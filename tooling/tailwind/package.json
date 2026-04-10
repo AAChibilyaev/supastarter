@@ -1,0 +1,12 @@
+{
+	"name": "@repo/tailwind-config",
+	"version": "0.0.0",
+	"private": true,
+	"main": "theme.css",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules"
+	},
+	"devDependencies": {
+		"tailwindcss": "catalog:"
+	}
+}

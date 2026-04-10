@@ -1,0 +1,19 @@
+{
+	"name": "@repo/storage",
+	"version": "0.0.0",
+	"main": "./index.ts",
+	"types": "./**/.ts",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "catalog:",
+		"@aws-sdk/s3-request-presigner": "catalog:",
+		"@repo/logs": "workspace:*"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:"
+	}
+}

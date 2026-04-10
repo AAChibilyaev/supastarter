@@ -1,0 +1,44 @@
+{
+	"name": "supastarter-nextjs",
+	"private": true,
+	"scripts": {
+		"build": "dotenv -c -- turbo build",
+		"dev": "dotenv -c -- turbo dev --concurrency 15",
+		"type-check": "dotenv -c -- turbo type-check",
+		"start": "dotenv -c -- turbo start",
+		"lint": "oxlint .",
+		"lint:fix": "oxlint --fix .",
+		"clean": "turbo clean",
+		"test": "dotenv -c -- turbo test",
+		"format": "oxfmt .",
+		"format:check": "oxfmt --check ."
+	},
+	"dependencies": {
+		"oxlint-tsgolint": "^0.20.0"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"dotenv-cli": "catalog:",
+		"oxfmt": "catalog:",
+		"oxlint": "catalog:",
+		"turbo": "^2.9.4",
+		"typescript": "catalog:"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"packageManager": "pnpm@10.28.2",
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@parcel/watcher",
+			"@prisma/client",
+			"@prisma/engines",
+			"@swc/core",
+			"esbuild",
+			"prisma",
+			"prisma-zod-generator",
+			"sharp"
+		]
+	}
+}

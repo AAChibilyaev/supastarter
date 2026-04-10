@@ -1,0 +1,8 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "react", "import", "jsx-a11y", "oxc"],
+	"ignorePatterns": ["**/.content-collections/**", "**/prisma/zod/index.ts"],
+	"options": {
+		"typeAware": true
+	}
+}

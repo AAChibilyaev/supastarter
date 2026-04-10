@@ -1,0 +1,22 @@
+{
+	"name": "@repo/ai",
+	"version": "0.0.0",
+	"main": "./index.ts",
+	"types": "./**/.tsx",
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@ai-sdk/anthropic": "catalog:",
+		"@ai-sdk/openai": "catalog:",
+		"@ai-sdk/react": "catalog:",
+		"ai": "catalog:",
+		"openai": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/react": "catalog:",
+		"typescript": "catalog:"
+	}
+}

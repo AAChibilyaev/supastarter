@@ -1,0 +1,33 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"arrowParens": "always",
+	"printWidth": 100,
+	"singleQuote": false,
+	"jsxSingleQuote": false,
+	"semi": true,
+	"sortImports": {
+		"groups": [
+			"builtin",
+			"external",
+			["internal", "subpath"],
+			["parent", "sibling", "index"],
+			"style",
+			"unknown"
+		]
+	},
+	"sortTailwindcss": {
+		"attributes": ["className"],
+		"functions": ["cn"],
+		"stylesheet": "./tooling/tailwind/theme.css"
+	},
+	"sortPackageJson": true,
+	"ignorePatterns": ["packages/database/prisma/zod/**.ts"],
+	"overrides": [
+		{
+			"files": ["**/*.json", "**/*.jsonc"],
+			"options": {
+				"trailingComma": "none"
+			}
+		}
+	]
+}

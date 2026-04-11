@@ -1,0 +1,61 @@
+---
+description: DSLMRank.com project-specific rules — always apply alongside boilerplate rules
+alwaysApply: true
+---
+
+# DSLMRank Project Rules
+
+## Project Identity
+
+DSLMRank.com is a public intelligence platform ranking Domain-Specific Language Models (DSLMs) by industry vertical performance. It uses a proprietary DSLM Score (0–100) per model×vertical pair.
+
+## BOILERPLATE: SUPASTARTER
+
+This repo is **Supastarter** (Turborepo). Use **pnpm** at the root. Prefer **`pnpm --filter database`** for Prisma. Full build plan: `docs/plans/dslmrank-build-plan-v2.md`.
+
+## Stack Additions (per plan)
+
+- algoliasearch + react-instantsearch (search layer)
+- @tanstack/react-query (already in Supastarter where used)
+- date-fns, zod, cheerio; use native `fetch` for benchmark ingestion
+
+## DSLM Score Engine
+
+- Never compute scores inline in UI — use `lib/dslm-score.ts` (to be added).
+- Score formula: benchmark (40%) + delta (30%) + adoption (20%) + compliance (10%).
+- Delta: (model_avg - best_gplm_avg) / best_gplm_avg × 100, clamped [-50, +100], normalized [0,100].
+
+## Prisma
+
+- Append DSLMRank models only; do not modify boilerplate auth/org tables.
+- New models: Vertical, LlmModel, Benchmark, BenchmarkResult, DslmScore, ModelVertical — see build plan.
+
+## Background Jobs (Supastarter)
+
+- Use **Upstash QStash** or **Trigger.dev** (or Vercel cron POST routes with `CRON_SECRET`) per `docs/plans/dslmrank-build-plan-v2.md` Phase 3.1B.
+- Daily: sync-benchmarks → sync-scores → algolia-index; jobs retriable independently.
+
+## API Routes
+
+- Public read APIs: `Cache-Control: s-maxage=3600` where applicable.
+- Validate query params with Zod (`lib/api-schemas.ts`).
+- Errors: `{ error: string, status?: number }`; never expose admin keys or `CRON_SECRET` on the client.
+
+## UI
+
+- Loading: Skeletons for async sections, not spinners-only.
+- Leaderboard: horizontal scroll on mobile; hide Delta + Adoption below `md` where specified.
+- Vertical pages: `generateStaticParams` + `revalidate = 3600` where applicable.
+- Dark mode: new components must work in dark mode.
+
+## Algolia
+
+- Client: **search key only**. Admin key only in server sync.
+- Indexes: `dslmrank_models`, `dslmrank_verticals`.
+
+## Commands
+
+- `pnpm dev` — dev (multiple apps)
+- `pnpm run typecheck` or workspace typecheck — after features
+- `pnpm --filter database generate` — after schema changes
+- `pnpm --filter database push` — push schema (never raw migrate if project standard is push)

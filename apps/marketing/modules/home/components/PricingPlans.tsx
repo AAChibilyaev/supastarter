@@ -1,8 +1,14 @@
+"use client";
+
 import { config } from "@config";
 import { cn } from "@repo/ui";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui";
+import { Badge } from "@repo/ui";
+import { Tabs, TabsList, TabsTrigger } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { CheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
 
@@ -12,20 +18,47 @@ const plans = [
 	{ key: "enterprise", featuresCount: 5, ctaKey: "contact", primary: false },
 ] as const;
 
+type BillingInterval = "monthly" | "yearly";
+
 export function PricingPlans() {
 	const t = useTranslations();
+	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="py-20 border-b border-border/60">
+		<section id="pricing" className="py-24 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<div className="mb-3 gap-2 px-3 py-1 text-xs backdrop-blur inline-flex items-center rounded-none border border-border bg-card/40 text-muted-foreground">
+					<Badge status="info" className="mb-4">
 						{t("home.pricing.badge")}
-					</div>
+					</Badge>
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-3 text-muted-foreground">{t("home.pricing.subtitle")}</p>
+					<p className="mt-4 text-lg text-muted-foreground">
+						{t("home.pricing.subtitle")}
+					</p>
+				</div>
+
+				<div className="mt-8 flex justify-center">
+					<Tabs value={interval} onValueChange={(v) => setInterval(v as BillingInterval)}>
+						<TabsList className="p-0.5 rounded-full border bg-muted/50">
+							<TabsTrigger
+								value="monthly"
+								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
+							>
+								Monthly
+							</TabsTrigger>
+							<TabsTrigger
+								value="yearly"
+								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
+							>
+								Yearly
+								<Badge status="success" className="ml-2 px-1.5 py-0 text-[10px]">
+									Save 17%
+								</Badge>
+							</TabsTrigger>
+						</TabsList>
+					</Tabs>
 				</div>
 
 				<div className="mt-12 gap-6 lg:grid-cols-3 grid">
@@ -35,69 +68,82 @@ export function PricingPlans() {
 						);
 
 						return (
-							<div
+							<Card
 								key={plan.key}
 								className={cn(
-									"p-6 backdrop-blur relative flex flex-col rounded-none border bg-card/30",
+									"relative flex flex-col",
 									plan.primary
-										? "shadow-black/10 shadow-xl dark:shadow-black/30 border-border"
-										: "border-border/70",
+										? "shadow-lg border-primary/30 ring-1 shadow-primary/5 ring-primary/10"
+										: "",
 								)}
 							>
 								{plan.primary && (
-									<span className="-top-3 left-6 px-2 py-0.5 absolute rounded-sm border border-border bg-background text-[11px] text-muted-foreground">
-										{t(`home.pricing.plans.${plan.key}.highlight`)}
-									</span>
+									<div className="-top-3 inset-x-0 absolute flex justify-center">
+										<Badge status="info" className="shadow-sm">
+											{t(`home.pricing.plans.${plan.key}.highlight`)}
+										</Badge>
+									</div>
 								)}
 
-								<h3 className="font-medium text-lg text-foreground">
-									{t(`home.pricing.plans.${plan.key}.name`)}
-								</h3>
-								<div className="mt-4 gap-1 flex items-baseline">
-									<span className="font-medium text-4xl tracking-tight">
-										{t(`home.pricing.plans.${plan.key}.price`)}
-									</span>
-									{plan.key !== "enterprise" && (
-										<span className="text-sm text-muted-foreground">
-											{t("home.pricing.perMonth")}
+								<CardHeader className={plan.primary ? "pt-8" : ""}>
+									<CardTitle>
+										{t(`home.pricing.plans.${plan.key}.name`)}
+									</CardTitle>
+									<CardDescription>
+										{t(`home.pricing.plans.${plan.key}.description`)}
+									</CardDescription>
+								</CardHeader>
+
+								<CardContent className="flex-1">
+									<div className="gap-1 flex items-baseline">
+										<span className="font-medium text-4xl tracking-tight">
+											{t(`home.pricing.plans.${plan.key}.price`)}
 										</span>
-									)}
-								</div>
-								<p className="mt-2 text-sm text-muted-foreground">
-									{t(`home.pricing.plans.${plan.key}.description`)}
-								</p>
+										{plan.key !== "enterprise" && (
+											<span className="text-sm text-muted-foreground">
+												{interval === "monthly"
+													? t("home.pricing.perMonth")
+													: "/yr"}
+											</span>
+										)}
+									</div>
 
-								<ul className="mt-6 gap-3 flex flex-1 flex-col">
-									{features.map((feature) => (
-										<li
-											key={feature}
-											className="gap-2 text-sm flex items-start text-foreground/90"
-										>
-											<CheckIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-											<span>{feature}</span>
-										</li>
-									))}
-								</ul>
+									<ul className="mt-8 gap-3 flex flex-col">
+										{features.map((feature) => (
+											<li
+												key={feature}
+												className="gap-3 text-sm flex items-start"
+											>
+												<CheckIcon className="mt-0.5 size-4 shrink-0 text-success" />
+												<span className="text-muted-foreground">
+													{feature}
+												</span>
+											</li>
+										))}
+									</ul>
+								</CardContent>
 
-								<Button
-									className={cn(
-										"mt-8",
-										marketingCtaButtonClassName(plan.primary),
-									)}
-									variant={plan.primary ? "primary" : "outline"}
-									asChild
-								>
-									<a
-										href={
-											plan.key === "enterprise"
-												? "/contact"
-												: (config.saasUrl ?? "/signup")
-										}
+								<CardFooter>
+									<Button
+										className={cn(
+											"w-full",
+											marketingCtaButtonClassName(plan.primary),
+										)}
+										variant={plan.primary ? "primary" : "outline"}
+										asChild
 									>
-										{t(`home.pricing.${plan.ctaKey}`)}
-									</a>
-								</Button>
-							</div>
+										<a
+											href={
+												plan.key === "enterprise"
+													? "/contact"
+													: (config.saasUrl ?? "/signup")
+											}
+										>
+											{t(`home.pricing.${plan.ctaKey}`)}
+										</a>
+									</Button>
+								</CardFooter>
+							</Card>
 						);
 					})}
 				</div>

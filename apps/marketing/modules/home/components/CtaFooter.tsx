@@ -8,15 +8,18 @@ export function CtaFooter() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-20">
-			<div className="container">
-				<div className="p-10 md:p-16 relative overflow-hidden rounded-sm border border-border/70 bg-card/40 text-center">
-					<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_50%_0%,oklch(0.45_0_0/0.10),transparent_60%)]" />
-					<h2 className="max-w-2xl font-medium text-3xl tracking-tight md:text-4xl mx-auto text-balance">
+		<section className="py-24 relative overflow-hidden">
+			{/* Gradient backgrounds */}
+			<div className="-top-24 -right-24 size-96 blur-3xl absolute rounded-full bg-primary/10" />
+			<div className="-bottom-24 -left-24 size-96 blur-3xl absolute rounded-full bg-accent/20" />
+
+			<div className="relative container">
+				<div className="max-w-2xl mx-auto text-center">
+					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-3 text-muted-foreground">{t("home.cta.subtitle")}</p>
-					<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
+					<p className="mt-4 text-lg text-muted-foreground">{t("home.cta.subtitle")}</p>
+					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
 						<Button
 							className={marketingCtaButtonClassName(true)}
 							size="lg"

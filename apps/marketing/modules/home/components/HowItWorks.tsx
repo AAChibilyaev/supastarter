@@ -6,30 +6,55 @@ export function HowItWorks() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-20 border-b border-border/60">
+		<section className="py-24 border-b border-border/60">
 			<div className="container">
-				<h2 className="max-w-2xl font-medium text-3xl tracking-tight md:text-4xl mx-auto text-center text-balance">
-					{t("home.howItWorks.title")}
-				</h2>
+				<div className="max-w-2xl mx-auto text-center">
+					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
+						{t("home.howItWorks.title")}
+					</h2>
+				</div>
 
-				<ol className="mt-12 md:grid-cols-3 grid gap-px overflow-hidden rounded-none border border-border/80 bg-border/80">
+				<div className="mt-20 lg:grid-cols-3 gap-0 grid grid-cols-1">
 					{steps.map((step, i) => (
-						<li
-							key={step}
-							className="p-6 backdrop-blur relative rounded-none bg-card/40 transition hover:bg-card/70"
-						>
-							<span className="-top-3 left-6 size-7 text-xs absolute inline-flex -translate-x-1/2 items-center justify-center rounded-sm border border-border bg-background text-muted-foreground">
-								0{i + 1}
-							</span>
-							<h3 className="mt-2 font-medium text-lg text-foreground">
+						<div key={step} className="relative flex flex-col items-center text-center">
+							{/* Timeline line — top half connects to previous, bottom half to next */}
+							<div className="mb-6 relative flex w-full items-center justify-center">
+								{/* Left connector line (hidden on first) */}
+								{i > 0 && (
+									<div className="lg:block absolute top-1/2 right-1/2 hidden h-px w-full bg-border" />
+								)}
+								{/* Vertical connector on mobile */}
+								{i > 0 && (
+									<div className="-top-10 h-10 lg:hidden absolute left-1/2 w-px bg-border" />
+								)}
+
+								{/* Number circle */}
+								<div className="size-12 shadow-sm z-10 flex items-center justify-center rounded-full border-2 border-primary/30 bg-background">
+									<span className="font-semibold text-sm text-primary">
+										{i + 1}
+									</span>
+								</div>
+
+								{/* Right connector line (hidden on last) */}
+								{i < steps.length - 1 && (
+									<div className="lg:block absolute top-1/2 left-1/2 hidden h-px w-full bg-border" />
+								)}
+								{/* Vertical connector on mobile */}
+								{i < steps.length - 1 && (
+									<div className="top-12 h-10 lg:hidden absolute left-1/2 w-px bg-border" />
+								)}
+							</div>
+
+							{/* Step content */}
+							<h3 className="font-medium text-lg text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
-							<p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+							<p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
 								{t(`home.howItWorks.${step}.description`)}
 							</p>
-						</li>
+						</div>
 					))}
-				</ol>
+				</div>
 			</div>
 		</section>
 	);

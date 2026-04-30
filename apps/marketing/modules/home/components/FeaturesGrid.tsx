@@ -1,3 +1,5 @@
+import { cn } from "@repo/ui";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
 import {
 	GaugeIcon,
 	GitBranchIcon,
@@ -29,35 +31,51 @@ const items: FeatureItem[] = [
 	{ key: "selfHost", icon: ServerIcon },
 ];
 
+const spanMap: Record<FeatureItem["key"], string> = {
+	scopedTokens: "md:col-span-2",
+	originAllowlist: "md:col-span-1",
+	rateLimitQuota: "md:col-span-1",
+	multiSearch: "md:col-span-1",
+	reindex: "md:col-span-1",
+	selfHost: "md:col-span-2",
+};
+
 export function FeaturesGrid() {
 	const t = useTranslations();
 
 	return (
-		<section id="features" className="py-20 border-b border-border/60">
+		<section id="features" className="py-24 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("home.features.title")}
 					</h2>
-					<p className="mt-3 text-muted-foreground">{t("home.features.subtitle")}</p>
+					<p className="mt-4 text-lg text-muted-foreground">
+						{t("home.features.subtitle")}
+					</p>
 				</div>
 
-				<div className="mt-12 sm:grid-cols-2 lg:grid-cols-3 grid gap-px overflow-hidden rounded-none border border-border/80 bg-border/80">
+				<div className="mt-16 gap-4 md:grid-cols-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
-						<div
+						<Card
 							key={key}
-							className="p-6 backdrop-blur bg-card/40 transition hover:bg-card/70"
+							className={cn(
+								"group transition-colors hover:border-primary/30 hover:bg-accent/5",
+								spanMap[key],
+							)}
 						>
-							<div className="gap-2 flex items-start">
-								<Icon className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
-								<h3 className="font-medium leading-snug text-foreground">
-									{t(`home.features.items.${key}.title`)}
-								</h3>
-							</div>
-							<p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-								{t(`home.features.items.${key}.description`)}
-							</p>
-						</div>
+							<CardHeader>
+								<div className="mb-3 size-10 flex items-center justify-center rounded-lg border border-border/60 bg-muted/50 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5">
+									<Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
+								</div>
+								<CardTitle>{t(`home.features.items.${key}.title`)}</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<CardDescription className="text-sm leading-relaxed">
+									{t(`home.features.items.${key}.description`)}
+								</CardDescription>
+							</CardContent>
+						</Card>
 					))}
 				</div>
 			</div>

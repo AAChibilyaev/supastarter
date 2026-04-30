@@ -29,7 +29,9 @@ export default async function AppStartPage() {
 
 	// If user has organizations, always redirect to the first one's overview
 	if (config.organizations.enable && organizations.length > 0) {
-		const org = organizations.find((o) => o.id === session?.session.activeOrganizationId) ?? organizations[0];
+		const org =
+			organizations.find((o) => o.id === session?.session.activeOrganizationId) ??
+			organizations[0];
 		redirect(`/${org.slug}/overview`);
 	}
 

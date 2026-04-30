@@ -18,6 +18,7 @@ import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { publicSearchApp } from "./modules/search/public-handler";
+import { scimRouter } from "./modules/search/scim-public";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
 import { v1Router } from "./v1/router";
 export { listPurchases } from "./modules/payments/procedures/list-purchases";
@@ -67,8 +68,10 @@ export const app = new Hono()
 	})
 	// Connector API (CMS modules — permissive CORS, mounted before global CORS)
 	.route("/", connectorApp)
-	// Analytics events API (public — permissive CORS, mounted before global CORS)
+	// Analytics events endpoint (permissive CORS for widget/SDK)
 	.route("/", analyticsApp)
+	// SCIM 2.0 endpoints (identity provisioning — own auth)
+	.route("/", scimRouter)
 	// Version 1 public REST API (API-key auth, mounted before global CORS for broad access)
 	.route("/v1", v1Router)
 	// Cors middleware

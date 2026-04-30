@@ -152,26 +152,21 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 	const renderStepAction = (step: StepConfig) => {
 		if (step.done) {
 			return (
-				<Button variant="secondary" disabled>
+				<Button variant="ghost" disabled size="sm">
 					{t("done")}
 				</Button>
 			);
 		}
 
 		if (step.key === "createIndex") {
-			return (
-				<CreateSearchIndexDialog
-					organizationId={organizationId}
-					trigger={<Button variant="primary">{t(step.actionKey)}</Button>}
-				/>
-			);
+			return <CreateSearchIndexDialog organizationId={organizationId} />;
 		}
 
 		if (step.key === "connectSource") {
 			return (
 				<div className="gap-2 flex flex-wrap">
 					<Button
-						variant="primary"
+						variant="outline"
 						size="sm"
 						onClick={() => openConnectorWizard("prestashop")}
 					>
@@ -200,7 +195,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 		}
 
 		return (
-			<Button variant="primary" asChild>
+			<Button variant="outline" size="sm" asChild>
 				<Link href={step.href}>{t(step.actionKey)}</Link>
 			</Button>
 		);
@@ -208,12 +203,12 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 
 	return (
 		<div className="space-y-8">
-			<Card className="shadow-sm overflow-hidden border-primary/15 bg-gradient-to-br from-primary/10 via-background to-secondary/80">
+			<Card className="shadow-sm overflow-hidden border-foreground/5">
 				<CardContent className="p-0">
 					<div className="gap-6 p-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.9fr)] lg:p-8 grid">
 						<div className="space-y-5">
 							<div className="gap-3 flex flex-wrap items-center">
-								<Badge status="info" className="bg-primary/12 text-primary">
+								<Badge status="info" className="bg-foreground/8 text-foreground/70">
 									<SparklesIcon className="mr-1 size-3 inline" />
 									{t("title")}
 								</Badge>
@@ -227,8 +222,8 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 
 							<div className="space-y-3">
 								<div className="gap-3 flex items-center">
-									<div className="size-12 shadow-sm flex items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-										<RocketIcon className="size-6" />
+									<div className="size-12 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/70">
+										<RocketIcon className="size-5" />
 									</div>
 									<div>
 										<h1 className="text-3xl font-semibold tracking-tight text-balance">
@@ -236,14 +231,14 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 										</h1>
 									</div>
 								</div>
-								<p className="max-w-2xl text-base leading-7 text-pretty text-muted-foreground">
+								<p className="max-w-2xl text-base leading-7 text-pretty text-foreground/60">
 									{isComplete ? t("allDone") : t("subtitle")}
 								</p>
 							</div>
 
 							<Alert
 								variant={isComplete ? "success" : "primary"}
-								className="backdrop-blur-sm rounded-3xl border-0 bg-background/80"
+								className="rounded-lg border border-foreground/10 bg-foreground/3"
 							>
 								<BarChart3Icon />
 								<AlertTitle>
@@ -255,7 +250,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 							</Alert>
 						</div>
 
-						<Card className="border-white/60 shadow-sm backdrop-blur-sm dark:border-white/10 bg-background/85 dark:bg-card/95">
+						<Card className="shadow-sm border-foreground/8">
 							<CardHeader className="space-y-4">
 								<div className="gap-3 flex items-center justify-between">
 									<div>
@@ -273,11 +268,11 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 								</div>
 								<Progress
 									value={percentComplete}
-									className="h-2.5 rounded-full bg-primary/10"
+									className="h-2.5 rounded-full bg-foreground/10"
 								/>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<div className="gap-3 p-4 flex flex-wrap items-center rounded-2xl border border-border/60 bg-primary/5">
+								<div className="gap-3 p-4 flex flex-wrap items-center rounded-lg border border-foreground/10 bg-foreground/3">
 									<Badge status="success" className="text-sm normal-case">
 										{completedCount} / {totalSteps} {t("completed")}
 									</Badge>
@@ -290,12 +285,12 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 								</div>
 
 								<div className="gap-3 flex flex-wrap">
-									<Button variant="primary" asChild>
+									<Button variant="outline" size="sm" asChild>
 										<Link href={`/${slug}/overview`}>
 											{t("skipToDashboard")}
 										</Link>
 									</Button>
-									<Button variant="outline" asChild>
+									<Button variant="ghost" size="sm" asChild>
 										<Link href={`/${slug}/settings/billing`}>
 											{t("managePlan")}
 										</Link>
@@ -315,8 +310,8 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 							key={step.key}
 							className={
 								step.done
-									? "shadow-sm border-primary/20 bg-primary/5"
-									: "shadow-sm border-border/70 bg-card"
+									? "shadow-sm border-foreground/8 bg-foreground/3"
+									: "shadow-sm border-foreground/8"
 							}
 						>
 							<CardHeader className="gap-4 pb-4 sm:flex-row sm:items-start sm:justify-between">
@@ -324,8 +319,8 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 									<div
 										className={
 											step.done
-												? "size-12 shadow-sm flex shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground"
-												: "size-12 flex shrink-0 items-center justify-center rounded-2xl border border-border bg-secondary text-secondary-foreground"
+												? "size-12 flex shrink-0 items-center justify-center rounded-lg border border-success/30 bg-success/10 text-success"
+												: "size-12 flex shrink-0 items-center justify-center rounded-lg border border-foreground/15 text-foreground/60"
 										}
 									>
 										{step.done ? (
@@ -338,8 +333,8 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 									</div>
 									<div className="min-w-0 space-y-2">
 										<div className="gap-2 flex flex-wrap items-center">
-											<div className="size-7 flex items-center justify-center rounded-full bg-secondary text-secondary-foreground">
-												<Icon className="size-4" />
+											<div className="size-7 flex items-center justify-center rounded-md border border-foreground/10 text-foreground/50">
+												<Icon className="size-3.5" />
 											</div>
 											<CardTitle className="text-lg leading-tight">
 												{t(step.labelKey)}
@@ -358,7 +353,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 								</Badge>
 							</CardHeader>
 							<CardContent>
-								<div className="gap-3 p-4 sm:flex-row sm:items-center sm:justify-between flex flex-col rounded-2xl border border-border/60 bg-background/80">
+								<div className="gap-3 p-4 sm:flex-row sm:items-center sm:justify-between flex flex-col rounded-lg border border-foreground/8 bg-foreground/2">
 									<div className="space-y-1">
 										<p className="text-sm font-medium text-foreground">
 											{t(step.actionKey)}
@@ -379,17 +374,17 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 				})}
 			</div>
 
-			<Card className="shadow-sm border-border/70">
+			<Card className="shadow-sm border-foreground/8">
 				<CardContent className="gap-4 p-6 lg:flex-row lg:items-center lg:justify-between flex flex-col">
 					<div className="space-y-1">
 						<h3 className="text-lg font-semibold">{t("planCtaTitle")}</h3>
-						<p className="text-sm text-muted-foreground">{t("planCtaDesc")}</p>
+						<p className="text-sm text-foreground/60">{t("planCtaDesc")}</p>
 					</div>
 					<div className="gap-3 flex flex-wrap">
-						<Button variant="outline" asChild>
+						<Button variant="outline" size="sm" asChild>
 							<Link href={`/${slug}/settings/billing`}>{t("managePlan")}</Link>
 						</Button>
-						<Button variant="ghost" asChild>
+						<Button variant="ghost" size="sm" asChild>
 							<Link href={`/${slug}/overview`}>{t("viewAnalytics")}</Link>
 						</Button>
 					</div>

@@ -33,11 +33,6 @@ const nextConfig: NextConfig = {
 				destination: "/:organizationSlug/settings/general",
 				permanent: true,
 			},
-			{
-				source: "/admin",
-				destination: "/admin/users",
-				permanent: true,
-			},
 		];
 	},
 	webpack: (config, { webpack, isServer }) => {

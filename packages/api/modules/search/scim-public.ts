@@ -113,7 +113,7 @@ function scimError(detail: string, status: number): ScimError {
 
 // ─── Helpers ────────────────────────────────────────────────────
 
-const SCIM_BASE = "/api/scim/v2";
+const SCIM_BASE = "/scim/v2";
 
 function buildLocation(resourceType: string, id: string): string {
 	return `${SCIM_BASE}/${resourceType}/${id}`;

@@ -22,7 +22,13 @@ export function SettingsMenu({
 }) {
 	const pathname = usePathname();
 
-	const isActiveMenuItem = (href: string) => pathname.includes(href);
+	const isActiveMenuItem = (href: string) => {
+		if (href === "/admin") {
+			return pathname === "/admin";
+		}
+
+		return pathname === href || pathname.startsWith(`${href}/`);
+	};
 
 	// Flatten all items from all menu sections into a single array
 	const allItems = menuItems.flatMap((item) => item.items);

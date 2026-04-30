@@ -531,6 +531,8 @@
 				}
 			},
 			"activePlan": {
+				"description": "Your current plan and usage limits for search and indexing.",
+				"notFound": "No plan information available.",
 				"status": {
 					"active": "Active",
 					"canceled": "Canceled",
@@ -570,7 +572,23 @@
 					"insufficientFunds": "Insufficient AI credits. Top up your wallet."
 				}
 			},
-			"title": "Billing"
+			"title": "Billing",
+			"usage": {
+				"searches": "Searches",
+				"documents": "Documents"
+			},
+			"limits": {
+				"maxIndexes": "Max indexes",
+				"maxDocuments": "Max documents",
+				"maxApiKeys": "Max API keys",
+				"rateLimit": "Rate limit",
+				"maxSearchesPerMonth": "Searches / month"
+			},
+			"features": {
+				"title": "Features",
+				"none": "No features configured"
+			},
+			"upgrade": "Upgrade plan"
 		},
 		"notificationsPage": {
 			"title": "Notifications",
@@ -660,7 +678,17 @@
 		"subtitle": "Manage Typesense indexes, API keys and usage for this organization.",
 		"loading": "Loading...",
 		"noIndexes": "No search indexes yet. Create your first one to get started.",
+		"noIndexesDescription": "Search indexes store your data and power search queries. Create one to get started.",
 		"selectIndex": "Select an index to manage its API keys.",
+		"apiKeysPage": {
+			"title": "API Keys"
+		},
+		"importJobsPage": {
+			"title": "Import Jobs"
+		},
+		"previewPage": {
+			"title": "Search Preview"
+		},
 		"fields": {
 			"displayName": "Display name",
 			"slug": "Slug",
@@ -690,6 +718,7 @@
 			"revealOnce": "Copy this key now. You will not be able to see it again.",
 			"done": "Done",
 			"empty": "No API keys yet.",
+			"emptyDescription": "Create your first API key to start integrating search into your application.",
 			"tableName": "Name",
 			"tablePrefix": "Prefix",
 			"tableScopes": "Scopes",
@@ -726,7 +755,8 @@
 			"countColumn": "Count",
 			"productColumn": "Product",
 			"clicksColumn": "Clicks",
-			"noData": "No data available for this period."
+			"noData": "No data available for this period.",
+			"noDataDescription": "Analytics data will appear once your search indexes start receiving queries."
 		},
 		"widget": {
 			"tab": "Widget",
@@ -749,26 +779,33 @@
 			"loadError": "Failed to load projects."
 		},
 		"overview": {
-			"indexVersion": "Index version",
-			"apiKeys": "API keys",
-			"searches": "Searches"
-		},
-		"checklist": {
-			"title": "Setup checklist",
-			"completed": "completed",
-			"done": "Done",
-			"pending": "Pending",
-			"createIndex": "Create search index",
-			"generateKey": "Generate API key",
-			"importData": "Import data / run sync",
-			"installWidget": "Install search widget",
-			"cmsModule": "Install CMS module",
-			"fullSync": "Run full sync",
-			"testSearch": "Test search",
-			"enableWidget": "Enable search widget"
-		},
-		"overview": {
-			"title": "Dashboard",
+			"title": "Overview",
+			"subtitle": "Past {days} days",
+			"totalSearches": "Total searches",
+			"searchesTrend": "Search trend",
+			"documentsIndexed": "Documents indexed",
+			"quotaUsage": "Quota usage",
+			"failedSyncJobs": "Failed sync jobs",
+			"searchesOverTime": "Searches over time",
+			"topQueries": "Top queries",
+			"activityFeed": "Recent activity",
+			"connectorStatus": "Connector status",
+			"period24h": "24h",
+			"period7d": "7 days",
+			"period30d": "30 days",
+			"quotaWarning": "You've used {percent}% of your search quota. Upgrade your plan to avoid disruption.",
+			"quotaExceeded": "You've exceeded your search quota ({percent}%). Some features may be limited.",
+			"connectorOnline": "All connectors online",
+			"connectorOffline": "Connector offline",
+			"connectorUnknown": "No connector configured",
+			"noData": "No data available",
+			"noDataDescription": "Data will appear once your search indexes start receiving queries.",
+			"refresh": "Refresh",
+			"activity": {
+				"indexCreated": "Index \"{name}\" created",
+				"keyRevoked": "{count, plural, one {# API key} other {# API keys}} for \"{name}\"",
+				"syncFailed": "Sync failed for index \"{name}\""
+			},
 			"indexVersion": "Index version",
 			"apiKeys": "API keys",
 			"searches": "Searches",
@@ -784,13 +821,9 @@
 			"setupConnectorDesc": "Connect PrestaShop or Bitrix module",
 			"managePlan": "Manage plan",
 			"graceUntil": "Read-only until {date}",
-			"active": "Active"
-		},
-		"overview": {
-			"title": "Project overview",
+			"active": "Active",
 			"indexedProducts": "Indexed products",
 			"apiKeysCount": "API keys",
-			"indexVersion": "Index version",
 			"lastHeartbeat": "Last heartbeat",
 			"noHeartbeat": "Never",
 			"connectorToken": "Connector token"
@@ -814,6 +847,17 @@
 			"stepDocs": "View docs",
 			"allDone": "All checks passed!"
 		},
+		"nav": {
+			"overview": "Overview",
+			"gettingStarted": "Getting Started",
+			"search": "Search",
+			"apiKeys": "API Keys",
+			"importJobs": "Import Jobs",
+			"searchPreview": "Search Preview",
+			"analytics": "Analytics",
+			"relevance": "Relevance",
+			"connectors": "Connectors"
+		},
 		"importJobs": {
 			"tab": "Import Jobs",
 			"title": "Import Jobs",
@@ -823,6 +867,7 @@
 			"completed": "Completed",
 			"failed": "Failed",
 			"empty": "No import activity in the last 7 days.",
+			"emptyDescription": "Import jobs appear here when you sync data from your CMS or upload documents.",
 			"tableJobId": "Job ID",
 			"tableType": "Type",
 			"tableStatus": "Status",
@@ -851,6 +896,7 @@
 			"saved": "Synonyms saved.",
 			"error": "Failed to save synonyms.",
 			"empty": "No synonyms configured yet. Add a synonym pair to get started.",
+			"emptyDescription": "Synonyms map different search terms to the same root word, expanding your search coverage.",
 			"synonymColumn": "Synonym",
 			"rootColumn": "Root",
 			"tableActions": "Actions",
@@ -867,6 +913,7 @@
 			"saved": "Curations saved.",
 			"error": "Failed to save curations.",
 			"empty": "No curation rules yet. Add a rule to get started.",
+			"emptyDescription": "Curation rules let you pin or hide specific products for search queries to fine-tune results.",
 			"queryColumn": "Query",
 			"pinnedColumn": "Pinned IDs",
 			"hiddenColumn": "Hidden IDs",
@@ -887,16 +934,114 @@
 			"removeConfirmMessage": "Are you sure you want to remove this curation rule?"
 		},
 		"connector": {
-			"title": "Connector",
-			"description": "Manage the CMS connector token and handshake status.",
+			"title": "Connectors",
+			"subtitle": "Connect PrestaShop, Bitrix, or push docs directly via API",
+			"prestashop": "PrestaShop",
+			"prestashopDesc": "Full sync for products, categories, stock",
+			"bitrix": "1C-Bitrix",
+			"bitrixDesc": "Full sync for product catalogs",
+			"directApi": "Direct API",
+			"directApiDesc": "Push documents directly via REST API",
+			"setup": "Set up",
+			"manage": "Manage",
+			"viewDocs": "View docs",
+			"statusOnline": "Online",
+			"statusOffline": "Offline",
+			"statusUnknown": "Unknown",
+			"lastSync": "Last sync: {time}",
+			"lastError": "Last error: {error}",
+			"noHeartbeat": "No heartbeat yet",
+			"syncJobs": "Sync jobs",
+			"syncJobsNote": "Showing jobs from the last process restart (in-memory).",
+			"activeConnectors": "Active connectors",
+			"noConnectors": "No connectors yet. Click 'Set up' on a source above.",
+			"wizardTitle": "Set up {source} connector",
+			"stepGenerateToken": "Generate token",
+			"stepDownloadModule": "Download module",
+			"stepConfigure": "Configure",
+			"stepTestConnection": "Test connection",
+			"stepRunSync": "Run first sync",
+			"tokenGenerated": "Your connector token",
+			"tokenCopyWarning": "Save this key — we can't show it again after you close this window",
+			"tokenCopied": "Copied!",
+			"downloadPrestashop": "Download PrestaShop module",
+			"downloadBitrix": "Download Bitrix module",
+			"testSuccess": "Connection successful — module is online!",
+			"testFailed": "Connection failed — check your module configuration",
+			"syncSuccess": "Sync started successfully",
+			"jobId": "Job ID",
+			"jobType": "Type",
+			"jobStatus": "Status",
+			"jobStarted": "Started",
+			"jobDuration": "Duration",
+			"jobItems": "Items / Failures",
+			"jobActions": "Actions",
+			"jobRetry": "Retry",
+			"typeFull": "Full",
+			"typeDelta": "Delta",
+			"statusPending": "Pending",
+			"statusRunning": "Running",
+			"statusCompleted": "Completed",
+			"statusFailed": "Failed",
+			"jobDetailTitle": "Job detail",
+			"jobEventLog": "Event log",
+			"noJobLogs": "No events logged",
 			"tokenLabel": "Connector token",
 			"tokenPlaceholder": "ss_connector_***",
 			"testHandshake": "Test handshake",
 			"handshakeSuccess": "Handshake successful",
 			"handshakeFailed": "Handshake failed",
+			"description": "Manage the CMS connector token and handshake status.",
 			"noConnectorKeys": "No connector keys. Create an API key with 'connector_write' scope in the API Keys tab.",
-			"lastHeartbeat": "Last heartbeat",
-			"noHeartbeat": "No heartbeat received yet"
+			"lastHeartbeat": "Last heartbeat"
+		},
+		"tabs": {
+			"indexes": "Indexes",
+			"playground": "Playground",
+			"apiKeys": "API Keys",
+			"widget": "Widget"
+		},
+		"playground": {
+			"title": "Search Playground",
+			"description": "Test advanced search queries against your index with all available options.",
+			"advanced": "Advanced options",
+			"advancedShow": "Show advanced options",
+			"advancedHide": "Hide advanced options",
+			"queryBy": "Query by fields",
+			"queryByPlaceholder": "Comma-separated field names (e.g. title, description)",
+			"filterBy": "Filter by",
+			"filterByPlaceholder": "e.g. price:>100 && inStock:=true",
+			"sortBy": "Sort by",
+			"sortByPlaceholder": "e.g. price:desc",
+			"perPage": "Results per page",
+			"run": "Run search",
+			"cmdEnter": "Cmd+Enter to search",
+			"hits": "Hits",
+			"facets": "Facets",
+			"rawJson": "Raw JSON",
+			"curlSnippet": "cURL equivalent",
+			"copy": "Copy",
+			"copied": "Copied!",
+			"responseTime": "Response time",
+			"hitCount": "Results",
+			"noDocuments": "No documents match your query.",
+			"debounceInfo": "Auto-searching (700ms debounce)",
+			"lastQueryRestored": "Last query restored from previous session.",
+			"noIndexes": "No indexes available. Create one first.",
+			"curlTitle": "cURL equivalent"
+		},
+		"indexActions": {
+			"actions": "Actions",
+			"reindex": "Reindex",
+			"viewSchema": "View schema",
+			"delete": "Delete index",
+			"deleteConfirmTitle": "Delete index",
+			"deleteConfirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone. All indexed data will be lost.",
+			"reindexConfirmTitle": "Reindex",
+			"reindexConfirmMessage": "Trigger a full reindex for \"{name}\"? This will reprocess all documents from the connector.",
+			"schemaTitle": "Schema for \"{name}\"",
+			"reindexed": "Reindex triggered.",
+			"deleted": "Index deleted."
 		}
 	}
 }

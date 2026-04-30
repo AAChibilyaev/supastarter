@@ -9,9 +9,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { DatabaseIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useSearchIndexesQuery } from "../lib/api";
+import { EmptyState } from "./EmptyState";
 
 interface SearchIndexesListProps {
 	organizationId: string;
@@ -32,7 +34,13 @@ export function SearchIndexesList({
 	}
 
 	if (!data || data.length === 0) {
-		return <Card className="p-6 text-center text-foreground/60">{t("search.noIndexes")}</Card>;
+		return (
+			<EmptyState
+				title={t("search.noIndexes")}
+				description={t("search.noIndexesDescription")}
+				icon={DatabaseIcon}
+			/>
+		);
 	}
 
 	return (

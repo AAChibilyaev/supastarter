@@ -40,6 +40,11 @@ import {
 	SlidersHorizontalIcon,
 	CableIcon,
 	UserCogIcon,
+	RocketIcon,
+	KeyIcon,
+	UploadIcon,
+	EyeIcon,
+	BookOpenIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -299,6 +304,10 @@ export function NavBar() {
 				href: "/settings/general",
 			},
 			{
+				label: "Knowledge",
+				href: "/knowledge",
+			},
+			{
 				label: t("settings.menu.account.security"),
 				href: "/settings/security",
 			},
@@ -350,34 +359,60 @@ export function NavBar() {
 			...(activeOrganization
 				? [
 						{
-							label: "Overview",
+							label: t("search.nav.overview"),
 							href: `${basePath}/overview`,
 							icon: HomeIcon,
 							isActive: pathname === `${basePath}/overview` || pathname === basePath,
 						},
 						{
-							label: "Search",
+							label: t("search.nav.gettingStarted"),
+							href: `${basePath}/getting-started`,
+							icon: RocketIcon,
+							isActive: pathname.startsWith(`${basePath}/getting-started`),
+						},
+						{
+							label: t("search.nav.search"),
 							href: `${basePath}/search`,
 							icon: SearchIcon,
 							isActive: pathname.startsWith(`${basePath}/search`),
+							subItems: [
+								{
+									label: t("search.nav.apiKeys"),
+									href: `${basePath}/search`,
+								},
+								{
+									label: t("search.nav.importJobs"),
+									href: `${basePath}/search`,
+								},
+								{
+									label: t("search.nav.searchPreview"),
+									href: `${basePath}/search`,
+								},
+							],
 						},
 						{
-							label: "Analytics",
+							label: t("search.nav.analytics"),
 							href: `${basePath}/analytics`,
 							icon: BarChart3Icon,
 							isActive: pathname.startsWith(`${basePath}/analytics`),
 						},
 						{
-							label: "Relevance",
+							label: t("search.nav.relevance"),
 							href: `${basePath}/relevance`,
 							icon: SlidersHorizontalIcon,
 							isActive: pathname.startsWith(`${basePath}/relevance`),
 						},
 						{
-							label: "Connectors",
+							label: t("search.nav.connectors"),
 							href: `${basePath}/connectors`,
 							icon: CableIcon,
 							isActive: pathname.startsWith(`${basePath}/connectors`),
+						},
+						{
+							label: "Knowledge",
+							href: `${basePath}/knowledge`,
+							icon: BookOpenIcon,
+							isActive: pathname.startsWith(`${basePath}/knowledge`),
 						},
 					]
 				: []),

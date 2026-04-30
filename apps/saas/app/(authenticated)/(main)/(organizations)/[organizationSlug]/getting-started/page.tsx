@@ -1,6 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { getBaseUrl } from "@repo/utils";
-import { OverviewPage } from "@search/components/OverviewPage";
+import { GettingStarted } from "@search/components/GettingStarted";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -10,12 +9,12 @@ export async function generateMetadata({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("search");
+	const t = await getTranslations("gettingStarted");
 	const org = await getActiveOrganization(organizationSlug);
-	return { title: `${t("overview.title")} – ${org?.name ?? ""}` };
+	return { title: `${t("title")} – ${org?.name ?? ""}` };
 }
 
-export default async function OverviewPageRoute({
+export default async function GettingStartedPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
@@ -29,7 +28,7 @@ export default async function OverviewPageRoute({
 
 	return (
 		<div className="p-6">
-			<OverviewPage />
+			<GettingStarted />
 		</div>
 	);
 }

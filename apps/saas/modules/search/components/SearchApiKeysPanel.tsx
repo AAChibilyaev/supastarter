@@ -30,6 +30,7 @@ import {
 } from "@repo/ui/components/table";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
+import { KeyIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -40,6 +41,7 @@ import {
 	useRevokeSearchApiKeyMutation,
 	useSearchApiKeysQuery,
 } from "../lib/api";
+import { EmptyState } from "./EmptyState";
 
 const formSchema = z.object({
 	name: z.string().min(1).max(120),
@@ -191,7 +193,12 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 			{isLoading ? (
 				<div className="text-foreground/60">{t("search.loading")}</div>
 			) : !keys || keys.length === 0 ? (
-				<p className="text-sm text-foreground/60">{t("search.apiKeys.empty")}</p>
+				<EmptyState
+					title={t("search.apiKeys.empty")}
+					description={t("search.apiKeys.emptyDescription")}
+					icon={KeyIcon}
+					action={{ label: t("search.apiKeys.create"), href: "#" }}
+				/>
 			) : (
 				<Table>
 					<TableHeader>

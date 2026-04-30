@@ -818,7 +818,7 @@ export class AacSearchWidget {
 				container,
 				mode: (dataset.mode as "inline" | "modal") ?? "inline",
 				theme: (dataset.theme as "light" | "dark" | "auto") ?? "auto",
-				locale: dataset.locale ?? "en",
+				locale: (dataset.locale as "en" | "ru" | "de" | "es" | "fr") ?? "en",
 				showPrices: dataset.showPrices !== "false",
 				showImages: dataset.showImages !== "false",
 			});

@@ -663,13 +663,17 @@
 			"revokeConfirmTitle": "Revoke API key",
 			"revokeConfirmMessage": "Are you sure you want to revoke \"{name}\"? Clients using this key will stop working immediately.",
 			"revoked": "API key revoked.",
-			"error": "Operation failed."
+			"error": "Operation failed.",
+			"emptyDescription": "Создайте первый API ключ, чтобы начать интеграцию поиска в ваше приложение."
 		},
 		"usage": {
 			"title": "Использование",
 			"windowDays": "Последние {days} дней",
 			"searches": "Поисков",
-			"ingests": "Документов проиндексировано"
+			"ingests": "Документов проиндексировано",
+			"documents": "Проиндексировано документов",
+			"ofLimit": "от месячного лимита",
+			"loadError": "Не удалось загрузить данные об использовании."
 		},
 		"widget": {
 			"tab": "Виджет",
@@ -692,7 +696,33 @@
 			"loadError": "Не удалось загрузить проекты."
 		},
 		"overview": {
-			"title": "Панель управления",
+			"title": "Обзор",
+			"subtitle": "За последние {days} дней",
+			"totalSearches": "Всего поисков",
+			"searchesTrend": "Тренд поиска",
+			"documentsIndexed": "Проиндексировано документов",
+			"quotaUsage": "Использование квоты",
+			"failedSyncJobs": "Ошибки синхронизации",
+			"searchesOverTime": "Поисков по дням",
+			"topQueries": "Популярные запросы",
+			"activityFeed": "Недавняя активность",
+			"connectorStatus": "Статус коннектора",
+			"period24h": "24ч",
+			"period7d": "7 дней",
+			"period30d": "30 дней",
+			"quotaWarning": "Вы использовали {percent}% квоты поиска. Обновите тариф, чтобы избежать ограничений.",
+			"quotaExceeded": "Вы превысили квоту поиска ({percent}%). Некоторые функции могут быть ограничены.",
+			"connectorOnline": "Все коннекторы онлайн",
+			"connectorOffline": "Коннектор отключён",
+			"connectorUnknown": "Коннектор не настроен",
+			"noData": "Нет данных",
+			"noDataDescription": "Данные появятся после того, как ваши поисковые индексы начнут получать запросы.",
+			"refresh": "Обновить",
+			"activity": {
+				"indexCreated": "Индекс \"{name}\" создан",
+				"keyRevoked": "{count, plural, one {# API ключ} few {# API ключа} many {# API ключей} other {# API ключей}} для \"{name}\"",
+				"syncFailed": "Синхронизация для индекса \"{name}\" не удалась"
+			},
 			"indexVersion": "Версия индекса",
 			"apiKeys": "API ключи",
 			"searches": "Поисков",
@@ -704,25 +734,35 @@
 			"manageIndexesDesc": "Создавайте и управляйте индексами поиска",
 			"viewAnalytics": "Аналитика",
 			"viewAnalyticsDesc": "Отслеживайте использование поиска и запросы",
-			"setupConnector": "Подключить модуль CMS",
+			"setupConnector": "Подключить коннектор",
 			"setupConnectorDesc": "Подключите PrestaShop или Bitrix модуль",
 			"managePlan": "Управление тарифом",
 			"graceUntil": "Только чтение до {date}",
-			"active": "Активен"
+			"active": "Активен",
+			"indexedProducts": "Проиндексировано товаров",
+			"apiKeysCount": "API ключей",
+			"lastHeartbeat": "Последний heartbeat",
+			"noHeartbeat": "Никогда",
+			"connectorToken": "Токен коннектора"
 		},
 		"checklist": {
 			"title": "Чеклист настройки",
-			"completed": "выполнено",
-			"done": "Готово",
-			"pending": "Ожидает",
-			"createIndex": "Создать индекс поиска",
-			"generateKey": "Сгенерировать API ключ",
-			"importData": "Импортировать данные",
-			"installWidget": "Установить виджет поиска",
-			"cmsModule": "Установить CMS модуль",
-			"fullSync": "Запустить полную синхронизацию",
-			"testSearch": "Протестировать поиск",
-			"enableWidget": "Включить виджет поиска"
+			"steps": {
+				"createIndex": "Создать индекс",
+				"createIndexDone": "Индекс создан",
+				"generateApiKey": "Сгенерировать API ключ",
+				"generateApiKeyDone": "API ключ сгенерирован",
+				"installCmsModule": "Установить CMS модуль",
+				"installCmsModuleDone": "CMS модуль установлен",
+				"runFullSync": "Запустить полную синхронизацию",
+				"runFullSyncDone": "Товары синхронизированы",
+				"testSearch": "Протестировать поиск",
+				"testSearchDone": "Поиск протестирован",
+				"enableWidget": "Включить виджет",
+				"enableWidgetDone": "Виджет включён"
+			},
+			"stepDocs": "Документация",
+			"allDone": "Все проверки пройдены!"
 		},
 		"analytics": {
 			"tab": "Аналитика",
@@ -733,38 +773,38 @@
 			"zeroResults": "Пустых результатов",
 			"searchesOverTime": "Поисков по дням",
 			"topQueries": "Популярные запросы",
-			"topClicked": "Популярные товары",
 			"queryColumn": "Запрос",
 			"countColumn": "Количество",
 			"productColumn": "Товар",
 			"clicksColumn": "Клики",
 			"noData": "Нет данных",
-			"period": "Период"
+			"noDataDescription": "Данные аналитики появятся после того, как ваши поисковые индексы начнут получать запросы.",
+			"topClickedProducts": "Популярные товары"
 		},
 		"importJobs": {
 			"tab": "Импорт",
 			"title": "Задачи импорта",
 			"description": "Отслеживание синхронизации документов",
-			"total": "Всего задач",
 			"pending": "В очереди",
 			"processing": "Выполняется",
 			"completed": "Завершено",
 			"failed": "Ошибок",
-			"jobId": "ID задачи",
-			"type": "Тип",
-			"progress": "Прогресс",
-			"errors": "Ошибки",
-			"noJobs": "Нет задач импорта",
-			"loadError": "Ошибка загрузки"
+			"tableJobId": "ID задачи",
+			"tableType": "Тип",
+			"tableStatus": "Статус",
+			"tableProgress": "Прогресс",
+			"tableErrors": "Ошибки",
+			"tableTime": "Время",
+			"empty": "Нет активности импорта за последние 7 дней.",
+			"emptyDescription": "Задачи импорта появляются здесь при синхронизации данных из вашей CMS."
 		},
 		"preview": {
-			"tab": "Тест поиска",
-			"title": "Тестовый поиск",
-			"description": "Проверьте как работает поиск",
-			"input": "Поисковый запрос",
+			"tab": "Предпросмотр поиска",
+			"title": "Предпросмотр поиска",
+			"description": "Тестируйте поисковые запросы к этому индексу и просматривайте сырые результаты.",
+			"placeholder": "Введите поисковый запрос…",
 			"search": "Найти",
-			"noResults": "Введите запрос для поиска",
-			"error": "Ошибка поиска"
+			"noResults": "Выполните запрос, чтобы увидеть результаты здесь."
 		},
 		"relevance": {
 			"tab": "Релевантность",
@@ -773,22 +813,23 @@
 		"synonyms": {
 			"title": "Синонимы",
 			"description": "Синонимы помогают находить товары по альтернативным названиям",
-			"synonym": "Синоним",
-			"root": "Основное слово",
-			"add": "Добавить синоним",
+			"add": "Добавить строку",
 			"remove": "Удалить",
 			"save": "Сохранить",
 			"saved": "Синонимы сохранены",
 			"error": "Ошибка сохранения",
 			"empty": "Нет синонимов",
-			"confirmRemove": "Удалить этот синоним?"
+			"emptyDescription": "Синонимы сопоставляют разные поисковые запросы с одним корневым словом, расширяя охват вашего поиска.",
+			"synonymColumn": "Синоним",
+			"rootColumn": "Корневое слово",
+			"tableActions": "Действия",
+			"removeConfirmTitle": "Удалить синоним",
+			"removeConfirmMessage": "Вы уверены, что хотите удалить эту пару синонимов?",
+			"tab": "Синонимы"
 		},
 		"curations": {
 			"title": "Курация результатов",
 			"description": "Закрепляйте или скрывайте товары по поисковым запросам",
-			"query": "Поисковый запрос",
-			"pinnedIds": "Закреплённые ID",
-			"hiddenIds": "Скрытые ID",
 			"add": "Добавить правило",
 			"edit": "Редактировать",
 			"remove": "Удалить",
@@ -796,11 +837,105 @@
 			"saved": "Правила сохранены",
 			"error": "Ошибка сохранения",
 			"empty": "Нет правил курации",
-			"confirmRemove": "Удалить это правило?"
+			"emptyDescription": "Правила курации позволяют закреплять или скрывать определённые товары для поисковых запросов.",
+			"queryColumn": "Запрос",
+			"pinnedColumn": "Закреплённые ID",
+			"hiddenColumn": "Скрытые ID",
+			"tableActions": "Действия",
+			"editTitle": "Редактировать правило",
+			"addTitle": "Добавить правило",
+			"dialogDescription": "Введите поисковый запрос и ID товаров для закрепления или скрытия.",
+			"queryLabel": "Поисковый запрос",
+			"queryPlaceholder": "например, беговые кроссовки",
+			"pinnedLabel": "Закреплённые ID товаров (через запятую)",
+			"pinnedPlaceholder": "prod-123, prod-456",
+			"hiddenLabel": "Скрытые ID товаров (через запятую)",
+			"hiddenPlaceholder": "prod-789, prod-012",
+			"dialogSave": "Сохранить правило",
+			"removeConfirmTitle": "Удалить правило",
+			"removeConfirmMessage": "Вы уверены, что хотите удалить это правило курации?",
+			"tab": "Курация"
 		},
 		"connector": {
-			"tab": "Коннекторы",
-			"title": "Подключение модулей CMS"
+			"title": "Подключение модулей CMS",
+			"description": "Управление токеном коннектора и статусом handshake.",
+			"tokenLabel": "Токен коннектора",
+			"tokenPlaceholder": "ss_connector_***",
+			"testHandshake": "Проверить handshake",
+			"handshakeSuccess": "Handshake успешен",
+			"handshakeFailed": "Handshake не удался",
+			"noConnectorKeys": "Нет ключей коннектора. Создайте API ключ с областью 'connector_write' во вкладке API Keys.",
+			"lastHeartbeat": "Последний heartbeat",
+			"noHeartbeat": "Heartbeat ещё не получен"
+		},
+		"tabs": {
+			"indexes": "Индексы",
+			"playground": "Playground",
+			"apiKeys": "API ключи",
+			"widget": "Виджет"
+		},
+		"playground": {
+			"title": "Поисковый Playground",
+			"description": "Тестируйте расширенные поисковые запросы со всеми доступными опциями.",
+			"advanced": "Расширенные опции",
+			"advancedShow": "Показать расширенные опции",
+			"advancedHide": "Скрыть расширенные опции",
+			"queryBy": "Поля поиска",
+			"queryByPlaceholder": "Названия полей через запятую (например, title, description)",
+			"filterBy": "Фильтр",
+			"filterByPlaceholder": "например, price:>100 && inStock:=true",
+			"sortBy": "Сортировка",
+			"sortByPlaceholder": "например, price:desc",
+			"perPage": "Результатов на страницу",
+			"run": "Выполнить поиск",
+			"cmdEnter": "Cmd+Enter для поиска",
+			"hits": "Результаты",
+			"facets": "Фасеты",
+			"rawJson": "Сырой JSON",
+			"curlSnippet": "cURL-запрос",
+			"copy": "Копировать",
+			"copied": "Скопировано!",
+			"responseTime": "Время ответа",
+			"hitCount": "Результатов",
+			"noDocuments": "Нет документов, соответствующих запросу.",
+			"debounceInfo": "Автопоиск (задержка 700мс)",
+			"lastQueryRestored": "Последний запрос восстановлен.",
+			"noIndexes": "Нет доступных индексов. Создайте сначала.",
+			"curlTitle": "cURL-запрос"
+		},
+		"indexActions": {
+			"actions": "Действия",
+			"reindex": "Переиндексировать",
+			"viewSchema": "Просмотр схемы",
+			"delete": "Удалить индекс",
+			"deleteConfirmTitle": "Удалить индекс",
+			"deleteConfirmMessage": "Вы уверены, что хотите удалить \"{name}\"? Это действие необратимо.",
+			"reindexConfirmTitle": "Переиндексация",
+			"reindexConfirmMessage": "Запустить полную переиндексацию для \"{name}\"?",
+			"schemaTitle": "Схема для \"{name}\"",
+			"reindexed": "Переиндексация запущена.",
+			"deleted": "Индекс удален."
+		},
+		"nav": {
+			"overview": "Обзор",
+			"gettingStarted": "Начало работы",
+			"search": "Поиск",
+			"apiKeys": "API ключи",
+			"importJobs": "Импорт задач",
+			"searchPreview": "Предпросмотр поиска",
+			"analytics": "Аналитика",
+			"relevance": "Релевантность",
+			"connectors": "Коннекторы"
+		},
+		"noIndexesDescription": "Поисковые индексы хранят ваши данные и обеспечивают поисковые запросы. Создайте индекс, чтобы начать.",
+		"apiKeysPage": {
+			"title": "API ключи"
+		},
+		"importJobsPage": {
+			"title": "Задачи импорта"
+		},
+		"previewPage": {
+			"title": "Предпросмотр поиска"
 		}
 	}
 }

@@ -38,14 +38,22 @@ export function ProjectOverview({
 	);
 
 	const hasApiKeys = apiKeys && apiKeys.length > 0;
-	const hasUsage = usage && (usage.searches > 0 || usage.ingests > 0);
+	const totalSearches =
+		usage?.rows
+			.filter((row) => row.type === "search")
+			.reduce((sum, row) => sum + row.total, 0) ?? 0;
+	const totalIngests =
+		usage?.rows
+			.filter((row) => row.type === "ingest" || row.type === "ingest_enqueued")
+			.reduce((sum, row) => sum + row.total, 0) ?? 0;
+	const hasUsage = totalSearches > 0 || totalIngests > 0;
 
 	const checklist = [
 		{ key: "createIndex", done: true },
 		{ key: "generateKey", done: hasApiKeys ?? false },
 		{ key: "cmsModule", done: false, link: true },
 		{ key: "fullSync", done: hasUsage ?? false },
-		{ key: "testSearch", done: (usage?.searches ?? 0) > 0 },
+		{ key: "testSearch", done: totalSearches > 0 },
 		{ key: "enableWidget", done: false },
 	];
 
@@ -82,7 +90,7 @@ export function ProjectOverview({
 							{usageLoading ? (
 								<Skeleton className="h-8 w-16" />
 							) : (
-								(usage?.searches ?? 0).toLocaleString()
+								totalSearches.toLocaleString()
 							)}
 						</CardTitle>
 					</CardHeader>
@@ -115,11 +123,11 @@ export function ProjectOverview({
 									{t(`search.checklist.${item.key}`)}
 								</div>
 								{item.done ? (
-									<Badge variant="success" className="text-xs">
+									<Badge status="success" className="text-xs">
 										{t("search.checklist.done")}
 									</Badge>
 								) : (
-									<Badge variant="secondary" className="text-xs">
+									<Badge status="info" className="text-xs">
 										{t("search.checklist.pending")}
 									</Badge>
 								)}

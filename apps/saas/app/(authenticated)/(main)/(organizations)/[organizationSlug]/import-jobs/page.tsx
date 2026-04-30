@@ -1,6 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { getBaseUrl } from "@repo/utils";
-import { OverviewPage } from "@search/components/OverviewPage";
+import { ImportJobsPanel } from "@search/components/ImportJobsPanel";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -10,12 +9,18 @@ export async function generateMetadata({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("search");
 	const org = await getActiveOrganization(organizationSlug);
-	return { title: `${t("overview.title")} – ${org?.name ?? ""}` };
+	let title = "Import Jobs";
+	try {
+		const t = await getTranslations("search");
+		title = t("importJobsPage.title");
+	} catch {
+		// fallback if locale key missing
+	}
+	return { title: `${title} – ${org?.name ?? ""}` };
 }
 
-export default async function OverviewPageRoute({
+export default async function ImportJobsPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
@@ -28,8 +33,14 @@ export default async function OverviewPageRoute({
 	if (!org || !session) return notFound();
 
 	return (
-		<div className="p-6">
-			<OverviewPage />
+		<div className="space-y-6 p-6">
+			<div>
+				<h1 className="text-3xl font-bold tracking-tight">Import Jobs</h1>
+				<p className="mt-1 text-muted-foreground">
+					Recent document import and sync activity from the ingest buffer.
+				</p>
+			</div>
+			<ImportJobsPanel organizationId={org.id} />
 		</div>
 	);
 }

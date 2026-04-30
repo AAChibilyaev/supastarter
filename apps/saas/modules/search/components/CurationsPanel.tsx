@@ -23,8 +23,11 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { FilterIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+
+import { EmptyState } from "./EmptyState";
 
 interface CurationsPanelProps {
 	organizationId: string;
@@ -231,7 +234,11 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 			</div>
 
 			{rules.length === 0 ? (
-				<p className="text-sm text-foreground/60">{t("search.curations.empty")}</p>
+				<EmptyState
+					title={t("search.curations.empty")}
+					description={t("search.curations.emptyDescription")}
+					icon={FilterIcon}
+				/>
 			) : (
 				<Table>
 					<TableHeader>

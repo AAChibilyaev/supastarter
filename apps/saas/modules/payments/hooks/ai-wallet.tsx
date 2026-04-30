@@ -41,7 +41,7 @@ export function useCreateTopup() {
 	return useMutation(
 		orpc.billingWallet.createTopup.mutationOptions({
 			onSuccess: () => {
-				qc.invalidateQueries({ queryKey: ["billingWallet"] });
+				void qc.invalidateQueries({ queryKey: ["billingWallet"] });
 			},
 		}),
 	);

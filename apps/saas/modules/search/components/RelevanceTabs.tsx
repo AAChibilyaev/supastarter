@@ -8,12 +8,20 @@ import { SynonymsPanel } from "./SynonymsPanel";
 
 interface RelevanceTabsProps {
 	organizationId: string;
-	slug: string;
+	slug?: string;
 }
 
 export function RelevanceTabs({ organizationId, slug }: RelevanceTabsProps) {
 	const t = useTranslations();
 	const [tab, setTab] = useState<"synonyms" | "curations">("synonyms");
+
+	if (!slug) {
+		return (
+			<div className="rounded p-6 border text-center text-foreground/60">
+				{t("search.selectIndex")}
+			</div>
+		);
+	}
 
 	return (
 		<div className="space-y-4">

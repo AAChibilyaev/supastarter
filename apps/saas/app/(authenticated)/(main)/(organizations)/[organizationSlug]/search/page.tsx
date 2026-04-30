@@ -2,7 +2,6 @@ import { getActiveOrganization, getSession } from "@auth/lib/server";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
 import { getBaseUrl } from "@repo/utils";
 import { SearchDashboard } from "@search/components/SearchDashboard";
-import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -25,7 +24,6 @@ export default async function SearchPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("search");
 
 	const [activeOrganization, session] = await Promise.all([
 		getActiveOrganization(organizationSlug),
@@ -39,13 +37,10 @@ export default async function SearchPage({
 	const canManage = isOrganizationAdmin(activeOrganization, session.user);
 
 	return (
-		<div>
-			<PageHeader title={t("title")} subtitle={t("subtitle")} />
-			<SearchDashboard
-				organizationId={activeOrganization.id}
-				canManage={canManage}
-				baseUrl={getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3000)}
-			/>
-		</div>
+		<SearchDashboard
+			organizationId={activeOrganization.id}
+			canManage={canManage}
+			baseUrl={getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3000)}
+		/>
 	);
 }

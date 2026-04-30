@@ -49,7 +49,7 @@ export function SearchPreview({ organizationId, slug }: SearchPreviewProps) {
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {
-			handleSearch();
+			void handleSearch();
 		}
 	};
 

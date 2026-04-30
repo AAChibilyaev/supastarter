@@ -12,7 +12,10 @@ import {
 } from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
+import { ListIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+
+import { EmptyState } from "./EmptyState";
 
 interface ImportJobsPanelProps {
 	organizationId: string;
@@ -84,7 +87,11 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			)}
 
 			{!jobs || jobs.length === 0 ? (
-				<p className="text-sm text-foreground/60">{t("search.importJobs.empty")}</p>
+				<EmptyState
+					title={t("search.importJobs.empty")}
+					description={t("search.importJobs.emptyDescription")}
+					icon={ListIcon}
+				/>
 			) : (
 				<div className="overflow-x-auto">
 					<Table>

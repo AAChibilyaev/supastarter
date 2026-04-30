@@ -13,8 +13,11 @@ import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
+import { BarChart3Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormatter } from "next-intl";
+
+import { EmptyState } from "./EmptyState";
 
 interface SearchAnalyticsCardsProps {
 	organizationId: string;
@@ -36,7 +39,13 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 	}
 
 	if (!data) {
-		return null;
+		return (
+			<EmptyState
+				title={t("search.analytics.noData")}
+				description={t("search.analytics.noDataDescription")}
+				icon={BarChart3Icon}
+			/>
+		);
 	}
 
 	const chartData = data.searchesOverTime.map((d) => ({

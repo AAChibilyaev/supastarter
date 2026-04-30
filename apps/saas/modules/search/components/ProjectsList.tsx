@@ -74,12 +74,12 @@ export function ProjectsList({ organizationId, onSelect, selectedSlug }: Project
 						<div className="flex items-center justify-between">
 							<CardTitle className="text-lg">{index.displayName}</CardTitle>
 							<div className="gap-2 flex items-center">
-								<Badge variant="secondary">{index.slug}</Badge>
-								<Badge>v{index.version}</Badge>
+								<Badge status="info">{index.slug}</Badge>
+								<Badge status="success">v{index.version}</Badge>
 							</div>
 						</div>
 						<CardDescription>
-							{index.apiKeyCount ?? 0} {t("search.projects.apiKeys")}
+							{index.apiKeysCount ?? 0} {t("search.projects.apiKeys")}
 						</CardDescription>
 					</CardHeader>
 				</Card>

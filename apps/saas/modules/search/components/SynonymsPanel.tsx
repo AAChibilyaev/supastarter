@@ -14,8 +14,11 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { BookOpenTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+
+import { EmptyState } from "./EmptyState";
 
 interface SynonymsPanelProps {
 	organizationId: string;
@@ -115,7 +118,11 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 			</div>
 
 			{rows.length === 0 ? (
-				<p className="text-sm text-foreground/60">{t("search.synonyms.empty")}</p>
+				<EmptyState
+					title={t("search.synonyms.empty")}
+					description={t("search.synonyms.emptyDescription")}
+					icon={BookOpenTextIcon}
+				/>
 			) : (
 				<Table>
 					<TableHeader>

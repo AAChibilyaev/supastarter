@@ -6,16 +6,16 @@
 
 ## 8.0 What's already in code (don't reinvent)
 
-| Surface | Component | Status | Gap to fill |
-|---|---|---|---|
-| List of collections | `SearchIndexesList.tsx` | ✅ shipped | Bulk-select, density toggle |
-| Create collection | `CreateSearchIndexDialog.tsx` | ✅ shipped — but uses JSON textarea for fields | Replace with structured form + drag-reorder |
-| Row actions | `IndexRowActions.tsx` | ✅ shipped | Verify: Reindex / Duplicate / Export schema / Delete |
-| Doc upsert (oRPC) | `searchRouter.upsertDocument` | ✅ shipped | UI consumer missing |
-| Doc bulk import (oRPC) | `searchRouter.importDocuments` | ✅ shipped | UI consumer missing |
-| **Documents table UI** | (none) | ❌ **biggest gap** | Full design below |
-| **Collection detail route** | (none) | ❌ **biggest gap** | `[indexSlug]/` route below |
-| **Schema diff preview** | (none) | ❌ | Required when editing live schema |
+| Surface                     | Component                      | Status                                         | Gap to fill                                          |
+| --------------------------- | ------------------------------ | ---------------------------------------------- | ---------------------------------------------------- |
+| List of collections         | `SearchIndexesList.tsx`        | ✅ shipped                                     | Bulk-select, density toggle                          |
+| Create collection           | `CreateSearchIndexDialog.tsx`  | ✅ shipped — but uses JSON textarea for fields | Replace with structured form + drag-reorder          |
+| Row actions                 | `IndexRowActions.tsx`          | ✅ shipped                                     | Verify: Reindex / Duplicate / Export schema / Delete |
+| Doc upsert (oRPC)           | `searchRouter.upsertDocument`  | ✅ shipped                                     | UI consumer missing                                  |
+| Doc bulk import (oRPC)      | `searchRouter.importDocuments` | ✅ shipped                                     | UI consumer missing                                  |
+| **Documents table UI**      | (none)                         | ❌ **biggest gap**                             | Full design below                                    |
+| **Collection detail route** | (none)                         | ❌ **biggest gap**                             | `[indexSlug]/` route below                           |
+| **Schema diff preview**     | (none)                         | ❌                                             | Required when editing live schema                    |
 
 ## 8.1 npm package decisions
 
@@ -23,35 +23,35 @@ The repo already has `react-hook-form + zod + recharts + sonner + 27 shadcn prim
 
 ### Add (recommended)
 
-| Package | Why | Size |
-|---|---|---|
-| **`@tanstack/react-table`** | Headless table primitive — column sorting, filtering, pagination, row selection, column visibility, sticky headers. **Industry standard**. The shadcn `table.tsx` is just the visual shell; React Table provides the logic. | ~12kb gz |
-| **`@tanstack/react-virtual`** | Row virtualization — required when rendering > 200 docs without scroll lag. Pairs with React Table. | ~3kb gz |
-| **`use-debounce`** *(or in-house)* | Debounced filter input. Tiny, well-tested. Alternative: 8-line custom hook in `apps/saas/modules/shared/hooks/use-debounced-value.ts` (cheaper). | < 1kb gz |
-| **`papaparse`** | CSV parsing for bulk import. Standard, streams large files. | ~13kb gz |
-| **`@dnd-kit/core` + `@dnd-kit/sortable`** | Drag-reorder fields in schema editor + columns in documents table. **Already a Radix-friendly choice**. | ~10kb gz combined |
+| Package                                   | Why                                                                                                                                                                                                                         | Size              |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| **`@tanstack/react-table`**               | Headless table primitive — column sorting, filtering, pagination, row selection, column visibility, sticky headers. **Industry standard**. The shadcn `table.tsx` is just the visual shell; React Table provides the logic. | ~12kb gz          |
+| **`@tanstack/react-virtual`**             | Row virtualization — required when rendering > 200 docs without scroll lag. Pairs with React Table.                                                                                                                         | ~3kb gz           |
+| **`use-debounce`** _(or in-house)_        | Debounced filter input. Tiny, well-tested. Alternative: 8-line custom hook in `apps/saas/modules/shared/hooks/use-debounced-value.ts` (cheaper).                                                                            | < 1kb gz          |
+| **`papaparse`**                           | CSV parsing for bulk import. Standard, streams large files.                                                                                                                                                                 | ~13kb gz          |
+| **`@dnd-kit/core` + `@dnd-kit/sortable`** | Drag-reorder fields in schema editor + columns in documents table. **Already a Radix-friendly choice**.                                                                                                                     | ~10kb gz combined |
 
 Total add: ~38kb gz. All loaded **only on the relevant route** (Next.js code splitting).
 
 ### Keep what we have, do NOT add duplicates
 
-| Function | Use existing | Don't add |
-|---|---|---|
-| Forms | `react-hook-form` + `zod` (already used in `CreateSearchIndexDialog.tsx`) | ~~`@tanstack/react-form`~~ |
-| Date picker | `react-day-picker` (already in shadcn `calendar.tsx`) | ~~standalone date lib~~ |
-| Command palette / quick-search | shadcn `command.tsx` (uses `cmdk` under the hood) | ~~separate cmdk install~~ |
-| Toasts | `sonner` (already used in `WidgetPanel`/`SearchApiKeysPanel`) | ~~react-toastify, etc.~~ |
-| JSON inspector | hand-rolled `<pre>{JSON.stringify(obj, null, 2)}</pre>` inside a `Card` for v1; copy button via existing pattern | ~~`react-json-view`, `@textea/json-viewer` until proven insufficient~~ |
-| Charts | `recharts` (already in `StatsTileChart`) | ~~chart.js, victory, etc.~~ |
+| Function                       | Use existing                                                                                                     | Don't add                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Forms                          | `react-hook-form` + `zod` (already used in `CreateSearchIndexDialog.tsx`)                                        | ~~`@tanstack/react-form`~~                                             |
+| Date picker                    | `react-day-picker` (already in shadcn `calendar.tsx`)                                                            | ~~standalone date lib~~                                                |
+| Command palette / quick-search | shadcn `command.tsx` (uses `cmdk` under the hood)                                                                | ~~separate cmdk install~~                                              |
+| Toasts                         | `sonner` (already used in `WidgetPanel`/`SearchApiKeysPanel`)                                                    | ~~react-toastify, etc.~~                                               |
+| JSON inspector                 | hand-rolled `<pre>{JSON.stringify(obj, null, 2)}</pre>` inside a `Card` for v1; copy button via existing pattern | ~~`react-json-view`, `@textea/json-viewer` until proven insufficient~~ |
+| Charts                         | `recharts` (already in `StatsTileChart`)                                                                         | ~~chart.js, victory, etc.~~                                            |
 
 ### Defer (only add if v1 surface proves limiting)
 
-| Package | When to add |
-|---|---|
-| `react-resizable-panels` | If users ask for split-pane "documents list + edit panel" layout |
-| `@uiw/react-codemirror` or `monaco-editor` | If users need code-style editing of large JSON docs (today: `<textarea>` is fine for < 5KB) |
-| `react-hotkeys-hook` | If keyboard-shortcut surface grows past 5 commands (today: native event listeners suffice) |
-| `react-virtuoso` | Alternative to `@tanstack/react-virtual` — only if React Table's virtualization story turns out limiting |
+| Package                                    | When to add                                                                                              |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `react-resizable-panels`                   | If users ask for split-pane "documents list + edit panel" layout                                         |
+| `@uiw/react-codemirror` or `monaco-editor` | If users need code-style editing of large JSON docs (today: `<textarea>` is fine for < 5KB)              |
+| `react-hotkeys-hook`                       | If keyboard-shortcut surface grows past 5 commands (today: native event listeners suffice)               |
+| `react-virtuoso`                           | Alternative to `@tanstack/react-virtual` — only if React Table's virtualization story turns out limiting |
 
 ### Per Hard Invariant #14
 
@@ -72,6 +72,7 @@ After adding any package: `pnpm install`, then verify `ls -l node_modules/@tanst
 URL state (not nested file routes) — keeps the route file tree flat and lets us implement tabs as `TabGroup` (existing in `apps/saas/modules/shared/components/`).
 
 Why one route with tabs instead of nested routes:
+
 - Customers expect to switch tabs without page reload (preserve filter state, scroll position, draft edits).
 - Server data dependencies overlap (all 5 tabs need the index meta).
 - Matches the existing pattern in the codebase (`SearchDashboard.tsx` already uses tabs for org-level search dashboard).
@@ -80,20 +81,24 @@ Why one route with tabs instead of nested routes:
 
 Today the list shows: name, slug, doc count, last updated, [Open] action. Improvements:
 
-| Add | Why |
-|---|---|
-| Bulk-select column (checkbox) | Multi-select for: bulk reindex, bulk delete, bulk export schema |
-| Bulk-action bar (sticky bottom) | Appears when > 0 selected — actions: `Reindex selected`, `Export schemas`, `Delete (with confirm)` |
-| Density toggle (compact / comfortable) | User preference, persisted in `localStorage`. Compact = 32px row, comfortable = 48px |
-| Quick-search field (debounced) | Filter by display name OR slug substring, client-side (lists are small — < 100 indexes per org) |
-| Status badge per row | green = healthy, amber = partial-fail in last sync, red = reindex stuck > 1h |
+| Add                                       | Why                                                                                                            |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Bulk-select column (checkbox)             | Multi-select for: bulk reindex, bulk delete, bulk export schema                                                |
+| Bulk-action bar (sticky bottom)           | Appears when > 0 selected — actions: `Reindex selected`, `Export schemas`, `Delete (with confirm)`             |
+| Density toggle (compact / comfortable)    | User preference, persisted in `localStorage`. Compact = 32px row, comfortable = 48px                           |
+| Quick-search field (debounced)            | Filter by display name OR slug substring, client-side (lists are small — < 100 indexes per org)                |
+| Status badge per row                      | green = healthy, amber = partial-fail in last sync, red = reindex stuck > 1h                                   |
 | "Owner" column when org+user contexts mix | shows org logo or user avatar — relevant per [§6.7 owner discriminator](06-ui-pages.md#67-owner-discriminator) |
 
 Composition (no new shadcn primitives needed):
 
 ```tsx
-import { useReactTable, getCoreRowModel, getFilteredRowModel,
-         getSortedRowModel } from "@tanstack/react-table"
+import {
+	useReactTable,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getSortedRowModel,
+} from "@tanstack/react-table";
 
 // 1 hook + existing Table primitives. ~80 lines total.
 ```
@@ -104,8 +109,8 @@ The current `CreateSearchIndexDialog` accepts JSON like:
 
 ```json
 [
-  { "name": "title", "type": "string" },
-  { "name": "tags", "type": "string[]", "facet": true, "optional": true }
+	{ "name": "title", "type": "string" },
+	{ "name": "tags", "type": "string[]", "facet": true, "optional": true }
 ]
 ```
 
@@ -284,13 +289,13 @@ Toolbar `[Export ▾]` → CSV / JSON / NDJSON. Streams from `searchRouter.searc
 
 Selecting rows enables the bulk action bar. Operations:
 
-| Action | Confirm | API |
-|---|---|---|
-| Edit common field | inline value picker → preview "12 docs will get tags=archived" → confirm | `searchRouter.bulkUpdate` (NEW — needed) |
-| Duplicate | optional id-prefix input | client loop over `upsertDocument` with new ids |
-| Delete | typed confirm "delete 12 documents" | `searchRouter.bulkDelete` (NEW — needed) |
-| Export | format picker | as above |
-| Reindex (re-process) | none | `searchRouter.reindex` |
+| Action               | Confirm                                                                  | API                                            |
+| -------------------- | ------------------------------------------------------------------------ | ---------------------------------------------- |
+| Edit common field    | inline value picker → preview "12 docs will get tags=archived" → confirm | `searchRouter.bulkUpdate` (NEW — needed)       |
+| Duplicate            | optional id-prefix input                                                 | client loop over `upsertDocument` with new ids |
+| Delete               | typed confirm "delete 12 documents"                                      | `searchRouter.bulkDelete` (NEW — needed)       |
+| Export               | format picker                                                            | as above                                       |
+| Reindex (re-process) | none                                                                     | `searchRouter.reindex`                         |
 
 **New procs needed**: `bulkUpdate`, `bulkDelete`. Both go through `enqueueManySearchIngest` to preserve [DB-first ingest](../../.claude/skills/supastarter-nextjs-skill/SKILL.md) (Hard Invariant #2).
 
@@ -331,31 +336,31 @@ Cross-link to Connectors page. Empty state in Documents tab includes:
 
 ## 8.7 Empty / Loading / Error
 
-| State | Documents tab UI |
-|---|---|
-| **Empty** (0 docs) | Centered card: "No documents yet. Drop a CSV, paste JSON, or connect a CMS." Three buttons → drop zone, paste dialog, Connectors page. |
-| **Loading initial** | Skeleton table (10 rows, animated shimmer). Same layout as real table — no shift on load. |
-| **Loading filter / page** | Inline progress bar at top of table; rows stay visible (don't blank out). |
-| **Error** | Inline `Alert` above table with retry button. Don't wipe rows on transient errors. |
-| **Quota exceeded** | Toolbar disabled; banner: "Search quota reached for this month — upgrade or wait until {date}." Read-only mode still works. |
-| **Schema mismatch on import** | Modal showing the mismatches with suggested fixes. Don't blanket-fail — let customer fix and retry. |
+| State                         | Documents tab UI                                                                                                                       |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Empty** (0 docs)            | Centered card: "No documents yet. Drop a CSV, paste JSON, or connect a CMS." Three buttons → drop zone, paste dialog, Connectors page. |
+| **Loading initial**           | Skeleton table (10 rows, animated shimmer). Same layout as real table — no shift on load.                                              |
+| **Loading filter / page**     | Inline progress bar at top of table; rows stay visible (don't blank out).                                                              |
+| **Error**                     | Inline `Alert` above table with retry button. Don't wipe rows on transient errors.                                                     |
+| **Quota exceeded**            | Toolbar disabled; banner: "Search quota reached for this month — upgrade or wait until {date}." Read-only mode still works.            |
+| **Schema mismatch on import** | Modal showing the mismatches with suggested fixes. Don't blanket-fail — let customer fix and retry.                                    |
 
 ## 8.8 Keyboard shortcuts (Documents tab)
 
-| Key | Action |
-|---|---|
-| `/` | Focus quick-search |
-| `f` | Open `[+ Filter]` picker |
-| `c` | Open `[Columns ▾]` popover |
-| `n` | New document (drawer in create mode) |
-| `↑ / ↓` | Move row selection |
-| `Enter` | Open drawer for highlighted row |
-| `Space` | Toggle row checkbox |
-| `Cmd+A` | Select all (with confirm if > 1k) |
-| `Cmd+Z` | Undo last cell edit |
-| `Esc` | Close drawer / cancel cell edit |
-| `Cmd+K` | Save current edit and close drawer |
-| `Delete` (when row selected) | Delete with confirm |
+| Key                          | Action                               |
+| ---------------------------- | ------------------------------------ |
+| `/`                          | Focus quick-search                   |
+| `f`                          | Open `[+ Filter]` picker             |
+| `c`                          | Open `[Columns ▾]` popover           |
+| `n`                          | New document (drawer in create mode) |
+| `↑ / ↓`                      | Move row selection                   |
+| `Enter`                      | Open drawer for highlighted row      |
+| `Space`                      | Toggle row checkbox                  |
+| `Cmd+A`                      | Select all (with confirm if > 1k)    |
+| `Cmd+Z`                      | Undo last cell edit                  |
+| `Esc`                        | Close drawer / cancel cell edit      |
+| `Cmd+K`                      | Save current edit and close drawer   |
+| `Delete` (when row selected) | Delete with confirm                  |
 
 ## 8.9 Mobile (375×667)
 

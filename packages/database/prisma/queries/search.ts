@@ -29,6 +29,12 @@ export const SEARCH_USAGE_EVENT_TYPES = {
 	searchQuery: "search_query",
 	ingestWrite: "ingest_write",
 	documentsIndexed: "documents_indexed",
+	click: "click",
+	zeroResults: "zero_results",
+	widgetOpen: "widget_open",
+	widgetQuery: "widget_query",
+	filterApplied: "filter_applied",
+	syncJob: "sync_job",
 } as const;
 
 export type SearchUsageMetricType =
@@ -197,6 +203,7 @@ export async function recordSearchUsage(input: {
 	organizationId: string;
 	type: SearchUsageMetricType;
 	count?: number;
+	metadata?: Prisma.InputJsonValue;
 }) {
 	return db.searchUsageEvent.create({
 		data: {
@@ -204,6 +211,7 @@ export async function recordSearchUsage(input: {
 			organizationId: input.organizationId,
 			type: input.type,
 			count: input.count ?? 1,
+			metadata: input.metadata,
 		},
 	});
 }

@@ -105,3 +105,9 @@ export async function listSyncJobs(organizationId: string): Promise<SyncJob[]> {
 		.sort((a, b) => b.startedAt.localeCompare(a.startedAt))
 		.slice(0, 50);
 }
+
+export async function getSyncJob(jobId: string, organizationId: string): Promise<SyncJob | null> {
+	const job = jobs.get(jobId);
+	if (!job || job.organizationId !== organizationId) return null;
+	return job;
+}

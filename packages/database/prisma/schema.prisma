@@ -319,6 +319,7 @@ model SearchUsageEvent {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   type           String
   count          Int          @default(1)
+  metadata       Json?
   createdAt      DateTime     @default(now())
 
   @@index([organizationId, createdAt])

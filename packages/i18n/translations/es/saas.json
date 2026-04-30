@@ -976,7 +976,8 @@
 			"searchPreview": "Vista previa",
 			"analytics": "Analíticas",
 			"relevance": "Relevancia",
-			"connectors": "Conectores"
+			"connectors": "Conectores",
+			"knowledge": "Conocimiento"
 		},
 		"noIndexesDescription": "Los índices de búsqueda almacenan tus datos y potencian las consultas de búsqueda. Crea uno para empezar.",
 		"synonyms": {
@@ -1028,6 +1029,50 @@
 		"relevance": {
 			"tab": "Relevancia",
 			"title": "Relevancia"
+		},
+		"knowledge": {
+			"title": "Conocimiento",
+			"subtitle": "Preguntas y respuestas RAG sobre sus documentos y catálogos",
+			"spaces": "Espacios",
+			"spacesDesc": "Espacios de trabajo de conocimiento personales/de organización",
+			"activeSpace": "Espacio activo",
+			"selectSpace": "Seleccionar espacio",
+			"newSpaceSlug": "Slug del nuevo espacio",
+			"newSpaceName": "Nombre del nuevo espacio",
+			"createSpace": "Crear espacio",
+			"sources": "Fuentes",
+			"sourcesDesc": "Fuentes CMS y de archivos para este espacio",
+			"sourceName": "Nombre de la fuente",
+			"sourceType": "Tipo de fuente",
+			"sourceConfig": "Configuración de fuente (JSON)",
+			"addSource": "Agregar fuente",
+			"fileIngestion": "Ingesta de archivos",
+			"fileIngestionDesc": "Subir md/xml/pdf al espacio seleccionado",
+			"fileInput": "Archivo",
+			"ingestFile": "Ingerir archivo",
+			"jobsAndMetrics": "Trabajos y métricas",
+			"jobsAndMetricsDesc": "Visibilidad operativa para la ingesta y construcción de grafos",
+			"sourcesMetric": "Fuentes",
+			"documentsMetric": "Documentos",
+			"chunksMetric": "Fragmentos",
+			"graphEdgesMetric": "Aristas del grafo",
+			"ragAsk": "Preguntar RAG",
+			"ragAskDesc": "Recuperación híbrida con citas de su espacio",
+			"question": "Pregunta",
+			"askButton": "Preguntar",
+			"graphExplain": "Explicar grafo",
+			"graphQuery": "Consulta de grafo",
+			"explainGraph": "Explicar grafo",
+			"fileSizeLimit": "El archivo debe ser menor de 50 MB",
+			"fileTypeLimit": "Solo se aceptan archivos .md, .xml y .pdf",
+			"createdSpace": "Espacio de conocimiento creado",
+			"createdSource": "Fuente de datos creada",
+			"ingestionStarted": "Ingesta de archivo iniciada",
+			"answerGenerated": "Respuesta generada",
+			"graphExplained": "Explicación del grafo generada",
+			"permissionDenied": "No tienes permisos para crear espacios",
+			"requiredFields": "Slug y nombre son obligatorios",
+			"noSpaceSelected": "Selecciona un espacio e ingresa una pregunta"
 		}
 	}
 }

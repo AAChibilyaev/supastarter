@@ -44,6 +44,7 @@ import {
 	KeyIcon,
 	UploadIcon,
 	EyeIcon,
+	LightbulbIcon,
 	BookOpenIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -403,16 +404,16 @@ export function NavBar() {
 							isActive: pathname.startsWith(`${basePath}/relevance`),
 						},
 						{
+							label: t("search.nav.knowledge"),
+							href: `${basePath}/knowledge`,
+							icon: LightbulbIcon,
+							isActive: pathname.startsWith(`${basePath}/knowledge`),
+						},
+						{
 							label: t("search.nav.connectors"),
 							href: `${basePath}/connectors`,
 							icon: CableIcon,
 							isActive: pathname.startsWith(`${basePath}/connectors`),
-						},
-						{
-							label: "Knowledge",
-							href: `${basePath}/knowledge`,
-							icon: BookOpenIcon,
-							isActive: pathname.startsWith(`${basePath}/knowledge`),
 						},
 					]
 				: []),

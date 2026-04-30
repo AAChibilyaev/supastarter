@@ -936,7 +936,8 @@
 			"searchPreview": "Suchvorschau",
 			"analytics": "Analysen",
 			"relevance": "Relevanz",
-			"connectors": "Connectors"
+			"connectors": "Connectors",
+			"knowledge": "Wissen"
 		},
 		"synonyms": {
 			"tab": "Synonyme",
@@ -987,6 +988,50 @@
 		"relevance": {
 			"tab": "Relevanz",
 			"title": "Relevanz"
+		},
+		"knowledge": {
+			"title": "Wissen",
+			"subtitle": "RAG-Fragenbeantwortung über Ihre Dokumente und Kataloge",
+			"spaces": "Bereiche",
+			"spacesDesc": "Persönliche/Organisations-Wissensarbeitsbereiche",
+			"activeSpace": "Aktiver Bereich",
+			"selectSpace": "Bereich auswählen",
+			"newSpaceSlug": "Slug für neuen Bereich",
+			"newSpaceName": "Name für neuen Bereich",
+			"createSpace": "Bereich erstellen",
+			"sources": "Quellen",
+			"sourcesDesc": "CMS- und Dateiquellen für diesen Bereich",
+			"sourceName": "Quellenname",
+			"sourceType": "Quellentyp",
+			"sourceConfig": "Quellenkonfiguration (JSON)",
+			"addSource": "Quelle hinzufügen",
+			"fileIngestion": "Dateiimport",
+			"fileIngestionDesc": "md/xml/pdf in ausgewählten Bereich hochladen",
+			"fileInput": "Datei",
+			"ingestFile": "Datei importieren",
+			"jobsAndMetrics": "Aufträge & Metriken",
+			"jobsAndMetricsDesc": "Operative Einblicke in Import- und Graphenerstellungen",
+			"sourcesMetric": "Quellen",
+			"documentsMetric": "Dokumente",
+			"chunksMetric": "Chunks",
+			"graphEdgesMetric": "Graph-Kanten",
+			"ragAsk": "RAG-Frage",
+			"ragAskDesc": "Hybride Abfrage mit Zitaten aus Ihrem Bereich",
+			"question": "Frage",
+			"askButton": "Fragen",
+			"graphExplain": "Graphen erklären",
+			"graphQuery": "Graph-Abfrage",
+			"explainGraph": "Graphen erklären",
+			"fileSizeLimit": "Datei muss unter 50 MB sein",
+			"fileTypeLimit": "Nur .md-, .xml- und .pdf-Dateien werden akzeptiert",
+			"createdSpace": "Wissensbereich erstellt",
+			"createdSource": "Datenquelle erstellt",
+			"ingestionStarted": "Dateiimport gestartet",
+			"answerGenerated": "Antwort generiert",
+			"graphExplained": "Graphen-Erklärung generiert",
+			"permissionDenied": "Sie haben keine Berechtigung, Bereiche zu erstellen",
+			"requiredFields": "Slug und Name sind erforderlich",
+			"noSpaceSelected": "Wählen Sie einen Bereich aus und geben Sie eine Frage ein"
 		}
 	}
 }

@@ -16,7 +16,8 @@ import { cors } from "hono/cors";
 import { z } from "zod";
 
 import { getConnectorDefinition } from "./lib/connectors/runtime";
-import { completeSyncJob, createSyncJob, failSyncJob } from "./lib/sync-jobs";
+import { recordDiagnostics } from "./lib/diagnostics-store";
+import { completeSyncJob, createSyncJob, failSyncJob, getSyncJob } from "./lib/sync-jobs";
 
 // ─── Auth middleware ─────────────────────────────────────────────
 
@@ -346,11 +347,31 @@ export const connectorApp = new Hono()
 			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
 		}
 
+		const stored = recordDiagnostics({
+			organizationId: verified.organizationId,
+			indexId: verified.indexId,
+			report: parsed.data,
+		});
+
 		logger.info("Connector diagnostics", {
 			projectId: verified.organizationId,
 			keyId: verified.keyId,
 			...parsed.data,
 		});
 
-		return c.json({ status: "ok", receivedAt: new Date().toISOString() });
+		return c.json({ status: "ok", receivedAt: stored.receivedAt });
+	})
+
+	// GET /api/projects/:projectId/sync/jobs/:jobId
+	.get("/projects/:projectId/sync/jobs/:jobId", async (c) => {
+		const verified = await gateConnectorRequest(c);
+		if (verified instanceof Response) return verified;
+
+		if (c.req.param("projectId") !== verified.organizationId) {
+			return c.json({ error: "project_not_found" }, 404);
+		}
+
+		const job = await getSyncJob(c.req.param("jobId"), verified.organizationId);
+		if (!job) return c.json({ error: "job_not_found" }, 404);
+		return c.json(job);
 	});

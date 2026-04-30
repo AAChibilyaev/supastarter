@@ -31,4 +31,4 @@ export const searchIndexSlugSchema = z
 	.max(64)
 	.regex(/^[a-z0-9][a-z0-9-]*$/, "slug must be lowercase letters, digits, and dashes");
 
-export const searchApiKeyScopeSchema = z.enum(["search", "ingest", "admin"]);
+export const searchApiKeyScopeSchema = z.enum(["search", "ingest", "admin", "connector_write"]);

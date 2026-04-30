@@ -15,6 +15,9 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
 
+import { getConnectorDefinition } from "./lib/connectors/runtime";
+import { completeSyncJob, createSyncJob, failSyncJob } from "./lib/sync-jobs";
+
 // ─── Auth middleware ─────────────────────────────────────────────
 
 interface VerifiedConnector {
@@ -185,10 +188,22 @@ export const connectorApp = new Hono()
 			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
 		}
 
+		const connector = getConnectorDefinition(parsed.data.platform);
+		if (!connector) {
+			return c.json({ error: "unsupported_connector" }, 400);
+		}
+
 		return c.json({
 			projectId: verified.organizationId,
 			indexSlug: verified.indexSlug,
 			status: "active",
+			connector: {
+				id: connector.id,
+				displayName: connector.displayName,
+				syncModes: connector.syncModes,
+				capabilities: connector.capabilities,
+				minModuleVersion: connector.minModuleVersion,
+			},
 		});
 	})
 
@@ -217,6 +232,11 @@ export const connectorApp = new Hono()
 		}
 
 		const docs = parsed.data.products.map(normalizeProduct);
+		const job = createSyncJob({
+			type: "full",
+			indexId: verified.indexId,
+			organizationId: verified.organizationId,
+		});
 
 		try {
 			await enqueueManySearchIngest(
@@ -225,14 +245,17 @@ export const connectorApp = new Hono()
 				"upsert",
 				docs as Prisma.InputJsonValue[],
 			);
+			completeSyncJob(job.id, { itemsCount: docs.length });
 		} catch (error) {
 			logger.error("Full sync enqueue failed", { error, projectId: verified.organizationId });
+			failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
 			return c.json({ error: "sync_failed" }, 502);
 		}
 
 		return c.json({
 			status: "accepted",
 			itemsCount: docs.length,
+			jobId: job.id,
 		});
 	})
 
@@ -254,6 +277,11 @@ export const connectorApp = new Hono()
 		}
 
 		const docs = parsed.data.products.map(normalizeProduct);
+		const job = createSyncJob({
+			type: "delta",
+			indexId: verified.indexId,
+			organizationId: verified.organizationId,
+		});
 
 		try {
 			await enqueueManySearchIngest(
@@ -262,15 +290,17 @@ export const connectorApp = new Hono()
 				"upsert",
 				docs as Prisma.InputJsonValue[],
 			);
+			completeSyncJob(job.id, { itemsCount: docs.length });
 		} catch (error) {
 			logger.error("Delta sync enqueue failed", {
 				error,
 				projectId: verified.organizationId,
 			});
+			failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
 			return c.json({ error: "sync_failed" }, 502);
 		}
 
-		return c.json({ status: "accepted", itemsProcessed: docs.length });
+		return c.json({ status: "accepted", itemsProcessed: docs.length, jobId: job.id });
 	})
 
 	// DELETE /api/projects/:projectId/products/:externalId

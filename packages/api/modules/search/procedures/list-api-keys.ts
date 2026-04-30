@@ -1,8 +1,14 @@
+import { ORPCError } from "@orpc/client";
 import { listSearchApiKeys } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationMember, requireSearchIndex } from "../lib/access";
+import {
+	requireSearchIndexByOwner,
+	requireSearchOwnerMember,
+	SEARCH_OWNER_TYPES,
+	type SearchOwnerInput,
+} from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
 export const listApiKeys = protectedProcedure
@@ -14,13 +20,30 @@ export const listApiKeys = protectedProcedure
 	})
 	.input(
 		z.object({
-			organizationId: z.string(),
+			organizationId: z.string().optional(),
+			ownerType: z
+				.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user])
+				.optional(),
+			ownerId: z.string().optional(),
 			slug: searchIndexSlugSchema,
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationMember(input.organizationId, user.id);
-		const index = await requireSearchIndex(input.organizationId, input.slug);
+		const owner: SearchOwnerInput =
+			input.ownerType && input.ownerId
+				? { ownerType: input.ownerType, ownerId: input.ownerId }
+				: {
+						ownerType: SEARCH_OWNER_TYPES.organization,
+						ownerId: input.organizationId ?? "",
+					};
+		if (!owner.ownerId) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "ownerId or organizationId is required",
+			});
+		}
+
+		await requireSearchOwnerMember(owner, user);
+		const index = await requireSearchIndexByOwner(owner, input.slug);
 		const keys = await listSearchApiKeys(index.id);
 
 		return keys.map((key) => ({

@@ -1,11 +1,11 @@
 import { ORPCError } from "@orpc/client";
-import { createSearchIndex, getSearchIndexBySlug } from "@repo/database";
+import { createSearchIndexByOwner, getSearchIndexByOwnerSlug } from "@repo/database";
 import { logger } from "@repo/logs";
 import { createPhysicalCollection, ensureAlias } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationAdmin } from "../lib/access";
+import { requireSearchOwnerAdmin, SEARCH_OWNER_TYPES, type SearchOwnerInput } from "../lib/access";
 import { searchFieldSchema, searchIndexSlugSchema } from "../types";
 
 export const createIndex = protectedProcedure
@@ -18,7 +18,11 @@ export const createIndex = protectedProcedure
 	})
 	.input(
 		z.object({
-			organizationId: z.string(),
+			organizationId: z.string().optional(),
+			ownerType: z
+				.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user])
+				.optional(),
+			ownerId: z.string().optional(),
 			slug: searchIndexSlugSchema,
 			displayName: z.string().min(1).max(120),
 			fields: z.array(searchFieldSchema).min(1),
@@ -26,15 +30,34 @@ export const createIndex = protectedProcedure
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationAdmin(input.organizationId, user);
+		const owner: SearchOwnerInput =
+			input.ownerType && input.ownerId
+				? { ownerType: input.ownerType, ownerId: input.ownerId }
+				: {
+						ownerType: SEARCH_OWNER_TYPES.organization,
+						ownerId: input.organizationId ?? "",
+					};
 
-		const existing = await getSearchIndexBySlug(input.organizationId, input.slug);
+		if (!owner.ownerId) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "ownerId or organizationId is required",
+			});
+		}
+
+		await requireSearchOwnerAdmin(owner, user);
+
+		const existing = await getSearchIndexByOwnerSlug(
+			{
+				organizationId: owner.ownerId,
+			},
+			input.slug,
+		);
 		if (existing) {
 			throw new ORPCError("CONFLICT", { message: "Index slug already exists" });
 		}
 
-		const created = await createSearchIndex({
-			organizationId: input.organizationId,
+		const created = await createSearchIndexByOwner({
+			organizationId: owner.ownerId,
 			slug: input.slug,
 			displayName: input.displayName,
 			schema: {
@@ -45,13 +68,13 @@ export const createIndex = protectedProcedure
 
 		try {
 			await createPhysicalCollection({
-				organizationId: input.organizationId,
+				organizationId: owner.ownerId,
 				slug: input.slug,
 				version: created.version,
 				fields: input.fields,
 				defaultSortingField: input.defaultSortingField,
 			});
-			await ensureAlias(input.organizationId, input.slug, created.version);
+			await ensureAlias(owner.ownerId, input.slug, created.version);
 		} catch (error) {
 			logger.error("Failed to create Typesense collection", { error });
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {

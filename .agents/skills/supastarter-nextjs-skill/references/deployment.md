@@ -4,16 +4,16 @@ Production deployment for supastarter Next.js (split-app monorepo).
 
 supastarter has **8 official deployment recipes**. Pick the one that matches your hosting.
 
-| Path                     | Best for                          | Doc                                                             |
-| ------------------------ | --------------------------------- | --------------------------------------------------------------- |
-| **Vercel** (recommended) | Zero-ops, one project per app     | <https://supastarter.dev/docs/nextjs/deployment/vercel>         |
-| **Netlify**              | Similar to Vercel, alternate host | <https://supastarter.dev/docs/nextjs/deployment/netlify>        |
-| **Docker**               | Generic container deploy          | <https://supastarter.dev/docs/nextjs/deployment/docker>         |
-| **Coolify**              | Self-hosted PaaS (Docker-based)   | <https://supastarter.dev/docs/nextjs/deployment/coolify>        |
-| **Railway**              | PaaS, easy Postgres included      | <https://supastarter.dev/docs/nextjs/deployment/railway>        |
-| **Render**               | PaaS with managed Postgres        | <https://supastarter.dev/docs/nextjs/deployment/render>         |
-| **Fly.io**               | Edge regions, Docker-based        | <https://supastarter.dev/docs/nextjs/deployment/flydotio>       |
-| **Standalone Node API**  | Split API for independent scaling | <https://supastarter.dev/docs/nextjs/deployment/standalone-api> |
+| Path | Best for | Doc |
+|---|---|---|
+| **Vercel** (recommended) | Zero-ops, one project per app | <https://supastarter.dev/docs/nextjs/deployment/vercel> |
+| **Netlify** | Similar to Vercel, alternate host | <https://supastarter.dev/docs/nextjs/deployment/netlify> |
+| **Docker** | Generic container deploy | <https://supastarter.dev/docs/nextjs/deployment/docker> |
+| **Coolify** | Self-hosted PaaS (Docker-based) | <https://supastarter.dev/docs/nextjs/deployment/coolify> |
+| **Railway** | PaaS, easy Postgres included | <https://supastarter.dev/docs/nextjs/deployment/railway> |
+| **Render** | PaaS with managed Postgres | <https://supastarter.dev/docs/nextjs/deployment/render> |
+| **Fly.io** | Edge regions, Docker-based | <https://supastarter.dev/docs/nextjs/deployment/flydotio> |
+| **Standalone Node API** | Split API for independent scaling | <https://supastarter.dev/docs/nextjs/deployment/standalone-api> |
 
 Below: detail on the three most common paths (Vercel, Coolify/Docker, Standalone API). The Railway/Render/Fly.io/Netlify recipes are minor variations of the Docker pattern — see their official docs for platform-specific quirks.
 
@@ -24,7 +24,6 @@ Below: detail on the three most common paths (Vercel, Coolify/Docker, Standalone
 Deploy each app (`apps/saas`, `apps/marketing`, `apps/docs`) as a **separate Vercel project** from the same monorepo.
 
 Per Vercel project:
-
 - **Root Directory**: `apps/saas` (or `apps/marketing` / `apps/docs`)
 - **Build Command**: `cd ../.. && pnpm --filter <app> build` (Turbo handles the workspace)
 - **Install Command**: `pnpm install --frozen-lockfile`
@@ -47,8 +46,8 @@ Use Next.js standalone output. Add to the relevant `apps/<app>/next.config.ts`:
 
 ```typescript
 const nextConfig = {
-	output: "standalone",
-	// ...
+  output: "standalone",
+  // ...
 };
 export default nextConfig;
 ```
@@ -86,7 +85,6 @@ CMD ["node", "apps/saas/server.js"]
 ```
 
 In Coolify:
-
 1. Create a new application from your repo.
 2. Build pack: **Dockerfile**.
 3. Dockerfile path: `apps/saas/Dockerfile` (and one Coolify app per Next.js app).
@@ -104,18 +102,17 @@ Docs: <https://supastarter.dev/docs/nextjs/deployment/coolify>.
 If you need to scale the API independently of the SaaS frontend (e.g., heavier oRPC traffic, websockets, long-running endpoints), split `packages/api` into a standalone Node server.
 
 Pattern:
-
 1. Create a tiny new app `apps/api/` that imports the Hono `app` from `@repo/api` and runs it via `@hono/node-server`:
 
-    ```typescript
-    // apps/api/server.ts
-    import { serve } from "@hono/node-server";
-    import { app } from "@repo/api";
+   ```typescript
+   // apps/api/server.ts
+   import { serve } from "@hono/node-server";
+   import { app } from "@repo/api";
 
-    const port = Number(process.env.PORT ?? 8080);
-    serve({ fetch: app.fetch, port });
-    console.log(`API listening on :${port}`);
-    ```
+   const port = Number(process.env.PORT ?? 8080);
+   serve({ fetch: app.fetch, port });
+   console.log(`API listening on :${port}`);
+   ```
 
 2. Build it as a separate container (similar Dockerfile to the apps).
 3. Update `apps/saas/next.config.ts` to proxy `/api/*` to the standalone API URL, OR change the SaaS oRPC client base URL to point at the standalone host.
@@ -123,7 +120,6 @@ Pattern:
 5. Set the same DB/auth/storage env vars on the API container.
 
 Useful when:
-
 - API needs to scale separately from the frontend
 - You want to host the API on Fly.io / Railway / Render while keeping the frontend on Vercel
 - You need longer execution timeouts than Vercel allows
@@ -177,17 +173,14 @@ Wire this as a Vercel build step, GitHub Action, or Coolify pre-deploy task. Pro
 ## Webhooks
 
 All payment providers post to **the same path**:
-
 ```
 ${NEXT_PUBLIC_SAAS_URL}/api/webhooks/payments
 ```
-
 The handler routes by active provider + signature. Set the matching `*_WEBHOOK_SECRET` per provider.
 
 ## OAuth callbacks
 
 Each OAuth provider needs:
-
 ```
 ${NEXT_PUBLIC_SAAS_URL}/api/auth/callback/<provider>
 ```

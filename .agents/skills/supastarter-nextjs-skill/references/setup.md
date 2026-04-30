@@ -39,11 +39,10 @@ pnpm dev
 ```
 
 After `pnpm dev`:
-
-- SaaS: http://localhost:3000
-- Marketing: http://localhost:3001
-- Docs: http://localhost:3002
-- Mail-preview: http://localhost:3003
+- SaaS:          http://localhost:3000
+- Marketing:     http://localhost:3001
+- Docs:          http://localhost:3002
+- Mail-preview:  http://localhost:3003
 - MinIO console: http://localhost:9001 (`minioadmin` / `minioadmin`)
 
 ## Single-app Dev

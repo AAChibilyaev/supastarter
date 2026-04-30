@@ -375,19 +375,23 @@ export function NavBar() {
 							label: t("search.nav.search"),
 							href: `${basePath}/search`,
 							icon: SearchIcon,
-							isActive: pathname.startsWith(`${basePath}/search`),
+							isActive:
+								pathname.startsWith(`${basePath}/search`) ||
+								pathname.startsWith(`${basePath}/api-keys`) ||
+								pathname.startsWith(`${basePath}/import-jobs`) ||
+								pathname.startsWith(`${basePath}/preview`),
 							subItems: [
 								{
 									label: t("search.nav.apiKeys"),
-									href: `${basePath}/search`,
+									href: `${basePath}/api-keys`,
 								},
 								{
 									label: t("search.nav.importJobs"),
-									href: `${basePath}/search`,
+									href: `${basePath}/import-jobs`,
 								},
 								{
 									label: t("search.nav.searchPreview"),
-									href: `${basePath}/search`,
+									href: `${basePath}/preview`,
 								},
 							],
 						},

@@ -694,7 +694,56 @@
 			"schemaHelp": "JSON-Array von Typesense-Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefugt.",
 			"submit": "Erstellen",
 			"success": "Index wurde erstellt.",
-			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen."
+			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen.",
+			"startFromTemplate": "Mit Vorlage starten:",
+			"autoFromName": "auto",
+			"builder": "Visueller Editor",
+			"json": "JSON",
+			"fieldsTitle": "Schema-Felder",
+			"fieldsCount": "{count} Felder konfiguriert",
+			"addField": "Feld hinzufugen",
+			"removeField": "Feld entfernen",
+			"moveUp": "Nach oben",
+			"moveDown": "Nach unten",
+			"errorsCount": "{count, plural, one {# Feld enthält einen Fehler} other {# Felder enthalten Fehler}}",
+			"noFields": "Noch keine Felder — fugen Sie eines hinzu oder wahlen Sie eine Vorlage.",
+			"noSort": "Keine Standard-Sortierung",
+			"noSortableHint": "Aktivieren Sie zuerst Sort fur ein numerisches Feld",
+			"tenantHint": "tenant_id wird zur Isolation automatisch hinzugefugt.",
+			"templates": {
+				"products": "Produkte",
+				"articles": "Artikel",
+				"users": "Benutzer",
+				"blank": "Leer"
+			},
+			"typeGroups": {
+				"text": "Text",
+				"number": "Zahl",
+				"boolean": "Boolean",
+				"advanced": "Erweitert"
+			},
+			"toggles": {
+				"facet": "Facette",
+				"optional": "Optional",
+				"sort": "Sortieren"
+			},
+			"tooltips": {
+				"displayName": "Lesbarer Name, der im Dashboard angezeigt wird. Hat keinen Einfluss auf die API.",
+				"slug": "Wird in API-Pfaden und als Typesense-Sammlungs-Alias verwendet. Nur Kleinbuchstaben, Ziffern und Bindestriche.",
+				"fields": "Definieren Sie die Spalten Ihrer Suchsammlung. Felder konnen facettierbar, sortierbar oder optional sein.",
+				"facet": "Erlaubt Filterung und Gruppierung nach diesem Feld (z. B. Kategorien, Tags, Marke).",
+				"optional": "Das Feld darf in Dokumenten fehlen. Pflichtfelder mussen in jedem Dokument vorhanden sein.",
+				"sort": "Sortierung fur dieses Feld erlauben (numerische Felder konnen immer sortiert werden).",
+				"defaultSort": "Feld zur Sortierung der Ergebnisse, wenn keine explizite Sortierung angegeben ist. Muss numerisch sein.",
+				"json": "Schema als reines JSON bearbeiten. Beim Wechsel zuruck zum visuellen Editor werden Anderungen validiert und ubernommen.",
+				"idField": "Empfohlener eindeutiger Bezeichner. Typesense verwendet diesen Wert als Primarschlussel beim Upsert."
+			},
+			"errors": {
+				"duplicateName": "Feldname muss eindeutig sein",
+				"invalidJson": "Ungultiges JSON",
+				"empty": "Mindestens ein Feld hinzufugen",
+				"fieldsInvalid": "Beheben Sie die markierten Felder"
+			}
 		},
 		"apiKeys": {
 			"title": "API-Keys",
@@ -939,6 +988,21 @@
 		"connector": {
 			"title": "Connectors",
 			"subtitle": "PrestaShop, Bitrix verbinden oder Dokumente direkt per API pushen",
+			"stepCounter": "Schritt {current} von {total}",
+			"runSyncDesc": "Starten Sie eine vollstandige Synchronisation, um alle Produkte aus Ihrem CMS zu indizieren.",
+			"runSyncCta": "Vollstandige Synchronisation starten",
+			"syncTriggerHint": "Offnen Sie Ihren CMS-Adminbereich und klicken Sie im AACsearch-Modul auf 'Full sync'.",
+			"configStep1": {
+				"prestashop": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres PrestaShop-Admins ein.",
+				"bitrix": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres Bitrix-Admins ein.",
+				"directApi": "Verwenden Sie die API-URL und das Token als Basis-URL und Bearer-Token fur Ihre REST-Aufrufe."
+			},
+			"configStep2": {
+				"prestashop": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
+				"bitrix": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
+				"directApi": "Geben Sie das Token im Authorization-Header an: Bearer <token>"
+			},
+			"configStep3": "Speichern Sie die Konfiguration.",
 			"prestashop": "PrestaShop",
 			"prestashopDesc": "Vollsynchronisation für Produkte, Kategorien, Lagerbestand",
 			"bitrix": "1C-Bitrix",

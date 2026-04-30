@@ -317,7 +317,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 							{t("search.connector.activeConnectorsDesc")}
 						</CardDescription>
 					</CardHeader>
-					<CardContent>
+					<CardContent className="overflow-x-auto">
 						{activeTokens.length === 0 ? (
 							<p className="py-4 text-sm text-center text-muted-foreground">
 								{t("search.connector.noConnectors")}

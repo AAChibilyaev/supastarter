@@ -27,21 +27,21 @@ See [assets/env.example](../assets/env.example) for the full list (mail, payment
 
 Each app has its own scoped config:
 
-| File                                             | Purpose                                                                                 |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `apps/saas/config.ts`                            | SaaS app metadata                                                                       |
-| `apps/marketing/config.ts`                       | Marketing site metadata, navigation, etc.                                               |
-| `apps/docs/config.ts`                            | Docs site config                                                                        |
-| `packages/i18n/config.ts`                        | Locales (`en`, `de`, `es`, `fr`), default locale, currency, cookie name (`NEXT_LOCALE`) |
-| `packages/payments/config.ts`                    | Payment provider selection, plan→priceId mapping                                        |
-| `packages/mail/config.ts`                        | Mail provider selection, from address                                                   |
-| `packages/storage/config.ts`                     | S3 settings                                                                             |
-| `packages/notifications/types.ts` + `catalog.ts` | Notification types, groups, i18n labels                                                 |
+| File | Purpose |
+|---|---|
+| `apps/saas/config.ts` | SaaS app metadata |
+| `apps/marketing/config.ts` | Marketing site metadata, navigation, etc. |
+| `apps/docs/config.ts` | Docs site config |
+| `packages/i18n/config.ts` | Locales (`en`, `de`, `es`, `fr`), default locale, currency, cookie name (`NEXT_LOCALE`) |
+| `packages/payments/config.ts` | Payment provider selection, plan→priceId mapping |
+| `packages/mail/config.ts` | Mail provider selection, from address |
+| `packages/storage/config.ts` | S3 settings |
+| `packages/notifications/types.ts` + `catalog.ts` | Notification types, groups, i18n labels |
 
 Import via package alias:
 
 ```typescript
-import { config } from "@config"; // current app's config
+import { config } from "@config";              // current app's config
 import { config as i18nConfig } from "@repo/i18n";
 ```
 

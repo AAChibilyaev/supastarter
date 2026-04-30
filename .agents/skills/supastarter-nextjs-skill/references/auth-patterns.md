@@ -69,14 +69,16 @@ Use the right procedure type from `packages/api/orpc/procedures.ts`:
 import { protectedProcedure, adminProcedure } from "../../../orpc/procedures";
 
 // any logged-in user
-export const myProcedure = protectedProcedure.handler(async ({ context }) => {
-	// context.user, context.session
-});
+export const myProcedure = protectedProcedure
+  .handler(async ({ context }) => {
+    // context.user, context.session
+  });
 
 // admin only (user.role === "admin")
-export const adminOnlyProcedure = adminProcedure.handler(async ({ context }) => {
-	// ...
-});
+export const adminOnlyProcedure = adminProcedure
+  .handler(async ({ context }) => {
+    // ...
+  });
 ```
 
 For the rare case where you need to inspect the session manually inside a `publicProcedure`:
@@ -85,10 +87,11 @@ For the rare case where you need to inspect the session manually inside a `publi
 import { auth } from "@repo/auth";
 import { publicProcedure } from "../../../orpc/procedures";
 
-export const maybeAuthed = publicProcedure.handler(async ({ context }) => {
-	const session = await auth.api.getSession({ headers: context.headers });
-	// session may be null
-});
+export const maybeAuthed = publicProcedure
+  .handler(async ({ context }) => {
+    const session = await auth.api.getSession({ headers: context.headers });
+    // session may be null
+  });
 ```
 
 ## OAuth providers
@@ -115,7 +118,7 @@ All wired via Better Auth plugins in `packages/auth/plugins/`. UI is in `apps/sa
 When a procedure operates on org-scoped data, also verify the user is a member:
 
 ```typescript
-import { hasOrganizationAccess } from "@organizations/lib/..."; // app-side helper
+import { hasOrganizationAccess } from "@organizations/lib/...";  // app-side helper
 // or use Better Auth org plugin: auth.api.hasPermission(...)
 ```
 
@@ -139,7 +142,6 @@ Better Auth's admin plugin gives certain users an `admin` role globally (separat
 ## Auth flow consistency checklist
 
 When changing auth flows, update:
-
 - Email templates in `packages/mail/emails/` (verify, reset, magic link, invitation)
 - Translations in `packages/i18n/translations/<locale>/{saas,mail}.json`
 - Better Auth audit hooks if any are wired in `packages/auth/`

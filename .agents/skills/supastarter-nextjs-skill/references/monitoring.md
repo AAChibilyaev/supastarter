@@ -16,7 +16,6 @@ logger.error("Webhook signature mismatch", { provider });
 ## Error boundaries
 
 Per-app:
-
 - `apps/saas/app/error.tsx` — runtime errors in protected segment
 - `apps/saas/app/global-error.tsx` — global fallback (incl. root layout errors)
 - `apps/marketing/app/[locale]/error.tsx` — marketing errors
@@ -41,8 +40,8 @@ Add a health endpoint when needed:
 import { db } from "@repo/database";
 
 export async function GET() {
-	await db.$queryRaw`SELECT 1`;
-	return Response.json({ ok: true });
+  await db.$queryRaw`SELECT 1`;
+  return Response.json({ ok: true });
 }
 ```
 

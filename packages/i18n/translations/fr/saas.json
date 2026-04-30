@@ -709,7 +709,56 @@
 			"schemaHelp": "Tableau JSON de définitions de champs Typesense. Le champ 'tenant_id' est ajouté automatiquement.",
 			"submit": "Créer",
 			"success": "Index créé.",
-			"error": "Impossible de créer l'index. Veuillez réessayer."
+			"error": "Impossible de créer l'index. Veuillez réessayer.",
+			"startFromTemplate": "Démarrer à partir d'un modèle :",
+			"autoFromName": "auto",
+			"builder": "Éditeur visuel",
+			"json": "JSON",
+			"fieldsTitle": "Champs du schéma",
+			"fieldsCount": "{count} champs configurés",
+			"addField": "Ajouter un champ",
+			"removeField": "Supprimer le champ",
+			"moveUp": "Monter",
+			"moveDown": "Descendre",
+			"errorsCount": "{count, plural, one {# champ en erreur} other {# champs en erreur}}",
+			"noFields": "Aucun champ — ajoutez-en un ou choisissez un modèle.",
+			"noSort": "Pas de tri par défaut",
+			"noSortableHint": "Activez d'abord Sort sur un champ numérique",
+			"tenantHint": "tenant_id est ajouté automatiquement pour l'isolation.",
+			"templates": {
+				"products": "Produits",
+				"articles": "Articles",
+				"users": "Utilisateurs",
+				"blank": "Vierge"
+			},
+			"typeGroups": {
+				"text": "Texte",
+				"number": "Nombre",
+				"boolean": "Booléen",
+				"advanced": "Avancé"
+			},
+			"toggles": {
+				"facet": "Facette",
+				"optional": "Optionnel",
+				"sort": "Trier"
+			},
+			"tooltips": {
+				"displayName": "Nom lisible affiché dans le tableau de bord. N'affecte pas l'API.",
+				"slug": "Utilisé dans les chemins d'API et comme alias de collection Typesense. Minuscules, chiffres et tirets uniquement.",
+				"fields": "Définissez les colonnes de votre collection de recherche. Les champs peuvent être à facettes, triables ou optionnels.",
+				"facet": "Permet de filtrer et regrouper par ce champ (ex. catégories, tags, marque).",
+				"optional": "Le champ peut être absent des documents. Les champs requis doivent exister dans chaque document.",
+				"sort": "Autorise le tri sur ce champ (les champs numériques sont toujours triables).",
+				"defaultSort": "Champ utilisé pour ordonner les résultats par défaut. Doit être numérique.",
+				"json": "Modifiez le schéma en JSON brut. Le retour à l'éditeur visuel valide et synchronise les modifications.",
+				"idField": "Identifiant unique recommandé. Typesense l'utilise comme clé primaire pour les upserts."
+			},
+			"errors": {
+				"duplicateName": "Le nom du champ doit être unique",
+				"invalidJson": "JSON invalide",
+				"empty": "Ajoutez au moins un champ",
+				"fieldsInvalid": "Corrigez les champs en erreur"
+			}
 		},
 		"apiKeys": {
 			"title": "Clés API",
@@ -969,6 +1018,21 @@
 		"connector": {
 			"title": "Connecteurs",
 			"subtitle": "Connectez PrestaShop, Bitrix ou poussez des documents directement via l'API",
+			"stepCounter": "Étape {current} sur {total}",
+			"runSyncDesc": "Déclenchez une synchronisation complète pour indexer tous les produits de votre CMS.",
+			"runSyncCta": "Lancer la synchronisation complète",
+			"syncTriggerHint": "Ouvrez votre admin CMS et cliquez sur 'Full sync' dans le module AACsearch.",
+			"configStep1": {
+				"prestashop": "Collez l'URL de l'API dans les réglages du module AACsearch de votre admin PrestaShop.",
+				"bitrix": "Collez l'URL de l'API dans les réglages du module AACsearch de votre admin Bitrix.",
+				"directApi": "Utilisez l'URL de l'API et le token comme URL de base et bearer token de vos appels REST."
+			},
+			"configStep2": {
+				"prestashop": "Collez le token du connecteur dans le champ des réglages du module.",
+				"bitrix": "Collez le token du connecteur dans le champ des réglages du module.",
+				"directApi": "Incluez le token dans l'en-tête Authorization : Bearer <token>"
+			},
+			"configStep3": "Enregistrez la configuration.",
 			"prestashop": "PrestaShop",
 			"prestashopDesc": "Synchronisation complète des produits, catégories, stock",
 			"bitrix": "1C-Bitrix",

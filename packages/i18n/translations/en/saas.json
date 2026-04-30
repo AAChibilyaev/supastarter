@@ -753,7 +753,56 @@
 			"schemaHelp": "JSON array of Typesense field definitions. The 'tenant_id' field is added automatically.",
 			"submit": "Create",
 			"success": "Index created.",
-			"error": "Could not create index. Please try again."
+			"error": "Could not create index. Please try again.",
+			"startFromTemplate": "Start from a template:",
+			"autoFromName": "auto",
+			"builder": "Visual builder",
+			"json": "JSON",
+			"fieldsTitle": "Schema fields",
+			"fieldsCount": "{count} fields configured",
+			"addField": "Add field",
+			"removeField": "Remove field",
+			"moveUp": "Move up",
+			"moveDown": "Move down",
+			"errorsCount": "{count, plural, one {# field has an error} other {# fields have errors}}",
+			"noFields": "No fields yet — add one or pick a template.",
+			"noSort": "No default sort",
+			"noSortableHint": "Enable Sort on a numeric field first",
+			"tenantHint": "tenant_id is added automatically for isolation.",
+			"templates": {
+				"products": "Products",
+				"articles": "Articles",
+				"users": "Users",
+				"blank": "Blank"
+			},
+			"typeGroups": {
+				"text": "Text",
+				"number": "Number",
+				"boolean": "Boolean",
+				"advanced": "Advanced"
+			},
+			"toggles": {
+				"facet": "Facet",
+				"optional": "Optional",
+				"sort": "Sort"
+			},
+			"tooltips": {
+				"displayName": "Human-readable name shown in the dashboard. Does not affect the API.",
+				"slug": "Used in API paths and as the Typesense collection alias. Lowercase letters, digits and dashes only.",
+				"fields": "Define the columns of your search collection. Fields can be made facetable, sortable, or optional.",
+				"facet": "Allow users to filter and group by this field (e.g. categories, tags, brand).",
+				"optional": "The field is allowed to be missing on documents. Required fields must be present in every document.",
+				"sort": "Allow sorting on this field (numeric fields can always be sorted).",
+				"defaultSort": "Field used to order results when no explicit sort is given. Must be numeric.",
+				"json": "Edit the schema as raw JSON. Switching back to the visual builder validates and re-syncs your changes.",
+				"idField": "Recommended unique identifier. Typesense uses this as the primary key for upserts."
+			},
+			"errors": {
+				"duplicateName": "Field name must be unique",
+				"invalidJson": "Invalid JSON",
+				"empty": "Add at least one field",
+				"fieldsInvalid": "Fix the highlighted fields"
+			}
 		},
 		"apiKeys": {
 			"title": "API keys",
@@ -1056,6 +1105,21 @@
 		"connector": {
 			"title": "Connectors",
 			"subtitle": "Connect PrestaShop, Bitrix, or push docs directly via API",
+			"stepCounter": "Step {current} of {total}",
+			"runSyncDesc": "Trigger a full sync to index all products from your CMS.",
+			"runSyncCta": "Run full sync",
+			"syncTriggerHint": "Open your CMS admin panel and click 'Full sync' in the AACsearch module.",
+			"configStep1": {
+				"prestashop": "Paste the API URL into the AACsearch module settings in your PrestaShop admin.",
+				"bitrix": "Paste the API URL into the AACsearch module settings in your Bitrix admin.",
+				"directApi": "Use the API URL and token as the base URL and bearer token for your REST calls."
+			},
+			"configStep2": {
+				"prestashop": "Paste the connector token into the module settings field.",
+				"bitrix": "Paste the connector token into the module settings field.",
+				"directApi": "Include the token in the Authorization header: Bearer <token>"
+			},
+			"configStep3": "Save the configuration.",
 			"prestashop": "PrestaShop",
 			"prestashopDesc": "Full sync for products, categories, stock",
 			"bitrix": "1C-Bitrix",

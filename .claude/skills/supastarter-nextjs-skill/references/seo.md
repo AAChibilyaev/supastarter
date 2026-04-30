@@ -7,39 +7,31 @@ Meta tags, sitemap, and structured data — primarily for `apps/marketing` and `
 Each app uses Next.js `Metadata` API. Patterns:
 
 ### Root metadata
-
 ```typescript
 // apps/marketing/app/[locale]/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	metadataBase: new URL(process.env.NEXT_PUBLIC_MARKETING_URL!),
-	title: { default: "My App", template: "%s · My App" },
-	description: "...",
-	openGraph: {
-		/* ... */
-	},
+  metadataBase: new URL(process.env.NEXT_PUBLIC_MARKETING_URL!),
+  title: { default: "My App", template: "%s · My App" },
+  description: "...",
+  openGraph: { /* ... */ },
 };
 ```
 
 ### Per-page (dynamic)
-
 ```typescript
 // apps/marketing/app/[locale]/blog/[slug]/page.tsx
 import type { Metadata } from "next";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ locale: string; slug: string }>;
-}): Promise<Metadata> {
-	const { slug, locale } = await params;
-	const post = await getPost(slug, locale);
-	return {
-		title: post.title,
-		description: post.excerpt,
-		openGraph: { images: [post.image] },
-	};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+  const { slug, locale } = await params;
+  const post = await getPost(slug, locale);
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: { images: [post.image] },
+  };
 }
 ```
 
@@ -51,11 +43,11 @@ Marketing site has a sitemap route — typically `apps/marketing/app/sitemap.ts`
 import { allPosts } from "content-collections";
 
 export default function sitemap() {
-	const base = process.env.NEXT_PUBLIC_MARKETING_URL!;
-	return [
-		{ url: `${base}/`, lastModified: new Date() },
-		...allPosts.map((p) => ({ url: `${base}/blog/${p.slug}`, lastModified: new Date(p.date) })),
-	];
+  const base = process.env.NEXT_PUBLIC_MARKETING_URL!;
+  return [
+    { url: `${base}/`, lastModified: new Date() },
+    ...allPosts.map(p => ({ url: `${base}/blog/${p.slug}`, lastModified: new Date(p.date) })),
+  ];
 }
 ```
 
@@ -69,15 +61,15 @@ JSON-LD via the `<script type="application/ld+json">` element in pages or shared
 
 ```tsx
 <script
-	type="application/ld+json"
-	dangerouslySetInnerHTML={{
-		__html: JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "BlogPosting",
-			headline: post.title,
-			author: { "@type": "Person", name: post.author },
-		}),
-	}}
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      author: { "@type": "Person", name: post.author },
+    }),
+  }}
 />
 ```
 

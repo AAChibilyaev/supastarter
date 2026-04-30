@@ -77,7 +77,6 @@ For private buckets, also generate presigned GET URLs to read.
 ## Buckets
 
 Add new buckets:
-
 1. Local: extend `docker-compose.yml` `minio-setup` to create the bucket on startup.
 2. Add an env var like `NEXT_PUBLIC_<NAME>_BUCKET_NAME`.
 3. Configure access policy in `packages/storage/provider/`.

@@ -734,7 +734,56 @@
 			"schemaHelp": "Array JSON con definiciones de campos de Typesense. El campo 'tenant_id' se anade automaticamente.",
 			"submit": "Crear",
 			"success": "Indice creado.",
-			"error": "No se pudo crear el indice. Intentelo de nuevo."
+			"error": "No se pudo crear el indice. Intentelo de nuevo.",
+			"startFromTemplate": "Empieza con una plantilla:",
+			"autoFromName": "auto",
+			"builder": "Constructor visual",
+			"json": "JSON",
+			"fieldsTitle": "Campos del esquema",
+			"fieldsCount": "{count} campos configurados",
+			"addField": "Anadir campo",
+			"removeField": "Quitar campo",
+			"moveUp": "Subir",
+			"moveDown": "Bajar",
+			"errorsCount": "{count, plural, one {# campo con errores} other {# campos con errores}}",
+			"noFields": "Aun no hay campos: anade uno o elige una plantilla.",
+			"noSort": "Sin orden por defecto",
+			"noSortableHint": "Activa primero Sort en un campo numerico",
+			"tenantHint": "tenant_id se anade automaticamente para aislar datos.",
+			"templates": {
+				"products": "Productos",
+				"articles": "Articulos",
+				"users": "Usuarios",
+				"blank": "En blanco"
+			},
+			"typeGroups": {
+				"text": "Texto",
+				"number": "Numero",
+				"boolean": "Booleano",
+				"advanced": "Avanzado"
+			},
+			"toggles": {
+				"facet": "Faceta",
+				"optional": "Opcional",
+				"sort": "Ordenar"
+			},
+			"tooltips": {
+				"displayName": "Nombre legible que se muestra en el panel. No afecta a la API.",
+				"slug": "Se usa en rutas API y como alias de la coleccion de Typesense. Solo letras minusculas, digitos y guiones.",
+				"fields": "Define las columnas de tu coleccion de busqueda. Los campos pueden ser facetables, ordenables u opcionales.",
+				"facet": "Permite filtrar y agrupar por este campo (p. ej. categorias, etiquetas, marca).",
+				"optional": "El campo puede faltar en los documentos. Los campos obligatorios deben existir en cada documento.",
+				"sort": "Permite ordenar por este campo (los campos numericos siempre pueden ordenarse).",
+				"defaultSort": "Campo usado para ordenar resultados cuando no se especifica un orden. Debe ser numerico.",
+				"json": "Edita el esquema como JSON puro. Al volver al constructor visual se validan y sincronizan los cambios.",
+				"idField": "Identificador unico recomendado. Typesense lo usa como clave primaria para upserts."
+			},
+			"errors": {
+				"duplicateName": "El nombre del campo debe ser unico",
+				"invalidJson": "JSON invalido",
+				"empty": "Anade al menos un campo",
+				"fieldsInvalid": "Corrige los campos marcados"
+			}
 		},
 		"apiKeys": {
 			"title": "Claves API",
@@ -972,6 +1021,21 @@
 		"connector": {
 			"title": "Connectors",
 			"subtitle": "Conecta PrestaShop, Bitrix o envía documentos directamente por API",
+			"stepCounter": "Paso {current} de {total}",
+			"runSyncDesc": "Inicia una sincronizacion completa para indexar todos los productos de tu CMS.",
+			"runSyncCta": "Ejecutar sincronizacion completa",
+			"syncTriggerHint": "Abre el panel de tu CMS y pulsa 'Full sync' en el modulo AACsearch.",
+			"configStep1": {
+				"prestashop": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de PrestaShop.",
+				"bitrix": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de Bitrix.",
+				"directApi": "Usa la URL de la API y el token como URL base y bearer token de tus llamadas REST."
+			},
+			"configStep2": {
+				"prestashop": "Pega el token del conector en el campo de ajustes del modulo.",
+				"bitrix": "Pega el token del conector en el campo de ajustes del modulo.",
+				"directApi": "Incluye el token en la cabecera Authorization: Bearer <token>"
+			},
+			"configStep3": "Guarda la configuracion.",
 			"prestashop": "PrestaShop",
 			"prestashopDesc": "Sincronización completa de productos, categorías, stock",
 			"bitrix": "1C-Bitrix",

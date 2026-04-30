@@ -32,11 +32,9 @@ export function useCreateSearchIndexMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...orpc.search.createIndex.mutationOptions(),
-		onSuccess: (_, variables) => {
-			void queryClient.invalidateQueries({
-				queryKey: orpc.search.listIndexes.queryKey({
-					input: { organizationId: variables?.organizationId },
-				}),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: orpc.search.listIndexes.key(),
 			});
 		},
 	});
@@ -46,11 +44,9 @@ export function useCreateSearchApiKeyMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...orpc.search.createApiKey.mutationOptions(),
-		onSuccess: (_, variables) => {
-			void queryClient.invalidateQueries({
-				queryKey: orpc.search.listApiKeys.queryKey({
-					input: { organizationId: variables?.organizationId, slug: variables?.slug },
-				}),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: orpc.search.listApiKeys.key(),
 			});
 		},
 	});

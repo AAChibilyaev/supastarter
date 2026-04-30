@@ -34,7 +34,6 @@ This happens when a formatter (Oxfmt) or another agent rewrites the file between
 ```bash
 pnpm --filter @repo/database generate
 ```
-
 Then restart the dev server. After every schema change, push/migrate AND regenerate.
 
 ## Better Auth warns: "Social provider X is missing clientId or clientSecret"

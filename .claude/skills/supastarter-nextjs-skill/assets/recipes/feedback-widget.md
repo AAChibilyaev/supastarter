@@ -56,23 +56,23 @@ pnpm --filter @repo/database generate
 import { db } from "../client";
 
 export async function createFeedback({
-	message,
-	type,
-	email,
-	name,
-	ipAddress,
-	userId,
+  message,
+  type,
+  email,
+  name,
+  ipAddress,
+  userId,
 }: {
-	message: string;
-	type: string;
-	email?: string;
-	name?: string;
-	ipAddress?: string;
-	userId?: string;
+  message: string;
+  type: string;
+  email?: string;
+  name?: string;
+  ipAddress?: string;
+  userId?: string;
 }) {
-	return db.feedback.create({
-		data: { message, type, email, name, ipAddress, userId },
-	});
+  return db.feedback.create({
+    data: { message, type, email, name, ipAddress, userId },
+  });
 }
 ```
 
@@ -100,10 +100,10 @@ export * from "./users";
 import { z } from "zod";
 
 export const feedbackSchema = z.object({
-	message: z.string().min(10).max(1000),
-	type: z.enum(["bug", "feature", "general"]).default("general"),
-	email: z.string().email().optional(),
-	name: z.string().min(2).max(100).optional(),
+  message: z.string().min(10).max(1000),
+  type: z.enum(["bug", "feature", "general"]).default("general"),
+  email: z.string().email().optional(),
+  name: z.string().min(2).max(100).optional(),
 });
 
 export type FeedbackFormValues = z.infer<typeof feedbackSchema>;
@@ -125,41 +125,41 @@ import { publicProcedure } from "../../../orpc/procedures";
 import { feedbackSchema } from "../types";
 
 export const createFeedbackProcedure = publicProcedure
-	.route({
-		method: "POST",
-		path: "/feedback",
-		tags: ["Feedback"],
-		summary: "Submit user feedback",
-		description: "Submit feedback with optional contact information",
-	})
-	.input(feedbackSchema)
-	.output(z.object({ id: z.string(), message: z.string() }))
-	.handler(async ({ input, context }) => {
-		try {
-			const session = await auth.api.getSession({ headers: context.headers });
+  .route({
+    method: "POST",
+    path: "/feedback",
+    tags: ["Feedback"],
+    summary: "Submit user feedback",
+    description: "Submit feedback with optional contact information",
+  })
+  .input(feedbackSchema)
+  .output(z.object({ id: z.string(), message: z.string() }))
+  .handler(async ({ input, context }) => {
+    try {
+      const session = await auth.api.getSession({ headers: context.headers });
 
-			const ipAddress =
-				context.headers.get("x-forwarded-for") ||
-				context.headers.get("x-real-ip") ||
-				undefined;
+      const ipAddress =
+        context.headers.get("x-forwarded-for") ||
+        context.headers.get("x-real-ip") ||
+        undefined;
 
-			const feedback = await createFeedback({
-				message: input.message,
-				type: input.type,
-				email: input.email,
-				name: input.name,
-				ipAddress,
-				userId: session?.user.id,
-			});
+      const feedback = await createFeedback({
+        message: input.message,
+        type: input.type,
+        email: input.email,
+        name: input.name,
+        ipAddress,
+        userId: session?.user.id,
+      });
 
-			return { id: feedback.id, message: "Feedback submitted successfully" };
-		} catch (error) {
-			logger.error("Failed to submit feedback:", error);
-			throw new ORPCError("INTERNAL_SERVER_ERROR", {
-				message: "Could not submit feedback",
-			});
-		}
-	});
+      return { id: feedback.id, message: "Feedback submitted successfully" };
+    } catch (error) {
+      logger.error("Failed to submit feedback:", error);
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Could not submit feedback",
+      });
+    }
+  });
 ```
 
 ### Router
@@ -170,7 +170,7 @@ export const createFeedbackProcedure = publicProcedure
 import { createFeedbackProcedure } from "./procedures/create";
 
 export const feedbackRouter = {
-	create: createFeedbackProcedure,
+  create: createFeedbackProcedure,
 };
 ```
 
@@ -190,13 +190,13 @@ import { usersRouter } from "../modules/users/router";
 import { publicProcedure } from "./procedures";
 
 export const router = publicProcedure.router({
-	admin: adminRouter,
-	organizations: organizationsRouter,
-	users: usersRouter,
-	payments: paymentsRouter,
-	ai: aiRouter,
-	notifications: notificationsRouter,
-	feedback: feedbackRouter,
+  admin: adminRouter,
+  organizations: organizationsRouter,
+  users: usersRouter,
+  payments: paymentsRouter,
+  ai: aiRouter,
+  notifications: notificationsRouter,
+  feedback: feedbackRouter,
 });
 
 export type ApiRouterClient = RouterClient<typeof router>;
@@ -207,7 +207,6 @@ export type ApiRouterClient = RouterClient<typeof router>;
 ## Step 4: Frontend Component
 
 Use the SaaS app's aliases. Note:
-
 - `@repo/ui/components/*` for shadcn primitives
 - `cn` from `@repo/ui`
 - `@auth/hooks/use-session` for the session hook
@@ -223,27 +222,27 @@ import { useSession } from "@auth/hooks/use-session";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { Button } from "@repo/ui/components/button";
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@repo/ui/components/dialog";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 import { cn } from "@repo/ui";
@@ -256,163 +255,159 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const feedbackSchema = z.object({
-	message: z.string().min(10).max(1000),
-	type: z.enum(["bug", "feature", "general"]).default("general"),
-	email: z.string().email().optional(),
-	name: z.string().min(2).max(100).optional(),
+  message: z.string().min(10).max(1000),
+  type: z.enum(["bug", "feature", "general"]).default("general"),
+  email: z.string().email().optional(),
+  name: z.string().min(2).max(100).optional(),
 });
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 
 export function FeedbackWidget({ className }: { className?: string }) {
-	const t = useTranslations();
-	const { user } = useSession();
-	const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations();
+  const { user } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
 
-	const createFeedbackMutation = useMutation(orpc.feedback.create.mutationOptions());
+  const createFeedbackMutation = useMutation(
+    orpc.feedback.create.mutationOptions(),
+  );
 
-	const form = useForm<FeedbackFormValues>({
-		resolver: zodResolver(feedbackSchema),
-		defaultValues: { message: "", type: "general", email: "", name: "" },
-	});
+  const form = useForm<FeedbackFormValues>({
+    resolver: zodResolver(feedbackSchema),
+    defaultValues: { message: "", type: "general", email: "", name: "" },
+  });
 
-	const onSubmit = async (data: FeedbackFormValues) => {
-		try {
-			await createFeedbackMutation.mutateAsync({ input: data });
-			setIsOpen(false);
-			form.reset();
-			toast.success(t("feedback.success.message"));
-		} catch (error) {
-			console.error("Error submitting feedback:", error);
-			toast.error(t("feedback.error.message"));
-		}
-	};
+  const onSubmit = async (data: FeedbackFormValues) => {
+    try {
+      await createFeedbackMutation.mutateAsync({ input: data });
+      setIsOpen(false);
+      form.reset();
+      toast.success(t("feedback.success.message"));
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error(t("feedback.error.message"));
+    }
+  };
 
-	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogTrigger asChild>
-				<Button
-					variant="outline"
-					size="sm"
-					className={cn("fixed bottom-4 right-4 z-50 shadow-lg", className)}
-				>
-					<MessageSquare className="mr-2 h-4 w-4" />
-					{t("feedback.button")}
-				</Button>
-			</DialogTrigger>
-			<DialogContent className="sm:max-w-md">
-				<DialogHeader>
-					<DialogTitle>{t("feedback.title")}</DialogTitle>
-				</DialogHeader>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<FormField
-							control={form.control}
-							name="type"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>{t("feedback.form.type.label")}</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													placeholder={t(
-														"feedback.form.type.placeholder",
-													)}
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="general">
-												{t("feedback.form.type.options.general")}
-											</SelectItem>
-											<SelectItem value="bug">
-												{t("feedback.form.type.options.bug")}
-											</SelectItem>
-											<SelectItem value="feature">
-												{t("feedback.form.type.options.feature")}
-											</SelectItem>
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className={cn("fixed bottom-4 right-4 z-50 shadow-lg", className)}
+        >
+          <MessageSquare className="mr-2 h-4 w-4" />
+          {t("feedback.button")}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{t("feedback.title")}</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("feedback.form.type.label")}</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("feedback.form.type.placeholder")}
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="general">
+                        {t("feedback.form.type.options.general")}
+                      </SelectItem>
+                      <SelectItem value="bug">
+                        {t("feedback.form.type.options.bug")}
+                      </SelectItem>
+                      <SelectItem value="feature">
+                        {t("feedback.form.type.options.feature")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-						{!user && (
-							<>
-								<FormField
-									control={form.control}
-									name="name"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t("feedback.form.name.label")}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t(
-														"feedback.form.name.placeholder",
-													)}
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
-									name="email"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{t("feedback.form.email.label")}</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={t(
-														"feedback.form.email.placeholder",
-													)}
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</>
-						)}
+            {!user && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("feedback.form.name.label")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("feedback.form.name.placeholder")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("feedback.form.email.label")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={t("feedback.form.email.placeholder")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
 
-						<FormField
-							control={form.control}
-							name="message"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>{t("feedback.form.message.label")}</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder={t("feedback.form.message.placeholder")}
-											className="min-h-[100px]"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("feedback.form.message.label")}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={t("feedback.form.message.placeholder")}
+                      className="min-h-[100px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-						<Button
-							type="submit"
-							className="w-full"
-							loading={createFeedbackMutation.isPending}
-						>
-							{t("feedback.form.submit")}
-						</Button>
-					</form>
-				</Form>
-			</DialogContent>
-		</Dialog>
-	);
+            <Button
+              type="submit"
+              className="w-full"
+              loading={createFeedbackMutation.isPending}
+            >
+              {t("feedback.form.submit")}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
 }
 ```
 
@@ -426,30 +421,30 @@ The widget is SaaS-only, so the keys go in `saas.json`. Add the same shape to **
 
 ```json
 {
-	"feedback": {
-		"button": "Feedback",
-		"title": "Send Feedback",
-		"success": {
-			"title": "Thank you!",
-			"message": "Your feedback has been submitted successfully."
-		},
-		"error": { "title": "Error", "message": "Failed to submit feedback" },
-		"form": {
-			"type": {
-				"label": "Feedback Type",
-				"placeholder": "Select feedback type",
-				"options": {
-					"general": "General",
-					"bug": "Bug Report",
-					"feature": "Feature Request"
-				}
-			},
-			"name": { "label": "Name", "placeholder": "Your name" },
-			"email": { "label": "Email", "placeholder": "your.email@example.com" },
-			"message": { "label": "Message", "placeholder": "Tell us what you think..." },
-			"submit": "Send Feedback"
-		}
-	}
+  "feedback": {
+    "button": "Feedback",
+    "title": "Send Feedback",
+    "success": {
+      "title": "Thank you!",
+      "message": "Your feedback has been submitted successfully."
+    },
+    "error": { "title": "Error", "message": "Failed to submit feedback" },
+    "form": {
+      "type": {
+        "label": "Feedback Type",
+        "placeholder": "Select feedback type",
+        "options": {
+          "general": "General",
+          "bug": "Bug Report",
+          "feature": "Feature Request"
+        }
+      },
+      "name": { "label": "Name", "placeholder": "Your name" },
+      "email": { "label": "Email", "placeholder": "your.email@example.com" },
+      "message": { "label": "Message", "placeholder": "Tell us what you think..." },
+      "submit": "Send Feedback"
+    }
+  }
 }
 ```
 
@@ -457,30 +452,30 @@ The widget is SaaS-only, so the keys go in `saas.json`. Add the same shape to **
 
 ```json
 {
-	"feedback": {
-		"button": "Feedback",
-		"title": "Feedback senden",
-		"success": {
-			"title": "Vielen Dank!",
-			"message": "Ihr Feedback wurde erfolgreich übermittelt."
-		},
-		"error": { "title": "Fehler", "message": "Feedback konnte nicht gesendet werden" },
-		"form": {
-			"type": {
-				"label": "Feedback-Typ",
-				"placeholder": "Feedback-Typ auswählen",
-				"options": {
-					"general": "Allgemein",
-					"bug": "Fehlermeldung",
-					"feature": "Feature-Anfrage"
-				}
-			},
-			"name": { "label": "Name", "placeholder": "Ihr Name" },
-			"email": { "label": "E-Mail", "placeholder": "ihre.email@beispiel.com" },
-			"message": { "label": "Nachricht", "placeholder": "Sagen Sie uns, was Sie denken..." },
-			"submit": "Feedback senden"
-		}
-	}
+  "feedback": {
+    "button": "Feedback",
+    "title": "Feedback senden",
+    "success": {
+      "title": "Vielen Dank!",
+      "message": "Ihr Feedback wurde erfolgreich übermittelt."
+    },
+    "error": { "title": "Fehler", "message": "Feedback konnte nicht gesendet werden" },
+    "form": {
+      "type": {
+        "label": "Feedback-Typ",
+        "placeholder": "Feedback-Typ auswählen",
+        "options": {
+          "general": "Allgemein",
+          "bug": "Fehlermeldung",
+          "feature": "Feature-Anfrage"
+        }
+      },
+      "name": { "label": "Name", "placeholder": "Ihr Name" },
+      "email": { "label": "E-Mail", "placeholder": "ihre.email@beispiel.com" },
+      "message": { "label": "Nachricht", "placeholder": "Sagen Sie uns, was Sie denken..." },
+      "submit": "Feedback senden"
+    }
+  }
 }
 ```
 
@@ -498,12 +493,12 @@ Mount the widget where you want it. For SaaS-only, add it to an authenticated la
 import { FeedbackWidget } from "@shared/components/FeedbackWidget";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<>
-			{children}
-			<FeedbackWidget />
-		</>
-	);
+  return (
+    <>
+      {children}
+      <FeedbackWidget />
+    </>
+  );
 }
 ```
 

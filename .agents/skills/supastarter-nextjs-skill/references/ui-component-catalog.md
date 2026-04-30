@@ -44,17 +44,17 @@ rg -l "Foo" apps/marketing/modules
 2. Fall back to **Layer 2** (`@shared/components/*` in saas / marketing).
 3. Lastly assemble from **Layer 1** (`@repo/ui/components/*`).
 
-If a Layer 3 component is _almost_ right but you need a variant — **prefer adding a prop to the existing component** over copy-pasting it into a new file. Two slightly-different copies are worse than one component with one extra prop.
+If a Layer 3 component is *almost* right but you need a variant — **prefer adding a prop to the existing component** over copy-pasting it into a new file. Two slightly-different copies are worse than one component with one extra prop.
 
 ---
 
 ## How layers work (overview before the inventory)
 
-| Layer                           | Path                                                                                  | Owns                                                                                                                       | When to add a new one                                              |
-| ------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| **L1: Primitives**              | `packages/ui/components/*`                                                            | Generic, app-agnostic shadcn/Radix building blocks (Button, Dialog, Form, Table, ...)                                      | Only via `pnpm dlx shadcn@latest add <name>` — never hand-written. |
+| Layer | Path | Owns | When to add a new one |
+|---|---|---|---|
+| **L1: Primitives** | `packages/ui/components/*` | Generic, app-agnostic shadcn/Radix building blocks (Button, Dialog, Form, Table, ...) | Only via `pnpm dlx shadcn@latest add <name>` — never hand-written. |
 | **L2: Shared blocks (per app)** | `apps/saas/modules/shared/components/*`, `apps/marketing/modules/shared/components/*` | Cross-cutting blocks within ONE app (NavBar, PageHeader, UserMenu, NotificationCenter, ...). May reach for L1 + auth/i18n. | Only when ≥2 features in the app already use the same composition. |
-| **L3: Feature blocks**          | `apps/saas/modules/<feature>/components/*`                                            | Components owned by a single feature (auth/organizations/payments/...).                                                    | Default location for any new feature component.                    |
+| **L3: Feature blocks** | `apps/saas/modules/<feature>/components/*` | Components owned by a single feature (auth/organizations/payments/...). | Default location for any new feature component. |
 
 Imports respect the layer order: L1 imports nothing from L2/L3; L2 imports L1; L3 imports L1+L2 (and may import sibling L3 cautiously). Reverse imports (L1 → L2/L3, L2 → L3) are forbidden.
 
@@ -64,35 +64,35 @@ Imports respect the layer order: L1 imports nothing from L2/L3; L2 imports L1; L
 
 Imports: `import { X } from "@repo/ui/components/<name>"`. Re-exports also live in `@repo/ui` index.
 
-| Component                                                                                                                | Path            | Use for                                                                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`                                                     | `accordion`     | FAQs, collapsible content                                                                                                                                               |
-| `Alert`, `AlertTitle`, `AlertDescription`                                                                                | `alert`         | Inline notices, banners                                                                                                                                                 |
-| `AlertDialog` (+ `Trigger/Content/Header/Title/Description/Footer/Action/Cancel`)                                        | `alert-dialog`  | Destructive confirms (delete, etc.)                                                                                                                                     |
-| `Avatar`, `AvatarImage`, `AvatarFallback`                                                                                | `avatar`        | User/org avatars                                                                                                                                                        |
-| `Badge`                                                                                                                  | `badge`         | Status pills, tags. Prop is **`status`** (not `variant`): `success` / `info` / `warning` / `error`.                                                                     |
-| `Button` (with `loading` prop)                                                                                           | `button`        | All buttons. Variants: `primary` (default) / `secondary` / `outline` / `ghost` / `destructive` / `link`. **No `default`** — use `primary`. Sizes: `default/sm/lg/icon`. |
-| `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`                                        | `card`          | Boxed sections                                                                                                                                                          |
-| `Chart*`                                                                                                                 | `chart`         | recharts wrapper for dashboards                                                                                                                                         |
-| `Dialog` (+ `Trigger/Content/Header/Title/Description/Footer/Close`)                                                     | `dialog`        | Modals (forms, info)                                                                                                                                                    |
-| `DropdownMenu` (+ `Trigger/Content/Item/CheckboxItem/RadioItem/Label/Separator/Shortcut/Group/Sub*`)                     | `dropdown-menu` | Action menus, user menu                                                                                                                                                 |
-| `Form`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`, `FormField`                            | `form`          | react-hook-form integration (always use this)                                                                                                                           |
-| `Input`                                                                                                                  | `input`         | Text/email/number inputs                                                                                                                                                |
-| `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator`                                                         | `input-otp`     | 2FA / OTP / verify codes                                                                                                                                                |
-| `Label`                                                                                                                  | `label`         | Form labels (also used inside FormLabel)                                                                                                                                |
-| `Logo`                                                                                                                   | `logo`          | App brand logo (SVG)                                                                                                                                                    |
-| `Popover`, `PopoverTrigger`, `PopoverContent`                                                                            | `popover`       | Inline pickers, hover panels                                                                                                                                            |
-| `Progress`                                                                                                               | `progress`      | Linear progress bars                                                                                                                                                    |
-| `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator` | `select`        | Dropdown selects                                                                                                                                                        |
-| `Sheet` (+ `Trigger/Content/Header/Title/Description/Footer/Close`)                                                      | `sheet`         | Drawer/sidebar overlays                                                                                                                                                 |
-| `Skeleton`                                                                                                               | `skeleton`      | Loading placeholders                                                                                                                                                    |
-| `Spinner`                                                                                                                | `spinner`       | Inline loading indicator                                                                                                                                                |
-| `Switch`                                                                                                                 | `switch`        | Boolean toggles (settings)                                                                                                                                              |
-| `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableHead`, `TableRow`, `TableCell`, `TableCaption`                 | `table`         | Data tables                                                                                                                                                             |
-| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`                                                                         | `tabs`          | Tabbed views (settings, etc.)                                                                                                                                           |
-| `Textarea`                                                                                                               | `textarea`      | Multi-line text input                                                                                                                                                   |
-| `Toast` system (`useToast`, `toast()` from sonner is also configured)                                                    | `toast`         | Notifications                                                                                                                                                           |
-| `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider`                                                         | `tooltip`       | Hover help                                                                                                                                                              |
+| Component | Path | Use for |
+|---|---|---|
+| `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` | `accordion` | FAQs, collapsible content |
+| `Alert`, `AlertTitle`, `AlertDescription` | `alert` | Inline notices, banners |
+| `AlertDialog` (+ `Trigger/Content/Header/Title/Description/Footer/Action/Cancel`) | `alert-dialog` | Destructive confirms (delete, etc.) |
+| `Avatar`, `AvatarImage`, `AvatarFallback` | `avatar` | User/org avatars |
+| `Badge` | `badge` | Status pills, tags. Prop is **`status`** (not `variant`): `success` / `info` / `warning` / `error`. |
+| `Button` (with `loading` prop) | `button` | All buttons. Variants: `primary` (default) / `secondary` / `outline` / `ghost` / `destructive` / `link`. **No `default`** — use `primary`. Sizes: `default/sm/lg/icon`. |
+| `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` | `card` | Boxed sections |
+| `Chart*` | `chart` | recharts wrapper for dashboards |
+| `Dialog` (+ `Trigger/Content/Header/Title/Description/Footer/Close`) | `dialog` | Modals (forms, info) |
+| `DropdownMenu` (+ `Trigger/Content/Item/CheckboxItem/RadioItem/Label/Separator/Shortcut/Group/Sub*`) | `dropdown-menu` | Action menus, user menu |
+| `Form`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`, `FormField` | `form` | react-hook-form integration (always use this) |
+| `Input` | `input` | Text/email/number inputs |
+| `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator` | `input-otp` | 2FA / OTP / verify codes |
+| `Label` | `label` | Form labels (also used inside FormLabel) |
+| `Logo` | `logo` | App brand logo (SVG) |
+| `Popover`, `PopoverTrigger`, `PopoverContent` | `popover` | Inline pickers, hover panels |
+| `Progress` | `progress` | Linear progress bars |
+| `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator` | `select` | Dropdown selects |
+| `Sheet` (+ `Trigger/Content/Header/Title/Description/Footer/Close`) | `sheet` | Drawer/sidebar overlays |
+| `Skeleton` | `skeleton` | Loading placeholders |
+| `Spinner` | `spinner` | Inline loading indicator |
+| `Switch` | `switch` | Boolean toggles (settings) |
+| `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableHead`, `TableRow`, `TableCell`, `TableCaption` | `table` | Data tables |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | `tabs` | Tabbed views (settings, etc.) |
+| `Textarea` | `textarea` | Multi-line text input |
+| `Toast` system (`useToast`, `toast()` from sonner is also configured) | `toast` | Notifications |
+| `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` | `tooltip` | Hover help |
 
 **Helper:** `cn(...inputs)` from `@repo/ui` (clsx + tailwind-merge) — always use for conditional classes.
 
@@ -104,31 +104,30 @@ There is **no** `Checkbox`, `RadioGroup`, `Slider`, `Calendar`, `DatePicker`, `C
 
 Path: `apps/saas/modules/shared/components/`. Used across multiple SaaS features.
 
-| Component                           | What it is                                                                                |
-| ----------------------------------- | ----------------------------------------------------------------------------------------- |
-| `AppWrapper`                        | Top-level layout shell for the authenticated app (sidebar + content)                      |
-| `AuthWrapper`                       | Layout shell for unauthenticated routes (login/signup/etc.)                               |
-| `ClientProviders`                   | Composes all client-side providers (Theme, QueryClient, Session, ConfirmationAlert, etc.) |
-| `ApiClientProvider`                 | TanStack Query client + oRPC client init                                                  |
-| `ConsentProvider` + `ConsentBanner` | Cookie/analytics consent gate                                                             |
-| `ConfirmationAlertProvider`         | Programmatic destructive-action confirmation (use this instead of ad-hoc `confirm()`)     |
-| `NavBar`                            | Top app bar (with `UserMenu` + `NotificationCenter`)                                      |
-| `Footer`                            | App footer                                                                                |
-| `UserMenu`                          | Avatar dropdown: settings, sign out, theme switch                                         |
-| `UserAvatar`                        | Avatar with image + initials fallback                                                     |
-| `NotificationCenter`                | Bell icon + popover with notifications list (uses `@repo/notifications` API)              |
-| `ColorModeToggle`                   | Light/dark/system theme switcher                                                          |
-| `LocaleSwitch`                      | Language switcher (4 locales)                                                             |
-| `Pagination`                        | Page navigation for lists/tables                                                          |
-| `PageHeader`                        | Standard page title + description + actions row                                           |
-| `TabGroup`                          | Wrapper around `Tabs` with route-synced state                                             |
-| `SettingsList` + `SettingsItem`     | Two-column settings rows (label/desc on left, control on right)                           |
-| `StatsTile`                         | Single KPI tile                                                                           |
-| `StatsTileChart`                    | KPI tile with sparkline                                                                   |
-| `PasswordInput`                     | Input with show/hide eye toggle                                                           |
+| Component | What it is |
+|---|---|
+| `AppWrapper` | Top-level layout shell for the authenticated app (sidebar + content) |
+| `AuthWrapper` | Layout shell for unauthenticated routes (login/signup/etc.) |
+| `ClientProviders` | Composes all client-side providers (Theme, QueryClient, Session, ConfirmationAlert, etc.) |
+| `ApiClientProvider` | TanStack Query client + oRPC client init |
+| `ConsentProvider` + `ConsentBanner` | Cookie/analytics consent gate |
+| `ConfirmationAlertProvider` | Programmatic destructive-action confirmation (use this instead of ad-hoc `confirm()`) |
+| `NavBar` | Top app bar (with `UserMenu` + `NotificationCenter`) |
+| `Footer` | App footer |
+| `UserMenu` | Avatar dropdown: settings, sign out, theme switch |
+| `UserAvatar` | Avatar with image + initials fallback |
+| `NotificationCenter` | Bell icon + popover with notifications list (uses `@repo/notifications` API) |
+| `ColorModeToggle` | Light/dark/system theme switcher |
+| `LocaleSwitch` | Language switcher (4 locales) |
+| `Pagination` | Page navigation for lists/tables |
+| `PageHeader` | Standard page title + description + actions row |
+| `TabGroup` | Wrapper around `Tabs` with route-synced state |
+| `SettingsList` + `SettingsItem` | Two-column settings rows (label/desc on left, control on right) |
+| `StatsTile` | Single KPI tile |
+| `StatsTileChart` | KPI tile with sparkline |
+| `PasswordInput` | Input with show/hide eye toggle |
 
 **Hooks/lib in `@shared/...`:**
-
 - `@shared/lib/orpc-client` — typed oRPC client
 - `@shared/lib/orpc-query-utils` — `orpc` helper for TanStack Query (`queryOptions`, `mutationOptions`)
 - `@shared/lib/query-client` — QueryClient factory
@@ -141,36 +140,36 @@ Path: `apps/saas/modules/shared/components/`. Used across multiple SaaS features
 
 ### Auth (`@auth/components/*`, `@auth/constants/*`, `@auth/hooks/*`, `@auth/lib/*`)
 
-| Component            | Use for                                        |
-| -------------------- | ---------------------------------------------- |
-| `LoginForm`          | Email/password + magic link + OAuth login      |
-| `SignupForm`         | New account creation                           |
-| `ForgotPasswordForm` | Send reset link                                |
-| `ResetPasswordForm`  | Set new password                               |
-| `OtpForm`            | OTP/2FA code entry (uses `InputOTP`)           |
-| `LoginModeSwitch`    | Toggle between password / magic link / passkey |
-| `SocialSigninButton` | OAuth provider button (GitHub, Google, etc.)   |
-| `SessionProvider`    | Client-side session context provider           |
+| Component | Use for |
+|---|---|
+| `LoginForm` | Email/password + magic link + OAuth login |
+| `SignupForm` | New account creation |
+| `ForgotPasswordForm` | Send reset link |
+| `ResetPasswordForm` | Set new password |
+| `OtpForm` | OTP/2FA code entry (uses `InputOTP`) |
+| `LoginModeSwitch` | Toggle between password / magic link / passkey |
+| `SocialSigninButton` | OAuth provider button (GitHub, Google, etc.) |
+| `SessionProvider` | Client-side session context provider |
 
 Hooks: `useSession()` from `@auth/hooks/use-session`. Server: `getSession()` from `@auth/lib/server`. OAuth provider list: `@auth/constants/oauth-providers`.
 
 ### Organizations (`@organizations/components/*`, `@organizations/hooks/*`, `@organizations/lib/*`)
 
-| Component                                                     | Use for                                      |
-| ------------------------------------------------------------- | -------------------------------------------- |
-| `ActiveOrganizationProvider`                                  | Client-side active-org context               |
-| `OrganizationStart`                                           | Empty/landing state for users without an org |
-| `OrganizationsGrid`                                           | Card grid of all user's orgs                 |
-| `OrganizationSelect`                                          | Dropdown to switch active org                |
-| `CreateOrganizationForm`                                      | New org creation form                        |
-| `ChangeOrganizationNameForm`                                  | Rename org                                   |
-| `DeleteOrganizationForm`                                      | Destructive: delete org                      |
-| `OrganizationLogo` + `OrganizationLogoForm`                   | Display + upload org avatar                  |
-| `OrganizationMembersBlock` + `OrganizationMembersList`        | Members listing + management                 |
-| `OrganizationRoleSelect`                                      | Member role dropdown (owner/admin/member)    |
-| `InviteMemberForm`                                            | Email invitation form                        |
-| `OrganizationInvitationsList`                                 | Pending invitations table                    |
-| `OrganizationInvitationAlert` + `OrganizationInvitationModal` | UI for receiving invitation                  |
+| Component | Use for |
+|---|---|
+| `ActiveOrganizationProvider` | Client-side active-org context |
+| `OrganizationStart` | Empty/landing state for users without an org |
+| `OrganizationsGrid` | Card grid of all user's orgs |
+| `OrganizationSelect` | Dropdown to switch active org |
+| `CreateOrganizationForm` | New org creation form |
+| `ChangeOrganizationNameForm` | Rename org |
+| `DeleteOrganizationForm` | Destructive: delete org |
+| `OrganizationLogo` + `OrganizationLogoForm` | Display + upload org avatar |
+| `OrganizationMembersBlock` + `OrganizationMembersList` | Members listing + management |
+| `OrganizationRoleSelect` | Member role dropdown (owner/admin/member) |
+| `InviteMemberForm` | Email invitation form |
+| `OrganizationInvitationsList` | Pending invitations table |
+| `OrganizationInvitationAlert` + `OrganizationInvitationModal` | UI for receiving invitation |
 
 Hook: `useActiveOrganization()` from `@organizations/hooks/use-active-organization`.
 
@@ -178,59 +177,59 @@ Hook: `useActiveOrganization()` from `@organizations/hooks/use-active-organizati
 
 Account settings building blocks:
 
-| Component                             | Use for                                        |
-| ------------------------------------- | ---------------------------------------------- |
-| `SettingsMenu`                        | Sidebar navigation for settings pages          |
-| `ChangeNameForm`                      | Update display name                            |
-| `ChangeEmailForm`                     | Change email + verification                    |
-| `ChangePassword` / `SetPassword`      | Password update / initial set                  |
-| `UserLanguageForm`                    | Per-user locale preference                     |
-| `UserAvatarForm` + `UserAvatarUpload` | Avatar upload (presigned S3)                   |
-| `CropImageDialog`                     | Modal for cropping uploaded images             |
-| `ConnectedAccountsBlock`              | OAuth providers connected to user              |
-| `PasskeysBlock`                       | List/add WebAuthn passkeys                     |
-| `TwoFactorBlock`                      | Enable/disable 2FA (TOTP)                      |
-| `ActiveSessionsBlock`                 | Current sessions + revoke                      |
-| `NotificationPreferencesForm`         | Per-type in-app/email notification preferences |
-| `CustomerPortalButton`                | Open payment provider's billing portal         |
-| `SubscriptionStatusBadge`             | Active plan badge                              |
-| `DeleteAccountForm`                   | Destructive: delete account                    |
+| Component | Use for |
+|---|---|
+| `SettingsMenu` | Sidebar navigation for settings pages |
+| `ChangeNameForm` | Update display name |
+| `ChangeEmailForm` | Change email + verification |
+| `ChangePassword` / `SetPassword` | Password update / initial set |
+| `UserLanguageForm` | Per-user locale preference |
+| `UserAvatarForm` + `UserAvatarUpload` | Avatar upload (presigned S3) |
+| `CropImageDialog` | Modal for cropping uploaded images |
+| `ConnectedAccountsBlock` | OAuth providers connected to user |
+| `PasskeysBlock` | List/add WebAuthn passkeys |
+| `TwoFactorBlock` | Enable/disable 2FA (TOTP) |
+| `ActiveSessionsBlock` | Current sessions + revoke |
+| `NotificationPreferencesForm` | Per-type in-app/email notification preferences |
+| `CustomerPortalButton` | Open payment provider's billing portal |
+| `SubscriptionStatusBadge` | Active plan badge |
+| `DeleteAccountForm` | Destructive: delete account |
 
 ### Payments (`@payments/components/*`, `@payments/hooks/*`, `@payments/lib/*`)
 
-| Component / Hook        | Use for                                  |
-| ----------------------- | ---------------------------------------- |
-| `PricingTable`          | Plan cards grid (used on `/choose-plan`) |
-| `ActivePlan`            | Current plan summary                     |
-| `ActivePlanBadge`       | Inline plan name pill                    |
-| `ChangePlan`            | Upgrade/downgrade flow                   |
-| `CheckoutReturnContent` | Post-checkout return screen content      |
-| `usePurchases()`        | Hook: current purchases for user/org     |
-| `usePlanData()`         | Hook: plan metadata helpers              |
+| Component / Hook | Use for |
+|---|---|
+| `PricingTable` | Plan cards grid (used on `/choose-plan`) |
+| `ActivePlan` | Current plan summary |
+| `ActivePlanBadge` | Inline plan name pill |
+| `ChangePlan` | Upgrade/downgrade flow |
+| `CheckoutReturnContent` | Post-checkout return screen content |
+| `usePurchases()` | Hook: current purchases for user/org |
+| `usePlanData()` | Hook: plan metadata helpers |
 
 ### AI (`@ai/components/*`)
 
-| Component | Use for                                            |
-| --------- | -------------------------------------------------- |
-| `AiChat`  | Full chatbot UI: messages list + input + streaming |
+| Component | Use for |
+|---|---|
+| `AiChat` | Full chatbot UI: messages list + input + streaming |
 
 ### Onboarding (`@onboarding/components/*`)
 
-| Component               | Use for                      |
-| ----------------------- | ---------------------------- |
-| `OnboardingForm`        | Multi-step onboarding wizard |
-| `OnboardingAccountStep` | Step: account info           |
+| Component | Use for |
+|---|---|
+| `OnboardingForm` | Multi-step onboarding wizard |
+| `OnboardingAccountStep` | Step: account info |
 
 ### Admin (`@admin/component/*`)
 
 > Note: directory is `component/` (singular) in this app.
 
-| Component                        | Use for                               |
-| -------------------------------- | ------------------------------------- |
-| `EmailVerified`                  | Admin: toggle email verification flag |
-| `users/UserList`                 | Admin: users table                    |
-| `organizations/OrganizationList` | Admin: orgs table                     |
-| `organizations/OrganizationForm` | Admin: edit org                       |
+| Component | Use for |
+|---|---|
+| `EmailVerified` | Admin: toggle email verification flag |
+| `users/UserList` | Admin: users table |
+| `organizations/OrganizationList` | Admin: orgs table |
+| `organizations/OrganizationForm` | Admin: edit org |
 
 ---
 
@@ -242,27 +241,27 @@ Account settings building blocks:
 
 ### Marketing home (`@home/components/*`)
 
-| Component           | Use for                                 |
-| ------------------- | --------------------------------------- |
-| `HeroSection`       | Top fold hero (headline + CTA + visual) |
-| `FeaturesSection`   | Feature grid                            |
-| `PricingSection`    | Public pricing (uses public plan data)  |
-| `FaqSection`        | FAQ accordion                           |
-| `NewsletterSection` | Email signup                            |
-| `ContactForm`       | Contact form                            |
+| Component | Use for |
+|---|---|
+| `HeroSection` | Top fold hero (headline + CTA + visual) |
+| `FeaturesSection` | Feature grid |
+| `PricingSection` | Public pricing (uses public plan data) |
+| `FaqSection` | FAQ accordion |
+| `NewsletterSection` | Email signup |
+| `ContactForm` | Contact form |
 
 ### Marketing blog (`@blog/components/*`)
 
-| Component            | Use for                                |
-| -------------------- | -------------------------------------- |
-| `PostListItem`       | Blog index card                        |
-| `PostContent`        | Single post body renderer (MDX)        |
+| Component | Use for |
+|---|---|
+| `PostListItem` | Blog index card |
+| `PostContent` | Single post body renderer (MDX) |
 | `lib/mdx-components` | MDX component overrides for blog posts |
 
 ### Marketing changelog (`@changelog/components/*`)
 
-| Component          | Use for                                          |
-| ------------------ | ------------------------------------------------ |
+| Component | Use for |
+|---|---|
 | `ChangelogSection` | Changelog list rendered from content-collections |
 
 ### Marketing analytics (`@analytics`)

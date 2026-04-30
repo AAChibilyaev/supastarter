@@ -35,15 +35,15 @@ export const publicProcedure = os.$context<{ headers: Headers }>();
 
 // Protected — adds context.session and context.user
 export const protectedProcedure = publicProcedure.use(async ({ context, next }) => {
-	const session = await auth.api.getSession({ headers: context.headers });
-	if (!session) throw new ORPCError("UNAUTHORIZED");
-	return next({ context: { session: session.session, user: session.user } });
+  const session = await auth.api.getSession({ headers: context.headers });
+  if (!session) throw new ORPCError("UNAUTHORIZED");
+  return next({ context: { session: session.session, user: session.user } });
 });
 
 // Admin — requires user.role === "admin"
 export const adminProcedure = protectedProcedure.use(async ({ context, next }) => {
-	if (context.user.role !== "admin") throw new ORPCError("FORBIDDEN");
-	return next();
+  if (context.user.role !== "admin") throw new ORPCError("FORBIDDEN");
+  return next();
 });
 ```
 
@@ -52,21 +52,19 @@ Always pick the **lowest privilege** procedure type that gets the job done.
 ## Module Pattern
 
 ### types.ts
-
 ```typescript
 // packages/api/modules/feedback/types.ts
 import { z } from "zod";
 
 export const createFeedbackSchema = z.object({
-	message: z.string().min(1).max(2000),
-	organizationId: z.string().optional(),
+  message: z.string().min(1).max(2000),
+  organizationId: z.string().optional(),
 });
 
 export type CreateFeedbackValues = z.infer<typeof createFeedbackSchema>;
 ```
 
 ### procedures/create.ts
-
 ```typescript
 // packages/api/modules/feedback/procedures/create.ts
 import { z } from "zod";
@@ -75,27 +73,26 @@ import { protectedProcedure } from "../../../orpc/procedures";
 import { createFeedbackSchema } from "../types";
 
 export const createFeedbackProcedure = protectedProcedure
-	.route({
-		method: "POST",
-		path: "/feedback",
-		tags: ["Feedback"],
-		summary: "Create feedback",
-		description: "Create a feedback entry for the current user",
-	})
-	.input(createFeedbackSchema)
-	.output(z.object({ id: z.string() }))
-	.handler(async ({ input, context }) => {
-		const row = await createFeedback({
-			userId: context.user.id,
-			organizationId: input.organizationId,
-			message: input.message,
-		});
-		return { id: row.id };
-	});
+  .route({
+    method: "POST",
+    path: "/feedback",
+    tags: ["Feedback"],
+    summary: "Create feedback",
+    description: "Create a feedback entry for the current user",
+  })
+  .input(createFeedbackSchema)
+  .output(z.object({ id: z.string() }))
+  .handler(async ({ input, context }) => {
+    const row = await createFeedback({
+      userId: context.user.id,
+      organizationId: input.organizationId,
+      message: input.message,
+    });
+    return { id: row.id };
+  });
 ```
 
 ### procedures/list.ts
-
 ```typescript
 // packages/api/modules/feedback/procedures/list.ts
 import { z } from "zod";
@@ -103,30 +100,28 @@ import { listFeedbackByOrg } from "@repo/database";
 import { protectedProcedure } from "../../../orpc/procedures";
 
 export const listFeedback = protectedProcedure
-	.route({ method: "GET", path: "/feedback", tags: ["Feedback"], summary: "List feedback" })
-	.input(z.object({ organizationId: z.string() }))
-	.output(z.object({ items: z.array(z.any()) }))
-	.handler(async ({ input }) => {
-		const items = await listFeedbackByOrg(input.organizationId);
-		return { items };
-	});
+  .route({ method: "GET", path: "/feedback", tags: ["Feedback"], summary: "List feedback" })
+  .input(z.object({ organizationId: z.string() }))
+  .output(z.object({ items: z.array(z.any()) }))
+  .handler(async ({ input }) => {
+    const items = await listFeedbackByOrg(input.organizationId);
+    return { items };
+  });
 ```
 
 ### router.ts
-
 ```typescript
 // packages/api/modules/feedback/router.ts
 import { createFeedbackProcedure } from "./procedures/create";
 import { listFeedback } from "./procedures/list";
 
 export const feedbackRouter = {
-	create: createFeedbackProcedure,
-	list: listFeedback,
+  create: createFeedbackProcedure,
+  list: listFeedback,
 };
 ```
 
 ### Mount in root router
-
 ```typescript
 // packages/api/orpc/router.ts
 import { feedbackRouter } from "../modules/feedback/router";
@@ -134,13 +129,13 @@ import { publicProcedure } from "./procedures";
 // ...other imports
 
 export const router = publicProcedure.router({
-	admin: adminRouter,
-	organizations: organizationsRouter,
-	users: usersRouter,
-	payments: paymentsRouter,
-	ai: aiRouter,
-	notifications: notificationsRouter,
-	feedback: feedbackRouter,
+  admin: adminRouter,
+  organizations: organizationsRouter,
+  users: usersRouter,
+  payments: paymentsRouter,
+  ai: aiRouter,
+  notifications: notificationsRouter,
+  feedback: feedbackRouter,
 });
 ```
 
@@ -153,17 +148,13 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function FeedbackList({ organizationId }: { organizationId: string }) {
-	const qc = useQueryClient();
-	const { data, isLoading } = useQuery(
-		orpc.feedback.list.queryOptions({ input: { organizationId } }),
-	);
-	const createMut = useMutation(
-		orpc.feedback.create.mutationOptions({
-			onSuccess: () => qc.invalidateQueries(orpc.feedback.list.key()),
-		}),
-	);
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery(orpc.feedback.list.queryOptions({ input: { organizationId } }));
+  const createMut = useMutation(orpc.feedback.create.mutationOptions({
+    onSuccess: () => qc.invalidateQueries(orpc.feedback.list.key()),
+  }));
 
-	// ...
+  // ...
 }
 ```
 
@@ -197,36 +188,32 @@ The Hono entry mounts `openApiHandler` so a Swagger / OpenAPI spec is exposed au
 ## Gotchas (verified)
 
 ### `bigint` does not survive JSON
-
 oRPC serializes responses as JSON; `JSON.stringify(BigInt)` throws. For any field that is a `bigint` on the server, project it to `string` in the output schema:
 
 ```typescript
 const bigintAsString = z.bigint().transform((v) => v.toString());
 
 const walletDtoSchema = z.object({
-	id: z.string(),
-	availableBalanceKopecks: bigintAsString, // wire format: "12345"
-	// ...
+  id: z.string(),
+  availableBalanceKopecks: bigintAsString,  // wire format: "12345"
+  // ...
 });
 ```
 
 The client decodes back via `BigInt(value)` only when arithmetic is needed; otherwise format the string directly (e.g. `Intl.NumberFormat`).
 
 ### `localeMiddleware` for localized errors
-
 For procedures that produce user-facing messages (especially 4xx errors shown in UI), chain `localeMiddleware` so `context.locale` is available:
 
 ```typescript
 import { localeMiddleware } from "../../../orpc/middleware/locale-middleware";
 
 export const createTopup = protectedProcedure
-	.use(localeMiddleware)
-	.route({
-		/* ... */
-	})
-	.handler(async ({ context: { user, locale } }) => {
-		// build redirect URLs with `locale`, look up translations, etc.
-	});
+  .use(localeMiddleware)
+  .route({ /* ... */ })
+  .handler(async ({ context: { user, locale } }) => {
+    // build redirect URLs with `locale`, look up translations, etc.
+  });
 ```
 
 ## Docs

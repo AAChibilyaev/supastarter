@@ -10,17 +10,17 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
 ### Architecture Overview
 
 - Frontend lives in **multiple Next.js apps**:
-    - `apps/saas/` — protected SaaS app (App Router, port 3000)
-    - `apps/marketing/` — public marketing site (port 3001)
-    - `apps/docs/` — documentation (port 3002)
-    - `apps/mail-preview/` — email template preview (port 3003)
+  - `apps/saas/` — protected SaaS app (App Router, port 3000)
+  - `apps/marketing/` — public marketing site (port 3001)
+  - `apps/docs/` — documentation (port 3002)
+  - `apps/mail-preview/` — email template preview (port 3003)
 - Shared feature modules live under `apps/<app>/modules/` (e.g., `apps/saas/modules/auth`, `apps/marketing/modules/blog`).
 - Backend logic resides in `packages/*`:
-    - `api` — oRPC procedures and Hono HTTP handler.
-    - `auth` — Better Auth configuration plus invitation/passkey/organization helpers.
-    - `database` — **Prisma AND Drizzle** clients, schema, queries (both ORMs coexist).
-    - `notifications` — in-app + email notifications (`createNotification`, preferences, catalog).
-    - `ai`, `logs`, `mail`, `payments`, `storage`, `utils`, `i18n` for their respective domains.
+  - `api` — oRPC procedures and Hono HTTP handler.
+  - `auth` — Better Auth configuration plus invitation/passkey/organization helpers.
+  - `database` — **Prisma AND Drizzle** clients, schema, queries (both ORMs coexist).
+  - `notifications` — in-app + email notifications (`createNotification`, preferences, catalog).
+  - `ai`, `logs`, `mail`, `payments`, `storage`, `utils`, `i18n` for their respective domains.
 - Use the package exports (`@repo/api`, `@repo/auth`, `@repo/database`, `@repo/ui/components/*`, `@repo/notifications`) instead of deep relative imports.
 - Use per-app aliases (`@auth/*`, `@shared/*`, `@organizations/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@settings/*`, `@i18n/*`, `@config`) for cross-module imports inside an app.
 
@@ -61,9 +61,9 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
 - Add API and data-fetching logic to `@repo/api` (single source of truth, reusable).
 - Group API logic in `packages/api/modules/<feature>/` — `types.ts` (zod schemas), `procedures/<action>.ts`, `router.ts` (router object). Mount the router in `packages/api/orpc/router.ts`.
 - Three procedure types from `packages/api/orpc/procedures.ts`:
-    - `publicProcedure` — no auth required
-    - `protectedProcedure` — adds `context.session` and `context.user` (throws `UNAUTHORIZED` otherwise)
-    - `adminProcedure` — requires `context.user.role === "admin"` (throws `FORBIDDEN` otherwise)
+  - `publicProcedure` — no auth required
+  - `protectedProcedure` — adds `context.session` and `context.user` (throws `UNAUTHORIZED` otherwise)
+  - `adminProcedure` — requires `context.user.role === "admin"` (throws `FORBIDDEN` otherwise)
 - Use the generated database clients from `@repo/database`; never instantiate Prisma or Drizzle directly in app code.
 - Honor caching/revalidation patterns already in the repo.
 - Client-side fetching: `import { orpc } from "@shared/lib/orpc-query-utils"` then `useQuery(orpc.<module>.<action>.queryOptions())` / `useMutation(orpc.<module>.<action>.mutationOptions())`.
@@ -113,23 +113,22 @@ These are **MUST**, not preferences. Each row has a default; overriding it requi
 
 **Step 0 — grep before you write.** Every new file (component, hook, procedure, query, helper, type) MUST be preceded by a grep for the same noun in the relevant directory (see SKILL.md "MANDATORY pre-write protocol"). No exceptions.
 
-| What you might add                                         | Default                                                                                                                                                                                     | You may override only if                                                                                                                                        |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **New UI component** (`Foo.tsx`)                           | **NO** — use the closest existing component from the [UI catalog](ui-component-catalog.md) (Layer 3 → Layer 2 → Layer 1) and add a prop if needed.                                          | The catalog truly has nothing close. Then place under `apps/<app>/modules/<feature>/components/` (Layer 3), not `packages/ui` (Layer 1) or `@shared` (Layer 2). |
-| **New hook** (`useFoo`)                                    | **NO** — search `apps/saas/modules/*/hooks/`, `apps/saas/modules/shared/hooks/`.                                                                                                            | No matching hook exists AND ≥1 call site in this same task.                                                                                                     |
-| **New oRPC procedure**                                     | **Only with a real caller in this same task.**                                                                                                                                              | — Speculative procedures are deleted in review.                                                                                                                 |
-| **New `@repo/database` query helper**                      | **NO** — search `packages/database/prisma/queries/` and `packages/database/drizzle/queries/`. Many composite queries already exist (e.g. `getOrganizationById` already includes `members`). | No matching helper, and the inline query would repeat in ≥2 places.                                                                                             |
-| **New zod schema for a Prisma model**                      | **NO** — `prisma-zod-generator` already wrote it under `packages/database/prisma/zod/`. Import `<Model>Schema` from `@repo/database`.                                                       | The schema needs project-specific refinements; then `extend()` the generated one — never duplicate fields.                                                      |
-| **New abstraction / interface / wrapper / factory**        | **NO** — inline it.                                                                                                                                                                         | There are **≥2 existing call sites** that would otherwise duplicate logic. One future call site does not count.                                                 |
-| **New `packages/<pkg>` workspace package**                 | **NO** — extend an existing one (`@repo/utils`, `@repo/payments`, ...).                                                                                                                     | New code has its own clear domain boundary AND ≥3 consumers AND its dependency graph would be uglier inside an existing package.                                |
-| **New env-driven provider switch** (`MY_FEATURE_PROVIDER`) | **NO** — hard-code the one provider needed.                                                                                                                                                 | A second provider is being added in this same task.                                                                                                             |
-| **New typed `Error` subclass**                             | **NO** — `throw new Error("MY_FOO_<CODE>:...")`.                                                                                                                                            | ≥3 `catch` sites need to discriminate this from other errors.                                                                                                   |
-| **New config in `config.ts` "for future flexibility"**     | **NO** — hardcode the current value.                                                                                                                                                        | A real second value exists today.                                                                                                                               |
-| **New i18n locale**                                        | **NO** — only the 4 locales already defined (en/de/es/fr) unless the project owner has explicitly asked for another.                                                                        | A specific locale is requested AND all 4 scope files (`mail`/`marketing`/`saas`/`shared`) will be filled in this same task — partial locales break TS types.    |
-| **New translation namespace / scope file**                 | **NO** — choose `saas` / `marketing` / `shared` / `mail` per [internationalization.md](internationalization.md).                                                                            | —                                                                                                                                                               |
+| What you might add | Default | You may override only if |
+|---|---|---|
+| **New UI component** (`Foo.tsx`) | **NO** — use the closest existing component from the [UI catalog](ui-component-catalog.md) (Layer 3 → Layer 2 → Layer 1) and add a prop if needed. | The catalog truly has nothing close. Then place under `apps/<app>/modules/<feature>/components/` (Layer 3), not `packages/ui` (Layer 1) or `@shared` (Layer 2). |
+| **New hook** (`useFoo`) | **NO** — search `apps/saas/modules/*/hooks/`, `apps/saas/modules/shared/hooks/`. | No matching hook exists AND ≥1 call site in this same task. |
+| **New oRPC procedure** | **Only with a real caller in this same task.** | — Speculative procedures are deleted in review. |
+| **New `@repo/database` query helper** | **NO** — search `packages/database/prisma/queries/` and `packages/database/drizzle/queries/`. Many composite queries already exist (e.g. `getOrganizationById` already includes `members`). | No matching helper, and the inline query would repeat in ≥2 places. |
+| **New zod schema for a Prisma model** | **NO** — `prisma-zod-generator` already wrote it under `packages/database/prisma/zod/`. Import `<Model>Schema` from `@repo/database`. | The schema needs project-specific refinements; then `extend()` the generated one — never duplicate fields. |
+| **New abstraction / interface / wrapper / factory** | **NO** — inline it. | There are **≥2 existing call sites** that would otherwise duplicate logic. One future call site does not count. |
+| **New `packages/<pkg>` workspace package** | **NO** — extend an existing one (`@repo/utils`, `@repo/payments`, ...). | New code has its own clear domain boundary AND ≥3 consumers AND its dependency graph would be uglier inside an existing package. |
+| **New env-driven provider switch** (`MY_FEATURE_PROVIDER`) | **NO** — hard-code the one provider needed. | A second provider is being added in this same task. |
+| **New typed `Error` subclass** | **NO** — `throw new Error("MY_FOO_<CODE>:...")`. | ≥3 `catch` sites need to discriminate this from other errors. |
+| **New config in `config.ts` "for future flexibility"** | **NO** — hardcode the current value. | A real second value exists today. |
+| **New i18n locale** | **NO** — only the 4 locales already defined (en/de/es/fr) unless the project owner has explicitly asked for another. | A specific locale is requested AND all 4 scope files (`mail`/`marketing`/`saas`/`shared`) will be filled in this same task — partial locales break TS types. |
+| **New translation namespace / scope file** | **NO** — choose `saas` / `marketing` / `shared` / `mail` per [internationalization.md](internationalization.md). | — |
 
 **Hard reuse rules (do not negotiate):**
-
 - ❌ NEVER instantiate `PrismaClient` / `Drizzle` directly — import `db` from `@repo/database`.
 - ❌ NEVER call `auth.api.getSession` from app code — use `getSession()` from `@auth/lib/server` (server) or `useSession()` from `@auth/hooks/use-session` (client).
 - ❌ NEVER write your own `cn()` — `import { cn } from "@repo/ui"`.

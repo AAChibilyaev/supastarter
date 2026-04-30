@@ -138,9 +138,9 @@ function IntegrationCard({
 			<CardContent>
 				{ok ? (
 					<div className="gap-3 flex items-center">
-						<CheckCircle2Icon className="size-5 text-emerald-500" />
+						<CheckCircle2Icon className="size-5 text-success" />
 						<div>
-							<p className="font-medium text-emerald-600 text-sm">Connected</p>
+							<p className="font-medium text-sm text-success">Connected</p>
 							{latencyMs !== undefined && (
 								<p className="text-xs text-muted-foreground">
 									{latencyMs}ms latency

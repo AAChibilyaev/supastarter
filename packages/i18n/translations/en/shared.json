@@ -57,5 +57,10 @@
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",
 		"perSeat": "seat"
+	},
+	"consent": {
+		"message": "This site doesn't use cookies yet, but we added this banner to demo it to you.",
+		"allow": "Allow",
+		"decline": "Decline"
 	}
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { getAdminPath } from "@admin/lib/links";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InviteMemberForm } from "@organizations/components/InviteMemberForm";
 import { OrganizationMembersBlock } from "@organizations/components/OrganizationMembersBlock";
@@ -27,6 +26,7 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
+import { joinRelativeURL } from "ufo";
 import { z } from "zod";
 
 const organizationFormSchema = z.object({
@@ -75,7 +75,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 			toastSuccess(t("admin.organizations.form.notifications.success"));
 
 			if (!organization) {
-				router.replace(getAdminPath(`/organizations/${newOrganization.id}`));
+				router.replace(joinRelativeURL("/admin", `/organizations/${newOrganization.id}`));
 			}
 		} catch {
 			toastError(t("admin.organizations.form.notifications.error"));

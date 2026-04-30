@@ -56,6 +56,11 @@
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",
-		"perSeat": "seat"
+		"perSeat": "место"
+	},
+	"consent": {
+		"message": "Этот сайт пока не использует cookies, но мы добавили этот баннер чтобы показать вам.",
+		"allow": "Разрешить",
+		"decline": "Отклонить"
 	}
 }

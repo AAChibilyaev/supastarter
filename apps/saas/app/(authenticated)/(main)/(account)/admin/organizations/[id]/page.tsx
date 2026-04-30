@@ -1,5 +1,4 @@
 import { OrganizationForm } from "@admin/components/organizations/OrganizationForm";
-import { getAdminPath } from "@admin/lib/links";
 import { fullOrganizationQueryKey } from "@organizations/lib/api";
 import { auth } from "@repo/auth";
 import { Button } from "@repo/ui";
@@ -9,6 +8,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { joinRelativeURL } from "ufo";
 
 export default async function OrganizationFormPage({
 	params,
@@ -39,7 +39,7 @@ export default async function OrganizationFormPage({
 			<div>
 				<div className="mb-2 flex justify-start">
 					<Button variant="link" size="sm" asChild className="px-0">
-						<Link href={backTo ?? getAdminPath("/organizations")}>
+						<Link href={backTo ?? joinRelativeURL("/admin", "/organizations")}>
 							<ArrowLeftIcon className="mr-1.5 size-4" />
 							{t("backToList")}
 						</Link>

@@ -57,5 +57,10 @@
 		"year": "Jahr",
 		"yearly": "Jährlich",
 		"perSeat": "Sitz"
+	},
+	"consent": {
+		"message": "Diese Website verwendet derzeit keine Cookies, aber wir haben dieses Banner hinzugefügt, um es dir zu zeigen.",
+		"allow": "Zulassen",
+		"decline": "Ablehnen"
 	}
 }

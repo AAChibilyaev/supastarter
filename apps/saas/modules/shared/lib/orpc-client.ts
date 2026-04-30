@@ -1,6 +1,7 @@
 import { createORPCClient, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { ApiRouterClient } from "@repo/api/orpc/router";
+import { logger } from "@repo/logs";
 
 const link = new RPCLink({
 	url: () => {
@@ -16,7 +17,7 @@ const link = new RPCLink({
 				return;
 			}
 
-			console.error(error);
+			logger.error("oRPC client error", { error });
 		}),
 	],
 });

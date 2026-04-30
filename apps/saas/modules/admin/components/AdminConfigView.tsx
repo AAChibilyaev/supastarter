@@ -70,8 +70,8 @@ export function AdminConfigView() {
 						{data.typesenseHealth.ok ? (
 							<>
 								<div className="gap-2 flex items-center">
-									<CheckCircle2Icon className="size-4 text-emerald-500" />
-									<span className="font-medium text-emerald-600">
+									<CheckCircle2Icon className="size-4 text-success" />
+									<span className="font-medium text-success">
 										{t("config.healthy")}
 									</span>
 								</div>

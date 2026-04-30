@@ -1,6 +1,5 @@
 "use client";
 
-import { getAdminPath } from "@admin/lib/links";
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
@@ -31,7 +30,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef } from "react";
-import { withQuery } from "ufo";
+import { joinRelativeURL, withQuery } from "ufo";
 import { useDebounceValue } from "usehooks-ts";
 
 const ITEMS_PER_PAGE = 10;
@@ -60,7 +59,7 @@ export function OrganizationList() {
 	};
 
 	const getOrganizationEditPath = (id: string) => {
-		return getPathWithBackToParemeter(getAdminPath(`/organizations/${id}`));
+		return getPathWithBackToParemeter(joinRelativeURL("/admin", `/organizations/${id}`));
 	};
 
 	useEffect(() => {
@@ -209,7 +208,7 @@ export function OrganizationList() {
 				<h2 className="font-semibold text-2xl">{t("admin.organizations.title")}</h2>
 
 				<Button asChild>
-					<Link href={getAdminPath("/organizations/new")}>
+					<Link href={joinRelativeURL("/admin", "/organizations/new")}>
 						<PlusIcon className="mr-1.5 size-4" />
 						{t("admin.organizations.create")}
 					</Link>

@@ -1,5 +1,6 @@
 "use server";
 
+import { logger } from "@repo/logs";
 import { revalidatePath } from "next/cache";
 
 export const clearCache = async (path?: string) => {
@@ -10,6 +11,6 @@ export const clearCache = async (path?: string) => {
 			revalidatePath("/", "layout");
 		}
 	} catch (error) {
-		console.error("Could not revalidate path", path, error);
+		logger.error("Could not revalidate path", { path, error });
 	}
 };

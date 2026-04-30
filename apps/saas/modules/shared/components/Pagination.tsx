@@ -29,7 +29,7 @@ const Pagination = ({
 				>
 					<ChevronLeftIcon />
 				</Button>
-				<span className="text-gray-500 text-sm">
+				<span className="text-sm text-muted-foreground">
 					{currentPage * itemsPerPage - itemsPerPage + 1} -{" "}
 					{currentPage * itemsPerPage > totalItems
 						? totalItems

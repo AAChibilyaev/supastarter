@@ -29,37 +29,35 @@ export const setupAutorecharge = protectedProcedure
 			operationId: z.string().optional(),
 		}),
 	)
-	.handler(
-		async ({ input: { thresholdKopecks, topupAmountKopecks }, context: { user } }) => {
-			const wallet = await db.aiWallet.findUnique({
-				where: { userId: user.id },
-			});
+	.handler(async ({ input: { thresholdKopecks, topupAmountKopecks }, context: { user } }) => {
+		const wallet = await db.aiWallet.findUnique({
+			where: { userId: user.id },
+		});
 
-			if (!wallet) {
-				throw new ORPCError("NOT_FOUND", { message: "Wallet not found" });
-			}
+		if (!wallet) {
+			throw new ORPCError("NOT_FOUND", { message: "Wallet not found" });
+		}
 
-			const idempotencyKey = `autorecharge:${wallet.id}:${randomUUID()}`;
-			const purpose = `AI Wallet auto-recharge (threshold: ${Number(thresholdKopecks) / 100} ₽)`;
-			const externalRef = `autorecharge:${wallet.id}:${idempotencyKey}`;
+		const idempotencyKey = `autorecharge:${wallet.id}:${randomUUID()}`;
+		const purpose = `AI Wallet auto-recharge (threshold: ${Number(thresholdKopecks) / 100} ₽)`;
+		const externalRef = `autorecharge:${wallet.id}:${idempotencyKey}`;
 
-			const _order = await db.walletTopupOrder.create({
-				data: {
-					walletId: wallet.id,
-					userId: wallet.userId,
-					provider: "tochka",
-					currency: wallet.currency ?? "RUB",
-					amountKopecks: topupAmountKopecks,
-					status: "created",
-					idempotencyKey: `autorecharge:${wallet.id}:${randomUUID()}`,
-				},
-			});
+		const _order = await db.walletTopupOrder.create({
+			data: {
+				walletId: wallet.id,
+				userId: wallet.userId,
+				provider: "tochka",
+				currency: wallet.currency ?? "RUB",
+				amountKopecks: topupAmountKopecks,
+				status: "created",
+				idempotencyKey: `autorecharge:${wallet.id}:${randomUUID()}`,
+			},
+		});
 
-			const result = await createSubscriptionLink(topupAmountKopecks, purpose, externalRef);
+		const result = await createSubscriptionLink(topupAmountKopecks, purpose, externalRef);
 
-			return {
-				paymentUrl: result.paymentUrl,
-				operationId: result.operationId,
-			};
-		},
-	);
+		return {
+			paymentUrl: result.paymentUrl,
+			operationId: result.operationId,
+		};
+	});

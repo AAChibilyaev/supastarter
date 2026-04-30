@@ -38,7 +38,7 @@ import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
-import { EmailVerified } from "../EmailVerified";
+import { EmailVerified } from "./EmailVerified";
 
 const ITEMS_PER_PAGE = 10;
 

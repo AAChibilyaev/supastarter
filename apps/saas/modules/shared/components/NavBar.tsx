@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "@auth/hooks/use-session";
+import { OrganzationSelect } from "@organizations/components/OrganizationSelect";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { config as authConfig } from "@repo/auth/config";
 import { config as paymentsConfig } from "@repo/payments/config";
@@ -48,7 +49,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
-import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
 import { useIsMobile } from "../hooks/use-media-query";
 import { useSidebar } from "../lib/sidebar-context";
 

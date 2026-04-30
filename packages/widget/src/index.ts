@@ -17,13 +17,14 @@
 
 import type { WidgetConfig } from "./search-client";
 import { createAacSearchClient } from "./search-client";
+import { t as translate, resolveLocale } from "./translations";
 
 export interface WidgetOptions {
 	baseUrl: string;
 	apiKey: string;
 	indexSlug: string;
 	container: string | HTMLElement;
-	locale?: string;
+	locale?: "en" | "ru" | "de" | "es" | "fr";
 	theme?: "light" | "dark" | "auto";
 	mode?: "inline" | "modal";
 	showPrices?: boolean;
@@ -381,9 +382,15 @@ export class AacSearchWidget {
 	private root: ShadowRoot;
 	private state: SearchState;
 	private containerEl: HTMLElement;
+	private locale: string;
+
+	private t(key: import("./translations").TranslationKey): string {
+		return translate(this.locale, key);
+	}
 
 	constructor(options: WidgetOptions) {
 		this.options = { ...DEFAULT_OPTIONS, ...options } as WidgetOptions;
+		this.locale = resolveLocale(this.options.locale);
 
 		// Resolve container
 		this.containerEl =
@@ -486,7 +493,7 @@ export class AacSearchWidget {
 			this.state = {
 				...this.state,
 				loading: false,
-				error: err instanceof Error ? err.message : "Search failed",
+				error: err instanceof Error ? err.message : this.t("error"),
 			};
 		}
 
@@ -587,7 +594,7 @@ export class AacSearchWidget {
 		let html = '<div class="aac-pagination">';
 
 		if (current > 1) {
-			html += `<button class="aac-page-btn" data-page="${current - 1}">&laquo; Prev</button>`;
+			html += `<button class="aac-page-btn" data-page="${current - 1}">&laquo; ${this.t("prev")}</button>`;
 		}
 
 		if (pages[0] > 1) {
@@ -606,7 +613,7 @@ export class AacSearchWidget {
 		}
 
 		if (current < total) {
-			html += `<button class="aac-page-btn" data-page="${current + 1}">Next &raquo;</button>`;
+			html += `<button class="aac-page-btn" data-page="${current + 1}">${this.t("next")} &raquo;</button>`;
 		}
 
 		html += "</div>";
@@ -647,7 +654,7 @@ export class AacSearchWidget {
 
 	private renderResults(): string {
 		if (this.state.loading) {
-			return '<div class="aac-loading">Searching...</div>';
+			return `<div class="aac-loading">${this.t("loading")}</div>`;
 		}
 
 		if (this.state.error) {
@@ -655,32 +662,32 @@ export class AacSearchWidget {
 		}
 
 		if (this.state.query && this.state.results.length === 0) {
-			return '<div class="aac-no-results">No products found. Try a different search term.</div>';
+			return `<div class="aac-no-results">${this.t("noResults")}</div>`;
 		}
 
 		if (!this.state.query && this.state.results.length === 0) {
-			return '<div class="aac-no-results">Start typing to search products...</div>';
+			return `<div class="aac-no-results">${this.t("startTyping")}</div>`;
 		}
 
 		const queryWord = this.state.query || "*";
 		let html = "";
 
 		// Stats
-		html += `<div class="aac-stats">${this.state.found} results for "${escapeHtml(queryWord)}" in ${this.state.searchTimeMs}ms</div>`;
+		html += `<div class="aac-stats">${this.state.found} ${this.t("results")} "${escapeHtml(queryWord)}" in ${this.state.searchTimeMs}ms</div>`;
 
 		// Sort
 		html += `<select class="aac-sort-select">`;
-		html += `<option value="">Relevance</option>`;
-		html += `<option value="price:asc" ${this.state.sortBy === "price:asc" ? "selected" : ""}>Price: Low to High</option>`;
-		html += `<option value="price:desc" ${this.state.sortBy === "price:desc" ? "selected" : ""}>Price: High to Low</option>`;
-		html += `<option value="created_at:desc" ${this.state.sortBy === "created_at:desc" ? "selected" : ""}>Newest First</option>`;
+		html += `<option value="">${this.t("relevance")}</option>`;
+		html += `<option value="price:asc" ${this.state.sortBy === "price:asc" ? "selected" : ""}>${this.t("priceLowHigh")}</option>`;
+		html += `<option value="price:desc" ${this.state.sortBy === "price:desc" ? "selected" : ""}>${this.t("priceHighLow")}</option>`;
+		html += `<option value="created_at:desc" ${this.state.sortBy === "created_at:desc" ? "selected" : ""}>${this.t("newest")}</option>`;
 		html += "</select>";
 
 		// Results
 		html += '<div class="aac-results">';
 		for (const hit of this.state.results) {
 			const doc = hit.document as Record<string, unknown>;
-			const title = (doc.title as string) ?? "Untitled";
+			const title = (doc.title as string) ?? this.t("untitled");
 			const sku = doc.sku as string | undefined;
 			const description = doc.description as string | undefined;
 			const price = doc.price as number | undefined;
@@ -704,7 +711,7 @@ export class AacSearchWidget {
 				html += `<div class="aac-result-title">${highlightText(title)}</div>`;
 			}
 
-			if (sku) html += `<div class="aac-result-sku">SKU: ${escapeHtml(sku)}</div>`;
+			if (sku) html += `<div class="aac-result-sku">${this.t("sku")}: ${escapeHtml(sku)}</div>`;
 
 			if (description) {
 				const desc =
@@ -722,19 +729,19 @@ export class AacSearchWidget {
 
 			if (this.options.showPrices && price !== undefined) {
 				if (salePrice !== undefined && salePrice < price) {
-					html += `<div class="aac-result-price"><span class="aac-result-sale-price">${formatPrice(salePrice)}</span><span class="aac-result-original-price">${formatPrice(price)}</span></div>`;
+					html += `<div class="aac-result-price"><span class="aac-result-sale-price">${formatPrice(salePrice, undefined, this.locale)}</span><span class="aac-result-original-price">${formatPrice(price, undefined, this.locale)}</span></div>`;
 				} else {
-					html += `<div class="aac-result-price">${formatPrice(price)}</div>`;
+					html += `<div class="aac-result-price">${formatPrice(price, undefined, this.locale)}</div>`;
 				}
 			}
 
 			if (availability) {
 				const status =
 					availability === "in_stock"
-						? "In Stock"
+						? this.t("inStock")
 						: availability === "out_of_stock"
-							? "Out of Stock"
-							: "Pre-order";
+							? this.t("outOfStock")
+							: this.t("preorder");
 				const color =
 					availability === "in_stock"
 						? "#16a34a"
@@ -769,13 +776,13 @@ export class AacSearchWidget {
 			<style>${WIDGET_STYLES}</style>
 			<div class="aac-widget-container">
 				<div class="aac-search-box">
-					<input
-						type="text"
-						class="aac-search-input"
-						placeholder="Search products..."
-						value="${escapeHtml(this.state.query)}"
-						aria-label="Search products"
-					/>
+				<input
+					type="text"
+					class="aac-search-input"
+					placeholder="${this.t("searchPlaceholder")}"
+					value="${escapeHtml(this.state.query)}"
+					aria-label="${this.t("searchLabel")}"
+				/>
 				</div>
 				${
 					this.state.query || this.state.results.length > 0
@@ -785,7 +792,7 @@ export class AacSearchWidget {
 								${this.renderResults()}
 							</div>
 						</div>`
-						: '<div class="aac-no-results">Start typing to search products...</div>'
+						: `<div class="aac-no-results">${this.t("startTyping")}</div>`
 				}
 			</div>
 		`;

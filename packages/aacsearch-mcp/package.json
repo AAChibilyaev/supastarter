@@ -1,0 +1,19 @@
+{
+	"name": "@repo/aacsearch-mcp",
+	"version": "0.0.1",
+	"description": "MCP (Model Context Protocol) server for AACsearch — AI agents can search, index, and manage search indexes via stdio JSON-RPC.",
+	"main": "./src/index.ts",
+	"scripts": {
+		"build": "tsc",
+		"type-check": "tsc --noEmit",
+		"clean": "git clean -xdf .cache .turbo dist node_modules"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"typescript": "catalog:"
+	}
+}

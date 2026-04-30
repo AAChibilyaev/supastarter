@@ -32,7 +32,10 @@
 			"subtitle": "Размещённый search API с токенами на уровне организации, allow-list по origin для каждого ключа, rate-limit и квотами — чтобы вы поставляли поиск, а не возились с инфраструктурой.",
 			"getStarted": "Начать бесплатно",
 			"documentation": "Открыть документацию",
-			"codeCaption": "search-client.ts"
+			"codeCaption": "search-client.ts",
+			"new": "НОВОЕ",
+			"featureBadge": "Поиск как сервис",
+			"imageAlt": "Скриншот панели AACsearch"
 		},
 		"howItWorks": {
 			"title": "Три вызова. Один вечер.",

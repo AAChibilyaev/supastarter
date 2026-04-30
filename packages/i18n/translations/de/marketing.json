@@ -32,7 +32,10 @@
 			"subtitle": "Eine gehostete Such-API mit organisationsbezogenen Tokens, Origin-Allowlists pro Key, Rate-Limit und Quota — damit Sie Suche ausliefern, statt Infrastruktur zu betreiben.",
 			"getStarted": "Kostenlos starten",
 			"documentation": "Doku lesen",
-			"codeCaption": "search-client.ts"
+			"codeCaption": "search-client.ts",
+			"new": "NEU",
+			"featureBadge": "Search-as-a-Service",
+			"imageAlt": "AACsearch Dashboard Screenshot"
 		},
 		"howItWorks": {
 			"title": "Drei Aufrufe. Ein Nachmittag.",

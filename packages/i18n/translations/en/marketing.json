@@ -32,7 +32,10 @@
 			"subtitle": "A hosted search API with org-scoped tokens, per-key origin allow-lists, rate-limit and quota — built so you ship search instead of running infra.",
 			"getStarted": "Start free",
 			"documentation": "Read the docs",
-			"codeCaption": "search-client.ts"
+			"codeCaption": "search-client.ts",
+			"new": "NEW",
+			"featureBadge": "Search-as-a-Service",
+			"imageAlt": "AACsearch dashboard screenshot"
 		},
 		"howItWorks": {
 			"title": "Three calls. One afternoon.",

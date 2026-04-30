@@ -32,7 +32,10 @@
 			"subtitle": "Une API de recherche hébergée avec tokens portés par l'organisation, allow-list d'origine par clé, rate-limit et quota — pour livrer la recherche au lieu de gérer l'infrastructure.",
 			"getStarted": "Commencer gratuitement",
 			"documentation": "Lire la documentation",
-			"codeCaption": "search-client.ts"
+			"codeCaption": "search-client.ts",
+			"new": "NOUVEAU",
+			"featureBadge": "Recherche en tant que Service",
+			"imageAlt": "Capture d'écran du tableau de bord AACsearch"
 		},
 		"howItWorks": {
 			"title": "Trois appels. Un après-midi.",

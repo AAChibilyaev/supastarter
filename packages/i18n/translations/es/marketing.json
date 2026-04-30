@@ -32,7 +32,10 @@
 			"subtitle": "Una API de búsqueda gestionada con tokens por organización, allow-list de origen por clave, rate-limit y cuotas — para que entregues búsqueda en lugar de operar infraestructura.",
 			"getStarted": "Empieza gratis",
 			"documentation": "Ver la documentación",
-			"codeCaption": "search-client.ts"
+			"codeCaption": "search-client.ts",
+			"new": "NUEVO",
+			"featureBadge": "Búsqueda como Servicio",
+			"imageAlt": "Captura del panel AACsearch"
 		},
 		"howItWorks": {
 			"title": "Tres llamadas. Una tarde.",

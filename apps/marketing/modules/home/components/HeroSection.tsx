@@ -25,7 +25,7 @@ const stats = [
 ];
 
 export function HeroSection() {
-	const t = useTranslations("marketing");
+	const t = useTranslations();
 
 	return (
 		<section className="relative overflow-hidden">

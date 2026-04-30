@@ -32,7 +32,7 @@ const featureBadges = [
 ];
 
 export function HeroWithCode() {
-	const t = useTranslations("marketing");
+	const t = useTranslations();
 
 	return (
 		<section className="relative isolate overflow-hidden border-b border-border/60">

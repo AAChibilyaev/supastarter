@@ -1,173 +1,173 @@
 {
 	"blog": {
-		"description": "Engineering notes from the AACsearch team",
-		"title": "AACsearch Blog",
-		"back": "Back to blog"
+		"description": "Notas de ingeniería del equipo de AACsearch",
+		"title": "Blog de AACsearch",
+		"back": "Volver al blog"
 	},
 	"changelog": {
-		"description": "What shipped, when, and what changed under the hood.",
+		"description": "Qué se publicó, cuándo, y qué cambió por debajo.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Reach the team — billing, security disclosures, partnerships.",
+		"description": "Contacta con el equipo — facturación, divulgaciones de seguridad, alianzas.",
 		"form": {
-			"email": "Email",
-			"message": "Message",
-			"name": "Name",
+			"email": "Correo",
+			"message": "Mensaje",
+			"name": "Nombre",
 			"notifications": {
-				"error": "Could not send your message. Please try again later.",
-				"success": "Got it — we'll reply within one business day."
+				"error": "No pudimos enviar tu mensaje. Inténtalo de nuevo más tarde.",
+				"success": "Recibido — responderemos en un día laborable."
 			},
-			"submit": "Send message"
+			"submit": "Enviar mensaje"
 		},
-		"title": "Contact"
+		"title": "Contacto"
 	},
 	"documentation": {
-		"title": "Documentation"
+		"title": "Documentación"
 	},
 	"home": {
 		"hero": {
-			"badge": "v0 — accepting early access",
-			"title": "Search your users actually feel.",
-			"subtitle": "A hosted search API with org-scoped tokens, per-key origin allow-lists, rate-limit and quota — built so you ship search instead of running infra.",
-			"getStarted": "Start free",
-			"documentation": "Read the docs",
+			"badge": "v0 — acceso anticipado abierto",
+			"title": "Búsqueda que tus usuarios sí notan.",
+			"subtitle": "Una API de búsqueda gestionada con tokens por organización, allow-list de origen por clave, rate-limit y cuotas — para que entregues búsqueda en lugar de operar infraestructura.",
+			"getStarted": "Empieza gratis",
+			"documentation": "Ver la documentación",
 			"codeCaption": "search-client.ts"
 		},
 		"howItWorks": {
-			"title": "Three calls. One afternoon.",
+			"title": "Tres llamadas. Una tarde.",
 			"step1": {
-				"title": "1. Push documents",
-				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — schema is whatever you send."
+				"title": "1. Sube documentos",
+				"description": "Envía tus registros a un índice de tu organización. Importación masiva o upsert único — el esquema es el que tú envíes."
 			},
 			"step2": {
-				"title": "2. Mint a search token",
-				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, a TTL."
+				"title": "2. Genera un token de búsqueda",
+				"description": "Emite un scoped token de vida corta desde el dashboard o tu servidor. Atado a un índice, un origen y un TTL."
 			},
 			"step3": {
-				"title": "3. Search from the browser",
-				"description": "Use the typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
+				"title": "3. Busca desde el navegador",
+				"description": "Usa el SDK tipado para navegador. Búsqueda simple, multi-search (federada), filtros con facetas — bajo 50 ms p99."
 			}
 		},
 		"features": {
-			"title": "What you actually get",
-			"subtitle": "No mystery boxes. Every feature here is shipping today.",
+			"title": "Lo que realmente recibes",
+			"subtitle": "Sin cajas misteriosas. Todo lo de aquí ya está en producción.",
 			"items": {
 				"scopedTokens": {
 					"title": "Scoped tokens",
-					"description": "Per-user, per-filter, TTL-bound. Mint server-side, ship to the browser, expire on schedule."
+					"description": "Por usuario, por filtro, con TTL. Genera en el servidor, sirve al navegador, expiran solos."
 				},
 				"originAllowlist": {
-					"title": "Per-key origin allow-list",
-					"description": "Pin every key to specific origins. A leaked key from Twitter doesn't drain your quota."
+					"title": "Allow-list de origen por clave",
+					"description": "Ata cada clave a orígenes concretos. Una clave filtrada en Twitter no agota tu cuota."
 				},
 				"rateLimitQuota": {
-					"title": "Rate limit & quota",
-					"description": "Per-key per-minute throttling and per-org monthly quota — both visible in the dashboard before you hit them."
+					"title": "Rate-limit y cuota",
+					"description": "Limitación por clave por minuto y cuota mensual por organización — ambas visibles en el dashboard antes de tocarlas."
 				},
 				"multiSearch": {
 					"title": "Multi-search",
-					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N requests."
+					"description": "Varias consultas en una sola ida y vuelta. Autocompletado entre colecciones sin N peticiones."
 				},
 				"reindex": {
-					"title": "Zero-downtime reindex",
-					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
+					"title": "Reindex sin caída",
+					"description": "Reconstruye el índice contra un nuevo esquema mientras el tráfico vivo sigue golpeando el viejo. Cambio atómico."
 				},
 				"selfHost": {
-					"title": "One self-host path",
-					"description": "Same code as managed cloud. Helm chart and Docker compose, no proprietary server fork."
+					"title": "Una sola vía de self-host",
+					"description": "Mismo código que la nube gestionada. Helm chart y Docker Compose — sin fork propietario."
 				}
 			}
 		},
 		"pricing": {
-			"badge": "Pricing",
-			"title": "Pay for searches and indexed docs. Nothing else.",
-			"subtitle": "1 search-unit = 1 search request OR 1 indexed document. Cancel anytime.",
-			"cta": "Start free",
-			"contact": "Contact sales",
-			"perMonth": "/mo",
+			"badge": "Precios",
+			"title": "Pagas por búsquedas y documentos indexados. Nada más.",
+			"subtitle": "1 search-unit = 1 búsqueda O 1 documento indexado. Cancela cuando quieras.",
+			"cta": "Empieza gratis",
+			"contact": "Hablar con ventas",
+			"perMonth": "/mes",
 			"plans": {
 				"free": {
 					"name": "Free",
 					"price": "$0",
-					"description": "For evaluating, hobby projects and side-products.",
+					"description": "Para evaluar, hobbies y side-products.",
 					"features": [
-						"10K search-units / month",
-						"1 index",
-						"3 API keys",
-						"Community support"
+						"10K search-units / mes",
+						"1 índice",
+						"3 claves API",
+						"Soporte de la comunidad"
 					]
 				},
 				"pro": {
 					"name": "Pro",
 					"price": "$29",
-					"description": "Production-ready for indie SaaS and small B2B teams.",
+					"description": "Listo para producción en SaaS indie y equipos B2B pequeños.",
 					"features": [
-						"1M search-units / month",
-						"10 indexes",
-						"Unlimited keys & scoped tokens",
-						"Custom origin allow-list",
-						"Email support, 1 business day"
+						"1M search-units / mes",
+						"10 índices",
+						"Claves y scoped tokens ilimitados",
+						"Allow-list de origen personalizada",
+						"Soporte por correo, 1 día laborable"
 					],
-					"highlight": "Most teams start here"
+					"highlight": "El plan más popular"
 				},
 				"enterprise": {
 					"name": "Enterprise",
-					"price": "Custom",
-					"description": "Dedicated cluster, audit log, 99.95% SLA.",
+					"price": "A medida",
+					"description": "Cluster dedicado, audit log, SLA 99,95 %.",
 					"features": [
-						"Unmetered search-units",
+						"Search-units sin medir",
 						"SSO (SAML / OIDC)",
-						"Audit log + IP allow-list",
-						"Dedicated cluster region",
-						"99.95% SLA, signed DPA"
+						"Audit log + allow-list de IP",
+						"Región de cluster dedicada",
+						"SLA 99,95 %, DPA firmado"
 					]
 				}
 			}
 		},
 		"cta": {
-			"title": "Ready to ship search?",
-			"subtitle": "Free tier covers most side-projects. No credit card.",
-			"primary": "Create an account",
-			"secondary": "Read the docs"
+			"title": "¿Listo para entregar búsqueda?",
+			"subtitle": "El plan gratuito cubre la mayoría de side-projects. Sin tarjeta.",
+			"primary": "Crear cuenta",
+			"secondary": "Ver la documentación"
 		}
 	},
 	"notFound": {
 		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
+		"title": "Página no encontrada",
+		"goToDashboard": "Ir al dashboard",
+		"goToHomepage": "Ir al inicio"
 	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
-			"features": "Features",
-			"pricing": "Pricing",
-			"privacyPolicy": "Privacy policy",
-			"termsAndConditions": "Terms",
-			"builtWith": "Built on supastarter"
+			"features": "Funciones",
+			"pricing": "Precios",
+			"privacyPolicy": "Privacidad",
+			"termsAndConditions": "Términos",
+			"builtWith": "Construido sobre supastarter"
 		},
 		"menu": {
 			"blog": "Blog",
 			"changelog": "Changelog",
-			"contact": "Contact",
+			"contact": "Contacto",
 			"dashboard": "Dashboard",
 			"docs": "Docs",
-			"features": "Features",
-			"login": "Sign in",
-			"pricing": "Pricing"
+			"features": "Funciones",
+			"login": "Entrar",
+			"pricing": "Precios"
 		},
 		"aria": {
-			"menu": "Menu",
-			"language": "Language"
+			"menu": "Menú",
+			"language": "Idioma"
 		},
 		"tableOfContents": {
-			"title": "On this page"
+			"title": "En esta página"
 		},
 		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
+			"system": "Sistema",
+			"light": "Claro",
+			"dark": "Oscuro"
 		}
 	}
 }

@@ -1,173 +1,173 @@
 {
 	"blog": {
-		"description": "Engineering notes from the AACsearch team",
-		"title": "AACsearch Blog",
-		"back": "Back to blog"
+		"description": "Инженерные заметки команды AACsearch",
+		"title": "Блог AACsearch",
+		"back": "Назад в блог"
 	},
 	"changelog": {
-		"description": "What shipped, when, and what changed under the hood.",
+		"description": "Что выкатили, когда и что изменилось под капотом.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Reach the team — billing, security disclosures, partnerships.",
+		"description": "Связь с командой — биллинг, отчёты о безопасности, партнёрства.",
 		"form": {
-			"email": "Email",
-			"message": "Message",
-			"name": "Name",
+			"email": "E-mail",
+			"message": "Сообщение",
+			"name": "Имя",
 			"notifications": {
-				"error": "Could not send your message. Please try again later.",
-				"success": "Got it — we'll reply within one business day."
+				"error": "Не удалось отправить сообщение. Попробуйте позже.",
+				"success": "Получили — ответим в течение одного рабочего дня."
 			},
-			"submit": "Send message"
+			"submit": "Отправить сообщение"
 		},
-		"title": "Contact"
+		"title": "Контакты"
 	},
 	"documentation": {
-		"title": "Documentation"
+		"title": "Документация"
 	},
 	"home": {
 		"hero": {
-			"badge": "v0 — accepting early access",
-			"title": "Search your users actually feel.",
-			"subtitle": "A hosted search API with org-scoped tokens, per-key origin allow-lists, rate-limit and quota — built so you ship search instead of running infra.",
-			"getStarted": "Start free",
-			"documentation": "Read the docs",
+			"badge": "v0 — открыт ранний доступ",
+			"title": "Поиск, который пользователи действительно чувствуют.",
+			"subtitle": "Размещённый search API с токенами на уровне организации, allow-list по origin для каждого ключа, rate-limit и квотами — чтобы вы поставляли поиск, а не возились с инфраструктурой.",
+			"getStarted": "Начать бесплатно",
+			"documentation": "Открыть документацию",
 			"codeCaption": "search-client.ts"
 		},
 		"howItWorks": {
-			"title": "Three calls. One afternoon.",
+			"title": "Три вызова. Один вечер.",
 			"step1": {
-				"title": "1. Push documents",
-				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — schema is whatever you send."
+				"title": "1. Загрузите документы",
+				"description": "POST-запрос с записями в индекс вашей организации. Массовый импорт или единичный upsert — схему задаёте вы."
 			},
 			"step2": {
-				"title": "2. Mint a search token",
-				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, a TTL."
+				"title": "2. Выпустите search-токен",
+				"description": "Создайте короткоживущий scoped-токен из дашборда или сервера. Закреплён за индексом, origin и TTL."
 			},
 			"step3": {
-				"title": "3. Search from the browser",
-				"description": "Use the typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
+				"title": "3. Ищите из браузера",
+				"description": "Используйте типизированный browser SDK. Одиночный поиск, multi-search (федеративный), фильтры по фасетам — менее 50 мс p99."
 			}
 		},
 		"features": {
-			"title": "What you actually get",
-			"subtitle": "No mystery boxes. Every feature here is shipping today.",
+			"title": "Что вы реально получаете",
+			"subtitle": "Никаких чёрных ящиков. Каждая фича уже работает в продакшене.",
 			"items": {
 				"scopedTokens": {
-					"title": "Scoped tokens",
-					"description": "Per-user, per-filter, TTL-bound. Mint server-side, ship to the browser, expire on schedule."
+					"title": "Scoped-токены",
+					"description": "На пользователя, на фильтр, с TTL. Создаются на сервере, отдаются в браузер, истекают по графику."
 				},
 				"originAllowlist": {
-					"title": "Per-key origin allow-list",
-					"description": "Pin every key to specific origins. A leaked key from Twitter doesn't drain your quota."
+					"title": "Allow-list origin для ключа",
+					"description": "Каждый ключ привязан к конкретным origin. Утёкший в Twitter ключ не съест вашу квоту."
 				},
 				"rateLimitQuota": {
-					"title": "Rate limit & quota",
-					"description": "Per-key per-minute throttling and per-org monthly quota — both visible in the dashboard before you hit them."
+					"title": "Rate-limit и квота",
+					"description": "Лимит на ключ в минуту и месячная квота организации — оба видны в дашборде до того, как вы упрётесь в лимит."
 				},
 				"multiSearch": {
 					"title": "Multi-search",
-					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N requests."
+					"description": "Несколько запросов в одном round-trip. Автокомплит между коллекциями без N запросов."
 				},
 				"reindex": {
-					"title": "Zero-downtime reindex",
-					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
+					"title": "Reindex без простоя",
+					"description": "Пересоберите индекс под новую схему, пока живой трафик идёт на старый. Атомарное переключение алиаса."
 				},
 				"selfHost": {
-					"title": "One self-host path",
-					"description": "Same code as managed cloud. Helm chart and Docker compose, no proprietary server fork."
+					"title": "Один путь self-host",
+					"description": "Тот же код, что и в managed cloud. Helm chart и Docker Compose — никаких проприетарных форков сервера."
 				}
 			}
 		},
 		"pricing": {
-			"badge": "Pricing",
-			"title": "Pay for searches and indexed docs. Nothing else.",
-			"subtitle": "1 search-unit = 1 search request OR 1 indexed document. Cancel anytime.",
-			"cta": "Start free",
-			"contact": "Contact sales",
-			"perMonth": "/mo",
+			"badge": "Тарифы",
+			"title": "Платите за поиск и индексированные документы. Больше ни за что.",
+			"subtitle": "1 search-unit = 1 поисковый запрос ИЛИ 1 индексированный документ. Отмена в любой момент.",
+			"cta": "Начать бесплатно",
+			"contact": "Связаться с продажами",
+			"perMonth": "/мес",
 			"plans": {
 				"free": {
 					"name": "Free",
 					"price": "$0",
-					"description": "For evaluating, hobby projects and side-products.",
+					"description": "Для оценки, хобби-проектов и сайд-продуктов.",
 					"features": [
-						"10K search-units / month",
-						"1 index",
-						"3 API keys",
-						"Community support"
+						"10 000 search-units / месяц",
+						"1 индекс",
+						"3 API-ключа",
+						"Поддержка сообщества"
 					]
 				},
 				"pro": {
 					"name": "Pro",
 					"price": "$29",
-					"description": "Production-ready for indie SaaS and small B2B teams.",
+					"description": "Готов к продакшену для indie-SaaS и небольших B2B-команд.",
 					"features": [
-						"1M search-units / month",
-						"10 indexes",
-						"Unlimited keys & scoped tokens",
-						"Custom origin allow-list",
-						"Email support, 1 business day"
+						"1 млн search-units / месяц",
+						"10 индексов",
+						"Неограниченные ключи и scoped-токены",
+						"Кастомный allow-list origin",
+						"Поддержка по e-mail, 1 рабочий день"
 					],
-					"highlight": "Most teams start here"
+					"highlight": "Большинство начинает отсюда"
 				},
 				"enterprise": {
 					"name": "Enterprise",
-					"price": "Custom",
-					"description": "Dedicated cluster, audit log, 99.95% SLA.",
+					"price": "Индивидуально",
+					"description": "Выделенный кластер, audit-log, SLA 99,95 %.",
 					"features": [
-						"Unmetered search-units",
+						"Search-units без лимита",
 						"SSO (SAML / OIDC)",
-						"Audit log + IP allow-list",
-						"Dedicated cluster region",
-						"99.95% SLA, signed DPA"
+						"Audit-log и allow-list по IP",
+						"Выделенный регион кластера",
+						"SLA 99,95 %, подписанный DPA"
 					]
 				}
 			}
 		},
 		"cta": {
-			"title": "Ready to ship search?",
-			"subtitle": "Free tier covers most side-projects. No credit card.",
-			"primary": "Create an account",
-			"secondary": "Read the docs"
+			"title": "Готовы выкатить поиск?",
+			"subtitle": "Бесплатного тарифа хватит для большинства сайд-проектов. Без карты.",
+			"primary": "Создать аккаунт",
+			"secondary": "Открыть документацию"
 		}
 	},
 	"notFound": {
 		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
+		"title": "Страница не найдена",
+		"goToDashboard": "В дашборд",
+		"goToHomepage": "На главную"
 	},
 	"common": {
 		"footer": {
-			"blog": "Blog",
-			"features": "Features",
-			"pricing": "Pricing",
-			"privacyPolicy": "Privacy policy",
-			"termsAndConditions": "Terms",
-			"builtWith": "Built on supastarter"
+			"blog": "Блог",
+			"features": "Возможности",
+			"pricing": "Тарифы",
+			"privacyPolicy": "Конфиденциальность",
+			"termsAndConditions": "Условия",
+			"builtWith": "Сделано на supastarter"
 		},
 		"menu": {
-			"blog": "Blog",
+			"blog": "Блог",
 			"changelog": "Changelog",
-			"contact": "Contact",
-			"dashboard": "Dashboard",
-			"docs": "Docs",
-			"features": "Features",
-			"login": "Sign in",
-			"pricing": "Pricing"
+			"contact": "Контакты",
+			"dashboard": "Дашборд",
+			"docs": "Документация",
+			"features": "Возможности",
+			"login": "Войти",
+			"pricing": "Тарифы"
 		},
 		"aria": {
-			"menu": "Menu",
-			"language": "Language"
+			"menu": "Меню",
+			"language": "Язык"
 		},
 		"tableOfContents": {
-			"title": "On this page"
+			"title": "На этой странице"
 		},
 		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
+			"system": "Системная",
+			"light": "Светлая",
+			"dark": "Тёмная"
 		}
 	}
 }

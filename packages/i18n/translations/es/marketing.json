@@ -1,154 +1,173 @@
 {
 	"blog": {
-		"description": "Lee las últimas noticias de nuestra empresa",
-		"title": "Mi increíble blog",
-		"back": "Volver al blog"
+		"description": "Engineering notes from the AACsearch team",
+		"title": "AACsearch Blog",
+		"back": "Back to blog"
 	},
 	"changelog": {
-		"description": "Últimos cambios.",
-		"title": "Registro"
+		"description": "What shipped, when, and what changed under the hood.",
+		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Estamos aquí para ayudarte. Por favor, usa el formulario de abajo para ponerte en contacto con nosotros.",
+		"description": "Reach the team — billing, security disclosures, partnerships.",
 		"form": {
-			"email": "Correo electrónico",
-			"message": "Mensaje",
-			"name": "Nombre",
+			"email": "Email",
+			"message": "Message",
+			"name": "Name",
 			"notifications": {
-				"error": "Lo sentimos, no pudimos enviar tu mensaje. Por favor, inténtalo más tarde.",
-				"success": "Tu mensaje se ha enviado correctamente. Nos pondremos en contacto contigo lo antes posible."
+				"error": "Could not send your message. Please try again later.",
+				"success": "Got it — we'll reply within one business day."
 			},
-			"submit": "Enviar mensaje"
+			"submit": "Send message"
 		},
-		"title": "Contáctanos"
+		"title": "Contact"
 	},
 	"documentation": {
-		"title": "Documentación"
-	},
-	"faq": {
-		"description": "¿Tienes alguna pregunta? Te tenemos cubierto.",
-		"title": "Preguntas frecuentes",
-		"items": {
-			"refundPolicy": {
-				"question": "¿Cuál es la política de reembolso?",
-				"answer": "Ofrecemos una garantía de devolución de 30 días si no estás satisfecho con nuestro producto."
-			},
-			"cancelSubscription": {
-				"question": "¿Cómo cancelo mi suscripción?",
-				"answer": "Puedes cancelar tu suscripción visitando la página de facturación."
-			},
-			"changePlan": {
-				"question": "¿Puedo cambiar mi plan?",
-				"answer": "Sí, puedes cambiar tu plan en cualquier momento visitando la página de facturación."
-			},
-			"freeTrial": {
-				"question": "¿Ofrecen una prueba gratuita?",
-				"answer": "Sí, ofrecemos una prueba gratuita de 14 días."
-			}
-		}
+		"title": "Documentation"
 	},
 	"home": {
 		"hero": {
-			"new": "Nuevo:",
-			"featureBadge": "Increíble función de tu SaaS",
-			"title": "Tu SaaS revolucionario construido con Next.js",
-			"subtitle": "Esta es una aplicación de demostración construida con supastarter. Te ahorrará mucho tiempo y esfuerzo al construir tu próximo SaaS.",
-			"getStarted": "Comenzar",
-			"documentation": "Documentación",
-			"imageAlt": "Nuestra aplicación",
-			"builtWith": "Construido y enviado con estas increíbles herramientas"
+			"badge": "v0 — accepting early access",
+			"title": "Search your users actually feel.",
+			"subtitle": "A hosted search API with org-scoped tokens, per-key origin allow-lists, rate-limit and quota — built so you ship search instead of running infra.",
+			"getStarted": "Start free",
+			"documentation": "Read the docs",
+			"codeCaption": "search-client.ts"
+		},
+		"howItWorks": {
+			"title": "Three calls. One afternoon.",
+			"step1": {
+				"title": "1. Push documents",
+				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — schema is whatever you send."
+			},
+			"step2": {
+				"title": "2. Mint a search token",
+				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, a TTL."
+			},
+			"step3": {
+				"title": "3. Search from the browser",
+				"description": "Use the typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
+			}
 		},
 		"features": {
-			"badge": "Funciones increíbles",
-			"title": "Funciones que tus clientes adorarán",
-			"description": "En esta sección puedes mostrar todas las funciones que ofrece tu SaaS y cómo pueden beneficiar a tus clientes.",
-			"feature1": {
-				"title": "Función 1",
-				"subtitle": "Haz más con nuestro increíble SaaS.",
-				"description": "Esta es una función brillante. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo.",
-				"benefit1": {
-					"title": "Beneficio 1",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+			"title": "What you actually get",
+			"subtitle": "No mystery boxes. Every feature here is shipping today.",
+			"items": {
+				"scopedTokens": {
+					"title": "Scoped tokens",
+					"description": "Per-user, per-filter, TTL-bound. Mint server-side, ship to the browser, expire on schedule."
 				},
-				"benefit2": {
-					"title": "Beneficio 2",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+				"originAllowlist": {
+					"title": "Per-key origin allow-list",
+					"description": "Pin every key to specific origins. A leaked key from Twitter doesn't drain your quota."
 				},
-				"benefit3": {
-					"title": "Beneficio 3",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+				"rateLimitQuota": {
+					"title": "Rate limit & quota",
+					"description": "Per-key per-minute throttling and per-org monthly quota — both visible in the dashboard before you hit them."
+				},
+				"multiSearch": {
+					"title": "Multi-search",
+					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N requests."
+				},
+				"reindex": {
+					"title": "Zero-downtime reindex",
+					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
+				},
+				"selfHost": {
+					"title": "One self-host path",
+					"description": "Same code as managed cloud. Helm chart and Docker compose, no proprietary server fork."
 				}
-			},
-			"feature2": {
-				"title": "Función 2",
-				"subtitle": "Tu SaaS también puede hacer esto.",
-				"description": "Otro texto de ejemplo para otra función.",
-				"benefit1": {
-					"title": "Beneficio 1",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
-				},
-				"benefit2": {
-					"title": "Beneficio 2",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
-				},
-				"benefit3": {
-					"title": "Beneficio 3",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
-				}
-			}
-		}
-	},
-	"newsletter": {
-		"email": "Correo electrónico",
-		"hints": {
-			"error": {
-				"message": "No se pudo suscribir al boletín. Por favor, inténtalo más tarde."
-			},
-			"success": {
-				"message": "Gracias por suscribirte a nuestro boletín. Te mantendremos informado.",
-				"title": "Suscrito"
 			}
 		},
-		"submit": "Suscribirse",
-		"subtitle": "Sé de los primeros en obtener acceso a supastarter.nextjs.",
-		"title": "Obtén acceso anticipado"
+		"pricing": {
+			"badge": "Pricing",
+			"title": "Pay for searches and indexed docs. Nothing else.",
+			"subtitle": "1 search-unit = 1 search request OR 1 indexed document. Cancel anytime.",
+			"cta": "Start free",
+			"contact": "Contact sales",
+			"perMonth": "/mo",
+			"plans": {
+				"free": {
+					"name": "Free",
+					"price": "$0",
+					"description": "For evaluating, hobby projects and side-products.",
+					"features": [
+						"10K search-units / month",
+						"1 index",
+						"3 API keys",
+						"Community support"
+					]
+				},
+				"pro": {
+					"name": "Pro",
+					"price": "$29",
+					"description": "Production-ready for indie SaaS and small B2B teams.",
+					"features": [
+						"1M search-units / month",
+						"10 indexes",
+						"Unlimited keys & scoped tokens",
+						"Custom origin allow-list",
+						"Email support, 1 business day"
+					],
+					"highlight": "Most teams start here"
+				},
+				"enterprise": {
+					"name": "Enterprise",
+					"price": "Custom",
+					"description": "Dedicated cluster, audit log, 99.95% SLA.",
+					"features": [
+						"Unmetered search-units",
+						"SSO (SAML / OIDC)",
+						"Audit log + IP allow-list",
+						"Dedicated cluster region",
+						"99.95% SLA, signed DPA"
+					]
+				}
+			}
+		},
+		"cta": {
+			"title": "Ready to ship search?",
+			"subtitle": "Free tier covers most side-projects. No credit card.",
+			"primary": "Create an account",
+			"secondary": "Read the docs"
+		}
 	},
 	"notFound": {
 		"code": "404",
-		"title": "Página no encontrada",
-		"goToDashboard": "Ir al panel",
-		"goToHomepage": "Ir a la página principal"
+		"title": "Page not found",
+		"goToDashboard": "Go to dashboard",
+		"goToHomepage": "Go to homepage"
 	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
-			"features": "Funciones",
-			"pricing": "Precios",
-			"privacyPolicy": "Política de privacidad",
-			"termsAndConditions": "Términos y condiciones",
-			"builtWith": "Construido con supastarter"
+			"features": "Features",
+			"pricing": "Pricing",
+			"privacyPolicy": "Privacy policy",
+			"termsAndConditions": "Terms",
+			"builtWith": "Built on supastarter"
 		},
 		"menu": {
 			"blog": "Blog",
-			"changelog": "Registro",
-			"contact": "Contacto",
-			"dashboard": "Panel",
+			"changelog": "Changelog",
+			"contact": "Contact",
+			"dashboard": "Dashboard",
 			"docs": "Docs",
-			"faq": "FAQ",
-			"login": "Iniciar sesión",
-			"pricing": "Precios"
+			"features": "Features",
+			"login": "Sign in",
+			"pricing": "Pricing"
 		},
 		"aria": {
-			"menu": "Menú",
-			"language": "Idioma"
+			"menu": "Menu",
+			"language": "Language"
 		},
 		"tableOfContents": {
-			"title": "En esta página"
+			"title": "On this page"
 		},
 		"colorMode": {
-			"system": "Sistema",
-			"light": "Claro",
-			"dark": "Oscuro"
+			"system": "System",
+			"light": "Light",
+			"dark": "Dark"
 		}
 	}
 }

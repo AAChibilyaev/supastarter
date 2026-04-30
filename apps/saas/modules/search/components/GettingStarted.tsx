@@ -29,6 +29,10 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { ComponentType } from "react";
+import { useState } from "react";
+
+import { ConnectorWizard } from "./ConnectorWizard";
+import { CreateSearchIndexDialog } from "./CreateSearchIndexDialog";
 
 interface StepConfig {
 	key: string;
@@ -37,13 +41,18 @@ interface StepConfig {
 	descKey: string;
 	actionKey: string;
 	icon: ComponentType<{ className?: string }>;
-	href: string;
+	href?: string;
 	done: boolean;
 }
 
+type ConnectorSource = "prestashop" | "bitrix" | "directApi";
+
 export function GettingStarted({ organizationId }: { organizationId: string }) {
 	const t = useTranslations("search.gettingStarted");
+	const tConnector = useTranslations("search.connector");
 	const slug = useActiveOrganization()?.activeOrganization?.slug;
+	const [connectorWizardOpen, setConnectorWizardOpen] = useState(false);
+	const [connectorSource, setConnectorSource] = useState<ConnectorSource>("directApi");
 
 	const { data: onboarding, isLoading } = useQuery({
 		...orpc.search.onboardingStatus.queryOptions({
@@ -82,7 +91,6 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 			descKey: "step1Desc",
 			actionKey: "step1Action",
 			icon: DatabaseIcon,
-			href: `/${slug}/search`,
 			done: serverSteps.find((step) => step.step === 1)?.completed ?? false,
 		},
 		{
@@ -92,7 +100,6 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 			descKey: "step2Desc",
 			actionKey: "step2Action",
 			icon: CableIcon,
-			href: `/${slug}/connectors`,
 			done: serverSteps.find((step) => step.step === 2)?.completed ?? false,
 		},
 		{
@@ -136,6 +143,68 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 			done: serverSteps.find((step) => step.step === 6)?.completed ?? false,
 		},
 	];
+
+	const openConnectorWizard = (source: ConnectorSource) => {
+		setConnectorSource(source);
+		setConnectorWizardOpen(true);
+	};
+
+	const renderStepAction = (step: StepConfig) => {
+		if (step.done) {
+			return (
+				<Button variant="secondary" disabled>
+					{t("done")}
+				</Button>
+			);
+		}
+
+		if (step.key === "createIndex") {
+			return (
+				<CreateSearchIndexDialog
+					organizationId={organizationId}
+					trigger={<Button variant="primary">{t(step.actionKey)}</Button>}
+				/>
+			);
+		}
+
+		if (step.key === "connectSource") {
+			return (
+				<div className="gap-2 flex flex-wrap">
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={() => openConnectorWizard("prestashop")}
+					>
+						{tConnector("prestashop")}
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => openConnectorWizard("bitrix")}
+					>
+						{tConnector("bitrix")}
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => openConnectorWizard("directApi")}
+					>
+						{tConnector("directApi")}
+					</Button>
+				</div>
+			);
+		}
+
+		if (!step.href) {
+			return null;
+		}
+
+		return (
+			<Button variant="primary" asChild>
+				<Link href={step.href}>{t(step.actionKey)}</Link>
+			</Button>
+		);
+	};
 
 	return (
 		<div className="space-y-8">
@@ -295,12 +364,14 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 											{t(step.actionKey)}
 										</p>
 										<p className="text-sm text-muted-foreground">
-											{step.done ? t("allDone") : t("subtitle")}
+											{step.key === "connectSource"
+												? tConnector("subtitle")
+												: step.done
+													? t("allDone")
+													: t("subtitle")}
 										</p>
 									</div>
-									<Button variant={step.done ? "secondary" : "primary"} asChild>
-										<Link href={step.href}>{t(step.actionKey)}</Link>
-									</Button>
+									{renderStepAction(step)}
 								</div>
 							</CardContent>
 						</Card>
@@ -324,6 +395,13 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 					</div>
 				</CardContent>
 			</Card>
+
+			<ConnectorWizard
+				open={connectorWizardOpen}
+				onOpenChange={setConnectorWizardOpen}
+				source={connectorSource}
+				organizationId={organizationId}
+			/>
 		</div>
 	);
 }

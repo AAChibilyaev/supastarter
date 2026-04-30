@@ -14,6 +14,7 @@ import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
 import { serveStatic } from "hono/serve-static";
 
+import { connectorApp } from "./modules/search/connector-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
 export { listPurchases } from "./modules/payments/procedures/list-purchases";
@@ -61,6 +62,8 @@ export const app = new Hono()
 			}
 		}
 	})
+	// Connector API (CMS modules — permissive CORS, mounted before global CORS)
+	.route("/", connectorApp)
 	// Cors middleware
 	.use(
 		cors({

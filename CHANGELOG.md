@@ -7,12 +7,12 @@
 #### Widget (MVP)
 
 - **`@repo/widget`**: Hosted storefront search widget — embeddable with one `<script>` tag.
-  - Vanilla JS (no framework dependency), Shadow DOM for CSS isolation.
-  - Works with AACsearch public API (Bearer auth with `ss_search_*` or `ss_scoped_*` keys).
-  - Modes: inline (default), supports facets, sorting, pagination, price display, availability.
-  - Theme: light, dark, auto (follows system preference).
-  - Built with tsup — outputs IIFE (14KB minified) + ESM.
-  - Auto-initializes from `<script>` data-* attributes.
+    - Vanilla JS (no framework dependency), Shadow DOM for CSS isolation.
+    - Works with AACsearch public API (Bearer auth with `ss_search_*` or `ss_scoped_*` keys).
+    - Modes: inline (default), supports facets, sorting, pagination, price display, availability.
+    - Theme: light, dark, auto (follows system preference).
+    - Built with tsup — outputs IIFE (14KB minified) + ESM.
+    - Auto-initializes from `<script>` data-\* attributes.
 
 #### API
 

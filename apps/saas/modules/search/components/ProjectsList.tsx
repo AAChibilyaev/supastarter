@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
 import {
 	Card,
 	CardContent,
@@ -10,14 +9,6 @@ import {
 	CardTitle,
 } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -31,11 +22,9 @@ interface ProjectsListProps {
 export function ProjectsList({ organizationId, onSelect, selectedSlug }: ProjectsListProps) {
 	const t = useTranslations();
 
-	const {
-		data: indexes,
-		isLoading,
-		error,
-	} = useQuery(orpc.search.listIndexes.queryOptions({ input: { organizationId } }));
+	const { data: indexes, isLoading } = useQuery(
+		orpc.search.listIndexes.queryOptions({ input: { organizationId } }),
+	);
 
 	if (isLoading) {
 		return (
@@ -44,10 +33,6 @@ export function ProjectsList({ organizationId, onSelect, selectedSlug }: Project
 				<Skeleton className="h-24 w-full" />
 			</div>
 		);
-	}
-
-	if (error) {
-		return <div className="text-destructive">{t("search.projects.loadError")}</div>;
 	}
 
 	if (!indexes || indexes.length === 0) {

@@ -134,7 +134,7 @@ export function ConnectorWizard({
 
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
-			<DialogContent className="max-h-[92vh] w-full max-w-[calc(100vw-2rem)] overflow-y-auto sm:max-w-2xl">
+			<DialogContent className="sm:max-w-2xl max-h-[92vh] w-full max-w-[calc(100vw-2rem)] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle className="break-words">
 						{t("search.connector.wizardTitle", { source: sourceLabel })}
@@ -146,7 +146,7 @@ export function ConnectorWizard({
 
 				{/* Step indicator — numbered dots with connector lines; active step label only */}
 				<div className="-mx-1 px-1">
-					<div className="flex items-center justify-between gap-1">
+					<div className="gap-1 flex items-center justify-between">
 						{STEP_KEYS.map((_, i) => {
 							const stepNum = i + 1;
 							const isActive = stepNum === step;
@@ -157,23 +157,21 @@ export function ConnectorWizard({
 									className="flex flex-1 items-center first:flex-none last:flex-none"
 								>
 									<div
-										className={`size-8 shrink-0 rounded-full text-sm font-medium flex items-center justify-center transition-colors ${
+										className={`size-8 text-sm font-medium flex shrink-0 items-center justify-center rounded-full transition-colors ${
 											isActive
 												? "bg-primary text-primary-foreground"
 												: isDone
 													? "bg-primary/20 text-primary"
 													: "bg-muted text-muted-foreground"
 										}`}
-										aria-label={t(
-											`search.connector.${STEP_KEYS[i]}` as never,
-										)}
+										aria-label={t(`search.connector.${STEP_KEYS[i]}` as never)}
 										title={t(`search.connector.${STEP_KEYS[i]}` as never)}
 									>
 										{isDone ? "✓" : stepNum}
 									</div>
 									{i < STEP_KEYS.length - 1 && (
 										<div
-											className={`mx-1 h-px flex-1 min-w-2 ${
+											className={`mx-1 min-w-2 h-px flex-1 ${
 												isDone ? "bg-primary/40" : "bg-muted-foreground/20"
 											}`}
 										/>
@@ -182,7 +180,7 @@ export function ConnectorWizard({
 							);
 						})}
 					</div>
-					<p className="mt-2 text-center text-xs font-medium text-foreground">
+					<p className="mt-2 text-xs font-medium text-center text-foreground">
 						{t("search.connector.stepCounter", {
 							current: step,
 							total: STEP_KEYS.length,
@@ -315,7 +313,11 @@ export function ConnectorWizard({
 							<CardContent className="space-y-4">
 								<div className="space-y-2">
 									<label className="text-sm font-medium">API URL</label>
-									<Input value={apiUrl} readOnly className="font-mono text-xs min-w-0 truncate" />
+									<Input
+										value={apiUrl}
+										readOnly
+										className="font-mono text-xs min-w-0 truncate"
+									/>
 								</div>
 								<div className="space-y-2">
 									<label className="text-sm font-medium">
@@ -332,8 +334,12 @@ export function ConnectorWizard({
 										{t("search.connector.stepConfigure")}
 									</p>
 									<ol className="space-y-1 text-xs list-inside list-decimal">
-										<li>{t(`search.connector.configStep1.${source}` as never)}</li>
-										<li>{t(`search.connector.configStep2.${source}` as never)}</li>
+										<li>
+											{t(`search.connector.configStep1.${source}` as never)}
+										</li>
+										<li>
+											{t(`search.connector.configStep2.${source}` as never)}
+										</li>
 										<li>{t("search.connector.configStep3")}</li>
 									</ol>
 								</div>

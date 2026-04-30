@@ -20,18 +20,7 @@ import {
 } from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-	AlertTriangle,
-	Cable,
-	CheckCircle2,
-	Clock,
-	ExternalLink,
-	Loader2,
-	RefreshCw,
-	Wifi,
-	WifiOff,
-	XCircle,
-} from "lucide-react";
+import { AlertTriangle, Cable, Clock, RefreshCw, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -137,7 +126,6 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	const isNewOrg = !indexes || indexes.length === 0;
 
 	const activeTokens = (tokens ?? []).filter((t) => !t.revokedAt);
-	const hasAnyConnector = activeTokens.length > 0;
 
 	const sourceStatusMap: Record<SourceType, ConnectorStatus> = {
 		prestashop: EMPTY_CONNECTOR_STATUS,
@@ -353,9 +341,6 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 											revokedAt: Date | null;
 										}) => {
 											const status = connectorStatusFromToken(token);
-											const lastJob = syncJobs?.find(
-												(j) => j.indexId === token.index?.slug,
-											);
 											return (
 												<TableRow key={token.id}>
 													<TableCell className="font-medium">

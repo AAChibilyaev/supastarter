@@ -41,11 +41,7 @@ import {
 	CableIcon,
 	UserCogIcon,
 	RocketIcon,
-	KeyIcon,
-	UploadIcon,
-	EyeIcon,
 	LightbulbIcon,
-	BookOpenIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";

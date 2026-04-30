@@ -38,15 +38,15 @@ import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
 export const chat = protectedProcedure
-  .route({ method: "POST", path: "/ai/chat", tags: ["AI"], summary: "Chat completion (stream)" })
-  .input(z.object({ messages: z.array(z.object({ role: z.string(), content: z.string() })) }))
-  .handler(async ({ input }) => {
-    const result = streamText({
-      model: openai("gpt-4o-mini"),
-      messages: input.messages,
-    });
-    return result.toDataStreamResponse();
-  });
+	.route({ method: "POST", path: "/ai/chat", tags: ["AI"], summary: "Chat completion (stream)" })
+	.input(z.object({ messages: z.array(z.object({ role: z.string(), content: z.string() })) }))
+	.handler(async ({ input }) => {
+		const result = streamText({
+			model: openai("gpt-4o-mini"),
+			messages: input.messages,
+		});
+		return result.toDataStreamResponse();
+	});
 ```
 
 ## Client (Vercel AI SDK + React)

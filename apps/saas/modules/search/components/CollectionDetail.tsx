@@ -13,7 +13,7 @@ import {
 } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { Activity, ChevronLeftIcon, Code2, Database, Key, Layers, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -59,7 +59,6 @@ export function CollectionDetail() {
 	const t = useTranslations("search");
 	const params = useParams<{ organizationSlug: string; indexSlug: string }>();
 	const { activeOrganization } = useActiveOrganization();
-	const queryClient = useQueryClient();
 
 	const orgSlug = params.organizationSlug;
 	const indexSlug = params.indexSlug;

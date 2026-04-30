@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "@auth/hooks/use-session";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
@@ -20,14 +19,8 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
 	AlertTriangleIcon,
-	ArrowDownIcon,
-	ArrowUpIcon,
-	CheckCircle2Icon,
-	ClockIcon,
-	KeyIcon,
 	SearchIcon,
-	FileIcon,
-	AlertCircleIcon,
+	KeyIcon,
 	WifiIcon,
 	WifiOffIcon,
 	HelpCircleIcon,
@@ -50,7 +43,6 @@ export function OverviewPage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { activeOrganization } = useActiveOrganization();
-	const { user } = useSession();
 
 	const orgId = activeOrganization?.id;
 	const slug = activeOrganization?.slug;
@@ -110,7 +102,6 @@ export function OverviewPage() {
 	const docsLimit = planInfo?.usage.documents.limit ?? 0;
 	const isUnlimitedDocs = planInfo?.usage.documents.isUnlimited ?? false;
 
-	const indexesCount = indexes?.length ?? 0;
 	const failedSyncs = 0; // Simplified — could be extended with connector sync job data
 
 	const quotaPercent = isUnlimitedSearches ? 0 : searchesPercent;
@@ -123,10 +114,6 @@ export function OverviewPage() {
 			const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
 			const key = d.toISOString().slice(0, 10);
 			dayMap[key] = 0;
-		}
-		for (const row of usageData.rows) {
-			// rows don't have dates directly, so we approximate using the event window
-			// group by type for a simpler approach
 		}
 		// Instead, build from search usage events (we have aggregated data already)
 		// For the sparkline we need daily data. The usage procedure returns aggregated

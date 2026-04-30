@@ -5,6 +5,7 @@ i18n in supastarter Next.js uses `next-intl` and a 4-locale × 4-scope translati
 ## Locales
 
 Configured in `packages/i18n/config.ts`:
+
 - `en` (default), `de`, `es`, `fr`
 - `defaultLocale: "en"`, `defaultCurrency: "USD"`, `localeCookieName: "NEXT_LOCALE"`
 
@@ -19,6 +20,7 @@ packages/i18n/translations/
 ```
 
 Pick the right scope for new keys:
+
 - `saas.json` — strings used only in `apps/saas`
 - `marketing.json` — strings used only in `apps/marketing`
 - `shared.json` — used across multiple apps
@@ -33,14 +35,10 @@ Server-side (Server Components, Route Handlers):
 ```typescript
 import { setRequestLocale } from "next-intl/server";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-  // ...
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	setRequestLocale(locale);
+	// ...
 }
 ```
 

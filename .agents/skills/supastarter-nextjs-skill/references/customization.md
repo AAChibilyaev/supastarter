@@ -18,11 +18,11 @@ Design tokens (colors, radii, etc.) live in `tooling/tailwind/theme.css`:
 ```css
 /* tooling/tailwind/theme.css (excerpt) */
 @theme {
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.15 0 0);
-  --color-primary: oklch(0.55 0.2 260);
-  --radius-md: 0.5rem;
-  /* ... */
+	--color-background: oklch(1 0 0);
+	--color-foreground: oklch(0.15 0 0);
+	--color-primary: oklch(0.55 0.2 260);
+	--radius-md: 0.5rem;
+	/* ... */
 }
 ```
 

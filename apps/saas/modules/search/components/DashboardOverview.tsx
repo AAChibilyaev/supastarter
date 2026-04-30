@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function DashboardOverview() {
-	const t = useTranslations();
+	const t = useTranslations("search");
 	const { activeOrganization } = useActiveOrganization();
 	const { user } = useSession();
 	const orgId = activeOrganization?.id;
@@ -87,7 +87,7 @@ export function DashboardOverview() {
 			{/* Header */}
 			<div>
 				<h1 className="text-3xl font-bold tracking-tight">{activeOrganization.name}</h1>
-				<p className="mt-1 text-muted-foreground">{t("search.overview.title")}</p>
+				<p className="mt-1 text-muted-foreground">{t("overview.title")}</p>
 			</div>
 
 			{/* Plan banner */}
@@ -102,18 +102,16 @@ export function DashboardOverview() {
 						</div>
 						<p className="text-sm mt-1 text-muted-foreground">
 							{planInfo?.graceReadsUntil
-								? t("search.overview.graceUntil", {
+								? t("overview.graceUntil", {
 										date: new Date(
 											planInfo.graceReadsUntil,
 										).toLocaleDateString(),
 									})
-								: t("search.overview.active")}
+								: t("overview.active")}
 						</p>
 					</div>
 					<Button variant="outline" asChild>
-						<Link href={`/${slug}/settings/billing`}>
-							{t("search.overview.managePlan")}
-						</Link>
+						<Link href={`/${slug}/settings/billing`}>{t("overview.managePlan")}</Link>
 					</Button>
 				</CardContent>
 			</Card>
@@ -122,13 +120,13 @@ export function DashboardOverview() {
 			<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid">
 				<Card>
 					<CardHeader className="pb-2">
-						<CardDescription>{t("search.overview.indexes")}</CardDescription>
+						<CardDescription>{t("overview.indexes")}</CardDescription>
 						<CardTitle className="text-2xl">{indexesCount}</CardTitle>
 					</CardHeader>
 				</Card>
 				<Card>
 					<CardHeader className="pb-2">
-						<CardDescription>{t("search.overview.searches")}</CardDescription>
+						<CardDescription>{t("overview.searches")}</CardDescription>
 						<CardTitle className="text-2xl">
 							{isUnlimitedSearches
 								? "∞"
@@ -141,7 +139,7 @@ export function DashboardOverview() {
 				</Card>
 				<Card>
 					<CardHeader className="pb-2">
-						<CardDescription>{t("search.overview.documents")}</CardDescription>
+						<CardDescription>{t("overview.documents")}</CardDescription>
 						<CardTitle className="text-2xl">
 							{isUnlimitedDocs
 								? "∞"
@@ -154,7 +152,7 @@ export function DashboardOverview() {
 				</Card>
 				<Card>
 					<CardHeader className="pb-2">
-						<CardDescription>{t("search.overview.plan")}</CardDescription>
+						<CardDescription>{t("overview.plan")}</CardDescription>
 						<CardTitle className="text-2xl capitalize">{planName}</CardTitle>
 					</CardHeader>
 				</Card>
@@ -162,17 +160,15 @@ export function DashboardOverview() {
 
 			{/* Quick actions */}
 			<div>
-				<h2 className="text-xl font-semibold mb-4">{t("search.overview.quickActions")}</h2>
+				<h2 className="text-xl font-semibold mb-4">{t("overview.quickActions")}</h2>
 				<div className="gap-3 md:grid-cols-2 lg:grid-cols-3 grid">
 					<Card className="cursor-pointer transition-colors hover:bg-accent/50">
 						<Link href={`/${slug}/search`}>
 							<CardHeader>
 								<CardTitle className="text-base">
-									{t("search.overview.manageIndexes")}
+									{t("overview.manageIndexes")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.overview.manageIndexesDesc")}
-								</CardDescription>
+								<CardDescription>{t("overview.manageIndexesDesc")}</CardDescription>
 							</CardHeader>
 						</Link>
 					</Card>
@@ -180,11 +176,9 @@ export function DashboardOverview() {
 						<Link href={`/${slug}/analytics`}>
 							<CardHeader>
 								<CardTitle className="text-base">
-									{t("search.overview.viewAnalytics")}
+									{t("overview.viewAnalytics")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.overview.viewAnalyticsDesc")}
-								</CardDescription>
+								<CardDescription>{t("overview.viewAnalyticsDesc")}</CardDescription>
 							</CardHeader>
 						</Link>
 					</Card>
@@ -192,10 +186,10 @@ export function DashboardOverview() {
 						<Link href={`/${slug}/connectors`}>
 							<CardHeader>
 								<CardTitle className="text-base">
-									{t("search.overview.setupConnector")}
+									{t("overview.setupConnector")}
 								</CardTitle>
 								<CardDescription>
-									{t("search.overview.setupConnectorDesc")}
+									{t("overview.setupConnectorDesc")}
 								</CardDescription>
 							</CardHeader>
 						</Link>
@@ -206,9 +200,9 @@ export function DashboardOverview() {
 			{/* Setup checklist */}
 			<Card>
 				<CardHeader>
-					<CardTitle>{t("search.checklist.title")}</CardTitle>
+					<CardTitle>{t("checklist.title")}</CardTitle>
 					<CardDescription>
-						{doneCount}/{checklist.length} {t("search.checklist.completed")}
+						{doneCount}/{checklist.length} {t("checklist.completed")}
 					</CardDescription>
 					<Progress value={(doneCount / checklist.length) * 100} className="mt-2 h-2" />
 				</CardHeader>
@@ -226,15 +220,15 @@ export function DashboardOverview() {
 									{item.done ? "✓" : String(checklist.indexOf(item) + 1)}
 								</div>
 								<Link href={item.href} className="text-sm flex-1 hover:underline">
-									{t(`search.checklist.${item.key}`)}
+									{t(`checklist.${item.key}`)}
 								</Link>
 								{item.done ? (
 									<Badge status="success" className="text-xs">
-										{t("search.checklist.done")}
+										{t("checklist.done")}
 									</Badge>
 								) : (
 									<Badge status="info" className="text-xs">
-										{t("search.checklist.pending")}
+										{t("checklist.pending")}
 									</Badge>
 								)}
 							</div>

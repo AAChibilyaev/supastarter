@@ -666,10 +666,139 @@
 			"error": "Operation failed."
 		},
 		"usage": {
-			"title": "Usage",
-			"windowDays": "Last {days} days",
-			"searches": "Searches",
-			"ingests": "Documents ingested"
+			"title": "Использование",
+			"windowDays": "Последние {days} дней",
+			"searches": "Поисков",
+			"ingests": "Документов проиндексировано"
+		},
+		"widget": {
+			"tab": "Виджет",
+			"title": "Виджет поиска",
+			"description": "Вставьте виджет поиска на витрину одним тегом script.",
+			"apiKeyLabel": "API ключ",
+			"apiKeyHint": "Вставьте search-only API ключ (ss_search_...) или создайте новый во вкладке API Keys.",
+			"snippet": "Код виджета",
+			"copySnippet": "Копировать код",
+			"copied": "Код виджета скопирован!",
+			"copyFailed": "Не удалось скопировать код.",
+			"installInstructions": "Инструкция по установке",
+			"step1": "Добавьте контейнер: <div id=\"aac-search\"></div>",
+			"step2": "Вставьте код перед закрывающим тегом </body>.",
+			"step3": "Виджет инициализируется автоматически."
+		},
+		"projects": {
+			"title": "Проекты",
+			"apiKeys": "API ключи",
+			"loadError": "Не удалось загрузить проекты."
+		},
+		"overview": {
+			"title": "Панель управления",
+			"indexVersion": "Версия индекса",
+			"apiKeys": "API ключи",
+			"searches": "Поисков",
+			"indexes": "Индексы",
+			"documents": "Документы",
+			"plan": "Тариф",
+			"quickActions": "Быстрые действия",
+			"manageIndexes": "Управление индексами",
+			"manageIndexesDesc": "Создавайте и управляйте индексами поиска",
+			"viewAnalytics": "Аналитика",
+			"viewAnalyticsDesc": "Отслеживайте использование поиска и запросы",
+			"setupConnector": "Подключить модуль CMS",
+			"setupConnectorDesc": "Подключите PrestaShop или Bitrix модуль",
+			"managePlan": "Управление тарифом",
+			"graceUntil": "Только чтение до {date}",
+			"active": "Активен"
+		},
+		"checklist": {
+			"title": "Чеклист настройки",
+			"completed": "выполнено",
+			"done": "Готово",
+			"pending": "Ожидает",
+			"createIndex": "Создать индекс поиска",
+			"generateKey": "Сгенерировать API ключ",
+			"cmsModule": "Установить CMS модуль",
+			"fullSync": "Запустить полную синхронизацию",
+			"testSearch": "Протестировать поиск",
+			"enableWidget": "Включить виджет поиска"
+		},
+		"analytics": {
+			"tab": "Аналитика",
+			"title": "Аналитика поиска",
+			"totalSearches": "Всего поисков",
+			"totalSessions": "Сессий",
+			"ctr": "CTR",
+			"zeroResults": "Пустых результатов",
+			"searchesOverTime": "Поисков по дням",
+			"topQueries": "Популярные запросы",
+			"topClicked": "Популярные товары",
+			"queryColumn": "Запрос",
+			"countColumn": "Количество",
+			"productColumn": "Товар",
+			"clicksColumn": "Клики",
+			"noData": "Нет данных",
+			"period": "Период"
+		},
+		"importJobs": {
+			"tab": "Импорт",
+			"title": "Задачи импорта",
+			"description": "Отслеживание синхронизации документов",
+			"total": "Всего задач",
+			"pending": "В очереди",
+			"processing": "Выполняется",
+			"completed": "Завершено",
+			"failed": "Ошибок",
+			"jobId": "ID задачи",
+			"type": "Тип",
+			"progress": "Прогресс",
+			"errors": "Ошибки",
+			"noJobs": "Нет задач импорта",
+			"loadError": "Ошибка загрузки"
+		},
+		"preview": {
+			"tab": "Тест поиска",
+			"title": "Тестовый поиск",
+			"description": "Проверьте как работает поиск",
+			"input": "Поисковый запрос",
+			"search": "Найти",
+			"noResults": "Введите запрос для поиска",
+			"error": "Ошибка поиска"
+		},
+		"relevance": {
+			"tab": "Релевантность",
+			"title": "Релевантность поиска"
+		},
+		"synonyms": {
+			"title": "Синонимы",
+			"description": "Синонимы помогают находить товары по альтернативным названиям",
+			"synonym": "Синоним",
+			"root": "Основное слово",
+			"add": "Добавить синоним",
+			"remove": "Удалить",
+			"save": "Сохранить",
+			"saved": "Синонимы сохранены",
+			"error": "Ошибка сохранения",
+			"empty": "Нет синонимов",
+			"confirmRemove": "Удалить этот синоним?"
+		},
+		"curations": {
+			"title": "Курация результатов",
+			"description": "Закрепляйте или скрывайте товары по поисковым запросам",
+			"query": "Поисковый запрос",
+			"pinnedIds": "Закреплённые ID",
+			"hiddenIds": "Скрытые ID",
+			"add": "Добавить правило",
+			"edit": "Редактировать",
+			"remove": "Удалить",
+			"save": "Сохранить",
+			"saved": "Правила сохранены",
+			"error": "Ошибка сохранения",
+			"empty": "Нет правил курации",
+			"confirmRemove": "Удалить это правило?"
+		},
+		"connector": {
+			"tab": "Коннекторы",
+			"title": "Подключение модулей CMS"
 		}
 	}
 }

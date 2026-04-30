@@ -8,6 +8,7 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.oxc": "always"
 	},
+	"biome.enabled": false,
 	"[typescript]": {
 		"editor.defaultFormatter": "oxc.oxc-vscode"
 	},

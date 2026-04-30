@@ -9,9 +9,15 @@ export async function generateMetadata({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("search");
 	const org = await getActiveOrganization(organizationSlug);
-	return { title: `${t("relevance.title")} – ${org?.name ?? ""}` };
+	let title = "Relevance";
+	try {
+		const t = await getTranslations("search");
+		title = t("relevance.title");
+	} catch {
+		// fallback if locale key missing
+	}
+	return { title: `${title} – ${org?.name ?? ""}` };
 }
 
 export default async function RelevancePage({

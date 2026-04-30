@@ -707,7 +707,25 @@
 			"title": "Usage",
 			"windowDays": "Last {days} days",
 			"searches": "Searches",
-			"ingests": "Documents ingested"
+			"documents": "Documents indexed",
+			"ingests": "Documents ingested",
+			"ofLimit": "of monthly limit",
+			"loadError": "Failed to load usage data."
+		},
+		"analytics": {
+			"tab": "Analytics",
+			"totalSearches": "Total searches",
+			"totalSessions": "Sessions",
+			"ctr": "CTR",
+			"zeroResults": "Zero results",
+			"searchesOverTime": "Searches over time",
+			"topQueries": "Top queries",
+			"topClickedProducts": "Top clicked products",
+			"queryColumn": "Query",
+			"countColumn": "Count",
+			"productColumn": "Product",
+			"clicksColumn": "Clicks",
+			"noData": "No data available for this period."
 		},
 		"widget": {
 			"tab": "Widget",

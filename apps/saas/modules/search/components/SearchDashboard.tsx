@@ -4,9 +4,11 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { CreateSearchIndexDialog } from "./CreateSearchIndexDialog";
+import { SearchAnalyticsCards } from "./SearchAnalyticsCards";
 import { SearchApiKeysPanel } from "./SearchApiKeysPanel";
 import { SearchIndexesList } from "./SearchIndexesList";
 import { SearchUsageCard } from "./SearchUsageCard";
+import { SearchUsageCards } from "./SearchUsageCards";
 import { WidgetPanel } from "./WidgetPanel";
 
 interface SearchDashboardProps {
@@ -18,7 +20,7 @@ interface SearchDashboardProps {
 export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDashboardProps) {
 	const t = useTranslations();
 	const [selectedSlug, setSelectedSlug] = useState<string>();
-	const [activeTab, setActiveTab] = useState<"keys" | "widget">("keys");
+	const [activeTab, setActiveTab] = useState<"keys" | "widget" | "analytics">("keys");
 
 	const handleSelect = (slug: string | undefined) => {
 		setSelectedSlug(slug);
@@ -37,6 +39,9 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 
 			<SearchUsageCard organizationId={organizationId} />
 
+			{/* Analytics overview (no index selected) */}
+			<SearchAnalyticsCards organizationId={organizationId} />
+
 			<div className="gap-6 lg:grid-cols-[2fr_3fr] grid">
 				<SearchIndexesList
 					organizationId={organizationId}
@@ -45,6 +50,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 				/>
 				{selectedSlug ? (
 					<div className="space-y-4">
+						<SearchUsageCards organizationId={organizationId} />
 						<div className="gap-2 flex border-b">
 							<button
 								type="button"
@@ -55,7 +61,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 								}`}
 								onClick={() => setActiveTab("keys")}
 							>
-								{t("search.apiKeys")}
+								{t("search.apiKeys.title")}
 							</button>
 							<button
 								type="button"
@@ -68,6 +74,17 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 							>
 								{t("search.widget.tab")}
 							</button>
+							<button
+								type="button"
+								className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+									activeTab === "analytics"
+										? "border-primary text-primary"
+										: "border-transparent text-foreground/60 hover:text-foreground"
+								}`}
+								onClick={() => setActiveTab("analytics")}
+							>
+								{t("search.analytics.tab")}
+							</button>
 						</div>
 
 						{activeTab === "keys" ? (
@@ -75,12 +92,14 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 								organizationId={organizationId}
 								slug={selectedSlug}
 							/>
-						) : (
+						) : activeTab === "widget" ? (
 							<WidgetPanel
 								organizationId={organizationId}
 								slug={selectedSlug}
 								baseUrl={baseUrl ?? ""}
 							/>
+						) : (
+							<SearchAnalyticsCards organizationId={organizationId} />
 						)}
 					</div>
 				) : (

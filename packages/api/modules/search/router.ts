@@ -1,3 +1,4 @@
+import { analytics } from "./procedures/analytics";
 import { createApiKey } from "./procedures/create-api-key";
 import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
@@ -8,6 +9,7 @@ import { reindex } from "./procedures/reindex";
 import { revokeApiKey } from "./procedures/revoke-api-key";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
+import { usageSummary } from "./procedures/usage-summary";
 import { getWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {
@@ -21,5 +23,7 @@ export const searchRouter = {
 	revokeApiKey,
 	reindex,
 	usage,
+	usageSummary,
 	widgetConfig: getWidgetConfig,
+	analytics,
 };

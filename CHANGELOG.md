@@ -29,6 +29,47 @@
 
 - **Widget translations**: All 4 locales (en, de, es, fr) — widget tab, snippet, installation instructions.
 
+#### Connector API
+
+- **`POST /api/connectors/handshake`**: CMS module token validation and project info.
+- **`POST /api/connectors/:connectorId/heartbeat`**: Module heartbeat reporting.
+- **`POST /api/projects/:projectId/sync/full`**: Batch product upsert via ingest buffer (up to 1000/batch).
+- **`POST /api/projects/:projectId/sync/delta`**: Incremental product updates (up to 100/batch).
+- **`DELETE /api/projects/:projectId/products/:externalId`**: Idempotent product removal.
+- **`POST /api/projects/:projectId/diagnostics`**: Module health and error reporting.
+- **Auth**: Bearer tokens with `ss_connector_*` prefix, hashed in `SearchApiKey`, scope `connector_write`.
+- **Product normalization**: CMS products normalized to canonical `ProductDocument` schema.
+
+#### PrestaShop Module (modules/prestashop/aacsearch/)
+
+- **15 PHP files**: Main module class, admin controller, HTTP client, product exporter, sync queue, templates, security redirects.
+- **PrestaShop 8.x compatible**: install/uninstall, `displayHeader` (widget injection), `actionProductUpdate` (delta sync), `actionObjectProductDeleteAfter` (delete), `actionUpdateQuantity` (stock change).
+- **Configuration**: 9 settings via Configuration table (API URL, Project ID, Connector token, Sync/Widget enabled, Locale, Currency, Batch size, Debug mode).
+- **Full sync**: Batch-iterates products → normalizes to ProductDocument → POST to Connector API.
+- **Admin panel**: Dedicated controller under AdminCatalog tab with HelperForm.
+
+#### Bitrix Module (modules/bitrix/aac.search/)
+
+- **14 PHP files**: Module installer, HTTP client, product exporter, sync agent, event handlers, settings/diagnostics pages, widget component.
+- **1C-Bitrix 24+ compatible**: CIBlockElement integration, catalog/iblock selector, price type handling.
+- **Events**: `OnAfterIBlockElementAdd`, `OnAfterIBlockElementUpdate`, `OnAfterIBlockElementDelete`.
+- **Background sync**: Bitrix agent for periodic full-sync with configurable interval.
+- **Widget modes**: auto-inject, Bitrix component (`aac:search.widget`), manual snippet.
+- **Settings**: 4-tab admin page (Connection, Catalog, Sync, Widget) + diagnostics page.
+
+#### Analytics
+
+- **Events API**: `POST /api/events/:projectId` — accepts search_query, zero_results, result_click, widget_open, filter_used events. Bearer auth, Zod validation, no PII stored.
+- **Analytics oRPC**: `search.analytics` procedure — total searches, sessions, CTR, top queries, zero-results, top clicked products, searches-over-time breakdown. Period: last 7/30 days.
+- **Dashboard cards**: SearchAnalyticsCards component — StatsTile cards for key metrics, tables for top queries/clicked products, search-time chart.
+- **i18n**: All 4 locales.
+
+#### Billing / Usage
+
+- **Usage summary oRPC**: `search.usageSummary` procedure — searches used, documents indexed, plan limits.
+- **Dashboard cards**: SearchUsageCards component — progress bars for searches and documents against plan limits.
+- **i18n**: All 4 locales.
+
 ## 2026-03-30 v3.3.0
 
 ### Added

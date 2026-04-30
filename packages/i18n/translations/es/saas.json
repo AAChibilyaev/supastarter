@@ -669,7 +669,25 @@
 			"title": "Uso",
 			"windowDays": "Últimos {days} días",
 			"searches": "Búsquedas",
-			"ingests": "Documentos indexados"
+			"documents": "Documentos indexados",
+			"ingests": "Documentos indexados",
+			"ofLimit": "del límite mensual",
+			"loadError": "No se pudieron cargar los datos de uso."
+		},
+		"analytics": {
+			"tab": "Analíticas",
+			"totalSearches": "Búsquedas totales",
+			"totalSessions": "Sesiones",
+			"ctr": "CTR",
+			"zeroResults": "Sin resultados",
+			"searchesOverTime": "Búsquedas a lo largo del tiempo",
+			"topQueries": "Principales búsquedas",
+			"topClickedProducts": "Productos más clickeados",
+			"queryColumn": "Búsqueda",
+			"countColumn": "Cuenta",
+			"productColumn": "Producto",
+			"clicksColumn": "Clics",
+			"noData": "No hay datos disponibles para este período."
 		},
 		"widget": {
 			"tab": "Widget",

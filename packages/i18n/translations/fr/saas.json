@@ -669,7 +669,25 @@
 			"title": "Utilisation",
 			"windowDays": "{days} derniers jours",
 			"searches": "Recherches",
-			"ingests": "Documents indexés"
+			"documents": "Documents indexés",
+			"ingests": "Documents indexés",
+			"ofLimit": "de la limite mensuelle",
+			"loadError": "Échec du chargement des données d'utilisation."
+		},
+		"analytics": {
+			"tab": "Analytique",
+			"totalSearches": "Recherches totales",
+			"totalSessions": "Sessions",
+			"ctr": "CTR",
+			"zeroResults": "Zéro résultat",
+			"searchesOverTime": "Recherches dans le temps",
+			"topQueries": "Meilleures requêtes",
+			"topClickedProducts": "Produits les plus cliqués",
+			"queryColumn": "Requête",
+			"countColumn": "Nombre",
+			"productColumn": "Produit",
+			"clicksColumn": "Clics",
+			"noData": "Aucune donnée disponible pour cette période."
 		},
 		"widget": {
 			"tab": "Widget",

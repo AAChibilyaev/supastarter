@@ -41,6 +41,8 @@ interface SyncJob {
 interface SyncJobsTableProps {
 	jobs: SyncJob[];
 	isLoading?: boolean;
+	onRetry?: (jobId: string) => void;
+	retryingJobId?: string | null;
 }
 
 const statusBadgeMap: Record<string, "warning" | "info" | "success" | "error"> = {
@@ -49,7 +51,7 @@ const statusBadgeMap: Record<string, "warning" | "info" | "success" | "error"> =
 	failed: "error",
 };
 
-export function SyncJobsTable({ jobs, isLoading }: SyncJobsTableProps) {
+export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJobsTableProps) {
 	const t = useTranslations();
 	const [selectedJob, setSelectedJob] = useState<SyncJob | null>(null);
 
@@ -82,6 +84,9 @@ export function SyncJobsTable({ jobs, isLoading }: SyncJobsTableProps) {
 								<TableHead>{t("search.connector.jobStarted")}</TableHead>
 								<TableHead>{t("search.connector.jobDuration")}</TableHead>
 								<TableHead>{t("search.connector.jobItems")}</TableHead>
+								{onRetry && (
+									<TableHead>{t("search.connector.jobActions")}</TableHead>
+								)}
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -112,6 +117,27 @@ export function SyncJobsTable({ jobs, isLoading }: SyncJobsTableProps) {
 											</span>
 										)}
 									</TableCell>
+									{onRetry && (
+										<TableCell>
+											{job.status === "failed" ? (
+												<Button
+													variant="outline"
+													size="sm"
+													loading={retryingJobId === job.id}
+													onClick={(e) => {
+														e.stopPropagation();
+														onRetry(job.id);
+													}}
+												>
+													{t("search.connector.jobRetry")}
+												</Button>
+											) : (
+												<span className="text-xs text-muted-foreground">
+													—
+												</span>
+											)}
+										</TableCell>
+									)}
 								</TableRow>
 							))}
 						</TableBody>

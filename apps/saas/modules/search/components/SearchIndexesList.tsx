@@ -9,15 +9,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
-import { DatabaseIcon } from "lucide-react";
+import { DatabaseIcon, ExternalLinkIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import { useSearchIndexesQuery } from "../lib/api";
 import { EmptyState } from "./EmptyState";
 
 interface SearchIndexesListProps {
 	organizationId: string;
-	onSelect: (slug: string) => void;
+	onSelect?: (slug: string) => void;
 	selectedSlug?: string;
 }
 
@@ -27,7 +29,9 @@ export function SearchIndexesList({
 	selectedSlug,
 }: SearchIndexesListProps) {
 	const t = useTranslations();
+	const params = useParams<{ organizationSlug: string }>();
 	const { data, isLoading } = useSearchIndexesQuery(organizationId);
+	const orgSlug = params.organizationSlug;
 
 	if (isLoading) {
 		return <div className="text-foreground/60">{t("search.loading")}</div>;
@@ -52,6 +56,7 @@ export function SearchIndexesList({
 						<TableHead>{t("search.fields.slug")}</TableHead>
 						<TableHead className="text-right">{t("search.fields.version")}</TableHead>
 						<TableHead className="text-right">{t("search.fields.apiKeys")}</TableHead>
+						<TableHead className="w-16 text-right">{""}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -61,12 +66,24 @@ export function SearchIndexesList({
 							<TableRow
 								key={index.id}
 								className={`cursor-pointer ${isSelected ? "bg-muted/40" : ""}`}
-								onClick={() => onSelect(index.slug)}
+								onClick={() => onSelect?.(index.slug)}
 							>
 								<TableCell className="font-medium">{index.displayName}</TableCell>
 								<TableCell className="font-mono text-xs">{index.slug}</TableCell>
 								<TableCell className="text-right">v{index.version}</TableCell>
 								<TableCell className="text-right">{index.apiKeysCount}</TableCell>
+								<TableCell className="text-right">
+									{orgSlug && (
+										<Link
+											href={`/${orgSlug}/search/${index.slug}`}
+											className="gap-1 text-xs inline-flex items-center text-primary hover:underline"
+											onClick={(e) => e.stopPropagation()}
+										>
+											{t("search.open")}
+											<ExternalLinkIcon className="size-3" />
+										</Link>
+									)}
+								</TableCell>
 							</TableRow>
 						);
 					})}

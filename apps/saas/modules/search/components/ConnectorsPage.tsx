@@ -19,7 +19,19 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+	AlertTriangle,
+	Cable,
+	CheckCircle2,
+	Clock,
+	ExternalLink,
+	Loader2,
+	RefreshCw,
+	Wifi,
+	WifiOff,
+	XCircle,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -39,10 +51,46 @@ const EMPTY_CONNECTOR_STATUS: ConnectorStatus = {
 	lastError: null,
 };
 
+function relativeTime(dateStr: string | Date | null | undefined): string {
+	if (!dateStr) return "";
+	const ms = Date.now() - new Date(dateStr).getTime();
+	const mins = Math.floor(ms / 60000);
+	if (mins < 1) return "<1 min";
+	if (mins < 60) return `${mins} min`;
+	const hrs = Math.floor(mins / 60);
+	if (hrs < 24) return `${hrs}h ${mins % 60}m`;
+	return `${Math.floor(hrs / 24)}d`;
+}
+
+function deriveSourceType(name: string): SourceType {
+	const lower = name.toLowerCase();
+	if (lower.includes("prestashop")) return "prestashop";
+	if (lower.includes("bitrix")) return "bitrix";
+	return "directApi";
+}
+
+function connectorStatusFromToken(token: {
+	id: string;
+	name: string;
+	lastUsedAt: Date | null;
+	revokedAt: Date | null;
+	index?: { slug: string } | null;
+}): "online" | "unknown" | "offline" {
+	if (token.revokedAt) return "offline";
+	if (!token.lastUsedAt) return "unknown";
+	const ms = Date.now() - new Date(token.lastUsedAt).getTime();
+	if (ms < 5 * 60 * 1000) return "online";
+	if (ms < 30 * 60 * 1000) return "unknown";
+	return "offline";
+}
+
 export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	const t = useTranslations();
+	const queryClient = useQueryClient();
 	const [wizardOpen, setWizardOpen] = useState(false);
 	const [wizardSource, setWizardSource] = useState<SourceType>("prestashop");
+	const [retryingJobId, setRetryingJobId] = useState<string | null>(null);
+	const [revokingTokenId, setRevokingTokenId] = useState<string | null>(null);
 
 	const { data: indexes, isLoading: indexesLoading } = useQuery(
 		orpc.search.listIndexes.queryOptions({
@@ -61,6 +109,30 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			input: { organizationId },
 		}),
 	);
+
+	const { data: pipelineStatus, isLoading: pipelineLoading } = useQuery(
+		orpc.search.pipelineStatus.queryOptions({
+			input: { organizationId },
+		}),
+	);
+
+	const revokeMutation = useMutation({
+		...orpc.search.revokeConnectorToken.mutationOptions(),
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listConnectorTokens.key(),
+			});
+		},
+	});
+
+	const retryMutation = useMutation({
+		...orpc.search.retryFailedBatches.mutationOptions(),
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.pipelineStatus.key(),
+			});
+		},
+	});
 
 	const isNewOrg = !indexes || indexes.length === 0;
 
@@ -83,11 +155,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 				)?.name ?? "")
 			: "Direct API";
 
-		const sourceKey = tokenName.toLowerCase().includes("prestashop")
-			? "prestashop"
-			: tokenName.toLowerCase().includes("bitrix")
-				? "bitrix"
-				: "directApi";
+		const sourceKey = deriveSourceType(tokenName);
 
 		sourceStatusMap[sourceKey] = {
 			isConnected: lastJob.status === "completed" || lastJob.status === "running",
@@ -104,7 +172,49 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 		setWizardOpen(true);
 	};
 
-	const isLoading = indexesLoading || tokensLoading || syncJobsLoading;
+	const handleRevoke = async (keyId: string) => {
+		setRevokingTokenId(keyId);
+		try {
+			await revokeMutation.mutateAsync({
+				organizationId,
+				keyId,
+			});
+		} finally {
+			setRevokingTokenId(null);
+		}
+	};
+
+	const handleSyncNow = () => {
+		void queryClient.invalidateQueries({
+			queryKey: orpc.search.listConnectorSyncJobs.key(),
+		});
+		void queryClient.invalidateQueries({
+			queryKey: orpc.search.pipelineStatus.key(),
+		});
+	};
+
+	const handleRetryJob = async (jobId: string) => {
+		setRetryingJobId(jobId);
+		const job = syncJobs?.find((j) => j.id === jobId);
+		const slug = job?.indexId ?? indexes?.[0]?.slug;
+		if (!slug) {
+			setRetryingJobId(null);
+			return;
+		}
+		try {
+			await retryMutation.mutateAsync({
+				organizationId,
+				slug,
+			});
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listConnectorSyncJobs.key(),
+			});
+		} finally {
+			setRetryingJobId(null);
+		}
+	};
+
+	const isLoading = indexesLoading || tokensLoading || syncJobsLoading || pipelineLoading;
 
 	if (isLoading) {
 		return (
@@ -130,6 +240,60 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 				<p className="mt-1 text-muted-foreground">{t("search.connector.subtitle")}</p>
 			</div>
 
+			{/* Pipeline stats row */}
+			{pipelineStatus && (
+				<div className="gap-4 sm:grid-cols-4 grid grid-cols-2">
+					<Card>
+						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
+							<Cable className="mr-2 size-4 text-muted-foreground" />
+							<CardTitle className="text-xs font-medium text-muted-foreground">
+								Buffer
+							</CardTitle>
+						</CardHeader>
+						<CardContent className="pb-3 pt-0 px-3">
+							<p className="text-2xl font-bold">{pipelineStatus.bufferDepth}</p>
+						</CardContent>
+					</Card>
+					<Card>
+						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
+							<RefreshCw className="mr-2 size-4 text-muted-foreground" />
+							<CardTitle className="text-xs font-medium text-muted-foreground">
+								Throughput
+							</CardTitle>
+						</CardHeader>
+						<CardContent className="pb-3 pt-0 px-3">
+							<p className="text-2xl font-bold">
+								{pipelineStatus.workerThroughput}/5m
+							</p>
+						</CardContent>
+					</Card>
+					<Card>
+						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
+							<AlertTriangle className="mr-2 size-4 text-muted-foreground" />
+							<CardTitle className="text-xs font-medium text-muted-foreground">
+								Retry queue
+							</CardTitle>
+						</CardHeader>
+						<CardContent className="pb-3 pt-0 px-3">
+							<p className="text-2xl font-bold">{pipelineStatus.retryQueueSize}</p>
+						</CardContent>
+					</Card>
+					<Card>
+						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
+							<XCircle className="mr-2 size-4 text-destructive" />
+							<CardTitle className="text-xs font-medium text-muted-foreground">
+								Failed
+							</CardTitle>
+						</CardHeader>
+						<CardContent className="pb-3 pt-0 px-3">
+							<p className="text-2xl font-bold text-destructive">
+								{pipelineStatus.failedCount}
+							</p>
+						</CardContent>
+					</Card>
+				</div>
+			)}
+
 			{/* Row 1: Connector Cards */}
 			<div className="gap-6 md:grid-cols-3 grid">
 				{CONNECTOR_SOURCES.map((source) => (
@@ -142,14 +306,16 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 				))}
 			</div>
 
-			{/* Row 2: Active connectors table (hidden for new orgs) */}
+			{/* Row 2: Active connectors table */}
 			{!isNewOrg && (
 				<Card>
 					<CardHeader>
 						<CardTitle className="text-base">
 							{t("search.connector.activeConnectors")}
 						</CardTitle>
-						<CardDescription>{t("search.connector.subtitle")}</CardDescription>
+						<CardDescription>
+							{t("search.connector.activeConnectorsDesc")}
+						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						{activeTokens.length === 0 ? (
@@ -163,26 +329,39 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 										<TableHead>{t("search.connector.jobType")}</TableHead>
 										<TableHead>{t("search.apiKeys.tableName")}</TableHead>
 										<TableHead>{t("search.connector.jobStatus")}</TableHead>
-										<TableHead>Last sync</TableHead>
-										<TableHead>Last error</TableHead>
+										<TableHead>{t("search.connector.lastHeartbeat")}</TableHead>
+										<TableHead className="text-right">
+											{t("search.connector.jobActions")}
+										</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
 									{activeTokens.map(
 										(token: {
 											id: string;
+											prefix: string;
 											scopes: string[];
 											name: string;
-											index?: { slug: string } | null;
+											lastUsedAt: Date | null;
+											expiresAt: Date | null;
+											createdAt: Date;
+											index?: {
+												id: string;
+												slug: string;
+												displayName: string;
+											} | null;
 											revokedAt: Date | null;
 										}) => {
+											const status = connectorStatusFromToken(token);
 											const lastJob = syncJobs?.find(
 												(j) => j.indexId === token.index?.slug,
 											);
 											return (
 												<TableRow key={token.id}>
 													<TableCell className="font-medium">
-														{token.scopes.join(", ")}
+														{t(
+															`search.connector.${deriveSourceType(token.name)}`,
+														)}
 													</TableCell>
 													<TableCell className="text-sm">
 														{token.name}
@@ -190,50 +369,59 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 													<TableCell>
 														<Badge
 															status={
-																lastJob?.status === "completed"
+																status === "online"
 																	? "success"
-																	: lastJob?.status === "failed"
-																		? "error"
-																		: lastJob?.status ===
-																			  "running"
-																			? "warning"
-																			: "info"
+																	: status === "unknown"
+																		? "warning"
+																		: "error"
 															}
 														>
-															{lastJob?.status === "completed"
+															{status === "online"
 																? t("search.connector.statusOnline")
-																: lastJob?.status === "failed"
+																: status === "unknown"
 																	? t(
-																			"search.connector.statusOffline",
+																			"search.connector.statusUnknown",
 																		)
-																	: lastJob?.status === "running"
-																		? t(
-																				"search.connector.statusUnknown",
-																			)
-																		: t(
-																				"search.connector.statusUnknown",
-																			)}
+																	: t(
+																			"search.connector.statusOffline",
+																		)}
 														</Badge>
 													</TableCell>
-													<TableCell className="text-sm text-muted-foreground">
-														{lastJob?.finishedAt
-															? new Date(
-																	lastJob.finishedAt,
-																).toLocaleString()
-															: lastJob?.startedAt
-																? new Date(
-																		lastJob.startedAt,
-																	).toLocaleString()
-																: "—"}
+													<TableCell className="text-sm whitespace-nowrap text-muted-foreground">
+														{token.lastUsedAt ? (
+															<span className="gap-1 inline-flex items-center">
+																<Clock className="size-3" />
+																{relativeTime(
+																	token.lastUsedAt,
+																)} ago
+															</span>
+														) : (
+															"—"
+														)}
 													</TableCell>
-													<TableCell className="text-sm text-rose-500 max-w-[200px] truncate">
-														{lastJob?.status === "failed"
-															? (lastJob.events
-																	?.find(
-																		(e) => e.level === "error",
-																	)
-																	?.message?.slice(0, 60) ?? "—")
-															: "—"}
+													<TableCell className="text-right">
+														<div className="gap-2 flex justify-end">
+															<Button
+																variant="outline"
+																size="sm"
+																onClick={handleSyncNow}
+															>
+																<RefreshCw className="mr-1 size-3" />
+																{t("search.connector.syncNow")}
+															</Button>
+															<Button
+																variant="destructive"
+																size="sm"
+																loading={
+																	revokingTokenId === token.id
+																}
+																onClick={() =>
+																	handleRevoke(token.id)
+																}
+															>
+																{t("search.connector.revokeToken")}
+															</Button>
+														</div>
 													</TableCell>
 												</TableRow>
 											);
@@ -247,7 +435,26 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			)}
 
 			{/* Row 3: Sync Jobs */}
-			<SyncJobsTable jobs={syncJobs ?? []} isLoading={syncJobsLoading} />
+			<div className="rounded-lg border">
+				<div className="gap-2 px-6 py-4 flex items-center border-b">
+					<span className="font-medium text-sm">
+						{t("search.connector.syncJobs")} ({syncJobs?.length ?? 0})
+					</span>
+					<span
+						className="text-xs text-muted-foreground"
+						title={t("search.connector.syncJobsNote")}
+					>
+						<Clock className="mr-1 size-3 inline" />
+						{t("search.connector.syncJobsNote")}
+					</span>
+				</div>
+				<SyncJobsTable
+					jobs={syncJobs ?? []}
+					isLoading={syncJobsLoading}
+					onRetry={handleRetryJob}
+					retryingJobId={retryingJobId}
+				/>
+			</div>
 
 			{/* Connector Wizard */}
 			<ConnectorWizard

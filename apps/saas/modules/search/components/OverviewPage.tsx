@@ -46,6 +46,7 @@ type PeriodKey = keyof typeof PERIOD_MAP;
 
 export function OverviewPage() {
 	const t = useTranslations("search");
+	const tSettings = useTranslations("settings");
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { activeOrganization } = useActiveOrganization();
@@ -233,7 +234,10 @@ export function OverviewPage() {
 		<div className="space-y-8">
 			{/* PageHeader + Period Switcher */}
 			<div className="flex items-start justify-between">
-				<PageHeader title={t("overview.title")} subtitle={t("overview.subtitle")} />
+				<PageHeader
+					title={t("overview.title")}
+					subtitle={t("overview.subtitle", { days })}
+				/>
 				<Select value={validPeriod} onValueChange={(v) => setPeriod(v as PeriodKey)}>
 					<SelectTrigger className="w-28">
 						<SelectValue />
@@ -453,7 +457,9 @@ export function OverviewPage() {
 				{/* Plan info card */}
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">{t("billing.activePlan.title")}</CardTitle>
+						<CardTitle className="text-base">
+							{tSettings("billing.activePlan.title")}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex items-center justify-between">

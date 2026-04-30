@@ -1,7 +1,10 @@
-import { getActiveOrganization, getSession } from "@auth/lib/server";
 import { RelevanceTabs } from "@search/components/RelevanceTabs";
+import {
+	getSearchOrganizationMetadataTitle,
+	getSearchOrganizationRouteContext,
+} from "@search/lib/server";
+import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 
 export async function generateMetadata({
 	params,
@@ -9,15 +12,9 @@ export async function generateMetadata({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const org = await getActiveOrganization(organizationSlug);
-	let title = "Relevance";
-	try {
-		const t = await getTranslations("search");
-		title = t("relevance.title");
-	} catch {
-		// fallback if locale key missing
-	}
-	return { title: `${title} – ${org?.name ?? ""}` };
+	return {
+		title: await getSearchOrganizationMetadataTitle(organizationSlug, "relevance.title"),
+	};
 }
 
 export default async function RelevancePage({
@@ -26,21 +23,19 @@ export default async function RelevancePage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const [org, session] = await Promise.all([
-		getActiveOrganization(organizationSlug),
-		getSession(),
+	const [{ organization }, t] = await Promise.all([
+		getSearchOrganizationRouteContext(organizationSlug),
+		getTranslations("search"),
 	]);
-	if (!org || !session) return notFound();
 
 	return (
 		<div className="space-y-6 p-6">
-			<div>
-				<h1 className="text-3xl font-bold tracking-tight">Search Relevance</h1>
-				<p className="mt-1 text-muted-foreground">
-					Manage synonyms, curations, and search result rankings.
-				</p>
-			</div>
-			<RelevanceTabs organizationId={org.id} />
+			<PageHeader
+				title={t("relevance.title")}
+				subtitle={t("relevance.description")}
+				className="mb-0"
+			/>
+			<RelevanceTabs organizationId={organization.id} />
 		</div>
 	);
 }

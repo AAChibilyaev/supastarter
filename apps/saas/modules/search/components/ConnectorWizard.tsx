@@ -21,11 +21,14 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { useSearchIndexesQuery } from "../lib/api";
+
 interface ConnectorWizardProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	source: "prestashop" | "bitrix" | "directApi";
 	organizationId: string;
+	indexSlug?: string;
 }
 
 const STEP_KEYS = [
@@ -47,6 +50,7 @@ export function ConnectorWizard({
 	onOpenChange,
 	source,
 	organizationId,
+	indexSlug,
 }: ConnectorWizardProps) {
 	const t = useTranslations();
 	const [step, setStep] = useState(1);
@@ -57,6 +61,7 @@ export function ConnectorWizard({
 	const [syncing, setSyncing] = useState(false);
 
 	const sourceLabel = SOURCE_LABELS[source];
+	const { data: indexes } = useSearchIndexesQuery(organizationId);
 
 	const handleClose = () => {
 		onOpenChange(false);
@@ -67,10 +72,15 @@ export function ConnectorWizard({
 	};
 
 	const handleGenerateToken = async () => {
+		// Use provided indexSlug or fetch the first available index
+		const targetSlug = indexSlug || indexes?.[0]?.slug || "";
+		if (!targetSlug) {
+			throw new Error("No index available. Create an index first.");
+		}
 		try {
 			const result = await orpc.search.createConnectorToken.call({
 				organizationId,
-				slug: "products",
+				slug: targetSlug,
 				name: `${sourceLabel} Connector`,
 			});
 			setRawKey(result.rawKey);

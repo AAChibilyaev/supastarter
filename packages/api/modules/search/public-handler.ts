@@ -69,7 +69,28 @@ export const publicSearchApp = new Hono()
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
 				type: "search_query",
+				metadata: {
+					q: parsed.data.q,
+					queryBy: parsed.data.queryBy,
+					filterBy: parsed.data.filterBy,
+					sortBy: parsed.data.sortBy,
+					perPage: parsed.data.perPage,
+					page: parsed.data.page,
+					resultCount: result.found,
+					latencyMs: result.searchTimeMs,
+					ua: c.req.header("user-agent") ?? null,
+					referrer: c.req.header("referer") ?? null,
+				},
 			}).catch((error) => logger.error("Could not record search usage", { error }));
+
+			if (result.found === 0) {
+				void recordSearchUsage({
+					indexId: verified.indexId,
+					organizationId: verified.organizationId,
+					type: "zero_results",
+					metadata: { q: parsed.data.q, filterBy: parsed.data.filterBy },
+				}).catch((error) => logger.error("Could not record zero_results", { error }));
+			}
 
 			return c.json({
 				hits: result.hits,

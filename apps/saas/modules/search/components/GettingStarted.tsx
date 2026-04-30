@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "@auth/hooks/use-session";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
@@ -16,126 +15,123 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
-	BarChart3Icon,
-	CableIcon,
+	CheckIcon,
 	DatabaseIcon,
+	CableIcon,
 	KeyIcon,
-	RocketIcon,
 	SearchIcon,
+	GlobeIcon,
+	RocketIcon,
+	BarChart3Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-interface Step {
+interface StepConfig {
 	key: string;
-	label: string;
-	description: string;
+	serverStep: number;
+	labelKey: string;
+	descKey: string;
+	actionKey: string;
 	icon: React.ComponentType<{ className?: string }>;
 	href: string;
 	done: boolean;
 }
 
-export function GettingStarted() {
-	const t = useTranslations("gettingStarted");
-	const { activeOrganization } = useActiveOrganization();
-	const orgId = activeOrganization?.id;
-	const slug = activeOrganization?.slug;
+export function GettingStarted({ organizationId }: { organizationId: string }) {
+	const t = useTranslations("search.gettingStarted");
+	const slug = useActiveOrganization()?.activeOrganization?.slug;
 
-	const { data: indexes, isLoading: indexesLoading } = useQuery({
-		...orpc.search.listIndexes.queryOptions({
-			input: { organizationId: orgId ?? "" },
+	const { data: onboarding, isLoading } = useQuery({
+		...orpc.search.onboardingStatus.queryOptions({
+			input: { organizationId },
 		}),
-		enabled: Boolean(orgId),
+		enabled: Boolean(organizationId),
 	});
 
-	const { data: planInfo, isLoading: planLoading } = useQuery({
-		...orpc.entitlements.plan.queryOptions({
-			input: { organizationId: orgId ?? "" },
-		}),
-		enabled: Boolean(orgId),
-	});
-
-	const { data: usage } = useQuery({
-		...orpc.search.usage.queryOptions({
-			input: { organizationId: orgId ?? "", windowDays: 30 },
-		}),
-		enabled: Boolean(orgId),
-	});
-
-	if (!orgId || !slug) return null;
-
-	const isLoading = indexesLoading || planLoading;
+	if (!slug) return null;
 
 	if (isLoading) {
 		return (
 			<div className="space-y-6">
 				<Skeleton className="h-10 w-72" />
 				<Skeleton className="h-4 w-96" />
-				{[...Array(5)].map((_, i) => (
+				{[...Array(6)].map((_, i) => (
 					<Skeleton key={i} className="h-24 w-full" />
 				))}
 			</div>
 		);
 	}
 
-	const hasIndexes = (indexes?.length ?? 0) > 0;
-	const totalApiKeys = indexes?.reduce((sum, idx) => sum + (idx.apiKeysCount ?? 0), 0) ?? 0;
-	const hasApiKeys = totalApiKeys > 0;
-	const totalSearches =
-		usage?.rows
-			.filter((row) => row.type === "search")
-			.reduce((sum, row) => sum + row.total, 0) ?? 0;
-	const hasUsage = totalSearches > 0;
-	const hasWidget = hasApiKeys && hasUsage; // widget is installable when both exist
+	const serverSteps = onboarding?.steps ?? [];
+	const isComplete = onboarding?.allCompleted ?? false;
+	const completedCount = onboarding?.completedCount ?? 0;
+	const totalSteps = onboarding?.totalSteps ?? 6;
 
-	const PLAN_RELATED = `${slug}/settings/billing`;
-
-	const steps: Step[] = [
+	const stepConfigs: StepConfig[] = [
 		{
 			key: "createIndex",
-			label: t("step1Label"),
-			description: t("step1Desc"),
+			serverStep: 1,
+			labelKey: "step1Label",
+			descKey: "step1Desc",
+			actionKey: "step1Action",
 			icon: DatabaseIcon,
 			href: `/${slug}/search`,
-			done: hasIndexes,
+			done: serverSteps.find((s) => s.step === 1)?.completed ?? false,
+		},
+		{
+			key: "connectSource",
+			serverStep: 2,
+			labelKey: "step2Label",
+			descKey: "step2Desc",
+			actionKey: "step2Action",
+			icon: CableIcon,
+			href: `/${slug}/connectors`,
+			done: serverSteps.find((s) => s.step === 2)?.completed ?? false,
+		},
+		{
+			key: "runSync",
+			serverStep: 3,
+			labelKey: "step3Label",
+			descKey: "step3Desc",
+			actionKey: "step3Action",
+			icon: RocketIcon,
+			href: `/${slug}/import-jobs`,
+			done: serverSteps.find((s) => s.step === 3)?.completed ?? false,
+		},
+		{
+			key: "testSearch",
+			serverStep: 4,
+			labelKey: "step4Label",
+			descKey: "step4Desc",
+			actionKey: "step4Action",
+			icon: SearchIcon,
+			href: `/${slug}/preview`,
+			done: serverSteps.find((s) => s.step === 4)?.completed ?? false,
 		},
 		{
 			key: "generateKey",
-			label: t("step2Label"),
-			description: t("step2Desc"),
+			serverStep: 5,
+			labelKey: "step5Label",
+			descKey: "step5Desc",
+			actionKey: "step5Action",
 			icon: KeyIcon,
-			href: hasIndexes ? `/${slug}/search` : `/${slug}/search`,
-			done: hasApiKeys,
+			href: `/${slug}/api-keys`,
+			done: serverSteps.find((s) => s.step === 5)?.completed ?? false,
 		},
 		{
-			key: "importData",
-			label: t("step3Label"),
-			description: t("step3Desc"),
-			icon: CableIcon,
-			href: hasIndexes ? `/${slug}/search` : `/${slug}/search`,
-			done: hasUsage,
-		},
-		{
-			key: "installWidget",
-			label: t("step4Label"),
-			description: t("step4Desc"),
-			icon: SearchIcon,
-			href: hasIndexes ? `/${slug}/search` : `/${slug}/search`,
-			done: hasWidget,
-		},
-		{
-			key: "monitorAnalytics",
-			label: t("step5Label"),
-			description: t("step5Desc"),
-			icon: BarChart3Icon,
-			href: hasUsage ? `/${slug}/analytics` : `/${slug}/search`,
-			done: hasUsage,
+			key: "embedWidget",
+			serverStep: 6,
+			labelKey: "step6Label",
+			descKey: "step6Desc",
+			actionKey: "step6Action",
+			icon: GlobeIcon,
+			href: `/${slug}/search?tab=widget`,
+			done: serverSteps.find((s) => s.step === 6)?.completed ?? false,
 		},
 	];
 
-	const doneCount = steps.filter((s) => s.done).length;
-	const totalSteps = steps.length;
-	const allDone = doneCount === totalSteps;
+	const percentComplete = totalSteps > 0 ? Math.round((completedCount / totalSteps) * 100) : 0;
 
 	return (
 		<div className="space-y-8">
@@ -146,27 +142,25 @@ export function GettingStarted() {
 					<h1 className="text-3xl font-bold tracking-tight">{t("welcome")}</h1>
 				</div>
 				<p className="mt-2 text-muted-foreground">
-					{allDone ? t("allDone") : t("subtitle")}
+					{isComplete ? t("allDone") : t("subtitle")}
 				</p>
 			</div>
 
 			{/* Progress bar */}
-			{!allDone && (
-				<Card>
-					<CardHeader className="pb-2">
-						<CardTitle className="text-base">{t("progress")}</CardTitle>
-						<CardDescription>
-							{doneCount}/{totalSteps} {t("completed")}
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<Progress value={(doneCount / totalSteps) * 100} className="h-2" />
-					</CardContent>
-				</Card>
-			)}
+			<Card>
+				<CardHeader className="pb-2">
+					<CardTitle className="text-base">{t("progress")}</CardTitle>
+					<CardDescription>
+						{completedCount} / {totalSteps} {t("completed")}
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<Progress value={percentComplete} className="h-2" />
+				</CardContent>
+			</Card>
 
 			{/* All done banner */}
-			{allDone && (
+			{isComplete && (
 				<Card className="border-l-4 border-l-primary">
 					<CardContent className="pt-6">
 						<div className="gap-4 flex items-center">
@@ -178,7 +172,7 @@ export function GettingStarted() {
 								<p className="text-sm text-muted-foreground">{t("allDoneDesc")}</p>
 							</div>
 							<Button variant="outline" asChild>
-								<Link href={`/${slug}/analytics`}>{t("viewAnalytics")}</Link>
+								<Link href={`/${slug}/overview`}>{t("viewAnalytics")}</Link>
 							</Button>
 						</div>
 					</CardContent>
@@ -187,10 +181,12 @@ export function GettingStarted() {
 
 			{/* Steps */}
 			<div className="space-y-4">
-				{steps.map((step, index) => (
-					<Link key={step.key} href={step.href} className="block">
+				{stepConfigs.map((step, index) => {
+					const Icon = step.icon;
+					return (
 						<Card
-							className={`cursor-pointer transition-colors hover:bg-accent/50 ${
+							key={step.key}
+							className={`transition-colors ${
 								step.done
 									? "border-l-4 border-l-primary"
 									: "border-l-4 border-l-muted-foreground/20"
@@ -207,7 +203,7 @@ export function GettingStarted() {
 										}`}
 									>
 										{step.done ? (
-											<span className="text-base">✓</span>
+											<CheckIcon className="size-5" />
 										) : (
 											<span>{index + 1}</span>
 										)}
@@ -215,19 +211,20 @@ export function GettingStarted() {
 
 									{/* Content */}
 									<div className="min-w-0 flex-1">
-										<div className="gap-2 flex items-center">
-											<step.icon className="size-4 shrink-0 text-muted-foreground" />
-											<h3 className="font-semibold">{step.label}</h3>
+										<div className="gap-2 flex flex-wrap items-center">
+											<Icon className="size-4 shrink-0 text-muted-foreground" />
+											<h3 className="font-semibold">{t(step.labelKey)}</h3>
 											{step.done ? (
 												<Badge
 													status="success"
 													className="text-xs ml-auto shrink-0"
 												>
+													<CheckIcon className="size-3 mr-1 inline" />
 													{t("done")}
 												</Badge>
 											) : (
 												<Badge
-													status="info"
+													status="warning"
 													className="text-xs ml-auto shrink-0"
 												>
 													{t("pending")}
@@ -235,28 +232,49 @@ export function GettingStarted() {
 											)}
 										</div>
 										<p className="mt-1 text-sm text-muted-foreground">
-											{step.description}
+											{t(step.descKey)}
 										</p>
+									</div>
+
+									{/* Action */}
+									<div className="shrink-0 self-center">
+										{step.done ? (
+											<Button variant="ghost" size="sm" disabled>
+												<CheckIcon className="size-4 text-primary" />
+											</Button>
+										) : (
+											<Button variant="outline" size="sm" asChild>
+												<Link href={step.href}>{t(step.actionKey)}</Link>
+											</Button>
+										)}
 									</div>
 								</div>
 							</CardContent>
 						</Card>
-					</Link>
-				))}
+					);
+				})}
 			</div>
 
-			{/* Plan CTA */}
-			<Card>
-				<CardContent className="pt-6 gap-4 flex items-center justify-between">
-					<div>
-						<h3 className="font-semibold text-sm">{t("planCtaTitle")}</h3>
-						<p className="text-sm text-muted-foreground">{t("planCtaDesc")}</p>
-					</div>
-					<Button variant="outline" asChild>
-						<Link href={PLAN_RELATED}>{t("managePlan")}</Link>
+			{/* Skip to dashboard and Plan CTA */}
+			<div className="space-y-4">
+				<div className="text-center">
+					<Button variant="link" asChild>
+						<Link href={`/${slug}/overview`}>{t("skipToDashboard")}</Link>
 					</Button>
-				</CardContent>
-			</Card>
+				</div>
+
+				<Card>
+					<CardContent className="pt-6 gap-4 flex items-center justify-between">
+						<div>
+							<h3 className="font-semibold text-sm">{t("planCtaTitle")}</h3>
+							<p className="text-sm text-muted-foreground">{t("planCtaDesc")}</p>
+						</div>
+						<Button variant="outline" asChild>
+							<Link href={`/${slug}/settings/billing`}>{t("managePlan")}</Link>
+						</Button>
+					</CardContent>
+				</Card>
+			</div>
 		</div>
 	);
 }

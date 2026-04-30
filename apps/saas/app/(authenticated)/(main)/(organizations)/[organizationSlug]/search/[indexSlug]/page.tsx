@@ -1,23 +1,23 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { GettingStarted } from "@search/components/GettingStarted";
+import { CollectionDetail } from "@search/components/CollectionDetail";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
 	params,
 }: {
-	params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string; indexSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("search.gettingStarted");
+	const t = await getTranslations("search");
 	const org = await getActiveOrganization(organizationSlug);
-	return { title: `${t("title")} – ${org?.name ?? ""}` };
+	return { title: `${t("collection.title")} – ${org?.name ?? ""}` };
 }
 
-export default async function GettingStartedPage({
+export default async function CollectionDetailPage({
 	params,
 }: {
-	params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string; indexSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
 	const [org, session] = await Promise.all([
@@ -26,9 +26,5 @@ export default async function GettingStartedPage({
 	]);
 	if (!org || !session) return notFound();
 
-	return (
-		<div className="p-6">
-			<GettingStarted organizationId={org.id} />
-		</div>
-	);
+	return <CollectionDetail />;
 }

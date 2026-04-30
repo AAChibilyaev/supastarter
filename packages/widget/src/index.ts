@@ -383,14 +383,56 @@ export class AacSearchWidget {
 	private state: SearchState;
 	private containerEl: HTMLElement;
 	private locale: string;
+	private sessionId: string;
 
 	private t(key: import("./translations").TranslationKey): string {
 		return translate(this.locale, key);
 	}
 
+	/**
+	 * Fire-and-forget analytics event to the SaaS backend.
+	 * Endpoint: POST /api/events/track (see packages/api/modules/search/events-public.ts).
+	 * Uses sendBeacon when available (handles unload races); falls back to fetch.
+	 * Auth: same `ss_search_*` Bearer used for search.
+	 */
+	private trackEvent(payload: {
+		type: "search_query" | "zero_results" | "result_click" | "widget_open" | "filter_used";
+		query?: string;
+		productId?: string;
+		position?: number;
+		filters?: Record<string, unknown>;
+		sort?: string;
+	}): void {
+		try {
+			const url = `${this.options.baseUrl.replace(/\/$/, "")}/api/events/track`;
+			const body = JSON.stringify({
+				...payload,
+				sessionId: this.sessionId,
+				locale: this.locale,
+				referrer: typeof document !== "undefined" ? document.referrer : undefined,
+			});
+			// sendBeacon doesn't support custom headers — use fetch with keepalive instead
+			void fetch(url, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+					authorization: `Bearer ${this.options.apiKey}`,
+				},
+				body,
+				keepalive: true,
+			}).catch(() => undefined);
+		} catch {
+			// swallow — analytics must never break the widget
+		}
+	}
+
 	constructor(options: WidgetOptions) {
 		this.options = { ...DEFAULT_OPTIONS, ...options } as WidgetOptions;
 		this.locale = resolveLocale(this.options.locale);
+		this.sessionId =
+			typeof crypto !== "undefined" && "randomUUID" in crypto
+				? crypto.randomUUID()
+				: `s_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
 		// Resolve container
 		this.containerEl =
@@ -426,6 +468,7 @@ export class AacSearchWidget {
 		// Render and attach events
 		this.render();
 		this.attachEvents();
+		this.trackEvent({ type: "widget_open" });
 	}
 
 	private async doSearch(page = 1): Promise<void> {
@@ -489,6 +532,18 @@ export class AacSearchWidget {
 				page,
 				facetCounts: this.parseFacets(result.facets ?? {}),
 			};
+
+			// Analytics: search_query (and zero_results when applicable).
+			// Server also records server-side; widget event carries sessionId
+			// + filters + sort that the server-side event doesn't see.
+			if (this.state.query) {
+				this.trackEvent({
+					type: result.nbHits === 0 ? "zero_results" : "search_query",
+					query: this.state.query,
+					filters: this.state.filters,
+					sort: this.state.sortBy || undefined,
+				});
+			}
 		} catch (err) {
 			this.state = {
 				...this.state,
@@ -518,6 +573,11 @@ export class AacSearchWidget {
 			...this.state,
 			filters: { ...this.state.filters, [field]: next },
 		};
+		this.trackEvent({
+			type: "filter_used",
+			filters: { [field]: next },
+			query: this.state.query || undefined,
+		});
 		this.doSearch(1);
 	}
 
@@ -572,6 +632,26 @@ export class AacSearchWidget {
 				if (field && value) {
 					this.toggleFilter(field, value);
 				}
+			});
+		}
+
+		// Result clicks (delegated) — fires `result_click` analytics event
+		// before the browser navigates via the <a target="_blank">.
+		const resultsRoot = this.root.querySelector(".aac-results");
+		if (resultsRoot) {
+			resultsRoot.addEventListener("click", (e) => {
+				const card = (e.target as HTMLElement).closest(
+					".aac-result-card",
+				) as HTMLElement | null;
+				if (!card) return;
+				const productId = card.getAttribute("data-product-id") ?? undefined;
+				const position = Number(card.getAttribute("data-position") ?? "0");
+				this.trackEvent({
+					type: "result_click",
+					productId: productId || undefined,
+					position: position > 0 ? position : undefined,
+					query: this.state.query || undefined,
+				});
 			});
 		}
 	}
@@ -685,6 +765,7 @@ export class AacSearchWidget {
 
 		// Results
 		html += '<div class="aac-results">';
+		let position = (this.state.page - 1) * this.state.perPage + 1;
 		for (const hit of this.state.results) {
 			const doc = hit.document as Record<string, unknown>;
 			const title = (doc.title as string) ?? this.t("untitled");
@@ -696,8 +777,11 @@ export class AacSearchWidget {
 			const productUrl = doc.product_url as string | undefined;
 			const categories = doc.categories as string[] | undefined;
 			const availability = doc.availability as string | undefined;
+			const productId =
+				(doc.external_id as string | undefined) ?? (doc.id as string | undefined);
 
-			html += '<div class="aac-result-card">';
+			html += `<div class="aac-result-card" data-product-id="${escapeHtml(productId ?? "")}" data-position="${position}">`;
+			position++;
 
 			if (imageUrl && this.options.showImages) {
 				html += `<img class="aac-result-image" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" loading="lazy" />`;

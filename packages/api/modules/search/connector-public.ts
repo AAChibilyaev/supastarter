@@ -8,7 +8,7 @@
  * All payloads are validated with Zod.
  */
 
-import { db, enqueueManySearchIngest, type Prisma } from "@repo/database";
+import { db, enqueueManySearchIngest, recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 import type { Context } from "hono";
 import { Hono } from "hono";
@@ -247,6 +247,13 @@ export const connectorApp = new Hono()
 				docs as Prisma.InputJsonValue[],
 			);
 			await completeSyncJob(job.id, { itemsCount: docs.length });
+			void recordSearchUsage({
+				indexId: verified.indexId,
+				organizationId: verified.organizationId,
+				type: "sync_job",
+				count: docs.length,
+				metadata: { jobId: job.id, type: "full", itemsCount: docs.length },
+			}).catch((err) => logger.warn("sync_job usage record failed", { err }));
 		} catch (error) {
 			logger.error("Full sync enqueue failed", { error, projectId: verified.organizationId });
 			await failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
@@ -292,6 +299,13 @@ export const connectorApp = new Hono()
 				docs as Prisma.InputJsonValue[],
 			);
 			await completeSyncJob(job.id, { itemsCount: docs.length });
+			void recordSearchUsage({
+				indexId: verified.indexId,
+				organizationId: verified.organizationId,
+				type: "sync_job",
+				count: docs.length,
+				metadata: { jobId: job.id, type: "delta", itemsCount: docs.length },
+			}).catch((err) => logger.warn("sync_job usage record failed", { err }));
 		} catch (error) {
 			logger.error("Delta sync enqueue failed", {
 				error,

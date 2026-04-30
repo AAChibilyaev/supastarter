@@ -9,10 +9,16 @@ import { importJobs } from "./procedures/import-jobs";
 import { listApiKeys } from "./procedures/list-api-keys";
 import { listConnectorSyncJobs } from "./procedures/list-connector-sync-jobs";
 import { listConnectorTokens } from "./procedures/list-connector-tokens";
+import { listDocuments } from "./procedures/list-documents";
 import { listIndexes } from "./procedures/list-indexes";
+import { onboardingStatus } from "./procedures/onboarding-status";
+import { pipelineStatus } from "./procedures/pipelineStatus";
+import { recentActivity } from "./procedures/recent-activity";
 import { reindex } from "./procedures/reindex";
+import { retryFailedBatches } from "./procedures/retry-failed-batches";
 import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
+import { getSchema, updateSchema } from "./procedures/schema";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
@@ -34,8 +40,17 @@ export const searchRouter = {
 	usage,
 	usageSummary,
 	topQueries,
+	recentActivity,
 	widgetConfig: getWidgetConfig,
 	analytics,
+	pipelineStatus,
+	listDocuments,
+	onboardingStatus,
+	retryFailedBatches,
+	schema: {
+		get: getSchema,
+		update: updateSchema,
+	},
 	synonyms: {
 		get: getSynonyms,
 		update: updateSynonyms,

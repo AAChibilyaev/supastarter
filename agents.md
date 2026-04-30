@@ -1608,37 +1608,11 @@ Last: [first session]
 ## Last Session Bridge
 
 [pre-compact bridge — saved before context compaction]
-Files (16):
-apps/saas/modules/search/components/CreateSearchIndexDialog.tsx (create)
-packages/i18n/translations/en/saas.json (edit)
-packages/i18n/translations/de/saas.json (edit)
-packages/i18n/translations/es/saas.json (edit)
-packages/i18n/translations/fr/saas.json (edit)
-packages/i18n/translations/ru/saas.json (edit)
-apps/saas/modules/search/components/CreateSearchIndexDialog.tsx (edit)
+Files (5):
 apps/saas/modules/shared/components/NavBar.tsx (edit)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/feedback_dev_server_required.md (create)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/MEMORY.md (create)
-apps/saas/modules/search/lib/api.ts (edit)
-apps/saas/modules/search/components/ConnectorWizard.tsx (edit)
 apps/saas/modules/search/components/ConnectorsPage.tsx (edit)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/feedback_reuse_only_existing_ui.md (create)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/MEMORY.md (edit)
-tooling/tailwind/theme.css (edit)
-Manual bridge:
-[proactive bridge @ 93% context — saved before compacting]
-Files (12):
-apps/saas/modules/search/components/CreateSearchIndexDialog.tsx (create)
-packages/i18n/translations/en/saas.json (edit)
-packages/i18n/translations/de/saas.json (edit)
-packages/i18n/translations/es/saas.json (edit)
-packages/i18n/translations/fr/saas.json (edit)
-packages/i18n/translations/ru/saas.json (edit)
-apps/saas/modules/search/components/CreateSearchIndexDialog.tsx (edit)
-apps/saas/modules/shared/components/NavBar.tsx (edit)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/feedback_dev_server_required.md (create)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/MEMORY.md (create)
-apps/saas/modules/search/lib/api.ts (edit)
-apps/saas/modules/search/components/ConnectorWizard.tsx (edit)
+apps/saas/modules/search/components/OverviewPage.tsx (edit)
+apps/saas/modules/search/components/ProjectsList.tsx (edit)
+apps/saas/modules/search/components/CollectionDetail.tsx (edit)
 
 # === END COGNILAYER ===

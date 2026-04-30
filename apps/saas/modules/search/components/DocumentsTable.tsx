@@ -393,9 +393,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 					const val = getValue();
 					if (field.type === "bool") {
 						return val === true || val === "true" ? (
-							<CheckIcon className="size-4 text-emerald-500" />
+							<CheckIcon className="size-4 text-success" />
 						) : val === false || val === "false" ? (
-							<XIcon className="size-4 text-rose-500" />
+							<XIcon className="size-4 text-destructive" />
 						) : (
 							<span className="text-foreground/40">\u2014</span>
 						);

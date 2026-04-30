@@ -800,10 +800,10 @@ export function SchemaEditor({ organizationId, slug }: SchemaEditorProps) {
 								diffEntries.map((entry, i) => {
 									const colorClass =
 										entry.type === "added"
-											? "text-emerald-600"
+											? "text-success"
 											: entry.type === "removed"
-												? "text-rose-600"
-												: "text-amber-600";
+												? "text-destructive"
+												: "text-foreground/60";
 									const prefix =
 										entry.type === "added"
 											? "+"

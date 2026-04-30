@@ -222,7 +222,7 @@ export function ConnectorWizard({
 													: t("search.apiKeys.copy")}
 											</Button>
 										</div>
-										<div className="border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200 rounded-md border">
+										<div className="p-3 text-sm rounded-md border border-foreground/20 bg-foreground/5 text-foreground/70 dark:border-foreground/30 dark:bg-foreground/10 dark:text-foreground/70">
 											{t("search.connector.tokenCopyWarning")}
 										</div>
 										<Button

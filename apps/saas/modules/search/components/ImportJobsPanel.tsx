@@ -81,13 +81,13 @@ function getStatusIcon(status: string) {
 function getStatusColor(status: string): string {
 	switch (status) {
 		case "completed":
-			return "text-emerald-500";
+			return "text-success";
 		case "failed":
-			return "text-rose-500";
+			return "text-destructive";
 		case "processing":
-			return "text-blue-500";
+			return "text-primary";
 		case "pending":
-			return "text-amber-500";
+			return "text-foreground/60";
 		default:
 			return "text-muted-foreground";
 	}
@@ -155,17 +155,17 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			<div className="p-4 space-y-3 rounded-lg border">
 				<div className="text-sm flex items-center justify-between">
 					<span className="text-foreground/60">{t("search.importJobs.successRate")}</span>
-					<span className="font-semibold text-emerald-500">{successRate}%</span>
+					<span className="font-semibold text-success">{successRate}%</span>
 				</div>
 				<div className="h-2 w-full overflow-hidden rounded-full bg-muted">
 					<div
-						className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+						className="h-full rounded-full bg-success transition-all duration-500"
 						style={{ width: `${successRate}%` }}
 					/>
 				</div>
 				<div className="gap-4 text-sm flex flex-wrap">
 					<div className="gap-1.5 flex items-center">
-						<span className="size-2 bg-emerald-500 rounded-full" />
+						<span className="size-2 rounded-full bg-success" />
 						<span>
 							<strong>{succeededCount}</strong>{" "}
 							<span className="text-foreground/60">
@@ -174,7 +174,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 						</span>
 					</div>
 					<div className="gap-1.5 flex items-center">
-						<span className="size-2 bg-rose-500 rounded-full" />
+						<span className="size-2 rounded-full bg-destructive" />
 						<span>
 							<strong>{failedCount}</strong>{" "}
 							<span className="text-foreground/60">
@@ -183,7 +183,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 						</span>
 					</div>
 					<div className="gap-1.5 flex items-center">
-						<span className="size-2 bg-amber-500 rounded-full" />
+						<span className="size-2 rounded-full bg-foreground/30" />
 						<span>
 							<strong>{pendingCount}</strong>{" "}
 							<span className="text-foreground/60">
@@ -225,7 +225,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 										className="sm:flex-row sm:items-center gap-2 p-3 text-sm flex flex-col justify-between rounded-md bg-muted/30"
 									>
 										<div className="gap-2 min-w-0 flex items-center">
-											<XCircle className="size-4 text-rose-500 shrink-0" />
+											<XCircle className="size-4 shrink-0 text-destructive" />
 											<span className="font-mono text-xs truncate">
 												{job.id}
 											</span>
@@ -311,7 +311,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									<div className="gap-4 text-xs flex items-center text-foreground/60">
 										<span>
 											{t("search.importJobs.tableProgress")}:{" "}
-											<span className="font-semibold text-emerald-500">
+											<span className="font-semibold text-success">
 												{job.processedItems}
 											</span>
 											/{job.totalItems}
@@ -319,7 +319,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 										{failedItems > 0 && (
 											<span>
 												{t("search.importJobs.failed")}:{" "}
-												<span className="font-semibold text-rose-500">
+												<span className="font-semibold text-destructive">
 													{failedItems}
 												</span>
 											</span>
@@ -329,11 +329,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 
 								{/* Error message */}
 								{job.errorMessage && (
-									<div className="gap-2 text-xs bg-rose-500/5 p-2 flex items-start rounded-md">
-										<XCircle className="mt-0.5 size-3.5 text-rose-500 shrink-0" />
-										<span className="text-rose-600 dark:text-rose-400">
-											{job.errorMessage}
-										</span>
+									<div className="gap-2 text-xs p-2 flex items-start rounded-md bg-destructive/10 dark:bg-destructive/20">
+										<XCircle className="mt-0.5 size-3.5 shrink-0 text-destructive" />
+										<span className="text-destructive">{job.errorMessage}</span>
 									</div>
 								)}
 							</div>

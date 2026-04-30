@@ -94,7 +94,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 
 				{/* ---- Playground tab ---- */}
 				<TabsContent value="playground" className="space-y-4">
-					<PlaygroundPanel organizationId={organizationId} baseUrl={baseUrl} />
+					<PlaygroundPanel organizationId={organizationId} />
 				</TabsContent>
 
 				{/* ---- API Keys tab ---- */}
@@ -147,11 +147,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 					</div>
 
 					{selectedSlug ? (
-						<WidgetPanel
-							organizationId={organizationId}
-							slug={selectedSlug}
-							baseUrl={baseUrl ?? ""}
-						/>
+						<WidgetPanel slug={selectedSlug} baseUrl={baseUrl ?? ""} />
 					) : (
 						<div className="rounded p-6 border text-center text-foreground/60">
 							{t("search.selectIndex")}

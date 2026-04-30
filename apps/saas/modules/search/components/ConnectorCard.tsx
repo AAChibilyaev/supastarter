@@ -69,7 +69,7 @@ export function ConnectorCard({ type, status, onSetup, onManage }: ConnectorCard
 						<p>{t("search.connector.noHeartbeat")}</p>
 					)}
 					{status.lastError && (
-						<p className="text-rose-500 text-xs truncate" title={status.lastError}>
+						<p className="text-xs truncate text-destructive" title={status.lastError}>
 							{t("search.connector.lastError")}: {status.lastError}
 						</p>
 					)}

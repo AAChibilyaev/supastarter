@@ -411,7 +411,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 
 			{/* Results area */}
 			{error && (
-				<div className="p-3 rounded text-sm bg-rose-500/10 text-rose-500 border-rose-500/20 border">
+				<div className="p-3 rounded text-sm border border-destructive/20 bg-destructive/10 text-destructive dark:border-destructive/30 dark:bg-destructive/20">
 					{error}
 				</div>
 			)}

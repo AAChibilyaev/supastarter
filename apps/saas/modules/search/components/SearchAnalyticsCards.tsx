@@ -177,9 +177,9 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 
 			{/* Retention banner */}
 			{showRetentionBanner && (
-				<Card className="border-l-amber-500 border-l-4">
+				<Card className="border-l-4 border-l-foreground/20">
 					<CardContent className="gap-3 pt-6 flex items-center">
-						<InfoIcon className="size-5 text-amber-500 shrink-0" />
+						<InfoIcon className="size-5 shrink-0 text-foreground/60" />
 						<p className="text-sm text-foreground/80">
 							{t("search.analytics.retentionBanner", {
 								days: planRetentionDays,

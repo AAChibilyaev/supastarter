@@ -413,7 +413,7 @@ export function SearchPreview({
 
 			{/* Results area */}
 			{error && (
-				<div className="rounded border-rose-500/20 bg-rose-500/10 p-3 text-sm text-rose-500 border">
+				<div className="rounded p-3 text-sm border border-destructive/20 bg-destructive/10 text-destructive dark:border-destructive/30 dark:bg-destructive/20">
 					{error}
 				</div>
 			)}

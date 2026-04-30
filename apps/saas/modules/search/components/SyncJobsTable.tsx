@@ -112,7 +112,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									<TableCell className="text-xs">
 										{job.itemsCount}
 										{job.failuresCount > 0 && (
-											<span className="ml-1 text-rose-500">
+											<span className="ml-1 text-destructive">
 												({job.failuresCount} failures)
 											</span>
 										)}

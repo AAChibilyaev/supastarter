@@ -93,7 +93,7 @@ export function IndexRowActions({
 						{t("search.indexActions.viewSchema")}
 					</DropdownMenuItem>
 					{onDelete && (
-						<DropdownMenuItem onClick={handleDelete} className="text-rose-500">
+						<DropdownMenuItem onClick={handleDelete} className="text-destructive">
 							<Trash2Icon className="mr-2 size-4" />
 							{t("search.indexActions.delete")}
 						</DropdownMenuItem>

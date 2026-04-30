@@ -45,9 +45,9 @@ function ActivityIcon({ kind }: { kind: string }) {
 		case "index_created":
 			return <Database className="size-4 text-primary" />;
 		case "api_key_created":
-			return <Key className="size-4 text-blue-500" />;
+			return <Key className="size-4 text-primary" />;
 		case "sync_job":
-			return <Activity className="size-4 text-amber-500" />;
+			return <Activity className="size-4 text-foreground/60" />;
 		default:
 			return <Activity className="size-4 text-muted-foreground" />;
 	}

@@ -241,13 +241,13 @@ export function OverviewPage() {
 			{quotaPercent >= 80 && (
 				<Card
 					className={`border-l-4 ${
-						quotaPercent >= 100 ? "border-l-destructive" : "border-l-amber-500"
+						quotaPercent >= 100 ? "border-l-destructive" : "border-l-foreground/20"
 					}`}
 				>
 					<CardContent className="pt-6 gap-3 flex items-center">
 						<AlertTriangleIcon
 							className={`size-5 ${
-								quotaPercent >= 100 ? "text-destructive" : "text-amber-500"
+								quotaPercent >= 100 ? "text-destructive" : "text-foreground/60"
 							}`}
 						/>
 						<p className="text-sm">

@@ -6,12 +6,14 @@ import { listApiKeys } from "./procedures/list-api-keys";
 import { listIndexes } from "./procedures/list-indexes";
 import { reindex } from "./procedures/reindex";
 import { revokeApiKey } from "./procedures/revoke-api-key";
+import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
 
 export const searchRouter = {
 	listIndexes,
 	createIndex,
 	importDocuments,
+	upsertDocument,
 	listApiKeys,
 	createApiKey,
 	createScopedToken,

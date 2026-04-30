@@ -73,3 +73,48 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		searchTimeMs: response.search_time_ms ?? 0,
 	};
 }
+
+export interface MultiSearchEntry extends Omit<SearchDocumentsInput, "alias"> {
+	alias: string;
+}
+
+/**
+ * Federated/union search across multiple aliases in a single Typesense round-trip.
+ * Each entry is tenant-filter-combined the same way as `searchDocuments`.
+ */
+export async function multiSearchDocuments(
+	entries: MultiSearchEntry[],
+): Promise<SearchDocumentsResult[]> {
+	if (entries.length === 0) return [];
+	const client = getTypesenseClient();
+
+	const searches = entries.map((entry) => {
+		const perPage = Math.min(
+			Math.max(entry.perPage ?? config.defaultPerPage, 1),
+			config.maxPerPage,
+		);
+		return {
+			collection: entry.alias,
+			q: entry.q,
+			query_by: entry.queryBy ?? "",
+			filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
+			facet_by: entry.facetBy,
+			sort_by: entry.sortBy,
+			per_page: perPage,
+			page: entry.page ?? 1,
+			highlight_fields: entry.highlightFields,
+		};
+	});
+
+	const response = await client.multiSearch.perform({ searches });
+	const results = (response as { results: Array<Record<string, unknown>> }).results ?? [];
+
+	return results.map((r, idx) => ({
+		hits: (r.hits as unknown[]) ?? [],
+		found: (r.found as number) ?? 0,
+		page: (r.page as number) ?? 1,
+		perPage: searches[idx].per_page,
+		facetCounts: (r.facet_counts as unknown[]) ?? [],
+		searchTimeMs: (r.search_time_ms as number) ?? 0,
+	}));
+}

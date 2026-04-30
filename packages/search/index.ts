@@ -26,7 +26,9 @@ export {
 	type BulkUpsertResult,
 } from "./lib/ingest";
 export {
+	multiSearchDocuments,
 	searchDocuments,
+	type MultiSearchEntry,
 	type SearchDocumentsInput,
 	type SearchDocumentsResult,
 } from "./lib/search";

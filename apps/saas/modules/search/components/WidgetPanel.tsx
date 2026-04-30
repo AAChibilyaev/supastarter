@@ -15,12 +15,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface WidgetPanelProps {
-	organizationId: string;
 	slug: string;
 	baseUrl: string;
 }
 
-export function WidgetPanel({ organizationId, slug, baseUrl }: WidgetPanelProps) {
+export function WidgetPanel({ slug, baseUrl }: WidgetPanelProps) {
 	const t = useTranslations();
 	const [apiKeyPrefix, setApiKeyPrefix] = useState("ss_search_***");
 
@@ -42,11 +41,11 @@ export function WidgetPanel({ organizationId, slug, baseUrl }: WidgetPanelProps)
 
 	return (
 		<Card>
-			<CardHeader>
+			<CardHeader className="pb-4">
 				<CardTitle>{t("search.widget.title")}</CardTitle>
 				<CardDescription>{t("search.widget.description")}</CardDescription>
 			</CardHeader>
-			<CardContent className="space-y-4">
+			<CardContent className="space-y-6">
 				<div className="space-y-2">
 					<Label htmlFor="apiKey">{t("search.widget.apiKeyLabel")}</Label>
 					<Input
@@ -67,7 +66,7 @@ export function WidgetPanel({ organizationId, slug, baseUrl }: WidgetPanelProps)
 
 				<Button onClick={copySnippet}>{t("search.widget.copySnippet")}</Button>
 
-				<div className="rounded p-4 mt-4 border border-dashed">
+				<div className="rounded p-4 border border-dashed">
 					<p className="text-sm mb-2 text-foreground/60">
 						{t("search.widget.installInstructions")}
 					</p>

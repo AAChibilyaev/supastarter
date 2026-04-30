@@ -97,8 +97,8 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 	}
 
 	return (
-		<Card className="p-6 space-y-4">
-			<div className="gap-4 flex items-center justify-between">
+		<Card className="p-6 space-y-6">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.synonyms.title")}</h3>
 					<p className="text-sm text-foreground/60">{t("search.synonyms.description")}</p>
@@ -144,7 +144,7 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 										onChange={(e) =>
 											handleChange(index, "synonym", e.target.value)
 										}
-										className="p-1.5 rounded text-sm w-full border bg-background"
+										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder="e.g. sneakers"
 									/>
 								</TableCell>
@@ -155,7 +155,7 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 										onChange={(e) =>
 											handleChange(index, "root", e.target.value)
 										}
-										className="p-1.5 rounded text-sm w-full border bg-background"
+										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder="e.g. shoes"
 									/>
 								</TableCell>

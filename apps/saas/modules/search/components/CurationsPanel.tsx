@@ -144,8 +144,8 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 	}
 
 	return (
-		<Card className="p-6 space-y-4">
-			<div className="gap-4 flex items-center justify-between">
+		<Card className="p-6 space-y-6">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.curations.title")}</h3>
 					<p className="text-sm text-foreground/60">
@@ -187,7 +187,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 										type="text"
 										value={formQuery}
 										onChange={(e) => setFormQuery(e.target.value)}
-										className="p-2 rounded text-sm w-full border bg-background"
+										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder={t("search.curations.queryPlaceholder")}
 									/>
 								</div>
@@ -199,7 +199,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 										type="text"
 										value={formPinned}
 										onChange={(e) => setFormPinned(e.target.value)}
-										className="p-2 rounded text-sm w-full border bg-background"
+										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder={t("search.curations.pinnedPlaceholder")}
 									/>
 								</div>
@@ -211,7 +211,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 										type="text"
 										value={formHidden}
 										onChange={(e) => setFormHidden(e.target.value)}
-										className="p-2 rounded text-sm w-full border bg-background"
+										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder={t("search.curations.hiddenPlaceholder")}
 									/>
 								</div>

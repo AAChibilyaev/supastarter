@@ -125,8 +125,8 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 	const retryJobs = jobs.filter((j) => j.status === "failed" || j.status === "pending");
 
 	return (
-		<Card className="p-6 space-y-4">
-			<div className="sm:flex-row sm:items-center sm:justify-between gap-3 flex flex-col">
+		<Card className="p-6 space-y-6">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.importJobs.title")}</h3>
 					<p className="text-sm text-foreground/60">

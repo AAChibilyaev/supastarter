@@ -115,8 +115,8 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 	});
 
 	return (
-		<Card className="p-6 space-y-4">
-			<div className="gap-4 flex items-center justify-between">
+		<Card className="p-6 space-y-6">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.apiKeys.title")}</h3>
 					<p className="text-sm text-foreground/60">{t("search.apiKeys.description")}</p>

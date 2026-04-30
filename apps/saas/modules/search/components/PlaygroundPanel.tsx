@@ -110,7 +110,7 @@ function HitCard({ hit, index }: { hit: Record<string, unknown>; index: number }
 	const fields = Object.entries(hit).filter(([k]) => k !== "highlight");
 
 	return (
-		<Card className="p-4 space-y-1">
+		<Card className="p-4 space-y-2">
 			<div className="text-xs font-mono text-foreground/40">#{index + 1}</div>
 			{fields.slice(0, 5).map(([key, value]) => {
 				const snippet = highlight?.[key]?.snippet;
@@ -149,10 +149,9 @@ function StringValue({ value }: { value: unknown }) {
 
 interface PlaygroundPanelProps {
 	organizationId: string;
-	baseUrl?: string;
 }
 
-export function PlaygroundPanel({ organizationId, baseUrl = "" }: PlaygroundPanelProps) {
+export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 	const t = useTranslations();
 	const { data: indexes, isLoading: indexesLoading } = useSearchIndexesQuery(organizationId);
 
@@ -305,7 +304,7 @@ export function PlaygroundPanel({ organizationId, baseUrl = "" }: PlaygroundPane
 	}
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-6">
 			{/* Index selector + Query input row */}
 			<div className="gap-4 sm:flex-row sm:items-start flex flex-col">
 				<div className="sm:w-48 w-full shrink-0">
@@ -508,7 +507,7 @@ export function PlaygroundPanel({ organizationId, baseUrl = "" }: PlaygroundPane
 					</Tabs>
 
 					{/* Curl snippet */}
-					<Card className="p-4 space-y-2">
+					<Card className="p-4 space-y-3">
 						<div className="gap-2 flex items-center">
 							<TerminalIcon className="size-4 text-foreground/40" />
 							<span className="text-sm font-medium">

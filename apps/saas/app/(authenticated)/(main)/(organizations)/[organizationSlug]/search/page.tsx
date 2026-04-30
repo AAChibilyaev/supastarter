@@ -1,5 +1,6 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
+import { getBaseUrl } from "@repo/utils";
 import { SearchDashboard } from "@search/components/SearchDashboard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
@@ -40,7 +41,11 @@ export default async function SearchPage({
 	return (
 		<div>
 			<PageHeader title={t("title")} subtitle={t("subtitle")} />
-			<SearchDashboard organizationId={activeOrganization.id} canManage={canManage} />
+			<SearchDashboard
+				organizationId={activeOrganization.id}
+				canManage={canManage}
+				baseUrl={getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3000)}
+			/>
 		</div>
 	);
 }

@@ -8,6 +8,7 @@ import { reindex } from "./procedures/reindex";
 import { revokeApiKey } from "./procedures/revoke-api-key";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
+import { getWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {
 	listIndexes,
@@ -20,4 +21,5 @@ export const searchRouter = {
 	revokeApiKey,
 	reindex,
 	usage,
+	widgetConfig: getWidgetConfig,
 };

@@ -12,6 +12,7 @@ import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
+import { serveStatic } from "hono/serve-static";
 
 import { publicSearchApp } from "./modules/search/public-handler";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
@@ -25,6 +26,41 @@ export const app = new Hono()
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
 	// Public search endpoint (own permissive CORS, mounted before global CORS)
 	.route("/", publicSearchApp)
+	// Widget JS serving (static file, accessible from any origin for storefronts)
+	.get("/widget/widget.js", async (c) => {
+		try {
+			const fs = await import("node:fs/promises");
+			const path = await import("node:path");
+			const widgetPath = path.resolve(
+				process.cwd(),
+				"../../packages/widget/dist/index.global.js",
+			);
+			const content = await fs.readFile(widgetPath, "utf-8");
+			return c.newResponse(content, 200, {
+				"Content-Type": "application/javascript",
+				"Access-Control-Allow-Origin": "*",
+				"Cache-Control": "public, max-age=3600",
+			});
+		} catch {
+			// Dev fallback: try local path
+			try {
+				const fs = await import("node:fs/promises");
+				const path = await import("node:path");
+				const widgetPath = path.resolve(
+					process.cwd(),
+					"packages/widget/dist/index.global.js",
+				);
+				const content = await fs.readFile(widgetPath, "utf-8");
+				return c.newResponse(content, 200, {
+					"Content-Type": "application/javascript",
+					"Access-Control-Allow-Origin": "*",
+					"Cache-Control": "public, max-age=3600",
+				});
+			} catch {
+				return c.text("Widget not built yet. Run: pnpm --filter @repo/widget build", 404);
+			}
+		}
+	})
 	// Cors middleware
 	.use(
 		cors({
@@ -111,8 +147,11 @@ async function syncIncludedCreditsAfterPaymentEvent(req: Request): Promise<void>
 	if (!planId) return;
 
 	const includedMap =
-		(paymentsConfig as { aiWallet?: { monthlyIncludedByPlan?: Record<string, bigint | number> } })
-			.aiWallet?.monthlyIncludedByPlan ?? {};
+		(
+			paymentsConfig as {
+				aiWallet?: { monthlyIncludedByPlan?: Record<string, bigint | number> };
+			}
+		).aiWallet?.monthlyIncludedByPlan ?? {};
 	const rawValue = includedMap[planId];
 	const includedKopecks =
 		typeof rawValue === "bigint"

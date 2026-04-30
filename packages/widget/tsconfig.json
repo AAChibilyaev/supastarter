@@ -1,0 +1,14 @@
+{
+	"extends": "@repo/tsconfig/base.json",
+	"compilerOptions": {
+		"target": "ES2020",
+		"lib": ["ES2020", "DOM"],
+		"moduleResolution": "bundler",
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "./dist"
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["dist", "node_modules"]
+}

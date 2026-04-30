@@ -665,8 +665,23 @@
 		"usage": {
 			"title": "Nutzung",
 			"windowDays": "Letzte {days} Tage",
-			"searches": "Suchen",
-			"ingests": "Importierte Dokumente"
+			"searches": "Suchanfragen",
+			"ingests": "Indizierte Dokumente"
+		},
+		"widget": {
+			"tab": "Widget",
+			"title": "Such-Widget",
+			"description": "Betten Sie ein Such-Widget mit einem Script-Tag in Ihren Shop ein.",
+			"apiKeyLabel": "API-Schlüssel",
+			"apiKeyHint": "Fügen Sie Ihren Search-Only API-Key ein (ss_search_...) oder erstellen Sie einen neuen im Reiter API Keys.",
+			"snippet": "Widget-Code",
+			"copySnippet": "Code kopieren",
+			"copied": "Widget-Code kopiert!",
+			"copyFailed": "Fehler beim Kopieren.",
+			"installInstructions": "Installationsanleitung",
+			"step1": "Container-Element hinzufügen: <div id=\"aac-search\"></div>",
+			"step2": "Widget-Code vor dem </body>-Tag einfügen.",
+			"step3": "Das Widget initialisiert sich automatisch. Passen Sie data-*-Attribute nach Bedarf an."
 		}
 	}
 }

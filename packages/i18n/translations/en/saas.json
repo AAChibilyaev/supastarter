@@ -708,6 +708,21 @@
 			"windowDays": "Last {days} days",
 			"searches": "Searches",
 			"ingests": "Documents ingested"
+		},
+		"widget": {
+			"tab": "Widget",
+			"title": "Search Widget",
+			"description": "Embed a search widget on your storefront with one script tag.",
+			"apiKeyLabel": "API Key",
+			"apiKeyHint": "Paste your search-only API key (ss_search_...) or create a new one from the API Keys tab.",
+			"snippet": "Widget snippet",
+			"copySnippet": "Copy snippet",
+			"copied": "Widget snippet copied!",
+			"copyFailed": "Failed to copy snippet.",
+			"installInstructions": "Installation instructions",
+			"step1": "Add a container element: <div id=\"aac-search\"></div>",
+			"step2": "Paste the widget snippet before the closing </body> tag.",
+			"step3": "The widget will auto-initialize. Customize data-* attributes as needed."
 		}
 	}
 }

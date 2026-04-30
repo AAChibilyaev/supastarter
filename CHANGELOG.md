@@ -1,5 +1,34 @@
 # Changelog
 
+## 2026-04-30
+
+### Added
+
+#### Widget (MVP)
+
+- **`@repo/widget`**: Hosted storefront search widget — embeddable with one `<script>` tag.
+  - Vanilla JS (no framework dependency), Shadow DOM for CSS isolation.
+  - Works with AACsearch public API (Bearer auth with `ss_search_*` or `ss_scoped_*` keys).
+  - Modes: inline (default), supports facets, sorting, pagination, price display, availability.
+  - Theme: light, dark, auto (follows system preference).
+  - Built with tsup — outputs IIFE (14KB minified) + ESM.
+  - Auto-initializes from `<script>` data-* attributes.
+
+#### API
+
+- **Widget config endpoint**: `GET /search/widget-config/:indexSlug` oRPC procedure — returns base URL, key prefix, and ready-to-use snippet.
+- **Widget JS serving**: `/api/widget/widget.js` endpoint serves the compiled widget bundle with permissive CORS and caching headers.
+
+#### SaaS Dashboard
+
+- **Widget tab**: New "Widget" tab in search dashboard next to API Keys panel.
+- **Widget snippet generator**: Copy widget `<script>` tag with editable API key field.
+- **Installation instructions**: Step-by-step guide in the dashboard.
+
+#### i18n
+
+- **Widget translations**: All 4 locales (en, de, es, fr) — widget tab, snippet, installation instructions.
+
 ## 2026-03-30 v3.3.0
 
 ### Added

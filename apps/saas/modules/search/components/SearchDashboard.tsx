@@ -7,15 +7,23 @@ import { CreateSearchIndexDialog } from "./CreateSearchIndexDialog";
 import { SearchApiKeysPanel } from "./SearchApiKeysPanel";
 import { SearchIndexesList } from "./SearchIndexesList";
 import { SearchUsageCard } from "./SearchUsageCard";
+import { WidgetPanel } from "./WidgetPanel";
 
 interface SearchDashboardProps {
 	organizationId: string;
 	canManage: boolean;
+	baseUrl?: string;
 }
 
-export function SearchDashboard({ organizationId, canManage }: SearchDashboardProps) {
+export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDashboardProps) {
 	const t = useTranslations();
 	const [selectedSlug, setSelectedSlug] = useState<string>();
+	const [activeTab, setActiveTab] = useState<"keys" | "widget">("keys");
+
+	const handleSelect = (slug: string | undefined) => {
+		setSelectedSlug(slug);
+		setActiveTab("keys");
+	};
 
 	return (
 		<div className="space-y-6">
@@ -32,11 +40,49 @@ export function SearchDashboard({ organizationId, canManage }: SearchDashboardPr
 			<div className="gap-6 lg:grid-cols-[2fr_3fr] grid">
 				<SearchIndexesList
 					organizationId={organizationId}
-					onSelect={setSelectedSlug}
+					onSelect={handleSelect}
 					selectedSlug={selectedSlug}
 				/>
 				{selectedSlug ? (
-					<SearchApiKeysPanel organizationId={organizationId} slug={selectedSlug} />
+					<div className="space-y-4">
+						<div className="gap-2 flex border-b">
+							<button
+								type="button"
+								className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+									activeTab === "keys"
+										? "border-primary text-primary"
+										: "border-transparent text-foreground/60 hover:text-foreground"
+								}`}
+								onClick={() => setActiveTab("keys")}
+							>
+								{t("search.apiKeys")}
+							</button>
+							<button
+								type="button"
+								className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+									activeTab === "widget"
+										? "border-primary text-primary"
+										: "border-transparent text-foreground/60 hover:text-foreground"
+								}`}
+								onClick={() => setActiveTab("widget")}
+							>
+								{t("search.widget.tab")}
+							</button>
+						</div>
+
+						{activeTab === "keys" ? (
+							<SearchApiKeysPanel
+								organizationId={organizationId}
+								slug={selectedSlug}
+							/>
+						) : (
+							<WidgetPanel
+								organizationId={organizationId}
+								slug={selectedSlug}
+								baseUrl={baseUrl ?? ""}
+							/>
+						)}
+					</div>
 				) : (
 					<div className="rounded p-6 border text-center text-foreground/60">
 						{t("search.selectIndex")}

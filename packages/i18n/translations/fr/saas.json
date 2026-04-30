@@ -670,6 +670,21 @@
 			"windowDays": "{days} derniers jours",
 			"searches": "Recherches",
 			"ingests": "Documents indexés"
+		},
+		"widget": {
+			"tab": "Widget",
+			"title": "Widget de recherche",
+			"description": "Intégrez un widget de recherche sur votre boutique avec une seule balise script.",
+			"apiKeyLabel": "Clé API",
+			"apiKeyHint": "Collez votre clé API de recherche uniquement (ss_search_...) ou créez-en une nouvelle dans l'onglet API Keys.",
+			"snippet": "Code du widget",
+			"copySnippet": "Copier le code",
+			"copied": "Code du widget copié !",
+			"copyFailed": "Échec de la copie.",
+			"installInstructions": "Instructions d'installation",
+			"step1": "Ajoutez un élément conteneur : <div id=\"aac-search\"></div>",
+			"step2": "Collez le code du widget avant la balise </body>.",
+			"step3": "Le widget s'initialisera automatiquement. Personnalisez les attributs data-* selon vos besoins."
 		}
 	}
 }

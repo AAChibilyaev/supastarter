@@ -129,7 +129,9 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 					}}
 				>
 					<DialogTrigger asChild>
-						<Button variant="primary">{t("search.apiKeys.create")}</Button>
+						<Button variant="outline" size="sm">
+							{t("search.apiKeys.create")}
+						</Button>
 					</DialogTrigger>
 					<DialogContent>
 						<DialogHeader>
@@ -177,7 +179,8 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 									<DialogFooter>
 										<Button
 											type="submit"
-											variant="primary"
+											variant="outline"
+											size="sm"
 											loading={form.formState.isSubmitting}
 										>
 											{t("search.apiKeys.generate")}

@@ -1,8 +1,7 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
+import { ConnectorsPage } from "@search/components/ConnectorsPage";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-
-import { ConnectorsPage } from "~/modules/search/components/ConnectorsPage";
 
 export async function generateMetadata({
 	params,

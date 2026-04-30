@@ -112,6 +112,12 @@ export const SearchIngestBufferScalarFieldEnumSchema = z.enum(['id', 'indexId', 
 
 export type SearchIngestBufferScalarFieldEnum = z.infer<typeof SearchIngestBufferScalarFieldEnumSchema>;
 
+// File: SearchConnectorSyncJobScalarFieldEnum.schema.ts
+
+export const SearchConnectorSyncJobScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'type', 'status', 'startedAt', 'finishedAt', 'durationMs', 'itemsCount', 'failuresCount', 'lastError', 'events', 'createdAt', 'updatedAt'])
+
+export type SearchConnectorSyncJobScalarFieldEnum = z.infer<typeof SearchConnectorSyncJobScalarFieldEnumSchema>;
+
 // File: KnowledgeSpaceScalarFieldEnum.schema.ts
 
 export const KnowledgeSpaceScalarFieldEnumSchema = z.enum(['id', 'ownerType', 'userId', 'organizationId', 'slug', 'name', 'createdAt', 'updatedAt'])
@@ -553,6 +559,28 @@ export const SearchIngestBufferSchema = z.object({
 });
 
 export type SearchIngestBufferType = z.infer<typeof SearchIngestBufferSchema>;
+
+
+// File: SearchConnectorSyncJob.schema.ts
+
+export const SearchConnectorSyncJobSchema = z.object({
+  id: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+  type: z.string(),
+  status: z.string(),
+  startedAt: z.date(),
+  finishedAt: z.date().nullish(),
+  durationMs: z.number().int().nullish(),
+  itemsCount: z.number().int(),
+  failuresCount: z.number().int(),
+  lastError: z.string().nullish(),
+  events: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("[]"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SearchConnectorSyncJobType = z.infer<typeof SearchConnectorSyncJobSchema>;
 
 
 // File: KnowledgeSpace.schema.ts

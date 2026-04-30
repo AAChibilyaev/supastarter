@@ -17,24 +17,18 @@ import {
 	DialogTitle,
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { orpc } from "@shared/lib/orpc-query-utils";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-
-import { orpc } from "@shared/lib/orpc-query-utils";
-
-import type { SourceType } from "./ConnectorCard";
 
 interface ConnectorWizardProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	source: SourceType;
+	source: "prestashop" | "bitrix" | "directApi";
 	organizationId: string;
 }
 
-const STEP_ICONS = ["1", "2", "3", "4", "5"];
-
-const STEP_KEYS: Array<keyof ConnectorTranslationKeys> = [
+const STEP_KEYS = [
 	"stepGenerateToken",
 	"stepDownloadModule",
 	"stepConfigure",
@@ -42,16 +36,7 @@ const STEP_KEYS: Array<keyof ConnectorTranslationKeys> = [
 	"stepRunSync",
 ];
 
-// Help TypeScript extract keys from the wizard translations
-type ConnectorTranslationKeys = {
-	stepGenerateToken: string;
-	stepDownloadModule: string;
-	stepConfigure: string;
-	stepTestConnection: string;
-	stepRunSync: string;
-};
-
-const SOURCE_LABELS: Record<SourceType, string> = {
+const SOURCE_LABELS: Record<string, string> = {
 	prestashop: "PrestaShop",
 	bitrix: "1C-Bitrix",
 	directApi: "Direct API",
@@ -68,9 +53,7 @@ export function ConnectorWizard({
 	const [rawKey, setRawKey] = useState<string | null>(null);
 	const [copied, setCopied] = useState(false);
 	const [testing, setTesting] = useState(false);
-	const [testResult, setTestResult] = useState<"idle" | "success" | "failed">(
-		"idle",
-	);
+	const [testResult, setTestResult] = useState<"idle" | "success" | "failed">("idle");
 	const [syncing, setSyncing] = useState(false);
 
 	const sourceLabel = SOURCE_LABELS[source];
@@ -85,17 +68,16 @@ export function ConnectorWizard({
 
 	const handleGenerateToken = async () => {
 		try {
-			const result = await orpc.search.createConnectorToken.mutate({
+			const result = await orpc.search.createConnectorToken.call({
 				organizationId,
 				slug: "products",
 				name: `${sourceLabel} Connector`,
 			});
 			setRawKey(result.rawKey);
 			setStep(2);
-		} catch (error) {
-			toastError(
-				error instanceof Error ? error.message : "Failed to generate token",
-			);
+		} catch (error: unknown) {
+			const msg = error instanceof Error ? error.message : "Failed to generate token";
+			throw new Error(msg);
 		}
 	};
 
@@ -105,7 +87,7 @@ export function ConnectorWizard({
 			await navigator.clipboard.writeText(rawKey);
 			setCopied(true);
 		} catch {
-			// Fallback for environments without clipboard API
+			// Fallback
 		}
 	};
 
@@ -113,12 +95,10 @@ export function ConnectorWizard({
 		setTesting(true);
 		setTestResult("idle");
 		try {
-			// Simulate a heartbeat check — the real endpoint would be called by the CMS module
-			// For now, we check if any connector tokens exist as a proxy
-			const tokens = await orpc.search.listConnectorTokens.query({
+			const tokens = await orpc.search.listConnectorTokens.call({
 				organizationId,
 			});
-			const activeToken = tokens.find((t) => !t.revokedAt);
+			const activeToken = tokens.find((token) => !token.revokedAt);
 			if (activeToken) {
 				setTestResult("success");
 			} else {
@@ -134,27 +114,22 @@ export function ConnectorWizard({
 	const handleRunSync = async () => {
 		setSyncing(true);
 		try {
-			// Trigger a sync via the import endpoint
-			await orpc.search.importDocuments.mutate({
+			await orpc.search.importDocuments.call({
 				organizationId,
 				slug: "products",
 				documents: [],
 			});
-			toastSuccess(t("search.connector.syncSuccess"));
 			handleClose();
-		} catch (error) {
-			toastError(
-				error instanceof Error ? error.message : "Sync failed to start",
-			);
+		} catch (error: unknown) {
+			const msg = error instanceof Error ? error.message : "Sync failed to start";
+			throw new Error(msg);
 		} finally {
 			setSyncing(false);
 		}
 	};
 
 	const apiUrl =
-		typeof window !== "undefined"
-			? `${window.location.protocol}//${window.location.host}`
-			: "";
+		typeof window !== "undefined" ? `${window.location.protocol}//${window.location.host}` : "";
 
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
@@ -163,21 +138,19 @@ export function ConnectorWizard({
 					<DialogTitle>
 						{t("search.connector.wizardTitle", { source: sourceLabel })}
 					</DialogTitle>
-					<DialogDescription>
-						{t("search.connector.subtitle")}
-					</DialogDescription>
+					<DialogDescription>{t("search.connector.subtitle")}</DialogDescription>
 				</DialogHeader>
 
 				{/* Step indicator */}
 				<div className="gap-2 flex items-center justify-center">
-					{STEP_ICONS.map((_, i) => {
+					{STEP_KEYS.map((_, i) => {
 						const stepNum = i + 1;
 						const isActive = stepNum === step;
 						const isDone = stepNum < step;
 						return (
 							<div key={stepNum} className="gap-1.5 flex items-center">
 								<div
-									className={`size-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
+									className={`size-8 text-sm font-medium flex items-center justify-center rounded-full transition-colors ${
 										isActive
 											? "bg-primary text-primary-foreground"
 											: isDone
@@ -190,15 +163,15 @@ export function ConnectorWizard({
 								<span
 									className={`text-xs ${
 										isActive
-											? "text-foreground font-medium"
+											? "font-medium text-foreground"
 											: "text-muted-foreground"
 									}`}
 								>
 									{t(`search.connector.${STEP_KEYS[i]}`)}
 								</span>
-								{i < STEP_ICONS.length - 1 && (
+								{i < STEP_KEYS.length - 1 && (
 									<div
-										className={`mx-1 h-px w-6 ${
+										className={`mx-1 w-6 h-px ${
 											isDone ? "bg-primary/40" : "bg-muted-foreground/20"
 										}`}
 									/>
@@ -239,7 +212,7 @@ export function ConnectorWizard({
 													: t("search.apiKeys.copy")}
 											</Button>
 										</div>
-										<div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">
+										<div className="border-amber-300 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200 rounded-md border">
 											{t("search.connector.tokenCopyWarning")}
 										</div>
 										<Button
@@ -272,9 +245,7 @@ export function ConnectorWizard({
 								<CardTitle className="text-base">
 									{t("search.connector.stepDownloadModule")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.connector.subtitle")}
-								</CardDescription>
+								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								{source === "prestashop" || source === "directApi" ? (
@@ -310,7 +281,7 @@ export function ConnectorWizard({
 								<Button
 									variant="primary"
 									onClick={() => setStep(3)}
-									className="w-full mt-2"
+									className="mt-2 w-full"
 								>
 									{t("search.connector.stepConfigure")} →
 								</Button>
@@ -327,15 +298,11 @@ export function ConnectorWizard({
 								<CardTitle className="text-base">
 									{t("search.connector.stepConfigure")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.connector.subtitle")}
-								</CardDescription>
+								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div className="space-y-2">
-									<label className="text-sm font-medium">
-										{t("search.apiKeysPage.title")} — API URL
-									</label>
+									<label className="text-sm font-medium">API URL</label>
 									<Input value={apiUrl} readOnly className="font-mono text-xs" />
 								</div>
 								<div className="space-y-2">
@@ -348,11 +315,11 @@ export function ConnectorWizard({
 										className="font-mono text-xs"
 									/>
 								</div>
-								<div className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
+								<div className="p-3 text-sm rounded-md bg-muted text-muted-foreground">
 									<p className="font-medium mb-1">
 										{t("search.connector.stepConfigure")}
 									</p>
-									<ol className="space-y-1 list-inside list-decimal text-xs">
+									<ol className="space-y-1 text-xs list-inside list-decimal">
 										<li>
 											{source === "prestashop"
 												? "Paste the API URL into the AACsearch module settings in your PrestaShop admin."
@@ -362,7 +329,7 @@ export function ConnectorWizard({
 										</li>
 										<li>
 											{source === "directApi"
-												? "Include the token in the Authorization header: Bearer &lt;token&gt;"
+												? "Include the token in the Authorization header: Bearer <token>"
 												: "Paste the connector token into the module settings field."}
 										</li>
 										<li>Save the configuration.</li>
@@ -388,9 +355,7 @@ export function ConnectorWizard({
 								<CardTitle className="text-base">
 									{t("search.connector.stepTestConnection")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.connector.subtitle")}
-								</CardDescription>
+								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								{testResult === "idle" ? (
@@ -447,14 +412,11 @@ export function ConnectorWizard({
 								<CardTitle className="text-base">
 									{t("search.connector.stepRunSync")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.connector.subtitle")}
-								</CardDescription>
+								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<p className="text-sm text-muted-foreground">
-									Trigger a full synchronization to index all products from your
-									CMS into AACsearch.
+									Trigger a full sync to index all products from your CMS.
 								</p>
 								<Button
 									variant="primary"

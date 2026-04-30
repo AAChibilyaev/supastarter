@@ -62,7 +62,7 @@ export const searchApp = new Hono()
 			void recordSearchUsage({
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
-				type: "search",
+				type: "search_query",
 			}).catch((error) => logger.error("Could not record search usage", { error }));
 
 			return c.json({
@@ -110,7 +110,7 @@ export const searchApp = new Hono()
 			void recordSearchUsage({
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
-				type: "search",
+				type: "search_query",
 				count: parsed.data.searches.length,
 			}).catch((error) => logger.error("Could not record multi-search usage", { error }));
 

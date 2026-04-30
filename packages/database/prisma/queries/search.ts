@@ -1,9 +1,38 @@
 import { db } from "../client";
 import type { Prisma } from "../generated/client";
 
+export interface ConnectorSyncJobEvent {
+	timestamp: string;
+	message: string;
+	level: "info" | "warn" | "error";
+}
+
+export interface ConnectorSyncJobView {
+	id: string;
+	type: "full" | "delta";
+	status: "running" | "completed" | "failed";
+	indexId: string;
+	organizationId: string;
+	startedAt: string;
+	finishedAt: string | null;
+	duration: string | null;
+	itemsCount: number;
+	failuresCount: number;
+	events: ConnectorSyncJobEvent[];
+}
+
 export interface SearchOwnerScope {
 	organizationId?: string;
 }
+
+export const SEARCH_USAGE_EVENT_TYPES = {
+	searchQuery: "search_query",
+	ingestWrite: "ingest_write",
+	documentsIndexed: "documents_indexed",
+} as const;
+
+export type SearchUsageMetricType =
+	(typeof SEARCH_USAGE_EVENT_TYPES)[keyof typeof SEARCH_USAGE_EVENT_TYPES];
 
 function toOwnerWhere(scope: SearchOwnerScope) {
 	return { organizationId: scope.organizationId ?? "" };
@@ -166,7 +195,7 @@ export async function touchSearchApiKey(id: string) {
 export async function recordSearchUsage(input: {
 	indexId: string;
 	organizationId: string;
-	type: "search" | "ingest" | "ingest_enqueued";
+	type: SearchUsageMetricType;
 	count?: number;
 }) {
 	return db.searchUsageEvent.create({

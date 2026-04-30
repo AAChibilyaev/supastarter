@@ -67,7 +67,7 @@ export const documentsApp = new Hono()
 			await recordSearchUsage({
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
-				type: "ingest_enqueued",
+				type: "ingest_write",
 				count: 1,
 			});
 
@@ -126,7 +126,7 @@ export const documentsApp = new Hono()
 			await recordSearchUsage({
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
-				type: "ingest_enqueued",
+				type: "ingest_write",
 				count: queued,
 			});
 

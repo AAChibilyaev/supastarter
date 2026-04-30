@@ -232,7 +232,7 @@ export const connectorApp = new Hono()
 		}
 
 		const docs = parsed.data.products.map(normalizeProduct);
-		const job = createSyncJob({
+		const job = await createSyncJob({
 			type: "full",
 			indexId: verified.indexId,
 			organizationId: verified.organizationId,
@@ -245,10 +245,10 @@ export const connectorApp = new Hono()
 				"upsert",
 				docs as Prisma.InputJsonValue[],
 			);
-			completeSyncJob(job.id, { itemsCount: docs.length });
+			await completeSyncJob(job.id, { itemsCount: docs.length });
 		} catch (error) {
 			logger.error("Full sync enqueue failed", { error, projectId: verified.organizationId });
-			failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
+			await failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
 			return c.json({ error: "sync_failed" }, 502);
 		}
 
@@ -277,7 +277,7 @@ export const connectorApp = new Hono()
 		}
 
 		const docs = parsed.data.products.map(normalizeProduct);
-		const job = createSyncJob({
+		const job = await createSyncJob({
 			type: "delta",
 			indexId: verified.indexId,
 			organizationId: verified.organizationId,
@@ -290,13 +290,13 @@ export const connectorApp = new Hono()
 				"upsert",
 				docs as Prisma.InputJsonValue[],
 			);
-			completeSyncJob(job.id, { itemsCount: docs.length });
+			await completeSyncJob(job.id, { itemsCount: docs.length });
 		} catch (error) {
 			logger.error("Delta sync enqueue failed", {
 				error,
 				projectId: verified.organizationId,
 			});
-			failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
+			await failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
 			return c.json({ error: "sync_failed" }, 502);
 		}
 

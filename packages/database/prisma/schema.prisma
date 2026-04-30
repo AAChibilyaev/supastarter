@@ -152,6 +152,7 @@ model Organization {
   searchApiKeys      SearchApiKey[]
   searchUsageEvents  SearchUsageEvent[]
   searchIngestBuffer SearchIngestBuffer[]
+  connectorSyncJobs  SearchConnectorSyncJob[]
   aiWallet           AiWallet?
   knowledgeSpaces    KnowledgeSpace[]
 
@@ -271,6 +272,7 @@ model SearchIndex {
   apiKeys      SearchApiKey[]
   usageEvents  SearchUsageEvent[]
   ingestBuffer SearchIngestBuffer[]
+  syncJobs     SearchConnectorSyncJob[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -340,6 +342,29 @@ model SearchIngestBuffer {
 
   @@index([indexId, processedAt, nextRetryAt])
   @@map("search_ingest_buffer")
+}
+
+model SearchConnectorSyncJob {
+  id             String       @id @default(cuid())
+  indexId        String
+  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String
+  status         String
+  startedAt      DateTime     @default(now())
+  finishedAt     DateTime?
+  durationMs     Int?
+  itemsCount     Int          @default(0)
+  failuresCount  Int          @default(0)
+  lastError      String?
+  events         Json         @default("[]")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId, startedAt(sort: Desc)])
+  @@index([indexId, startedAt(sort: Desc)])
+  @@map("search_connector_sync_job")
 }
 
 enum KnowledgeOwnerType {

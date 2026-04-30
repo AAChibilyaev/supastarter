@@ -46,7 +46,7 @@ export const upsertDocument = protectedProcedure
 			await recordSearchUsage({
 				indexId: index.id,
 				organizationId: index.organizationId,
-				type: "ingest_enqueued",
+				type: "ingest_write",
 				count: 1,
 			});
 

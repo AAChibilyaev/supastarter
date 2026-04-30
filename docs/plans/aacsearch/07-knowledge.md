@@ -15,17 +15,17 @@ This doc takes path **(b)** and clarifies the boundary.
 
 ## 7.2 The boundary — Search vs. Knowledge
 
-| | **Search (Typesense)** | **Knowledge (RAG/GraphRAG)** |
-|---|---|---|
-| **Audience** | End-user on storefront (anonymous shopper) | Logged-in operator (support agent, sales, internal team) |
-| **Backed by** | Typesense collections + alias swap | Prisma `KnowledgeChunk` table + `embedding: Json?` column + `KnowledgeGraph{Node,Edge}` |
-| **Query mode** | Keyword + facet + sort + filter | Natural-language question → cited paragraphs |
-| **Latency target** | < 100ms p95 | < 5s for `ask`, < 30s for `ingest-file` |
-| **Cost model** | Free/Starter/Pro per search-units (`@repo/payments/lib/entitlements`) | Per-token model spend (uses `@repo/billing-wallet` kopecks ledger) |
-| **Auth** | `ss_search_*` / `ss_scoped_*` Bearer (browser-safe) | Better Auth session cookie (oRPC), org or user owner |
-| **Public-handler** | `packages/api/modules/search/public-handler.ts` (CORS open) | None — never public-handler. All access via authenticated oRPC |
-| **Docs schema** | One canonical `ProductDocument` ([§3.3](03-domain-api.md)) | Free-form chunked text + metadata; sourceType-aware extraction |
-| **Reindex path** | Alias swap, zero downtime ([R5 in SKILL](../../.claude/skills/supastarter-nextjs-skill/SKILL.md)) | Per-document reembed; chunks have stable `(documentId, chunkIndex)` |
+|                    | **Search (Typesense)**                                                                            | **Knowledge (RAG/GraphRAG)**                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Audience**       | End-user on storefront (anonymous shopper)                                                        | Logged-in operator (support agent, sales, internal team)                                |
+| **Backed by**      | Typesense collections + alias swap                                                                | Prisma `KnowledgeChunk` table + `embedding: Json?` column + `KnowledgeGraph{Node,Edge}` |
+| **Query mode**     | Keyword + facet + sort + filter                                                                   | Natural-language question → cited paragraphs                                            |
+| **Latency target** | < 100ms p95                                                                                       | < 5s for `ask`, < 30s for `ingest-file`                                                 |
+| **Cost model**     | Free/Starter/Pro per search-units (`@repo/payments/lib/entitlements`)                             | Per-token model spend (uses `@repo/billing-wallet` kopecks ledger)                      |
+| **Auth**           | `ss_search_*` / `ss_scoped_*` Bearer (browser-safe)                                               | Better Auth session cookie (oRPC), org or user owner                                    |
+| **Public-handler** | `packages/api/modules/search/public-handler.ts` (CORS open)                                       | None — never public-handler. All access via authenticated oRPC                          |
+| **Docs schema**    | One canonical `ProductDocument` ([§3.3](03-domain-api.md))                                        | Free-form chunked text + metadata; sourceType-aware extraction                          |
+| **Reindex path**   | Alias swap, zero downtime ([R5 in SKILL](../../.claude/skills/supastarter-nextjs-skill/SKILL.md)) | Per-document reembed; chunks have stable `(documentId, chunkIndex)`                     |
 
 **Hard rule**: Knowledge does **not** replace Search. A storefront customer browsing products still hits Typesense. Knowledge powers a separate "Ask" surface in the SaaS dashboard for the org's logged-in users.
 
@@ -56,17 +56,17 @@ DataSource              ← upstream ingestion source (file / URL / etc.)
 
 `packages/api/modules/knowledge/router.ts` exposes 9 procedures:
 
-| Procedure | Type | Purpose |
-|---|---|---|
-| `createSpace` | mutation | Create a Knowledge space (org or user-owned) |
-| `listSpaces` | query | List spaces caller can access |
-| `createSource` | mutation | Register an upstream `DataSource` |
-| `listSources` | query | List sources in a space |
-| `ingestFile` | mutation | Ingest one file → chunks + embeddings + graph build |
-| `listIngestionJobs` | query | Status of recent ingestion runs |
-| `ask` | mutation | Q&A with citations |
-| `graphragExplain` | query | Show retrieval path through GraphNodes/Edges |
-| `usageMetrics` | query | Chunks indexed, queries asked, token spend |
+| Procedure           | Type     | Purpose                                             |
+| ------------------- | -------- | --------------------------------------------------- |
+| `createSpace`       | mutation | Create a Knowledge space (org or user-owned)        |
+| `listSpaces`        | query    | List spaces caller can access                       |
+| `createSource`      | mutation | Register an upstream `DataSource`                   |
+| `listSources`       | query    | List sources in a space                             |
+| `ingestFile`        | mutation | Ingest one file → chunks + embeddings + graph build |
+| `listIngestionJobs` | query    | Status of recent ingestion runs                     |
+| `ask`               | mutation | Q&A with citations                                  |
+| `graphragExplain`   | query    | Show retrieval path through GraphNodes/Edges        |
+| `usageMetrics`      | query    | Chunks indexed, queries asked, token spend          |
 
 Mounted in `packages/api/orpc/router.ts` as `knowledge`.
 
@@ -74,7 +74,7 @@ Mounted in `packages/api/orpc/router.ts` as `knowledge`.
 
 - **Org-scope route**: `apps/saas/app/(authenticated)/(main)/(organizations)/[organizationSlug]/knowledge/page.tsx`
 - **Account-scope route**: `apps/saas/app/(authenticated)/(main)/(account)/knowledge/page.tsx`
-- **Component**: `apps/saas/modules/search/components/KnowledgeWorkbench.tsx` *(co-located with search components for now; consider extracting to `apps/saas/modules/knowledge/` if surface grows)*
+- **Component**: `apps/saas/modules/search/components/KnowledgeWorkbench.tsx` _(co-located with search components for now; consider extracting to `apps/saas/modules/knowledge/` if surface grows)_
 
 ### 7.3.4 Sidebar IA
 
@@ -105,29 +105,29 @@ These complement [SKILL.md Hard Invariants](../../.claude/skills/supastarter-nex
 
 ## 7.6 Open questions / what's still needed
 
-| # | Question | Current state |
-|---|---|---|
-| 1 | Vector index — Postgres pgvector? External (Pinecone/Qdrant)? Or in-Json scan? | Currently `embedding: Json?` — works at small scale, won't scale past ~10k chunks/space without a real ANN index |
-| 2 | Embedding provider abstraction | Lives somewhere in `packages/ai` or `packages/ai-core`. Verify single source of truth before scale |
-| 3 | Chunking strategy per `mimeType` | `ingestFile` exists; chunking logic location unknown — likely in `lib/connectors/` shared with search OR new `lib/knowledge/` |
-| 4 | Knowledge graph build (GraphRAG) | `GraphNode`/`GraphEdge` tables exist; build step happens during `ingestFile`. Algorithm choice + edge-types schema TBD |
-| 5 | Citation rendering in `ask` UI | UI must show "from doc X, chunk Y" with deep-link. Verify in `KnowledgeWorkbench.tsx` |
-| 6 | Rate limit on `ask` | Public-search has per-key per-minute limit. Knowledge currently has only Better Auth + plan quota. Add per-user rate limit if abuse seen |
-| 7 | File size / type allowlist | `ingestFile` MUST validate. Verify the implementation rejects > 50MB, non-text mime types, etc. |
-| 8 | Retention | When user deletes a `KnowledgeSpace` or `DataSource`, all chunks/docs/graph cascade-delete via Prisma `onDelete: Cascade`. Confirm cron / soft-delete policy |
-| 9 | Admin observability | `admin/knowledge` route doesn't exist yet. Cross-org listing for platform admin TBD |
+| #   | Question                                                                       | Current state                                                                                                                                                |
+| --- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Vector index — Postgres pgvector? External (Pinecone/Qdrant)? Or in-Json scan? | Currently `embedding: Json?` — works at small scale, won't scale past ~10k chunks/space without a real ANN index                                             |
+| 2   | Embedding provider abstraction                                                 | Lives somewhere in `packages/ai` or `packages/ai-core`. Verify single source of truth before scale                                                           |
+| 3   | Chunking strategy per `mimeType`                                               | `ingestFile` exists; chunking logic location unknown — likely in `lib/connectors/` shared with search OR new `lib/knowledge/`                                |
+| 4   | Knowledge graph build (GraphRAG)                                               | `GraphNode`/`GraphEdge` tables exist; build step happens during `ingestFile`. Algorithm choice + edge-types schema TBD                                       |
+| 5   | Citation rendering in `ask` UI                                                 | UI must show "from doc X, chunk Y" with deep-link. Verify in `KnowledgeWorkbench.tsx`                                                                        |
+| 6   | Rate limit on `ask`                                                            | Public-search has per-key per-minute limit. Knowledge currently has only Better Auth + plan quota. Add per-user rate limit if abuse seen                     |
+| 7   | File size / type allowlist                                                     | `ingestFile` MUST validate. Verify the implementation rejects > 50MB, non-text mime types, etc.                                                              |
+| 8   | Retention                                                                      | When user deletes a `KnowledgeSpace` or `DataSource`, all chunks/docs/graph cascade-delete via Prisma `onDelete: Cascade`. Confirm cron / soft-delete policy |
+| 9   | Admin observability                                                            | `admin/knowledge` route doesn't exist yet. Cross-org listing for platform admin TBD                                                                          |
 
 ## 7.7 Decision gates (when X, do Y)
 
 Add to [SKILL.md Decision gates](../../.claude/skills/supastarter-nextjs-skill/SKILL.md) on next refresh:
 
-| If the change touches… | Mandatory follow-ups |
-|---|---|
-| `packages/api/modules/knowledge/*` | Owner check via `ownerType + ownerId`; no public-handler exposure; cite-or-refuse on `ask`; embedding values stay server-side |
-| `KnowledgeChunk.embedding` provider/model change | Re-embed job for ALL existing chunks (track `metadata.embeddingModel`); never silently mix models in one space |
-| `KnowledgeWorkbench.tsx` | Citations rendered with deep-links to `KnowledgeDocument` view; ingestion progress polled via `listIngestionJobs` |
-| Adding a new `KnowledgeSourceType` enum value | Schema migration (additive enum); ingestion logic in `ingestFile` extended; UI shows new source type in `createSource` form |
-| Cross-org admin view of Knowledge | Add `admin/knowledge/page.tsx`; needs new query helper that bypasses owner check (admin-only) |
+| If the change touches…                           | Mandatory follow-ups                                                                                                          |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `packages/api/modules/knowledge/*`               | Owner check via `ownerType + ownerId`; no public-handler exposure; cite-or-refuse on `ask`; embedding values stay server-side |
+| `KnowledgeChunk.embedding` provider/model change | Re-embed job for ALL existing chunks (track `metadata.embeddingModel`); never silently mix models in one space                |
+| `KnowledgeWorkbench.tsx`                         | Citations rendered with deep-links to `KnowledgeDocument` view; ingestion progress polled via `listIngestionJobs`             |
+| Adding a new `KnowledgeSourceType` enum value    | Schema migration (additive enum); ingestion logic in `ingestFile` extended; UI shows new source type in `createSource` form   |
+| Cross-org admin view of Knowledge                | Add `admin/knowledge/page.tsx`; needs new query helper that bypasses owner check (admin-only)                                 |
 
 ## 7.8 Out of scope (for the Knowledge surface specifically)
 

@@ -38,11 +38,17 @@ export const usageSummary = protectedProcedure
 
 		// _sum.count returns number (Int field), transform for BigInt safety
 		const searchesUsed = aggregated
-			.filter((row) => row.type === "search" || row.type === "search_query")
+			.filter((row) => row.type === "search_query" || row.type === "search")
 			.reduce((acc, row) => acc + (row._sum.count ?? 0), 0);
 
 		const documentsIndexed = aggregated
-			.filter((row) => row.type === "ingest" || (row.type as string) === "ingest_enqueued")
+			.filter(
+				(row) =>
+					row.type === "ingest_write" ||
+					row.type === "documents_indexed" ||
+					(row.type as string) === "ingest" ||
+					(row.type as string) === "ingest_enqueued",
+			)
 			.reduce((acc, row) => acc + (row._sum.count ?? 0), 0);
 
 		// Get limits from plan config

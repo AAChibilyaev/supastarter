@@ -1,117 +1,107 @@
-/**
- * In-memory sync jobs tracker for CMS connectors.
- * Jobs are ephemeral (lost on restart) — sufficient for dashboard display.
- */
+import type { ConnectorSyncJobView } from "@repo/database";
 
-export interface SyncJob {
-	id: string;
-	type: "full" | "delta";
-	status: "running" | "completed" | "failed";
-	indexId: string;
-	organizationId: string;
-	startedAt: string;
-	finishedAt: string | null;
-	duration: string | null;
-	itemsCount: number;
-	failuresCount: number;
-	events: Array<{
-		timestamp: string;
-		message: string;
-		level: "info" | "warn" | "error";
-	}>;
-}
+export type SyncJob = ConnectorSyncJobView;
 
-const jobs = new Map<string, SyncJob>();
-const MAX_JOBS = 50;
+// In-memory ephemeral sync job storage.
+// Sync jobs are lost on server restart — acceptable for MVP since
+// CMS modules retry on heartbeat fail. When this becomes a pain
+// point, DB-unfreeze a SearchConnectorSyncJob table.
+const jobs: Map<string, SyncJob> = new Map();
 
-function generateJobId(): string {
-	return `sync_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
+let nextJobId = 1;
 
-export function createSyncJob(input: {
+export async function createSyncJob(input: {
 	type: "full" | "delta";
 	indexId: string;
 	organizationId: string;
-}): SyncJob {
-	// Evict oldest if at capacity
-	if (jobs.size >= MAX_JOBS) {
-		const oldest = [...jobs.entries()].sort(
-			([, a], [, b]) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime(),
-		)[0];
-		if (oldest) jobs.delete(oldest[0]);
-	}
-
+}): Promise<SyncJob> {
+	const id = `sync_${nextJobId++}_${Date.now()}`;
+	const now = new Date().toISOString();
 	const job: SyncJob = {
-		id: generateJobId(),
+		id,
 		type: input.type,
 		status: "running",
 		indexId: input.indexId,
 		organizationId: input.organizationId,
-		startedAt: new Date().toISOString(),
+		startedAt: now,
 		finishedAt: null,
 		duration: null,
 		itemsCount: 0,
 		failuresCount: 0,
 		events: [
 			{
-				timestamp: new Date().toISOString(),
+				timestamp: now,
 				message: `${input.type === "full" ? "Full" : "Delta"} sync started`,
 				level: "info",
 			},
 		],
 	};
-	jobs.set(job.id, job);
+	jobs.set(id, job);
+	// Keep only last 50
+	if (jobs.size > 50) {
+		const oldest = jobs.keys().next().value;
+		if (oldest) jobs.delete(oldest);
+	}
 	return job;
 }
 
-export function completeSyncJob(
+export async function completeSyncJob(
 	jobId: string,
 	result: { itemsCount: number; failuresCount?: number },
-): SyncJob | null {
+): Promise<SyncJob | null> {
 	const job = jobs.get(jobId);
 	if (!job) return null;
-
-	job.status = "completed";
-	job.finishedAt = new Date().toISOString();
-	job.itemsCount = result.itemsCount;
-	job.failuresCount = result.failuresCount ?? 0;
-	const start = new Date(job.startedAt).getTime();
-	const end = new Date(job.finishedAt).getTime();
-	const ms = end - start;
-	job.duration = ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`;
-	job.events.push({
-		timestamp: job.finishedAt,
-		message: `Sync completed: ${job.itemsCount} items processed`,
-		level: "info",
-	});
-	return job;
+	const finishedAt = new Date().toISOString();
+	const startedMs = new Date(job.startedAt).getTime();
+	const durationMs = Date.now() - startedMs;
+	const updated: SyncJob = {
+		...job,
+		status: "completed",
+		finishedAt,
+		duration: durationMs >= 1000 ? `${(durationMs / 1000).toFixed(1)}s` : `${durationMs}ms`,
+		itemsCount: result.itemsCount,
+		failuresCount: result.failuresCount ?? 0,
+		events: [
+			...job.events,
+			{
+				timestamp: finishedAt,
+				message: `Sync completed: ${result.itemsCount} items processed`,
+				level: "info",
+			},
+		],
+	};
+	jobs.set(jobId, updated);
+	return updated;
 }
 
-export function failSyncJob(jobId: string, error: string): SyncJob | null {
+export async function failSyncJob(jobId: string, error: string): Promise<SyncJob | null> {
 	const job = jobs.get(jobId);
 	if (!job) return null;
-
-	job.status = "failed";
-	job.finishedAt = new Date().toISOString();
-	const start = new Date(job.startedAt).getTime();
-	const end = new Date(job.finishedAt).getTime();
-	const ms = end - start;
-	job.duration = ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`;
-	job.events.push({
-		timestamp: job.finishedAt,
-		message: `Sync failed: ${error}`,
-		level: "error",
-	});
-	return job;
+	const finishedAt = new Date().toISOString();
+	const startedMs = new Date(job.startedAt).getTime();
+	const durationMs = Date.now() - startedMs;
+	const updated: SyncJob = {
+		...job,
+		status: "failed",
+		finishedAt,
+		duration: durationMs >= 1000 ? `${(durationMs / 1000).toFixed(1)}s` : `${durationMs}ms`,
+		events: [
+			...job.events,
+			{
+				timestamp: finishedAt,
+				message: `Sync failed: ${error}`,
+				level: "error",
+			},
+		],
+	};
+	jobs.set(jobId, updated);
+	return updated;
 }
 
-export function listSyncJobs(organizationId: string): SyncJob[] {
-	return [...jobs.values()]
+export async function listSyncJobs(organizationId: string): Promise<SyncJob[]> {
+	const all = Array.from(jobs.values());
+	return all
 		.filter((j) => j.organizationId === organizationId)
-		.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime())
-		.slice(0, MAX_JOBS);
-}
-
-export function getSyncJob(jobId: string): SyncJob | undefined {
-	return jobs.get(jobId);
+		.sort((a, b) => b.startedAt.localeCompare(a.startedAt))
+		.slice(0, 50);
 }

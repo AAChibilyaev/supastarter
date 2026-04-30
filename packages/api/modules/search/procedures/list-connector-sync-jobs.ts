@@ -10,7 +10,7 @@ export const listConnectorSyncJobs = protectedProcedure
 		path: "/search/connector-sync-jobs",
 		tags: ["Search"],
 		summary: "List connector sync jobs",
-		description: "Returns recent connector sync jobs (full/delta) tracked in-memory.",
+		description: "Returns recent connector sync jobs (full/delta) stored in database.",
 	})
 	.input(
 		z.object({
@@ -19,5 +19,5 @@ export const listConnectorSyncJobs = protectedProcedure
 	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
-		return listSyncJobs(organizationId);
+		return await listSyncJobs(organizationId);
 	});

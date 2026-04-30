@@ -82,7 +82,7 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 		await recordSearchUsage({
 			indexId: index.id,
 			organizationId: index.organizationId,
-			type: "ingest",
+			type: "documents_indexed",
 			count: successIds.length,
 		}).catch((err) => logger.error("flushSearchIngestBuffer: usage record failed", { err }));
 	}

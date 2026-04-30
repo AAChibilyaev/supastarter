@@ -10,7 +10,8 @@ interface QuotaSnapshot {
 	planId: string;
 	searchPerMonth: number;
 	indexedDocuments: number;
-	searchUsedThisPeriod: number;
+	searchQueriesUsedThisPeriod: number;
+	indexedDocumentsUsedThisPeriod: number;
 	periodStart: Date;
 	periodEnd: Date;
 }
@@ -51,15 +52,25 @@ export async function resolveOrgPlanQuota(organizationId: string): Promise<Quota
 	const { periodStart, periodEnd } = monthBounds();
 
 	const usage = await aggregateSearchUsage(organizationId, periodStart);
-	const searchUsedThisPeriod = usage
-		.filter((row) => row.type === "search")
+	const searchQueriesUsedThisPeriod = usage
+		.filter((row) => row.type === "search_query" || row.type === "search")
+		.reduce((acc, row) => acc + row.total, 0);
+	const indexedDocumentsUsedThisPeriod = usage
+		.filter(
+			(row) =>
+				row.type === "ingest_write" ||
+				row.type === "documents_indexed" ||
+				row.type === "ingest_enqueued" ||
+				row.type === "ingest",
+		)
 		.reduce((acc, row) => acc + row.total, 0);
 
 	const snapshot: QuotaSnapshot = {
 		planId,
 		searchPerMonth: limits.searchPerMonth,
 		indexedDocuments: limits.indexedDocuments,
-		searchUsedThisPeriod,
+		searchQueriesUsedThisPeriod,
+		indexedDocumentsUsedThisPeriod,
 		periodStart,
 		periodEnd,
 	};

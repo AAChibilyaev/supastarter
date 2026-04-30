@@ -66,13 +66,16 @@ export async function gateV1Request(
 	// Check org-level quota for write/ingest operations
 	if (requiredScope === "ingest" || requiredScope === "admin") {
 		const quota = await resolveOrgPlanQuota(verified.organizationId);
-		if (quota.indexedDocuments > 0 && quota.searchUsedThisPeriod >= quota.indexedDocuments) {
+		if (
+			quota.indexedDocuments > 0 &&
+			quota.indexedDocumentsUsedThisPeriod >= quota.indexedDocuments
+		) {
 			return c.json(
 				{
 					error: "quota_exceeded",
 					message: "Monthly indexing quota exceeded",
 					limit: quota.indexedDocuments,
-					used: quota.searchUsedThisPeriod,
+					used: quota.indexedDocumentsUsedThisPeriod,
 					reset: quota.periodEnd,
 				},
 				402,

@@ -1,13 +1,5 @@
 "use client";
 
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@repo/ui/components/table";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -17,16 +9,21 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@repo/ui/components/table";
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { orpc } from "@shared/lib/orpc-query-utils";
-
-import {
-	ConnectorCard,
-	type ConnectorStatus,
-	type SourceType,
-} from "./ConnectorCard";
+import { ConnectorCard, type ConnectorStatus, type SourceType } from "./ConnectorCard";
 import { ConnectorWizard } from "./ConnectorWizard";
 import { SyncJobsTable } from "./SyncJobsTable";
 
@@ -47,24 +44,27 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	const [wizardOpen, setWizardOpen] = useState(false);
 	const [wizardSource, setWizardSource] = useState<SourceType>("prestashop");
 
-	const { data: indexes, isLoading: indexesLoading } =
-		orpc.search.listIndexes.useQuery({
+	const { data: indexes, isLoading: indexesLoading } = useQuery(
+		orpc.search.listIndexes.queryOptions({
 			input: { organizationId },
-		});
+		}),
+	);
 
-	const { data: tokens, isLoading: tokensLoading } =
-		orpc.search.listConnectorTokens.useQuery({
+	const { data: tokens, isLoading: tokensLoading } = useQuery(
+		orpc.search.listConnectorTokens.queryOptions({
 			input: { organizationId },
-		});
+		}),
+	);
 
-	const { data: syncJobs, isLoading: syncJobsLoading } =
-		orpc.search.listConnectorSyncJobs.useQuery({
+	const { data: syncJobs, isLoading: syncJobsLoading } = useQuery(
+		orpc.search.listConnectorSyncJobs.queryOptions({
 			input: { organizationId },
-		});
+		}),
+	);
 
 	const isNewOrg = !indexes || indexes.length === 0;
 
-	const activeTokens = tokens?.filter((t) => !t.revokedAt) ?? [];
+	const activeTokens = (tokens ?? []).filter((t) => !t.revokedAt);
 	const hasAnyConnector = activeTokens.length > 0;
 
 	const sourceStatusMap: Record<SourceType, ConnectorStatus> = {
@@ -77,12 +77,12 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	if (syncJobs && syncJobs.length > 0) {
 		const lastJob = syncJobs[0];
 		const tokenName = lastJob.indexId
-			? activeTokens.find(
-					(t) => t.index?.slug === lastJob.indexId || t.id === lastJob.indexId,
-				)?.name ?? ""
-				: "Direct API";
+			? (activeTokens.find(
+					(token) =>
+						token.index?.slug === lastJob.indexId || token.id === lastJob.indexId,
+				)?.name ?? "")
+			: "Direct API";
 
-		// Find applicable source based on token name
 		const sourceKey = tokenName.toLowerCase().includes("prestashop")
 			? "prestashop"
 			: tokenName.toLowerCase().includes("bitrix")
@@ -94,7 +94,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			lastSync: lastJob.finishedAt ?? lastJob.startedAt,
 			lastError:
 				lastJob.status === "failed"
-					? lastJob.events.find((e) => e.level === "error")?.message ?? null
+					? (lastJob.events?.find((e) => e.level === "error")?.message ?? null)
 					: null,
 		};
 	}
@@ -104,16 +104,30 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 		setWizardOpen(true);
 	};
 
+	const isLoading = indexesLoading || tokensLoading || syncJobsLoading;
+
+	if (isLoading) {
+		return (
+			<div className="space-y-6">
+				<div className="space-y-2">
+					<Skeleton className="h-8 w-48" />
+					<Skeleton className="h-4 w-96" />
+				</div>
+				<div className="gap-6 md:grid-cols-3 grid">
+					{CONNECTOR_SOURCES.map((_, i) => (
+						<Skeleton key={i} className="h-40 rounded-xl" />
+					))}
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-6">
 			{/* Page header */}
 			<div>
-				<h1 className="text-3xl font-bold tracking-tight">
-					{t("search.connector.title")}
-				</h1>
-				<p className="mt-1 text-muted-foreground">
-					{t("search.connector.subtitle")}
-				</p>
+				<h1 className="text-3xl font-bold tracking-tight">{t("search.connector.title")}</h1>
+				<p className="mt-1 text-muted-foreground">{t("search.connector.subtitle")}</p>
 			</div>
 
 			{/* Row 1: Connector Cards */}
@@ -135,13 +149,11 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						<CardTitle className="text-base">
 							{t("search.connector.activeConnectors")}
 						</CardTitle>
-						<CardDescription>
-							{t("search.connector.subtitle")}
-						</CardDescription>
+						<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 					</CardHeader>
 					<CardContent>
 						{activeTokens.length === 0 ? (
-							<p className="py-4 text-sm text-muted-foreground text-center">
+							<p className="py-4 text-sm text-center text-muted-foreground">
 								{t("search.connector.noConnectors")}
 							</p>
 						) : (
@@ -151,66 +163,82 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 										<TableHead>{t("search.connector.jobType")}</TableHead>
 										<TableHead>{t("search.apiKeys.tableName")}</TableHead>
 										<TableHead>{t("search.connector.jobStatus")}</TableHead>
-										<TableHead>
-											{t("search.connector.lastSync", { time: "" })
-												.replace(/: \{time\}$/, "")
-												.replace(/:$/, "")}
-										</TableHead>
-										<TableHead>{t("search.connector.lastError", { error: "" }).replace(/: \{error\}$/, "").replace(/:$/, "")}</TableHead>
+										<TableHead>Last sync</TableHead>
+										<TableHead>Last error</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{activeTokens.map((token) => {
-										const tokenSyncJobs = syncJobs?.filter(
-											(j) => j.indexId === token.index?.slug,
-										);
-										const lastJob = tokenSyncJobs?.[0];
-										return (
-											<TableRow key={token.id}>
-												<TableCell className="font-medium">
-													{token.scopes.join(", ")}
-												</TableCell>
-												<TableCell className="text-sm">
-													{token.name}
-												</TableCell>
-												<TableCell>
-													<Badge
-														status={
-															lastJob?.status === "completed"
-																? "success"
+									{activeTokens.map(
+										(token: {
+											id: string;
+											scopes: string[];
+											name: string;
+											index?: { slug: string } | null;
+											revokedAt: Date | null;
+										}) => {
+											const lastJob = syncJobs?.find(
+												(j) => j.indexId === token.index?.slug,
+											);
+											return (
+												<TableRow key={token.id}>
+													<TableCell className="font-medium">
+														{token.scopes.join(", ")}
+													</TableCell>
+													<TableCell className="text-sm">
+														{token.name}
+													</TableCell>
+													<TableCell>
+														<Badge
+															status={
+																lastJob?.status === "completed"
+																	? "success"
+																	: lastJob?.status === "failed"
+																		? "error"
+																		: lastJob?.status ===
+																			  "running"
+																			? "warning"
+																			: "info"
+															}
+														>
+															{lastJob?.status === "completed"
+																? t("search.connector.statusOnline")
 																: lastJob?.status === "failed"
-																	? "error"
+																	? t(
+																			"search.connector.statusOffline",
+																		)
 																	: lastJob?.status === "running"
-																		? "warning"
-																		: "info"
-														}
-													>
-														{lastJob?.status === "completed"
-															? t("search.connector.statusOnline")
-															: lastJob?.status === "failed"
-																? t("search.connector.statusOffline")
-																: lastJob?.status === "running"
-																	? t("search.connector.statusRunning")
-																	: t("search.connector.statusUnknown")}
-													</Badge>
-												</TableCell>
-												<TableCell className="text-sm text-muted-foreground">
-													{lastJob?.finishedAt
-														? new Date(lastJob.finishedAt).toLocaleString()
-														: lastJob?.startedAt
-															? new Date(lastJob.startedAt).toLocaleString()
+																		? t(
+																				"search.connector.statusUnknown",
+																			)
+																		: t(
+																				"search.connector.statusUnknown",
+																			)}
+														</Badge>
+													</TableCell>
+													<TableCell className="text-sm text-muted-foreground">
+														{lastJob?.finishedAt
+															? new Date(
+																	lastJob.finishedAt,
+																).toLocaleString()
+															: lastJob?.startedAt
+																? new Date(
+																		lastJob.startedAt,
+																	).toLocaleString()
+																: "—"}
+													</TableCell>
+													<TableCell className="text-sm text-rose-500 max-w-[200px] truncate">
+														{lastJob?.status === "failed"
+															? (lastJob.events
+																	?.find(
+																		(e) => e.level === "error",
+																	)
+																	?.message?.slice(0, 60) ?? "—")
 															: "—"}
-												</TableCell>
-												<TableCell className="text-sm text-rose-500 max-w-[200px] truncate">
-													{lastJob?.status === "failed"
-														? lastJob.events
-																.find((e) => e.level === "error")
-																?.message?.slice(0, 60) ?? "—"
-														: "—"}
-												</TableCell>
-											</TableRow>
-										);
-									})}
+													</TableCell>
+												</TableRow>
+											);
+										},
+									)}
 								</TableBody>
 							</Table>
 						)}
@@ -219,10 +247,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			)}
 
 			{/* Row 3: Sync Jobs */}
-			<SyncJobsTable
-				jobs={syncJobs ?? []}
-				isLoading={syncJobsLoading}
-			/>
+			<SyncJobsTable jobs={syncJobs ?? []} isLoading={syncJobsLoading} />
 
 			{/* Connector Wizard */}
 			<ConnectorWizard

@@ -63,12 +63,12 @@ export async function gatePublicSearchRequest(
 	}
 
 	const quota = await resolveOrgPlanQuota(verified.organizationId);
-	if (quota.searchPerMonth > 0 && quota.searchUsedThisPeriod >= quota.searchPerMonth) {
+	if (quota.searchPerMonth > 0 && quota.searchQueriesUsedThisPeriod >= quota.searchPerMonth) {
 		return c.json(
 			{
 				error: "quota_exceeded",
 				limit: quota.searchPerMonth,
-				used: quota.searchUsedThisPeriod,
+				used: quota.searchQueriesUsedThisPeriod,
 				reset: quota.periodEnd,
 			},
 			402,

@@ -18,6 +18,10 @@ export const config = {
 			label: "Français",
 			currency: "USD",
 		},
+		ru: {
+			label: "Русский",
+			currency: "RUB",
+		},
 	},
 	defaultLocale: "en",
 	defaultCurrency: "USD",

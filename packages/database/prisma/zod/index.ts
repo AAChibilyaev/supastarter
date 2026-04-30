@@ -82,6 +82,78 @@ export const UserNotificationPreferenceScalarFieldEnumSchema = z.enum(['id', 'us
 
 export type UserNotificationPreferenceScalarFieldEnum = z.infer<typeof UserNotificationPreferenceScalarFieldEnumSchema>;
 
+// File: SearchIndexScalarFieldEnum.schema.ts
+
+export const SearchIndexScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'slug', 'displayName', 'schema', 'version', 'enabled', 'createdAt', 'updatedAt'])
+
+export type SearchIndexScalarFieldEnum = z.infer<typeof SearchIndexScalarFieldEnumSchema>;
+
+// File: SearchApiKeyScalarFieldEnum.schema.ts
+
+export const SearchApiKeyScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'name', 'prefix', 'hash', 'scopes', 'expiresAt', 'revokedAt', 'lastUsedAt', 'createdAt'])
+
+export type SearchApiKeyScalarFieldEnum = z.infer<typeof SearchApiKeyScalarFieldEnumSchema>;
+
+// File: SearchUsageEventScalarFieldEnum.schema.ts
+
+export const SearchUsageEventScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'type', 'count', 'createdAt'])
+
+export type SearchUsageEventScalarFieldEnum = z.infer<typeof SearchUsageEventScalarFieldEnumSchema>;
+
+// File: SearchIngestBufferScalarFieldEnum.schema.ts
+
+export const SearchIngestBufferScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'action', 'document', 'processedAt', 'createdAt'])
+
+export type SearchIngestBufferScalarFieldEnum = z.infer<typeof SearchIngestBufferScalarFieldEnumSchema>;
+
+// File: AiWalletScalarFieldEnum.schema.ts
+
+export const AiWalletScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'currency', 'availableBalanceKopecks', 'reservedBalanceKopecks', 'includedMonthlyLimitKopecks', 'includedUsedPeriodKopecks', 'promoBalanceKopecks', 'overageLimitKopecks', 'overageUsedKopecks', 'status', 'periodStart', 'periodEnd', 'createdAt', 'updatedAt'])
+
+export type AiWalletScalarFieldEnum = z.infer<typeof AiWalletScalarFieldEnumSchema>;
+
+// File: AiWalletTransactionScalarFieldEnum.schema.ts
+
+export const AiWalletTransactionScalarFieldEnumSchema = z.enum(['id', 'walletId', 'userId', 'organizationId', 'projectId', 'type', 'direction', 'amountKopecks', 'currency', 'source', 'usageEventId', 'reservationId', 'topupOrderId', 'idempotencyKey', 'metadata', 'createdAt'])
+
+export type AiWalletTransactionScalarFieldEnum = z.infer<typeof AiWalletTransactionScalarFieldEnumSchema>;
+
+// File: AiQuotaReservationScalarFieldEnum.schema.ts
+
+export const AiQuotaReservationScalarFieldEnumSchema = z.enum(['id', 'walletId', 'userId', 'organizationId', 'projectId', 'apiKeyId', 'operation', 'estimatedAmountKopecks', 'status', 'expiresAt', 'committedAt', 'releasedAt', 'metadata', 'createdAt'])
+
+export type AiQuotaReservationScalarFieldEnum = z.infer<typeof AiQuotaReservationScalarFieldEnumSchema>;
+
+// File: AiUsageEventScalarFieldEnum.schema.ts
+
+export const AiUsageEventScalarFieldEnumSchema = z.enum(['id', 'walletId', 'userId', 'organizationId', 'projectId', 'apiKeyId', 'reservationId', 'operation', 'provider', 'model', 'status', 'promptTokens', 'completionTokens', 'totalTokens', 'inputCostKopecks', 'outputCostKopecks', 'flatFeeKopecks', 'markupBps', 'totalChargeKopecks', 'providerCostUsdMicros', 'fxRateRubPerUsdMicros', 'pricingRuleId', 'requestId', 'idempotencyKey', 'metadata', 'createdAt'])
+
+export type AiUsageEventScalarFieldEnum = z.infer<typeof AiUsageEventScalarFieldEnumSchema>;
+
+// File: AiPricingRuleScalarFieldEnum.schema.ts
+
+export const AiPricingRuleScalarFieldEnumSchema = z.enum(['id', 'provider', 'model', 'operation', 'currency', 'inputPer1MTokensKopecks', 'outputPer1MTokensKopecks', 'embeddingPer1MTokensKopecks', 'flatFeeKopecks', 'markupBps', 'effectiveFrom', 'effectiveTo', 'notes', 'createdByUserId', 'createdAt'])
+
+export type AiPricingRuleScalarFieldEnum = z.infer<typeof AiPricingRuleScalarFieldEnumSchema>;
+
+// File: FxRateScalarFieldEnum.schema.ts
+
+export const FxRateScalarFieldEnumSchema = z.enum(['id', 'pair', 'ratePer1UnitMicros', 'source', 'effectiveAt', 'createdAt'])
+
+export type FxRateScalarFieldEnum = z.infer<typeof FxRateScalarFieldEnumSchema>;
+
+// File: WalletTopupOrderScalarFieldEnum.schema.ts
+
+export const WalletTopupOrderScalarFieldEnumSchema = z.enum(['id', 'walletId', 'userId', 'organizationId', 'provider', 'amountKopecks', 'currency', 'status', 'paymentLinkUrl', 'providerPaymentId', 'providerOperationId', 'providerCustomerId', 'initiatedByUserId', 'idempotencyKey', 'metadata', 'expiresAt', 'paidAt', 'createdAt', 'updatedAt'])
+
+export type WalletTopupOrderScalarFieldEnum = z.infer<typeof WalletTopupOrderScalarFieldEnumSchema>;
+
+// File: PaymentProviderEventScalarFieldEnum.schema.ts
+
+export const PaymentProviderEventScalarFieldEnumSchema = z.enum(['id', 'provider', 'eventType', 'providerEventId', 'signatureValid', 'rawPayload', 'idempotencyKey', 'topupOrderId', 'processedAt', 'processingError', 'createdAt'])
+
+export type PaymentProviderEventScalarFieldEnum = z.infer<typeof PaymentProviderEventScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -93,6 +165,12 @@ export type SortOrder = z.infer<typeof SortOrderSchema>;
 export const JsonNullValueInputSchema = z.enum(['JsonNull'])
 
 export type JsonNullValueInput = z.infer<typeof JsonNullValueInputSchema>;
+
+// File: NullableJsonNullValueInput.schema.ts
+
+export const NullableJsonNullValueInputSchema = z.enum(['DbNull', 'JsonNull'])
+
+export type NullableJsonNullValueInput = z.infer<typeof NullableJsonNullValueInputSchema>;
 
 // File: QueryMode.schema.ts
 
@@ -120,7 +198,7 @@ export type PurchaseType = z.infer<typeof PurchaseTypeSchema>;
 
 // File: NotificationType.schema.ts
 
-export const NotificationTypeSchema = z.enum(['WELCOME', 'APP_UPDATE'])
+export const NotificationTypeSchema = z.enum(['WELCOME', 'APP_UPDATE', 'AI_LOW_BALANCE', 'AI_TOPUP_PAID', 'AI_TOPUP_FAILED', 'AI_OVERAGE_REACHED'])
 
 export type NotificationType = z.infer<typeof NotificationTypeSchema>;
 
@@ -328,4 +406,256 @@ export const UserNotificationPreferenceSchema = z.object({
 });
 
 export type UserNotificationPreferenceType = z.infer<typeof UserNotificationPreferenceSchema>;
+
+
+// File: SearchIndex.schema.ts
+
+export const SearchIndexSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  slug: z.string(),
+  displayName: z.string(),
+  schema: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  version: z.number().int().default(1),
+  enabled: z.boolean().default(true),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SearchIndexType = z.infer<typeof SearchIndexSchema>;
+
+
+// File: SearchApiKey.schema.ts
+
+export const SearchApiKeySchema = z.object({
+  id: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+  name: z.string(),
+  prefix: z.string(),
+  hash: z.string(),
+  scopes: z.array(z.string()),
+  expiresAt: z.date().nullish(),
+  revokedAt: z.date().nullish(),
+  lastUsedAt: z.date().nullish(),
+  createdAt: z.date(),
+});
+
+export type SearchApiKeyType = z.infer<typeof SearchApiKeySchema>;
+
+
+// File: SearchUsageEvent.schema.ts
+
+export const SearchUsageEventSchema = z.object({
+  id: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+  type: z.string(),
+  count: z.number().int().default(1),
+  createdAt: z.date(),
+});
+
+export type SearchUsageEventType = z.infer<typeof SearchUsageEventSchema>;
+
+
+// File: SearchIngestBuffer.schema.ts
+
+export const SearchIngestBufferSchema = z.object({
+  id: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+  action: z.string(),
+  document: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  processedAt: z.date().nullish(),
+  createdAt: z.date(),
+});
+
+export type SearchIngestBufferType = z.infer<typeof SearchIngestBufferSchema>;
+
+
+// File: AiWallet.schema.ts
+
+export const AiWalletSchema = z.object({
+  id: z.string(),
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  currency: z.string().default("RUB"),
+  availableBalanceKopecks: z.bigint().default(BigInt(0)),
+  reservedBalanceKopecks: z.bigint().default(BigInt(0)),
+  includedMonthlyLimitKopecks: z.bigint().default(BigInt(0)),
+  includedUsedPeriodKopecks: z.bigint().default(BigInt(0)),
+  promoBalanceKopecks: z.bigint().default(BigInt(0)),
+  overageLimitKopecks: z.bigint().default(BigInt(0)),
+  overageUsedKopecks: z.bigint().default(BigInt(0)),
+  status: z.string().default("active"),
+  periodStart: z.date(),
+  periodEnd: z.date(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type AiWalletType = z.infer<typeof AiWalletSchema>;
+
+
+// File: AiWalletTransaction.schema.ts
+
+export const AiWalletTransactionSchema = z.object({
+  id: z.string(),
+  walletId: z.string(),
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  projectId: z.string().nullish(),
+  type: z.string(),
+  direction: z.string(),
+  amountKopecks: z.bigint(),
+  currency: z.string().default("RUB"),
+  source: z.string(),
+  usageEventId: z.string().nullish(),
+  reservationId: z.string().nullish(),
+  topupOrderId: z.string().nullish(),
+  idempotencyKey: z.string(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type AiWalletTransactionType = z.infer<typeof AiWalletTransactionSchema>;
+
+
+// File: AiQuotaReservation.schema.ts
+
+export const AiQuotaReservationSchema = z.object({
+  id: z.string(),
+  walletId: z.string(),
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  projectId: z.string().nullish(),
+  apiKeyId: z.string().nullish(),
+  operation: z.string(),
+  estimatedAmountKopecks: z.bigint(),
+  status: z.string().default("active"),
+  expiresAt: z.date(),
+  committedAt: z.date().nullish(),
+  releasedAt: z.date().nullish(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type AiQuotaReservationType = z.infer<typeof AiQuotaReservationSchema>;
+
+
+// File: AiUsageEvent.schema.ts
+
+export const AiUsageEventSchema = z.object({
+  id: z.string(),
+  walletId: z.string(),
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  projectId: z.string().nullish(),
+  apiKeyId: z.string().nullish(),
+  reservationId: z.string().nullish(),
+  operation: z.string(),
+  provider: z.string(),
+  model: z.string(),
+  status: z.string(),
+  promptTokens: z.number().int(),
+  completionTokens: z.number().int(),
+  totalTokens: z.number().int(),
+  inputCostKopecks: z.bigint().default(BigInt(0)),
+  outputCostKopecks: z.bigint().default(BigInt(0)),
+  flatFeeKopecks: z.bigint().default(BigInt(0)),
+  markupBps: z.number().int(),
+  totalChargeKopecks: z.bigint().default(BigInt(0)),
+  providerCostUsdMicros: z.bigint().default(BigInt(0)),
+  fxRateRubPerUsdMicros: z.bigint().default(BigInt(0)),
+  pricingRuleId: z.string().nullish(),
+  requestId: z.string().nullish(),
+  idempotencyKey: z.string(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type AiUsageEventType = z.infer<typeof AiUsageEventSchema>;
+
+
+// File: AiPricingRule.schema.ts
+
+export const AiPricingRuleSchema = z.object({
+  id: z.string(),
+  provider: z.string(),
+  model: z.string(),
+  operation: z.string(),
+  currency: z.string().default("RUB"),
+  inputPer1MTokensKopecks: z.bigint().nullish(),
+  outputPer1MTokensKopecks: z.bigint().nullish(),
+  embeddingPer1MTokensKopecks: z.bigint().nullish(),
+  flatFeeKopecks: z.bigint().default(BigInt(0)),
+  markupBps: z.number().int().default(2000),
+  effectiveFrom: z.date(),
+  effectiveTo: z.date().nullish(),
+  notes: z.string().nullish(),
+  createdByUserId: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type AiPricingRuleType = z.infer<typeof AiPricingRuleSchema>;
+
+
+// File: FxRate.schema.ts
+
+export const FxRateSchema = z.object({
+  id: z.string(),
+  pair: z.string(),
+  ratePer1UnitMicros: z.bigint(),
+  source: z.string(),
+  effectiveAt: z.date(),
+  createdAt: z.date(),
+});
+
+export type FxRateType = z.infer<typeof FxRateSchema>;
+
+
+// File: WalletTopupOrder.schema.ts
+
+export const WalletTopupOrderSchema = z.object({
+  id: z.string(),
+  walletId: z.string(),
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  provider: z.string(),
+  amountKopecks: z.bigint(),
+  currency: z.string().default("RUB"),
+  status: z.string().default("created"),
+  paymentLinkUrl: z.string().nullish(),
+  providerPaymentId: z.string().nullish(),
+  providerOperationId: z.string().nullish(),
+  providerCustomerId: z.string().nullish(),
+  initiatedByUserId: z.string().nullish(),
+  idempotencyKey: z.string(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  expiresAt: z.date().nullish(),
+  paidAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type WalletTopupOrderType = z.infer<typeof WalletTopupOrderSchema>;
+
+
+// File: PaymentProviderEvent.schema.ts
+
+export const PaymentProviderEventSchema = z.object({
+  id: z.string(),
+  provider: z.string(),
+  eventType: z.string(),
+  providerEventId: z.string().nullish(),
+  signatureValid: z.boolean(),
+  rawPayload: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  idempotencyKey: z.string(),
+  topupOrderId: z.string().nullish(),
+  processedAt: z.date().nullish(),
+  processingError: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type PaymentProviderEventType = z.infer<typeof PaymentProviderEventSchema>;
 

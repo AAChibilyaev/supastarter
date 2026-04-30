@@ -5,7 +5,7 @@
 	"types": "./**/.tsx",
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
-		"generate": "dotenv -c -e ../../.env -- prisma generate --no-hints",
+		"generate": "dotenv -c -e ../../.env -- prisma generate --no-hints && node ./scripts/patch-zod-bigint-defaults.mjs",
 		"push": "dotenv -c -e ../../.env -- prisma db push",
 		"migrate": "dotenv -c -e ../../.env -- prisma migrate dev",
 		"studio": "dotenv -c -e ../../.env -- prisma studio",

@@ -77,6 +77,7 @@
 			"navigationTitle": "Menu",
 			"openNavigation": "Open navigation",
 			"organizationSettings": "Organization settings",
+			"search": "Search",
 			"start": "Start"
 		},
 		"userMenu": {
@@ -547,6 +548,29 @@
 				"description": "Choose a plan to subscribe to.",
 				"title": "Change your plan"
 			},
+			"aiCredits": {
+				"title": "AI credits",
+				"subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",
+				"balance": {
+					"title": "Wallet balance",
+					"includedRemaining": "Included this month",
+					"reserved": "Reserved",
+					"promo": "Promo credits",
+					"notInitialized": "Wallet is not initialized yet."
+				},
+				"topup": {
+					"button": "Top up",
+					"title": "Top up your AI wallet",
+					"description": "Choose an amount or enter a custom value in rubles.",
+					"customAmount": "Custom amount (₽)",
+					"summary": "You will be charged {amount}",
+					"confirm": "Pay with Tochka",
+					"error": "Failed to create payment link. Please try again."
+				},
+				"errors": {
+					"insufficientFunds": "Insufficient AI credits. Top up your wallet."
+				}
+			},
 			"title": "Billing"
 		},
 		"notificationsPage": {
@@ -555,11 +579,26 @@
 			"groups": {
 				"general": {
 					"title": "General"
+				},
+				"billing": {
+					"title": "Billing"
 				}
 			},
 			"types": {
 				"APP_UPDATE": {
 					"label": "App updates"
+				},
+				"AI_LOW_BALANCE": {
+					"label": "AI wallet balance is low"
+				},
+				"AI_TOPUP_PAID": {
+					"label": "AI wallet top-up confirmed"
+				},
+				"AI_TOPUP_FAILED": {
+					"label": "AI wallet top-up failed"
+				},
+				"AI_OVERAGE_REACHED": {
+					"label": "AI wallet overage limit reached"
 				}
 			},
 			"columns": {
@@ -616,5 +655,60 @@
 		"title": "Processing your purchase",
 		"description": "Please wait while we confirm your payment.",
 		"loading": "Confirming your purchase, please wait..."
+	},
+	"search": {
+		"title": "Search",
+		"subtitle": "Manage Typesense indexes, API keys and usage for this organization.",
+		"loading": "Loading…",
+		"noIndexes": "No search indexes yet. Create your first one to get started.",
+		"selectIndex": "Select an index to manage its API keys.",
+		"fields": {
+			"displayName": "Display name",
+			"slug": "Slug",
+			"version": "Version",
+			"apiKeys": "API keys",
+			"defaultSortingField": "Default sorting field",
+			"schema": "Fields (JSON)"
+		},
+		"createIndex": {
+			"trigger": "Create index",
+			"title": "Create search index",
+			"description": "Provisions a Typesense collection and alias scoped to this organization.",
+			"slugHelp": "Lowercase letters, digits and dashes. Used in API paths and as collection alias.",
+			"schemaHelp": "JSON array of Typesense field definitions. The 'tenant_id' field is added automatically.",
+			"submit": "Create",
+			"success": "Index created.",
+			"error": "Could not create index. Please try again."
+		},
+		"apiKeys": {
+			"title": "API keys",
+			"description": "SaaS search keys are validated by our backend before queries hit Typesense. The Typesense admin key never leaves the server.",
+			"create": "Create key",
+			"createDescription": "The raw key is shown once. Store it securely.",
+			"name": "Name",
+			"generate": "Generate key",
+			"created": "API key created.",
+			"revealOnce": "Copy this key now. You will not be able to see it again.",
+			"done": "Done",
+			"empty": "No API keys yet.",
+			"tableName": "Name",
+			"tablePrefix": "Prefix",
+			"tableScopes": "Scopes",
+			"tableStatus": "Status",
+			"tableActions": "Actions",
+			"statusActive": "Active",
+			"statusRevoked": "Revoked",
+			"revoke": "Revoke",
+			"revokeConfirmTitle": "Revoke API key",
+			"revokeConfirmMessage": "Are you sure you want to revoke \"{name}\"? Clients using this key will stop working immediately.",
+			"revoked": "API key revoked.",
+			"error": "Operation failed."
+		},
+		"usage": {
+			"title": "Usage",
+			"windowDays": "Last {days} days",
+			"searches": "Searches",
+			"ingests": "Documents ingested"
+		}
 	}
 }

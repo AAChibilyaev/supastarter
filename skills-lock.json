@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "supastarter-nextjs-skill": {
+      "source": "OscarDRT/supastarter-nextjs-skill",
+      "sourceType": "github",
+      "skillPath": "supastarter-nextjs-skill/SKILL.md",
+      "computedHash": "9a875fe5b99655dc5993074b35997374a67d6e66731b37fa5826929ee90eb652"
+    }
+  }
+}

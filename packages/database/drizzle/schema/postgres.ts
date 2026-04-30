@@ -374,3 +374,143 @@ export const userNotificationPreferenceRelations = relations(
 		}),
 	}),
 );
+
+export const searchIndex = pgTable(
+	"search_index",
+	{
+		id: text("id")
+			.$defaultFn(() => cuid())
+			.primaryKey(),
+		organizationId: text("organizationId")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		slug: text("slug").notNull(),
+		displayName: text("displayName").notNull(),
+		schema: jsonb("schema").$type<Record<string, unknown>>().notNull(),
+		version: integer("version").default(1).notNull(),
+		enabled: boolean("enabled").default(true).notNull(),
+		createdAt: timestamp("createdAt").defaultNow().notNull(),
+		updatedAt: timestamp("updatedAt")
+			.defaultNow()
+			.$onUpdate(() => /* @__PURE__ */ new Date())
+			.notNull(),
+	},
+	(table) => [
+		uniqueIndex("search_index_organizationId_slug_uidx").on(table.organizationId, table.slug),
+		index("search_index_organizationId_idx").on(table.organizationId),
+	],
+);
+
+export const searchApiKey = pgTable(
+	"search_api_key",
+	{
+		id: text("id")
+			.$defaultFn(() => cuid())
+			.primaryKey(),
+		indexId: text("indexId")
+			.notNull()
+			.references(() => searchIndex.id, { onDelete: "cascade" }),
+		organizationId: text("organizationId")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		name: text("name").notNull(),
+		prefix: text("prefix").notNull(),
+		hash: text("hash").notNull().unique(),
+		scopes: text("scopes").array().notNull(),
+		expiresAt: timestamp("expiresAt"),
+		revokedAt: timestamp("revokedAt"),
+		lastUsedAt: timestamp("lastUsedAt"),
+		createdAt: timestamp("createdAt").defaultNow().notNull(),
+	},
+	(table) => [
+		index("search_api_key_indexId_idx").on(table.indexId),
+		index("search_api_key_organizationId_idx").on(table.organizationId),
+	],
+);
+
+export const searchUsageEvent = pgTable(
+	"search_usage_event",
+	{
+		id: text("id")
+			.$defaultFn(() => cuid())
+			.primaryKey(),
+		indexId: text("indexId")
+			.notNull()
+			.references(() => searchIndex.id, { onDelete: "cascade" }),
+		organizationId: text("organizationId")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		type: text("type").notNull(),
+		count: integer("count").default(1).notNull(),
+		createdAt: timestamp("createdAt").defaultNow().notNull(),
+	},
+	(table) => [
+		index("search_usage_event_org_createdAt_idx").on(table.organizationId, table.createdAt),
+		index("search_usage_event_index_createdAt_idx").on(table.indexId, table.createdAt),
+	],
+);
+
+export const searchIngestBuffer = pgTable(
+	"search_ingest_buffer",
+	{
+		id: text("id")
+			.$defaultFn(() => cuid())
+			.primaryKey(),
+		indexId: text("indexId")
+			.notNull()
+			.references(() => searchIndex.id, { onDelete: "cascade" }),
+		organizationId: text("organizationId")
+			.notNull()
+			.references(() => organization.id, { onDelete: "cascade" }),
+		action: text("action").notNull(),
+		document: jsonb("document").$type<Record<string, unknown>>().notNull(),
+		processedAt: timestamp("processedAt"),
+		createdAt: timestamp("createdAt").defaultNow().notNull(),
+	},
+	(table) => [
+		index("search_ingest_buffer_index_processedAt_idx").on(table.indexId, table.processedAt),
+	],
+);
+
+export const searchIndexRelations = relations(searchIndex, ({ one, many }) => ({
+	organization: one(organization, {
+		fields: [searchIndex.organizationId],
+		references: [organization.id],
+	}),
+	apiKeys: many(searchApiKey),
+	usageEvents: many(searchUsageEvent),
+	ingestBuffer: many(searchIngestBuffer),
+}));
+
+export const searchApiKeyRelations = relations(searchApiKey, ({ one }) => ({
+	index: one(searchIndex, {
+		fields: [searchApiKey.indexId],
+		references: [searchIndex.id],
+	}),
+	organization: one(organization, {
+		fields: [searchApiKey.organizationId],
+		references: [organization.id],
+	}),
+}));
+
+export const searchUsageEventRelations = relations(searchUsageEvent, ({ one }) => ({
+	index: one(searchIndex, {
+		fields: [searchUsageEvent.indexId],
+		references: [searchIndex.id],
+	}),
+	organization: one(organization, {
+		fields: [searchUsageEvent.organizationId],
+		references: [organization.id],
+	}),
+}));
+
+export const searchIngestBufferRelations = relations(searchIngestBuffer, ({ one }) => ({
+	index: one(searchIndex, {
+		fields: [searchIngestBuffer.indexId],
+		references: [searchIndex.id],
+	}),
+	organization: one(organization, {
+		fields: [searchIngestBuffer.organizationId],
+		references: [organization.id],
+	}),
+}));

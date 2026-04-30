@@ -1,5 +1,5 @@
 import { getOrganizationList, getSession } from "@auth/lib/server";
-import { listPurchases } from "@repo/api/modules/payments/procedures/list-purchases";
+import { listPurchases } from "@repo/api";
 import { config as authConfig } from "@repo/auth/config";
 import { config as paymentsConfig } from "@repo/payments/config";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";

@@ -1,0 +1,23 @@
+{
+	"name": "@repo/billing-wallet",
+	"version": "0.0.0",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"type-check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@repo/database": "workspace:*",
+		"@repo/logs": "workspace:*",
+		"@repo/notifications": "workspace:*"
+	},
+	"devDependencies": {
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"typescript": "catalog:"
+	}
+}

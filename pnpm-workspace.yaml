@@ -88,6 +88,7 @@ catalog:
     tailwindcss: 4.2.2
     tsx: ^4.20.6
     typescript: 6.0.2
+    typesense: ^3.0.0
     ufo: ^1.6.3
     use-intl: ^4.9.0
     usehooks-ts: ^3.1.1

@@ -42,6 +42,7 @@ model User {
   twofactors               TwoFactor[]
   notifications            Notification[]
   notificationPreferences  UserNotificationPreference[]
+  aiWallet                 AiWallet?
 
   @@unique([email])
   @@unique([username])
@@ -146,6 +147,11 @@ model Organization {
   members            Member[]
   invitations        Invitation[]
   purchases          Purchase[]
+  searchIndexes      SearchIndex[]
+  searchApiKeys      SearchApiKey[]
+  searchUsageEvents  SearchUsageEvent[]
+  searchIngestBuffer SearchIngestBuffer[]
+  aiWallet           AiWallet?
 
   @@unique([slug])
   @@map("organization")
@@ -215,6 +221,10 @@ enum NotificationTarget {
 enum NotificationType {
   WELCOME
   APP_UPDATE
+  AI_LOW_BALANCE
+  AI_TOPUP_PAID
+  AI_TOPUP_FAILED
+  AI_OVERAGE_REACHED
 }
 
 model Notification {
@@ -242,4 +252,278 @@ model UserNotificationPreference {
 
   @@unique([userId, type, target])
   @@map("user_notification_preference")
+}
+
+model SearchIndex {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  slug           String
+  displayName    String
+  schema         Json
+  version        Int          @default(1)
+  enabled        Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  apiKeys      SearchApiKey[]
+  usageEvents  SearchUsageEvent[]
+  ingestBuffer SearchIngestBuffer[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@map("search_index")
+}
+
+model SearchApiKey {
+  id             String       @id @default(cuid())
+  indexId        String
+  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  prefix         String
+  hash           String       @unique
+  scopes         String[]
+  expiresAt      DateTime?
+  revokedAt      DateTime?
+  lastUsedAt     DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([indexId])
+  @@index([organizationId])
+  @@map("search_api_key")
+}
+
+model SearchUsageEvent {
+  id             String       @id @default(cuid())
+  indexId        String
+  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String
+  count          Int          @default(1)
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([indexId, createdAt])
+  @@map("search_usage_event")
+}
+
+model SearchIngestBuffer {
+  id             String       @id @default(cuid())
+  indexId        String
+  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  action         String
+  document       Json
+  processedAt    DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([indexId, processedAt])
+  @@map("search_ingest_buffer")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI Wallet + Usage Ledger + RUB Top-up
+// XOR ownership (user OR organization) mirrors Purchase pattern.
+// XOR is enforced via SQL CHECK constraint added in the SQL migration step.
+// All money is stored as integer minor units (kopecks) — never numeric.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AiWallet {
+  id                          String   @id @default(cuid())
+  userId                      String?  @unique
+  user                        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId              String?  @unique
+  organization                Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  currency                    String   @default("RUB")
+  availableBalanceKopecks     BigInt   @default(0)
+  reservedBalanceKopecks      BigInt   @default(0)
+  includedMonthlyLimitKopecks BigInt   @default(0)
+  includedUsedPeriodKopecks   BigInt   @default(0)
+  promoBalanceKopecks         BigInt   @default(0)
+  overageLimitKopecks         BigInt   @default(0)
+  overageUsedKopecks          BigInt   @default(0)
+
+  status                      String   @default("active") // active | frozen | closed
+  periodStart                 DateTime
+  periodEnd                   DateTime
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+
+  transactions                AiWalletTransaction[]
+  reservations                AiQuotaReservation[]
+  usageEvents                 AiUsageEvent[]
+  topupOrders                 WalletTopupOrder[]
+
+  @@index([periodEnd, status])
+  @@map("ai_wallet")
+}
+
+model AiWalletTransaction {
+  id              String   @id @default(cuid())
+  walletId        String
+  wallet          AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  userId          String?
+  organizationId  String?
+  projectId       String?
+  type            String   // reserve | release | debit | credit | reversal | adjustment
+  direction       String   // credit | debit | reserve | release | reversal
+  amountKopecks   BigInt
+  currency        String   @default("RUB")
+  source          String   // included | promo | prepaid | overage | tochka | manual | reservation
+  usageEventId    String?
+  reservationId   String?
+  topupOrderId    String?
+  idempotencyKey  String   @unique
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([walletId, createdAt(sort: Desc)])
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([usageEventId])
+  @@index([topupOrderId])
+  @@map("ai_wallet_transaction")
+}
+
+model AiQuotaReservation {
+  id                     String   @id @default(cuid())
+  walletId               String
+  wallet                 AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  userId                 String?
+  organizationId         String?
+  projectId              String?
+  apiKeyId               String?
+  operation              String
+  estimatedAmountKopecks BigInt
+  status                 String   @default("active") // active | committed | released | expired
+  expiresAt              DateTime
+  committedAt            DateTime?
+  releasedAt             DateTime?
+  metadata               Json?
+  createdAt              DateTime @default(now())
+
+  @@index([status, expiresAt])
+  @@index([walletId, status])
+  @@map("ai_quota_reservation")
+}
+
+model AiUsageEvent {
+  id                    String   @id @default(cuid())
+  walletId              String
+  wallet                AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  userId                String?
+  organizationId        String?
+  projectId             String?
+  apiKeyId              String?
+  reservationId         String?
+  operation             String
+  provider              String
+  model                 String
+  status                String
+  promptTokens          Int      @default(0)
+  completionTokens      Int      @default(0)
+  totalTokens           Int      @default(0)
+  inputCostKopecks      BigInt   @default(0)
+  outputCostKopecks     BigInt   @default(0)
+  flatFeeKopecks        BigInt   @default(0)
+  markupBps             Int      @default(0)
+  totalChargeKopecks    BigInt   @default(0)
+  providerCostUsdMicros BigInt   @default(0)
+  fxRateRubPerUsdMicros BigInt   @default(0)
+  pricingRuleId         String?
+  requestId             String?
+  idempotencyKey        String   @unique
+  metadata              Json?
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([projectId, operation, createdAt])
+  @@index([model, provider, createdAt])
+  @@map("ai_usage_event")
+}
+
+model AiPricingRule {
+  id                          String    @id @default(cuid())
+  provider                    String
+  model                       String
+  operation                   String
+  currency                    String    @default("RUB")
+  inputPer1MTokensKopecks     BigInt?
+  outputPer1MTokensKopecks    BigInt?
+  embeddingPer1MTokensKopecks BigInt?
+  flatFeeKopecks              BigInt    @default(0)
+  markupBps                   Int       @default(2000)
+  effectiveFrom               DateTime
+  effectiveTo                 DateTime?
+  notes                       String?
+  createdByUserId             String?
+  createdAt                   DateTime  @default(now())
+
+  @@unique([provider, model, operation, effectiveFrom])
+  @@index([provider, model, operation, effectiveFrom, effectiveTo])
+  @@map("ai_pricing_rule")
+}
+
+model FxRate {
+  id                 String   @id @default(cuid())
+  pair               String
+  ratePer1UnitMicros BigInt
+  source             String
+  effectiveAt        DateTime
+  createdAt          DateTime @default(now())
+
+  @@index([pair, effectiveAt(sort: Desc)])
+  @@map("fx_rate")
+}
+
+model WalletTopupOrder {
+  id                  String    @id @default(cuid())
+  walletId            String
+  wallet              AiWallet  @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  userId              String?
+  organizationId      String?
+  provider            String    // tochka | dodo | manual
+  amountKopecks       BigInt
+  currency            String    @default("RUB")
+  status              String    @default("created") // created | pending | paid | failed | cancelled | expired | refunded
+  paymentLinkUrl      String?
+  providerPaymentId   String?
+  providerOperationId String?   @unique
+  providerCustomerId  String?
+  initiatedByUserId   String?
+  idempotencyKey      String    @unique
+  metadata            Json?
+  expiresAt           DateTime?
+  paidAt              DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([organizationId, status, createdAt(sort: Desc)])
+  @@index([userId, status, createdAt(sort: Desc)])
+  @@index([provider, status])
+  @@map("wallet_topup_order")
+}
+
+model PaymentProviderEvent {
+  id              String    @id @default(cuid())
+  provider        String
+  eventType       String
+  providerEventId String?
+  signatureValid  Boolean   @default(false)
+  rawPayload      Json
+  idempotencyKey  String    @unique
+  topupOrderId    String?
+  processedAt     DateTime?
+  processingError String?
+  createdAt       DateTime  @default(now())
+
+  @@index([provider, createdAt(sort: Desc)])
+  @@index([processedAt])
+  @@map("payment_provider_event")
 }

@@ -34,6 +34,7 @@ import {
 	MenuIcon,
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
+	SearchIcon,
 	SettingsIcon,
 	ShieldUserIcon,
 	UserCogIcon,
@@ -350,6 +351,16 @@ export function NavBar() {
 				icon: BotMessageSquareIcon,
 				isActive: pathname.startsWith("/chatbot"),
 			},
+			...(activeOrganization
+				? [
+						{
+							label: t("app.menu.search"),
+							href: `${basePath}/search`,
+							icon: SearchIcon,
+							isActive: pathname.startsWith(`${basePath}/search`),
+						},
+					]
+				: []),
 			...(organizationSubItems
 				? [
 						{

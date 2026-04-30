@@ -1,8 +1,51 @@
 import type { PaymentsConfig } from "./types";
 
-export const config: PaymentsConfig = {
+/**
+ * AI Wallet configuration that piggybacks on the payments config so that
+ * subscription event handlers can resolve a plan → included credits mapping
+ * without a separate config import. All amounts are in kopecks (RUB minor
+ * units). `0n` means no included credits for that plan.
+ */
+export interface AiWalletConfig {
+	/**
+	 * Map of plan id → kopecks included with the active subscription each month.
+	 * Plan ids must match keys in `plans` below.
+	 */
+	monthlyIncludedByPlan: Record<string, bigint>;
+	/**
+	 * Default kopecks balance below which AI_LOW_BALANCE notifications fire.
+	 */
+	lowBalanceThresholdKopecks: bigint;
+	/**
+	 * Default reservation lifetime in seconds before stale reservations are released.
+	 */
+	reservationTtlSeconds: number;
+	/**
+	 * Whether overage is allowed by default. Per-org override lives in the wallet row.
+	 */
+	overageDefaultEnabled: boolean;
+	maxOverageKopecks: bigint;
+}
+
+export interface PaymentsConfigWithWallet extends PaymentsConfig {
+	aiWallet: AiWalletConfig;
+}
+
+export const config: PaymentsConfigWithWallet = {
 	billingAttachedTo: "user",
 	requireActiveSubscription: false,
+	aiWallet: {
+		monthlyIncludedByPlan: {
+			free: BigInt(10_000), // 100 ₽ promo
+			starter: BigInt(100_000), // 1 000 ₽
+			pro: BigInt(500_000), // 5 000 ₽
+			business: BigInt(3_000_000), // 30 000 ₽
+		},
+		lowBalanceThresholdKopecks: BigInt(20_000), // 200 ₽
+		reservationTtlSeconds: 300,
+		overageDefaultEnabled: false,
+		maxOverageKopecks: BigInt(10_000), // 100 ₽
+	},
 	plans: {
 		pro: {
 			recommended: true,

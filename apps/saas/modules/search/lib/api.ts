@@ -1,0 +1,69 @@
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+export function useSearchIndexesQuery(organizationId: string) {
+	return useQuery(
+		orpc.search.listIndexes.queryOptions({
+			input: { organizationId },
+			enabled: !!organizationId,
+		}),
+	);
+}
+
+export function useSearchApiKeysQuery(organizationId: string, slug: string) {
+	return useQuery(
+		orpc.search.listApiKeys.queryOptions({
+			input: { organizationId, slug },
+			enabled: !!organizationId && !!slug,
+		}),
+	);
+}
+
+export function useSearchUsageQuery(organizationId: string, windowDays = 30) {
+	return useQuery(
+		orpc.search.usage.queryOptions({
+			input: { organizationId, windowDays },
+			enabled: !!organizationId,
+		}),
+	);
+}
+
+export function useCreateSearchIndexMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...orpc.search.createIndex.mutationOptions(),
+		onSuccess: (_, variables) => {
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listIndexes.queryKey({
+					input: { organizationId: variables?.organizationId },
+				}),
+			});
+		},
+	});
+}
+
+export function useCreateSearchApiKeyMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...orpc.search.createApiKey.mutationOptions(),
+		onSuccess: (_, variables) => {
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listApiKeys.queryKey({
+					input: { organizationId: variables?.organizationId, slug: variables?.slug },
+				}),
+			});
+		},
+	});
+}
+
+export function useRevokeSearchApiKeyMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...orpc.search.revokeApiKey.mutationOptions(),
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listApiKeys.key(),
+			});
+		},
+	});
+}

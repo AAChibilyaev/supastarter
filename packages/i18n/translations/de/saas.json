@@ -77,6 +77,7 @@
 			"navigationTitle": "Menü",
 			"openNavigation": "Navigation öffnen",
 			"organizationSettings": "Organisationseinstellungen",
+			"search": "Suche",
 			"start": "Start"
 		},
 		"userMenu": {
@@ -613,5 +614,60 @@
 		"title": "Kauf wird verarbeitet",
 		"description": "Bitte warten Sie, während wir Ihre Zahlung bestätigen.",
 		"loading": "Ihr Kauf wird bestätigt, bitte warten..."
+	},
+	"search": {
+		"title": "Suche",
+		"subtitle": "Verwalten Sie Typesense-Indexe, API-Keys und Nutzung dieser Organisation.",
+		"loading": "Wird geladen…",
+		"noIndexes": "Noch keine Suchindexe. Erstellen Sie Ihren ersten Index, um zu beginnen.",
+		"selectIndex": "Wählen Sie einen Index aus, um seine API-Keys zu verwalten.",
+		"fields": {
+			"displayName": "Anzeigename",
+			"slug": "Slug",
+			"version": "Version",
+			"apiKeys": "API-Keys",
+			"defaultSortingField": "Standard-Sortierfeld",
+			"schema": "Felder (JSON)"
+		},
+		"createIndex": {
+			"trigger": "Index erstellen",
+			"title": "Suchindex erstellen",
+			"description": "Erstellt eine Typesense-Sammlung und einen Alias, die auf diese Organisation beschränkt sind.",
+			"slugHelp": "Kleinbuchstaben, Ziffern und Bindestriche. Wird in API-Pfaden und als Sammlungs-Alias verwendet.",
+			"schemaHelp": "JSON-Array von Typesense-Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefügt.",
+			"submit": "Erstellen",
+			"success": "Index wurde erstellt.",
+			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen."
+		},
+		"apiKeys": {
+			"title": "API-Keys",
+			"description": "SaaS-Suchschlüssel werden serverseitig validiert, bevor Anfragen Typesense erreichen. Der Typesense-Adminschlüssel verlässt niemals den Server.",
+			"create": "Schlüssel erstellen",
+			"createDescription": "Der Rohschlüssel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
+			"name": "Name",
+			"generate": "Schlüssel generieren",
+			"created": "API-Key wurde erstellt.",
+			"revealOnce": "Kopieren Sie diesen Schlüssel jetzt. Er wird Ihnen nicht wieder angezeigt.",
+			"done": "Fertig",
+			"empty": "Noch keine API-Keys.",
+			"tableName": "Name",
+			"tablePrefix": "Präfix",
+			"tableScopes": "Berechtigungen",
+			"tableStatus": "Status",
+			"tableActions": "Aktionen",
+			"statusActive": "Aktiv",
+			"statusRevoked": "Widerrufen",
+			"revoke": "Widerrufen",
+			"revokeConfirmTitle": "API-Key widerrufen",
+			"revokeConfirmMessage": "Möchten Sie \"{name}\" wirklich widerrufen? Clients, die diesen Schlüssel verwenden, funktionieren sofort nicht mehr.",
+			"revoked": "API-Key widerrufen.",
+			"error": "Vorgang fehlgeschlagen."
+		},
+		"usage": {
+			"title": "Nutzung",
+			"windowDays": "Letzte {days} Tage",
+			"searches": "Suchen",
+			"ingests": "Importierte Dokumente"
+		}
 	}
 }

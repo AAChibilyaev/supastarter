@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
 		"@polar-sh/sdk": "^0.47.0",
+		"@repo/billing-wallet": "workspace:*",
 		"@repo/database": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"dodopayments": "^2.26.0",

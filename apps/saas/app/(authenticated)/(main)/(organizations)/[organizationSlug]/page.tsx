@@ -28,5 +28,5 @@ export default async function OrganizationPage({
 		return notFound();
 	}
 
-	redirect(`/${organizationSlug}/search`);
+	redirect(`/${organizationSlug}/overview`);
 }

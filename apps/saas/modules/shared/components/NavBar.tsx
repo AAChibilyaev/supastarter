@@ -36,6 +36,9 @@ import {
 	SearchIcon,
 	SettingsIcon,
 	ShieldUserIcon,
+	BarChart3Icon,
+	SlidersHorizontalIcon,
+	CableIcon,
 	UserCogIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -347,10 +350,34 @@ export function NavBar() {
 			...(activeOrganization
 				? [
 						{
-							label: t("app.menu.search"),
+							label: "Overview",
+							href: `${basePath}/overview`,
+							icon: HomeIcon,
+							isActive: pathname === `${basePath}/overview` || pathname === basePath,
+						},
+						{
+							label: "Search",
 							href: `${basePath}/search`,
 							icon: SearchIcon,
 							isActive: pathname.startsWith(`${basePath}/search`),
+						},
+						{
+							label: "Analytics",
+							href: `${basePath}/analytics`,
+							icon: BarChart3Icon,
+							isActive: pathname.startsWith(`${basePath}/analytics`),
+						},
+						{
+							label: "Relevance",
+							href: `${basePath}/relevance`,
+							icon: SlidersHorizontalIcon,
+							isActive: pathname.startsWith(`${basePath}/relevance`),
+						},
+						{
+							label: "Connectors",
+							href: `${basePath}/connectors`,
+							icon: CableIcon,
+							isActive: pathname.startsWith(`${basePath}/connectors`),
 						},
 					]
 				: []),

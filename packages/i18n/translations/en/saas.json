@@ -764,15 +764,24 @@
 			"testSearch": "Test search",
 			"enableWidget": "Enable search widget"
 		},
-		"analytics": {
-			"title": "Projects",
-			"subtitle": "Search indexes and connectors for this organization.",
-			"newProject": "New project",
-			"noProjects": "No projects yet. Create one to get started.",
-			"apiKeysLabel": "API keys",
-			"versionLabel": "Version",
-			"selectProject": "Select a project to view its details.",
-			"linkToSearch": "Open search"
+		"overview": {
+			"title": "Dashboard",
+			"indexVersion": "Index version",
+			"apiKeys": "API keys",
+			"searches": "Searches",
+			"indexes": "Indexes",
+			"documents": "Documents",
+			"plan": "Plan",
+			"quickActions": "Quick actions",
+			"manageIndexes": "Manage indexes",
+			"manageIndexesDesc": "Create and manage search indexes",
+			"viewAnalytics": "View analytics",
+			"viewAnalyticsDesc": "Track search usage and top queries",
+			"setupConnector": "Set up connector",
+			"setupConnectorDesc": "Connect PrestaShop or Bitrix module",
+			"managePlan": "Manage plan",
+			"graceUntil": "Read-only until {date}",
+			"active": "Active"
 		},
 		"overview": {
 			"title": "Project overview",

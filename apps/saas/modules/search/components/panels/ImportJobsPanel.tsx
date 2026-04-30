@@ -26,6 +26,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { ingestJobStatusBadge } from "../../lib/job-status";
 import { EmptyState } from "../cards/EmptyState";
 
 interface ImportJobsPanelProps {
@@ -34,13 +35,6 @@ interface ImportJobsPanelProps {
 }
 
 type ViewMode = "timeline" | "table";
-
-const statusBadgeMap: Record<string, "warning" | "info" | "success" | "error"> = {
-	pending: "warning",
-	processing: "info",
-	completed: "success",
-	failed: "error",
-};
 
 function formatDuration(startedAt: string, finishedAt: string | null): string {
 	if (!finishedAt) return "\u2014";
@@ -289,7 +283,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 											className={`size-4 shrink-0 ${getStatusColor(job.status)}`}
 										/>
 										<span className="font-mono text-xs truncate">{job.id}</span>
-										<Badge status={statusBadgeMap[job.status] ?? "info"}>
+										<Badge status={ingestJobStatusBadge[job.status] ?? "info"}>
 											{job.status}
 										</Badge>
 										{job.type && (
@@ -360,7 +354,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									</TableCell>
 									<TableCell className="text-xs">{job.type}</TableCell>
 									<TableCell>
-										<Badge status={statusBadgeMap[job.status] ?? "info"}>
+										<Badge status={ingestJobStatusBadge[job.status] ?? "info"}>
 											{job.status}
 										</Badge>
 									</TableCell>

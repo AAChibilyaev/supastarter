@@ -25,6 +25,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { ConnectorCard, type ConnectorStatus, type SourceType } from "../cards/ConnectorCard";
+import { EmptyState } from "../cards/EmptyState";
 import { ConnectorWizard } from "../dialogs/ConnectorWizard";
 import { SyncJobsTable } from "../tables/SyncJobsTable";
 
@@ -307,9 +308,10 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 					</CardHeader>
 					<CardContent className="overflow-x-auto">
 						{activeTokens.length === 0 ? (
-							<p className="py-4 text-sm text-center text-muted-foreground">
-								{t("search.connector.noConnectors")}
-							</p>
+							<EmptyState
+								variant="inline"
+								description={t("search.connector.noConnectors")}
+							/>
 						) : (
 							<Table>
 								<TableHeader>

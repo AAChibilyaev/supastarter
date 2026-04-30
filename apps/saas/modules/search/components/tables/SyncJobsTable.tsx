@@ -20,6 +20,8 @@ import {
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { syncJobStatusBadge } from "../../lib/job-status";
+
 interface SyncJob {
 	id: string;
 	type: "full" | "delta";
@@ -44,12 +46,6 @@ interface SyncJobsTableProps {
 	onRetry?: (jobId: string) => void;
 	retryingJobId?: string | null;
 }
-
-const statusBadgeMap: Record<string, "warning" | "info" | "success" | "error"> = {
-	running: "warning",
-	completed: "success",
-	failed: "error",
-};
 
 export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJobsTableProps) {
 	const t = useTranslations();
@@ -101,7 +97,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									</TableCell>
 									<TableCell className="text-xs capitalize">{job.type}</TableCell>
 									<TableCell>
-										<Badge status={statusBadgeMap[job.status] ?? "info"}>
+										<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
 											{job.status}
 										</Badge>
 									</TableCell>
@@ -177,7 +173,9 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									</span>
 									<p className="text-sm font-medium">
 										<Badge
-											status={statusBadgeMap[selectedJob.status] ?? "info"}
+											status={
+												syncJobStatusBadge[selectedJob.status] ?? "info"
+											}
 										>
 											{selectedJob.status}
 										</Badge>
@@ -232,9 +230,9 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 												<span
 													className={
 														event.level === "error"
-															? "text-rose-500"
+															? "text-destructive"
 															: event.level === "warn"
-																? "text-amber-500"
+																? "text-warning"
 																: ""
 													}
 												>

@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import { useSearchIndexesQuery } from "../../lib/api";
+import { EmptyState } from "../cards/EmptyState";
 import { SearchUsageCard } from "../cards/SearchUsageCard";
 import { SearchUsageCards } from "../cards/SearchUsageCards";
 import { CreateSearchIndexDialog } from "../dialogs/CreateSearchIndexDialog";
@@ -123,9 +124,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 							/>
 						</>
 					) : (
-						<div className="rounded p-6 border text-center text-foreground/60">
-							{t("search.selectIndex")}
-						</div>
+						<EmptyState variant="inline" description={t("search.selectIndex")} />
 					)}
 				</TabsContent>
 
@@ -149,9 +148,7 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 					{selectedSlug ? (
 						<WidgetPanel slug={selectedSlug} baseUrl={baseUrl ?? ""} />
 					) : (
-						<div className="rounded p-6 border text-center text-foreground/60">
-							{t("search.selectIndex")}
-						</div>
+						<EmptyState variant="inline" description={t("search.selectIndex")} />
 					)}
 				</TabsContent>
 			</Tabs>

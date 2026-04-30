@@ -1,10 +1,14 @@
-# Coding Agent Guidelines
+# Coding Agent Guidelines — AACsearch
 
-> Comprehensive guide for AI coding agents working with this supastarter Next.js codebase.
+> Conventions for AI coding agents working in this repo. AACsearch is a hosted **search-as-a-service** built on a supastarter Next.js monorepo.
 
-## Purpose
+## Read first
 
-Use this document whenever generating or updating code in this repository. Mirror existing project conventions; do not invent new patterns without a strong reason.
+1. **Status & scope**: [`docs/plans/aacsearch-prd.md`](docs/plans/aacsearch-prd.md)
+2. **Workflow contract**: `~/.claude/skills/supastarter-nextjs-skill/SKILL.md` (Hard Invariants, Decision Gates, Task Recipes, Definition of Done)
+3. **This file** — coding conventions only. Mirror existing patterns; don't invent new ones without a strong reason.
+
+The PRD owns *what* is in/out of v0.x. SKILL.md owns *how* a task is executed. This file owns *how the code looks* once the task is approved.
 
 ---
 

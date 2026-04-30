@@ -12,8 +12,7 @@ export function Footer() {
 				<div>
 					<Logo className="opacity-70 grayscale" />
 					<p className="mt-3 text-sm opacity-70">
-						© {new Date().getFullYear()} {config.appName}.{" "}
-						<a href="https://supastarter.dev">{t("common.footer.builtWith")}</a>.
+						© {new Date().getFullYear()} {config.appName}.
 					</p>
 				</div>
 

@@ -48,7 +48,7 @@ export function FeaturesGrid() {
 							key={key}
 							className="p-6 backdrop-blur bg-card/30 transition hover:bg-card/60"
 						>
-							<Icon className="size-5 text-emerald-300" />
+							<Icon className="size-5 text-pink-400" />
 							<h3 className="mt-4 font-medium text-foreground">
 								{t(`home.features.items.${key}.title`)}
 							</h3>

@@ -38,12 +38,12 @@ export function PricingPlans() {
 								className={cn(
 									"p-6 backdrop-blur relative flex flex-col rounded-xl border bg-card/30",
 									plan.primary
-										? "border-emerald-400/50 shadow-emerald-400/10 shadow-xl"
+										? "border-pink-500/50 shadow-pink-500/15 shadow-xl"
 										: "border-border/70",
 								)}
 							>
 								{plan.primary && (
-									<span className="-top-3 left-6 border-emerald-400/50 px-2 py-0.5 font-mono text-emerald-300 absolute rounded-md border bg-background text-[11px]">
+									<span className="-top-3 left-6 border-pink-500/50 px-2 py-0.5 font-mono text-pink-400 absolute rounded-md border bg-background text-[11px]">
 										{t(`home.pricing.plans.${plan.key}.highlight`)}
 									</span>
 								)}
@@ -71,7 +71,7 @@ export function PricingPlans() {
 											key={feature}
 											className="gap-2 text-sm flex items-start text-foreground/90"
 										>
-											<CheckIcon className="mt-0.5 size-4 text-emerald-300 shrink-0" />
+											<CheckIcon className="mt-0.5 size-4 text-pink-400 shrink-0" />
 											<span>{feature}</span>
 										</li>
 									))}

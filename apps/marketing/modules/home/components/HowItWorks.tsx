@@ -16,9 +16,9 @@ export function HowItWorks() {
 					{steps.map((step, i) => (
 						<li
 							key={step}
-							className="p-6 backdrop-blur hover:border-emerald-400/40 relative rounded-xl border border-border/70 bg-card/30 transition"
+							className="p-6 backdrop-blur hover:border-pink-400/50 relative rounded-xl border border-border/70 bg-card/30 transition"
 						>
-							<span className="-top-3 left-6 size-7 border-emerald-400/40 font-mono text-emerald-300 text-xs absolute inline-flex -translate-x-1/2 items-center justify-center rounded-md border bg-background">
+							<span className="-top-3 left-6 size-7 border-pink-400/50 font-mono text-pink-400 text-xs absolute inline-flex -translate-x-1/2 items-center justify-center rounded-md border bg-background">
 								0{i + 1}
 							</span>
 							<h3 className="mt-2 font-medium text-lg text-foreground">

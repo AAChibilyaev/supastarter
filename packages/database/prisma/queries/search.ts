@@ -1,6 +1,14 @@
 import { db } from "../client";
 import type { Prisma } from "../generated/client";
 
+export interface SearchOwnerScope {
+	organizationId?: string;
+}
+
+function toOwnerWhere(scope: SearchOwnerScope) {
+	return { organizationId: scope.organizationId ?? "" };
+}
+
 export async function listSearchIndexes(organizationId: string) {
 	return db.searchIndex.findMany({
 		where: { organizationId },
@@ -19,6 +27,27 @@ export async function getSearchIndexBySlug(organizationId: string, slug: string)
 	});
 }
 
+export async function listSearchIndexesByOwner(scope: SearchOwnerScope) {
+	return db.searchIndex.findMany({
+		where: toOwnerWhere(scope),
+		orderBy: { createdAt: "desc" },
+		include: {
+			_count: {
+				select: { apiKeys: true },
+			},
+		},
+	});
+}
+
+export async function getSearchIndexByOwnerSlug(scope: SearchOwnerScope, slug: string) {
+	return db.searchIndex.findFirst({
+		where: {
+			...toOwnerWhere(scope),
+			slug,
+		},
+	});
+}
+
 export async function getSearchIndexById(id: string) {
 	return db.searchIndex.findUnique({
 		where: { id },
@@ -31,6 +60,26 @@ export async function createSearchIndex(input: {
 	displayName: string;
 	schema: Prisma.InputJsonValue;
 }) {
+	return db.searchIndex.create({
+		data: {
+			organizationId: input.organizationId,
+			slug: input.slug,
+			displayName: input.displayName,
+			schema: input.schema,
+		},
+	});
+}
+
+export async function createSearchIndexByOwner(input: {
+	organizationId?: string;
+	slug: string;
+	displayName: string;
+	schema: Prisma.InputJsonValue;
+}) {
+	if (!input.organizationId) {
+		throw new Error("organizationId is required");
+	}
+
 	return db.searchIndex.create({
 		data: {
 			organizationId: input.organizationId,

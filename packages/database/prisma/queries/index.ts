@@ -1,6 +1,7 @@
 export * from "./ai-pricing";
 export * from "./ai-usage";
 export * from "./ai-wallets";
+export * from "./knowledge";
 export * from "./organizations";
 export * from "./purchases";
 export * from "./search";

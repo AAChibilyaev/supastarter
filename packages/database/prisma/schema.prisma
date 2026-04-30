@@ -43,6 +43,7 @@ model User {
   notifications            Notification[]
   notificationPreferences  UserNotificationPreference[]
   aiWallet                 AiWallet?
+  knowledgeSpaces          KnowledgeSpace[]
 
   @@unique([email])
   @@unique([username])
@@ -152,6 +153,7 @@ model Organization {
   searchUsageEvents  SearchUsageEvent[]
   searchIngestBuffer SearchIngestBuffer[]
   aiWallet           AiWallet?
+  knowledgeSpaces    KnowledgeSpace[]
 
   @@unique([slug])
   @@map("organization")
@@ -338,6 +340,171 @@ model SearchIngestBuffer {
 
   @@index([indexId, processedAt, nextRetryAt])
   @@map("search_ingest_buffer")
+}
+
+enum KnowledgeOwnerType {
+  USER
+  ORGANIZATION
+}
+
+enum KnowledgeSourceType {
+  CMS_PRESTASHOP
+  CMS_BITRIX
+  FILE_MD
+  FILE_XML
+  FILE_PDF
+  HTTP_SITEMAP
+  RSS
+}
+
+enum IngestionJobStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+model KnowledgeSpace {
+  id             String             @id @default(cuid())
+  ownerType      KnowledgeOwnerType
+  userId         String?
+  user           User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   Organization?      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  slug           String
+  name           String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  dataSources    DataSource[]
+  documents      KnowledgeDocument[]
+  chunks         KnowledgeChunk[]
+  graphNodes     GraphNode[]
+  graphEdges     GraphEdge[]
+  ingestionJobs  IngestionJob[]
+
+  @@unique([ownerType, userId, slug])
+  @@unique([ownerType, organizationId, slug])
+  @@index([ownerType, userId])
+  @@index([ownerType, organizationId])
+  @@map("knowledge_space")
+}
+
+model DataSource {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  sourceType        KnowledgeSourceType
+  name              String
+  config            Json              @default("{}")
+  credentialRef     String?
+  syncEnabled       Boolean           @default(true)
+  lastSyncedAt      DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  ingestionJobs     IngestionJob[]
+  documents         KnowledgeDocument[]
+
+  @@index([knowledgeSpaceId, sourceType])
+  @@map("data_source")
+}
+
+model IngestionJob {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  dataSourceId      String?
+  dataSource        DataSource?       @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
+  status            IngestionJobStatus @default(QUEUED)
+  mode              String
+  inputMeta         Json              @default("{}")
+  totalItems        Int               @default(0)
+  processedItems    Int               @default(0)
+  failedItems       Int               @default(0)
+  errorMessage      String?
+  startedAt         DateTime?
+  finishedAt        DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([knowledgeSpaceId, status, createdAt(sort: Desc)])
+  @@index([dataSourceId, createdAt(sort: Desc)])
+  @@map("ingestion_job")
+}
+
+model KnowledgeDocument {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  dataSourceId      String?
+  dataSource        DataSource?       @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
+  externalId        String
+  sourceType        KnowledgeSourceType
+  title             String
+  mimeType          String
+  language          String            @default("en")
+  contentText       String
+  metadata          Json              @default("{}")
+  version           Int               @default(1)
+  checksum          String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  chunks            KnowledgeChunk[]
+
+  @@unique([knowledgeSpaceId, externalId])
+  @@index([knowledgeSpaceId, sourceType, updatedAt(sort: Desc)])
+  @@map("knowledge_document")
+}
+
+model KnowledgeChunk {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  documentId        String
+  document          KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  chunkIndex        Int
+  text              String
+  tokenCount        Int               @default(0)
+  embedding         Json?
+  metadata          Json              @default("{}")
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@unique([documentId, chunkIndex])
+  @@index([knowledgeSpaceId, documentId])
+  @@map("knowledge_chunk")
+}
+
+model GraphNode {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  canonicalName     String
+  nodeType          String
+  metadata          Json              @default("{}")
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@unique([knowledgeSpaceId, canonicalName, nodeType])
+  @@index([knowledgeSpaceId, nodeType])
+  @@map("graph_node")
+}
+
+model GraphEdge {
+  id                String            @id @default(cuid())
+  knowledgeSpaceId  String
+  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  fromNodeId        String
+  toNodeId          String
+  relationType      String
+  weight            Float             @default(1)
+  evidenceChunkId   String?
+  metadata          Json              @default("{}")
+  createdAt         DateTime          @default(now())
+
+  @@index([knowledgeSpaceId, fromNodeId, relationType])
+  @@index([knowledgeSpaceId, toNodeId, relationType])
+  @@map("graph_edge")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

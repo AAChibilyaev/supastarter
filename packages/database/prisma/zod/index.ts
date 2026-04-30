@@ -112,6 +112,48 @@ export const SearchIngestBufferScalarFieldEnumSchema = z.enum(['id', 'indexId', 
 
 export type SearchIngestBufferScalarFieldEnum = z.infer<typeof SearchIngestBufferScalarFieldEnumSchema>;
 
+// File: KnowledgeSpaceScalarFieldEnum.schema.ts
+
+export const KnowledgeSpaceScalarFieldEnumSchema = z.enum(['id', 'ownerType', 'userId', 'organizationId', 'slug', 'name', 'createdAt', 'updatedAt'])
+
+export type KnowledgeSpaceScalarFieldEnum = z.infer<typeof KnowledgeSpaceScalarFieldEnumSchema>;
+
+// File: DataSourceScalarFieldEnum.schema.ts
+
+export const DataSourceScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'sourceType', 'name', 'config', 'credentialRef', 'syncEnabled', 'lastSyncedAt', 'createdAt', 'updatedAt'])
+
+export type DataSourceScalarFieldEnum = z.infer<typeof DataSourceScalarFieldEnumSchema>;
+
+// File: IngestionJobScalarFieldEnum.schema.ts
+
+export const IngestionJobScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'dataSourceId', 'status', 'mode', 'inputMeta', 'totalItems', 'processedItems', 'failedItems', 'errorMessage', 'startedAt', 'finishedAt', 'createdAt', 'updatedAt'])
+
+export type IngestionJobScalarFieldEnum = z.infer<typeof IngestionJobScalarFieldEnumSchema>;
+
+// File: KnowledgeDocumentScalarFieldEnum.schema.ts
+
+export const KnowledgeDocumentScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'dataSourceId', 'externalId', 'sourceType', 'title', 'mimeType', 'language', 'contentText', 'metadata', 'version', 'checksum', 'createdAt', 'updatedAt'])
+
+export type KnowledgeDocumentScalarFieldEnum = z.infer<typeof KnowledgeDocumentScalarFieldEnumSchema>;
+
+// File: KnowledgeChunkScalarFieldEnum.schema.ts
+
+export const KnowledgeChunkScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'documentId', 'chunkIndex', 'text', 'tokenCount', 'embedding', 'metadata', 'createdAt', 'updatedAt'])
+
+export type KnowledgeChunkScalarFieldEnum = z.infer<typeof KnowledgeChunkScalarFieldEnumSchema>;
+
+// File: GraphNodeScalarFieldEnum.schema.ts
+
+export const GraphNodeScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'canonicalName', 'nodeType', 'metadata', 'createdAt', 'updatedAt'])
+
+export type GraphNodeScalarFieldEnum = z.infer<typeof GraphNodeScalarFieldEnumSchema>;
+
+// File: GraphEdgeScalarFieldEnum.schema.ts
+
+export const GraphEdgeScalarFieldEnumSchema = z.enum(['id', 'knowledgeSpaceId', 'fromNodeId', 'toNodeId', 'relationType', 'weight', 'evidenceChunkId', 'metadata', 'createdAt'])
+
+export type GraphEdgeScalarFieldEnum = z.infer<typeof GraphEdgeScalarFieldEnumSchema>;
+
 // File: AiWalletScalarFieldEnum.schema.ts
 
 export const AiWalletScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'currency', 'availableBalanceKopecks', 'reservedBalanceKopecks', 'includedMonthlyLimitKopecks', 'includedUsedPeriodKopecks', 'promoBalanceKopecks', 'overageLimitKopecks', 'overageUsedKopecks', 'status', 'periodStart', 'periodEnd', 'createdAt', 'updatedAt'])
@@ -213,6 +255,24 @@ export type NotificationType = z.infer<typeof NotificationTypeSchema>;
 export const NotificationTargetSchema = z.enum(['IN_APP', 'EMAIL'])
 
 export type NotificationTarget = z.infer<typeof NotificationTargetSchema>;
+
+// File: KnowledgeOwnerType.schema.ts
+
+export const KnowledgeOwnerTypeSchema = z.enum(['USER', 'ORGANIZATION'])
+
+export type KnowledgeOwnerType = z.infer<typeof KnowledgeOwnerTypeSchema>;
+
+// File: KnowledgeSourceType.schema.ts
+
+export const KnowledgeSourceTypeSchema = z.enum(['CMS_PRESTASHOP', 'CMS_BITRIX', 'FILE_MD', 'FILE_XML', 'FILE_PDF', 'HTTP_SITEMAP', 'RSS'])
+
+export type KnowledgeSourceType = z.infer<typeof KnowledgeSourceTypeSchema>;
+
+// File: IngestionJobStatus.schema.ts
+
+export const IngestionJobStatusSchema = z.enum(['QUEUED', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED'])
+
+export type IngestionJobStatus = z.infer<typeof IngestionJobStatusSchema>;
 
 // File: User.schema.ts
 
@@ -493,6 +553,134 @@ export const SearchIngestBufferSchema = z.object({
 });
 
 export type SearchIngestBufferType = z.infer<typeof SearchIngestBufferSchema>;
+
+
+// File: KnowledgeSpace.schema.ts
+
+export const KnowledgeSpaceSchema = z.object({
+  id: z.string(),
+  ownerType: KnowledgeOwnerTypeSchema,
+  userId: z.string().nullish(),
+  organizationId: z.string().nullish(),
+  slug: z.string(),
+  name: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type KnowledgeSpaceType = z.infer<typeof KnowledgeSpaceSchema>;
+
+
+// File: DataSource.schema.ts
+
+export const DataSourceSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  sourceType: KnowledgeSourceTypeSchema,
+  name: z.string(),
+  config: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  credentialRef: z.string().nullish(),
+  syncEnabled: z.boolean().default(true),
+  lastSyncedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type DataSourceType = z.infer<typeof DataSourceSchema>;
+
+
+// File: IngestionJob.schema.ts
+
+export const IngestionJobSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  dataSourceId: z.string().nullish(),
+  status: IngestionJobStatusSchema.default("QUEUED"),
+  mode: z.string(),
+  inputMeta: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  totalItems: z.number().int(),
+  processedItems: z.number().int(),
+  failedItems: z.number().int(),
+  errorMessage: z.string().nullish(),
+  startedAt: z.date().nullish(),
+  finishedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type IngestionJobType = z.infer<typeof IngestionJobSchema>;
+
+
+// File: KnowledgeDocument.schema.ts
+
+export const KnowledgeDocumentSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  dataSourceId: z.string().nullish(),
+  externalId: z.string(),
+  sourceType: KnowledgeSourceTypeSchema,
+  title: z.string(),
+  mimeType: z.string(),
+  language: z.string().default("en"),
+  contentText: z.string(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  version: z.number().int().default(1),
+  checksum: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type KnowledgeDocumentType = z.infer<typeof KnowledgeDocumentSchema>;
+
+
+// File: KnowledgeChunk.schema.ts
+
+export const KnowledgeChunkSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  documentId: z.string(),
+  chunkIndex: z.number().int(),
+  text: z.string(),
+  tokenCount: z.number().int(),
+  embedding: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type KnowledgeChunkType = z.infer<typeof KnowledgeChunkSchema>;
+
+
+// File: GraphNode.schema.ts
+
+export const GraphNodeSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  canonicalName: z.string(),
+  nodeType: z.string(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type GraphNodeType = z.infer<typeof GraphNodeSchema>;
+
+
+// File: GraphEdge.schema.ts
+
+export const GraphEdgeSchema = z.object({
+  id: z.string(),
+  knowledgeSpaceId: z.string(),
+  fromNodeId: z.string(),
+  toNodeId: z.string(),
+  relationType: z.string(),
+  weight: z.number().default(1.0),
+  evidenceChunkId: z.string().nullish(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  createdAt: z.date(),
+});
+
+export type GraphEdgeType = z.infer<typeof GraphEdgeSchema>;
 
 
 // File: AiWallet.schema.ts

@@ -19,6 +19,7 @@ import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
+import { v1Router } from "./v1/router";
 export { listPurchases } from "./modules/payments/procedures/list-purchases";
 
 export { router } from "./orpc/router";
@@ -68,6 +69,8 @@ export const app = new Hono()
 	.route("/", connectorApp)
 	// Analytics events API (public — permissive CORS, mounted before global CORS)
 	.route("/", analyticsApp)
+	// Version 1 public REST API (API-key auth, mounted before global CORS for broad access)
+	.route("/v1", v1Router)
 	// Cors middleware
 	.use(
 		cors({

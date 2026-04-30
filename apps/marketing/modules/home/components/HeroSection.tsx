@@ -13,11 +13,11 @@ export function HeroSection() {
 	const t = useTranslations();
 
 	return (
-		<div className="relative max-w-full overflow-x-hidden bg-linear-to-t from-background via-primary/5 to-background">
+		<div className="relative max-w-full overflow-x-hidden bg-linear-to-t from-background via-muted/60 to-background">
 			<div className="py-8 md:py-16 relative z-20 container text-center">
 				<div className="mb-4 flex justify-center">
-					<div className="px-3 py-1 font-normal text-sm flex flex-wrap items-center justify-center rounded-full bg-muted p-px text-foreground">
-						<span className="gap-2 font-semibold flex items-center rounded-full">
+					<div className="px-3 py-1 font-normal text-sm flex flex-wrap items-center justify-center rounded-none bg-muted p-px text-foreground">
+						<span className="gap-2 font-semibold flex items-center rounded-none">
 							{t("home.hero.new")}
 						</span>
 						<span className="ml-1 font-medium block">
@@ -48,17 +48,17 @@ export function HeroSection() {
 					)}
 				</div>
 
-				<div className="mt-12 lg:mt-16 lg:flex-1 p-4 mx-auto rounded-4xl border border-primary/10 bg-primary/5">
+				<div className="mt-12 lg:mt-16 lg:flex-1 p-4 mx-auto rounded-sm border border-border/70 bg-card/50">
 					<Image
 						src={heroImage}
 						alt={t("home.hero.imageAlt")}
-						className="block rounded-xl dark:hidden"
+						className="block rounded-sm dark:hidden"
 						priority
 					/>
 					<Image
 						src={heroImageDark}
 						alt={t("home.hero.imageAlt")}
-						className="hidden rounded-xl dark:block"
+						className="hidden rounded-sm dark:block"
 						priority
 					/>
 				</div>

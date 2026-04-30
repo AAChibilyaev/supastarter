@@ -58,7 +58,7 @@
 					"description": "Per-user, per-filter, TTL-bound. Mint server-side, ship to the browser, expire on schedule."
 				},
 				"originAllowlist": {
-					"title": "Per-key origin allow-list",
+					"title": "Origin allow-list",
 					"description": "Pin every key to specific origins. A leaked key from Twitter doesn't drain your quota."
 				},
 				"rateLimitQuota": {

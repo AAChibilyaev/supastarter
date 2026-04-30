@@ -42,16 +42,18 @@ export function FeaturesGrid() {
 					<p className="mt-3 text-muted-foreground">{t("home.features.subtitle")}</p>
 				</div>
 
-				<div className="mt-12 sm:grid-cols-2 lg:grid-cols-3 grid gap-px overflow-hidden rounded-xl border border-border/70 bg-border/70">
+				<div className="mt-12 sm:grid-cols-2 lg:grid-cols-3 grid gap-px overflow-hidden rounded-none border border-border/70 bg-border/70">
 					{items.map(({ key, icon: Icon }) => (
 						<div
 							key={key}
 							className="p-6 backdrop-blur bg-card/30 transition hover:bg-card/60"
 						>
-							<Icon className="size-5 text-pink-400" />
-							<h3 className="mt-4 font-medium text-foreground">
-								{t(`home.features.items.${key}.title`)}
-							</h3>
+							<div className="gap-2 flex items-start">
+								<Icon className="mt-0.5 size-5 text-pink-400 shrink-0" />
+								<h3 className="font-medium leading-snug text-foreground">
+									{t(`home.features.items.${key}.title`)}
+								</h3>
+							</div>
 							<p className="mt-2 text-sm leading-relaxed text-muted-foreground">
 								{t(`home.features.items.${key}.description`)}
 							</p>

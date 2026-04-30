@@ -17,7 +17,7 @@ export function PricingPlans() {
 		<section id="pricing" className="py-20 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<div className="mb-3 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex items-center rounded-full border border-border bg-card/40 text-muted-foreground">
+					<div className="mb-3 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex items-center rounded-none border border-border bg-card/40 text-muted-foreground">
 						{t("home.pricing.badge")}
 					</div>
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -36,14 +36,14 @@ export function PricingPlans() {
 							<div
 								key={plan.key}
 								className={cn(
-									"p-6 backdrop-blur relative flex flex-col rounded-xl border bg-card/30",
+									"p-6 backdrop-blur relative flex flex-col rounded-none border bg-card/30",
 									plan.primary
 										? "border-pink-500/50 shadow-pink-500/15 shadow-xl"
 										: "border-border/70",
 								)}
 							>
 								{plan.primary && (
-									<span className="-top-3 left-6 border-pink-500/50 px-2 py-0.5 font-mono text-pink-400 absolute rounded-md border bg-background text-[11px]">
+									<span className="-top-3 left-6 border-pink-500/50 px-2 py-0.5 font-mono text-pink-400 absolute rounded-sm border bg-background text-[11px]">
 										{t(`home.pricing.plans.${plan.key}.highlight`)}
 									</span>
 								)}

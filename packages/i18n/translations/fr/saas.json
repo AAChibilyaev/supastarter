@@ -689,6 +689,30 @@
 			"clicksColumn": "Clics",
 			"noData": "Aucune donnée disponible pour cette période."
 		},
+		"importJobs": {
+			"tab": "Tâches d'import",
+			"title": "Tâches d'import",
+			"description": "Activité récente d'import et de synchronisation de documents depuis le tampon d'ingestion.",
+			"pending": "En attente",
+			"processing": "En cours",
+			"completed": "Terminé",
+			"failed": "Échoué",
+			"empty": "Aucune activité d'import au cours des 7 derniers jours.",
+			"tableJobId": "ID tâche",
+			"tableType": "Type",
+			"tableStatus": "Statut",
+			"tableProgress": "Progression",
+			"tableErrors": "Erreurs",
+			"tableTime": "Date"
+		},
+		"preview": {
+			"tab": "Aperçu recherche",
+			"title": "Aperçu de la recherche",
+			"description": "Testez des requêtes de recherche sur cet index et inspectez les résultats bruts.",
+			"placeholder": "Saisissez une requête…",
+			"search": "Rechercher",
+			"noResults": "Exécutez une requête pour voir les résultats ici."
+		},
 		"widget": {
 			"tab": "Widget",
 			"title": "Widget de recherche",

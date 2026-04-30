@@ -23,11 +23,11 @@ export function HeroWithCode() {
 
 	return (
 		<section className="relative isolate overflow-hidden border-b border-border/60">
-			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.62_0.22_7/0.20),transparent_55%)]" />
-			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.62_0.22_7/0.12),transparent_50%)]" />
+			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.62_0.22_7/0.10),transparent_55%)]" />
+			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.62_0.22_7/0.06),transparent_50%)]" />
 			<div className="gap-10 py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24 container grid">
 				<div className="flex flex-col justify-center">
-					<div className="mb-5 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex w-fit items-center rounded-full border border-border bg-card/40 text-muted-foreground">
+					<div className="mb-5 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex w-fit items-center rounded-none border border-border bg-card/40 text-muted-foreground">
 						<span className="size-1.5 bg-pink-500 rounded-full" />
 						{t("home.hero.badge")}
 					</div>
@@ -56,7 +56,7 @@ export function HeroWithCode() {
 				</div>
 
 				<div className="relative">
-					<div className="shadow-2xl shadow-pink-500/10 backdrop-blur relative overflow-hidden rounded-xl border border-border/80 bg-card/50">
+					<div className="shadow-2xl shadow-pink-500/8 backdrop-blur relative overflow-hidden rounded-sm border border-border/80 bg-card/50">
 						<div className="gap-2 px-4 py-3 flex items-center border-b border-border/60">
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />

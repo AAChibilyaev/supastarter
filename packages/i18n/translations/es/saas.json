@@ -780,6 +780,30 @@
 			"stepDocs": "Ver documentacion",
 			"allDone": "Todas las comprobaciones superadas!"
 		},
+		"importJobs": {
+			"tab": "Trabajos de Importación",
+			"title": "Trabajos de Importación",
+			"description": "Actividad reciente de importación y sincronización de documentos desde el búfer de ingesta.",
+			"pending": "Pendiente",
+			"processing": "Procesando",
+			"completed": "Completado",
+			"failed": "Fallido",
+			"empty": "No hay actividad de importación en los últimos 7 días.",
+			"tableJobId": "ID del Trabajo",
+			"tableType": "Tipo",
+			"tableStatus": "Estado",
+			"tableProgress": "Progreso",
+			"tableErrors": "Errores",
+			"tableTime": "Hora"
+		},
+		"preview": {
+			"tab": "Vista Previa",
+			"title": "Vista Previa de Búsqueda",
+			"description": "Prueba consultas de búsqueda contra este índice e inspecciona los resultados en bruto.",
+			"placeholder": "Ingresa una consulta…",
+			"search": "Buscar",
+			"noResults": "Ejecuta una consulta para ver los resultados aquí."
+		},
 		"connector": {
 			"title": "Conector",
 			"description": "Gestiona el token del conector y el estado del handshake.",

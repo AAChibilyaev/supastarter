@@ -21,7 +21,7 @@
 		--popover-foreground: var(--color-stone-950);
 		--card: var(--color-white);
 		--card-foreground: var(--color-stone-950);
-		--radius: 0.75rem;
+		--radius: 0.25rem;
 	}
 
 	.dark {

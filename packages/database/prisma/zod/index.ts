@@ -108,7 +108,7 @@ export type SearchUsageEventScalarFieldEnum = z.infer<typeof SearchUsageEventSca
 
 // File: SearchIngestBufferScalarFieldEnum.schema.ts
 
-export const SearchIngestBufferScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'action', 'document', 'processedAt', 'createdAt'])
+export const SearchIngestBufferScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'action', 'document', 'processedAt', 'attempts', 'lastError', 'nextRetryAt', 'createdAt'])
 
 export type SearchIngestBufferScalarFieldEnum = z.infer<typeof SearchIngestBufferScalarFieldEnumSchema>;
 
@@ -486,6 +486,9 @@ export const SearchIngestBufferSchema = z.object({
   action: z.string(),
   document: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
   processedAt: z.date().nullish(),
+  attempts: z.number().int(),
+  lastError: z.string().nullish(),
+  nextRetryAt: z.date().nullish(),
   createdAt: z.date(),
 });
 

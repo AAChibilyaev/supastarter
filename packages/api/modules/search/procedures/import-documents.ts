@@ -1,7 +1,6 @@
 import { ORPCError } from "@orpc/client";
-import { recordSearchUsage } from "@repo/database";
+import { enqueueManySearchIngest, recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
-import { aliasName, bulkUpsert } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -13,8 +12,9 @@ export const importDocuments = protectedProcedure
 		method: "POST",
 		path: "/search/indexes/{slug}/import",
 		tags: ["Search"],
-		summary: "Bulk import documents",
-		description: "Bulk upserts documents into the index alias collection.",
+		summary: "Enqueue documents for asynchronous indexing",
+		description:
+			"Persists documents into the durable ingest buffer in a single INSERT. The background flush worker delivers them to Typesense; this response confirms enqueueing only, NOT delivery. Use the cron flush endpoint or wait for the worker to mark rows processed.",
 	})
 	.input(
 		z.object({
@@ -28,27 +28,26 @@ export const importDocuments = protectedProcedure
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
 		try {
-			const result = await bulkUpsert({
-				collection: aliasName(input.organizationId, input.slug),
-				tenantId: input.organizationId,
-				documents: input.documents,
-			});
+			const queued = await enqueueManySearchIngest(
+				index.id,
+				index.organizationId,
+				"upsert",
+				input.documents as Prisma.InputJsonValue[],
+			);
 
 			await recordSearchUsage({
 				indexId: index.id,
 				organizationId: index.organizationId,
-				type: "ingest",
-				count: result.successCount,
+				type: "ingest_enqueued",
+				count: queued,
 			});
 
 			return {
-				total: result.total,
-				successCount: result.successCount,
-				failureCount: result.failures.length,
-				failures: result.failures.slice(0, 10),
+				queued,
+				accepted: input.documents.length,
 			};
 		} catch (error) {
-			logger.error("Search import failed", { error });
+			logger.error("Search enqueue failed", { error });
 			throw new ORPCError("INTERNAL_SERVER_ERROR");
 		}
 	});

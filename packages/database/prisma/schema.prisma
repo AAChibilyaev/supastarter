@@ -331,9 +331,12 @@ model SearchIngestBuffer {
   action         String
   document       Json
   processedAt    DateTime?
+  attempts       Int          @default(0)
+  lastError      String?
+  nextRetryAt    DateTime?
   createdAt      DateTime     @default(now())
 
-  @@index([indexId, processedAt])
+  @@index([indexId, processedAt, nextRetryAt])
   @@map("search_ingest_buffer")
 }
 

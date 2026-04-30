@@ -34,7 +34,7 @@ export async function flushAllSearchIngestBuffers(
 		try {
 			const result = await flushSearchIngestBuffer(indexId, options.limitPerIndex);
 			totalFlushed += result.flushed;
-			totalFailures += result.failures;
+			totalFailures += result.failed;
 		} catch (error) {
 			logger.error("flushAllSearchIngestBuffers: index failed", { indexId, error });
 		}

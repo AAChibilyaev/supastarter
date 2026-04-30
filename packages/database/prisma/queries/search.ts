@@ -117,7 +117,7 @@ export async function touchSearchApiKey(id: string) {
 export async function recordSearchUsage(input: {
 	indexId: string;
 	organizationId: string;
-	type: "search" | "ingest";
+	type: "search" | "ingest" | "ingest_enqueued";
 	count?: number;
 }) {
 	return db.searchUsageEvent.create({
@@ -163,20 +163,73 @@ export async function enqueueSearchIngest(input: {
 	});
 }
 
+/**
+ * Bulk-enqueue many ingest rows in a single INSERT — used by the import API
+ * so it doesn't pay one round-trip per document. Returns the count actually
+ * inserted.
+ */
+export async function enqueueManySearchIngest(
+	indexId: string,
+	organizationId: string,
+	action: "upsert" | "delete",
+	documents: Prisma.InputJsonValue[],
+): Promise<number> {
+	if (documents.length === 0) return 0;
+	const result = await db.searchIngestBuffer.createMany({
+		data: documents.map((document) => ({
+			indexId,
+			organizationId,
+			action,
+			document,
+		})),
+	});
+	return result.count;
+}
+
 export async function takePendingIngestRows(indexId: string, limit: number) {
+	const now = new Date();
 	return db.searchIngestBuffer.findMany({
-		where: { indexId, processedAt: null },
+		where: {
+			indexId,
+			processedAt: null,
+			OR: [{ nextRetryAt: null }, { nextRetryAt: { lte: now } }],
+		},
 		orderBy: { createdAt: "asc" },
 		take: limit,
 	});
 }
 
-export async function markIngestRowsProcessed(ids: string[]) {
+export async function markIngestRowsSuccess(ids: string[]) {
 	if (ids.length === 0) {
 		return;
 	}
 	await db.searchIngestBuffer.updateMany({
 		where: { id: { in: ids } },
-		data: { processedAt: new Date() },
+		data: { processedAt: new Date(), lastError: null },
 	});
+}
+
+const MAX_BACKOFF_MS = 60 * 60 * 1000;
+const BASE_BACKOFF_MS = 30 * 1000;
+
+export async function markIngestRowsFailure(input: { id: string; error: string }[]) {
+	if (input.length === 0) {
+		return;
+	}
+	for (const row of input) {
+		const current = await db.searchIngestBuffer.findUnique({
+			where: { id: row.id },
+			select: { attempts: true },
+		});
+		const nextAttempts = (current?.attempts ?? 0) + 1;
+		const backoffMs = Math.min(BASE_BACKOFF_MS * 2 ** (nextAttempts - 1), MAX_BACKOFF_MS);
+		await db.searchIngestBuffer.update({
+			where: { id: row.id },
+			data: {
+				attempts: nextAttempts,
+				lastError: row.error.slice(0, 1000),
+				nextRetryAt: new Date(Date.now() + backoffMs),
+			},
+		});
+	}
 }

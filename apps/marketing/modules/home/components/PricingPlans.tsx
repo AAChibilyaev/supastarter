@@ -17,7 +17,7 @@ export function PricingPlans() {
 		<section id="pricing" className="py-20 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<div className="mb-3 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex items-center rounded-none border border-border bg-card/40 text-muted-foreground">
+					<div className="mb-3 gap-2 px-3 py-1 text-xs backdrop-blur inline-flex items-center rounded-none border border-border bg-card/40 text-muted-foreground">
 						{t("home.pricing.badge")}
 					</div>
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -38,12 +38,12 @@ export function PricingPlans() {
 								className={cn(
 									"p-6 backdrop-blur relative flex flex-col rounded-none border bg-card/30",
 									plan.primary
-										? "border-pink-500/50 shadow-pink-500/15 shadow-xl"
+										? "shadow-black/10 shadow-xl dark:shadow-black/30 border-border"
 										: "border-border/70",
 								)}
 							>
 								{plan.primary && (
-									<span className="-top-3 left-6 border-pink-500/50 px-2 py-0.5 font-mono text-pink-400 absolute rounded-sm border bg-background text-[11px]">
+									<span className="-top-3 left-6 px-2 py-0.5 absolute rounded-sm border border-border bg-background text-[11px] text-muted-foreground">
 										{t(`home.pricing.plans.${plan.key}.highlight`)}
 									</span>
 								)}
@@ -71,7 +71,7 @@ export function PricingPlans() {
 											key={feature}
 											className="gap-2 text-sm flex items-start text-foreground/90"
 										>
-											<CheckIcon className="mt-0.5 size-4 text-pink-400 shrink-0" />
+											<CheckIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
 											<span>{feature}</span>
 										</li>
 									))}

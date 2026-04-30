@@ -15,12 +15,12 @@ pnpm --filter @repo/aacsearch-mcp type-check
 
 ## Tools
 
-| Tool               | Description                                        | Required API Key Scope |
-| ------------------ | -------------------------------------------------- | ---------------------- |
-| `search`           | Search documents in a public index                 | `search` or scoped     |
-| `list_indexes`     | List all indexes in a project                      | `admin`                |
-| `upsert_document`  | Upsert a single document to an index               | `ingest`               |
-| `search_stats`     | Get search usage statistics for a project          | `admin`                |
+| Tool              | Description                               | Required API Key Scope |
+| ----------------- | ----------------------------------------- | ---------------------- |
+| `search`          | Search documents in a public index        | `search` or scoped     |
+| `list_indexes`    | List all indexes in a project             | `admin`                |
+| `upsert_document` | Upsert a single document to an index      | `ingest`               |
+| `search_stats`    | Get search usage statistics for a project | `admin`                |
 
 ### Tool Inputs
 
@@ -39,12 +39,12 @@ Add to your `~/.claude/settings.json` or project `.claude/settings.local.json`:
 
 ```json
 {
-  "mcpServers": {
-    "aacsearch": {
-      "command": "node",
-      "args": ["/path/to/supastarter/packages/aacsearch-mcp/dist/index.js"]
-    }
-  }
+	"mcpServers": {
+		"aacsearch": {
+			"command": "node",
+			"args": ["/path/to/supastarter/packages/aacsearch-mcp/dist/index.js"]
+		}
+	}
 }
 ```
 
@@ -52,18 +52,12 @@ Or via `pnpm` (if built):
 
 ```json
 {
-  "mcpServers": {
-    "aacsearch": {
-      "command": "pnpm",
-      "args": [
-        "--filter",
-        "@repo/aacsearch-mcp",
-        "exec",
-        "node",
-        "dist/index.js"
-      ]
-    }
-  }
+	"mcpServers": {
+		"aacsearch": {
+			"command": "pnpm",
+			"args": ["--filter", "@repo/aacsearch-mcp", "exec", "node", "dist/index.js"]
+		}
+	}
 }
 ```
 

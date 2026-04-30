@@ -10,7 +10,8 @@
 		},
 		"./config": "./config.ts",
 		"./types": "./types.ts",
-		"./lib/helper": "./lib/helper.ts"
+		"./lib/helper": "./lib/helper.ts",
+		"./lib/entitlements": "./lib/entitlements.ts"
 	},
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",

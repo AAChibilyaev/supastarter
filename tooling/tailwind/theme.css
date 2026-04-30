@@ -2,11 +2,11 @@
 	:root {
 		--border: var(--color-stone-200);
 		--input: var(--color-stone-200);
-		--ring: #f02e65;
+		--ring: var(--color-stone-700);
 		--background: var(--color-stone-50);
 		--foreground: var(--color-stone-950);
-		--primary: #f02e65;
-		--primary-foreground: var(--color-white);
+		--primary: var(--color-stone-900);
+		--primary-foreground: var(--color-stone-50);
 		--secondary: var(--color-stone-100);
 		--secondary-foreground: var(--color-stone-900);
 		--destructive: var(--color-red-700);
@@ -27,11 +27,11 @@
 	.dark {
 		--border: var(--color-stone-800);
 		--input: var(--color-stone-800);
-		--ring: #fd366e;
+		--ring: var(--color-stone-300);
 		--background: var(--color-stone-950);
 		--foreground: var(--color-white);
-		--primary: #fd366e;
-		--primary-foreground: var(--color-white);
+		--primary: var(--color-stone-100);
+		--primary-foreground: var(--color-stone-950);
 		--secondary: var(--color-stone-800);
 		--secondary-foreground: var(--color-white);
 		--destructive: var(--color-red-600);

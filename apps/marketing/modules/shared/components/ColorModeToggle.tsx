@@ -9,15 +9,14 @@ import {
 } from "@repo/ui/components/tooltip";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 
+import { useMarketingTheme } from "./ThemeProvider";
+
 export function ColorModeToggle() {
-	const { resolvedTheme, setTheme, theme } = useTheme();
-	const [value, setValue] = useState<string>(
-		(theme === "system" ? resolvedTheme : theme) ?? "light",
-	);
+	const { setTheme, theme } = useMarketingTheme();
+	const [value, setValue] = useState<string>(theme);
 	const isClient = useIsClient();
 	const t = useTranslations();
 
@@ -27,11 +26,8 @@ export function ColorModeToggle() {
 	] as const;
 
 	useEffect(() => {
-		const resolved = theme === "system" ? resolvedTheme : theme;
-		if (resolved) {
-			setValue(resolved);
-		}
-	}, [theme, resolvedTheme]);
+		setValue(theme);
+	}, [theme]);
 
 	if (!isClient) {
 		return null;
@@ -39,7 +35,7 @@ export function ColorModeToggle() {
 
 	const activeIndex = colorModeOptions.findIndex((option) => option.value === value);
 
-	const handleClick = (optionValue: string) => {
+	const handleClick = (optionValue: "light" | "dark") => {
 		setTheme(optionValue);
 		setValue(optionValue);
 	};

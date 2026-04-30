@@ -9,7 +9,7 @@ export function CtaFooter() {
 		<section className="py-20">
 			<div className="container">
 				<div className="p-10 md:p-16 relative overflow-hidden rounded-sm border border-border/70 bg-card/40 text-center">
-					<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_50%_0%,oklch(0.62_0.22_7/0.10),transparent_60%)]" />
+					<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_50%_0%,oklch(0.45_0_0/0.10),transparent_60%)]" />
 					<h2 className="max-w-2xl font-medium text-3xl tracking-tight md:text-4xl mx-auto text-balance">
 						{t("home.cta.title")}
 					</h2>

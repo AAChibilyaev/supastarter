@@ -711,7 +711,8 @@ export class AacSearchWidget {
 				html += `<div class="aac-result-title">${highlightText(title)}</div>`;
 			}
 
-			if (sku) html += `<div class="aac-result-sku">${this.t("sku")}: ${escapeHtml(sku)}</div>`;
+			if (sku)
+				html += `<div class="aac-result-sku">${this.t("sku")}: ${escapeHtml(sku)}</div>`;
 
 			if (description) {
 				const desc =

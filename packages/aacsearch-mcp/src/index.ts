@@ -97,11 +97,13 @@ const tools: ToolDefinition[] = [
 			properties: {
 				baseUrl: {
 					type: "string",
-					description: "Base URL of the AACsearch deployment (e.g. https://app.example.com)",
+					description:
+						"Base URL of the AACsearch deployment (e.g. https://app.example.com)",
 				},
 				apiKey: {
 					type: "string",
-					description: "Search-scoped API key (ss_search_...) or scoped token (ss_scoped_...)",
+					description:
+						"Search-scoped API key (ss_search_...) or scoped token (ss_scoped_...)",
 				},
 				indexSlug: {
 					type: "string",
@@ -550,7 +552,12 @@ function sendMessage(msg: JsonRpcMessage): void {
 	process.stdout.write(json + "\n");
 }
 
-function handleError(id: string | number | null, code: number, message: string, data?: unknown): void {
+function handleError(
+	id: string | number | null,
+	code: number,
+	message: string,
+	data?: unknown,
+): void {
 	const error: JsonRpcError = {
 		jsonrpc: "2.0",
 		id,
@@ -609,7 +616,11 @@ async function handleRequest(req: JsonRpcRequest): Promise<void> {
 					result,
 				});
 			} catch (error) {
-				handleError(id, -32603, `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`);
+				handleError(
+					id,
+					-32603,
+					`Tool execution failed: ${error instanceof Error ? error.message : String(error)}`,
+				);
 			}
 			return;
 		}

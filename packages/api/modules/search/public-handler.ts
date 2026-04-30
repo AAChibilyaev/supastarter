@@ -5,6 +5,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
 
+import { quotaCheck } from "../entitlements/middleware/quota-check";
 import { combineFilters, gatePublicSearchRequest } from "./lib/public-auth";
 
 const publicSearchInput = z.object({
@@ -37,6 +38,12 @@ export const publicSearchApp = new Hono()
 		const gated = await gatePublicSearchRequest(c, new Set([slug]));
 		if (gated instanceof Response) return gated;
 		const { verified, scopedFilter } = gated;
+
+		// Plan quota check
+		const quota = await quotaCheck(c, verified.organizationId, "search");
+		if (!quota.allowed) {
+			return c.json({ error: quota.error ?? "quota_exceeded" }, 429);
+		}
 
 		let body: unknown;
 		try {
@@ -82,6 +89,12 @@ export const publicSearchApp = new Hono()
 		const gated = await gatePublicSearchRequest(c);
 		if (gated instanceof Response) return gated;
 		const { verified, scopedFilter } = gated;
+
+		// Plan quota check
+		const quotaMulti = await quotaCheck(c, verified.organizationId, "search");
+		if (!quotaMulti.allowed) {
+			return c.json({ error: quotaMulti.error ?? "quota_exceeded" }, 429);
+		}
 
 		let body: unknown;
 		try {

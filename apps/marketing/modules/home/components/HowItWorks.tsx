@@ -12,13 +12,13 @@ export function HowItWorks() {
 					{t("home.howItWorks.title")}
 				</h2>
 
-				<ol className="mt-12 gap-6 md:grid-cols-3 grid">
+				<ol className="mt-12 md:grid-cols-3 grid gap-px overflow-hidden rounded-none border border-border/80 bg-border/80">
 					{steps.map((step, i) => (
 						<li
 							key={step}
-							className="p-6 backdrop-blur hover:border-pink-400/50 relative rounded-none border border-border/70 bg-card/30 transition"
+							className="p-6 backdrop-blur relative rounded-none bg-card/40 transition hover:bg-card/70"
 						>
-							<span className="-top-3 left-6 size-7 border-pink-400/50 font-mono text-pink-400 text-xs absolute inline-flex -translate-x-1/2 items-center justify-center rounded-sm border bg-background">
+							<span className="-top-3 left-6 size-7 text-xs absolute inline-flex -translate-x-1/2 items-center justify-center rounded-sm border border-border bg-background text-muted-foreground">
 								0{i + 1}
 							</span>
 							<h3 className="mt-2 font-medium text-lg text-foreground">

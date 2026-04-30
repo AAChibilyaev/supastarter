@@ -7,9 +7,9 @@ import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
+import { MarketingThemeProvider } from "@shared/components/ThemeProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { ThemeProvider } from "next-themes";
 import { Figtree } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -45,18 +45,16 @@ export default async function MarketingLayout({
 	const consentCookie = cookieStore.get("consent");
 
 	return (
-		<html lang={locale} suppressHydrationWarning className={sansFont.variable}>
+		<html
+			lang={locale}
+			suppressHydrationWarning
+			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
+		>
 			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
 				<ConsentProvider initialConsent={consentCookie?.value === "true"}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
-							<ThemeProvider
-								attribute="class"
-								disableTransitionOnChange
-								enableSystem
-								defaultTheme={config.defaultTheme}
-								themes={Array.from(config.enabledThemes)}
-							>
+							<MarketingThemeProvider defaultTheme={config.defaultTheme}>
 								<NavBar />
 
 								<main className="min-h-screen">{children}</main>
@@ -65,7 +63,7 @@ export default async function MarketingLayout({
 
 								<ConsentBanner />
 								<AnalyticsScript />
-							</ThemeProvider>
+							</MarketingThemeProvider>
 						</ClientProviders>
 					</NextIntlClientProvider>
 				</ConsentProvider>

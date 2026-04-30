@@ -9,18 +9,18 @@ import { authClient } from "@repo/auth/client";
 import { config as authConfig } from "@repo/auth/config";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useRouter } from "@shared/hooks/router";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-	AlertTriangleIcon,
-	ArrowRightIcon,
-	EyeIcon,
-	EyeOffIcon,
-	KeyIcon,
-	MailboxIcon,
-} from "lucide-react";
+import { AlertTriangleIcon, EyeIcon, EyeOffIcon, KeyIcon, MailboxIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -64,7 +64,7 @@ export function LoginForm() {
 		defaultValues: {
 			email: email ?? "",
 			password: "",
-			mode: authConfig.enablePasswordLogin ? "password" : "magic-link",
+			mode: authConfig.enablePasswordLogin ? ("password" as const) : ("magic-link" as const),
 		},
 	});
 
@@ -137,159 +137,175 @@ export function LoginForm() {
 	const signinMode = form.watch("mode");
 
 	return (
-		<div>
-			<h1 className="font-bold text-xl md:text-2xl">{t("auth.login.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60">{t("auth.login.subtitle")}</p>
-
-			{form.formState.isSubmitSuccessful && signinMode === "magic-link" ? (
-				<Alert variant="success">
-					<MailboxIcon />
-					<AlertTitle>{t("auth.login.hints.linkSent.title")}</AlertTitle>
-					<AlertDescription>{t("auth.login.hints.linkSent.message")}</AlertDescription>
-				</Alert>
-			) : (
-				<>
-					{invitationId && <OrganizationInvitationAlert className="mb-6" />}
-
-					<Form {...form}>
-						<form className="space-y-4" onSubmit={onSubmit}>
-							{authConfig.enableMagicLink && authConfig.enablePasswordLogin && (
-								<LoginModeSwitch
-									activeMode={signinMode}
-									onChange={(mode) =>
-										form.setValue("mode", mode as typeof signinMode)
-									}
-								/>
-							)}
-
-							{form.formState.isSubmitted && form.formState.errors.root?.message && (
-								<Alert variant="error">
-									<AlertTriangleIcon />
-									<AlertTitle>{form.formState.errors.root.message}</AlertTitle>
-								</Alert>
-							)}
-
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>{t("auth.signup.email")}</FormLabel>
-										<FormControl>
-											<Input {...field} autoComplete="email" />
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-
-							{authConfig.enablePasswordLogin && signinMode === "password" && (
-								<FormField
-									control={form.control}
-									name="password"
-									render={({ field }) => (
-										<FormItem>
-											<div className="gap-4 flex justify-between">
-												<FormLabel>{t("auth.signup.password")}</FormLabel>
-
-												<Link
-													href="/forgot-password"
-													className="text-xs text-foreground/60"
-												>
-													{t("auth.login.forgotPassword")}
-												</Link>
-											</div>
-											<FormControl>
-												<div className="relative">
-													<Input
-														type={showPassword ? "text" : "password"}
-														className="pr-10"
-														{...field}
-														autoComplete="current-password"
-													/>
-													<button
-														type="button"
-														onClick={() =>
-															setShowPassword(!showPassword)
-														}
-														className="inset-y-0 right-0 pr-4 text-xl absolute flex items-center text-primary"
-													>
-														{showPassword ? (
-															<EyeOffIcon className="size-4" />
-														) : (
-															<EyeIcon className="size-4" />
-														)}
-													</button>
-												</div>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
-							)}
-
-							<Button
-								className="w-full"
-								type="submit"
-								variant="primary"
-								loading={form.formState.isSubmitting}
-							>
-								{signinMode === "magic-link"
-									? t("auth.login.sendMagicLink")
-									: t("auth.login.submit")}
-							</Button>
-						</form>
-					</Form>
-
-					{(authConfig.enablePasskeys ||
-						(authConfig.enableSignup && authConfig.enableSocialLogin)) && (
+		<div className="gap-6 flex flex-col">
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-2xl">{t("auth.login.title")}</CardTitle>
+					<CardDescription>{t("auth.login.subtitle")}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					{form.formState.isSubmitSuccessful && signinMode === "magic-link" ? (
+						<Alert variant="success">
+							<MailboxIcon />
+							<AlertTitle>{t("auth.login.hints.linkSent.title")}</AlertTitle>
+							<AlertDescription>
+								{t("auth.login.hints.linkSent.message")}
+							</AlertDescription>
+						</Alert>
+					) : (
 						<>
-							<div className="my-6 h-4 relative">
-								<hr className="top-2 relative" />
-								<p className="top-0 h-4 px-2 font-medium text-sm leading-tight absolute left-1/2 mx-auto inline-block -translate-x-1/2 bg-card text-center text-foreground/60">
-									{t("auth.login.continueWith")}
-								</p>
-							</div>
+							{invitationId && <OrganizationInvitationAlert className="mb-6" />}
 
-							<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
-								{authConfig.enableSignup &&
-									authConfig.enableSocialLogin &&
-									Object.keys(oAuthProviders).map((providerId) => (
-										<SocialSigninButton
-											key={providerId}
-											provider={providerId as OAuthProvider}
-										/>
-									))}
+							<Form {...form}>
+								<form className="gap-6 flex flex-col" onSubmit={onSubmit}>
+									{authConfig.enableMagicLink &&
+										authConfig.enablePasswordLogin && (
+											<LoginModeSwitch
+												activeMode={signinMode}
+												onChange={(mode) =>
+													form.setValue("mode", mode as typeof signinMode)
+												}
+											/>
+										)}
 
-								{authConfig.enablePasskeys && (
+									{form.formState.isSubmitted &&
+										form.formState.errors.root?.message && (
+											<Alert variant="error">
+												<AlertTriangleIcon />
+												<AlertTitle>
+													{form.formState.errors.root.message}
+												</AlertTitle>
+											</Alert>
+										)}
+
+									<FormField
+										control={form.control}
+										name="email"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>{t("auth.signup.email")}</FormLabel>
+												<FormControl>
+													<Input {...field} autoComplete="email" />
+												</FormControl>
+											</FormItem>
+										)}
+									/>
+
+									{authConfig.enablePasswordLogin &&
+										signinMode === "password" && (
+											<FormField
+												control={form.control}
+												name="password"
+												render={({ field }) => (
+													<FormItem>
+														<div className="flex items-center">
+															<FormLabel>
+																{t("auth.signup.password")}
+															</FormLabel>
+
+															<Link
+																href="/forgot-password"
+																className="text-sm ml-auto inline-block underline-offset-4 hover:underline"
+															>
+																{t("auth.login.forgotPassword")}
+															</Link>
+														</div>
+														<FormControl>
+															<div className="relative">
+																<Input
+																	type={
+																		showPassword
+																			? "text"
+																			: "password"
+																	}
+																	className="pr-10"
+																	{...field}
+																	autoComplete="current-password"
+																/>
+																<button
+																	type="button"
+																	onClick={() =>
+																		setShowPassword(
+																			!showPassword,
+																		)
+																	}
+																	className="inset-y-0 right-0 pr-4 text-xl absolute flex items-center text-primary"
+																>
+																	{showPassword ? (
+																		<EyeOffIcon className="size-4" />
+																	) : (
+																		<EyeIcon className="size-4" />
+																	)}
+																</button>
+															</div>
+														</FormControl>
+													</FormItem>
+												)}
+											/>
+										)}
+
 									<Button
-										variant="secondary"
-										className="sm:col-span-2 w-full"
-										onClick={() => signInWithPasskey()}
+										className="w-full"
+										type="submit"
+										variant="primary"
+										loading={form.formState.isSubmitting}
 									>
-										<KeyIcon className="mr-1.5 size-4 text-primary" />
-										{t("auth.login.loginWithPasskey")}
+										{signinMode === "magic-link"
+											? t("auth.login.sendMagicLink")
+											: t("auth.login.submit")}
 									</Button>
-								)}
-							</div>
+								</form>
+							</Form>
+
+							{(authConfig.enablePasskeys ||
+								(authConfig.enableSignup && authConfig.enableSocialLogin)) && (
+								<>
+									<div className="my-6 text-sm after:inset-0 relative text-center after:absolute after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+										<span className="px-2 relative z-10 bg-card text-muted-foreground">
+											{t("auth.login.continueWith")}
+										</span>
+									</div>
+
+									<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
+										{authConfig.enableSignup &&
+											authConfig.enableSocialLogin &&
+											Object.keys(oAuthProviders).map((providerId) => (
+												<SocialSigninButton
+													key={providerId}
+													provider={providerId as OAuthProvider}
+												/>
+											))}
+
+										{authConfig.enablePasskeys && (
+											<Button
+												variant="secondary"
+												className="sm:col-span-2 w-full"
+												onClick={() => signInWithPasskey()}
+											>
+												<KeyIcon className="mr-1.5 size-4 text-primary" />
+												{t("auth.login.loginWithPasskey")}
+											</Button>
+										)}
+									</div>
+								</>
+							)}
 						</>
 					)}
+				</CardContent>
+			</Card>
 
-					{authConfig.enableSignup && (
-						<div className="mt-6 text-sm text-center">
-							<span className="text-foreground/60">
-								{t("auth.login.dontHaveAnAccount")}{" "}
-							</span>
-							<Link
-								href={withQuery(
-									"/signup",
-									Object.fromEntries(searchParams.entries()),
-								)}
-							>
-								{t("auth.login.createAnAccount")}
-								<ArrowRightIcon className="ml-1 size-4 inline align-middle" />
-							</Link>
-						</div>
-					)}
-				</>
+			{authConfig.enableSignup && (
+				<div className="text-sm text-center">
+					<span className="text-muted-foreground">
+						{t("auth.login.dontHaveAnAccount")}{" "}
+					</span>
+					<Link
+						href={withQuery("/signup", Object.fromEntries(searchParams.entries()))}
+						className="underline underline-offset-4 hover:text-primary"
+					>
+						{t("auth.login.createAnAccount")}
+					</Link>
+				</div>
 			)}
 		</div>
 	);

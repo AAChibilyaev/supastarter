@@ -8,6 +8,13 @@ import { authClient } from "@repo/auth/client";
 import { Alert, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
+import {
 	Form,
 	FormControl,
 	FormField,
@@ -68,57 +75,66 @@ export function ResetPasswordForm() {
 	});
 
 	return (
-		<>
-			<h1 className="font-bold text-xl md:text-2xl">{t("auth.resetPassword.title")}</h1>
-			<p className="mt-1 mb-6 text-foreground/60">{t("auth.resetPassword.message")} </p>
+		<div className="gap-6 flex flex-col">
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-2xl">{t("auth.resetPassword.title")}</CardTitle>
+					<CardDescription>{t("auth.resetPassword.message")}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					{form.formState.isSubmitSuccessful ? (
+						<Alert variant="success">
+							<MailboxIcon />
+							<AlertTitle>{t("auth.resetPassword.hints.success")}</AlertTitle>
+						</Alert>
+					) : (
+						<Form {...form}>
+							<form className="gap-6 flex flex-col" onSubmit={onSubmit}>
+								{form.formState.errors.root && (
+									<Alert variant="error">
+										<AlertTriangleIcon />
+										<AlertTitle>
+											{form.formState.errors.root.message}
+										</AlertTitle>
+									</Alert>
+								)}
 
-			{form.formState.isSubmitSuccessful ? (
-				<Alert variant="success">
-					<MailboxIcon />
-					<AlertTitle>{t("auth.resetPassword.hints.success")}</AlertTitle>
-				</Alert>
-			) : (
-				<Form {...form}>
-					<form className="gap-4 flex flex-col items-stretch" onSubmit={onSubmit}>
-						{form.formState.errors.root && (
-							<Alert variant="error">
-								<AlertTriangleIcon />
-								<AlertTitle>{form.formState.errors.root.message}</AlertTitle>
-							</Alert>
-						)}
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>
+												{t("auth.resetPassword.newPassword")}
+											</FormLabel>
+											<FormControl>
+												<PasswordInput
+													autoComplete="new-password"
+													showPasswordCriteria
+													showGenerateButton
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>{t("auth.resetPassword.newPassword")}</FormLabel>
-									<FormControl>
-										<PasswordInput
-											autoComplete="new-password"
-											showPasswordCriteria
-											showGenerateButton
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+								<Button loading={form.formState.isSubmitting}>
+									{t("auth.resetPassword.submit")}
+								</Button>
+							</form>
+						</Form>
+					)}
+				</CardContent>
+			</Card>
 
-						<Button loading={form.formState.isSubmitting}>
-							{t("auth.resetPassword.submit")}
-						</Button>
-					</form>
-				</Form>
-			)}
-
-			<div className="mt-6 text-sm text-center">
-				<Link href="/login">
+			<div className="text-sm text-center">
+				<Link href="/login" className="underline underline-offset-4 hover:text-primary">
 					<ArrowLeftIcon className="mr-1 size-4 inline align-middle" />
 					{t("auth.resetPassword.backToSignin")}
 				</Link>
 			</div>
-		</>
+		</div>
 	);
 }

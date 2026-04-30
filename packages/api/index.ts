@@ -14,6 +14,7 @@ import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
 import { serveStatic } from "hono/serve-static";
 
+import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { publicSearchApp } from "./modules/search/public-handler";
@@ -91,6 +92,8 @@ export const app = new Hono()
 	})
 	// Wallet provider webhook (Tochka one-time top-ups)
 	.post("/webhooks/payments/tochka", (c) => walletWebhookHandler(c.req.raw))
+	// Tochka Acquiring API v1.0 webhook
+	.route("/", tochkaWebhookApp)
 	// Health check
 	.get("/health", (c) => c.text("OK"))
 	// oRPC handlers (for RPC and OpenAPI)

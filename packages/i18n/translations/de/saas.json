@@ -45,7 +45,7 @@
 			"deleteUser": {
 				"deleted": "Der Benutzer wurde erfolgreich gelöscht!",
 				"deleting": "Benutzer wird gelöscht...",
-				"notDeleted": "Der Benutzer konnte nicht gelöscht werden. \nBitte versuche es erneut."
+				"notDeleted": "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
 			},
 			"emailVerified": {
 				"verified": "Email verifiziert",
@@ -57,10 +57,10 @@
 			},
 			"loading": "Benutzer werden geladen...",
 			"resendVerificationMail": {
-				"error": "Bestätigungsmail konnte nicht erneut gesendet werden. \nBitte versuche es erneut.",
-				"submitting": "Bestätigungsmail wird erneut gesendet...",
-				"success": "Bestätigungsmail wurde gesendet.",
-				"title": "Bestätigungsmail erneut senden"
+				"error": "Bestatigungsmail konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
+				"submitting": "Bestatigungsmail wird erneut gesendet...",
+				"success": "Bestatigungsmail wurde gesendet.",
+				"title": "Bestatigungsmail erneut senden"
 			},
 			"search": "Nach Name oder E-Mail suchen...",
 			"title": "Benutzer verwalten",
@@ -73,8 +73,8 @@
 		"menu": {
 			"accountSettings": "Kontoeinstellungen",
 			"admin": "Administration",
-			"navigationTitle": "Menü",
-			"openNavigation": "Navigation öffnen",
+			"navigationTitle": "Menu",
+			"openNavigation": "Navigation offnen",
 			"organizationSettings": "Organisationseinstellungen",
 			"search": "Suche",
 			"start": "Start"
@@ -92,7 +92,7 @@
 			"markAllRead": "Alle als gelesen markieren",
 			"fallbackTitle": "Benachrichtigung",
 			"aria": {
-				"open": "Benachrichtigungen öffnen"
+				"open": "Benachrichtigungen offnen"
 			}
 		}
 	},
@@ -100,22 +100,22 @@
 		"errors": {
 			"credentialAccountNotFound": "Konto nicht gefunden.",
 			"emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
-			"emailNotVerified": "Bitte verifiziere zunächst deine E-Mail, bevor du dich anmeldest.",
+			"emailNotVerified": "Bitte verifiziere zunachst deine E-Mail, bevor du dich anmeldest.",
 			"failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
 			"failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
 			"failedToGetSession": "Session konnte nicht geladen werden.",
 			"failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
 			"failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
-			"idTokenNotSupported": "ID-Token wird nicht unterstützt.",
-			"invalidEmail": "Die eingegebene E-Mail ist ungültig.",
-			"invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungültig. Bitte überprüfe sie und versuche es erneut.",
-			"invalidInvitation": "Die Einladung ist ungültig oder abgelaufen.",
+			"idTokenNotSupported": "ID-Token wird nicht unterstutzt.",
+			"invalidEmail": "Die eingegebene E-Mail ist ungultig.",
+			"invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungultig. Bitte uberprufe sie und versuche es erneut.",
+			"invalidInvitation": "Die Einladung ist ungultig oder abgelaufen.",
 			"invalidPassword": "Das eingegebene Passwort ist falsch.",
-			"invalidToken": "Das von dir eingegebene Token ist ungültig oder abgelaufen.",
+			"invalidToken": "Das von dir eingegebene Token ist ungultig oder abgelaufen.",
 			"passwordTooLong": "Das Passwort ist zu lang.",
 			"passwordTooShort": "Das Passwort ist zu kurz.",
-			"providerNotFound": "Dieser Anbieter wird nicht unterstützt.",
-			"socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknüpft.",
+			"providerNotFound": "Dieser Anbieter wird nicht unterstutzt.",
+			"socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknupft.",
 			"unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
 			"userAlreadyExists": "Dieser Benutzer existiert bereits.",
 			"userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
@@ -126,19 +126,19 @@
 			"failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
 		},
 		"forgotPassword": {
-			"backToSignin": "Zurück zum Login",
+			"backToSignin": "Zuruck zum Login",
 			"email": "E-Mail",
 			"hints": {
 				"linkNotSent": {
-					"message": "Es tut uns leid, aber wir konnten keinen Link zum Zurücksetzen des Passworts senden. \nBitte versuche es später noch einmal.",
+					"message": "Es tut uns leid, aber wir konnten keinen Link zum Zurucksetzen des Passworts senden. Bitte versuche es spater noch einmal.",
 					"title": "Link nicht gesendet"
 				},
 				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
+					"message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
 					"title": "Link gesendet"
 				}
 			},
-			"message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.",
+			"message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurucksetzen deines Passworts.",
 			"submit": "Link senden",
 			"title": "Hast du dein Passwort vergessen?"
 		},
@@ -148,49 +148,49 @@
 			"dontHaveAnAccount": "Du hast noch kein Konto?",
 			"forgotPassword": "Passwort vergessen?",
 			"hints": {
-				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungültig. \nBitte versuche es erneut.",
+				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungultig. Bitte versuche es erneut.",
 				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
+					"message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
 					"title": "Link gesendet"
 				}
 			},
 			"loginWithPasskey": "Anmeldung mit Passkey",
 			"modes": {
 				"magicLink": "Magischer Link",
-				"password": "Passwort"
+				"password": "***"
 			},
 			"submit": "Anmelden",
 			"subtitle": "Bitte gib deine Zugangsdaten ein, um dich anzumelden.",
-			"title": "Willkommen zurück",
+			"title": "Willkommen zuruck",
 			"sendMagicLink": "Anmelde-Link senden"
 		},
 		"resetPassword": {
-			"backToSignin": "Zurück zu Signin",
+			"backToSignin": "Zuruck zu Signin",
 			"hints": {
-				"error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurücksetzen. Bitte versuche es erneut.",
-				"success": "Dein Passwort wurde erfolgreich zurückgesetzt."
+				"error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurucksetzen. Bitte versuche es erneut.",
+				"success": "Dein Passwort wurde erfolgreich zuruckgesetzt."
 			},
 			"message": "Bitte gib ein neues Passwort ein.",
 			"newPassword": "Neues Passwort",
-			"submit": "Passwort zurücksetzen",
-			"title": "Dein Passwort zurücksetzen"
+			"submit": "Passwort zurucksetzen",
+			"title": "Dein Passwort zurucksetzen"
 		},
 		"signup": {
 			"alreadyHaveAccount": "Du hast bereits ein Konto?",
 			"email": "Email",
 			"hints": {
-				"signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. \nBitte versuche es später noch einmal.",
-				"verifyEmail": "Wir haben dir einen Link zur Bestätigung deiner E-Mail-Adresse gesendet. \nBitte überprüfe deinen Posteingang."
+				"signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. Bitte versuche es spater noch einmal.",
+				"verifyEmail": "Wir haben dir einen Link zur Bestatigung deiner E-Mail-Adresse gesendet. Bitte uberprufe deinen Posteingang."
 			},
-			"message": "Wir freuen uns, dass du dich uns anschließen möchtest. \nBitte fülle das untenstehende Formular aus, um dein Konto zu erstellen.",
+			"message": "Wir freuen uns, dass du dich uns anschließen mochtest. Bitte fulle das untenstehende Formular aus, um dein Konto zu erstellen.",
 			"name": "Name",
-			"password": "Passwort",
+			"password": "***",
 			"signIn": "Anmelden",
 			"submit": "Benutzerkonto erstellen",
 			"title": "Ein Konto erstellen"
 		},
 		"verify": {
-			"backToSignin": "Zurück zur Anmeldung",
+			"backToSignin": "Zuruck zur Anmeldung",
 			"code": "Einmaliges Passwort",
 			"message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
 			"submit": "Verifizieren",
@@ -198,8 +198,8 @@
 		}
 	},
 	"choosePlan": {
-		"title": "Wähle einen Plan",
-		"description": "Um weiterzumachen, wähle bitte einen Plan aus."
+		"title": "Wahle einen Plan",
+		"description": "Um weiterzumachen, wahle bitte einen Plan aus."
 	},
 	"documentation": {
 		"title": "Dokumentation"
@@ -218,11 +218,11 @@
 		"continue": "Weiter",
 		"message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
 		"notifications": {
-			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. \nBitte versuche es später noch einmal."
+			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. Bitte versuche es spater noch einmal."
 		},
 		"pricing": {
-			"planSelected": "Dein Plan wurde erfolgreich ausgewählt.",
-			"skip": "Vorerst überspringen"
+			"planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
+			"skip": "Vorerst uberspringen"
 		},
 		"step": "Schritt {step} / {total}",
 		"title": "Richte dein Konto ein"
@@ -231,11 +231,11 @@
 		"createForm": {
 			"name": "Name der Organisation",
 			"notifications": {
-				"error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es später noch einmal.",
+				"error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es spater noch einmal.",
 				"success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
 			},
 			"submit": "Organisation erstellen",
-			"subtitle": "Gib einen Namen für deine Organisation ein, um loszulegen. Du kannst den Namen später in den Organisationseinstellungen ändern.",
+			"subtitle": "Gib einen Namen fur deine Organisation ein, um loszulegen. Du kannst den Namen spater in den Organisationseinstellungen andern.",
 			"title": "Erstelle eine Organisation"
 		},
 		"invitationAlert": {
@@ -245,13 +245,13 @@
 		"invitationModal": {
 			"accept": "Annehmen",
 			"decline": "Ablehnen",
-			"description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Möchtest du die Einladung annehmen und der Organisation beitreten?",
+			"description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Mochtest du die Einladung annehmen und der Organisation beitreten?",
 			"title": "Organisation beitreten"
 		},
 		"organizationSelect": {
 			"createNewOrganization": "Neue Organisation erstellen",
 			"organizations": "Organisationen",
-			"personalAccount": "Persönliches Konto"
+			"personalAccount": "Personliches Konto"
 		},
 		"organizationsGrid": {
 			"createNewOrganization": "Neue Organisation erstellen",
@@ -260,20 +260,20 @@
 		"roles": {
 			"admin": "Administration",
 			"member": "Mitglied",
-			"owner": "Eigentümer"
+			"owner": "Eigentumer"
 		},
 		"settings": {
 			"changeName": {
 				"title": "Name der Organisation"
 			},
 			"deleteOrganization": {
-				"confirmation": "Bist du sicher, dass du deine Organisation löschen möchtest?",
-				"description": "Lösche deine Organisation dauerhaft. Sobald du deine Organisation gelöscht hast, gibt es kein Zurück mehr. Zur Bestätigung gib bitte unten dein Passwort ein:",
-				"submit": "Organisation löschen",
-				"title": "Organisation löschen"
+				"confirmation": "Bist du sicher, dass du deine Organisation loschen mochtest?",
+				"description": "Losche deine Organisation dauerhaft. Sobald du deine Organisation geloscht hast, gibt es kein Zuruck mehr. Zur Bestatigung gib bitte unten dein Passwort ein:",
+				"submit": "Organisation loschen",
+				"title": "Organisation loschen"
 			},
 			"logo": {
-				"description": "Lade ein Logo für deine Organisation hoch.",
+				"description": "Lade ein Logo fur deine Organisation hoch.",
 				"title": "Logo der Organisation"
 			},
 			"members": {
@@ -281,7 +281,7 @@
 				"description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
 				"invitations": {
 					"empty": "Es wurden noch keine Mitglieder eingeladen.",
-					"expiresAt": "Läuft am {date} ab",
+					"expiresAt": "Lauft am {date} ab",
 					"invitationStatus": {
 						"accepted": "Angenommen",
 						"canceled": "Abgebrochen",
@@ -296,7 +296,7 @@
 					"email": "E-Mail",
 					"notifications": {
 						"error": {
-							"description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es später noch einmal.",
+							"description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es spater noch einmal.",
 							"title": "Mitglied konnte nicht eingeladen werden"
 						},
 						"success": {
@@ -323,7 +323,7 @@
 					},
 					"revokeInvitation": {
 						"error": {
-							"description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es später noch einmal."
+							"description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es spater noch einmal."
 						},
 						"loading": {
 							"description": "Widerruf der Einladung..."
@@ -360,10 +360,10 @@
 				"title": "Mitglieder"
 			},
 			"notifications": {
-				"organizationDeleted": "Deine Organisation wurde gelöscht.",
-				"organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es später noch einmal.",
+				"organizationDeleted": "Deine Organisation wurde geloscht.",
+				"organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es spater noch einmal.",
 				"organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
-				"organizationNotDeleted": "Wir konnten deine Organisation nicht löschen. Bitte versuche es später noch einmal."
+				"organizationNotDeleted": "Wir konnten deine Organisation nicht loschen. Bitte versuche es spater noch einmal."
 			},
 			"subtitle": "Verwalte die Einstellungen der Organisation.",
 			"title": "Organisation",
@@ -378,7 +378,7 @@
 	"settings": {
 		"account": {
 			"avatar": {
-				"description": "Um deinen Avatar zu ändern, klicke auf das Bild in diesem Block und wähle eine Datei von deinem Computer zum Hochladen aus.",
+				"description": "Um deinen Avatar zu andern, klicke auf das Bild in diesem Block und wahle eine Datei von deinem Computer zum Hochladen aus.",
 				"notifications": {
 					"error": "Avatar konnte nicht aktualisiert werden",
 					"success": "Avatar wurde erfolgreich aktualisiert"
@@ -386,7 +386,7 @@
 				"title": "Dein Avatar"
 			},
 			"changeEmail": {
-				"description": "Um deine E-Mail zu ändern, ändere sie im Eingabefeld und drücke auf Speichern. Du musst die neue E-Mail bestätigen, bevor sie aktiv wird.",
+				"description": "Um deine E-Mail zu andern, andere sie im Eingabefeld und drucke auf Speichern. Du musst die neue E-Mail bestatigen, bevor sie aktiv wird.",
 				"notifications": {
 					"error": "E-Mail konnte nicht aktualisiert werden",
 					"success": "E-Mail wurde erfolgreich aktualisiert"
@@ -401,17 +401,17 @@
 				"title": "Dein Name"
 			},
 			"deleteAccount": {
-				"confirmation": "Bist du sicher, dass du dein Konto löschen möchtest?",
-				"description": "Lösche dein Konto dauerhaft. \nSobald Du dein Konto gelöscht hast, gibt es kein Zurück mehr. \nBitte sei dir sicher, bevor du hier weitermachst.",
+				"confirmation": "Bist du sicher, dass du dein Konto loschen mochtest?",
+				"description": "Losche dein Konto dauerhaft. Sobald Du dein Konto geloscht hast, gibt es kein Zuruck mehr. Bitte sei dir sicher, bevor du hier weitermachst.",
 				"notifications": {
-					"error": "Konto konnte nicht gelöscht werden",
-					"success": "Konto wurde erfolgreich gelöscht"
+					"error": "Konto konnte nicht geloscht werden",
+					"success": "Konto wurde erfolgreich geloscht"
 				},
-				"submit": "Konto löschen",
-				"title": "Konto löschen"
+				"submit": "Konto loschen",
+				"title": "Konto loschen"
 			},
 			"language": {
-				"description": "Um die Sprache der App für dein Konto zu ändern, wähle eine Sprache aus der Liste aus und klicke auf Speichern.",
+				"description": "Um die Sprache der App fur dein Konto zu andern, wahle eine Sprache aus der Liste aus und klicke auf Speichern.",
 				"notifications": {
 					"error": "Sprache konnte nicht aktualisiert werden",
 					"success": "Sprache wurde erfolgreich aktualisiert"
@@ -445,43 +445,43 @@
 					"title": "Verbundene Konten"
 				},
 				"passkeys": {
-					"addPasskey": "Passkey hinzufügen",
-					"description": "Verwende Passkeys als sichere alternative zu Passwörtern.",
+					"addPasskey": "Passkey hinzufugen",
+					"description": "Verwende Passkeys als sichere alternative zu Passwortern.",
 					"notifications": {
 						"addPasskey": {
 							"error": {
-								"title": "Kann keinen Hauptschlüssel hinzufügen"
+								"title": "Kann keinen Hauptschlussel hinzufugen"
 							},
 							"success": {
-								"title": "Passkey hinzugefügt"
+								"title": "Passkey hinzugefugt"
 							}
 						},
 						"deletePasskey": {
 							"error": {
-								"title": "Der Hauptschlüssel konnte nicht gelöscht werden"
+								"title": "Der Hauptschlussel konnte nicht geloscht werden"
 							},
 							"loading": {
-								"title": "Hauptschlüssel löschen..."
+								"title": "Hauptschlussel loschen..."
 							},
 							"success": {
-								"title": "Passkey gelöscht"
+								"title": "Passkey geloscht"
 							}
 						}
 					},
-					"title": "Passwörter"
+					"title": "Passworter"
 				},
 				"setPassword": {
-					"description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortrücksetzung durchlaufen. Klicke auf die Schaltfläche unten, um eine E-Mail zum Zurücksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
+					"description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortruck setzung durchlaufen. Klicke auf die Schaltflache unten, um eine E-Mail zum Zurucksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
 					"notifications": {
 						"error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
-						"success": "Prüfen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
+						"success": "Prufen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
 					},
 					"submit": "Passwort festlegen",
 					"title": "Dein Passwort"
 				},
 				"title": "Sicherheit",
 				"twoFactor": {
-					"description": "Füge deinem Konto eine zusätzliche Sicherheitsebene hinzu.",
+					"description": "Fuge deinem Konto eine zusatzliche Sicherheitsebene hinzu.",
 					"dialog": {
 						"password": {
 							"description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
@@ -489,14 +489,14 @@
 							"title": "Mit Passwort verifizieren"
 						},
 						"totpUrl": {
-							"code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestätigen:",
+							"code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestatigen:",
 							"description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
 							"title": "Zwei-Faktor-Authentifizierung aktivieren"
 						}
 					},
 					"disable": "Zwei-Faktor-Authentifizierung deaktivieren",
 					"enable": "Zwei-Faktor-Authentifizierung aktivieren",
-					"enabled": "Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert.",
+					"enabled": "Du hast die Zwei-Faktor-Authentifizierung fur dein Konto aktiviert.",
 					"notifications": {
 						"disable": {
 							"success": {
@@ -517,7 +517,7 @@
 					"title": "Zwei-Faktor-Authentifizierung"
 				}
 			},
-			"subtitle": "Verwalte die Einstellungen deines persönlichen Kontos.",
+			"subtitle": "Verwalte die Einstellungen deines personlichen Kontos.",
 			"title": "Kontoeinstellungen"
 		},
 		"billing": {
@@ -525,17 +525,17 @@
 				"label": "Abrechung verwalten",
 				"notifications": {
 					"error": {
-						"title": "Es konnte keine Kundenportalsitzung erstellt werden. \nBitte versuche es erneut."
+						"title": "Es konnte keine Kundenportalsitzung erstellt werden. Bitte versuche es erneut."
 					}
 				}
 			},
 			"activePlan": {
 				"status": {
 					"active": "Aktiv",
-					"canceled": "Gekündigt",
+					"canceled": "Gekundigt",
 					"expired": "Ausgelaufen",
-					"incomplete": "Unvollständig",
-					"past_due": "Überfällig",
+					"incomplete": "Unvollstandig",
+					"past_due": "Uberfallig",
 					"paused": "Pausiert",
 					"trialing": "Testversion",
 					"unpaid": "Unbezahlt"
@@ -543,14 +543,14 @@
 				"title": "Dein Plan"
 			},
 			"changePlan": {
-				"description": "Wähle einen Plan aus, den du abonnieren möchtest.",
-				"title": "Ändere deinen Plan"
+				"description": "Wahle einen Plan aus, den du abonnieren mochtest.",
+				"title": "Andere deinen Plan"
 			},
 			"title": "Zahlung"
 		},
 		"notificationsPage": {
 			"title": "Benachrichtigungen",
-			"description": "Lege fest, wie du Benachrichtigungen erhältst. Deaktivierte Optionen werden gespeichert; standardmäßig ist alles aktiviert.",
+			"description": "Lege fest, wie du Benachrichtigungen erhaltst. Deaktivierte Optionen werden gespeichert; standardmaig ist alles aktiviert.",
 			"groups": {
 				"general": {
 					"title": "Allgemein"
@@ -590,36 +590,36 @@
 		"save": "Speichern"
 	},
 	"start": {
-		"subtitle": "Sieh dir die neuesten Statistiken über dein großartiges Unternehmen an.",
+		"subtitle": "Sieh dir die neuesten Statistiken uber dein groartiges Unternehmen an.",
 		"welcome": "Willkommen {name}!"
 	},
 	"common": {
 		"confirmation": {
 			"cancel": "Abbrechen",
-			"confirm": "Bestätigen"
+			"confirm": "Bestatigen"
 		},
 		"actions": {
 			"continue": "Weiter",
-			"verify": "Überprüfen Sie"
+			"verify": "Uberprufen Sie"
 		},
 		"passwordCriteria": {
 			"minLength": "Min. 8 Zeichen",
-			"upperAndLowercase": "Groß- & Kleinbuchstaben",
+			"upperAndLowercase": "Gro- & Kleinbuchstaben",
 			"number": "Zahl",
 			"specialCharacter": "Sonderzeichen"
 		}
 	},
 	"checkoutReturn": {
 		"title": "Kauf wird verarbeitet",
-		"description": "Bitte warten Sie, während wir Ihre Zahlung bestätigen.",
-		"loading": "Ihr Kauf wird bestätigt, bitte warten..."
+		"description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
+		"loading": "Ihr Kauf wird bestatigt, bitte warten..."
 	},
 	"search": {
 		"title": "Suche",
 		"subtitle": "Verwalten Sie Typesense-Indexe, API-Keys und Nutzung dieser Organisation.",
-		"loading": "Wird geladen…",
+		"loading": "Wird geladen...",
 		"noIndexes": "Noch keine Suchindexe. Erstellen Sie Ihren ersten Index, um zu beginnen.",
-		"selectIndex": "Wählen Sie einen Index aus, um seine API-Keys zu verwalten.",
+		"selectIndex": "Wahlen Sie einen Index aus, um seine API-Keys zu verwalten.",
 		"fields": {
 			"displayName": "Anzeigename",
 			"slug": "Slug",
@@ -631,26 +631,26 @@
 		"createIndex": {
 			"trigger": "Index erstellen",
 			"title": "Suchindex erstellen",
-			"description": "Erstellt eine Typesense-Sammlung und einen Alias, die auf diese Organisation beschränkt sind.",
+			"description": "Erstellt eine Typesense-Sammlung und einen Alias, die auf diese Organisation beschrankt sind.",
 			"slugHelp": "Kleinbuchstaben, Ziffern und Bindestriche. Wird in API-Pfaden und als Sammlungs-Alias verwendet.",
-			"schemaHelp": "JSON-Array von Typesense-Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefügt.",
+			"schemaHelp": "JSON-Array von Typesense-Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefugt.",
 			"submit": "Erstellen",
 			"success": "Index wurde erstellt.",
 			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen."
 		},
 		"apiKeys": {
 			"title": "API-Keys",
-			"description": "SaaS-Suchschlüssel werden serverseitig validiert, bevor Anfragen Typesense erreichen. Der Typesense-Adminschlüssel verlässt niemals den Server.",
-			"create": "Schlüssel erstellen",
-			"createDescription": "Der Rohschlüssel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
+			"description": "SaaS-Suchschlussel werden serverseitig validiert, bevor Anfragen Typesense erreichen. Der Typesense-Adminschlussel verlasst niemals den Server.",
+			"create": "Schlussel erstellen",
+			"createDescription": "Der Rohschlussel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
 			"name": "Name",
-			"generate": "Schlüssel generieren",
+			"generate": "Schlussel generieren",
 			"created": "API-Key wurde erstellt.",
-			"revealOnce": "Kopieren Sie diesen Schlüssel jetzt. Er wird Ihnen nicht wieder angezeigt.",
+			"revealOnce": "Kopieren Sie diesen Schlussel jetzt. Er wird Ihnen nicht wieder angezeigt.",
 			"done": "Fertig",
 			"empty": "Noch keine API-Keys.",
 			"tableName": "Name",
-			"tablePrefix": "Präfix",
+			"tablePrefix": "Prafix",
 			"tableScopes": "Berechtigungen",
 			"tableStatus": "Status",
 			"tableActions": "Aktionen",
@@ -658,7 +658,7 @@
 			"statusRevoked": "Widerrufen",
 			"revoke": "Widerrufen",
 			"revokeConfirmTitle": "API-Key widerrufen",
-			"revokeConfirmMessage": "Möchten Sie \"{name}\" wirklich widerrufen? Clients, die diesen Schlüssel verwenden, funktionieren sofort nicht mehr.",
+			"revokeConfirmMessage": "Mochten Sie \"{name}\" wirklich widerrufen? Clients, die diesen Schlussel verwenden, funktionieren sofort nicht mehr.",
 			"revoked": "API-Key widerrufen.",
 			"error": "Vorgang fehlgeschlagen."
 		},
@@ -684,22 +684,72 @@
 			"countColumn": "Anzahl",
 			"productColumn": "Produkt",
 			"clicksColumn": "Klicks",
-			"noData": "Keine Daten für diesen Zeitraum verfügbar."
+			"noData": "Keine Daten fur diesen Zeitraum verfugbar."
 		},
 		"widget": {
 			"tab": "Widget",
 			"title": "Such-Widget",
 			"description": "Betten Sie ein Such-Widget mit einem Script-Tag in Ihren Shop ein.",
-			"apiKeyLabel": "API-Schlüssel",
-			"apiKeyHint": "Fügen Sie Ihren Search-Only API-Key ein (ss_search_...) oder erstellen Sie einen neuen im Reiter API Keys.",
+			"apiKeyLabel": "API-Schlussel",
+			"apiKeyHint": "Fugen Sie Ihren Search-Only API-Key ein (ss_search_...) oder erstellen Sie einen neuen im Reiter API Keys.",
 			"snippet": "Widget-Code",
 			"copySnippet": "Code kopieren",
 			"copied": "Widget-Code kopiert!",
 			"copyFailed": "Fehler beim Kopieren.",
 			"installInstructions": "Installationsanleitung",
-			"step1": "Container-Element hinzufügen: <div id=\"aac-search\"></div>",
-			"step2": "Widget-Code vor dem </body>-Tag einfügen.",
+			"step1": "Container-Element hinzufugen: <div id=\"aac-search\"></div>",
+			"step2": "Widget-Code vor dem </body>-Tag einfugen.",
 			"step3": "Das Widget initialisiert sich automatisch. Passen Sie data-*-Attribute nach Bedarf an."
+		},
+		"projects": {
+			"title": "Projekte",
+			"subtitle": "Suchindexe und Verbindungen fur diese Organisation.",
+			"newProject": "Neues Projekt",
+			"noProjects": "Noch keine Projekte. Erstellen Sie eines, um zu beginnen.",
+			"apiKeysLabel": "API-Keys",
+			"versionLabel": "Version",
+			"selectProject": "Wahlen Sie ein Projekt aus, um seine Details anzuzeigen.",
+			"linkToSearch": "Suche offnen"
+		},
+		"overview": {
+			"title": "Projektubersicht",
+			"indexedProducts": "Indizierte Produkte",
+			"apiKeysCount": "API-Keys",
+			"indexVersion": "Index-Version",
+			"lastHeartbeat": "Letzter Heartbeat",
+			"noHeartbeat": "Nie",
+			"connectorToken": "Connector-Token"
+		},
+		"checklist": {
+			"title": "Setup-Checkliste",
+			"steps": {
+				"createIndex": "Index erstellen",
+				"createIndexDone": "Index erstellt",
+				"generateApiKey": "API-Key generieren",
+				"generateApiKeyDone": "API-Key generiert",
+				"installCmsModule": "CMS-Modul installieren",
+				"installCmsModuleDone": "CMS-Modul installiert",
+				"runFullSync": "Vollsynchronisation durchfuhren",
+				"runFullSyncDone": "Produkte synchronisiert",
+				"testSearch": "Suche testen",
+				"testSearchDone": "Suche getestet",
+				"enableWidget": "Widget aktivieren",
+				"enableWidgetDone": "Widget aktiviert"
+			},
+			"stepDocs": "Dokumentation anzeigen",
+			"allDone": "Alle Prufungen bestanden!"
+		},
+		"connector": {
+			"title": "Connector",
+			"description": "Verwalten Sie das Connector-Token und den Handshake-Status.",
+			"tokenLabel": "Connector-Token",
+			"tokenPlaceholder": "ss_connector_***",
+			"testHandshake": "Handshake testen",
+			"handshakeSuccess": "Handshake erfolgreich",
+			"handshakeFailed": "Handshake fehlgeschlagen",
+			"noConnectorKeys": "Keine Connector-Keys. Erstellen Sie einen API-Key mit dem Bereich 'connector_write' im Reiter API Keys.",
+			"lastHeartbeat": "Letzter Heartbeat",
+			"noHeartbeat": "Noch kein Heartbeat empfangen"
 		}
 	}
 }

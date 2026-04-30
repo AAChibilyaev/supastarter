@@ -157,7 +157,7 @@
 			"loginWithPasskey": "Login with passkey",
 			"modes": {
 				"magicLink": "Magic link",
-				"password": "Password"
+				"password": "***"
 			},
 			"submit": "Sign in",
 			"subtitle": "Please enter your credentials to sign in.",
@@ -184,7 +184,7 @@
 			},
 			"message": "We are happy that you want to join us. Please fill in the form below to create your account.",
 			"name": "Name",
-			"password": "Password",
+			"password": "***",
 			"signIn": "Sign in",
 			"submit": "Create account",
 			"title": "Create an account"
@@ -561,7 +561,7 @@
 					"button": "Top up",
 					"title": "Top up your AI wallet",
 					"description": "Choose an amount or enter a custom value in rubles.",
-					"customAmount": "Custom amount (₽)",
+					"customAmount": "Custom amount (P)",
 					"summary": "You will be charged {amount}",
 					"confirm": "Pay with Tochka",
 					"error": "Failed to create payment link. Please try again."
@@ -658,7 +658,7 @@
 	"search": {
 		"title": "Search",
 		"subtitle": "Manage Typesense indexes, API keys and usage for this organization.",
-		"loading": "Loading…",
+		"loading": "Loading...",
 		"noIndexes": "No search indexes yet. Create your first one to get started.",
 		"selectIndex": "Select an index to manage its API keys.",
 		"fields": {
@@ -741,6 +741,78 @@
 			"step1": "Add a container element: <div id=\"aac-search\"></div>",
 			"step2": "Paste the widget snippet before the closing </body> tag.",
 			"step3": "The widget will auto-initialize. Customize data-* attributes as needed."
+		},
+		"projects": {
+			"title": "Projects",
+			"apiKeys": "API keys",
+			"loadError": "Failed to load projects."
+		},
+		"overview": {
+			"indexVersion": "Index version",
+			"apiKeys": "API keys",
+			"searches": "Searches"
+		},
+		"checklist": {
+			"title": "Setup checklist",
+			"completed": "completed",
+			"done": "Done",
+			"pending": "Pending",
+			"createIndex": "Create search index",
+			"generateKey": "Generate API key",
+			"cmsModule": "Install CMS module",
+			"fullSync": "Run full sync",
+			"testSearch": "Test search",
+			"enableWidget": "Enable search widget"
+		},
+		"analytics": {
+			"title": "Projects",
+			"subtitle": "Search indexes and connectors for this organization.",
+			"newProject": "New project",
+			"noProjects": "No projects yet. Create one to get started.",
+			"apiKeysLabel": "API keys",
+			"versionLabel": "Version",
+			"selectProject": "Select a project to view its details.",
+			"linkToSearch": "Open search"
+		},
+		"overview": {
+			"title": "Project overview",
+			"indexedProducts": "Indexed products",
+			"apiKeysCount": "API keys",
+			"indexVersion": "Index version",
+			"lastHeartbeat": "Last heartbeat",
+			"noHeartbeat": "Never",
+			"connectorToken": "Connector token"
+		},
+		"checklist": {
+			"title": "Setup checklist",
+			"steps": {
+				"createIndex": "Create index",
+				"createIndexDone": "Index created",
+				"generateApiKey": "Generate API key",
+				"generateApiKeyDone": "API key generated",
+				"installCmsModule": "Install CMS module",
+				"installCmsModuleDone": "CMS module installed",
+				"runFullSync": "Run full sync",
+				"runFullSyncDone": "Products synced",
+				"testSearch": "Test search",
+				"testSearchDone": "Search tested",
+				"enableWidget": "Enable widget",
+				"enableWidgetDone": "Widget enabled"
+			},
+			"stepDocs": "View docs",
+			"allDone": "All checks passed!"
+		},
+		"connector": {
+			"title": "Connector",
+			"description": "Manage the CMS connector token and handshake status.",
+			"tokenLabel": "Connector token",
+			"tokenPlaceholder": "ss_connector_***",
+			"testHandshake": "Test handshake",
+			"handshakeSuccess": "Handshake successful",
+			"handshakeFailed": "Handshake failed",
+			"noConnectorKeys": "No connector keys. Create an API key with 'connector_write' scope in the API Keys tab.",
+			"lastHeartbeat": "Last heartbeat",
+			"noHeartbeat": "No heartbeat received yet"
 		}
 	}
 }

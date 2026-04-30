@@ -760,6 +760,8 @@
 			"pending": "Pending",
 			"createIndex": "Create search index",
 			"generateKey": "Generate API key",
+			"importData": "Import data / run sync",
+			"installWidget": "Install search widget",
 			"cmsModule": "Install CMS module",
 			"fullSync": "Run full sync",
 			"testSearch": "Test search",

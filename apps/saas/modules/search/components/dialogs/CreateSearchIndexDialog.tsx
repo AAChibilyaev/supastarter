@@ -64,7 +64,7 @@ import type { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useCreateSearchIndexMutation } from "../lib/api";
+import { useCreateSearchIndexMutation } from "../../lib/api";
 
 const fieldTypes = [
 	"string",

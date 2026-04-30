@@ -18,6 +18,20 @@ export const onboardingStatus = protectedProcedure
 			organizationId: z.string(),
 		}),
 	)
+	.output(
+		z.object({
+			steps: z.array(
+				z.object({
+					step: z.number(),
+					label: z.string(),
+					completed: z.boolean(),
+				}),
+			),
+			completedCount: z.number(),
+			totalSteps: z.number(),
+			allCompleted: z.boolean(),
+		}),
+	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

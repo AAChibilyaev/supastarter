@@ -7,7 +7,6 @@
 
 import { aggregateSearchUsage, db } from "@repo/database";
 import { Hono } from "hono";
-import { z } from "zod";
 
 import { requireScope } from "./auth";
 

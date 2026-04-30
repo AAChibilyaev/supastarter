@@ -19,6 +19,29 @@ export const importJobs = protectedProcedure
 			indexSlug: z.string().optional(),
 		}),
 	)
+	.output(
+		z.object({
+			jobs: z.array(
+				z.object({
+					id: z.string(),
+					type: z.string(),
+					status: z.string(),
+					totalItems: z.number(),
+					processedItems: z.number(),
+					errorMessage: z.string().nullable(),
+					startedAt: z.string(),
+					finishedAt: z.string().nullable(),
+				}),
+			),
+			summary: z.object({
+				pending: z.number(),
+				processing: z.number(),
+				completed: z.number(),
+				failed: z.number(),
+				total: z.number(),
+			}),
+		}),
+	)
 	.handler(async ({ input: { organizationId, indexSlug }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

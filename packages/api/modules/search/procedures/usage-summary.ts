@@ -20,6 +20,16 @@ export const usageSummary = protectedProcedure
 			period: z.enum(["last7", "last30"]),
 		}),
 	)
+	.output(
+		z.object({
+			searchesUsed: z.number(),
+			documentsIndexed: z.number(),
+			searchesLimit: z.number(),
+			documentsLimit: z.number(),
+			periodStart: z.string(),
+			periodEnd: z.string(),
+		}),
+	)
 	.handler(async ({ input: { organizationId, period }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

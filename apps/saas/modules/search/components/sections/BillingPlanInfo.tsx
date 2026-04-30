@@ -195,7 +195,11 @@ export function BillingPlanInfo() {
 	);
 }
 
-export function TochkaWalletSection({ organizationId }: { organizationId: string }) {
+export function TochkaWalletSection({
+	organizationId: _organizationId,
+}: {
+	organizationId: string;
+}) {
 	const t = useTranslations("settings.billing");
 
 	return (

@@ -18,7 +18,7 @@ import { BookOpenTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { EmptyState } from "./EmptyState";
+import { EmptyState } from "../cards/EmptyState";
 
 interface SynonymsPanelProps {
 	organizationId: string;

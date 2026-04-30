@@ -29,7 +29,7 @@ export const createTopupLink = protectedProcedure
 			operationId: z.string().optional(),
 		}),
 	)
-	.handler(async ({ input: { amountMinor }, context: { user, locale } }) => {
+	.handler(async ({ input: { amountMinor }, context: { user } }) => {
 		const wallet = await db.aiWallet.findUnique({
 			where: { userId: user.id },
 		});

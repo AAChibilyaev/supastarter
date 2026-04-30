@@ -30,7 +30,7 @@ export const setupAutorecharge = protectedProcedure
 		}),
 	)
 	.handler(
-		async ({ input: { thresholdKopecks, topupAmountKopecks }, context: { user, locale } }) => {
+		async ({ input: { thresholdKopecks, topupAmountKopecks }, context: { user } }) => {
 			const wallet = await db.aiWallet.findUnique({
 				where: { userId: user.id },
 			});
@@ -43,7 +43,7 @@ export const setupAutorecharge = protectedProcedure
 			const purpose = `AI Wallet auto-recharge (threshold: ${Number(thresholdKopecks) / 100} ₽)`;
 			const externalRef = `autorecharge:${wallet.id}:${idempotencyKey}`;
 
-			const order = await db.walletTopupOrder.create({
+			const _order = await db.walletTopupOrder.create({
 				data: {
 					walletId: wallet.id,
 					userId: wallet.userId,

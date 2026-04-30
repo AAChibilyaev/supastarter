@@ -22,7 +22,7 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { useSearchIndexesQuery } from "../lib/api";
+import { useSearchIndexesQuery } from "../../lib/api";
 
 interface ConnectorWizardProps {
 	open: boolean;
@@ -312,18 +312,28 @@ export function ConnectorWizard({
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div className="space-y-2">
-									<label className="text-sm font-medium">API URL</label>
+									<label
+										htmlFor="connector-api-url"
+										className="text-sm font-medium"
+									>
+										API URL
+									</label>
 									<Input
+										id="connector-api-url"
 										value={apiUrl}
 										readOnly
 										className="font-mono text-xs min-w-0 truncate"
 									/>
 								</div>
 								<div className="space-y-2">
-									<label className="text-sm font-medium">
+									<label
+										htmlFor="connector-access-token"
+										className="text-sm font-medium"
+									>
 										{t("search.connector.tokenLabel")}
 									</label>
 									<Input
+										id="connector-access-token"
 										value={rawKey ?? t("search.connector.tokenPlaceholder")}
 										readOnly
 										className="font-mono text-xs"

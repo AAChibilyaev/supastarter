@@ -3,7 +3,7 @@
 import { StatsTile } from "@shared/components/StatsTile";
 import { useTranslations } from "next-intl";
 
-import { useSearchUsageQuery } from "../lib/api";
+import { useSearchUsageQuery } from "../../lib/api";
 
 interface SearchUsageCardProps {
 	organizationId: string;

@@ -1,5 +1,5 @@
 import { getBaseUrl } from "@repo/utils";
-import { SearchDashboard } from "@search/components/SearchDashboard";
+import { SearchDashboard } from "@search/components/pages/SearchDashboard";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,

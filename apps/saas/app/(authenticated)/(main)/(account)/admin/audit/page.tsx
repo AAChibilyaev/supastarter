@@ -1,4 +1,4 @@
-import { AdminAuditView } from "@admin/component/AdminAuditView";
+import { AdminAuditView } from "@admin/components/AdminAuditView";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminAuditPage() {

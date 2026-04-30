@@ -1,4 +1,4 @@
-import { RelevanceTabs } from "@search/components/RelevanceTabs";
+import { RelevanceTabs } from "@search/components/pages/RelevanceTabs";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,

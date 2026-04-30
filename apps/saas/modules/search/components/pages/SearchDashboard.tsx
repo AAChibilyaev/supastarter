@@ -12,14 +12,14 @@ import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
-import { useSearchIndexesQuery } from "../lib/api";
-import { CreateSearchIndexDialog } from "./CreateSearchIndexDialog";
-import { PlaygroundPanel } from "./PlaygroundPanel";
-import { SearchApiKeysPanel } from "./SearchApiKeysPanel";
-import { SearchIndexesList } from "./SearchIndexesList";
-import { SearchUsageCard } from "./SearchUsageCard";
-import { SearchUsageCards } from "./SearchUsageCards";
-import { WidgetPanel } from "./WidgetPanel";
+import { useSearchIndexesQuery } from "../../lib/api";
+import { SearchUsageCard } from "../cards/SearchUsageCard";
+import { SearchUsageCards } from "../cards/SearchUsageCards";
+import { CreateSearchIndexDialog } from "../dialogs/CreateSearchIndexDialog";
+import { PlaygroundPanel } from "../panels/PlaygroundPanel";
+import { SearchApiKeysPanel } from "../panels/SearchApiKeysPanel";
+import { WidgetPanel } from "../panels/WidgetPanel";
+import { SearchIndexesList } from "../tables/SearchIndexesList";
 
 interface SearchDashboardProps {
 	organizationId: string;

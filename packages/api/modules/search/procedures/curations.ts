@@ -25,6 +25,7 @@ export const getCurations = protectedProcedure
 			slug: searchIndexSlugSchema,
 		}),
 	)
+	.output(z.array(curationSchema))
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
@@ -55,6 +56,7 @@ export const updateCurations = protectedProcedure
 			curations: z.array(curationSchema),
 		}),
 	)
+	.output(z.array(curationSchema))
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);

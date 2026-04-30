@@ -1,4 +1,4 @@
-import { OrganizationForm } from "@admin/component/organizations/OrganizationForm";
+import { OrganizationForm } from "@admin/components/organizations/OrganizationForm";
 import { getAdminPath } from "@admin/lib/links";
 import { fullOrganizationQueryKey } from "@organizations/lib/api";
 import { auth } from "@repo/auth";

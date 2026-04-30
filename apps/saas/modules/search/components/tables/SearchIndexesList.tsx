@@ -14,8 +14,8 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { useSearchIndexesQuery } from "../lib/api";
-import { EmptyState } from "./EmptyState";
+import { useSearchIndexesQuery } from "../../lib/api";
+import { EmptyState } from "../cards/EmptyState";
 
 interface SearchIndexesListProps {
 	organizationId: string;

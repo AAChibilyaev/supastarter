@@ -5,7 +5,7 @@
  *   POST /v1/multi-search                — multi-search (federated across searches)
  */
 
-import { aggregateSearchUsage, recordSearchUsage } from "@repo/database";
+import { recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
 import { aliasName, multiSearchDocuments, searchDocuments } from "@repo/search";
 import { Hono } from "hono";

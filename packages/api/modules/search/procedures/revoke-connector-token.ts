@@ -18,6 +18,11 @@ export const revokeConnectorToken = protectedProcedure
 			keyId: z.string(),
 		}),
 	)
+	.output(
+		z.object({
+			revoked: z.boolean(),
+		}),
+	)
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 

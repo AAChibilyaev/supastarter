@@ -1,4 +1,4 @@
-import { AdminConfigView } from "@admin/component/AdminConfigView";
+import { AdminConfigView } from "@admin/components/AdminConfigView";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminConfigPage() {

@@ -26,9 +26,18 @@ export const getSchema = protectedProcedure
 			slug: searchIndexSlugSchema,
 		}),
 	)
+	.output(
+		z.object({
+			name: z.string(),
+			fields: z.array(z.any()),
+			defaultSortingField: z.string().nullable(),
+			enableNestedFields: z.boolean(),
+			numDocuments: z.number(),
+		}),
+	)
 	.handler(async ({ input: { organizationId, slug }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
-		const index = await requireSearchIndex(organizationId, slug);
+		await requireSearchIndex(organizationId, slug);
 
 		const client = getTypesenseClient();
 		const alias = aliasName(organizationId, slug);
@@ -77,6 +86,15 @@ export const updateSchema = protectedProcedure
 			fields: z.array(searchFieldSchema),
 			defaultSortingField: z.string().optional(),
 			triggerReindex: z.boolean().optional().default(false),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			schemaUpdated: z.boolean(),
+			reindexTriggered: z.boolean(),
+			indexId: z.string(),
+			indexSlug: z.string(),
 		}),
 	)
 	.handler(

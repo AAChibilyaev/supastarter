@@ -24,9 +24,9 @@ import { AlertTriangle, Cable, Clock, RefreshCw, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { ConnectorCard, type ConnectorStatus, type SourceType } from "./ConnectorCard";
-import { ConnectorWizard } from "./ConnectorWizard";
-import { SyncJobsTable } from "./SyncJobsTable";
+import { ConnectorCard, type ConnectorStatus, type SourceType } from "../cards/ConnectorCard";
+import { ConnectorWizard } from "../dialogs/ConnectorWizard";
+import { SyncJobsTable } from "../tables/SyncJobsTable";
 
 interface ConnectorsPageProps {
 	organizationId: string;

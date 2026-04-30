@@ -1,4 +1,3 @@
-import { ORPCError } from "@orpc/client";
 import { createSearchApiKey } from "@repo/database";
 import { generateSearchApiKey } from "@repo/search";
 import { z } from "zod";

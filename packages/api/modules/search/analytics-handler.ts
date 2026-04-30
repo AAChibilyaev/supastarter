@@ -107,12 +107,12 @@ export const analyticsApp = new Hono()
 			query,
 			sessionId,
 			productId,
-			position,
-			filters,
-			sort,
-			locale,
-			userAgent,
-			referrer,
+			position: _position,
+			filters: _filters,
+			sort: _sort,
+			locale: _locale,
+			userAgent: _userAgent,
+			referrer: _referrer,
 		} = parsed.data;
 
 		try {

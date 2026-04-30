@@ -1,5 +1,5 @@
 import { getSession } from "@auth/lib/server";
-import { KnowledgeWorkbench } from "@search/components/KnowledgeWorkbench";
+import { KnowledgeWorkbench } from "@knowledge/components/KnowledgeWorkbench";
 import { redirect } from "next/navigation";
 
 export default async function PersonalKnowledgePage() {

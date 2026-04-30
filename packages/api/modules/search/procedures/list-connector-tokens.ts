@@ -1,4 +1,3 @@
-import { ORPCError } from "@orpc/client";
 import { db } from "@repo/database";
 import { z } from "zod";
 
@@ -17,6 +16,27 @@ export const listConnectorTokens = protectedProcedure
 		z.object({
 			organizationId: z.string(),
 		}),
+	)
+	.output(
+		z.array(
+			z.object({
+				id: z.string(),
+				name: z.string(),
+				prefix: z.string(),
+				scopes: z.array(z.string()),
+				expiresAt: z.date().nullable(),
+				revokedAt: z.date().nullable(),
+				lastUsedAt: z.date().nullable(),
+				createdAt: z.date(),
+				index: z
+					.object({
+						id: z.string(),
+						slug: z.string(),
+						displayName: z.string(),
+					})
+					.nullable(),
+			}),
+		),
 	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);

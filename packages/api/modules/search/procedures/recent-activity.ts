@@ -28,6 +28,20 @@ export const recentActivity = protectedProcedure
 			limit: z.number().int().min(1).max(100).optional().default(20),
 		}),
 	)
+	.output(
+		z.object({
+			activities: z.array(
+				z.object({
+					id: z.string(),
+					kind: z.enum(["index_created", "api_key_created", "usage_event", "sync_job"]),
+					label: z.string(),
+					description: z.string(),
+					indexSlug: z.string().nullable(),
+					createdAt: z.string(),
+				}),
+			),
+		}),
+	)
 	.handler(async ({ input: { organizationId, limit }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

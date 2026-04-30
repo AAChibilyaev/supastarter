@@ -19,6 +19,12 @@ export const usage = protectedProcedure
 			windowDays: z.number().int().min(1).max(365).optional(),
 		}),
 	)
+	.output(
+		z.object({
+			since: z.string(),
+			rows: z.array(z.any()),
+		}),
+	)
 	.handler(async ({ input: { organizationId, windowDays }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 		const since = new Date(Date.now() - (windowDays ?? 30) * DAY_MS);

@@ -31,8 +31,8 @@ import Link from "next/link";
 import type { ComponentType } from "react";
 import { useState } from "react";
 
-import { ConnectorWizard } from "./ConnectorWizard";
-import { CreateSearchIndexDialog } from "./CreateSearchIndexDialog";
+import { ConnectorWizard } from "../dialogs/ConnectorWizard";
+import { CreateSearchIndexDialog } from "../dialogs/CreateSearchIndexDialog";
 
 interface StepConfig {
 	key: string;

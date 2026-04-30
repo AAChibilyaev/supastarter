@@ -88,7 +88,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { EmptyState } from "./EmptyState";
+import { EmptyState } from "../cards/EmptyState";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -172,10 +172,19 @@ function buildFieldSchema(fields: SchemaField[]) {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+function stringifyInputValue(value: unknown): string {
+	if (value === null || value === undefined) return "";
+	if (typeof value === "string") return value;
+	if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") {
+		return value.toString();
+	}
+	if (Array.isArray(value) || typeof value === "object") return JSON.stringify(value);
+	return "";
+}
+
 function formatCellValue(value: unknown): string {
 	if (value === null || value === undefined) return "\u2014";
-	if (typeof value === "object") return JSON.stringify(value);
-	return String(value);
+	return stringifyInputValue(value);
 }
 
 function truncate(str: string, max = 60): string {
@@ -217,7 +226,7 @@ function SkeletonRows({ columns, count = 8 }: { columns: number; count?: number 
 
 // ─── Empty State ────────────────────────────────────────────────────────────
 
-function EmptyDocumentsState({ onImport }: { onImport: () => void }) {
+function EmptyDocumentsState({ onImport: _onImport }: { onImport: () => void }) {
 	const t = useTranslations();
 
 	return (
@@ -955,7 +964,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														<select
 															name={formField.name}
 															className="h-9 px-3 py-2 text-sm shadow-xs flex w-full rounded-md border border-input bg-card ring-offset-background focus:ring-1 focus:ring-ring focus:outline-hidden"
-															value={String(formField.value ?? "")}
+															value={stringifyInputValue(
+																formField.value,
+															)}
 															onBlur={formField.onBlur}
 															onChange={(e) => {
 																const val = e.target.value;
@@ -987,7 +998,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 															step={
 																field.type === "float" ? "any" : "1"
 															}
-															value={String(formField.value ?? "")}
+															value={stringifyInputValue(
+																formField.value,
+															)}
 															onBlur={formField.onBlur}
 															onChange={(e) =>
 																formField.onChange(e.target.value)
@@ -996,7 +1009,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 													) : (
 														<Input
 															name={formField.name}
-															value={String(formField.value ?? "")}
+															value={stringifyInputValue(
+																formField.value,
+															)}
 															onBlur={formField.onBlur}
 															onChange={(e) =>
 																formField.onChange(e.target.value)

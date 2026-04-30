@@ -2,6 +2,8 @@ import { config } from "@config";
 import { Button } from "@repo/ui/components/button";
 import { useTranslations } from "next-intl";
 
+import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
+
 export function CtaFooter() {
 	const t = useTranslations();
 
@@ -15,7 +17,12 @@ export function CtaFooter() {
 					</h2>
 					<p className="mt-3 text-muted-foreground">{t("home.cta.subtitle")}</p>
 					<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
-						<Button size="lg" variant="primary" asChild>
+						<Button
+							className={marketingCtaButtonClassName(true)}
+							size="lg"
+							variant="primary"
+							asChild
+						>
 							<a href={config.saasUrl ?? "/signup"}>{t("home.cta.primary")}</a>
 						</Button>
 						{config.docsUrl && (

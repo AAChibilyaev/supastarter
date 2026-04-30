@@ -15,7 +15,7 @@ import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircleIcon, BarChart3Icon, SearchIcon, InfoIcon } from "lucide-react";
+import { BarChart3Icon, SearchIcon, InfoIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormatter } from "next-intl";
 import { useMemo, useState } from "react";

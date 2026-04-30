@@ -1,5 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { GettingStarted } from "@search/components/GettingStarted";
+import { GettingStarted } from "@search/components/pages/GettingStarted";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 

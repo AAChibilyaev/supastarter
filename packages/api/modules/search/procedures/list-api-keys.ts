@@ -28,6 +28,20 @@ export const listApiKeys = protectedProcedure
 			slug: searchIndexSlugSchema,
 		}),
 	)
+	.output(
+		z.array(
+			z.object({
+				id: z.string(),
+				name: z.string(),
+				prefix: z.string(),
+				scopes: z.array(z.string()),
+				expiresAt: z.date().nullable(),
+				revokedAt: z.date().nullable(),
+				lastUsedAt: z.date().nullable(),
+				createdAt: z.date(),
+			}),
+		),
+	)
 	.handler(async ({ input, context: { user } }) => {
 		const owner: SearchOwnerInput =
 			input.ownerType && input.ownerId

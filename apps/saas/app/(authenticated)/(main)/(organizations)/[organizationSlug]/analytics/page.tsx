@@ -1,4 +1,4 @@
-import { SearchAnalyticsCards } from "@search/components/SearchAnalyticsCards";
+import { SearchAnalyticsCards } from "@search/components/cards/SearchAnalyticsCards";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,

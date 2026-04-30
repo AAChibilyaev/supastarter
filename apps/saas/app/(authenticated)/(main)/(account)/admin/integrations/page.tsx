@@ -1,4 +1,4 @@
-import { AdminIntegrationsView } from "@admin/component/AdminIntegrationsView";
+import { AdminIntegrationsView } from "@admin/components/AdminIntegrationsView";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminIntegrationsPage() {

@@ -30,6 +30,12 @@ export const upsertDocument = protectedProcedure
 			document: z.record(z.string(), z.unknown()),
 		}),
 	)
+	.output(
+		z.object({
+			id: z.string(),
+			queued: z.boolean(),
+		}),
+	)
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);

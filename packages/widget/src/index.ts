@@ -15,7 +15,6 @@
  * It uses Shadow DOM for CSS isolation.
  */
 
-import type { WidgetConfig } from "./search-client";
 import { createAacSearchClient } from "./search-client";
 import { t as translate, resolveLocale } from "./translations";
 
@@ -441,7 +440,13 @@ export class AacSearchWidget {
 				: this.options.container;
 
 		if (!this.containerEl) {
-			throw new Error(`AACsearch Widget: container "${this.options.container}" not found`);
+			const containerLabel =
+				typeof this.options.container === "string"
+					? this.options.container
+					: this.options.container.id
+						? `#${this.options.container.id}`
+						: "<HTMLElement>";
+			throw new Error(`AACsearch Widget: container "${containerLabel}" not found`);
 		}
 
 		// Create Shadow DOM
@@ -578,12 +583,12 @@ export class AacSearchWidget {
 			filters: { [field]: next },
 			query: this.state.query || undefined,
 		});
-		this.doSearch(1);
+		void this.doSearch(1);
 	}
 
 	private setSortBy(sortBy: string): void {
 		this.state = { ...this.state, sortBy };
-		this.doSearch(1);
+		void this.doSearch(1);
 	}
 
 	private attachEvents(): void {
@@ -595,7 +600,7 @@ export class AacSearchWidget {
 				if (timeout) clearTimeout(timeout);
 				timeout = setTimeout(() => {
 					this.state = { ...this.state, query: input.value };
-					this.doSearch(1);
+					void this.doSearch(1);
 				}, 300);
 			});
 		}

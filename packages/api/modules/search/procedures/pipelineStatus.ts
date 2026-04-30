@@ -20,6 +20,15 @@ export const pipelineStatus = protectedProcedure
 			organizationId: z.string(),
 		}),
 	)
+	.output(
+		z.object({
+			bufferDepth: z.number(),
+			workerThroughput: z.number(),
+			retryQueueSize: z.number(),
+			failedCount: z.number(),
+			snapshotAt: z.string(),
+		}),
+	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

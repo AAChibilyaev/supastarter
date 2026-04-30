@@ -18,7 +18,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { useSearchIndexesQuery } from "../lib/api";
+import { useSearchIndexesQuery } from "../../lib/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -136,11 +136,20 @@ function HitCard({ hit, index }: { hit: Record<string, unknown>; index: number }
 	);
 }
 
+function stringifyPrimitive(value: unknown): string {
+	if (typeof value === "string") return value;
+	if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") {
+		return value.toString();
+	}
+	return "";
+}
+
 function StringValue({ value }: { value: unknown }) {
 	if (value === null || value === undefined) return <span className="text-foreground/40">—</span>;
-	if (Array.isArray(value)) return <span>{value.join(", ")}</span>;
+	if (Array.isArray(value))
+		return <span>{value.map((item) => stringifyPrimitive(item)).join(", ")}</span>;
 	if (typeof value === "object") return <span className="text-foreground/40">[object]</span>;
-	return <span>{String(value)}</span>;
+	return <span>{stringifyPrimitive(value)}</span>;
 }
 
 // ---------------------------------------------------------------------------
@@ -328,7 +337,6 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 						onKeyDown={handleKeyDown}
 						placeholder={t("search.preview.placeholder")}
 						className="flex-1"
-						autoFocus
 					/>
 					<Button
 						onClick={() => {

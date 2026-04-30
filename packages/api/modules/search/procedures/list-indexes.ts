@@ -22,6 +22,21 @@ export const listIndexes = protectedProcedure
 			ownerId: z.string().optional(),
 		}),
 	)
+	.output(
+		z.array(
+			z.object({
+				id: z.string(),
+				organizationId: z.string(),
+				slug: z.string(),
+				displayName: z.string(),
+				version: z.number(),
+				enabled: z.boolean(),
+				createdAt: z.date(),
+				updatedAt: z.date(),
+				apiKeysCount: z.number(),
+			}),
+		),
+	)
 	.handler(async ({ input, context: { user } }) => {
 		const owner: SearchOwnerInput =
 			input.ownerType && input.ownerId

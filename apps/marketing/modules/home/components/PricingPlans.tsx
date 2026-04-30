@@ -4,6 +4,8 @@ import { Button } from "@repo/ui/components/button";
 import { CheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
+
 const plans = [
 	{ key: "free", featuresCount: 4, ctaKey: "cta", primary: false },
 	{ key: "pro", featuresCount: 5, ctaKey: "cta", primary: true },
@@ -78,7 +80,10 @@ export function PricingPlans() {
 								</ul>
 
 								<Button
-									className="mt-8"
+									className={cn(
+										"mt-8",
+										marketingCtaButtonClassName(plan.primary),
+									)}
 									variant={plan.primary ? "primary" : "outline"}
 									asChild
 								>

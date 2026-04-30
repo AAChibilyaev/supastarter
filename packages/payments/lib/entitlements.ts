@@ -242,10 +242,8 @@ function resolvePlanId(purchase: { priceId: string } | null): PlanId {
 }
 
 const GRACE_READ_DAYS = 7;
-const GRACE_WRITE_DAYS = 0;
 
 function buildFreePlan(): PlanInfo {
-	const now = new Date();
 	return {
 		planId: "free",
 		name: PLANS.free.name,

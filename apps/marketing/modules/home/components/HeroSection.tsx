@@ -8,6 +8,7 @@ import Image from "next/image";
 
 import heroImageDark from "../../../public/images/hero-image-dark.png";
 import heroImage from "../../../public/images/hero-image.png";
+import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
 
 export function HeroSection() {
 	const t = useTranslations();
@@ -35,7 +36,12 @@ export function HeroSection() {
 				</p>
 
 				<div className="mt-4 gap-2 flex items-center justify-center">
-					<Button size="lg" variant="primary" asChild>
+					<Button
+						className={marketingCtaButtonClassName(true)}
+						size="lg"
+						variant="primary"
+						asChild
+					>
 						<a href={config.saasUrl}>
 							{t("home.hero.getStarted")}
 							<ArrowRightIcon className="ml-2 size-4" />

@@ -17,16 +17,11 @@ import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { Activity, ChevronLeftIcon, Code2, Database, Key, Layers, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-// ── Lazy imports ─────────────────────────────────────────────────
-
-const DocumentsTable = dynamic(() => import("./DocumentsTable").then((mod) => mod.DocumentsTable), {
-	ssr: false,
-});
+import { DocumentsTable } from "../tables/DocumentsTable";
 
 // ── Types ───────────────────────────────────────────────────────
 

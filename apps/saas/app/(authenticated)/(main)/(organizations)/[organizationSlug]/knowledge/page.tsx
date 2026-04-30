@@ -1,6 +1,6 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
+import { KnowledgeWorkbench } from "@knowledge/components/KnowledgeWorkbench";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
-import { KnowledgeWorkbench } from "@search/components/KnowledgeWorkbench";
 import { notFound } from "next/navigation";
 
 export default async function OrganizationKnowledgePage({

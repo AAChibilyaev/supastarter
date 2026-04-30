@@ -2,6 +2,19 @@
 
 ## 2026-04-30
 
+### Changed
+
+#### Marketing
+
+- **Theme-aware primary CTA styling**: Updated all “Start for free / Начать бесплатно” marketing CTA buttons (hero, pricing, footer) to use theme-aware borders, surfaces, and shadows in both light and dark modes via `apps/marketing/modules/shared/lib/cta-button-styles.ts`.
+
+#### SaaS app structure
+
+- **Search module consolidation**: Split the overloaded `apps/saas/modules/search/components/` folder into `pages`, `panels`, `dialogs`, `tables`, `cards`, and `sections`.
+- **Knowledge module extraction**: Moved `KnowledgeWorkbench` into `apps/saas/modules/knowledge/components/` and added the `@knowledge/*` tsconfig alias.
+- **Admin module normalization**: Renamed `apps/saas/modules/admin/component/` to `apps/saas/modules/admin/components/`.
+- **Dead UI cleanup**: Removed orphaned search UI files (`DashboardOverview`, `IndexRowActions`, `ProjectOverview`, `ProjectsList`, `SchemaEditor`, `SearchApiKeysPage`, `SearchPreview`, `SearchPreviewPage`) and deleted the duplicate sidebar context at `apps/saas/modules/lib/sidebar-context.tsx`.
+
 ### Added
 
 #### Widget (MVP)

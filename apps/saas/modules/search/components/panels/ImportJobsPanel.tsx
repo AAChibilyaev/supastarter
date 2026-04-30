@@ -26,7 +26,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { EmptyState } from "./EmptyState";
+import { EmptyState } from "../cards/EmptyState";
 
 interface ImportJobsPanelProps {
 	organizationId: string;

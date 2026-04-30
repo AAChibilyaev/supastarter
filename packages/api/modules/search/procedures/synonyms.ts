@@ -24,6 +24,7 @@ export const getSynonyms = protectedProcedure
 			slug: searchIndexSlugSchema,
 		}),
 	)
+	.output(z.array(synonymSchema))
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
@@ -52,6 +53,7 @@ export const updateSynonyms = protectedProcedure
 			synonyms: z.array(synonymSchema),
 		}),
 	)
+	.output(z.array(synonymSchema))
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);

@@ -1,4 +1,4 @@
-import { AdminNotificationsView } from "@admin/component/AdminNotificationsView";
+import { AdminNotificationsView } from "@admin/components/AdminNotificationsView";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminNotificationsPage() {

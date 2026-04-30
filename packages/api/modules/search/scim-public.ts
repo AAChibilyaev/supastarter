@@ -21,7 +21,6 @@
  */
 
 import { db } from "@repo/database";
-import { logger } from "@repo/logs";
 import type { Context } from "hono";
 import { Hono } from "hono";
 import { cors } from "hono/cors";

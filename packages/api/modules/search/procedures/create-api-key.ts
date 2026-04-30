@@ -33,7 +33,18 @@ export const createApiKey = protectedProcedure
 			scopes: z.array(searchApiKeyScopeSchema).min(1),
 			allowedOrigins: z.array(z.string().min(3).max(255)).max(20).optional(),
 			rateLimitPerMinute: z.number().int().min(1).max(60_000).optional(),
-			expiresAt: z.iso.datetime().optional(),
+			expiresAt: z.string().datetime().optional(),
+		}),
+	)
+	.output(
+		z.object({
+			id: z.string(),
+			name: z.string(),
+			prefix: z.string(),
+			scopes: z.array(z.string()),
+			expiresAt: z.date().nullable(),
+			createdAt: z.date(),
+			rawKey: z.string(),
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {

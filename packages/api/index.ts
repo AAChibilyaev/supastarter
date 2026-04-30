@@ -12,7 +12,6 @@ import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
-import { serveStatic } from "hono/serve-static";
 
 import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { analyticsApp } from "./modules/search/analytics-handler";

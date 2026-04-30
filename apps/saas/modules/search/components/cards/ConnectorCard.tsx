@@ -9,7 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { type LucideIcon, BlocksIcon, DatabaseIcon, GlobeIcon, ServerIcon } from "lucide-react";
+import { type LucideIcon, BlocksIcon, GlobeIcon, ServerIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export type SourceType = "prestashop" | "bitrix" | "directApi";

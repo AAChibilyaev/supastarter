@@ -1,5 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { ConnectorsPage } from "@search/components/ConnectorsPage";
+import { ConnectorsPage } from "@search/components/pages/ConnectorsPage";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 

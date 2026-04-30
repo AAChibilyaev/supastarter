@@ -1,5 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { CollectionDetail } from "@search/components/CollectionDetail";
+import { CollectionDetail } from "@search/components/pages/CollectionDetail";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 

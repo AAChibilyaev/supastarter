@@ -40,8 +40,8 @@ import {
 	useCreateSearchApiKeyMutation,
 	useRevokeSearchApiKeyMutation,
 	useSearchApiKeysQuery,
-} from "../lib/api";
-import { EmptyState } from "./EmptyState";
+} from "../../lib/api";
+import { EmptyState } from "../cards/EmptyState";
 
 const formSchema = z.object({
 	name: z.string().min(1).max(120),

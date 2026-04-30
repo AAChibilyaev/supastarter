@@ -6,12 +6,7 @@
  */
 
 import { logger } from "@repo/logs";
-import {
-	checkQuota,
-	checkHardLimit,
-	invalidatePlanCache,
-	resolveOrgPlan,
-} from "@repo/payments/lib/entitlements";
+import { checkQuota, checkHardLimit, invalidatePlanCache } from "@repo/payments/lib/entitlements";
 import type { Context } from "hono";
 
 export interface QuotaContext {

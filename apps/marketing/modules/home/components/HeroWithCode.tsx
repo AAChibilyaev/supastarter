@@ -3,6 +3,8 @@ import { Button } from "@repo/ui/components/button";
 import { ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
+
 const codeSample = String.raw`import { SearchClient } from "@aacsearch/client";
 
 const search = new SearchClient({
@@ -41,7 +43,12 @@ export function HeroWithCode() {
 					</p>
 
 					<div className="mt-8 gap-3 flex flex-wrap items-center">
-						<Button size="lg" variant="primary" asChild>
+						<Button
+							className={marketingCtaButtonClassName(true)}
+							size="lg"
+							variant="primary"
+							asChild
+						>
 							<a href={config.saasUrl ?? "/signup"}>
 								{t("home.hero.getStarted")}
 								<ArrowRightIcon className="ml-2 size-4" />

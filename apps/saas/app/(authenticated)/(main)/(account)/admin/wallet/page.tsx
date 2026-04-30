@@ -1,4 +1,4 @@
-import { AdminWalletOps } from "@admin/component/AdminWalletOps";
+import { AdminWalletOps } from "@admin/components/AdminWalletOps";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminWalletPage() {

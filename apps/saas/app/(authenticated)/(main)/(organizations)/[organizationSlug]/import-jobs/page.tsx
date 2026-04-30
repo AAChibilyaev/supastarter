@@ -1,4 +1,4 @@
-import { ImportJobsPanel } from "@search/components/ImportJobsPanel";
+import { ImportJobsPanel } from "@search/components/panels/ImportJobsPanel";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,

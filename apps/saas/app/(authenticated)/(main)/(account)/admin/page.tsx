@@ -1,4 +1,4 @@
-import { AdminOverview } from "@admin/component/AdminOverview";
+import { AdminOverview } from "@admin/components/AdminOverview";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminOverviewPage() {

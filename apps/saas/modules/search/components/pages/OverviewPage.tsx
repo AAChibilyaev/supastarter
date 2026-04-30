@@ -11,7 +11,7 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { EmptyState } from "@search/components/EmptyState";
+import { EmptyState } from "@search/components/cards/EmptyState";
 import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";

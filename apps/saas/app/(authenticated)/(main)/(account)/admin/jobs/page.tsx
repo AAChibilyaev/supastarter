@@ -1,4 +1,4 @@
-import { AdminJobsView } from "@admin/component/AdminJobsView";
+import { AdminJobsView } from "@admin/components/AdminJobsView";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export default function AdminJobsPage() {

@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { CurationsPanel } from "./CurationsPanel";
-import { SynonymsPanel } from "./SynonymsPanel";
+import { CurationsPanel } from "../panels/CurationsPanel";
+import { SynonymsPanel } from "../panels/SynonymsPanel";
 
 interface RelevanceTabsProps {
 	organizationId: string;

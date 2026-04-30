@@ -14,7 +14,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { toastError, toastPromise } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { formatKopecks } from "../../payments/lib/format-kopecks";
 
@@ -39,14 +39,9 @@ export function AdminWalletOps() {
 	);
 
 	const organizations = organizationsQuery.data?.organizations ?? [];
+	const fallbackOrganizationId = organizationsQuery.data?.organizations?.[0]?.id ?? "";
 
-	const effectiveOrganizationId = useMemo(() => {
-		if (selectedOrganizationId) {
-			return selectedOrganizationId;
-		}
-
-		return organizations[0]?.id ?? "";
-	}, [organizations, selectedOrganizationId]);
+	const effectiveOrganizationId = selectedOrganizationId || fallbackOrganizationId;
 
 	const walletQuery = useQuery({
 		...orpc.billingWallet.getWallet.queryOptions({

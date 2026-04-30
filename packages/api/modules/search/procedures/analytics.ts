@@ -20,6 +20,19 @@ export const analytics = protectedProcedure
 			period: z.enum(["last7", "last30"]),
 		}),
 	)
+	.output(
+		z.object({
+			totalSearches: z.number(),
+			totalSessions: z.number(),
+			topQueries: z.array(z.object({ query: z.string(), count: z.number() })),
+			zeroResultQueries: z.array(z.object({ query: z.string(), count: z.number() })),
+			topClickedProducts: z.array(
+				z.object({ productId: z.string(), title: z.string(), clicks: z.number() }),
+			),
+			ctr: z.number(),
+			searchesOverTime: z.array(z.object({ date: z.string(), count: z.number() })),
+		}),
+	)
 	.handler(async ({ input: { organizationId, period }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

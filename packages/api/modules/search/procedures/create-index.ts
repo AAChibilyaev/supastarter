@@ -29,6 +29,14 @@ export const createIndex = protectedProcedure
 			defaultSortingField: z.string().optional(),
 		}),
 	)
+	.output(
+		z.object({
+			id: z.string(),
+			slug: z.string(),
+			displayName: z.string(),
+			version: z.number(),
+		}),
+	)
 	.handler(async ({ input, context: { user } }) => {
 		const owner: SearchOwnerInput =
 			input.ownerType && input.ownerId

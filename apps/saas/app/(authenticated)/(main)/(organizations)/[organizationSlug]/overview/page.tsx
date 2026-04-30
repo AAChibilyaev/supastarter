@@ -1,6 +1,5 @@
 import { getActiveOrganization, getSession } from "@auth/lib/server";
-import { getBaseUrl } from "@repo/utils";
-import { OverviewPage } from "@search/components/OverviewPage";
+import { OverviewPage } from "@search/components/pages/OverviewPage";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 

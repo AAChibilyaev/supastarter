@@ -90,9 +90,15 @@ export type SearchIndexScalarFieldEnum = z.infer<typeof SearchIndexScalarFieldEn
 
 // File: SearchApiKeyScalarFieldEnum.schema.ts
 
-export const SearchApiKeyScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'name', 'prefix', 'hash', 'scopes', 'expiresAt', 'revokedAt', 'lastUsedAt', 'createdAt'])
+export const SearchApiKeyScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'name', 'prefix', 'hash', 'scopes', 'allowedOrigins', 'rateLimitPerMinute', 'expiresAt', 'revokedAt', 'lastUsedAt', 'createdAt'])
 
 export type SearchApiKeyScalarFieldEnum = z.infer<typeof SearchApiKeyScalarFieldEnumSchema>;
+
+// File: SearchRateLimitBucketScalarFieldEnum.schema.ts
+
+export const SearchRateLimitBucketScalarFieldEnumSchema = z.enum(['keyId', 'windowStart', 'count'])
+
+export type SearchRateLimitBucketScalarFieldEnum = z.infer<typeof SearchRateLimitBucketScalarFieldEnumSchema>;
 
 // File: SearchUsageEventScalarFieldEnum.schema.ts
 
@@ -435,6 +441,8 @@ export const SearchApiKeySchema = z.object({
   prefix: z.string(),
   hash: z.string(),
   scopes: z.array(z.string()),
+  allowedOrigins: z.array(z.string()),
+  rateLimitPerMinute: z.number().int().default(600),
   expiresAt: z.date().nullish(),
   revokedAt: z.date().nullish(),
   lastUsedAt: z.date().nullish(),
@@ -442,6 +450,17 @@ export const SearchApiKeySchema = z.object({
 });
 
 export type SearchApiKeyType = z.infer<typeof SearchApiKeySchema>;
+
+
+// File: SearchRateLimitBucket.schema.ts
+
+export const SearchRateLimitBucketSchema = z.object({
+  keyId: z.string(),
+  windowStart: z.date(),
+  count: z.number().int(),
+});
+
+export type SearchRateLimitBucketType = z.infer<typeof SearchRateLimitBucketSchema>;
 
 
 // File: SearchUsageEvent.schema.ts

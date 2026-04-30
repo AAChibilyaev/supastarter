@@ -1,9 +1,16 @@
-import { recordSearchUsage } from "@repo/database";
+import {
+	aggregateSearchUsage,
+	incrementRateLimitBucket,
+	recordSearchUsage,
+} from "@repo/database";
 import { logger } from "@repo/logs";
 import { aliasName, searchDocuments, verifySearchApiKey } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
+
+import { resolveOrgPlanQuota } from "./lib/quota";
+import { verifyScopedSearchToken } from "./lib/scoped-token";
 
 const publicSearchInput = z.object({
 	q: z.string().default("*"),
@@ -17,6 +24,7 @@ const publicSearchInput = z.object({
 });
 
 const BEARER_PREFIX = "Bearer ";
+const SCOPED_PREFIX = "ss_scoped_";
 
 export const publicSearchApp = new Hono()
 	.use(
@@ -33,12 +41,25 @@ export const publicSearchApp = new Hono()
 		if (!auth.startsWith(BEARER_PREFIX)) {
 			return c.json({ error: "missing_bearer_token" }, 401);
 		}
-		const rawKey = auth.slice(BEARER_PREFIX.length).trim();
-		if (!rawKey) {
+		const rawToken = auth.slice(BEARER_PREFIX.length).trim();
+		if (!rawToken) {
 			return c.json({ error: "missing_bearer_token" }, 401);
 		}
 
-		const verified = await verifySearchApiKey(rawKey, "search");
+		// Two token forms: native search key (ss_search_*) OR scoped token (ss_scoped_*).
+		// Scoped tokens carry an additional filter the client cannot remove.
+		let scopedFilter: string | undefined;
+		let parentRawKey = rawToken;
+		if (rawToken.startsWith(SCOPED_PREFIX)) {
+			const decoded = await verifyScopedSearchToken(rawToken);
+			if (!decoded) {
+				return c.json({ error: "invalid_or_expired_scoped_token" }, 401);
+			}
+			scopedFilter = decoded.filterBy;
+			parentRawKey = decoded.parentRawKey;
+		}
+
+		const verified = await verifySearchApiKey(parentRawKey, "search");
 		if (!verified) {
 			return c.json({ error: "invalid_or_revoked_key" }, 401);
 		}
@@ -46,6 +67,34 @@ export const publicSearchApp = new Hono()
 		const slug = c.req.param("slug");
 		if (slug !== verified.indexSlug) {
 			return c.json({ error: "key_does_not_match_index" }, 403);
+		}
+
+		// 1. Per-key allowed origins (empty list = wildcard for backwards compatibility).
+		if (verified.allowedOrigins.length > 0) {
+			const origin = c.req.header("origin") ?? "";
+			if (!verified.allowedOrigins.includes(origin)) {
+				return c.json({ error: "origin_not_allowed" }, 403);
+			}
+		}
+
+		// 2. Per-key sliding window rate limit.
+		const used = await incrementRateLimitBucket(verified.keyId);
+		if (used > verified.rateLimitPerMinute) {
+			return c.json({ error: "rate_limited", limit: verified.rateLimitPerMinute }, 429);
+		}
+
+		// 3. Per-org monthly quota by plan.
+		const quota = await resolveOrgPlanQuota(verified.organizationId);
+		if (quota.searchPerMonth > 0 && quota.searchUsedThisPeriod >= quota.searchPerMonth) {
+			return c.json(
+				{
+					error: "quota_exceeded",
+					limit: quota.searchPerMonth,
+					used: quota.searchUsedThisPeriod,
+					reset: quota.periodEnd,
+				},
+				402,
+			);
 		}
 
 		let body: unknown;
@@ -60,11 +109,18 @@ export const publicSearchApp = new Hono()
 			return c.json({ error: "invalid_input", details: z.treeifyError(parsed.error) }, 400);
 		}
 
+		// Combine scoped token's filter (if any) with caller-provided filter.
+		const combinedFilter = [scopedFilter, parsed.data.filterBy]
+			.filter(Boolean)
+			.map((f) => `(${f})`)
+			.join(" && ") || undefined;
+
 		try {
 			const result = await searchDocuments({
 				alias: aliasName(verified.organizationId, verified.indexSlug),
 				tenantId: verified.organizationId,
 				...parsed.data,
+				filterBy: combinedFilter,
 			});
 
 			void recordSearchUsage({
@@ -86,3 +142,6 @@ export const publicSearchApp = new Hono()
 			return c.json({ error: "search_failed" }, 502);
 		}
 	});
+
+// keep cleanup helper exported so the cron task can reach it without circular deps
+export { aggregateSearchUsage };

@@ -81,6 +81,8 @@ export async function createSearchApiKey(input: {
 	prefix: string;
 	hash: string;
 	scopes: string[];
+	allowedOrigins?: string[];
+	rateLimitPerMinute?: number;
 	expiresAt?: Date | null;
 }) {
 	return db.searchApiKey.create({
@@ -91,6 +93,8 @@ export async function createSearchApiKey(input: {
 			prefix: input.prefix,
 			hash: input.hash,
 			scopes: input.scopes,
+			allowedOrigins: input.allowedOrigins ?? [],
+			rateLimitPerMinute: input.rateLimitPerMinute ?? 600,
 			expiresAt: input.expiresAt ?? null,
 		},
 	});

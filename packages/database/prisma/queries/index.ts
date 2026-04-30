@@ -4,5 +4,6 @@ export * from "./ai-wallets";
 export * from "./organizations";
 export * from "./purchases";
 export * from "./search";
+export * from "./search-rate-limit";
 export * from "./users";
 export * from "./wallet-topup-orders";

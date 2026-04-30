@@ -27,8 +27,14 @@ export interface AiWalletConfig {
 	maxOverageKopecks: bigint;
 }
 
+export interface SearchPlanLimits {
+	searchPerMonth: number;
+	indexedDocuments: number;
+}
+
 export interface PaymentsConfigWithWallet extends PaymentsConfig {
 	aiWallet: AiWalletConfig;
+	searchLimits: Record<string, SearchPlanLimits>;
 }
 
 export const config: PaymentsConfigWithWallet = {
@@ -45,6 +51,12 @@ export const config: PaymentsConfigWithWallet = {
 		reservationTtlSeconds: 300,
 		overageDefaultEnabled: false,
 		maxOverageKopecks: BigInt(10_000), // 100 ₽
+	},
+	searchLimits: {
+		free: { searchPerMonth: 50_000, indexedDocuments: 10_000 },
+		starter: { searchPerMonth: 1_000_000, indexedDocuments: 250_000 },
+		pro: { searchPerMonth: 10_000_000, indexedDocuments: 2_000_000 },
+		business: { searchPerMonth: 50_000_000, indexedDocuments: 10_000_000 },
 	},
 	plans: {
 		pro: {

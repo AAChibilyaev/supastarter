@@ -9,6 +9,8 @@ export interface VerifiedSearchKey {
 	organizationId: string;
 	indexSlug: string;
 	scopes: SearchApiKeyScope[];
+	allowedOrigins: string[];
+	rateLimitPerMinute: number;
 }
 
 export async function verifySearchApiKey(
@@ -42,5 +44,7 @@ export async function verifySearchApiKey(
 		organizationId: record.organizationId,
 		indexSlug: record.index.slug,
 		scopes,
+		allowedOrigins: record.allowedOrigins ?? [],
+		rateLimitPerMinute: record.rateLimitPerMinute ?? 600,
 	};
 }

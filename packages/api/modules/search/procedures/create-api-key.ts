@@ -21,6 +21,8 @@ export const createApiKey = protectedProcedure
 			slug: searchIndexSlugSchema,
 			name: z.string().min(1).max(120),
 			scopes: z.array(searchApiKeyScopeSchema).min(1),
+			allowedOrigins: z.array(z.string().min(3).max(255)).max(20).optional(),
+			rateLimitPerMinute: z.number().int().min(1).max(60_000).optional(),
 			expiresAt: z.iso.datetime().optional(),
 		}),
 	)
@@ -36,6 +38,8 @@ export const createApiKey = protectedProcedure
 			prefix: generated.prefix,
 			hash: generated.hash,
 			scopes: input.scopes,
+			allowedOrigins: input.allowedOrigins,
+			rateLimitPerMinute: input.rateLimitPerMinute,
 			expiresAt: input.expiresAt ? new Date(input.expiresAt) : null,
 		});
 

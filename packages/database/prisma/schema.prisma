@@ -276,23 +276,35 @@ model SearchIndex {
 }
 
 model SearchApiKey {
-  id             String       @id @default(cuid())
-  indexId        String
-  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  name           String
-  prefix         String
-  hash           String       @unique
-  scopes         String[]
-  expiresAt      DateTime?
-  revokedAt      DateTime?
-  lastUsedAt     DateTime?
-  createdAt      DateTime     @default(now())
+  id                 String       @id @default(cuid())
+  indexId            String
+  index              SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name               String
+  prefix             String
+  hash               String       @unique
+  scopes             String[]
+  allowedOrigins     String[]     @default([])
+  rateLimitPerMinute Int          @default(600)
+  expiresAt          DateTime?
+  revokedAt          DateTime?
+  lastUsedAt         DateTime?
+  createdAt          DateTime     @default(now())
 
   @@index([indexId])
   @@index([organizationId])
   @@map("search_api_key")
+}
+
+model SearchRateLimitBucket {
+  keyId       String
+  windowStart DateTime
+  count       Int      @default(0)
+
+  @@id([keyId, windowStart])
+  @@index([windowStart])
+  @@map("search_rate_limit_bucket")
 }
 
 model SearchUsageEvent {

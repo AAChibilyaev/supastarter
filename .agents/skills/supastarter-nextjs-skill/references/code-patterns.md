@@ -1,302 +1,288 @@
 # Common supastarter Code Patterns
 
-This reference contains frequently used code patterns and examples for building features in supastarter (Next.js). For oRPC-specific patterns see [api-patterns.md](api-patterns.md).
+Frequently used code patterns for building features in supastarter Next.js (split-app monorepo). For oRPC-specific patterns see [api-patterns.md](api-patterns.md).
 
-## Database Patterns (Prisma)
+## Database (Prisma)
 
-### Creating a New Model
+### New model
 
 ```prisma
 // packages/database/prisma/schema.prisma
+model Feedback {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-model YourFeature {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  // Relations
   userId         String
-  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   organizationId String?
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  // Fields
-  title       String
-  description String?
-  status      FeatureStatus @default(ACTIVE)
-  
+
+  message        String
+  status         String   @default("open")
+
   @@index([userId])
   @@index([organizationId])
 }
-
-enum FeatureStatus {
-  ACTIVE
-  INACTIVE
-  ARCHIVED
-}
 ```
 
-### Query Patterns
+After editing: `pnpm --filter @repo/database push` then `pnpm --filter @repo/database generate`.
+
+Avoid Prisma `enum` — use string fields with TS-side `as const` records (see Coding Conventions).
+
+### Query patterns
 
 ```typescript
 import { db } from "@repo/database";
 
 // Find with relations
-const item = await db.yourFeature.findUnique({
+const item = await db.feedback.findUnique({
   where: { id },
-  include: {
-    user: true,
-    organization: true,
-  },
+  include: { user: true, organization: true },
 });
 
 // Find many with filters
-const items = await db.yourFeature.findMany({
-  where: {
-    organizationId,
-    status: "ACTIVE",
-  },
+const items = await db.feedback.findMany({
+  where: { organizationId, status: "open" },
   orderBy: { createdAt: "desc" },
-  take: 10,
+  take: 20,
 });
 
-// Create with transaction
+// Transaction
 await db.$transaction(async (tx) => {
-  const feature = await tx.yourFeature.create({
-    data: {
-      title,
-      userId,
-      organizationId,
-    },
-  });
-  return feature;
+  const fb = await tx.feedback.create({ data: { userId, message } });
+  await tx.notificationLog.create({ data: { feedbackId: fb.id } });
+  return fb;
 });
 ```
 
-## API Patterns (Hono / oRPC)
+Wrap into helpers in `packages/database/prisma/queries/<feature>.ts` rather than calling `db.*` from the API layer directly.
 
-For oRPC procedures (recommended in supastarter Next.js), see [api-patterns.md](api-patterns.md) and [assets/recipes/feedback-widget.md](../assets/recipes/feedback-widget.md). Below: plain Hono route style if the project uses it.
+## API (oRPC)
 
-### Basic Hono Route Setup
+See [api-patterns.md](api-patterns.md) for the canonical layout. Quick template:
 
 ```typescript
-// packages/api/src/routes/features.ts
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
+// packages/api/modules/feedback/procedures/create.ts
 import { z } from "zod";
+import { protectedProcedure } from "../../../orpc/procedures";
+import { createFeedback } from "@repo/database";
 
-const app = new Hono();
-
-const createSchema = z.object({
-  title: z.string().min(1).max(100),
-  description: z.string().optional(),
-});
-
-app.post("/", zValidator("json", createSchema), async (c) => {
-  const { title, description } = c.req.valid("json");
-  const userId = c.get("userId");
-  const organizationId = c.get("organizationId");
-  // create via @repo/database
-  return c.json({ feature: {} }, 201);
-});
-
-export default app;
+export const createFeedbackProcedure = protectedProcedure
+  .route({ method: "POST", path: "/feedback", tags: ["Feedback"], summary: "Create feedback" })
+  .input(z.object({ message: z.string().min(1).max(2000) }))
+  .output(z.object({ id: z.string() }))
+  .handler(async ({ input, context }) => {
+    const row = await createFeedback({ userId: context.user.id, message: input.message });
+    return { id: row.id };
+  });
 ```
 
-## Frontend Patterns (Next.js)
+Mount in `packages/api/orpc/router.ts`:
+```typescript
+import { feedbackRouter } from "../modules/feedback/router";
+export const router = publicProcedure.router({ ..., feedback: feedbackRouter });
+```
 
-### Server Component with Data Fetching
+## Frontend
+
+### Server Component with auth + DB
 
 ```typescript
-// apps/web/app/(app)/[organizationSlug]/features/page.tsx
+// apps/saas/app/(authenticated)/(main)/(organizations)/[organizationSlug]/feedback/page.tsx
+import { getSession } from "@auth/lib/server";
 import { db } from "@repo/database";
-import { getCurrentUser } from "@repo/auth";
-import { FeatureList } from "@modules/.../feature-list";
+import { notFound, redirect } from "next/navigation";
+import { FeedbackList } from "@shared/components/FeedbackList";
 
-export default async function FeaturesPage({
+export default async function FeedbackPage({
   params,
 }: {
-  params: { organizationSlug: string };
+  params: Promise<{ organizationSlug: string }>;
 }) {
-  const user = await getCurrentUser();
-  const organization = await db.organization.findUnique({
-    where: { slug: params.organizationSlug },
-  });
-  if (!organization) notFound();
+  const session = await getSession();
+  if (!session) redirect("/login");
 
-  const features = await db.yourFeature.findMany({
-    where: { organizationId: organization.id },
+  const { organizationSlug } = await params;
+  const org = await db.organization.findUnique({ where: { slug: organizationSlug } });
+  if (!org) notFound();
+
+  const feedback = await db.feedback.findMany({
+    where: { organizationId: org.id },
     orderBy: { createdAt: "desc" },
   });
 
-  return (
-    <div>
-      <h1>Features</h1>
-      <FeatureList features={features} />
-    </div>
-  );
+  return <FeedbackList items={feedback} />;
 }
 ```
 
 ### Client Component with TanStack Query + oRPC
 
-Use the project’s oRPC client (e.g. `orpc` from `@shared/lib/orpc-query-utils`):
-
 ```typescript
-// apps/web/components/features/feature-list.tsx
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function FeatureList() {
-  const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery(orpc.features.list.queryOptions());
-  const createMutation = useMutation(orpc.features.create.mutationOptions());
+export function FeedbackList({ organizationId }: { organizationId: string }) {
+  const qc = useQueryClient();
+  const { data, isLoading } = useQuery(orpc.feedback.list.queryOptions({ input: { organizationId } }));
+  const createMut = useMutation(orpc.feedback.create.mutationOptions({
+    onSuccess: () => qc.invalidateQueries(orpc.feedback.list.key()),
+  }));
 
-  const onCreate = () => {
-    createMutation.mutate(
-      { input: { title: "New" } },
-      {
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["features"] }),
-      }
-    );
-  };
+  if (isLoading) return <div>Loading…</div>;
 
-  if (isLoading) return <div>Loading...</div>;
   return (
     <div>
-      {data?.items?.map((f) => (
-        <div key={f.id}>{f.title}</div>
-      ))}
-      <button onClick={onCreate}>Create</button>
+      {data?.items?.map((f) => <div key={f.id}>{f.message}</div>)}
+      <button onClick={() => createMut.mutate({ message: "Hi" })}>Send</button>
     </div>
   );
 }
 ```
 
-### Form with react-hook-form + zod
+### Form (react-hook-form + zod)
 
 ```typescript
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+"use client";
 
-const schema = z.object({ title: z.string().min(1) });
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+} from "@repo/ui/components/form";
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+
+const schema = z.object({ message: z.string().min(1).max(2000) });
 type FormValues = z.infer<typeof schema>;
 
-export function FeatureForm() {
+export function FeedbackForm({ onSubmit }: { onSubmit: (v: FormValues) => Promise<void> }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { title: "" },
+    defaultValues: { message: "" },
   });
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit((data) => { /* submit */ })}>
-        <FormField control={form.control} name="title" render={({ field }) => (
-          <FormItem>
-            <FormLabel>Title</FormLabel>
-            <FormControl><Input {...field} /></FormControl>
-            <FormMessage />
-          </FormItem>
-        )} />
-        <Button type="submit">Submit</Button>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your feedback</FormLabel>
+              <FormControl><Input {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Send</Button>
       </form>
     </Form>
   );
 }
 ```
 
-## UI Components (shadcn/ui)
-
-### Using Built-in Components
+## UI (shadcn / Tailwind v4)
 
 ```typescript
-import { Button } from "@ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@ui/components/card";
-import { Input } from "@ui/components/input";
-import { Label } from "@ui/components/label";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { cn } from "@repo/ui";
 
-export function FeatureCard() {
+export function StatCard({ title, value, className }: { title: string; value: number; className?: string }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create Feature</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" name="title" />
-          </div>
-          <Button type="submit">Submit</Button>
-        </div>
-      </CardContent>
+    <Card className={cn("flex flex-col gap-2", className)}>
+      <CardHeader><CardTitle>{title}</CardTitle></CardHeader>
+      <CardContent className="text-2xl font-semibold">{value}</CardContent>
     </Card>
   );
 }
 ```
 
-## Authentication Patterns
+Theme tokens come from `tooling/tailwind/theme.css` (Tailwind v4 — no per-app `tailwind.config.ts`).
 
-### Getting Current User (server)
+## Auth
+
+### Get session (server)
 
 ```typescript
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { getSession } from "@auth/lib/server";  // apps/saas/modules/auth/lib/server.ts
 import { redirect } from "next/navigation";
 
-export async function getCurrentUser() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export async function requireUser() {
+  const session = await getSession();
   if (!session) redirect("/login");
   return session.user;
 }
 ```
 
-### Protecting Routes (middleware)
-
-Use the project’s auth middleware; ensure organization access is checked when using `[organizationSlug]` routes. See [auth-patterns.md](auth-patterns.md).
-
-## Organization Patterns
-
-### Organization Context (client)
+### Get session (client)
 
 ```typescript
 "use client";
+import { useSession } from "@auth/hooks/use-session";
 
-import { createContext, useContext } from "react";
-import type { Organization } from "@repo/database";
-
-const OrganizationContext = createContext<Organization | null>(null);
-
-export function useOrganization() {
-  const context = useContext(OrganizationContext);
-  if (!context) throw new Error("useOrganization must be used within OrganizationProvider");
-  return context;
+export function UserBadge() {
+  const { user, loaded } = useSession();
+  if (!loaded || !user) return null;
+  return <span>{user.email}</span>;
 }
 ```
 
-### Role-Based Access Control
-
-Use maps or union literals instead of enums (per [coding-conventions.md](coding-conventions.md)):
+## Notifications
 
 ```typescript
-const OrganizationRole = {
-  OWNER: "OWNER",
-  ADMIN: "ADMIN",
-  MEMBER: "MEMBER",
+import { createNotification } from "@repo/notifications";
+
+await createNotification({
+  userId: targetUserId,
+  type: "feedback_received",
+  data: { headline: "New feedback", message: "..." },
+  link: "/feedback/123",
+});
+```
+
+See [notifications-patterns.md](notifications-patterns.md).
+
+## Roles (no enums)
+
+```typescript
+const ORGANIZATION_ROLES = {
+  owner: "owner",
+  admin: "admin",
+  member: "member",
 } as const;
 
-export function canManageMembers(role: string) {
-  return role === OrganizationRole.OWNER || role === OrganizationRole.ADMIN;
+export type OrganizationRole = (typeof ORGANIZATION_ROLES)[keyof typeof ORGANIZATION_ROLES];
+
+export function canManageMembers(role: OrganizationRole) {
+  return role === "owner" || role === "admin";
 }
 ```
+
+## i18n
+
+```typescript
+"use client";
+import { useTranslations } from "next-intl";
+
+export function Greeting() {
+  const t = useTranslations();
+  return <h1>{t("home.welcome.title")}</h1>;
+}
+```
+
+Translation lives in `packages/i18n/translations/<locale>/<scope>.json` — pick `saas` / `marketing` / `shared` / `mail` per scope. See [internationalization.md](internationalization.md).
 
 ## Docs
 
 - [API patterns (oRPC)](api-patterns.md)
+- [Database patterns](database-patterns.md)
+- [Notifications patterns](notifications-patterns.md)
 - [Feedback widget recipe](../assets/recipes/feedback-widget.md)
 - [supastarter Next.js docs](https://supastarter.dev/docs/nextjs)

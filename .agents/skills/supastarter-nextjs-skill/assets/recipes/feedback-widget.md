@@ -1,23 +1,19 @@
 # Build a Feature: Feedback Widget (Next.js)
 
-Full “build a feature” example for supastarter Next.js: database → queries → API (oRPC) → frontend → i18n → integration. Based on [Build a feature – feedback widget](https://supastarter.dev/docs/nextjs/recipes/build-a-feedback-widget).
+Full "build a feature" example for supastarter Next.js: database → queries → API (oRPC) → frontend → i18n → integration. Adapted from [Build a feedback widget](https://supastarter.dev/docs/nextjs/recipes/build-a-feedback-widget) for the current **split-app monorepo**.
 
 ## Overview
 
-The feedback widget consists of:
-
-1. **Database schema** – Prisma `Feedback` model and `User` relation
-2. **Database queries** – `createFeedback` and exports
-3. **API endpoint** – oRPC procedure (Zod, `publicProcedure`, optional session)
+1. **Database schema** – Prisma `Feedback` model + `User` relation
+2. **Database queries** – `createFeedback` helper, exported via `@repo/database`
+3. **API endpoint** – oRPC procedure (Zod, `publicProcedure` + optional session, since feedback is allowed for anonymous users)
 4. **Frontend component** – React form (shadcn, `useSession`, i18n, TanStack mutation)
-5. **Translations** – en/de keys for feedback
-6. **Integration** – Add `<FeedbackWidget />` to layout
+5. **Translations** – keys in `saas.json` (or `shared.json` if used across apps) for all 4 locales
+6. **Integration** – mount `<FeedbackWidget />` in a layout
 
 ---
 
 ## Step 1: Database Schema
-
-Add a `Feedback` model and relation on `User` in the Prisma schema.
 
 **File:** `packages/database/prisma/schema.prisma`
 
@@ -43,23 +39,20 @@ model User {
 }
 ```
 
-Then run:
+Apply:
 
 ```bash
-pnpm --filter database push
-# or: pnpm --filter database migrate dev
-pnpm --filter database generate
+pnpm --filter @repo/database push
+pnpm --filter @repo/database generate
 ```
 
 ---
 
 ## Step 2: Database Queries
 
-Create query functions and export them.
-
 **File:** `packages/database/prisma/queries/feedback.ts`
 
-```ts
+```typescript
 import { db } from "../client";
 
 export async function createFeedback({
@@ -77,38 +70,33 @@ export async function createFeedback({
   ipAddress?: string;
   userId?: string;
 }) {
-  return await db.feedback.create({
-    data: {
-      message,
-      type,
-      email,
-      name,
-      ipAddress,
-      userId,
-    },
+  return db.feedback.create({
+    data: { message, type, email, name, ipAddress, userId },
   });
 }
 ```
 
+Export from the queries index:
+
 **File:** `packages/database/prisma/queries/index.ts`
 
-Add:
-
-```ts
+```typescript
+export * from "./ai-chats";
 export * from "./feedback";
+export * from "./organizations";
+export * from "./purchases";
+export * from "./users";
 ```
-
-(Keep existing exports like `./ai-chats`, `./organizations`, `./purchases`, `./users`.)
 
 ---
 
-## Step 3: API Endpoint
+## Step 3: API Endpoint (oRPC)
 
-Create the feedback oRPC module: types, procedure, router, then mount the router.
+### Schema
 
 **File:** `packages/api/modules/feedback/types.ts`
 
-```ts
+```typescript
 import { z } from "zod";
 
 export const feedbackSchema = z.object({
@@ -121,15 +109,19 @@ export const feedbackSchema = z.object({
 export type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 ```
 
+### Procedure
+
+Feedback can be submitted anonymously, so we use `publicProcedure` and pull the session manually (it's optional). For protected features use `protectedProcedure` instead.
+
 **File:** `packages/api/modules/feedback/procedures/create.ts`
 
-```ts
+```typescript
 import { ORPCError } from "@orpc/server";
 import { auth } from "@repo/auth";
 import { createFeedback } from "@repo/database";
 import { logger } from "@repo/logs";
 import { z } from "zod";
-import { publicProcedure } from "../../orpc/procedures";
+import { publicProcedure } from "../../../orpc/procedures";
 import { feedbackSchema } from "../types";
 
 export const createFeedbackProcedure = publicProcedure
@@ -141,15 +133,11 @@ export const createFeedbackProcedure = publicProcedure
     description: "Submit feedback with optional contact information",
   })
   .input(feedbackSchema)
-  .output(
-    z.object({
-      id: z.string(),
-      message: z.string(),
-    })
-  )
+  .output(z.object({ id: z.string(), message: z.string() }))
   .handler(async ({ input, context }) => {
     try {
       const session = await auth.api.getSession({ headers: context.headers });
+
       const ipAddress =
         context.headers.get("x-forwarded-for") ||
         context.headers.get("x-real-ip") ||
@@ -164,10 +152,7 @@ export const createFeedbackProcedure = publicProcedure
         userId: session?.user.id,
       });
 
-      return {
-        id: feedback.id,
-        message: "Feedback submitted successfully",
-      };
+      return { id: feedback.id, message: "Feedback submitted successfully" };
     } catch (error) {
       logger.error("Failed to submit feedback:", error);
       throw new ORPCError("INTERNAL_SERVER_ERROR", {
@@ -177,9 +162,11 @@ export const createFeedbackProcedure = publicProcedure
   });
 ```
 
+### Router
+
 **File:** `packages/api/modules/feedback/router.ts`
 
-```ts
+```typescript
 import { createFeedbackProcedure } from "./procedures/create";
 
 export const feedbackRouter = {
@@ -187,40 +174,60 @@ export const feedbackRouter = {
 };
 ```
 
-**Mount in:** `packages/api/orpc/router.ts`
+### Mount in root router
 
-```ts
+**File:** `packages/api/orpc/router.ts`
+
+```typescript
+import type { RouterClient } from "@orpc/server";
+import { adminRouter } from "../modules/admin/router";
+import { aiRouter } from "../modules/ai/router";
 import { feedbackRouter } from "../modules/feedback/router";
+import { notificationsRouter } from "../modules/notifications/router";
+import { organizationsRouter } from "../modules/organizations/router";
+import { paymentsRouter } from "../modules/payments/router";
+import { usersRouter } from "../modules/users/router";
+import { publicProcedure } from "./procedures";
 
-export const router = publicProcedure
-  .prefix("/api")
-  .router({
-    // ... other routers
-    feedback: feedbackRouter,
-  });
+export const router = publicProcedure.router({
+  admin: adminRouter,
+  organizations: organizationsRouter,
+  users: usersRouter,
+  payments: paymentsRouter,
+  ai: aiRouter,
+  notifications: notificationsRouter,
+  feedback: feedbackRouter,
+});
+
+export type ApiRouterClient = RouterClient<typeof router>;
 ```
 
 ---
 
 ## Step 4: Frontend Component
 
-React form with shadcn, `useSession`, i18n, and TanStack mutation.
+Use the SaaS app's aliases. Note:
+- `@repo/ui/components/*` for shadcn primitives
+- `cn` from `@repo/ui`
+- `@auth/hooks/use-session` for the session hook
+- `@shared/lib/orpc-query-utils` for the typed oRPC client
 
-**File:** `apps/web/modules/shared/components/FeedbackWidget.tsx`
+**File:** `apps/saas/modules/shared/components/FeedbackWidget.tsx`
 
 ```tsx
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "@saas/auth/hooks/use-session";
-import { Button } from "@ui/components/button";
+import { useSession } from "@auth/hooks/use-session";
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@ui/components/dialog";
+} from "@repo/ui/components/dialog";
 import {
   Form,
   FormControl,
@@ -228,25 +235,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ui/components/form";
-import { Input } from "@ui/components/input";
+} from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ui/components/select";
-import { Textarea } from "@ui/components/textarea";
-import { cn } from "@ui/lib";
+} from "@repo/ui/components/select";
+import { Textarea } from "@repo/ui/components/textarea";
+import { cn } from "@repo/ui";
+import { useMutation } from "@tanstack/react-query";
 import { MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { z } from "zod";
-import { orpc } from "@shared/lib/orpc-query-utils";
 import { toast } from "sonner";
+import { z } from "zod";
 
 const feedbackSchema = z.object({
   message: z.string().min(10).max(1000),
@@ -261,15 +267,14 @@ export function FeedbackWidget({ className }: { className?: string }) {
   const t = useTranslations();
   const { user } = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  const createFeedbackMutation = useMutation(orpc.feedback.create.mutationOptions());
+
+  const createFeedbackMutation = useMutation(
+    orpc.feedback.create.mutationOptions(),
+  );
+
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
-    defaultValues: {
-      message: "",
-      type: "general",
-      email: "",
-      name: "",
-    },
+    defaultValues: { message: "", type: "general", email: "", name: "" },
   });
 
   const onSubmit = async (data: FeedbackFormValues) => {
@@ -292,7 +297,7 @@ export function FeedbackWidget({ className }: { className?: string }) {
           size="sm"
           className={cn("fixed bottom-4 right-4 z-50 shadow-lg", className)}
         >
-          <MessageSquare className="h-4 w-4 mr-2" />
+          <MessageSquare className="mr-2 h-4 w-4" />
           {t("feedback.button")}
         </Button>
       </DialogTrigger>
@@ -308,22 +313,34 @@ export function FeedbackWidget({ className }: { className?: string }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("feedback.form.type.label")}</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("feedback.form.type.placeholder")} />
+                        <SelectValue
+                          placeholder={t("feedback.form.type.placeholder")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="general">{t("feedback.form.type.options.general")}</SelectItem>
-                      <SelectItem value="bug">{t("feedback.form.type.options.bug")}</SelectItem>
-                      <SelectItem value="feature">{t("feedback.form.type.options.feature")}</SelectItem>
+                      <SelectItem value="general">
+                        {t("feedback.form.type.options.general")}
+                      </SelectItem>
+                      <SelectItem value="bug">
+                        {t("feedback.form.type.options.bug")}
+                      </SelectItem>
+                      <SelectItem value="feature">
+                        {t("feedback.form.type.options.feature")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             {!user && (
               <>
                 <FormField
@@ -333,7 +350,10 @@ export function FeedbackWidget({ className }: { className?: string }) {
                     <FormItem>
                       <FormLabel>{t("feedback.form.name.label")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("feedback.form.name.placeholder")} {...field} />
+                        <Input
+                          placeholder={t("feedback.form.name.placeholder")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -346,7 +366,10 @@ export function FeedbackWidget({ className }: { className?: string }) {
                     <FormItem>
                       <FormLabel>{t("feedback.form.email.label")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("feedback.form.email.placeholder")} {...field} />
+                        <Input
+                          placeholder={t("feedback.form.email.placeholder")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -354,6 +377,7 @@ export function FeedbackWidget({ className }: { className?: string }) {
                 />
               </>
             )}
+
             <FormField
               control={form.control}
               name="message"
@@ -371,7 +395,12 @@ export function FeedbackWidget({ className }: { className?: string }) {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={createFeedbackMutation.isPending}>
+
+            <Button
+              type="submit"
+              className="w-full"
+              loading={createFeedbackMutation.isPending}
+            >
               {t("feedback.form.submit")}
             </Button>
           </form>
@@ -382,17 +411,13 @@ export function FeedbackWidget({ className }: { className?: string }) {
 }
 ```
 
-(Adjust imports like `@saas/auth/hooks/use-session`, `@ui/*`, `@shared/lib/orpc-query-utils` to match your repo.)
-
 ---
 
-## Step 5: Translations
+## Step 5: Translations (4 locales × 1 scope)
 
-Add feedback keys to en and de.
+The widget is SaaS-only, so the keys go in `saas.json`. Add the same shape to **all four locales**.
 
-**File:** `packages/i18n/translations/en.json`
-
-Add under the root (or merge into existing):
+**File:** `packages/i18n/translations/en/saas.json` (add at top level)
 
 ```json
 {
@@ -403,10 +428,7 @@ Add under the root (or merge into existing):
       "title": "Thank you!",
       "message": "Your feedback has been submitted successfully."
     },
-    "error": {
-      "title": "Error",
-      "message": "Failed to submit feedback"
-    },
+    "error": { "title": "Error", "message": "Failed to submit feedback" },
     "form": {
       "type": {
         "label": "Feedback Type",
@@ -426,22 +448,51 @@ Add under the root (or merge into existing):
 }
 ```
 
-**File:** `packages/i18n/translations/de.json`
+**File:** `packages/i18n/translations/de/saas.json`
 
-Add the same structure with German strings, e.g. `"button": "Feedback"`, `"title": "Feedback senden"`, etc.
+```json
+{
+  "feedback": {
+    "button": "Feedback",
+    "title": "Feedback senden",
+    "success": {
+      "title": "Vielen Dank!",
+      "message": "Ihr Feedback wurde erfolgreich übermittelt."
+    },
+    "error": { "title": "Fehler", "message": "Feedback konnte nicht gesendet werden" },
+    "form": {
+      "type": {
+        "label": "Feedback-Typ",
+        "placeholder": "Feedback-Typ auswählen",
+        "options": {
+          "general": "Allgemein",
+          "bug": "Fehlermeldung",
+          "feature": "Feature-Anfrage"
+        }
+      },
+      "name": { "label": "Name", "placeholder": "Ihr Name" },
+      "email": { "label": "E-Mail", "placeholder": "ihre.email@beispiel.com" },
+      "message": { "label": "Nachricht", "placeholder": "Sagen Sie uns, was Sie denken..." },
+      "submit": "Feedback senden"
+    }
+  }
+}
+```
+
+Repeat for `es/saas.json` and `fr/saas.json` with translated copy.
 
 ---
 
 ## Step 6: Integration
 
-Add the widget to a layout so it appears on the desired pages.
+Mount the widget where you want it. For SaaS-only, add it to an authenticated layout:
 
-**File:** `apps/web/app/(marketing)/layout.tsx`
+**File:** `apps/saas/app/(authenticated)/(main)/layout.tsx` (or any existing layout)
 
 ```tsx
-import { FeedbackWidget } from "@modules/shared/components/FeedbackWidget";
+import { FeedbackWidget } from "@shared/components/FeedbackWidget";
 
-export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
@@ -451,17 +502,31 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 }
 ```
 
-(Adjust import path to match your repo.)
+To show on marketing too, build a shared marketing version (different alias scope) — or move the keys into `shared.json` and the component into a cross-app shared package.
 
 ---
 
-## Summary
+## Step 7: Evaluation (next steps)
 
-- **Schema:** `packages/database/prisma/schema.prisma` – `Feedback` model + `User.feedbacks`
-- **Queries:** `packages/database/prisma/queries/feedback.ts` + export in `queries/index.ts`
-- **API:** `packages/api/modules/feedback/` (types, procedures/create, router) + mount in `packages/api/orpc/router.ts`
-- **UI:** `apps/web/modules/shared/components/FeedbackWidget.tsx` (form, session, i18n, mutation)
-- **i18n:** `packages/i18n/translations/{en,de}.json` – `feedback.*`
-- **Integration:** `<FeedbackWidget />` in `apps/web/app/(marketing)/layout.tsx`
+- View feedback in the admin module (`apps/saas/modules/admin/`) — add an `apps/saas/app/(authenticated)/(main)/(account)/admin/feedback/page.tsx` and a `feedback.list` admin procedure (`adminProcedure`).
+- Email a digest of new feedback via a daily cron (see `references/background-tasks.md`).
+- Trigger a Slack/Discord webhook in the procedure handler.
+- Notify admins in-app via `createNotification` from `@repo/notifications` (see `references/notifications-patterns.md`).
 
-For more, see [Build a feature – feedback widget](https://supastarter.dev/docs/nextjs/recipes/build-a-feedback-widget).
+## Features summary
+
+- Session integration (auto-attach `userId` for logged-in users)
+- Conditional fields (name/email hidden when logged in)
+- Full i18n via `saas.json` × 4 locales
+- Zod client + server validation
+- shadcn UI primitives
+- Type-safe oRPC mutation
+- IP capture for anti-abuse
+
+## Further considerations
+
+- Rate limiting per IP (use Upstash Ratelimit, see `references/background-tasks.md` for QStash)
+- Sentiment analysis via `packages/ai/`
+- File attachments (presigned uploads — see `references/storage-patterns.md`)
+- Dedicated feedback management dashboard
+- Multi-channel notifications (email + Slack + in-app via `@repo/notifications`)

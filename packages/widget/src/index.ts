@@ -622,7 +622,7 @@ export class AacSearchWidget {
 				) as HTMLElement | null;
 				if (!btn || btn.hasAttribute("disabled")) return;
 				const page = parseInt(btn.getAttribute("data-page") ?? "1", 10);
-				this.doSearch(page);
+				void this.doSearch(page);
 			});
 		}
 

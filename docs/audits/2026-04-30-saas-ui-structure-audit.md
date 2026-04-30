@@ -1,111 +1,43 @@
-# SaaS UI Structure Audit — 2026-04-30
+# SaaS UI structure audit — 2026-04-30
 
 ## Scope
 
-Audit and cleanup of `apps/saas/modules/search`, `apps/saas/modules/admin`, and duplicate shared sidebar context placement.
+Audit and cleanup of SaaS dashboard UI structure in `apps/saas` with focus on:
 
-## Intentional architecture
+- route wrapper → feature component mapping
+- `search` module folder overload
+- orphan / duplicate / ambiguous component cleanup
+- inconsistent folder naming in `admin`
+- domain leakage for `knowledge`
 
-The following layering is intentional and was preserved:
+## Intentional architecture confirmed
 
-1. `apps/saas/app/**/page.tsx` — thin route wrappers
-2. `apps/saas/modules/<feature>/**` — feature/domain UI
-3. `packages/ui/components/**` — shared primitives
+The repo still follows the expected 3-layer structure:
 
-## Real issues found
+1. `apps/saas/app/**/page.tsx` — thin Next.js route entrypoints
+2. `apps/saas/modules/**` — feature/domain components
+3. `packages/ui/components/**` — shared UI primitives
 
-### 1. Flat overloaded search component folder
+Deep App Router route groups like `(authenticated)/(main)/(organizations)` are structural noise, not debt.
 
-Before cleanup, `apps/saas/modules/search/components/` mixed:
+## Module TSX counts
 
-- page-level screens
-- dialogs
-- panels
-- tables
-- cards
-- section blocks
-- dead/orphan files
+- `shared`: 25
+- `search`: 23
+- `settings`: 17
+- `organizations`: 15
+- `admin`: 11
+- `payments`: 10
+- `auth`: 9
+- `onboarding`: 2
+- `knowledge`: 1
+- `ai`: 1
 
-### 2. Duplicate sidebar context placement
+Result: `search` is still one of the heavier domains, but it is no longer a single flat component bucket.
 
-Removed duplicate file:
+## Page → feature component map
 
-- `apps/saas/modules/lib/sidebar-context.tsx`
-
-Kept canonical file:
-
-- `apps/saas/modules/shared/lib/sidebar-context.tsx`
-
-### 3. Inconsistent admin folder naming
-
-Normalized:
-
-- `apps/saas/modules/admin/component/` → `apps/saas/modules/admin/components/`
-
-### 4. Cross-domain leakage
-
-Moved:
-
-- `apps/saas/modules/search/components/KnowledgeWorkbench.tsx`
-  → `apps/saas/modules/knowledge/components/KnowledgeWorkbench.tsx`
-
-## Orphan / dead files removed
-
-Deleted unused search files confirmed by reference scan:
-
-- `DashboardOverview.tsx`
-- `IndexRowActions.tsx`
-- `ProjectOverview.tsx`
-- `ProjectsList.tsx`
-- `SchemaEditor.tsx`
-- `SearchApiKeysPage.tsx`
-- `SearchPreview.tsx`
-- `SearchPreviewPage.tsx`
-
-## Final search UI structure
-
-### Pages
-
-- `components/pages/CollectionDetail.tsx`
-- `components/pages/ConnectorsPage.tsx`
-- `components/pages/GettingStarted.tsx`
-- `components/pages/OverviewPage.tsx`
-- `components/pages/RelevanceTabs.tsx`
-- `components/pages/SearchDashboard.tsx`
-
-### Panels
-
-- `components/panels/CurationsPanel.tsx`
-- `components/panels/ImportJobsPanel.tsx`
-- `components/panels/PlaygroundPanel.tsx`
-- `components/panels/SearchApiKeysPanel.tsx`
-- `components/panels/SynonymsPanel.tsx`
-- `components/panels/WidgetPanel.tsx`
-
-### Dialogs
-
-- `components/dialogs/ConnectorWizard.tsx`
-- `components/dialogs/CreateSearchIndexDialog.tsx`
-
-### Tables
-
-- `components/tables/DocumentsTable.tsx`
-- `components/tables/SearchIndexesList.tsx`
-- `components/tables/SyncJobsTable.tsx`
-
-### Cards
-
-- `components/cards/ConnectorCard.tsx`
-- `components/cards/EmptyState.tsx`
-- `components/cards/SearchAnalyticsCards.tsx`
-- `components/cards/SearchUsageCard.tsx`
-- `components/cards/SearchUsageCards.tsx`
-
-### Sections
-
-- `components/sections/BillingPlanInfo.tsx`
-
-## Page → feature map after cleanup
+### Organization dashboard routes
 
 - `/{organizationSlug}/overview` → `@search/components/pages/OverviewPage`
 - `/{organizationSlug}/getting-started` → `@search/components/pages/GettingStarted`
@@ -115,20 +47,122 @@ Deleted unused search files confirmed by reference scan:
 - `/{organizationSlug}/relevance` → `@search/components/pages/RelevanceTabs`
 - `/{organizationSlug}/connectors` → `@search/components/pages/ConnectorsPage`
 - `/{organizationSlug}/import-jobs` → `@search/components/panels/ImportJobsPanel`
+- `/{organizationSlug}/knowledge` → `@knowledge/components/KnowledgeWorkbench`
 - `/{organizationSlug}/settings/billing` → `@search/components/sections/BillingPlanInfo`
-- `/(account)/knowledge` + `/{organizationSlug}/knowledge` → `@knowledge/components/KnowledgeWorkbench`
 
-## Notes
+### Alias / redirect routes
 
-- Import paths were updated to match the new folder boundaries.
-- `apps/saas/tsconfig.json` now includes `@knowledge/*` for the extracted knowledge module.
-- `apps/saas` verification passed after cleanup:
-    - `pnpm exec oxlint apps/saas` → 0 warnings / 0 errors
-    - `pnpm --filter saas type-check` → success
+These now redirect into the canonical search workspace instead of owning duplicate page implementations:
 
-## Marketing follow-up completed in same workstream
+- `/{organizationSlug}/api-keys` → redirects to `/{organizationSlug}/search?tab=apiKeys`
+- `/{organizationSlug}/preview` → redirects to `/{organizationSlug}/search?tab=playground`
 
-Theme-aware styling was added for marketing CTA buttons with the “Start for free / Начать бесплатно” action via:
+## Structural cleanup applied
 
-- `apps/marketing/modules/shared/lib/cta-button-styles.ts`
-- updated Hero, Pricing, and CTA footer components
+### 1) Search module decomposed by role
+
+Previous problem: `apps/saas/modules/search/components/` mixed pages, dialogs, tables, cards, panels, and unrelated domain UI in one flat folder.
+
+Current structure:
+
+- `components/pages/`
+  - `CollectionDetail.tsx`
+  - `ConnectorsPage.tsx`
+  - `GettingStarted.tsx`
+  - `OverviewPage.tsx`
+  - `RelevanceTabs.tsx`
+  - `SearchDashboard.tsx`
+- `components/panels/`
+  - `CurationsPanel.tsx`
+  - `ImportJobsPanel.tsx`
+  - `PlaygroundPanel.tsx`
+  - `SearchApiKeysPanel.tsx`
+  - `SynonymsPanel.tsx`
+  - `WidgetPanel.tsx`
+- `components/dialogs/`
+  - `ConnectorWizard.tsx`
+  - `CreateSearchIndexDialog.tsx`
+- `components/tables/`
+  - `DocumentsTable.tsx`
+  - `SearchIndexesList.tsx`
+  - `SyncJobsTable.tsx`
+- `components/cards/`
+  - `ConnectorCard.tsx`
+  - `EmptyState.tsx`
+  - `SearchAnalyticsCards.tsx`
+  - `SearchUsageCard.tsx`
+  - `SearchUsageCards.tsx`
+- `components/sections/`
+  - `BillingPlanInfo.tsx`
+
+### 2) Knowledge split into its own domain
+
+Moved:
+
+- from: `apps/saas/modules/search/components/KnowledgeWorkbench.tsx`
+- to: `apps/saas/modules/knowledge/components/KnowledgeWorkbench.tsx`
+
+Also added alias support for `@knowledge/*` and updated route imports.
+
+### 3) Admin folder naming normalized
+
+Renamed:
+
+- from: `apps/saas/modules/admin/component/`
+- to: `apps/saas/modules/admin/components/`
+
+This removes the singular/plural inconsistency that existed against the rest of the repo.
+
+### 4) Shared duplicate removed
+
+Removed duplicate sidebar context implementation:
+
+- kept: `apps/saas/modules/shared/lib/sidebar-context.tsx`
+- removed: `apps/saas/modules/lib/sidebar-context.tsx`
+
+## Orphans / duplicates / ambiguous files removed
+
+Confirmed dead and removed:
+
+- `apps/saas/modules/search/components/DashboardOverview.tsx`
+- `apps/saas/modules/search/components/IndexRowActions.tsx`
+- `apps/saas/modules/search/components/ProjectOverview.tsx`
+- `apps/saas/modules/search/components/ProjectsList.tsx`
+- `apps/saas/modules/search/components/SchemaEditor.tsx`
+- `apps/saas/modules/search/components/SearchApiKeysPage.tsx`
+- `apps/saas/modules/search/components/SearchPreview.tsx`
+- `apps/saas/modules/search/components/SearchPreviewPage.tsx`
+- `apps/saas/modules/lib/sidebar-context.tsx`
+
+Post-cleanup check: no remaining references to those basenames inside `apps/saas/modules/search`.
+
+## Naming drift resolved in behavior
+
+Instead of keeping duplicate page-level implementations, the app now has a single canonical search workspace:
+
+- API keys flow lives in `SearchDashboard` + `SearchApiKeysPanel`
+- preview flow lives in `SearchDashboard` + `PlaygroundPanel`
+- route aliases redirect into the canonical dashboard tabs
+
+This reduces page-name ambiguity without changing user-facing URLs.
+
+## Verification completed
+
+Ran successfully:
+
+- `pnpm lint` → 0 warnings, 0 errors
+- `pnpm format:check` → pass
+- `pnpm --filter saas type-check` → pass
+
+Also cleaned pre-existing workspace lint warnings that blocked a zero-warning commit.
+
+## Outcome
+
+The SaaS UI structure now has:
+
+- clear route-wrapper → feature-component boundaries
+- decomposed search UI by responsibility
+- no duplicate sidebar context implementation
+- normalized admin folder naming
+- knowledge isolated as its own domain
+- removed dead search-page leftovers after dashboard consolidation

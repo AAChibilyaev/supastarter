@@ -42,7 +42,7 @@ export const createTopupLink = protectedProcedure
 		const purpose = `AI Wallet topup ${(Number(amountMinor) / 100).toFixed(2)} RUB`;
 		const externalRef = `topup:${wallet.id}:${idempotencyKey}`;
 
-		const order = await db.walletTopupOrder.create({
+		const _order = await db.walletTopupOrder.create({
 			data: {
 				walletId: wallet.id,
 				userId: wallet.userId,
@@ -57,7 +57,7 @@ export const createTopupLink = protectedProcedure
 		const result = await createPaymentLink(amountMinor, purpose, externalRef);
 
 		return {
-			intentId: order.id,
+			intentId: _order.id,
 			paymentUrl: result.paymentUrl,
 			operationId: result.operationId,
 		};

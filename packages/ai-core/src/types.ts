@@ -6,7 +6,7 @@ export type AiProvider =
 	| "yandexgpt"
 	| "gigachat"
 	| "openrouter"
-	| string;
+	| (string & {});
 
 export type AiOperation =
 	| "chat"

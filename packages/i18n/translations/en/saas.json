@@ -714,6 +714,7 @@
 		},
 		"analytics": {
 			"tab": "Analytics",
+			"title": "Analytics",
 			"totalSearches": "Total searches",
 			"totalSessions": "Sessions",
 			"ctr": "CTR",
@@ -836,7 +837,8 @@
 			"noResults": "Run a query to see results here."
 		},
 		"relevance": {
-			"tab": "Relevance"
+			"tab": "Relevance",
+			"title": "Relevance"
 		},
 		"synonyms": {
 			"tab": "Synonyms",

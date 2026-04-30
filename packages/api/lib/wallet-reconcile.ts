@@ -59,7 +59,10 @@ export async function reconcileStaleTopupOrders(): Promise<{
 			if (status.status === "failed" || status.status === "cancelled") {
 				await db.walletTopupOrder.update({
 					where: { id: order.id },
-					data: { status: status.status, metadata: { reconciledAt: new Date().toISOString() } },
+					data: {
+						status: status.status,
+						metadata: { reconciledAt: new Date().toISOString() },
+					},
 				});
 				failed += 1;
 				continue;
@@ -68,7 +71,10 @@ export async function reconcileStaleTopupOrders(): Promise<{
 			if (status.status === "expired") {
 				await db.walletTopupOrder.update({
 					where: { id: order.id },
-					data: { status: "expired", metadata: { reconciledAt: new Date().toISOString() } },
+					data: {
+						status: "expired",
+						metadata: { reconciledAt: new Date().toISOString() },
+					},
 				});
 				failed += 1;
 				continue;

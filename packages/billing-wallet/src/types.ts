@@ -76,7 +76,9 @@ export class AiWalletInsufficientFundsError extends Error {
 		readonly requiredKopecks: bigint,
 		readonly availableKopecks: bigint,
 	) {
-		super(`AI wallet insufficient funds: required=${requiredKopecks}, available=${availableKopecks}`);
+		super(
+			`AI wallet insufficient funds: required=${requiredKopecks}, available=${availableKopecks}`,
+		);
 		this.name = "AiWalletInsufficientFundsError";
 	}
 }

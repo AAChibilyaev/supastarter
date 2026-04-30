@@ -48,13 +48,13 @@ Debug mode                 (bool — verbose logs to /var/logs/)
 
 ### PrestaShop hooks used
 
-| Hook | Why |
-|---|---|
-| `displayHeader` | Inject widget loader `<script>` into storefront `<head>` |
-| `actionProductUpdate` | Trigger delta sync on product save |
-| `actionObjectProductDeleteAfter` | Trigger delete on product removal |
-| `actionUpdateQuantity` | Stock change → push delta |
-| `addWebserviceResources` | Only if we expose a custom resource — likely not in MVP |
+| Hook                             | Why                                                      |
+| -------------------------------- | -------------------------------------------------------- |
+| `displayHeader`                  | Inject widget loader `<script>` into storefront `<head>` |
+| `actionProductUpdate`            | Trigger delta sync on product save                       |
+| `actionObjectProductDeleteAfter` | Trigger delete on product removal                        |
+| `actionUpdateQuantity`           | Stock change → push delta                                |
+| `addWebserviceResources`         | Only if we expose a custom resource — likely not in MVP  |
 
 `displayHeader` is the canonical place to add `<script>` / `<link>` to the page head; `actionProductUpdate` fires after a product is saved.
 
@@ -88,10 +88,10 @@ The dashboard generates a snippet; the merchant doesn't write any JS. The module
 
 ```html
 <script
-  src="https://cdn.aacsearch.com/widget.js"
-  data-project-id="PROJECT_ID"
-  data-locale="ru"
-  data-container="#aac-search"
+	src="https://cdn.aacsearch.com/widget.js"
+	data-project-id="PROJECT_ID"
+	data-locale="ru"
+	data-container="#aac-search"
 ></script>
 ```
 
@@ -223,12 +223,12 @@ The Typesense InstantSearch adapter exposes Typesense to InstantSearch widgets (
 
 ### Modes
 
-| Mode | MVP? |
-|---|---|
-| `inline` — embedded into a page region | ✅ |
-| `modal` — opens over content on hotkey / button | ✅ |
+| Mode                                                  | MVP?        |
+| ----------------------------------------------------- | ----------- |
+| `inline` — embedded into a page region                | ✅          |
+| `modal` — opens over content on hotkey / button       | ✅          |
 | `autocomplete-only` — search box without results page | ⏳ post-MVP |
-| `results-page` — dedicated `/search` route | ⏳ post-MVP |
+| `results-page` — dedicated `/search` route            | ⏳ post-MVP |
 
 ### UI states
 
@@ -283,26 +283,26 @@ sort_used
 
 ```yaml
 query_by:
-  - title           # weight: highest
-  - sku             # weight: high
-  - brand           # weight: medium
-  - categories      # weight: medium
-  - description     # weight: lower
-  - tags            # weight: lower
+    - title # weight: highest
+    - sku # weight: high
+    - brand # weight: medium
+    - categories # weight: medium
+    - description # weight: lower
+    - tags # weight: lower
 
 filter_by:
-  - project_id      # always — tenant boundary
-  - availability
-  - categories      (or category_ids)
-  - brand
-  - price           (range)
-  - locale
+    - project_id # always — tenant boundary
+    - availability
+    - categories      (or category_ids)
+    - brand
+    - price           (range)
+    - locale
 
 sort_by:
-  - _text_match:desc          # default
-  - price:asc | price:desc
-  - sale_price:asc | sale_price:desc
-  - created_at:desc           # "newest"
+    - _text_match:desc # default
+    - price:asc | price:desc
+    - sale_price:asc | sale_price:desc
+    - created_at:desc # "newest"
 ```
 
 ### MVP feature surface
@@ -362,33 +362,33 @@ Searches over time          (sparkline)
 ### Event schema (`AnalyticsEvent`)
 
 ```yaml
-projectId:        string
-sessionId:        string         # ephemeral, browser tab/session bound
-anonymousUserId:  string         # stable per browser, may be null in privacy mode
-type:             string         # see table below
-query:            string?
-productId:        string?        # for click events
-position:         int32?         # 1-indexed rank in result list
-filters:          object?        # selected facets
-sort:             string?
-locale:           string
-userAgent:        string         # capped to 256 chars
-referrer:         string?
-metadata:         object?        # capped JSON, opaque, no PII
-timestamp:        int64
+projectId: string
+sessionId: string # ephemeral, browser tab/session bound
+anonymousUserId: string # stable per browser, may be null in privacy mode
+type: string # see table below
+query: string?
+productId: string? # for click events
+position: int32? # 1-indexed rank in result list
+filters: object? # selected facets
+sort: string?
+locale: string
+userAgent: string # capped to 256 chars
+referrer: string?
+metadata: object? # capped JSON, opaque, no PII
+timestamp: int64
 ```
 
 ### Required events
 
-| Event | Priority | Owner |
-|---|---|---|
-| `search_query` | P0 | widget / SDK |
-| `zero_results` | P0 | widget / SDK |
-| `result_click` | P0 | widget / SDK |
-| `widget_open` | P1 | widget |
-| `filter_used` | P1 | widget |
-| `add_to_cart` | P1 | CMS module (PrestaShop hook / Bitrix event) |
-| `conversion` | P1 | CMS module (order confirmation) |
+| Event          | Priority | Owner                                       |
+| -------------- | -------- | ------------------------------------------- |
+| `search_query` | P0       | widget / SDK                                |
+| `zero_results` | P0       | widget / SDK                                |
+| `result_click` | P0       | widget / SDK                                |
+| `widget_open`  | P1       | widget                                      |
+| `filter_used`  | P1       | widget                                      |
+| `add_to_cart`  | P1       | CMS module (PrestaShop hook / Bitrix event) |
+| `conversion`   | P1       | CMS module (order confirmation)             |
 
 ### Acceptance
 

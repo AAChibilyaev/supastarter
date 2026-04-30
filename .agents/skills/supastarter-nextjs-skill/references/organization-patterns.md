@@ -19,6 +19,7 @@ model Project {
 ## Routing
 
 Org-scoped pages live under:
+
 ```
 apps/saas/app/(authenticated)/(main)/(organizations)/[organizationSlug]/
 ```
@@ -32,14 +33,16 @@ Within these pages, the `[organizationSlug]` param identifies the active org.
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 
 export function OrgHeader() {
-  const { activeOrganization, isOrganizationAdmin, isOrganizationOwner } = useActiveOrganization();
-  // ...
+	const { activeOrganization, isOrganizationAdmin, isOrganizationOwner } =
+		useActiveOrganization();
+	// ...
 }
 ```
 
 ## Roles
 
 Better Auth org plugin defines roles (typically `owner`, `admin`, `member`). Check via:
+
 - Client: `useActiveOrganization()` returns flags like `isOrganizationAdmin`.
 - Server: query members and the user's role for the org, or use Better Auth helpers in `packages/auth/lib/`.
 
@@ -47,15 +50,15 @@ For role helpers, prefer `as const` records over enums:
 
 ```typescript
 const ORGANIZATION_ROLES = {
-  owner: "owner",
-  admin: "admin",
-  member: "member",
+	owner: "owner",
+	admin: "admin",
+	member: "member",
 } as const;
 
 export type OrganizationRole = (typeof ORGANIZATION_ROLES)[keyof typeof ORGANIZATION_ROLES];
 
 export function canManageMembers(role: OrganizationRole) {
-  return role === "owner" || role === "admin";
+	return role === "owner" || role === "admin";
 }
 ```
 
@@ -78,24 +81,20 @@ import { getSession } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound, redirect } from "next/navigation";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ organizationSlug: string }>;
-}) {
-  const session = await getSession();
-  if (!session) redirect("/login");
+export default async function Page({ params }: { params: Promise<{ organizationSlug: string }> }) {
+	const session = await getSession();
+	if (!session) redirect("/login");
 
-  const { organizationSlug } = await params;
-  const org = await db.organization.findUnique({ where: { slug: organizationSlug } });
-  if (!org) notFound();
+	const { organizationSlug } = await params;
+	const org = await db.organization.findUnique({ where: { slug: organizationSlug } });
+	if (!org) notFound();
 
-  const member = await db.member.findFirst({
-    where: { organizationId: org.id, userId: session.user.id },
-  });
-  if (!member) redirect("/");
+	const member = await db.member.findFirst({
+		where: { organizationId: org.id, userId: session.user.id },
+	});
+	if (!member) redirect("/");
 
-  // ...
+	// ...
 }
 ```
 

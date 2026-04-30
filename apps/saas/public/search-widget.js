@@ -17,7 +17,9 @@
 			var args = arguments;
 			var ctx = this;
 			if (timer) clearTimeout(timer);
-			timer = setTimeout(function () { fn.apply(ctx, args); }, delay);
+			timer = setTimeout(function () {
+				fn.apply(ctx, args);
+			}, delay);
 		};
 	}
 

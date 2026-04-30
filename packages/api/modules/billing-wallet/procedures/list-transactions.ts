@@ -1,5 +1,5 @@
-import { getAiWalletByEntity, listAiWalletTransactions } from "@repo/database";
 import { ORPCError } from "@orpc/client";
+import { getAiWalletByEntity, listAiWalletTransactions } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

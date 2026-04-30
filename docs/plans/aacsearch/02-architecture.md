@@ -55,24 +55,24 @@ Otherwise a new folder under an existing package suffices. We do **not** create 
 
 These are the ownership boundaries used in the backlog (see [05-roadmap-sprints.md §5.4](05-roadmap-sprints.md#54-mvp-backlog)).
 
-| # | Product Area | Covers |
-|---|---|---|
-| 1 | SaaS Foundation | Supastarter setup, auth, organizations, protected dashboard, onboarding |
-| 2 | Multi-tenancy | Organization-as-workspace, role permissions, project switcher |
-| 3 | Projects / Stores | AACsearch project model, store settings, allowed origins, locale, currency |
-| 4 | Search Engine | Typesense client, query builder, query parameters, relevance defaults |
-| 5 | Typesense Infrastructure | Hosting, alias-swap reindex, schema migrations, health checks |
-| 6 | Indexing / Sync | Full sync, delta sync, retries, sync-job state, ingest buffer |
-| 7 | PrestaShop Connector | Module skeleton, settings, full + delta sync, widget injection, diagnostics |
-| 8 | Bitrix Connector | Module skeleton, settings, catalog/iblock selector, full + delta sync, widget component, diagnostics |
-| 9 | Widget | Embeddable JS widget, modes (inline/modal), tracking, theme |
-| 10 | Relevance | Ranking weights, synonyms, curations, presets, stopwords |
-| 11 | Analytics | search/click/zero-results events, dashboard cards, retention |
-| 12 | Billing / Usage | Plans, usage counters, limits, paywalls |
-| 13 | API / Developer Platform | Public Connector API, public Search API, scoped tokens, OpenAPI |
-| 14 | Admin / Support | Internal admin tools, debug views, replay tools |
-| 15 | Documentation | Install guides, troubleshooting, API reference |
-| 16 | Distribution | Module packaging, marketplace readiness, release artifacts |
+| #   | Product Area             | Covers                                                                                               |
+| --- | ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| 1   | SaaS Foundation          | Supastarter setup, auth, organizations, protected dashboard, onboarding                              |
+| 2   | Multi-tenancy            | Organization-as-workspace, role permissions, project switcher                                        |
+| 3   | Projects / Stores        | AACsearch project model, store settings, allowed origins, locale, currency                           |
+| 4   | Search Engine            | Typesense client, query builder, query parameters, relevance defaults                                |
+| 5   | Typesense Infrastructure | Hosting, alias-swap reindex, schema migrations, health checks                                        |
+| 6   | Indexing / Sync          | Full sync, delta sync, retries, sync-job state, ingest buffer                                        |
+| 7   | PrestaShop Connector     | Module skeleton, settings, full + delta sync, widget injection, diagnostics                          |
+| 8   | Bitrix Connector         | Module skeleton, settings, catalog/iblock selector, full + delta sync, widget component, diagnostics |
+| 9   | Widget                   | Embeddable JS widget, modes (inline/modal), tracking, theme                                          |
+| 10  | Relevance                | Ranking weights, synonyms, curations, presets, stopwords                                             |
+| 11  | Analytics                | search/click/zero-results events, dashboard cards, retention                                         |
+| 12  | Billing / Usage          | Plans, usage counters, limits, paywalls                                                              |
+| 13  | API / Developer Platform | Public Connector API, public Search API, scoped tokens, OpenAPI                                      |
+| 14  | Admin / Support          | Internal admin tools, debug views, replay tools                                                      |
+| 15  | Documentation            | Install guides, troubleshooting, API reference                                                       |
+| 16  | Distribution             | Module packaging, marketplace readiness, release artifacts                                           |
 
 ## 2.3 Layered backend principle (CRITICAL)
 
@@ -108,73 +108,73 @@ This is **Hard Invariant #2** in `SKILL.md` ("DB-first ingest").
 
 ## 2.4 What we reuse from supastarter (never rebuild)
 
-| Need | Use from supastarter |
-|------|---|
-| SaaS shell (sidebar, settings, account) | `apps/saas` + `apps/saas/modules/shared/components` (NavBar, PageHeader, SettingsList, …) |
-| Marketing site shell (landing/pricing/legal) | `apps/marketing` |
-| Docs site shell (when v0.7 ships) | `apps/docs` |
-| Auth — login/signup/roles/sessions | `@repo/auth` (Better Auth) |
-| Multi-tenancy / organizations | `@repo/auth` org plugin + supastarter components |
-| API framework | Hono + oRPC (`packages/api`) |
-| Frontend data fetching | TanStack Query via `@shared/lib/orpc-query-utils` |
-| Forms | react-hook-form + zod, `@repo/ui/components/form` |
-| UI primitives | `@repo/ui/components/*` (27 shadcn-based, see ui-component-catalog) |
-| Email | `@repo/mail` (React Email templates + provider drivers) |
-| Payments | `@repo/payments` (Stripe / Lemonsqueezy / Polar / Creem / DodoPayments) |
-| Background jobs | trigger.dev (preferred for long sync jobs); QStash for serverless-only |
-| Monitoring | supastarter Sentry integration |
-| Analytics (product/marketing) | supastarter analytics providers |
+| Need                                         | Use from supastarter                                                                      |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| SaaS shell (sidebar, settings, account)      | `apps/saas` + `apps/saas/modules/shared/components` (NavBar, PageHeader, SettingsList, …) |
+| Marketing site shell (landing/pricing/legal) | `apps/marketing`                                                                          |
+| Docs site shell (when v0.7 ships)            | `apps/docs`                                                                               |
+| Auth — login/signup/roles/sessions           | `@repo/auth` (Better Auth)                                                                |
+| Multi-tenancy / organizations                | `@repo/auth` org plugin + supastarter components                                          |
+| API framework                                | Hono + oRPC (`packages/api`)                                                              |
+| Frontend data fetching                       | TanStack Query via `@shared/lib/orpc-query-utils`                                         |
+| Forms                                        | react-hook-form + zod, `@repo/ui/components/form`                                         |
+| UI primitives                                | `@repo/ui/components/*` (27 shadcn-based, see ui-component-catalog)                       |
+| Email                                        | `@repo/mail` (React Email templates + provider drivers)                                   |
+| Payments                                     | `@repo/payments` (Stripe / Lemonsqueezy / Polar / Creem / DodoPayments)                   |
+| Background jobs                              | trigger.dev (preferred for long sync jobs); QStash for serverless-only                    |
+| Monitoring                                   | supastarter Sentry integration                                                            |
+| Analytics (product/marketing)                | supastarter analytics providers                                                           |
 
 ## 2.5 What we add for AACsearch search
 
-| Need | Library / approach |
-|------|---|
-| Typesense server client | `typesense` (server-side only, admin key) |
-| Browser SDK | `@repo/search-client` (already shipped) |
-| InstantSearch adapter (widget) | `typesense-instantsearch-adapter` |
-| Widget UI | `instantsearch.js` |
-| Optional dashboard preview | `react-instantsearch` |
-| Validation | `zod` (already used in API layer) |
-| Widget bundling | `tsup` |
-| Widget CSS isolation | Shadow DOM first; namespaced CSS as fallback |
+| Need                           | Library / approach                           |
+| ------------------------------ | -------------------------------------------- |
+| Typesense server client        | `typesense` (server-side only, admin key)    |
+| Browser SDK                    | `@repo/search-client` (already shipped)      |
+| InstantSearch adapter (widget) | `typesense-instantsearch-adapter`            |
+| Widget UI                      | `instantsearch.js`                           |
+| Optional dashboard preview     | `react-instantsearch`                        |
+| Validation                     | `zod` (already used in API layer)            |
+| Widget bundling                | `tsup`                                       |
+| Widget CSS isolation           | Shadow DOM first; namespaced CSS as fallback |
 
 > The `typesense-js` client supports both server-side and client-side use. In the browser we **only** allow search-only / scoped keys — never master/admin.
 
 ## 2.6 What we deliberately do not build
 
-| Not building | Use instead |
-|---|---|
-| Custom auth | Supastarter Better Auth |
-| Custom billing | Supastarter `@repo/payments` |
-| Custom search UI engine | InstantSearch.js + Typesense adapter |
-| Custom queue engine | trigger.dev / QStash |
+| Not building                      | Use instead                           |
+| --------------------------------- | ------------------------------------- |
+| Custom auth                       | Supastarter Better Auth               |
+| Custom billing                    | Supastarter `@repo/payments`          |
+| Custom search UI engine           | InstantSearch.js + Typesense adapter  |
+| Custom queue engine               | trigger.dev / QStash                  |
 | Custom CMS module injection hacks | PrestaShop hooks / Bitrix module APIs |
-| Custom public docs engine | Supastarter `apps/docs` |
-| Custom error tracking | Supastarter / Sentry |
+| Custom public docs engine         | Supastarter `apps/docs`               |
+| Custom error tracking             | Supastarter / Sentry                  |
 
 ## 2.7 Reliability / ops contract
 
 ### Background-job catalog (target)
 
-| Job | Trigger | Notes |
-|---|---|---|
-| Full catalog sync | Connector "Run sync" / install | Long; chunked; retryable |
-| Delta sync processing | Webhook from CMS module | Short; retryable; ordered per product |
-| Reindex (schema change) | Admin oRPC `reindex` | Alias-swap; keep prev version |
-| Schema migration | One-shot, manual | Admin only |
-| Usage aggregation | Cron (daily / hourly) | Rolls up `recordSearchUsage` rows into `UsageCounter` |
-| Failed sync retry | Cron / event | Exponential backoff |
-| Cleanup old events | Cron (weekly) | Honor plan retention |
+| Job                     | Trigger                        | Notes                                                 |
+| ----------------------- | ------------------------------ | ----------------------------------------------------- |
+| Full catalog sync       | Connector "Run sync" / install | Long; chunked; retryable                              |
+| Delta sync processing   | Webhook from CMS module        | Short; retryable; ordered per product                 |
+| Reindex (schema change) | Admin oRPC `reindex`           | Alias-swap; keep prev version                         |
+| Schema migration        | One-shot, manual               | Admin only                                            |
+| Usage aggregation       | Cron (daily / hourly)          | Rolls up `recordSearchUsage` rows into `UsageCounter` |
+| Failed sync retry       | Cron / event                   | Exponential backoff                                   |
+| Cleanup old events      | Cron (weekly)                  | Honor plan retention                                  |
 
 ### Retry policy
 
-| Failure class | Action |
-|---|---|
-| Network error | Retry, exponential backoff |
-| 4xx validation | **No retry**, surface in diagnostics |
-| 429 / rate limit | Retry later (jittered) |
-| Typesense temporary error | Retry |
-| Schema error | **Fail job**, require admin action |
+| Failure class             | Action                               |
+| ------------------------- | ------------------------------------ |
+| Network error             | Retry, exponential backoff           |
+| 4xx validation            | **No retry**, surface in diagnostics |
+| 429 / rate limit          | Retry later (jittered)               |
+| Typesense temporary error | Retry                                |
+| Schema error              | **Fail job**, require admin action   |
 
 This matches the partial-fail handling already in `packages/search/lib/buffer.ts` (`markIngestRowsSuccess` / `markIngestRowsFailure`).
 

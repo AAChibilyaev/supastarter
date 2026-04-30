@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>aacsearch</name>
+    <displayName><![CDATA[AACsearch Connector]]></displayName>
+    <version><![CDATA[1.0.0]]></version>
+    <description><![CDATA[Syncs PrestaShop product data to AACsearch via the Connector API.]]></description>
+    <author><![CDATA[AACsearch]]></author>
+    <tab><![CDATA[advertising_marketing]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+    <limited_countries></limited_countries>
+</module>

@@ -14,26 +14,26 @@ Merchants install a CMS module (PrestaShop, Bitrix), connect their AACsearch pro
 
 ## Where we are vs. where we're going
 
-| Status | Concept |
-|---|---|
-| ✅ Shipped | Search-as-a-service core (`packages/search`, `packages/api/modules/search`, `@repo/search-client`) |
-| ✅ Shipped | Org-scoped auth + organizations as workspaces (supastarter base) |
-| ✅ Shipped | API keys (hashed, scoped, origin-restricted, rate-limited) + scoped tokens (HMAC) |
-| ✅ Shipped | Per-org plan quota (`searchLimits` in `@repo/payments`) |
-| ✅ Shipped | Zero-downtime alias-swap reindex |
-| ✅ Shipped | DB-first ingest (`SearchIngestBuffer` → worker → Typesense, partial-fail handling) |
-| ✅ Shipped | Browser SDK (`@repo/search-client`, multi-search, error catalog) |
-| 🟡 In progress | Marketing site (`apps/marketing`) — **v0.5 current focus** |
-| 🟡 Partial | `recordSearchUsage` writes raw rows; `UsageCounter` rollup is deferred |
-| ⏳ Planned (v0.6) | Stripe billing wired to search-units + per-plan metering |
-| ⏳ Planned (v0.7) | Public docs site (`apps/docs`) |
-| ⏳ Planned (v1.0) | Self-host quickstart + Helm chart |
-| ❌ Not started | `Project` as a first-class DB entity (today implicit in `SearchIndex`) |
-| ❌ Not started | `Connector` / `ConnectorToken` / `SyncJob` |
-| ❌ Not started | Hosted widget (`packages/widget` + `typesense-instantsearch-adapter`) |
-| ❌ Not started | PrestaShop module (`modules/prestashop/aacsearch`) |
-| ❌ Not started | Bitrix module (`modules/bitrix/aac.search`) |
-| ❌ Not started | `AnalyticsEvent` capture (search/click/zero-results) |
+| Status               | Concept                                                                                                               |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| ✅ Shipped           | Search-as-a-service core (`packages/search`, `packages/api/modules/search`, `@repo/search-client`)                    |
+| ✅ Shipped           | Org-scoped auth + organizations as workspaces (supastarter base)                                                      |
+| ✅ Shipped           | API keys (hashed, scoped, origin-restricted, rate-limited) + scoped tokens (HMAC)                                     |
+| ✅ Shipped           | Per-org plan quota (`searchLimits` in `@repo/payments`)                                                               |
+| ✅ Shipped           | Zero-downtime alias-swap reindex                                                                                      |
+| ✅ Shipped           | DB-first ingest (`SearchIngestBuffer` → worker → Typesense, partial-fail handling)                                    |
+| ✅ Shipped           | Browser SDK (`@repo/search-client`, multi-search, error catalog)                                                      |
+| 🟡 In progress       | Marketing site (`apps/marketing`) — **v0.5 current focus**                                                            |
+| 🟡 Partial           | `recordSearchUsage` writes raw rows; `UsageCounter` rollup is deferred                                                |
+| ⏳ Planned (v0.6)    | Stripe billing wired to search-units + per-plan metering                                                              |
+| ⏳ Planned (v0.7)    | Public docs site (`apps/docs`)                                                                                        |
+| ⏳ Planned (v1.0)    | Self-host quickstart + Helm chart                                                                                     |
+| ❌ Not started       | `Project` as a first-class DB entity (today implicit in `SearchIndex`)                                                |
+| ❌ Not started       | `Connector` / `ConnectorToken` / `SyncJob`                                                                            |
+| ❌ Not started       | Hosted widget (`packages/widget` + `typesense-instantsearch-adapter`)                                                 |
+| ❌ Not started       | PrestaShop module (`modules/prestashop/aacsearch`)                                                                    |
+| ❌ Not started       | Bitrix module (`modules/bitrix/aac.search`)                                                                           |
+| ❌ Not started       | `AnalyticsEvent` capture (search/click/zero-results)                                                                  |
 | 🛑 Out of scope (v1) | Vector / semantic / NL search; image / audio search; auto-crawling; A/B tests; SSO; multi-region; analytics replay UI |
 
 ## Half-orphaned — keep, don't extend

@@ -1,5 +1,4 @@
 import type { WalletProvider } from "../../wallet-types";
-
 import { tochkaRequest } from "./client";
 import type { TochkaCreatePaymentResponse } from "./types";
 

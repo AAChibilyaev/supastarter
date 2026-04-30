@@ -31,10 +31,14 @@ export const reindex = protectedProcedure
 
 		const fields =
 			input.fields ??
-			(Array.isArray(index.schema as unknown[]) ? (index.schema as unknown as { name: string; type: string }[]) : []);
+			(Array.isArray(index.schema as unknown[])
+				? (index.schema as unknown as { name: string; type: string }[])
+				: []);
 
 		if (!fields || fields.length === 0) {
-			throw new ORPCError("BAD_REQUEST", { message: "Index has no schema fields to reindex" });
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Index has no schema fields to reindex",
+			});
 		}
 
 		try {

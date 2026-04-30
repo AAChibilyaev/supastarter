@@ -1,8 +1,4 @@
-import {
-	AiWalletFrozenError,
-	AiWalletInsufficientFundsError,
-	WalletNotFoundError,
-} from "./types";
+import { AiWalletFrozenError, AiWalletInsufficientFundsError, WalletNotFoundError } from "./types";
 
 /**
  * Parse a Postgres `RAISE EXCEPTION` thrown from RPC functions and convert it

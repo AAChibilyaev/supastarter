@@ -4,8 +4,8 @@
 // We rewrite the bad string defaults to `BigInt(...)` calls in-place.
 
 import { readFile, writeFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const target = join(here, "..", "prisma", "zod", "index.ts");
@@ -22,6 +22,7 @@ if (src === patched) {
 	console.log("patch-zod-bigint-defaults: nothing to patch");
 } else {
 	await writeFile(target, patched, "utf8");
-	const count = (src.match(/z\.bigint\(\)(?:\.[a-zA-Z]+\(\))*\.default\("\-?\d+"\)/g) ?? []).length;
+	const count = (src.match(/z\.bigint\(\)(?:\.[a-zA-Z]+\(\))*\.default\("\-?\d+"\)/g) ?? [])
+		.length;
 	console.log(`patch-zod-bigint-defaults: patched ${count} BigInt defaults`);
 }

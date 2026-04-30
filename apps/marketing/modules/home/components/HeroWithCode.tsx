@@ -23,24 +23,24 @@ export function HeroWithCode() {
 
 	return (
 		<section className="relative isolate overflow-hidden border-b border-border/60">
-			<div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.55_0.18_155/0.18),transparent_55%)]" />
-			<div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.55_0.18_155/0.10),transparent_50%)]" />
-			<div className="container grid gap-10 py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24">
+			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.55_0.18_155/0.18),transparent_55%)]" />
+			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.55_0.18_155/0.10),transparent_50%)]" />
+			<div className="gap-10 py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24 container grid">
 				<div className="flex flex-col justify-center">
-					<div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur">
-						<span className="size-1.5 rounded-full bg-emerald-400" />
+					<div className="mb-5 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex w-fit items-center rounded-full border border-border bg-card/40 text-muted-foreground">
+						<span className="size-1.5 bg-emerald-400 rounded-full" />
 						{t("home.hero.badge")}
 					</div>
 
-					<h1 className="text-balance font-medium text-4xl text-foreground tracking-tight md:text-5xl lg:text-6xl">
+					<h1 className="font-medium text-4xl tracking-tight md:text-5xl lg:text-6xl text-balance text-foreground">
 						{t("home.hero.title")}
 					</h1>
 
-					<p className="mt-5 max-w-xl text-pretty text-base text-muted-foreground md:text-lg">
+					<p className="mt-5 max-w-xl text-base md:text-lg text-pretty text-muted-foreground">
 						{t("home.hero.subtitle")}
 					</p>
 
-					<div className="mt-8 flex flex-wrap items-center gap-3">
+					<div className="mt-8 gap-3 flex flex-wrap items-center">
 						<Button size="lg" variant="primary" asChild>
 							<a href={config.saasUrl ?? "/signup"}>
 								{t("home.hero.getStarted")}
@@ -56,16 +56,16 @@ export function HeroWithCode() {
 				</div>
 
 				<div className="relative">
-					<div className="relative overflow-hidden rounded-xl border border-border/80 bg-card/50 shadow-2xl shadow-emerald-500/5 backdrop-blur">
-						<div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
+					<div className="shadow-2xl shadow-emerald-500/5 backdrop-blur relative overflow-hidden rounded-xl border border-border/80 bg-card/50">
+						<div className="gap-2 px-4 py-3 flex items-center border-b border-border/60">
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
-							<span className="ml-3 font-mono text-muted-foreground text-xs">
+							<span className="ml-3 font-mono text-xs text-muted-foreground">
 								{t("home.hero.codeCaption")}
 							</span>
 						</div>
-						<pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed text-foreground/90">
+						<pre className="p-5 font-mono leading-relaxed overflow-x-auto text-[13px] text-foreground/90">
 							<code>{highlightCode(codeSample)}</code>
 						</pre>
 					</div>

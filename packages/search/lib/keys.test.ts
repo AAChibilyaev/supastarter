@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-	generateSearchApiKey,
-	hashSearchApiKey,
-	isValidSearchApiKeyShape,
-} from "./keys";
+import { generateSearchApiKey, hashSearchApiKey, isValidSearchApiKeyShape } from "./keys";
 
 describe("generateSearchApiKey", () => {
 	it("returns rawKey starting with ss_search_", () => {

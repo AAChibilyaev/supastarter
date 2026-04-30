@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import {
 	Dialog,
@@ -12,7 +13,6 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { cn } from "@repo/ui";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -64,10 +64,12 @@ export function TopUpDialog({
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>{t("settings.billing.aiCredits.topup.title")}</DialogTitle>
-					<DialogDescription>{t("settings.billing.aiCredits.topup.description")}</DialogDescription>
+					<DialogDescription>
+						{t("settings.billing.aiCredits.topup.description")}
+					</DialogDescription>
 				</DialogHeader>
 
-				<div className="grid grid-cols-2 gap-2">
+				<div className="gap-2 grid grid-cols-2">
 					{PRESETS_KOPECKS.map((amt) => (
 						<Button
 							key={amt}
@@ -84,7 +86,7 @@ export function TopUpDialog({
 					))}
 				</div>
 
-				<div className="flex flex-col gap-2">
+				<div className="gap-2 flex flex-col">
 					<Label htmlFor="topup-custom">
 						{t("settings.billing.aiCredits.topup.customAmount")}
 					</Label>
@@ -98,8 +100,8 @@ export function TopUpDialog({
 					/>
 				</div>
 
-				<DialogFooter className="flex flex-row items-center justify-between gap-3 sm:justify-between">
-					<div className="text-foreground/70 text-sm">
+				<DialogFooter className="gap-3 sm:justify-between flex flex-row items-center justify-between">
+					<div className="text-sm text-foreground/70">
 						{t("settings.billing.aiCredits.topup.summary", {
 							amount: formatKopecks(finalKopecks),
 						})}

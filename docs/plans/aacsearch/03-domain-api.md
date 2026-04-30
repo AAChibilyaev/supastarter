@@ -134,38 +134,38 @@ MVP indexes only **products**. One canonical Typesense schema across PrestaShop 
 
 ```yaml
 ProductDocument:
-  id: string                    # external_id namespaced by project — e.g. "proj_42:7891"
-  project_id: string            # tenant boundary — must always be filtered on
-  external_id: string           # raw id from CMS
-  platform: string              # prestashop | bitrix
-  title: string
-  description: string
-  sku: string
-  brand: string
-  categories: string[]          # display names, may be localized
-  category_ids: string[]        # platform-stable ids for facet links
-  tags: string[]
-  price: float
-  sale_price: float
-  currency: string              # ISO 4217 — RUB | USD | EUR | …
-  image_url: string
-  product_url: string
-  availability: string          # in_stock | out_of_stock | preorder
-  stock_quantity: int32         # optional / -1 if unknown
-  attributes: object            # free-form CMS attributes (color, size, …) — small payload
-  locale: string                # primary locale of the doc; multi-locale via separate docs in v1
-  created_at: int64             # epoch seconds
-  updated_at: int64
+    id: string # external_id namespaced by project — e.g. "proj_42:7891"
+    project_id: string # tenant boundary — must always be filtered on
+    external_id: string # raw id from CMS
+    platform: string # prestashop | bitrix
+    title: string
+    description: string
+    sku: string
+    brand: string
+    categories: string[] # display names, may be localized
+    category_ids: string[] # platform-stable ids for facet links
+    tags: string[]
+    price: float
+    sale_price: float
+    currency: string # ISO 4217 — RUB | USD | EUR | …
+    image_url: string
+    product_url: string
+    availability: string # in_stock | out_of_stock | preorder
+    stock_quantity: int32 # optional / -1 if unknown
+    attributes: object # free-form CMS attributes (color, size, …) — small payload
+    locale: string # primary locale of the doc; multi-locale via separate docs in v1
+    created_at: int64 # epoch seconds
+    updated_at: int64
 ```
 
 ### Field roles
 
-| Role | Fields |
-|---|---|
-| **query_by** (search) | `title`, `sku`, `brand`, `categories`, `description`, `tags` |
-| **filter_by** | `project_id`, `availability`, `categories`, `category_ids`, `brand`, `price` (range), `currency`, `locale` |
-| **facet** | `brand`, `categories`, `availability`, `price` (manual buckets in the widget), `currency`, `locale` |
-| **sort_by** | `_text_match:desc`, `price:asc/desc`, `sale_price:asc/desc`, `created_at:desc`, `updated_at:desc` |
+| Role                  | Fields                                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **query_by** (search) | `title`, `sku`, `brand`, `categories`, `description`, `tags`                                               |
+| **filter_by**         | `project_id`, `availability`, `categories`, `category_ids`, `brand`, `price` (range), `currency`, `locale` |
+| **facet**             | `brand`, `categories`, `availability`, `price` (manual buckets in the widget), `currency`, `locale`        |
+| **sort_by**           | `_text_match:desc`, `price:asc/desc`, `sale_price:asc/desc`, `created_at:desc`, `updated_at:desc`          |
 
 ### Schema versioning
 
@@ -190,15 +190,15 @@ These are **logical contracts**. Today only the Search API + admin oRPC subset i
 
 ### Connector API (called by CMS modules)
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/connectors/handshake` | Module checks token + project; returns project metadata |
-| POST | `/api/connectors/:connectorId/heartbeat` | Module reports it's alive (cron-driven) |
-| POST | `/api/projects/:projectId/sync/full` | Create a full-sync job (returns `jobId`) |
-| POST | `/api/projects/:projectId/sync/delta` | Push delta (product updated/deleted) |
-| DELETE | `/api/projects/:projectId/products/:externalId` | Idempotent delete by external id |
-| GET | `/api/projects/:projectId/sync/jobs/:jobId` | Sync job status |
-| POST | `/api/projects/:projectId/diagnostics` | Module reports its diagnostics (version, last-error, …) |
+| Method | Endpoint                                        | Purpose                                                 |
+| ------ | ----------------------------------------------- | ------------------------------------------------------- |
+| POST   | `/api/connectors/handshake`                     | Module checks token + project; returns project metadata |
+| POST   | `/api/connectors/:connectorId/heartbeat`        | Module reports it's alive (cron-driven)                 |
+| POST   | `/api/projects/:projectId/sync/full`            | Create a full-sync job (returns `jobId`)                |
+| POST   | `/api/projects/:projectId/sync/delta`           | Push delta (product updated/deleted)                    |
+| DELETE | `/api/projects/:projectId/products/:externalId` | Idempotent delete by external id                        |
+| GET    | `/api/projects/:projectId/sync/jobs/:jobId`     | Sync job status                                         |
+| POST   | `/api/projects/:projectId/diagnostics`          | Module reports its diagnostics (version, last-error, …) |
 
 **Auth**: bearer with a connector token (hashed server-side, scoped, project-bound).
 
@@ -206,17 +206,17 @@ These are **logical contracts**. Today only the Search API + admin oRPC subset i
 
 Implemented in `packages/api/modules/search/public-handler.ts`. ✅ Live.
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/search/public/:slug` | Single search against the project's index |
-| POST | `/search/public/multi` | Federated multi-search (autocomplete + results in one round-trip) |
+| Method | Endpoint               | Purpose                                                           |
+| ------ | ---------------------- | ----------------------------------------------------------------- |
+| POST   | `/search/public/:slug` | Single search against the project's index                         |
+| POST   | `/search/public/multi` | Federated multi-search (autocomplete + results in one round-trip) |
 
 Future / planned (vision):
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/api/search/:projectId/config` | Widget config + safe public key (one round-trip widget bootstrap) |
-| POST | `/api/events/:projectId` | Tracking events (search/click/zero-results) — separate from search to keep search hot path pure |
+| Method | Endpoint                        | Purpose                                                                                         |
+| ------ | ------------------------------- | ----------------------------------------------------------------------------------------------- |
+| GET    | `/api/search/:projectId/config` | Widget config + safe public key (one round-trip widget bootstrap)                               |
+| POST   | `/api/events/:projectId`        | Tracking events (search/click/zero-results) — separate from search to keep search hot path pure |
 
 **Auth**: `Authorization: Bearer ss_search_…` or `ss_scoped_…`, plus `Origin` validated against `allowedOrigins`.
 
@@ -224,22 +224,22 @@ Future / planned (vision):
 
 Implemented as oRPC procedures in `packages/api/modules/search/procedures/` (✅ partial — see `searchRouter`):
 
-| Status | Procedure |
-|---|---|
-| ✅ | `listIndexes`, `createIndex`, `reindex`, `usage` |
-| ✅ | `listApiKeys`, `createApiKey`, `revokeApiKey`, `createScopedToken` |
-| ✅ | `upsertDocument`, `importDocuments` |
+| Status | Procedure                                                          |
+| ------ | ------------------------------------------------------------------ |
+| ✅     | `listIndexes`, `createIndex`, `reindex`, `usage`                   |
+| ✅     | `listApiKeys`, `createApiKey`, `revokeApiKey`, `createScopedToken` |
+| ✅     | `upsertDocument`, `importDocuments`                                |
 
 Future (vision, ❌):
 
-| Procedure | Purpose |
-|---|---|
-| `listProjects` | When `Project` lands as DB entity |
-| `createProject` | …same |
-| `getProjectOverview` | Setup checklist + status counts |
-| `listSyncJobs` | Drives indexing-status page |
+| Procedure             | Purpose                                  |
+| --------------------- | ---------------------------------------- |
+| `listProjects`        | When `Project` lands as DB entity        |
+| `createProject`       | …same                                    |
+| `getProjectOverview`  | Setup checklist + status counts          |
+| `listSyncJobs`        | Drives indexing-status page              |
 | `getAnalyticsSummary` | Top queries, zero-results, click-through |
-| `updateWidgetConfig` | Widget editor save |
+| `updateWidgetConfig`  | Widget editor save                       |
 
 ### Auth rules summary
 
@@ -267,13 +267,13 @@ Tied to Hard Invariants 3, 4, 5, 6 in `SKILL.md`. Repeating them here for contex
 
 ### Key types
 
-| Token | Carrier | Stored as | Used by |
-|---|---|---|---|
-| Better Auth session | HTTP cookie | session table | Dashboard users |
-| Connector token | `Authorization: Bearer …` | `tokenHash` (hashed server-side) | CMS modules (PrestaShop / Bitrix) |
-| Search API key | `Authorization: Bearer ss_search_…` | `SearchApiKey.hashedKey` | Storefront browser, partner SDKs |
+| Token               | Carrier                             | Stored as                                    | Used by                                                               |
+| ------------------- | ----------------------------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| Better Auth session | HTTP cookie                         | session table                                | Dashboard users                                                       |
+| Connector token     | `Authorization: Bearer …`           | `tokenHash` (hashed server-side)             | CMS modules (PrestaShop / Bitrix)                                     |
+| Search API key      | `Authorization: Bearer ss_search_…` | `SearchApiKey.hashedKey`                     | Storefront browser, partner SDKs                                      |
 | Scoped search token | `Authorization: Bearer ss_scoped_…` | **stateless HMAC** over `BETTER_AUTH_SECRET` | Logged-in storefront users with per-user filter (e.g. own org's docs) |
-| Typesense admin | `X-TYPESENSE-API-KEY` (server-side) | `TYPESENSE_ADMIN_KEY` env | Server only — `getTypesenseClient()` |
+| Typesense admin     | `X-TYPESENSE-API-KEY` (server-side) | `TYPESENSE_ADMIN_KEY` env                    | Server only — `getTypesenseClient()`                                  |
 
 ### P0 security tasks (cross-checked against current code)
 

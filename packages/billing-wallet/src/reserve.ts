@@ -3,7 +3,9 @@ import { db } from "@repo/database";
 import { parsePgRpcError } from "./parse-pg-error";
 import type { ReserveAiCreditsInput, ReserveAiCreditsResult } from "./types";
 
-export async function reserveAiCredits(input: ReserveAiCreditsInput): Promise<ReserveAiCreditsResult> {
+export async function reserveAiCredits(
+	input: ReserveAiCreditsInput,
+): Promise<ReserveAiCreditsResult> {
 	try {
 		const rows = await db.$queryRaw<
 			Array<{ reservation_id: string; available_kopecks: bigint }>

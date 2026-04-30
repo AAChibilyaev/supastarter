@@ -24,12 +24,12 @@ Objective → Initiative → Epic → Feature/Story → Task → Subtask
 
 Priority is a separate **field**, never a tree level:
 
-| Priority | Meaning |
-|---|---|
-| P0 | Critical / blocker for current release |
-| P1 | Must-have for next release |
-| P2 | Nice-to-have |
-| P3 | Idea / discovery |
+| Priority | Meaning                                |
+| -------- | -------------------------------------- |
+| P0       | Critical / blocker for current release |
+| P1       | Must-have for next release             |
+| P2       | Nice-to-have                           |
+| P3       | Idea / discovery                       |
 
 ## 5.2 Release plan R0 → R5
 
@@ -121,80 +121,80 @@ Exit criteria:
 
 ## 5.3 MVP backlog (R1–R3 horizon)
 
-| Name | Type | Area | Priority | Release |
-|---|---|---|---|---|
-| Launch AACsearch MVP | Objective | Product | P0 | R1–R3 |
-| Supastarter AACsearch Foundation | Initiative | SaaS | P0 | R0 ✅ |
-| Project model + dashboard shell | Epic | SaaS | P0 | R0 ✅ |
-| Typesense Search Core | Initiative | Search | P0 | R1 ✅ |
-| ProductDocument schema v1 | Epic | Search | P0 | R1 |
-| Indexing API v1 | Epic | API | P0 | R1 ✅ |
-| Search API v1 | Epic | API | P0 | R1 ✅ |
-| Hosted Search Widget | Initiative | Widget | P0 | R1 ❌ |
-| Connector API contract | Epic | Connectors | P0 | R2 ❌ |
-| PrestaShop Connector MVP | Initiative | PrestaShop | P0 | R2 ❌ |
-| Bitrix Connector MVP | Initiative | Bitrix | P0 | R2 ❌ |
-| Sync Jobs and Retries | Epic | Reliability | P0 | R2 ❌ |
-| Search Analytics MVP | Initiative | Analytics | P1 | R3 ❌ |
-| Usage Limits | Epic | Billing | P1 | R3 ❌ |
-| Synonyms Beta | Epic | Relevance | P1 | R3 ❌ |
-| Curations Beta | Epic | Relevance | P1 | R3 ❌ |
-| Docs and Onboarding | Initiative | Docs | P1 | R3 ❌ |
-| Marketplace Packaging | Epic | Distribution | P2 | R4 ❌ |
-| Semantic / Hybrid Search | Epic | AI Search | P2 | v1+ |
-| Recommendations | Epic | Growth | P3 | v1+ |
+| Name                             | Type       | Area         | Priority | Release |
+| -------------------------------- | ---------- | ------------ | -------- | ------- |
+| Launch AACsearch MVP             | Objective  | Product      | P0       | R1–R3   |
+| Supastarter AACsearch Foundation | Initiative | SaaS         | P0       | R0 ✅   |
+| Project model + dashboard shell  | Epic       | SaaS         | P0       | R0 ✅   |
+| Typesense Search Core            | Initiative | Search       | P0       | R1 ✅   |
+| ProductDocument schema v1        | Epic       | Search       | P0       | R1      |
+| Indexing API v1                  | Epic       | API          | P0       | R1 ✅   |
+| Search API v1                    | Epic       | API          | P0       | R1 ✅   |
+| Hosted Search Widget             | Initiative | Widget       | P0       | R1 ❌   |
+| Connector API contract           | Epic       | Connectors   | P0       | R2 ❌   |
+| PrestaShop Connector MVP         | Initiative | PrestaShop   | P0       | R2 ❌   |
+| Bitrix Connector MVP             | Initiative | Bitrix       | P0       | R2 ❌   |
+| Sync Jobs and Retries            | Epic       | Reliability  | P0       | R2 ❌   |
+| Search Analytics MVP             | Initiative | Analytics    | P1       | R3 ❌   |
+| Usage Limits                     | Epic       | Billing      | P1       | R3 ❌   |
+| Synonyms Beta                    | Epic       | Relevance    | P1       | R3 ❌   |
+| Curations Beta                   | Epic       | Relevance    | P1       | R3 ❌   |
+| Docs and Onboarding              | Initiative | Docs         | P1       | R3 ❌   |
+| Marketplace Packaging            | Epic       | Distribution | P2       | R4 ❌   |
+| Semantic / Hybrid Search         | Epic       | AI Search    | P2       | v1+     |
+| Recommendations                  | Epic       | Growth       | P3       | v1+     |
 
 ## 5.4 Sprints 1–4
 
 ### Sprint 1 — Foundation + Search Core (mostly ✅ already)
 
-| Task | Pri | DoD |
-|---|---|---|
-| AACsearch dashboard area | P0 | Protected route exists |
-| Project concept in app layer | P0 | Org → Project model in dashboard |
-| Typesense server client | P0 | Health check works |
-| `ProductDocument` schema v1 | P0 | Demo products normalize cleanly |
-| Collection create / upsert / delete | P0 | Products can be indexed |
-| Search API v1 | P0 | Query returns results |
-| Dashboard search preview | P0 | User can test search |
-| Widget prototype | P0 | Script renders search UI |
+| Task                                | Pri | DoD                              |
+| ----------------------------------- | --- | -------------------------------- |
+| AACsearch dashboard area            | P0  | Protected route exists           |
+| Project concept in app layer        | P0  | Org → Project model in dashboard |
+| Typesense server client             | P0  | Health check works               |
+| `ProductDocument` schema v1         | P0  | Demo products normalize cleanly  |
+| Collection create / upsert / delete | P0  | Products can be indexed          |
+| Search API v1                       | P0  | Query returns results            |
+| Dashboard search preview            | P0  | User can test search             |
+| Widget prototype                    | P0  | Script renders search UI         |
 
 ### Sprint 2 — Connector Contract + PrestaShop
 
-| Task | Pri | DoD |
-|---|---|---|
-| Define Connector API contract | P0 | Modules know how to sync |
-| Connector token generation | P0 | Token authenticates connector |
-| PrestaShop module skeleton | P0 | Module installs |
-| PrestaShop settings page | P0 | API URL / project / token saved |
-| PrestaShop full sync | P0 | Products sync |
-| Sync job status page | P0 | User sees sync progress / errors |
-| Widget install snippet | P0 | User can copy code |
+| Task                          | Pri | DoD                              |
+| ----------------------------- | --- | -------------------------------- |
+| Define Connector API contract | P0  | Modules know how to sync         |
+| Connector token generation    | P0  | Token authenticates connector    |
+| PrestaShop module skeleton    | P0  | Module installs                  |
+| PrestaShop settings page      | P0  | API URL / project / token saved  |
+| PrestaShop full sync          | P0  | Products sync                    |
+| Sync job status page          | P0  | User sees sync progress / errors |
+| Widget install snippet        | P0  | User can copy code               |
 
 ### Sprint 3 — Bitrix + Delta Sync
 
-| Task | Pri | DoD |
-|---|---|---|
-| Bitrix module skeleton | P0 | Module installs |
-| Bitrix settings page | P0 | API URL / project / token saved |
-| Catalog / iblock selector | P0 | Admin selects catalog |
-| Bitrix full sync | P0 | Products sync |
-| Delta sync endpoint | P0 | Update / delete works |
-| PrestaShop delta hooks | P0 | product update / delete handled |
-| Diagnostics contract | P0 | Modules report status / errors |
+| Task                      | Pri | DoD                             |
+| ------------------------- | --- | ------------------------------- |
+| Bitrix module skeleton    | P0  | Module installs                 |
+| Bitrix settings page      | P0  | API URL / project / token saved |
+| Catalog / iblock selector | P0  | Admin selects catalog           |
+| Bitrix full sync          | P0  | Products sync                   |
+| Delta sync endpoint       | P0  | Update / delete works           |
+| PrestaShop delta hooks    | P0  | product update / delete handled |
+| Diagnostics contract      | P0  | Modules report status / errors  |
 
 ### Sprint 4 — Analytics + Hardening
 
-| Task | Pri | DoD |
-|---|---|---|
-| Track `search_query` | P1 | Queries visible |
-| Track `result_click` | P1 | Clicks visible |
-| Track `zero_results` | P1 | Empty queries visible |
-| Failed sync retries | P0 | Failed jobs retry safely |
-| Usage counters design | P1 | Usage visible in dashboard |
-| Plan limit checks | P1 | Limits warn / block |
-| Installation docs | P1 | Test merchant can install |
-| Monitoring / error tracking | P0 | Production errors visible |
+| Task                        | Pri | DoD                        |
+| --------------------------- | --- | -------------------------- |
+| Track `search_query`        | P1  | Queries visible            |
+| Track `result_click`        | P1  | Clicks visible             |
+| Track `zero_results`        | P1  | Empty queries visible      |
+| Failed sync retries         | P0  | Failed jobs retry safely   |
+| Usage counters design       | P1  | Usage visible in dashboard |
+| Plan limit checks           | P1  | Limits warn / block        |
+| Installation docs           | P1  | Test merchant can install  |
+| Monitoring / error tracking | P0  | Production errors visible  |
 
 ## 5.5 Billing — plans and usage
 
@@ -202,13 +202,13 @@ Supastarter's `@repo/payments` already supports multi-provider (Stripe / Lemonsq
 
 ### MVP plans
 
-| Plan | Limits |
-|---|---|
-| **Free** | 1 project · 500 products · 1k searches/mo · AACsearch branding · `aacsearch.com` subdomain only · community support |
-| **Starter** ($29/mo) | 3 projects · 10k products · 50k searches/mo · custom origin allow-list · email support |
-| **Pro** ($99/mo) | 10 projects · 100k products · 500k searches/mo · curations · advanced analytics · priority sync · no branding |
-| **Business** | Custom limits · multi-user teams · SLA · custom onboarding · advanced relevance · API access |
-| **Enterprise** | Dedicated cluster · custom contract · SSO · audit logs · custom connector |
+| Plan                 | Limits                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Free**             | 1 project · 500 products · 1k searches/mo · AACsearch branding · `aacsearch.com` subdomain only · community support |
+| **Starter** ($29/mo) | 3 projects · 10k products · 50k searches/mo · custom origin allow-list · email support                              |
+| **Pro** ($99/mo)     | 10 projects · 100k products · 500k searches/mo · curations · advanced analytics · priority sync · no branding       |
+| **Business**         | Custom limits · multi-user teams · SLA · custom onboarding · advanced relevance · API access                        |
+| **Enterprise**       | Dedicated cluster · custom contract · SSO · audit logs · custom connector                                           |
 
 ### Metered counters
 

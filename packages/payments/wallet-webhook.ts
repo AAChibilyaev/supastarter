@@ -1,7 +1,8 @@
+import { createHash } from "node:crypto";
+
 import { applyTopupCredit, notifyTopupPaid } from "@repo/billing-wallet";
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
-import { createHash } from "node:crypto";
 
 import { walletProvider } from "./wallet-provider";
 
@@ -24,8 +25,7 @@ export async function walletWebhookHandler(req: Request): Promise<Response> {
 	const verified = await walletProvider.verifyWebhook({ headers: req.headers, rawBody });
 
 	const eventKey =
-		verified.providerEventId ??
-		createHash("sha256").update(rawBody).digest("hex").slice(0, 32);
+		verified.providerEventId ?? createHash("sha256").update(rawBody).digest("hex").slice(0, 32);
 	const idempotencyKey = `${walletProvider.id}:${eventKey}`;
 
 	const event = await db.paymentProviderEvent.upsert({
@@ -76,9 +76,7 @@ export async function walletWebhookHandler(req: Request): Promise<Response> {
 						walletId: order.walletId,
 						amountKopecks: order.amountKopecks,
 						orderId: result.orderId,
-					}).catch((notifyErr) =>
-						logger.error("notifyTopupPaid failed", { notifyErr }),
-					);
+					}).catch((notifyErr) => logger.error("notifyTopupPaid failed", { notifyErr }));
 				}
 			}
 		} catch (err) {

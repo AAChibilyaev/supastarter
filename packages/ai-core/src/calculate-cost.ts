@@ -11,11 +11,15 @@ const TEN_THOUSAND_BPS = BigInt(10_000); // 100% in basis points
  * raw_cost    = input_cost + output_cost + flatFee
  * customer    = ceil(raw_cost * (1 + markup_bps/10000))
  */
-export function calculateCharge(input: CostEstimateInput, rule: PricingRuleSnapshot): CostBreakdown {
+export function calculateCharge(
+	input: CostEstimateInput,
+	rule: PricingRuleSnapshot,
+): CostBreakdown {
 	const promptTokens = BigInt(Math.max(0, Math.floor(input.promptTokens)));
 	const outputTokens = BigInt(Math.max(0, Math.floor(input.maxOutputTokens)));
 
-	const inputPrice = rule.inputPer1MTokensKopecks ?? rule.embeddingPer1MTokensKopecks ?? BigInt(0);
+	const inputPrice =
+		rule.inputPer1MTokensKopecks ?? rule.embeddingPer1MTokensKopecks ?? BigInt(0);
 	const outputPrice = rule.outputPer1MTokensKopecks ?? BigInt(0);
 
 	const inputCost = (promptTokens * inputPrice + ONE_MILLION - BigInt(1)) / ONE_MILLION;
@@ -24,7 +28,8 @@ export function calculateCharge(input: CostEstimateInput, rule: PricingRuleSnaps
 
 	const rawCost = inputCost + outputCost + flatFee;
 	const markupMultiplier = TEN_THOUSAND_BPS + BigInt(rule.markupBps);
-	const totalCharge = (rawCost * markupMultiplier + TEN_THOUSAND_BPS - BigInt(1)) / TEN_THOUSAND_BPS;
+	const totalCharge =
+		(rawCost * markupMultiplier + TEN_THOUSAND_BPS - BigInt(1)) / TEN_THOUSAND_BPS;
 
 	return {
 		inputCostKopecks: inputCost,

@@ -32,7 +32,7 @@ export function AiWalletCard({ organizationId }: { organizationId?: string }) {
 					<CardTitle>{t("settings.billing.aiCredits.balance.title")}</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<p className="text-foreground/60 text-sm">
+					<p className="text-sm text-foreground/60">
 						{t("settings.billing.aiCredits.balance.notInitialized")}
 					</p>
 				</CardContent>
@@ -47,26 +47,34 @@ export function AiWalletCard({ organizationId }: { organizationId?: string }) {
 
 	return (
 		<Card>
-			<CardHeader className="flex flex-row items-center justify-between gap-3">
+			<CardHeader className="gap-3 flex flex-row items-center justify-between">
 				<CardTitle>{t("settings.billing.aiCredits.balance.title")}</CardTitle>
 				{isFrozen && (
-					<span className="rounded-md bg-destructive/10 px-2 py-1 font-medium text-destructive text-xs uppercase">
+					<span className="px-2 py-1 font-medium text-xs rounded-md bg-destructive/10 text-destructive uppercase">
 						{wallet.status}
 					</span>
 				)}
 			</CardHeader>
-			<CardContent className="flex flex-col gap-3">
-				<div className="font-semibold text-3xl">{formatKopecks(wallet.availableBalanceKopecks)}</div>
+			<CardContent className="gap-3 flex flex-col">
+				<div className="font-semibold text-3xl">
+					{formatKopecks(wallet.availableBalanceKopecks)}
+				</div>
 
-				<dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-foreground/70 text-sm">
+				<dl className="gap-x-4 gap-y-1 text-sm grid grid-cols-2 text-foreground/70">
 					<dt>{t("settings.billing.aiCredits.balance.includedRemaining")}</dt>
-					<dd className="text-right tabular-nums">{formatKopecks(includedRemaining.toString())}</dd>
+					<dd className="text-right tabular-nums">
+						{formatKopecks(includedRemaining.toString())}
+					</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.reserved")}</dt>
-					<dd className="text-right tabular-nums">{formatKopecks(reserved.toString())}</dd>
+					<dd className="text-right tabular-nums">
+						{formatKopecks(reserved.toString())}
+					</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.promo")}</dt>
-					<dd className="text-right tabular-nums">{formatKopecks(wallet.promoBalanceKopecks)}</dd>
+					<dd className="text-right tabular-nums">
+						{formatKopecks(wallet.promoBalanceKopecks)}
+					</dd>
 				</dl>
 			</CardContent>
 		</Card>

@@ -11,11 +11,12 @@ export function formatKopecks(
 	const locale = options.locale ?? "ru-RU";
 	const currency = options.currency ?? "RUB";
 
-	const value = typeof amount === "bigint"
-		? Number(amount) / 100
-		: typeof amount === "string"
+	const value =
+		typeof amount === "bigint"
 			? Number(amount) / 100
-			: amount / 100;
+			: typeof amount === "string"
+				? Number(amount) / 100
+				: amount / 100;
 
 	return new Intl.NumberFormat(locale, {
 		style: "currency",
@@ -33,11 +34,12 @@ export function formatKopecksPlain(
 	options: { locale?: string } = {},
 ): string {
 	const locale = options.locale ?? "ru-RU";
-	const value = typeof amount === "bigint"
-		? Number(amount) / 100
-		: typeof amount === "string"
+	const value =
+		typeof amount === "bigint"
 			? Number(amount) / 100
-			: amount / 100;
+			: typeof amount === "string"
+				? Number(amount) / 100
+				: amount / 100;
 
 	return new Intl.NumberFormat(locale, {
 		minimumFractionDigits: 2,

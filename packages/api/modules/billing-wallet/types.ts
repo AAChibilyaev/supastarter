@@ -65,10 +65,7 @@ export const aiUsageEventDtoSchema = z.object({
 });
 
 export const createTopupInputSchema = z.object({
-	amountKopecks: z
-		.bigint()
-		.min(BigInt(10000))
-		.max(BigInt(100_000_000)),
+	amountKopecks: z.bigint().min(BigInt(10000)).max(BigInt(100_000_000)),
 	organizationId: z.string().optional(),
 });
 

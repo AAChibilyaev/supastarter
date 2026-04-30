@@ -35,9 +35,7 @@ export async function listAiUsageEvents(
 }
 
 export async function aggregateAiUsageByDay(filter: ListUsageEventsFilter) {
-	return db.$queryRaw<
-		Array<{ day: Date; total_kopecks: bigint; events: bigint }>
-	>`
+	return db.$queryRaw<Array<{ day: Date; total_kopecks: bigint; events: bigint }>>`
 		SELECT
 			date_trunc('day', "createdAt") as day,
 			SUM("totalChargeKopecks")::bigint as total_kopecks,

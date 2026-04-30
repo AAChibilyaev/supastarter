@@ -6,7 +6,10 @@ import { db } from "../client";
  *
  * Calls are atomic: `INSERT ... ON CONFLICT DO UPDATE count = count + 1 RETURNING count`.
  */
-export async function incrementRateLimitBucket(keyId: string, now: Date = new Date()): Promise<number> {
+export async function incrementRateLimitBucket(
+	keyId: string,
+	now: Date = new Date(),
+): Promise<number> {
 	const windowMs = 60_000;
 	const windowStart = new Date(Math.floor(now.getTime() / windowMs) * windowMs);
 

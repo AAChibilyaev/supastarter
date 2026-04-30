@@ -6,26 +6,26 @@ Before running a single Cursor agent prompt, choose your boilerplate. The plan b
 
 ### Boilerplate Comparison
 
-| Dimension | Supastarter ($299–$349) | IndieKit ($79–$119) |
-|---|---|---|
-| **Framework** | Next.js App Router + Turborepo monorepo[^1] | Next.js 16 App Router, single repo[^2] |
-| **Auth** | better-auth (email, magic link, OAuth, passkeys, 2FA)[^3] | Auth.js (social login, magic links, RBAC)[^4] |
-| **ORM** | Prisma or Drizzle (your choice at setup)[^3] | Prisma + PostgreSQL[^5] |
-| **Database** | Neon, Supabase, PlanetScale, Turso, Railway guides[^3] | Neon, PlanetScale, Supabase[^6] |
-| **API Layer** | Hono + oRPC (type-safe, OpenAPI generation)[^1] | Next.js Route Handlers + AI SDK[^6] |
-| **Payments** | 5 providers: Stripe, Lemon Squeezy, Creem, Polar, Dodo[^3] | 5 providers: Stripe, LemonSqueezy, Paddle, PayPal, Dodo[^2] |
-| **Background Jobs** | trigger.dev, Upstash QStash, or BullMQ[^3] | Inngest[^6] |
-| **Email** | React Email + Resend/Postmark/Plunk/Nodemailer[^3] | React Email + Resend/SES/Mailgun/Mailchimp[^6] |
-| **Multi-tenancy** | Built-in organizations, roles, invite system[^3] | Built-in organizations, teams, RBAC[^4] |
-| **AI SDK** | Vercel AI SDK (OpenAI, Anthropic, etc.)[^3] | AI SDK + Inngest multi-step workflows[^6] |
-| **Cursor Rules** | Not native — add manually (Section 0B)[^1] | **Native** — built-in Cursor rules & Claude skills[^2] |
-| **Monorepo** | Yes — Turborepo (apps/marketing, apps/saas, apps/docs)[^7] | No — single Next.js app[^2] |
-| **i18n** | Built-in, English + German included[^3] | Not included[^2] |
-| **Admin Panel** | Full super admin + user impersonation[^3] | Full admin dashboard + user impersonation[^6] |
-| **Analytics** | 8+ providers pre-wired (PostHog, GA4, Mixpanel, etc.)[^3] | NextSEO + JSON-LD baked in[^6] |
-| **Storage** | S3, R2, DigitalOcean Spaces, MinIO, Supabase Storage[^3] | Not included by default[^2] |
-| **Docs App** | Fumadocs-powered docs site included[^3] | Not included[^2] |
-| **Price** | $299 solo / $349 team — one-time[^7][^8] | $79–$119 — one-time + AppSumo LTD[^9][^2] |
+| Dimension           | Supastarter ($299–$349)                                    | IndieKit ($79–$119)                                         |
+| ------------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
+| **Framework**       | Next.js App Router + Turborepo monorepo[^1]                | Next.js 16 App Router, single repo[^2]                      |
+| **Auth**            | better-auth (email, magic link, OAuth, passkeys, 2FA)[^3]  | Auth.js (social login, magic links, RBAC)[^4]               |
+| **ORM**             | Prisma or Drizzle (your choice at setup)[^3]               | Prisma + PostgreSQL[^5]                                     |
+| **Database**        | Neon, Supabase, PlanetScale, Turso, Railway guides[^3]     | Neon, PlanetScale, Supabase[^6]                             |
+| **API Layer**       | Hono + oRPC (type-safe, OpenAPI generation)[^1]            | Next.js Route Handlers + AI SDK[^6]                         |
+| **Payments**        | 5 providers: Stripe, Lemon Squeezy, Creem, Polar, Dodo[^3] | 5 providers: Stripe, LemonSqueezy, Paddle, PayPal, Dodo[^2] |
+| **Background Jobs** | trigger.dev, Upstash QStash, or BullMQ[^3]                 | Inngest[^6]                                                 |
+| **Email**           | React Email + Resend/Postmark/Plunk/Nodemailer[^3]         | React Email + Resend/SES/Mailgun/Mailchimp[^6]              |
+| **Multi-tenancy**   | Built-in organizations, roles, invite system[^3]           | Built-in organizations, teams, RBAC[^4]                     |
+| **AI SDK**          | Vercel AI SDK (OpenAI, Anthropic, etc.)[^3]                | AI SDK + Inngest multi-step workflows[^6]                   |
+| **Cursor Rules**    | Not native — add manually (Section 0B)[^1]                 | **Native** — built-in Cursor rules & Claude skills[^2]      |
+| **Monorepo**        | Yes — Turborepo (apps/marketing, apps/saas, apps/docs)[^7] | No — single Next.js app[^2]                                 |
+| **i18n**            | Built-in, English + German included[^3]                    | Not included[^2]                                            |
+| **Admin Panel**     | Full super admin + user impersonation[^3]                  | Full admin dashboard + user impersonation[^6]               |
+| **Analytics**       | 8+ providers pre-wired (PostHog, GA4, Mixpanel, etc.)[^3]  | NextSEO + JSON-LD baked in[^6]                              |
+| **Storage**         | S3, R2, DigitalOcean Spaces, MinIO, Supabase Storage[^3]   | Not included by default[^2]                                 |
+| **Docs App**        | Fumadocs-powered docs site included[^3]                    | Not included[^2]                                            |
+| **Price**           | $299 solo / $349 team — one-time[^7][^8]                   | $79–$119 — one-time + AppSumo LTD[^9][^2]                   |
 
 ### Recommendation for DSLMRank
 
@@ -35,13 +35,14 @@ Before running a single Cursor agent prompt, choose your boilerplate. The plan b
 
 **DSLMRank recommendation: IndieKit** — the native Cursor rules, Inngest for cron/background jobs, and single-repo simplicity align better with a fast-moving intelligence platform that's being built by a solo agent run.
 
-***
+---
 
 ## Phase 0A — Pre-Flight Checklist (Run Before Any Prompts)
 
 Complete these steps manually before pasting any agent prompts:
 
 **For Supastarter:**
+
 1. Purchase at [supastarter.dev](https://supastarter.dev) (~$299)
 2. Clone the Next.js repo from your license download
 3. Run `npm install` in the monorepo root
@@ -52,6 +53,7 @@ Complete these steps manually before pasting any agent prompts:
 8. Confirm `npm run dev` runs cleanly
 
 **For IndieKit:**
+
 1. Purchase at [indiekit.pro](https://indiekit.pro) (~$79–$119)[^2]
 2. Clone the repo
 3. Run `npm install`
@@ -62,7 +64,7 @@ Complete these steps manually before pasting any agent prompts:
 8. Confirm `npm run dev` runs cleanly
 9. **IndieKit bonus:** Review the built-in Cursor rules in `.cursor/` — note the existing `db-handler`, `auth-handler`, `payments-handler` skills which the agent will build on[^6]
 
-***
+---
 
 ## Phase 0B — Master Cursor Rules File
 
@@ -79,14 +81,17 @@ alwaysApply: true
 # DSLMRank Project Rules
 
 ## Project Identity
+
 DSLMRank.com is a public intelligence platform ranking Domain-Specific Language Models (DSLMs)
 by industry vertical performance. It uses a proprietary DSLM Score (0-100) per model×vertical pair.
 
 ## BOILERPLATE: [SUPASTARTER | INDIEKIT]
+
 <!-- IMPORTANT: Replace the bracketed value above with your chosen boilerplate -->
 <!-- This changes which auth, job, and API patterns the agent uses below -->
 
 ## Stack Additions to Boilerplate
+
 - algoliasearch + react-instantsearch (search layer)
 - @tanstack/react-query (already in Supastarter; add for IndieKit)
 - date-fns (date formatting)
@@ -97,42 +102,50 @@ by industry vertical performance. It uses a proprietary DSLM Score (0-100) per m
 ## DSLMRank Domain Rules
 
 ### DSLM Score Engine (lib/dslm-score.ts)
+
 - NEVER compute scores inline in components — always call lib/dslm-score.ts functions
 - Score formula: benchmark(40%) + delta(30%) + adoption(20%) + compliance(10%)
 - All scores stored as 0-100 Float in DslmScore table
-- Delta = (model_avg - best_gplm_avg) / best_gplm_avg * 100, clamped [-50, +100], normalized [0,100]
+- Delta = (model_avg - best_gplm_avg) / best_gplm_avg \* 100, clamped [-50, +100], normalized [0,100]
 
 ### Prisma Schema Extensions
+
 - All DSLMRank-specific models extend the boilerplate schema — never modify boilerplate auth models
 - New models: Vertical, LlmModel, Benchmark, BenchmarkResult, DslmScore, ModelVertical
 - Use @default(cuid()) for all new model IDs
 - Use @@unique for composite unique constraints on BenchmarkResult and DslmScore
 
 ### Background Jobs / Cron
+
 <!-- SUPASTARTER: Use trigger.dev or Upstash QStash -->
 <!-- INDIEKIT: Use Inngest (already wired in) -->
+
 - Daily sync at 6AM UTC: sync-benchmarks → sync-scores → algolia-index
 - Each job must be independently retriable (no monolithic sync function)
 - All cron endpoints require CRON_SECRET Bearer auth or platform-specific cron auth header
 
 ### API Routes
+
 - All public read APIs live in app/api/ with Cache-Control: s-maxage=3600
 - Validate all query params with Zod before hitting Prisma
 - Return { error: string, status: number } shape for all error responses
 - NEVER expose admin keys or CRON_SECRET in client-side code
 
 ### UI Conventions
+
 - Loading states: ALWAYS use Skeleton component for async data — no spinners
 - Leaderboard table: horizontal scroll on mobile, hide Delta + Adoption columns below md breakpoint
 - Vertical pages use generateStaticParams + export const revalidate = 3600
 - Dark mode first — all new components must work in dark mode
 
 ### Algolia
+
 - Frontend ALWAYS uses ALGOLIA_SEARCH_KEY (read-only)
 - ALGOLIA_ADMIN_KEY only in server-side sync functions
 - Index names: "dslmrank_models" and "dslmrank_verticals"
 
 ## Commands
+
 - npm run dev — start dev server
 - npm run typecheck — run after every feature (mandatory)
 - npx prisma generate — after schema changes
@@ -140,7 +153,7 @@ by industry vertical performance. It uses a proprietary DSLM Score (0-100) per m
 - npm run seed — run prisma/seed.ts
 ```
 
-***
+---
 
 ## Phase 1 — Schema Extension
 
@@ -247,7 +260,7 @@ After adding models:
 Report any errors.
 ```
 
-***
+---
 
 ### Prompt 1.2 — Seed Data
 
@@ -323,7 +336,7 @@ After creating seed.ts:
 3. Verify record counts with: npx prisma studio (report what you see)
 ```
 
-***
+---
 
 ## Phase 2 — DSLM Score Engine
 
@@ -375,7 +388,7 @@ EXPORTS:
 Run typecheck after creation.
 ```
 
-***
+---
 
 ## Phase 3 — Background Jobs (Boilerplate-Specific Fork)
 
@@ -454,7 +467,7 @@ Add to .env.local: CRON_SECRET=<generate 32-char random string>
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 4 — Algolia Search Layer
 
@@ -509,7 +522,7 @@ Create components/shared/dslmrank-search.tsx (Client Component):
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 5 — Core Pages
 
@@ -550,7 +563,7 @@ SECTION 6 — CTA Banner:
 Run typecheck after.
 ```
 
-***
+---
 
 ### Prompt 5.2 — Leaderboard Page
 
@@ -591,7 +604,7 @@ generateMetadata with SEO title/description.
 Run typecheck after.
 ```
 
-***
+---
 
 ### Prompt 5.3 — Vertical Detail Pages
 
@@ -638,7 +651,7 @@ generateMetadata: "Best LLMs for [Vertical Name] — DSLM Score Rankings | DSLMR
 Run typecheck after.
 ```
 
-***
+---
 
 ### Prompt 5.4 — Model Detail Pages
 
@@ -678,7 +691,7 @@ not-found.tsx: "Model not found — it may not be in our database yet."
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 6 — Public API Routes
 
@@ -722,7 +735,7 @@ Create lib/api-schemas.ts with Zod validation schemas for all query params.
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 7 — Admin Extensions
 
@@ -758,7 +771,7 @@ Add SyncLog to Prisma schema before running this prompt.
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 8 — SEO & Static Assets
 
@@ -794,7 +807,7 @@ generateMetadata for /about.
 Run typecheck after.
 ```
 
-***
+---
 
 ## Phase 9 — Final Audit & Launch
 
@@ -834,7 +847,7 @@ Fix ALL TypeScript and build errors before reporting back.
 Report a list of every issue found and resolved.
 ```
 
-***
+---
 
 ## Architecture Diagram
 
@@ -898,33 +911,33 @@ graph TB
     FE --> ADMIN
 ```
 
-***
+---
 
 ## Boilerplate Delta Reference
 
 This table shows what the boilerplate provides vs what DSLMRank-specific prompts above must build:
 
-| Layer | Supastarter (built-in) | IndieKit (built-in) | DSLMRank Adds |
-|---|---|---|---|
-| Auth flows | ✅ better-auth | ✅ Auth.js | Admin role gate for /admin/dslmrank/* |
-| Admin panel | ✅ super admin UI | ✅ admin dashboard | New sections: models, benchmarks, sync |
-| DB schema | ✅ User/Org tables | ✅ User/Org tables | Vertical, LlmModel, Benchmark, etc. |
-| Background jobs | ✅ trigger.dev / QStash | ✅ Inngest | sync-benchmarks, sync-scores functions |
-| Email | ✅ React Email + provider | ✅ React Email + Resend | Newsletter CTA on homepage |
-| Payments | ✅ Stripe + 4 others | ✅ Stripe + 4 others | Future: API access subscriptions |
-| Cursor rules | ❌ manual setup | ✅ native skills (auth, db, payments) | dslmrank.mdc overlay (Phase 0B) |
-| Monorepo | ✅ Turborepo | ❌ single app | N/A |
-| i18n | ✅ full i18n | ❌ | N/A (not needed for MVP) |
-| Marketing site | ✅ apps/marketing | ❌ | DSLMRank homepage in main app |
-| Analytics | ✅ 8+ providers | ✅ NextSEO + JSON-LD | PostHog event tracking on score views |
-| Search | ❌ | ❌ | Full Algolia layer (Phase 4) |
-| DSLM Score engine | ❌ | ❌ | lib/dslm-score.ts (Phase 2) |
-| Benchmark ingestion | ❌ | ❌ | Scrape + static JSON (Phase 3) |
-| Leaderboard UI | ❌ | ❌ | All of Phase 5 |
-| Vertical pages | ❌ | ❌ | Phase 5.3 |
-| Public API | ❌ | ❌ | Phase 6 |
+| Layer               | Supastarter (built-in)    | IndieKit (built-in)                   | DSLMRank Adds                          |
+| ------------------- | ------------------------- | ------------------------------------- | -------------------------------------- |
+| Auth flows          | ✅ better-auth            | ✅ Auth.js                            | Admin role gate for /admin/dslmrank/\* |
+| Admin panel         | ✅ super admin UI         | ✅ admin dashboard                    | New sections: models, benchmarks, sync |
+| DB schema           | ✅ User/Org tables        | ✅ User/Org tables                    | Vertical, LlmModel, Benchmark, etc.    |
+| Background jobs     | ✅ trigger.dev / QStash   | ✅ Inngest                            | sync-benchmarks, sync-scores functions |
+| Email               | ✅ React Email + provider | ✅ React Email + Resend               | Newsletter CTA on homepage             |
+| Payments            | ✅ Stripe + 4 others      | ✅ Stripe + 4 others                  | Future: API access subscriptions       |
+| Cursor rules        | ❌ manual setup           | ✅ native skills (auth, db, payments) | dslmrank.mdc overlay (Phase 0B)        |
+| Monorepo            | ✅ Turborepo              | ❌ single app                         | N/A                                    |
+| i18n                | ✅ full i18n              | ❌                                    | N/A (not needed for MVP)               |
+| Marketing site      | ✅ apps/marketing         | ❌                                    | DSLMRank homepage in main app          |
+| Analytics           | ✅ 8+ providers           | ✅ NextSEO + JSON-LD                  | PostHog event tracking on score views  |
+| Search              | ❌                        | ❌                                    | Full Algolia layer (Phase 4)           |
+| DSLM Score engine   | ❌                        | ❌                                    | lib/dslm-score.ts (Phase 2)            |
+| Benchmark ingestion | ❌                        | ❌                                    | Scrape + static JSON (Phase 3)         |
+| Leaderboard UI      | ❌                        | ❌                                    | All of Phase 5                         |
+| Vertical pages      | ❌                        | ❌                                    | Phase 5.3                              |
+| Public API          | ❌                        | ❌                                    | Phase 6                                |
 
-***
+---
 
 ## Execution Order Summary
 
@@ -971,4 +984,3 @@ Run prompts in this exact sequence — each depends on the one before:
 9. [Ship Your SaaS in Minutes with Indie Kit — AI‑Powered Next.js Boilerplate](https://www.youtube.com/watch?v=t6reWSGmeGU) - Indie Kit gives you a production-ready Next.js boilerplate that wires up authentication, payments, t...
 
 10. [Product & Engineering blog - Inngest](https://www.inngest.com/blog) - How to Build a Durable AI Agent with Inngest. 3/17/2026. Use Inngest's step primitives to build resi...
-

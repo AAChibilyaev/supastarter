@@ -39,8 +39,4 @@ export {
 	type FlushAllResult,
 } from "./lib/maintenance";
 export { verifySearchApiKey, type VerifiedSearchKey } from "./lib/verify";
-export {
-	reindexCollection,
-	type ReindexInput,
-	type ReindexResult,
-} from "./lib/reindex";
+export { reindexCollection, type ReindexInput, type ReindexResult } from "./lib/reindex";

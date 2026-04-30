@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { ORPCError } from "@orpc/client";
 import {
 	createTopupOrder,
@@ -7,7 +9,6 @@ import {
 } from "@repo/database";
 import { logger } from "@repo/logs";
 import { walletProvider } from "@repo/payments";
-import { randomUUID } from "node:crypto";
 import { z } from "zod";
 
 import { localeMiddleware } from "../../../orpc/middleware/locale-middleware";
@@ -75,6 +76,8 @@ export const createTopup = protectedProcedure
 		} catch (e) {
 			logger.error("createTopup: provider failed", e);
 			await markTopupOrderFailed(order.id, (e as Error)?.message);
-			throw new ORPCError("INTERNAL_SERVER_ERROR", { message: "Failed to create payment link" });
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Failed to create payment link",
+			});
 		}
 	});

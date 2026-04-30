@@ -38,22 +38,22 @@ import { db } from "@repo/database";
 
 // Find with relations
 const item = await db.feedback.findUnique({
-  where: { id },
-  include: { user: true, organization: true },
+	where: { id },
+	include: { user: true, organization: true },
 });
 
 // Find many with filters
 const items = await db.feedback.findMany({
-  where: { organizationId, status: "open" },
-  orderBy: { createdAt: "desc" },
-  take: 20,
+	where: { organizationId, status: "open" },
+	orderBy: { createdAt: "desc" },
+	take: 20,
 });
 
 // Transaction
 await db.$transaction(async (tx) => {
-  const fb = await tx.feedback.create({ data: { userId, message } });
-  await tx.notificationLog.create({ data: { feedbackId: fb.id } });
-  return fb;
+	const fb = await tx.feedback.create({ data: { userId, message } });
+	await tx.notificationLog.create({ data: { feedbackId: fb.id } });
+	return fb;
 });
 ```
 
@@ -70,16 +70,17 @@ import { protectedProcedure } from "../../../orpc/procedures";
 import { createFeedback } from "@repo/database";
 
 export const createFeedbackProcedure = protectedProcedure
-  .route({ method: "POST", path: "/feedback", tags: ["Feedback"], summary: "Create feedback" })
-  .input(z.object({ message: z.string().min(1).max(2000) }))
-  .output(z.object({ id: z.string() }))
-  .handler(async ({ input, context }) => {
-    const row = await createFeedback({ userId: context.user.id, message: input.message });
-    return { id: row.id };
-  });
+	.route({ method: "POST", path: "/feedback", tags: ["Feedback"], summary: "Create feedback" })
+	.input(z.object({ message: z.string().min(1).max(2000) }))
+	.output(z.object({ id: z.string() }))
+	.handler(async ({ input, context }) => {
+		const row = await createFeedback({ userId: context.user.id, message: input.message });
+		return { id: row.id };
+	});
 ```
 
 Mount in `packages/api/orpc/router.ts`:
+
 ```typescript
 import { feedbackRouter } from "../modules/feedback/router";
 export const router = publicProcedure.router({ ..., feedback: feedbackRouter });
@@ -211,13 +212,13 @@ Theme tokens come from `tooling/tailwind/theme.css` (Tailwind v4 — no per-app 
 ### Get session (server)
 
 ```typescript
-import { getSession } from "@auth/lib/server";  // apps/saas/modules/auth/lib/server.ts
+import { getSession } from "@auth/lib/server"; // apps/saas/modules/auth/lib/server.ts
 import { redirect } from "next/navigation";
 
 export async function requireUser() {
-  const session = await getSession();
-  if (!session) redirect("/login");
-  return session.user;
+	const session = await getSession();
+	if (!session) redirect("/login");
+	return session.user;
 }
 ```
 
@@ -240,10 +241,10 @@ export function UserBadge() {
 import { createNotification } from "@repo/notifications";
 
 await createNotification({
-  userId: targetUserId,
-  type: "feedback_received",
-  data: { headline: "New feedback", message: "..." },
-  link: "/feedback/123",
+	userId: targetUserId,
+	type: "feedback_received",
+	data: { headline: "New feedback", message: "..." },
+	link: "/feedback/123",
 });
 ```
 
@@ -253,15 +254,15 @@ See [notifications-patterns.md](notifications-patterns.md).
 
 ```typescript
 const ORGANIZATION_ROLES = {
-  owner: "owner",
-  admin: "admin",
-  member: "member",
+	owner: "owner",
+	admin: "admin",
+	member: "member",
 } as const;
 
 export type OrganizationRole = (typeof ORGANIZATION_ROLES)[keyof typeof ORGANIZATION_ROLES];
 
 export function canManageMembers(role: OrganizationRole) {
-  return role === "owner" || role === "admin";
+	return role === "owner" || role === "admin";
 }
 ```
 

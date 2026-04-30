@@ -38,7 +38,12 @@ export async function listTopupOrdersByWallet(walletId: string, limit = 50) {
 
 export async function markTopupOrderPending(
 	id: string,
-	data: { paymentLinkUrl: string; providerPaymentId: string; providerCustomerId?: string; expiresAt?: Date },
+	data: {
+		paymentLinkUrl: string;
+		providerPaymentId: string;
+		providerCustomerId?: string;
+		expiresAt?: Date;
+	},
 ) {
 	return db.walletTopupOrder.update({
 		where: { id },

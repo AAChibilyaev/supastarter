@@ -23,6 +23,11 @@ export async function getActiveAiPricingRule(input: PricingLookup) {
 
 export async function listAiPricingRules() {
 	return db.aiPricingRule.findMany({
-		orderBy: [{ provider: "asc" }, { model: "asc" }, { operation: "asc" }, { effectiveFrom: "desc" }],
+		orderBy: [
+			{ provider: "asc" },
+			{ model: "asc" },
+			{ operation: "asc" },
+			{ effectiveFrom: "desc" },
+		],
 	});
 }

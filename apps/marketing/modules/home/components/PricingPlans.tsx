@@ -14,19 +14,19 @@ export function PricingPlans() {
 	const t = useTranslations();
 
 	return (
-		<section id="pricing" className="border-b border-border/60 py-20">
+		<section id="pricing" className="py-20 border-b border-border/60">
 			<div className="container">
-				<div className="mx-auto max-w-2xl text-center">
-					<div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 font-mono text-muted-foreground text-xs backdrop-blur">
+				<div className="max-w-2xl mx-auto text-center">
+					<div className="mb-3 gap-2 px-3 py-1 font-mono text-xs backdrop-blur inline-flex items-center rounded-full border border-border bg-card/40 text-muted-foreground">
 						{t("home.pricing.badge")}
 					</div>
-					<h2 className="text-balance font-medium text-3xl tracking-tight md:text-4xl">
+					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("home.pricing.title")}
 					</h2>
 					<p className="mt-3 text-muted-foreground">{t("home.pricing.subtitle")}</p>
 				</div>
 
-				<div className="mt-12 grid gap-6 lg:grid-cols-3">
+				<div className="mt-12 gap-6 lg:grid-cols-3 grid">
 					{plans.map((plan) => {
 						const features = Array.from({ length: plan.featuresCount }, (_, i) =>
 							t(`home.pricing.plans.${plan.key}.features.${i}`),
@@ -36,42 +36,42 @@ export function PricingPlans() {
 							<div
 								key={plan.key}
 								className={cn(
-									"relative flex flex-col rounded-xl border bg-card/30 p-6 backdrop-blur",
+									"p-6 backdrop-blur relative flex flex-col rounded-xl border bg-card/30",
 									plan.primary
 										? "border-emerald-400/50 shadow-emerald-400/10 shadow-xl"
 										: "border-border/70",
 								)}
 							>
 								{plan.primary && (
-									<span className="-top-3 absolute left-6 rounded-md border border-emerald-400/50 bg-background px-2 py-0.5 font-mono text-[11px] text-emerald-300">
+									<span className="-top-3 left-6 border-emerald-400/50 px-2 py-0.5 font-mono text-emerald-300 absolute rounded-md border bg-background text-[11px]">
 										{t(`home.pricing.plans.${plan.key}.highlight`)}
 									</span>
 								)}
 
-								<h3 className="font-medium text-foreground text-lg">
+								<h3 className="font-medium text-lg text-foreground">
 									{t(`home.pricing.plans.${plan.key}.name`)}
 								</h3>
-								<div className="mt-4 flex items-baseline gap-1">
+								<div className="mt-4 gap-1 flex items-baseline">
 									<span className="font-medium text-4xl tracking-tight">
 										{t(`home.pricing.plans.${plan.key}.price`)}
 									</span>
 									{plan.key !== "enterprise" && (
-										<span className="text-muted-foreground text-sm">
+										<span className="text-sm text-muted-foreground">
 											{t("home.pricing.perMonth")}
 										</span>
 									)}
 								</div>
-								<p className="mt-2 text-muted-foreground text-sm">
+								<p className="mt-2 text-sm text-muted-foreground">
 									{t(`home.pricing.plans.${plan.key}.description`)}
 								</p>
 
-								<ul className="mt-6 flex flex-1 flex-col gap-3">
+								<ul className="mt-6 gap-3 flex flex-1 flex-col">
 									{features.map((feature) => (
 										<li
 											key={feature}
-											className="flex items-start gap-2 text-foreground/90 text-sm"
+											className="gap-2 text-sm flex items-start text-foreground/90"
 										>
-											<CheckIcon className="mt-0.5 size-4 shrink-0 text-emerald-300" />
+											<CheckIcon className="mt-0.5 size-4 text-emerald-300 shrink-0" />
 											<span>{feature}</span>
 										</li>
 									))}

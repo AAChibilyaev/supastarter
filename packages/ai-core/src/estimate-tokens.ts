@@ -9,7 +9,9 @@
  * For exact counts use `tiktoken` (OpenAI) or provider-specific tokenizers
  * inside the actual AI procedure — but DO NOT block reservation on that.
  */
-export function estimateTokens(text: string | string[] | { role: string; content: string }[]): number {
+export function estimateTokens(
+	text: string | string[] | { role: string; content: string }[],
+): number {
 	if (Array.isArray(text)) {
 		return text.reduce<number>((sum, item) => {
 			if (typeof item === "string") return sum + estimateOne(item);

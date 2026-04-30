@@ -1,9 +1,15 @@
 import { db } from "@repo/database";
 
 import { parsePgRpcError } from "./parse-pg-error";
-import type { AdminAdjustWalletInput, ApplyTopupCreditInput, ApplyTopupCreditResult } from "./types";
+import type {
+	AdminAdjustWalletInput,
+	ApplyTopupCreditInput,
+	ApplyTopupCreditResult,
+} from "./types";
 
-export async function applyTopupCredit(input: ApplyTopupCreditInput): Promise<ApplyTopupCreditResult> {
+export async function applyTopupCredit(
+	input: ApplyTopupCreditInput,
+): Promise<ApplyTopupCreditResult> {
 	try {
 		const rows = await db.$queryRaw<
 			Array<{ order_id: string; applied: boolean; new_balance: bigint }>

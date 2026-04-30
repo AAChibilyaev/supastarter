@@ -4,12 +4,12 @@ supastarter Next.js ships **five payment providers**. Pick one per project. Plus
 
 ## Supported providers
 
-| Provider | Docs |
-|---|---|
-| Stripe | <https://supastarter.dev/docs/nextjs/payments/providers/stripe> |
+| Provider     | Docs                                                                  |
+| ------------ | --------------------------------------------------------------------- |
+| Stripe       | <https://supastarter.dev/docs/nextjs/payments/providers/stripe>       |
 | Lemonsqueezy | <https://supastarter.dev/docs/nextjs/payments/providers/lemonsqueezy> |
-| Polar | <https://supastarter.dev/docs/nextjs/payments/providers/polar> |
-| Creem | <https://supastarter.dev/docs/nextjs/payments/providers/creem> |
+| Polar        | <https://supastarter.dev/docs/nextjs/payments/providers/polar>        |
+| Creem        | <https://supastarter.dev/docs/nextjs/payments/providers/creem>        |
 | DodoPayments | <https://supastarter.dev/docs/nextjs/payments/providers/dodopayments> |
 
 Each provider has a driver in `packages/payments/provider/<name>/` and is selected in `packages/payments/config.ts`.
@@ -59,39 +59,40 @@ PRICE_ID_LIFETIME=
 
 ```typescript
 export const config = {
-  plans: {
-    pro: {
-      recommended: true,
-      prices: [
-        {
-          type: "subscription",          // or "one-time"
-          priceId: process.env.PRICE_ID_PRO_MONTHLY as string,
-          interval: "month",
-          amount: 29,
-          currency: "USD",
-          seatBased: true,                // for org-level seat pricing
-          trialPeriodDays: 7,
-        },
-        {
-          type: "subscription",
-          priceId: process.env.PRICE_ID_PRO_YEARLY as string,
-          interval: "year",
-          amount: 290,
-          currency: "USD",
-          seatBased: true,
-          trialPeriodDays: 7,
-        },
-      ],
-    },
-  },
-  locales: {
-    en: { currency: "USD", language: "en" },
-    de: { currency: "EUR", language: "de" },
-  },
+	plans: {
+		pro: {
+			recommended: true,
+			prices: [
+				{
+					type: "subscription", // or "one-time"
+					priceId: process.env.PRICE_ID_PRO_MONTHLY as string,
+					interval: "month",
+					amount: 29,
+					currency: "USD",
+					seatBased: true, // for org-level seat pricing
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_PRO_YEARLY as string,
+					interval: "year",
+					amount: 290,
+					currency: "USD",
+					seatBased: true,
+					trialPeriodDays: 7,
+				},
+			],
+		},
+	},
+	locales: {
+		en: { currency: "USD", language: "en" },
+		de: { currency: "EUR", language: "de" },
+	},
 };
 ```
 
 Notes:
+
 - `priceId` always references provider-side product/price IDs — keep them server-only.
 - `seatBased` enables per-seat billing for organizations (when org-level billing is on).
 - `trialPeriodDays` works on subscription plans where the provider supports it.
@@ -100,21 +101,25 @@ Notes:
 ## Provider-specific notes
 
 ### Polar
+
 - Token: Polar dashboard → Settings → Developers → New token (all scopes recommended).
 - Webhook events to subscribe: `order.created`, `subscription.created`, `subscription.updated`, `subscription.canceled`.
 - Use sandbox products in dev; switch to live before deploy.
 
 ### Stripe
+
 - Use Stripe CLI for local webhook testing: `stripe listen --forward-to localhost:3000/api/webhooks/payments`.
 - Test mode keys (`sk_test_*`) → live keys (`sk_live_*`) on switchover.
 
 ### Lemonsqueezy / Creem / DodoPayments
+
 - Each has its own dashboard for products + webhooks. Same unified webhook URL.
 - Lemonsqueezy needs `LEMONSQUEEZY_STORE_ID`.
 
 ## API procedures
 
 `packages/api/modules/payments/` contains:
+
 - `checkout` — create checkout session / redirect URL
 - `portal` — open the customer billing portal
 - `plans` — list plans (server-side resolves prices to provider data)
@@ -136,7 +141,7 @@ The webhook handler updates the user/org's purchase rows in DB. Check active sub
 import { db } from "@repo/database";
 
 const purchases = await db.purchase.findMany({
-  where: { userId },         // or organizationId
+	where: { userId }, // or organizationId
 });
 ```
 
@@ -145,6 +150,7 @@ For paywalls, gate via Server Component + `redirect("/choose-plan")` if no activ
 ## Usage-based billing
 
 Supported on top of subscriptions for providers that allow metered usage. Workflow:
+
 1. Track usage events server-side (call provider's "report usage" API after work happens).
 2. Surface remaining usage in the UI from your DB or from the provider's API.
 3. Enforce limits in oRPC procedures before allowing usage.

@@ -1,6 +1,10 @@
-import { aggregateSearchUsage, getOrganizationById, getPurchasesByOrganizationId } from "@repo/database";
-import { config as paymentsConfig } from "@repo/payments/config";
+import {
+	aggregateSearchUsage,
+	getOrganizationById,
+	getPurchasesByOrganizationId,
+} from "@repo/database";
 import { getPlanIdByProviderPriceId } from "@repo/payments";
+import { config as paymentsConfig } from "@repo/payments/config";
 
 interface QuotaSnapshot {
 	planId: string;

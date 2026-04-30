@@ -1,8 +1,5 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import OrganizationStart from "@organizations/components/OrganizationStart";
-import { PageHeader } from "@shared/components/PageHeader";
-import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export async function generateMetadata({
 	params,
@@ -24,7 +21,6 @@ export default async function OrganizationPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("organizations.start");
 
 	const activeOrganization = await getActiveOrganization(organizationSlug as string);
 
@@ -32,11 +28,5 @@ export default async function OrganizationPage({
 		return notFound();
 	}
 
-	return (
-		<div>
-			<PageHeader title={activeOrganization.name} subtitle={t("subtitle")} />
-
-			<OrganizationStart />
-		</div>
-	);
+	redirect(`/${organizationSlug}/search`);
 }

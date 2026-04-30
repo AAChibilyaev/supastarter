@@ -28,7 +28,6 @@ import {
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
-	BotMessageSquareIcon,
 	ChevronRightIcon,
 	HomeIcon,
 	MenuIcon,
@@ -344,12 +343,6 @@ export function NavBar() {
 				href: startHref,
 				icon: HomeIcon,
 				isActive: pathname === "/" || pathname === basePath,
-			},
-			{
-				label: t("app.menu.aiChatbot"),
-				href: "/chatbot",
-				icon: BotMessageSquareIcon,
-				isActive: pathname.startsWith("/chatbot"),
 			},
 			...(activeOrganization
 				? [

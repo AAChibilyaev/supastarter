@@ -207,19 +207,30 @@ Three placement modes a merchant can choose from settings:
 ✓ Diagnostics show module version, API status, last sync, failed jobs.
 ```
 
-## 4.3 Hosted search widget
+## 4.3 Hosted search widget — ✅ SHIPPED (commit `e72c082`)
 
-### Tech decisions
+> Status flip: previously planned as InstantSearch.js + adapter. **Actually shipped as hand-rolled Vanilla JS.** The plan below is updated to match what's in `packages/widget/`.
+
+### Tech decisions (as shipped)
 
 ```
-Adapter:       typesense-instantsearch-adapter
-UI engine:     instantsearch.js
-Isolation:     Shadow DOM (preferred)  ─ namespaced CSS as fallback
-Distribution:  hosted JS bundle on cdn.aacsearch.com
-Bootstrap:     widget reads project config from /api/search/:projectId/config
+UI engine:     hand-rolled Vanilla JS (packages/widget/src/index.ts, ~825 lines)
+HTTP client:   hand-rolled (packages/widget/src/search-client.ts, ~124 lines)
+Isolation:     Shadow DOM
+Bundle:        tsup → IIFE + ESM outputs (14KB minified)
+Distribution:  served by SaaS at GET /api/widget/widget.js (CORS-allowed, cached)
+Auth:          search-only key (ss_search_*) embedded as data-api-key="…"
+Bootstrap:     <script data-base-url data-api-key data-index-slug data-container data-theme="auto"></script>
+               + GET /search/widget-config/:indexSlug oRPC procedure for runtime config
 ```
 
-The Typesense InstantSearch adapter exposes Typesense to InstantSearch widgets (`searchBox`, `hits`, `refinementList`, …). We wrap it with our auth gate so the widget never sees an admin key.
+### Why not InstantSearch.js (revisit decision)
+
+InstantSearch + adapter would give us: more facet widgets out of the box, well-known DX, less custom code. But it adds ~80KB+ to the bundle (instantsearch.js + adapter + helpers), and the auth wrapping required to never expose admin keys was non-trivial. Decision: ship Vanilla MVP, revisit adapter switch when widget UX needs more facet primitives than we want to hand-roll.
+
+### Decision gate when extending the widget
+
+Before adding a new facet type / sort option / filter widget: check `packages/widget/src/index.ts` for the existing pattern; extend in place. Do **not** introduce InstantSearch as a half-replacement — it's all-or-nothing.
 
 ### Modes
 

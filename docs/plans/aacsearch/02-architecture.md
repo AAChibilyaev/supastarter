@@ -13,31 +13,30 @@ apps/
   docs/                     # Public docs site (deferred to v0.7)
   mail-preview/             # Email template preview only
 
-packages/
-  api/                      # Hono + oRPC. Modules: admin, ai, billing-wallet, notifications, organizations, payments, search, users
-                            # Future modules (vision, ❌): projects, connectors, indexing, analytics, widget-config
+packages/                   # 17 workspace packages — all imported via @repo/<name>
+  api/                      # Hono + oRPC. Modules: admin, ai, billing-wallet, entitlements, notifications, organizations, payments, search, users (9 oRPC modules). Public Hono routes: search public-handler, search connector-public, widget bundle, wallet webhook
   auth/                     # Better Auth — login/signup/sessions/orgs
-  database/                 # Prisma + Drizzle. 25 Prisma models today.
+  database/                 # Prisma + Drizzle. 25 Prisma models today. Prisma is the active ORM (Hard Invariant #13)
   ai/                       # Vercel AI SDK + provider configs (chat-style)
-  ai-core/                  # Lower-level AI orchestration primitives (half-orphan; keep, don't extend)
-  billing-wallet/           # Kopecks ledger, reserve→commit/release, Tochka top-up driver (half-orphan)
-  search/                   # Typesense client, versioned collections + alias swap, ingest-buffer worker, public-handler
-  search-client/            # Browser-safe SDK (`@repo/search-client`). Only `ss_search_*` / `ss_scoped_*` tokens.
-  i18n/                     # 4 locales × 4 scopes (en/de/es/fr × marketing/saas/mail/shared)
+  ai-core/                  # Lower-level AI orchestration primitives (consumed by `ai` and `billing-wallet`)
+  billing-wallet/           # BigInt-kopecks ledger, reserve→commit/release, Tochka top-up driver, scoped tokens. Active v0.6 metering wiring
+  search/                   # Typesense client, versioned collections + alias swap, ingest-buffer worker (DB-first ingest, partial-fail handling)
+  search-client/            # Browser-safe SDK (`@repo/search-client`). Only `ss_search_*` / `ss_scoped_*` tokens
+  widget/                   # ✅ Vanilla JS storefront search widget (Shadow DOM, 14KB IIFE+ESM, served at `/api/widget/widget.js`). Hand-rolled — NOT InstantSearch.js + adapter
+  i18n/                     # 5 locales × 4 scopes (en/de/es/fr/**ru** × marketing/saas/mail/shared)
   logs/                     # Logger
   mail/                     # React Email templates + provider drivers
   notifications/            # createNotification, list, mark-read, preferences, catalog
-  payments/                 # Stripe / Lemonsqueezy / Polar / Creem / DodoPayments. Per-plan limits in config.ts (incl. `searchLimits`)
+  payments/                 # Stripe / Lemonsqueezy / Polar / Creem / DodoPayments / **Tochka** (RU). Per-plan limits in config.ts (incl. `searchLimits`); `lib/entitlements.ts` (`checkQuota` / `checkHardLimit` / `resolveOrgPlan` / `invalidatePlanCache`); `wallet-webhook.ts`
   storage/                  # S3-compatible (MinIO local)
   ui/                       # Shadcn UI primitives — 27 of them (catalog: skill `ui-component-catalog.md`)
-  utils/                    # Generic helpers
+  utils/                    # Generic helpers (incl. `getBaseUrl`)
                             # Future packages (vision, ❌):
-                            # widget/      — embeddable storefront search widget (instantsearch.js + typesense-instantsearch-adapter)
-                            # connectors/  — shared TS contracts + signing helpers consumed by PrestaShop/Bitrix modules
+                            # connectors/  — shared TS contracts + signing helpers consumed by CMS modules (currently they hit Connector API directly)
 
-modules/                    # ❌ NOT a Node workspace — PHP / external module sources (vision, separate repos likely)
-  prestashop/aacsearch/
-  bitrix/aac.search/
+modules/                    # ❗ NOT a Node workspace — PHP CMS modules (skeleton untracked WIP)
+  prestashop/aacsearch/     # PrestaShop 8.x: Aacsearch.php class + config.xml + classes/{AacSearchClient,AacSearchProductExporter,AacSearchSyncQueue}.php + controllers/admin + views/templates
+  bitrix/aac.search/        # 1C-Bitrix self-hosted: install/{index,version}.php + lib/Client.php (namespace AAC\Search, Bitrix\Main\Web\HttpClient + Option::get)
 
 tooling/                    # Build tooling, shared TS configs, Tailwind v4 theme tokens
 ```

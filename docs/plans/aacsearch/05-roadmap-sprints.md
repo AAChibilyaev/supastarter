@@ -65,17 +65,18 @@ Exit criteria:
   ✓ DB-first ingest pipeline (buffer → worker).
 ```
 
-### R2 — Connector Alpha (❌ not started)
+### R2 — Connector Alpha (🟡 partially shipped)
 
 ```
 Goal: real shops start syncing.
 
 Exit criteria:
-  ─ PrestaShop module installs; full sync works.
-  ─ Bitrix module installs; full sync works.
-  ─ Connector API stable (handshake / sync.full / sync.delta / diagnostics).
-  ─ Sync job status visible in dashboard.
-  ─ Connector tokens generated, hashed, scoped.
+  ✅ Connector API stable (handshake / sync.full / sync.delta / delete / diagnostics) — commit fa6cffe
+  ✅ Connector tokens generated, hashed, scoped — `ss_connector_*` via SearchApiKey.scopes=connector_write
+  ✅ Hosted widget shipped — packages/widget/ (Vanilla JS, Shadow DOM, 14KB) — commit e72c082
+  🟡 PrestaShop module installs; full sync works — Aacsearch.php skeleton in modules/prestashop/aacsearch/ (untracked)
+  🟡 Bitrix module installs; full sync works — lib/Client.php skeleton in modules/bitrix/aac.search/ (untracked)
+  ❌ Sync job status visible in dashboard — currently in-memory only, no UI
 ```
 
 ### R3 — Private Beta (❌)
@@ -146,30 +147,30 @@ Exit criteria:
 
 ## 5.4 Sprints 1–4
 
-### Sprint 1 — Foundation + Search Core (mostly ✅ already)
+### Sprint 1 — Foundation + Search Core (✅ DONE)
 
-| Task                                | Pri | DoD                              |
-| ----------------------------------- | --- | -------------------------------- |
-| AACsearch dashboard area            | P0  | Protected route exists           |
-| Project concept in app layer        | P0  | Org → Project model in dashboard |
-| Typesense server client             | P0  | Health check works               |
-| `ProductDocument` schema v1         | P0  | Demo products normalize cleanly  |
-| Collection create / upsert / delete | P0  | Products can be indexed          |
-| Search API v1                       | P0  | Query returns results            |
-| Dashboard search preview            | P0  | User can test search             |
-| Widget prototype                    | P0  | Script renders search UI         |
+| Task                                | Pri | Status | Evidence                                                                     |
+| ----------------------------------- | --- | ------ | ---------------------------------------------------------------------------- |
+| AACsearch dashboard area            | P0  | ✅     | `apps/saas/.../[organizationSlug]/search/page.tsx` + `SearchDashboard`       |
+| Project concept in app layer        | P0  | 🟡     | Implicit via `SearchIndex` (DB-frozen workaround); first-class entity is ❌  |
+| Typesense server client             | P0  | ✅     | `packages/search/lib/client.ts`                                              |
+| `ProductDocument` schema v1         | P0  | ✅     | `packages/search/lib/collections.ts`                                         |
+| Collection create / upsert / delete | P0  | ✅     | `packages/api/modules/search/procedures/{create-index,upsert-document}.ts`   |
+| Search API v1                       | P0  | ✅     | `packages/api/modules/search/public-handler.ts` (+quotaCheck middleware)     |
+| Dashboard search preview            | P0  | ✅     | `SearchIndexesList` + `WidgetPanel` install snippet                          |
+| Widget prototype                    | P0  | ✅     | `packages/widget/` — Vanilla JS + Shadow DOM, 14KB IIFE+ESM (commit e72c082) |
 
-### Sprint 2 — Connector Contract + PrestaShop
+### Sprint 2 — Connector Contract + PrestaShop (🟡 partial — contract DONE, module skeleton WIP)
 
-| Task                          | Pri | DoD                              |
-| ----------------------------- | --- | -------------------------------- |
-| Define Connector API contract | P0  | Modules know how to sync         |
-| Connector token generation    | P0  | Token authenticates connector    |
-| PrestaShop module skeleton    | P0  | Module installs                  |
-| PrestaShop settings page      | P0  | API URL / project / token saved  |
-| PrestaShop full sync          | P0  | Products sync                    |
-| Sync job status page          | P0  | User sees sync progress / errors |
-| Widget install snippet        | P0  | User can copy code               |
+| Task                          | Pri | Status | Evidence                                                                         |
+| ----------------------------- | --- | ------ | -------------------------------------------------------------------------------- |
+| Define Connector API contract | P0  | ✅     | `packages/api/modules/search/connector-public.ts` (commit fa6cffe)               |
+| Connector token generation    | P0  | ✅     | `ss_connector_*` via `SearchApiKey.scopes=connector_write` (no separate table)   |
+| PrestaShop module skeleton    | P0  | 🟡     | `modules/prestashop/aacsearch/Aacsearch.php` (PS 8.x) + `config.xml` — untracked |
+| PrestaShop settings page      | P0  | ❌     | `controllers/admin/AdminAacSearchController.php` referenced but not present      |
+| PrestaShop full sync          | P0  | ❌     | `classes/AacSearchProductExporter.php` referenced but not present                |
+| Sync job status page          | P0  | ❌     | Sync-job tracking is **in-memory ephemeral**; no dashboard surface yet           |
+| Widget install snippet        | P0  | ✅     | `apps/saas/modules/search/components/WidgetPanel.tsx` (copy snippet + 3 steps)   |
 
 ### Sprint 3 — Bitrix + Delta Sync
 
@@ -355,20 +356,20 @@ Pricing / limits are clear enough for paid beta.
 5.  Demo product import path                     ✅ done (single-doc + bulk via buffer)
 6.  Search API                                   ✅ done
 7.  Dashboard search preview                     ✅ done
-8.  Widget prototype with InstantSearch          ❌ NEXT
-9.  Connector API contract                       ❌ after #8
-10. PrestaShop module full sync                  ❌
-11. Bitrix module full sync                      ❌
-12. Delta sync                                   ❌
-13. Analytics                                    ❌
-14. Billing limits                               ❌
-15. Docs                                         ❌ (v0.7)
-16. Private beta                                 ❌ (R3)
+8.  Widget prototype                              ✅ done — packages/widget/ Vanilla JS (NOT InstantSearch — see §4.3)
+9.  Connector API contract                        ✅ done — packages/api/modules/search/connector-public.ts
+10. PrestaShop module full sync                   🟡 NEXT — skeleton in modules/prestashop/aacsearch/ (untracked); needs Client/Exporter/SyncQueue classes + AdminController + sync wiring
+11. Bitrix module full sync                       🟡 in flight — skeleton in modules/bitrix/aac.search/ (untracked); needs ProductExporter + SyncAgent + EventHandlers + admin pages
+12. Delta sync                                     ❌ — endpoint exists (`/sync/delta`); CMS-side hooks (PrestaShop `actionProductUpdate` / Bitrix iblock events) wire-up not done
+13. Analytics capture                              ❌ — widget has client emit hooks but no `POST /api/events` capture endpoint yet
+14. Billing limits                                 🟡 active WIP — quotaCheck middleware shipped; Tochka top-up driver + wallet-webhook in `git status` uncommitted
+15. Docs                                           ❌ (v0.7)
+16. Private beta                                   ❌ (R3)
 ```
 
 ### Hard rule on order
 
-**Do not start PrestaShop / Bitrix module work before #8 (widget) and #9 (Connector API contract).** Otherwise we'll have two complex modules built against an unstable backend contract — and rewriting either is more expensive than waiting.
+#10 + #11 are the **current bottleneck** — Connector API contract (#9) is stable, so PrestaShop/Bitrix module classes can be filled in. Don't start #12 (delta sync wiring) until #10/#11 full sync round-trip works against a real shop.
 
 ## 5.9 What this roadmap deliberately does not say
 

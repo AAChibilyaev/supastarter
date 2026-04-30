@@ -267,13 +267,15 @@ Tied to Hard Invariants 3, 4, 5, 6 in `SKILL.md`. Repeating them here for contex
 
 ### Key types
 
-| Token               | Carrier                             | Stored as                                    | Used by                                                               |
-| ------------------- | ----------------------------------- | -------------------------------------------- | --------------------------------------------------------------------- |
-| Better Auth session | HTTP cookie                         | session table                                | Dashboard users                                                       |
-| Connector token     | `Authorization: Bearer …`           | `tokenHash` (hashed server-side)             | CMS modules (PrestaShop / Bitrix)                                     |
-| Search API key      | `Authorization: Bearer ss_search_…` | `SearchApiKey.hashedKey`                     | Storefront browser, partner SDKs                                      |
-| Scoped search token | `Authorization: Bearer ss_scoped_…` | **stateless HMAC** over `BETTER_AUTH_SECRET` | Logged-in storefront users with per-user filter (e.g. own org's docs) |
-| Typesense admin     | `X-TYPESENSE-API-KEY` (server-side) | `TYPESENSE_ADMIN_KEY` env                    | Server only — `getTypesenseClient()`                                  |
+| Token                              | Carrier                                | Stored as                                                                                                      | Used by                                                               |
+| ---------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Better Auth session                | HTTP cookie                            | session table                                                                                                  | Dashboard users                                                       |
+| Connector token (`ss_connector_*`) | `Authorization: Bearer ss_connector_…` | `SearchApiKey.hashedKey` row with `scopes: ["connector_write"]` (**no separate table** — DB-frozen workaround) | CMS modules (PrestaShop / Bitrix), via `connector-public.ts`          |
+| Search API key                     | `Authorization: Bearer ss_search_…`    | `SearchApiKey.hashedKey` row with `scopes: ["search"]`                                                         | Storefront browser, partner SDKs                                      |
+| Scoped search token                | `Authorization: Bearer ss_scoped_…`    | **stateless HMAC** over `BETTER_AUTH_SECRET`                                                                   | Logged-in storefront users with per-user filter (e.g. own org's docs) |
+| Typesense admin                    | `X-TYPESENSE-API-KEY` (server-side)    | `TYPESENSE_ADMIN_KEY` env                                                                                      | Server only — `getTypesenseClient()`                                  |
+
+> All three `ss_*` token types share one storage table (`SearchApiKey`). The discriminator is `scopes`. Plaintext is shown **once** at creation (Hard Invariant #3) and never returned on read.
 
 ### P0 security tasks (cross-checked against current code)
 

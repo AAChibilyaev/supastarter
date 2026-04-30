@@ -28,6 +28,7 @@
 | 04  | [04-connectors-widget.md](04-connectors-widget.md) | PrestaShop module spec, Bitrix module spec, hosted search widget spec, Typesense MVP relevance, analytics event schema                                                                                                                                          |
 | 05  | [05-roadmap-sprints.md](05-roadmap-sprints.md)     | Release plan R0–R5, MVP backlog, sprints 1–4, billing/usage plans, docs site structure, acceptance criteria, "what to do first"                                                                                                                                 |
 | 06  | [06-ui-pages.md](06-ui-pages.md)                   | SaaS dashboard sitemap & UX blueprints — 9 nav items (Start / Overview / Search / Analytics / Relevance / Connectors / Org settings / Account / Admin), block compositions from existing UI catalog, DB-frozen workarounds, implementation sequence Sprints A–E |
+| 07  | [07-knowledge.md](07-knowledge.md)                 | **Knowledge module** (RAG / GraphRAG) — separate product surface from Search. Schema (KnowledgeSpace/Document/Chunk/Graph), 9 oRPC procedures, UI, hard invariants (owner isolation, no public-handler, cite-or-refuse), open questions (vector index, embedding provider, chunking), proposed §1.7 OUT list amendment |
 
 ## Companion docs
 

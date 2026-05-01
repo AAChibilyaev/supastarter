@@ -1340,6 +1340,35 @@
 				"hybride": "Hybride",
 				"semantic": "Recherche NL"
 			}
+		},
+		"geoSearch": {
+			"description": "Recherche par emplacement.",
+			"lat": "Latitude",
+			"lng": "Longitude",
+			"radius": "Rayon (km)"
+		},
+		"federatedSearch": {
+			"description": "Recherche multi-index.",
+			"addIndex": "Ajouter un index"
+		},
+		"groupedSearch": {
+			"groupBy": "Grouper par"
+		},
+		"suggestions": "Suggestions",
+		"presets": "Préréglages",
+		"aliases": "Alias de collection",
+		"snapshots": {
+			"create": "Créer instantané"
+		},
+		"health": {
+			"ok": "En bonne santé",
+			"error": "Défaillant"
 		}
+	},
+	"nav": {
+		"geoSearch": "Recherche géo",
+		"federatedSearch": "Fédérée",
+		"settings": "Paramètres",
+		"switchOrganization": "Changer d'organisation"
 	}
 }

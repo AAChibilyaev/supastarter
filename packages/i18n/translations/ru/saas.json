@@ -1319,6 +1319,35 @@
 				"hybrid": "Гибридный",
 				"semantic": "NL-поиск"
 			}
+		},
+		"geoSearch": {
+			"description": "Поиск по местоположению.",
+			"lat": "Широта",
+			"lng": "Долгота",
+			"radius": "Радиус (км)"
+		},
+		"federatedSearch": {
+			"description": "Поиск по нескольким индексам.",
+			"addIndex": "Добавить индекс"
+		},
+		"groupedSearch": {
+			"groupBy": "Группировать по"
+		},
+		"suggestions": "Подсказки",
+		"presets": "Пресеты поиска",
+		"aliases": "Псевдонимы коллекций",
+		"snapshots": {
+			"create": "Создать снапшот"
+		},
+		"health": {
+			"ok": "Исправен",
+			"error": "Неисправен"
 		}
+	},
+	"nav": {
+		"geoSearch": "Гео-поиск",
+		"federatedSearch": "Федеративный",
+		"settings": "Настройки",
+		"switchOrganization": "Сменить организацию"
 	}
 }

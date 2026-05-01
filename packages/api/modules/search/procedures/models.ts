@@ -1,5 +1,5 @@
-import { EMBEDDING_MODELS } from "@repo/search";
 import { db, type Prisma } from "@repo/database";
+import { EMBEDDING_MODELS } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

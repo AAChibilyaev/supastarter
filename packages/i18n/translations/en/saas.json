@@ -1454,6 +1454,35 @@
 				"hybrid": "Hybrid",
 				"semantic": "NL Search"
 			}
+		},
+		"geoSearch": {
+			"description": "Search by location with radius filtering.",
+			"lat": "Latitude",
+			"lng": "Longitude",
+			"radius": "Radius (km)"
+		},
+		"federatedSearch": {
+			"description": "Search across multiple indexes simultaneously.",
+			"addIndex": "Add index"
+		},
+		"groupedSearch": {
+			"groupBy": "Group by field"
+		},
+		"suggestions": "Query Suggestions",
+		"presets": "Search Presets",
+		"aliases": "Collection Aliases",
+		"snapshots": {
+			"create": "Create Snapshot"
+		},
+		"health": {
+			"ok": "Healthy",
+			"error": "Unhealthy"
 		}
+	},
+	"nav": {
+		"geoSearch": "Geo Search",
+		"federatedSearch": "Federated",
+		"settings": "Settings",
+		"switchOrganization": "Switch organization"
 	}
 }

@@ -4,6 +4,9 @@ import { createConnectorToken } from "./procedures/create-connector-token";
 import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
 import { getCurations, updateCurations } from "./procedures/curations";
+import { federatedSearch } from "./procedures/federated-search";
+import { geoSearch } from "./procedures/geo-search";
+import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
 import { importDocuments } from "./procedures/import-documents";
 import { importJobs } from "./procedures/import-jobs";
@@ -14,7 +17,16 @@ import { listDocuments } from "./procedures/list-documents";
 import { listIndexes } from "./procedures/list-indexes";
 import { listModels, getModelConfig, updateModelConfig } from "./procedures/models";
 import { onboardingStatus } from "./procedures/onboarding-status";
+import {
+	createSnapshot,
+	healthCheck,
+	listAliases,
+	listPresets,
+	upsertAlias,
+	upsertPreset,
+} from "./procedures/operations";
 import { pipelineStatus } from "./procedures/pipelineStatus";
+import { querySuggestions } from "./procedures/query-suggestions";
 import { recentActivity } from "./procedures/recent-activity";
 import { reindex } from "./procedures/reindex";
 import { retryFailedBatches } from "./procedures/retry-failed-batches";
@@ -70,9 +82,23 @@ export const searchRouter = {
 	vectorSearch,
 	hybridSearch,
 	semanticSearch,
+	geoSearch,
+	federatedSearch,
+	groupedSearch,
+	querySuggestions,
 	listModels,
 	modelConfig: {
 		get: getModelConfig,
 		update: updateModelConfig,
 	},
+	presets: {
+		list: listPresets,
+		upsert: upsertPreset,
+	},
+	aliases: {
+		list: listAliases,
+		upsert: upsertAlias,
+	},
+	snapshot: createSnapshot,
+	health: healthCheck,
 };

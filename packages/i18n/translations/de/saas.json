@@ -1373,6 +1373,35 @@
 				"hybrid": "Hybrid",
 				"semantic": "NL-Suche"
 			}
+		},
+		"geoSearch": {
+			"description": "Suche nach Standort.",
+			"lat": "Breitengrad",
+			"lng": "Längengrad",
+			"radius": "Radius (km)"
+		},
+		"federatedSearch": {
+			"description": "Suche über mehrere Indizes.",
+			"addIndex": "Index hinzufügen"
+		},
+		"groupedSearch": {
+			"groupBy": "Gruppieren nach"
+		},
+		"suggestions": "Suchvorschläge",
+		"presets": "Suchvoreinstellungen",
+		"aliases": "Sammlungsaliase",
+		"snapshots": {
+			"create": "Snapshot erstellen"
+		},
+		"health": {
+			"ok": "Gesund",
+			"error": "Fehlerhaft"
 		}
+	},
+	"nav": {
+		"geoSearch": "Geosuche",
+		"federatedSearch": "Föderiert",
+		"settings": "Einstellungen",
+		"switchOrganization": "Organisation wechseln"
 	}
 }

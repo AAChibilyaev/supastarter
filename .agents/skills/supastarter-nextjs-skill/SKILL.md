@@ -50,12 +50,12 @@ Run these in order. Skipping a step is the #1 source of "I missed something".
 ```bash
 # ── New UI component / dialog / form / card / list / button-style ───────
 rg -l "<Foo|FooDialog|FooCard|FooList|FooForm" apps/saas/modules apps/marketing/modules packages/ui/components
-# also: ls packages/ui/components/  (~27 shadcn primitives — see ui-component-catalog.md)
+# also: ls packages/ui/components/  (~39 shadcn primitives — see ui-component-catalog.md)
 # also: ls apps/saas/modules/shared/components/  (cross-cutting blocks: NavBar, PageHeader, SettingsList, UserAvatar, NotificationCenter, ConfirmationAlertProvider, ...)
 
 # ── New oRPC procedure / module ─────────────────────────────────────────
 rg -l "method:.*POST|GET.*path: \"/foo" packages/api/modules
-ls packages/api/modules/   # current: admin, ai, billing-wallet, entitlements, notifications, organizations, payments, search, users
+ls packages/api/modules/   # current: admin, ai, billing-wallet, entitlements, knowledge, notifications, organizations, payments, search, users
 # also `ls packages/api/modules/<name>/procedures/` before adding a procedure to that module
 
 # ── New database query helper ───────────────────────────────────────────
@@ -79,15 +79,15 @@ This skill is calibrated for the **AACsearch** product running on a supastarter 
 
 - **Sources of truth (read in this order)**: `docs/plans/aacsearch-prd.md` (Status PRD — shipped vs. planned vs. out-of-scope, ~80 lines), then [`docs/plans/aacsearch/index.md`](docs/plans/aacsearch/index.md) which fans out to the 5-file vision pack (`01-vision-scope.md`, `02-architecture.md`, `03-domain-api.md`, `04-connectors-widget.md`, `05-roadmap-sprints.md`); `agents.md` (coding conventions); this SKILL.md (workflow contract). **Don't load all five vision files at once** — pick the one matching the current task domain.
 - **Archived — must not influence current work**: `archive/cursor-rules/dslmrank.mdc`, `docs/plans/archive/*`. DSLMRank is an unrelated legacy project. Do not read, reference, or apply its rules.
-- **Current focus**: R2 — PrestaShop + Bitrix module wiring (skeletons live in `modules/prestashop/aacsearch/` + `modules/bitrix/aac.search/`, both untracked) + v0.6 metering integration (active WIP in `packages/billing-wallet`, `packages/payments/wallet-webhook.ts`, Tochka driver). Marketing site (was v0.5) is **shipped** in 5 locales.
-- **Already shipped (v0.x → R1)**: single-doc upsert, multi-search, browser SDK (`@repo/search-client`), scoped tokens, per-key origin allow-list + rate-limit, per-org plan quota (via `@repo/payments/lib/entitlements` + `quotaCheck` middleware), zero-downtime alias-swap reindex, DB-first ingest pipeline, hosted widget (`packages/widget` — Vanilla JS + Shadow DOM, 14KB IIFE+ESM, served at `/api/widget/widget.js`), Connector API (`packages/api/modules/search/connector-public.ts` — handshake/heartbeat/sync.full/sync.delta/delete/diagnostics, `ss_connector_*` tokens stored as `SearchApiKey` rows with `connector_write` scope, ephemeral in-memory sync-job tracking), entitlements oRPC module (`packages/api/modules/entitlements/`), AACsearch rebrand across saas + marketing.
-- **Active WIP (this session, uncommitted)**: AI Wallet → search-units metering wiring (Tochka top-up driver, `wallet-webhook.ts` reconciler, `wallet-reconcile.ts`, `AiWalletCard` UI, `TopUpDialog`, `format-kopecks`); `WALLET_CRON_SECRET` + `TOCHKA_*` env additions. Treat wallet edits as **legitimate v0.6 work**, not "half-orphan" — confirm only if scope appears to expand beyond what's already in `git status`.
-- **Deferred — confirm before coding**: public docs site `apps/docs` (**v0.7**), self-host quickstart + Helm chart (**v1.0**), Stripe-as-provider for search-units (current Tochka path is the active one for RU market).
-- **Out of scope — refuse without explicit greenlight**: Visual builder (drag-and-drop canvas, codegen for multiple frameworks, plugin system, real-time collab) — see [`docs/plans/aacsearch/01-vision-scope.md §1.7 OUT`](docs/plans/aacsearch/01-vision-scope.md). Vector / semantic / NL search, image / audio search, A/B testing, full personalization. DSLMRank rules in `archive/`.
+- **Current focus**: R2 — PrestaShop + Bitrix module wiring (skeletons live in `modules/prestashop/aacsearch/` + `modules/bitrix/aac.search/`, both untracked) + v0.6 metering integration (active WIP in `packages/billing-wallet`, `packages/payments/wallet-webhook.ts`, Tochka driver).
+- **Already shipped (v0.x → R2.5)**: single-doc upsert, multi-search, browser SDK (`@repo/search-client`), scoped tokens, per-key origin allow-list + rate-limit, per-org plan quota (via `@repo/payments/lib/entitlements` + `quotaCheck` middleware), zero-downtime alias-swap reindex, DB-first ingest pipeline, hosted widget (`packages/widget` — Vanilla JS + Shadow DOM, 14KB IIFE+ESM, served at `/api/widget/widget.js`), Connector API (`packages/api/modules/search/connector-public.ts` — handshake/heartbeat/sync.full/sync.delta/delete/diagnostics, `ss_connector_*` tokens stored as `SearchApiKey` rows with `connector_write` scope, ephemeral in-memory sync-job tracking), entitlements oRPC module (`packages/api/modules/entitlements/`), AACsearch rebrand across saas + marketing, **Knowledge module** (RAG/GraphRAG — `packages/api/modules/knowledge/`, 9 procedures, 7 Prisma models), **advanced search procedures** (vector, hybrid, semantic, geo, federated, grouped, dynamic, conversational, image, voice, query-suggestions — 45 procedure files total in search module), **docs site i18n** (5 locales, Fumadocs 16.x), **marketing site** fully shipped with 9 pages (home, blog, changelog, contact, features, pricing, integrations, security, use-cases, enterprise) in 5 locales.
+- **Active WIP (v0.6)**: AI Wallet → search-units metering wiring (Tochka top-up driver, `wallet-webhook.ts` reconciler, `wallet-reconcile.ts`, `AiWalletCard` UI, `TopUpDialog`, `format-kopecks`); `WALLET_CRON_SECRET` + `TOCHKA_*` env additions. Treat wallet edits as **legitimate v0.6 work** — confirm only if scope expands beyond what's already in `git status`.
+- **Deferred — confirm before coding**: self-host quickstart + Helm chart (**v1.0**), Stripe-as-provider for search-units (current Tochka path is the active one for RU market).
+- **Out of scope — refuse without explicit greenlight**: Visual builder (drag-and-drop canvas, codegen for multiple frameworks, plugin system, real-time collab) — see [`docs/plans/aacsearch/01-vision-scope.md §1.7 OUT`](docs/plans/aacsearch/01-vision-scope.md). A/B testing, full personalization engine. DSLMRank rules in `archive/`. Note: vector/hybrid/semantic/geo/image/voice search ARE shipped (see procedure files) — do not refuse them.
 - **DB-frozen pattern (current)**: when a feature needs persistence, prefer **(a)** additive `scopes`/columns on existing rows (e.g. connector tokens reused `SearchApiKey` with `connector_write` scope), **(b)** in-memory ephemeral state (e.g. sync-job tracking), **(c)** config-only via `@repo/payments/lib/entitlements` (e.g. plan quota). New Prisma models require explicit user approval.
 - **Removed in `84481e3` — do NOT recreate**: `apps/saas/app/api/cron/sync-subscriptions/route.ts`, `packages/api/lib/wallet-sync.ts`.
 
-When a request comes in, **first** classify it: `v0.x search/keys/tokens/quota/usage` ✅ implement | marketing/saas UI extending shipped surfaces ✅ implement | R2 connectors (PrestaShop/Bitrix modules, `modules/*`) ✅ implement | v0.6 wallet/Tochka/metering (active WIP) ✅ implement | `v0.7/v1.0` → confirm | builder / vector / semantic → **refuse, see OUT list**. State the classification in your first reply.
+When a request comes in, **first** classify it: `search/keys/tokens/quota/usage` ✅ implement | marketing/saas UI extending shipped surfaces ✅ implement | R2 connectors (PrestaShop/Bitrix modules, `modules/*`) ✅ implement | v0.6 wallet/Tochka/metering (active WIP) ✅ implement | vector/hybrid/semantic/geo search ✅ implement (already shipped) | `v1.0` → confirm | builder / A/B testing / personalization engine → **refuse, see OUT list**. State the classification in your first reply.
 
 ## Hard invariants — MUST never violate
 
@@ -110,7 +110,7 @@ Non-negotiable in THIS repo. If a request would break one, refuse and explain.
     - **DB queries**: `packages/database/prisma/queries/*` — extend the matching file (`search.ts`, `users.ts`, `ai-wallets.ts`, …) first.
     - **Zod schemas for Prisma models**: `packages/database/prisma/zod/index.ts` — generated by `prisma-zod-generator`. **Never hand-write** a model schema; import the generated `<Model>Schema` from `@repo/database`.
     - **Helpers / lib**: `packages/utils`, `packages/api/lib`, `apps/saas/modules/shared/lib`. Grep before adding.
-    - **Workspace package**: **17** already exist (incl. `widget`). Adding an 18th requires user confirmation + ≥2 internal consumers OR a customer-facing SDK use case.
+    - **Workspace package**: **18** already exist (incl. `widget`, `aacsearch-mcp`). Adding a 19th requires user confirmation + ≥2 internal consumers OR a customer-facing SDK use case.
       If after grepping you still need to create new — state in your reply **why the existing thing isn't enough** before writing. Skipping this check produced bloat and duplicates in past sessions; it is the #1 source of skill-violating changes.
 13. **Prisma is the active ORM in `@repo/database`.** `packages/database/index.ts` re-exports only `./prisma`. The `drizzle/` directory exists for legacy reference but is **not** wired into the public surface. New queries go in `packages/database/prisma/queries/<area>.ts`. Do not add new files to `packages/database/drizzle/queries/` unless the user explicitly asks for an ORM migration.
 14. **New workspace package → `pnpm install` immediately after creation.** Without it, consumers fail with `Cannot find module '@repo/<name>'`. Verify: `ls -l node_modules/@repo/ | grep <name>` shows a symlink. Same rule when you add a new package to `pnpm-workspace.yaml`.
@@ -240,22 +240,23 @@ apps/
       image-proxy/[...path]/
     modules/              # auth, organizations, settings, payments, admin, ai, onboarding, shared, i18n, lib
     tests/                # Playwright E2E
-  marketing/              # Public site (port 3001) — home, blog, changelog, legal
+  marketing/              # Public site (port 3001) — 9 pages (home, blog, changelog, contact, features, pricing, integrations, security, use-cases, enterprise), all in 5 locales
     app/[locale]/
-    modules/              # home, blog, changelog, legal, shared, analytics, i18n
-    content/              # MDX (legal, blog posts, changelog)
+    modules/              # home, blog, changelog, legal, shared, analytics, i18n, integrations, security, enterprise, use-cases
+    content/              # MDX (legal, blog posts, changelog) — 5 locales each
     tests/                # Playwright E2E
   docs/                   # Documentation site (port 3002)
   mail-preview/           # Email template preview (port 3003)
 
-packages/                 # 17 workspace packages — all imported via @repo/<name>
-  api/                    # Hono + oRPC. modules/{admin,ai,billing-wallet,entitlements,notifications,organizations,payments,search,users}, orpc/{router,procedures,handler,middleware}. Public Hono routes: search public-handler + connector-public + widget bundle + wallet webhook
+packages/                 # 18 workspace packages — all imported via @repo/<name>
+  api/                    # Hono + oRPC. modules/{admin,ai,billing-wallet,entitlements,knowledge,notifications,organizations,payments,search,users}, orpc/{router,procedures,handler,middleware}. Public Hono routes: search public-handler + connector-public + widget bundle + wallet webhook + events track + SCIM + v1 REST
   auth/                   # Better Auth (auth.ts, client.ts, lib/, plugins/)
-  database/               # BOTH Prisma (prisma/) AND Drizzle (drizzle/) coexist; 25 Prisma models; query helpers in prisma/queries/. Prisma is the active ORM (Hard Invariant #13)
+  database/               # BOTH Prisma (prisma/) AND Drizzle (drizzle/) coexist; **33 Prisma models**; query helpers in prisma/queries/. Prisma is the active ORM (Hard Invariant #13)
   ai/                     # Vercel AI SDK + provider configs (chat-style models)
   ai-core/                # Lower-level AI orchestration primitives consumed by `ai` and `billing-wallet`
   billing-wallet/         # AI Wallet: BigInt-kopecks ledger, reserve→commit/release, Tochka top-up driver, scoped tokens. Active v0.6 metering wiring
-  search/                 # Typesense client, versioned collections + alias swap, ingest buffer worker (DB-first ingest, partial-fail handling)
+  aacsearch-mcp/          # MCP server for AI agent integration (Claude, Cursor) — search, list_indexes, upsert_document, search_stats
+  search/                 # Typesense client, versioned collections + alias swap, ingest buffer worker (DB-first ingest, partial-fail handling); also: embeddings (OpenAI vectors)
   search-client/          # Browser-safe SDK for the public search API (only ss_search_*/ss_scoped_* tokens)
   widget/                 # Vanilla JS storefront search widget (Shadow DOM, 14KB IIFE+ESM, served at /api/widget/widget.js, hand-rolled — not InstantSearch.js)
   i18n/                   # translations/{en,de,es,fr,ru}/{mail,marketing,saas,shared}.json — 5 locales × 4 scopes (Hard Invariant #11)
@@ -281,7 +282,7 @@ Use package exports (`@repo/api`, `@repo/auth`, `@repo/database`, `@repo/ui/comp
 
 ### Path aliases (per app)
 
-**apps/saas:** `@config`, `@auth/*`, `@organizations/*`, `@settings/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@shared/*`, `@i18n/*` → `apps/saas/modules/<area>/*`
+**apps/saas:** `@config`, `@auth/*`, `@organizations/*`, `@settings/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@shared/*`, `@i18n/*`, `@search/*`, `@knowledge/*` → `apps/saas/modules/<area>/*`
 
 **apps/marketing:** `@config`, `@analytics`, `@home/*`, `@blog/*`, `@changelog/*`, `@legal/*`, `@shared/*`, `@i18n/*`, `content-collections` → `apps/marketing/modules/<area>/*` (and content-collections generated dir)
 

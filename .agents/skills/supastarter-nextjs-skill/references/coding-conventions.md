@@ -22,7 +22,7 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
     - `notifications` — in-app + email notifications (`createNotification`, preferences, catalog).
     - `ai`, `logs`, `mail`, `payments`, `storage`, `utils`, `i18n` for their respective domains.
 - Use the package exports (`@repo/api`, `@repo/auth`, `@repo/database`, `@repo/ui/components/*`, `@repo/notifications`) instead of deep relative imports.
-- Use per-app aliases (`@auth/*`, `@shared/*`, `@organizations/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@settings/*`, `@i18n/*`, `@config`) for cross-module imports inside an app.
+- Use per-app aliases for cross-module imports inside an app. **apps/saas** exports: `@auth/*`, `@shared/*`, `@organizations/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@settings/*`, `@i18n/*`, `@search/*`, `@knowledge/*`, `@config`. **apps/marketing** exports: `@home/*`, `@blog/*`, `@changelog/*`, `@shared/*`, `@i18n/*`, `@config`.
 
 ### Core Coding Principles
 

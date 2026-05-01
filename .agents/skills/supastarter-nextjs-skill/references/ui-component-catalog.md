@@ -96,7 +96,9 @@ Imports: `import { X } from "@repo/ui/components/<name>"`. Re-exports also live 
 
 **Helper:** `cn(...inputs)` from `@repo/ui` (clsx + tailwind-merge) — always use for conditional classes.
 
-There is **no** `Checkbox`, `RadioGroup`, `Slider`, `Calendar`, `DatePicker`, `Combobox`, `Command`, `ScrollArea`, `Separator`, `Breadcrumb`, `NavigationMenu`, `ContextMenu`, `Menubar`, `Toggle`, `ToggleGroup`, `Pagination`, `HoverCard`, `Resizable`, `Carousel`, `AspectRatio`, `Collapsible` shipped by default. If you need one, run `pnpm dlx shadcn@latest add <name>` from `packages/ui` to add it.
+Shipped (39 total, as of R2.5): all components above plus `Checkbox`, `Command`, `ScrollArea`, `Separator`, `Breadcrumb`, `NavigationMenu`, `ContextMenu`, `Toggle`, `HoverCard`, `Collapsible`, `Drawer`, `Sidebar`.
+
+**Not yet installed** (run `pnpm dlx shadcn@latest add <name>` from `packages/ui` to add): `RadioGroup`, `Slider`, `Calendar`, `DatePicker`, `Combobox`, `Menubar`, `ToggleGroup`, `Resizable`, `Carousel`, `AspectRatio`.
 
 ---
 

@@ -88,6 +88,13 @@ export function OverviewPage() {
 		enabled: Boolean(orgId),
 	});
 
+	const { data: syncJobs } = useQuery({
+		...orpc.search.listConnectorSyncJobs.queryOptions({
+			input: { organizationId: orgId ?? "" },
+		}),
+		enabled: Boolean(orgId),
+	});
+
 	if (!orgId || !slug) return null;
 
 	const isLoading = planLoading || usageLoading;
@@ -102,7 +109,7 @@ export function OverviewPage() {
 	const docsLimit = planInfo?.usage.documents.limit ?? 0;
 	const isUnlimitedDocs = planInfo?.usage.documents.isUnlimited ?? false;
 
-	const failedSyncs = 0; // Simplified — could be extended with connector sync job data
+	const failedSyncs = (syncJobs ?? []).filter((j) => j.status === "failed").length;
 
 	const quotaPercent = isUnlimitedSearches ? 0 : searchesPercent;
 

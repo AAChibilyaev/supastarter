@@ -36,10 +36,9 @@ export function ContactForm() {
 		},
 	});
 
-	const onSubmit = form.handleSubmit(async (values) => {
+	const onSubmit = form.handleSubmit(async (_values) => {
 		try {
 			// TODO: Insert your contact form submission logic here to integrate with your CRM or email service
-			console.log("Submitting contact form for values:", values);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		} catch {
 			form.setError("root", {

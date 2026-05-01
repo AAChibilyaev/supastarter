@@ -10,6 +10,7 @@ import {
 	CardTitle,
 } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { toastError } from "@repo/ui/components/toast";
 import {
 	Table,
 	TableBody,
@@ -41,15 +42,18 @@ const EMPTY_CONNECTOR_STATUS: ConnectorStatus = {
 	lastError: null,
 };
 
-function relativeTime(dateStr: string | Date | null | undefined): string {
+function relativeTime(
+	dateStr: string | Date | null | undefined,
+	t: (key: string, values?: Record<string, string | number | Date>) => string,
+): string {
 	if (!dateStr) return "";
 	const ms = Date.now() - new Date(dateStr).getTime();
 	const mins = Math.floor(ms / 60000);
-	if (mins < 1) return "<1 min";
-	if (mins < 60) return `${mins} min`;
+	if (mins < 1) return t("search.connector.time.lessThanMinute");
+	if (mins < 60) return t("search.connector.time.minutes", { count: mins });
 	const hrs = Math.floor(mins / 60);
-	if (hrs < 24) return `${hrs}h ${mins % 60}m`;
-	return `${Math.floor(hrs / 24)}d`;
+	if (hrs < 24) return t("search.connector.time.hoursMinutes", { h: hrs, m: mins % 60 });
+	return t("search.connector.time.days", { count: Math.floor(hrs / 24) });
 }
 
 function deriveSourceType(name: string): SourceType {
@@ -113,6 +117,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 				queryKey: orpc.search.listConnectorTokens.key(),
 			});
 		},
+		onError: () => {
+			toastError(t("search.connector.revokeError"));
+		},
 	});
 
 	const retryMutation = useMutation({
@@ -121,6 +128,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			void queryClient.invalidateQueries({
 				queryKey: orpc.search.pipelineStatus.key(),
 			});
+		},
+		onError: () => {
+			toastError(t("search.connector.retryError"));
 		},
 	});
 
@@ -236,7 +246,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
 							<Cable className="mr-2 size-4 text-muted-foreground" />
 							<CardTitle className="text-xs font-medium text-muted-foreground">
-								Buffer
+								{t("search.connector.pipeline.buffer")}
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
@@ -247,7 +257,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
 							<RefreshCw className="mr-2 size-4 text-muted-foreground" />
 							<CardTitle className="text-xs font-medium text-muted-foreground">
-								Throughput
+								{t("search.connector.pipeline.throughput")}
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
@@ -260,7 +270,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
 							<AlertTriangle className="mr-2 size-4 text-muted-foreground" />
 							<CardTitle className="text-xs font-medium text-muted-foreground">
-								Retry queue
+								{t("search.connector.pipeline.retryQueue")}
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
@@ -271,7 +281,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						<CardHeader className="gap-1 p-3 space-y-0 flex-row items-center">
 							<XCircle className="mr-2 size-4 text-destructive" />
 							<CardTitle className="text-xs font-medium text-muted-foreground">
-								Failed
+								{t("search.connector.pipeline.failed")}
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
@@ -378,9 +388,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 														{token.lastUsedAt ? (
 															<span className="gap-1 inline-flex items-center">
 																<Clock className="size-3" />
-																{relativeTime(
-																	token.lastUsedAt,
-																)} ago
+																{t("search.connector.time.ago", {
+																	time: relativeTime(token.lastUsedAt, t),
+																})}
 															</span>
 														) : (
 															"—"

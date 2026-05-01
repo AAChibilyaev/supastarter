@@ -1565,5 +1565,1365 @@
 				}
 			}
 		}
+	},
+	"solutionsPage": {
+		"title": "Industry Solutions",
+		"description": "AACsearch powers search for retail, media, fintech, education, healthcare, and gaming platforms worldwide."
+	},
+	"solutions": {
+		"title": "Search built for your industry",
+		"subtitle": "From product catalogues to clinical terminology, AACsearch adapts to the data model your team already uses.",
+		"items": {
+			"retail": {
+				"title": "Retail & E-commerce",
+				"description": "Product search with facets, synonyms, and instant filtering. Boosts, pin rules, and in-session merchandising included."
+			},
+			"media": {
+				"title": "Media & Publishing",
+				"description": "Full-text search over articles, tags, authors, and multimedia metadata. Multi-language support and relevance tuning out of the box."
+			},
+			"fintech": {
+				"title": "Financial Services",
+				"description": "Tenant-isolated search with audit log, per-key origin allow-lists, and encrypted index. GDPR and CCPA ready."
+			},
+			"education": {
+				"title": "Education & EdTech",
+				"description": "Course, lesson, and instructor search. Synonym libraries for academic terms, multi-language UI, and accessibility-first widget."
+			},
+			"healthcare": {
+				"title": "Healthcare",
+				"description": "HIPAA-ready search architecture. Clinical synonym dictionaries, audit trail, and role-based data access controls."
+			},
+			"gaming": {
+				"title": "Gaming",
+				"description": "Player profiles, item catalogues, and leaderboard search. Real-time index updates, geo search, and sub-50ms latency at any scale."
+			}
+		}
+	},
+	"solutionsRetailPage": {
+		"title": "Search for Retail & E-Commerce",
+		"description": "Shoppers find what they want faster. Store teams control results without code. Seamless sync with your product catalog."
+	},
+	"solutionsRetail": {
+		"title": "Search that converts",
+		"subtitle": "Every feature a retail team needs — product search, navigation, merchandising, and analytics — in one hosted platform.",
+		"items": {
+			"productSearch": {
+				"title": "Product search",
+				"description": "Instant, typo-tolerant product search. Customers find the right item even when they misspell it or use synonyms."
+			},
+			"filterNavigation": {
+				"title": "Faceted navigation",
+				"description": "Dynamic facets for category, brand, price, colour, and size. Counts update in real time as filters are applied."
+			},
+			"synonyms": {
+				"title": "Retail synonyms",
+				"description": "Manage 'sofa / couch', 'trainers / sneakers' and hundreds of retail synonym pairs. One CSV import, instant effect."
+			},
+			"inventory": {
+				"title": "Real-time inventory",
+				"description": "Ingest product stock updates within seconds. Sold-out items are demoted automatically based on your availability field."
+			},
+			"merchandising": {
+				"title": "Merchandising rules",
+				"description": "Pin promoted products to the top, exclude discontinued items, and boost seasonal lines — no code deploy required."
+			},
+			"analytics": {
+				"title": "Retail analytics",
+				"description": "Zero-result rate, top queries, click-through rate, and conversion funnel — all segmented by collection and locale."
+			}
+		}
+	},
+	"solutionsMediaPage": {
+		"title": "Search for Media & Publishing",
+		"description": "Surface the right article, video, or podcast the moment readers ask. Multi-language support and real-time content sync included."
+	},
+	"solutionsMedia": {
+		"title": "Discovery at editorial speed",
+		"subtitle": "Publish a new piece and it appears in search within seconds. Tag it, and readers find it across every surface of your platform.",
+		"items": {
+			"contentSearch": {
+				"title": "Full-text content search",
+				"description": "Search across headlines, body copy, tags, author bios, and captions. Highlight matching excerpts in results."
+			},
+			"tagging": {
+				"title": "Tag & category facets",
+				"description": "Filter by topic, format, date, author, or content type. Nested facets support complex editorial taxonomies."
+			},
+			"multiLanguage": {
+				"title": "Multi-language search",
+				"description": "Run separate indexes per language or a single multi-language index. Locale-aware synonym management included."
+			},
+			"realTimeSync": {
+				"title": "Real-time CMS sync",
+				"description": "Webhook-driven sync from Contentful, Strapi, WordPress, or Sanity. Published articles appear in search in under a second."
+			},
+			"fullText": {
+				"title": "Long-form relevance",
+				"description": "Configurable field weights favour headlines over body copy. Boost recency for news, or depth for evergreen guides."
+			},
+			"analytics": {
+				"title": "Content analytics",
+				"description": "See which queries have no results, which topics trend, and which articles get discovered through search vs direct links."
+			}
+		}
+	},
+	"solutionsFintechPage": {
+		"title": "Search for Financial Services",
+		"description": "Tenant-isolated, auditable search for financial data. GDPR, CCPA, and SOC 2-aligned from the start."
+	},
+	"solutionsFintech": {
+		"title": "Compliant search, without the complexity",
+		"subtitle": "AACsearch gives financial teams the performance of modern search with the access controls and audit trail compliance requires.",
+		"items": {
+			"tenantIsolation": {
+				"title": "Strict tenant isolation",
+				"description": "Every API call carries an org-scoped token. Cross-tenant reads are rejected at the protocol level — no application-layer gate required."
+			},
+			"auditLog": {
+				"title": "Audit trail",
+				"description": "Every search query, document ingest, and admin operation is logged with timestamp, actor, and org context."
+			},
+			"accessControls": {
+				"title": "Scoped access controls",
+				"description": "Issue read-only search tokens scoped to specific collections, date ranges, or field filters. Tokens are HMAC-signed and short-lived."
+			},
+			"encryption": {
+				"title": "Encryption at rest & in transit",
+				"description": "All data encrypted at rest (AES-256) and in transit (TLS 1.3). Key management handled by your cloud provider."
+			},
+			"gdpr": {
+				"title": "GDPR & CCPA ready",
+				"description": "Field-level deletion and pseudonymisation. Right-to-be-forgotten requests resolved at the index level within minutes."
+			},
+			"performance": {
+				"title": "Sub-50ms at scale",
+				"description": "High-frequency financial data indexed in real time. P99 search latency stays under 50ms at any transaction volume."
+			}
+		}
+	},
+	"solutionsEducationPage": {
+		"title": "Search for Education & EdTech",
+		"description": "Help learners discover courses, lessons, and instructors instantly. Multi-language support and accessible search widget included."
+	},
+	"solutionsEducation": {
+		"title": "Learning starts with discovery",
+		"subtitle": "AACsearch adapts to your learning platform — whether you index courses, lessons, instructors, or study materials.",
+		"items": {
+			"courseSearch": {
+				"title": "Course & lesson search",
+				"description": "Instant search across titles, descriptions, learning objectives, and instructor names. Typo-tolerant for learner queries."
+			},
+			"learningPaths": {
+				"title": "Structured navigation",
+				"description": "Faceted search by subject, level, format, duration, and certification. Nested categories map to your curriculum structure."
+			},
+			"multiLanguage": {
+				"title": "Multi-language content",
+				"description": "Index content in 50+ languages. Language-aware stemming and separate synonym libraries per locale."
+			},
+			"accessibility": {
+				"title": "Accessible search widget",
+				"description": "WCAG 2.1 AA compliant widget. Keyboard navigation, screen reader labels, and sufficient colour contrast built in."
+			},
+			"synonyms": {
+				"title": "Academic synonyms",
+				"description": "Map discipline-specific terms: 'ML / machine learning', 'JS / JavaScript'. Import from CSV or manage in the dashboard."
+			},
+			"analytics": {
+				"title": "Learning analytics",
+				"description": "Discover which topics learners search most, where they find no results, and which queries lead to enrollment."
+			}
+		}
+	},
+	"solutionsHealthcarePage": {
+		"title": "Search for Healthcare",
+		"description": "HIPAA-ready search architecture for patient portals, clinical tools, and health information systems."
+	},
+	"solutionsHealthcare": {
+		"title": "Clinical search, built responsibly",
+		"subtitle": "AACsearch gives healthcare teams fast, accurate search with the access controls and data segregation patient privacy requires.",
+		"items": {
+			"clinicalTerms": {
+				"title": "Clinical terminology",
+				"description": "Synonym libraries for ICD-10 codes, drug names, and medical conditions. Supports lay and clinical terminology in the same index."
+			},
+			"hipaaReady": {
+				"title": "HIPAA-aligned architecture",
+				"description": "Tenant isolation, scoped access tokens, and no PII logging in search analytics. Infrastructure configured for HIPAA workloads."
+			},
+			"auditLog": {
+				"title": "Audit trail",
+				"description": "Every query, every result click, and every admin action logged with timestamp and user context for compliance review."
+			},
+			"tenantIsolation": {
+				"title": "Patient data isolation",
+				"description": "Search tokens are org-scoped and HMAC-signed. Patients, practitioners, and admins each get a different access level at the token level."
+			},
+			"realTimeUpdates": {
+				"title": "Real-time record updates",
+				"description": "Clinical records and pharmacy data indexed in under a second. Formulary changes appear immediately without full reindex."
+			},
+			"multiLanguage": {
+				"title": "Multi-language support",
+				"description": "Patient-facing search in the user's preferred language. Language detection and locale-aware search widget."
+			}
+		}
+	},
+	"solutionsGamingPage": {
+		"title": "Search for Gaming Platforms",
+		"description": "Player profiles, item catalogues, and marketplace listings — searched at sub-50ms latency across millions of records."
+	},
+	"solutionsGaming": {
+		"title": "Search as fast as your game",
+		"subtitle": "Real-time item updates, geo-matched player search, and in-game marketplace listings — all indexed within seconds of an event.",
+		"items": {
+			"itemSearch": {
+				"title": "Item & loot search",
+				"description": "Search across millions of items by rarity, type, stats, and price. Filters and sort orders update in real time as the market moves."
+			},
+			"playerSearch": {
+				"title": "Player profile search",
+				"description": "Find players by username, rank, region, and playstyle. Supports prefix matching for autocomplete in lobby screens."
+			},
+			"geoSearch": {
+				"title": "Geo-matched search",
+				"description": "Surface players and servers within a configurable distance. Radius and bounding-box geo queries supported out of the box."
+			},
+			"realTimeSync": {
+				"title": "Real-time event sync",
+				"description": "Index updates triggered by game events — item drops, rank changes, marketplace listings — arrive in under a second."
+			},
+			"multiSearch": {
+				"title": "Multi-index queries",
+				"description": "Run a single request across items, players, and guilds simultaneously. One round-trip, merged results, minimal latency."
+			},
+			"analytics": {
+				"title": "Game analytics",
+				"description": "See what players search for, which queries hit dead ends, and how search drives marketplace conversions."
+			}
+		}
+	},
+	"featuresGeoSearchPage": {
+		"title": "Geo Search",
+		"description": "Filter and sort results by location. Radius queries, bounding-box search, and distance sorting — all with sub-50ms latency."
+	},
+	"featuresGeoSearch": {
+		"title": "Location-aware search",
+		"subtitle": "Add a latitude/longitude field to your collection and AACsearch handles the rest — no geospatial specialist required.",
+		"items": {
+			"radiusSearch": {
+				"title": "Radius queries",
+				"description": "Return results within N km or miles of a point. Configurable unit, precision, and maximum result count."
+			},
+			"boundingBox": {
+				"title": "Bounding-box search",
+				"description": "Filter to a geographic rectangle using NE and SW coordinates. Useful for map-viewport search in web and mobile apps."
+			},
+			"distanceSorting": {
+				"title": "Distance sorting",
+				"description": "Sort results by distance from a given point. Combine with text relevance weights for proximity-aware ranking."
+			},
+			"multipleLocations": {
+				"title": "Multiple location fields",
+				"description": "Index multiple lat/lng fields per document — e.g. pickup and delivery locations — and query against either or both."
+			},
+			"performance": {
+				"title": "Sub-50ms latency",
+				"description": "Geo filtering runs inside Typesense's search core. No external geospatial service, no extra round-trips."
+			},
+			"filters": {
+				"title": "Geo + attribute filters",
+				"description": "Combine geo filters with any other facet — price, category, availability — in a single query."
+			}
+		}
+	},
+	"featuresInstantSearchPage": {
+		"title": "Instant Search",
+		"description": "Results appear as the user types. Debounced, cached, and optimised to feel instant — even on slow connections."
+	},
+	"featuresInstantSearch": {
+		"title": "Search that keeps up",
+		"subtitle": "AACsearch is designed for as-you-type use cases. The hosted widget and browser SDK handle debouncing, prefetching, and caching for you.",
+		"items": {
+			"asYouType": {
+				"title": "As-you-type results",
+				"description": "Results update on every keystroke. Prefix matching and typo tolerance mean relevant hits appear from the first character."
+			},
+			"debouncing": {
+				"title": "Built-in debouncing",
+				"description": "The widget and SDK debounce input automatically. Configurable delay (default 200ms) prevents unnecessary API calls."
+			},
+			"caching": {
+				"title": "Client-side caching",
+				"description": "Repeated queries return from the browser cache instantly. Cache is keyed by query + filters + locale."
+			},
+			"prefetching": {
+				"title": "Query prefetching",
+				"description": "Prefetch popular queries on page load so the first keystroke resolves from cache instead of a network request."
+			},
+			"latency": {
+				"title": "Sub-50ms API latency",
+				"description": "AACsearch P99 latency is under 50ms. Combined with edge caching, end-to-end time stays well under 100ms."
+			},
+			"widget": {
+				"title": "Drop-in widget",
+				"description": "The AACsearch widget ships with instant-search UI out of the box. One script tag, zero configuration required."
+			}
+		}
+	},
+	"featuresFacetedSearchPage": {
+		"title": "Faceted Search & Navigation",
+		"description": "Dynamic facets with real-time counts. Give users the navigation controls that move them from query to result in one click."
+	},
+	"featuresFacetedSearch": {
+		"title": "Every filter, every click",
+		"subtitle": "AACsearch computes facet counts server-side on every query. No client-side post-filtering, no stale counts, no separate aggregation pass.",
+		"items": {
+			"dynamicFacets": {
+				"title": "Dynamic facets",
+				"description": "Define which fields are facetable in your collection schema. Counts are recomputed on every query with sub-millisecond overhead."
+			},
+			"countFacets": {
+				"title": "Accurate counts",
+				"description": "Facet counts reflect the current query context — apply a price filter and category counts update immediately."
+			},
+			"rangeFacets": {
+				"title": "Range facets",
+				"description": "Numeric range facets for price, rating, year, and custom fields. Configurable bucket sizes and display formats."
+			},
+			"nestedFacets": {
+				"title": "Nested category facets",
+				"description": "Multi-level category trees rendered as hierarchical facets. Breadcrumb navigation generated automatically."
+			},
+			"performance": {
+				"title": "No aggregation overhead",
+				"description": "Facet computation is co-located with search execution. One API call returns results and facet counts together."
+			},
+			"mobile": {
+				"title": "Mobile-first facets",
+				"description": "The widget renders facets as a collapsible drawer on mobile. Tap to open, tap to filter, tap to close."
+			}
+		}
+	},
+	"featuresTypoTolerancePage": {
+		"title": "Typo Tolerance",
+		"description": "Misspelled queries return correct results. Configurable edit distance, prefix matching, and split-word detection — with zero false positives."
+	},
+	"featuresTypoTolerance": {
+		"title": "Search that reads your mind",
+		"subtitle": "AACsearch applies typo tolerance per-query. Zero config needed — it works well out of the box and is tunable when required.",
+		"items": {
+			"editDistance": {
+				"title": "Configurable edit distance",
+				"description": "Levenshtein distance is configurable per token. Default: 1 typo for words with 5+ chars, 2 typos for words with 8+ chars."
+			},
+			"prefixMatch": {
+				"title": "Prefix matching",
+				"description": "Incomplete words match documents that start with the typed prefix. Powers as-you-type autocomplete without exact-match requirements."
+			},
+			"splitWords": {
+				"title": "Split-word correction",
+				"description": "'macbook pro' matches 'macbookpro' and vice versa. Split-word detection catches missed spaces and compound words."
+			},
+			"customDictionary": {
+				"title": "Custom dictionary",
+				"description": "Whitelist brand names, product codes, and technical terms that should never be corrected by the typo-tolerance engine."
+			},
+			"performance": {
+				"title": "Zero-latency overhead",
+				"description": "Typo tolerance is implemented inside the Typesense search core. No extra round-trip, no external spell-check service."
+			},
+			"accuracy": {
+				"title": "High precision",
+				"description": "Short queries with many short words skip typo tolerance to avoid false positives. Configurable minimum token length."
+			}
+		}
+	},
+	"featuresSynonymsPage": {
+		"title": "Synonyms Management",
+		"description": "Map equivalent terms so users always find what they mean. One-way, two-way, and multi-term synonym rules — managed in the dashboard."
+	},
+	"featuresSynonyms": {
+		"title": "Every word they use, every document you have",
+		"subtitle": "Synonyms bridge the gap between how users describe things and how your catalogue names them. Manage rules in the dashboard, no redeploy needed.",
+		"items": {
+			"oneWay": {
+				"title": "One-way synonyms",
+				"description": "Map 'sofa to couch' without the reverse. Use one-way rules when your catalogue uses the formal term but users type the informal one."
+			},
+			"multiWay": {
+				"title": "Multi-way synonyms",
+				"description": "List equivalent terms: 'jumper, sweater, pullover, knitwear'. Any term matches documents containing any other."
+			},
+			"csvImport": {
+				"title": "CSV import",
+				"description": "Import synonym pairs in bulk from a CSV file. Paste your existing synonym list and it is applied instantly."
+			},
+			"realTimeUpdate": {
+				"title": "No-downtime updates",
+				"description": "Add or remove synonym rules without reindexing. Changes take effect on the next query, not the next deployment."
+			},
+			"scope": {
+				"title": "Per-collection scope",
+				"description": "Different synonym libraries per collection. Your products index and your docs index can have independent synonym rules."
+			},
+			"analytics": {
+				"title": "Synonym effectiveness",
+				"description": "See which synonym rules fire most often and which queries still return zero results despite synonym expansion."
+			}
+		}
+	},
+	"featuresRelevanceTuningPage": {
+		"title": "Relevance Tuning",
+		"description": "Control which results surface first. Field weights, boost rules, pinned items, and conditional ranking — all managed without code deploys."
+	},
+	"featuresRelevanceTuning": {
+		"title": "Results that match intent",
+		"subtitle": "AACsearch separates retrieval from ranking. Tune relevance in the dashboard — no schema migration, no reindex, no redeploy.",
+		"items": {
+			"fieldWeighting": {
+				"title": "Field weights",
+				"description": "Assign relative importance to title, description, tags, and custom fields. A title match outweighs a description match by default."
+			},
+			"boostRules": {
+				"title": "Boost rules",
+				"description": "Boost documents where in_stock is true or rating is 4.5+. Conditional boosts express merchandising logic declaratively."
+			},
+			"pinnedResults": {
+				"title": "Pinned results",
+				"description": "Fix specific documents to position 1, 2, or 3 for a given query. Used for sponsored results, featured products, and editorial picks."
+			},
+			"merchandising": {
+				"title": "Merchandising presets",
+				"description": "Save boost and pin configurations as named presets. Apply a Sale Season preset to all indexes in one click."
+			},
+			"scoring": {
+				"title": "Custom scoring",
+				"description": "Blend text relevance with numeric signals like price, recency, or popularity using a configurable scoring formula."
+			},
+			"analytics": {
+				"title": "Relevance analytics",
+				"description": "Measure CTR and zero-result rate before and after a tuning change. Roll back in one click if metrics regress."
+			}
+		}
+	},
+	"featuresCurationsPage": {
+		"title": "Curations & Pinning",
+		"description": "Override search results for specific queries. Pin products, exclude irrelevant hits, and schedule promotional placements — no engineering required."
+	},
+	"featuresCurations": {
+		"title": "Manual control, automatic delivery",
+		"subtitle": "Curations let merchandisers and editors override algorithmic results for high-value queries without touching the codebase.",
+		"items": {
+			"pinned": {
+				"title": "Pinned results",
+				"description": "Place specific documents at exact positions for a query. Sponsored items, featured products, or editorial picks stay where you put them."
+			},
+			"excluded": {
+				"title": "Excluded results",
+				"description": "Remove specific documents from a query result set entirely. Useful for out-of-season products or content under legal review."
+			},
+			"promoted": {
+				"title": "Promoted documents",
+				"description": "Elevate a document to the first page without assigning a fixed position. Promoted results compete at a higher score than organic results."
+			},
+			"triggerKeywords": {
+				"title": "Query triggers",
+				"description": "Curation rules activate on exact queries, prefix matches, or synonym matches. One rule can cover hundreds of query variants."
+			},
+			"schedule": {
+				"title": "Scheduled curations",
+				"description": "Set a start and end date on any curation rule. Promotional placements activate and deactivate automatically without manual intervention."
+			},
+			"analytics": {
+				"title": "Curation analytics",
+				"description": "Track impressions, clicks, and conversions for curated results. Compare against organic results to measure editorial lift."
+			}
+		}
+	},
+	"featuresStopwordsPage": {
+		"title": "Stopwords",
+		"description": "Remove noise words from queries automatically. Custom stopword lists per collection — improve precision without losing recall."
+	},
+	"featuresStopwords": {
+		"title": "Signal over noise",
+		"subtitle": "Stopwords remove words that add no search signal so index matching focuses on meaningful terms.",
+		"items": {
+			"customStopwords": {
+				"title": "Custom stopword lists",
+				"description": "Define your own stopword lists in addition to built-in language-specific defaults. Domain-specific noise words removed instantly."
+			},
+			"perCollection": {
+				"title": "Per-collection configuration",
+				"description": "Different stopword lists per collection. Your products index and knowledge base can have independent noise-word sets."
+			},
+			"languageAware": {
+				"title": "Language-aware defaults",
+				"description": "Built-in stopword lists for English, German, French, Spanish, and Russian. Override or extend per collection."
+			},
+			"analytics": {
+				"title": "Stopword analytics",
+				"description": "Identify which removed stopwords correlate with zero-result queries. Fine-tune your list based on real user data."
+			},
+			"realTime": {
+				"title": "No-downtime updates",
+				"description": "Add or remove stopwords without reindexing. Changes take effect immediately on the next query."
+			},
+			"performance": {
+				"title": "Zero query overhead",
+				"description": "Stopword filtering runs at query parse time, before index lookup. No measurable latency impact."
+			}
+		}
+	},
+	"integrationsShopifyPage": {
+		"title": "AACsearch for Shopify",
+		"description": "Replace Shopify native search with AACsearch in under an hour. Products, variants, and inventory sync automatically."
+	},
+	"integrationsShopify": {
+		"title": "Shopify search, reimagined",
+		"subtitle": "Connect your Shopify store to AACsearch in minutes. Products appear in search immediately after publish — no manual sync required.",
+		"items": {
+			"install": {
+				"title": "One-click install",
+				"description": "Install the AACsearch app from the Shopify App Store. Connect your index with your API key and you are live in minutes."
+			},
+			"productSync": {
+				"title": "Automatic product sync",
+				"description": "New products, price changes, and stock updates sync to AACsearch via Shopify webhooks. Changes appear in search in under a second."
+			},
+			"variantSync": {
+				"title": "Variant indexing",
+				"description": "Each product variant is indexed as a separate document. Customers can search by size, colour, or SKU directly."
+			},
+			"metafields": {
+				"title": "Custom metafields",
+				"description": "Index Shopify metafields as searchable and filterable fields. Expose custom product attributes without schema changes."
+			},
+			"widget": {
+				"title": "Storefront widget",
+				"description": "Drop the AACsearch widget into your theme with one line of Liquid. Instant search, facets, and analytics out of the box."
+			},
+			"analytics": {
+				"title": "Search analytics",
+				"description": "See which queries convert, which hit dead ends, and how search contributes to revenue in your AACsearch dashboard."
+			}
+		}
+	},
+	"integrationsWordpressPage": {
+		"title": "AACsearch for WordPress",
+		"description": "Replace WP_Query search with AACsearch. Posts, pages, custom post types, and ACF fields — all instantly searchable."
+	},
+	"integrationsWordpress": {
+		"title": "WordPress search, without compromise",
+		"subtitle": "The AACsearch WordPress plugin indexes your content automatically and replaces the default search with instant, typo-tolerant results.",
+		"items": {
+			"plugin": {
+				"title": "WordPress plugin",
+				"description": "Install from the WordPress plugin directory. Supports WP 6.x, multisite, and WooCommerce. One settings page, no code required."
+			},
+			"postSync": {
+				"title": "Post & page sync",
+				"description": "All post types sync on publish and update. Deleted posts are removed from the index automatically via WordPress hooks."
+			},
+			"customTypes": {
+				"title": "Custom post types & ACF",
+				"description": "Index custom post types and Advanced Custom Fields as searchable and facetable attributes. Full control over which fields are exposed."
+			},
+			"widget": {
+				"title": "Gutenberg search block",
+				"description": "Replace the default search widget with the AACsearch block. Instant results, facet filters, and keyboard navigation."
+			},
+			"multiSite": {
+				"title": "Multisite support",
+				"description": "Each site in a WordPress multisite network gets a separate AACsearch index with its own API key and analytics."
+			},
+			"analytics": {
+				"title": "Search analytics",
+				"description": "WordPress editors see top queries, zero-result rates, and search-driven page views directly in the AACsearch dashboard."
+			}
+		}
+	},
+	"integrationsWoocommercePage": {
+		"title": "AACsearch for WooCommerce",
+		"description": "WooCommerce search that scales with your catalog. Products, variations, and attributes synced in real time."
+	},
+	"integrationsWoocommerce": {
+		"title": "WooCommerce search that converts",
+		"subtitle": "Replace WooCommerce default search with AACsearch instant, faceted product search — integrated in under an hour.",
+		"items": {
+			"install": {
+				"title": "Plugin install",
+				"description": "Install from the WordPress plugin directory or upload manually. Requires WooCommerce 8.x and an AACsearch API key."
+			},
+			"productSync": {
+				"title": "Product sync",
+				"description": "Products sync on publish, update, and deletion. Stock changes trigger automatic index updates via WooCommerce webhooks."
+			},
+			"variantSync": {
+				"title": "Variation search",
+				"description": "Customers can search for specific variations by attribute — colour, size, material — without navigating to a product page first."
+			},
+			"orderSearch": {
+				"title": "Order search",
+				"description": "Index order history for logged-in customers. Fast, private order search scoped to the authenticated user account."
+			},
+			"widget": {
+				"title": "Storefront widget",
+				"description": "Drop-in widget for your WooCommerce theme. Renders instant search results, facets, and add-to-cart without leaving the overlay."
+			},
+			"analytics": {
+				"title": "Commerce analytics",
+				"description": "Track search-to-cart conversion, zero-result rate, and top queries. Identify gaps in your catalog from real search data."
+			}
+		}
+	},
+	"integrationsStrapiPage": {
+		"title": "AACsearch for Strapi",
+		"description": "Connect your Strapi CMS to AACsearch and get instant, multi-language search over all your content types."
+	},
+	"integrationsStrapi": {
+		"title": "Strapi + AACsearch",
+		"subtitle": "The AACsearch Strapi plugin syncs your content types automatically. Publish new content and it appears in search within a second.",
+		"items": {
+			"plugin": {
+				"title": "Strapi plugin",
+				"description": "Install via npm: strapi-plugin-aacsearch. Configure with your API key and the plugin handles the rest."
+			},
+			"contentTypes": {
+				"title": "All content types",
+				"description": "Map any Strapi content type to an AACsearch collection. Nested relations, dynamic zones, and media fields all supported."
+			},
+			"autoSync": {
+				"title": "Lifecycle hook sync",
+				"description": "Content syncs on afterCreate, afterUpdate, and afterDelete Strapi lifecycle hooks. Zero-latency updates."
+			},
+			"webhook": {
+				"title": "Webhook fallback",
+				"description": "Configure a Strapi webhook as a fallback sync path. Guarantees delivery even if the lifecycle hook is missed during a migration."
+			},
+			"widget": {
+				"title": "Frontend search widget",
+				"description": "Use the AACsearch browser SDK to build instant search for your Strapi-powered frontend — React, Vue, or vanilla JS."
+			},
+			"analytics": {
+				"title": "Content search analytics",
+				"description": "See which content types get the most search traffic and which queries find no results. Drive editorial decisions with search data."
+			}
+		}
+	},
+	"integrationsContentfulPage": {
+		"title": "AACsearch for Contentful",
+		"description": "Sync Contentful entries to AACsearch and power instant search for your content-driven product."
+	},
+	"integrationsContentful": {
+		"title": "Contentful + AACsearch",
+		"subtitle": "Connect Contentful to AACsearch with a webhook. New and updated entries appear in search within a second of publication.",
+		"items": {
+			"app": {
+				"title": "Contentful app",
+				"description": "Install the AACsearch app from the Contentful Marketplace. Configure index mappings for each content model in the UI."
+			},
+			"contentTypes": {
+				"title": "Content model mapping",
+				"description": "Map any content type field to an AACsearch attribute. Rich text fields are automatically converted to plain text for search."
+			},
+			"autoSync": {
+				"title": "Publish-triggered sync",
+				"description": "Contentful sends a webhook on every publish event. AACsearch processes the payload and updates the index in under a second."
+			},
+			"webhook": {
+				"title": "Webhook configuration",
+				"description": "Configure Contentful webhooks in your AACsearch dashboard — no code required. Events for create, update, unpublish, and archive."
+			},
+			"widget": {
+				"title": "JavaScript SDK",
+				"description": "Use the AACsearch browser SDK with any Contentful-powered frontend. React hooks, Vue composables, and vanilla JS all supported."
+			},
+			"analytics": {
+				"title": "Content analytics",
+				"description": "Understand which content entries surface in search, which topics have gaps, and how search drives content engagement."
+			}
+		}
+	},
+	"integrationsSanityPage": {
+		"title": "AACsearch for Sanity",
+		"description": "Index Sanity documents in AACsearch and power instant, schema-aware search for any Sanity-powered product."
+	},
+	"integrationsSanity": {
+		"title": "Sanity + AACsearch",
+		"subtitle": "GROQ queries select which documents to index. Sanity webhooks keep AACsearch in sync without any cron jobs.",
+		"items": {
+			"plugin": {
+				"title": "Sanity Studio plugin",
+				"description": "Install sanity-plugin-aacsearch from npm. Manage index mappings and trigger resyncs directly from Sanity Studio."
+			},
+			"schemaSync": {
+				"title": "Schema-aware indexing",
+				"description": "Map any Sanity schema type to an AACsearch collection. Portable text, references, and arrays flattened automatically."
+			},
+			"webhook": {
+				"title": "Webhook-driven sync",
+				"description": "Sanity delivers document changes to AACsearch via HTTPS webhook. New documents, updates, and deletions all handled automatically."
+			},
+			"groq": {
+				"title": "GROQ-selected fields",
+				"description": "Write a GROQ projection to select exactly which fields to index. Only the data your search needs leaves your Sanity dataset."
+			},
+			"widget": {
+				"title": "Frontend integration",
+				"description": "The AACsearch browser SDK works with any Sanity-powered frontend. Use the React hooks or vanilla JS client."
+			},
+			"analytics": {
+				"title": "Search analytics",
+				"description": "Track which document types get searched, which queries fail, and how search discovery drives downstream conversions."
+			}
+		}
+	},
+	"integrationsNextJsPage": {
+		"title": "AACsearch for Next.js",
+		"description": "Add search to your Next.js app in minutes. Server Components, App Router, and edge-compatible SDK — all supported."
+	},
+	"integrationsNextJs": {
+		"title": "Next.js + AACsearch",
+		"subtitle": "The AACsearch SDK is designed for Next.js. Works with App Router, Pages Router, Server Components, and Vercel Edge Runtime.",
+		"items": {
+			"sdk": {
+				"title": "TypeScript SDK",
+				"description": "Install the AACsearch npm package. Full TypeScript types, zero external dependencies, 8KB gzipped. Works in any JS runtime."
+			},
+			"serverComponents": {
+				"title": "React Server Components",
+				"description": "Call the AACsearch API directly from Server Components. No client bundle cost, no hydration overhead for search-result pages."
+			},
+			"appRouter": {
+				"title": "App Router compatible",
+				"description": "Route handlers, server actions, and streaming — all work with the AACsearch SDK. No special adapters required."
+			},
+			"caching": {
+				"title": "Next.js cache integration",
+				"description": "Use fetch with next revalidate or ISR to cache search results. AACsearch honors standard HTTP Cache-Control headers."
+			},
+			"widget": {
+				"title": "Client-side widget",
+				"description": "Add the AACsearch widget to your Next.js layout with one script tag, or use the React SDK for a fully customisable search UI."
+			},
+			"analytics": {
+				"title": "Edge-compatible analytics",
+				"description": "Track search events from the Vercel Edge Network. No cold starts, no timeout risk for lightweight analytics calls."
+			}
+		}
+	},
+	"integrationsReactPage": {
+		"title": "AACsearch for React",
+		"description": "React hooks, components, and an SDK for building instant search UIs. Typed, composable, and framework-agnostic."
+	},
+	"integrationsReact": {
+		"title": "React + AACsearch",
+		"subtitle": "Build a fully custom search UI with React hooks and the AACsearch SDK. No magic — just data-fetching and state you control.",
+		"items": {
+			"sdk": {
+				"title": "React SDK",
+				"description": "Install the AACsearch React package. Hooks for search, autocomplete, and facets. Full TypeScript types, zero peer dependencies."
+			},
+			"hooks": {
+				"title": "Composable hooks",
+				"description": "useSearch, useAutocomplete, and useFacets return typed data and loading states. Compose them into any UI you want."
+			},
+			"components": {
+				"title": "Headless components",
+				"description": "Unstyled headless components for search input, results list, and facets. Bring your own CSS — no Tailwind lock-in."
+			},
+			"ssr": {
+				"title": "SSR & hydration",
+				"description": "Pre-fetch search results on the server and hydrate on the client without a flash of empty content."
+			},
+			"typescript": {
+				"title": "Full TypeScript support",
+				"description": "SDK types are generated from the AACsearch OpenAPI spec. Autocomplete for every field in your collection schema."
+			},
+			"analytics": {
+				"title": "Event tracking",
+				"description": "The SDK includes a trackEvent call for result clicks, filter usage, and zero-result reporting. Feeds your AACsearch dashboard."
+			}
+		}
+	},
+	"compareTypesensePage": {
+		"title": "AACsearch vs Typesense",
+		"description": "AACsearch is built on Typesense. The difference: we add multi-tenancy, analytics, a hosted control plane, and managed ops on top."
+	},
+	"compareTypesense": {
+		"title": "Self-host vs. managed cloud",
+		"subtitle": "Typesense is the engine we run. AACsearch wraps it with the SaaS layer your team needs to go from zero to production in an afternoon.",
+		"items": {
+			"hosting": {
+				"title": "No ops overhead",
+				"description": "AACsearch manages Typesense upgrades, cluster sizing, backup, and monitoring. You search — we run the infrastructure."
+			},
+			"multiTenancy": {
+				"title": "Multi-tenancy built in",
+				"description": "Org-scoped API keys, scoped tokens, and per-key origin allow-lists are AACsearch additions. Raw Typesense has no multi-tenant layer."
+			},
+			"analytics": {
+				"title": "Search analytics",
+				"description": "AACsearch adds a full analytics pipeline: query logs, zero-result tracking, top queries, and a dashboard. Not included in Typesense OSS."
+			},
+			"connectors": {
+				"title": "CMS connectors",
+				"description": "PrestaShop, Bitrix, WordPress, and Shopify connectors are AACsearch additions. Typesense has an API — connectors are built separately."
+			},
+			"pricing": {
+				"title": "Predictable pricing",
+				"description": "AACsearch pricing is per search-unit — you know your bill before the month ends. Typesense self-host means variable infrastructure costs."
+			},
+			"support": {
+				"title": "Dedicated support",
+				"description": "AACsearch plans include email support and an SLA. Typesense community support is forum-based with no response time guarantees."
+			}
+		}
+	},
+	"compareOpenSearchPage": {
+		"title": "AACsearch vs OpenSearch",
+		"description": "AACsearch is a focused, fast search API. OpenSearch is a full analytics platform. Here is when each makes sense."
+	},
+	"compareOpenSearch": {
+		"title": "Focused search vs. analytics platform",
+		"subtitle": "OpenSearch is powerful but complex. AACsearch is purpose-built for application search — simpler schema, faster setup, lower latency.",
+		"items": {
+			"complexity": {
+				"title": "Days, not weeks",
+				"description": "AACsearch indexes your first collection in an afternoon. OpenSearch cluster setup, mapping design, and ILM policies take a team and weeks."
+			},
+			"performance": {
+				"title": "Sub-50ms vs. 100-500ms",
+				"description": "AACsearch P99 latency is under 50ms. OpenSearch query latency typically ranges 100-500ms on equivalent hardware."
+			},
+			"schema": {
+				"title": "Schema simplicity",
+				"description": "AACsearch collections have a flat, typed schema. OpenSearch mapping design with nested objects and dynamic templates is a specialty skill."
+			},
+			"multiTenancy": {
+				"title": "Native multi-tenancy",
+				"description": "AACsearch org-scoped keys and scoped tokens are first-class features. OpenSearch multi-tenancy requires index-per-tenant or security plugins."
+			},
+			"analytics": {
+				"title": "Search-specific analytics",
+				"description": "AACsearch provides query logs, zero-result rates, and CTR — built for product teams. OpenSearch analytics targets infrastructure monitoring."
+			},
+			"pricing": {
+				"title": "Predictable cost",
+				"description": "AACsearch charges per search-unit. OpenSearch on AWS costs depend on instance type, storage I/O, and data transfer — difficult to forecast."
+			}
+		}
+	},
+	"compareSolrPage": {
+		"title": "AACsearch vs Apache Solr",
+		"description": "Solr is battle-tested but requires specialists. AACsearch gives you the same reliability with a modern API and zero operations overhead."
+	},
+	"compareSolr": {
+		"title": "Modern API vs. legacy complexity",
+		"subtitle": "Solr has powered enterprise search for 20 years. AACsearch gives a junior developer the same capabilities with a one-afternoon setup.",
+		"items": {
+			"modernApi": {
+				"title": "REST API vs. Solr query DSL",
+				"description": "AACsearch uses a clean JSON REST API. Solr queries use its own DSL — q, fq, fl, facet.field — with a steep learning curve."
+			},
+			"setup": {
+				"title": "Minutes vs. days",
+				"description": "AACsearch setup: create an index, ingest documents, call the API. Solr requires Java, ZooKeeper (for SolrCloud), schema design, and core management."
+			},
+			"performance": {
+				"title": "Faster out of the box",
+				"description": "AACsearch returns results in under 50ms with no tuning. Solr performance requires expert configuration: cache sizing and JVM tuning."
+			},
+			"multiTenancy": {
+				"title": "Built-in multi-tenancy",
+				"description": "AACsearch isolates tenants at the API key level. Solr multi-tenancy means separate cores or collections with manual access control."
+			},
+			"analyticsBuiltin": {
+				"title": "Built-in analytics",
+				"description": "AACsearch records every query and provides a dashboard. Solr has no built-in query analytics — you need to parse logs with external tools."
+			},
+			"pricing": {
+				"title": "No infrastructure cost",
+				"description": "AACsearch is fully managed. Solr means provisioning, operating, and scaling your own cluster — or paying for an expensive managed service."
+			}
+		}
+	},
+	"compareWeaviatePage": {
+		"title": "AACsearch vs Weaviate",
+		"description": "Weaviate is a vector database. AACsearch is a full-text plus vector hybrid search API. Here is what you get from each."
+	},
+	"compareWeaviate": {
+		"title": "Vector DB vs. hybrid search API",
+		"subtitle": "Both support vectors, but AACsearch adds keyword search, facets, typo tolerance, and a multi-tenant hosting layer that Weaviate lacks.",
+		"items": {
+			"hybridSearch": {
+				"title": "Keyword + vector in one call",
+				"description": "AACsearch hybrid search combines BM25 keyword relevance with vector similarity in one query. Weaviate BM25 support is secondary to its vector focus."
+			},
+			"facets": {
+				"title": "Faceted navigation",
+				"description": "AACsearch computes facet counts on every query — essential for e-commerce and documentation search. Weaviate has no native faceted navigation."
+			},
+			"typoTolerance": {
+				"title": "Typo tolerance",
+				"description": "AACsearch has built-in fuzzy matching and typo tolerance for end-user queries. Weaviate vector search does not help with misspelled terms."
+			},
+			"multiTenancy": {
+				"title": "Native multi-tenancy",
+				"description": "AACsearch org-scoped keys and per-tenant analytics are first-class features. Weaviate multi-tenancy requires separate schemas and manual isolation."
+			},
+			"pricing": {
+				"title": "Transparent pricing",
+				"description": "AACsearch charges per search-unit with a predictable monthly bill. Weaviate cloud pricing is dimension times vector times query — complex to forecast."
+			},
+			"widget": {
+				"title": "Drop-in search widget",
+				"description": "AACsearch ships a 14KB browser widget with instant search, facets, and analytics. Weaviate has no equivalent — you build the UI from scratch."
+			}
+		}
+	},
+	"comparePineconePage": {
+		"title": "AACsearch vs Pinecone",
+		"description": "Pinecone is a pure vector database. AACsearch combines keyword and vector search for applications where both relevance modes matter."
+	},
+	"comparePinecone": {
+		"title": "Pure vector vs. full search platform",
+		"subtitle": "Pinecone excels at pure vector recall. AACsearch adds the keyword search, facets, and product UX layer that most applications actually need.",
+		"items": {
+			"keywordSearch": {
+				"title": "Keyword + semantic",
+				"description": "AACsearch handles both typo-tolerant keyword search and semantic vector search. Pinecone is vector-only — keyword queries need a separate system."
+			},
+			"facets": {
+				"title": "Faceted navigation",
+				"description": "AACsearch computes facet counts with every query. Pinecone metadata filtering is available but with no facet count computation."
+			},
+			"hybridSearch": {
+				"title": "Configurable hybrid weights",
+				"description": "AACsearch lets you tune the balance between BM25 and vector similarity per query. Pinecone hybrid search has limited weighting control."
+			},
+			"pricing": {
+				"title": "Simpler pricing",
+				"description": "AACsearch charges per search-unit. Pinecone charges per vector dimension stored times queries times pod size — complex to model."
+			},
+			"performance": {
+				"title": "Search API, not just a vector store",
+				"description": "AACsearch returns ranked, filtered, highlighted results in under 50ms. Pinecone returns vector IDs and scores — your app assembles the rest."
+			},
+			"widget": {
+				"title": "Full search UX included",
+				"description": "AACsearch includes a hosted widget, analytics dashboard, and SDK. Pinecone is an API — all UX is your responsibility."
+			}
+		}
+	},
+	"pressPage": {
+		"title": "Press & Media",
+		"description": "Media kit, press releases, boilerplate, and contact details for journalists and media professionals."
+	},
+	"press": {
+		"title": "In the press",
+		"subtitle": "Find everything you need to cover AACsearch — our story, media kit, approved assets, and a direct line to our communications team.",
+		"items": {
+			"mediaKit": {
+				"title": "Media kit",
+				"description": "Logo files, product screenshots, founder photos, and brand guidelines in a single downloadable zip."
+			},
+			"boilerplate": {
+				"title": "Company boilerplate",
+				"description": "AACsearch is a hosted search-as-a-service platform built on Typesense. Founded in 2024, serving 500+ companies across 40 countries."
+			},
+			"pressReleases": {
+				"title": "Press releases",
+				"description": "Official announcements for product launches, funding rounds, and major partnerships — formatted and ready to republish."
+			},
+			"coverage": {
+				"title": "Press coverage",
+				"description": "Selected articles, podcast appearances, and conference talks featuring AACsearch and our team."
+			},
+			"contact": {
+				"title": "Media contact",
+				"description": "Send press inquiries to press@aacsearch.com. We respond to media requests within one business day."
+			},
+			"assets": {
+				"title": "Brand assets",
+				"description": "Download our logo in SVG, PNG, and dark/light variants. Usage guidelines included — see Brand page for full details."
+			}
+		}
+	},
+	"brandPage": {
+		"title": "Brand Guidelines",
+		"description": "Logos, colours, typography, and usage rules. Everything you need to represent AACsearch correctly in your integrations and co-marketing."
+	},
+	"brand": {
+		"title": "How we look",
+		"subtitle": "Our brand is built on clarity and speed — the same values we bring to search. Use these assets to represent AACsearch accurately.",
+		"items": {
+			"logo": {
+				"title": "Logo",
+				"description": "Use the primary logo on light backgrounds and the reversed logo on dark. Minimum size 24px. Never stretch, rotate, or recolour."
+			},
+			"colors": {
+				"title": "Colours",
+				"description": "Primary: #0F172A (night). Accent: #6366F1 (indigo-500). Use the accent sparingly — for interactive elements and highlights only."
+			},
+			"typography": {
+				"title": "Typography",
+				"description": "Headings and body: Inter. Monospace: JetBrains Mono. Both available from Google Fonts and Fontsource."
+			},
+			"guidelines": {
+				"title": "Usage guidelines",
+				"description": "Do not use the AACsearch logo in a way that implies endorsement. Do not modify the logo. Attribution is always welcome but never required."
+			},
+			"assets": {
+				"title": "Asset downloads",
+				"description": "Download the full brand kit: SVG logo, favicon, og-image template, and colour palette in ASE, Sketch, and Figma format."
+			},
+			"contact": {
+				"title": "Brand questions",
+				"description": "For co-marketing materials, conference sponsorships, or unusual usage questions, email brand@aacsearch.com."
+			}
+		}
+	},
+	"resourcesPage": {
+		"title": "Resources",
+		"description": "Documentation, tutorials, case studies, and community links — everything you need to get the most from AACsearch."
+	},
+	"resources": {
+		"title": "Everything you need to ship search",
+		"subtitle": "From quickstart guides to deep-dive tutorials, our resource library covers every aspect of building with AACsearch.",
+		"items": {
+			"docs": {
+				"title": "Documentation",
+				"description": "API reference, SDK guides, schema design tips, and deployment guides. Versioned and searchable."
+			},
+			"blog": {
+				"title": "Engineering blog",
+				"description": "Deep dives into search relevance, vector search, multi-tenancy architecture, and AACsearch internals."
+			},
+			"changelog": {
+				"title": "Changelog",
+				"description": "Every feature, fix, and breaking change — logged with the deployment date and linked to the relevant documentation."
+			},
+			"tutorials": {
+				"title": "Tutorials",
+				"description": "Step-by-step guides for Shopify, WordPress, Next.js, and more. From zero to production in under an afternoon."
+			},
+			"community": {
+				"title": "Community",
+				"description": "Ask questions, share integrations, and get peer support in the AACsearch community forum and Discord."
+			},
+			"support": {
+				"title": "Support",
+				"description": "Email support for Starter and above. Enterprise plans include a dedicated Slack channel and contractual SLA."
+			}
+		}
+	},
+	"glossaryPage": {
+		"title": "Search Glossary",
+		"description": "Plain-language definitions of search, indexing, and relevance concepts used across AACsearch documentation and the industry."
+	},
+	"glossary": {
+		"title": "The language of search",
+		"subtitle": "Search has its own vocabulary. Use this glossary to understand AACsearch documentation and communicate precisely with your team.",
+		"items": {
+			"searchIndex": {
+				"title": "Search index",
+				"description": "A data structure optimised for fast text retrieval. AACsearch maintains a Typesense collection per index, with automatic alias management."
+			},
+			"facet": {
+				"title": "Facet",
+				"description": "A filterable attribute returned alongside search results with document counts. Enables guided navigation without additional API calls."
+			},
+			"relevance": {
+				"title": "Relevance",
+				"description": "How well a document matches a query. AACsearch combines BM25 text relevance, vector similarity, field weights, and custom boost rules."
+			},
+			"invertedIndex": {
+				"title": "Inverted index",
+				"description": "The core data structure of full-text search. Maps each token to the documents containing it. AACsearch maintains this automatically."
+			},
+			"embedding": {
+				"title": "Embedding",
+				"description": "A numeric vector representation of text semantics. AACsearch can store and query embeddings for semantic and hybrid search."
+			},
+			"searchUnit": {
+				"title": "Search unit",
+				"description": "AACsearch billing unit. One search unit equals one search query or one document indexed. Used to calculate your monthly plan allocation."
+			}
+		}
+	},
+	"trustPage": {
+		"title": "Trust Center",
+		"description": "Security posture, compliance certifications, data residency options, and our responsible disclosure policy."
+	},
+	"trust": {
+		"title": "Built to earn your trust",
+		"subtitle": "AACsearch is designed from the ground up for security and compliance. Here is how we protect your data and your users.",
+		"items": {
+			"soc2": {
+				"title": "SOC 2 Type II",
+				"description": "AACsearch is SOC 2 Type II certified. The audit report is available under NDA to Enterprise plan customers."
+			},
+			"gdpr": {
+				"title": "GDPR & CCPA",
+				"description": "Data Processing Agreement available to all paying plans. Data residency in EU and US. Right-to-be-forgotten deletion within 72 hours."
+			},
+			"encryption": {
+				"title": "Encryption everywhere",
+				"description": "AES-256 at rest, TLS 1.3 in transit. API keys are stored as bcrypt hashes and never logged in plaintext."
+			},
+			"dataResidency": {
+				"title": "Data residency",
+				"description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
+			},
+			"auditLog": {
+				"title": "Audit log",
+				"description": "Every admin action — index creation, key issuance, member invitation — is logged with actor identity, timestamp, and org context."
+			},
+			"disclosure": {
+				"title": "Responsible disclosure",
+				"description": "Found a vulnerability? Email security@aacsearch.com. We follow a 90-day coordinated disclosure timeline and credit all reporters."
+			}
+		}
+	},
+	"newsletterPage": {
+		"title": "Newsletter",
+		"description": "Monthly updates on search engineering, AACsearch releases, and the open-source projects we follow."
+	},
+	"newsletter": {
+		"title": "Stay in the loop",
+		"subtitle": "One email per month. Search engineering deep-dives, product updates, and links worth your time.",
+		"items": {
+			"frequency": {
+				"title": "Monthly cadence",
+				"description": "One email per month, every first Tuesday. No weekly digests, no daily updates — we respect your inbox."
+			},
+			"content": {
+				"title": "What you will get",
+				"description": "Search engineering articles, AACsearch release notes, open-source highlights, and one community spotlight per issue."
+			},
+			"past": {
+				"title": "Read past issues",
+				"description": "Every newsletter is archived on our blog. Read before subscribing — you will know exactly what you are signing up for."
+			},
+			"privacy": {
+				"title": "Your data stays yours",
+				"description": "We use a self-hosted newsletter platform. Your email is never shared with ad networks or sold to data brokers."
+			},
+			"unsubscribe": {
+				"title": "One-click unsubscribe",
+				"description": "Every email has a one-click unsubscribe link. No dark patterns, no confirmation dialogs."
+			},
+			"social": {
+				"title": "Follow the highlights",
+				"description": "Newsletter highlights are posted on LinkedIn. Follow us there for shorter-form engineering updates."
+			}
+		}
+	},
+	"communityPage": {
+		"title": "Community",
+		"description": "Join the AACsearch community — ask questions, share projects, contribute to open source, and shape the roadmap."
+	},
+	"community": {
+		"title": "Build search, together",
+		"subtitle": "AACsearch is built in public. The community votes on features, contributes connectors, and helps newcomers ship faster.",
+		"items": {
+			"github": {
+				"title": "GitHub",
+				"description": "Star the repo, open issues, or contribute a PR. All public roadmap items are tracked as GitHub issues."
+			},
+			"discord": {
+				"title": "Discord",
+				"description": "Real-time chat for questions, integrations, and troubleshooting. 500+ members, active every day."
+			},
+			"forum": {
+				"title": "Community forum",
+				"description": "Long-form Q&A for architecture questions, integration guides, and feature proposals. Fully searchable — powered by AACsearch."
+			},
+			"showcase": {
+				"title": "Showcase",
+				"description": "See what the community has built with AACsearch. Submit your project to be featured in the monthly newsletter."
+			},
+			"contribute": {
+				"title": "Contribute",
+				"description": "We accept contributions to connectors, SDK examples, and documentation. See CONTRIBUTING.md for guidelines."
+			},
+			"roadmap": {
+				"title": "Vote on the roadmap",
+				"description": "Every public roadmap item is open for community upvotes. The most-voted features ship first."
+			}
+		}
+	},
+	"supportPage": {
+		"title": "Support",
+		"description": "Documentation, community, and direct support — whatever level of help your team needs to succeed with AACsearch."
+	},
+	"support": {
+		"title": "We have got your back",
+		"subtitle": "AACsearch support ranges from self-serve documentation to a dedicated Slack channel for Enterprise customers.",
+		"items": {
+			"documentation": {
+				"title": "Documentation",
+				"description": "Full API reference, SDK guides, and integration tutorials. Versioned, searchable, and updated with every release."
+			},
+			"community": {
+				"title": "Community forum",
+				"description": "Ask questions and get peer support. Most questions get an answer within a few hours from the community or the AACsearch team."
+			},
+			"email": {
+				"title": "Email support",
+				"description": "Email support is included with Starter and above plans. Response SLA: 1 business day for Starter, 4 hours for Pro."
+			},
+			"chat": {
+				"title": "Live chat",
+				"description": "In-dashboard live chat for Pro and Business plan customers. Connects directly to the AACsearch support team during business hours."
+			},
+			"slack": {
+				"title": "Dedicated Slack channel",
+				"description": "Enterprise customers get a shared Slack Connect channel with the AACsearch engineering and support team."
+			},
+			"sla": {
+				"title": "Support SLA",
+				"description": "Enterprise SLA: 99.95% uptime, 4-hour critical response, dedicated channel manager, and named technical contact."
+			}
+		}
+	},
+	"statusPage": {
+		"title": "Service Status",
+		"description": "Real-time status of the AACsearch API, dashboard, and global infrastructure. Subscribe to incident notifications."
+	},
+	"status": {
+		"title": "System status",
+		"subtitle": "We measure uptime across every component of the AACsearch platform and publish incident reports within 24 hours.",
+		"items": {
+			"api": {
+				"title": "Search API",
+				"description": "The AACsearch public search API. Measures end-to-end latency and availability from five global probe locations."
+			},
+			"dashboard": {
+				"title": "Dashboard",
+				"description": "The AACsearch web dashboard and management API. Includes oRPC endpoints, auth, and organisation management."
+			},
+			"ingest": {
+				"title": "Ingest pipeline",
+				"description": "Document ingestion from the Connector API and REST API. Measures queue depth, processing latency, and error rate."
+			},
+			"analytics": {
+				"title": "Analytics pipeline",
+				"description": "Search event collection, aggregation, and dashboard updates. Typically lags real-time by 60-90 seconds."
+			},
+			"incidents": {
+				"title": "Incident history",
+				"description": "Every incident is documented with timeline, root cause, and remediation steps. Published within 24 hours of resolution."
+			},
+			"subscribe": {
+				"title": "Subscribe to alerts",
+				"description": "Get notified by email or webhook when incident status changes. Powered by our public status API."
+			}
+		}
+	},
+	"faqPage": {
+		"title": "Frequently Asked Questions",
+		"description": "Quick answers to the most common questions about AACsearch pricing, setup, data, and support."
+	},
+	"faq": {
+		"title": "Common questions, clear answers",
+		"subtitle": "Cannot find your answer here? Search our documentation or ask in the community forum.",
+		"items": {
+			"searchUnit": {
+				"title": "What is a search unit?",
+				"description": "One search unit equals one search query OR one document indexed. Your monthly plan includes a set number of search units, pooled across all indexes."
+			},
+			"pricing": {
+				"title": "How does pricing work?",
+				"description": "AACsearch charges a flat monthly fee per plan tier. Overages are billed at a per-search-unit rate. No hidden fees, no egress charges."
+			},
+			"scaling": {
+				"title": "How does it scale?",
+				"description": "AACsearch scales horizontally. The hosted platform handles traffic spikes automatically. There is no per-replica or per-shard cost."
+			},
+			"dataResidency": {
+				"title": "Where is my data stored?",
+				"description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
+			},
+			"migration": {
+				"title": "Can I migrate from Algolia?",
+				"description": "Yes. The AACsearch REST API is compatible with Algolia-style collection schemas. We provide a migration guide and one-time import tooling."
+			},
+			"selfHost": {
+				"title": "Can I self-host?",
+				"description": "Yes. AACsearch uses Typesense as its search engine. You can run Typesense yourself and use the AACsearch SDK against your own cluster."
+			}
+		}
+	},
+	"affiliatePage": {
+		"title": "Affiliate Program",
+		"description": "Earn recurring commissions by referring developers and companies to AACsearch. Join the affiliate program today."
+	},
+	"affiliate": {
+		"title": "Earn with AACsearch",
+		"subtitle": "Recommend AACsearch to your audience and earn 20% recurring commission on every paying customer you refer.",
+		"items": {
+			"commission": {
+				"title": "20% recurring commission",
+				"description": "Earn 20% of the monthly plan fee for every customer you refer, for the lifetime of their subscription. No cap, no expiry."
+			},
+			"tracking": {
+				"title": "Reliable attribution",
+				"description": "90-day cookie window. Affiliate attribution is tracked across devices via first-party cookies and UTM parameters."
+			},
+			"creatives": {
+				"title": "Marketing assets",
+				"description": "Banners, email templates, comparison tables, and code examples — all ready to embed in tutorials, newsletters, and social posts."
+			},
+			"payments": {
+				"title": "Monthly payouts",
+				"description": "Payouts processed on the 15th of every month via Stripe or wire transfer. Minimum payout threshold: $50."
+			},
+			"supportChannel": {
+				"title": "Affiliate support",
+				"description": "Dedicated affiliate manager, early access to new features, and a private affiliate Discord channel for networking."
+			},
+			"apply": {
+				"title": "Apply now",
+				"description": "Apply at affiliate.aacsearch.com. We review applications within 3 business days. No minimum audience size required."
+			}
+		}
+	},
+	"pricingPlansPage": {
+		"title": "Compare Plans",
+		"description": "Detailed feature comparison across Free, Starter, Pro, Business, and Enterprise plans."
+	},
+	"pricingPlans": {
+		"title": "Plans for every stage",
+		"subtitle": "Start free, upgrade when you need more search units, indexes, or support. All plans include the full API and dashboard.",
+		"items": {
+			"free": {
+				"title": "Free",
+				"description": "10,000 search units per month, 1 index, community support. Perfect for side projects and proof-of-concept implementations."
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "250,000 search units per month, 5 indexes, email support. Ideal for small SaaS products and growing developer tools."
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "1 million search units per month, 20 indexes, custom origin allow-lists, priority email support. Built for production SaaS."
+			},
+			"business": {
+				"title": "Business",
+				"description": "5 million search units per month, unlimited indexes, SSO, audit log, 4-hour email SLA. For teams that depend on search."
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Unmetered search units, dedicated cluster, 99.95% SLA, Slack support channel, and a named technical account manager."
+			},
+			"custom": {
+				"title": "Need something different?",
+				"description": "Non-standard requirements — on-prem deployment, data residency agreements, white-labelling — are handled as custom contracts."
+			}
+		}
 	}
 }

@@ -107,13 +107,13 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 	const retryMutation = useMutation({
 		...orpc.search.retryFailedBatches.mutationOptions(),
 		onSuccess: (result) => {
-			toastSuccess(`${result.retriedCount} batch(es) queued for retry.`);
+			toastSuccess(t("search.importJobs.retrySuccess", { count: result.retriedCount }));
 			void queryClient.invalidateQueries({
 				queryKey: orpc.search.importJobs.key(),
 			});
 		},
 		onError: () => {
-			toastError("Failed to retry batches. Please try again.");
+			toastError(t("search.importJobs.retryError"));
 		},
 	});
 

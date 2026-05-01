@@ -1,1547 +1,1564 @@
 {
-  "admin": {
-    "menu": {
-      "organizations": "Organizaciones",
-      "users": "Usuarios"
-    },
-    "organizations": {
-      "backToList": "Volver a organizaciones",
-      "confirmDelete": {
-        "confirm": "Eliminar",
-        "message": "Estas seguro de que quieres eliminar esta organizacion? Esta accion no se puede deshacer.",
-        "title": "Eliminar organizacion"
-      },
-      "create": "Crear",
-      "delete": "Eliminar",
-      "deleteOrganization": {
-        "deleted": "La organizacion se ha eliminado correctamente.",
-        "deleting": "Eliminando organizacion...",
-        "notDeleted": "No se pudo eliminar la organizacion. Intentalo de nuevo."
-      },
-      "edit": "Editar",
-      "form": {
-        "createTitle": "Crear una organizacion",
-        "name": "Nombre de la organizacion",
-        "notifications": {
-          "error": "No se pudo guardar la organizacion. Intentalo de nuevo mas tarde.",
-          "success": "La organizacion se ha guardado."
-        },
-        "save": "Guardar",
-        "updateTitle": "Editar organizacion"
-      },
-      "loading": "Cargando organizaciones...",
-      "membersCount": "{count} {count, plural, one {miembro} other {miembros}}",
-      "search": "Buscar una organizacion...",
-      "title": "Gestionar organizaciones"
-    },
-    "title": "Administracion",
-    "users": {
-      "confirmDelete": {
-        "confirm": "Eliminar",
-        "message": "Estas seguro de que quieres eliminar este usuario? Esta accion no se puede deshacer.",
-        "title": "Eliminar usuario"
-      },
-      "delete": "Eliminar",
-      "deleteUser": {
-        "deleted": "El usuario se ha eliminado correctamente.",
-        "deleting": "Eliminando usuario...",
-        "notDeleted": "No se pudo eliminar el usuario. Intentalo de nuevo."
-      },
-      "emailVerified": {
-        "verified": "Email verificado",
-        "waiting": "Email esperando verificacion"
-      },
-      "impersonate": "Personificar",
-      "impersonation": {
-        "impersonating": "Personificando como {name}..."
-      },
-      "loading": "Cargando usuarios...",
-      "resendVerificationMail": {
-        "error": "No se pudo reenviar el correo de verificacion. Intentalo de nuevo.",
-        "submitting": "Reenviando correo de verificacion...",
-        "success": "El correo de verificacion ha sido enviado.",
-        "title": "Reenviar correo de verificacion"
-      },
-      "search": "Buscar por nombre o email...",
-      "title": "Gestionar usuarios",
-      "assignAdminRole": "Asignar rol de administrador",
-      "removeAdminRole": "Eliminar rol de administrador"
-    },
-    "description": "Gestiona tu aplicacion.",
-    "config": {
-      "title": "Configuración",
-      "loadError": "No se pudieron cargar los datos de configuración.",
-      "application": "Aplicación",
-      "appName": "Nombre de la app",
-      "nodeVersion": "Versión de Node.js",
-      "runtimeEnv": "Entorno",
-      "platform": "Plataforma",
-      "uptime": "Tiempo activo",
-      "typesenseHealth": "Estado del motor de búsqueda",
-      "healthy": "Saludable",
-      "unhealthy": "No saludable",
-      "version": "Versión",
-      "databaseStats": "Estadísticas de base de datos",
-      "users": "Usuarios",
-      "organizations": "Organizaciones",
-      "searchIndexes": "Índices de búsqueda",
-      "apiKeys": "Claves API",
-      "usageEvents": "Eventos de uso",
-      "statsError": "No se pudieron obtener estadísticas.",
-      "services": "Servicios externos",
-      "configured": "Configurado",
-      "notConfigured": "No configurado"
-    },
-    "integrations": {
-      "title": "Integraciones",
-      "loadError": "No se pudo verificar el estado de integración.",
-      "database": "Base de datos",
-      "typesense": "AACsearch Engine",
-      "mail": "Correo",
-      "payments": "Pagos",
-      "storage": "Almacenamiento",
-      "walletProvider": "Proveedor de billetera",
-      "configured": "Configurado",
-      "notConfigured": "No configurado",
-      "endpoint": "Endpoint"
-    },
-    "jobs": {
-      "title": "Tareas",
-      "loadError": "No se pudo cargar el estado de las tareas.",
-      "backgroundJobs": "Tareas en segundo plano",
-      "ready": "Listo",
-      "missingSecret": "Secreto faltante",
-      "recentSyncActivity": "Actividad de sincronización reciente",
-      "totalJobs": "Tareas totales",
-      "noSyncActivity": "Aún no hay actividad de sincronización."
-    }
-  },
-  "app": {
-    "menu": {
-      "accountSettings": "Configuracion de la cuenta",
-      "admin": "Admin",
-      "navigationTitle": "Menu",
-      "openNavigation": "Abrir navegacion",
-      "organizationSettings": "Configuracion de la organizacion",
-      "search": "Buscar",
-      "start": "Inicio"
-    },
-    "userMenu": {
-      "accountSettings": "Configuracion de la cuenta",
-      "colorMode": "Modo de color",
-      "documentation": "Documentacion",
-      "home": "Inicio",
-      "logout": "Cerrar sesion"
-    },
-    "notifications": {
-      "title": "Notificaciones",
-      "empty": "Aun no hay notificaciones.",
-      "markAllRead": "Marcar todo como leido",
-      "fallbackTitle": "Notificacion",
-      "aria": {
-        "open": "Abrir notificaciones"
-      }
-    }
-  },
-  "auth": {
-    "errors": {
-      "invalidEmailOrPassword": "Las credenciales introducidas no son validas. Compruebalas e intentelo de nuevo.",
-      "unknown": "Algo salio mal. Intentelo de nuevo.",
-      "userNotFound": "Este usuario no existe",
-      "failedToCreateUser": "No se pudo crear el usuario. Intentelo de nuevo.",
-      "failedToCreateSession": "No se pudo crear una sesion. Intentelo de nuevo.",
-      "failedToUpdateUser": "No se pudo actualizar el usuario. Intentelo de nuevo.",
-      "failedToGetSession": "No se pudo obtener la sesion.",
-      "invalidPassword": "La contrasena introducida es incorrecta.",
-      "invalidEmail": "El email introducido no es valido.",
-      "invalidToken": "El token introducido no es valido o ha caducado.",
-      "credentialAccountNotFound": "Cuenta no encontrada.",
-      "emailCanNotBeUpdated": "El email no se pudo actualizar. Intentelo de nuevo.",
-      "emailNotVerified": "Verifica tu email antes de iniciar sesion.",
-      "failedToGetUserInfo": "No se pudo cargar la informacion del usuario.",
-      "idTokenNotSupported": "El token de ID no es compatible.",
-      "passwordTooLong": "La contrasena es demasiado larga.",
-      "passwordTooShort": "La contrasena es demasiado corta.",
-      "providerNotFound": "Este proveedor no es compatible.",
-      "socialAccountAlreadyLinked": "Esta cuenta ya esta vinculada a un usuario.",
-      "userEmailNotFound": "Email no encontrado.",
-      "userAlreadyExists": "Este usuario ya existe.",
-      "userAlreadyExistsUseAnotherEmail": "El usuario ya existe. Usa otro email.",
-      "invalidInvitation": "La invitacion no es valida o ha caducado.",
-      "sessionExpired": "La sesion ha caducado.",
-      "failedToUnlinkLastAccount": "Error al desvincular la cuenta",
-      "accountNotFound": "Cuenta no encontrada"
-    },
-    "forgotPassword": {
-      "backToSignin": "Volver a iniciar sesion",
-      "email": "Email",
-      "hints": {
-        "linkNotSent": {
-          "message": "Lo sentimos, no pudimos enviarle un enlace para restablecer su contrasena. Intentelo de nuevo mas tarde.",
-          "title": "Enlace no enviado"
-        },
-        "linkSent": {
-          "message": "Te hemos enviado un enlace para continuar. Revisa tu bandeja de entrada.",
-          "title": "Enlace enviado"
-        }
-      },
-      "message": "Introduce tu direccion de email y te enviaremos un enlace para restablecer tu contrasena.",
-      "submit": "Enviar enlace",
-      "title": "Has olvidado tu contrasena?"
-    },
-    "login": {
-      "continueWith": "O continuar con",
-      "createAnAccount": "Crear una cuenta",
-      "dontHaveAnAccount": "Aun no tienes una cuenta?",
-      "forgotPassword": "Has olvidado tu contrasena?",
-      "hints": {
-        "invalidCredentials": "El email o la contrasena introducidos no son validos. Intentelo de nuevo.",
-        "linkSent": {
-          "message": "Te hemos enviado un enlace para continuar. Revisa tu bandeja de entrada.",
-          "title": "Enlace enviado"
-        }
-      },
-      "loginWithPasskey": "Iniciar sesion con passkey",
-      "modes": {
-        "magicLink": "Enlace magico",
-        "password": "***"
-      },
-      "submit": "Iniciar sesion",
-      "subtitle": "Introduce tus credenciales para iniciar sesion.",
-      "title": "Bienvenido de nuevo",
-      "sendMagicLink": "Enviar enlace magico"
-    },
-    "resetPassword": {
-      "backToSignin": "Volver a iniciar sesion",
-      "hints": {
-        "error": "Lo sentimos, no pudimos restablecer tu contrasena. Intentelo de nuevo.",
-        "success": "Tu contrasena se ha restablecido correctamente."
-      },
-      "message": "Introduce una nueva contrasena.",
-      "newPassword": "Nueva contrasena",
-      "submit": "Restablecer contrasena",
-      "title": "Restablecer tu contrasena"
-    },
-    "signup": {
-      "alreadyHaveAccount": "Ya tienes una cuenta?",
-      "email": "Email",
-      "hints": {
-        "signupFailed": "Lo sentimos, no pudimos crear tu cuenta. Intentelo de nuevo mas tarde.",
-        "verifyEmail": "Te hemos enviado un enlace para verificar tu email. Revisa tu bandeja de entrada."
-      },
-      "message": "Nos alegra que quieras unirte. Rellena el siguiente formulario para crear tu cuenta.",
-      "name": "Nombre",
-      "password": "***",
-      "signIn": "Iniciar sesion",
-      "submit": "Crear cuenta",
-      "title": "Crear una cuenta"
-    },
-    "verify": {
-      "title": "Verifica tu cuenta",
-      "code": "Contrasena de un solo uso",
-      "submit": "Verificar",
-      "backToSignin": "Volver a iniciar sesion",
-      "message": "Introduce la contrasena de un solo uso de tu aplicacion de autenticacion para continuar."
-    }
-  },
-  "choosePlan": {
-    "title": "Elige tu plan",
-    "description": "Para continuar, selecciona un plan."
-  },
-  "documentation": {
-    "title": "Documentacion"
-  },
-  "notFound": {
-    "code": "404",
-    "title": "Pagina no encontrada",
-    "goToDashboard": "Ir al panel",
-    "goToHomepage": "Ir a la pagina de inicio"
-  },
-  "onboarding": {
-    "account": {
-      "avatar": "Avatar",
-      "avatarDescription": "Haz clic en el circulo o arrastra una imagen para subir tu avatar.",
-      "name": "Nombre"
-    },
-    "continue": "Continuar",
-    "message": "Solo unos pasos rapidos para empezar.",
-    "notifications": {
-      "accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Intentelo de nuevo mas tarde."
-    },
-    "pricing": {
-      "planSelected": "Tu plan ha sido seleccionado correctamente.",
-      "skip": "Saltar por ahora"
-    },
-    "step": "Paso {step} / {total}",
-    "title": "Configura tu cuenta"
-  },
-  "organizations": {
-    "createForm": {
-      "name": "Nombre de la organizacion",
-      "notifications": {
-        "error": "Lo sentimos, no pudimos crear tu organizacion. Intentelo de nuevo mas tarde.",
-        "success": "Tu organizacion ha sido creada. Ya puedes invitar miembros."
-      },
-      "submit": "Crear organizacion",
-      "subtitle": "Introduce un nombre para tu organizacion para empezar. Puedes cambiar el nombre mas tarde en la configuracion de la organizacion.",
-      "title": "Crear una organizacion"
-    },
-    "invitationAlert": {
-      "description": "Necesitas iniciar sesion o crear una cuenta para unirte a la organizacion.",
-      "title": "Has sido invitado a unirte a una organizacion."
-    },
-    "invitationModal": {
-      "accept": "Aceptar",
-      "decline": "Rechazar",
-      "description": "Has sido invitado a unirte a la organizacion {organizationName}. Quieres aceptar la invitacion y unirte a la organizacion?",
-      "title": "Unirse a la organizacion",
-      "error": "Se produjo un error. Por favor, inténtelo de nuevo."
-    },
-    "organizationSelect": {
-      "createNewOrganization": "Crear nueva organizacion",
-      "organizations": "Organizaciones",
-      "personalAccount": "Cuenta personal"
-    },
-    "organizationsGrid": {
-      "createNewOrganization": "Crear nueva organizacion",
-      "title": "Tus organizaciones"
-    },
-    "roles": {
-      "admin": "Admin",
-      "member": "Miembro",
-      "owner": "Propietario"
-    },
-    "settings": {
-      "changeName": {
-        "title": "Nombre de la organizacion"
-      },
-      "deleteOrganization": {
-        "confirmation": "Estas seguro de que quieres eliminar tu organizacion?",
-        "description": "Elimina permanentemente tu organizacion. Una vez que elimines tu organizacion, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
-        "submit": "Eliminar organizacion",
-        "title": "Eliminar organizacion"
-      },
-      "logo": {
-        "description": "Sube un logotipo para tu organizacion.",
-        "title": "Logotipo de la organizacion"
-      },
-      "members": {
-        "activeMembers": "Miembros activos",
-        "description": "Ve todos los miembros activos y las invitaciones pendientes de tu organizacion.",
-        "invitations": {
-          "empty": "Aun no has invitado a ningun miembro.",
-          "expiresAt": "Expira el {date}",
-          "invitationStatus": {
-            "accepted": "Aceptada",
-            "canceled": "Cancelada",
-            "pending": "Pendiente",
-            "rejected": "Rechazada"
-          },
-          "revoke": "Revocar invitacion",
-          "resend": "Reenviar invitacion"
-        },
-        "inviteMember": {
-          "description": "Para invitar a un nuevo miembro, enviale una invitacion.",
-          "email": "Email",
-          "notifications": {
-            "error": {
-              "description": "No pudimos invitar al miembro. Intentelo de nuevo mas tarde.",
-              "title": "No se pudo invitar al miembro"
-            },
-            "success": {
-              "description": "El miembro ha sido invitado.",
-              "title": "Miembro invitado"
-            }
-          },
-          "role": "Rol",
-          "submit": "Invitar",
-          "title": "Invitar miembro"
-        },
-        "leaveOrganization": "Abandonar organizacion",
-        "notifications": {
-          "removeMember": {
-            "error": {
-              "description": "No se pudo eliminar al miembro de tu organizacion. Intentelo de nuevo."
-            },
-            "loading": {
-              "description": "Eliminando miembro de la organizacion..."
-            },
-            "success": {
-              "description": "El miembro ha sido eliminado correctamente de tu organizacion."
-            }
-          },
-          "revokeInvitation": {
-            "error": {
-              "description": "No se pudo revocar la invitacion. Intentelo de nuevo mas tarde."
-            },
-            "loading": {
-              "description": "Revocando invitacion..."
-            },
-            "success": {
-              "description": "La invitacion ha sido revocada."
-            }
-          },
-          "updateMembership": {
-            "error": {
-              "description": "No se pudo actualizar la membresia de la organizacion. Intentelo de nuevo."
-            },
-            "loading": {
-              "description": "Actualizando membresia..."
-            },
-            "success": {
-              "description": "La membresia se actualizo correctamente"
-            }
-          },
-          "resendInvitation": {
-            "loading": {
-              "description": "Reenviando invitacion..."
-            },
-            "success": {
-              "description": "Invitacion enviada"
-            },
-            "error": {
-              "description": "No se pudo enviar la invitacion. Intentelo de nuevo."
-            }
-          }
-        },
-        "pendingInvitations": "Invitaciones pendientes",
-        "removeMember": "Eliminar miembro",
-        "title": "Miembros"
-      },
-      "notifications": {
-        "organizationDeleted": "Tu organizacion ha sido eliminada.",
-        "organizationNameNotUpdated": "No pudimos actualizar el nombre de tu organizacion. Intentelo de nuevo mas tarde.",
-        "organizationNameUpdated": "El nombre de tu organizacion ha sido actualizado.",
-        "organizationNotDeleted": "No pudimos eliminar tu organizacion. Intentelo de nuevo mas tarde."
-      },
-      "subtitle": "Gestiona la configuracion de la organizacion.",
-      "title": "Organizacion",
-      "dangerZone": {
-        "title": "Zona de peligro"
-      }
-    },
-    "start": {
-      "subtitle": "Bienvenido a la pagina de inicio de esta organizacion!"
-    }
-  },
-  "settings": {
-    "account": {
-      "avatar": {
-        "description": "Para cambiar tu avatar, haz clic en la imagen de este bloque y selecciona un archivo de tu computadora para subir.",
-        "notifications": {
-          "error": "No se pudo actualizar el avatar",
-          "success": "El avatar se actualizo correctamente"
-        },
-        "title": "Tu avatar"
-      },
-      "changeEmail": {
-        "description": "Para cambiar tu email, introduce el nuevo email y pulsa guardar. Tendras que confirmar el nuevo email antes de que se active.",
-        "notifications": {
-          "error": "No se pudo actualizar el email",
-          "success": "El email se actualizo correctamente"
-        },
-        "title": "Tu email"
-      },
-      "changeName": {
-        "notifications": {
-          "error": "No se pudo actualizar el nombre",
-          "success": "El nombre se actualizo correctamente"
-        },
-        "title": "Tu nombre"
-      },
-      "deleteAccount": {
-        "confirmation": "Estas seguro de que quieres eliminar tu cuenta?",
-        "description": "Elimina permanentemente tu cuenta. Una vez que elimines tu cuenta, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
-        "notifications": {
-          "error": "No se pudo eliminar la cuenta",
-          "success": "La cuenta se elimino correctamente"
-        },
-        "submit": "Eliminar cuenta",
-        "title": "Eliminar cuenta"
-      },
-      "language": {
-        "description": "Para cambiar el idioma de la aplicacion para tu cuenta, selecciona un idioma de la lista y haz clic en guardar.",
-        "notifications": {
-          "error": "No se pudo actualizar el idioma",
-          "success": "El idioma se actualizo correctamente"
-        },
-        "title": "Tu idioma"
-      },
-      "security": {
-        "activeSessions": {
-          "description": "Estas son todas las sesiones activas de tu cuenta. Haz clic en la X para finalizar una sesion especifica.",
-          "title": "Sesiones activas",
-          "notifications": {
-            "revokeSession": {
-              "success": "Sesion revocada"
-            }
-          },
-          "currentSession": "Sesion actual"
-        },
-        "changePassword": {
-          "currentPassword": "Contrasena actual",
-          "newPassword": "Nueva contrasena",
-          "notifications": {
-            "error": "No se pudo actualizar la contrasena",
-            "success": "La contrasena se actualizo correctamente"
-          },
-          "title": "Tu contrasena"
-        },
-        "connectedAccounts": {
-          "connect": "Conectar",
-          "connected": "Conectado",
-          "disconnect": "Desconectar",
-          "title": "Cuentas conectadas"
-        },
-        "passkeys": {
-          "addPasskey": "Anadir passkey",
-          "description": "Usa passkeys como una alternativa segura a las contrasenas.",
-          "notifications": {
-            "addPasskey": {
-              "error": {
-                "title": "No se pudo anadir el passkey"
-              },
-              "success": {
-                "title": "Passkey anadido"
-              }
-            },
-            "deletePasskey": {
-              "error": {
-                "title": "No se pudo eliminar el passkey"
-              },
-              "loading": {
-                "title": "Eliminando passkey..."
-              },
-              "success": {
-                "title": "Passkey eliminado"
-              }
-            }
-          },
-          "title": "Passkeys"
-        },
-        "setPassword": {
-          "description": "Aun no has establecido una contrasena. Para establecerla, debes seguir el flujo de restablecimiento de contrasena. Haz clic en el boton de abajo para enviar un email para restablecer tu contrasena y sigue las instrucciones del email.",
-          "notifications": {
-            "error": "No se pudo enviar el enlace para establecer la contrasena. Intentelo de nuevo.",
-            "success": "Revisa tu bandeja de entrada para el enlace para establecer tu contrasena."
-          },
-          "submit": "Establecer contrasena",
-          "title": "Tu contrasena"
-        },
-        "title": "Seguridad",
-        "twoFactor": {
-          "title": "Autenticacion de dos factores",
-          "description": "Anade una capa extra de seguridad a tu cuenta.",
-          "dialog": {
-            "password": {
-              "title": "Verificar con contrasena",
-              "description": "Verifica tu cuenta introduciendo tu contrasena:",
-              "label": "Tu contrasena:"
-            },
-            "totpUrl": {
-              "description": "Usa tu aplicacion de autenticacion preferida y escanea el codigo QR o introduce el secreto manualmente para configurar la autenticacion de dos factores.",
-              "code": "Introduce el codigo de 6 digitos para verificar la configuracion:",
-              "title": "Activar autenticacion de dos factores"
-            }
-          },
-          "enable": "Activar autenticacion de dos factores",
-          "notifications": {
-            "verify": {
-              "success": {
-                "title": "La autenticacion de dos factores se ha activado correctamente."
-              }
-            },
-            "enable": {
-              "error": {
-                "title": "No se pudo verificar tu cuenta con la contrasena proporcionada. Intentelo de nuevo."
-              }
-            },
-            "disable": {
-              "success": {
-                "title": "La autenticacion de dos factores se ha desactivado correctamente."
-              }
-            }
-          },
-          "disable": "Desactivar autenticacion de dos factores",
-          "enabled": "Tienes la autenticacion de dos factores activada para tu cuenta."
-        }
-      },
-      "subtitle": "Gestiona la configuracion de tu cuenta personal.",
-      "title": "Configuracion de la cuenta"
-    },
-    "billing": {
-      "createCustomerPortal": {
-        "label": "Gestionar facturacion",
-        "notifications": {
-          "error": {
-            "title": "No se pudo crear una sesion del portal de clientes. Intentelo de nuevo."
-          }
-        }
-      },
-      "activePlan": {
-        "status": {
-          "active": "Activo",
-          "canceled": "Cancelado",
-          "expired": "Expirado",
-          "incomplete": "Incompleto",
-          "past_due": "Vencido",
-          "paused": "Pausado",
-          "trialing": "Prueba",
-          "unpaid": "No pagado"
-        },
-        "title": "Tu plan",
-        "description": "Su plan actual y límites de uso para búsqueda e indexación.",
-        "notFound": "No hay información del plan disponible."
-      },
-      "changePlan": {
-        "description": "Elige un plan para suscribirte.",
-        "title": "Cambiar tu plan"
-      },
-      "aiCredits": {
-        "title": "Créditos AI",
-        "subtitle": "Uso de IA de pago por uso. Recargue su cartera para desbloquear todas las funciones de IA.",
-        "balance": {
-          "title": "Saldo de la cartera",
-          "includedRemaining": "Incluido este mes",
-          "reserved": "Reservado",
-          "promo": "Créditos promocionales",
-          "notInitialized": "La cartera aún no está inicializada."
-        },
-        "topup": {
-          "button": "Recargar",
-          "title": "Recargar cartera AI",
-          "description": "Elija una cantidad o introduzca un valor personalizado en rublos.",
-          "customAmount": "Cantidad personalizada (₽)",
-          "summary": "Se le cobrará {amount}",
-          "confirm": "Pagar con Tochka",
-          "error": "No se pudo crear el enlace de pago. Inténtelo de nuevo."
-        },
-        "errors": {
-          "insufficientFunds": "Créditos AI insuficientes. Recargue su cartera."
-        }
-      },
-      "title": "Facturacion",
-      "features": {
-        "title": "Características",
-        "none": "No hay características configuradas"
-      },
-      "limits": {
-        "maxIndexes": "Máx. índices",
-        "maxDocuments": "Máx. documentos",
-        "maxApiKeys": "Máx. claves API",
-        "rateLimit": "Límite de velocidad",
-        "maxSearchesPerMonth": "Búsquedas / mes"
-      },
-      "upgrade": "Mejorar plan",
-      "usage": {
-        "searches": "Búsquedas",
-        "documents": "Documentos"
-      }
-    },
-    "notificationsPage": {
-      "title": "Notificaciones",
-      "description": "Elige como recibes las notificaciones. Las opciones desactivadas se almacenan; todo esta activado por defecto.",
-      "groups": {
-        "general": {
-          "title": "General"
-        },
-        "billing": {
-          "title": "Facturacion"
-        }
-      },
-      "types": {
-        "APP_UPDATE": {
-          "label": "Actualizaciones de la app"
-        },
-        "AI_LOW_BALANCE": {
-          "label": "El saldo AI es bajo"
-        },
-        "AI_TOPUP_PAID": {
-          "label": "Recarga AI confirmada"
-        },
-        "AI_TOPUP_FAILED": {
-          "label": "Recarga AI fallida"
-        },
-        "AI_OVERAGE_REACHED": {
-          "label": "Límite AI alcanzado"
-        }
-      },
-      "columns": {
-        "type": "Notificacion",
-        "inApp": "En la app",
-        "email": "Email"
-      }
-    },
-    "menu": {
-      "account": {
-        "billing": "Facturacion",
-        "dangerZone": "Zona de peligro",
-        "general": "General",
-        "notifications": "Notificaciones",
-        "security": "Seguridad",
-        "title": "Cuenta"
-      },
-      "organization": {
-        "billing": "Facturacion",
-        "general": "General",
-        "members": "Miembros",
-        "title": "Organizacion",
-        "dangerZone": "Zona de peligro"
-      }
-    },
-    "save": "Guardar"
-  },
-  "start": {
-    "subtitle": "Ve las ultimas estadisticas de tu increible negocio.",
-    "welcome": "Bienvenido {name}!"
-  },
-  "common": {
-    "confirmation": {
-      "cancel": "Cancelar",
-      "confirm": "Confirmar"
-    },
-    "actions": {
-      "continue": "Continuar",
-      "verify": "Verificar"
-    },
-    "colorMode": {
-      "system": "Sistema",
-      "light": "Claro",
-      "dark": "Oscuro"
-    },
-    "passwordCriteria": {
-      "minLength": "Min. 8 caracteres",
-      "upperAndLowercase": "Mayusculas y minusculas",
-      "number": "Numero",
-      "specialCharacter": "Caracter especial"
-    }
-  },
-  "checkoutReturn": {
-    "title": "Procesando tu compra",
-    "description": "Por favor espera mientras confirmamos tu pago.",
-    "loading": "Confirmando tu compra, por favor espera..."
-  },
-  "search": {
-    "title": "Busqueda",
-    "subtitle": "Gestiona índices de búsqueda, claves API y uso de esta organización.",
-    "loading": "Cargando...",
-    "noIndexes": "Aun no hay indices de busqueda. Crea el primero para comenzar.",
-    "selectIndex": "Selecciona un indice para gestionar sus claves API.",
-    "apiKeysPage": {
-      "title": "API Keys"
-    },
-    "importJobsPage": {
-      "title": "Trabajos de Importacion",
-      "description": "Actividad reciente de importacion y sincronizacion de documentos desde la cola de ingesta."
-    },
-    "previewPage": {
-      "title": "Vista Previa de Busqueda"
-    },
-    "fields": {
-      "displayName": "Nombre",
-      "slug": "Slug",
-      "version": "Version",
-      "apiKeys": "Claves API",
-      "defaultSortingField": "Campo de ordenacion por defecto",
-      "schema": "Campos (JSON)"
-    },
-    "createIndex": {
-      "trigger": "Crear indice",
-      "title": "Crear indice de busqueda",
-      "description": "Crea una colección y alias de búsqueda con alcance a esta organización.",
-      "slugHelp": "Letras minusculas, digitos y guiones. Se usa en rutas API y como alias de coleccion.",
-      "schemaHelp": "Array JSON con definiciones de campos. El campo 'tenant_id' se añade automáticamente.",
-      "submit": "Crear",
-      "success": "Indice creado.",
-      "error": "No se pudo crear el indice. Intentelo de nuevo.",
-      "startFromTemplate": "Empieza con una plantilla:",
-      "autoFromName": "auto",
-      "builder": "Constructor visual",
-      "json": "JSON",
-      "fieldsTitle": "Campos del esquema",
-      "fieldsCount": "{count} campos configurados",
-      "addField": "Anadir campo",
-      "removeField": "Quitar campo",
-      "moveUp": "Subir",
-      "moveDown": "Bajar",
-      "errorsCount": "{count, plural, one {# campo con errores} other {# campos con errores}}",
-      "noFields": "Aun no hay campos: anade uno o elige una plantilla.",
-      "noSort": "Sin orden por defecto",
-      "noSortableHint": "Activa primero Sort en un campo numerico",
-      "tenantHint": "tenant_id se anade automaticamente para aislar datos.",
-      "templates": {
-        "products": "Productos",
-        "articles": "Articulos",
-        "users": "Usuarios",
-        "blank": "En blanco"
-      },
-      "typeGroups": {
-        "text": "Texto",
-        "number": "Numero",
-        "boolean": "Booleano",
-        "advanced": "Avanzado"
-      },
-      "toggles": {
-        "facet": "Faceta",
-        "optional": "Opcional",
-        "sort": "Ordenar"
-      },
-      "tooltips": {
-        "displayName": "Nombre legible que se muestra en el panel. No afecta a la API.",
-        "slug": "Se usa en rutas API y como alias de la colección de búsqueda. Solo letras minúsculas, dígitos y guiones.",
-        "fields": "Define las columnas de tu coleccion de busqueda. Los campos pueden ser facetables, ordenables u opcionales.",
-        "facet": "Permite filtrar y agrupar por este campo (p. ej. categorias, etiquetas, marca).",
-        "optional": "El campo puede faltar en los documentos. Los campos obligatorios deben existir en cada documento.",
-        "sort": "Permite ordenar por este campo (los campos numericos siempre pueden ordenarse).",
-        "defaultSort": "Campo usado para ordenar resultados cuando no se especifica un orden. Debe ser numerico.",
-        "json": "Edita el esquema como JSON puro. Al volver al constructor visual se validan y sincronizan los cambios.",
-        "idField": "Identificador único recomendado. AACsearch lo usa como clave primaria para upserts."
-      },
-      "errors": {
-        "duplicateName": "El nombre del campo debe ser unico",
-        "invalidJson": "JSON invalido",
-        "empty": "Anade al menos un campo",
-        "fieldsInvalid": "Corrige los campos marcados"
-      }
-    },
-    "apiKeys": {
-      "title": "Claves API",
-      "description": "Las claves de búsqueda se validan en el backend antes de ejecutar las consultas. Las credenciales de administración nunca salen del servidor.",
-      "create": "Crear clave",
-      "createDescription": "La clave en bruto se muestra una sola vez. Guardala de forma segura.",
-      "name": "Nombre",
-      "generate": "Generar clave",
-      "created": "Clave API creada.",
-      "revealOnce": "Copia esta clave ahora. No volvera a mostrarse.",
-      "done": "Hecho",
-      "empty": "Aun no hay claves API.",
-      "tableName": "Nombre",
-      "tablePrefix": "Prefijo",
-      "tableScopes": "Permisos",
-      "tableStatus": "Estado",
-      "tableActions": "Acciones",
-      "statusActive": "Activa",
-      "statusRevoked": "Revocada",
-      "revoke": "Revocar",
-      "revokeConfirmTitle": "Revocar clave API",
-      "revokeConfirmMessage": "Seguro que quieres revocar \"{name}\"? Los clientes que la usen dejaran de funcionar inmediatamente.",
-      "revoked": "Clave API revocada.",
-      "error": "La operacion fallo.",
-      "emptyDescription": "Crea tu primera clave API para empezar a integrar la búsqueda en tu aplicación."
-    },
-    "usage": {
-      "title": "Uso",
-      "windowDays": "Ultimos {days} dias",
-      "searches": "Busquedas",
-      "documents": "Documentos indexados",
-      "ingests": "Documentos indexados",
-      "ofLimit": "del limite mensual",
-      "loadError": "No se pudieron cargar los datos de uso."
-    },
-    "analytics": {
-      "tab": "Analiticas",
-      "title": "Analiticas",
-      "description": "Sigue el uso de busqueda, las consultas principales, los resultados vacios y las tendencias.",
-      "totalSearches": "Busquedas totales",
-      "totalSessions": "Sesiones",
-      "ctr": "CTR",
-      "zeroResults": "Sin resultados",
-      "zeroResultRate": "Tasa de cero resultados",
-      "comingSoon": "Próximamente",
-      "searchesOverTime": "Busquedas a lo largo del tiempo",
-      "topQueries": "Principales busquedas",
-      "topClickedProducts": "Productos mas clickeados",
-      "queryColumn": "Busqueda",
-      "countColumn": "Cuenta",
-      "productColumn": "Producto",
-      "clicksColumn": "Clics",
-      "rankColumn": "#",
-      "percentColumn": "% del total",
-      "period24h": "24h",
-      "period7d": "7 días",
-      "period30d": "30 días",
-      "documentsIndexed": "Documentos indexados",
-      "failedSyncJobs": "Trabajos de sincronización fallidos",
-      "failed": "fallidos",
-      "retentionBanner": "Su plan {plan} conserva los datos analíticos durante {days} días. Seleccione un período más corto para ver los datos.",
-      "noData": "No hay datos disponibles para este periodo.",
-      "noDataDescription": "Los datos analíticos aparecerán una vez que tus índices de búsqueda comiencen a recibir consultas."
-    },
-    "widget": {
-      "tab": "Widget",
-      "title": "Widget de busqueda",
-      "description": "Incrusta un widget de busqueda en tu tienda con una sola etiqueta script.",
-      "apiKeyLabel": "Clave API",
-      "apiKeyHint": "Pega tu clave API de solo busqueda (ss_search_...) o crea una nueva en la pestana API Keys.",
-      "snippet": "Codigo del widget",
-      "copySnippet": "Copiar codigo",
-      "copied": "Codigo del widget copiado!",
-      "copyFailed": "Error al copiar.",
-      "installInstructions": "Instrucciones de instalacion",
-      "step1": "Anade un elemento contenedor: <div id=\"aac-search\"></div>",
-      "step2": "Pega el codigo del widget antes de la etiqueta </body>.",
-      "step3": "El widget se inicializara automaticamente. Personaliza los atributos data-* segun sea necesario."
-    },
-    "projects": {
-      "title": "Proyectos",
-      "apiKeys": "Claves API",
-      "loadError": "Error al cargar los proyectos."
-    },
-    "overview": {
-      "title": "Resumen",
-      "subtitle": "Últimos {days} días",
-      "totalSearches": "Búsquedas totales",
-      "searchesTrend": "Tendencia de búsqueda",
-      "documentsIndexed": "Documentos indexados",
-      "quotaUsage": "Uso de cuota",
-      "failedSyncJobs": "Trabajos de sincronización fallidos",
-      "searchesOverTime": "Búsquedas a lo largo del tiempo",
-      "topQueries": "Principales búsquedas",
-      "activityFeed": "Actividad reciente",
-      "connectorStatus": "Estado del conector",
-      "period24h": "24h",
-      "period7d": "7 días",
-      "period30d": "30 días",
-      "quotaWarning": "Has usado el {percent}% de tu cuota de búsqueda. Actualiza tu plan para evitar interrupciones.",
-      "quotaExceeded": "Has superado tu cuota de búsqueda ({percent}%). Algunas funciones pueden estar limitadas.",
-      "connectorOnline": "Todos los conectores en línea",
-      "connectorOffline": "Conector desconectado",
-      "connectorUnknown": "Sin conector configurado",
-      "noData": "No hay datos disponibles",
-      "noDataDescription": "Los datos aparecerán una vez que tus índices de búsqueda comiencen a recibir consultas.",
-      "refresh": "Actualizar",
-      "activity": {
-        "indexCreated": "Índice \"{name}\" creado",
-        "keyRevoked": "{count, plural, one {# clave API} other {# claves API}} para \"{name}\"",
-        "syncFailed": "Sincronización fallida para el índice \"{name}\""
-      },
-      "indexVersion": "Versión del índice",
-      "apiKeys": "Claves API",
-      "searches": "Búsquedas",
-      "indexes": "Índices",
-      "documents": "Documentos",
-      "plan": "Plan",
-      "quickActions": "Acciones rápidas",
-      "manageIndexes": "Gestionar índices",
-      "manageIndexesDesc": "Crear y gestionar índices de búsqueda",
-      "viewAnalytics": "Ver analíticas",
-      "viewAnalyticsDesc": "Seguir el uso de búsqueda y las consultas principales",
-      "setupConnector": "Configurar conector",
-      "setupConnectorDesc": "Conectar módulo de PrestaShop o Bitrix",
-      "managePlan": "Gestionar plan",
-      "graceUntil": "Solo lectura hasta {date}",
-      "active": "Activo",
-      "indexedProducts": "Productos indexados",
-      "apiKeysCount": "Claves API",
-      "lastHeartbeat": "Último heartbeat",
-      "noHeartbeat": "Nunca",
-      "connectorToken": "Token del conector",
-      "upgrade": "Actualizar plan",
-      "createIndex": "Crear índice",
-      "addConnector": "Añadir conector",
-      "viewAll": "Ver todo",
-      "noSearchesYet": "Aún no has enviado ninguna búsqueda",
-      "emptyStateDescription": "Comienza creando tu primer índice de búsqueda.",
-      "getStarted": "Comenzar"
-    },
-    "gettingStarted": {
-      "title": "Primeros pasos",
-      "welcome": "Comienza con la búsqueda",
-      "subtitle": "Completa los pasos a continuación para empezar a usar la búsqueda.",
-      "allDone": "¡Todos los pasos completados!",
-      "allDoneTitle": "¡Todo listo!",
-      "allDoneDesc": "Todos los pasos de incorporación están completos. Ya puedes usar la búsqueda.",
-      "progress": "Progreso de configuración",
-      "completed": "completado",
-      "step1Label": "Crear un índice de búsqueda",
-      "step1Desc": "Crea tu primer índice de búsqueda para almacenar y organizar datos.",
-      "step1Action": "Crear índice",
-      "step2Label": "Conectar una fuente",
-      "step2Desc": "Genera un token de conector para conectar tu fuente de datos.",
-      "step2Action": "Conectar fuente",
-      "step3Label": "Ejecutar una sincronización",
-      "step3Desc": "Sincroniza tus datos desde tu CMS u otras fuentes.",
-      "step3Action": "Sincronizar",
-      "step4Label": "Probar búsqueda",
-      "step4Desc": "Realiza una búsqueda de prueba para verificar tu configuración.",
-      "step4Action": "Probar búsqueda",
-      "step5Label": "Generar una clave API",
-      "step5Desc": "Crea una clave API para permitir solicitudes de búsqueda desde tu aplicación.",
-      "step5Action": "Generar clave",
-      "step6Label": "Insertar el widget de búsqueda",
-      "step6Desc": "Inserta el widget de búsqueda en tu tienda.",
-      "step6Action": "Insertar widget",
-      "done": "Hecho",
-      "pending": "Pendiente",
-      "inProgress": "En progreso",
-      "viewAnalytics": "Ver análisis",
-      "planCtaTitle": "¿Necesitas más potencia?",
-      "planCtaDesc": "Mejora tu plan para obtener límites más altos y más funciones.",
-      "managePlan": "Gestionar plan",
-      "skipToDashboard": "Ir al panel"
-    },
-    "checklist": {
-      "title": "Lista de verificación",
-      "steps": {
-        "createIndex": "Crear índice",
-        "createIndexDone": "Índice creado",
-        "generateApiKey": "Generar clave API",
-        "generateApiKeyDone": "Clave API generada",
-        "installCmsModule": "Instalar módulo CMS",
-        "installCmsModuleDone": "Módulo CMS instalado",
-        "runFullSync": "Ejecutar sincronización completa",
-        "runFullSyncDone": "Productos sincronizados",
-        "testSearch": "Probar búsqueda",
-        "testSearchDone": "Búsqueda probada",
-        "enableWidget": "Activar widget",
-        "enableWidgetDone": "Widget activado"
-      },
-      "stepDocs": "Ver documentación",
-      "allDone": "¡Todas las comprobaciones superadas!"
-    },
-    "importJobs": {
-      "tab": "Trabajos de Importación",
-      "title": "Trabajos de Importación",
-      "description": "Actividad reciente de importación y sincronización de documentos desde el búfer de ingesta.",
-      "pending": "Pendiente",
-      "processing": "Procesando",
-      "completed": "Completado",
-      "failed": "Fallido",
-      "empty": "No hay actividad de importación en los últimos 7 días.",
-      "tableJobId": "ID del Trabajo",
-      "tableType": "Tipo",
-      "tableStatus": "Estado",
-      "tableProgress": "Progreso",
-      "tableErrors": "Errores",
-      "tableTime": "Hora",
-      "emptyDescription": "Los trabajos de importación aparecen aquí cuando sincronizas datos desde tu CMS.",
-      "viewTimeline": "Cronología",
-      "viewTable": "Tabla",
-      "successRate": "Tasa de éxito",
-      "indexed": "Indexado",
-      "retryQueue": "Cola de reintentos",
-      "retryAll": "Reintentar todo",
-      "clearQueue": "Limpiar",
-      "nextRetry": "Próximo reintento"
-    },
-    "preview": {
-      "tab": "Vista Previa",
-      "title": "Vista Previa de Búsqueda",
-      "description": "Prueba consultas de búsqueda contra este índice e inspecciona los resultados en bruto.",
-      "placeholder": "Ingresa una consulta…",
-      "search": "Buscar",
-      "noResults": "Ejecuta una consulta para ver los resultados aquí.",
-      "perPage": "Por página",
-      "page": "Página",
-      "highlightFields": "Campos de resaltado",
-      "highlightFieldsPlaceholder": "ej. title, description",
-      "facetBy": "Facetas",
-      "facetByPlaceholder": "ej. brand, category",
-      "stats": "{found} resultados en {time} ms"
-    },
-    "connector": {
-      "title": "Connectors",
-      "subtitle": "Conecta PrestaShop, Bitrix o envía documentos directamente por API",
-      "stepCounter": "Paso {current} de {total}",
-      "runSyncDesc": "Inicia una sincronizacion completa para indexar todos los productos de tu CMS.",
-      "runSyncCta": "Ejecutar sincronizacion completa",
-      "syncTriggerHint": "Abre el panel de tu CMS y pulsa 'Full sync' en el modulo AACsearch.",
-      "configStep1": {
-        "prestashop": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de PrestaShop.",
-        "bitrix": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de Bitrix.",
-        "directApi": "Usa la URL de la API y el token como URL base y bearer token de tus llamadas REST."
-      },
-      "configStep2": {
-        "prestashop": "Pega el token del conector en el campo de ajustes del modulo.",
-        "bitrix": "Pega el token del conector en el campo de ajustes del modulo.",
-        "directApi": "Incluye el token en la cabecera Authorization: Bearer <token>"
-      },
-      "configStep3": "Guarda la configuracion.",
-      "prestashop": "PrestaShop",
-      "prestashopDesc": "Sincronización completa de productos, categorías, stock",
-      "bitrix": "1C-Bitrix",
-      "bitrixDesc": "Sincronización completa de catálogos de productos",
-      "directApi": "Direct API",
-      "directApiDesc": "Envía documentos directamente por REST API",
-      "setup": "Configurar",
-      "manage": "Gestionar",
-      "viewDocs": "Documentación",
-      "statusOnline": "En línea",
-      "statusOffline": "Desconectado",
-      "statusUnknown": "Desconocido",
-      "lastSync": "Última sincronización: {time}",
-      "lastError": "Último error: {error}",
-      "noHeartbeat": "Sin heartbeat aún",
-      "syncJobs": "Trabajos de sync",
-      "syncJobsNote": "Mostrando trabajos desde el último reinicio (en memoria).",
-      "activeConnectors": "Conectores activos",
-      "activeConnectorsDesc": "Tokens de conector y su estado de heartbeat",
-      "noConnectors": "Aún no hay conectores. Haz clic en 'Configurar' arriba.",
-      "wizardTitle": "Configurar conector {source}",
-      "stepGenerateToken": "Generar token",
-      "stepDownloadModule": "Descargar módulo",
-      "stepConfigure": "Configurar",
-      "stepTestConnection": "Probar conexión",
-      "stepRunSync": "Ejecutar primera sincronización",
-      "tokenGenerated": "Tu token de conector",
-      "tokenCopyWarning": "Guarda esta clave — no podremos mostrarla de nuevo después de cerrar",
-      "tokenCopied": "¡Copiado!",
-      "downloadPrestashop": "Descargar módulo PrestaShop",
-      "downloadBitrix": "Descargar módulo Bitrix",
-      "testSuccess": "¡Conexión exitosa — el módulo está en línea!",
-      "testFailed": "Conexión fallida — revisa la configuración del módulo",
-      "syncSuccess": "Sincronización iniciada correctamente",
-      "jobId": "ID del trabajo",
-      "jobType": "Tipo",
-      "jobStatus": "Estado",
-      "jobStarted": "Iniciado",
-      "jobDuration": "Duración",
-      "jobItems": "Elementos / Fallos",
-      "jobActions": "Acciones",
-      "jobRetry": "Reintentar",
-      "typeFull": "Completo",
-      "typeDelta": "Delta",
-      "statusPending": "Pendiente",
-      "statusRunning": "En ejecución",
-      "statusCompleted": "Completado",
-      "statusFailed": "Fallido",
-      "jobDetailTitle": "Detalle del trabajo",
-      "jobEventLog": "Registro de eventos",
-      "noJobLogs": "No hay eventos registrados",
-      "tokenLabel": "Token del conector",
-      "tokenPlaceholder": "ss_connector_***",
-      "testHandshake": "Probar handshake",
-      "handshakeSuccess": "Handshake exitoso",
-      "handshakeFailed": "Handshake fallido",
-      "description": "Gestiona el token del conector y el estado del handshake.",
-      "noConnectorKeys": "No hay claves de conector. Crea una clave API con el alcance 'connector_write' en la pestaña API Keys.",
-      "lastHeartbeat": "Último heartbeat",
-      "syncNow": "Sincronizar ahora",
-      "revokeToken": "Revocar"
-    },
-    "tabs": {
-      "indexes": "Índices",
-      "playground": "Playground",
-      "apiKeys": "Claves API",
-      "widget": "Widget"
-    },
-    "playground": {
-      "title": "Playground de búsqueda",
-      "description": "Prueba consultas de búsqueda avanzadas con todas las opciones disponibles.",
-      "advanced": "Opciones avanzadas",
-      "advancedShow": "Mostrar opciones avanzadas",
-      "advancedHide": "Ocultar opciones avanzadas",
-      "queryBy": "Campos de búsqueda",
-      "queryByPlaceholder": "Nombres de campos separados por comas (ej. title, description)",
-      "filterBy": "Filtrar por",
-      "filterByPlaceholder": "ej. price:>100 && inStock:=true",
-      "sortBy": "Ordenar por",
-      "sortByPlaceholder": "ej. price:desc",
-      "perPage": "Resultados por página",
-      "run": "Ejecutar búsqueda",
-      "cmdEnter": "Cmd+Enter para buscar",
-      "hits": "Resultados",
-      "facets": "Facetas",
-      "rawJson": "JSON bruto",
-      "curlSnippet": "Equivalente cURL",
-      "copy": "Copiar",
-      "copied": "¡Copiado!",
-      "responseTime": "Tiempo de respuesta",
-      "hitCount": "Resultados",
-      "noDocuments": "Ningún documento coincide con tu consulta.",
-      "debounceInfo": "Búsqueda automática (700ms de retardo)",
-      "lastQueryRestored": "Última consulta restaurada de la sesión anterior.",
-      "noIndexes": "No hay índices disponibles. Crea uno primero.",
-      "curlTitle": "Equivalente cURL"
-    },
-    "indexActions": {
-      "actions": "Acciones",
-      "reindex": "Reindexar",
-      "viewSchema": "Ver esquema",
-      "delete": "Eliminar índice",
-      "deleteConfirmTitle": "Eliminar índice",
-      "deleteConfirmMessage": "¿Seguro que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
-      "reindexConfirmTitle": "Reindexar",
-      "reindexConfirmMessage": "¿Activar una reindexación completa para \"{name}\"?",
-      "schemaTitle": "Esquema para \"{name}\"",
-      "reindexed": "Reindexación activada.",
-      "deleted": "Índice eliminado."
-    },
-    "nav": {
-      "overview": "Resumen",
-      "gettingStarted": "Primeros pasos",
-      "search": "Búsqueda",
-      "apiKeys": "Claves API",
-      "importJobs": "Importaciones",
-      "searchPreview": "Vista previa",
-      "analytics": "Analíticas",
-      "relevance": "Relevancia",
-      "connectors": "Conectores",
-      "knowledge": "Conocimiento"
-    },
-    "noIndexesDescription": "Los índices de búsqueda almacenan tus datos y potencian las consultas de búsqueda. Crea uno para empezar.",
-    "synonyms": {
-      "tab": "Sinónimos",
-      "title": "Sinónimos",
-      "description": "Configure sinónimos de búsqueda. Cuando un usuario busca el término sinónimo, se muestran resultados del término raíz.",
-      "add": "Añadir fila",
-      "save": "Guardar sinónimos",
-      "saved": "Sinónimos guardados.",
-      "error": "Error al guardar los sinónimos.",
-      "empty": "Aún no hay sinónimos configurados. Añada un par de sinónimos para empezar.",
-      "emptyDescription": "Los sinónimos asignan diferentes términos de búsqueda a la misma palabra raíz, ampliando la cobertura de su búsqueda.",
-      "synonymColumn": "Sinónimo",
-      "rootColumn": "Raíz",
-      "tableActions": "Acciones",
-      "remove": "Eliminar",
-      "removeConfirmTitle": "Eliminar sinónimo",
-      "removeConfirmMessage": "¿Está seguro de que desea eliminar este par de sinónimos?"
-    },
-    "curations": {
-      "tab": "Curaciones",
-      "title": "Curaciones",
-      "description": "Fije u oculte productos para consultas de búsqueda específicas y controle manualmente los resultados.",
-      "add": "Añadir regla",
-      "save": "Guardar curaciones",
-      "saved": "Curaciones guardadas.",
-      "error": "Error al guardar las curaciones.",
-      "empty": "Aún no hay reglas de curación. Añada una regla para empezar.",
-      "emptyDescription": "Las reglas de curación le permiten fijar u ocultar productos específicos para consultas de búsqueda.",
-      "queryColumn": "Consulta",
-      "pinnedColumn": "IDs fijados",
-      "hiddenColumn": "IDs ocultos",
-      "tableActions": "Acciones",
-      "edit": "Editar",
-      "remove": "Eliminar",
-      "editTitle": "Editar regla de curación",
-      "addTitle": "Añadir regla de curación",
-      "dialogDescription": "Ingrese la consulta de búsqueda y los IDs de producto para fijar u ocultar.",
-      "queryLabel": "Consulta de búsqueda",
-      "queryPlaceholder": "ej. zapatillas running",
-      "pinnedLabel": "IDs de producto fijados (separados por comas)",
-      "pinnedPlaceholder": "prod-123, prod-456",
-      "hiddenLabel": "IDs de producto ocultos (separados por comas)",
-      "hiddenPlaceholder": "prod-789, prod-012",
-      "dialogSave": "Guardar regla",
-      "removeConfirmTitle": "Eliminar regla de curación",
-      "removeConfirmMessage": "¿Está seguro de que desea eliminar esta regla de curación?"
-    },
-    "relevance": {
-      "tab": "Relevancia",
-      "title": "Relevancia",
-      "description": "Gestiona sinonimos, curaciones y rankings de resultados de busqueda."
-    },
-    "knowledge": {
-      "title": "Base de conocimiento",
-      "subtitle": "Respuestas RAG a preguntas sobre sus documentos y catálogos",
-      "spaces": "Espacios",
-      "spacesDesc": "Espacios de conocimiento personales y de organización",
-      "activeSpace": "Espacio activo",
-      "selectSpace": "Seleccionar espacio",
-      "newSpaceSlug": "Slug del nuevo espacio",
-      "newSpaceName": "Nombre del nuevo espacio",
-      "createSpace": "Crear espacio",
-      "sources": "Fuentes",
-      "sourcesDesc": "Fuentes de CMS y archivos para este espacio",
-      "sourceName": "Nombre de la fuente",
-      "sourceType": "Tipo de fuente",
-      "sourceConfig": "Configuración de la fuente (JSON)",
-      "addSource": "Añadir fuente",
-      "fileIngestion": "Ingestión de archivo",
-      "fileIngestionDesc": "Cargue md/xml/pdf en el espacio seleccionado",
-      "fileInput": "Archivo",
-      "ingestFile": "Ingestar archivo",
-      "jobsAndMetrics": "Trabajos y métricas",
-      "jobsAndMetricsDesc": "Visibilidad operacional para ingestión y construcción de grafos",
-      "sourcesMetric": "Fuentes",
-      "documentsMetric": "Documentos",
-      "chunksMetric": "Fragmentos",
-      "graphEdgesMetric": "Aristas del grafo",
-      "ragAsk": "Consulta RAG",
-      "ragAskDesc": "Recuperación híbrida con citas de su espacio",
-      "question": "Pregunta",
-      "askButton": "Preguntar",
-      "graphExplain": "Explicación del grafo",
-      "graphQuery": "Consulta al grafo",
-      "explainGraph": "Explicar grafo",
-      "fileSizeLimit": "El archivo debe ser menor de 50 MB",
-      "fileTypeLimit": "Solo se aceptan archivos .md, .xml, .pdf",
-      "createdSpace": "Espacio de conocimiento creado",
-      "createdSource": "Fuente de datos creada",
-      "ingestionStarted": "Ingestión de archivo iniciada",
-      "answerGenerated": "Respuesta generada",
-      "graphExplained": "Explicación del grafo generada",
-      "permissionDenied": "No tiene permiso para crear espacios",
-      "requiredFields": "El slug y el nombre son obligatorios",
-      "noSpaceSelected": "Seleccione un espacio e introduzca una pregunta",
-      "slugPlaceholder": "catalog-knowledge",
-      "namePlaceholder": "Conocimiento del catálogo",
-      "sourceNamePlaceholder": "Conector de tienda Bitrix",
-      "questionPlaceholder": "¿Qué productos mencionan la rotación de clave API?",
-      "graphQueryPlaceholder": "fallos de diagnóstico del conector",
-      "graphQueryLabel": "Consulta al grafo",
-      "graphExplainDesc": "Inspeccionar el vecindario del grafo para su consulta",
-      "citedFrom": "Citado del documento",
-      "seedNodes": "Nodos semilla",
-      "edges": "Aristas",
-      "noSeedNodes": "No se encontraron nodos semilla.",
-      "noEdges": "No se encontraron aristas.",
-      "loadingSpaces": "Cargando espacios...",
-      "activeSpaceLabel": "Espacio activo: {name} ({slug})",
-      "createSpaceError": "Error al crear el espacio de conocimiento",
-      "sourceCreateError": "Error al crear la fuente de datos",
-      "ingestError": "Error al ingestar el archivo",
-      "answerError": "Error al generar la respuesta",
-      "graphExplainError": "Error al explicar el grafo",
-      "noPermissionSources": "No tiene permiso para crear fuentes",
-      "selectSpaceAndSource": "Seleccione un espacio y proporcione el nombre de la fuente",
-      "invalidSourceConfig": "Configuración de fuente no válida",
-      "noPermissionIngest": "No tiene permiso para ingestar archivos",
-      "selectSpaceAndFile": "Seleccione un espacio y un archivo",
-      "fileReadError": "Error al leer el archivo",
-      "fileTypeInvalid": "Solo se admiten archivos .md, .xml y .pdf",
-      "selectSpaceAndGraphQuery": "Seleccione un espacio e introduzca una consulta al grafo"
-    },
-    "documents": {
-      "empty": "Aún no hay documentos en este índice",
-      "emptyDescription": "Sube un CSV o usa la API para añadir documentos a este índice.",
-      "importCsv": "Importar CSV",
-      "importCsvDescription": "Selecciona un archivo CSV para importar. La primera fila debe contener encabezados de columna que coincidan con los campos del esquema.",
-      "import": "Importar",
-      "cancel": "Cancelar",
-      "parseError": "Se encontraron {count} errores de análisis en el CSV",
-      "parsedRows": "{count} filas analizadas",
-      "importSuccess": "{count} documentos encolados para indexación",
-      "importError": "Error al importar documentos",
-      "saved": "Documento guardado",
-      "saveError": "Error al guardar el documento",
-      "deleted": "{count} documento(s) eliminado(s)",
-      "deleteError": "Error al eliminar documentos",
-      "searchPlaceholder": "Buscar documentos…",
-      "filter": "Filtrar",
-      "columns": "Columnas",
-      "toggleColumns": "Mostrar/ocultar columnas",
-      "compact": "Compacto",
-      "comfortable": "Cómodo",
-      "exportCsv": "Exportar CSV",
-      "exportSelected": "Exportar selección",
-      "deleteSelected": "Eliminar selección",
-      "clearSelection": "Limpiar selección",
-      "selected": "{count} seleccionados",
-      "showing": "Mostrando {from}–{to} de {total}",
-      "prev": "Anterior",
-      "next": "Siguiente",
-      "pageOf": "{page} / {total}",
-      "editDocument": "Editar documento",
-      "editDocumentDescription": "Edita los campos del documento a continuación. Los cambios se actualizarán.",
-      "rawDocument": "JSON original",
-      "save": "Guardar cambios",
-      "notSet": "No definido",
-      "true": "Verdadero",
-      "false": "Falso",
-      "optional": "opcional",
-      "bulkDeleteTitle": "Eliminar documentos",
-      "bulkDeleteMessage": "¿Estás seguro de que deseas eliminar {count} documento(s)? Esta acción no se puede deshacer.",
-      "noResults": "Ningún documento coincide con tu búsqueda.",
-      "queryByPlaceholder": "Buscar por campos…",
-      "filterByPlaceholder": "Expresión de filtro…",
-      "clear": "Limpiar filtros"
-    },
-    "collection": {
-      "title": "Colección",
-      "notFound": "Índice no encontrado",
-      "backToIndexes": "Volver a índices",
-      "collection": "Colección",
-      "alias": "Alias",
-      "tab": {
-        "overview": "Resumen",
-        "schema": "Esquema",
-        "documents": "Documentos",
-        "api": "API",
-        "settings": "Ajustes"
-      },
-      "documentsTotal": "Documentos",
-      "searchesWeek": "Búsquedas (7d)",
-      "ingestEvents": "Eventos de ingesta",
-      "apiKeysCount": "Claves API",
-      "schemaOverview": "Campos del esquema",
-      "noSchema": "No hay campos de esquema disponibles.",
-      "viewAllFields": "Ver {count} campos",
-      "indexMeta": "Metadatos del índice",
-      "slug": "Slug",
-      "collectionName": "Colección",
-      "aliasName": "Alias",
-      "schemaVersion": "Versión del esquema",
-      "created": "Creado",
-      "schemaFields": "Campos del esquema",
-      "fields": "campos",
-      "fieldName": "Campo",
-      "fieldType": "Tipo",
-      "fieldFacet": "Faceta",
-      "fieldSort": "Orden",
-      "fieldIndex": "Índice",
-      "totalDocuments": "Documentos totales",
-      "loading": "Cargando...",
-      "noDocuments": "Aún no hay documentos",
-      "noDocumentsDesc": "Suba documentos a través de la API de conector o SDK.",
-      "apiExamples": "Ejemplos de API",
-      "searchExample": "Ejemplo de búsqueda",
-      "indexEndpoint": "Endpoint del índice",
-      "settings": "Ajustes",
-      "displayName": "Nombre mostrado",
-      "open": "Abrir",
-      "schemaEditor": {
-        "addField": "+ Añadir campo",
-        "importJson": "Importar JSON",
-        "exportJson": "Exportar JSON",
-        "previewDiff": "Vista previa de cambios",
-        "cancel": "Cancelar",
-        "saveOnly": "Guardar solo esquema",
-        "saveReindex": "Guardar + reindexar",
-        "defaultSort": "Campo de ordenación por defecto:",
-        "noDefaultSort": "Sin ordenación por defecto",
-        "empty": "No hay campos definidos aún",
-        "addFirstField": "+ Añadir primer campo",
-        "clickToEdit": "Haga clic para editar el nombre del campo",
-        "unnamed": "sin nombre",
-        "settings": "Ajustes",
-        "delete": "Eliminar",
-        "loadError": "Error al cargar el esquema.",
-        "retry": "Reintentar",
-        "saved": "Esquema actualizado.",
-        "saveError": "Error al guardar el esquema.",
-        "importDialogTitle": "Importar campos desde JSON",
-        "importDialogDesc": "Pegue un array JSON de definiciones de campo para reemplazar la lista actual.",
-        "importAction": "Importar",
-        "importMustBeArray": "La entrada debe ser un array JSON.",
-        "invalidJson": "JSON inválido. Por favor, verifique su entrada.",
-        "exported": "JSON del esquema copiado al portapapeles.",
-        "exportError": "Error al copiar al portapapeles.",
-        "diffTitle": "Cambios en el esquema",
-        "diffDesc": "Revise las diferencias entre el borrador y el esquema guardado.",
-        "noChanges": "No se detectaron cambios.",
-        "settingsTitle": "Ajustes para {name}",
-        "settingsDesc": "Configure opciones avanzadas del campo. Se almacenan localmente hasta que guarde.",
-        "defaultValue": "Valor por defecto",
-        "defaultValuePlaceholder": "p.ej. 0, false, cadena vacía",
-        "locale": "Configuración regional",
-        "validators": "Validadores (JSON)"
-      },
-      "version": "Versión",
-      "recentActivity": "Actividad reciente",
-      "noActivity": "No hay actividad reciente.",
-      "useApiKeys": "Autentique las solicitudes usando una clave API.",
-      "manageSettings": "Gestionar la configuración del índice.",
-      "defaultSortingField": "Campo de ordenación por defecto",
-      "enabled": "Activado",
-      "statusEnabled": "Activado",
-      "statusDisabled": "Desactivado",
-      "updatedAt": "Actualizado",
-      "dangerZone": "Zona peligrosa",
-      "dangerZoneDesc": "Eliminar permanentemente este índice y todos sus documentos.",
-      "deleteWarning": "Esta acción no se puede deshacer. Todos los documentos se perderán permanentemente.",
-      "deleteCollection": "Eliminar índice",
-      "confirmDelete": "Eliminar índice",
-      "confirmDeleteDesc": "Esta acción es irreversible.",
-      "confirmDeleteMessage": "¿Está seguro de que desea eliminar \"{name}\"? Todos los documentos se eliminarán permanentemente.",
-      "cancel": "Cancelar",
-      "delete": "Eliminar",
-      "noApiKeys": "No hay claves API aún. Cree una para usar estos ejemplos.",
-      "fieldOptional": "Opcional",
-      "deleted": "Índice eliminado correctamente",
-      "deleteError": "Error al eliminar el índice"
-    },
-    "open": "Abrir",
-    "search": {
-      "vectorSearch": {
-        "description": "Busca por significado.",
-        "placeholder": "Describe lo que buscas...",
-        "field": "Campo vectorial",
-        "results": "{count} resultados",
-        "distance": "Distancia: {distance}"
-      },
-      "hybridSearch": {
-        "description": "Combina keywords + semántica.",
-        "alpha": "Peso semántico (alfa)",
-        "alphaHint": "0 = keywords, 1 = semántico"
-      },
-      "semanticSearch": {
-        "description": "Preguntas en lenguaje natural.",
-        "placeholder": "Pregunta sobre tus datos..."
-      },
-      "models": {
-        "description": "Configurar modelos embedding.",
-        "enabled": "Activar búsqueda vectorial"
-      },
-      "searchTabs": {
-        "vector": "Vectorial",
-        "hybrid": "Híbrido",
-        "semantic": "Búsqueda NL"
-      }
-    },
-    "geoSearch": {
-      "description": "Busca por ubicación.",
-      "lat": "Latitud",
-      "lng": "Longitud",
-      "radius": "Radio (km)"
-    },
-    "federatedSearch": {
-      "description": "Busca en múltiples índices.",
-      "addIndex": "Añadir índice"
-    },
-    "groupedSearch": {
-      "groupBy": "Agrupar por"
-    },
-    "suggestions": "Sugerencias",
-    "presets": "Preajustes",
-    "aliases": "Alias de colección",
-    "snapshots": {
-      "create": "Crear instantánea"
-    },
-    "health": {
-      "ok": "Saludable",
-      "error": "No saludable"
-    },
-    "conversationalSearch": {
-      "description": "Haz preguntas y obtén respuestas generadas por IA de tus datos."
-    },
-    "voiceSearch": {
-      "description": "Busca por voz. El audio se transcribe automáticamente."
-    },
-    "imageSearch": {
-      "description": "Busca subiendo una imagen. La IA la describe antes de buscar."
-    },
-    "stemming": {
-      "description": "Gestiona anulaciones de stemming para coincidencias de texto precisas.",
-      "word": "Palabra",
-      "root": "Raíz"
-    },
-    "stopwords": {
-      "description": "Gestiona palabras vacías para filtrar palabras comunes de la búsqueda."
-    },
-    "clusterOps": {
-      "description": "Operaciones y métricas a nivel de clúster.",
-      "vote": "Votar",
-      "debug": "Depurar",
-      "metrics": "Métricas"
-    },
-    "analyticsRules": {
-      "description": "Reglas de análisis personalizadas para el seguimiento de métricas.",
-      "name": "Nombre",
-      "type": "Tipo",
-      "create": "Crear regla",
-      "delete": "Eliminar regla"
-    },
-    "dynamicSearch": {
-      "description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
-      "diversifyField": "Campo de diversificación",
-      "maxPerValue": "Máx por valor"
-    }
-  },
-  "nav": {
-    "geoSearch": "Búsqueda geográfica",
-    "federatedSearch": "Federada",
-    "settings": "Configuración",
-    "switchOrganization": "Cambiar organización"
-  }
+	"admin": {
+		"menu": {
+			"organizations": "Organizaciones",
+			"users": "Usuarios"
+		},
+		"organizations": {
+			"backToList": "Volver a organizaciones",
+			"confirmDelete": {
+				"confirm": "Eliminar",
+				"message": "Estas seguro de que quieres eliminar esta organizacion? Esta accion no se puede deshacer.",
+				"title": "Eliminar organizacion"
+			},
+			"create": "Crear",
+			"delete": "Eliminar",
+			"deleteOrganization": {
+				"deleted": "La organizacion se ha eliminado correctamente.",
+				"deleting": "Eliminando organizacion...",
+				"notDeleted": "No se pudo eliminar la organizacion. Intentalo de nuevo."
+			},
+			"edit": "Editar",
+			"form": {
+				"createTitle": "Crear una organizacion",
+				"name": "Nombre de la organizacion",
+				"notifications": {
+					"error": "No se pudo guardar la organizacion. Intentalo de nuevo mas tarde.",
+					"success": "La organizacion se ha guardado."
+				},
+				"save": "Guardar",
+				"updateTitle": "Editar organizacion"
+			},
+			"loading": "Cargando organizaciones...",
+			"membersCount": "{count} {count, plural, one {miembro} other {miembros}}",
+			"search": "Buscar una organizacion...",
+			"title": "Gestionar organizaciones"
+		},
+		"title": "Administracion",
+		"users": {
+			"confirmDelete": {
+				"confirm": "Eliminar",
+				"message": "Estas seguro de que quieres eliminar este usuario? Esta accion no se puede deshacer.",
+				"title": "Eliminar usuario"
+			},
+			"delete": "Eliminar",
+			"deleteUser": {
+				"deleted": "El usuario se ha eliminado correctamente.",
+				"deleting": "Eliminando usuario...",
+				"notDeleted": "No se pudo eliminar el usuario. Intentalo de nuevo."
+			},
+			"emailVerified": {
+				"verified": "Email verificado",
+				"waiting": "Email esperando verificacion"
+			},
+			"impersonate": "Personificar",
+			"impersonation": {
+				"impersonating": "Personificando como {name}..."
+			},
+			"loading": "Cargando usuarios...",
+			"resendVerificationMail": {
+				"error": "No se pudo reenviar el correo de verificacion. Intentalo de nuevo.",
+				"submitting": "Reenviando correo de verificacion...",
+				"success": "El correo de verificacion ha sido enviado.",
+				"title": "Reenviar correo de verificacion"
+			},
+			"search": "Buscar por nombre o email...",
+			"title": "Gestionar usuarios",
+			"assignAdminRole": "Asignar rol de administrador",
+			"removeAdminRole": "Eliminar rol de administrador"
+		},
+		"description": "Gestiona tu aplicacion.",
+		"config": {
+			"title": "Configuración",
+			"loadError": "No se pudieron cargar los datos de configuración.",
+			"application": "Aplicación",
+			"appName": "Nombre de la app",
+			"nodeVersion": "Versión de Node.js",
+			"runtimeEnv": "Entorno",
+			"platform": "Plataforma",
+			"uptime": "Tiempo activo",
+			"typesenseHealth": "Estado del motor de búsqueda",
+			"healthy": "Saludable",
+			"unhealthy": "No saludable",
+			"version": "Versión",
+			"databaseStats": "Estadísticas de base de datos",
+			"users": "Usuarios",
+			"organizations": "Organizaciones",
+			"searchIndexes": "Índices de búsqueda",
+			"apiKeys": "Claves API",
+			"usageEvents": "Eventos de uso",
+			"statsError": "No se pudieron obtener estadísticas.",
+			"services": "Servicios externos",
+			"configured": "Configurado",
+			"notConfigured": "No configurado"
+		},
+		"integrations": {
+			"title": "Integraciones",
+			"loadError": "No se pudo verificar el estado de integración.",
+			"database": "Base de datos",
+			"typesense": "AACsearch Engine",
+			"mail": "Correo",
+			"payments": "Pagos",
+			"storage": "Almacenamiento",
+			"walletProvider": "Proveedor de billetera",
+			"configured": "Configurado",
+			"notConfigured": "No configurado",
+			"endpoint": "Endpoint"
+		},
+		"jobs": {
+			"title": "Tareas",
+			"loadError": "No se pudo cargar el estado de las tareas.",
+			"backgroundJobs": "Tareas en segundo plano",
+			"ready": "Listo",
+			"missingSecret": "Secreto faltante",
+			"recentSyncActivity": "Actividad de sincronización reciente",
+			"totalJobs": "Tareas totales",
+			"noSyncActivity": "Aún no hay actividad de sincronización."
+		}
+	},
+	"app": {
+		"menu": {
+			"accountSettings": "Configuracion de la cuenta",
+			"admin": "Admin",
+			"navigationTitle": "Menu",
+			"openNavigation": "Abrir navegacion",
+			"organizationSettings": "Configuracion de la organizacion",
+			"search": "Buscar",
+			"start": "Inicio"
+		},
+		"userMenu": {
+			"accountSettings": "Configuracion de la cuenta",
+			"colorMode": "Modo de color",
+			"documentation": "Documentacion",
+			"home": "Inicio",
+			"logout": "Cerrar sesion"
+		},
+		"notifications": {
+			"title": "Notificaciones",
+			"empty": "Aun no hay notificaciones.",
+			"markAllRead": "Marcar todo como leido",
+			"fallbackTitle": "Notificacion",
+			"aria": {
+				"open": "Abrir notificaciones"
+			}
+		}
+	},
+	"auth": {
+		"errors": {
+			"invalidEmailOrPassword": "Las credenciales introducidas no son validas. Compruebalas e intentelo de nuevo.",
+			"unknown": "Algo salio mal. Intentelo de nuevo.",
+			"userNotFound": "Este usuario no existe",
+			"failedToCreateUser": "No se pudo crear el usuario. Intentelo de nuevo.",
+			"failedToCreateSession": "No se pudo crear una sesion. Intentelo de nuevo.",
+			"failedToUpdateUser": "No se pudo actualizar el usuario. Intentelo de nuevo.",
+			"failedToGetSession": "No se pudo obtener la sesion.",
+			"invalidPassword": "La contrasena introducida es incorrecta.",
+			"invalidEmail": "El email introducido no es valido.",
+			"invalidToken": "El token introducido no es valido o ha caducado.",
+			"credentialAccountNotFound": "Cuenta no encontrada.",
+			"emailCanNotBeUpdated": "El email no se pudo actualizar. Intentelo de nuevo.",
+			"emailNotVerified": "Verifica tu email antes de iniciar sesion.",
+			"failedToGetUserInfo": "No se pudo cargar la informacion del usuario.",
+			"idTokenNotSupported": "El token de ID no es compatible.",
+			"passwordTooLong": "La contrasena es demasiado larga.",
+			"passwordTooShort": "La contrasena es demasiado corta.",
+			"providerNotFound": "Este proveedor no es compatible.",
+			"socialAccountAlreadyLinked": "Esta cuenta ya esta vinculada a un usuario.",
+			"userEmailNotFound": "Email no encontrado.",
+			"userAlreadyExists": "Este usuario ya existe.",
+			"userAlreadyExistsUseAnotherEmail": "El usuario ya existe. Usa otro email.",
+			"invalidInvitation": "La invitacion no es valida o ha caducado.",
+			"sessionExpired": "La sesion ha caducado.",
+			"failedToUnlinkLastAccount": "Error al desvincular la cuenta",
+			"accountNotFound": "Cuenta no encontrada"
+		},
+		"forgotPassword": {
+			"backToSignin": "Volver a iniciar sesion",
+			"email": "Email",
+			"hints": {
+				"linkNotSent": {
+					"message": "Lo sentimos, no pudimos enviarle un enlace para restablecer su contrasena. Intentelo de nuevo mas tarde.",
+					"title": "Enlace no enviado"
+				},
+				"linkSent": {
+					"message": "Te hemos enviado un enlace para continuar. Revisa tu bandeja de entrada.",
+					"title": "Enlace enviado"
+				}
+			},
+			"message": "Introduce tu direccion de email y te enviaremos un enlace para restablecer tu contrasena.",
+			"submit": "Enviar enlace",
+			"title": "Has olvidado tu contrasena?"
+		},
+		"login": {
+			"continueWith": "O continuar con",
+			"createAnAccount": "Crear una cuenta",
+			"dontHaveAnAccount": "Aun no tienes una cuenta?",
+			"forgotPassword": "Has olvidado tu contrasena?",
+			"hints": {
+				"invalidCredentials": "El email o la contrasena introducidos no son validos. Intentelo de nuevo.",
+				"linkSent": {
+					"message": "Te hemos enviado un enlace para continuar. Revisa tu bandeja de entrada.",
+					"title": "Enlace enviado"
+				}
+			},
+			"loginWithPasskey": "Iniciar sesion con passkey",
+			"modes": {
+				"magicLink": "Enlace magico",
+				"password": "***"
+			},
+			"submit": "Iniciar sesion",
+			"subtitle": "Introduce tus credenciales para iniciar sesion.",
+			"title": "Bienvenido de nuevo",
+			"sendMagicLink": "Enviar enlace magico"
+		},
+		"resetPassword": {
+			"backToSignin": "Volver a iniciar sesion",
+			"hints": {
+				"error": "Lo sentimos, no pudimos restablecer tu contrasena. Intentelo de nuevo.",
+				"success": "Tu contrasena se ha restablecido correctamente."
+			},
+			"message": "Introduce una nueva contrasena.",
+			"newPassword": "Nueva contrasena",
+			"submit": "Restablecer contrasena",
+			"title": "Restablecer tu contrasena"
+		},
+		"signup": {
+			"alreadyHaveAccount": "Ya tienes una cuenta?",
+			"email": "Email",
+			"hints": {
+				"signupFailed": "Lo sentimos, no pudimos crear tu cuenta. Intentelo de nuevo mas tarde.",
+				"verifyEmail": "Te hemos enviado un enlace para verificar tu email. Revisa tu bandeja de entrada."
+			},
+			"message": "Nos alegra que quieras unirte. Rellena el siguiente formulario para crear tu cuenta.",
+			"name": "Nombre",
+			"password": "***",
+			"signIn": "Iniciar sesion",
+			"submit": "Crear cuenta",
+			"title": "Crear una cuenta"
+		},
+		"verify": {
+			"title": "Verifica tu cuenta",
+			"code": "Contrasena de un solo uso",
+			"submit": "Verificar",
+			"backToSignin": "Volver a iniciar sesion",
+			"message": "Introduce la contrasena de un solo uso de tu aplicacion de autenticacion para continuar."
+		}
+	},
+	"choosePlan": {
+		"title": "Elige tu plan",
+		"description": "Para continuar, selecciona un plan."
+	},
+	"documentation": {
+		"title": "Documentacion"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "Pagina no encontrada",
+		"goToDashboard": "Ir al panel",
+		"goToHomepage": "Ir a la pagina de inicio"
+	},
+	"onboarding": {
+		"account": {
+			"avatar": "Avatar",
+			"avatarDescription": "Haz clic en el circulo o arrastra una imagen para subir tu avatar.",
+			"name": "Nombre"
+		},
+		"continue": "Continuar",
+		"message": "Solo unos pasos rapidos para empezar.",
+		"notifications": {
+			"accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Intentelo de nuevo mas tarde."
+		},
+		"pricing": {
+			"planSelected": "Tu plan ha sido seleccionado correctamente.",
+			"skip": "Saltar por ahora"
+		},
+		"step": "Paso {step} / {total}",
+		"title": "Configura tu cuenta"
+	},
+	"organizations": {
+		"createForm": {
+			"name": "Nombre de la organizacion",
+			"notifications": {
+				"error": "Lo sentimos, no pudimos crear tu organizacion. Intentelo de nuevo mas tarde.",
+				"success": "Tu organizacion ha sido creada. Ya puedes invitar miembros."
+			},
+			"submit": "Crear organizacion",
+			"subtitle": "Introduce un nombre para tu organizacion para empezar. Puedes cambiar el nombre mas tarde en la configuracion de la organizacion.",
+			"title": "Crear una organizacion"
+		},
+		"invitationAlert": {
+			"description": "Necesitas iniciar sesion o crear una cuenta para unirte a la organizacion.",
+			"title": "Has sido invitado a unirte a una organizacion."
+		},
+		"invitationModal": {
+			"accept": "Aceptar",
+			"decline": "Rechazar",
+			"description": "Has sido invitado a unirte a la organizacion {organizationName}. Quieres aceptar la invitacion y unirte a la organizacion?",
+			"title": "Unirse a la organizacion",
+			"error": "Se produjo un error. Por favor, inténtelo de nuevo."
+		},
+		"organizationSelect": {
+			"createNewOrganization": "Crear nueva organizacion",
+			"organizations": "Organizaciones",
+			"personalAccount": "Cuenta personal"
+		},
+		"organizationsGrid": {
+			"createNewOrganization": "Crear nueva organizacion",
+			"title": "Tus organizaciones"
+		},
+		"roles": {
+			"admin": "Admin",
+			"member": "Miembro",
+			"owner": "Propietario"
+		},
+		"settings": {
+			"changeName": {
+				"title": "Nombre de la organizacion"
+			},
+			"deleteOrganization": {
+				"confirmation": "Estas seguro de que quieres eliminar tu organizacion?",
+				"description": "Elimina permanentemente tu organizacion. Una vez que elimines tu organizacion, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
+				"submit": "Eliminar organizacion",
+				"title": "Eliminar organizacion"
+			},
+			"logo": {
+				"description": "Sube un logotipo para tu organizacion.",
+				"title": "Logotipo de la organizacion"
+			},
+			"members": {
+				"activeMembers": "Miembros activos",
+				"description": "Ve todos los miembros activos y las invitaciones pendientes de tu organizacion.",
+				"invitations": {
+					"empty": "Aun no has invitado a ningun miembro.",
+					"expiresAt": "Expira el {date}",
+					"invitationStatus": {
+						"accepted": "Aceptada",
+						"canceled": "Cancelada",
+						"pending": "Pendiente",
+						"rejected": "Rechazada"
+					},
+					"revoke": "Revocar invitacion",
+					"resend": "Reenviar invitacion"
+				},
+				"inviteMember": {
+					"description": "Para invitar a un nuevo miembro, enviale una invitacion.",
+					"email": "Email",
+					"notifications": {
+						"error": {
+							"description": "No pudimos invitar al miembro. Intentelo de nuevo mas tarde.",
+							"title": "No se pudo invitar al miembro"
+						},
+						"success": {
+							"description": "El miembro ha sido invitado.",
+							"title": "Miembro invitado"
+						}
+					},
+					"role": "Rol",
+					"submit": "Invitar",
+					"title": "Invitar miembro"
+				},
+				"leaveOrganization": "Abandonar organizacion",
+				"notifications": {
+					"removeMember": {
+						"error": {
+							"description": "No se pudo eliminar al miembro de tu organizacion. Intentelo de nuevo."
+						},
+						"loading": {
+							"description": "Eliminando miembro de la organizacion..."
+						},
+						"success": {
+							"description": "El miembro ha sido eliminado correctamente de tu organizacion."
+						}
+					},
+					"revokeInvitation": {
+						"error": {
+							"description": "No se pudo revocar la invitacion. Intentelo de nuevo mas tarde."
+						},
+						"loading": {
+							"description": "Revocando invitacion..."
+						},
+						"success": {
+							"description": "La invitacion ha sido revocada."
+						}
+					},
+					"updateMembership": {
+						"error": {
+							"description": "No se pudo actualizar la membresia de la organizacion. Intentelo de nuevo."
+						},
+						"loading": {
+							"description": "Actualizando membresia..."
+						},
+						"success": {
+							"description": "La membresia se actualizo correctamente"
+						}
+					},
+					"resendInvitation": {
+						"loading": {
+							"description": "Reenviando invitacion..."
+						},
+						"success": {
+							"description": "Invitacion enviada"
+						},
+						"error": {
+							"description": "No se pudo enviar la invitacion. Intentelo de nuevo."
+						}
+					}
+				},
+				"pendingInvitations": "Invitaciones pendientes",
+				"removeMember": "Eliminar miembro",
+				"title": "Miembros"
+			},
+			"notifications": {
+				"organizationDeleted": "Tu organizacion ha sido eliminada.",
+				"organizationNameNotUpdated": "No pudimos actualizar el nombre de tu organizacion. Intentelo de nuevo mas tarde.",
+				"organizationNameUpdated": "El nombre de tu organizacion ha sido actualizado.",
+				"organizationNotDeleted": "No pudimos eliminar tu organizacion. Intentelo de nuevo mas tarde."
+			},
+			"subtitle": "Gestiona la configuracion de la organizacion.",
+			"title": "Organizacion",
+			"dangerZone": {
+				"title": "Zona de peligro"
+			}
+		},
+		"start": {
+			"subtitle": "Bienvenido a la pagina de inicio de esta organizacion!"
+		}
+	},
+	"settings": {
+		"account": {
+			"avatar": {
+				"description": "Para cambiar tu avatar, haz clic en la imagen de este bloque y selecciona un archivo de tu computadora para subir.",
+				"notifications": {
+					"error": "No se pudo actualizar el avatar",
+					"success": "El avatar se actualizo correctamente"
+				},
+				"title": "Tu avatar"
+			},
+			"changeEmail": {
+				"description": "Para cambiar tu email, introduce el nuevo email y pulsa guardar. Tendras que confirmar el nuevo email antes de que se active.",
+				"notifications": {
+					"error": "No se pudo actualizar el email",
+					"success": "El email se actualizo correctamente"
+				},
+				"title": "Tu email"
+			},
+			"changeName": {
+				"notifications": {
+					"error": "No se pudo actualizar el nombre",
+					"success": "El nombre se actualizo correctamente"
+				},
+				"title": "Tu nombre"
+			},
+			"deleteAccount": {
+				"confirmation": "Estas seguro de que quieres eliminar tu cuenta?",
+				"description": "Elimina permanentemente tu cuenta. Una vez que elimines tu cuenta, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
+				"notifications": {
+					"error": "No se pudo eliminar la cuenta",
+					"success": "La cuenta se elimino correctamente"
+				},
+				"submit": "Eliminar cuenta",
+				"title": "Eliminar cuenta"
+			},
+			"language": {
+				"description": "Para cambiar el idioma de la aplicacion para tu cuenta, selecciona un idioma de la lista y haz clic en guardar.",
+				"notifications": {
+					"error": "No se pudo actualizar el idioma",
+					"success": "El idioma se actualizo correctamente"
+				},
+				"title": "Tu idioma"
+			},
+			"security": {
+				"activeSessions": {
+					"description": "Estas son todas las sesiones activas de tu cuenta. Haz clic en la X para finalizar una sesion especifica.",
+					"title": "Sesiones activas",
+					"notifications": {
+						"revokeSession": {
+							"success": "Sesion revocada"
+						}
+					},
+					"currentSession": "Sesion actual"
+				},
+				"changePassword": {
+					"currentPassword": "Contrasena actual",
+					"newPassword": "Nueva contrasena",
+					"notifications": {
+						"error": "No se pudo actualizar la contrasena",
+						"success": "La contrasena se actualizo correctamente"
+					},
+					"title": "Tu contrasena"
+				},
+				"connectedAccounts": {
+					"connect": "Conectar",
+					"connected": "Conectado",
+					"disconnect": "Desconectar",
+					"title": "Cuentas conectadas"
+				},
+				"passkeys": {
+					"addPasskey": "Anadir passkey",
+					"description": "Usa passkeys como una alternativa segura a las contrasenas.",
+					"notifications": {
+						"addPasskey": {
+							"error": {
+								"title": "No se pudo anadir el passkey"
+							},
+							"success": {
+								"title": "Passkey anadido"
+							}
+						},
+						"deletePasskey": {
+							"error": {
+								"title": "No se pudo eliminar el passkey"
+							},
+							"loading": {
+								"title": "Eliminando passkey..."
+							},
+							"success": {
+								"title": "Passkey eliminado"
+							}
+						}
+					},
+					"title": "Passkeys"
+				},
+				"setPassword": {
+					"description": "Aun no has establecido una contrasena. Para establecerla, debes seguir el flujo de restablecimiento de contrasena. Haz clic en el boton de abajo para enviar un email para restablecer tu contrasena y sigue las instrucciones del email.",
+					"notifications": {
+						"error": "No se pudo enviar el enlace para establecer la contrasena. Intentelo de nuevo.",
+						"success": "Revisa tu bandeja de entrada para el enlace para establecer tu contrasena."
+					},
+					"submit": "Establecer contrasena",
+					"title": "Tu contrasena"
+				},
+				"title": "Seguridad",
+				"twoFactor": {
+					"title": "Autenticacion de dos factores",
+					"description": "Anade una capa extra de seguridad a tu cuenta.",
+					"dialog": {
+						"password": {
+							"title": "Verificar con contrasena",
+							"description": "Verifica tu cuenta introduciendo tu contrasena:",
+							"label": "Tu contrasena:"
+						},
+						"totpUrl": {
+							"description": "Usa tu aplicacion de autenticacion preferida y escanea el codigo QR o introduce el secreto manualmente para configurar la autenticacion de dos factores.",
+							"code": "Introduce el codigo de 6 digitos para verificar la configuracion:",
+							"title": "Activar autenticacion de dos factores"
+						}
+					},
+					"enable": "Activar autenticacion de dos factores",
+					"notifications": {
+						"verify": {
+							"success": {
+								"title": "La autenticacion de dos factores se ha activado correctamente."
+							}
+						},
+						"enable": {
+							"error": {
+								"title": "No se pudo verificar tu cuenta con la contrasena proporcionada. Intentelo de nuevo."
+							}
+						},
+						"disable": {
+							"success": {
+								"title": "La autenticacion de dos factores se ha desactivado correctamente."
+							}
+						}
+					},
+					"disable": "Desactivar autenticacion de dos factores",
+					"enabled": "Tienes la autenticacion de dos factores activada para tu cuenta."
+				}
+			},
+			"subtitle": "Gestiona la configuracion de tu cuenta personal.",
+			"title": "Configuracion de la cuenta"
+		},
+		"billing": {
+			"createCustomerPortal": {
+				"label": "Gestionar facturacion",
+				"notifications": {
+					"error": {
+						"title": "No se pudo crear una sesion del portal de clientes. Intentelo de nuevo."
+					}
+				}
+			},
+			"activePlan": {
+				"status": {
+					"active": "Activo",
+					"canceled": "Cancelado",
+					"expired": "Expirado",
+					"incomplete": "Incompleto",
+					"past_due": "Vencido",
+					"paused": "Pausado",
+					"trialing": "Prueba",
+					"unpaid": "No pagado"
+				},
+				"title": "Tu plan",
+				"description": "Su plan actual y límites de uso para búsqueda e indexación.",
+				"notFound": "No hay información del plan disponible."
+			},
+			"changePlan": {
+				"description": "Elige un plan para suscribirte.",
+				"title": "Cambiar tu plan"
+			},
+			"aiCredits": {
+				"title": "Créditos AI",
+				"subtitle": "Uso de IA de pago por uso. Recargue su cartera para desbloquear todas las funciones de IA.",
+				"balance": {
+					"title": "Saldo de la cartera",
+					"includedRemaining": "Incluido este mes",
+					"reserved": "Reservado",
+					"promo": "Créditos promocionales",
+					"notInitialized": "La cartera aún no está inicializada."
+				},
+				"topup": {
+					"button": "Recargar",
+					"title": "Recargar cartera AI",
+					"description": "Elija una cantidad o introduzca un valor personalizado en rublos.",
+					"customAmount": "Cantidad personalizada (₽)",
+					"summary": "Se le cobrará {amount}",
+					"confirm": "Pagar con Tochka",
+					"error": "No se pudo crear el enlace de pago. Inténtelo de nuevo."
+				},
+				"errors": {
+					"insufficientFunds": "Créditos AI insuficientes. Recargue su cartera."
+				}
+			},
+			"title": "Facturacion",
+			"features": {
+				"title": "Características",
+				"none": "No hay características configuradas"
+			},
+			"limits": {
+				"maxIndexes": "Máx. índices",
+				"maxDocuments": "Máx. documentos",
+				"maxApiKeys": "Máx. claves API",
+				"rateLimit": "Límite de velocidad",
+				"maxSearchesPerMonth": "Búsquedas / mes"
+			},
+			"upgrade": "Mejorar plan",
+			"usage": {
+				"searches": "Búsquedas",
+				"documents": "Documentos"
+			}
+		},
+		"notificationsPage": {
+			"title": "Notificaciones",
+			"description": "Elige como recibes las notificaciones. Las opciones desactivadas se almacenan; todo esta activado por defecto.",
+			"groups": {
+				"general": {
+					"title": "General"
+				},
+				"billing": {
+					"title": "Facturacion"
+				}
+			},
+			"types": {
+				"APP_UPDATE": {
+					"label": "Actualizaciones de la app"
+				},
+				"AI_LOW_BALANCE": {
+					"label": "El saldo AI es bajo"
+				},
+				"AI_TOPUP_PAID": {
+					"label": "Recarga AI confirmada"
+				},
+				"AI_TOPUP_FAILED": {
+					"label": "Recarga AI fallida"
+				},
+				"AI_OVERAGE_REACHED": {
+					"label": "Límite AI alcanzado"
+				}
+			},
+			"columns": {
+				"type": "Notificacion",
+				"inApp": "En la app",
+				"email": "Email"
+			}
+		},
+		"menu": {
+			"account": {
+				"billing": "Facturacion",
+				"dangerZone": "Zona de peligro",
+				"general": "General",
+				"notifications": "Notificaciones",
+				"security": "Seguridad",
+				"title": "Cuenta"
+			},
+			"organization": {
+				"billing": "Facturacion",
+				"general": "General",
+				"members": "Miembros",
+				"title": "Organizacion",
+				"dangerZone": "Zona de peligro"
+			}
+		},
+		"save": "Guardar"
+	},
+	"start": {
+		"subtitle": "Ve las ultimas estadisticas de tu increible negocio.",
+		"welcome": "Bienvenido {name}!"
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Cancelar",
+			"confirm": "Confirmar"
+		},
+		"actions": {
+			"continue": "Continuar",
+			"verify": "Verificar"
+		},
+		"colorMode": {
+			"system": "Sistema",
+			"light": "Claro",
+			"dark": "Oscuro"
+		},
+		"passwordCriteria": {
+			"minLength": "Min. 8 caracteres",
+			"upperAndLowercase": "Mayusculas y minusculas",
+			"number": "Numero",
+			"specialCharacter": "Caracter especial"
+		}
+	},
+	"checkoutReturn": {
+		"title": "Procesando tu compra",
+		"description": "Por favor espera mientras confirmamos tu pago.",
+		"loading": "Confirmando tu compra, por favor espera..."
+	},
+	"search": {
+		"title": "Busqueda",
+		"subtitle": "Gestiona índices de búsqueda, claves API y uso de esta organización.",
+		"loading": "Cargando...",
+		"noIndexes": "Aun no hay indices de busqueda. Crea el primero para comenzar.",
+		"selectIndex": "Selecciona un indice para gestionar sus claves API.",
+		"apiKeysPage": {
+			"title": "API Keys"
+		},
+		"importJobsPage": {
+			"title": "Trabajos de Importacion",
+			"description": "Actividad reciente de importacion y sincronizacion de documentos desde la cola de ingesta."
+		},
+		"previewPage": {
+			"title": "Vista Previa de Busqueda"
+		},
+		"fields": {
+			"displayName": "Nombre",
+			"slug": "Slug",
+			"version": "Version",
+			"apiKeys": "Claves API",
+			"defaultSortingField": "Campo de ordenacion por defecto",
+			"schema": "Campos (JSON)"
+		},
+		"createIndex": {
+			"trigger": "Crear indice",
+			"title": "Crear indice de busqueda",
+			"description": "Crea una colección y alias de búsqueda con alcance a esta organización.",
+			"slugHelp": "Letras minusculas, digitos y guiones. Se usa en rutas API y como alias de coleccion.",
+			"schemaHelp": "Array JSON con definiciones de campos. El campo 'tenant_id' se añade automáticamente.",
+			"submit": "Crear",
+			"success": "Indice creado.",
+			"error": "No se pudo crear el indice. Intentelo de nuevo.",
+			"startFromTemplate": "Empieza con una plantilla:",
+			"autoFromName": "auto",
+			"builder": "Constructor visual",
+			"json": "JSON",
+			"fieldsTitle": "Campos del esquema",
+			"fieldsCount": "{count} campos configurados",
+			"addField": "Anadir campo",
+			"removeField": "Quitar campo",
+			"moveUp": "Subir",
+			"moveDown": "Bajar",
+			"errorsCount": "{count, plural, one {# campo con errores} other {# campos con errores}}",
+			"noFields": "Aun no hay campos: anade uno o elige una plantilla.",
+			"noSort": "Sin orden por defecto",
+			"noSortableHint": "Activa primero Sort en un campo numerico",
+			"tenantHint": "tenant_id se anade automaticamente para aislar datos.",
+			"templates": {
+				"products": "Productos",
+				"articles": "Articulos",
+				"users": "Usuarios",
+				"blank": "En blanco"
+			},
+			"typeGroups": {
+				"text": "Texto",
+				"number": "Numero",
+				"boolean": "Booleano",
+				"advanced": "Avanzado"
+			},
+			"toggles": {
+				"facet": "Faceta",
+				"optional": "Opcional",
+				"sort": "Ordenar"
+			},
+			"tooltips": {
+				"displayName": "Nombre legible que se muestra en el panel. No afecta a la API.",
+				"slug": "Se usa en rutas API y como alias de la colección de búsqueda. Solo letras minúsculas, dígitos y guiones.",
+				"fields": "Define las columnas de tu coleccion de busqueda. Los campos pueden ser facetables, ordenables u opcionales.",
+				"facet": "Permite filtrar y agrupar por este campo (p. ej. categorias, etiquetas, marca).",
+				"optional": "El campo puede faltar en los documentos. Los campos obligatorios deben existir en cada documento.",
+				"sort": "Permite ordenar por este campo (los campos numericos siempre pueden ordenarse).",
+				"defaultSort": "Campo usado para ordenar resultados cuando no se especifica un orden. Debe ser numerico.",
+				"json": "Edita el esquema como JSON puro. Al volver al constructor visual se validan y sincronizan los cambios.",
+				"idField": "Identificador único recomendado. AACsearch lo usa como clave primaria para upserts."
+			},
+			"errors": {
+				"duplicateName": "El nombre del campo debe ser unico",
+				"invalidJson": "JSON invalido",
+				"empty": "Anade al menos un campo",
+				"fieldsInvalid": "Corrige los campos marcados"
+			}
+		},
+		"apiKeys": {
+			"title": "Claves API",
+			"description": "Las claves de búsqueda se validan en el backend antes de ejecutar las consultas. Las credenciales de administración nunca salen del servidor.",
+			"create": "Crear clave",
+			"createDescription": "La clave en bruto se muestra una sola vez. Guardala de forma segura.",
+			"name": "Nombre",
+			"generate": "Generar clave",
+			"created": "Clave API creada.",
+			"revealOnce": "Copia esta clave ahora. No volvera a mostrarse.",
+			"done": "Hecho",
+			"empty": "Aun no hay claves API.",
+			"tableName": "Nombre",
+			"tablePrefix": "Prefijo",
+			"tableScopes": "Permisos",
+			"tableStatus": "Estado",
+			"tableActions": "Acciones",
+			"statusActive": "Activa",
+			"statusRevoked": "Revocada",
+			"revoke": "Revocar",
+			"revokeConfirmTitle": "Revocar clave API",
+			"revokeConfirmMessage": "Seguro que quieres revocar \"{name}\"? Los clientes que la usen dejaran de funcionar inmediatamente.",
+			"revoked": "Clave API revocada.",
+			"error": "La operacion fallo.",
+			"emptyDescription": "Crea tu primera clave API para empezar a integrar la búsqueda en tu aplicación."
+		},
+		"usage": {
+			"title": "Uso",
+			"windowDays": "Ultimos {days} dias",
+			"searches": "Busquedas",
+			"documents": "Documentos indexados",
+			"ingests": "Documentos indexados",
+			"ofLimit": "del limite mensual",
+			"loadError": "No se pudieron cargar los datos de uso."
+		},
+		"analytics": {
+			"tab": "Analiticas",
+			"title": "Analiticas",
+			"description": "Sigue el uso de busqueda, las consultas principales, los resultados vacios y las tendencias.",
+			"totalSearches": "Busquedas totales",
+			"totalSessions": "Sesiones",
+			"ctr": "CTR",
+			"zeroResults": "Sin resultados",
+			"zeroResultRate": "Tasa de cero resultados",
+			"comingSoon": "Próximamente",
+			"searchesOverTime": "Busquedas a lo largo del tiempo",
+			"topQueries": "Principales busquedas",
+			"topClickedProducts": "Productos mas clickeados",
+			"queryColumn": "Busqueda",
+			"countColumn": "Cuenta",
+			"productColumn": "Producto",
+			"clicksColumn": "Clics",
+			"rankColumn": "#",
+			"percentColumn": "% del total",
+			"period24h": "24h",
+			"period7d": "7 días",
+			"period30d": "30 días",
+			"documentsIndexed": "Documentos indexados",
+			"failedSyncJobs": "Trabajos de sincronización fallidos",
+			"failed": "fallidos",
+			"retentionBanner": "Su plan {plan} conserva los datos analíticos durante {days} días. Seleccione un período más corto para ver los datos.",
+			"noData": "No hay datos disponibles para este periodo.",
+			"noDataDescription": "Los datos analíticos aparecerán una vez que tus índices de búsqueda comiencen a recibir consultas."
+		},
+		"widget": {
+			"tab": "Widget",
+			"title": "Widget de busqueda",
+			"description": "Incrusta un widget de busqueda en tu tienda con una sola etiqueta script.",
+			"apiKeyLabel": "Clave API",
+			"apiKeyHint": "Pega tu clave API de solo busqueda (ss_search_...) o crea una nueva en la pestana API Keys.",
+			"snippet": "Codigo del widget",
+			"copySnippet": "Copiar codigo",
+			"copied": "Codigo del widget copiado!",
+			"copyFailed": "Error al copiar.",
+			"installInstructions": "Instrucciones de instalacion",
+			"step1": "Anade un elemento contenedor: <div id=\"aac-search\"></div>",
+			"step2": "Pega el codigo del widget antes de la etiqueta </body>.",
+			"step3": "El widget se inicializara automaticamente. Personaliza los atributos data-* segun sea necesario."
+		},
+		"projects": {
+			"title": "Proyectos",
+			"apiKeys": "Claves API",
+			"loadError": "Error al cargar los proyectos."
+		},
+		"overview": {
+			"title": "Resumen",
+			"subtitle": "Últimos {days} días",
+			"totalSearches": "Búsquedas totales",
+			"searchesTrend": "Tendencia de búsqueda",
+			"documentsIndexed": "Documentos indexados",
+			"quotaUsage": "Uso de cuota",
+			"failedSyncJobs": "Trabajos de sincronización fallidos",
+			"searchesOverTime": "Búsquedas a lo largo del tiempo",
+			"topQueries": "Principales búsquedas",
+			"activityFeed": "Actividad reciente",
+			"connectorStatus": "Estado del conector",
+			"period24h": "24h",
+			"period7d": "7 días",
+			"period30d": "30 días",
+			"quotaWarning": "Has usado el {percent}% de tu cuota de búsqueda. Actualiza tu plan para evitar interrupciones.",
+			"quotaExceeded": "Has superado tu cuota de búsqueda ({percent}%). Algunas funciones pueden estar limitadas.",
+			"connectorOnline": "Todos los conectores en línea",
+			"connectorOffline": "Conector desconectado",
+			"connectorUnknown": "Sin conector configurado",
+			"noData": "No hay datos disponibles",
+			"noDataDescription": "Los datos aparecerán una vez que tus índices de búsqueda comiencen a recibir consultas.",
+			"refresh": "Actualizar",
+			"activity": {
+				"indexCreated": "Índice \"{name}\" creado",
+				"keyRevoked": "{count, plural, one {# clave API} other {# claves API}} para \"{name}\"",
+				"syncFailed": "Sincronización fallida para el índice \"{name}\""
+			},
+			"indexVersion": "Versión del índice",
+			"apiKeys": "Claves API",
+			"searches": "Búsquedas",
+			"indexes": "Índices",
+			"documents": "Documentos",
+			"plan": "Plan",
+			"quickActions": "Acciones rápidas",
+			"manageIndexes": "Gestionar índices",
+			"manageIndexesDesc": "Crear y gestionar índices de búsqueda",
+			"viewAnalytics": "Ver analíticas",
+			"viewAnalyticsDesc": "Seguir el uso de búsqueda y las consultas principales",
+			"setupConnector": "Configurar conector",
+			"setupConnectorDesc": "Conectar módulo de PrestaShop o Bitrix",
+			"managePlan": "Gestionar plan",
+			"graceUntil": "Solo lectura hasta {date}",
+			"active": "Activo",
+			"indexedProducts": "Productos indexados",
+			"apiKeysCount": "Claves API",
+			"lastHeartbeat": "Último heartbeat",
+			"noHeartbeat": "Nunca",
+			"connectorToken": "Token del conector",
+			"upgrade": "Actualizar plan",
+			"createIndex": "Crear índice",
+			"addConnector": "Añadir conector",
+			"viewAll": "Ver todo",
+			"noSearchesYet": "Aún no has enviado ninguna búsqueda",
+			"emptyStateDescription": "Comienza creando tu primer índice de búsqueda.",
+			"getStarted": "Comenzar"
+		},
+		"gettingStarted": {
+			"title": "Primeros pasos",
+			"welcome": "Comienza con la búsqueda",
+			"subtitle": "Completa los pasos a continuación para empezar a usar la búsqueda.",
+			"allDone": "¡Todos los pasos completados!",
+			"allDoneTitle": "¡Todo listo!",
+			"allDoneDesc": "Todos los pasos de incorporación están completos. Ya puedes usar la búsqueda.",
+			"progress": "Progreso de configuración",
+			"completed": "completado",
+			"step1Label": "Crear un índice de búsqueda",
+			"step1Desc": "Crea tu primer índice de búsqueda para almacenar y organizar datos.",
+			"step1Action": "Crear índice",
+			"step2Label": "Conectar una fuente",
+			"step2Desc": "Genera un token de conector para conectar tu fuente de datos.",
+			"step2Action": "Conectar fuente",
+			"step3Label": "Ejecutar una sincronización",
+			"step3Desc": "Sincroniza tus datos desde tu CMS u otras fuentes.",
+			"step3Action": "Sincronizar",
+			"step4Label": "Probar búsqueda",
+			"step4Desc": "Realiza una búsqueda de prueba para verificar tu configuración.",
+			"step4Action": "Probar búsqueda",
+			"step5Label": "Generar una clave API",
+			"step5Desc": "Crea una clave API para permitir solicitudes de búsqueda desde tu aplicación.",
+			"step5Action": "Generar clave",
+			"step6Label": "Insertar el widget de búsqueda",
+			"step6Desc": "Inserta el widget de búsqueda en tu tienda.",
+			"step6Action": "Insertar widget",
+			"done": "Hecho",
+			"pending": "Pendiente",
+			"inProgress": "En progreso",
+			"viewAnalytics": "Ver análisis",
+			"planCtaTitle": "¿Necesitas más potencia?",
+			"planCtaDesc": "Mejora tu plan para obtener límites más altos y más funciones.",
+			"managePlan": "Gestionar plan",
+			"skipToDashboard": "Ir al panel"
+		},
+		"checklist": {
+			"title": "Lista de verificación",
+			"steps": {
+				"createIndex": "Crear índice",
+				"createIndexDone": "Índice creado",
+				"generateApiKey": "Generar clave API",
+				"generateApiKeyDone": "Clave API generada",
+				"installCmsModule": "Instalar módulo CMS",
+				"installCmsModuleDone": "Módulo CMS instalado",
+				"runFullSync": "Ejecutar sincronización completa",
+				"runFullSyncDone": "Productos sincronizados",
+				"testSearch": "Probar búsqueda",
+				"testSearchDone": "Búsqueda probada",
+				"enableWidget": "Activar widget",
+				"enableWidgetDone": "Widget activado"
+			},
+			"stepDocs": "Ver documentación",
+			"allDone": "¡Todas las comprobaciones superadas!"
+		},
+		"importJobs": {
+			"tab": "Trabajos de Importación",
+			"title": "Trabajos de Importación",
+			"description": "Actividad reciente de importación y sincronización de documentos desde el búfer de ingesta.",
+			"pending": "Pendiente",
+			"processing": "Procesando",
+			"completed": "Completado",
+			"failed": "Fallido",
+			"empty": "No hay actividad de importación en los últimos 7 días.",
+			"tableJobId": "ID del Trabajo",
+			"tableType": "Tipo",
+			"tableStatus": "Estado",
+			"tableProgress": "Progreso",
+			"tableErrors": "Errores",
+			"tableTime": "Hora",
+			"emptyDescription": "Los trabajos de importación aparecen aquí cuando sincronizas datos desde tu CMS.",
+			"viewTimeline": "Cronología",
+			"viewTable": "Tabla",
+			"successRate": "Tasa de éxito",
+			"indexed": "Indexado",
+			"retryQueue": "Cola de reintentos",
+			"retryAll": "Reintentar todo",
+			"clearQueue": "Limpiar",
+			"nextRetry": "Próximo reintento",
+			"retrySuccess": "{count} lote(s) en cola para reintento.",
+			"retryError": "Error al reintentar los lotes. Por favor, inténtelo de nuevo."
+		},
+		"preview": {
+			"tab": "Vista Previa",
+			"title": "Vista Previa de Búsqueda",
+			"description": "Prueba consultas de búsqueda contra este índice e inspecciona los resultados en bruto.",
+			"placeholder": "Ingresa una consulta…",
+			"search": "Buscar",
+			"noResults": "Ejecuta una consulta para ver los resultados aquí.",
+			"perPage": "Por página",
+			"page": "Página",
+			"highlightFields": "Campos de resaltado",
+			"highlightFieldsPlaceholder": "ej. title, description",
+			"facetBy": "Facetas",
+			"facetByPlaceholder": "ej. brand, category",
+			"stats": "{found} resultados en {time} ms"
+		},
+		"connector": {
+			"title": "Connectors",
+			"subtitle": "Conecta PrestaShop, Bitrix o envía documentos directamente por API",
+			"stepCounter": "Paso {current} de {total}",
+			"runSyncDesc": "Inicia una sincronizacion completa para indexar todos los productos de tu CMS.",
+			"runSyncCta": "Ejecutar sincronizacion completa",
+			"syncTriggerHint": "Abre el panel de tu CMS y pulsa 'Full sync' en el modulo AACsearch.",
+			"configStep1": {
+				"prestashop": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de PrestaShop.",
+				"bitrix": "Pega la URL de la API en los ajustes del modulo AACsearch de tu admin de Bitrix.",
+				"directApi": "Usa la URL de la API y el token como URL base y bearer token de tus llamadas REST."
+			},
+			"configStep2": {
+				"prestashop": "Pega el token del conector en el campo de ajustes del modulo.",
+				"bitrix": "Pega el token del conector en el campo de ajustes del modulo.",
+				"directApi": "Incluye el token en la cabecera Authorization: Bearer <token>"
+			},
+			"configStep3": "Guarda la configuracion.",
+			"prestashop": "PrestaShop",
+			"prestashopDesc": "Sincronización completa de productos, categorías, stock",
+			"bitrix": "1C-Bitrix",
+			"bitrixDesc": "Sincronización completa de catálogos de productos",
+			"directApi": "Direct API",
+			"directApiDesc": "Envía documentos directamente por REST API",
+			"setup": "Configurar",
+			"manage": "Gestionar",
+			"viewDocs": "Documentación",
+			"statusOnline": "En línea",
+			"statusOffline": "Desconectado",
+			"statusUnknown": "Desconocido",
+			"lastSync": "Última sincronización: {time}",
+			"lastError": "Último error: {error}",
+			"noHeartbeat": "Sin heartbeat aún",
+			"syncJobs": "Trabajos de sync",
+			"syncJobsNote": "Mostrando trabajos desde el último reinicio (en memoria).",
+			"activeConnectors": "Conectores activos",
+			"activeConnectorsDesc": "Tokens de conector y su estado de heartbeat",
+			"noConnectors": "Aún no hay conectores. Haz clic en 'Configurar' arriba.",
+			"wizardTitle": "Configurar conector {source}",
+			"stepGenerateToken": "Generar token",
+			"stepDownloadModule": "Descargar módulo",
+			"stepConfigure": "Configurar",
+			"stepTestConnection": "Probar conexión",
+			"stepRunSync": "Ejecutar primera sincronización",
+			"tokenGenerated": "Tu token de conector",
+			"tokenCopyWarning": "Guarda esta clave — no podremos mostrarla de nuevo después de cerrar",
+			"tokenCopied": "¡Copiado!",
+			"downloadPrestashop": "Descargar módulo PrestaShop",
+			"downloadBitrix": "Descargar módulo Bitrix",
+			"testSuccess": "¡Conexión exitosa — el módulo está en línea!",
+			"testFailed": "Conexión fallida — revisa la configuración del módulo",
+			"syncSuccess": "Sincronización iniciada correctamente",
+			"jobId": "ID del trabajo",
+			"jobType": "Tipo",
+			"jobStatus": "Estado",
+			"jobStarted": "Iniciado",
+			"jobDuration": "Duración",
+			"jobItems": "Elementos / Fallos",
+			"jobActions": "Acciones",
+			"jobRetry": "Reintentar",
+			"typeFull": "Completo",
+			"typeDelta": "Delta",
+			"statusPending": "Pendiente",
+			"statusRunning": "En ejecución",
+			"statusCompleted": "Completado",
+			"statusFailed": "Fallido",
+			"jobDetailTitle": "Detalle del trabajo",
+			"jobEventLog": "Registro de eventos",
+			"noJobLogs": "No hay eventos registrados",
+			"tokenLabel": "Token del conector",
+			"tokenPlaceholder": "ss_connector_***",
+			"testHandshake": "Probar handshake",
+			"handshakeSuccess": "Handshake exitoso",
+			"handshakeFailed": "Handshake fallido",
+			"description": "Gestiona el token del conector y el estado del handshake.",
+			"noConnectorKeys": "No hay claves de conector. Crea una clave API con el alcance 'connector_write' en la pestaña API Keys.",
+			"lastHeartbeat": "Último heartbeat",
+			"syncNow": "Sincronizar ahora",
+			"revokeToken": "Revocar",
+			"pipeline": {
+				"buffer": "Buffer",
+				"throughput": "Rendimiento",
+				"retryQueue": "Cola de reintentos",
+				"failed": "Fallido"
+			},
+			"time": {
+				"lessThanMinute": "<1 min",
+				"minutes": "{count} min",
+				"hoursMinutes": "{h}h {m}m",
+				"days": "{count}d",
+				"ago": "hace {time}"
+			},
+			"revokeError": "No se pudo revocar el token. Por favor, inténtalo de nuevo.",
+			"retryError": "No se pudieron reintentar los lotes. Por favor, inténtalo de nuevo."
+		},
+		"tabs": {
+			"indexes": "Índices",
+			"playground": "Playground",
+			"apiKeys": "Claves API",
+			"widget": "Widget"
+		},
+		"playground": {
+			"title": "Playground de búsqueda",
+			"description": "Prueba consultas de búsqueda avanzadas con todas las opciones disponibles.",
+			"advanced": "Opciones avanzadas",
+			"advancedShow": "Mostrar opciones avanzadas",
+			"advancedHide": "Ocultar opciones avanzadas",
+			"queryBy": "Campos de búsqueda",
+			"queryByPlaceholder": "Nombres de campos separados por comas (ej. title, description)",
+			"filterBy": "Filtrar por",
+			"filterByPlaceholder": "ej. price:>100 && inStock:=true",
+			"sortBy": "Ordenar por",
+			"sortByPlaceholder": "ej. price:desc",
+			"perPage": "Resultados por página",
+			"run": "Ejecutar búsqueda",
+			"cmdEnter": "Cmd+Enter para buscar",
+			"hits": "Resultados",
+			"facets": "Facetas",
+			"rawJson": "JSON bruto",
+			"curlSnippet": "Equivalente cURL",
+			"copy": "Copiar",
+			"copied": "¡Copiado!",
+			"responseTime": "Tiempo de respuesta",
+			"hitCount": "Resultados",
+			"noDocuments": "Ningún documento coincide con tu consulta.",
+			"debounceInfo": "Búsqueda automática (700ms de retardo)",
+			"lastQueryRestored": "Última consulta restaurada de la sesión anterior.",
+			"noIndexes": "No hay índices disponibles. Crea uno primero.",
+			"curlTitle": "Equivalente cURL"
+		},
+		"indexActions": {
+			"actions": "Acciones",
+			"reindex": "Reindexar",
+			"viewSchema": "Ver esquema",
+			"delete": "Eliminar índice",
+			"deleteConfirmTitle": "Eliminar índice",
+			"deleteConfirmMessage": "¿Seguro que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+			"reindexConfirmTitle": "Reindexar",
+			"reindexConfirmMessage": "¿Activar una reindexación completa para \"{name}\"?",
+			"schemaTitle": "Esquema para \"{name}\"",
+			"reindexed": "Reindexación activada.",
+			"deleted": "Índice eliminado."
+		},
+		"nav": {
+			"overview": "Resumen",
+			"gettingStarted": "Primeros pasos",
+			"search": "Búsqueda",
+			"apiKeys": "Claves API",
+			"importJobs": "Importaciones",
+			"searchPreview": "Vista previa",
+			"analytics": "Analíticas",
+			"relevance": "Relevancia",
+			"connectors": "Conectores",
+			"knowledge": "Conocimiento"
+		},
+		"noIndexesDescription": "Los índices de búsqueda almacenan tus datos y potencian las consultas de búsqueda. Crea uno para empezar.",
+		"synonyms": {
+			"tab": "Sinónimos",
+			"title": "Sinónimos",
+			"description": "Configure sinónimos de búsqueda. Cuando un usuario busca el término sinónimo, se muestran resultados del término raíz.",
+			"add": "Añadir fila",
+			"save": "Guardar sinónimos",
+			"saved": "Sinónimos guardados.",
+			"error": "Error al guardar los sinónimos.",
+			"empty": "Aún no hay sinónimos configurados. Añada un par de sinónimos para empezar.",
+			"emptyDescription": "Los sinónimos asignan diferentes términos de búsqueda a la misma palabra raíz, ampliando la cobertura de su búsqueda.",
+			"synonymColumn": "Sinónimo",
+			"rootColumn": "Raíz",
+			"tableActions": "Acciones",
+			"remove": "Eliminar",
+			"removeConfirmTitle": "Eliminar sinónimo",
+			"removeConfirmMessage": "¿Está seguro de que desea eliminar este par de sinónimos?"
+		},
+		"curations": {
+			"tab": "Curaciones",
+			"title": "Curaciones",
+			"description": "Fije u oculte productos para consultas de búsqueda específicas y controle manualmente los resultados.",
+			"add": "Añadir regla",
+			"save": "Guardar curaciones",
+			"saved": "Curaciones guardadas.",
+			"error": "Error al guardar las curaciones.",
+			"empty": "Aún no hay reglas de curación. Añada una regla para empezar.",
+			"emptyDescription": "Las reglas de curación le permiten fijar u ocultar productos específicos para consultas de búsqueda.",
+			"queryColumn": "Consulta",
+			"pinnedColumn": "IDs fijados",
+			"hiddenColumn": "IDs ocultos",
+			"tableActions": "Acciones",
+			"edit": "Editar",
+			"remove": "Eliminar",
+			"editTitle": "Editar regla de curación",
+			"addTitle": "Añadir regla de curación",
+			"dialogDescription": "Ingrese la consulta de búsqueda y los IDs de producto para fijar u ocultar.",
+			"queryLabel": "Consulta de búsqueda",
+			"queryPlaceholder": "ej. zapatillas running",
+			"pinnedLabel": "IDs de producto fijados (separados por comas)",
+			"pinnedPlaceholder": "prod-123, prod-456",
+			"hiddenLabel": "IDs de producto ocultos (separados por comas)",
+			"hiddenPlaceholder": "prod-789, prod-012",
+			"dialogSave": "Guardar regla",
+			"removeConfirmTitle": "Eliminar regla de curación",
+			"removeConfirmMessage": "¿Está seguro de que desea eliminar esta regla de curación?"
+		},
+		"relevance": {
+			"tab": "Relevancia",
+			"title": "Relevancia",
+			"description": "Gestiona sinonimos, curaciones y rankings de resultados de busqueda."
+		},
+		"knowledge": {
+			"title": "Base de conocimiento",
+			"subtitle": "Respuestas RAG a preguntas sobre sus documentos y catálogos",
+			"spaces": "Espacios",
+			"spacesDesc": "Espacios de conocimiento personales y de organización",
+			"activeSpace": "Espacio activo",
+			"selectSpace": "Seleccionar espacio",
+			"newSpaceSlug": "Slug del nuevo espacio",
+			"newSpaceName": "Nombre del nuevo espacio",
+			"createSpace": "Crear espacio",
+			"sources": "Fuentes",
+			"sourcesDesc": "Fuentes de CMS y archivos para este espacio",
+			"sourceName": "Nombre de la fuente",
+			"sourceType": "Tipo de fuente",
+			"sourceConfig": "Configuración de la fuente (JSON)",
+			"addSource": "Añadir fuente",
+			"fileIngestion": "Ingestión de archivo",
+			"fileIngestionDesc": "Cargue md/xml/pdf en el espacio seleccionado",
+			"fileInput": "Archivo",
+			"ingestFile": "Ingestar archivo",
+			"jobsAndMetrics": "Trabajos y métricas",
+			"jobsAndMetricsDesc": "Visibilidad operacional para ingestión y construcción de grafos",
+			"sourcesMetric": "Fuentes",
+			"documentsMetric": "Documentos",
+			"chunksMetric": "Fragmentos",
+			"graphEdgesMetric": "Aristas del grafo",
+			"ragAsk": "Consulta RAG",
+			"ragAskDesc": "Recuperación híbrida con citas de su espacio",
+			"question": "Pregunta",
+			"askButton": "Preguntar",
+			"graphExplain": "Explicación del grafo",
+			"graphQuery": "Consulta al grafo",
+			"explainGraph": "Explicar grafo",
+			"fileSizeLimit": "El archivo debe ser menor de 50 MB",
+			"fileTypeLimit": "Solo se aceptan archivos .md, .xml, .pdf",
+			"createdSpace": "Espacio de conocimiento creado",
+			"createdSource": "Fuente de datos creada",
+			"ingestionStarted": "Ingestión de archivo iniciada",
+			"answerGenerated": "Respuesta generada",
+			"graphExplained": "Explicación del grafo generada",
+			"permissionDenied": "No tiene permiso para crear espacios",
+			"requiredFields": "El slug y el nombre son obligatorios",
+			"noSpaceSelected": "Seleccione un espacio e introduzca una pregunta",
+			"slugPlaceholder": "catalog-knowledge",
+			"namePlaceholder": "Conocimiento del catálogo",
+			"sourceNamePlaceholder": "Conector de tienda Bitrix",
+			"questionPlaceholder": "¿Qué productos mencionan la rotación de clave API?",
+			"graphQueryPlaceholder": "fallos de diagnóstico del conector",
+			"graphQueryLabel": "Consulta al grafo",
+			"graphExplainDesc": "Inspeccionar el vecindario del grafo para su consulta",
+			"citedFrom": "Citado del documento",
+			"seedNodes": "Nodos semilla",
+			"edges": "Aristas",
+			"noSeedNodes": "No se encontraron nodos semilla.",
+			"noEdges": "No se encontraron aristas.",
+			"loadingSpaces": "Cargando espacios...",
+			"activeSpaceLabel": "Espacio activo: {name} ({slug})",
+			"createSpaceError": "Error al crear el espacio de conocimiento",
+			"sourceCreateError": "Error al crear la fuente de datos",
+			"ingestError": "Error al ingestar el archivo",
+			"answerError": "Error al generar la respuesta",
+			"graphExplainError": "Error al explicar el grafo",
+			"noPermissionSources": "No tiene permiso para crear fuentes",
+			"selectSpaceAndSource": "Seleccione un espacio y proporcione el nombre de la fuente",
+			"invalidSourceConfig": "Configuración de fuente no válida",
+			"noPermissionIngest": "No tiene permiso para ingestar archivos",
+			"selectSpaceAndFile": "Seleccione un espacio y un archivo",
+			"fileReadError": "Error al leer el archivo",
+			"fileTypeInvalid": "Solo se admiten archivos .md, .xml y .pdf",
+			"selectSpaceAndGraphQuery": "Seleccione un espacio e introduzca una consulta al grafo"
+		},
+		"documents": {
+			"empty": "Aún no hay documentos en este índice",
+			"emptyDescription": "Sube un CSV o usa la API para añadir documentos a este índice.",
+			"importCsv": "Importar CSV",
+			"importCsvDescription": "Selecciona un archivo CSV para importar. La primera fila debe contener encabezados de columna que coincidan con los campos del esquema.",
+			"import": "Importar",
+			"cancel": "Cancelar",
+			"parseError": "Se encontraron {count} errores de análisis en el CSV",
+			"parsedRows": "{count} filas analizadas",
+			"importSuccess": "{count} documentos encolados para indexación",
+			"importError": "Error al importar documentos",
+			"saved": "Documento guardado",
+			"saveError": "Error al guardar el documento",
+			"deleted": "{count} documento(s) eliminado(s)",
+			"deleteError": "Error al eliminar documentos",
+			"searchPlaceholder": "Buscar documentos…",
+			"filter": "Filtrar",
+			"columns": "Columnas",
+			"toggleColumns": "Mostrar/ocultar columnas",
+			"compact": "Compacto",
+			"comfortable": "Cómodo",
+			"exportCsv": "Exportar CSV",
+			"exportSelected": "Exportar selección",
+			"deleteSelected": "Eliminar selección",
+			"clearSelection": "Limpiar selección",
+			"selected": "{count} seleccionados",
+			"showing": "Mostrando {from}–{to} de {total}",
+			"prev": "Anterior",
+			"next": "Siguiente",
+			"pageOf": "{page} / {total}",
+			"editDocument": "Editar documento",
+			"editDocumentDescription": "Edita los campos del documento a continuación. Los cambios se actualizarán.",
+			"rawDocument": "JSON original",
+			"save": "Guardar cambios",
+			"notSet": "No definido",
+			"true": "Verdadero",
+			"false": "Falso",
+			"optional": "opcional",
+			"bulkDeleteTitle": "Eliminar documentos",
+			"bulkDeleteMessage": "¿Estás seguro de que deseas eliminar {count} documento(s)? Esta acción no se puede deshacer.",
+			"noResults": "Ningún documento coincide con tu búsqueda.",
+			"queryByPlaceholder": "Buscar por campos…",
+			"filterByPlaceholder": "Expresión de filtro…",
+			"clear": "Limpiar filtros"
+		},
+		"collection": {
+			"title": "Colección",
+			"notFound": "Índice no encontrado",
+			"backToIndexes": "Volver a índices",
+			"collection": "Colección",
+			"alias": "Alias",
+			"tab": {
+				"overview": "Resumen",
+				"schema": "Esquema",
+				"documents": "Documentos",
+				"api": "API",
+				"settings": "Ajustes"
+			},
+			"documentsTotal": "Documentos",
+			"searchesWeek": "Búsquedas (7d)",
+			"ingestEvents": "Eventos de ingesta",
+			"apiKeysCount": "Claves API",
+			"schemaOverview": "Campos del esquema",
+			"noSchema": "No hay campos de esquema disponibles.",
+			"viewAllFields": "Ver {count} campos",
+			"indexMeta": "Metadatos del índice",
+			"slug": "Slug",
+			"collectionName": "Colección",
+			"aliasName": "Alias",
+			"schemaVersion": "Versión del esquema",
+			"created": "Creado",
+			"schemaFields": "Campos del esquema",
+			"fields": "campos",
+			"fieldName": "Campo",
+			"fieldType": "Tipo",
+			"fieldFacet": "Faceta",
+			"fieldSort": "Orden",
+			"fieldIndex": "Índice",
+			"totalDocuments": "Documentos totales",
+			"loading": "Cargando...",
+			"noDocuments": "Aún no hay documentos",
+			"noDocumentsDesc": "Suba documentos a través de la API de conector o SDK.",
+			"apiExamples": "Ejemplos de API",
+			"searchExample": "Ejemplo de búsqueda",
+			"indexEndpoint": "Endpoint del índice",
+			"settings": "Ajustes",
+			"displayName": "Nombre mostrado",
+			"open": "Abrir",
+			"schemaEditor": {
+				"addField": "+ Añadir campo",
+				"importJson": "Importar JSON",
+				"exportJson": "Exportar JSON",
+				"previewDiff": "Vista previa de cambios",
+				"cancel": "Cancelar",
+				"saveOnly": "Guardar solo esquema",
+				"saveReindex": "Guardar + reindexar",
+				"defaultSort": "Campo de ordenación por defecto:",
+				"noDefaultSort": "Sin ordenación por defecto",
+				"empty": "No hay campos definidos aún",
+				"addFirstField": "+ Añadir primer campo",
+				"clickToEdit": "Haga clic para editar el nombre del campo",
+				"unnamed": "sin nombre",
+				"settings": "Ajustes",
+				"delete": "Eliminar",
+				"loadError": "Error al cargar el esquema.",
+				"retry": "Reintentar",
+				"saved": "Esquema actualizado.",
+				"saveError": "Error al guardar el esquema.",
+				"importDialogTitle": "Importar campos desde JSON",
+				"importDialogDesc": "Pegue un array JSON de definiciones de campo para reemplazar la lista actual.",
+				"importAction": "Importar",
+				"importMustBeArray": "La entrada debe ser un array JSON.",
+				"invalidJson": "JSON inválido. Por favor, verifique su entrada.",
+				"exported": "JSON del esquema copiado al portapapeles.",
+				"exportError": "Error al copiar al portapapeles.",
+				"diffTitle": "Cambios en el esquema",
+				"diffDesc": "Revise las diferencias entre el borrador y el esquema guardado.",
+				"noChanges": "No se detectaron cambios.",
+				"settingsTitle": "Ajustes para {name}",
+				"settingsDesc": "Configure opciones avanzadas del campo. Se almacenan localmente hasta que guarde.",
+				"defaultValue": "Valor por defecto",
+				"defaultValuePlaceholder": "p.ej. 0, false, cadena vacía",
+				"locale": "Configuración regional",
+				"validators": "Validadores (JSON)"
+			},
+			"version": "Versión",
+			"recentActivity": "Actividad reciente",
+			"noActivity": "No hay actividad reciente.",
+			"useApiKeys": "Autentique las solicitudes usando una clave API.",
+			"manageSettings": "Gestionar la configuración del índice.",
+			"defaultSortingField": "Campo de ordenación por defecto",
+			"enabled": "Activado",
+			"statusEnabled": "Activado",
+			"statusDisabled": "Desactivado",
+			"updatedAt": "Actualizado",
+			"dangerZone": "Zona peligrosa",
+			"dangerZoneDesc": "Eliminar permanentemente este índice y todos sus documentos.",
+			"deleteWarning": "Esta acción no se puede deshacer. Todos los documentos se perderán permanentemente.",
+			"deleteCollection": "Eliminar índice",
+			"confirmDelete": "Eliminar índice",
+			"confirmDeleteDesc": "Esta acción es irreversible.",
+			"confirmDeleteMessage": "¿Está seguro de que desea eliminar \"{name}\"? Todos los documentos se eliminarán permanentemente.",
+			"cancel": "Cancelar",
+			"delete": "Eliminar",
+			"noApiKeys": "No hay claves API aún. Cree una para usar estos ejemplos.",
+			"fieldOptional": "Opcional",
+			"deleted": "Índice eliminado correctamente",
+			"deleteError": "Error al eliminar el índice"
+		},
+		"open": "Abrir",
+		"search": {
+			"vectorSearch": {
+				"description": "Busca por significado.",
+				"placeholder": "Describe lo que buscas...",
+				"field": "Campo vectorial",
+				"results": "{count} resultados",
+				"distance": "Distancia: {distance}"
+			},
+			"hybridSearch": {
+				"description": "Combina keywords + semántica.",
+				"alpha": "Peso semántico (alfa)",
+				"alphaHint": "0 = keywords, 1 = semántico"
+			},
+			"semanticSearch": {
+				"description": "Preguntas en lenguaje natural.",
+				"placeholder": "Pregunta sobre tus datos..."
+			},
+			"models": {
+				"description": "Configurar modelos embedding.",
+				"enabled": "Activar búsqueda vectorial"
+			},
+			"searchTabs": {
+				"vector": "Vectorial",
+				"hybrid": "Híbrido",
+				"semantic": "Búsqueda NL"
+			}
+		},
+		"geoSearch": {
+			"description": "Busca por ubicación.",
+			"lat": "Latitud",
+			"lng": "Longitud",
+			"radius": "Radio (km)"
+		},
+		"federatedSearch": {
+			"description": "Busca en múltiples índices.",
+			"addIndex": "Añadir índice"
+		},
+		"groupedSearch": {
+			"groupBy": "Agrupar por"
+		},
+		"suggestions": "Sugerencias",
+		"presets": "Preajustes",
+		"aliases": "Alias de colección",
+		"snapshots": {
+			"create": "Crear instantánea"
+		},
+		"health": {
+			"ok": "Saludable",
+			"error": "No saludable"
+		},
+		"conversationalSearch": {
+			"description": "Haz preguntas y obtén respuestas generadas por IA de tus datos."
+		},
+		"voiceSearch": {
+			"description": "Busca por voz. El audio se transcribe automáticamente."
+		},
+		"imageSearch": {
+			"description": "Busca subiendo una imagen. La IA la describe antes de buscar."
+		},
+		"stemming": {
+			"description": "Gestiona anulaciones de stemming para coincidencias de texto precisas.",
+			"word": "Palabra",
+			"root": "Raíz"
+		},
+		"stopwords": {
+			"description": "Gestiona palabras vacías para filtrar palabras comunes de la búsqueda."
+		},
+		"clusterOps": {
+			"description": "Operaciones y métricas a nivel de clúster.",
+			"vote": "Votar",
+			"debug": "Depurar",
+			"metrics": "Métricas"
+		},
+		"analyticsRules": {
+			"description": "Reglas de análisis personalizadas para el seguimiento de métricas.",
+			"name": "Nombre",
+			"type": "Tipo",
+			"create": "Crear regla",
+			"delete": "Eliminar regla"
+		},
+		"dynamicSearch": {
+			"description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
+			"diversifyField": "Campo de diversificación",
+			"maxPerValue": "Máx por valor"
+		}
+	},
+	"nav": {
+		"geoSearch": "Búsqueda geográfica",
+		"federatedSearch": "Federada",
+		"settings": "Configuración",
+		"switchOrganization": "Cambiar organización"
+	}
 }

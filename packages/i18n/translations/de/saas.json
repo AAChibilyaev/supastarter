@@ -1235,7 +1235,7 @@
 			"saveError": "Fehler beim Speichern des Dokuments",
 			"deleted": "{count} Dokument(e) gelöscht",
 			"deleteError": "Fehler beim Löschen der Dokumente",
-			"searchPlaceholder": "Dokumente durchsuchen\u2026",
+			"searchPlaceholder": "Dokumente durchsuchen…",
 			"filter": "Filter",
 			"columns": "Spalten",
 			"toggleColumns": "Spalten ein-/ausblenden",
@@ -1246,7 +1246,7 @@
 			"deleteSelected": "Auswahl löschen",
 			"clearSelection": "Auswahl aufheben",
 			"selected": "{count} ausgewählt",
-			"showing": "Zeige {from}\u2013{to} von {total}",
+			"showing": "Zeige {from}–{to} von {total}",
 			"prev": "Zurück",
 			"next": "Weiter",
 			"pageOf": "{page} / {total}",
@@ -1261,8 +1261,8 @@
 			"bulkDeleteTitle": "Dokumente löschen",
 			"bulkDeleteMessage": "Sind Sie sicher, dass Sie {count} Dokument(e) löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.",
 			"noResults": "Keine Dokumente entsprechen Ihrer Suche.",
-			"queryByPlaceholder": "Felder durchsuchen\u2026",
-			"filterByPlaceholder": "Filterausdruck\u2026",
+			"queryByPlaceholder": "Felder durchsuchen…",
+			"filterByPlaceholder": "Filterausdruck…",
 			"clear": "Filter zurücksetzen"
 		},
 		"collection": {
@@ -1346,6 +1346,33 @@
 				"validators": "Validatoren (JSON)"
 			}
 		},
-		"open": "Öffnen"
+		"open": "Öffnen",
+		"search": {
+			"vectorSearch": {
+				"description": "Suche nach Bedeutung.",
+				"placeholder": "Beschreiben Sie, wonach Sie suchen...",
+				"field": "Vektorfeld",
+				"results": "{count} Ergebnisse",
+				"distance": "Distanz: {distance}"
+			},
+			"hybridSearch": {
+				"description": "Keyword + Semantik kombinieren.",
+				"alpha": "Semantisches Gewicht (Alpha)",
+				"alphaHint": "0 = Keywords, 1 = Semantik"
+			},
+			"semanticSearch": {
+				"description": "Fragen in natürlicher Sprache.",
+				"placeholder": "Fragen zu Ihren Daten..."
+			},
+			"models": {
+				"description": "Embedding-Modelle konfigurieren.",
+				"enabled": "Vektorsuche aktivieren"
+			},
+			"searchTabs": {
+				"vector": "Vektor",
+				"hybrid": "Hybrid",
+				"semantic": "NL-Suche"
+			}
+		}
 	}
 }

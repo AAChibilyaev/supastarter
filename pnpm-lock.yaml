@@ -1303,6 +1303,9 @@ importers:
       '@repo/logs':
         specifier: workspace:*
         version: link:../logs
+      openai:
+        specifier: 'catalog:'
+        version: 6.33.0(ws@8.18.3)(zod@4.3.6)
       server-only:
         specifier: 'catalog:'
         version: 0.0.1

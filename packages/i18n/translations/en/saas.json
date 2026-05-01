@@ -1427,6 +1427,33 @@
 				"validators": "Validators (JSON)"
 			}
 		},
-		"open": "Open"
+		"open": "Open",
+		"search": {
+			"vectorSearch": {
+				"description": "Search by meaning, not just keywords.",
+				"placeholder": "Describe what you're looking for...",
+				"field": "Vector field",
+				"results": "{count} results found",
+				"distance": "Distance: {distance}"
+			},
+			"hybridSearch": {
+				"description": "Combine keyword + semantic for best results.",
+				"alpha": "Semantic weight (alpha)",
+				"alphaHint": "0 = keywords, 1 = semantic"
+			},
+			"semanticSearch": {
+				"description": "Ask questions in plain language.",
+				"placeholder": "Ask a question about your data..."
+			},
+			"models": {
+				"description": "Configure embedding models for vector and hybrid search.",
+				"enabled": "Enable vector search"
+			},
+			"searchTabs": {
+				"vector": "Vector",
+				"hybrid": "Hybrid",
+				"semantic": "NL Search"
+			}
+		}
 	}
 }

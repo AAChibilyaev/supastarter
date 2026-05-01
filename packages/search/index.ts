@@ -40,3 +40,12 @@ export {
 } from "./lib/maintenance";
 export { verifySearchApiKey, type VerifiedSearchKey } from "./lib/verify";
 export { reindexCollection, type ReindexInput, type ReindexResult } from "./lib/reindex";
+export {
+	EMBEDDING_MODELS,
+	formatVectorQuery,
+	generateEmbedding,
+	generateEmbeddings,
+	getOpenAIClient,
+	type EmbeddingModelName,
+	type EmbeddingResult,
+} from "./lib/embeddings";

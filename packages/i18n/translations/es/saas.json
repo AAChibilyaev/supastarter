@@ -1269,7 +1269,7 @@
 			"saveError": "Error al guardar el documento",
 			"deleted": "{count} documento(s) eliminado(s)",
 			"deleteError": "Error al eliminar documentos",
-			"searchPlaceholder": "Buscar documentos\u2026",
+			"searchPlaceholder": "Buscar documentos…",
 			"filter": "Filtrar",
 			"columns": "Columnas",
 			"toggleColumns": "Mostrar/ocultar columnas",
@@ -1280,7 +1280,7 @@
 			"deleteSelected": "Eliminar selección",
 			"clearSelection": "Limpiar selección",
 			"selected": "{count} seleccionados",
-			"showing": "Mostrando {from}\u2013{to} de {total}",
+			"showing": "Mostrando {from}–{to} de {total}",
 			"prev": "Anterior",
 			"next": "Siguiente",
 			"pageOf": "{page} / {total}",
@@ -1295,8 +1295,8 @@
 			"bulkDeleteTitle": "Eliminar documentos",
 			"bulkDeleteMessage": "¿Estás seguro de que deseas eliminar {count} documento(s)? Esta acción no se puede deshacer.",
 			"noResults": "Ningún documento coincide con tu búsqueda.",
-			"queryByPlaceholder": "Buscar por campos\u2026",
-			"filterByPlaceholder": "Expresión de filtro\u2026",
+			"queryByPlaceholder": "Buscar por campos…",
+			"filterByPlaceholder": "Expresión de filtro…",
 			"clear": "Limpiar filtros"
 		},
 		"collection": {
@@ -1380,6 +1380,33 @@
 				"validators": "Validadores (JSON)"
 			}
 		},
-		"open": "Abrir"
+		"open": "Abrir",
+		"search": {
+			"vectorSearch": {
+				"description": "Busca por significado.",
+				"placeholder": "Describe lo que buscas...",
+				"field": "Campo vectorial",
+				"results": "{count} resultados",
+				"distance": "Distancia: {distance}"
+			},
+			"hybridSearch": {
+				"description": "Combina keywords + semántica.",
+				"alpha": "Peso semántico (alfa)",
+				"alphaHint": "0 = keywords, 1 = semántico"
+			},
+			"semanticSearch": {
+				"description": "Preguntas en lenguaje natural.",
+				"placeholder": "Pregunta sobre tus datos..."
+			},
+			"models": {
+				"description": "Configurar modelos embedding.",
+				"enabled": "Activar búsqueda vectorial"
+			},
+			"searchTabs": {
+				"vector": "Vectorial",
+				"hybrid": "Híbrido",
+				"semantic": "Búsqueda NL"
+			}
+		}
 	}
 }

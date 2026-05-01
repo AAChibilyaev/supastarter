@@ -1181,7 +1181,7 @@
 			"saveError": "Не удалось сохранить документ",
 			"deleted": "{count} документов(а) удалено",
 			"deleteError": "Не удалось удалить документы",
-			"searchPlaceholder": "Поиск документов\u2026",
+			"searchPlaceholder": "Поиск документов…",
 			"filter": "Фильтр",
 			"columns": "Столбцы",
 			"toggleColumns": "Показать/скрыть столбцы",
@@ -1192,7 +1192,7 @@
 			"deleteSelected": "Удалить выбранные",
 			"clearSelection": "Очистить выбор",
 			"selected": "Выбрано: {count}",
-			"showing": "Показано {from}\u2013{to} из {total}",
+			"showing": "Показано {from}–{to} из {total}",
 			"prev": "Назад",
 			"next": "Вперёд",
 			"pageOf": "{page} / {total}",
@@ -1207,8 +1207,8 @@
 			"bulkDeleteTitle": "Удаление документов",
 			"bulkDeleteMessage": "Вы уверены, что хотите удалить {count} документов(а)? Это действие нельзя отменить.",
 			"noResults": "Документы по вашему запросу не найдены.",
-			"queryByPlaceholder": "Поиск по полям\u2026",
-			"filterByPlaceholder": "Выражение фильтра\u2026",
+			"queryByPlaceholder": "Поиск по полям…",
+			"filterByPlaceholder": "Выражение фильтра…",
 			"clear": "Очистить фильтры"
 		},
 		"collection": {
@@ -1292,6 +1292,33 @@
 				"validators": "Валидаторы (JSON)"
 			}
 		},
-		"open": "Открыть"
+		"open": "Открыть",
+		"search": {
+			"vectorSearch": {
+				"description": "Поиск по смыслу.",
+				"placeholder": "Опишите, что вы ищете...",
+				"field": "Векторное поле",
+				"results": "{count} результатов",
+				"distance": "Дистанция: {distance}"
+			},
+			"hybridSearch": {
+				"description": "Ключевые слова + семантика.",
+				"alpha": "Вес семантики (alpha)",
+				"alphaHint": "0 = ключевые слова, 1 = семантика"
+			},
+			"semanticSearch": {
+				"description": "Вопросы на естественном языке.",
+				"placeholder": "Вопрос о ваших данных..."
+			},
+			"models": {
+				"description": "Настройка моделей эмбеддингов.",
+				"enabled": "Включить векторный поиск"
+			},
+			"searchTabs": {
+				"vector": "Векторный",
+				"hybrid": "Гибридный",
+				"semantic": "NL-поиск"
+			}
+		}
 	}
 }

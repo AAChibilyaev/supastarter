@@ -1051,7 +1051,7 @@
 			"syncJobs": "Tâches de sync",
 			"syncJobsNote": "Affichage des tâches depuis le dernier redémarrage (en mémoire).",
 			"activeConnectors": "Connecteurs actifs",
-			"activeConnectorsDesc": "Jetons de connecteur et leur statut de battement de c\u0153ur",
+			"activeConnectorsDesc": "Jetons de connecteur et leur statut de battement de cœur",
 			"noConnectors": "Pas encore de connecteurs. Cliquez sur 'Configurer' ci-dessus.",
 			"wizardTitle": "Configurer le connecteur {source}",
 			"stepGenerateToken": "Générer le jeton",
@@ -1202,7 +1202,7 @@
 			"saveError": "Échec de l'enregistrement du document",
 			"deleted": "{count} document(s) supprimé(s)",
 			"deleteError": "Échec de la suppression des documents",
-			"searchPlaceholder": "Rechercher des documents\u2026",
+			"searchPlaceholder": "Rechercher des documents…",
 			"filter": "Filtrer",
 			"columns": "Colonnes",
 			"toggleColumns": "Afficher/masquer les colonnes",
@@ -1213,7 +1213,7 @@
 			"deleteSelected": "Supprimer la sélection",
 			"clearSelection": "Effacer la sélection",
 			"selected": "{count} sélectionné(s)",
-			"showing": "Affichage de {from}\u2013{to} sur {total}",
+			"showing": "Affichage de {from}–{to} sur {total}",
 			"prev": "Précédent",
 			"next": "Suivant",
 			"pageOf": "{page} / {total}",
@@ -1228,8 +1228,8 @@
 			"bulkDeleteTitle": "Supprimer des documents",
 			"bulkDeleteMessage": "Êtes-vous sûr de vouloir supprimer {count} document(s) ? Cette action est irréversible.",
 			"noResults": "Aucun document ne correspond à votre recherche.",
-			"queryByPlaceholder": "Rechercher par champs\u2026",
-			"filterByPlaceholder": "Expression de filtre\u2026",
+			"queryByPlaceholder": "Rechercher par champs…",
+			"filterByPlaceholder": "Expression de filtre…",
 			"clear": "Effacer les filtres"
 		},
 		"collection": {
@@ -1313,6 +1313,33 @@
 				"validators": "Validateurs (JSON)"
 			}
 		},
-		"open": "Ouvrir"
+		"open": "Ouvrir",
+		"search": {
+			"vectorSearch": {
+				"description": "Recherchez par sens.",
+				"placeholder": "Décrivez ce que vous recherchez...",
+				"field": "Champ vectoriel",
+				"results": "{count} résultats",
+				"distance": "Distance : {distance}"
+			},
+			"hybridSearch": {
+				"description": "Combinez mots-clés + sémantique.",
+				"alpha": "Poids sémantique (alpha)",
+				"alphaHint": "0 = mots-clés, 1 = sémantique"
+			},
+			"semanticSearch": {
+				"description": "Questions en langage naturel.",
+				"placeholder": "Question sur vos données..."
+			},
+			"models": {
+				"description": "Configurer modèles embedding.",
+				"enabled": "Activer recherche vectorielle"
+			},
+			"searchTabs": {
+				"vector": "Vectoriel",
+				"hybride": "Hybride",
+				"semantic": "Recherche NL"
+			}
+		}
 	}
 }

@@ -77,7 +77,7 @@
 			"runtimeEnv": "Runtime",
 			"platform": "Platform",
 			"uptime": "Uptime",
-			"typesenseHealth": "Typesense health",
+			"typesenseHealth": "Search engine health",
 			"healthy": "Healthy",
 			"unhealthy": "Unhealthy",
 			"version": "Version",
@@ -96,7 +96,7 @@
 			"title": "Integrations",
 			"loadError": "Failed to check integration status.",
 			"database": "Database",
-			"typesense": "Typesense",
+			"typesense": "AACsearch Engine",
 			"mail": "Mail",
 			"payments": "Payments",
 			"storage": "Storage",
@@ -294,7 +294,8 @@
 			"accept": "Accept",
 			"decline": "Decline",
 			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization"
+			"title": "Join the organization",
+			"error": "An error occurred. Please try again."
 		},
 		"organizationSelect": {
 			"createNewOrganization": "Create new organization",
@@ -722,7 +723,7 @@
 	},
 	"search": {
 		"title": "Search",
-		"subtitle": "Manage Typesense indexes, API keys and usage for this organization.",
+		"subtitle": "Manage search indexes, API keys and usage for this organization.",
 		"loading": "Loading...",
 		"noIndexes": "No search indexes yet. Create your first one to get started.",
 		"noIndexesDescription": "Search indexes store your data and power search queries. Create one to get started.",
@@ -748,9 +749,9 @@
 		"createIndex": {
 			"trigger": "Create index",
 			"title": "Create search index",
-			"description": "Provisions a Typesense collection and alias scoped to this organization.",
+			"description": "Provisions a search collection and alias scoped to this organization.",
 			"slugHelp": "Lowercase letters, digits and dashes. Used in API paths and as collection alias.",
-			"schemaHelp": "JSON array of Typesense field definitions. The 'tenant_id' field is added automatically.",
+			"schemaHelp": "JSON array of field definitions. The 'tenant_id' field is added automatically.",
 			"submit": "Create",
 			"success": "Index created.",
 			"error": "Could not create index. Please try again.",
@@ -788,14 +789,14 @@
 			},
 			"tooltips": {
 				"displayName": "Human-readable name shown in the dashboard. Does not affect the API.",
-				"slug": "Used in API paths and as the Typesense collection alias. Lowercase letters, digits and dashes only.",
+				"slug": "Used in API paths and as the search collection alias. Lowercase letters, digits and dashes only.",
 				"fields": "Define the columns of your search collection. Fields can be made facetable, sortable, or optional.",
 				"facet": "Allow users to filter and group by this field (e.g. categories, tags, brand).",
 				"optional": "The field is allowed to be missing on documents. Required fields must be present in every document.",
 				"sort": "Allow sorting on this field (numeric fields can always be sorted).",
 				"defaultSort": "Field used to order results when no explicit sort is given. Must be numeric.",
 				"json": "Edit the schema as raw JSON. Switching back to the visual builder validates and re-syncs your changes.",
-				"idField": "Recommended unique identifier. Typesense uses this as the primary key for upserts."
+				"idField": "Recommended unique identifier. AACsearch uses this as the primary key for upserts."
 			},
 			"errors": {
 				"duplicateName": "Field name must be unique",
@@ -806,7 +807,7 @@
 		},
 		"apiKeys": {
 			"title": "API keys",
-			"description": "SaaS search keys are validated by our backend before queries hit Typesense. The Typesense admin key never leaves the server.",
+			"description": "Search keys are validated by our backend before queries are executed. Admin credentials never leave the server.",
 			"create": "Create key",
 			"createDescription": "The raw key is shown once. Store it securely.",
 			"name": "Name",
@@ -1425,7 +1426,28 @@
 				"defaultValuePlaceholder": "e.g. 0, false, empty string",
 				"locale": "Locale",
 				"validators": "Validators (JSON)"
-			}
+			},
+			"version": "Version",
+			"recentActivity": "Recent activity",
+			"noActivity": "No recent activity.",
+			"useApiKeys": "Authenticate requests using an API key.",
+			"manageSettings": "Manage index configuration.",
+			"defaultSortingField": "Default sort field",
+			"enabled": "Enabled",
+			"statusEnabled": "Enabled",
+			"statusDisabled": "Disabled",
+			"updatedAt": "Updated",
+			"dangerZone": "Danger zone",
+			"dangerZoneDesc": "Permanently delete this index and all its documents.",
+			"deleteWarning": "This action cannot be undone. All documents will be permanently lost.",
+			"deleteCollection": "Delete index",
+			"confirmDelete": "Delete index",
+			"confirmDeleteDesc": "This action is irreversible.",
+			"confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? All documents will be permanently removed.",
+			"cancel": "Cancel",
+			"delete": "Delete",
+			"noApiKeys": "No API keys yet. Create one to use these examples.",
+			"fieldOptional": "Optional"
 		},
 		"open": "Open",
 		"search": {

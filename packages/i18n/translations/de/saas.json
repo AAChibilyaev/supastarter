@@ -77,7 +77,7 @@
 			"runtimeEnv": "Laufzeit",
 			"platform": "Plattform",
 			"uptime": "Betriebszeit",
-			"typesenseHealth": "Typesense-Status",
+			"typesenseHealth": "Search-Engine-Status",
 			"healthy": "Gesund",
 			"unhealthy": "Ungesund",
 			"version": "Version",
@@ -96,7 +96,7 @@
 			"title": "Integrationen",
 			"loadError": "Integrationsstatus konnte nicht geprüft werden.",
 			"database": "Datenbank",
-			"typesense": "Typesense",
+			"typesense": "AACsearch Engine",
 			"mail": "E-Mail",
 			"payments": "Zahlungen",
 			"storage": "Speicher",
@@ -293,7 +293,8 @@
 			"accept": "Annehmen",
 			"decline": "Ablehnen",
 			"description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Mochtest du die Einladung annehmen und der Organisation beitreten?",
-			"title": "Organisation beitreten"
+			"title": "Organisation beitreten",
+			"error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 		},
 		"organizationSelect": {
 			"createNewOrganization": "Neue Organisation erstellen",
@@ -663,7 +664,7 @@
 	},
 	"search": {
 		"title": "Suche",
-		"subtitle": "Verwalten Sie Typesense-Indizes, API-Keys und die Nutzung für diese Organisation.",
+		"subtitle": "Verwalten Sie Suchindizes, API-Keys und die Nutzung für diese Organisation.",
 		"loading": "Wird geladen...",
 		"noIndexes": "Noch keine Suchindexe. Erstellen Sie Ihren ersten Index, um zu beginnen.",
 		"noIndexesDescription": "Suchindexe speichern Ihre Daten und ermöglichen Suchabfragen. Erstellen Sie einen, um zu beginnen.",
@@ -689,9 +690,9 @@
 		"createIndex": {
 			"trigger": "Index erstellen",
 			"title": "Suchindex erstellen",
-			"description": "Erstellt eine Typesense-Sammlung und einen Alias, die auf diese Organisation beschrankt sind.",
+			"description": "Erstellt eine Suchsammlung und einen Alias, die auf diese Organisation beschränkt sind.",
 			"slugHelp": "Kleinbuchstaben, Ziffern und Bindestriche. Wird in API-Pfaden und als Sammlungs-Alias verwendet.",
-			"schemaHelp": "JSON-Array von Typesense-Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefugt.",
+			"schemaHelp": "JSON-Array von Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefügt.",
 			"submit": "Erstellen",
 			"success": "Index wurde erstellt.",
 			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen.",
@@ -729,14 +730,14 @@
 			},
 			"tooltips": {
 				"displayName": "Lesbarer Name, der im Dashboard angezeigt wird. Hat keinen Einfluss auf die API.",
-				"slug": "Wird in API-Pfaden und als Typesense-Sammlungs-Alias verwendet. Nur Kleinbuchstaben, Ziffern und Bindestriche.",
+				"slug": "Wird in API-Pfaden und als Suchsammlungs-Alias verwendet. Nur Kleinbuchstaben, Ziffern und Bindestriche.",
 				"fields": "Definieren Sie die Spalten Ihrer Suchsammlung. Felder konnen facettierbar, sortierbar oder optional sein.",
 				"facet": "Erlaubt Filterung und Gruppierung nach diesem Feld (z. B. Kategorien, Tags, Marke).",
 				"optional": "Das Feld darf in Dokumenten fehlen. Pflichtfelder mussen in jedem Dokument vorhanden sein.",
 				"sort": "Sortierung fur dieses Feld erlauben (numerische Felder konnen immer sortiert werden).",
 				"defaultSort": "Feld zur Sortierung der Ergebnisse, wenn keine explizite Sortierung angegeben ist. Muss numerisch sein.",
 				"json": "Schema als reines JSON bearbeiten. Beim Wechsel zuruck zum visuellen Editor werden Anderungen validiert und ubernommen.",
-				"idField": "Empfohlener eindeutiger Bezeichner. Typesense verwendet diesen Wert als Primarschlussel beim Upsert."
+				"idField": "Empfohlener eindeutiger Bezeichner. AACsearch verwendet diesen Wert als Primärschlüssel beim Upsert."
 			},
 			"errors": {
 				"duplicateName": "Feldname muss eindeutig sein",
@@ -747,7 +748,7 @@
 		},
 		"apiKeys": {
 			"title": "API-Keys",
-			"description": "SaaS-Suchschlussel werden serverseitig validiert, bevor Anfragen Typesense erreichen. Der Typesense-Adminschlussel verlasst niemals den Server.",
+			"description": "Suchschlüssel werden serverseitig validiert, bevor Anfragen ausgeführt werden. Admin-Zugangsdaten verlassen den Server niemals.",
 			"create": "Schlussel erstellen",
 			"createDescription": "Der Rohschlussel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
 			"name": "Name",
@@ -1344,7 +1345,28 @@
 				"defaultValuePlaceholder": "z.B. 0, false, Leerstring",
 				"locale": "Gebietsschema",
 				"validators": "Validatoren (JSON)"
-			}
+			},
+			"version": "Version",
+			"recentActivity": "Letzte Aktivität",
+			"noActivity": "Keine aktuelle Aktivität.",
+			"useApiKeys": "Anfragen mit einem API-Schlüssel authentifizieren.",
+			"manageSettings": "Indexkonfiguration verwalten.",
+			"defaultSortingField": "Standard-Sortierfeld",
+			"enabled": "Aktiviert",
+			"statusEnabled": "Aktiviert",
+			"statusDisabled": "Deaktiviert",
+			"updatedAt": "Aktualisiert",
+			"dangerZone": "Gefahrenbereich",
+			"dangerZoneDesc": "Diesen Index und alle seine Dokumente dauerhaft löschen.",
+			"deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Dokumente gehen dauerhaft verloren.",
+			"deleteCollection": "Index löschen",
+			"confirmDelete": "Index löschen",
+			"confirmDeleteDesc": "Diese Aktion ist irreversibel.",
+			"confirmDeleteMessage": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Alle Dokumente werden dauerhaft entfernt.",
+			"cancel": "Abbrechen",
+			"delete": "Löschen",
+			"noApiKeys": "Noch keine API-Schlüssel. Erstellen Sie einen, um diese Beispiele zu verwenden.",
+			"fieldOptional": "Optional"
 		},
 		"open": "Öffnen",
 		"search": {

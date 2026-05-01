@@ -77,7 +77,7 @@
 			"runtimeEnv": "Entorno",
 			"platform": "Plataforma",
 			"uptime": "Tiempo activo",
-			"typesenseHealth": "Estado de Typesense",
+			"typesenseHealth": "Estado del motor de búsqueda",
 			"healthy": "Saludable",
 			"unhealthy": "No saludable",
 			"version": "Versión",
@@ -96,7 +96,7 @@
 			"title": "Integraciones",
 			"loadError": "No se pudo verificar el estado de integración.",
 			"database": "Base de datos",
-			"typesense": "Typesense",
+			"typesense": "AACsearch Engine",
 			"mail": "Correo",
 			"payments": "Pagos",
 			"storage": "Almacenamiento",
@@ -294,7 +294,8 @@
 			"accept": "Aceptar",
 			"decline": "Rechazar",
 			"description": "Has sido invitado a unirte a la organizacion {organizationName}. Quieres aceptar la invitacion y unirte a la organizacion?",
-			"title": "Unirse a la organizacion"
+			"title": "Unirse a la organizacion",
+			"error": "Se produjo un error. Por favor, inténtelo de nuevo."
 		},
 		"organizationSelect": {
 			"createNewOrganization": "Crear nueva organizacion",
@@ -704,7 +705,7 @@
 	},
 	"search": {
 		"title": "Busqueda",
-		"subtitle": "Gestiona indices de Typesense, claves API y uso de esta organizacion.",
+		"subtitle": "Gestiona índices de búsqueda, claves API y uso de esta organización.",
 		"loading": "Cargando...",
 		"noIndexes": "Aun no hay indices de busqueda. Crea el primero para comenzar.",
 		"selectIndex": "Selecciona un indice para gestionar sus claves API.",
@@ -729,9 +730,9 @@
 		"createIndex": {
 			"trigger": "Crear indice",
 			"title": "Crear indice de busqueda",
-			"description": "Crea una coleccion y alias de Typesense con alcance a esta organizacion.",
+			"description": "Crea una colección y alias de búsqueda con alcance a esta organización.",
 			"slugHelp": "Letras minusculas, digitos y guiones. Se usa en rutas API y como alias de coleccion.",
-			"schemaHelp": "Array JSON con definiciones de campos de Typesense. El campo 'tenant_id' se anade automaticamente.",
+			"schemaHelp": "Array JSON con definiciones de campos. El campo 'tenant_id' se añade automáticamente.",
 			"submit": "Crear",
 			"success": "Indice creado.",
 			"error": "No se pudo crear el indice. Intentelo de nuevo.",
@@ -769,14 +770,14 @@
 			},
 			"tooltips": {
 				"displayName": "Nombre legible que se muestra en el panel. No afecta a la API.",
-				"slug": "Se usa en rutas API y como alias de la coleccion de Typesense. Solo letras minusculas, digitos y guiones.",
+				"slug": "Se usa en rutas API y como alias de la colección de búsqueda. Solo letras minúsculas, dígitos y guiones.",
 				"fields": "Define las columnas de tu coleccion de busqueda. Los campos pueden ser facetables, ordenables u opcionales.",
 				"facet": "Permite filtrar y agrupar por este campo (p. ej. categorias, etiquetas, marca).",
 				"optional": "El campo puede faltar en los documentos. Los campos obligatorios deben existir en cada documento.",
 				"sort": "Permite ordenar por este campo (los campos numericos siempre pueden ordenarse).",
 				"defaultSort": "Campo usado para ordenar resultados cuando no se especifica un orden. Debe ser numerico.",
 				"json": "Edita el esquema como JSON puro. Al volver al constructor visual se validan y sincronizan los cambios.",
-				"idField": "Identificador unico recomendado. Typesense lo usa como clave primaria para upserts."
+				"idField": "Identificador único recomendado. AACsearch lo usa como clave primaria para upserts."
 			},
 			"errors": {
 				"duplicateName": "El nombre del campo debe ser unico",
@@ -787,7 +788,7 @@
 		},
 		"apiKeys": {
 			"title": "Claves API",
-			"description": "Las claves de busqueda SaaS se validan en el backend antes de llegar a Typesense. La clave admin de Typesense nunca sale del servidor.",
+			"description": "Las claves de búsqueda se validan en el backend antes de ejecutar las consultas. Las credenciales de administración nunca salen del servidor.",
 			"create": "Crear clave",
 			"createDescription": "La clave en bruto se muestra una sola vez. Guardala de forma segura.",
 			"name": "Nombre",
@@ -1378,7 +1379,28 @@
 				"defaultValuePlaceholder": "p.ej. 0, false, cadena vacía",
 				"locale": "Configuración regional",
 				"validators": "Validadores (JSON)"
-			}
+			},
+			"version": "Versión",
+			"recentActivity": "Actividad reciente",
+			"noActivity": "No hay actividad reciente.",
+			"useApiKeys": "Autentique las solicitudes usando una clave API.",
+			"manageSettings": "Gestionar la configuración del índice.",
+			"defaultSortingField": "Campo de ordenación por defecto",
+			"enabled": "Activado",
+			"statusEnabled": "Activado",
+			"statusDisabled": "Desactivado",
+			"updatedAt": "Actualizado",
+			"dangerZone": "Zona peligrosa",
+			"dangerZoneDesc": "Eliminar permanentemente este índice y todos sus documentos.",
+			"deleteWarning": "Esta acción no se puede deshacer. Todos los documentos se perderán permanentemente.",
+			"deleteCollection": "Eliminar índice",
+			"confirmDelete": "Eliminar índice",
+			"confirmDeleteDesc": "Esta acción es irreversible.",
+			"confirmDeleteMessage": "¿Está seguro de que desea eliminar \"{name}\"? Todos los documentos se eliminarán permanentemente.",
+			"cancel": "Cancelar",
+			"delete": "Eliminar",
+			"noApiKeys": "No hay claves API aún. Cree una para usar estos ejemplos.",
+			"fieldOptional": "Opcional"
 		},
 		"open": "Abrir",
 		"search": {

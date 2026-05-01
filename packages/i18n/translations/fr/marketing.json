@@ -171,5 +171,149 @@
 			"light": "Clair",
 			"dark": "Sombre"
 		}
+	},
+	"featuresPage": {
+		"title": "Toutes les fonctionnalités pour déployer la recherche",
+		"description": "Tokens limités, listes d'origines autorisées, limitation de débit, multi-recherche, réindexation sans interruption — tout disponible aujourd'hui."
+	},
+	"pricingPage": {
+		"title": "Tarification simple basée sur l'usage",
+		"description": "Payez uniquement pour les recherches et documents indexés. Sans frais cachés. Annulez à tout moment."
+	},
+	"integrationsPage": {
+		"title": "Connectez AACsearch à votre stack",
+		"description": "Modules prêts à l'emploi pour les plateformes populaires. API REST et SDK navigateur pour le reste."
+	},
+	"integrations": {
+		"title": "Intégrations prêtes à l'emploi",
+		"subtitle": "Installation en quelques minutes. Synchronisation automatique. Recherche instantanée.",
+		"items": {
+			"prestashop": {
+				"title": "PrestaShop 8.x",
+				"description": "Module PHP clé en main. Synchronise produits, catégories et stock automatiquement à chaque sauvegarde."
+			},
+			"bitrix": {
+				"title": "1C-Bitrix",
+				"description": "Module Bitrix natif. Export de produits piloté par événements avec support complet du catalogue."
+			},
+			"restApi": {
+				"title": "API REST",
+				"description": "15 endpoints publics avec authentification par clé API. Compatible avec tout langage backend."
+			},
+			"browserSdk": {
+				"title": "SDK navigateur",
+				"description": "Client JavaScript typé. Recherche simple, multi-recherche fédérée, facettes — moins de 50 ms p99."
+			},
+			"mcpServer": {
+				"title": "Serveur MCP",
+				"description": "Intégration du protocole de contexte de modèle pour Claude, Cursor et autres agents IA."
+			},
+			"custom": {
+				"title": "Connecteur personnalisé",
+				"description": "L'API Connector à 7 endpoints vous permet de créer une synchronisation pour n'importe quelle source de données."
+			}
+		}
+	},
+	"securityPage": {
+		"title": "Sécurité intégrée à chaque couche",
+		"description": "Clés API hachées et jamais stockées en clair. Tokens limités qui réduisent les permissions, ne les élargissent pas. Isolation des tenants à chaque requête."
+	},
+	"security": {
+		"title": "Défense en profondeur",
+		"subtitle": "Chaque requête passe par l'authentification, la limitation de débit, la vérification du quota et l'isolation des tenants.",
+		"items": {
+			"keyHashing": {
+				"title": "Hachage des clés API",
+				"description": "Toutes les clés API sont hachées avec SHA-256 et stockées sous forme de condensés. Le texte en clair n'est affiché qu'une seule fois."
+			},
+			"scopedTokens": {
+				"title": "Tokens limités",
+				"description": "Les tokens signés HMAC sont verrouillés sur un index, une origine et un TTL spécifiques. Ils réduisent les permissions, ne les élargissent jamais."
+			},
+			"originAllowlist": {
+				"title": "Liste d'origines autorisées",
+				"description": "Associez chaque clé API à des origines spécifiques. Une clé compromise ne peut pas épuiser votre quota."
+			},
+			"rateLimiting": {
+				"title": "Limitation de débit",
+				"description": "Throttling par clé et par minute, appliqué côté serveur. L'utilisation et les limites sont visibles dans le tableau de bord."
+			},
+			"tenantIsolation": {
+				"title": "Isolation des tenants",
+				"description": "Chaque recherche est limitée à l'ID de votre organisation. Les accès inter-organisations sont architecturalement impossibles."
+			},
+			"auditLog": {
+				"title": "Journal d'audit",
+				"description": "Chaque action d'administration est enregistrée avec horodatage, acteur et modification. Disponible sur les plans Enterprise."
+			}
+		}
+	},
+	"useCasesPage": {
+		"title": "La recherche pour chaque produit et équipe",
+		"description": "Des vitrines e-commerce aux outils internes — AACsearch s'adapte à votre modèle de données et à l'échelle de votre équipe."
+	},
+	"useCases": {
+		"title": "Conçu pour votre cas d'usage",
+		"subtitle": "Une API, de nombreuses formes. Apportez vos données — AACsearch gère l'indexation, le classement et la livraison.",
+		"items": {
+			"ecommerce": {
+				"title": "Recherche de produits e-commerce",
+				"description": "Filtres à facettes, expansion des synonymes, gestion des résultats nuls et tokens limités par utilisateur — tout en un seul appel."
+			},
+			"helpCenter": {
+				"title": "Centre d'aide & documentation",
+				"description": "Indexez votre base de connaissances et affichez des articles pertinents en millisecondes. Compatible avec le module Knowledge pour les Q&R sur PDF."
+			},
+			"multiTenant": {
+				"title": "SaaS multi-tenant",
+				"description": "Un index AACsearch par tenant, des tokens limités par utilisateur final. Vos clients ne voient jamais les données des autres — par conception."
+			},
+			"devTools": {
+				"title": "Outils développeur",
+				"description": "Recherche sémantique sur le code, les configurations et les logs. Le serveur MCP permet aux agents IA d'accéder programmatiquement."
+			},
+			"internalTools": {
+				"title": "Outils internes",
+				"description": "Recherche rapide sur les enregistrements CRM, l'inventaire, les annuaires d'employés ou tout jeu de données interne."
+			},
+			"contentSites": {
+				"title": "Sites de contenu",
+				"description": "Recherche instantanée pour les blogs, changelogs et documentations. Le SDK navigateur s'intègre en moins d'une heure."
+			}
+		}
+	},
+	"enterprisePage": {
+		"title": "AACsearch pour les entreprises",
+		"description": "Infrastructure dédiée, SSO, journal d'audit, SLA à 99,95% et DPA signé — tout ce que les équipes conformité et sécurité exigent."
+	},
+	"enterprise": {
+		"title": "Conçu pour les équipes régulées",
+		"subtitle": "Recherche illimitée, cluster dédié, intégrations personnalisées. Contactez-nous pour définir un plan selon vos besoins.",
+		"items": {
+			"sso": {
+				"title": "SSO (SAML / OIDC)",
+				"description": "Connectez votre fournisseur d'identité — Okta, Azure AD, Google Workspace ou tout IdP SAML 2.0 / OIDC compatible."
+			},
+			"dedicatedCluster": {
+				"title": "Cluster dédié",
+				"description": "Vos index fonctionnent sur une infrastructure isolée dans la région de votre choix. Pas de voisins bruyants, pas de nœuds partagés."
+			},
+			"auditLog": {
+				"title": "Journal d'audit + liste d'IP autorisées",
+				"description": "Chaque action administrative est horodatée et attribuable. Limitez l'accès à une plage d'IP spécifique pour vos ops."
+			},
+			"sla": {
+				"title": "SLA 99,95% + DPA signé",
+				"description": "Garantie contractuelle de disponibilité et un Accord de Traitement des Données signé couvrant le RGPD et le CCPA."
+			},
+			"prioritySupport": {
+				"title": "Support prioritaire",
+				"description": "Canal Slack dédié. Première réponse en moins de 4 heures. Responsable technique de compte dédié pour l'onboarding et les incidents."
+			},
+			"customIntegrations": {
+				"title": "Intégrations personnalisées",
+				"description": "Nous intégrons votre CMS, ERP ou source de données propriétaire. API Connector incluse ; connecteurs personnalisés sur demande."
+			}
+		}
 	}
 }

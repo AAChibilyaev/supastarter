@@ -77,7 +77,7 @@
 			"runtimeEnv": "Environnement",
 			"platform": "Plateforme",
 			"uptime": "Temps d'activité",
-			"typesenseHealth": "Santé de Typesense",
+			"typesenseHealth": "Santé du moteur de recherche",
 			"healthy": "Sain",
 			"unhealthy": "Malsain",
 			"version": "Version",
@@ -96,7 +96,7 @@
 			"title": "Intégrations",
 			"loadError": "Échec de la vérification du statut d'intégration.",
 			"database": "Base de données",
-			"typesense": "Typesense",
+			"typesense": "AACsearch Engine",
 			"mail": "E-mail",
 			"payments": "Paiements",
 			"storage": "Stockage",
@@ -294,7 +294,8 @@
 			"accept": "Accepter",
 			"decline": "Refuser",
 			"description": "Vous avez été invité à rejoindre l'organisation {organizationName}. Souhaitez-vous accepter l'invitation et rejoindre l'organisation ?",
-			"title": "Rejoindre l'organisation"
+			"title": "Rejoindre l'organisation",
+			"error": "Une erreur s'est produite. Veuillez réessayer."
 		},
 		"organizationSelect": {
 			"createNewOrganization": "Créer une nouvelle organisation",
@@ -666,7 +667,7 @@
 	},
 	"search": {
 		"title": "Recherche",
-		"subtitle": "Gérez les index Typesense, les clés API et l'utilisation de cette organisation.",
+		"subtitle": "Gérez les index de recherche, les clés API et l'utilisation de cette organisation.",
 		"loading": "Chargement…",
 		"noIndexes": "Aucun index de recherche pour le moment. Créez votre premier index pour commencer.",
 		"noIndexesDescription": "Les index de recherche stockent vos données et alimentent les requêtes. Créez-en un pour commencer.",
@@ -704,9 +705,9 @@
 		"createIndex": {
 			"trigger": "Créer un index",
 			"title": "Créer un index de recherche",
-			"description": "Provisionne une collection et un alias Typesense limités à cette organisation.",
+			"description": "Provisionne une collection et un alias de recherche limités à cette organisation.",
 			"slugHelp": "Minuscules, chiffres et tirets. Utilisé dans les chemins d'API et comme alias de collection.",
-			"schemaHelp": "Tableau JSON de définitions de champs Typesense. Le champ 'tenant_id' est ajouté automatiquement.",
+			"schemaHelp": "Tableau JSON de définitions de champs. Le champ 'tenant_id' est ajouté automatiquement.",
 			"submit": "Créer",
 			"success": "Index créé.",
 			"error": "Impossible de créer l'index. Veuillez réessayer.",
@@ -744,14 +745,14 @@
 			},
 			"tooltips": {
 				"displayName": "Nom lisible affiché dans le tableau de bord. N'affecte pas l'API.",
-				"slug": "Utilisé dans les chemins d'API et comme alias de collection Typesense. Minuscules, chiffres et tirets uniquement.",
+				"slug": "Utilisé dans les chemins d'API et comme alias de collection de recherche. Minuscules, chiffres et tirets uniquement.",
 				"fields": "Définissez les colonnes de votre collection de recherche. Les champs peuvent être à facettes, triables ou optionnels.",
 				"facet": "Permet de filtrer et regrouper par ce champ (ex. catégories, tags, marque).",
 				"optional": "Le champ peut être absent des documents. Les champs requis doivent exister dans chaque document.",
 				"sort": "Autorise le tri sur ce champ (les champs numériques sont toujours triables).",
 				"defaultSort": "Champ utilisé pour ordonner les résultats par défaut. Doit être numérique.",
 				"json": "Modifiez le schéma en JSON brut. Le retour à l'éditeur visuel valide et synchronise les modifications.",
-				"idField": "Identifiant unique recommandé. Typesense l'utilise comme clé primaire pour les upserts."
+				"idField": "Identifiant unique recommandé. AACsearch l'utilise comme clé primaire pour les upserts."
 			},
 			"errors": {
 				"duplicateName": "Le nom du champ doit être unique",
@@ -762,7 +763,7 @@
 		},
 		"apiKeys": {
 			"title": "Clés API",
-			"description": "Les clés de recherche SaaS sont validées par notre backend avant d'atteindre Typesense. La clé admin Typesense ne quitte jamais le serveur.",
+			"description": "Les clés de recherche sont validées par notre backend avant l'exécution des requêtes. Les identifiants administrateur ne quittent jamais le serveur.",
 			"create": "Créer une clé",
 			"createDescription": "La clé brute est affichée une seule fois. Conservez-la en lieu sûr.",
 			"name": "Nom",
@@ -1311,7 +1312,28 @@
 				"defaultValuePlaceholder": "p.ex. 0, false, chaîne vide",
 				"locale": "Locale",
 				"validators": "Validateurs (JSON)"
-			}
+			},
+			"version": "Version",
+			"recentActivity": "Activité récente",
+			"noActivity": "Aucune activité récente.",
+			"useApiKeys": "Authentifiez les requêtes à l'aide d'une clé API.",
+			"manageSettings": "Gérer la configuration de l'index.",
+			"defaultSortingField": "Champ de tri par défaut",
+			"enabled": "Activé",
+			"statusEnabled": "Activé",
+			"statusDisabled": "Désactivé",
+			"updatedAt": "Mis à jour",
+			"dangerZone": "Zone dangereuse",
+			"dangerZoneDesc": "Supprimer définitivement cet index et tous ses documents.",
+			"deleteWarning": "Cette action est irréversible. Tous les documents seront définitivement perdus.",
+			"deleteCollection": "Supprimer l'index",
+			"confirmDelete": "Supprimer l'index",
+			"confirmDeleteDesc": "Cette action est irréversible.",
+			"confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Tous les documents seront définitivement supprimés.",
+			"cancel": "Annuler",
+			"delete": "Supprimer",
+			"noApiKeys": "Aucune clé API pour l'instant. Créez-en une pour utiliser ces exemples.",
+			"fieldOptional": "Optionnel"
 		},
 		"open": "Ouvrir",
 		"search": {

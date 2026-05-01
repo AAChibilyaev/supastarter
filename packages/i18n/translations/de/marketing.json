@@ -171,5 +171,149 @@
 			"light": "Hell",
 			"dark": "Dunkel"
 		}
+	},
+	"featuresPage": {
+		"title": "Alle Features, die du für Suche brauchst",
+		"description": "Scoped Tokens, Origin-Allowlists, Rate-Limiting, Multi-Search, Zero-Downtime-Reindex — alles heute verfügbar."
+	},
+	"pricingPage": {
+		"title": "Einfaches, nutzungsbasiertes Preismodell",
+		"description": "Zahle nur für Suchanfragen und indizierte Dokumente. Keine versteckten Kosten. Jederzeit kündbar."
+	},
+	"integrationsPage": {
+		"title": "AACsearch mit deinem Stack verbinden",
+		"description": "Fertige Module für beliebte Plattformen. REST-API und Browser-SDK für alles andere."
+	},
+	"integrations": {
+		"title": "Fertige Integrationen",
+		"subtitle": "In Minuten installiert. Automatische Synchronisation. Sofortiger Suchzugang.",
+		"items": {
+			"prestashop": {
+				"title": "PrestaShop 8.x",
+				"description": "PHP-Modul zum Einbinden. Synchronisiert Produkte, Kategorien und Lagerbestand automatisch."
+			},
+			"bitrix": {
+				"title": "1C-Bitrix",
+				"description": "Natives Bitrix-Modul. Ereignisgesteuerter Produktexport mit vollem Katalog-Support."
+			},
+			"restApi": {
+				"title": "REST-API",
+				"description": "15 öffentliche Endpunkte mit API-Key-Authentifizierung. Funktioniert mit jeder Backend-Sprache."
+			},
+			"browserSdk": {
+				"title": "Browser-SDK",
+				"description": "Typisierter JavaScript-Client. Suche, Multi-Search, Facetten — unter 50 ms p99."
+			},
+			"mcpServer": {
+				"title": "MCP-Server",
+				"description": "Model-Context-Protocol-Integration für Claude, Cursor und andere KI-Agenten."
+			},
+			"custom": {
+				"title": "Eigener Connector",
+				"description": "7-Endpunkt-Connector-API zum Erstellen eigener Synchronisierungen für beliebige Datenquellen."
+			}
+		}
+	},
+	"securityPage": {
+		"title": "Sicherheit auf jeder Ebene",
+		"description": "API-Keys werden gehasht und nie im Klartext gespeichert. Scoped Tokens, die Rechte einschränken, nie erweitern. Tenant-Isolation bei jeder Anfrage."
+	},
+	"security": {
+		"title": "Defense in Depth",
+		"subtitle": "Jede Anfrage durchläuft Authentifizierung, Rate-Limiting, Quota-Prüfung und Tenant-Isolation.",
+		"items": {
+			"keyHashing": {
+				"title": "API-Key-Hashing",
+				"description": "Alle API-Keys werden mit SHA-256 gehasht und als Digest gespeichert. Der Klartext wird nur einmal angezeigt."
+			},
+			"scopedTokens": {
+				"title": "Scoped Tokens",
+				"description": "HMAC-signierte Tokens sind auf einen bestimmten Index, Origin und TTL beschränkt — Rechte werden nie erweitert."
+			},
+			"originAllowlist": {
+				"title": "Origin-Allowlist",
+				"description": "Jeder API-Key ist an bestimmte Origins gebunden. Ein geleakter Key kann das Kontingent nicht aufbrauchen."
+			},
+			"rateLimiting": {
+				"title": "Rate-Limiting",
+				"description": "Serverseitiges Rate-Limiting pro Key und Minute. Nutzung und Limits sind im Dashboard sichtbar."
+			},
+			"tenantIsolation": {
+				"title": "Tenant-Isolation",
+				"description": "Jede Suchanfrage ist auf deine Organisations-ID beschränkt. Organisationsübergreifende Zugriffe sind architektonisch unmöglich."
+			},
+			"auditLog": {
+				"title": "Audit-Log",
+				"description": "Jede Admin-Aktion wird mit Zeitstempel, Akteur und Änderung protokolliert. Verfügbar in Enterprise-Plänen."
+			}
+		}
+	},
+	"useCasesPage": {
+		"title": "Suche für jedes Produkt und Team",
+		"description": "Von E-Commerce-Storefronts bis hin zu internen Tools — AACsearch passt sich deinem Datenmodell an."
+	},
+	"useCases": {
+		"title": "Für deinen Anwendungsfall gebaut",
+		"subtitle": "Eine API, viele Formen. Bring deine Daten — AACsearch übernimmt Indizierung, Ranking und Auslieferung.",
+		"items": {
+			"ecommerce": {
+				"title": "E-Commerce-Produktsuche",
+				"description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und benutzerspezifische Tokens — alles in einem Suchaufruf."
+			},
+			"helpCenter": {
+				"title": "Hilfezentrum & Dokumentation",
+				"description": "Indiziere deine Wissensbasis und liefere relevante Artikel in Millisekunden. Mit dem Knowledge-Modul für PDF-Q&A kombinierbar."
+			},
+			"multiTenant": {
+				"title": "Multi-Tenant-SaaS",
+				"description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Deine Kunden sehen nie gegenseitig ihre Daten — by Design."
+			},
+			"devTools": {
+				"title": "Entwicklertools",
+				"description": "Semantische Suche über Code, Konfigurationen und Logs. Der MCP-Server ermöglicht KI-Agenten programmatischen Zugriff."
+			},
+			"internalTools": {
+				"title": "Interne Tools",
+				"description": "Schnelle Suche über CRM-Datensätze, Inventar, Mitarbeiterverzeichnisse und andere interne Datensätze."
+			},
+			"contentSites": {
+				"title": "Content-Websites",
+				"description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde einbinden."
+			}
+		}
+	},
+	"enterprisePage": {
+		"title": "AACsearch für Enterprise",
+		"description": "Dedizierte Infrastruktur, SSO, Audit-Log, 99,95% SLA und unterzeichneter DPA — alles, was Compliance- und Sicherheitsteams benötigen."
+	},
+	"enterprise": {
+		"title": "Für regulierte Teams entwickelt",
+		"subtitle": "Unbegrenzte Suche, dedizierter Cluster, individuelle Integrationen. Kontaktiere uns für ein maßgeschneidertes Angebot.",
+		"items": {
+			"sso": {
+				"title": "SSO (SAML / OIDC)",
+				"description": "Verbinde deinen Identity Provider — Okta, Azure AD, Google Workspace oder jeden SAML 2.0 / OIDC-konformen IdP."
+			},
+			"dedicatedCluster": {
+				"title": "Dedizierter Cluster",
+				"description": "Deine Indizes laufen auf isolierter Infrastruktur in der Region deiner Wahl. Keine geteilten Such-Nodes."
+			},
+			"auditLog": {
+				"title": "Audit-Log + IP-Allowlist",
+				"description": "Jede Admin-Aktion wird zeitgestempelt und einem Nutzer zugeordnet. Zugriff auf bestimmte IP-Bereiche einschränkbar."
+			},
+			"sla": {
+				"title": "99,95% SLA + unterzeichneter DPA",
+				"description": "Vertragliche Uptime-Garantie und ein unterzeichneter Auftragsverarbeitungsvertrag für DSGVO und CCPA."
+			},
+			"prioritySupport": {
+				"title": "Prioritätssupport",
+				"description": "Dedizierter Slack-Kanal. Erste Reaktion unter 4 Stunden. Namentlicher Technical Account Manager für Onboarding und Störfälle."
+			},
+			"customIntegrations": {
+				"title": "Individuelle Integrationen",
+				"description": "Wir binden dein CMS, ERP oder proprietäre Datenquellen ein. Connector API inklusive; benutzerdefinierte Connectors auf Anfrage."
+			}
+		}
 	}
 }

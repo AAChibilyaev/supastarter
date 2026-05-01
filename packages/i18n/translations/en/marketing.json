@@ -171,5 +171,149 @@
 			"light": "Light",
 			"dark": "Dark"
 		}
+	},
+	"featuresPage": {
+		"title": "Every feature you need to ship search",
+		"description": "Scoped tokens, origin allow-lists, rate limiting, multi-search, zero-downtime reindex — all shipping today."
+	},
+	"pricingPage": {
+		"title": "Simple, usage-based pricing",
+		"description": "Pay for searches and indexed documents. Nothing else. No seat fees, no hidden limits. Cancel anytime."
+	},
+	"integrationsPage": {
+		"title": "Connect AACsearch to your stack",
+		"description": "Pre-built modules for popular platforms. REST API and Browser SDK for everything else."
+	},
+	"integrations": {
+		"title": "Ready-made integrations",
+		"subtitle": "Install in minutes. Sync automatically. Search instantly.",
+		"items": {
+			"prestashop": {
+				"title": "PrestaShop 8.x",
+				"description": "Drop-in PHP module. Syncs products, categories, and stock automatically on every save."
+			},
+			"bitrix": {
+				"title": "1C-Bitrix",
+				"description": "Native Bitrix module. Event-driven product export with full catalog support."
+			},
+			"restApi": {
+				"title": "REST API",
+				"description": "15 public endpoints with API-key auth. Works with any backend language or platform."
+			},
+			"browserSdk": {
+				"title": "Browser SDK",
+				"description": "Typed JavaScript client. Single search, federated multi-search, facets — under 50 ms p99."
+			},
+			"mcpServer": {
+				"title": "MCP Server",
+				"description": "Model Context Protocol integration for Claude, Cursor, and other AI agents."
+			},
+			"custom": {
+				"title": "Custom connector",
+				"description": "7-endpoint Connector API lets you build a sync for any data source in any language."
+			}
+		}
+	},
+	"securityPage": {
+		"title": "Security built into every layer",
+		"description": "API keys hashed and never stored in plaintext. Scoped tokens that narrow, never widen. Tenant isolation enforced at every query."
+	},
+	"security": {
+		"title": "Defense in depth",
+		"subtitle": "Every request goes through auth, rate limiting, quota check, and tenant isolation before touching your data.",
+		"items": {
+			"keyHashing": {
+				"title": "API key hashing",
+				"description": "All API keys are hashed with SHA-256 and stored as digests. The plaintext is shown once at creation and never again."
+			},
+			"scopedTokens": {
+				"title": "Scoped tokens",
+				"description": "HMAC-signed tokens are locked to a specific index, origin, and TTL. They narrow permissions — never widen them."
+			},
+			"originAllowlist": {
+				"title": "Origin allow-list",
+				"description": "Pin every API key to specific origins. A leaked key published on Twitter still can't drain your quota."
+			},
+			"rateLimiting": {
+				"title": "Rate limiting",
+				"description": "Per-key per-minute throttling, enforced server-side. Usage and limits are visible in the dashboard before you hit them."
+			},
+			"tenantIsolation": {
+				"title": "Tenant isolation",
+				"description": "Every search call is scoped to your organization ID. Cross-org reads are architecturally impossible — not just policy."
+			},
+			"auditLog": {
+				"title": "Audit log",
+				"description": "Every admin action is logged with timestamp, actor, and change. Available on Enterprise plans."
+			}
+		}
+	},
+	"useCasesPage": {
+		"title": "Search for every product and team",
+		"description": "From e-commerce storefronts to internal tools — AACsearch adapts to your data model and your team's scale."
+	},
+	"useCases": {
+		"title": "Built for your use case",
+		"subtitle": "One API, many shapes. Bring your data — AACsearch handles the indexing, ranking, and delivery.",
+		"items": {
+			"ecommerce": {
+				"title": "E-commerce product search",
+				"description": "Faceted filters, synonym expansion, zero-results handling, and per-user scoped tokens — all in a single search call."
+			},
+			"helpCenter": {
+				"title": "Help center & docs",
+				"description": "Index your knowledge base and surface relevant articles in milliseconds. Pair with the Knowledge module for Q&A over PDFs."
+			},
+			"multiTenant": {
+				"title": "Multi-tenant SaaS",
+				"description": "One AACsearch index per tenant, scoped tokens per end-user. Your customers never see each other's data — by design."
+			},
+			"devTools": {
+				"title": "Developer tools",
+				"description": "Semantic search over code, configs, and logs. MCP Server lets your AI agents search and update indexes programmatically."
+			},
+			"internalTools": {
+				"title": "Internal tools",
+				"description": "Fast search over CRM records, inventory, employee directories, or any internal dataset your team queries daily."
+			},
+			"contentSites": {
+				"title": "Content sites",
+				"description": "Instant search for blogs, changelogs, and documentation. The Browser SDK drops into any front end in under an hour."
+			}
+		}
+	},
+	"enterprisePage": {
+		"title": "AACsearch for Enterprise",
+		"description": "Dedicated infrastructure, SSO, audit log, 99.95% SLA, and signed DPA — everything compliance and security teams require."
+	},
+	"enterprise": {
+		"title": "Built for regulated teams",
+		"subtitle": "Unmetered search, dedicated cluster, custom integrations. Contact us and we'll scope a plan for your requirements.",
+		"items": {
+			"sso": {
+				"title": "SSO (SAML / OIDC)",
+				"description": "Connect your identity provider — Okta, Azure AD, Google Workspace, or any SAML 2.0 / OIDC compliant IdP."
+			},
+			"dedicatedCluster": {
+				"title": "Dedicated cluster",
+				"description": "Your indexes run on isolated infrastructure in the region you choose. No noisy neighbours, no shared search nodes."
+			},
+			"auditLog": {
+				"title": "Audit log + IP allow-list",
+				"description": "Every admin action is timestamped and attributable. Lock access to a specific IP range for your ops team."
+			},
+			"sla": {
+				"title": "99.95% SLA + signed DPA",
+				"description": "Contractual uptime guarantee and a signed Data Processing Agreement covering GDPR and CCPA requirements."
+			},
+			"prioritySupport": {
+				"title": "Priority support",
+				"description": "Dedicated Slack channel. Sub-4-hour first response. Named technical account manager for onboarding and incidents."
+			},
+			"customIntegrations": {
+				"title": "Custom integrations",
+				"description": "We onboard your CMS, ERP, or proprietary data source. Connector API included; custom connectors on request."
+			}
+		}
 	}
 }

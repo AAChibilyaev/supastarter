@@ -1,0 +1,143 @@
+---
+title: Architektur
+description: Monorepo-Layout, Service-Grenzen, das geschichtete Backend-Prinzip und der Datenfluss für Schreib- und Lesepfade.
+---
+
+AACsearch basiert auf einem **supastarter Next.js-Monorepo** mit Turborepo und pnpm-Workspaces.
+Die Codebasis ist in vier Apps und sechzehn Pakete aufgeteilt, alle bedient durch einen einzigen Hono-HTTP-Prozess,
+der oRPC, öffentliche Suchendpunkte, Widget-Bundle, Connectoren und Auth einbindet.
+
+## Monorepo-Layout
+
+```
+apps/
+  saas/           # Geschütztes SaaS-Dashboard — Indizes, Schlüssel, Analysen, Connectoren, Abrechnung
+  marketing/      # Öffentliche Marketing-Website — Landing, Preise, Blog, Changelog, Rechtliches
+  docs/           # Öffentliche Dokumentations-Website (diese Website — v0.7)
+  mail-preview/   # Nur E-Mail-Template-Vorschau
+
+packages/
+  api/            # Hono + oRPC — 11 oRPC-Module + öffentliche Hono-Routen
+  auth/           # Better Auth — Login, Orgs, Passkeys, 2FA, Magic Links, OAuth
+  database/       # Prisma (aktives ORM) + Drizzle (nur Legacy-Referenz) — 33 Modelle
+  search/         # Typesense-Client, Collections, Buffer, Reindex, Schlüssel, Ingest
+  search-client/  # Browser-SDK — nur Suche, keine Admin-Schlüssel
+  widget/         # Gehostetes Storefront-Widget — Vanilla JS, Shadow DOM, 14 KB IIFE+ESM
+  i18n/           # 5 Locales × 4 Bereiche (en/de/es/fr/ru × marketing/saas/mail/shared)
+  payments/       # Stripe / LemonSqueezy / Polar / Creem / DodoPayments / Tochka
+  billing-wallet/ # BigInt-Kopeken-Ledger, reserve→commit/release
+  ai/             # Vercel AI SDK + Provider-Konfigurationen
+  ai-core/        # Untergeordnete KI-Orchestrierungsprimitive
+  notifications/  # createNotification, auflisten, als gelesen markieren, Einstellungen, Katalog
+  mail/           # React-Email-Templates + Provider-Treiber
+  storage/        # S3-kompatibel (MinIO für lokale Entwicklung)
+  ui/             # 27 shadcn-basierte UI-Primitive
+  logs/           # pino-basierter Logger
+  utils/          # Generische Hilfsfunktionen
+
+modules/          # KEIN Node-Workspace — PHP-CMS-Module
+  prestashop/aacsearch/   # PrestaShop 8.x (Entwurf, separater Track)
+  bitrix/aac.search/      # 1C-Bitrix selbst gehostet (Entwurf, separater Track)
+```
+
+## HTTP-Server
+
+Gesamter Traffic kommt durch eine **einzelne Hono-App** unter `packages/api/index.ts`, die Routen in Reihenfolge einbindet:
+
+| Mount                    | Zweck                                   |
+| ------------------------ | --------------------------------------- |
+| `/api`                   | Öffentlicher Suchhandler (permissives CORS) |
+| `/api`                   | Widget-Analytics-Ereignisse             |
+| `/api/widget/widget.js`  | Gehostetes Widget-JS-Bundle             |
+| `/api`                   | Connector-API (CMS-Module)              |
+| `/api`                   | Analytics-Handler                       |
+| `/api`                   | SCIM 2.0 (Identitätsbereitstellung)     |
+| `/api/v1`                | REST-API v1 (15 Endpunkte, OpenAPI 3.1) |
+| `/api/auth/**`           | Better-Auth-Handler                     |
+| `/api/webhooks/payments` | Zahlungsanbieter-Webhooks               |
+| `/api/rpc/**`            | oRPC-Handler (11 Module)                |
+
+## oRPC-Module
+
+Der oRPC-Router unter `packages/api/orpc/router.ts` bindet 11 Module ein:
+
+`admin`, `organizations`, `users`, `payments`, `ai`, `notifications`, `search`, `knowledge`, `billingWallet`, `entitlements`
+
+Das `search`-Modul hat 26 Prozeduren für Indizes, API-Schlüssel, eingeschränkte Token, Relevanz, Analysen, Connectoren und Import-Jobs.
+
+## Das geschichtete Backend-Prinzip
+
+Externe CMS-Module und Storefront-Browser kontaktieren **niemals** Typesense direkt. Die AACsearch-API-Schicht
+hält die einzigen Admin-Zugangsdaten.
+
+```
+PrestaShop / Bitrix-Modul
+    │  bearer(ss_connector_*-Token)
+    ▼
+AACsearch Connector-API  ←  validiert, prüft Auth, begrenzt Rate
+    │
+    ▼
+SearchIngestBuffer (Prisma)  ←  enqueueManySearchIngest()
+    │
+    ▼
+Hintergrund-Worker  ←  leert Puffer in Batches
+    │
+    ▼
+Typesense  (nur serverseitig, Admin-Schlüssel verlässt den Server nie)
+```
+
+Das Offenlegen eines Typesense-Admin-Schlüssels in einem CMS-Modul oder `<script>`-Tag würde eine willkürliche Index-
+Manipulation über alle Mandanten hinweg ermöglichen. Dies ist **Hard Invariant #2** in der Codebasis und nicht verhandelbar.
+
+## Schreibpfad (Ingest)
+
+```
+Anfrage → public-handler.ts (Auth + Kontingentprüfung)
+  → enqueueManySearchIngest() (DB-Einfügung in SearchIngestBuffer)
+  → Hintergrund-Worker nimmt unverarbeitete Zeilen auf
+  → bulkUpsert zu Typesense
+  → markIngestRowsSuccess / markIngestRowsFailure (exponentielles Backoff bei Fehlern)
+```
+
+Der DB-Buffer-Ansatz bietet Dauerhaftigkeit (Zeilen überleben Server-Neustarts), Teilfehlerbehandlung
+(nur fehlgeschlagene Zeilen werden erneut versucht) und Batching (Worker gruppiert Zeilen nach Collection vor dem Senden).
+
+## Lesepfad (Suche)
+
+```
+Anfrage → public-handler.ts (Auth + Rate-Limit + Kontingentprüfung)
+  → searchDocuments / multiSearchDocuments (über packages/search/lib/search.ts)
+  → Typesense-Antwort
+  → bereinigtes JSON zurückgegeben (rohe Typesense-Fehler werden niemals weitergeleitet)
+  → recordSearchUsage() wird asynchron aufgerufen (nicht blockierend)
+```
+
+## Collection-Benennung und Versionierung
+
+Jeder Suchindex verwendet versionierte Collection-Namen, um Zero-Downtime-Reindex zu ermöglichen:
+
+```
+Collection-Name:  {orgShortId}_{slug}_v{version}
+Alias-Name:       {orgShortId}_{slug}
+```
+
+Alle Suchanfragen zielen auf den Alias. Ein Reindex erstellt eine neue Version, überprüft sie und tauscht den Alias atomisch aus.
+Die vorherige Version bleibt erhalten, bis der nächste Reindex grün bestätigt wird.
+
+## Technologieentscheidungen
+
+| Schicht               | Technologie                                    |
+| --------------------- | ---------------------------------------------- |
+| Framework             | Next.js 16 (App Router, RSC)                   |
+| API                   | Hono + oRPC 1.13                               |
+| Auth                  | Better Auth 1.5                                |
+| ORM                   | Prisma 7 (aktiv) / Drizzle (Legacy-Referenz)   |
+| Suchmaschine          | Typesense 3                                    |
+| Validierung           | Zod 4                                          |
+| Client-Datenabruf     | TanStack Query 5                               |
+| Formulare             | react-hook-form 7                              |
+| UI                    | Tailwind v4 + shadcn-Primitive                 |
+| Linting               | Oxlint (nicht ESLint)                          |
+| Formatierung          | Oxfmt (nicht Prettier)                         |
+| Paketmanager          | pnpm 10 mit Workspace-Katalog                  |
+| Build-Orchestrierung  | Turborepo 2                                    |

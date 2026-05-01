@@ -1,0 +1,142 @@
+---
+title: "Module Knowledge & Administration"
+description: "Le module Knowledge pour les questions-réponses internes sur des documents (RAG/GraphRAG) et la section d'administration pour les administrateurs du site."
+---
+
+## Module Knowledge
+
+> **Distinction importante :** Le module Knowledge est une surface produit séparée de la recherche par mots-clés en vitrine. La recherche en vitrine utilise Typesense pour des requêtes par mots-clés rapides et tolérantes aux fautes de frappe sur les catalogues produits. Le module Knowledge est destiné aux Q&R internes sur des documents non structurés — fichiers PDF, DOCX, documents texte — en utilisant la récupération par IA (RAG et GraphRAG). Les deux surfaces sont indépendantes ; elles ne partagent pas d'indexes ni de données.
+
+Le module Knowledge est disponible à :
+
+- **Portée organisation :** `/[orgSlug]/knowledge` — espaces de connaissance pour toute l'organisation
+- **Portée compte :** `/knowledge` — espaces de connaissance personnels
+
+### Espaces de connaissance
+
+Un espace de connaissance est un conteneur pour les sources de documents et l'interface de Q&R. Vous pouvez créer plusieurs espaces (par ex. « Docs produits », « Politiques internes », « Base de connaissance support »).
+
+Chaque espace appartient soit à une organisation soit à un utilisateur (modèle de discriminateur de propriétaire — le même modèle utilisé pour les indexes de recherche).
+
+### Sources de données
+
+Dans un espace, vous ajoutez des sources de données — actuellement des téléchargements de fichiers :
+
+| Format | Prise en charge |
+| ------ | --------------- |
+| PDF    | Pris en charge  |
+| DOCX   | Pris en charge  |
+| TXT    | Pris en charge  |
+
+Lorsque vous téléchargez un fichier, un job d'ingestion est créé. Le système :
+
+1. Analyse le fichier en texte
+2. Découpe le texte en utilisant des stratégies de découpage configurables
+3. Génère des embeddings pour chaque morceau (via OpenAI)
+4. Stocke les morceaux dans `KnowledgeChunk` avec des embeddings vectoriels
+
+### Jobs d'ingestion
+
+La liste des jobs d'ingestion affiche le statut (en cours / terminé / échoué), le nom du fichier, le nombre de morceaux et les éventuelles erreurs.
+
+### Demander (RAG)
+
+Une fois l'ingestion terminée, vous pouvez poser des questions dans l'espace. Le flux de demande :
+
+1. Intègre votre requête dans un vecteur
+2. Récupère les morceaux les plus pertinents via la similarité vectorielle
+3. Envoie le contexte récupéré + la question au LLM
+4. Retourne la réponse avec les citations des sources
+
+### GraphRAG
+
+La fonctionnalité GraphRAG construit un graphe de connaissance à partir des documents ingérés :
+
+- `GraphNode` — concepts, entités, sujets extraits des documents
+- `GraphEdge` — relations entre les nœuds
+
+Les requêtes GraphRAG traversent le graphe pour fournir des réponses plus profondes et plus interconnectées que le RAG simple. Utilisez GraphRAG pour les questions qui nécessitent un raisonnement sur plusieurs documents ou sujets.
+
+### Métriques d'utilisation
+
+Chaque espace suit l'utilisation via la procédure `knowledge.usageMetrics` : total des requêtes, consommation de tokens et comptages de documents par source.
+
+### Modèles Prisma
+
+Le module Knowledge utilise 7 modèles Prisma dédiés :
+
+| Modèle              | Objectif                                            |
+| ------------------- | --------------------------------------------------- |
+| `KnowledgeSpace`    | Conteneur de premier niveau, propriété org ou utilisateur |
+| `DataSource`        | Enregistrement de source de fichier (nom, type, statut) |
+| `IngestionJob`      | Suivi de l'ingestion (statut, progression, erreurs) |
+| `KnowledgeDocument` | Document traité                                     |
+| `KnowledgeChunk`    | Morceau de texte individuel pour la récupération    |
+| `GraphNode`         | Nœud du graphe de connaissance (concept, entité)    |
+| `GraphEdge`         | Relation entre les nœuds du graphe                  |
+
+### Procédures oRPC
+
+Le module knowledge expose 10 procédures dans `packages/api/modules/knowledge/` :
+
+| Procédure           | Description                                          |
+| ------------------- | ---------------------------------------------------- |
+| `listSpaces`        | Lister tous les espaces pour le propriétaire         |
+| `createSpace`       | Créer un nouvel espace de connaissance               |
+| `listSources`       | Lister les sources de données pour un espace         |
+| `createSource`      | Ajouter une nouvelle source de données               |
+| `listIngestionJobs` | Lister les jobs d'ingestion pour un espace           |
+| `ingestFile`        | Télécharger et ingérer un fichier                    |
+| `ask`               | Poser une question (récupération RAG + réponse LLM)  |
+| `graphragExplain`   | Requête d'explication GraphRAG                       |
+| `usageMetrics`      | Statistiques d'utilisation des tokens et des requêtes |
+
+---
+
+## Section Administration
+
+La section d'administration n'est visible que pour les utilisateurs ayant le rôle d'administrateur du site. Elle est accessible à `/admin/*`.
+
+> **Remarque :** Plusieurs pages d'administration sont actuellement des stubs avec du contenu fictif — elles affichent la mise en page de la page mais n'ont pas encore de fonctionnalité complète. Ceci est noté par page ci-dessous.
+
+### Pages d'administration
+
+| Chemin                 | Description                                       | Statut                                       |
+| ---------------------- | ------------------------------------------------- | -------------------------------------------- |
+| `/admin/`              | Racine du tableau de bord admin                   | Fonctionnel                                  |
+| `/admin/organizations` | Lister et gérer toutes les organisations          | Fonctionnel                                  |
+| `/admin/users`         | Lister et gérer tous les utilisateurs, impersonation | Fonctionnel                               |
+| `/admin/config`        | Configuration du système                          | Stub — en attente                            |
+| `/admin/security`      | Paramètres de sécurité et gestion des sessions    | Stub — en attente                            |
+| `/admin/integrations`  | Paramètres d'intégration tiers                    | Stub — en attente                            |
+| `/admin/audit`         | Visualiseur de journal d'audit                    | Stub — en attente                            |
+| `/admin/wallet`        | Admin du wallet IA (solde par utilisateur, transactions) | Stub — développement actif (v0.6)      |
+| `/admin/jobs`          | Gestion des jobs en arrière-plan                  | Stub — en attente                            |
+| `/admin/notifications` | Gestion des notifications système                 | Stub — en attente                            |
+
+### Wallet IA et crédits (v0.6 — développement actif)
+
+Le système wallet (`@repo/billing-wallet`) gère les soldes de crédits IA en utilisant un registre BigInt kopecks. La page d'administration du wallet à `/admin/wallet` et la page de crédits IA côté utilisateur à `/settings/billing/ai-credits` sont activement développées dans le cadre de la version de mesure v0.6. Le driver de paiement Tochka (pour le marché russe) est câblé ; Stripe est une option parallèle.
+
+La fonctionnalité wallet est intentionnellement semi-isolée — si votre tâche ne concerne pas la facturation ou les crédits IA, ne l'étendez pas sans confirmation explicite du périmètre.
+
+---
+
+## Paramètres au niveau du compte
+
+Les paramètres personnels se trouvent en dehors du contexte org sous `/settings/`.
+
+| Chemin                         | Contenu                                                    |
+| ------------------------------ | ---------------------------------------------------------- |
+| `/settings/general`            | Nom d'affichage, e-mail, photo de profil                   |
+| `/settings/security`           | Changement de mot de passe, 2FA (TOTP), passkeys, connexions OAuth |
+| `/settings/notifications`      | Préférences de notification par type                       |
+| `/settings/billing`            | Facturation personnelle, plan actif, mode de paiement      |
+| `/settings/billing/ai-credits` | Recharge du wallet IA et historique des transactions (v0.6) |
+
+Les paramètres de sécurité prennent en charge : connexion par mot de passe, lien magique, authentification à deux facteurs (TOTP via application d'authentification), passkey (WebAuthn) et OAuth (Google, GitHub).
+
+## Pages associées
+
+- [Vue d'ensemble du tableau de bord](/docs/dashboard/overview)
+- [Espace de travail de recherche](/docs/dashboard/search-workspace)

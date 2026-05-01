@@ -1,0 +1,226 @@
+---
+title: Domain Model
+description: Logical entities, ownership boundaries, and which models are persisted today versus planned for future DB migrations.
+---
+
+AACsearch uses a **frozen DB constraint**: no new Prisma schema changes without explicit approval.
+This means some domain concepts exist as logical entities implemented through workarounds on existing tables,
+while others are fully persisted Prisma models.
+
+This page maps every domain concept to its current implementation state.
+
+## Persisted models (Prisma, active today)
+
+### Organization
+
+The primary workspace. All AACsearch resources belong to an organization.
+
+```
+Organization
+  id            String  @id
+  name          String
+  slug          String  @unique
+  plan          String  (resolved to feature matrix via @repo/payments/lib/entitlements)
+  members[]     Member[]
+  createdAt     DateTime
+```
+
+Organizations are provisioned by Better Auth's organization plugin and are the tenant boundary for
+all search operations. Every API call includes `organizationId`; cross-org reads are never allowed.
+
+### SearchIndex
+
+The central search resource. Today one `SearchIndex` represents one logical project (store + index).
+
+```
+SearchIndex
+  id              String   @id
+  organizationId  String   (will become projectId when Project entity lands)
+  userId          String?  (owner discriminator — index can belong to org or user)
+  slug            String
+  collectionName  String   (versioned: {orgShortId}_{slug}_v{N})
+  aliasName       String   ({orgShortId}_{slug})
+  schemaVersion   Int
+  status          String
+  createdAt       DateTime
+```
+
+### SearchApiKey
+
+Stores hashed API keys for all key types. Plaintext is shown **once** at creation and never stored.
+
+```
+SearchApiKey
+  id                 String    @id
+  indexId            String
+  organizationId     String
+  hashedKey          String    @unique   (bcrypt hash — NEVER store plaintext)
+  prefix             String              (ss_search_* | ss_connector_* | ss_scoped_*)
+  scopes             String[]            (search | ingest | admin | connector_write)
+  allowedOrigins     String[]
+  rateLimitPerMinute Int
+  expiresAt          DateTime?
+  lastUsedAt         DateTime?
+```
+
+**Important:** Connector tokens reuse `SearchApiKey` with `scopes: ["connector_write"]` and
+`prefix: "ss_connector_*"`. There is no separate `ConnectorToken` table (DB frozen workaround).
+
+### SearchIngestBuffer
+
+The durability layer for the write path. Requests enqueue here; the background worker drains to Typesense.
+
+```
+SearchIngestBuffer
+  id             String    @id
+  organizationId String
+  indexId        String
+  documents      Json      (array of ProductDocument)
+  status         String    (pending | processing | success | failed)
+  attempts       Int       @default(0)
+  errorMessage   String?
+  processedAt    DateTime?
+  createdAt      DateTime
+```
+
+### SearchRateLimitBucket
+
+Sliding-window rate limit tracking per key.
+
+### SearchUsageEvent
+
+Raw usage rows written by `recordSearchUsage()` on every search request.
+
+```
+SearchUsageEvent
+  id           String   @id
+  indexId      String
+  orgId        String
+  query        String
+  resultCount  Int
+  latencyMs    Int
+  filters      Json?
+  sort         String?
+  userAgent    String?  (capped 256 chars)
+  sessionId    String?
+  referrer     String?
+  createdAt    DateTime
+```
+
+### SearchConnectorSyncJob
+
+Persisted sync job tracking (in addition to in-memory map in connector-public.ts).
+
+### Knowledge models (7)
+
+`KnowledgeSpace`, `DataSource`, `IngestionJob`, `KnowledgeDocument`, `KnowledgeChunk`, `GraphNode`, `GraphEdge`
+
+These belong to the Knowledge module (separate product surface for internal Q&A, not storefront search).
+See [Knowledge & Admin](/docs/dashboard/knowledge-and-admin) for usage.
+
+### Wallet / AI models (7)
+
+`AiWallet`, `AiWalletTransaction`, `AiQuotaReservation`, `AiUsageEvent`, `AiPricingRule`, `FxRate`, `WalletTopupOrder`
+
+Used by the v0.6 metering / billing-wallet module. Current status: active WIP.
+
+## Logical-only entities (not persisted yet)
+
+These describe the intended domain shape but have no dedicated Prisma model today.
+Creating them requires DB-unfreeze approval.
+
+### Project
+
+```
+Project (logical)
+  id              String
+  organizationId  String
+  name            String
+  platform        prestashop | bitrix | bitrix24 | api | demo
+  status          String
+  defaultLocale   String
+  currency        String
+  allowedOrigins  String[]
+```
+
+**Current workaround:** 1 `SearchIndex` = 1 implicit project. The `organizationId` on `SearchIndex`
+acts as the project-organization link.
+
+### Connector / SyncJob (logical)
+
+```
+Connector (logical)
+  id              String
+  projectId       String
+  type            prestashop | bitrix
+  status          String
+  lastSeenAt      DateTime
+  lastSyncAt      DateTime
+
+SyncJob (logical)
+  id              String
+  type            full | delta | reindex | delete
+  status          queued | running | succeeded | failed | cancelled
+  totalItems      Int
+  processedItems  Int
+```
+
+**Current workaround:** Connector tokens use `SearchApiKey` with `connector_write` scope.
+Sync-job tracking is **in-memory** in `connector-public.ts` (lost on restart — acceptable for MVP
+since CMS modules retry on heartbeat failure).
+
+### WidgetConfig (logical)
+
+```
+WidgetConfig (logical)
+  projectId       String
+  theme           light | dark | auto
+  layout          inline | modal
+  filters         FacetConfig[]
+  sortOptions     SortOption[]
+  trackingEnabled Boolean
+```
+
+**Current workaround:** Widget is configured entirely through `data-*` attributes on the `<script>` tag.
+No draft/published versioning exists.
+
+### AnalyticsEvent (logical)
+
+```
+AnalyticsEvent (logical)
+  projectId       String
+  sessionId       String
+  type            search_query | zero_results | result_click | widget_open | filter_used
+  query           String?
+  productId       String?
+  position        Int?
+  filters         Json?
+  locale          String
+  userAgent       String?
+  referrer        String?
+  timestamp       DateTime
+```
+
+**Current state:** `SearchUsageEvent` captures raw rows from `recordSearchUsage()`. A dedicated
+`AnalyticsEvent` with widget event types is not yet persisted.
+
+## Scoped search tokens (stateless)
+
+Scoped tokens are **not** a DB model. They are stateless HMAC-signed claims:
+
+```
+ss_scoped_{base64(JSON payload)}.{HMAC-SHA256 signature}
+```
+
+The payload includes `organizationId`, `indexId`, `scopedFilter` (AND-combined with caller filters),
+and optional `expiresAt`. Verification in `packages/api/modules/search/lib/scoped-token.ts`.
+
+## Ownership discriminator
+
+`SearchIndex` supports two owners:
+
+- **Org-owned:** `organizationId` set, `userId` null — the normal case for multi-user workspaces
+- **User-owned:** `userId` set, `organizationId` null — for personal/demo projects
+
+Query helpers: `listSearchIndexesByOwner`, `getSearchIndexByOwnerSlug`, `createSearchIndexByOwner`
+in `packages/database/prisma/queries/search.ts`.

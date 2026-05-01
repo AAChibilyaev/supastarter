@@ -1,0 +1,108 @@
+---
+title: Plans & Limits
+description: Quota tiers, feature gates, hard and soft limits, and how enforcement works in the codebase.
+---
+
+AACsearch enforces per-plan limits through an entitlements system backed by `@repo/payments/lib/entitlements`.
+No separate usage counter table exists yet — quota is checked against config at request time and validated
+against raw `SearchUsageEvent` rows for period aggregation.
+
+**Note:** Pricing figures below are draft posture, not publicly committed rates. The enforcement infrastructure
+is shipped; exact plan boundaries may change before launch.
+
+## Plans (draft)
+
+| Plan           | Search units/month | Max indexes | Origin allow-list               | Support        |
+| -------------- | ------------------ | ----------- | ------------------------------- | -------------- |
+| **Free**       | 10,000             | 1           | `aacsearch.com` subdomains only | Community      |
+| **Starter**    | 100,000            | 3           | Custom origins                  | Email          |
+| **Pro**        | 1,000,000          | 10          | Custom origins                  | Priority email |
+| **Business**   | 5,000,000          | 50          | Custom origins                  | Dedicated      |
+| **Enterprise** | Unlimited          | Unlimited   | Custom origins                  | SLA 99.95%     |
+
+One **search-unit** = 1 search request OR 1 document indexed.
+
+## Feature gates
+
+Feature availability beyond quota is controlled by `packages/api/modules/entitlements/middleware/feature-gate.ts`.
+oRPC procedures use middleware:
+
+```typescript
+// Gate a procedure behind a feature flag
+.use(featureGate("synonyms"))
+
+// Gate a write operation
+.use(writeGate("synonyms"))
+```
+
+The feature matrix maps plan IDs to enabled features in `@repo/payments/lib/entitlements`:
+
+```typescript
+const FEATURE_MATRIX: Record<PlanId, Features> = {
+  free:       { synonyms: false, curations: false, originRestriction: false, ... },
+  starter:    { synonyms: true,  curations: true,  originRestriction: false, ... },
+  pro:        { synonyms: true,  curations: true,  originRestriction: true,  ... },
+  enterprise: { synonyms: true,  curations: true,  originRestriction: true,  ... },
+};
+```
+
+## Quota enforcement flow
+
+Every search and ingest request goes through:
+
+```
+Request
+  → Auth gate (valid key + org)
+  → Feature gate (plan allows this operation)
+  → Quota gate (org has remaining units)
+  → Rate gate (per-key rate limit not exceeded)
+  → Typesense
+```
+
+The `quotaCheck` middleware in `packages/api/modules/entitlements/middleware/quota-check.ts`
+calls `checkQuota(orgId, "search")` and returns:
+
+- `allowed: true` — proceed
+- `allowed: false`, `reason: "search_quota_exceeded"` — 429 response
+
+Hard limits stop all traffic immediately. Soft limits (configurable grace) may allow limited reads
+for a grace period after cancellation (default: 7 days reads, 0 days writes).
+
+## Rate limiting
+
+Rate limiting is per API key using a sliding-window bucket in `SearchRateLimitBucket`.
+
+Default: 60 requests per minute per key (configurable per key). Exceeding the limit returns HTTP 429
+with `error: "rate_limit_exceeded"` and a `Retry-After` header.
+
+## Plan resolution
+
+The active plan for an org is resolved by `resolveOrgPlan(orgId)` in `@repo/payments`:
+
+1. Look up the latest `Purchase` (subscription) for the org.
+2. Map `priceId` → `planId` using the price matrix in `packages/payments/config.ts`.
+3. Cache for 60 seconds (`invalidatePlanCache(orgId)` is called on subscription events).
+4. Fail-open: if resolution fails (payment provider unavailable), default to Free plan limits.
+
+## oRPC entitlements procedure
+
+The `entitlements.getPlanInfo` procedure returns the org's current plan and usage summary:
+
+```typescript
+const planInfo = await orpc.entitlements.getPlanInfo.call({ organizationId });
+// Returns: { planId, planName, searchUnitsUsed, searchUnitsLimit, indexCount, indexLimit, features }
+```
+
+## Upgrade flow
+
+Current status: **Partial.** Stripe billing for search-units is planned for v0.6. Tochka (Russian
+payment provider) is actively being wired in `packages/payments/provider/tochka-wallet/`.
+
+The `BillingPlanInfo` component in `apps/saas/modules/search/components/BillingPlanInfo.tsx` renders
+the current plan and usage. The upgrade CTA points to the billing settings page.
+
+## Admin overrides
+
+Organization admins can view plan info in the dashboard under **Settings → Billing**. Platform
+admins (via `/admin/organizations`) can inspect any org's entitlements and manually adjust plan
+assignment in the database for edge cases.

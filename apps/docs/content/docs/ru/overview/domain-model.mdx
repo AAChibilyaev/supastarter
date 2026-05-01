@@ -1,0 +1,226 @@
+---
+title: Доменная модель
+description: Логические сущности, границы владения и какие модели хранятся сегодня в сравнении с запланированными для будущих миграций БД.
+---
+
+AACsearch использует **ограничение заморозки БД**: никаких изменений схемы Prisma без явного одобрения.
+Это означает, что некоторые доменные концепции существуют как логические сущности, реализованные через обходные решения на существующих таблицах,
+тогда как другие являются полноценно сохранёнными моделями Prisma.
+
+Данная страница сопоставляет каждую доменную концепцию с текущим состоянием реализации.
+
+## Хранимые модели (Prisma, действующие сегодня)
+
+### Organization
+
+Основное рабочее пространство. Все ресурсы AACsearch принадлежат организации.
+
+```
+Organization
+  id            String  @id
+  name          String
+  slug          String  @unique
+  plan          String  (разрешается в матрицу функций через @repo/payments/lib/entitlements)
+  members[]     Member[]
+  createdAt     DateTime
+```
+
+Организации создаются плагином организаций Better Auth и являются границей арендатора для
+всех поисковых операций. Каждый вызов API включает `organizationId`; межорганизационное чтение никогда не допускается.
+
+### SearchIndex
+
+Центральный поисковый ресурс. Сегодня один `SearchIndex` представляет один логический проект (магазин + индекс).
+
+```
+SearchIndex
+  id              String   @id
+  organizationId  String   (станет projectId, когда появится сущность Project)
+  userId          String?  (дискриминатор владельца — индекс может принадлежать орг. или пользователю)
+  slug            String
+  collectionName  String   (версионированное: {orgShortId}_{slug}_v{N})
+  aliasName       String   ({orgShortId}_{slug})
+  schemaVersion   Int
+  status          String
+  createdAt       DateTime
+```
+
+### SearchApiKey
+
+Хранит хэшированные API-ключи для всех типов ключей. Открытый текст показывается **один раз** при создании и никогда не хранится.
+
+```
+SearchApiKey
+  id                 String    @id
+  indexId            String
+  organizationId     String
+  hashedKey          String    @unique   (bcrypt-хэш — НИКОГДА не хранить открытый текст)
+  prefix             String              (ss_search_* | ss_connector_* | ss_scoped_*)
+  scopes             String[]            (search | ingest | admin | connector_write)
+  allowedOrigins     String[]
+  rateLimitPerMinute Int
+  expiresAt          DateTime?
+  lastUsedAt         DateTime?
+```
+
+**Важно:** Токены коннектора повторно используют `SearchApiKey` с `scopes: ["connector_write"]` и
+`prefix: "ss_connector_*"`. Отдельной таблицы `ConnectorToken` нет (обходное решение из-за заморозки БД).
+
+### SearchIngestBuffer
+
+Слой надёжности пути записи. Запросы помещаются в очередь здесь; фоновый воркер дренирует данные в Typesense.
+
+```
+SearchIngestBuffer
+  id             String    @id
+  organizationId String
+  indexId        String
+  documents      Json      (массив ProductDocument)
+  status         String    (pending | processing | success | failed)
+  attempts       Int       @default(0)
+  errorMessage   String?
+  processedAt    DateTime?
+  createdAt      DateTime
+```
+
+### SearchRateLimitBucket
+
+Отслеживание лимитов запросов со скользящим окном по ключу.
+
+### SearchUsageEvent
+
+Сырые строки использования, записываемые `recordSearchUsage()` при каждом поисковом запросе.
+
+```
+SearchUsageEvent
+  id           String   @id
+  indexId      String
+  orgId        String
+  query        String
+  resultCount  Int
+  latencyMs    Int
+  filters      Json?
+  sort         String?
+  userAgent    String?  (не более 256 символов)
+  sessionId    String?
+  referrer     String?
+  createdAt    DateTime
+```
+
+### SearchConnectorSyncJob
+
+Хранимое отслеживание заданий синхронизации (в дополнение к in-memory карте в connector-public.ts).
+
+### Модели знаний (7)
+
+`KnowledgeSpace`, `DataSource`, `IngestionJob`, `KnowledgeDocument`, `KnowledgeChunk`, `GraphNode`, `GraphEdge`
+
+Принадлежат модулю знаний (отдельная продуктовая поверхность для внутреннего Q&A, не поиск витрины).
+Подробности использования смотрите в разделе [Знания и администрирование](/docs/dashboard/knowledge-and-admin).
+
+### Модели кошелька / AI (7)
+
+`AiWallet`, `AiWalletTransaction`, `AiQuotaReservation`, `AiUsageEvent`, `AiPricingRule`, `FxRate`, `WalletTopupOrder`
+
+Используются модулем тарификации / billing-wallet версии v0.6. Текущий статус: в активной разработке.
+
+## Только логические сущности (пока не хранятся)
+
+Описывают предполагаемую форму домена, но не имеют выделенной модели Prisma сегодня.
+Их создание требует одобрения размораживания БД.
+
+### Project
+
+```
+Project (логический)
+  id              String
+  organizationId  String
+  name            String
+  platform        prestashop | bitrix | bitrix24 | api | demo
+  status          String
+  defaultLocale   String
+  currency        String
+  allowedOrigins  String[]
+```
+
+**Текущее обходное решение:** 1 `SearchIndex` = 1 неявный проект. `organizationId` в `SearchIndex`
+выступает как связь проект-организация.
+
+### Connector / SyncJob (логические)
+
+```
+Connector (логический)
+  id              String
+  projectId       String
+  type            prestashop | bitrix
+  status          String
+  lastSeenAt      DateTime
+  lastSyncAt      DateTime
+
+SyncJob (логический)
+  id              String
+  type            full | delta | reindex | delete
+  status          queued | running | succeeded | failed | cancelled
+  totalItems      Int
+  processedItems  Int
+```
+
+**Текущее обходное решение:** Токены коннектора используют `SearchApiKey` с областью `connector_write`.
+Отслеживание заданий синхронизации **хранится в памяти** в `connector-public.ts` (теряется при перезапуске — приемлемо для MVP,
+так как модули CMS повторяют попытку при сбое heartbeat).
+
+### WidgetConfig (логический)
+
+```
+WidgetConfig (логический)
+  projectId       String
+  theme           light | dark | auto
+  layout          inline | modal
+  filters         FacetConfig[]
+  sortOptions     SortOption[]
+  trackingEnabled Boolean
+```
+
+**Текущее обходное решение:** Виджет настраивается полностью через атрибуты `data-*` тега `<script>`.
+Версионирование черновик/опубликовано отсутствует.
+
+### AnalyticsEvent (логический)
+
+```
+AnalyticsEvent (логический)
+  projectId       String
+  sessionId       String
+  type            search_query | zero_results | result_click | widget_open | filter_used
+  query           String?
+  productId       String?
+  position        Int?
+  filters         Json?
+  locale          String
+  userAgent       String?
+  referrer        String?
+  timestamp       DateTime
+```
+
+**Текущее состояние:** `SearchUsageEvent` фиксирует сырые строки из `recordSearchUsage()`. Выделенная
+`AnalyticsEvent` с типами событий виджета пока не сохраняется.
+
+## Ограниченные поисковые токены (stateless)
+
+Ограниченные токены **не являются** моделью БД. Это stateless HMAC-подписанные утверждения:
+
+```
+ss_scoped_{base64(JSON payload)}.{HMAC-SHA256 signature}
+```
+
+Нагрузка включает `organizationId`, `indexId`, `scopedFilter` (объединяется через AND с фильтрами вызывающей стороны)
+и опциональный `expiresAt`. Верификация в `packages/api/modules/search/lib/scoped-token.ts`.
+
+## Дискриминатор владельца
+
+`SearchIndex` поддерживает двух владельцев:
+
+- **Принадлежит организации:** `organizationId` задан, `userId` равен null — обычный случай для многопользовательских рабочих пространств
+- **Принадлежит пользователю:** `userId` задан, `organizationId` равен null — для личных/демо-проектов
+
+Вспомогательные функции запросов: `listSearchIndexesByOwner`, `getSearchIndexByOwnerSlug`, `createSearchIndexByOwner`
+в `packages/database/prisma/queries/search.ts`.

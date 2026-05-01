@@ -1,0 +1,164 @@
+---
+title: Подключение коннектора
+description: Сгенерируйте токен коннектора и подключите модуль CMS к AACsearch с помощью процедуры рукопожатия.
+---
+
+Connector API AACsearch позволяет модулям CMS (PrestaShop, Bitrix и пользовательским интеграциям)
+безопасно отправлять данные каталога в AACsearch. На этой странице описаны аутентификация коннектора и процедура первоначального подключения.
+
+## Предварительные требования
+
+Перед подключением CMS вам необходимо:
+
+1. Аккаунт AACsearch с организацией
+2. Поисковый индекс (см. [Создание первого индекса](/docs/getting-started/create-first-index))
+3. **Токен коннектора** (`ss_connector_*`) для данного индекса
+4. Установленный модуль CMS (PrestaShop или Bitrix)
+
+## Шаг 1: Генерация токена коннектора
+
+Токены коннектора используют префикс `ss_connector_*` и область `connector_write`.
+Они позволяют модулям CMS отправлять документы, но не читать их и не управлять схемой индекса.
+
+### Через панель управления
+
+1. Перейдите в **Search** → **Connectors** → **Connector Tokens**
+2. Нажмите **Create connector token**
+3. Введите имя (например, `PrestaShop production`)
+4. Скопируйте токен немедленно — он показывается только один раз
+
+### Через oRPC
+
+```typescript
+const token = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "PrestaShop production",
+});
+
+console.log(token.plaintext); // ss_connector_abc123... — сохраните сейчас!
+```
+
+## Шаг 2: Настройка модуля CMS
+
+Введите следующие значения на странице настроек модуля CMS:
+
+| Настройка          | Значение                             |
+| ------------------ | ------------------------------------ |
+| URL API AACsearch  | `https://your-app.com`               |
+| Слаг индекса       | `products` (ваш слаг индекса)        |
+| Токен коннектора   | `ss_connector_your_token`            |
+
+Для PrestaShop: настройки находятся в **Modules → AACsearch → Configure**.
+Для Bitrix: настройки находятся в панели администратора модуля в разделе **Настройки → AACsearch**.
+
+## Шаг 3: Рукопожатие (Handshake)
+
+При сохранении конфигурации модуль CMS вызывает эндпоинт рукопожатия для проверки соединения:
+
+```bash
+POST /api/connector/handshake
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "moduleVersion": "1.0.0",
+  "platform": "prestashop"
+}
+```
+
+**Успешный ответ (200):**
+
+```json
+{
+	"status": "ok",
+	"organizationId": "org_...",
+	"indexSlug": "products",
+	"collectionAlias": "org123_products",
+	"indexStatus": "active"
+}
+```
+
+**Ответы при ошибке:**
+
+- `401` — недействительный или истёкший токен коннектора
+- `403` — у токена нет области `connector_write`
+- `404` — слаг индекса не найден для данной организации
+
+## Шаг 4: Полная синхронизация
+
+После успешного рукопожатия запустите полную синхронизацию каталога:
+
+```bash
+POST /api/connector/sync/full
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "documents": [
+    { "id": "1", "title": "Product A", ... },
+    { "id": "2", "title": "Product B", ... }
+  ],
+  "batchNumber": 1,
+  "totalBatches": 5
+}
+```
+
+Для больших каталогов отправляйте документы пакетами по 200 штук. Отслеживайте прогресс через `batchNumber` и
+`totalBatches`. Модуль CMS управляет пакетированием — AACsearch принимает каждый пакет независимо.
+
+Полную документацию по эндпоинтам смотрите в разделе [Жизненный цикл Connector API](/docs/connectors/connector-api-lifecycle).
+
+## Шаг 5: Проверка в панели управления
+
+После завершения полной синхронизации:
+
+1. Откройте панель управления → **Search** → **Import Jobs**
+2. Убедитесь, что задание синхронизации показывает статус `succeeded`
+3. Откройте **Search Preview** и выполните тестовый запрос
+4. Убедитесь, что документы возвращаются в результатах
+
+## Heartbeat (keepalive)
+
+Модули CMS периодически отправляют heartbeat-сигналы, сигнализируя о том, что они подключены:
+
+```bash
+POST /api/connector/heartbeat
+Authorization: Bearer ss_connector_your_token
+
+{ "indexSlug": "products", "timestamp": 1717200000 }
+```
+
+Панель управления отображает время последнего heartbeat в панели **Connectors**. Если heartbeat не поступает 15 минут, коннектор помечается как `disconnected`.
+
+## Дельта-синхронизация (непрерывная синхронизация)
+
+После полной синхронизации модули CMS отправляют отдельные изменения товаров по мере их возникновения:
+
+```bash
+POST /api/connector/sync/delta
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "upsert": [
+    { "id": "123", "title": "Updated Product", "price": 89.99, ... }
+  ],
+  "delete": ["product-456", "product-789"]
+}
+```
+
+Вызовы дельта-синхронизации выполняются из хуков событий CMS (`actionProductUpdate` в PrestaShop,
+`OnAfterIBlockElementUpdate` в Bitrix).
+
+## Управление токенами
+
+- **Список токенов:** `searchRouter.listConnectorTokens`
+- **Отзыв токена:** `searchRouter.revokeConnectorToken` — мгновенный эффект, модуль не пройдёт следующий запрос
+- **Ротация токена:** Отзовите старый + создайте новый, затем обновите конфигурацию модуля CMS
+
+После отзыва токена модуль CMS не пройдёт следующий heartbeat или запрос синхронизации — получит ответ 401.
+Модуль должен показывать статус «отключено» в панели администратора.

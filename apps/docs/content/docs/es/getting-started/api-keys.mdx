@@ -1,0 +1,159 @@
+---
+title: API Keys
+description: Genere, use y revoque API keys para casos de uso de búsqueda, conector y token con ámbito.
+---
+
+AACsearch utiliza tres tipos de API keys, cada una con un prefijo distinto y un ámbito de permisos.
+Todas las claves se almacenan como hashes bcrypt — el texto plano se muestra **una vez** en la creación y no puede recuperarse posteriormente.
+
+## Tipos de claves
+
+| Tipo              | Prefijo          | Ámbitos                   | Utilizada por                            |
+| ----------------- | ---------------- | ------------------------- | ---------------------------------------- |
+| Clave de búsqueda | `ss_search_*`    | `search`                  | SDK del navegador, widget, llamadas directas a la API |
+| Clave de conector | `ss_connector_*` | `connector_write`         | Módulos CMS (PrestaShop, Bitrix)         |
+| Token con ámbito  | `ss_scoped_*`    | Reducido desde clave de búsqueda | Delegación de token por usuario, por filtro |
+
+## Generar una clave de búsqueda
+
+### Mediante el panel
+
+1. Navegue a **Búsqueda** → **API Keys**
+2. Haga clic en **Crear API key**
+3. Seleccione el tipo de clave: **Búsqueda**
+4. Configure los orígenes permitidos (déjelo vacío durante el desarrollo)
+5. Establezca el límite de velocidad (predeterminado: 60 req/min)
+6. Establezca la expiración opcional
+7. Haga clic en **Crear** — copie la clave inmediatamente, no se mostrará nuevamente
+
+### Mediante oRPC
+
+```typescript
+const key = await orpc.search.createApiKey.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopes: ["search"],
+	allowedOrigins: ["https://yourstore.com"],
+	rateLimitPerMinute: 60,
+	name: "Clave de búsqueda para tienda",
+});
+
+console.log(key.plaintext); // ss_search_abc123... — ¡guárdela ahora!
+```
+
+## Generar una clave de conector
+
+Las claves de conector usan el ámbito `connector_write` y el prefijo `ss_connector_*`.
+Son utilizadas por los módulos CMS para enviar documentos al endpoint de ingestión.
+
+```typescript
+const key = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "Conector PrestaShop",
+});
+
+console.log(key.plaintext); // ss_connector_abc123...
+```
+
+En el panel, las claves de conector se muestran en **Conectores** → **Tokens de conector**.
+
+## Usar una clave de búsqueda
+
+### Encabezado HTTP
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexSlug": "products", "q": "auriculares" }'
+```
+
+### SDK del navegador
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+	baseUrl: "https://your-app.com",
+	apiKey: "ss_search_your_key",
+	indexSlug: "products",
+});
+
+const results = await client.search({ q: "auriculares" });
+```
+
+Consulte [SDK del navegador](/docs/getting-started/browser-sdk) para la documentación completa del SDK.
+
+## Tokens con ámbito
+
+Los tokens con ámbito son tokens de corta duración firmados con HMAC que reducen los permisos de una clave de búsqueda.
+Se generan en el lado del servidor y se pasan al navegador — la clave de búsqueda base permanece en el servidor.
+
+**Caso de uso común:** Limitar los resultados de búsqueda a la organización o nivel de precios del usuario actual.
+
+```typescript
+// Lado del servidor: generar un token con ámbito
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopedFilter: "availability:=in_stock && price:<100",
+	expiresInSeconds: 3600,
+});
+
+// Pasar al navegador — usar como una clave de búsqueda regular
+// El filtro se combina con AND con cualquier filtro del llamador
+```
+
+Los tokens con ámbito son sin estado (no se almacenan en la base de datos). Expiran según el parámetro `expiresInSeconds`.
+Consulte [Tokens de búsqueda con ámbito](/docs/search-api/scoped-search-tokens) para obtener detalles completos.
+
+## Restricción de origen
+
+Cada clave de búsqueda tiene una lista `allowedOrigins[]`. Las solicitudes de orígenes no incluidos en la lista reciben una respuesta 403.
+
+- **Desarrollo:** deje `allowedOrigins` vacío para permitir todos los orígenes
+- **Producción:** añada explícitamente los dominios de su tienda
+
+```typescript
+// Ejemplo: restringir a dominios específicos
+allowedOrigins: ["https://mystore.com", "https://www.mystore.com"];
+```
+
+**Restricción del plan gratuito:** En el plan gratuito, solo se permiten subdominios `*.aacsearch.com` en
+`allowedOrigins`. Actualice al plan Pro para soporte de dominio personalizado.
+
+## Límites de velocidad
+
+Límite de velocidad predeterminado: **60 solicitudes por minuto** por clave. Superar esto devuelve:
+
+```json
+HTTP/1.1 429 Too Many Requests
+Retry-After: 15
+
+{ "error": "rate_limit_exceeded" }
+```
+
+Ajuste los límites de velocidad por clave al momento de su creación o actualícelos en el panel.
+
+## Revocar una clave
+
+```typescript
+await orpc.search.revokeApiKey.call({
+	organizationId: "org_...",
+	keyId: "key_...",
+});
+```
+
+La revocación de una clave es inmediata. La clave será rechazada en la siguiente solicitud. El valor hasheado se
+conserva en la base de datos con fines de registro de auditoría.
+
+## Lista de verificación de seguridad de claves
+
+- [ ] Nunca confirme claves en el control de versiones
+- [ ] Nunca registre claves (AACsearch nunca las registra en el lado del servidor)
+- [ ] Use claves `ss_search_*` en el navegador (solo lectura, limitadas por origen)
+- [ ] Use claves `ss_connector_*` solo en su módulo CMS (lado del servidor)
+- [ ] Rote las claves periódicamente usando el flujo de revocar + recrear
+- [ ] Establezca `allowedOrigins` para claves de producción
+- [ ] Establezca `expiresAt` para acceso temporal

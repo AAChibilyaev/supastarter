@@ -1,0 +1,115 @@
+---
+title: Search API Overview
+description: Three API surfaces — oRPC dashboard procedures, public REST search endpoint, and Connector API — and when to use each.
+---
+
+AACsearch exposes three distinct API surfaces. Understanding which one to use in which context is
+important for security and for not calling the wrong endpoint.
+
+## Three API surfaces
+
+### 1. oRPC (dashboard / admin procedures)
+
+Used by the AACsearch SaaS dashboard. Requires a Better Auth session (authenticated user).
+Not intended for external callers or CMS modules.
+
+- **Base path:** `/api/rpc/**`
+- **Auth:** Session cookie (Better Auth)
+- **Used by:** `apps/saas` dashboard, management operations
+- **26 procedures** covering indexes, keys, tokens, analytics, connectors, relevance
+
+### 2. Public search endpoint
+
+Used by browsers, browser SDKs, and the hosted widget. Requires a `ss_search_*` or `ss_scoped_*` key.
+
+- **Base path:** `/api/search` (mounted in `public-handler.ts`)
+- **Auth:** Bearer token (API key in Authorization header)
+- **Used by:** `@repo/search-client`, `packages/widget`, any HTTP client
+- **Operations:** search, multi-search
+
+### 3. Connector API
+
+Used by CMS modules (PrestaShop, Bitrix, custom integrations). Requires a `ss_connector_*` key.
+
+- **Base path:** `/api/connector/**`
+- **Auth:** Bearer token (`ss_connector_*` key)
+- **Used by:** CMS modules, custom sync scripts
+- **Operations:** handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync status
+
+## REST API v1
+
+In addition to the above, AACsearch exposes a REST API v1 at `/api/v1/` with an OpenAPI 3.1 spec.
+
+**Current status:** Shipped. 15 endpoints covering projects, indexes, documents, search, API key management.
+
+OpenAPI spec: `GET /api/v1/openapi.json`
+
+Auth scopes for v1:
+
+| Prefix        | Scope    | Access level    |
+| ------------- | -------- | --------------- |
+| `aa_admin_*`  | `admin`  | Full management |
+| `aa_write_*`  | `write`  | Ingest + write  |
+| `aa_search_*` | `search` | Search only     |
+| `aa_scoped_*` | `scoped` | Narrowed search |
+
+## Request format (public search)
+
+All search requests are JSON POST:
+
+```
+POST /api/search
+Authorization: Bearer ss_search_your_key
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "q": "wireless headphones",
+  ...search parameters...
+}
+```
+
+## Authentication flow
+
+```
+Request arrives
+    │
+    ▼
+Extract Authorization: Bearer {token}
+    │
+    ▼
+Determine key type by prefix:
+  ss_search_*    → verify API key hash, check origin, check rate limit, check quota
+  ss_scoped_*    → verify HMAC signature, extract scoped filter, proceed as search
+  ss_connector_* → verify API key hash, check connector_write scope
+    │
+    ▼
+Proceed to handler (search / ingest / connector op)
+```
+
+## Error format
+
+All errors from the public search endpoint follow this format:
+
+```json
+{
+	"error": "error_code",
+	"message": "Human-readable description"
+}
+```
+
+Common error codes: `unauthorized`, `forbidden`, `rate_limit_exceeded`, `quota_exceeded`,
+`index_not_found`, `search_failed`, `ingest_failed`.
+
+Raw Typesense errors are **never** forwarded to callers. All upstream errors are mapped to
+typed codes before the response is sent.
+
+## SDK support
+
+| Environment       | Package                                           |
+| ----------------- | ------------------------------------------------- |
+| Browser / Node.js | `@repo/search-client`                             |
+| Storefront widget | `packages/widget` (auto-installed via `<script>`) |
+| AI agent (MCP)    | `packages/aacsearch-mcp`                          |
+
+See [Browser SDK](/docs/getting-started/browser-sdk) for the client SDK documentation.

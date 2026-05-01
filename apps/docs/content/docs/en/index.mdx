@@ -1,0 +1,52 @@
+---
+title: AACsearch Documentation
+description: Hosted search-as-a-service for e-commerce and CRM catalogs. Fast, typo-tolerant, org-scoped, and CMS-ready.
+---
+
+AACsearch is a hosted **search-as-a-service** built for e-commerce and CRM catalogs. Merchants install a CMS module
+(PrestaShop or Bitrix), connect their AACsearch project, and get a fast, typo-tolerant search endpoint plus a
+hosted widget — without running Typesense infrastructure themselves.
+
+## What you get
+
+| Capability                                   | Status                             |
+| -------------------------------------------- | ---------------------------------- |
+| Typo-tolerant full-text search               | ✅ Shipped                         |
+| Facets, sorting, highlighting                | ✅ Shipped                         |
+| Org-scoped multi-tenancy                     | ✅ Shipped                         |
+| API keys (hashed, scoped, origin-restricted) | ✅ Shipped                         |
+| Scoped search tokens (HMAC)                  | ✅ Shipped                         |
+| Per-plan quota and rate limiting             | ✅ Shipped                         |
+| Zero-downtime alias-swap reindex             | ✅ Shipped                         |
+| DB-first ingest pipeline                     | ✅ Shipped                         |
+| Browser SDK (`@repo/search-client`)          | ✅ Shipped                         |
+| Hosted widget (Vanilla JS, Shadow DOM)       | ✅ Shipped                         |
+| Connector API for CMS modules                | ✅ Shipped                         |
+| Synonyms and curations                       | ✅ Shipped                         |
+| Knowledge module (RAG/GraphRAG)              | ✅ Shipped                         |
+| PrestaShop module                            | 🟡 Skeleton (separate track)       |
+| Bitrix module                                | 🟡 Skeleton (separate track)       |
+| Search-unit metering (Tochka/Stripe)         | 🟡 Active WIP                      |
+| Public docs site                             | 🟡 You are here (v0.7 in progress) |
+| Self-host quickstart + Helm chart            | ⏳ Planned (v1.0)                  |
+
+## Where to start
+
+- **New to AACsearch?** → [Getting Started overview](/docs/getting-started/overview)
+- **Setting up a development environment?** → [Local development](/docs/getting-started/local-development)
+- **Installing the widget on a storefront?** → [Widget installation](/docs/getting-started/widget-installation)
+- **Connecting a CMS?** → [Connector onboarding](/docs/getting-started/connector-onboarding)
+- **Building against the search API?** → [Search API overview](/docs/search-api/overview)
+- **Understand plans and limits?** → [Plans and limits](/docs/overview/plans-and-limits)
+
+## Project context
+
+AACsearch is built on a **supastarter Next.js monorepo**. The SaaS app (`apps/saas`) provides the dashboard,
+the marketing site (`apps/marketing`) serves the landing page, and this docs site (`apps/docs`) provides
+the documentation you are reading now.
+
+The search engine is [Typesense](https://typesense.org) — a fast, typo-tolerant open-source search engine.
+AACsearch wraps it with multi-tenancy, auth, quota enforcement, CMS connectors, and a hosted widget so
+developers and merchants don't have to operate Typesense directly.
+
+See [Architecture](/docs/overview/architecture) for the full system picture.

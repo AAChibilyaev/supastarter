@@ -1,0 +1,146 @@
+---
+title: Erreurs & Limites de débit
+description: Codes d'erreur, codes de statut HTTP, stratégies de nouvelle tentative et en-têtes de limite de débit pour l'API publique AACsearch.
+---
+
+AACsearch mappe toutes les erreurs en amont vers des codes d'erreur typés avant de les retourner aux appelants.
+Les messages d'erreur bruts de Typesense ne sont jamais transmis — cela empêche les fuites d'information et
+fournit un contrat d'erreur stable.
+
+## Format des réponses d'erreur
+
+Toutes les réponses d'erreur suivent ce format :
+
+```json
+{
+	"error": "error_code",
+	"message": "Description lisible par l'humain de l'erreur"
+}
+```
+
+Le champ `error` est lisible par machine et stable. Le champ `message` est destiné à la consommation humaine
+et peut changer entre les versions.
+
+## Codes de statut HTTP et codes d'erreur
+
+### 4xx — Erreurs client (ne pas réessayer automatiquement)
+
+| HTTP | Code `error`          | Cause                                                              |
+| ---- | --------------------- | ------------------------------------------------------------------ |
+| 400  | `invalid_request`     | JSON malformé ou champ requis manquant                             |
+| 400  | `invalid_filter`      | Syntaxe d'expression `filterBy` invalide                           |
+| 400  | `invalid_sort`        | Expression `sortBy` invalide                                       |
+| 401  | `unauthorized`        | Clé API ou token limité manquant, invalide ou expiré               |
+| 401  | `token_expired`       | La durée de vie du token limité est dépassée                       |
+| 403  | `forbidden`           | La clé n'a pas la portée requise (`search` ou `connector_write`)   |
+| 403  | `origin_not_allowed`  | L'origine de la requête n'est pas dans `allowedOrigins` pour la clé |
+| 404  | `index_not_found`     | L'`indexSlug` spécifié n'existe pas pour cette organisation        |
+| 429  | `rate_limit_exceeded` | Limite de débit par clé dépassée                                   |
+| 429  | `quota_exceeded`      | Le quota mensuel d'unités de recherche de l'organisation est épuisé |
+
+### 5xx — Erreurs serveur (possibilité de nouvelle tentative avec backoff)
+
+| HTTP | Code `error`          | Cause                                                             |
+| ---- | --------------------- | ----------------------------------------------------------------- |
+| 502  | `search_failed`       | Erreur Typesense en amont (cluster inaccessible, timeout de requête) |
+| 502  | `ingest_failed`       | Échec de la mise en file d'attente des documents dans le buffer d'ingestion |
+| 503  | `service_unavailable` | L'API AACsearch est temporairement indisponible                   |
+
+## Limitation de débit
+
+La limitation de débit est appliquée par clé API en utilisant un compteur à fenêtre glissante.
+
+**Limite par défaut :** 60 requêtes par minute par clé.
+
+Lorsque la limite est dépassée, la réponse est :
+
+```
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 15
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1717201234
+
+{
+  "error": "rate_limit_exceeded",
+  "message": "Rate limit of 60 req/min exceeded. Retry after 15 seconds."
+}
+```
+
+### En-têtes de réponse
+
+Ces en-têtes sont inclus dans toutes les réponses réussies et les réponses de limitation de débit :
+
+| En-tête                 | Description                                       |
+| ----------------------- | ------------------------------------------------- |
+| `X-RateLimit-Limit`     | Total des requêtes autorisées par fenêtre         |
+| `X-RateLimit-Remaining` | Requêtes restantes dans la fenêtre actuelle       |
+| `X-RateLimit-Reset`     | Horodatage Unix lorsque la fenêtre se réinitialise |
+| `Retry-After`           | Secondes à attendre avant de réessayer (uniquement sur 429) |
+
+## Épuisement du quota
+
+Lorsque le quota mensuel du plan est dépassé :
+
+```
+HTTP/1.1 429 Too Many Requests
+
+{
+  "error": "quota_exceeded",
+  "message": "Monthly search-unit quota exhausted. Upgrade your plan or wait for reset."
+}
+```
+
+Les unités de recherche se réinitialisent le 1er de chaque mois calendaire. Mettez à niveau le plan dans **Settings → Billing**
+pour restaurer immédiatement le quota.
+
+## Stratégie de nouvelle tentative pour les clients
+
+| Classe d'erreur            | Action                                                          |
+| -------------------------- | --------------------------------------------------------------- |
+| 4xx (sauf 429)             | **Ne pas réessayer** — corriger la requête                      |
+| 429 `rate_limit_exceeded`  | Attendre les secondes `Retry-After`, puis réessayer             |
+| 429 `quota_exceeded`       | Ne pas réessayer jusqu'à la réinitialisation du quota ou la mise à niveau du plan |
+| 502 `search_failed`        | Réessayer une fois après 1 seconde ; si cela échoue à nouveau, afficher l'erreur à l'utilisateur |
+| 503                        | Réessayer avec backoff exponentiel : 1s → 2s → 4s → abandonner |
+| Erreur réseau              | Réessayer avec backoff exponentiel                              |
+
+### Comportement de nouvelle tentative du SDK
+
+Le SDK `@repo/search-client` ne réessaie pas automatiquement les erreurs 5xx. Implémentez la logique de nouvelle tentative
+dans votre couche applicative ou utilisez une bibliothèque comme `p-retry`.
+
+```typescript
+import pRetry from "p-retry";
+
+const results = await pRetry(() => client.search({ q: "headphones" }), {
+	retries: 3,
+	factor: 2,
+	minTimeout: 1000,
+	shouldRetry: (err) => err.status >= 500, // réessayer uniquement les erreurs serveur
+});
+```
+
+## Comportement de nouvelle tentative du module CMS
+
+Le buffer d'ingestion AACsearch est conçu pour les nouvelles tentatives :
+
+- Les requêtes de synchronisation du connecteur (`sync/full`, `sync/delta`) mettent les documents en file d'attente dans `SearchIngestBuffer`
+- Le worker en arrière-plan réessaie les lignes ayant échoué avec un backoff exponentiel
+- Le module CMS n'a pas besoin d'implémenter la logique de nouvelle tentative pour les documents individuels — le buffer s'en charge
+- Le module CMS doit réessayer la requête HTTP elle-même sur les réponses 5xx (pas sur les réponses 4xx)
+
+## Débogage en développement
+
+Pour les erreurs 502 en développement :
+
+1. Vérifiez si Typesense est en cours d'exécution : `curl http://localhost:8108/health`
+2. Vérifiez les logs de l'API pour l'erreur Typesense originale (mappée avant de répondre au client)
+3. Vérifiez `TYPESENSE_HOST`, `TYPESENSE_PORT`, `TYPESENSE_API_KEY` dans `.env.local`
+
+Pour les erreurs 401 :
+
+1. Vérifiez que la clé n'a pas expiré
+2. Vérifiez que le préfixe de la clé correspond à l'opération (`ss_search_*` pour la recherche, `ss_connector_*` pour l'ingestion)
+3. Pour les tokens limités : vérifiez le champ `expiresAt` dans la charge utile décodée

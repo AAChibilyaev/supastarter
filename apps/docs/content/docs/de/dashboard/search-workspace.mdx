@@ -1,0 +1,158 @@
+---
+title: "Such-Workspace"
+description: "Der Such-Bereich des Dashboards — Indizes, Playground, API-Schlüssel, Widget-Tabs, Import-Jobs, Connector-Token und die Onboarding-Checkliste."
+---
+
+Der Such-Workspace unter `/[orgSlug]/search` ist das Hauptsteuerungspanel für Ihre Suchindizes. Er ist in Tabs gegliedert:
+
+- **Indizes** — Suchindizes verwalten
+- **Playground** — Abfragen interaktiv testen
+- **API-Schlüssel** — Such-API-Schlüssel pro Index verwalten
+- **Widget** — Installations-Snippet für das gehostete Widget abrufen
+
+## Indizes-Tab
+
+Der Indizes-Tab listet alle Suchindizes für die Organisation auf. Für jeden Index können Sie:
+
+- Dokumentanzahl und Zeitstempel der letzten Aktualisierung sehen
+- Zeilenaktionen öffnen: Reindex, Import-Jobs anzeigen, Schema, Synonyme, Kurationen verwalten
+- Einen neuen Index erstellen (nur Org-Admin)
+
+Eine Verwendungszusammenfassungs-Karte oben zeigt den Verbrauch gegenüber Ihren Plan-Limits (verwendete Suchen, indizierte Dokumente, Kontingent-Prozentsatz).
+
+### Index erstellen
+
+Klicken Sie auf **Neuer Index** (für Org-Admins sichtbar). Sie wählen einen Anzeigenamen und einen Slug. Der Slug wird Teil des Typesense-Collection-Namens und kann nach der Erstellung nicht mehr geändert werden.
+
+Index-Slugs werden verwendet in:
+
+- Dem Widget-Attribut `data-index-slug`
+- Dem Connector-API-Pfadsegment `:indexSlug`
+- API-Schlüssel-Bindungen
+
+### Reindex
+
+Das Auslösen eines Reindex über Zeilenaktionen erstellt eine neue versionierte Typesense-Collection (`{orgShortId}_{slug}_v{n+1}`), überprüft sie und tauscht den Alias atomisch aus. Die vorherige Version bleibt bis zum Abschluss des Austauschs aktiv. Kein Downtime.
+
+## Playground-Tab
+
+Der Playground ermöglicht Ihnen, Testabfragen gegen jeden Index auszuführen, ohne Code zu schreiben. Sie können:
+
+- Eine Suchanfrage eingeben
+- Filter anwenden
+- Verschiedene Sortieroptionen ausprobieren
+- Rohe Typesense-Ergebnisse inklusive Facettenzählungen und Hervorhebungen sehen
+
+Der Playground verwendet Ihre Dashboard-Sitzung — es ist kein API-Schlüssel für die Verwendung erforderlich.
+
+## API-Schlüssel-Tab
+
+Der API-Schlüssel-Tab zeigt alle Schlüssel für einen ausgewählten Index. Wählen Sie einen Index aus dem Dropdown, um seine Schlüssel zu sehen.
+
+### Schlüsselbereiche
+
+| Bereich           | Zweck                                                        |
+| ----------------- | ------------------------------------------------------------ |
+| `search`          | Nur-Lese-Suchanfragen. Sicher in Browser-Code einzubetten.   |
+| `ingest`          | Schreibzugriff zum Einreichen von Dokumenten über die REST-API |
+| `admin`           | Vollzugriff — Collections erstellen/löschen, Schema verwalten |
+| `connector_write` | Von CMS-Modulen verwendet (siehe Connector-Token unten)      |
+
+### Schlüssel erstellen
+
+Klicken Sie auf **Schlüssel erstellen** und wählen Sie einen Namen und Bereich. Der Klartext-Schlüssel wird einmal bei der Erstellung angezeigt. Kopieren Sie ihn sofort — er kann nicht erneut abgerufen werden.
+
+Schlüssel werden als SHA-256-Hashes (Präfix:Hash-Format) gespeichert. Nur das Präfix und Metadaten werden im Klartext gespeichert.
+
+### Schlüssel widerrufen
+
+Klicken Sie bei jedem aktiven Schlüssel auf **Widerrufen**. Der Widerruf ist sofort — der Schlüssel wird bei der nächsten Verwendung abgelehnt. Widerrufene Schlüssel werden zu Audit-Zwecken in der Liste behalten.
+
+## Widget-Tab
+
+Der Widget-Tab generiert den Installations-Snippet für das gehostete Widget. Wählen Sie einen Index aus dem Dropdown, dann:
+
+1. Geben Sie Ihren `ss_search_*`-API-Schlüssel ein (oder verwenden Sie einen bereits erstellten Schlüssel)
+2. Kopieren Sie den generierten Snippet
+
+Der Snippet sieht wie folgt aus:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Fügen Sie ihn in den `<head>` Ihres Storefronts ein und fügen Sie `<div id="aac-search"></div>` dort hinzu, wo die Suche erscheinen soll.
+
+Siehe [Widget-Übersicht](/docs/connectors/widget-overview) für vollständige Konfigurationsoptionen.
+
+## Import-Jobs
+
+Die Seite `/[orgSlug]/import-jobs` zeigt den Verlauf der Massenimport-Operationen.
+
+### Massenimport
+
+Sie können eine JSONL-Datei über den Indizes-Tab → Zeilenaktionen → Dokumente importieren hochladen. Jede Zeile in der Datei ist ein Produktdokument in demselben Format wie der Connector-API-Sync-Payload:
+
+```jsonl
+{"external_id":"1","title":"Produkt A","price":9.99}
+{"external_id":"2","title":"Produkt B","price":19.99}
+```
+
+Import-Jobs werden in der Datenbank verfolgt. Jeder Job zeigt:
+
+- Status (laufend / abgeschlossen / fehlgeschlagen)
+- Gesamt verarbeitete Elemente
+- Fehleranzahl
+- Start- und Endzeitstempel
+
+## Erste-Schritte-Checkliste
+
+Die Seite `/[orgSlug]/getting-started` zeigt eine 6-Schritt-Checkliste, die ihren Zustand automatisch aus Ihren vorhandenen Daten ableitet — keine manuelle Eingabe erforderlich.
+
+| Schritt                          | Bedingung                                                              |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| 1. Suchindex erstellen           | `SearchIndex`-Anzahl > 0 für die Org                                   |
+| 2. Connector-Token generieren    | `SearchApiKey` mit `connector_write`-Bereich existiert und ist nicht widerrufen |
+| 3. Daten synchronisieren         | `SearchUsageEvent` mit Ingest-Typ existiert                            |
+| 4. Suche durchführen             | `SearchUsageEvent` mit Such-Typ existiert                              |
+| 5. API-Schlüssel generieren      | `SearchApiKey` mit `search`-Bereich existiert und ist nicht widerrufen |
+| 6. Such-Widget einbetten         | Beginnt immer deaktiviert — Selbstbescheinigung durch den Benutzer     |
+
+Schritte 1–5 werden automatisch geprüft. Schritt 6 spiegelt das Widget-Einbetten wider, das serverseitig nicht erkannt werden kann.
+
+## Connector-Token
+
+Connector-Token (`ss_connector_*`) werden von der Connectoren-Seite unter `/[orgSlug]/connectors` verwaltet, nicht vom Such-Workspace. Von dort aus können Sie:
+
+- Alle aktiven Connector-Token mit ihrer letzten Heartbeat-Zeit sehen
+- Ein neues Connector-Token für einen bestimmten Index erstellen
+- Ein Token widerrufen
+
+Siehe [Connectoren-Übersicht](/docs/connectors/overview) für den vollständigen Connector-Workflow.
+
+## Relevanzeinstellungen
+
+Die Seite `/[orgSlug]/relevance` hat Unter-Tabs für die per-Index-Relevanzoptimierung:
+
+- **Synonyme** — Synonym-Sets hinzufügen (z. B. „Turnschuhe" = „Laufschuhe" = „Sneaker")
+- **Kurationen** — Bestimmte Dokumente für bestimmte Anfragen anheften oder ausblenden
+- **Stoppwörter** — Wörter definieren, die bei der Suche ignoriert werden sollen (für v1.x geplant)
+- **Presets** — Benannte Such-Parameter-Sets für schnelle Wiederverwendung speichern (für v1.x geplant)
+
+## Analytics-Seite
+
+Die Seite `/[orgSlug]/analytics` bietet detaillierte Such-Analysen für die Organisation. Sie zeigt Gesamtsuchen, eindeutige Sitzungen, Null-Ergebnis-Rate, durchschnittliche Latenz und Klickrate. Daten stammen aus `SearchUsageEvent`-Zeilen über die oRPC-Prozedur `search.analytics`.
+
+## Verwandte Seiten
+
+- [Dashboard-Übersicht](/docs/dashboard/overview)
+- [Widget-Übersicht](/docs/connectors/widget-overview)
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle)
+- [Authentifizierung](/docs/search-api/authentication)

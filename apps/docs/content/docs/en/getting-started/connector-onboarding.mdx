@@ -1,0 +1,166 @@
+---
+title: Connector Onboarding
+description: Generate a connector token and connect your CMS module to AACsearch using the handshake flow.
+---
+
+The AACsearch Connector API allows CMS modules (PrestaShop, Bitrix, and custom integrations) to
+push catalog data into AACsearch securely. This page walks through the connector authentication
+and initial connection flow.
+
+## Prerequisites
+
+Before connecting a CMS, you need:
+
+1. An AACsearch account with an organization
+2. A search index (see [Create Your First Index](/docs/getting-started/create-first-index))
+3. A **connector token** (`ss_connector_*`) for that index
+4. Your CMS module installed (PrestaShop or Bitrix)
+
+## Step 1: Generate a connector token
+
+Connector tokens use the `ss_connector_*` prefix and the `connector_write` scope.
+They allow CMS modules to push documents but never to read documents or manage the index schema.
+
+### Via dashboard
+
+1. Navigate to **Search** → **Connectors** → **Connector Tokens**
+2. Click **Create connector token**
+3. Enter a name (e.g., `PrestaShop production`)
+4. Copy the token immediately — it is shown only once
+
+### Via oRPC
+
+```typescript
+const token = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "PrestaShop production",
+});
+
+console.log(token.plaintext); // ss_connector_abc123... — save this now!
+```
+
+## Step 2: Configure the CMS module
+
+Enter these values in the CMS module's settings page:
+
+| Setting           | Value                        |
+| ----------------- | ---------------------------- |
+| AACsearch API URL | `https://your-app.com`       |
+| Index slug        | `products` (your index slug) |
+| Connector token   | `ss_connector_your_token`    |
+
+For PrestaShop, these settings are in **Modules → AACsearch → Configure**.
+For Bitrix, these settings are in the module admin panel under **Settings → AACsearch**.
+
+## Step 3: Handshake
+
+When the CMS module saves its configuration, it calls the handshake endpoint to verify connectivity:
+
+```bash
+POST /api/connector/handshake
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "moduleVersion": "1.0.0",
+  "platform": "prestashop"
+}
+```
+
+**Success response (200):**
+
+```json
+{
+	"status": "ok",
+	"organizationId": "org_...",
+	"indexSlug": "products",
+	"collectionAlias": "org123_products",
+	"indexStatus": "active"
+}
+```
+
+**Failure responses:**
+
+- `401` — invalid or expired connector token
+- `403` — token does not have `connector_write` scope
+- `404` — index slug not found for this organization
+
+## Step 4: Full sync
+
+After a successful handshake, trigger a full catalog sync:
+
+```bash
+POST /api/connector/sync/full
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "documents": [
+    { "id": "1", "title": "Product A", ... },
+    { "id": "2", "title": "Product B", ... }
+  ],
+  "batchNumber": 1,
+  "totalBatches": 5
+}
+```
+
+For large catalogs, send documents in batches of 200. Track progress using `batchNumber` and
+`totalBatches`. The CMS module manages batching — AACsearch accepts each batch independently.
+
+See [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle) for the full endpoint reference.
+
+## Step 5: Verify in the dashboard
+
+After the full sync completes:
+
+1. Open the dashboard → **Search** → **Import Jobs**
+2. Verify the sync job shows `succeeded` status
+3. Open **Search Preview** and run a test query
+4. Confirm documents are returning in results
+
+## Heartbeat (keepalive)
+
+CMS modules send periodic heartbeats to signal they are still connected:
+
+```bash
+POST /api/connector/heartbeat
+Authorization: Bearer ss_connector_your_token
+
+{ "indexSlug": "products", "timestamp": 1717200000 }
+```
+
+The dashboard displays the last heartbeat time in the **Connectors** panel. If no heartbeat is
+received for 15 minutes, the connector is marked as `disconnected`.
+
+## Delta sync (ongoing sync)
+
+After full sync, CMS modules send individual product changes as they happen:
+
+```bash
+POST /api/connector/sync/delta
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "upsert": [
+    { "id": "123", "title": "Updated Product", "price": 89.99, ... }
+  ],
+  "delete": ["product-456", "product-789"]
+}
+```
+
+Delta sync calls are made from CMS event hooks (`actionProductUpdate` in PrestaShop,
+`OnAfterIBlockElementUpdate` in Bitrix).
+
+## Token management
+
+- **List tokens:** `searchRouter.listConnectorTokens`
+- **Revoke token:** `searchRouter.revokeConnectorToken` — immediate effect, module will fail on next request
+- **Rotate token:** Revoke old + create new, then update the CMS module configuration
+
+After revoking a token, the CMS module will fail its next heartbeat or sync request with a 401.
+The module should surface this as a "disconnected" status in its admin panel.

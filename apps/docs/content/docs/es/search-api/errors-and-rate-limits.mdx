@@ -1,0 +1,146 @@
+---
+title: Errores y Límites de Velocidad
+description: Códigos de error, códigos de estado HTTP, estrategias de reintento y encabezados de límite de velocidad para la API pública de AACsearch.
+---
+
+AACsearch mapea todos los errores upstream a códigos de error tipados antes de devolverlos a los llamadores.
+Los mensajes de error crudos de Typesense nunca se reenvían — esto evita la fuga de información y
+proporciona un contrato de errores estable.
+
+## Formato de respuesta de error
+
+Todas las respuestas de error siguen este formato:
+
+```json
+{
+	"error": "error_code",
+	"message": "Descripción legible por humanos del error"
+}
+```
+
+El campo `error` es legible por máquina y estable. El campo `message` es para consumo humano
+y puede cambiar entre versiones.
+
+## Códigos de estado HTTP y códigos de error
+
+### 4xx — Errores del cliente (no reintentar automáticamente)
+
+| HTTP | Código `error`        | Causa                                                            |
+| ---- | --------------------- | ---------------------------------------------------------------- |
+| 400  | `invalid_request`     | JSON malformado o campo requerido faltante                       |
+| 400  | `invalid_filter`      | Sintaxis de expresión `filterBy` inválida                        |
+| 400  | `invalid_sort`        | Expresión `sortBy` inválida                                      |
+| 401  | `unauthorized`        | API key o token con ámbito faltante, inválido o expirado         |
+| 401  | `token_expired`       | El TTL del token con ámbito ha expirado                          |
+| 403  | `forbidden`           | La clave no tiene el ámbito requerido (`search` o `connector_write`) |
+| 403  | `origin_not_allowed`  | El origen de la solicitud no está en `allowedOrigins` para la clave |
+| 404  | `index_not_found`     | El `indexSlug` especificado no existe para esta organización     |
+| 429  | `rate_limit_exceeded` | Límite de velocidad por clave superado                           |
+| 429  | `quota_exceeded`      | La cuota mensual de unidades de búsqueda de la organización está agotada |
+
+### 5xx — Errores del servidor (puede reintentar con retroceso)
+
+| HTTP | Código `error`        | Causa                                                         |
+| ---- | --------------------- | ------------------------------------------------------------- |
+| 502  | `search_failed`       | Error upstream de Typesense (clúster inalcanzable, tiempo de espera de consulta) |
+| 502  | `ingest_failed`       | No se pudieron poner en cola los documentos en el buffer de ingestión |
+| 503  | `service_unavailable` | La API de AACsearch no está disponible temporalmente          |
+
+## Límite de velocidad
+
+El límite de velocidad se aplica por API key usando un contador de ventana deslizante.
+
+**Límite predeterminado:** 60 solicitudes por minuto por clave.
+
+Cuando se supera el límite, la respuesta es:
+
+```
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 15
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1717201234
+
+{
+  "error": "rate_limit_exceeded",
+  "message": "Límite de velocidad de 60 req/min superado. Reintente después de 15 segundos."
+}
+```
+
+### Encabezados de respuesta
+
+Estos encabezados se incluyen en todas las respuestas exitosas y con límite de velocidad:
+
+| Encabezado              | Descripción                                   |
+| ----------------------- | --------------------------------------------- |
+| `X-RateLimit-Limit`     | Total de solicitudes permitidas por ventana   |
+| `X-RateLimit-Remaining` | Solicitudes restantes en la ventana actual    |
+| `X-RateLimit-Reset`     | Marca de tiempo Unix cuando se resetea la ventana |
+| `Retry-After`           | Segundos a esperar antes de reintentar (solo en 429) |
+
+## Agotamiento de cuota
+
+Cuando se agota la cuota del plan mensual:
+
+```
+HTTP/1.1 429 Too Many Requests
+
+{
+  "error": "quota_exceeded",
+  "message": "Cuota mensual de unidades de búsqueda agotada. Actualice su plan o espere el reseteo."
+}
+```
+
+Las unidades de búsqueda se resetean el día 1 de cada mes calendario. Actualice el plan en **Configuración → Facturación**
+para restaurar la cuota inmediatamente.
+
+## Estrategia de reintento para clientes
+
+| Clase de error            | Acción                                                        |
+| ------------------------- | ------------------------------------------------------------- |
+| 4xx (excepto 429)         | **No reintentar** — corrija la solicitud                      |
+| 429 `rate_limit_exceeded` | Espere los segundos de `Retry-After`, luego reintente         |
+| 429 `quota_exceeded`      | No reintentar hasta que se resetee la cuota o se actualice el plan |
+| 502 `search_failed`       | Reintente una vez después de 1 segundo; si falla nuevamente, muestre error al usuario |
+| 503                       | Reintente con retroceso exponencial: 1s → 2s → 4s → abandone |
+| Error de red              | Reintente con retroceso exponencial                           |
+
+### Comportamiento de reintento del SDK
+
+El SDK `@repo/search-client` no reintenta automáticamente en errores 5xx. Implemente la lógica de reintento
+en la capa de su aplicación o use una biblioteca como `p-retry`.
+
+```typescript
+import pRetry from "p-retry";
+
+const results = await pRetry(() => client.search({ q: "auriculares" }), {
+	retries: 3,
+	factor: 2,
+	minTimeout: 1000,
+	shouldRetry: (err) => err.status >= 500, // solo reintentar errores del servidor
+});
+```
+
+## Comportamiento de reintento del módulo CMS
+
+El buffer de ingestión de AACsearch está diseñado para reintentos:
+
+- Las solicitudes de sincronización del conector (`sync/full`, `sync/delta`) ponen en cola los documentos en `SearchIngestBuffer`
+- El trabajador en segundo plano reintenta las filas con error con retroceso exponencial
+- El módulo CMS no necesita implementar reintento para documentos individuales — el buffer lo maneja
+- El módulo CMS debe reintentar la propia solicitud HTTP en respuestas 5xx (no en 4xx)
+
+## Depuración en desarrollo
+
+Para errores 502 durante el desarrollo:
+
+1. Verifique si Typesense está en ejecución: `curl http://localhost:8108/health`
+2. Verifique los registros de la API para el error original de Typesense (mapeado antes de responder al cliente)
+3. Verifique `TYPESENSE_HOST`, `TYPESENSE_PORT`, `TYPESENSE_API_KEY` en `.env.local`
+
+Para errores 401:
+
+1. Verifique que la clave no haya expirado
+2. Verifique que el prefijo de la clave coincida con la operación (`ss_search_*` para búsqueda, `ss_connector_*` para ingestión)
+3. Para tokens con ámbito: verifique el campo `expiresAt` en el payload decodificado

@@ -1,0 +1,208 @@
+---
+title: SDK navigateur
+description: Utiliser le SDK navigateur @repo/search-client pour effectuer des recherches depuis un navigateur ou une application Node.js.
+---
+
+Le SDK navigateur AACsearch (`@repo/search-client`) fournit une interface typée pour appeler le
+point de terminaison de recherche public depuis les navigateurs et les applications Node.js.
+
+**Important :** Le SDK accepte uniquement les clés `ss_search_*` et `ss_scoped_*` — jamais les clés admin ou connecteur.
+La clé admin Typesense ne quitte jamais le serveur.
+
+## Installation
+
+Le SDK est un package du workspace. Dans les projets externes (une fois publié) :
+
+```bash
+npm install @aacsearch/search-client
+# ou : yarn add @aacsearch/search-client
+```
+
+Dans le monorepo :
+
+```json
+{
+	"dependencies": {
+		"@repo/search-client": "workspace:*"
+	}
+}
+```
+
+## Initialiser le client
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+	baseUrl: "https://your-app.com", // votre point de terminaison AACsearch
+	apiKey: "ss_search_your_key", // clé lecture seule
+	indexSlug: "products", // index par défaut
+});
+```
+
+## Recherche de base
+
+```typescript
+const results = await client.search({
+	q: "wireless headphones",
+	queryBy: "title,description,brand",
+	page: 1,
+	perPage: 20,
+});
+
+// results.hits: tableau de documents correspondants
+// results.found: nombre total
+// results.facetCounts: valeurs de facettes si demandées
+```
+
+## Recherche avec filtres
+
+```typescript
+const results = await client.search({
+	q: "headphones",
+	queryBy: "title,brand",
+	filterBy: "availability:=in_stock && price:<200",
+	sortBy: "price:asc",
+	facetBy: "brand,categories",
+	page: 1,
+	perPage: 20,
+});
+```
+
+La syntaxe des filtres suit la [syntaxe de filtres Typesense](https://typesense.org/docs/latest/api/search.html#filter-parameters).
+
+## Multi-search
+
+Le multi-search exécute plusieurs requêtes en un seul aller-retour HTTP. Utile pour l'autocomplétion
+(une requête par type de suggestion) et la recherche fédérée sur différents ensembles de résultats.
+
+```typescript
+const [productResults, categoryResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "shoes",
+		queryBy: "title,brand",
+		perPage: 5,
+	},
+	{
+		indexSlug: "categories",
+		q: "shoes",
+		queryBy: "name",
+		perPage: 3,
+	},
+]);
+```
+
+## Utiliser des tokens limités
+
+Pour les restrictions par utilisateur (par ex. limiter les résultats aux produits en stock uniquement), générez un token limité
+côté serveur et transmettez-le au client :
+
+```typescript
+// Serveur : générer un token limité (par ex. dans une Server Action Next.js ou une route API)
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "availability:=in_stock",
+	expiresInSeconds: 3600,
+});
+
+// Client : utiliser le token limité comme clé API
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+```
+
+Le filtre limité est combiné avec ET avec tous les filtres ajoutés par le client. Il ne peut pas être supprimé par l'appelant.
+
+## Modèle d'autocomplétion
+
+Pour une expérience de recherche au fil de la frappe réactive, appliquez un debounce aux requêtes et utilisez le multi-search :
+
+```typescript
+import { useDeferredValue, useEffect, useState } from "react";
+
+function useSearch(query: string) {
+	const deferredQuery = useDeferredValue(query);
+	const [results, setResults] = useState(null);
+
+	useEffect(() => {
+		if (!deferredQuery.trim()) return;
+
+		client
+			.search({
+				q: deferredQuery,
+				queryBy: "title,sku",
+				perPage: 5,
+				highlightFields: "title",
+			})
+			.then(setResults);
+	}, [deferredQuery]);
+
+	return results;
+}
+```
+
+## Gestion des erreurs
+
+Le SDK génère des erreurs typées depuis un catalogue d'erreurs :
+
+```typescript
+import { AacSearchError } from "@repo/search-client";
+
+try {
+	const results = await client.search({ q: "test" });
+} catch (err) {
+	if (err instanceof AacSearchError) {
+		switch (err.code) {
+			case "unauthorized": // clé invalide ou expirée
+			case "quota_exceeded": // limite du plan atteinte
+			case "rate_limit": // trop de requêtes
+			case "search_failed": // erreur Typesense en amont
+			case "index_not_found": // indexSlug incorrect
+		}
+	}
+}
+```
+
+Les messages d'erreur bruts de Typesense ne sont jamais transmis aux clients — ils sont mappés vers des codes typés côté serveur.
+
+## Intégrations avec les frameworks
+
+### Next.js App Router
+
+```typescript
+// app/search/page.tsx — Server Component
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+  baseUrl: process.env.NEXT_PUBLIC_API_URL!,
+  apiKey: process.env.SEARCH_API_KEY!,  // clé lecture seule depuis l'environnement
+  indexSlug: "products",
+});
+
+export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
+  const results = await client.search({ q: searchParams.q ?? "" });
+  return <ResultsList results={results} />;
+}
+```
+
+### Composant client React
+
+```typescript
+"use client";
+import { useQuery } from "@tanstack/react-query";
+
+function SearchResults({ query }: { query: string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["search", query],
+    queryFn: () => client.search({ q: query, perPage: 20 }),
+    enabled: query.length > 1,
+  });
+
+  if (isLoading) return <Skeleton />;
+  return <ResultsList results={data} />;
+}
+```

@@ -1,0 +1,186 @@
+---
+title: Local Development
+description: Set up the AACsearch monorepo for local development — prerequisites, environment variables, Docker services, and running the apps.
+---
+
+AACsearch is a pnpm + Turborepo monorepo. This page covers the full local setup from a fresh clone
+to a running SaaS dashboard and docs site.
+
+## Prerequisites
+
+| Tool    | Version | Install                          |
+| ------- | ------- | -------------------------------- |
+| Node.js | 20+     | [nodejs.org](https://nodejs.org) |
+| pnpm    | 10.28+  | `npm i -g pnpm`                  |
+| Docker  | Latest  | [docker.com](https://docker.com) |
+
+## Clone and install
+
+```bash
+git clone <repo-url> supastarter
+cd supastarter
+pnpm install
+```
+
+pnpm will bootstrap all workspace packages. First install may take 2–3 minutes.
+
+## Start Docker services
+
+The monorepo requires Postgres (database) and MinIO (S3-compatible object storage):
+
+```bash
+docker compose up -d
+```
+
+This starts:
+
+- **Postgres** on port `5432` — application database
+- **MinIO** on ports `9000` (API) and `9001` (console) — file storage
+
+Verify services are healthy:
+
+```bash
+docker compose ps
+```
+
+## Typesense
+
+You also need a running Typesense instance. The simplest approach for local dev:
+
+```bash
+docker run -d \
+  -p 8108:8108 \
+  -v /tmp/typesense-data:/data \
+  typesense/typesense:26.0 \
+  --data-dir /data \
+  --api-key=your-local-admin-key \
+  --listen-port 8108
+```
+
+Set `TYPESENSE_API_KEY` and `TYPESENSE_HOST` in your environment file (see below).
+
+## Environment variables
+
+Copy the example file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Key variables to configure:
+
+```bash
+# Database
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/supastarter"
+
+# Auth
+BETTER_AUTH_SECRET="your-local-secret-at-least-32-chars"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Typesense
+TYPESENSE_HOST="localhost"
+TYPESENSE_PORT="8108"
+TYPESENSE_PROTOCOL="http"
+TYPESENSE_API_KEY="your-local-admin-key"
+
+# Storage (MinIO)
+STORAGE_ENDPOINT="http://localhost:9000"
+STORAGE_BUCKET="supastarter"
+STORAGE_ACCESS_KEY="minioadmin"
+STORAGE_SECRET_KEY="minioadmin"
+
+# App URLs
+NEXT_PUBLIC_SAAS_URL="http://localhost:3000"
+NEXT_PUBLIC_MARKETING_URL="http://localhost:3001"
+```
+
+**Note:** Prisma reads from `.env`, not `.env.local`. Copy `.env.local` to `.env` for Prisma CLI commands:
+
+```bash
+cp .env.local .env
+```
+
+## Database setup
+
+Generate the Prisma client and apply migrations:
+
+```bash
+pnpm --filter @repo/database generate
+pnpm --filter @repo/database push    # dev: apply schema directly
+```
+
+Prisma Studio (optional visual DB browser):
+
+```bash
+pnpm --filter @repo/database studio
+```
+
+Opens on port `5555`.
+
+## Run the apps
+
+Run all apps simultaneously (recommended for development):
+
+```bash
+pnpm dev
+```
+
+Or run individual apps:
+
+```bash
+pnpm dev --filter=saas         # SaaS dashboard → http://localhost:3000
+pnpm dev --filter=marketing    # Marketing site → http://localhost:3001
+pnpm dev --filter=docs         # Docs site      → http://localhost:3002
+```
+
+Turborepo runs all tasks with concurrency 15 and caches build outputs.
+
+## Verify setup
+
+1. Open `http://localhost:3000` — you should see the AACsearch login page
+2. Create an account via the signup form
+3. Create an organization
+4. Navigate to the search section
+5. Create a search index — this creates the Typesense collection
+
+If Typesense is not reachable, the index creation will fail with a `typesense_connection_error` and
+you will see it in the dashboard error state.
+
+## Type-check and lint
+
+```bash
+pnpm type-check     # TypeScript type checking (all packages)
+pnpm lint           # Oxlint (NOT ESLint)
+pnpm lint:fix       # Auto-fix lint issues
+pnpm format         # Oxfmt (NOT Prettier)
+pnpm format:check   # Check formatting only
+```
+
+## Useful commands
+
+```bash
+# Build widget bundle (needed for widget dev)
+pnpm --filter @repo/widget build
+
+# Reset database (DESTRUCTIVE — drops all data)
+docker compose down -v && docker compose up -d
+pnpm --filter @repo/database push
+
+# Clear Turborepo cache
+pnpm clean
+
+# Build everything
+pnpm build
+```
+
+## Troubleshooting
+
+**`Cannot find module '@repo/...'`** — run `pnpm install` from the repo root.
+
+**`Prisma DATABASE_URL empty`** — Prisma reads `.env`, not `.env.local`. Run `cp .env.local .env`.
+
+**`Prisma Client not generated`** — run `pnpm --filter @repo/database generate`.
+
+**`BigInt serialization error`** — a procedure is missing `.transform(v => v.toString())` on BigInt output fields.
+
+**Build OOM on macOS** — set `NODE_OPTIONS='--max-old-space-size=12288' pnpm build`.

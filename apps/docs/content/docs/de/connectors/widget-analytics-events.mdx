@@ -1,0 +1,165 @@
+---
+title: "Widget-Analytics-Ereignisse"
+description: "Ereignistypen, Transport, Payload-Schema und aktueller Persistenzstatus für das Widget-Analytics-Tracking."
+---
+
+Das AACsearch-Widget verfolgt automatisch das Benutzerverhalten und sendet Ereignisse an den Analytics-Endpunkt. Diese Ereignisse speisen das Such-Analytics-Dashboard — Top-Anfragen, Null-Ergebnis-Rate, Klickrate und Suchen über Zeit.
+
+## Endpunkt
+
+```
+POST /api/events/track
+Authorization: Bearer <ss_search_*- oder ss_scoped_*-Schlüssel>
+Content-Type: application/json
+```
+
+Derselbe API-Schlüssel, der für die Suche verwendet wird (`ss_search_*`), wird zur Authentifizierung von Analytics-Ereignissen verwendet. Der Endpunkt ist CORS-aktiviert für alle Ursprünge.
+
+## Ereignistypen
+
+| Ereignistyp    | Auslöser                                 | Priorität |
+| -------------- | ---------------------------------------- | --------- |
+| `search_query` | Benutzer sendet eine Suchanfrage         | P0        |
+| `zero_results` | Eine Suche gibt keine Treffer zurück     | P0        |
+| `result_click` | Benutzer klickt auf ein Produktergebnis  | P0        |
+| `widget_open`  | Widget wird geöffnet / sichtbar          | P1        |
+| `filter_used`  | Benutzer wendet einen Facettenfilter an oder ändert ihn | P1 |
+
+## Transport
+
+Das Widget sendet Ereignisse mit `keepalive: true`, um den Verlust von Ereignissen bei der Seitennavigation zu verhindern:
+
+```javascript
+fetch(eventsUrl, {
+	method: "POST",
+	headers: {
+		"Content-Type": "application/json",
+		Authorization: "Bearer " + apiKey,
+	},
+	keepalive: true,
+	body: JSON.stringify(payload),
+});
+```
+
+## Payload-Schema
+
+Sie können ein einzelnes Ereignis oder einen Batch von bis zu 50 Ereignissen senden.
+
+**Einzelnes Ereignis:**
+
+```json
+{
+	"type": "search_query",
+	"sessionId": "a1b2c3d4-e5f6-...",
+	"anonymousUserId": "uid_xyz",
+	"query": "blaue laufschuhe",
+	"locale": "de",
+	"referrer": "https://myshop.example.com/search",
+	"metadata": {}
+}
+```
+
+**Batch:**
+
+```json
+{
+	"events": [
+		{ "type": "widget_open", "sessionId": "a1b2c3d4-..." },
+		{ "type": "search_query", "query": "blaue laufschuhe", "sessionId": "a1b2c3d4-..." }
+	]
+}
+```
+
+### Feldreferenz
+
+| Feld              | Typ     | Max. Länge | Beschreibung                                                              |
+| ----------------- | ------- | ---------- | ------------------------------------------------------------------------- |
+| `type`            | string  | —          | Ereignistyp (siehe Tabelle oben)                                          |
+| `sessionId`       | string  | 64         | Ephemere Sitzungs-ID (`crypto.randomUUID()` oder Fallback)                |
+| `anonymousUserId` | string  | 64         | Stabile anonyme Benutzer-ID (pro Browser, kann im Datenschutzmodus null sein) |
+| `query`           | string  | 512        | Die Suchanfragezeichenkette (Ereignisse `search_query` und `zero_results`) |
+| `productId`       | string  | 128        | Externe Produkt-ID (Ereignisse `result_click`)                            |
+| `position`        | integer | —          | 1-indizierter Rang des angeklickten Ergebnisses (Ereignisse `result_click`) |
+| `filters`         | object  | —          | Aktive Facettenfilter zum Zeitpunkt des Ereignisses (Ereignisse `filter_used`) |
+| `sort`            | string  | 128        | Aktive Sortieroption                                                      |
+| `locale`          | string  | 16         | Locale aus der Widget-Konfiguration                                       |
+| `referrer`        | string  | 512        | Seiten-URL (aus `document.referrer`)                                      |
+| `metadata`        | object  | 4 KB       | Opake Zusatzdaten — keine PII                                             |
+
+### Sitzungs-ID-Generierung
+
+Das Widget generiert eine Sitzungs-ID mit `crypto.randomUUID()` und einem Fallback auf eine einfache Zufallszeichenkette:
+
+```javascript
+const sessionId =
+	typeof crypto !== "undefined" && crypto.randomUUID
+		? crypto.randomUUID()
+		: Math.random().toString(36).slice(2);
+```
+
+Die Sitzungs-ID ist pro Widget-Instanz / Seitenaufruf. Sie wird nicht persistiert.
+
+## Persistenz
+
+Jedes Ereignis wird über `recordSearchUsage()` in der Tabelle `SearchUsageEvent` persistiert. Der Ereignistyp wird wie folgt abgebildet:
+
+| Widget-Ereignistyp | Gespeicherter `SearchUsageEvent.type` |
+| ------------------ | ------------------------------------- |
+| `search_query`     | `"search_query"`                      |
+| `zero_results`     | `"zero_results"`                      |
+| `result_click`     | `"click"`                             |
+| `widget_open`      | `"widget_open"`                       |
+| `filter_used`      | `"filter_applied"`                    |
+
+Alle Metadatenfelder (Anfrage, productId, position, filters, sort, locale, referrer, sessionId, anonymousUserId, user-agent) werden als JSON-Blob in `SearchUsageEvent.metadata` persistiert.
+
+### Was gespeichert wird und was nicht
+
+**Gespeichert:**
+
+- Ereignistyp
+- Sitzungs-ID (ephemer, zufällig)
+- Anonyme Benutzer-ID (zufällig, stabil pro Browser)
+- Suchanfragetext
+- Produkt-ID und Position für Klick-Ereignisse
+- Facettenfilter
+- Sortieroption
+- Locale
+- Referrer-URL (auf 512 Zeichen begrenzt)
+- User-Agent-Zeichenkette (auf 256 Zeichen begrenzt)
+
+**Nicht gespeichert:**
+
+- Vollständige IP-Adresse — nur die serverseitige Anfrage wird verarbeitet; keine IP wird in `SearchUsageEvent` geschrieben
+- E-Mail oder irgendein authentifizierter Benutzerkennzeichner
+- Rohe Abfragestring-Parameter aus der Referrer-URL, die PII enthalten könnten
+
+### Teilpersistenz-Vorbehalt
+
+Wenn ein Batch von Ereignissen gesendet wird und einige nicht persistiert werden können, gibt der Endpunkt zurück:
+
+```json
+{
+	"accepted": 4,
+	"rejected": 1
+}
+```
+
+Die `rejected`-Anzahl spiegelt Datenbankschreibfehler wider, keine Validierungsfehler. Validierungsfehler geben ein 400 zurück, bevor irgendwelche Schreibvorgänge stattfinden. Das Widget wiederholt abgelehnte Ereignisse nicht.
+
+## Analytics-Dashboard
+
+In `SearchUsageEvent` gespeicherte Ereignisse speisen die Analytics-Prozeduren:
+
+- `search.usage` — rohe Ereigniszeilen für den Zeitraum
+- `search.usageSummary` — aggregierte Zählungen nach Typ
+- `search.topQueries` — häufigste Suchanfragen
+- `search.analytics` — Dashboard-Level-Analytics-Daten
+
+Dashboard-Seiten unter **Dashboard → Übersicht** (KPI-Kacheln, Suchen über Zeit, Top-Anfragen) und **Dashboard → Analytics** lesen aus diesen Prozeduren.
+
+## Verwandte Seiten
+
+- [Widget-Übersicht](/docs/connectors/widget-overview)
+- [Such-API-Authentifizierung](/docs/search-api/authentication)
+- [Dashboard-Übersicht](/docs/dashboard/overview)

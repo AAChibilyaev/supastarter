@@ -1,0 +1,12 @@
+{
+	"title": "API de Búsqueda",
+	"pages": [
+		"overview",
+		"public-search-endpoint",
+		"scoped-search-tokens",
+		"multi-search-and-querying",
+		"filter-sort-pagination",
+		"errors-and-rate-limits",
+		"reindexing-and-zero-downtime"
+	]
+}

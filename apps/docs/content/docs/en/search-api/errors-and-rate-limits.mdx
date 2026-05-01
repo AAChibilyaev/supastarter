@@ -1,0 +1,146 @@
+---
+title: Errors & Rate Limits
+description: Error codes, HTTP status codes, retry strategies, and rate limit headers for the AACsearch public API.
+---
+
+AACsearch maps all upstream errors to typed error codes before returning them to callers.
+Raw Typesense error messages are never forwarded — this prevents information leakage and
+provides a stable error contract.
+
+## Error response format
+
+All error responses follow this format:
+
+```json
+{
+	"error": "error_code",
+	"message": "Human-readable description of the error"
+}
+```
+
+The `error` field is machine-readable and stable. The `message` field is for human consumption
+and may change between versions.
+
+## HTTP status codes and error codes
+
+### 4xx — Client errors (do not retry automatically)
+
+| HTTP | `error` code          | Cause                                                            |
+| ---- | --------------------- | ---------------------------------------------------------------- |
+| 400  | `invalid_request`     | Malformed JSON or missing required field                         |
+| 400  | `invalid_filter`      | Invalid `filterBy` expression syntax                             |
+| 400  | `invalid_sort`        | Invalid `sortBy` expression                                      |
+| 401  | `unauthorized`        | Missing, invalid, or expired API key or scoped token             |
+| 401  | `token_expired`       | Scoped token TTL has passed                                      |
+| 403  | `forbidden`           | Key does not have required scope (`search` or `connector_write`) |
+| 403  | `origin_not_allowed`  | Request origin not in `allowedOrigins` for the key               |
+| 404  | `index_not_found`     | The specified `indexSlug` does not exist for this organization   |
+| 429  | `rate_limit_exceeded` | Per-key rate limit exceeded                                      |
+| 429  | `quota_exceeded`      | Monthly search-unit quota for the organization is exhausted      |
+
+### 5xx — Server errors (may retry with backoff)
+
+| HTTP | `error` code          | Cause                                                         |
+| ---- | --------------------- | ------------------------------------------------------------- |
+| 502  | `search_failed`       | Upstream Typesense error (cluster unreachable, query timeout) |
+| 502  | `ingest_failed`       | Failed to enqueue documents to the ingest buffer              |
+| 503  | `service_unavailable` | AACsearch API is temporarily unavailable                      |
+
+## Rate limiting
+
+Rate limiting is enforced per API key using a sliding-window counter.
+
+**Default limit:** 60 requests per minute per key.
+
+When the limit is exceeded, the response is:
+
+```
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 15
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1717201234
+
+{
+  "error": "rate_limit_exceeded",
+  "message": "Rate limit of 60 req/min exceeded. Retry after 15 seconds."
+}
+```
+
+### Response headers
+
+These headers are included on all successful and rate-limited responses:
+
+| Header                  | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `X-RateLimit-Limit`     | Total requests allowed per window             |
+| `X-RateLimit-Remaining` | Requests remaining in current window          |
+| `X-RateLimit-Reset`     | Unix timestamp when the window resets         |
+| `Retry-After`           | Seconds to wait before retrying (only on 429) |
+
+## Quota exhaustion
+
+When the monthly plan quota is exceeded:
+
+```
+HTTP/1.1 429 Too Many Requests
+
+{
+  "error": "quota_exceeded",
+  "message": "Monthly search-unit quota exhausted. Upgrade your plan or wait for reset."
+}
+```
+
+Search units reset on the 1st of each calendar month. Upgrade the plan in **Settings → Billing**
+to immediately restore quota.
+
+## Retry strategy for clients
+
+| Error class               | Action                                                        |
+| ------------------------- | ------------------------------------------------------------- |
+| 4xx (except 429)          | **Do not retry** — fix the request                            |
+| 429 `rate_limit_exceeded` | Wait for `Retry-After` seconds, then retry                    |
+| 429 `quota_exceeded`      | Do not retry until quota resets or plan upgraded              |
+| 502 `search_failed`       | Retry once after 1 second; if fails again, show error to user |
+| 503                       | Retry with exponential backoff: 1s → 2s → 4s → give up        |
+| Network error             | Retry with exponential backoff                                |
+
+### SDK retry behavior
+
+The `@repo/search-client` SDK does not automatically retry on 5xx errors. Implement retry
+logic in your application layer or use a library like `p-retry`.
+
+```typescript
+import pRetry from "p-retry";
+
+const results = await pRetry(() => client.search({ q: "headphones" }), {
+	retries: 3,
+	factor: 2,
+	minTimeout: 1000,
+	shouldRetry: (err) => err.status >= 500, // only retry server errors
+});
+```
+
+## CMS module retry behavior
+
+The AACsearch ingest buffer is designed for retry:
+
+- Connector sync requests (`sync/full`, `sync/delta`) enqueue documents into `SearchIngestBuffer`
+- The background worker retries failed rows with exponential backoff
+- The CMS module does not need to implement retry for individual documents — the buffer handles it
+- The CMS module should retry the HTTP request itself on 5xx responses (not on 4xx)
+
+## Development debugging
+
+For 502 errors during development:
+
+1. Check if Typesense is running: `curl http://localhost:8108/health`
+2. Check the API logs for the original Typesense error (mapped before responding to client)
+3. Check `TYPESENSE_HOST`, `TYPESENSE_PORT`, `TYPESENSE_API_KEY` in `.env.local`
+
+For 401 errors:
+
+1. Verify the key has not expired
+2. Verify the key prefix matches the operation (`ss_search_*` for search, `ss_connector_*` for ingest)
+3. For scoped tokens: check the `expiresAt` field in the decoded payload

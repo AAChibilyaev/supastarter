@@ -1,0 +1,232 @@
+---
+title: Filtres, tri & pagination
+description: Référence complète pour les expressions de filtre, les options de tri, les facettes et la pagination dans les requêtes AACsearch.
+---
+
+AACsearch utilise la syntaxe de filtre et de tri de Typesense avec quelques conventions spécifiques au
+schéma produit. Cette page est une référence complète pour la construction d'expressions de filtre, la configuration
+des ordres de tri et la pagination des résultats.
+
+## Syntaxe des expressions de filtre
+
+Les filtres sont spécifiés comme une chaîne de caractères utilisant la logique booléenne.
+
+### Égalité
+
+```
+availability:=in_stock
+brand:=Sony
+categories:=Electronics
+locale:=en
+```
+
+### Négation
+
+```
+availability:!=out_of_stock
+brand:!=Competitors
+```
+
+### Plage (numérique)
+
+```
+price:>50
+price:<200
+price:[50..200]     # plage inclusive
+price:(50..200)     # plage exclusive
+```
+
+### Appartenance à un tableau
+
+```
+categories:=[Electronics, Audio]
+brand:=[Sony, Bose, Sennheiser]
+```
+
+### Contient une chaîne / préfixe
+
+Typesense ne supporte que la correspondance exacte de chaîne pour les champs de facette. Pour la recherche par préfixe, utilisez `q` avec `queryBy`.
+
+### Logique booléenne
+
+```
+# ET (les deux conditions doivent correspondre)
+availability:=in_stock && price:<200
+
+# OU (l'une ou l'autre condition correspond)
+brand:=Sony || brand:=Bose
+
+# Regroupement
+(brand:=Sony || brand:=Bose) && availability:=in_stock && price:<200
+```
+
+### Filtre de locataire (automatique)
+
+Le handler public ajoute automatiquement :
+
+```
+organization_id:={organizationId}
+```
+
+Vous n'avez pas besoin d'ajouter ce filtre manuellement — il est toujours appliqué.
+
+## Champs de filtre disponibles
+
+Le schéma produit par défaut inclut ces champs filtrables (marqués `facet: true`) :
+
+| Champ          | Type     | Exemple de filtre                  |
+| -------------- | -------- | ---------------------------------- |
+| `brand`        | string   | `brand:=Sony`                      |
+| `categories`   | string[] | `categories:=[Electronics, Audio]` |
+| `availability` | string   | `availability:=in_stock`           |
+| `price`        | float    | `price:[10..500]`                  |
+| `sale_price`   | float    | `sale_price:<100`                  |
+| `locale`       | string   | `locale:=en`                       |
+
+## Facettes
+
+Les facettes calculent la distribution des valeurs pour un champ sur les documents correspondants. Utilisez-les pour afficher
+les barres latérales de filtres.
+
+```json
+{
+	"q": "headphones",
+	"facetBy": "brand,categories,availability"
+}
+```
+
+La réponse inclut `facetCounts` :
+
+```json
+{
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 },
+				{ "value": "Sennheiser", "count": 19 }
+			]
+		},
+		{
+			"fieldName": "availability",
+			"counts": [
+				{ "value": "in_stock", "count": 89 },
+				{ "value": "out_of_stock", "count": 23 }
+			]
+		}
+	]
+}
+```
+
+### Facettes avec filtres appliqués
+
+Lorsqu'un filtre est actif, les comptages de facettes reflètent l'ensemble de résultats filtré, pas l'index entier :
+
+```json
+{
+	"q": "*",
+	"filterBy": "brand:=Sony",
+	"facetBy": "categories,availability"
+}
+```
+
+Cela retourne les comptages de catégories et de disponibilité pour les produits Sony uniquement.
+
+## Tri
+
+### Tri sur un seul champ
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "price:desc" }
+{ "sortBy": "created_at:desc" }
+{ "sortBy": "sale_price:asc" }
+```
+
+### Tri par pertinence d'abord (par défaut)
+
+```json
+{ "sortBy": "_text_match:desc" }
+```
+
+C'est le comportement par défaut lorsque `sortBy` est omis.
+
+### Tri multi-champ (départage)
+
+```json
+{ "sortBy": "_text_match:desc,price:asc" }
+```
+
+Trie par score de pertinence d'abord ; à score égal, trie par prix croissant.
+
+### Préréglages de tri courants
+
+| Libellé                 | Valeur `sortBy`    |
+| ----------------------- | ------------------ |
+| Le plus pertinent       | `_text_match:desc` |
+| Prix : du moins cher    | `price:asc`        |
+| Prix : du plus cher     | `price:desc`       |
+| Les plus récents        | `created_at:desc`  |
+| Prix promotionnel : du moins cher | `sale_price:asc` |
+
+## Pagination
+
+```json
+{
+	"page": 1, // indexé à partir de 1, défaut : 1
+	"perPage": 20 // défaut : 10, max : 100
+}
+```
+
+Champs de réponse pour la pagination :
+
+```json
+{
+	"found": 142, // total de documents correspondants
+	"page": 1, // page actuelle
+	"outOf": 5000 // total de documents dans l'index (non filtré)
+}
+```
+
+Calcul du nombre total de pages :
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+const hasMore = results.page * perPage < results.found;
+```
+
+### Avertissement sur la pagination profonde
+
+Les performances de Typesense se dégradent avec de grandes valeurs de `page` pour les indexes de plus de 100 000 documents.
+Pour la pagination profonde ou les exports :
+
+1. Utilisez des valeurs de `page` croissantes avec un `perPage` fixe
+2. Ou implémentez une pagination basée sur curseur en triant sur un champ unique (`id:asc`)
+   et en utilisant `filterBy: "id:>lastSeenId"`
+
+## Sélection de champs
+
+Réduisez la taille de la réponse en sélectionnant uniquement les champs dont vous avez besoin :
+
+```json
+{
+	"includeFields": "id,title,price,brand,availability",
+	"excludeFields": "description,tags"
+}
+```
+
+Utilisez `excludeFields` pour supprimer les grands champs de texte des réponses lorsque vous ne les affichez pas
+(par ex. `description` dans une autocomplétion de recherche au fil de la frappe qui n'affiche que les titres).
+
+## Combiner les filtres avec les tokens limités
+
+Lorsqu'un token limité est utilisé, son `scopedFilter` est combiné avec ET avec le `filterBy` de l'appelant :
+
+```
+Token scopedFilter :   "price:<100"
+Appelant filterBy :    "brand:=Sony && availability:=in_stock"
+filterBy effectif :    "brand:=Sony && availability:=in_stock && price:<100"
+```
+
+Le filtre du token ne peut pas être remplacé par le `filterBy` de l'appelant.

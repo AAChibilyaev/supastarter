@@ -1,0 +1,232 @@
+---
+title: Filter, Sortierung & Seitenumbruch
+description: Vollständige Referenz für Filterausdrücke, Sortieroptionen, Facettierung und Seitenumbruch in AACsearch-Abfragen.
+---
+
+AACsearch verwendet die Filter- und Sortiersyntax von Typesense mit einigen produktschema-spezifischen Konventionen.
+Diese Seite ist eine vollständige Referenz für das Erstellen von Filterausdrücken, das Konfigurieren
+von Sortierreihenfolgen und das Paginieren von Ergebnissen.
+
+## Filterausdruck-Syntax
+
+Filter werden als Zeichenkette mit boolescher Logik angegeben.
+
+### Gleichheit
+
+```
+availability:=in_stock
+brand:=Sony
+categories:=Electronics
+locale:=de
+```
+
+### Negation
+
+```
+availability:!=out_of_stock
+brand:!=Competitors
+```
+
+### Bereich (numerisch)
+
+```
+price:>50
+price:<200
+price:[50..200]     # inklusiver Bereich
+price:(50..200)     # exklusiver Bereich
+```
+
+### Array-Mitgliedschaft
+
+```
+categories:=[Electronics, Audio]
+brand:=[Sony, Bose, Sennheiser]
+```
+
+### Zeichenkette enthält / Präfix
+
+Typesense unterstützt nur exakten Zeichenkettenabgleich für Facettenfelder. Für Präfix-Suche verwenden Sie `q` mit `queryBy`.
+
+### Boolesche Logik
+
+```
+# UND (beide Bedingungen müssen übereinstimmen)
+availability:=in_stock && price:<200
+
+# ODER (eine der Bedingungen stimmt überein)
+brand:=Sony || brand:=Bose
+
+# Gruppierung
+(brand:=Sony || brand:=Bose) && availability:=in_stock && price:<200
+```
+
+### Mandantenfilter (automatisch)
+
+Der öffentliche Handler hängt automatisch folgendes voran:
+
+```
+organization_id:={organizationId}
+```
+
+Sie müssen diesen Filter nicht manuell hinzufügen — er wird immer angewendet.
+
+## Verfügbare Filterfelder
+
+Das Standard-Produktschema enthält diese filterbaren Felder (als `facet: true` markiert):
+
+| Feld           | Typ      | Beispielfilter                       |
+| -------------- | -------- | ------------------------------------ |
+| `brand`        | string   | `brand:=Sony`                        |
+| `categories`   | string[] | `categories:=[Electronics, Audio]`   |
+| `availability` | string   | `availability:=in_stock`             |
+| `price`        | float    | `price:[10..500]`                    |
+| `sale_price`   | float    | `sale_price:<100`                    |
+| `locale`       | string   | `locale:=de`                         |
+
+## Facettierung
+
+Facetten berechnen die Werteverteilung für ein Feld über übereinstimmende Dokumente. Verwenden Sie sie zum Rendern
+von Filter-Seitenleisten.
+
+```json
+{
+	"q": "headphones",
+	"facetBy": "brand,categories,availability"
+}
+```
+
+Antwort enthält `facetCounts`:
+
+```json
+{
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 },
+				{ "value": "Sennheiser", "count": 19 }
+			]
+		},
+		{
+			"fieldName": "availability",
+			"counts": [
+				{ "value": "in_stock", "count": 89 },
+				{ "value": "out_of_stock", "count": 23 }
+			]
+		}
+	]
+}
+```
+
+### Facetten mit angewendeten Filtern
+
+Wenn ein Filter aktiv ist, spiegeln Facettenzählungen die gefilterte Ergebnismenge wider, nicht den gesamten Index:
+
+```json
+{
+	"q": "*",
+	"filterBy": "brand:=Sony",
+	"facetBy": "categories,availability"
+}
+```
+
+Dies gibt Kategorien und Verfügbarkeitszählungen nur für Sony-Produkte zurück.
+
+## Sortierung
+
+### Einzelfeld-Sortierung
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "price:desc" }
+{ "sortBy": "created_at:desc" }
+{ "sortBy": "sale_price:asc" }
+```
+
+### Relevanz-zuerst-Sortierung (Standard)
+
+```json
+{ "sortBy": "_text_match:desc" }
+```
+
+Dies ist der Standard, wenn `sortBy` weggelassen wird.
+
+### Mehrfeld-Sortierung (Gleichstand-Auflösung)
+
+```json
+{ "sortBy": "_text_match:desc,price:asc" }
+```
+
+Sortiert zuerst nach Relevanzbewertung; innerhalb derselben Bewertung nach Preis aufsteigend.
+
+### Häufige Sortier-Presets
+
+| Bezeichnung              | `sortBy`-Wert      |
+| ------------------------ | ------------------ |
+| Relevanteste             | `_text_match:desc` |
+| Preis: günstigste zuerst | `price:asc`        |
+| Preis: teuerste zuerst   | `price:desc`       |
+| Neueste zuerst           | `created_at:desc`  |
+| Angebotspreis: günstigste zuerst | `sale_price:asc` |
+
+## Seitenumbruch
+
+```json
+{
+	"page": 1, // 1-indiziert, Standard: 1
+	"perPage": 20 // Standard: 10, Max: 100
+}
+```
+
+Antwortfelder für den Seitenumbruch:
+
+```json
+{
+	"found": 142, // Gesamtzahl übereinstimmender Dokumente
+	"page": 1, // Aktuelle Seite
+	"outOf": 5000 // Gesamtdokumente im Index (ungefiltert)
+}
+```
+
+Gesamtseiten berechnen:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+const hasMore = results.page * perPage < results.found;
+```
+
+### Warnung bei tiefer Paginierung
+
+Die Typesense-Leistung verschlechtert sich bei großen `page`-Werten für Indizes über 100.000 Dokumente.
+Für tiefe Paginierung oder Exporte:
+
+1. Steigende `page`-Werte mit festem `perPage` verwenden
+2. Oder cursorbasierte Paginierung implementieren, indem ein eindeutiges Feld sortiert wird (`id:asc`)
+   und `filterBy: "id:>lastSeenId"` verwendet wird
+
+## Feldauswahl
+
+Reduzieren Sie die Antwortgröße, indem Sie nur die Felder auswählen, die Sie benötigen:
+
+```json
+{
+	"includeFields": "id,title,price,brand,availability",
+	"excludeFields": "description,tags"
+}
+```
+
+Verwenden Sie `excludeFields`, um große Textfelder aus Antworten zu entfernen, wenn Sie sie nicht rendern
+(z. B. `description` in einer Suche-während-der-Eingabe-Autocomplete, die nur Titel anzeigt).
+
+## Filter mit eingeschränkten Token kombinieren
+
+Wenn ein eingeschränktes Token verwendet wird, wird sein `scopedFilter` UND-verknüpft mit dem `filterBy` des Aufrufers:
+
+```
+Token-scopedFilter:  "price:<100"
+Aufrufer-filterBy:   "brand:=Sony && availability:=in_stock"
+Effektiver filterBy: "brand:=Sony && availability:=in_stock && price:<100"
+```
+
+Der Filter des Tokens kann nicht vom `filterBy` des Aufrufers überschrieben werden.

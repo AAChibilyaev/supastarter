@@ -1,0 +1,218 @@
+---
+title: Multi-search & Requêtes
+description: Exécuter plusieurs requêtes de recherche en une seule requête pour l'autocomplétion, la recherche fédérée et les scénarios multi-index.
+---
+
+Le multi-search exécute plusieurs requêtes de recherche en un seul aller-retour HTTP. C'est essentiel pour
+l'autocomplétion (exécuter une requête de résultats + une requête de suggestions simultanément) et la recherche fédérée
+(rechercher dans plusieurs indexes à la fois).
+
+## Point de terminaison multi-search
+
+**Point de terminaison :** `POST /api/search/multi`
+
+**Auth :** `Authorization: Bearer ss_search_your_key`
+
+```typescript
+{
+	searches: Array<{
+		indexSlug: string;
+		q: string;
+		queryBy?: string;
+		filterBy?: string;
+		facetBy?: string;
+		sortBy?: string;
+		page?: number;
+		perPage?: number;
+		highlightFields?: string;
+	}>;
+}
+```
+
+**Réponse :**
+
+```typescript
+{
+	results: Array<SearchResponse>; // un résultat par recherche dans le même ordre
+}
+```
+
+## Modèle d'autocomplétion
+
+Le cas d'utilisation multi-search le plus courant : exécuter une recherche complète plus une requête de suggestions rapides simultanément.
+
+```typescript
+const [mainResults, suggestions] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title,brand,description",
+		perPage: 20,
+		facetBy: "brand,categories",
+	},
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title",
+		perPage: 5,
+		includeFields: "id,title",
+		highlightFields: "title",
+	},
+]);
+```
+
+Cela envoie une seule requête HTTP et récupère les deux ensembles de résultats simultanément.
+
+## Recherche fédérée sur plusieurs indexes
+
+Rechercher dans plusieurs indexes et fusionner les résultats côté client :
+
+```typescript
+const [productResults, articleResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "sustainability",
+		queryBy: "title,description,tags",
+		perPage: 10,
+	},
+	{
+		indexSlug: "knowledge",
+		q: "sustainability",
+		queryBy: "content,title",
+		perPage: 5,
+	},
+]);
+```
+
+Remarque : pour les résultats multi-index, fusionnez et reclassez côté client.
+
+## Paramètres de requête en détail
+
+### `q` — requête de recherche
+
+La chaîne de recherche. Utilisez `"*"` pour une navigation par joker (pas de correspondance plein texte, utile pour la navigation filtrée).
+
+```json
+{ "q": "wireless headphones" }    // recherche plein texte
+{ "q": "*" }                      // naviguer tout (combiner avec filterBy)
+```
+
+### `queryBy` — quels champs rechercher
+
+Liste de champs séparés par des virgules. L'ordre compte — les champs antérieurs obtiennent un poids plus élevé par défaut.
+
+```json
+{ "queryBy": "title,sku,brand,description" }
+```
+
+Pour chaque champ, vous pouvez spécifier un poids personnalisé par champ :
+
+```json
+{ "queryBy": "title,brand,description", "queryByWeights": "10,5,2" }
+```
+
+### `filterBy` — expression de filtre
+
+Expression booléenne utilisant la syntaxe de filtre Typesense :
+
+```
+Égalité :         field:=value
+                  field:=[value1, value2]
+Plage :           field:>100
+                  field:[50..200]
+Chaîne exacte :   field:=value
+Négation :        field:!=value
+ET logique :      cond1 && cond2
+OU logique :      cond1 || cond2
+Regroupement :    (cond1 || cond2) && cond3
+```
+
+Exemples :
+
+```
+"filterBy": "availability:=in_stock"
+"filterBy": "price:[50..200] && brand:=[Sony, Bose]"
+"filterBy": "categories:=Electronics && availability:!=out_of_stock"
+```
+
+### `facetBy` — calculer les comptages de facettes
+
+Retourne les distributions de valeurs pour les champs spécifiés. Les champs de facette doivent être indexés avec `facet: true`
+dans le schéma de collection.
+
+```json
+{ "facetBy": "brand,categories,availability" }
+```
+
+La réponse inclura `facetCounts` avec des paires valeur → comptage pour chaque champ de facette.
+
+### `sortBy` — ordre de tri
+
+Tri sur un ou plusieurs champs :
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "_text_match:desc,price:asc" }
+{ "sortBy": "created_at:desc" }
+```
+
+Champs de tri disponibles : `price`, `sale_price`, `created_at`, `_text_match` (score de pertinence).
+
+## Tolérance aux fautes de frappe
+
+La tolérance aux fautes de frappe de Typesense est appliquée automatiquement. Par défaut :
+
+- 1 faute de frappe autorisée pour les requêtes de 5+ caractères
+- 2 fautes de frappe autorisées pour les requêtes de 8+ caractères
+
+Cela gère les fautes de frappe courantes comme « ecouteurs » → correspond à « écouteurs ».
+
+## Mise en surbrillance
+
+Les termes correspondants sont mis en surbrillance avec des balises configurables :
+
+```json
+{
+	"highlightFields": "title,description",
+	"highlightStartTag": "<em class='highlight'>",
+	"highlightEndTag": "</em>"
+}
+```
+
+Mises en surbrillance dans la réponse :
+
+```json
+{
+	"highlights": [
+		{
+			"field": "title",
+			"snippet": "Sony <em class='highlight'>Wireless</em> <em class='highlight'>Headphones</em>"
+		}
+	]
+}
+```
+
+## Pagination
+
+Les résultats sont paginés en utilisant `page` (indexé à partir de 1) et `perPage` :
+
+```json
+{ "page": 2, "perPage": 20 }
+```
+
+La réponse inclut `found` (comptage total de correspondances) pour calculer les totaux de pages :
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+```
+
+Maximum `perPage` : 100. Pour les exports nécessitant plus de résultats, implémentez une itération basée sur curseur
+en utilisant des valeurs de `page` croissantes.
+
+## Recommandations de performance
+
+- Gardez `perPage ≤ 20` pour la recherche au fil de la frappe (autocomplétion)
+- Utilisez `includeFields` pour ne retourner que les champs que vous affichez — réduit la taille de la réponse
+- Évitez d'exécuter des facettes à chaque frappe — appliquez un debounce de 150 à 300 ms
+- Pour les grands ensembles de résultats avec de nombreuses facettes, envisagez de séparer la requête de facette de la requête principale
+  en utilisant le multi-search

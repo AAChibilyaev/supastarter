@@ -1,0 +1,159 @@
+---
+title: API Keys
+description: Generate, use, and revoke API keys for search, connector, and scoped token use cases.
+---
+
+AACsearch uses three types of API keys, each with a distinct prefix and permission scope.
+All keys are stored as bcrypt hashes — plaintext is shown **once** at creation and cannot be retrieved later.
+
+## Key types
+
+| Type          | Prefix           | Scopes                   | Used by                               |
+| ------------- | ---------------- | ------------------------ | ------------------------------------- |
+| Search key    | `ss_search_*`    | `search`                 | Browser SDK, widget, direct API calls |
+| Connector key | `ss_connector_*` | `connector_write`        | CMS modules (PrestaShop, Bitrix)      |
+| Scoped token  | `ss_scoped_*`    | Narrowed from search key | Per-user, per-filter token delegation |
+
+## Generate a search key
+
+### Via dashboard
+
+1. Navigate to **Search** → **API Keys**
+2. Click **Create API key**
+3. Select key type: **Search**
+4. Configure allowed origins (leave empty during development)
+5. Set rate limit (default: 60 req/min)
+6. Set optional expiry
+7. Click **Create** — copy the key immediately, it will not be shown again
+
+### Via oRPC
+
+```typescript
+const key = await orpc.search.createApiKey.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopes: ["search"],
+	allowedOrigins: ["https://yourstore.com"],
+	rateLimitPerMinute: 60,
+	name: "Storefront search key",
+});
+
+console.log(key.plaintext); // ss_search_abc123... — save this now!
+```
+
+## Generate a connector key
+
+Connector keys use `connector_write` scope and the `ss_connector_*` prefix.
+They are used by CMS modules to push documents to the ingest endpoint.
+
+```typescript
+const key = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "PrestaShop connector",
+});
+
+console.log(key.plaintext); // ss_connector_abc123...
+```
+
+In the dashboard, connector keys are shown in **Connectors** → **Connector Tokens**.
+
+## Use a search key
+
+### HTTP header
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexSlug": "products", "q": "headphones" }'
+```
+
+### Browser SDK
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+	baseUrl: "https://your-app.com",
+	apiKey: "ss_search_your_key",
+	indexSlug: "products",
+});
+
+const results = await client.search({ q: "headphones" });
+```
+
+See [Browser SDK](/docs/getting-started/browser-sdk) for full SDK documentation.
+
+## Scoped tokens
+
+Scoped tokens are short-lived, HMAC-signed tokens that narrow a search key's permissions.
+They are generated server-side and passed to the browser — the base search key stays on the server.
+
+**Common use case:** Limit search results to the current user's organization or price tier.
+
+```typescript
+// Server-side: generate a scoped token
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopedFilter: "availability:=in_stock && price:<100",
+	expiresInSeconds: 3600,
+});
+
+// Pass to browser — use as a regular search key
+// The filter is AND-combined with any caller filters
+```
+
+Scoped tokens are stateless (not stored in DB). They expire based on the `expiresInSeconds` parameter.
+See [Scoped Search Tokens](/docs/search-api/scoped-search-tokens) for full details.
+
+## Origin restriction
+
+Each search key has an `allowedOrigins[]` list. Requests from unlisted origins receive a 403 response.
+
+- **Development:** leave `allowedOrigins` empty to allow all origins
+- **Production:** add your storefront domains explicitly
+
+```typescript
+// Example: restrict to specific domains
+allowedOrigins: ["https://mystore.com", "https://www.mystore.com"];
+```
+
+**Free plan restriction:** On the Free plan, only `*.aacsearch.com` subdomains are permitted in
+`allowedOrigins`. Upgrade to Pro for custom domain support.
+
+## Rate limits
+
+Default rate limit: **60 requests per minute** per key. Exceeding this returns:
+
+```json
+HTTP/1.1 429 Too Many Requests
+Retry-After: 15
+
+{ "error": "rate_limit_exceeded" }
+```
+
+Adjust per-key rate limits at creation time or update them in the dashboard.
+
+## Revoke a key
+
+```typescript
+await orpc.search.revokeApiKey.call({
+	organizationId: "org_...",
+	keyId: "key_...",
+});
+```
+
+Revoking a key is immediate. The key will be rejected on the next request. The hashed value is
+retained in the database for audit log purposes.
+
+## Key security checklist
+
+- [ ] Never commit keys to version control
+- [ ] Never log keys (AACsearch never logs them server-side)
+- [ ] Use `ss_search_*` keys in the browser (read-only, limited by origin)
+- [ ] Use `ss_connector_*` keys only in your CMS module (server-side)
+- [ ] Rotate keys periodically using the revoke + recreate flow
+- [ ] Set `allowedOrigins` for production keys
+- [ ] Set `expiresAt` for temporary access

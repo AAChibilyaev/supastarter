@@ -1,0 +1,126 @@
+---
+title: "Widget de Búsqueda Alojado"
+description: "Incruste el widget de AACsearch en su tienda con una sola etiqueta de script. Vanilla JS, Shadow DOM, cinco idiomas."
+---
+
+El widget de búsqueda alojado de AACsearch es una interfaz de búsqueda autocontenida que incrusta en cualquier tienda con una sola etiqueta `<script>`. Maneja la entrada de búsqueda, la cuadrícula de resultados, las facetas, la ordenación, la paginación y el seguimiento de clics — sin dependencia de framework ni paso de compilación de su parte.
+
+## Descripción técnica
+
+| Propiedad       | Valor                                                       |
+| --------------- | ----------------------------------------------------------- |
+| Implementación  | Vanilla JS, hecho a mano (sin InstantSearch.js, sin React)  |
+| Aislamiento de estilos | Shadow DOM — los estilos del widget no pueden filtrarse al CSS de su tienda |
+| Tamaño del bundle | ~14 KB minificado (salida dual IIFE + ESM)                |
+| Servido en      | `GET /api/widget/widget.js` (CORS habilitado, en caché)     |
+| Autenticación   | Requiere una API key `ss_search_*` incrustada en `data-api-key` |
+| Idiomas         | `en`, `de`, `es`, `fr`, `ru`                                |
+
+El widget nunca expone una clave de administrador de Typesense. Se comunica solo a través del endpoint de búsqueda pública usando la clave `ss_search_*` con ámbito que usted proporciona.
+
+## Fragmento de incrustación
+
+Copie el fragmento de **Panel → Búsqueda → pestaña Widget** y péguelo en el `<head>` de su tienda o antes del `</body>` de cierre:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_your_key_here"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+También añada el elemento contenedor donde desea que se renderice el widget:
+
+```html
+<div id="aac-search"></div>
+```
+
+El widget se auto-inicializa cuando se carga el script. No se requiere código de inicialización de JavaScript.
+
+## Atributos de configuración
+
+Toda la configuración se realiza mediante atributos `data-*` en la etiqueta `<script>`.
+
+| Atributo           | Requerido | Predeterminado | Descripción                                   |
+| ------------------ | --------- | -------------- | --------------------------------------------- |
+| `data-base-url`    | Sí        | —              | URL base de su instancia de AACsearch         |
+| `data-api-key`     | Sí        | —              | Una clave `ss_search_*` (ámbito solo de búsqueda) |
+| `data-index-slug`  | Sí        | —              | Slug del índice de búsqueda a consultar       |
+| `data-container`   | Sí        | —              | Selector CSS para el elemento contenedor      |
+| `data-locale`      | No        | `"en"`         | Idioma de la UI: `en`, `de`, `es`, `fr` o `ru` |
+| `data-theme`       | No        | `"auto"`       | Tema de color: `"light"`, `"dark"` o `"auto"` |
+| `data-mode`        | No        | `"inline"`     | Modo de visualización: `"inline"` o `"modal"` |
+| `data-show-prices` | No        | `"true"`       | Mostrar precios de productos en los resultados |
+| `data-show-images` | No        | `"true"`       | Mostrar imágenes de productos en los resultados |
+
+### Modo: inline vs modal
+
+`inline` — el widget se renderiza directamente dentro del elemento contenedor. Adecuado para una página de búsqueda dedicada o una sección de búsqueda prominente.
+
+`modal` — el widget aparece como una superposición. La modal generalmente se activa mediante un clic de botón o un atajo de teclado. (Nota: el botón de activación de la modal debe conectarse desde su tema.)
+
+### Detección automática de idioma
+
+El widget resuelve los idiomas con una cadena de retroceso: atributo `data-locale` → idioma base (`en-US` → `en`) → `"en"`. Si pasa `"es-ES"`, se resuelve a `"es"`.
+
+## Requisitos de la API key
+
+El atributo `data-api-key` debe ser una clave `ss_search_*`, no un token de conector ni una clave de administrador. Las claves de búsqueda tienen solo el ámbito `search` y pueden incrustarse de forma segura en HTML visible en el navegador.
+
+Cree una clave de búsqueda en **Panel → Búsqueda → API Keys → Crear clave** y seleccione el ámbito `search`.
+
+Si restringe la clave a orígenes específicos (`allowedOrigins`), añada el dominio de su tienda a la lista de permisiones.
+
+## Modos de visualización y estados de la UI
+
+El widget maneja estos estados automáticamente:
+
+| Estado               | Lo que ve el usuario                                    |
+| -------------------- | ------------------------------------------------------- |
+| Inactivo (sin consulta) | Texto de marcador de posición                        |
+| Cargando             | Indicador de progreso "Buscando..."                     |
+| Resultados           | Cuadrícula de productos con facetas, controles de ordenación, paginación |
+| Sin resultados       | Estado vacío con sugerencia de probar un término diferente |
+| Error                | Estado degradado con entrada de búsqueda aún funcional  |
+
+## Idiomas soportados
+
+Todas las cadenas de la UI están incrustadas en el bundle del widget. Sin obtenciones externas de i18n.
+
+| Idioma | Idioma   |
+| ------ | -------- |
+| `en`   | Inglés   |
+| `de`   | Alemán   |
+| `ru`   | Ruso     |
+| `es`   | Español  |
+| `fr`   | Francés  |
+
+## Personalización CSS
+
+El widget usa propiedades CSS personalizadas limitadas al host Shadow DOM. Puede anularlas apuntando al elemento contenedor:
+
+```css
+/* Estas se aplican dentro del Shadow DOM mediante herencia CSS a través de :host */
+#aac-search {
+	--aac-primary: #e60000;
+	--aac-radius: 4px;
+}
+```
+
+Variables CSS disponibles: `--aac-primary`, `--aac-primary-hover`, `--aac-bg`, `--aac-bg-secondary`, `--aac-text`, `--aac-text-secondary`, `--aac-border`, `--aac-radius`.
+
+El modo oscuro se maneja automáticamente cuando `data-theme="auto"` — el widget detecta la preferencia del sistema mediante `prefers-color-scheme`.
+
+## Analíticas
+
+El widget rastrea el comportamiento de búsqueda y envía eventos a `POST /api/events/track`. Los eventos incluyen `search_query`, `zero_results`, `result_click`, `widget_open` y `filter_used`. Consulte [Eventos de analíticas del widget](/docs/connectors/widget-analytics-events) para la referencia completa de eventos.
+
+## Páginas relacionadas
+
+- [Descripción general de conectores](/docs/connectors/overview)
+- [Eventos de analíticas del widget](/docs/connectors/widget-analytics-events)
+- [Autenticación](/docs/search-api/authentication)

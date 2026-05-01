@@ -1,0 +1,158 @@
+---
+title: Auth & Tenancy
+description: How organizations work as workspaces, how session context flows through the API, and the security model for multi-tenant search.
+---
+
+AACsearch is multi-tenant by design. Every resource — search indexes, API keys, usage events,
+knowledge spaces — is scoped to an **organization**. Cross-org reads are never allowed.
+
+## Authentication stack
+
+Auth is provided by [Better Auth](https://better-auth.com) configured in `packages/auth/auth.ts`.
+
+Enabled features:
+
+| Feature                | Notes                                 |
+| ---------------------- | ------------------------------------- |
+| Email + password       | Standard login flow                   |
+| Magic links            | Passwordless email login              |
+| Passkeys               | WebAuthn                              |
+| 2FA (TOTP)             | Time-based one-time passwords         |
+| OAuth (Google, GitHub) | Social login                          |
+| Organizations          | Workspaces with role-based membership |
+| Invitation-only orgs   | Optional; configurable                |
+| Admin panel            | Internal user/org management          |
+| Session impersonation  | For support/debug                     |
+
+## Organizations as workspaces
+
+An organization is the primary workspace unit. Users can belong to multiple organizations and
+switch between them in the dashboard. Every search index, API key, and analytics event belongs
+to exactly one organization.
+
+```
+User → Member(role) → Organization
+                           │
+                    SearchIndex(es)
+                    SearchApiKey(s)
+                    SearchUsageEvent(s)
+                    KnowledgeSpace(s)
+```
+
+## Session context in oRPC
+
+oRPC procedures are called as one of three types:
+
+| Procedure type       | Context available                 | Used for                            |
+| -------------------- | --------------------------------- | ----------------------------------- |
+| `publicProcedure`    | No session required               | Public search handler, health check |
+| `protectedProcedure` | `context.user`, `context.session` | Authenticated dashboard operations  |
+| `adminProcedure`     | `context.user` + admin role check | Admin-only operations               |
+
+Accessing session in a server component:
+
+```typescript
+import { getSession } from "@auth/lib/server";
+
+const session = await getSession();
+```
+
+Accessing session in a client component:
+
+```typescript
+"use client";
+import { useSession } from "@auth/hooks/use-session";
+
+const { user, loaded } = useSession();
+```
+
+Accessing the active organization:
+
+```typescript
+"use client";
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
+
+const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
+```
+
+## Tenant isolation — Hard Invariant
+
+Every search call MUST pass `tenantId: verified.organizationId`. This is enforced in
+`packages/api/modules/search/public-handler.ts`:
+
+```typescript
+// Always AND-combine with tenant filter
+const tenantFilter = `organization_id:=${organizationId}`;
+const combinedFilter = combineFilters(tenantFilter, callerFilter);
+```
+
+There is no code path that returns documents across organizations. If you are writing a new
+search procedure, this invariant must be maintained explicitly — it is not automatic.
+
+## API key security model
+
+API keys are the primary auth mechanism for external callers (CMS modules and browser SDKs).
+
+### Key types and prefixes
+
+| Prefix           | Scope                       | Used by                         |
+| ---------------- | --------------------------- | ------------------------------- |
+| `ss_search_*`    | `search`                    | Browser SDK, widget — read-only |
+| `ss_connector_*` | `connector_write`           | CMS modules — write + sync      |
+| `ss_scoped_*`    | Narrowed from `ss_search_*` | Per-user, per-filter tokens     |
+
+### Security guarantees
+
+- **Hash-only storage:** `SearchApiKey.hashedKey` stores only the bcrypt hash. Plaintext is shown
+  once at creation and is never logged, never returned on list operations, and never echoed.
+- **Origin restriction:** Each key has `allowedOrigins[]`. Requests from unlisted origins are
+  rejected at the API level before any Typesense call.
+- **Rate limiting:** Per-key sliding window enforced via `SearchRateLimitBucket`.
+- **Quota:** Per-org plan quota enforced via `quotaCheck` middleware before search/ingest.
+- **Expiry:** Keys can have `expiresAt`; expired keys are rejected and cleaned up by the maintenance job.
+
+### Admin key isolation
+
+The Typesense admin key **never** leaves the server. It lives in `packages/search/lib/client.ts`,
+instantiated once from the `TYPESENSE_API_KEY` environment variable. It is never returned to any
+client, never passed to CMS modules, and never embedded in the widget bundle.
+
+CMS modules receive only `ss_connector_*` tokens that go through the AACsearch Connector API,
+which then uses the admin key internally.
+
+## Scoped tokens
+
+Scoped tokens narrow the permissions of an existing `ss_search_*` key. They are HMAC-signed
+stateless JWTs (not stored in DB) issued by `issueScopedSearchToken()`.
+
+A common use case: issue a per-user token that limits results to that user's products only.
+
+```typescript
+// Server-side: issue a scoped token for a specific price range
+const token = await orpc.search.createScopedToken.call({
+	organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100",
+	expiresInSeconds: 3600,
+});
+```
+
+The `scopedFilter` is always AND-combined with the caller's own filters via `combineFilters()`.
+It can only narrow permissions — it cannot widen them. Bypassing `combineFilters` is a Hard Invariant violation.
+
+## Origin allow-list per key
+
+Each `ss_search_*` key has an `allowedOrigins[]` array. Only requests from those origins pass.
+
+On the Free plan, only `aacsearch.com` subdomains are allowed. Pro and above support custom origins.
+See [Plans and Limits](/docs/overview/plans-and-limits) for the per-plan policy.
+
+## Role-based access within organizations
+
+| Role     | Capabilities                                  |
+| -------- | --------------------------------------------- |
+| `owner`  | Full access, can transfer org, manage billing |
+| `admin`  | Manage indexes, keys, members, settings       |
+| `member` | View dashboard, run searches in preview       |
+
+Role checks in oRPC procedures use the `context.session` object provided by Better Auth.

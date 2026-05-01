@@ -1,0 +1,186 @@
+---
+title: Desarrollo Local
+description: Configure el monorepo de AACsearch para desarrollo local — prerrequisitos, variables de entorno, servicios Docker y ejecución de las aplicaciones.
+---
+
+AACsearch es un monorepo pnpm + Turborepo. Esta página cubre la configuración local completa desde una clonación limpia
+hasta un panel SaaS en ejecución y el sitio de documentación.
+
+## Prerrequisitos
+
+| Herramienta | Versión | Instalación                      |
+| ----------- | ------- | -------------------------------- |
+| Node.js     | 20+     | [nodejs.org](https://nodejs.org) |
+| pnpm        | 10.28+  | `npm i -g pnpm`                  |
+| Docker      | Última  | [docker.com](https://docker.com) |
+
+## Clonar e instalar
+
+```bash
+git clone <repo-url> supastarter
+cd supastarter
+pnpm install
+```
+
+pnpm inicializará todos los paquetes del workspace. La primera instalación puede tardar 2–3 minutos.
+
+## Iniciar servicios Docker
+
+El monorepo requiere Postgres (base de datos) y MinIO (almacenamiento de objetos compatible con S3):
+
+```bash
+docker compose up -d
+```
+
+Esto inicia:
+
+- **Postgres** en el puerto `5432` — base de datos de la aplicación
+- **MinIO** en los puertos `9000` (API) y `9001` (consola) — almacenamiento de archivos
+
+Verifique que los servicios estén funcionando:
+
+```bash
+docker compose ps
+```
+
+## Typesense
+
+También necesita una instancia de Typesense en ejecución. El enfoque más sencillo para desarrollo local:
+
+```bash
+docker run -d \
+  -p 8108:8108 \
+  -v /tmp/typesense-data:/data \
+  typesense/typesense:26.0 \
+  --data-dir /data \
+  --api-key=your-local-admin-key \
+  --listen-port 8108
+```
+
+Configure `TYPESENSE_API_KEY` y `TYPESENSE_HOST` en su archivo de entorno (véase a continuación).
+
+## Variables de entorno
+
+Copie el archivo de ejemplo:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Variables clave a configurar:
+
+```bash
+# Base de datos
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/supastarter"
+
+# Autenticación
+BETTER_AUTH_SECRET="your-local-secret-at-least-32-chars"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Typesense
+TYPESENSE_HOST="localhost"
+TYPESENSE_PORT="8108"
+TYPESENSE_PROTOCOL="http"
+TYPESENSE_API_KEY="your-local-admin-key"
+
+# Almacenamiento (MinIO)
+STORAGE_ENDPOINT="http://localhost:9000"
+STORAGE_BUCKET="supastarter"
+STORAGE_ACCESS_KEY="minioadmin"
+STORAGE_SECRET_KEY="minioadmin"
+
+# URLs de la aplicación
+NEXT_PUBLIC_SAAS_URL="http://localhost:3000"
+NEXT_PUBLIC_MARKETING_URL="http://localhost:3001"
+```
+
+**Nota:** Prisma lee de `.env`, no de `.env.local`. Copie `.env.local` a `.env` para los comandos de la CLI de Prisma:
+
+```bash
+cp .env.local .env
+```
+
+## Configuración de la base de datos
+
+Genere el cliente Prisma y aplique las migraciones:
+
+```bash
+pnpm --filter @repo/database generate
+pnpm --filter @repo/database push    # desarrollo: aplicar esquema directamente
+```
+
+Prisma Studio (navegador visual de base de datos opcional):
+
+```bash
+pnpm --filter @repo/database studio
+```
+
+Se abre en el puerto `5555`.
+
+## Ejecutar las aplicaciones
+
+Ejecute todas las aplicaciones simultáneamente (recomendado para desarrollo):
+
+```bash
+pnpm dev
+```
+
+O ejecute aplicaciones individuales:
+
+```bash
+pnpm dev --filter=saas         # Panel SaaS → http://localhost:3000
+pnpm dev --filter=marketing    # Sitio de marketing → http://localhost:3001
+pnpm dev --filter=docs         # Sitio de documentación → http://localhost:3002
+```
+
+Turborepo ejecuta todas las tareas con concurrencia 15 y almacena en caché las salidas de compilación.
+
+## Verificar la configuración
+
+1. Abra `http://localhost:3000` — debería ver la página de inicio de sesión de AACsearch
+2. Cree una cuenta mediante el formulario de registro
+3. Cree una organización
+4. Navegue a la sección de búsqueda
+5. Cree un índice de búsqueda — esto crea la colección Typesense
+
+Si Typesense no es accesible, la creación del índice fallará con un `typesense_connection_error` y
+lo verá en el estado de error del panel.
+
+## Verificación de tipos y lint
+
+```bash
+pnpm type-check     # Verificación de tipos TypeScript (todos los paquetes)
+pnpm lint           # Oxlint (NO ESLint)
+pnpm lint:fix       # Corregir automáticamente problemas de lint
+pnpm format         # Oxfmt (NO Prettier)
+pnpm format:check   # Solo verificar el formato
+```
+
+## Comandos útiles
+
+```bash
+# Compilar el bundle del widget (necesario para desarrollo del widget)
+pnpm --filter @repo/widget build
+
+# Restablecer la base de datos (DESTRUCTIVO — elimina todos los datos)
+docker compose down -v && docker compose up -d
+pnpm --filter @repo/database push
+
+# Limpiar caché de Turborepo
+pnpm clean
+
+# Compilar todo
+pnpm build
+```
+
+## Resolución de problemas
+
+**`Cannot find module '@repo/...'`** — ejecute `pnpm install` desde la raíz del repositorio.
+
+**`Prisma DATABASE_URL empty`** — Prisma lee `.env`, no `.env.local`. Ejecute `cp .env.local .env`.
+
+**`Prisma Client not generated`** — ejecute `pnpm --filter @repo/database generate`.
+
+**`BigInt serialization error`** — un procedimiento no tiene `.transform(v => v.toString())` en los campos de salida BigInt.
+
+**Build OOM en macOS** — establezca `NODE_OPTIONS='--max-old-space-size=12288' pnpm build`.

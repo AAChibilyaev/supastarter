@@ -1,0 +1,115 @@
+---
+title: Descripción General de la API de Búsqueda
+description: Tres superficies de API — procedimientos oRPC del panel, endpoint REST de búsqueda pública y API de conector — y cuándo usar cada uno.
+---
+
+AACsearch expone tres superficies de API distintas. Comprender cuál usar en qué contexto es
+importante para la seguridad y para no llamar al endpoint incorrecto.
+
+## Tres superficies de API
+
+### 1. oRPC (procedimientos del panel / administración)
+
+Usado por el panel SaaS de AACsearch. Requiere una sesión de Better Auth (usuario autenticado).
+No está destinado a llamadores externos ni a módulos CMS.
+
+- **Ruta base:** `/api/rpc/**`
+- **Autenticación:** Cookie de sesión (Better Auth)
+- **Usado por:** panel `apps/saas`, operaciones de gestión
+- **26 procedimientos** que cubren índices, claves, tokens, analíticas, conectores, relevancia
+
+### 2. Endpoint de búsqueda pública
+
+Usado por navegadores, SDKs del navegador y el widget alojado. Requiere una clave `ss_search_*` o `ss_scoped_*`.
+
+- **Ruta base:** `/api/search` (montado en `public-handler.ts`)
+- **Autenticación:** Token Bearer (API key en el encabezado de Autorización)
+- **Usado por:** `@repo/search-client`, `packages/widget`, cualquier cliente HTTP
+- **Operaciones:** búsqueda, búsqueda múltiple
+
+### 3. API de conector
+
+Usado por módulos CMS (PrestaShop, Bitrix, integraciones personalizadas). Requiere una clave `ss_connector_*`.
+
+- **Ruta base:** `/api/connector/**`
+- **Autenticación:** Token Bearer (clave `ss_connector_*`)
+- **Usado por:** módulos CMS, scripts de sincronización personalizados
+- **Operaciones:** handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync status
+
+## API REST v1
+
+Además de lo anterior, AACsearch expone una API REST v1 en `/api/v1/` con una especificación OpenAPI 3.1.
+
+**Estado actual:** Lanzada. 15 endpoints que cubren proyectos, índices, documentos, búsqueda, gestión de API keys.
+
+Especificación OpenAPI: `GET /api/v1/openapi.json`
+
+Ámbitos de autenticación para v1:
+
+| Prefijo       | Ámbito   | Nivel de acceso     |
+| ------------- | -------- | ------------------- |
+| `aa_admin_*`  | `admin`  | Gestión completa    |
+| `aa_write_*`  | `write`  | Ingestión + escritura |
+| `aa_search_*` | `search` | Solo búsqueda       |
+| `aa_scoped_*` | `scoped` | Búsqueda reducida   |
+
+## Formato de solicitud (búsqueda pública)
+
+Todas las solicitudes de búsqueda son JSON POST:
+
+```
+POST /api/search
+Authorization: Bearer ss_search_your_key
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "q": "auriculares inalámbricos",
+  ...parámetros de búsqueda...
+}
+```
+
+## Flujo de autenticación
+
+```
+Solicitud llega
+    │
+    ▼
+Extraer Authorization: Bearer {token}
+    │
+    ▼
+Determinar tipo de clave por prefijo:
+  ss_search_*    → verificar hash de API key, verificar origen, verificar límite de velocidad, verificar cuota
+  ss_scoped_*    → verificar firma HMAC, extraer filtro con ámbito, proceder como búsqueda
+  ss_connector_* → verificar hash de API key, verificar ámbito connector_write
+    │
+    ▼
+Proceder al manejador (búsqueda / ingestión / operación de conector)
+```
+
+## Formato de error
+
+Todos los errores del endpoint de búsqueda pública siguen este formato:
+
+```json
+{
+	"error": "error_code",
+	"message": "Descripción legible por humanos"
+}
+```
+
+Códigos de error comunes: `unauthorized`, `forbidden`, `rate_limit_exceeded`, `quota_exceeded`,
+`index_not_found`, `search_failed`, `ingest_failed`.
+
+Los errores crudos de Typesense **nunca** se reenvían a los llamadores. Todos los errores upstream se mapean a
+códigos tipados antes de enviar la respuesta.
+
+## Soporte de SDK
+
+| Entorno           | Paquete                                           |
+| ----------------- | ------------------------------------------------- |
+| Navegador / Node.js | `@repo/search-client`                           |
+| Widget de tienda  | `packages/widget` (auto-instalado vía `<script>`) |
+| Agente de IA (MCP) | `packages/aacsearch-mcp`                        |
+
+Consulte [SDK del navegador](/docs/getting-started/browser-sdk) para la documentación del SDK cliente.

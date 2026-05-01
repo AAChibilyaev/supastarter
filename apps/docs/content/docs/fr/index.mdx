@@ -1,0 +1,52 @@
+---
+title: Documentation AACsearch
+description: Service de recherche hébergé pour les catalogues e-commerce et CRM. Rapide, tolérant aux fautes de frappe, isolé par organisation et prêt pour les CMS.
+---
+
+AACsearch est un service de **recherche hébergé** conçu pour les catalogues e-commerce et CRM. Les marchands installent un module CMS
+(PrestaShop ou Bitrix), connectent leur projet AACsearch et obtiennent un point de terminaison de recherche rapide, tolérant aux fautes de frappe, ainsi qu'un
+widget hébergé — sans avoir à gérer eux-mêmes l'infrastructure Typesense.
+
+## Ce que vous obtenez
+
+| Fonctionnalité                                    | Statut                                  |
+| ------------------------------------------------- | --------------------------------------- |
+| Recherche plein texte tolérante aux fautes        | ✅ Disponible                           |
+| Facettes, tri, mise en surbrillance               | ✅ Disponible                           |
+| Multi-tenant isolé par organisation               | ✅ Disponible                           |
+| Clés API (hachées, limitées, restreintes par origine) | ✅ Disponible                       |
+| Tokens de recherche limités (HMAC)                | ✅ Disponible                           |
+| Quota et limitation de débit par plan             | ✅ Disponible                           |
+| Réindexation sans interruption (alias-swap)       | ✅ Disponible                           |
+| Pipeline d'ingestion DB-first                     | ✅ Disponible                           |
+| SDK navigateur (`@repo/search-client`)            | ✅ Disponible                           |
+| Widget hébergé (Vanilla JS, Shadow DOM)           | ✅ Disponible                           |
+| API Connecteur pour modules CMS                   | ✅ Disponible                           |
+| Synonymes et curations                            | ✅ Disponible                           |
+| Module Knowledge (RAG/GraphRAG)                   | ✅ Disponible                           |
+| Module PrestaShop                                 | 🟡 Squelette (suivi séparé)             |
+| Module Bitrix                                     | 🟡 Squelette (suivi séparé)             |
+| Mesure des unités de recherche (Tochka/Stripe)    | 🟡 En cours de développement            |
+| Site de documentation public                      | 🟡 Vous êtes ici (v0.7 en cours)        |
+| Démarrage rapide auto-hébergé + chart Helm        | ⏳ Prévu (v1.0)                         |
+
+## Par où commencer
+
+- **Nouveau sur AACsearch ?** → [Vue d'ensemble — Démarrage](/docs/getting-started/overview)
+- **Mise en place d'un environnement de développement ?** → [Développement local](/docs/getting-started/local-development)
+- **Installation du widget sur une boutique ?** → [Installation du widget](/docs/getting-started/widget-installation)
+- **Connexion d'un CMS ?** → [Intégration d'un connecteur](/docs/getting-started/connector-onboarding)
+- **Développement sur l'API de recherche ?** → [Vue d'ensemble de l'API de recherche](/docs/search-api/overview)
+- **Comprendre les plans et les limites ?** → [Plans et limites](/docs/overview/plans-and-limits)
+
+## Contexte du projet
+
+AACsearch est construit sur un **monorepo Next.js supastarter**. L'application SaaS (`apps/saas`) fournit le tableau de bord,
+le site marketing (`apps/marketing`) sert la page d'accueil, et ce site de documentation (`apps/docs`) fournit
+la documentation que vous lisez actuellement.
+
+Le moteur de recherche est [Typesense](https://typesense.org) — un moteur de recherche open source rapide et tolérant aux fautes de frappe.
+AACsearch l'enveloppe avec la multi-location, l'authentification, l'application des quotas, les connecteurs CMS et un widget hébergé afin que
+les développeurs et les marchands n'aient pas à exploiter Typesense directement.
+
+Consultez [Architecture](/docs/overview/architecture) pour une vue complète du système.

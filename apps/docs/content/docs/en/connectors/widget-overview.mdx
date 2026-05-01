@@ -1,0 +1,126 @@
+---
+title: "Hosted Search Widget"
+description: "Embed the AACsearch widget in your storefront with a single script tag. Vanilla JS, Shadow DOM, five locales."
+---
+
+The AACsearch hosted widget is a self-contained search UI that you embed in any storefront with a single `<script>` tag. It handles the search input, results grid, facets, sorting, pagination, and click tracking — without any framework dependency or build step on your end.
+
+## Technical overview
+
+| Property        | Value                                                       |
+| --------------- | ----------------------------------------------------------- |
+| Implementation  | Vanilla JS, hand-rolled (no InstantSearch.js, no React)     |
+| Style isolation | Shadow DOM — widget styles cannot leak into your shop CSS   |
+| Bundle size     | ~14 KB minified (IIFE + ESM dual output)                    |
+| Served at       | `GET /api/widget/widget.js` (CORS-allowed, cached)          |
+| Auth            | Requires a `ss_search_*` API key embedded in `data-api-key` |
+| Locales         | `en`, `de`, `es`, `fr`, `ru`                                |
+
+The widget never exposes a Typesense admin key. It communicates only through the public search endpoint using the scoped `ss_search_*` key you provide.
+
+## Embed snippet
+
+Copy the snippet from **Dashboard → Search → Widget tab** and paste it into your storefront's `<head>` or before the closing `</body>`:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_your_key_here"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Also add the container element where you want the widget to render:
+
+```html
+<div id="aac-search"></div>
+```
+
+The widget auto-initializes when the script loads. No JavaScript initialization code is required.
+
+## Configuration attributes
+
+All configuration is via `data-*` attributes on the `<script>` tag.
+
+| Attribute          | Required | Default    | Description                                   |
+| ------------------ | -------- | ---------- | --------------------------------------------- |
+| `data-base-url`    | Yes      | —          | Base URL of your AACsearch instance           |
+| `data-api-key`     | Yes      | —          | A `ss_search_*` key (search-only scope)       |
+| `data-index-slug`  | Yes      | —          | Slug of the search index to query             |
+| `data-container`   | Yes      | —          | CSS selector for the container element        |
+| `data-locale`      | No       | `"en"`     | UI locale: `en`, `de`, `es`, `fr`, or `ru`    |
+| `data-theme`       | No       | `"auto"`   | Color theme: `"light"`, `"dark"`, or `"auto"` |
+| `data-mode`        | No       | `"inline"` | Display mode: `"inline"` or `"modal"`         |
+| `data-show-prices` | No       | `"true"`   | Show product prices in results                |
+| `data-show-images` | No       | `"true"`   | Show product images in results                |
+
+### Mode: inline vs modal
+
+`inline` — the widget renders directly inside the container element. Suitable for a dedicated search page or a prominent search section.
+
+`modal` — the widget appears as an overlay. The modal is typically triggered by a button click or keyboard shortcut. (Note: modal trigger button must be wired by your theme.)
+
+### Locale auto-detection
+
+The widget resolves locales with a fallback chain: `data-locale` attribute → base language (`en-US` → `en`) → `"en"`. If you pass `"ru-RU"`, it resolves to `"ru"`.
+
+## API key requirements
+
+The `data-api-key` attribute must be a `ss_search_*` key, not a connector token or admin key. Search keys have only the `search` scope and can safely be embedded in browser-visible HTML.
+
+Create a search key in **Dashboard → Search → API Keys → Create Key** and select the `search` scope.
+
+If you restrict the key to specific origins (`allowedOrigins`), add your storefront domain to the allow-list.
+
+## Display modes and UI states
+
+The widget handles these states automatically:
+
+| State           | What the user sees                                  |
+| --------------- | --------------------------------------------------- |
+| Idle (no query) | Placeholder text prompt                             |
+| Loading         | "Searching..." spinner                              |
+| Results         | Product grid with facets, sort controls, pagination |
+| Zero results    | Empty state with suggestion to try a different term |
+| Error           | Degraded state with search input still functional   |
+
+## Supported languages
+
+All UI strings are embedded in the widget bundle. No external i18n fetches.
+
+| Locale | Language |
+| ------ | -------- |
+| `en`   | English  |
+| `de`   | German   |
+| `ru`   | Russian  |
+| `es`   | Spanish  |
+| `fr`   | French   |
+
+## CSS customization
+
+The widget uses CSS custom properties scoped to its Shadow DOM host. You can override them by targeting the container element:
+
+```css
+/* These apply inside the Shadow DOM via CSS inheritance through :host */
+#aac-search {
+	--aac-primary: #e60000;
+	--aac-radius: 4px;
+}
+```
+
+Available CSS variables: `--aac-primary`, `--aac-primary-hover`, `--aac-bg`, `--aac-bg-secondary`, `--aac-text`, `--aac-text-secondary`, `--aac-border`, `--aac-radius`.
+
+Dark mode is handled automatically when `data-theme="auto"` — the widget detects system preference via `prefers-color-scheme`.
+
+## Analytics
+
+The widget tracks search behavior and sends events to `POST /api/events/track`. Events include `search_query`, `zero_results`, `result_click`, `widget_open`, and `filter_used`. See [Widget Analytics Events](/docs/connectors/widget-analytics-events) for the full event reference.
+
+## Related pages
+
+- [Connectors Overview](/docs/connectors/overview)
+- [Widget Analytics Events](/docs/connectors/widget-analytics-events)
+- [Authentication](/docs/search-api/authentication)

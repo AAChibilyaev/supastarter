@@ -1,0 +1,125 @@
+---
+title: Создание первого индекса
+description: Создайте поисковый индекс, разберитесь с моделью коллекция-псевдоним и выполните первый поисковый запрос через панель управления.
+---
+
+**Поисковый индекс** в AACsearch соответствует коллекции Typesense с версионированным именем и псевдонимом.
+Создание индекса подготавливает коллекцию Typesense и регистрирует индекс в базе данных.
+
+## Что такое индекс?
+
+Каждый индекс представляет собой доступный для поиска каталог — как правило, один на магазин или набор товаров.
+
+```
+Organization
+  └── SearchIndex (slug: "products")
+        collectionName: "org123_products_v1"   ← коллекция Typesense (версионированная)
+        aliasName:      "org123_products"       ← псевдоним Typesense (стабильный, всегда указывает на текущую)
+```
+
+Все поисковые запросы направлены к **псевдониму**, а не напрямую к версионированной коллекции. Это обеспечивает переиндексацию без простоя — новая версия создаётся, пока текущая обслуживает трафик, затем псевдоним атомарно переключается.
+
+## Создание индекса через панель управления
+
+1. Откройте панель SaaS на `http://localhost:3000`
+2. Выберите организацию в переключателе
+3. Перейдите в **Search** → **Indexes**
+4. Нажмите **Create index**
+5. Введите слаг (например, `products`) и опциональное отображаемое имя
+6. Нажмите **Create**
+
+Панель управления вызывает `searchRouter.createIndex`, который подготавливает коллекцию Typesense и создаёт запись `SearchIndex` в Postgres.
+
+## Создание индекса через oRPC
+
+```typescript
+import { orpc } from "@shared/lib/orpc-query-utils";
+
+const index = await orpc.search.createIndex.call({
+	organizationId: "org_...",
+	slug: "products",
+	name: "Product catalog",
+});
+```
+
+## Схема коллекции по умолчанию
+
+При создании индекса AACsearch подготавливает коллекцию Typesense с оптимизированной для товаров схемой:
+
+```json
+{
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string", "weight": 10 },
+		{ "name": "sku", "type": "string", "weight": 8 },
+		{ "name": "brand", "type": "string", "weight": 5, "facet": true },
+		{ "name": "categories", "type": "string[]", "weight": 5, "facet": true },
+		{ "name": "description", "type": "string", "weight": 2 },
+		{ "name": "price", "type": "float", "facet": true },
+		{ "name": "sale_price", "type": "float", "optional": true },
+		{ "name": "availability", "type": "string", "facet": true },
+		{ "name": "locale", "type": "string", "facet": true },
+		{ "name": "created_at", "type": "int64" }
+	],
+	"default_sorting_field": "_text_match"
+}
+```
+
+Схема определена в `packages/search/lib/collections.ts` и развивается вместе с версией схемы товаров.
+
+## Добавление первого документа
+
+После создания индекса отправьте документ через буфер приёма:
+
+```typescript
+const result = await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-123",
+		title: "Wireless Headphones",
+		sku: "WH-2024",
+		brand: "Acme",
+		categories: ["Electronics", "Audio"],
+		description: "Noise-cancelling over-ear headphones with 30h battery.",
+		price: 99.99,
+		availability: "in_stock",
+		locale: "en",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+Это вызывает `enqueueManySearchIngest()`, который записывает в `SearchIngestBuffer`. Фоновый воркер подхватывает документ и пересылает его в Typesense в течение нескольких секунд.
+
+## Выполнение поискового запроса
+
+Используйте вкладку **Search Preview** в панели управления или обратитесь к публичному поисковому эндпоинту напрямую:
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 10
+  }'
+```
+
+Полную схему запроса смотрите в разделе [Публичный поисковый эндпоинт](/docs/search-api/public-search-endpoint).
+
+## Что происходит после создания индекса
+
+1. Чек-лист **Getting Started** в панели управления обновляется — отмечает «Создать индекс» как выполненное
+2. Вкладка **Import Jobs** становится доступна для массового импорта CSV/JSON
+3. Вкладка **API Keys** отображает панель ключей, привязанных к индексу
+4. Вкладка **Widget** показывает сниппет установки с предзаполненным слагом индекса
+
+## Следующие шаги
+
+- [API-ключи](/docs/getting-started/api-keys) — сгенерируйте ключи для интеграции
+- [Приём данных и переиндексация](/docs/getting-started/ingest-and-reindex) — массовый импорт и обновление схемы
+- [Подключение коннектора](/docs/getting-started/connector-onboarding) — подключите CMS для автоматической синхронизации

@@ -1,0 +1,285 @@
+---
+title: "Жизненный цикл Connector API"
+description: "Все 7 эндпоинтов Connector API, аутентификация, формы запросов/ответов, поток жизненного цикла и коды ошибок."
+---
+
+Connector API — это набор маршрутов Hono, смонтированных под `/api`, которые модули CMS вызывают для отправки данных о товарах и сообщения диагностической информации. Все эндпоинты требуют Bearer-токена `ss_connector_*`. Все данные валидируются с помощью Zod.
+
+## Аутентификация
+
+Каждый запрос должен включать заголовок `Authorization`:
+
+```http
+Authorization: Bearer ss_connector_<token>
+```
+
+Токен сопоставляется с хэшированными записями в `SearchApiKey`, где `scopes` включает `connector_write`, а `revokedAt` равен null. При успешном совпадении `lastUsedAt` токена обновляется (неблокирующим образом).
+
+**Ответы при ошибке аутентификации:**
+
+| Условие                            | Статус | Тело                                    |
+| ---------------------------------- | ------ | --------------------------------------- |
+| Нет заголовка `Authorization`      | 401    | `{ "error": "missing_bearer_token" }`   |
+| Токен не найден или отозван        | 403    | `{ "error": "invalid_or_revoked_key" }` |
+
+## Эндпоинты
+
+### POST /api/connectors/handshake
+
+Вызывайте однократно при запуске модуля CMS или когда продавец сохраняет конфигурацию. Валидирует токен и возвращает метаданные индекса.
+
+**Тело запроса:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"platform": "prestashop"
+}
+```
+
+`platform` должен быть `"prestashop"` или `"bitrix"`.
+
+**Ответ (200):**
+
+```json
+{
+	"projectId": "org_abc123",
+	"indexSlug": "products",
+	"status": "active",
+	"connector": {
+		"id": "prestashop",
+		"displayName": "PrestaShop",
+		"syncModes": ["full", "delta"],
+		"capabilities": ["upsert", "delete"],
+		"minModuleVersion": "1.0.0"
+	}
+}
+```
+
+Используйте `projectId` как сегмент пути `:projectId` для всех последующих вызовов синхронизации и диагностики.
+
+---
+
+### POST /api/connectors/:connectorId/heartbeat
+
+Сигнал keepalive. Вызывайте периодически (рекомендуется: каждые 5 минут), чтобы панель управления могла показывать статус коннектора онлайн/оффлайн.
+
+**Тело запроса:** не требуется
+
+**Ответ (200):**
+
+```json
+{
+	"status": "ok",
+	"timestamp": "2025-01-15T10:00:00.000Z"
+}
+```
+
+Панель управления определяет работоспособность коннектора по `lastUsedAt` токена: онлайн — если использован в течение 5 минут, неизвестно — в течение 30 минут, оффлайн — в противном случае.
+
+---
+
+### POST /api/projects/:projectId/sync/full
+
+Отправьте все товары для полной синхронизации каталога. Товары помещаются в очередь `SearchIngestBuffer` и индексируются асинхронно.
+
+**Лимит пакета:** 1–1000 товаров на запрос. Для больших каталогов отправляйте несколько запросов.
+
+**Тело запроса:**
+
+```json
+{
+	"products": [
+		{
+			"external_id": "product-123",
+			"title": "Blue Running Shoes",
+			"description": "Lightweight running shoes",
+			"sku": "BRS-42",
+			"brand": "Acme Sport",
+			"categories": ["Shoes", "Running"],
+			"category_ids": ["cat-10", "cat-22"],
+			"tags": ["sale", "new-arrival"],
+			"price": 99.99,
+			"sale_price": 79.99,
+			"currency": "USD",
+			"image_url": "https://example.com/img/brs-42.jpg",
+			"product_url": "https://example.com/products/brs-42",
+			"availability": "in_stock",
+			"stock_quantity": 42,
+			"attributes": { "color": "blue", "size": "42" },
+			"locale": "en"
+		}
+	]
+}
+```
+
+Все поля, кроме `external_id` и `title`, опциональны. `availability` принимает `"in_stock"`, `"out_of_stock"` или `"preorder"`.
+
+**Ответ (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsCount": 1,
+	"jobId": "sync_42_1737000000000"
+}
+```
+
+Используйте `jobId` для опроса статуса через `GET /api/projects/:projectId/sync/jobs/:jobId`.
+
+**Ошибка (502):** `{ "error": "sync_failed" }` — постановка в очередь `SearchIngestBuffer` не удалась. Повторите с экспоненциальной задержкой.
+
+---
+
+### POST /api/projects/:projectId/sync/delta
+
+Отправьте только изменённые товары. Используйте для обновлений в реальном времени, вызываемых событиями сохранения/удаления/изменения остатков товаров.
+
+**Лимит пакета:** 1–100 товаров на запрос.
+
+Формы запроса и ответа идентичны эндпоинту полной синхронизации. `jobId` в ответе имеет тип `"delta"`.
+
+**Ответ (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsProcessed": 1,
+	"jobId": "sync_43_1737000001000"
+}
+```
+
+---
+
+### DELETE /api/projects/:projectId/products/:externalId
+
+Удалить один документ из индекса по его внешнему ID.
+
+**Тело запроса не требуется.**
+
+**Ответ (200):**
+
+```json
+{
+	"status": "deleted",
+	"externalId": "product-123"
+}
+```
+
+**Ошибка (502):** `{ "error": "delete_failed" }`
+
+---
+
+### POST /api/projects/:projectId/diagnostics
+
+Сообщить AACsearch информацию о работоспособности модуля. Панель управления использует эти данные для отображения последнего известного состояния синхронизации и любых ошибок со стороны CMS.
+
+> **Предупреждение для ранних пользователей:** Диагностические отчёты хранятся в памяти серверного процесса AACsearch. Они теряются при перезапуске сервера. Это приемлемо для MVP; для постоянного хранения потребуется изменение схемы БД.
+
+**Тело запроса:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"lastFullSync": "2025-01-15T09:00:00.000Z",
+	"lastDeltaSync": "2025-01-15T09:55:00.000Z",
+	"totalProducts": 4823,
+	"phpVersion": "8.2.0",
+	"shopUrl": "https://myshop.example.com",
+	"errors": [
+		{
+			"code": "export_timeout",
+			"message": "Product export timed out after 30s",
+			"timestamp": "2025-01-15T09:54:30.000Z"
+		}
+	]
+}
+```
+
+**Ответ (200):**
+
+```json
+{
+	"status": "ok",
+	"receivedAt": "2025-01-15T09:55:01.000Z"
+}
+```
+
+---
+
+### GET /api/projects/:projectId/sync/jobs/:jobId
+
+Опросить статус задания синхронизации по его ID.
+
+> **Предупреждение для ранних пользователей:** История заданий синхронизации хранится в памяти серверного процесса AACsearch. In-memory хранилище держит последние 50 заданий на экземпляр сервера и теряется при перезапуске. Если сервер перезапустится между вызовом `sync/full` и опросом этого эндпоинта, вы получите 404. Модули CMS должны воспринимать 404 как приемлемый исход после перезапуска сервера и не повторять запросы бесконечно.
+
+**Ответ (200) — завершённое задание:**
+
+```json
+{
+	"id": "sync_42_1737000000000",
+	"type": "full",
+	"status": "completed",
+	"indexId": "idx_abc123",
+	"organizationId": "org_abc123",
+	"startedAt": "2025-01-15T09:00:00.000Z",
+	"finishedAt": "2025-01-15T09:00:05.432Z",
+	"duration": "5.4s",
+	"itemsCount": 500,
+	"failuresCount": 0,
+	"events": [
+		{ "timestamp": "...", "message": "Full sync started", "level": "info" },
+		{ "timestamp": "...", "message": "Sync completed: 500 items processed", "level": "info" }
+	]
+}
+```
+
+`status` — одно из: `"running"`, `"completed"`, `"failed"`.
+
+**Ошибка (404):** `{ "error": "job_not_found" }`
+
+## Поток жизненного цикла
+
+Типичный модуль CMS следует такой последовательности:
+
+```
+1. Запуск / сохранение конфигурации
+   └─ POST /api/connectors/handshake
+      → сохранить projectId + indexSlug в конфигурацию модуля
+
+2. Фоновый keepalive (каждые 5 мин)
+   └─ POST /api/connectors/:connectorId/heartbeat
+
+3. Начальная полная синхронизация (однократно или по расписанию)
+   └─ POST /api/projects/:projectId/sync/full (пакетно)
+      → опрос GET .../sync/jobs/:jobId до завершения/ошибки
+
+4. Дельта в реальном времени (при событиях с товаром)
+   └─ POST /api/projects/:projectId/sync/delta
+
+5. Удаление товара
+   └─ DELETE /api/projects/:projectId/products/:externalId
+
+6. Периодический отчёт диагностики
+   └─ POST /api/projects/:projectId/diagnostics
+```
+
+## Справочник кодов ошибок
+
+| Код                      | Значение                                                          |
+| ------------------------ | ----------------------------------------------------------------- |
+| `missing_bearer_token`   | Нет заголовка `Authorization: Bearer ...`                         |
+| `invalid_or_revoked_key` | Токен не найден, неверная область или отозван                     |
+| `invalid_json`           | Тело запроса не удалось разобрать                                 |
+| `invalid_input`          | Валидация Zod не прошла; массив `details` содержит ошибки по полям |
+| `project_not_found`      | `:projectId` не соответствует организации токена                  |
+| `unsupported_connector`  | Поле `platform` не является `prestashop` или `bitrix`             |
+| `sync_failed`            | Постановка в очередь `SearchIngestBuffer` не удалась — повторите  |
+| `delete_failed`          | Постановка удаления в очередь не удалась — повторите              |
+| `job_not_found`          | ID задания не найден (возможно, потерян при перезапуске)           |
+
+## Связанные страницы
+
+- [Обзор коннекторов](/docs/connectors/overview)
+- [Модуль PrestaShop](/docs/connectors/prestashop)
+- [Модуль Bitrix](/docs/connectors/bitrix)

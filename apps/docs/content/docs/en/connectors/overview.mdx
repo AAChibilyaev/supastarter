@@ -1,0 +1,69 @@
+---
+title: "Connectors & Widget Overview"
+description: "How CMS connectors and the hosted widget push data into AACsearch and display search results in your storefront."
+---
+
+AACsearch connects to your existing CMS through two complementary surfaces:
+
+- **Connector API** — a set of HTTP endpoints that CMS modules call to push product data into AACsearch. The module runs on your server; AACsearch never polls or scrapes your store.
+- **Hosted Widget** — a Vanilla JS bundle served by AACsearch at `/api/widget/widget.js`. You embed a single `<script>` tag in your storefront theme and the widget handles the search UI, facets, sorting, and click tracking.
+
+Both surfaces use different token types. Neither surface ever exposes your Typesense admin credentials.
+
+## Connector token model
+
+Connector tokens use the `ss_connector_*` prefix and are stored as `SearchApiKey` rows with the `connector_write` scope. They are created from the AACsearch dashboard and bound to a specific search index.
+
+Token properties:
+
+- Prefix: `ss_connector_`
+- Scope: `connector_write`
+- Stored as: SHA-256 hash (prefix:hash format) in `SearchApiKey.hash`
+- Plaintext returned once at creation — never again
+- Revocable at any time from the dashboard
+
+Create a connector token from **Dashboard → Connectors → New Connector Token**, or via the oRPC procedure `search.createConnectorToken`.
+
+## Supported CMS modules
+
+| Platform                | Status        | Notes                                              |
+| ----------------------- | ------------- | -------------------------------------------------- |
+| PrestaShop 8.x          | Early preview | PHP module skeleton exists; separate commit track  |
+| 1C-Bitrix (self-hosted) | Early preview | PHP module skeleton exists; separate commit track  |
+| Direct API              | Available     | Any system can call the Connector API with a token |
+
+The PrestaShop and Bitrix modules are tracked separately from the main Node.js monorepo. They are functional skeletons — the core sync and auth flows work, but installation packaging and admin UI polish are still in progress.
+
+## How to get started
+
+1. **Create a search index** — Dashboard → Search → Indexes → New Index
+2. **Create a connector token** — Dashboard → Connectors → New Connector Token. Copy the plaintext token immediately.
+3. **Install the CMS module** — upload the PrestaShop or Bitrix module to your shop, or build your own integration using the Connector API directly.
+4. **Run handshake** — the module calls `POST /api/connectors/handshake` with your token. A successful response confirms the token is valid and returns the index slug.
+5. **Run full sync** — the module exports all products and sends them in batches to `POST /api/projects/:projectId/sync/full`. Products are queued to the `SearchIngestBuffer` and indexed asynchronously.
+6. **Embed the widget** — copy the install snippet from Dashboard → Search → Widget tab and paste it into your storefront theme.
+
+## Architecture principle
+
+CMS modules and browsers never contact Typesense directly. All data flows through the AACsearch API layer, which validates, auth-checks, rate-limits, and queues writes to the `SearchIngestBuffer`. The Typesense admin key never leaves the server.
+
+```
+CMS module (bearer: ss_connector_*)
+    │
+    ▼
+Connector API  ←  validates token, checks scope
+    │
+    ▼
+SearchIngestBuffer (Prisma DB)
+    │
+    ▼
+Background worker → Typesense
+```
+
+## Related pages
+
+- [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle) — all 7 endpoints, request shapes, error codes
+- [PrestaShop Module](/docs/connectors/prestashop) — install and configure the PrestaShop 8.x module
+- [Bitrix Module](/docs/connectors/bitrix) — install and configure the 1C-Bitrix module
+- [Widget Overview](/docs/connectors/widget-overview) — embed the hosted search widget
+- [Widget Analytics Events](/docs/connectors/widget-analytics-events) — event tracking reference

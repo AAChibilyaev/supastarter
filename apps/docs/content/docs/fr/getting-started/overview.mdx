@@ -1,0 +1,69 @@
+---
+title: Démarrage
+description: Commencez ici — créez un compte, configurez votre premier index de recherche et connectez votre première boutique.
+---
+
+Cette section vous guide à travers AACsearch, de zéro à un point de terminaison de recherche opérationnel. Que vous soyez
+un développeur configurant le monorepo localement ou un marchand connectant une boutique PrestaShop, c'est
+le bon endroit pour commencer.
+
+## Le chemin vers une recherche fonctionnelle
+
+```
+1. Créer un compte + une organisation
+2. Créer un index de recherche
+3. Générer des clés API
+4. Ingérer vos premiers documents
+5. Exécuter une requête de recherche
+6. (Optionnel) Installer le widget sur votre boutique
+7. (Optionnel) Connecter un module CMS pour une synchronisation continue
+```
+
+## Rôles et besoins correspondants
+
+### Développeur / Intégrateur
+
+Vous souhaitez configurer le monorepo local, comprendre la surface API et mettre en place une intégration personnalisée.
+
+Commencez par :
+
+1. [Développement local](/docs/getting-started/local-development) — configuration de l'environnement
+2. [Créer votre premier index](/docs/getting-started/create-first-index) — comprendre le modèle index + alias
+3. [Clés API](/docs/getting-started/api-keys) — comprendre les types de clés avant d'appeler l'API
+4. [SDK navigateur](/docs/getting-started/browser-sdk) — rechercher depuis un navigateur ou un client Node.js
+5. [Ingestion et réindexation](/docs/getting-started/ingest-and-reindex) — charger et mettre à jour les documents
+
+### Marchand / Opérateur de boutique
+
+Vous souhaitez connecter une boutique PrestaShop ou Bitrix existante et activer la recherche sur votre vitrine.
+
+Commencez par :
+
+1. Inscrivez-vous sur le tableau de bord AACsearch
+2. Créez une organisation et un index de recherche
+3. [Intégration d'un connecteur](/docs/getting-started/connector-onboarding) — générer un token de connecteur et connecter votre CMS
+4. [Installation du widget](/docs/getting-started/widget-installation) — ajouter le widget de recherche à votre boutique
+
+## Prérequis
+
+| Exigence           | Notes                                             |
+| ------------------ | ------------------------------------------------- |
+| Node.js 20+        | Pour le développement local                       |
+| pnpm 10            | Gestionnaire de paquets — installer via `npm i -g pnpm` |
+| Docker             | Pour Postgres + MinIO locaux (stockage d'objets)  |
+| Instance Typesense | Image Docker ou cloud géré                        |
+| Compte AACsearch   | Inscrivez-vous sur le tableau de bord             |
+
+## Définition MVP de la complétude
+
+Le chemin complet de bout en bout pour le MVP AACsearch est :
+
+```
+Inscription → création d'organisation → création de projet →
+génération d'un token connecteur → installation du module PrestaShop ou Bitrix →
+connexion du module → synchronisation complète → produits indexés →
+test de recherche dans le tableau de bord → activation du widget → la recherche fonctionne sur la vitrine →
+les analyses de base apparaissent dans le tableau de bord
+```
+
+Consultez [Statut & Feuille de route](/docs/overview/status-roadmap) pour l'état actuel de chaque étape.

@@ -1,0 +1,143 @@
+---
+title: Architecture
+description: Monorepo layout, service boundaries, the layered backend principle, and the data flow for write and read paths.
+---
+
+AACsearch is built on a **supastarter Next.js monorepo** using Turborepo with pnpm workspaces.
+The codebase is split into four apps and sixteen packages, all served through a single Hono HTTP process
+that mounts oRPC, public search endpoints, widget bundle, connectors, and auth.
+
+## Monorepo layout
+
+```
+apps/
+  saas/           # Protected SaaS dashboard — indexes, keys, analytics, connectors, billing
+  marketing/      # Public marketing site — landing, pricing, blog, changelog, legal
+  docs/           # Public docs site (this site — v0.7)
+  mail-preview/   # Email template preview only
+
+packages/
+  api/            # Hono + oRPC — 11 oRPC modules + public Hono routes
+  auth/           # Better Auth — login, orgs, passkeys, 2FA, magic links, OAuth
+  database/       # Prisma (active ORM) + Drizzle (legacy reference only) — 33 models
+  search/         # Typesense client, collections, buffer, reindex, keys, ingest
+  search-client/  # Browser SDK — search-only, no admin keys
+  widget/         # Hosted storefront widget — Vanilla JS, Shadow DOM, 14 KB IIFE+ESM
+  i18n/           # 5 locales × 4 scopes (en/de/es/fr/ru × marketing/saas/mail/shared)
+  payments/       # Stripe / LemonSqueezy / Polar / Creem / DodoPayments / Tochka
+  billing-wallet/ # BigInt kopecks ledger, reserve→commit/release
+  ai/             # Vercel AI SDK + provider configs
+  ai-core/        # Lower-level AI orchestration primitives
+  notifications/  # createNotification, list, mark-read, preferences, catalog
+  mail/           # React Email templates + provider drivers
+  storage/        # S3-compatible (MinIO for local dev)
+  ui/             # 27 shadcn-based UI primitives
+  logs/           # pino-based logger
+  utils/          # Generic helpers
+
+modules/          # NOT a Node workspace — PHP CMS modules
+  prestashop/aacsearch/   # PrestaShop 8.x (skeleton, separate track)
+  bitrix/aac.search/      # 1C-Bitrix self-hosted (skeleton, separate track)
+```
+
+## HTTP server
+
+All traffic enters through a **single Hono app** at `packages/api/index.ts`, which mounts routes in order:
+
+| Mount                    | Purpose                                 |
+| ------------------------ | --------------------------------------- |
+| `/api`                   | Public search handler (permissive CORS) |
+| `/api`                   | Widget analytics events                 |
+| `/api/widget/widget.js`  | Hosted widget JS bundle                 |
+| `/api`                   | Connector API (CMS modules)             |
+| `/api`                   | Analytics handler                       |
+| `/api`                   | SCIM 2.0 (identity provisioning)        |
+| `/api/v1`                | REST API v1 (15 endpoints, OpenAPI 3.1) |
+| `/api/auth/**`           | Better Auth handler                     |
+| `/api/webhooks/payments` | Payment provider webhooks               |
+| `/api/rpc/**`            | oRPC handler (11 modules)               |
+
+## oRPC modules
+
+The oRPC router at `packages/api/orpc/router.ts` mounts 11 modules:
+
+`admin`, `organizations`, `users`, `payments`, `ai`, `notifications`, `search`, `knowledge`, `billingWallet`, `entitlements`
+
+The `search` module has 26 procedures covering indexes, API keys, scoped tokens, relevance, analytics, connectors, and import jobs.
+
+## The layered backend principle
+
+External CMS modules and storefront browsers **never** contact Typesense directly. The AACsearch API layer
+holds the only admin credentials.
+
+```
+PrestaShop / Bitrix module
+    │  bearer(ss_connector_* token)
+    ▼
+AACsearch Connector API  ←  validates, auth-checks, rate-limits
+    │
+    ▼
+SearchIngestBuffer (Prisma)  ←  enqueueManySearchIngest()
+    │
+    ▼
+Background worker  ←  drains buffer in batches
+    │
+    ▼
+Typesense  (server-side only, admin key never leaves the server)
+```
+
+Exposing a Typesense admin key in a CMS module or `<script>` tag would allow arbitrary index
+manipulation across all tenants. This is **Hard Invariant #2** in the codebase and is non-negotiable.
+
+## Write path (ingest)
+
+```
+Request → public-handler.ts (auth + quota check)
+  → enqueueManySearchIngest() (DB insert into SearchIngestBuffer)
+  → background worker picks up unprocessed rows
+  → bulkUpsert to Typesense
+  → markIngestRowsSuccess / markIngestRowsFailure (exponential backoff on failures)
+```
+
+The DB-buffer approach provides durability (rows survive server restarts), partial-fail handling
+(only failed rows are retried), and batching (worker groups rows by collection before sending).
+
+## Read path (search)
+
+```
+Request → public-handler.ts (auth + rate limit + quota check)
+  → searchDocuments / multiSearchDocuments (via packages/search/lib/search.ts)
+  → Typesense response
+  → sanitized JSON returned (raw Typesense errors never forwarded)
+  → recordSearchUsage() called async (non-blocking)
+```
+
+## Collection naming and versioning
+
+Every search index uses versioned collection names to enable zero-downtime reindex:
+
+```
+Collection name:  {orgShortId}_{slug}_v{version}
+Alias name:       {orgShortId}_{slug}
+```
+
+All search queries target the alias. A reindex creates a new version, verifies it, then atomically
+swaps the alias. The previous version stays alive until the next reindex confirms green.
+
+## Technology choices
+
+| Layer                | Technology                                     |
+| -------------------- | ---------------------------------------------- |
+| Framework            | Next.js 16 (App Router, RSC)                   |
+| API                  | Hono + oRPC 1.13                               |
+| Auth                 | Better Auth 1.5                                |
+| ORM                  | Prisma 7 (active) / Drizzle (legacy reference) |
+| Search engine        | Typesense 3                                    |
+| Validation           | Zod 4                                          |
+| Client data fetching | TanStack Query 5                               |
+| Forms                | react-hook-form 7                              |
+| UI                   | Tailwind v4 + shadcn primitives                |
+| Lint                 | Oxlint (not ESLint)                            |
+| Format               | Oxfmt (not Prettier)                           |
+| Package manager      | pnpm 10 with workspace catalog                 |
+| Build orchestration  | Turborepo 2                                    |

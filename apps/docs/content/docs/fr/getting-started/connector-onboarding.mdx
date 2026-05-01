@@ -1,0 +1,166 @@
+---
+title: Intégration d'un connecteur
+description: Générer un token de connecteur et connecter votre module CMS à AACsearch via le flux de poignée de main.
+---
+
+L'API Connecteur AACsearch permet aux modules CMS (PrestaShop, Bitrix et intégrations personnalisées) de
+pousser des données de catalogue dans AACsearch de manière sécurisée. Cette page décrit l'authentification du connecteur
+et le flux de connexion initial.
+
+## Prérequis
+
+Avant de connecter un CMS, vous avez besoin de :
+
+1. Un compte AACsearch avec une organisation
+2. Un index de recherche (voir [Créer votre premier index](/docs/getting-started/create-first-index))
+3. Un **token de connecteur** (`ss_connector_*`) pour cet index
+4. Votre module CMS installé (PrestaShop ou Bitrix)
+
+## Étape 1 : Générer un token de connecteur
+
+Les tokens de connecteur utilisent le préfixe `ss_connector_*` et la portée `connector_write`.
+Ils permettent aux modules CMS de pousser des documents mais jamais de lire des documents ni de gérer le schéma de l'index.
+
+### Via le tableau de bord
+
+1. Naviguez vers **Search** → **Connectors** → **Connector Tokens**
+2. Cliquez sur **Create connector token**
+3. Entrez un nom (par ex. `PrestaShop production`)
+4. Copiez le token immédiatement — il n'est affiché qu'une seule fois
+
+### Via oRPC
+
+```typescript
+const token = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "PrestaShop production",
+});
+
+console.log(token.plaintext); // ss_connector_abc123... — sauvegardez ceci maintenant !
+```
+
+## Étape 2 : Configurer le module CMS
+
+Entrez ces valeurs dans la page de paramètres du module CMS :
+
+| Paramètre           | Valeur                       |
+| ------------------- | ---------------------------- |
+| URL API AACsearch   | `https://your-app.com`       |
+| Slug de l'index     | `products` (votre slug)      |
+| Token de connecteur | `ss_connector_your_token`    |
+
+Pour PrestaShop, ces paramètres se trouvent dans **Modules → AACsearch → Configurer**.
+Pour Bitrix, ces paramètres se trouvent dans le panneau d'administration du module sous **Paramètres → AACsearch**.
+
+## Étape 3 : Poignée de main
+
+Lorsque le module CMS enregistre sa configuration, il appelle le point de terminaison de poignée de main pour vérifier la connectivité :
+
+```bash
+POST /api/connector/handshake
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "moduleVersion": "1.0.0",
+  "platform": "prestashop"
+}
+```
+
+**Réponse de succès (200) :**
+
+```json
+{
+	"status": "ok",
+	"organizationId": "org_...",
+	"indexSlug": "products",
+	"collectionAlias": "org123_products",
+	"indexStatus": "active"
+}
+```
+
+**Réponses d'échec :**
+
+- `401` — token de connecteur invalide ou expiré
+- `403` — le token n'a pas la portée `connector_write`
+- `404` — slug d'index introuvable pour cette organisation
+
+## Étape 4 : Synchronisation complète
+
+Après une poignée de main réussie, déclenchez une synchronisation complète du catalogue :
+
+```bash
+POST /api/connector/sync/full
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "documents": [
+    { "id": "1", "title": "Product A", ... },
+    { "id": "2", "title": "Product B", ... }
+  ],
+  "batchNumber": 1,
+  "totalBatches": 5
+}
+```
+
+Pour les grands catalogues, envoyez les documents en lots de 200. Suivez la progression avec `batchNumber` et
+`totalBatches`. Le module CMS gère le traitement par lots — AACsearch accepte chaque lot indépendamment.
+
+Consultez [Cycle de vie de l'API Connecteur](/docs/connectors/connector-api-lifecycle) pour la référence complète des points de terminaison.
+
+## Étape 5 : Vérifier dans le tableau de bord
+
+Une fois la synchronisation complète terminée :
+
+1. Ouvrez le tableau de bord → **Search** → **Import Jobs**
+2. Vérifiez que le job de synchronisation affiche le statut `succeeded`
+3. Ouvrez **Search Preview** et exécutez une requête de test
+4. Confirmez que les documents apparaissent dans les résultats
+
+## Signal de vie (keepalive)
+
+Les modules CMS envoient des signaux de vie périodiques pour signaler qu'ils sont toujours connectés :
+
+```bash
+POST /api/connector/heartbeat
+Authorization: Bearer ss_connector_your_token
+
+{ "indexSlug": "products", "timestamp": 1717200000 }
+```
+
+Le tableau de bord affiche l'heure du dernier signal de vie dans le panneau **Connectors**. Si aucun signal de vie n'est
+reçu pendant 15 minutes, le connecteur est marqué comme `disconnected`.
+
+## Synchronisation delta (synchronisation continue)
+
+Après la synchronisation complète, les modules CMS envoient les modifications individuelles des produits au fur et à mesure :
+
+```bash
+POST /api/connector/sync/delta
+Authorization: Bearer ss_connector_your_token
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "upsert": [
+    { "id": "123", "title": "Updated Product", "price": 89.99, ... }
+  ],
+  "delete": ["product-456", "product-789"]
+}
+```
+
+Les appels de synchronisation delta sont effectués depuis les hooks d'événements CMS (`actionProductUpdate` dans PrestaShop,
+`OnAfterIBlockElementUpdate` dans Bitrix).
+
+## Gestion des tokens
+
+- **Lister les tokens :** `searchRouter.listConnectorTokens`
+- **Révoquer un token :** `searchRouter.revokeConnectorToken` — effet immédiat, le module échouera à la prochaine requête
+- **Renouveler un token :** Révoquer l'ancien + créer un nouveau, puis mettre à jour la configuration du module CMS
+
+Après la révocation d'un token, le module CMS échouera à son prochain signal de vie ou à sa prochaine requête de synchronisation avec un code 401.
+Le module doit afficher cela comme un statut « déconnecté » dans son panneau d'administration.

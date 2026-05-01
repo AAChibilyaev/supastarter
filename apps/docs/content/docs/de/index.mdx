@@ -1,0 +1,52 @@
+---
+title: AACsearch Dokumentation
+description: Gehostetes Search-as-a-Service für E-Commerce- und CRM-Kataloge. Schnell, tippfehlerresistent, org-basiert und CMS-kompatibel.
+---
+
+AACsearch ist ein gehostetes **Search-as-a-Service**, das für E-Commerce- und CRM-Kataloge entwickelt wurde. Händler installieren ein CMS-Modul
+(PrestaShop oder Bitrix), verbinden ihren AACsearch-Projekt und erhalten einen schnellen, tippfehlerresistenten Suchendpunkt sowie ein
+gehostetes Widget – ohne selbst eine Typesense-Infrastruktur betreiben zu müssen.
+
+## Was Sie erhalten
+
+| Funktion                                             | Status                              |
+| ---------------------------------------------------- | ----------------------------------- |
+| Tippfehlerresistente Volltextsuche                   | ✅ Verfügbar                         |
+| Facetten, Sortierung, Hervorhebung                   | ✅ Verfügbar                         |
+| Org-basierte Mandantenfähigkeit                      | ✅ Verfügbar                         |
+| API-Schlüssel (gehasht, eingeschränkt, ursprungsbasiert) | ✅ Verfügbar                    |
+| Eingeschränkte Suchtoken (HMAC)                      | ✅ Verfügbar                         |
+| Plan-basiertes Kontingent und Rate-Limiting          | ✅ Verfügbar                         |
+| Zero-Downtime-Alias-Swap-Reindex                     | ✅ Verfügbar                         |
+| DB-First-Ingest-Pipeline                             | ✅ Verfügbar                         |
+| Browser-SDK (`@repo/search-client`)                  | ✅ Verfügbar                         |
+| Gehostetes Widget (Vanilla JS, Shadow DOM)           | ✅ Verfügbar                         |
+| Connector-API für CMS-Module                         | ✅ Verfügbar                         |
+| Synonyme und Kurationen                              | ✅ Verfügbar                         |
+| Knowledge-Modul (RAG/GraphRAG)                       | ✅ Verfügbar                         |
+| PrestaShop-Modul                                     | 🟡 Entwurf (separater Track)        |
+| Bitrix-Modul                                         | 🟡 Entwurf (separater Track)        |
+| Sucheinheiten-Messung (Tochka/Stripe)                | 🟡 Aktiv in Entwicklung             |
+| Öffentliche Dokumentations-Website                   | 🟡 Sie sind hier (v0.7 in Arbeit)   |
+| Self-Host-Schnellstart + Helm-Chart                  | ⏳ Geplant (v1.0)                   |
+
+## Wo Sie anfangen sollten
+
+- **Neu bei AACsearch?** → [Erste Schritte – Übersicht](/docs/getting-started/overview)
+- **Entwicklungsumgebung einrichten?** → [Lokale Entwicklung](/docs/getting-started/local-development)
+- **Widget auf einem Storefront installieren?** → [Widget-Installation](/docs/getting-started/widget-installation)
+- **Ein CMS verbinden?** → [Connector-Onboarding](/docs/getting-started/connector-onboarding)
+- **Gegen die Such-API entwickeln?** → [Such-API-Übersicht](/docs/search-api/overview)
+- **Pläne und Limits verstehen?** → [Pläne und Limits](/docs/overview/plans-and-limits)
+
+## Projektkontext
+
+AACsearch basiert auf einem **supastarter Next.js-Monorepo**. Die SaaS-App (`apps/saas`) stellt das Dashboard bereit,
+die Marketing-Website (`apps/marketing`) dient als Landingpage, und diese Dokumentations-Website (`apps/docs`) enthält
+die Dokumentation, die Sie gerade lesen.
+
+Die Suchmaschine ist [Typesense](https://typesense.org) – eine schnelle, tippfehlerresistente Open-Source-Suchmaschine.
+AACsearch ergänzt sie um Mandantenfähigkeit, Authentifizierung, Kontingentdurchsetzung, CMS-Connectoren und ein gehostetes Widget, sodass
+Entwickler und Händler Typesense nicht direkt betreiben müssen.
+
+Siehe [Architektur](/docs/overview/architecture) für das vollständige Systembild.

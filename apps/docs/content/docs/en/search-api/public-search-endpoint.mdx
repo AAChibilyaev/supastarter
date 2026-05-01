@@ -1,0 +1,188 @@
+---
+title: Public Search Endpoint
+description: Full reference for the POST /api/search endpoint — request schema, parameters, and response format.
+---
+
+The public search endpoint is the primary way to execute search queries. It accepts JSON POST
+requests authenticated with a `ss_search_*` or `ss_scoped_*` key.
+
+**Endpoint:** `POST /api/search`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+## Request schema
+
+```typescript
+{
+  // Required
+  indexSlug: string;                   // target index slug
+
+  // Query
+  q: string;                           // search query (use "*" for wildcard/browse)
+  queryBy?: string;                    // comma-separated field names to search
+                                       // default: "title,sku,brand,description"
+
+  // Filtering
+  filterBy?: string;                   // Typesense filter expression
+  facetBy?: string;                    // comma-separated fields to compute facets
+
+  // Sorting
+  sortBy?: string;                     // e.g. "price:asc" or "_text_match:desc,price:asc"
+
+  // Pagination
+  page?: number;                       // 1-indexed (default: 1)
+  perPage?: number;                    // default: 10, max: 100
+
+  // Highlighting
+  highlightFields?: string;            // comma-separated fields to highlight
+  highlightStartTag?: string;          // default: "<mark>"
+  highlightEndTag?: string;            // default: "</mark>"
+
+  // Field selection
+  includeFields?: string;              // return only these fields
+  excludeFields?: string;              // exclude these fields from response
+}
+```
+
+## Example: basic search
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "wireless headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Example: filtered search with facets
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,brand",
+    "filterBy": "availability:=in_stock && price:<200",
+    "facetBy": "brand,categories",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Response schema
+
+```typescript
+{
+  found: number;           // total matching documents
+  page: number;            // current page (1-indexed)
+  outOf: number;           // total documents in the index
+  searchTimeMs: number;    // query execution time in milliseconds
+
+  hits: Array<{
+    document: Record<string, unknown>;  // the matched document
+    highlights: Array<{
+      field: string;
+      snippet: string;     // HTML with <mark> tags around matched terms
+    }>;
+    textMatchScore: number;
+  }>;
+
+  facetCounts?: Array<{
+    fieldName: string;
+    counts: Array<{
+      value: string;
+      count: number;
+    }>;
+  }>;
+}
+```
+
+## Example response
+
+```json
+{
+	"found": 142,
+	"page": 1,
+	"outOf": 5000,
+	"searchTimeMs": 4,
+	"hits": [
+		{
+			"document": {
+				"id": "product-123",
+				"title": "Sony WH-1000XM5 Wireless Headphones",
+				"brand": "Sony",
+				"price": 349.99,
+				"availability": "in_stock"
+			},
+			"highlights": [
+				{
+					"field": "title",
+					"snippet": "Sony WH-1000XM5 <mark>Wireless</mark> <mark>Headphones</mark>"
+				}
+			],
+			"textMatchScore": 578730
+		}
+	],
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 }
+			]
+		}
+	]
+}
+```
+
+## Query wildcards
+
+Use `q: "*"` to return all documents (useful for browsing with filters):
+
+```json
+{
+	"indexSlug": "products",
+	"q": "*",
+	"filterBy": "categories:=Electronics",
+	"sortBy": "price:asc"
+}
+```
+
+## Tenant isolation
+
+The public handler automatically adds a tenant filter to every query:
+
+```
+organization_id:={organizationId}
+```
+
+This filter is AND-combined with any `filterBy` the caller provides. It cannot be removed or
+overridden by the caller. Cross-org data access is architecturally impossible through this endpoint.
+
+## Default query parameters
+
+AACsearch applies these defaults if not specified:
+
+| Parameter           | Default value                              |
+| ------------------- | ------------------------------------------ |
+| `queryBy`           | `"title,sku,brand,categories,description"` |
+| `sortBy`            | `"_text_match:desc"`                       |
+| `page`              | `1`                                        |
+| `perPage`           | `10`                                       |
+| `highlightStartTag` | `"<mark>"`                                 |
+| `highlightEndTag`   | `"</mark>"`                                |
+
+## Performance notes
+
+- Typical query latency: < 10 ms for indexes under 100K documents
+- Response time increases with complex `filterBy` expressions and many facets
+- Avoid `perPage > 50` for facet-heavy queries — it increases Typesense processing time
+- Use `excludeFields` to strip large text fields (e.g., `description`) from results you don't render

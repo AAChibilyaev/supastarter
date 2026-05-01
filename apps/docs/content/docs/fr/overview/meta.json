@@ -1,0 +1,4 @@
+{
+	"title": "Vue d'ensemble",
+	"pages": ["status-roadmap", "architecture", "domain-model", "auth-tenancy", "plans-and-limits"]
+}

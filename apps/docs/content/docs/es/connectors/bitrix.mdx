@@ -1,0 +1,182 @@
+---
+title: "Módulo 1C-Bitrix"
+description: "Instale y configure el módulo AACsearch para 1C-Bitrix autoalojado."
+---
+
+> **Estado: Vista previa temprana.** El esqueleto del módulo (`aac.search`) es funcional — el handshake, la sincronización completa, la sincronización delta mediante manejadores de eventos iblock y la sincronización de agente en segundo plano funcionan todos. El empaquetado de instalación y el refinamiento de la interfaz de administración aún están en progreso. Bitrix24 **cloud** (REST/OAuth) es una pista separada y aún no está soportado.
+
+El módulo AACsearch para Bitrix (`modules/bitrix/aac.search`) integra su catálogo 1C-Bitrix autoalojado con AACsearch. Se encarga de:
+
+- Exportar productos desde el catálogo iblock de Bitrix a AACsearch mediante la API de conector
+- Activar sincronizaciones delta mediante manejadores de eventos iblock
+- Ejecutar sincronización en segundo plano mediante agentes Bitrix (el equivalente Bitrix de los trabajos cron)
+- Inyectar el widget de búsqueda alojado
+
+## Requisitos
+
+- 1C-Bitrix 24+ (autoalojado, local)
+- Módulo `catalog` de Bitrix habilitado
+- PHP 7.4 o superior con `Bitrix\Main\Web\HttpClient`
+- Una cuenta AACsearch con al menos un índice de búsqueda
+- Un token de conector (`ss_connector_*`) vinculado a ese índice
+
+> **Bitrix24 cloud** (API REST, OAuth, `catalog.catalog.list`) es una pista de conector separada y no está incluido en este módulo.
+
+## Estructura de archivos del módulo
+
+```
+modules/bitrix/aac.search/
+  install/
+    index.php           # Instalador/desinstalador del módulo
+    version.php         # Información de versión del módulo
+    step_install.php    # Paso del asistente de instalación
+    step_uninstall.php  # Paso del asistente de desinstalación
+  lib/
+    Client.php          # Cliente HTTP que envuelve las llamadas a la API de conector
+    ProductExporter.php # Normaliza productos iblock de Bitrix → forma ProductDocument
+    SyncAgent.php       # Agente Bitrix para sincronización en segundo plano/periódica
+    EventHandlers.php   # Listeners de eventos iblock para sincronización delta
+  admin/
+    aac_search_settings.php    # Página de administración de configuración
+    aac_search_diagnostics.php # Página de administración de diagnósticos
+  options.php                  # Bootstrap de opciones del módulo
+```
+
+## Pasos de instalación
+
+### 1. Cargar el módulo
+
+Copie el directorio `modules/bitrix/aac.search/` a `/local/modules/aac.search/` en su servidor Bitrix. Luego navegue a **Admin de Bitrix → Marketplace → Lista de módulos** e instale `aac.search`.
+
+### 2. Configurar el módulo
+
+Abra **Admin → aac.search → Configuración** y complete:
+
+| Campo                 | Descripción                                                            |
+| --------------------- | ---------------------------------------------------------------------- |
+| URL de la API de AACsearch | URL base de su instancia de AACsearch (p. ej. `https://app.aacsearch.com`) |
+| ID del proyecto       | Su ID de organización del panel de AACsearch                           |
+| Token de conector     | El token `ss_connector_*` creado en Panel → Conectores                 |
+| IBlock / catálogo     | Seleccione el/los iblock(s) que contienen su catálogo de productos     |
+| Tipo de precio        | Qué tipo de precio de Bitrix exportar                                  |
+| Moneda                | Código de moneda para los campos de precio                             |
+| Intervalo de sincronización | Minutos entre ejecuciones del agente en segundo plano            |
+| Modo de widget        | `auto-inject`, `component` o `manual` (véase la sección Widget a continuación) |
+| Modo de depuración    | Activar registro detallado                                             |
+
+### 3. Probar la conexión
+
+Haga clic en **Probar conexión** en la página de configuración. Esto llama a `POST /api/connectors/handshake`. Una respuesta exitosa muestra el slug del índice conectado.
+
+### 4. Ejecutar una sincronización completa
+
+Haga clic en **Sincronización completa del catálogo** en la página de configuración. El módulo:
+
+1. Lee todos los productos de los iblocks seleccionados usando `CIBlockElement::GetList`
+2. Normaliza cada producto con `ProductExporter`
+3. Envía productos en lotes a `POST /api/projects/:projectId/sync/full`
+4. Consulta `GET /api/projects/:projectId/sync/jobs/:jobId` para el estado
+5. Muestra los resultados en la página de diagnósticos
+
+## Forma de ProductDocument
+
+El `ProductExporter` mapea los campos iblock de Bitrix a la estructura de documento estándar:
+
+```json
+{
+	"external_id": "1234",
+	"title": "Zapatillas de running azules",
+	"description": "Zapatillas de running ligeras",
+	"sku": "BRS-42",
+	"brand": "Acme Sport",
+	"categories": ["Zapatos", "Running"],
+	"category_ids": ["10", "22"],
+	"price": 5999.0,
+	"sale_price": 4799.0,
+	"currency": "RUB",
+	"image_url": "https://myshop.example.ru/img/brs-42.jpg",
+	"product_url": "https://myshop.example.ru/catalog/brs-42/",
+	"availability": "in_stock",
+	"stock_quantity": 42,
+	"attributes": { "color": "azul", "size": "42" },
+	"locale": "ru"
+}
+```
+
+## Manejadores de eventos
+
+El módulo registra manejadores de eventos iblock para sincronizaciones delta automáticas:
+
+| Evento                        | Disparador                                      |
+| ----------------------------- | ----------------------------------------------- |
+| `OnAfterIBlockElementAdd`     | Nuevo producto — activa sincronización delta    |
+| `OnAfterIBlockElementUpdate`  | Producto actualizado — activa sincronización delta |
+| `OnAfterIBlockElementDelete`  | Producto eliminado — envía solicitud de eliminación |
+| `OnPriceUpdate`               | Precio cambiado (requiere módulo catalog de Bitrix) |
+| `OnIBlockSectionUpdate`       | Sección/categoría actualizada                   |
+
+## Agente en segundo plano
+
+El módulo registra un agente Bitrix para sincronización periódica y drenaje del buffer delta:
+
+```php
+\Aac\Search\SyncAgent::run();
+```
+
+El intervalo del agente es configurable en la configuración del módulo (predeterminado: cada 15 minutos). Use esto para:
+
+- Reintentar elementos de sincronización delta con errores
+- Sincronización completa periódica si los manejadores de eventos pierden eventos (p. ej., importaciones masivas)
+
+## Colocación del widget
+
+Hay tres modos disponibles:
+
+### Auto-inyección
+
+El módulo añade automáticamente la etiqueta `<script>` del widget a la sección `<head>` de su plantilla:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+### Componente Bitrix
+
+Coloque el componente AACsearch manualmente en su plantilla:
+
+```php
+<?$APPLICATION->IncludeComponent("aac:search.widget", "", []);?>
+```
+
+### Colocación manual
+
+Copie el fragmento del panel de AACsearch y péguelo directamente en su plantilla. La página de configuración del módulo muestra el fragmento actual para su índice.
+
+El valor `data-api-key` debe ser una clave `ss_search_*` — no el token de conector. Cree una clave de búsqueda en Panel → Búsqueda → API Keys.
+
+## Resolución de problemas
+
+**La prueba de conexión falla**
+Verifique que el token de conector sea válido y no haya sido revocado. Compruebe que la extensión PHP `curl` esté habilitada. Confirme que la URL de la API de AACsearch sea accesible desde su servidor.
+
+**Los productos no aparecen después de la sincronización completa**
+La indexación es asíncrona. Espere 30–60 segundos. Verifique Panel → Descripción general para el estado del pipeline de ingestión y cualquier lote con errores.
+
+**Los manejadores de eventos no se disparan**
+Confirme que el módulo esté instalado y que los manejadores de eventos estén registrados. En el admin de Bitrix, verifique la lista de eventos en **Configuración → Configuración del sistema → Eventos**.
+
+**El agente no se ejecuta**
+Verifique que el planificador de agentes de Bitrix esté activo. Verifique **Admin → Configuración → Rendimiento → Agentes** para confirmar que `Aac\Search\SyncAgent::run()` esté listado y en ejecución.
+
+## Páginas relacionadas
+
+- [Descripción general de conectores](/docs/connectors/overview)
+- [Ciclo de vida de la API de conector](/docs/connectors/connector-api-lifecycle)
+- [Descripción general del widget](/docs/connectors/widget-overview)

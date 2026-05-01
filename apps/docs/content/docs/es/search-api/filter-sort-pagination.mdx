@@ -1,0 +1,232 @@
+---
+title: Filtros, Ordenación y Paginación
+description: Referencia completa para expresiones de filtro, opciones de ordenación, facetado y paginación en las consultas de AACsearch.
+---
+
+AACsearch usa la sintaxis de filtro y ordenación de Typesense con algunas convenciones específicas del
+esquema de productos. Esta página es una referencia completa para construir expresiones de filtro, configurar
+órdenes de clasificación y paginar resultados.
+
+## Sintaxis de expresión de filtro
+
+Los filtros se especifican como una cadena usando lógica booleana.
+
+### Igualdad
+
+```
+availability:=in_stock
+brand:=Sony
+categories:=Electrónica
+locale:=es
+```
+
+### Negación
+
+```
+availability:!=out_of_stock
+brand:!=Competidores
+```
+
+### Rango (numérico)
+
+```
+price:>50
+price:<200
+price:[50..200]     # rango inclusivo
+price:(50..200)     # rango exclusivo
+```
+
+### Pertenencia a array
+
+```
+categories:=[Electrónica, Audio]
+brand:=[Sony, Bose, Sennheiser]
+```
+
+### Contiene cadena / prefijo
+
+Typesense admite solo coincidencia exacta de cadena para campos con faceta. Para búsqueda de prefijo, use `q` con `queryBy`.
+
+### Lógica booleana
+
+```
+# AND (ambas condiciones deben coincidir)
+availability:=in_stock && price:<200
+
+# OR (cualquier condición coincide)
+brand:=Sony || brand:=Bose
+
+# Agrupación
+(brand:=Sony || brand:=Bose) && availability:=in_stock && price:<200
+```
+
+### Filtro de tenant (automático)
+
+El manejador público antepone automáticamente:
+
+```
+organization_id:={organizationId}
+```
+
+No necesita añadir este filtro manualmente — siempre se aplica.
+
+## Campos de filtro disponibles
+
+El esquema de producto predeterminado incluye estos campos filtrables (marcados como `facet: true`):
+
+| Campo          | Tipo     | Ejemplo de filtro                  |
+| -------------- | -------- | ---------------------------------- |
+| `brand`        | string   | `brand:=Sony`                      |
+| `categories`   | string[] | `categories:=[Electrónica, Audio]` |
+| `availability` | string   | `availability:=in_stock`           |
+| `price`        | float    | `price:[10..500]`                  |
+| `sale_price`   | float    | `sale_price:<100`                  |
+| `locale`       | string   | `locale:=es`                       |
+
+## Facetado
+
+Las facetas calculan la distribución de valores para un campo entre los documentos coincidentes. Úselas para renderizar
+barras laterales de filtros.
+
+```json
+{
+	"q": "auriculares",
+	"facetBy": "brand,categories,availability"
+}
+```
+
+La respuesta incluye `facetCounts`:
+
+```json
+{
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 },
+				{ "value": "Sennheiser", "count": 19 }
+			]
+		},
+		{
+			"fieldName": "availability",
+			"counts": [
+				{ "value": "in_stock", "count": 89 },
+				{ "value": "out_of_stock", "count": 23 }
+			]
+		}
+	]
+}
+```
+
+### Facetas con filtros aplicados
+
+Cuando un filtro está activo, los recuentos de facetas reflejan el conjunto de resultados filtrado, no todo el índice:
+
+```json
+{
+	"q": "*",
+	"filterBy": "brand:=Sony",
+	"facetBy": "categories,availability"
+}
+```
+
+Esto devuelve recuentos de categorías y disponibilidad solo para los productos de Sony.
+
+## Ordenación
+
+### Ordenación por un solo campo
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "price:desc" }
+{ "sortBy": "created_at:desc" }
+{ "sortBy": "sale_price:asc" }
+```
+
+### Ordenación por relevancia primero (predeterminado)
+
+```json
+{ "sortBy": "_text_match:desc" }
+```
+
+Este es el predeterminado cuando se omite `sortBy`.
+
+### Ordenación por múltiples campos (desempate)
+
+```json
+{ "sortBy": "_text_match:desc,price:asc" }
+```
+
+Ordena primero por puntuación de relevancia; dentro de la misma puntuación, ordena por precio ascendente.
+
+### Presets de ordenación comunes
+
+| Etiqueta                 | Valor de `sortBy`  |
+| ------------------------ | ------------------ |
+| Más relevante            | `_text_match:desc` |
+| Precio: menor a mayor    | `price:asc`        |
+| Precio: mayor a menor    | `price:desc`       |
+| Más recientes primero    | `created_at:desc`  |
+| Precio de oferta: menor a mayor | `sale_price:asc` |
+
+## Paginación
+
+```json
+{
+	"page": 1, // indexado desde 1, predeterminado: 1
+	"perPage": 20 // predeterminado: 10, máx.: 100
+}
+```
+
+Campos de respuesta para paginación:
+
+```json
+{
+	"found": 142, // total de documentos coincidentes
+	"page": 1, // página actual
+	"outOf": 5000 // total de documentos en el índice (sin filtrar)
+}
+```
+
+Calcular el total de páginas:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+const hasMore = results.page * perPage < results.found;
+```
+
+### Advertencia de paginación profunda
+
+El rendimiento de Typesense se degrada con valores grandes de `page` para índices con más de 100K documentos.
+Para paginación profunda o exportaciones:
+
+1. Use valores crecientes de `page` con un `perPage` fijo
+2. O implemente paginación basada en cursor ordenando por un campo único (`id:asc`)
+   y usando `filterBy: "id:>lastSeenId"`
+
+## Selección de campos
+
+Reduzca el tamaño de la respuesta seleccionando solo los campos que necesita:
+
+```json
+{
+	"includeFields": "id,title,price,brand,availability",
+	"excludeFields": "description,tags"
+}
+```
+
+Use `excludeFields` para eliminar campos de texto grandes de las respuestas cuando no los renderiza
+(por ejemplo, `description` en un autocompletado de búsqueda mientras se escribe que solo muestra títulos).
+
+## Combinar filtros con tokens con ámbito
+
+Cuando se usa un token con ámbito, su `scopedFilter` se combina con AND con el `filterBy` del llamador:
+
+```
+scopedFilter del token:  "price:<100"
+filterBy del llamador:   "brand:=Sony && availability:=in_stock"
+filterBy efectivo:       "brand:=Sony && availability:=in_stock && price:<100"
+```
+
+El filtro del token no puede ser anulado por el `filterBy` del llamador.

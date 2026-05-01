@@ -1,0 +1,108 @@
+---
+title: "Descripción General del Panel"
+description: "La estructura del panel de AACsearch — ámbitos a nivel de organización y cuenta, navegación y lo que muestra la página de Descripción general."
+---
+
+El panel de AACsearch es la aplicación SaaS protegida en `apps/saas`. Está organizado en dos ámbitos: **nivel de organización** (su workspace de búsqueda) y **nivel de cuenta** (su cuenta personal y herramientas de administración).
+
+## Ámbitos del panel
+
+### Ámbito de organización (`/[orgSlug]/...`)
+
+Todo lo relacionado con la búsqueda para una organización específica vive aquí. Una organización se corresponde con un tenant en AACsearch — todos los índices, API keys, analíticas y facturación tienen como ámbito esa organización.
+
+| Ruta                          | Área                                                          |
+| ----------------------------- | ------------------------------------------------------------- |
+| `/[orgSlug]/overview`         | Panel KPI, consultas principales, feed de actividad, alertas de cuota |
+| `/[orgSlug]/getting-started`  | Lista de verificación de incorporación de 6 pasos            |
+| `/[orgSlug]/search`           | Workspace de búsqueda (pestañas de Índices, Playground, API Keys, Widget) |
+| `/[orgSlug]/api-keys`         | API keys en todos los índices                                 |
+| `/[orgSlug]/import-jobs`      | Historial de trabajos de importación                          |
+| `/[orgSlug]/preview`          | Vista previa de búsqueda / playground                         |
+| `/[orgSlug]/analytics`        | Analíticas de búsqueda — CTR, consultas principales, sesiones |
+| `/[orgSlug]/relevance`        | Sinónimos, Curaciones, Stopwords, Presets                    |
+| `/[orgSlug]/connectors`       | Estado del módulo CMS, tokens de conector, historial de trabajos de sincronización |
+| `/[orgSlug]/knowledge`        | Espacios de conocimiento (RAG/GraphRAG — superficie de producto separada) |
+| `/[orgSlug]/settings/general` | Configuración de la organización                              |
+| `/[orgSlug]/settings/members` | Gestión de miembros, invitaciones                             |
+| `/[orgSlug]/settings/billing` | Facturación y plan de la organización                         |
+
+### Ámbito de cuenta (`/...`)
+
+La configuración personal y las herramientas de administración viven fuera del contexto de la organización.
+
+| Ruta                           | Área                                                  |
+| ------------------------------ | ----------------------------------------------------- |
+| `/settings/general`            | Perfil de la cuenta                                   |
+| `/settings/security`           | Contraseña, 2FA (TOTP, passkeys), conexiones OAuth    |
+| `/settings/notifications`      | Preferencias de notificaciones                        |
+| `/settings/billing`            | Facturación personal                                  |
+| `/settings/billing/ai-credits` | Wallet de IA (en desarrollo activo — v0.6)            |
+| `/knowledge`                   | Espacios de conocimiento personales                   |
+| `/chatbot`                     | Chatbot de IA                                         |
+| `/admin/*`                     | Herramientas de administración del sitio (solo usuarios admin — véase a continuación) |
+
+## La página de Descripción general
+
+La página de descripción general de la organización (`/[orgSlug]/overview`) es la página de inicio principal después de seleccionar una organización. Muestra:
+
+### Tarjetas KPI
+
+Cuatro métricas de resumen para el período seleccionado (24h / 7d / 30d):
+
+| Tarjeta               | Fuente                                                |
+| --------------------- | ----------------------------------------------------- |
+| Total de búsquedas    | Consumo de unidades de búsqueda de los derechos del plan |
+| Documentos indexados  | Recuento de documentos de los derechos del plan       |
+| Uso de cuota          | `searches.percentUsed` de `entitlements.plan`         |
+| Trabajos de sincronización con error | Derivado del estado del pipeline de ingestión |
+
+Aparece un banner de advertencia cuando la cuota alcanza el 80%, y un banner de error cuando se supera.
+
+### Búsquedas a lo largo del tiempo
+
+Un gráfico sparkline que muestra el volumen de búsqueda durante el período seleccionado. Los datos provienen de filas `SearchUsageEvent` mediante el procedimiento oRPC `search.usage`.
+
+### Consultas principales
+
+Una lista clasificada de las 10 consultas de búsqueda más frecuentes para el período. Impulsado por el procedimiento `search.topQueries` que agrupa filas `SearchUsageEvent` por texto de consulta.
+
+### Feed de actividad
+
+Una lista ordenada por tiempo de eventos recientes derivados de marcas de tiempo de creación de índices y recuentos de API keys. Un procedimiento `recentActivity` dedicado está planificado para v1.x; el feed actual se deriva de los datos de consulta existentes.
+
+### Estado del conector
+
+Muestra si algún conector ha llamado al endpoint de latido recientemente. El estado se deriva de `lastUsedAt` en los tokens de conector:
+
+- **En línea** — último latido en los últimos 5 minutos
+- **Desconocido** — último latido en los últimos 30 minutos
+- **Sin conexión** — sin latido reciente
+
+### Tarjeta del plan
+
+Muestra el nombre y estado del plan activo (activo / cancelado / vencido). Enlaza a la página de facturación.
+
+## Selector de período
+
+La página de descripción general admite un selector de período (24h / 7d / 30d) almacenado en la URL como `?period=7d`. Esto controla todas las agregaciones KPI en la página.
+
+## Estructura de navegación
+
+La barra lateral tiene 9 elementos a nivel de organización:
+
+1. Descripción general
+2. Primeros pasos
+3. Búsqueda
+4. Analíticas
+5. Relevancia
+6. Conectores
+7. Conocimiento
+8. Configuración
+9. (Facturación — anidada en Configuración)
+
+## Páginas relacionadas
+
+- [Workspace de búsqueda](/docs/dashboard/search-workspace)
+- [Conocimiento y administración](/docs/dashboard/knowledge-and-admin)
+- [Primeros pasos: Cree su primer índice](/docs/getting-started/create-first-index)

@@ -1,0 +1,108 @@
+---
+title: "Dashboard-Übersicht"
+description: "Die AACsearch-Dashboard-Struktur — org-spezifische und konto-spezifische Bereiche, Navigation und was die Übersichtsseite zeigt."
+---
+
+Das AACsearch-Dashboard ist die geschützte SaaS-Anwendung unter `apps/saas`. Es ist in zwei Bereiche unterteilt: **Organisationsebene** (Ihr Such-Workspace) und **Kontoebene** (Ihr persönliches Konto und Admin-Tools).
+
+## Dashboard-Bereiche
+
+### Organisationsbereich (`/[orgSlug]/...`)
+
+Alles, was mit der Suche für eine bestimmte Organisation zusammenhängt, befindet sich hier. Eine Organisation entspricht einem Mandanten in AACsearch — alle Indizes, API-Schlüssel, Analysen und Abrechnungen sind darauf beschränkt.
+
+| Pfad                          | Bereich                                                           |
+| ----------------------------- | ----------------------------------------------------------------- |
+| `/[orgSlug]/overview`         | KPI-Dashboard, Top-Anfragen, Aktivitätsfeed, Kontingent-Warnungen |
+| `/[orgSlug]/getting-started`  | 6-Schritt-Onboarding-Checkliste                                   |
+| `/[orgSlug]/search`           | Such-Workspace (Indizes, Playground, API-Schlüssel, Widget-Tabs)  |
+| `/[orgSlug]/api-keys`         | API-Schlüssel über alle Indizes                                   |
+| `/[orgSlug]/import-jobs`      | Import-Job-Verlauf                                                |
+| `/[orgSlug]/preview`          | Suchvorschau / Playground                                         |
+| `/[orgSlug]/analytics`        | Such-Analysen — CTR, Top-Anfragen, Sitzungen                      |
+| `/[orgSlug]/relevance`        | Synonyme, Kurationen, Stoppwörter, Presets                        |
+| `/[orgSlug]/connectors`       | CMS-Modul-Status, Connector-Token, Sync-Job-Verlauf               |
+| `/[orgSlug]/knowledge`        | Knowledge-Spaces (RAG/GraphRAG — separate Produktoberfläche)      |
+| `/[orgSlug]/settings/general` | Organisationseinstellungen                                        |
+| `/[orgSlug]/settings/members` | Mitgliederverwaltung, Einladungen                                 |
+| `/[orgSlug]/settings/billing` | Org-Abrechnung und Plan                                           |
+
+### Kontobereich (`/...`)
+
+Persönliche Einstellungen und Admin-Tools befinden sich außerhalb des Org-Kontexts.
+
+| Pfad                           | Bereich                                                    |
+| ------------------------------ | ---------------------------------------------------------- |
+| `/settings/general`            | Kontoprofil                                                |
+| `/settings/security`           | Passwort, 2FA (TOTP, Passkeys), OAuth-Verbindungen         |
+| `/settings/notifications`      | Benachrichtigungseinstellungen                             |
+| `/settings/billing`            | Persönliche Abrechnung                                     |
+| `/settings/billing/ai-credits` | KI-Wallet (aktive Entwicklung — v0.6)                     |
+| `/knowledge`                   | Persönliche Knowledge-Spaces                               |
+| `/chatbot`                     | KI-Chatbot                                                 |
+| `/admin/*`                     | Website-Admin-Tools (nur Admin-Benutzer — siehe unten)     |
+
+## Die Übersichtsseite
+
+Die Org-Übersichtsseite (`/[orgSlug]/overview`) ist die primäre Zielseite, nachdem Sie eine Organisation ausgewählt haben. Sie zeigt:
+
+### KPI-Kacheln
+
+Vier Zusammenfassungsmetriken für den ausgewählten Zeitraum (24h / 7d / 30d):
+
+| Kachel                | Quelle                                                    |
+| --------------------- | --------------------------------------------------------- |
+| Gesamtsuchen          | Sucheinheiten-Verbrauch aus Plan-Berechtigungen           |
+| Indizierte Dokumente  | Dokumentanzahl aus Plan-Berechtigungen                    |
+| Kontingentnutzung     | `searches.percentUsed` aus `entitlements.plan`            |
+| Fehlgeschlagene Sync-Jobs | Abgeleitet aus dem Ingest-Pipeline-Status              |
+
+Ein Warnbanner erscheint, wenn das Kontingent 80% erreicht, und ein Fehlerbanner, wenn es überschritten wird.
+
+### Suchen über Zeit
+
+Ein Sparkline-Diagramm, das das Suchvolumen über den ausgewählten Zeitraum zeigt. Daten stammen aus `SearchUsageEvent`-Zeilen über die oRPC-Prozedur `search.usage`.
+
+### Top-Anfragen
+
+Eine gerankte Liste der 10 häufigsten Suchanfragen für den Zeitraum. Gespeist von der Prozedur `search.topQueries`, die `SearchUsageEvent`-Zeilen nach Anfragetext gruppiert.
+
+### Aktivitätsfeed
+
+Eine zeitgeordnete Liste der letzten Ereignisse, abgeleitet aus Index-Erstellungszeitstempeln und API-Schlüssel-Zählungen. Eine dedizierte `recentActivity`-Prozedur ist für v1.x geplant; der aktuelle Feed wird aus vorhandenen Abfragedaten abgeleitet.
+
+### Connector-Status
+
+Zeigt an, ob ein Connector kürzlich den Heartbeat-Endpunkt aufgerufen hat. Status wird aus `lastUsedAt` auf Connector-Token abgeleitet:
+
+- **Online** — letzter Heartbeat innerhalb von 5 Minuten
+- **Unbekannt** — letzter Heartbeat innerhalb von 30 Minuten
+- **Offline** — kein kürzlicher Heartbeat
+
+### Plan-Karte
+
+Zeigt den aktiven Plan-Namen und Status (aktiv / gekündigt / überfällig). Links zur Abrechnungsseite.
+
+## Zeitraumauswahl
+
+Die Übersichtsseite unterstützt eine Zeitraumauswahl (24h / 7d / 30d), die in der URL als `?period=7d` gespeichert wird. Dies steuert alle KPI-Aggregationen auf der Seite.
+
+## Navigationsstruktur
+
+Die Seitenleiste hat 9 Elemente auf der Org-Ebene:
+
+1. Übersicht
+2. Erste Schritte
+3. Suche
+4. Analytics
+5. Relevanz
+6. Connectoren
+7. Knowledge
+8. Einstellungen
+9. (Abrechnung — unter Einstellungen verschachtelt)
+
+## Verwandte Seiten
+
+- [Such-Workspace](/docs/dashboard/search-workspace)
+- [Knowledge und Admin](/docs/dashboard/knowledge-and-admin)
+- [Erste Schritte: Ersten Index erstellen](/docs/getting-started/create-first-index)

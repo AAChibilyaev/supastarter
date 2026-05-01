@@ -1,0 +1,188 @@
+---
+title: Endpoint de Búsqueda Pública
+description: Referencia completa para el endpoint POST /api/search — esquema de solicitud, parámetros y formato de respuesta.
+---
+
+El endpoint de búsqueda pública es la forma principal de ejecutar consultas de búsqueda. Acepta solicitudes
+JSON POST autenticadas con una clave `ss_search_*` o `ss_scoped_*`.
+
+**Endpoint:** `POST /api/search`
+
+**Autenticación:** `Authorization: Bearer ss_search_your_key`
+
+## Esquema de solicitud
+
+```typescript
+{
+  // Requerido
+  indexSlug: string;                   // slug del índice objetivo
+
+  // Consulta
+  q: string;                           // consulta de búsqueda (use "*" para comodín/exploración)
+  queryBy?: string;                    // nombres de campos separados por comas para buscar
+                                       // predeterminado: "title,sku,brand,description"
+
+  // Filtrado
+  filterBy?: string;                   // expresión de filtro de Typesense
+  facetBy?: string;                    // campos separados por comas para calcular facetas
+
+  // Ordenación
+  sortBy?: string;                     // p. ej. "price:asc" o "_text_match:desc,price:asc"
+
+  // Paginación
+  page?: number;                       // indexado desde 1 (predeterminado: 1)
+  perPage?: number;                    // predeterminado: 10, máx.: 100
+
+  // Resaltado
+  highlightFields?: string;            // campos separados por comas para resaltar
+  highlightStartTag?: string;          // predeterminado: "<mark>"
+  highlightEndTag?: string;            // predeterminado: "</mark>"
+
+  // Selección de campos
+  includeFields?: string;              // devolver solo estos campos
+  excludeFields?: string;              // excluir estos campos de la respuesta
+}
+```
+
+## Ejemplo: búsqueda básica
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "auriculares inalámbricos",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Ejemplo: búsqueda filtrada con facetas
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "auriculares",
+    "queryBy": "title,brand",
+    "filterBy": "availability:=in_stock && price:<200",
+    "facetBy": "brand,categories",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Esquema de respuesta
+
+```typescript
+{
+  found: number;           // total de documentos coincidentes
+  page: number;            // página actual (indexada desde 1)
+  outOf: number;           // total de documentos en el índice
+  searchTimeMs: number;    // tiempo de ejecución de la consulta en milisegundos
+
+  hits: Array<{
+    document: Record<string, unknown>;  // el documento coincidente
+    highlights: Array<{
+      field: string;
+      snippet: string;     // HTML con etiquetas <mark> alrededor de los términos coincidentes
+    }>;
+    textMatchScore: number;
+  }>;
+
+  facetCounts?: Array<{
+    fieldName: string;
+    counts: Array<{
+      value: string;
+      count: number;
+    }>;
+  }>;
+}
+```
+
+## Ejemplo de respuesta
+
+```json
+{
+	"found": 142,
+	"page": 1,
+	"outOf": 5000,
+	"searchTimeMs": 4,
+	"hits": [
+		{
+			"document": {
+				"id": "product-123",
+				"title": "Auriculares inalámbricos Sony WH-1000XM5",
+				"brand": "Sony",
+				"price": 349.99,
+				"availability": "in_stock"
+			},
+			"highlights": [
+				{
+					"field": "title",
+					"snippet": "Auriculares <mark>inalámbricos</mark> Sony WH-1000XM5"
+				}
+			],
+			"textMatchScore": 578730
+		}
+	],
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 }
+			]
+		}
+	]
+}
+```
+
+## Comodines de consulta
+
+Use `q: "*"` para devolver todos los documentos (útil para explorar con filtros):
+
+```json
+{
+	"indexSlug": "products",
+	"q": "*",
+	"filterBy": "categories:=Electrónica",
+	"sortBy": "price:asc"
+}
+```
+
+## Aislamiento de tenant
+
+El manejador público añade automáticamente un filtro de tenant a cada consulta:
+
+```
+organization_id:={organizationId}
+```
+
+Este filtro se combina con AND con cualquier `filterBy` que proporcione el llamador. El llamador no puede eliminarlo ni
+anularlo. El acceso a datos entre organizaciones es arquitectónicamente imposible a través de este endpoint.
+
+## Parámetros de consulta predeterminados
+
+AACsearch aplica estos valores predeterminados si no se especifican:
+
+| Parámetro           | Valor predeterminado                       |
+| ------------------- | ------------------------------------------ |
+| `queryBy`           | `"title,sku,brand,categories,description"` |
+| `sortBy`            | `"_text_match:desc"`                       |
+| `page`              | `1`                                        |
+| `perPage`           | `10`                                       |
+| `highlightStartTag` | `"<mark>"`                                 |
+| `highlightEndTag`   | `"</mark>"`                                |
+
+## Notas de rendimiento
+
+- Latencia típica de consulta: < 10 ms para índices con menos de 100K documentos
+- El tiempo de respuesta aumenta con expresiones `filterBy` complejas y muchas facetas
+- Evite `perPage > 50` para consultas con muchas facetas — aumenta el tiempo de procesamiento de Typesense
+- Use `excludeFields` para eliminar campos de texto grandes (por ejemplo, `description`) de los resultados que no renderiza

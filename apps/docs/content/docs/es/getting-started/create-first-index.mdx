@@ -1,0 +1,129 @@
+---
+title: Cree Su Primer Índice
+description: Cree un índice de búsqueda, comprenda el modelo de colección-alias y ejecute su primera consulta de búsqueda a través del panel.
+---
+
+Un **índice de búsqueda** en AACsearch se corresponde con una colección Typesense con nomenclatura versionada y un alias.
+Crear un índice aprovisiona la colección Typesense y registra el índice en la base de datos.
+
+## ¿Qué es un índice?
+
+Cada índice representa un catálogo de búsqueda — típicamente uno por tienda o conjunto de productos.
+
+```
+Organización
+  └── SearchIndex (slug: "products")
+        collectionName: "org123_products_v1"   ← colección Typesense (versionada)
+        aliasName:      "org123_products"       ← alias Typesense (estable, siempre apunta al actual)
+```
+
+Todas las consultas de búsqueda tienen como objetivo el **alias**, no la colección versionada directamente. Esto permite
+la reindexación sin tiempo de inactividad — se construye una nueva versión mientras la versión actual atiende el tráfico,
+luego el alias se intercambia de forma atómica.
+
+## Crear un índice mediante el panel
+
+1. Abra el panel SaaS en `http://localhost:3000`
+2. Seleccione su organización del selector
+3. Navegue a **Búsqueda** → **Índices**
+4. Haga clic en **Crear índice**
+5. Ingrese un slug (por ejemplo, `products`) y un nombre de visualización opcional
+6. Haga clic en **Crear**
+
+El panel llama a `searchRouter.createIndex` que aprovisiona la colección Typesense
+y crea la fila `SearchIndex` en Postgres.
+
+## Crear un índice mediante oRPC
+
+```typescript
+import { orpc } from "@shared/lib/orpc-query-utils";
+
+const index = await orpc.search.createIndex.call({
+	organizationId: "org_...",
+	slug: "products",
+	name: "Catálogo de productos",
+});
+```
+
+## Esquema de colección predeterminado
+
+Cuando se crea un índice, AACsearch aprovisiona una colección Typesense con un esquema optimizado para productos:
+
+```json
+{
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string", "weight": 10 },
+		{ "name": "sku", "type": "string", "weight": 8 },
+		{ "name": "brand", "type": "string", "weight": 5, "facet": true },
+		{ "name": "categories", "type": "string[]", "weight": 5, "facet": true },
+		{ "name": "description", "type": "string", "weight": 2 },
+		{ "name": "price", "type": "float", "facet": true },
+		{ "name": "sale_price", "type": "float", "optional": true },
+		{ "name": "availability", "type": "string", "facet": true },
+		{ "name": "locale", "type": "string", "facet": true },
+		{ "name": "created_at", "type": "int64" }
+	],
+	"default_sorting_field": "_text_match"
+}
+```
+
+El esquema está definido en `packages/search/lib/collections.ts` y evoluciona con la versión del esquema de productos.
+
+## Ingestar su primer documento
+
+Una vez creado el índice, envíe un documento a través del buffer de ingestión:
+
+```typescript
+const result = await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-123",
+		title: "Auriculares inalámbricos",
+		sku: "WH-2024",
+		brand: "Acme",
+		categories: ["Electrónica", "Audio"],
+		description: "Auriculares de diadema con cancelación de ruido y 30h de batería.",
+		price: 99.99,
+		availability: "in_stock",
+		locale: "es",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+Esto llama a `enqueueManySearchIngest()` que escribe en `SearchIngestBuffer`. El trabajador en segundo plano
+lo recoge y lo reenvía a Typesense en segundos.
+
+## Ejecutar una consulta de búsqueda
+
+Use la pestaña **Vista previa de búsqueda** en el panel, o llame directamente al endpoint de búsqueda pública:
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "auriculares",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 10
+  }'
+```
+
+Consulte [Endpoint de búsqueda pública](/docs/search-api/public-search-endpoint) para el esquema completo de la solicitud.
+
+## Qué sucede después de la creación del índice
+
+1. La lista de verificación de **Primeros pasos** del panel se actualiza para marcar "Crear índice" como completado
+2. La pestaña **Trabajos de importación** queda disponible para importación masiva de CSV/JSON
+3. La pestaña **API Keys** muestra el panel de clave con ámbito de índice
+4. La pestaña **Widget** muestra el fragmento de instalación prellenado con el slug del índice
+
+## Próximos pasos
+
+- [API Keys](/docs/getting-started/api-keys) — genere claves para su integración
+- [Ingestión y reindexación](/docs/getting-started/ingest-and-reindex) — importación masiva y actualizaciones de esquema
+- [Incorporación de conectores](/docs/getting-started/connector-onboarding) — conecte un CMS para sincronización automática

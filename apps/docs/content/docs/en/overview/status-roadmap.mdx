@@ -1,0 +1,118 @@
+---
+title: Status & Roadmap
+description: What has shipped, what is in progress, and what is planned for AACsearch.
+---
+
+This page is the authoritative reference for feature status. Use it to understand what is safe to
+rely on in production, what is actively being built, and what remains on the roadmap.
+
+## Shipped (production-ready)
+
+These features exist in the codebase and are ready to use.
+
+### Core search
+
+| Feature                                   | Package / file                        |
+| ----------------------------------------- | ------------------------------------- |
+| Typesense client (server-side only)       | `packages/search/lib/client.ts`       |
+| Collection schema management + versioning | `packages/search/lib/collections.ts`  |
+| DB-first ingest buffer                    | `packages/search/lib/buffer.ts`       |
+| searchDocuments / multiSearchDocuments    | `packages/search/lib/search.ts`       |
+| Zero-downtime alias-swap reindex          | `packages/search/lib/reindex.ts`      |
+| API key generation + hashing              | `packages/search/lib/keys.ts`         |
+| Browser SDK                               | `packages/search-client/src/index.ts` |
+
+### Authentication & multi-tenancy
+
+| Feature                                      | Notes                                                    |
+| -------------------------------------------- | -------------------------------------------------------- |
+| Org-scoped auth via Better Auth              | Organizations are the primary workspace                  |
+| API keys (hashed, scoped, origin-restricted) | Prefixes: `ss_search_*`, `ss_connector_*`, `ss_scoped_*` |
+| Scoped search tokens (HMAC)                  | Stateless, signed over `BETTER_AUTH_SECRET`              |
+| Per-plan quota enforcement                   | `packages/api/modules/entitlements/`                     |
+| Rate limiting per key/IP                     | `packages/search/lib/keys.ts` + DB bucket                |
+
+### Widget & connector
+
+| Feature                       | Notes                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------ |
+| Hosted widget                 | `packages/widget/` — Vanilla JS, Shadow DOM, 14 KB                                         |
+| Connector API                 | 7 endpoints: handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status |
+| Connector token CRUD          | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`           |
+| Sync job tracking (in-memory) | Lost on restart — acceptable for MVP                                                       |
+
+### Relevance controls
+
+| Feature                      | Notes                                 |
+| ---------------------------- | ------------------------------------- |
+| Synonyms                     | `searchRouter.synonyms.{get,update}`  |
+| Curations                    | `searchRouter.curations.{get,update}` |
+| Collection schema management | `searchRouter.schema.{get,update}`    |
+
+### Knowledge module (R2.5)
+
+RAG/GraphRAG over documents. Separate product surface from storefront search.
+
+- `KnowledgeSpace`, `DataSource`, `IngestionJob`, `KnowledgeDocument`, `KnowledgeChunk`, `GraphNode`, `GraphEdge` Prisma models
+- 10 oRPC procedures: list/create spaces, list/create sources, list ingestion jobs, ingest-file, ask, graphrag-explain, usage-metrics
+- `KnowledgeWorkbench.tsx` UI, org-scope + account-scope routes
+
+## Active WIP
+
+These features are in active development and may change.
+
+| Feature                                              | Status                                                                  |
+| ---------------------------------------------------- | ----------------------------------------------------------------------- |
+| v0.6 metering (Tochka top-up, wallet)                | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/` |
+| `recordSearchUsage` rollup aggregation               | Raw rows exist; `UsageCounter` table deferred                           |
+| Admin pages (audit, wallet, notifications, security) | Committed as stubs — operational content TBD                            |
+
+## Skeleton / untracked
+
+| Feature           | Notes                                                        |
+| ----------------- | ------------------------------------------------------------ |
+| PrestaShop module | `modules/prestashop/aacsearch/` — PHP, separate commit track |
+| Bitrix module     | `modules/bitrix/aac.search/` — PHP, separate commit track    |
+
+These modules have the correct file structure (`Aacsearch.php`, `config.xml`, `classes/`, `controllers/`, `views/`)
+but are not tracked in the main repo. They follow the connector API contract described in
+[Connector API Lifecycle](/docs/connectors/connector-api-lifecycle).
+
+## Planned
+
+| Feature                            | Target                      |
+| ---------------------------------- | --------------------------- |
+| Self-host quickstart + Helm chart  | v1.0                        |
+| `Project` as first-class DB entity | v1.x (DB-unfreeze required) |
+| `WidgetConfig` DB model            | v1.x (DB-unfreeze required) |
+| `AnalyticsEvent` capture endpoint  | v1.x                        |
+| `recentActivity` procedure         | v1.x                        |
+| Stopwords + Presets sub-tabs       | v1.x                        |
+| Schema Manager UI                  | v1.x                        |
+
+## Out of scope (v1)
+
+The following are **explicitly not planned** for v1:
+
+- AI chat / conversational search
+- Personalization profiles per visitor
+- Recommendations engine
+- A/B testing for relevance
+- Enterprise SSO (SAML/OIDC)
+- Multi-region Typesense replication
+- Dedicated single-tenant clusters
+- Connectors beyond PrestaShop and Bitrix
+- Deep BI analytics beyond dashboard cards
+
+## Roadmap releases
+
+| Release | Goal                                                 | Status               |
+| ------- | ---------------------------------------------------- | -------------------- |
+| R0      | Foundation — supastarter + AACsearch scaffold        | ✅ Done              |
+| R1      | Vertical slice — search works end-to-end without CMS | ✅ Done              |
+| R2      | Connector alpha — real shops start syncing           | 🟡 Partially shipped |
+| R2.5    | Knowledge module (RAG/GraphRAG)                      | ✅ Done              |
+| v0.5    | Marketing site rebrand in 5 locales                  | ✅ Done              |
+| v0.6    | Search-unit metering wired to payment provider       | 🟡 Active WIP        |
+| v0.7    | Public docs site                                     | 🟡 You are here      |
+| v1.0    | Self-host quickstart + Helm chart                    | ⏳ Planned           |

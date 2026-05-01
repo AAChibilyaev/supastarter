@@ -1,0 +1,153 @@
+---
+title: Scoped Search Tokens
+description: Generate short-lived HMAC tokens that narrow a search key's permissions — per-user filters, TTL, and security model.
+---
+
+Scoped tokens let you create short-lived, cryptographically signed search tokens that narrow what
+a caller can see. Generate them server-side and pass them to the browser — the base `ss_search_*`
+key never leaves your server.
+
+## When to use scoped tokens
+
+| Scenario                                                        | Use scoped token?                    |
+| --------------------------------------------------------------- | ------------------------------------ |
+| Single-tenant storefront (one org, one store)                   | No — `ss_search_*` key is sufficient |
+| Multi-tenant app where users should only see their own products | **Yes**                              |
+| Exposing search to a third party with restricted access         | **Yes**                              |
+| Limiting results to a specific price tier                       | **Yes**                              |
+| Short-lived widget embed with expiry                            | **Yes**                              |
+| Internal dashboard preview                                      | No — use session-based oRPC          |
+
+## How scoped tokens work
+
+Scoped tokens are stateless HMAC-SHA256 signed claims — they are never stored in the database.
+
+```
+Token structure:
+  ss_scoped_{base64url(payload)}.{HMAC-SHA256 signature}
+
+Payload:
+  {
+    "organizationId": "org_...",
+    "indexSlug": "products",
+    "scopedFilter": "availability:=in_stock",
+    "issuedAt": 1717200000,
+    "expiresAt": 1717203600   // optional
+  }
+
+Signature:
+  HMAC-SHA256(payload, BETTER_AUTH_SECRET)
+```
+
+The signature is verified server-side on every request. Tampering with the payload (e.g., removing
+the `scopedFilter`) invalidates the signature and results in a 401 response.
+
+## Generate a scoped token
+
+### Via oRPC (server-side)
+
+```typescript
+// Server Component, Server Action, or API route
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100", // always AND-combined with caller filters
+	expiresInSeconds: 3600, // 1 hour TTL
+	name: "Budget search for user XYZ", // optional label for audit
+});
+
+// scopedToken.token: "ss_scoped_abc...123" — pass to browser
+```
+
+### Via dashboard
+
+1. Navigate to **Search** → **API Keys** → **Scoped Tokens**
+2. Click **Create scoped token**
+3. Enter the `scopedFilter` expression
+4. Set expiry
+5. Copy the generated token
+
+Note: Dashboard-generated tokens are for testing. Production tokens should always be
+generated dynamically per-user in a server-side handler.
+
+## Use a scoped token in the browser
+
+Scoped tokens are used exactly like regular search keys:
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+// Token received from your server (e.g., via a Server Action or API route)
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+
+const results = await client.search({
+	q: "headphones",
+	filterBy: "brand:=Sony", // Caller's filter: only Sony brand
+	// AACsearch will AND-combine this with "price:<100" from the token
+	// Effective filter: "brand:=Sony && price:<100"
+});
+```
+
+## Filter combination
+
+The `scopedFilter` from the token is always AND-combined with the caller's `filterBy`.
+The caller cannot remove or bypass the token's filter.
+
+```
+Caller filterBy:    "brand:=Sony"
+Token scopedFilter: "price:<100"
+Effective filter:   "brand:=Sony && price:<100"
+```
+
+This is implemented by `combineFilters()` in `packages/api/modules/search/lib/scoped-token.ts`.
+Bypassing this function is a **Hard Invariant violation** in the codebase.
+
+## Expiry
+
+Set `expiresInSeconds` to limit token validity. After expiry, the token returns 401.
+
+Recommended TTLs:
+
+| Context               | TTL                        |
+| --------------------- | -------------------------- |
+| Widget session        | 1–4 hours                  |
+| Single page load      | 15–30 minutes              |
+| Testing / development | No expiry (omit the field) |
+
+Expired tokens are rejected server-side — no client-side timer or refresh mechanism is needed.
+
+## Rotation pattern
+
+For session-scoped tokens, generate a new token each time a user session is established:
+
+```typescript
+// Next.js middleware or server action called on session start
+export async function generateSearchToken(session: Session) {
+	return await orpc.search.createScopedToken.call({
+		organizationId: session.organizationId,
+		indexSlug: "products",
+		scopedFilter: `organization_id:=${session.organizationId}`,
+		expiresInSeconds: 4 * 60 * 60, // 4 hours
+	});
+}
+```
+
+Store the token in the client (e.g., React context, Zustand store) for the session duration.
+
+## Security model
+
+- Scoped tokens are signed over `BETTER_AUTH_SECRET` — keep this secret secure
+- The token payload is base64-encoded but not encrypted — treat it as opaque to the browser
+- Do not put sensitive data in the `scopedFilter` expression (it is visible in the token payload)
+- For very sensitive filters, use server-side search instead of a scoped token
+
+## Limitations
+
+- Scoped tokens can only **narrow** permissions — they cannot grant access to indexes or orgs
+  that the base key does not already have access to
+- A scoped token is bound to a single index slug
+- Scoped tokens do not support `connector_write` operations — they are search-only

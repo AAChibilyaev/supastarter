@@ -1,0 +1,149 @@
+---
+title: "PrestaShop Module"
+description: "Install and configure the AACsearch module for PrestaShop 8.x."
+---
+
+> **Status: Early preview.** The module skeleton is functional — handshake, full sync, delta sync, and widget injection all work. Installation packaging and admin UI polish are still in progress. Expect rough edges.
+
+The AACsearch PrestaShop module (`modules/aacsearch`) integrates your PrestaShop 8.x catalog with AACsearch. It handles:
+
+- Exporting products to AACsearch via the Connector API
+- Triggering delta syncs on product create/update/delete/stock events
+- Injecting the hosted search widget into your storefront `<head>`
+
+## Requirements
+
+- PrestaShop 8.x (compatible with PS 9 — hook API is the same)
+- PHP 7.4 or higher
+- cURL extension enabled
+- An AACsearch account with at least one search index created
+- A connector token (`ss_connector_*`) bound to that index
+
+## Module file layout
+
+```
+modules/aacsearch/
+  aacsearch.php                           # Main module class — install/uninstall/hooks
+  config.xml                              # Module descriptor (name, version, author)
+  index.php                               # Directory listing guard
+  classes/
+    AacSearchClient.php                   # HTTP client wrapping all Connector API calls
+    AacSearchProductExporter.php          # Normalizes PS products → ProductDocument shape
+    AacSearchSyncQueue.php                # Batches products and manages retry state
+  controllers/
+    admin/
+      AdminAacSearchController.php        # Admin settings + diagnostics page
+  views/
+    templates/
+      admin/configure.tpl                 # Settings form template
+      hook/widget.tpl                     # Widget injection template
+```
+
+## Install steps
+
+### 1. Upload the module
+
+Copy the `modules/aacsearch/` directory into your PrestaShop `modules/` directory. Then navigate to **Back Office → Modules → Module Manager** and install "AACsearch".
+
+### 2. Configure the module
+
+Open the module configuration page (**Modules → AACsearch → Configure**) and fill in:
+
+| Field             | Description                                                            |
+| ----------------- | ---------------------------------------------------------------------- |
+| AACsearch API URL | Base URL of your AACsearch instance (e.g. `https://app.aacsearch.com`) |
+| Project ID        | Your organization ID from the AACsearch dashboard                      |
+| Connector token   | The `ss_connector_*` token created in Dashboard → Connectors           |
+| Sync enabled      | Enable automatic delta syncs on product events                         |
+| Widget enabled    | Inject the hosted widget into the storefront                           |
+| Locale            | Default locale for search results (e.g. `en`, `ru`)                    |
+| Default currency  | Currency code used in price fields                                     |
+| Batch size        | Products per sync request (default: 200, max: 1000)                    |
+| Debug mode        | Write verbose logs to `/var/logs/aacsearch.log`                        |
+
+### 3. Test the connection
+
+Click **Test Connection** on the settings page. This calls `POST /api/connectors/handshake`. A successful response shows the connected index slug and confirms the token is valid.
+
+### 4. Run a full sync
+
+Click **Full Sync** to export all products. The module reads products in batches (controlled by the batch size setting), normalizes them using `AacSearchProductExporter`, and sends each batch to `POST /api/projects/:projectId/sync/full`.
+
+Large catalogs may take several minutes. Progress and any errors are shown on the diagnostics page.
+
+## ProductDocument shape
+
+The exporter maps PrestaShop product fields to the following document structure:
+
+```json
+{
+	"external_id": "123",
+	"title": "Blue Running Shoes",
+	"description": "Lightweight running shoes for all terrains",
+	"sku": "BRS-42",
+	"brand": "Acme Sport",
+	"categories": ["Shoes", "Running"],
+	"category_ids": ["10", "22"],
+	"tags": ["sale", "new-arrival"],
+	"price": 99.99,
+	"sale_price": 79.99,
+	"currency": "EUR",
+	"image_url": "https://myshop.example.com/img/brs-42.jpg",
+	"product_url": "https://myshop.example.com/products/brs-42",
+	"availability": "in_stock",
+	"stock_quantity": 42,
+	"attributes": { "color": "blue", "size": "42" },
+	"locale": "en"
+}
+```
+
+## Hooks
+
+The module registers these PrestaShop hooks for automatic delta syncs:
+
+| Hook                             | Trigger                                                        |
+| -------------------------------- | -------------------------------------------------------------- |
+| `displayHeader`                  | Injects the widget `<script>` tag into the storefront `<head>` |
+| `actionProductUpdate`            | Fires after a product is saved — triggers delta sync           |
+| `actionObjectProductDeleteAfter` | Fires after a product is deleted — sends a delete request      |
+| `actionUpdateQuantity`           | Stock change — triggers delta sync                             |
+
+## Widget injection
+
+When **Widget enabled** is checked, the module outputs an embed snippet through the `displayHeader` hook:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+The `data-api-key` value is a separate `ss_search_*` key — not the connector token. The search key can be read-only and is safe to embed in the browser.
+
+You also need to add the container element to your theme template:
+
+```html
+<div id="aac-search"></div>
+```
+
+## Troubleshooting
+
+**Test Connection fails with `invalid_or_revoked_key`**
+Check that the connector token was copied correctly and has not been revoked in the AACsearch dashboard. Generate a new token if needed.
+
+**Full sync completes but products do not appear in search**
+The sync enqueues products to `SearchIngestBuffer`; indexing is asynchronous. Wait 30–60 seconds and try a test search. If documents still don't appear, check the ingest pipeline status in Dashboard → Overview.
+
+**Widget not appearing on storefront**
+Confirm the `#aac-search` container element exists in your theme. Check that `Widget enabled` is checked and the `data-api-key` value is a valid `ss_search_*` key (not the connector token).
+
+## Related pages
+
+- [Connectors Overview](/docs/connectors/overview)
+- [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle)
+- [Widget Overview](/docs/connectors/widget-overview)

@@ -1,0 +1,163 @@
+---
+title: Ingest & Reindex
+description: How DB-first ingest works, how to load documents in bulk, and how zero-downtime alias-swap reindex works.
+---
+
+AACsearch uses a **DB-first ingest pipeline**: write requests insert documents into a Postgres buffer
+table first, then a background worker batches them to Typesense. This provides durability,
+partial-fail handling, and batching without N+1 round-trips.
+
+## DB-first ingest pipeline
+
+```
+Your code / CMS module
+    │
+    ▼
+POST /api/connector/sync/full (or upsertDocument oRPC)
+    │
+    ▼
+enqueueManySearchIngest()  ←  writes to SearchIngestBuffer (Postgres)
+    │
+    ▼
+Background worker  ←  drains buffer in batches
+    │
+    ▼
+bulkUpsert() → Typesense
+    │
+    ▼
+markIngestRowsSuccess() / markIngestRowsFailure() (exponential backoff)
+```
+
+**Key invariant:** `bulkUpsert()` is only called from the background worker. Never call it directly
+from a request handler — this would bypass the buffer and break durability guarantees.
+
+## Single document upsert
+
+```typescript
+await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-456",
+		title: "Running Shoes",
+		sku: "RS-001",
+		brand: "SpeedCo",
+		categories: ["Sports", "Footwear"],
+		price: 79.99,
+		availability: "in_stock",
+		locale: "en",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+The oRPC procedure calls `enqueueManySearchIngest()` with a single-element array.
+
+## Bulk import via the dashboard
+
+The dashboard's **Import Jobs** tab supports CSV and JSON file upload:
+
+1. Navigate to **Search** → **Import Jobs**
+2. Click **Import documents**
+3. Upload a CSV or JSON file
+4. Map columns to document fields
+5. Click **Start import**
+
+Import jobs are tracked in the database with status (`pending`, `processing`, `success`, `failed`)
+and item counts. Failed rows are surfaced in the import job detail view.
+
+## Bulk ingest via the Connector API
+
+CMS modules send bulk payloads through the Connector API:
+
+```bash
+curl -X POST https://your-app.com/api/connector/sync/full \
+  -H "Authorization: Bearer ss_connector_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "documents": [
+      { "id": "1", "title": "Product A", "price": 29.99, ... },
+      { "id": "2", "title": "Product B", "price": 49.99, ... }
+    ]
+  }'
+```
+
+The recommended batch size is 200 documents. Larger batches increase Typesense import latency and
+risk timeout on slow connections. CMS modules use a configurable batch size (default: 200).
+
+## Partial-fail handling
+
+The worker marks individual rows as success or failure independently. If a batch partially fails:
+
+1. Successful documents are committed via `markIngestRowsSuccess()`
+2. Failed documents are marked with `markIngestRowsFailure()` and a retry is scheduled
+3. Retry uses exponential backoff: 1s → 2s → 4s → 8s → give up after configurable max attempts
+
+Permanently failed rows appear in the Import Jobs panel with their error messages.
+
+## Reindex (zero-downtime)
+
+Reindex is required when the Typesense collection schema changes — for example, adding a new facet field.
+AACsearch uses an **alias-swap** strategy to avoid search downtime during reindex.
+
+### How it works
+
+```
+Current state:
+  alias: org123_products  →  org123_products_v1  (serving traffic)
+
+During reindex:
+  1. Create: org123_products_v2 (new schema)
+  2. Bulk-import all documents into v2
+  3. Verify v2 is healthy (doc count matches)
+  4. Atomically swap alias: org123_products  →  org123_products_v2
+  5. Keep v1 alive until next reindex (rollback option)
+
+After reindex:
+  alias: org123_products  →  org123_products_v2  (serving traffic)
+  org123_products_v1  remains (but not serving)
+```
+
+### Trigger reindex via dashboard
+
+Navigate to **Search** → **Indexes** → your index → **Reindex**.
+
+### Trigger reindex via oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// job.status: "queued" | "running" | "succeeded" | "failed"
+```
+
+### When to reindex
+
+| Scenario                      | Action                                  |
+| ----------------------------- | --------------------------------------- |
+| Added a new facet field       | Reindex required                        |
+| Changed field type            | Reindex required                        |
+| Added a new searchable field  | Reindex required                        |
+| Updated document content only | No reindex needed — upsert the document |
+| Changed synonym rules         | No reindex needed                       |
+
+### Reindex and quota
+
+Reindex counts documents indexed against your plan quota. For large catalogs on the Free plan
+(10K units), reindex will consume the monthly quota. Plan accordingly.
+
+## Retry failed batches
+
+Failed ingest batches can be retried from the dashboard under **Import Jobs** → select failed job → **Retry**,
+or via oRPC:
+
+```typescript
+await orpc.search.retryFailedBatches.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+```
+
+This re-queues all rows in `failed` status for the index.

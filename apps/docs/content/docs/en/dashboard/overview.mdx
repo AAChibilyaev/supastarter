@@ -1,0 +1,108 @@
+---
+title: "Dashboard Overview"
+description: "The AACsearch dashboard structure — org-level and account-level scopes, navigation, and what the Overview page shows."
+---
+
+The AACsearch dashboard is the protected SaaS application at `apps/saas`. It is organized into two scopes: **organization-level** (your search workspace) and **account-level** (your personal account and admin tools).
+
+## Dashboard scopes
+
+### Organization scope (`/[orgSlug]/...`)
+
+Everything related to search for a specific organization lives here. An organization maps to a tenant in AACsearch — all indexes, API keys, analytics, and billing are scoped to it.
+
+| Path                          | Area                                                          |
+| ----------------------------- | ------------------------------------------------------------- |
+| `/[orgSlug]/overview`         | KPI dashboard, top queries, activity feed, quota alerts       |
+| `/[orgSlug]/getting-started`  | 6-step onboarding checklist                                   |
+| `/[orgSlug]/search`           | Search workspace (Indexes, Playground, API Keys, Widget tabs) |
+| `/[orgSlug]/api-keys`         | API keys across all indexes                                   |
+| `/[orgSlug]/import-jobs`      | Import job history                                            |
+| `/[orgSlug]/preview`          | Search preview / playground                                   |
+| `/[orgSlug]/analytics`        | Search analytics — CTR, top queries, sessions                 |
+| `/[orgSlug]/relevance`        | Synonyms, Curations, Stopwords, Presets                       |
+| `/[orgSlug]/connectors`       | CMS module status, connector tokens, sync job history         |
+| `/[orgSlug]/knowledge`        | Knowledge spaces (RAG/GraphRAG — separate product surface)    |
+| `/[orgSlug]/settings/general` | Organization settings                                         |
+| `/[orgSlug]/settings/members` | Member management, invitations                                |
+| `/[orgSlug]/settings/billing` | Org billing and plan                                          |
+
+### Account scope (`/...`)
+
+Personal settings and admin tools live outside the org context.
+
+| Path                           | Area                                              |
+| ------------------------------ | ------------------------------------------------- |
+| `/settings/general`            | Account profile                                   |
+| `/settings/security`           | Password, 2FA (TOTP, passkeys), OAuth connections |
+| `/settings/notifications`      | Notification preferences                          |
+| `/settings/billing`            | Personal billing                                  |
+| `/settings/billing/ai-credits` | AI wallet (active development — v0.6)             |
+| `/knowledge`                   | Personal knowledge spaces                         |
+| `/chatbot`                     | AI chatbot                                        |
+| `/admin/*`                     | Site admin tools (admin users only — see below)   |
+
+## The Overview page
+
+The org overview page (`/[orgSlug]/overview`) is the primary landing page after you select an organization. It shows:
+
+### KPI tiles
+
+Four summary metrics for the selected period (24h / 7d / 30d):
+
+| Tile              | Source                                          |
+| ----------------- | ----------------------------------------------- |
+| Total searches    | Search unit consumption from plan entitlements  |
+| Documents indexed | Document count from plan entitlements           |
+| Quota usage       | `searches.percentUsed` from `entitlements.plan` |
+| Failed sync jobs  | Derived from ingest pipeline status             |
+
+A warning banner appears when quota reaches 80%, and an error banner when it is exceeded.
+
+### Searches over time
+
+A sparkline chart showing search volume over the selected period. Data comes from `SearchUsageEvent` rows via the `search.usage` oRPC procedure.
+
+### Top queries
+
+A ranked list of the 10 most frequent search queries for the period. Powered by the `search.topQueries` procedure which groups `SearchUsageEvent` rows by query text.
+
+### Activity feed
+
+A time-ordered list of recent events derived from index creation timestamps and API key counts. A dedicated `recentActivity` procedure is planned for v1.x; the current feed is derived from existing query data.
+
+### Connector status
+
+Shows whether any connector has called the heartbeat endpoint recently. Status is derived from `lastUsedAt` on connector tokens:
+
+- **Online** — last heartbeat within 5 minutes
+- **Unknown** — last heartbeat within 30 minutes
+- **Offline** — no recent heartbeat
+
+### Plan card
+
+Shows the active plan name and status (active / canceled / past_due). Links to the billing page.
+
+## Period selector
+
+The overview page supports a period selector (24h / 7d / 30d) stored in the URL as `?period=7d`. This controls all KPI aggregations on the page.
+
+## Navigation structure
+
+The sidebar has 9 items at the org level:
+
+1. Overview
+2. Getting Started
+3. Search
+4. Analytics
+5. Relevance
+6. Connectors
+7. Knowledge
+8. Settings
+9. (Billing — nested under Settings)
+
+## Related pages
+
+- [Search Workspace](/docs/dashboard/search-workspace)
+- [Knowledge and Admin](/docs/dashboard/knowledge-and-admin)
+- [Getting Started: Create Your First Index](/docs/getting-started/create-first-index)

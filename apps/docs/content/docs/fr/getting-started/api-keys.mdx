@@ -1,0 +1,159 @@
+---
+title: Clés API
+description: Générer, utiliser et révoquer des clés API pour les cas d'utilisation de recherche, de connecteur et de token limité.
+---
+
+AACsearch utilise trois types de clés API, chacun avec un préfixe distinct et une portée de permission.
+Toutes les clés sont stockées sous forme de hachages bcrypt — le texte en clair est affiché **une seule fois** lors de la création et ne peut pas être récupéré ultérieurement.
+
+## Types de clés
+
+| Type           | Préfixe          | Portées                  | Utilisé par                                  |
+| -------------- | ---------------- | ------------------------ | -------------------------------------------- |
+| Clé de recherche | `ss_search_*`  | `search`                 | SDK navigateur, widget, appels API directs   |
+| Clé connecteur | `ss_connector_*` | `connector_write`        | Modules CMS (PrestaShop, Bitrix)             |
+| Token limité   | `ss_scoped_*`    | Restreint depuis la clé de recherche | Délégation de token par utilisateur/filtre |
+
+## Générer une clé de recherche
+
+### Via le tableau de bord
+
+1. Naviguez vers **Search** → **API Keys**
+2. Cliquez sur **Create API key**
+3. Sélectionnez le type de clé : **Search**
+4. Configurez les origines autorisées (laissez vide pendant le développement)
+5. Définissez la limite de débit (par défaut : 60 req/min)
+6. Définissez une expiration optionnelle
+7. Cliquez sur **Create** — copiez la clé immédiatement, elle ne sera plus affichée
+
+### Via oRPC
+
+```typescript
+const key = await orpc.search.createApiKey.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopes: ["search"],
+	allowedOrigins: ["https://yourstore.com"],
+	rateLimitPerMinute: 60,
+	name: "Storefront search key",
+});
+
+console.log(key.plaintext); // ss_search_abc123... — sauvegardez ceci maintenant !
+```
+
+## Générer une clé connecteur
+
+Les clés connecteur utilisent la portée `connector_write` et le préfixe `ss_connector_*`.
+Elles sont utilisées par les modules CMS pour pousser des documents vers le point de terminaison d'ingestion.
+
+```typescript
+const key = await orpc.search.createConnectorToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	name: "PrestaShop connector",
+});
+
+console.log(key.plaintext); // ss_connector_abc123...
+```
+
+Dans le tableau de bord, les clés connecteur sont affichées dans **Connectors** → **Connector Tokens**.
+
+## Utiliser une clé de recherche
+
+### En-tête HTTP
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexSlug": "products", "q": "headphones" }'
+```
+
+### SDK navigateur
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+	baseUrl: "https://your-app.com",
+	apiKey: "ss_search_your_key",
+	indexSlug: "products",
+});
+
+const results = await client.search({ q: "headphones" });
+```
+
+Consultez [SDK navigateur](/docs/getting-started/browser-sdk) pour la documentation complète du SDK.
+
+## Tokens limités
+
+Les tokens limités sont des tokens signés HMAC à courte durée de vie qui restreignent les permissions d'une clé de recherche.
+Ils sont générés côté serveur et transmis au navigateur — la clé de recherche de base reste sur le serveur.
+
+**Cas d'utilisation courant :** Limiter les résultats de recherche à l'organisation ou au niveau de prix de l'utilisateur actuel.
+
+```typescript
+// Côté serveur : générer un token limité
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	scopedFilter: "availability:=in_stock && price:<100",
+	expiresInSeconds: 3600,
+});
+
+// Transmettre au navigateur — utiliser comme une clé de recherche ordinaire
+// Le filtre est combiné avec ET avec les filtres de l'appelant
+```
+
+Les tokens limités sont sans état (non stockés en base de données). Ils expirent selon le paramètre `expiresInSeconds`.
+Consultez [Tokens de recherche limités](/docs/search-api/scoped-search-tokens) pour les détails complets.
+
+## Restriction d'origine
+
+Chaque clé de recherche possède une liste `allowedOrigins[]`. Les requêtes provenant d'origines non listées reçoivent une réponse 403.
+
+- **Développement :** laissez `allowedOrigins` vide pour autoriser toutes les origines
+- **Production :** ajoutez explicitement vos domaines de boutique
+
+```typescript
+// Exemple : restreindre à des domaines spécifiques
+allowedOrigins: ["https://mystore.com", "https://www.mystore.com"];
+```
+
+**Restriction du plan Free :** Sur le plan Free, seuls les sous-domaines `*.aacsearch.com` sont autorisés dans
+`allowedOrigins`. Passez au plan Pro pour la prise en charge des domaines personnalisés.
+
+## Limites de débit
+
+Limite de débit par défaut : **60 requêtes par minute** par clé. Le dépassement de cette limite renvoie :
+
+```json
+HTTP/1.1 429 Too Many Requests
+Retry-After: 15
+
+{ "error": "rate_limit_exceeded" }
+```
+
+Ajustez les limites de débit par clé au moment de la création ou mettez-les à jour dans le tableau de bord.
+
+## Révoquer une clé
+
+```typescript
+await orpc.search.revokeApiKey.call({
+	organizationId: "org_...",
+	keyId: "key_...",
+});
+```
+
+La révocation d'une clé est immédiate. La clé sera rejetée à la prochaine requête. La valeur hachée est
+conservée dans la base de données à des fins de journal d'audit.
+
+## Liste de contrôle de sécurité des clés
+
+- [ ] Ne jamais committer les clés dans le contrôle de version
+- [ ] Ne jamais journaliser les clés (AACsearch ne les journalise jamais côté serveur)
+- [ ] Utiliser les clés `ss_search_*` dans le navigateur (lecture seule, limité par origine)
+- [ ] Utiliser les clés `ss_connector_*` uniquement dans votre module CMS (côté serveur)
+- [ ] Faire tourner les clés périodiquement en utilisant le flux révoquer + recréer
+- [ ] Définir `allowedOrigins` pour les clés de production
+- [ ] Définir `expiresAt` pour les accès temporaires

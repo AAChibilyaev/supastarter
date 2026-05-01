@@ -1,0 +1,155 @@
+---
+title: Widget-Installation
+description: Installieren Sie das gehostete AACsearch-Widget auf jedem Storefront mit einem einzigen Script-Tag.
+---
+
+Das AACsearch-Widget ist eine in sich geschlossene Vanilla-JS-Komponente, die mit einem einzigen `<script>`-Tag ein vollständiges Sucherlebnis
+zu jedem Storefront hinzufügt. Es verwendet Shadow DOM für CSS-Isolierung und wiegt ~14 KB
+minifiziert (IIFE + ESM-Builds).
+
+## So funktioniert das Widget
+
+```
+<script data-*>-Tag wird geladen
+    │
+    ▼
+Widget-Bootstrap (liest data-*-Attribute)
+    │
+    ▼
+Shadow-DOM-Container erstellt (CSS-Isolierung)
+    │
+    ▼
+GET /api/rpc/search.widgetConfig  ←  lädt Laufzeitkonfiguration (Layout, Filter, Sortieroptionen)
+    │
+    ▼
+Benutzer tippt → POST /api/search  ←  Nur-Suche-Schlüssel im Authorization-Header
+    │
+    ▼
+Ergebnisse im Shadow DOM gerendert
+    │
+    ▼
+Ereignisse verfolgt → POST /api/events/track (asynchron, keepalive)
+```
+
+Das Widget verwendet nur den `ss_search_*`-Schlüssel, der in `data-api-key` eingebettet ist. Der Admin-Typesense-Schlüssel
+erreicht den Browser niemals.
+
+## Grundlegende Installation
+
+Fügen Sie das Script-Tag im `<head>` Ihres Storefronts oder vor `</body>` ein:
+
+```html
+<script
+	src="https://your-app.com/api/widget/widget.js"
+	data-base-url="https://your-app.com"
+	data-api-key="ss_search_your_search_key"
+	data-index-slug="products"
+	data-container="#search-container"
+	data-theme="auto"
+></script>
+```
+
+Erstellen Sie das Container-Element, in dem das Widget eingebunden wird:
+
+```html
+<div id="search-container"></div>
+```
+
+## Script-Attribute
+
+| Attribut          | Erforderlich | Standard | Beschreibung                                       |
+| ----------------- | ------------ | -------- | -------------------------------------------------- |
+| `data-base-url`   | Ja           | —        | Ihre AACsearch-API-Basis-URL                       |
+| `data-api-key`    | Ja           | —        | `ss_search_*`-Schlüssel für diesen Index           |
+| `data-index-slug` | Ja           | —        | Der Index-Slug (z. B. `products`)                  |
+| `data-container`  | Ja           | —        | CSS-Selektor für das Mount-Element                 |
+| `data-theme`      | Nein         | `auto`   | `light`, `dark` oder `auto`                        |
+| `data-locale`     | Nein         | `en`     | Widget-UI-Locale (`en`, `de`, `es`, `fr`, `ru`)   |
+| `data-layout`     | Nein         | `inline` | `inline` oder `modal`                              |
+
+## Layout-Modi
+
+### Inline
+
+Das Widget rendert eine Suchbox und ein Ergebnispanel direkt im Container. Der Container muss
+eine definierte Höhe haben, wenn die Ergebnisse hoch sind.
+
+```html
+<div id="search-container" style="min-height: 400px;"></div>
+```
+
+### Modal
+
+Das Widget rendert nur einen Such-Trigger-Button im Container. Ein Klick öffnet eine
+Vollbild-Such-Überlagerung. Dies eignet sich für die Header-Suche.
+
+```html
+<script ... data-layout="modal" data-container="#search-trigger"></script>
+<button id="search-trigger">Suche</button>
+```
+
+## Theme-Anpassung
+
+Das Widget unterstützt drei Theme-Modi:
+
+- `auto` – folgt der OS-/Browser-Dark-Mode-Einstellung
+- `light` – immer hell
+- `dark` – immer dunkel
+
+CSS-benutzerdefinierte Eigenschaften für eine feingranulare Anpassung (auf der Host-Seite festgelegt, sie durchdringen die Shadow-DOM-Grenze
+nur wenn das Widget CSS-Parts freilegt):
+
+```css
+/* Diese werden in das Shadow Root des Widgets gespiegelt */
+#search-container {
+	--aac-accent: #6366f1;
+	--aac-border-radius: 8px;
+}
+```
+
+## CMS-Modul-Installation
+
+Bei Verwendung eines PrestaShop- oder Bitrix-Moduls wird das Widget-Script-Tag **automatisch** vom
+Modul über das CMS-Hook-System in den `<head>` des Storefronts injiziert. Sie müssen es nicht manuell hinzufügen.
+
+Das Modul liest die Widget-Konfiguration (API-URL, Schlüssel, Index-Slug) von der Modul-Einstellungsseite.
+Siehe [PrestaShop](/docs/connectors/prestashop) und [Bitrix](/docs/connectors/bitrix) für modulspezifische Details.
+
+## Widget-Snippet aus dem Dashboard abrufen
+
+Das Dashboard generiert einen vorgefüllten Snippet unter **Suche** → **Widget**:
+
+1. Navigieren Sie zu Ihrem Suchindex
+2. Klicken Sie auf den Tab **Widget**
+3. Kopieren Sie das generierte `<script>`-Tag mit Ihrem Schlüssel und Index-Slug vorausgefüllt
+
+Die Komponente `WidgetPanel` im Dashboard (`apps/saas/modules/search/components/WidgetPanel.tsx`)
+zeigt auch das Connector-Token für die CMS-Modul-Konfiguration an.
+
+## Content Security Policy (CSP)
+
+Wenn Ihr Storefront einen CSP-Header verwendet, fügen Sie die AACsearch-Skriptquelle zu Ihrer Richtlinie hinzu:
+
+```
+script-src 'self' https://your-app.com;
+connect-src 'self' https://your-app.com;
+```
+
+Shadow DOM erfordert kein `style-src unsafe-inline` – Stile sind auf das Shadow Root beschränkt.
+
+## Browser-Unterstützung
+
+Das Widget zielt auf moderne Browser ab (Chrome 88+, Firefox 85+, Safari 14+, Edge 88+).
+Shadow DOM v1 ist erforderlich. Internet Explorer wird nicht unterstützt.
+
+## Analytics-Tracking
+
+Das Widget verfolgt automatisch die folgenden Ereignisse (gesendet an `POST /api/events/track`):
+
+- `widget_open` – wenn das Widget geöffnet wird
+- `search_query` – wenn eine Suche gesendet wird
+- `zero_results` – wenn eine Anfrage keine Ergebnisse liefert
+- `result_click` – wenn ein Benutzer auf ein Ergebnis klickt
+- `filter_used` – wenn ein Facettenfilter angewendet wird
+
+Siehe [Widget-Analytics-Ereignisse](/docs/connectors/widget-analytics-events) für das vollständige Ereignisschema.

@@ -1,0 +1,69 @@
+---
+title: "Vue d'ensemble des connecteurs & du widget"
+description: "Comment les connecteurs CMS et le widget hébergé poussent les données dans AACsearch et affichent les résultats de recherche dans votre boutique."
+---
+
+AACsearch se connecte à votre CMS existant via deux surfaces complémentaires :
+
+- **API Connecteur** — un ensemble de points de terminaison HTTP que les modules CMS appellent pour pousser les données produits dans AACsearch. Le module s'exécute sur votre serveur ; AACsearch ne scrape jamais votre boutique.
+- **Widget hébergé** — un bundle Vanilla JS servi par AACsearch à `/api/widget/widget.js`. Vous intégrez une seule balise `<script>` dans le thème de votre boutique et le widget gère l'UI de recherche, les facettes, le tri et le suivi des clics.
+
+Les deux surfaces utilisent des types de tokens différents. Aucune des deux surfaces n'expose jamais vos identifiants admin Typesense.
+
+## Modèle de token de connecteur
+
+Les tokens de connecteur utilisent le préfixe `ss_connector_*` et sont stockés comme lignes `SearchApiKey` avec la portée `connector_write`. Ils sont créés depuis le tableau de bord AACsearch et liés à un index de recherche spécifique.
+
+Propriétés du token :
+
+- Préfixe : `ss_connector_`
+- Portée : `connector_write`
+- Stocké comme : hash SHA-256 (format préfixe:hash) dans `SearchApiKey.hash`
+- Texte en clair retourné une seule fois à la création — jamais ensuite
+- Révocable à tout moment depuis le tableau de bord
+
+Créez un token de connecteur depuis **Tableau de bord → Connecteurs → Nouveau token connecteur**, ou via la procédure oRPC `search.createConnectorToken`.
+
+## Modules CMS pris en charge
+
+| Plateforme              | Statut        | Notes                                                                |
+| ----------------------- | ------------- | -------------------------------------------------------------------- |
+| PrestaShop 8.x          | Aperçu anticipé | Squelette de module PHP existe ; suivi de commit séparé             |
+| 1C-Bitrix (auto-hébergé) | Aperçu anticipé | Squelette de module PHP existe ; suivi de commit séparé            |
+| API directe             | Disponible    | N'importe quel système peut appeler l'API Connecteur avec un token   |
+
+Les modules PrestaShop et Bitrix sont suivis séparément du monorepo Node.js principal. Ce sont des squelettes fonctionnels — les flux de synchronisation et d'authentification principaux fonctionnent, mais l'emballage d'installation et la finition de l'UI d'administration sont encore en cours.
+
+## Comment démarrer
+
+1. **Créer un index de recherche** — Tableau de bord → Search → Indexes → Nouvel index
+2. **Créer un token de connecteur** — Tableau de bord → Connecteurs → Nouveau token connecteur. Copiez le token en texte clair immédiatement.
+3. **Installer le module CMS** — téléchargez le module PrestaShop ou Bitrix dans votre boutique, ou construisez votre propre intégration en utilisant directement l'API Connecteur.
+4. **Effectuer la poignée de main** — le module appelle `POST /api/connectors/handshake` avec votre token. Une réponse réussie confirme que le token est valide et retourne le slug de l'index.
+5. **Exécuter la synchronisation complète** — le module exporte tous les produits et les envoie par lots à `POST /api/projects/:projectId/sync/full`. Les produits sont mis en file d'attente dans `SearchIngestBuffer` et indexés de manière asynchrone.
+6. **Intégrer le widget** — copiez l'extrait d'installation depuis Tableau de bord → Search → onglet Widget et collez-le dans le thème de votre boutique.
+
+## Principe d'architecture
+
+Les modules CMS et les navigateurs ne contactent jamais Typesense directement. Toutes les données transitent par la couche API AACsearch, qui valide, vérifie l'authentification, limite le débit et met les écritures en file d'attente dans `SearchIngestBuffer`. La clé admin Typesense ne quitte jamais le serveur.
+
+```
+Module CMS (bearer : ss_connector_*)
+    │
+    ▼
+API Connecteur  ←  valide le token, vérifie la portée
+    │
+    ▼
+SearchIngestBuffer (Prisma DB)
+    │
+    ▼
+Worker en arrière-plan → Typesense
+```
+
+## Pages associées
+
+- [Cycle de vie de l'API Connecteur](/docs/connectors/connector-api-lifecycle) — les 7 points de terminaison, formes des requêtes, codes d'erreur
+- [Module PrestaShop](/docs/connectors/prestashop) — installer et configurer le module PrestaShop 8.x
+- [Module Bitrix](/docs/connectors/bitrix) — installer et configurer le module 1C-Bitrix
+- [Vue d'ensemble du widget](/docs/connectors/widget-overview) — intégrer le widget de recherche hébergé
+- [Événements analytiques du widget](/docs/connectors/widget-analytics-events) — référence du suivi des événements

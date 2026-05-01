@@ -1,0 +1,4 @@
+{
+	"title": "Обзор",
+	"pages": ["status-roadmap", "architecture", "domain-model", "auth-tenancy", "plans-and-limits"]
+}

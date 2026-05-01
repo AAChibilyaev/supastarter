@@ -1,0 +1,134 @@
+---
+title: Reindexación y Cero Tiempo de Inactividad
+description: Cómo funciona la estrategia de reindexación con intercambio de alias, cuándo activarla y cómo monitorizar el progreso.
+---
+
+AACsearch usa una estrategia de **colección versionada + alias** para realizar migraciones de esquema y
+reindexaciones completas sin tiempo de inactividad de búsqueda. Las consultas siempre tienen como objetivo el alias (un nombre estable), mientras que
+las colecciones versionadas se intercambian por debajo.
+
+## El modelo de intercambio de alias
+
+Cada índice de búsqueda usa dos nombres de Typesense:
+
+```
+alias:      org123_products        ← estable, usado por todas las consultas de búsqueda
+colección:  org123_products_v1     ← colección versionada actual (atendiendo tráfico)
+```
+
+Cuando se activa una reindexación:
+
+```
+1. CREAR   org123_products_v2       ← nueva colección con esquema actualizado
+2. IMPORTAR todos los documentos → v2 ← reingestar desde la base de datos (o snapshot)
+3. VERIFICAR recuento de docs(v2) ≈ esperado ← verificación de salud antes del intercambio
+4. INTERCAMBIAR alias: org123_products → org123_products_v2
+5. MANTENER org123_products_v1      ← mantenido hasta la próxima reindexación (opción de reversión)
+```
+
+El paso 4 (intercambio de alias) es atómico en Typesense. Las consultas siguen llegando a la versión anterior durante los pasos
+1–3 y apuntan sin problemas a la nueva versión después del paso 4 — con cero tiempo de inactividad.
+
+## Cuándo reindexar
+
+| Escenario                                | ¿Reindexación requerida?                      |
+| ---------------------------------------- | --------------------------------------------- |
+| Añadir un nuevo campo de faceta          | **Sí** — Typesense requiere migración de esquema |
+| Cambiar un tipo de campo                 | **Sí**                                        |
+| Añadir un nuevo campo de texto buscable  | **Sí**                                        |
+| Eliminar un campo                        | **Sí**                                        |
+| Actualizar contenido del documento       | No — usar upsert/sincronización delta         |
+| Cambiar reglas de sinónimos              | No — los sinónimos son un recurso separado    |
+| Cambiar opciones de ordenación           | No — `sortBy` es un parámetro de consulta     |
+| Cambiar reglas de curación               | No — las curaciones son un recurso separado   |
+
+## Activar reindexación
+
+### Mediante el panel
+
+1. Navegue a **Búsqueda** → **Índices** → seleccione su índice
+2. Haga clic en el botón **Reindexar** en la configuración del índice
+3. Monitorice el progreso en el panel de trabajos de importación
+
+### Mediante oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// Devuelve: { jobId, status: "queued" }
+```
+
+### Mediante la API de conector (administrador)
+
+```bash
+POST /api/v1/indexes/{indexSlug}/reindex
+Authorization: Bearer aa_admin_your_key
+```
+
+## Monitorizar el progreso de reindexación
+
+Verifique el estado del trabajo de importación:
+
+```typescript
+const jobs = await orpc.search.importJobs.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+
+const activeJob = jobs.find((j) => j.type === "reindex" && j.status === "running");
+// activeJob.processedItems / activeJob.totalItems → progreso
+```
+
+En el panel, la pestaña **Trabajos de importación** muestra el progreso de reindexación con una barra de progreso.
+
+## Actualizaciones de esquema
+
+Antes de reindexar, actualice el esquema de la colección:
+
+```typescript
+await orpc.search.schema.update.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	fields: [
+		// Añadir un nuevo campo
+		{ name: "tags", type: "string[]", facet: true, optional: true },
+	],
+});
+```
+
+Esto actualiza la definición del esquema almacenada en AACsearch. El esquema real de la colección Typesense
+se actualiza durante la próxima reindexación (los cambios de esquema no se aplican en su lugar para evitar el tiempo de inactividad).
+
+## Impacto en la cuota
+
+La reindexación reingestiona todos los documentos. Para un catálogo de 50K productos, una reindexación consume 50K unidades de búsqueda.
+Planifique su calendario de reindexación alrededor de su cuota mensual.
+
+## Reversión
+
+Si la nueva colección tiene problemas, revierta apuntando el alias nuevamente a la versión anterior:
+
+```typescript
+await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	rollback: true, // intercambia el alias de vuelta a la versión anterior
+});
+```
+
+La versión anterior (`v{N-1}`) se preserva hasta la próxima reindexación exitosa.
+
+## Detalles de implementación
+
+La implementación de reindexación está en `packages/search/lib/reindex.ts` (exportada como `reindexCollection`).
+
+Comportamientos clave:
+
+- Nombre de colección versionado: `{orgShortId}_{slug}_v{nextVersion}`
+- Intercambio de alias: `typesense.aliases.upsert(alias, { collection_name: newCollectionName })`
+- Fuente de documentos: re-drena el conjunto completo de documentos del buffer de ingestión o un snapshot
+- Fallo parcial: si la importación falla antes del intercambio, la versión antigua sigue sirviendo; la nueva versión se elimina
+
+La función se llama desde el procedimiento `searchRouter.reindex` en `packages/api/modules/search/procedures/reindex.ts`.

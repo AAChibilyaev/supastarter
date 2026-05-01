@@ -1,0 +1,129 @@
+---
+title: Create Your First Index
+description: Create a search index, understand the collection-alias model, and run your first search query through the dashboard.
+---
+
+A **search index** in AACsearch maps to a Typesense collection with versioned naming and an alias.
+Creating an index provisions the Typesense collection and registers the index in the database.
+
+## What is an index?
+
+Each index represents a searchable catalog — typically one per store or product set.
+
+```
+Organization
+  └── SearchIndex (slug: "products")
+        collectionName: "org123_products_v1"   ← Typesense collection (versioned)
+        aliasName:      "org123_products"       ← Typesense alias (stable, always points to current)
+```
+
+All search queries target the **alias**, not the versioned collection directly. This allows
+zero-downtime reindex — a new version is built while the current version serves traffic,
+then the alias is atomically swapped.
+
+## Create an index via the dashboard
+
+1. Open the SaaS dashboard at `http://localhost:3000`
+2. Select your organization from the switcher
+3. Navigate to **Search** → **Indexes**
+4. Click **Create index**
+5. Enter a slug (e.g., `products`) and optional display name
+6. Click **Create**
+
+The dashboard calls `searchRouter.createIndex` which provisions the Typesense collection
+and creates the `SearchIndex` row in Postgres.
+
+## Create an index via oRPC
+
+```typescript
+import { orpc } from "@shared/lib/orpc-query-utils";
+
+const index = await orpc.search.createIndex.call({
+	organizationId: "org_...",
+	slug: "products",
+	name: "Product catalog",
+});
+```
+
+## Default collection schema
+
+When an index is created, AACsearch provisions a Typesense collection with a product-optimized schema:
+
+```json
+{
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string", "weight": 10 },
+		{ "name": "sku", "type": "string", "weight": 8 },
+		{ "name": "brand", "type": "string", "weight": 5, "facet": true },
+		{ "name": "categories", "type": "string[]", "weight": 5, "facet": true },
+		{ "name": "description", "type": "string", "weight": 2 },
+		{ "name": "price", "type": "float", "facet": true },
+		{ "name": "sale_price", "type": "float", "optional": true },
+		{ "name": "availability", "type": "string", "facet": true },
+		{ "name": "locale", "type": "string", "facet": true },
+		{ "name": "created_at", "type": "int64" }
+	],
+	"default_sorting_field": "_text_match"
+}
+```
+
+The schema is defined in `packages/search/lib/collections.ts` and evolves with the product schema version.
+
+## Ingest your first document
+
+Once the index is created, push a document through the ingest buffer:
+
+```typescript
+const result = await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-123",
+		title: "Wireless Headphones",
+		sku: "WH-2024",
+		brand: "Acme",
+		categories: ["Electronics", "Audio"],
+		description: "Noise-cancelling over-ear headphones with 30h battery.",
+		price: 99.99,
+		availability: "in_stock",
+		locale: "en",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+This calls `enqueueManySearchIngest()` which writes to `SearchIngestBuffer`. The background worker
+picks it up and forwards to Typesense within seconds.
+
+## Run a search query
+
+Use the **Search Preview** tab in the dashboard, or call the public search endpoint directly:
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 10
+  }'
+```
+
+See [Public Search Endpoint](/docs/search-api/public-search-endpoint) for the full request schema.
+
+## What happens after index creation
+
+1. The dashboard **Getting Started** checklist updates to mark "Create index" as complete
+2. The **Import Jobs** tab becomes available for bulk CSV/JSON import
+3. The **API Keys** tab shows the index-scoped key panel
+4. The **Widget** tab shows the install snippet pre-filled with the index slug
+
+## Next steps
+
+- [API Keys](/docs/getting-started/api-keys) — generate keys for your integration
+- [Ingest and Reindex](/docs/getting-started/ingest-and-reindex) — bulk import and schema updates
+- [Connector Onboarding](/docs/getting-started/connector-onboarding) — connect a CMS for automatic sync

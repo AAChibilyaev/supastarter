@@ -1,0 +1,69 @@
+---
+title: "Connectoren & Widget – Übersicht"
+description: "Wie CMS-Connectoren und das gehostete Widget Daten in AACsearch übermitteln und Suchergebnisse in Ihrem Storefront anzeigen."
+---
+
+AACsearch verbindet sich mit Ihrem bestehenden CMS über zwei komplementäre Oberflächen:
+
+- **Connector-API** — ein Satz von HTTP-Endpunkten, die CMS-Module aufrufen, um Produktdaten in AACsearch zu übermitteln. Das Modul läuft auf Ihrem Server; AACsearch fragt niemals Ihren Shop ab oder durchsucht ihn.
+- **Gehostetes Widget** — ein Vanilla-JS-Bundle, das AACsearch unter `/api/widget/widget.js` bereitstellt. Sie betten einen einzigen `<script>`-Tag in Ihr Storefront-Theme ein, und das Widget übernimmt die Such-UI, Facetten, Sortierung und Click-Tracking.
+
+Beide Oberflächen verwenden unterschiedliche Token-Typen. Keine der Oberflächen legt Ihre Typesense-Admin-Zugangsdaten offen.
+
+## Connector-Token-Modell
+
+Connector-Token verwenden das Präfix `ss_connector_*` und werden als `SearchApiKey`-Zeilen mit dem Bereich `connector_write` gespeichert. Sie werden vom AACsearch-Dashboard erstellt und an einen bestimmten Suchindex gebunden.
+
+Token-Eigenschaften:
+
+- Präfix: `ss_connector_`
+- Bereich: `connector_write`
+- Gespeichert als: SHA-256-Hash (Präfix:Hash-Format) in `SearchApiKey.hash`
+- Klartext wird einmal bei der Erstellung zurückgegeben – niemals wieder
+- Jederzeit vom Dashboard aus widerrufbar
+
+Erstellen Sie ein Connector-Token über **Dashboard → Connectoren → Neues Connector-Token** oder über die oRPC-Prozedur `search.createConnectorToken`.
+
+## Unterstützte CMS-Module
+
+| Plattform                | Status          | Hinweise                                                  |
+| ------------------------ | --------------- | --------------------------------------------------------- |
+| PrestaShop 8.x           | Frühe Vorschau  | PHP-Modul-Entwurf vorhanden; separater Commit-Track       |
+| 1C-Bitrix (selbst gehostet) | Frühe Vorschau | PHP-Modul-Entwurf vorhanden; separater Commit-Track     |
+| Direkte API              | Verfügbar       | Jedes System kann die Connector-API mit einem Token aufrufen |
+
+Die PrestaShop- und Bitrix-Module werden separat vom Haupt-Node.js-Monorepo verfolgt. Sie sind funktionale Entwürfe – die Kern-Sync- und Auth-Abläufe funktionieren, aber Installationspaketierung und Admin-UI-Feinschliff sind noch in Arbeit.
+
+## Erste Schritte
+
+1. **Suchindex erstellen** — Dashboard → Suche → Indizes → Neuer Index
+2. **Connector-Token erstellen** — Dashboard → Connectoren → Neues Connector-Token. Den Klartext-Token sofort kopieren.
+3. **CMS-Modul installieren** — Das PrestaShop- oder Bitrix-Modul in Ihren Shop hochladen oder eine eigene Integration direkt über die Connector-API erstellen.
+4. **Handshake ausführen** — Das Modul ruft `POST /api/connectors/handshake` mit Ihrem Token auf. Eine erfolgreiche Antwort bestätigt, dass das Token gültig ist, und gibt den Index-Slug zurück.
+5. **Vollsynchronisierung ausführen** — Das Modul exportiert alle Produkte und sendet sie in Batches an `POST /api/projects/:projectId/sync/full`. Produkte werden im `SearchIngestBuffer` eingereiht und asynchron indiziert.
+6. **Widget einbetten** — Den Installations-Snippet aus Dashboard → Suche → Widget-Tab kopieren und in Ihr Storefront-Theme einfügen.
+
+## Architekturprinzip
+
+CMS-Module und Browser kontaktieren Typesense niemals direkt. Alle Daten fließen durch die AACsearch-API-Schicht, die Schreibvorgänge validiert, Auth-prüft, Rate-limitiert und in den `SearchIngestBuffer` einreiht. Der Typesense-Admin-Schlüssel verlässt den Server niemals.
+
+```
+CMS-Modul (bearer: ss_connector_*)
+    │
+    ▼
+Connector-API  ←  validiert Token, prüft Bereich
+    │
+    ▼
+SearchIngestBuffer (Prisma-DB)
+    │
+    ▼
+Hintergrund-Worker → Typesense
+```
+
+## Verwandte Seiten
+
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle) — alle 7 Endpunkte, Anfrageformate, Fehlercodes
+- [PrestaShop-Modul](/docs/connectors/prestashop) — PrestaShop-8.x-Modul installieren und konfigurieren
+- [Bitrix-Modul](/docs/connectors/bitrix) — 1C-Bitrix-Modul installieren und konfigurieren
+- [Widget-Übersicht](/docs/connectors/widget-overview) — gehostetes Such-Widget einbetten
+- [Widget-Analytics-Ereignisse](/docs/connectors/widget-analytics-events) — Ereignis-Tracking-Referenz

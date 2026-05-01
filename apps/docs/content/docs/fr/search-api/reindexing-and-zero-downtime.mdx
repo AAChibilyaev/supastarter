@@ -1,0 +1,134 @@
+---
+title: Réindexation & Zéro interruption
+description: Fonctionnement de la stratégie de réindexation par alias-swap, quand la déclencher et comment surveiller la progression.
+---
+
+AACsearch utilise une stratégie de **collection versionnée + alias** pour effectuer des migrations de schéma et des
+réindexations complètes sans interruption de la recherche. Les requêtes ciblent toujours l'alias (un nom stable), tandis que
+les collections versionnées sont échangées en dessous.
+
+## Le modèle d'alias-swap
+
+Chaque index de recherche utilise deux noms Typesense :
+
+```
+alias :       org123_products        ← stable, utilisé par toutes les requêtes de recherche
+collection :  org123_products_v1     ← collection versionnée actuelle (servant le trafic)
+```
+
+Lorsqu'une réindexation est déclenchée :
+
+```
+1. CRÉER  org123_products_v2       ← nouvelle collection avec schéma mis à jour
+2. IMPORTER  tous les documents → v2       ← ré-ingérer depuis la base de données (ou snapshot)
+3. VÉRIFIER  doc count(v2) ≈ attendu ← vérification de santé avant le basculement
+4. BASCULER    alias : org123_products → org123_products_v2
+5. CONSERVER    org123_products_v1       ← conservé jusqu'à la prochaine réindexation (option de rollback)
+```
+
+L'étape 4 (basculement d'alias) est atomique dans Typesense. Les requêtes continuent de cibler l'ancienne version pendant les étapes
+1 à 3 et ciblent de manière transparente la nouvelle version après l'étape 4 — sans aucune interruption.
+
+## Quand réindexer
+
+| Scénario                            | Réindexation requise ?                          |
+| ----------------------------------- | ----------------------------------------------- |
+| Ajout d'un nouveau champ de facette | **Oui** — Typesense nécessite une migration de schéma |
+| Changement du type de champ         | **Oui**                                         |
+| Ajout d'un nouveau champ de texte indexable | **Oui**                                 |
+| Suppression d'un champ              | **Oui**                                         |
+| Mise à jour du contenu d'un document | Non — utiliser upsert/synchronisation delta    |
+| Changement des règles de synonymes  | Non — les synonymes sont une ressource séparée  |
+| Changement des options de tri       | Non — `sortBy` est un paramètre de requête      |
+| Changement des règles de curation   | Non — les curations sont une ressource séparée  |
+
+## Déclencher la réindexation
+
+### Via le tableau de bord
+
+1. Naviguez vers **Search** → **Indexes** → sélectionnez votre index
+2. Cliquez sur le bouton **Reindex** dans les paramètres de l'index
+3. Surveillez la progression dans le panneau des jobs d'import
+
+### Via oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// Retourne : { jobId, status: "queued" }
+```
+
+### Via l'API Connecteur (admin)
+
+```bash
+POST /api/v1/indexes/{indexSlug}/reindex
+Authorization: Bearer aa_admin_your_key
+```
+
+## Surveiller la progression de la réindexation
+
+Vérifiez le statut du job d'import :
+
+```typescript
+const jobs = await orpc.search.importJobs.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+
+const activeJob = jobs.find((j) => j.type === "reindex" && j.status === "running");
+// activeJob.processedItems / activeJob.totalItems → progression
+```
+
+Dans le tableau de bord, l'onglet **Import Jobs** affiche la progression de la réindexation avec une barre de progression.
+
+## Mises à jour du schéma
+
+Avant la réindexation, mettez à jour le schéma de collection :
+
+```typescript
+await orpc.search.schema.update.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	fields: [
+		// Ajouter un nouveau champ
+		{ name: "tags", type: "string[]", facet: true, optional: true },
+	],
+});
+```
+
+Cela met à jour la définition du schéma stockée dans AACsearch. Le schéma de collection Typesense réel
+est mis à jour lors de la prochaine réindexation (les changements de schéma ne sont pas appliqués sur place pour éviter les interruptions).
+
+## Impact sur le quota
+
+La réindexation ré-ingère tous les documents. Pour un catalogue de 50 000 produits, une réindexation consomme 50 000 unités de recherche.
+Planifiez votre calendrier de réindexation en fonction de votre quota mensuel.
+
+## Rollback
+
+Si la nouvelle collection présente des problèmes, effectuez un rollback en faisant pointer l'alias vers la version précédente :
+
+```typescript
+await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	rollback: true, // bascule l'alias vers la version précédente
+});
+```
+
+La version précédente (`v{N-1}`) est conservée jusqu'à la prochaine réindexation réussie.
+
+## Détails d'implémentation
+
+L'implémentation de la réindexation se trouve dans `packages/search/lib/reindex.ts` (exportée sous le nom `reindexCollection`).
+
+Comportements clés :
+
+- Nom de collection versionnée : `{orgShortId}_{slug}_v{nextVersion}`
+- Basculement d'alias : `typesense.aliases.upsert(alias, { collection_name: newCollectionName })`
+- Source des documents : ré-vide l'ensemble complet des documents depuis le buffer d'ingestion ou un snapshot
+- Échec partiel : si l'import échoue avant le basculement, l'ancienne version continue de servir ; la nouvelle version est supprimée
+
+La fonction est appelée depuis la procédure `searchRouter.reindex` dans `packages/api/modules/search/procedures/reindex.ts`.

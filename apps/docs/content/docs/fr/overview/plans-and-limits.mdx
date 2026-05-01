@@ -1,0 +1,108 @@
+---
+title: Plans & Limites
+description: Niveaux de quota, portes de fonctionnalités, limites strictes et flexibles, et fonctionnement de l'application dans la base de code.
+---
+
+AACsearch applique des limites par plan via un système d'habilitations soutenu par `@repo/payments/lib/entitlements`.
+Aucune table de compteur d'utilisation séparée n'existe encore — le quota est vérifié par rapport à la configuration au moment de la requête et validé
+par rapport aux lignes brutes `SearchUsageEvent` pour l'agrégation par période.
+
+**Remarque :** Les chiffres de tarification ci-dessous sont des postures provisoires, non des taux publiquement engagés. L'infrastructure d'application
+est livrée ; les limites exactes du plan peuvent changer avant le lancement.
+
+## Plans (provisoires)
+
+| Plan           | Unités de recherche/mois | Max d'indexes | Liste d'origines autorisées        | Support          |
+| -------------- | ------------------------ | ------------- | ---------------------------------- | ---------------- |
+| **Free**       | 10 000                   | 1             | Sous-domaines `aacsearch.com` uniquement | Communauté  |
+| **Starter**    | 100 000                  | 3             | Origines personnalisées            | E-mail           |
+| **Pro**        | 1 000 000                | 10            | Origines personnalisées            | E-mail prioritaire |
+| **Business**   | 5 000 000                | 50            | Origines personnalisées            | Dédié            |
+| **Enterprise** | Illimité                 | Illimité      | Origines personnalisées            | SLA 99,95%       |
+
+Une **unité de recherche** = 1 requête de recherche OU 1 document indexé.
+
+## Portes de fonctionnalités
+
+La disponibilité des fonctionnalités au-delà du quota est contrôlée par `packages/api/modules/entitlements/middleware/feature-gate.ts`.
+Les procédures oRPC utilisent le middleware :
+
+```typescript
+// Mettre une procédure derrière un indicateur de fonctionnalité
+.use(featureGate("synonyms"))
+
+// Mettre une opération d'écriture derrière une porte
+.use(writeGate("synonyms"))
+```
+
+La matrice de fonctionnalités mappe les IDs de plan aux fonctionnalités activées dans `@repo/payments/lib/entitlements` :
+
+```typescript
+const FEATURE_MATRIX: Record<PlanId, Features> = {
+  free:       { synonyms: false, curations: false, originRestriction: false, ... },
+  starter:    { synonyms: true,  curations: true,  originRestriction: false, ... },
+  pro:        { synonyms: true,  curations: true,  originRestriction: true,  ... },
+  enterprise: { synonyms: true,  curations: true,  originRestriction: true,  ... },
+};
+```
+
+## Flux d'application du quota
+
+Chaque requête de recherche et d'ingestion passe par :
+
+```
+Requête
+  → Porte d'auth (clé valide + org)
+  → Porte de fonctionnalité (le plan autorise cette opération)
+  → Porte de quota (l'org a des unités restantes)
+  → Porte de débit (la limite de débit par clé n'est pas dépassée)
+  → Typesense
+```
+
+Le middleware `quotaCheck` dans `packages/api/modules/entitlements/middleware/quota-check.ts`
+appelle `checkQuota(orgId, "search")` et retourne :
+
+- `allowed: true` — procéder
+- `allowed: false`, `reason: "search_quota_exceeded"` — réponse 429
+
+Les limites strictes arrêtent tout le trafic immédiatement. Les limites flexibles (grâce configurable) peuvent autoriser des lectures limitées
+pendant une période de grâce après annulation (par défaut : 7 jours de lectures, 0 jour d'écritures).
+
+## Limitation de débit
+
+La limitation de débit est par clé API en utilisant un bucket à fenêtre glissante dans `SearchRateLimitBucket`.
+
+Par défaut : 60 requêtes par minute par clé (configurable par clé). Le dépassement de la limite retourne HTTP 429
+avec `error: "rate_limit_exceeded"` et un en-tête `Retry-After`.
+
+## Résolution du plan
+
+Le plan actif pour une org est résolu par `resolveOrgPlan(orgId)` dans `@repo/payments` :
+
+1. Rechercher le dernier `Purchase` (abonnement) pour l'org.
+2. Mapper `priceId` → `planId` en utilisant la matrice de prix dans `packages/payments/config.ts`.
+3. Cache pendant 60 secondes (`invalidatePlanCache(orgId)` est appelé lors des événements d'abonnement).
+4. Fail-open : si la résolution échoue (fournisseur de paiement indisponible), utiliser par défaut les limites du plan Free.
+
+## Procédure d'habilitations oRPC
+
+La procédure `entitlements.getPlanInfo` retourne le plan actuel de l'org et le résumé d'utilisation :
+
+```typescript
+const planInfo = await orpc.entitlements.getPlanInfo.call({ organizationId });
+// Retourne : { planId, planName, searchUnitsUsed, searchUnitsLimit, indexCount, indexLimit, features }
+```
+
+## Flux de mise à niveau
+
+Statut actuel : **Partiel.** La facturation Stripe pour les unités de recherche est prévue pour v0.6. Tochka (fournisseur de paiement russe)
+est activement câblé dans `packages/payments/provider/tochka-wallet/`.
+
+Le composant `BillingPlanInfo` dans `apps/saas/modules/search/components/BillingPlanInfo.tsx` affiche
+le plan actuel et l'utilisation. Le bouton de mise à niveau pointe vers la page de paramètres de facturation.
+
+## Remplacements admin
+
+Les administrateurs d'organisation peuvent voir les informations du plan dans le tableau de bord sous **Settings → Billing**. Les
+administrateurs de plateforme (via `/admin/organizations`) peuvent inspecter les habilitations de toute org et ajuster manuellement l'attribution du plan
+dans la base de données pour les cas particuliers.

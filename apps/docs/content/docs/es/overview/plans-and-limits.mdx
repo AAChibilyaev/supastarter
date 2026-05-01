@@ -1,0 +1,108 @@
+---
+title: Planes y Límites
+description: Niveles de cuota, puertas de características, límites duros y blandos, y cómo funciona la aplicación en el código base.
+---
+
+AACsearch aplica límites por plan a través de un sistema de derechos respaldado por `@repo/payments/lib/entitlements`.
+No existe todavía una tabla de contadores de uso separada — la cuota se verifica contra la configuración al momento de la solicitud y se valida
+contra filas crudas de `SearchUsageEvent` para la agregación por período.
+
+**Nota:** Los valores de precios a continuación son una postura preliminar, no tarifas comprometidas públicamente. La infraestructura de aplicación
+está lanzada; los límites exactos del plan pueden cambiar antes del lanzamiento.
+
+## Planes (preliminares)
+
+| Plan           | Unidades de búsqueda/mes | Máx. índices | Lista de permisiones de origen          | Soporte         |
+| -------------- | ------------------------ | ------------ | --------------------------------------- | --------------- |
+| **Gratuito**   | 10.000                   | 1            | Solo subdominios `aacsearch.com`        | Comunidad       |
+| **Starter**    | 100.000                  | 3            | Orígenes personalizados                 | Correo electrónico |
+| **Pro**        | 1.000.000                | 10           | Orígenes personalizados                 | Correo prioritario |
+| **Business**   | 5.000.000                | 50           | Orígenes personalizados                 | Dedicado        |
+| **Enterprise** | Ilimitado                | Ilimitado    | Orígenes personalizados                 | SLA 99,95%      |
+
+Una **unidad de búsqueda** = 1 solicitud de búsqueda O 1 documento indexado.
+
+## Puertas de características
+
+La disponibilidad de características más allá de la cuota está controlada por `packages/api/modules/entitlements/middleware/feature-gate.ts`.
+Los procedimientos oRPC usan middleware:
+
+```typescript
+// Bloquear un procedimiento detrás de un indicador de característica
+.use(featureGate("synonyms"))
+
+// Bloquear una operación de escritura
+.use(writeGate("synonyms"))
+```
+
+La matriz de características mapea IDs de plan a características habilitadas en `@repo/payments/lib/entitlements`:
+
+```typescript
+const FEATURE_MATRIX: Record<PlanId, Features> = {
+  free:       { synonyms: false, curations: false, originRestriction: false, ... },
+  starter:    { synonyms: true,  curations: true,  originRestriction: false, ... },
+  pro:        { synonyms: true,  curations: true,  originRestriction: true,  ... },
+  enterprise: { synonyms: true,  curations: true,  originRestriction: true,  ... },
+};
+```
+
+## Flujo de aplicación de cuota
+
+Cada solicitud de búsqueda e ingestión pasa por:
+
+```
+Solicitud
+  → Puerta de autenticación (clave válida + organización)
+  → Puerta de características (el plan permite esta operación)
+  → Puerta de cuota (la organización tiene unidades restantes)
+  → Puerta de velocidad (el límite de velocidad por clave no se ha superado)
+  → Typesense
+```
+
+El middleware `quotaCheck` en `packages/api/modules/entitlements/middleware/quota-check.ts`
+llama a `checkQuota(orgId, "search")` y devuelve:
+
+- `allowed: true` — continuar
+- `allowed: false`, `reason: "search_quota_exceeded"` — respuesta 429
+
+Los límites duros detienen todo el tráfico inmediatamente. Los límites blandos (gracia configurable) pueden permitir lecturas limitadas
+durante un período de gracia después de la cancelación (predeterminado: 7 días de lecturas, 0 días de escrituras).
+
+## Límite de velocidad
+
+El límite de velocidad es por API key usando un bucket de ventana deslizante en `SearchRateLimitBucket`.
+
+Predeterminado: 60 solicitudes por minuto por clave (configurable por clave). Superar el límite devuelve HTTP 429
+con `error: "rate_limit_exceeded"` y un encabezado `Retry-After`.
+
+## Resolución del plan
+
+El plan activo para una organización se resuelve mediante `resolveOrgPlan(orgId)` en `@repo/payments`:
+
+1. Buscar la `Purchase` (suscripción) más reciente para la organización.
+2. Mapear `priceId` → `planId` usando la matriz de precios en `packages/payments/config.ts`.
+3. Caché durante 60 segundos (`invalidatePlanCache(orgId)` se llama en eventos de suscripción).
+4. Fallo abierto: si la resolución falla (proveedor de pago no disponible), se usa el predeterminado de los límites del plan gratuito.
+
+## Procedimiento oRPC de derechos
+
+El procedimiento `entitlements.getPlanInfo` devuelve el plan actual de la organización y el resumen de uso:
+
+```typescript
+const planInfo = await orpc.entitlements.getPlanInfo.call({ organizationId });
+// Devuelve: { planId, planName, searchUnitsUsed, searchUnitsLimit, indexCount, indexLimit, features }
+```
+
+## Flujo de actualización
+
+Estado actual: **Parcial.** La facturación de Stripe para unidades de búsqueda está planificada para v0.6. Tochka (proveedor de
+pago ruso) se está conectando activamente en `packages/payments/provider/tochka-wallet/`.
+
+El componente `BillingPlanInfo` en `apps/saas/modules/search/components/BillingPlanInfo.tsx` renderiza
+el plan actual y el uso. El CTA de actualización apunta a la página de configuración de facturación.
+
+## Anulaciones de administrador
+
+Los administradores de la organización pueden ver la información del plan en el panel en **Configuración → Facturación**. Los administradores de la plataforma
+(vía `/admin/organizations`) pueden inspeccionar los derechos de cualquier organización y ajustar manualmente la asignación del plan
+en la base de datos para casos especiales.

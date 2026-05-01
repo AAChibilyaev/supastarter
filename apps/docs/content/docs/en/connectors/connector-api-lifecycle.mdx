@@ -1,0 +1,285 @@
+---
+title: "Connector API Lifecycle"
+description: "All 7 Connector API endpoints, authentication, request/response shapes, lifecycle flow, and error codes."
+---
+
+The Connector API is a set of Hono routes mounted under `/api` that CMS modules call to push product data and report diagnostics. All endpoints require a `ss_connector_*` Bearer token. All payloads are validated with Zod.
+
+## Authentication
+
+Every request must include an `Authorization` header:
+
+```http
+Authorization: Bearer ss_connector_<token>
+```
+
+The token is matched against hashed records in `SearchApiKey` where `scopes` includes `connector_write` and `revokedAt` is null. On a successful match the token's `lastUsedAt` is updated (non-blocking).
+
+**Error responses for invalid auth:**
+
+| Condition                  | Status | Body                                    |
+| -------------------------- | ------ | --------------------------------------- |
+| No `Authorization` header  | 401    | `{ "error": "missing_bearer_token" }`   |
+| Token not found or revoked | 403    | `{ "error": "invalid_or_revoked_key" }` |
+
+## Endpoints
+
+### POST /api/connectors/handshake
+
+Call this once when the CMS module starts up or when the merchant saves configuration. Validates the token and returns index metadata.
+
+**Request body:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"platform": "prestashop"
+}
+```
+
+`platform` must be `"prestashop"` or `"bitrix"`.
+
+**Response (200):**
+
+```json
+{
+	"projectId": "org_abc123",
+	"indexSlug": "products",
+	"status": "active",
+	"connector": {
+		"id": "prestashop",
+		"displayName": "PrestaShop",
+		"syncModes": ["full", "delta"],
+		"capabilities": ["upsert", "delete"],
+		"minModuleVersion": "1.0.0"
+	}
+}
+```
+
+Use `projectId` as the `:projectId` path segment for all subsequent sync and diagnostics calls.
+
+---
+
+### POST /api/connectors/:connectorId/heartbeat
+
+Keepalive signal. Call this periodically (recommended: every 5 minutes) so the dashboard can show connector online/offline status.
+
+**Request body:** none required
+
+**Response (200):**
+
+```json
+{
+	"status": "ok",
+	"timestamp": "2025-01-15T10:00:00.000Z"
+}
+```
+
+The dashboard derives connector health from `lastUsedAt` on the token: online if last used within 5 minutes, unknown within 30 minutes, offline otherwise.
+
+---
+
+### POST /api/projects/:projectId/sync/full
+
+Send all products for a full catalog sync. Products are enqueued to `SearchIngestBuffer` and indexed asynchronously.
+
+**Batch limit:** 1–1000 products per request. For large catalogs, send multiple requests.
+
+**Request body:**
+
+```json
+{
+	"products": [
+		{
+			"external_id": "product-123",
+			"title": "Blue Running Shoes",
+			"description": "Lightweight running shoes",
+			"sku": "BRS-42",
+			"brand": "Acme Sport",
+			"categories": ["Shoes", "Running"],
+			"category_ids": ["cat-10", "cat-22"],
+			"tags": ["sale", "new-arrival"],
+			"price": 99.99,
+			"sale_price": 79.99,
+			"currency": "USD",
+			"image_url": "https://example.com/img/brs-42.jpg",
+			"product_url": "https://example.com/products/brs-42",
+			"availability": "in_stock",
+			"stock_quantity": 42,
+			"attributes": { "color": "blue", "size": "42" },
+			"locale": "en"
+		}
+	]
+}
+```
+
+All fields except `external_id` and `title` are optional. `availability` accepts `"in_stock"`, `"out_of_stock"`, or `"preorder"`.
+
+**Response (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsCount": 1,
+	"jobId": "sync_42_1737000000000"
+}
+```
+
+Use `jobId` to poll `GET /api/projects/:projectId/sync/jobs/:jobId` for status.
+
+**Error (502):** `{ "error": "sync_failed" }` — the enqueue to `SearchIngestBuffer` failed. Retry with exponential backoff.
+
+---
+
+### POST /api/projects/:projectId/sync/delta
+
+Send only changed products. Use this for real-time updates triggered by product save/delete/stock change events.
+
+**Batch limit:** 1–100 products per request.
+
+Request and response shapes are identical to the full sync endpoint. The `jobId` in the response has type `"delta"`.
+
+**Response (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsProcessed": 1,
+	"jobId": "sync_43_1737000001000"
+}
+```
+
+---
+
+### DELETE /api/projects/:projectId/products/:externalId
+
+Remove a single document from the index by its external ID.
+
+**No request body required.**
+
+**Response (200):**
+
+```json
+{
+	"status": "deleted",
+	"externalId": "product-123"
+}
+```
+
+**Error (502):** `{ "error": "delete_failed" }`
+
+---
+
+### POST /api/projects/:projectId/diagnostics
+
+Report module health information to AACsearch. The dashboard uses this data to show the last known sync state and any errors from the CMS side.
+
+> **Early-access caveat:** Diagnostics reports are stored in memory on the AACsearch server process. They are lost on server restart. This is acceptable for MVP; persistent storage will require a DB schema change.
+
+**Request body:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"lastFullSync": "2025-01-15T09:00:00.000Z",
+	"lastDeltaSync": "2025-01-15T09:55:00.000Z",
+	"totalProducts": 4823,
+	"phpVersion": "8.2.0",
+	"shopUrl": "https://myshop.example.com",
+	"errors": [
+		{
+			"code": "export_timeout",
+			"message": "Product export timed out after 30s",
+			"timestamp": "2025-01-15T09:54:30.000Z"
+		}
+	]
+}
+```
+
+**Response (200):**
+
+```json
+{
+	"status": "ok",
+	"receivedAt": "2025-01-15T09:55:01.000Z"
+}
+```
+
+---
+
+### GET /api/projects/:projectId/sync/jobs/:jobId
+
+Poll the status of a sync job by its ID.
+
+> **Early-access caveat:** Sync job history is stored in memory on the AACsearch server process. The in-memory store holds the last 50 jobs per server instance and is lost on restart. If the server restarts between your call to `sync/full` and your poll of this endpoint, you will receive a 404. CMS modules should treat a 404 as an acceptable outcome after a server restart and not retry indefinitely.
+
+**Response (200) — completed job:**
+
+```json
+{
+	"id": "sync_42_1737000000000",
+	"type": "full",
+	"status": "completed",
+	"indexId": "idx_abc123",
+	"organizationId": "org_abc123",
+	"startedAt": "2025-01-15T09:00:00.000Z",
+	"finishedAt": "2025-01-15T09:00:05.432Z",
+	"duration": "5.4s",
+	"itemsCount": 500,
+	"failuresCount": 0,
+	"events": [
+		{ "timestamp": "...", "message": "Full sync started", "level": "info" },
+		{ "timestamp": "...", "message": "Sync completed: 500 items processed", "level": "info" }
+	]
+}
+```
+
+`status` is one of: `"running"`, `"completed"`, `"failed"`.
+
+**Error (404):** `{ "error": "job_not_found" }`
+
+## Lifecycle flow
+
+A typical CMS module follows this sequence:
+
+```
+1. Startup / config save
+   └─ POST /api/connectors/handshake
+      → save projectId + indexSlug to module config
+
+2. Background keepalive (every 5 min)
+   └─ POST /api/connectors/:connectorId/heartbeat
+
+3. Initial full sync (one-time or scheduled)
+   └─ POST /api/projects/:projectId/sync/full (batched)
+      → poll GET .../sync/jobs/:jobId until completed/failed
+
+4. Real-time delta (on product events)
+   └─ POST /api/projects/:projectId/sync/delta
+
+5. Product deletion
+   └─ DELETE /api/projects/:projectId/products/:externalId
+
+6. Periodic diagnostics report
+   └─ POST /api/projects/:projectId/diagnostics
+```
+
+## Error code reference
+
+| Code                     | Meaning                                                       |
+| ------------------------ | ------------------------------------------------------------- |
+| `missing_bearer_token`   | No `Authorization: Bearer ...` header                         |
+| `invalid_or_revoked_key` | Token not found, wrong scope, or revoked                      |
+| `invalid_json`           | Request body could not be parsed                              |
+| `invalid_input`          | Zod validation failed; `details` array has field-level errors |
+| `project_not_found`      | `:projectId` does not match the token's organization          |
+| `unsupported_connector`  | `platform` field is not `prestashop` or `bitrix`              |
+| `sync_failed`            | Enqueue to `SearchIngestBuffer` failed — retry                |
+| `delete_failed`          | Document delete enqueue failed — retry                        |
+| `job_not_found`          | Job ID not found (may have been lost on restart)              |
+
+## Related pages
+
+- [Connectors Overview](/docs/connectors/overview)
+- [PrestaShop Module](/docs/connectors/prestashop)
+- [Bitrix Module](/docs/connectors/bitrix)

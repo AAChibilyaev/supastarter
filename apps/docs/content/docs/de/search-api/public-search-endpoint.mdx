@@ -1,0 +1,188 @@
+---
+title: Öffentlicher Suchendpunkt
+description: Vollständige Referenz für den POST /api/search-Endpunkt — Anfrageschema, Parameter und Antwortformat.
+---
+
+Der öffentliche Suchendpunkt ist der primäre Weg zur Ausführung von Suchanfragen. Er akzeptiert JSON-POST-
+Anfragen, die mit einem `ss_search_*`- oder `ss_scoped_*`-Schlüssel authentifiziert werden.
+
+**Endpunkt:** `POST /api/search`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+## Anfrageschema
+
+```typescript
+{
+  // Erforderlich
+  indexSlug: string;                   // Ziel-Index-Slug
+
+  // Abfrage
+  q: string;                           // Suchanfrage (Verwenden Sie "*" für Platzhalter/Durchsuchen)
+  queryBy?: string;                    // Kommagetrennte Feldnamen zum Durchsuchen
+                                       // Standard: "title,sku,brand,description"
+
+  // Filtern
+  filterBy?: string;                   // Typesense-Filterausdruck
+  facetBy?: string;                    // Kommagetrennte Felder für Facettenberechnung
+
+  // Sortieren
+  sortBy?: string;                     // z. B. "price:asc" oder "_text_match:desc,price:asc"
+
+  // Seitenumbruch
+  page?: number;                       // 1-indiziert (Standard: 1)
+  perPage?: number;                    // Standard: 10, Max: 100
+
+  // Hervorhebung
+  highlightFields?: string;            // Kommagetrennte Felder zur Hervorhebung
+  highlightStartTag?: string;          // Standard: "<mark>"
+  highlightEndTag?: string;            // Standard: "</mark>"
+
+  // Feldauswahl
+  includeFields?: string;              // Nur diese Felder zurückgeben
+  excludeFields?: string;              // Diese Felder aus der Antwort ausschließen
+}
+```
+
+## Beispiel: Einfache Suche
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "kabellose kopfhörer",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Beispiel: Gefilterte Suche mit Facetten
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,brand",
+    "filterBy": "availability:=in_stock && price:<200",
+    "facetBy": "brand,categories",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Antwortschema
+
+```typescript
+{
+  found: number;           // Gesamt übereinstimmende Dokumente
+  page: number;            // Aktuelle Seite (1-indiziert)
+  outOf: number;           // Gesamtdokumente im Index
+  searchTimeMs: number;    // Abfrageausführungszeit in Millisekunden
+
+  hits: Array<{
+    document: Record<string, unknown>;  // Das übereinstimmende Dokument
+    highlights: Array<{
+      field: string;
+      snippet: string;     // HTML mit <mark>-Tags um übereinstimmende Begriffe
+    }>;
+    textMatchScore: number;
+  }>;
+
+  facetCounts?: Array<{
+    fieldName: string;
+    counts: Array<{
+      value: string;
+      count: number;
+    }>;
+  }>;
+}
+```
+
+## Beispielantwort
+
+```json
+{
+	"found": 142,
+	"page": 1,
+	"outOf": 5000,
+	"searchTimeMs": 4,
+	"hits": [
+		{
+			"document": {
+				"id": "product-123",
+				"title": "Sony WH-1000XM5 Kabellose Kopfhörer",
+				"brand": "Sony",
+				"price": 349.99,
+				"availability": "in_stock"
+			},
+			"highlights": [
+				{
+					"field": "title",
+					"snippet": "Sony WH-1000XM5 <mark>Kabellose</mark> <mark>Kopfhörer</mark>"
+				}
+			],
+			"textMatchScore": 578730
+		}
+	],
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 }
+			]
+		}
+	]
+}
+```
+
+## Abfrage-Platzhalter
+
+Verwenden Sie `q: "*"`, um alle Dokumente zurückzugeben (nützlich zum Durchsuchen mit Filtern):
+
+```json
+{
+	"indexSlug": "products",
+	"q": "*",
+	"filterBy": "categories:=Elektronik",
+	"sortBy": "price:asc"
+}
+```
+
+## Mandantenisolierung
+
+Der öffentliche Handler fügt jeder Abfrage automatisch einen Mandantenfilter hinzu:
+
+```
+organization_id:={organizationId}
+```
+
+Dieser Filter wird UND-verknüpft mit jedem `filterBy`, das der Aufrufer bereitstellt. Er kann vom
+Aufrufer nicht entfernt oder überschrieben werden. Der organisationsübergreifende Datenzugriff ist durch diesen Endpunkt architektonisch unmöglich.
+
+## Standard-Abfrageparameter
+
+AACsearch wendet diese Standardwerte an, wenn nicht angegeben:
+
+| Parameter           | Standardwert                               |
+| ------------------- | ------------------------------------------ |
+| `queryBy`           | `"title,sku,brand,categories,description"` |
+| `sortBy`            | `"_text_match:desc"`                       |
+| `page`              | `1`                                        |
+| `perPage`           | `10`                                       |
+| `highlightStartTag` | `"<mark>"`                                 |
+| `highlightEndTag`   | `"</mark>"`                                |
+
+## Leistungshinweise
+
+- Typische Abfragelatenz: < 10 ms für Indizes unter 100.000 Dokumenten
+- Die Antwortzeit steigt mit komplexen `filterBy`-Ausdrücken und vielen Facetten
+- Vermeiden Sie `perPage > 50` für facettenintensive Abfragen — es erhöht die Typesense-Verarbeitungszeit
+- Verwenden Sie `excludeFields`, um große Textfelder (z. B. `description`) aus Ergebnissen zu entfernen, die Sie nicht rendern

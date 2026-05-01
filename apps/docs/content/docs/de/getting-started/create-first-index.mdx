@@ -1,0 +1,129 @@
+---
+title: Ersten Index erstellen
+description: Erstellen Sie einen Suchindex, verstehen Sie das Collection-Alias-Modell und führen Sie Ihre erste Suchanfrage über das Dashboard aus.
+---
+
+Ein **Suchindex** in AACsearch entspricht einer Typesense-Collection mit versionierter Benennung und einem Alias.
+Das Erstellen eines Index richtet die Typesense-Collection ein und registriert den Index in der Datenbank.
+
+## Was ist ein Index?
+
+Jeder Index repräsentiert einen durchsuchbaren Katalog – typischerweise einen pro Shop oder Produktsatz.
+
+```
+Organisation
+  └── SearchIndex (slug: "products")
+        collectionName: "org123_products_v1"   ← Typesense-Collection (versioniert)
+        aliasName:      "org123_products"       ← Typesense-Alias (stabil, zeigt immer auf die aktuelle Version)
+```
+
+Alle Suchanfragen zielen auf den **Alias**, nicht direkt auf die versionierte Collection. Dies ermöglicht
+Zero-Downtime-Reindex – eine neue Version wird erstellt, während die aktuelle Version Traffic bedient,
+dann wird der Alias atomisch ausgetauscht.
+
+## Index über das Dashboard erstellen
+
+1. Öffnen Sie das SaaS-Dashboard unter `http://localhost:3000`
+2. Wählen Sie Ihre Organisation aus dem Umschalter
+3. Navigieren Sie zu **Suche** → **Indizes**
+4. Klicken Sie auf **Index erstellen**
+5. Geben Sie einen Slug (z. B. `products`) und einen optionalen Anzeigenamen ein
+6. Klicken Sie auf **Erstellen**
+
+Das Dashboard ruft `searchRouter.createIndex` auf, das die Typesense-Collection einrichtet
+und die `SearchIndex`-Zeile in Postgres erstellt.
+
+## Index über oRPC erstellen
+
+```typescript
+import { orpc } from "@shared/lib/orpc-query-utils";
+
+const index = await orpc.search.createIndex.call({
+	organizationId: "org_...",
+	slug: "products",
+	name: "Produktkatalog",
+});
+```
+
+## Standard-Collection-Schema
+
+Beim Erstellen eines Index richtet AACsearch eine Typesense-Collection mit einem produktoptimierten Schema ein:
+
+```json
+{
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string", "weight": 10 },
+		{ "name": "sku", "type": "string", "weight": 8 },
+		{ "name": "brand", "type": "string", "weight": 5, "facet": true },
+		{ "name": "categories", "type": "string[]", "weight": 5, "facet": true },
+		{ "name": "description", "type": "string", "weight": 2 },
+		{ "name": "price", "type": "float", "facet": true },
+		{ "name": "sale_price", "type": "float", "optional": true },
+		{ "name": "availability", "type": "string", "facet": true },
+		{ "name": "locale", "type": "string", "facet": true },
+		{ "name": "created_at", "type": "int64" }
+	],
+	"default_sorting_field": "_text_match"
+}
+```
+
+Das Schema ist in `packages/search/lib/collections.ts` definiert und entwickelt sich mit der Produktschema-Version weiter.
+
+## Erstes Dokument einlesen
+
+Sobald der Index erstellt ist, pushen Sie ein Dokument durch den Ingest-Buffer:
+
+```typescript
+const result = await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-123",
+		title: "Kabellose Kopfhörer",
+		sku: "WH-2024",
+		brand: "Acme",
+		categories: ["Elektronik", "Audio"],
+		description: "Geräuschunterdrückende Over-Ear-Kopfhörer mit 30h Akku.",
+		price: 99.99,
+		availability: "in_stock",
+		locale: "de",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+Dies ruft `enqueueManySearchIngest()` auf, das in `SearchIngestBuffer` schreibt. Der Hintergrund-Worker
+nimmt es auf und leitet es innerhalb von Sekunden an Typesense weiter.
+
+## Suchanfrage ausführen
+
+Verwenden Sie den Tab **Suchvorschau** im Dashboard oder rufen Sie den öffentlichen Suchendpunkt direkt auf:
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 10
+  }'
+```
+
+Siehe [Öffentlicher Suchendpunkt](/docs/search-api/public-search-endpoint) für das vollständige Anfrageschema.
+
+## Was nach der Index-Erstellung passiert
+
+1. Die **Erste Schritte**-Checkliste im Dashboard aktualisiert sich und markiert „Index erstellen" als abgeschlossen
+2. Der Tab **Import-Jobs** wird für den Massen-CSV/JSON-Import verfügbar
+3. Der Tab **API-Schlüssel** zeigt das index-spezifische Schlüssel-Panel
+4. Der Tab **Widget** zeigt den Installations-Snippet mit dem vorausgefüllten Index-Slug
+
+## Nächste Schritte
+
+- [API-Schlüssel](/docs/getting-started/api-keys) – Schlüssel für Ihre Integration generieren
+- [Ingest und Reindex](/docs/getting-started/ingest-and-reindex) – Massenimport und Schema-Updates
+- [Connector-Onboarding](/docs/getting-started/connector-onboarding) – CMS für automatische Synchronisierung verbinden

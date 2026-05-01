@@ -1,0 +1,126 @@
+---
+title: "Gehostetes Such-Widget"
+description: "Das AACsearch-Widget mit einem einzigen Script-Tag in Ihren Storefront einbetten. Vanilla JS, Shadow DOM, fünf Locales."
+---
+
+Das gehostete AACsearch-Widget ist eine in sich geschlossene Such-UI, die Sie mit einem einzigen `<script>`-Tag in jeden Storefront einbetten. Es verarbeitet die Sucheingabe, das Ergebnisraster, Facetten, Sortierung, Seitenumbruch und Click-Tracking — ohne Abhängigkeit von einem Framework oder einem Build-Schritt Ihrerseits.
+
+## Technische Übersicht
+
+| Eigenschaft     | Wert                                                         |
+| --------------- | ------------------------------------------------------------ |
+| Implementierung | Vanilla JS, handgefertigt (kein InstantSearch.js, kein React) |
+| Stil-Isolierung | Shadow DOM — Widget-Stile können nicht in Ihr Shop-CSS austreten |
+| Bundle-Größe    | ~14 KB minifiziert (IIFE + ESM Dual-Output)                 |
+| Bereitgestellt unter | `GET /api/widget/widget.js` (CORS-erlaubt, gecacht)    |
+| Auth            | Erfordert einen `ss_search_*`-API-Schlüssel in `data-api-key` |
+| Locales         | `en`, `de`, `es`, `fr`, `ru`                                 |
+
+Das Widget legt niemals einen Typesense-Admin-Schlüssel offen. Es kommuniziert nur über den öffentlichen Suchendpunkt mit dem von Ihnen bereitgestellten eingeschränkten `ss_search_*`-Schlüssel.
+
+## Einbettungsschnipsel
+
+Kopieren Sie den Schnipsel aus **Dashboard → Suche → Widget-Tab** und fügen Sie ihn in den `<head>` Ihres Storefronts oder vor das schließende `</body>` ein:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_your_key_here"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Fügen Sie auch das Container-Element hinzu, wo das Widget gerendert werden soll:
+
+```html
+<div id="aac-search"></div>
+```
+
+Das Widget initialisiert sich automatisch, wenn das Skript geladen wird. Es ist kein JavaScript-Initialisierungscode erforderlich.
+
+## Konfigurationsattribute
+
+Alle Konfigurationen erfolgen über `data-*`-Attribute am `<script>`-Tag.
+
+| Attribut           | Erforderlich | Standard    | Beschreibung                                     |
+| ------------------ | ------------ | ----------- | ------------------------------------------------ |
+| `data-base-url`    | Ja           | —           | Basis-URL Ihrer AACsearch-Instanz                |
+| `data-api-key`     | Ja           | —           | Ein `ss_search_*`-Schlüssel (nur Such-Bereich)   |
+| `data-index-slug`  | Ja           | —           | Slug des abzufragenden Suchindex                 |
+| `data-container`   | Ja           | —           | CSS-Selektor für das Container-Element           |
+| `data-locale`      | Nein         | `"en"`      | UI-Locale: `en`, `de`, `es`, `fr` oder `ru`     |
+| `data-theme`       | Nein         | `"auto"`    | Farbthema: `"light"`, `"dark"` oder `"auto"`     |
+| `data-mode`        | Nein         | `"inline"`  | Anzeigemodus: `"inline"` oder `"modal"`          |
+| `data-show-prices` | Nein         | `"true"`    | Produktpreise in Ergebnissen anzeigen            |
+| `data-show-images` | Nein         | `"true"`    | Produktbilder in Ergebnissen anzeigen            |
+
+### Modus: inline vs. modal
+
+`inline` — das Widget rendert direkt im Container-Element. Geeignet für eine dedizierte Suchseite oder einen prominenten Suchbereich.
+
+`modal` — das Widget erscheint als Überlagerung. Das Modal wird typischerweise durch einen Button-Klick oder Tastaturkürzel ausgelöst. (Hinweis: Modal-Trigger-Button muss von Ihrem Theme verdrahtet werden.)
+
+### Automatische Locale-Erkennung
+
+Das Widget löst Locales mit einer Fallback-Kette auf: `data-locale`-Attribut → Basissprache (`en-US` → `en`) → `"en"`. Wenn Sie `"de-DE"` übergeben, wird es zu `"de"` aufgelöst.
+
+## API-Schlüssel-Anforderungen
+
+Das `data-api-key`-Attribut muss ein `ss_search_*`-Schlüssel sein, kein Connector-Token oder Admin-Schlüssel. Suchschlüssel haben nur den `search`-Bereich und können sicher in browser-sichtigem HTML eingebettet werden.
+
+Erstellen Sie einen Suchschlüssel in **Dashboard → Suche → API-Schlüssel → Schlüssel erstellen** und wählen Sie den `search`-Bereich.
+
+Wenn Sie den Schlüssel auf bestimmte Ursprünge beschränken (`allowedOrigins`), fügen Sie Ihre Storefront-Domain zur Allowlist hinzu.
+
+## Anzeigemodi und UI-Zustände
+
+Das Widget verarbeitet diese Zustände automatisch:
+
+| Zustand              | Was der Benutzer sieht                                        |
+| -------------------- | ------------------------------------------------------------- |
+| Inaktiv (keine Anfrage) | Platzhaltertext-Aufforderung                               |
+| Wird geladen         | „Wird gesucht..."-Spinner                                    |
+| Ergebnisse           | Produktraster mit Facetten, Sortieroptionen, Seitenumbruch   |
+| Keine Ergebnisse     | Leerer Zustand mit Vorschlag, einen anderen Begriff zu versuchen |
+| Fehler               | Degradierter Zustand mit noch funktionierender Sucheingabe   |
+
+## Unterstützte Sprachen
+
+Alle UI-Zeichenketten sind im Widget-Bundle eingebettet. Keine externen i18n-Abrufe.
+
+| Locale | Sprache     |
+| ------ | ----------- |
+| `en`   | Englisch    |
+| `de`   | Deutsch     |
+| `ru`   | Russisch    |
+| `es`   | Spanisch    |
+| `fr`   | Französisch |
+
+## CSS-Anpassung
+
+Das Widget verwendet CSS-benutzerdefinierte Eigenschaften, die auf seinen Shadow-DOM-Host beschränkt sind. Sie können sie durch das Targeting des Container-Elements überschreiben:
+
+```css
+/* Diese gelten innerhalb des Shadow DOM über CSS-Vererbung durch :host */
+#aac-search {
+	--aac-primary: #e60000;
+	--aac-radius: 4px;
+}
+```
+
+Verfügbare CSS-Variablen: `--aac-primary`, `--aac-primary-hover`, `--aac-bg`, `--aac-bg-secondary`, `--aac-text`, `--aac-text-secondary`, `--aac-border`, `--aac-radius`.
+
+Der Dark-Modus wird automatisch behandelt, wenn `data-theme="auto"` — das Widget erkennt die Systempräferenz über `prefers-color-scheme`.
+
+## Analytics
+
+Das Widget verfolgt Suchverhalten und sendet Ereignisse an `POST /api/events/track`. Ereignisse umfassen `search_query`, `zero_results`, `result_click`, `widget_open` und `filter_used`. Siehe [Widget-Analytics-Ereignisse](/docs/connectors/widget-analytics-events) für die vollständige Ereignisreferenz.
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [Widget-Analytics-Ereignisse](/docs/connectors/widget-analytics-events)
+- [Authentifizierung](/docs/search-api/authentication)

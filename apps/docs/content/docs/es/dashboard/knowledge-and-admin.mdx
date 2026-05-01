@@ -1,0 +1,142 @@
+---
+title: "Módulo de Conocimiento y Administración"
+description: "El módulo de Conocimiento para preguntas y respuestas internas sobre documentos (RAG/GraphRAG), y la sección de administración para administradores del sitio."
+---
+
+## Módulo de Conocimiento
+
+> **Distinción importante:** El módulo de Conocimiento es una superficie de producto separada de la búsqueda de palabras clave en tienda. La búsqueda en tienda usa Typesense para consultas de palabras clave rápidas y tolerantes a errores tipográficos contra catálogos de productos. El módulo de Conocimiento es para preguntas y respuestas internas sobre documentos no estructurados — archivos PDF, DOCX, documentos de texto — usando recuperación de IA (RAG y GraphRAG). Las dos superficies son independientes; no comparten índices ni datos.
+
+El módulo de Conocimiento está disponible en:
+
+- **Ámbito de organización:** `/[orgSlug]/knowledge` — espacios de conocimiento para toda la organización
+- **Ámbito de cuenta:** `/knowledge` — espacios de conocimiento personales
+
+### Espacios de conocimiento
+
+Un espacio de conocimiento es un contenedor para fuentes de documentos y la interfaz de preguntas y respuestas. Puede crear múltiples espacios (por ejemplo, "Documentos de productos", "Políticas internas", "Base de conocimientos de soporte").
+
+Cada espacio es propiedad de una organización o de un usuario (patrón de discriminador de propietario — el mismo modelo usado para los índices de búsqueda).
+
+### Fuentes de datos
+
+Dentro de un espacio, añade fuentes de datos — actualmente cargas de archivos:
+
+| Formato | Soporte   |
+| ------- | --------- |
+| PDF     | Soportado |
+| DOCX    | Soportado |
+| TXT     | Soportado |
+
+Cuando carga un archivo, se crea un trabajo de ingestión. El sistema:
+
+1. Analiza el archivo en texto
+2. Divide el texto en fragmentos usando estrategias de fragmentación configurables
+3. Genera embeddings para cada fragmento (mediante OpenAI)
+4. Almacena los fragmentos en `KnowledgeChunk` con embeddings vectoriales
+
+### Trabajos de ingestión
+
+La lista de trabajos de ingestión muestra el estado (en ejecución / completado / con error), el nombre del archivo, el recuento de fragmentos y cualquier error.
+
+### Preguntar (RAG)
+
+Una vez completada la ingestión, puede hacer preguntas sobre el espacio. El flujo de preguntas:
+
+1. Embebe su consulta
+2. Recupera los fragmentos más relevantes mediante similitud vectorial
+3. Envía el contexto recuperado + la pregunta al LLM
+4. Devuelve la respuesta con citas de fuentes
+
+### GraphRAG
+
+La característica GraphRAG construye un grafo de conocimiento a partir de los documentos ingeridos:
+
+- `GraphNode` — conceptos, entidades, temas extraídos de los documentos
+- `GraphEdge` — relaciones entre nodos
+
+Las consultas GraphRAG recorren el grafo para proporcionar respuestas más profundas y conectadas que el RAG simple. Use GraphRAG para preguntas que requieren razonamiento entre múltiples documentos o temas.
+
+### Métricas de uso
+
+Cada espacio rastrea el uso mediante el procedimiento `knowledge.usageMetrics`: total de consultas, consumo de tokens y recuentos de documentos por fuente.
+
+### Modelos Prisma
+
+El módulo de Conocimiento usa 7 modelos Prisma dedicados:
+
+| Modelo              | Propósito                                       |
+| ------------------- | ----------------------------------------------- |
+| `KnowledgeSpace`    | Contenedor de nivel superior, propiedad de organización o usuario |
+| `DataSource`        | Registro de fuente de archivo (nombre, tipo, estado) |
+| `IngestionJob`      | Seguimiento de ingestión (estado, progreso, errores) |
+| `KnowledgeDocument` | Documento procesado                             |
+| `KnowledgeChunk`    | Fragmento de texto individual para recuperación |
+| `GraphNode`         | Nodo del grafo de conocimiento (concepto, entidad) |
+| `GraphEdge`         | Relación entre nodos del grafo                  |
+
+### Procedimientos oRPC
+
+El módulo de conocimiento expone 10 procedimientos en `packages/api/modules/knowledge/`:
+
+| Procedimiento       | Descripción                                    |
+| ------------------- | ---------------------------------------------- |
+| `listSpaces`        | Listar todos los espacios para el propietario  |
+| `createSpace`       | Crear un nuevo espacio de conocimiento         |
+| `listSources`       | Listar fuentes de datos para un espacio        |
+| `createSource`      | Añadir una nueva fuente de datos               |
+| `listIngestionJobs` | Listar trabajos de ingestión para un espacio   |
+| `ingestFile`        | Cargar e ingestar un archivo                   |
+| `ask`               | Hacer una pregunta (recuperación RAG + respuesta LLM) |
+| `graphragExplain`   | Consulta de explicación GraphRAG               |
+| `usageMetrics`      | Estadísticas de uso de tokens y consultas      |
+
+---
+
+## Sección de Administración
+
+La sección de administración solo es visible para los usuarios con el rol de administrador del sitio. Es accesible en `/admin/*`.
+
+> **Nota:** Varias páginas de administración son actualmente stubs con contenido de marcador de posición — renderizan el diseño de la página pero aún no tienen funcionalidad completa. Esto se indica por página a continuación.
+
+### Páginas de administración
+
+| Ruta                   | Descripción                                              | Estado                           |
+| ---------------------- | -------------------------------------------------------- | -------------------------------- |
+| `/admin/`              | Raíz del panel de administración                         | Funcional                        |
+| `/admin/organizations` | Listar y gestionar todas las organizaciones              | Funcional                        |
+| `/admin/users`         | Listar y gestionar todos los usuarios, suplantación      | Funcional                        |
+| `/admin/config`        | Configuración del sistema                                | Stub — pendiente                 |
+| `/admin/security`      | Configuración de seguridad y gestión de sesiones         | Stub — pendiente                 |
+| `/admin/integrations`  | Configuración de integraciones de terceros               | Stub — pendiente                 |
+| `/admin/audit`         | Visor del registro de auditoría                          | Stub — pendiente                 |
+| `/admin/wallet`        | Admin del wallet de IA (saldo por usuario, transacciones) | Stub — en desarrollo activo (v0.6) |
+| `/admin/jobs`          | Gestión de trabajos en segundo plano                     | Stub — pendiente                 |
+| `/admin/notifications` | Gestión de notificaciones del sistema                    | Stub — pendiente                 |
+
+### Wallet de IA y créditos (v0.6 — en desarrollo activo)
+
+El sistema de wallet (`@repo/billing-wallet`) gestiona los saldos de crédito de IA usando un ledger BigInt en kopecks. La página de administración del wallet en `/admin/wallet` y la página de créditos de IA para el usuario en `/settings/billing/ai-credits` están en desarrollo activo como parte del lanzamiento de medición v0.6. El controlador de pago Tochka (para el mercado ruso) está conectado; Stripe es una opción paralela.
+
+La característica del wallet está intencionalmente semi-aislada — si su tarea no involucra facturación o créditos de IA, no la extienda sin confirmación explícita del alcance.
+
+---
+
+## Configuración a nivel de cuenta
+
+La configuración personal vive fuera del contexto de la organización en `/settings/`.
+
+| Ruta                           | Contenidos                                                     |
+| ------------------------------ | -------------------------------------------------------------- |
+| `/settings/general`            | Nombre de visualización, correo electrónico, foto de perfil    |
+| `/settings/security`           | Cambio de contraseña, 2FA (TOTP), passkeys, conexiones OAuth   |
+| `/settings/notifications`      | Preferencias de notificaciones por tipo                        |
+| `/settings/billing`            | Facturación personal, plan activo, método de pago              |
+| `/settings/billing/ai-credits` | Recarga del wallet de IA e historial de transacciones (v0.6)   |
+
+La configuración de seguridad admite: inicio de sesión con contraseña, magic link, autenticación de dos factores (TOTP mediante aplicación de autenticación), passkey (WebAuthn) y OAuth (Google, GitHub).
+
+## Páginas relacionadas
+
+- [Descripción general del panel](/docs/dashboard/overview)
+- [Workspace de búsqueda](/docs/dashboard/search-workspace)

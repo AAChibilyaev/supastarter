@@ -1,0 +1,153 @@
+---
+title: Tokens de recherche limités
+description: Générer des tokens HMAC de courte durée qui restreignent les permissions d'une clé de recherche — filtres par utilisateur, durée de vie et modèle de sécurité.
+---
+
+Les tokens limités vous permettent de créer des tokens de recherche signés cryptographiquement de courte durée qui restreignent ce que
+l'appelant peut voir. Générez-les côté serveur et transmettez-les au navigateur — la clé `ss_search_*` de base
+ne quitte jamais votre serveur.
+
+## Quand utiliser les tokens limités
+
+| Scénario                                                         | Utiliser un token limité ?              |
+| ---------------------------------------------------------------- | --------------------------------------- |
+| Boutique mono-tenant (une org, une boutique)                     | Non — la clé `ss_search_*` suffit       |
+| Application multi-tenant où les utilisateurs ne doivent voir que leurs propres produits | **Oui** |
+| Exposer la recherche à un tiers avec un accès restreint          | **Oui**                                 |
+| Limiter les résultats à un niveau de prix spécifique             | **Oui**                                 |
+| Widget d'intégration de courte durée avec expiration             | **Oui**                                 |
+| Aperçu du tableau de bord interne                                | Non — utiliser oRPC basé sur session    |
+
+## Fonctionnement des tokens limités
+
+Les tokens limités sont des claims signés HMAC-SHA256 sans état — ils ne sont jamais stockés en base de données.
+
+```
+Structure du token :
+  ss_scoped_{base64url(payload)}.{HMAC-SHA256 signature}
+
+Payload :
+  {
+    "organizationId": "org_...",
+    "indexSlug": "products",
+    "scopedFilter": "availability:=in_stock",
+    "issuedAt": 1717200000,
+    "expiresAt": 1717203600   // optionnel
+  }
+
+Signature :
+  HMAC-SHA256(payload, BETTER_AUTH_SECRET)
+```
+
+La signature est vérifiée côté serveur à chaque requête. La falsification de la charge utile (par ex. supprimer
+le `scopedFilter`) invalide la signature et entraîne une réponse 401.
+
+## Générer un token limité
+
+### Via oRPC (côté serveur)
+
+```typescript
+// Composant serveur, Server Action ou route API
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100", // toujours combiné avec ET avec les filtres de l'appelant
+	expiresInSeconds: 3600, // TTL de 1 heure
+	name: "Budget search for user XYZ", // étiquette optionnelle pour l'audit
+});
+
+// scopedToken.token: "ss_scoped_abc...123" — à transmettre au navigateur
+```
+
+### Via le tableau de bord
+
+1. Naviguez vers **Search** → **API Keys** → **Scoped Tokens**
+2. Cliquez sur **Create scoped token**
+3. Entrez l'expression `scopedFilter`
+4. Définissez l'expiration
+5. Copiez le token généré
+
+Remarque : Les tokens générés depuis le tableau de bord sont destinés aux tests. Les tokens de production doivent toujours être
+générés dynamiquement par utilisateur dans un handler côté serveur.
+
+## Utiliser un token limité dans le navigateur
+
+Les tokens limités sont utilisés exactement comme les clés de recherche ordinaires :
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+// Token reçu de votre serveur (par ex. via une Server Action ou une route API)
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+
+const results = await client.search({
+	q: "headphones",
+	filterBy: "brand:=Sony", // Filtre de l'appelant : uniquement la marque Sony
+	// AACsearch combinera ceci avec ET avec "price:<100" du token
+	// Filtre effectif : "brand:=Sony && price:<100"
+});
+```
+
+## Combinaison des filtres
+
+Le `scopedFilter` du token est toujours combiné avec ET avec le `filterBy` de l'appelant.
+L'appelant ne peut pas supprimer ni contourner le filtre du token.
+
+```
+filterBy de l'appelant :     "brand:=Sony"
+scopedFilter du token :      "price:<100"
+Filtre effectif :            "brand:=Sony && price:<100"
+```
+
+Ceci est implémenté par `combineFilters()` dans `packages/api/modules/search/lib/scoped-token.ts`.
+Contourner cette fonction est une **violation d'Invariant Hard** dans la base de code.
+
+## Expiration
+
+Définissez `expiresInSeconds` pour limiter la validité du token. Après expiration, le token retourne 401.
+
+Durées de vie recommandées :
+
+| Contexte              | Durée de vie               |
+| --------------------- | -------------------------- |
+| Session widget        | 1 à 4 heures               |
+| Chargement de page unique | 15 à 30 minutes         |
+| Tests / développement | Pas d'expiration (omettre le champ) |
+
+Les tokens expirés sont rejetés côté serveur — aucun minuteur côté client ni mécanisme de rafraîchissement n'est nécessaire.
+
+## Modèle de rotation
+
+Pour les tokens à portée de session, générez un nouveau token chaque fois qu'une session utilisateur est établie :
+
+```typescript
+// Middleware Next.js ou server action appelé au démarrage de session
+export async function generateSearchToken(session: Session) {
+	return await orpc.search.createScopedToken.call({
+		organizationId: session.organizationId,
+		indexSlug: "products",
+		scopedFilter: `organization_id:=${session.organizationId}`,
+		expiresInSeconds: 4 * 60 * 60, // 4 heures
+	});
+}
+```
+
+Stockez le token côté client (par ex. contexte React, store Zustand) pour la durée de la session.
+
+## Modèle de sécurité
+
+- Les tokens limités sont signés sur `BETTER_AUTH_SECRET` — gardez ce secret en sécurité
+- La charge utile du token est encodée en base64 mais non chiffrée — traitez-la comme opaque pour le navigateur
+- Ne mettez pas de données sensibles dans l'expression `scopedFilter` (elle est visible dans la charge utile du token)
+- Pour les filtres très sensibles, utilisez la recherche côté serveur plutôt qu'un token limité
+
+## Limitations
+
+- Les tokens limités ne peuvent qu'**affiner** les permissions — ils ne peuvent pas accorder l'accès aux indexes ou aux orgs
+  auxquels la clé de base n'a pas déjà accès
+- Un token limité est lié à un seul slug d'index
+- Les tokens limités ne prennent pas en charge les opérations `connector_write` — ils sont uniquement pour la recherche

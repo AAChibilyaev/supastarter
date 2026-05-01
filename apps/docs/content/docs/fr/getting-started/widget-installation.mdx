@@ -1,0 +1,155 @@
+---
+title: Installation du widget
+description: Installer le widget hébergé AACsearch sur n'importe quelle boutique avec une seule balise script.
+---
+
+Le widget AACsearch est un composant Vanilla JS autonome qui ajoute une expérience de recherche complète
+à n'importe quelle boutique avec une seule balise `<script>`. Il utilise le Shadow DOM pour l'isolation CSS et pèse environ 14 Ko
+minifié (builds IIFE + ESM).
+
+## Fonctionnement du widget
+
+```
+Balise <script data-*> chargée
+    │
+    ▼
+Amorçage du widget (lecture des attributs data-*)
+    │
+    ▼
+Conteneur Shadow DOM créé (isolation CSS)
+    │
+    ▼
+GET /api/rpc/search.widgetConfig  ←  charge la configuration d'exécution (mise en page, filtres, options de tri)
+    │
+    ▼
+L'utilisateur tape → POST /api/search  ←  clé lecture seule dans l'en-tête Authorization
+    │
+    ▼
+Résultats affichés dans le Shadow DOM
+    │
+    ▼
+Événements suivis → POST /api/events/track (asynchrone, keepalive)
+```
+
+Le widget utilise uniquement la clé `ss_search_*` intégrée dans `data-api-key`. La clé admin Typesense
+n'atteint jamais le navigateur.
+
+## Installation de base
+
+Ajoutez la balise script dans le `<head>` de votre boutique ou avant `</body>` :
+
+```html
+<script
+	src="https://your-app.com/api/widget/widget.js"
+	data-base-url="https://your-app.com"
+	data-api-key="ss_search_your_search_key"
+	data-index-slug="products"
+	data-container="#search-container"
+	data-theme="auto"
+></script>
+```
+
+Créez l'élément conteneur où le widget sera monté :
+
+```html
+<div id="search-container"></div>
+```
+
+## Attributs du script
+
+| Attribut          | Requis | Défaut   | Description                                        |
+| ----------------- | ------ | -------- | -------------------------------------------------- |
+| `data-base-url`   | Oui    | —        | URL de base de votre API AACsearch                 |
+| `data-api-key`    | Oui    | —        | Clé `ss_search_*` pour cet index                  |
+| `data-index-slug` | Oui    | —        | Le slug de l'index (par ex. `products`)            |
+| `data-container`  | Oui    | —        | Sélecteur CSS pour l'élément de montage            |
+| `data-theme`      | Non    | `auto`   | `light`, `dark` ou `auto`                         |
+| `data-locale`     | Non    | `en`     | Locale de l'UI du widget (`en`, `de`, `es`, `fr`, `ru`) |
+| `data-layout`     | Non    | `inline` | `inline` ou `modal`                               |
+
+## Modes d'affichage
+
+### Inline
+
+Le widget affiche une barre de recherche et un panneau de résultats directement dans le conteneur. Le conteneur doit
+avoir une hauteur définie si les résultats sont nombreux.
+
+```html
+<div id="search-container" style="min-height: 400px;"></div>
+```
+
+### Modal
+
+Le widget n'affiche qu'un bouton de déclenchement de recherche dans le conteneur. En cliquant dessus, une
+superposition de recherche plein écran s'ouvre. Convient pour la recherche dans l'en-tête.
+
+```html
+<script ... data-layout="modal" data-container="#search-trigger"></script>
+<button id="search-trigger">Search</button>
+```
+
+## Personnalisation du thème
+
+Le widget prend en charge trois modes de thème :
+
+- `auto` — suit la préférence du mode sombre du système d'exploitation / navigateur
+- `light` — toujours clair
+- `dark` — toujours sombre
+
+Propriétés personnalisées CSS pour un thème précis (définies sur la page hôte, elles traversent la limite du Shadow DOM
+uniquement si le widget expose des parties CSS) :
+
+```css
+/* Ces valeurs sont reflétées dans la racine shadow du widget */
+#search-container {
+	--aac-accent: #6366f1;
+	--aac-border-radius: 8px;
+}
+```
+
+## Installation via le module CMS
+
+Lors de l'utilisation d'un module PrestaShop ou Bitrix, la balise script du widget est **automatiquement injectée** par le
+module dans le `<head>` de la boutique via le système de hooks du CMS. Vous n'avez pas besoin de l'ajouter manuellement.
+
+Le module lit la configuration du widget (URL API, clé, slug d'index) depuis la page de paramètres du module.
+Consultez [PrestaShop](/docs/connectors/prestashop) et [Bitrix](/docs/connectors/bitrix) pour les détails spécifiques au module.
+
+## Obtenir l'extrait du widget depuis le tableau de bord
+
+Le tableau de bord génère un extrait pré-rempli dans **Search** → **Widget** :
+
+1. Naviguez vers votre index de recherche
+2. Cliquez sur l'onglet **Widget**
+3. Copiez la balise `<script>` générée avec votre clé et le slug d'index pré-remplis
+
+Le composant `WidgetPanel` dans le tableau de bord (`apps/saas/modules/search/components/WidgetPanel.tsx`)
+affiche également le token connecteur pour la configuration du module CMS.
+
+## Politique de sécurité du contenu (CSP)
+
+Si votre boutique utilise un en-tête CSP, ajoutez la source de script AACsearch à votre politique :
+
+```
+script-src 'self' https://your-app.com;
+connect-src 'self' https://your-app.com;
+```
+
+Le Shadow DOM ne nécessite pas `style-src unsafe-inline` — les styles sont limités à la racine shadow.
+
+## Compatibilité des navigateurs
+
+Le widget cible les navigateurs modernes (Chrome 88+, Firefox 85+, Safari 14+, Edge 88+).
+Shadow DOM v1 est requis. Internet Explorer n'est pas pris en charge.
+
+## Suivi des analyses
+
+Le widget suit automatiquement les événements suivants (envoyés à `POST /api/events/track`) :
+
+- `widget_open` — lorsque le widget est ouvert
+- `search_query` — lorsqu'une recherche est soumise
+- `zero_results` — lorsqu'une requête ne retourne aucun résultat
+- `result_click` — lorsqu'un utilisateur clique sur un résultat
+- `filter_used` — lorsqu'un filtre de facette est appliqué
+
+Consultez [Événements analytiques du widget](/docs/connectors/widget-analytics-events) pour le schéma complet des événements.

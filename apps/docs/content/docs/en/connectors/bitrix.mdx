@@ -1,0 +1,182 @@
+---
+title: "1C-Bitrix Module"
+description: "Install and configure the AACsearch module for self-hosted 1C-Bitrix."
+---
+
+> **Status: Early preview.** The module skeleton (`aac.search`) is functional — handshake, full sync, delta sync via iblock event handlers, and background agent sync all work. Installation packaging and admin UI polish are still in progress. Bitrix24 **cloud** (REST/OAuth) is a separate track and is not yet supported.
+
+The AACsearch Bitrix module (`modules/bitrix/aac.search`) integrates your self-hosted 1C-Bitrix catalog with AACsearch. It handles:
+
+- Exporting products from Bitrix iblock/catalog to AACsearch via the Connector API
+- Triggering delta syncs via iblock event handlers
+- Running background sync via Bitrix agents (the Bitrix equivalent of cron jobs)
+- Injecting the hosted search widget
+
+## Requirements
+
+- 1C-Bitrix 24+ (self-hosted, on-premise)
+- Bitrix `catalog` module enabled
+- PHP 7.4 or higher with `Bitrix\Main\Web\HttpClient`
+- An AACsearch account with at least one search index
+- A connector token (`ss_connector_*`) bound to that index
+
+> **Bitrix24 cloud** (REST API, OAuth, `catalog.catalog.list`) is a separate connector track and is not included in this module.
+
+## Module file layout
+
+```
+modules/bitrix/aac.search/
+  install/
+    index.php           # Module installer/uninstaller
+    version.php         # Module version info
+    step_install.php    # Install wizard step
+    step_uninstall.php  # Uninstall wizard step
+  lib/
+    Client.php          # HTTP client wrapping Connector API calls
+    ProductExporter.php # Normalizes Bitrix iblock products → ProductDocument shape
+    SyncAgent.php       # Bitrix agent for background/periodic sync
+    EventHandlers.php   # iblock event listeners for delta sync
+  admin/
+    aac_search_settings.php    # Settings admin page
+    aac_search_diagnostics.php # Diagnostics admin page
+  options.php                  # Module options bootstrap
+```
+
+## Install steps
+
+### 1. Upload the module
+
+Copy the `modules/bitrix/aac.search/` directory to `/local/modules/aac.search/` on your Bitrix server. Then navigate to **Bitrix Admin → Marketplace → Module List** and install `aac.search`.
+
+### 2. Configure the module
+
+Open **Admin → aac.search → Settings** and fill in:
+
+| Field             | Description                                                            |
+| ----------------- | ---------------------------------------------------------------------- |
+| AACsearch API URL | Base URL of your AACsearch instance (e.g. `https://app.aacsearch.com`) |
+| Project ID        | Your organization ID from the AACsearch dashboard                      |
+| Connector token   | The `ss_connector_*` token created in Dashboard → Connectors           |
+| IBlock / catalog  | Select the iblock(s) containing your product catalog                   |
+| Price type        | Which Bitrix price type to export                                      |
+| Currency          | Currency code for price fields                                         |
+| Sync interval     | Minutes between background agent sync runs                             |
+| Widget mode       | `auto-inject`, `component`, or `manual` (see Widget section below)     |
+| Debug mode        | Enable verbose logging                                                 |
+
+### 3. Test the connection
+
+Click **Test Connection** on the settings page. This calls `POST /api/connectors/handshake`. A successful response shows the connected index slug.
+
+### 4. Run a full sync
+
+Click **Full Catalog Sync** on the settings page. The module:
+
+1. Reads all products from the selected iblocks using `CIBlockElement::GetList`
+2. Normalizes each product with `ProductExporter`
+3. Sends products in batches to `POST /api/projects/:projectId/sync/full`
+4. Polls `GET /api/projects/:projectId/sync/jobs/:jobId` for status
+5. Displays results on the diagnostics page
+
+## ProductDocument shape
+
+The `ProductExporter` maps Bitrix iblock fields to the standard document structure:
+
+```json
+{
+	"external_id": "1234",
+	"title": "Blue Running Shoes",
+	"description": "Lightweight running shoes",
+	"sku": "BRS-42",
+	"brand": "Acme Sport",
+	"categories": ["Shoes", "Running"],
+	"category_ids": ["10", "22"],
+	"price": 5999.0,
+	"sale_price": 4799.0,
+	"currency": "RUB",
+	"image_url": "https://myshop.example.ru/img/brs-42.jpg",
+	"product_url": "https://myshop.example.ru/catalog/brs-42/",
+	"availability": "in_stock",
+	"stock_quantity": 42,
+	"attributes": { "color": "blue", "size": "42" },
+	"locale": "ru"
+}
+```
+
+## Event handlers
+
+The module registers iblock event handlers for automatic delta syncs:
+
+| Event                        | Trigger                                        |
+| ---------------------------- | ---------------------------------------------- |
+| `OnAfterIBlockElementAdd`    | New product — triggers delta sync              |
+| `OnAfterIBlockElementUpdate` | Product updated — triggers delta sync          |
+| `OnAfterIBlockElementDelete` | Product deleted — sends delete request         |
+| `OnPriceUpdate`              | Price changed (requires Bitrix catalog module) |
+| `OnIBlockSectionUpdate`      | Section/category updated                       |
+
+## Background agent
+
+The module registers a Bitrix agent for periodic sync and delta-buffer drain:
+
+```php
+\Aac\Search\SyncAgent::run();
+```
+
+The agent interval is configurable in module settings (default: every 15 minutes). Use this for:
+
+- Retrying failed delta sync items
+- Periodic full sync if event handlers miss events (e.g. bulk imports)
+
+## Widget placement
+
+Three modes are available:
+
+### Auto-inject
+
+The module automatically adds the widget `<script>` tag to your template's `<head>` section:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+### Bitrix component
+
+Place the AACsearch component manually in your template:
+
+```php
+<?$APPLICATION->IncludeComponent("aac:search.widget", "", []);?>
+```
+
+### Manual placement
+
+Copy the snippet from the AACsearch dashboard and paste it into your template directly. The module settings page shows the current snippet for your index.
+
+The `data-api-key` value must be an `ss_search_*` key — not the connector token. Create a search key in Dashboard → Search → API Keys.
+
+## Troubleshooting
+
+**Test Connection fails**
+Verify the connector token is valid and not revoked. Check that the PHP `curl` extension is enabled. Confirm the AACsearch API URL is reachable from your server.
+
+**Products not appearing after full sync**
+Indexing is asynchronous. Wait 30–60 seconds. Check Dashboard → Overview for ingest pipeline status and any failed batches.
+
+**Event handlers not firing**
+Confirm the module is installed and the event handlers are registered. In Bitrix admin, check the event list under **Settings → System Settings → Events**.
+
+**Agent not running**
+Verify the Bitrix agent scheduler is active. Check **Admin → Settings → Performance → Agents** to confirm `Aac\Search\SyncAgent::run()` is listed and running.
+
+## Related pages
+
+- [Connectors Overview](/docs/connectors/overview)
+- [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle)
+- [Widget Overview](/docs/connectors/widget-overview)

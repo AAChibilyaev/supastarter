@@ -1,0 +1,218 @@
+---
+title: Multi-Search & Querying
+description: Execute multiple search queries in a single request for autocomplete, federated search, and multi-index scenarios.
+---
+
+Multi-search executes multiple search queries in a single HTTP round-trip. This is essential for
+autocomplete (run a results query + a suggestions query simultaneously) and federated search
+(search across multiple indexes at once).
+
+## Multi-search endpoint
+
+**Endpoint:** `POST /api/search/multi`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+```typescript
+{
+	searches: Array<{
+		indexSlug: string;
+		q: string;
+		queryBy?: string;
+		filterBy?: string;
+		facetBy?: string;
+		sortBy?: string;
+		page?: number;
+		perPage?: number;
+		highlightFields?: string;
+	}>;
+}
+```
+
+**Response:**
+
+```typescript
+{
+	results: Array<SearchResponse>; // one result per search in the same order
+}
+```
+
+## Autocomplete pattern
+
+The most common multi-search use case: run a full search plus a quick-hit suggestions query simultaneously.
+
+```typescript
+const [mainResults, suggestions] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title,brand,description",
+		perPage: 20,
+		facetBy: "brand,categories",
+	},
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title",
+		perPage: 5,
+		includeFields: "id,title",
+		highlightFields: "title",
+	},
+]);
+```
+
+This sends a single HTTP request and gets both result sets back simultaneously.
+
+## Federated search across indexes
+
+Search across multiple indexes and merge results client-side:
+
+```typescript
+const [productResults, articleResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "sustainability",
+		queryBy: "title,description,tags",
+		perPage: 10,
+	},
+	{
+		indexSlug: "knowledge",
+		q: "sustainability",
+		queryBy: "content,title",
+		perPage: 5,
+	},
+]);
+```
+
+Note: For cross-index results, merge and re-rank client-side.
+
+## Query parameters in depth
+
+### `q` — search query
+
+The search string. Use `"*"` for a wildcard browse (no full-text matching, useful for filtered browsing).
+
+```json
+{ "q": "wireless headphones" }    // full-text search
+{ "q": "*" }                      // browse all (combine with filterBy)
+```
+
+### `queryBy` — which fields to search
+
+Comma-separated list of fields. Order matters — earlier fields get higher weight by default.
+
+```json
+{ "queryBy": "title,sku,brand,description" }
+```
+
+For each field you can specify a per-field weight override:
+
+```json
+{ "queryBy": "title,brand,description", "queryByWeights": "10,5,2" }
+```
+
+### `filterBy` — filter expression
+
+Boolean expression using Typesense filter syntax:
+
+```
+Equality:        field:=value
+                 field:=[value1, value2]
+Range:           field:>100
+                 field:[50..200]
+String exact:    field:=value
+Negation:        field:!=value
+Logical AND:     cond1 && cond2
+Logical OR:      cond1 || cond2
+Grouping:        (cond1 || cond2) && cond3
+```
+
+Examples:
+
+```
+"filterBy": "availability:=in_stock"
+"filterBy": "price:[50..200] && brand:=[Sony, Bose]"
+"filterBy": "categories:=Electronics && availability:!=out_of_stock"
+```
+
+### `facetBy` — compute facet counts
+
+Returns value distributions for the specified fields. Facet fields must be indexed as `facet: true`
+in the collection schema.
+
+```json
+{ "facetBy": "brand,categories,availability" }
+```
+
+Response will include `facetCounts` with value → count pairs for each facet field.
+
+### `sortBy` — sort order
+
+Single or multi-field sort:
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "_text_match:desc,price:asc" }
+{ "sortBy": "created_at:desc" }
+```
+
+Available sort fields: `price`, `sale_price`, `created_at`, `_text_match` (relevance score).
+
+## Typo tolerance
+
+Typesense's typo tolerance is applied automatically. By default:
+
+- 1 typo allowed for queries 5+ characters long
+- 2 typos allowed for queries 8+ characters long
+
+This handles common misspellings like "headphons" → matches "headphones".
+
+## Highlighting
+
+Matching terms are highlighted with configurable tags:
+
+```json
+{
+	"highlightFields": "title,description",
+	"highlightStartTag": "<em class='highlight'>",
+	"highlightEndTag": "</em>"
+}
+```
+
+Highlights in the response:
+
+```json
+{
+	"highlights": [
+		{
+			"field": "title",
+			"snippet": "Sony <em class='highlight'>Wireless</em> <em class='highlight'>Headphones</em>"
+		}
+	]
+}
+```
+
+## Pagination
+
+Results are paginated using `page` (1-indexed) and `perPage`:
+
+```json
+{ "page": 2, "perPage": 20 }
+```
+
+The response includes `found` (total matching count) for computing page totals:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+```
+
+Maximum `perPage`: 100. For exports requiring more results, implement cursor-based iteration
+using increasing `page` values.
+
+## Performance recommendations
+
+- Keep `perPage ≤ 20` for search-as-you-type (autocomplete)
+- Use `includeFields` to return only the fields you render — reduces response size
+- Avoid running facets on every keystroke — debounce at 150–300 ms
+- For large result sets with many facets, consider splitting the facet query from the main query
+  using multi-search

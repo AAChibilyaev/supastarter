@@ -1,0 +1,153 @@
+---
+title: Tokens de Búsqueda con Ámbito
+description: Genere tokens HMAC de corta duración que reducen los permisos de una clave de búsqueda — filtros por usuario, TTL y modelo de seguridad.
+---
+
+Los tokens con ámbito le permiten crear tokens de búsqueda de corta duración y firmados criptográficamente que reducen lo que
+un llamador puede ver. Genérelos en el lado del servidor y páselos al navegador — la clave base `ss_search_*`
+nunca sale de su servidor.
+
+## Cuándo usar tokens con ámbito
+
+| Escenario                                                          | ¿Usar token con ámbito?              |
+| ------------------------------------------------------------------ | ------------------------------------ |
+| Tienda de un solo tenant (una organización, una tienda)            | No — la clave `ss_search_*` es suficiente |
+| App multi-tenant donde los usuarios solo deben ver sus propios productos | **Sí**                         |
+| Exponer búsqueda a un tercero con acceso restringido               | **Sí**                               |
+| Limitar resultados a un nivel de precio específico                 | **Sí**                               |
+| Incrustación de widget de corta duración con expiración            | **Sí**                               |
+| Vista previa interna del panel                                     | No — usar oRPC basado en sesión      |
+
+## Cómo funcionan los tokens con ámbito
+
+Los tokens con ámbito son afirmaciones firmadas con HMAC-SHA256 sin estado — nunca se almacenan en la base de datos.
+
+```
+Estructura del token:
+  ss_scoped_{base64url(payload)}.{firma HMAC-SHA256}
+
+Payload:
+  {
+    "organizationId": "org_...",
+    "indexSlug": "products",
+    "scopedFilter": "availability:=in_stock",
+    "issuedAt": 1717200000,
+    "expiresAt": 1717203600   // opcional
+  }
+
+Firma:
+  HMAC-SHA256(payload, BETTER_AUTH_SECRET)
+```
+
+La firma se verifica en el servidor en cada solicitud. Manipular el payload (por ejemplo, eliminar
+el `scopedFilter`) invalida la firma y resulta en una respuesta 401.
+
+## Generar un token con ámbito
+
+### Mediante oRPC (lado del servidor)
+
+```typescript
+// Componente de servidor, Server Action o ruta de API
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100", // siempre combinado con AND con los filtros del llamador
+	expiresInSeconds: 3600, // TTL de 1 hora
+	name: "Búsqueda económica para usuario XYZ", // etiqueta opcional para auditoría
+});
+
+// scopedToken.token: "ss_scoped_abc...123" — pasar al navegador
+```
+
+### Mediante el panel
+
+1. Navegue a **Búsqueda** → **API Keys** → **Tokens con ámbito**
+2. Haga clic en **Crear token con ámbito**
+3. Ingrese la expresión `scopedFilter`
+4. Establezca la expiración
+5. Copie el token generado
+
+Nota: Los tokens generados desde el panel son para pruebas. Los tokens de producción siempre deben generarse
+dinámicamente por usuario en un manejador del lado del servidor.
+
+## Usar un token con ámbito en el navegador
+
+Los tokens con ámbito se usan exactamente igual que las claves de búsqueda regulares:
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+// Token recibido de su servidor (por ejemplo, mediante un Server Action o ruta de API)
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+
+const results = await client.search({
+	q: "auriculares",
+	filterBy: "brand:=Sony", // Filtro del llamador: solo marca Sony
+	// AACsearch combinará esto con AND con "price:<100" del token
+	// Filtro efectivo: "brand:=Sony && price:<100"
+});
+```
+
+## Combinación de filtros
+
+El `scopedFilter` del token siempre se combina con AND con el `filterBy` del llamador.
+El llamador no puede eliminar ni omitir el filtro del token.
+
+```
+filterBy del llamador:    "brand:=Sony"
+scopedFilter del token:   "price:<100"
+Filtro efectivo:          "brand:=Sony && price:<100"
+```
+
+Esto está implementado por `combineFilters()` en `packages/api/modules/search/lib/scoped-token.ts`.
+Omitir esta función es una **violación del Invariante Duro** en el código base.
+
+## Expiración
+
+Establezca `expiresInSeconds` para limitar la validez del token. Después de la expiración, el token devuelve 401.
+
+TTLs recomendados:
+
+| Contexto                | TTL                        |
+| ----------------------- | -------------------------- |
+| Sesión del widget       | 1–4 horas                  |
+| Carga de una sola página | 15–30 minutos             |
+| Prueba / desarrollo     | Sin expiración (omita el campo) |
+
+Los tokens expirados se rechazan en el servidor — no se necesita temporizador del cliente ni mecanismo de actualización.
+
+## Patrón de rotación
+
+Para tokens con ámbito de sesión, genere un nuevo token cada vez que se establezca una sesión de usuario:
+
+```typescript
+// Middleware de Next.js o acción del servidor llamada al inicio de la sesión
+export async function generateSearchToken(session: Session) {
+	return await orpc.search.createScopedToken.call({
+		organizationId: session.organizationId,
+		indexSlug: "products",
+		scopedFilter: `organization_id:=${session.organizationId}`,
+		expiresInSeconds: 4 * 60 * 60, // 4 horas
+	});
+}
+```
+
+Almacene el token en el cliente (por ejemplo, contexto React, almacén Zustand) durante la duración de la sesión.
+
+## Modelo de seguridad
+
+- Los tokens con ámbito están firmados sobre `BETTER_AUTH_SECRET` — mantenga este secreto seguro
+- El payload del token está codificado en base64 pero no encriptado — trátelo como opaco para el navegador
+- No ponga datos sensibles en la expresión `scopedFilter` (es visible en el payload del token)
+- Para filtros muy sensibles, use búsqueda del lado del servidor en lugar de un token con ámbito
+
+## Limitaciones
+
+- Los tokens con ámbito solo pueden **reducir** permisos — no pueden otorgar acceso a índices u organizaciones
+  a los que la clave base ya no tiene acceso
+- Un token con ámbito está vinculado a un solo slug de índice
+- Los tokens con ámbito no admiten operaciones `connector_write` — son solo de búsqueda

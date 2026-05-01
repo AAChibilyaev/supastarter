@@ -1,0 +1,134 @@
+---
+title: Reindexing & Zero-Downtime
+description: Wie die Alias-Swap-Reindex-Strategie funktioniert, wann sie ausgelöst werden sollte und wie der Fortschritt überwacht wird.
+---
+
+AACsearch verwendet eine **versionierte Collection + Alias**-Strategie, um Schema-Migrationen und vollständige
+Reindexierungen ohne Such-Downtime durchzuführen. Abfragen zielen immer auf den Alias (ein stabiler Name), während
+versionierte Collections darunter ausgetauscht werden.
+
+## Das Alias-Swap-Modell
+
+Jeder Suchindex verwendet zwei Typesense-Namen:
+
+```
+Alias:      org123_products        ← stabil, von allen Suchanfragen verwendet
+Collection: org123_products_v1     ← aktuelle versionierte Collection (bedient Traffic)
+```
+
+Wenn ein Reindex ausgelöst wird:
+
+```
+1. ERSTELLEN  org123_products_v2       ← neue Collection mit aktualisiertem Schema
+2. IMPORTIEREN  alle Dokumente → v2    ← aus DB (oder Snapshot) erneut einlesen
+3. ÜBERPRÜFEN   Dokumentanzahl(v2) ≈ erwartet ← Gesundheitscheck vor dem Austausch
+4. AUSTAUSCHEN  Alias: org123_products → org123_products_v2
+5. BEIBEHALTEN  org123_products_v1     ← bis zum nächsten Reindex erhalten (Rollback-Option)
+```
+
+Schritt 4 (Alias-Austausch) ist in Typesense atomar. Abfragen treffen während der Schritte
+1–3 weiterhin auf die alte Version und zielen nach Schritt 4 nahtlos auf die neue Version — ohne Downtime.
+
+## Wann Reindex erforderlich ist
+
+| Szenario                               | Reindex erforderlich?                          |
+| -------------------------------------- | ---------------------------------------------- |
+| Neues Facettenfeld hinzufügen          | **Ja** — Typesense erfordert Schema-Migration  |
+| Feldtyp ändern                         | **Ja**                                         |
+| Neues durchsuchbares Textfeld hinzufügen | **Ja**                                       |
+| Feld entfernen                         | **Ja**                                         |
+| Dokumentinhalt aktualisieren           | Nein — Upsert/Delta-Sync verwenden             |
+| Synonymregeln ändern                   | Nein — Synonyme sind eine separate Ressource   |
+| Sortieroptionen ändern                 | Nein — `sortBy` ist ein Abfrageparameter       |
+| Kurationsregeln ändern                 | Nein — Kurationen sind eine separate Ressource |
+
+## Reindex auslösen
+
+### Über das Dashboard
+
+1. Navigieren Sie zu **Suche** → **Indizes** → Ihren Index auswählen
+2. Klicken Sie auf den Button **Reindex** in den Index-Einstellungen
+3. Fortschritt im Import-Jobs-Panel überwachen
+
+### Über oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// Gibt zurück: { jobId, status: "queued" }
+```
+
+### Über die Connector-API (Admin)
+
+```bash
+POST /api/v1/indexes/{indexSlug}/reindex
+Authorization: Bearer aa_admin_your_key
+```
+
+## Reindex-Fortschritt überwachen
+
+Import-Job-Status prüfen:
+
+```typescript
+const jobs = await orpc.search.importJobs.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+
+const activeJob = jobs.find((j) => j.type === "reindex" && j.status === "running");
+// activeJob.processedItems / activeJob.totalItems → Fortschritt
+```
+
+Im Dashboard zeigt der Tab **Import-Jobs** den Reindex-Fortschritt mit einem Fortschrittsbalken.
+
+## Schema-Updates
+
+Vor dem Reindexieren das Collection-Schema aktualisieren:
+
+```typescript
+await orpc.search.schema.update.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	fields: [
+		// Neues Feld hinzufügen
+		{ name: "tags", type: "string[]", facet: true, optional: true },
+	],
+});
+```
+
+Dies aktualisiert die in AACsearch gespeicherte Schema-Definition. Das tatsächliche Typesense-Collection-Schema
+wird beim nächsten Reindex aktualisiert (Schema-Änderungen werden nicht in-place angewendet, um Downtime zu vermeiden).
+
+## Kontingentauswirkung
+
+Reindex liest alle Dokumente erneut ein. Für einen 50.000-Produkt-Katalog verbraucht ein Reindex 50.000 Sucheinheiten.
+Planen Sie Ihren Reindex-Zeitplan rund um Ihr monatliches Kontingent.
+
+## Rollback
+
+Wenn die neue Collection Probleme hat, Rollback durch Zurückzeigen des Alias auf die vorherige Version:
+
+```typescript
+await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	rollback: true, // tauscht Alias zurück zur vorherigen Version
+});
+```
+
+Die vorherige Version (`v{N-1}`) wird bis zum nächsten erfolgreichen Reindex aufbewahrt.
+
+## Implementierungsdetails
+
+Die Reindex-Implementierung befindet sich in `packages/search/lib/reindex.ts` (exportiert als `reindexCollection`).
+
+Wesentliche Verhaltensweisen:
+
+- Versionierter Collection-Name: `{orgShortId}_{slug}_v{nextVersion}`
+- Alias-Austausch: `typesense.aliases.upsert(alias, { collection_name: newCollectionName })`
+- Dokumentquelle: vollständigen Dokumentsatz aus dem Ingest-Buffer oder einem Snapshot erneut leeren
+- Teilfehler: wenn der Import vor dem Austausch fehlschlägt, bedient die alte Version weiterhin Traffic; neue Version wird gelöscht
+
+Die Funktion wird von der Prozedur `searchRouter.reindex` in `packages/api/modules/search/procedures/reindex.ts` aufgerufen.

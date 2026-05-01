@@ -1,0 +1,126 @@
+---
+title: "Widget de recherche hébergé"
+description: "Intégrez le widget AACsearch dans votre boutique avec une seule balise script. Vanilla JS, Shadow DOM, cinq locales."
+---
+
+Le widget hébergé AACsearch est une UI de recherche autonome que vous intégrez dans n'importe quelle boutique avec une seule balise `<script>`. Il gère la saisie de recherche, la grille de résultats, les facettes, le tri, la pagination et le suivi des clics — sans dépendance à un framework ni étape de build de votre côté.
+
+## Vue d'ensemble technique
+
+| Propriété       | Valeur                                                             |
+| --------------- | ------------------------------------------------------------------ |
+| Implémentation  | Vanilla JS, fait main (pas InstantSearch.js, pas React)            |
+| Isolation des styles | Shadow DOM — les styles du widget ne peuvent pas déborder dans le CSS de votre boutique |
+| Taille du bundle | ~14 Ko minifié (sortie duale IIFE + ESM)                          |
+| Servi à         | `GET /api/widget/widget.js` (CORS autorisé, mis en cache)          |
+| Auth            | Nécessite une clé API `ss_search_*` intégrée dans `data-api-key`  |
+| Locales         | `en`, `de`, `es`, `fr`, `ru`                                       |
+
+Le widget n'expose jamais de clé admin Typesense. Il communique uniquement via le point de terminaison de recherche public en utilisant la clé `ss_search_*` limitée que vous fournissez.
+
+## Extrait d'intégration
+
+Copiez l'extrait depuis **Tableau de bord → Search → onglet Widget** et collez-le dans le `<head>` de votre boutique ou avant la balise fermante `</body>` :
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_your_key_here"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Ajoutez également l'élément conteneur où vous souhaitez que le widget s'affiche :
+
+```html
+<div id="aac-search"></div>
+```
+
+Le widget s'initialise automatiquement au chargement du script. Aucun code d'initialisation JavaScript n'est requis.
+
+## Attributs de configuration
+
+Toute la configuration se fait via les attributs `data-*` sur la balise `<script>`.
+
+| Attribut           | Requis | Défaut     | Description                                    |
+| ------------------ | ------ | ---------- | ---------------------------------------------- |
+| `data-base-url`    | Oui    | —          | URL de base de votre instance AACsearch        |
+| `data-api-key`     | Oui    | —          | Une clé `ss_search_*` (portée recherche seule) |
+| `data-index-slug`  | Oui    | —          | Slug de l'index de recherche à interroger      |
+| `data-container`   | Oui    | —          | Sélecteur CSS pour l'élément conteneur         |
+| `data-locale`      | Non    | `"en"`     | Locale UI : `en`, `de`, `es`, `fr` ou `ru`    |
+| `data-theme`       | Non    | `"auto"`   | Thème de couleur : `"light"`, `"dark"` ou `"auto"` |
+| `data-mode`        | Non    | `"inline"` | Mode d'affichage : `"inline"` ou `"modal"`    |
+| `data-show-prices` | Non    | `"true"`   | Afficher les prix des produits dans les résultats |
+| `data-show-images` | Non    | `"true"`   | Afficher les images des produits dans les résultats |
+
+### Mode : inline vs modal
+
+`inline` — le widget s'affiche directement dans l'élément conteneur. Convient pour une page de recherche dédiée ou une section de recherche bien visible.
+
+`modal` — le widget apparaît comme une superposition. La superposition modale est généralement déclenchée par un clic sur un bouton ou un raccourci clavier. (Remarque : le bouton de déclenchement modal doit être câblé par votre thème.)
+
+### Détection automatique de la locale
+
+Le widget résout les locales avec une chaîne de repli : attribut `data-locale` → langue de base (`en-US` → `en`) → `"en"`. Si vous passez `"ru-RU"`, il se résout en `"ru"`.
+
+## Exigences relatives à la clé API
+
+L'attribut `data-api-key` doit être une clé `ss_search_*`, pas un token de connecteur ou une clé admin. Les clés de recherche n'ont que la portée `search` et peuvent être intégrées en toute sécurité dans le HTML visible par le navigateur.
+
+Créez une clé de recherche dans **Tableau de bord → Search → API Keys → Créer une clé** et sélectionnez la portée `search`.
+
+Si vous restreignez la clé à des origines spécifiques (`allowedOrigins`), ajoutez le domaine de votre boutique à la liste d'autorisation.
+
+## Modes d'affichage et états UI
+
+Le widget gère automatiquement ces états :
+
+| État              | Ce que l'utilisateur voit                               |
+| ----------------- | ------------------------------------------------------- |
+| Inactif (pas de requête) | Texte de remplacement d'invite                 |
+| Chargement        | Indicateur de chargement « Recherche en cours... »     |
+| Résultats         | Grille de produits avec facettes, contrôles de tri, pagination |
+| Zéro résultats    | État vide avec suggestion d'essayer un terme différent |
+| Erreur            | État dégradé avec la saisie de recherche toujours fonctionnelle |
+
+## Langues prises en charge
+
+Toutes les chaînes UI sont intégrées dans le bundle du widget. Pas de récupération i18n externe.
+
+| Locale | Langue   |
+| ------ | -------- |
+| `en`   | Anglais  |
+| `de`   | Allemand |
+| `ru`   | Russe    |
+| `es`   | Espagnol |
+| `fr`   | Français |
+
+## Personnalisation CSS
+
+Le widget utilise des propriétés personnalisées CSS limitées à son hôte Shadow DOM. Vous pouvez les remplacer en ciblant l'élément conteneur :
+
+```css
+/* Ces valeurs s'appliquent à l'intérieur du Shadow DOM via l'héritage CSS à travers :host */
+#aac-search {
+	--aac-primary: #e60000;
+	--aac-radius: 4px;
+}
+```
+
+Variables CSS disponibles : `--aac-primary`, `--aac-primary-hover`, `--aac-bg`, `--aac-bg-secondary`, `--aac-text`, `--aac-text-secondary`, `--aac-border`, `--aac-radius`.
+
+Le mode sombre est géré automatiquement lorsque `data-theme="auto"` — le widget détecte les préférences système via `prefers-color-scheme`.
+
+## Analyses
+
+Le widget suit le comportement de recherche et envoie des événements à `POST /api/events/track`. Les événements incluent `search_query`, `zero_results`, `result_click`, `widget_open` et `filter_used`. Consultez [Événements analytiques du widget](/docs/connectors/widget-analytics-events) pour la référence complète des événements.
+
+## Pages associées
+
+- [Vue d'ensemble des connecteurs](/docs/connectors/overview)
+- [Événements analytiques du widget](/docs/connectors/widget-analytics-events)
+- [Authentification](/docs/search-api/authentication)

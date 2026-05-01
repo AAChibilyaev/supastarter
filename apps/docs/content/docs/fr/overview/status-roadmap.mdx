@@ -1,0 +1,118 @@
+---
+title: Statut & Feuille de route
+description: Ce qui a été livré, ce qui est en cours de développement et ce qui est prévu pour AACsearch.
+---
+
+Cette page est la référence faisant autorité pour le statut des fonctionnalités. Utilisez-la pour comprendre ce qui est sûr à
+utiliser en production, ce qui est activement en cours de construction et ce qui reste sur la feuille de route.
+
+## Livré (prêt pour la production)
+
+Ces fonctionnalités existent dans la base de code et sont prêtes à être utilisées.
+
+### Recherche principale
+
+| Fonctionnalité                                    | Package / fichier                     |
+| ------------------------------------------------- | ------------------------------------- |
+| Client Typesense (côté serveur uniquement)        | `packages/search/lib/client.ts`       |
+| Gestion du schéma de collection + versionnage     | `packages/search/lib/collections.ts`  |
+| Buffer d'ingestion DB-first                       | `packages/search/lib/buffer.ts`       |
+| searchDocuments / multiSearchDocuments            | `packages/search/lib/search.ts`       |
+| Réindexation sans interruption (alias-swap)       | `packages/search/lib/reindex.ts`      |
+| Génération + hachage de clés API                  | `packages/search/lib/keys.ts`         |
+| SDK navigateur                                    | `packages/search-client/src/index.ts` |
+
+### Authentification & multi-tenant
+
+| Fonctionnalité                                       | Notes                                                        |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| Auth limitée aux orgs via Better Auth                | Les organisations sont l'espace de travail principal         |
+| Clés API (hachées, limitées, restreintes par origine) | Préfixes : `ss_search_*`, `ss_connector_*`, `ss_scoped_*`   |
+| Tokens de recherche limités (HMAC)                   | Sans état, signés sur `BETTER_AUTH_SECRET`                   |
+| Application du quota par plan                        | `packages/api/modules/entitlements/`                         |
+| Limitation de débit par clé/IP                       | `packages/search/lib/keys.ts` + bucket DB                    |
+
+### Widget & connecteur
+
+| Fonctionnalité                   | Notes                                                                                         |
+| -------------------------------- | --------------------------------------------------------------------------------------------- |
+| Widget hébergé                   | `packages/widget/` — Vanilla JS, Shadow DOM, 14 Ko                                            |
+| API Connecteur                   | 7 points de terminaison : handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status |
+| CRUD des tokens connecteur       | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`              |
+| Suivi des jobs de synchronisation (en mémoire) | Perdu au redémarrage — acceptable pour le MVP                               |
+
+### Contrôles de pertinence
+
+| Fonctionnalité                | Notes                                  |
+| ----------------------------- | -------------------------------------- |
+| Synonymes                     | `searchRouter.synonyms.{get,update}`   |
+| Curations                     | `searchRouter.curations.{get,update}`  |
+| Gestion du schéma de collection | `searchRouter.schema.{get,update}`   |
+
+### Module Knowledge (R2.5)
+
+RAG/GraphRAG sur des documents. Surface produit séparée de la recherche en vitrine.
+
+- Modèles Prisma : `KnowledgeSpace`, `DataSource`, `IngestionJob`, `KnowledgeDocument`, `KnowledgeChunk`, `GraphNode`, `GraphEdge`
+- 10 procédures oRPC : liste/création d'espaces, liste/création de sources, liste des jobs d'ingestion, ingest-file, ask, graphrag-explain, usage-metrics
+- UI `KnowledgeWorkbench.tsx`, routes à portée org + portée compte
+
+## En développement actif
+
+Ces fonctionnalités sont en développement actif et peuvent changer.
+
+| Fonctionnalité                                               | Statut                                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| Mesure v0.6 (recharge Tochka, wallet)                        | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/`  |
+| Agrégation par rollup de `recordSearchUsage`                 | Les lignes brutes existent ; la table `UsageCounter` est différée          |
+| Pages d'administration (audit, wallet, notifications, sécurité) | Commitées comme stubs — contenu opérationnel à définir               |
+
+## Squelette / non suivi
+
+| Fonctionnalité     | Notes                                                           |
+| ------------------ | --------------------------------------------------------------- |
+| Module PrestaShop  | `modules/prestashop/aacsearch/` — PHP, suivi de commit séparé  |
+| Module Bitrix      | `modules/bitrix/aac.search/` — PHP, suivi de commit séparé     |
+
+Ces modules ont la structure de fichiers correcte (`Aacsearch.php`, `config.xml`, `classes/`, `controllers/`, `views/`)
+mais ne sont pas suivis dans le dépôt principal. Ils respectent le contrat API Connecteur décrit dans
+[Cycle de vie de l'API Connecteur](/docs/connectors/connector-api-lifecycle).
+
+## Prévu
+
+| Fonctionnalité                            | Cible                          |
+| ----------------------------------------- | ------------------------------ |
+| Démarrage rapide auto-hébergé + chart Helm | v1.0                          |
+| `Project` comme entité DB de premier niveau | v1.x (dégel de base de données requis) |
+| Modèle DB `WidgetConfig`                  | v1.x (dégel de base de données requis) |
+| Point de terminaison de capture `AnalyticsEvent` | v1.x                   |
+| Procédure `recentActivity`                | v1.x                           |
+| Onglets Mots vides + Préréglages          | v1.x                           |
+| UI du gestionnaire de schéma              | v1.x                           |
+
+## Hors périmètre (v1)
+
+Les éléments suivants sont **explicitement non prévus** pour v1 :
+
+- Chat IA / recherche conversationnelle
+- Profils de personnalisation par visiteur
+- Moteur de recommandations
+- A/B testing pour la pertinence
+- SSO entreprise (SAML/OIDC)
+- Réplication Typesense multi-région
+- Clusters dédiés mono-tenant
+- Connecteurs au-delà de PrestaShop et Bitrix
+- Analyses BI approfondies au-delà des cartes du tableau de bord
+
+## Versions de la feuille de route
+
+| Version | Objectif                                                  | Statut                |
+| ------- | --------------------------------------------------------- | --------------------- |
+| R0      | Fondation — supastarter + scaffold AACsearch              | ✅ Terminé            |
+| R1      | Tranche verticale — la recherche fonctionne de bout en bout sans CMS | ✅ Terminé  |
+| R2      | Alpha connecteur — les vraies boutiques commencent à se synchroniser | 🟡 Partiellement livré |
+| R2.5    | Module Knowledge (RAG/GraphRAG)                           | ✅ Terminé            |
+| v0.5    | Refonte du site marketing en 5 locales                    | ✅ Terminé            |
+| v0.6    | Mesure des unités de recherche liée au fournisseur de paiement | 🟡 En développement actif |
+| v0.7    | Site de documentation public                              | 🟡 Vous êtes ici      |
+| v1.0    | Démarrage rapide auto-hébergé + chart Helm                | ⏳ Prévu              |

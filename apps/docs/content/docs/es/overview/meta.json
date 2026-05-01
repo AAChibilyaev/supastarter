@@ -1,0 +1,4 @@
+{
+	"title": "Descripción General",
+	"pages": ["status-roadmap", "architecture", "domain-model", "auth-tenancy", "plans-and-limits"]
+}

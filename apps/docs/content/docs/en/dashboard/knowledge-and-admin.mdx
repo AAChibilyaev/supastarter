@@ -1,0 +1,142 @@
+---
+title: "Knowledge Module & Admin"
+description: "The Knowledge module for internal document Q&A (RAG/GraphRAG), and the admin section for site administrators."
+---
+
+## Knowledge module
+
+> **Important distinction:** The Knowledge module is a separate product surface from storefront keyword search. Storefront search uses Typesense for fast, typo-tolerant keyword queries against product catalogs. The Knowledge module is for internal Q&A over unstructured documents — PDFs, DOCX files, text documents — using AI retrieval (RAG and GraphRAG). The two surfaces are independent; they do not share indexes or data.
+
+The Knowledge module is available at:
+
+- **Org scope:** `/[orgSlug]/knowledge` — knowledge spaces for the whole organization
+- **Account scope:** `/knowledge` — personal knowledge spaces
+
+### Knowledge spaces
+
+A Knowledge space is a container for document sources and the Q&A interface. You can create multiple spaces (e.g. "Product Docs", "Internal Policies", "Support KB").
+
+Each space is owned by either an organization or a user (owner discriminator pattern — the same model used for search indexes).
+
+### Data sources
+
+Within a space, you add data sources — currently file uploads:
+
+| Format | Support   |
+| ------ | --------- |
+| PDF    | Supported |
+| DOCX   | Supported |
+| TXT    | Supported |
+
+When you upload a file, an ingestion job is created. The system:
+
+1. Parses the file into text
+2. Chunks the text using configurable chunking strategies
+3. Generates embeddings for each chunk (via OpenAI)
+4. Stores chunks in `KnowledgeChunk` with vector embeddings
+
+### Ingestion jobs
+
+The ingestion jobs list shows status (running / completed / failed), file name, chunk count, and any errors.
+
+### Ask (RAG)
+
+Once ingestion is complete, you can ask questions against the space. The ask flow:
+
+1. Embeds your query
+2. Retrieves the most relevant chunks via vector similarity
+3. Sends retrieved context + question to the LLM
+4. Returns the answer with source citations
+
+### GraphRAG
+
+The GraphRAG feature builds a knowledge graph from the ingested documents:
+
+- `GraphNode` — concepts, entities, topics extracted from documents
+- `GraphEdge` — relationships between nodes
+
+GraphRAG queries traverse the graph to provide deeper, more connected answers than plain RAG. Use GraphRAG for questions that require reasoning across multiple documents or topics.
+
+### Usage metrics
+
+Each space tracks usage via the `knowledge.usageMetrics` procedure: total queries, token consumption, and per-source document counts.
+
+### Prisma models
+
+The Knowledge module uses 7 dedicated Prisma models:
+
+| Model               | Purpose                                       |
+| ------------------- | --------------------------------------------- |
+| `KnowledgeSpace`    | Top-level container, org or user owned        |
+| `DataSource`        | File source record (name, type, status)       |
+| `IngestionJob`      | Ingestion tracking (status, progress, errors) |
+| `KnowledgeDocument` | Processed document                            |
+| `KnowledgeChunk`    | Individual text chunk for retrieval           |
+| `GraphNode`         | Knowledge graph node (concept, entity)        |
+| `GraphEdge`         | Relationship between graph nodes              |
+
+### oRPC procedures
+
+The knowledge module exposes 10 procedures at `packages/api/modules/knowledge/`:
+
+| Procedure           | Description                                 |
+| ------------------- | ------------------------------------------- |
+| `listSpaces`        | List all spaces for the owner               |
+| `createSpace`       | Create a new knowledge space                |
+| `listSources`       | List data sources for a space               |
+| `createSource`      | Add a new data source                       |
+| `listIngestionJobs` | List ingestion jobs for a space             |
+| `ingestFile`        | Upload and ingest a file                    |
+| `ask`               | Ask a question (RAG retrieval + LLM answer) |
+| `graphragExplain`   | GraphRAG explanation query                  |
+| `usageMetrics`      | Token and query usage stats                 |
+
+---
+
+## Admin section
+
+The admin section is only visible to users with the site admin role. It is accessible at `/admin/*`.
+
+> **Note:** Several admin pages are currently stubs with placeholder content — they render the page layout but do not yet have full functionality. This is noted per page below.
+
+### Admin pages
+
+| Path                   | Description                                      | Status                           |
+| ---------------------- | ------------------------------------------------ | -------------------------------- |
+| `/admin/`              | Admin dashboard root                             | Functional                       |
+| `/admin/organizations` | List and manage all organizations                | Functional                       |
+| `/admin/users`         | List and manage all users, impersonation         | Functional                       |
+| `/admin/config`        | System configuration                             | Stub — pending                   |
+| `/admin/security`      | Security settings and session management         | Stub — pending                   |
+| `/admin/integrations`  | Third-party integration settings                 | Stub — pending                   |
+| `/admin/audit`         | Audit log viewer                                 | Stub — pending                   |
+| `/admin/wallet`        | AI wallet admin (per-user balance, transactions) | Stub — active development (v0.6) |
+| `/admin/jobs`          | Background job management                        | Stub — pending                   |
+| `/admin/notifications` | System notification management                   | Stub — pending                   |
+
+### AI wallet and credits (v0.6 — active development)
+
+The wallet system (`@repo/billing-wallet`) handles AI credit balances using a BigInt kopecks ledger. The wallet admin page at `/admin/wallet` and the user-facing AI credits page at `/settings/billing/ai-credits` are actively being developed as part of the v0.6 metering release. The Tochka payment driver (for RU market) is wired; Stripe is a parallel option.
+
+The wallet feature is intentionally half-isolated — if your task does not involve billing or AI credits, do not extend it without explicit scope confirmation.
+
+---
+
+## Account-level settings
+
+Personal settings live outside the org context under `/settings/`.
+
+| Path                           | Contents                                                 |
+| ------------------------------ | -------------------------------------------------------- |
+| `/settings/general`            | Display name, email, profile photo                       |
+| `/settings/security`           | Password change, 2FA (TOTP), passkeys, OAuth connections |
+| `/settings/notifications`      | Per-type notification preferences                        |
+| `/settings/billing`            | Personal billing, active plan, payment method            |
+| `/settings/billing/ai-credits` | AI wallet top-up and transaction history (v0.6)          |
+
+Security settings support: password login, magic link, two-factor authentication (TOTP via authenticator app), passkey (WebAuthn), and OAuth (Google, GitHub).
+
+## Related pages
+
+- [Dashboard Overview](/docs/dashboard/overview)
+- [Search Workspace](/docs/dashboard/search-workspace)

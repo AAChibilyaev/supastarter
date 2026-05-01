@@ -1,0 +1,155 @@
+---
+title: Widget Installation
+description: Install the AACsearch hosted widget on any storefront with a single script tag.
+---
+
+The AACsearch widget is a self-contained Vanilla JS component that adds a full search experience
+to any storefront with one `<script>` tag. It uses Shadow DOM for CSS isolation and weighs ~14 KB
+minified (IIFE + ESM builds).
+
+## How the widget works
+
+```
+<script data-*> tag loaded
+    │
+    ▼
+Widget bootstrap (reads data-* attributes)
+    │
+    ▼
+Shadow DOM container created (CSS isolation)
+    │
+    ▼
+GET /api/rpc/search.widgetConfig  ←  loads runtime config (layout, filters, sort options)
+    │
+    ▼
+User types → POST /api/search  ←  search-only key in Authorization header
+    │
+    ▼
+Results rendered in Shadow DOM
+    │
+    ▼
+Events tracked → POST /api/events/track (async, keepalive)
+```
+
+The widget uses only the `ss_search_*` key embedded in `data-api-key`. The admin Typesense key
+never reaches the browser.
+
+## Basic installation
+
+Add the script tag to your storefront's `<head>` or before `</body>`:
+
+```html
+<script
+	src="https://your-app.com/api/widget/widget.js"
+	data-base-url="https://your-app.com"
+	data-api-key="ss_search_your_search_key"
+	data-index-slug="products"
+	data-container="#search-container"
+	data-theme="auto"
+></script>
+```
+
+Create the container element where the widget will mount:
+
+```html
+<div id="search-container"></div>
+```
+
+## Script attributes
+
+| Attribute         | Required | Default  | Description                                     |
+| ----------------- | -------- | -------- | ----------------------------------------------- |
+| `data-base-url`   | Yes      | —        | Your AACsearch API base URL                     |
+| `data-api-key`    | Yes      | —        | `ss_search_*` key for this index                |
+| `data-index-slug` | Yes      | —        | The index slug (e.g., `products`)               |
+| `data-container`  | Yes      | —        | CSS selector for mount element                  |
+| `data-theme`      | No       | `auto`   | `light`, `dark`, or `auto`                      |
+| `data-locale`     | No       | `en`     | Widget UI locale (`en`, `de`, `es`, `fr`, `ru`) |
+| `data-layout`     | No       | `inline` | `inline` or `modal`                             |
+
+## Layout modes
+
+### Inline
+
+The widget renders a search box and results panel directly in the container. The container must
+have a defined height if results are tall.
+
+```html
+<div id="search-container" style="min-height: 400px;"></div>
+```
+
+### Modal
+
+The widget renders only a search trigger button in the container. Clicking it opens a full-screen
+search overlay. This is suitable for header search.
+
+```html
+<script ... data-layout="modal" data-container="#search-trigger"></script>
+<button id="search-trigger">Search</button>
+```
+
+## Theme customization
+
+The widget supports three theme modes:
+
+- `auto` — follows the OS/browser dark mode preference
+- `light` — always light
+- `dark` — always dark
+
+CSS custom properties for fine-grained theming (set on the host page, they pierce the Shadow DOM boundary
+only if the widget exposes CSS parts):
+
+```css
+/* These are reflected into the widget's shadow root */
+#search-container {
+	--aac-accent: #6366f1;
+	--aac-border-radius: 8px;
+}
+```
+
+## CMS module installation
+
+When using a PrestaShop or Bitrix module, the widget script tag is **automatically injected** by the
+module into the storefront's `<head>` via the CMS hook system. You do not need to add it manually.
+
+The module reads the widget configuration (API URL, key, index slug) from the module settings page.
+See [PrestaShop](/docs/connectors/prestashop) and [Bitrix](/docs/connectors/bitrix) for module-specific details.
+
+## Get the widget snippet from the dashboard
+
+The dashboard generates a pre-filled snippet in **Search** → **Widget**:
+
+1. Navigate to your search index
+2. Click the **Widget** tab
+3. Copy the generated `<script>` tag with your key and index slug pre-filled
+
+The `WidgetPanel` component in the dashboard (`apps/saas/modules/search/components/WidgetPanel.tsx`)
+also shows the connector token for CMS module configuration.
+
+## Content Security Policy (CSP)
+
+If your storefront uses a CSP header, add the AACsearch script source to your policy:
+
+```
+script-src 'self' https://your-app.com;
+connect-src 'self' https://your-app.com;
+```
+
+Shadow DOM does not require `style-src unsafe-inline` — styles are scoped to the shadow root.
+
+## Browser support
+
+The widget targets modern browsers (Chrome 88+, Firefox 85+, Safari 14+, Edge 88+).
+Shadow DOM v1 is required. Internet Explorer is not supported.
+
+## Analytics tracking
+
+The widget automatically tracks the following events (sent to `POST /api/events/track`):
+
+- `widget_open` — when the widget is opened
+- `search_query` — when a search is submitted
+- `zero_results` — when a query returns no results
+- `result_click` — when a user clicks on a result
+- `filter_used` — when a facet filter is applied
+
+See [Widget Analytics Events](/docs/connectors/widget-analytics-events) for the full event schema.

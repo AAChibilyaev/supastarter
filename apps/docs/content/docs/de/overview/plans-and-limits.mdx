@@ -1,0 +1,108 @@
+---
+title: Pläne & Limits
+description: Kontingent-Stufen, Feature-Gates, harte und weiche Limits und wie die Durchsetzung in der Codebasis funktioniert.
+---
+
+AACsearch setzt plan-spezifische Limits über ein Berechtigungssystem durch, das auf `@repo/payments/lib/entitlements` basiert.
+Es gibt noch keine separate Verwendungszähler-Tabelle – das Kontingent wird zum Anfragezeitpunkt gegen die Konfiguration geprüft und
+für die Periodenaggregatoin gegen rohe `SearchUsageEvent`-Zeilen validiert.
+
+**Hinweis:** Die unten aufgeführten Preisangaben sind eine Entwurfsposition und keine öffentlich zugesagten Tarife. Die Durchsetzungsinfrastruktur
+ist ausgeliefert; genaue Plan-Grenzen können sich vor dem Launch ändern.
+
+## Pläne (Entwurf)
+
+| Plan           | Sucheinheiten/Monat | Max. Indizes | Ursprungs-Allowlist                 | Support        |
+| -------------- | ------------------- | ------------ | ----------------------------------- | -------------- |
+| **Free**       | 10.000              | 1            | Nur `aacsearch.com`-Subdomains      | Community      |
+| **Starter**    | 100.000             | 3            | Benutzerdefinierte Ursprünge        | E-Mail         |
+| **Pro**        | 1.000.000           | 10           | Benutzerdefinierte Ursprünge        | Prioritäts-E-Mail |
+| **Business**   | 5.000.000           | 50           | Benutzerdefinierte Ursprünge        | Dediziert      |
+| **Enterprise** | Unbegrenzt          | Unbegrenzt   | Benutzerdefinierte Ursprünge        | SLA 99,95%     |
+
+Eine **Sucheinheit** = 1 Suchanfrage ODER 1 indiziertes Dokument.
+
+## Feature-Gates
+
+Die Feature-Verfügbarkeit über das Kontingent hinaus wird durch `packages/api/modules/entitlements/middleware/feature-gate.ts` gesteuert.
+oRPC-Prozeduren verwenden Middleware:
+
+```typescript
+// Eine Prozedur hinter einem Feature-Flag schützen
+.use(featureGate("synonyms"))
+
+// Eine Schreiboperation schützen
+.use(writeGate("synonyms"))
+```
+
+Die Feature-Matrix ordnet Plan-IDs aktivierten Features in `@repo/payments/lib/entitlements` zu:
+
+```typescript
+const FEATURE_MATRIX: Record<PlanId, Features> = {
+  free:       { synonyms: false, curations: false, originRestriction: false, ... },
+  starter:    { synonyms: true,  curations: true,  originRestriction: false, ... },
+  pro:        { synonyms: true,  curations: true,  originRestriction: true,  ... },
+  enterprise: { synonyms: true,  curations: true,  originRestriction: true,  ... },
+};
+```
+
+## Kontingent-Durchsetzungsablauf
+
+Jede Such- und Ingest-Anfrage durchläuft:
+
+```
+Anfrage
+  → Auth-Gate (gültiger Schlüssel + Org)
+  → Feature-Gate (Plan erlaubt diese Operation)
+  → Kontingent-Gate (Org hat verbleibende Einheiten)
+  → Rate-Gate (Rate-Limit pro Schlüssel nicht überschritten)
+  → Typesense
+```
+
+Die `quotaCheck`-Middleware in `packages/api/modules/entitlements/middleware/quota-check.ts`
+ruft `checkQuota(orgId, "search")` auf und gibt zurück:
+
+- `allowed: true` – fortfahren
+- `allowed: false`, `reason: "search_quota_exceeded"` – 429-Antwort
+
+Harte Limits stoppen sofort den gesamten Traffic. Weiche Limits (konfigurierbarer Toleranzzeitraum) können begrenzte Lesevorgänge
+für einen Toleranzzeitraum nach der Kündigung erlauben (Standard: 7 Tage Lesen, 0 Tage Schreiben).
+
+## Rate-Limiting
+
+Rate-Limiting erfolgt pro API-Schlüssel über einen Gleitfenster-Bucket in `SearchRateLimitBucket`.
+
+Standard: 60 Anfragen pro Minute pro Schlüssel (konfigurierbar pro Schlüssel). Bei Überschreitung des Limits wird HTTP 429
+mit `error: "rate_limit_exceeded"` und einem `Retry-After`-Header zurückgegeben.
+
+## Plan-Auflösung
+
+Der aktive Plan einer Org wird durch `resolveOrgPlan(orgId)` in `@repo/payments` aufgelöst:
+
+1. Den neuesten `Purchase` (Abonnement) für die Org nachschlagen.
+2. `priceId` → `planId` über die Preismatrix in `packages/payments/config.ts` abbilden.
+3. Für 60 Sekunden cachen (`invalidatePlanCache(orgId)` wird bei Abonnement-Ereignissen aufgerufen).
+4. Fail-Open: Wenn die Auflösung fehlschlägt (Zahlungsanbieter nicht verfügbar), auf Free-Plan-Limits zurückfallen.
+
+## oRPC-Berechtigungsprozedur
+
+Die Prozedur `entitlements.getPlanInfo` gibt den aktuellen Plan und die Verwendungszusammenfassung der Org zurück:
+
+```typescript
+const planInfo = await orpc.entitlements.getPlanInfo.call({ organizationId });
+// Gibt zurück: { planId, planName, searchUnitsUsed, searchUnitsLimit, indexCount, indexLimit, features }
+```
+
+## Upgrade-Ablauf
+
+Aktueller Status: **Teilweise.** Stripe-Abrechnung für Sucheinheiten ist für v0.6 geplant. Tochka (russischer
+Zahlungsanbieter) wird aktiv in `packages/payments/provider/tochka-wallet/` integriert.
+
+Die Komponente `BillingPlanInfo` in `apps/saas/modules/search/components/BillingPlanInfo.tsx` rendert
+den aktuellen Plan und die Verwendung. Der Upgrade-CTA zeigt auf die Abrechnungseinstellungsseite.
+
+## Admin-Überschreibungen
+
+Organisations-Admins können Plan-Informationen im Dashboard unter **Einstellungen → Abrechnung** einsehen. Plattform-
+Admins (über `/admin/organizations`) können die Berechtigungen jeder Org einsehen und die Plan-
+Zuweisung in der Datenbank für Randfälle manuell anpassen.

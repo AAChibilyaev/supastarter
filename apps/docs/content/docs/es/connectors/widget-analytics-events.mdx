@@ -1,0 +1,165 @@
+---
+title: "Eventos de Analíticas del Widget"
+description: "Tipos de eventos, transporte, esquema de payload y estado actual de persistencia para el seguimiento de analíticas del widget."
+---
+
+El widget de AACsearch rastrea automáticamente el comportamiento del usuario y envía eventos al endpoint de analíticas. Estos eventos impulsan el panel de analíticas de búsqueda — consultas principales, tasa de cero resultados, tasa de clics y búsquedas a lo largo del tiempo.
+
+## Endpoint
+
+```
+POST /api/events/track
+Authorization: Bearer <clave ss_search_* o ss_scoped_*>
+Content-Type: application/json
+```
+
+La misma API key utilizada para la búsqueda (`ss_search_*`) se usa para autenticar eventos de analíticas. El endpoint tiene CORS habilitado para todos los orígenes.
+
+## Tipos de eventos
+
+| Tipo de evento | Disparador                              | Prioridad |
+| -------------- | --------------------------------------- | --------- |
+| `search_query` | El usuario envía una consulta de búsqueda | P0      |
+| `zero_results` | Una búsqueda no devuelve resultados     | P0        |
+| `result_click` | El usuario hace clic en un resultado de producto | P0 |
+| `widget_open`  | El widget se abre / se hace visible     | P1        |
+| `filter_used`  | El usuario aplica o cambia un filtro de faceta | P1  |
+
+## Transporte
+
+El widget envía eventos con `keepalive: true` para evitar perder eventos en la navegación de página:
+
+```javascript
+fetch(eventsUrl, {
+	method: "POST",
+	headers: {
+		"Content-Type": "application/json",
+		Authorization: "Bearer " + apiKey,
+	},
+	keepalive: true,
+	body: JSON.stringify(payload),
+});
+```
+
+## Esquema de payload
+
+Puede enviar un solo evento o un lote de hasta 50 eventos.
+
+**Evento único:**
+
+```json
+{
+	"type": "search_query",
+	"sessionId": "a1b2c3d4-e5f6-...",
+	"anonymousUserId": "uid_xyz",
+	"query": "zapatillas running azules",
+	"locale": "es",
+	"referrer": "https://myshop.example.com/search",
+	"metadata": {}
+}
+```
+
+**Lote:**
+
+```json
+{
+	"events": [
+		{ "type": "widget_open", "sessionId": "a1b2c3d4-..." },
+		{ "type": "search_query", "query": "zapatillas running azules", "sessionId": "a1b2c3d4-..." }
+	]
+}
+```
+
+### Referencia de campos
+
+| Campo             | Tipo    | Longitud máx. | Descripción                                                         |
+| ----------------- | ------- | -------------- | ------------------------------------------------------------------- |
+| `type`            | string  | —              | Tipo de evento (véase la tabla anterior)                            |
+| `sessionId`       | string  | 64             | ID de sesión efímero (`crypto.randomUUID()` o alternativa)          |
+| `anonymousUserId` | string  | 64             | ID de usuario anónimo estable (por navegador, puede ser nulo en modo privacidad) |
+| `query`           | string  | 512            | La cadena de consulta de búsqueda (eventos `search_query` y `zero_results`) |
+| `productId`       | string  | 128            | ID externo del producto (eventos `result_click`)                    |
+| `position`        | integer | —              | Rango indexado desde 1 del resultado clicado (eventos `result_click`) |
+| `filters`         | object  | —              | Filtros de faceta activos al momento del evento (eventos `filter_used`) |
+| `sort`            | string  | 128            | Opción de ordenación activa                                         |
+| `locale`          | string  | 16             | Idioma de la configuración del widget                               |
+| `referrer`        | string  | 512            | URL de la página (de `document.referrer`)                           |
+| `metadata`        | object  | 4 KB           | Datos adicionales opacos — sin PII                                  |
+
+### Generación del ID de sesión
+
+El widget genera un ID de sesión usando `crypto.randomUUID()` con una alternativa a una cadena aleatoria simple:
+
+```javascript
+const sessionId =
+	typeof crypto !== "undefined" && crypto.randomUUID
+		? crypto.randomUUID()
+		: Math.random().toString(36).slice(2);
+```
+
+El ID de sesión es por instancia del widget / carga de página. No se persiste.
+
+## Persistencia
+
+Cada evento se persiste en la tabla `SearchUsageEvent` mediante `recordSearchUsage()`. El tipo de evento se mapea de la siguiente manera:
+
+| Tipo de evento del widget | `SearchUsageEvent.type` almacenado |
+| ------------------------- | ---------------------------------- |
+| `search_query`            | `"search_query"`                   |
+| `zero_results`            | `"zero_results"`                   |
+| `result_click`            | `"click"`                          |
+| `widget_open`             | `"widget_open"`                    |
+| `filter_used`             | `"filter_applied"`                 |
+
+Todos los campos de metadatos (query, productId, position, filters, sort, locale, referrer, sessionId, anonymousUserId, user-agent) se persisten como un blob JSON en `SearchUsageEvent.metadata`.
+
+### Qué se almacena y qué no
+
+**Almacenado:**
+
+- Tipo de evento
+- ID de sesión (efímero, aleatorio)
+- ID de usuario anónimo (aleatorio, estable por navegador)
+- Texto de la consulta de búsqueda
+- ID del producto y posición para eventos de clic
+- Filtros de faceta
+- Opción de ordenación
+- Idioma
+- URL de referencia (limitada a 512 caracteres)
+- Cadena de agente de usuario (limitada a 256 caracteres)
+
+**No almacenado:**
+
+- Dirección IP completa — solo se procesa la solicitud del lado del servidor; no se escribe ninguna IP en `SearchUsageEvent`
+- Correo electrónico ni ningún identificador de usuario autenticado
+- Parámetros de cadena de consulta crudos de la URL de referencia que podrían contener PII
+
+### Advertencia de persistencia parcial
+
+Si se envía un lote de eventos y algunos fallan al persistirse, el endpoint devuelve:
+
+```json
+{
+	"accepted": 4,
+	"rejected": 1
+}
+```
+
+El recuento `rejected` refleja fallos de escritura en la base de datos, no errores de validación. Los fallos de validación devuelven un 400 antes de que ocurra cualquier escritura. El widget no reintenta los eventos rechazados.
+
+## Panel de analíticas
+
+Los eventos almacenados en `SearchUsageEvent` impulsan los procedimientos de analíticas:
+
+- `search.usage` — filas de eventos crudas para el período
+- `search.usageSummary` — recuentos agregados por tipo
+- `search.topQueries` — consultas de búsqueda más frecuentes
+- `search.analytics` — datos de analíticas a nivel de panel
+
+Las páginas del panel en **Panel → Descripción general** (tarjetas KPI, búsquedas a lo largo del tiempo, consultas principales) y **Panel → Analíticas** leen de estos procedimientos.
+
+## Páginas relacionadas
+
+- [Descripción general del widget](/docs/connectors/widget-overview)
+- [Autenticación de la API de búsqueda](/docs/search-api/authentication)
+- [Descripción general del panel](/docs/dashboard/overview)

@@ -1,0 +1,165 @@
+---
+title: "Widget Analytics Events"
+description: "Event types, transport, payload schema, and current persistence status for widget analytics tracking."
+---
+
+The AACsearch widget automatically tracks user behavior and sends events to the analytics endpoint. These events power the search analytics dashboard — top queries, zero-result rate, click-through rate, and searches over time.
+
+## Endpoint
+
+```
+POST /api/events/track
+Authorization: Bearer <ss_search_* or ss_scoped_* key>
+Content-Type: application/json
+```
+
+The same API key used for search (`ss_search_*`) is used to authenticate analytics events. The endpoint is CORS-enabled for all origins.
+
+## Event types
+
+| Event type     | Trigger                                | Priority |
+| -------------- | -------------------------------------- | -------- |
+| `search_query` | User submits a search query            | P0       |
+| `zero_results` | A search returns no hits               | P0       |
+| `result_click` | User clicks a product result           | P0       |
+| `widget_open`  | Widget is opened / becomes visible     | P1       |
+| `filter_used`  | User applies or changes a facet filter | P1       |
+
+## Transport
+
+The widget sends events with `keepalive: true` to avoid losing events on page navigation:
+
+```javascript
+fetch(eventsUrl, {
+	method: "POST",
+	headers: {
+		"Content-Type": "application/json",
+		Authorization: "Bearer " + apiKey,
+	},
+	keepalive: true,
+	body: JSON.stringify(payload),
+});
+```
+
+## Payload schema
+
+You can send a single event or a batch of up to 50 events.
+
+**Single event:**
+
+```json
+{
+	"type": "search_query",
+	"sessionId": "a1b2c3d4-e5f6-...",
+	"anonymousUserId": "uid_xyz",
+	"query": "blue running shoes",
+	"locale": "en",
+	"referrer": "https://myshop.example.com/search",
+	"metadata": {}
+}
+```
+
+**Batch:**
+
+```json
+{
+	"events": [
+		{ "type": "widget_open", "sessionId": "a1b2c3d4-..." },
+		{ "type": "search_query", "query": "blue running shoes", "sessionId": "a1b2c3d4-..." }
+	]
+}
+```
+
+### Field reference
+
+| Field             | Type    | Max length | Description                                                         |
+| ----------------- | ------- | ---------- | ------------------------------------------------------------------- |
+| `type`            | string  | —          | Event type (see table above)                                        |
+| `sessionId`       | string  | 64         | Ephemeral session ID (`crypto.randomUUID()` or fallback)            |
+| `anonymousUserId` | string  | 64         | Stable anonymous user ID (per browser, may be null in privacy mode) |
+| `query`           | string  | 512        | The search query string (`search_query` and `zero_results` events)  |
+| `productId`       | string  | 128        | External product ID (`result_click` events)                         |
+| `position`        | integer | —          | 1-indexed rank of clicked result (`result_click` events)            |
+| `filters`         | object  | —          | Active facet filters at time of event (`filter_used` events)        |
+| `sort`            | string  | 128        | Active sort option                                                  |
+| `locale`          | string  | 16         | Locale from widget config                                           |
+| `referrer`        | string  | 512        | Page URL (from `document.referrer`)                                 |
+| `metadata`        | object  | 4 KB       | Opaque extra data — no PII                                          |
+
+### Session ID generation
+
+The widget generates a session ID using `crypto.randomUUID()` with a fallback to a simple random string:
+
+```javascript
+const sessionId =
+	typeof crypto !== "undefined" && crypto.randomUUID
+		? crypto.randomUUID()
+		: Math.random().toString(36).slice(2);
+```
+
+The session ID is per widget instance / page load. It is not persisted.
+
+## Persistence
+
+Each event is persisted to the `SearchUsageEvent` table via `recordSearchUsage()`. The event type is mapped as follows:
+
+| Widget event type | `SearchUsageEvent.type` stored |
+| ----------------- | ------------------------------ |
+| `search_query`    | `"search_query"`               |
+| `zero_results`    | `"zero_results"`               |
+| `result_click`    | `"click"`                      |
+| `widget_open`     | `"widget_open"`                |
+| `filter_used`     | `"filter_applied"`             |
+
+All metadata fields (query, productId, position, filters, sort, locale, referrer, sessionId, anonymousUserId, user-agent) are persisted as a JSON blob in `SearchUsageEvent.metadata`.
+
+### What is and is not stored
+
+**Stored:**
+
+- Event type
+- Session ID (ephemeral, random)
+- Anonymous user ID (random, stable per browser)
+- Search query text
+- Product ID and position for click events
+- Facet filters
+- Sort option
+- Locale
+- Referrer URL (capped at 512 characters)
+- User-agent string (capped at 256 characters)
+
+**Not stored:**
+
+- Full IP address — only the server-side request is processed; no IP is written to `SearchUsageEvent`
+- Email or any authenticated user identifier
+- Raw query string parameters from the referrer URL that could contain PII
+
+### Partial persistence caveat
+
+If a batch of events is sent and some fail to persist, the endpoint returns:
+
+```json
+{
+	"accepted": 4,
+	"rejected": 1
+}
+```
+
+The `rejected` count reflects database write failures, not validation errors. Validation failures return a 400 before any writes occur. The widget does not retry rejected events.
+
+## Analytics dashboard
+
+Events stored in `SearchUsageEvent` power the analytics procedures:
+
+- `search.usage` — raw event rows for the period
+- `search.usageSummary` — aggregated counts by type
+- `search.topQueries` — most frequent search queries
+- `search.analytics` — dashboard-level analytics data
+
+Dashboard pages at **Dashboard → Overview** (KPI tiles, searches over time, top queries) and **Dashboard → Analytics** read from these procedures.
+
+## Related pages
+
+- [Widget Overview](/docs/connectors/widget-overview)
+- [Search API Authentication](/docs/search-api/authentication)
+- [Dashboard Overview](/docs/dashboard/overview)

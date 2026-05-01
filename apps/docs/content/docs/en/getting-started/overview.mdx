@@ -1,0 +1,69 @@
+---
+title: Getting Started
+description: Start here — create an account, set up your first search index, and connect your first store.
+---
+
+This section walks you through AACsearch from zero to a working search endpoint. Whether you are
+a developer setting up the monorepo locally or a merchant connecting a PrestaShop store, this is
+the right place to start.
+
+## The path to a working search
+
+```
+1. Create account + organization
+2. Create a search index
+3. Generate API keys
+4. Ingest your first documents
+5. Run a search query
+6. (Optional) Install the widget on your storefront
+7. (Optional) Connect a CMS module for ongoing sync
+```
+
+## Roles and what they need
+
+### Developer / integrator
+
+You want to set up the local monorepo, understand the API surface, and wire up a custom integration.
+
+Start with:
+
+1. [Local development](/docs/getting-started/local-development) — environment setup
+2. [Create your first index](/docs/getting-started/create-first-index) — understand the index + alias model
+3. [API keys](/docs/getting-started/api-keys) — understand the key types before calling the API
+4. [Browser SDK](/docs/getting-started/browser-sdk) — search from a browser or Node.js client
+5. [Ingest and reindex](/docs/getting-started/ingest-and-reindex) — load and update documents
+
+### Merchant / store operator
+
+You want to connect an existing PrestaShop or Bitrix store and get search working on your storefront.
+
+Start with:
+
+1. Sign up at the AACsearch dashboard
+2. Create an organization and a search index
+3. [Connector onboarding](/docs/getting-started/connector-onboarding) — generate a connector token and connect your CMS
+4. [Widget installation](/docs/getting-started/widget-installation) — add the search widget to your storefront
+
+## Prerequisites
+
+| Requirement        | Notes                                         |
+| ------------------ | --------------------------------------------- |
+| Node.js 20+        | For local development                         |
+| pnpm 10            | Package manager — install via `npm i -g pnpm` |
+| Docker             | For local Postgres + MinIO (object storage)   |
+| Typesense instance | Docker image or managed cloud                 |
+| AACsearch account  | Sign up at the dashboard                      |
+
+## MVP definition of done
+
+The full end-to-end path for AACsearch MVP is:
+
+```
+Sign up → create org → create project →
+generate connector token → install PrestaShop or Bitrix module →
+connect module → run full sync → products are indexed →
+test search in dashboard → enable widget → storefront search works →
+basic analytics appear in dashboard
+```
+
+See [Status & Roadmap](/docs/overview/status-roadmap) for the current state of each step.

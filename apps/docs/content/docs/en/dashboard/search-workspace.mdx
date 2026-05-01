@@ -1,0 +1,158 @@
+---
+title: "Search Workspace"
+description: "The Search section of the dashboard — Indexes, Playground, API Keys, Widget tabs, import jobs, connector tokens, and the onboarding checklist."
+---
+
+The Search workspace at `/[orgSlug]/search` is the main control panel for your search indexes. It is organized into tabs:
+
+- **Indexes** — manage your search indexes
+- **Playground** — test queries interactively
+- **API Keys** — manage search API keys per index
+- **Widget** — get the install snippet for the hosted widget
+
+## Indexes tab
+
+The Indexes tab lists all search indexes for the organization. For each index you can:
+
+- See the document count and last updated timestamp
+- Open row actions: reindex, view import jobs, manage schema, synonyms, curations
+- Create a new index (org admin only)
+
+A usage summary card at the top shows consumption against your plan limits (searches used, documents indexed, quota percentage).
+
+### Creating an index
+
+Click **New Index** (visible to org admins). You choose a display name and a slug. The slug becomes part of the Typesense collection name and cannot be changed after creation.
+
+Index slugs are used in:
+
+- The widget `data-index-slug` attribute
+- The Connector API `:indexSlug` path segment
+- API key bindings
+
+### Reindex
+
+Triggering a reindex from row actions creates a new versioned Typesense collection (`{orgShortId}_{slug}_v{n+1}`), verifies it, and atomically swaps the alias. The previous version stays live until the swap completes. No downtime.
+
+## Playground tab
+
+The Playground lets you run test queries against any index without writing code. You can:
+
+- Enter a search query
+- Apply filters
+- Try different sort options
+- See raw Typesense results including facet counts and highlights
+
+The Playground uses your dashboard session — no API key is required to use it.
+
+## API Keys tab
+
+The API Keys tab shows all keys for a selected index. Select an index from the dropdown to see its keys.
+
+### Key scopes
+
+| Scope             | Purpose                                                  |
+| ----------------- | -------------------------------------------------------- |
+| `search`          | Read-only search queries. Safe to embed in browser code. |
+| `ingest`          | Write access to submit documents via the REST API        |
+| `admin`           | Full access — create/delete collections, manage schema   |
+| `connector_write` | Used by CMS modules (see connector tokens below)         |
+
+### Creating a key
+
+Click **Create Key** and choose a name and scope. The plaintext key is shown once at creation. Copy it immediately — it cannot be retrieved again.
+
+Keys are stored as SHA-256 hashes (prefix:hash format). Only the prefix and metadata are stored in plaintext.
+
+### Revoking a key
+
+Click **Revoke** on any active key. Revocation is immediate — the key is rejected on the next use. Revoked keys are kept in the list for audit purposes.
+
+## Widget tab
+
+The Widget tab generates the install snippet for the hosted widget. Select an index from the dropdown, then:
+
+1. Enter your `ss_search_*` API key (or use a key you already created)
+2. Copy the generated snippet
+
+The snippet looks like:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Paste it into your storefront `<head>` and add `<div id="aac-search"></div>` where you want search to appear.
+
+See [Widget Overview](/docs/connectors/widget-overview) for full configuration options.
+
+## Import Jobs
+
+The `/[orgSlug]/import-jobs` page shows the history of bulk import operations.
+
+### Bulk import
+
+You can upload a JSONL file from the Indexes tab → row actions → Import Documents. Each line in the file is a product document in the same shape as the Connector API sync payload:
+
+```jsonl
+{"external_id":"1","title":"Product A","price":9.99}
+{"external_id":"2","title":"Product B","price":19.99}
+```
+
+Import jobs are tracked in the database. Each job shows:
+
+- Status (running / completed / failed)
+- Total items processed
+- Failure count
+- Start and finish timestamps
+
+## Getting Started checklist
+
+The `/[orgSlug]/getting-started` page shows a 6-step checklist that self-derives its state from your existing data — no manual input required.
+
+| Step                          | Condition                                                             |
+| ----------------------------- | --------------------------------------------------------------------- |
+| 1. Create a search index      | `SearchIndex` count > 0 for the org                                   |
+| 2. Generate a connector token | `SearchApiKey` with `connector_write` scope exists and is not revoked |
+| 3. Sync your data             | `SearchUsageEvent` with ingest type exists                            |
+| 4. Perform a search           | `SearchUsageEvent` with search type exists                            |
+| 5. Generate an API key        | `SearchApiKey` with `search` scope exists and is not revoked          |
+| 6. Embed the search widget    | Always starts unchecked — self-attestation by the user                |
+
+Steps 1–5 are checked automatically. Step 6 reflects widget embedding, which cannot be detected server-side.
+
+## Connector tokens
+
+Connector tokens (`ss_connector_*`) are managed from the Connectors page at `/[orgSlug]/connectors` rather than the Search workspace. From there you can:
+
+- See all active connector tokens with their last heartbeat time
+- Create a new connector token for a specific index
+- Revoke a token
+
+See [Connectors Overview](/docs/connectors/overview) for the full connector workflow.
+
+## Relevance settings
+
+The `/[orgSlug]/relevance` page has sub-tabs for per-index relevance tuning:
+
+- **Synonyms** — add synonym sets (e.g. "sneakers" = "running shoes" = "trainers")
+- **Curations** — pin or hide specific documents for certain queries
+- **Stopwords** — define words to ignore during search (planned for v1.x)
+- **Presets** — save named search parameter sets for quick reuse (planned for v1.x)
+
+## Analytics page
+
+The `/[orgSlug]/analytics` page provides detailed search analytics for the organization. It shows total searches, unique sessions, zero-result rate, average latency, and click-through rate. Data is sourced from `SearchUsageEvent` rows via the `search.analytics` oRPC procedure.
+
+## Related pages
+
+- [Dashboard Overview](/docs/dashboard/overview)
+- [Widget Overview](/docs/connectors/widget-overview)
+- [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle)
+- [Authentication](/docs/search-api/authentication)

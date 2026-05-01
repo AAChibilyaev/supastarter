@@ -1,0 +1,188 @@
+---
+title: Point de terminaison de recherche public
+description: Référence complète pour le point de terminaison POST /api/search — schéma de requête, paramètres et format de réponse.
+---
+
+Le point de terminaison de recherche public est la principale façon d'exécuter des requêtes de recherche. Il accepte des requêtes JSON POST
+authentifiées avec une clé `ss_search_*` ou `ss_scoped_*`.
+
+**Point de terminaison :** `POST /api/search`
+
+**Auth :** `Authorization: Bearer ss_search_your_key`
+
+## Schéma de requête
+
+```typescript
+{
+  // Requis
+  indexSlug: string;                   // slug de l'index cible
+
+  // Requête
+  q: string;                           // requête de recherche (utilisez "*" pour la navigation par joker)
+  queryBy?: string;                    // noms de champs séparés par des virgules à rechercher
+                                       // défaut : "title,sku,brand,description"
+
+  // Filtrage
+  filterBy?: string;                   // expression de filtre Typesense
+  facetBy?: string;                    // champs séparés par des virgules pour calculer les facettes
+
+  // Tri
+  sortBy?: string;                     // par ex. "price:asc" ou "_text_match:desc,price:asc"
+
+  // Pagination
+  page?: number;                       // indexé à partir de 1 (défaut : 1)
+  perPage?: number;                    // défaut : 10, max : 100
+
+  // Mise en surbrillance
+  highlightFields?: string;            // champs séparés par des virgules à mettre en surbrillance
+  highlightStartTag?: string;          // défaut : "<mark>"
+  highlightEndTag?: string;            // défaut : "</mark>"
+
+  // Sélection de champs
+  includeFields?: string;              // retourner uniquement ces champs
+  excludeFields?: string;              // exclure ces champs de la réponse
+}
+```
+
+## Exemple : recherche de base
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "wireless headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Exemple : recherche filtrée avec facettes
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,brand",
+    "filterBy": "availability:=in_stock && price:<200",
+    "facetBy": "brand,categories",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Schéma de réponse
+
+```typescript
+{
+  found: number;           // total de documents correspondants
+  page: number;            // page actuelle (indexée à partir de 1)
+  outOf: number;           // total de documents dans l'index
+  searchTimeMs: number;    // temps d'exécution de la requête en millisecondes
+
+  hits: Array<{
+    document: Record<string, unknown>;  // le document correspondant
+    highlights: Array<{
+      field: string;
+      snippet: string;     // HTML avec des balises <mark> autour des termes correspondants
+    }>;
+    textMatchScore: number;
+  }>;
+
+  facetCounts?: Array<{
+    fieldName: string;
+    counts: Array<{
+      value: string;
+      count: number;
+    }>;
+  }>;
+}
+```
+
+## Exemple de réponse
+
+```json
+{
+	"found": 142,
+	"page": 1,
+	"outOf": 5000,
+	"searchTimeMs": 4,
+	"hits": [
+		{
+			"document": {
+				"id": "product-123",
+				"title": "Sony WH-1000XM5 Wireless Headphones",
+				"brand": "Sony",
+				"price": 349.99,
+				"availability": "in_stock"
+			},
+			"highlights": [
+				{
+					"field": "title",
+					"snippet": "Sony WH-1000XM5 <mark>Wireless</mark> <mark>Headphones</mark>"
+				}
+			],
+			"textMatchScore": 578730
+		}
+	],
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 }
+			]
+		}
+	]
+}
+```
+
+## Jokers dans les requêtes
+
+Utilisez `q: "*"` pour retourner tous les documents (utile pour la navigation avec des filtres) :
+
+```json
+{
+	"indexSlug": "products",
+	"q": "*",
+	"filterBy": "categories:=Electronics",
+	"sortBy": "price:asc"
+}
+```
+
+## Isolation des locataires
+
+Le handler public ajoute automatiquement un filtre de locataire à chaque requête :
+
+```
+organization_id:={organizationId}
+```
+
+Ce filtre est combiné avec ET avec tout `filterBy` fourni par l'appelant. Il ne peut pas être supprimé ni
+remplacé par l'appelant. L'accès aux données inter-organisations est architecturalement impossible via ce point de terminaison.
+
+## Paramètres de requête par défaut
+
+AACsearch applique ces valeurs par défaut si non spécifiées :
+
+| Paramètre           | Valeur par défaut                          |
+| ------------------- | ------------------------------------------ |
+| `queryBy`           | `"title,sku,brand,categories,description"` |
+| `sortBy`            | `"_text_match:desc"`                       |
+| `page`              | `1`                                        |
+| `perPage`           | `10`                                       |
+| `highlightStartTag` | `"<mark>"`                                 |
+| `highlightEndTag`   | `"</mark>"`                                |
+
+## Notes de performance
+
+- Latence de requête typique : < 10 ms pour les indexes de moins de 100 000 documents
+- Le temps de réponse augmente avec des expressions `filterBy` complexes et de nombreuses facettes
+- Évitez `perPage > 50` pour les requêtes avec beaucoup de facettes — cela augmente le temps de traitement Typesense
+- Utilisez `excludeFields` pour supprimer les grands champs de texte (par ex. `description`) des résultats que vous n'affichez pas

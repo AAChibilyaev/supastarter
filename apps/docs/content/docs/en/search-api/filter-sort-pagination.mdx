@@ -1,0 +1,232 @@
+---
+title: Filters, Sorting & Pagination
+description: Complete reference for filter expressions, sort options, faceting, and pagination in AACsearch queries.
+---
+
+AACsearch uses Typesense's filter and sort syntax with a few conventions specific to the
+product schema. This page is a complete reference for building filter expressions, configuring
+sort orders, and paginating results.
+
+## Filter expression syntax
+
+Filters are specified as a string using boolean logic.
+
+### Equality
+
+```
+availability:=in_stock
+brand:=Sony
+categories:=Electronics
+locale:=en
+```
+
+### Negation
+
+```
+availability:!=out_of_stock
+brand:!=Competitors
+```
+
+### Range (numeric)
+
+```
+price:>50
+price:<200
+price:[50..200]     # inclusive range
+price:(50..200)     # exclusive range
+```
+
+### Array membership
+
+```
+categories:=[Electronics, Audio]
+brand:=[Sony, Bose, Sennheiser]
+```
+
+### String contains / prefix
+
+Typesense supports exact string match only for faceted fields. For prefix search, use `q` with `queryBy`.
+
+### Boolean logic
+
+```
+# AND (both conditions must match)
+availability:=in_stock && price:<200
+
+# OR (either condition matches)
+brand:=Sony || brand:=Bose
+
+# Grouping
+(brand:=Sony || brand:=Bose) && availability:=in_stock && price:<200
+```
+
+### Tenant filter (automatic)
+
+The public handler automatically prepends:
+
+```
+organization_id:={organizationId}
+```
+
+You do not need to add this filter manually — it is always applied.
+
+## Available filter fields
+
+The default product schema includes these filterable fields (marked `facet: true`):
+
+| Field          | Type     | Example filter                     |
+| -------------- | -------- | ---------------------------------- |
+| `brand`        | string   | `brand:=Sony`                      |
+| `categories`   | string[] | `categories:=[Electronics, Audio]` |
+| `availability` | string   | `availability:=in_stock`           |
+| `price`        | float    | `price:[10..500]`                  |
+| `sale_price`   | float    | `sale_price:<100`                  |
+| `locale`       | string   | `locale:=en`                       |
+
+## Faceting
+
+Facets compute the value distribution for a field across matching documents. Use them to render
+filter sidebars.
+
+```json
+{
+	"q": "headphones",
+	"facetBy": "brand,categories,availability"
+}
+```
+
+Response includes `facetCounts`:
+
+```json
+{
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 },
+				{ "value": "Sennheiser", "count": 19 }
+			]
+		},
+		{
+			"fieldName": "availability",
+			"counts": [
+				{ "value": "in_stock", "count": 89 },
+				{ "value": "out_of_stock", "count": 23 }
+			]
+		}
+	]
+}
+```
+
+### Facets with filters applied
+
+When a filter is active, facet counts reflect the filtered result set, not the whole index:
+
+```json
+{
+	"q": "*",
+	"filterBy": "brand:=Sony",
+	"facetBy": "categories,availability"
+}
+```
+
+This returns categories and availability counts for Sony products only.
+
+## Sorting
+
+### Single-field sort
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "price:desc" }
+{ "sortBy": "created_at:desc" }
+{ "sortBy": "sale_price:asc" }
+```
+
+### Relevance-first sort (default)
+
+```json
+{ "sortBy": "_text_match:desc" }
+```
+
+This is the default when `sortBy` is omitted.
+
+### Multi-field sort (tiebreaker)
+
+```json
+{ "sortBy": "_text_match:desc,price:asc" }
+```
+
+Sorts by relevance score first; within the same score, sorts by price ascending.
+
+### Common sort presets
+
+| Label                   | `sortBy` value     |
+| ----------------------- | ------------------ |
+| Most relevant           | `_text_match:desc` |
+| Price: low to high      | `price:asc`        |
+| Price: high to low      | `price:desc`       |
+| Newest first            | `created_at:desc`  |
+| Sale price: low to high | `sale_price:asc`   |
+
+## Pagination
+
+```json
+{
+	"page": 1, // 1-indexed, default: 1
+	"perPage": 20 // default: 10, max: 100
+}
+```
+
+Response fields for pagination:
+
+```json
+{
+	"found": 142, // total matching documents
+	"page": 1, // current page
+	"outOf": 5000 // total documents in the index (unfilterd)
+}
+```
+
+Computing total pages:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+const hasMore = results.page * perPage < results.found;
+```
+
+### Deep pagination warning
+
+Typesense performance degrades with large `page` values for indexes over 100K documents.
+For deep pagination or exports:
+
+1. Use increasing `page` values with a fixed `perPage`
+2. Or implement cursor-based pagination by sorting on a unique field (`id:asc`)
+   and using `filterBy: "id:>lastSeenId"`
+
+## Field selection
+
+Reduce response size by selecting only the fields you need:
+
+```json
+{
+	"includeFields": "id,title,price,brand,availability",
+	"excludeFields": "description,tags"
+}
+```
+
+Use `excludeFields` to strip large text fields from responses when you don't render them
+(e.g., `description` in a search-as-you-type autocomplete that only shows titles).
+
+## Combining filters with scoped tokens
+
+When a scoped token is used, its `scopedFilter` is AND-combined with the caller's `filterBy`:
+
+```
+Token scopedFilter:    "price:<100"
+Caller filterBy:       "brand:=Sony && availability:=in_stock"
+Effective filterBy:    "brand:=Sony && availability:=in_stock && price:<100"
+```
+
+The token's filter cannot be overridden by the caller's `filterBy`.

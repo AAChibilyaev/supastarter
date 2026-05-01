@@ -1,0 +1,149 @@
+---
+title: "PrestaShop-Modul"
+description: "Das AACsearch-Modul für PrestaShop 8.x installieren und konfigurieren."
+---
+
+> **Status: Frühe Vorschau.** Das Modul-Entwurf ist funktional — Handshake, Vollsynchronisierung, Delta-Synchronisierung und Widget-Injektion funktionieren alle. Installationspaketierung und Admin-UI-Feinschliff sind noch in Arbeit. Erwarten Sie Kinderkrankheiten.
+
+Das AACsearch PrestaShop-Modul (`modules/aacsearch`) integriert Ihren PrestaShop-8.x-Katalog mit AACsearch. Es übernimmt:
+
+- Produkte über die Connector-API nach AACsearch exportieren
+- Delta-Synchronisierungen bei Produkt-Erstellen-/Aktualisieren-/Löschen-/Lagerbestand-Ereignissen auslösen
+- Das gehostete Such-Widget in den `<head>` Ihres Storefronts injizieren
+
+## Anforderungen
+
+- PrestaShop 8.x (kompatibel mit PS 9 — Hook-API ist identisch)
+- PHP 7.4 oder höher
+- cURL-Erweiterung aktiviert
+- Ein AACsearch-Konto mit mindestens einem erstellten Suchindex
+- Ein Connector-Token (`ss_connector_*`) für diesen Index
+
+## Modul-Dateilayout
+
+```
+modules/aacsearch/
+  aacsearch.php                           # Hauptmodul-Klasse — installieren/deinstallieren/hooks
+  config.xml                              # Moduldeskriptor (Name, Version, Autor)
+  index.php                               # Verzeichnisauflistungsschutz
+  classes/
+    AacSearchClient.php                   # HTTP-Client, der alle Connector-API-Aufrufe verpackt
+    AacSearchProductExporter.php          # Normalisiert PS-Produkte → ProductDocument-Format
+    AacSearchSyncQueue.php                # Batcht Produkte und verwaltet Retry-Zustand
+  controllers/
+    admin/
+      AdminAacSearchController.php        # Admin-Einstellungen + Diagnoseseite
+  views/
+    templates/
+      admin/configure.tpl                 # Einstellungsformular-Template
+      hook/widget.tpl                     # Widget-Injektions-Template
+```
+
+## Installationsschritte
+
+### 1. Modul hochladen
+
+Kopieren Sie das Verzeichnis `modules/aacsearch/` in Ihr PrestaShop-Verzeichnis `modules/`. Navigieren Sie dann zu **Back-Office → Module → Modulmanager** und installieren Sie „AACsearch".
+
+### 2. Modul konfigurieren
+
+Öffnen Sie die Modulkonfigurationsseite (**Module → AACsearch → Konfigurieren**) und füllen Sie aus:
+
+| Feld              | Beschreibung                                                              |
+| ----------------- | ------------------------------------------------------------------------- |
+| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)    |
+| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                         |
+| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren           |
+| Sync aktiviert    | Automatische Delta-Synchronisierungen bei Produktereignissen aktivieren   |
+| Widget aktiviert  | Das gehostete Widget in das Storefront injizieren                         |
+| Locale            | Standard-Locale für Suchergebnisse (z. B. `de`, `en`)                    |
+| Standardwährung   | Währungscode für Preisfelder                                              |
+| Batch-Größe       | Produkte pro Synchronisierungsanfrage (Standard: 200, Max: 1000)          |
+| Debug-Modus       | Ausführliche Protokolle in `/var/logs/aacsearch.log` schreiben            |
+
+### 3. Verbindung testen
+
+Klicken Sie auf der Einstellungsseite auf **Verbindung testen**. Dies ruft `POST /api/connectors/handshake` auf. Eine erfolgreiche Antwort zeigt den verbundenen Index-Slug und bestätigt, dass das Token gültig ist.
+
+### 4. Vollsynchronisierung ausführen
+
+Klicken Sie auf **Vollsynchronisierung**, um alle Produkte zu exportieren. Das Modul liest Produkte in Batches (gesteuert durch die Batch-Größen-Einstellung), normalisiert sie mit `AacSearchProductExporter` und sendet jeden Batch an `POST /api/projects/:projectId/sync/full`.
+
+Große Kataloge können mehrere Minuten dauern. Fortschritt und etwaige Fehler werden auf der Diagnoseseite angezeigt.
+
+## ProductDocument-Format
+
+Der Exporter bildet PrestaShop-Produktfelder auf folgende Dokumentstruktur ab:
+
+```json
+{
+	"external_id": "123",
+	"title": "Blaue Laufschuhe",
+	"description": "Leichte Laufschuhe für alle Geländearten",
+	"sku": "BRS-42",
+	"brand": "Acme Sport",
+	"categories": ["Schuhe", "Laufen"],
+	"category_ids": ["10", "22"],
+	"tags": ["sale", "neu-eingetroffen"],
+	"price": 99.99,
+	"sale_price": 79.99,
+	"currency": "EUR",
+	"image_url": "https://myshop.example.com/img/brs-42.jpg",
+	"product_url": "https://myshop.example.com/products/brs-42",
+	"availability": "in_stock",
+	"stock_quantity": 42,
+	"attributes": { "color": "blau", "size": "42" },
+	"locale": "de"
+}
+```
+
+## Hooks
+
+Das Modul registriert diese PrestaShop-Hooks für automatische Delta-Synchronisierungen:
+
+| Hook                             | Auslöser                                                           |
+| -------------------------------- | ------------------------------------------------------------------ |
+| `displayHeader`                  | Injiziert das Widget-`<script>`-Tag in den Storefront-`<head>`    |
+| `actionProductUpdate`            | Wird nach dem Speichern eines Produkts ausgelöst — Delta-Sync      |
+| `actionObjectProductDeleteAfter` | Wird nach dem Löschen eines Produkts ausgelöst — Löschanfrage senden |
+| `actionUpdateQuantity`           | Lagerbestandsänderung — Delta-Sync auslösen                        |
+
+## Widget-Injektion
+
+Wenn **Widget aktiviert** angehakt ist, gibt das Modul einen Einbettungsschnipsel über den `displayHeader`-Hook aus:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Der `data-api-key`-Wert ist ein separater `ss_search_*`-Schlüssel — nicht das Connector-Token. Der Suchschlüssel kann schreibgeschützt sein und ist sicher im Browser einzubetten.
+
+Sie müssen auch das Container-Element zu Ihrem Theme-Template hinzufügen:
+
+```html
+<div id="aac-search"></div>
+```
+
+## Fehlerbehebung
+
+**Verbindungstest schlägt mit `invalid_or_revoked_key` fehl**
+Stellen Sie sicher, dass das Connector-Token korrekt kopiert wurde und im AACsearch-Dashboard nicht widerrufen wurde. Generieren Sie bei Bedarf ein neues Token.
+
+**Vollsynchronisierung abgeschlossen, aber Produkte erscheinen nicht in der Suche**
+Die Synchronisierung reiht Produkte im `SearchIngestBuffer` ein; die Indizierung ist asynchron. Warten Sie 30–60 Sekunden und versuchen Sie eine Testsuche. Wenn Dokumente immer noch nicht erscheinen, überprüfen Sie den Ingest-Pipeline-Status in Dashboard → Übersicht.
+
+**Widget erscheint nicht im Storefront**
+Bestätigen Sie, dass das `#aac-search`-Container-Element in Ihrem Theme vorhanden ist. Prüfen Sie, dass **Widget aktiviert** angehakt ist und der `data-api-key`-Wert ein gültiger `ss_search_*`-Schlüssel ist (nicht das Connector-Token).
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle)
+- [Widget-Übersicht](/docs/connectors/widget-overview)

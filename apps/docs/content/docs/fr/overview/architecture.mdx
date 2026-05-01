@@ -1,0 +1,143 @@
+---
+title: Architecture
+description: Structure du monorepo, limites de service, le principe de backend en couches et le flux de données pour les chemins d'écriture et de lecture.
+---
+
+AACsearch est construit sur un **monorepo Next.js supastarter** utilisant Turborepo avec les workspaces pnpm.
+La base de code est divisée en quatre applications et seize packages, tous servis via un seul processus HTTP Hono
+qui monte oRPC, les points de terminaison de recherche publics, le bundle widget, les connecteurs et l'authentification.
+
+## Structure du monorepo
+
+```
+apps/
+  saas/           # Tableau de bord SaaS protégé — indexes, clés, analyses, connecteurs, facturation
+  marketing/      # Site marketing public — landing, tarifs, blog, changelog, mentions légales
+  docs/           # Site de documentation public (ce site — v0.7)
+  mail-preview/   # Aperçu des templates d'e-mail uniquement
+
+packages/
+  api/            # Hono + oRPC — 11 modules oRPC + routes Hono publiques
+  auth/           # Better Auth — connexion, orgs, passkeys, 2FA, magic links, OAuth
+  database/       # Prisma (ORM actif) + Drizzle (référence legacy uniquement) — 33 modèles
+  search/         # Client Typesense, collections, buffer, réindexation, clés, ingestion
+  search-client/  # SDK navigateur — recherche uniquement, pas de clés admin
+  widget/         # Widget de vitrine hébergé — Vanilla JS, Shadow DOM, 14 Ko IIFE+ESM
+  i18n/           # 5 locales × 4 portées (en/de/es/fr/ru × marketing/saas/mail/shared)
+  payments/       # Stripe / LemonSqueezy / Polar / Creem / DodoPayments / Tochka
+  billing-wallet/ # Registre BigInt kopecks, réserve→commit/release
+  ai/             # Vercel AI SDK + configurations de fournisseur
+  ai-core/        # Primitives d'orchestration IA de bas niveau
+  notifications/  # createNotification, liste, marquer comme lu, préférences, catalogue
+  mail/           # Templates React Email + drivers de fournisseur
+  storage/        # Compatible S3 (MinIO pour le développement local)
+  ui/             # 27 primitives UI basées sur shadcn
+  logs/           # Logger basé sur pino
+  utils/          # Helpers génériques
+
+modules/          # PAS un workspace Node — modules CMS PHP
+  prestashop/aacsearch/   # PrestaShop 8.x (squelette, suivi séparé)
+  bitrix/aac.search/      # 1C-Bitrix auto-hébergé (squelette, suivi séparé)
+```
+
+## Serveur HTTP
+
+Tout le trafic entre par une **seule application Hono** dans `packages/api/index.ts`, qui monte les routes dans l'ordre :
+
+| Montage                  | Objectif                                  |
+| ------------------------ | ----------------------------------------- |
+| `/api`                   | Handler de recherche public (CORS permissif) |
+| `/api`                   | Événements analytiques du widget          |
+| `/api/widget/widget.js`  | Bundle JS du widget hébergé              |
+| `/api`                   | API Connecteur (modules CMS)              |
+| `/api`                   | Handler analytique                        |
+| `/api`                   | SCIM 2.0 (provisionnement d'identité)    |
+| `/api/v1`                | REST API v1 (15 points de terminaison, OpenAPI 3.1) |
+| `/api/auth/**`           | Handler Better Auth                       |
+| `/api/webhooks/payments` | Webhooks du fournisseur de paiement       |
+| `/api/rpc/**`            | Handler oRPC (11 modules)                 |
+
+## Modules oRPC
+
+Le routeur oRPC dans `packages/api/orpc/router.ts` monte 11 modules :
+
+`admin`, `organizations`, `users`, `payments`, `ai`, `notifications`, `search`, `knowledge`, `billingWallet`, `entitlements`
+
+Le module `search` dispose de 26 procédures couvrant les indexes, les clés API, les tokens limités, la pertinence, les analyses, les connecteurs et les jobs d'import.
+
+## Le principe de backend en couches
+
+Les modules CMS externes et les navigateurs de boutique ne contactent **jamais** Typesense directement. La couche API AACsearch
+détient les seules accréditations d'administration.
+
+```
+Module PrestaShop / Bitrix
+    │  bearer(ss_connector_* token)
+    ▼
+API Connecteur AACsearch  ←  valide, vérifie l'auth, limite le débit
+    │
+    ▼
+SearchIngestBuffer (Prisma)  ←  enqueueManySearchIngest()
+    │
+    ▼
+Worker en arrière-plan  ←  vide le buffer par lots
+    │
+    ▼
+Typesense  (côté serveur uniquement, la clé admin ne quitte jamais le serveur)
+```
+
+Exposer une clé admin Typesense dans un module CMS ou une balise `<script>` permettrait la manipulation arbitraire des index
+pour tous les locataires. Ceci est l'**Invariant Hard #2** dans la base de code et n'est pas négociable.
+
+## Chemin d'écriture (ingestion)
+
+```
+Requête → public-handler.ts (auth + vérification du quota)
+  → enqueueManySearchIngest() (insertion en base dans SearchIngestBuffer)
+  → le worker en arrière-plan récupère les lignes non traitées
+  → bulkUpsert vers Typesense
+  → markIngestRowsSuccess / markIngestRowsFailure (backoff exponentiel sur les échecs)
+```
+
+L'approche buffer-DB assure la durabilité (les lignes survivent aux redémarrages du serveur), la gestion des échecs partiels
+(seules les lignes ayant échoué sont retentées) et le traitement par lots (le worker regroupe les lignes par collection avant envoi).
+
+## Chemin de lecture (recherche)
+
+```
+Requête → public-handler.ts (auth + limite de débit + vérification du quota)
+  → searchDocuments / multiSearchDocuments (via packages/search/lib/search.ts)
+  → réponse Typesense
+  → JSON nettoyé retourné (les erreurs brutes Typesense ne sont jamais transmises)
+  → recordSearchUsage() appelé de manière asynchrone (non bloquant)
+```
+
+## Nommage et versionnage des collections
+
+Chaque index de recherche utilise des noms de collection versionnés pour permettre la réindexation sans interruption :
+
+```
+Nom de collection :  {orgShortId}_{slug}_v{version}
+Nom d'alias :        {orgShortId}_{slug}
+```
+
+Toutes les requêtes de recherche ciblent l'alias. Une réindexation crée une nouvelle version, la vérifie, puis
+bascule l'alias de manière atomique. La version précédente reste active jusqu'à ce que la prochaine réindexation soit confirmée valide.
+
+## Choix technologiques
+
+| Couche               | Technologie                                      |
+| -------------------- | ------------------------------------------------ |
+| Framework            | Next.js 16 (App Router, RSC)                     |
+| API                  | Hono + oRPC 1.13                                 |
+| Auth                 | Better Auth 1.5                                  |
+| ORM                  | Prisma 7 (actif) / Drizzle (référence legacy)    |
+| Moteur de recherche  | Typesense 3                                      |
+| Validation           | Zod 4                                            |
+| Récupération de données client | TanStack Query 5                       |
+| Formulaires          | react-hook-form 7                                |
+| UI                   | Tailwind v4 + primitives shadcn                  |
+| Lint                 | Oxlint (pas ESLint)                              |
+| Formatage            | Oxfmt (pas Prettier)                             |
+| Gestionnaire de paquets | pnpm 10 avec catalogue workspace              |
+| Orchestration de build | Turborepo 2                                    |

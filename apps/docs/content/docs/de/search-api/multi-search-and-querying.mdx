@@ -1,0 +1,217 @@
+---
+title: Multi-Suche & Abfragen
+description: Mehrere Suchanfragen in einer einzigen Anfrage für Autocomplete, föderierte Suche und Multi-Index-Szenarien ausführen.
+---
+
+Multi-Suche führt mehrere Suchanfragen in einem einzigen HTTP-Round-Trip aus. Dies ist unverzichtbar für
+Autocomplete (gleichzeitig eine Ergebnisabfrage + eine Vorschlagsabfrage ausführen) und föderierte Suche
+(gleichzeitig über mehrere Indizes suchen).
+
+## Multi-Suche-Endpunkt
+
+**Endpunkt:** `POST /api/search/multi`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+```typescript
+{
+	searches: Array<{
+		indexSlug: string;
+		q: string;
+		queryBy?: string;
+		filterBy?: string;
+		facetBy?: string;
+		sortBy?: string;
+		page?: number;
+		perPage?: number;
+		highlightFields?: string;
+	}>;
+}
+```
+
+**Antwort:**
+
+```typescript
+{
+	results: Array<SearchResponse>; // ein Ergebnis pro Suche in derselben Reihenfolge
+}
+```
+
+## Autocomplete-Muster
+
+Der häufigste Multi-Suche-Anwendungsfall: gleichzeitig eine vollständige Suche plus eine schnelle Vorschlagsabfrage ausführen.
+
+```typescript
+const [mainResults, suggestions] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "kabellose kopf",
+		queryBy: "title,brand,description",
+		perPage: 20,
+		facetBy: "brand,categories",
+	},
+	{
+		indexSlug: "products",
+		q: "kabellose kopf",
+		queryBy: "title",
+		perPage: 5,
+		includeFields: "id,title",
+		highlightFields: "title",
+	},
+]);
+```
+
+Dies sendet eine einzige HTTP-Anfrage und erhält beide Ergebnismengen gleichzeitig zurück.
+
+## Föderierte Suche über Indizes
+
+Über mehrere Indizes suchen und Ergebnisse clientseitig zusammenführen:
+
+```typescript
+const [productResults, articleResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "nachhaltigkeit",
+		queryBy: "title,description,tags",
+		perPage: 10,
+	},
+	{
+		indexSlug: "knowledge",
+		q: "nachhaltigkeit",
+		queryBy: "content,title",
+		perPage: 5,
+	},
+]);
+```
+
+Hinweis: Für indexübergreifende Ergebnisse clientseitig zusammenführen und neu bewerten.
+
+## Abfrageparameter im Detail
+
+### `q` — Suchanfrage
+
+Die Suchzeichenkette. Verwenden Sie `"*"` für eine Platzhalter-Durchsuchen-Funktion (kein Volltextabgleich, nützlich für gefiltertes Durchsuchen).
+
+```json
+{ "q": "kabellose kopfhörer" }    // Volltextsuche
+{ "q": "*" }                      // Alle durchsuchen (mit filterBy kombinieren)
+```
+
+### `queryBy` — welche Felder durchsucht werden
+
+Kommagetrennte Feldliste. Die Reihenfolge ist wichtig — frühere Felder erhalten standardmäßig eine höhere Gewichtung.
+
+```json
+{ "queryBy": "title,sku,brand,description" }
+```
+
+Für jedes Feld können Sie eine Feldgewichtungsüberschreibung angeben:
+
+```json
+{ "queryBy": "title,brand,description", "queryByWeights": "10,5,2" }
+```
+
+### `filterBy` — Filterausdruck
+
+Boolescher Ausdruck unter Verwendung der Typesense-Filtersyntax:
+
+```
+Gleichheit:      field:=value
+                 field:=[value1, value2]
+Bereich:         field:>100
+                 field:[50..200]
+Exakter String:  field:=value
+Negation:        field:!=value
+Logisches UND:   cond1 && cond2
+Logisches ODER:  cond1 || cond2
+Gruppierung:     (cond1 || cond2) && cond3
+```
+
+Beispiele:
+
+```
+"filterBy": "availability:=in_stock"
+"filterBy": "price:[50..200] && brand:=[Sony, Bose]"
+"filterBy": "categories:=Electronics && availability:!=out_of_stock"
+```
+
+### `facetBy` — Facettenzählungen berechnen
+
+Gibt Werteverteilungen für die angegebenen Felder zurück. Facettenfelder müssen im Collection-Schema als `facet: true` indiziert sein.
+
+```json
+{ "facetBy": "brand,categories,availability" }
+```
+
+Die Antwort enthält `facetCounts` mit Wert-→-Anzahl-Paaren für jedes Facettenfeld.
+
+### `sortBy` — Sortierreihenfolge
+
+Einzel- oder Mehrfeld-Sortierung:
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "_text_match:desc,price:asc" }
+{ "sortBy": "created_at:desc" }
+```
+
+Verfügbare Sortierfelder: `price`, `sale_price`, `created_at`, `_text_match` (Relevanzbewertung).
+
+## Tippfehlertoleranz
+
+Die Tippfehlertoleranz von Typesense wird automatisch angewendet. Standardmäßig:
+
+- 1 Tippfehler für Abfragen mit 5+ Zeichen erlaubt
+- 2 Tippfehler für Abfragen mit 8+ Zeichen erlaubt
+
+Dies behandelt häufige Rechtschreibfehler wie „kopfhörer" → passt zu „kopfhörer".
+
+## Hervorhebung
+
+Übereinstimmende Begriffe werden mit konfigurierbaren Tags hervorgehoben:
+
+```json
+{
+	"highlightFields": "title,description",
+	"highlightStartTag": "<em class='highlight'>",
+	"highlightEndTag": "</em>"
+}
+```
+
+Hervorhebungen in der Antwort:
+
+```json
+{
+	"highlights": [
+		{
+			"field": "title",
+			"snippet": "Sony <em class='highlight'>Kabellose</em> <em class='highlight'>Kopfhörer</em>"
+		}
+	]
+}
+```
+
+## Seitenumbruch
+
+Ergebnisse werden mit `page` (1-indiziert) und `perPage` paginiert:
+
+```json
+{ "page": 2, "perPage": 20 }
+```
+
+Die Antwort enthält `found` (Gesamtzahl übereinstimmender Treffer) für die Berechnung der Seitengesamtzahl:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+```
+
+Maximum `perPage`: 100. Für Exporte, die mehr Ergebnisse erfordern, cursorbasierte Iteration
+mit steigenden `page`-Werten implementieren.
+
+## Leistungsempfehlungen
+
+- `perPage ≤ 20` für Suche-während-der-Eingabe (Autocomplete) beibehalten
+- `includeFields` verwenden, um nur die gerenderten Felder zurückzugeben — reduziert die Antwortgröße
+- Keine Facetten bei jedem Tastendruck ausführen — Entprellung bei 150–300 ms
+- Für große Ergebnismengen mit vielen Facetten die Facettenabfrage von der Hauptabfrage trennen
+  mittels Multi-Suche

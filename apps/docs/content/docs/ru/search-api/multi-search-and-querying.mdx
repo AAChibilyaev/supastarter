@@ -1,0 +1,218 @@
+---
+title: Мульти-поиск и формирование запросов
+description: Выполняйте несколько поисковых запросов в одном запросе для автодополнения, федеративного поиска и мультиндексных сценариев.
+---
+
+Мульти-поиск выполняет несколько поисковых запросов за один HTTP-вызов. Это необходимо для
+автодополнения (одновременный запрос результатов + подсказок) и федеративного поиска
+(поиск по нескольким индексам сразу).
+
+## Эндпоинт мульти-поиска
+
+**Эндпоинт:** `POST /api/search/multi`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+```typescript
+{
+	searches: Array<{
+		indexSlug: string;
+		q: string;
+		queryBy?: string;
+		filterBy?: string;
+		facetBy?: string;
+		sortBy?: string;
+		page?: number;
+		perPage?: number;
+		highlightFields?: string;
+	}>;
+}
+```
+
+**Ответ:**
+
+```typescript
+{
+	results: Array<SearchResponse>; // один результат на запрос в том же порядке
+}
+```
+
+## Шаблон автодополнения
+
+Наиболее распространённый случай использования мульти-поиска: одновременный запрос полного поиска и быстрых подсказок.
+
+```typescript
+const [mainResults, suggestions] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title,brand,description",
+		perPage: 20,
+		facetBy: "brand,categories",
+	},
+	{
+		indexSlug: "products",
+		q: "wireless head",
+		queryBy: "title",
+		perPage: 5,
+		includeFields: "id,title",
+		highlightFields: "title",
+	},
+]);
+```
+
+Это отправляет один HTTP-запрос и одновременно получает оба набора результатов.
+
+## Федеративный поиск по индексам
+
+Поиск по нескольким индексам с объединением результатов на стороне клиента:
+
+```typescript
+const [productResults, articleResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "sustainability",
+		queryBy: "title,description,tags",
+		perPage: 10,
+	},
+	{
+		indexSlug: "knowledge",
+		q: "sustainability",
+		queryBy: "content,title",
+		perPage: 5,
+	},
+]);
+```
+
+Примечание: для результатов по нескольким индексам объедините и переранжируйте на стороне клиента.
+
+## Параметры запроса в деталях
+
+### `q` — поисковый запрос
+
+Строка поиска. Используйте `"*"` для wildcard-просмотра (без полнотекстового совпадения, полезно для просмотра с фильтрами).
+
+```json
+{ "q": "wireless headphones" }    // полнотекстовый поиск
+{ "q": "*" }                      // просмотр всех (сочетать с filterBy)
+```
+
+### `queryBy` — по каким полям искать
+
+Список полей через запятую. Порядок важен — поля в начале списка получают больший вес по умолчанию.
+
+```json
+{ "queryBy": "title,sku,brand,description" }
+```
+
+Для каждого поля можно указать переопределение веса:
+
+```json
+{ "queryBy": "title,brand,description", "queryByWeights": "10,5,2" }
+```
+
+### `filterBy` — выражение фильтра
+
+Булево выражение с использованием синтаксиса фильтров Typesense:
+
+```
+Равенство:       field:=value
+                 field:=[value1, value2]
+Диапазон:        field:>100
+                 field:[50..200]
+Строка точная:   field:=value
+Отрицание:       field:!=value
+Логическое AND:  cond1 && cond2
+Логическое OR:   cond1 || cond2
+Группировка:     (cond1 || cond2) && cond3
+```
+
+Примеры:
+
+```
+"filterBy": "availability:=in_stock"
+"filterBy": "price:[50..200] && brand:=[Sony, Bose]"
+"filterBy": "categories:=Electronics && availability:!=out_of_stock"
+```
+
+### `facetBy` — вычисление счётчиков фасетов
+
+Возвращает распределение значений для указанных полей. Поля фасетов должны быть проиндексированы как `facet: true`
+в схеме коллекции.
+
+```json
+{ "facetBy": "brand,categories,availability" }
+```
+
+Ответ будет содержать `facetCounts` с парами значение → количество для каждого поля фасета.
+
+### `sortBy` — порядок сортировки
+
+Одно- или многопольная сортировка:
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "_text_match:desc,price:asc" }
+{ "sortBy": "created_at:desc" }
+```
+
+Доступные поля для сортировки: `price`, `sale_price`, `created_at`, `_text_match` (оценка релевантности).
+
+## Устойчивость к опечаткам
+
+Устойчивость к опечаткам Typesense применяется автоматически. По умолчанию:
+
+- 1 опечатка допустима для запросов длиной 5+ символов
+- 2 опечатки допустимы для запросов длиной 8+ символов
+
+Это обрабатывает распространённые опечатки вроде «наушнеки» → совпадает с «наушники».
+
+## Подсветка
+
+Совпадающие термины подсвечиваются настраиваемыми тегами:
+
+```json
+{
+	"highlightFields": "title,description",
+	"highlightStartTag": "<em class='highlight'>",
+	"highlightEndTag": "</em>"
+}
+```
+
+Подсветка в ответе:
+
+```json
+{
+	"highlights": [
+		{
+			"field": "title",
+			"snippet": "Sony <em class='highlight'>Wireless</em> <em class='highlight'>Headphones</em>"
+		}
+	]
+}
+```
+
+## Пагинация
+
+Результаты пагинируются с использованием `page` (с 1) и `perPage`:
+
+```json
+{ "page": 2, "perPage": 20 }
+```
+
+Ответ содержит `found` (общее число совпадений) для вычисления итогов страниц:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+```
+
+Максимум `perPage`: 100. Для экспортов, требующих больше результатов, реализуйте итерацию на основе курсора
+с возрастающими значениями `page`.
+
+## Рекомендации по производительности
+
+- Сохраняйте `perPage ≤ 20` для поиска по мере ввода (автодополнение)
+- Используйте `includeFields`, чтобы возвращать только поля, которые вы рендерите — уменьшает размер ответа
+- Избегайте вычисления фасетов при каждом нажатии клавиши — дебаунс 150–300 мс
+- Для больших наборов результатов с множеством фасетов рассмотрите разделение запроса фасетов от основного
+  с помощью мульти-поиска

@@ -1,0 +1,129 @@
+---
+title: Créer votre premier index
+description: Créez un index de recherche, comprenez le modèle collection-alias et exécutez votre première requête de recherche via le tableau de bord.
+---
+
+Un **index de recherche** dans AACsearch correspond à une collection Typesense avec un nommage versionné et un alias.
+La création d'un index provisionne la collection Typesense et enregistre l'index dans la base de données.
+
+## Qu'est-ce qu'un index ?
+
+Chaque index représente un catalogue consultable — généralement un par boutique ou ensemble de produits.
+
+```
+Organisation
+  └── SearchIndex (slug : "products")
+        collectionName: "org123_products_v1"   ← Collection Typesense (versionnée)
+        aliasName:      "org123_products"       ← Alias Typesense (stable, pointe toujours vers la version actuelle)
+```
+
+Toutes les requêtes de recherche ciblent l'**alias**, pas la collection versionnée directement. Cela permet
+une réindexation sans interruption de service — une nouvelle version est construite tandis que la version actuelle sert le trafic,
+puis l'alias est basculé de manière atomique.
+
+## Créer un index via le tableau de bord
+
+1. Ouvrez le tableau de bord SaaS à `http://localhost:3000`
+2. Sélectionnez votre organisation dans le sélecteur
+3. Naviguez vers **Search** → **Indexes**
+4. Cliquez sur **Create index**
+5. Entrez un slug (par ex. `products`) et un nom d'affichage optionnel
+6. Cliquez sur **Create**
+
+Le tableau de bord appelle `searchRouter.createIndex` qui provisionne la collection Typesense
+et crée la ligne `SearchIndex` dans Postgres.
+
+## Créer un index via oRPC
+
+```typescript
+import { orpc } from "@shared/lib/orpc-query-utils";
+
+const index = await orpc.search.createIndex.call({
+	organizationId: "org_...",
+	slug: "products",
+	name: "Product catalog",
+});
+```
+
+## Schéma de collection par défaut
+
+Lors de la création d'un index, AACsearch provisionne une collection Typesense avec un schéma optimisé pour les produits :
+
+```json
+{
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string", "weight": 10 },
+		{ "name": "sku", "type": "string", "weight": 8 },
+		{ "name": "brand", "type": "string", "weight": 5, "facet": true },
+		{ "name": "categories", "type": "string[]", "weight": 5, "facet": true },
+		{ "name": "description", "type": "string", "weight": 2 },
+		{ "name": "price", "type": "float", "facet": true },
+		{ "name": "sale_price", "type": "float", "optional": true },
+		{ "name": "availability", "type": "string", "facet": true },
+		{ "name": "locale", "type": "string", "facet": true },
+		{ "name": "created_at", "type": "int64" }
+	],
+	"default_sorting_field": "_text_match"
+}
+```
+
+Le schéma est défini dans `packages/search/lib/collections.ts` et évolue avec la version du schéma produit.
+
+## Ingérer votre premier document
+
+Une fois l'index créé, envoyez un document via le buffer d'ingestion :
+
+```typescript
+const result = await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-123",
+		title: "Wireless Headphones",
+		sku: "WH-2024",
+		brand: "Acme",
+		categories: ["Electronics", "Audio"],
+		description: "Noise-cancelling over-ear headphones with 30h battery.",
+		price: 99.99,
+		availability: "in_stock",
+		locale: "en",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+Cela appelle `enqueueManySearchIngest()` qui écrit dans `SearchIngestBuffer`. Le worker en arrière-plan
+le récupère et le transmet à Typesense en quelques secondes.
+
+## Exécuter une requête de recherche
+
+Utilisez l'onglet **Search Preview** dans le tableau de bord, ou appelez directement le point de terminaison de recherche public :
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 10
+  }'
+```
+
+Consultez [Point de terminaison de recherche public](/docs/search-api/public-search-endpoint) pour le schéma complet de requête.
+
+## Ce qui se passe après la création de l'index
+
+1. La liste de contrôle **Getting Started** du tableau de bord se met à jour pour marquer « Créer un index » comme terminé
+2. L'onglet **Import Jobs** devient disponible pour l'import en masse CSV/JSON
+3. L'onglet **API Keys** affiche le panneau de clés lié à l'index
+4. L'onglet **Widget** affiche l'extrait d'installation pré-rempli avec le slug de l'index
+
+## Étapes suivantes
+
+- [Clés API](/docs/getting-started/api-keys) — générer des clés pour votre intégration
+- [Ingestion et réindexation](/docs/getting-started/ingest-and-reindex) — import en masse et mises à jour de schéma
+- [Intégration d'un connecteur](/docs/getting-started/connector-onboarding) — connecter un CMS pour une synchronisation automatique

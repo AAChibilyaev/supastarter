@@ -1,0 +1,153 @@
+---
+title: Eingeschränkte Suchtoken
+description: Kurzlebige HMAC-Token generieren, die die Berechtigungen eines Suchschlüssels einschränken — Pro-Benutzer-Filter, TTL und Sicherheitsmodell.
+---
+
+Eingeschränkte Token ermöglichen es Ihnen, kurzlebige, kryptografisch signierte Suchtoken zu erstellen, die einschränken, was
+ein Aufrufer sehen kann. Generieren Sie sie serverseitig und übergeben Sie sie an den Browser — der Basis-`ss_search_*`-
+Schlüssel verlässt Ihren Server niemals.
+
+## Wann eingeschränkte Token verwendet werden sollten
+
+| Szenario                                                           | Eingeschränktes Token verwenden?              |
+| ------------------------------------------------------------------ | --------------------------------------------- |
+| Single-Tenant-Storefront (eine Org, ein Shop)                      | Nein — `ss_search_*`-Schlüssel reicht aus     |
+| Multi-Tenant-App, wo Benutzer nur ihre eigenen Produkte sehen sollen | **Ja**                                      |
+| Suche einem Dritten mit eingeschränktem Zugriff zugänglich machen  | **Ja**                                        |
+| Ergebnisse auf eine bestimmte Preisstufe beschränken               | **Ja**                                        |
+| Kurzlebige Widget-Einbettung mit Ablauf                            | **Ja**                                        |
+| Interne Dashboard-Vorschau                                         | Nein — sitzungsbasiertes oRPC verwenden        |
+
+## Wie eingeschränkte Token funktionieren
+
+Eingeschränkte Token sind zustandslose HMAC-SHA256-signierte Claims — sie werden niemals in der Datenbank gespeichert.
+
+```
+Token-Struktur:
+  ss_scoped_{base64url(payload)}.{HMAC-SHA256-Signatur}
+
+Payload:
+  {
+    "organizationId": "org_...",
+    "indexSlug": "products",
+    "scopedFilter": "availability:=in_stock",
+    "issuedAt": 1717200000,
+    "expiresAt": 1717203600   // optional
+  }
+
+Signatur:
+  HMAC-SHA256(payload, BETTER_AUTH_SECRET)
+```
+
+Die Signatur wird serverseitig bei jeder Anfrage überprüft. Das Manipulieren des Payloads (z. B. Entfernen
+des `scopedFilter`) macht die Signatur ungültig und führt zu einer 401-Antwort.
+
+## Eingeschränktes Token generieren
+
+### Über oRPC (serverseitig)
+
+```typescript
+// Server-Komponente, Server-Action oder API-Route
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100", // wird immer UND-verknüpft mit Aufruferfiltern
+	expiresInSeconds: 3600, // 1 Stunde TTL
+	name: "Budget-Suche für Benutzer XYZ", // optionale Bezeichnung für Audit
+});
+
+// scopedToken.token: "ss_scoped_abc...123" — an Browser übergeben
+```
+
+### Über das Dashboard
+
+1. Navigieren Sie zu **Suche** → **API-Schlüssel** → **Eingeschränkte Token**
+2. Klicken Sie auf **Eingeschränktes Token erstellen**
+3. Geben Sie den `scopedFilter`-Ausdruck ein
+4. Ablauf festlegen
+5. Generiertes Token kopieren
+
+Hinweis: Dashboard-generierte Token sind zum Testen. Produktions-Token sollten immer
+dynamisch pro Benutzer in einem serverseitigen Handler generiert werden.
+
+## Eingeschränktes Token im Browser verwenden
+
+Eingeschränkte Token werden genau wie reguläre Suchschlüssel verwendet:
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+// Token von Ihrem Server empfangen (z. B. über eine Server-Action oder API-Route)
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+
+const results = await client.search({
+	q: "headphones",
+	filterBy: "brand:=Sony", // Filter des Aufrufers: nur Sony-Marke
+	// AACsearch wird dies UND-verknüpfen mit "price:<100" aus dem Token
+	// Effektiver Filter: "brand:=Sony && price:<100"
+});
+```
+
+## Filter-Kombination
+
+Der `scopedFilter` aus dem Token wird immer UND-verknüpft mit dem `filterBy` des Aufrufers.
+Der Aufrufer kann den Filter des Tokens nicht entfernen oder umgehen.
+
+```
+Aufrufer-filterBy:  "brand:=Sony"
+Token-scopedFilter: "price:<100"
+Effektiver Filter:  "brand:=Sony && price:<100"
+```
+
+Dies wird durch `combineFilters()` in `packages/api/modules/search/lib/scoped-token.ts` implementiert.
+Das Umgehen dieser Funktion ist eine **Hard-Invariant-Verletzung** in der Codebasis.
+
+## Ablauf
+
+Setzen Sie `expiresInSeconds`, um die Token-Gültigkeit zu begrenzen. Nach Ablauf gibt das Token 401 zurück.
+
+Empfohlene TTLs:
+
+| Kontext               | TTL                               |
+| --------------------- | --------------------------------- |
+| Widget-Sitzung        | 1–4 Stunden                       |
+| Einzelner Seitenaufruf | 15–30 Minuten                    |
+| Tests / Entwicklung   | Kein Ablauf (Feld weglassen)      |
+
+Abgelaufene Token werden serverseitig abgelehnt — es ist kein clientseitiger Timer oder Refresh-Mechanismus erforderlich.
+
+## Rotationsmuster
+
+Für sitzungsbezogene Token generieren Sie bei jeder Benutzersitzungserstellung ein neues Token:
+
+```typescript
+// Next.js-Middleware oder Server-Action, die beim Sitzungsstart aufgerufen wird
+export async function generateSearchToken(session: Session) {
+	return await orpc.search.createScopedToken.call({
+		organizationId: session.organizationId,
+		indexSlug: "products",
+		scopedFilter: `organization_id:=${session.organizationId}`,
+		expiresInSeconds: 4 * 60 * 60, // 4 Stunden
+	});
+}
+```
+
+Speichern Sie das Token im Client (z. B. React-Kontext, Zustand-Store) für die Sitzungsdauer.
+
+## Sicherheitsmodell
+
+- Eingeschränkte Token werden über `BETTER_AUTH_SECRET` signiert — halten Sie dieses Geheimnis sicher
+- Der Token-Payload ist base64-kodiert, aber nicht verschlüsselt — behandeln Sie ihn für den Browser als opak
+- Legen Sie keine sensiblen Daten in den `scopedFilter`-Ausdruck (er ist im Token-Payload sichtbar)
+- Für sehr sensible Filter verwenden Sie serverseitige Suche statt eines eingeschränkten Tokens
+
+## Einschränkungen
+
+- Eingeschränkte Token können Berechtigungen nur **einschränken** — sie können keinen Zugriff auf Indizes oder Orgs gewähren,
+  auf die der Basis-Schlüssel noch keinen Zugriff hat
+- Ein eingeschränktes Token ist an einen einzigen Index-Slug gebunden
+- Eingeschränkte Token unterstützen keine `connector_write`-Operationen — sie sind nur für die Suche

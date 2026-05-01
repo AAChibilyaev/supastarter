@@ -1,0 +1,163 @@
+---
+title: Ingest & Reindex
+description: Wie die DB-First-Ingest-Pipeline funktioniert, wie Dokumente in großen Mengen geladen werden und wie der Zero-Downtime-Alias-Swap-Reindex funktioniert.
+---
+
+AACsearch verwendet eine **DB-First-Ingest-Pipeline**: Schreibanfragen fügen Dokumente zunächst in eine Postgres-Puffertabelle ein,
+dann bündelt ein Hintergrund-Worker sie für Typesense. Dies bietet Dauerhaftigkeit,
+Teilfehlerbehandlung und Batching ohne N+1-Round-Trips.
+
+## DB-First-Ingest-Pipeline
+
+```
+Ihr Code / CMS-Modul
+    │
+    ▼
+POST /api/connector/sync/full (oder upsertDocument oRPC)
+    │
+    ▼
+enqueueManySearchIngest()  ←  schreibt in SearchIngestBuffer (Postgres)
+    │
+    ▼
+Hintergrund-Worker  ←  leert Puffer in Batches
+    │
+    ▼
+bulkUpsert() → Typesense
+    │
+    ▼
+markIngestRowsSuccess() / markIngestRowsFailure() (exponentielles Backoff)
+```
+
+**Wesentliche Invariante:** `bulkUpsert()` wird nur vom Hintergrund-Worker aufgerufen. Rufen Sie es niemals direkt
+aus einem Request-Handler auf – dies würde den Puffer umgehen und Dauerhaftigkeitsgarantien brechen.
+
+## Einzelnes Dokument upserten
+
+```typescript
+await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-456",
+		title: "Laufschuhe",
+		sku: "RS-001",
+		brand: "SpeedCo",
+		categories: ["Sport", "Schuhe"],
+		price: 79.99,
+		availability: "in_stock",
+		locale: "de",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+Die oRPC-Prozedur ruft `enqueueManySearchIngest()` mit einem einelementigen Array auf.
+
+## Massenimport über das Dashboard
+
+Der Tab **Import-Jobs** im Dashboard unterstützt CSV- und JSON-Datei-Upload:
+
+1. Navigieren Sie zu **Suche** → **Import-Jobs**
+2. Klicken Sie auf **Dokumente importieren**
+3. Laden Sie eine CSV- oder JSON-Datei hoch
+4. Spalten auf Dokumentfelder abbilden
+5. Klicken Sie auf **Import starten**
+
+Import-Jobs werden in der Datenbank mit Status (`pending`, `processing`, `success`, `failed`)
+und Elementanzahl verfolgt. Fehlgeschlagene Zeilen werden in der Import-Job-Detailansicht angezeigt.
+
+## Masseningest über die Connector-API
+
+CMS-Module senden Massen-Payloads über die Connector-API:
+
+```bash
+curl -X POST https://your-app.com/api/connector/sync/full \
+  -H "Authorization: Bearer ss_connector_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "documents": [
+      { "id": "1", "title": "Produkt A", "price": 29.99, ... },
+      { "id": "2", "title": "Produkt B", "price": 49.99, ... }
+    ]
+  }'
+```
+
+Die empfohlene Batch-Größe beträgt 200 Dokumente. Größere Batches erhöhen die Typesense-Import-Latenz und
+riskieren Timeouts bei langsamen Verbindungen. CMS-Module verwenden eine konfigurierbare Batch-Größe (Standard: 200).
+
+## Teilfehlerbehandlung
+
+Der Worker markiert einzelne Zeilen unabhängig als Erfolg oder Fehler. Wenn ein Batch teilweise fehlschlägt:
+
+1. Erfolgreiche Dokumente werden über `markIngestRowsSuccess()` committet
+2. Fehlgeschlagene Dokumente werden mit `markIngestRowsFailure()` markiert und ein Retry wird geplant
+3. Retry verwendet exponentielles Backoff: 1s → 2s → 4s → 8s → Aufgabe nach konfigurierbarer maximaler Anzahl von Versuchen
+
+Dauerhaft fehlgeschlagene Zeilen erscheinen im Import-Jobs-Panel mit ihren Fehlermeldungen.
+
+## Reindex (Zero-Downtime)
+
+Reindex ist erforderlich, wenn sich das Typesense-Collection-Schema ändert – zum Beispiel beim Hinzufügen eines neuen Facettenfeldes.
+AACsearch verwendet eine **Alias-Swap**-Strategie, um Suchunterbrechungen während des Reindex zu vermeiden.
+
+### Funktionsweise
+
+```
+Aktueller Zustand:
+  Alias: org123_products  →  org123_products_v1  (bedient Traffic)
+
+Während des Reindex:
+  1. Erstellen: org123_products_v2 (neues Schema)
+  2. Alle Dokumente in v2 massenimportieren
+  3. v2-Gesundheit prüfen (Dokumentanzahl stimmt überein)
+  4. Alias atomisch tauschen: org123_products  →  org123_products_v2
+  5. v1 bis zum nächsten Reindex erhalten (Rollback-Option)
+
+Nach dem Reindex:
+  Alias: org123_products  →  org123_products_v2  (bedient Traffic)
+  org123_products_v1 bleibt erhalten (bedient aber keinen Traffic)
+```
+
+### Reindex über Dashboard auslösen
+
+Navigieren Sie zu **Suche** → **Indizes** → Ihr Index → **Reindex**.
+
+### Reindex über oRPC auslösen
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// job.status: "queued" | "running" | "succeeded" | "failed"
+```
+
+### Wann ein Reindex erforderlich ist
+
+| Szenario                          | Aktion                                         |
+| --------------------------------- | ---------------------------------------------- |
+| Neues Facettenfeld hinzugefügt    | Reindex erforderlich                           |
+| Feldtyp geändert                  | Reindex erforderlich                           |
+| Neues durchsuchbares Feld hinzugefügt | Reindex erforderlich                       |
+| Nur Dokumentinhalt aktualisiert   | Kein Reindex nötig – Dokument upserten         |
+| Synonymregeln geändert            | Kein Reindex nötig                             |
+
+### Reindex und Kontingent
+
+Reindex zählt indizierte Dokumente gegen Ihr Plan-Kontingent. Für große Kataloge im Free-Plan
+(10.000 Einheiten) verbraucht ein Reindex das monatliche Kontingent. Planen Sie entsprechend.
+
+## Fehlgeschlagene Batches wiederholen
+
+Fehlgeschlagene Ingest-Batches können über das Dashboard unter **Import-Jobs** → fehlgeschlagenen Job auswählen → **Wiederholen** erneut versucht werden,
+oder über oRPC:
+
+```typescript
+await orpc.search.retryFailedBatches.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+```
+
+Dadurch werden alle Zeilen im Status `failed` für den Index erneut in die Warteschlange gestellt.

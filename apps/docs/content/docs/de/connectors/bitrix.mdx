@@ -1,0 +1,182 @@
+---
+title: "1C-Bitrix-Modul"
+description: "Das AACsearch-Modul für selbst gehostetes 1C-Bitrix installieren und konfigurieren."
+---
+
+> **Status: Frühe Vorschau.** Das Modul-Entwurf (`aac.search`) ist funktional — Handshake, Vollsynchronisierung, Delta-Synchronisierung über IBlock-Ereignishandler und Hintergrund-Agent-Synchronisierung funktionieren alle. Installationspaketierung und Admin-UI-Feinschliff sind noch in Arbeit. Bitrix24 **Cloud** (REST/OAuth) ist ein separater Track und wird noch nicht unterstützt.
+
+Das AACsearch Bitrix-Modul (`modules/bitrix/aac.search`) integriert Ihren selbst gehosteten 1C-Bitrix-Katalog mit AACsearch. Es übernimmt:
+
+- Produkte aus Bitrix-IBlock/Katalog über die Connector-API nach AACsearch exportieren
+- Delta-Synchronisierungen über IBlock-Ereignishandler auslösen
+- Hintergrund-Synchronisierung über Bitrix-Agents ausführen (das Bitrix-Äquivalent von Cron-Jobs)
+- Das gehostete Such-Widget injizieren
+
+## Anforderungen
+
+- 1C-Bitrix 24+ (selbst gehostet, On-Premise)
+- Bitrix-`catalog`-Modul aktiviert
+- PHP 7.4 oder höher mit `Bitrix\Main\Web\HttpClient`
+- Ein AACsearch-Konto mit mindestens einem Suchindex
+- Ein Connector-Token (`ss_connector_*`) für diesen Index
+
+> **Bitrix24 Cloud** (REST-API, OAuth, `catalog.catalog.list`) ist ein separater Connector-Track und ist nicht in diesem Modul enthalten.
+
+## Modul-Dateilayout
+
+```
+modules/bitrix/aac.search/
+  install/
+    index.php           # Modul-Installer/Deinstaller
+    version.php         # Modul-Versionsinformationen
+    step_install.php    # Installationsschritt-Assistent
+    step_uninstall.php  # Deinstallationsschritt-Assistent
+  lib/
+    Client.php          # HTTP-Client, der Connector-API-Aufrufe verpackt
+    ProductExporter.php # Normalisiert Bitrix-IBlock-Produkte → ProductDocument-Format
+    SyncAgent.php       # Bitrix-Agent für Hintergrund-/Periodische Synchronisierung
+    EventHandlers.php   # IBlock-Ereignis-Listener für Delta-Synchronisierung
+  admin/
+    aac_search_settings.php    # Einstellungs-Admin-Seite
+    aac_search_diagnostics.php # Diagnose-Admin-Seite
+  options.php                  # Moduloptionen-Bootstrap
+```
+
+## Installationsschritte
+
+### 1. Modul hochladen
+
+Kopieren Sie das Verzeichnis `modules/bitrix/aac.search/` nach `/local/modules/aac.search/` auf Ihrem Bitrix-Server. Navigieren Sie dann zu **Bitrix-Admin → Marketplace → Modulliste** und installieren Sie `aac.search`.
+
+### 2. Modul konfigurieren
+
+Öffnen Sie **Admin → aac.search → Einstellungen** und füllen Sie aus:
+
+| Feld              | Beschreibung                                                              |
+| ----------------- | ------------------------------------------------------------------------- |
+| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)    |
+| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                         |
+| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren           |
+| IBlock / Katalog  | Wählen Sie die IBlocks aus, die Ihren Produktkatalog enthalten            |
+| Preistyp          | Welchen Bitrix-Preistyp exportieren                                       |
+| Währung           | Währungscode für Preisfelder                                              |
+| Sync-Intervall    | Minuten zwischen Hintergrund-Agent-Synchronisierungsläufen               |
+| Widget-Modus      | `auto-inject`, `component` oder `manual` (siehe Widget-Abschnitt unten)  |
+| Debug-Modus       | Ausführliche Protokollierung aktivieren                                   |
+
+### 3. Verbindung testen
+
+Klicken Sie auf der Einstellungsseite auf **Verbindung testen**. Dies ruft `POST /api/connectors/handshake` auf. Eine erfolgreiche Antwort zeigt den verbundenen Index-Slug.
+
+### 4. Vollsynchronisierung ausführen
+
+Klicken Sie auf der Einstellungsseite auf **Vollkatalogsynchronisierung**. Das Modul:
+
+1. Liest alle Produkte aus den ausgewählten IBlocks mit `CIBlockElement::GetList`
+2. Normalisiert jedes Produkt mit `ProductExporter`
+3. Sendet Produkte in Batches an `POST /api/projects/:projectId/sync/full`
+4. Fragt `GET /api/projects/:projectId/sync/jobs/:jobId` für den Status ab
+5. Zeigt Ergebnisse auf der Diagnoseseite an
+
+## ProductDocument-Format
+
+Der `ProductExporter` bildet Bitrix-IBlock-Felder auf die Standard-Dokumentstruktur ab:
+
+```json
+{
+	"external_id": "1234",
+	"title": "Blaue Laufschuhe",
+	"description": "Leichte Laufschuhe",
+	"sku": "BRS-42",
+	"brand": "Acme Sport",
+	"categories": ["Schuhe", "Laufen"],
+	"category_ids": ["10", "22"],
+	"price": 5999.0,
+	"sale_price": 4799.0,
+	"currency": "RUB",
+	"image_url": "https://myshop.example.ru/img/brs-42.jpg",
+	"product_url": "https://myshop.example.ru/catalog/brs-42/",
+	"availability": "in_stock",
+	"stock_quantity": 42,
+	"attributes": { "color": "blau", "size": "42" },
+	"locale": "de"
+}
+```
+
+## Ereignishandler
+
+Das Modul registriert IBlock-Ereignishandler für automatische Delta-Synchronisierungen:
+
+| Ereignis                     | Auslöser                                          |
+| ---------------------------- | ------------------------------------------------- |
+| `OnAfterIBlockElementAdd`    | Neues Produkt — Delta-Synchronisierung auslösen   |
+| `OnAfterIBlockElementUpdate` | Produkt aktualisiert — Delta-Synchronisierung auslösen |
+| `OnAfterIBlockElementDelete` | Produkt gelöscht — Löschanfrage senden            |
+| `OnPriceUpdate`              | Preis geändert (erfordert Bitrix-Katalogmodul)    |
+| `OnIBlockSectionUpdate`      | Abschnitt/Kategorie aktualisiert                  |
+
+## Hintergrund-Agent
+
+Das Modul registriert einen Bitrix-Agent für periodische Synchronisierung und Delta-Buffer-Leerung:
+
+```php
+\Aac\Search\SyncAgent::run();
+```
+
+Das Agent-Intervall ist in den Moduleinstellungen konfigurierbar (Standard: alle 15 Minuten). Verwenden Sie dies für:
+
+- Fehlgeschlagene Delta-Synchronisierungselemente erneut versuchen
+- Periodische Vollsynchronisierung, wenn Ereignishandler Ereignisse verpassen (z. B. Massenimporte)
+
+## Widget-Platzierung
+
+Drei Modi sind verfügbar:
+
+### Auto-Inject
+
+Das Modul fügt das Widget-`<script>`-Tag automatisch zum `<head>`-Abschnitt Ihres Templates hinzu:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+### Bitrix-Komponente
+
+Platzieren Sie die AACsearch-Komponente manuell in Ihrem Template:
+
+```php
+<?$APPLICATION->IncludeComponent("aac:search.widget", "", []);?>
+```
+
+### Manuelle Platzierung
+
+Kopieren Sie den Snippet aus dem AACsearch-Dashboard und fügen Sie ihn direkt in Ihr Template ein. Die Moduleinstellungsseite zeigt den aktuellen Snippet für Ihren Index.
+
+Der `data-api-key`-Wert muss ein `ss_search_*`-Schlüssel sein — nicht das Connector-Token. Erstellen Sie einen Suchschlüssel in Dashboard → Suche → API-Schlüssel.
+
+## Fehlerbehebung
+
+**Verbindungstest schlägt fehl**
+Überprüfen Sie, ob das Connector-Token gültig und nicht widerrufen ist. Stellen Sie sicher, dass die PHP-`curl`-Erweiterung aktiviert ist. Bestätigen Sie, dass die AACsearch-API-URL von Ihrem Server erreichbar ist.
+
+**Produkte erscheinen nach der Vollsynchronisierung nicht**
+Die Indizierung ist asynchron. Warten Sie 30–60 Sekunden. Überprüfen Sie Dashboard → Übersicht auf den Ingest-Pipeline-Status und etwaige fehlgeschlagene Batches.
+
+**Ereignishandler werden nicht ausgelöst**
+Bestätigen Sie, dass das Modul installiert ist und die Ereignishandler registriert sind. Prüfen Sie in Bitrix-Admin unter **Einstellungen → Systemeinstellungen → Ereignisse** die Ereignisliste.
+
+**Agent läuft nicht**
+Überprüfen Sie, ob der Bitrix-Agent-Scheduler aktiv ist. Überprüfen Sie **Admin → Einstellungen → Performance → Agents**, um sicherzustellen, dass `Aac\Search\SyncAgent::run()` aufgeführt ist und läuft.
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle)
+- [Widget-Übersicht](/docs/connectors/widget-overview)

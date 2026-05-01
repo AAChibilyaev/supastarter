@@ -1,0 +1,115 @@
+---
+title: Vue d'ensemble de l'API de recherche
+description: Trois surfaces API — procédures oRPC du tableau de bord, point de terminaison REST de recherche public et API Connecteur — et quand utiliser chacune.
+---
+
+AACsearch expose trois surfaces API distinctes. Comprendre laquelle utiliser dans quel contexte est
+important pour la sécurité et pour ne pas appeler le mauvais point de terminaison.
+
+## Les trois surfaces API
+
+### 1. oRPC (procédures tableau de bord / admin)
+
+Utilisé par le tableau de bord SaaS AACsearch. Nécessite une session Better Auth (utilisateur authentifié).
+Non destiné aux appelants externes ni aux modules CMS.
+
+- **Chemin de base :** `/api/rpc/**`
+- **Auth :** Cookie de session (Better Auth)
+- **Utilisé par :** tableau de bord `apps/saas`, opérations de gestion
+- **26 procédures** couvrant les indexes, les clés, les tokens, les analyses, les connecteurs, la pertinence
+
+### 2. Point de terminaison de recherche public
+
+Utilisé par les navigateurs, les SDK navigateur et le widget hébergé. Nécessite une clé `ss_search_*` ou `ss_scoped_*`.
+
+- **Chemin de base :** `/api/search` (monté dans `public-handler.ts`)
+- **Auth :** Token Bearer (clé API dans l'en-tête Authorization)
+- **Utilisé par :** `@repo/search-client`, `packages/widget`, tout client HTTP
+- **Opérations :** recherche, multi-search
+
+### 3. API Connecteur
+
+Utilisé par les modules CMS (PrestaShop, Bitrix, intégrations personnalisées). Nécessite une clé `ss_connector_*`.
+
+- **Chemin de base :** `/api/connector/**`
+- **Auth :** Token Bearer (clé `ss_connector_*`)
+- **Utilisé par :** modules CMS, scripts de synchronisation personnalisés
+- **Opérations :** handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, statut de synchronisation
+
+## REST API v1
+
+En plus de ce qui précède, AACsearch expose une API REST v1 à `/api/v1/` avec une spec OpenAPI 3.1.
+
+**Statut actuel :** Livré. 15 points de terminaison couvrant les projets, les indexes, les documents, la recherche, la gestion des clés API.
+
+Spec OpenAPI : `GET /api/v1/openapi.json`
+
+Portées d'authentification pour v1 :
+
+| Préfixe       | Portée   | Niveau d'accès  |
+| ------------- | -------- | --------------- |
+| `aa_admin_*`  | `admin`  | Gestion complète |
+| `aa_write_*`  | `write`  | Ingestion + écriture |
+| `aa_search_*` | `search` | Recherche uniquement |
+| `aa_scoped_*` | `scoped` | Recherche restreinte |
+
+## Format des requêtes (recherche publique)
+
+Toutes les requêtes de recherche sont en JSON POST :
+
+```
+POST /api/search
+Authorization: Bearer ss_search_your_key
+Content-Type: application/json
+
+{
+  "indexSlug": "products",
+  "q": "wireless headphones",
+  ...paramètres de recherche...
+}
+```
+
+## Flux d'authentification
+
+```
+Requête arrivant
+    │
+    ▼
+Extraire Authorization: Bearer {token}
+    │
+    ▼
+Déterminer le type de clé par préfixe :
+  ss_search_*    → vérifier le hash de la clé API, vérifier l'origine, vérifier la limite de débit, vérifier le quota
+  ss_scoped_*    → vérifier la signature HMAC, extraire le filtre limité, procéder comme recherche
+  ss_connector_* → vérifier le hash de la clé API, vérifier la portée connector_write
+    │
+    ▼
+Procéder au handler (recherche / ingestion / opération connecteur)
+```
+
+## Format des erreurs
+
+Toutes les erreurs du point de terminaison de recherche public suivent ce format :
+
+```json
+{
+	"error": "error_code",
+	"message": "Description lisible par l'humain"
+}
+```
+
+Codes d'erreur courants : `unauthorized`, `forbidden`, `rate_limit_exceeded`, `quota_exceeded`,
+`index_not_found`, `search_failed`, `ingest_failed`.
+
+Les erreurs brutes Typesense ne sont **jamais** transmises aux appelants. Toutes les erreurs en amont sont mappées vers des
+codes typés avant l'envoi de la réponse.
+
+## Prise en charge SDK
+
+| Environnement      | Package                                           |
+| ------------------ | ------------------------------------------------- |
+| Navigateur / Node.js | `@repo/search-client`                           |
+| Widget de vitrine  | `packages/widget` (auto-installé via `<script>`) |
+| Agent IA (MCP)     | `packages/aacsearch-mcp`                          |
+
+Consultez [SDK navigateur](/docs/getting-started/browser-sdk) pour la documentation du SDK client.

@@ -1,0 +1,69 @@
+---
+title: Erste Schritte
+description: Beginnen Sie hier – erstellen Sie ein Konto, richten Sie Ihren ersten Suchindex ein und verbinden Sie Ihren ersten Shop.
+---
+
+Dieser Abschnitt führt Sie von Grund auf durch AACsearch bis zu einem funktionierenden Suchendpunkt. Unabhängig davon, ob Sie
+ein Entwickler sind, der das Monorepo lokal einrichtet, oder ein Händler, der einen PrestaShop-Shop verbindet – hier ist
+der richtige Ausgangspunkt.
+
+## Der Weg zu einer funktionierenden Suche
+
+```
+1. Konto + Organisation erstellen
+2. Suchindex erstellen
+3. API-Schlüssel generieren
+4. Erste Dokumente einlesen
+5. Suchanfrage ausführen
+6. (Optional) Widget auf dem Storefront installieren
+7. (Optional) CMS-Modul für laufende Synchronisierung verbinden
+```
+
+## Rollen und ihre Anforderungen
+
+### Entwickler / Integrator
+
+Sie möchten das lokale Monorepo einrichten, die API-Oberfläche verstehen und eine benutzerdefinierte Integration einbinden.
+
+Beginnen Sie mit:
+
+1. [Lokale Entwicklung](/docs/getting-started/local-development) – Einrichtung der Umgebung
+2. [Ersten Index erstellen](/docs/getting-started/create-first-index) – Index- und Alias-Modell verstehen
+3. [API-Schlüssel](/docs/getting-started/api-keys) – Schlüsseltypen vor dem API-Aufruf verstehen
+4. [Browser-SDK](/docs/getting-started/browser-sdk) – Suche aus einem Browser oder Node.js-Client
+5. [Ingest und Reindex](/docs/getting-started/ingest-and-reindex) – Dokumente laden und aktualisieren
+
+### Händler / Shop-Betreiber
+
+Sie möchten einen bestehenden PrestaShop- oder Bitrix-Shop verbinden und die Suche auf Ihrem Storefront zum Laufen bringen.
+
+Beginnen Sie mit:
+
+1. Registrierung im AACsearch-Dashboard
+2. Organisation und Suchindex erstellen
+3. [Connector-Onboarding](/docs/getting-started/connector-onboarding) – Connector-Token generieren und Ihr CMS verbinden
+4. [Widget-Installation](/docs/getting-started/widget-installation) – Such-Widget zum Storefront hinzufügen
+
+## Voraussetzungen
+
+| Anforderung        | Hinweise                                                    |
+| ------------------ | ----------------------------------------------------------- |
+| Node.js 20+        | Für lokale Entwicklung                                      |
+| pnpm 10            | Paketmanager – installieren über `npm i -g pnpm`            |
+| Docker             | Für lokales Postgres + MinIO (Objektspeicher)               |
+| Typesense-Instanz  | Docker-Image oder verwaltete Cloud                          |
+| AACsearch-Konto    | Registrierung im Dashboard                                  |
+
+## MVP-Definition of Done
+
+Der vollständige End-to-End-Pfad für das AACsearch-MVP ist:
+
+```
+Registrierung → Organisation erstellen → Projekt erstellen →
+Connector-Token generieren → PrestaShop- oder Bitrix-Modul installieren →
+Modul verbinden → Vollsynchronisierung ausführen → Produkte sind indiziert →
+Suche im Dashboard testen → Widget aktivieren → Storefront-Suche funktioniert →
+Grundlegende Analysen erscheinen im Dashboard
+```
+
+Siehe [Status & Roadmap](/docs/overview/status-roadmap) für den aktuellen Stand der einzelnen Schritte.

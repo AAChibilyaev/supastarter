@@ -1,0 +1,158 @@
+---
+title: Auth & Mandantenfähigkeit
+description: Wie Organisationen als Workspaces funktionieren, wie der Sitzungskontext durch die API fließt und das Sicherheitsmodell für mandantenfähige Suche.
+---
+
+AACsearch ist von Grund auf mandantenfähig. Jede Ressource – Suchindizes, API-Schlüssel, Verwendungsereignisse,
+Knowledge-Spaces – ist auf eine **Organisation** beschränkt. Organisationsübergreifende Lesevorgänge sind niemals erlaubt.
+
+## Authentifizierungs-Stack
+
+Auth wird durch [Better Auth](https://better-auth.com) bereitgestellt, konfiguriert in `packages/auth/auth.ts`.
+
+Aktivierte Features:
+
+| Feature                | Hinweise                                   |
+| ---------------------- | ------------------------------------------ |
+| E-Mail + Passwort      | Standardmäßiger Anmeldeablauf              |
+| Magic Links            | Passwortloser E-Mail-Login                 |
+| Passkeys               | WebAuthn                                   |
+| 2FA (TOTP)             | Zeitbasierte Einmalpasswörter              |
+| OAuth (Google, GitHub) | Social Login                               |
+| Organisationen         | Workspaces mit rollenbasierter Mitgliedschaft |
+| Einladungsbasierte Orgs | Optional; konfigurierbar                  |
+| Admin-Panel            | Internes Benutzer-/Org-Management          |
+| Sitzungsimitierung     | Für Support/Debug                          |
+
+## Organisationen als Workspaces
+
+Eine Organisation ist die primäre Workspace-Einheit. Benutzer können mehreren Organisationen angehören und
+im Dashboard zwischen ihnen wechseln. Jeder Suchindex, API-Schlüssel und jedes Analytics-Ereignis gehört
+zu genau einer Organisation.
+
+```
+Benutzer → Member(Rolle) → Organisation
+                               │
+                        SearchIndex(e)
+                        SearchApiKey(s)
+                        SearchUsageEvent(s)
+                        KnowledgeSpace(s)
+```
+
+## Sitzungskontext in oRPC
+
+oRPC-Prozeduren werden als einer von drei Typen aufgerufen:
+
+| Prozedurtyp          | Verfügbarer Kontext               | Verwendet für                          |
+| -------------------- | --------------------------------- | -------------------------------------- |
+| `publicProcedure`    | Keine Sitzung erforderlich        | Öffentlicher Suchhandler, Health-Check |
+| `protectedProcedure` | `context.user`, `context.session` | Authentifizierte Dashboard-Operationen |
+| `adminProcedure`     | `context.user` + Admin-Rollenprüfung | Nur-Admin-Operationen               |
+
+Zugriff auf die Sitzung in einer Server-Komponente:
+
+```typescript
+import { getSession } from "@auth/lib/server";
+
+const session = await getSession();
+```
+
+Zugriff auf die Sitzung in einer Client-Komponente:
+
+```typescript
+"use client";
+import { useSession } from "@auth/hooks/use-session";
+
+const { user, loaded } = useSession();
+```
+
+Zugriff auf die aktive Organisation:
+
+```typescript
+"use client";
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
+
+const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
+```
+
+## Mandantenisolierung – Hard Invariant
+
+Jeder Suchaufruf MUSS `tenantId: verified.organizationId` übergeben. Dies wird durchgesetzt in
+`packages/api/modules/search/public-handler.ts`:
+
+```typescript
+// Immer UND-verknüpfen mit Mandantenfilter
+const tenantFilter = `organization_id:=${organizationId}`;
+const combinedFilter = combineFilters(tenantFilter, callerFilter);
+```
+
+Es gibt keinen Codepfad, der Dokumente über Organisationen hinweg zurückgibt. Wenn Sie eine neue
+Suchprozedur schreiben, muss diese Invariante explizit aufrechterhalten werden – sie ist nicht automatisch.
+
+## API-Schlüssel-Sicherheitsmodell
+
+API-Schlüssel sind der primäre Auth-Mechanismus für externe Aufrufer (CMS-Module und Browser-SDKs).
+
+### Schlüsseltypen und Präfixe
+
+| Präfix           | Bereich                     | Verwendet von                      |
+| ---------------- | --------------------------- | ---------------------------------- |
+| `ss_search_*`    | `search`                    | Browser-SDK, Widget – schreibgeschützt |
+| `ss_connector_*` | `connector_write`           | CMS-Module – Schreiben + Sync      |
+| `ss_scoped_*`    | Eingeschränkt von `ss_search_*` | Pro-Benutzer, pro-Filter-Token |
+
+### Sicherheitsgarantien
+
+- **Nur-Hash-Speicherung:** `SearchApiKey.hashedKey` speichert nur den bcrypt-Hash. Klartext wird
+  einmal bei der Erstellung angezeigt und wird niemals protokolliert, niemals bei Auflistungsoperationen zurückgegeben und niemals wiederholt.
+- **Ursprungsbeschränkung:** Jeder Schlüssel hat `allowedOrigins[]`. Anfragen von nicht aufgelisteten Ursprüngen werden
+  auf API-Ebene vor jedem Typesense-Aufruf abgelehnt.
+- **Rate-Limiting:** Gleitfenster pro Schlüssel, durchgesetzt über `SearchRateLimitBucket`.
+- **Kontingent:** Pro-Org-Plan-Kontingent, durchgesetzt über `quotaCheck`-Middleware vor Suche/Ingest.
+- **Ablauf:** Schlüssel können `expiresAt` haben; abgelaufene Schlüssel werden abgelehnt und durch den Wartungsjob bereinigt.
+
+### Admin-Schlüssel-Isolierung
+
+Der Typesense-Admin-Schlüssel **verlässt den Server niemals**. Er lebt in `packages/search/lib/client.ts`,
+einmalig aus der Umgebungsvariable `TYPESENSE_API_KEY` instanziiert. Er wird niemals an irgendwelche
+Clients zurückgegeben, niemals an CMS-Module weitergegeben und niemals in das Widget-Bundle eingebettet.
+
+CMS-Module erhalten nur `ss_connector_*`-Token, die durch die AACsearch Connector-API gehen,
+welche dann intern den Admin-Schlüssel verwendet.
+
+## Eingeschränkte Token
+
+Eingeschränkte Token schränken die Berechtigungen eines bestehenden `ss_search_*`-Schlüssels ein. Sie sind HMAC-signierte
+zustandslose JWTs (nicht in DB gespeichert), ausgestellt von `issueScopedSearchToken()`.
+
+Ein häufiger Anwendungsfall: Ausstellen eines Pro-Benutzer-Tokens, das Ergebnisse auf die Produkte dieses Benutzers beschränkt.
+
+```typescript
+// Serverseitig: eingeschränktes Token für einen bestimmten Preisbereich ausstellen
+const token = await orpc.search.createScopedToken.call({
+	organizationId,
+	indexSlug: "products",
+	scopedFilter: "price:<100",
+	expiresInSeconds: 3600,
+});
+```
+
+Der `scopedFilter` wird immer über `combineFilters()` UND-verknüpft mit den eigenen Filtern des Aufrufers.
+Er kann nur Berechtigungen einschränken – er kann sie nicht erweitern. Das Umgehen von `combineFilters` ist eine Hard-Invariant-Verletzung.
+
+## Ursprungs-Allowlist pro Schlüssel
+
+Jeder `ss_search_*`-Schlüssel hat ein `allowedOrigins[]`-Array. Nur Anfragen von diesen Ursprüngen werden durchgelassen.
+
+Im Free-Plan sind nur `aacsearch.com`-Subdomains erlaubt. Pro und darüber hinaus unterstützen benutzerdefinierte Ursprünge.
+Siehe [Pläne und Limits](/docs/overview/plans-and-limits) für die Plan-spezifische Richtlinie.
+
+## Rollenbasierter Zugriff innerhalb von Organisationen
+
+| Rolle    | Fähigkeiten                                          |
+| -------- | ---------------------------------------------------- |
+| `owner`  | Vollzugriff, kann Org übertragen, Abrechnung verwalten |
+| `admin`  | Indizes, Schlüssel, Mitglieder, Einstellungen verwalten |
+| `member` | Dashboard anzeigen, Suchen in der Vorschau ausführen |
+
+Rollenprüfungen in oRPC-Prozeduren verwenden das von Better Auth bereitgestellte `context.session`-Objekt.

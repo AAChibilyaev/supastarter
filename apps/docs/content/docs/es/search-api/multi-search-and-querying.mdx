@@ -1,0 +1,218 @@
+---
+title: Búsqueda Múltiple y Consultas
+description: Ejecute múltiples consultas de búsqueda en una sola solicitud para autocompletado, búsqueda federada y escenarios de múltiples índices.
+---
+
+La búsqueda múltiple ejecuta múltiples consultas de búsqueda en un solo viaje de ida y vuelta HTTP. Esto es esencial para
+el autocompletado (ejecutar una consulta de resultados + una consulta de sugerencias simultáneamente) y la búsqueda federada
+(buscar en múltiples índices a la vez).
+
+## Endpoint de búsqueda múltiple
+
+**Endpoint:** `POST /api/search/multi`
+
+**Autenticación:** `Authorization: Bearer ss_search_your_key`
+
+```typescript
+{
+	searches: Array<{
+		indexSlug: string;
+		q: string;
+		queryBy?: string;
+		filterBy?: string;
+		facetBy?: string;
+		sortBy?: string;
+		page?: number;
+		perPage?: number;
+		highlightFields?: string;
+	}>;
+}
+```
+
+**Respuesta:**
+
+```typescript
+{
+	results: Array<SearchResponse>; // un resultado por búsqueda en el mismo orden
+}
+```
+
+## Patrón de autocompletado
+
+El caso de uso más común de búsqueda múltiple: ejecutar una búsqueda completa más una consulta de sugerencias rápidas simultáneamente.
+
+```typescript
+const [mainResults, suggestions] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "auriculares inalám",
+		queryBy: "title,brand,description",
+		perPage: 20,
+		facetBy: "brand,categories",
+	},
+	{
+		indexSlug: "products",
+		q: "auriculares inalám",
+		queryBy: "title",
+		perPage: 5,
+		includeFields: "id,title",
+		highlightFields: "title",
+	},
+]);
+```
+
+Esto envía una sola solicitud HTTP y obtiene ambos conjuntos de resultados simultáneamente.
+
+## Búsqueda federada en índices
+
+Busque en múltiples índices y combine los resultados en el cliente:
+
+```typescript
+const [productResults, articleResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "sostenibilidad",
+		queryBy: "title,description,tags",
+		perPage: 10,
+	},
+	{
+		indexSlug: "knowledge",
+		q: "sostenibilidad",
+		queryBy: "content,title",
+		perPage: 5,
+	},
+]);
+```
+
+Nota: Para resultados entre índices, combine y reclasifique en el cliente.
+
+## Parámetros de consulta en profundidad
+
+### `q` — consulta de búsqueda
+
+La cadena de búsqueda. Use `"*"` para una exploración comodín (sin coincidencia de texto completo, útil para exploración filtrada).
+
+```json
+{ "q": "auriculares inalámbricos" }    // búsqueda de texto completo
+{ "q": "*" }                           // explorar todo (combinar con filterBy)
+```
+
+### `queryBy` — qué campos buscar
+
+Lista separada por comas de campos. El orden importa — los campos anteriores obtienen mayor peso por defecto.
+
+```json
+{ "queryBy": "title,sku,brand,description" }
+```
+
+Para cada campo puede especificar un peso por campo:
+
+```json
+{ "queryBy": "title,brand,description", "queryByWeights": "10,5,2" }
+```
+
+### `filterBy` — expresión de filtro
+
+Expresión booleana usando la sintaxis de filtro de Typesense:
+
+```
+Igualdad:        field:=value
+                 field:=[value1, value2]
+Rango:           field:>100
+                 field:[50..200]
+Cadena exacta:   field:=value
+Negación:        field:!=value
+AND lógico:      cond1 && cond2
+OR lógico:       cond1 || cond2
+Agrupación:      (cond1 || cond2) && cond3
+```
+
+Ejemplos:
+
+```
+"filterBy": "availability:=in_stock"
+"filterBy": "price:[50..200] && brand:=[Sony, Bose]"
+"filterBy": "categories:=Electrónica && availability:!=out_of_stock"
+```
+
+### `facetBy` — calcular recuentos de facetas
+
+Devuelve distribuciones de valores para los campos especificados. Los campos de faceta deben estar indexados como `facet: true`
+en el esquema de la colección.
+
+```json
+{ "facetBy": "brand,categories,availability" }
+```
+
+La respuesta incluirá `facetCounts` con pares valor → recuento para cada campo de faceta.
+
+### `sortBy` — orden de clasificación
+
+Ordenación por un solo campo o múltiples campos:
+
+```json
+{ "sortBy": "price:asc" }
+{ "sortBy": "_text_match:desc,price:asc" }
+{ "sortBy": "created_at:desc" }
+```
+
+Campos de ordenación disponibles: `price`, `sale_price`, `created_at`, `_text_match` (puntuación de relevancia).
+
+## Tolerancia a errores tipográficos
+
+La tolerancia a errores tipográficos de Typesense se aplica automáticamente. Por defecto:
+
+- Se permite 1 error tipográfico para consultas de 5+ caracteres
+- Se permiten 2 errores tipográficos para consultas de 8+ caracteres
+
+Esto maneja errores de escritura comunes como "auriculares" → coincide con "auriculares".
+
+## Resaltado
+
+Los términos coincidentes se resaltan con etiquetas configurables:
+
+```json
+{
+	"highlightFields": "title,description",
+	"highlightStartTag": "<em class='highlight'>",
+	"highlightEndTag": "</em>"
+}
+```
+
+Resaltados en la respuesta:
+
+```json
+{
+	"highlights": [
+		{
+			"field": "title",
+			"snippet": "Sony <em class='highlight'>Auriculares</em> <em class='highlight'>Inalámbricos</em>"
+		}
+	]
+}
+```
+
+## Paginación
+
+Los resultados se paginan usando `page` (indexado desde 1) y `perPage`:
+
+```json
+{ "page": 2, "perPage": 20 }
+```
+
+La respuesta incluye `found` (recuento total coincidente) para calcular los totales de páginas:
+
+```javascript
+const totalPages = Math.ceil(results.found / perPage);
+```
+
+Máximo `perPage`: 100. Para exportaciones que requieren más resultados, implemente iteración basada en cursor
+usando valores crecientes de `page`.
+
+## Recomendaciones de rendimiento
+
+- Mantenga `perPage ≤ 20` para búsqueda mientras se escribe (autocompletado)
+- Use `includeFields` para devolver solo los campos que renderiza — reduce el tamaño de la respuesta
+- Evite ejecutar facetas en cada pulsación de tecla — elimine rebotes a 150–300 ms
+- Para conjuntos de resultados grandes con muchas facetas, considere separar la consulta de facetas de la consulta principal
+  usando búsqueda múltiple

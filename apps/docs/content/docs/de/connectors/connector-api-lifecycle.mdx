@@ -1,0 +1,285 @@
+---
+title: "Connector-API-Lebenszyklus"
+description: "Alle 7 Connector-API-Endpunkte, Authentifizierung, Anfrage-/Antwortformate, Lebenszyklusablauf und Fehlercodes."
+---
+
+Die Connector-API ist ein Satz von Hono-Routen, die unter `/api` eingebunden sind und von CMS-Modulen aufgerufen werden, um Produktdaten zu übermitteln und Diagnosen zu melden. Alle Endpunkte erfordern ein `ss_connector_*`-Bearer-Token. Alle Payloads werden mit Zod validiert.
+
+## Authentifizierung
+
+Jede Anfrage muss einen `Authorization`-Header enthalten:
+
+```http
+Authorization: Bearer ss_connector_<token>
+```
+
+Das Token wird gegen gehashte Datensätze in `SearchApiKey` abgeglichen, wo `scopes` `connector_write` enthält und `revokedAt` null ist. Bei einer erfolgreichen Übereinstimmung wird das `lastUsedAt` des Tokens aktualisiert (nicht blockierend).
+
+**Fehlerantworten bei ungültiger Auth:**
+
+| Bedingung                  | Status | Body                                    |
+| -------------------------- | ------ | --------------------------------------- |
+| Kein `Authorization`-Header | 401   | `{ "error": "missing_bearer_token" }`   |
+| Token nicht gefunden oder widerrufen | 403 | `{ "error": "invalid_or_revoked_key" }` |
+
+## Endpunkte
+
+### POST /api/connectors/handshake
+
+Rufen Sie diesen Endpunkt auf, wenn das CMS-Modul startet oder wenn der Händler die Konfiguration speichert. Validiert das Token und gibt Index-Metadaten zurück.
+
+**Anfrage-Body:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"platform": "prestashop"
+}
+```
+
+`platform` muss `"prestashop"` oder `"bitrix"` sein.
+
+**Antwort (200):**
+
+```json
+{
+	"projectId": "org_abc123",
+	"indexSlug": "products",
+	"status": "active",
+	"connector": {
+		"id": "prestashop",
+		"displayName": "PrestaShop",
+		"syncModes": ["full", "delta"],
+		"capabilities": ["upsert", "delete"],
+		"minModuleVersion": "1.0.0"
+	}
+}
+```
+
+Verwenden Sie `projectId` als `:projectId`-Pfadsegment für alle nachfolgenden Sync- und Diagnoseaufrufe.
+
+---
+
+### POST /api/connectors/:connectorId/heartbeat
+
+Keepalive-Signal. Rufen Sie diesen Endpunkt regelmäßig auf (empfohlen: alle 5 Minuten), damit das Dashboard den Online-/Offline-Status des Connectors anzeigen kann.
+
+**Anfrage-Body:** nicht erforderlich
+
+**Antwort (200):**
+
+```json
+{
+	"status": "ok",
+	"timestamp": "2025-01-15T10:00:00.000Z"
+}
+```
+
+Das Dashboard leitet die Connector-Gesundheit aus `lastUsedAt` am Token ab: online, wenn zuletzt innerhalb von 5 Minuten verwendet, unbekannt innerhalb von 30 Minuten, offline andernfalls.
+
+---
+
+### POST /api/projects/:projectId/sync/full
+
+Alle Produkte für eine vollständige Katalogsynchronisierung senden. Produkte werden im `SearchIngestBuffer` eingereiht und asynchron indiziert.
+
+**Batch-Limit:** 1–1000 Produkte pro Anfrage. Für große Kataloge mehrere Anfragen senden.
+
+**Anfrage-Body:**
+
+```json
+{
+	"products": [
+		{
+			"external_id": "product-123",
+			"title": "Blaue Laufschuhe",
+			"description": "Leichte Laufschuhe",
+			"sku": "BRS-42",
+			"brand": "Acme Sport",
+			"categories": ["Schuhe", "Laufen"],
+			"category_ids": ["cat-10", "cat-22"],
+			"tags": ["sale", "neu-eingetroffen"],
+			"price": 99.99,
+			"sale_price": 79.99,
+			"currency": "EUR",
+			"image_url": "https://example.com/img/brs-42.jpg",
+			"product_url": "https://example.com/products/brs-42",
+			"availability": "in_stock",
+			"stock_quantity": 42,
+			"attributes": { "color": "blau", "size": "42" },
+			"locale": "de"
+		}
+	]
+}
+```
+
+Alle Felder außer `external_id` und `title` sind optional. `availability` akzeptiert `"in_stock"`, `"out_of_stock"` oder `"preorder"`.
+
+**Antwort (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsCount": 1,
+	"jobId": "sync_42_1737000000000"
+}
+```
+
+Verwenden Sie `jobId`, um `GET /api/projects/:projectId/sync/jobs/:jobId` für den Status abzufragen.
+
+**Fehler (502):** `{ "error": "sync_failed" }` — die Einreihung in `SearchIngestBuffer` ist fehlgeschlagen. Erneut versuchen mit exponentiellem Backoff.
+
+---
+
+### POST /api/projects/:projectId/sync/delta
+
+Nur geänderte Produkte senden. Verwenden Sie dies für Echtzeit-Updates, die durch Produkt-Speichern-/Löschen-/Lagerbestand-Ereignisse ausgelöst werden.
+
+**Batch-Limit:** 1–100 Produkte pro Anfrage.
+
+Anfrage- und Antwortformate sind identisch mit dem vollständigen Synchronisierungsendpunkt. Die `jobId` in der Antwort hat den Typ `"delta"`.
+
+**Antwort (200):**
+
+```json
+{
+	"status": "accepted",
+	"itemsProcessed": 1,
+	"jobId": "sync_43_1737000001000"
+}
+```
+
+---
+
+### DELETE /api/projects/:projectId/products/:externalId
+
+Ein einzelnes Dokument aus dem Index anhand seiner externen ID entfernen.
+
+**Kein Anfrage-Body erforderlich.**
+
+**Antwort (200):**
+
+```json
+{
+	"status": "deleted",
+	"externalId": "product-123"
+}
+```
+
+**Fehler (502):** `{ "error": "delete_failed" }`
+
+---
+
+### POST /api/projects/:projectId/diagnostics
+
+Modul-Gesundheitsinformationen an AACsearch melden. Das Dashboard verwendet diese Daten, um den letzten bekannten Synchronisierungsstatus und etwaige Fehler von der CMS-Seite anzuzeigen.
+
+> **Early-Access-Vorbehalt:** Diagnoseberichte werden im Arbeitsspeicher des AACsearch-Serverprozesses gespeichert. Sie gehen bei Serverneustarts verloren. Dies ist für MVP akzeptabel; persistenter Speicher erfordert eine DB-Schemaänderung.
+
+**Anfrage-Body:**
+
+```json
+{
+	"moduleVersion": "1.0.0",
+	"lastFullSync": "2025-01-15T09:00:00.000Z",
+	"lastDeltaSync": "2025-01-15T09:55:00.000Z",
+	"totalProducts": 4823,
+	"phpVersion": "8.2.0",
+	"shopUrl": "https://myshop.example.com",
+	"errors": [
+		{
+			"code": "export_timeout",
+			"message": "Produktexport nach 30s abgebrochen",
+			"timestamp": "2025-01-15T09:54:30.000Z"
+		}
+	]
+}
+```
+
+**Antwort (200):**
+
+```json
+{
+	"status": "ok",
+	"receivedAt": "2025-01-15T09:55:01.000Z"
+}
+```
+
+---
+
+### GET /api/projects/:projectId/sync/jobs/:jobId
+
+Den Status eines Synchronisierungsjobs anhand seiner ID abfragen.
+
+> **Early-Access-Vorbehalt:** Die Synchronisierungsjob-Historie wird im Arbeitsspeicher des AACsearch-Serverprozesses gespeichert. Der In-Memory-Speicher hält die letzten 50 Jobs pro Server-Instanz und geht bei Neustart verloren. Wenn der Server zwischen Ihrem Aufruf von `sync/full` und Ihrer Abfrage dieses Endpunkts neu startet, erhalten Sie eine 404. CMS-Module sollten eine 404 nach einem Serverneustart als akzeptables Ergebnis behandeln und nicht unbegrenzt erneut versuchen.
+
+**Antwort (200) — abgeschlossener Job:**
+
+```json
+{
+	"id": "sync_42_1737000000000",
+	"type": "full",
+	"status": "completed",
+	"indexId": "idx_abc123",
+	"organizationId": "org_abc123",
+	"startedAt": "2025-01-15T09:00:00.000Z",
+	"finishedAt": "2025-01-15T09:00:05.432Z",
+	"duration": "5.4s",
+	"itemsCount": 500,
+	"failuresCount": 0,
+	"events": [
+		{ "timestamp": "...", "message": "Vollsynchronisierung gestartet", "level": "info" },
+		{ "timestamp": "...", "message": "Synchronisierung abgeschlossen: 500 Elemente verarbeitet", "level": "info" }
+	]
+}
+```
+
+`status` ist eines von: `"running"`, `"completed"`, `"failed"`.
+
+**Fehler (404):** `{ "error": "job_not_found" }`
+
+## Lebenszyklusablauf
+
+Ein typisches CMS-Modul folgt dieser Reihenfolge:
+
+```
+1. Start / Konfiguration speichern
+   └─ POST /api/connectors/handshake
+      → projectId + indexSlug in Modulkonfiguration speichern
+
+2. Hintergrund-Keepalive (alle 5 Min)
+   └─ POST /api/connectors/:connectorId/heartbeat
+
+3. Initiale Vollsynchronisierung (einmalig oder geplant)
+   └─ POST /api/projects/:projectId/sync/full (gebatcht)
+      → GET .../sync/jobs/:jobId abfragen bis completed/failed
+
+4. Echtzeit-Delta (bei Produktereignissen)
+   └─ POST /api/projects/:projectId/sync/delta
+
+5. Produktlöschung
+   └─ DELETE /api/projects/:projectId/products/:externalId
+
+6. Regelmäßiger Diagnosebericht
+   └─ POST /api/projects/:projectId/diagnostics
+```
+
+## Fehlercode-Referenz
+
+| Code                     | Bedeutung                                                           |
+| ------------------------ | ------------------------------------------------------------------- |
+| `missing_bearer_token`   | Kein `Authorization: Bearer ...`-Header                             |
+| `invalid_or_revoked_key` | Token nicht gefunden, falscher Bereich oder widerrufen              |
+| `invalid_json`           | Anfrage-Body konnte nicht geparst werden                            |
+| `invalid_input`          | Zod-Validierung fehlgeschlagen; `details`-Array hat Fehler auf Feldebene |
+| `project_not_found`      | `:projectId` stimmt nicht mit der Organisation des Tokens überein   |
+| `unsupported_connector`  | `platform`-Feld ist nicht `prestashop` oder `bitrix`                |
+| `sync_failed`            | Einreihung in `SearchIngestBuffer` fehlgeschlagen — erneut versuchen |
+| `delete_failed`          | Dokumentlöschung-Einreihung fehlgeschlagen — erneut versuchen       |
+| `job_not_found`          | Job-ID nicht gefunden (kann bei Neustart verloren gegangen sein)    |
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [PrestaShop-Modul](/docs/connectors/prestashop)
+- [Bitrix-Modul](/docs/connectors/bitrix)

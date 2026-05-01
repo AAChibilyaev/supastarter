@@ -1,0 +1,226 @@
+---
+title: Domänenmodell
+description: Logische Entitäten, Eigentumsgrenzen und welche Modelle heute persistiert werden gegenüber geplanten zukünftigen DB-Migrationen.
+---
+
+AACsearch verwendet eine **eingefrorene DB-Einschränkung**: keine neuen Prisma-Schema-Änderungen ohne explizite Genehmigung.
+Das bedeutet, dass einige Domänenkonzepte als logische Entitäten existieren, die durch Workarounds auf bestehenden Tabellen implementiert sind,
+während andere vollständig persistierte Prisma-Modelle sind.
+
+Diese Seite ordnet jeden Domänenbegriff seinem aktuellen Implementierungsstatus zu.
+
+## Persistierte Modelle (Prisma, heute aktiv)
+
+### Organisation
+
+Der primäre Workspace. Alle AACsearch-Ressourcen gehören zu einer Organisation.
+
+```
+Organisation
+  id            String  @id
+  name          String
+  slug          String  @unique
+  plan          String  (aufgelöst zur Feature-Matrix über @repo/payments/lib/entitlements)
+  members[]     Member[]
+  createdAt     DateTime
+```
+
+Organisationen werden durch das Organisations-Plugin von Better Auth bereitgestellt und sind die Mandantengrenze für
+alle Suchoperationen. Jeder API-Aufruf enthält `organizationId`; organisationsübergreifende Lesevorgänge sind niemals erlaubt.
+
+### SearchIndex
+
+Die zentrale Suchressource. Heute repräsentiert ein `SearchIndex` ein logisches Projekt (Shop + Index).
+
+```
+SearchIndex
+  id              String   @id
+  organizationId  String   (wird zu projectId wenn die Project-Entität hinzukommt)
+  userId          String?  (Eigentümer-Diskriminator — Index kann Org oder Benutzer gehören)
+  slug            String
+  collectionName  String   (versioniert: {orgShortId}_{slug}_v{N})
+  aliasName       String   ({orgShortId}_{slug})
+  schemaVersion   Int
+  status          String
+  createdAt       DateTime
+```
+
+### SearchApiKey
+
+Speichert gehashte API-Schlüssel für alle Schlüsseltypen. Klartext wird **einmal** bei der Erstellung angezeigt und niemals gespeichert.
+
+```
+SearchApiKey
+  id                 String    @id
+  indexId            String
+  organizationId     String
+  hashedKey          String    @unique   (bcrypt-Hash — NIEMALS Klartext speichern)
+  prefix             String              (ss_search_* | ss_connector_* | ss_scoped_*)
+  scopes             String[]            (search | ingest | admin | connector_write)
+  allowedOrigins     String[]
+  rateLimitPerMinute Int
+  expiresAt          DateTime?
+  lastUsedAt         DateTime?
+```
+
+**Wichtig:** Connector-Token verwenden `SearchApiKey` mit `scopes: ["connector_write"]` und
+`prefix: "ss_connector_*"`. Es gibt keine separate `ConnectorToken`-Tabelle (DB-eingefrorener Workaround).
+
+### SearchIngestBuffer
+
+Die Dauerhaftigkeitsschicht für den Schreibpfad. Anfragen werden hier eingereiht; der Hintergrund-Worker leert nach Typesense.
+
+```
+SearchIngestBuffer
+  id             String    @id
+  organizationId String
+  indexId        String
+  documents      Json      (Array von ProductDocument)
+  status         String    (pending | processing | success | failed)
+  attempts       Int       @default(0)
+  errorMessage   String?
+  processedAt    DateTime?
+  createdAt      DateTime
+```
+
+### SearchRateLimitBucket
+
+Gleitfenster-Rate-Limit-Tracking pro Schlüssel.
+
+### SearchUsageEvent
+
+Rohe Verwendungszeilen, die durch `recordSearchUsage()` bei jeder Suchanfrage geschrieben werden.
+
+```
+SearchUsageEvent
+  id           String   @id
+  indexId      String
+  orgId        String
+  query        String
+  resultCount  Int
+  latencyMs    Int
+  filters      Json?
+  sort         String?
+  userAgent    String?  (auf 256 Zeichen begrenzt)
+  sessionId    String?
+  referrer     String?
+  createdAt    DateTime
+```
+
+### SearchConnectorSyncJob
+
+Persistiertes Synchronisierungsjob-Tracking (zusätzlich zur In-Memory-Map in connector-public.ts).
+
+### Knowledge-Modelle (7)
+
+`KnowledgeSpace`, `DataSource`, `IngestionJob`, `KnowledgeDocument`, `KnowledgeChunk`, `GraphNode`, `GraphEdge`
+
+Diese gehören zum Knowledge-Modul (separate Produktoberfläche für interne Q&A, nicht Storefront-Suche).
+Siehe [Knowledge & Admin](/docs/dashboard/knowledge-and-admin) für die Verwendung.
+
+### Wallet / KI-Modelle (7)
+
+`AiWallet`, `AiWalletTransaction`, `AiQuotaReservation`, `AiUsageEvent`, `AiPricingRule`, `FxRate`, `WalletTopupOrder`
+
+Verwendet vom v0.6-Metering- / Billing-Wallet-Modul. Aktueller Status: aktive Entwicklung.
+
+## Nur logische Entitäten (noch nicht persistiert)
+
+Diese beschreiben die beabsichtigte Domänenform, haben aber heute kein dediziertes Prisma-Modell.
+Ihre Erstellung erfordert eine DB-Entsperrgenehmigung.
+
+### Projekt
+
+```
+Projekt (logisch)
+  id              String
+  organizationId  String
+  name            String
+  platform        prestashop | bitrix | bitrix24 | api | demo
+  status          String
+  defaultLocale   String
+  currency        String
+  allowedOrigins  String[]
+```
+
+**Aktueller Workaround:** 1 `SearchIndex` = 1 implizites Projekt. Die `organizationId` auf `SearchIndex`
+dient als Projekt-Organisations-Verknüpfung.
+
+### Connector / SyncJob (logisch)
+
+```
+Connector (logisch)
+  id              String
+  projectId       String
+  type            prestashop | bitrix
+  status          String
+  lastSeenAt      DateTime
+  lastSyncAt      DateTime
+
+SyncJob (logisch)
+  id              String
+  type            full | delta | reindex | delete
+  status          queued | running | succeeded | failed | cancelled
+  totalItems      Int
+  processedItems  Int
+```
+
+**Aktueller Workaround:** Connector-Token verwenden `SearchApiKey` mit `connector_write`-Bereich.
+Sync-Job-Tracking erfolgt **in-memory** in `connector-public.ts` (geht bei Neustart verloren – akzeptabel für MVP,
+da CMS-Module bei Heartbeat-Fehler erneut versuchen).
+
+### WidgetConfig (logisch)
+
+```
+WidgetConfig (logisch)
+  projectId       String
+  theme           light | dark | auto
+  layout          inline | modal
+  filters         FacetConfig[]
+  sortOptions     SortOption[]
+  trackingEnabled Boolean
+```
+
+**Aktueller Workaround:** Widget wird vollständig über `data-*`-Attribute am `<script>`-Tag konfiguriert.
+Es gibt keine Entwurfs-/Veröffentlichungsversionierung.
+
+### AnalyticsEvent (logisch)
+
+```
+AnalyticsEvent (logisch)
+  projectId       String
+  sessionId       String
+  type            search_query | zero_results | result_click | widget_open | filter_used
+  query           String?
+  productId       String?
+  position        Int?
+  filters         Json?
+  locale          String
+  userAgent       String?
+  referrer        String?
+  timestamp       DateTime
+```
+
+**Aktueller Stand:** `SearchUsageEvent` erfasst rohe Zeilen aus `recordSearchUsage()`. Ein dediziertes
+`AnalyticsEvent` mit Widget-Ereignistypen ist noch nicht persistiert.
+
+## Eingeschränkte Suchtoken (zustandslos)
+
+Eingeschränkte Token sind **kein** DB-Modell. Sie sind zustandslose HMAC-signierte Claims:
+
+```
+ss_scoped_{base64(JSON-Payload)}.{HMAC-SHA256-Signatur}
+```
+
+Der Payload enthält `organizationId`, `indexId`, `scopedFilter` (UND-verknüpft mit Aufruferfiltern),
+und optionales `expiresAt`. Überprüfung in `packages/api/modules/search/lib/scoped-token.ts`.
+
+## Eigentümer-Diskriminator
+
+`SearchIndex` unterstützt zwei Eigentümer:
+
+- **Org-eigentümer:** `organizationId` gesetzt, `userId` null – der normale Fall für Multi-User-Workspaces
+- **Benutzer-eigentümer:** `userId` gesetzt, `organizationId` null – für persönliche/Demo-Projekte
+
+Abfrage-Hilfsfunktionen: `listSearchIndexesByOwner`, `getSearchIndexByOwnerSlug`, `createSearchIndexByOwner`
+in `packages/database/prisma/queries/search.ts`.

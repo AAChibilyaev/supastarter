@@ -1,0 +1,142 @@
+---
+title: "Knowledge-Modul & Admin"
+description: "Das Knowledge-Modul für interne Dokument-Q&A (RAG/GraphRAG) und der Admin-Bereich für Website-Administratoren."
+---
+
+## Knowledge-Modul
+
+> **Wichtige Unterscheidung:** Das Knowledge-Modul ist eine separate Produktoberfläche von der Storefront-Schlüsselwortsuche. Die Storefront-Suche verwendet Typesense für schnelle, tippfehlerresistente Schlüsselwortanfragen gegen Produktkataloge. Das Knowledge-Modul ist für interne Q&A über unstrukturierte Dokumente — PDFs, DOCX-Dateien, Textdokumente — mit KI-Retrieval (RAG und GraphRAG). Die beiden Oberflächen sind unabhängig; sie teilen keine Indizes oder Daten.
+
+Das Knowledge-Modul ist verfügbar unter:
+
+- **Org-Bereich:** `/[orgSlug]/knowledge` — Knowledge-Spaces für die gesamte Organisation
+- **Kontobereich:** `/knowledge` — Persönliche Knowledge-Spaces
+
+### Knowledge-Spaces
+
+Ein Knowledge-Space ist ein Container für Dokumentquellen und die Q&A-Schnittstelle. Sie können mehrere Spaces erstellen (z. B. „Produktdokumentation", „Interne Richtlinien", „Support-KB").
+
+Jeder Space gehört entweder einer Organisation oder einem Benutzer (Eigentümer-Diskriminator-Muster — dasselbe Modell wie bei Suchindizes).
+
+### Datenquellen
+
+Innerhalb eines Spaces fügen Sie Datenquellen hinzu — derzeit Datei-Uploads:
+
+| Format | Unterstützung |
+| ------ | ------------- |
+| PDF    | Unterstützt   |
+| DOCX   | Unterstützt   |
+| TXT    | Unterstützt   |
+
+Wenn Sie eine Datei hochladen, wird ein Ingestion-Job erstellt. Das System:
+
+1. Parst die Datei in Text
+2. Teilt den Text mit konfigurierbaren Chunking-Strategien auf
+3. Generiert Einbettungen für jeden Chunk (über OpenAI)
+4. Speichert Chunks in `KnowledgeChunk` mit Vektor-Einbettungen
+
+### Ingestion-Jobs
+
+Die Ingestion-Jobs-Liste zeigt Status (laufend / abgeschlossen / fehlgeschlagen), Dateiname, Chunk-Anzahl und etwaige Fehler.
+
+### Ask (RAG)
+
+Sobald die Ingestion abgeschlossen ist, können Sie Fragen gegen den Space stellen. Der Ask-Ablauf:
+
+1. Bettet Ihre Abfrage ein
+2. Ruft die relevantesten Chunks über Vektor-Ähnlichkeit ab
+3. Sendet abgerufenen Kontext + Frage an das LLM
+4. Gibt die Antwort mit Quellenangaben zurück
+
+### GraphRAG
+
+Das GraphRAG-Feature erstellt einen Wissensgraphen aus den ingestierten Dokumenten:
+
+- `GraphNode` — Konzepte, Entitäten, Themen aus Dokumenten extrahiert
+- `GraphEdge` — Beziehungen zwischen Knoten
+
+GraphRAG-Abfragen durchqueren den Graphen, um tiefere, stärker vernetzte Antworten als einfaches RAG zu liefern. Verwenden Sie GraphRAG für Fragen, die Schlussfolgerungen über mehrere Dokumente oder Themen erfordern.
+
+### Verwendungsmetriken
+
+Jeder Space verfolgt die Verwendung über die Prozedur `knowledge.usageMetrics`: Gesamtabfragen, Token-Verbrauch und Dokumentanzahl pro Quelle.
+
+### Prisma-Modelle
+
+Das Knowledge-Modul verwendet 7 dedizierte Prisma-Modelle:
+
+| Modell              | Zweck                                         |
+| ------------------- | --------------------------------------------- |
+| `KnowledgeSpace`    | Oberster Container, org- oder benutzereigen   |
+| `DataSource`        | Datei-Quell-Datensatz (Name, Typ, Status)     |
+| `IngestionJob`      | Ingestion-Tracking (Status, Fortschritt, Fehler) |
+| `KnowledgeDocument` | Verarbeitetes Dokument                        |
+| `KnowledgeChunk`    | Einzelner Text-Chunk für Retrieval            |
+| `GraphNode`         | Wissensgraph-Knoten (Konzept, Entität)        |
+| `GraphEdge`         | Beziehung zwischen Graphknoten                |
+
+### oRPC-Prozeduren
+
+Das Knowledge-Modul stellt 10 Prozeduren unter `packages/api/modules/knowledge/` bereit:
+
+| Prozedur            | Beschreibung                                      |
+| ------------------- | ------------------------------------------------- |
+| `listSpaces`        | Alle Spaces für den Eigentümer auflisten          |
+| `createSpace`       | Neuen Knowledge-Space erstellen                   |
+| `listSources`       | Datenquellen für einen Space auflisten            |
+| `createSource`      | Neue Datenquelle hinzufügen                       |
+| `listIngestionJobs` | Ingestion-Jobs für einen Space auflisten          |
+| `ingestFile`        | Datei hochladen und ingestieren                   |
+| `ask`               | Frage stellen (RAG-Retrieval + LLM-Antwort)       |
+| `graphragExplain`   | GraphRAG-Erklärungsabfrage                        |
+| `usageMetrics`      | Token- und Abfrage-Verwendungsstatistiken         |
+
+---
+
+## Admin-Bereich
+
+Der Admin-Bereich ist nur für Benutzer mit der Website-Admin-Rolle sichtbar. Er ist unter `/admin/*` zugänglich.
+
+> **Hinweis:** Mehrere Admin-Seiten sind derzeit Stubs mit Platzhalterinhalt — sie rendern das Seitenlayout, haben aber noch keine vollständige Funktionalität. Dies wird per Seite unten vermerkt.
+
+### Admin-Seiten
+
+| Pfad                   | Beschreibung                                          | Status                             |
+| ---------------------- | ----------------------------------------------------- | ---------------------------------- |
+| `/admin/`              | Admin-Dashboard-Root                                  | Funktional                         |
+| `/admin/organizations` | Alle Organisationen auflisten und verwalten           | Funktional                         |
+| `/admin/users`         | Alle Benutzer auflisten und verwalten, Imitierung     | Funktional                         |
+| `/admin/config`        | Systemkonfiguration                                   | Stub — ausstehend                  |
+| `/admin/security`      | Sicherheitseinstellungen und Sitzungsverwaltung       | Stub — ausstehend                  |
+| `/admin/integrations`  | Drittanbieter-Integrationseinstellungen               | Stub — ausstehend                  |
+| `/admin/audit`         | Audit-Log-Betrachter                                  | Stub — ausstehend                  |
+| `/admin/wallet`        | KI-Wallet-Admin (pro-Benutzer-Guthaben, Transaktionen) | Stub — aktive Entwicklung (v0.6) |
+| `/admin/jobs`          | Hintergrund-Job-Verwaltung                            | Stub — ausstehend                  |
+| `/admin/notifications` | System-Benachrichtigungsverwaltung                    | Stub — ausstehend                  |
+
+### KI-Wallet und Credits (v0.6 — aktive Entwicklung)
+
+Das Wallet-System (`@repo/billing-wallet`) verwaltet KI-Kredit-Guthaben über ein BigInt-Kopeken-Ledger. Die Wallet-Admin-Seite unter `/admin/wallet` und die benutzerseitige KI-Credits-Seite unter `/settings/billing/ai-credits` werden aktiv als Teil des v0.6-Metering-Releases entwickelt. Der Tochka-Zahlungstreiber (für den RU-Markt) ist verdrahtet; Stripe ist eine parallele Option.
+
+Das Wallet-Feature ist absichtlich halb-isoliert — wenn Ihre Aufgabe nicht die Abrechnung oder KI-Credits betrifft, erweitern Sie es nicht ohne explizite Bereichsbestätigung.
+
+---
+
+## Konto-spezifische Einstellungen
+
+Persönliche Einstellungen befinden sich außerhalb des Org-Kontexts unter `/settings/`.
+
+| Pfad                           | Inhalt                                                       |
+| ------------------------------ | ------------------------------------------------------------ |
+| `/settings/general`            | Anzeigename, E-Mail, Profilfoto                              |
+| `/settings/security`           | Passwortänderung, 2FA (TOTP), Passkeys, OAuth-Verbindungen   |
+| `/settings/notifications`      | Pro-Typ-Benachrichtigungseinstellungen                       |
+| `/settings/billing`            | Persönliche Abrechnung, aktiver Plan, Zahlungsmethode        |
+| `/settings/billing/ai-credits` | KI-Wallet-Aufladung und Transaktionsverlauf (v0.6)           |
+
+Sicherheitseinstellungen unterstützen: Passwort-Login, Magic-Link, Zwei-Faktor-Authentifizierung (TOTP über Authenticator-App), Passkey (WebAuthn) und OAuth (Google, GitHub).
+
+## Verwandte Seiten
+
+- [Dashboard-Übersicht](/docs/dashboard/overview)
+- [Such-Workspace](/docs/dashboard/search-workspace)

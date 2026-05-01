@@ -1,0 +1,163 @@
+---
+title: Ingestión y Reindexación
+description: Cómo funciona la ingestión con prioridad en base de datos, cómo cargar documentos en masa y cómo funciona la reindexación con cambio de alias sin tiempo de inactividad.
+---
+
+AACsearch utiliza un **pipeline de ingestión con prioridad en base de datos**: las solicitudes de escritura insertan documentos en una tabla buffer de Postgres
+primero, luego un trabajador en segundo plano los envía por lotes a Typesense. Esto proporciona durabilidad,
+manejo de fallos parciales y procesamiento por lotes sin N+1 viajes de ida y vuelta.
+
+## Pipeline de ingestión con prioridad en base de datos
+
+```
+Su código / módulo CMS
+    │
+    ▼
+POST /api/connector/sync/full (o upsertDocument oRPC)
+    │
+    ▼
+enqueueManySearchIngest()  ←  escribe en SearchIngestBuffer (Postgres)
+    │
+    ▼
+Trabajador en segundo plano  ←  drena el buffer en lotes
+    │
+    ▼
+bulkUpsert() → Typesense
+    │
+    ▼
+markIngestRowsSuccess() / markIngestRowsFailure() (retroceso exponencial)
+```
+
+**Invariante clave:** `bulkUpsert()` solo se llama desde el trabajador en segundo plano. Nunca lo llame directamente
+desde un manejador de solicitudes — esto evitaría el buffer y rompería las garantías de durabilidad.
+
+## Inserción de un solo documento
+
+```typescript
+await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-456",
+		title: "Zapatillas de running",
+		sku: "RS-001",
+		brand: "SpeedCo",
+		categories: ["Deportes", "Calzado"],
+		price: 79.99,
+		availability: "in_stock",
+		locale: "es",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+El procedimiento oRPC llama a `enqueueManySearchIngest()` con un array de un solo elemento.
+
+## Importación masiva mediante el panel
+
+La pestaña **Trabajos de importación** del panel admite carga de archivos CSV y JSON:
+
+1. Navegue a **Búsqueda** → **Trabajos de importación**
+2. Haga clic en **Importar documentos**
+3. Cargue un archivo CSV o JSON
+4. Mapee las columnas a los campos del documento
+5. Haga clic en **Iniciar importación**
+
+Los trabajos de importación se rastrean en la base de datos con estado (`pending`, `processing`, `success`, `failed`)
+y recuentos de elementos. Las filas con errores aparecen en la vista de detalle del trabajo de importación.
+
+## Ingestión masiva mediante la API de conector
+
+Los módulos CMS envían cargas masivas a través de la API de conector:
+
+```bash
+curl -X POST https://your-app.com/api/connector/sync/full \
+  -H "Authorization: Bearer ss_connector_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "documents": [
+      { "id": "1", "title": "Producto A", "price": 29.99, ... },
+      { "id": "2", "title": "Producto B", "price": 49.99, ... }
+    ]
+  }'
+```
+
+El tamaño de lote recomendado es de 200 documentos. Los lotes más grandes aumentan la latencia de importación de Typesense y
+arriesgan el tiempo de espera en conexiones lentas. Los módulos CMS usan un tamaño de lote configurable (predeterminado: 200).
+
+## Manejo de fallos parciales
+
+El trabajador marca las filas individuales como éxito o fallo de forma independiente. Si un lote falla parcialmente:
+
+1. Los documentos exitosos se confirman mediante `markIngestRowsSuccess()`
+2. Los documentos con error se marcan con `markIngestRowsFailure()` y se programa un reintento
+3. El reintento usa retroceso exponencial: 1s → 2s → 4s → 8s → se abandona después de intentos máximos configurables
+
+Las filas con fallos permanentes aparecen en el panel de Trabajos de importación con sus mensajes de error.
+
+## Reindexación (sin tiempo de inactividad)
+
+La reindexación es necesaria cuando cambia el esquema de la colección Typesense — por ejemplo, al añadir un nuevo campo de faceta.
+AACsearch usa una estrategia de **intercambio de alias** para evitar el tiempo de inactividad durante la reindexación.
+
+### Cómo funciona
+
+```
+Estado actual:
+  alias: org123_products  →  org123_products_v1  (atendiendo tráfico)
+
+Durante la reindexación:
+  1. Crear: org123_products_v2 (nuevo esquema)
+  2. Importar masivamente todos los documentos en v2
+  3. Verificar que v2 sea saludable (el recuento de documentos coincide)
+  4. Intercambiar alias de forma atómica: org123_products  →  org123_products_v2
+  5. Mantener v1 activo hasta la próxima reindexación (opción de reversión)
+
+Después de la reindexación:
+  alias: org123_products  →  org123_products_v2  (atendiendo tráfico)
+  org123_products_v1  permanece (pero no atiende)
+```
+
+### Activar reindexación mediante el panel
+
+Navegue a **Búsqueda** → **Índices** → su índice → **Reindexar**.
+
+### Activar reindexación mediante oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// job.status: "queued" | "running" | "succeeded" | "failed"
+```
+
+### Cuándo reindexar
+
+| Escenario                                | Acción                                       |
+| ---------------------------------------- | -------------------------------------------- |
+| Se añadió un nuevo campo de faceta       | Reindexación necesaria                       |
+| Se cambió el tipo de campo               | Reindexación necesaria                       |
+| Se añadió un nuevo campo de búsqueda     | Reindexación necesaria                       |
+| Solo se actualizó el contenido del documento | No se necesita reindexación — inserte el documento |
+| Se cambiaron las reglas de sinónimos     | No se necesita reindexación                  |
+
+### Reindexación y cuota
+
+La reindexación cuenta los documentos indexados contra la cuota de su plan. Para catálogos grandes en el plan gratuito
+(10K unidades), la reindexación consumirá la cuota mensual. Planifique en consecuencia.
+
+## Reintentar lotes con errores
+
+Los lotes de ingestión con errores pueden reintentarse desde el panel en **Trabajos de importación** → seleccione el trabajo con error → **Reintentar**,
+o mediante oRPC:
+
+```typescript
+await orpc.search.retryFailedBatches.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+```
+
+Esto vuelve a poner en cola todas las filas en estado `failed` para el índice.

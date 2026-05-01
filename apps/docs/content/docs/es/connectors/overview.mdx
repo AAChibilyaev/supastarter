@@ -1,0 +1,69 @@
+---
+title: "Descripción General de Conectores y Widget"
+description: "Cómo los conectores CMS y el widget alojado envían datos a AACsearch y muestran resultados de búsqueda en su tienda."
+---
+
+AACsearch se conecta a su CMS existente a través de dos superficies complementarias:
+
+- **API de conector** — un conjunto de endpoints HTTP que los módulos CMS llaman para enviar datos de productos a AACsearch. El módulo se ejecuta en su servidor; AACsearch nunca sondea ni extrae datos de su tienda.
+- **Widget alojado** — un bundle Vanilla JS servido por AACsearch en `/api/widget/widget.js`. Incruste una sola etiqueta `<script>` en el tema de su tienda y el widget se encarga de la interfaz de búsqueda, facetas, ordenación y seguimiento de clics.
+
+Ambas superficies usan diferentes tipos de tokens. Ninguna superficie expone nunca sus credenciales de administrador de Typesense.
+
+## Modelo de token de conector
+
+Los tokens de conector usan el prefijo `ss_connector_*` y se almacenan como filas `SearchApiKey` con el ámbito `connector_write`. Se crean desde el panel de AACsearch y están vinculados a un índice de búsqueda específico.
+
+Propiedades del token:
+
+- Prefijo: `ss_connector_`
+- Ámbito: `connector_write`
+- Almacenado como: hash SHA-256 (formato prefijo:hash) en `SearchApiKey.hash`
+- Texto plano devuelto una vez en la creación — nunca más
+- Revocable en cualquier momento desde el panel
+
+Cree un token de conector desde **Panel → Conectores → Nuevo token de conector**, o mediante el procedimiento oRPC `search.createConnectorToken`.
+
+## Módulos CMS compatibles
+
+| Plataforma              | Estado         | Notas                                              |
+| ----------------------- | -------------- | -------------------------------------------------- |
+| PrestaShop 8.x          | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada |
+| 1C-Bitrix (autoalojado) | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada |
+| API directa             | Disponible     | Cualquier sistema puede llamar a la API de conector con un token |
+
+Los módulos PrestaShop y Bitrix se rastrean por separado del monorepo principal de Node.js. Son esqueletos funcionales — los flujos principales de sincronización y autenticación funcionan, pero el empaquetado de instalación y el refinamiento de la interfaz de administración aún están en progreso.
+
+## Cómo empezar
+
+1. **Crear un índice de búsqueda** — Panel → Búsqueda → Índices → Nuevo índice
+2. **Crear un token de conector** — Panel → Conectores → Nuevo token de conector. Copie el token de texto plano inmediatamente.
+3. **Instalar el módulo CMS** — cargue el módulo PrestaShop o Bitrix a su tienda, o construya su propia integración usando la API de conector directamente.
+4. **Ejecutar handshake** — el módulo llama a `POST /api/connectors/handshake` con su token. Una respuesta exitosa confirma que el token es válido y devuelve el slug del índice.
+5. **Ejecutar sincronización completa** — el módulo exporta todos los productos y los envía en lotes a `POST /api/projects/:projectId/sync/full`. Los productos se ponen en cola en `SearchIngestBuffer` y se indexan de forma asíncrona.
+6. **Incrustar el widget** — copie el fragmento de instalación desde Panel → Búsqueda → pestaña Widget y péguelo en el tema de su tienda.
+
+## Principio de arquitectura
+
+Los módulos CMS y los navegadores nunca contactan Typesense directamente. Todos los datos fluyen a través de la capa de API de AACsearch, que valida, verifica autenticación, limita la velocidad y pone en cola las escrituras en `SearchIngestBuffer`. La clave de administrador de Typesense nunca sale del servidor.
+
+```
+Módulo CMS (bearer: ss_connector_*)
+    │
+    ▼
+API de conector  ←  valida token, verifica ámbito
+    │
+    ▼
+SearchIngestBuffer (Base de datos Prisma)
+    │
+    ▼
+Trabajador en segundo plano → Typesense
+```
+
+## Páginas relacionadas
+
+- [Ciclo de vida de la API de conector](/docs/connectors/connector-api-lifecycle) — los 7 endpoints, formas de solicitud, códigos de error
+- [Módulo PrestaShop](/docs/connectors/prestashop) — instalar y configurar el módulo PrestaShop 8.x
+- [Módulo Bitrix](/docs/connectors/bitrix) — instalar y configurar el módulo 1C-Bitrix
+- [Descripción general del widget](/docs/connectors/widget-overview) — incrustar el widget de búsqueda alojado
+- [Eventos de analíticas del widget](/docs/connectors/widget-analytics-events) — referencia de seguimiento de eventos

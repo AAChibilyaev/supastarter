@@ -1,0 +1,134 @@
+---
+title: Reindexing & Zero-Downtime
+description: How the alias-swap reindex strategy works, when to trigger it, and how to monitor progress.
+---
+
+AACsearch uses a **versioned collection + alias** strategy to perform schema migrations and full
+reindexes without search downtime. Queries always target the alias (a stable name), while
+versioned collections are swapped underneath.
+
+## The alias-swap model
+
+Every search index uses two Typesense names:
+
+```
+alias:       org123_products        ← stable, used by all search queries
+collection:  org123_products_v1     ← current versioned collection (serving traffic)
+```
+
+When a reindex is triggered:
+
+```
+1. CREATE  org123_products_v2       ← new collection with updated schema
+2. IMPORT  all documents → v2       ← re-ingest from DB (or snapshot)
+3. VERIFY  doc count(v2) ≈ expected ← health check before swap
+4. SWAP    alias: org123_products → org123_products_v2
+5. KEEP    org123_products_v1       ← kept until next reindex (rollback option)
+```
+
+Step 4 (alias swap) is atomic in Typesense. Queries continue hitting the old version during steps
+1–3 and seamlessly target the new version after step 4 — with zero downtime.
+
+## When to reindex
+
+| Scenario                           | Reindex required?                             |
+| ---------------------------------- | --------------------------------------------- |
+| Adding a new facet field           | **Yes** — Typesense requires schema migration |
+| Changing a field type              | **Yes**                                       |
+| Adding a new searchable text field | **Yes**                                       |
+| Removing a field                   | **Yes**                                       |
+| Updating document content          | No — use upsert/delta sync                    |
+| Changing synonym rules             | No — synonyms are a separate resource         |
+| Changing sort options              | No — `sortBy` is a query parameter            |
+| Changing curation rules            | No — curations are a separate resource        |
+
+## Trigger reindex
+
+### Via dashboard
+
+1. Navigate to **Search** → **Indexes** → select your index
+2. Click the **Reindex** button in the index settings
+3. Monitor progress in the import jobs panel
+
+### Via oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// Returns: { jobId, status: "queued" }
+```
+
+### Via Connector API (admin)
+
+```bash
+POST /api/v1/indexes/{indexSlug}/reindex
+Authorization: Bearer aa_admin_your_key
+```
+
+## Monitor reindex progress
+
+Check the import job status:
+
+```typescript
+const jobs = await orpc.search.importJobs.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+
+const activeJob = jobs.find((j) => j.type === "reindex" && j.status === "running");
+// activeJob.processedItems / activeJob.totalItems → progress
+```
+
+In the dashboard, the **Import Jobs** tab shows reindex progress with a progress bar.
+
+## Schema updates
+
+Before reindexing, update the collection schema:
+
+```typescript
+await orpc.search.schema.update.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	fields: [
+		// Add a new field
+		{ name: "tags", type: "string[]", facet: true, optional: true },
+	],
+});
+```
+
+This updates the schema definition stored in AACsearch. The actual Typesense collection schema
+is updated during the next reindex (schema changes are not applied in-place to avoid downtime).
+
+## Quota impact
+
+Reindex re-ingests all documents. For a 50K-product catalog, a reindex consumes 50K search units.
+Plan your reindex schedule around your monthly quota.
+
+## Rollback
+
+If the new collection has problems, rollback by pointing the alias back to the previous version:
+
+```typescript
+await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	rollback: true, // swaps alias back to the previous version
+});
+```
+
+The previous version (`v{N-1}`) is preserved until the next successful reindex.
+
+## Implementation details
+
+The reindex implementation is in `packages/search/lib/reindex.ts` (exported as `reindexCollection`).
+
+Key behaviors:
+
+- Versioned collection name: `{orgShortId}_{slug}_v{nextVersion}`
+- Alias swap: `typesense.aliases.upsert(alias, { collection_name: newCollectionName })`
+- Document source: re-drains the full document set from the ingest buffer or a snapshot
+- Partial failure: if import fails before swap, old version continues serving; new version is deleted
+
+The function is called from `searchRouter.reindex` procedure in `packages/api/modules/search/procedures/reindex.ts`.

@@ -1,0 +1,158 @@
+---
+title: "Workspace de Búsqueda"
+description: "La sección de Búsqueda del panel — pestañas de Índices, Playground, API Keys, Widget, trabajos de importación, tokens de conector y la lista de verificación de incorporación."
+---
+
+El workspace de búsqueda en `/[orgSlug]/search` es el panel de control principal para sus índices de búsqueda. Está organizado en pestañas:
+
+- **Índices** — gestionar sus índices de búsqueda
+- **Playground** — probar consultas de forma interactiva
+- **API Keys** — gestionar las API keys de búsqueda por índice
+- **Widget** — obtener el fragmento de instalación para el widget alojado
+
+## Pestaña Índices
+
+La pestaña Índices lista todos los índices de búsqueda de la organización. Para cada índice puede:
+
+- Ver el recuento de documentos y la marca de tiempo de la última actualización
+- Abrir acciones de fila: reindexar, ver trabajos de importación, gestionar esquema, sinónimos, curaciones
+- Crear un nuevo índice (solo administrador de la organización)
+
+Una tarjeta de resumen de uso en la parte superior muestra el consumo contra los límites de su plan (búsquedas usadas, documentos indexados, porcentaje de cuota).
+
+### Crear un índice
+
+Haga clic en **Nuevo índice** (visible para administradores de la organización). Elija un nombre de visualización y un slug. El slug se convierte en parte del nombre de la colección Typesense y no puede cambiarse después de la creación.
+
+Los slugs de índice se usan en:
+
+- El atributo `data-index-slug` del widget
+- El segmento de ruta `:indexSlug` de la API de conector
+- Los vínculos de API keys
+
+### Reindexar
+
+Activar una reindexación desde las acciones de fila crea una nueva colección Typesense versionada (`{orgShortId}_{slug}_v{n+1}`), la verifica y atomicamente intercambia el alias. La versión anterior permanece activa hasta que el intercambio se completa. Sin tiempo de inactividad.
+
+## Pestaña Playground
+
+El Playground le permite ejecutar consultas de prueba contra cualquier índice sin escribir código. Puede:
+
+- Ingresar una consulta de búsqueda
+- Aplicar filtros
+- Probar diferentes opciones de ordenación
+- Ver resultados crudos de Typesense incluyendo recuentos de facetas y resaltados
+
+El Playground usa su sesión del panel — no se requiere API key para usarlo.
+
+## Pestaña API Keys
+
+La pestaña API Keys muestra todas las claves para un índice seleccionado. Seleccione un índice del menú desplegable para ver sus claves.
+
+### Ámbitos de clave
+
+| Ámbito            | Propósito                                                        |
+| ----------------- | ---------------------------------------------------------------- |
+| `search`          | Consultas de búsqueda de solo lectura. Seguro para incrustar en código del navegador. |
+| `ingest`          | Acceso de escritura para enviar documentos mediante la API REST  |
+| `admin`           | Acceso completo — crear/eliminar colecciones, gestionar esquema  |
+| `connector_write` | Usado por módulos CMS (véase tokens de conector a continuación)  |
+
+### Crear una clave
+
+Haga clic en **Crear clave** y elija un nombre y ámbito. El texto plano de la clave se muestra una vez en la creación. Cópielo inmediatamente — no puede recuperarse nuevamente.
+
+Las claves se almacenan como hashes SHA-256 (formato prefijo:hash). Solo el prefijo y los metadatos se almacenan en texto plano.
+
+### Revocar una clave
+
+Haga clic en **Revocar** en cualquier clave activa. La revocación es inmediata — la clave es rechazada en el próximo uso. Las claves revocadas se mantienen en la lista con fines de auditoría.
+
+## Pestaña Widget
+
+La pestaña Widget genera el fragmento de instalación para el widget alojado. Seleccione un índice del menú desplegable, luego:
+
+1. Ingrese su API key `ss_search_*` (o use una clave que ya haya creado)
+2. Copie el fragmento generado
+
+El fragmento se ve así:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Péguelo en el `<head>` de su tienda y añada `<div id="aac-search"></div>` donde desea que aparezca la búsqueda.
+
+Consulte [Descripción general del widget](/docs/connectors/widget-overview) para las opciones de configuración completas.
+
+## Trabajos de importación
+
+La página `/[orgSlug]/import-jobs` muestra el historial de operaciones de importación masiva.
+
+### Importación masiva
+
+Puede cargar un archivo JSONL desde la pestaña Índices → acciones de fila → Importar documentos. Cada línea del archivo es un documento de producto con la misma forma que el payload de sincronización de la API de conector:
+
+```jsonl
+{"external_id":"1","title":"Producto A","price":9.99}
+{"external_id":"2","title":"Producto B","price":19.99}
+```
+
+Los trabajos de importación se rastrean en la base de datos. Cada trabajo muestra:
+
+- Estado (en ejecución / completado / con error)
+- Total de elementos procesados
+- Recuento de errores
+- Marcas de tiempo de inicio y finalización
+
+## Lista de verificación de Primeros pasos
+
+La página `/[orgSlug]/getting-started` muestra una lista de verificación de 6 pasos que deriva automáticamente su estado de sus datos existentes — sin entrada manual requerida.
+
+| Paso                                 | Condición                                                             |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| 1. Crear un índice de búsqueda       | Recuento de `SearchIndex` > 0 para la organización                    |
+| 2. Generar un token de conector      | Existe `SearchApiKey` con ámbito `connector_write` y no está revocado |
+| 3. Sincronizar sus datos             | Existe `SearchUsageEvent` con tipo de ingestión                       |
+| 4. Realizar una búsqueda             | Existe `SearchUsageEvent` con tipo de búsqueda                        |
+| 5. Generar una API key               | Existe `SearchApiKey` con ámbito `search` y no está revocado          |
+| 6. Incrustar el widget de búsqueda   | Siempre comienza sin marcar — auto-certificación por el usuario       |
+
+Los pasos 1–5 se verifican automáticamente. El paso 6 refleja la incrustación del widget, que no puede detectarse en el lado del servidor.
+
+## Tokens de conector
+
+Los tokens de conector (`ss_connector_*`) se gestionan desde la página de Conectores en `/[orgSlug]/connectors` en lugar del workspace de búsqueda. Desde allí puede:
+
+- Ver todos los tokens de conector activos con su tiempo de último latido
+- Crear un nuevo token de conector para un índice específico
+- Revocar un token
+
+Consulte [Descripción general de conectores](/docs/connectors/overview) para el flujo completo del conector.
+
+## Configuración de relevancia
+
+La página `/[orgSlug]/relevance` tiene sub-pestañas para el ajuste de relevancia por índice:
+
+- **Sinónimos** — añadir conjuntos de sinónimos (por ejemplo, "sneakers" = "zapatillas de running" = "tenis")
+- **Curaciones** — anclar u ocultar documentos específicos para ciertas consultas
+- **Stopwords** — definir palabras a ignorar durante la búsqueda (planificado para v1.x)
+- **Presets** — guardar conjuntos de parámetros de búsqueda con nombre para reutilización rápida (planificado para v1.x)
+
+## Página de Analíticas
+
+La página `/[orgSlug]/analytics` proporciona analíticas de búsqueda detalladas para la organización. Muestra el total de búsquedas, sesiones únicas, tasa de cero resultados, latencia promedio y tasa de clics. Los datos provienen de filas `SearchUsageEvent` mediante el procedimiento oRPC `search.analytics`.
+
+## Páginas relacionadas
+
+- [Descripción general del panel](/docs/dashboard/overview)
+- [Descripción general del widget](/docs/connectors/widget-overview)
+- [Ciclo de vida de la API de conector](/docs/connectors/connector-api-lifecycle)
+- [Autenticación](/docs/search-api/authentication)

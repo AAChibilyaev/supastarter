@@ -1,0 +1,11 @@
+{
+	"title": "Connectors & Widget",
+	"pages": [
+		"overview",
+		"connector-api-lifecycle",
+		"prestashop",
+		"bitrix",
+		"widget-overview",
+		"widget-analytics-events"
+	]
+}

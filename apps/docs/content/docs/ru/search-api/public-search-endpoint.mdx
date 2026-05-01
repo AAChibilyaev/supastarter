@@ -1,0 +1,187 @@
+---
+title: Публичный поисковый эндпоинт
+description: Полная справочная информация по эндпоинту POST /api/search — схема запроса, параметры и формат ответа.
+---
+
+Публичный поисковый эндпоинт — основной способ выполнения поисковых запросов. Он принимает JSON POST-запросы, аутентифицированные ключом `ss_search_*` или `ss_scoped_*`.
+
+**Эндпоинт:** `POST /api/search`
+
+**Auth:** `Authorization: Bearer ss_search_your_key`
+
+## Схема запроса
+
+```typescript
+{
+  // Обязательно
+  indexSlug: string;                   // слаг целевого индекса
+
+  // Запрос
+  q: string;                           // поисковый запрос (используйте "*" для wildcard/просмотра)
+  queryBy?: string;                    // имена полей для поиска через запятую
+                                       // по умолчанию: "title,sku,brand,description"
+
+  // Фильтрация
+  filterBy?: string;                   // выражение фильтра Typesense
+  facetBy?: string;                    // поля для вычисления фасетов через запятую
+
+  // Сортировка
+  sortBy?: string;                     // например, "price:asc" или "_text_match:desc,price:asc"
+
+  // Пагинация
+  page?: number;                       // с 1 (по умолчанию: 1)
+  perPage?: number;                    // по умолчанию: 10, макс.: 100
+
+  // Подсветка
+  highlightFields?: string;            // поля для подсветки через запятую
+  highlightStartTag?: string;          // по умолчанию: "<mark>"
+  highlightEndTag?: string;            // по умолчанию: "</mark>"
+
+  // Выбор полей
+  includeFields?: string;              // возвращать только эти поля
+  excludeFields?: string;              // исключить эти поля из ответа
+}
+```
+
+## Пример: базовый поиск
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "wireless headphones",
+    "queryBy": "title,description,brand",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Пример: поиск с фильтрами и фасетами
+
+```bash
+curl -X POST https://your-app.com/api/search \
+  -H "Authorization: Bearer ss_search_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "q": "headphones",
+    "queryBy": "title,brand",
+    "filterBy": "availability:=in_stock && price:<200",
+    "facetBy": "brand,categories",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20
+  }'
+```
+
+## Схема ответа
+
+```typescript
+{
+  found: number;           // всего совпадающих документов
+  page: number;            // текущая страница (с 1)
+  outOf: number;           // всего документов в индексе
+  searchTimeMs: number;    // время выполнения запроса в миллисекундах
+
+  hits: Array<{
+    document: Record<string, unknown>;  // совпавший документ
+    highlights: Array<{
+      field: string;
+      snippet: string;     // HTML с тегами <mark> вокруг совпавших терминов
+    }>;
+    textMatchScore: number;
+  }>;
+
+  facetCounts?: Array<{
+    fieldName: string;
+    counts: Array<{
+      value: string;
+      count: number;
+    }>;
+  }>;
+}
+```
+
+## Пример ответа
+
+```json
+{
+	"found": 142,
+	"page": 1,
+	"outOf": 5000,
+	"searchTimeMs": 4,
+	"hits": [
+		{
+			"document": {
+				"id": "product-123",
+				"title": "Sony WH-1000XM5 Wireless Headphones",
+				"brand": "Sony",
+				"price": 349.99,
+				"availability": "in_stock"
+			},
+			"highlights": [
+				{
+					"field": "title",
+					"snippet": "Sony WH-1000XM5 <mark>Wireless</mark> <mark>Headphones</mark>"
+				}
+			],
+			"textMatchScore": 578730
+		}
+	],
+	"facetCounts": [
+		{
+			"fieldName": "brand",
+			"counts": [
+				{ "value": "Sony", "count": 45 },
+				{ "value": "Bose", "count": 28 }
+			]
+		}
+	]
+}
+```
+
+## Wildcard-запросы
+
+Используйте `q: "*"` для возврата всех документов (полезно для просмотра с фильтрами):
+
+```json
+{
+	"indexSlug": "products",
+	"q": "*",
+	"filterBy": "categories:=Electronics",
+	"sortBy": "price:asc"
+}
+```
+
+## Изоляция арендатора
+
+Публичный обработчик автоматически добавляет фильтр арендатора к каждому запросу:
+
+```
+organization_id:={organizationId}
+```
+
+Этот фильтр объединяется через AND с любым `filterBy`, предоставленным вызывающей стороной. Он не может быть удалён или
+переопределён вызывающей стороной. Межорганизационный доступ к данным архитектурно невозможен через этот эндпоинт.
+
+## Параметры запроса по умолчанию
+
+AACsearch применяет следующие значения по умолчанию, если не указано иное:
+
+| Параметр            | Значение по умолчанию                      |
+| ------------------- | ------------------------------------------ |
+| `queryBy`           | `"title,sku,brand,categories,description"` |
+| `sortBy`            | `"_text_match:desc"`                       |
+| `page`              | `1`                                        |
+| `perPage`           | `10`                                       |
+| `highlightStartTag` | `"<mark>"`                                 |
+| `highlightEndTag`   | `"</mark>"`                                |
+
+## Замечания по производительности
+
+- Типичная задержка запроса: < 10 мс для индексов менее 100К документов
+- Время ответа возрастает при сложных выражениях `filterBy` и большом количестве фасетов
+- Избегайте `perPage > 50` для запросов с большим числом фасетов — это увеличивает время обработки Typesense
+- Используйте `excludeFields` для удаления больших текстовых полей (например, `description`) из результатов, которые вы не рендерите

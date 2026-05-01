@@ -1,0 +1,163 @@
+---
+title: Ingestion & Réindexation
+description: Fonctionnement du pipeline d'ingestion DB-first, chargement en masse de documents et réindexation sans interruption avec l'alias-swap.
+---
+
+AACsearch utilise un **pipeline d'ingestion DB-first** : les requêtes d'écriture insèrent d'abord les documents dans une table tampon Postgres,
+puis un worker en arrière-plan les envoie par lots à Typesense. Cela assure la durabilité,
+la gestion des échecs partiels et le traitement par lots sans N+1 allers-retours.
+
+## Pipeline d'ingestion DB-first
+
+```
+Votre code / module CMS
+    │
+    ▼
+POST /api/connector/sync/full (ou oRPC upsertDocument)
+    │
+    ▼
+enqueueManySearchIngest()  ←  écrit dans SearchIngestBuffer (Postgres)
+    │
+    ▼
+Worker en arrière-plan  ←  vide le buffer par lots
+    │
+    ▼
+bulkUpsert() → Typesense
+    │
+    ▼
+markIngestRowsSuccess() / markIngestRowsFailure() (backoff exponentiel)
+```
+
+**Invariant clé :** `bulkUpsert()` n'est appelé que depuis le worker en arrière-plan. Ne l'appelez jamais directement
+depuis un handler de requête — cela contournerait le buffer et briserait les garanties de durabilité.
+
+## Upsert de document unique
+
+```typescript
+await orpc.search.upsertDocument.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+	document: {
+		id: "product-456",
+		title: "Running Shoes",
+		sku: "RS-001",
+		brand: "SpeedCo",
+		categories: ["Sports", "Footwear"],
+		price: 79.99,
+		availability: "in_stock",
+		locale: "en",
+		created_at: Math.floor(Date.now() / 1000),
+	},
+});
+```
+
+La procédure oRPC appelle `enqueueManySearchIngest()` avec un tableau à un seul élément.
+
+## Import en masse via le tableau de bord
+
+L'onglet **Import Jobs** du tableau de bord prend en charge le téléchargement de fichiers CSV et JSON :
+
+1. Naviguez vers **Search** → **Import Jobs**
+2. Cliquez sur **Import documents**
+3. Téléchargez un fichier CSV ou JSON
+4. Mappez les colonnes sur les champs du document
+5. Cliquez sur **Start import**
+
+Les jobs d'import sont suivis dans la base de données avec un statut (`pending`, `processing`, `success`, `failed`)
+et des comptages d'éléments. Les lignes ayant échoué sont affichées dans la vue détaillée du job d'import.
+
+## Ingestion en masse via l'API Connecteur
+
+Les modules CMS envoient des charges utiles en masse via l'API Connecteur :
+
+```bash
+curl -X POST https://your-app.com/api/connector/sync/full \
+  -H "Authorization: Bearer ss_connector_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "indexSlug": "products",
+    "documents": [
+      { "id": "1", "title": "Product A", "price": 29.99, ... },
+      { "id": "2", "title": "Product B", "price": 49.99, ... }
+    ]
+  }'
+```
+
+La taille de lot recommandée est de 200 documents. Des lots plus importants augmentent la latence d'import Typesense et
+risquent un timeout sur les connexions lentes. Les modules CMS utilisent une taille de lot configurable (par défaut : 200).
+
+## Gestion des échecs partiels
+
+Le worker marque les lignes individuelles comme succès ou échec de manière indépendante. Si un lot échoue partiellement :
+
+1. Les documents réussis sont validés via `markIngestRowsSuccess()`
+2. Les documents ayant échoué sont marqués avec `markIngestRowsFailure()` et une nouvelle tentative est planifiée
+3. La nouvelle tentative utilise un backoff exponentiel : 1s → 2s → 4s → 8s → abandon après un nombre maximum configurable de tentatives
+
+Les lignes ayant définitivement échoué apparaissent dans le panneau Import Jobs avec leurs messages d'erreur.
+
+## Réindexation (sans interruption)
+
+La réindexation est nécessaire lorsque le schéma de collection Typesense change — par exemple, lors de l'ajout d'un nouveau champ de facette.
+AACsearch utilise une stratégie d'**alias-swap** pour éviter les interruptions de recherche pendant la réindexation.
+
+### Fonctionnement
+
+```
+État actuel :
+  alias: org123_products  →  org123_products_v1  (sert le trafic)
+
+Pendant la réindexation :
+  1. Créer : org123_products_v2 (nouveau schéma)
+  2. Importer en masse tous les documents dans v2
+  3. Vérifier que v2 est sain (le nombre de documents correspond)
+  4. Basculer l'alias de manière atomique : org123_products  →  org123_products_v2
+  5. Conserver v1 jusqu'à la prochaine réindexation (option de rollback)
+
+Après la réindexation :
+  alias: org123_products  →  org123_products_v2  (sert le trafic)
+  org123_products_v1  reste (mais ne sert plus)
+```
+
+### Déclencher la réindexation via le tableau de bord
+
+Naviguez vers **Search** → **Indexes** → votre index → **Reindex**.
+
+### Déclencher la réindexation via oRPC
+
+```typescript
+const job = await orpc.search.reindex.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+// job.status: "queued" | "running" | "succeeded" | "failed"
+```
+
+### Quand réindexer
+
+| Scénario                          | Action                                       |
+| --------------------------------- | -------------------------------------------- |
+| Ajout d'un nouveau champ de facette | Réindexation requise                        |
+| Changement du type de champ       | Réindexation requise                         |
+| Ajout d'un nouveau champ indexable | Réindexation requise                        |
+| Mise à jour du contenu du document uniquement | Pas de réindexation — faites un upsert du document |
+| Changement des règles de synonymes | Pas de réindexation requise                 |
+
+### Réindexation et quota
+
+La réindexation compte les documents indexés contre votre quota de plan. Pour les grands catalogues sur le plan Free
+(10 000 unités), la réindexation consommera le quota mensuel. Planifiez en conséquence.
+
+## Réessayer les lots ayant échoué
+
+Les lots d'ingestion ayant échoué peuvent être réessayés depuis le tableau de bord sous **Import Jobs** → sélectionner le job échoué → **Retry**,
+ou via oRPC :
+
+```typescript
+await orpc.search.retryFailedBatches.call({
+	organizationId: "org_...",
+	indexSlug: "products",
+});
+```
+
+Cela remet en file d'attente toutes les lignes en statut `failed` pour l'index.

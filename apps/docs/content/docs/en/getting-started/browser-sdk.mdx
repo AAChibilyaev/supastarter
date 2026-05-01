@@ -1,0 +1,208 @@
+---
+title: Browser SDK
+description: Use the @repo/search-client browser SDK to search from a browser or Node.js application.
+---
+
+The AACsearch browser SDK (`@repo/search-client`) provides a typed interface for calling the
+public search endpoint from browsers and Node.js applications.
+
+**Important:** The SDK only accepts `ss_search_*` and `ss_scoped_*` keys — never admin or connector keys.
+The admin Typesense key never leaves the server.
+
+## Installation
+
+The SDK is a workspace package. In external projects (when published):
+
+```bash
+npm install @aacsearch/search-client
+# or: yarn add @aacsearch/search-client
+```
+
+Within the monorepo:
+
+```json
+{
+	"dependencies": {
+		"@repo/search-client": "workspace:*"
+	}
+}
+```
+
+## Initialize the client
+
+```typescript
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+	baseUrl: "https://your-app.com", // your AACsearch endpoint
+	apiKey: "ss_search_your_key", // search-only key
+	indexSlug: "products", // default index
+});
+```
+
+## Basic search
+
+```typescript
+const results = await client.search({
+	q: "wireless headphones",
+	queryBy: "title,description,brand",
+	page: 1,
+	perPage: 20,
+});
+
+// results.hits: array of matching documents
+// results.found: total count
+// results.facetCounts: facet values if requested
+```
+
+## Search with filters
+
+```typescript
+const results = await client.search({
+	q: "headphones",
+	queryBy: "title,brand",
+	filterBy: "availability:=in_stock && price:<200",
+	sortBy: "price:asc",
+	facetBy: "brand,categories",
+	page: 1,
+	perPage: 20,
+});
+```
+
+Filter syntax follows [Typesense filter syntax](https://typesense.org/docs/latest/api/search.html#filter-parameters).
+
+## Multi-search
+
+Multi-search executes multiple queries in a single HTTP round-trip. Useful for autocomplete
+(one query per suggestion type) and federated search across different result sets.
+
+```typescript
+const [productResults, categoryResults] = await client.multiSearch([
+	{
+		indexSlug: "products",
+		q: "shoes",
+		queryBy: "title,brand",
+		perPage: 5,
+	},
+	{
+		indexSlug: "categories",
+		q: "shoes",
+		queryBy: "name",
+		perPage: 3,
+	},
+]);
+```
+
+## Using scoped tokens
+
+For per-user restrictions (e.g., limiting results to in-stock products only), generate a scoped
+token server-side and pass it to the client:
+
+```typescript
+// Server: generate scoped token (e.g., in a Next.js Server Action or API route)
+const scopedToken = await orpc.search.createScopedToken.call({
+	organizationId: session.organizationId,
+	indexSlug: "products",
+	scopedFilter: "availability:=in_stock",
+	expiresInSeconds: 3600,
+});
+
+// Client: use the scoped token as the API key
+const client = new AacSearchClient({
+	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	apiKey: scopedToken,
+	indexSlug: "products",
+});
+```
+
+The scoped filter is AND-combined with any filters the client adds. It cannot be removed by the caller.
+
+## Autocomplete pattern
+
+For a responsive search-as-you-type experience, debounce queries and use multi-search:
+
+```typescript
+import { useDeferredValue, useEffect, useState } from "react";
+
+function useSearch(query: string) {
+	const deferredQuery = useDeferredValue(query);
+	const [results, setResults] = useState(null);
+
+	useEffect(() => {
+		if (!deferredQuery.trim()) return;
+
+		client
+			.search({
+				q: deferredQuery,
+				queryBy: "title,sku",
+				perPage: 5,
+				highlightFields: "title",
+			})
+			.then(setResults);
+	}, [deferredQuery]);
+
+	return results;
+}
+```
+
+## Error handling
+
+The SDK throws typed errors from an error catalog:
+
+```typescript
+import { AacSearchError } from "@repo/search-client";
+
+try {
+	const results = await client.search({ q: "test" });
+} catch (err) {
+	if (err instanceof AacSearchError) {
+		switch (err.code) {
+			case "unauthorized": // invalid or expired key
+			case "quota_exceeded": // plan limit reached
+			case "rate_limit": // too many requests
+			case "search_failed": // upstream Typesense error
+			case "index_not_found": // wrong indexSlug
+		}
+	}
+}
+```
+
+Raw Typesense error messages are never forwarded to clients — they are mapped to typed codes server-side.
+
+## Framework integrations
+
+### Next.js App Router
+
+```typescript
+// app/search/page.tsx — Server Component
+import { AacSearchClient } from "@repo/search-client";
+
+const client = new AacSearchClient({
+  baseUrl: process.env.NEXT_PUBLIC_API_URL!,
+  apiKey: process.env.SEARCH_API_KEY!,  // search-only key from env
+  indexSlug: "products",
+});
+
+export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
+  const results = await client.search({ q: searchParams.q ?? "" });
+  return <ResultsList results={results} />;
+}
+```
+
+### React client component
+
+```typescript
+"use client";
+import { useQuery } from "@tanstack/react-query";
+
+function SearchResults({ query }: { query: string }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["search", query],
+    queryFn: () => client.search({ q: query, perPage: 20 }),
+    enabled: query.length > 1,
+  });
+
+  if (isLoading) return <Skeleton />;
+  return <ResultsList results={data} />;
+}
+```

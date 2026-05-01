@@ -1,0 +1,13 @@
+{
+	"title": "Начало работы",
+	"pages": [
+		"overview",
+		"local-development",
+		"create-first-index",
+		"api-keys",
+		"ingest-and-reindex",
+		"browser-sdk",
+		"widget-installation",
+		"connector-onboarding"
+	]
+}

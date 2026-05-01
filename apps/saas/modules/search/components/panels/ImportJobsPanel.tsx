@@ -12,7 +12,7 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	CheckCircle2,
 	ChevronDown,
@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
 
 import { ingestJobStatusBadge } from "../../lib/job-status";
 import { KanbanBoard } from "../blocks/KanbanBoard";
@@ -93,6 +95,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 	const t = useTranslations();
 	const [view, setView] = useState<ViewMode>("timeline");
 	const [retryOpen, setRetryOpen] = useState(false);
+	const queryClient = useQueryClient();
 
 	const { data, isLoading } = useQuery(
 		orpc.search.importJobs.queryOptions({
@@ -100,6 +103,19 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			enabled: !!organizationId,
 		}),
 	);
+
+	const retryMutation = useMutation({
+		...orpc.search.retryFailedBatches.mutationOptions(),
+		onSuccess: (result) => {
+			toastSuccess(`${result.retriedCount} batch(es) queued for retry.`);
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.importJobs.key(),
+			});
+		},
+		onError: () => {
+			toastError("Failed to retry batches. Please try again.");
+		},
+	});
 
 	const jobs = data?.jobs ?? [];
 	const summary = data?.summary;
@@ -280,11 +296,20 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 								);
 							})}
 							<div className="gap-2 pt-1 flex">
-								<Button variant="primary" size="sm">
+								<Button
+									variant="primary"
+									size="sm"
+									loading={retryMutation.isPending}
+									disabled={retryMutation.isPending || !slug}
+									onClick={() => {
+										if (!slug) return;
+										retryMutation.mutate({ organizationId, slug });
+									}}
+								>
 									<RotateCw className="size-3.5" />
 									{t("search.importJobs.retryAll")}
 								</Button>
-								<Button variant="ghost" size="sm">
+								<Button variant="ghost" size="sm" disabled>
 									{t("search.importJobs.clearQueue")}
 								</Button>
 							</div>

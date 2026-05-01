@@ -1,1410 +1,1547 @@
 {
-	"admin": {
-		"menu": {
-			"organizations": "Organizations",
-			"users": "Users"
-		},
-		"organizations": {
-			"backToList": "Back to organizations",
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this organization? This action cannot be undone.",
-				"title": "Delete organization"
-			},
-			"create": "Create",
-			"delete": "Delete",
-			"deleteOrganization": {
-				"deleted": "Organization has been deleted successfully!",
-				"deleting": "Deleting organization...",
-				"notDeleted": "Organization could not be deleted. Please try again."
-			},
-			"edit": "Edit",
-			"form": {
-				"createTitle": "Create an organization",
-				"name": "Organization name",
-				"notifications": {
-					"error": "Could not save the organization. Please try again later.",
-					"success": "Organization has been saved."
-				},
-				"save": "Save",
-				"updateTitle": "Edit organization"
-			},
-			"loading": "Loading organizations...",
-			"membersCount": "{count} {count, plural, one {member} other {members}}",
-			"search": "Search for an organization...",
-			"title": "Manage organizations"
-		},
-		"title": "Administration",
-		"users": {
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this user? This action cannot be undone.",
-				"title": "Delete user"
-			},
-			"delete": "Delete",
-			"deleteUser": {
-				"deleted": "User has been deleted successfully!",
-				"deleting": "Deleting user...",
-				"notDeleted": "User could not be deleted. Please try again."
-			},
-			"emailVerified": {
-				"verified": "Email verified",
-				"waiting": "Email waiting for verification"
-			},
-			"impersonate": "Impersonate",
-			"impersonation": {
-				"impersonating": "Impersonating as {name}..."
-			},
-			"loading": "Loading users...",
-			"resendVerificationMail": {
-				"error": "Could not resend verification mail. Please try again.",
-				"submitting": "Resending verification mail...",
-				"success": "Verification mail has been sent.",
-				"title": "Resend verification mail"
-			},
-			"search": "Search for name or email...",
-			"title": "Manage users",
-			"assignAdminRole": "Assign admin role",
-			"removeAdminRole": "Remove admin role"
-		},
-		"description": "Manage your application.",
-		"config": {
-			"title": "Конфигурация",
-			"loadError": "Не удалось загрузить данные конфигурации.",
-			"application": "Приложение",
-			"appName": "Имя приложения",
-			"nodeVersion": "Версия Node.js",
-			"runtimeEnv": "Среда",
-			"platform": "Платформа",
-			"uptime": "Время работы",
-			"typesenseHealth": "Состояние поискового движка",
-			"healthy": "Здоров",
-			"unhealthy": "Не здоров",
-			"version": "Версия",
-			"databaseStats": "Статистика базы данных",
-			"users": "Пользователи",
-			"organizations": "Организации",
-			"searchIndexes": "Индексы поиска",
-			"apiKeys": "API-ключи",
-			"usageEvents": "События использования",
-			"statsError": "Не удалось получить статистику.",
-			"services": "Внешние сервисы",
-			"configured": "Настроен",
-			"notConfigured": "Не настроен"
-		},
-		"integrations": {
-			"title": "Интеграции",
-			"loadError": "Не удалось проверить статус интеграции.",
-			"database": "База данных",
-			"typesense": "AACsearch Engine",
-			"mail": "Почта",
-			"payments": "Платежи",
-			"storage": "Хранилище",
-			"walletProvider": "Провайдер кошелька",
-			"configured": "Настроен",
-			"notConfigured": "Не настроен",
-			"endpoint": "Endpoint"
-		},
-		"jobs": {
-			"title": "Задачи",
-			"loadError": "Не удалось загрузить статус задач.",
-			"backgroundJobs": "Фоновые задачи",
-			"ready": "Готов",
-			"missingSecret": "Отсутствует секрет",
-			"recentSyncActivity": "Недавняя активность синхронизации",
-			"totalJobs": "Всего задач",
-			"noSyncActivity": "Пока нет активности синхронизации."
-		}
-	},
-	"app": {
-		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Open navigation",
-			"organizationSettings": "Organization settings",
-			"search": "Search",
-			"start": "Start"
-		},
-		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
-		},
-		"notifications": {
-			"title": "Notifications",
-			"empty": "No notifications yet.",
-			"markAllRead": "Mark all as read",
-			"fallbackTitle": "Notification",
-			"aria": {
-				"open": "Open notifications"
-			}
-		}
-	},
-	"auth": {
-		"errors": {
-			"invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
-			"unknown": "Something went wrong. Please try again.",
-			"userNotFound": "This user does not exists",
-			"failedToCreateUser": "Could not create user. Please try again.",
-			"failedToCreateSession": "Could not create a session. Please try again.",
-			"failedToUpdateUser": "Could not update user. Please try again.",
-			"failedToGetSession": "Could not get the session.",
-			"invalidPassword": "The entered password is incorrect.",
-			"invalidEmail": "The entered email is invalid.",
-			"invalidToken": "The token you entered is invalid or has expired.",
-			"credentialAccountNotFound": "Account not found.",
-			"emailCanNotBeUpdated": "Email could not be updated. Please try again.",
-			"emailNotVerified": "Please verify your email first before logging in.",
-			"failedToGetUserInfo": "Could not load user information.",
-			"idTokenNotSupported": "ID token is not supported.",
-			"passwordTooLong": "Password is too long.",
-			"passwordTooShort": "Password is too short.",
-			"providerNotFound": "This provider is not suppported.",
-			"socialAccountAlreadyLinked": "This account is already linked to a user.",
-			"userEmailNotFound": "Email not found.",
-			"userAlreadyExists": "This user already exists.",
-			"userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
-			"invalidInvitation": "The invitation is invalid or expired.",
-			"sessionExpired": "The session has expired.",
-			"failedToUnlinkLastAccount": "Failed to unlink account",
-			"accountNotFound": "Account not found"
-		},
-		"forgotPassword": {
-			"backToSignin": "Back to signin",
-			"email": "Email",
-			"hints": {
-				"linkNotSent": {
-					"message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
-					"title": "Link not sent"
-				},
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"message": "Please enter your email address and we will send you a link to reset your password.",
-			"submit": "Send link",
-			"title": "Forgot your password?"
-		},
-		"login": {
-			"continueWith": "Or continue with",
-			"createAnAccount": "Create an account",
-			"dontHaveAnAccount": "Don't have an account yet?",
-			"forgotPassword": "Forgot password?",
-			"hints": {
-				"invalidCredentials": "The email or password you entered are invalid. Please try again.",
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"loginWithPasskey": "Login with passkey",
-			"modes": {
-				"magicLink": "Magic link",
-				"password": "Password"
-			},
-			"submit": "Sign in",
-			"subtitle": "Please enter your credentials to sign in.",
-			"title": "Welcome back",
-			"sendMagicLink": "Send magic link"
-		},
-		"resetPassword": {
-			"backToSignin": "Back to signin",
-			"hints": {
-				"error": "We are sorry, but we were unable to reset your password. Please try again.",
-				"success": "Your password has been reset successfully."
-			},
-			"message": "Please enter a new password.",
-			"newPassword": "New password",
-			"submit": "Reset password",
-			"title": "Reset your password"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Already have an account?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
-				"verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
-			},
-			"message": "We are happy that you want to join us. Please fill in the form below to create your account.",
-			"name": "Name",
-			"password": "Password",
-			"signIn": "Sign in",
-			"submit": "Create account",
-			"title": "Create an account"
-		},
-		"verify": {
-			"title": "Verify your account",
-			"code": "One-time password",
-			"submit": "Verify",
-			"backToSignin": "Back to login",
-			"message": "Enter the one-time password from your authenticator app to continue."
-		}
-	},
-	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan."
-	},
-	"documentation": {
-		"title": "Documentation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
-		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
-		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
-		},
-		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
-		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account"
-	},
-	"organizations": {
-		"createForm": {
-			"name": "Organization name",
-			"notifications": {
-				"error": "We are sorry, but we were unable to create your organization. Please try again later.",
-				"success": "Your organization has been created. You can now invite members."
-			},
-			"submit": "Create organization",
-			"subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
-			"title": "Create an organization"
-		},
-		"invitationAlert": {
-			"description": "You need to sign in or create an account to join the organization.",
-			"title": "You have been invited to join an organization."
-		},
-		"invitationModal": {
-			"accept": "Accept",
-			"decline": "Decline",
-			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization",
-			"error": "Произошла ошибка. Пожалуйста, попробуйте ещё раз."
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Create new organization",
-			"organizations": "Organizations",
-			"personalAccount": "Personal account"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Create new organization",
-			"title": "Your organizations"
-		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Member",
-			"owner": "Owner"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Organization name"
-			},
-			"deleteOrganization": {
-				"confirmation": "Are you sure you want to delete your organization?",
-				"description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
-				"submit": "Delete organization",
-				"title": "Delete organization"
-			},
-			"logo": {
-				"description": "Upload a logo for your organization.",
-				"title": "Organization logo"
-			},
-			"members": {
-				"activeMembers": "Active members",
-				"description": "See all active members and the pending invites of your organization.",
-				"invitations": {
-					"empty": "You have not invited any members yet.",
-					"expiresAt": "Expires at {date}",
-					"invitationStatus": {
-						"accepted": "Accepted",
-						"canceled": "Canceled",
-						"pending": "Pending",
-						"rejected": "Rejected"
-					},
-					"revoke": "Revoke invitation",
-					"resend": "Resend invitation"
-				},
-				"inviteMember": {
-					"description": "To invite a new member, send them an invitation.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "We were unable to invite the member. Please try again later.",
-							"title": "Could not invite member"
-						},
-						"success": {
-							"description": "The member has been invited.",
-							"title": "Member invited"
-						}
-					},
-					"role": "Role",
-					"submit": "Invite",
-					"title": "Invite member"
-				},
-				"leaveOrganization": "Leave organization",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Could not remove the member from your organization. Please try again."
-						},
-						"loading": {
-							"description": "Removing member from organization..."
-						},
-						"success": {
-							"description": "The member has been successfully removed from your organization."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "The invitation could not be revoked. Please try again later."
-						},
-						"loading": {
-							"description": "Revoking invitation..."
-						},
-						"success": {
-							"description": "The invitation has been revoked."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Could not update organization membership. Please try again."
-						},
-						"loading": {
-							"description": "Updating membership..."
-						},
-						"success": {
-							"description": "Membership was updated successfully"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Resending invitation..."
-						},
-						"success": {
-							"description": "Invitation sent"
-						},
-						"error": {
-							"description": "Could not sent invitation. Please try again."
-						}
-					}
-				},
-				"pendingInvitations": "Pending invitations",
-				"removeMember": "Remove member",
-				"title": "Members"
-			},
-			"notifications": {
-				"organizationDeleted": "Your organization has been deleted.",
-				"organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
-				"organizationNameUpdated": "Your organization name has been updated.",
-				"organizationNotDeleted": "We were unable to delete your organization. Please try again later."
-			},
-			"subtitle": "Manage the settings of the organization.",
-			"title": "Organization",
-			"dangerZone": {
-				"title": "Danger zone"
-			}
-		},
-		"start": {
-			"subtitle": "Welcome to the start page of this organization!"
-		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
-				},
-				"title": "Your avatar"
-			},
-			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
-				},
-				"title": "Your email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
-				},
-				"title": "Your name"
-			},
-			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
-				},
-				"submit": "Delete account",
-				"title": "Delete account"
-			},
-			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
-				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
-				},
-				"title": "Your language"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-					"title": "Active sessions",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session revoked"
-						}
-					},
-					"currentSession": "Current session"
-				},
-				"changePassword": {
-					"currentPassword": "Current password",
-					"newPassword": "New password",
-					"notifications": {
-						"error": "Could not update password",
-						"success": "Password was updated successfully"
-					},
-					"title": "Your password"
-				},
-				"connectedAccounts": {
-					"connect": "Connect",
-					"connected": "Connected",
-					"disconnect": "Disconnect",
-					"title": "Connected accounts"
-				},
-				"passkeys": {
-					"addPasskey": "Add passkey",
-					"description": "Use passkeys as a secure alternative to passwords.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Could not add passkey"
-							},
-							"success": {
-								"title": "Passkey added"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Could not delete passkey"
-							},
-							"loading": {
-								"title": "Deleting passkey..."
-							},
-							"success": {
-								"title": "Passkey deleted"
-							}
-						}
-					},
-					"title": "Passkeys"
-				},
-				"setPassword": {
-					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
-					"notifications": {
-						"error": "Could not send link to set password. Please try again.",
-						"success": "Check your inbox for the link to set your password."
-					},
-					"submit": "Set password",
-					"title": "Your password"
-				},
-				"title": "Security",
-				"twoFactor": {
-					"title": "Two-factor authentication",
-					"description": "Add an extra layer of security to your account.",
-					"dialog": {
-						"password": {
-							"title": "Verify with password",
-							"description": "Please verify your account by entering your password:",
-							"label": "Your password:"
-						},
-						"totpUrl": {
-							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-							"code": "Enter 6-digit code to verify the setup:",
-							"title": "Enable two-factor authentication"
-						}
-					},
-					"enable": "Enable two-factor authentication",
-					"notifications": {
-						"verify": {
-							"success": {
-								"title": "Two-factor authentication has been enabled successfully."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Could not verify your account with the provided password. Please try again."
-							}
-						},
-						"disable": {
-							"success": {
-								"title": "Two-factor authentication has been disabled successfully."
-							}
-						}
-					},
-					"disable": "Disable two-factor authentication",
-					"enabled": "You have two-factor authentication enabled for your account."
-				}
-			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Manage billing",
-				"notifications": {
-					"error": {
-						"title": "Could not create a customer portal session. Please try again."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
-				},
-				"title": "Your plan"
-			},
-			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
-			},
-			"title": "Billing"
-		},
-		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
-			"groups": {
-				"general": {
-					"title": "General"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "App updates"
-				}
-			},
-			"columns": {
-				"type": "Notification",
-				"inApp": "In-app",
-				"email": "Email"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Billing",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"notifications": "Notifications",
-				"security": "Security",
-				"title": "Account"
-			},
-			"organization": {
-				"billing": "Billing",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
-			}
-		},
-		"save": "Save"
-	},
-	"start": {
-		"subtitle": "See the latest stats of your awesome business.",
-		"welcome": "Welcome {name}!"
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
-		},
-		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
-		}
-	},
-	"checkoutReturn": {
-		"title": "Processing your purchase",
-		"description": "Please wait while we confirm your payment.",
-		"loading": "Confirming your purchase, please wait..."
-	},
-	"search": {
-		"title": "Поиск",
-		"subtitle": "Управляйте поисковыми индексами, API-ключами и использованием для этой организации.",
-		"loading": "Загрузка…",
-		"noIndexes": "Поисковых индексов пока нет. Создайте первый, чтобы начать.",
-		"selectIndex": "Выберите индекс, чтобы управлять его API-ключами.",
-		"fields": {
-			"displayName": "Название",
-			"slug": "Slug",
-			"version": "Версия",
-			"apiKeys": "API-ключи",
-			"defaultSortingField": "Поле сортировки по умолчанию",
-			"schema": "Поля (JSON)"
-		},
-		"createIndex": {
-			"trigger": "Создать индекс",
-			"title": "Создание поискового индекса",
-			"description": "Создаёт поисковую коллекцию и алиас, ограниченные этой организацией.",
-			"slugHelp": "Строчные латинские буквы, цифры и дефисы. Используется в API и как алиас коллекции.",
-			"schemaHelp": "JSON-массив определений полей. Поле 'tenant_id' добавляется автоматически.",
-			"submit": "Создать",
-			"success": "Индекс создан.",
-			"error": "Не удалось создать индекс. Попробуйте ещё раз.",
-			"startFromTemplate": "Начать с шаблона:",
-			"autoFromName": "авто",
-			"builder": "Визуальный конструктор",
-			"json": "JSON",
-			"fieldsTitle": "Поля схемы",
-			"fieldsCount": "Полей настроено: {count}",
-			"addField": "Добавить поле",
-			"removeField": "Удалить поле",
-			"moveUp": "Переместить вверх",
-			"moveDown": "Переместить вниз",
-			"errorsCount": "{count, plural, one {# поле с ошибкой} few {# поля с ошибками} many {# полей с ошибками} other {# полей с ошибками}}",
-			"noFields": "Полей пока нет — добавьте поле или выберите шаблон.",
-			"noSort": "Без сортировки по умолчанию",
-			"noSortableHint": "Сначала включите Сортировку у числового поля",
-			"tenantHint": "tenant_id добавляется автоматически для изоляции данных.",
-			"templates": {
-				"products": "Товары",
-				"articles": "Статьи",
-				"users": "Пользователи",
-				"blank": "Пустой"
-			},
-			"typeGroups": {
-				"text": "Текст",
-				"number": "Число",
-				"boolean": "Булево",
-				"advanced": "Расширенные"
-			},
-			"toggles": {
-				"facet": "Фасет",
-				"optional": "Необязательное",
-				"sort": "Сортировка"
-			},
-			"tooltips": {
-				"displayName": "Понятное название, отображаемое в дашборде. Не влияет на API.",
-				"slug": "Используется в путях API и как алиас поисковой коллекции. Только строчные буквы, цифры и дефисы.",
-				"fields": "Опишите столбцы коллекции. Поля можно сделать фасетными, сортируемыми или необязательными.",
-				"facet": "Разрешить фильтрацию и группировку по этому полю (категории, теги, бренд и т. п.).",
-				"optional": "Поле может отсутствовать в документе. Обязательные поля должны быть в каждом документе.",
-				"sort": "Разрешить сортировку по этому полю (числовые поля сортируются всегда).",
-				"defaultSort": "Поле, по которому сортируются результаты, если порядок не задан явно. Должно быть числовым.",
-				"json": "Редактировать схему в чистом JSON. При возврате к визуальному конструктору изменения проверяются и синхронизируются.",
-				"idField": "Рекомендуемый уникальный идентификатор. AACsearch использует его как первичный ключ для upsert."
-			},
-			"errors": {
-				"duplicateName": "Имя поля должно быть уникальным",
-				"invalidJson": "Некорректный JSON",
-				"empty": "Добавьте хотя бы одно поле",
-				"fieldsInvalid": "Исправьте подсвеченные поля"
-			}
-		},
-		"apiKeys": {
-			"title": "API-ключи",
-			"description": "Ключи поиска проверяются нашим бэкендом перед выполнением запросов. Административные учётные данные никогда не покидают сервер.",
-			"create": "Создать ключ",
-			"createDescription": "Сам ключ показывается только один раз. Сохраните его в надёжном месте.",
-			"name": "Название",
-			"generate": "Сгенерировать ключ",
-			"created": "API-ключ создан.",
-			"revealOnce": "Скопируйте ключ сейчас. Снова показать его будет нельзя.",
-			"done": "Готово",
-			"empty": "API-ключей пока нет.",
-			"tableName": "Название",
-			"tablePrefix": "Префикс",
-			"tableScopes": "Области",
-			"tableStatus": "Статус",
-			"tableActions": "Действия",
-			"statusActive": "Активный",
-			"statusRevoked": "Отозван",
-			"revoke": "Отозвать",
-			"revokeConfirmTitle": "Отозвать API-ключ",
-			"revokeConfirmMessage": "Вы уверены, что хотите отозвать «{name}»? Клиенты, использующие этот ключ, сразу перестанут работать.",
-			"revoked": "API-ключ отозван.",
-			"error": "Не удалось выполнить операцию.",
-			"emptyDescription": "Создайте первый API-ключ, чтобы начать интеграцию поиска в ваше приложение."
-		},
-		"usage": {
-			"title": "Использование",
-			"windowDays": "Последние {days} дней",
-			"searches": "Поисков",
-			"ingests": "Документов проиндексировано",
-			"documents": "Проиндексировано документов",
-			"ofLimit": "от месячного лимита",
-			"loadError": "Не удалось загрузить данные об использовании."
-		},
-		"widget": {
-			"tab": "Виджет",
-			"title": "Виджет поиска",
-			"description": "Вставьте виджет поиска на витрину одним тегом script.",
-			"apiKeyLabel": "API ключ",
-			"apiKeyHint": "Вставьте search-only API ключ (ss_search_...) или создайте новый во вкладке API Keys.",
-			"snippet": "Код виджета",
-			"copySnippet": "Копировать код",
-			"copied": "Код виджета скопирован!",
-			"copyFailed": "Не удалось скопировать код.",
-			"installInstructions": "Инструкция по установке",
-			"step1": "Добавьте контейнер: <div id=\"aac-search\"></div>",
-			"step2": "Вставьте код перед закрывающим тегом </body>.",
-			"step3": "Виджет инициализируется автоматически."
-		},
-		"projects": {
-			"title": "Проекты",
-			"apiKeys": "API ключи",
-			"loadError": "Не удалось загрузить проекты."
-		},
-		"overview": {
-			"title": "Обзор",
-			"subtitle": "За последние {days} дней",
-			"totalSearches": "Всего поисков",
-			"searchesTrend": "Тренд поиска",
-			"documentsIndexed": "Проиндексировано документов",
-			"quotaUsage": "Использование квоты",
-			"failedSyncJobs": "Ошибки синхронизации",
-			"searchesOverTime": "Поисков по дням",
-			"topQueries": "Популярные запросы",
-			"activityFeed": "Недавняя активность",
-			"connectorStatus": "Статус коннектора",
-			"period24h": "24ч",
-			"period7d": "7 дней",
-			"period30d": "30 дней",
-			"quotaWarning": "Вы использовали {percent}% квоты поиска. Обновите тариф, чтобы избежать ограничений.",
-			"quotaExceeded": "Вы превысили квоту поиска ({percent}%). Некоторые функции могут быть ограничены.",
-			"connectorOnline": "Все коннекторы онлайн",
-			"connectorOffline": "Коннектор отключён",
-			"connectorUnknown": "Коннектор не настроен",
-			"noData": "Нет данных",
-			"noDataDescription": "Данные появятся после того, как ваши поисковые индексы начнут получать запросы.",
-			"refresh": "Обновить",
-			"activity": {
-				"indexCreated": "Индекс \"{name}\" создан",
-				"keyRevoked": "{count, plural, one {# API ключ} few {# API ключа} many {# API ключей} other {# API ключей}} для \"{name}\"",
-				"syncFailed": "Синхронизация для индекса \"{name}\" не удалась"
-			},
-			"indexVersion": "Версия индекса",
-			"apiKeys": "API ключи",
-			"searches": "Поисков",
-			"indexes": "Индексы",
-			"documents": "Документы",
-			"plan": "Тариф",
-			"quickActions": "Быстрые действия",
-			"manageIndexes": "Управление индексами",
-			"manageIndexesDesc": "Создавайте и управляйте индексами поиска",
-			"viewAnalytics": "Аналитика",
-			"viewAnalyticsDesc": "Отслеживайте использование поиска и запросы",
-			"setupConnector": "Подключить коннектор",
-			"setupConnectorDesc": "Подключите PrestaShop или Bitrix модуль",
-			"managePlan": "Управление тарифом",
-			"graceUntil": "Только чтение до {date}",
-			"active": "Активен",
-			"indexedProducts": "Проиндексировано товаров",
-			"apiKeysCount": "API ключей",
-			"lastHeartbeat": "Последний heartbeat",
-			"noHeartbeat": "Никогда",
-			"connectorToken": "Токен коннектора",
-			"upgrade": "Обновить тариф",
-			"createIndex": "Создать индекс",
-			"addConnector": "Добавить коннектор",
-			"viewAll": "Все запросы",
-			"noSearchesYet": "Вы ещё не отправляли поисковых запросов",
-			"emptyStateDescription": "Начните с создания вашего первого поискового индекса.",
-			"getStarted": "Начать"
-		},
-		"gettingStarted": {
-			"title": "Начало работы",
-			"welcome": "Начните работу с поиском",
-			"subtitle": "Выполните шаги ниже, чтобы начать использовать поиск.",
-			"allDone": "Все шаги выполнены!",
-			"allDoneTitle": "Всё готово!",
-			"allDoneDesc": "Все шаги настройки выполнены. Теперь вы можете использовать поиск.",
-			"progress": "Прогресс настройки",
-			"completed": "завершено",
-			"step1Label": "Создать поисковый индекс",
-			"step1Desc": "Создайте свой первый поисковый индекс для хранения и организации данных.",
-			"step1Action": "Создать индекс",
-			"step2Label": "Подключить источник",
-			"step2Desc": "Создайте токен коннектора для подключения вашего источника данных.",
-			"step2Action": "Подключить источник",
-			"step3Label": "Запустить синхронизацию",
-			"step3Desc": "Синхронизируйте данные из вашей CMS или других источников.",
-			"step3Action": "Синхронизировать",
-			"step4Label": "Протестировать поиск",
-			"step4Desc": "Выполните тестовый поиск для проверки настройки.",
-			"step4Action": "Тестовый поиск",
-			"step5Label": "Создать API-ключ",
-			"step5Desc": "Создайте API-ключ для разрешения поисковых запросов из вашего приложения.",
-			"step5Action": "Создать ключ",
-			"step6Label": "Встроить виджет поиска",
-			"step6Desc": "Встройте виджет поиска на ваш сайт.",
-			"step6Action": "Встроить виджет",
-			"done": "Готово",
-			"pending": "Ожидает",
-			"inProgress": "В процессе",
-			"viewAnalytics": "Аналитика",
-			"planCtaTitle": "Нужно больше возможностей?",
-			"planCtaDesc": "Обновите тариф для более высоких лимитов и функций.",
-			"managePlan": "Управление тарифом",
-			"skipToDashboard": "Перейти к панели"
-		},
-		"checklist": {
-			"title": "Чеклист настройки",
-			"steps": {
-				"createIndex": "Создать индекс",
-				"createIndexDone": "Индекс создан",
-				"generateApiKey": "Сгенерировать API ключ",
-				"generateApiKeyDone": "API ключ сгенерирован",
-				"installCmsModule": "Установить CMS модуль",
-				"installCmsModuleDone": "CMS модуль установлен",
-				"runFullSync": "Запустить полную синхронизацию",
-				"runFullSyncDone": "Товары синхронизированы",
-				"testSearch": "Протестировать поиск",
-				"testSearchDone": "Поиск протестирован",
-				"enableWidget": "Включить виджет",
-				"enableWidgetDone": "Виджет включён"
-			},
-			"stepDocs": "Документация",
-			"allDone": "Все проверки пройдены!"
-		},
-		"analytics": {
-			"tab": "Аналитика",
-			"title": "Аналитика поиска",
-			"description": "Отслеживайте использование поиска, популярные запросы, пустые результаты и тренды.",
-			"totalSearches": "Всего поисков",
-			"totalSessions": "Сессий",
-			"ctr": "CTR",
-			"zeroResults": "Пустых результатов",
-			"zeroResultRate": "Доля пустых результатов",
-			"comingSoon": "Скоро",
-			"searchesOverTime": "Поисков по дням",
-			"topQueries": "Популярные запросы",
-			"topClickedProducts": "Часто кликаемые товары",
-			"queryColumn": "Запрос",
-			"countColumn": "Кол-во",
-			"productColumn": "Товар",
-			"clicksColumn": "Клики",
-			"rankColumn": "#",
-			"percentColumn": "% от общего",
-			"period24h": "24ч",
-			"period7d": "7 дней",
-			"period30d": "30 дней",
-			"documentsIndexed": "Проиндексировано документов",
-			"failedSyncJobs": "Ошибки синхронизации",
-			"failed": "ошибок",
-			"retentionBanner": "Ваш тариф {plan} хранит данные аналитики {days} дней. Выберите меньший период для просмотра данных.",
-			"noData": "Нет данных за этот период.",
-			"noDataDescription": "Данные аналитики появятся после получения запросов поисковыми индексами."
-		},
-		"importJobs": {
-			"tab": "Импорт",
-			"title": "Задачи импорта",
-			"description": "Отслеживание синхронизации документов",
-			"pending": "В очереди",
-			"processing": "Выполняется",
-			"completed": "Завершено",
-			"failed": "Ошибок",
-			"tableJobId": "ID задачи",
-			"tableType": "Тип",
-			"tableStatus": "Статус",
-			"tableProgress": "Прогресс",
-			"tableErrors": "Ошибки",
-			"tableTime": "Время",
-			"empty": "Нет активности импорта за последние 7 дней.",
-			"emptyDescription": "Задачи импорта появляются здесь при синхронизации данных из вашей CMS.",
-			"viewTimeline": "Хронология",
-			"viewTable": "Таблица",
-			"successRate": "Успешность",
-			"indexed": "Проиндексировано",
-			"retryQueue": "Очередь повторов",
-			"retryAll": "Повторить все",
-			"clearQueue": "Очистить",
-			"nextRetry": "Следующий повтор"
-		},
-		"preview": {
-			"tab": "Предпросмотр поиска",
-			"title": "Предпросмотр поиска",
-			"description": "Тестируйте поисковые запросы к этому индексу и просматривайте сырые результаты.",
-			"placeholder": "Введите поисковый запрос…",
-			"search": "Найти",
-			"noResults": "Выполните запрос, чтобы увидеть результаты здесь."
-		},
-		"relevance": {
-			"tab": "Релевантность",
-			"title": "Релевантность поиска",
-			"description": "Управляйте синонимами, правилами выдачи и ранжированием результатов поиска."
-		},
-		"synonyms": {
-			"title": "Синонимы",
-			"description": "Синонимы помогают находить товары по альтернативным названиям",
-			"add": "Добавить строку",
-			"remove": "Удалить",
-			"save": "Сохранить",
-			"saved": "Синонимы сохранены",
-			"error": "Ошибка сохранения",
-			"empty": "Нет синонимов",
-			"emptyDescription": "Синонимы сопоставляют разные поисковые запросы с одним корневым словом, расширяя охват вашего поиска.",
-			"synonymColumn": "Синоним",
-			"rootColumn": "Корневое слово",
-			"tableActions": "Действия",
-			"removeConfirmTitle": "Удалить синоним",
-			"removeConfirmMessage": "Вы уверены, что хотите удалить эту пару синонимов?",
-			"tab": "Синонимы"
-		},
-		"curations": {
-			"title": "Курация результатов",
-			"description": "Закрепляйте или скрывайте товары по поисковым запросам",
-			"add": "Добавить правило",
-			"edit": "Редактировать",
-			"remove": "Удалить",
-			"save": "Сохранить",
-			"saved": "Правила сохранены",
-			"error": "Ошибка сохранения",
-			"empty": "Нет правил курации",
-			"emptyDescription": "Правила курации позволяют закреплять или скрывать определённые товары для поисковых запросов.",
-			"queryColumn": "Запрос",
-			"pinnedColumn": "Закреплённые ID",
-			"hiddenColumn": "Скрытые ID",
-			"tableActions": "Действия",
-			"editTitle": "Редактировать правило",
-			"addTitle": "Добавить правило",
-			"dialogDescription": "Введите поисковый запрос и ID товаров для закрепления или скрытия.",
-			"queryLabel": "Поисковый запрос",
-			"queryPlaceholder": "например, беговые кроссовки",
-			"pinnedLabel": "Закреплённые ID товаров (через запятую)",
-			"pinnedPlaceholder": "prod-123, prod-456",
-			"hiddenLabel": "Скрытые ID товаров (через запятую)",
-			"hiddenPlaceholder": "prod-789, prod-012",
-			"dialogSave": "Сохранить правило",
-			"removeConfirmTitle": "Удалить правило",
-			"removeConfirmMessage": "Вы уверены, что хотите удалить это правило курации?",
-			"tab": "Курация"
-		},
-		"connector": {
-			"title": "Подключение модулей CMS",
-			"subtitle": "Подключите PrestaShop, Bitrix или отправляйте документы напрямую через API",
-			"stepCounter": "Шаг {current} из {total}",
-			"runSyncDesc": "Запустите полную синхронизацию, чтобы проиндексировать все товары из вашей CMS.",
-			"runSyncCta": "Запустить полную синхронизацию",
-			"syncTriggerHint": "Откройте админку вашей CMS и нажмите «Full sync» в модуле AACsearch.",
-			"configStep1": {
-				"prestashop": "Вставьте API URL в настройки модуля AACsearch в админке PrestaShop.",
-				"bitrix": "Вставьте API URL в настройки модуля AACsearch в админке Bitrix.",
-				"directApi": "Используйте API URL и токен как базовый URL и bearer-токен для ваших REST-запросов."
-			},
-			"configStep2": {
-				"prestashop": "Вставьте токен коннектора в соответствующее поле настроек модуля.",
-				"bitrix": "Вставьте токен коннектора в соответствующее поле настроек модуля.",
-				"directApi": "Передавайте токен в заголовке Authorization: Bearer <token>"
-			},
-			"configStep3": "Сохраните конфигурацию.",
-			"prestashop": "PrestaShop",
-			"prestashopDesc": "Полная синхронизация товаров, категорий, остатков",
-			"bitrix": "1C-Bitrix",
-			"bitrixDesc": "Полная синхронизация каталогов товаров",
-			"directApi": "Direct API",
-			"directApiDesc": "Отправляйте документы напрямую через REST API",
-			"setup": "Настроить",
-			"manage": "Управлять",
-			"viewDocs": "Документация",
-			"statusOnline": "В сети",
-			"statusOffline": "Не в сети",
-			"statusUnknown": "Неизвестно",
-			"lastSync": "Последняя синхр.: {time}",
-			"lastError": "Последняя ошибка: {error}",
-			"noHeartbeat": "Heartbeat ещё не получен",
-			"syncJobs": "Задачи синхронизации",
-			"syncJobsNote": "Показаны задачи с последнего перезапуска (в памяти).",
-			"activeConnectors": "Активные коннекторы",
-			"activeConnectorsDesc": "Токены коннекторов и статус heartbeat",
-			"noConnectors": "Коннекторы ещё не настроены. Нажмите 'Настроить' выше.",
-			"wizardTitle": "Настройка коннектора {source}",
-			"stepGenerateToken": "Сгенерировать токен",
-			"stepDownloadModule": "Скачать модуль",
-			"stepConfigure": "Настроить",
-			"stepTestConnection": "Проверить подключение",
-			"stepRunSync": "Запустить первую синхронизацию",
-			"tokenGenerated": "Токен коннектора",
-			"tokenCopyWarning": "Сохраните этот ключ — после закрытия мы не сможем показать его снова",
-			"tokenCopied": "Скопировано!",
-			"downloadPrestashop": "Скачать модуль PrestaShop",
-			"downloadBitrix": "Скачать модуль Bitrix",
-			"testSuccess": "Подключение успешно — модуль в сети!",
-			"testFailed": "Подключение не удалось — проверьте настройки модуля",
-			"syncSuccess": "Синхронизация успешно запущена",
-			"jobId": "ID задачи",
-			"jobType": "Тип",
-			"jobStatus": "Статус",
-			"jobStarted": "Запущена",
-			"jobDuration": "Длительность",
-			"jobItems": "Элементов / Ошибок",
-			"jobActions": "Действия",
-			"jobRetry": "Повторить",
-			"typeFull": "Полная",
-			"typeDelta": "Дельта",
-			"statusPending": "Ожидание",
-			"statusRunning": "Выполняется",
-			"statusCompleted": "Завершена",
-			"statusFailed": "Ошибка",
-			"jobDetailTitle": "Детали задачи",
-			"jobEventLog": "Журнал событий",
-			"noJobLogs": "Событий не зарегистрировано",
-			"tokenLabel": "Токен коннектора",
-			"tokenPlaceholder": "ss_connector_***",
-			"testHandshake": "Проверить handshake",
-			"handshakeSuccess": "Handshake успешен",
-			"handshakeFailed": "Handshake не удался",
-			"description": "Управление токеном коннектора и статусом handshake.",
-			"noConnectorKeys": "Нет ключей коннектора. Создайте API ключ с областью 'connector_write' во вкладке API Keys.",
-			"lastHeartbeat": "Последний heartbeat",
-			"syncNow": "Синхронизировать",
-			"revokeToken": "Отозвать"
-		},
-		"tabs": {
-			"indexes": "Индексы",
-			"playground": "Playground",
-			"apiKeys": "API ключи",
-			"widget": "Виджет"
-		},
-		"playground": {
-			"title": "Поисковый Playground",
-			"description": "Тестируйте расширенные поисковые запросы со всеми доступными опциями.",
-			"advanced": "Расширенные опции",
-			"advancedShow": "Показать расширенные опции",
-			"advancedHide": "Скрыть расширенные опции",
-			"queryBy": "Поля поиска",
-			"queryByPlaceholder": "Названия полей через запятую (например, title, description)",
-			"filterBy": "Фильтр",
-			"filterByPlaceholder": "например, price:>100 && inStock:=true",
-			"sortBy": "Сортировка",
-			"sortByPlaceholder": "например, price:desc",
-			"perPage": "Результатов на страницу",
-			"run": "Выполнить поиск",
-			"cmdEnter": "Cmd+Enter для поиска",
-			"hits": "Результаты",
-			"facets": "Фасеты",
-			"rawJson": "Сырой JSON",
-			"curlSnippet": "cURL-запрос",
-			"copy": "Копировать",
-			"copied": "Скопировано!",
-			"responseTime": "Время ответа",
-			"hitCount": "Результатов",
-			"noDocuments": "Нет документов, соответствующих запросу.",
-			"debounceInfo": "Автопоиск (задержка 700мс)",
-			"lastQueryRestored": "Последний запрос восстановлен.",
-			"noIndexes": "Нет доступных индексов. Создайте сначала.",
-			"curlTitle": "cURL-запрос"
-		},
-		"indexActions": {
-			"actions": "Действия",
-			"reindex": "Переиндексировать",
-			"viewSchema": "Просмотр схемы",
-			"delete": "Удалить индекс",
-			"deleteConfirmTitle": "Удалить индекс",
-			"deleteConfirmMessage": "Вы уверены, что хотите удалить \"{name}\"? Это действие необратимо.",
-			"reindexConfirmTitle": "Переиндексация",
-			"reindexConfirmMessage": "Запустить полную переиндексацию для \"{name}\"?",
-			"schemaTitle": "Схема для \"{name}\"",
-			"reindexed": "Переиндексация запущена.",
-			"deleted": "Индекс удален."
-		},
-		"nav": {
-			"overview": "Обзор",
-			"gettingStarted": "Начало работы",
-			"search": "Поиск",
-			"apiKeys": "API ключи",
-			"importJobs": "Импорт задач",
-			"searchPreview": "Предпросмотр поиска",
-			"analytics": "Аналитика",
-			"relevance": "Релевантность",
-			"connectors": "Коннекторы"
-		},
-		"noIndexesDescription": "Поисковые индексы хранят ваши данные и обеспечивают поисковые запросы. Создайте индекс, чтобы начать.",
-		"apiKeysPage": {
-			"title": "API ключи"
-		},
-		"importJobsPage": {
-			"title": "Задачи импорта",
-			"description": "Последние операции импорта документов и синхронизации из очереди индексации."
-		},
-		"previewPage": {
-			"title": "Предпросмотр поиска"
-		},
-		"documents": {
-			"empty": "Нет документов в этом индексе",
-			"emptyDescription": "Загрузите CSV или используйте API для добавления документов в этот индекс.",
-			"importCsv": "Импорт CSV",
-			"importCsvDescription": "Выберите CSV-файл для импорта. Первая строка должна содержать заголовки столбцов, соответствующие полям схемы.",
-			"import": "Импортировать",
-			"cancel": "Отмена",
-			"parseError": "Найдено {count} ошибок(и) парсинга в CSV",
-			"parsedRows": "Обработано строк: {count}",
-			"importSuccess": "{count} документов(а) поставлены в очередь индексации",
-			"importError": "Не удалось импортировать документы",
-			"saved": "Документ сохранён",
-			"saveError": "Не удалось сохранить документ",
-			"deleted": "{count} документов(а) удалено",
-			"deleteError": "Не удалось удалить документы",
-			"searchPlaceholder": "Поиск документов…",
-			"filter": "Фильтр",
-			"columns": "Столбцы",
-			"toggleColumns": "Показать/скрыть столбцы",
-			"compact": "Компактный",
-			"comfortable": "Комфортный",
-			"exportCsv": "Экспорт CSV",
-			"exportSelected": "Экспорт выбранных",
-			"deleteSelected": "Удалить выбранные",
-			"clearSelection": "Очистить выбор",
-			"selected": "Выбрано: {count}",
-			"showing": "Показано {from}–{to} из {total}",
-			"prev": "Назад",
-			"next": "Вперёд",
-			"pageOf": "{page} / {total}",
-			"editDocument": "Редактировать документ",
-			"editDocumentDescription": "Измените поля документа ниже. Изменения будут применены.",
-			"rawDocument": "Исходный JSON",
-			"save": "Сохранить изменения",
-			"notSet": "Не задано",
-			"true": "Да",
-			"false": "Нет",
-			"optional": "необязательный",
-			"bulkDeleteTitle": "Удаление документов",
-			"bulkDeleteMessage": "Вы уверены, что хотите удалить {count} документов(а)? Это действие нельзя отменить.",
-			"noResults": "Документы по вашему запросу не найдены.",
-			"queryByPlaceholder": "Поиск по полям…",
-			"filterByPlaceholder": "Выражение фильтра…",
-			"clear": "Очистить фильтры"
-		},
-		"collection": {
-			"title": "Коллекция",
-			"notFound": "Индекс не найден",
-			"backToIndexes": "Назад к индексам",
-			"collection": "Коллекция",
-			"alias": "Алиас",
-			"tab": {
-				"overview": "Обзор",
-				"schema": "Схема",
-				"documents": "Документы",
-				"api": "API",
-				"settings": "Настройки"
-			},
-			"documentsTotal": "Документов",
-			"searchesWeek": "Поисков (7д)",
-			"ingestEvents": "Импорт событий",
-			"apiKeysCount": "API-ключи",
-			"schemaOverview": "Поля схемы",
-			"noSchema": "Нет полей схемы.",
-			"viewAllFields": "Все {count} полей",
-			"indexMeta": "Метаданные индекса",
-			"slug": "Slug",
-			"collectionName": "Коллекция",
-			"aliasName": "Алиас",
-			"schemaVersion": "Версия схемы",
-			"created": "Создан",
-			"schemaFields": "Поля схемы",
-			"fields": "полей",
-			"fieldName": "Поле",
-			"fieldType": "Тип",
-			"fieldFacet": "Фасет",
-			"fieldSort": "Сортировка",
-			"fieldIndex": "Индекс",
-			"totalDocuments": "Всего документов",
-			"loading": "Загрузка...",
-			"noDocuments": "Нет документов",
-			"noDocumentsDesc": "Загрузите документы через Connector API или SDK.",
-			"apiExamples": "Примеры API",
-			"searchExample": "Пример поиска",
-			"indexEndpoint": "Endpoint индекса",
-			"settings": "Настройки",
-			"displayName": "Отображаемое имя",
-			"open": "Открыть",
-			"schemaEditor": {
-				"addField": "+ Добавить поле",
-				"importJson": "Импорт JSON",
-				"exportJson": "Экспорт JSON",
-				"previewDiff": "Предпросмотр изменений",
-				"cancel": "Отмена",
-				"saveOnly": "Сохранить только схему",
-				"saveReindex": "Сохранить + переиндексировать",
-				"defaultSort": "Поле сортировки по умолчанию:",
-				"noDefaultSort": "Нет сортировки по умолчанию",
-				"empty": "Поля ещё не определены",
-				"addFirstField": "+ Добавить первое поле",
-				"clickToEdit": "Нажмите, чтобы изменить имя поля",
-				"unnamed": "без имени",
-				"settings": "Настройки",
-				"delete": "Удалить",
-				"loadError": "Не удалось загрузить схему.",
-				"retry": "Повторить",
-				"saved": "Схема обновлена.",
-				"saveError": "Не удалось сохранить схему.",
-				"importDialogTitle": "Импорт полей из JSON",
-				"importDialogDesc": "Вставьте JSON-массив определений полей, чтобы заменить текущий список.",
-				"importAction": "Импортировать",
-				"importMustBeArray": "Входные данные должны быть JSON-массивом.",
-				"invalidJson": "Неверный JSON. Проверьте ввод.",
-				"exported": "JSON схемы скопирован в буфер обмена.",
-				"exportError": "Не удалось скопировать в буфер обмена.",
-				"diffTitle": "Изменения схемы",
-				"diffDesc": "Просмотрите различия между черновиком и сохранённой схемой.",
-				"noChanges": "Изменений не обнаружено.",
-				"settingsTitle": "Настройки для {name}",
-				"settingsDesc": "Настройте расширенные параметры поля. Они хранятся локально до сохранения.",
-				"defaultValue": "Значение по умолчанию",
-				"defaultValuePlaceholder": "например, 0, false, пустая строка",
-				"locale": "Локаль",
-				"validators": "Валидаторы (JSON)"
-			},
-			"version": "Версия",
-			"recentActivity": "Последняя активность",
-			"noActivity": "Нет недавней активности.",
-			"useApiKeys": "Аутентифицируйте запросы с помощью API-ключа.",
-			"manageSettings": "Управление настройками индекса.",
-			"defaultSortingField": "Поле сортировки по умолчанию",
-			"enabled": "Включён",
-			"statusEnabled": "Включён",
-			"statusDisabled": "Отключён",
-			"updatedAt": "Обновлён",
-			"dangerZone": "Опасная зона",
-			"dangerZoneDesc": "Навсегда удалить этот индекс и все его документы.",
-			"deleteWarning": "Это действие нельзя отменить. Все документы будут безвозвратно утеряны.",
-			"deleteCollection": "Удалить индекс",
-			"confirmDelete": "Удалить индекс",
-			"confirmDeleteDesc": "Это действие необратимо.",
-			"confirmDeleteMessage": "Вы уверены, что хотите удалить \"{name}\"? Все документы будут безвозвратно удалены.",
-			"cancel": "Отмена",
-			"delete": "Удалить",
-			"noApiKeys": "Нет API-ключей. Создайте один, чтобы использовать эти примеры.",
-			"fieldOptional": "Необязательное"
-		},
-		"open": "Открыть",
-		"search": {
-			"vectorSearch": {
-				"description": "Поиск по смыслу.",
-				"placeholder": "Опишите, что вы ищете...",
-				"field": "Векторное поле",
-				"results": "{count} результатов",
-				"distance": "Дистанция: {distance}"
-			},
-			"hybridSearch": {
-				"description": "Ключевые слова + семантика.",
-				"alpha": "Вес семантики (alpha)",
-				"alphaHint": "0 = ключевые слова, 1 = семантика"
-			},
-			"semanticSearch": {
-				"description": "Вопросы на естественном языке.",
-				"placeholder": "Вопрос о ваших данных..."
-			},
-			"models": {
-				"description": "Настройка моделей эмбеддингов.",
-				"enabled": "Включить векторный поиск"
-			},
-			"searchTabs": {
-				"vector": "Векторный",
-				"hybrid": "Гибридный",
-				"semantic": "NL-поиск"
-			}
-		},
-		"geoSearch": {
-			"description": "Поиск по местоположению.",
-			"lat": "Широта",
-			"lng": "Долгота",
-			"radius": "Радиус (км)"
-		},
-		"federatedSearch": {
-			"description": "Поиск по нескольким индексам.",
-			"addIndex": "Добавить индекс"
-		},
-		"groupedSearch": {
-			"groupBy": "Группировать по"
-		},
-		"suggestions": "Подсказки",
-		"presets": "Пресеты поиска",
-		"aliases": "Псевдонимы коллекций",
-		"snapshots": {
-			"create": "Создать снапшот"
-		},
-		"health": {
-			"ok": "Исправен",
-			"error": "Неисправен"
-		},
-		"conversationalSearch": {
-			"description": "Задавайте вопросы и получайте ответы ИИ на основе ваших данных."
-		},
-		"voiceSearch": {
-			"description": "Поиск голосом. Аудио автоматически расшифровывается."
-		},
-		"imageSearch": {
-			"description": "Поиск по загруженному изображению. ИИ описывает его перед поиском."
-		},
-		"stemming": {
-			"description": "Управление переопределениями стемминга для точного текстового сопоставления.",
-			"word": "Слово",
-			"root": "Корень"
-		},
-		"stopwords": {
-			"description": "Управление стоп-словами для фильтрации общих слов из поиска."
-		},
-		"clusterOps": {
-			"description": "Операции и метрики на уровне кластера.",
-			"vote": "Голосовать",
-			"debug": "Отладка",
-			"metrics": "Метрики"
-		},
-		"analyticsRules": {
-			"description": "Пользовательские правила аналитики для отслеживания метрик.",
-			"name": "Название",
-			"type": "Тип",
-			"create": "Создать правило",
-			"delete": "Удалить правило"
-		},
-		"dynamicSearch": {
-			"description": "Расширенный поиск с динамической сортировкой и диверсификацией результатов.",
-			"diversifyField": "Поле диверсификации",
-			"maxPerValue": "Макс на значение"
-		}
-	},
-	"nav": {
-		"geoSearch": "Гео-поиск",
-		"federatedSearch": "Федеративный",
-		"settings": "Настройки",
-		"switchOrganization": "Сменить организацию"
-	}
+  "admin": {
+    "menu": {
+      "organizations": "Organizations",
+      "users": "Users"
+    },
+    "organizations": {
+      "backToList": "Back to organizations",
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this organization? This action cannot be undone.",
+        "title": "Delete organization"
+      },
+      "create": "Create",
+      "delete": "Delete",
+      "deleteOrganization": {
+        "deleted": "Organization has been deleted successfully!",
+        "deleting": "Deleting organization...",
+        "notDeleted": "Organization could not be deleted. Please try again."
+      },
+      "edit": "Edit",
+      "form": {
+        "createTitle": "Create an organization",
+        "name": "Organization name",
+        "notifications": {
+          "error": "Could not save the organization. Please try again later.",
+          "success": "Organization has been saved."
+        },
+        "save": "Save",
+        "updateTitle": "Edit organization"
+      },
+      "loading": "Loading organizations...",
+      "membersCount": "{count} {count, plural, one {member} other {members}}",
+      "search": "Search for an organization...",
+      "title": "Manage organizations"
+    },
+    "title": "Administration",
+    "users": {
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this user? This action cannot be undone.",
+        "title": "Delete user"
+      },
+      "delete": "Delete",
+      "deleteUser": {
+        "deleted": "User has been deleted successfully!",
+        "deleting": "Deleting user...",
+        "notDeleted": "User could not be deleted. Please try again."
+      },
+      "emailVerified": {
+        "verified": "Email verified",
+        "waiting": "Email waiting for verification"
+      },
+      "impersonate": "Impersonate",
+      "impersonation": {
+        "impersonating": "Impersonating as {name}..."
+      },
+      "loading": "Loading users...",
+      "resendVerificationMail": {
+        "error": "Could not resend verification mail. Please try again.",
+        "submitting": "Resending verification mail...",
+        "success": "Verification mail has been sent.",
+        "title": "Resend verification mail"
+      },
+      "search": "Search for name or email...",
+      "title": "Manage users",
+      "assignAdminRole": "Assign admin role",
+      "removeAdminRole": "Remove admin role"
+    },
+    "description": "Manage your application.",
+    "config": {
+      "title": "Конфигурация",
+      "loadError": "Не удалось загрузить данные конфигурации.",
+      "application": "Приложение",
+      "appName": "Имя приложения",
+      "nodeVersion": "Версия Node.js",
+      "runtimeEnv": "Среда",
+      "platform": "Платформа",
+      "uptime": "Время работы",
+      "typesenseHealth": "Состояние поискового движка",
+      "healthy": "Здоров",
+      "unhealthy": "Не здоров",
+      "version": "Версия",
+      "databaseStats": "Статистика базы данных",
+      "users": "Пользователи",
+      "organizations": "Организации",
+      "searchIndexes": "Индексы поиска",
+      "apiKeys": "API-ключи",
+      "usageEvents": "События использования",
+      "statsError": "Не удалось получить статистику.",
+      "services": "Внешние сервисы",
+      "configured": "Настроен",
+      "notConfigured": "Не настроен"
+    },
+    "integrations": {
+      "title": "Интеграции",
+      "loadError": "Не удалось проверить статус интеграции.",
+      "database": "База данных",
+      "typesense": "AACsearch Engine",
+      "mail": "Почта",
+      "payments": "Платежи",
+      "storage": "Хранилище",
+      "walletProvider": "Провайдер кошелька",
+      "configured": "Настроен",
+      "notConfigured": "Не настроен",
+      "endpoint": "Endpoint"
+    },
+    "jobs": {
+      "title": "Задачи",
+      "loadError": "Не удалось загрузить статус задач.",
+      "backgroundJobs": "Фоновые задачи",
+      "ready": "Готов",
+      "missingSecret": "Отсутствует секрет",
+      "recentSyncActivity": "Недавняя активность синхронизации",
+      "totalJobs": "Всего задач",
+      "noSyncActivity": "Пока нет активности синхронизации."
+    }
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Open navigation",
+      "organizationSettings": "Organization settings",
+      "search": "Search",
+      "start": "Start"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "markAllRead": "Mark all as read",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Open notifications"
+      }
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
+      "unknown": "Something went wrong. Please try again.",
+      "userNotFound": "This user does not exists",
+      "failedToCreateUser": "Could not create user. Please try again.",
+      "failedToCreateSession": "Could not create a session. Please try again.",
+      "failedToUpdateUser": "Could not update user. Please try again.",
+      "failedToGetSession": "Could not get the session.",
+      "invalidPassword": "The entered password is incorrect.",
+      "invalidEmail": "The entered email is invalid.",
+      "invalidToken": "The token you entered is invalid or has expired.",
+      "credentialAccountNotFound": "Account not found.",
+      "emailCanNotBeUpdated": "Email could not be updated. Please try again.",
+      "emailNotVerified": "Please verify your email first before logging in.",
+      "failedToGetUserInfo": "Could not load user information.",
+      "idTokenNotSupported": "ID token is not supported.",
+      "passwordTooLong": "Password is too long.",
+      "passwordTooShort": "Password is too short.",
+      "providerNotFound": "This provider is not suppported.",
+      "socialAccountAlreadyLinked": "This account is already linked to a user.",
+      "userEmailNotFound": "Email not found.",
+      "userAlreadyExists": "This user already exists.",
+      "userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
+      "invalidInvitation": "The invitation is invalid or expired.",
+      "sessionExpired": "The session has expired.",
+      "failedToUnlinkLastAccount": "Failed to unlink account",
+      "accountNotFound": "Account not found"
+    },
+    "forgotPassword": {
+      "backToSignin": "Back to signin",
+      "email": "Email",
+      "hints": {
+        "linkNotSent": {
+          "message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
+          "title": "Link not sent"
+        },
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "message": "Please enter your email address and we will send you a link to reset your password.",
+      "submit": "Send link",
+      "title": "Forgot your password?"
+    },
+    "login": {
+      "continueWith": "Or continue with",
+      "createAnAccount": "Create an account",
+      "dontHaveAnAccount": "Don't have an account yet?",
+      "forgotPassword": "Forgot password?",
+      "hints": {
+        "invalidCredentials": "The email or password you entered are invalid. Please try again.",
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "loginWithPasskey": "Login with passkey",
+      "modes": {
+        "magicLink": "Magic link",
+        "password": "Password"
+      },
+      "submit": "Sign in",
+      "subtitle": "Please enter your credentials to sign in.",
+      "title": "Welcome back",
+      "sendMagicLink": "Send magic link"
+    },
+    "resetPassword": {
+      "backToSignin": "Back to signin",
+      "hints": {
+        "error": "We are sorry, but we were unable to reset your password. Please try again.",
+        "success": "Your password has been reset successfully."
+      },
+      "message": "Please enter a new password.",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "title": "Reset your password"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Already have an account?",
+      "email": "Email",
+      "hints": {
+        "signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
+        "verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
+      },
+      "message": "We are happy that you want to join us. Please fill in the form below to create your account.",
+      "name": "Name",
+      "password": "Password",
+      "signIn": "Sign in",
+      "submit": "Create account",
+      "title": "Create an account"
+    },
+    "verify": {
+      "title": "Verify your account",
+      "code": "One-time password",
+      "submit": "Verify",
+      "backToSignin": "Back to login",
+      "message": "Enter the one-time password from your authenticator app to continue."
+    }
+  },
+  "choosePlan": {
+    "title": "Choose your plan",
+    "description": "To continue, please select a plan."
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "На главную"
+  },
+  "onboarding": {
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
+      "name": "Name"
+    },
+    "continue": "Continue",
+    "message": "Just a few quick steps to get you started.",
+    "notifications": {
+      "accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+    },
+    "pricing": {
+      "planSelected": "Your plan has been selected successfully.",
+      "skip": "Skip for now"
+    },
+    "step": "Step {step} / {total}",
+    "title": "Set up your account"
+  },
+  "organizations": {
+    "createForm": {
+      "name": "Organization name",
+      "notifications": {
+        "error": "We are sorry, but we were unable to create your organization. Please try again later.",
+        "success": "Your organization has been created. You can now invite members."
+      },
+      "submit": "Create organization",
+      "subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
+      "title": "Create an organization"
+    },
+    "invitationAlert": {
+      "description": "You need to sign in or create an account to join the organization.",
+      "title": "You have been invited to join an organization."
+    },
+    "invitationModal": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
+      "title": "Join the organization",
+      "error": "Произошла ошибка. Пожалуйста, попробуйте ещё раз."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Create new organization",
+      "organizations": "Organizations",
+      "personalAccount": "Personal account"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Create new organization",
+      "title": "Your organizations"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Member",
+      "owner": "Owner"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Organization name"
+      },
+      "deleteOrganization": {
+        "confirmation": "Are you sure you want to delete your organization?",
+        "description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
+        "submit": "Delete organization",
+        "title": "Delete organization"
+      },
+      "logo": {
+        "description": "Upload a logo for your organization.",
+        "title": "Organization logo"
+      },
+      "members": {
+        "activeMembers": "Active members",
+        "description": "See all active members and the pending invites of your organization.",
+        "invitations": {
+          "empty": "You have not invited any members yet.",
+          "expiresAt": "Expires at {date}",
+          "invitationStatus": {
+            "accepted": "Accepted",
+            "canceled": "Canceled",
+            "pending": "Pending",
+            "rejected": "Rejected"
+          },
+          "revoke": "Revoke invitation",
+          "resend": "Resend invitation"
+        },
+        "inviteMember": {
+          "description": "To invite a new member, send them an invitation.",
+          "email": "Email",
+          "notifications": {
+            "error": {
+              "description": "We were unable to invite the member. Please try again later.",
+              "title": "Could not invite member"
+            },
+            "success": {
+              "description": "The member has been invited.",
+              "title": "Member invited"
+            }
+          },
+          "role": "Role",
+          "submit": "Invite",
+          "title": "Invite member"
+        },
+        "leaveOrganization": "Leave organization",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Could not remove the member from your organization. Please try again."
+            },
+            "loading": {
+              "description": "Removing member from organization..."
+            },
+            "success": {
+              "description": "The member has been successfully removed from your organization."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "The invitation could not be revoked. Please try again later."
+            },
+            "loading": {
+              "description": "Revoking invitation..."
+            },
+            "success": {
+              "description": "The invitation has been revoked."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Could not update organization membership. Please try again."
+            },
+            "loading": {
+              "description": "Updating membership..."
+            },
+            "success": {
+              "description": "Membership was updated successfully"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Resending invitation..."
+            },
+            "success": {
+              "description": "Invitation sent"
+            },
+            "error": {
+              "description": "Could not sent invitation. Please try again."
+            }
+          }
+        },
+        "pendingInvitations": "Pending invitations",
+        "removeMember": "Remove member",
+        "title": "Members"
+      },
+      "notifications": {
+        "organizationDeleted": "Your organization has been deleted.",
+        "organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
+        "organizationNameUpdated": "Your organization name has been updated.",
+        "organizationNotDeleted": "We were unable to delete your organization. Please try again later."
+      },
+      "subtitle": "Manage the settings of the organization.",
+      "title": "Organization",
+      "dangerZone": {
+        "title": "Danger zone"
+      }
+    },
+    "start": {
+      "subtitle": "Welcome to the start page of this organization!"
+    }
+  },
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+        "notifications": {
+          "error": "Could not update avatar",
+          "success": "Avatar was updated successfully"
+        },
+        "title": "Your avatar"
+      },
+      "changeEmail": {
+        "description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+        "notifications": {
+          "error": "Could not update email",
+          "success": "Email was updated successfully"
+        },
+        "title": "Your email"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Could not update name",
+          "success": "Name was updated successfully"
+        },
+        "title": "Your name"
+      },
+      "deleteAccount": {
+        "confirmation": "Are you sure you want to delete your account?",
+        "description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+        "notifications": {
+          "error": "Could not delete account",
+          "success": "Account was deleted successfully"
+        },
+        "submit": "Delete account",
+        "title": "Delete account"
+      },
+      "language": {
+        "description": "To change the language of the app for your account, select a language from the list and click save.",
+        "notifications": {
+          "error": "Could not update language",
+          "success": "Language was updated successfully"
+        },
+        "title": "Your language"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "These are all the active sessions of your account. Click the X to end a specifc session.",
+          "title": "Active sessions",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session revoked"
+            }
+          },
+          "currentSession": "Current session"
+        },
+        "changePassword": {
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "notifications": {
+            "error": "Could not update password",
+            "success": "Password was updated successfully"
+          },
+          "title": "Your password"
+        },
+        "connectedAccounts": {
+          "connect": "Connect",
+          "connected": "Connected",
+          "disconnect": "Disconnect",
+          "title": "Connected accounts"
+        },
+        "passkeys": {
+          "addPasskey": "Add passkey",
+          "description": "Use passkeys as a secure alternative to passwords.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Could not add passkey"
+              },
+              "success": {
+                "title": "Passkey added"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Could not delete passkey"
+              },
+              "loading": {
+                "title": "Deleting passkey..."
+              },
+              "success": {
+                "title": "Passkey deleted"
+              }
+            }
+          },
+          "title": "Passkeys"
+        },
+        "setPassword": {
+          "description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+          "notifications": {
+            "error": "Could not send link to set password. Please try again.",
+            "success": "Check your inbox for the link to set your password."
+          },
+          "submit": "Set password",
+          "title": "Your password"
+        },
+        "title": "Security",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Add an extra layer of security to your account.",
+          "dialog": {
+            "password": {
+              "title": "Verify with password",
+              "description": "Please verify your account by entering your password:",
+              "label": "Your password:"
+            },
+            "totpUrl": {
+              "description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
+              "code": "Enter 6-digit code to verify the setup:",
+              "title": "Enable two-factor authentication"
+            }
+          },
+          "enable": "Enable two-factor authentication",
+          "notifications": {
+            "verify": {
+              "success": {
+                "title": "Two-factor authentication has been enabled successfully."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Could not verify your account with the provided password. Please try again."
+              }
+            },
+            "disable": {
+              "success": {
+                "title": "Two-factor authentication has been disabled successfully."
+              }
+            }
+          },
+          "disable": "Disable two-factor authentication",
+          "enabled": "You have two-factor authentication enabled for your account."
+        }
+      },
+      "subtitle": "Manage the settings of your personal account.",
+      "title": "Account settings"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Manage billing",
+        "notifications": {
+          "error": {
+            "title": "Could not create a customer portal session. Please try again."
+          }
+        }
+      },
+      "activePlan": {
+        "status": {
+          "active": "Active",
+          "canceled": "Canceled",
+          "expired": "Expired",
+          "incomplete": "Incomplete",
+          "past_due": "Past due",
+          "paused": "Paused",
+          "trialing": "Trialing",
+          "unpaid": "Unpaid"
+        },
+        "title": "Your plan",
+        "description": "Ваш текущий план и лимиты использования для поиска и индексирования.",
+        "notFound": "Информация о плане недоступна."
+      },
+      "changePlan": {
+        "description": "Choose a plan to subscribe to.",
+        "title": "Change your plan"
+      },
+      "title": "Billing",
+      "aiCredits": {
+        "title": "AI-кредиты",
+        "subtitle": "Оплата по факту использования AI. Пополните кошелёк для доступа ко всем функциям AI.",
+        "balance": {
+          "title": "Баланс кошелька",
+          "includedRemaining": "Включено в этом месяце",
+          "reserved": "Зарезервировано",
+          "promo": "Промо-кредиты",
+          "notInitialized": "Кошелёк ещё не инициализирован."
+        },
+        "topup": {
+          "button": "Пополнить",
+          "title": "Пополнить AI-кошелёк",
+          "description": "Выберите сумму или введите произвольное значение в рублях.",
+          "customAmount": "Произвольная сумма (₽)",
+          "summary": "С вас будет списано {amount}",
+          "confirm": "Оплатить через Точку",
+          "error": "Не удалось создать ссылку на оплату. Пожалуйста, попробуйте снова."
+        },
+        "errors": {
+          "insufficientFunds": "Недостаточно AI-кредитов. Пополните кошелёк."
+        }
+      },
+      "features": {
+        "title": "Функции",
+        "none": "Нет настроенных функций"
+      },
+      "limits": {
+        "maxIndexes": "Макс. индексов",
+        "maxDocuments": "Макс. документов",
+        "maxApiKeys": "Макс. API-ключей",
+        "rateLimit": "Лимит запросов",
+        "maxSearchesPerMonth": "Поисков / месяц"
+      },
+      "upgrade": "Улучшить план",
+      "usage": {
+        "searches": "Поиски",
+        "documents": "Документы"
+      }
+    },
+    "notificationsPage": {
+      "title": "Notifications",
+      "description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
+      "groups": {
+        "general": {
+          "title": "General"
+        },
+        "billing": {
+          "title": "Биллинг"
+        }
+      },
+      "types": {
+        "APP_UPDATE": {
+          "label": "App updates"
+        },
+        "AI_LOW_BALANCE": {
+          "label": "Баланс AI-кошелька низкий"
+        },
+        "AI_TOPUP_PAID": {
+          "label": "Пополнение AI-кошелька подтверждено"
+        },
+        "AI_TOPUP_FAILED": {
+          "label": "Пополнение AI-кошелька не удалось"
+        },
+        "AI_OVERAGE_REACHED": {
+          "label": "Превышен лимит AI-кошелька"
+        }
+      },
+      "columns": {
+        "type": "Notification",
+        "inApp": "In-app",
+        "email": "Email"
+      }
+    },
+    "menu": {
+      "account": {
+        "billing": "Billing",
+        "dangerZone": "Danger zone",
+        "general": "General",
+        "notifications": "Notifications",
+        "security": "Security",
+        "title": "Account"
+      },
+      "organization": {
+        "billing": "Billing",
+        "general": "General",
+        "members": "Members",
+        "title": "Organization",
+        "dangerZone": "Danger zone"
+      }
+    },
+    "save": "Save"
+  },
+  "start": {
+    "subtitle": "See the latest stats of your awesome business.",
+    "welcome": "Welcome {name}!"
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "continue": "Continue",
+      "verify": "Verify"
+    },
+    "colorMode": {
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    }
+  },
+  "checkoutReturn": {
+    "title": "Processing your purchase",
+    "description": "Please wait while we confirm your payment.",
+    "loading": "Confirming your purchase, please wait..."
+  },
+  "search": {
+    "title": "Поиск",
+    "subtitle": "Управляйте поисковыми индексами, API-ключами и использованием для этой организации.",
+    "loading": "Загрузка…",
+    "noIndexes": "Поисковых индексов пока нет. Создайте первый, чтобы начать.",
+    "selectIndex": "Выберите индекс, чтобы управлять его API-ключами.",
+    "fields": {
+      "displayName": "Название",
+      "slug": "Slug",
+      "version": "Версия",
+      "apiKeys": "API-ключи",
+      "defaultSortingField": "Поле сортировки по умолчанию",
+      "schema": "Поля (JSON)"
+    },
+    "createIndex": {
+      "trigger": "Создать индекс",
+      "title": "Создание поискового индекса",
+      "description": "Создаёт поисковую коллекцию и алиас, ограниченные этой организацией.",
+      "slugHelp": "Строчные латинские буквы, цифры и дефисы. Используется в API и как алиас коллекции.",
+      "schemaHelp": "JSON-массив определений полей. Поле 'tenant_id' добавляется автоматически.",
+      "submit": "Создать",
+      "success": "Индекс создан.",
+      "error": "Не удалось создать индекс. Попробуйте ещё раз.",
+      "startFromTemplate": "Начать с шаблона:",
+      "autoFromName": "авто",
+      "builder": "Визуальный конструктор",
+      "json": "JSON",
+      "fieldsTitle": "Поля схемы",
+      "fieldsCount": "Полей настроено: {count}",
+      "addField": "Добавить поле",
+      "removeField": "Удалить поле",
+      "moveUp": "Переместить вверх",
+      "moveDown": "Переместить вниз",
+      "errorsCount": "{count, plural, one {# поле с ошибкой} few {# поля с ошибками} many {# полей с ошибками} other {# полей с ошибками}}",
+      "noFields": "Полей пока нет — добавьте поле или выберите шаблон.",
+      "noSort": "Без сортировки по умолчанию",
+      "noSortableHint": "Сначала включите Сортировку у числового поля",
+      "tenantHint": "tenant_id добавляется автоматически для изоляции данных.",
+      "templates": {
+        "products": "Товары",
+        "articles": "Статьи",
+        "users": "Пользователи",
+        "blank": "Пустой"
+      },
+      "typeGroups": {
+        "text": "Текст",
+        "number": "Число",
+        "boolean": "Булево",
+        "advanced": "Расширенные"
+      },
+      "toggles": {
+        "facet": "Фасет",
+        "optional": "Необязательное",
+        "sort": "Сортировка"
+      },
+      "tooltips": {
+        "displayName": "Понятное название, отображаемое в дашборде. Не влияет на API.",
+        "slug": "Используется в путях API и как алиас поисковой коллекции. Только строчные буквы, цифры и дефисы.",
+        "fields": "Опишите столбцы коллекции. Поля можно сделать фасетными, сортируемыми или необязательными.",
+        "facet": "Разрешить фильтрацию и группировку по этому полю (категории, теги, бренд и т. п.).",
+        "optional": "Поле может отсутствовать в документе. Обязательные поля должны быть в каждом документе.",
+        "sort": "Разрешить сортировку по этому полю (числовые поля сортируются всегда).",
+        "defaultSort": "Поле, по которому сортируются результаты, если порядок не задан явно. Должно быть числовым.",
+        "json": "Редактировать схему в чистом JSON. При возврате к визуальному конструктору изменения проверяются и синхронизируются.",
+        "idField": "Рекомендуемый уникальный идентификатор. AACsearch использует его как первичный ключ для upsert."
+      },
+      "errors": {
+        "duplicateName": "Имя поля должно быть уникальным",
+        "invalidJson": "Некорректный JSON",
+        "empty": "Добавьте хотя бы одно поле",
+        "fieldsInvalid": "Исправьте подсвеченные поля"
+      }
+    },
+    "apiKeys": {
+      "title": "API-ключи",
+      "description": "Ключи поиска проверяются нашим бэкендом перед выполнением запросов. Административные учётные данные никогда не покидают сервер.",
+      "create": "Создать ключ",
+      "createDescription": "Сам ключ показывается только один раз. Сохраните его в надёжном месте.",
+      "name": "Название",
+      "generate": "Сгенерировать ключ",
+      "created": "API-ключ создан.",
+      "revealOnce": "Скопируйте ключ сейчас. Снова показать его будет нельзя.",
+      "done": "Готово",
+      "empty": "API-ключей пока нет.",
+      "tableName": "Название",
+      "tablePrefix": "Префикс",
+      "tableScopes": "Области",
+      "tableStatus": "Статус",
+      "tableActions": "Действия",
+      "statusActive": "Активный",
+      "statusRevoked": "Отозван",
+      "revoke": "Отозвать",
+      "revokeConfirmTitle": "Отозвать API-ключ",
+      "revokeConfirmMessage": "Вы уверены, что хотите отозвать «{name}»? Клиенты, использующие этот ключ, сразу перестанут работать.",
+      "revoked": "API-ключ отозван.",
+      "error": "Не удалось выполнить операцию.",
+      "emptyDescription": "Создайте первый API-ключ, чтобы начать интеграцию поиска в ваше приложение."
+    },
+    "usage": {
+      "title": "Использование",
+      "windowDays": "Последние {days} дней",
+      "searches": "Поисков",
+      "ingests": "Документов проиндексировано",
+      "documents": "Проиндексировано документов",
+      "ofLimit": "от месячного лимита",
+      "loadError": "Не удалось загрузить данные об использовании."
+    },
+    "widget": {
+      "tab": "Виджет",
+      "title": "Виджет поиска",
+      "description": "Вставьте виджет поиска на витрину одним тегом script.",
+      "apiKeyLabel": "API ключ",
+      "apiKeyHint": "Вставьте search-only API ключ (ss_search_...) или создайте новый во вкладке API Keys.",
+      "snippet": "Код виджета",
+      "copySnippet": "Копировать код",
+      "copied": "Код виджета скопирован!",
+      "copyFailed": "Не удалось скопировать код.",
+      "installInstructions": "Инструкция по установке",
+      "step1": "Добавьте контейнер: <div id=\"aac-search\"></div>",
+      "step2": "Вставьте код перед закрывающим тегом </body>.",
+      "step3": "Виджет инициализируется автоматически."
+    },
+    "projects": {
+      "title": "Проекты",
+      "apiKeys": "API ключи",
+      "loadError": "Не удалось загрузить проекты."
+    },
+    "overview": {
+      "title": "Обзор",
+      "subtitle": "За последние {days} дней",
+      "totalSearches": "Всего поисков",
+      "searchesTrend": "Тренд поиска",
+      "documentsIndexed": "Проиндексировано документов",
+      "quotaUsage": "Использование квоты",
+      "failedSyncJobs": "Ошибки синхронизации",
+      "searchesOverTime": "Поисков по дням",
+      "topQueries": "Популярные запросы",
+      "activityFeed": "Недавняя активность",
+      "connectorStatus": "Статус коннектора",
+      "period24h": "24ч",
+      "period7d": "7 дней",
+      "period30d": "30 дней",
+      "quotaWarning": "Вы использовали {percent}% квоты поиска. Обновите тариф, чтобы избежать ограничений.",
+      "quotaExceeded": "Вы превысили квоту поиска ({percent}%). Некоторые функции могут быть ограничены.",
+      "connectorOnline": "Все коннекторы онлайн",
+      "connectorOffline": "Коннектор отключён",
+      "connectorUnknown": "Коннектор не настроен",
+      "noData": "Нет данных",
+      "noDataDescription": "Данные появятся после того, как ваши поисковые индексы начнут получать запросы.",
+      "refresh": "Обновить",
+      "activity": {
+        "indexCreated": "Индекс \"{name}\" создан",
+        "keyRevoked": "{count, plural, one {# API ключ} few {# API ключа} many {# API ключей} other {# API ключей}} для \"{name}\"",
+        "syncFailed": "Синхронизация для индекса \"{name}\" не удалась"
+      },
+      "indexVersion": "Версия индекса",
+      "apiKeys": "API ключи",
+      "searches": "Поисков",
+      "indexes": "Индексы",
+      "documents": "Документы",
+      "plan": "Тариф",
+      "quickActions": "Быстрые действия",
+      "manageIndexes": "Управление индексами",
+      "manageIndexesDesc": "Создавайте и управляйте индексами поиска",
+      "viewAnalytics": "Аналитика",
+      "viewAnalyticsDesc": "Отслеживайте использование поиска и запросы",
+      "setupConnector": "Подключить коннектор",
+      "setupConnectorDesc": "Подключите PrestaShop или Bitrix модуль",
+      "managePlan": "Управление тарифом",
+      "graceUntil": "Только чтение до {date}",
+      "active": "Активен",
+      "indexedProducts": "Проиндексировано товаров",
+      "apiKeysCount": "API ключей",
+      "lastHeartbeat": "Последний heartbeat",
+      "noHeartbeat": "Никогда",
+      "connectorToken": "Токен коннектора",
+      "upgrade": "Обновить тариф",
+      "createIndex": "Создать индекс",
+      "addConnector": "Добавить коннектор",
+      "viewAll": "Все запросы",
+      "noSearchesYet": "Вы ещё не отправляли поисковых запросов",
+      "emptyStateDescription": "Начните с создания вашего первого поискового индекса.",
+      "getStarted": "Начать"
+    },
+    "gettingStarted": {
+      "title": "Начало работы",
+      "welcome": "Начните работу с поиском",
+      "subtitle": "Выполните шаги ниже, чтобы начать использовать поиск.",
+      "allDone": "Все шаги выполнены!",
+      "allDoneTitle": "Всё готово!",
+      "allDoneDesc": "Все шаги настройки выполнены. Теперь вы можете использовать поиск.",
+      "progress": "Прогресс настройки",
+      "completed": "завершено",
+      "step1Label": "Создать поисковый индекс",
+      "step1Desc": "Создайте свой первый поисковый индекс для хранения и организации данных.",
+      "step1Action": "Создать индекс",
+      "step2Label": "Подключить источник",
+      "step2Desc": "Создайте токен коннектора для подключения вашего источника данных.",
+      "step2Action": "Подключить источник",
+      "step3Label": "Запустить синхронизацию",
+      "step3Desc": "Синхронизируйте данные из вашей CMS или других источников.",
+      "step3Action": "Синхронизировать",
+      "step4Label": "Протестировать поиск",
+      "step4Desc": "Выполните тестовый поиск для проверки настройки.",
+      "step4Action": "Тестовый поиск",
+      "step5Label": "Создать API-ключ",
+      "step5Desc": "Создайте API-ключ для разрешения поисковых запросов из вашего приложения.",
+      "step5Action": "Создать ключ",
+      "step6Label": "Встроить виджет поиска",
+      "step6Desc": "Встройте виджет поиска на ваш сайт.",
+      "step6Action": "Встроить виджет",
+      "done": "Готово",
+      "pending": "Ожидает",
+      "inProgress": "В процессе",
+      "viewAnalytics": "Аналитика",
+      "planCtaTitle": "Нужно больше возможностей?",
+      "planCtaDesc": "Обновите тариф для более высоких лимитов и функций.",
+      "managePlan": "Управление тарифом",
+      "skipToDashboard": "Перейти к панели"
+    },
+    "checklist": {
+      "title": "Чек-лист настройки",
+      "steps": {
+        "createIndex": "Создать индекс",
+        "createIndexDone": "Индекс создан",
+        "generateApiKey": "Создать API-ключ",
+        "generateApiKeyDone": "API-ключ создан",
+        "installCmsModule": "Установить модуль CMS",
+        "installCmsModuleDone": "Модуль CMS установлен",
+        "runFullSync": "Запустить полную синхронизацию",
+        "runFullSyncDone": "Товары синхронизированы",
+        "testSearch": "Проверить поиск",
+        "testSearchDone": "Поиск проверен",
+        "enableWidget": "Включить виджет",
+        "enableWidgetDone": "Виджет включён"
+      },
+      "stepDocs": "Документация",
+      "allDone": "Все проверки пройдены!"
+    },
+    "analytics": {
+      "tab": "Аналитика",
+      "title": "Аналитика поиска",
+      "description": "Отслеживайте использование поиска, популярные запросы, пустые результаты и тренды.",
+      "totalSearches": "Всего поисков",
+      "totalSessions": "Сессий",
+      "ctr": "CTR",
+      "zeroResults": "Пустых результатов",
+      "zeroResultRate": "Доля пустых результатов",
+      "comingSoon": "Скоро",
+      "searchesOverTime": "Поисков по дням",
+      "topQueries": "Популярные запросы",
+      "topClickedProducts": "Часто кликаемые товары",
+      "queryColumn": "Запрос",
+      "countColumn": "Кол-во",
+      "productColumn": "Товар",
+      "clicksColumn": "Клики",
+      "rankColumn": "#",
+      "percentColumn": "% от общего",
+      "period24h": "24ч",
+      "period7d": "7 дней",
+      "period30d": "30 дней",
+      "documentsIndexed": "Проиндексировано документов",
+      "failedSyncJobs": "Ошибки синхронизации",
+      "failed": "ошибок",
+      "retentionBanner": "Ваш тариф {plan} хранит данные аналитики {days} дней. Выберите меньший период для просмотра данных.",
+      "noData": "Нет данных за этот период.",
+      "noDataDescription": "Данные аналитики появятся после получения запросов поисковыми индексами."
+    },
+    "importJobs": {
+      "tab": "Импорт",
+      "title": "Задачи импорта",
+      "description": "Отслеживание синхронизации документов",
+      "pending": "В очереди",
+      "processing": "Выполняется",
+      "completed": "Завершено",
+      "failed": "Ошибок",
+      "tableJobId": "ID задачи",
+      "tableType": "Тип",
+      "tableStatus": "Статус",
+      "tableProgress": "Прогресс",
+      "tableErrors": "Ошибки",
+      "tableTime": "Время",
+      "empty": "Нет активности импорта за последние 7 дней.",
+      "emptyDescription": "Задачи импорта появляются здесь при синхронизации данных из вашей CMS.",
+      "viewTimeline": "Хронология",
+      "viewTable": "Таблица",
+      "successRate": "Успешность",
+      "indexed": "Проиндексировано",
+      "retryQueue": "Очередь повторов",
+      "retryAll": "Повторить все",
+      "clearQueue": "Очистить",
+      "nextRetry": "Следующий повтор"
+    },
+    "preview": {
+      "tab": "Предпросмотр поиска",
+      "title": "Предпросмотр поиска",
+      "description": "Тестируйте поисковые запросы к этому индексу и просматривайте сырые результаты.",
+      "placeholder": "Введите поисковый запрос…",
+      "search": "Найти",
+      "noResults": "Выполните запрос, чтобы увидеть результаты здесь.",
+      "perPage": "На странице",
+      "page": "Страница",
+      "highlightFields": "Поля выделения",
+      "highlightFieldsPlaceholder": "например title, description",
+      "facetBy": "Фасет",
+      "facetByPlaceholder": "например brand, category",
+      "stats": "{found} результатов за {time} мс"
+    },
+    "relevance": {
+      "tab": "Релевантность",
+      "title": "Релевантность поиска",
+      "description": "Управляйте синонимами, правилами выдачи и ранжированием результатов поиска."
+    },
+    "synonyms": {
+      "title": "Синонимы",
+      "description": "Синонимы помогают находить товары по альтернативным названиям",
+      "add": "Добавить строку",
+      "remove": "Удалить",
+      "save": "Сохранить",
+      "saved": "Синонимы сохранены",
+      "error": "Ошибка сохранения",
+      "empty": "Нет синонимов",
+      "emptyDescription": "Синонимы сопоставляют разные поисковые запросы с одним корневым словом, расширяя охват вашего поиска.",
+      "synonymColumn": "Синоним",
+      "rootColumn": "Корневое слово",
+      "tableActions": "Действия",
+      "removeConfirmTitle": "Удалить синоним",
+      "removeConfirmMessage": "Вы уверены, что хотите удалить эту пару синонимов?",
+      "tab": "Синонимы"
+    },
+    "curations": {
+      "title": "Курация результатов",
+      "description": "Закрепляйте или скрывайте товары по поисковым запросам",
+      "add": "Добавить правило",
+      "edit": "Редактировать",
+      "remove": "Удалить",
+      "save": "Сохранить",
+      "saved": "Правила сохранены",
+      "error": "Ошибка сохранения",
+      "empty": "Нет правил курации",
+      "emptyDescription": "Правила курации позволяют закреплять или скрывать определённые товары для поисковых запросов.",
+      "queryColumn": "Запрос",
+      "pinnedColumn": "Закреплённые ID",
+      "hiddenColumn": "Скрытые ID",
+      "tableActions": "Действия",
+      "editTitle": "Редактировать правило",
+      "addTitle": "Добавить правило",
+      "dialogDescription": "Введите поисковый запрос и ID товаров для закрепления или скрытия.",
+      "queryLabel": "Поисковый запрос",
+      "queryPlaceholder": "например, беговые кроссовки",
+      "pinnedLabel": "Закреплённые ID товаров (через запятую)",
+      "pinnedPlaceholder": "prod-123, prod-456",
+      "hiddenLabel": "Скрытые ID товаров (через запятую)",
+      "hiddenPlaceholder": "prod-789, prod-012",
+      "dialogSave": "Сохранить правило",
+      "removeConfirmTitle": "Удалить правило",
+      "removeConfirmMessage": "Вы уверены, что хотите удалить это правило курации?",
+      "tab": "Курация"
+    },
+    "connector": {
+      "title": "Подключение модулей CMS",
+      "subtitle": "Подключите PrestaShop, Bitrix или отправляйте документы напрямую через API",
+      "stepCounter": "Шаг {current} из {total}",
+      "runSyncDesc": "Запустите полную синхронизацию, чтобы проиндексировать все товары из вашей CMS.",
+      "runSyncCta": "Запустить полную синхронизацию",
+      "syncTriggerHint": "Откройте админку вашей CMS и нажмите «Full sync» в модуле AACsearch.",
+      "configStep1": {
+        "prestashop": "Вставьте API URL в настройки модуля AACsearch в админке PrestaShop.",
+        "bitrix": "Вставьте API URL в настройки модуля AACsearch в админке Bitrix.",
+        "directApi": "Используйте API URL и токен как базовый URL и bearer-токен для ваших REST-запросов."
+      },
+      "configStep2": {
+        "prestashop": "Вставьте токен коннектора в соответствующее поле настроек модуля.",
+        "bitrix": "Вставьте токен коннектора в соответствующее поле настроек модуля.",
+        "directApi": "Передавайте токен в заголовке Authorization: Bearer <token>"
+      },
+      "configStep3": "Сохраните конфигурацию.",
+      "prestashop": "PrestaShop",
+      "prestashopDesc": "Полная синхронизация товаров, категорий, остатков",
+      "bitrix": "1C-Bitrix",
+      "bitrixDesc": "Полная синхронизация каталогов товаров",
+      "directApi": "Direct API",
+      "directApiDesc": "Отправляйте документы напрямую через REST API",
+      "setup": "Настроить",
+      "manage": "Управлять",
+      "viewDocs": "Документация",
+      "statusOnline": "В сети",
+      "statusOffline": "Не в сети",
+      "statusUnknown": "Неизвестно",
+      "lastSync": "Последняя синхр.: {time}",
+      "lastError": "Последняя ошибка: {error}",
+      "noHeartbeat": "Heartbeat ещё не получен",
+      "syncJobs": "Задачи синхронизации",
+      "syncJobsNote": "Показаны задачи с последнего перезапуска (в памяти).",
+      "activeConnectors": "Активные коннекторы",
+      "activeConnectorsDesc": "Токены коннекторов и статус heartbeat",
+      "noConnectors": "Коннекторы ещё не настроены. Нажмите 'Настроить' выше.",
+      "wizardTitle": "Настройка коннектора {source}",
+      "stepGenerateToken": "Сгенерировать токен",
+      "stepDownloadModule": "Скачать модуль",
+      "stepConfigure": "Настроить",
+      "stepTestConnection": "Проверить подключение",
+      "stepRunSync": "Запустить первую синхронизацию",
+      "tokenGenerated": "Токен коннектора",
+      "tokenCopyWarning": "Сохраните этот ключ — после закрытия мы не сможем показать его снова",
+      "tokenCopied": "Скопировано!",
+      "downloadPrestashop": "Скачать модуль PrestaShop",
+      "downloadBitrix": "Скачать модуль Bitrix",
+      "testSuccess": "Подключение успешно — модуль в сети!",
+      "testFailed": "Подключение не удалось — проверьте настройки модуля",
+      "syncSuccess": "Синхронизация успешно запущена",
+      "jobId": "ID задачи",
+      "jobType": "Тип",
+      "jobStatus": "Статус",
+      "jobStarted": "Запущена",
+      "jobDuration": "Длительность",
+      "jobItems": "Элементов / Ошибок",
+      "jobActions": "Действия",
+      "jobRetry": "Повторить",
+      "typeFull": "Полная",
+      "typeDelta": "Дельта",
+      "statusPending": "Ожидание",
+      "statusRunning": "Выполняется",
+      "statusCompleted": "Завершена",
+      "statusFailed": "Ошибка",
+      "jobDetailTitle": "Детали задачи",
+      "jobEventLog": "Журнал событий",
+      "noJobLogs": "Событий не зарегистрировано",
+      "tokenLabel": "Токен коннектора",
+      "tokenPlaceholder": "ss_connector_***",
+      "testHandshake": "Проверить handshake",
+      "handshakeSuccess": "Handshake успешен",
+      "handshakeFailed": "Handshake не удался",
+      "description": "Управление токеном коннектора и статусом handshake.",
+      "noConnectorKeys": "Нет ключей коннектора. Создайте API ключ с областью 'connector_write' во вкладке API Keys.",
+      "lastHeartbeat": "Последний heartbeat",
+      "syncNow": "Синхронизировать",
+      "revokeToken": "Отозвать"
+    },
+    "tabs": {
+      "indexes": "Индексы",
+      "playground": "Playground",
+      "apiKeys": "API ключи",
+      "widget": "Виджет"
+    },
+    "playground": {
+      "title": "Поисковый Playground",
+      "description": "Тестируйте расширенные поисковые запросы со всеми доступными опциями.",
+      "advanced": "Расширенные опции",
+      "advancedShow": "Показать расширенные опции",
+      "advancedHide": "Скрыть расширенные опции",
+      "queryBy": "Поля поиска",
+      "queryByPlaceholder": "Названия полей через запятую (например, title, description)",
+      "filterBy": "Фильтр",
+      "filterByPlaceholder": "например, price:>100 && inStock:=true",
+      "sortBy": "Сортировка",
+      "sortByPlaceholder": "например, price:desc",
+      "perPage": "Результатов на страницу",
+      "run": "Выполнить поиск",
+      "cmdEnter": "Cmd+Enter для поиска",
+      "hits": "Результаты",
+      "facets": "Фасеты",
+      "rawJson": "Сырой JSON",
+      "curlSnippet": "cURL-запрос",
+      "copy": "Копировать",
+      "copied": "Скопировано!",
+      "responseTime": "Время ответа",
+      "hitCount": "Результатов",
+      "noDocuments": "Нет документов, соответствующих запросу.",
+      "debounceInfo": "Автопоиск (задержка 700мс)",
+      "lastQueryRestored": "Последний запрос восстановлен.",
+      "noIndexes": "Нет доступных индексов. Создайте сначала.",
+      "curlTitle": "cURL-запрос"
+    },
+    "indexActions": {
+      "actions": "Действия",
+      "reindex": "Переиндексировать",
+      "viewSchema": "Просмотр схемы",
+      "delete": "Удалить индекс",
+      "deleteConfirmTitle": "Удалить индекс",
+      "deleteConfirmMessage": "Вы уверены, что хотите удалить \"{name}\"? Это действие необратимо.",
+      "reindexConfirmTitle": "Переиндексация",
+      "reindexConfirmMessage": "Запустить полную переиндексацию для \"{name}\"?",
+      "schemaTitle": "Схема для \"{name}\"",
+      "reindexed": "Переиндексация запущена.",
+      "deleted": "Индекс удален."
+    },
+    "nav": {
+      "overview": "Обзор",
+      "gettingStarted": "Начало работы",
+      "search": "Поиск",
+      "apiKeys": "API ключи",
+      "importJobs": "Импорт задач",
+      "searchPreview": "Предпросмотр поиска",
+      "analytics": "Аналитика",
+      "relevance": "Релевантность",
+      "connectors": "Коннекторы",
+      "knowledge": "База знаний"
+    },
+    "noIndexesDescription": "Поисковые индексы хранят ваши данные и обеспечивают поисковые запросы. Создайте индекс, чтобы начать.",
+    "apiKeysPage": {
+      "title": "API ключи"
+    },
+    "importJobsPage": {
+      "title": "Задачи импорта",
+      "description": "Последние операции импорта документов и синхронизации из очереди индексации."
+    },
+    "previewPage": {
+      "title": "Предпросмотр поиска"
+    },
+    "documents": {
+      "empty": "Нет документов в этом индексе",
+      "emptyDescription": "Загрузите CSV или используйте API для добавления документов в этот индекс.",
+      "importCsv": "Импорт CSV",
+      "importCsvDescription": "Выберите CSV-файл для импорта. Первая строка должна содержать заголовки столбцов, соответствующие полям схемы.",
+      "import": "Импортировать",
+      "cancel": "Отмена",
+      "parseError": "Найдено {count} ошибок(и) парсинга в CSV",
+      "parsedRows": "Обработано строк: {count}",
+      "importSuccess": "{count} документов(а) поставлены в очередь индексации",
+      "importError": "Не удалось импортировать документы",
+      "saved": "Документ сохранён",
+      "saveError": "Не удалось сохранить документ",
+      "deleted": "{count} документов(а) удалено",
+      "deleteError": "Не удалось удалить документы",
+      "searchPlaceholder": "Поиск документов…",
+      "filter": "Фильтр",
+      "columns": "Столбцы",
+      "toggleColumns": "Показать/скрыть столбцы",
+      "compact": "Компактный",
+      "comfortable": "Комфортный",
+      "exportCsv": "Экспорт CSV",
+      "exportSelected": "Экспорт выбранных",
+      "deleteSelected": "Удалить выбранные",
+      "clearSelection": "Очистить выбор",
+      "selected": "Выбрано: {count}",
+      "showing": "Показано {from}–{to} из {total}",
+      "prev": "Назад",
+      "next": "Вперёд",
+      "pageOf": "{page} / {total}",
+      "editDocument": "Редактировать документ",
+      "editDocumentDescription": "Измените поля документа ниже. Изменения будут применены.",
+      "rawDocument": "Исходный JSON",
+      "save": "Сохранить изменения",
+      "notSet": "Не задано",
+      "true": "Да",
+      "false": "Нет",
+      "optional": "необязательный",
+      "bulkDeleteTitle": "Удаление документов",
+      "bulkDeleteMessage": "Вы уверены, что хотите удалить {count} документов(а)? Это действие нельзя отменить.",
+      "noResults": "Документы по вашему запросу не найдены.",
+      "queryByPlaceholder": "Поиск по полям…",
+      "filterByPlaceholder": "Выражение фильтра…",
+      "clear": "Очистить фильтры"
+    },
+    "collection": {
+      "title": "Коллекция",
+      "notFound": "Индекс не найден",
+      "backToIndexes": "Назад к индексам",
+      "collection": "Коллекция",
+      "alias": "Алиас",
+      "tab": {
+        "overview": "Обзор",
+        "schema": "Схема",
+        "documents": "Документы",
+        "api": "API",
+        "settings": "Настройки"
+      },
+      "documentsTotal": "Документов",
+      "searchesWeek": "Поисков (7д)",
+      "ingestEvents": "Импорт событий",
+      "apiKeysCount": "API-ключи",
+      "schemaOverview": "Поля схемы",
+      "noSchema": "Нет полей схемы.",
+      "viewAllFields": "Все {count} полей",
+      "indexMeta": "Метаданные индекса",
+      "slug": "Slug",
+      "collectionName": "Коллекция",
+      "aliasName": "Алиас",
+      "schemaVersion": "Версия схемы",
+      "created": "Создан",
+      "schemaFields": "Поля схемы",
+      "fields": "полей",
+      "fieldName": "Поле",
+      "fieldType": "Тип",
+      "fieldFacet": "Фасет",
+      "fieldSort": "Сортировка",
+      "fieldIndex": "Индекс",
+      "totalDocuments": "Всего документов",
+      "loading": "Загрузка...",
+      "noDocuments": "Нет документов",
+      "noDocumentsDesc": "Загрузите документы через Connector API или SDK.",
+      "apiExamples": "Примеры API",
+      "searchExample": "Пример поиска",
+      "indexEndpoint": "Endpoint индекса",
+      "settings": "Настройки",
+      "displayName": "Отображаемое имя",
+      "open": "Открыть",
+      "schemaEditor": {
+        "addField": "+ Добавить поле",
+        "importJson": "Импорт JSON",
+        "exportJson": "Экспорт JSON",
+        "previewDiff": "Предпросмотр изменений",
+        "cancel": "Отмена",
+        "saveOnly": "Сохранить только схему",
+        "saveReindex": "Сохранить + переиндексировать",
+        "defaultSort": "Поле сортировки по умолчанию:",
+        "noDefaultSort": "Нет сортировки по умолчанию",
+        "empty": "Поля ещё не определены",
+        "addFirstField": "+ Добавить первое поле",
+        "clickToEdit": "Нажмите, чтобы изменить имя поля",
+        "unnamed": "без имени",
+        "settings": "Настройки",
+        "delete": "Удалить",
+        "loadError": "Не удалось загрузить схему.",
+        "retry": "Повторить",
+        "saved": "Схема обновлена.",
+        "saveError": "Не удалось сохранить схему.",
+        "importDialogTitle": "Импорт полей из JSON",
+        "importDialogDesc": "Вставьте JSON-массив определений полей, чтобы заменить текущий список.",
+        "importAction": "Импортировать",
+        "importMustBeArray": "Входные данные должны быть JSON-массивом.",
+        "invalidJson": "Неверный JSON. Проверьте ввод.",
+        "exported": "JSON схемы скопирован в буфер обмена.",
+        "exportError": "Не удалось скопировать в буфер обмена.",
+        "diffTitle": "Изменения схемы",
+        "diffDesc": "Просмотрите различия между черновиком и сохранённой схемой.",
+        "noChanges": "Изменений не обнаружено.",
+        "settingsTitle": "Настройки для {name}",
+        "settingsDesc": "Настройте расширенные параметры поля. Они хранятся локально до сохранения.",
+        "defaultValue": "Значение по умолчанию",
+        "defaultValuePlaceholder": "например, 0, false, пустая строка",
+        "locale": "Локаль",
+        "validators": "Валидаторы (JSON)"
+      },
+      "version": "Версия",
+      "recentActivity": "Последняя активность",
+      "noActivity": "Нет недавней активности.",
+      "useApiKeys": "Аутентифицируйте запросы с помощью API-ключа.",
+      "manageSettings": "Управление настройками индекса.",
+      "defaultSortingField": "Поле сортировки по умолчанию",
+      "enabled": "Включён",
+      "statusEnabled": "Включён",
+      "statusDisabled": "Отключён",
+      "updatedAt": "Обновлён",
+      "dangerZone": "Опасная зона",
+      "dangerZoneDesc": "Навсегда удалить этот индекс и все его документы.",
+      "deleteWarning": "Это действие нельзя отменить. Все документы будут безвозвратно утеряны.",
+      "deleteCollection": "Удалить индекс",
+      "confirmDelete": "Удалить индекс",
+      "confirmDeleteDesc": "Это действие необратимо.",
+      "confirmDeleteMessage": "Вы уверены, что хотите удалить \"{name}\"? Все документы будут безвозвратно удалены.",
+      "cancel": "Отмена",
+      "delete": "Удалить",
+      "noApiKeys": "Нет API-ключей. Создайте один, чтобы использовать эти примеры.",
+      "fieldOptional": "Необязательное",
+      "deleted": "Индекс успешно удалён",
+      "deleteError": "Не удалось удалить индекс"
+    },
+    "open": "Открыть",
+    "search": {
+      "vectorSearch": {
+        "description": "Поиск по смыслу.",
+        "placeholder": "Опишите, что вы ищете...",
+        "field": "Векторное поле",
+        "results": "{count} результатов",
+        "distance": "Дистанция: {distance}"
+      },
+      "hybridSearch": {
+        "description": "Ключевые слова + семантика.",
+        "alpha": "Вес семантики (alpha)",
+        "alphaHint": "0 = ключевые слова, 1 = семантика"
+      },
+      "semanticSearch": {
+        "description": "Вопросы на естественном языке.",
+        "placeholder": "Вопрос о ваших данных..."
+      },
+      "models": {
+        "description": "Настройка моделей эмбеддингов.",
+        "enabled": "Включить векторный поиск"
+      },
+      "searchTabs": {
+        "vector": "Векторный",
+        "hybrid": "Гибридный",
+        "semantic": "NL-поиск"
+      }
+    },
+    "geoSearch": {
+      "description": "Поиск по местоположению.",
+      "lat": "Широта",
+      "lng": "Долгота",
+      "radius": "Радиус (км)"
+    },
+    "federatedSearch": {
+      "description": "Поиск по нескольким индексам.",
+      "addIndex": "Добавить индекс"
+    },
+    "groupedSearch": {
+      "groupBy": "Группировать по"
+    },
+    "suggestions": "Подсказки",
+    "presets": "Пресеты поиска",
+    "aliases": "Псевдонимы коллекций",
+    "snapshots": {
+      "create": "Создать снапшот"
+    },
+    "health": {
+      "ok": "Исправен",
+      "error": "Неисправен"
+    },
+    "conversationalSearch": {
+      "description": "Задавайте вопросы и получайте ответы ИИ на основе ваших данных."
+    },
+    "voiceSearch": {
+      "description": "Поиск голосом. Аудио автоматически расшифровывается."
+    },
+    "imageSearch": {
+      "description": "Поиск по загруженному изображению. ИИ описывает его перед поиском."
+    },
+    "stemming": {
+      "description": "Управление переопределениями стемминга для точного текстового сопоставления.",
+      "word": "Слово",
+      "root": "Корень"
+    },
+    "stopwords": {
+      "description": "Управление стоп-словами для фильтрации общих слов из поиска."
+    },
+    "clusterOps": {
+      "description": "Операции и метрики на уровне кластера.",
+      "vote": "Голосовать",
+      "debug": "Отладка",
+      "metrics": "Метрики"
+    },
+    "analyticsRules": {
+      "description": "Пользовательские правила аналитики для отслеживания метрик.",
+      "name": "Название",
+      "type": "Тип",
+      "create": "Создать правило",
+      "delete": "Удалить правило"
+    },
+    "dynamicSearch": {
+      "description": "Расширенный поиск с динамической сортировкой и диверсификацией результатов.",
+      "diversifyField": "Поле диверсификации",
+      "maxPerValue": "Макс на значение"
+    },
+    "knowledge": {
+      "title": "База знаний",
+      "subtitle": "RAG-ответы на вопросы по вашим документам и каталогам",
+      "spaces": "Пространства",
+      "spacesDesc": "Личные и организационные рабочие пространства знаний",
+      "activeSpace": "Активное пространство",
+      "selectSpace": "Выбрать пространство",
+      "newSpaceSlug": "Слаг нового пространства",
+      "newSpaceName": "Название нового пространства",
+      "createSpace": "Создать пространство",
+      "sources": "Источники",
+      "sourcesDesc": "CMS и файловые источники для этого пространства",
+      "sourceName": "Название источника",
+      "sourceType": "Тип источника",
+      "sourceConfig": "Конфигурация источника (JSON)",
+      "addSource": "Добавить источник",
+      "fileIngestion": "Загрузка файла",
+      "fileIngestionDesc": "Загрузите md/xml/pdf в выбранное пространство",
+      "fileInput": "Файл",
+      "ingestFile": "Загрузить файл",
+      "jobsAndMetrics": "Задачи и метрики",
+      "jobsAndMetricsDesc": "Операционная видимость для инжестирования и построения графов",
+      "sourcesMetric": "Источники",
+      "documentsMetric": "Документы",
+      "chunksMetric": "Чанки",
+      "graphEdgesMetric": "Рёбра графа",
+      "ragAsk": "Вопрос к базе знаний",
+      "ragAskDesc": "Гибридный поиск с цитатами из вашего пространства",
+      "question": "Вопрос",
+      "askButton": "Спросить",
+      "graphExplain": "Объяснение графа",
+      "graphQuery": "Запрос к графу",
+      "explainGraph": "Объяснить граф",
+      "fileSizeLimit": "Файл должен быть меньше 50 МБ",
+      "fileTypeLimit": "Принимаются только файлы .md, .xml, .pdf",
+      "createdSpace": "Пространство знаний создано",
+      "createdSource": "Источник данных создан",
+      "ingestionStarted": "Загрузка файла начата",
+      "answerGenerated": "Ответ сгенерирован",
+      "graphExplained": "Объяснение графа сгенерировано",
+      "permissionDenied": "У вас нет прав на создание пространств",
+      "requiredFields": "Слаг и название обязательны",
+      "noSpaceSelected": "Выберите пространство и введите вопрос",
+      "slugPlaceholder": "catalog-knowledge",
+      "namePlaceholder": "Знания о каталоге",
+      "sourceNamePlaceholder": "Коннектор магазина Bitrix",
+      "questionPlaceholder": "Какие товары упоминают ротацию API-ключей?",
+      "graphQueryPlaceholder": "сбои диагностики коннектора",
+      "graphQueryLabel": "Запрос к графу",
+      "graphExplainDesc": "Изучить окружение графа для вашего запроса",
+      "citedFrom": "Цитата из документа",
+      "seedNodes": "Начальные узлы",
+      "edges": "Рёбра",
+      "noSeedNodes": "Начальные узлы не найдены.",
+      "noEdges": "Рёбра не найдены.",
+      "loadingSpaces": "Загрузка пространств...",
+      "activeSpaceLabel": "Активное пространство: {name} ({slug})",
+      "createSpaceError": "Не удалось создать пространство знаний",
+      "sourceCreateError": "Не удалось создать источник данных",
+      "ingestError": "Не удалось загрузить файл",
+      "answerError": "Не удалось сгенерировать ответ",
+      "graphExplainError": "Не удалось выполнить объяснение графа",
+      "noPermissionSources": "У вас нет прав на создание источников",
+      "selectSpaceAndSource": "Выберите пространство и укажите название источника",
+      "invalidSourceConfig": "Неверная конфигурация источника",
+      "noPermissionIngest": "У вас нет прав на загрузку файлов",
+      "selectSpaceAndFile": "Выберите пространство и файл",
+      "fileReadError": "Не удалось прочитать файл",
+      "fileTypeInvalid": "Поддерживаются только файлы .md, .xml и .pdf",
+      "selectSpaceAndGraphQuery": "Выберите пространство и введите запрос к графу"
+    }
+  },
+  "nav": {
+    "geoSearch": "Гео-поиск",
+    "federatedSearch": "Федеративный",
+    "settings": "Настройки",
+    "switchOrganization": "Сменить организацию"
+  }
 }

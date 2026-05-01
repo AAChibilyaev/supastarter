@@ -1477,6 +1477,41 @@
 		"health": {
 			"ok": "Healthy",
 			"error": "Unhealthy"
+		},
+		"conversationalSearch": {
+			"description": "Ask questions and get AI-generated answers from your data."
+		},
+		"voiceSearch": {
+			"description": "Search by speaking. Audio is transcribed automatically."
+		},
+		"imageSearch": {
+			"description": "Search by uploading an image. AI describes it before searching."
+		},
+		"stemming": {
+			"description": "Manage stemming overrides for fine-grained text matching.",
+			"word": "Word",
+			"root": "Root"
+		},
+		"stopwords": {
+			"description": "Manage stopwords to filter out common words from search."
+		},
+		"clusterOps": {
+			"description": "Cluster-level operations and metrics.",
+			"vote": "Vote",
+			"debug": "Debug",
+			"metrics": "Metrics"
+		},
+		"analyticsRules": {
+			"description": "Custom analytics rules for tracking search metrics.",
+			"name": "Name",
+			"type": "Type",
+			"create": "Create Rule",
+			"delete": "Delete Rule"
+		},
+		"dynamicSearch": {
+			"description": "Advanced search with dynamic sorting and result diversification.",
+			"diversifyField": "Diversify field",
+			"maxPerValue": "Max per value"
 		}
 	},
 	"nav": {

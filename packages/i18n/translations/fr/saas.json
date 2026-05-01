@@ -1363,6 +1363,41 @@
 		"health": {
 			"ok": "En bonne santé",
 			"error": "Défaillant"
+		},
+		"conversationalSearch": {
+			"description": "Posez des questions et obtenez des réponses générées par IA à partir de vos données."
+		},
+		"voiceSearch": {
+			"description": "Recherchez par la voix. L'audio est transcrit automatiquement."
+		},
+		"imageSearch": {
+			"description": "Recherchez en téléchargeant une image. L'IA la décrit avant de chercher."
+		},
+		"stemming": {
+			"description": "Gérez les substitutions de racinisation pour une correspondance textuelle précise.",
+			"word": "Mot",
+			"root": "Racine"
+		},
+		"stopwords": {
+			"description": "Gérez les mots vides pour filtrer les mots courants de la recherche."
+		},
+		"clusterOps": {
+			"description": "Opérations et métriques au niveau du cluster.",
+			"vote": "Voter",
+			"debug": "Déboguer",
+			"metrics": "Métriques"
+		},
+		"analyticsRules": {
+			"description": "Règles d'analyse personnalisées pour le suivi des métriques.",
+			"name": "Nom",
+			"type": "Type",
+			"create": "Créer une règle",
+			"delete": "Supprimer la règle"
+		},
+		"dynamicSearch": {
+			"description": "Recherche avancée avec tri dynamique et diversification des résultats.",
+			"diversifyField": "Champ de diversification",
+			"maxPerValue": "Max par valeur"
 		}
 	},
 	"nav": {

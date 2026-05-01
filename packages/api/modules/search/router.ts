@@ -1,13 +1,22 @@
 import { analytics } from "./procedures/analytics";
+import {
+	listAnalyticsRules,
+	createAnalyticsRule,
+	deleteAnalyticsRule,
+} from "./procedures/analytics-rules";
+import { performClusterOperation, clusterMetrics } from "./procedures/cluster-ops";
+import { conversationalSearch } from "./procedures/conversational-search";
 import { createApiKey } from "./procedures/create-api-key";
 import { createConnectorToken } from "./procedures/create-connector-token";
 import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
 import { getCurations, updateCurations } from "./procedures/curations";
+import { dynamicSearch } from "./procedures/dynamic-search";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
+import { imageSearch } from "./procedures/image-search";
 import { importDocuments } from "./procedures/import-documents";
 import { importJobs } from "./procedures/import-jobs";
 import { listApiKeys } from "./procedures/list-api-keys";
@@ -34,12 +43,15 @@ import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
+import { listStemmingOverrides, upsertStemmingOverride } from "./procedures/stemming";
+import { listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
+import { voiceSearch } from "./procedures/voice-search";
 import { getWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {
@@ -101,4 +113,25 @@ export const searchRouter = {
 	},
 	snapshot: createSnapshot,
 	health: healthCheck,
+	conversationalSearch,
+	voiceSearch,
+	imageSearch,
+	stemming: {
+		list: listStemmingOverrides,
+		upsert: upsertStemmingOverride,
+	},
+	stopwords: {
+		list: listStopwords,
+		upsert: upsertStopwords,
+	},
+	clusterOps: {
+		perform: performClusterOperation,
+		metrics: clusterMetrics,
+	},
+	analyticsRules: {
+		list: listAnalyticsRules,
+		create: createAnalyticsRule,
+		delete: deleteAnalyticsRule,
+	},
+	dynamicSearch,
 };

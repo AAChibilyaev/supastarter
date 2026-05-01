@@ -1396,6 +1396,41 @@
 		"health": {
 			"ok": "Gesund",
 			"error": "Fehlerhaft"
+		},
+		"conversationalSearch": {
+			"description": "Stellen Sie Fragen und erhalten Sie KI-generierte Antworten aus Ihren Daten."
+		},
+		"voiceSearch": {
+			"description": "Suchen per Sprache. Audio wird automatisch transkribiert."
+		},
+		"imageSearch": {
+			"description": "Suchen Sie durch Hochladen eines Bildes. KI beschreibt es vor der Suche."
+		},
+		"stemming": {
+			"description": "Verwalten Sie Stemming-Überschreibungen für präzise Textübereinstimmung.",
+			"word": "Wort",
+			"root": "Stamm"
+		},
+		"stopwords": {
+			"description": "Verwalten Sie Stoppwörter, um häufige Wörter aus der Suche zu filtern."
+		},
+		"clusterOps": {
+			"description": "Cluster-Operationen und Metriken.",
+			"vote": "Abstimmung",
+			"debug": "Debug",
+			"metrics": "Metriken"
+		},
+		"analyticsRules": {
+			"description": "Benutzerdefinierte Analyseregeln für Suchmetriken.",
+			"name": "Name",
+			"type": "Typ",
+			"create": "Regel erstellen",
+			"delete": "Regel löschen"
+		},
+		"dynamicSearch": {
+			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
+			"diversifyField": "Diversifikationsfeld",
+			"maxPerValue": "Max pro Wert"
 		}
 	},
 	"nav": {

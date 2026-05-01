@@ -1430,6 +1430,41 @@
 		"health": {
 			"ok": "Saludable",
 			"error": "No saludable"
+		},
+		"conversationalSearch": {
+			"description": "Haz preguntas y obtén respuestas generadas por IA de tus datos."
+		},
+		"voiceSearch": {
+			"description": "Busca por voz. El audio se transcribe automáticamente."
+		},
+		"imageSearch": {
+			"description": "Busca subiendo una imagen. La IA la describe antes de buscar."
+		},
+		"stemming": {
+			"description": "Gestiona anulaciones de stemming para coincidencias de texto precisas.",
+			"word": "Palabra",
+			"root": "Raíz"
+		},
+		"stopwords": {
+			"description": "Gestiona palabras vacías para filtrar palabras comunes de la búsqueda."
+		},
+		"clusterOps": {
+			"description": "Operaciones y métricas a nivel de clúster.",
+			"vote": "Votar",
+			"debug": "Depurar",
+			"metrics": "Métricas"
+		},
+		"analyticsRules": {
+			"description": "Reglas de análisis personalizadas para el seguimiento de métricas.",
+			"name": "Nombre",
+			"type": "Tipo",
+			"create": "Crear regla",
+			"delete": "Eliminar regla"
+		},
+		"dynamicSearch": {
+			"description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
+			"diversifyField": "Campo de diversificación",
+			"maxPerValue": "Máx por valor"
 		}
 	},
 	"nav": {

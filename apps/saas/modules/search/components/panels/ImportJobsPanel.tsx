@@ -24,9 +24,11 @@ import {
 	XCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ingestJobStatusBadge } from "../../lib/job-status";
+import { KanbanBoard } from "../blocks/KanbanBoard";
+import type { KanbanColumn } from "../blocks/KanbanBoard";
 import { EmptyState } from "../cards/EmptyState";
 
 interface ImportJobsPanelProps {
@@ -34,7 +36,7 @@ interface ImportJobsPanelProps {
 	slug?: string;
 }
 
-type ViewMode = "timeline" | "table";
+type ViewMode = "timeline" | "table" | "kanban";
 
 function formatDuration(startedAt: string, finishedAt: string | null): string {
 	if (!finishedAt) return "\u2014";
@@ -118,6 +120,32 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 
 	const retryJobs = jobs.filter((j) => j.status === "failed" || j.status === "pending");
 
+	const kanbanColumns = useMemo<KanbanColumn[]>(() => {
+		const statuses = ["pending", "processing", "completed", "failed"] as const;
+		const grouped = new Map<string, typeof jobs>();
+		for (const job of jobs) {
+			const list = grouped.get(job.status) ?? [];
+			list.push(job);
+			grouped.set(job.status, list);
+		}
+		return statuses.map((status) => ({
+			id: status,
+			title: t(`search.importJobs.${status}` as never),
+			emptyMessage: t("search.importJobs.empty"),
+			items: (grouped.get(status) ?? []).map((job) => ({
+				id: job.id,
+				title: job.id.slice(0, 12),
+				description: job.type ?? undefined,
+				badge: {
+					label: `${job.processedItems}/${job.totalItems}`,
+					status:
+						status === "completed" ? "success" : status === "failed" ? "error" : "info",
+				} as const,
+				meta: job.errorMessage?.slice(0, 60) || formatTime(job.startedAt),
+			})),
+		}));
+	}, [jobs, t]);
+
 	return (
 		<Card className="p-6 space-y-6">
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
@@ -141,6 +169,13 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 						onClick={() => setView("table")}
 					>
 						{t("search.importJobs.viewTable")}
+					</Button>
+					<Button
+						variant={view === "kanban" ? "primary" : "ghost"}
+						size="sm"
+						onClick={() => setView("kanban")}
+					>
+						<ListIcon className="size-3.5" />
 					</Button>
 				</div>
 			</div>
@@ -332,7 +367,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 						);
 					})}
 				</div>
-			) : (
+			) : view === "table" ? (
 				/* Table view */
 				<div className="overflow-x-auto">
 					<Table>
@@ -372,6 +407,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 						</TableBody>
 					</Table>
 				</div>
+			) : (
+				/* Kanban view */
+				<KanbanBoard columns={kanbanColumns} />
 			)}
 		</Card>
 	);

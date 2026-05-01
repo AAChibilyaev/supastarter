@@ -1,0 +1,112 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
+import { GaugeIcon, CodeIcon, DollarSignIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import type { ComponentType } from "react";
+
+interface WhyItem {
+	key: "speed" | "simple" | "open";
+	icon: ComponentType<{ className?: string }>;
+}
+
+const whyItems: WhyItem[] = [
+	{ key: "speed", icon: GaugeIcon },
+	{ key: "simple", icon: CodeIcon },
+	{ key: "open", icon: DollarSignIcon },
+];
+
+export function AboutContent() {
+	const t = useTranslations("aboutPage");
+
+	return (
+		<>
+			{/* Mission section */}
+			<section className="py-24 border-b border-border/60">
+				<div className="container">
+					<div className="max-w-3xl mx-auto text-center">
+						<p className="text-sm font-semibold uppercase tracking-widest text-primary">
+							{t("mission.label")}
+						</p>
+						<blockquote className="mt-6 text-2xl md:text-3xl font-medium tracking-tight text-balance leading-snug">
+							&ldquo;{t("mission.quote")}&rdquo;
+						</blockquote>
+						<p className="mt-6 text-lg text-muted-foreground text-balance">
+							{t("mission.body")}
+						</p>
+					</div>
+				</div>
+			</section>
+
+			{/* Stats section */}
+			<section className="py-20 border-b border-border/60 bg-muted/30">
+				<div className="container">
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center">
+						<div>
+							<div className="text-4xl font-bold text-foreground tabular-nums">
+								{t("stats.searches")}
+							</div>
+							<div className="mt-2 text-sm text-muted-foreground">
+								{t("stats.searchesLabel")}
+							</div>
+						</div>
+						<div>
+							<div className="text-4xl font-bold text-foreground tabular-nums">
+								{t("stats.companies")}
+							</div>
+							<div className="mt-2 text-sm text-muted-foreground">
+								{t("stats.companiesLabel")}
+							</div>
+						</div>
+						<div>
+							<div className="text-4xl font-bold text-foreground tabular-nums">
+								{t("stats.uptime")}
+							</div>
+							<div className="mt-2 text-sm text-muted-foreground">
+								{t("stats.uptimeLabel")}
+							</div>
+						</div>
+						<div>
+							<div className="text-4xl font-bold text-foreground tabular-nums">
+								{t("stats.latency")}
+							</div>
+							<div className="mt-2 text-sm text-muted-foreground">
+								{t("stats.latencyLabel")}
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* Why AACsearch section */}
+			<section className="py-24 border-b border-border/60">
+				<div className="container">
+					<div className="max-w-2xl mx-auto text-center">
+						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
+							{t("why.title")}
+						</h2>
+					</div>
+
+					<div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+						{whyItems.map(({ key, icon: Icon }) => (
+							<Card
+								key={key}
+								className="group transition-colors hover:border-primary/30 hover:bg-accent/5"
+							>
+								<CardHeader>
+									<div className="mb-3 size-10 flex items-center justify-center rounded-lg border border-border/60 bg-muted/50 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5">
+										<Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
+									</div>
+									<CardTitle>{t(`why.items.${key}.title`)}</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<CardDescription className="text-sm leading-relaxed">
+										{t(`why.items.${key}.description`)}
+									</CardDescription>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</div>
+			</section>
+		</>
+	);
+}

@@ -84,7 +84,7 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
 
 ### Internationalization
 
-- Strings come from `packages/i18n/translations/<locale>/<scope>.json` where `locale ∈ {en, de, es, fr}` and `scope ∈ {mail, marketing, saas, shared}`.
+- Strings come from `packages/i18n/translations/<locale>/<scope>.json` where `locale ∈ {en, de, es, fr, ru}` and `scope ∈ {mail, marketing, saas, shared}`.
 - Pick the right scope file: SaaS-only feature → `saas.json`, marketing-only → `marketing.json`, both → `shared.json`, email copy → `mail.json`.
 - Server: `setRequestLocale(locale)` and `getMessagesForLocale(locale, scope)` from `@repo/i18n`.
 - Client: `useTranslations()` from `next-intl`.
@@ -125,7 +125,7 @@ These are **MUST**, not preferences. Each row has a default; overriding it requi
 | **New env-driven provider switch** (`MY_FEATURE_PROVIDER`) | **NO** — hard-code the one provider needed.                                                                                                                                                 | A second provider is being added in this same task.                                                                                                             |
 | **New typed `Error` subclass**                             | **NO** — `throw new Error("MY_FOO_<CODE>:...")`.                                                                                                                                            | ≥3 `catch` sites need to discriminate this from other errors.                                                                                                   |
 | **New config in `config.ts` "for future flexibility"**     | **NO** — hardcode the current value.                                                                                                                                                        | A real second value exists today.                                                                                                                               |
-| **New i18n locale**                                        | **NO** — only the 4 locales already defined (en/de/es/fr) unless the project owner has explicitly asked for another.                                                                        | A specific locale is requested AND all 4 scope files (`mail`/`marketing`/`saas`/`shared`) will be filled in this same task — partial locales break TS types.    |
+| **New i18n locale**                                        | **NO** — only the 5 locales already defined (en/de/es/fr/ru) unless the project owner has explicitly asked for another.                                                                     | A specific locale is requested AND all 4 scope files (`mail`/`marketing`/`saas`/`shared`) will be filled in this same task — partial locales break TS types.    |
 | **New translation namespace / scope file**                 | **NO** — choose `saas` / `marketing` / `shared` / `mail` per [internationalization.md](internationalization.md).                                                                            | —                                                                                                                                                               |
 
 **Hard reuse rules (do not negotiate):**

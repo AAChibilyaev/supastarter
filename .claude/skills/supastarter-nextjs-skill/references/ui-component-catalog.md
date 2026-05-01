@@ -8,7 +8,7 @@
 
 ```bash
 # 1. Is there already a primitive in @repo/ui?
-ls packages/ui/components/                # 27 shadcn primitives — see Layer 1 below
+ls packages/ui/components/                # 39 primitives — see Layer 1 below
 rg -l "export.*Foo" packages/ui/components
 
 # 2. Is there a shared SaaS block? (NavBar, PageHeader, UserAvatar, NotificationCenter,
@@ -120,7 +120,7 @@ Path: `apps/saas/modules/shared/components/`. Used across multiple SaaS features
 | `UserAvatar`                        | Avatar with image + initials fallback                                                     |
 | `NotificationCenter`                | Bell icon + popover with notifications list (uses `@repo/notifications` API)              |
 | `ColorModeToggle`                   | Light/dark/system theme switcher                                                          |
-| `LocaleSwitch`                      | Language switcher (4 locales)                                                             |
+| `LocaleSwitch`                      | Language switcher (5 locales)                                                             |
 | `Pagination`                        | Page navigation for lists/tables                                                          |
 | `PageHeader`                        | Standard page title + description + actions row                                           |
 | `TabGroup`                          | Wrapper around `Tabs` with route-synced state                                             |

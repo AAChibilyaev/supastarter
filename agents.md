@@ -1595,27 +1595,14 @@ Last: [first session]
 
 ## Last Session Bridge
 [pre-compact bridge — saved before context compaction]
-Files (48):
-  apps/marketing/app/[locale]/features/page.tsx (create)
-  /tmp/marketing-patches/features/en.json (create)
-  /tmp/marketing-patches/features/de.json (create)
-  /tmp/marketing-patches/features/es.json (create)
-  apps/marketing/app/[locale]/pricing/page.tsx (create)
-  /tmp/marketing-patches/features/fr.json (create)
-  /tmp/marketing-patches/features/ru.json (create)
-  /tmp/marketing-patches/pricing/en.json (create)
-  /tmp/marketing-patches/pricing/de.json (create)
-  /tmp/marketing-patches/pricing/es.json (create)
-  /tmp/marketing-patches/pricing/fr.json (create)
-  /tmp/marketing-patches/pricing/ru.json (create)
-  apps/marketing/modules/integrations/components/IntegrationsGrid.tsx (create)
-  apps/marketing/app/[locale]/integrations/page.tsx (create)
-  /tmp/marketing-patches/integrations/en.json (create)
-  /tmp/marketing-patches/integrations/de.json (create)
-  /tmp/marketing-patches/integrations/es.json (create)
-  /tmp/marketing-patches/integrations/fr.json (create)
-  apps/marketing/modules/security/components/SecurityGrid.tsx (create)
-  /tmp/marketing-patches/integrations/ru.json (create)
-  ... +28 more
+Files (8):
+  .claude/skills/supastarter-nextjs-skill/SKILL.md (edit)
+  .claude/skills/supastarter-nextjs-skill/references/ui-component-catalog.md (edit)
+  .claude/skills/supastarter-nextjs-skill/references/coding-conventions.md (edit)
+  apps/saas/modules/search/components/panels/ImportJobsPanel.tsx (edit)
+  /tmp/update_ru.py (create)
+  /tmp/update_de.py (create)
+  /tmp/update_es.py (create)
+  /tmp/update_fr.py (create)
 
 # === END COGNILAYER ===

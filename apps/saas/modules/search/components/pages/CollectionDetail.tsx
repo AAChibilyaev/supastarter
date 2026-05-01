@@ -7,7 +7,6 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
@@ -25,6 +24,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { Switch } from "@repo/ui/components/switch";
 import { Textarea } from "@repo/ui/components/textarea";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
@@ -106,13 +106,13 @@ export function CollectionDetail() {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const { activeOrganization } = useActiveOrganization();
+	const { confirm } = useConfirmationAlert();
 
 	const orgSlug = params.organizationSlug;
 	const indexSlug = params.indexSlug;
 	const orgId = activeOrganization?.id;
 
 	const [activeTab, setActiveTab] = useState<TabId>("overview");
-	const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
 	// ── Fetch indexes ──────────────────────────────────────────────
 
@@ -160,9 +160,7 @@ export function CollectionDetail() {
 	);
 
 	const firstApiKey = apiKeys?.[0];
-	const maskedKey = firstApiKey
-		? `${firstApiKey.prefix}...${firstApiKey.name?.slice(0, 4) ?? "KEY"}`
-		: "ss_sea...KEY";
+	const maskedKey = firstApiKey ? `${firstApiKey.prefix}****` : "ss_search_****";
 	const saasUrl = process.env.NEXT_PUBLIC_SAAS_URL ?? "https://app.example.com";
 
 	// ── Delete mutation ────────────────────────────────────────────
@@ -596,57 +594,26 @@ $data = json_decode($response->getBody(), true);`;
 							</p>
 							<Button
 								variant="destructive"
-								onClick={() => setDeleteConfirmOpen(true)}
+								onClick={() => {
+									if (!orgId) return;
+									confirm({
+										title: t("collection.confirmDelete"),
+										message: t("collection.confirmDeleteDesc"),
+										confirmLabel: t("collection.delete"),
+										destructive: true,
+										onConfirm: () => {
+											deleteMutation.mutate({
+												organizationId: orgId,
+												slug: index.slug,
+											});
+										},
+									});
+								}}
 							>
 								{t("collection.deleteCollection")}
 							</Button>
 						</CardContent>
 					</Card>
-
-					{/* Delete confirmation dialog */}
-					{deleteConfirmOpen && (
-						<div className="inset-0 backdrop-blur-sm fixed z-50 flex items-center justify-center bg-background/80">
-							<Card className="mx-4 max-w-md w-full">
-								<CardHeader>
-									<CardTitle className="text-destructive">
-										{t("collection.confirmDelete")}
-									</CardTitle>
-									<CardDescription>
-										{t("collection.confirmDeleteDesc")}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<p className="text-sm">
-										{t("collection.confirmDeleteMessage", {
-											name: index.displayName ?? index.slug,
-										})}
-									</p>
-								</CardContent>
-								<CardFooter className="gap-2 justify-end">
-									<Button
-										variant="outline"
-										onClick={() => setDeleteConfirmOpen(false)}
-									>
-										{t("collection.cancel")}
-									</Button>
-									<Button
-										variant="destructive"
-										disabled={deleteMutation.isPending}
-										onClick={() => {
-											setDeleteConfirmOpen(false);
-											if (!orgId) return;
-											deleteMutation.mutate({
-												organizationId: orgId,
-												slug: index.slug,
-											});
-										}}
-									>
-										{deleteMutation.isPending ? t("loading") : t("collection.delete")}
-									</Button>
-								</CardFooter>
-							</Card>
-						</div>
-					)}
 				</div>
 			)}
 		</div>
@@ -759,10 +726,19 @@ function SchemaEditor({
 			onSuccess: () => {
 				toastSuccess(t("saved"));
 				void queryClient.invalidateQueries({
-					queryKey: orpc.search.schema.get.key(),
+					queryKey: orpc.search.schema.get.queryOptions({
+						input: { slug, organizationId },
+					}).queryKey,
 				});
 			},
 			onError: () => toastError(t("saveError")),
+		}),
+	);
+
+	const reindexMutation = useMutation(
+		orpc.search.reindex.mutationOptions({
+			onSuccess: () => toastSuccess(t("reindexStarted")),
+			onError: () => toastError(t("reindexError")),
 		}),
 	);
 
@@ -1106,6 +1082,33 @@ function SchemaEditor({
 							{t("cancel")}
 						</Button>
 						<Button
+							variant="outline"
+							disabled={mutation.isPending || reindexMutation.isPending}
+							loading={mutation.isPending && !reindexMutation.isPending}
+							onClick={() => {
+								const validFields = draft.filter((f) => f.name.trim());
+								mutation.mutate(
+									{
+										organizationId,
+										slug,
+										fields: validFields,
+										defaultSortingField: defaultSort || undefined,
+										triggerReindex: false,
+									},
+									{
+										onSuccess: () => {
+											reindexMutation.mutate({ organizationId, slug });
+											setDiffOpen(false);
+										},
+									},
+								);
+							}}
+						>
+							{t("saveReindex")}
+						</Button>
+						<Button
+							disabled={mutation.isPending || reindexMutation.isPending}
+							loading={mutation.isPending || reindexMutation.isPending}
 							onClick={() => {
 								handleSave(false);
 								setDiffOpen(false);

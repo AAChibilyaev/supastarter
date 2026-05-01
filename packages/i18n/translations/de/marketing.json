@@ -315,5 +315,1255 @@
 				"description": "Wir binden dein CMS, ERP oder proprietäre Datenquellen ein. Connector API inklusive; benutzerdefinierte Connectors auf Anfrage."
 			}
 		}
+	},
+	"aboutPage": {
+		"title": "Über AACsearch",
+		"description": "Wir bauen die Such-Infrastruktur für die nächste Generation von Webanwendungen.",
+		"mission": {
+			"label": "Unsere Mission",
+			"quote": "Suche sollte schnell, relevant und für jeden Entwickler zugänglich sein.",
+			"body": "AACsearch wurde mit einer einfachen Überzeugung gegründet: Großartige Suche sollte kein Team von Ingenieuren zur Wartung oder ein Vermögen zum Betrieb erfordern."
+		},
+		"stats": {
+			"searches": "10M+",
+			"searchesLabel": "Suchen pro Tag",
+			"companies": "500+",
+			"companiesLabel": "Unternehmen vertrauen uns",
+			"uptime": "99,9%",
+			"uptimeLabel": "Verfügbarkeits-SLA",
+			"latency": "<50ms",
+			"latencyLabel": "Durchschnittliche Latenz"
+		},
+		"why": {
+			"title": "Warum AACsearch",
+			"items": {
+				"speed": {
+					"title": "Blitzschnell",
+					"description": "Suchantworten unter 50 ms in jedem Maßstab, betrieben von unserer verteilten Such-Infrastruktur."
+				},
+				"simple": {
+					"title": "Entwickler zuerst",
+					"description": "Intuitive REST-API, SDKs für alle wichtigen Programmiersprachen und ein übersichtliches Dashboard."
+				},
+				"open": {
+					"title": "Transparente Preise",
+					"description": "Keine versteckten Gebühren, keine Bindung. Zahlen Sie nur für das, was Sie nutzen, mit klaren, vorhersehbaren Preisen."
+				}
+			}
+		}
+	},
+	"about": {
+		"title": "Warum wir AACsearch gebaut haben",
+		"subtitle": "Such-Infrastruktur ist komplex. Managed Services sind teuer und intransparent. Wir haben gebaut, was wir selbst gebraucht hätten.",
+		"items": {
+			"mission": {
+				"title": "Mission",
+				"description": "Professionelle Suche für jedes Team zugänglich machen — von Zwei-Personen-Startups bis hin zu regulierten Unternehmen — ohne dedizierten Such-Ingenieur."
+			},
+			"technology": {
+				"title": "Technologie",
+				"description": "Aufgebaut auf Typesense, einer schnellen Open-Source-Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
+			},
+			"openCore": {
+				"title": "Open Core",
+				"description": "Der Servercode ist Open Source. Prüfen Sie, was läuft, hosten Sie es selbst oder nutzen Sie unsere Managed Cloud. Kein proprietärer Fork, kein Lock-in."
+			},
+			"team": {
+				"title": "Team",
+				"description": "Ein kleines, fokussiertes Team. Wir haben Suche bei B2B-SaaS-Unternehmen, E-Commerce-Plattformen und Entwicklertools geliefert. Wir nutzen unser eigenes Produkt."
+			},
+			"values": {
+				"title": "Werte",
+				"description": "Einfachheit vor Cleverness. Dokumentiertes Verhalten statt Magic. Eine API, die ein Junior-Entwickler am ersten Tag nutzen und ein Senior in der Produktion vertrauen kann."
+			},
+			"roadmap": {
+				"title": "Roadmap",
+				"description": "Öffentliche Roadmap, durch Nutzer abgestimmt. Wir liefern inkrementell — keine Big-Bang-Releases. Der Changelog wird mit jedem Deployment aktualisiert."
+			}
+		}
+	},
+	"customersPage": {
+		"title": "Geliebt von Entwicklern, vertraut von Unternehmen",
+		"description": "Schließen Sie sich Hunderten von Unternehmen an, die AACsearch nutzen, um schnelle und relevante Sucherlebnisse zu bieten.",
+		"stats": {
+			"companies": "500+",
+			"companiesLabel": "Unternehmen weltweit",
+			"searches": "10M+",
+			"searchesLabel": "Suchen pro Tag",
+			"uptime": "99,9%",
+			"uptimeLabel": "Plattformverfügbarkeit",
+			"rating": "4,9/5",
+			"ratingLabel": "Durchschnittliche Bewertung"
+		},
+		"testimonials": {
+			"title": "Was unsere Kunden sagen",
+			"items": {
+				"first": {
+					"quote": "AACsearch hat unsere Suchlatenz um 80 % reduziert und unser Team hat es an einem Nachmittag eingerichtet. Es funktioniert einfach.",
+					"author": "Sarah Chen",
+					"role": "CTO",
+					"company": "TechCorp"
+				},
+				"second": {
+					"quote": "Wir haben von einem veralteten Suchanbieter migriert und sofortige Verbesserungen bei der Relevanz festgestellt. Unsere Konversionsrate stieg um 15 %.",
+					"author": "Marcus Weber",
+					"role": "Leiter Engineering",
+					"company": "ShopNow"
+				},
+				"third": {
+					"quote": "Die API ist sauber, die Dokumentation ist großartig und das Support-Team antwortet tatsächlich. Eine seltene Kombination.",
+					"author": "Priya Sharma",
+					"role": "Lead-Entwicklerin",
+					"company": "DevHub"
+				}
+			}
+		},
+		"logos": {
+			"title": "Vertraut von Teams bei"
+		},
+		"cta": {
+			"title": "Schließen Sie sich Hunderten von Unternehmen an",
+			"description": "Starten Sie noch heute Ihre kostenlose Testversion – keine Kreditkarte erforderlich."
+		}
+	},
+	"customers": {
+		"title": "Vertraut von Entwicklern",
+		"subtitle": "Early Adopters, die Algolia, Elasticsearch oder selbst gebaute Lösungen ersetzt haben — und sich nicht mehr um Such-Infrastruktur kümmern müssen.",
+		"items": {
+			"ecommerce": {
+				"title": "E-Commerce-Plattform",
+				"description": "Nach der dritten unerwarteten Rechnung haben wir Algolia ersetzt. AACsearch kostet jeden Monat einen fixen Betrag. Die Migration dauerte drei Tage. Die Suche ist besser als zuvor.",
+				"role": "CTO, 15-köpfiges E-Commerce-SaaS-Team"
+			},
+			"saasFounder": {
+				"title": "B2B-SaaS-Gründer",
+				"description": "Wir brauchten Tenant-Suche ohne eigene Infrastruktur. Dank AACsearch Scoped Tokens haben wir an einem Wochenende geliefert statt in einem ganzen Sprint.",
+				"role": "Gründer, Projektmanagement-SaaS"
+			},
+			"devTools": {
+				"title": "Entwicklertools-Unternehmen",
+				"description": "Der MCP-Server ermöglicht unseren KI-Features programmatischen Zugriff auf Nutzerdaten. Eine Integration hat drei neue Produktfeatures freigeschaltet.",
+				"role": "VP Engineering, Entwicklertools-Startup"
+			},
+			"enterprise": {
+				"title": "Enterprise-Plattform",
+				"description": "Audit-Log, SSO und dedizierter Cluster waren die Anforderungen. AACsearch Enterprise erfüllte alle drei. Das SLA ist vertraglich fixiert.",
+				"role": "Head of Security, Enterprise-SaaS"
+			},
+			"marketplace": {
+				"title": "Marketplace-Startup",
+				"description": "Multi-Search ermöglicht uns Produkt-, Anbieter- und Inhaltsabfragen in einer Anfrage. Die Analytics zeigen uns genau, wo Nutzer abspringen.",
+				"role": "Lead Engineer, zweiseitiger Marketplace"
+			},
+			"agency": {
+				"title": "Digitalagentur",
+				"description": "Wir setzen AACsearch für Kunden ein. Der Self-Host-Pfad bedeutet, dass Kunden mit On-Premises-Anforderungen dasselbe Produkt wie Cloud-Kunden erhalten.",
+				"role": "Technical Director, Digitalagentur"
+			}
+		}
+	},
+	"roadmapPage": {
+		"title": "Produkt-Roadmap",
+		"description": "Was geliefert wurde, was in Arbeit ist und was als Nächstes kommt. Nach jedem Sprint aktualisiert."
+	},
+	"roadmap": {
+		"title": "Wohin wir gehen",
+		"subtitle": "Inkrementell, öffentlich und zuverlässig im besten Sinne. Keine Big-Bang-Releases — nur konsequente Lieferung.",
+		"shipped": "Geliefert",
+		"inProgress": "In Arbeit",
+		"planned": "Geplant",
+		"items": {
+			"searchCore": {
+				"title": "Search Core v0.x",
+				"description": "Einzel-Upsert, Multi-Search, Browser-SDK, Scoped Tokens, Origin-Allowlist, Rate-Limit, Quota, Zero-Downtime-Reindex, DB-First-Ingest.",
+				"status": "shipped"
+			},
+			"marketing": {
+				"title": "Marketing-Website v0.5",
+				"description": "Öffentliche Marketing-Website mit Preisen, Features, Integrationen, Sicherheit, Anwendungsfällen und Enterprise-Seiten in 5 Sprachen.",
+				"status": "shipped"
+			},
+			"connectors": {
+				"title": "CMS-Connectors R2",
+				"description": "PrestaShop 8.x und 1C-Bitrix Module. Connector API mit Handshake, Full/Delta-Sync, Diagnose, Heartbeat.",
+				"status": "shipped"
+			},
+			"knowledge": {
+				"title": "Knowledge-Modul R2.5",
+				"description": "RAG und GraphRAG über Dokumente. 9 oRPC-Prozeduren, 7 Prisma-Modelle, Datei-Ingestion, Chunking, Retrieval.",
+				"status": "shipped"
+			},
+			"metering": {
+				"title": "Search-Units-Metering v0.6",
+				"description": "Tochka-Wallet-Aufladung, planbasierte Search-Unit-Abrechnung, Analytics-Pipeline, Wallet-Dashboard.",
+				"status": "inProgress"
+			},
+			"docs": {
+				"title": "Öffentliche Doku-Website v0.7",
+				"description": "Vollständige Dokumentationswebsite mit API-Referenz, Schnellstart-Anleitungen und Tutorials.",
+				"status": "planned"
+			},
+			"selfHost": {
+				"title": "Self-Host-Schnellstart v1.0",
+				"description": "Helm-Chart, Docker Compose, One-Click-Deploy auf Coolify. Identischer Code wie Managed Cloud.",
+				"status": "planned"
+			},
+			"vectorSearch": {
+				"title": "Vektor- & Hybridsuche",
+				"description": "Semantische Suche über OpenAI-Embeddings. Hybrides BM25 + Vektor-Ranking. Bereits in Prozeduren implementiert.",
+				"status": "shipped"
+			}
+		}
+	},
+	"careersPage": {
+		"title": "Karriere bei AACsearch",
+		"description": "Ein kleines Team, das Such-Infrastruktur für die nächste Generation von Software-Produkten entwickelt. Remote-First."
+	},
+	"careers": {
+		"title": "An Such-Infrastruktur arbeiten",
+		"subtitle": "Kleines Team, bedeutungsvolle Arbeit. Jeder Ingenieur liefert in die Produktion. Keine Komitees, keine verfehlen Sprints.",
+		"openRoles": "Offene Stellen",
+		"noRoles": "Derzeit keine offenen Stellen — wir sind aber immer an außergewöhnlichen Kandidaten interessiert.",
+		"applyPrompt": "Schreiben Sie uns eine Nachricht an",
+		"applyEmail": "jobs@aacsearch.com",
+		"items": {
+			"culture": {
+				"title": "Kultur",
+				"description": "Remote-First, Async als Standard. Wir schreiben Dinge auf. Meetings sind selten und haben eine Agenda. Ergebnisse zählen, nicht Stunden."
+			},
+			"engineering": {
+				"title": "Engineering",
+				"description": "TypeScript, Next.js, Typesense, Prisma, Hono. Der Stack ist modern und dokumentiert. Sie übernehmen Features von Anfang bis Ende."
+			},
+			"growth": {
+				"title": "Wachstum",
+				"description": "Wir sind früh. Sie werden überproportionalen Einfluss haben. Die Codebasis ist sauber — keine Legacy-Schulden, durch die man sich wühlen müsste."
+			},
+			"benefits": {
+				"title": "Benefits",
+				"description": "Wettbewerbsfähiges Gehalt, an Ihren Standort angepasst. Beteiligung. Home-Office-Budget. Kein Mikromanagement."
+			},
+			"learning": {
+				"title": "Weiterbildung",
+				"description": "Konferenzbudget. Bezahlte Bücher und Kurse. Zeit, neue Ideen zu erkunden, die dem Produkt dienen."
+			},
+			"hiring": {
+				"title": "Einstellungsprozess",
+				"description": "Zwei Gespräche und eine bezahlte Hausaufgabe. Wir respektieren Ihre Zeit. Entscheidung innerhalb von zwei Wochen nach dem ersten Kontakt."
+			}
+		}
+	},
+	"partnersPage": {
+		"title": "Partner von AACsearch werden",
+		"description": "Erweitern Sie Ihr Geschäft durch Integration, Weiterverkauf oder Aufbau auf AACsearch. Werden Sie Teil unseres Partner-Ökosystems."
+	},
+	"partners": {
+		"title": "Gemeinsam wachsen",
+		"subtitle": "Wir suchen Agenturen, Berater und Technologieunternehmen, die Suche in ihr Angebot integrieren möchten.",
+		"items": {
+			"technology": {
+				"title": "Technologiepartner",
+				"description": "Native Integrationen für Ihre Plattform erstellen. Co-Marketing, gemeinsame Dokumentation und technischer Support."
+			},
+			"implementation": {
+				"title": "Implementierungspartner",
+				"description": "Agenturen und Berater, die AACsearch für ihre Kunden implementieren. Revenue-Sharing und Deal-Registrierung."
+			},
+			"reseller": {
+				"title": "Reseller",
+				"description": "AACsearch unter Ihrer eigenen Marke weiterverkaufen oder in Ihr Produkt einbündeln. White-Label-Optionen verfügbar."
+			},
+			"cloud": {
+				"title": "Cloud-Marktplatz",
+				"description": "Verfügbar im AWS Marketplace und Azure Marketplace. Abwicklung über Ihr bestehendes Cloud-Budget."
+			},
+			"benefits": {
+				"title": "Partner-Vorteile",
+				"description": "Partnerportal, Co-Marketing-Support, dedizierter Channel-Manager, NFR-Lizenzen und Priority-Support-SLA."
+			},
+			"apply": {
+				"title": "Zum Programm bewerben",
+				"description": "Füllen Sie das Formular aus und ein Partner-Manager antwortet innerhalb von zwei Werktagen. Kein Exklusivitätserfordernis."
+			}
+		}
+	},
+	"featuresSearchApiPage": {
+		"title": "Search API",
+		"description": "Eine einfache, leistungsstarke REST-API für blitzschnelle Suche über Ihre Daten. Tenant-isoliert, rate-limitiert und beobachtbar."
+	},
+	"featuresSearchApi": {
+		"title": "Die API, die Ihr Team verdient",
+		"subtitle": "15 REST-Endpunkte. OpenAPI 3.1 Spec. Browser-SDK. Kein Typesense-Cluster zu verwalten.",
+		"items": {
+			"endpoints": {
+				"title": "15 öffentliche Endpunkte",
+				"description": "Vollständiges CRUD über Indexe, Dokumente und API-Keys. Dazu Suche, Multi-Search, Analytics und OpenAPI-Spec unter /api/v1/openapi.json."
+			},
+			"openApi": {
+				"title": "OpenAPI 3.1 Spec",
+				"description": "Maschinenlesbare Spec wird mit jedem Deployment ausgeliefert. Clients in jeder Sprache generieren. Von Anfang an typsicher."
+			},
+			"browserSdk": {
+				"title": "Typisiertes Browser-SDK",
+				"description": "NPM-Paket. Einfache Suche, Multi-Search (föderiert), Facetten. Unter 50 ms p99. Funktioniert in jedem Framework."
+			},
+			"authentication": {
+				"title": "API-Key-Authentifizierung",
+				"description": "Bearer-Token-Auth. Keys werden im Ruhezustand gehasht. Scoped Tokens für Browser-Verwendung. Origin-Allowlist pro Key."
+			},
+			"tenancy": {
+				"title": "Eingebaute Multi-Tenancy",
+				"description": "Jede Anfrage ist auf Ihre Organisation beschränkt. Organisationsübergreifende Zugriffe sind architektonisch unmöglich — nicht nur Richtlinie."
+			},
+			"observability": {
+				"title": "Eingebaute Observability",
+				"description": "Jede Suche wird mit Query, Ergebnisanzahl, Latenz und User-Agent aufgezeichnet. Analytics und Top-Queries im Dashboard."
+			}
+		}
+	},
+	"featuresAnalyticsPage": {
+		"title": "Such-Analytics",
+		"description": "Verstehen Sie, wonach Ihre Nutzer suchen, was keine Ergebnisse liefert und was Conversions treibt — alles im Dashboard."
+	},
+	"featuresAnalytics": {
+		"title": "Suchanfragen in Erkenntnisse verwandeln",
+		"subtitle": "Jede Suchanfrage ist ein implizites Signal für die Nutzerabsicht. AACsearch erfasst, aggregiert und zeigt sie automatisch.",
+		"items": {
+			"topQueries": {
+				"title": "Top-Suchanfragen",
+				"description": "Die häufigsten Suchbegriffe nach Volumen gerankt. Trends, aufkommende Nachfrage und saisonale Muster erkennen."
+			},
+			"zeroResults": {
+				"title": "Zero-Results-Tracking",
+				"description": "Jede Suche ohne Ergebnis wird markiert. Synonyme aufbauen, fehlende Inhalte ergänzen oder Alternativen anzeigen."
+			},
+			"clickThrough": {
+				"title": "Click-Through-Rate",
+				"description": "Verfolgen Sie, welche Ergebnisse Nutzer pro Suchanfrage anklicken. Ranking-Probleme erkennen, bevor sie die Conversion beeinträchtigen."
+			},
+			"recentActivity": {
+				"title": "Aktivitäts-Feed",
+				"description": "Live-Feed von Such-Events in Ihrer Organisation. Nach Index, Zeitraum oder Ergebnisanzahl filtern."
+			},
+			"usageSummary": {
+				"title": "Nutzungsübersicht",
+				"description": "Monatlicher Search-Unit-Verbrauch, aufgeschlüsselt nach Index. Kosten prognostizieren und Kapazität planen, bevor Limits erreicht werden."
+			},
+			"widgetEvents": {
+				"title": "Widget-Event-Tracking",
+				"description": "widget_open, search_query, result_click, filter_used — alle automatisch vom einbettbaren Widget erfasst."
+			}
+		}
+	},
+	"featuresWidgetPage": {
+		"title": "Einbettbares Such-Widget",
+		"description": "Ein 14 KB JavaScript-Widget mit Shadow-DOM-Isolation. In unter einer Stunde in jeden Storefront oder jede Website einbinden."
+	},
+	"featuresWidget": {
+		"title": "Suche, die sich in jede Seite einfügt",
+		"subtitle": "Vanilla JS, keine Framework-Abhängigkeit, von Ihrer AACsearch-Subdomain ausgeliefert. Funktioniert auf PrestaShop, Bitrix, WordPress und eigenen Storefronts.",
+		"items": {
+			"shadowDom": {
+				"title": "Shadow-DOM-Isolation",
+				"description": "Widget-Styles lecken nie in Ihre Seite. Seitenstyles brechen das Widget nie. Null CSS-Konflikte."
+			},
+			"noFramework": {
+				"title": "Kein Framework erforderlich",
+				"description": "Reines JavaScript-IIFE. Funktioniert neben React, Vue, Plain HTML oder jedem CMS. Kein Build-Schritt, kein npm, kein Bundler."
+			},
+			"i18n": {
+				"title": "5 Sprachen eingebaut",
+				"description": "Englisch, Deutsch, Spanisch, Französisch und Russisch im Widget-Bundle enthalten. Erkennt Locale automatisch."
+			},
+			"analytics": {
+				"title": "Analytics von Haus aus",
+				"description": "Verfolgt widget_open, search_query, zero_results, result_click und filter_used automatisch. Kein zusätzlicher Code."
+			},
+			"config": {
+				"title": "Data-Attribut-Konfiguration",
+				"description": "Konfiguration über data-*-Attribute am Script-Tag. Kein JavaScript erforderlich. Token, Platzhalter, Locale — alles als Attribute."
+			},
+			"performance": {
+				"title": "14 KB gzipped",
+				"description": "IIFE + ESM Dual-Build. Schnelles initiales Laden, sofortige Suchergebnisse. Keine Async-Chunks, keine Dynamic Imports."
+			}
+		}
+	},
+	"featuresKnowledgePage": {
+		"title": "Wissensbasis & RAG",
+		"description": "Dokumente indizieren und mit KI Fragen dazu beantworten. Chunking, Retrieval und GraphRAG — inklusive."
+	},
+	"featuresKnowledge": {
+		"title": "Q&A über Ihre Dokumente",
+		"subtitle": "PDFs, DOCX und Textdateien hochladen. Fragen in natürlicher Sprache stellen. Zitierte Antworten aus Ihren Inhalten erhalten.",
+		"items": {
+			"ingestion": {
+				"title": "Multi-Format-Ingestion",
+				"description": "PDF, DOCX, TXT und Markdown. Upload über das Dashboard oder die Ingest-File-API. Status pro Ingestion-Job nachverfolgbar."
+			},
+			"chunking": {
+				"title": "Intelligentes Chunking",
+				"description": "Dokumente werden in semantische Abschnitte mit Überlappung aufgeteilt. Chunk-Größe und Strategie pro Knowledge-Space konfigurierbar."
+			},
+			"retrieval": {
+				"title": "Semantisches Retrieval",
+				"description": "OpenAI-Embeddings für semantische Ähnlichkeit. BM25 für Keyword-Präzision. Hybrides Scoring für optimale Ergebnisse."
+			},
+			"graphRag": {
+				"title": "GraphRAG",
+				"description": "Entity-Extraktion erstellt einen Wissensgraphen über Ihre Dokumente. Multi-Hop-Reasoning findet Zusammenhänge, die einfache Suche übersieht."
+			},
+			"citations": {
+				"title": "Zitierte Antworten",
+				"description": "Jede Antwort enthält Quellenangaben mit Dokumentname, Chunk-Position und Relevanz-Score."
+			},
+			"multiTenant": {
+				"title": "Tenant-eigene Spaces",
+				"description": "Jede Organisation hat isolierte Knowledge-Spaces. Nutzer sehen nur ihre eigenen Daten. Kein Cross-Tenant-Informationsleck."
+			}
+		}
+	},
+	"featuresConnectorsPage": {
+		"title": "CMS-Connectors",
+		"description": "Native Module für PrestaShop und 1C-Bitrix. REST-API für alles andere. Produkte und Inhalte automatisch synchronisieren."
+	},
+	"featuresConnectors": {
+		"title": "Ihre Datenquelle verbinden",
+		"subtitle": "Fertige Module übernehmen die Sync-Schleife. Die 7-Endpunkt-Connector-API ermöglicht einen eigenen Connector in jeder Sprache.",
+		"items": {
+			"prestashop": {
+				"title": "PrestaShop 8.x",
+				"description": "PHP-Modul. Event-Hooks bei Produkt-Speichern, -Aktualisieren und -Löschen. Vollständiger Katalog-Export per Klick."
+			},
+			"bitrix": {
+				"title": "1C-Bitrix",
+				"description": "Natives Bitrix-Modul. Hintergrund-Agent für geplante Synchronisation. Event-Handler für Echtzeit-Updates."
+			},
+			"connectorApi": {
+				"title": "Connector API",
+				"description": "7 Endpunkte: Handshake, Full-Sync, Delta-Sync, Löschen, Diagnose, Sync-Status, Heartbeat. Eigenen Connector in jeder Sprache entwickeln."
+			},
+			"fullSync": {
+				"title": "Full- & Delta-Sync",
+				"description": "Full-Sync re-indiziert den gesamten Katalog. Delta-Sync verarbeitet nur geänderte Datensätze. Zeitgesteuert oder auf Abruf."
+			},
+			"diagnostics": {
+				"title": "Diagnose-Endpunkt",
+				"description": "Verbindung testen, Index-Zustand prüfen und Token-Berechtigungen verifizieren — ohne Produktionsdaten zu berühren."
+			},
+			"syncJobs": {
+				"title": "Sync-Job-Verlauf",
+				"description": "Jeder Sync-Lauf wird mit Startzeit, Dokumentenanzahl, Fehlern und Dauer protokolliert. Fehlgeschlagene Batches vom Dashboard aus erneut versuchen."
+			}
+		}
+	},
+	"featuresScopedTokensPage": {
+		"title": "Scoped Search-Tokens",
+		"description": "HMAC-signierte Tokens, die Berechtigungen auf einen bestimmten Index, Nutzer, TTL und Filter einschränken — niemals erweitern."
+	},
+	"featuresScopedTokens": {
+		"title": "Feingranulare Zugriffskontrolle",
+		"subtitle": "Token serverseitig ausstellen, in den Browser ausliefern. Er läuft ab, ist auf einen Index beschränkt und kann das Ergebnis nur per AND einengen.",
+		"items": {
+			"hmacSigning": {
+				"title": "HMAC-signiert",
+				"description": "Tokens werden mit Ihrem Secret signiert. Manipulation oder Replay ist kryptografisch nachweisbar."
+			},
+			"ttl": {
+				"title": "TTL-gebunden",
+				"description": "Jeder Scoped Token enthält eine Ablaufzeit. Kurzlebige Tokens für Browser-Sessions; längere TTLs für Server-zu-Server-Kommunikation."
+			},
+			"filters": {
+				"title": "AND-kombinierte Filter",
+				"description": "Ein Token kann einen Pflichtfilter tragen (z. B. userId = 42). Der Server kombiniert ihn per AND mit dem Filter des Aufrufers — niemals per OR."
+			},
+			"originLock": {
+				"title": "Origin-Bindung",
+				"description": "Token an bestimmte Origins binden. Ein in JavaScript exportierter Token kann nur von Ihrer Domain aus genutzt werden."
+			},
+			"indexScope": {
+				"title": "Index-gebunden",
+				"description": "Jeder Token ist an einen einzelnen Index gebunden. Cross-Index-Abfragen erfordern einen separaten Token pro Index."
+			},
+			"serverSide": {
+				"title": "Serverseitige Ausstellung",
+				"description": "Tokens werden von Ihrem Backend per einzelnem API-Aufruf ausgestellt. Der Browser sieht niemals Ihren Admin-API-Key."
+			}
+		}
+	},
+	"featuresMultiSearchPage": {
+		"title": "Multi-Search & föderierte Abfragen",
+		"description": "Mehrere Suchen über verschiedene Indexe in einer HTTP-Anfrage ausführen. Cross-Collection-Autocomplete unter 50 ms aufbauen."
+	},
+	"featuresMultiSearch": {
+		"title": "Eine Anfrage, viele Ergebnisse",
+		"subtitle": "Föderierte Suche über Indexe, Collections und Datentypen — ohne N Roundtrips vom Browser.",
+		"items": {
+			"federation": {
+				"title": "Cross-Index-Föderation",
+				"description": "Produkte, Kategorien und Blogposts in einem Aufruf abfragen. Ergebnisse clientseitig zusammenführen und ranken oder von der API erledigen lassen."
+			},
+			"autocomplete": {
+				"title": "Autocomplete",
+				"description": "Typeahead-Vorschläge über mehrere Collections in einer Anfrage. Unter 50 ms p99 für sofortiges Gefühl."
+			},
+			"batchedRequests": {
+				"title": "Gebündelte Anfragen",
+				"description": "Bis zu 50 Suchen pro Multi-Search-Anfrage. Jede mit unabhängigen Filtern, Sortierung und Facetten."
+			},
+			"parallelExecution": {
+				"title": "Parallele Ausführung",
+				"description": "Alle Suchen in einem Multi-Search-Aufruf werden parallel auf dem Server ausgeführt. Gesamtlatenz = langsamste Einzelabfrage."
+			},
+			"independentFacets": {
+				"title": "Unabhängige Facetten",
+				"description": "Jede Suche im Batch gibt eigene Facetten-Zählungen zurück. Multi-Panel-Facetten-UIs ohne zusätzliche Anfragen aufbauen."
+			},
+			"singleToken": {
+				"title": "Einzelner Token",
+				"description": "Ein Scoped Token autorisiert alle Suchen im Batch. Tenant-Isolation wird pro Abfrage innerhalb des Batches durchgesetzt."
+			}
+		}
+	},
+	"featuresReindexPage": {
+		"title": "Zero-Downtime-Reindex",
+		"description": "Index gegen ein neues Schema neu aufbauen, während Live-Traffic weiter den alten trifft. Atomarer Cut-over."
+	},
+	"featuresReindex": {
+		"title": "Schema-Änderungen ohne Downtime",
+		"subtitle": "Indexe versionieren. Im Hintergrund neu aufbauen. Alias bei Bereitschaft tauschen. Rollback mit einem Befehl.",
+		"items": {
+			"versioning": {
+				"title": "Versionierte Indexe",
+				"description": "Jeder Index hat eine Versionsnummer (z. B. org_products_v3). Aliase zeigen transparent auf die aktive Version."
+			},
+			"aliasSwap": {
+				"title": "Atomarer Alias-Tausch",
+				"description": "In eine neue Version re-indizieren, während Traffic die alte trifft. Alias in einer atomaren Operation tauschen — null verworfene Anfragen."
+			},
+			"backgroundRebuild": {
+				"title": "Hintergrund-Rebuild",
+				"description": "Reindex läuft außerhalb des Hauptpfads. Ihre API bedient weiterhin Suchen aus der aktuellen Version."
+			},
+			"rollback": {
+				"title": "Rollback mit einem Befehl",
+				"description": "Hat die neue Version Probleme, zeigen Sie den Alias zurück auf die vorherige Version. Traffic wechselt sofort."
+			},
+			"schemaChanges": {
+				"title": "Schema-Evolution",
+				"description": "Felder hinzufügen, Typen ändern, Facetten-Einstellungen aktualisieren — alles durch Erstellen einer neuen Version, ohne den Live-Index zu mutieren."
+			},
+			"verification": {
+				"title": "Eingebaute Verifikation",
+				"description": "Nach dem Reindex eine Verifikationsabfrage ausführen, bevor der Alias getauscht wird. Fehlende Dokumente erkennen, bevor Nutzer es bemerken."
+			}
+		}
+	},
+	"featuresRateLimitingPage": {
+		"title": "Rate-Limiting & Quota",
+		"description": "Pro-Key-pro-Minute-Drosselung und monatliche Org-Quota. Beides im Dashboard sichtbar, bevor Sie Limits erreichen."
+	},
+	"featuresRateLimiting": {
+		"title": "Budget und Dienst schützen",
+		"subtitle": "Konfigurierbare Limits auf jeder Ebene. Sie bestimmen, was passiert, wenn Limits erreicht werden.",
+		"items": {
+			"perKeyThrottling": {
+				"title": "Pro-Key-Drosselung",
+				"description": "Requests-per-Minute pro API-Key festlegen. Burst-Traffic von einem Key beeinträchtigt keine anderen Keys in Ihrem Konto."
+			},
+			"orgQuota": {
+				"title": "Monatliche Org-Quota",
+				"description": "Hartes Limit für Search-Units pro Monat und Organisation. Pro Plan konfigurierbar. Dashboard zeigt Nutzung in Echtzeit."
+			},
+			"graceful429": {
+				"title": "Elegante 429-Antworten",
+				"description": "Rate-limitierte Anfragen geben HTTP 429 mit Retry-After-Header zurück. Das Browser-SDK verarbeitet Wiederholungsversuche automatisch."
+			},
+			"dashboardVisibility": {
+				"title": "Dashboard-Transparenz",
+				"description": "Aktuelle Nutzung, Limit und prognostizierter Monatsendverbrauch auf einen Blick sichtbar. Keine überraschenden Überschreitungen."
+			},
+			"planBased": {
+				"title": "Planbasierte Limits",
+				"description": "Free-, Pro- und Enterprise-Pläne tragen unterschiedliche Quotas und Rate-Limits. Upgrade ohne Änderung Ihrer Integration."
+			},
+			"gracePeriod": {
+				"title": "Kündigungs-Schonfrist",
+				"description": "7-tägiger Lesezugriff nach Kündigung. Suche funktioniert weiter, während Sie migrieren. Schreibzugriff wird nach Kündigung gesperrt."
+			}
+		}
+	},
+	"featuresSelfHostPage": {
+		"title": "AACsearch selbst hosten",
+		"description": "AACsearch auf eigener Infrastruktur betreiben. Identischer Code wie Managed Cloud. Helm-Chart und Docker Compose inklusive."
+	},
+	"featuresSelfHost": {
+		"title": "Ihre Infrastruktur, Ihre Regeln",
+		"subtitle": "Eine Codebasis für Managed Cloud und Self-Hosted. Kein proprietärer Server-Fork. Kein Vendor-Lock-in.",
+		"items": {
+			"openSource": {
+				"title": "Open-Source-Kern",
+				"description": "Der vollständige Servercode ist Open Source. Jede Zeile inspizieren, jede Abhängigkeit prüfen, forken wenn nötig."
+			},
+			"dockerCompose": {
+				"title": "Docker Compose",
+				"description": "Ein Befehl startet Postgres, MinIO und AACsearch lokal. Identisch zur Managed-Cloud-Architektur."
+			},
+			"helmChart": {
+				"title": "Helm-Chart",
+				"description": "Produktions-Kubernetes-Deployment via Helm. Values-Datei für Ressource-Limits, Replicas und Storage-Class."
+			},
+			"coolify": {
+				"title": "Coolify One-Click",
+				"description": "Mit einem Klick auf Coolify deployen. Umgebungsvariablen werden aus Ihrer Konfiguration vorausgefüllt."
+			},
+			"noFork": {
+				"title": "Kein proprietärer Fork",
+				"description": "Self-Hosted und Cloud laufen dasselbe Binary aus demselben Repository. Features werden gleichzeitig an beide ausgeliefert."
+			},
+			"support": {
+				"title": "Self-Host-Support",
+				"description": "Community-Support via GitHub für den kostenlosen Tarif. Enterprise-Self-Host beinhaltet dedizierten Support und SLA."
+			}
+		}
+	},
+	"useCasesEcommercePage": {
+		"title": "Suche für E-Commerce",
+		"description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und Echtzeit-Analytics — für Produktkataloge entwickelt."
+	},
+	"useCasesEcommerce": {
+		"title": "Produktsuche, die konvertiert",
+		"subtitle": "Katalog mit dem PrestaShop- oder Bitrix-Modul verbinden. Nachmittags live. Analytics ab Tag eins.",
+		"items": {
+			"facetedFilter": {
+				"title": "Facettierte Filter",
+				"description": "Marke, Kategorie, Preisbereich, Verfügbarkeit, Attribute — jedes Feld in Ihrem Schema wird zur Facette. Keine zusätzliche Konfiguration."
+			},
+			"synonyms": {
+				"title": "Synonym-Erweiterung",
+				"description": "Synonyme im Dashboard hinzufügen. TV → Fernseher, Sofa → Couch. Nutzer finden Produkte mit natürlicher Sprache."
+			},
+			"zeroResults": {
+				"title": "Zero-Results-Handling",
+				"description": "AACsearch verfolgt jede Suche ohne Ergebnis. Nutzen Sie die Liste, um Synonyme, Produkte oder Fallback-Vorschläge hinzuzufügen."
+			},
+			"prestaShop": {
+				"title": "PrestaShop-Modul",
+				"description": "Drop-in-PHP-Modul. Synchronisiert bei jedem Produktspeichern, -aktualisieren und -löschen. Vollständiger Katalog-Export per Klick."
+			},
+			"analytics": {
+				"title": "Conversion-Analytics",
+				"description": "CTR pro Suchanfrage, Top-Suchbegriffe und Filter-Nutzung verfolgen. Ranking-Probleme erkennen, bevor sie den Umsatz beeinträchtigen."
+			},
+			"widget": {
+				"title": "Drop-in-Widget",
+				"description": "14-KB-Widget für Ihren Storefront. Kein Build-Schritt, kein npm. Funktioniert neben Ihrem bestehenden Theme."
+			}
+		}
+	},
+	"useCasesSaasPage": {
+		"title": "Suche für Multi-Tenant-SaaS",
+		"description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Ihre Kunden sehen nie gegenseitig ihre Daten."
+	},
+	"useCasesSaas": {
+		"title": "Such-Isolation eingebaut",
+		"subtitle": "Tenant-Isolation ist architektonisch — nicht nur Richtlinie. Jede Organisation erhält eigenen Index, eigene Quota, eigene Keys.",
+		"items": {
+			"tenantIsolation": {
+				"title": "Tenant-eigene Indexe",
+				"description": "Einen Index pro Kundenorganisation erstellen. Daten vermischen sich nie. Tenant löschen löscht deren Index."
+			},
+			"scopedTokens": {
+				"title": "Nutzer-spezifische Scoped Tokens",
+				"description": "Serverseitig Tokens ausstellen, die auf einen userId-Filter gesperrt sind. Ihre Endnutzer suchen nur in ihren eigenen Datensätzen."
+			},
+			"multiIndex": {
+				"title": "Multi-Index pro Tenant",
+				"description": "Bis zu 10 Indexe pro Organisation im Pro-Tarif. Produkte, Bestellungen, Tickets, Doku — separate Indexe, ein Dashboard."
+			},
+			"quota": {
+				"title": "Tenant-eigene Quota",
+				"description": "Search-Unit-Verbrauch pro Tenant verfolgen. Kosten Kunden zuordnen. Entsprechend abrechnen."
+			},
+			"orpc": {
+				"title": "oRPC Management-API",
+				"description": "Indexe programmgesteuert erstellen, Keys rotieren und Analytics pro Tenant aus Ihrem Backend abrufen."
+			},
+			"reindex": {
+				"title": "Schema-Evolution",
+				"description": "Datenmodell ohne Downtime weiterentwickeln. Jeden Tenant im Hintergrund re-indizieren, Aliase atomisch tauschen."
+			}
+		}
+	},
+	"useCasesHelpCenterPage": {
+		"title": "Suche für Hilfezentren & Dokumentation",
+		"description": "Wissensbasis indizieren und relevante Artikel in Millisekunden anzeigen. Mit dem Knowledge-Modul für KI-Q&A kombinieren."
+	},
+	"useCasesHelpCenter": {
+		"title": "Nutzern helfen, sich selbst zu helfen",
+		"subtitle": "Sofortige Artikel-Suche, Zero-Results-Tracking und KI-Q&A über PDFs — eine Integration, kein Such-Ingenieur erforderlich.",
+		"items": {
+			"articleSearch": {
+				"title": "Sofortige Artikel-Suche",
+				"description": "Volltextsuche über Ihre Hilfsartikel mit Tippfehler-Toleranz und Relevanz-Ranking. Ergebnisse in unter 50 ms."
+			},
+			"knowledgeRag": {
+				"title": "KI-Q&A (RAG)",
+				"description": "Nutzer stellen eine Frage in natürlicher Sprache. Das Knowledge-Modul ruft relevante Abschnitte ab und generiert eine zitierte Antwort."
+			},
+			"zeroResults": {
+				"title": "Zero-Results-Intelligenz",
+				"description": "Jede unbeantwortete Suchanfrage wird protokolliert. Lücken in Ihrer Dokumentation erkennen, bevor Kunden den Support kontaktieren."
+			},
+			"multilingual": {
+				"title": "Mehrsprachiger Support",
+				"description": "Inhalte in mehreren Sprachen indizieren. In der Sprache des Nutzers suchen. Synonym-Bibliotheken pro Sprache."
+			},
+			"widget": {
+				"title": "Drop-in-Such-Widget",
+				"description": "Suche in unter einer Stunde zu jedem Hilfezentrum hinzufügen. Funktioniert auf Docusaurus, GitBook, Notion oder eigenen Portalen."
+			},
+			"analytics": {
+				"title": "Such-Analytics",
+				"description": "Top-Suchanfragen, Zero-Results und CTR zeigen, wonach Nutzer tatsächlich suchen — nicht was Sie vermuten."
+			}
+		}
+	},
+	"useCasesDevToolsPage": {
+		"title": "Suche für Entwicklertools",
+		"description": "Semantische Suche über Code, Konfigurationen und Logs. MCP-Server ermöglicht KI-Agenten programmatischen Index-Zugriff."
+	},
+	"useCasesDevTools": {
+		"title": "Suche für Entwickler entwickelt",
+		"subtitle": "REST-API, typisiertes SDK, MCP-Server und eine oRPC Control Plane. Kein GUI erforderlich — alles automatisierbar.",
+		"items": {
+			"restApi": {
+				"title": "Vollständige REST-API",
+				"description": "15 Endpunkte, OpenAPI 3.1 Spec, API-Key-Auth. In jeder Sprache, jeder CI-Pipeline, jeder Infra integrierbar."
+			},
+			"mcp": {
+				"title": "MCP-Server für KI-Agenten",
+				"description": "Claude, Cursor und jeder MCP-Client kann programmgesteuert suchen, Indexe auflisten, Dokumente upserten und Statistiken abrufen."
+			},
+			"semanticSearch": {
+				"title": "Semantische Suche",
+				"description": "OpenAI-Embeddings über Code-Kommentare, Konfigurationen und Logs. Relevante Einträge auch bei abweichender Terminologie finden."
+			},
+			"typedSdk": {
+				"title": "Typisiertes Browser-SDK",
+				"description": "NPM-Paket mit vollständigen TypeScript-Typen. Im Frontend Ihres Entwicklertools integrieren, ohne API-Strukturen zu erraten."
+			},
+			"selfHost": {
+				"title": "Self-Hostbar",
+				"description": "AACsearch in Ihrer Infrastruktur betreiben. Air-Gap-Deployment für sicherheitssensible Entwicklertools."
+			},
+			"orpcControl": {
+				"title": "Programmgesteuerte Control Plane",
+				"description": "Indexe erstellen, Keys rotieren, Reindex auslösen und Analytics aus Ihrer Build-Pipeline oder Deployment-Skripten abrufen."
+			}
+		}
+	},
+	"useCasesContentSitesPage": {
+		"title": "Suche für Content-Websites",
+		"description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde in jedes Frontend einbinden."
+	},
+	"useCasesContentSites": {
+		"title": "Content-Suche, die Leser hält",
+		"subtitle": "Blogposts, Changelogs, Dokumentationen, Landing-Pages — von Tag eins indiziert und durchsuchbar.",
+		"items": {
+			"contentIndexing": {
+				"title": "Alles indizieren",
+				"description": "MDX, Markdown, HTML, JSON-Feeds — jedes Content-Format, das strukturierte Datensätze erzeugt, kann indiziert werden."
+			},
+			"instantSearch": {
+				"title": "Sofort-Such-UI",
+				"description": "Ergebnisse erscheinen während der Nutzer tippt. Tippfehler-Toleranz, Treffer hervorheben, Deep-Link zu Anker-Abschnitten."
+			},
+			"browserSdk": {
+				"title": "Browser-SDK",
+				"description": "Typisiertes SDK in Ihr Next.js, Astro, Nuxt oder statisches Site einbinden. Eine Komponente, sofortige Ergebnisse."
+			},
+			"changelog": {
+				"title": "Changelog-Suche",
+				"description": "Entwickler durchsuchen Changelogs, um zu finden, wann sich ein Verhalten geändert hat. Changelog-Einträge indizieren und in Sekunden finden lassen."
+			},
+			"multilingual": {
+				"title": "Mehrsprachige Inhalte",
+				"description": "Inhalte pro Locale indizieren. Ergebnisse in der Sprache des Nutzers ausliefern. Synonym-Bibliotheken pro Locale abgestimmt."
+			},
+			"seo": {
+				"title": "SEO-freundlich",
+				"description": "Suche ist clientseitig — kein Server-Rendering erforderlich. Ihre statischen Seiten bleiben statisch generiert."
+			}
+		}
+	},
+	"integrationsPrestashopPage": {
+		"title": "PrestaShop-Integration",
+		"description": "Natives PrestaShop-8.x-Modul für AACsearch. Produktkatalog automatisch bei jedem Speichern synchronisieren."
+	},
+	"integrationsPrestashop": {
+		"title": "AACsearch für PrestaShop",
+		"subtitle": "Drop-in-PHP-Modul. Kein API-Coding erforderlich. Vollständiger Katalog-Sync, Echtzeit-Updates und Such-Widget in Minuten.",
+		"items": {
+			"install": {
+				"title": "One-Click-Installation",
+				"description": "ZIP im PrestaShop-Modul-Manager hochladen. Connector-Token eingeben. Fertig."
+			},
+			"autoSync": {
+				"title": "Automatische Synchronisation",
+				"description": "Produkt-Speichern, -Aktualisieren und -Löschen lösen sofortigen Sync via PrestaShop-Event-Hooks aus. Kein Cron nötig."
+			},
+			"fullExport": {
+				"title": "Vollständiger Katalog-Export",
+				"description": "Initialer Export aller Produkte und Kategorien per Klick im Modul-Admin-Panel."
+			},
+			"widget": {
+				"title": "Widget-Einbettung",
+				"description": "AACsearch-Widget in den Modul-Einstellungen aktivieren. Es injiziert sich automatisch in den Such-Hook Ihres Themes."
+			},
+			"diagnostics": {
+				"title": "Diagnose-Panel",
+				"description": "Verbindung testen, letzten Sync-Zeitpunkt prüfen und Fehler-Logs im Modul-Admin-Panel einsehen."
+			},
+			"compatibility": {
+				"title": "PrestaShop 8.x kompatibel",
+				"description": "Getestet auf PrestaShop 8.0 und 8.1. PHP 8.1+. Funktioniert mit allen gängigen Themes."
+			}
+		}
+	},
+	"integrationsBitrixPage": {
+		"title": "1C-Bitrix-Integration",
+		"description": "Natives 1C-Bitrix-Modul für AACsearch. Katalog automatisch mit Event-Handlern und Hintergrund-Agenten synchronisieren."
+	},
+	"integrationsBitrix": {
+		"title": "AACsearch für 1C-Bitrix",
+		"subtitle": "Natives Bitrix-Modul mit ereignisgesteuerten Updates und einem Hintergrund-Sync-Agenten. Keine manuellen Exporte.",
+		"items": {
+			"eventHandlers": {
+				"title": "Event-Handler",
+				"description": "Produkt-Erstellen, -Aktualisieren und -Löschen lösen sofortigen Sync via Bitrix-Event-Handler aus. Unter 1 Sekunde Latenz."
+			},
+			"backgroundAgent": {
+				"title": "Hintergrund-Sync-Agent",
+				"description": "Bitrix-Agent führt regelmäßigen Full-Sync zur Zuverlässigkeit aus. Erfasst Änderungen, die Event-Handler verpasst haben."
+			},
+			"catalogSupport": {
+				"title": "Vollständiger Katalog-Support",
+				"description": "Produkte, Eigenschaften, Preise und Lagerbestände. Alle Felder in Ihrem iBlock sind indizierbar."
+			},
+			"adminPanel": {
+				"title": "Admin-Einstellungs-Panel",
+				"description": "Connector-Token, Index-Slug und Sync-Häufigkeit in den Bitrix-Modul-Einstellungen konfigurieren."
+			},
+			"diagnostics": {
+				"title": "Diagnose-Seite",
+				"description": "Verbindung testen, Index-Zustand prüfen und Berechtigungen vom Bitrix-Admin aus verifizieren."
+			},
+			"support": {
+				"title": "Bitrix Site Manager kompatibel",
+				"description": "Getestet auf Bitrix Site Manager und Business-Editionen. PHP 8.1+. Nutzt Standard-Bitrix-HttpClient."
+			}
+		}
+	},
+	"integrationsRestApiPage": {
+		"title": "REST-API-Integration",
+		"description": "15 öffentliche Endpunkte mit API-Key-Auth. Funktioniert mit jeder Backend-Sprache oder -Plattform. OpenAPI 3.1 Spec inklusive."
+	},
+	"integrationsRestApi": {
+		"title": "Eigene Integration entwickeln",
+		"subtitle": "Wenn kein natives Modul für Ihre Plattform existiert, deckt die REST-API jeden Anwendungsfall ab.",
+		"items": {
+			"endpoints": {
+				"title": "15 Endpunkte",
+				"description": "Index-CRUD, Dokument-CRUD (einzeln + bulk), Suche, Multi-Search, Analytics und API-Key-Management."
+			},
+			"openApi": {
+				"title": "OpenAPI 3.1",
+				"description": "Maschinenlesbare Spec unter /api/v1/openapi.json. Client in Python, Go, Ruby oder jeder anderen Sprache generieren."
+			},
+			"authentication": {
+				"title": "Bearer-Token-Auth",
+				"description": "API-Keys mit Präfix ss_search_*, ss_connector_* oder ss_scoped_*. Jeder Präfix trägt unterschiedliche Berechtigungen."
+			},
+			"webhooks": {
+				"title": "Ausgehende Webhooks (demnächst)",
+				"description": "Webhook bei Sync-Abschluss, Quota-Alert oder abgeschlossenem Reindex empfangen. Derzeit: Connector API für Polling."
+			},
+			"rateLimit": {
+				"title": "Rate-Limit-Header",
+				"description": "X-RateLimit-Limit und X-RateLimit-Remaining Header bei jeder Antwort. Retry-After bei 429."
+			},
+			"versioning": {
+				"title": "Versionierte API",
+				"description": "Alle öffentlichen Endpunkte unter /api/v1. Breaking Changes erhalten ein neues Versions-Präfix. Alte Versionen werden 12 Monate lang beibehalten."
+			}
+		}
+	},
+	"integrationsBrowserSdkPage": {
+		"title": "Browser-SDK",
+		"description": "Ein typisierter JavaScript-Client für AACsearch. Einfache Suche, föderierter Multi-Search, Facetten — unter 50 ms p99."
+	},
+	"integrationsBrowserSdk": {
+		"title": "Suche vom Browser aus",
+		"subtitle": "NPM-Paket. TypeScript-Typen. Funktioniert in React, Vue, Svelte, Astro oder Plain JS. Kein Backend-Proxy erforderlich.",
+		"items": {
+			"typedClient": {
+				"title": "Vollständige TypeScript-Typen",
+				"description": "Autocomplete bei jeder Methode. Keine Unsicherheit bei Antwort-Strukturen. Typen werden mit dem Paket ausgeliefert — kein @types/ nötig."
+			},
+			"singleSearch": {
+				"title": "Einfache Suche",
+				"description": "search(indexSlug, query, options) → typisierte Ergebnisse. Facetten, Filter, Sortierung, Paginierung — alles im Options-Objekt."
+			},
+			"multiSearch": {
+				"title": "Multi-Search (föderiert)",
+				"description": "multiSearch([...queries]) → typisiertes Ergebnis-Array. Eine HTTP-Anfrage, parallele Ausführung, unabhängige Facetten."
+			},
+			"tokenHandling": {
+				"title": "Scoped-Token-Support",
+				"description": "Mit einem kurzlebigen Scoped Token vom Server initialisieren. Das SDK hängt ihn automatisch an jede Anfrage."
+			},
+			"errorHandling": {
+				"title": "Typisierte Fehlerbehandlung",
+				"description": "Typisierte Error-Objekte mit Slug (search_failed, quota_exceeded, rate_limited). Programmatisch abfangen und behandeln."
+			},
+			"lightweight": {
+				"title": "Unter 5 KB gzipped",
+				"description": "Tree-shakeables ESM-Build. Nur die importierten Methoden werden gebündelt. Keine Laufzeit-Abhängigkeiten."
+			}
+		}
+	},
+	"integrationsMcpPage": {
+		"title": "MCP-Server-Integration",
+		"description": "Model-Context-Protocol-Server für KI-Agenten. Claude, Cursor und jeder MCP-Client kann Indexe durchsuchen und verwalten."
+	},
+	"integrationsMcp": {
+		"title": "KI-Agenten, die Ihre Daten durchsuchen",
+		"subtitle": "Der AACsearch MCP-Server stellt Suche, Index-Management und Statistiken jedem MCP-kompatiblen KI-Assistenten zur Verfügung.",
+		"items": {
+			"tools": {
+				"title": "4 MCP-Tools",
+				"description": "search, list_indexes, upsert_document, search_stats — die Kernoperationen, die ein KI-Agent über Ihre Daten benötigt."
+			},
+			"claude": {
+				"title": "Funktioniert mit Claude",
+				"description": "AACsearch MCP-Server zu Claude Code oder Claude Desktop hinzufügen. Natürlichsprachige Fragen über Ihre indizierten Daten stellen."
+			},
+			"cursor": {
+				"title": "Funktioniert mit Cursor",
+				"description": "Cursors KI-Features können Ihren Codebase-Index, Dokumentation oder Produktdaten über die MCP-Integration durchsuchen."
+			},
+			"transport": {
+				"title": "stdio-Transport",
+				"description": "JSON-RPC 2.0 über stdio. Funktioniert mit jedem MCP-Client. Kein HTTP-Server erforderlich — einfach auf das Binary zeigen."
+			},
+			"authentication": {
+				"title": "API-Key-Auth",
+				"description": "Mit einem ss_search_*-API-Key konfigurieren. Der MCP-Server übernimmt die Scopes und Rate-Limits des Keys."
+			},
+			"openSource": {
+				"title": "Open Source",
+				"description": "Der MCP-Server-Code ist Open Source. Forken, erweitern, eigene Tools für Ihren Workflow hinzufügen."
+			}
+		}
+	},
+	"comparePage": {
+		"title": "AACsearch vs. die Alternativen",
+		"description": "Erfahren Sie, wie sich AACsearch mit Algolia, Elasticsearch und MeiliSearch vergleicht – und warum Tausende von Entwicklern uns wählen.",
+		"table": {
+			"feature": "Funktion",
+			"aacsearch": "AACsearch",
+			"features": {
+				"fulltext": "Volltextsuche",
+				"vector": "Vektor- / semantische Suche",
+				"hybrid": "Hybridsuche",
+				"realtime": "Echtzeit-Indizierung",
+				"opensource": "Open Source",
+				"selfhost": "Selbst hostbar",
+				"pricing": "Vorhersehbare Preise",
+				"managed": "Verwaltete Cloud",
+				"connector": "Connector-API",
+				"cms": "CMS-Integrationen",
+				"setup": "Einrichtungszeit",
+				"free": "Kostenloses Angebot"
+			},
+			"values": {
+				"minutes": "Minuten",
+				"hours": "Stunden",
+				"days": "Tage",
+				"yes": "Ja",
+				"no": "Nein",
+				"partial": "Teilweise"
+			}
+		},
+		"cta": {
+			"title": "Bereit zum Wechseln?",
+			"description": "Die Migration von Algolia oder Elasticsearch dauert mit unserer Connector-API weniger als einen Tag."
+		}
+	},
+	"compare": {
+		"title": "Der ehrliche Vergleich",
+		"subtitle": "Wir sind nicht für jedes Team die richtige Wahl. Hier ist ein offener Überblick, wo AACsearch gewinnt und wo nicht.",
+		"items": {
+			"vsAlgolia": {
+				"title": "AACsearch vs. Algolia",
+				"description": "Algolia ist ausgereift und hat ausgezeichnete Dokumentation. AACsearch ist günstiger, Open Source und self-hostbar. Wenn Sie $500+/Monat für Algolia ausgeben, wird AACsearch das deutlich reduzieren."
+			},
+			"vsElasticsearch": {
+				"title": "AACsearch vs. Elasticsearch",
+				"description": "Elasticsearch ist unendlich flexibel und unendlich komplex. AACsearch ist meinungsstark und einfach. Wenn Sie ein SIEM oder Log-Analytics brauchen, nutzen Sie Elastic. Wenn Sie Produktsuche brauchen, nutzen Sie uns."
+			},
+			"vsMeilisearch": {
+				"title": "AACsearch vs. Meilisearch",
+				"description": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu: Scoped Tokens, Multi-Tenancy, Analytics und eine Control Plane."
+			},
+			"vsTypesense": {
+				"title": "AACsearch vs. Typesense Cloud",
+				"description": "AACsearch basiert auf Typesense. Wir ergänzen Multi-Tenancy, API-Key-Management, Scoped Tokens und eine SaaS-Control-Plane auf der Engine."
+			},
+			"vsCustom": {
+				"title": "AACsearch vs. DIY",
+				"description": "Eine eigene gehostete Suche zu bauen bedeutet, Nodes, Upgrades, Backups und Monitoring zu verwalten. AACsearch übernimmt das, damit Sie Features liefern können."
+			},
+			"whenNotUs": {
+				"title": "Wann Sie etwas anderes nutzen sollten",
+				"description": "Log-Analytics → Elasticsearch. Volltext-Enterprise-Suche mit Compliance → Coveo. Einfaches Autocomplete über 1.000 Datensätze → kein Dienst nötig."
+			}
+		}
+	},
+	"compareAlgoliaPage": {
+		"title": "AACsearch vs. Algolia",
+		"description": "Ein detaillierter Vergleich von AACsearch und Algolia — Preise, Features, Self-Hosting und Migration."
+	},
+	"compareAlgolia": {
+		"title": "AACsearch vs. Algolia",
+		"subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist günstiger, Open Source und bietet Multi-Tenant-Isolation.",
+		"items": {
+			"pricing": {
+				"title": "Preise",
+				"description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz, mit Mindestbeträgen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif."
+			},
+			"selfHost": {
+				"title": "Self-Hosting",
+				"description": "Algolia ist reines SaaS — Sie können es nicht selbst hosten. AACsearch ist self-hostbar mit derselben Codebasis wie die Cloud."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy",
+				"description": "Algolia nutzt Index-spezifische API-Keys mit User-Tokens. AACsearch nutzt HMAC Scoped Tokens mit obligatorischen AND-kombinierten Filtern."
+			},
+			"openSource": {
+				"title": "Open Source",
+				"description": "Algolia ist Closed Source. AACsearch ist Open Source — Code inspizieren, Logik prüfen, forken wenn nötig."
+			},
+			"migration": {
+				"title": "Migration",
+				"description": "Die AACsearch REST-API ist strukturell ähnlich zu Algolias. Ein Migrationsskript kann Ihre Daten in Stunden re-indizieren."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Self-Hosting, Multi-Tenancy-Isolation oder Open Source für Sie wichtig ist."
+			}
+		}
+	},
+	"compareElasticsearchPage": {
+		"title": "AACsearch vs. Elasticsearch",
+		"description": "Elasticsearch vs. AACsearch — wann jedes das richtige Werkzeug ist und wie der operative Unterschied aussieht."
+	},
+	"compareElasticsearch": {
+		"title": "AACsearch vs. Elasticsearch",
+		"subtitle": "Elasticsearch ist eine Allzweck-Datenplattform. AACsearch ist eine zweckbestimmte Such-API. Verschiedene Werkzeuge für verschiedene Aufgaben.",
+		"items": {
+			"complexity": {
+				"title": "Operationale Komplexität",
+				"description": "Elasticsearch erfordert Cluster-Management, Tuning und laufende Wartung. AACsearch ist eine gehostete API — kein Ops erforderlich."
+			},
+			"latency": {
+				"title": "Such-Latenz",
+				"description": "Elasticsearch p99-Such-Latenz liegt typischerweise bei 100–400 ms. AACsearch (Typesense-basiert) zielt auf unter 50 ms p99."
+			},
+			"useCase": {
+				"title": "Anwendungsfall-Eignung",
+				"description": "Elasticsearch glänzt bei Log-Analytics, Enterprise-Volltextsuche und Aggregationen. AACsearch glänzt bei Produkt- und Dokumentensuche."
+			},
+			"cost": {
+				"title": "Kosten",
+				"description": "Elasticsearch in der Cloud ist für reine Such-Workloads teuer. AACsearch-Preise basieren auf Search-Units — zahlen Sie, was Sie nutzen."
+			},
+			"schema": {
+				"title": "Schema-Management",
+				"description": "Elasticsearch-Mapping-Änderungen sind komplex. AACsearch hat Zero-Downtime-Alias-Swap-Reindex — Schema-Änderungen ohne Downtime."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Ihr Anwendungsfall Produktsuche, Hilfezentrum oder SaaS-Volltextsuche ist — und Sie keine Log-Analytics oder komplexe Aggregationen benötigen."
+			}
+		}
+	},
+	"compareMeilisearchPage": {
+		"title": "AACsearch vs. Meilisearch",
+		"description": "AACsearch vs. Meilisearch — Engine-Vergleich, gehostete Ebene, Multi-Tenancy und wann Sie welches wählen sollten."
+	},
+	"compareMeilisearch": {
+		"title": "AACsearch vs. Meilisearch",
+		"subtitle": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu, die Ihr Produktions-Deployment benötigt.",
+		"items": {
+			"engine": {
+				"title": "Zugrunde liegende Engine",
+				"description": "Meilisearch ist Engine und Produkt zugleich. AACsearch basiert auf Typesense, einer anderen Open-Source-Engine mit eingebauter Vektorsuche."
+			},
+			"hosted": {
+				"title": "Managed Cloud",
+				"description": "Meilisearch Cloud ist deren gehostete Option. AACsearch's gehostete Ebene fügt Scoped Tokens, Multi-Tenancy und eine Management-Control-Plane hinzu."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy",
+				"description": "Meilisearchs Multi-Tenancy nutzt Tenant-Tokens. AACsearchs Scoped Tokens tragen AND-kombinierte Pflichtfilter für stärkere Isolation."
+			},
+			"analytics": {
+				"title": "Analytics",
+				"description": "Meilisearch hat grundlegende Such-Analytics. AACsearch verfolgt jedes Such-Event mit vollständigen Metadaten: Query, Filter, Latenz, CTR."
+			},
+			"connectors": {
+				"title": "CMS-Connectors",
+				"description": "Meilisearch verfolgt einen JavaScript-SDK-First-Ansatz. AACsearch hat native PHP-Module für PrestaShop und 1C-Bitrix."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Sie Multi-Tenant-Isolation, eine Management-API, CMS-Connectors oder Analytics über grundlegende Query-Zählungen hinaus benötigen."
+			}
+		}
+	},
+	"openSourcePage": {
+		"title": "AACsearch Open Source",
+		"description": "Der vollständige AACsearch-Servercode ist Open Source. Inspizieren, prüfen, selbst hosten oder beitragen."
+	},
+	"openSource": {
+		"title": "Open Source im Kern",
+		"subtitle": "Kein proprietärer Server-Fork. Der Code auf GitHub ist derselbe Code, der auf Managed Cloud läuft. Immer.",
+		"items": {
+			"license": {
+				"title": "MIT-lizenziert",
+				"description": "Der AACsearch-Server ist MIT-lizenziert. Kommerziell nutzen, forken, modifizieren — keine Einschränkungen."
+			},
+			"selfHost": {
+				"title": "Self-Hostbar",
+				"description": "Docker Compose und Helm-Chart inklusive. AACsearch in Ihrer eigenen Cloud, On-Premises oder Air-Gapped betreiben."
+			},
+			"transparency": {
+				"title": "Transparente Sicherheit",
+				"description": "Jede Sicherheitsentscheidung ist offen einsehbar. Prüfen Sie, wie Keys gehasht, Tokens signiert und Tenants isoliert werden."
+			},
+			"contribute": {
+				"title": "Beitragen",
+				"description": "Issues, PRs und Diskussionen auf GitHub willkommen. Wir prüfen PRs innerhalb einer Woche. Mitwirkende werden im Changelog aufgeführt."
+			},
+			"noLockIn": {
+				"title": "Kein Vendor-Lock-in",
+				"description": "Ihre Daten gehören Ihnen. Indexe exportieren, zu Self-Hosted migrieren oder Anbieter wechseln. Kein proprietäres Datenformat."
+			},
+			"community": {
+				"title": "Community",
+				"description": "GitHub Discussions für Fragen, Ideen und Präsentationen. Discord für Echtzeit-Chat mit dem Team und anderen Nutzern."
+			}
+		}
+	},
+	"developersPage": {
+		"title": "Entwicklerfreundlich von Anfang an",
+		"description": "Eine saubere API, gute Dokumentation und SDKs, die nicht im Weg stehen. AACsearch lässt sich in Minuten integrieren, nicht in Tagen.",
+		"hero": {
+			"badge": "Developer-First",
+			"codeCaption": "Suche in 3 Zeilen einbinden"
+		},
+		"features": {
+			"title": "Alles, was du brauchst, um Suche zu liefern",
+			"api": {
+				"title": "REST API",
+				"description": "Klare, intuitive REST API mit vollständiger OpenAPI 3.1-Spezifikation. Jeder Endpunkt mit Beispielen dokumentiert."
+			},
+			"sdks": {
+				"title": "Offizielle SDKs",
+				"description": "JavaScript- und TypeScript-SDKs. Community-SDKs für Python, Go und PHP."
+			},
+			"browserSdk": {
+				"title": "Browser SDK",
+				"description": "Leichtes 14KB Browser-Widget. Shadow DOM, 5 Sprachen, integrierte Analytics. Ein Script-Tag."
+			},
+			"connectorApi": {
+				"title": "Connector API",
+				"description": "7-Endpunkt-API für CMS-Integrationen. PrestaShop- und Bitrix24-Module direkt inklusive."
+			},
+			"openapi": {
+				"title": "OpenAPI Spezifikation",
+				"description": "Vollständige OpenAPI 3.1-Spezifikation unter /api/v1/openapi.json. Client-Bibliotheken in jeder Sprache automatisch generieren."
+			},
+			"dashboard": {
+				"title": "Analytics Dashboard",
+				"description": "Suchanalysen, Zero-Result-Tracking, Top-Anfragen und CTR — alles in deinem Dashboard."
+			}
+		},
+		"cta": {
+			"title": "In Minuten loslegen",
+			"description": "Kostenloses Kontingent inklusive. Keine Kreditkarte erforderlich."
+		}
+	},
+	"aiSearchPage": {
+		"title": "KI-gestützte Suche",
+		"description": "Gehen Sie über Schlüsselwörter hinaus. AACsearch unterstützt Vektor-, Hybrid- und semantische Suche von Haus aus — ohne ML-Expertise.",
+		"badge": "Jetzt in Produktion",
+		"modes": {
+			"title": "Drei Suchmodi, eine Plattform",
+			"vector": {
+				"title": "Vektorsuche",
+				"description": "Finden Sie semantisch ähnliche Ergebnisse, auch wenn exakte Schlüsselwörter nicht übereinstimmen. Nutzt Embedding-Modelle zum Verstehen von Bedeutungen."
+			},
+			"hybrid": {
+				"title": "Hybridsuche",
+				"description": "Kombinieren Sie Keyword-Präzision mit semantischem Verständnis. Konfigurierbare Gewichte ermöglichen Ihnen, die Relevanz für Ihren Anwendungsfall zu optimieren."
+			},
+			"semantic": {
+				"title": "Semantisches Re-Ranking",
+				"description": "Ordnen Sie Ergebnisse mit KI neu an, um die relevantesten Treffer nach oben zu bringen. Verbessert die CTR ohne Änderungen an Ihrer Indexierung."
+			}
+		},
+		"useCases": {
+			"title": "Für jeden Anwendungsfall gebaut",
+			"ecommerce": {
+				"title": "E-Commerce",
+				"description": "Zeigen Sie relevante Produkte für Suchanfragen wie 'bequeme Laufschuhe' an, auch ohne exakten Keyword-Treffer."
+			},
+			"docs": {
+				"title": "Dokumentation",
+				"description": "Lassen Sie Nutzer mit natürlichsprachigen Fragen Antworten in Ihrer gesamten Wissensdatenbank finden."
+			},
+			"knowledge": {
+				"title": "RAG-Pipelines",
+				"description": "Verbinden Sie AACsearch mit Ihrer RAG-Pipeline für präzise, fundierte KI-Antworten."
+			},
+			"marketplace": {
+				"title": "Marktplatz",
+				"description": "Verknüpfen Sie Käufer und Verkäufer per semantischer Ähnlichkeit statt starrer Keyword-Filter."
+			}
+		},
+		"howItWorks": {
+			"title": "So funktioniert es",
+			"steps": {
+				"upload": {
+					"title": "Daten hochladen",
+					"description": "Verbinden Sie Ihr CMS, Ihre Datenbank oder laden Sie Dateien über die API hoch."
+				},
+				"model": {
+					"title": "Embedding-Modell wählen",
+					"description": "Wählen Sie aus integrierten Modellen oder bringen Sie Ihre eigenen OpenAI-Embeddings mit."
+				},
+				"index": {
+					"title": "Vektoren automatisch generiert",
+					"description": "AACsearch generiert und speichert Vektor-Embeddings während der Indexierung."
+				},
+				"query": {
+					"title": "Mit natürlicher Sprache suchen",
+					"description": "Ihre Nutzer suchen natürlich — AACsearch liefert die semantisch relevantesten Ergebnisse."
+				}
+			}
+		}
 	}
 }

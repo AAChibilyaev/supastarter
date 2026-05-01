@@ -10,6 +10,7 @@ import { createApiKey } from "./procedures/create-api-key";
 import { createConnectorToken } from "./procedures/create-connector-token";
 import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
+import { deleteIndex } from "./procedures/delete-index";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { dynamicSearch } from "./procedures/dynamic-search";
 import { federatedSearch } from "./procedures/federated-search";
@@ -57,6 +58,7 @@ import { getWidgetConfig } from "./procedures/widget-config";
 export const searchRouter = {
 	listIndexes,
 	createIndex,
+	deleteIndex,
 	importDocuments,
 	importJobs,
 	upsertDocument,

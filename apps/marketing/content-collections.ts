@@ -78,5 +78,5 @@ const legalPages = defineCollection({
 });
 
 export default defineConfig({
-	collections: [posts, legalPages],
+	content: [posts, legalPages],
 });

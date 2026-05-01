@@ -11,15 +11,65 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@repo/ui/components/dialog";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { Switch } from "@repo/ui/components/switch";
+import { Textarea } from "@repo/ui/components/textarea";
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import { Activity, ChevronLeftIcon, Code2, Database, Key, Layers, Settings } from "lucide-react";
+import {
+	Activity,
+	ChevronLeftIcon,
+	Code2,
+	Database,
+	DownloadIcon,
+	Key,
+	Layers,
+	PlusIcon,
+	Settings,
+	Trash2Icon,
+	UploadIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+
+// Local mirror of SearchFieldInput from @repo/api/modules/search/types
+type FieldType =
+	| "string"
+	| "int32"
+	| "int64"
+	| "float"
+	| "bool"
+	| "string[]"
+	| "int32[]"
+	| "int64[]"
+	| "float[]"
+	| "bool[]"
+	| "object"
+	| "object[]"
+	| "auto";
+
+interface SchemaField {
+	name: string;
+	type: FieldType;
+	facet?: boolean;
+	optional?: boolean;
+	index?: boolean;
+	sort?: boolean;
+}
 
 import { DocumentsTable } from "../tables/DocumentsTable";
 
@@ -53,6 +103,8 @@ function ActivityIcon({ kind }: { kind: string }) {
 export function CollectionDetail() {
 	const t = useTranslations("search");
 	const params = useParams<{ organizationSlug: string; indexSlug: string }>();
+	const router = useRouter();
+	const queryClient = useQueryClient();
 	const { activeOrganization } = useActiveOrganization();
 
 	const orgSlug = params.organizationSlug;
@@ -113,17 +165,22 @@ export function CollectionDetail() {
 		: "ss_sea...KEY";
 	const saasUrl = process.env.NEXT_PUBLIC_SAAS_URL ?? "https://app.example.com";
 
-	// ── Delete mutation (no backend endpoint yet) ──────────────────
+	// ── Delete mutation ────────────────────────────────────────────
 
-	// const deleteMutation = useMutation({
-	//   ...orpc.search.deleteIndex.mutationOptions(),
-	//   onSuccess: () => {
-	//     toastSuccess(t("collection.deleted"));
-	//     void queryClient.invalidateQueries({
-	//       queryKey: orpc.search.listIndexes.key(),
-	//     });
-	//   },
-	// });
+	const deleteMutation = useMutation(
+		orpc.search.deleteIndex.mutationOptions({
+			onSuccess: async () => {
+				toastSuccess(t("collection.deleted"));
+				await queryClient.invalidateQueries({
+					queryKey: orpc.search.listIndexes.key(),
+				});
+				router.push(`/${orgSlug}/search`);
+			},
+			onError: () => {
+				toastError(t("collection.deleteError"));
+			},
+		}),
+	);
 
 	// ── Early returns ──────────────────────────────────────────────
 
@@ -263,7 +320,9 @@ $data = json_decode($response->getBody(), true);`;
 							{index.displayName ?? index.slug}
 						</h1>
 						<Badge status={index.enabled ? "success" : "warning"}>
-							{index.enabled ? "Enabled" : "Disabled"}
+							{index.enabled
+								? t("collection.statusEnabled")
+								: t("collection.statusDisabled")}
 						</Badge>
 					</div>
 					<p className="text-sm mt-1 text-muted-foreground">
@@ -419,106 +478,17 @@ $data = json_decode($response->getBody(), true);`;
 				</div>
 			)}
 
-			{/* ── Tab: Schema ───────────────────────────────────────── */}
+			{/* ── Tab: Schema ─────────────────────────────────────── */}
 
-			{activeTab === "schema" && (
-				<>
-					{schemaLoading ? (
-						<Card>
-							<CardHeader>
-								<Skeleton className="h-6 w-32" />
-								<Skeleton className="h-4 w-48" />
-							</CardHeader>
-							<CardContent>
-								<div className="space-y-3">
-									<Skeleton className="h-8 w-full" />
-									<Skeleton className="h-8 w-full" />
-									<Skeleton className="h-8 w-full" />
-								</div>
-							</CardContent>
-						</Card>
-					) : (
-						<Card>
-							<CardHeader>
-								<CardTitle className="text-base">
-									{t("collection.schemaFields")}
-								</CardTitle>
-								<CardDescription>
-									{index.slug} &mdash; {schemaFields.length}{" "}
-									{t("collection.fields")}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
-								{schemaFields.length === 0 ? (
-									<p className="text-sm text-muted-foreground">
-										{t("collection.noSchema")}
-									</p>
-								) : (
-									<div className="overflow-x-auto">
-										<table className="text-sm w-full">
-											<thead>
-												<tr className="border-b text-left text-muted-foreground">
-													<th className="pb-2 pr-4 font-medium">
-														{t("collection.fieldName")}
-													</th>
-													<th className="pb-2 pr-4 font-medium">
-														{t("collection.fieldType")}
-													</th>
-													<th className="pb-2 pr-4 font-medium">Facet</th>
-													<th className="pb-2 pr-4 font-medium">Sort</th>
-													<th className="pb-2 pr-4 font-medium">Index</th>
-													<th className="pb-2 font-medium">Optional</th>
-												</tr>
-											</thead>
-											<tbody>
-												{schemaFields.map((field) => (
-													<tr
-														key={field.name}
-														className="border-b last:border-0"
-													>
-														<td className="py-2 pr-4 font-mono text-xs">
-															{field.name}
-														</td>
-														<td className="py-2 pr-4">
-															<Badge status="info">
-																{field.type}
-															</Badge>
-														</td>
-														<td className="py-2 pr-4">
-															{field.facet ? "\u2713" : "\u2014"}
-														</td>
-														<td className="py-2 pr-4">
-															{field.sort ? "\u2713" : "\u2014"}
-														</td>
-														<td className="py-2 pr-4">
-															{field.index ? "\u2713" : "\u2014"}
-														</td>
-														<td className="py-2">
-															{field.optional ? "\u2713" : "\u2014"}
-														</td>
-													</tr>
-												))}
-											</tbody>
-										</table>
-									</div>
-								)}
-								{/* Schema Editor feature placeholder */}
-								<div className="mt-6 pt-6 border-t">
-									<p className="text-sm font-medium text-muted-foreground">
-										Schema Editor coming soon
-									</p>
-									<p className="text-xs mt-1 text-muted-foreground/60">
-										A visual schema editor will allow you to add, remove, and
-										reorder fields, configure faceting and sorting, and set
-										default sort fields from an intuitive interface.
-									</p>
-								</div>
-							</CardContent>
-						</Card>
-					)}
-				</>
+			{activeTab === "schema" && orgId && indexSlug && (
+				<SchemaEditor
+					organizationId={orgId}
+					slug={indexSlug}
+					schemaLoading={schemaLoading}
+					schemaFields={schemaFields as SchemaField[]}
+					defaultSortingField={defaultSortingField}
+				/>
 			)}
-
 			{/* ── Tab: Documents ────────────────────────────────────── */}
 
 			{activeTab === "documents" && (
@@ -557,7 +527,7 @@ $data = json_decode($response->getBody(), true);`;
 						<CardContent className="space-y-6">
 							{apiKeys?.length === 0 && (
 								<p className="text-sm text-muted-foreground">
-									No API keys found. Create one to use these examples.
+									{t("collection.noApiKeys")}
 								</p>
 							)}
 							<CodeBlock label="cURL" code={curlExample} />
@@ -595,7 +565,11 @@ $data = json_decode($response->getBody(), true);`;
 							/>
 							<MetaRow
 								label={t("collection.enabled")}
-								value={index.enabled ? "Yes" : "No"}
+								value={
+									index.enabled
+										? t("collection.statusEnabled")
+										: t("collection.statusDisabled")
+								}
 							/>
 							<MetaRow
 								label={t("collection.created")}
@@ -657,13 +631,17 @@ $data = json_decode($response->getBody(), true);`;
 									</Button>
 									<Button
 										variant="destructive"
+										disabled={deleteMutation.isPending}
 										onClick={() => {
 											setDeleteConfirmOpen(false);
-											// No backend endpoint yet — show a toast or navigate
-											// toastSuccess(t("collection.deleted"));
+											if (!orgId) return;
+											deleteMutation.mutate({
+												organizationId: orgId,
+												slug: index.slug,
+											});
 										}}
 									>
-										{t("collection.delete")}
+										{deleteMutation.isPending ? t("loading") : t("collection.delete")}
 									</Button>
 								</CardFooter>
 							</Card>
@@ -720,9 +698,424 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
 					onClick={handleCopy}
 					className="top-2 right-2 px-2 py-1 text-xs absolute rounded-md bg-foreground/10 transition-colors hover:bg-foreground/20"
 				>
-					{copied ? "Copied!" : "Copy"}
+					{copied ? "✓" : "⧉"}
 				</button>
 			</div>
 		</div>
+	);
+}
+
+// ── SchemaEditor ──────────────────────────────────────────────────
+
+const FIELD_TYPES: FieldType[] = [
+	"string",
+	"int32",
+	"int64",
+	"float",
+	"bool",
+	"string[]",
+	"int32[]",
+	"int64[]",
+	"float[]",
+	"bool[]",
+	"object",
+	"object[]",
+	"auto",
+];
+
+function SchemaEditor({
+	organizationId,
+	slug,
+	schemaLoading,
+	schemaFields,
+	defaultSortingField,
+}: {
+	organizationId: string;
+	slug: string;
+	schemaLoading: boolean;
+	schemaFields: SchemaField[];
+	defaultSortingField: string | null;
+}) {
+	const t = useTranslations("search.collection.schemaEditor");
+	const tColl = useTranslations("search.collection");
+	const queryClient = useQueryClient();
+
+	const [draft, setDraft] = useState<SchemaField[]>([]);
+	const [defaultSort, setDefaultSort] = useState<string>("");
+	const [initialized, setInitialized] = useState(false);
+
+	const [importOpen, setImportOpen] = useState(false);
+	const [importJson, setImportJson] = useState("");
+	const [diffOpen, setDiffOpen] = useState(false);
+
+	if (!initialized && (schemaFields.length > 0 || !schemaLoading)) {
+		setDraft(schemaFields.map((f) => ({ ...f })));
+		setDefaultSort(defaultSortingField ?? "");
+		setInitialized(true);
+	}
+
+	const mutation = useMutation(
+		orpc.search.schema.update.mutationOptions({
+			onSuccess: () => {
+				toastSuccess(t("saved"));
+				void queryClient.invalidateQueries({
+					queryKey: orpc.search.schema.get.key(),
+				});
+			},
+			onError: () => toastError(t("saveError")),
+		}),
+	);
+
+	const handleAddField = () => {
+		setDraft((prev) => [...prev, { name: "", type: "string" as FieldType }]);
+	};
+
+	const handleRemove = (idx: number) => {
+		setDraft((prev) => prev.filter((_, i) => i !== idx));
+	};
+
+	const handleChange = (idx: number, patch: Partial<SchemaField>) => {
+		setDraft((prev) => prev.map((f, i) => (i === idx ? { ...f, ...patch } : f)));
+	};
+
+	const handleSave = (triggerReindex: boolean) => {
+		const validFields = draft.filter((f) => f.name.trim());
+		mutation.mutate({
+			organizationId,
+			slug,
+			fields: validFields,
+			defaultSortingField: defaultSort || undefined,
+			triggerReindex,
+		});
+	};
+
+	const handleExport = async () => {
+		try {
+			await navigator.clipboard.writeText(JSON.stringify(draft, null, 2));
+			toastSuccess(t("exported"));
+		} catch {
+			toastError(t("exportError"));
+		}
+	};
+
+	const handleImport = () => {
+		try {
+			const parsed = JSON.parse(importJson) as unknown;
+			if (!Array.isArray(parsed)) {
+				toastError(t("importMustBeArray"));
+				return;
+			}
+			setDraft(parsed as SchemaField[]);
+			setImportOpen(false);
+			setImportJson("");
+		} catch {
+			toastError(t("invalidJson"));
+		}
+	};
+
+	const addedFields = draft.filter((d) => !schemaFields.some((f) => f.name === d.name));
+	const removedFields = schemaFields.filter((f) => !draft.some((d) => d.name === f.name));
+	const hasDiff = addedFields.length > 0 || removedFields.length > 0;
+
+	if (schemaLoading) {
+		return (
+			<Card>
+				<CardHeader>
+					<Skeleton className="h-6 w-32" />
+					<Skeleton className="h-4 w-48" />
+				</CardHeader>
+				<CardContent className="space-y-3">
+					<Skeleton className="h-8 w-full" />
+					<Skeleton className="h-8 w-full" />
+					<Skeleton className="h-8 w-full" />
+				</CardContent>
+			</Card>
+		);
+	}
+
+	const sortableFields = draft.filter(
+		(f) => f.name && (f.sort || f.type === "int32" || f.type === "int64" || f.type === "float"),
+	);
+
+	return (
+		<>
+			<Card>
+				<CardHeader>
+					<div className="gap-2 flex flex-wrap items-start justify-between">
+						<div>
+							<CardTitle className="text-base">{tColl("schemaFields")}</CardTitle>
+							<CardDescription>
+								{slug} &mdash; {draft.length} {tColl("fields")}
+							</CardDescription>
+						</div>
+						<div className="gap-2 flex flex-wrap">
+							<Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
+								<UploadIcon className="size-3.5" />
+								{t("importJson")}
+							</Button>
+							<Button variant="outline" size="sm" onClick={handleExport}>
+								<DownloadIcon className="size-3.5" />
+								{t("exportJson")}
+							</Button>
+							{hasDiff && (
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setDiffOpen(true)}
+								>
+									{t("previewDiff")}
+								</Button>
+							)}
+						</div>
+					</div>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					{/* Default sort selector */}
+					<div className="gap-3 flex flex-wrap items-center">
+						<Label className="text-sm shrink-0 text-muted-foreground">
+							{t("defaultSort")}
+						</Label>
+						<Select value={defaultSort} onValueChange={setDefaultSort}>
+							<SelectTrigger className="w-48">
+								<SelectValue placeholder={t("noDefaultSort")} />
+							</SelectTrigger>
+							<SelectContent>
+								{sortableFields.map((f) => (
+									<SelectItem key={f.name} value={f.name}>
+										{f.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+
+					{draft.length === 0 ? (
+						<div className="py-8 text-center">
+							<p className="mb-3 text-sm text-muted-foreground">{t("empty")}</p>
+							<Button variant="outline" size="sm" onClick={handleAddField}>
+								<PlusIcon className="size-3.5" />
+								{t("addFirstField")}
+							</Button>
+						</div>
+					) : (
+						<div className="overflow-x-auto">
+							<table className="text-sm w-full">
+								<thead>
+									<tr className="border-b text-left text-muted-foreground">
+										<th className="pb-2 pr-3 font-medium min-w-[140px]">
+											{tColl("fieldName")}
+										</th>
+										<th className="pb-2 pr-3 font-medium min-w-[120px]">
+											{tColl("fieldType")}
+										</th>
+										<th className="pb-2 pr-2 font-medium text-center">
+											{tColl("fieldFacet")}
+										</th>
+										<th className="pb-2 pr-2 font-medium text-center">
+											{tColl("fieldSort")}
+										</th>
+										<th className="pb-2 pr-2 font-medium text-center">
+											{tColl("fieldIndex")}
+										</th>
+										<th className="pb-2 pr-2 font-medium text-center">
+											{tColl("fieldOptional")}
+										</th>
+										<th className="pb-2 font-medium" />
+									</tr>
+								</thead>
+								<tbody>
+									{draft.map((field, idx) => (
+										<tr key={idx} className="border-b last:border-0">
+											<td className="py-1.5 pr-3">
+												<Input
+													value={field.name}
+													onChange={(e) =>
+														handleChange(idx, { name: e.target.value })
+													}
+													className="h-7 font-mono text-xs"
+													placeholder={t("unnamed")}
+												/>
+											</td>
+											<td className="py-1.5 pr-3">
+												<Select
+													value={field.type}
+													onValueChange={(v) =>
+														handleChange(idx, { type: v as FieldType })
+													}
+												>
+													<SelectTrigger className="h-7 text-xs w-full">
+														<SelectValue />
+													</SelectTrigger>
+													<SelectContent>
+														{FIELD_TYPES.map((ft) => (
+															<SelectItem key={ft} value={ft}>
+																{ft}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+											</td>
+											<td className="py-1.5 pr-2 text-center">
+												<Switch
+													checked={field.facet ?? false}
+													onCheckedChange={(v) =>
+														handleChange(idx, { facet: v })
+													}
+													className="scale-75"
+												/>
+											</td>
+											<td className="py-1.5 pr-2 text-center">
+												<Switch
+													checked={field.sort ?? false}
+													onCheckedChange={(v) =>
+														handleChange(idx, { sort: v })
+													}
+													className="scale-75"
+												/>
+											</td>
+											<td className="py-1.5 pr-2 text-center">
+												<Switch
+													checked={field.index ?? true}
+													onCheckedChange={(v) =>
+														handleChange(idx, { index: v })
+													}
+													className="scale-75"
+												/>
+											</td>
+											<td className="py-1.5 pr-2 text-center">
+												<Switch
+													checked={field.optional ?? false}
+													onCheckedChange={(v) =>
+														handleChange(idx, { optional: v })
+													}
+													className="scale-75"
+												/>
+											</td>
+											<td className="py-1.5">
+												<Button
+													variant="ghost"
+													size="sm"
+													onClick={() => handleRemove(idx)}
+													className="size-7 p-0 text-muted-foreground hover:text-destructive"
+												>
+													<Trash2Icon className="size-3.5" />
+												</Button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)}
+
+					{/* Footer */}
+					<div className="gap-2 pt-2 flex flex-wrap items-center justify-between border-t">
+						<Button variant="outline" size="sm" onClick={handleAddField}>
+							<PlusIcon className="size-3.5" />
+							{t("addField")}
+						</Button>
+						<div className="gap-2 flex">
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => handleSave(false)}
+								loading={mutation.isPending}
+							>
+								{t("saveOnly")}
+							</Button>
+							<Button
+								size="sm"
+								onClick={() => handleSave(true)}
+								loading={mutation.isPending}
+							>
+								{t("saveReindex")}
+							</Button>
+						</div>
+					</div>
+				</CardContent>
+			</Card>
+
+			{/* Import JSON dialog */}
+			<Dialog open={importOpen} onOpenChange={setImportOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>{t("importDialogTitle")}</DialogTitle>
+					</DialogHeader>
+					<p className="text-sm text-muted-foreground">{t("importDialogDesc")}</p>
+					<Textarea
+						value={importJson}
+						onChange={(e) => setImportJson(e.target.value)}
+						rows={8}
+						className="font-mono text-xs"
+						placeholder='[{"name": "title", "type": "string", "facet": false}]'
+					/>
+					<div className="gap-2 flex justify-end">
+						<Button variant="outline" onClick={() => setImportOpen(false)}>
+							{t("cancel")}
+						</Button>
+						<Button onClick={handleImport}>{t("importAction")}</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
+
+			{/* Diff preview dialog */}
+			<Dialog open={diffOpen} onOpenChange={setDiffOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>{t("diffTitle")}</DialogTitle>
+					</DialogHeader>
+					<p className="text-sm text-muted-foreground">{t("diffDesc")}</p>
+					{!hasDiff ? (
+						<p className="text-sm">{t("noChanges")}</p>
+					) : (
+						<div className="space-y-3 text-sm">
+							{addedFields.length > 0 && (
+								<div>
+									<p className="mb-1 font-medium text-success">
+										+ Added ({addedFields.length})
+									</p>
+									{addedFields.map((f) => (
+										<div
+											key={f.name}
+											className="rounded px-2 py-1 font-mono text-xs bg-success/10 text-success"
+										>
+											{f.name}: {f.type}
+										</div>
+									))}
+								</div>
+							)}
+							{removedFields.length > 0 && (
+								<div>
+									<p className="mb-1 font-medium text-destructive">
+										- Removed ({removedFields.length})
+									</p>
+									{removedFields.map((f) => (
+										<div
+											key={f.name}
+											className="rounded px-2 py-1 font-mono text-xs bg-destructive/10 text-destructive"
+										>
+											{f.name}: {f.type}
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+					)}
+					<div className="gap-2 flex justify-end">
+						<Button variant="outline" onClick={() => setDiffOpen(false)}>
+							{t("cancel")}
+						</Button>
+						<Button
+							onClick={() => {
+								handleSave(false);
+								setDiffOpen(false);
+							}}
+						>
+							{t("saveOnly")}
+						</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }

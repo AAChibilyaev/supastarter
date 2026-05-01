@@ -46,7 +46,7 @@ export function AdminIntegrationsView() {
 					error={data.database.error}
 				/>
 
-				{/* Typesense */}
+				{/* Search Engine */}
 				<IntegrationCard
 					title={t("integrations.typesense")}
 					icon={<WifiIcon className="size-4" />}

@@ -121,9 +121,10 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 	const retryJobs = jobs.filter((j) => j.status === "failed" || j.status === "pending");
 
 	const kanbanColumns = useMemo<KanbanColumn[]>(() => {
+		const currentJobs = data?.jobs ?? [];
 		const statuses = ["pending", "processing", "completed", "failed"] as const;
-		const grouped = new Map<string, typeof jobs>();
-		for (const job of jobs) {
+		const grouped = new Map<string, typeof currentJobs>();
+		for (const job of currentJobs) {
 			const list = grouped.get(job.status) ?? [];
 			list.push(job);
 			grouped.set(job.status, list);
@@ -144,7 +145,7 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 				meta: job.errorMessage?.slice(0, 60) || formatTime(job.startedAt),
 			})),
 		}));
-	}, [jobs, t]);
+	}, [data, t]);
 
 	return (
 		<Card className="p-6 space-y-6">

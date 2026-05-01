@@ -4,6 +4,7 @@ import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import { toastError } from "@repo/ui/components/toast";
 import { useRouter } from "@shared/hooks/router";
 import { useQueryClient } from "@tanstack/react-query";
 import { CheckIcon, XIcon } from "lucide-react";
@@ -54,8 +55,10 @@ export function OrganizationInvitationModal({
 
 				router.replace("/");
 			}
-		} catch {
-			// TODO: handle error
+		} catch (err) {
+			const msg =
+				err instanceof Error ? err.message : t("organizations.invitationModal.error");
+			toastError(msg);
 		} finally {
 			setSubmitting(false);
 		}

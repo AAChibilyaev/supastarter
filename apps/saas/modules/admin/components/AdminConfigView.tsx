@@ -209,6 +209,6 @@ function formatServiceName(key: string): string {
 	return key
 		.replace(/([A-Z])/g, " $1")
 		.replace(/^./, (s) => s.toUpperCase())
-		.replace("Typesense", "Typesense")
+		.replace("Typesense", "AACsearch Engine")
 		.trim();
 }

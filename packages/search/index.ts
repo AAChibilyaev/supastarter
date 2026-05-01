@@ -3,6 +3,7 @@ export { getTypesenseClient } from "./lib/client";
 export {
 	aliasName,
 	createPhysicalCollection,
+	deleteSearchIndexCollections,
 	dropCollection,
 	dropOldVersions,
 	ensureAlias,

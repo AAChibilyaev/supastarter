@@ -79,6 +79,26 @@ export async function swapAliasToVersion(organizationId: string, slug: string, n
 	return result;
 }
 
+export async function deleteSearchIndexCollections(organizationId: string, slug: string) {
+	const client = getTypesenseClient();
+	const alias = aliasName(organizationId, slug);
+
+	try {
+		await client.aliases(alias).delete();
+	} catch (error) {
+		logger.warn("Could not delete alias", { alias, error });
+	}
+
+	const collections = await client.collections().retrieve();
+	const prefix = `${alias}_v`;
+
+	for (const name of collections.map((collection) => collection.name)) {
+		if (name.startsWith(prefix)) {
+			await dropCollection(name);
+		}
+	}
+}
+
 export async function dropCollection(name: string) {
 	const client = getTypesenseClient();
 	try {

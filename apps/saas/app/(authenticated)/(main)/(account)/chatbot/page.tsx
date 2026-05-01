@@ -6,7 +6,7 @@ export default async function AiDemoPage() {
 		<>
 			<PageHeader
 				title="AI Chatbot"
-				subtitle="This is an example chatbot built with the OpenAI API"
+				subtitle="AI-powered assistant"
 				className="max-w-3xl mx-auto"
 			/>
 

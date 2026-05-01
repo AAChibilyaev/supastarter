@@ -9,9 +9,22 @@ import { logger } from "@repo/logs";
 
 import { router } from "./router";
 
+function shouldSkipApiErrorLog(error: unknown): boolean {
+	if (!(error instanceof Error)) {
+		return false;
+	}
+
+	const message = error.message.toLowerCase();
+	return message === "unauthorized" || message.includes("unauthorized");
+}
+
 export const rpcHandler = new RPCHandler(router, {
 	clientInterceptors: [
 		onError((error) => {
+			if (shouldSkipApiErrorLog(error)) {
+				return;
+			}
+
 			logger.error(error);
 		}),
 	],
@@ -52,6 +65,10 @@ export const openApiHandler = new OpenAPIHandler(router, {
 	],
 	clientInterceptors: [
 		onError((error) => {
+			if (shouldSkipApiErrorLog(error)) {
+				return;
+			}
+
 			logger.error(error);
 		}),
 	],

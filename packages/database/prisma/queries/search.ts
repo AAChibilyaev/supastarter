@@ -305,26 +305,35 @@ export async function markIngestRowsSuccess(ids: string[]) {
 	});
 }
 
-const MAX_BACKOFF_MS = 60 * 60 * 1000;
 const BASE_BACKOFF_MS = 30 * 1000;
+const MAX_BACKOFF_MS = 7200 * 1000; // 2 hours
+const SLOW_RETRY_THRESHOLD = 5; // attempts >= 5 → long park
+const SLOW_RETRY_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export async function markIngestRowsFailure(input: { id: string; error: string }[]) {
 	if (input.length === 0) {
 		return;
 	}
+	const ids = input.map((r) => r.id);
+	const currentRows = await db.searchIngestBuffer.findMany({
+		where: { id: { in: ids } },
+		select: { id: true, attempts: true },
+	});
+	const attemptsMap = new Map(currentRows.map((r) => [r.id, r.attempts]));
+
+	const now = Date.now();
 	for (const row of input) {
-		const current = await db.searchIngestBuffer.findUnique({
-			where: { id: row.id },
-			select: { attempts: true },
-		});
-		const nextAttempts = (current?.attempts ?? 0) + 1;
-		const backoffMs = Math.min(BASE_BACKOFF_MS * 2 ** (nextAttempts - 1), MAX_BACKOFF_MS);
+		const nextAttempts = (attemptsMap.get(row.id) ?? 0) + 1;
+		const backoffMs =
+			nextAttempts >= SLOW_RETRY_THRESHOLD
+				? SLOW_RETRY_MS
+				: Math.min(BASE_BACKOFF_MS * 2 ** (nextAttempts - 1), MAX_BACKOFF_MS);
 		await db.searchIngestBuffer.update({
 			where: { id: row.id },
 			data: {
 				attempts: nextAttempts,
 				lastError: row.error.slice(0, 1000),
-				nextRetryAt: new Date(Date.now() + backoffMs),
+				nextRetryAt: new Date(now + backoffMs),
 			},
 		});
 	}

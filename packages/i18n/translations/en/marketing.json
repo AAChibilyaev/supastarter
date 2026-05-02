@@ -362,7 +362,7 @@
 			},
 			"technology": {
 				"title": "Technology",
-				"description": "Built on Typesense, a fast open-source search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
+				"description": "Built on a lightning-fast open-source search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
 			},
 			"openCore": {
 				"title": "Open core",
@@ -533,7 +533,7 @@
 			},
 			"engineering": {
 				"title": "Engineering",
-				"description": "TypeScript, Next.js, Typesense, Prisma, Hono. The stack is modern and documented. You will own features end-to-end."
+				"description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. The stack is modern and documented. You will own features end-to-end."
 			},
 			"growth": {
 				"title": "Growth",
@@ -593,7 +593,7 @@
 	},
 	"featuresSearchApi": {
 		"title": "The API your team deserves",
-		"subtitle": "15 REST endpoints. OpenAPI 3.1 spec. Browser SDK. No Typesense cluster to manage.",
+		"subtitle": "15 REST endpoints. OpenAPI 3.1 spec. Browser SDK. No search cluster to manage.",
 		"items": {
 			"endpoints": {
 				"title": "15 public endpoints",
@@ -1379,7 +1379,7 @@
 			},
 			"latency": {
 				"title": "Search latency",
-				"description": "Elasticsearch p99 search latency is typically 100-400ms. AACsearch (Typesense-backed) targets under 50ms p99."
+				"description": "Elasticsearch p99 search latency is typically 100-400ms. AACsearch targets under 50ms p99."
 			},
 			"useCase": {
 				"title": "Use case fit",
@@ -1409,7 +1409,7 @@
 		"items": {
 			"engine": {
 				"title": "Underlying engine",
-				"description": "Meilisearch is the engine and the product. AACsearch is built on Typesense, a different open-source engine with vector search built in."
+				"description": "Meilisearch is the engine and the product. AACsearch uses a different open-source engine with vector search built in."
 			},
 			"hosted": {
 				"title": "Managed cloud",
@@ -1830,7 +1830,7 @@
 			},
 			"performance": {
 				"title": "Sub-50ms latency",
-				"description": "Geo filtering runs inside Typesense's search core. No external geospatial service, no extra round-trips."
+				"description": "Geo filtering runs inside AACsearch's search core. No external geospatial service, no extra round-trips."
 			},
 			"filters": {
 				"title": "Geo + attribute filters",
@@ -1932,7 +1932,7 @@
 			},
 			"performance": {
 				"title": "Zero-latency overhead",
-				"description": "Typo tolerance is implemented inside the Typesense search core. No extra round-trip, no external spell-check service."
+				"description": "Typo tolerance is implemented inside AACsearch's search core. No extra round-trip, no external spell-check service."
 			},
 			"accuracy": {
 				"title": "High precision",
@@ -2532,7 +2532,7 @@
 			},
 			"boilerplate": {
 				"title": "Company boilerplate",
-				"description": "AACsearch is a hosted search-as-a-service platform built on Typesense. Founded in 2024, serving 500+ companies across 40 countries."
+				"description": "AACsearch is a hosted search-as-a-service platform. Founded in 2024, serving 500+ companies across 40 countries."
 			},
 			"pressReleases": {
 				"title": "Press releases",
@@ -2630,7 +2630,7 @@
 		"items": {
 			"searchIndex": {
 				"title": "Search index",
-				"description": "A data structure optimised for fast text retrieval. AACsearch maintains a Typesense collection per index, with automatic alias management."
+				"description": "A data structure optimised for fast text retrieval. AACsearch maintains a search collection per index, with automatic alias management."
 			},
 			"facet": {
 				"title": "Facet",
@@ -2854,7 +2854,7 @@
 			},
 			"selfHost": {
 				"title": "Can I self-host?",
-				"description": "Yes. AACsearch uses Typesense as its search engine. You can run Typesense yourself and use the AACsearch SDK against your own cluster."
+				"description": "Yes. AACsearch supports self-hosting. You can run the search engine yourself and use the AACsearch SDK against your own cluster."
 			}
 		}
 	},

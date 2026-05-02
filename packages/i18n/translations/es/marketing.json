@@ -362,7 +362,7 @@
 			},
 			"technology": {
 				"title": "Tecnología",
-				"description": "Construido sobre Typesense, un motor de búsqueda open-source de alto rendimiento. Añadimos multi-tenancy, gestión de claves API, analíticas y un plano de control gestionado encima."
+				"description": "Construido sobre un motor de búsqueda open-source ultrarrápido. Añadimos multi-tenancy, gestión de claves API, analíticas y un plano de control gestionado encima."
 			},
 			"openCore": {
 				"title": "Open core",
@@ -533,7 +533,7 @@
 			},
 			"engineering": {
 				"title": "Ingeniería",
-				"description": "TypeScript, Next.js, Typesense, Prisma, Hono. El stack es moderno y está documentado. Serás responsable de funcionalidades de punta a punta."
+				"description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. El stack es moderno y está documentado. Serás responsable de funcionalidades de punta a punta."
 			},
 			"growth": {
 				"title": "Crecimiento",
@@ -593,7 +593,7 @@
 	},
 	"featuresSearchApi": {
 		"title": "La API que tu equipo merece",
-		"subtitle": "15 endpoints REST. Especificación OpenAPI 3.1. SDK de navegador. Sin clúster de Typesense que gestionar.",
+		"subtitle": "15 endpoints REST. Especificación OpenAPI 3.1. SDK de navegador. Sin clúster de búsqueda que gestionar.",
 		"items": {
 			"endpoints": {
 				"title": "15 endpoints públicos",
@@ -1379,7 +1379,7 @@
 			},
 			"latency": {
 				"title": "Latencia de búsqueda",
-				"description": "La latencia p99 de Elasticsearch es típicamente de 100-400 ms. AACsearch (respaldado por Typesense) apunta a menos de 50 ms p99."
+				"description": "La latencia p99 de Elasticsearch es típicamente de 100-400 ms. AACsearch apunta a menos de 50 ms p99."
 			},
 			"useCase": {
 				"title": "Adecuación al caso de uso",
@@ -1409,7 +1409,7 @@
 		"items": {
 			"engine": {
 				"title": "Motor subyacente",
-				"description": "Meilisearch es el motor y el producto. AACsearch está construido sobre Typesense, un motor open-source diferente con búsqueda vectorial incorporada."
+				"description": "Meilisearch es el motor y el producto. AACsearch utiliza un motor open-source diferente con búsqueda vectorial incorporada."
 			},
 			"hosted": {
 				"title": "Nube gestionada",

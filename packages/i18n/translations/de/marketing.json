@@ -362,7 +362,7 @@
 			},
 			"technology": {
 				"title": "Technologie",
-				"description": "Aufgebaut auf Typesense, einer schnellen Open-Source-Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
+				"description": "Aufgebaut auf einer blitzschnellen Open-Source-Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
 			},
 			"openCore": {
 				"title": "Open Core",
@@ -533,7 +533,7 @@
 			},
 			"engineering": {
 				"title": "Engineering",
-				"description": "TypeScript, Next.js, Typesense, Prisma, Hono. Der Stack ist modern und dokumentiert. Sie übernehmen Features von Anfang bis Ende."
+				"description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. Der Stack ist modern und dokumentiert. Sie übernehmen Features von Anfang bis Ende."
 			},
 			"growth": {
 				"title": "Wachstum",
@@ -593,7 +593,7 @@
 	},
 	"featuresSearchApi": {
 		"title": "Die API, die Ihr Team verdient",
-		"subtitle": "15 REST-Endpunkte. OpenAPI 3.1 Spec. Browser-SDK. Kein Typesense-Cluster zu verwalten.",
+		"subtitle": "15 REST-Endpunkte. OpenAPI 3.1 Spec. Browser-SDK. Kein Search-Cluster zu verwalten.",
 		"items": {
 			"endpoints": {
 				"title": "15 öffentliche Endpunkte",
@@ -1379,7 +1379,7 @@
 			},
 			"latency": {
 				"title": "Such-Latenz",
-				"description": "Elasticsearch p99-Such-Latenz liegt typischerweise bei 100–400 ms. AACsearch (Typesense-basiert) zielt auf unter 50 ms p99."
+				"description": "Elasticsearch p99-Such-Latenz liegt typischerweise bei 100–400 ms. AACsearch zielt auf unter 50 ms p99."
 			},
 			"useCase": {
 				"title": "Anwendungsfall-Eignung",
@@ -1409,7 +1409,7 @@
 		"items": {
 			"engine": {
 				"title": "Zugrunde liegende Engine",
-				"description": "Meilisearch ist Engine und Produkt zugleich. AACsearch basiert auf Typesense, einer anderen Open-Source-Engine mit eingebauter Vektorsuche."
+				"description": "Meilisearch ist Engine und Produkt zugleich. AACsearch nutzt eine andere Open-Source-Engine mit eingebauter Vektorsuche."
 			},
 			"hosted": {
 				"title": "Managed Cloud",

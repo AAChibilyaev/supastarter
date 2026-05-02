@@ -141,7 +141,7 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 
 	// ── Retention banner ──────────────────────────────────────────────
 
-	const planName = planInfo?.planName ?? "Free";
+	const planName = planInfo?.planName ?? t("search.analytics.freePlan");
 	const isFreePlan = planName.toLowerCase() === "free";
 	const planRetentionDays = isFreePlan ? FREE_RETENTION_DAYS : 30;
 	const showRetentionBanner = days > planRetentionDays;

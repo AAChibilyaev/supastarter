@@ -246,7 +246,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 				const json = (await res.json()) as SearchResult;
 				setResult(json);
 			} catch (err) {
-				setError(err instanceof Error ? err.message : "Search failed");
+				setError(err instanceof Error ? err.message : t("search.playground.searchFailed"));
 				setResult(null);
 			} finally {
 				setLoading(false);
@@ -287,7 +287,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 		const curl = buildCurl(selectedSlug, query, { queryBy, filterBy, sortBy, perPage });
 		navigator.clipboard.writeText(curl).then(
 			() => toast.success(t("search.playground.copied")),
-			() => toast.error("Failed to copy"),
+			() => toast.error(t("search.playground.copyFailed")),
 		);
 	};
 
@@ -295,7 +295,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 		if (!result) return;
 		navigator.clipboard.writeText(JSON.stringify(result, null, 2)).then(
 			() => toast.success(t("search.playground.copied")),
-			() => toast.error("Failed to copy"),
+			() => toast.error(t("search.playground.copyFailed")),
 		);
 	};
 

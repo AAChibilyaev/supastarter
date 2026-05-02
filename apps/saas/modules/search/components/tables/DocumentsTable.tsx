@@ -387,7 +387,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			{
 				id: "id",
 				accessorFn: (row) => row.id,
-				header: "ID",
+				header: t("search.documents.columnId"),
 				size: 200,
 				cell: ({ getValue }) => (
 					<span className="font-mono text-xs">{truncate(getValue() as string, 24)}</span>

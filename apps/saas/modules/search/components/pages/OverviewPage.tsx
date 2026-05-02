@@ -302,7 +302,7 @@ export function OverviewPage() {
 						}
 						className="text-xs"
 					>
-						{quotaPercent >= 100 ? "Exceeded" : `${Math.round(quotaPercent)}% used`}
+						{quotaPercent >= 100 ? t("overview.quotaExceededBadge") : t("overview.quotaUsedBadge", { percent: Math.round(quotaPercent) })}
 					</Badge>
 				</StatsTile>
 
@@ -335,7 +335,7 @@ export function OverviewPage() {
 								dataKey="searches"
 								chartConfig={{
 									searches: {
-										label: "Searches",
+										label: t("overview.searchesLabel"),
 										color: "hsl(var(--primary))",
 									},
 								}}
@@ -459,7 +459,7 @@ export function OverviewPage() {
 						<div className="flex items-center justify-between">
 							<div className="gap-2 flex items-center">
 								<span className="font-semibold capitalize">
-									{planInfo?.planName ?? "Free"}
+									{planInfo?.planName ?? t("overview.freePlan")}
 								</span>
 								{planInfo?.status !== "active" && (
 									<Badge status="error">{planInfo?.status}</Badge>

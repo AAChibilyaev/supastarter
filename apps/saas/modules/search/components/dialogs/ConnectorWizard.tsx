@@ -76,7 +76,7 @@ export function ConnectorWizard({
 		// Use provided indexSlug or fetch the first available index
 		const targetSlug = indexSlug || indexes?.[0]?.slug || "";
 		if (!targetSlug) {
-			throw new Error("No index available. Create an index first.");
+			throw new Error(t("search.connector.wizard.noIndex"));
 		}
 		try {
 			const result = await orpc.search.createConnectorToken.call({
@@ -87,7 +87,7 @@ export function ConnectorWizard({
 			setRawKey(result.rawKey);
 			setStep(2);
 		} catch (error: unknown) {
-			const msg = error instanceof Error ? error.message : "Failed to generate token";
+			const msg = error instanceof Error ? error.message : t("search.connector.wizard.tokenFailed");
 			throw new Error(msg);
 		}
 	};

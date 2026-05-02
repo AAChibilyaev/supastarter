@@ -147,7 +147,13 @@
 			"features": "Features",
 			"pricing": "Pricing",
 			"privacyPolicy": "Privacy policy",
-			"termsAndConditions": "Terms"
+			"termsAndConditions": "Terms",
+			"tagline": "Search as a service — scoped tokens, origin allow-lists, and a typed browser SDK.",
+			"legal": "Legal",
+			"status": "Status",
+			"support": "Support",
+			"trust": "Trust",
+			"brand": "Brand"
 		},
 		"menu": {
 			"blog": "Blog",
@@ -157,7 +163,27 @@
 			"docs": "Docs",
 			"features": "Features",
 			"login": "Sign in",
-			"pricing": "Pricing"
+			"pricing": "Pricing",
+			"product": "Product",
+			"solutions": "Solutions",
+			"resources": "Resources",
+			"company": "Company",
+			"enterprise": "Enterprise",
+			"roadmap": "Roadmap",
+			"useCases": "Use Cases",
+			"integrations": "Integrations",
+			"customers": "Customers",
+			"compare": "Compare",
+			"aiSearch": "AI Search",
+			"developers": "Developers",
+			"faq": "FAQ",
+			"glossary": "Glossary",
+			"openSource": "Open Source",
+			"about": "About",
+			"security": "Security",
+			"careers": "Careers",
+			"partners": "Partners",
+			"press": "Press"
 		},
 		"aria": {
 			"menu": "Menu",

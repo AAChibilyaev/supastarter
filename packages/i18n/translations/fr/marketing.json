@@ -147,7 +147,13 @@
 			"features": "Fonctionnalités",
 			"pricing": "Tarifs",
 			"privacyPolicy": "Confidentialité",
-			"termsAndConditions": "CGU"
+			"termsAndConditions": "CGU",
+			"tagline": "Recherche en tant que service — tokens délimités, listes blanches d'origines et SDK typé.",
+			"legal": "Légal",
+			"status": "Statut",
+			"support": "Support",
+			"trust": "Confiance",
+			"brand": "Marque"
 		},
 		"menu": {
 			"blog": "Blog",
@@ -157,7 +163,27 @@
 			"docs": "Docs",
 			"features": "Fonctionnalités",
 			"login": "Se connecter",
-			"pricing": "Tarifs"
+			"pricing": "Tarifs",
+			"product": "Produit",
+			"solutions": "Solutions",
+			"resources": "Ressources",
+			"company": "Entreprise",
+			"enterprise": "Enterprise",
+			"roadmap": "Feuille de route",
+			"useCases": "Cas d'usage",
+			"integrations": "Intégrations",
+			"customers": "Clients",
+			"compare": "Comparer",
+			"aiSearch": "Recherche IA",
+			"developers": "Développeurs",
+			"faq": "FAQ",
+			"glossary": "Glossaire",
+			"openSource": "Open Source",
+			"about": "À propos",
+			"security": "Sécurité",
+			"careers": "Emploi",
+			"partners": "Partenaires",
+			"press": "Presse"
 		},
 		"aria": {
 			"menu": "Menu",
@@ -1563,6 +1589,1366 @@
 					"title": "Interrogez en langage naturel",
 					"description": "Vos utilisateurs recherchent naturellement — AACsearch renvoie les résultats sémantiquement les plus pertinents."
 				}
+			}
+		}
+	},
+	"affiliatePage": {
+		"title": "Programme Affilié",
+		"description": "Gagnez des commissions récurrentes en recommandant AACsearch à des développeurs et des entreprises. Rejoignez le programme dès aujourd'hui."
+	},
+	"affiliate": {
+		"title": "Mit AACsearch verdienen",
+		"subtitle": "Empfehle AACsearch deiner Zielgruppe und verdiene 20 % wiederkehrende Provision für jeden zahlenden Kunden, den du wirfst.",
+		"items": {
+			"commission": {
+				"title": "20 % wiederkehrende Provision",
+				"description": "Verdiene 20 % der monatlichen Plangebühr für jeden geworbenen Kunden – solange ihr Abonnement besteht. Kein Limit, kein Ablaufdatum."
+			},
+			"tracking": {
+				"title": "Zuverlässige Attribution",
+				"description": "90-Tage-Cookie-Fenster. Affiliate-Attribution wird geräteübergreifend via First-Party-Cookies und UTM-Parameter verfolgt."
+			},
+			"creatives": {
+				"title": "Marketing-Assets",
+				"description": "Banner, E-Mail-Vorlagen, Vergleichstabellen und Code-Beispiele – sofort einsatzbereit für Tutorials, Newsletter und Social Posts."
+			},
+			"payments": {
+				"title": "Monatliche Auszahlungen",
+				"description": "Auszahlungen am 15. jedes Monats per Stripe oder Überweisung. Mindestauszahlungsbetrag: 50 $."
+			},
+			"supportChannel": {
+				"title": "Affiliate-Support",
+				"description": "Dedizierter Affiliate-Manager, früher Zugang zu neuen Funktionen und ein privater Affiliate-Discord-Kanal für Networking."
+			},
+			"apply": {
+				"title": "Jetzt bewerben",
+				"description": "Bewirb dich auf affiliate.aacsearch.com. Wir prüfen Bewerbungen innerhalb von 3 Werktagen. Keine Mindest-Reichweite erforderlich."
+			}
+		}
+	},
+	"brandPage": {
+		"title": "Charte Graphique",
+		"description": "Logos, couleurs, typographie et règles d'utilisation. Tout ce dont vous avez besoin pour représenter AACsearch correctement."
+	},
+	"brand": {
+		"title": "Unser Erscheinungsbild",
+		"subtitle": "Unsere Marke steht für Klarheit und Geschwindigkeit – dieselben Werte, die wir in die Suche einbringen. Nutze diese Assets, um AACsearch korrekt zu repräsentieren.",
+		"items": {
+			"logo": {
+				"title": "Logo",
+				"description": "Verwende das primäre Logo auf hellen Hintergründen und das invertierte auf dunklen. Mindestgröße 24 px. Niemals strecken, drehen oder umfärben."
+			},
+			"colors": {
+				"title": "Farben",
+				"description": "Primär: #0F172A (Nacht). Akzent: #6366F1 (Indigo-500). Den Akzent sparsam einsetzen – nur für interaktive Elemente und Highlights."
+			},
+			"typography": {
+				"title": "Typografie",
+				"description": "Überschriften und Fließtext: Inter. Monospace: JetBrains Mono. Beide über Google Fonts und Fontsource verfügbar."
+			},
+			"guidelines": {
+				"title": "Nutzungsrichtlinien",
+				"description": "Das AACsearch-Logo darf nicht in einer Weise verwendet werden, die eine Billigung impliziert. Das Logo darf nicht verändert werden."
+			},
+			"assets": {
+				"title": "Asset-Downloads",
+				"description": "Lade das vollständige Brand-Kit herunter: SVG-Logo, Favicon, OG-Image-Vorlage und Farbpalette im ASE-, Sketch- und Figma-Format."
+			},
+			"contact": {
+				"title": "Markenfragen",
+				"description": "Für Co-Marketing-Materialien, Konferenz-Sponsoring oder besondere Nutzungsfragen wende dich an brand@aacsearch.com."
+			}
+		}
+	},
+	"communityPage": {
+		"title": "Communauté",
+		"description": "Rejoignez la communauté AACsearch — posez des questions, partagez des projets, contribuez à l'open source et façonnez la feuille de route."
+	},
+	"community": {
+		"title": "Suche gemeinsam aufbauen",
+		"subtitle": "AACsearch wird öffentlich entwickelt. Die Community stimmt über Features ab, trägt Konnektoren bei und hilft Neulingen, schneller zu liefern.",
+		"items": {
+			"github": {
+				"title": "GitHub",
+				"description": "Gib dem Repo einen Stern, öffne Issues oder trage per PR bei. Alle öffentlichen Roadmap-Einträge werden als GitHub-Issues verfolgt."
+			},
+			"discord": {
+				"title": "Discord",
+				"description": "Echtzeit-Chat für Fragen, Integrationen und Troubleshooting. 500+ Mitglieder, täglich aktiv."
+			},
+			"forum": {
+				"title": "Community-Forum",
+				"description": "Ausführliche Q&A für Architektur-, Integrations- und Feature-Fragen. Vollständig durchsuchbar – betrieben von AACsearch."
+			},
+			"showcase": {
+				"title": "Showcase",
+				"description": "Sieh, was die Community mit AACsearch gebaut hat. Reiche dein Projekt ein, um im monatlichen Newsletter vorgestellt zu werden."
+			},
+			"contribute": {
+				"title": "Beitragen",
+				"description": "Wir akzeptieren Beiträge zu Konnektoren, SDK-Beispielen und Dokumentation. Siehe CONTRIBUTING.md für Richtlinien."
+			},
+			"roadmap": {
+				"title": "Über die Roadmap abstimmen",
+				"description": "Jeder öffentliche Roadmap-Eintrag ist offen für Community-Upvotes. Die meistgewählten Features werden zuerst umgesetzt."
+			}
+		}
+	},
+	"compareOpenSearchPage": {
+		"title": "AACsearch vs OpenSearch",
+		"description": "AACsearch est une API de recherche rapide et ciblée. OpenSearch est une plateforme d'analyse complète."
+	},
+	"compareOpenSearch": {
+		"title": "Fokussierte Suche vs. Analyseplattform",
+		"subtitle": "OpenSearch ist leistungsstark, aber komplex. AACsearch ist speziell für Anwendungssuche gebaut – einfacheres Schema, schnelleres Setup, geringere Latenz.",
+		"items": {
+			"complexity": {
+				"title": "Tage statt Wochen",
+				"description": "AACsearch indiziert deine erste Kollektion an einem Nachmittag. Das Setup eines OpenSearch-Clusters dauert Wochen."
+			},
+			"performance": {
+				"title": "Unter 50 ms vs. 100–500 ms",
+				"description": "AACsearch P99-Latenz liegt unter 50 ms. OpenSearch-Abfragelatenz beträgt typischerweise 100–500 ms auf vergleichbarer Hardware."
+			},
+			"schema": {
+				"title": "Schema-Einfachheit",
+				"description": "AACsearch-Kollektionen haben ein flaches, typisiertes Schema. Das OpenSearch-Mapping-Design ist ein Spezialgebiet."
+			},
+			"multiTenancy": {
+				"title": "Native Multi-Tenancy",
+				"description": "AACsearch org-scoped Keys und Scoped Tokens sind erstklassige Features. OpenSearch benötigt Plugins für Multi-Tenancy."
+			},
+			"analytics": {
+				"title": "Suchspezifische Analytik",
+				"description": "AACsearch liefert Query-Logs, Zero-Result-Raten und CTR – für Produktteams. OpenSearch-Analytik zielt auf Infrastruktur-Monitoring."
+			},
+			"pricing": {
+				"title": "Vorhersehbare Kosten",
+				"description": "AACsearch berechnet pro Sucheinheit. OpenSearch-Kosten hängen von Instanztyp, Speicher-I/O und Datentransfer ab."
+			}
+		}
+	},
+	"comparePineconePage": {
+		"title": "AACsearch vs Pinecone",
+		"description": "Pinecone est une base de données vectorielle pure. AACsearch combine recherche par mots-clés et vectorielle pour les applications où les deux modes de pertinence comptent."
+	},
+	"comparePinecone": {
+		"title": "Reiner Vektor vs. vollständige Suchplattform",
+		"subtitle": "Pinecone glänzt bei reinem Vektor-Recall. AACsearch ergänzt die Keyword-Suche, Facetten und die Produkt-UX-Schicht, die die meisten Anwendungen brauchen.",
+		"items": {
+			"keywordSearch": {
+				"title": "Keyword + Semantik",
+				"description": "AACsearch verarbeitet typolerante Keyword-Suche und semantische Vektorsuche. Pinecone ist rein vektor-basiert."
+			},
+			"facets": {
+				"title": "Facettierte Navigation",
+				"description": "AACsearch berechnet Facettenzählungen mit jeder Anfrage. Pinecone hat Metadaten-Filterung, aber keine Facettenzählung."
+			},
+			"hybridSearch": {
+				"title": "Konfigurierbare Hybrid-Gewichte",
+				"description": "AACsearch lässt dich die Balance zwischen BM25 und Vektorähnlichkeit pro Anfrage einstellen."
+			},
+			"pricing": {
+				"title": "Einfachere Preisgestaltung",
+				"description": "AACsearch berechnet pro Sucheinheit. Pinecones Preismodell ist komplex."
+			},
+			"performance": {
+				"title": "Such-API, nicht nur ein Vektorspeicher",
+				"description": "AACsearch liefert gereigte, gefilterte, hervorgehobene Ergebnisse in unter 50 ms."
+			},
+			"widget": {
+				"title": "Vollständige Such-UX inklusive",
+				"description": "AACsearch enthält ein gehostetes Widget, ein Analyse-Dashboard und ein SDK. Pinecone ist eine API."
+			}
+		}
+	},
+	"compareSolrPage": {
+		"title": "AACsearch vs Apache Solr",
+		"description": "Solr est éprouvé mais nécessite des spécialistes. AACsearch offre la même fiabilité avec une API moderne et zéro overhead opérationnel."
+	},
+	"compareSolr": {
+		"title": "Moderne API vs. Legacy-Komplexität",
+		"subtitle": "Solr unterstützt Enterprise-Suche seit 20 Jahren. AACsearch gibt einem Junior-Entwickler dieselben Fähigkeiten mit einem halbtägigen Setup.",
+		"items": {
+			"modernApi": {
+				"title": "REST-API vs. Solr-Query-DSL",
+				"description": "AACsearch verwendet eine saubere JSON-REST-API. Solr-Abfragen nutzen eine eigene DSL mit steiler Lernkurve."
+			},
+			"setup": {
+				"title": "Minuten statt Tage",
+				"description": "AACsearch-Setup: Index erstellen, Dokumente einlesen, API aufrufen. Solr erfordert Java, ZooKeeper, Schema-Design und Core-Management."
+			},
+			"performance": {
+				"title": "Schneller out of the box",
+				"description": "AACsearch liefert Ergebnisse in unter 50 ms ohne Tuning. Solr-Performance erfordert Experten-Konfiguration."
+			},
+			"multiTenancy": {
+				"title": "Eingebaute Multi-Tenancy",
+				"description": "AACsearch isoliert Mandanten auf API-Key-Ebene. Solr-Multi-Tenancy erfordert separate Cores."
+			},
+			"analyticsBuiltin": {
+				"title": "Eingebaute Analytik",
+				"description": "AACsearch zeichnet jede Anfrage auf und bietet ein Dashboard. Solr hat keine eingebaute Query-Analytik."
+			},
+			"pricing": {
+				"title": "Keine Infrastrukturkosten",
+				"description": "AACsearch ist vollständig managed. Solr bedeutet eigenes Cluster-Betreiben und -Skalieren."
+			}
+		}
+	},
+	"compareTypesensePage": {
+		"title": "AACsearch vs Typesense",
+		"description": "AACsearch est construit sur Typesense. La différence : nous ajoutons la multi-tenante, les analyses, un plan de contrôle hébergé et des opérations gérées."
+	},
+	"compareTypesense": {
+		"title": "Self-Hosting vs. verwaltete Cloud",
+		"subtitle": "Typesense ist die Engine, die wir betreiben. AACsearch umhüllt sie mit der SaaS-Schicht, die dein Team braucht, um in einem Nachmittag in Produktion zu gehen.",
+		"items": {
+			"hosting": {
+				"title": "Kein Ops-Overhead",
+				"description": "AACsearch verwaltet Typesense-Upgrades, Cluster-Größen, Backups und Monitoring."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy eingebaut",
+				"description": "Org-scoped API-Keys, Scoped Tokens und Per-Key-Origin-Allow-Lists sind AACsearch-Ergänzungen."
+			},
+			"analytics": {
+				"title": "Such-Analytik",
+				"description": "AACsearch ergänzt eine vollständige Analytik-Pipeline: Query-Logs, Zero-Result-Tracking, Top-Abfragen und ein Dashboard."
+			},
+			"connectors": {
+				"title": "CMS-Konnektoren",
+				"description": "PrestaShop-, Bitrix-, WordPress- und Shopify-Konnektoren sind AACsearch-Ergänzungen."
+			},
+			"pricing": {
+				"title": "Vorhersehbare Preise",
+				"description": "AACsearch-Preise basieren auf Sucheinheiten – du kennst deine Rechnung vor Monatsende."
+			},
+			"support": {
+				"title": "Dedizierter Support",
+				"description": "AACsearch-Pläne umfassen E-Mail-Support und ein SLA."
+			}
+		}
+	},
+	"compareWeaviatePage": {
+		"title": "AACsearch vs Weaviate",
+		"description": "Weaviate est une base de données vectorielle. AACsearch est une API de recherche hybride texte intégral plus vectorielle."
+	},
+	"compareWeaviate": {
+		"title": "Vektordatenbank vs. hybride Such-API",
+		"subtitle": "Beide unterstützen Vektoren, aber AACsearch ergänzt Keyword-Suche, Facetten, Typo-Toleranz und eine Multi-Tenant-Hosting-Schicht.",
+		"items": {
+			"hybridSearch": {
+				"title": "Keyword + Vektor in einem Aufruf",
+				"description": "AACsearch-Hybridsuche kombiniert BM25-Keyword-Relevanz mit Vektorähnlichkeit in einer Anfrage."
+			},
+			"facets": {
+				"title": "Facettierte Navigation",
+				"description": "AACsearch berechnet Facettenzählungen bei jeder Anfrage – unverzichtbar für E-Commerce und Dokumentationssuche."
+			},
+			"typoTolerance": {
+				"title": "Typo-Toleranz",
+				"description": "AACsearch hat eingebautes Fuzzy-Matching für Endbenutzeranfragen. Vektorsuche hilft nicht bei Rechtschreibfehlern."
+			},
+			"multiTenancy": {
+				"title": "Native Multi-Tenancy",
+				"description": "AACsearch org-scoped Keys und Per-Tenant-Analytik sind erstklassige Features."
+			},
+			"pricing": {
+				"title": "Transparente Preise",
+				"description": "AACsearch berechnet pro Sucheinheit mit einer vorhersehbaren Monatsrechnung."
+			},
+			"widget": {
+				"title": "Drop-in-Such-Widget",
+				"description": "AACsearch liefert ein 14-KB-Browser-Widget mit sofortiger Suche, Facetten und Analytik."
+			}
+		}
+	},
+	"faqPage": {
+		"title": "Questions Fréquentes",
+		"description": "Réponses rapides aux questions les plus fréquentes sur la tarification, la configuration, les données et le support d'AACsearch."
+	},
+	"faq": {
+		"title": "Häufige Fragen, klare Antworten",
+		"subtitle": "Keine Antwort gefunden? Durchsuche unsere Dokumentation oder frage im Community-Forum.",
+		"items": {
+			"searchUnit": {
+				"title": "Was ist eine Sucheinheit?",
+				"description": "Eine Sucheinheit entspricht einer Suchanfrage ODER einem indizierten Dokument. Dein monatlicher Plan enthält eine bestimmte Anzahl von Sucheinheiten."
+			},
+			"pricing": {
+				"title": "Wie funktioniert die Preisgestaltung?",
+				"description": "AACsearch berechnet eine monatliche Pauschalgebühr pro Plan-Tier. Keine versteckten Gebühren, keine Egress-Kosten."
+			},
+			"scaling": {
+				"title": "Wie skaliert es?",
+				"description": "AACsearch skaliert horizontal. Die gehostete Plattform verarbeitet Traffic-Spitzen automatisch."
+			},
+			"dataResidency": {
+				"title": "Wo werden meine Daten gespeichert?",
+				"description": "Wähle beim Anmelden EU (Frankfurt) oder USA (Nord-Virginia). Daten verlassen deine Region nie."
+			},
+			"migration": {
+				"title": "Kann ich von Algolia migrieren?",
+				"description": "Ja. Die AACsearch-REST-API ist kompatibel mit Algolia-ähnlichen Kollektion-Schemata. Wir bieten einen Migrationsleitfaden."
+			},
+			"selfHost": {
+				"title": "Kann ich selbst hosten?",
+				"description": "Ja. AACsearch verwendet Typesense als Such-Engine. Du kannst Typesense selbst betreiben und das AACsearch-SDK dagegen verwenden."
+			}
+		}
+	},
+	"featuresCurationsPage": {
+		"title": "Curation et Épinglage",
+		"description": "Remplacez les résultats de recherche pour des requêtes spécifiques. Épinglez des produits, excluez des résultats non pertinents et planifiez des placements promotionnels."
+	},
+	"featuresCurations": {
+		"title": "Manuelle Kontrolle, automatische Auslieferung",
+		"subtitle": "Kuratierungen ermöglichen es Merchandisern und Redakteuren, algorithmische Ergebnisse für hochwertige Abfragen zu überschreiben.",
+		"items": {
+			"pinned": {
+				"title": "Gepinnte Ergebnisse",
+				"description": "Platziere bestimmte Dokumente an exakten Positionen für eine Abfrage. Gesponserte Artikel bleiben, wo du sie platzierst."
+			},
+			"excluded": {
+				"title": "Ausgeschlossene Ergebnisse",
+				"description": "Entferne bestimmte Dokumente vollständig aus einem Ergebnissatz. Nützlich für Saisonprodukte oder rechtlich geprüfte Inhalte."
+			},
+			"promoted": {
+				"title": "Geförderte Dokumente",
+				"description": "Hebe ein Dokument auf die erste Seite, ohne eine feste Position zuzuweisen."
+			},
+			"triggerKeywords": {
+				"title": "Abfrage-Trigger",
+				"description": "Kuratierungsregeln werden bei exakten Abfragen, Präfix-Übereinstimmungen oder Synonym-Treffern aktiviert."
+			},
+			"schedule": {
+				"title": "Geplante Kuratierungen",
+				"description": "Setze ein Start- und Enddatum für jede Kuratierungsregel. Werbeplatzierungen werden automatisch aktiviert und deaktiviert."
+			},
+			"analytics": {
+				"title": "Kuratierungs-Analytik",
+				"description": "Verfolge Impressionen, Klicks und Conversions für kuratierte Ergebnisse."
+			}
+		}
+	},
+	"featuresFacetedSearchPage": {
+		"title": "Recherche et Navigation à Facettes",
+		"description": "Facettes dynamiques avec des décomptes en temps réel. Donnez aux utilisateurs les contrôles de navigation pour passer de la requête au résultat en un clic."
+	},
+	"featuresFacetedSearch": {
+		"title": "Jeder Filter, jeder Klick",
+		"subtitle": "AACsearch berechnet Facettenzählungen serverseitig bei jeder Abfrage. Keine clientseitige Post-Filterung, keine veralteten Zählungen.",
+		"items": {
+			"dynamicFacets": {
+				"title": "Dynamische Facetten",
+				"description": "Definiere in deinem Kollektion-Schema, welche Felder facettierbar sind. Zählungen werden bei jeder Abfrage neu berechnet."
+			},
+			"countFacets": {
+				"title": "Genaue Zählungen",
+				"description": "Facettenzählungen spiegeln den aktuellen Abfragekontext wider – wende einen Preisfilter an und Kategoriezählungen aktualisieren sich sofort."
+			},
+			"rangeFacets": {
+				"title": "Bereichsfacetten",
+				"description": "Numerische Bereichsfacetten für Preis, Bewertung, Jahr und benutzerdefinierte Felder."
+			},
+			"nestedFacets": {
+				"title": "Verschachtelte Kategoriefacetten",
+				"description": "Mehrstufige Kategoriebäume als hierarchische Facetten. Breadcrumb-Navigation wird automatisch generiert."
+			},
+			"performance": {
+				"title": "Kein Aggregationsoverhead",
+				"description": "Facettenberechnung ist ko-lokiert mit der Suchausführung. Ein API-Aufruf gibt Ergebnisse und Facettenzählungen zurück."
+			},
+			"mobile": {
+				"title": "Mobile-First-Facetten",
+				"description": "Das Widget rendert Facetten als einklappbare Schublade auf Mobilgeräten."
+			}
+		}
+	},
+	"featuresGeoSearchPage": {
+		"title": "Recherche Géographique",
+		"description": "Filtrez et triez les résultats par localisation. Requêtes de rayon, recherche par boîte englobante et tri par distance — tout avec une latence inférieure à 50 ms."
+	},
+	"featuresGeoSearch": {
+		"title": "Standortbewusste Suche",
+		"subtitle": "Füge ein Breiten-/Längengrad-Feld zu deiner Kollektion hinzu und AACsearch erledigt den Rest.",
+		"items": {
+			"radiusSearch": {
+				"title": "Radiusabfragen",
+				"description": "Gib Ergebnisse innerhalb von N km oder Meilen um einen Punkt zurück."
+			},
+			"boundingBox": {
+				"title": "Begrenzungsrahmen-Suche",
+				"description": "Filtere auf ein geografisches Rechteck mithilfe von NO- und SW-Koordinaten."
+			},
+			"distanceSorting": {
+				"title": "Entfernungssortierung",
+				"description": "Sortiere Ergebnisse nach Entfernung von einem gegebenen Punkt."
+			},
+			"multipleLocations": {
+				"title": "Mehrere Standortfelder",
+				"description": "Indiziere mehrere Lat-/Lng-Felder pro Dokument – z. B. Abhol- und Lieferorte."
+			},
+			"performance": {
+				"title": "Unter 50 ms Latenz",
+				"description": "Geo-Filterung läuft innerhalb von AACsearchs Such-Core. Kein externer Geodienst."
+			},
+			"filters": {
+				"title": "Geo + Attributfilter",
+				"description": "Kombiniere Geo-Filter mit beliebigen anderen Facetten – Preis, Kategorie, Verfügbarkeit – in einer einzigen Abfrage."
+			}
+		}
+	},
+	"featuresInstantSearchPage": {
+		"title": "Recherche Instantanée",
+		"description": "Les résultats s'affichent pendant que l'utilisateur tape. Anti-rebond, mis en cache et optimisé pour paraître instantané."
+	},
+	"featuresInstantSearch": {
+		"title": "Suche, die mithalten kann",
+		"subtitle": "AACsearch ist für Eingabe-während-der-Suche-Szenarien ausgelegt. Das gehostete Widget und Browser-SDK übernehmen Debouncing, Prefetching und Caching.",
+		"items": {
+			"asYouType": {
+				"title": "Ergebnisse während der Eingabe",
+				"description": "Ergebnisse aktualisieren sich bei jedem Tastendruck. Präfix-Matching und Typo-Toleranz bedeuten, dass relevante Treffer ab dem ersten Zeichen erscheinen."
+			},
+			"debouncing": {
+				"title": "Eingebautes Debouncing",
+				"description": "Das Widget und SDK entprallen Eingaben automatisch. Konfigurierbare Verzögerung (Standard 200 ms)."
+			},
+			"caching": {
+				"title": "Clientseitiges Caching",
+				"description": "Wiederholte Abfragen werden sofort aus dem Browser-Cache zurückgegeben."
+			},
+			"prefetching": {
+				"title": "Query-Prefetching",
+				"description": "Prefetch beliebte Abfragen beim Laden der Seite, damit der erste Tastendruck aus dem Cache kommt."
+			},
+			"latency": {
+				"title": "Unter 50 ms API-Latenz",
+				"description": "AACsearch P99-Latenz liegt unter 50 ms. Kombiniert mit Edge-Caching bleibt die End-to-End-Zeit deutlich unter 100 ms."
+			},
+			"widget": {
+				"title": "Drop-in-Widget",
+				"description": "Das AACsearch-Widget enthält Sofortsuche-UI out of the box. Ein Script-Tag, null Konfiguration erforderlich."
+			}
+		}
+	},
+	"featuresRelevanceTuningPage": {
+		"title": "Réglage de la Pertinence",
+		"description": "Ajustez les pondérations des champs, les règles de boost et les signaux de classement — directement depuis le tableau de bord, sans réindexation."
+	},
+	"featuresRelevanceTuning": {
+		"title": "Ergebnisse, die der Absicht entsprechen",
+		"subtitle": "AACsearch trennt Retrieval von Ranking. Tune Relevanz im Dashboard – keine Schema-Migration, kein Reindex, kein Redeploy.",
+		"items": {
+			"fieldWeighting": {
+				"title": "Feldgewichte",
+				"description": "Weise Titeln, Beschreibungen, Tags und benutzerdefinierten Feldern relative Gewichtungen zu."
+			},
+			"boostRules": {
+				"title": "Boost-Regeln",
+				"description": "Booste Dokumente, wo in_stock wahr ist oder rating 4,5+ beträgt."
+			},
+			"pinnedResults": {
+				"title": "Kuratierte Ergebnisse",
+				"description": "Hefte bestimmte Dokumente für exakte Abfragen an feste Positionen."
+			},
+			"synonyms": {
+				"title": "Synonym-Erweiterung",
+				"description": "Synonym-Treffer erhalten konfigurierbare Gewichtungsabzüge."
+			},
+			"customSorting": {
+				"title": "Benutzerdefinierte Sortierregeln",
+				"description": "Definiere mehrere Sortieroptionen: Preis aufsteigend, Bewertung absteigend, manuell kuratiert."
+			},
+			"preview": {
+				"title": "Live-Vorschau",
+				"description": "Teste Relevanzänderungen mit echten Abfragen gegen deinen Live-Datensatz, bevor du speicherst."
+			}
+		}
+	},
+	"featuresStopwordsPage": {
+		"title": "Mots Vides",
+		"description": "Filtrez les mots non significatifs qui génèrent du bruit dans la recherche. Gérez les listes de mots vides par collection depuis le tableau de bord."
+	},
+	"featuresStopwords": {
+		"title": "Weniger Rauschen, mehr Relevanz",
+		"subtitle": "Stoppwörter entfernen hochfrequente, bedeutungslose Terme aus Abfragen, sodass die Such-Engine sich auf das Wesentliche konzentriert.",
+		"items": {
+			"builtinLists": {
+				"title": "Eingebaute Stoppwortlisten",
+				"description": "AACsearch enthält kuratierte Stoppwortlisten für Englisch, Deutsch, Französisch, Spanisch und Russisch."
+			},
+			"customLists": {
+				"title": "Benutzerdefinierte Listen",
+				"description": "Füge domänenspezifische Terme hinzu: Produktcodes, interne Abkürzungen und Branchenjargon."
+			},
+			"perCollection": {
+				"title": "Pro Kollektion",
+				"description": "Verschiedene Kollektionen können verschiedene Stoppwortlisten haben."
+			},
+			"queryTime": {
+				"title": "Abfragezeit-Anwendung",
+				"description": "Stoppwörter werden zur Abfragezeit angewendet – keine Reindizierung erforderlich, wenn du die Liste änderst."
+			},
+			"indexTime": {
+				"title": "Indizierer-Anwendung",
+				"description": "Optional auch zur Indizierungszeit anwenden, um den Index zu verkleinern und die Indizierungslatenz zu reduzieren."
+			},
+			"ui": {
+				"title": "Dashboard-UI",
+				"description": "Verwalte Stoppwortlisten über eine einfache Listenoberfläche. Keine API-Aufrufe für routinemäßige Aktualisierungen erforderlich."
+			}
+		}
+	},
+	"featuresSynonymsPage": {
+		"title": "Gestion des Synonymes",
+		"description": "Assurez-vous que les utilisateurs trouvent des résultats quels que soient les termes qu'ils utilisent. Les synonymes sont appliqués instantanément."
+	},
+	"featuresSynonyms": {
+		"title": "Spreche die Sprache deiner Benutzer",
+		"subtitle": "Synonyme überbrücken die Lücke zwischen Benutzertermen und deinen indizierten Termen. Einmal konfiguriert, für alle Abfragen angewendet.",
+		"items": {
+			"equivalentSynonyms": {
+				"title": "Äquivalente Synonyme",
+				"description": "'Handy', 'Mobiltelefon' und 'Smartphone' behandeln. Jede Variante findet dieselben Dokumente."
+			},
+			"onewayExpansion": {
+				"title": "Einwegige Erweiterung",
+				"description": "'Laptop' zu 'Notebook' und 'Ultrabook' erweitern – ohne umgekehrt zu expandieren."
+			},
+			"phraseMatching": {
+				"title": "Mehrwort-Synonyme",
+				"description": "Phrasen als Synonyme definieren: 'Künstliche Intelligenz' → 'KI'."
+			},
+			"collectionScoped": {
+				"title": "Kollektion-scoped",
+				"description": "Synonyme gelten pro Kollektion. Verschiedene Domains erhalten verschiedene Synonymlisten."
+			},
+			"instantApplication": {
+				"title": "Sofortige Anwendung",
+				"description": "Änderungen werden sofort wirksam – kein Reindex, kein Deployment."
+			},
+			"analytics": {
+				"title": "Zero-Result-Analytik",
+				"description": "Sieh, welche Abfragen keine Ergebnisse zurückgeben. Das ist dein Leitfaden für neue Synonyme."
+			}
+		}
+	},
+	"featuresTypoTolerancePage": {
+		"title": "Tolérance aux Fautes de Frappe",
+		"description": "Les utilisateurs font des fautes. AACsearch trouve quand même le bon résultat. Niveaux de correspondance floue configurables par collection."
+	},
+	"featuresTypoTolerance": {
+		"title": "Tippfehler passieren. Ergebnisse trotzdem.",
+		"subtitle": "AACsearch-Typo-Toleranz basiert auf Damerau-Levenshtein-Distanz. Relevante Ergebnisse erscheinen trotz Tippfehlern.",
+		"items": {
+			"autoCorrect": {
+				"title": "Automatische Korrektur",
+				"description": "Falsch geschriebene Begriffe werden automatisch auf die nächste Übereinstimmung korrigiert. Kein separater Rechtschreib-Service erforderlich."
+			},
+			"editDistance": {
+				"title": "Konfigurierbare Bearbeitungsdistanz",
+				"description": "Setze die maximale Levenshtein-Distanz pro Abfrage oder Kollektion. Standard: 1 für kurze Begriffe, 2 für lange."
+			},
+			"prefixMatch": {
+				"title": "Präfixübereinstimmung",
+				"description": "'Sear' findet 'Suche', 'Suchanfrage' und 'Suchindex'. Präfixübereinstimmung ist standardmäßig für alle Felder aktiviert."
+			},
+			"symbolStripping": {
+				"title": "Symbol-Stripping",
+				"description": "Sonderzeichen in Abfragen werden normalisiert. 'C++' und 'C plus plus' finden dasselbe."
+			},
+			"performance": {
+				"title": "Keine Latenzkosten",
+				"description": "Typo-Toleranz ist in AACsearchs Retrieval-Core integriert und fügt unter 1 ms pro Abfrage hinzu."
+			},
+			"fieldsControl": {
+				"title": "Pro-Feld-Kontrolle",
+				"description": "Deaktiviere Typo-Toleranz für genaue Felder wie SKU, Barcode oder E-Mail."
+			}
+		}
+	},
+	"glossaryPage": {
+		"title": "Glossaire de Recherche",
+		"description": "Explications simples des concepts de recherche — de l'index inversé à la fonction de classement BM25."
+	},
+	"glossary": {
+		"title": "Suchbegriffe, klar erklärt",
+		"subtitle": "Ein praktisches Glossar für Entwickler, die mit Suchdiensten arbeiten. Kein Jargon ohne Erklärung.",
+		"items": {
+			"invertedIndex": {
+				"title": "Invertierter Index",
+				"description": "Eine Datenstruktur, die jeden Term auf die Dokumente abbildet, in denen er vorkommt. Die Grundlage für schnelle Volltextsuche."
+			},
+			"bm25": {
+				"title": "BM25",
+				"description": "Best Match 25 – die Standard-Ranking-Funktion für Volltextsuche. Berücksichtigt Termhäufigkeit und Dokumentlänge."
+			},
+			"facets": {
+				"title": "Facetten",
+				"description": "Filterattribute mit Zählungen. Zeigen Benutzern, wie viele Ergebnisse für jeden Filterwert verfügbar sind."
+			},
+			"typoTolerance": {
+				"title": "Typo-Toleranz",
+				"description": "Fähigkeit der Such-Engine, Dokumente trotz Rechtschreibfehlern in der Abfrage zu finden."
+			},
+			"synonyms": {
+				"title": "Synonyme",
+				"description": "Äquivalente Terme, die dieselben Suchergebnisse zurückgeben sollten."
+			},
+			"relevanceTuning": {
+				"title": "Relevanz-Tuning",
+				"description": "Der Prozess der Anpassung von Ranking-Signalen und -Gewichten, um Suchergebnisse zu verbessern."
+			}
+		}
+	},
+	"integrationsContentfulPage": {
+		"title": "AACsearch pour Contentful",
+		"description": "Connectez Contentful à AACsearch et ajoutez une recherche instantanée et tolérante aux fautes à votre CMS."
+	},
+	"integrationsContentful": {
+		"title": "Suche für deinen Content Hub",
+		"subtitle": "Verbinde deinen Contentful Space mit AACsearch. Inhalt wird automatisch synchronisiert – keine manuellen Importe.",
+		"items": {
+			"webhook": {
+				"title": "Contentful-Webhooks",
+				"description": "Richte Webhooks in Contentful ein, um Einträge automatisch zu indizieren, wenn Inhalte veröffentlicht oder archiviert werden."
+			},
+			"contentTypes": {
+				"title": "Alle Content-Typen",
+				"description": "Indiziere beliebige Contentful-Content-Typen: Artikel, Produkte, Seiten, benutzerdefinierte Modelle."
+			},
+			"localization": {
+				"title": "Lokalisierung",
+				"description": "AACsearch-Kollektionen können pro Locale angelegt werden. Contentful-Lokalisierung wird nativ unterstützt."
+			},
+			"richText": {
+				"title": "Rich-Text-Indizierung",
+				"description": "Rich-Text-Felder werden zu Klartext für die Indizierung normalisiert. Formatierungsmarkierungen verstopfen keine Suchergebnisse."
+			},
+			"preview": {
+				"title": "Vorschau-API-Unterstützung",
+				"description": "Integriere mit der Contentful Preview API, um Suchergebnisse vor der Veröffentlichung zu testen."
+			},
+			"mapping": {
+				"title": "Feld-Mapping",
+				"description": "Mappe Contentful-Felder auf AACsearch-Felder mit einer JSON-Konfiguration."
+			}
+		}
+	},
+	"integrationsNextJsPage": {
+		"title": "AACsearch pour Next.js",
+		"description": "Ajoutez la recherche instantanée à votre application Next.js. Les Server Components, Route Handlers et Client Components sont pris en charge."
+	},
+	"integrationsNextJs": {
+		"title": "Suche für Next.js-Apps",
+		"subtitle": "Der AACsearch-Browser-SDK funktioniert nahtlos mit Next.js App Router, Server Components und Client Components.",
+		"items": {
+			"appRouter": {
+				"title": "App-Router-Unterstützung",
+				"description": "Verwende AACsearch in Server Components mit dem Node.js-SDK oder in Client Components mit dem Browser-SDK."
+			},
+			"routeHandlers": {
+				"title": "Route-Handler-Proxy",
+				"description": "Proxye AACsearch-Abfragen durch einen Next.js Route Handler, um deine API-Keys sicher auf dem Server zu halten."
+			},
+			"ssg": {
+				"title": "Statische Generierung",
+				"description": "Prefetch beliebte Suchterme zur Build-Zeit und hydratiere den Client-Cache für sofortige erste Treffer."
+			},
+			"edgeRuntime": {
+				"title": "Edge-Runtime",
+				"description": "AACsearch Route Handler laufen auf Vercel Edge Runtime für minimale Kaltstartlatenz."
+			},
+			"typescript": {
+				"title": "TypeScript-Unterstützung",
+				"description": "Vollständige TypeScript-Typen inklusive. Kollektion-Schemas werden durch generierte Typen durchgesetzt."
+			},
+			"hooks": {
+				"title": "React-Hooks",
+				"description": "useAACSearch, useAACFacets und useAACInfiniteScroll sind out of the box verfügbar."
+			}
+		}
+	},
+	"integrationsReactPage": {
+		"title": "AACsearch pour React",
+		"description": "Ajoutez une recherche instantanée tolérante aux fautes à votre application React. Hooks, widgets et SDKs inclus."
+	},
+	"integrationsReact": {
+		"title": "Suche für React-Apps",
+		"subtitle": "Der AACsearch-Browser-SDK exportiert React-Hooks und Komponenten. Füge Suche in Minuten hinzu.",
+		"items": {
+			"hooks": {
+				"title": "Such-Hooks",
+				"description": "useSearch, useFacets und useInfiniteResults lassen dich eigene Suchoberflächen mit minimalem State-Management bauen."
+			},
+			"components": {
+				"title": "Drop-in-Komponenten",
+				"description": "SearchBox, FacetList und ResultCard sind vorgefertigte Komponenten für gängige Such-UI-Muster."
+			},
+			"stateManagement": {
+				"title": "Eingebauter State",
+				"description": "Der SDK verwaltet Abfrage-, Filter- und Paginierungszustand intern. Keine Redux- oder Zustand-Integration erforderlich."
+			},
+			"typescript": {
+				"title": "TypeScript-Unterstützung",
+				"description": "Alle Hooks und Komponenten sind vollständig typisiert. Prop-Fehler werden zur Buildzeit abgefangen."
+			},
+			"customUI": {
+				"title": "Benutzerdefinierte UI",
+				"description": "Verwende die Hooks direkt mit eigenem Markup. Du bist nicht an die mitgelieferten Komponenten gebunden."
+			},
+			"performance": {
+				"title": "Leistungsoptimiert",
+				"description": "Debouncing, clientseitiges Caching und Prefetching sind standardmäßig aktiviert."
+			}
+		}
+	},
+	"integrationsSanityPage": {
+		"title": "AACsearch pour Sanity",
+		"description": "Connectez votre Sanity Studio à AACsearch. Le contenu se synchronise automatiquement à chaque publication."
+	},
+	"integrationsSanity": {
+		"title": "Sofortsuche für Sanity-Inhalte",
+		"subtitle": "Verbinde dein Sanity-Studio mit AACsearch und aktiviere sofortige, typolerante Suche für alle veröffentlichten Dokumente.",
+		"items": {
+			"plugin": {
+				"title": "Sanity-Plugin",
+				"description": "Installiere das AACsearch-Sanity-Plugin via npm. Konfiguriere deinen Projektpfad und deine Kollektion in sanity.config.ts."
+			},
+			"realtime": {
+				"title": "Echtzeitsynchronisation",
+				"description": "Dokumentänderungen werden sofort an AACsearch gesendet. Kein Cron-Job oder manueller Export erforderlich."
+			},
+			"groq": {
+				"title": "GROQ-Query-Unterstützung",
+				"description": "Definiere, welche Felder indiziert werden sollen, mit GROQ-Projektionen. Komplexe Dokumentstrukturen werden normalisiert."
+			},
+			"studio": {
+				"title": "Studio-Integration",
+				"description": "Testsuche direkt im Sanity Studio mithilfe des AACsearch-Vorschau-Panels."
+			},
+			"multiDataset": {
+				"title": "Multi-Dataset-Unterstützung",
+				"description": "Produktions- und Entwicklungs-Datasets indizieren auf separate AACsearch-Kollektionen."
+			},
+			"types": {
+				"title": "Typ-Generierung",
+				"description": "TypeScript-Typen aus Sanity-Schemas generieren und in AACsearch-Kollektions-Schemas verwenden."
+			}
+		}
+	},
+	"integrationsShopifyPage": {
+		"title": "AACsearch pour Shopify",
+		"description": "Remplacez la recherche par défaut de Shopify par AACsearch. Résultats instantanés, facettes et classement personnalisé."
+	},
+	"integrationsShopify": {
+		"title": "Produktsuche für Shopify",
+		"subtitle": "Ersetze Shopifys langsame Standard-Suchleiste durch AACsearch und erhöhe die Konversionsrate durch sofortige, relevante Ergebnisse.",
+		"items": {
+			"sync": {
+				"title": "Automatische Produktsynchronisation",
+				"description": "AACsearch synchronisiert deinen Shopify-Produktkatalog über den Admin-API-Webhook. Neue Produkte und Preisaktualisierungen erscheinen sofort in den Suchergebnissen."
+			},
+			"widget": {
+				"title": "Drop-in-Such-Widget",
+				"description": "Ersetze die Standard-Suchleiste durch das AACsearch-Widget mit einem einzelnen Script-Tag. Keine Themenanpassung erforderlich."
+			},
+			"facets": {
+				"title": "Produktfacetten",
+				"description": "Filtern nach Preis, Größe, Farbe, Material und benutzerdefinierten Metafeldern – alles mit Echtzeitzählungen."
+			},
+			"variants": {
+				"title": "Variantenindizierung",
+				"description": "Jede Produktvariante wird indiziert. Benutzer können nach bestimmten Größen, Farben oder SKUs suchen."
+			},
+			"analytics": {
+				"title": "Handels-Analytik",
+				"description": "Sieh deine meistgesuchten Produkte, Zero-Result-Abfragen und Klick-zu-Kauf-Conversion-Rates."
+			},
+			"multilingual": {
+				"title": "Mehrsprachige Shops",
+				"description": "Indiziere Produkte in mehreren Sprachen. AACsearch liefert Ergebnisse basierend auf der Store-Locale."
+			}
+		}
+	},
+	"integrationsStrapiPage": {
+		"title": "AACsearch pour Strapi",
+		"description": "Connectez Strapi à AACsearch et ajoutez une recherche en texte intégral instantanée à chaque type de contenu."
+	},
+	"integrationsStrapi": {
+		"title": "Suche für Strapi-Inhalte",
+		"subtitle": "Das AACsearch-Strapi-Plugin indiziert automatisch deinen Content, wenn er erstellt, aktualisiert oder veröffentlicht wird.",
+		"items": {
+			"plugin": {
+				"title": "Strapi-Plugin",
+				"description": "Installiere das AACsearch-Strapi-Plugin aus dem Marketplace. Konfiguriere, welche Content-Typen und Felder indiziert werden sollen."
+			},
+			"lifecycle": {
+				"title": "Lifecycle-Hooks",
+				"description": "Indizierung und De-Indizierung geschieht automatisch über Strapi-Lifecycle-Hooks. Kein manueller Trigger erforderlich."
+			},
+			"contentTypes": {
+				"title": "Alle Content-Typen",
+				"description": "Indiziere Artikel, Produkte, Seiten und benutzerdefinierte Content-Typen. Verschachtelte Komponenten werden normalisiert."
+			},
+			"localization": {
+				"title": "Lokalisierungs-Plugin",
+				"description": "Funktioniert mit dem Strapi-i18n-Plugin. Jede Locale wird auf eine separate AACsearch-Kollektion indiziert."
+			},
+			"adminPanel": {
+				"title": "Admin-Panel-Integration",
+				"description": "Manage deinen AACsearch-Indizierungsstatus direkt aus dem Strapi-Admin-Panel."
+			},
+			"api": {
+				"title": "REST und GraphQL",
+				"description": "Proxyge AACsearch-Suche über Strapi-API-Endpunkte für sicherheitskonformes Key-Management."
+			}
+		}
+	},
+	"integrationsWoocommercePage": {
+		"title": "AACsearch pour WooCommerce",
+		"description": "Remplacez la recherche par défaut de WordPress par AACsearch. Recherche instantanée tolérante aux fautes pour une meilleure découverte de produits."
+	},
+	"integrationsWoocommerce": {
+		"title": "Schnellere Produktfindung für WooCommerce",
+		"subtitle": "Das AACsearch WooCommerce-Plugin synchronisiert deinen Produktkatalog und ersetzt das native Such-Widget durch sofortige Ergebnisse.",
+		"items": {
+			"plugin": {
+				"title": "WordPress-Plugin",
+				"description": "Installiere AACsearch aus dem WordPress-Plugin-Verzeichnis. API-Key konfigurieren, Kollektion wählen – fertig."
+			},
+			"sync": {
+				"title": "Automatische Produktsynchronisation",
+				"description": "Produkte, Kategorien und Attribute werden automatisch synchronisiert. Lager- und Preisänderungen erscheinen sofort."
+			},
+			"widget": {
+				"title": "Widget-Ersatz",
+				"description": "Das AACsearch-Widget ersetzt automatisch das native WordPress-Such-Widget mit sofortigem Typeahead."
+			},
+			"attributes": {
+				"title": "Produktattribute als Facetten",
+				"description": "WooCommerce-Produktattribute (Farbe, Größe, Material) werden automatisch als facettierbare Felder indiziert."
+			},
+			"categories": {
+				"title": "Kategorie-Boost",
+				"description": "Konfiguriere Kategorie-Boosts, um Produkte aus bestimmten Kategorien bei relevanten Abfragen höher zu ranken."
+			},
+			"performance": {
+				"title": "Schnellere Ladezeiten",
+				"description": "AACsearch-Ergebnisse werden über CDN geliefert. Kein serverseitiges PHP-Rendering für Suchtreffer."
+			}
+		}
+	},
+	"integrationsWordpressPage": {
+		"title": "AACsearch pour WordPress",
+		"description": "Ajoutez une recherche instantanée tolérante aux fautes aux sites WordPress. Plugin disponible, aucune programmation requise."
+	},
+	"integrationsWordpress": {
+		"title": "Bessere Suche für WordPress",
+		"subtitle": "Das AACsearch WordPress-Plugin ersetzt die native WP_Query-Suche durch blitzschnelle indizierte Suchergebnisse.",
+		"items": {
+			"plugin": {
+				"title": "Ein-Klick-Installation",
+				"description": "Installiere aus dem Plugin-Verzeichnis, gib deinen API-Key ein und wähle, welche Post-Typen indiziert werden sollen."
+			},
+			"postTypes": {
+				"title": "Alle Post-Typen",
+				"description": "Indiziere Beiträge, Seiten, benutzerdefinierte Post-Typen und WooCommerce-Produkte in einer einzigen Kollektion."
+			},
+			"instant": {
+				"title": "Sofortsuche-Overlay",
+				"description": "Eine schlanke Suchoberfläche erscheint sofort beim Klicken auf die Suchleiste. Keine Seitennavigation erforderlich."
+			},
+			"acf": {
+				"title": "ACF-Feld-Unterstützung",
+				"description": "Benutzerdefinierte Felder aus Advanced Custom Fields werden automatisch erkannt und indiziert."
+			},
+			"multilingual": {
+				"title": "Polylang und WPML",
+				"description": "Mehrsprachige WordPress-Setups werden unterstützt. Jede Sprache indiziert auf eine separate AACsearch-Kollektion."
+			},
+			"shortcode": {
+				"title": "Shortcode und Block",
+				"description": "Platziere eine AACsearch-Suchleiste überall auf deiner Seite mithilfe eines Shortcodes oder eines Gutenberg-Blocks."
+			}
+		}
+	},
+	"newsletterPage": {
+		"title": "Newsletter AACsearch",
+		"description": "Mises à jour hebdomadaires sur les nouvelles fonctionnalités, les actualités du secteur de la recherche et les nouveaux documents développeurs."
+	},
+	"newsletter": {
+		"title": "Auf dem Laufenden bleiben",
+		"subtitle": "Der AACsearch-Newsletter erscheint wöchentlich. Produktupdates, Suchtipps und Benchmarks – direkt in deinem Posteingang.",
+		"items": {
+			"productUpdates": {
+				"title": "Produktupdates",
+				"description": "Neue Funktionen, API-Änderungen und Leistungsverbesserungen – erklärt mit Code-Beispielen."
+			},
+			"searchTips": {
+				"title": "Suchtipps",
+				"description": "Praxistipps zu Relevanz-Tuning, Datenmodellierung und Such-UX – zusammengestellt von unserem Ingenieursteam."
+			},
+			"benchmarks": {
+				"title": "Benchmarks",
+				"description": "Monatliche Latenz- und Durchsatz-Benchmarks von unserem Testlabor."
+			},
+			"industry": {
+				"title": "Branchennachrichten",
+				"description": "Die wichtigsten Neuigkeiten aus der Suchwelt: neue Modelle, Papers und Open-Source-Releases."
+			},
+			"showcase": {
+				"title": "Community-Showcase",
+				"description": "Interessante Projekte aus der AACsearch-Community und Gastartikel von Partnern."
+			},
+			"frequency": {
+				"title": "Wöchentlich, kein Spam",
+				"description": "Montags, ca. 08:00 Uhr MEZ. Kein Marketing, keine Werbung. Jederzeit abmeldbar."
+			}
+		}
+	},
+	"pressPage": {
+		"title": "Presse et Médias",
+		"description": "Communiqués de presse, kit presse et contacts médias pour les journalistes et blogueurs écrivant sur AACsearch."
+	},
+	"press": {
+		"title": "AACsearch in der Presse",
+		"subtitle": "Pressemitteilungen, Interviews und Medienmaterial. Journalisten finden hier alles, was sie benötigen.",
+		"items": {
+			"releases": {
+				"title": "Pressemitteilungen",
+				"description": "Alle offiziellen Pressemitteilungen ab 2024 – Produktankündigungen, Partnerschaften und Meilensteine."
+			},
+			"kit": {
+				"title": "Pressekit",
+				"description": "Logo-Paket, Produktscreenshots, Gründerfotos und Unternehmens-Faktenkarte – alles in einem ZIP."
+			},
+			"coverage": {
+				"title": "Medienberichterstattung",
+				"description": "Ausgewählte Artikel aus Fachmedien, Entwicklerblogs und Tech-Publikationen."
+			},
+			"contact": {
+				"title": "Medienkontakt",
+				"description": "Für Interviewanfragen, Produktdemos und Exklusivgeschichten: press@aacsearch.com. Reaktionszeit unter 24 Stunden."
+			},
+			"boilerplate": {
+				"title": "Unternehmens-Boilerplate",
+				"description": "Standardisierter Unternehmenstext für Pressemitteilungen und Artikel."
+			},
+			"founders": {
+				"title": "Gründerbiografien",
+				"description": "Kurzbiografien und Hochauflösungsfotos für Medienartikel und Konferenzprogramme."
+			}
+		}
+	},
+	"pricingPlansPage": {
+		"title": "Plans et Tarifs",
+		"description": "Tarification transparente basée sur l'usage. Commencez gratuitement. Évoluez selon votre croissance."
+	},
+	"pricingPlans": {
+		"title": "Der richtige Plan für dein Team",
+		"subtitle": "Alle Pläne beinhalten typolerante Suche, Facetten, Synonyme und Echtzeit-Indizierung. Skaliere, wann immer du bereit bist.",
+		"items": {
+			"free": {
+				"title": "Kostenlos",
+				"description": "10.000 Sucheinheiten/Monat, 1 Index, Community-Support. Ideal für Hobby-Projekte und Tests."
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "100.000 Sucheinheiten/Monat, 5 Indizes, E-Mail-Support. Für kleine Produktionsdienste."
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "1 Mio. Sucheinheiten/Monat, 10 Indizes, Priority-Support, benutzerdefinierte Domain. Für wachsende SaaS-Produkte."
+			},
+			"business": {
+				"title": "Business",
+				"description": "10 Mio. Sucheinheiten/Monat, 50 Indizes, SLA 99,9%, SSO. Für skalensensible Unternehmen."
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Unbegrenzte Einheiten, dedizierter Cluster, SLA 99,95%, Audit-Log, SCIM-Provisioning. Für unternehmenskritische Workloads."
+			},
+			"overage": {
+				"title": "Überverbrauch",
+				"description": "Überschreitungen werden pro Sucheinheit fakturiert. Kein harter Stopp – dein Dienst bleibt immer online."
+			}
+		}
+	},
+	"resourcesPage": {
+		"title": "Ressources",
+		"description": "Guides, tutoriels, référence API et meilleures pratiques pour construire une recherche avec AACsearch."
+	},
+	"resources": {
+		"title": "Alles, was du zum Starten brauchst",
+		"subtitle": "Von Schnellstarts bis zu fortgeschrittener Relevanz-Tuning – hier findest du alles.",
+		"items": {
+			"docs": {
+				"title": "Dokumentation",
+				"description": "Vollständige API-Referenz, SDK-Guides und konzeptionelle Erklärungen – von Ersteinrichtung bis zu fortgeschrittenen Themen."
+			},
+			"tutorials": {
+				"title": "Tutorials",
+				"description": "Schritt-für-Schritt-Anleitungen für gängige Setups: E-Commerce-Suche, Wissensdatenbanken und mehrstufige Hierarchien."
+			},
+			"apiRef": {
+				"title": "API-Referenz",
+				"description": "Vollständige REST-API-Dokumentation mit interaktiven Beispielen. In OpenAPI 3.1 generiert."
+			},
+			"sdks": {
+				"title": "SDKs",
+				"description": "Browser-SDK, Node.js-Client und CLI. Alle in TypeScript, alle auf npm veröffentlicht."
+			},
+			"blog": {
+				"title": "Blog",
+				"description": "Technische Artikel zu Such-Engineering, Produkt-Updates und Fallstudien."
+			},
+			"changelog": {
+				"title": "Änderungsprotokoll",
+				"description": "Jedes Release dokumentiert, Upgradepfade klar."
+			}
+		}
+	},
+	"solutionsPage": {
+		"title": "AACsearch pour chaque secteur",
+		"description": "Solutions de recherche sur mesure pour le retail, les médias, la fintech, l'éducation, la santé et le gaming."
+	},
+	"solutions": {
+		"title": "Suche für jede Branche",
+		"subtitle": "AACsearch wurde für die Anforderungen verschiedener Branchen optimiert – von E-Commerce bis Healthcare.",
+		"items": {
+			"retail": {
+				"title": "Einzelhandel",
+				"description": "Sofortige Produktsuche mit Facetten, Preis-Filterung und standortbewusstem Ranking für Online-Shops."
+			},
+			"media": {
+				"title": "Medien",
+				"description": "Inhalts-Discovery für News-Sites, Streaming-Plattformen und digitale Verlage."
+			},
+			"fintech": {
+				"title": "Fintech",
+				"description": "Sichere, revisionsfähige Suche über Finanzdokumente, Transaktionen und Compliance-Inhalte."
+			},
+			"education": {
+				"title": "Bildung",
+				"description": "Kurssuche, Wissensmanagement und Lernmaterialien-Discovery für EdTech-Plattformen."
+			},
+			"healthcare": {
+				"title": "Gesundheitswesen",
+				"description": "HIPAA-konforme Suche über medizinische Inhalte und klinische Dokumente."
+			},
+			"gaming": {
+				"title": "Gaming",
+				"description": "Item-Suche, Spieler-Matchmaking und Community-Inhalts-Discovery für Gaming-Plattformen."
+			}
+		}
+	},
+	"solutionsRetailPage": {
+		"title": "AACsearch pour le Retail",
+		"description": "Recherche de produits instantanée, navigation à facettes et outils de merchandising pour les boutiques en ligne."
+	},
+	"solutionsRetail": {
+		"title": "Konversionen durch bessere Suche steigern",
+		"subtitle": "Shopper finden Produkte, die Ergebnisse schlechterer Suche verbergen. AACsearch bringt sie schneller zum Checkout.",
+		"items": {
+			"instantSearch": {
+				"title": "Sofortige Produktsuche",
+				"description": "Ergebnisse erscheinen beim ersten Tastendruck. Typo-Toleranz bedeutet, dass 'laufschuhe' trotzdem findet."
+			},
+			"facets": {
+				"title": "Facettennavigation",
+				"description": "Preis, Größe, Farbe und Verfügbarkeit – alle mit Echtzeitzählungen. Kunden verfeinern ohne Seitenreload."
+			},
+			"merchandising": {
+				"title": "Merchandising-Tools",
+				"description": "Pinne Bestseller, booste Sale-Artikel und begrabe Auslaufprodukte ohne Code."
+			},
+			"synonyms": {
+				"title": "Produktsynonyme",
+				"description": "Stelle sicher, dass 'Turnschuhe', 'Sneakers' und 'Sportschuhe' dieselben Ergebnisse finden."
+			},
+			"analytics": {
+				"title": "Commerce-Analytik",
+				"description": "Zero-Result-Abfragen, meistgesuchte Begriffe und CTR per Produkt. Dein Leitfaden für Kataloglücken."
+			},
+			"multiCurrency": {
+				"title": "Mehrwährung & Sprachen",
+				"description": "Separate Kollektionen pro Sprache und Währung oder eine gemeinsame mit Locale-Filterung."
+			}
+		}
+	},
+	"solutionsMediaPage": {
+		"title": "AACsearch pour les Médias",
+		"description": "Découverte de contenus pour les sites d'actualités, les plateformes de streaming et les éditeurs numériques."
+	},
+	"solutionsMedia": {
+		"title": "Inhalte finden, die das Publikum begeistern",
+		"subtitle": "Von Nachrichtenarchiven bis zu Video-Bibliotheken – AACsearch indiziert deine Inhalte und liefert Ergebnisse in Millisekunden.",
+		"items": {
+			"articles": {
+				"title": "Artikel & Archivsuche",
+				"description": "Durchsuche Millionen von Artikeln über mehrere Jahre und Themen hinweg."
+			},
+			"video": {
+				"title": "Video- & Podcast-Suche",
+				"description": "Indiziere Transkripte und Metadaten für Suche über Audio- und Videoinhalte."
+			},
+			"recommendations": {
+				"title": "Ähnliche Inhalte",
+				"description": "Zeige verwandte Artikel, Videos und Episoden auf der Basis von Vektordistanz."
+			},
+			"multiformat": {
+				"title": "Multi-Format-Inhalte",
+				"description": "Indiziere Artikel, Galerien, Podcasts und Newsletter in einer einzigen Kollektion."
+			},
+			"trending": {
+				"title": "Trend-Boost",
+				"description": "Booste frisch veröffentlichte oder trending Inhalte in Suchergebnissen."
+			},
+			"subscription": {
+				"title": "Zugangskontrolle",
+				"description": "Kennzeichne Inhalte als Premium oder Metered und filtere basierend auf dem Abonnementstatus des Nutzers."
+			}
+		}
+	},
+	"solutionsFintechPage": {
+		"title": "AACsearch pour la Fintech",
+		"description": "Recherche sécurisée et auditables sur des documents financiers, des transactions et des contenus de conformité."
+	},
+	"solutionsFintech": {
+		"title": "Suche für regulierte Daten",
+		"subtitle": "Finanzprodukte brauchen schnelle, präzise Suche mit klarer Datentrennung. AACsearch liefert beides.",
+		"items": {
+			"compliance": {
+				"title": "Compliance-Dokumentensuche",
+				"description": "Indiziere Regulierungstexte, interne Richtlinien und Audit-Trails für sofortigen Compliance-Lookup."
+			},
+			"transactions": {
+				"title": "Transaktionssuche",
+				"description": "Ermögliche Kunden, ihre Transaktionshistorie nach Händler, Betrag oder Kategorie zu durchsuchen."
+			},
+			"tenantIsolation": {
+				"title": "Mandantenisolierung",
+				"description": "Scoped Tokens stellen sicher, dass jeder Mandant nur seine eigenen Daten sieht – auf Abfrageebene durchgesetzt."
+			},
+			"auditLogs": {
+				"title": "Abfrage-Audit-Log",
+				"description": "Jede Suche wird mit Timestamp, Benutzer-ID und Parametern protokolliert. Exportierbar für Compliance."
+			},
+			"encryption": {
+				"title": "Verschlüsselung im Ruhezustand",
+				"description": "Alle indizierten Daten sind im Ruhezustand mit AES-256 verschlüsselt. Schlüssel-Rotation wird unterstützt."
+			},
+			"regions": {
+				"title": "EU-Datenresidenz",
+				"description": "Wähle die EU-Region (Frankfurt) für DSGVO- und DORA-Konformität."
+			}
+		}
+	},
+	"solutionsEducationPage": {
+		"title": "AACsearch pour l'Éducation",
+		"description": "Recherche de cours, gestion des connaissances et découverte de matériaux d'apprentissage pour les plateformes EdTech."
+	},
+	"solutionsEducation": {
+		"title": "Wissen leichter entdecken",
+		"subtitle": "Von der Kurskatalog-Suche bis zur Lernmaterial-Discovery – AACsearch macht Bildungsinhalte sofort zugänglich.",
+		"items": {
+			"catalog": {
+				"title": "Kurskatalog-Suche",
+				"description": "Durchsuchbarer Katalog mit Filter nach Thema, Level, Sprache, Dauer und Dozent."
+			},
+			"knowledge": {
+				"title": "Wissensdatenbanken",
+				"description": "Indiziere Lernmaterialien, FAQs und Dokumentation für sofortigen Studenten-Self-Service."
+			},
+			"multilingual": {
+				"title": "Mehrsprachige Inhalte",
+				"description": "Separate Kollektionen pro Sprache oder eine gemeinsame mit Locale-Filterung."
+			},
+			"accessibility": {
+				"title": "Barrierefreiheit",
+				"description": "Das AACsearch-Widget folgt ARIA-Best-Practices für Screen-Reader-Kompatibilität."
+			},
+			"analytics": {
+				"title": "Lern-Analytik",
+				"description": "Sieh, wonach Studenten suchen und was sie nicht finden. Leitfaden für Inhaltslücken."
+			},
+			"scorm": {
+				"title": "LMS-Integration",
+				"description": "Integriere in Moodle, Canvas oder beliebige LMS-Plattformen über die REST-API."
+			}
+		}
+	},
+	"solutionsHealthcarePage": {
+		"title": "AACsearch pour la Santé",
+		"description": "Recherche conforme à HIPAA sur les contenus médicaux, les documents cliniques et les informations patients."
+	},
+	"solutionsHealthcare": {
+		"title": "Suche für medizinische Plattformen",
+		"subtitle": "Klinische Inhalte, Patientenmaterialien und Wissensdatenbanken – AACsearch hält sie durchsuchbar und sicher.",
+		"items": {
+			"clinical": {
+				"title": "Klinische Dokumentensuche",
+				"description": "Indiziere klinische Leitlinien, Protokolle und Formulare für sofortigen Kliniker-Lookup."
+			},
+			"patient": {
+				"title": "Patienteninformations-Portal",
+				"description": "Durchsuchbare Nachsorgeanleitungen, Medikamentenbeipackzettel und FAQ für Patienten."
+			},
+			"hipaa": {
+				"title": "HIPAA-Berücksichtigung",
+				"description": "Kein PII in Suchabfragen oder Antworten. Audit-Logs pro Abfrage für Compliance-Nachweis."
+			},
+			"medicalCoding": {
+				"title": "ICD/CPT-Code-Suche",
+				"description": "Typolerante Suche über ICD-10- und CPT-Code-Datenbanken für klinisches Coding."
+			},
+			"tenantIsolation": {
+				"title": "Abteilungsisolierung",
+				"description": "Scoped Tokens sichern Abteilungs- oder Einrichtungsdatentrennung auf Abfrageebene."
+			},
+			"multilingual": {
+				"title": "Mehrsprachige Inhalte",
+				"description": "Patienteninformationen in mehreren Sprachen durchsuchbar machen – mit Locale-basierten Kollektionen."
+			}
+		}
+	},
+	"solutionsGamingPage": {
+		"title": "AACsearch pour le Gaming",
+		"description": "Recherche d'objets, matchmaking de joueurs et découverte de contenu communautaire pour les plateformes de jeux."
+	},
+	"solutionsGaming": {
+		"title": "Schnelle Suche für Gaming-Plattformen",
+		"subtitle": "Ob Item-Shops, Game-Wikis oder Spieler-Directories – AACsearch liefert Echtzeitergebnisse für hohe Gleichzeitigkeit.",
+		"items": {
+			"items": {
+				"title": "Item-Datenbank-Suche",
+				"description": "Durchsuche Game-Items, Skins, Waffen und Ausrüstung mit typoleranten Abfragen und attributbasierten Facetten."
+			},
+			"players": {
+				"title": "Spieler-Discovery",
+				"description": "Suche nach Spielernamen, Rängen, Server und Spielstil. Nützlich für LFG- und Matchmaking-Features."
+			},
+			"wiki": {
+				"title": "Game-Wiki-Suche",
+				"description": "Mache dein Game-Wiki sofort durchsuchbar. Strategie-Guides, Lore und Patch-Notes findbar in Sekunden."
+			},
+			"realtime": {
+				"title": "Echtzeit-Updates",
+				"description": "Item-Stats und Spielerdaten aktualisieren sich in Echtzeit. Kein Cache-Invalidierungsproblem."
+			},
+			"highConcurrency": {
+				"title": "Hohe Gleichzeitigkeit",
+				"description": "AACsearch skaliert horizontal. Spitzen während Game-Releases oder Events werden automatisch aufgefangen."
+			},
+			"widget": {
+				"title": "Anpassbares Widget",
+				"description": "Das AACsearch-Widget ist vollständig stilisierbar. Passe es dem visuellen Design deines Spiels an."
+			}
+		}
+	},
+	"statusPage": {
+		"title": "État du Système",
+		"description": "Disponibilité en temps réel et historique des incidents pour tous les services AACsearch."
+	},
+	"status": {
+		"title": "Immer verfügbar",
+		"subtitle": "Echtzeit-Status, Incident-History und Wartungsfenster für alle AACsearch-Dienste.",
+		"items": {
+			"api": {
+				"title": "Such-API",
+				"description": "Verfügbarkeit und Latenz für den primären Such-API-Endpunkt. Aktualisiert jede Minute."
+			},
+			"ingest": {
+				"title": "Ingest-Pipeline",
+				"description": "Status der Dokumenten-Ingest-Pipeline einschließlich Verarbeitungsverzögerung."
+			},
+			"dashboard": {
+				"title": "Dashboard",
+				"description": "Verfügbarkeit der SaaS-Steuerungsebene: Login, Index-Management und Analytik."
+			},
+			"incidents": {
+				"title": "Incident-History",
+				"description": "Vollständige Incident-History der letzten 90 Tage mit Root-Cause-Analyse."
+			},
+			"maintenance": {
+				"title": "Geplante Wartung",
+				"description": "Geplante Wartungsfenster werden 72 Stunden im Voraus bekannt gegeben."
+			},
+			"subscribe": {
+				"title": "Status-Abonnement",
+				"description": "Abonniere E-Mail- oder SMS-Benachrichtigungen für Incidents, die deinen Plan betreffen."
+			}
+		}
+	},
+	"supportPage": {
+		"title": "Support",
+		"description": "Obtenez de l'aide avec AACsearch. Documentation, forum communautaire, support par e-mail et SLA entreprise."
+	},
+	"support": {
+		"title": "Wir sind für dich da",
+		"subtitle": "Von Self-Service-Dokumentation bis hin zu dedizierten Ingenieuren – für jede Stufe der Reife gibt es einen Supportweg.",
+		"items": {
+			"docs": {
+				"title": "Dokumentation",
+				"description": "Vollständige API-Referenz, Konzeptleitfäden und Tutorials. Durchsucht von AACsearch."
+			},
+			"community": {
+				"title": "Community-Forum",
+				"description": "Stelle öffentliche Fragen, tausche dich mit anderen Entwicklern aus und sieh vergangene Lösungen."
+			},
+			"email": {
+				"title": "E-Mail-Support",
+				"description": "Für Starter-Plan und höher. Reaktionszeit unter 24 Stunden. Für kritische Probleme selber Tag."
+			},
+			"sla": {
+				"title": "Enterprise-SLA",
+				"description": "99,95 % Uptime-Garantie, dedizierter Customer Success Manager und 4-Stunden-Reaktionszeit für Blocker."
+			},
+			"onboarding": {
+				"title": "Onboarding-Unterstützung",
+				"description": "Geführtes Onboarding für Pro- und Enterprise-Kunden. Wir helfen beim Schema-Design und der Migrationsstrategie."
+			},
+			"status": {
+				"title": "Systemstatus",
+				"description": "Überprüfe status.aacsearch.com für Echtzeit-Verfügbarkeit und Incident-History."
+			}
+		}
+	},
+	"trustPage": {
+		"title": "Confiance et Sécurité",
+		"description": "Comment AACsearch protège les données clients : chiffrement, contrôle d'accès, résidence des données et certifications de conformité."
+	},
+	"trust": {
+		"title": "Sicherheit als Grundlage",
+		"subtitle": "AACsearch wurde mit Security by Default gebaut. Alle Maßnahmen, Zertifizierungen und Richtlinien sind hier dokumentiert.",
+		"items": {
+			"encryption": {
+				"title": "Verschlüsselung",
+				"description": "Daten werden im Ruhezustand (AES-256) und bei der Übertragung (TLS 1.3) verschlüsselt. Schlüssel werden in einem HSM verwaltet."
+			},
+			"accessControl": {
+				"title": "Zugangskontrolle",
+				"description": "API-Keys, scoped Tokens, IP-Allow-Lists und SCIM-Provisioning. Jede Aktion wird geloggt."
+			},
+			"dataResidency": {
+				"title": "Datenresidenz",
+				"description": "Wähle EU (Frankfurt) oder USA (Nord-Virginia) beim Anmelden. Keine gebietsübergreifende Replikation ohne Zustimmung."
+			},
+			"soc2": {
+				"title": "SOC 2 Typ II (geplant)",
+				"description": "Das SOC 2-Audit ist für Q4 2025 geplant. Bestehende Sicherheitskontrollen entsprechen dem SOC 2 Trust Services Criteria."
+			},
+			"gdpr": {
+				"title": "DSGVO",
+				"description": "AACsearch ist als Datenverarbeiter tätig. Ein Auftragsverarbeitungsvertrag (DPA) ist im Enterprise-Plan verfügbar."
+			},
+			"pentest": {
+				"title": "Penetrationstests",
+				"description": "Jährliche Penetrationstests durch einen unabhängigen Dritten. Ergebnisse auf Anfrage an Enterprise-Kunden."
 			}
 		}
 	}

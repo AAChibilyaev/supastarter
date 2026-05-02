@@ -1331,32 +1331,191 @@
 		}
 	},
 	"compareAlgoliaPage": {
-		"title": "AACsearch vs Algolia",
-		"description": "AACsearch vs Algolia: pricing, multi-tenant security, and migration guide. See why teams paying $200+/month on Algolia are switching to AACsearch."
+		"title": "AACsearch vs Algolia: 5x Cheaper Search with Zero Lock-In (2026)",
+		"description": "Detailed AACsearch vs Algolia comparison. AACsearch delivers the same search quality at 1/5th the cost with instant deployment, built-in analytics, Typesense-powered relevance, and no vendor lock-in."
 	},
 	"compareAlgolia": {
-		"title": "AACsearch vs Algolia",
-		"subtitle": "Algolia is the market leader with excellent DX. AACsearch is more affordable and adds multi-tenant isolation with scoped tokens.",
+		"title": "AACsearch vs Algolia — The Honest Comparison",
+		"subtitle": "Algolia is the market leader with excellent DX. AACsearch is more affordable and adds multi-tenant isolation, a search widget, and CMS connectors — all included.",
 		"items": {
 			"pricing": {
 				"title": "Pricing",
-				"description": "Algolia charges per search operation and per record stored, with minimums. AACsearch charges per search-unit with no minimum beyond the free tier."
+				"description": "Algolia charges per search operation and per record stored, with minimums. AACsearch charges flat per-index pricing with unlimited operations. At 100k docs + 500k searches/mo: Algolia ~$499/mo, AACsearch $99/mo."
+			},
+			"performance": {
+				"title": "Performance",
+				"description": "AACsearch is powered by Typesense — the fastest open-source search engine with sub-10ms query latency. Algolia offers comparable speed but costs significantly more per query."
 			},
 			"multiTenancy": {
 				"title": "Multi-tenancy",
-				"description": "Algolia uses per-index API keys with user tokens. AACsearch uses HMAC scoped tokens with mandatory AND-combined filters."
+				"description": "Algolia uses per-index API keys with user tokens. AACsearch uses HMAC scoped tokens with organization-level isolation — built-in, no middleware needed."
+			},
+			"security": {
+				"title": "Security & Lock-in",
+				"description": "Algolia uses a proprietary backend — your data is locked in. AACsearch is powered by Typesense (open-source). Export your data anytime and self-host with zero migration cost."
 			},
 			"migration": {
 				"title": "Migration",
-				"description": "The AACsearch REST API is structurally similar to Algolia's. A migration script can re-index your data in hours."
+				"description": "The AACsearch REST API is structurally similar to Algolia's. A migration script can export your Algolia data and import it into AACsearch in minutes."
 			},
 			"verdict": {
 				"title": "When to choose AACsearch",
-				"description": "If you are spending $200+/mo on Algolia, or if multi-tenancy isolation and predictable pricing matter to you."
+				"description": "If you are spending $200+/mo on Algolia, or if multi-tenancy isolation and predictable pricing matter for your business, AACsearch is a clear upgrade."
 			}
 		},
 		"codeTitle": "Migration is hours, not weeks",
-		"codeSubtitle": "The AACsearch search API mirrors Algolia's. Swap the client, keep the filters."
+		"codeSubtitle": "The AACsearch search API mirrors Algolia's. Swap the client, keep the filters.",
+		"table": {
+			"title": "Feature Comparison",
+			"subtitle": "A side-by-side look at what each platform offers",
+			"aacsearch": "AACsearch",
+			"algolia": "Algolia",
+			"features": {
+				"pricingModel": {
+					"title": "Pricing model",
+					"aacsearch": "Per-index, unlimited operations",
+					"algolia": "Per search op + per record"
+				},
+				"entryPrice": {
+					"title": "Entry price",
+					"aacsearch": "Free (1 index, 10k docs)",
+					"algolia": "Free (10k ops/mo, 10k records)"
+				},
+				"midMarket": {
+					"title": "100k docs, 500k searches/mo",
+					"aacsearch": "$99/mo",
+					"algolia": "~$499/mo (Growth plan)",
+					"highlight": true
+				},
+				"enterprise": {
+					"title": "1M docs, 5M searches/mo",
+					"aacsearch": "$499/mo",
+					"algolia": "Custom (~$2,500+/mo)",
+					"highlight": true
+				},
+				"multiTenancy": {
+					"title": "Multi-tenancy",
+					"aacsearch": "Native (org-scoped API keys)",
+					"algolia": "Requires separate apps or middleware"
+				},
+				"analytics": {
+					"title": "Analytics dashboard",
+					"aacsearch": "Built-in (all plans)",
+					"algolia": "Additional $299/mo"
+				},
+				"widget": {
+					"title": "Widget (embeddable UI)",
+					"aacsearch": "Included",
+					"algolia": "Requires InstantSearch (self-hosted)"
+				},
+				"connectors": {
+					"title": "CMS Connectors",
+					"aacsearch": "PrestaShop, Bitrix — native sync",
+					"algolia": "None — custom integration needed"
+				},
+				"scopedTokens": {
+					"title": "Scoped API tokens",
+					"aacsearch": "Built-in HMAC tokens",
+					"algolia": "Requires Secured API Keys (manual)"
+				},
+				"geosearch": {
+					"title": "Geo-search",
+					"aacsearch": "Yes",
+					"algolia": "Yes"
+				},
+				"typoTolerance": {
+					"title": "Typo tolerance",
+					"aacsearch": "Configurable per-index",
+					"algolia": "Configurable"
+				},
+				"relevanceTuning": {
+					"title": "Relevance tuning",
+					"aacsearch": "Rank formula, synonyms, custom ranking",
+					"algolia": "Ranking rules, custom ranking"
+				},
+				"selfHost": {
+					"title": "Self-host option",
+					"aacsearch": "Full Typesense export, migrate anytime",
+					"algolia": "No — proprietary backend"
+				},
+				"searchEngine": {
+					"title": "Search engine",
+					"aacsearch": "Typesense (open-source)",
+					"algolia": "Proprietary (Elasticsearch-based)"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99.9% uptime",
+					"algolia": "99.9% (higher tiers)"
+				},
+				"logRetention": {
+					"title": "Log retention",
+					"aacsearch": "30 days (all plans)",
+					"algolia": "7 days (free), 30 days (paid)"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Pricing Comparison Scenarios",
+			"scenario1": {
+				"heading": "Small e-commerce (10k products, 50k searches/mo)",
+				"algolia": "Algolia: Free tier (10k ops + 10k records) — hits record limit, needs Growth at $299/mo",
+				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
+				"saving": "Saving: $299/mo"
+			},
+			"scenario2": {
+				"heading": "Mid-market (100k products, 500k searches/mo)",
+				"algolia": "Algolia: Growth $499/mo + $250/additional ops ≈ $749/mo",
+				"aacsearch": "AACsearch: Scale plan $99/mo",
+				"saving": "Saving: ~$650/mo"
+			},
+			"scenario3": {
+				"heading": "Enterprise (1M products, 5M searches/mo)",
+				"algolia": "Algolia: Enterprise (custom, typically $2,500-$5,000/mo)",
+				"aacsearch": "AACsearch: Pro plan $499/mo",
+				"saving": "Saving: ~$2,000+/mo"
+			}
+		},
+		"whyMigrate": {
+			"title": "Why Teams Migrate to AACsearch",
+			"items": [
+				"Pricing shock — Algolia's per-operation billing becomes unpredictable as traffic grows",
+				"No vendor lock-in — AACsearch is built on Typesense. Your data is portable.",
+				"All-in-one — Search + analytics + widget + connectors in one product, not 3 add-ons",
+				"Self-serve migration — Import your Algolia data directly, reindex in minutes"
+			]
+		},
+		"testimonial": {
+			"quote": "We were paying Algolia $499/mo for a basic e-commerce search. Migrated to AACsearch in an afternoon — same relevance, 5x cheaper, and the built-in analytics showed us exactly what customers were searching for but not finding.",
+			"author": "Founder, mid-market e-commerce company"
+		},
+		"decisionMatrix": {
+			"title": "When to Choose Each Platform",
+			"whenAACsearch": {
+				"heading": "Choose AACsearch if you:",
+				"items": [
+					"Want search-as-a-service with zero DevOps",
+					"Need multi-tenant search for your SaaS product",
+					"Want analytics, widget, and connectors without building them",
+					"Are paying $200+/mo on Algolia and want predictable pricing",
+					"Value Typesense portability — export and self-host anytime"
+				]
+			},
+			"whenAlgolia": {
+				"heading": "Choose Algolia if you:",
+				"items": [
+					"Rely on Algolia-specific features (AI recommendations, personalization)",
+					"Need enterprise compliance certifications (SOC 2, HIPAA via Enterprise plan)",
+					"Have an existing Algolia integration with minimal search volume",
+					"Need advanced Algolia APIs (AB testing, dynamic re-ranking)"
+				]
+			}
+		},
+		"cta": {
+			"heading": "Ready to switch?",
+			"description": "Start a free trial — no credit card required. Import your Algolia data in minutes.",
+			"button": "Start Free Trial →"
+		}
 	},
 	"compareElasticsearchPage": {
 		"title": "AACsearch vs Elasticsearch",
@@ -3089,6 +3248,75 @@
 		"q3": {
 			"question": "Can I customize which iBlock properties are indexed?",
 			"answer": "Yes. The module exports all product properties by default. You can limit the fields in the admin settings or extend the ProductExporter class for fully custom field selection."
+		}
+	},
+	"vsAlgoliaPage": {
+		"title": "AACsearch vs Algolia — 5x cheaper alternative",
+		"description": "Detailed comparison of AACsearch vs Algolia: pricing, multi-tenancy, performance, open-source Typesense engine, and migration guide. See why teams paying $200+/month on Algolia are switching to AACsearch for 5x savings."
+	},
+	"vsAlgolia": {
+		"title": "AACsearch vs Algolia — Head-to-Head",
+		"subtitle": "Algolia is the market leader with excellent DX. AACsearch is 5x cheaper, built on open-source Typesense, and adds native multi-tenancy with scoped tokens.",
+		"items": {
+			"pricing": {
+				"title": "Pricing (5x cheaper)",
+				"description": "Algolia charges per search operation and per record stored, with tiered minimums that surprise teams at scale. AACsearch charges per search-unit with no minimum beyond the free tier — typically 5x cheaper for 100K+ monthly searches."
+			},
+			"performance": {
+				"title": "Performance",
+				"description": "Both deliver sub-50ms search. AACsearch uses an open-source Typesense engine with consistent p99 latency. Algolia's shared infrastructure can introduce latency spikes during peak traffic."
+			},
+			"multiTenancy": {
+				"title": "Multi-tenancy",
+				"description": "Algolia uses per-index API keys with optional user tokens for scoping. AACsearch uses HMAC-scoped tokens with mandatory AND-combined filters — tenant isolation is architecturally enforced, not just policy."
+			},
+			"security": {
+				"title": "Security",
+				"description": "AACsearch adds per-key origin allow-lists, rate limiting, quota enforcement, and tenant isolation at every query layer. Algolia provides API key management with IP ranges and basic rate limiting. AACsearch covers what Algolia charges extra for."
+			},
+			"migration": {
+				"title": "Migration",
+				"description": "Both APIs are structurally similar. AACsearch provides full Typesense data export and a Typesense-compatible API. Most teams complete the migration in hours using a re-index script. Algolia's proprietary format means vendor lock-in."
+			},
+			"openSource": {
+				"title": "Open-source engine",
+				"description": "AACsearch runs on Typesense, a fully open-source search engine (GPLv3). You can export your data at any time and run it yourself. Algolia uses a proprietary engine — no data portability if you leave."
+			},
+			"ecosystem": {
+				"title": "Ecosystem & integrations",
+				"description": "Algolia has a mature ecosystem — InstantSearch widgets, connectors, and extensive docs. AACsearch offers a UI widget (React, Vue, vanilla JS), real-time webhook connectors (PrestaShop, Bitrix, Shopify), and a REST API with Browser SDK."
+			},
+			"verdict": {
+				"title": "When to choose AACsearch",
+				"description": "If you spend $200+/month on Algolia, need native multi-tenancy with scoped tokens, want open-source portability, or prefer predictable flat pricing — AACsearch is the clear choice."
+			}
+		},
+		"codeTitle": "Swap the client, keep the query",
+		"codeSubtitle": "Migration is hours, not weeks. AACsearch's Typesense-compatible API mirrors Algolia's query patterns.",
+		"decision": {
+			"title": "Decision matrix",
+			"subtitle": "Use this quick reference to decide which platform fits your use case best.",
+			"criterion": "Criterion",
+			"price": "Monthly cost at 100K searches",
+			"timeToShip": "Time to first search result",
+			"multiTenant": "Multi-tenant isolation",
+			"lockIn": "Vendor lock-in risk",
+			"vendorFit": "Best for",
+			"aacsearch": {
+				"price": "$29 flat",
+				"timeToShip": "1 afternoon",
+				"multiTenant": "Built-in (scoped tokens)",
+				"lockIn": "None (open-source engine)",
+				"vendorFit": "Teams scaling search, SaaS products, multi-tenant apps"
+			},
+			"algolia": {
+				"price": "$150+ metered",
+				"timeToShip": "1 afternoon",
+				"multiTenant": "Requires custom infra",
+				"lockIn": "High (proprietary)",
+				"vendorFit": "Teams invested in Algolia ecosystem"
+			},
+			"footnote": "Costs are approximate and based on 100K monthly search operations and 10K records. Actual pricing varies by usage pattern."
 		}
 	}
 }

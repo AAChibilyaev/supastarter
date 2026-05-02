@@ -3372,5 +3372,22 @@
 			"admin": "Администратор",
 			"misc": "Разное"
 		}
+	},
+	"connectorsPage": {
+		"title": "CMS-коннекторы",
+		"description": "Нативные PHP-модули для PrestaShop и 1C-Bitrix. REST Connector API для всего остального.",
+		"comingSoon": "Скоро",
+		"comingSoonTitle": "Больше коннекторов скоро",
+		"comingSoonSubtitle": "Поддержка WooCommerce и Shopify в разработке. Используйте Connector API, чтобы создать собственный коннектор уже сегодня.",
+		"comingSoonItems": {
+			"woocommerce": {
+				"title": "WooCommerce",
+				"description": "Плагин WordPress + WooCommerce. Синхронизация товаров, категорий и заказов."
+			},
+			"shopify": {
+				"title": "Shopify",
+				"description": "Приложение Shopify с синхронизацией товаров, вариантов и метафилдов. Встройка виджета включена."
+			}
+		}
 	}
 }

@@ -3440,5 +3440,22 @@
 			"admin": "Admin",
 			"misc": "Miscelánea"
 		}
+	},
+	"connectorsPage": {
+		"title": "Conectores CMS",
+		"description": "Módulos PHP nativos para PrestaShop y 1C-Bitrix. REST Connector API para todo lo demás.",
+		"comingSoon": "Próximamente",
+		"comingSoonTitle": "Más conectores en camino",
+		"comingSoonSubtitle": "El soporte para WooCommerce y Shopify está en desarrollo. Usa la Connector API para crear el tuyo hoy.",
+		"comingSoonItems": {
+			"woocommerce": {
+				"title": "WooCommerce",
+				"description": "Plugin de WordPress + WooCommerce. Sincroniza productos, categorías y pedidos."
+			},
+			"shopify": {
+				"title": "Shopify",
+				"description": "App de Shopify con sincronización de productos, variantes y metafields. Integración de widget incluida."
+			}
+		}
 	}
 }

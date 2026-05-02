@@ -33,7 +33,11 @@ const eventSchema = z.object({
 
 const trackInputSchema = z.union([
 	eventSchema,
-	z.object({ events: z.array(eventSchema).min(1).max(50) }),
+	z.object({
+		events: z.array(eventSchema).min(1).max(50),
+		// sendBeacon cannot set Authorization headers; apiKey in body is the fallback.
+		apiKey: z.string().max(256).optional(),
+	}),
 ]);
 
 const TYPE_TO_USAGE = {
@@ -60,10 +64,6 @@ export const eventsApp = new Hono()
 		}),
 	)
 	.post("/events/track", async (c) => {
-		const gated = await gatePublicSearchRequest(c);
-		if (gated instanceof Response) return gated;
-		const { verified } = gated;
-
 		let body: unknown;
 		try {
 			body = await c.req.json();
@@ -75,6 +75,13 @@ export const eventsApp = new Hono()
 		if (!parsed.success) {
 			return c.json({ error: "invalid_input", details: z.treeifyError(parsed.error) }, 400);
 		}
+
+		// sendBeacon path: no Authorization header available — use apiKey from body instead.
+		const bodyApiKey =
+			"apiKey" in parsed.data ? (parsed.data.apiKey as string | undefined) : undefined;
+		const gated = await gatePublicSearchRequest(c, undefined, bodyApiKey);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
 
 		const events = "events" in parsed.data ? parsed.data.events : [parsed.data];
 		const ua = capUa(c.req.header("user-agent") ?? undefined);

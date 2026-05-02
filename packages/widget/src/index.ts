@@ -376,6 +376,18 @@ function highlightText(text: string, highlights?: unknown[]): string {
 	return result;
 }
 
+type BatchedEvent = {
+	type: "search_query" | "zero_results" | "result_click" | "widget_open" | "filter_used";
+	query?: string;
+	productId?: string;
+	position?: number;
+	filters?: Record<string, unknown>;
+	sort?: string;
+	sessionId: string;
+	locale: string;
+	referrer?: string;
+};
+
 export class AacSearchWidget {
 	private options: WidgetOptions;
 	private root: ShadowRoot;
@@ -383,16 +395,18 @@ export class AacSearchWidget {
 	private containerEl: HTMLElement;
 	private locale: string;
 	private sessionId: string;
+	private batchQueue: BatchedEvent[] = [];
+	private batchTimer: ReturnType<typeof setTimeout> | null = null;
+	private static readonly BATCH_DELAY_MS = 500;
 
 	private t(key: import("./translations").TranslationKey): string {
 		return translate(this.locale, key);
 	}
 
 	/**
-	 * Fire-and-forget analytics event to the SaaS backend.
-	 * Endpoint: POST /api/events/track (see packages/api/modules/search/events-public.ts).
-	 * Uses sendBeacon when available (handles unload races); falls back to fetch.
-	 * Auth: same `ss_search_*` Bearer used for search.
+	 * Enqueue an analytics event. Events are batched for BATCH_DELAY_MS (500ms)
+	 * then flushed as a single POST — reducing requests 5-10x vs. one-per-event.
+	 * On page unload, flushBeacon() drains the queue via sendBeacon.
 	 */
 	private trackEvent(payload: {
 		type: "search_query" | "zero_results" | "result_click" | "widget_open" | "filter_used";
@@ -403,25 +417,75 @@ export class AacSearchWidget {
 		sort?: string;
 	}): void {
 		try {
-			const url = `${this.options.baseUrl.replace(/\/$/, "")}/api/events/track`;
-			const body = JSON.stringify({
+			this.batchQueue.push({
 				...payload,
 				sessionId: this.sessionId,
 				locale: this.locale,
 				referrer: typeof document !== "undefined" ? document.referrer : undefined,
 			});
-			// sendBeacon doesn't support custom headers — use fetch with keepalive instead
+			if (this.batchTimer === null) {
+				this.batchTimer = setTimeout(() => {
+					this.batchTimer = null;
+					this.flushBatch();
+				}, AacSearchWidget.BATCH_DELAY_MS);
+			}
+		} catch {
+			// swallow — analytics must never break the widget
+		}
+	}
+
+	/** Send all queued events in one POST via fetch (normal path). */
+	private flushBatch(): void {
+		if (this.batchQueue.length === 0) return;
+		const events = this.batchQueue.splice(0);
+		const url = `${this.options.baseUrl.replace(/\/$/, "")}/api/events/track`;
+		try {
 			void fetch(url, {
 				method: "POST",
 				headers: {
 					"content-type": "application/json",
 					authorization: `Bearer ${this.options.apiKey}`,
 				},
-				body,
+				body: JSON.stringify({ events }),
 				keepalive: true,
 			}).catch(() => undefined);
 		} catch {
-			// swallow — analytics must never break the widget
+			// swallow
+		}
+	}
+
+	/**
+	 * Drain the queue on page unload using sendBeacon (no Authorization header support).
+	 * The API key is embedded in the JSON body; events-public.ts accepts it as fallback auth.
+	 * Falls back to fetch+keepalive when sendBeacon is unavailable.
+	 */
+	private flushBeacon(): void {
+		if (this.batchTimer !== null) {
+			clearTimeout(this.batchTimer);
+			this.batchTimer = null;
+		}
+		if (this.batchQueue.length === 0) return;
+		const events = this.batchQueue.splice(0);
+		const url = `${this.options.baseUrl.replace(/\/$/, "")}/api/events/track`;
+		try {
+			if (typeof navigator !== "undefined" && "sendBeacon" in navigator) {
+				const blob = new Blob([JSON.stringify({ events, apiKey: this.options.apiKey })], {
+					type: "application/json",
+				});
+				if (navigator.sendBeacon(url, blob)) return;
+			}
+			// fallback: fetch with keepalive (handles unload in modern browsers)
+			void fetch(url, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+					authorization: `Bearer ${this.options.apiKey}`,
+				},
+				body: JSON.stringify({ events }),
+				keepalive: true,
+			}).catch(() => undefined);
+		} catch {
+			// swallow
 		}
 	}
 
@@ -474,6 +538,14 @@ export class AacSearchWidget {
 		this.render();
 		this.attachEvents();
 		this.trackEvent({ type: "widget_open" });
+
+		// Flush pending batch on page unload
+		if (typeof document !== "undefined") {
+			document.addEventListener("visibilitychange", () => {
+				if (document.visibilityState === "hidden") this.flushBeacon();
+			});
+			window.addEventListener("pagehide", () => this.flushBeacon());
+		}
 	}
 
 	private async doSearch(page = 1): Promise<void> {

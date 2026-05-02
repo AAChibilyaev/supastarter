@@ -16,12 +16,18 @@ export interface PublicSearchAuth {
 /**
  * Shared auth/origin/rate-limit/quota gate for any public search route.
  * Returns either a typed success or an HTTP Response (caller forwards it).
+ *
+ * tokenOverride: raw API key from the request body — used by the events endpoint
+ * when the client cannot set Authorization headers (e.g. navigator.sendBeacon).
  */
 export async function gatePublicSearchRequest(
 	c: Context,
 	allowedSlugs?: Set<string>,
+	tokenOverride?: string,
 ): Promise<PublicSearchAuth | Response> {
-	const auth = c.req.header("authorization") ?? "";
+	const auth = tokenOverride
+		? `${BEARER_PREFIX}${tokenOverride}`
+		: (c.req.header("authorization") ?? "");
 	if (!auth.startsWith(BEARER_PREFIX)) {
 		return c.json({ error: "missing_bearer_token" }, 401);
 	}

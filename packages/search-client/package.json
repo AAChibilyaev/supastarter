@@ -1,19 +1,51 @@
 {
-	"name": "@repo/search-client",
-	"version": "0.0.0",
-	"description": "Customer-facing TypeScript client for the public search API. Safe for browser bundles — never exposes admin/write keys.",
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"name": "@aacsearch/client",
+	"version": "0.1.0",
+	"description": "AACSearch TypeScript SDK — browser-safe SearchClient + server-side AdminClient for the v1 REST API",
+	"keywords": [
+		"aacsearch",
+		"sdk",
+		"search",
+		"search-client",
+		"typesense"
+	],
+	"homepage": "https://aacsearch.com/docs/sdks/node",
+	"bugs": "https://github.com/aacsearch/supastarter/issues",
+	"license": "MIT",
+	"author": "AACSearch (https://aacsearch.com)",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/aacsearch/supastarter.git",
+		"directory": "packages/search-client"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
-		".": "./src/index.ts"
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
 	},
 	"scripts": {
+		"build": "tsc",
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"prepublishOnly": "pnpm build",
 		"type-check": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
 		"typescript": "catalog:"
+	},
+	"engines": {
+		"node": ">= 20"
 	}
 }

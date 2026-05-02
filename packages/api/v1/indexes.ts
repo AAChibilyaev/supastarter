@@ -8,13 +8,16 @@
 import {
 	createSearchIndex,
 	db,
+	deleteSearchIndex,
 	getSearchIndexById,
 	getSearchIndexBySlug,
 	listSearchIndexes,
+	updateSearchIndex,
 } from "@repo/database";
 import { logger } from "@repo/logs";
 import {
 	createPhysicalCollection,
+	deleteSearchIndexCollections,
 	ensureAlias,
 	getTypesenseClient,
 	physicalCollectionName,
@@ -167,6 +170,100 @@ export const indexesApp = new Hono()
 			createdAt: index.createdAt,
 			updatedAt: index.updatedAt,
 		});
+	})
+
+	// ── Update index (PATCH) ───────────────────────────────────────
+	.patch("/indexes/:indexId", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		const index = await getSearchIndexById(indexId);
+
+		if (!index || index.organizationId !== verified.organizationId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const schema = z.object({
+			displayName: z.string().min(1).max(120).optional(),
+			enabled: z.boolean().optional(),
+		});
+
+		let body: unknown;
+		try {
+			body = await c.req.json();
+		} catch {
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
+		}
+
+		const parsed = schema.safeParse(body);
+		if (!parsed.success) {
+			return c.json(
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
+				400,
+			);
+		}
+
+		if (parsed.data.displayName === undefined && parsed.data.enabled === undefined) {
+			return c.json(
+				{ error: "invalid_input", message: "At least one field must be provided" },
+				400,
+			);
+		}
+
+		const updated = await updateSearchIndex(indexId, parsed.data);
+
+		return c.json({
+			id: updated.id,
+			organizationId: updated.organizationId,
+			slug: updated.slug,
+			displayName: updated.displayName,
+			version: updated.version,
+			enabled: updated.enabled,
+			schema: updated.schema,
+			createdAt: updated.createdAt,
+			updatedAt: updated.updatedAt,
+		});
+	})
+
+	// ── Delete index ───────────────────────────────────────────────
+	.delete("/indexes/:indexId", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		const index = await getSearchIndexById(indexId);
+
+		if (!index || index.organizationId !== verified.organizationId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		try {
+			await deleteSearchIndexCollections(index.organizationId, index.slug);
+			await deleteSearchIndex(indexId);
+		} catch (error) {
+			logger.error("Failed to delete search index", {
+				error,
+				indexId,
+				organizationId: index.organizationId,
+				slug: index.slug,
+			});
+			return c.json(
+				{ error: "internal_error", message: "Could not delete search index" },
+				502,
+			);
+		}
+
+		return c.json({ deleted: true, id: index.id, slug: index.slug });
 	})
 
 	// ── Get index stats ────────────────────────────────────────────

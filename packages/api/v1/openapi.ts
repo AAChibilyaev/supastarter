@@ -198,6 +198,77 @@ export function generateOpenApiSpec() {
 						"404": { $ref: "#/components/responses/NotFound" },
 					},
 				},
+				patch: {
+					summary: "Update search index",
+					description:
+						"Updates mutable index fields (displayName, enabled). At least one field must be provided.",
+					tags: ["Indexes"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									minProperties: 1,
+									properties: {
+										displayName: { type: "string", maxLength: 120 },
+										enabled: { type: "boolean" },
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Updated index",
+							content: {
+								"application/json": {
+									schema: { $ref: "#/components/schemas/SearchIndexFull" },
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+				delete: {
+					summary: "Delete search index",
+					description:
+						"Deletes the index record, its Typesense alias, and all versioned collections. " +
+						"This is irreversible — all indexed documents will be lost.",
+					tags: ["Indexes"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+					],
+					responses: {
+						"200": {
+							description: "Index deleted",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											deleted: { type: "boolean", enum: [true] },
+											id: { type: "string" },
+											slug: { type: "string" },
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Typesense or database error during deletion" },
+					},
+				},
 			},
 			"/indexes/{indexId}/stats": {
 				get: {

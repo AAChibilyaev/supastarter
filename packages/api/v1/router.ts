@@ -10,6 +10,8 @@
  *   POST   /v1/projects/:projectId/indexes      — create index
  *   GET    /v1/projects/:projectId/indexes      — list indexes
  *   GET    /v1/indexes/:indexId                 — get index
+ *   PATCH  /v1/indexes/:indexId                 — update index (displayName, enabled)
+ *   DELETE /v1/indexes/:indexId                 — delete index + Typesense cleanup
  *   GET    /v1/indexes/:indexId/stats           — index statistics
  *   PUT    /v1/indexes/:indexId/documents/:documentId         — upsert doc
  *   POST   /v1/indexes/:indexId/documents:batch               — batch upsert

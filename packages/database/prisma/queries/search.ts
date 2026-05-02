@@ -132,6 +132,16 @@ export async function updateSearchIndexVersion(id: string, version: number) {
 	});
 }
 
+export async function updateSearchIndex(
+	id: string,
+	data: { displayName?: string; enabled?: boolean },
+) {
+	return db.searchIndex.update({
+		where: { id },
+		data,
+	});
+}
+
 export async function deleteSearchIndex(id: string) {
 	return db.searchIndex.delete({
 		where: { id },

@@ -95,17 +95,17 @@ async function loginAsTestUser(page: Page, baseURL: string): Promise<void> {
 // ─── Extend base test ─────────────────────────────────────────────
 
 export const test = base.extend<TestFixtures>({
-	authPage: async ({ browser }, use) => {
+	authPage: async ({ browser }, _use) => {
 		const context = await browser.newContext({
 			storageState: undefined, // fresh session
 		});
 		const page = await context.newPage();
 		await loginAsTestUser(page, getSaaSUrl());
-		await use(page);
+		await _use(page);
 		await context.close();
 	},
 
-	apiClient: async ({}, use) => {
+	apiClient: async (_unused: unknown, use) => {
 		const client = createApiClient(getSaaSUrl());
 		await use(client);
 	},

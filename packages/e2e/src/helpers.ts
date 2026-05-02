@@ -2,8 +2,6 @@
  * Helper functions for E2E tests.
  */
 
-import type { Page } from "@playwright/test";
-
 /**
  * Creates a test search index via the v1 REST API.
  * Returns the index name/slug.

@@ -7,7 +7,7 @@ config({ path: resolve(__dirname, "../../.env.local") });
 config({ path: resolve(__dirname, "../../.env") });
 
 const SAAS_URL = process.env.NEXT_PUBLIC_SAAS_URL || "http://localhost:3010";
-const MARKETING_URL = process.env.NEXT_PUBLIC_MARKETING_URL || "http://localhost:3001";
+const _MARKETING_URL = process.env.NEXT_PUBLIC_MARKETING_URL || "http://localhost:3001";
 
 export default defineConfig({
 	testDir: "./tests",

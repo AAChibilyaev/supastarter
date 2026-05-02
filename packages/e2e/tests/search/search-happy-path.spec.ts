@@ -31,13 +31,12 @@ const SAMPLE_DOCUMENTS = [
 
 let adminKey: string;
 let indexSlug: string;
-let scopedKey: string;
 
 test.describe.configure({ mode: "serial" });
 
 test.describe("Search Happy Path", () => {
 
-	test.beforeAll(async ({ apiClient }) => {
+	test.beforeAll(async () => {
 		// Create a search index
 		const index = await createTestIndex(
 			process.env.E2E_ADMIN_API_KEY || "test-admin-key",
@@ -122,7 +121,7 @@ test.describe("Search Happy Path", () => {
 
 test.describe("Search Error Cases", () => {
 
-	test("should return 404 for non-existent index", async ({ apiClient }) => {
+	test("should return 404 for non-existent index", async () => {
 		const response = await fetch(`${BASE_URL}/api/search/public/non-existent-index-slug`, {
 			method: "POST",
 			headers: {
@@ -134,7 +133,7 @@ test.describe("Search Error Cases", () => {
 		expect(response.status).toBe(404);
 	});
 
-	test("should return 502 for upstream failure gracefully", async ({ apiClient }) => {
+	test("should return 502 for upstream failure gracefully", async () => {
 		// Simulate by providing an invalid Typesense configuration
 		// (the response shape should still be a JSON error, not raw Typesense error)
 		const response = await fetch(`${BASE_URL}/api/search/public/invalid-index`, {

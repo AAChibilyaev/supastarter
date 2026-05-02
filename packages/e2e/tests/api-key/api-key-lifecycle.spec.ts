@@ -10,7 +10,7 @@
  */
 
 import { test, expect } from "../../src/fixtures";
-import { createTestIndex, createApiKey, revokeApiKey, searchPublic, wait } from "../../src/helpers";
+import { createTestIndex, createApiKey, revokeApiKey, wait } from "../../src/helpers";
 
 const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 const ADMIN_KEY = process.env.E2E_ADMIN_API_KEY || "test-admin-key";

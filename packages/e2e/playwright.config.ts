@@ -59,6 +59,12 @@ export default defineConfig({
 			testMatch: "tests/quota/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "connector",
+			dependencies: ["setup"],
+			testMatch: "tests/connector/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

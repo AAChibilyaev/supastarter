@@ -1,0 +1,18 @@
+{
+	"name": "@repo/loadtest",
+	"version": "0.0.1",
+	"private": true,
+	"description": "Load testing & performance benchmarks for AACsearch — k6 scripts covering search throughput, ingest, and widget sessions",
+	"scripts": {
+		"search": "k6 run scenarios/search-benchmark.js",
+		"ingest": "k6 run scenarios/ingest-benchmark.js",
+		"widget": "k6 run scenarios/widget-sessions.js",
+		"all": "k6 run scenarios/search-benchmark.js && k6 run scenarios/ingest-benchmark.js && k6 run scenarios/widget-sessions.js",
+		"search:local": "k6 run -e BASE_URL=http://localhost:3010 -e TYPESENSE_URL=http://localhost:8108 scenarios/search-benchmark.js",
+		"ingest:local": "k6 run -e TYPESENSE_URL=http://localhost:8108 scenarios/ingest-benchmark.js",
+		"widget:local": "k6 run -e BASE_URL=http://localhost:3010 scenarios/widget-sessions.js",
+		"watch": "k6 run --out json scenarios/search-benchmark.js"
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}

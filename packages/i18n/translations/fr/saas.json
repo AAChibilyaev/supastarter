@@ -712,6 +712,10 @@
 				"description": "Choisissez un forfait auquel vous abonner.",
 				"title": "Changer de forfait"
 			},
+			"upgradePlan": "Mettre à niveau",
+			"currentPlan": "Plan actuel",
+			"switchToAnnual": "Passer à l'annuel",
+			"upgradeSuccess": "Plan mis à niveau avec succès",
 			"title": "Facturation",
 			"aiCredits": {
 				"title": "Crédits IA",

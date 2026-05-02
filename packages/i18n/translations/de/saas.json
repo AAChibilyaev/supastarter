@@ -712,6 +712,10 @@
 				"description": "Wahle einen Plan aus, den du abonnieren mochtest.",
 				"title": "Andere deinen Plan"
 			},
+			"upgradePlan": "Plan upgraden",
+			"currentPlan": "Aktueller Plan",
+			"switchToAnnual": "Zu jährlicher Abrechnung wechseln",
+			"upgradeSuccess": "Plan erfolgreich aktualisiert",
 			"title": "Zahlung",
 			"aiCredits": {
 				"title": "KI-Guthaben",

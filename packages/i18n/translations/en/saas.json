@@ -712,6 +712,10 @@
 				"description": "Choose a plan to subscribe to.",
 				"title": "Change your plan"
 			},
+			"upgradePlan": "Upgrade Plan",
+			"currentPlan": "Current Plan",
+			"switchToAnnual": "Switch to Annual",
+			"upgradeSuccess": "Plan upgraded successfully",
 			"aiCredits": {
 				"title": "AI credits",
 				"subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",

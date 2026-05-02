@@ -712,6 +712,10 @@
 				"description": "Elige un plan para suscribirte.",
 				"title": "Cambiar tu plan"
 			},
+			"upgradePlan": "Actualizar plan",
+			"currentPlan": "Plan actual",
+			"switchToAnnual": "Cambiar a anual",
+			"upgradeSuccess": "Plan actualizado con éxito",
 			"aiCredits": {
 				"title": "Créditos AI",
 				"subtitle": "Uso de IA de pago por uso. Recargue su cartera para desbloquear todas las funciones de IA.",

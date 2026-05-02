@@ -712,6 +712,10 @@
 				"description": "Choose a plan to subscribe to.",
 				"title": "Change your plan"
 			},
+			"upgradePlan": "Улучшить план",
+			"currentPlan": "Текущий план",
+			"switchToAnnual": "Перейти на годовой",
+			"upgradeSuccess": "План успешно обновлён",
 			"aiCredits": {
 				"title": "AI credits",
 				"subtitle": "Оплата по факту использования AI. Пополните кошелёк для доступа ко всем функциям AI.",

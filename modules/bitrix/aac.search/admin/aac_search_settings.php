@@ -63,7 +63,7 @@ if (Loader::includeModule('iblock')) {
     $rsIblocks = \CIBlock::GetList(['SORT' => 'ASC'], ['ACTIVE' => 'Y']);
     while ($iblock = $rsIblocks->Fetch()) {
         $iblockOptions .= '<option value="' . (int) $iblock['ID'] . '"'
-            . (in_array((int) $iblock['ID'], self::getSelectedIblocks(), true) ? ' selected' : '')
+            . (in_array((int) $iblock['ID'], getSelectedIblocks(), true) ? ' selected' : '')
             . '>' . htmlspecialcharsbx($iblock['NAME'] . ' [' . $iblock['ID'] . ']') . '</option>';
     }
 }

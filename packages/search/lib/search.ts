@@ -2,6 +2,20 @@ import "server-only";
 import { config } from "../config";
 import { getTypesenseClient } from "./client";
 
+export interface GeoPolygonFilter {
+	/** Geolocation field name (default: "_geoloc") */
+	field?: string;
+	/** Polygon vertices as [lat, lng] pairs */
+	polygon: Array<[number, number]>;
+}
+
+export interface GeoBoundingBoxFilter {
+	/** Geolocation field name (default: "_geoloc") */
+	field?: string;
+	/** Bounding box defined by top-left and bottom-right corners */
+	bounding_box: [{ lat: number; lng: number }, { lat: number; lng: number }];
+}
+
 interface TypesenseSearchParams {
 	q: string;
 	query_by: string;
@@ -23,6 +37,7 @@ interface TypesenseSearchParams {
 	query_by_weights?: string;
 	// ── Geo Search ─────────────────────────────────────────────────
 	polygon_filter?: Record<string, unknown>;
+	bounding_box?: Record<string, unknown>;
 	// ── Search Params Extensions ───────────────────────────────────
 	exclude_fields?: string;
 	highlight_start_tag?: string;
@@ -55,6 +70,9 @@ export interface SearchDocumentsInput {
 	prefix?: boolean | string;
 	infix?: string;
 	queryByWeights?: string;
+	// ── Geo Search ─────────────────────────────────────────────────
+	polygonFilter?: GeoPolygonFilter;
+	boundingBoxFilter?: GeoBoundingBoxFilter;
 	// ── Search Params Extensions ───────────────────────────────────
 	excludeFields?: string;
 	highlightStartTag?: string;
@@ -116,6 +134,19 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		...(input.prefix !== undefined && { prefix: input.prefix }),
 		...(input.infix !== undefined && { infix: input.infix }),
 		...(input.queryByWeights !== undefined && { query_by_weights: input.queryByWeights }),
+		// ── Geo Search ──
+		...(input.polygonFilter !== undefined && {
+			polygon_filter: {
+				field: input.polygonFilter.field ?? "_geoloc",
+				polygon: input.polygonFilter.polygon,
+			} as Record<string, unknown>,
+		}),
+		...(input.boundingBoxFilter !== undefined && {
+			bounding_box: {
+				field: input.boundingBoxFilter.field ?? "_geoloc",
+				bounding_box: input.boundingBoxFilter.bounding_box,
+			} as Record<string, unknown>,
+		}),
 		// ── Search Params Extensions ──
 		...(input.excludeFields !== undefined && { exclude_fields: input.excludeFields }),
 		...(input.highlightStartTag !== undefined && {
@@ -189,6 +220,19 @@ export async function multiSearchDocuments(
 			...(entry.prefix !== undefined && { prefix: entry.prefix }),
 			...(entry.infix !== undefined && { infix: entry.infix }),
 			...(entry.queryByWeights !== undefined && { query_by_weights: entry.queryByWeights }),
+			// ── Geo Search ──
+			...(entry.polygonFilter !== undefined && {
+				polygon_filter: {
+					field: entry.polygonFilter.field ?? "_geoloc",
+					polygon: entry.polygonFilter.polygon,
+				} as Record<string, unknown>,
+			}),
+			...(entry.boundingBoxFilter !== undefined && {
+				bounding_box: {
+					field: entry.boundingBoxFilter.field ?? "_geoloc",
+					bounding_box: entry.boundingBoxFilter.bounding_box,
+				} as Record<string, unknown>,
+			}),
 			// ── Search Params Extensions ──
 			...(entry.excludeFields !== undefined && { exclude_fields: entry.excludeFields }),
 			...(entry.highlightStartTag !== undefined && {

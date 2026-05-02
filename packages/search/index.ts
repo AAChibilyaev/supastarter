@@ -29,6 +29,8 @@ export {
 export {
 	multiSearchDocuments,
 	searchDocuments,
+	type GeoBoundingBoxFilter,
+	type GeoPolygonFilter,
 	type MultiSearchEntry,
 	type SearchDocumentsInput,
 	type SearchDocumentsResult,

@@ -13,6 +13,19 @@ import { z } from "zod";
 
 import { requireScope } from "./auth";
 
+const geoPolygonSchema = z.object({
+	field: z.string().optional(),
+	polygon: z.array(z.tuple([z.number(), z.number()])).min(3),
+});
+
+const geoBoundingBoxSchema = z.object({
+	field: z.string().optional(),
+	bounding_box: z.tuple([
+		z.object({ lat: z.number(), lng: z.number() }),
+		z.object({ lat: z.number(), lng: z.number() }),
+	]),
+});
+
 const searchInputSchema = z.object({
 	q: z.string().default("*"),
 	queryBy: z.string().optional(),
@@ -34,6 +47,9 @@ const searchInputSchema = z.object({
 		.optional(),
 	infix: z.enum(["off", "always", "fallback"]).optional(),
 	queryByWeights: z.string().optional(),
+	// ── Geo Search ──
+	polygonFilter: geoPolygonSchema.optional(),
+	boundingBoxFilter: geoBoundingBoxSchema.optional(),
 	// ── Search Params Extensions ──
 	excludeFields: z.string().optional(),
 	highlightStartTag: z.string().optional(),

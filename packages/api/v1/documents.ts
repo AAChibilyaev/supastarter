@@ -1,9 +1,10 @@
 /**
  * V1 Documents endpoints.
  *
- *   PUT    /v1/indexes/:indexId/documents/:documentId   — upsert single document
- *   POST   /v1/indexes/:indexId/documents:batch          — batch upsert documents
- *   DELETE /v1/indexes/:indexId/documents/:documentId    — delete document
+ *   PUT    /v1/indexes/:indexId/documents/:documentId    — upsert single document
+ *   POST   /v1/indexes/:indexId/documents:batch           — batch upsert documents
+ *   POST   /v1/indexes/:indexId/documents:batchDelete     — batch delete documents by IDs
+ *   DELETE /v1/indexes/:indexId/documents/:documentId     — delete document
  */
 
 import {
@@ -137,6 +138,59 @@ export const documentsApp = new Hono()
 		} catch (error) {
 			logger.error("Batch upsert enqueue failed", { error, indexId });
 			return c.json({ error: "internal_error", message: "Failed to enqueue documents" }, 502);
+		}
+	})
+
+	// ── Batch delete documents ────────────────────────────────────
+	.post("/indexes/:indexId/documents:batchDelete", async (c) => {
+		const gated = await requireScope("ingest")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		if (indexId !== verified.indexId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const schema = z.object({
+			ids: z.array(z.string().min(1)).min(1).max(5000),
+		});
+
+		let body: unknown;
+		try {
+			body = await c.req.json();
+		} catch {
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
+		}
+
+		const parsed = schema.safeParse(body);
+		if (!parsed.success) {
+			return c.json(
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
+				400,
+			);
+		}
+
+		try {
+			const documents = parsed.data.ids.map((id) => ({ id }) as Prisma.InputJsonValue);
+			const queued = await enqueueManySearchIngest(
+				verified.indexId,
+				verified.organizationId,
+				"delete",
+				documents,
+			);
+
+			return c.json({ queued, accepted: parsed.data.ids.length });
+		} catch (error) {
+			logger.error("Batch delete enqueue failed", { error, indexId });
+			return c.json({ error: "internal_error", message: "Failed to enqueue deletions" }, 502);
 		}
 	})
 

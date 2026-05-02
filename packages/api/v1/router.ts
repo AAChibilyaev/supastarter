@@ -15,6 +15,7 @@
  *   GET    /v1/indexes/:indexId/stats           — index statistics
  *   PUT    /v1/indexes/:indexId/documents/:documentId         — upsert doc
  *   POST   /v1/indexes/:indexId/documents:batch               — batch upsert
+ *   POST   /v1/indexes/:indexId/documents:batchDelete         — batch delete by IDs
  *   DELETE /v1/indexes/:indexId/documents/:documentId         — delete doc
  *   POST   /v1/indexes/:indexId/search          — search index
  *   POST   /v1/multi-search                     — multi-search

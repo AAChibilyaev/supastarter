@@ -431,6 +431,68 @@ export function generateOpenApiSpec() {
 					},
 				},
 			},
+			"/indexes/{indexId}/documents:batchDelete": {
+				post: {
+					summary: "Batch delete documents by IDs",
+					description:
+						"Enqueues up to 5 000 documents for deletion by their IDs. " +
+						"Documents are removed asynchronously via the ingest worker.",
+					tags: ["Documents"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["ids"],
+									properties: {
+										ids: {
+											type: "array",
+											minItems: 1,
+											maxItems: 5000,
+											items: { type: "string", minLength: 1 },
+											description: "Document IDs to delete",
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Deletions enqueued",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											queued: {
+												type: "integer",
+												description:
+													"Number of rows inserted into the ingest queue",
+											},
+											accepted: {
+												type: "integer",
+												description:
+													"Number of IDs received in the request",
+											},
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to enqueue deletions" },
+					},
+				},
+			},
 
 			// ─── Search ─────────────────────────────────────────────────
 			"/indexes/{indexId}/search": {

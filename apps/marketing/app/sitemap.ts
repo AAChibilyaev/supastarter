@@ -96,6 +96,7 @@ const staticMarketingPages = [
 	"/faq",
 	"/affiliate",
 	"/pricing/plans",
+	"/all-pages",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

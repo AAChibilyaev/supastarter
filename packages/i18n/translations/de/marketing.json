@@ -2951,5 +2951,26 @@
 				"description": "Jährliche Penetrationstests durch einen unabhängigen Dritten. Ergebnisse auf Anfrage an Enterprise-Kunden."
 			}
 		}
+	},
+	"allPagesPage": {
+		"title": "Alle Seiten",
+		"description": "Ein vollständiges Verzeichnis aller AACsearch-Seiten — Marketing-Website, Funktionen, Integrationen und die Anwendung.",
+		"marketingTitle": "Marketing-Website",
+		"appTitle": "Anwendung",
+		"saasNote": "Anwendungsrouten auf {base}",
+		"sections": {
+			"core": "Kernseiten",
+			"features": "Funktionen",
+			"useCases": "Anwendungsfälle",
+			"integrations": "Integrationen",
+			"compare": "Vergleiche",
+			"solutions": "Lösungen",
+			"company": "Unternehmen",
+			"auth": "Authentifizierung",
+			"account": "Konto",
+			"organization": "Organisation",
+			"admin": "Admin",
+			"misc": "Sonstiges"
+		}
 	}
 }

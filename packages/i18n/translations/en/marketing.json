@@ -2951,5 +2951,26 @@
 				"description": "Non-standard requirements — on-prem deployment, data residency agreements, white-labelling — are handled as custom contracts."
 			}
 		}
+	},
+	"allPagesPage": {
+		"title": "All Pages",
+		"description": "A complete index of all AACsearch pages — marketing site, features, integrations, and the application.",
+		"marketingTitle": "Marketing Site",
+		"appTitle": "Application",
+		"saasNote": "Application routes on {base}",
+		"sections": {
+			"core": "Core",
+			"features": "Features",
+			"useCases": "Use Cases",
+			"integrations": "Integrations",
+			"compare": "Compare",
+			"solutions": "Solutions",
+			"company": "Company",
+			"auth": "Authentication",
+			"account": "Account",
+			"organization": "Organization",
+			"admin": "Admin",
+			"misc": "Miscellaneous"
+		}
 	}
 }

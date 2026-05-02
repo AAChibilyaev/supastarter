@@ -90,7 +90,9 @@
 			"statsError": "Statistiken konnten nicht abgerufen werden.",
 			"services": "Externe Dienste",
 			"configured": "Konfiguriert",
-			"notConfigured": "Nicht konfiguriert"
+			"notConfigured": "Nicht konfiguriert",
+			"pageTitle": "Laufzeitkonfiguration",
+			"pageSubtitle": "Systemkonfiguration in Echtzeit, Dienstintegrität und Datenbankstatistiken."
 		},
 		"integrations": {
 			"title": "Integrationen",
@@ -103,7 +105,9 @@
 			"walletProvider": "Wallet-Anbieter",
 			"configured": "Konfiguriert",
 			"notConfigured": "Nicht konfiguriert",
-			"endpoint": "Endpunkt"
+			"endpoint": "Endpunkt",
+			"pageTitle": "Integrationsstatus",
+			"pageSubtitle": "Echtzeit-Verbindungsprüfungen für alle konfigurierten externen Dienste."
 		},
 		"jobs": {
 			"title": "Aufgaben",
@@ -113,7 +117,9 @@
 			"missingSecret": "Fehlendes Geheimnis",
 			"recentSyncActivity": "Letzte Sync-Aktivität",
 			"totalJobs": "Aufgaben insgesamt",
-			"noSyncActivity": "Noch keine Sync-Aktivität."
+			"noSyncActivity": "Noch keine Sync-Aktivität.",
+			"pageTitle": "Hintergrundaufgaben",
+			"pageSubtitle": "Status der Cron-Job-Konfiguration und aktuelle Synchronisierungsaktivitäten."
 		},
 		"overview": {
 			"usersTitle": "Benutzer",
@@ -126,13 +132,17 @@
 			"recentOrganizations": "Aktuelle Organisationen",
 			"noSlug": "Kein Slug",
 			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-			"openOrganizations": "Organisationen öffnen"
+			"openOrganizations": "Organisationen öffnen",
+			"pageTitle": "Admin-Übersicht",
+			"pageSubtitle": "Betriebszusammenfassung für Benutzer, Organisationen und Benachrichtigungen."
 		},
 		"audit": {
 			"recentUserChanges": "Aktuelle Benutzeränderungen",
 			"recentOrgChanges": "Aktuelle Organisationsänderungen",
 			"defaultRole": "Benutzer",
-			"noSlug": "Kein Slug"
+			"noSlug": "Kein Slug",
+			"pageTitle": "Audit-Ansicht",
+			"pageSubtitle": "Aktuelle Benutzer- und Organisationsänderungen aus Admin-Datenquellen."
 		},
 		"notifications": {
 			"recentNotifications": "Aktuelle Benachrichtigungen",
@@ -142,7 +152,9 @@
 			"markReadError": "Konnte nicht alle als gelesen markieren.",
 			"statusRead": "gelesen",
 			"statusUnread": "ungelesen",
-			"noNotifications": "Noch keine Benachrichtigungen."
+			"noNotifications": "Noch keine Benachrichtigungen.",
+			"pageTitle": "Benachrichtigungsverwaltung",
+			"pageSubtitle": "Aktuelle Benachrichtigungen einsehen und Zustelleinstellungen aktualisieren."
 		},
 		"wallet": {
 			"manualAdjustment": "Manuelle Wallet-Anpassung",
@@ -162,7 +174,13 @@
 			"adjustmentSuccess": "Wallet erfolgreich angepasst.",
 			"adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
 			"latestTransactions": "Letzte Wallet-Transaktionen",
-			"noTransactions": "Keine Transaktionen gefunden."
+			"noTransactions": "Keine Transaktionen gefunden.",
+			"pageTitle": "Wallet-Operationen",
+			"pageSubtitle": "Manuelle KI-Wallet-Anpassungen für Organisationen."
+		},
+		"security": {
+			"pageTitle": "Sicherheitsoperationen",
+			"pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
 		}
 	},
 	"app": {

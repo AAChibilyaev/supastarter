@@ -90,7 +90,9 @@
 			"statsError": "No se pudieron obtener estadísticas.",
 			"services": "Servicios externos",
 			"configured": "Configurado",
-			"notConfigured": "No configurado"
+			"notConfigured": "No configurado",
+			"pageTitle": "Configuración en tiempo de ejecución",
+			"pageSubtitle": "Configuración del sistema en tiempo real, estado de los servicios y estadísticas de la base de datos."
 		},
 		"integrations": {
 			"title": "Integraciones",
@@ -103,7 +105,9 @@
 			"walletProvider": "Proveedor de billetera",
 			"configured": "Configurado",
 			"notConfigured": "No configurado",
-			"endpoint": "Endpoint"
+			"endpoint": "Endpoint",
+			"pageTitle": "Estado de integraciones",
+			"pageSubtitle": "Verificaciones de conectividad en tiempo real para todos los servicios externos configurados."
 		},
 		"jobs": {
 			"title": "Tareas",
@@ -113,7 +117,9 @@
 			"missingSecret": "Secreto faltante",
 			"recentSyncActivity": "Actividad de sincronización reciente",
 			"totalJobs": "Tareas totales",
-			"noSyncActivity": "Aún no hay actividad de sincronización."
+			"noSyncActivity": "Aún no hay actividad de sincronización.",
+			"pageTitle": "Tareas en segundo plano",
+			"pageSubtitle": "Estado de configuración de trabajos cron y actividad de sincronización reciente."
 		},
 		"overview": {
 			"usersTitle": "Usuarios",
@@ -126,13 +132,17 @@
 			"recentOrganizations": "Organizaciones recientes",
 			"noSlug": "Sin slug",
 			"membersCount": "{count} {count, plural, one {miembro} other {miembros}}",
-			"openOrganizations": "Abrir organizaciones"
+			"openOrganizations": "Abrir organizaciones",
+			"pageTitle": "Resumen de administración",
+			"pageSubtitle": "Resumen operativo de usuarios, organizaciones y notificaciones."
 		},
 		"audit": {
 			"recentUserChanges": "Cambios de usuario recientes",
 			"recentOrgChanges": "Cambios de organización recientes",
 			"defaultRole": "usuario",
-			"noSlug": "Sin slug"
+			"noSlug": "Sin slug",
+			"pageTitle": "Vista de auditoría",
+			"pageSubtitle": "Cambios recientes de usuarios y organizaciones disponibles en las fuentes de datos de administración."
 		},
 		"notifications": {
 			"recentNotifications": "Notificaciones recientes",
@@ -142,7 +152,9 @@
 			"markReadError": "No se pudo marcar todo como leído.",
 			"statusRead": "leído",
 			"statusUnread": "no leído",
-			"noNotifications": "Sin notificaciones aún."
+			"noNotifications": "Sin notificaciones aún.",
+			"pageTitle": "Control de notificaciones",
+			"pageSubtitle": "Revisar notificaciones recientes y actualizar las preferencias de entrega."
 		},
 		"wallet": {
 			"manualAdjustment": "Ajuste manual de wallet",
@@ -162,7 +174,13 @@
 			"adjustmentSuccess": "Wallet ajustada correctamente.",
 			"adjustmentError": "Error al ajustar la wallet.",
 			"latestTransactions": "Últimas transacciones de wallet",
-			"noTransactions": "No se encontraron transacciones."
+			"noTransactions": "No se encontraron transacciones.",
+			"pageTitle": "Operaciones de billetera",
+			"pageSubtitle": "Ajustes manuales de billetera de IA para organizaciones."
+		},
+		"security": {
+			"pageTitle": "Operaciones de seguridad",
+			"pageSubtitle": "Sesiones activas, claves de acceso y configuración de doble factor para la cuenta de administrador actual."
 		}
 	},
 	"app": {

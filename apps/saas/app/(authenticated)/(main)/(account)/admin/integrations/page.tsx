@@ -1,13 +1,12 @@
 import { AdminIntegrationsView } from "@admin/components/AdminIntegrationsView";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminIntegrationsPage() {
+export default async function AdminIntegrationsPage() {
+	const t = await getTranslations("admin.integrations");
 	return (
 		<>
-			<PageHeader
-				title="Integrations health"
-				subtitle="Real-time connectivity checks for all configured external services."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 			<AdminIntegrationsView />
 		</>
 	);

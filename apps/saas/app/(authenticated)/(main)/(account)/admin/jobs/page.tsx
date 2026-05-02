@@ -1,13 +1,12 @@
 import { AdminJobsView } from "@admin/components/AdminJobsView";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminJobsPage() {
+export default async function AdminJobsPage() {
+	const t = await getTranslations("admin.jobs");
 	return (
 		<>
-			<PageHeader
-				title="Background jobs"
-				subtitle="Cron job configuration status and recent sync job activity."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 			<AdminJobsView />
 		</>
 	);

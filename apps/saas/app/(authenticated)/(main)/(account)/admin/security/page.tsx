@@ -2,14 +2,13 @@ import { ActiveSessionsBlock } from "@settings/components/ActiveSessionsBlock";
 import { PasskeysBlock } from "@settings/components/PasskeysBlock";
 import { TwoFactorBlock } from "@settings/components/TwoFactorBlock";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminSecurityPage() {
+export default async function AdminSecurityPage() {
+	const t = await getTranslations("admin.security");
 	return (
 		<>
-			<PageHeader
-				title="Security operations"
-				subtitle="Active sessions, passkeys and two-factor settings for the current admin account."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 
 			<div className="gap-6 grid grid-cols-1">
 				<TwoFactorBlock />

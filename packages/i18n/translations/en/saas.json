@@ -90,7 +90,9 @@
 			"statsError": "Could not fetch stats.",
 			"services": "External services",
 			"configured": "Configured",
-			"notConfigured": "Not configured"
+			"notConfigured": "Not configured",
+			"pageTitle": "Runtime config",
+			"pageSubtitle": "Real-time system configuration, service health, and database statistics."
 		},
 		"integrations": {
 			"title": "Integrations",
@@ -103,7 +105,9 @@
 			"walletProvider": "Wallet provider",
 			"configured": "Configured",
 			"notConfigured": "Not configured",
-			"endpoint": "Endpoint"
+			"endpoint": "Endpoint",
+			"pageTitle": "Integrations health",
+			"pageSubtitle": "Real-time connectivity checks for all configured external services."
 		},
 		"jobs": {
 			"title": "Jobs",
@@ -113,7 +117,9 @@
 			"missingSecret": "Missing secret",
 			"recentSyncActivity": "Recent sync activity",
 			"totalJobs": "Total jobs",
-			"noSyncActivity": "No sync activity yet."
+			"noSyncActivity": "No sync activity yet.",
+			"pageTitle": "Background jobs",
+			"pageSubtitle": "Cron job configuration status and recent sync job activity."
 		},
 		"overview": {
 			"usersTitle": "Users",
@@ -126,13 +132,17 @@
 			"recentOrganizations": "Recent organizations",
 			"noSlug": "No slug",
 			"membersCount": "{count} {count, plural, one {member} other {members}}",
-			"openOrganizations": "Open organizations"
+			"openOrganizations": "Open organizations",
+			"pageTitle": "Admin overview",
+			"pageSubtitle": "Operational summary across users, organizations and notifications."
 		},
 		"audit": {
 			"recentUserChanges": "Recent user changes",
 			"recentOrgChanges": "Recent organization changes",
 			"defaultRole": "user",
-			"noSlug": "No slug"
+			"noSlug": "No slug",
+			"pageTitle": "Audit view",
+			"pageSubtitle": "Recent user and organization changes available from admin data sources."
 		},
 		"notifications": {
 			"recentNotifications": "Recent notifications",
@@ -142,7 +152,9 @@
 			"markReadError": "Could not mark all as read.",
 			"statusRead": "read",
 			"statusUnread": "unread",
-			"noNotifications": "No notifications yet."
+			"noNotifications": "No notifications yet.",
+			"pageTitle": "Notification control",
+			"pageSubtitle": "Review recent notifications and update delivery preferences."
 		},
 		"wallet": {
 			"manualAdjustment": "Manual wallet adjustment",
@@ -162,7 +174,13 @@
 			"adjustmentSuccess": "Wallet adjusted successfully.",
 			"adjustmentError": "Failed to adjust wallet.",
 			"latestTransactions": "Latest wallet transactions",
-			"noTransactions": "No transactions found."
+			"noTransactions": "No transactions found.",
+			"pageTitle": "Wallet operations",
+			"pageSubtitle": "Manual AI wallet adjustments for organizations."
+		},
+		"security": {
+			"pageTitle": "Security operations",
+			"pageSubtitle": "Active sessions, passkeys and two-factor settings for the current admin account."
 		}
 	},
 	"app": {

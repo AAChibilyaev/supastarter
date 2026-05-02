@@ -1,13 +1,12 @@
 import { AdminWalletOps } from "@admin/components/AdminWalletOps";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminWalletPage() {
+export default async function AdminWalletPage() {
+	const t = await getTranslations("admin.wallet");
 	return (
 		<>
-			<PageHeader
-				title="Wallet operations"
-				subtitle="Manual AI wallet adjustments for organizations."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 			<AdminWalletOps />
 		</>
 	);

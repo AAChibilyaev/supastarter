@@ -1,13 +1,12 @@
 import { AdminAuditView } from "@admin/components/AdminAuditView";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminAuditPage() {
+export default async function AdminAuditPage() {
+	const t = await getTranslations("admin.audit");
 	return (
 		<>
-			<PageHeader
-				title="Audit view"
-				subtitle="Recent user and organization changes available from admin data sources."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 			<AdminAuditView />
 		</>
 	);

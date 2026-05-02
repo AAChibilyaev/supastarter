@@ -1,13 +1,12 @@
 import { AdminOverview } from "@admin/components/AdminOverview";
 import { PageHeader } from "@shared/components/PageHeader";
+import { getTranslations } from "next-intl/server";
 
-export default function AdminOverviewPage() {
+export default async function AdminOverviewPage() {
+	const t = await getTranslations("admin.overview");
 	return (
 		<>
-			<PageHeader
-				title="Admin overview"
-				subtitle="Operational summary across users, organizations and notifications."
-			/>
+			<PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 			<AdminOverview />
 		</>
 	);

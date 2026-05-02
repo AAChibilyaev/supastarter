@@ -90,7 +90,9 @@
 			"statsError": "Impossible de récupérer les statistiques.",
 			"services": "Services externes",
 			"configured": "Configuré",
-			"notConfigured": "Non configuré"
+			"notConfigured": "Non configuré",
+			"pageTitle": "Configuration d'exécution",
+			"pageSubtitle": "Configuration du système en temps réel, état des services et statistiques de la base de données."
 		},
 		"integrations": {
 			"title": "Intégrations",
@@ -103,7 +105,9 @@
 			"walletProvider": "Fournisseur de portefeuille",
 			"configured": "Configuré",
 			"notConfigured": "Non configuré",
-			"endpoint": "Endpoint"
+			"endpoint": "Endpoint",
+			"pageTitle": "État des intégrations",
+			"pageSubtitle": "Vérifications de connectivité en temps réel pour tous les services externes configurés."
 		},
 		"jobs": {
 			"title": "Tâches",
@@ -113,7 +117,9 @@
 			"missingSecret": "Secret manquant",
 			"recentSyncActivity": "Activité de synchronisation récente",
 			"totalJobs": "Total des tâches",
-			"noSyncActivity": "Aucune activité de synchronisation pour le moment."
+			"noSyncActivity": "Aucune activité de synchronisation pour le moment.",
+			"pageTitle": "Tâches en arrière-plan",
+			"pageSubtitle": "État de la configuration des tâches planifiées et activité de synchronisation récente."
 		},
 		"overview": {
 			"usersTitle": "Utilisateurs",
@@ -126,13 +132,17 @@
 			"recentOrganizations": "Organisations récentes",
 			"noSlug": "Pas de slug",
 			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
-			"openOrganizations": "Ouvrir les organisations"
+			"openOrganizations": "Ouvrir les organisations",
+			"pageTitle": "Vue d'ensemble administration",
+			"pageSubtitle": "Résumé opérationnel des utilisateurs, organisations et notifications."
 		},
 		"audit": {
 			"recentUserChanges": "Modifications d'utilisateurs récentes",
 			"recentOrgChanges": "Modifications d'organisations récentes",
 			"defaultRole": "utilisateur",
-			"noSlug": "Pas de slug"
+			"noSlug": "Pas de slug",
+			"pageTitle": "Vue d'audit",
+			"pageSubtitle": "Modifications récentes des utilisateurs et organisations disponibles depuis les sources de données d'administration."
 		},
 		"notifications": {
 			"recentNotifications": "Notifications récentes",
@@ -142,7 +152,9 @@
 			"markReadError": "Impossible de tout marquer comme lu.",
 			"statusRead": "lu",
 			"statusUnread": "non lu",
-			"noNotifications": "Aucune notification pour l'instant."
+			"noNotifications": "Aucune notification pour l'instant.",
+			"pageTitle": "Gestion des notifications",
+			"pageSubtitle": "Consulter les notifications récentes et mettre à jour les préférences de livraison."
 		},
 		"wallet": {
 			"manualAdjustment": "Ajustement manuel du portefeuille",
@@ -162,7 +174,13 @@
 			"adjustmentSuccess": "Portefeuille ajusté avec succès.",
 			"adjustmentError": "Échec de l'ajustement du portefeuille.",
 			"latestTransactions": "Dernières transactions du portefeuille",
-			"noTransactions": "Aucune transaction trouvée."
+			"noTransactions": "Aucune transaction trouvée.",
+			"pageTitle": "Opérations de portefeuille",
+			"pageSubtitle": "Ajustements manuels du portefeuille IA pour les organisations."
+		},
+		"security": {
+			"pageTitle": "Opérations de sécurité",
+			"pageSubtitle": "Sessions actives, clés d'accès et paramètres de double facteur pour le compte administrateur actuel."
 		}
 	},
 	"app": {

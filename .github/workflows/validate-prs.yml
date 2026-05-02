@@ -37,6 +37,22 @@ jobs:
               run: pnpm install
             - name: Run TypeScript
               run: pnpm type-check
+    build:
+        name: Build check
+        runs-on: ubuntu-latest
+        needs: [lint, type-check]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Build saas app
+              run: pnpm --filter database generate && pnpm --filter saas build
+            - name: Build marketing app
+              run: pnpm --filter marketing build
     unit:
         name: Run unit tests
         runs-on: ubuntu-latest

@@ -89,6 +89,12 @@ export default defineConfig({
 			testMatch: "tests/indexing/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "typesense-features",
+			dependencies: ["setup"],
+			testMatch: "tests/typesense-features/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

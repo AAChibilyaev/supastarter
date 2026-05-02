@@ -844,6 +844,25 @@
 		"description": "Veuillez patienter pendant que nous confirmons votre paiement.",
 		"loading": "Confirmation de votre achat en cours, veuillez patienter..."
 	},
+	"indexing": {
+		"dashboard": {
+			"title": "Gestion des index",
+			"subtitle": "Gérer l'indexation, la réindexation et la synchronisation pour cette collection",
+			"documents": "Documents",
+			"todaySearches": "Aujourd'hui",
+			"size": "Taille",
+			"avgLatency": "Latence moyenne",
+			"liveVersion": "Actif",
+			"indexHealth": "Santé de l'index",
+			"last7Days": "7 derniers jours",
+			"lastFullSync": "Dernière synchro complète",
+			"lastDeltaSync": "Dernière synchro delta",
+			"nextScheduled": "Prochaine planifiée",
+			"indexingProgress": "Progression de l'indexation",
+			"noData": "Aucune donnée d'indexation",
+			"backToCollection": "Retour à la collection"
+		}
+	},
 	"search": {
 		"title": "Recherche",
 		"subtitle": "Gérez les index de recherche, les clés API et l'utilisation de cette organisation.",

@@ -844,6 +844,25 @@
 		"description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
 		"loading": "Ihr Kauf wird bestatigt, bitte warten..."
 	},
+	"indexing": {
+		"dashboard": {
+			"title": "Index-Verwaltung",
+			"subtitle": "Indizierung, Neuindizierung und Synchronisierung für diese Kollektion verwalten",
+			"documents": "Dokumente",
+			"todaySearches": "Heute",
+			"size": "Größe",
+			"avgLatency": "Durchschn. Latenz",
+			"liveVersion": "Live",
+			"indexHealth": "Index-Zustand",
+			"last7Days": "Letzte 7 Tage",
+			"lastFullSync": "Letzte Vollsync",
+			"lastDeltaSync": "Letzte Delta-Sync",
+			"nextScheduled": "Nächste geplante",
+			"indexingProgress": "Indizierungsfortschritt",
+			"noData": "Noch keine Indizierungsdaten",
+			"backToCollection": "Zurück zur Kollektion"
+		}
+	},
 	"search": {
 		"title": "Suche",
 		"subtitle": "Verwalten Sie Suchindizes, API-Keys und die Nutzung für diese Organisation.",

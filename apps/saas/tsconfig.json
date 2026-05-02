@@ -14,6 +14,7 @@
 			"@knowledge/*": ["./modules/knowledge/*"],
 			"@onboarding/*": ["./modules/onboarding/*"],
 			"@search/*": ["./modules/search/*"],
+			"@indexing/*": ["./modules/indexing/*"],
 			"@shared/*": ["./modules/shared/*"]
 		}
 	},

@@ -844,6 +844,25 @@
 		"description": "Please wait while we confirm your payment.",
 		"loading": "Confirming your purchase, please wait..."
 	},
+	"indexing": {
+		"dashboard": {
+			"title": "Управление индексацией",
+			"subtitle": "Управление индексацией, реиндексацией и синхронизацией для этой коллекции",
+			"documents": "Документы",
+			"todaySearches": "Сегодня",
+			"size": "Размер",
+			"avgLatency": "Ср. задержка",
+			"liveVersion": "Активна",
+			"indexHealth": "Состояние индекса",
+			"last7Days": "Последние 7 дней",
+			"lastFullSync": "Последняя полная синхр.",
+			"lastDeltaSync": "Последняя дельта-синхр.",
+			"nextScheduled": "Следующая по расписанию",
+			"indexingProgress": "Прогресс индексации",
+			"noData": "Данных об индексации пока нет",
+			"backToCollection": "Назад к коллекции"
+		}
+	},
 	"search": {
 		"title": "Поиск",
 		"subtitle": "Управляйте поисковыми индексами, API-ключами и использованием для этой организации.",

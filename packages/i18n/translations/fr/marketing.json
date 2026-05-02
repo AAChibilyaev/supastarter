@@ -1518,37 +1518,189 @@
 		}
 	},
 	"compareElasticsearchPage": {
-		"title": "AACsearch vs Elasticsearch",
-		"description": "Elasticsearch vs AACsearch — quand chacun est le bon outil, et à quoi ressemble la différence opérationnelle."
+		"title": "AACsearch vs Elasticsearch: The Honest Alternative (2026)",
+		"description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications."
 	},
 	"compareElasticsearch": {
-		"title": "AACsearch vs Elasticsearch",
-		"subtitle": "Elasticsearch est une plateforme de données généraliste. AACsearch est une API de recherche spécialisée. Des outils différents pour des missions différentes.",
+		"title": "AACsearch vs Elasticsearch — The Honest Comparison",
+		"subtitle": "Elasticsearch is a powerful general-purpose data platform. AACsearch is a purpose-built search API. Different tools for different jobs — here is when each makes sense.",
 		"items": {
 			"complexity": {
-				"title": "Complexité opérationnelle",
-				"description": "Elasticsearch nécessite la gestion de cluster, le tuning et la maintenance continue. AACsearch est une API hébergée — aucune opération requise."
+				"title": "Operational complexity",
+				"description": "Elasticsearch requires cluster management, JVM tuning, shard optimization, and ongoing maintenance. AACsearch is a hosted API — zero-ops, no infrastructure to manage."
 			},
 			"latency": {
-				"title": "Latence de recherche",
-				"description": "La latence p99 d'Elasticsearch est typiquement de 100-400 ms. AACsearch cible moins de 50 ms p99."
+				"title": "Search latency",
+				"description": "Elasticsearch p99 search latency is typically 100-400ms depending on cluster size and query complexity. AACsearch targets under 50ms p99 for product and document search workloads."
 			},
 			"useCase": {
-				"title": "Adéquation au cas d'usage",
-				"description": "Elasticsearch excelle dans l'analytique de logs, la recherche full-text d'entreprise et les agrégations. AACsearch excelle dans la recherche produits et documentaire."
+				"title": "Use case fit",
+				"description": "Elasticsearch excels at log analytics, observability pipelines, full-text enterprise search, and complex aggregations. AACsearch excels at product search, help center search, and SaaS application search."
 			},
 			"cost": {
-				"title": "Coût",
-				"description": "Elasticsearch sur cloud est cher pour les charges de travail de recherche pure. La tarification AACsearch est basée sur les search-units — payez ce que vous utilisez."
+				"title": "Cost",
+				"description": "Elasticsearch Cloud is expensive for pure search workloads — you pay for cluster nodes you don't need. AACsearch pricing is based on search-units — pay only for what you use."
 			},
 			"schema": {
-				"title": "Gestion du schéma",
-				"description": "Les changements de mapping Elasticsearch sont complexes. AACsearch a le reindex à échange d'alias sans coupure — évolution de schéma sans indisponibilité."
+				"title": "Schema management",
+				"description": "Elasticsearch mapping changes are complex and often require reindexing with downtime. AACsearch has zero-downtime alias-swap reindex — schema changes without any interruption."
 			},
 			"verdict": {
-				"title": "Quand choisir AACsearch",
-				"description": "Si votre cas d'usage est la recherche produits, le centre d'aide ou la recherche full-text SaaS — et que vous n'avez pas besoin d'analytique de logs ou d'agrégations complexes."
+				"title": "When to choose AACsearch",
+				"description": "If your use case is product search, help center, or SaaS full-text search — and you do not need log analytics or complex aggregations — AACsearch is the simpler, cheaper, faster option."
 			}
+		},
+		"codeTitle": "Zero-ops search, not cluster management",
+		"codeSubtitle": "AACsearch is a managed search API. Elasticsearch requires cluster provisioning, JVM tuning, and ongoing maintenance.",
+		"table": {
+			"title": "Feature Comparison",
+			"subtitle": "A side-by-side look at how AACsearch and Elasticsearch compare across key dimensions",
+			"aacsearch": "AACsearch",
+			"elasticsearch": "Elasticsearch",
+			"features": {
+				"pricingModel": {
+					"title": "Pricing model",
+					"aacsearch": "Per-index, unlimited operations",
+					"elasticsearch": "Per node-hour + storage (cloud) or self-hosted infra cost"
+				},
+				"entryPrice": {
+					"title": "Entry price",
+					"aacsearch": "Free (1 index, 10k docs)",
+					"elasticsearch": "Free (self-hosted) / ~$95/mo Elastic Cloud (2 nodes)"
+				},
+				"midMarket": {
+					"title": "100k docs, 500k searches/mo",
+					"aacsearch": "$99/mo",
+					"elasticsearch": "~$350-600/mo (Elastic Cloud, 3-node cluster, 120GB storage)"
+				},
+				"enterprise": {
+					"title": "1M docs, 5M searches/mo",
+					"aacsearch": "$499/mo",
+					"elasticsearch": "~$1,200-2,500/mo (Elastic Cloud, 5-10 node cluster)"
+				},
+				"multiTenancy": {
+					"title": "Multi-tenancy",
+					"aacsearch": "Native (org-scoped API keys)",
+					"elasticsearch": "Requires separate indices or cross-cluster search setup"
+				},
+				"analytics": {
+					"title": "Analytics dashboard",
+					"aacsearch": "Built-in (all plans)",
+					"elasticsearch": "Requires Kibana setup and maintenance"
+				},
+				"widget": {
+					"title": "Widget (embeddable UI)",
+					"aacsearch": "Included",
+					"elasticsearch": "Requires custom UI with Elasticsearch JS client"
+				},
+				"connectors": {
+					"title": "CMS Connectors",
+					"aacsearch": "PrestaShop, Bitrix — native sync",
+					"elasticsearch": "None — custom integration needed"
+				},
+				"scopedTokens": {
+					"title": "Scoped API tokens",
+					"aacsearch": "Built-in HMAC tokens",
+					"elasticsearch": "Requires API key setup with role-based access control"
+				},
+				"geosearch": {
+					"title": "Geo-search",
+					"aacsearch": "Yes",
+					"elasticsearch": "Yes (geo_shape, geo_point)"
+				},
+				"typoTolerance": {
+					"title": "Typo tolerance",
+					"aacsearch": "Configurable per-index",
+					"elasticsearch": "Requires custom analyzer configuration (fuzzy queries)"
+				},
+				"relevanceTuning": {
+					"title": "Relevance tuning",
+					"aacsearch": "Rank formula, synonyms, custom ranking",
+					"elasticsearch": "BM25 scoring, function_score, custom similarity"
+				},
+				"selfHost": {
+					"title": "Self-host option",
+					"aacsearch": "Full Typesense export, migrate anytime",
+					"elasticsearch": "Fully self-hostable — Elastic's main strength"
+				},
+				"searchEngine": {
+					"title": "Search engine",
+					"aacsearch": "Typesense (open-source, C++)",
+					"elasticsearch": "Apache Lucene (open-source, Java)"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99.9% uptime",
+					"elasticsearch": "99.9% (Elastic Cloud, higher tiers available)"
+				},
+				"logRetention": {
+					"title": "Log retention",
+					"aacsearch": "30 days (all plans)",
+					"elasticsearch": "Configurable (self-managed) / varies by Elastic Cloud plan"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Pricing Comparison Scenarios",
+			"scenario1": {
+				"heading": "Small e-commerce (10k products, 50k searches/mo)",
+				"elasticsearch": "Elasticsearch: Self-hosted (free) or Elastic Cloud ~$95/mo (2-node cluster)",
+				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
+				"saving": "Saving: Up to $95/mo vs Elastic Cloud"
+			},
+			"scenario2": {
+				"heading": "Mid-market (100k products, 500k searches/mo)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$350-600/mo (3-node, 120GB) + DevOps time for cluster management",
+				"aacsearch": "AACsearch: Scale plan $99/mo — zero ops, automatic scaling",
+				"saving": "Saving: ~$250-500/mo plus no DevOps overhead"
+			},
+			"scenario3": {
+				"heading": "Enterprise (1M products, 5M searches/mo)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$1,200-2,500/mo (5-10 nodes) + dedicated SRE team",
+				"aacsearch": "AACsearch: Pro plan $499/mo",
+				"saving": "Saving: ~$700-2,000/mo plus full SRE cost elimination"
+			}
+		},
+		"whyMigrate": {
+			"title": "Why Teams Migrate from Elasticsearch to AACsearch",
+			"items": [
+				"Zero-ops — No cluster provisioning, JVM tuning, or shard management. AACsearch is fully managed.",
+				"Automatic scaling — AACsearch handles traffic spikes without capacity planning or cluster resizing.",
+				"Predictable pricing — Flat per-index cost vs unpredictable node-hour + storage bills from Elastic Cloud.",
+				"Built-in analytics — Search analytics out of the box. No Kibana setup, no dashboard maintenance."
+			]
+		},
+		"testimonial": {
+			"quote": "We spent more time managing our Elasticsearch cluster than actually building search features. Migrated to AACsearch in a weekend — zero ops, lower latency, and the dashboard showed us search gaps we had no visibility into before.",
+			"author": "CTO, B2B SaaS company (migrated from Elasticsearch Cloud)"
+		},
+		"decisionMatrix": {
+			"title": "When to Choose Each Platform",
+			"whenAACsearch": {
+				"heading": "Choose AACsearch if you:",
+				"items": [
+					"Want zero-ops search — no cluster provisioning or JVM tuning",
+					"Need automatic scaling without capacity planning",
+					"Want search analytics, widget, and connectors included",
+					"Are paying Elastic Cloud bills and want predictable pricing",
+					"Build product search, help center, or SaaS application search"
+				]
+			},
+			"whenElasticsearch": {
+				"heading": "Choose Elasticsearch if you:",
+				"items": [
+					"Need log analytics / observability pipelines (ELK stack)",
+					"Require complex aggregations and data analytics queries",
+					"Need on-prem control with full self-hosting flexibility",
+					"Have an existing Elasticsearch infrastructure with committed investment",
+					"Require advanced ES features (machine learning, graph exploration)"
+				]
+			}
+		},
+		"cta": {
+			"heading": "Ready to switch from Elasticsearch?",
+			"description": "Start a free trial — no credit card required. Zero-ops search in minutes, not weeks.",
+			"button": "Start Free Trial →"
 		}
 	},
 	"compareMeilisearchPage": {

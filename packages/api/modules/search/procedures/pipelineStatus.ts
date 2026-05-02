@@ -1,9 +1,8 @@
-import { db } from "@repo/database";
+import { db, listActiveReindexJobsForOrg } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationMember } from "../lib/access";
-import { listActiveReindexJobs } from "../lib/sync-jobs";
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
 
@@ -45,42 +44,24 @@ export const pipelineStatus = protectedProcedure
 		const now = new Date();
 		const fiveMinAgo = new Date(now.getTime() - FIVE_MIN_MS);
 
-		// Buffer depth: unprocessed rows with no retry scheduled
-		const bufferDepth = await db.searchIngestBuffer.count({
-			where: {
-				organizationId,
-				processedAt: null,
-				nextRetryAt: null,
-			},
-		});
+		const [bufferDepth, retryQueueSize, workerThroughput, failedCount, reindexJobs] =
+			await Promise.all([
+				db.searchIngestBuffer.count({
+					where: { organizationId, processedAt: null, nextRetryAt: null },
+				}),
+				db.searchIngestBuffer.count({
+					where: { organizationId, processedAt: null, nextRetryAt: { not: null } },
+				}),
+				db.searchIngestBuffer.count({
+					where: { organizationId, processedAt: { gte: fiveMinAgo } },
+				}),
+				db.searchIngestBuffer.count({
+					where: { organizationId, processedAt: null, attempts: { gt: 0 } },
+				}),
+				listActiveReindexJobsForOrg(organizationId),
+			]);
 
-		// Retry queue: rows with nextRetryAt set and not yet processed
-		const retryQueueSize = await db.searchIngestBuffer.count({
-			where: {
-				organizationId,
-				processedAt: null,
-				nextRetryAt: { not: null },
-			},
-		});
-
-		// Worker throughput: rows processed in last 5 minutes
-		const workerThroughput = await db.searchIngestBuffer.count({
-			where: {
-				organizationId,
-				processedAt: { gte: fiveMinAgo },
-			},
-		});
-
-		// Failed counts: rows with attempts > 0 and not yet processed
-		const failedCount = await db.searchIngestBuffer.count({
-			where: {
-				organizationId,
-				processedAt: null,
-				attempts: { gt: 0 },
-			},
-		});
-
-		const activeReindexJobs = listActiveReindexJobs(organizationId).map((j) => ({
+		const activeReindexJobs = reindexJobs.map((j) => ({
 			jobId: j.id,
 			slug: j.slug,
 			processed: j.processed,

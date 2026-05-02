@@ -474,3 +474,198 @@ export async function getConnectorSyncJob(
 	if (!row) return null;
 	return toSyncJobView(row);
 }
+
+// ─── Reindex Jobs (stored in SearchConnectorSyncJob, type="reindex") ─────────
+
+export interface ReindexJobView {
+	id: string;
+	indexId: string;
+	organizationId: string;
+	slug: string;
+	status: "pending" | "running" | "completed" | "failed";
+	processed: number;
+	total: number;
+	startedAt: string;
+	finishedAt: string | null;
+}
+
+interface ReindexParamsEvent {
+	_type: "reindex_params";
+	fields: unknown[];
+	defaultSortingField?: string;
+}
+
+export interface ReindexJobParams {
+	fields: unknown[];
+	defaultSortingField?: string;
+}
+
+function toReindexJobView(row: {
+	id: string;
+	indexId: string;
+	organizationId: string;
+	status: string;
+	startedAt: Date;
+	finishedAt: Date | null;
+	itemsCount: number;
+	failuresCount: number;
+	events: Prisma.JsonValue;
+	index: { slug: string };
+}): ReindexJobView {
+	const events = row.events as unknown as unknown[];
+	const paramsEvent = events[0] as ReindexParamsEvent | undefined;
+	const total =
+		paramsEvent?._type === "reindex_params"
+			? row.itemsCount + row.failuresCount
+			: row.itemsCount + row.failuresCount;
+	return {
+		id: row.id,
+		indexId: row.indexId,
+		organizationId: row.organizationId,
+		slug: row.index.slug,
+		status: row.status as ReindexJobView["status"],
+		processed: row.itemsCount,
+		total,
+		startedAt: row.startedAt.toISOString(),
+		finishedAt: row.finishedAt?.toISOString() ?? null,
+	};
+}
+
+export async function createPendingReindexJob(input: {
+	indexId: string;
+	organizationId: string;
+	fields: unknown[];
+	defaultSortingField?: string;
+}): Promise<ReindexJobView> {
+	const paramsEvent: ReindexParamsEvent = {
+		_type: "reindex_params",
+		fields: input.fields,
+		defaultSortingField: input.defaultSortingField,
+	};
+	const row = await db.searchConnectorSyncJob.create({
+		data: {
+			indexId: input.indexId,
+			organizationId: input.organizationId,
+			type: "reindex",
+			status: "pending",
+			events: [paramsEvent] as unknown as Prisma.InputJsonValue,
+		},
+		include: { index: { select: { slug: true } } },
+	});
+	return toReindexJobView(row);
+}
+
+export async function claimPendingReindexJob(jobId: string): Promise<ReindexJobView | null> {
+	const result = await db.searchConnectorSyncJob.updateMany({
+		where: { id: jobId, status: "pending" },
+		data: { status: "running" },
+	});
+	if (result.count === 0) return null;
+	const row = await db.searchConnectorSyncJob.findUnique({
+		where: { id: jobId },
+		include: { index: { select: { slug: true } } },
+	});
+	if (!row) return null;
+	return toReindexJobView(row);
+}
+
+export async function getReindexJobParams(jobId: string): Promise<ReindexJobParams | null> {
+	const row = await db.searchConnectorSyncJob.findUnique({
+		where: { id: jobId },
+		select: { events: true },
+	});
+	if (!row) return null;
+	const events = row.events as unknown as unknown[];
+	const first = events[0] as ReindexParamsEvent | undefined;
+	if (!first || first._type !== "reindex_params") return null;
+	return { fields: first.fields, defaultSortingField: first.defaultSortingField };
+}
+
+export async function updateReindexJobProgress(
+	jobId: string,
+	processed: number,
+	_total: number,
+): Promise<void> {
+	await db.searchConnectorSyncJob.update({
+		where: { id: jobId },
+		data: { itemsCount: processed },
+	});
+}
+
+export async function completeReindexJob(
+	jobId: string,
+	result: { processed: number; failed: number },
+): Promise<void> {
+	const existing = await db.searchConnectorSyncJob.findUnique({
+		where: { id: jobId },
+		select: { startedAt: true },
+	});
+	const finishedAt = new Date();
+	const durationMs = existing ? finishedAt.getTime() - existing.startedAt.getTime() : null;
+	await db.searchConnectorSyncJob.update({
+		where: { id: jobId },
+		data: {
+			status: "completed",
+			finishedAt,
+			durationMs,
+			itemsCount: result.processed,
+			failuresCount: result.failed,
+		},
+	});
+}
+
+export async function failReindexJob(jobId: string, error: string): Promise<void> {
+	const existing = await db.searchConnectorSyncJob.findUnique({
+		where: { id: jobId },
+		select: { startedAt: true },
+	});
+	const finishedAt = new Date();
+	const durationMs = existing ? finishedAt.getTime() - existing.startedAt.getTime() : null;
+	await db.searchConnectorSyncJob.update({
+		where: { id: jobId },
+		data: {
+			status: "failed",
+			finishedAt,
+			durationMs,
+			lastError: error.slice(0, 1000),
+		},
+	});
+}
+
+export async function listPendingReindexJobs(): Promise<
+	Array<ReindexJobView & { params: ReindexJobParams | null }>
+> {
+	const rows = await db.searchConnectorSyncJob.findMany({
+		where: { type: "reindex", status: "pending" },
+		orderBy: { startedAt: "asc" },
+		take: 5,
+		include: { index: { select: { slug: true, version: true } } },
+	});
+	return rows.map((row) => {
+		const events = row.events as unknown as unknown[];
+		const first = events[0] as ReindexParamsEvent | undefined;
+		const params =
+			first?._type === "reindex_params"
+				? { fields: first.fields, defaultSortingField: first.defaultSortingField }
+				: null;
+		return { ...toReindexJobView(row), params };
+	});
+}
+
+export async function listActiveReindexJobsForOrg(
+	organizationId: string,
+): Promise<ReindexJobView[]> {
+	const rows = await db.searchConnectorSyncJob.findMany({
+		where: { organizationId, type: "reindex", status: { in: ["pending", "running"] } },
+		orderBy: { startedAt: "desc" },
+		include: { index: { select: { slug: true } } },
+	});
+	return rows.map(toReindexJobView);
+}
+
+export async function hasActiveReindexJob(indexId: string): Promise<boolean> {
+	const count = await db.searchConnectorSyncJob.count({
+		where: { indexId, type: "reindex", status: { in: ["pending", "running"] } },
+	});
+	return count > 0;
+}

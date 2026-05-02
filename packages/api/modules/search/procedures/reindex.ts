@@ -1,17 +1,10 @@
 import { ORPCError } from "@orpc/client";
-import { updateSearchIndexVersion } from "@repo/database";
+import { createPendingReindexJob, hasActiveReindexJob } from "@repo/database";
 import { logger } from "@repo/logs";
-import { reindexCollection } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
-import {
-	completeReindexJob,
-	createReindexJob,
-	failReindexJob,
-	updateReindexProgress,
-} from "../lib/sync-jobs";
 import { searchFieldSchema, searchIndexSlugSchema } from "../types";
 
 export const reindex = protectedProcedure
@@ -21,7 +14,7 @@ export const reindex = protectedProcedure
 		tags: ["Search"],
 		summary: "Reindex collection (zero-downtime alias swap)",
 		description:
-			"Launches an async background reindex job. Returns immediately with { jobId }. Poll pipelineStatus.activeReindexJobs for progress.",
+			"Enqueues an async background reindex job. Returns immediately with { jobId }. Poll pipelineStatus.activeReindexJobs for progress.",
 	})
 	.input(
 		z.object({
@@ -52,43 +45,24 @@ export const reindex = protectedProcedure
 			});
 		}
 
-		const job = createReindexJob({
+		if (await hasActiveReindexJob(index.id)) {
+			throw new ORPCError("CONFLICT", {
+				message: "A reindex job is already running or pending for this index",
+			});
+		}
+
+		const job = await createPendingReindexJob({
 			indexId: index.id,
 			organizationId: input.organizationId,
-			slug: input.slug,
+			fields: fields as unknown[],
+			defaultSortingField: input.defaultSortingField,
 		});
 
-		setImmediate(async () => {
-			try {
-				const result = await reindexCollection({
-					organizationId: input.organizationId,
-					slug: input.slug,
-					currentVersion: index.version,
-					fields: fields as never,
-					defaultSortingField: input.defaultSortingField,
-					onProgress: (processed, total) =>
-						updateReindexProgress(job.id, processed, total),
-				});
-
-				await updateSearchIndexVersion(index.id, result.newVersion);
-				completeReindexJob(job.id, result.copiedDocuments, result.failedDocuments);
-
-				logger.info("Async reindex completed", {
-					jobId: job.id,
-					organizationId: input.organizationId,
-					slug: input.slug,
-					newVersion: result.newVersion,
-					copied: result.copiedDocuments,
-					failed: result.failedDocuments,
-				});
-			} catch (error) {
-				failReindexJob(job.id);
-				logger.error("Async reindex failed", {
-					jobId: job.id,
-					error,
-					slug: input.slug,
-				});
-			}
+		logger.info("Reindex job enqueued", {
+			jobId: job.id,
+			organizationId: input.organizationId,
+			slug: input.slug,
+			fieldCount: fields.length,
 		});
 
 		return { jobId: job.id };

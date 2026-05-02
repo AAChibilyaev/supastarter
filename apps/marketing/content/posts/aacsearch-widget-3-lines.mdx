@@ -1,0 +1,258 @@
+---
+title: AACSearch Widget: Add Search to Any Website with 3 Lines
+date: 2025-05-01
+image: https://picsum.photos/id/60/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Add instant, typo-tolerant search to any website — static, dynamic, or CMS — with just 3 lines of code. No React, no build step, no NPM install required.
+tags: [tutorial, widget, javascript, cms]
+published: true
+---
+
+Search is the most impactful feature you can add to a website — and with the AACsearch widget, it's also the easiest. Three lines of HTML turn any site into a searchable experience with autocomplete, keyboard navigation, and faceted filtering.
+
+## The 3-Line Setup
+
+Add these three lines to any HTML page:
+
+```html
+<script src="https://cdn.aacsearch.com/widget.js"></script>
+<link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css">
+<div id="search-root"></div>
+```
+
+Then in a script tag or your main JavaScript file:
+
+```javascript
+new AACsearchWidget({
+  apiKey: 'ss_search_your_api_key',
+  index: 'products',
+  mountElement: '#search-root'
+});
+```
+
+That's it. Your site now has a full-featured search bar that returns results as the user types.
+
+## How It Works
+
+The widget connects directly to the AACsearch API from the browser. When a user types, the widget:
+
+1. Sends the query to AACsearch with your API key and index
+2. Receives matching results (typically in under 50ms)
+3. Renders an overlay with product cards, snippets, or custom templates
+4. Handles keyboard navigation (arrow keys, Enter, Escape)
+5. Tracks click events for analytics
+
+No backend server, no build step, no database sync. The widget handles every interaction.
+
+## What You Get Out of the Box
+
+The widget ships with these features active:
+
+| Feature           | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| Autocomplete      | Results appear as you type, debounced at 300ms               |
+| Keyboard nav      | Arrow keys to navigate, Enter to select, Escape to close     |
+| Typo tolerance    | Misspelled queries still return relevant results              |
+| Result snippets   | Shows title, excerpt, thumbnail, and price (configurable)     |
+| Dark mode         | Auto-detects system preference, CSS variables to customize    |
+| Mobile responsive | Full-width on mobile, bottom drawer for facets on small screens |
+| Analytics         | Tracks search queries, clicks, and zero-result searches       |
+| Faceted filters   | Display facet panels when fields are configured               |
+
+## Customizing the Look
+
+Override any visual aspect with CSS variables:
+
+```css
+:root {
+  --aacsearch-primary: #2563eb;
+  --aacsearch-bg: #ffffff;
+  --aacsearch-text: #1f2937;
+  --aacsearch-border: #e5e7eb;
+  --aacsearch-radius: 8px;
+  --aacsearch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --aacsearch-bg: #1f2937;
+    --aacsearch-text: #f9fafb;
+    --aacsearch-border: #374151;
+  }
+}
+```
+
+## Integration Examples
+
+### Static HTML Site
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.aacsearch.com/widget.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css">
+</head>
+<body>
+  <header>
+    <div id="search-root"></div>
+  </header>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      new AACsearchWidget({
+        apiKey: 'ss_search_demo_key',
+        index: 'docs',
+        placeholder: 'Search documentation...',
+        mountElement: '#search-root'
+      });
+    });
+  </script>
+</body>
+</html>
+```
+
+### WordPress (functions.php)
+
+```php
+function add_aacsearch_widget() {
+    wp_enqueue_script('aacsearch-widget', 'https://cdn.aacsearch.com/widget.js', [], null, true);
+    wp_enqueue_style('aacsearch-widget', 'https://cdn.aacsearch.com/widget.css');
+}
+add_action('wp_enqueue_scripts', 'add_aacsearch_widget');
+
+function render_aacsearch_widget() {
+    echo '<div id="search-root"></div>';
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new AACsearchWidget({
+                apiKey: "' . esc_js(get_option('aacsearch_api_key')) . '",
+                index: "wordpress_posts",
+                mountElement: "#search-root"
+            });
+        });
+    </script>';
+}
+add_action('wp_footer', 'render_aacsearch_widget');
+```
+
+### React / Next.js
+
+```tsx
+'use client';
+
+import { useEffect, useRef } from 'react';
+
+export function AACSearchWidget() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const widget = new AACsearchWidget({
+      apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+      index: 'blog',
+    });
+
+    widget.mount(ref.current);
+    return () => widget.destroy();
+  }, []);
+
+  return <div ref={ref} />;
+}
+```
+
+### Vue.js
+
+```vue
+<template>
+  <div ref="searchRoot"></div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+
+const searchRoot = ref(null);
+let widget = null;
+
+onMounted(() => {
+  widget = new AACsearchWidget({
+    apiKey: 'ss_search_demo_key',
+    index: 'products',
+    mountElement: searchRoot.value
+  });
+});
+
+onUnmounted(() => widget?.destroy());
+</script>
+```
+
+## Advanced Configuration
+
+The widget accepts these options for fine-grained control:
+
+```javascript
+const search = new AACsearchWidget({
+  // Required
+  apiKey: 'ss_search_...',
+  index: 'products',
+
+  // Display
+  placeholder: 'Search products...',
+  theme: 'light',        // 'light' | 'dark' | 'auto'
+  resultsPerPage: 12,
+  maxSuggestions: 5,
+
+  // Search behavior
+  searchableFields: ['name', 'brand', 'description', 'sku'],
+  facetFields: ['brand', 'category', 'price'],
+  sortOptions: [
+    { label: 'Relevance', value: '_text_match:desc' },
+    { label: 'Price: Low to High', value: 'price:asc' },
+  ],
+
+  // Custom rendering
+  resultTemplate: (item) => `
+    <div class="aacsearch-result">
+      <img src="${item.image}" alt="${item.name}" />
+      <div class="aacsearch-result-info">
+        <h3>${item.name}</h3>
+        <p class="price">$${item.price}</p>
+        <span class="brand">${item.brand}</span>
+      </div>
+    </div>
+  `,
+
+  // Analytics
+  trackClicks: true,
+  onSearch: (query, results) => console.log('Searched:', query, 'Results:', results.length),
+  onClick: (result) => console.log('Clicked:', result.name),
+});
+```
+
+## Performance
+
+- **First render:** < 200ms (widget JS is ~35KB gzipped)
+- **Query response:** < 50ms (P95 from US West)
+- **Result rendering:** < 20ms (virtual scrolling for large result sets)
+- **Bundle size:** 35KB JS + 8KB CSS (gzipped)
+
+## Limitations
+
+The widget is designed for search — not for building a complete storefront. Use it for:
+
+- Documentation site search (best fit)
+- E-commerce product search
+- Blog / content search
+- SaaS app command palette
+
+For complex UIs (custom product pages, checkout flows), use the AACsearch REST API directly.
+
+## What's Next
+
+- [Build a product search with faceted filters](/blog/building-faceted-product-search)
+- [Try the WooCommerce integration](/integrations/woocommerce)
+- [View the full API reference](/docs/widget-api)
+
+[Add search to your site in 5 minutes →](/signup)

@@ -1,0 +1,206 @@
+---
+title: Building a Product Search with Faceted Filters
+date: 2025-05-01
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Learn how to build a product search with faceted filtering using AACsearch — price ranges, brand filters, color swatches, and category navigation in under 30 minutes.
+tags: [tutorial, faceted-search, ecommerce, filters]
+published: true
+---
+
+Faceted filtering is the difference between "I can't find what I'm looking for" and "exactly what I need." Customers who use filters convert at 2-3x the rate of those who don't. In this tutorial, you'll build a production-ready faceted product search with AACsearch.
+
+## What Are Faceted Filters?
+
+Faceted filters let users narrow search results by product attributes: price range, brand, size, color, category, rating — any dimension that matters to your customers. Unlike simple category browsing, facets combine. A user can filter by "Nike" + "running shoes" + "under $150" + "size 10" and see only matching products.
+
+AACsearch handles facets natively. No custom indexing, no external search service. Declare which fields are faceted, and the search engine returns available filter options with every query.
+
+## Step 1: Set Up Your Index with Faceted Fields
+
+Log into your AACsearch dashboard and create a new index. When defining your schema, mark these fields as `facet: true`:
+
+```json
+{
+  "name": "string",
+  "brand": { "type": "string", "facet": true },
+  "category": { "type": "string", "facet": true },
+  "price": { "type": "float", "facet": true },
+  "color": { "type": "string", "facet": true },
+  "size": { "type": "string", "facet": true },
+  "rating": { "type": "float", "facet": true },
+  "in_stock": { "type": "bool", "facet": true },
+  "tags": { "type": "string[]", "facet": true }
+}
+```
+
+Typesense indexes facet values in a bitmap — query-time filtering is sub-millisecond regardless of collection size. Price facets are returned as histogram bucketing with range counts.
+
+## Step 2: Import Products
+
+Upload your product catalog via CSV, JSON, or API. Each product document should include the facet values:
+
+```json
+[
+  {
+    "id": "101",
+    "name": "Ultra Running Shoes",
+    "brand": "Nike",
+    "category": "Footwear",
+    "price": 129.99,
+    "color": "Black",
+    "size": "10",
+    "rating": 4.5,
+    "in_stock": true,
+    "tags": ["running", "outdoor", "men"]
+  },
+  {
+    "id": "102",
+    "name": "Trail Hiker Boots",
+    "brand": "Merrell",
+    "category": "Footwear",
+    "price": 159.99,
+    "color": "Brown",
+    "size": "11",
+    "rating": 4.7,
+    "in_stock": true,
+    "tags": ["hiking", "outdoor", "unisex"]
+  }
+]
+```
+
+Pro tip: Keep documents flat. Typesense performs best with denormalized data. If you have variant products (size, color), create one document per variant with a `parent_id` field to group them.
+
+## Step 3: Connect the Widget with Facets
+
+The AACsearch widget renders facets automatically. Initialize it with facet configuration:
+
+```javascript
+const search = new AACsearchWidget({
+  apiKey: 'ss_search_your_api_key',
+  index: 'products',
+  facets: [
+    { field: 'brand', type: 'string', label: 'Brand' },
+    { field: 'category', type: 'string', label: 'Category' },
+    { field: 'price', type: 'range', label: 'Price Range' },
+    { field: 'color', type: 'string', label: 'Color' },
+    { field: 'rating', type: 'range', label: 'Rating' },
+    { field: 'in_stock', type: 'boolean', label: 'In Stock' }
+  ],
+  searchableFields: ['name', 'brand', 'category', 'tags'],
+  resultsPerPage: 24,
+  sortOptions: [
+    { label: 'Relevance', value: '_text_match:desc' },
+    { label: 'Price: Low to High', value: 'price:asc' },
+    { label: 'Price: High to Low', value: 'price:desc' },
+    { label: 'Rating', value: 'rating:desc' },
+    { label: 'Newest', value: 'id:desc' }
+  ]
+});
+
+search.mount('#search-container');
+```
+
+The widget handles:
+- Multi-select facets (user picks Nike AND Adidas)
+- Price range sliders (draggable histogram)
+- Color swatch rendering (color-type facets show circles)
+- Active filter tags with remove buttons
+- Mobile-responsive facet drawer
+
+## Step 4: Configure Display Rules
+
+Facets should feel natural, not overwhelming. Configure these in the AACsearch dashboard:
+
+**Collapsed by default:** Categories with more than 10 values (show "Show more" link)
+**Expanded by default:** Price range, rating, in-stock
+**Search within facets:** For brands with 50+ values, users can search the facet list
+**Facet ordering:** Boost "Category" and "Brand" to the top, relegate "Tags" to bottom
+
+Set facet display limits:
+
+| Facet        | Max values | Expand behavior      |
+| ------------ | ---------- | -------------------- |
+| Brand        | 8          | Show +N more         |
+| Category     | 10         | Show +N more         |
+| Color        | All        | Grid with swatches   |
+| Price        | Range      | Histogram slider     |
+| Rating       | 5          | Star rating selector |
+
+## Step 5: Add Relevance Boosts for Filtered Searches
+
+When a user filters by brand, boost that brand's products higher in results. AACsearch supports dynamic ranking rules:
+
+**Category boost:** If user selects "Footwear" → boost all footwear by 1.5x
+**New arrival boost:** Products added in last 30 days get 1.2x boost
+**In-stock priority:** Out-of-stock products always appear after in-stock (at same relevance level)
+
+Configure these in the dashboard under Relevance Tuning → Ranking Rules.
+
+## Example: Full E-Commerce Page
+
+Here's a complete implementation using the AACsearch widget with a Next.js app:
+
+```tsx
+// app/products/page.tsx
+import dynamic from 'next/dynamic';
+
+const SearchPage = dynamic(() => import('./search-client'), { ssr: false });
+
+export default function ProductsPage() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">All Products</h1>
+      <SearchPage />
+    </div>
+  );
+}
+```
+
+```tsx
+// app/products/search-client.tsx
+'use client';
+
+import { useEffect, useRef } from 'react';
+
+export default function SearchClient() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || typeof window === 'undefined') return;
+
+    const widget = new AACsearchWidget({
+      apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+      index: 'products',
+      facets: [
+        { field: 'category', type: 'string', label: 'Category' },
+        { field: 'brand', type: 'string', label: 'Brand' },
+        { field: 'price', type: 'range', label: 'Price Range' },
+      ],
+      searchableFields: ['name', 'brand', 'description'],
+    });
+
+    widget.mount(containerRef.current);
+
+    return () => widget.destroy();
+  }, []);
+
+  return <div ref={containerRef} className="min-h-[600px]" />;
+}
+```
+
+## Performance at Scale
+
+- **50,000 products, 50 facets:** < 50ms response time (P95)
+- **500,000 products, 100 facets:** < 120ms response time
+- **Multi-select facets:** No performance penalty — bitmap intersection is O(1)
+- **Concurrent filtered searches:** 500+ QPS on Scale plan
+
+## Next Steps
+
+- Try the [live e-commerce demo](/use-cases/ecommerce-search)
+- Read the [widget customization guide](/docs/widget)
+- Check our [PrestaShop connector](/integrations/prestashop) for instant store integration
+
+Ready to build? [Start for free →](/signup)

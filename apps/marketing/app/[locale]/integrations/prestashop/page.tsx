@@ -2,6 +2,8 @@ import { CtaFooter } from "@home/components/CtaFooter";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { IntegrationFaq } from "../../../../modules/integrations/components/IntegrationFaq";
+import { IntegrationSetupSteps } from "../../../../modules/integrations/components/IntegrationSetupSteps";
 import { PrestashopGrid } from "../../../../modules/integrations/components/PrestashopGrid";
 
 export async function generateMetadata(props: {
@@ -34,6 +36,12 @@ export default async function IntegrationsPrestashopPage(props: {
 				</div>
 			</section>
 			<PrestashopGrid />
+			<IntegrationSetupSteps
+				namespace="integrationsPrestashopSetup"
+				stepCount={5}
+				ctaHref="#"
+			/>
+			<IntegrationFaq namespace="integrationsPrestashopFaq" />
 			<CtaFooter />
 		</>
 	);

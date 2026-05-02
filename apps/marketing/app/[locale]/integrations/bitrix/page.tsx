@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { BitrixGrid } from "../../../../modules/integrations/components/BitrixGrid";
+import { IntegrationFaq } from "../../../../modules/integrations/components/IntegrationFaq";
+import { IntegrationSetupSteps } from "../../../../modules/integrations/components/IntegrationSetupSteps";
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -34,6 +36,8 @@ export default async function IntegrationsBitrixPage(props: {
 				</div>
 			</section>
 			<BitrixGrid />
+			<IntegrationSetupSteps namespace="integrationsBitrixSetup" stepCount={5} ctaHref="#" />
+			<IntegrationFaq namespace="integrationsBitrixFaq" />
 			<CtaFooter />
 		</>
 	);

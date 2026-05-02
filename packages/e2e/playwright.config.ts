@@ -83,6 +83,12 @@ export default defineConfig({
 			testMatch: "tests/analytics/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "indexing",
+			dependencies: ["setup"],
+			testMatch: "tests/indexing/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

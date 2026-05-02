@@ -138,6 +138,15 @@
 			"primary": "Create an account",
 			"secondary": "Read the docs"
 		},
+		"testimonials": {
+			"title": "Real results from real teams",
+			"subtitle": "Hear from customers who transformed their search infrastructure with AACsearch.",
+			"prev": "Previous",
+			"next": "Next",
+			"prevLabel": "Previous testimonial",
+			"nextLabel": "Next testimonial",
+			"dotLabel": "Go to testimonial {number}"
+		},
 		"logos": {
 			"title": "Trusted by innovative teams"
 		}
@@ -412,18 +421,18 @@
 				"title": "Roadmap",
 				"description": "Public roadmap, voted by users. We ship incrementally — no big-bang releases. Changelog updated with every deployment."
 			}
-			}
-		},
-		"caseStudiesPage": {
-			"title": "Customer Case Studies",
-			"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
-			"readCaseStudy": "Read case study",
-			"cta": {
-				"title": "Want to be our next case study?",
-				"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
-			}
-		},
-		"customersPage": {
+		}
+	},
+	"caseStudiesPage": {
+		"title": "Customer Case Studies",
+		"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+		"readCaseStudy": "Read case study",
+		"cta": {
+			"title": "Want to be our next case study?",
+			"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
+		}
+	},
+	"customersPage": {
 		"title": "Loved by Developers, Trusted by Businesses",
 		"description": "Join hundreds of companies using AACsearch to power fast, relevant search experiences.",
 		"stats": {

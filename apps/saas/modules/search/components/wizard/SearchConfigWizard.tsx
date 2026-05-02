@@ -3,13 +3,8 @@
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
+import { CheckIcon, FileUpIcon, Settings2Icon, Table2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-	CheckIcon,
-	FileUpIcon,
-	Settings2Icon,
-	Table2Icon,
-} from "lucide-react";
 import { useState } from "react";
 
 interface StepInfo {
@@ -105,7 +100,7 @@ export function SearchConfigWizard({
 					<div key={step.id} className="gap-2 flex flex-1 items-center">
 						<div
 							className={cn(
-								"gap-2 flex items-center rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
+								"gap-2 px-3 py-1.5 text-sm font-medium flex items-center rounded-full transition-colors",
 								currentStep === step.id
 									? "bg-primary text-primary-foreground"
 									: currentStep > step.id
@@ -118,7 +113,7 @@ export function SearchConfigWizard({
 							) : (
 								<step.icon className="size-4" />
 							)}
-							<span className="hidden sm:inline">{t(`step${step.id}Title`)}</span>
+							<span className="sm:inline hidden">{t(`step${step.id}Title`)}</span>
 						</div>
 						{idx < STEPS.length - 1 && (
 							<div
@@ -241,7 +236,7 @@ function StepDataSource({ value, onChange, t }: StepDataSourceProps) {
 								</p>
 							</div>
 							{value === opt.id && (
-								<CheckIcon className="size-5 text-primary shrink-0" />
+								<CheckIcon className="size-5 shrink-0 text-primary" />
 							)}
 						</CardContent>
 					</Card>
@@ -255,7 +250,15 @@ function StepDataSource({ value, onChange, t }: StepDataSourceProps) {
 
 interface StepSchemaProps {
 	fields: Array<{ name: string; type: string; facet: boolean; sort: boolean; index: boolean }>;
-	onChange: (fields: Array<{ name: string; type: string; facet: boolean; sort: boolean; index: boolean }>) => void;
+	onChange: (
+		fields: Array<{
+			name: string;
+			type: string;
+			facet: boolean;
+			sort: boolean;
+			index: boolean;
+		}>,
+	) => void;
 	t: (key: string) => string;
 }
 
@@ -296,7 +299,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 
 			{fields.length === 0 ? (
 				<div className="py-12 text-center">
-					<Table2Icon className="mx-auto mb-3 size-10 text-muted-foreground/40" />
+					<Table2Icon className="mb-3 size-10 mx-auto text-muted-foreground/40" />
 					<p className="text-sm text-muted-foreground">{t("schemaEmpty")}</p>
 					<p className="text-xs text-muted-foreground/60">{t("schemaEmptyHint")}</p>
 				</div>
@@ -305,19 +308,19 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b bg-muted/50">
-								<th className="px-4 py-2 text-left font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
 									{t("fieldName")}
 								</th>
-								<th className="px-4 py-2 text-left font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
 									{t("fieldType")}
 								</th>
-								<th className="px-4 py-2 text-center font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
 									{t("fieldSearch")}
 								</th>
-								<th className="px-4 py-2 text-center font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
 									{t("fieldFacet")}
 								</th>
-								<th className="px-4 py-2 text-center font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
 									{t("fieldSort")}
 								</th>
 							</tr>
@@ -327,7 +330,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 								<tr key={field.name} className="border-b last:border-0">
 									<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
 									<td className="px-4 py-2">
-										<span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+										<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
 											{field.type}
 										</span>
 									</td>
@@ -435,13 +438,13 @@ function StepSearchConfig({
 					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b bg-muted/50">
-								<th className="px-4 py-2 text-left font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
 									{t("fieldName")}
 								</th>
-								<th className="px-4 py-2 text-center font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
 									{t("searchable")}
 								</th>
-								<th className="px-4 py-2 text-left font-medium text-muted-foreground">
+								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
 									{t("weight")}
 								</th>
 							</tr>
@@ -472,9 +475,11 @@ function StepSearchConfig({
 											min={1}
 											max={100}
 											value={fieldWeights[field.name] ?? 1}
-											onChange={(e) => setWeight(field.name, Number(e.target.value))}
+											onChange={(e) =>
+												setWeight(field.name, Number(e.target.value))
+											}
 											disabled={!searchableFields.includes(field.name)}
-											className="h-7 w-16 rounded border border-input bg-background px-2 text-xs disabled:opacity-40"
+											className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
 										/>
 									</td>
 								</tr>
@@ -492,13 +497,15 @@ function StepSearchConfig({
 			{/* Ranking options */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
-				<div className="gap-3 grid sm:grid-cols-2">
+				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
+						<label className="text-xs text-muted-foreground">
+							{t("typoTolerance")}
+						</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}
-							className="h-7 w-full rounded border border-input bg-background px-2 text-xs"
+							className="h-7 rounded px-2 text-xs w-full border border-input bg-background"
 						>
 							<option value={0}>{t("typoOff")}</option>
 							<option value={1}>{t("typo1")}</option>
@@ -511,9 +518,11 @@ function StepSearchConfig({
 						<select
 							value={infixSearch}
 							onChange={(e) =>
-								onChange({ infixSearch: e.target.value as "off" | "fallback" | "always" })
+								onChange({
+									infixSearch: e.target.value as "off" | "fallback" | "always",
+								})
 							}
-							className="h-7 w-full rounded border border-input bg-background px-2 text-xs"
+							className="h-7 rounded px-2 text-xs w-full border border-input bg-background"
 						>
 							<option value="off">{t("infixOff")}</option>
 							<option value="fallback">{t("infixFallback")}</option>
@@ -522,7 +531,7 @@ function StepSearchConfig({
 					</div>
 				</div>
 				<div className="gap-4 flex flex-wrap">
-					<label className="gap-2 flex items-center text-sm">
+					<label className="gap-2 text-sm flex items-center">
 						<input
 							type="checkbox"
 							checked={prefixSearch}
@@ -531,7 +540,7 @@ function StepSearchConfig({
 						/>
 						{t("prefixSearch")}
 					</label>
-					<label className="gap-2 flex items-center text-sm">
+					<label className="gap-2 text-sm flex items-center">
 						<input
 							type="checkbox"
 							checked={exactMatch}

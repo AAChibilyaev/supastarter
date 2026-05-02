@@ -1,11 +1,17 @@
+import { getAllPosts } from "@blog/lib/posts";
 import { CaseStudiesGrid } from "@case-studies/components/CaseStudiesGrid";
 import { CtaFooter } from "@home/components/CtaFooter";
-import { getAllPosts } from "@blog/lib/posts";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateStaticParams() {
-	return [{ locale: "en" }, { locale: "de" }, { locale: "es" }, { locale: "fr" }, { locale: "ru" }];
+	return [
+		{ locale: "en" },
+		{ locale: "de" },
+		{ locale: "es" },
+		{ locale: "fr" },
+		{ locale: "ru" },
+	];
 }
 
 export async function generateMetadata(props: {
@@ -23,9 +29,7 @@ export async function generateMetadata(props: {
 	};
 }
 
-export default async function CaseStudiesPage(props: {
-	params: Promise<{ locale: string }>;
-}) {
+export default async function CaseStudiesPage(props: { params: Promise<{ locale: string }> }) {
 	const { locale } = await props.params;
 	setRequestLocale(locale);
 

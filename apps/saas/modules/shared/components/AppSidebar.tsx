@@ -297,7 +297,7 @@ export function AppSidebar() {
 							subItems: [
 								{
 									label: t("search.nav.widgetConfigurator"),
-									href: `${basePath}/widget`,
+									href: `${basePath}/search-configurator`,
 								},
 								{
 									label: t("search.nav.widgetFilters"),

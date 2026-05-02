@@ -5,9 +5,11 @@
  * Output: packages/api/openapi.yaml
  */
 
-import { generateOpenApiSpec } from "../v1/openapi";
-import { dump } from "js-yaml";
 import { writeFileSync, statSync } from "node:fs";
+
+import { dump } from "js-yaml";
+
+import { generateOpenApiSpec } from "../v1/openapi";
 
 const spec = generateOpenApiSpec();
 const yaml = dump(spec, {

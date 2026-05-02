@@ -10,10 +10,10 @@ export function generateOpenApiSpec() {
 		info: {
 			title: "AACsearch API v1",
 			version: "1.0.0",
-		license: {
-			name: "MIT",
-			url: "https://opensource.org/licenses/MIT",
-		},
+			license: {
+				name: "MIT",
+				url: "https://opensource.org/licenses/MIT",
+			},
 			description:
 				"Versioned public REST API for AACsearch. Manages projects (organizations), " +
 				"search indexes, documents, API keys, and provides search/analytics endpoints.\n\n" +

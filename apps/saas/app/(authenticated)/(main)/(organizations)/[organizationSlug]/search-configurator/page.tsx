@@ -1,8 +1,8 @@
+import { SearchConfigPage } from "@search/components/pages/SearchConfigPage";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,
 } from "@search/lib/server";
-import { SearchConfigPage } from "@search/components/pages/SearchConfigPage";
 import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
 
@@ -12,7 +12,7 @@ export async function generateMetadata({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-		return {
+	return {
 		title: await getSearchOrganizationMetadataTitle(organizationSlug, "configurator.pageTitle"),
 	};
 }

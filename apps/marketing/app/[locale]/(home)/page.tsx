@@ -4,6 +4,7 @@ import { HeroWithCode } from "@home/components/HeroWithCode";
 import { HowItWorks } from "@home/components/HowItWorks";
 import { LogosWall } from "@home/components/LogosWall";
 import { PricingPlans } from "@home/components/PricingPlans";
+import { TestimonialCarousel } from "@home/components/TestimonialCarousel";
 import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -36,6 +37,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			<HowItWorks />
 			<FeaturesGrid />
 			<PricingPlans />
+			<TestimonialCarousel />
 			<LogosWall />
 			<CtaFooter />
 		</>

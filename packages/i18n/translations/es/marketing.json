@@ -138,6 +138,15 @@
 			"primary": "Crear cuenta",
 			"secondary": "Ver la documentación"
 		},
+		"testimonials": {
+			"title": "Real results from real teams",
+			"subtitle": "Hear from customers who transformed their search infrastructure with AACsearch.",
+			"prev": "Previous",
+			"next": "Next",
+			"prevLabel": "Previous testimonial",
+			"nextLabel": "Next testimonial",
+			"dotLabel": "Go to testimonial {number}"
+		},
 		"logos": {
 			"title": "Confiado por equipos innovadores"
 		}

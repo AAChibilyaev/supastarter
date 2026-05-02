@@ -27,7 +27,7 @@ export function CaseStudiesGrid({ caseStudies }: CaseStudiesGridProps) {
 								className="group p-6 rounded-4xl border bg-card transition-all duration-300 hover:border-primary/30 hover:bg-accent/5"
 							>
 								{image && (
-									<div className="mb-4 aspect-[16/10] -mx-2 -mt-2 relative overflow-hidden rounded-2xl">
+									<div className="mb-4 -mx-2 -mt-2 relative aspect-[16/10] overflow-hidden rounded-2xl">
 										<Image
 											src={image}
 											alt={title}
@@ -64,12 +64,12 @@ export function CaseStudiesGrid({ caseStudies }: CaseStudiesGridProps) {
 								</LocaleLink>
 
 								{excerpt && (
-									<p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+									<p className="mt-2 text-sm leading-relaxed line-clamp-3 text-muted-foreground">
 										{excerpt}
 									</p>
 								)}
 
-								<div className="mt-6 flex items-center justify-between border-t border-border/30 pt-4">
+								<div className="mt-6 pt-4 flex items-center justify-between border-t border-border/30">
 									{authorName && (
 										<div className="flex items-center">
 											{authorImage && (

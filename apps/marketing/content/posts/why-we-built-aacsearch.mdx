@@ -1,0 +1,62 @@
+---
+title: Why We Built AACSearch
+date: 2025-03-15
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Every great product starts with a problem worth solving. Here's the story of why we built AACSearch — and the pain points that made it inevitable.
+tags: [product, story, search]
+published: true
+---
+
+## The Problem We Couldn't Ignore
+
+Running an online store is hard enough without worrying about search. Yet for thousands of merchants using platforms like Bitrix and PrestaShop, that's exactly the situation — the built-in search is mediocre at best, and upgrading it means choosing between two painful options:
+
+**Option A:** Pay premium prices for a managed search SaaS like Algolia. It works great, but the bill scales faster than your revenue, and you're locked into a proprietary ecosystem that doesn't speak your CMS's language.
+
+**Option B:** Self-host Typesense or Elasticsearch. It's powerful and affordable, but you need a DevOps engineer just to keep it running. Index management, schema migrations, hardware provisioning, failover — it's a full-time job before you've written a single line of product logic.
+
+Most merchants pick neither. They live with slow, irrelevant search results and quietly watch conversion rates suffer.
+
+## What We Actually Tried First
+
+We didn't set out to build a search product. We were building integrations for a large Bitrix deployment when we ran into this exact wall. We evaluated every option on the market:
+
+- Algolia: too expensive at scale, no native Bitrix connector
+- Elasticsearch: too complex to operate for a small team
+- Typesense Cloud: closer, but still required manual schema management and had no CMS-aware sync
+
+We ended up building a custom Typesense integration — connector, schema management, sync queue, the works. It took three months and required ongoing maintenance. When a second client asked for the same thing in PrestaShop, we realized we'd built something valuable.
+
+## The Insight: Search-as-a-Service, CMS-First
+
+The core insight wasn't technical — it was organizational. CMS merchants don't think about "indexes" and "schemas." They think about products, categories, and attributes. A search platform that speaks their language, with native connectors that sync automatically, changes the economics entirely.
+
+So we productized what we'd built:
+
+- **Hosted Typesense** under the hood — fast, relevant, open-core
+- **Native CMS connectors** for Bitrix and PrestaShop — plug in, configure, sync
+- **Automatic schema inference** from product catalogs — no DevOps required
+- **A browser widget** you drop onto any page with a single script tag
+- **A clean dashboard** for analytics, synonyms, curations, and API key management
+
+The result: enterprise-grade search that any merchant can deploy in an afternoon.
+
+## What Makes AACSearch Different
+
+We've talked to dozens of merchants, developers, and platform agencies. Three things matter most:
+
+**1. Time to first result.** With AACSearch, a fresh Bitrix store can have full-text product search running in under 30 minutes. That's connector setup, index creation, first full sync, and widget embed. No infrastructure decisions required.
+
+**2. Predictable pricing.** We price on search units — queries plus indexed documents. A store with 10,000 products and moderate traffic fits comfortably in our free tier. You only pay when your search actually drives volume.
+
+**3. CMS-aware sync.** When a merchant updates a product price or adds a new variant, AACSearch picks it up automatically. No webhooks to configure manually, no cron jobs to babysit. The connector handles delta syncs every few minutes.
+
+## What's Next
+
+We're shipping fast. The core search platform, connector API, and widget are already in production. Coming next: an analytics dashboard that shows you which queries return no results (your biggest conversion opportunity), a knowledge base module for internal Q&A, and deeper integrations with more CMS platforms.
+
+We built AACSearch because we needed it ourselves. We're betting that thousands of merchants need it too.
+
+If you're running a Bitrix or PrestaShop store and search is holding you back — [try AACSearch free](/). No credit card required.

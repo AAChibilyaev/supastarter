@@ -1,0 +1,62 @@
+---
+title: Pourquoi nous avons créé AACSearch
+date: 2025-03-15
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Chaque grand produit commence par un problème qui mérite d'être résolu. Voici l'histoire de la création d'AACSearch — et les points de douleur qui l'ont rendue inévitable.
+tags: [product, story, search]
+published: true
+---
+
+## Le problème que nous ne pouvions pas ignorer
+
+Gérer une boutique en ligne est déjà assez difficile sans se soucier de la recherche. Pourtant, pour des milliers de marchands utilisant des plateformes comme Bitrix et PrestaShop, c'est exactement la situation — la recherche intégrée est médiocre au mieux, et l'améliorer signifie choisir entre deux options douloureuses :
+
+**Option A :** Payer des prix premium pour un SaaS de recherche géré comme Algolia. Ça fonctionne bien, mais la facture augmente plus vite que les revenus, et vous êtes enfermé dans un écosystème propriétaire qui ne parle pas la langue de votre CMS.
+
+**Option B :** Auto-héberger Typesense ou Elasticsearch. C'est puissant et abordable, mais vous avez besoin d'un ingénieur DevOps rien que pour le maintenir en fonctionnement. Gestion des index, migrations de schémas, approvisionnement matériel, basculement — c'est un travail à temps plein avant d'avoir écrit une seule ligne de logique produit.
+
+La plupart des marchands ne choisissent ni l'une ni l'autre. Ils vivent avec des résultats de recherche lents et peu pertinents et regardent silencieusement les taux de conversion souffrir.
+
+## Ce que nous avons essayé en premier
+
+Nous n'avions pas l'intention de construire un produit de recherche. Nous développions des intégrations pour un large déploiement Bitrix quand nous avons heurté exactement ce mur. Nous avons évalué chaque option disponible :
+
+- Algolia : trop cher à l'échelle, pas de connecteur Bitrix natif
+- Elasticsearch : trop complexe à exploiter pour une petite équipe
+- Typesense Cloud : plus proche, mais nécessitait encore une gestion manuelle des schémas sans conscience du CMS
+
+Nous avons finalement construit une intégration Typesense personnalisée — connecteur, gestion de schémas, file d'attente de synchronisation, tout. Cela a pris trois mois et a nécessité une maintenance continue. Quand un deuxième client a demandé la même chose pour PrestaShop, nous avons réalisé que nous avions construit quelque chose de précieux.
+
+## L'insight : Search-as-a-Service, CMS-first
+
+L'insight central n'était pas technique — il était organisationnel. Les marchands CMS ne pensent pas aux « index » et aux « schémas ». Ils pensent aux produits, catégories et attributs. Une plateforme de recherche qui parle leur langage, avec des connecteurs natifs qui se synchronisent automatiquement, change complètement l'économie.
+
+Alors nous avons transformé ce que nous avions construit en produit :
+
+- **Typesense hébergé** sous le capot — rapide, pertinent, open-core
+- **Connecteurs CMS natifs** pour Bitrix et PrestaShop — brancher, configurer, synchroniser
+- **Inférence automatique de schémas** depuis les catalogues de produits — aucun DevOps requis
+- **Un widget navigateur** que vous intégrez sur n'importe quelle page avec une seule balise script
+- **Un tableau de bord épuré** pour les analyses, synonymes, curations et gestion des clés API
+
+Le résultat : une recherche de niveau entreprise que tout marchand peut déployer en une après-midi.
+
+## Ce qui distingue AACSearch
+
+Nous avons parlé à des dizaines de marchands, développeurs et agences de plateformes. Trois choses comptent le plus :
+
+**1. Temps jusqu'au premier résultat.** Avec AACSearch, une nouvelle boutique Bitrix peut avoir une recherche en texte intégral opérationnelle en moins de 30 minutes. Cela inclut la configuration du connecteur, la création de l'index, la première synchronisation complète et l'intégration du widget. Aucune décision d'infrastructure requise.
+
+**2. Tarification prévisible.** Nous facturons par unités de recherche — requêtes plus documents indexés. Une boutique avec 10 000 produits et un trafic modéré s'intègre confortablement dans notre niveau gratuit. Vous ne payez que lorsque votre recherche génère réellement du volume.
+
+**3. Synchronisation consciente du CMS.** Quand un marchand met à jour le prix d'un produit ou ajoute une nouvelle variante, AACSearch le détecte automatiquement. Pas de webhooks à configurer manuellement, pas de tâches cron à surveiller. Le connecteur gère les synchronisations delta toutes les quelques minutes.
+
+## Ce qui vient ensuite
+
+Nous livrons rapidement. La plateforme de recherche centrale, l'API connecteur et le widget sont déjà en production. Prochainement : un tableau de bord d'analyse qui montre quelles requêtes ne renvoient aucun résultat (votre plus grande opportunité de conversion), un module de base de connaissances pour les questions-réponses internes, et des intégrations plus profondes avec davantage de plateformes CMS.
+
+Nous avons construit AACSearch parce que nous en avions besoin nous-mêmes. Nous parions que des milliers de marchands en ont besoin aussi.
+
+Si vous gérez une boutique Bitrix ou PrestaShop et que la recherche vous freine — [essayez AACSearch gratuitement](/). Aucune carte de crédit requise.

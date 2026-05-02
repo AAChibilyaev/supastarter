@@ -424,7 +424,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			})),
 		];
 		return cols;
-	}, [documentFields]);
+	}, [documentFields, t]);
 
 	const table = useReactTable({
 		data: rows,

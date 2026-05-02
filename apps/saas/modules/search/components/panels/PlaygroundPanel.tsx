@@ -253,7 +253,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 				setAutoSearching(false);
 			}
 		},
-		[selectedSlug, query, queryBy, filterBy, sortBy, perPage],
+		[selectedSlug, query, queryBy, filterBy, sortBy, perPage, t],
 	);
 
 	// ---- Debounced auto-search ----

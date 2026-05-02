@@ -1015,7 +1015,17 @@
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",
-			"noLatencyData": "Latenzdaten erscheinen nach der Verarbeitung von Suchanfragen."
+			"noLatencyData": "Latenzdaten erscheinen nach der Verarbeitung von Suchanfragen.",
+			"failedQueries": "Fehlgeschlagene Suchanfragen",
+			"ofTotalSearches": "der Gesamtsuchanfragen",
+			"totalFailedQueries": "insgesamt fehlgeschlagen",
+			"noFailedQueries": "Keine fehlgeschlagenen Suchanfragen in diesem Zeitraum.",
+			"tabDashboard": "Dashboard",
+			"tabFailed": "Fehlgeschlagene",
+			"tabActivity": "Aktivität",
+			"uniqueFailedQueries": "Einzigartige fehlgeschlagene",
+			"recentActivity": "Letzte Aktivität",
+			"noActivity": "Keine aktuellen Aktivitäten."
 		},
 		"widget": {
 			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",

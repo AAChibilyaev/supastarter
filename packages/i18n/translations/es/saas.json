@@ -1014,7 +1014,17 @@
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",
-			"noLatencyData": "Los datos de latencia aparecerán después de procesar consultas de búsqueda."
+			"noLatencyData": "Los datos de latencia aparecerán después de procesar consultas de búsqueda.",
+			"failedQueries": "Consultas fallidas",
+			"ofTotalSearches": "del total de búsquedas",
+			"totalFailedQueries": "total fallidas",
+			"noFailedQueries": "No hay consultas fallidas en este período.",
+			"tabDashboard": "Panel",
+			"tabFailed": "Fallidas",
+			"tabActivity": "Actividad",
+			"uniqueFailedQueries": "Consultas fallidas únicas",
+			"recentActivity": "Actividad reciente",
+			"noActivity": "No hay actividad reciente."
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",

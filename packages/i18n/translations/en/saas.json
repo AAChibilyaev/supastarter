@@ -1015,7 +1015,17 @@
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",
-			"noLatencyData": "Latency data will appear after search queries are processed."
+			"noLatencyData": "Latency data will appear after search queries are processed.",
+			"failedQueries": "Failed Queries",
+			"ofTotalSearches": "of total searches",
+			"totalFailedQueries": "total failed",
+			"noFailedQueries": "No failed queries in this period.",
+			"tabDashboard": "Dashboard",
+			"tabFailed": "Failed Queries",
+			"tabActivity": "Activity",
+			"uniqueFailedQueries": "Unique failed queries",
+			"recentActivity": "Recent Activity",
+			"noActivity": "No recent activity to display."
 		},
 		"widget": {
 			"description": "Configure and customize your search widget. Set up filters, autocomplete, voice search, and embed it on your site.",

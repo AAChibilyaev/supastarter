@@ -21,6 +21,7 @@ import { useFormatter } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { EmptyState } from "./EmptyState";
+import { FailedQueriesTable } from "./FailedQueriesTable";
 
 type PeriodKey = "24h" | "7d" | "30d";
 
@@ -38,6 +39,8 @@ const PERIOD_API: Record<PeriodKey, "last7" | "last30"> = {
 
 const FREE_RETENTION_DAYS = 7;
 
+type AnalyticsTab = "dashboard" | "failed" | "activity";
+
 interface SearchAnalyticsCardsProps {
 	organizationId: string;
 }
@@ -46,6 +49,7 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 	const t = useTranslations();
 	const format = useFormatter();
 	const [period, setPeriod] = useState<PeriodKey>("7d");
+	const [activeTab, setActiveTab] = useState<AnalyticsTab>("dashboard");
 
 	const days = PERIOD_DAYS[period];
 
@@ -169,32 +173,8 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 		);
 	}
 
-	return (
+	const renderDashboardTab = () => (
 		<div className="space-y-6">
-			{/* Period switcher */}
-			<Tabs value={period} onValueChange={(v) => setPeriod(v as PeriodKey)}>
-				<TabsList>
-					<TabsTrigger value="24h">{t("search.analytics.period24h")}</TabsTrigger>
-					<TabsTrigger value="7d">{t("search.analytics.period7d")}</TabsTrigger>
-					<TabsTrigger value="30d">{t("search.analytics.period30d")}</TabsTrigger>
-				</TabsList>
-			</Tabs>
-
-			{/* Retention banner */}
-			{showRetentionBanner && (
-				<Card className="border-l-4 border-l-foreground/20">
-					<CardContent className="gap-3 pt-6 flex items-center">
-						<InfoIcon className="size-5 shrink-0 text-foreground/60" />
-						<p className="text-sm text-foreground/80">
-							{t("search.analytics.retentionBanner", {
-								days: planRetentionDays,
-								plan: planName,
-							})}
-						</p>
-					</CardContent>
-				</Card>
-			)}
-
 			{/* KPI row */}
 			<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid">
 				<StatsTile
@@ -365,6 +345,113 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 					)}
 				</CardContent>
 			</Card>
+
+			{/* Failed Queries table */}
+			<FailedQueriesTable
+				zeroResultQueries={zeroResultQueries}
+				totalSearches={totalSearches}
+			/>
+		</div>
+	);
+
+	const renderFailedTab = () => (
+		<div className="space-y-6">
+			<FailedQueriesTable
+				zeroResultQueries={zeroResultQueries}
+				totalSearches={totalSearches}
+			/>
+
+			{/* Summary stats for failed queries */}
+			<Card>
+				<CardHeader>
+					<CardTitle>{t("search.analytics.failedQueries")}</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<div className="gap-4 md:grid-cols-3 grid">
+						<StatsTile
+							title={t("search.analytics.totalFailedQueries")}
+							value={
+								hasZeroResultData
+									? zeroResultQueries.reduce(
+											(sum: number, q: { count: number }) =>
+												sum + (q.count ?? 0),
+											0,
+										)
+									: 0
+							}
+							valueFormat="number"
+						/>
+						<StatsTile
+							title={t("search.analytics.zeroResultRate")}
+							value={hasZeroResultData ? zeroResultRate : 0}
+							valueFormat={hasZeroResultData ? "percentage" : "number"}
+						/>
+						<StatsTile
+							title={t("search.analytics.uniqueFailedQueries")}
+							value={zeroResultQueries.length}
+							valueFormat="number"
+						/>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+
+	const renderActivityTab = () => (
+		<Card>
+			<CardHeader>
+				<CardTitle>{t("search.analytics.recentActivity")}</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<EmptyState variant="inline" description={t("search.analytics.noActivity")} />
+			</CardContent>
+		</Card>
+	);
+
+	return (
+		<div className="space-y-6">
+			{/* Period switcher */}
+			<div className="flex items-center justify-between">
+				<Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AnalyticsTab)}>
+					<TabsList>
+						<TabsTrigger value="dashboard">
+							{t("search.analytics.tabDashboard")}
+						</TabsTrigger>
+						<TabsTrigger value="failed">{t("search.analytics.tabFailed")}</TabsTrigger>
+						<TabsTrigger value="activity">
+							{t("search.analytics.tabActivity")}
+						</TabsTrigger>
+					</TabsList>
+				</Tabs>
+
+				<Tabs value={period} onValueChange={(v) => setPeriod(v as PeriodKey)}>
+					<TabsList>
+						<TabsTrigger value="24h">{t("search.analytics.period24h")}</TabsTrigger>
+						<TabsTrigger value="7d">{t("search.analytics.period7d")}</TabsTrigger>
+						<TabsTrigger value="30d">{t("search.analytics.period30d")}</TabsTrigger>
+					</TabsList>
+				</Tabs>
+			</div>
+
+			{/* Retention banner */}
+			{showRetentionBanner && (
+				<Card className="border-l-4 border-l-foreground/20">
+					<CardContent className="gap-3 pt-6 flex items-center">
+						<InfoIcon className="size-5 shrink-0 text-foreground/60" />
+						<p className="text-sm text-foreground/80">
+							{t("search.analytics.retentionBanner", {
+								days: planRetentionDays,
+								plan: planName,
+							})}
+						</p>
+					</CardContent>
+				</Card>
+			)}
+
+			{/* Tab content */}
+			{activeTab === "dashboard" && renderDashboardTab()}
+			{activeTab === "failed" && renderFailedTab()}
+			{activeTab === "activity" && renderActivityTab()}
 		</div>
 	);
 }

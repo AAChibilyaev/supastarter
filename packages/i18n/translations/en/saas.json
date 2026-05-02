@@ -1022,7 +1022,9 @@
 			"quotaExceededBadge": "Exceeded",
 			"quotaUsedBadge": "{percent}% used",
 			"searchesLabel": "Searches",
-			"freePlan": "Free"
+			"freePlan": "Free",
+			"activeReindexJobs": "Active reindex jobs",
+			"reindexProgress": "{processed} / {total} documents"
 		},
 		"gettingStarted": {
 			"title": "Getting Started",
@@ -1529,7 +1531,8 @@
 				"defaultValuePlaceholder": "e.g. 0, false, empty string",
 				"locale": "Locale",
 				"validators": "Validators (JSON)",
-				"reindexStarted": "Reindex started"
+				"reindexStarted": "Reindex started",
+				"reindexError": "Failed to start reindex"
 			},
 			"version": "Version",
 			"recentActivity": "Recent activity",

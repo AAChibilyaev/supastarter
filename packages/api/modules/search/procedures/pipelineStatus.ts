@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationMember } from "../lib/access";
+import { listActiveReindexJobs } from "../lib/sync-jobs";
 
 const FIVE_MIN_MS = 5 * 60 * 1000;
 
@@ -27,6 +28,15 @@ export const pipelineStatus = protectedProcedure
 			retryQueueSize: z.number(),
 			failedCount: z.number(),
 			snapshotAt: z.string(),
+			activeReindexJobs: z.array(
+				z.object({
+					jobId: z.string(),
+					slug: z.string(),
+					processed: z.number(),
+					total: z.number(),
+					startedAt: z.string(),
+				}),
+			),
 		}),
 	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
@@ -70,11 +80,20 @@ export const pipelineStatus = protectedProcedure
 			},
 		});
 
+		const activeReindexJobs = listActiveReindexJobs(organizationId).map((j) => ({
+			jobId: j.id,
+			slug: j.slug,
+			processed: j.processed,
+			total: j.total,
+			startedAt: j.startedAt,
+		}));
+
 		return {
 			bufferDepth,
 			workerThroughput,
 			retryQueueSize,
 			failedCount,
 			snapshotAt: now.toISOString(),
+			activeReindexJobs,
 		};
 	});

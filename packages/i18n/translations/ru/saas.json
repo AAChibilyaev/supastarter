@@ -1022,7 +1022,9 @@
 			"quotaExceededBadge": "Превышено",
 			"quotaUsedBadge": "{percent}% использовано",
 			"searchesLabel": "Запросы",
-			"freePlan": "Бесплатный"
+			"freePlan": "Бесплатный",
+			"activeReindexJobs": "Активные задачи переиндексации",
+			"reindexProgress": "{processed} / {total} документов"
 		},
 		"gettingStarted": {
 			"title": "Начало работы",
@@ -1494,7 +1496,7 @@
 			"displayName": "Отображаемое имя",
 			"open": "Открыть",
 			"schemaEditor": {
-				"addField": "+ Add field",
+				"addField": "+ Добавить поле",
 				"importJson": "Импорт JSON",
 				"exportJson": "Экспорт JSON",
 				"previewDiff": "Предпросмотр изменений",
@@ -1529,7 +1531,8 @@
 				"defaultValuePlaceholder": "например, 0, false, пустая строка",
 				"locale": "Локаль",
 				"validators": "Валидаторы (JSON)",
-				"reindexStarted": "Переиндексация запущена"
+				"reindexStarted": "Переиндексация запущена",
+				"reindexError": "Ошибка запуска переиндексации"
 			},
 			"version": "Версия",
 			"recentActivity": "Последняя активность",

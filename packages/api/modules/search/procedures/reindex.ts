@@ -6,6 +6,12 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
+import {
+	completeReindexJob,
+	createReindexJob,
+	failReindexJob,
+	updateReindexProgress,
+} from "../lib/sync-jobs";
 import { searchFieldSchema, searchIndexSlugSchema } from "../types";
 
 export const reindex = protectedProcedure
@@ -15,7 +21,7 @@ export const reindex = protectedProcedure
 		tags: ["Search"],
 		summary: "Reindex collection (zero-downtime alias swap)",
 		description:
-			"Creates a new versioned Typesense collection, copies all current documents to it, swaps the alias atomically, then drops obsolete prior versions (keeping the immediately previous one as a rollback target).",
+			"Launches an async background reindex job. Returns immediately with { jobId }. Poll pipelineStatus.activeReindexJobs for progress.",
 	})
 	.input(
 		z.object({
@@ -23,6 +29,11 @@ export const reindex = protectedProcedure
 			slug: searchIndexSlugSchema,
 			fields: z.array(searchFieldSchema).min(1).optional(),
 			defaultSortingField: z.string().optional(),
+		}),
+	)
+	.output(
+		z.object({
+			jobId: z.string(),
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {
@@ -41,20 +52,44 @@ export const reindex = protectedProcedure
 			});
 		}
 
-		try {
-			const result = await reindexCollection({
-				organizationId: input.organizationId,
-				slug: input.slug,
-				currentVersion: index.version,
-				fields: fields as never,
-				defaultSortingField: input.defaultSortingField,
-			});
+		const job = createReindexJob({
+			indexId: index.id,
+			organizationId: input.organizationId,
+			slug: input.slug,
+		});
 
-			await updateSearchIndexVersion(index.id, result.newVersion);
+		setImmediate(async () => {
+			try {
+				const result = await reindexCollection({
+					organizationId: input.organizationId,
+					slug: input.slug,
+					currentVersion: index.version,
+					fields: fields as never,
+					defaultSortingField: input.defaultSortingField,
+					onProgress: (processed, total) =>
+						updateReindexProgress(job.id, processed, total),
+				});
 
-			return result;
-		} catch (error) {
-			logger.error("Reindex failed", { error, slug: input.slug });
-			throw new ORPCError("INTERNAL_SERVER_ERROR", { message: "reindex_failed" });
-		}
+				await updateSearchIndexVersion(index.id, result.newVersion);
+				completeReindexJob(job.id, result.copiedDocuments, result.failedDocuments);
+
+				logger.info("Async reindex completed", {
+					jobId: job.id,
+					organizationId: input.organizationId,
+					slug: input.slug,
+					newVersion: result.newVersion,
+					copied: result.copiedDocuments,
+					failed: result.failedDocuments,
+				});
+			} catch (error) {
+				failReindexJob(job.id);
+				logger.error("Async reindex failed", {
+					jobId: job.id,
+					error,
+					slug: input.slug,
+				});
+			}
+		});
+
+		return { jobId: job.id };
 	});

@@ -18,6 +18,7 @@ export interface ReindexInput {
 	currentVersion: number;
 	fields: CollectionFieldInput[];
 	defaultSortingField?: string;
+	onProgress?: (processed: number, total: number) => void;
 }
 
 export interface ReindexResult {
@@ -56,6 +57,9 @@ export async function reindexCollection(input: ReindexInput): Promise<ReindexRes
 	const exportStream = await client.collections(oldName).documents().export();
 	const lines = exportStream.split("\n").filter((line) => line.trim().length > 0);
 	const batchSize = config.ingestBatchSize;
+	const total = lines.length;
+
+	input.onProgress?.(0, total);
 
 	for (let cursor = 0; cursor < lines.length; cursor += batchSize) {
 		const batch = lines
@@ -78,6 +82,7 @@ export async function reindexCollection(input: ReindexInput): Promise<ReindexRes
 		});
 		copied += result.successCount;
 		failed += result.failures.length;
+		input.onProgress?.(copied + failed, total);
 	}
 
 	await swapAliasToVersion(input.organizationId, input.slug, newVersion);

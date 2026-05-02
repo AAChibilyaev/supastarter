@@ -1022,7 +1022,9 @@
 			"quotaExceededBadge": "Überschritten",
 			"quotaUsedBadge": "{percent}% genutzt",
 			"searchesLabel": "Suchen",
-			"freePlan": "Kostenlos"
+			"freePlan": "Kostenlos",
+			"activeReindexJobs": "Aktive Neuindizierungsaufgaben",
+			"reindexProgress": "{processed} / {total} Dokumente"
 		},
 		"gettingStarted": {
 			"title": "Erste Schritte",
@@ -1529,7 +1531,8 @@
 				"defaultValuePlaceholder": "z.B. 0, false, Leerstring",
 				"locale": "Gebietsschema",
 				"validators": "Validatoren (JSON)",
-				"reindexStarted": "Neuindizierung gestartet"
+				"reindexStarted": "Neuindizierung gestartet",
+				"reindexError": "Neuindizierung fehlgeschlagen"
 			},
 			"version": "Version",
 			"recentActivity": "Letzte Aktivität",

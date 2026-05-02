@@ -3,6 +3,7 @@
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
 import {
 	Select,
 	SelectContent,
@@ -20,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	ActivityIcon,
 	AlertTriangleIcon,
+	DatabaseIcon,
 	HelpCircleIcon,
 	KeyIcon,
 	RefreshCwIcon,
@@ -102,6 +104,14 @@ export function OverviewPage() {
 			input: { organizationId: orgId ?? "", limit: 15 },
 		}),
 		enabled: Boolean(orgId),
+	});
+
+	const { data: pipelineStatus } = useQuery({
+		...orpc.search.pipelineStatus.queryOptions({
+			input: { organizationId: orgId ?? "" },
+		}),
+		enabled: Boolean(orgId),
+		refetchInterval: 3000,
 	});
 
 	const isLoading = planLoading || usageLoading;
@@ -399,6 +409,45 @@ export function OverviewPage() {
 					)}
 				</CardContent>
 			</Card>
+
+			{/* Active reindex jobs */}
+			{pipelineStatus?.activeReindexJobs && pipelineStatus.activeReindexJobs.length > 0 && (
+				<Card>
+					<CardHeader>
+						<CardTitle className="gap-2 text-base flex items-center">
+							<DatabaseIcon className="size-4" />
+							{t("overview.activeReindexJobs")}
+							<Badge status="info" className="text-xs">
+								{pipelineStatus.activeReindexJobs.length}
+							</Badge>
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className="space-y-4">
+							{pipelineStatus.activeReindexJobs.map((job) => {
+								const percent =
+									job.total > 0
+										? Math.round((job.processed / job.total) * 100)
+										: 0;
+								return (
+									<div key={job.jobId} className="space-y-2">
+										<div className="text-sm flex items-center justify-between">
+											<span className="font-medium">{job.slug}</span>
+											<span className="text-xs text-muted-foreground">
+												{t("overview.reindexProgress", {
+													processed: job.processed,
+													total: job.total,
+												})}
+											</span>
+										</div>
+										<Progress value={percent} className="h-2" />
+									</div>
+								);
+							})}
+						</div>
+					</CardContent>
+				</Card>
+			)}
 
 			{/* Row 4: Status / Alerts */}
 			<div className="gap-6 lg:grid-cols-2 grid">

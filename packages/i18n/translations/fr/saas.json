@@ -1107,7 +1107,9 @@
 			"quotaExceededBadge": "Dépassé",
 			"quotaUsedBadge": "{percent}% utilisé",
 			"searchesLabel": "Recherches",
-			"freePlan": "Gratuit"
+			"freePlan": "Gratuit",
+			"activeReindexJobs": "Tâches de réindexation actives",
+			"reindexProgress": "{processed} / {total} documents"
 		},
 		"relevance": {
 			"tab": "Pertinence",
@@ -1505,7 +1507,8 @@
 				"defaultValuePlaceholder": "p.ex. 0, false, chaîne vide",
 				"locale": "Locale",
 				"validators": "Validateurs (JSON)",
-				"reindexStarted": "Réindexation démarrée"
+				"reindexStarted": "Réindexation démarrée",
+				"reindexError": "Échec du démarrage de la réindexation"
 			},
 			"version": "Version",
 			"recentActivity": "Activité récente",

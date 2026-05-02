@@ -77,10 +77,6 @@ export function AppSidebar() {
 				href: "/settings/general",
 			},
 			{
-				label: "Knowledge",
-				href: "/knowledge",
-			},
-			{
 				label: t("settings.menu.account.security"),
 				href: "/settings/security",
 			},
@@ -123,12 +119,16 @@ export function AppSidebar() {
 				: undefined;
 
 		return [
-			{
-				label: t("app.menu.start"),
-				href: startHref,
-				icon: HomeIcon,
-				isActive: pathname === "/" || pathname === basePath,
-			},
+			...(activeOrganization
+				? []
+				: [
+						{
+							label: t("app.menu.start"),
+							href: startHref,
+							icon: HomeIcon,
+							isActive: pathname === "/" || pathname === basePath,
+						},
+					]),
 			...(activeOrganization
 				? [
 						{
@@ -229,24 +229,19 @@ export function AppSidebar() {
 			<SidebarHeader className={cn("gap-3", sidebarCollapsed && "items-center")}>
 				<div
 					className={cn(
-						"flex w-full min-w-0 items-center gap-2",
+						"min-w-0 gap-2 flex w-full items-center",
 						sidebarCollapsed ? "justify-center" : "justify-between",
 					)}
 				>
 					<Link
 						href="/"
-						className={cn(
-							"flex shrink-0 items-center",
-							sidebarCollapsed && "hidden",
-						)}
+						className={cn("flex shrink-0 items-center", sidebarCollapsed && "hidden")}
 					>
 						<Logo withLabel={false} />
 					</Link>
 					<SidebarTrigger className="shrink-0" />
 				</div>
-				<NotificationCenter
-					className={cn("shrink-0", sidebarCollapsed && "self-center")}
-				/>
+				<NotificationCenter className={cn("shrink-0", sidebarCollapsed && "self-center")} />
 				{authConfig.organizations.enable && !authConfig.organizations.hideOrganization && (
 					<OrganzationSelect collapsed={sidebarCollapsed} />
 				)}

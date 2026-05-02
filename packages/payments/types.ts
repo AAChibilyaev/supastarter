@@ -118,6 +118,13 @@ export type CancelSubscription = (
 	options?: { mode?: CancelSubscriptionMode },
 ) => Promise<void>;
 
+export type UpgradeSubscription = (params: {
+	subscriptionId: string;
+	newPriceId: string;
+	seats?: number;
+	prorationBehavior?: "create_prorations" | "always_invoice" | "none";
+}) => Promise<void>;
+
 export type WebhookHandler = (req: Request) => Promise<Response>;
 
 export type PaymentProvider = {

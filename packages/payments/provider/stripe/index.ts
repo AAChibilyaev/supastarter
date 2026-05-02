@@ -16,10 +16,74 @@ import type {
 	CreateCheckoutLink,
 	CreateCustomerPortalLink,
 	SetSubscriptionSeats,
+	UpgradeSubscription,
 	WebhookHandler,
 } from "../../types";
 
 let stripeClient: Stripe | null = null;
+
+// In-memory cache of processed Stripe event IDs for idempotency.
+// Best-effort guard within the same process lifetime (survives restarts only via Stripe's own retry idempotency).
+const processedEventIds = new Set<string>();
+const IDEMPOTENCY_CLEANUP_INTERVAL_MS = 3600_000; // 1 hour
+let lastCleanup = Date.now();
+
+/** Check if an event has already been processed. Logs a warning on duplicate. */
+function isEventProcessed(eventId: string): boolean {
+	if (processedEventIds.has(eventId)) {
+		logger.warn("Duplicate Stripe event detected (skipping)", { eventId });
+		return true;
+	}
+	processedEventIds.add(eventId);
+
+	// Periodic cleanup to prevent memory leak
+	const now = Date.now();
+	if (now - lastCleanup > IDEMPOTENCY_CLEANUP_INTERVAL_MS) {
+		processedEventIds.clear();
+		lastCleanup = now;
+	}
+	return false;
+}
+
+/** Retry a Stripe API call with exponential backoff on transient errors. */
+async function retryStripeCall<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+	let lastError: unknown;
+	for (let attempt = 0; attempt <= maxRetries; attempt++) {
+		try {
+			return await fn();
+		} catch (error) {
+			lastError = error;
+			if (error instanceof Stripe.errors.StripeError) {
+				// Only retry on rate limits (429) and server errors (5xx)
+				if (error.statusCode && error.statusCode >= 500 && error.statusCode < 600) {
+					if (attempt < maxRetries) {
+						const delay = Math.min(1000 * 2 ** attempt, 10_000);
+						logger.warn("Stripe API error, retrying", {
+							statusCode: error.statusCode,
+							attempt: attempt + 1,
+							delayMs: delay,
+						});
+						await new Promise((r) => setTimeout(r, delay));
+						continue;
+					}
+				} else if (error.statusCode === 429) {
+					if (attempt < maxRetries) {
+						const delay = Math.min(2000 * 2 ** attempt, 15_000);
+						logger.warn("Stripe rate limited, retrying", {
+							attempt: attempt + 1,
+							delayMs: delay,
+						});
+						await new Promise((r) => setTimeout(r, delay));
+						continue;
+					}
+				}
+			}
+			// Non-retryable error or exhausted retries
+			throw error;
+		}
+	}
+	throw lastError;
+}
 
 export function getStripeClient() {
 	if (stripeClient) {
@@ -128,6 +192,59 @@ export const cancelSubscription: CancelSubscription = async (id, options) => {
 	}
 };
 
+export const upgradeSubscription: UpgradeSubscription = async ({
+	subscriptionId,
+	newPriceId,
+	seats,
+	prorationBehavior = "create_prorations",
+}) => {
+	const stripeClient = getStripeClient();
+
+	// Retrieve the current subscription to get the existing item IDs
+	const subscription = await retryStripeCall(() =>
+		stripeClient.subscriptions.retrieve(subscriptionId),
+	);
+
+	if (!subscription) {
+		throw new Error(`Subscription ${subscriptionId} not found`);
+	}
+
+	const currentItem = subscription.items?.data[0];
+	if (!currentItem) {
+		throw new Error(`No items found on subscription ${subscriptionId}`);
+	}
+
+	// Build the update: mark old item as deleted, add new item
+	const items: Stripe.SubscriptionUpdateParams.Item[] = [
+		{
+			id: currentItem.id,
+			deleted: true,
+		},
+		{
+			price: newPriceId,
+			...(seats ? { quantity: seats } : {}),
+		},
+	];
+
+	await retryStripeCall(() =>
+		stripeClient.subscriptions.update(subscriptionId, {
+			items,
+			proration_behavior: prorationBehavior,
+			// Preserve the current billing cycle anchor
+			billing_cycle_anchor: "unchanged",
+			// Ensure subscription doesn't pause during update
+			off_session: true,
+		}),
+	);
+
+	logger.info("Subscription upgraded/downgraded", {
+		subscriptionId,
+		from: currentItem.price.id,
+		to: newPriceId,
+		prorationBehavior,
+	});
+};
+
 async function getPaymentRecipients(purchase: {
 	userId: string | null;
 	organizationId: string | null;
@@ -174,6 +291,20 @@ export const webhookHandler: WebhookHandler = async (req) => {
 	}
 
 	try {
+		// Idempotency: skip already-processed Stripe events
+		if (isEventProcessed(event.id)) {
+			logger.info("Skipping already-processed Stripe event", {
+				eventId: event.id,
+				type: event.type,
+			});
+			return new Response(null, { status: 204 });
+		}
+
+		logger.info("Processing Stripe webhook event", {
+			eventId: event.id,
+			type: event.type,
+		});
+
 		switch (event.type) {
 			case "checkout.session.completed": {
 				const { mode, metadata, customer, id } = event.data.object;

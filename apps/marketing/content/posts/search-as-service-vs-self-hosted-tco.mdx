@@ -1,0 +1,184 @@
+---
+title: Search as a Service vs Self-Hosted: Total Cost of Ownership Analysis
+date: 2025-05-01
+image: https://picsum.photos/id/29/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: A detailed total cost of ownership (TCO) analysis comparing managed search services vs self-hosted Typesense/Elasticsearch — including infrastructure, operations, engineering time, and scaling costs.
+tags: [comparison, tco, self-hosted, managed, cost-analysis]
+published: true
+---
+
+The "build vs buy" decision for search infrastructure is rarely as simple as comparing monthly subscription prices. Self-hosting has hidden costs in engineering time, operations, and opportunity cost. Managed services have premium pricing but include maintenance and reliability.
+
+This post breaks down the real TCO for both approaches across three typical deployment sizes.
+
+## Cost Categories
+
+A fair comparison must include:
+
+1. **Infrastructure** — Servers, storage, bandwidth, backups
+2. **Operations** — Monitoring, alerting, incident response, upgrades
+3. **Engineering time** — Initial setup, tuning, maintenance, debugging
+4. **Opportunity cost** — What your team could be building instead
+5. **Scaling cost** — Cost to add capacity as you grow
+
+## Scenario 1: Small Deployment (10K documents, 50K searches/mo)
+
+### Self-Hosted (Typesense on a $10 VPS)
+
+| Item                     | Monthly cost | Notes                                    |
+| ------------------------ | ------------ | ---------------------------------------- |
+| VPS (2GB RAM, 2 vCPU)    | $10          | Digital Ocean / Hetzner                  |
+| Backups                  | $2           | Automated snapshot storage               |
+| Monitoring               | $0           | Basic health check (free)                |
+| Domain + SSL             | $1           | Certificate renewal (amortized)          |
+| **Infrastructure total** | **$13/mo**   |                                          |
+| Initial setup            | $200         | 4 hours of senior engineer time @ $50/hr |
+| Monthly maintenance      | $50          | 1 hour/month for updates, tuning         |
+| Incident response        | $25          | 30 min/month average (outages, issues)   |
+| **Engineering total**    | **$275/mo**  | Amortized over 12 months                 |
+| **True TCO**             | **$288/mo**  |                                          |
+
+### Managed (AACsearch Free Tier)
+
+| Item         | Monthly cost          |
+| ------------ | --------------------- |
+| Subscription | $0                    |
+| Setup time   | $0 (30 min, no cost)  |
+| Maintenance  | $0 (provider handled) |
+| **True TCO** | **$0/mo**             |
+
+**Verdict:** At small scale, managed is free and self-hosted costs $288/mo. No contest.
+
+## Scenario 2: Mid-Scale (500K documents, 1M searches/mo)
+
+### Self-Hosted (Typesense, 3-node cluster)
+
+| Item                     | Monthly cost |
+| ------------------------ | ------------ | ------------------------ |
+| 3 x VPS (4GB, 2 vCPU)    | $72          |
+| Load balancer            | $12          |
+| Backups (automated)      | $15          |
+| Monitoring + alerting    | $20          |
+| **Infrastructure total** | **$119/mo**  |
+| Initial setup            | $1,000       | 20 hours engineering     |
+| Monthly maintenance      | $200         | 4 hours/month            |
+| Incident response        | $100         | 2 hours/month avg        |
+| Relevance tuning         | $100         | 2 hours/month            |
+| **Engineering total**    | **$525/mo**  | Amortized over 12 months |
+| **True TCO**             | **$644/mo**  |                          |
+
+### Managed (AACsearch Scale Plan)
+
+| Item           | Monthly cost |
+| -------------- | ------------ | ------------ |
+| Subscription   | $99          |
+| Setup + tuning | $25          | 30 min/month |
+| **True TCO**   | **$124/mo**  |
+
+**Saving:** $520/mo by using managed search. Plus your team builds product features instead of managing search infrastructure.
+
+## Scenario 3: Large Scale (5M documents, 10M searches/mo)
+
+### Self-Hosted (Typesense or Elasticsearch, 6-node cluster)
+
+| Item                     | Monthly cost  |
+| ------------------------ | ------------- | ------------------------ |
+| 6 x VPS (8GB, 4 vCPU)    | $288          |
+| Load balancer            | $25           |
+| Backups                  | $50           |
+| Monitoring + APM         | $50           |
+| Data transfer            | $30           |
+| **Infrastructure total** | **$443/mo**   |
+| Initial setup            | $3,000        | 60 hours engineering     |
+| Monthly maintenance      | $500          | 10 hours/month           |
+| Incident response        | $250          | 5 hours/month avg        |
+| Relevance tuning         | $200          | 4 hours/month            |
+| Scaling planning         | $100          | 2 hours/month            |
+| **Engineering total**    | **$1,300/mo** | Amortized over 12 months |
+| **True TCO**             | **$1,743/mo** |                          |
+
+### Managed (AACsearch Pro Plan)
+
+| Item           | Monthly cost |
+| -------------- | ------------ | ------------ |
+| Subscription   | $249         |
+| Setup + tuning | $50          | 1 hour/month |
+| **True TCO**   | **$299/mo**  |
+
+**Saving:** $1,444/mo by using managed search. The engineering time savings alone could fund a part-time hire.
+
+## Hidden Costs of Self-Hosting
+
+Beyond the numbers, self-hosting carries risks that are hard to quantify until they happen:
+
+| Risk                   | Probability | Impact                  | Mitigation cost        |
+| ---------------------- | ----------- | ----------------------- | ---------------------- |
+| Cluster failure        | Low         | Complete search outage  | HA setup (2x infra $)  |
+| Data corruption        | Very low    | Rebuild from backup     | RTO: 2-4 hours         |
+| Version upgrade broken | Medium      | Rollback or fix         | Staging env ($50/mo)   |
+| Security vulnerability | Low         | Data exposure           | Patching SLA           |
+| Scaling emergency      | Medium      | Performance degradation | Emergency provisioning |
+
+Most teams underestimate these risks when making the build vs buy decision.
+
+## Hidden Costs of Managed Services
+
+Managed search isn't risk-free:
+
+| Risk                | Probability | Impact               | Mitigation                  |
+| ------------------- | ----------- | -------------------- | --------------------------- |
+| Vendor lock-in      | Low         | Expensive to migrate | AACsearch: full data export |
+| Price increase      | Medium      | Budget impact        | Lock in annual pricing      |
+| Feature gaps        | Low         | Workarounds needed   | Evaluate before committing  |
+| Latency from region | Low         | Slower responses     | Choose nearest region       |
+
+AACsearch mitigates the vendor lock-in risk by being built on Typesense — you can export your entire dataset and run it on your own Typesense cluster at any time.
+
+## Break-Even Analysis
+
+At what scale does self-hosting become cheaper than managed?
+
+```
+Self-host fixed costs:  Setup ($200-3K) + Monthly ops ($50-500)
+Managed fixed costs:    Monthly subscription ($0-249)
+
+Break-even point: When monthly ops cost < subscription premium
+```
+
+For most teams, the break-even is never reached because:
+
+1. Engineering time has a growth cost — every hour spent on search ops could improve your product
+2. Self-hosted infrastructure costs grow with data (more servers) while managed costs stay flat
+3. Incident risk increases with scale, not decreases
+
+## The Non-Financial Factors
+
+Sometimes self-hosting makes sense even at higher cost:
+
+- **Compliance:** Data must never leave your infrastructure
+- **Full control:** You need custom search behavior the provider doesn't support
+- **Existing investment:** You already have an Elasticsearch team and cluster
+- **Offline/air-gapped:** Your application runs in an isolated network
+
+For everyone else, managed search delivers better ROI.
+
+## Decision Framework
+
+```text
+Is search your core differentiator?
+├── Yes → Self-host (you need full control and will invest)
+└── No → Use managed service
+        ├── < 50K docs → Free tier (AACsearch / Algolia)
+        ├── < 500K docs → Starter/Scale plan
+        └── > 500K docs → Scale/Pro plan
+```
+
+## Next Steps
+
+- [Try AACsearch free](/signup) — see if managed search works for you
+- [Read the Typesense self-hosting guide](/blog/typesense-deep-dive) if you need to self-host
+- [Compare pricing](/pricing) across deployment sizes
+
+[Calculate your TCO with the pricing calculator →](/pricing)

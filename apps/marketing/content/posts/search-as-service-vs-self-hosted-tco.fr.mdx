@@ -1,0 +1,184 @@
+---
+title: Recherche en tant que Service vs Auto-Hébergement : Analyse du Coût Total de Possession
+date: 2025-05-01
+image: https://picsum.photos/id/29/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Une analyse détaillée du coût total de possession (TCO) comparant les services de recherche gérés vs l'auto-hébergement Typesense/Elasticsearch — incluant l'infrastructure, les opérations, le temps d'ingénierie et les coûts de passage à l'échelle.
+tags: [comparison, tco, self-hosted, managed, cost-analysis]
+published: true
+---
+
+La décision « construire vs acheter » pour l'infrastructure de recherche est rarement aussi simple que de comparer les prix d'abonnement mensuels. L'auto-hébergement comporte des coûts cachés en temps d'ingénierie, opérations et coût d'opportunité. Les services gérés ont un prix premium mais incluent la maintenance et la fiabilité.
+
+Cet article décompose le TCO réel pour les deux approches sur trois tailles de déploiement typiques.
+
+## Catégories de Coûts
+
+Une comparaison équitable doit inclure :
+
+1. **Infrastructure** — Serveurs, stockage, bande passante, sauvegardes
+2. **Opérations** — Surveillance, alertes, réponse aux incidents, mises à niveau
+3. **Temps d'ingénierie** — Installation initiale, réglage, maintenance, débogage
+4. **Coût d'opportunité** — Ce que votre équipe pourrait construire à la place
+5. **Coût de passage à l'échelle** — Coût pour ajouter de la capacité en grandissant
+
+## Scénario 1 : Petit Déploiement (10 000 documents, 50 000 recherches/mois)
+
+### Auto-Hébergé (Typesense sur un VPS à 10 $)
+
+| Article                  | Coût mensuel | Remarques                                  |
+| ------------------------ | ------------ | ------------------------------------------ |
+| VPS (2 Go RAM, 2 vCPU)   | 10 $         | Digital Ocean / Hetzner                    |
+| Sauvegardes              | 2 $          | Stockage de snapshots automatisés          |
+| Surveillance             | 0 $          | Vérification de santé de base (gratuit)    |
+| Domaine + SSL            | 1 $          | Renouvellement de certificat (amorti)      |
+| **Total infrastructure** | **13 $/mo**  |                                            |
+| Installation initiale    | 200 $        | 4 heures d'ingénieur senior @ 50 $/h       |
+| Maintenance mensuelle    | 50 $         | 1 heure/mois pour mises à jour, réglages   |
+| Réponse aux incidents    | 25 $         | 30 min/mois en moyenne (pannes, problèmes) |
+| **Total ingénierie**     | **275 $/mo** | Amorti sur 12 mois                         |
+| **TCO réel**             | **288 $/mo** |                                            |
+
+### Géré (Offre Gratuite AACsearch)
+
+| Article              | Coût mensuel                   |
+| -------------------- | ------------------------------ |
+| Abonnement           | 0 $                            |
+| Temps d'installation | 0 $ (30 min, sans frais)       |
+| Maintenance          | 0 $ (gérée par le fournisseur) |
+| **TCO réel**         | **0 $/mo**                     |
+
+**Verdict :** À petite échelle, le service géré est gratuit et l'auto-hébergement coûte 288 $/mo. Aucune contestation.
+
+## Scénario 2 : Échelle Moyenne (500 000 documents, 1 M de recherches/mois)
+
+### Auto-Hébergé (Typesense, cluster de 3 nœuds)
+
+| Article                    | Coût mensuel |
+| -------------------------- | ------------ | ------------------------ |
+| 3 x VPS (4 Go, 2 vCPU)     | 72 $         |
+| Équilibreur de charge      | 12 $         |
+| Sauvegardes (automatisées) | 15 $         |
+| Surveillance + alertes     | 20 $         |
+| **Total infrastructure**   | **119 $/mo** |
+| Installation initiale      | 1 000 $      | 20 heures d'ingénierie   |
+| Maintenance mensuelle      | 200 $        | 4 heures/mois            |
+| Réponse aux incidents      | 100 $        | 2 heures/mois en moyenne |
+| Réglage de pertinence      | 100 $        | 2 heures/mois            |
+| **Total ingénierie**       | **525 $/mo** | Amorti sur 12 mois       |
+| **TCO réel**               | **644 $/mo** |                          |
+
+### Géré (Forfait Scale AACsearch)
+
+| Article                | Coût mensuel |
+| ---------------------- | ------------ | ----------- |
+| Abonnement             | 99 $         |
+| Installation + réglage | 25 $         | 30 min/mois |
+| **TCO réel**           | **124 $/mo** |
+
+**Économie :** 520 $/mo en utilisant la recherche gérée. En plus, votre équipe construit des fonctionnalités produit au lieu de gérer l'infrastructure de recherche.
+
+## Scénario 3 : Grande Échelle (5 M de documents, 10 M de recherches/mois)
+
+### Auto-Hébergé (Typesense ou Elasticsearch, cluster de 6 nœuds)
+
+| Article                              | Coût mensuel   |
+| ------------------------------------ | -------------- | ------------------------ |
+| 6 x VPS (8 Go, 4 vCPU)               | 288 $          |
+| Équilibreur de charge                | 25 $           |
+| Sauvegardes                          | 50 $           |
+| Surveillance + APM                   | 50 $           |
+| Transfert de données                 | 30 $           |
+| **Total infrastructure**             | **443 $/mo**   |
+| Installation initiale                | 3 000 $        | 60 heures d'ingénierie   |
+| Maintenance mensuelle                | 500 $          | 10 heures/mois           |
+| Réponse aux incidents                | 250 $          | 5 heures/mois en moyenne |
+| Réglage de pertinence                | 200 $          | 4 heures/mois            |
+| Planification de passage à l'échelle | 100 $          | 2 heures/mois            |
+| **Total ingénierie**                 | **1 300 $/mo** | Amorti sur 12 mois       |
+| **TCO réel**                         | **1 743 $/mo** |                          |
+
+### Géré (Forfait Pro AACsearch)
+
+| Article                | Coût mensuel |
+| ---------------------- | ------------ | ------------ |
+| Abonnement             | 249 $        |
+| Installation + réglage | 50 $         | 1 heure/mois |
+| **TCO réel**           | **299 $/mo** |
+
+**Économie :** 1 444 $/mo en utilisant la recherche gérée. Les économies de temps d'ingénierie pourraient à elles seules financer une embauche à temps partiel.
+
+## Coûts Cachés de l'Auto-Hébergement
+
+Au-delà des chiffres, l'auto-hébergement comporte des risques difficiles à quantifier avant qu'ils ne surviennent :
+
+| Risque                         | Probabilité | Impact                                   | Coût d'atténuation                 |
+| ------------------------------ | ----------- | ---------------------------------------- | ---------------------------------- |
+| Panne du cluster               | Faible      | Interruption totale de la recherche      | Configuration HA (2x coût infra)   |
+| Corruption de données          | Très faible | Reconstruction à partir de la sauvegarde | RTO : 2 à 4 heures                 |
+| Mise à niveau cassée           | Moyenne     | Retour arrière ou correction             | Environnement de staging (50 $/mo) |
+| Vulnérabilité de sécurité      | Faible      | Exposition des données                   | SLA de correction                  |
+| Urgence de passage à l'échelle | Moyenne     | Dégradation des performances             | Provisionnement d'urgence          |
+
+La plupart des équipes sous-estiment ces risques au moment de prendre la décision construire vs acheter.
+
+## Coûts Cachés des Services Gérés
+
+La recherche gérée n'est pas sans risque :
+
+| Risque                    | Probabilité | Impact                     | Atténuation                            |
+| ------------------------- | ----------- | -------------------------- | -------------------------------------- |
+| Dépendance au fournisseur | Faible      | Migration coûteuse         | AACsearch : export complet des données |
+| Augmentation de prix      | Moyenne     | Impact budgétaire          | Bloquer le tarif annuel                |
+| Lacunes fonctionnelles    | Faible      | Contournements nécessaires | Évaluer avant de s'engager             |
+| Latence due à la région   | Faible      | Réponses plus lentes       | Choisir la région la plus proche       |
+
+AACsearch atténue le risque de dépendance au fournisseur en étant construit sur Typesense — vous pouvez exporter l'intégralité de votre ensemble de données et l'exécuter sur votre propre cluster Typesense à tout moment.
+
+## Analyse du Seuil de Rentabilité
+
+À quelle échelle l'auto-hébergement devient-il moins cher que le service géré ?
+
+```
+Coûts fixes auto-hébergé :  Installation (200-3 000 $) + Opérations mensuelles (50-500 $)
+Coûts fixes géré :          Abonnement mensuel (0-249 $)
+
+Seuil de rentabilité : Quand le coût des opérations mensuelles < la prime d'abonnement
+```
+
+Pour la plupart des équipes, le seuil de rentabilité n'est jamais atteint car :
+
+1. Le temps d'ingénierie a un coût de croissance — chaque heure passée sur les opérations de recherche pourrait améliorer votre produit
+2. Les coûts d'infrastructure auto-hébergée augmentent avec les données (plus de serveurs) tandis que les coûts gérés restent stables
+3. Le risque d'incident augmente avec l'échelle, il ne diminue pas
+
+## Les Facteurs Non Financiers
+
+Parfois, l'auto-hébergement a du sens même à un coût plus élevé :
+
+- **Conformité :** Les données ne doivent jamais quitter votre infrastructure
+- **Contrôle total :** Vous avez besoin d'un comportement de recherche personnalisé que le fournisseur ne supporte pas
+- **Investissement existant :** Vous avez déjà une équipe et un cluster Elasticsearch
+- **Hors ligne/réseau isolé :** Votre application s'exécute dans un réseau isolé
+
+Pour tous les autres, la recherche gérée offre un meilleur retour sur investissement.
+
+## Cadre Décisionnel
+
+```text
+La recherche est-elle votre différenciateur clé ?
+├── Oui → Auto-hébergé (vous avez besoin du contrôle total et investirez)
+└── Non → Utilisez un service géré
+        ├── < 50 K docs → Offre gratuite (AACsearch / Algolia)
+        ├── < 500 K docs → Forfait Starter/Scale
+        └── > 500 K docs → Forfait Scale/Pro
+```
+
+## Prochaines Étapes
+
+- [Essayer AACsearch gratuitement](/signup) — voyez si la recherche gérée vous convient
+- [Lire le guide d'auto-hébergement Typesense](/blog/typesense-deep-dive) si vous devez auto-héberger
+- [Comparer les tarifs](/pricing) selon les tailles de déploiement
+
+[Calculez votre TCO avec le simulateur de tarifs →](/pricing)

@@ -28,6 +28,8 @@ export interface WidgetOptions {
 	mode?: "inline" | "modal";
 	showPrices?: boolean;
 	showImages?: boolean;
+	recommendationsMode?: "sidebar" | "modal" | "inline";
+	recommendationsLimit?: number;
 }
 
 const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
@@ -36,6 +38,8 @@ const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
 	mode: "inline",
 	showPrices: true,
 	showImages: true,
+	recommendationsMode: "sidebar",
+	recommendationsLimit: 5,
 };
 
 const WIDGET_STYLES = `
@@ -534,12 +538,222 @@ const WIDGET_STYLES = `
 }
 
 .aac-error {
-  text-align: center;
-  padding: 24px;
-  color: #dc2626;
-  background: #fef2f2;
-  border-radius: var(--aac-radius);
-  border: 1px solid #fecaca;
+	text-align: center;
+	padding: 24px;
+	color: #dc2626;
+	background: #fef2f2;
+	border-radius: var(--aac-radius);
+	border: 1px solid #fecaca;
+}
+
+/* Recommendations: Similar Products button */
+.aac-similar-btn {
+	display: inline-block;
+	margin-top: 8px;
+	padding: 6px 12px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--aac-primary);
+	background: transparent;
+	border: 1px solid var(--aac-primary);
+	border-radius: var(--aac-radius);
+	cursor: pointer;
+	transition: all 0.2s;
+}
+.aac-similar-btn:hover {
+	background: var(--aac-primary);
+	color: white;
+}
+.aac-similar-btn.active {
+	background: var(--aac-primary);
+	color: white;
+}
+
+/* Recommendations: Sidebar panel */
+.aac-recs-sidebar {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 380px;
+	max-width: 100vw;
+	height: 100vh;
+	background: var(--aac-bg);
+	border-left: 1px solid var(--aac-border);
+	box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+	z-index: 10000;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	animation: aac-slide-in 0.25s ease;
+}
+@keyframes aac-slide-in {
+	from { transform: translateX(100%); }
+	to { transform: translateX(0); }
+}
+.aac-recs-sidebar-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px;
+	border-bottom: 1px solid var(--aac-border);
+	font-weight: 700;
+	font-size: 16px;
+	color: var(--aac-text);
+}
+.aac-recs-sidebar-close {
+	background: none;
+	border: none;
+	font-size: 20px;
+	color: var(--aac-text-secondary);
+	cursor: pointer;
+	padding: 4px 8px;
+	border-radius: 4px;
+	line-height: 1;
+}
+.aac-recs-sidebar-close:hover {
+	background: var(--aac-bg-secondary);
+	color: var(--aac-text);
+}
+.aac-recs-sidebar-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 12px 16px;
+}
+.aac-recs-sidebar-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.3);
+	z-index: 9999;
+}
+
+/* Recommendations: Modal panel */
+.aac-recs-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10000;
+}
+.aac-recs-modal {
+	background: var(--aac-bg);
+	border-radius: 12px;
+	width: 600px;
+	max-width: 90vw;
+	max-height: 80vh;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+	animation: aac-modal-in 0.2s ease;
+}
+@keyframes aac-modal-in {
+	from { opacity: 0; transform: scale(0.95); }
+	to { opacity: 1; transform: scale(1); }
+}
+.aac-recs-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--aac-border);
+	font-weight: 700;
+	font-size: 16px;
+	color: var(--aac-text);
+}
+.aac-recs-modal-close {
+	background: none;
+	border: none;
+	font-size: 20px;
+	color: var(--aac-text-secondary);
+	cursor: pointer;
+	padding: 4px 8px;
+	border-radius: 4px;
+	line-height: 1;
+}
+.aac-recs-modal-close:hover {
+	background: var(--aac-bg-secondary);
+	color: var(--aac-text);
+}
+.aac-recs-modal-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 16px 20px;
+}
+
+/* Recommendations: Inline panel */
+.aac-recs-inline {
+	margin-top: 16px;
+	padding: 16px;
+	border: 1px solid var(--aac-border);
+	border-radius: var(--aac-radius);
+	background: var(--aac-bg-secondary);
+}
+.aac-recs-inline-title {
+	font-weight: 700;
+	font-size: 15px;
+	color: var(--aac-text);
+	margin-bottom: 12px;
+}
+
+/* Recommendations: Shared item card */
+.aac-recs-item {
+	display: flex;
+	gap: 12px;
+	padding: 10px 0;
+	border-bottom: 1px solid var(--aac-border);
+}
+.aac-recs-item:last-child {
+	border-bottom: none;
+}
+.aac-recs-item-image {
+	width: 50px;
+	height: 50px;
+	object-fit: contain;
+	border-radius: 4px;
+	flex-shrink: 0;
+	background: var(--aac-bg);
+}
+.aac-recs-item-info {
+	flex: 1;
+	min-width: 0;
+}
+.aac-recs-item-title {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--aac-text);
+	margin-bottom: 2px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.aac-recs-item-title a {
+	color: inherit;
+	text-decoration: none;
+}
+.aac-recs-item-title a:hover {
+	color: var(--aac-primary);
+}
+.aac-recs-item-price {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--aac-primary);
+}
+.aac-recs-item-category {
+	font-size: 11px;
+	color: var(--aac-text-secondary);
+}
+.aac-recs-loading,
+.aac-recs-empty,
+.aac-recs-error {
+	padding: 24px;
+	text-align: center;
+	font-size: 14px;
+	color: var(--aac-text-secondary);
+}
+.aac-recs-error {
+	color: #dc2626;
 }
 `;
 
@@ -559,6 +773,11 @@ interface SearchState {
 	filters: Record<string, string[]>;
 	priceRange: { min: number; max: number } | null;
 	sortBy: string;
+	recommendations: Array<Record<string, unknown>>;
+	recommendationsLoading: boolean;
+	recommendationsError: string | null;
+	recommendationsProductId: string | null;
+	recommendationsOpen: boolean;
 }
 
 function formatPrice(price: number, currency = "USD", locale = "en"): string {
@@ -596,7 +815,13 @@ function highlightText(text: string, highlights?: unknown[]): string {
 }
 
 type BatchedEvent = {
-	type: "search_query" | "zero_results" | "result_click" | "widget_open" | "filter_used";
+	type:
+		| "search_query"
+		| "zero_results"
+		| "result_click"
+		| "widget_open"
+		| "filter_used"
+		| "recommendations_click";
 	query?: string;
 	productId?: string;
 	position?: number;
@@ -630,7 +855,13 @@ export class AacSearchWidget {
 	 * On page unload, flushBeacon() drains the queue via sendBeacon.
 	 */
 	private trackEvent(payload: {
-		type: "search_query" | "zero_results" | "result_click" | "widget_open" | "filter_used";
+		type:
+			| "search_query"
+			| "zero_results"
+			| "result_click"
+			| "widget_open"
+			| "filter_used"
+			| "recommendations_click";
 		query?: string;
 		productId?: string;
 		position?: number;
@@ -754,6 +985,11 @@ export class AacSearchWidget {
 			filters: {},
 			priceRange: null,
 			sortBy: "",
+			recommendations: [],
+			recommendationsLoading: false,
+			recommendationsError: null,
+			recommendationsProductId: null,
+			recommendationsOpen: false,
 		};
 
 		// Render and attach events
@@ -945,6 +1181,181 @@ export class AacSearchWidget {
 		};
 	}
 
+	/**
+	 * Fetch recommendations (similar products) from the recommendations API.
+	 */
+	private async fetchRecommendations(productId: string): Promise<void> {
+		if (!productId) return;
+
+		this.state = {
+			...this.state,
+			recommendations: [],
+			recommendationsLoading: true,
+			recommendationsError: null,
+			recommendationsProductId: productId,
+			recommendationsOpen: true,
+		};
+		this.render();
+
+		try {
+			const baseUrl = this.options.baseUrl.replace(/\/+$/, "");
+			const limit = this.options.recommendationsLimit ?? 5;
+			const url = `${baseUrl}/api/v1/recommendations/${encodeURIComponent(this.options.indexSlug)}?product_id=${encodeURIComponent(productId)}&limit=${limit}`;
+
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${this.options.apiKey}`,
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error(`Recommendations API returned ${response.status}`);
+			}
+
+			const data = await response.json();
+			const products = (data.recommendations ?? data.products ?? data.results ?? []) as Array<
+				Record<string, unknown>
+			>;
+
+			this.state = {
+				...this.state,
+				recommendations: products,
+				recommendationsLoading: false,
+				recommendationsError: null,
+			};
+		} catch (err) {
+			this.state = {
+				...this.state,
+				recommendations: [],
+				recommendationsLoading: false,
+				recommendationsError:
+					err instanceof Error ? err.message : this.t("recommendationsError"),
+			};
+		}
+
+		this.render();
+	}
+
+	/**
+	 * Close the recommendations panel and clear state.
+	 */
+	private closeRecommendations(): void {
+		this.state = {
+			...this.state,
+			recommendations: [],
+			recommendationsLoading: false,
+			recommendationsError: null,
+			recommendationsProductId: null,
+			recommendationsOpen: false,
+		};
+		this.render();
+	}
+
+	/** Render a single recommendations item card. */
+	private renderRecommendationsItem(product: Record<string, unknown>): string {
+		const title = (product.title as string) ?? this.t("untitled");
+		const price = product.price as number | undefined;
+		const salePrice = product.sale_price as number | undefined;
+		const imageUrl = product.image_url as string | undefined;
+		const productUrl = product.product_url as string | undefined;
+		const categories = product.categories as string[] | undefined;
+		const productId =
+			(product.external_id as string | undefined) ?? (product.id as string | undefined);
+
+		let html = '<div class="aac-recs-item">';
+
+		if (imageUrl) {
+			html += `<img class="aac-recs-item-image" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" loading="lazy" />`;
+		}
+
+		html += '<div class="aac-recs-item-info">';
+
+		if (productUrl) {
+			html += `<div class="aac-recs-item-title"><a href="${escapeHtml(productUrl)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></div>`;
+		} else {
+			html += `<div class="aac-recs-item-title">${escapeHtml(title)}</div>`;
+		}
+
+		if (categories && categories.length > 0) {
+			html += `<div class="aac-recs-item-category">${escapeHtml(categories[0])}</div>`;
+		}
+
+		if (price !== undefined) {
+			if (salePrice !== undefined && salePrice < price) {
+				html += `<div class="aac-recs-item-price"><span style="color:#dc2626">${formatPrice(salePrice, undefined, this.locale)}</span> <span style="text-decoration:line-through;color:var(--aac-text-secondary);font-size:12px">${formatPrice(price, undefined, this.locale)}</span></div>`;
+			} else {
+				html += `<div class="aac-recs-item-price">${formatPrice(price, undefined, this.locale)}</div>`;
+			}
+		}
+
+		html += "</div>"; // info
+		html += "</div>"; // item
+
+		return html;
+	}
+
+	/**
+	 * Render the recommendations panel for the current mode.
+	 * Returns empty string if panel should not be shown.
+	 */
+	private renderRecommendationsPanel(): string {
+		if (!this.state.recommendationsOpen && !this.state.recommendationsLoading) return "";
+
+		const mode = this.options.recommendationsMode ?? "sidebar";
+
+		// Build the body content
+		let bodyHtml = "";
+
+		if (this.state.recommendationsLoading) {
+			bodyHtml = `<div class="aac-recs-loading">${this.t("recommendationsLoading")}</div>`;
+		} else if (this.state.recommendationsError) {
+			bodyHtml = `<div class="aac-recs-error">${escapeHtml(this.state.recommendationsError)}</div>`;
+		} else if (this.state.recommendations.length === 0) {
+			bodyHtml = `<div class="aac-recs-empty">${this.t("noRecommendations")}</div>`;
+		} else {
+			bodyHtml = '<div class="aac-recs-items">';
+			for (const product of this.state.recommendations) {
+				bodyHtml += this.renderRecommendationsItem(product as Record<string, unknown>);
+			}
+			bodyHtml += "</div>";
+		}
+
+		const title = this.t("similarProducts");
+
+		if (mode === "sidebar") {
+			return `
+				<div class="aac-recs-sidebar-overlay" data-action="close-recs"></div>
+				<div class="aac-recs-sidebar">
+					<div class="aac-recs-sidebar-header">
+						<span>${escapeHtml(title)}</span>
+						<button class="aac-recs-sidebar-close" data-action="close-recs">&times;</button>
+					</div>
+					<div class="aac-recs-sidebar-body">${bodyHtml}</div>
+				</div>`;
+		}
+
+		if (mode === "modal") {
+			return `
+				<div class="aac-recs-modal-overlay" data-action="close-recs">
+					<div class="aac-recs-modal">
+						<div class="aac-recs-modal-header">
+							<span>${escapeHtml(title)}</span>
+							<button class="aac-recs-modal-close" data-action="close-recs">&times;</button>
+						</div>
+						<div class="aac-recs-modal-body">${bodyHtml}</div>
+					</div>
+				</div>`;
+		}
+
+		// Inline mode
+		return `
+			<div class="aac-recs-inline">
+				<div class="aac-recs-inline-title">${escapeHtml(title)}</div>
+				${bodyHtml}
+			</div>`;
+	}
+
 	private toggleFilter(field: string, value: string): void {
 		const current = this.state.filters[field] ?? [];
 		const idx = current.indexOf(value);
@@ -1121,6 +1532,41 @@ export class AacSearchWidget {
 				});
 			});
 		}
+
+		// Recommendations: "Similar Products" button clicks
+		this.root.addEventListener("click", (e) => {
+			const btn = (e.target as HTMLElement).closest(
+				"[data-action='show-recs']",
+			) as HTMLElement | null;
+			if (!btn) return;
+			const productId = btn.getAttribute("data-product-id");
+			if (productId) {
+				// If clicking the already-active product, toggle off
+				if (
+					this.state.recommendationsProductId === productId &&
+					this.state.recommendationsOpen
+				) {
+					this.closeRecommendations();
+				} else {
+					this.trackEvent({
+						type: "recommendations_click",
+						productId: productId,
+						query: this.state.query || undefined,
+					});
+					void this.fetchRecommendations(productId);
+				}
+			}
+		});
+
+		// Recommendations: close buttons (sidebar overlay, modal overlay, close buttons)
+		this.root.addEventListener("click", (e) => {
+			const closeEl = (e.target as HTMLElement).closest(
+				"[data-action='close-recs']",
+			) as HTMLElement | null;
+			if (closeEl) {
+				this.closeRecommendations();
+			}
+		});
 
 		// Facet header toggle (collapse/expand)
 		const facetsContainer = this.root.querySelector(".aac-facets");
@@ -1499,6 +1945,14 @@ export class AacSearchWidget {
 				html += `<div style="font-size:12px;color:${color};margin-top:4px">${status}</div>`;
 			}
 
+			// Similar Products button
+			if (productId && this.options.recommendationsMode) {
+				const isActive =
+					this.state.recommendationsProductId === productId &&
+					this.state.recommendationsOpen;
+				html += `<button class="aac-similar-btn ${isActive ? "active" : ""}" data-action="show-recs" data-product-id="${escapeHtml(productId)}">${this.t("similarProducts")}</button>`;
+			}
+
 			html += "</div>"; // info
 			html += "</div>"; // card
 		}
@@ -1520,6 +1974,14 @@ export class AacSearchWidget {
 		const hostEl = this.root.host as HTMLElement;
 		hostEl.setAttribute("theme", theme);
 
+		const mode = this.options.recommendationsMode ?? "sidebar";
+		const isOverlay = mode === "sidebar" || mode === "modal";
+		const showRecs = this.state.recommendationsOpen || this.state.recommendationsLoading;
+
+		// For sidebar/modal: recommendations panel renders at root level (above widget-container)
+		// For inline: recommendations panel renders inside the results area
+		const recsHtml = showRecs && isOverlay ? this.renderRecommendationsPanel() : "";
+
 		this.root.innerHTML = `
 			<style>${WIDGET_STYLES}</style>
 			<div class="aac-widget-container">
@@ -1540,11 +2002,13 @@ export class AacSearchWidget {
 								${this.renderFacets()}
 								<div>
 									${this.renderResults()}
+									${showRecs && !isOverlay ? this.renderRecommendationsPanel() : ""}
 								</div>
 							</div>`
 						: `<div class="aac-no-results">${this.t("startTyping")}</div>`
 				}
 			</div>
+			${recsHtml}
 		`;
 	}
 }
@@ -1570,6 +2034,11 @@ export class AacSearchWidget {
 				locale: (dataset.locale as "en" | "ru" | "de" | "es" | "fr") ?? "en",
 				showPrices: dataset.showPrices !== "false",
 				showImages: dataset.showImages !== "false",
+				recommendationsMode:
+					(dataset.recommendationsMode as "sidebar" | "modal" | "inline") ?? "sidebar",
+				recommendationsLimit: dataset.recommendationsLimit
+					? parseInt(dataset.recommendationsLimit, 10)
+					: 5,
 			});
 		};
 

@@ -1,0 +1,258 @@
+---
+title: AACsearch Widget: добавьте поиск на любой сайт в 3 строки
+date: 2025-05-01
+image: https://picsum.photos/id/60/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Добавьте мгновенный поиск с устойчивостью к опечаткам на любой сайт — статический, динамический или CMS — всего 3 строками кода. Без React, без этапа сборки, без установки NPM.
+tags: [tutorial, widget, javascript, cms]
+published: true
+---
+
+Поиск — самая эффективная функция, которую можно добавить на сайт, и с AACsearch widget это ещё и проще всего. Три строки HTML превращают любой сайт в поисковый опыт с автодополнением, навигацией с клавиатуры и фасетной фильтрацией.
+
+## Установка в 3 строки
+
+Добавьте эти три строки на любую HTML-страницу:
+
+```html
+<script src="https://cdn.aacsearch.com/widget.js"></script>
+<link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css" />
+<div id="search-root"></div>
+```
+
+Затем в теге `<script>` или в вашем основном JavaScript-файле:
+
+```javascript
+new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	mountElement: "#search-root",
+});
+```
+
+Всё готово. Теперь на вашем сайте есть полнофункциональная поисковая строка, которая возвращает результаты по мере ввода текста.
+
+## Как это работает
+
+Widget подключается напрямую к AACsearch API из браузера. Когда пользователь вводит текст, widget:
+
+1. Отправляет запрос в AACsearch с вашим API-ключом и индексом
+2. Получает соответствующие результаты (обычно менее чем за 50 мс)
+3. Отображает наложение с карточками товаров, сниппетами или кастомными шаблонами
+4. Обрабатывает навигацию с клавиатуры (стрелки, Enter, Escape)
+5. Отслеживает клики для аналитики
+
+Никакого бэкенд-сервера, никакого этапа сборки, никакой синхронизации базы данных. Widget обрабатывает каждое взаимодействие.
+
+## Что вы получаете из коробки
+
+Widget поставляется с этими активными функциями:
+
+| Функция                    | Описание                                                                   |
+| -------------------------- | -------------------------------------------------------------------------- |
+| Автодополнение             | Результаты появляются по мере ввода, с дебаунсом 300 мс                    |
+| Навигация с клавиатуры     | Стрелки для навигации, Enter для выбора, Escape для закрытия               |
+| Устойчивость к опечаткам   | Запросы с ошибками всё равно возвращают релевантные результаты             |
+| Сниппеты результатов       | Показывает заголовок, отрывок, миниатюру и цену (настраивается)            |
+| Тёмная тема                | Автоопределение системных предпочтений, CSS-переменные для настройки       |
+| Адаптивность для мобильных | Полная ширина на мобильных, нижняя панель для фасетов на маленьких экранах |
+| Аналитика                  | Отслеживает поисковые запросы, клики и поиски без результатов              |
+| Фасетные фильтры           | Отображает панели фасетов, когда поля настроены                            |
+
+## Настройка внешнего вида
+
+Переопределите любой визуальный аспект с помощью CSS-переменных:
+
+```css
+:root {
+	--aacsearch-primary: #2563eb;
+	--aacsearch-bg: #ffffff;
+	--aacsearch-text: #1f2937;
+	--aacsearch-border: #e5e7eb;
+	--aacsearch-radius: 8px;
+	--aacsearch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Переопределения для тёмной темы */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--aacsearch-bg: #1f2937;
+		--aacsearch-text: #f9fafb;
+		--aacsearch-border: #374151;
+	}
+}
+```
+
+## Примеры интеграции
+
+### Статический HTML-сайт
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.aacsearch.com/widget.js" defer></script>
+		<link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css" />
+	</head>
+	<body>
+		<header>
+			<div id="search-root"></div>
+		</header>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				new AACsearchWidget({
+					apiKey: "ss_search_demo_key",
+					index: "docs",
+					placeholder: "Search documentation...",
+					mountElement: "#search-root",
+				});
+			});
+		</script>
+	</body>
+</html>
+```
+
+### WordPress (functions.php)
+
+```php
+function add_aacsearch_widget() {
+    wp_enqueue_script('aacsearch-widget', 'https://cdn.aacsearch.com/widget.js', [], null, true);
+    wp_enqueue_style('aacsearch-widget', 'https://cdn.aacsearch.com/widget.css');
+}
+add_action('wp_enqueue_scripts', 'add_aacsearch_widget');
+
+function render_aacsearch_widget() {
+    echo '<div id="search-root"></div>';
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new AACsearchWidget({
+                apiKey: "' . esc_js(get_option('aacsearch_api_key')) . '",
+                index: "wordpress_posts",
+                mountElement: "#search-root"
+            });
+        });
+    </script>';
+}
+add_action('wp_footer', 'render_aacsearch_widget');
+```
+
+### React / Next.js
+
+```tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export function AACSearchWidget() {
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!ref.current) return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "blog",
+		});
+
+		widget.mount(ref.current);
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={ref} />;
+}
+```
+
+### Vue.js
+
+```vue
+<template>
+	<div ref="searchRoot"></div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+
+const searchRoot = ref(null);
+let widget = null;
+
+onMounted(() => {
+	widget = new AACsearchWidget({
+		apiKey: "ss_search_demo_key",
+		index: "products",
+		mountElement: searchRoot.value,
+	});
+});
+
+onUnmounted(() => widget?.destroy());
+</script>
+```
+
+## Расширенная конфигурация
+
+Widget принимает следующие параметры для тонкой настройки:
+
+```javascript
+const search = new AACsearchWidget({
+	// Обязательные
+	apiKey: "ss_search_...",
+	index: "products",
+
+	// Отображение
+	placeholder: "Search products...",
+	theme: "light", // 'light' | 'dark' | 'auto'
+	resultsPerPage: 12,
+	maxSuggestions: 5,
+
+	// Поведение поиска
+	searchableFields: ["name", "brand", "description", "sku"],
+	facetFields: ["brand", "category", "price"],
+	sortOptions: [
+		{ label: "Relevance", value: "_text_match:desc" },
+		{ label: "Price: Low to High", value: "price:asc" },
+	],
+
+	// Кастомный рендеринг
+	resultTemplate: (item) => `
+    <div class="aacsearch-result">
+      <img src="${item.image}" alt="${item.name}" />
+      <div class="aacsearch-result-info">
+        <h3>${item.name}</h3>
+        <p class="price">$${item.price}</p>
+        <span class="brand">${item.brand}</span>
+      </div>
+    </div>
+  `,
+
+	// Аналитика
+	trackClicks: true,
+	onSearch: (query, results) => console.log("Searched:", query, "Results:", results.length),
+	onClick: (result) => console.log("Clicked:", result.name),
+});
+```
+
+## Производительность
+
+- **Первый рендер:** < 200 мс (JS widget ~35KB в gzip)
+- **Ответ на запрос:** < 50 мс (P95 из US West)
+- **Рендеринг результатов:** < 20 мс (виртуальная прокрутка для больших наборов результатов)
+- **Размер бандла:** 35KB JS + 8KB CSS (в gzip)
+
+## Ограничения
+
+Widget предназначен для поиска — а не для создания полноценного магазина. Используйте его для:
+
+- Поиска по сайту документации (лучшее применение)
+- Поиска товаров в интернет-магазине
+- Поиска по блогу / контенту
+- Командной палитры в SaaS-приложении
+
+Для сложных интерфейсов (кастомные страницы товаров, процессы оформления заказа) используйте AACsearch REST API напрямую.
+
+## Что дальше
+
+- [Создайте поиск товаров с фасетными фильтрами](/blog/building-faceted-product-search)
+- [Попробуйте интеграцию с WooCommerce](/integrations/woocommerce)
+- [Посмотрите полную справку по API](/docs/widget-api)
+
+[Добавьте поиск на свой сайт за 5 минут →](/signup)

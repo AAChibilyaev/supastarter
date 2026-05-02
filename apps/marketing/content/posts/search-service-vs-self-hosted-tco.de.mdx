@@ -1,0 +1,243 @@
+---
+title: Search-as-a-Service vs. Selbst gehostet: Total Cost of Ownership Analyse
+date: 2026-05-03
+image: https://picsum.photos/id/28/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Ein umfassender Total-Cost-of-Ownership-Vergleich zwischen verwalteten Search-as-a-Service-Anbietern und selbst gehosteten Suchmaschinen – über Infrastruktur, Betrieb, Ingenieurszeit, Skalierungskosten und versteckte Ausgaben in jeder Wachstumsphase.
+tags: [tco, self-hosted, saas, cost-analysis, typesense, infrastructure]
+published: true
+---
+
+Eine der häufigsten Fragen, die wir hören, lautet: „Soll ich Typesense selbst hosten oder einen verwalteten Dienst wie AACsearch nutzen?"
+
+Die Antwort ist nicht einfach – sie hängt von Ihrer Teamgröße, Ihrem Dokumentenvolumen, Ihren SLA-Anforderungen und Ihrer Wachstumsdynamik ab. Dieser Beitrag bietet einen datengestützten TCO-Rahmen (Total Cost of Ownership), damit Sie eine fundierte Entscheidung treffen können.
+
+## Die Kostenkomponenten
+
+Beim Vergleich von selbst gehosteter und verwalteter Suche vergleichen die meisten Menschen nur die Serverkosten. Das vollständige Bild umfasst fünf Kategorien:
+
+```
+TCO = Infrastruktur + Ingenieurszeit + Betrieb + Ausfallrisiko + Opportunitätskosten
+```
+
+Lassen Sie uns jede einzelne aufschlüsseln.
+
+## Infrastrukturkosten
+
+### Selbst gehostetes Typesense
+
+Typesense ist speichergebunden – Ihr gesamter Index muss für optimale Leistung im RAM liegen. Hier ist, was Sie in verschiedenen Größenordnungen benötigen:
+
+| Dokumentanzahl | Erforderlicher RAM | Monatliche Serverkosten | Speicher |
+| -------------- | ------------------ | ----------------------- | -------- |
+| 100.000        | 2 GB               | 30–60 $                 | 20 GB    |
+| 1 Mio.         | 8 GB               | 80–150 $                | 50 GB    |
+| 10 Mio.        | 32 GB              | 300–500 $               | 200 GB   |
+| 100 Mio.       | 64 GB              | 800–1.500 $             | 500 GB   |
+| 1 Mrd.         | 128 GB+            | 3.000–6.000 $           | 2 TB+    |
+
+**Zusätzliche Kosten:**
+
+- **Hochverfügbarkeitsreplikat:** 2-fache Serverkosten (mindestens für den Produktionsbetrieb)
+- **Regionenübergreifende Replikation:** 2–3-fache Serverkosten (für globale Nutzer)
+- **Backup-Speicher:** 20–100 $/Monat (Snapshots in S3 oder Äquivalent)
+- **CDN für Suchergebnisse:** 50–200 $/Monat (bei Auslieferung an ein globales Publikum)
+- **Überwachungsinfrastruktur:** 30–100 $/Monat (Grafana, Prometheus, Alarmierung)
+
+**Selbst gehostete Infrastruktur gesamt (Produktion, HA):**
+
+- 1 Mio. Dokumente: **250–500 $/Monat**
+- 10 Mio. Dokumente: **750–1.500 $/Monat**
+- 100 Mio. Dokumente: **2.000–4.000 $/Monat**
+
+### Verwaltete SaaS (AACsearch)
+
+| Dokumentanzahl | Monatliche Kosten | Enthaltene Leistungen                      |
+| -------------- | ----------------- | ------------------------------------------ |
+| 100.000        | 29 $              | HA, Backups, Analysen                      |
+| 1 Mio.         | 99 $              | HA, Backups, Analysen, 99,99 % SLA         |
+| 10 Mio.        | 249 $             | HA, Multi-Region, Premium-Support          |
+| 100 Mio.       | 999 $             | Dedizierter Cluster, SSO, individuelle SLA |
+| 1 Mrd.         | Individuell       | Dedizierte Infrastruktur, Private Cloud    |
+
+**Verwaltete SaaS gesamt:**
+
+- 1 Mio. Dokumente: **99 $/Monat** (60–80 % günstiger als selbst gehostet)
+- 10 Mio. Dokumente: **249 $/Monat** (65–80 % günstiger)
+- 100 Mio. Dokumente: **999 $/Monat** (50–75 % günstiger)
+
+## Ingenieurszeit-Kosten
+
+Dies sind die größten versteckten Kosten. Ein erfahrener Backend-Ingenieur kostet 120.000–200.000 $/Jahr. Jede Stunde, die für Suchinfrastruktur aufgewendet wird, ist eine Stunde, die nicht in Ihr Kernprodukt investiert wird.
+
+| Tätigkeit                       | Selbst gehostet (Stunden/Jahr) | Verwaltete SaaS (Stunden/Jahr) |
+| ------------------------------- | ------------------------------ | ------------------------------ |
+| Ersteinrichtung & Optimierung   | 40–80                          | 2–4                            |
+| Indexoptimierung                | 20–40                          | 0                              |
+| Abfrageleistungsoptimierung     | 20–40                          | 0                              |
+| Infrastrukturwartung            | 40–80                          | 0                              |
+| Versionsupgrades                | 20–40                          | 0                              |
+| Backup-/Wiederherstellungstests | 10–20                          | 0                              |
+| Überwachungseinrichtung         | 20–40                          | 0                              |
+| Bereitschaftsdienst             | 50–100                         | 0                              |
+| Sicherheitsupdates              | 10–20                          | 0                              |
+| Multi-Region-Einrichtung        | 40–80                          | 0                              |
+| **Gesamt**                      | **270–540**                    | **2–4**                        |
+
+**Ingenieurskosten bei 150.000 $/Jahr (75 $/Stunde):**
+
+- Selbst gehostet: **20.250–40.500 $/Jahr** (1.687–3.375 $/Monat)
+- Verwaltet: **150–300 $/Jahr** (12–25 $/Monat)
+
+## Betrieblicher Aufwand
+
+Neben der Ingenieurszeit verursacht das Selbsthosten einen fortlaufenden betrieblichen Aufwand:
+
+### Überwachung & Alarmierung
+
+- Prometheus + Grafana Einrichtung: 1–2 Wochen initial
+- Alarmmüdigkeit: Falschmeldungen durch Speicherdruck, Speicherplatzauslastung, langsame Abfragen
+- SLO-Tracking erfordert benutzerdefinierte Dashboards
+
+### Backup & Notfallwiederherstellung
+
+- Typesense-Snapshots müssen geplant und getestet werden
+- Wiederherstellungszeit: 10–60 Minuten, abhängig von der Indexgröße
+- RPO (Recovery Point Objective): Zeitpunkt des letzten Snapshots
+- RTO (Recovery Time Objective): Wiederherstellungszeit + DNS-Verbreitung
+
+### Skalierungsbetrieb
+
+- Das Hinzufügen von Knoten erfordert Bereitstellung, Tests und Datenverkehrsmigration
+- Neuverteilung nach Knotenhinzufügung kann Stunden dauern
+- Vertikale Skalierung (größere Instanz) erfordert Ausfallzeit
+
+## Ausfallrisiko
+
+| Faktor                                                              | Selbst gehostet | Verwaltete SaaS |
+| ------------------------------------------------------------------- | --------------- | --------------- |
+| Erwartete Verfügbarkeit                                             | 99,5–99,9 %     | 99,99 %+        |
+| Geplante Ausfallzeiten                                              | 2–4 Std./Monat  | 0               |
+| Reaktion auf Vorfälle                                               | Ihr Team        | 24/7 SRE-Team   |
+| Mittlere Wiederherstellungszeit                                     | 30–90 Min.      | 5–15 Min.       |
+| Jährliche Ausfallkosten (bei 10.000 $/Std. suchenabhängigem Umsatz) | 4.000–40.000 $  | 50–500 $        |
+
+**Versteckte Ausfallkosten:**
+
+- Vertrauensverlust der Kunden bei jedem Ausfall
+- SEO-Auswirkungen, wenn die Suche auf einer öffentlichen Website ausfällt
+- Support-Tickets und Kundenabwanderung durch Suchfehler
+
+## Opportunitätskosten
+
+Dies ist am schwersten zu quantifizieren, aber oft am bedeutendsten:
+
+**Opportunitätskosten beim Selbsthosten:**
+
+- Suchfunktionen, die nie entwickelt werden (kein dediziertes Suchteam)
+- Langsamere Iteration der Suchrelevanz (jede Änderung erfordert einen Deploy)
+- Keine Analysen zur Verbesserung der Suchqualität (Analysen müssen selbst gebaut werden)
+- Geringere Suchqualität = niedrigere Konversion = Umsatzverlust
+
+**Opportunitätskosten bei verwalteter SaaS:**
+
+- Weniger Kontrolle über Low-Level-Optimierungen
+- Bedenken bezüglich Vendor-Lock-in (abgemildert durch Open-Source-Typesense)
+- Daten verlassen Ihre Infrastruktur (abgemildert durch dedizierte Cluster)
+
+## TCO-Vergleich nach Größenordnung
+
+### Kleiner Maßstab (< 100.000 Dokumente)
+
+| Kostenkategorie  | Selbst gehostet     | Verwaltet         |
+| ---------------- | ------------------- | ----------------- |
+| Infrastruktur    | 60–120 $/Monat      | 29 $/Monat        |
+| Ingenieursarbeit | 300–600 $/Monat     | 12–25 $/Monat     |
+| Betrieb          | 100–200 $/Monat     | 0 $               |
+| **Gesamt**       | **460–920 $/Monat** | **41–54 $/Monat** |
+
+**Fazit:** Verwaltet ist im kleinen Maßstab 10–20x günstiger.
+
+### Mittlerer Maßstab (1–10 Mio. Dokumente)
+
+| Kostenkategorie  | Selbst gehostet         | Verwaltet           |
+| ---------------- | ----------------------- | ------------------- |
+| Infrastruktur    | 250–1.500 $/Monat       | 99–249 $/Monat      |
+| Ingenieursarbeit | 1.687–3.375 $/Monat     | 12–25 $/Monat       |
+| Betrieb          | 300–800 $/Monat         | 0 $                 |
+| **Gesamt**       | **2.237–5.675 $/Monat** | **111–274 $/Monat** |
+
+**Fazit:** Verwaltet ist im mittleren Maßstab 15–20x günstiger. Ingenieurskosten dominieren.
+
+### Großer Maßstab (100 Mio.+ Dokumente)
+
+| Kostenkategorie  | Selbst gehostet         | Verwaltet               |
+| ---------------- | ----------------------- | ----------------------- |
+| Infrastruktur    | 2.000–4.000 $/Monat     | 999 $/Monat+            |
+| Ingenieursarbeit | 1.687–3.375 $/Monat     | 12–25 $/Monat           |
+| Betrieb          | 500–1.500 $/Monat       | 0 $                     |
+| **Gesamt**       | **4.187–8.875 $/Monat** | **1.011–1.024 $/Monat** |
+
+**Fazit:** Verwaltet ist im großen Maßstab 4–8x günstiger, und der Abstand verringert sich bei Annäherung an dedizierte Infrastruktur.
+
+## Wann Selbsthosten sinnvoll ist
+
+Selbsthosten ist die richtige Wahl, wenn:
+
+1. **Ihr Kerngeschäft IST Suchinfrastruktur** – Sie bauen ein Suchprodukt oder bieten Suche als Kernfunktion für Enterprise-Kunden an, die eine lokale Bereitstellung benötigen.
+
+2. **Sie ein dediziertes Suchteam haben** (2+ Ingenieure) – Das Team kann die betrieblichen Investitionen durch suchspezifische Optimierungen rechtfertigen.
+
+3. **Strenge Anforderungen an den Datenaufenthaltsort** – Einige regulierte Branchen (Finanzen, Gesundheitswesen, Behörden) verlangen, dass Daten in bestimmten geografischen Grenzen auf von Ihnen kontrollierter Infrastruktur verbleiben.
+
+4. **Sie sind wirklich massiv groß** (1 Mrd.+ Dokumente) – In dieser Größenordnung verringert sich der Infrastrukturkostenunterschied so weit, dass ein dediziertes Team zur Verwaltung eines eigenen Clusters günstiger sein könnte.
+
+5. **Sie benötigen benutzerdefinierte Ranking-Modelle** – Wenn Ihr Relevanzalgorithmus benutzerdefinierte ML-Modelle erfordert, die von verwalteten Anbietern nicht unterstützt werden.
+
+## Wann verwaltete Suche besser ist
+
+Die verwaltete Suche gewinnt in fast jedem anderen Szenario:
+
+1. **Sie sind ein Startup oder ein Wachstumsunternehmen** – Ihre Ingenieurszeit ist besser in die Produktdifferenzierung investiert als in Suchinfrastruktur.
+
+2. **Suche ist ein Feature, nicht Ihr Produkt** – Für E-Commerce, SaaS, Content-Websites und Marktplätze.
+
+3. **Sie müssen schnell sein** – Starten Sie die Suche in Tagen, nicht in Wochen. Iterieren Sie an der Relevanz ohne Infrastrukturänderungen.
+
+4. **Sie haben keinen 24/7-Betrieb** – Verwaltet beinhaltet SRE-Abdeckung, Backups und Vorfallsreaktion.
+
+5. **Sie möchten Suchanalysen** – Integrierte Analysen für Null-Ergebnis-Abfragen, beliebte Suchanfragen und Klickraten.
+
+## Der hybride Ansatz
+
+Einige Teams starten mit Selbsthosten und migrieren zu verwalteten Diensten, wenn sie skalieren. Der Vorteil von Typesence-basierten Lösungen ist, dass die Migration unkompliziert ist:
+
+```bash
+# Export from self-hosted Typesense
+curl "http://localhost:8108/collections/products/documents/export" \
+  -H "X-TYPESENSE-API-KEY: $API_KEY" > products_export.json
+
+# Import to AACsearch
+curl -X POST "https://api.aacsearch.com/collections/products/documents/import" \
+  -H "X-AACSEARCH-API-KEY: $API_KEY" \
+  --data-binary @products_export.json
+```
+
+Ihr Schema, Ihre Abfragen und Ihr Client-Code bleiben nahezu identisch. Der Wechsel ist eine Konfigurationsänderung, keine Neuentwicklung.
+
+## Zusammenfassung
+
+| Faktor                          | Selbst gehostet           | Verwaltet (AACsearch)            |
+| ------------------------------- | ------------------------- | -------------------------------- |
+| Monatliche Kosten (1 Mio. Dok.) | 2.200–5.600 $             | 111–274 $                        |
+| Einrichtungszeit                | 2–8 Wochen                | 1–2 Tage                         |
+| Ingenieursaufwand               | 270–540 Std./Jahr         | 2–4 Std./Jahr                    |
+| Verfügbarkeits-SLA              | 99,5–99,9 %               | 99,99 %                          |
+| Analysen                        | Muss selbst gebaut werden | Integriert                       |
+| Multi-Region                    | Manuelle Einrichtung      | Integriert                       |
+| Vendor-Lock-in                  | N/A                       | Typesense Open-Source-kompatibel |
+
+Für 95 % der Teams liefert die verwaltete Search-as-a-Service bessere Ergebnisse zu einem Bruchteil der Gesamtkosten. Die wenigen Prozent, die wirklich vom Selbsthosten profitieren, sind diejenigen, die Suchinfrastruktur als Kernkompetenz betreiben – und sie wissen, wer sie sind.
+
+[Berechnen Sie Ihre TCO →](/pricing)

@@ -1,0 +1,217 @@
+---
+title: Architecture de Recherche Multi-Tenant pour Applications SaaS
+date: 2025-05-01
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Une plongée dans l'architecture de recherche multi-tenant — comment AACsearch gère l'isolation des données, les jetons API filtrés, la limitation de débit par locataire, et une infrastructure partagée sans compromettre la sécurité ni les performances.
+tags: [architecture, multi-tenant, saas, search, security]
+published: true
+---
+
+Chaque plateforme SaaS finit par se confronter à la question de la multi-tenance. Lorsque vous servez plus de 100 organisations à partir d'une infrastructure de recherche unique, comment garantir que le Locataire A ne voit jamais les données du Locataire B ? Comment fixer le prix ? Comment empêcher un locataire bruyant de dégrader la recherche pour tout le monde ?
+
+Cet article explique comment AACsearch résout la recherche multi-tenant au niveau de l'infrastructure — afin que votre code applicatif reste simple.
+
+## L'Approche Naïve : Un Index par Locataire
+
+Le modèle multi-tenant le plus simple est un index de recherche par client. Chaque locataire reçoit sa propre collection, ses propres clés API, et une isolation complète.
+
+**Avantages :** Isolation maximale des données. Facile à déboguer. Facturation simple par nombre d'index.
+**Inconvénients :** Surcharge de gestion des index à grande échelle. Dérive de configuration entre locataires. Plus difficile à provisionner lors de l'inscription.
+
+Pour les petites applications SaaS (< 50 locataires), cela fonctionne très bien. AACsearch prend en charge plusieurs index par compte avec des clés API distinctes par index.
+
+```bash
+# Création d'un index par locataire via l'API
+curl -X POST "https://api.aacsearch.com/indices" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "acme_corp_products",
+    "fields": [
+      {"name": "name", "type": "string"},
+      {"name": "price", "type": "float"},
+      {"name": "sku", "type": "string"}
+    ]
+  }'
+```
+
+## L'Approche Évolutive : Index Partagé avec Sécurité au Niveau Ligne
+
+Pour les plateformes SaaS comptant des centaines ou des milliers de locataires, un index partagé avec filtrage par locataire est plus économique et plus facile à gérer.
+
+### Modèle de Données
+
+Chaque document inclut un champ `tenant_id` :
+
+```json
+{
+	"id": "doc_001",
+	"tenant_id": "acme_corp",
+	"name": "Wireless Headphones",
+	"price": 79.99,
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Jetons API Filtrés (Scoped Tokens)
+
+Les jetons API filtrés d'AACsearch filtrent automatiquement chaque requête pour un locataire spécifique. Lorsque vous créez un jeton, vous spécifiez un filtre qui est combiné avec ET logique à chaque demande de recherche :
+
+```bash
+# Création d'un jeton filtré pour un locataire
+curl -X POST "https://api.aacsearch.com/api-keys/scoped" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filter": "tenant_id:=:acme_corp",
+    "description": "Clé de recherche Acme Corp"
+  }'
+```
+
+Le jeton retourné (`ss_scoped_*`) ne peut rechercher que les documents où `tenant_id == "acme_corp"`. Même en cas d'interception du jeton par un acteur malveillant, celui-ci ne peut pas accéder aux données des autres locataires.
+
+### Flux d'Architecture
+
+```
+Requête Utilisateur → Votre App SaaS → Création Jeton Filtré → AACsearch → Résultats Filtrés
+                                    │
+                                    └── token_filter: tenant_id:=:acme_corp
+                                                ↓
+                               Toutes les requêtes auto-filtrées
+                               Pas de middleware, aucun risque d'injection SQL
+```
+
+Votre application crée un jeton filtré lorsque l'utilisateur se connecte. Le jeton inclut le filtre du locataire. Chaque requête de recherche ultérieure depuis le navigateur de l'utilisateur inclut le jeton. AACsearch applique le filtre au niveau du moteur de recherche — votre application n'ajoute jamais manuellement `WHERE tenant_id = X`.
+
+## Caractéristiques de Performance
+
+| Architecture           | < 100 Locataires | 100–1K Locataires | 1K–10K Locataires  |
+| ---------------------- | ---------------- | ----------------- | ------------------ |
+| Par index              | Excellente       | Bonne             | Médiocre (gestion) |
+| Partagé + jeton filtré | Bonne            | Excellente        | Excellente         |
+| Hybride (partitionné)  | Excessif         | Bonne             | Excellente         |
+
+**Performance de l'index partagé à grande échelle :**
+
+- Latence des requêtes : < 50 ms au P95, quel que soit le nombre de locataires (le filtre est une recherche bitmap)
+- Taille de l'index : Un index de 10M documents avec 5 000 locataires se comporte comme un index mono-locataire
+- Requêtes simultanées : 500+ QPS sur le plan Scale, 2 000+ sur le Pro
+
+## Limitation de Débit par Locataire
+
+Sans limitation de débit par locataire, un client agressif pourrait monopoliser la capacité de recherche. AACsearch prend en charge des limites configurables :
+
+```json
+{
+	"rate_limits": {
+		"acme_corp": {
+			"searches_per_second": 100,
+			"indexing_per_minute": 1000
+		},
+		"startup_inc": {
+			"searches_per_second": 20,
+			"indexing_per_minute": 200
+		}
+	}
+}
+```
+
+Configurez via le tableau de bord ou l'API. Les limites dépassées retournent un code HTTP 429 avec un en-tête `Retry-After`, offrant un retour au locataire sans impacter les autres clients.
+
+## Automatisation du Provisionnement des Locataires
+
+Lorsqu'un nouveau client s'inscrit, automatisez le flux de provisionnement :
+
+```typescript
+async function provisionTenant(tenantId: string) {
+	// 1. Créer une clé API filtrée
+	const scopedKey = await aacsearch.createScopedKey({
+		filter: `tenant_id:=:${tenantId}`,
+		description: `Clé de recherche ${tenantId}`,
+	});
+
+	// 2. Stocker la clé dans les paramètres du locataire
+	await db.tenants.update({
+		where: { id: tenantId },
+		data: { aacsearchKey: scopedKey },
+	});
+
+	// 3. Optionnellement, pré-remplir avec des données modèles
+	await aacsearch.importDocuments(
+		"products",
+		templateData.map((doc) => ({
+			...doc,
+			tenant_id: tenantId,
+		})),
+	);
+
+	return scopedKey;
+}
+```
+
+L'ensemble de ce flux s'exécute en moins de 500 ms. Votre client peut effectuer des recherches immédiatement après son inscription.
+
+## Architecture Hybride : Partitionnement par Niveau de Locataire
+
+Pour les très grands déploiements (10K+ locataires), envisagez une approche hybride :
+
+- **Niveau 1 (Gratuit/Démarrage) :** Index partagé avec jetons filtrés (500+ locataires par index)
+- **Niveau 2 (Scale) :** Index dédié par locataire
+- **Niveau 3 (Entreprise) :** Cluster Typesense dédié
+
+```typescript
+function getIndexForTenant(tenant: Tenant): string {
+	if (tenant.plan === "enterprise") return `enterprise_${tenant.id}`;
+	if (tenant.plan === "scale") return `scale_${tenant.id}`;
+	return "free_tier_shared"; // des milliers de locataires gratuits partagent un index
+}
+```
+
+## Considérations de Sécurité
+
+| Préoccupation                     | Comment AACsearch y répond                                                       |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| Interception de jeton             | Les jetons filtrés sont en lecture seule (pas d'accès en écriture)               |
+| Fuite de données inter-locataires | L'application du filtre est côté serveur, pas côté client                        |
+| Expiration du jeton               | Les jetons peuvent avoir une TTL (auto-expiration après N heures/jours)          |
+| Piste d'audit                     | Toutes les requêtes API sont enregistrées avec l'ID du jeton et l'horodatage     |
+| Résidence des données             | Sélection de région par index — gardez les données UE dans l'UE                  |
+| Conformité                        | Infrastructure conforme SOC2, prête pour le RGPD                                 |
+| Rotation des clés                 | Régénérez les clés sans temps d'arrêt (l'ancienne clé fonctionne jusqu'à la TTL) |
+
+## Tarification à l'Échelle Multi-Tenant
+
+AACsearch facture par index, pas par locataire. Pour l'approche par index partagé :
+
+| Plan    | Prix       | Max Locataires (partagé) | Max Documents | Recherches |
+| ------- | ---------- | ------------------------ | ------------- | ---------- |
+| Free    | 0 $        | 50                       | 10K           | Illimité   |
+| Starter | 29 $/mo    | 200                      | 50K           | Illimité   |
+| Scale   | 99 $/mo    | 1 000                    | 500K          | Illimité   |
+| Pro     | 249 $/mo   | 5 000                    | 5M            | Illimité   |
+| Custom  | Sur mesure | Illimité                 | Sur mesure    | Illimité   |
+
+La plupart des applications SaaS sur le plan Scale peuvent servir 500 à 1 000 locataires depuis un seul index partagé. À 99 $/mois, cela représente 0,10 à 0,20 $ par locataire par mois — bien moins que le coût d'auto-hébergement de Typesense ou d'abonnement à la tarification par opération des concurrents.
+
+## Migration vers le Multi-Tenant
+
+Vous avez déjà une configuration mono-locataire ? Migrez vers un modèle multi-tenant partagé :
+
+1. Ajoutez le champ `tenant_id` à tous les documents dans chaque index par locataire
+2. Exportez tous les index par locataire
+3. Importez dans un seul index partagé avec `tenant_id` renseigné
+4. Créez des jetons API filtrés pour chaque locataire
+5. Mettez à jour votre application pour créer des jetons à la connexion
+6. Décommissionnez les index par locataire
+7. Terminé — vos clients ne subissent aucune interruption de service
+
+## Prochaines Étapes
+
+- Lisez l'article [Typesense Deep Dive](/blog/typesense-deep-dive) pour le moteur de recherche sous-jacent
+- Explorez la [référence API des jetons filtrés](/docs/scoped-tokens)
+- Découvrez comment [AACsearch se compare à une solution maison](/comparison-vs-self-hosted)
+
+[Commencez à construire votre recherche multi-tenant gratuitement →](/signup)

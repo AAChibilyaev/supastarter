@@ -1,0 +1,260 @@
+---
+title: Créer une API de Recherche pour votre SaaS : Bonnes Pratiques d'Architecture
+date: 2025-05-01
+image: https://picsum.photos/id/57/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Les schémas d'architecture pour ajouter la recherche à votre plateforme SaaS — conception d'API REST, jetons cloisonnés, stratégies de filtrage, synchronisation par webhook, et les compromis entre infrastructure de recherche embarquée et externe.
+tags: [architecture, api, saas, search, best-practices]
+published: true
+---
+
+Chaque plateforme SaaS a besoin un jour d'une fonctionnalité de recherche. La question est de savoir comment l'architecturer : comme une fonctionnalité intégrée ? Une API que vous exposez à vos clients ? Ou un service géré que vous consommez ?
+
+Cet article couvre les schémas d'architecture qui fonctionnent à grande échelle — que vous construisiez la recherche dans votre produit ou que vous l'offriez comme fonctionnalité à vos clients.
+
+## Options d'Architecture
+
+### Option 1 : Recherche Embarquée (DIY)
+
+Vous construisez la recherche directement dans votre base de données applicative avec PostgreSQL `ILIKE` ou Elasticsearch.
+
+```
+Votre App → PostgreSQL `ILIKE` / Elasticsearch → Résultats
+```
+
+| Aspect               | Évaluation                                          |
+| -------------------- | --------------------------------------------------- |
+| Temps d'installation | 2 à 4 semaines                                      |
+| Maintenance          | Continue (indexation, réglage, passage à l'échelle) |
+| Multi-tenant         | À construire soi-même                               |
+| Analytiques          | À construire soi-même                               |
+| Coût pour 1M docs    | 200-500 $/mo serveur + 20h/mo ops                   |
+
+Cette approche fonctionne pour les produits en phase de démarrage avec moins de 10 000 documents. Au-delà, le coût opérationnel dépasse le gain de simplicité.
+
+### Option 2 : Moteur Tiers Embarqué
+
+Vous intégrez un fournisseur de recherche en tant que service (comme AACsearch) dans votre application via API. Le fournisseur gère l'indexation, la recherche et l'infrastructure.
+
+```
+Votre App → API AACsearch → Résultats
+```
+
+| Aspect               | Évaluation                          |
+| -------------------- | ----------------------------------- |
+| Temps d'installation | 1 à 2 jours                         |
+| Maintenance          | Minimale (gérée par le fournisseur) |
+| Multi-tenant         | Intégré (jetons cloisonnés)         |
+| Analytiques          | Intégré                             |
+| Coût pour 1M docs    | 99-249 $/mo                         |
+
+C'est le point idéal pour la plupart des entreprises SaaS. Vous obtenez une recherche de production sans avoir besoin d'un ingénieur recherche dédié.
+
+### Option 3 : Exposer la Recherche en tant que Produit API
+
+Vous construisez une couche API de recherche que vos clients consomment. AACsearch peut être le backend.
+
+```
+Application Client → Votre API de Recherche → AACsearch → Résultats
+                                               ↑
+                              Votre API gère les jetons cloisonnés,
+                              la limitation de débit et la facturation
+```
+
+| Aspect               | Évaluation                             |
+| -------------------- | -------------------------------------- |
+| Temps d'installation | 1 à 2 semaines                         |
+| Maintenance          | Gestion de la surface d'API            |
+| Multi-tenant         | Jetons cloisonnés par client           |
+| Analytiques          | Analytiques par client                 |
+| Revenu               | Facturation par recherche ou par index |
+
+C'est le modèle des plateformes qui offrent la recherche comme fonctionnalité à leurs utilisateurs finaux (ex. : plateformes e-commerce, fournisseurs de CMS).
+
+## Modèles de Conception d'API REST
+
+### API de Recherche Interne (Option 2)
+
+```typescript
+// Point de terminaison de recherche interne pour votre application SaaS
+app.post("/api/search", async (req, res) => {
+	const { tenantId } = await authenticate(req);
+	const { query, filters, page = 1 } = req.body;
+
+	const scopedKey = await getTenantKey(tenantId);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: "products",
+		q: query,
+		filter_by: filters,
+		page,
+	});
+
+	res.json(results);
+});
+```
+
+### API de Recherche orientée Client (Option 3)
+
+```typescript
+// API de recherche pour les utilisateurs finaux de vos clients
+app.post("/api/v1/search", async (req, res) => {
+	// Limitation de débit par clé API client
+	await rateLimiter.check(req.apiKey);
+
+	// La clé du client correspond à son jeton AACsearch cloisonné
+	const scopedKey = await getScopedKey(req.apiKey);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: req.body.index,
+		q: req.body.q,
+		filter_by: req.body.filter_by,
+	});
+
+	// Ajout du suivi d'utilisation pour la facturation
+	await trackUsage(req.apiKey, results);
+
+	res.json(results);
+});
+```
+
+## Architecture d'Indexation
+
+### Indexation en Temps Réel (Basée sur Webhooks)
+
+Pour les applications SaaS dont les données changent fréquemment, utilisez l'indexation par webhook :
+
+```typescript
+// Quand un enregistrement est créé/mis à jour dans votre application
+app.post("/webhooks/aacsearch/sync", async (req, res) => {
+	const { event, data } = req.body;
+
+	switch (event) {
+		case "product.created":
+		case "product.updated":
+			await aacsearch.upsertDocument("products", data);
+			break;
+		case "product.deleted":
+			await aacsearch.deleteDocument("products", data.id);
+			break;
+	}
+
+	res.status(200).end();
+});
+```
+
+### Indexation par Lots (Pour les Importations Initiales ou les Synchronisations Nocturnes)
+
+Pour les grands ensembles de données, utilisez les importations par lots :
+
+```typescript
+async function batchImport(tenantId: string, documents: any[]) {
+	// Découpage en lots de 10K pour des performances optimales
+	const chunks = chunk(documents, 10000);
+
+	for (const chunk of chunks) {
+		await aacsearch.importDocuments(
+			"products",
+			chunk.map((doc) => ({
+				...doc,
+				tenant_id: tenantId,
+			})),
+		);
+	}
+}
+```
+
+### Approche Hybride
+
+Utilisez les webhooks pour les mises à jour en temps réel et les synchronisations par lots nocturnes pour la cohérence :
+
+```
+Temps réel :   Webhook → Upsert de documents individuels (moins de 100 ms)
+Nocturne :     Tâche cron → Réindexation complète pour rattraper les mises à jour manquées
+Récupération : Déclenchement manuel → Reconstruire l'index à partir d'un dump de base de données
+```
+
+## Stratégies de Filtrage
+
+### Filtrage par Locataire
+
+Appliquez toujours l'isolation des locataires au niveau du moteur de recherche, pas au niveau de l'application :
+
+```typescript
+// BON : Le jeton d'API cloisonné applique le filtre du locataire
+const key = await aacsearch.createScopedKey({
+	filter: `tenant_id:=:${tenantId}`,
+});
+
+// MAUVAIS : Filtrage au niveau applicatif (risque de fuite)
+const results = await aacsearch.search({
+	filter_by: `tenant_id:${tenantId}`, // Si un bug supprime ceci, fuite inter-locataire
+});
+```
+
+### Filtrage par Rôle
+
+Pour les applications avec contrôle d'accès basé sur les rôles (admin vs. lecteur) :
+
+```typescript
+const filters: string[] = [];
+
+if (user.role === "viewer") {
+	filters.push("visibility:public");
+} else if (user.role === "editor") {
+	filters.push("visibility:public,internal");
+}
+// L'admin voit tout — pas de filtre
+
+const scopedKey = await aacsearch.createScopedKey({
+	filter: filters.join(" && "),
+});
+```
+
+## Optimisation des Performances
+
+| Stratégie             | Impact                                     | Mise en œuvre                                                  |
+| --------------------- | ------------------------------------------ | -------------------------------------------------------------- |
+| Dénormaliser les docs | Requêtes 2 à 5 fois plus rapides           | Aplatir les données liées en un seul document                  |
+| Limiter les champs    | Indexation 30 à 50 % plus rapide           | Indexer uniquement les champs recherchés par les utilisateurs  |
+| Pagination            | Temps de réponse constant                  | Utiliser le curseur, pas le décalage                           |
+| Mise en cache         | 50 à 80 % de requêtes en moins             | Mettre en cache les 100 premières requêtes pendant 60 secondes |
+| Limites de facettes   | Calcul des facettes 2 à 3 fois plus rapide | Limiter à 10 valeurs de facette par champ                      |
+
+## Surveillance et Alertes
+
+Votre API de recherche doit être aussi observable que votre application :
+
+```typescript
+// Surveiller les métriques clés
+interface SearchMetrics {
+	p50_latency_ms: number;
+	p95_latency_ms: number;
+	p99_latency_ms: number;
+	queries_per_second: number;
+	error_rate: number;
+	zero_result_rate: number;
+	cache_hit_rate: number;
+}
+
+// Définir des alertes
+const alerts = {
+	p95_latency_ms: { warn: 150, critical: 300 },
+	error_rate: { warn: 0.01, critical: 0.05 }, // 1 % et 5 %
+	zero_result_rate: { warn: 0.1, critical: 0.25 }, // 10 % et 25 %
+};
+```
+
+## Quand Proposer la Recherche comme Fonctionnalité
+
+Si votre plateforme a plusieurs clients qui ont chacun besoin de recherche, envisagez de l'exposer comme fonctionnalité produit :
+
+- **Plateforme e-commerce :** Chaque boutique a besoin de recherche de produits
+- **CMS :** Chaque site a besoin de recherche de contenu
+- **Marketplace :** Chaque liste de vendeurs a besoin de filtrage
+- **SaaS :** Chaque organisation a besoin de recherche dans l'application
+
+Dans chaque cas, les jetons cloisonnés d'AACsearch font de la recherche multi-tenant une configuration, pas un projet d'ingénierie.
+
+[Commencez à intégrer la recherche dans votre SaaS →](/signup)

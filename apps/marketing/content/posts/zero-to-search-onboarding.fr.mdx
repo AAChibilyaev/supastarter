@@ -38,12 +38,14 @@ Aucune carte de crédit requise. Vous arriverez sur le Dashboard — votre centr
 ## Étape 2 : Créez Votre Premier Index
 
 Cliquez sur **New Index** dans le Dashboard. Vous aurez besoin de :
+
 - **Nom d'index :** `products`, `docs`, `blog` — adaptez à votre type de données
 - **Champ de tri par défaut :** Généralement `_text_match` (pertinence) ou un champ numérique comme `price`
 
 L'index est provisionné immédiatement. Typesense crée la collection sous-jacente, et vos clés API sont générées automatiquement.
 
 **Comprendre les Clés API :**
+
 - **Clé recherche uniquement** (`ss_search_*`) : Pour utilisation navigateur/côté client — peut chercher mais pas modifier les données
 - **Clé admin** (`ss_admin_*`) : Pour opérations côté serveur — peut créer/mettre à jour/supprimer des documents
 - **Clé limitée** (`ss_scoped_*`) : Pour configurations multi-tenant — restreinte à des conditions de filtre spécifiques
@@ -55,22 +57,24 @@ Stockez votre clé admin dans les variables d'environnement. La clé de recherch
 AACsearch fonctionne avec des documents plats et dénormalisés. Chaque document est un objet JSON d'une taille maximale de 100 Ko.
 
 **Exemple de produit e-commerce :**
+
 ```json
 {
-  "id": "prod_001",
-  "name": "Wireless Bluetooth Headphones",
-  "description": "Noise-cancelling wireless headphones with 30-hour battery life",
-  "price": 79.99,
-  "brand": "SoundMax",
-  "category": "Electronics",
-  "image_url": "https://example.com/images/headphones.jpg",
-  "in_stock": true,
-  "rating": 4.5,
-  "tags": ["wireless", "audio", "bluetooth"]
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"description": "Noise-cancelling wireless headphones with 30-hour battery life",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"image_url": "https://example.com/images/headphones.jpg",
+	"in_stock": true,
+	"rating": 4.5,
+	"tags": ["wireless", "audio", "bluetooth"]
 }
 ```
 
 **Règles clés :**
+
 - Chaque document nécessite un champ `id` unique (chaîne de caractères)
 - Les tableaux sont pris en charge (`tags`, `colors`, `sizes`) — ils deviennent automatiquement des facettes multi-valeurs
 - L'imbrication est limitée — aplatissez les données connexes dans le document
@@ -131,6 +135,7 @@ Le boost contrôle le classement : une correspondance dans `name` (boost 3x) est
 ### Tolérance aux Fautes de Frappe
 
 Configurez par index :
+
 - **Fautes max :** 1 (par défaut) ou 2 pour les champs courts comme les codes SKU
 - **Boost de correspondance exacte :** Les correspondances exactes sont classées 2x plus haut que les correspondances corrigées
 - **Correspondance de préfixe :** Les requêtes correspondent aux préfixes (gère la saisie partielle)
@@ -157,11 +162,11 @@ Le Widget AACsearch est une balise script à intégrer. Idéal pour les sites de
 <script src="https://cdn.aacsearch.com/widget.js"></script>
 <div id="search"></div>
 <script>
-  new AACsearchWidget({
-    apiKey: 'ss_search_your_key',
-    index: 'products',
-    mountElement: '#search'
-  });
+	new AACsearchWidget({
+		apiKey: "ss_search_your_key",
+		index: "products",
+		mountElement: "#search",
+	});
 </script>
 ```
 
@@ -170,18 +175,18 @@ Le Widget AACsearch est une balise script à intégrer. Idéal pour les sites de
 Utilisez l'API REST pour les frontends personnalisés, les applications mobiles ou la recherche côté serveur.
 
 ```javascript
-const response = await fetch('https://api.aacsearch.com/indices/products/search', {
-  method: 'POST',
-  headers: {
-    'X-API-KEY': 'ss_search_your_key',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    q: 'wireless headphones',
-    query_by: 'name,description',
-    facet_by: 'brand,category',
-    max_facet_values: 10
-  })
+const response = await fetch("https://api.aacsearch.com/indices/products/search", {
+	method: "POST",
+	headers: {
+		"X-API-KEY": "ss_search_your_key",
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		q: "wireless headphones",
+		query_by: "name,description",
+		facet_by: "brand,category",
+		max_facet_values: 10,
+	}),
 });
 
 const results = await response.json();
@@ -193,16 +198,16 @@ Disponible pour Node.js, Python, PHP, Go et Ruby.
 
 ```typescript
 // npm install @aacsearch/client
-import { AACSearchClient } from '@aacsearch/client';
+import { AACSearchClient } from "@aacsearch/client";
 
 const client = new AACSearchClient({
-  apiKey: process.env.AACSEARCH_ADMIN_KEY,
+	apiKey: process.env.AACSEARCH_ADMIN_KEY,
 });
 
-const results = await client.search('products', {
-  q: 'wireless headphones',
-  search_fields: ['name', 'description'],
-  facet_fields: ['brand', 'category'],
+const results = await client.search("products", {
+	q: "wireless headphones",
+	search_fields: ["name", "description"],
+	facet_fields: ["brand", "category"],
 });
 ```
 
@@ -235,16 +240,16 @@ const results = await client.search('products', {
 
 ## Dépannage des Problèmes Courants
 
-| Problème                          | Cause probable                        | Correctif                                             |
-| --------------------------------- | ------------------------------------- | ----------------------------------------------------- |
-| Aucun résultat pour toute requête | Documents non encore indexés          | Vérifiez le nombre de documents dans le Dashboard → réimportez |
-| Tolérance aux fautes inactive     | Champ non marqué comme recherchable   | Marquez le champ comme recherchable dans les paramètres du schéma |
+| Problème                          | Cause probable                        | Correctif                                                          |
+| --------------------------------- | ------------------------------------- | ------------------------------------------------------------------ |
+| Aucun résultat pour toute requête | Documents non encore indexés          | Vérifiez le nombre de documents dans le Dashboard → réimportez     |
+| Tolérance aux fautes inactive     | Champ non marqué comme recherchable   | Marquez le champ comme recherchable dans les paramètres du schéma  |
 | Le Widget ne s'affiche pas        | Lien CSS manquant ou ID div incorrect | Vérifiez que le CSS est chargé et que l'ID mountElement correspond |
-| Recherche lente (>200 ms)         | Trop de champs recherchables          | Limitez les champs recherchables aux 3-5 plus importants |
-| Valeurs de facettes absentes      | Champ non marqué comme facette        | Activez la facette dans les paramètres du schéma       |
-| Données inter-locataires visibles | Pas de clé API limitée                | Créez des clés limitées avec `token_filter` par locataire |
-| L'API retourne 401                | Clé API expirée ou invalide           | Régénérez la clé depuis le Dashboard                   |
-| L'import échoue avec timeout      | Lot trop volumineux                   | Divisez en lots de 10 000 documents                   |
+| Recherche lente (>200 ms)         | Trop de champs recherchables          | Limitez les champs recherchables aux 3-5 plus importants           |
+| Valeurs de facettes absentes      | Champ non marqué comme facette        | Activez la facette dans les paramètres du schéma                   |
+| Données inter-locataires visibles | Pas de clé API limitée                | Créez des clés limitées avec `token_filter` par locataire          |
+| L'API retourne 401                | Clé API expirée ou invalide           | Régénérez la clé depuis le Dashboard                               |
+| L'import échoue avec timeout      | Lot trop volumineux                   | Divisez en lots de 10 000 documents                                |
 
 ## Prochaines Étapes
 

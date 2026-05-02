@@ -1,0 +1,274 @@
+---
+title: Cómo Escalar la Búsqueda a Millones de Documentos con un Presupuesto Ajustado
+date: 2025-05-01
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Estrategias prácticas para escalar la búsqueda a millones de documentos sin arruinarte — fragmentación de índices, optimización de documentos, patrones de consulta, capas de caché y cuándo actualizar de plan.
+tags: [scaling, performance, optimization, architecture, documents]
+published: true
+---
+
+Escalar la búsqueda de miles a millones de documentos es un desafío que todo producto en crecimiento enfrenta. La buena noticia: no necesitas infraestructura empresarial para manejar millones de documentos. Con la arquitectura adecuada, puedes servir millones de docs desde infraestructura asequible.
+
+Esta guía cubre estrategias prácticas de escalado para AACsearch (y Typesense) en cada etapa de crecimiento.
+
+## Etapa 1: 10K-100K Documentos (Gratuito a Starter)
+
+A esta escala, cualquier motor de búsqueda funciona bien. Concéntrate en la corrección y relevancia, no en la infraestructura.
+
+### Mejores Prácticas
+
+**Optimización de documentos:**
+
+- Mantén cada documento por debajo de 10KB (excluye campos no utilizados)
+- Limita los campos buscables a 5-7 (menos campos = consultas más rápidas)
+- Usa IDs de cadena (Typesense maneja mejor las cadenas que los enteros para IDs)
+
+```json
+// Documento optimizado (8KB → 2KB)
+{
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Rendimiento en Esta Etapa
+
+| Métrica                    | Esperado           |
+| -------------------------- | ------------------ |
+| Latencia de consulta (P50) | < 10ms             |
+| Latencia de consulta (P95) | < 30ms             |
+| Velocidad de indexación    | 5,000 docs/seg     |
+| Consultas concurrentes     | 100+ QPS           |
+| Plan necesario             | Gratuito o Starter |
+
+## Etapa 2: 100K-500K Documentos (Starter a Scale)
+
+Al cruzar los 100K documentos, los patrones de consulta empiezan a importar. No todos los campos necesitan ser buscables.
+
+### Estrategia de Indexación
+
+**Usa subconjuntos de campos para búsqueda:**
+
+```json
+{
+	"searchable_fields": ["name", "brand", "category"],
+	"facet_fields": ["brand", "category", "price"],
+	"sortable_fields": ["price", "rating", "created_at"]
+	// NO buscable: description, long_text, raw_data
+}
+```
+
+Al eliminar `description` y `long_text` de los campos buscables, reduces el tamaño del índice en un 40-60% con un impacto mínimo en la calidad de la búsqueda (los usuarios mayormente buscan por nombre y marca).
+
+### Optimización de Facetas
+
+Para facetas con alta cardinalidad (muchos valores únicos), limita los valores devueltos:
+
+```json
+{
+	"max_facet_values": 15,
+	"facet_query": "brand", // Permitir búsqueda dentro de valores de faceta
+	"facet_limit": 50 // Nunca devolver más de 50 valores
+}
+```
+
+### Caché
+
+Implementa caché del lado del servidor para las consultas principales:
+
+```typescript
+const cache = new Map<string, SearchResult>();
+const CACHE_TTL = 60_000; // 60 segundos
+
+async function searchWithCache(query: string) {
+	const key = query.toLowerCase().trim();
+
+	if (cache.has(key)) {
+		const cached = cache.get(key)!;
+		if (Date.now() - cached.timestamp < CACHE_TTL) {
+			return cached.data;
+		}
+		cache.delete(key);
+	}
+
+	const results = await aacsearch.search({ q: query });
+	cache.set(key, { data: results, timestamp: Date.now() });
+	return results;
+}
+```
+
+Con una tasa de aciertos de caché del 50%, esto duplica efectivamente tu capacidad.
+
+### Rendimiento en Esta Etapa
+
+| Métrica                    | Esperado        |
+| -------------------------- | --------------- |
+| Latencia de consulta (P50) | < 15ms          |
+| Latencia de consulta (P95) | < 50ms          |
+| Tamaño del índice          | 500MB-2GB       |
+| Consultas concurrentes     | 200-500 QPS     |
+| Plan necesario             | Starter o Scale |
+
+## Etapa 3: 500K-5M Documentos (Scale a Pro)
+
+Más allá de los 500K documentos, necesitas decisiones arquitectónicas deliberadas.
+
+### Fragmentación de Índices (Sharding)
+
+AACsearch escala horizontalmente. Para índices grandes, considera fragmentar por:
+
+**Opción A: Fragmentar por inquilino (para apps multi-inquilino)**
+
+```typescript
+// Cada inquilino obtiene su propio fragmento/índice
+const shard = `products_${Math.floor(tenantId / 1000)}`;
+```
+
+**Opción B: Fragmentar por categoría de documento**
+
+```typescript
+// Dividir por categorías lógicas
+const shards = ["products_electronics", "products_clothing", "products_home"];
+```
+
+**Opción C: Fragmentar por fecha (para datos de series temporales)**
+
+```typescript
+// Fragmentos mensuales para logs/contenido
+const shard = `products_2025_${String(month).padStart(2, "0")}`;
+```
+
+### Estrategia de Indexación por Lotes
+
+Para grandes importaciones iniciales o reindexación:
+
+```typescript
+async function batchReindex(documents: Document[]) {
+	const BATCH_SIZE = 10000;
+	const CONCURRENCY = 4;
+
+	// Procesar lotes en paralelo
+	const batches = chunk(documents, BATCH_SIZE);
+	const results = [];
+
+	for (let i = 0; i < batches.length; i += CONCURRENCY) {
+		const batchGroup = batches.slice(i, i + CONCURRENCY);
+		const batchResults = await Promise.all(
+			batchGroup.map((batch) => aacsearch.importDocuments("products", batch)),
+		);
+		results.push(...batchResults);
+	}
+
+	return results;
+}
+```
+
+### Optimización de Consultas
+
+**Usa paginación basada en cursor en lugar de desplazamiento:**
+
+```typescript
+// BUENO: Basado en cursor (rápido, consistente)
+const page1 = await aacsearch.search({ q: "shoes", per_page: 20 });
+const page2 = await aacsearch.search({
+	q: "shoes",
+	per_page: 20,
+	page: page1.next_page, // cursor
+});
+
+// MALO: Basado en desplazamiento (más lento en desplazamientos altos)
+const page100 = await aacsearch.search({ q: "shoes", per_page: 20, page: 100 });
+```
+
+**Usa preselección basada en filtros para facetas grandes:**
+
+```typescript
+// En lugar de devolver las 5,000 marcas, permite a los usuarios buscar dentro de facetas
+const query = { q: "headphones", facet_by: "brand", max_facet_values: 10 };
+// El usuario hace clic en "Mostrar más marcas" → llamar con facet_query
+const facetQuery = { q: "headphones", facet_by: "brand", facet_query: "sony" };
+```
+
+### Rendimiento en Esta Etapa
+
+| Métrica                    | Esperado     |
+| -------------------------- | ------------ |
+| Latencia de consulta (P50) | < 20ms       |
+| Latencia de consulta (P95) | < 80ms       |
+| Tamaño del índice          | 2GB-15GB     |
+| Consultas concurrentes     | 500-1000 QPS |
+| Plan necesario             | Scale o Pro  |
+
+## Etapa 4: 5M-50M Documentos (Pro + Personalizado)
+
+A esta escala, estás gestionando una operación de búsqueda significativa. Estrategias clave:
+
+### Infraestructura Dedicada
+
+AACsearch Pro incluye opciones de infraestructura dedicada:
+
+- Nodos de búsqueda aislados (sin vecinos ruidosos)
+- SLA personalizado (99.95%+)
+- Ingeniero de soporte dedicado
+- Índices pre-calentados (sin latencia de arranque en frío)
+
+### Enrutamiento de Consultas
+
+Para QPS muy alto, enruta las consultas de manera inteligente:
+
+```typescript
+// Enrutar consultas frecuentemente buscadas a nodos activos
+const ROUTING = {
+	hot: ["wireless headphones", "nike shoes", "iPhone"], // caché potenciada
+	warm: /^[a-z]{4,}$/i, // consultas de longitud media → nodos templados
+	cold: /./, // todo lo demás → grupo predeterminado
+};
+```
+
+### Gestión del Ciclo de Vida de Datos
+
+No todos los documentos necesitan la misma prioridad de búsqueda:
+
+```typescript
+const lifecycle = {
+	active: { age: "< 90 days", priority: "real-time", replica: 3 },
+	warm: { age: "90-365 days", priority: "nearline", replica: 2 },
+	cold: { age: "> 365 days", priority: "archive", replica: 1, demoted_boost: 0.5 },
+};
+```
+
+Los productos activos obtienen recursos completos. Los productos más antiguos aún son buscables pero se clasifican más abajo con menos réplicas.
+
+## Resumen de Escalado
+
+| Etapa       | Documentos | Estrategia                                                                    | Costo mensual |
+| ----------- | ---------- | ----------------------------------------------------------------------------- | ------------- |
+| Startup     | < 100K     | Configuración predeterminada, enfocarse en relevancia                         | $0-29         |
+| Crecimiento | 100K-500K  | Optimización de campos, caché                                                 | $29-99        |
+| Escalado    | 500K-5M    | Fragmentación, indexación por lotes, paginación por cursor                    | $99-249       |
+| Empresa     | 5M-50M     | Infraestructura dedicada, enrutamiento de consultas, gestión de ciclo de vida | Personalizado |
+
+## Errores Comunes a Escala
+
+| Error                         | Síntoma                           | Solución                                                      |
+| ----------------------------- | --------------------------------- | ------------------------------------------------------------- |
+| Demasiados campos buscables   | Consultas lentas, índice grande   | Limitar a 5-7 campos                                          |
+| Sin caché                     | Carga innecesaria en el motor     | Cachear las 100 consultas principales durante 60s             |
+| Paginación por desplazamiento | Consultas más lentas              | Usar paginación basada en cursor                              |
+| Documentos enormes            | Indexación lenta, índice grande   | Eliminar campos no utilizados, aplanar datos relacionados     |
+| Todas las facetas ilimitadas  | Cálculo de facetas lento          | Limitar a 10-15 valores principales por faceta                |
+| Sin plan de fragmentación     | Difícil de escalar más allá de 5M | Planificar estrategia de fragmentación antes de 1M documentos |
+
+## Próximos Pasos
+
+- [Benchmarkea tu índice](/docs/benchmarking) a escala actual y proyectada
+- [Revisa tu esquema de documentos](/docs/document-optimization) para oportunidades de optimización
+- [Habla con nuestro equipo](/contact) sobre necesidades de escalado
+
+[Comienza a escalar tu búsqueda →](/signup)

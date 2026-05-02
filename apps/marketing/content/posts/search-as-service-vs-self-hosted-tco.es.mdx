@@ -1,0 +1,184 @@
+---
+title: Búsqueda como Servicio vs Auto-Alojada: Análisis de Costo Total de Propiedad
+date: 2025-05-01
+image: https://picsum.photos/id/29/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Un análisis detallado del costo total de propiedad (TCO) comparando servicios de búsqueda gestionados vs Typesense/Elasticsearch auto-alojados — incluyendo infraestructura, operaciones, tiempo de ingeniería y costos de escalado.
+tags: [comparison, tco, self-hosted, managed, cost-analysis]
+published: true
+---
+
+La decisión de "construir vs comprar" para infraestructura de búsqueda rara vez es tan simple como comparar precios de suscripción mensuales. Auto-alojar tiene costos ocultos en tiempo de ingeniería, operaciones y costo de oportunidad. Los servicios gestionados tienen precios premium pero incluyen mantenimiento y confiabilidad.
+
+Este artículo desglosa el TCO real para ambos enfoques en tres tamaños de despliegue típicos.
+
+## Categorías de Costo
+
+Una comparación justa debe incluir:
+
+1. **Infraestructura** — Servidores, almacenamiento, ancho de banda, respaldos
+2. **Operaciones** — Monitoreo, alertas, respuesta a incidentes, actualizaciones
+3. **Tiempo de ingeniería** — Configuración inicial, ajuste, mantenimiento, depuración
+4. **Costo de oportunidad** — Lo que tu equipo podría estar construyendo en su lugar
+5. **Costo de escalado** — Costo de añadir capacidad a medida que creces
+
+## Escenario 1: Despliegue Pequeño (10K documentos, 50K búsquedas/mes)
+
+### Auto-Alojado (Typesense en un VPS de $10)
+
+| Ítem                      | Costo mensual | Notas                                      |
+| ------------------------- | ------------- | ------------------------------------------ |
+| VPS (2GB RAM, 2 vCPU)     | $10           | Digital Ocean / Hetzner                    |
+| Respaldos                 | $2            | Almacenamiento de snapshot automatizado    |
+| Monitoreo                 | $0            | Verificación de salud básica (gratuito)    |
+| Dominio + SSL             | $1            | Renovación de certificado (amortizado)     |
+| **Total infraestructura** | **$13/mes**   |                                            |
+| Configuración inicial     | $200          | 4 horas de ingeniero senior @ $50/hora     |
+| Mantenimiento mensual     | $50           | 1 hora/mes para actualizaciones, ajuste    |
+| Respuesta a incidentes    | $25           | 30 min/mes en promedio (caídas, problemas) |
+| **Total ingeniería**      | **$275/mes**  | Amortizado en 12 meses                     |
+| **TCO real**              | **$288/mes**  |                                            |
+
+### Gestionado (Tier Gratuito de AACsearch)
+
+| Ítem                    | Costo mensual                    |
+| ----------------------- | -------------------------------- |
+| Suscripción             | $0                               |
+| Tiempo de configuración | $0 (30 min, sin costo)           |
+| Mantenimiento           | $0 (gestionado por el proveedor) |
+| **TCO real**            | **$0/mes**                       |
+
+**Veredicto:** A pequeña escala, gestionado es gratis y auto-alojado cuesta $288/mes. No hay comparación.
+
+## Escenario 2: Mediana Escala (500K documentos, 1M búsquedas/mes)
+
+### Auto-Alojado (Typesense, clúster de 3 nodos)
+
+| Ítem                      | Costo mensual |
+| ------------------------- | ------------- | ---------------------- |
+| 3 x VPS (4GB, 2 vCPU)     | $72           |
+| Balanceador de carga      | $12           |
+| Respaldos (automatizados) | $15           |
+| Monitoreo + alertas       | $20           |
+| **Total infraestructura** | **$119/mes**  |
+| Configuración inicial     | $1,000        | 20 horas de ingeniería |
+| Mantenimiento mensual     | $200          | 4 horas/mes            |
+| Respuesta a incidentes    | $100          | 2 horas/mes promedio   |
+| Ajuste de relevancia      | $100          | 2 horas/mes            |
+| **Total ingeniería**      | **$525/mes**  | Amortizado en 12 meses |
+| **TCO real**              | **$644/mes**  |                        |
+
+### Gestionado (Plan Scale de AACsearch)
+
+| Ítem                   | Costo mensual |
+| ---------------------- | ------------- | ---------- |
+| Suscripción            | $99           |
+| Configuración + ajuste | $25           | 30 min/mes |
+| **TCO real**           | **$124/mes**  |
+
+**Ahorro:** $520/mes usando búsqueda gestionada. Además, tu equipo construye funcionalidades del producto en lugar de gestionar infraestructura de búsqueda.
+
+## Escenario 3: Gran Escala (5M documentos, 10M búsquedas/mes)
+
+### Auto-Alojado (Typesense o Elasticsearch, clúster de 6 nodos)
+
+| Ítem                      | Costo mensual  |
+| ------------------------- | -------------- | ---------------------- |
+| 6 x VPS (8GB, 4 vCPU)     | $288           |
+| Balanceador de carga      | $25            |
+| Respaldos                 | $50            |
+| Monitoreo + APM           | $50            |
+| Transferencia de datos    | $30            |
+| **Total infraestructura** | **$443/mes**   |
+| Configuración inicial     | $3,000         | 60 horas de ingeniería |
+| Mantenimiento mensual     | $500           | 10 horas/mes           |
+| Respuesta a incidentes    | $250           | 5 horas/mes promedio   |
+| Ajuste de relevancia      | $200           | 4 horas/mes            |
+| Planificación de escalado | $100           | 2 horas/mes            |
+| **Total ingeniería**      | **$1,300/mes** | Amortizado en 12 meses |
+| **TCO real**              | **$1,743/mes** |                        |
+
+### Gestionado (Plan Pro de AACsearch)
+
+| Ítem                   | Costo mensual |
+| ---------------------- | ------------- | ---------- |
+| Suscripción            | $249          |
+| Configuración + ajuste | $50           | 1 hora/mes |
+| **TCO real**           | **$299/mes**  |
+
+**Ahorro:** $1,444/mes usando búsqueda gestionada. Solo el ahorro en tiempo de ingeniería podría financiar una contratación a tiempo parcial.
+
+## Costos Ocultos del Auto-Alojamiento
+
+Más allá de los números, auto-alojar conlleva riesgos que son difíciles de cuantificar hasta que ocurren:
+
+| Riesgo                        | Probabilidad | Impacto                     | Costo de mitigación                     |
+| ----------------------------- | ------------ | --------------------------- | --------------------------------------- |
+| Fallo del clúster             | Baja         | Caída completa de búsqueda  | Configuración HA (2x infraestructura $) |
+| Corrupción de datos           | Muy baja     | Reconstruir desde respaldo  | RTO: 2-4 horas                          |
+| Actualización de versión rota | Media        | Reversión o reparación      | Entorno staging ($50/mes)               |
+| Vulnerabilidad de seguridad   | Baja         | Exposición de datos         | SLA de parcheo                          |
+| Emergencia de escalado        | Media        | Degradación del rendimiento | Aprovisionamiento de emergencia         |
+
+La mayoría de los equipos subestiman estos riesgos al tomar la decisión de construir vs comprar.
+
+## Costos Ocultos de los Servicios Gestionados
+
+La búsqueda gestionada no está libre de riesgos:
+
+| Riesgo                    | Probabilidad | Impacto                              | Mitigación                               |
+| ------------------------- | ------------ | ------------------------------------ | ---------------------------------------- |
+| Dependencia del proveedor | Baja         | Costoso de migrar                    | AACsearch: exportación completa de datos |
+| Aumento de precio         | Media        | Impacto en presupuesto               | Bloquear precio anual                    |
+| Brechas de funcionalidad  | Baja         | Se necesitan soluciones alternativas | Evaluar antes de comprometerse           |
+| Latencia desde región     | Baja         | Respuestas más lentas                | Elegir la región más cercana             |
+
+AACsearch mitiga el riesgo de dependencia del proveedor al estar construido sobre Typesense — puedes exportar todo tu conjunto de datos y ejecutarlo en tu propio clúster de Typesense en cualquier momento.
+
+## Análisis de Punto de Equilibrio
+
+¿A qué escala auto-alojar se vuelve más barato que gestionado?
+
+```
+Costos fijos auto-alojado:  Configuración ($200-3K) + Operaciones mensuales ($50-500)
+Costos fijos gestionado:    Suscripción mensual ($0-249)
+
+Punto de equilibrio: Cuando el costo de operaciones mensual < prima de suscripción
+```
+
+Para la mayoría de los equipos, el punto de equilibrio nunca se alcanza porque:
+
+1. El tiempo de ingeniería tiene un costo de crecimiento — cada hora gastada en operaciones de búsqueda podría mejorar tu producto
+2. Los costos de infraestructura auto-alojada crecen con los datos (más servidores) mientras que los costos gestionados se mantienen planos
+3. El riesgo de incidentes aumenta con la escala, no disminuye
+
+## Los Factores No Financieros
+
+A veces auto-alojar tiene sentido incluso a mayor costo:
+
+- **Cumplimiento normativo:** Los datos nunca deben salir de tu infraestructura
+- **Control total:** Necesitas un comportamiento de búsqueda personalizado que el proveedor no soporta
+- **Inversión existente:** Ya tienes un equipo y clúster de Elasticsearch
+- **Fuera de línea/air-gapped:** Tu aplicación se ejecuta en una red aislada
+
+Para todos los demás, la búsqueda gestionada ofrece mejor retorno de inversión.
+
+## Marco de Decisión
+
+```text
+¿Es la búsqueda tu diferenciador principal?
+├── Sí → Auto-aloja (necesitas control total e invertirás)
+└── No → Usa servicio gestionado
+        ├── < 50K docs → Tier gratuito (AACsearch / Algolia)
+        ├── < 500K docs → Plan Starter/Scale
+        └── > 500K docs → Plan Scale/Pro
+```
+
+## Próximos Pasos
+
+- [Prueba AACsearch gratis](/signup) — comprueba si la búsqueda gestionada funciona para ti
+- [Lee la guía de auto-alojamiento de Typesense](/blog/typesense-deep-dive) si necesitas auto-alojar
+- [Compara precios](/pricing) entre tamaños de despliegue
+
+[Calcula tu TCO con la calculadora de precios →](/pricing)

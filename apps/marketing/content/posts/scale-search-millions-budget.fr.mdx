@@ -1,0 +1,274 @@
+---
+title: Comment Passer la Recherche à l'Échelle sur des Millions de Documents avec un Budget Limité
+date: 2025-05-01
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Stratégies pratiques pour passer la recherche à l'échelle sur des millions de documents sans vous ruiner — partitionnement d'index, optimisation des documents, modèles de requêtes, couches de cache, et quand passer à un forfait supérieur.
+tags: [scaling, performance, optimization, architecture, documents]
+published: true
+---
+
+Passer la recherche de quelques milliers à des millions de documents est un défi que chaque produit en croissance rencontre. La bonne nouvelle : vous n'avez pas besoin d'une infrastructure d'entreprise pour gérer des millions de documents. Avec la bonne architecture, vous pouvez servir des millions de documents depuis une infrastructure abordable.
+
+Ce guide couvre les stratégies de passage à l'échelle pratiques pour AACsearch (et Typesense) à chaque étape de la croissance.
+
+## Étape 1 : 10 K - 100 K Documents (Gratuit à Starter)
+
+À cette échelle, n'importe quel moteur de recherche performe bien. Concentrez-vous sur l'exactitude et la pertinence, pas sur l'infrastructure.
+
+### Bonnes Pratiques
+
+**Optimisation des documents :**
+
+- Gardez chaque document sous 10 Ko (excluez les champs inutilisés)
+- Limitez les champs recherchables à 5-7 (moins de champs = requêtes plus rapides)
+- Utilisez des identifiants chaîne (Typesense gère mieux les chaînes que les entiers pour les ID)
+
+```json
+// Document optimisé (8 Ko → 2 Ko)
+{
+	"id": "prod_001",
+	"name": "Casque Bluetooth sans fil",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Électronique",
+	"in_stock": true
+}
+```
+
+### Performances à Cette Étape
+
+| Métrique                 | Attendu            |
+| ------------------------ | ------------------ |
+| Latence de requête (P50) | < 10 ms            |
+| Latence de requête (P95) | < 30 ms            |
+| Vitesse d'indexation     | 5 000 docs/s       |
+| Requêtes simultanées     | 100+ QPS           |
+| Forfait nécessaire       | Gratuit ou Starter |
+
+## Étape 2 : 100 K - 500 K Documents (Starter à Scale)
+
+Quand vous dépassez 100 000 documents, les modèles de requêtes commencent à compter. Tous les champs n'ont pas besoin d'être recherchables.
+
+### Stratégie d'Indexation
+
+**Utilisez des sous-ensembles de champs pour la recherche :**
+
+```json
+{
+	"searchable_fields": ["name", "brand", "category"],
+	"facet_fields": ["brand", "category", "price"],
+	"sortable_fields": ["price", "rating", "created_at"]
+	// PAS recherchable : description, long_text, raw_data
+}
+```
+
+En retirant `description` et `long_text` des champs recherchables, vous réduisez la taille de l'index de 40 à 60 % avec un impact minimal sur la qualité de la recherche (les utilisateurs cherchent surtout par nom et marque).
+
+### Optimisation des Facettes
+
+Pour les facettes à haute cardinalité (nombreuses valeurs uniques), limitez les valeurs retournées :
+
+```json
+{
+	"max_facet_values": 15,
+	"facet_query": "brand", // Permettre la recherche dans les valeurs de facette
+	"facet_limit": 50 // Ne jamais retourner plus de 50 valeurs
+}
+```
+
+### Mise en Cache
+
+Implémentez une mise en cache côté serveur pour les requêtes les plus fréquentes :
+
+```typescript
+const cache = new Map<string, SearchResult>();
+const CACHE_TTL = 60_000; // 60 secondes
+
+async function searchWithCache(query: string) {
+	const key = query.toLowerCase().trim();
+
+	if (cache.has(key)) {
+		const cached = cache.get(key)!;
+		if (Date.now() - cached.timestamp < CACHE_TTL) {
+			return cached.data;
+		}
+		cache.delete(key);
+	}
+
+	const results = await aacsearch.search({ q: query });
+	cache.set(key, { data: results, timestamp: Date.now() });
+	return results;
+}
+```
+
+Avec un taux de succès du cache de 50 %, cela double effectivement votre capacité.
+
+### Performances à Cette Étape
+
+| Métrique                 | Attendu          |
+| ------------------------ | ---------------- |
+| Latence de requête (P50) | < 15 ms          |
+| Latence de requête (P95) | < 50 ms          |
+| Taille de l'index        | 500 Mo - 2 Go    |
+| Requêtes simultanées     | 200-500 QPS      |
+| Forfait nécessaire       | Starter ou Scale |
+
+## Étape 3 : 500 K - 5 M Documents (Scale à Pro)
+
+Au-delà de 500 000 documents, vous avez besoin de choix d'architecture délibérés.
+
+### Partitionnement d'Index
+
+AACsearch passe à l'échelle horizontalement. Pour les grands index, envisagez le partitionnement par :
+
+**Option A : Partitionner par locataire (pour les applications multi-tenant)**
+
+```typescript
+// Chaque locataire son propre fragment/index
+const shard = `products_${Math.floor(tenantId / 1000)}`;
+```
+
+**Option B : Partitionner par catégorie de document**
+
+```typescript
+// Diviser par catégories logiques
+const shards = ["products_electronics", "products_clothing", "products_home"];
+```
+
+**Option C : Partitionner par date (pour les données de séries temporelles)**
+
+```typescript
+// Fragments mensuels pour les journaux/contenu
+const shard = `products_2025_${String(month).padStart(2, "0")}`;
+```
+
+### Stratégie d'Indexation par Lots
+
+Pour les grandes importations initiales ou les réindexations :
+
+```typescript
+async function batchReindex(documents: Document[]) {
+	const BATCH_SIZE = 10000;
+	const CONCURRENCY = 4;
+
+	// Traiter les lots en parallèle
+	const batches = chunk(documents, BATCH_SIZE);
+	const results = [];
+
+	for (let i = 0; i < batches.length; i += CONCURRENCY) {
+		const batchGroup = batches.slice(i, i + CONCURRENCY);
+		const batchResults = await Promise.all(
+			batchGroup.map((batch) => aacsearch.importDocuments("products", batch)),
+		);
+		results.push(...batchResults);
+	}
+
+	return results;
+}
+```
+
+### Optimisation des Requêtes
+
+**Utilisez la pagination par curseur au lieu du décalage :**
+
+```typescript
+// BON : Basée sur curseur (rapide, cohérente)
+const page1 = await aacsearch.search({ q: "chaussures", per_page: 20 });
+const page2 = await aacsearch.search({
+	q: "chaussures",
+	per_page: 20,
+	page: page1.next_page, // curseur
+});
+
+// MAUVAIS : Basée sur décalage (plus lente aux grands décalages)
+const page100 = await aacsearch.search({ q: "chaussures", per_page: 20, page: 100 });
+```
+
+**Utilisez la présélection par filtre pour les grandes facettes :**
+
+```typescript
+// Au lieu de retourner les 5 000 marques, laissez les utilisateurs chercher dans les facettes
+const query = { q: "casques", facet_by: "brand", max_facet_values: 10 };
+// L'utilisateur clique « Voir plus de marques » → appel avec facet_query
+const facetQuery = { q: "casques", facet_by: "brand", facet_query: "sony" };
+```
+
+### Performances à Cette Étape
+
+| Métrique                 | Attendu      |
+| ------------------------ | ------------ |
+| Latence de requête (P50) | < 20 ms      |
+| Latence de requête (P95) | < 80 ms      |
+| Taille de l'index        | 2 Go - 15 Go |
+| Requêtes simultanées     | 500-1000 QPS |
+| Forfait nécessaire       | Scale ou Pro |
+
+## Étape 4 : 5 M - 50 M Documents (Pro + Personnalisé)
+
+À cette échelle, vous gérez une opération de recherche significative. Stratégies clés :
+
+### Infrastructure Dédiée
+
+AACsearch Pro inclut des options d'infrastructure dédiée :
+
+- Nœuds de recherche isolés (pas de voisins bruyants)
+- SLA personnalisé (99,95 %+)
+- Ingénieur support dédié
+- Index préchauffés (pas de latence de démarrage à froid)
+
+### Routage des Requêtes
+
+Pour un QPS très élevé, acheminez les requêtes intelligemment :
+
+```typescript
+// Acheminer les requêtes fréquemment recherchées vers les nœuds chauds
+const ROUTING = {
+	hot: ["casque sans fil", "chaussures nike", "iPhone"], // cache optimisé
+	warm: /^[a-z]{4,}$/i, // requêtes de longueur moyenne → nœuds tièdes
+	cold: /./, // tout le reste → pool par défaut
+};
+```
+
+### Gestion du Cycle de Vie des Données
+
+Tous les documents n'ont pas besoin de la même priorité de recherche :
+
+```typescript
+const lifecycle = {
+	active: { age: "< 90 jours", priority: "temps réel", replica: 3 },
+	warm: { age: "90-365 jours", priority: "proche ligne", replica: 2 },
+	cold: { age: "> 365 jours", priority: "archive", replica: 1, demoted_boost: 0.5 },
+};
+```
+
+Les produits actifs obtiennent toutes les ressources. Les produits plus anciens restent recherchables mais sont classés plus bas avec moins de répliques.
+
+## Résumé du Passage à l'Échelle
+
+| Étape               | Documents   | Stratégie                                                            | Coût mensuel |
+| ------------------- | ----------- | -------------------------------------------------------------------- | ------------ |
+| Démarrage           | < 100 K     | Configuration par défaut, concentrez-vous sur la pertinence          | 0-29 $       |
+| Croissance          | 100 K-500 K | Optimisation des champs, mise en cache                               | 29-99 $      |
+| Passage à l'échelle | 500 K-5 M   | Partitionnement, indexation par lots, pagination par curseur         | 99-249 $     |
+| Entreprise          | 5 M-50 M    | Infrastructure dédiée, routage des requêtes, gestion du cycle de vie | Personnalisé |
+
+## Erreurs Courantes à Grande Échelle
+
+| Erreur                         | Symptôme                           | Correction                                                    |
+| ------------------------------ | ---------------------------------- | ------------------------------------------------------------- |
+| Trop de champs recherchables   | Requêtes lentes, index volumineux  | Limiter à 5-7 champs                                          |
+| Pas de mise en cache           | Charge inutile sur le moteur       | Mettre en cache les 100 premières requêtes pendant 60 s       |
+| Pagination par décalage        | Requêtes qui ralentissent          | Utiliser la pagination par curseur                            |
+| Documents énormes              | Indexation lente, index volumineux | Supprimer les champs inutilisés, aplatir les données liées    |
+| Toutes les facettes illimitées | Calcul de facettes lent            | Limiter à 10-15 valeurs par facette                           |
+| Pas de plan de partitionnement | Difficile de dépasser 5 M          | Planifier la stratégie de partitionnement avant 1 M documents |
+
+## Prochaines Étapes
+
+- [Évaluer votre index](/docs/benchmarking) à l'échelle actuelle et projetée
+- [Réviser votre schéma de document](/docs/document-optimization) pour trouver des opportunités d'optimisation
+- [Parler à notre équipe](/contact) de vos besoins de passage à l'échelle
+
+[Commencez à passer votre recherche à l'échelle →](/signup)

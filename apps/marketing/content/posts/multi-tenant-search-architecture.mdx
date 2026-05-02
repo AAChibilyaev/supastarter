@@ -1,0 +1,217 @@
+---
+title: Multi-Tenant Search Architecture for SaaS Applications
+date: 2025-05-01
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: A deep dive into multi-tenant search architecture — how AACsearch handles data isolation, scoped API tokens, per-tenant rate limiting, and shared infrastructure without compromising security or performance.
+tags: [architecture, multi-tenant, saas, search, security]
+published: true
+---
+
+Every SaaS platform eventually faces the multi-tenancy question. When you serve 100+ organizations from a single search infrastructure, how do you ensure that Tenant A never sees Tenant B's data? How do you price it? How do you prevent one noisy tenant from degrading search for everyone else?
+
+This post explains how AACsearch solves multi-tenant search at the infrastructure level — so your application code stays simple.
+
+## The Naive Approach: One Index Per Tenant
+
+The simplest multi-tenant pattern is one search index per customer. Each tenant gets their own collection, their own API keys, and complete isolation.
+
+**Pros:** Maximum data isolation. Easy to debug. Simple to bill by index count.
+**Cons:** Index management overhead at scale. Configuration drift across tenants. Harder to provision at signup time.
+
+For small SaaS apps (< 50 tenants), this works fine. AACsearch supports multiple indices per account with separate API keys per index.
+
+```bash
+# Creating a per-tenant index via API
+curl -X POST "https://api.aacsearch.com/indices" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "acme_corp_products",
+    "fields": [
+      {"name": "name", "type": "string"},
+      {"name": "price", "type": "float"},
+      {"name": "sku", "type": "string"}
+    ]
+  }'
+```
+
+## The Scalable Approach: Shared Index with Row-Level Security
+
+For SaaS platforms with hundreds or thousands of tenants, a shared index with tenant filtering is more economical and easier to manage.
+
+### Data Model
+
+Every document includes a `tenant_id` field:
+
+```json
+{
+	"id": "doc_001",
+	"tenant_id": "acme_corp",
+	"name": "Wireless Headphones",
+	"price": 79.99,
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Scoped API Tokens
+
+AACsearch's scoped API tokens automatically filter every query to a specific tenant. When you mint a token, you specify a filter that's AND-combined with every search request:
+
+```bash
+# Create a scoped token for a tenant
+curl -X POST "https://api.aacsearch.com/api-keys/scoped" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filter": "tenant_id:=:acme_corp",
+    "description": "Acme Corp search key"
+  }'
+```
+
+The returned token (`ss_scoped_*`) can only search documents where `tenant_id == "acme_corp"`. Even if a bad actor intercepts the token, they cannot access other tenants' data.
+
+### Architecture Flow
+
+```
+User Request → Your SaaS App → Mint Scoped Token → AACsearch → Filtered Results
+                                    │
+                                    └── token_filter: tenant_id:=:acme_corp
+                                                ↓
+                               All queries auto-filtered
+                               No middleware, no SQL injection risk
+```
+
+Your app mints a scoped token when the user logs in. The token includes the tenant filter. Every subsequent search request from that user's browser includes the token. AACsearch enforces the filter at the search engine level — your app never manually appends `WHERE tenant_id = X`.
+
+## Performance Characteristics
+
+| Architecture          | < 100 Tenants | 100-1K Tenants | 1K-10K Tenants    |
+| --------------------- | ------------- | -------------- | ----------------- |
+| Per-index             | Excellent     | Good           | Poor (management) |
+| Shared + scoped token | Good          | Excellent      | Excellent         |
+| Hybrid (sharded)      | Overkill      | Good           | Excellent         |
+
+**Shared index performance at scale:**
+
+- Query latency: < 50ms at P95 regardless of tenant count (filter is a bitmap lookup)
+- Index size: A 10M-document index with 5,000 tenants performs same as a single-tenant index
+- Concurrent queries: 500+ QPS on Scale plan, 2,000+ on Pro
+
+## Rate Limiting Per Tenant
+
+Without per-tenant rate limiting, one aggressive customer could monopolize search capacity. AACsearch supports configurable rate limits:
+
+```json
+{
+	"rate_limits": {
+		"acme_corp": {
+			"searches_per_second": 100,
+			"indexing_per_minute": 1000
+		},
+		"startup_inc": {
+			"searches_per_second": 20,
+			"indexing_per_minute": 200
+		}
+	}
+}
+```
+
+Configure via the dashboard or API. Exceeded limits return HTTP 429 with a `Retry-After` header, giving the tenant feedback without impacting other customers.
+
+## Tenant Provisioning Automation
+
+When a new customer signs up, automate the provisioning flow:
+
+```typescript
+async function provisionTenant(tenantId: string) {
+	// 1. Create scoped API key
+	const scopedKey = await aacsearch.createScopedKey({
+		filter: `tenant_id:=:${tenantId}`,
+		description: `${tenantId} search key`,
+	});
+
+	// 2. Store the key in your tenant settings
+	await db.tenants.update({
+		where: { id: tenantId },
+		data: { aacsearchKey: scopedKey },
+	});
+
+	// 3. Optionally pre-populate with template data
+	await aacsearch.importDocuments(
+		"products",
+		templateData.map((doc) => ({
+			...doc,
+			tenant_id: tenantId,
+		})),
+	);
+
+	return scopedKey;
+}
+```
+
+This entire flow completes in under 500ms. Your customer can search immediately after signup.
+
+## Hybrid Architecture: Sharded by Tenant Tier
+
+For very large deployments (10K+ tenants), consider a hybrid approach:
+
+- **Tier 1 (Free/Starter):** Shared index with scoped tokens (500+ tenants per index)
+- **Tier 2 (Scale):** Dedicated index per tenant
+- **Tier 3 (Enterprise):** Dedicated Typesense cluster
+
+```typescript
+function getIndexForTenant(tenant: Tenant): string {
+	if (tenant.plan === "enterprise") return `enterprise_${tenant.id}`;
+	if (tenant.plan === "scale") return `scale_${tenant.id}`;
+	return "free_tier_shared"; // thousands of free tenants share one index
+}
+```
+
+## Security Considerations
+
+| Concern                   | How AACsearch Addresses It                                 |
+| ------------------------- | ---------------------------------------------------------- |
+| Token interception        | Scoped tokens are search-only (no write access)            |
+| Cross-tenant data leakage | Filter enforcement is server-side, not client-side         |
+| Token expiry              | Tokens can have TTL (auto-expire after N hours/days)       |
+| Audit trail               | All API requests logged with token ID and timestamp        |
+| Data residency            | Per-index region selection — keep EU tenant data in EU     |
+| Compliance                | SOC2-compliant infrastructure, GDPR-ready                  |
+| Key rotation              | Regenerate keys without downtime (old key works until TTL) |
+
+## Pricing at Multi-Tenant Scale
+
+AACsearch charges per-index, not per-tenant. For the shared-index approach:
+
+| Plan    | Price   | Max Tenants (shared) | Max Documents | Searches  |
+| ------- | ------- | -------------------- | ------------- | --------- |
+| Free    | $0      | 50                   | 10K           | Unlimited |
+| Starter | $29/mo  | 200                  | 50K           | Unlimited |
+| Scale   | $99/mo  | 1,000                | 500K          | Unlimited |
+| Pro     | $249/mo | 5,000                | 5M            | Unlimited |
+| Custom  | Custom  | Unlimited            | Custom        | Unlimited |
+
+Most SaaS apps on the Scale plan can serve 500-1,000 tenants from a single shared index. At $99/mo, that's $0.10-0.20 per tenant per month — far less than the cost of self-hosting Typesense or subscribing to per-operation pricing from competitors.
+
+## Migration to Multi-Tenant
+
+Already have a single-tenant setup? Migrate to shared multi-tenant:
+
+1. Add `tenant_id` field to all documents in each per-tenant index
+2. Export all per-tenant indices
+3. Import into one shared index with `tenant_id` populated
+4. Create scoped API tokens for each tenant
+5. Update your app to mint tokens at login
+6. Decommission per-tenant indices
+7. Done — your customers experience zero downtime
+
+## Next Steps
+
+- Read the [Typesense Deep Dive](/blog/typesense-deep-dive) for the underlying search engine
+- Explore [scoped token API reference](/docs/scoped-tokens)
+- See how [AACsearch compares to building your own](/comparison-vs-self-hosted)
+
+[Start building multi-tenant search free →](/signup)

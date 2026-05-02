@@ -1,0 +1,203 @@
+---
+title: Connectors Deep Dive: Sync Your Database or CMS Automatically
+date: 2025-05-01
+image: https://picsum.photos/id/12/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: How AACsearch connectors work — webhook-based real-time sync, CMS plugins, database change data capture (CDC), and keeping your search index synchronized without cron jobs or manual imports.
+tags: [connectors, integration, webhook, cms, prestashop, bitrix, woocommerce]
+published: true
+---
+
+The hardest part of search isn't the search itself — it's keeping the index in sync with your source of truth. When a product price changes, a blog post is updated, or a SKU is discontinued, the search index should reflect that change in seconds, not hours.
+
+This post covers how AACsearch connectors solve the sync problem for different data sources.
+
+## The Sync Problem
+
+Without automated sync, teams resort to:
+
+- **Manual CSV exports:** Uploaded daily or weekly — data is always stale
+- **Cron job reindexing:** Runs every N hours — wasteful for infrequent changes
+- **Full reimports:** Expensive at scale, causes temporary search degradation
+
+AACsearch connectors solve this with three approaches, depending on your data source.
+
+## Approach 1: Webhook API (Best for Custom Apps)
+
+For custom applications, webhook-based sync is the most flexible. Your app sends document updates to AACsearch whenever data changes:
+
+```typescript
+// In your CRUD handler
+async function updateProduct(id: string, data: ProductData) {
+	// 1. Update your database
+	await db.products.update({ where: { id }, data });
+
+	// 2. Sync to AACsearch in real-time
+	await aacsearch.upsertDocument("products", {
+		id,
+		name: data.name,
+		price: data.price,
+		description: data.description,
+		category: data.category,
+		in_stock: data.stock > 0,
+		updated_at: new Date().toISOString(),
+	});
+}
+```
+
+### Batch Operations
+
+For bulk changes or initial imports:
+
+```bash
+# Import 10,000 documents (2s)
+curl -X POST "https://api.aacsearch.com/indices/products/documents/import" \
+  -H "X-API-KEY: ss_admin_key" \
+  -H "Content-Type: application/json" \
+  -d @products.json
+
+# Delete by query
+curl -X POST "https://api.aacsearch.com/indices/products/documents/delete" \
+  -H "X-API-KEY: ss_admin_key" \
+  -H "Content-Type: application/json" \
+  -d '{"filter_by": "category:=:discontinued"}'
+```
+
+### Upsert vs. Full Reindex
+
+| Operation    | Speed     | When to use                              |
+| ------------ | --------- | ---------------------------------------- |
+| `upsert`     | < 100ms   | Real-time single document updates        |
+| `import`     | 5K docs/s | Batch imports, initial load              |
+| `delete`     | < 50ms    | Single document removal                  |
+| Full reindex | Varies    | Schema changes, data migration, recovery |
+
+## Approach 2: Pre-Built CMS Connectors
+
+AACsearch ships with connectors for popular e-commerce and CMS platforms. These handle schema auto-mapping, incremental sync, and delete propagation automatically.
+
+### PrestaShop Connector
+
+Installed via Composer, the PrestaShop connector hooks into PrestaShop's lifecycle events:
+
+```bash
+composer require aacsearch/prestashop-connector
+php bin/console aacsearch:sync --store=my-store.com
+```
+
+**What it syncs automatically:**
+
+| Entity         | Sync type | Fields indexed                                                      |
+| -------------- | --------- | ------------------------------------------------------------------- |
+| Products       | Real-time | name, price, description, category, image, attributes, stock status |
+| Categories     | On change | name, description, parent, image                                    |
+| Manufacturers  | On change | name, description, logo                                             |
+| Product combos | Real-time | Variant-specific attributes, price, stock                           |
+| Customers      | Opt-in    | name, email, group                                                  |
+| Orders         | Opt-in    | status, total, products, date                                       |
+
+The connector uses PrestaShop's `hookActionObjectAddAfter`, `hookActionObjectUpdateAfter`, and `hookActionObjectDeleteAfter` to sync changes in real-time.
+
+### Bitrix24 Connector
+
+Installed via the Bitrix Marketplace, the Bitrix connector syncs:
+
+```bash
+# Installation via Bitrix CLI
+php bitrix.php module:install aacsearch.connector
+php bitrix.php aacsearch:configure --api-key=ss_admin_key
+```
+
+**Synced entities:** Products, sections, properties, prices, and stocks.
+**Sync mode:** Real-time via Bitrix events API with 30-second debounce for bulk operations.
+
+### WooCommerce Connector
+
+```bash
+wp plugin install aacsearch-woocommerce --activate
+wp aacsearch:sync --full
+```
+
+**Synced entities:** Products, variations, categories, tags, attributes, reviews.
+**Sync mode:** Real-time via WooCommerce webhook hooks (`woocommerce_product_updated`, etc.).
+
+## Approach 3: Database Change Data Capture (CDC)
+
+For applications without webhook support, CDC captures changes directly from your database:
+
+```sql
+-- AACsearch CDC reads from your database's WAL or binlog
+-- Every INSERT, UPDATE, and DELETE is captured and synced
+
+-- Example: PostgreSQL publication for CDC
+CREATE PUBLICATION aacsearch_pub FOR TABLE products, categories, brands;
+```
+
+**Supported databases:**
+
+- PostgreSQL (via logical replication / WAL)
+- MySQL (via binlog)
+- MongoDB (via oplog)
+
+The CDC connector runs as a sidecar process that tails your database's change stream and pushes updates to AACsearch:
+
+```
+Your Database → CDC Connector → AACsearch API
+    │                │
+    │                └── Batches changes every 500ms
+    │
+    └── Writes continue normally — no performance impact
+```
+
+**Latency:** Changes are reflected in search within 500ms-2s, depending on batch configuration.
+
+## Connector Architecture Comparison
+
+| Approach         | Setup time | Real-time | Accuracy | Maintenance | Best for                    |
+| ---------------- | ---------- | --------- | -------- | ----------- | --------------------------- |
+| Webhook API      | 2-4 hours  | Yes       | 100%     | Low         | Custom apps, APIs           |
+| PrestaShop plug  | 10 minutes | Yes       | 100%     | Very low    | PrestaShop stores           |
+| Bitrix connector | 10 minutes | Yes       | 100%     | Very low    | Bitrix24 catalogs           |
+| WooCommerce plug | 10 minutes | Yes       | 100%     | Very low    | WooCommerce stores          |
+| CDC              | 1-2 days   | Near-real | High     | Medium      | Legacy apps, no webhook API |
+| Cron reindex     | 1 hour     | No        | Stale    | Low         | Prototypes, low-accuracy OK |
+
+## Conflict Resolution
+
+When a document update arrives while a previous update is still being indexed, AACsearch uses last-write-wins:
+
+```json
+{
+	"upsert_strategy": "last_write_wins",
+	"conflict_resolution": "timestamp_based"
+}
+```
+
+For applications requiring transactional consistency, use the webhook API with idempotency keys:
+
+```typescript
+await aacsearch.upsertDocument("products", data, {
+	idempotencyKey: `product_${productId}_${version}`,
+});
+```
+
+## Monitoring Your Sync Pipeline
+
+A healthy sync pipeline is critical. Monitor:
+
+| Metric                | Healthy range     | Action if out of range                   |
+| --------------------- | ----------------- | ---------------------------------------- |
+| Documents indexed/sec | > 50              | Check connector config, reduce batch     |
+| Sync latency          | < 2s              | Check network, increase CDC batch window |
+| Error rate            | < 0.1%            | Check document schema mismatches         |
+| Queue depth           | < 10K             | Increase batch size, scale connector     |
+| Index freshness       | < 5m since update | Check cron/webhook health                |
+
+## Next Steps
+
+- [Set up the PrestaShop connector](/integrations/prestashop)
+- [Try the WooCommerce connector](/integrations/woocommerce)
+- [View the webhook API reference](/docs/webhook-api)
+
+[Sync your data with AACsearch free →](/signup)

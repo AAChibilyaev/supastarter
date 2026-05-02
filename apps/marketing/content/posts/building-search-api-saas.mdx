@@ -1,0 +1,260 @@
+---
+title: Building a Search API for Your SaaS: Architecture Best Practices
+date: 2025-05-01
+image: https://picsum.photos/id/57/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Architecture patterns for adding search to your SaaS platform — REST API design, scoped tokens, filtering strategies, webhook sync, and the tradeoffs between embedded and external search infrastructure.
+tags: [architecture, api, saas, search, best-practices]
+published: true
+---
+
+Every SaaS platform eventually needs search. The question is how to architect it: as a built-in feature? An API you expose to customers? Or a managed service you consume?
+
+This post covers the architecture patterns that work at scale — whether you're building search into your product or offering it as a feature to your customers.
+
+## Architecture Options
+
+### Option 1: Embedded Search (DIY)
+
+You build search directly into your application database using PostgreSQL `ILIKE` or Elasticsearch.
+
+```
+Your App → PostgreSQL `ILIKE` / Elasticsearch → Results
+```
+
+| Aspect          | Assessment                          |
+| --------------- | ----------------------------------- |
+| Setup time      | 2-4 weeks                           |
+| Maintenance     | Ongoing (indexing, tuning, scaling) |
+| Multi-tenancy   | Must build yourself                 |
+| Analytics       | Must build yourself                 |
+| Cost at 1M docs | $200-500/mo server + 20h/mo ops     |
+
+This works for early-stage products with < 10K documents. Beyond that, the operational cost outweighs the simplicity gain.
+
+### Option 2: Embedded + Third-Party Engine
+
+You integrate a search-as-a-service provider (like AACsearch) into your app via API. The provider handles indexing, search, and infrastructure.
+
+```
+Your App → AACsearch API → Results
+```
+
+| Aspect          | Assessment                 |
+| --------------- | -------------------------- |
+| Setup time      | 1-2 days                   |
+| Maintenance     | Minimal (provider-managed) |
+| Multi-tenancy   | Built-in (scoped tokens)   |
+| Analytics       | Built-in                   |
+| Cost at 1M docs | $99-249/mo                 |
+
+This is the sweet spot for most SaaS companies. You get production search without a dedicated search engineer.
+
+### Option 3: Expose Search as an API Product
+
+You build a search API layer that your customers consume. AACsearch can be the backend.
+
+```
+Customer App → Your Search API → AACsearch → Results
+                                          ↑
+                              Your API manages scoped tokens,
+                              rate limiting, and billing
+```
+
+| Aspect        | Assessment                     |
+| ------------- | ------------------------------ |
+| Setup time    | 1-2 weeks                      |
+| Maintenance   | API surface management         |
+| Multi-tenancy | Customer-level scoped tokens   |
+| Analytics     | Per-customer analytics         |
+| Revenue       | Charge per search or per index |
+
+This is the model for platforms that offer search as a feature to their end users (e.g., e-commerce platforms, CMS providers).
+
+## REST API Design Patterns
+
+### Internal Search API (Option 2)
+
+```typescript
+// Internal search endpoint for your SaaS app
+app.post("/api/search", async (req, res) => {
+	const { tenantId } = await authenticate(req);
+	const { query, filters, page = 1 } = req.body;
+
+	const scopedKey = await getTenantKey(tenantId);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: "products",
+		q: query,
+		filter_by: filters,
+		page,
+	});
+
+	res.json(results);
+});
+```
+
+### Customer-Facing Search API (Option 3)
+
+```typescript
+// Search API for your customers' end users
+app.post("/api/v1/search", async (req, res) => {
+	// Rate limit per customer API key
+	await rateLimiter.check(req.apiKey);
+
+	// Customer's key maps to their scoped AACsearch token
+	const scopedKey = await getScopedKey(req.apiKey);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: req.body.index,
+		q: req.body.q,
+		filter_by: req.body.filter_by,
+	});
+
+	// Add usage tracking for billing
+	await trackUsage(req.apiKey, results);
+
+	res.json(results);
+});
+```
+
+## Indexing Architecture
+
+### Real-Time Indexing (Webhook-Based)
+
+For SaaS apps where data changes frequently, use webhook-based indexing:
+
+```typescript
+// When a record is created/updated in your app
+app.post("/webhooks/aacsearch/sync", async (req, res) => {
+	const { event, data } = req.body;
+
+	switch (event) {
+		case "product.created":
+		case "product.updated":
+			await aacsearch.upsertDocument("products", data);
+			break;
+		case "product.deleted":
+			await aacsearch.deleteDocument("products", data.id);
+			break;
+	}
+
+	res.status(200).end();
+});
+```
+
+### Batch Indexing (For Initial Imports or Nightly Syncs)
+
+For large datasets, use batch imports:
+
+```typescript
+async function batchImport(tenantId: string, documents: any[]) {
+	// Split into chunks of 10K for optimal performance
+	const chunks = chunk(documents, 10000);
+
+	for (const chunk of chunks) {
+		await aacsearch.importDocuments(
+			"products",
+			chunk.map((doc) => ({
+				...doc,
+				tenant_id: tenantId,
+			})),
+		);
+	}
+}
+```
+
+### Hybrid Approach
+
+Use webhooks for real-time updates and nightly batch syncs for consistency:
+
+```
+Real-time:  Webhook → Upsert individual documents (sub-100ms)
+Nightly:    Cron job → Full reindex to catch any missed updates
+Recovery:   Manual trigger → Rebuild index from database dump
+```
+
+## Filtering Strategies
+
+### Tenant Filtering
+
+Always enforce tenant isolation at the search engine level, not the application level:
+
+```typescript
+// GOOD: Scoped API token enforces tenant filter
+const key = await aacsearch.createScopedKey({
+	filter: `tenant_id:=:${tenantId}`,
+});
+
+// BAD: Application-level filtering (risk of leak)
+const results = await aacsearch.search({
+	filter_by: `tenant_id:${tenantId}`, // If a bug drops this, cross-tenant leak
+});
+```
+
+### Role-Based Filtering
+
+For apps with role-based access (admin vs. viewer):
+
+```typescript
+const filters: string[] = [];
+
+if (user.role === "viewer") {
+	filters.push("visibility:public");
+} else if (user.role === "editor") {
+	filters.push("visibility:public,internal");
+}
+// Admin sees everything — no filter
+
+const scopedKey = await aacsearch.createScopedKey({
+	filter: filters.join(" && "),
+});
+```
+
+## Performance Optimization
+
+| Strategy         | Impact                   | Implementation                         |
+| ---------------- | ------------------------ | -------------------------------------- |
+| Denormalize docs | 2-5x faster queries      | Flatten related data into one document |
+| Limit fields     | 30-50% faster indexing   | Only index fields users search on      |
+| Pagination       | Consistent response time | Use cursor-based, not offset-based     |
+| Caching          | 50-80% fewer queries     | Cache top 100 queries for 60 seconds   |
+| Facet limits     | 2-3x faster facet calc   | Limit to top 10 facet values per field |
+
+## Monitoring & Alerts
+
+Your search API should be as observable as your application:
+
+```typescript
+// Monitor key metrics
+interface SearchMetrics {
+	p50_latency_ms: number;
+	p95_latency_ms: number;
+	p99_latency_ms: number;
+	queries_per_second: number;
+	error_rate: number;
+	zero_result_rate: number;
+	cache_hit_rate: number;
+}
+
+// Set alerts
+const alerts = {
+	p95_latency_ms: { warn: 150, critical: 300 },
+	error_rate: { warn: 0.01, critical: 0.05 }, // 1% and 5%
+	zero_result_rate: { warn: 0.1, critical: 0.25 }, // 10% and 25%
+};
+```
+
+## When to Offer Search as a Feature
+
+If your platform has multiple customers who each need search, consider exposing it as a product feature:
+
+- **E-commerce platform:** Each store needs product search
+- **CMS:** Each site needs content search
+- **Marketplace:** Each vendor list needs filtering
+- **SaaS:** Each organization needs in-app search
+
+In each case, AACsearch's scoped tokens make multi-tenant search a configuration, not an engineering project.
+
+[Start building search into your SaaS →](/signup)

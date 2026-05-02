@@ -4,3 +4,4 @@ export { SoftwareApplicationSchema } from "./components/SoftwareApplicationSchem
 export { BreadcrumbSchema } from "./components/BreadcrumbSchema";
 export { FAQPageSchema } from "./components/FAQPageSchema";
 export { BlogPostingSchema } from "./components/BlogPostingSchema";
+export { ComparisonPageSchema } from "./components/ComparisonPageSchema";

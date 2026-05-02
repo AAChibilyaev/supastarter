@@ -10,6 +10,7 @@
 			"@i18n/*": ["./modules/i18n/*"],
 			"@changelog/*": ["./modules/changelog/*"],
 			"@legal/*": ["./modules/legal/*"],
+			"@seo/*": ["./modules/seo/*"],
 			"@shared/*": ["./modules/shared/*"],
 			"content-collections": ["./.content-collections/generated"]
 		}

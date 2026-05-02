@@ -62,9 +62,7 @@ export function IndexManagementPage() {
 		activityData?.activities?.filter((a) => a.indexSlug === indexSlug) ?? [];
 
 	// Extract last full sync from activity data
-	const lastFullSyncActivity = indexActivities.find(
-		(a) => a.kind === "sync_job",
-	);
+	const lastFullSyncActivity = indexActivities.find((a) => a.kind === "sync_job");
 	const lastFullSyncAt = lastFullSyncActivity?.createdAt ?? null;
 
 	// ══ Mock data for now — will connect to real oRPC in Phase 8 ══

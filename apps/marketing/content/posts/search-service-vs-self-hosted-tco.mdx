@@ -1,0 +1,243 @@
+---
+title: Search as a Service vs Self-Hosted: Total Cost of Ownership Analysis
+date: 2026-05-03
+image: https://picsum.photos/id/28/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: A comprehensive total cost of ownership comparison between managed search-as-a-service providers and self-hosted search engines — covering infrastructure, operations, engineering time, scaling costs, and hidden expenses at every stage.
+tags: [tco, self-hosted, saas, cost-analysis, typesense, infrastructure]
+published: true
+---
+
+One of the most common questions we hear is: "Should I self-host Typesense or use a managed service like AACsearch?"
+
+The answer isn't simple — it depends on your team size, document volume, SLA requirements, and growth trajectory. This post provides a data-driven TCO (Total Cost of Ownership) framework so you can make an informed decision.
+
+## The Cost Components
+
+When comparing self-hosted vs managed search, most people only compare server costs. The real picture includes five categories:
+
+```
+TCO = Infrastructure + Engineering Time + Operations + Downtime Risk + Opportunity Cost
+```
+
+Let's break each one down.
+
+## Infrastructure Costs
+
+### Self-Hosted Typesense
+
+Typesense is memory-bound — your entire index must fit in RAM for best performance. Here's what you need at various scales:
+
+| Document Count | RAM Required | Monthly Server Cost | Storage |
+| -------------- | ------------ | ------------------- | ------- |
+| 100K           | 2 GB         | $30–60              | 20 GB   |
+| 1M             | 8 GB         | $80–150             | 50 GB   |
+| 10M            | 32 GB        | $300–500            | 200 GB  |
+| 100M           | 64 GB        | $800–1,500          | 500 GB  |
+| 1B             | 128 GB+      | $3,000–6,000        | 2 TB+   |
+
+**Additional costs:**
+
+- **High availability replica:** 2x server cost (minimum for production)
+- **Cross-region replication:** 2–3x server cost (for global users)
+- **Backup storage:** $20–100/mo (snapshots in S3 or equivalent)
+- **CDN for search results:** $50–200/mo (if serving global audience)
+- **Monitoring infrastructure:** $30–100/mo (Grafana, Prometheus, alerting)
+
+**Self-hosted infrastructure total (production, HA):**
+
+- 1M documents: **$250–500/mo**
+- 10M documents: **$750–1,500/mo**
+- 100M documents: **$2,000–4,000/mo**
+
+### Managed SaaS (AACsearch)
+
+| Document Count | Monthly Cost | Includes                           |
+| -------------- | ------------ | ---------------------------------- |
+| 100K           | $29          | HA, backups, analytics             |
+| 1M             | $99          | HA, backups, analytics, 99.99% SLA |
+| 10M            | $249         | HA, multi-region, premium support  |
+| 100M           | $999         | Dedicated cluster, SSO, custom SLA |
+| 1B             | Custom       | Dedicated infra, private cloud     |
+
+**Managed SaaS total:**
+
+- 1M documents: **$99/mo** (60–80% less than self-hosted)
+- 10M documents: **$249/mo** (65–80% less)
+- 100M documents: **$999/mo** (50–75% less)
+
+## Engineering Time Costs
+
+This is the biggest hidden cost. A senior backend engineer costs $120–200K/year. Every hour spent on search infrastructure is an hour not spent on your core product.
+
+| Activity                   | Self-Hosted (hours/year) | Managed SaaS (hours/year) |
+| -------------------------- | ------------------------ | ------------------------- |
+| Initial setup & tuning     | 40–80                    | 2–4                       |
+| Index optimization         | 20–40                    | 0                         |
+| Query performance tuning   | 20–40                    | 0                         |
+| Infrastructure maintenance | 40–80                    | 0                         |
+| Version upgrades           | 20–40                    | 0                         |
+| Backup/restore testing     | 10–20                    | 0                         |
+| Monitoring setup           | 20–40                    | 0                         |
+| On-call rotation           | 50–100                   | 0                         |
+| Security patching          | 10–20                    | 0                         |
+| Multi-region setup         | 40–80                    | 0                         |
+| **Total**                  | **270–540**              | **2–4**                   |
+
+**Engineering cost at $150K/year ($75/hr):**
+
+- Self-hosted: **$20,250–40,500/year** ($1,687–3,375/mo)
+- Managed: **$150–300/year** ($12–25/mo)
+
+## Operational Overhead
+
+Beyond engineering time, self-hosting creates ongoing operational burden:
+
+### Monitoring & Alerting
+
+- Prometheus + Grafana setup: 1–2 weeks initial
+- Alert fatigue: false positives from memory pressure, disk usage, slow queries
+- SLO tracking requires custom dashboards
+
+### Backup & Disaster Recovery
+
+- Typesense snapshots must be scheduled and tested
+- Restore time: 10–60 minutes depending on index size
+- RPO (Recovery Point Objective): last snapshot time
+- RTO (Recovery Time Objective): restore time + DNS propagation
+
+### Scaling Operations
+
+- Adding nodes requires provisioning, testing, and traffic migration
+- Rebalancing after node addition can take hours
+- Vertical scaling (bigger instance) requires downtime
+
+## Downtime Risk
+
+| Factor                                                     | Self-Hosted   | Managed SaaS  |
+| ---------------------------------------------------------- | ------------- | ------------- |
+| Expected uptime                                            | 99.5–99.9%    | 99.99%+       |
+| Planned downtime                                           | 2–4 hrs/month | 0             |
+| Incident response                                          | Your team     | 24/7 SRE team |
+| Mean time to recovery                                      | 30–90 min     | 5–15 min      |
+| Annual downtime cost (at $10K/hr search-dependent revenue) | $4,000–40,000 | $50–500       |
+
+**Hidden downtime costs:**
+
+- Customer trust erosion with each outage
+- SEO impact if search on public-facing site goes down
+- Support tickets and churn from search failures
+
+## Opportunity Cost
+
+This is the hardest to quantify but often the most significant:
+
+**Self-hosted opportunity costs:**
+
+- Search features that never get built (no dedicated search team)
+- Slower iteration on search relevance (each change requires deploy)
+- No analytics to improve search quality (analytics must be built)
+- Reduced search quality = lower conversion = lost revenue
+
+**Managed SaaS opportunity costs:**
+
+- Less control over low-level tuning
+- Vendor lock-in concern (mitigated by Typesense being open-source)
+- Data leaves your infrastructure (mitigated by dedicated clusters)
+
+## TCO Comparison by Scale
+
+### Small Scale (< 100K documents)
+
+| Cost Category  | Self-Hosted     | Managed       |
+| -------------- | --------------- | ------------- |
+| Infrastructure | $60–120/mo      | $29/mo        |
+| Engineering    | $300–600/mo     | $12–25/mo     |
+| Operations     | $100–200/mo     | $0            |
+| **Total**      | **$460–920/mo** | **$41–54/mo** |
+
+**Verdict:** Managed is 10–20x cheaper at small scale.
+
+### Mid Scale (1M–10M documents)
+
+| Cost Category  | Self-Hosted         | Managed         |
+| -------------- | ------------------- | --------------- |
+| Infrastructure | $250–1,500/mo       | $99–249/mo      |
+| Engineering    | $1,687–3,375/mo     | $12–25/mo       |
+| Operations     | $300–800/mo         | $0              |
+| **Total**      | **$2,237–5,675/mo** | **$111–274/mo** |
+
+**Verdict:** Managed is 15–20x cheaper at mid scale. Engineering costs dominate.
+
+### Large Scale (100M+ documents)
+
+| Cost Category  | Self-Hosted         | Managed             |
+| -------------- | ------------------- | ------------------- |
+| Infrastructure | $2,000–4,000/mo     | $999/mo+            |
+| Engineering    | $1,687–3,375/mo     | $12–25/mo           |
+| Operations     | $500–1,500/mo       | $0                  |
+| **Total**      | **$4,187–8,875/mo** | **$1,011–1,024/mo** |
+
+**Verdict:** Managed is 4–8x cheaper at large scale, and the gap narrows as you approach dedicated infrastructure.
+
+## When Self-Hosting Makes Sense
+
+Self-hosting is the right choice when:
+
+1. **Your primary business IS search infrastructure** — You're building a search product or offering search as a core feature to enterprise customers who require on-premise deployment.
+
+2. **You have a dedicated search team** (2+ engineers) — The team can justify the operational investment with search-specific optimizations.
+
+3. **Strict data residency requirements** — Some regulated industries (finance, healthcare, government) require data to remain within specific geographic boundaries on infrastructure you control.
+
+4. **You're at truly massive scale** (1B+ documents) — At this scale, the infrastructure cost difference narrows enough that a dedicated team managing your own cluster might be cheaper.
+
+5. **You need custom ranking models** — If your relevance algorithm requires custom ML models that aren't supported by managed providers.
+
+## When Managed Search Is Better
+
+Managed search wins in almost every other scenario:
+
+1. **You're a startup or growth-stage company** — Your engineering time is better spent on product differentiation, not search infrastructure.
+
+2. **Search is a feature, not your product** — For e-commerce, SaaS, content sites, and marketplaces.
+
+3. **You need to move fast** — Launch search in days, not weeks. Iterate on relevance without infrastructure changes.
+
+4. **You don't have 24/7 ops** — Managed includes SRE coverage, backups, and incident response.
+
+5. **You want search analytics** — Built-in analytics for zero-result queries, popular searches, and click-through rates.
+
+## The Hybrid Approach
+
+Some teams start with self-hosted and migrate to managed as they scale. The advantage of Typesense-based solutions is that migration is straightforward:
+
+```bash
+# Export from self-hosted Typesense
+curl "http://localhost:8108/collections/products/documents/export" \
+  -H "X-TYPESENSE-API-KEY: $API_KEY" > products_export.json
+
+# Import to AACsearch
+curl -X POST "https://api.aacsearch.com/collections/products/documents/import" \
+  -H "X-AACSEARCH-API-KEY: $API_KEY" \
+  --data-binary @products_export.json
+```
+
+Your schema, queries, and client code remain nearly identical. The switch is a configuration change, not a rewrite.
+
+## Summary
+
+| Factor                 | Self-Hosted    | Managed (AACsearch)              |
+| ---------------------- | -------------- | -------------------------------- |
+| Monthly cost (1M docs) | $2,200–5,600   | $111–274                         |
+| Setup time             | 2–8 weeks      | 1–2 days                         |
+| Engineering overhead   | 270–540 hrs/yr | 2–4 hrs/yr                       |
+| Uptime SLA             | 99.5–99.9%     | 99.99%                           |
+| Analytics              | Must build     | Built-in                         |
+| Multi-region           | Manual setup   | Built-in                         |
+| Vendor lock-in         | N/A            | Typesense open-source compatible |
+
+For 95% of teams, managed search-as-a-service delivers better results at a fraction of the total cost. The few percent who genuinely benefit from self-hosting are those running search infrastructure as a core competency — and they know who they are.
+
+[Calculate your TCO →](/pricing)

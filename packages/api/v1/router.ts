@@ -18,14 +18,27 @@
  *   POST   /v1/indexes/:indexId/documents:batch               — batch upsert
  *   POST   /v1/indexes/:indexId/documents:batchDelete         — batch delete by IDs
  *   DELETE /v1/indexes/:indexId/documents/:documentId         — delete doc
- *   POST   /v1/indexes/:indexId/search          — search index
- *   POST   /v1/multi-search                     — multi-search
- *   POST   /v1/projects/:projectId/keys         — create API key
- *   GET    /v1/projects/:projectId/keys         — list API keys
- *   DELETE /v1/keys/:keyId                      — revoke API key
- *   GET    /v1/projects/:projectId/analytics    — analytics
- *   GET    /v1/projects/:projectId/usage        — usage data
- *   GET    /v1/openapi.json                     — OpenAPI spec
+ *   POST   /v1/indexes/:indexId/search             — search index
+ *   POST   /v1/multi-search                        — multi-search
+ *   POST   /v1/projects/:projectId/keys             — create API key
+ *   GET    /v1/projects/:projectId/keys             — list API keys
+ *   DELETE /v1/keys/:keyId                          — revoke API key
+ *   GET    /v1/projects/:projectId/analytics        — analytics
+ *   GET    /v1/projects/:projectId/usage            — usage data
+ *   GET    /v1/indexes/:indexId/synonyms            — list synonyms
+ *   POST   /v1/indexes/:indexId/synonyms            — create synonym
+ *   PUT    /v1/indexes/:indexId/synonyms            — upsert synonyms
+ *   DELETE /v1/indexes/:indexId/synonyms/:synonymId — delete synonym
+ *   GET    /v1/indexes/:indexId/curations           — list curations
+ *   POST   /v1/indexes/:indexId/curations           — create curation
+ *   PUT    /v1/indexes/:indexId/curations           — upsert curations
+ *   DELETE /v1/indexes/:indexId/curations/:curationId — delete curation
+ *   GET    /v1/indexes/:indexId/sorting             — list sorting fields
+ *   POST   /v1/indexes/:indexId/sorting             — add sorting field
+ *   PUT    /v1/indexes/:indexId/sorting             — replace sorting fields
+ *   DELETE /v1/indexes/:indexId/sorting/:fieldName   — remove sorting field
+ *   GET    /v1/indexes/:indexId/facets              — list facets
+ *   GET    /v1/openapi.json                         — OpenAPI spec
  */
 
 import { Hono } from "hono";
@@ -37,6 +50,7 @@ import { keysApp } from "./keys";
 import { generateOpenApiSpec } from "./openapi";
 import { projectsApp } from "./projects";
 import { searchApp } from "./search";
+import { synonymsApp } from "./synonyms";
 
 const v1Router = new Hono()
 	.route("/", projectsApp)
@@ -44,7 +58,8 @@ const v1Router = new Hono()
 	.route("/", documentsApp)
 	.route("/", searchApp)
 	.route("/", keysApp)
-	.route("/", analyticsApp);
+	.route("/", analyticsApp)
+	.route("/", synonymsApp);
 
 // OpenAPI spec (no auth required for API discovery)
 v1Router.get("/openapi.json", (c) => c.json(generateOpenApiSpec()));

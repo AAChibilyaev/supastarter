@@ -3,7 +3,10 @@
 /**
  * HTTP client for communicating with the AACsearch Connector API.
  *
- * Uses Bitrix curl wrapper (Bitrix\Main\Web\HttpClient).
+ * Adapter around Aacsearch\ConnectorClient from the aacsearch-php SDK.
+ * Reads configuration from Bitrix module options and returns arrays
+ * (not booleans) to match Bitrix's existing caller expectations.
+ *
  * Supported endpoints:
  *  - handshake()
  *  - fullSync(array $products)
@@ -14,28 +17,45 @@
  */
 namespace AAC\Search;
 
+use Aacsearch\ConnectorClient;
+use Aacsearch\AacsearchException;
+
+// Load the aacsearch-php SDK (Bitrix does not use Composer autoload)
+require_once __DIR__ . '/../lib/aacsearch/ConnectorClient.php';
+require_once __DIR__ . '/../lib/aacsearch/Exceptions.php';
+
 use Bitrix\Main\Config\Option;
-use Bitrix\Main\Web\HttpClient;
-use Bitrix\Main\Web\Json;
 
 class Client
 {
     private const MODULE_ID = 'aac.search';
 
-    private string $apiUrl;
-    private string $projectId;
-    private string $token;
-    private int    $timeout;
+    /**
+     * Underlying SDK ConnectorClient instance.
+     *
+     * @var ConnectorClient|null
+     */
+    private ?ConnectorClient $connector = null;
 
+    /**
+     * Construct and configure from module options.
+     */
     public function __construct()
     {
-        $this->apiUrl    = rtrim(
-            (string) Option::get(self::MODULE_ID, 'api_url', ''),
-            '/',
-        );
-        $this->projectId = (string) Option::get(self::MODULE_ID, 'project_id', '');
-        $this->token     = (string) Option::get(self::MODULE_ID, 'connector_token', '');
-        $this->timeout   = (int) Option::get(self::MODULE_ID, 'request_timeout', 30);
+        $apiUrl         = rtrim((string) Option::get(self::MODULE_ID, 'api_url', ''), '/');
+        $projectId      = (string) Option::get(self::MODULE_ID, 'project_id', '');
+        $token          = (string) Option::get(self::MODULE_ID, 'connector_token', '');
+        $timeout        = (int) Option::get(self::MODULE_ID, 'request_timeout', 30);
+
+        if ($apiUrl !== '' && $token !== '') {
+            $this->connector = new ConnectorClient(
+                $apiUrl,
+                $projectId,
+                $token,
+                $timeout,
+                'AACsearch-Bitrix/1.0.0'
+            );
+        }
     }
 
     /**
@@ -43,7 +63,7 @@ class Client
      */
     public function isConfigured(): bool
     {
-        return $this->apiUrl !== '' && $this->token !== '';
+        return $this->connector !== null && $this->connector->isConfigured();
     }
 
     /**
@@ -51,14 +71,23 @@ class Client
      *
      * Verifies that the module can talk to the Connector API.
      *
-     * @return array{status: string, projectId?: string, indexSlug?: string}|array{error: string}
+     * @return array{status: string, projectId?: string, indexSlug?: string}|array{error: string, message?: string}
      */
     public function handshake(): array
     {
-        return $this->post('/connectors/handshake', [
-            'moduleVersion' => defined('SM_VERSION') ? SM_VERSION : 'unknown',
-            'platform'      => 'bitrix',
-        ]);
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
+        }
+
+        try {
+            $moduleVersion = defined('SM_VERSION') ? SM_VERSION : 'unknown';
+            $success = $this->connector->handshake($moduleVersion, 'bitrix');
+            return $success
+                ? ['status' => 'active']
+                : ['error' => 'handshake_failed', 'message' => 'Handshake returned non-active status.'];
+        } catch (AacsearchException $e) {
+            return ['error' => 'handshake_failed', 'message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -67,15 +96,22 @@ class Client
      * Sends a batch of up to 1000 normalized products.
      *
      * @param array $products Array of ProductDocument arrays.
-     * @return array{status: string, itemsCount?: int}|array{error: string}
+     * @return array{status: string, itemsCount?: int}|array{error: string, message?: string}
      */
     public function fullSync(array $products): array
     {
-        return $this->post(
-            "/projects/{$this->projectId}/sync/full",
-            ['products' => $products],
-            120, // longer timeout for full sync
-        );
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
+        }
+
+        try {
+            $success = $this->connector->fullSync($products, 120);
+            return $success
+                ? ['status' => 'ok', 'itemsCount' => count($products)]
+                : ['error' => 'sync_failed', 'message' => 'Full sync request returned an error.'];
+        } catch (AacsearchException $e) {
+            return ['error' => 'sync_failed', 'message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -84,14 +120,22 @@ class Client
      * Sends a small batch (up to 100) of changed products.
      *
      * @param array $products Array of ProductDocument arrays.
-     * @return array{status: string, itemsProcessed?: int}|array{error: string}
+     * @return array{status: string, itemsProcessed?: int}|array{error: string, message?: string}
      */
     public function deltaSync(array $products): array
     {
-        return $this->post(
-            "/projects/{$this->projectId}/sync/delta",
-            ['products' => $products],
-        );
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
+        }
+
+        try {
+            $success = $this->connector->deltaSync($products);
+            return $success
+                ? ['status' => 'ok', 'itemsProcessed' => count($products)]
+                : ['error' => 'sync_failed', 'message' => 'Delta sync request returned an error.'];
+        } catch (AacsearchException $e) {
+            return ['error' => 'sync_failed', 'message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -100,13 +144,22 @@ class Client
      * Notifies the API that a product was deleted.
      *
      * @param string $externalId The product ID in Bitrix.
-     * @return array{status: string, externalId?: string}|array{error: string}
+     * @return array{status: string, externalId?: string}|array{error: string, message?: string}
      */
     public function deleteProduct(string $externalId): array
     {
-        return $this->delete(
-            "/projects/{$this->projectId}/products/{$externalId}",
-        );
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
+        }
+
+        try {
+            $success = $this->connector->deleteProduct($externalId);
+            return $success
+                ? ['status' => 'ok', 'externalId' => $externalId]
+                : ['error' => 'delete_failed', 'message' => 'Delete request returned an error.'];
+        } catch (AacsearchException $e) {
+            return ['error' => 'delete_failed', 'message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -116,7 +169,7 @@ class Client
      * Automatically chunks larger arrays.
      *
      * @param array $externalIds External product IDs to delete.
-     * @return array{deleted: int}|array{error: string}
+     * @return array{deleted: int}|array{error: string, message?: string}
      */
     public function batchDelete(array $externalIds): array
     {
@@ -124,16 +177,16 @@ class Client
             return ['deleted' => 0];
         }
 
-        $total = 0;
-        foreach (array_chunk($externalIds, 500) as $chunk) {
-            $result = $this->deleteWithBody('/connector/documents', ['externalIds' => $chunk]);
-            if (isset($result['error'])) {
-                return $result;
-            }
-            $total += (int) ($result['deleted'] ?? count($chunk));
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
         }
 
-        return ['deleted' => $total];
+        try {
+            $total = $this->connector->batchDelete($externalIds);
+            return ['deleted' => $total];
+        } catch (AacsearchException $e) {
+            return ['error' => 'delete_failed', 'message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -142,148 +195,32 @@ class Client
      * Sends module health / stats information.
      *
      * @param array $data Additional diagnostic fields.
-     * @return array{status: string, receivedAt?: string}|array{error: string}
+     * @return array{status: string, receivedAt?: string}|array{error: string, message?: string}
      */
     public function sendDiagnostics(array $data = []): array
     {
+        if (!$this->isConfigured()) {
+            return ['error' => 'not_configured', 'message' => 'Client is not configured.'];
+        }
+
         $defaults = [
             'moduleVersion' => defined('SM_VERSION') ? SM_VERSION : 'unknown',
             'lastFullSync'  => Option::get(self::MODULE_ID, 'last_full_sync', ''),
             'lastDeltaSync' => Option::get(self::MODULE_ID, 'last_delta_sync', ''),
             'totalProducts' => (int) Option::get(self::MODULE_ID, 'total_products', 0),
             'errors'        => [],
-            'phpVersion'    => phpversion(),
+            'phpVersion'    => PHP_VERSION,
             'shopUrl'       => $this->getShopUrl(),
         ];
 
-        return $this->post(
-            "/projects/{$this->projectId}/diagnostics",
-            array_merge($defaults, $data),
-        );
-    }
-
-    // ─── Internal helpers ─────────────────────────────────────────
-
-    /**
-     * Build the auth header value.
-     */
-    private function authHeader(): string
-    {
-        return "Bearer {$this->token}";
-    }
-
-    /**
-     * Perform a POST request.
-     */
-    private function post(string $path, array $body, int $timeout = null): array
-    {
-        $http = new HttpClient();
-        $http->setTimeout($timeout ?? $this->timeout);
-        $http->setStreamTimeout($timeout ?? $this->timeout);
-        $http->setHeader('Content-Type', 'application/json');
-        $http->setHeader('Authorization', $this->authHeader());
-
-        $url = $this->apiUrl . $path;
-        $response = $http->post($url, Json::encode($body));
-
-        return $this->parseResponse($http, $response);
-    }
-
-    /**
-     * Perform a DELETE request.
-     */
-    private function delete(string $path): array
-    {
-        $http = new HttpClient();
-        $http->setTimeout($this->timeout);
-        $http->setStreamTimeout($this->timeout);
-        $http->setHeader('Content-Type', 'application/json');
-        $http->setHeader('Authorization', $this->authHeader());
-
-        $url = $this->apiUrl . $path;
-        $response = $http->delete($url);
-
-        return $this->parseResponse($http, $response);
-    }
-
-    /**
-     * Perform a DELETE request with a JSON body via raw cURL.
-     * Bitrix HttpClient::delete() does not support a request body.
-     */
-    private function deleteWithBody(string $path, array $body): array
-    {
-        $url = $this->apiUrl . $path;
-
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => $url,
-            CURLOPT_CUSTOMREQUEST  => 'DELETE',
-            CURLOPT_POSTFIELDS     => Json::encode($body),
-            CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/json',
-                'Authorization: ' . $this->authHeader(),
-            ],
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => $this->timeout,
-            CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_SSL_VERIFYHOST => 2,
-        ]);
-
-        $response  = curl_exec($ch);
-        $errno     = curl_errno($ch);
-        $curlError = curl_error($ch);
-        $status    = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($errno !== 0) {
-            return ['error' => 'connection_failed', 'message' => $curlError];
+        try {
+            $success = $this->connector->sendDiagnostics(array_merge($defaults, $data));
+            return $success
+                ? ['status' => 'ok']
+                : ['error' => 'diagnostics_failed', 'message' => 'Diagnostics request returned an error.'];
+        } catch (AacsearchException $e) {
+            return ['error' => 'diagnostics_failed', 'message' => $e->getMessage()];
         }
-
-        $parsed = Json::decode((string) $response);
-
-        if (!is_array($parsed)) {
-            return ['error' => 'invalid_response', 'message' => 'Non-JSON response received.'];
-        }
-
-        if ($status >= 400) {
-            return array_merge(['error' => 'http_' . $status], $parsed);
-        }
-
-        return $parsed;
-    }
-
-    /**
-     * Parse the HTTP response into an associative array.
-     */
-    private function parseResponse(HttpClient $http, ?string $response): array
-    {
-        $status = $http->getStatus();
-
-        if ($status === 0 || $response === null) {
-            return [
-                'error' => 'connection_failed',
-                'message' => 'Could not reach the API server.',
-            ];
-        }
-
-        $parsed = Json::decode($response);
-
-        if (!is_array($parsed)) {
-            return [
-                'error' => 'invalid_response',
-                'message' => 'Non-JSON response received.',
-            ];
-        }
-
-        if ($status >= 400) {
-            return array_merge(
-                ['error' => 'http_' . $status],
-                $parsed,
-            );
-        }
-
-        return $parsed;
     }
 
     /**

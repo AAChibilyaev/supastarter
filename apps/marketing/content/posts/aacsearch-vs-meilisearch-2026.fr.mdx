@@ -1,0 +1,176 @@
+---
+title: "AACsearch vs MeiliSearch : Comparatif des moteurs de recherche 2026"
+date: 2025-05-01
+image: https://picsum.photos/id/21/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Une comparaison honnête, fonctionnalité par fonctionnalité, entre AACsearch et MeiliSearch Cloud — tarifs, multi-tenant, analytique, géo-recherche, connecteurs et coût total de possession pour des cas d'usage en production.
+tags: [comparison, meilisearch, typesense, search-engine, alternatives]
+published: true
+---
+
+Si vous évaluez les fournisseurs de recherche en tant que service (search-as-a-service) en 2026, AACsearch et MeiliSearch Cloud sont probablement sur votre liste restreinte. Les deux proposent une recherche hébergée avec une simplicité à la Typesense, mais ils adoptent des approches fondamentalement différentes en matière de tarification, de multi-tenant et d'analytique.
+
+Ce comparatif couvre les différences réelles — pas les arguments marketing.
+
+## En un coup d'œil
+
+| Fonctionnalité          | AACsearch                                        | MeiliSearch Cloud                         |
+| ----------------------- | ------------------------------------------------ | ----------------------------------------- |
+| Moteur                  | Typesense (open source)                          | MeiliSearch (open source)                 |
+| Hébergement             | Géré (multi-région)                              | Géré (US/EU)                              |
+| Multi-tenant            | Natif — jetons API avec périmètre                | Pas intégré — nécessite une couche proxy  |
+| Clés API                | 3 types : recherche, admin, avec périmètre       | Gestion des clés API (basique)            |
+| Widget de recherche     | Inclus (balise script, 35 Ko)                    | Instant MeiliSearch (lourd en React)      |
+| Analytique              | Intégré — gratuit sur tous les forfaits          | Minimal (dashboard open source)           |
+| Géo-recherche           | Prise en charge native                           | Pas intégré                               |
+| Tolérance aux fautes    | Configurable par index                           | Par défaut (paramètres min/max de fautes) |
+| Synonymes               | Dashboard UI + import en masse                   | Dashboard + API                           |
+| Connecteurs             | PrestaShop, Bitrix, WooCommerce, Shopify         | Aucun                                     |
+| Recherche vectorielle   | Oui (champs d'embedding)                         | Oui (recherche hybride)                   |
+| Option auto-hébergement | Export complet Typesense                         | Oui (open source)                         |
+| SLA                     | 99,9 % (Scale+)                                  | 99,95 % (Cloud)                           |
+| Offre gratuite          | 1 index, 10 000 documents, opérations illimitées | 1 index, opérations limitées              |
+
+## Comparaison des tarifs
+
+AACsearch facture par index avec des **opérations de recherche illimitées**. MeiliSearch Cloud facture par opération de recherche — plus vos utilisateurs cherchent, plus vous payez.
+
+### Scénario 1 : Petit e-commerce (10 000 produits, 50 000 recherches/mois)
+
+| Composant de coût       | AACsearch         | MeiliSearch Cloud            |
+| ----------------------- | ----------------- | ---------------------------- |
+| Index/forfait           | Offre gratuite    | 29 $/mo (Starter)            |
+| Opérations de recherche | Illimité (inclus) | ~5-10 $ (dépassement)        |
+| Analytique              | Inclus            | Supplément (si auto-hébergé) |
+| **Total**               | **0 $/mo**        | **~35-40 $/mo**              |
+
+### Scénario 2 : SaaS B2B de milieu de marché (500 000 documents, 1 M de recherches/mois)
+
+| Composant de coût       | AACsearch                      | MeiliSearch Cloud                 |
+| ----------------------- | ------------------------------ | --------------------------------- |
+| Index/forfait           | 99 $/mo (Scale)                | 399 $/mo (Business)               |
+| Opérations de recherche | Illimité (inclus)              | ~100 $ (dépassement à 1 M)        |
+| Multi-tenant            | Inclus (jetons avec périmètre) | Supplément (infrastructure proxy) |
+| **Total**               | **99 $/mo**                    | **~500 $/mo**                     |
+
+### Scénario 3 : Grand SaaS (5 M de documents, 10 M de recherches/mois)
+
+| Composant de coût       | AACsearch         | MeiliSearch Cloud                            |
+| ----------------------- | ----------------- | -------------------------------------------- |
+| Index/forfait           | 249 $/mo (Pro)    | Sur mesure (est. 1 500-2 000 $/mo)           |
+| Opérations de recherche | Illimité (inclus) | Sur mesure (est. 500-1 000 $ de dépassement) |
+| Infrastructure dédiée   | Disponible        | Non disponible                               |
+| **Total**               | **249 $/mo**      | **~2 000-3 000 $/mo**                        |
+
+**Différence clé de tarification :** La tarification par index d'AACsearch rend les coûts prévisibles. La tarification par opération de MeiliSearch Cloud signifie que votre facture augmente avec le volume de recherche — un défi de passage à l'échelle pour les produits qui réussissent.
+
+## Multi-tenant : AACsearch gagne
+
+Pour les plateformes SaaS servant plusieurs organisations, le multi-tenant est le facteur décisif.
+
+**AACsearch** dispose de jetons API natifs avec périmètre. Créez une clé par locataire avec un filtre tel que `tenant_id:=:acme_corp`. Chaque requête effectuée avec ce jeton est automatiquement filtrée. Pas de middleware, pas de proxy, aucun risque de fuite de données entre locataires.
+
+**MeiliSearch Cloud** n'a pas de multi-tenant intégré. Vous devez implémenter une couche proxy qui ajoute les filtres de locataire à chaque requête. Cela implique :
+
+- Une latence supplémentaire (la requête passe par votre serveur)
+- Une infrastructure supplémentaire à maintenir
+- Un risque de fuite de données si le proxy est mal configuré
+
+Pour une application SaaS de 200 locataires, l'infrastructure proxy seule ajoute 50 à 200 $/mois en coûts de serveur.
+
+## Analytique : AACsearch gagne
+
+Les analyses de recherche sont essentielles pour améliorer la pertinence. AACsearch les inclut sur tous les forfaits — volume de recherche, requêtes principales, taux de clics, rapports de résultats vides et suivi des conversions.
+
+L'analytique de MeiliSearch Cloud est minimal. Le dashboard open source de MeiliSearch fournit des métriques de base, mais vous aurez besoin d'outils supplémentaires (PostHog, Mixpanel ou un pipeline d'analyse personnalisé) pour obtenir des informations dignes de la production. Cela ajoute une surcharge d'intégration et de maintenance.
+
+## Géo-recherche : AACsearch gagne
+
+Si votre application comporte des fonctionnalités liées à la localisation (localisateurs de magasins, recherches « près de chez moi », inventaire local), la géo-recherche est un prérequis indispensable.
+
+AACsearch prend en charge la géo-recherche de manière native avec un filtrage par rayon :
+
+```json
+{
+	"q": "coffee shops",
+	"filter_by": "_geo_dist(40.7128, -74.0060, 5000)"
+}
+```
+
+MeiliSearch Cloud n'a pas de géo-recherche intégrée. Vous devriez l'implémenter via un service de géocodage séparé et filtrer manuellement — ce qui ajoute de la complexité et de la latence.
+
+## Widget et frontend : Égalité
+
+Les deux plateformes proposent des composants d'interface de recherche, mais avec des approches différentes :
+
+| Aspect                 | Widget AACsearch           | Instant MeiliSearch              |
+| ---------------------- | -------------------------- | -------------------------------- |
+| Installation           | Balise script en 3 lignes  | Composant React + étape de build |
+| Taille du bundle       | 35 Ko JS + 8 Ko CSS        | ~60 Ko (lourd en React)          |
+| Support des frameworks | Toute page HTML            | React uniquement (ou sur mesure) |
+| Palette de commandes   | Incluse (mode Cmd+K)       | Disponible via plugin            |
+| Filtres à facettes     | Natifs, sélection multiple | Natifs                           |
+| Thématisation          | Variables CSS              | CSS + surcharges de plugin       |
+
+Le widget AACsearch fonctionne sur n'importe quel site web — HTML statique, WordPress, Astro ou React. Instant MeiliSearch est réservé à React, ce qui exclut les sites statiques et les frameworks non-React.
+
+## Connecteurs : AACsearch gagne
+
+AACsearch est livré avec des connecteurs pré-construits pour les principales plateformes e-commerce : PrestaShop, Bitrix24, WooCommerce et Shopify (feuille de route). Ils gèrent le mappage automatique des schémas, la synchronisation incrémentale et la propagation des suppressions.
+
+MeiliSearch Cloud n'offre aucun connecteur pré-construit. Chaque intégration est une implémentation personnalisée.
+
+## Recherche vectorielle : Les deux la prennent en charge
+
+Les deux plateformes prennent en charge les embeddings vectoriels pour la recherche sémantique :
+
+| Fonctionnalité     | AACsearch                             | MeiliSearch Cloud                       |
+| ------------------ | ------------------------------------- | --------------------------------------- |
+| Implémentation     | Champs d'embedding dans les documents | Recherche hybride (mot-clé + vectoriel) |
+| Source d'embedding | Apportez vos propres embeddings       | Apportez vos propres embeddings         |
+| Cas d'usage        | Recherche sémantique, RAG             | Recherche sémantique, recommandations   |
+
+AACsearch utilise le mécanisme d'embedding de Typesense où vous incluez des embeddings vectoriels comme champs de document. MeiliSearch Cloud prend en charge la recherche hybride combinant la correspondance par mot-clé et par vecteur.
+
+## Quand choisir chacun
+
+### Choisissez AACsearch quand :
+
+- Vous avez besoin de multi-tenant (jetons API avec périmètre par organisation)
+- Vous voulez une tarification prévisible par index (pas de facturation par opération)
+- L'analytique intégrée est importante (suivi des résultats vides, CTR, conversion)
+- Vous avez besoin de géo-recherche (localisateurs de magasins, « près de chez moi »)
+- Vous utilisez un site statique ou un framework non-React
+- Vous voulez des connecteurs CMS pré-construits
+- L'export de données / l'absence de verrouillage est important
+
+### Choisissez MeiliSearch Cloud quand :
+
+- Vous utilisez déjà l'écosystème open source MeiliSearch
+- Vous avez besoin de fonctionnalités spécifiques à MeiliSearch (recherche fédérée)
+- Vous voulez vous auto-héberger (MeiliSearch est entièrement open source)
+- Vous préférez les composants d'interface basés sur React/InstantSearch
+- Vous avez besoin d'un SLA de 99,95 % comme exigence impérative
+- Vous construisez une fonctionnalité de recherche uniquement (pas de besoin de multi-tenant)
+
+## Chemin de migration
+
+Passer de MeiliSearch à AACsearch :
+
+1. Exportez votre dump MeiliSearch
+2. Aplatissez les documents imbriqués (Typesense préfère les schémas plats)
+3. Importez dans AACsearch via l'API en masse
+4. Configurez des jetons API avec périmètre par locataire (non disponible dans MeiliSearch)
+5. Configurez la formule de classement et les attributs à facettes dans le dashboard AACsearch
+6. Déployez le widget AACsearch (remplacez Instant MeiliSearch)
+
+La migration prend généralement 2 à 4 heures pour un index de taille moyenne.
+
+## Verdict
+
+AACsearch est le meilleur choix pour la plupart des applications SaaS en production — en particulier celles avec plusieurs locataires, un besoin d'analytique ou des exigences de géo-recherche. MeiliSearch Cloud est une option solide pour les projets mono-locataires déjà investis dans l'écosystème MeiliSearch.
+
+Pour le cas d'usage le plus courant — une application SaaS B2B ayant besoin de recherche — le multi-tenant natif et la tarification à opérations illimitées d'AACsearch permettent d'économiser à la fois du temps de développement et des coûts récurrents.
+
+[Comparez les tarifs côte à côte →](/pricing)

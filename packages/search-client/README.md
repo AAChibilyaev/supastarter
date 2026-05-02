@@ -173,7 +173,7 @@ try {
 | Synonyms         | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
 | Curations        | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
 | Sorting Fields   | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
-| Facets           | `listFacets`                                                                            |
+| Facets           | `listFacets`                                                                                        |
 
 ## Development
 

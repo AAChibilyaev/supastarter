@@ -1,0 +1,274 @@
+---
+title: So skalieren Sie die Suche auf Millionen von Dokumenten mit kleinem Budget
+date: 2026-05-03
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Praktische Strategien zur Skalierung der Suche auf Millionen von Dokumenten ohne das Budget zu sprengen – Index-Sharding, Dokumentoptimierung, Abfragemuster, Caching-Schichten und der richtige Zeitpunkt für ein Upgrade.
+tags: [scaling, performance, optimization, architecture, documents]
+published: true
+---
+
+Die Skalierung der Suche von Tausenden auf Millionen von Dokumenten ist eine Herausforderung, vor der jedes wachsende Produkt steht. Die gute Nachricht: Sie brauchen keine Enterprise-Infrastruktur, um Millionen von Dokumenten zu verarbeiten. Mit der richtigen Architektur können Sie Millionen von Dokumenten auf erschwinglicher Infrastruktur bereitstellen.
+
+Dieser Leitfaden behandelt praktische Skalierungsstrategien für AACsearch (und Typesense) in jeder Wachstumsphase.
+
+## Stufe 1: 10.000–100.000 Dokumente (Kostenlos bis Starter)
+
+In dieser Größenordnung liefert jede Suchmaschine gute Ergebnisse. Konzentrieren Sie sich auf Korrektheit und Relevanz, nicht auf Infrastruktur.
+
+### Best Practices
+
+**Dokumentoptimierung:**
+
+- Halten Sie jedes Dokument unter 10 KB (unnötige Felder ausschließen)
+- Begrenzen Sie die durchsuchbaren Felder auf 5–7 (weniger Felder = schnellere Abfragen)
+- Verwenden Sie String-IDs (Typesense verarbeitet Strings besser als Integers für IDs)
+
+```json
+// Optimized document (8KB → 2KB)
+{
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Leistung in dieser Stufe
+
+| Metrik                      | Erwarteter Wert        |
+| --------------------------- | ---------------------- |
+| Abfrage-Latenz (P50)        | < 10 ms                |
+| Abfrage-Latenz (P95)        | < 30 ms                |
+| Indizierungsgeschwindigkeit | 5.000 Dok./s           |
+| Gleichzeitige Abfragen      | 100+ QPS               |
+| Benötigter Tarif            | Kostenlos oder Starter |
+
+## Stufe 2: 100.000–500.000 Dokumente (Starter bis Scale)
+
+Sobald Sie 100.000 Dokumente überschreiten, werden Abfragemuster wichtiger. Nicht alle Felder müssen durchsuchbar sein.
+
+### Indizierungsstrategie
+
+**Feldteilmengen für die Suche verwenden:**
+
+```json
+{
+	"searchable_fields": ["name", "brand", "category"],
+	"facet_fields": ["brand", "category", "price"],
+	"sortable_fields": ["price", "rating", "created_at"]
+	// NOT searchable: description, long_text, raw_data
+}
+```
+
+Indem Sie `description` und `long_text` aus den durchsuchbaren Feldern entfernen, reduzieren Sie die Indexgröße um 40–60 % bei minimalen Auswirkungen auf die Suchqualität (Benutzer suchen meist nach Name und Marke).
+
+### Facettenoptimierung
+
+Begrenzen Sie bei Facetten mit hoher Kardinalität (viele eindeutige Werte) die zurückgegebenen Werte:
+
+```json
+{
+	"max_facet_values": 15,
+	"facet_query": "brand", // Allow search within facet values
+	"facet_limit": 50 // Never return more than 50 values
+}
+```
+
+### Caching
+
+Implementieren Sie serverseitiges Caching für die häufigsten Abfragen:
+
+```typescript
+const cache = new Map<string, SearchResult>();
+const CACHE_TTL = 60_000; // 60 seconds
+
+async function searchWithCache(query: string) {
+	const key = query.toLowerCase().trim();
+
+	if (cache.has(key)) {
+		const cached = cache.get(key)!;
+		if (Date.now() - cached.timestamp < CACHE_TTL) {
+			return cached.data;
+		}
+		cache.delete(key);
+	}
+
+	const results = await aacsearch.search({ q: query });
+	cache.set(key, { data: results, timestamp: Date.now() });
+	return results;
+}
+```
+
+Bei einer Cache-Trefferquote von 50 % verdoppelt sich Ihre Kapazität effektiv.
+
+### Leistung in dieser Stufe
+
+| Metrik                 | Erwarteter Wert    |
+| ---------------------- | ------------------ |
+| Abfrage-Latenz (P50)   | < 15 ms            |
+| Abfrage-Latenz (P95)   | < 50 ms            |
+| Indexgröße             | 500 MB–2 GB        |
+| Gleichzeitige Abfragen | 200–500 QPS        |
+| Benötigter Tarif       | Starter oder Scale |
+
+## Stufe 3: 500.000–5 Millionen Dokumente (Scale bis Pro)
+
+Jenseits von 500.000 Dokumenten sind bewusste Architekturentscheidungen erforderlich.
+
+### Index-Sharding
+
+AACsearch skaliert horizontal. Für große Indizes sollten Sie eine Aufteilung nach folgenden Kriterien in Betracht ziehen:
+
+**Option A: Sharding nach Mandant (für Multi-Tenant-Apps)**
+
+```typescript
+// Each tenant gets their own shard/index
+const shard = `products_${Math.floor(tenantId / 1000)}`;
+```
+
+**Option B: Sharding nach Dokumentkategorie**
+
+```typescript
+// Split by logical categories
+const shards = ["products_electronics", "products_clothing", "products_home"];
+```
+
+**Option C: Sharding nach Datum (für Zeitreihendaten)**
+
+```typescript
+// Monthly shards for logs/content
+const shard = `products_2025_${String(month).padStart(2, "0")}`;
+```
+
+### Batch-Indizierungsstrategie
+
+Für große Erstimporte oder Neuindizierungen:
+
+```typescript
+async function batchReindex(documents: Document[]) {
+	const BATCH_SIZE = 10000;
+	const CONCURRENCY = 4;
+
+	// Process batches in parallel
+	const batches = chunk(documents, BATCH_SIZE);
+	const results = [];
+
+	for (let i = 0; i < batches.length; i += CONCURRENCY) {
+		const batchGroup = batches.slice(i, i + CONCURRENCY);
+		const batchResults = await Promise.all(
+			batchGroup.map((batch) => aacsearch.importDocuments("products", batch)),
+		);
+		results.push(...batchResults);
+	}
+
+	return results;
+}
+```
+
+### Abfrageoptimierung
+
+**Cursor-basierte Seitennummerierung anstelle von Offset verwenden:**
+
+```typescript
+// GOOD: Cursor-based (fast, consistent)
+const page1 = await aacsearch.search({ q: "shoes", per_page: 20 });
+const page2 = await aacsearch.search({
+	q: "shoes",
+	per_page: 20,
+	page: page1.next_page, // cursor
+});
+
+// BAD: Offset-based (slower at high offsets)
+const page100 = await aacsearch.search({ q: "shoes", per_page: 20, page: 100 });
+```
+
+**Filter-basierte Vorauswahl für große Facetten verwenden:**
+
+```typescript
+// Instead of returning all 5,000 brands, let users search within facets
+const query = { q: "headphones", facet_by: "brand", max_facet_values: 10 };
+// User clicks "Show more brands" → call with facet_query
+const facetQuery = { q: "headphones", facet_by: "brand", facet_query: "sony" };
+```
+
+### Leistung in dieser Stufe
+
+| Metrik                 | Erwarteter Wert |
+| ---------------------- | --------------- |
+| Abfrage-Latenz (P50)   | < 20 ms         |
+| Abfrage-Latenz (P95)   | < 80 ms         |
+| Indexgröße             | 2 GB–15 GB      |
+| Gleichzeitige Abfragen | 500–1000 QPS    |
+| Benötigter Tarif       | Scale oder Pro  |
+
+## Stufe 4: 5–50 Millionen Dokumente (Pro + Individuell)
+
+In dieser Größenordnung betreiben Sie einen bedeutenden Suchbetrieb. Wichtige Strategien:
+
+### Dedizierte Infrastruktur
+
+AACsearch Pro bietet dedizierte Infrastrukturoptionen:
+
+- Isolierte Suchknoten (keine lauten Nachbarn)
+- Individuelle SLA (99,95 %+)
+- Dedizierter Support-Ingenieur
+- Vorgewärmte Indizes (keine Kaltstart-Latenz)
+
+### Abfrage-Routing
+
+Bei sehr hohen QPS sollten Sie Abfragen intelligent routen:
+
+```typescript
+// Route frequently searched queries to hot nodes
+const ROUTING = {
+	hot: ["wireless headphones", "nike shoes", "iPhone"], // boosted cache
+	warm: /^[a-z]{4,}$/i, // medium-length queries → warm nodes
+	cold: /./, // everything else → default pool
+};
+```
+
+### Daten-Lebenszyklus-Management
+
+Nicht alle Dokumente benötigen die gleiche Suchpriorität:
+
+```typescript
+const lifecycle = {
+	active: { age: "< 90 days", priority: "real-time", replica: 3 },
+	warm: { age: "90-365 days", priority: "nearline", replica: 2 },
+	cold: { age: "> 365 days", priority: "archive", replica: 1, demoted_boost: 0.5 },
+};
+```
+
+Aktive Produkte erhalten volle Ressourcen. Ältere Produkte sind weiterhin durchsuchbar, werden aber niedriger eingestuft und haben weniger Replikate.
+
+## Skalierungsübersicht
+
+| Stufe      | Dokumente       | Strategie                                                          | Monatliche Kosten |
+| ---------- | --------------- | ------------------------------------------------------------------ | ----------------- |
+| Startup    | < 100.000       | Standardkonfiguration, Fokus auf Relevanz                          | 0–29 $            |
+| Wachsend   | 100.000–500.000 | Feldoptimierung, Caching                                           | 29–99 $           |
+| Skalierend | 500.000–5 Mio.  | Sharding, Batch-Indizierung, Cursor-Paginierung                    | 99–249 $          |
+| Enterprise | 5–50 Mio.       | Dedizierte Infrastruktur, Abfrage-Routing, Lebenszyklus-Management | Individuell       |
+
+## Häufige Fehler bei der Skalierung
+
+| Fehler                        | Symptom                            | Lösung                                             |
+| ----------------------------- | ---------------------------------- | -------------------------------------------------- |
+| Zu viele durchsuchbare Felder | Langsame Abfragen, großer Index    | Auf 5–7 Felder begrenzen                           |
+| Kein Caching                  | Unnötige Last auf der Engine       | Top-100-Abfragen für 60 s zwischenspeichern        |
+| Offset-Paginierung            | Verlangsamung der Abfragen         | Cursor-basierte Seitennummerierung verwenden       |
+| Riesige Dokumente             | Langsame Indizierung, großer Index | Unbenutzte Felder entfernen, Daten denormalisieren |
+| Alle Facetten uneingeschränkt | Langsame Facettenberechnung        | Auf 10–15 Werte pro Facette begrenzen              |
+| Kein Sharding-Plan            | Schwer über 5 Mio. skalierbar      | Sharding-Strategie vor 1 Mio. Dokumenten planen    |
+
+## Nächste Schritte
+
+- [Testen Sie Ihren Index](/docs/benchmarking) bei aktueller und prognostizierter Größe
+- [Überprüfen Sie Ihr Dokumentenschema](/docs/document-optimization) auf Optimierungsmöglichkeiten
+- [Sprechen Sie mit unserem Team](/contact) über Ihren Skalierungsbedarf
+
+[Starten Sie die Skalierung Ihrer Suche →](/signup)

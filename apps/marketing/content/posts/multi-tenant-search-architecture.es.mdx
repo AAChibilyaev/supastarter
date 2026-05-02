@@ -1,0 +1,217 @@
+---
+title: Arquitectura de Búsqueda Multi-Inquilino para Aplicaciones SaaS
+date: 2025-05-01
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Una inmersión profunda en la arquitectura de búsqueda multi-inquilino — cómo AACsearch maneja el aislamiento de datos, tokens de API con alcance, limitación de tasa por inquilino e infraestructura compartida sin comprometer la seguridad ni el rendimiento.
+tags: [architecture, multi-tenant, saas, search, security]
+published: true
+---
+
+Toda plataforma SaaS eventualmente enfrenta la pregunta de la multi-inquilindad. Cuando atiendes a más de 100 organizaciones desde una única infraestructura de búsqueda, ¿cómo aseguras que el Inquilino A nunca vea los datos del Inquilino B? ¿Cómo lo precias? ¿Cómo evitas que un inquilino ruidoso degrade la búsqueda para los demás?
+
+Este artículo explica cómo AACsearch resuelve la búsqueda multi-inquilino a nivel de infraestructura — para que el código de tu aplicación se mantenga simple.
+
+## El Enfoque Ingenuo: Un Índice Por Inquilino
+
+El patrón multi-inquilino más simple es un índice de búsqueda por cliente. Cada inquilino tiene su propia colección, sus propias claves API y un aislamiento completo.
+
+**Ventajas:** Máximo aislamiento de datos. Fácil de depurar. Simple de facturar por cantidad de índices.
+**Desventajas:** Sobrecarga de gestión de índices a escala. Deriva de configuración entre inquilinos. Más difícil de aprovisionar al momento del registro.
+
+Para aplicaciones SaaS pequeñas (< 50 inquilinos), esto funciona bien. AACsearch soporta múltiples índices por cuenta con claves API separadas por índice.
+
+```bash
+# Creando un índice por inquilino vía API
+curl -X POST "https://api.aacsearch.com/indices" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "acme_corp_products",
+    "fields": [
+      {"name": "name", "type": "string"},
+      {"name": "price", "type": "float"},
+      {"name": "sku", "type": "string"}
+    ]
+  }'
+```
+
+## El Enfoque Escalable: Índice Compartido con Seguridad a Nivel de Fila
+
+Para plataformas SaaS con cientos o miles de inquilinos, un índice compartido con filtrado por inquilino es más económico y fácil de gestionar.
+
+### Modelo de Datos
+
+Cada documento incluye un campo `tenant_id`:
+
+```json
+{
+	"id": "doc_001",
+	"tenant_id": "acme_corp",
+	"name": "Wireless Headphones",
+	"price": 79.99,
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Tokens de API con Alcance
+
+Los tokens de API con alcance de AACsearch filtran automáticamente cada consulta a un inquilino específico. Cuando creas un token, especificas un filtro que se combina con AND en cada solicitud de búsqueda:
+
+```bash
+# Crear un token con alcance para un inquilino
+curl -X POST "https://api.aacsearch.com/api-keys/scoped" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filter": "tenant_id:=:acme_corp",
+    "description": "Acme Corp search key"
+  }'
+```
+
+El token devuelto (`ss_scoped_*`) solo puede buscar documentos donde `tenant_id == "acme_corp"`. Incluso si un actor malicioso intercepta el token, no puede acceder a los datos de otros inquilinos.
+
+### Flujo de Arquitectura
+
+```
+User Request → Your SaaS App → Mint Scoped Token → AACsearch → Filtered Results
+                                    │
+                                    └── token_filter: tenant_id:=:acme_corp
+                                                ↓
+                               All queries auto-filtered
+                               No middleware, no SQL injection risk
+```
+
+Tu aplicación genera un token con alcance cuando el usuario inicia sesión. El token incluye el filtro del inquilino. Cada solicitud de búsqueda posterior desde el navegador de ese usuario incluye el token. AACsearch aplica el filtro a nivel del motor de búsqueda — tu aplicación nunca añade manualmente `WHERE tenant_id = X`.
+
+## Características de Rendimiento
+
+| Arquitectura                   | < 100 Inquilinos | 100-1K Inquilinos | 1K-10K Inquilinos |
+| ------------------------------ | ---------------- | ----------------- | ----------------- |
+| Por índice                     | Excelente        | Bueno             | Pobre (gestión)   |
+| Compartido + token con alcance | Bueno            | Excelente         | Excelente         |
+| Híbrido (fragmentado)          | Excesivo         | Bueno             | Excelente         |
+
+**Rendimiento del índice compartido a escala:**
+
+- Latencia de consulta: < 50ms en P95 independientemente del número de inquilinos (el filtro es una búsqueda de mapa de bits)
+- Tamaño del índice: Un índice de 10M documentos con 5,000 inquilinos rinde igual que un índice de un solo inquilino
+- Consultas concurrentes: 500+ QPS en el plan Scale, 2,000+ en Pro
+
+## Limitación de Tasa Por Inquilino
+
+Sin limitación de tasa por inquilino, un cliente agresivo podría monopolizar la capacidad de búsqueda. AACsearch soporta límites de tasa configurables:
+
+```json
+{
+	"rate_limits": {
+		"acme_corp": {
+			"searches_per_second": 100,
+			"indexing_per_minute": 1000
+		},
+		"startup_inc": {
+			"searches_per_second": 20,
+			"indexing_per_minute": 200
+		}
+	}
+}
+```
+
+Configura desde el dashboard o la API. Los límites excedidos devuelven HTTP 429 con un encabezado `Retry-After`, dando retroalimentación al inquilino sin afectar a otros clientes.
+
+## Automatización del Aprovisionamiento de Inquilinos
+
+Cuando un nuevo cliente se registra, automatiza el flujo de aprovisionamiento:
+
+```typescript
+async function provisionTenant(tenantId: string) {
+	// 1. Crear clave API con alcance
+	const scopedKey = await aacsearch.createScopedKey({
+		filter: `tenant_id:=:${tenantId}`,
+		description: `${tenantId} search key`,
+	});
+
+	// 2. Almacenar la clave en la configuración del inquilino
+	await db.tenants.update({
+		where: { id: tenantId },
+		data: { aacsearchKey: scopedKey },
+	});
+
+	// 3. Opcionalmente precargar datos de plantilla
+	await aacsearch.importDocuments(
+		"products",
+		templateData.map((doc) => ({
+			...doc,
+			tenant_id: tenantId,
+		})),
+	);
+
+	return scopedKey;
+}
+```
+
+Todo este flujo se completa en menos de 500ms. Tu cliente puede buscar inmediatamente después del registro.
+
+## Arquitectura Híbrida: Fragmentada por Nivel de Inquilino
+
+Para implementaciones muy grandes (10K+ inquilinos), considera un enfoque híbrido:
+
+- **Nivel 1 (Free/Starter):** Índice compartido con tokens con alcance (500+ inquilinos por índice)
+- **Nivel 2 (Scale):** Índice dedicado por inquilino
+- **Nivel 3 (Enterprise):** Clúster Typesense dedicado
+
+```typescript
+function getIndexForTenant(tenant: Tenant): string {
+	if (tenant.plan === "enterprise") return `enterprise_${tenant.id}`;
+	if (tenant.plan === "scale") return `scale_${tenant.id}`;
+	return "free_tier_shared"; // miles de inquilinos gratuitos comparten un índice
+}
+```
+
+## Consideraciones de Seguridad
+
+| Preocupación                    | Cómo lo Aborda AACsearch                                                           |
+| ------------------------------- | ---------------------------------------------------------------------------------- |
+| Intercepción de tokens          | Los tokens con alcance son solo de búsqueda (sin acceso de escritura)              |
+| Fugas de datos entre inquilinos | La aplicación del filtro es del lado del servidor, no del cliente                  |
+| Caducidad de tokens             | Los tokens pueden tener TTL (auto-caducan después de N horas/días)                 |
+| Registro de auditoría           | Todas las solicitudes API se registran con ID de token y marca de tiempo           |
+| Residencia de datos             | Selección de región por índice — mantén datos de inquilinos UE en la UE            |
+| Cumplimiento normativo          | Infraestructura compatible con SOC2, preparada para GDPR                           |
+| Rotación de claves              | Regenera claves sin tiempo de inactividad (la clave antigua funciona hasta el TTL) |
+
+## Precios a Escala Multi-Inquilino
+
+AACsearch cobra por índice, no por inquilino. Para el enfoque de índice compartido:
+
+| Plan    | Precio        | Máx. Inquilinos (compartido) | Máx. Documentos | Búsquedas  |
+| ------- | ------------- | ---------------------------- | --------------- | ---------- |
+| Free    | $0            | 50                           | 10K             | Ilimitadas |
+| Starter | $29/mes       | 200                          | 50K             | Ilimitadas |
+| Scale   | $99/mes       | 1,000                        | 500K            | Ilimitadas |
+| Pro     | $249/mes      | 5,000                        | 5M              | Ilimitadas |
+| Custom  | Personalizado | Ilimitados                   | Personalizado   | Ilimitadas |
+
+La mayoría de las aplicaciones SaaS en el plan Scale pueden atender 500-1,000 inquilinos desde un único índice compartido. A $99/mes, eso es $0.10-0.20 por inquilino por mes — mucho menos que el costo de auto-alojar Typesense o suscribirse a precios por operación de la competencia.
+
+## Migración a Multi-Inquilino
+
+¿Ya tienes una configuración de inquilino único? Migra a multi-inquilino compartido:
+
+1. Añade el campo `tenant_id` a todos los documentos en cada índice por inquilino
+2. Exporta todos los índices por inquilino
+3. Importa en un índice compartido con `tenant_id` poblado
+4. Crea tokens de API con alcance para cada inquilino
+5. Actualiza tu aplicación para generar tokens al iniciar sesión
+6. Descomisiona los índices por inquilino
+7. Listo — tus clientes experimentan cero tiempo de inactividad
+
+## Próximos Pasos
+
+- Lee el [Typesense Deep Dive](/blog/typesense-deep-dive) para conocer el motor de búsqueda subyacente
+- Explora la [referencia de API de tokens con alcance](/docs/scoped-tokens)
+- Mira cómo [AACsearch se compara con construir tu propia solución](/comparison-vs-self-hosted)
+
+[Comienza a construir búsqueda multi-inquilino gratis →](/signup)

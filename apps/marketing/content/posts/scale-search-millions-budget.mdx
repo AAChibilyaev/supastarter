@@ -1,0 +1,274 @@
+---
+title: How to Scale Search to Millions of Documents on a Budget
+date: 2025-05-01
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Practical strategies for scaling search to millions of documents without breaking the bank — index sharding, document optimization, query patterns, caching layers, and when to upgrade plans.
+tags: [scaling, performance, optimization, architecture, documents]
+published: true
+---
+
+Scaling search from thousands to millions of documents is a challenge every growing product faces. The good news: you don't need enterprise infrastructure to handle millions of documents. With the right architecture, you can serve millions of docs from affordable infrastructure.
+
+This guide covers practical scaling strategies for AACsearch (and Typesense) at every stage of growth.
+
+## Stage 1: 10K-100K Documents (Free to Starter)
+
+At this scale, any search engine performs well. Focus on correctness and relevance, not infrastructure.
+
+### Best Practices
+
+**Document optimization:**
+
+- Keep each document under 10KB (exclude unused fields)
+- Limit searchable fields to 5-7 (fewer fields = faster queries)
+- Use string IDs (Typesense handles strings better than integers for IDs)
+
+```json
+// Optimized document (8KB → 2KB)
+{
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Performance at This Stage
+
+| Metric              | Expected        |
+| ------------------- | --------------- |
+| Query latency (P50) | < 10ms          |
+| Query latency (P95) | < 30ms          |
+| Indexing speed      | 5,000 docs/sec  |
+| Concurrent queries  | 100+ QPS        |
+| Plan needed         | Free or Starter |
+
+## Stage 2: 100K-500K Documents (Starter to Scale)
+
+As you cross 100K documents, query patterns start to matter. Not all fields need to be searchable.
+
+### Indexing Strategy
+
+**Use field subsets for search:**
+
+```json
+{
+	"searchable_fields": ["name", "brand", "category"],
+	"facet_fields": ["brand", "category", "price"],
+	"sortable_fields": ["price", "rating", "created_at"]
+	// NOT searchable: description, long_text, raw_data
+}
+```
+
+By removing `description` and `long_text` from searchable fields, you reduce index size by 40-60% with minimal impact on search quality (users mostly search by name and brand).
+
+### Facet Optimization
+
+For facets with high cardinality (many unique values), limit the returned values:
+
+```json
+{
+	"max_facet_values": 15,
+	"facet_query": "brand", // Allow search within facet values
+	"facet_limit": 50 // Never return more than 50 values
+}
+```
+
+### Caching
+
+Implement server-side caching for top queries:
+
+```typescript
+const cache = new Map<string, SearchResult>();
+const CACHE_TTL = 60_000; // 60 seconds
+
+async function searchWithCache(query: string) {
+	const key = query.toLowerCase().trim();
+
+	if (cache.has(key)) {
+		const cached = cache.get(key)!;
+		if (Date.now() - cached.timestamp < CACHE_TTL) {
+			return cached.data;
+		}
+		cache.delete(key);
+	}
+
+	const results = await aacsearch.search({ q: query });
+	cache.set(key, { data: results, timestamp: Date.now() });
+	return results;
+}
+```
+
+At 50% cache hit rate, this effectively doubles your capacity.
+
+### Performance at This Stage
+
+| Metric              | Expected         |
+| ------------------- | ---------------- |
+| Query latency (P50) | < 15ms           |
+| Query latency (P95) | < 50ms           |
+| Index size          | 500MB-2GB        |
+| Concurrent queries  | 200-500 QPS      |
+| Plan needed         | Starter or Scale |
+
+## Stage 3: 500K-5M Documents (Scale to Pro)
+
+Beyond 500K documents, you need deliberate architecture choices.
+
+### Index Sharding
+
+AACsearch scales horizontally. For large indexes, consider sharding by:
+
+**Option A: Shard by tenant (for multi-tenant apps)**
+
+```typescript
+// Each tenant gets their own shard/index
+const shard = `products_${Math.floor(tenantId / 1000)}`;
+```
+
+**Option B: Shard by document category**
+
+```typescript
+// Split by logical categories
+const shards = ["products_electronics", "products_clothing", "products_home"];
+```
+
+**Option C: Shard by date (for time-series data)**
+
+```typescript
+// Monthly shards for logs/content
+const shard = `products_2025_${String(month).padStart(2, "0")}`;
+```
+
+### Batch Indexing Strategy
+
+For large initial imports or reindexing:
+
+```typescript
+async function batchReindex(documents: Document[]) {
+	const BATCH_SIZE = 10000;
+	const CONCURRENCY = 4;
+
+	// Process batches in parallel
+	const batches = chunk(documents, BATCH_SIZE);
+	const results = [];
+
+	for (let i = 0; i < batches.length; i += CONCURRENCY) {
+		const batchGroup = batches.slice(i, i + CONCURRENCY);
+		const batchResults = await Promise.all(
+			batchGroup.map((batch) => aacsearch.importDocuments("products", batch)),
+		);
+		results.push(...batchResults);
+	}
+
+	return results;
+}
+```
+
+### Query Optimization
+
+**Use cursor-based pagination instead of offset:**
+
+```typescript
+// GOOD: Cursor-based (fast, consistent)
+const page1 = await aacsearch.search({ q: "shoes", per_page: 20 });
+const page2 = await aacsearch.search({
+	q: "shoes",
+	per_page: 20,
+	page: page1.next_page, // cursor
+});
+
+// BAD: Offset-based (slower at high offsets)
+const page100 = await aacsearch.search({ q: "shoes", per_page: 20, page: 100 });
+```
+
+**Use filter-based pre-selection for large facets:**
+
+```typescript
+// Instead of returning all 5,000 brands, let users search within facets
+const query = { q: "headphones", facet_by: "brand", max_facet_values: 10 };
+// User clicks "Show more brands" → call with facet_query
+const facetQuery = { q: "headphones", facet_by: "brand", facet_query: "sony" };
+```
+
+### Performance at This Stage
+
+| Metric              | Expected     |
+| ------------------- | ------------ |
+| Query latency (P50) | < 20ms       |
+| Query latency (P95) | < 80ms       |
+| Index size          | 2GB-15GB     |
+| Concurrent queries  | 500-1000 QPS |
+| Plan needed         | Scale or Pro |
+
+## Stage 4: 5M-50M Documents (Pro + Custom)
+
+At this scale, you're managing a significant search operation. Key strategies:
+
+### Dedicated Infrastructure
+
+AACsearch Pro includes dedicated infrastructure options:
+
+- Isolated search nodes (no noisy neighbors)
+- Custom SLA (99.95%+)
+- Dedicated support engineer
+- Pre-warmed indexes (no cold-start latency)
+
+### Query Routing
+
+For very high QPS, route queries intelligently:
+
+```typescript
+// Route frequently searched queries to hot nodes
+const ROUTING = {
+	hot: ["wireless headphones", "nike shoes", "iPhone"], // boosted cache
+	warm: /^[a-z]{4,}$/i, // medium-length queries → warm nodes
+	cold: /./, // everything else → default pool
+};
+```
+
+### Data Lifecycle Management
+
+Not all documents need the same search priority:
+
+```typescript
+const lifecycle = {
+	active: { age: "< 90 days", priority: "real-time", replica: 3 },
+	warm: { age: "90-365 days", priority: "nearline", replica: 2 },
+	cold: { age: "> 365 days", priority: "archive", replica: 1, demoted_boost: 0.5 },
+};
+```
+
+Active products get full resources. Older products are still searchable but ranked lower with fewer replicas.
+
+## Scaling Summary
+
+| Stage      | Documents | Strategy                                       | Monthly cost |
+| ---------- | --------- | ---------------------------------------------- | ------------ |
+| Startup    | < 100K    | Default config, focus on relevance             | $0-29        |
+| Growing    | 100K-500K | Field optimization, caching                    | $29-99       |
+| Scaling    | 500K-5M   | Sharding, batch indexing, cursor pagination    | $99-249      |
+| Enterprise | 5M-50M    | Dedicated infra, query routing, lifecycle mgmt | Custom       |
+
+## Common Mistakes at Scale
+
+| Mistake                    | Symptom                    | Fix                                        |
+| -------------------------- | -------------------------- | ------------------------------------------ |
+| Too many searchable fields | Slow queries, large index  | Limit to 5-7 fields                        |
+| No caching                 | Unnecessary load on engine | Cache top 100 queries for 60s              |
+| Offset pagination          | Slowing queries            | Use cursor-based pagination                |
+| Huge documents             | Slow indexing, large index | Remove unused fields, flatten related data |
+| All facets unlimited       | Slow facet calculation     | Limit to top 10-15 values per facet        |
+| No sharding plan           | Hard to scale beyond 5M    | Plan sharding strategy before 1M documents |
+
+## Next Steps
+
+- [Benchmark your index](/docs/benchmarking) at current and projected scale
+- [Review your document schema](/docs/document-optimization) for optimization opportunities
+- [Talk to our team](/contact) about scaling needs
+
+[Start scaling your search →](/signup)

@@ -1,0 +1,207 @@
+---
+title: Создание поиска товаров с фасетными фильтрами
+date: 2025-05-01
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Узнайте, как создать поиск товаров с фасетной фильтрацией с помощью AACsearch — ценовые диапазоны, фильтры брендов, цветовые образцы и навигация по категориям менее чем за 30 минут.
+tags: [tutorial, faceted-search, ecommerce, filters]
+published: true
+---
+
+Фасетная фильтрация — это разница между «я не могу найти то, что ищу» и «именно то, что мне нужно». Клиенты, использующие фильтры, конвертируются в 2–3 раза чаще тех, кто их не использует. В этом руководстве вы создадите готовый к продакшену фасетный поиск товаров с помощью AACsearch.
+
+## Что такое фасетные фильтры?
+
+Фасетные фильтры позволяют пользователям сужать результаты поиска по атрибутам товаров: ценовой диапазон, бренд, размер, цвет, категория, рейтинг — любые параметры, важные для ваших клиентов. В отличие от простого просмотра категорий, фасеты комбинируются. Пользователь может отфильтровать по «Nike» + «кроссовки» + «до $150» + «размер 10» и увидеть только подходящие товары.
+
+AACsearch поддерживает фасеты нативно. Никакого кастомного индексирования, никакого внешнего поискового сервиса. Объявите, какие поля являются фасетными, и поисковая система вернёт доступные варианты фильтров с каждым запросом.
+
+## Шаг 1: Настройка индекса с фасетными полями
+
+Войдите в панель управления AACsearch и создайте новый индекс. При определении схемы отметьте эти поля как `facet: true`:
+
+```json
+{
+	"name": "string",
+	"brand": { "type": "string", "facet": true },
+	"category": { "type": "string", "facet": true },
+	"price": { "type": "float", "facet": true },
+	"color": { "type": "string", "facet": true },
+	"size": { "type": "string", "facet": true },
+	"rating": { "type": "float", "facet": true },
+	"in_stock": { "type": "bool", "facet": true },
+	"tags": { "type": "string[]", "facet": true }
+}
+```
+
+Typesense индексирует значения фасетов в битовой карте — фильтрация во время запроса выполняется за субмиллисекунды независимо от размера коллекции. Ценовые фасеты возвращаются в виде группировки гистограммы с количеством по диапазонам.
+
+## Шаг 2: Импорт товаров
+
+Загрузите свой каталог товаров через CSV, JSON или API. Каждый документ товара должен содержать значения фасетов:
+
+```json
+[
+	{
+		"id": "101",
+		"name": "Ultra Running Shoes",
+		"brand": "Nike",
+		"category": "Footwear",
+		"price": 129.99,
+		"color": "Black",
+		"size": "10",
+		"rating": 4.5,
+		"in_stock": true,
+		"tags": ["running", "outdoor", "men"]
+	},
+	{
+		"id": "102",
+		"name": "Trail Hiker Boots",
+		"brand": "Merrell",
+		"category": "Footwear",
+		"price": 159.99,
+		"color": "Brown",
+		"size": "11",
+		"rating": 4.7,
+		"in_stock": true,
+		"tags": ["hiking", "outdoor", "unisex"]
+	}
+]
+```
+
+Совет: Держите документы плоскими. Typesense работает лучше всего с денормализованными данными. Если у вас есть товары с вариантами (размер, цвет), создавайте один документ на вариант с полем `parent_id` для их группировки.
+
+## Шаг 3: Подключение Widget с фасетами
+
+Widget AACsearch отображает фасеты автоматически. Инициализируйте его с конфигурацией фасетов:
+
+```javascript
+const search = new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	facets: [
+		{ field: "brand", type: "string", label: "Brand" },
+		{ field: "category", type: "string", label: "Category" },
+		{ field: "price", type: "range", label: "Price Range" },
+		{ field: "color", type: "string", label: "Color" },
+		{ field: "rating", type: "range", label: "Rating" },
+		{ field: "in_stock", type: "boolean", label: "In Stock" },
+	],
+	searchableFields: ["name", "brand", "category", "tags"],
+	resultsPerPage: 24,
+	sortOptions: [
+		{ label: "Relevance", value: "_text_match:desc" },
+		{ label: "Price: Low to High", value: "price:asc" },
+		{ label: "Price: High to Low", value: "price:desc" },
+		{ label: "Rating", value: "rating:desc" },
+		{ label: "Newest", value: "id:desc" },
+	],
+});
+
+search.mount("#search-container");
+```
+
+Widget обрабатывает:
+
+- Множественный выбор фасетов (пользователь выбирает Nike И Adidas)
+- Ползунки ценового диапазона (перетаскиваемая гистограмма)
+- Отображение цветовых образцов (фасеты типа color показывают кружки)
+- Теги активных фильтров с кнопками удаления
+- Адаптивную панель фасетов для мобильных устройств
+
+## Шаг 4: Настройка правил отображения
+
+Фасеты должны выглядеть естественно, а не перегружать. Настройте их в панели управления AACsearch:
+
+**Свёрнуты по умолчанию:** Категории с более чем 10 значениями (показать ссылку «Показать ещё»)
+**Развёрнуты по умолчанию:** Ценовой диапазон, рейтинг, наличие на складе
+**Поиск внутри фасетов:** Для брендов с 50+ значениями пользователи могут искать в списке фасетов
+**Порядок фасетов:** Поднимите «Категорию» и «Бренд» наверх, опустите «Теги» вниз
+
+Настройте лимиты отображения фасетов:
+
+| Фасет    | Макс. значений | Поведение разворачивания |
+| -------- | -------------- | ------------------------ |
+| Brand    | 8              | Показать ещё +N          |
+| Category | 10             | Показать ещё +N          |
+| Color    | Все            | Сетка с образцами        |
+| Price    | Диапазон       | Ползунок-гистограмма     |
+| Rating   | 5              | Выбор по звёздам         |
+
+## Шаг 5: Добавление повышения релевантности для фильтрованных поисков
+
+Когда пользователь фильтрует по бренду, поднимите товары этого бренда выше в результатах. AACsearch поддерживает динамические правила ранжирования:
+
+**Повышение категории:** Если пользователь выбрал «Footwear» → повысить всю обувь в 1.5x
+**Повышение новинок:** Товары, добавленные за последние 30 дней, получают повышение 1.2x
+**Приоритет наличия:** Товары не в наличии всегда отображаются после товаров в наличии (при одинаковом уровне релевантности)
+
+Настройте это в панели управления в разделе Relevance Tuning → Ranking Rules.
+
+## Пример: Полная страница интернет-магазина
+
+Вот полная реализация с использованием widget AACsearch в приложении Next.js:
+
+```tsx
+// app/products/page.tsx
+import dynamic from "next/dynamic";
+
+const SearchPage = dynamic(() => import("./search-client"), { ssr: false });
+
+export default function ProductsPage() {
+	return (
+		<div className="max-w-7xl mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-8">All Products</h1>
+			<SearchPage />
+		</div>
+	);
+}
+```
+
+```tsx
+// app/products/search-client.tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export default function SearchClient() {
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!containerRef.current || typeof window === "undefined") return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "products",
+			facets: [
+				{ field: "category", type: "string", label: "Category" },
+				{ field: "brand", type: "string", label: "Brand" },
+				{ field: "price", type: "range", label: "Price Range" },
+			],
+			searchableFields: ["name", "brand", "description"],
+		});
+
+		widget.mount(containerRef.current);
+
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={containerRef} className="min-h-[600px]" />;
+}
+```
+
+## Производительность при масштабировании
+
+- **50 000 товаров, 50 фасетов:** < 50 мс время ответа (P95)
+- **500 000 товаров, 100 фасетов:** < 120 мс время ответа
+- **Множественный выбор фасетов:** Нет снижения производительности — пересечение битовых карт выполняется за O(1)
+- **Одновременные фильтрованные поиски:** 500+ QPS на тарифе Scale
+
+## Следующие шаги
+
+- Попробуйте [живой демо-пример интернет-магазина](/use-cases/ecommerce-search)
+- Прочитайте [руководство по настройке widget](/docs/widget)
+- Ознакомьтесь с [коннектором PrestaShop](/integrations/prestashop) для мгновенной интеграции с магазином
+
+Готовы создать свой поиск? [Начните бесплатно →](/signup)

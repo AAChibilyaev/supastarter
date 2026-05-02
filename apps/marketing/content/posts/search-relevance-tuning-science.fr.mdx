@@ -1,0 +1,276 @@
+---
+title: La Science de la Pertinence en Recherche : Classement, Réglage et Synonymes
+date: 2025-05-01
+image: https://picsum.photos/id/45/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Comment fonctionne réellement la pertinence en recherche — classement TF-IDF, pondération des champs, groupes de synonymes, règles de classement dynamiques, et la boucle de rétroaction analytique qui améliore la recherche au fil du temps.
+tags: [relevance, ranking, search, typesense, tuning]
+published: true
+---
+
+La pertinence en recherche, c'est la différence entre « presque bon » et « exactement ce qu'il me fallait ». Google y dépense des milliards. Vos utilisateurs l'attendent aussi de votre site.
+
+Cet article explique la science derrière la pertinence en recherche dans AACsearch (propulsé par Typesense) — du classement de base TF-IDF aux techniques avancées de réglage que les équipes merchandising peuvent gérer sans l'intervention des développeurs.
+
+## Les Fondations : Le Score TF-IDF
+
+Chaque moteur de recherche a besoin d'une méthode pour noter les documents. Typesense utilise le TF-IDF (Term Frequency-Inverse Document Frequency) comme formule de classement de base.
+
+**Fréquence du terme (Term Frequency) :** Combien de fois le terme recherché apparaît-il dans le document ? Un produit nommé « Wireless Bluetooth Headphones » qui mentionne « Bluetooth » trois fois sera mieux classé pour la recherche « Bluetooth » qu'un produit qui ne le mentionne qu'une fois.
+
+**Fréquence inverse de document (Inverse Document Frequency) :** Quelle est la rareté du terme dans l'ensemble des documents ? « Bluetooth » est plus spécifique que « product » — une correspondance sur « Bluetooth » contribue davantage à la pertinence qu'une correspondance sur « product », qui apparaît dans presque tous les documents.
+
+Typesense combine ces deux éléments en un score `_text_match`, qui est le champ de tri par défaut. Plus le `_text_match` est élevé, plus le résultat est pertinent.
+
+```json
+// Chaque résultat de recherche inclut son score de pertinence
+{
+	"hits": [
+		{
+			"document": { "name": "Wireless Bluetooth Headphones" },
+			"text_match": 142857,
+			"text_match_info": {
+				"best_field_score": "85678",
+				"best_field_weight": 3,
+				"fields_matched": 2
+			}
+		}
+	]
+}
+```
+
+## Pondération des Champs : Prioriser là où les Correspondances Comptent
+
+Tous les champs ne se valent pas. Une correspondance dans le `name` du produit est plus importante qu'une correspondance dans la `description`. AACsearch vous permet de définir des poids de pondération par champ :
+
+| Champ       | Pondération | Justification                                                                       |
+| ----------- | ----------- | ----------------------------------------------------------------------------------- |
+| name        | 3x          | Identifiant principal — une correspondance exacte est le signal le plus fort        |
+| brand       | 2x          | Une correspondance sur le nom de marque signale une intention élevée                |
+| category    | 2x          | Une correspondance de catégorie confirme le contexte de navigation de l'utilisateur |
+| description | 1x          | Supporte les correspondances secondaires, mais moins fort                           |
+| tags        | 1,5x        | Les métadonnées organisées font remonter des associations pertinentes               |
+| sku         | 5x          | Les recherches exactes de SKU doivent être classées n°1                             |
+
+Configurez les poids de pondération dans le tableau de bord AACsearch, sous Réglage de la Pertinence :
+
+```json
+{
+	"searchable_fields": [
+		{ "name": "name", "boost": 3 },
+		{ "name": "brand", "boost": 2 },
+		{ "name": "category", "boost": 2 },
+		{ "name": "description", "boost": 1 },
+		{ "name": "tags", "boost": 1.5 }
+	]
+}
+```
+
+## Bonus de Correspondance Exacte
+
+Lorsqu'une requête correspond exactement à la valeur d'un champ, Typesense lui accorde un bonus de pertinence. C'est essentiel pour :
+
+- **Recherches de marques :** « Nike » correspond exactement au champ brand → les produits Nike sont classés n°1
+- **Noms de produits :** « iPhone 16 » correspond exactement → ce produit spécifique apparaît en premier
+- **Numéros SKU/Modèle :** « B07YZN5LLK » correspond exactement → un seul résultat, toujours en premier
+
+Le bonus de correspondance exacte est activé par défaut. Configurez le multiplicateur dans les paramètres du tableau de bord (valeur par défaut : 2x).
+
+## Configuration de la Tolérance aux Fautes de Frappe
+
+La tolérance aux fautes de frappe n'est pas binaire — c'est une échelle graduelle. AACsearch vous permet de contrôler :
+
+```json
+{
+	"typo_tolerance": {
+		"enabled": true,
+		"min_length": 4, // Requêtes < 4 caractères : pas de correction
+		"max_typos_per_word": {
+			"1": 1, // Mots de 1 à 3 caractères : 0 fautes
+			"4": 1, // Mots de 4 à 6 caractères : 1 faute max
+			"7": 2 // Mots de 7+ caractères : 2 fautes max
+		}
+	}
+}
+```
+
+Cela évite la sur-correction. Une recherche pour « iphon » (1 faute éloignée de « iphone ») doit se corriger en iPhone. Mais « socks » ne doit pas retourner « soccer » — cela représente 2 fautes et le contexte est erroné.
+
+## Groupes de Synonymes : La Touche Humaine
+
+La pertinence algorithmique vous emmène à 80 % du chemin. Les synonymes vous apportent les 20 % restants — et c'est là que l'expertise du domaine compte.
+
+### Fonctionnement des Synonymes dans AACsearch
+
+Un groupe de synonymes est un ensemble de termes équivalents. La recherche d'un terme quelconque du groupe renvoie les résultats correspondant à n'importe quel autre terme du groupe :
+
+```json
+{
+	"synonyms": [
+		["sneakers", "trainers", "chaussures de sport", "running shoes"],
+		["laptop", "notebook", "macbook", "ultrabook"],
+		["canapé", "sofa", "divan", "causeuse"],
+		["téléphone portable", "mobile", "smartphone", "iPhone"],
+		["soda", "boisson gazeuse", "cola", "soft drink"],
+		["sweat à capuche", "hoodie", "sweatshirt à capuche", "pullover"]
+	]
+}
+```
+
+### Types de Relations de Synonymes
+
+| Type                    | Exemple                       | Effet                                                        |
+| ----------------------- | ----------------------------- | ------------------------------------------------------------ |
+| Unidirectionnel         | « laptop » → « notebook »     | Chercher « laptop » retourne les notebooks ; pas l'inverse   |
+| Équivalent              | « sneakers » ↔ « trainers »   | Les deux termes retournent les mêmes résultats               |
+| Hiérarchique            | « fruit » → [liste de fruits] | Un terme générique s'étend à des éléments spécifiques        |
+| Spécifique à une marque | « Nike » → « Air Max »        | Une recherche de marque fait remonter des gammes spécifiques |
+
+Configurez les synonymes dans le tableau de bord AACsearch, sous Réglage de la Pertinence → Synonymes. L'import en masse via CSV est pris en charge pour les grands ensembles de synonymes.
+
+## Règles de Classement Dynamiques
+
+Au-delà de la pondération par champ, AACsearch prend en charge des règles de classement dynamiques qui ajustent la pertinence en fonction de la logique métier :
+
+```json
+{
+	"ranking_rules": [
+		{
+			"name": "Favoriser les produits en stock",
+			"condition": "in_stock :=: true",
+			"boost": 1.5,
+			"priority": 1
+		},
+		{
+			"name": "Favoriser les nouvelles arrivées",
+			"condition": "created_at:>=:2025-04-01",
+			"boost": 1.2,
+			"priority": 2
+		},
+		{
+			"name": "Favoriser les produits promus",
+			"condition": "is_promoted :=: true",
+			"boost": 2.0,
+			"priority": 0
+		},
+		{
+			"name": "Défavoriser les articles en liquidation",
+			"condition": "is_clearance :=: true",
+			"boost": 0.5,
+			"priority": 3
+		}
+	]
+}
+```
+
+Ces règles s'appliquent à TOUTES les recherches. Pour des pondérations spécifiques à une requête, utilisez les paramètres `prioritize_fields` ou `pinning` de l'API.
+
+## Épinglage et Enfouissement
+
+Parfois, vous avez besoin d'un contrôle chirurgical :
+
+**Épinglage (Pinning) :** Forcer un document spécifique à la position n°1 pour certaines requêtes :
+
+```json
+{
+	"pinning": {
+		"query": "running shoes",
+		"product_id": "featured_001",
+		"position": 1
+	}
+}
+```
+
+**Enfouissement (Burying) :** Repousser les résultats non pertinents vers le bas :
+
+```json
+{
+	"burying": {
+		"query": "iphone",
+		"conditions": [
+			{ "field": "category", "value": "Accessories" }, // Coques et chargeurs sous les téléphones
+			{ "field": "condition", "value": "refurbished" } // Reconditionnés en bas
+		]
+	}
+}
+```
+
+## La Boucle de Rétroaction Analytique
+
+La pertinence n'est pas une configuration ponctuelle. C'est un cycle d'amélioration continue rendu possible par les analytics intégrés d'AACsearch :
+
+```
+Collecter les Données de Requêtes → Analyser les Requêtes Sans Résultat → Ajouter des Synonymes → Surveiller le CTR → Ajuster les Pondérations
+      ↕                                                                                                                    ↕
+Mettre à Jour les Règles de Classement ← Identifier les Recherches Peu Performantes ← Examiner les Tests A/B ← Déployer les Changements
+```
+
+### Indicateurs Analytiques Clés
+
+| Indicateur             | Ce qu'il vous révèle                                                  |
+| ---------------------- | --------------------------------------------------------------------- |
+| Taux de résultat nul   | Lacunes de contenu — utilisateurs cherchent ce que vous n'indexez pas |
+| Taux de clic (CTR)     | Les premiers résultats sont-ils les bons ?                            |
+| Fréquence des requêtes | Termes les plus recherchés — priorisez l'effort de réglage ici        |
+| Taux d'absence de clic | Les utilisateurs n'ont pas trouvé ce qu'ils voulaient dans le top 10  |
+| Recherche-achat        | Les chercheurs convertissent-ils après avoir trouvé des résultats ?   |
+| Profondeur de session  | Combien de recherches avant de trouver ? Élevé = mauvaise pertinence  |
+
+### Guide d'Action
+
+1. **Semaine 1 :** Examinez les requêtes sans résultat → ajoutez les produits ou synonymes manquants
+2. **Semaine 2 :** Examinez les premiers résultats à faible CTR → ajustez les pondérations des champs
+3. **Semaine 3 :** Ajoutez des synonymes pour les principales requêtes non trouvées (souvent du jargon sectoriel)
+4. **Semaine 4 :** Examinez les tendances saisonnières → ajoutez/supprimez les règles d'épinglage
+5. **En continu :** Surveillez le rapport analytique hebdomadaire — 15 minutes/semaine
+
+## Tests A/B des Changements de Pertinence
+
+Chaque changement de pertinence doit être mesuré. AACsearch prend en charge les tests A/B :
+
+```json
+{
+	"ab_test": {
+		"name": "Pondération marque vs description",
+		"control": { "brand_boost": 2, "description_boost": 1 },
+		"variant": { "brand_boost": 3, "description_boost": 1.5 },
+		"traffic_split": 50,
+		"metrics": ["ctr", "conversion", "zero_result_rate"],
+		"duration_days": 7
+	}
+}
+```
+
+Le tableau de bord indique quelle variante est la plus performante sur chaque indicateur. Déployez la gagnante.
+
+## Le Modèle de Maturité de la Pertinence
+
+| Niveau | Caractéristiques                                                       | Outils Utilisés                             |
+| ------ | ---------------------------------------------------------------------- | ------------------------------------------- |
+| L1     | Classement par défaut, aucun réglage                                   | TF-IDF par défaut                           |
+| L2     | Poids de pondération des champs configurés                             | Pondérations du tableau de bord             |
+| L3     | Groupes de synonymes pour les 20 principales requêtes peu performantes | Gestionnaire de synonymes + analytics       |
+| L4     | Règles de classement dynamiques + épinglage saisonnier                 | Règles de classement + API d'épinglage      |
+| L5     | Testé A/B, amélioration continue pilotée par les analytics             | Tous les outils + tableau de bord analytics |
+
+La plupart des équipes atteignent le niveau L3 en 2 semaines après le lancement. Les niveaux L4-L5 nécessitent un investissement mensuel de 2 à 4 heures.
+
+## Erreurs Courantes en Pertinence
+
+| Erreur                                  | Effet                                                                  | Correctif                                                  |
+| --------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Trop de champs recherchables            | Résultats basés sur des champs non pertinents, faible CTR              | Limitez-vous aux 5 champs les plus importants              |
+| Pondération égale de tous les champs    | Résultats génériques — nom pas mieux que corps                         | Utilisez une hiérarchie 3x/2x/1x                           |
+| Pas de synonymes                        | Les utilisateurs cherchent « sneakers », obtiennent « aucun résultat » | Ajoutez des groupes de synonymes sectoriels                |
+| Ignorer les analytics de résultats nuls | Les lacunes de contenu persistent des mois                             | Révision hebdomadaire, ajoutez du contenu ou des synonymes |
+| Configuration unique de pertinence      | La pertinence se dégrade à mesure que le catalogue grandit             | Cycle de réglage mensuel                                   |
+| Pas de tests A/B                        | Les changements de pertinence sont des suppositions                    | Lancez des tests 50/50 pendant 7 jours                     |
+
+## Prochaines Étapes
+
+- Lisez le [Guide d'Analytics de Recherche](/blog/search-analytics-guide) pour des analytics plus approfondis
+- Essayez la [démonstration live de pertinence](/use-cases/ecommerce-search)
+- Consultez le [Typesense Deep Dive](/blog/typesense-deep-dive) pour l'architecture du moteur
+
+[Commencez à optimiser la pertinence de votre recherche →](/signup)

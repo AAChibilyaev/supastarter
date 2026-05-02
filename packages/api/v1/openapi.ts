@@ -844,6 +844,579 @@ export function generateOpenApiSpec() {
 				},
 			},
 
+			// ─── Synonyms ──────────────────────────────────────────────
+			"/indexes/{indexId}/synonyms": {
+				get: {
+					summary: "List index synonyms",
+					description: "Returns all synonym groups for the index.",
+					tags: ["Synonyms"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Synonym list",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											synonyms: {
+												type: "array",
+												items: { $ref: "#/components/schemas/Synonym" },
+											},
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+				post: {
+					summary: "Create a single synonym",
+					description: "Creates a new synonym group in the index.",
+					tags: ["Synonyms"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["root", "synonyms"],
+									properties: {
+										root: { type: "string", maxLength: 256 },
+										synonyms: {
+											type: "array",
+											minItems: 1,
+											items: { type: "string", maxLength: 256 },
+											description: "Synonym variants for this root",
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"201": { description: "Synonym created" },
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to create synonym" },
+					},
+				},
+				put: {
+					summary: "Upsert synonyms (bulk replace)",
+					description:
+						"Replaces all synonym groups for the index in one operation. Missing groups are deleted.",
+					tags: ["Synonyms"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["synonyms"],
+									properties: {
+										synonyms: {
+											type: "array",
+											items: { $ref: "#/components/schemas/SynonymInput" },
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Synonyms synced",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											synced: { type: "integer" },
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+			},
+
+			"/indexes/{indexId}/synonyms/{synonymId}": {
+				delete: {
+					summary: "Delete a synonym",
+					description: "Deletes a single synonym group by its Typesense ID.",
+					tags: ["Synonyms"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+						{
+							name: "synonymId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Synonym ID (e.g. syn_my_root)",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Synonym deleted",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											id: { type: "string" },
+											deleted: { type: "boolean", enum: [true] },
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to delete synonym" },
+					},
+				},
+			},
+
+			// ─── Curations ─────────────────────────────────────────────
+			"/indexes/{indexId}/curations": {
+				get: {
+					summary: "List index curations (overrides)",
+					description:
+						"Returns all curation/override rules for the index (pinned/hidden documents per query).",
+					tags: ["Curations"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Curation list",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											overrides: {
+												type: "array",
+												items: { $ref: "#/components/schemas/Curation" },
+											},
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+				post: {
+					summary: "Create a single curation",
+					description: "Creates a new curation/override rule for a specific query.",
+					tags: ["Curations"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: { $ref: "#/components/schemas/CurationInput" },
+							},
+						},
+					},
+					responses: {
+						"201": { description: "Curation created" },
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to create curation" },
+					},
+				},
+				put: {
+					summary: "Upsert curations (bulk replace)",
+					description:
+						"Replaces all curation rules for the index. Missing rules are deleted.",
+					tags: ["Curations"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["curations"],
+									properties: {
+										curations: {
+											type: "array",
+											items: { $ref: "#/components/schemas/CurationInput" },
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Curations synced",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											synced: { type: "integer" },
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+			},
+
+			"/indexes/{indexId}/curations/{curationId}": {
+				delete: {
+					summary: "Delete a curation",
+					description: "Deletes a single curation/override rule by its Typesense ID.",
+					tags: ["Curations"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+						{
+							name: "curationId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Curation ID (e.g. cur_my_query)",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Curation deleted",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											id: { type: "string" },
+											deleted: { type: "boolean", enum: [true] },
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to delete curation" },
+					},
+				},
+			},
+
+			// ─── Sorting ────────────────────────────────────────────────
+			"/indexes/{indexId}/sorting": {
+				get: {
+					summary: "List sorting fields",
+					description: "Returns all fields in the index that have sorting enabled.",
+					tags: ["Sorting"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Sorting fields",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											fields: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														name: { type: "string" },
+														type: { type: "string" },
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+				post: {
+					summary: "Add a sorting field",
+					description: "Enables sorting on an existing field in the index schema.",
+					tags: ["Sorting"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["name"],
+									properties: {
+										name: { type: "string", maxLength: 64 },
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"201": { description: "Sorting field added" },
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to add sorting field" },
+					},
+				},
+				put: {
+					summary: "Replace all sorting fields",
+					description:
+						"Replaces all sorting fields with the specified list. Any existing sorting fields not in the list will have sorting disabled.",
+					tags: ["Sorting"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["fields"],
+									properties: {
+										fields: {
+											type: "array",
+											minItems: 1,
+											items: {
+												type: "object",
+												properties: {
+													name: { type: "string", maxLength: 64 },
+												},
+												required: ["name"],
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": { description: "Sorting fields replaced" },
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to replace sorting fields" },
+					},
+				},
+			},
+			"/indexes/{indexId}/sorting/{fieldName}": {
+				delete: {
+					summary: "Remove a sorting field",
+					description: "Disables sorting on the specified field.",
+					tags: ["Sorting"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+						{
+							name: "fieldName",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Field name to remove sorting from",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Sorting removed",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											name: { type: "string" },
+											sort: { type: "boolean", enum: [false] },
+											removed: { type: "boolean", enum: [true] },
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to remove sorting field" },
+					},
+				},
+			},
+
+			// ─── Facets ─────────────────────────────────────────────────
+			"/indexes/{indexId}/facets": {
+				get: {
+					summary: "List facet fields",
+					description:
+						"Returns all fields in the index that have faceting enabled, with their type and sorting status.",
+					tags: ["Facets"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index ID",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Facet fields",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											fields: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														name: { type: "string" },
+														type: { type: "string" },
+														sort: { type: "boolean" },
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+			},
+
 			// ─── Analytics ──────────────────────────────────────────────
 			"/projects/{projectId}/analytics": {
 				get: {
@@ -1096,6 +1669,55 @@ export function generateOpenApiSpec() {
 						apiKeysCount: { type: "integer" },
 						createdAt: { type: "string", format: "date-time" },
 						updatedAt: { type: "string", format: "date-time" },
+					},
+				},
+				Synonym: {
+					type: "object",
+					properties: {
+						id: { type: "string" },
+						root: { type: "string" },
+						synonyms: {
+							type: "array",
+							items: { type: "string" },
+						},
+					},
+				},
+				SynonymInput: {
+					type: "object",
+					required: ["root", "synonym"],
+					properties: {
+						root: { type: "string" },
+						synonym: { type: "string" },
+					},
+				},
+				Curation: {
+					type: "object",
+					properties: {
+						id: { type: "string" },
+						query: { type: "string" },
+						pinnedIds: {
+							type: "array",
+							items: { type: "string" },
+						},
+						hiddenIds: {
+							type: "array",
+							items: { type: "string" },
+						},
+					},
+				},
+				CurationInput: {
+					type: "object",
+					required: ["query"],
+					properties: {
+						query: { type: "string" },
+						pinnedIds: {
+							type: "array",
+							items: { type: "string" },
+						},
+						hiddenIds: {
+							type: "array",
+							items: { type: "string" },
+						},
 					},
 				},
 				ApiError: {

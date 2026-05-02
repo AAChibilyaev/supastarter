@@ -1,0 +1,243 @@
+---
+title: Recherche comme Service vs Auto-hébergée : Analyse du Coût Total de Possession
+date: 2026-05-03
+image: https://picsum.photos/id/28/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Une comparaison exhaustive du coût total de possession entre les fournisseurs de recherche en tant que service gérée et les moteurs de recherche auto-hébergés — couvrant l'infrastructure, les opérations, le temps d'ingénierie, les coûts de passage à l'échelle et les dépenses cachées à chaque étape.
+tags: [tco, self-hosted, saas, cost-analysis, typesense, infrastructure]
+published: true
+---
+
+L'une des questions les plus fréquentes que nous recevons est : « Dois-je auto-héberger Typesense ou utiliser un service géré comme AACsearch ? »
+
+La réponse n'est pas simple — cela dépend de la taille de votre équipe, du volume de documents, des exigences de SLA et de la trajectoire de croissance. Cet article fournit un cadre basé sur les données du CTP (Coût Total de Possession) afin que vous puissiez prendre une décision éclairée.
+
+## Les Composantes du Coût
+
+Lorsqu'on compare la recherche auto-hébergée à la recherche gérée, la plupart des gens ne comparent que les coûts du serveur. La réalité comprend cinq catégories :
+
+```
+CTP = Infrastructure + Temps d'Ingénierie + Opérations + Risque d'Indisponibilité + Coût d'Opportunité
+```
+
+Détaillons chacune d'elles.
+
+## Coûts d'Infrastructure
+
+### Typesense Auto-hébergé
+
+Typesense dépend de la mémoire RAM — votre index entier doit tenir en RAM pour des performances optimales. Voici ce dont vous avez besoin à différentes échelles :
+
+| Nombre de Documents | RAM Requise | Coût Mensuel du Serveur | Stockage |
+| ------------------- | ----------- | ----------------------- | -------- |
+| 100K                | 2 Go        | 30–60 $                 | 20 Go    |
+| 1M                  | 8 Go        | 80–150 $                | 50 Go    |
+| 10M                 | 32 Go       | 300–500 $               | 200 Go   |
+| 100M                | 64 Go       | 800–1 500 $             | 500 Go   |
+| 1B                  | 128 Go+     | 3 000–6 000 $           | 2 To+    |
+
+**Coûts supplémentaires :**
+
+- **Réplica haute disponibilité :** 2x le coût du serveur (minimum pour la production)
+- **Réplication multi-région :** 2–3x le coût du serveur (pour les utilisateurs mondiaux)
+- **Stockage de sauvegarde :** 20–100 $/mois (instantanés dans S3 ou équivalent)
+- **CDN pour les résultats de recherche :** 50–200 $/mois (si vous servez un public mondial)
+- **Infrastructure de surveillance :** 30–100 $/mois (Grafana, Prometheus, alertes)
+
+**Total infrastructure auto-hébergée (production, HA) :**
+
+- 1M documents : **250–500 $/mois**
+- 10M documents : **750–1 500 $/mois**
+- 100M documents : **2 000–4 000 $/mois**
+
+### SaaS Géré (AACsearch)
+
+| Nombre de Documents | Coût Mensuel | Inclut                                 |
+| ------------------- | ------------ | -------------------------------------- |
+| 100K                | 29 $         | HA, sauvegardes, analyses              |
+| 1M                  | 99 $         | HA, sauvegardes, analyses, SLA 99,99 % |
+| 10M                 | 249 $        | HA, multi-région, support premium      |
+| 100M                | 999 $        | Cluster dédié, SSO, SLA personnalisé   |
+| 1B                  | Personnalisé | Infrastructure dédiée, cloud privé     |
+
+**Total SaaS Géré :**
+
+- 1M documents : **99 $/mois** (60–80 % de moins qu'auto-hébergé)
+- 10M documents : **249 $/mois** (65–80 % de moins)
+- 100M documents : **999 $/mois** (50–75 % de moins)
+
+## Coûts de Temps d'Ingénierie
+
+C'est le plus grand coût caché. Un ingénieur backend senior coûte 120 000–200 000 $/an. Chaque heure consacrée à l'infrastructure de recherche est une heure non consacrée à votre produit principal.
+
+| Activité                            | Auto-hébergé (heures/an) | SaaS Géré (heures/an) |
+| ----------------------------------- | ------------------------ | --------------------- |
+| Configuration et réglage initial    | 40–80                    | 2–4                   |
+| Optimisation des index              | 20–40                    | 0                     |
+| Réglage des performances de requête | 20–40                    | 0                     |
+| Maintenance de l'infrastructure     | 40–80                    | 0                     |
+| Mises à jour de version             | 20–40                    | 0                     |
+| Tests de sauvegarde/restauration    | 10–20                    | 0                     |
+| Configuration de la surveillance    | 20–40                    | 0                     |
+| Astreinte                           | 50–100                   | 0                     |
+| Correctifs de sécurité              | 10–20                    | 0                     |
+| Configuration multi-région          | 40–80                    | 0                     |
+| **Total**                           | **270–540**              | **2–4**               |
+
+**Coût d'ingénierie à 150 000 $/an (75 $/heure) :**
+
+- Auto-hébergé : **20 250–40 500 $/an** (1 687–3 375 $/mois)
+- Géré : **150–300 $/an** (12–25 $/mois)
+
+## Frais Opérationnels
+
+Au-delà du temps d'ingénierie, l'auto-hébergement crée une charge opérationnelle continue :
+
+### Surveillance et Alertes
+
+- Configuration de Prometheus + Grafana : 1–2 semaines initiales
+- Fatigue des alertes : faux positifs dus à la pression mémoire, à l'utilisation du disque, aux requêtes lentes
+- Le suivi des SLO nécessite des tableaux de bord personnalisés
+
+### Sauvegarde et Reprise après Sinistre
+
+- Les instantanés Typesense doivent être planifiés et testés
+- Temps de restauration : 10–60 minutes selon la taille de l'index
+- Point de Récupération (RPO) : heure de la dernière instantané
+- Temps de Récupération (RTO) : temps de restauration + propagation DNS
+
+### Opérations de Passage à l'Échelle
+
+- L'ajout de nœuds nécessite provisionnement, tests et migration du trafic
+- Le rééquilibrage après l'ajout d'un nœud peut prendre des heures
+- Le passage à l'échelle verticale (instance plus grande) nécessite une indisponibilité
+
+## Risque d'Indisponibilité
+
+| Facteur                                                                            | Auto-hébergé   | SaaS Géré       |
+| ---------------------------------------------------------------------------------- | -------------- | --------------- |
+| Disponibilité attendue                                                             | 99,5–99,9 %    | 99,99 %+        |
+| Indisponibilité planifiée                                                          | 2–4 h/mois     | 0               |
+| Réponse aux incidents                                                              | Votre équipe   | Équipe SRE 24/7 |
+| Temps moyen de récupération                                                        | 30–90 min      | 5–15 min        |
+| Coût annuel d'indisponibilité (à 10 000 $/h de revenus dépendants de la recherche) | 4 000–40 000 $ | 50–500 $        |
+
+**Coûts cachés d'indisponibilité :**
+
+- Érosion de la confiance des clients à chaque interruption
+- Impact SEO si la recherche sur le site public tombe en panne
+- Tickets de support et attrition dus aux échecs de recherche
+
+## Coût d'Opportunité
+
+C'est le plus difficile à quantifier mais souvent le plus significatif :
+
+**Coûts d'opportunité de l'auto-hébergé :**
+
+- Fonctionnalités de recherche qui ne sont jamais construites (pas d'équipe dédiée)
+- Itération plus lente sur la pertinence de la recherche (chaque changement nécessite un déploiement)
+- Pas d'analyses pour améliorer la qualité de la recherche (les analyses doivent être construites)
+- Qualité de recherche réduite = conversion plus faible = revenus perdus
+
+**Coûts d'opportunité du SaaS Géré :**
+
+- Moins de contrôle sur les réglages de bas niveau
+- Préoccupation de dépendance au fournisseur (atténué par le fait que Typesense est open-source)
+- Les données quittent votre infrastructure (atténué par des clusters dédiés)
+
+## Comparaison du CTP par Échelle
+
+### Petite Échelle (< 100K documents)
+
+| Catégorie de Coût | Auto-hébergé       | Géré             |
+| ----------------- | ------------------ | ---------------- |
+| Infrastructure    | 60–120 $/mois      | 29 $/mois        |
+| Ingénierie        | 300–600 $/mois     | 12–25 $/mois     |
+| Opérations        | 100–200 $/mois     | 0                |
+| **Total**         | **460–920 $/mois** | **41–54 $/mois** |
+
+**Verdict :** Le géré est 10–20x moins cher à petite échelle.
+
+### Échelle Moyenne (1M–10M documents)
+
+| Catégorie de Coût | Auto-hébergé           | Géré               |
+| ----------------- | ---------------------- | ------------------ |
+| Infrastructure    | 250–1 500 $/mois       | 99–249 $/mois      |
+| Ingénierie        | 1 687–3 375 $/mois     | 12–25 $/mois       |
+| Opérations        | 300–800 $/mois         | 0                  |
+| **Total**         | **2 237–5 675 $/mois** | **111–274 $/mois** |
+
+**Verdict :** Le géré est 15–20x moins cher à échelle moyenne. Les coûts d'ingénierie dominent.
+
+### Grande Échelle (100M+ documents)
+
+| Catégorie de Coût | Auto-hébergé           | Géré                   |
+| ----------------- | ---------------------- | ---------------------- |
+| Infrastructure    | 2 000–4 000 $/mois     | 999 $/mois+            |
+| Ingénierie        | 1 687–3 375 $/mois     | 12–25 $/mois           |
+| Opérations        | 500–1 500 $/mois       | 0                      |
+| **Total**         | **4 187–8 875 $/mois** | **1 011–1 024 $/mois** |
+
+**Verdict :** Le géré est 4–8x moins cher à grande échelle, et l'écart se réduit à mesure que vous vous approchez d'une infrastructure dédiée.
+
+## Quand l'Auto-hébergement a du Sens
+
+L'auto-hébergement est le bon choix lorsque :
+
+1. **Votre activité principale EST l'infrastructure de recherche** — Vous construisez un produit de recherche ou offrez la recherche comme fonctionnalité principale à des clients entreprises qui nécessitent un déploiement sur site.
+
+2. **Vous avez une équipe dédiée à la recherche** (2+ ingénieurs) — L'équipe peut justifier l'investissement opérationnel avec des optimisations spécifiques à la recherche.
+
+3. **Des exigences strictes de résidence des données** — Certaines industries réglementées (finance, santé, gouvernement) exigent que les données restent dans des limites géographiques spécifiques sur une infrastructure que vous contrôlez.
+
+4. **Vous êtes à une échelle vraiment massive** (1B+ documents) — À cette échelle, la différence de coût d'infrastructure se réduit suffisamment pour qu'une équipe dédiée gérant votre propre cluster puisse être moins chère.
+
+5. **Vous avez besoin de modèles de classement personnalisés** — Si votre algorithme de pertinence nécessite des modèles ML personnalisés non pris en charge par les fournisseurs gérés.
+
+## Quand la Recherche Gérée est Meilleure
+
+La recherche gérée gagne dans presque tous les autres scénarios :
+
+1. **Vous êtes une startup ou une entreprise en phase de croissance** — Votre temps d'ingénierie est mieux investi dans la différenciation du produit, pas dans l'infrastructure de recherche.
+
+2. **La recherche est une fonctionnalité, pas votre produit** — Pour le e-commerce, le SaaS, les sites de contenu et les places de marché.
+
+3. **Vous devez aller vite** — Lancez la recherche en jours, pas en semaines. Itérez sur la pertinence sans changements d'infrastructure.
+
+4. **Vous n'avez pas d'exploitation 24/7** — Le géré inclut la couverture SRE, les sauvegardes et la réponse aux incidents.
+
+5. **Vous voulez des analyses de recherche** — Analyses intégrées pour les requêtes sans résultat, les recherches populaires et les taux de clics.
+
+## L'Approche Hybride
+
+Certaines équipes commencent par l'auto-hébergement et migrent vers le géré à mesure qu'elles évoluent. L'avantage des solutions basées sur Typesense est que la migration est simple :
+
+```bash
+# Exportation depuis Typesense auto-hébergé
+curl "http://localhost:8108/collections/products/documents/export" \
+  -H "X-TYPESENSE-API-KEY: $API_KEY" > products_export.json
+
+# Importation vers AACsearch
+curl -X POST "https://api.aacsearch.com/collections/products/documents/import" \
+  -H "X-AACSEARCH-API-KEY: $API_KEY" \
+  --data-binary @products_export.json
+```
+
+Votre schéma, vos requêtes et votre code client restent quasiment identiques. Le changement est une modification de configuration, pas une réécriture.
+
+## Résumé
+
+| Facteur                   | Auto-hébergé           | Géré (AACsearch)                 |
+| ------------------------- | ---------------------- | -------------------------------- |
+| Coût mensuel (1M docs)    | 2 200–5 600 $          | 111–274 $                        |
+| Temps de configuration    | 2–8 semaines           | 1–2 jours                        |
+| Surcharge d'ingénierie    | 270–540 h/an           | 2–4 h/an                         |
+| SLA de disponibilité      | 99,5–99,9 %            | 99,99 %                          |
+| Analyses                  | À construire           | Intégrées                        |
+| Multi-région              | Configuration manuelle | Intégrée                         |
+| Dépendance au fournisseur | N/A                    | Compatible Typesense open-source |
+
+Pour 95 % des équipes, la recherche en tant que service gérée offre de meilleurs résultats pour une fraction du coût total. Les quelques pour cent qui bénéficient réellement de l'auto-hébergement sont ceux qui exploitent l'infrastructure de recherche comme compétence principale — et ils savent qui ils sont.
+
+[Calculez votre CTP →](/pricing)

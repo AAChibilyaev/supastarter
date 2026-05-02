@@ -1,0 +1,276 @@
+---
+title: Die Wissenschaft der Suchrelevanz: Ranking, Tuning und Synonyme
+date: 2025-05-01
+image: https://picsum.photos/id/45/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Wie Suchrelevanz tatsächlich funktioniert – TF-IDF-Ranking, Feld-Boosts, Synonymgruppen, dynamische Ranking-Regeln und der Analyse-Feedback-Loop, der die Suche mit der Zeit verbessert.
+tags: [relevance, ranking, search, typesense, tuning]
+published: true
+---
+
+Suchrelevanz ist der Unterschied zwischen „ungefähr richtig" und „genau das, was ich brauchte." Google gibt Milliarden dafür aus. Ihre Benutzer erwarten das auch von Ihrer Website.
+
+Dieser Beitrag erklärt die Wissenschaft hinter der Suchrelevanz in AACsearch (angetrieben von Typesense) – vom grundlegenden TF-IDF-Ranking bis hin zu fortgeschrittenen Tuning-Techniken, die Merchandising-Teams ohne Entwicklerbeteiligung verwalten können.
+
+## Die Grundlage: TF-IDF-Bewertung
+
+Jede Suchmaschine braucht eine Möglichkeit, Dokumente zu bewerten. Typesense verwendet TF-IDF (Term Frequency – Inverse Document Frequency) als Basis-Ranking-Formel.
+
+**Term Frequency (Begriffshäufigkeit):** Wie oft kommt der Suchbegriff im Dokument vor? Ein Produkt namens „Wireless Bluetooth Headphones", das dreimal „Bluetooth" erwähnt, erhält ein höheres Ranking für „Bluetooth" als eines, das es nur einmal erwähnt.
+
+**Inverse Document Frequency (Inverse Dokumentenhäufigkeit):** Wie selten ist der Begriff über alle Dokumente hinweg? „Bluetooth" ist spezifischer als „Produkt" – eine Übereinstimmung bei „Bluetooth" trägt mehr zur Relevanz bei als eine Übereinstimmung bei „Produkt", das in fast jedem Dokument vorkommt.
+
+Typesense kombiniert diese zu einem `_text_match`-Score, der das Standard-Sortierfeld ist. Höherer `_text_match` = relevanter.
+
+```json
+// Jedes Suchergebnis enthält seinen Relevanz-Score
+{
+	"hits": [
+		{
+			"document": { "name": "Wireless Bluetooth Headphones" },
+			"text_match": 142857,
+			"text_match_info": {
+				"best_field_score": "85678",
+				"best_field_weight": 3,
+				"fields_matched": 2
+			}
+		}
+	]
+}
+```
+
+## Feld-Boosts: Priorisieren, wo Übereinstimmungen zählen
+
+Nicht alle Felder sind gleich. Eine Übereinstimmung im Produkt-`name` ist wichtiger als eine Übereinstimmung in der `description`. AACsearch ermöglicht es Ihnen, Boost-Gewichte pro Feld festzulegen:
+
+| Feld        | Boost | Begründung                                                            |
+| ----------- | ----- | --------------------------------------------------------------------- |
+| name        | 3x    | Primäre Kennung – exakte Übereinstimmung hier ist das stärkste Signal |
+| brand       | 2x    | Markennamen-Übereinstimmung signalisiert hohe Absicht                 |
+| category    | 2x    | Kategorie-Übereinstimmung bestätigt den Browser-Kontext des Benutzers |
+| description | 1x    | Unterstützt sekundäre Übereinstimmungen, aber nicht so stark          |
+| tags        | 1,5x  | Kuratierte Metadaten zeigen relevante Assoziationen                   |
+| sku         | 5x    | Exakte SKU-Suchen müssen auf Rang #1 erscheinen                       |
+
+Konfigurieren Sie Boost-Gewichte im AACsearch-Dashboard unter Relevanz-Tuning:
+
+```json
+{
+	"searchable_fields": [
+		{ "name": "name", "boost": 3 },
+		{ "name": "brand", "boost": 2 },
+		{ "name": "category", "boost": 2 },
+		{ "name": "description", "boost": 1 },
+		{ "name": "tags", "boost": 1.5 }
+	]
+}
+```
+
+## Exakte-Übereinstimmung-Boost
+
+Wenn eine Abfrage exakt mit einem Feldwert übereinstimmt, gibt Typesense einen Relevanz-Bonus. Dies ist entscheidend für:
+
+- **Markensuchen:** „Nike" stimmt exakt mit dem Markenfeld überein → Nike-Produkte erscheinen auf Rang #1
+- **Produktnamen:** „iPhone 16" stimmt exakt überein → dieses spezifische Produkt erscheint zuerst
+- **SKU-/Modellnummern:** „[B07YZN5LLK]" stimmt exakt überein → ein Ergebnis, immer zuerst
+
+Der Exakte-Übereinstimmung-Boost ist standardmäßig aktiviert. Konfigurieren Sie den Multiplikator in den Dashboard-Einstellungen (Standard: 2x).
+
+## Tippfehlertoleranz-Konfiguration
+
+Tippfehlertoleranz ist nicht binär – es ist eine gleitende Skala. AACsearch lässt Sie steuern:
+
+```json
+{
+	"typo_tolerance": {
+		"enabled": true,
+		"min_length": 4, // Abfragen < 4 Zeichen: keine Tippfehlerkorrektur
+		"max_typos_per_word": {
+			"1": 1, // Wörter mit 1–3 Zeichen: 0 Tippfehler
+			"4": 1, // Wörter mit 4–6 Zeichen: max. 1 Tippfehler
+			"7": 2 // Wörter mit 7+ Zeichen: max. 2 Tippfehler
+		}
+	}
+}
+```
+
+Dies vermeidet Überkorrektur. Eine Suche nach „Iphon" (1 Tippfehler von „iPhone") sollte zu iPhone korrigieren. Aber „Socken" sollte nicht „Fußball" zurückgeben – das sind 2 Tippfehler entfernt und der Kontext ist falsch.
+
+## Synonymgruppen: Die menschliche Note
+
+Algorithmische Relevanz bringt Sie 80 % des Weges. Synonyme bringen die restlichen 20 % – und hier kommt domänenspezifisches Fachwissen ins Spiel.
+
+### Wie Synonyme in AACsearch funktionieren
+
+Eine Synonymgruppe ist eine Menge gleichwertiger Begriffe. Die Suche nach einem Begriff in der Gruppe liefert Ergebnisse, die mit jedem anderen Begriff in der Gruppe übereinstimmen:
+
+```json
+{
+	"synonyms": [
+		["sneakers", "trainers", "athletic shoes", "running shoes"],
+		["laptop", "notebook", "macbook", "ultrabook"],
+		["sofa", "couch", "settee", "loveseat"],
+		["cell phone", "mobile phone", "smartphone", "iPhone"],
+		["soda", "pop", "cola", "soft drink"],
+		["hoodie", "hooded sweatshirt", "pullover"]
+	]
+}
+```
+
+### Arten von Synonymbeziehungen
+
+| Typ              | Beispiel                | Wirkung                                                |
+| ---------------- | ----------------------- | ------------------------------------------------------ |
+| Einseitig        | „laptop" → „notebook"   | Suche nach „laptop" liefert Notebooks, nicht umgekehrt |
+| Gleichwertig     | „sneakers" ↔ „trainers" | Beide Begriffe liefern gleiche Ergebnisse              |
+| Hierarchisch     | „fruit" → [Obstliste]   | Allgemeiner Begriff erweitert zu spezifischen Artikeln |
+| Markenspezifisch | „Nike" → „Air Max"      | Markenabfrage zeigt spezifische Produktlinien          |
+
+Konfigurieren Sie Synonyme im AACsearch-Dashboard unter Relevanz-Tuning → Synonyme. Der CSV-Massenimport wird für große Synonymmengen unterstützt.
+
+## Dynamische Ranking-Regeln
+
+Über feldbezogene Boosts hinaus unterstützt AACsearch dynamische Ranking-Regeln, die die Relevanz basierend auf Geschäftslogik anpassen:
+
+```json
+{
+	"ranking_rules": [
+		{
+			"name": "Produkte auf Lager bevorzugen",
+			"condition": "in_stock :=: true",
+			"boost": 1.5,
+			"priority": 1
+		},
+		{
+			"name": "Neuheiten bevorzugen",
+			"condition": "created_at:>=:2025-04-01",
+			"boost": 1.2,
+			"priority": 2
+		},
+		{
+			"name": "Beworbene Produkte bevorzugen",
+			"condition": "is_promoted :=: true",
+			"boost": 2.0,
+			"priority": 0
+		},
+		{
+			"name": "Auslaufartikel herabstufen",
+			"condition": "is_clearance :=: true",
+			"boost": 0.5,
+			"priority": 3
+		}
+	]
+}
+```
+
+Diese Regeln gelten für ALLE Suchen. Für abfragespezifische Boosts verwenden Sie die `prioritize_fields`- oder `pinning`-Parameter der API.
+
+## Pinning und Burying
+
+Manchmal brauchen Sie punktgenaue Kontrolle:
+
+**Pinning:** Erzwingen, dass ein bestimmtes Dokument bei bestimmten Abfragen auf Position #1 erscheint:
+
+```json
+{
+	"pinning": {
+		"query": "running shoes",
+		"product_id": "featured_001",
+		"position": 1
+	}
+}
+```
+
+**Burying:** Irrelevante Ergebnisse nach unten verschieben:
+
+```json
+{
+	"burying": {
+		"query": "iphone",
+		"conditions": [
+			{ "field": "category", "value": "Accessories" }, // Hüllen & Ladegeräte unter Telefonen
+			{ "field": "condition", "value": "refurbished" } // Refurbished ganz unten
+		]
+	}
+}
+```
+
+## Der Analyse-Feedback-Loop
+
+Relevanz ist keine einmalige Konfiguration. Es ist ein kontinuierlicher Verbesserungszyklus, ermöglicht durch die integrierte Analyse von AACsearch:
+
+```
+Abfragedaten sammeln → Null-Ergebnis-Abfragen analysieren → Synonyme hinzufügen → CTR überwachen → Boosts anpassen
+      ↕                                                                              ↕
+Ranking-Regeln aktualisieren ← Schwach performende Suchen identifizieren ← A/B-Tests auswerten ← Änderungen bereitstellen
+```
+
+### Wichtige Analyse-Kennzahlen
+
+| Metrik             | Was sie Ihnen sagt                                                    |
+| ------------------ | --------------------------------------------------------------------- |
+| Null-Ergebnis-Rate | Inhaltslücken – Benutzer suchen nach Dingen, die Sie nicht indexieren |
+| Klickrate (CTR)    | Sind die Top-Ergebnisse die richtigen?                                |
+| Abfragehäufigkeit  | Meistgesuchte Begriffe – priorisieren Sie Tuning-Aufwand hier         |
+| Kein-Klick-Rate    | Benutzer haben nicht gefunden, was sie wollten, in den Top 10         |
+| Suche-zu-Kauf-Rate | Konvertieren Suchende, nachdem sie Ergebnisse gefunden haben?         |
+| Sitzungstiefe      | Wie viele Suchen vor Erfolg? Hoch = schlechte Relevanz                |
+
+### Umsetzbarer Spielplan
+
+1. **Woche 1:** Null-Ergebnis-Abfragen prüfen → fehlende Produkte oder Synonyme hinzufügen
+2. **Woche 2:** Top-Ergebnisse mit niedriger CTR prüfen → Feld-Boosts anpassen
+3. **Woche 3:** Synonyme für die häufigsten nicht gefundenen Abfragen hinzufügen (normalerweise Branchenjargon)
+4. **Woche 4:** Saisonale Trends prüfen → Pinning-Regeln hinzufügen/entfernen
+5. **Fortlaufend:** Wöchentlichen Analysebericht prüfen – 15 Minuten/Woche
+
+## A/B-Testing von Relevanzänderungen
+
+Jede Relevanzänderung sollte gemessen werden. AACsearch unterstützt A/B-Testing:
+
+```json
+{
+	"ab_test": {
+		"name": "Marken-Boost vs. Beschreibungs-Boost",
+		"control": { "brand_boost": 2, "description_boost": 1 },
+		"variant": { "brand_boost": 3, "description_boost": 1.5 },
+		"traffic_split": 50,
+		"metrics": ["ctr", "conversion", "zero_result_rate"],
+		"duration_days": 7
+	}
+}
+```
+
+Das Dashboard zeigt, welche Variante bei jeder Metrik besser abschneidet. Setzen Sie den Gewinner ein.
+
+## Das Relevanz-Reifegradmodell
+
+| Stufe | Merkmale                                                     | Verwendete Werkzeuge               |
+| ----- | ------------------------------------------------------------ | ---------------------------------- |
+| L1    | Standard-Ranking, kein Tuning                                | Standard-TF-IDF                    |
+| L2    | Feld-Boost-Gewichte konfiguriert                             | Dashboard-Boosts                   |
+| L3    | Synonymgruppen für die Top 20 schwachen Abfragen             | Synonym-Manager + Analyse          |
+| L4    | Dynamische Ranking-Regeln + saisonales Pinning               | Ranking-Regeln + Pinning-API       |
+| L5    | A/B-getestet, analysegetriebene kontinuierliche Verbesserung | Alle Werkzeuge + Analyse-Dashboard |
+
+Die meisten Teams erreichen L3 innerhalb von 2 Wochen nach dem Start. L4–L5 erfordert einen monatlichen Aufwand von 2–4 Stunden.
+
+## Häufige Relevanzfehler
+
+| Fehler                           | Wirkung                                                             | Behebung                                               |
+| -------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------ |
+| Zu viele durchsuchbare Felder    | Ergebnisse stimmen auf irrelevante Felder, niedrige CTR             | Auf 5 wichtigste Felder beschränken                    |
+| Alle Felder gleicher Boost       | Generische Ergebnisse – Namensübereinstimmung nicht besser als Text | 3x/2x/1x-Boost-Hierarchie verwenden                    |
+| Keine Synonyme                   | Benutzer suchen „Sneakers", erhalten „keine Ergebnisse"             | Branchen-Synonymgruppen hinzufügen                     |
+| Null-Ergebnis-Analyse ignorieren | Inhaltslücken bestehen monatelang                                   | Wöchentliche Prüfung, Inhalte oder Synonyme hinzufügen |
+| Einmaliges Relevanz-Setup        | Relevanz verschlechtert sich mit wachsendem Katalog                 | Monatlicher Tuning-Zyklus                              |
+| Kein A/B-Testing                 | Relevanzänderungen sind Vermutungen                                 | 50/50-Tests für 7 Tage durchführen                     |
+
+## Nächste Schritte
+
+- Lesen Sie den [Search Analytics Guide](/blog/search-analytics-guide) für tiefergehende Analysen
+- Probieren Sie die [Live-Relevanz-Demo](/use-cases/ecommerce-search) aus
+- Sehen Sie sich den [Typesense Deep Dive](/blog/typesense-deep-dive) für die Engine-Architektur an
+
+[Optimieren Sie jetzt Ihre Suchrelevanz →](/signup)

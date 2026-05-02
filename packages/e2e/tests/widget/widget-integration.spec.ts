@@ -31,9 +31,7 @@ test.describe("Widget Integration", () => {
 		expect(body.length).toBeGreaterThan(100);
 	});
 
-	test("should accept widget search requests with valid API key", async ({
-		apiClient,
-	}) => {
+	test("should accept widget search requests with valid API key", async ({ apiClient }) => {
 		const index = await createTestIndex(
 			process.env.E2E_ADMIN_API_KEY || "test-admin-key",
 			BASE_URL,
@@ -50,26 +48,21 @@ test.describe("Widget Integration", () => {
 		);
 
 		// Attempt a widget search (POST to widget API)
-		const response = await fetch(
-			`${BASE_URL}/api/search/public/${index.slug}`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${key.key}`,
-				},
-				body: JSON.stringify({ q: "test", perPage: 10 }),
+		const response = await fetch(`${BASE_URL}/api/search/public/${index.slug}`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${key.key}`,
 			},
-		);
+			body: JSON.stringify({ q: "test", perPage: 10 }),
+		});
 
 		expect(response.status).toBe(200);
 		const data = await response.json();
 		expect(data).toHaveProperty("hits");
 	});
 
-	test("should embed widget script in a test page and execute", async ({
-		page,
-	}) => {
+	test("should embed widget script in a test page and execute", async ({ page }) => {
 		// Load a simple HTML page that includes the widget script
 		await page.goto(`${BASE_URL}/api/widget/widget.js`);
 

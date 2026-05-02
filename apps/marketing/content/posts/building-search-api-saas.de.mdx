@@ -1,0 +1,260 @@
+---
+title: Eine Such-API für Ihre SaaS-Plattform erstellen: Best Practices für die Architektur
+date: 2026-05-03
+image: https://picsum.photos/id/57/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Architekturmuster für die Integration einer Suchfunktion in Ihre SaaS-Plattform – REST-API-Design, bereichsbezogene Tokens, Filterstrategien, Webhook-Synchronisation und die Abwägungen zwischen eingebetteter und externer Suchinfrastruktur.
+tags: [architecture, api, saas, search, best-practices]
+published: true
+---
+
+Jede SaaS-Plattform braucht irgendwann eine Suchfunktion. Die Frage ist, wie man sie architektonisch umsetzt: als integriertes Feature? Als API, die Sie Kunden bereitstellen? Oder als verwalteten Dienst, den Sie konsumieren?
+
+Dieser Beitrag behandelt die Architekturmuster, die in großem Maßstab funktionieren – egal, ob Sie die Suche in Ihr Produkt einbauen oder sie als Funktion für Ihre Kunden anbieten.
+
+## Architekturoptionen
+
+### Option 1: Eingebettete Suche (Eigenbau)
+
+Sie bauen die Suche direkt in Ihre Anwendungsdatenbank ein, indem Sie PostgreSQL `ILIKE` oder Elasticsearch verwenden.
+
+```
+Ihre App → PostgreSQL `ILIKE` / Elasticsearch → Ergebnisse
+```
+
+| Aspekt             | Bewertung                                          |
+| ------------------ | -------------------------------------------------- |
+| Einrichtungszeit   | 2–4 Wochen                                         |
+| Wartung            | Fortlaufend (Indizierung, Optimierung, Skalierung) |
+| Multi-Tenancy      | Muss selbst entwickelt werden                      |
+| Analysen           | Muss selbst entwickelt werden                      |
+| Kosten bei 1M Dok. | 200–500 $/Monat Server + 20h/Monat Betrieb         |
+
+Dies funktioniert für Produkte in der Frühphase mit weniger als 10.000 Dokumenten. Darüber hinaus überwiegen die Betriebskosten den Einfachheitsgewinn.
+
+### Option 2: Eingebettet + Suchdienst eines Drittanbieters
+
+Sie integrieren einen Search-as-a-Service-Anbieter (wie AACsearch) über eine API in Ihre App. Der Anbieter übernimmt Indizierung, Suche und Infrastruktur.
+
+```
+Ihre App → AACsearch-API → Ergebnisse
+```
+
+| Aspekt             | Bewertung                            |
+| ------------------ | ------------------------------------ |
+| Einrichtungszeit   | 1–2 Tage                             |
+| Wartung            | Minimal (vom Anbieter verwaltet)     |
+| Multi-Tenancy      | Integriert (bereichsbezogene Tokens) |
+| Analysen           | Integriert                           |
+| Kosten bei 1M Dok. | 99–249 $/Monat                       |
+
+Dies ist der optimale Bereich für die meisten SaaS-Unternehmen. Sie erhalten eine produktionsreife Suche ohne dedizierten Suchingenieur.
+
+### Option 3: Suche als API-Produkt anbieten
+
+Sie bauen eine Such-API-Schicht, die Ihre Kunden nutzen. AACsearch kann das Backend sein.
+
+```
+Kunden-App → Ihre Such-API → AACsearch → Ergebnisse
+                                          ↑
+                              Ihre API verwaltet bereichsbezogene Tokens,
+                              Ratenbegrenzung und Abrechnung
+```
+
+| Aspekt           | Bewertung                           |
+| ---------------- | ----------------------------------- |
+| Einrichtungszeit | 1–2 Wochen                          |
+| Wartung          | Verwaltung der API-Oberfläche       |
+| Multi-Tenancy    | Bereichsbezogene Tokens pro Kunde   |
+| Analysen         | Analysen pro Kunde                  |
+| Umsatz           | Abrechnung pro Suche oder pro Index |
+
+Dies ist das Modell für Plattformen, die ihren Endnutzern eine Suchfunktion anbieten (z. B. E-Commerce-Plattformen, CMS-Anbieter).
+
+## REST-API-Entwurfsmuster
+
+### Interne Such-API (Option 2)
+
+```typescript
+// Internal search endpoint for your SaaS app
+app.post("/api/search", async (req, res) => {
+	const { tenantId } = await authenticate(req);
+	const { query, filters, page = 1 } = req.body;
+
+	const scopedKey = await getTenantKey(tenantId);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: "products",
+		q: query,
+		filter_by: filters,
+		page,
+	});
+
+	res.json(results);
+});
+```
+
+### Kundenorientierte Such-API (Option 3)
+
+```typescript
+// Search API for your customers' end users
+app.post("/api/v1/search", async (req, res) => {
+	// Rate limit per customer API key
+	await rateLimiter.check(req.apiKey);
+
+	// Customer's key maps to their scoped AACsearch token
+	const scopedKey = await getScopedKey(req.apiKey);
+	const results = await aacsearch.search({
+		apiKey: scopedKey,
+		index: req.body.index,
+		q: req.body.q,
+		filter_by: req.body.filter_by,
+	});
+
+	// Add usage tracking for billing
+	await trackUsage(req.apiKey, results);
+
+	res.json(results);
+});
+```
+
+## Indizierungsarchitektur
+
+### Echtzeit-Indizierung (Webhook-basiert)
+
+Für SaaS-Apps, bei denen sich Daten häufig ändern, verwenden Sie die Webhook-basierte Indizierung:
+
+```typescript
+// When a record is created/updated in your app
+app.post("/webhooks/aacsearch/sync", async (req, res) => {
+	const { event, data } = req.body;
+
+	switch (event) {
+		case "product.created":
+		case "product.updated":
+			await aacsearch.upsertDocument("products", data);
+			break;
+		case "product.deleted":
+			await aacsearch.deleteDocument("products", data.id);
+			break;
+	}
+
+	res.status(200).end();
+});
+```
+
+### Batch-Indizierung (Für Erstimporte oder nächtliche Synchronisierungen)
+
+Für große Datensätze verwenden Sie Batch-Importe:
+
+```typescript
+async function batchImport(tenantId: string, documents: any[]) {
+	// Split into chunks of 10K for optimal performance
+	const chunks = chunk(documents, 10000);
+
+	for (const chunk of chunks) {
+		await aacsearch.importDocuments(
+			"products",
+			chunk.map((doc) => ({
+				...doc,
+				tenant_id: tenantId,
+			})),
+		);
+	}
+}
+```
+
+### Hybrider Ansatz
+
+Verwenden Sie Webhooks für Echtzeit-Updates und nächtliche Batch-Synchronisierungen zur Konsistenzsicherung:
+
+```
+Echtzeit:    Webhook → Einzelne Dokumente aktualisieren (unter 100 ms)
+Nächtlich:   Cron-Job → Vollständige Neuindizierung, um verpasste Aktualisierungen zu erfassen
+Wiederherstellung: Manueller Trigger → Index aus Datenbank-Dump neu aufbauen
+```
+
+## Filterstrategien
+
+### Mandantenfilterung
+
+Erzwingen Sie die Mandantenisolierung immer auf der Suchmaschinenebene, nicht auf der Anwendungsebene:
+
+```typescript
+// GUT: Bereichsbezogener API-Token erzwingt Mandantenfilter
+const key = await aacsearch.createScopedKey({
+	filter: `tenant_id:=:${tenantId}`,
+});
+
+// SCHLECHT: Filterung auf Anwendungsebene (Risiko eines Datenlecks)
+const results = await aacsearch.search({
+	filter_by: `tenant_id:${tenantId}`, // Fehlt dieser Filter durch einen Bug, kommt es zum mandantenübergreifenden Datenleck
+});
+```
+
+### Rollenbasierte Filterung
+
+Für Apps mit rollenbasiertem Zugriff (Administrator vs. Betrachter):
+
+```typescript
+const filters: string[] = [];
+
+if (user.role === "viewer") {
+	filters.push("visibility:public");
+} else if (user.role === "editor") {
+	filters.push("visibility:public,internal");
+}
+// Admin sees everything — no filter
+
+const scopedKey = await aacsearch.createScopedKey({
+	filter: filters.join(" && "),
+});
+```
+
+## Leistungsoptimierung
+
+| Strategie                 | Auswirkung                         | Implementierung                                    |
+| ------------------------- | ---------------------------------- | -------------------------------------------------- |
+| Dokumente denormalisieren | 2–5x schnellere Abfragen           | Verknüpfte Daten in ein Dokument einfügen          |
+| Felder begrenzen          | 30–50 % schnellere Indizierung     | Nur Felder indizieren, nach denen Nutzer suchen    |
+| Seitennummerierung        | Gleichbleibende Antwortzeit        | Cursor-basiert statt Offset-basiert verwenden      |
+| Caching                   | 50–80 % weniger Abfragen           | Top-100-Abfragen für 60 Sekunden zwischenspeichern |
+| Facetten begrenzen        | 2–3x schnellere Facettenberechnung | Auf 10 Facettenwerte pro Feld begrenzen            |
+
+## Überwachung und Benachrichtigungen
+
+Ihre Such-API sollte genauso beobachtbar sein wie Ihre Anwendung:
+
+```typescript
+// Monitor key metrics
+interface SearchMetrics {
+	p50_latency_ms: number;
+	p95_latency_ms: number;
+	p99_latency_ms: number;
+	queries_per_second: number;
+	error_rate: number;
+	zero_result_rate: number;
+	cache_hit_rate: number;
+}
+
+// Set alerts
+const alerts = {
+	p95_latency_ms: { warn: 150, critical: 300 },
+	error_rate: { warn: 0.01, critical: 0.05 }, // 1% and 5%
+	zero_result_rate: { warn: 0.1, critical: 0.25 }, // 10% and 25%
+};
+```
+
+## Wann man Suche als Feature anbieten sollte
+
+Wenn Ihre Plattform mehrere Kunden hat, die jeweils eine Suchfunktion benötigen, sollten Sie in Betracht ziehen, sie als Produktfunktion anzubieten:
+
+- **E-Commerce-Plattform:** Jeder Shop benötigt eine Produktsuche
+- **CMS:** Jede Website benötigt eine Inhaltsuche
+- **Marktplatz:** Jede Verkäuferliste benötigt Filterfunktionen
+- **SaaS:** Jede Organisation benötigt eine anwendungsinterne Suche
+
+In jedem Fall machen die bereichsbezogenen Tokens von AACsearch die Mehr-Mandanten-Suche zu einer Konfigurationsfrage, nicht zu einem Ingenieurprojekt.
+
+[Starten Sie die Suche in Ihrer SaaS →](/signup)

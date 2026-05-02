@@ -1,0 +1,176 @@
+---
+title: AACsearch vs MeiliSearch: Suchmaschinen-Vergleich 2026
+date: 2025-05-01
+image: https://picsum.photos/id/21/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Ein ehrlicher Feature-by-Feature-Vergleich von AACsearch vs MeiliSearch Cloud – Preise, Multi-Tenancy, Analysen, Geo-Suche, Konnektoren und Gesamtbetriebskosten für Produktionsanwendungen.
+tags: [comparison, meilisearch, typesense, search-engine, alternatives]
+published: true
+---
+
+Wenn Sie 2026 Search-as-a-Service-Anbieter evaluieren, stehen AACsearch und MeiliSearch Cloud vermutlich auf Ihrer Shortlist. Beide bieten gehostete Suche mit Typesense-ähnlicher Einfachheit, verfolgen jedoch grundlegend unterschiedliche Ansätze bei Preisgestaltung, Multi-Tenancy und Analysen.
+
+Dieser Vergleich deckt die echten Unterschiede auf – nicht Marketing-Versprechen.
+
+## Auf einen Blick
+
+| Merkmal             | AACsearch                                | MeiliSearch Cloud                          |
+| ------------------- | ---------------------------------------- | ------------------------------------------ |
+| Engine              | Typesense (Open Source)                  | MeiliSearch (Open Source)                  |
+| Hosting             | Managed (Multi-Region)                   | Managed (US/EU)                            |
+| Multi-Tenancy       | Nativ – bereichsspezifische API-Tokens   | Nicht integriert – benötigt Proxy-Ebene    |
+| API-Schlüssel       | 3 Typen: Search, Admin, Scoped           | API-Key-Verwaltung (einfach)               |
+| Such-Widget         | Enthalten (Script-Tag, 35KB)             | Instant MeiliSearch (React-lastig)         |
+| Analysen            | Integriert – kostenlos auf allen Plänen  | Minimal (Open-Source-Dashboard)            |
+| Geo-Suche           | Native Unterstützung                     | Nicht integriert                           |
+| Tippfehlertoleranz  | Konfigurierbar pro Index                 | Standard (Min/Max-Tippfehlereinstellungen) |
+| Synonyme            | UI-Dashboard + Bulk-Import               | Dashboard + API                            |
+| Konnektoren         | PrestaShop, Bitrix, WooCommerce, Shopify | Keine                                      |
+| Vektorsuche         | Ja (Embedding-Felder)                    | Ja (Hybride Suche)                         |
+| Self-Hosting-Option | Vollständiger Typesense-Export           | Ja (Open Source)                           |
+| SLA                 | 99,9 % (Scale+)                          | 99,95 % (Cloud)                            |
+| Kostenloser Tarif   | 1 Index, 10K Dokumente, unbegrenzte Ops  | 1 Index, begrenzte Operationen             |
+
+## Preisvergleich
+
+AACsearch berechnet pro Index mit **unbegrenzten Suchoperationen**. MeiliSearch Cloud berechnet pro Suchoperation – je mehr Ihre Nutzer suchen, desto mehr zahlen Sie.
+
+### Szenario 1: Kleiner E-Commerce (10K Produkte, 50K Suchanfragen/Monat)
+
+| Kostenbestandteil | AACsearch              | MeiliSearch Cloud        |
+| ----------------- | ---------------------- | ------------------------ |
+| Index/Tarif       | Kostenloser Tarif      | 29 $/Monat (Starter)     |
+| Suchoperationen   | Unbegrenzt (enthalten) | ~5–10 $ (Überschreitung) |
+| Analysen          | Enthalten              | Extra (bei Self-Hosting) |
+| **Gesamt**        | **0 $/Monat**          | **~35–40 $/Monat**       |
+
+### Szenario 2: B2B-SaaS im Mittelstand (500K Dokumente, 1M Suchanfragen/Monat)
+
+| Kostenbestandteil | AACsearch                 | MeiliSearch Cloud              |
+| ----------------- | ------------------------- | ------------------------------ |
+| Index/Tarif       | 99 $/Monat (Scale)        | 399 $/Monat (Business)         |
+| Suchoperationen   | Unbegrenzt (enthalten)    | ~100 $ (Überschreitung bei 1M) |
+| Multi-Tenancy     | Enthalten (Scoped Tokens) | Extra (Proxy-Infrastruktur)    |
+| **Gesamt**        | **99 $/Monat**            | **~500 $/Monat**               |
+
+### Szenario 3: Große SaaS (5M Dokumente, 10M Suchanfragen/Monat)
+
+| Kostenbestandteil        | AACsearch              | MeiliSearch Cloud                            |
+| ------------------------ | ---------------------- | -------------------------------------------- |
+| Index/Tarif              | 249 $/Monat (Pro)      | Individuell (ca. 1.500–2.000 $/Monat)        |
+| Suchoperationen          | Unbegrenzt (enthalten) | Individuell (ca. 500–1.000 $ Überschreitung) |
+| Dedizierte Infrastruktur | Verfügbar              | Nicht verfügbar                              |
+| **Gesamt**               | **249 $/Monat**        | **~2.000–3.000 $/Monat**                     |
+
+**Wichtiger Preisunterschied:** AACsearchs Preisgestaltung pro Index macht Kosten planbar. MeiliSearch Clouds Abrechnung pro Operation bedeutet, dass Ihre Rechnung mit dem Suchvolumen wächst – eine skalierungstechnische Herausforderung für erfolgreiche Produkte.
+
+## Multi-Tenancy: AACsearch gewinnt
+
+Für SaaS-Plattformen, die mehrere Organisationen bedienen, ist Multi-Tenancy der entscheidende Faktor.
+
+**AACsearch** bietet native bereichsspezifische API-Tokens. Erstellen Sie einen Schlüssel pro Mandant mit einem Filter wie `tenant_id:=:acme_corp`. Jede Abfrage mit diesem Token wird automatisch gefiltert. Keine Middleware, kein Proxy, kein Risiko von mandantenübergreifenden Datenlecks.
+
+**MeiliSearch Cloud** verfügt nicht über eine integrierte Multi-Tenancy. Sie müssen eine Proxy-Ebene implementieren, die Mandantenfilter an jede Abfrage anhängt. Das bedeutet:
+
+- Zusätzliche Latenz (die Anfrage durchläuft Ihren Server)
+- Zusätzliche Infrastruktur, die gewartet werden muss
+- Risiko von Datenlecks bei falscher Proxy-Konfiguration
+
+Bei einer SaaS-App mit 200 Mandanten kostet die Proxy-Infrastruktur allein 50–200 $/Monat an Serverkosten.
+
+## Analysen: AACsearch gewinnt
+
+Suchanalysen sind entscheidend für die Verbesserung der Relevanz. AACsearch bietet sie in jedem Tarif – Suchvolumen, Top-Anfragen, Klickrate, Null-Ergebnis-Berichte und Conversion-Tracking.
+
+Die Analysen von MeiliSearch Cloud sind minimal. Das Open-Source-Dashboard von MeiliSearch liefert grundlegende Metriken, aber für produktionsreife Einblicke benötigen Sie zusätzliche Werkzeuge (PostHog, Mixpanel oder eine eigene Analyse-Pipeline). Das verursacht Integrations- und Wartungsaufwand.
+
+## Geo-Suche: AACsearch gewinnt
+
+Wenn Ihre Anwendung standortbezogene Funktionen hat (Filialfinder, „in meiner Nähe"-Suche, lokales Inventar), ist die Geo-Suche ein Muss.
+
+AACsearch unterstützt Geo-Suche nativ mit Radius-Filterung:
+
+```json
+{
+	"q": "coffee shops",
+	"filter_by": "_geo_dist(40.7128, -74.0060, 5000)"
+}
+```
+
+MeiliSearch Cloud verfügt nicht über eine integrierte Geo-Suche. Sie müssten diese über einen separaten Geocoding-Dienst implementieren und manuell filtern – was Komplexität und Latenz erhöht.
+
+## Widget & Frontend: Unentschieden
+
+Beide Plattformen bieten Such-UI-Komponenten, jedoch mit unterschiedlichen Ansätzen:
+
+| Aspekt                  | AACsearch Widget        | MeiliSearch Instant MeiliSearch  |
+| ----------------------- | ----------------------- | -------------------------------- |
+| Einrichtung             | 3-zeiliger Script-Tag   | React-Komponente + Build-Schritt |
+| Bundle-Größe            | 35KB JS + 8KB CSS       | ~60KB (React-lastig)             |
+| Framework-Unterstützung | Beliebige HTML-Seite    | Nur React (oder individuell)     |
+| Befehlspalette          | Enthalten (Cmd+K-Modus) | Per Plugin verfügbar             |
+| Facettenfilter          | Nativ, Mehrfachauswahl  | Nativ                            |
+| Theming                 | CSS-Variablen           | CSS + Plugin-Überschreibungen    |
+
+Das AACsearch-Widget funktioniert auf jeder Website – statisches HTML, WordPress, Astro oder React. MeiliSearchs Instant MeiliSearch ist nur für React, was statische Seiten und Nicht-React-Frameworks ausschließt.
+
+## Konnektoren: AACsearch gewinnt
+
+AACsearch bietet vorgefertigte Konnektoren für große E-Commerce-Plattformen: PrestaShop, Bitrix24, WooCommerce und Shopify (in Planung). Diese übernehmen Schema-Auto-Mapping, inkrementelle Synchronisation und Löschweitergabe.
+
+MeiliSearch Cloud bietet keine vorgefertigten Konnektoren. Jede Integration ist eine individuelle Implementierung.
+
+## Vektorsuche: Beide unterstützen sie
+
+Beide Plattformen unterstützen Vektor-Embeddings für semantische Suche:
+
+| Merkmal          | AACsearch                      | MeiliSearch Cloud                |
+| ---------------- | ------------------------------ | -------------------------------- |
+| Implementierung  | Embedding-Felder in Dokumenten | Hybride Suche (Keyword + Vektor) |
+| Embedding-Quelle | Eigene Embeddings mitbringen   | Eigene Embeddings mitbringen     |
+| Anwendungsfälle  | Semantische Suche, RAG         | Semantische Suche, Empfehlungen  |
+
+AACsearch verwendet Typesenses Embedding-Mechanismus, bei dem Sie Vektor-Embeddings als Dokumentfelder einfügen. MeiliSearch Cloud unterstützt hybride Suche, die Keyword- und Vektor-Matching kombiniert.
+
+## Wann Sie sich für welche Lösung entscheiden sollten
+
+### Wählen Sie AACsearch, wenn:
+
+- Sie Multi-Tenancy benötigen (bereichsspezifische API-Tokens pro Organisation)
+- Sie planbare Preise pro Index wünschen (keine Abrechnung pro Operation)
+- Integrierte Analysen wichtig sind (Null-Ergebnis-Tracking, CTR, Conversion)
+- Sie Geo-Suche benötigen (Filialfinder, „in meiner Nähe")
+- Sie eine statische Website oder ein Nicht-React-Framework verwenden
+- Sie vorgefertigte CMS-Konnektoren wünschen
+- Datenexport / keine Anbieterbindung wichtig ist
+
+### Wählen Sie MeiliSearch Cloud, wenn:
+
+- Sie bereits das MeiliSearch-Open-Source-Ökosystem nutzen
+- Sie MeiliSearch-spezifische Funktionen benötigen (Federated Search)
+- Sie selbst hosten möchten (MeiliSearch ist vollständig Open Source)
+- Sie React/InstantSearch-basierte UI-Komponenten bevorzugen
+- Sie eine 99,95 % SLA als zwingende Anforderung haben
+- Sie eine reine Suchfunktion ohne Multi-Tenancy-Bedarf entwickeln
+
+## Migrationspfad
+
+Wechsel von MeiliSearch zu AACsearch:
+
+1. Exportieren Sie Ihren MeiliSearch-Dump
+2. Flatten Sie verschachtelte Dokumente (Typesense bevorzugt flache Schemata)
+3. Importieren Sie die Daten per Bulk-API in AACsearch
+4. Konfigurieren Sie bereichsspezifische API-Tokens pro Mandant (in MeiliSearch nicht verfügbar)
+5. Richten Sie die Rangformel und Facettenattribute im AACsearch-Dashboard ein
+6. Stellen Sie das AACsearch-Widget bereit (ersetzen Sie Instant MeiliSearch)
+
+Die Migration dauert bei einem durchschnittlich großen Index in der Regel 2–4 Stunden.
+
+## Fazit
+
+AACsearch ist die bessere Wahl für die meisten produktiven SaaS-Anwendungen – insbesondere solche mit mehreren Mandanten, Analysebedarf oder Geo-Suche-Anforderungen. MeiliSearch Cloud ist eine solide Option für Ein-Mandanten-Projekte, die bereits im MeiliSearch-Ökosystem verwurzelt sind.
+
+Beim häufigsten Anwendungsfall – einer B2B-SaaS-App, die eine Suchfunktion benötigt – sparen AACsearchs native Multi-Tenancy und die Preisgestaltung mit unbegrenzten Operationen sowohl Entwicklungszeit als auch laufende Kosten.
+
+[Preise direkt vergleichen →](/pricing)

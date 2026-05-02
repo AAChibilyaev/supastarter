@@ -1,0 +1,243 @@
+---
+title: Búsqueda como Servicio vs Autogestionada: Análisis de Costo Total de Propiedad
+date: 2026-05-03
+image: https://picsum.photos/id/28/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Una comparación exhaustiva del costo total de propiedad entre proveedores de búsqueda como servicio gestionada y motores de búsqueda autogestionados — cubriendo infraestructura, operaciones, tiempo de ingeniería, costos de escalado y gastos ocultos en cada etapa.
+tags: [tco, self-hosted, saas, cost-analysis, typesense, infrastructure]
+published: true
+---
+
+Una de las preguntas más frecuentes que escuchamos es: "¿Debería alojar Typesense yo mismo o usar un servicio gestionado como AACsearch?"
+
+La respuesta no es simple — depende del tamaño de tu equipo, volumen de documentos, requisitos de SLA y trayectoria de crecimiento. Este artículo proporciona un marco basado en datos del CTP (Costo Total de Propiedad) para que puedas tomar una decisión informada.
+
+## Los Componentes del Costo
+
+Al comparar búsqueda autogestionada vs gestionada, la mayoría solo compara los costos del servidor. La imagen real incluye cinco categorías:
+
+```
+CTP = Infraestructura + Tiempo de Ingeniería + Operaciones + Riesgo de Inactividad + Costo de Oportunidad
+```
+
+Desglosemos cada uno.
+
+## Costos de Infraestructura
+
+### Typesense Autogestionado
+
+Typesense depende de la memoria RAM — todo tu índice debe caber en RAM para un mejor rendimiento. Esto es lo que necesitas en varias escalas:
+
+| Cantidad de Documentos | RAM Requerida | Costo Mensual del Servidor | Almacenamiento |
+| ---------------------- | ------------- | -------------------------- | -------------- |
+| 100K                   | 2 GB          | $30–60                     | 20 GB          |
+| 1M                     | 8 GB          | $80–150                    | 50 GB          |
+| 10M                    | 32 GB         | $300–500                   | 200 GB         |
+| 100M                   | 64 GB         | $800–1,500                 | 500 GB         |
+| 1B                     | 128 GB+       | $3,000–6,000               | 2 TB+          |
+
+**Costos adicionales:**
+
+- **Réplica de alta disponibilidad:** 2x el costo del servidor (mínimo para producción)
+- **Replicación entre regiones:** 2–3x el costo del servidor (para usuarios globales)
+- **Almacenamiento de respaldo:** $20–100/mes (instantáneas en S3 o equivalente)
+- **CDN para resultados de búsqueda:** $50–200/mes (si sirves a una audiencia global)
+- **Infraestructura de monitoreo:** $30–100/mes (Grafana, Prometheus, alertas)
+
+**Total infraestructura autogestionada (producción, HA):**
+
+- 1M documentos: **$250–500/mes**
+- 10M documentos: **$750–1,500/mes**
+- 100M documentos: **$2,000–4,000/mes**
+
+### SaaS Gestionado (AACsearch)
+
+| Cantidad de Documentos | Costo Mensual | Incluye                                  |
+| ---------------------- | ------------- | ---------------------------------------- |
+| 100K                   | $29           | HA, respaldos, analíticas                |
+| 1M                     | $99           | HA, respaldos, analíticas, SLA 99.99%    |
+| 10M                    | $249          | HA, multi-región, soporte premium        |
+| 100M                   | $999          | Clúster dedicado, SSO, SLA personalizado |
+| 1B                     | Personalizado | Infraestructura dedicada, nube privada   |
+
+**Total SaaS Gestionado:**
+
+- 1M documentos: **$99/mes** (60–80% menos que autogestionado)
+- 10M documentos: **$249/mes** (65–80% menos)
+- 100M documentos: **$999/mes** (50–75% menos)
+
+## Costos de Tiempo de Ingeniería
+
+Este es el mayor costo oculto. Un ingeniero backend senior cuesta $120–200K/año. Cada hora dedicada a infraestructura de búsqueda es una hora que no se dedica a tu producto principal.
+
+| Actividad                          | Autogestionado (horas/año) | SaaS Gestionado (horas/año) |
+| ---------------------------------- | -------------------------- | --------------------------- |
+| Configuración y ajuste inicial     | 40–80                      | 2–4                         |
+| Optimización de índices            | 20–40                      | 0                           |
+| Ajuste de rendimiento de consultas | 20–40                      | 0                           |
+| Mantenimiento de infraestructura   | 40–80                      | 0                           |
+| Actualizaciones de versión         | 20–40                      | 0                           |
+| Pruebas de respaldo/restauración   | 10–20                      | 0                           |
+| Configuración de monitoreo         | 20–40                      | 0                           |
+| Guardia rotativa                   | 50–100                     | 0                           |
+| Parches de seguridad               | 10–20                      | 0                           |
+| Configuración multi-región         | 40–80                      | 0                           |
+| **Total**                          | **270–540**                | **2–4**                     |
+
+**Costo de ingeniería a $150K/año ($75/hora):**
+
+- Autogestionado: **$20,250–40,500/año** ($1,687–3,375/mes)
+- Gestionado: **$150–300/año** ($12–25/mes)
+
+## Gastos Operativos
+
+Más allá del tiempo de ingeniería, el autogestionado genera una carga operativa continua:
+
+### Monitoreo y Alertas
+
+- Configuración de Prometheus + Grafana: 1–2 semanas iniciales
+- Fatiga de alertas: falsos positivos por presión de memoria, uso de disco, consultas lentas
+- El seguimiento de SLO requiere paneles personalizados
+
+### Respaldo y Recuperación ante Desastres
+
+- Las instantáneas de Typesense deben programarse y probarse
+- Tiempo de restauración: 10–60 minutos dependiendo del tamaño del índice
+- Punto de Recuperación (RPO): tiempo de la última instantánea
+- Tiempo de Recuperación (RTO): tiempo de restauración + propagación de DNS
+
+### Operaciones de Escalado
+
+- Agregar nodos requiere aprovisionamiento, pruebas y migración de tráfico
+- El rebalanceo después de agregar un nodo puede llevar horas
+- El escalado vertical (instancia más grande) requiere tiempo de inactividad
+
+## Riesgo de Inactividad
+
+| Factor                                                                        | Autogestionado | SaaS Gestionado |
+| ----------------------------------------------------------------------------- | -------------- | --------------- |
+| Tiempo de actividad esperado                                                  | 99.5–99.9%     | 99.99%+         |
+| Tiempo de inactividad planificado                                             | 2–4 hrs/mes    | 0               |
+| Respuesta a incidentes                                                        | Tu equipo      | Equipo SRE 24/7 |
+| Tiempo medio de recuperación                                                  | 30–90 min      | 5–15 min        |
+| Costo anual de inactividad (a $10K/hora de ingresos dependientes de búsqueda) | $4,000–40,000  | $50–500         |
+
+**Costos ocultos de inactividad:**
+
+- Erosión de la confianza del cliente con cada interrupción
+- Impacto en SEO si la búsqueda en el sitio público se cae
+- Tickets de soporte y abandono por fallas en la búsqueda
+
+## Costo de Oportunidad
+
+Este es el más difícil de cuantificar pero a menudo el más significativo:
+
+**Costos de oportunidad del autogestionado:**
+
+- Funcionalidades de búsqueda que nunca se construyen (sin equipo dedicado de búsqueda)
+- Iteración más lenta en la relevancia de búsqueda (cada cambio requiere despliegue)
+- Sin analíticas para mejorar la calidad de búsqueda (las analíticas deben construirse)
+- Menor calidad de búsqueda = menor conversión = ingresos perdidos
+
+**Costos de oportunidad del SaaS Gestionado:**
+
+- Menos control sobre el ajuste de bajo nivel
+- Preocupación por dependencia del proveedor (mitigado por ser Typesense de código abierto)
+- Los datos salen de tu infraestructura (mitigado por clústeres dedicados)
+
+## Comparación de CTP por Escala
+
+### Pequeña Escala (< 100K documentos)
+
+| Categoría de Costo | Autogestionado   | Gestionado     |
+| ------------------ | ---------------- | -------------- |
+| Infraestructura    | $60–120/mes      | $29/mes        |
+| Ingeniería         | $300–600/mes     | $12–25/mes     |
+| Operaciones        | $100–200/mes     | $0             |
+| **Total**          | **$460–920/mes** | **$41–54/mes** |
+
+**Veredicto:** Gestionado es 10–20x más barato a pequeña escala.
+
+### Escala Media (1M–10M documentos)
+
+| Categoría de Costo | Autogestionado       | Gestionado       |
+| ------------------ | -------------------- | ---------------- |
+| Infraestructura    | $250–1,500/mes       | $99–249/mes      |
+| Ingeniería         | $1,687–3,375/mes     | $12–25/mes       |
+| Operaciones        | $300–800/mes         | $0               |
+| **Total**          | **$2,237–5,675/mes** | **$111–274/mes** |
+
+**Veredicto:** Gestionado es 15–20x más barato a escala media. Los costos de ingeniería dominan.
+
+### Gran Escala (100M+ documentos)
+
+| Categoría de Costo | Autogestionado       | Gestionado           |
+| ------------------ | -------------------- | -------------------- |
+| Infraestructura    | $2,000–4,000/mes     | $999/mes+            |
+| Ingeniería         | $1,687–3,375/mes     | $12–25/mes           |
+| Operaciones        | $500–1,500/mes       | $0                   |
+| **Total**          | **$4,187–8,875/mes** | **$1,011–1,024/mes** |
+
+**Veredicto:** Gestionado es 4–8x más barato a gran escala, y la brecha se reduce a medida que te acercas a infraestructura dedicada.
+
+## Cuándo Tiene Sentido Autogestionar
+
+Autogestionar es la opción correcta cuando:
+
+1. **Tu negocio principal ES la infraestructura de búsqueda** — Estás construyendo un producto de búsqueda u ofreciendo búsqueda como funcionalidad principal a clientes empresariales que requieren implementación on-premise.
+
+2. **Tienes un equipo dedicado de búsqueda** (2+ ingenieros) — El equipo puede justificar la inversión operativa con optimizaciones específicas de búsqueda.
+
+3. **Requisitos estrictos de residencia de datos** — Algunas industrias reguladas (finanzas, salud, gobierno) requieren que los datos permanezcan dentro de límites geográficos específicos en infraestructura que tú controlas.
+
+4. **Estás a una escala verdaderamente masiva** (1B+ documentos) — A esta escala, la diferencia de costo de infraestructura se reduce lo suficiente como para que un equipo dedicado gestionando tu propio clúster pueda ser más barato.
+
+5. **Necesitas modelos de clasificación personalizados** — Si tu algoritmo de relevancia requiere modelos ML personalizados que no son compatibles con los proveedores gestionados.
+
+## Cuándo es Mejor la Búsqueda Gestionada
+
+La búsqueda gestionada gana en casi todos los demás escenarios:
+
+1. **Eres una startup o empresa en crecimiento** — Tu tiempo de ingeniería está mejor invertido en diferenciación del producto, no en infraestructura de búsqueda.
+
+2. **La búsqueda es una funcionalidad, no tu producto** — Para comercio electrónico, SaaS, sitios de contenido y marketplaces.
+
+3. **Necesitas moverte rápido** — Lanza la búsqueda en días, no semanas. Itera sobre la relevancia sin cambios en la infraestructura.
+
+4. **No tienes operaciones 24/7** — Gestionado incluye cobertura SRE, respaldos y respuesta a incidentes.
+
+5. **Quieres analíticas de búsqueda** — Analíticas integradas para consultas sin resultados, búsquedas populares y tasas de clics.
+
+## El Enfoque Híbrido
+
+Algunos equipos comienzan con autogestionado y migran a gestionado a medida que escalan. La ventaja de las soluciones basadas en Typesense es que la migración es sencilla:
+
+```bash
+# Exportar desde Typesense autogestionado
+curl "http://localhost:8108/collections/products/documents/export" \
+  -H "X-TYPESENSE-API-KEY: $API_KEY" > products_export.json
+
+# Importar a AACsearch
+curl -X POST "https://api.aacsearch.com/collections/products/documents/import" \
+  -H "X-AACSEARCH-API-KEY: $API_KEY" \
+  --data-binary @products_export.json
+```
+
+Tu esquema, consultas y código de cliente permanecen casi idénticos. El cambio es una modificación de configuración, no una reescritura.
+
+## Resumen
+
+| Factor                    | Autogestionado       | Gestionado (AACsearch)               |
+| ------------------------- | -------------------- | ------------------------------------ |
+| Costo mensual (1M docs)   | $2,200–5,600         | $111–274                             |
+| Tiempo de configuración   | 2–8 semanas          | 1–2 días                             |
+| Sobrecarga de ingeniería  | 270–540 hrs/año      | 2–4 hrs/año                          |
+| SLA de disponibilidad     | 99.5–99.9%           | 99.99%                               |
+| Analíticas                | Debes construir      | Integradas                           |
+| Multi-región              | Configuración manual | Integrada                            |
+| Dependencia del proveedor | N/A                  | Compatible con Typesense open-source |
+
+Para el 95% de los equipos, la búsqueda como servicio gestionada ofrece mejores resultados a una fracción del costo total. El pequeño porcentaje que realmente se beneficia del autogestionado son aquellos que operan infraestructura de búsqueda como una competencia central — y ellos saben quiénes son.
+
+[Calcula tu CTP →](/pricing)

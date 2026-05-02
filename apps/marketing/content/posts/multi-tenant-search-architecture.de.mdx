@@ -1,0 +1,217 @@
+---
+title: Multi-Tenant-Sucharchitektur für SaaS-Anwendungen
+date: 2025-05-01
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Ein tiefer Einblick in die Multi-Tenant-Sucharchitektur – wie AACsearch Datenisolierung, eingeschränkte API-Tokens, Ratenbegrenzung pro Mandant und gemeinsam genutzte Infrastruktur handhabt, ohne Sicherheit oder Leistung zu beeinträchtigen.
+tags: [architecture, multi-tenant, saas, search, security]
+published: true
+---
+
+Jede SaaS-Plattform steht irgendwann vor der Multi-Tenancy-Frage. Wenn Sie 100+ Organisationen mit einer einzigen Suchinfrastruktur bedienen, wie stellen Sie sicher, dass Mandant A niemals die Daten von Mandant B sieht? Wie bepreisen Sie das? Wie verhindern Sie, dass ein lauter Mandant die Suche für alle anderen verschlechtert?
+
+Dieser Beitrag erklärt, wie AACsearch Multi-Tenant-Suche auf Infrastrukturebene löst – damit Ihr Anwendungscode einfach bleibt.
+
+## Der naive Ansatz: Ein Index pro Mandant
+
+Das einfachste Multi-Tenant-Muster ist ein Suchindex pro Kunde. Jeder Mandant erhält seine eigene Sammlung, eigene API-Schlüssel und vollständige Isolierung.
+
+**Vorteile:** Maximale Datenisolierung. Einfach zu debuggen. Einfache Abrechnung nach Index-Anzahl.
+**Nachteile:** Index-Verwaltungsaufwand bei Skalierung. Konfigurationsabweichungen zwischen Mandanten. Schwerer bei der Registrierung bereitzustellen.
+
+Für kleine SaaS-Apps (< 50 Mandanten) funktioniert dies gut. AACsearch unterstützt mehrere Indizes pro Konto mit separaten API-Schlüsseln pro Index.
+
+```bash
+# Erstellen eines mandantenspezifischen Index per API
+curl -X POST "https://api.aacsearch.com/indices" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "acme_corp_products",
+    "fields": [
+      {"name": "name", "type": "string"},
+      {"name": "price", "type": "float"},
+      {"name": "sku", "type": "string"}
+    ]
+  }'
+```
+
+## Der skalierbare Ansatz: Gemeinsam genutzter Index mit Zeilen-Sicherheit
+
+Für SaaS-Plattformen mit Hunderten oder Tausenden von Mandanten ist ein gemeinsam genutzter Index mit Mandantenfilterung wirtschaftlicher und einfacher zu verwalten.
+
+### Datenmodell
+
+Jedes Dokument enthält ein `tenant_id`-Feld:
+
+```json
+{
+	"id": "doc_001",
+	"tenant_id": "acme_corp",
+	"name": "Wireless Headphones",
+	"price": 79.99,
+	"category": "Electronics",
+	"in_stock": true
+}
+```
+
+### Eingeschränkte API-Tokens (Scoped API Tokens)
+
+Die eingeschränkten API-Tokens von AACsearch filtern automatisch jede Abfrage auf einen bestimmten Mandanten. Wenn Sie einen Token ausstellen, geben Sie einen Filter an, der mit jeder Suchanfrage UND-verknüpft wird:
+
+```bash
+# Erstellen eines eingeschränkten Tokens für einen Mandanten
+curl -X POST "https://api.aacsearch.com/api-keys/scoped" \
+  -H "X-API-KEY: ss_admin_main_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filter": "tenant_id:=:acme_corp",
+    "description": "Acme Corp Suchschlüssel"
+  }'
+```
+
+Der zurückgegebene Token (`ss_scoped_*`) kann nur Dokumente durchsuchen, bei denen `tenant_id == "acme_corp"` gilt. Selbst wenn ein Angreifer den Token abfängt, kann er nicht auf Daten anderer Mandanten zugreifen.
+
+### Architektur-Ablauf
+
+```
+Benutzeranfrage → Ihre SaaS-App → Ausstellen eines Scoped Tokens → AACsearch → Gefilterte Ergebnisse
+                                    │
+                                    └── token_filter: tenant_id:=:acme_corp
+                                                ↓
+                               Alle Abfragen automatisch gefiltert
+                               Keine Middleware, kein SQL-Injection-Risiko
+```
+
+Ihre App stellt einen eingeschränkten Token aus, wenn sich der Benutzer anmeldet. Der Token enthält den Mandantenfilter. Jede nachfolgende Suchanfrage vom Browser dieses Benutzers enthält den Token. AACsearch erzwingt den Filter auf Suchmaschinenebene – Ihre App hängt niemals manuell `WHERE tenant_id = X` an.
+
+## Leistungsmerkmale
+
+| Architektur            | < 100 Mandanten   | 100–1K Mandanten | 1K–10K Mandanten      |
+| ---------------------- | ----------------- | ---------------- | --------------------- |
+| Pro Index              | Hervorragend      | Gut              | Schlecht (Verwaltung) |
+| Geteilt + Scoped Token | Gut               | Hervorragend     | Hervorragend          |
+| Hybrid (Sharded)       | Überdimensioniert | Gut              | Hervorragend          |
+
+**Leistung des gemeinsamen Index bei Skalierung:**
+
+- Abfragelatenz: < 50 ms bei P95, unabhängig von der Mandantenanzahl (Filter ist eine Bitmap-Suche)
+- Indexgröße: Ein Index mit 10 Mio. Dokumenten und 5.000 Mandanten verhält sich wie ein Ein-Mandanten-Index
+- Gleichzeitige Abfragen: 500+ QPS beim Scale-Plan, 2.000+ beim Pro-Plan
+
+## Ratenbegrenzung pro Mandant
+
+Ohne Ratenbegrenzung pro Mandant könnte ein aggressiver Kunde die Suchkapazität monopolisieren. AACsearch unterstützt konfigurierbare Ratenbegrenzungen:
+
+```json
+{
+	"rate_limits": {
+		"acme_corp": {
+			"searches_per_second": 100,
+			"indexing_per_minute": 1000
+		},
+		"startup_inc": {
+			"searches_per_second": 20,
+			"indexing_per_minute": 200
+		}
+	}
+}
+```
+
+Konfigurieren Sie dies über das Dashboard oder die API. Überschrittene Limits geben HTTP 429 mit einem `Retry-After`-Header zurück und geben dem Mandanten Rückmeldung, ohne andere Kunden zu beeinträchtigen.
+
+## Automatisierung der Mandantenbereitstellung
+
+Wenn ein neuer Kunde registriert, automatisieren Sie den Bereitstellungsablauf:
+
+```typescript
+async function provisionTenant(tenantId: string) {
+	// 1. Eingeschränkten API-Key erstellen
+	const scopedKey = await aacsearch.createScopedKey({
+		filter: `tenant_id:=:${tenantId}`,
+		description: `${tenantId} Suchschlüssel`,
+	});
+
+	// 2. Schlüssel in Ihren Mandanteneinstellungen speichern
+	await db.tenants.update({
+		where: { id: tenantId },
+		data: { aacsearchKey: scopedKey },
+	});
+
+	// 3. Optional mit Vorlagendaten vorausfüllen
+	await aacsearch.importDocuments(
+		"products",
+		templateData.map((doc) => ({
+			...doc,
+			tenant_id: tenantId,
+		})),
+	);
+
+	return scopedKey;
+}
+```
+
+Dieser gesamte Ablauf ist in unter 500 ms abgeschlossen. Ihr Kunde kann sofort nach der Registrierung suchen.
+
+## Hybride Architektur: Aufgeteilt nach Mandantenstufe
+
+Für sehr große Bereitstellungen (10K+ Mandanten) sollten Sie einen hybriden Ansatz in Betracht ziehen:
+
+- **Stufe 1 (Free/Starter):** Gemeinsam genutzter Index mit Scoped Tokens (500+ Mandanten pro Index)
+- **Stufe 2 (Scale):** Dedizierter Index pro Mandant
+- **Stufe 3 (Enterprise):** Dedizierter Typesense-Cluster
+
+```typescript
+function getIndexForTenant(tenant: Tenant): string {
+	if (tenant.plan === "enterprise") return `enterprise_${tenant.id}`;
+	if (tenant.plan === "scale") return `scale_${tenant.id}`;
+	return "free_tier_shared"; // Tausende Free-Mandanten teilen sich einen Index
+}
+```
+
+## Sicherheitsaspekte
+
+| Anliegen                          | Wie AACsearch es adressiert                                                        |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| Token-Abfang                      | Scoped Tokens sind nur für die Suche (kein Schreibzugriff)                         |
+| Mandantenübergreifende Datenlecks | Filterdurchsetzung erfolgt serverseitig, nicht clientseitig                        |
+| Token-Ablauf                      | Tokens können eine TTL haben (automatischer Ablauf nach N Std./Tagen)              |
+| Prüfpfad (Audit Trail)            | Alle API-Anfragen werden mit Token-ID und Zeitstempel protokolliert                |
+| Datenresidenz                     | Regionsauswahl pro Index – EU-Mandantendaten in der EU behalten                    |
+| Compliance                        | SOC2-konforme Infrastruktur, GDPR-ready                                            |
+| Schlüsselrotation                 | Schlüssel ohne Ausfallzeiten neu generieren (alter Schlüssel funktioniert bis TTL) |
+
+## Preisgestaltung im Multi-Tenant-Maßstab
+
+AACsearch berechnet pro Index, nicht pro Mandant. Für den gemeinsam genutzten Index-Ansatz:
+
+| Plan    | Preis    | Max. Mandanten (geteilt) | Max. Dokumente | Suchanfragen |
+| ------- | -------- | ------------------------ | -------------- | ------------ |
+| Free    | 0 $      | 50                       | 10K            | Unbegrenzt   |
+| Starter | 29 $/M.  | 200                      | 50K            | Unbegrenzt   |
+| Scale   | 99 $/M.  | 1.000                    | 500K           | Unbegrenzt   |
+| Pro     | 249 $/M. | 5.000                    | 5M             | Unbegrenzt   |
+| Custom  | Indiv.   | Unbegrenzt               | Indiv.         | Unbegrenzt   |
+
+Die meisten SaaS-Apps mit dem Scale-Plan können 500–1.000 Mandanten aus einem einzigen gemeinsamen Index bedienen. Bei 99 $/Monat sind das 0,10–0,20 $ pro Mandant pro Monat – weit weniger als die Kosten für selbst gehostetes Typesense oder Pay-per-Operation-Preise der Konkurrenz.
+
+## Migration zu Multi-Tenant
+
+Haben Sie bereits ein Ein-Mandanten-Setup? Migrieren Sie zu gemeinsam genutztem Multi-Tenant:
+
+1. Fügen Sie das Feld `tenant_id` zu allen Dokumenten in jedem mandantenspezifischen Index hinzu
+2. Exportieren Sie alle mandantenspezifischen Indizes
+3. Importieren Sie in einen gemeinsamen Index mit befüllter `tenant_id`
+4. Erstellen Sie eingeschränkte API-Tokens für jeden Mandanten
+5. Aktualisieren Sie Ihre App, um Tokens beim Login auszustellen
+6. Entfernen Sie die mandantenspezifischen Indizes
+7. Fertig – Ihre Kunden erleben keine Ausfallzeiten
+
+## Nächste Schritte
+
+- Lesen Sie den [Typesense Deep Dive](/blog/typesense-deep-dive) für die zugrundeliegende Suchmaschine
+- Erkunden Sie die [Scoped-Token-API-Referenz](/docs/scoped-tokens)
+- Sehen Sie, wie [AACsearch im Vergleich zum Selbstbauen abschneidet](/comparison-vs-self-hosted)
+
+[Starten Sie kostenlos mit Multi-Tenant-Suche →](/signup)

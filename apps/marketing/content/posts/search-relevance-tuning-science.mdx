@@ -1,0 +1,276 @@
+---
+title: The Science of Search Relevance: Ranking, Tuning, and Synonyms
+date: 2025-05-01
+image: https://picsum.photos/id/45/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: How search relevance actually works — TF-IDF ranking, field boosts, synonym groups, dynamic ranking rules, and the analytics feedback loop that makes search better over time.
+tags: [relevance, ranking, search, typesense, tuning]
+published: true
+---
+
+Search relevance is the difference between "close enough" and "exactly what I needed." Google spends billions on it. Your users expect it from your site too.
+
+This post explains the science behind search relevance in AACsearch (powered by Typesense) — from basic TF-IDF ranking to advanced tuning techniques that merchandising teams can manage without developer involvement.
+
+## The Foundation: TF-IDF Scoring
+
+Every search engine needs a way to score documents. Typesense uses TF-IDF (Term Frequency-Inverse Document Frequency) as its base ranking formula.
+
+**Term Frequency:** How many times does the search term appear in the document? A product named "Wireless Bluetooth Headphones" that mentions "Bluetooth" three times ranks higher for "Bluetooth" than one that mentions it once.
+
+**Inverse Document Frequency:** How rare is the term across all documents? "Bluetooth" is more specific than "product" — a match on "Bluetooth" contributes more to relevance than a match on "product," which appears in nearly every document.
+
+Typesense combines these into a `_text_match` score, which is the default sort field. Higher `_text_match` = more relevant.
+
+```json
+// Each search result includes its relevance score
+{
+	"hits": [
+		{
+			"document": { "name": "Wireless Bluetooth Headphones" },
+			"text_match": 142857,
+			"text_match_info": {
+				"best_field_score": "85678",
+				"best_field_weight": 3,
+				"fields_matched": 2
+			}
+		}
+	]
+}
+```
+
+## Field Boosts: Prioritizing Where Matches Matter
+
+Not all fields are equal. A match in the product `name` matters more than a match in `description`. AACsearch lets you set per-field boost weights:
+
+| Field       | Boost | Rationale                                                 |
+| ----------- | ----- | --------------------------------------------------------- |
+| name        | 3x    | Primary identifier — exact match here is strongest signal |
+| brand       | 2x    | Brand name match signals high intent                      |
+| category    | 2x    | Category match confirms user's browsing context           |
+| description | 1x    | Supports secondary matching, but not as strong            |
+| tags        | 1.5x  | Curated metadata surfaces relevant associations           |
+| sku         | 5x    | Exact SKU lookups must rank #1                            |
+
+Configure boost weights in the AACsearch dashboard under Relevance Tuning:
+
+```json
+{
+	"searchable_fields": [
+		{ "name": "name", "boost": 3 },
+		{ "name": "brand", "boost": 2 },
+		{ "name": "category", "boost": 2 },
+		{ "name": "description", "boost": 1 },
+		{ "name": "tags", "boost": 1.5 }
+	]
+}
+```
+
+## Exact Match Boost
+
+When a query exactly matches a field value, Typesense gives it a relevance bonus. This is critical for:
+
+- **Brand searches:** "Nike" matches the brand field exactly → Nike products rank #1
+- **Product names:** "iPhone 16" matches exactly → that specific product surfaces first
+- **SKU/Model numbers:** "[B07YZN5LLK]" matches exactly → one result, always first
+
+Exact match boost is enabled by default. Configure the multiplier in dashboard settings (default: 2x).
+
+## Typo Tolerance Configuration
+
+Typo tolerance isn't binary — it's a sliding scale. AACsearch lets you control:
+
+```json
+{
+	"typo_tolerance": {
+		"enabled": true,
+		"min_length": 4, // Queries < 4 chars: no typo correction
+		"max_typos_per_word": {
+			"1": 1, // Words 1-3 chars: 0 typos
+			"4": 1, // Words 4-6 chars: 1 typo max
+			"7": 2 // Words 7+ chars: 2 typos max
+		}
+	}
+}
+```
+
+This avoids over-correction. A search for "iphon" (1 typo from "iphone") should correct to iPhone. But "socks" should not return "soccer" — that's 2 typos away and the context is wrong.
+
+## Synonym Groups: The Human Touch
+
+Algorithmic relevance gets you 80% of the way. Synonyms get you the remaining 20% — and they're where domain expertise matters.
+
+### How Synonyms Work in AACsearch
+
+A synonym group is a set of equivalent terms. Searching for any term in the group returns results matching any other term in the group:
+
+```json
+{
+	"synonyms": [
+		["sneakers", "trainers", "athletic shoes", "running shoes"],
+		["laptop", "notebook", "macbook", "ultrabook"],
+		["sofa", "couch", "settee", "loveseat"],
+		["cell phone", "mobile phone", "smartphone", "iPhone"],
+		["soda", "pop", "cola", "soft drink"],
+		["hoodie", "hooded sweatshirt", "pullover"]
+	]
+}
+```
+
+### Types of Synonym Relationships
+
+| Type           | Example                 | Effect                                            |
+| -------------- | ----------------------- | ------------------------------------------------- |
+| One-way        | "laptop" → "notebook"   | Search "laptop" returns notebooks; not vice versa |
+| Equivalent     | "sneakers" ↔ "trainers" | Both terms return same results                    |
+| Hierarchical   | "fruit" → [fruit list]  | Generic term expands to specific items            |
+| Brand-specific | "Nike" → "Air Max"      | Brand query surfaces specific product lines       |
+
+Configure synonyms in the AACsearch dashboard under Relevance Tuning → Synonyms. Bulk import via CSV is supported for large synonym sets.
+
+## Dynamic Ranking Rules
+
+Beyond per-field boosts, AACsearch supports dynamic ranking rules that adjust relevance based on business logic:
+
+```json
+{
+	"ranking_rules": [
+		{
+			"name": "Boost in-stock products",
+			"condition": "in_stock :=: true",
+			"boost": 1.5,
+			"priority": 1
+		},
+		{
+			"name": "Boost new arrivals",
+			"condition": "created_at:>=:2025-04-01",
+			"boost": 1.2,
+			"priority": 2
+		},
+		{
+			"name": "Boost promoted products",
+			"condition": "is_promoted :=: true",
+			"boost": 2.0,
+			"priority": 0
+		},
+		{
+			"name": "Demote clearance items",
+			"condition": "is_clearance :=: true",
+			"boost": 0.5,
+			"priority": 3
+		}
+	]
+}
+```
+
+These rules apply to ALL searches. For query-specific boosts, use the API's `prioritize_fields` or `pinning` parameters.
+
+## Pinning and Burying
+
+Sometimes you need surgical control:
+
+**Pinning:** Force a specific document to position #1 for certain queries:
+
+```json
+{
+	"pinning": {
+		"query": "running shoes",
+		"product_id": "featured_001",
+		"position": 1
+	}
+}
+```
+
+**Burying:** Push irrelevant results down:
+
+```json
+{
+	"burying": {
+		"query": "iphone",
+		"conditions": [
+			{ "field": "category", "value": "Accessories" }, // Cases & chargers below phones
+			{ "field": "condition", "value": "refurbished" } // Refurbished at bottom
+		]
+	}
+}
+```
+
+## The Analytics Feedback Loop
+
+Relevance isn't a one-time configuration. It's a continuous improvement cycle enabled by AACsearch's built-in analytics:
+
+```
+Collect Query Data → Analyze Zero-Result Queries → Add Synonyms → Monitor CTR → Tune Boosts
+      ↕                                                                              ↕
+Update Ranking Rules ← Identify Underperforming Searches ← Review A/B Tests ← Deploy Changes
+```
+
+### Key Analytics Metrics
+
+| Metric             | What It Tells You                                         |
+| ------------------ | --------------------------------------------------------- |
+| Zero-result rate   | Content gaps — users searching for things you don't index |
+| Click-through rate | Are the top results the right ones?                       |
+| Query frequency    | Most searched terms — prioritize tuning effort here       |
+| No-click rate      | Users didn't find what they wanted in top 10 results      |
+| Search-to-purchase | Are searchers converting after finding results?           |
+| Session depth      | How many searches before finding? High = poor relevance   |
+
+### Actionable Playbook
+
+1. **Week 1:** Review zero-result queries → add missing products or synonyms
+2. **Week 2:** Review low-CTR top results → adjust field boosts
+3. **Week 3:** Add synonyms for top unfound queries (usually industry jargon)
+4. **Week 4:** Review seasonal trends → add/remove pinning rules
+5. **Ongoing:** Monitor weekly analytics report — 15 minutes/week
+
+## A/B Testing Relevance Changes
+
+Every relevance change should be measured. AACsearch supports A/B testing:
+
+```json
+{
+	"ab_test": {
+		"name": "Boost brand field vs description",
+		"control": { "brand_boost": 2, "description_boost": 1 },
+		"variant": { "brand_boost": 3, "description_boost": 1.5 },
+		"traffic_split": 50,
+		"metrics": ["ctr", "conversion", "zero_result_rate"],
+		"duration_days": 7
+	}
+}
+```
+
+The dashboard shows which variant performs better on each metric. Deploy the winner.
+
+## The Relevance Maturity Model
+
+| Stage | Characteristics                                     | Tools Used                      |
+| ----- | --------------------------------------------------- | ------------------------------- |
+| L1    | Default ranking, no tuning                          | Default TF-IDF                  |
+| L2    | Field boost weights configured                      | Dashboard boosts                |
+| L3    | Synonym groups for top 20 underperforming queries   | Synonym manager + analytics     |
+| L4    | Dynamic ranking rules + seasonal pinning            | Ranking rules + pinning API     |
+| L5    | A/B tested, analytics-driven continuous improvement | All tools + analytics dashboard |
+
+Most teams reach L3 within 2 weeks of launch. L4-L5 requires monthly investment of 2-4 hours.
+
+## Common Relevance Mistakes
+
+| Mistake                        | Effect                                           | Fix                                    |
+| ------------------------------ | ------------------------------------------------ | -------------------------------------- |
+| Too many searchable fields     | Results match on irrelevant fields, low CTR      | Limit to 5 most important fields       |
+| All fields equal boost         | Generic results — name match no better than body | Use 3x/2x/1x boost hierarchy           |
+| No synonyms                    | Users search "sneakers", get "no results"        | Add industry synonym groups            |
+| Ignoring zero-result analytics | Content gaps persist for months                  | Weekly review, add content or synonyms |
+| One-time relevance setup       | Relevance degrades as catalog grows              | Monthly tuning cycle                   |
+| No A/B testing                 | Relevance changes are guesses                    | Run 50/50 tests for 7 days             |
+
+## Next Steps
+
+- Read the [Search Analytics Guide](/blog/search-analytics-guide) for deeper analytics
+- Try the [live relevance demo](/use-cases/ecommerce-search)
+- View the [Typesense Deep Dive](/blog/typesense-deep-dive) for engine architecture
+
+[Start optimizing your search relevance →](/signup)

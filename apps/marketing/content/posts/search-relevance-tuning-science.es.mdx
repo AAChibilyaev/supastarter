@@ -1,0 +1,276 @@
+---
+title: La Ciencia de la Relevancia en Búsqueda: Ranking, Ajuste y Sinónimos
+date: 2025-05-01
+image: https://picsum.photos/id/45/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Cómo funciona realmente la relevancia en búsqueda — ranking TF-IDF, potenciación de campos, grupos de sinónimos, reglas de ranking dinámicas y el ciclo de retroalimentación analítica que mejora la búsqueda con el tiempo.
+tags: [relevance, ranking, search, typesense, tuning]
+published: true
+---
+
+La relevancia en la búsqueda es la diferencia entre "casi correcto" y "exactamente lo que necesitaba". Google gasta miles de millones en ello. Tus usuarios también lo esperan de tu sitio.
+
+Este artículo explica la ciencia detrás de la relevancia en búsqueda en AACsearch (impulsado por Typesense) — desde el ranking básico TF-IDF hasta técnicas avanzadas de ajuste que los equipos de merchandising pueden gestionar sin involucrar a desarrolladores.
+
+## El Fundamento: Puntuación TF-IDF
+
+Todo motor de búsqueda necesita una forma de puntuar documentos. Typesense usa TF-IDF (Frecuencia de Término - Frecuencia Inversa de Documento) como su fórmula de ranking base.
+
+**Frecuencia de Término:** ¿Cuántas veces aparece el término de búsqueda en el documento? Un producto llamado "Wireless Bluetooth Headphones" que menciona "Bluetooth" tres veces rankea más alto para "Bluetooth" que uno que lo menciona una vez.
+
+**Frecuencia Inversa de Documento:** ¿Qué tan raro es el término entre todos los documentos? "Bluetooth" es más específico que "product" — una coincidencia en "Bluetooth" contribuye más a la relevancia que una coincidencia en "product", que aparece en casi todos los documentos.
+
+Typesense combina estos en una puntuación `_text_match`, que es el campo de ordenación por defecto. Un `_text_match` más alto = más relevante.
+
+```json
+// Cada resultado de búsqueda incluye su puntuación de relevancia
+{
+	"hits": [
+		{
+			"document": { "name": "Wireless Bluetooth Headphones" },
+			"text_match": 142857,
+			"text_match_info": {
+				"best_field_score": "85678",
+				"best_field_weight": 3,
+				"fields_matched": 2
+			}
+		}
+	]
+}
+```
+
+## Potenciación de Campos: Priorizando Dónde Importan las Coincidencias
+
+No todos los campos son iguales. Una coincidencia en el `name` del producto importa más que una coincidencia en `description`. AACsearch te permite establecer pesos de potenciación por campo:
+
+| Campo       | Potencia | Razón                                                                     |
+| ----------- | -------- | ------------------------------------------------------------------------- |
+| name        | 3x       | Identificador principal — coincidencia exacta aquí es la señal más fuerte |
+| brand       | 2x       | Coincidencia de nombre de marca señala alta intención                     |
+| category    | 2x       | Coincidencia de categoría confirma el contexto de navegación del usuario  |
+| description | 1x       | Soporta coincidencia secundaria, pero no es tan fuerte                    |
+| tags        | 1.5x     | Metadatos curados que muestran asociaciones relevantes                    |
+| sku         | 5x       | Las búsquedas exactas de SKU deben rankear #1                             |
+
+Configura los pesos de potenciación en el dashboard de AACsearch bajo Ajuste de Relevancia:
+
+```json
+{
+	"searchable_fields": [
+		{ "name": "name", "boost": 3 },
+		{ "name": "brand", "boost": 2 },
+		{ "name": "category", "boost": 2 },
+		{ "name": "description", "boost": 1 },
+		{ "name": "tags", "boost": 1.5 }
+	]
+}
+```
+
+## Potenciación de Coincidencia Exacta
+
+Cuando una consulta coincide exactamente con el valor de un campo, Typesense le da un bonus de relevancia. Esto es crítico para:
+
+- **Búsquedas de marca:** "Nike" coincide exactamente con el campo brand → los productos Nike rankean #1
+- **Nombres de producto:** "iPhone 16" coincide exactamente → ese producto específico aparece primero
+- **SKU/Números de modelo:** "[B07YZN5LLK]" coincide exactamente → un resultado, siempre primero
+
+La potenciación de coincidencia exacta está habilitada por defecto. Configura el multiplicador en los ajustes del dashboard (por defecto: 2x).
+
+## Configuración de Tolerancia a Errores Tipográficos
+
+La tolerancia a errores tipográficos no es binaria — es una escala deslizante. AACsearch te permite controlar:
+
+```json
+{
+	"typo_tolerance": {
+		"enabled": true,
+		"min_length": 4, // Consultas < 4 caracteres: sin corrección tipográfica
+		"max_typos_per_word": {
+			"1": 1, // Palabras de 1-3 caracteres: 0 errores
+			"4": 1, // Palabras de 4-6 caracteres: 1 error máximo
+			"7": 2 // Palabras de 7+ caracteres: 2 errores máximo
+		}
+	}
+}
+```
+
+Esto evita la sobrecorrección. Una búsqueda de "iphon" (1 error de "iphone") debe corregir a iPhone. Pero "socks" no debería devolver "soccer" — eso está a 2 errores de distancia y el contexto es incorrecto.
+
+## Grupos de Sinónimos: El Toque Humano
+
+La relevancia algorítmica te lleva al 80% del camino. Los sinónimos te dan el 20% restante — y ahí es donde importa el conocimiento del dominio.
+
+### Cómo Funcionan los Sinónimos en AACsearch
+
+Un grupo de sinónimos es un conjunto de términos equivalentes. Buscar cualquier término del grupo devuelve resultados que coinciden con cualquier otro término del grupo:
+
+```json
+{
+	"synonyms": [
+		["sneakers", "trainers", "athletic shoes", "running shoes"],
+		["laptop", "notebook", "macbook", "ultrabook"],
+		["sofa", "couch", "settee", "loveseat"],
+		["cell phone", "mobile phone", "smartphone", "iPhone"],
+		["soda", "pop", "cola", "soft drink"],
+		["hoodie", "hooded sweatshirt", "pullover"]
+	]
+}
+```
+
+### Tipos de Relaciones de Sinónimos
+
+| Tipo                | Ejemplo                     | Efecto                                                      |
+| ------------------- | --------------------------- | ----------------------------------------------------------- |
+| Unidireccional      | "laptop" → "notebook"       | Buscar "laptop" devuelve notebooks; no al revés             |
+| Equivalente         | "sneakers" ↔ "trainers"     | Ambos términos devuelven los mismos resultados              |
+| Jerárquico          | "fruit" → [lista de frutas] | El término genérico se expande a elementos específicos      |
+| Específico de marca | "Nike" → "Air Max"          | La consulta de marca muestra líneas de producto específicas |
+
+Configura los sinónimos en el dashboard de AACsearch bajo Ajuste de Relevancia → Sinónimos. La importación masiva vía CSV está soportada para conjuntos grandes de sinónimos.
+
+## Reglas de Ranking Dinámicas
+
+Más allá de las potenciaciones por campo, AACsearch soporta reglas de ranking dinámicas que ajustan la relevancia según la lógica de negocio:
+
+```json
+{
+	"ranking_rules": [
+		{
+			"name": "Potenciar productos en stock",
+			"condition": "in_stock :=: true",
+			"boost": 1.5,
+			"priority": 1
+		},
+		{
+			"name": "Potenciar nuevos ingresos",
+			"condition": "created_at:>=:2025-04-01",
+			"boost": 1.2,
+			"priority": 2
+		},
+		{
+			"name": "Potenciar productos promocionados",
+			"condition": "is_promoted :=: true",
+			"boost": 2.0,
+			"priority": 0
+		},
+		{
+			"name": "Degradar artículos de liquidación",
+			"condition": "is_clearance :=: true",
+			"boost": 0.5,
+			"priority": 3
+		}
+	]
+}
+```
+
+Estas reglas se aplican a TODAS las búsquedas. Para potenciaciones específicas de consultas, usa los parámetros `prioritize_fields` o `pinning` de la API.
+
+## Fijación y Hundimiento
+
+A veces necesitas control quirúrgico:
+
+**Fijación (Pinning):** Forzar un documento específico a la posición #1 para ciertas consultas:
+
+```json
+{
+	"pinning": {
+		"query": "running shoes",
+		"product_id": "featured_001",
+		"position": 1
+	}
+}
+```
+
+**Hundimiento (Burying):** Empujar resultados irrelevantes hacia abajo:
+
+```json
+{
+	"burying": {
+		"query": "iphone",
+		"conditions": [
+			{ "field": "category", "value": "Accessories" }, // Fundas y cargadores debajo de los teléfonos
+			{ "field": "condition", "value": "refurbished" } // Reacondicionados al final
+		]
+	}
+}
+```
+
+## El Ciclo de Retroalimentación Analítica
+
+La relevancia no es una configuración única. Es un ciclo de mejora continua habilitado por el analytics integrado de AACsearch:
+
+```
+Collect Query Data → Analyze Zero-Result Queries → Add Synonyms → Monitor CTR → Tune Boosts
+      ↕                                                                              ↕
+Update Ranking Rules ← Identify Underperforming Searches ← Review A/B Tests ← Deploy Changes
+```
+
+### Métricas Clave de Analytics
+
+| Métrica                 | Lo que te dice                                                           |
+| ----------------------- | ------------------------------------------------------------------------ |
+| Tasa de resultados cero | Brechas de contenido — usuarios buscando cosas que no indexas            |
+| Tasa de clics           | ¿Son los primeros resultados los correctos?                              |
+| Frecuencia de consultas | Términos más buscados — prioriza el esfuerzo de ajuste aquí              |
+| Tasa de sin clics       | Los usuarios no encontraron lo que querían en los 10 primeros resultados |
+| Búsqueda a compra       | ¿Los buscadores están convirtiendo después de encontrar resultados?      |
+| Profundidad de sesión   | ¿Cuántas búsquedas antes de encontrar? Alto = poca relevancia            |
+
+### Manual de Acción
+
+1. **Semana 1:** Revisa las consultas sin resultados → añade productos faltantes o sinónimos
+2. **Semana 2:** Revisa los primeros resultados con bajo CTR → ajusta las potenciaciones de campo
+3. **Semana 3:** Añade sinónimos para las consultas principales no encontradas (generalmente jerga de la industria)
+4. **Semana 4:** Revisa tendencias estacionales → añade/elimina reglas de fijación
+5. **Continuo:** Monitorea el informe analítico semanal — 15 minutos/semana
+
+## Pruebas A/B de Cambios de Relevancia
+
+Cada cambio de relevancia debe medirse. AACsearch soporta pruebas A/B:
+
+```json
+{
+	"ab_test": {
+		"name": "Potenciar campo brand vs description",
+		"control": { "brand_boost": 2, "description_boost": 1 },
+		"variant": { "brand_boost": 3, "description_boost": 1.5 },
+		"traffic_split": 50,
+		"metrics": ["ctr", "conversion", "zero_result_rate"],
+		"duration_days": 7
+	}
+}
+```
+
+El dashboard muestra qué variante rinde mejor en cada métrica. Despliega la ganadora.
+
+## El Modelo de Madurez de Relevancia
+
+| Etapa | Características                                                | Herramientas Usadas                             |
+| ----- | -------------------------------------------------------------- | ----------------------------------------------- |
+| L1    | Ranking por defecto, sin ajuste                                | TF-IDF por defecto                              |
+| L2    | Pesos de potenciación de campo configurados                    | Potenciaciones del dashboard                    |
+| L3    | Grupos de sinónimos para las 20 consultas con peor rendimiento | Gestor de sinónimos + analytics                 |
+| L4    | Reglas de ranking dinámicas + fijación estacional              | Reglas de ranking + API de fijación             |
+| L5    | Pruebas A/B, mejora continua basada en analytics               | Todas las herramientas + dashboard de analytics |
+
+La mayoría de los equipos alcanzan L3 dentro de 2 semanas del lanzamiento. L4-L5 requiere una inversión mensual de 2-4 horas.
+
+## Errores Comunes de Relevancia
+
+| Error                                   | Efecto                                                               | Solución                                      |
+| --------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------- |
+| Demasiados campos buscables             | Resultados coinciden en campos irrelevantes, bajo CTR                | Limita a los 5 campos más importantes         |
+| Todos los campos con igual potenciación | Resultados genéricos — coincidencia en nombre no mejor que en cuerpo | Usa jerarquía de potenciación 3x/2x/1x        |
+| Sin sinónimos                           | Usuarios buscan "sneakers", obtienen "sin resultados"                | Añade grupos de sinónimos de la industria     |
+| Ignorar analytics de resultados cero    | Brechas de contenido persisten por meses                             | Revisión semanal, añade contenido o sinónimos |
+| Configuración única de relevancia       | La relevancia se degrada a medida que crece el catálogo              | Ciclo de ajuste mensual                       |
+| Sin pruebas A/B                         | Los cambios de relevancia son suposiciones                           | Ejecuta pruebas 50/50 durante 7 días          |
+
+## Próximos Pasos
+
+- Lee la [Guía de Analytics de Búsqueda](/blog/search-analytics-guide) para analytics más profundos
+- Prueba el [demo de relevancia en vivo](/use-cases/ecommerce-search)
+- Consulta el [Typesense Deep Dive](/blog/typesense-deep-dive) para la arquitectura del motor
+
+[Comienza a optimizar tu relevancia de búsqueda →](/signup)

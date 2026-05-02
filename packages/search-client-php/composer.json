@@ -1,0 +1,27 @@
+{
+	"name": "aacsearch/aacsearch-php",
+	"description": "PHP client for the AACSearch v1 REST API — search, index management, synonyms, curations, and more",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "AACSearch",
+			"email": "dev@aacsearch.com"
+		}
+	],
+	"require": {
+		"php": ">=8.1",
+		"guzzlehttp/guzzle": "^7.0",
+		"ext-json": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Aacsearch\\": "src/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-main": "0.1.x-dev"
+		}
+	}
+}

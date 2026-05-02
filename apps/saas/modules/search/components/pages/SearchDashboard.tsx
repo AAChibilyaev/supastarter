@@ -146,7 +146,11 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 					</div>
 
 					{selectedSlug ? (
-						<WidgetPanel slug={selectedSlug} baseUrl={baseUrl ?? ""} />
+						<WidgetPanel
+							slug={selectedSlug}
+							organizationId={organizationId}
+							baseUrl={baseUrl ?? ""}
+						/>
 					) : (
 						<EmptyState variant="inline" description={t("search.selectIndex")} />
 					)}

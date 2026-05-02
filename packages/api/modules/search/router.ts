@@ -53,7 +53,7 @@ import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
 import { voiceSearch } from "./procedures/voice-search";
-import { getWidgetConfig } from "./procedures/widget-config";
+import { getWidgetConfig, saveWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {
 	listIndexes,
@@ -72,6 +72,7 @@ export const searchRouter = {
 	topQueries,
 	recentActivity,
 	widgetConfig: getWidgetConfig,
+	saveWidgetConfig,
 	analytics,
 	pipelineStatus,
 	listDocuments,

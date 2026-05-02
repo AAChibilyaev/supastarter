@@ -65,6 +65,24 @@ export default defineConfig({
 			testMatch: "tests/connector/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "project",
+			dependencies: ["setup"],
+			testMatch: "tests/project/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "widget",
+			dependencies: ["setup"],
+			testMatch: "tests/widget/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "analytics",
+			dependencies: ["setup"],
+			testMatch: "tests/analytics/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

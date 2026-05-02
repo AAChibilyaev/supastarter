@@ -43,6 +43,7 @@ import {
 	UserCogIcon,
 	RocketIcon,
 	LightbulbIcon,
+	Code2,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -414,6 +415,12 @@ export function NavBar() {
 							href: `${basePath}/connectors`,
 							icon: CableIcon,
 							isActive: pathname.startsWith(`${basePath}/connectors`),
+						},
+						{
+							label: t("sdks.nav"),
+							href: `${basePath}/sdks`,
+							icon: Code2,
+							isActive: pathname.startsWith(`${basePath}/sdks`),
 						},
 					]
 				: []),

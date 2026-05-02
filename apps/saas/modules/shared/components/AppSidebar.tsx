@@ -36,6 +36,20 @@ import {
 	ShieldUserIcon,
 	SlidersHorizontalIcon,
 	UserCogIcon,
+	SparklesIcon,
+	PuzzleIcon,
+	CodeIcon,
+	BookOpenIcon,
+	StarIcon,
+	FlameIcon,
+	AlertTriangleIcon,
+	ActivityIcon,
+	ScrollTextIcon,
+	WrenchIcon,
+	ShuffleIcon,
+	Volume2Icon,
+	BotIcon,
+	TagsIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -120,16 +134,6 @@ export function AppSidebar() {
 
 		return [
 			...(activeOrganization
-				? []
-				: [
-						{
-							label: t("app.menu.start"),
-							href: startHref,
-							icon: HomeIcon,
-							isActive: pathname === "/" || pathname === basePath,
-						},
-					]),
-			...(activeOrganization
 				? [
 						{
 							label: t("search.nav.overview"),
@@ -154,6 +158,10 @@ export function AppSidebar() {
 								pathname.startsWith(`${basePath}/preview`),
 							subItems: [
 								{
+									label: t("search.nav.indexes"),
+									href: `${basePath}/search`,
+								},
+								{
 									label: t("search.nav.apiKeys"),
 									href: `${basePath}/api-keys`,
 								},
@@ -165,6 +173,10 @@ export function AppSidebar() {
 									label: t("search.nav.searchPreview"),
 									href: `${basePath}/preview`,
 								},
+								{
+									label: t("search.nav.playground"),
+									href: `${basePath}/search?tab=playground`,
+								},
 							],
 						},
 						{
@@ -172,12 +184,76 @@ export function AppSidebar() {
 							href: `${basePath}/analytics`,
 							icon: BarChart3Icon,
 							isActive: pathname.startsWith(`${basePath}/analytics`),
+							subItems: [
+								{
+									label: t("search.nav.analyticsDashboard"),
+									href: `${basePath}/analytics`,
+								},
+								{
+									label: t("search.nav.analyticsTopQueries"),
+									href: `${basePath}/analytics?tab=top-queries`,
+								},
+								{
+									label: t("search.nav.analyticsFailed"),
+									href: `${basePath}/analytics?tab=failed`,
+								},
+								{
+									label: t("search.nav.analyticsActivity"),
+									href: `${basePath}/analytics?tab=activity`,
+								},
+							],
 						},
 						{
 							label: t("search.nav.relevance"),
 							href: `${basePath}/relevance`,
 							icon: SlidersHorizontalIcon,
 							isActive: pathname.startsWith(`${basePath}/relevance`),
+							subItems: [
+								{
+									label: t("search.nav.relevanceSynonyms"),
+									href: `${basePath}/relevance?tab=synonyms`,
+								},
+								{
+									label: t("search.nav.relevanceCurations"),
+									href: `${basePath}/relevance?tab=curations`,
+								},
+								{
+									label: t("search.nav.relevanceStemming"),
+									href: `${basePath}/relevance?tab=stemming`,
+								},
+								{
+									label: t("search.nav.relevanceStopwords"),
+									href: `${basePath}/relevance?tab=stopwords`,
+								},
+								{
+									label: t("search.nav.relevanceRanking"),
+									href: `${basePath}/relevance?tab=ranking`,
+								},
+								{
+									label: t("search.nav.relevanceSpell"),
+									href: `${basePath}/relevance?tab=spell`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.connectors"),
+							href: `${basePath}/connectors`,
+							icon: CableIcon,
+							isActive: pathname.startsWith(`${basePath}/connectors`),
+							subItems: [
+								{
+									label: t("search.nav.connectorsCMS"),
+									href: `${basePath}/connectors`,
+								},
+								{
+									label: t("search.nav.connectorsWebhooks"),
+									href: `${basePath}/connectors?tab=webhooks`,
+								},
+								{
+									label: t("search.nav.connectorsSDK"),
+									href: `${basePath}/connectors?tab=sdk`,
+								},
+							],
 						},
 						{
 							label: t("search.nav.knowledge"),
@@ -186,13 +262,74 @@ export function AppSidebar() {
 							isActive: pathname.startsWith(`${basePath}/knowledge`),
 						},
 						{
-							label: t("search.nav.connectors"),
-							href: `${basePath}/connectors`,
-							icon: CableIcon,
-							isActive: pathname.startsWith(`${basePath}/connectors`),
+							label: t("search.nav.recommendations"),
+							href: `${basePath}/recommendations`,
+							icon: SparklesIcon,
+							isActive: pathname.startsWith(`${basePath}/recommendations`),
+							subItems: [
+								{
+									label: t("search.nav.recommendationsDashboard"),
+									href: `${basePath}/recommendations`,
+								},
+								{
+									label: t("search.nav.recommendationsSimilar"),
+									href: `${basePath}/recommendations?tab=similar`,
+								},
+								{
+									label: t("search.nav.recommendationsPersonalized"),
+									href: `${basePath}/recommendations?tab=personalized`,
+								},
+								{
+									label: t("search.nav.recommendationsGraphRAG"),
+									href: `${basePath}/recommendations?tab=graphrag`,
+								},
+								{
+									label: t("search.nav.recommendationsSettings"),
+									href: `${basePath}/recommendations?tab=settings`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.widget"),
+							href: `${basePath}/widget`,
+							icon: PuzzleIcon,
+							isActive: pathname.startsWith(`${basePath}/widget`),
+							subItems: [
+								{
+									label: t("search.nav.widgetConfigurator"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetFilters"),
+									href: `${basePath}/widget?tab=filters`,
+								},
+								{
+									label: t("search.nav.widgetAutocomplete"),
+									href: `${basePath}/widget?tab=autocomplete`,
+								},
+								{
+									label: t("search.nav.widgetVoice"),
+									href: `${basePath}/widget?tab=voice`,
+								},
+								{
+									label: t("search.nav.widgetAnalytics"),
+									href: `${basePath}/widget?tab=analytics`,
+								},
+								{
+									label: t("search.nav.widgetInstall"),
+									href: `${basePath}/widget?tab=install`,
+								},
+							],
 						},
 					]
-				: []),
+				: [
+						{
+							label: t("app.menu.start"),
+							href: startHref,
+							icon: HomeIcon,
+							isActive: pathname === "/" || pathname === basePath,
+						},
+					]),
 			...(organizationSubItems
 				? [
 						{

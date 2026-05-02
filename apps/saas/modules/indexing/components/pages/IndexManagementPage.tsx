@@ -2,8 +2,6 @@
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +13,8 @@ import { useParams } from "next/navigation";
 import { IndexHealthChart } from "../dashboard/IndexHealthChart";
 import { IndexStatusCards } from "../dashboard/IndexStatusCards";
 import { LastSyncInfo } from "../dashboard/LastSyncInfo";
+import { DeltaSyncPanel } from "../panels/DeltaSyncPanel";
+import { FullReindexPanel } from "../panels/FullReindexPanel";
 
 // ── Main component ───────────────────────────────────────────────
 
@@ -165,17 +165,11 @@ export function IndexManagementPage() {
 				/>
 			</div>
 
-			{/* Placeholder for future action panels (Phase 2-5) */}
-			<Card>
-				<CardContent className="py-8 flex flex-col items-center justify-center">
-					<p className="text-sm text-muted-foreground">{t("indexingProgress")}</p>
-					<div className="gap-3 mt-4 flex">
-						<Button variant="outline" disabled>
-							{t("backToCollection")}
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
+			{/* Full Reindex panel */}
+			<FullReindexPanel organizationId={orgId ?? ""} indexSlug={indexSlug} />
+
+			{/* Delta Sync panel */}
+			<DeltaSyncPanel organizationId={orgId ?? ""} indexId={index?.id ?? ""} />
 		</div>
 	);
 }

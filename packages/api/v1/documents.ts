@@ -11,11 +11,17 @@
 import {
 	enqueueManySearchIngest,
 	enqueueSearchIngest,
+	getSearchIndexById,
 	recordSearchUsage,
 	type Prisma,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import { aliasName, searchDocuments } from "@repo/search";
+import {
+	aliasName,
+	exportDocumentsRaw,
+	physicalCollectionName,
+	searchDocuments,
+} from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -278,5 +284,73 @@ export const documentsApp = new Hono()
 		} catch (error) {
 			logger.error("Document delete enqueue failed", { error, indexId, documentId });
 			return c.json({ error: "internal_error", message: "Failed to delete document" }, 502);
+		}
+	})
+
+	// ── Export documents ───────────────────────────────────────────
+	.get("/indexes/:indexId/documents/export", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		if (indexId !== verified.indexId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const querySchema = z.object({
+			filterBy: z.string().optional(),
+			format: z.enum(["json", "jsonl"]).optional().default("jsonl"),
+		});
+
+		const parsed = querySchema.safeParse({
+			filterBy: c.req.query("filterBy"),
+			format: c.req.query("format"),
+		});
+
+		if (!parsed.success) {
+			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
+		}
+
+		// Lookup index to get version for physical collection name
+		const index = await getSearchIndexById(indexId);
+		if (!index || index.organizationId !== verified.organizationId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const collName = physicalCollectionName(
+			verified.organizationId,
+			verified.indexSlug,
+			index.version,
+		);
+
+		try {
+			const raw = await exportDocumentsRaw({
+				collection: collName,
+				filterBy: parsed.data.filterBy,
+			});
+
+			if (parsed.data.format === "json") {
+				const lines = raw.split("\n").filter((line) => line.trim().length > 0);
+				const docs = lines
+					.map((line) => {
+						try {
+							return JSON.parse(line);
+						} catch {
+							return null;
+						}
+					})
+					.filter(Boolean);
+				c.header("Content-Type", "application/json");
+				return c.json({ documents: docs, total: docs.length });
+			}
+
+			// JSONL format (default) — stream as file download
+			c.header("Content-Type", "application/x-ndjson");
+			c.header("Content-Disposition", `attachment; filename="documents-${indexId}.jsonl"`);
+			return c.body(raw, 200);
+		} catch (error) {
+			logger.error("V1 export documents failed", { error, indexId });
+			return c.json({ error: "internal_error", message: "Failed to export documents" }, 502);
 		}
 	});

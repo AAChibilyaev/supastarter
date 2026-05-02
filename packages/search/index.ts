@@ -42,6 +42,13 @@ export {
 export { verifySearchApiKey, type VerifiedSearchKey } from "./lib/verify";
 export { reindexCollection, type ReindexInput, type ReindexResult } from "./lib/reindex";
 export {
+	exportDocuments,
+	exportDocumentsRaw,
+	type ExportDocumentsInput,
+	type ExportDocumentsResult,
+	type ExportDocumentsStreamInput,
+} from "./lib/export";
+export {
 	EMBEDDING_MODELS,
 	formatVectorQuery,
 	generateEmbedding,

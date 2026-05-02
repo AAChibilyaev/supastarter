@@ -56,24 +56,19 @@ export function UserMenu({
 				<button
 					type="button"
 					className={cn(
-						"flex cursor-pointer items-center gap-2 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
+						"gap-2 flex cursor-pointer items-center rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
 						compressed
-							? "size-8 shrink-0 justify-center p-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-							: "w-full justify-between md:w-[100%+1rem] md:px-2 md:py-1.5 md:hover:bg-primary/5",
+							? "size-8 p-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground shrink-0 justify-center"
+							: "md:w-[100%+1rem] md:px-2 md:py-1.5 md:hover:bg-primary/5 w-full justify-between",
 					)}
 					aria-label="User menu"
 				>
-					<span
-						className={cn(
-							"flex items-center gap-2",
-							compressed && "justify-center",
-						)}
-					>
+					<span className={cn("gap-2 flex items-center", compressed && "justify-center")}>
 						<UserAvatar name={name ?? ""} avatarUrl={image} />
 						{showExpandedRow ? (
-							<span className="text-left leading-tight">
+							<span className="leading-tight text-left">
 								<span className="font-medium text-sm">{name}</span>
-								<span className="block text-xs opacity-70">{email}</span>
+								<span className="text-xs block opacity-70">{email}</span>
 							</span>
 						) : null}
 					</span>

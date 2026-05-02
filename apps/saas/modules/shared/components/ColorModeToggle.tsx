@@ -7,9 +7,9 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useTheme } from "@teispace/next-themes";
 import { MonitorCogIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTheme } from "@teispace/next-themes";
 import { useEffect, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 

@@ -66,7 +66,7 @@ export function WidgetPanel({ slug, baseUrl }: WidgetPanelProps) {
 						value={snippet}
 						rows={6}
 						spellCheck={false}
-						className="bg-muted max-h-48 min-h-0 resize-y font-mono text-sm"
+						className="max-h-48 min-h-0 font-mono text-sm resize-y bg-muted"
 					/>
 				</div>
 

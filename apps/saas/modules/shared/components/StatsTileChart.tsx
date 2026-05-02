@@ -66,7 +66,7 @@ export function StatsTileChart({
 	}
 
 	return (
-		<div className={cn("h-32 w-full min-w-0", className)}>
+		<div className={cn("h-32 min-w-0 w-full", className)}>
 			<svg
 				viewBox="0 0 100 100"
 				preserveAspectRatio="none"
@@ -91,7 +91,7 @@ export function StatsTileChart({
 					strokeLinecap="round"
 				/>
 			</svg>
-			<div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+			<div className="mt-2 text-xs flex items-center justify-between text-muted-foreground">
 				<span>{spark.startValue}</span>
 				<span>{spark.endValue}</span>
 			</div>

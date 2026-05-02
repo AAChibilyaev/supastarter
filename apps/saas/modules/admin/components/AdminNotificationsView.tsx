@@ -6,6 +6,7 @@ import { toastPromise } from "@repo/ui/components/toast";
 import { NotificationPreferencesForm } from "@settings/components/NotificationPreferencesForm";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 type NotificationRow = {
 	id: string;
@@ -16,6 +17,7 @@ type NotificationRow = {
 };
 
 export function AdminNotificationsView() {
+	const t = useTranslations("admin.notifications");
 	const queryClient = useQueryClient();
 	const notificationsQuery = useQuery(
 		orpc.notifications.list.queryOptions({
@@ -43,19 +45,19 @@ export function AdminNotificationsView() {
 		<div className="gap-6 grid grid-cols-1">
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between">
-					<CardTitle>Recent notifications</CardTitle>
+					<CardTitle>{t("recentNotifications")}</CardTitle>
 					<Button
 						variant="outline"
 						onClick={() =>
 							toastPromise(async () => markAllReadMutation.mutateAsync({}), {
-								loading: "Marking notifications as read...",
-								success: "Done.",
-								error: "Could not mark all as read.",
+								loading: t("markingRead"),
+								success: t("markReadSuccess"),
+								error: t("markReadError"),
 							})
 						}
 						disabled={markAllReadMutation.isPending}
 					>
-						Mark all as read
+						{t("markAllRead")}
 					</Button>
 				</CardHeader>
 				<CardContent className="gap-2 grid grid-cols-1">
@@ -71,13 +73,13 @@ export function AdminNotificationsView() {
 								</p>
 							</div>
 							<span className="text-xs text-foreground/60">
-								{item.read ? "read" : "unread"}
+								{item.read ? t("statusRead") : t("statusUnread")}
 							</span>
 						</div>
 					))}
 					{!notificationsQuery.isLoading &&
 					(notificationsQuery.data as NotificationRow[] | undefined)?.length === 0 ? (
-						<p className="text-sm text-foreground/60">No notifications yet.</p>
+						<p className="text-sm text-foreground/60">{t("noNotifications")}</p>
 					) : null}
 				</CardContent>
 			</Card>

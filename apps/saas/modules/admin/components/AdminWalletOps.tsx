@@ -14,6 +14,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { toastError, toastPromise } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { formatKopecks } from "../../payments/lib/format-kopecks";
@@ -21,6 +22,7 @@ import { formatKopecks } from "../../payments/lib/format-kopecks";
 const LIST_LIMIT = 50;
 
 export function AdminWalletOps() {
+	const t = useTranslations("admin.wallet");
 	const queryClient = useQueryClient();
 	const [organizationSearch, setOrganizationSearch] = useState("");
 	const [selectedOrganizationId, setSelectedOrganizationId] = useState<string>("");
@@ -80,18 +82,18 @@ export function AdminWalletOps() {
 	const runAdjustment = () => {
 		const wallet = walletQuery.data;
 		if (!wallet?.id) {
-			toastError("Select an organization with initialized wallet first.");
+			toastError(t("noWalletError"));
 			return;
 		}
 
 		const amount = Number(amountRub.replace(",", "."));
 		if (!Number.isFinite(amount) || amount <= 0) {
-			toastError("Amount must be a positive number.");
+			toastError(t("invalidAmountError"));
 			return;
 		}
 
 		if (reason.trim().length < 10) {
-			toastError("Reason must be at least 10 characters.");
+			toastError(t("shortReasonError"));
 			return;
 		}
 
@@ -106,9 +108,9 @@ export function AdminWalletOps() {
 					reason: reason.trim(),
 				}),
 			{
-				loading: "Applying adjustment...",
-				success: "Wallet adjusted successfully.",
-				error: "Failed to adjust wallet.",
+				loading: t("applyingAdjustment"),
+				success: t("adjustmentSuccess"),
+				error: t("adjustmentError"),
 			},
 		);
 	};
@@ -117,13 +119,13 @@ export function AdminWalletOps() {
 		<div className="gap-6 grid grid-cols-1">
 			<Card>
 				<CardHeader>
-					<CardTitle>Manual wallet adjustment</CardTitle>
+					<CardTitle>{t("manualAdjustment")}</CardTitle>
 				</CardHeader>
 				<CardContent className="gap-4 grid grid-cols-1">
 					<Input
 						value={organizationSearch}
 						onChange={(event) => setOrganizationSearch(event.target.value)}
-						placeholder="Search organization..."
+						placeholder={t("searchOrgPlaceholder")}
 					/>
 
 					<Select
@@ -131,7 +133,7 @@ export function AdminWalletOps() {
 						onValueChange={setSelectedOrganizationId}
 					>
 						<SelectTrigger>
-							<SelectValue placeholder="Select organization" />
+							<SelectValue placeholder={t("selectOrgPlaceholder")} />
 						</SelectTrigger>
 						<SelectContent>
 							{organizations.map((organization) => (
@@ -146,15 +148,13 @@ export function AdminWalletOps() {
 						<Skeleton className="h-16 w-full" />
 					) : walletQuery.data ? (
 						<div className="p-3 text-sm rounded-md border">
-							<p className="text-foreground/60">Current balance</p>
+							<p className="text-foreground/60">{t("currentBalance")}</p>
 							<p className="font-semibold text-2xl">
 								{formatKopecks(walletQuery.data.availableBalanceKopecks)}
 							</p>
 						</div>
 					) : (
-						<p className="text-sm text-foreground/60">
-							Wallet is not initialized for selected organization.
-						</p>
+						<p className="text-sm text-foreground/60">{t("walletNotInitialized")}</p>
 					)}
 
 					<div className="gap-3 md:grid-cols-3 grid grid-cols-1">
@@ -166,32 +166,32 @@ export function AdminWalletOps() {
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="credit">Credit</SelectItem>
-								<SelectItem value="debit">Debit</SelectItem>
+								<SelectItem value="credit">{t("creditLabel")}</SelectItem>
+								<SelectItem value="debit">{t("debitLabel")}</SelectItem>
 							</SelectContent>
 						</Select>
 
 						<Input
 							value={amountRub}
 							onChange={(event) => setAmountRub(event.target.value)}
-							placeholder="Amount (RUB)"
+							placeholder={t("amountPlaceholder")}
 						/>
 						<Button onClick={runAdjustment} loading={adjustWalletMutation.isPending}>
-							Apply
+							{t("applyButton")}
 						</Button>
 					</div>
 
 					<Input
 						value={reason}
 						onChange={(event) => setReason(event.target.value)}
-						placeholder="Reason (minimum 10 chars)"
+						placeholder={t("reasonPlaceholder")}
 					/>
 				</CardContent>
 			</Card>
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Latest wallet transactions</CardTitle>
+					<CardTitle>{t("latestTransactions")}</CardTitle>
 				</CardHeader>
 				<CardContent className="gap-2 grid grid-cols-1">
 					{transactionsQuery.isLoading ? (
@@ -199,7 +199,7 @@ export function AdminWalletOps() {
 							<Skeleton key={`txn-${index}`} className="h-10 w-full" />
 						))
 					) : (transactionsQuery.data ?? []).length === 0 ? (
-						<p className="text-sm text-foreground/60">No transactions found.</p>
+						<p className="text-sm text-foreground/60">{t("noTransactions")}</p>
 					) : (
 						transactionsQuery.data?.map((transaction) => (
 							<div

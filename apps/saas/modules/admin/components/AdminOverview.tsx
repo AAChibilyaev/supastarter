@@ -5,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ca
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 const PREVIEW_LIMIT = 5;
 
 export function AdminOverview() {
+	const t = useTranslations("admin.overview");
 	const usersQuery = useQuery(
 		orpc.admin.users.list.queryOptions({
 			input: { limit: PREVIEW_LIMIT, offset: 0 },
@@ -32,21 +34,21 @@ export function AdminOverview() {
 		<div className="gap-6 grid grid-cols-1">
 			<div className="gap-4 md:grid-cols-3 grid grid-cols-1">
 				<KpiCard
-					title="Users"
+					title={t("usersTitle")}
 					value={usersQuery.data?.total}
-					fallback="No data"
+					fallback={t("noData")}
 					isLoading={usersQuery.isLoading}
 				/>
 				<KpiCard
-					title="Organizations"
+					title={t("organizationsTitle")}
 					value={organizationsQuery.data?.total}
-					fallback="No data"
+					fallback={t("noData")}
 					isLoading={organizationsQuery.isLoading}
 				/>
 				<KpiCard
-					title="Unread notifications"
+					title={t("unreadNotifications")}
 					value={unreadNotificationsQuery.data?.count}
-					fallback="No data"
+					fallback={t("noData")}
 					isLoading={unreadNotificationsQuery.isLoading}
 				/>
 			</div>
@@ -54,7 +56,7 @@ export function AdminOverview() {
 			<div className="gap-4 xl:grid-cols-2 grid grid-cols-1">
 				<Card>
 					<CardHeader>
-						<CardTitle>Recent users</CardTitle>
+						<CardTitle>{t("recentUsers")}</CardTitle>
 					</CardHeader>
 					<CardContent className="gap-3 grid grid-cols-1">
 						{isLoading
@@ -71,20 +73,20 @@ export function AdminOverview() {
 											<p className="text-foreground/60">{user.email}</p>
 										</div>
 										<span className="text-xs text-foreground/60">
-											{user.role ?? "user"}
+											{user.role ?? t("defaultRole")}
 										</span>
 									</div>
 								))}
 
 						<Button asChild variant="outline">
-							<Link href="/admin/users">Open users</Link>
+							<Link href="/admin/users">{t("openUsers")}</Link>
 						</Button>
 					</CardContent>
 				</Card>
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Recent organizations</CardTitle>
+						<CardTitle>{t("recentOrganizations")}</CardTitle>
 					</CardHeader>
 					<CardContent className="gap-3 grid grid-cols-1">
 						{isLoading
@@ -99,17 +101,17 @@ export function AdminOverview() {
 										<div>
 											<p className="font-medium">{organization.name}</p>
 											<p className="text-foreground/60">
-												{organization.slug ?? "No slug"}
+												{organization.slug ?? t("noSlug")}
 											</p>
 										</div>
 										<span className="text-xs text-foreground/60">
-											{organization.membersCount} members
+											{t("membersCount", { count: organization.membersCount })}
 										</span>
 									</div>
 								))}
 
 						<Button asChild variant="outline">
-							<Link href="/admin/organizations">Open organizations</Link>
+							<Link href="/admin/organizations">{t("openOrganizations")}</Link>
 						</Button>
 					</CardContent>
 				</Card>

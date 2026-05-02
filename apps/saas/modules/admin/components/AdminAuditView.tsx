@@ -4,10 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ca
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 const ITEMS_LIMIT = 10;
 
 export function AdminAuditView() {
+	const t = useTranslations("admin.audit");
 	const usersQuery = useQuery(
 		orpc.admin.users.list.queryOptions({
 			input: {
@@ -29,7 +31,7 @@ export function AdminAuditView() {
 		<div className="gap-4 xl:grid-cols-2 grid grid-cols-1">
 			<Card>
 				<CardHeader>
-					<CardTitle>Recent user changes</CardTitle>
+					<CardTitle>{t("recentUserChanges")}</CardTitle>
 				</CardHeader>
 				<CardContent className="gap-2 grid grid-cols-1">
 					{usersQuery.isLoading
@@ -47,7 +49,7 @@ export function AdminAuditView() {
 									</div>
 									<div className="text-right">
 										<p className="text-xs text-foreground/60">
-											{user.role ?? "user"}
+											{user.role ?? t("defaultRole")}
 										</p>
 										<p className="text-xs text-foreground/60">
 											{new Date(user.updatedAt).toLocaleString()}
@@ -60,7 +62,7 @@ export function AdminAuditView() {
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Recent organization changes</CardTitle>
+					<CardTitle>{t("recentOrgChanges")}</CardTitle>
 				</CardHeader>
 				<CardContent className="gap-2 grid grid-cols-1">
 					{organizationsQuery.isLoading
@@ -75,7 +77,7 @@ export function AdminAuditView() {
 									<div>
 										<p className="font-medium">{organization.name}</p>
 										<p className="text-foreground/60">
-											{organization.slug ?? "No slug"}
+											{organization.slug ?? t("noSlug")}
 										</p>
 									</div>
 									<div className="text-right">

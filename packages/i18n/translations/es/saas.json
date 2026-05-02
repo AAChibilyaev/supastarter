@@ -1635,5 +1635,6 @@
 		"federatedSearch": "Federada",
 		"settings": "Configuración",
 		"switchOrganization": "Cambiar organización"
-	}
+	},
+	"__test": {}
 }

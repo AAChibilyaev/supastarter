@@ -1,3 +1,9 @@
+import { DripDay0 } from "./DripDay0";
+import { DripDay1 } from "./DripDay1";
+import { DripDay3 } from "./DripDay3";
+import { DripDay7 } from "./DripDay7";
+import { DripDay14 } from "./DripDay14";
+import { DripDay21 } from "./DripDay21";
 import { EmailVerification } from "./EmailVerification";
 import { ForgotPassword } from "./ForgotPassword";
 import { MagicLink } from "./MagicLink";
@@ -12,4 +18,10 @@ export const mailTemplates = {
 	organizationInvitation: OrganizationInvitation,
 	emailVerification: EmailVerification,
 	notification: Notification,
+	dripDay0: DripDay0,
+	dripDay1: DripDay1,
+	dripDay3: DripDay3,
+	dripDay7: DripDay7,
+	dripDay14: DripDay14,
+	dripDay21: DripDay21,
 } as const;

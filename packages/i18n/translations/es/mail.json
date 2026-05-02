@@ -30,6 +30,63 @@
 		"join": "Unirse a la organización",
 		"subject": "Has sido invitado a unirte a una organización"
 	},
+	"dripDay0": {
+		"greeting": "Hola {name},",
+		"body": "¡Bienvenido a AACsearch! Has dado el primer paso para llevar una búsqueda potente a tu plataforma. Estamos emocionados de tenerte a bordo.",
+		"whatsNext": "Tu plan de inicio para estar listo en minutos:",
+		"step1": "1. Crea tu primer índice de búsqueda",
+		"step2": "2. Añade documentos a tu índice",
+		"step3": "3. Prueba tu primera consulta de búsqueda",
+		"step4": "4. Genera una clave API y comienza a integrar",
+		"cta": "Comenzar guía rápida",
+		"subject": "¡Bienvenido a AACsearch — comienza en minutos!"
+	},
+	"dripDay1": {
+		"greeting": "Hola {name},",
+		"body": "¿Listo para crear tu primer índice de búsqueda? Es la base de todo lo que construirás con AACsearch. Mira nuestro tutorial rápido.",
+		"watchVideo": "Ver tutorial",
+		"orCta": "O empieza directamente:",
+		"createCollection": "Crear tu primer índice",
+		"subject": "Cómo crear tu primer índice de búsqueda"
+	},
+	"dripDay3": {
+		"greeting": "Hola {name},",
+		"body": "¿Sabías que puedes conectar AACsearch directamente a tu CMS, plataforma de comercio electrónico o cualquier fuente de datos? Nuestros conectores lo hacen sencillo.",
+		"supported": "Actualmente compatibles: PrestaShop, Bitrix24 e integración directa por API.",
+		"benefit1": "✓ Sincronización automática — sin cargas manuales",
+		"benefit2": "✓ Actualizaciones en tiempo real — tu búsqueda siempre actualizada",
+		"connectNow": "Conectar tu CMS ahora",
+		"orDocs": "Más información en nuestra documentación:",
+		"viewDocs": "Ver documentación de conectores",
+		"subject": "Conecta tu CMS a AACsearch"
+	},
+	"dripDay7": {
+		"greeting": "Hola {name},",
+		"body": "Aquí tienes algunos consejos para aprovechar al máximo AACsearch:",
+		"tip1": "🔍 Sinónimos — define sinónimos para que los usuarios encuentren lo que necesitan",
+		"tip2": "⭐ Curaciones — fija resultados importantes para búsquedas clave",
+		"tip3": "⚡ Ajuste de relevancia — adapta la clasificación a tu tipo de contenido",
+		"goToSettings": "Explorar ajustes de búsqueda",
+		"subject": "Consejos: saca más partido a AACsearch"
+	},
+	"dripDay14": {
+		"greeting": "Hola {name},",
+		"body": "Dos semanas — ¡esperamos que estés disfrutando AACsearch! Así es como otros equipos transforman su experiencia de búsqueda.",
+		"teaser": "Lee nuestro caso de estudio para ver cómo una plataforma similar mejoró la relevancia de búsqueda en un 40% y redujo los tickets de soporte en un 25%.",
+		"readCaseStudy": "Leer caso de estudio",
+		"orMore": "O explora más historias:",
+		"visitBlog": "Visita nuestro blog",
+		"subject": "Cómo equipos como tú usan AACsearch"
+	},
+	"dripDay21": {
+		"greeting": "Hola {name},",
+		"body": "Has estado explorando AACsearch durante tres semanas. ¿Listo para desbloquear todo el potencial? Actualizar te ofrece:",
+		"benefit1": "🚀 Mayores volúmenes de búsqueda y tiempos de respuesta más rápidos",
+		"benefit2": "📊 Analíticas avanzadas e información detallada",
+		"benefit3": "👥 Funciones de colaboración en equipo",
+		"upgrade": "Ver planes y precios",
+		"subject": "Desbloquea más con AACsearch"
+	},
 	"notification": {
 		"openInApp": "Abre esta notificación en la aplicación:",
 		"subject": "Nueva notificación",

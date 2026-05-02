@@ -136,6 +136,7 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 			? {
 					payment_intent_data: {
 						metadata,
+						setup_future_usage: "off_session",
 					},
 					customer_creation: "always",
 				}
@@ -143,6 +144,15 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 					subscription_data: {
 						metadata,
 						trial_period_days: trialPeriodDays,
+						...(automaticTaxEnabled
+							? {
+									default_settings: {
+										card: {
+											request_three_d_secure: "automatic",
+										},
+									},
+								}
+							: {}),
 					},
 				}),
 		...(automaticTaxEnabled
@@ -200,6 +210,34 @@ export const cancelSubscription: CancelSubscription = async (id, options) => {
 	} else {
 		await stripeClient.subscriptions.cancel(id);
 	}
+};
+
+export interface PaymentMethodInfo {
+	id: string;
+	brand: string | null;
+	last4: string | null;
+	expMonth: number | null;
+	expYear: number | null;
+}
+
+export const listPaymentMethods = async (customerId: string): Promise<PaymentMethodInfo[]> => {
+	const stripeClient = getStripeClient();
+	const methods = await stripeClient.paymentMethods.list({
+		customer: customerId,
+		type: "card",
+	});
+	return methods.data.map((pm) => ({
+		id: pm.id,
+		brand: pm.card?.brand ?? null,
+		last4: pm.card?.last4 ?? null,
+		expMonth: pm.card?.exp_month ?? null,
+		expYear: pm.card?.exp_year ?? null,
+	}));
+};
+
+export const detachPaymentMethod = async (paymentMethodId: string): Promise<void> => {
+	const stripeClient = getStripeClient();
+	await stripeClient.paymentMethods.detach(paymentMethodId);
 };
 
 export const upgradeSubscription: UpgradeSubscription = async ({

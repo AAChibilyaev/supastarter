@@ -9,7 +9,6 @@ import {
 	updateSearchIndexVersion,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import * as Sentry from "@sentry/nextjs";
 import {
 	aliasName,
 	reindexCollection,
@@ -18,6 +17,7 @@ import {
 	type CurationRule,
 	type SynonymPair,
 } from "@repo/search";
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

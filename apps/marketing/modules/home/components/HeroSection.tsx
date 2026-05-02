@@ -60,7 +60,7 @@ export function HeroSection() {
 
 				{/* CTA buttons — single row; scroll on narrow widths */}
 				<div className="mt-8 w-full overflow-x-auto">
-					<div className="mx-auto flex w-max items-center justify-center gap-3">
+					<div className="gap-3 mx-auto flex w-max items-center justify-center">
 						<Button
 							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
 							size="lg"
@@ -82,12 +82,12 @@ export function HeroSection() {
 
 				{/* Feature badge row — single line; scroll on narrow widths */}
 				<div className="mt-8 w-full overflow-x-auto">
-					<div className="mx-auto flex w-max items-center gap-2">
+					<div className="gap-2 mx-auto flex w-max items-center">
 						{featureBadges.map(({ icon: Icon, label }) => (
 							<Badge
 								key={label}
 								status="info"
-								className="shrink-0 gap-1.5 whitespace-nowrap px-3 py-1 text-xs font-medium normal-case"
+								className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
 							>
 								<Icon className="size-3" />
 								{label}

@@ -21,7 +21,7 @@ export function CtaFooter() {
 					</h2>
 					<p className="mt-4 text-lg text-muted-foreground">{t("home.cta.subtitle")}</p>
 					<div className="mt-8 w-full overflow-x-auto">
-						<div className="mx-auto flex w-max items-center justify-center gap-4">
+						<div className="gap-4 mx-auto flex w-max items-center justify-center">
 							<Button
 								className={cn(marketingCtaButtonClassName(true), "shrink-0")}
 								size="lg"

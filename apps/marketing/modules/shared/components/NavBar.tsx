@@ -122,12 +122,12 @@ export function NavBar() {
 			<div className="container">
 				<div
 					className={cn(
-						"flex items-center justify-between gap-4 transition-[padding] duration-200",
+						"gap-4 flex items-center justify-between transition-[padding] duration-200",
 						"lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-6",
 						!isTop ? "py-4" : "py-6",
 					)}
 				>
-					<div className="flex min-w-0 shrink-0 items-center justify-start">
+					<div className="min-w-0 flex shrink-0 items-center justify-start">
 						<LocaleLink
 							href="/"
 							className="block hover:no-underline active:no-underline"
@@ -137,7 +137,7 @@ export function NavBar() {
 					</div>
 
 					{/* Desktop: true viewport center — equal 1fr side tracks, auto-width menu */}
-					<div className="hidden justify-self-center lg:block">
+					<div className="lg:block hidden justify-self-center">
 						<NavigationMenu className="max-w-max flex-none">
 							<NavigationMenuList>
 								{navGroups.map((group) => (
@@ -186,7 +186,7 @@ export function NavBar() {
 						</NavigationMenu>
 					</div>
 
-					<div className="flex min-w-0 items-center justify-end gap-3">
+					<div className="min-w-0 gap-3 flex items-center justify-end">
 						<ColorModeToggle />
 						<Suspense>
 							<LocaleSwitch />

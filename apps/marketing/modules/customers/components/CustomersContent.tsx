@@ -99,11 +99,11 @@ export function CustomersContent() {
 						{LOGOS_LABEL}
 					</p>
 					<div className="mt-8 w-full overflow-x-auto">
-						<div className="mx-auto flex w-max items-center gap-x-10">
+						<div className="gap-x-10 mx-auto flex w-max items-center">
 							{COMPANY_NAMES.map((name) => (
 								<span
 									key={name}
-									className="shrink-0 whitespace-nowrap text-lg font-semibold text-muted-foreground/60 select-none"
+									className="text-lg font-semibold shrink-0 whitespace-nowrap text-muted-foreground/60 select-none"
 								>
 									{name}
 								</span>

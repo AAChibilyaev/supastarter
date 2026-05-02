@@ -1,6 +1,6 @@
-import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
+import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import {
 	GaugeIcon,
 	GitBranchIcon,
@@ -66,7 +66,9 @@ export function FeaturesGrid() {
 							)}
 						>
 							<FeatureCardHeaderRow icon={Icon}>
-								<CardTitle className="leading-snug">{t(`home.features.items.${key}.title`)}</CardTitle>
+								<CardTitle className="leading-snug">
+									{t(`home.features.items.${key}.title`)}
+								</CardTitle>
 							</FeatureCardHeaderRow>
 							<CardContent>
 								<CardDescription className="text-sm leading-relaxed">

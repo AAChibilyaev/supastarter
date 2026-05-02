@@ -63,7 +63,7 @@ export function HeroWithCode() {
 					</p>
 
 					{/* CTA buttons — single row; scroll on narrow widths */}
-					<div className="mt-8 flex min-w-0 items-center gap-3 overflow-x-auto">
+					<div className="mt-8 min-w-0 gap-3 flex items-center overflow-x-auto">
 						<Button
 							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
 							size="lg"
@@ -83,12 +83,12 @@ export function HeroWithCode() {
 					</div>
 
 					{/* Feature badge row — single line; scroll on narrow widths */}
-					<div className="mt-6 flex min-w-0 items-center gap-2 overflow-x-auto">
+					<div className="mt-6 min-w-0 gap-2 flex items-center overflow-x-auto">
 						{featureBadges.map(({ icon: Icon, label }) => (
 							<Badge
 								key={label}
 								status="info"
-								className="shrink-0 gap-1.5 whitespace-nowrap px-3 py-1 text-xs font-medium normal-case"
+								className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
 							>
 								<Icon className="size-3" />
 								{label}

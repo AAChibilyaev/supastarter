@@ -63,7 +63,7 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 				<div className="max-w-2xl mx-auto text-center">
 					<h1 className="font-bold text-4xl">{title}</h1>
 
-					<div className="mt-4 flex min-w-0 items-center justify-center gap-4 overflow-x-auto sm:gap-6">
+					<div className="mt-4 min-w-0 gap-4 sm:gap-6 flex items-center justify-center overflow-x-auto">
 						{authorName && (
 							<div className="flex shrink-0 items-center">
 								{authorImage && (
@@ -90,11 +90,11 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 						</div>
 
 						{tags && (
-							<div className="flex shrink-0 items-center gap-2">
+							<div className="gap-2 flex shrink-0 items-center">
 								{tags.map((tag) => (
 									<span
 										key={tag}
-										className="shrink-0 whitespace-nowrap font-semibold text-xs tracking-wider text-primary uppercase"
+										className="font-semibold text-xs tracking-wider shrink-0 whitespace-nowrap text-primary uppercase"
 									>
 										#{tag}
 									</span>

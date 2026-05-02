@@ -1,0 +1,478 @@
+---
+title: "Cómo añadir búsqueda instantánea a una app Next.js (guía completa)"
+date: 2026-05-03
+image: https://picsum.photos/id/9/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Añadir búsqueda a una app Next.js con App Router toma unos 30 minutos con el stack correcto. Esta guía cubre la configuración completa — desde la indexación de documentos hasta una UI de búsqueda lista para producción con navegación por teclado, tolerancia a errores tipográficos y resultados instantáneos.
+tags: [nextjs, tutorial, búsqueda, desarrollador, react]
+published: true
+---
+
+La búsqueda es una de esas funciones que parece simple hasta que la implementas. Una implementación naive (filtrar un array, consultar una base de datos con LIKE) funciona bien con 100 elementos. Con 10.000 elementos — o con usuarios escribiendo rápido y esperando resultados instantáneos — falla de inmediato.
+
+Esta guía cubre cómo añadir búsqueda instantánea de calidad productiva a una aplicación Next.js usando AACSearch (búsqueda hospedada respaldada por Typesense). La configuración completa toma unos 30 minutos.
+
+## Qué vamos a construir
+
+- Un índice de búsqueda para tu contenido (productos, artículos, usuarios — cualquier dato estructurado)
+- Una ruta del lado del servidor para hacer proxy de solicitudes de búsqueda de forma segura
+- Una UI de búsqueda del lado del cliente con resultados instantáneos, navegación por teclado y tolerancia a errores tipográficos
+- Seguimiento de analíticas (consultas sin resultados, clics en resultados)
+
+## Requisitos previos
+
+- Next.js 14+ con App Router
+- TypeScript
+- Una cuenta de AACSearch (el nivel gratuito es suficiente)
+
+## Paso 1: Crear un índice de búsqueda
+
+En el dashboard de AACSearch, crea un nuevo índice. Para un blog o sitio de documentación:
+
+```json
+{
+  "name": "articles",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "content", "type": "string" },
+    { "name": "excerpt", "type": "string" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "tags", "type": "string[]", "facet": true },
+    { "name": "published_at", "type": "int64" }
+  ],
+  "default_sorting_field": "published_at"
+}
+```
+
+Para un catálogo de productos de e-commerce:
+
+```json
+{
+  "name": "products",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "float" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "in_stock", "type": "bool", "facet": true }
+  ],
+  "default_sorting_field": "price"
+}
+```
+
+## Paso 2: Indexar tu contenido
+
+Instala el cliente Node.js de AACSearch:
+
+```bash
+npm install @aacsearch/client
+# o
+pnpm add @aacsearch/client
+```
+
+Crea un script de indexación en `scripts/index-content.ts`:
+
+```typescript
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+  apiUrl: process.env.AACSEARCH_API_URL!,
+  apiKey: process.env.AACSEARCH_INGEST_KEY!, // clave de escritura, solo servidor
+});
+
+async function indexArticles() {
+  // Reemplaza con tu fuente de datos real
+  const articles = await fetchAllArticles();
+
+  const documents = articles.map((article) => ({
+    id: article.slug,
+    title: article.title,
+    content: article.content,
+    excerpt: article.excerpt,
+    category: article.category,
+    tags: article.tags,
+    published_at: Math.floor(new Date(article.publishedAt).getTime() / 1000),
+  }));
+
+  await client.documents("articles").importBatch(documents, {
+    action: "upsert", // crear o actualizar
+  });
+
+  console.log(`Indexados ${documents.length} artículos`);
+}
+
+indexArticles().catch(console.error);
+```
+
+Ejecútalo:
+
+```bash
+npx tsx scripts/index-content.ts
+```
+
+Para producción, activa la reindexación desde un webhook cuando el contenido cambie (por ejemplo, en eventos de publicación del CMS).
+
+## Paso 3: Crear una ruta de búsqueda del lado del servidor
+
+Nunca expongas tu clave API de búsqueda directamente al navegador. Crea un Route Handler de Next.js que haga proxy de las solicitudes de búsqueda:
+
+```typescript
+// app/api/search/route.ts
+import { NextRequest, NextResponse } from "next/server";
+
+const AACSEARCH_API_URL = process.env.AACSEARCH_API_URL!;
+const AACSEARCH_SEARCH_KEY = process.env.AACSEARCH_SEARCH_KEY!; // clave de solo lectura
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get("q");
+
+  if (!query || query.trim().length === 0) {
+    return NextResponse.json({ hits: [], found: 0 });
+  }
+
+  const response = await fetch(
+    `${AACSEARCH_API_URL}/api/search?` +
+      new URLSearchParams({
+        q: query,
+        query_by: "title,excerpt,content",
+        per_page: "10",
+        highlight_full_fields: "title,excerpt",
+      }),
+    {
+      headers: {
+        Authorization: `Bearer ${AACSEARCH_SEARCH_KEY}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return NextResponse.json({ error: "search_failed" }, { status: 502 });
+  }
+
+  const data = await response.json();
+  return NextResponse.json(data);
+}
+```
+
+Añade las variables de entorno a `.env.local`:
+
+```bash
+AACSEARCH_API_URL=https://api.aacsearch.com
+AACSEARCH_SEARCH_KEY=ss_search_your_read_only_key
+AACSEARCH_INGEST_KEY=ss_connector_your_write_key
+```
+
+## Paso 4: Construir el componente de UI de búsqueda
+
+Crea un componente cliente para la interfaz de búsqueda:
+
+```typescript
+// components/search/SearchModal.tsx
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+
+interface SearchHit {
+  document: {
+    id: string;
+    title: string;
+    excerpt: string;
+    category: string;
+  };
+  highlights: Array<{
+    field: string;
+    snippet: string;
+  }>;
+}
+
+interface SearchResults {
+  hits: SearchHit[];
+  found: number;
+}
+
+export function SearchModal({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResults | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  // Enfocar el input al montar
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  // Búsqueda con debounce
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`
+        );
+        const data = await res.json();
+        setResults(data);
+        setSelectedIndex(0);
+      } finally {
+        setLoading(false);
+      }
+    }, 150); // 150ms debounce — suficientemente rápido para sentirse instantáneo
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Navegación por teclado
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const hits = results?.hits ?? [];
+
+      if (e.key === "Escape") {
+        onClose();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((i) => Math.min(i + 1, hits.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "Enter" && hits[selectedIndex]) {
+        router.push(`/articles/${hits[selectedIndex].document.id}`);
+        onClose();
+      }
+    },
+    [results, selectedIndex, router, onClose]
+  );
+
+  const getHighlight = (hit: SearchHit, field: string) => {
+    const h = hit.highlights.find((h) => h.field === field);
+    return h?.snippet ?? hit.document[field as keyof typeof hit.document];
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-xl bg-background rounded-xl shadow-2xl border border-border overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
+      >
+        {/* Input de búsqueda */}
+        <div className="flex items-center px-4 border-b border-border">
+          <svg
+            className="w-4 h-4 text-muted-foreground shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar..."
+            className="flex-1 px-3 py-4 bg-transparent outline-none text-sm"
+          />
+          {loading && (
+            <div className="w-4 h-4 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
+          )}
+        </div>
+
+        {/* Resultados */}
+        {results && results.hits.length > 0 && (
+          <ul className="max-h-80 overflow-y-auto py-2">
+            {results.hits.map((hit, i) => (
+              <li key={hit.document.id}>
+                <button
+                  className={`w-full text-left px-4 py-3 hover:bg-muted transition-colors ${
+                    i === selectedIndex ? "bg-muted" : ""
+                  }`}
+                  onClick={() => {
+                    router.push(`/articles/${hit.document.id}`);
+                    onClose();
+                  }}
+                >
+                  <p
+                    className="text-sm font-medium"
+                    dangerouslySetInnerHTML={{
+                      __html: getHighlight(hit, "title"),
+                    }}
+                  />
+                  <p
+                    className="text-xs text-muted-foreground mt-0.5 line-clamp-1"
+                    dangerouslySetInnerHTML={{
+                      __html: getHighlight(hit, "excerpt"),
+                    }}
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Sin resultados */}
+        {results && results.hits.length === 0 && query.trim() && (
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            Sin resultados para &ldquo;{query}&rdquo;
+          </div>
+        )}
+
+        {/* Pie de página */}
+        <div className="px-4 py-2 border-t border-border flex gap-3 text-xs text-muted-foreground">
+          <span>↑↓ navegar</span>
+          <span>↵ abrir</span>
+          <span>esc cerrar</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Paso 5: Conectar el disparador
+
+Añade un botón de búsqueda a tu layout que abra el modal:
+
+```typescript
+// components/search/SearchButton.tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { SearchModal } from "./SearchModal";
+
+export function SearchButton() {
+  const [open, setOpen] = useState(false);
+
+  // Atajo Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground border border-border rounded-lg hover:bg-muted transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Buscar
+        <kbd className="ml-auto text-xs opacity-60">⌘K</kbd>
+      </button>
+
+      {open && <SearchModal onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+```
+
+Añádelo a tu layout:
+
+```typescript
+// app/layout.tsx
+import { SearchButton } from "@/components/search/SearchButton";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es">
+      <body>
+        <header className="flex items-center justify-between px-6 py-4 border-b">
+          <a href="/">Mi App</a>
+          <SearchButton />
+        </header>
+        <main>{children}</main>
+      </body>
+    </html>
+  );
+}
+```
+
+## Paso 6: Mantener el índice actualizado
+
+Para contenido que cambia frecuentemente, activa la reindexación cuando el contenido se actualice. Con un webhook:
+
+```typescript
+// app/api/webhooks/content/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+  apiUrl: process.env.AACSEARCH_API_URL!,
+  apiKey: process.env.AACSEARCH_INGEST_KEY!,
+});
+
+export async function POST(request: NextRequest) {
+  const { event, article } = await request.json();
+
+  if (event === "article.published" || event === "article.updated") {
+    await client.documents("articles").upsert({
+      id: article.slug,
+      title: article.title,
+      content: article.content,
+      excerpt: article.excerpt,
+      category: article.category,
+      tags: article.tags,
+      published_at: Math.floor(Date.now() / 1000),
+    });
+  }
+
+  if (event === "article.deleted") {
+    await client.documents("articles").delete(article.slug);
+  }
+
+  return NextResponse.json({ ok: true });
+}
+```
+
+## Qué obtienes
+
+Después de esta configuración:
+
+- **Respuestas de búsqueda < 50ms** independientemente del tamaño del índice
+- **Tolerancia a errores tipográficos** — "javascrpt" encuentra resultados de JavaScript
+- **Coincidencia de prefijos** — los resultados aparecen después de 2–3 caracteres
+- **Navegación por teclado** — totalmente accesible sin ratón
+- **Disparador Cmd+K** — el atajo estándar para usuarios avanzados
+- **Carga del servidor cero** — la búsqueda se ejecuta contra la API de AACSearch, no tu servidor Next.js
+
+El componente del modal de búsqueda tiene ~120 líneas de React puro — sin dependencias de librerías UI adicionales.
+
+## Lista de verificación para producción
+
+- [ ] La clave de búsqueda es de solo lectura (nunca la clave de ingestión)
+- [ ] El Route Handler valida y sanitiza el parámetro `q`
+- [ ] `dangerouslySetInnerHTML` solo renderiza fragmentos destacados de AACSearch (no entrada del usuario)
+- [ ] El debounce es ≥ 150ms (previene el rate limiting)
+- [ ] Las consultas sin resultados se registran en analíticas
+- [ ] El índice se actualiza en eventos de publicación/actualización/eliminación de contenido
+- [ ] Las variables de entorno están configuradas en producción (no solo en `.env.local`)

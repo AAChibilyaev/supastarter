@@ -1,0 +1,478 @@
+---
+title: "Как добавить мгновенный поиск в приложение Next.js (полное руководство)"
+date: 2026-05-03
+image: https://picsum.photos/id/9/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Добавление поиска в приложение Next.js с App Router занимает около 30 минут при правильном стеке. Это руководство охватывает полную настройку — от индексации документов до готового к продакшену UI поиска с навигацией с клавиатуры, допуском опечаток и мгновенными результатами.
+tags: [nextjs, руководство, поиск, разработчик, react]
+published: true
+---
+
+Поиск — одна из тех функций, которая кажется простой, пока вы её не начнёте реализовывать. Наивная реализация (фильтрация массива, запросы к базе данных с LIKE) работает нормально при 100 элементах. При 10 000 элементах — или когда пользователи быстро печатают и ожидают мгновенных результатов — она немедленно даёт сбой.
+
+Это руководство охватывает добавление мгновенного поиска производственного качества в приложение Next.js с использованием AACSearch (хостируемый поиск на базе Typesense). Полная настройка занимает около 30 минут.
+
+## Что мы создаём
+
+- Индекс поиска для вашего контента (товары, статьи, пользователи — любые структурированные данные)
+- Серверный маршрут для безопасного проксирования поисковых запросов
+- Клиентский UI поиска с мгновенными результатами, навигацией с клавиатуры и допуском опечаток
+- Отслеживание аналитики (запросы без результатов, клики по результатам)
+
+## Требования
+
+- Next.js 14+ с App Router
+- TypeScript
+- Аккаунт AACSearch (бесплатный тариф достаточен)
+
+## Шаг 1: Создание индекса поиска
+
+В дашборде AACSearch создайте новый индекс. Для блога или сайта документации:
+
+```json
+{
+  "name": "articles",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "content", "type": "string" },
+    { "name": "excerpt", "type": "string" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "tags", "type": "string[]", "facet": true },
+    { "name": "published_at", "type": "int64" }
+  ],
+  "default_sorting_field": "published_at"
+}
+```
+
+Для каталога продуктов интернет-магазина:
+
+```json
+{
+  "name": "products",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "float" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "in_stock", "type": "bool", "facet": true }
+  ],
+  "default_sorting_field": "price"
+}
+```
+
+## Шаг 2: Индексация контента
+
+Установите клиент AACSearch для Node.js:
+
+```bash
+npm install @aacsearch/client
+# или
+pnpm add @aacsearch/client
+```
+
+Создайте скрипт индексации в `scripts/index-content.ts`:
+
+```typescript
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+  apiUrl: process.env.AACSEARCH_API_URL!,
+  apiKey: process.env.AACSEARCH_INGEST_KEY!, // ключ записи, только на сервере
+});
+
+async function indexArticles() {
+  // Замените на ваш реальный источник данных
+  const articles = await fetchAllArticles();
+
+  const documents = articles.map((article) => ({
+    id: article.slug,
+    title: article.title,
+    content: article.content,
+    excerpt: article.excerpt,
+    category: article.category,
+    tags: article.tags,
+    published_at: Math.floor(new Date(article.publishedAt).getTime() / 1000),
+  }));
+
+  await client.documents("articles").importBatch(documents, {
+    action: "upsert", // создать или обновить
+  });
+
+  console.log(`Проиндексировано ${documents.length} статей`);
+}
+
+indexArticles().catch(console.error);
+```
+
+Запустите его:
+
+```bash
+npx tsx scripts/index-content.ts
+```
+
+В продакшене запускайте переиндексацию через вебхук при изменении контента (например, при событиях публикации в CMS).
+
+## Шаг 3: Создание серверного маршрута поиска
+
+Никогда не выставляйте ключ API поиска напрямую в браузер. Создайте Route Handler Next.js, который проксирует поисковые запросы:
+
+```typescript
+// app/api/search/route.ts
+import { NextRequest, NextResponse } from "next/server";
+
+const AACSEARCH_API_URL = process.env.AACSEARCH_API_URL!;
+const AACSEARCH_SEARCH_KEY = process.env.AACSEARCH_SEARCH_KEY!; // ключ только для чтения
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get("q");
+
+  if (!query || query.trim().length === 0) {
+    return NextResponse.json({ hits: [], found: 0 });
+  }
+
+  const response = await fetch(
+    `${AACSEARCH_API_URL}/api/search?` +
+      new URLSearchParams({
+        q: query,
+        query_by: "title,excerpt,content",
+        per_page: "10",
+        highlight_full_fields: "title,excerpt",
+      }),
+    {
+      headers: {
+        Authorization: `Bearer ${AACSEARCH_SEARCH_KEY}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return NextResponse.json({ error: "search_failed" }, { status: 502 });
+  }
+
+  const data = await response.json();
+  return NextResponse.json(data);
+}
+```
+
+Добавьте переменные окружения в `.env.local`:
+
+```bash
+AACSEARCH_API_URL=https://api.aacsearch.com
+AACSEARCH_SEARCH_KEY=ss_search_your_read_only_key
+AACSEARCH_INGEST_KEY=ss_connector_your_write_key
+```
+
+## Шаг 4: Создание UI-компонента поиска
+
+Создайте клиентский компонент для интерфейса поиска:
+
+```typescript
+// components/search/SearchModal.tsx
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+
+interface SearchHit {
+  document: {
+    id: string;
+    title: string;
+    excerpt: string;
+    category: string;
+  };
+  highlights: Array<{
+    field: string;
+    snippet: string;
+  }>;
+}
+
+interface SearchResults {
+  hits: SearchHit[];
+  found: number;
+}
+
+export function SearchModal({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResults | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  // Фокус на инпут при монтировании
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  // Поиск с debounce
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`
+        );
+        const data = await res.json();
+        setResults(data);
+        setSelectedIndex(0);
+      } finally {
+        setLoading(false);
+      }
+    }, 150); // 150ms debounce — достаточно быстро для ощущения мгновенного поиска
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Навигация с клавиатуры
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const hits = results?.hits ?? [];
+
+      if (e.key === "Escape") {
+        onClose();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((i) => Math.min(i + 1, hits.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === "Enter" && hits[selectedIndex]) {
+        router.push(`/articles/${hits[selectedIndex].document.id}`);
+        onClose();
+      }
+    },
+    [results, selectedIndex, router, onClose]
+  );
+
+  const getHighlight = (hit: SearchHit, field: string) => {
+    const h = hit.highlights.find((h) => h.field === field);
+    return h?.snippet ?? hit.document[field as keyof typeof hit.document];
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-xl bg-background rounded-xl shadow-2xl border border-border overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
+      >
+        {/* Поле ввода поиска */}
+        <div className="flex items-center px-4 border-b border-border">
+          <svg
+            className="w-4 h-4 text-muted-foreground shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Поиск..."
+            className="flex-1 px-3 py-4 bg-transparent outline-none text-sm"
+          />
+          {loading && (
+            <div className="w-4 h-4 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
+          )}
+        </div>
+
+        {/* Результаты */}
+        {results && results.hits.length > 0 && (
+          <ul className="max-h-80 overflow-y-auto py-2">
+            {results.hits.map((hit, i) => (
+              <li key={hit.document.id}>
+                <button
+                  className={`w-full text-left px-4 py-3 hover:bg-muted transition-colors ${
+                    i === selectedIndex ? "bg-muted" : ""
+                  }`}
+                  onClick={() => {
+                    router.push(`/articles/${hit.document.id}`);
+                    onClose();
+                  }}
+                >
+                  <p
+                    className="text-sm font-medium"
+                    dangerouslySetInnerHTML={{
+                      __html: getHighlight(hit, "title"),
+                    }}
+                  />
+                  <p
+                    className="text-xs text-muted-foreground mt-0.5 line-clamp-1"
+                    dangerouslySetInnerHTML={{
+                      __html: getHighlight(hit, "excerpt"),
+                    }}
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Нет результатов */}
+        {results && results.hits.length === 0 && query.trim() && (
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            Нет результатов для &ldquo;{query}&rdquo;
+          </div>
+        )}
+
+        {/* Нижняя панель */}
+        <div className="px-4 py-2 border-t border-border flex gap-3 text-xs text-muted-foreground">
+          <span>↑↓ навигация</span>
+          <span>↵ открыть</span>
+          <span>esc закрыть</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Шаг 5: Подключение триггера
+
+Добавьте кнопку поиска в ваш layout, которая открывает модальное окно:
+
+```typescript
+// components/search/SearchButton.tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { SearchModal } from "./SearchModal";
+
+export function SearchButton() {
+  const [open, setOpen] = useState(false);
+
+  // Горячая клавиша Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground border border-border rounded-lg hover:bg-muted transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Поиск
+        <kbd className="ml-auto text-xs opacity-60">⌘K</kbd>
+      </button>
+
+      {open && <SearchModal onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+```
+
+Добавьте его в ваш layout:
+
+```typescript
+// app/layout.tsx
+import { SearchButton } from "@/components/search/SearchButton";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ru">
+      <body>
+        <header className="flex items-center justify-between px-6 py-4 border-b">
+          <a href="/">Моё приложение</a>
+          <SearchButton />
+        </header>
+        <main>{children}</main>
+      </body>
+    </html>
+  );
+}
+```
+
+## Шаг 6: Поддержание актуальности индекса
+
+Для часто изменяемого контента запускайте переиндексацию при обновлении контента. С вебхуком:
+
+```typescript
+// app/api/webhooks/content/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+  apiUrl: process.env.AACSEARCH_API_URL!,
+  apiKey: process.env.AACSEARCH_INGEST_KEY!,
+});
+
+export async function POST(request: NextRequest) {
+  const { event, article } = await request.json();
+
+  if (event === "article.published" || event === "article.updated") {
+    await client.documents("articles").upsert({
+      id: article.slug,
+      title: article.title,
+      content: article.content,
+      excerpt: article.excerpt,
+      category: article.category,
+      tags: article.tags,
+      published_at: Math.floor(Date.now() / 1000),
+    });
+  }
+
+  if (event === "article.deleted") {
+    await client.documents("articles").delete(article.slug);
+  }
+
+  return NextResponse.json({ ok: true });
+}
+```
+
+## Что вы получаете
+
+После этой настройки:
+
+- **Ответы на поиск < 50 мс** независимо от размера индекса
+- **Допуск опечаток** — "javascrpt" находит результаты по JavaScript
+- **Совпадение по префиксу** — результаты появляются после 2–3 символов
+- **Навигация с клавиатуры** — полная доступность без мыши
+- **Триггер Cmd+K** — стандартное сочетание клавиш для опытных пользователей
+- **Нулевая нагрузка на сервер** — поиск выполняется против API AACSearch, не вашего сервера Next.js
+
+Компонент модального окна поиска составляет ~120 строк чистого React — без дополнительных зависимостей UI-библиотек.
+
+## Чеклист для продакшена
+
+- [ ] Ключ поиска только для чтения (никогда не ключ инgestии)
+- [ ] Route Handler валидирует и санитизирует параметр `q`
+- [ ] `dangerouslySetInnerHTML` рендерит только подсвеченные фрагменты AACSearch (не пользовательский ввод)
+- [ ] Debounce ≥ 150 мс (предотвращает rate limiting)
+- [ ] Запросы без результатов логируются в аналитике
+- [ ] Индекс обновляется при событиях публикации/обновления/удаления контента
+- [ ] Переменные окружения настроены в продакшене (не только в `.env.local`)

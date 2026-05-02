@@ -1,4 +1,6 @@
 import { db, type Prisma } from "@repo/database";
+import { logger } from "@repo/logs";
+import { aliasName, syncSynonymsToTypesense } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -69,6 +71,16 @@ export const updateSynonyms = protectedProcedure
 				} as Prisma.InputJsonValue,
 			},
 		});
+
+		// Sync to Typesense — best-effort, does not block the response
+		const collection = aliasName(input.organizationId, input.slug);
+		syncSynonymsToTypesense(collection, input.synonyms).catch((err) =>
+			logger.error("updateSynonyms: Typesense sync failed", {
+				organizationId: input.organizationId,
+				slug: input.slug,
+				err,
+			}),
+		);
 
 		return input.synonyms;
 	});

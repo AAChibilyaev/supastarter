@@ -9,7 +9,14 @@ import {
 	updateSearchIndexVersion,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import { reindexCollection } from "@repo/search";
+import {
+	aliasName,
+	reindexCollection,
+	syncCurationsToTypesense,
+	syncSynonymsToTypesense,
+	type CurationRule,
+	type SynonymPair,
+} from "@repo/search";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -75,6 +82,38 @@ export async function POST(request: Request) {
 				failed: result.failedDocuments,
 			});
 
+			// Re-apply synonyms and curations to the newly indexed collection.
+			// The alias now points to the new physical collection, so syncing via
+			// the alias propagates settings to it.
+			const collection = aliasName(pendingJob.organizationId, pendingJob.slug);
+			const schema =
+				typeof index.schema === "object" && index.schema !== null
+					? (index.schema as Record<string, unknown>)
+					: {};
+			const synonyms = Array.isArray(schema._synonyms)
+				? (schema._synonyms as SynonymPair[])
+				: [];
+			const curations = Array.isArray(schema._curations)
+				? (schema._curations as CurationRule[])
+				: [];
+
+			await Promise.all([
+				syncSynonymsToTypesense(collection, synonyms).catch((err) =>
+					logger.error("reindex-runner: synonym re-sync failed", {
+						jobId: pendingJob.id,
+						slug: pendingJob.slug,
+						err,
+					}),
+				),
+				syncCurationsToTypesense(collection, curations).catch((err) =>
+					logger.error("reindex-runner: curation re-sync failed", {
+						jobId: pendingJob.id,
+						slug: pendingJob.slug,
+						err,
+					}),
+				),
+			]);
+
 			logger.info("Reindex job completed", {
 				jobId: pendingJob.id,
 				organizationId: pendingJob.organizationId,
@@ -82,6 +121,8 @@ export async function POST(request: Request) {
 				newVersion: result.newVersion,
 				copied: result.copiedDocuments,
 				failed: result.failedDocuments,
+				synonymsRestored: synonyms.length,
+				curationsRestored: curations.length,
 			});
 			processed++;
 		} catch (error) {

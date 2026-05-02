@@ -1,4 +1,6 @@
 import { db, type Prisma } from "@repo/database";
+import { logger } from "@repo/logs";
+import { aliasName, syncCurationsToTypesense } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -75,6 +77,16 @@ export const updateCurations = protectedProcedure
 				} as Prisma.InputJsonValue,
 			},
 		});
+
+		// Sync to Typesense — best-effort, does not block the response
+		const collection = aliasName(input.organizationId, input.slug);
+		syncCurationsToTypesense(collection, input.curations).catch((err) =>
+			logger.error("updateCurations: Typesense sync failed", {
+				organizationId: input.organizationId,
+				slug: input.slug,
+				err,
+			}),
+		);
 
 		return input.curations;
 	});

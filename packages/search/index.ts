@@ -50,3 +50,9 @@ export {
 	type EmbeddingModelName,
 	type EmbeddingResult,
 } from "./lib/embeddings";
+export {
+	syncCurationsToTypesense,
+	syncSynonymsToTypesense,
+	type CurationRule,
+	type SynonymPair,
+} from "./lib/synonyms-sync";

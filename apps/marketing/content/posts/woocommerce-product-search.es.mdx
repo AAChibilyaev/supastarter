@@ -1,0 +1,115 @@
+---
+title: "Búsqueda de productos en WooCommerce: por qué la opción predeterminada falla y cómo solucionarlo"
+date: 2026-05-03
+image: https://picsum.photos/id/7/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: La búsqueda integrada de WooCommerce es una consulta MySQL LIKE contra títulos de publicaciones. Pierde sinónimos, errores tipográficos y coincidencias parciales, lo que cuesta ventas reales. Aquí te mostramos cómo reemplazarla con búsqueda instantánea y tolerante a errores en menos de una hora.
+tags: [woocommerce, ecommerce, tutorial, búsqueda, integración]
+published: true
+---
+
+WooCommerce impulsa aproximadamente el 36% de todas las tiendas online. Su búsqueda integrada es una de las principales razones por las que esas tiendas pierden ventas.
+
+La búsqueda predeterminada de WooCommerce es una consulta MySQL `LIKE '%query%'` contra `post_title`. Eso significa:
+
+- "zapatillas de correr" no devuelve nada si el producto se llama "Zapatillas para jogging"
+- "Nkie" (error tipográfico de Nike) devuelve cero resultados
+- "jersey rojo de lana" devuelve cada producto que tenga "rojo", "lana" o "jersey" en cualquier parte — ordenado por fecha de publicación, no por relevancia
+- Sin autocompletado, sin resultados instantáneos, sin filtros que se actualicen en tiempo real
+
+Para tiendas con menos de 50 productos, esto es tolerable. Para cualquier cosa más grande, es una fuga de ingresos.
+
+## Lo que estás perdiendo
+
+Los compradores que usan la búsqueda convierten 2–3× más que los que navegan. Cuando tu búsqueda devuelve cero resultados para una consulta razonable, la mayoría de los compradores se van — no refinan su búsqueda.
+
+**Patrones de fallo comunes en la búsqueda de WooCommerce:**
+
+| El cliente escribe | WooCommerce devuelve | Debería devolver |
+| --- | --- | --- |
+| "sneakers" | Nada (productos etiquetados "zapatillas") | Nike Air Max, Adidas Ultraboost... |
+| "chaqueta mujer" (error tipográfico) | Nada | Chaquetas de mujer |
+| "azul" | Cada producto que menciona azul | Productos azules, ordenados por popularidad |
+| Escribe "za..." | Nada (sin autocompletado) | Sugerencias instantáneas |
+
+## La solución: búsqueda hospedada con conector WooCommerce
+
+La solución correcta es un servicio de búsqueda dedicado con una integración WooCommerce que sincroniza tu catálogo de productos automáticamente. AACSearch proporciona un conector WooCommerce que gestiona la sincronización automáticamente.
+
+## Paso 1: Instalar el plugin
+
+En el panel de administración de WordPress:
+
+1. Ve a **Plugins → Añadir nuevo**
+2. Busca "AACSearch"
+3. Instala y activa
+
+## Paso 2: Conectar tu tienda
+
+En la configuración del plugin:
+
+1. Ingresa tu **URL API de AACSearch**
+2. Pega tu **Clave API del conector** (comienza con `ss_connector_`)
+3. Haz clic en **Probar conexión**
+
+## Paso 3: Ejecutar la sincronización inicial
+
+Haz clic en **Sincronizar todos los productos**. Para una tienda con 10.000 productos, esto suele tardar 2–5 minutos.
+
+El conector mapea los campos de WooCommerce al índice de búsqueda:
+
+| Campo WooCommerce | Campo AACSearch | Buscable | Filtrable |
+| --- | --- | --- | --- |
+| Nombre del producto | title | ✅ | ❌ |
+| Descripción | description | ✅ | ❌ |
+| Precio | price | ❌ | ✅ |
+| Categorías | categories | ✅ | ✅ |
+| Atributos | attributes | ✅ | ✅ |
+| Estado de stock | in_stock | ❌ | ✅ |
+
+## Paso 4: Activar el widget de búsqueda
+
+En la configuración del plugin, activa **Reemplazar búsqueda de WooCommerce**. Esto reemplaza el widget de búsqueda predeterminado de WordPress con el widget de AACSearch:
+
+- Resultados que aparecen mientras escribes (< 50ms de tiempo de respuesta)
+- Tolerancia a errores tipográficos (maneja 1–2 errores de caracteres automáticamente)
+- Texto coincidente resaltado en los resultados
+- Miniaturas de productos y precios en la lista de resultados
+- Barra lateral de filtros que se actualiza en tiempo real
+
+## Paso 5: Configurar sinónimos (opcional pero valioso)
+
+En tu panel de AACSearch, ve a **Relevancia → Sinónimos**:
+
+```
+sneakers → zapatillas, tenis, zapatos deportivos
+jeans → vaqueros, pantalones, denim
+chaqueta → abrigo, anorak, prendas exteriores
+```
+
+Este paso solo típicamente recupera el 15–25% de las búsquedas que antes devolvían cero resultados.
+
+## Qué cambia después del cambio
+
+**Antes:**
+- Consulta MySQL LIKE, ~200–500ms
+- Sin tolerancia a errores tipográficos
+- Sin autocompletado
+- Tasa de cero resultados: típicamente 20–35%
+
+**Después:**
+- Búsqueda Typesense, < 50ms
+- Maneja 1–2 errores de caracteres automáticamente
+- Sugerencias instantáneas mientras escribes
+- Tasa de cero resultados: típicamente 3–8%
+
+## Sincronización delta
+
+El conector escucha los eventos de productos de WooCommerce y sincroniza los cambios automáticamente — nuevos productos, cambios de precio y de stock se actualizan en el índice de búsqueda en segundos.
+
+## Precios
+
+AACSearch incluye un nivel gratuito: 10.000 unidades de búsqueda al mes. Los planes de pago empiezan en $29/mes para 1 millón de unidades de búsqueda. Una tienda con 5.000 visitantes mensuales usa típicamente 30.000–80.000 unidades al mes.
+
+La configuración completa — instalación del plugin, sincronización inicial, configuración del widget y primer grupo de sinónimos — tarda unos 45 minutos.

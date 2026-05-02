@@ -1,0 +1,157 @@
+---
+title: "WooCommerce Product Search: Why the Default Fails and How to Fix It"
+date: 2026-05-03
+image: https://picsum.photos/id/7/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: WooCommerce's built-in search is a MySQL LIKE query against post titles. It misses synonyms, typos, and partial matches — costing you real sales. Here's how to replace it with instant, typo-tolerant search in under an hour.
+tags: [woocommerce, ecommerce, tutorial, search, integration]
+published: true
+---
+
+WooCommerce powers roughly 36% of all online stores. Its built-in search is one of the biggest reasons those stores lose sales.
+
+The default WooCommerce search is a MySQL `LIKE '%query%'` against `post_title`. That means:
+
+- "running shoes" returns nothing if the product is called "Jogging Trainers"
+- "nkie" (typo for Nike) returns zero results
+- Searching "red wool sweater" returns every product that has "red", "wool", or "sweater" anywhere in the title or content — ranked by publication date, not relevance
+- No autocomplete, no instant results, no filters that update in real time
+
+For stores with fewer than 50 products, this is tolerable. For anything larger, it's a revenue leak.
+
+## What You're Losing
+
+Research consistently shows that shoppers who use search convert 2–3× higher than those who browse. They know what they want — they just need to find it.
+
+When your search returns zero results for a reasonable query, most shoppers don't refine their search. They leave.
+
+**Common failure patterns in WooCommerce search:**
+
+| Customer types | WooCommerce returns | Should return |
+| --- | --- | --- |
+| "sneakers" | Nothing (products tagged "trainers") | Nike Air Max, Adidas Ultraboost... |
+| "womans jacket" (typo) | Nothing | Women's jackets |
+| "blue" | Every product mentioning blue anywhere | Blue-colored products, ranked by popularity |
+| Starts typing "run..." | Nothing (no autocomplete) | Instant suggestions as they type |
+
+## The Fix: Hosted Search with a WooCommerce Connector
+
+The right solution is a dedicated search service with a WooCommerce integration that syncs your product catalog automatically. You get typo-tolerance, synonym support, faceted filters, and instant results — without rewriting your store.
+
+AACSearch provides a WooCommerce connector that handles the sync automatically. Here's how it works.
+
+## Step 1: Install the AACSearch Plugin
+
+Install the AACSearch plugin from your WordPress admin panel:
+
+1. Go to **Plugins → Add New**
+2. Search for "AACSearch"
+3. Install and activate
+
+Alternatively, upload the plugin zip from the AACSearch dashboard under **Connectors → WooCommerce → Download Plugin**.
+
+## Step 2: Connect Your Store
+
+In the plugin settings:
+
+1. Enter your **AACSearch API URL** (from your dashboard)
+2. Paste your **Connector API Key** (starts with `ss_connector_`)
+3. Click **Test Connection** — you should see a green checkmark
+
+The connector creates a search index named after your store and configures the schema automatically based on your WooCommerce product attributes.
+
+## Step 3: Run the Initial Sync
+
+In the plugin settings, click **Sync All Products**. This exports your entire WooCommerce catalog to AACSearch. For a store with 10,000 products, this typically takes 2–5 minutes.
+
+The connector maps WooCommerce fields to the search index:
+
+| WooCommerce field | AACSearch field | Searchable | Facetable |
+| --- | --- | --- | --- |
+| Product name | title | ✅ | ❌ |
+| Description | description | ✅ | ❌ |
+| Short description | short_description | ✅ | ❌ |
+| SKU | sku | ✅ | ❌ |
+| Price | price | ❌ | ✅ |
+| Categories | categories | ✅ | ✅ |
+| Tags | tags | ✅ | ✅ |
+| Attributes | attributes | ✅ | ✅ |
+| Stock status | in_stock | ❌ | ✅ |
+| Rating | rating | ❌ | ✅ |
+
+## Step 4: Enable the Search Widget
+
+In the plugin settings, enable **Replace WooCommerce Search**. This replaces the default WordPress search widget with the AACSearch widget — a modal-based instant search interface with:
+
+- Results appearing as you type (< 50ms response time)
+- Typo tolerance (handles 1–2 character mistakes automatically)
+- Highlighted matching text in results
+- Product thumbnails and prices in the result list
+- Filter sidebar that updates in real time
+
+The widget activates on the standard WordPress search shortcode, the WooCommerce search widget, and the search bar in most themes — no theme modifications required.
+
+## Step 5: Configure Synonyms (Optional but Valuable)
+
+In your AACSearch dashboard, go to **Relevance → Synonyms**. Add synonym groups that match how your customers actually talk about your products:
+
+```
+sneakers → trainers, running shoes, athletic shoes
+jeans → denim, denims, pants
+jacket → coat, parka, outerwear
+```
+
+This step alone typically recovers 15–25% of searches that were previously returning zero results.
+
+## What Changes After the Switch
+
+**Before:**
+- MySQL LIKE query, ~200–500ms response
+- No typo tolerance
+- No autocomplete
+- Relevance = post date
+- Zero-result rate: typically 20–35% for larger catalogs
+
+**After:**
+- Typesense search, < 50ms response
+- Handles 1–2 character typos automatically
+- Instant suggestions as you type
+- Relevance = configurable (popularity, price, rating, text match score)
+- Zero-result rate: typically 3–8%
+
+## Delta Sync: Keeping the Index Current
+
+The connector listens to WooCommerce product events and syncs changes automatically:
+
+- **Product published** → added to the index
+- **Product updated** → updated in the index
+- **Product deleted** → removed from the index
+- **Price change** → updated within seconds
+- **Stock status change** → updated immediately (so out-of-stock products can be filtered or deprioritized)
+
+No manual sync required after the initial setup. Your search index stays current as you manage your store.
+
+## Performance Impact
+
+AACSearch search runs entirely outside WordPress — no PHP execution, no MySQL queries, no server load from search requests. This means:
+
+1. **Your WooCommerce server load doesn't increase with search traffic**
+2. **Search doesn't slow down during product imports or backups**
+3. **Response time is consistent regardless of catalog size** — 50,000 products searches as fast as 500
+
+For stores using WooCommerce on shared hosting, this is particularly meaningful. MySQL queries against large product tables frequently timeout or slow down the entire store.
+
+## Pricing
+
+AACSearch includes a free tier: 10,000 search units per month. That's roughly 10,000 product searches — enough for a small store or to verify everything works before committing.
+
+Paid plans start at $29/month for 1 million search units. A store doing 5,000 monthly visitors typically uses 30,000–80,000 search units per month, well within the $29 plan.
+
+By comparison, the most popular WooCommerce search plugins with comparable features typically cost $79–199/year, don't include the hosted infrastructure, and require you to manage the search engine yourself.
+
+## Getting Started
+
+The full setup — plugin install, initial sync, widget configuration, and first synonym group — takes about 45 minutes. The free tier covers the entire setup process.
+
+If you're running WooCommerce with more than 500 products and haven't replaced the default search, the zero-result rate alone is costing you sales today.

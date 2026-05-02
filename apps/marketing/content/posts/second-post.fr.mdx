@@ -1,29 +1,144 @@
 ---
-title: Superbe deuxième article
-date: 2023-03-01
+title: "Optimisation de la pertinence en recherche : Synonymes, curations et mots vides qui boostent vraiment le chiffre d'affaires"
+date: 2026-02-19
 image: https://picsum.photos/id/436/1200/800
-authorName: Jon Doe
+authorName: Équipe AACsearch
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: C'est mon premier article. Je suis tellement enthousiaste !
-tags: [first, post]
+excerpt: "Un guide pratique pour améliorer la pertinence de la recherche en e-commerce. Apprenez comment fonctionnent les synonymes, les curations et les mots vides — et comment mesurer leur impact sur le taux de conversion."
+tags: [e-commerce, pertinence, synonymes, curations, recherche]
 published: true
 ---
 
-## Bonjour le monde
+## Le problème de pertinence qui vous coûte des ventes
 
-C'est mon premier article. Je suis tellement enthousiaste ! Cet article de blog a besoin de quelques lignes de texte supplémentaires pour remplir la page, donc je vais juste écrire des choses aléatoires ici. Je vais écrire sur mes choses préférées, comme :
+Votre produit le plus vendu apparaît en page 3. Un client cherche "baskets" et obtient zéro résultat parce que votre catalogue utilise "tennis". Quelqu'un tape "pas cher" et votre moteur de recherche le traite comme un mot-clé au lieu de l'ignorer.
 
-### Qu'est-ce qui suit ?
+Ce sont des problèmes de pertinence. Ils sont invisibles dans vos analyses jusqu'à ce que quelqu'un corrèle les recherches sans résultats avec l'abandon de panier — et quand c'est le cas, les chiffres sont toujours pires que prévu.
 
-Je vais écrire beaucoup d'autres articles. Je vais écrire sur mes choses préférées, comme :
+La bonne nouvelle : les problèmes de pertinence sont solubles sans équipe de data science. Trois outils règlent 80% d'entre eux : les **synonymes**, les **curations** et les **mots vides**.
 
-- Les chats
-- Les chiens
-- La pizza
+## Synonymes : Quand les clients s'expriment différemment
 
-Vous pouvez même ajouter de beaux liens ici :
+Une règle de synonymes indique au moteur de recherche de traiter deux termes ou plus comme équivalents. Il en existe deux types :
 
-- [Mon chat préféré](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Mon chien préféré](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Ma pizza préférée](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Accueil](/)
+### Synonymes équivalents (bidirectionnels)
+
+```json
+{
+	"synonyms": ["baskets", "tennis", "sneakers", "chaussures de sport"]
+}
+```
+
+Lorsqu'un client cherche "sneakers", les résultats pour "baskets" et "tennis" apparaissent aux côtés des correspondances littérales pour "sneakers". L'inverse est également vrai.
+
+**À utiliser pour :** les différences de vocabulaire régionales, les variations de noms de marque, le jargon technique face aux termes grand public.
+
+### Synonymes unidirectionnels
+
+```json
+{
+	"root": "ordinateur portable",
+	"synonyms": ["laptop", "PC portable"]
+}
+```
+
+Rechercher "ordinateur portable" renvoie des résultats correspondant à "laptop", mais rechercher "laptop" ne renvoie PAS de résultats pour "ordinateur portable". C'est utile lorsqu'un terme fait autorité et que les autres sont des cas particuliers.
+
+**À utiliser pour :** les termes techniques qui correspondent à une catégorie de produit canonique, les anciens noms de produits qui redirigent vers les actuels.
+
+### Mesurer l'impact des synonymes
+
+Dans AACsearch Analytics, filtrez par les termes de requête auxquels vous avez ajouté des synonymes. Comparez le taux de résultats nuls avant et après le déploiement. Un ensemble de synonymes bien placé réduit généralement les recherches sans résultats de 15 à 40% pour les termes ciblés.
+
+## Curations : Intervention manuelle quand les algorithmes ne suffisent pas
+
+Les curations vous permettent d'épingler des produits spécifiques en haut des résultats de recherche, ou d'exclure des produits qui ne devraient pas apparaître pour une requête donnée.
+
+### Épingler un produit
+
+Votre soldes d'été a un article vedette. Vous voulez qu'il apparaisse en premier pour des recherches comme "sandales", "chaussures d'été" et "plage" :
+
+```json
+{
+	"id": "curation-soldes-ete",
+	"query": "sandales",
+	"includedHits": [{ "id": "produit-1234", "position": 1 }]
+}
+```
+
+Le produit 1234 apparaît en position 1 quelle que soit sa note de pertinence. Tout le reste se classe normalement en dessous.
+
+### Exclure des produits
+
+Un produit est épuisé mais vous ne l'avez pas encore retiré de l'index. Ou il est abandonné et vous ne voulez pas qu'il apparaisse pour certaines requêtes :
+
+```json
+{
+	"query": "chaussures de running",
+	"excludedHits": ["produit-5678", "produit-9012"]
+}
+```
+
+### Quand utiliser les curations
+
+Les curations sont un scalpel, pas un pinceau. Réservez-les pour :
+
+- **Promotions saisonnières** — épinglez les articles en solde pour les requêtes pertinentes durant une campagne
+- **Lancements de nouveaux produits** — assurez la visibilité des articles qui n'ont pas encore de signaux de notation
+- **Retraits de sécurité ou exclusions légales** — supprimez des produits spécifiques pour certaines recherches
+
+N'utilisez pas les curations pour compenser une mauvaise indexation. Si 50 produits nécessitent un épinglage manuel, le problème sous-jacent est probablement le schéma ou la pondération — corrigez cela à la place.
+
+## Mots vides : Ignorer les mots qui ajoutent du bruit
+
+Les mots vides sont des termes que le moteur de recherche ignore complètement. Les mots vides courants en français — "le", "la", "un", "et" — sont généralement gérés automatiquement. Les sites e-commerce ont besoin de mots vides personnalisés pour leur contexte spécifique.
+
+### Mots vides courants en e-commerce
+
+```json
+{
+	"stopwords": ["pas cher", "acheter", "acquérir", "trouver", "meilleur", "bon", "achat"]
+}
+```
+
+Lorsqu'un client recherche "acheter des chaussures de running pas chères", le moteur de recherche traite "chaussures de running" — ce qu'il veut réellement. Sans mots vides, "acheter" et "pas cher" deviennent des mots-clés qui peuvent diluer la notation de pertinence.
+
+### Ce qu'il NE FAUT PAS ajouter comme mot vide
+
+Soyez prudent avec les termes liés aux prix. "Pas cher" est un candidat comme mot vide parce que c'est une intention, pas une donnée produit. "Promo" est plus délicat — certains de vos produits pourraient littéralement avoir "promo" dans leur nom ou description. Testez avant de déployer.
+
+### L'anti-pattern des mots vides
+
+Certaines équipes ajoutent des noms de marques concurrentes comme mots vides pour éviter d'afficher leurs produits quand les clients recherchent un concurrent. C'est une erreur — les clients qui recherchent un concurrent sont une opportunité de conversion, pas un problème. Montrez-leur votre meilleure alternative à la place.
+
+## Tout assembler : Un audit de pertinence
+
+Effectuez cet audit trimestriellement :
+
+1. **Exportez vos 100 principales requêtes avec zéro résultat.** Ce sont vos candidats prioritaires pour les synonymes.
+2. **Vérifiez vos 100 principales requêtes avec un CTR inférieur à 5%.** Un CTR bas sur des termes à fort volume signifie que les mauvais produits se classent en premier — candidats à la curation.
+3. **Examinez les requêtes où les clients ajoutent "pas cher", "acheter" ou "trouver".** Ajoutez-les à votre liste de mots vides.
+4. **Testez les ensembles de synonymes en A/B** en les déployant d'abord sur une région ou un segment de trafic.
+
+## Surveiller la pertinence dans AACsearch
+
+AACsearch Analytics affiche :
+
+| Métrique                           | Ce qu'elle vous dit                                         |
+| ---------------------------------- | ----------------------------------------------------------- |
+| Taux de résultats nuls             | Quelles requêtes n'ont pas de correspondances — cibles pour synonymes |
+| CTR par requête                    | Quels résultats les clients ne cliquent pas — candidats à la curation |
+| Requêtes principales               | Où concentrer votre investissement en synonymes et curations |
+| Distribution des positions         | Si les produits épinglés apparaissent réellement            |
+
+Vérifiez ces tableaux de bord hebdomadairement lors d'un cycle actif d'amélioration de la pertinence. Une fois les choses stabilisées, une fois par mois suffit.
+
+## Commencez petit, mesurez tout
+
+Le piège dans l'optimisation de la pertinence est d'en faire trop d'un coup et de ne pas savoir ce qui a fait bouger les chiffres. Ajoutez un ensemble de synonymes, mesurez pendant une semaine, puis ajoutez-en un autre. Les curations ont un effet immédiat — vous verrez le CTR changer dans les 24 heures suivant le déploiement.
+
+La pertinence n'est jamais "terminée". Les nouveaux produits introduisent un nouveau vocabulaire. Les tendances saisonnières changent ce que les clients recherchent. Un bilan trimestriel vous permet de rester en avance sur la dérive.
+
+---
+
+Vous voulez gérer les synonymes et les curations depuis un tableau de bord sans toucher aux fichiers de configuration ? [Essayez AACsearch gratuitement →](https://app.aacsearch.com/signup)

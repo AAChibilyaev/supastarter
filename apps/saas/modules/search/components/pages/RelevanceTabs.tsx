@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { EmptyState } from "../cards/EmptyState";
 import { CurationsPanel } from "../panels/CurationsPanel";
+import { StopwordsPanel } from "../panels/StopwordsPanel";
 import { SynonymsPanel } from "../panels/SynonymsPanel";
 
 interface RelevanceTabsProps {
@@ -24,6 +25,7 @@ export function RelevanceTabs({ organizationId, slug }: RelevanceTabsProps) {
 			<TabsList>
 				<TabsTrigger value="synonyms">{t("search.synonyms.tab")}</TabsTrigger>
 				<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
+				<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
 			</TabsList>
 
 			<TabsContent value="synonyms">
@@ -32,6 +34,10 @@ export function RelevanceTabs({ organizationId, slug }: RelevanceTabsProps) {
 
 			<TabsContent value="curations">
 				<CurationsPanel organizationId={organizationId} slug={slug} />
+			</TabsContent>
+
+			<TabsContent value="stopwords">
+				<StopwordsPanel organizationId={organizationId} slug={slug} />
 			</TabsContent>
 		</Tabs>
 	);

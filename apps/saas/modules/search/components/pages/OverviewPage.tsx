@@ -18,12 +18,14 @@ import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
+	ActivityIcon,
 	AlertTriangleIcon,
-	SearchIcon,
+	HelpCircleIcon,
 	KeyIcon,
+	RefreshCwIcon,
+	SearchIcon,
 	WifiIcon,
 	WifiOffIcon,
-	HelpCircleIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -95,6 +97,13 @@ export function OverviewPage() {
 		enabled: Boolean(orgId),
 	});
 
+	const { data: recentActivityData } = useQuery({
+		...orpc.search.recentActivity.queryOptions({
+			input: { organizationId: orgId ?? "", limit: 15 },
+		}),
+		enabled: Boolean(orgId),
+	});
+
 	if (!orgId || !slug) return null;
 
 	const isLoading = planLoading || usageLoading;
@@ -149,50 +158,24 @@ export function OverviewPage() {
 		return currentSearchCount > 0 ? 0.12 : undefined;
 	}, [usageData]);
 
-	// ── Activity feed ───────────────────────────────────────────────
+	// ── Activity feed (from recentActivity procedure) ───────────────
+	const kindIcon: Record<string, React.ReactNode> = {
+		index_created: <SearchIcon className="size-4 text-primary" />,
+		api_key_created: <KeyIcon className="size-4 text-muted-foreground" />,
+		usage_event: <ActivityIcon className="size-4 text-blue-500" />,
+		sync_job: <RefreshCwIcon className="size-4 text-muted-foreground" />,
+	};
+
 	const activityItems = useMemo(() => {
-		const items: Array<{
-			id: string;
-			icon: React.ReactNode;
-			label: string;
-			time: string;
-		}> = [];
-
-		// Index creation events
-		if (indexes) {
-			for (const idx of indexes.slice(0, 5)) {
-				items.push({
-					id: `index-${idx.id}`,
-					icon: <SearchIcon className="size-4 text-primary" />,
-					label: t("overview.activity.indexCreated", {
-						name: idx.displayName,
-					}),
-					time: new Date(idx.createdAt).toLocaleDateString(),
-				});
-			}
-		}
-
-		// Api key events — derived from indexes apiKeysCount
-		if (indexes) {
-			for (const idx of indexes) {
-				if (idx.apiKeysCount > 0) {
-					items.push({
-						id: `keys-${idx.id}`,
-						icon: <KeyIcon className="size-4 text-muted-foreground" />,
-						label: t("overview.activity.keyRevoked", {
-							count: idx.apiKeysCount,
-							name: idx.displayName,
-						}),
-						time: new Date(idx.updatedAt).toLocaleDateString(),
-					});
-				}
-			}
-		}
-
-		// Sort by time descending
-		items.sort((a, b) => b.time.localeCompare(a.time));
-		return items.slice(0, 10);
-	}, [indexes, t]);
+		if (!recentActivityData?.activities.length) return [];
+		return recentActivityData.activities.map((a) => ({
+			id: a.id,
+			icon: kindIcon[a.kind] ?? <ActivityIcon className="size-4 text-muted-foreground" />,
+			label: a.label,
+			time: new Date(a.createdAt).toLocaleDateString(),
+		}));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [recentActivityData]);
 
 	// ── Connector status ────────────────────────────────────────────
 	const connectorOnline = indexes?.some((idx) => {

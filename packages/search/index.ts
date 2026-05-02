@@ -43,6 +43,7 @@ export {
 } from "./lib/maintenance";
 export { verifySearchApiKey, type VerifiedSearchKey } from "./lib/verify";
 export { reindexCollection, type ReindexInput, type ReindexResult } from "./lib/reindex";
+export { deltaSync, type DeltaSyncInput, type DeltaSyncResult } from "./lib/delta-sync";
 export {
 	exportDocuments,
 	exportDocumentsRaw,

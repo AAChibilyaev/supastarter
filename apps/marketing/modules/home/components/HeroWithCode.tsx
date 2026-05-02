@@ -1,6 +1,7 @@
 "use client";
 
 import { config } from "@config";
+import { cn } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -61,10 +62,10 @@ export function HeroWithCode() {
 						{t("home.hero.subtitle")}
 					</p>
 
-					{/* CTA buttons */}
-					<div className="mt-8 gap-3 flex flex-wrap items-center">
+					{/* CTA buttons — single row; scroll on narrow widths */}
+					<div className="mt-8 flex min-w-0 items-center gap-3 overflow-x-auto">
 						<Button
-							className={marketingCtaButtonClassName(true)}
+							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
 							size="lg"
 							variant="primary"
 							asChild
@@ -75,19 +76,19 @@ export function HeroWithCode() {
 							</a>
 						</Button>
 						{config.docsUrl && (
-							<Button variant="ghost" size="lg" asChild>
+							<Button className="shrink-0" variant="ghost" size="lg" asChild>
 								<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
 							</Button>
 						)}
 					</div>
 
-					{/* Feature badge row */}
-					<div className="mt-6 gap-2 flex flex-wrap items-center">
+					{/* Feature badge row — single line; scroll on narrow widths */}
+					<div className="mt-6 flex min-w-0 items-center gap-2 overflow-x-auto">
 						{featureBadges.map(({ icon: Icon, label }) => (
 							<Badge
 								key={label}
 								status="info"
-								className="gap-1.5 px-3 py-1 text-xs font-medium normal-case"
+								className="shrink-0 gap-1.5 whitespace-nowrap px-3 py-1 text-xs font-medium normal-case"
 							>
 								<Icon className="size-3" />
 								{label}

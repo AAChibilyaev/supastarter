@@ -1,6 +1,7 @@
 "use client";
 
 import { config } from "@config";
+import { cn } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { ArrowRightIcon, BarChart3Icon, SearchIcon, ShieldIcon, ZapIcon } from "lucide-react";
@@ -57,38 +58,42 @@ export function HeroSection() {
 					{t("home.hero.subtitle")}
 				</p>
 
-				{/* CTA buttons */}
-				<div className="mt-8 gap-3 flex items-center justify-center">
-					<Button
-						className={marketingCtaButtonClassName(true)}
-						size="lg"
-						variant="primary"
-						asChild
-					>
-						<a href={config.saasUrl}>
-							{t("home.hero.getStarted")}
-							<ArrowRightIcon className="ml-2 size-4" />
-						</a>
-					</Button>
-					{config.docsUrl && (
-						<Button variant="ghost" size="lg" asChild>
-							<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
+				{/* CTA buttons — single row; scroll on narrow widths */}
+				<div className="mt-8 w-full overflow-x-auto">
+					<div className="mx-auto flex w-max items-center justify-center gap-3">
+						<Button
+							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
+							size="lg"
+							variant="primary"
+							asChild
+						>
+							<a href={config.saasUrl}>
+								{t("home.hero.getStarted")}
+								<ArrowRightIcon className="ml-2 size-4" />
+							</a>
 						</Button>
-					)}
+						{config.docsUrl && (
+							<Button className="shrink-0" variant="ghost" size="lg" asChild>
+								<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
+							</Button>
+						)}
+					</div>
 				</div>
 
-				{/* Feature badge row */}
-				<div className="mt-8 gap-2 flex flex-wrap items-center justify-center">
-					{featureBadges.map(({ icon: Icon, label }) => (
-						<Badge
-							key={label}
-							status="info"
-							className="gap-1.5 px-3 py-1 text-xs font-medium normal-case"
-						>
-							<Icon className="size-3" />
-							{label}
-						</Badge>
-					))}
+				{/* Feature badge row — single line; scroll on narrow widths */}
+				<div className="mt-8 w-full overflow-x-auto">
+					<div className="mx-auto flex w-max items-center gap-2">
+						{featureBadges.map(({ icon: Icon, label }) => (
+							<Badge
+								key={label}
+								status="info"
+								className="shrink-0 gap-1.5 whitespace-nowrap px-3 py-1 text-xs font-medium normal-case"
+							>
+								<Icon className="size-3" />
+								{label}
+							</Badge>
+						))}
+					</div>
 				</div>
 
 				{/* Hero image in glass-morphism card */}

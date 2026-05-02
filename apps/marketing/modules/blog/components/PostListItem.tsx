@@ -32,11 +32,11 @@ export function PostListItem({ post, priorityImage = false }: PostListItemProps)
 			)}
 
 			{tags && (
-				<div className="mb-2 gap-2 flex flex-wrap">
+				<div className="mb-2 flex min-w-0 items-center gap-2 overflow-x-auto">
 					{tags.map((tag) => (
 						<span
 							key={tag}
-							className="font-semibold text-xs tracking-wider text-primary uppercase"
+							className="shrink-0 whitespace-nowrap font-semibold text-xs tracking-wider text-primary uppercase"
 						>
 							#{tag}
 						</span>

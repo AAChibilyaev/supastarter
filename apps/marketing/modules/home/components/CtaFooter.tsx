@@ -1,4 +1,5 @@
 import { config } from "@config";
+import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { useTranslations } from "next-intl";
 
@@ -19,20 +20,22 @@ export function CtaFooter() {
 						{t("home.cta.title")}
 					</h2>
 					<p className="mt-4 text-lg text-muted-foreground">{t("home.cta.subtitle")}</p>
-					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
-						<Button
-							className={marketingCtaButtonClassName(true)}
-							size="lg"
-							variant="primary"
-							asChild
-						>
-							<a href={config.saasUrl ?? "/signup"}>{t("home.cta.primary")}</a>
-						</Button>
-						{config.docsUrl && (
-							<Button size="lg" variant="ghost" asChild>
-								<a href={config.docsUrl}>{t("home.cta.secondary")}</a>
+					<div className="mt-8 w-full overflow-x-auto">
+						<div className="mx-auto flex w-max items-center justify-center gap-4">
+							<Button
+								className={cn(marketingCtaButtonClassName(true), "shrink-0")}
+								size="lg"
+								variant="primary"
+								asChild
+							>
+								<a href={config.saasUrl ?? "/signup"}>{t("home.cta.primary")}</a>
 							</Button>
-						)}
+							{config.docsUrl && (
+								<Button className="shrink-0" size="lg" variant="ghost" asChild>
+									<a href={config.docsUrl}>{t("home.cta.secondary")}</a>
+								</Button>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>

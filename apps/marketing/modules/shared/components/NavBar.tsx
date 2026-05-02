@@ -122,11 +122,12 @@ export function NavBar() {
 			<div className="container">
 				<div
 					className={cn(
-						"gap-6 flex items-center justify-stretch transition-[padding] duration-200",
+						"flex items-center justify-between gap-4 transition-[padding] duration-200",
+						"lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-6",
 						!isTop ? "py-4" : "py-6",
 					)}
 				>
-					<div className="flex flex-1 justify-start">
+					<div className="flex min-w-0 shrink-0 items-center justify-start">
 						<LocaleLink
 							href="/"
 							className="block hover:no-underline active:no-underline"
@@ -135,9 +136,9 @@ export function NavBar() {
 						</LocaleLink>
 					</div>
 
-					{/* Desktop navigation with dropdowns */}
-					<div className="lg:flex hidden flex-1 items-center justify-center">
-						<NavigationMenu>
+					{/* Desktop: true viewport center — equal 1fr side tracks, auto-width menu */}
+					<div className="hidden justify-self-center lg:block">
+						<NavigationMenu className="max-w-max flex-none">
 							<NavigationMenuList>
 								{navGroups.map((group) => (
 									<NavigationMenuItem key={group.label}>
@@ -185,7 +186,7 @@ export function NavBar() {
 						</NavigationMenu>
 					</div>
 
-					<div className="gap-3 flex flex-1 items-center justify-end">
+					<div className="flex min-w-0 items-center justify-end gap-3">
 						<ColorModeToggle />
 						<Suspense>
 							<LocaleSwitch />

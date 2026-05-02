@@ -1,4 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
+import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
+import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import { GaugeIcon, CodeIcon, DollarSignIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
@@ -91,12 +92,9 @@ export function AboutContent() {
 								key={key}
 								className="group transition-colors hover:border-primary/30 hover:bg-accent/5"
 							>
-								<CardHeader>
-									<div className="mb-3 size-10 flex items-center justify-center rounded-lg border border-border/60 bg-muted/50 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5">
-										<Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
-									</div>
+								<FeatureCardHeaderRow icon={Icon}>
 									<CardTitle>{t(`why.items.${key}.title`)}</CardTitle>
-								</CardHeader>
+								</FeatureCardHeaderRow>
 								<CardContent>
 									<CardDescription className="text-sm leading-relaxed">
 										{t(`why.items.${key}.description`)}

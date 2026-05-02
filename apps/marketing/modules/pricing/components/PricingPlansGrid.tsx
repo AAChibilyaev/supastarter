@@ -1,5 +1,6 @@
 import { cn } from "@repo/ui";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
+import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
+import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import { Building2Icon, CrownIcon, GiftIcon, RocketIcon, StarIcon, WrenchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
@@ -49,12 +50,9 @@ export function PricingPlansGrid() {
 								spanMap[key],
 							)}
 						>
-							<CardHeader>
-								<div className="mb-3 size-10 flex items-center justify-center rounded-lg border border-border/60 bg-muted/50 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5">
-									<Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
-								</div>
+							<FeatureCardHeaderRow icon={Icon}>
 								<CardTitle>{t(`items.${key}.title`)}</CardTitle>
-							</CardHeader>
+							</FeatureCardHeaderRow>
 							<CardContent>
 								<CardDescription className="text-sm leading-relaxed">
 									{t(`items.${key}.description`)}

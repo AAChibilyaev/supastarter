@@ -653,7 +653,7 @@
 	},
 	"featuresAnalyticsPage": {
 		"title": "Analytique de recherche",
-		"description": "Comprenez ce que vos utilisateurs cherchent, ce qui ne retourne aucun résultat et ce qui génère des conversions — tout dans le dashboard."
+		"description": "Suivez requêtes fréquentes, zéro-résultats et taux de clics. L'analytique AACsearch révèle l'intention utilisateur automatiquement, sans instrumentation."
 	},
 	"featuresAnalytics": {
 		"title": "Transformez les recherches en insights",
@@ -687,7 +687,7 @@
 	},
 	"featuresWidgetPage": {
 		"title": "Widget de recherche intégrable",
-		"description": "Un widget JavaScript de 14 Ko avec isolation Shadow DOM. Intégrez-le dans n'importe quelle vitrine ou site web en moins d'une heure."
+		"description": "Widget JS 14 Ko avec Shadow DOM. Analytique intégrée, 5 langues, sans framework. Ajoutez la recherche instantanée à n'importe quelle boutique en une heure."
 	},
 	"featuresWidget": {
 		"title": "Une recherche qui s'intègre à n'importe quelle page",
@@ -755,7 +755,7 @@
 	},
 	"featuresConnectorsPage": {
 		"title": "Connecteurs CMS",
-		"description": "Modules natifs pour PrestaShop et 1C-Bitrix. API REST pour tout le reste. Synchronisez produits et contenu automatiquement."
+		"description": "Modules PHP natifs pour PrestaShop 8.x et 1C-Bitrix. API Connector REST à 7 endpoints. Synchronisation complète et delta avec tentatives automatiques en cas d'échec."
 	},
 	"featuresConnectors": {
 		"title": "Connectez votre source de données",
@@ -1363,7 +1363,7 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs Algolia",
-		"description": "Une comparaison détaillée d'AACsearch et Algolia — tarifs, fonctionnalités, self-hosting et migration."
+		"description": "AACsearch vs Algolia : tarifs, self-hosting, sécurité multi-tenant et migration. Pourquoi les équipes à 200+$/mois chez Algolia migrent vers AACsearch."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs Algolia",
@@ -2158,7 +2158,7 @@
 	},
 	"featuresInstantSearchPage": {
 		"title": "Recherche Instantanée",
-		"description": "Les résultats s'affichent pendant que l'utilisateur tape. Anti-rebond, mis en cache et optimisé pour paraître instantané."
+		"description": "Résultats pendant la frappe. Latence P99 sous 50 ms, cache côté client et anti-rebond intégré — une recherche instantanée fonctionnant sur toute connexion."
 	},
 	"featuresInstantSearch": {
 		"title": "Recherche instantanée",

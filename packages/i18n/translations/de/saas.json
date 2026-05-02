@@ -1528,7 +1528,8 @@
 				"defaultValue": "Standardwert",
 				"defaultValuePlaceholder": "z.B. 0, false, Leerstring",
 				"locale": "Gebietsschema",
-				"validators": "Validatoren (JSON)"
+				"validators": "Validatoren (JSON)",
+				"reindexStarted": "Neuindizierung gestartet"
 			},
 			"version": "Version",
 			"recentActivity": "Letzte Aktivität",

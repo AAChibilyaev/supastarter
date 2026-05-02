@@ -653,7 +653,7 @@
 	},
 	"featuresAnalyticsPage": {
 		"title": "Search analytics",
-		"description": "Understand what your users search for, what returns no results, and what drives conversions — all in the dashboard."
+		"description": "Track top queries, zero-result searches, and click-through rates. AACsearch analytics surface user intent automatically — no extra instrumentation required."
 	},
 	"featuresAnalytics": {
 		"title": "Turn searches into insights",
@@ -687,7 +687,7 @@
 	},
 	"featuresWidgetPage": {
 		"title": "Embeddable search widget",
-		"description": "A 14KB JavaScript widget with Shadow DOM isolation. Drop it into any storefront or website in under an hour."
+		"description": "A 14KB JavaScript widget with Shadow DOM isolation. Built-in analytics, 5 locales, zero framework dependency — drop instant search into any storefront in under an hour."
 	},
 	"featuresWidget": {
 		"title": "Search that drops into any page",
@@ -755,7 +755,7 @@
 	},
 	"featuresConnectorsPage": {
 		"title": "CMS connectors",
-		"description": "Native modules for PrestaShop and 1C-Bitrix. REST API for everything else. Sync products and content automatically."
+		"description": "Native PHP modules for PrestaShop 8.x and 1C-Bitrix. 7-endpoint REST Connector API for custom integrations. Full and delta sync with automatic retries on failure."
 	},
 	"featuresConnectors": {
 		"title": "Connect your data source",
@@ -1363,7 +1363,7 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs Algolia",
-		"description": "A detailed comparison of AACsearch and Algolia — pricing, features, self-hosting, and migration."
+		"description": "AACsearch vs Algolia: pricing, self-hosting, multi-tenant security, and migration guide. See why teams paying $200+/month on Algolia are switching to AACsearch."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs Algolia",
@@ -1870,7 +1870,7 @@
 	},
 	"featuresInstantSearchPage": {
 		"title": "Instant Search",
-		"description": "Results appear as the user types. Debounced, cached, and optimised to feel instant — even on slow connections."
+		"description": "Search results appear as the user types. Sub-50ms P99 API latency, client-side caching, and built-in debouncing — instant search that works on any connection."
 	},
 	"featuresInstantSearch": {
 		"title": "Search that keeps up",

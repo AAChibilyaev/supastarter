@@ -653,7 +653,7 @@
 	},
 	"featuresAnalyticsPage": {
 		"title": "Analíticas de búsqueda",
-		"description": "Comprende qué buscan tus usuarios, qué no devuelve resultados y qué impulsa conversiones — todo en el dashboard."
+		"description": "Rastrea consultas frecuentes, búsquedas sin resultados y CTR. La analítica de AACsearch revela la intención del usuario automáticamente, sin código adicional."
 	},
 	"featuresAnalytics": {
 		"title": "Convierte búsquedas en conocimiento",
@@ -687,7 +687,7 @@
 	},
 	"featuresWidgetPage": {
 		"title": "Widget de búsqueda embebible",
-		"description": "Un widget JavaScript de 14 KB con aislamiento Shadow DOM. Intégralo en cualquier tienda o sitio web en menos de una hora."
+		"description": "Widget JavaScript de 14 KB con aislamiento Shadow DOM. Analítica, 5 idiomas, sin framework — añade búsqueda instantánea a cualquier tienda en menos de una hora."
 	},
 	"featuresWidget": {
 		"title": "Búsqueda que se integra en cualquier página",
@@ -755,7 +755,7 @@
 	},
 	"featuresConnectorsPage": {
 		"title": "Conectores CMS",
-		"description": "Módulos nativos para PrestaShop y 1C-Bitrix. API REST para todo lo demás. Sincroniza productos y contenido automáticamente."
+		"description": "Módulos PHP nativos para PrestaShop 8.x y 1C-Bitrix. API Connector REST de 7 endpoints. Sincronización completa y delta con reintentos automáticos en caso de fallo."
 	},
 	"featuresConnectors": {
 		"title": "Conecta tu fuente de datos",
@@ -1363,7 +1363,7 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs Algolia",
-		"description": "Una comparación detallada de AACsearch y Algolia — precios, funcionalidades, self-hosting y migración."
+		"description": "AACsearch vs Algolia: precios, self-hosting, seguridad multi-tenant y guía de migración. Por qué equipos que pagan $200+/mes en Algolia están migrando a AACsearch."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs Algolia",
@@ -2158,7 +2158,7 @@
 	},
 	"featuresInstantSearchPage": {
 		"title": "Búsqueda Instantánea",
-		"description": "Los resultados aparecen mientras el usuario escribe. Eliminación de rebotes, caché y optimizado para sentirse instantáneo."
+		"description": "Resultados mientras el usuario escribe. Latencia P99 bajo 50 ms, caché del lado del cliente, sin rebotes — búsqueda instantánea en cualquier conexión."
 	},
 	"featuresInstantSearch": {
 		"title": "Búsqueda instantánea",

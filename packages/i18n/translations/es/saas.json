@@ -1528,7 +1528,8 @@
 				"defaultValue": "Valor por defecto",
 				"defaultValuePlaceholder": "p.ej. 0, false, cadena vacía",
 				"locale": "Configuración regional",
-				"validators": "Validadores (JSON)"
+				"validators": "Validadores (JSON)",
+				"reindexStarted": "Reindexación iniciada"
 			},
 			"version": "Versión",
 			"recentActivity": "Actividad reciente",

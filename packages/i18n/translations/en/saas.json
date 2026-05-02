@@ -1528,7 +1528,8 @@
 				"defaultValue": "Default value",
 				"defaultValuePlaceholder": "e.g. 0, false, empty string",
 				"locale": "Locale",
-				"validators": "Validators (JSON)"
+				"validators": "Validators (JSON)",
+				"reindexStarted": "Reindex started"
 			},
 			"version": "Version",
 			"recentActivity": "Recent activity",

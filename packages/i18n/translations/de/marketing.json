@@ -653,7 +653,7 @@
 	},
 	"featuresAnalyticsPage": {
 		"title": "Such-Analytics",
-		"description": "Verstehen Sie, wonach Ihre Nutzer suchen, was keine Ergebnisse liefert und was Conversions treibt — alles im Dashboard."
+		"description": "Top-Suchanfragen, Null-Ergebnis-Suchen und Klickraten verfolgen. AACsearch-Analytics zeigen Nutzerabsichten automatisch auf — ohne zusätzliche Instrumentierung."
 	},
 	"featuresAnalytics": {
 		"title": "Suchanfragen in Erkenntnisse verwandeln",
@@ -687,7 +687,7 @@
 	},
 	"featuresWidgetPage": {
 		"title": "Einbettbares Such-Widget",
-		"description": "Ein 14 KB JavaScript-Widget mit Shadow-DOM-Isolation. In unter einer Stunde in jeden Storefront oder jede Website einbinden."
+		"description": "14-KB-JavaScript-Widget mit Shadow-DOM-Isolation. Analytics, 5 Sprachen, keine Framework-Abhängigkeit — Sofortsuche in jedem Storefront in unter einer Stunde."
 	},
 	"featuresWidget": {
 		"title": "Suche, die sich in jede Seite einfügt",
@@ -755,7 +755,7 @@
 	},
 	"featuresConnectorsPage": {
 		"title": "CMS-Connectors",
-		"description": "Native Module für PrestaShop und 1C-Bitrix. REST-API für alles andere. Produkte und Inhalte automatisch synchronisieren."
+		"description": "Native PHP-Module für PrestaShop 8.x und 1C-Bitrix. REST-Connector-API mit 7 Endpunkten für eigene Integrationen. Voll- und Delta-Sync mit automatischen Wiederholungen."
 	},
 	"featuresConnectors": {
 		"title": "Ihre Datenquelle verbinden",
@@ -1363,7 +1363,7 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs. Algolia",
-		"description": "Ein detaillierter Vergleich von AACsearch und Algolia — Preise, Features, Self-Hosting und Migration."
+		"description": "AACsearch vs. Algolia: Preise, Self-Hosting, Multi-Tenant-Sicherheit und Migration im Vergleich. Erfahren Sie, warum Teams mit 200+$/Monat auf AACsearch wechseln."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs. Algolia",
@@ -2006,7 +2006,7 @@
 	},
 	"featuresInstantSearchPage": {
 		"title": "Sofortsuche",
-		"description": "Ergebnisse erscheinen während der Eingabe. Entprallt, gecacht und optimiert, um sich sofort anzufühlen."
+		"description": "Suchergebnisse erscheinen während der Eingabe. P99-Latenz unter 50 ms, clientseitiges Caching, eingebautes Debouncing — Sofortsuche auf jeder Verbindung."
 	},
 	"featuresInstantSearch": {
 		"title": "Suche, die mithalten kann",

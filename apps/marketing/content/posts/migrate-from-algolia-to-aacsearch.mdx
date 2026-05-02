@@ -1,0 +1,204 @@
+---
+title: "How to Migrate from Algolia to AACSearch in 15 Minutes"
+date: 2026-05-03
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia is excellent software — at $500+/month for 1M searches. AACSearch gives you the same hosted search experience at $29/month. Here's the exact migration path, including API differences and a production-ready checklist.
+tags: [migration, algolia, tutorial, search]
+published: true
+---
+
+Algolia is excellent software. It's fast, reliable, and has great documentation. It's also priced for companies with enterprise budgets: at 1 million search requests per month, you're paying $500+. For a growing SaaS product or e-commerce store, that's a line item that becomes hard to justify.
+
+AACSearch is built on Typesense — the same technology Algolia uses internally — and delivers the same hosted search experience at $29/month for 1 million search units. The migration is straightforward because the conceptual models are nearly identical.
+
+Here's the complete migration guide.
+
+## What Maps to What
+
+Algolia and AACSearch share the same mental model with different names:
+
+| Algolia          | AACSearch     | Notes                                            |
+| ---------------- | ------------- | ------------------------------------------------ |
+| Application      | Organization  | Top-level container                              |
+| Index            | Search Index  | A collection of documents                        |
+| Record           | Document      | A single searchable item                         |
+| API Key          | API Key       | Auth tokens with scoped permissions              |
+| Replica index    | —             | Use relevance tuning + sort parameters instead   |
+| Query Suggestions| —             | Use `prefix_search` + analytics for suggestions  |
+
+The core difference: AACSearch uses Typesense under the hood. Typesense has better defaults for typo-tolerance, prefix search, and faceted navigation out of the box.
+
+## Step 1: Create Your Index
+
+In your AACSearch dashboard, create a new search index and define your schema.
+
+```json
+{
+  "name": "products",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "float" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "in_stock", "type": "bool", "facet": true }
+  ],
+  "default_sorting_field": "price"
+}
+```
+
+AACSearch uses explicit schema definitions (like Algolia's `attributesForFaceting`). This gives you faster indexing and better query performance.
+
+## Step 2: Generate Your API Keys
+
+Create two API keys in the AACSearch dashboard:
+
+1. **Ingest key** — write access, server-side only, never exposed to the browser
+2. **Search key** — read-only, safe to use in your frontend
+
+AACSearch also supports **scoped tokens** — HMAC-signed tokens that narrow the scope of a search key at runtime. This replaces Algolia's `generateSecuredApiKey()`:
+
+```typescript
+// Algolia approach
+const securedKey = algoliasearch.generateSecuredApiKey(
+  searchOnlyApiKey,
+  { filters: `org_id:${userId}` }
+);
+
+// AACSearch approach
+const scopedToken = await orpc.search.createScopedToken({
+  keyId: searchKeyId,
+  filters: `org_id:=${userId}`,
+  ttlSeconds: 3600
+});
+```
+
+The security model is equivalent. AACSearch uses HMAC-SHA256 over your secret — Algolia uses HMAC-SHA256 over your search-only key.
+
+## Step 3: Ingest Your Data
+
+Export your Algolia records as JSON (or query your database directly) and import them into AACSearch.
+
+**Batch import via the dashboard:**
+1. Go to your index → Import
+2. Upload a JSON file (array of objects)
+3. AACSearch handles deduplication by `id` field
+
+**Import via API:**
+```bash
+curl -X POST "https://api.aacsearch.com/api/connector/sync/full" \
+  -H "Authorization: Bearer ss_connector_your_token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "documents": [
+      { "id": "1", "title": "Running Shoes", "price": 89.99, "category": "footwear" },
+      { "id": "2", "title": "Trail Shoes", "price": 119.99, "category": "footwear" }
+    ]
+  }'
+```
+
+**Import from your database:**
+If you have a PrestaShop, WooCommerce, or Bitrix store, install the AACSearch connector module. It syncs your product catalog automatically — no code required.
+
+## Step 4: Update Your Search Client
+
+### If you use the JavaScript SDK
+
+Replace `algoliasearch` with the AACSearch browser SDK:
+
+```html
+<!-- Remove this -->
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+
+<!-- Add this -->
+<script src="https://app.aacsearch.com/api/widget/widget.js"
+  data-index="products"
+  data-api-key="ss_search_your_key"
+  data-api-url="https://api.aacsearch.com">
+</script>
+```
+
+The AACSearch widget is a drop-in with built-in modal UI, keyboard navigation, and analytics. Zero configuration required beyond the data attributes.
+
+### If you use InstantSearch.js
+
+AACSearch supports the Typesense InstantSearch adapter:
+
+```bash
+npm install typesense-instantsearch-adapter
+```
+
+```javascript
+import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
+
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: "ss_search_your_key",
+    nodes: [{ host: "api.aacsearch.com", port: 443, protocol: "https" }],
+  },
+  additionalSearchParameters: {
+    query_by: "title,description,category",
+  },
+});
+
+const searchClient = typesenseInstantsearchAdapter.searchClient;
+
+// Then use searchClient exactly as you would with Algolia
+```
+
+This gives you InstantSearch components (SearchBox, Hits, RefinementList, etc.) with AACSearch as the backend.
+
+## Step 5: Verify Relevance
+
+Run your top 20 queries against both Algolia and AACSearch and compare result ordering. Typesense's default ranking is:
+
+1. Exact matches first
+2. Prefix matches next
+3. Typo-tolerant matches
+4. Sorted by `default_sorting_field`
+
+If your Algolia index uses custom ranking (e.g., `popularity_score DESC`), add that field to your AACSearch schema and configure it in the relevance settings.
+
+## Step 6: Set Up Analytics
+
+AACSearch automatically tracks:
+- Query volume over time
+- Zero-result queries
+- Click-through rate (via the widget)
+- Top queries by volume
+
+No extra configuration required. Analytics appear in your dashboard immediately after the first searches.
+
+## Migration Checklist
+
+Before switching DNS / API keys:
+
+- [ ] Schema defined with all required fields and facets
+- [ ] All documents imported (verify count matches Algolia)
+- [ ] Search key generated and scoped correctly
+- [ ] Frontend updated to use AACSearch SDK or adapter
+- [ ] Top 20 queries tested for relevance parity
+- [ ] Typo tolerance verified (try intentional misspellings)
+- [ ] Facet navigation tested (if applicable)
+- [ ] Analytics dashboard showing data
+- [ ] Old Algolia keys revoked
+
+## What You'll Save
+
+At 1 million search requests per month:
+
+| | Algolia | AACSearch |
+|---|---|---|
+| Monthly cost | ~$500 | $29 |
+| Annual cost | ~$6,000 | $348 |
+| **Annual savings** | | **~$5,650** |
+
+The migration typically takes 2-4 hours for a standard product catalog. Most of that time is schema definition and relevance testing, not code changes.
+
+## Getting Started
+
+Create a free AACSearch account — 10,000 search units/month, no credit card required. The free tier is enough to run the full migration in a staging environment before you switch production.
+
+If you run into issues, the AACSearch team is reachable via the in-app chat and responds within hours, not days.

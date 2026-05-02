@@ -1,0 +1,183 @@
+---
+title: "Как перейти с Algolia на AACSearch за 15 минут"
+date: 2026-05-03
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia — отличный продукт, но от $500/месяц при 1 млн запросов. AACSearch предлагает тот же hosted search-опыт за $29/месяц. Вот точный путь миграции: различия API, пошаговый гайд и чеклист для продакшена.
+tags: [миграция, algolia, tutorial, поиск]
+published: true
+---
+
+Algolia — отличный продукт. Быстрый, надёжный, с хорошей документацией. Но он рассчитан на компании с корпоративными бюджетами: при миллионе поисковых запросов в месяц вы платите $500 и больше. Для растущего SaaS-продукта или интернет-магазина это сложно обосновать.
+
+AACSearch построен на Typesense — той же технологии, которую использует Algolia внутри, — и предлагает тот же опыт hosted-поиска за $29/месяц при миллионе поисковых единиц. Миграция несложна, потому что концептуальные модели практически идентичны.
+
+Вот полное руководство по миграции.
+
+## Соответствие понятий
+
+Algolia и AACSearch используют одну и ту же модель, но с разными названиями:
+
+| Algolia           | AACSearch    | Примечания                                                |
+| ----------------- | ------------ | --------------------------------------------------------- |
+| Application       | Организация  | Верхний уровень контейнера                                |
+| Index             | Индекс       | Коллекция документов                                      |
+| Record            | Документ     | Отдельный индексируемый элемент                           |
+| API Key           | API-ключ     | Токены с ограниченными правами                            |
+| Replica index     | —            | Используйте настройку релевантности + параметры сортировки|
+| Query Suggestions | —            | Используйте `prefix_search` + analytics для подсказок     |
+
+Ключевое отличие: AACSearch использует Typesense под капотом. Typesense имеет лучшие настройки по умолчанию для допуска опечаток, префиксного поиска и фасетной навигации.
+
+## Шаг 1: Создайте индекс
+
+В дашборде AACSearch создайте новый поисковый индекс и определите схему.
+
+```json
+{
+  "name": "products",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "float" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "in_stock", "type": "bool", "facet": true }
+  ],
+  "default_sorting_field": "price"
+}
+```
+
+AACSearch использует явные определения схем (как `attributesForFaceting` в Algolia). Это даёт более быструю индексацию и лучшую производительность запросов.
+
+## Шаг 2: Создайте API-ключи
+
+Создайте два API-ключа в дашборде AACSearch:
+
+1. **Ключ для инжестии** — права на запись, только серверная сторона, никогда не передаётся браузеру
+2. **Поисковый ключ** — только чтение, безопасно использовать во фронтенде
+
+AACSearch также поддерживает **ограниченные токены** — HMAC-подписанные токены, которые сужают область действия поискового ключа во время выполнения. Это заменяет `generateSecuredApiKey()` от Algolia:
+
+```typescript
+// Подход Algolia
+const securedKey = algoliasearch.generateSecuredApiKey(
+  searchOnlyApiKey,
+  { filters: `org_id:${userId}` }
+);
+
+// Подход AACSearch
+const scopedToken = await orpc.search.createScopedToken({
+  keyId: searchKeyId,
+  filters: `org_id:=${userId}`,
+  ttlSeconds: 3600
+});
+```
+
+Модель безопасности эквивалентна. AACSearch использует HMAC-SHA256 поверх вашего секрета.
+
+## Шаг 3: Импортируйте данные
+
+Экспортируйте записи из Algolia в JSON и импортируйте их в AACSearch.
+
+**Пакетный импорт через дашборд:**
+1. Перейдите в индекс → Импорт
+2. Загрузите JSON-файл (массив объектов)
+3. AACSearch дедуплицирует по полю `id`
+
+**Импорт через API:**
+```bash
+curl -X POST "https://api.aacsearch.com/api/connector/sync/full" \
+  -H "Authorization: Bearer ss_connector_your_token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "documents": [
+      { "id": "1", "title": "Кроссовки для бега", "price": 89.99, "category": "footwear" },
+      { "id": "2", "title": "Трейловые кроссовки", "price": 119.99, "category": "footwear" }
+    ]
+  }'
+```
+
+**Импорт из вашего магазина:**
+Если у вас PrestaShop, WooCommerce или Bitrix — установите модуль-коннектор AACSearch. Он синхронизирует каталог товаров автоматически, без кода.
+
+## Шаг 4: Обновите поисковый клиент
+
+### Если вы используете JavaScript SDK
+
+Замените `algoliasearch` на браузерный SDK AACSearch:
+
+```html
+<!-- Удалить -->
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+
+<!-- Добавить -->
+<script src="https://app.aacsearch.com/api/widget/widget.js"
+  data-index="products"
+  data-api-key="ss_search_your_key"
+  data-api-url="https://api.aacsearch.com">
+</script>
+```
+
+Виджет AACSearch — это drop-in с встроенным модальным интерфейсом, навигацией с клавиатуры и аналитикой.
+
+### Если вы используете InstantSearch.js
+
+AACSearch совместим с адаптером Typesense InstantSearch:
+
+```bash
+npm install typesense-instantsearch-adapter
+```
+
+```javascript
+import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
+
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: "ss_search_your_key",
+    nodes: [{ host: "api.aacsearch.com", port: 443, protocol: "https" }],
+  },
+  additionalSearchParameters: {
+    query_by: "title,description,category",
+  },
+});
+
+const searchClient = typesenseInstantsearchAdapter.searchClient;
+```
+
+Используйте `searchClient` точно так же, как с Algolia — все компоненты InstantSearch работают без изменений.
+
+## Шаг 5: Проверьте релевантность
+
+Запустите 20 ваших ключевых запросов в Algolia и AACSearch и сравните порядок результатов. Typesense ранжирует по: точным совпадениям, затем по префиксу, затем с учётом опечаток, потом по `default_sorting_field`.
+
+## Чеклист миграции
+
+Перед переключением продакшена:
+
+- [ ] Схема определена со всеми полями и фасетами
+- [ ] Все документы импортированы (проверьте счётчик против Algolia)
+- [ ] Поисковый ключ создан и корректно ограничен
+- [ ] Фронтенд обновлён под AACSearch SDK/адаптер
+- [ ] Топ-20 запросов проверены на паритет релевантности
+- [ ] Допуск опечаток проверен (намеренные опечатки)
+- [ ] Фасетная навигация протестирована (если используется)
+- [ ] Дашборд аналитики отображает данные
+- [ ] Старые ключи Algolia отозваны
+
+## Сколько вы сэкономите
+
+При миллионе запросов в месяц:
+
+| | Algolia | AACSearch |
+|---|---|---|
+| Ежемесячно | ~$500 | $29 |
+| Ежегодно | ~$6 000 | $348 |
+| **Экономия в год** | | **~$5 650** |
+
+Миграция стандартного каталога товаров занимает 2–4 часа. Большую часть времени занимает определение схемы и тестирование релевантности, а не написание кода.
+
+## Начало работы
+
+Создайте бесплатный аккаунт AACSearch — 10 000 поисковых единиц в месяц, без карты. Бесплатного тарифа достаточно, чтобы провести полную миграцию в стейджинговой среде перед переключением продакшена.

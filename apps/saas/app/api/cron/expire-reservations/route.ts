@@ -7,7 +7,9 @@ export const dynamic = "force-dynamic";
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.WALLET_CRON_SECRET;
 	if (!expected) {
-		logger.warn("WALLET_CRON_SECRET is not set — expire-reservations cron will always reject requests");
+		logger.warn(
+			"WALLET_CRON_SECRET is not set — expire-reservations cron will always reject requests",
+		);
 		return false;
 	}
 	const auth = request.headers.get("authorization");

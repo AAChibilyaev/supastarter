@@ -52,22 +52,9 @@ async function gateConnectorRequest(c: Context): Promise<VerifiedConnector | Res
 		return c.json({ error: "invalid_or_revoked_key" }, 403);
 	}
 
-	const crypto = await import("node:crypto");
-	let matched: (typeof keys)[number] | undefined;
-
-	for (const k of keys) {
-		const parts = k.hash.split(":");
-		if (parts.length !== 2) continue;
-		const [salt, storedHash] = parts;
-		const computedHash = crypto
-			.createHash("sha256")
-			.update(salt + token)
-			.digest("hex");
-		if (computedHash === storedHash) {
-			matched = k;
-			break;
-		}
-	}
+	const { createHash } = await import("node:crypto");
+	const computedHash = createHash("sha256").update(token).digest("hex");
+	const matched = keys.find((k) => k.hash === computedHash);
 
 	if (!matched) {
 		return c.json({ error: "invalid_or_revoked_key" }, 403);
@@ -366,7 +353,9 @@ export const connectorApp = new Hono()
 				verified.indexId,
 				verified.organizationId,
 				"delete",
-				parsed.data.externalIds.map((id) => ({ external_id: id })) as Prisma.InputJsonValue[],
+				parsed.data.externalIds.map((id) => ({
+					external_id: id,
+				})) as Prisma.InputJsonValue[],
 			);
 		} catch (error) {
 			logger.error("Batch delete failed", { error });

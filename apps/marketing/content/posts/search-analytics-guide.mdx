@@ -20,6 +20,7 @@ The zero-results rate is the percentage of searches that return no documents at 
 A healthy zero-results rate is under 10%. If you're seeing 15–20%, your catalog has gaps or your search configuration has problems.
 
 **Common causes:**
+
 - Product names don't match how customers search ("trainers" vs "running shoes")
 - Typos that typo-tolerance isn't catching
 - Seasonal or brand-specific terms without synonyms
@@ -33,6 +34,7 @@ Your top queries report is your customers telling you, directly and at scale, ex
 A product that appears in the top 20 search queries but doesn't rank in the top 5 results is a conversion problem. A term in the top 10 queries with no matching product is an inventory signal.
 
 **What to do:**
+
 - Map the top 50 queries to their current rank-1 result. Is it the right product?
 - Flag any top query with a zero-results rate above 5%
 - Use curations to manually pin the best result for your highest-volume terms
@@ -42,6 +44,7 @@ A product that appears in the top 20 search queries but doesn't rank in the top 
 CTR measures what percentage of searches result in at least one click. A low CTR means users are seeing results but aren't convinced by them — the search worked mechanically, but the results didn't match intent.
 
 **Common causes of low CTR:**
+
 - Wrong product ranked first
 - Missing product images in results
 - Prices not visible in the result card
@@ -69,21 +72,21 @@ If you're using the AACSearch hosted widget, all five of these metrics are track
 
 ```json
 {
-  "type": "search_query",
-  "query": "running shoes",
-  "resultCount": 42,
-  "latencyMs": 18,
-  "sessionId": "sess_xyz"
+	"type": "search_query",
+	"query": "running shoes",
+	"resultCount": 42,
+	"latencyMs": 18,
+	"sessionId": "sess_xyz"
 }
 ```
 
 ```json
 {
-  "type": "result_click",
-  "query": "running shoes",
-  "productId": "prod_8821",
-  "position": 2,
-  "sessionId": "sess_xyz"
+	"type": "result_click",
+	"query": "running shoes",
+	"productId": "prod_8821",
+	"position": 2,
+	"sessionId": "sess_xyz"
 }
 ```
 

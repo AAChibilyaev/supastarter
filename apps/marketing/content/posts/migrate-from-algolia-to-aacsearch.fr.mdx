@@ -1,0 +1,183 @@
+---
+title: "Comment migrer d'Algolia vers AACSearch en 15 minutes"
+date: 2026-05-03
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia est un excellent logiciel — à 500 $/mois ou plus pour 1 million de recherches. AACSearch offre la même expérience de recherche hébergée pour 29 $/mois. Voici le chemin de migration exact, avec les différences d'API et une checklist prête pour la production.
+tags: [migration, algolia, tutoriel, recherche]
+published: true
+---
+
+Algolia est un excellent logiciel. Il est rapide, fiable et bien documenté. Il est aussi conçu pour des entreprises avec des budgets d'envergure : à un million de requêtes par mois, vous payez 500 $ ou plus. Pour un produit SaaS en croissance ou une boutique e-commerce, c'est difficile à justifier.
+
+AACSearch est construit sur Typesense — la même technologie qu'Algolia utilise en interne — et offre la même expérience de recherche hébergée pour 29 $/mois pour un million d'unités de recherche. La migration est simple car les modèles conceptuels sont presque identiques.
+
+Voici le guide de migration complet.
+
+## Correspondance des concepts
+
+Algolia et AACSearch partagent le même modèle mental avec des noms différents :
+
+| Algolia          | AACSearch    | Notes                                                     |
+| ---------------- | ------------ | --------------------------------------------------------- |
+| Application      | Organisation | Conteneur de niveau supérieur                             |
+| Index            | Index        | Une collection de documents                               |
+| Record           | Document     | Un élément indexable individuel                           |
+| API Key          | Clé API      | Tokens d'authentification avec permissions délimitées     |
+| Replica index    | —            | Utilisez le réglage de pertinence + paramètres de tri     |
+| Query Suggestions| —            | Utilisez `prefix_search` + analytics pour les suggestions |
+
+La différence clé : AACSearch utilise Typesense en arrière-plan, avec de meilleures valeurs par défaut pour la tolérance aux fautes de frappe, la recherche par préfixe et la navigation par facettes.
+
+## Étape 1 : Créer votre index
+
+Dans votre tableau de bord AACSearch, créez un nouvel index et définissez votre schéma.
+
+```json
+{
+  "name": "products",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "float" },
+    { "name": "category", "type": "string", "facet": true },
+    { "name": "in_stock", "type": "bool", "facet": true }
+  ],
+  "default_sorting_field": "price"
+}
+```
+
+AACSearch utilise des définitions de schéma explicites (comme `attributesForFaceting` d'Algolia). Cela permet une indexation plus rapide et de meilleures performances de requête.
+
+## Étape 2 : Générer vos clés API
+
+Créez deux clés API dans le tableau de bord AACSearch :
+
+1. **Clé d'ingestion** — accès en écriture, côté serveur uniquement, jamais exposée au navigateur
+2. **Clé de recherche** — lecture seule, sûre à utiliser dans le frontend
+
+AACSearch prend également en charge les **tokens délimités** — tokens signés HMAC qui restreignent la portée d'une clé de recherche à l'exécution. Cela remplace `generateSecuredApiKey()` d'Algolia :
+
+```typescript
+// Approche Algolia
+const securedKey = algoliasearch.generateSecuredApiKey(
+  searchOnlyApiKey,
+  { filters: `org_id:${userId}` }
+);
+
+// Approche AACSearch
+const scopedToken = await orpc.search.createScopedToken({
+  keyId: searchKeyId,
+  filters: `org_id:=${userId}`,
+  ttlSeconds: 3600
+});
+```
+
+Le modèle de sécurité est équivalent. AACSearch utilise HMAC-SHA256 sur votre secret.
+
+## Étape 3 : Importer vos données
+
+Exportez vos enregistrements Algolia en JSON et importez-les dans AACSearch.
+
+**Import par lot depuis le tableau de bord :**
+1. Allez dans votre index → Importer
+2. Téléchargez un fichier JSON (tableau d'objets)
+3. AACSearch gère la déduplication via le champ `id`
+
+**Import via API :**
+```bash
+curl -X POST "https://api.aacsearch.com/api/connector/sync/full" \
+  -H "Authorization: Bearer ss_connector_your_token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "documents": [
+      { "id": "1", "title": "Chaussures de course", "price": 89.99, "category": "footwear" },
+      { "id": "2", "title": "Chaussures de trail", "price": 119.99, "category": "footwear" }
+    ]
+  }'
+```
+
+**Import depuis votre boutique :**
+Si vous utilisez PrestaShop, WooCommerce ou Bitrix, installez le module connecteur AACSearch. Il synchronise votre catalogue produits automatiquement, sans code.
+
+## Étape 4 : Mettre à jour votre client de recherche
+
+### Si vous utilisez le SDK JavaScript
+
+Remplacez `algoliasearch` par le SDK navigateur AACSearch :
+
+```html
+<!-- Supprimer -->
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+
+<!-- Ajouter -->
+<script src="https://app.aacsearch.com/api/widget/widget.js"
+  data-index="products"
+  data-api-key="ss_search_your_key"
+  data-api-url="https://api.aacsearch.com">
+</script>
+```
+
+Le widget AACSearch est un drop-in avec une UI modale intégrée, navigation au clavier et analytics.
+
+### Si vous utilisez InstantSearch.js
+
+AACSearch est compatible avec l'adaptateur Typesense InstantSearch :
+
+```bash
+npm install typesense-instantsearch-adapter
+```
+
+```javascript
+import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
+
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: "ss_search_your_key",
+    nodes: [{ host: "api.aacsearch.com", port: 443, protocol: "https" }],
+  },
+  additionalSearchParameters: {
+    query_by: "title,description,category",
+  },
+});
+
+const searchClient = typesenseInstantsearchAdapter.searchClient;
+```
+
+Utilisez `searchClient` exactement comme avec Algolia — tous les composants InstantSearch fonctionnent.
+
+## Étape 5 : Vérifier la pertinence
+
+Exécutez vos 20 requêtes les plus importantes sur Algolia et AACSearch et comparez l'ordre des résultats. Typesense classe par : correspondances exactes, correspondances par préfixe, correspondances avec fautes de frappe, puis le champ de tri par défaut.
+
+## Checklist de migration
+
+Avant de basculer en production :
+
+- [ ] Schéma défini avec tous les champs et facettes nécessaires
+- [ ] Tous les documents importés (vérifiez que le nombre correspond à Algolia)
+- [ ] Clé de recherche générée et correctement délimitée
+- [ ] Frontend mis à jour pour utiliser le SDK/adaptateur AACSearch
+- [ ] 20 requêtes principales testées pour la parité de pertinence
+- [ ] Tolérance aux fautes de frappe vérifiée
+- [ ] Navigation par facettes testée (si applicable)
+- [ ] Tableau de bord analytics affichant des données
+- [ ] Anciennes clés Algolia révoquées
+
+## Ce que vous économiserez
+
+À un million de requêtes par mois :
+
+| | Algolia | AACSearch |
+|---|---|---|
+| Coût mensuel | ~500 $ | 29 $ |
+| Coût annuel | ~6 000 $ | 348 $ |
+| **Économies annuelles** | | **~5 650 $** |
+
+La migration prend généralement 2 à 4 heures pour un catalogue produit standard.
+
+## Pour commencer
+
+Créez un compte AACSearch gratuit — 10 000 unités de recherche/mois, sans carte bancaire. Le niveau gratuit suffit pour réaliser la migration complète dans un environnement de staging avant de basculer la production.

@@ -1,14 +1,8 @@
 /**
- * Tests for connector-public.ts — DELETE /connector/documents (AAC-58)
+ * Tests for connector-public.ts — DELETE /connector/documents (AAC-158)
  *
- * BUG REPORT: gateConnectorRequest contains a hash-format mismatch.
- * The function splits k.hash by ":" expecting "salt:sha256(salt+token)" format,
- * but hashSearchApiKey() stores hashes as plain "sha256(rawKey)" with NO colon.
- * Result: every connector token verification fails with 403, even valid tokens.
- *
- * Tests marked "[BUG]" fail until the bug is fixed.
- * Fix: use verifySearchApiKey() from @repo/search (same approach as public-handler.ts),
- * or align hash comparison: hash = hashSearchApiKey(rawKey), compare k.hash === hash.
+ * Verifies that gateConnectorRequest correctly authenticates connector tokens
+ * using plain sha256 hash comparison (matching hashSearchApiKey() output).
  */
 
 import { createHash } from "node:crypto";
@@ -65,18 +59,6 @@ const FAKE_PREFIX = FAKE_TOKEN.slice(0, 8); // "ss_conne"
  */
 const PLAIN_HASH = createHash("sha256").update(FAKE_TOKEN).digest("hex");
 
-/**
- * SALTED hash — the format gateConnectorRequest currently expects (broken assumption):
- *   `${salt}:${sha256(salt + token)}`
- * No code in the codebase ever writes hashes in this format, so this format
- * cannot exist in production — it is used here ONLY to get past auth in
- * input-validation tests while the bug is unresolved.
- */
-const _SALT = "testsalt";
-const SALTED_HASH = `${_SALT}:${createHash("sha256")
-	.update(_SALT + FAKE_TOKEN)
-	.digest("hex")}`;
-
 function makeKeyRecord(hash: string) {
 	return {
 		id: "key-id-1",
@@ -130,19 +112,7 @@ describe("DELETE /connector/documents", () => {
 			expect(await res.json()).toEqual({ error: "invalid_or_revoked_key" });
 		});
 
-		it("[BUG] valid token with plain sha256 hash should return 200, not 403", async () => {
-			// This is the actual production scenario:
-			// createConnectorToken → generateSearchApiKey() → hashSearchApiKey(rawKey) → sha256(rawKey)
-			// The resulting hash has NO colon — gateConnectorRequest splits by ":" and expects 2 parts,
-			// gets 1, hits `continue`, matched stays undefined → always 403.
-			//
-			// Root cause: gateConnectorRequest (lines 58-68 in connector-public.ts) expects
-			//   k.hash format: "salt:sha256(salt+token)"
-			// Actual stored format (hashSearchApiKey):
-			//   "sha256(rawKey)"  — no colon, no salt
-			//
-			// Fix: replace the salt-based comparison with hashSearchApiKey(token) === k.hash,
-			// or delegate to verifySearchApiKey() from @repo/search (used in public-handler.ts).
+		it("valid token with plain sha256 hash returns 200", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
 				makeKeyRecord(PLAIN_HASH),
 			] as never);
@@ -150,20 +120,17 @@ describe("DELETE /connector/documents", () => {
 
 			const res = await deleteRequest({ externalIds: ["product-42"] });
 
-			// FAILS now (bug → 403). PASSES after fix (→ 200).
 			expect(res.status).toBe(200);
 			expect(await res.json()).toEqual({ deleted: 1 });
 		});
 	});
 
-	// ── Input validation (auth bypassed via salted-hash fixture) ──
-	// NOTE: these use SALTED_HASH to work around the auth bug.
-	// After the bug is fixed, switch the key fixture to makeKeyRecord(PLAIN_HASH).
+	// ── Input validation ──────────────────────────────────────────
 
 	describe("input validation", () => {
 		it("returns 400 when request body is missing", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
-				makeKeyRecord(SALTED_HASH),
+				makeKeyRecord(PLAIN_HASH),
 			] as never);
 			const res = await connectorApp.request("/connector/documents", {
 				method: "DELETE",
@@ -177,7 +144,7 @@ describe("DELETE /connector/documents", () => {
 
 		it("returns 400 when externalIds is an empty array", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
-				makeKeyRecord(SALTED_HASH),
+				makeKeyRecord(PLAIN_HASH),
 			] as never);
 			const res = await deleteRequest({ externalIds: [] });
 			expect(res.status).toBe(400);
@@ -187,7 +154,7 @@ describe("DELETE /connector/documents", () => {
 
 		it("returns 400 when externalIds exceeds 500 items", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
-				makeKeyRecord(SALTED_HASH),
+				makeKeyRecord(PLAIN_HASH),
 			] as never);
 			const res = await deleteRequest({
 				externalIds: Array.from({ length: 501 }, (_, i) => `p${i}`),
@@ -199,7 +166,7 @@ describe("DELETE /connector/documents", () => {
 
 		it("returns 400 when externalIds field is missing entirely", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
-				makeKeyRecord(SALTED_HASH),
+				makeKeyRecord(PLAIN_HASH),
 			] as never);
 			const res = await deleteRequest({ other: "data" });
 			expect(res.status).toBe(400);
@@ -208,12 +175,10 @@ describe("DELETE /connector/documents", () => {
 		});
 	});
 
-	// ── Happy path (requires auth bug fix) ────────────────────��─
-	// These tests demonstrate correct endpoint behaviour after the bug is resolved.
-	// They currently FAIL because auth returns 403.
+	// ── Happy path ────────────────────────────────────────────────
 
-	describe("happy path [requires auth bug fix]", () => {
-		it("[BUG] returns 200 with deleted count when request is valid", async () => {
+	describe("happy path", () => {
+		it("returns 200 with deleted count when request is valid", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
 				makeKeyRecord(PLAIN_HASH),
 			] as never);
@@ -221,12 +186,11 @@ describe("DELETE /connector/documents", () => {
 
 			const res = await deleteRequest({ externalIds: ["p1", "p2", "p3"] });
 
-			// BUG: currently 403; should be 200 after fix
 			expect(res.status).toBe(200);
 			expect(await res.json()).toEqual({ deleted: 3 });
 		});
 
-		it("[BUG] returns 502 when enqueueManySearchIngest throws", async () => {
+		it("returns 502 when enqueueManySearchIngest throws", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
 				makeKeyRecord(PLAIN_HASH),
 			] as never);
@@ -234,12 +198,11 @@ describe("DELETE /connector/documents", () => {
 
 			const res = await deleteRequest({ externalIds: ["p1"] });
 
-			// BUG: currently 403; should be 502 after fix
 			expect(res.status).toBe(502);
 			expect(await res.json()).toMatchObject({ error: "delete_failed" });
 		});
 
-		it("[BUG] touches key lastUsedAt after successful auth", async () => {
+		it("touches key lastUsedAt after successful auth", async () => {
 			vi.mocked(db.searchApiKey.findMany).mockResolvedValueOnce([
 				makeKeyRecord(PLAIN_HASH),
 			] as never);
@@ -247,7 +210,6 @@ describe("DELETE /connector/documents", () => {
 
 			await deleteRequest({ externalIds: ["p1"] });
 
-			// BUG: currently not called because auth fails; should be called after fix
 			expect(vi.mocked(db.searchApiKey.update)).toHaveBeenCalled();
 		});
 	});

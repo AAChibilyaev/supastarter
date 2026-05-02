@@ -20,6 +20,7 @@ Le taux de résultats zéro est le pourcentage de recherches qui ne renvoient au
 Un taux sain est inférieur à 10%. Si vous observez 15–20%, votre catalogue a des lacunes ou votre configuration de recherche a des problèmes.
 
 **Causes fréquentes :**
+
 - Les noms de produits ne correspondent pas à la façon dont les clients cherchent (« baskets » vs « chaussures de course »)
 - Des fautes de frappe non corrigées par la tolérance aux erreurs
 - Des termes saisonniers ou de marque sans synonymes
@@ -31,6 +32,7 @@ Un taux sain est inférieur à 10%. Si vous observez 15–20%, votre catalogue a
 Vos requêtes principales sont vos clients qui vous disent directement, à grande échelle, exactement ce qu'ils veulent acheter. C'est l'actif de données le plus sous-utilisé dans le commerce électronique.
 
 **Que faire :**
+
 - Mappez les 50 requêtes principales à leur résultat en première position. Est-ce le bon produit ?
 - Signalez les requêtes avec un taux de résultats zéro supérieur à 5%
 - Utilisez les curations pour épingler le meilleur résultat pour les termes à fort volume
@@ -40,6 +42,7 @@ Vos requêtes principales sont vos clients qui vous disent directement, à grand
 Mesure quel pourcentage de recherches aboutit à au moins un clic. Un faible taux signifie que les utilisateurs voient des résultats mais ne sont pas convaincus — la recherche a fonctionné mécaniquement, mais les résultats ne correspondaient pas à l'intention.
 
 **Causes fréquentes d'un faible taux de clics :**
+
 - Mauvais produit classé en premier
 - Images produit manquantes dans les résultats
 - Prix non visibles dans la carte de résultat
@@ -65,21 +68,21 @@ Si vous utilisez le widget hébergé d'AACSearch, les cinq métriques sont suivi
 
 ```json
 {
-  "type": "search_query",
-  "query": "chaussures de course",
-  "resultCount": 42,
-  "latencyMs": 18,
-  "sessionId": "sess_xyz"
+	"type": "search_query",
+	"query": "chaussures de course",
+	"resultCount": 42,
+	"latencyMs": 18,
+	"sessionId": "sess_xyz"
 }
 ```
 
 ```json
 {
-  "type": "result_click",
-  "query": "chaussures de course",
-  "productId": "prod_8821",
-  "position": 2,
-  "sessionId": "sess_xyz"
+	"type": "result_click",
+	"query": "chaussures de course",
+	"productId": "prod_8821",
+	"position": 2,
+	"sessionId": "sess_xyz"
 }
 ```
 

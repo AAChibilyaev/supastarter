@@ -20,6 +20,7 @@ La tasa de resultados cero es el porcentaje de búsquedas que no devuelven ning�
 Una tasa saludable de resultados cero está por debajo del 10%. Si ves 15–20%, tu catálogo tiene lagunas o tu configuración de búsqueda tiene problemas.
 
 **Causas comunes:**
+
 - Los nombres de productos no coinciden con cómo buscan los clientes ("zapatillas" vs "zapatos para correr")
 - Errores tipográficos que la tolerancia no captura
 - Términos estacionales o de marca sin sinónimos
@@ -31,6 +32,7 @@ Una tasa saludable de resultados cero está por debajo del 10%. Si ves 15–20%,
 Tus consultas principales son tus clientes diciéndote directamente, a escala, exactamente qué quieren comprar. Es el activo de datos más subutilizado en el comercio electrónico.
 
 **Qué hacer:**
+
 - Mapea las 50 consultas principales a su resultado en primera posición. ¿Es el producto correcto?
 - Marca consultas con tasa de resultados cero superior al 5%
 - Usa curaciones para fijar manualmente el mejor resultado para términos de alto volumen
@@ -40,6 +42,7 @@ Tus consultas principales son tus clientes diciéndote directamente, a escala, e
 Mide qué porcentaje de búsquedas resultan en al menos un clic. Una tasa baja significa que los usuarios ven resultados pero no están convencidos — la búsqueda funcionó mecánicamente, pero los resultados no coincidieron con la intención.
 
 **Causas comunes de baja tasa de clics:**
+
 - Producto incorrecto clasificado primero
 - Imágenes de producto ausentes en los resultados
 - Precios no visibles en la tarjeta de resultado
@@ -65,21 +68,21 @@ Si usas el widget alojado de AACSearch, las cinco métricas se rastrean automát
 
 ```json
 {
-  "type": "search_query",
-  "query": "zapatillas running",
-  "resultCount": 42,
-  "latencyMs": 18,
-  "sessionId": "sess_xyz"
+	"type": "search_query",
+	"query": "zapatillas running",
+	"resultCount": 42,
+	"latencyMs": 18,
+	"sessionId": "sess_xyz"
 }
 ```
 
 ```json
 {
-  "type": "result_click",
-  "query": "zapatillas running",
-  "productId": "prod_8821",
-  "position": 2,
-  "sessionId": "sess_xyz"
+	"type": "result_click",
+	"query": "zapatillas running",
+	"productId": "prod_8821",
+	"position": 2,
+	"sessionId": "sess_xyz"
 }
 ```
 

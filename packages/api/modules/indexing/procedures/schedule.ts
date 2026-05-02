@@ -1,66 +1,66 @@
 import { ORPCError } from "@orpc/client";
-import {
-	createReindexSchedule,
-	deleteReindexSchedule,
-	getReindexSchedule,
-	listReindexSchedules,
-	updateReindexSchedule,
-} from "@repo/database";
 import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import {
-	requireOrganizationAdmin,
-	requireOrganizationMember,
-	requireSearchIndex,
-} from "../lib/access";
-import { indexingSlugSchema, reindexScheduleViewSchema } from "../types";
+import { requireOrganizationAdmin } from "../../search/lib/access";
+
+const scheduleViewSchema = z.object({
+	id: z.string(),
+	indexId: z.string(),
+	organizationId: z.string(),
+	slug: z.string(),
+	cronExpression: z.string(),
+	enabled: z.boolean(),
+	lastRunAt: z.string().nullable(),
+	createdAt: z.string(),
+});
 
 export const listSchedules = protectedProcedure
 	.route({
 		method: "GET",
-		path: "/indexing/schedules",
+		path: "/indexing/reindex/schedules",
 		tags: ["Indexing"],
-		summary: "List reindex schedules for an organization",
+		summary: "List reindex schedules",
+		description: "Returns all reindex schedules for the organization.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
 		}),
 	)
-	.output(z.array(reindexScheduleViewSchema))
+	.output(z.array(scheduleViewSchema))
 	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationMember(input.organizationId, user.id);
+		await requireOrganizationAdmin(input.organizationId, user);
+
+		const { listReindexSchedules } = await import("@repo/database");
 		return listReindexSchedules(input.organizationId);
 	});
 
 export const createSchedule = protectedProcedure
 	.route({
 		method: "POST",
-		path: "/indexing/schedules",
+		path: "/indexing/reindex/schedules",
 		tags: ["Indexing"],
-		summary: "Create a scheduled reindex",
+		summary: "Create reindex schedule",
+		description: "Creates a scheduled reindex job with a cron expression.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
-			slug: indexingSlugSchema,
-			cronExpression: z
-				.string()
-				.min(1)
-				.max(100)
-				.regex(/^(\S+\s){4}\S+$/, "Must be a valid cron expression (5 fields)"),
+			indexId: z.string(),
+			cronExpression: z.string().min(1).max(256),
 			enabled: z.boolean().optional().default(true),
 		}),
 	)
-	.output(reindexScheduleViewSchema)
+	.output(scheduleViewSchema)
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
-		const index = await requireSearchIndex(input.organizationId, input.slug);
+
+		const { createReindexSchedule } = await import("@repo/database");
 
 		const schedule = await createReindexSchedule({
-			indexId: index.id,
+			indexId: input.indexId,
 			organizationId: input.organizationId,
 			cronExpression: input.cronExpression,
 			enabled: input.enabled,
@@ -68,8 +68,8 @@ export const createSchedule = protectedProcedure
 
 		logger.info("Reindex schedule created", {
 			scheduleId: schedule.id,
-			slug: input.slug,
-			cronExpression: input.cronExpression,
+			indexId: input.indexId,
+			cron: input.cronExpression,
 		});
 
 		return schedule;
@@ -77,49 +77,45 @@ export const createSchedule = protectedProcedure
 
 export const updateSchedule = protectedProcedure
 	.route({
-		method: "PATCH",
-		path: "/indexing/schedules/{scheduleId}",
+		method: "PUT",
+		path: "/indexing/reindex/schedules/{scheduleId}",
 		tags: ["Indexing"],
-		summary: "Update a reindex schedule",
+		summary: "Update reindex schedule",
+		description: "Updates the cron expression and/or enabled status of a schedule.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
 			scheduleId: z.string(),
-			cronExpression: z
-				.string()
-				.min(1)
-				.max(100)
-				.regex(/^(\S+\s){4}\S+$/, "Must be a valid cron expression (5 fields)")
-				.optional(),
+			cronExpression: z.string().min(1).max(256).optional(),
 			enabled: z.boolean().optional(),
 		}),
 	)
-	.output(reindexScheduleViewSchema.nullable())
+	.output(scheduleViewSchema)
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 
-		const existing = await getReindexSchedule(input.scheduleId);
-		if (!existing) {
-			throw new ORPCError("NOT_FOUND", {
-				message: "Reindex schedule not found",
-			});
-		}
+		const { updateReindexSchedule } = await import("@repo/database");
 
-		const schedule = await updateReindexSchedule(input.scheduleId, {
+		const updated = await updateReindexSchedule(input.scheduleId, {
 			cronExpression: input.cronExpression,
 			enabled: input.enabled,
 		});
 
-		return schedule;
+		if (!updated) {
+			throw new ORPCError("NOT_FOUND", { message: "Reindex schedule not found" });
+		}
+
+		return updated;
 	});
 
 export const deleteSchedule = protectedProcedure
 	.route({
 		method: "DELETE",
-		path: "/indexing/schedules/{scheduleId}",
+		path: "/indexing/reindex/schedules/{scheduleId}",
 		tags: ["Indexing"],
-		summary: "Delete a reindex schedule",
+		summary: "Delete reindex schedule",
+		description: "Permanently removes a reindex schedule.",
 	})
 	.input(
 		z.object({
@@ -135,18 +131,12 @@ export const deleteSchedule = protectedProcedure
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAdmin(input.organizationId, user);
 
-		const existing = await getReindexSchedule(input.scheduleId);
-		if (!existing) {
-			throw new ORPCError("NOT_FOUND", {
-				message: "Reindex schedule not found",
-			});
-		}
+		const { deleteReindexSchedule } = await import("@repo/database");
 
 		const deleted = await deleteReindexSchedule(input.scheduleId);
+		if (!deleted) {
+			throw new ORPCError("NOT_FOUND", { message: "Reindex schedule not found" });
+		}
 
-		logger.info("Reindex schedule deleted", {
-			scheduleId: input.scheduleId,
-		});
-
-		return { deleted };
+		return { deleted: true };
 	});

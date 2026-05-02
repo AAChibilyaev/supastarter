@@ -22,9 +22,9 @@ export const router = publicProcedure.router({
 	notifications: notificationsRouter,
 	search: searchRouter,
 	knowledge: knowledgeRouter,
-	indexing: indexingRouter,
 	billingWallet: billingWalletRouter,
 	entitlements: entitlementsRouter,
+	indexing: indexingRouter,
 });
 
 export type ApiRouterClient = RouterClient<typeof router>;

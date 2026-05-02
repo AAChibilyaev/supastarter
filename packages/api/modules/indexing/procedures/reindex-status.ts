@@ -1,17 +1,16 @@
 import { ORPCError } from "@orpc/client";
-import { getReindexJobById } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationMember } from "../lib/access";
-import { reindexJobViewSchema } from "../types";
+import { requireOrganizationAdmin } from "../../search/lib/access";
 
 export const reindexStatus = protectedProcedure
 	.route({
 		method: "GET",
-		path: "/indexing/reindex-status",
+		path: "/indexing/reindex/{jobId}/status",
 		tags: ["Indexing"],
-		summary: "Get the status of a specific reindex job",
+		summary: "Get reindex job status",
+		description: "Returns the current status and progress of a reindex job.",
 	})
 	.input(
 		z.object({
@@ -19,15 +18,26 @@ export const reindexStatus = protectedProcedure
 			jobId: z.string(),
 		}),
 	)
-	.output(reindexJobViewSchema.nullable())
+	.output(
+		z.object({
+			id: z.string(),
+			indexId: z.string(),
+			slug: z.string(),
+			status: z.enum(["pending", "running", "completed", "failed"]),
+			processed: z.number().int(),
+			total: z.number().int(),
+			startedAt: z.string(),
+			finishedAt: z.string().nullable(),
+		}),
+	)
 	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationMember(input.organizationId, user.id);
+		await requireOrganizationAdmin(input.organizationId, user);
+
+		const { getReindexJobById } = await import("@repo/database");
 
 		const job = await getReindexJobById(input.jobId);
-		if (!job) {
-			throw new ORPCError("NOT_FOUND", {
-				message: "Reindex job not found",
-			});
+		if (!job || job.organizationId !== input.organizationId) {
+			throw new ORPCError("NOT_FOUND", { message: "Reindex job not found" });
 		}
 
 		return job;

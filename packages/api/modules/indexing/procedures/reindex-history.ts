@@ -1,32 +1,48 @@
-import { listReindexJobHistory } from "@repo/database";
+import { ORPCError } from "@orpc/client";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationMember } from "../lib/access";
-import { reindexJobViewSchema } from "../types";
+import { requireOrganizationAdmin } from "../../search/lib/access";
+
+const reindexJobSchema = z.object({
+	id: z.string(),
+	indexId: z.string(),
+	organizationId: z.string(),
+	slug: z.string(),
+	status: z.enum(["pending", "running", "completed", "failed"]),
+	processed: z.number().int(),
+	total: z.number().int(),
+	startedAt: z.string(),
+	finishedAt: z.string().nullable(),
+});
 
 export const reindexHistory = protectedProcedure
 	.route({
 		method: "GET",
-		path: "/indexing/reindex-history",
+		path: "/indexing/reindex/history",
 		tags: ["Indexing"],
-		summary: "List reindex job history for an organization",
+		summary: "List reindex job history",
+		description:
+			"Returns paginated history of reindex jobs for an organization, " +
+			"ordered by most recent first.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
-			limit: z.number().min(1).max(100).default(20),
-			offset: z.number().min(0).default(0),
+			limit: z.number().int().min(1).max(100).optional().default(20),
+			offset: z.number().int().min(0).optional().default(0),
 		}),
 	)
 	.output(
 		z.object({
-			jobs: z.array(reindexJobViewSchema),
-			total: z.number(),
+			jobs: z.array(reindexJobSchema),
+			total: z.number().int(),
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationMember(input.organizationId, user.id);
+		await requireOrganizationAdmin(input.organizationId, user);
+
+		const { listReindexJobHistory } = await import("@repo/database");
 
 		return listReindexJobHistory(input.organizationId, input.limit, input.offset);
 	});

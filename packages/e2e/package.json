@@ -12,14 +12,14 @@
 		"clean": "git clean -xdf .cache .turbo node_modules test-results playwright-report",
 		"type-check": "tsc --noEmit"
 	},
+	"dependencies": {
+		"dotenv": "^17.4.2"
+	},
 	"devDependencies": {
 		"@playwright/test": "catalog:",
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
 		"dotenv-cli": "catalog:",
 		"typescript": "catalog:"
-	},
-	"dependencies": {
-		"dotenv": "^17.4.2"
 	}
 }

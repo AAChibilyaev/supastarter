@@ -21,13 +21,18 @@ let apiKey: string;
 test.describe.configure({ mode: "serial" });
 
 test.describe("Document Import", () => {
-
 	test.beforeAll(async () => {
 		// Create a test index — define fields inline after creation
 		const index = await createTestIndex(ADMIN_KEY, BASE_URL, `e2e-import-${Date.now()}`);
 		indexSlug = index.slug;
 
-		const key = await createApiKey(ADMIN_KEY, BASE_URL, `e2e-import-key`, ["search", "ingest"], indexSlug);
+		const key = await createApiKey(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-import-key`,
+			["search", "ingest"],
+			indexSlug,
+		);
 		apiKey = key.key;
 
 		await wait(500);
@@ -35,9 +40,24 @@ test.describe("Document Import", () => {
 
 	test("should import documents via v1 API", async () => {
 		const documents = [
-			{ title: "Product A", body: "Description for product A", price: 29.99, tags: ["electronics", "gadget"] },
-			{ title: "Product B", body: "Description for product B", price: 49.99, tags: ["home", "kitchen"] },
-			{ title: "Product C", body: "Description for product C", price: 99.99, tags: ["electronics", "premium"] },
+			{
+				title: "Product A",
+				body: "Description for product A",
+				price: 29.99,
+				tags: ["electronics", "gadget"],
+			},
+			{
+				title: "Product B",
+				body: "Description for product B",
+				price: 49.99,
+				tags: ["home", "kitchen"],
+			},
+			{
+				title: "Product C",
+				body: "Description for product C",
+				price: 99.99,
+				tags: ["electronics", "premium"],
+			},
 		];
 
 		const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents`, {
@@ -71,7 +91,9 @@ test.describe("Document Import", () => {
 				Authorization: `Bearer ${apiKey}`,
 			},
 			body: JSON.stringify({
-				documents: [{ title: "Product D", body: "Single upsert", price: 19.99, tags: ["test"] }],
+				documents: [
+					{ title: "Product D", body: "Single upsert", price: 19.99, tags: ["test"] },
+				],
 			}),
 		});
 
@@ -111,7 +133,6 @@ test.describe("Document Import", () => {
 });
 
 test.describe("Connector Sync", () => {
-
 	test("should list available connectors", async () => {
 		const response = await fetch(`${BASE_URL}/api/v1/connectors`, {
 			method: "GET",

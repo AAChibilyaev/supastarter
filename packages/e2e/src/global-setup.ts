@@ -8,8 +8,9 @@
  * - Create test users/data fixtures if needed
  */
 
-import type { FullConfig } from "@playwright/test";
 import { resolve } from "node:path";
+
+import type { FullConfig } from "@playwright/test";
 import { config as dotenv } from "dotenv";
 
 dotenv({ path: resolve(__dirname, "../../.env.local") });

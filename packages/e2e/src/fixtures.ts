@@ -15,7 +15,7 @@ export interface ApiClient {
 	get: (path: string, opts?: RequestInit) => Promise<ApiResponse>;
 	post: (path: string, body?: unknown, opts?: RequestInit) => Promise<ApiResponse>;
 	patch: (path: string, body?: unknown, opts?: RequestInit) => Promise<ApiResponse>;
-	"delete": (path: string, opts?: RequestInit) => Promise<ApiResponse>;
+	delete: (path: string, opts?: RequestInit) => Promise<ApiResponse>;
 }
 
 interface ApiResponse {
@@ -68,7 +68,7 @@ function createApiClient(baseURL: string): ApiClient {
 		get: (path, opts) => request("GET", path, undefined, opts),
 		post: (path, body, opts) => request("POST", path, body, opts),
 		patch: (path, body, opts) => request("PATCH", path, body, opts),
-		"delete": (path, opts) => request("DELETE", path, undefined, opts),
+		delete: (path, opts) => request("DELETE", path, undefined, opts),
 	};
 }
 

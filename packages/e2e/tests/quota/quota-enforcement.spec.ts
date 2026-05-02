@@ -22,7 +22,6 @@ let apiKey: string;
 test.describe.configure({ mode: "serial" });
 
 test.describe("Quota Enforcement", () => {
-
 	test.beforeAll(async () => {
 		// Create a test index
 		const index = await createTestIndex(ADMIN_KEY, BASE_URL, `e2e-quota-${Date.now()}`);

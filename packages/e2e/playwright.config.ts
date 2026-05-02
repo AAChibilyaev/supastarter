@@ -1,5 +1,6 @@
-import { defineConfig, devices } from "@playwright/test";
 import { resolve } from "node:path";
+
+import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 
 // Load env from monorepo root
@@ -14,10 +15,7 @@ export default defineConfig({
 	fullyParallel: false,
 	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 2 : 1,
-	reporter: [
-		["html", { outputFolder: "playwright-report" }],
-		["list"],
-	],
+	reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
 	use: {
 		baseURL: SAAS_URL,
 		trace: "retain-on-failure",

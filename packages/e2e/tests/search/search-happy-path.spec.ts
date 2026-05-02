@@ -22,11 +22,36 @@ const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 // ─── Test data ───────────────────────────────────────────────────
 
 const SAMPLE_DOCUMENTS = [
-	{ title: "MacBook Pro 16", description: "High-performance laptop", price: 2499, category: "electronics" },
-	{ title: "Wireless Mouse", description: "Ergonomic bluetooth mouse", price: 79, category: "accessories" },
-	{ title: "USB-C Hub", description: "7-in-1 multiport adapter", price: 49, category: "accessories" },
-	{ title: "Developer Handbook", description: "Guide to modern web development", price: 39, category: "books" },
-	{ title: "TypeScript Design Patterns", description: "Advanced patterns and best practices", price: 49, category: "books" },
+	{
+		title: "MacBook Pro 16",
+		description: "High-performance laptop",
+		price: 2499,
+		category: "electronics",
+	},
+	{
+		title: "Wireless Mouse",
+		description: "Ergonomic bluetooth mouse",
+		price: 79,
+		category: "accessories",
+	},
+	{
+		title: "USB-C Hub",
+		description: "7-in-1 multiport adapter",
+		price: 49,
+		category: "accessories",
+	},
+	{
+		title: "Developer Handbook",
+		description: "Guide to modern web development",
+		price: 39,
+		category: "books",
+	},
+	{
+		title: "TypeScript Design Patterns",
+		description: "Advanced patterns and best practices",
+		price: 49,
+		category: "books",
+	},
 ];
 
 let adminKey: string;
@@ -35,7 +60,6 @@ let indexSlug: string;
 test.describe.configure({ mode: "serial" });
 
 test.describe("Search Happy Path", () => {
-
 	test.beforeAll(async () => {
 		// Create a search index
 		const index = await createTestIndex(
@@ -69,7 +93,12 @@ test.describe("Search Happy Path", () => {
 	});
 
 	test("should return empty results for non-matching query", async () => {
-		const results = await searchPublic(indexSlug, "zzzznon_existent_queryxxxx", adminKey, BASE_URL);
+		const results = await searchPublic(
+			indexSlug,
+			"zzzznon_existent_queryxxxx",
+			adminKey,
+			BASE_URL,
+		);
 		expect(results.found).toBe(0);
 		expect(results.hits).toHaveLength(0);
 	});
@@ -103,10 +132,16 @@ test.describe("Search Happy Path", () => {
 	});
 
 	test("should paginate results", async () => {
-		const page1 = await searchPublic(indexSlug, "*", adminKey, BASE_URL, { perPage: 2, page: 1 });
+		const page1 = await searchPublic(indexSlug, "*", adminKey, BASE_URL, {
+			perPage: 2,
+			page: 1,
+		});
 		expect(page1.hits.length).toBeLessThanOrEqual(2);
 
-		const page2 = await searchPublic(indexSlug, "*", adminKey, BASE_URL, { perPage: 2, page: 2 });
+		const page2 = await searchPublic(indexSlug, "*", adminKey, BASE_URL, {
+			perPage: 2,
+			page: 2,
+		});
 		expect(page2.hits.length).toBeLessThanOrEqual(2);
 
 		// Different pages should have different documents
@@ -120,7 +155,6 @@ test.describe("Search Happy Path", () => {
 });
 
 test.describe("Search Error Cases", () => {
-
 	test("should return 404 for non-existent index", async () => {
 		const response = await fetch(`${BASE_URL}/api/search/public/non-existent-index-slug`, {
 			method: "POST",

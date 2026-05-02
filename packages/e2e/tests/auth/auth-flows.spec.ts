@@ -11,8 +11,9 @@
  * - OAuth redirect placeholder
  */
 
-import { test, expect } from "../../src/fixtures";
 import type { Page } from "@playwright/test";
+
+import { test, expect } from "../../src/fixtures";
 
 const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 const _MARKETING_URL = process.env.E2E_MARKETING_URL || "http://localhost:3001";
@@ -44,7 +45,6 @@ async function logout(page: Page): Promise<void> {
 // ─── Tests ───────────────────────────────────────────────────────
 
 test.describe("Auth — Login / Logout", () => {
-
 	test("should redirect unauthenticated user to login page", async ({ page }) => {
 		await page.goto(`${BASE_URL}/overview`);
 		// Should redirect to login
@@ -72,9 +72,11 @@ test.describe("Auth — Login / Logout", () => {
 		expect(page.url()).toContain("/login");
 		// Look for error message
 		const errorEl = page.locator('[role="alert"], .error, .text-red-*, [data-error]').first();
-		await expect(errorEl).toBeVisible({ timeout: 5000 }).catch(() => {
-			// Error might be rendered differently
-		});
+		await expect(errorEl)
+			.toBeVisible({ timeout: 5000 })
+			.catch(() => {
+				// Error might be rendered differently
+			});
 	});
 
 	test("should persist session across page reload", async ({ page }) => {
@@ -91,14 +93,15 @@ test.describe("Auth — Login / Logout", () => {
 });
 
 test.describe("Auth — Registration", () => {
-
 	test("should show signup page", async ({ page }) => {
 		await page.goto(`${BASE_URL}/signup`);
 		await expect(page.locator('input[name="email"]')).toBeVisible();
 		await expect(page.locator('input[name="password"]')).toBeVisible();
-		await expect(page.locator('input[name="name"]')).toBeVisible().catch(() => {
-			// Name field may be optional or have different selector
-		});
+		await expect(page.locator('input[name="name"]'))
+			.toBeVisible()
+			.catch(() => {
+				// Name field may be optional or have different selector
+			});
 	});
 
 	test("should register a new user", async ({ page }) => {
@@ -136,7 +139,6 @@ test.describe("Auth — Registration", () => {
 });
 
 test.describe("Auth — Session Management", () => {
-
 	test("should allow logout", async ({ page }) => {
 		await login(page, TEST_EMAIL, TEST_PASSWORD);
 		await page.waitForURL(/\/overview|\/getting-started/);
@@ -161,19 +163,24 @@ test.describe("Auth — Session Management", () => {
 });
 
 test.describe("Auth — Organization Switching", () => {
-
 	test("should show organization switcher for users with multiple orgs", async ({ page }) => {
 		await login(page, TEST_EMAIL, TEST_PASSWORD);
 		await page.waitForURL(/\/overview|\/getting-started/);
 
 		// Look for org switcher UI element
-		const orgSwitcher = page.locator('[data-org-switcher], [data-radix-select-trigger], [aria-label*="organization" i], [aria-label*="org" i]').first();
+		const orgSwitcher = page
+			.locator(
+				'[data-org-switcher], [data-radix-select-trigger], [aria-label*="organization" i], [aria-label*="org" i]',
+			)
+			.first();
 		const visible = await orgSwitcher.isVisible().catch(() => false);
 
 		if (visible) {
 			// Click org switcher
 			await orgSwitcher.click();
-			const orgOptions = page.locator('[role="option"], [role="menuitem"], [data-org-option]');
+			const orgOptions = page.locator(
+				'[role="option"], [role="menuitem"], [data-org-option]',
+			);
 			await expect(orgOptions.first()).toBeVisible({ timeout: 3000 });
 		}
 		// If no org switcher, user may only have one org — that's acceptable
@@ -181,7 +188,6 @@ test.describe("Auth — Organization Switching", () => {
 });
 
 test.describe("Auth — Password Reset", () => {
-
 	test("should show password reset page", async ({ page }) => {
 		await page.goto(`${BASE_URL}/reset-password`);
 		await expect(page.locator('input[name="email"]')).toBeVisible();
@@ -190,7 +196,6 @@ test.describe("Auth — Password Reset", () => {
 });
 
 test.describe("Auth — 2FA / TOTP", () => {
-
 	test("should show 2FA setup option in security settings", async ({ page }) => {
 		await login(page, TEST_EMAIL, TEST_PASSWORD);
 		await page.waitForURL(/\/overview|\/getting-started/);
@@ -204,7 +209,9 @@ test.describe("Auth — 2FA / TOTP", () => {
 		await page.waitForTimeout(2000);
 
 		// Look for 2FA section
-		const twoFactorSection = page.locator('text=2FA,text=Two Factor,text=Two-Factor,text=Authenticator,text=TOTP').first();
+		const twoFactorSection = page
+			.locator("text=2FA,text=Two Factor,text=Two-Factor,text=Authenticator,text=TOTP")
+			.first();
 		const visible = await twoFactorSection.isVisible().catch(() => false);
 		if (visible) {
 			await expect(twoFactorSection).toBeVisible();

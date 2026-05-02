@@ -20,7 +20,6 @@ let indexSlug: string;
 test.describe.configure({ mode: "serial" });
 
 test.describe("API Key Lifecycle", () => {
-
 	test.beforeAll(async () => {
 		// Create a test index
 		const index = await createTestIndex(ADMIN_KEY, BASE_URL, `e2e-apikey-${Date.now()}`);
@@ -29,7 +28,13 @@ test.describe("API Key Lifecycle", () => {
 	});
 
 	test("should create a search API key", async () => {
-		const result = await createApiKey(ADMIN_KEY, BASE_URL, `e2e-test-search-key`, ["search"], indexSlug);
+		const result = await createApiKey(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-test-search-key`,
+			["search"],
+			indexSlug,
+		);
 		expect(result.key).toBeTruthy();
 		expect(result.id).toBeTruthy();
 		// Key should start with expected prefix format
@@ -37,7 +42,13 @@ test.describe("API Key Lifecycle", () => {
 	});
 
 	test("should use a search API key for authenticated requests", async () => {
-		const result = await createApiKey(ADMIN_KEY, BASE_URL, `e2e-use-key-${Date.now()}`, ["search"], indexSlug);
+		const result = await createApiKey(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-use-key-${Date.now()}`,
+			["search"],
+			indexSlug,
+		);
 		expect(result.key).toBeTruthy();
 
 		// Use the key to search
@@ -53,7 +64,13 @@ test.describe("API Key Lifecycle", () => {
 	});
 
 	test("should revoke an API key", async () => {
-		const result = await createApiKey(ADMIN_KEY, BASE_URL, `e2e-revoke-key-${Date.now()}`, ["search"], indexSlug);
+		const result = await createApiKey(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-revoke-key-${Date.now()}`,
+			["search"],
+			indexSlug,
+		);
 		expect(result.key).toBeTruthy();
 
 		const revoked = await revokeApiKey(ADMIN_KEY, BASE_URL, result.id);
@@ -61,7 +78,13 @@ test.describe("API Key Lifecycle", () => {
 	});
 
 	test("should return 401 for revoked API key", async () => {
-		const result = await createApiKey(ADMIN_KEY, BASE_URL, `e2e-revoked-key-${Date.now()}`, ["search"], indexSlug);
+		const result = await createApiKey(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-revoked-key-${Date.now()}`,
+			["search"],
+			indexSlug,
+		);
 		expect(result.key).toBeTruthy();
 
 		// Revoke it

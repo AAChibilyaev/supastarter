@@ -1,0 +1,149 @@
+---
+title: "7 beste Algolia-Alternativen 2026 (nach Preis und Funktionen bewertet)"
+date: 2026-05-03
+image: https://picsum.photos/id/3/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia ist leistungsstark, aber teuer — 500 $/Monat oder mehr bei 1 Mio. Suchen. Wir haben 7 gehostete und Open-Source-Suchalternativen nach Preis, Entwicklererfahrung und E-Commerce-Unterstützung bewertet. Hier ist das ehrliche Ergebnis.
+tags: [vergleich, algolia, alternativen, suche]
+published: true
+---
+
+Algolia ist die Standardwahl, wenn es um "Wir brauchen Suche" geht. Es ist schnell, gut dokumentiert und die InstantSearch-UI-Bibliothek ist wirklich gut. Aber es ist für Unternehmen konzipiert, die Search als strategischen Budgetposten behandeln — was die meisten wachsenden SaaS-Produkte und E-Commerce-Shops nicht sind.
+
+Bei einer Million Suchanfragen pro Monat kostet Algolia rund 500 $. Bei zehn Millionen sind es 4.500 $+. Zum Vergleich: Ein mittelgroßer WooCommerce-Shop mit 50.000 monatlichen Besuchern kann leicht 3–5 Millionen Suchen erreichen.
+
+Hier ist ein ehrlicher Vergleich der besten Alternativen — gehostete Dienste, Managed-Plattformen und wofür jede einzelne wirklich geeignet ist.
+
+## Schnellvergleich
+
+| Dienst          | Typ       | 1M Suchen/Mon. | Self-Serve? | Am besten für                     |
+| --------------- | --------- | -------------- | ----------- | ---------------------------------- |
+| **AACSearch**   | Hosted    | 29 $           | Ja          | CMS-Händler, SaaS-Produkte         |
+| Typesense Cloud | Hosted    | ~50–100 $      | Ja          | Entwicklerorientierte Projekte     |
+| Meilisearch     | Hosted    | ~30–60 $       | Ja          | Einfache Suchanwendungen           |
+| OpenSearch      | Managed   | 80–200 $+      | Ja (AWS)    | Bestehende AWS-Infrastruktur       |
+| Elasticsearch   | Managed   | 95–300 $+      | Ja (Elastic)| Log-Analyse + Suche                |
+| Solr            | Managed   | Variiert       | Nein        | Enterprise-Legacy-Systeme          |
+| Weaviate        | Hosted    | 25 $+          | Ja          | KI/Vektorsuche                     |
+
+---
+
+## 1. AACSearch — Bestes Angebot für CMS-Händler und SaaS-Produkte
+
+**Preis:** Kostenlos (10K Einheiten/Mo.) · 29 $/Mo. (1M Einheiten) · Enterprise (individuell)
+
+AACSearch ist ein auf Typesense basierender Hosted-Search-as-a-Service. Es richtet sich an zwei Zielgruppen, die Algolia konsequent unterversorgt: PrestaShop/Bitrix/WooCommerce-Händler und mandantenfähige SaaS-Produkte.
+
+**Was es besonders macht:**
+
+- **CMS-Konnektoren inklusive** — PrestaShop- oder Bitrix-Modul installieren, Produktkatalog synchronisiert sich automatisch, kein Code nötig
+- **Scoped Search Tokens** — HMAC-Tokens serverseitig generieren, um Mandantendaten zu isolieren
+- **Zero-Downtime-Reindexierung** — Alias-Swap-Architektur hält die Suche während der Reindexierung online
+- **Widget inklusive** — Drop-in `<script>`-Tag mit Modal-UI, Tastaturnavigation und integrierter Analytics
+
+**Preisrealität:** Bei 1M Suchen/Monat kostet AACSearch 29 $. Algolia kostet ~500 $. Das sind rund 5.650 $ Ersparnis pro Jahr.
+
+→ [Vollständiger AACSearch-vs-Algolia-Vergleich](/compare/algolia)
+
+---
+
+## 2. Typesense Cloud — Beste Entwicklererfahrung nach Algolia
+
+**Preis:** Kostenlos (3 Knoten) · ~50 $/Mo. für Produktions-Cluster
+
+Typesense ist eine Open-Source-Suchmaschine mit einem Hosted-Cloud-Angebot. Für Entwickler, die irgendwann alles selbst betreiben möchten, aber heute einen Managed Service benötigen, ist Typesense Cloud der beste Weg.
+
+**Stärken:** Nahezu identische API wie Algolia, InstantSearch-Adapter out of the box, hervorragende Dokumentation.
+
+**Einschränkungen:** Preisgestaltung knotenbasiert (nicht anfragenbasiert). Community-Support für günstigere Tiers.
+
+→ [AACSearch-vs-Typesense-Vergleich](/compare/typesense)
+
+---
+
+## 3. Meilisearch — Bestes Angebot für einfache Anwendungsfälle
+
+**Preis:** Kostenlos (Community) · 30 $+/Mo. gehostet
+
+Meilisearch ist in der Entwickler-Community dank seiner Einfachheit gewachsen. Die Standardkonfiguration funktioniert für die meisten Suchanwendungen ohne Anpassung — was selten ist.
+
+**Stärken:** Extrem schnelles Setup ohne Konfiguration, saubere REST-API, gute Filterung und Facettierung.
+
+**Einschränkungen:** Mandantenfähigkeit eingeschränkter als Algolia oder AACSearch. Analytics-Funktionen sind grundlegend.
+
+→ [AACSearch-vs-Meilisearch-Vergleich](/compare/meilisearch)
+
+---
+
+## 4. OpenSearch — Bestes Angebot für AWS-native Infrastruktur
+
+**Preis:** ~0,10–0,25 $/Stunde pro Instanz auf AWS
+
+OpenSearch ist der von Amazon gepflegte Fork von Elasticsearch, als Managed Service verfügbar. Wenn Ihre Infrastruktur bereits in AWS liegt und Ihr Team Elasticsearch-Erfahrung hat, ist OpenSearch eine natürliche Wahl.
+
+**Stärken:** Tiefe AWS-Integration (IAM, CloudWatch, VPC), vertraute Elasticsearch-Abfragesyntax.
+
+**Einschränkungen:** Komplex für reine Suchanwendungen. Erfordert operatives Know-how.
+
+→ [AACSearch-vs-OpenSearch-Vergleich](/compare/opensearch)
+
+---
+
+## 5. Elasticsearch (Elastic Cloud) — Bestes Angebot für bestehende Elastic-Nutzer
+
+**Preis:** ~95 $/Mo. für Einstiegspläne · 300 $+/Mo. für Produktion
+
+Elasticsearch ist der Enterprise-Standard für Suche. Wenn Sie Log-Analytics, Security-Monitoring und benutzerorientierte Suche auf derselben Infrastruktur kombinieren müssen, ist Elastic Cloud die vollständigste Plattform.
+
+→ [AACSearch-vs-Elasticsearch-Vergleich](/compare/elasticsearch)
+
+---
+
+## 6. Solr — Bestes Angebot für Enterprise-Legacy-Systeme
+
+**Preis:** Kostenlos (Open Source) · Enterprise-Preise über Lucidworks
+
+Solr ist die ursprüngliche Open-Source-Suchplattform. Sie wird in Enterprise-Umgebungen noch weit verbreitet eingesetzt, empfiehlt sich aber nicht für neue Projekte.
+
+→ [AACSearch-vs-Solr-Vergleich](/compare/solr)
+
+---
+
+## 7. Weaviate — Bestes Angebot für KI/Vektorsuche
+
+**Preis:** Kostenlos (Open Source) · 25 $+/Mo. gehostet
+
+Weaviate ist eine Vektordatenbank mit Volltextsuchfunktionen. Für KI-gestützte Suche, RAG oder semantische Empfehlungen eine starke Wahl.
+
+→ [AACSearch-vs-Weaviate-Vergleich](/compare/weaviate)
+
+---
+
+## Wie Sie die richtige Wahl treffen
+
+**Für PrestaShop, Bitrix oder WooCommerce-Shops:**
+→ AACSearch. Konnektoren synchronisieren den Katalog automatisch. Das Widget ist Drop-in. Der Preis ist 17-mal günstiger als Algolia.
+
+**Für SaaS-Produkte mit mandantenfähiger Suche:**
+→ AACSearch (Scoped Tokens) oder Typesense Cloud.
+
+**Für Entwicklerprojekte mit einfachen Suchanforderungen:**
+→ Meilisearch oder Typesense Cloud.
+
+**Für bestehende AWS-Infrastruktur:**
+→ OpenSearch.
+
+**Für Enterprise mit bestehender Elastic-Investition:**
+→ Bei Elasticsearch bleiben.
+
+**Für KI/Semantische Suche:**
+→ Weaviate oder Pinecone.
+
+---
+
+## Die Algolia-Preisfalle
+
+Die meisten Teams starten auf Algolias kostenlosem Kontingent (10K Anfragen/Monat), wachsen darüber hinaus und zahlen plötzlich 200–500 $ pro Monat, bevor ihr Geschäftsmodell validiert ist.
+
+Die beste Zeit, Alternativen zu bewerten, ist vor einer vollständigen Bindung — nicht danach. Alle genannten Dienste bieten kostenlose Kontingente oder Testversionen an. Testen Sie Ihre 20 häufigsten Suchanfragen gegen jede Option in einer Staging-Umgebung.

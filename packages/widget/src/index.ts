@@ -752,8 +752,69 @@ const WIDGET_STYLES = `
 	font-size: 14px;
 	color: var(--aac-text-secondary);
 }
-.aac-recs-error {
-	color: #dc2626;
+
+/* Active filter chips */
+.aac-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.aac-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--aac-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  cursor: default;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.aac-filter-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+}
+
+.aac-filter-chip-remove:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.aac-filter-chips-clear {
+  font-size: 12px;
+  color: var(--aac-text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  padding: 2px 0;
+  white-space: nowrap;
+}
+
+.aac-filter-chips-clear:hover {
+  color: var(--aac-primary);
+  border-bottom-color: var(--aac-primary);
 }
 `;
 
@@ -1464,6 +1525,54 @@ export class AacSearchWidget {
 		);
 	}
 
+	/**
+	 * Render active filter chips — pills showing currently selected filters with remove button.
+	 * Only shown when at least one filter or price range is active.
+	 */
+	private renderFilterChips(): string {
+		const activeFilters: Array<{ field: string; label: string; value: string }> = [];
+
+		// Collect active text/checkbox filters
+		for (const [field, values] of Object.entries(this.state.filters)) {
+			if (values.length > 0) {
+				const groupLabel = field
+					.replace(/_/g, " ")
+					.replace(/\b\w/g, (c) => c.toUpperCase());
+				for (const val of values) {
+					activeFilters.push({ field, label: groupLabel, value: val });
+				}
+			}
+		}
+
+		// Add price range chip if active
+		const hasPriceChip = this.state.priceRange !== null;
+
+		if (activeFilters.length === 0 && !hasPriceChip) return "";
+
+		let html = '<div class="aac-filter-chips">';
+
+		for (const chip of activeFilters) {
+			html += `<span class="aac-filter-chip" data-chip-field="${escapeHtml(chip.field)}" data-chip-value="${escapeHtml(chip.value)}">`;
+			html += `${escapeHtml(chip.label)}: ${escapeHtml(chip.value)}`;
+			html += `<button class="aac-filter-chip-remove" data-chip-remove="${escapeHtml(chip.field)}" data-chip-remove-value="${escapeHtml(chip.value)}" aria-label="Remove ${escapeHtml(chip.label)}: ${escapeHtml(chip.value)}">&times;</button>`;
+			html += `</span>`;
+		}
+
+		// Price range chip
+		if (hasPriceChip && this.state.priceRange) {
+			html += `<span class="aac-filter-chip" data-chip-field="__price__" data-chip-value="${this.state.priceRange.min}-${this.state.priceRange.max}">`;
+			html += `Price: ${this.formatPriceValue(this.state.priceRange.min)} - ${this.formatPriceValue(this.state.priceRange.max)}`;
+			html += `<button class="aac-filter-chip-remove" data-chip-remove="__price__" aria-label="Remove price filter">&times;</button>`;
+			html += `</span>`;
+		}
+
+		// Clear all button
+		html += `<button class="aac-filter-chips-clear" data-action="clear-all-filters">Clear all</button>`;
+
+		html += "</div>";
+		return html;
+	}
+
 	private attachEvents(): void {
 		// Search input (debounced)
 		const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
@@ -1710,6 +1819,59 @@ export class AacSearchWidget {
 				this.setPriceRange(null);
 			});
 		}
+
+		// Filter chip remove — delegate on widget root
+		this.root.addEventListener("click", (e) => {
+			const removeBtn = (e.target as HTMLElement).closest(
+				"[data-chip-remove]",
+			) as HTMLElement | null;
+			if (!removeBtn) return;
+			const field = removeBtn.getAttribute("data-chip-remove");
+			if (!field) return;
+
+			if (field === "__price__") {
+				this.setPriceRange(null);
+				return;
+			}
+
+			const value = removeBtn.getAttribute("data-chip-remove-value");
+			if (value === null) return;
+
+			// Uncheck the corresponding checkbox in the facet panel so UI stays in sync
+			const checkbox = this.root.querySelector(
+				`input[type="checkbox"][data-field="${escapeHtml(field)}"][data-value="${escapeHtml(value)}"]`,
+			) as HTMLInputElement | null;
+			if (checkbox) checkbox.checked = false;
+
+			this.toggleFilter(field, value);
+		});
+
+		// Clear all filters
+		this.root.addEventListener("click", (e) => {
+			const clearBtn = (e.target as HTMLElement).closest(
+				"[data-action='clear-all-filters']",
+			) as HTMLElement | null;
+			if (!clearBtn) return;
+
+			// Clear text filters
+			const hasFilters = Object.values(this.state.filters).some((v) => v.length > 0);
+			if (hasFilters) {
+				this.state = { ...this.state, filters: {} };
+			}
+
+			// Clear price range
+			if (this.state.priceRange !== null) {
+				this.state = { ...this.state, priceRange: null };
+			}
+
+			// Uncheck all facet checkboxes
+			this.root.querySelectorAll('input[type="checkbox"][data-field]').forEach((el) => {
+				(el as HTMLInputElement).checked = false;
+			});
+
+			this.trackEvent({ type: "filter_used", filters: {} });
+			void this.doSearch(1);
+		});
 	}
 
 	private totalPages(): number {
@@ -1994,6 +2156,7 @@ export class AacSearchWidget {
 					aria-label="${this.t("searchLabel")}"
 				/>
 				</div>
+				${this.renderFilterChips()}
 				${
 					this.state.query || this.state.results.length > 0
 						? `<button class="aac-filter-toggle-btn" id="aac-filter-toggle">Filters</button>

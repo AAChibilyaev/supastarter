@@ -22,7 +22,7 @@ import http from "k6/http";
 import { BASE_URL, API_KEY, INDEX_ID, apiHeaders, randomQuery } from "../lib/config.js";
 
 if (!API_KEY) {
-	throw new Error("API_KEY is required. Set via -e API_KEY=ss_search_...");
+	throw new Error("API_KEY is required. Set via -e API_KEY=***");
 }
 
 if (!INDEX_ID) {

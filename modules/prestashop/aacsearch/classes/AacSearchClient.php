@@ -66,10 +66,11 @@ class AacSearchClient
     public function handshake()
     {
         $response = $this->request('POST', '/api/connectors/handshake', [
-            'project_id' => $this->projectId,
+            'moduleVersion' => defined('_PS_VERSION_') ? _PS_VERSION_ : 'unknown',
+            'platform'      => 'prestashop',
         ]);
 
-        return $response !== null && isset($response['success']) && $response['success'] === true;
+        return $response !== null && isset($response['status']) && $response['status'] === 'active';
     }
 
     /**
@@ -176,12 +177,20 @@ class AacSearchClient
      *
      * @throws Exception
      */
-    public function sendDiagnostics(array $diagnostics)
+    public function sendDiagnostics(array $diagnostics = [])
     {
+        $defaults = [
+            'moduleVersion' => defined('_PS_VERSION_') ? _PS_VERSION_ : 'unknown',
+            'phpVersion'    => phpversion(),
+            'shopUrl'       => Tools::getShopDomainSsl(true),
+            'totalProducts' => 0,
+            'errors'        => [],
+        ];
+
         $response = $this->request(
             'POST',
             '/api/projects/' . urlencode($this->projectId) . '/diagnostics',
-            $diagnostics
+            array_merge($defaults, $diagnostics)
         );
 
         return $response !== null && !isset($response['error']);

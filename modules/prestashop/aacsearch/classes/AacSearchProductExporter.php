@@ -256,32 +256,13 @@ class AacSearchProductExporter
             $idShop
         );
 
-        // Attributes (combinations)
-        $attributes = [];
-        $combinations = $productFull->getAttributesGroups($idLang);
-        if (!empty($combinations)) {
-            $seen = [];
-            foreach ($combinations as $combination) {
-                $groupName = isset($combination['group_name']) ? $combination['group_name'] : '';
-                $attrName = isset($combination['attribute_name']) ? $combination['attribute_name'] : '';
-
-                if ($groupName && $attrName && !isset($seen[$groupName . '-' . $attrName])) {
-                    $attributes[] = [
-                        'name' => $groupName,
-                        'value' => $attrName,
-                    ];
-                    $seen[$groupName . '-' . $attrName] = true;
-                }
-            }
-        }
-
         // Stock / Availability
         $stockQuantity = Product::getQuantity($productId, null, null);
         $availability = $stockQuantity > 0 ? 'in_stock' : 'out_of_stock';
 
         // Dates
-        $createdAt = $productFull->date_add ? date('c', strtotime($productFull->date_add)) : date('c');
-        $updatedAt = $productFull->date_upd ? date('c', strtotime($productFull->date_upd)) : date('c');
+        $createdAt = $productFull->date_add ? strtotime($productFull->date_add) : time();
+        $updatedAt = $productFull->date_upd ? strtotime($productFull->date_upd) : time();
 
         // Build the ProductDocument
         $document = [
@@ -291,7 +272,7 @@ class AacSearchProductExporter
             'sku' => $productFull->reference ?: '',
             'brand' => $brand,
             'categories' => $categoryNames,
-            'category_ids' => $categoryIds,
+            'category_ids' => array_map('strval', $categoryIds),
             'tags' => $tagList,
             'price' => round($priceTaxIncl, 2),
             'sale_price' => $salePriceTaxIncl !== null ? round($salePriceTaxIncl, 2) : null,
@@ -300,13 +281,63 @@ class AacSearchProductExporter
             'product_url' => $productUrl,
             'availability' => $availability,
             'stock_quantity' => $stockQuantity,
-            'attributes' => $attributes,
+            'attributes' => $this->buildAttributes($productFull),
             'locale' => $this->locale,
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];
 
         return $document;
+    }
+
+    /**
+     * Build key-value attributes from product combination data.
+     *
+     * @param Product $productFull Fully loaded product object
+     *
+     * @return array Key-value pairs of attribute group => value
+     */
+    protected function buildAttributes($productFull)
+    {
+        $attrs = [];
+        $idLang = $this->langId ?: (int) $this->context()->language->id;
+        $idShop = (int) $this->context()->shop->id;
+
+        $combinations = $productFull->getAttributesGroups($idLang);
+        if (!empty($combinations)) {
+            foreach ($combinations as $combination) {
+                $groupName = isset($combination['group_name']) ? $combination['group_name'] : '';
+                $attrName = isset($combination['attribute_name']) ? $combination['attribute_name'] : '';
+                if ($groupName && $attrName) {
+                    $attrs[$groupName] = $attrName;
+                }
+            }
+        }
+
+        // Add reference if it differs from SKU
+        if (!empty($productFull->reference)) {
+            $attrs['reference'] = $productFull->reference;
+        }
+
+        // Add EAN / UPC if present
+        if (!empty($productFull->ean13)) {
+            $attrs['ean13'] = $productFull->ean13;
+        }
+        if (!empty($productFull->upc)) {
+            $attrs['upc'] = $productFull->upc;
+        }
+
+        // Add wholesale price for analytics
+        if (!empty($productFull->wholesale_price)) {
+            $attrs['wholesale_price'] = (float) $productFull->wholesale_price;
+        }
+
+        // Add condition
+        if (!empty($productFull->condition)) {
+            $attrs['condition'] = $productFull->condition;
+        }
+
+        return $attrs;
     }
 
     /**

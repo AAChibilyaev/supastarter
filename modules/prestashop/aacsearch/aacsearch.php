@@ -103,7 +103,9 @@ class Aacsearch extends Module
             && Configuration::updateValue(self::CFG_LOCALE, 'en')
             && Configuration::updateValue(self::CFG_CURRENCY, 'USD')
             && Configuration::updateValue(self::CFG_BATCH_SIZE, (string) self::DEFAULT_BATCH_SIZE)
-            && Configuration::updateValue(self::CFG_DEBUG_MODE, '0');
+            && Configuration::updateValue(self::CFG_DEBUG_MODE, '0')
+            && Configuration::updateValue('AACSEARCH_LAST_FULL_SYNC', '')
+            && Configuration::updateValue('AACSEARCH_LAST_DELTA_SYNC', '');
     }
 
     /**
@@ -121,7 +123,9 @@ class Aacsearch extends Module
             && Configuration::deleteByName(self::CFG_LOCALE)
             && Configuration::deleteByName(self::CFG_CURRENCY)
             && Configuration::deleteByName(self::CFG_BATCH_SIZE)
-            && Configuration::deleteByName(self::CFG_DEBUG_MODE);
+            && Configuration::deleteByName(self::CFG_DEBUG_MODE)
+            && Configuration::deleteByName('AACSEARCH_LAST_FULL_SYNC')
+            && Configuration::deleteByName('AACSEARCH_LAST_DELTA_SYNC');
     }
 
     /**
@@ -252,6 +256,7 @@ class Aacsearch extends Module
             $syncResult = $client->fullSync($products);
 
             if ($syncResult) {
+                Configuration::updateValue('AACSEARCH_LAST_FULL_SYNC', date('c'));
                 return $this->displayConfirmation(
                     $this->l('Full sync completed successfully.') . ' ' .
                     sprintf($this->l('%d products exported.'), count($products))
@@ -281,22 +286,12 @@ class Aacsearch extends Module
 
         try {
             $diagnostics = [
-                'module_version' => $this->version,
-                'prestashop_version' => _PS_VERSION_,
-                'php_version' => PHP_VERSION,
-                'shop_name' => Configuration::get('PS_SHOP_NAME'),
-                'shop_url' => Tools::getShopDomainSsl(true),
-                'products_count' => (int) Db::getInstance()->getValue(
+                'lastFullSync'  => Configuration::get('AACSEARCH_LAST_FULL_SYNC', ''),
+                'lastDeltaSync' => Configuration::get('AACSEARCH_LAST_DELTA_SYNC', ''),
+                'totalProducts' => (int) Db::getInstance()->getValue(
                     'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'product` WHERE `active` = 1'
                 ),
-                'categories_count' => (int) Db::getInstance()->getValue(
-                    'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'category`'
-                ),
-                'sync_enabled' => (bool) Configuration::get(self::CFG_SYNC_ENABLED),
-                'widget_enabled' => (bool) Configuration::get(self::CFG_WIDGET_ENABLED),
-                'locale' => Configuration::get(self::CFG_LOCALE),
-                'currency' => Configuration::get(self::CFG_CURRENCY),
-                'batch_size' => (int) Configuration::get(self::CFG_BATCH_SIZE),
+                'errors'        => [],
             ];
 
             $result = $client->sendDiagnostics($diagnostics);
@@ -546,6 +541,7 @@ class Aacsearch extends Module
 
             $client = $this->createClient();
             $client->deltaSync([$productDocument]);
+            Configuration::updateValue('AACSEARCH_LAST_DELTA_SYNC', date('c'));
 
             $this->logDebug('Delta synced product ' . $productId . ' to AACsearch.');
         } catch (Exception $e) {
@@ -644,6 +640,8 @@ class Aacsearch extends Module
                     count($products)
                 ));
             }
+
+            Configuration::updateValue('AACSEARCH_LAST_FULL_SYNC', date('c'));
 
             return [
                 'success' => true,

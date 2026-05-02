@@ -60,9 +60,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 							<TableHead>{t("search.connector.jobStarted")}</TableHead>
 							<TableHead>{t("search.connector.jobDuration")}</TableHead>
 							<TableHead>{t("search.connector.jobItems")}</TableHead>
-							{onRetry && (
-								<TableHead>{t("search.connector.jobActions")}</TableHead>
-							)}
+							{onRetry && <TableHead>{t("search.connector.jobActions")}</TableHead>}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -89,7 +87,8 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									{job.itemsCount}
 									{job.failuresCount > 0 && (
 										<span className="ml-1 text-destructive">
-											({job.failuresCount} {t("search.connector.jobFailures")})
+											({job.failuresCount} {t("search.connector.jobFailures")}
+											)
 										</span>
 									)}
 								</TableCell>
@@ -108,9 +107,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 												{t("search.connector.jobRetry")}
 											</Button>
 										) : (
-											<span className="text-xs text-muted-foreground">
-												—
-											</span>
+											<span className="text-xs text-muted-foreground">—</span>
 										)}
 									</TableCell>
 								)}

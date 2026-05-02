@@ -9,7 +9,6 @@ import {
 	LinkIcon,
 	MegaphoneIcon,
 	SearchIcon,
-
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";

@@ -28,12 +28,12 @@ When your search returns zero results for a reasonable query, most shoppers don'
 
 **Common failure patterns in WooCommerce search:**
 
-| Customer types | WooCommerce returns | Should return |
-| --- | --- | --- |
-| "sneakers" | Nothing (products tagged "trainers") | Nike Air Max, Adidas Ultraboost... |
-| "womans jacket" (typo) | Nothing | Women's jackets |
-| "blue" | Every product mentioning blue anywhere | Blue-colored products, ranked by popularity |
-| Starts typing "run..." | Nothing (no autocomplete) | Instant suggestions as they type |
+| Customer types         | WooCommerce returns                    | Should return                               |
+| ---------------------- | -------------------------------------- | ------------------------------------------- |
+| "sneakers"             | Nothing (products tagged "trainers")   | Nike Air Max, Adidas Ultraboost...          |
+| "womans jacket" (typo) | Nothing                                | Women's jackets                             |
+| "blue"                 | Every product mentioning blue anywhere | Blue-colored products, ranked by popularity |
+| Starts typing "run..." | Nothing (no autocomplete)              | Instant suggestions as they type            |
 
 ## The Fix: Hosted Search with a WooCommerce Connector
 
@@ -67,18 +67,18 @@ In the plugin settings, click **Sync All Products**. This exports your entire Wo
 
 The connector maps WooCommerce fields to the search index:
 
-| WooCommerce field | AACSearch field | Searchable | Facetable |
-| --- | --- | --- | --- |
-| Product name | title | ✅ | ❌ |
-| Description | description | ✅ | ❌ |
-| Short description | short_description | ✅ | ❌ |
-| SKU | sku | ✅ | ❌ |
-| Price | price | ❌ | ✅ |
-| Categories | categories | ✅ | ✅ |
-| Tags | tags | ✅ | ✅ |
-| Attributes | attributes | ✅ | ✅ |
-| Stock status | in_stock | ❌ | ✅ |
-| Rating | rating | ❌ | ✅ |
+| WooCommerce field | AACSearch field   | Searchable | Facetable |
+| ----------------- | ----------------- | ---------- | --------- |
+| Product name      | title             | ✅         | ❌        |
+| Description       | description       | ✅         | ❌        |
+| Short description | short_description | ✅         | ❌        |
+| SKU               | sku               | ✅         | ❌        |
+| Price             | price             | ❌         | ✅        |
+| Categories        | categories        | ✅         | ✅        |
+| Tags              | tags              | ✅         | ✅        |
+| Attributes        | attributes        | ✅         | ✅        |
+| Stock status      | in_stock          | ❌         | ✅        |
+| Rating            | rating            | ❌         | ✅        |
 
 ## Step 4: Enable the Search Widget
 
@@ -107,6 +107,7 @@ This step alone typically recovers 15–25% of searches that were previously ret
 ## What Changes After the Switch
 
 **Before:**
+
 - MySQL LIKE query, ~200–500ms response
 - No typo tolerance
 - No autocomplete
@@ -114,6 +115,7 @@ This step alone typically recovers 15–25% of searches that were previously ret
 - Zero-result rate: typically 20–35% for larger catalogs
 
 **After:**
+
 - Typesense search, < 50ms response
 - Handles 1–2 character typos automatically
 - Instant suggestions as you type

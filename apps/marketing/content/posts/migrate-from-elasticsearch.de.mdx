@@ -1,0 +1,143 @@
+---
+title: "So migrieren Sie von Elasticsearch in 20 Minuten"
+date: 2025-05-03
+image: https://picsum.photos/id/119/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Eine Schritt-für-Schritt-Anleitung zur Migration Ihrer Suchinfrastruktur von selbst gehostetem Elasticsearch zu AACSearch — ohne Ausfallzeiten, ohne Datenverlust und mit einer 10-fachen Reduzierung der monatlichen Kosten.
+tags: [tutorial, migration, elasticsearch, getting-started]
+published: false
+---
+
+Wenn Sie selbst gehostetes Elasticsearch betreiben, kennen Sie den Schmerz: JVM-Heap-Tuning, Cluster-Health-Überwachung, Shard-Rebalancing, Snapshot-Repositories … die Liste ist lang. Ihre monatliche Cloud-Rechnung für das 3-Knoten-Cluster liegt bei 300–500 $ pro Monat.
+
+Der Wechsel zu AACSearch dauert 20 Minuten und senkt Ihre Suchkosten um das Zehnfache. So geht's.
+
+## Voraussetzungen
+
+- Ein AACSearch-Konto ([kostenlose Stufe](https://aacsearch.com) — 10.000 Dokumente)
+- Der Name Ihres aktuellen Elasticsearch-Index
+- Das Tool `elasticdump` (`npm install elasticdump -g`)
+- Python 3.6+ (für das Schema-Konvertierungsskript)
+
+## Schritt 1: Elasticsearch-Mapping exportieren
+
+Exportieren Sie zunächst Ihr Index-Mapping und Ihre Daten aus Elasticsearch:
+
+```bash
+# Export mapping
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./mapping.json \
+  --type=mapping
+
+# Export data
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./data.json \
+  --type=data
+```
+
+## Schritt 2: In das Typesense-Schema konvertieren
+
+Typesense verwendet abgeleitete Schemata, sodass die meisten Konvertierungen automatisch erfolgen. Dennoch sollten Sie diese ES-spezifischen Typen beachten:
+
+- `text` → `string` (Typesense erkennt automatisch)
+- `keyword` → `string` (mit `facet: true` für Aggregationen)
+- `integer` / `long` → `int64` oder `float`
+- `nested` → zu einem flachen Objekt abflachen (Typesense unterstützt keine verschachtelten Objekte)
+- `date` → `string` im ISO-8601-Format (Typesense speichert als String)
+
+Erstellen Sie einen neuen Index in AACSearch:
+
+1. Melden Sie sich in Ihrem Dashboard an
+2. Klicken Sie auf **Neuer Index** → vergeben Sie einen Namen (z. B. `products-v1`)
+3. Wählen Sie **Importieren** → **JSON hochladen**
+
+AACSearch erkennt Ihr Schema automatisch und erstellt die Typesense-Collection.
+
+## Schritt 3: Daten hochladen
+
+Der schnellste Weg für kleine bis mittelgroße Datensätze:
+
+```bash
+# Upload using the AACSearch API
+curl -X POST https://api.aacsearch.com/v1/collections/products-v1/documents/import \
+  -H "X-API-Key: ss_search_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d @data.json
+```
+
+Für Datensätze über 100 MB nutzen Sie die Funktion **Massenimport** im Dashboard mit geteilten Uploads (automatisch).
+
+## Schritt 4: Anwendungscode aktualisieren
+
+Ersetzen Sie Ihren Elasticsearch-Client durch den AACSearch-Client:
+
+**Vorher (Elasticsearch):**
+
+```javascript
+import { Client } from "@elastic/elasticsearch";
+
+const client = new Client({ node: "http://localhost:9200" });
+const { hits } = await client.search({
+	index: "products",
+	body: { query: { match: { name: "wireless headphones" } } },
+});
+```
+
+**Nachher (AACSearch):**
+
+```javascript
+import { AACSearch } from "@repo/search-client";
+
+const search = new AACSearch({
+	apiKey: "ss_search_YOUR_KEY",
+});
+
+const results = await search.query("wireless headphones", {
+	collection: "products-v1",
+	filters: { inStock: true },
+});
+```
+
+## Schritt 5: Überprüfen und umschalten
+
+Führen Sie einen Rauchtest durch:
+
+```bash
+# Test a few queries against AACSearch
+curl "https://api.aacsearch.com/v1/search?q=wireless+headphones&collection=products-v1" \
+  -H "X-API-Key: ss_search_YOUR_KEY"
+```
+
+Vergleichen Sie die Ergebnisse mit Ihrer aktuellen Elasticsearch-Ausgabe. In den meisten Fällen ist das Relevanz-Ranking vergleichbar oder besser — der TF-IDF von Typesense mit konfigurierbaren Feldgewichtungen gibt Ihnen eine feingranulare Kontrolle über die Ergebnisreihenfolge.
+
+Sobald die Überprüfung abgeschlossen ist, leiten Sie Ihre Produktionsanwendung zu AACSearch um und stellen Sie Ihren Elasticsearch-Cluster außer Dienst.
+
+## Was ist mit Ausfallzeiten?
+
+Da Ihr Elasticsearch-Cluster und AACSearch während der Migration unabhängig voneinander laufen, besteht kein Ausfallrisiko. Sie können:
+
+1. Beide parallel laufen lassen (Minuten bis Stunden)
+2. Einen Prozentsatz des Datenverkehrs zu AACSearch leiten, um zu testen
+3. Zu 100 % umschalten, wenn Sie sicher sind
+
+Das unterbrechungsfreie Reindexing von AACSearch bedeutet, dass zukünftige Schemaänderungen keine weitere Migration erfordern — klicken Sie einfach im Dashboard auf **Neu indizieren**.
+
+## Kostenvergleich
+
+|                   | Selbst gehostetes ES (3 Knoten)              | AACSearch Pro   |
+| ----------------- | -------------------------------------------- | --------------- |
+| Monatliche Kosten | ~350 $ (AWS m6g.large x3)                    | 29 $/Monat      |
+| Wartung           | JVM-Tuning, Backups, Patches                 | Keine           |
+| Skalierung        | Knoten hinzufügen, Shards neu ausbalancieren | Upgrade klicken |
+| Backups           | Manueller Snapshot-Lebenszyklus              | Automatisch     |
+
+**Ersparnis: 10-fach, plus Ihre DevOps-Zeit zurückgewonnen.**
+
+## Nächste Schritte
+
+[Kostenloses AACSearch-Konto erstellen →](https://aacsearch.com)
+
+Bereits migriert? [Teilen Sie Ihre Erfahrungen →](https://github.com/AAChibilyaev/supastarter/discussions)

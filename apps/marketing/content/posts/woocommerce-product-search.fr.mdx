@@ -26,12 +26,12 @@ Les acheteurs qui utilisent la recherche convertissent 2–3× plus que ceux qui
 
 **Schémas d'échec courants dans la recherche WooCommerce :**
 
-| Le client tape | WooCommerce retourne | Devrait retourner |
-| --- | --- | --- |
-| "sneakers" | Rien (produits tagués "baskets") | Nike Air Max, Adidas Ultraboost... |
-| "veste femme" (faute de frappe) | Rien | Vestes femme |
-| "bleu" | Chaque produit mentionnant bleu | Produits bleus, triés par popularité |
-| Tape "ba..." | Rien (pas d'autocomplétion) | Suggestions instantanées |
+| Le client tape                  | WooCommerce retourne             | Devrait retourner                    |
+| ------------------------------- | -------------------------------- | ------------------------------------ |
+| "sneakers"                      | Rien (produits tagués "baskets") | Nike Air Max, Adidas Ultraboost...   |
+| "veste femme" (faute de frappe) | Rien                             | Vestes femme                         |
+| "bleu"                          | Chaque produit mentionnant bleu  | Produits bleus, triés par popularité |
+| Tape "ba..."                    | Rien (pas d'autocomplétion)      | Suggestions instantanées             |
 
 ## La solution : recherche hébergée avec connecteur WooCommerce
 
@@ -60,13 +60,13 @@ Cliquez sur **Synchroniser tous les produits**. Pour une boutique de 10 000 prod
 Le connecteur mappe les champs WooCommerce à l'index de recherche :
 
 | Champ WooCommerce | Champ AACSearch | Recherchable | Filtrable |
-| --- | --- | --- | --- |
-| Nom du produit | title | ✅ | ❌ |
-| Description | description | ✅ | ❌ |
-| Prix | price | ❌ | ✅ |
-| Catégories | categories | ✅ | ✅ |
-| Attributs | attributes | ✅ | ✅ |
-| Statut de stock | in_stock | ❌ | ✅ |
+| ----------------- | --------------- | ------------ | --------- |
+| Nom du produit    | title           | ✅           | ❌        |
+| Description       | description     | ✅           | ❌        |
+| Prix              | price           | ❌           | ✅        |
+| Catégories        | categories      | ✅           | ✅        |
+| Attributs         | attributes      | ✅           | ✅        |
+| Statut de stock   | in_stock        | ❌           | ✅        |
 
 ## Étape 4 : Activer le widget de recherche
 
@@ -93,12 +93,14 @@ Cette étape seule permet typiquement de récupérer 15–25 % des recherches qu
 ## Ce qui change après la bascule
 
 **Avant :**
+
 - Requête MySQL LIKE, ~200–500ms
 - Pas de tolérance aux fautes de frappe
 - Pas d'autocomplétion
 - Taux de zéro résultat : typiquement 20–35 %
 
 **Après :**
+
 - Recherche Typesense, < 50ms
 - Gère 1–2 erreurs de caractères automatiquement
 - Suggestions instantanées pendant la frappe

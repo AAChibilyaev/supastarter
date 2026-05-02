@@ -28,17 +28,17 @@ cp .env.local.example .env.production
 
 Edit `.env.production` and fill in the required values:
 
-| Variable | Required | Description |
-|---|---|---|
-| `DB_PASSWORD` | ✅ | PostgreSQL password |
-| `NEXT_PUBLIC_SAAS_URL` | ✅ | Your app URL, e.g. `https://app.aacsearch.com` |
-| `BETTER_AUTH_SECRET` | ✅ | Random 32-byte secret: `openssl rand -base64 32` |
-| `TYPESENSE_ADMIN_API_KEY` | ✅ | Strong random key for Typesense: `openssl rand -hex 32` |
-| `SEARCH_CRON_SECRET` | ✅ | Secret for cron endpoint auth: `openssl rand -hex 24` |
-| `WALLET_CRON_SECRET` | ✅ | Secret for wallet cron endpoints: `openssl rand -hex 24` |
-| `MINIO_ROOT_PASSWORD` | ✅ | MinIO admin password |
-| `MAIL_FROM` | ✅ | Sender address, e.g. `noreply@aacsearch.com` |
-| One mail provider key | ✅ | `RESEND_API_KEY` or SMTP vars (`MAIL_HOST`/`MAIL_PORT`/`MAIL_USER`/`MAIL_PASS`) |
+| Variable                  | Required | Description                                                                     |
+| ------------------------- | -------- | ------------------------------------------------------------------------------- |
+| `DB_PASSWORD`             | ✅       | PostgreSQL password                                                             |
+| `NEXT_PUBLIC_SAAS_URL`    | ✅       | Your app URL, e.g. `https://app.aacsearch.com`                                  |
+| `BETTER_AUTH_SECRET`      | ✅       | Random 32-byte secret: `openssl rand -base64 32`                                |
+| `TYPESENSE_ADMIN_API_KEY` | ✅       | Strong random key for Typesense: `openssl rand -hex 32`                         |
+| `SEARCH_CRON_SECRET`      | ✅       | Secret for cron endpoint auth: `openssl rand -hex 24`                           |
+| `WALLET_CRON_SECRET`      | ✅       | Secret for wallet cron endpoints: `openssl rand -hex 24`                        |
+| `MINIO_ROOT_PASSWORD`     | ✅       | MinIO admin password                                                            |
+| `MAIL_FROM`               | ✅       | Sender address, e.g. `noreply@aacsearch.com`                                    |
+| One mail provider key     | ✅       | `RESEND_API_KEY` or SMTP vars (`MAIL_HOST`/`MAIL_PORT`/`MAIL_USER`/`MAIL_PASS`) |
 
 ### 3. Start services
 
@@ -113,12 +113,12 @@ Use this if you already have managed PostgreSQL, MinIO/S3, and Typesense.
 
 AACSearch needs four periodic jobs. In the Docker Compose setup, the `cron-worker` service handles them automatically using `deploy/cron/crontab`.
 
-| Endpoint | Schedule | Secret | Purpose |
-|---|---|---|---|
-| `POST /api/cron/search-flush` | Every minute | `SEARCH_CRON_SECRET` | Flush ingest buffer → Typesense |
-| `POST /api/cron/reindex-runner` | Every 2 min | `SEARCH_CRON_SECRET` | Run pending reindex jobs |
-| `POST /api/cron/expire-reservations` | Every 5 min | `WALLET_CRON_SECRET` | Expire stale wallet reservations |
-| `POST /api/cron/reconcile-tochka-topups` | Hourly | `WALLET_CRON_SECRET` | Reconcile Tochka top-up orders |
+| Endpoint                                 | Schedule     | Secret               | Purpose                          |
+| ---------------------------------------- | ------------ | -------------------- | -------------------------------- |
+| `POST /api/cron/search-flush`            | Every minute | `SEARCH_CRON_SECRET` | Flush ingest buffer → Typesense  |
+| `POST /api/cron/reindex-runner`          | Every 2 min  | `SEARCH_CRON_SECRET` | Run pending reindex jobs         |
+| `POST /api/cron/expire-reservations`     | Every 5 min  | `WALLET_CRON_SECRET` | Expire stale wallet reservations |
+| `POST /api/cron/reconcile-tochka-topups` | Hourly       | `WALLET_CRON_SECRET` | Reconcile Tochka top-up orders   |
 
 To call them manually:
 
@@ -169,10 +169,10 @@ DATABASE_URL="..." pnpm --filter @repo/database migrate
 
 ## Troubleshooting
 
-| Symptom | Fix |
-|---|---|
-| App starts but `/api/health` returns 503 | Check `docker compose logs app` — usually a missing env var |
-| Typesense connection refused | Ensure `TYPESENSE_ADMIN_API_KEY` matches what Typesense was started with |
-| Email not sending | Verify `MAIL_FROM` and at least one mail provider key |
-| Search ingest stuck | Check cron-worker logs: `docker compose logs cron-worker` |
-| MinIO bucket missing | Re-run `docker compose up minio-setup` |
+| Symptom                                  | Fix                                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------ |
+| App starts but `/api/health` returns 503 | Check `docker compose logs app` — usually a missing env var              |
+| Typesense connection refused             | Ensure `TYPESENSE_ADMIN_API_KEY` matches what Typesense was started with |
+| Email not sending                        | Verify `MAIL_FROM` and at least one mail provider key                    |
+| Search ingest stuck                      | Check cron-worker logs: `docker compose logs cron-worker`                |
+| MinIO bucket missing                     | Re-run `docker compose up minio-setup`                                   |

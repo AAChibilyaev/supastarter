@@ -26,17 +26,17 @@ Im AACSearch-Dashboard einen neuen Index für Blogbeiträge erstellen:
 
 ```json
 {
-  "name": "articles",
-  "fields": [
-    { "name": "id", "type": "string" },
-    { "name": "title", "type": "string" },
-    { "name": "content", "type": "string" },
-    { "name": "excerpt", "type": "string" },
-    { "name": "category", "type": "string", "facet": true },
-    { "name": "tags", "type": "string[]", "facet": true },
-    { "name": "published_at", "type": "int64" }
-  ],
-  "default_sorting_field": "published_at"
+	"name": "articles",
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string" },
+		{ "name": "content", "type": "string" },
+		{ "name": "excerpt", "type": "string" },
+		{ "name": "category", "type": "string", "facet": true },
+		{ "name": "tags", "type": "string[]", "facet": true },
+		{ "name": "published_at", "type": "int64" }
+	],
+	"default_sorting_field": "published_at"
 }
 ```
 
@@ -51,22 +51,22 @@ npm install @aacsearch/client
 import { AACSearchClient } from "@aacsearch/client";
 
 const client = new AACSearchClient({
-  apiUrl: process.env.AACSEARCH_API_URL!,
-  apiKey: process.env.AACSEARCH_INGEST_KEY!,
+	apiUrl: process.env.AACSEARCH_API_URL!,
+	apiKey: process.env.AACSEARCH_INGEST_KEY!,
 });
 
 const articles = await fetchAllArticles();
 await client.documents("articles").importBatch(
-  articles.map((a) => ({
-    id: a.slug,
-    title: a.title,
-    content: a.content,
-    excerpt: a.excerpt,
-    category: a.category,
-    tags: a.tags,
-    published_at: Math.floor(new Date(a.publishedAt).getTime() / 1000),
-  })),
-  { action: "upsert" }
+	articles.map((a) => ({
+		id: a.slug,
+		title: a.title,
+		content: a.content,
+		excerpt: a.excerpt,
+		category: a.category,
+		tags: a.tags,
+		published_at: Math.floor(new Date(a.publishedAt).getTime() / 1000),
+	})),
+	{ action: "upsert" },
 );
 ```
 
@@ -79,22 +79,22 @@ Legen Sie niemals Ihren API-Schlüssel direkt im Browser offen. Erstellen Sie ei
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const query = new URL(request.url).searchParams.get("q");
-  if (!query?.trim()) return NextResponse.json({ hits: [], found: 0 });
+	const query = new URL(request.url).searchParams.get("q");
+	if (!query?.trim()) return NextResponse.json({ hits: [], found: 0 });
 
-  const response = await fetch(
-    `${process.env.AACSEARCH_API_URL}/api/search?` +
-      new URLSearchParams({
-        q: query,
-        query_by: "title,excerpt,content",
-        per_page: "10",
-        highlight_full_fields: "title,excerpt",
-      }),
-    { headers: { Authorization: `Bearer ${process.env.AACSEARCH_SEARCH_KEY}` } }
-  );
+	const response = await fetch(
+		`${process.env.AACSEARCH_API_URL}/api/search?` +
+			new URLSearchParams({
+				q: query,
+				query_by: "title,excerpt,content",
+				per_page: "10",
+				highlight_full_fields: "title,excerpt",
+			}),
+		{ headers: { Authorization: `Bearer ${process.env.AACSEARCH_SEARCH_KEY}` } },
+	);
 
-  if (!response.ok) return NextResponse.json({ error: "search_failed" }, { status: 502 });
-  return NextResponse.json(await response.json());
+	if (!response.ok) return NextResponse.json({ error: "search_failed" }, { status: 502 });
+	return NextResponse.json(await response.json());
 }
 ```
 

@@ -37,7 +37,9 @@ const trustedOrigins = Array.from(
 		"http://localhost:3010",
 		"http://127.0.0.1:3000",
 		"http://127.0.0.1:3010",
-		...(process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()).filter(Boolean) ?? []),
+		...(process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",")
+			.map((o) => o.trim())
+			.filter(Boolean) ?? []),
 	]),
 );
 

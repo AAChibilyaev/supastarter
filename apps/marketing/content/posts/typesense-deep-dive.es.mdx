@@ -1,0 +1,108 @@
+---
+title: "Arquitectura de búsqueda para SaaS: Una inmersión profunda en Typesense"
+date: 2025-05-03
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Por qué elegimos Typesense como el motor de búsqueda que impulsa AACSearch — decisiones arquitectónicas, comparativas de rendimiento y las ventajas y desventajas frente a Elasticsearch y Meilisearch.
+tags: [architecture, typesense, engineering, performance]
+published: false
+---
+
+Cuando nos propusimos construir AACSearch, evaluamos todos los motores de búsqueda importantes del mercado. Aquí explicamos por qué ganó Typesense, cómo diseñamos la arquitectura a su alrededor y cómo es el rendimiento en producción.
+
+## ¿Por qué no Elasticsearch?
+
+Elasticsearch es potente pero operativamente pesado. Un clúster gestionado de Elasticsearch en Elastic Cloud comienza en 95 $/mes por 2 GB de RAM — antes de añadir cualquier funcionalidad de búsqueda. Más importante aún:
+
+- **La multiinquilinato es compleja**: cada inquilino necesita un índice separado (intensivo en recursos) o un enrutamiento de alias complejo
+- **Sobrecarga de memoria**: el montón JVM de Elasticsearch es notoriamente hambriento; un clúster de 4 GB puede indexar realistamente solo ~1M de documentos pequeños
+- **Superficie de configuración**: más de 200 ajustes crean un impuesto DevOps que los equipos SaaS no deberían pagar
+
+Typesense, por el contrario, está escrito en C++ — arranca en milisegundos y usa una fracción de la memoria.
+
+## ¿Por qué no Meilisearch?
+
+Meilisearch tiene una excelente experiencia de desarrollo, pero en el momento de la evaluación:
+
+- **Sin multiinquilinato nativa** — cada inquilino requiere un nodo separado o filtrado de token incrustado
+- **Orientado a casos de uso de un solo inquilino** (documentación, blogs) en lugar de SaaS
+- **Menos opciones de despliegue** para alojamiento gestionado
+
+El modelo integrado de colección por inquilino de Typesense se adapta perfectamente a la multiinquilinato de SaaS.
+
+## Arquitectura multiinquilino
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  API Layer  │────▶│  Ingest      │────▶│  Typesense  │
+│  (Hono/oRPC) │     │  Buffer      │     │  Cluster    │
+└─────────────┘     │  (Postgres)  │     └─────────────┘
+                    └──────────────┘
+                           │
+                    ┌──────┴──────┐
+                    │  Worker      │
+                    │  (bulk upsert)│
+                    └─────────────┘
+```
+
+Cada inquilino (organización) obtiene su propia colección de Typesense. El búfer de ingesta asegura que nunca sobrecarguemos Typesense con escrituras concurrentes — las solicitudes de API públicas van primero a Postgres, y un trabajador en segundo plano maneja el `bulkUpsert` real a Typesense.
+
+**Aislamiento de inquilinos**: las llamadas llevan un `tenantId: verified.organizationId`. Los tokens de API con ámbito restringen aún más el acceso — un `scopedFilter` se combina con AND con los filtros de la persona que llama, asegurando que no haya lecturas entre organizaciones.
+
+## Reindexación sin tiempo de inactividad
+
+Esta es la función estrella de AACSearch. Cuando actualiza su esquema:
+
+1. Creamos una nueva colección (v2) con el esquema actualizado
+2. Transmitimos sus documentos desde la colección actual (v1) a v2
+3. Ejecutamos ambas colecciones en paralelo — v1 sirve tráfico
+4. Una vez que v2 está completamente indexada, intercambiamos atómicamente el alias
+5. v1 se elimina
+
+Todo el proceso ocurre sin una sola consulta fallida.
+
+## Comparativas de rendimiento
+
+Medido en un solo nodo de Typesense (8 GB RAM, 4 vCPU):
+
+| Tipo de consulta                        | p50  | p95  | p99   |
+| --------------------------------------- | ---- | ---- | ----- |
+| Búsqueda simple por palabra clave       | 3ms  | 8ms  | 15ms  |
+| Filtro facetado + búsqueda              | 5ms  | 12ms | 22ms  |
+| Búsqueda en múltiples campos (5 campos) | 4ms  | 10ms | 18ms  |
+| Búsqueda con filtro geográfico          | 6ms  | 15ms | 28ms  |
+| Búsqueda semántica (con embedding)      | 45ms | 80ms | 120ms |
+
+Estas mediciones son en nuestra infraestructura alojada (Docker gestionado por Coolify). La latencia varía según la región, pero se mantiene por debajo de 50 ms p99 para búsquedas estándar en Norteamérica y Europa.
+
+## Patrones de diseño de esquemas
+
+Para la mayoría de los casos de uso de SaaS, un modelo de documento plano funciona mejor:
+
+```typescript
+interface Product {
+	id: string;
+	name: string; // búsqueda de texto completo
+	description: string; // búsqueda de texto completo
+	category: string; // faceta
+	price: number; // faceta + ordenación
+	tags: string[]; // faceta (múltiple)
+	inStock: boolean; // filtro
+	imageUrl: string; // solo visualización de resultados
+	metadata: Record<string, unknown>; // paso directo
+}
+```
+
+El esquema inferido de Typesense significa que no necesita predefnir su mapeo. Para casos de uso avanzados, puede establecer pesos específicos por campo, reglas de clasificación personalizadas y grupos de sinónimos a través del panel de AACSearch.
+
+## Conclusión
+
+Typesense nos proporcionó un motor de búsqueda que es:
+
+- **Rápido**: tiempo de ejecución en C++, consultas por debajo de 10 ms
+- **Multiinquilino por diseño**: modelo de colección por organización
+- **Sencillo**: esquemas inferidos, configuración mínima
+- **Rentable**: 10 veces más barato que clústeres de Elasticsearch de tamaño equivalente
+
+Fue la base adecuada para AACSearch.

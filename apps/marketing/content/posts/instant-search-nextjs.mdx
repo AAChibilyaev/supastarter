@@ -32,17 +32,17 @@ In the AACSearch dashboard, create a new index. For a blog or documentation site
 
 ```json
 {
-  "name": "articles",
-  "fields": [
-    { "name": "id", "type": "string" },
-    { "name": "title", "type": "string" },
-    { "name": "content", "type": "string" },
-    { "name": "excerpt", "type": "string" },
-    { "name": "category", "type": "string", "facet": true },
-    { "name": "tags", "type": "string[]", "facet": true },
-    { "name": "published_at", "type": "int64" }
-  ],
-  "default_sorting_field": "published_at"
+	"name": "articles",
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string" },
+		{ "name": "content", "type": "string" },
+		{ "name": "excerpt", "type": "string" },
+		{ "name": "category", "type": "string", "facet": true },
+		{ "name": "tags", "type": "string[]", "facet": true },
+		{ "name": "published_at", "type": "int64" }
+	],
+	"default_sorting_field": "published_at"
 }
 ```
 
@@ -50,16 +50,16 @@ For an e-commerce product catalog:
 
 ```json
 {
-  "name": "products",
-  "fields": [
-    { "name": "id", "type": "string" },
-    { "name": "title", "type": "string" },
-    { "name": "description", "type": "string" },
-    { "name": "price", "type": "float" },
-    { "name": "category", "type": "string", "facet": true },
-    { "name": "in_stock", "type": "bool", "facet": true }
-  ],
-  "default_sorting_field": "price"
+	"name": "products",
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string" },
+		{ "name": "description", "type": "string" },
+		{ "name": "price", "type": "float" },
+		{ "name": "category", "type": "string", "facet": true },
+		{ "name": "in_stock", "type": "bool", "facet": true }
+	],
+	"default_sorting_field": "price"
 }
 ```
 
@@ -79,29 +79,29 @@ Create an indexing script at `scripts/index-content.ts`:
 import { AACSearchClient } from "@aacsearch/client";
 
 const client = new AACSearchClient({
-  apiUrl: process.env.AACSEARCH_API_URL!,
-  apiKey: process.env.AACSEARCH_INGEST_KEY!, // write key, server-side only
+	apiUrl: process.env.AACSEARCH_API_URL!,
+	apiKey: process.env.AACSEARCH_INGEST_KEY!, // write key, server-side only
 });
 
 async function indexArticles() {
-  // Replace with your actual data source
-  const articles = await fetchAllArticles();
+	// Replace with your actual data source
+	const articles = await fetchAllArticles();
 
-  const documents = articles.map((article) => ({
-    id: article.slug,
-    title: article.title,
-    content: article.content,
-    excerpt: article.excerpt,
-    category: article.category,
-    tags: article.tags,
-    published_at: Math.floor(new Date(article.publishedAt).getTime() / 1000),
-  }));
+	const documents = articles.map((article) => ({
+		id: article.slug,
+		title: article.title,
+		content: article.content,
+		excerpt: article.excerpt,
+		category: article.category,
+		tags: article.tags,
+		published_at: Math.floor(new Date(article.publishedAt).getTime() / 1000),
+	}));
 
-  await client.documents("articles").importBatch(documents, {
-    action: "upsert", // create or update
-  });
+	await client.documents("articles").importBatch(documents, {
+		action: "upsert", // create or update
+	});
 
-  console.log(`Indexed ${documents.length} articles`);
+	console.log(`Indexed ${documents.length} articles`);
 }
 
 indexArticles().catch(console.error);
@@ -127,34 +127,34 @@ const AACSEARCH_API_URL = process.env.AACSEARCH_API_URL!;
 const AACSEARCH_SEARCH_KEY = process.env.AACSEARCH_SEARCH_KEY!; // read-only key
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const query = searchParams.get("q");
+	const { searchParams } = new URL(request.url);
+	const query = searchParams.get("q");
 
-  if (!query || query.trim().length === 0) {
-    return NextResponse.json({ hits: [], found: 0 });
-  }
+	if (!query || query.trim().length === 0) {
+		return NextResponse.json({ hits: [], found: 0 });
+	}
 
-  const response = await fetch(
-    `${AACSEARCH_API_URL}/api/search?` +
-      new URLSearchParams({
-        q: query,
-        query_by: "title,excerpt,content",
-        per_page: "10",
-        highlight_full_fields: "title,excerpt",
-      }),
-    {
-      headers: {
-        Authorization: `Bearer ${AACSEARCH_SEARCH_KEY}`,
-      },
-    }
-  );
+	const response = await fetch(
+		`${AACSEARCH_API_URL}/api/search?` +
+			new URLSearchParams({
+				q: query,
+				query_by: "title,excerpt,content",
+				per_page: "10",
+				highlight_full_fields: "title,excerpt",
+			}),
+		{
+			headers: {
+				Authorization: `Bearer ${AACSEARCH_SEARCH_KEY}`,
+			},
+		},
+	);
 
-  if (!response.ok) {
-    return NextResponse.json({ error: "search_failed" }, { status: 502 });
-  }
+	if (!response.ok) {
+		return NextResponse.json({ error: "search_failed" }, { status: 502 });
+	}
 
-  const data = await response.json();
-  return NextResponse.json(data);
+	const data = await response.json();
+	return NextResponse.json(data);
 }
 ```
 
@@ -427,30 +427,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { AACSearchClient } from "@aacsearch/client";
 
 const client = new AACSearchClient({
-  apiUrl: process.env.AACSEARCH_API_URL!,
-  apiKey: process.env.AACSEARCH_INGEST_KEY!,
+	apiUrl: process.env.AACSEARCH_API_URL!,
+	apiKey: process.env.AACSEARCH_INGEST_KEY!,
 });
 
 export async function POST(request: NextRequest) {
-  const { event, article } = await request.json();
+	const { event, article } = await request.json();
 
-  if (event === "article.published" || event === "article.updated") {
-    await client.documents("articles").upsert({
-      id: article.slug,
-      title: article.title,
-      content: article.content,
-      excerpt: article.excerpt,
-      category: article.category,
-      tags: article.tags,
-      published_at: Math.floor(Date.now() / 1000),
-    });
-  }
+	if (event === "article.published" || event === "article.updated") {
+		await client.documents("articles").upsert({
+			id: article.slug,
+			title: article.title,
+			content: article.content,
+			excerpt: article.excerpt,
+			category: article.category,
+			tags: article.tags,
+			published_at: Math.floor(Date.now() / 1000),
+		});
+	}
 
-  if (event === "article.deleted") {
-    await client.documents("articles").delete(article.slug);
-  }
+	if (event === "article.deleted") {
+		await client.documents("articles").delete(article.slug);
+	}
 
-  return NextResponse.json({ ok: true });
+	return NextResponse.json({ ok: true });
 }
 ```
 

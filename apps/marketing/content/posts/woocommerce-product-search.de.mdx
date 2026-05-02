@@ -26,12 +26,12 @@ Käufer, die die Suche verwenden, konvertieren 2–3× häufiger als solche, die
 
 **Häufige Fehlermuster in der WooCommerce-Suche:**
 
-| Kunde tippt | WooCommerce liefert | Sollte liefern |
-| --- | --- | --- |
-| "Sneakers" | Nichts (Produkte heißen "Trainer") | Nike Air Max, Adidas Ultraboost... |
-| "Damenjacke" (Tippfehler) | Nichts | Damenjacken |
-| "blau" | Jedes Produkt mit "blau" | Blaue Produkte, nach Beliebtheit sortiert |
-| Tippt "lauf..." | Nichts (kein Autocomplete) | Sofortige Vorschläge |
+| Kunde tippt               | WooCommerce liefert                | Sollte liefern                            |
+| ------------------------- | ---------------------------------- | ----------------------------------------- |
+| "Sneakers"                | Nichts (Produkte heißen "Trainer") | Nike Air Max, Adidas Ultraboost...        |
+| "Damenjacke" (Tippfehler) | Nichts                             | Damenjacken                               |
+| "blau"                    | Jedes Produkt mit "blau"           | Blaue Produkte, nach Beliebtheit sortiert |
+| Tippt "lauf..."           | Nichts (kein Autocomplete)         | Sofortige Vorschläge                      |
 
 ## Die Lösung: Hosted Search mit WooCommerce-Konnektor
 
@@ -60,13 +60,13 @@ Klicken Sie in den Plugin-Einstellungen auf **Alle Produkte synchronisieren**. F
 Der Konnektor ordnet WooCommerce-Felder dem Suchindex zu:
 
 | WooCommerce-Feld | AACSearch-Feld | Durchsuchbar | Filterbar |
-| --- | --- | --- | --- |
-| Produktname | title | ✅ | ❌ |
-| Beschreibung | description | ✅ | ❌ |
-| Preis | price | ❌ | ✅ |
-| Kategorien | categories | ✅ | ✅ |
-| Attribute | attributes | ✅ | ✅ |
-| Lagerstatus | in_stock | ❌ | ✅ |
+| ---------------- | -------------- | ------------ | --------- |
+| Produktname      | title          | ✅           | ❌        |
+| Beschreibung     | description    | ✅           | ❌        |
+| Preis            | price          | ❌           | ✅        |
+| Kategorien       | categories     | ✅           | ✅        |
+| Attribute        | attributes     | ✅           | ✅        |
+| Lagerstatus      | in_stock       | ❌           | ✅        |
 
 ## Schritt 4: Such-Widget aktivieren
 
@@ -93,12 +93,14 @@ Dieser Schritt allein rettet typischerweise 15–25 % der Suchen, die zuvor kein
 ## Was sich nach dem Wechsel ändert
 
 **Vorher:**
+
 - MySQL LIKE-Abfrage, ~200–500ms
 - Keine Tippfehlertoleranz
 - Kein Autocomplete
 - Nulltrefferquote: typischerweise 20–35 %
 
 **Nachher:**
+
 - Typesense-Suche, < 50ms
 - Behandelt 1–2 Zeichenfehler automatisch
 - Sofortige Vorschläge beim Tippen

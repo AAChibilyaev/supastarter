@@ -19,14 +19,14 @@ Hier ist die vollständige Migrationsanleitung.
 
 Algolia und AACSearch teilen dasselbe mentale Modell, nur mit anderen Namen:
 
-| Algolia          | AACSearch     | Hinweise                                             |
-| ---------------- | ------------- | ---------------------------------------------------- |
-| Application      | Organisation  | Oberster Container                                   |
-| Index            | Suchindex     | Eine Sammlung von Dokumenten                         |
-| Record           | Dokument      | Ein einzelnes durchsuchbares Element                 |
-| API Key          | API-Schlüssel | Auth-Tokens mit Berechtigungsumfang                  |
-| Replica index    | —             | Relevanztuning + Sortierparameter verwenden          |
-| Query Suggestions| —             | `prefix_search` + Analytics für Vorschläge verwenden |
+| Algolia           | AACSearch     | Hinweise                                             |
+| ----------------- | ------------- | ---------------------------------------------------- |
+| Application       | Organisation  | Oberster Container                                   |
+| Index             | Suchindex     | Eine Sammlung von Dokumenten                         |
+| Record            | Dokument      | Ein einzelnes durchsuchbares Element                 |
+| API Key           | API-Schlüssel | Auth-Tokens mit Berechtigungsumfang                  |
+| Replica index     | —             | Relevanztuning + Sortierparameter verwenden          |
+| Query Suggestions | —             | `prefix_search` + Analytics für Vorschläge verwenden |
 
 Der wesentliche Unterschied: AACSearch nutzt Typesense im Hintergrund. Typesense bietet bessere Standardeinstellungen für Tippfehlertoleranz, Präfixsuche und facettierte Navigation.
 
@@ -36,16 +36,16 @@ Erstellen Sie im AACSearch-Dashboard einen neuen Suchindex und definieren Sie Ih
 
 ```json
 {
-  "name": "products",
-  "fields": [
-    { "name": "id", "type": "string" },
-    { "name": "title", "type": "string" },
-    { "name": "description", "type": "string" },
-    { "name": "price", "type": "float" },
-    { "name": "category", "type": "string", "facet": true },
-    { "name": "in_stock", "type": "bool", "facet": true }
-  ],
-  "default_sorting_field": "price"
+	"name": "products",
+	"fields": [
+		{ "name": "id", "type": "string" },
+		{ "name": "title", "type": "string" },
+		{ "name": "description", "type": "string" },
+		{ "name": "price", "type": "float" },
+		{ "name": "category", "type": "string", "facet": true },
+		{ "name": "in_stock", "type": "bool", "facet": true }
+	],
+	"default_sorting_field": "price"
 }
 ```
 
@@ -62,16 +62,15 @@ AACSearch unterstützt auch **Scoped Tokens** — HMAC-signierte Tokens, die den
 
 ```typescript
 // Algolia-Ansatz
-const securedKey = algoliasearch.generateSecuredApiKey(
-  searchOnlyApiKey,
-  { filters: `org_id:${userId}` }
-);
+const securedKey = algoliasearch.generateSecuredApiKey(searchOnlyApiKey, {
+	filters: `org_id:${userId}`,
+});
 
 // AACSearch-Ansatz
 const scopedToken = await orpc.search.createScopedToken({
-  keyId: searchKeyId,
-  filters: `org_id:=${userId}`,
-  ttlSeconds: 3600
+	keyId: searchKeyId,
+	filters: `org_id:=${userId}`,
+	ttlSeconds: 3600,
 });
 ```
 
@@ -82,11 +81,13 @@ Das Sicherheitsmodell ist äquivalent. AACSearch verwendet HMAC-SHA256 über Ihr
 Exportieren Sie Ihre Algolia-Records als JSON und importieren Sie sie in AACSearch.
 
 **Batch-Import über das Dashboard:**
+
 1. Gehen Sie zu Ihrem Index → Import
 2. Laden Sie eine JSON-Datei hoch (Array von Objekten)
 3. AACSearch behandelt Duplikate anhand des `id`-Felds
 
 **Import via API:**
+
 ```bash
 curl -X POST "https://api.aacsearch.com/api/connector/sync/full" \
   -H "Authorization: Bearer ss_connector_your_token" \
@@ -113,11 +114,12 @@ Ersetzen Sie `algoliasearch` durch das AACSearch Browser-SDK:
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
 
 <!-- Hinzufügen -->
-<script src="https://app.aacsearch.com/api/widget/widget.js"
-  data-index="products"
-  data-api-key="ss_search_your_key"
-  data-api-url="https://api.aacsearch.com">
-</script>
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index="products"
+	data-api-key="ss_search_your_key"
+	data-api-url="https://api.aacsearch.com"
+></script>
 ```
 
 Das AACSearch-Widget ist ein Drop-in mit integrierter Modal-UI, Tastaturnavigation und Analytics.
@@ -134,13 +136,13 @@ npm install typesense-instantsearch-adapter
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
-  server: {
-    apiKey: "ss_search_your_key",
-    nodes: [{ host: "api.aacsearch.com", port: 443, protocol: "https" }],
-  },
-  additionalSearchParameters: {
-    query_by: "title,description,category",
-  },
+	server: {
+		apiKey: "ss_search_your_key",
+		nodes: [{ host: "api.aacsearch.com", port: 443, protocol: "https" }],
+	},
+	additionalSearchParameters: {
+		query_by: "title,description,category",
+	},
 });
 
 const searchClient = typesenseInstantsearchAdapter.searchClient;
@@ -168,11 +170,11 @@ Vor dem Wechsel:
 
 Bei einer Million Suchanfragen pro Monat:
 
-| | Algolia | AACSearch |
-|---|---|---|
-| Monatliche Kosten | ~500 $ | 29 $ |
-| Jährliche Kosten | ~6.000 $ | 348 $ |
-| **Jährliche Einsparung** | | **~5.650 $** |
+|                          | Algolia  | AACSearch    |
+| ------------------------ | -------- | ------------ |
+| Monatliche Kosten        | ~500 $   | 29 $         |
+| Jährliche Kosten         | ~6.000 $ | 348 $        |
+| **Jährliche Einsparung** |          | **~5.650 $** |
 
 Die Migration dauert typischerweise 2–4 Stunden für einen Standard-Produktkatalog.
 

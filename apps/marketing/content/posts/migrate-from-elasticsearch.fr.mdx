@@ -1,0 +1,143 @@
+---
+title: "Comment migrer depuis Elasticsearch en 20 minutes"
+date: 2025-05-03
+image: https://picsum.photos/id/119/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Un guide étape par étape pour migrer votre infrastructure de recherche depuis Elasticsearch auto-hébergé vers AACSearch — sans temps d'arrêt, sans perte de données et avec une réduction de 10x des coûts mensuels.
+tags: [tutorial, migration, elasticsearch, getting-started]
+published: false
+---
+
+Si vous utilisez Elasticsearch auto-hébergé, vous connaissez la douleur : réglage du tas JVM, surveillance de l'état du cluster, rééquilibrage des shards, dépôts de snapshots… la liste est longue. Pendant ce temps, votre facture mensuelle pour ce cluster à 3 nœuds est de 300 à 500 $/mois.
+
+Migrer vers AACSearch prend 20 minutes et réduit vos coûts de recherche de 10x. Voici exactement comment procéder.
+
+## Prérequis
+
+- Un compte AACSearch ([niveau gratuit](https://aacsearch.com) — 10K documents)
+- Le nom de votre index Elasticsearch actuel
+- L'outil `elasticdump` (`npm install elasticdump -g`)
+- Python 3.6+ (pour le script de conversion de schéma)
+
+## Étape 1 : Exporter votre mapping Elasticsearch
+
+Commencez par exporter le mapping et les données de votre index depuis Elasticsearch :
+
+```bash
+# Export mapping
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./mapping.json \
+  --type=mapping
+
+# Export data
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./data.json \
+  --type=data
+```
+
+## Étape 2 : Convertir vers le schéma Typesense
+
+Typesense utilise des schémas inférés, donc la plupart des conversions sont automatiques. Cependant, vous devrez traiter ces types spécifiques à ES :
+
+- `text` → `string` (Typesense détecte automatiquement)
+- `keyword` → `string` (avec `facet: true` pour les agrégations)
+- `integer` / `long` → `int64` ou `float`
+- `nested` → aplatir en un objet plat (Typesense ne prend pas en charge les objets imbriqués)
+- `date` → `string` au format ISO 8601 (Typesense stocke comme string)
+
+Créez un nouvel index dans AACSearch :
+
+1. Connectez-vous à votre tableau de bord
+2. Cliquez sur **Nouvel index** → nommez-le (ex. `products-v1`)
+3. Sélectionnez **Importer** → **Télécharger JSON**
+
+AACSearch détectera automatiquement votre schéma et créera la collection Typesense.
+
+## Étape 3 : Télécharger vos données
+
+La façon la plus rapide pour les jeux de données petits à moyens :
+
+```bash
+# Upload using the AACSearch API
+curl -X POST https://api.aacsearch.com/v1/collections/products-v1/documents/import \
+  -H "X-API-Key: ss_search_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d @data.json
+```
+
+Pour les jeux de données de plus de 100 Mo, utilisez la fonction d'**Import en masse** du tableau de bord avec des téléchargements fragmentés (automatique).
+
+## Étape 4 : Mettre à jour le code de votre application
+
+Remplacez votre client Elasticsearch par le client AACSearch :
+
+**Avant (Elasticsearch) :**
+
+```javascript
+import { Client } from "@elastic/elasticsearch";
+
+const client = new Client({ node: "http://localhost:9200" });
+const { hits } = await client.search({
+	index: "products",
+	body: { query: { match: { name: "wireless headphones" } } },
+});
+```
+
+**Après (AACSearch) :**
+
+```javascript
+import { AACSearch } from "@repo/search-client";
+
+const search = new AACSearch({
+	apiKey: "ss_search_YOUR_KEY",
+});
+
+const results = await search.query("wireless headphones", {
+	collection: "products-v1",
+	filters: { inStock: true },
+});
+```
+
+## Étape 5 : Vérifier et basculer
+
+Effectuez un test de fumée :
+
+```bash
+# Test a few queries against AACSearch
+curl "https://api.aacsearch.com/v1/search?q=wireless+headphones&collection=products-v1" \
+  -H "X-API-Key: ss_search_YOUR_KEY"
+```
+
+Comparez les résultats avec la sortie actuelle d'Elasticsearch. Pour la plupart des configurations, le classement de pertinence sera comparable ou meilleur — le TF-IDF de Typesense avec des pondérations de champ configurables vous donne un contrôle précis sur l'ordre des résultats.
+
+Une fois vérifié, pointez votre application de production vers AACSearch et décommissionnez votre cluster Elasticsearch.
+
+## Qu'en est-il du zéro temps d'arrêt ?
+
+Étant donné que votre cluster Elasticsearch et AACSearch fonctionnent indépendamment pendant la migration, il n'y a aucun risque de temps d'arrêt. Vous pouvez :
+
+1. Garder les deux en parallèle (minutes à heures)
+2. Router un pourcentage du trafic vers AACSearch pour tester
+3. Basculer à 100 % lorsque vous êtes confiant
+
+Le réindexage sans temps d'arrêt d'AACSearch signifie que les futurs changements de schéma ne nécessiteront pas une autre migration — cliquez simplement sur **Réindexer** dans le tableau de bord.
+
+## Comparaison des coûts
+
+|                     | ES auto-hébergé (3 nœuds)                  | AACSearch Pro             |
+| ------------------- | ------------------------------------------ | ------------------------- |
+| Coût mensuel        | ~350 $ (AWS m6g.large x3)                  | 29 $/mois                 |
+| Maintenance         | Réglage JVM, sauvegardes, correctifs       | Aucune                    |
+| Passage à l'échelle | Ajouter des nœuds, rééquilibrer les shards | Cliquer sur mise à niveau |
+| Sauvegardes         | Cycle de vie manuel des snapshots          | Automatique               |
+
+**Économies : 10x, plus votre temps DevOps récupéré.**
+
+## Prochaines étapes
+
+[Créez votre compte AACSearch gratuit →](https://aacsearch.com)
+
+Déjà migré ? [Partagez votre expérience →](https://github.com/AAChibilyaev/supastarter/discussions)

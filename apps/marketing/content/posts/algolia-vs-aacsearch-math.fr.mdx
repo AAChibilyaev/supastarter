@@ -1,0 +1,69 @@
+---
+title: "Algolia vs AACSearch : Nous avons fait les comptes"
+date: 2025-05-03
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Une comparaison des coûts transparente et fondée sur les données entre Algolia et AACSearch sur trois niveaux d'utilisation réels — et pourquoi la plupart des équipes économisent 5 à 10 fois.
+tags: [comparison, algolia, pricing, typesense]
+published: false
+---
+
+Chaque équipe SaaS qui évalue une infrastructure de recherche se heurte à la même question : Algolia est le leader du marché, mais les prix grimpent rapidement. AACSearch est plus récent — offre-t-il une qualité comparable pour une fraction du coût ?
+
+Nous avons fait les comptes sur trois niveaux d'utilisation pour que vous n'ayez pas à le faire.
+
+## Méthodologie
+
+Nous avons comparé le plan Pro d'AACSearch (29 $/mois, 100 000 recherches, 10 000 documents) et le plan Enterprise (299 $/mois, 1 M de recherches, 100 000 documents) aux équivalents Algolia en utilisant leurs tarifs publiés sur algolia.com/pricing.
+
+Les deux plateformes proposent : recherche en texte intégral, filtrage par facettes, tolérance aux fautes de frappe, analytics et support multi-tenant.
+
+## Niveau 1 : SaaS en phase de démarrage (100 000 recherches/mois)
+
+| Fonctionnalité                 | Algolia                        | AACSearch                                                |
+| ------------------------------ | ------------------------------ | -------------------------------------------------------- |
+| Coût mensuel                   | 299 $/mois (Growth)            | 29 $/mois (Pro)                                          |
+| Opérations de recherche        | 100 000 incluses               | 100 000 incluses                                         |
+| Documents                      | 10 000                         | 10 000                                                   |
+| Analytics                      | Basique                        | Complet (volume de requêtes, CTR, recherches populaires) |
+| Réindexation sans interruption | Enterprise uniquement (599 $+) | Incluse                                                  |
+| Interface de recherche i18n    | Module complémentaire séparé   | Intégrée, 5 langues                                      |
+| Connecteurs                    | API uniquement                 | PrestaShop, Bitrix, Next.js, React                       |
+
+**Économies : 10x**
+
+## Niveau 2 : Entreprise en croissance (1 M de recherches/mois)
+
+| Fonctionnalité          | Algolia                | AACSearch               |
+| ----------------------- | ---------------------- | ----------------------- |
+| Coût mensuel            | 1 299 $/mois (Premium) | 299 $/mois (Enterprise) |
+| Opérations de recherche | 1 M incluses           | 1 M incluses            |
+| Documents               | 100 000                | 100 000                 |
+| Analytics               | Avancé                 | Complet                 |
+| SLA                     | 99,9 %                 | 99,9 %                  |
+| SSO/SAML                | Plan Enterprise        | Plan Enterprise         |
+
+**Économies : 4,3x**
+
+## Niveau 3 : Haut volume (10 M de recherches/mois)
+
+À ce niveau, Algolia exige un contrat entreprise personnalisé commençant autour de 5 000 $/mois. AACSearch Enterprise peut prendre en charge ce volume avec une tarification personnalisée — généralement entre 1 500 et 2 000 $/mois selon le nombre de documents et les fonctionnalités.
+
+**Économies estimées : 3-5x**
+
+## Les Coûts Cachés
+
+Au-delà de la ligne budgétaire, il y a des coûts qu'Algolia ne mentionne pas :
+
+1. **La réindexation sans interruption** est une fonctionnalité exclusivement Enterprise chez Algolia (+300 $/mois minimum). AACSearch l'inclut dans tous les plans payants.
+2. **Les analytics de recherche** qu'Algolia facture en supplément (analytique des clics, suggestions de requêtes) sont intégrés dans AACSearch.
+3. **Le déploiement multirégion** chez Algolia nécessite des contrats entreprise personnalisés ; AACSearch le propose dans le plan Enterprise.
+
+## Le Compromis
+
+AACSearch utilise Typesense en coulisses (open source) plutôt que le moteur propriétaire d'Algolia. Pour les cas d'usage standard — recherche de produits, recherche sur site, recherche dans une application — la qualité est comparable. Cependant, Algolia propose une personnalisation plus avancée et des fonctionnalités de classement alimentées par l'IA dont certaines équipes enterprise peuvent avoir besoin.
+
+**En résumé :** Si vous avez besoin d'un moteur de recherche qui fonctionne simplement à un prix raisonnable, AACSearch vous fait économiser 5 à 10 fois. Si vous avez besoin de la couche avancée de personnalisation par IA d'Algolia, la prime peut en valoir la peine.
+
+[Commencez gratuitement →](https://aacsearch.com)

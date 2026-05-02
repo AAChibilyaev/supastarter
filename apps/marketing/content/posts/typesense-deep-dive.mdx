@@ -1,0 +1,108 @@
+---
+title: "Search Architecture for SaaS: A Typesense Deep Dive"
+date: 2025-05-03
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Why we chose Typesense as the search engine powering AACSearch — architecture decisions, performance benchmarks, and the trade-offs vs Elasticsearch and Meilisearch.
+tags: [architecture, typesense, engineering, performance]
+published: false
+---
+
+When we set out to build AACSearch, we evaluated every major search engine on the market. Here's why Typesense won, how we architected around it, and what the performance looks like in production.
+
+## Why Not Elasticsearch?
+
+Elasticsearch is powerful but operationally heavy. A managed Elasticsearch cluster on Elastic Cloud starts at $95/mo for 2GB RAM — before adding any search features on top. More importantly:
+
+- **Multi-tenancy is complex**: every tenant needs either a separate index (resource-heavy) or complex alias routing
+- **Memory overhead**: Elasticsearch's JVM heap is notoriously hungry; a 4GB cluster can realistically index only ~1M small documents
+- **Configuration surface area**: 200+ settings create a DevOps tax that SaaS teams shouldn't pay
+
+Typesense, by contrast, is written in C++ — it starts in milliseconds and uses a fraction of the memory.
+
+## Why Not Meilisearch?
+
+Meilisearch has excellent developer experience, but at the time of evaluation:
+
+- **No native multi-tenancy** — every tenant requires a separate node or embedded token filtering
+- **Geared toward single-tenant use cases** (documentation, blogs) rather than SaaS
+- **Fewer deployment options** for managed hosting
+
+Typesense's built-in collection-per-tenant model maps perfectly to SaaS multitenancy.
+
+## Multi-Tenant Architecture
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  API Layer  │────▶│  Ingest      │────▶│  Typesense  │
+│  (Hono/oRPC) │     │  Buffer      │     │  Cluster    │
+└─────────────┘     │  (Postgres)  │     └─────────────┘
+                    └──────────────┘
+                           │
+                    ┌──────┴──────┐
+                    │  Worker      │
+                    │  (bulk upsert)│
+                    └─────────────┘
+```
+
+Each tenant (organization) gets their own Typesense collection. The ingest buffer ensures we never overload Typesense with concurrent writes — public API requests go to Postgres first, and a background worker handles the actual `bulkUpsert` to Typesense.
+
+**Tenant isolation**: calls carry a `tenantId: verified.organizationId`. Scoped API tokens narrow access further — a `scopedFilter` is AND-combined with the caller's filters, ensuring no cross-org reads.
+
+## Zero-Downtime Reindexing
+
+This is AACSearch's killer feature. When you update your schema:
+
+1. We create a new collection (v2) with the updated schema
+2. We stream your documents from the current collection (v1) to v2
+3. We run both collections in parallel — v1 serves traffic
+4. Once v2 is fully indexed, we atomically swap the alias
+5. v1 is dropped
+
+The entire process happens without a single failed query.
+
+## Performance Benchmarks
+
+Measured on a single Typesense node (8GB RAM, 4 vCPU):
+
+| Query Type                       | p50  | p95  | p99   |
+| -------------------------------- | ---- | ---- | ----- |
+| Simple keyword search            | 3ms  | 8ms  | 15ms  |
+| Faceted filter + search          | 5ms  | 12ms | 22ms  |
+| Multi-field search (5 fields)    | 4ms  | 10ms | 18ms  |
+| Geo-filtered search              | 6ms  | 15ms | 28ms  |
+| Semantic search (with embedding) | 45ms | 80ms | 120ms |
+
+These benchmarks are on our hosted infrastructure (Coolify-managed Docker). Latency varies by region but stays under 50ms p99 for standard search in North America and Europe.
+
+## Schema Design Patterns
+
+For most SaaS use cases, a flat document model works best:
+
+```typescript
+interface Product {
+	id: string;
+	name: string; // full-text search
+	description: string; // full-text search
+	category: string; // facet
+	price: number; // facet + sort
+	tags: string[]; // facet (multiple)
+	inStock: boolean; // filter
+	imageUrl: string; // result display only
+	metadata: Record<string, unknown>; // passthrough
+}
+```
+
+Typesense's inferred schema means you don't need to predefine your mapping. For advanced use cases, you can set field-specific weights, custom ranking rules, and synonym groups through the AACSearch dashboard.
+
+## The Bottom Line
+
+Typesense gave us a search engine that's:
+
+- **Fast**: C++ runtime, sub-10ms queries
+- **Multi-tenant by design**: collection-per-org model
+- **Simple**: inferred schemas, minimal config
+- **Cost-effective**: 10x cheaper than equivalently-sized Elasticsearch clusters
+
+It was the right foundation for AACSearch.

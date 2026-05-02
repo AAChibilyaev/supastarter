@@ -17,15 +17,15 @@ Here's an honest comparison of the best alternatives, covering hosted services, 
 
 ## Quick Comparison Table
 
-| Service         | Type      | 1M searches/mo | Self-serve? | Best for                     |
-| --------------- | --------- | -------------- | ----------- | ---------------------------- |
-| **AACSearch**   | Hosted    | $29            | Yes         | CMS merchants, SaaS products |
-| Typesense Cloud | Hosted    | ~$50–100       | Yes         | Developer-friendly projects  |
-| Meilisearch     | Hosted    | ~$30–60        | Yes         | Simple search use cases      |
-| OpenSearch      | Managed   | $80–200+       | Yes (AWS)   | Existing AWS infrastructure  |
-| Elasticsearch   | Managed   | $95–300+       | Yes (Elastic Cloud) | Log analytics + search |
-| Solr            | Managed   | Varies         | No (self-hosted) | Enterprise legacy systems |
-| Weaviate        | Hosted    | $25+           | Yes         | AI/vector search             |
+| Service         | Type    | 1M searches/mo | Self-serve?         | Best for                     |
+| --------------- | ------- | -------------- | ------------------- | ---------------------------- |
+| **AACSearch**   | Hosted  | $29            | Yes                 | CMS merchants, SaaS products |
+| Typesense Cloud | Hosted  | ~$50–100       | Yes                 | Developer-friendly projects  |
+| Meilisearch     | Hosted  | ~$30–60        | Yes                 | Simple search use cases      |
+| OpenSearch      | Managed | $80–200+       | Yes (AWS)           | Existing AWS infrastructure  |
+| Elasticsearch   | Managed | $95–300+       | Yes (Elastic Cloud) | Log analytics + search       |
+| Solr            | Managed | Varies         | No (self-hosted)    | Enterprise legacy systems    |
+| Weaviate        | Hosted  | $25+           | Yes                 | AI/vector search             |
 
 ---
 
@@ -57,6 +57,7 @@ AACSearch is a hosted search-as-a-service built on Typesense. It's designed for 
 Typesense is an open-source search engine with a hosted cloud offering. If you're a developer who wants to run everything yourself eventually but needs a managed service today, Typesense Cloud is the best path.
 
 **Strengths:**
+
 - Near-identical API to Algolia (many teams migrate in a day)
 - InstantSearch adapter works out of the box
 - Strong typo-tolerance and prefix search by default
@@ -75,6 +76,7 @@ Typesense is an open-source search engine with a hosted cloud offering. If you'r
 Meilisearch has grown rapidly in the developer community on the strength of its simplicity. The default configuration works well for most search use cases without tuning — which is rare.
 
 **Strengths:**
+
 - Exceptionally fast zero-config setup
 - Clean REST API
 - Good filtering and faceting support
@@ -93,6 +95,7 @@ Meilisearch has grown rapidly in the developer community on the strength of its 
 OpenSearch is the Amazon-maintained fork of Elasticsearch, available as a managed service (Amazon OpenSearch Service). If your infrastructure is already in AWS and your team has Elasticsearch experience, OpenSearch is a natural fit.
 
 **Strengths:**
+
 - Deep AWS ecosystem integration (IAM, CloudWatch, VPC)
 - Familiar Elasticsearch query syntax
 - Good for log analytics + search combined
@@ -111,6 +114,7 @@ OpenSearch is the Amazon-maintained fork of Elasticsearch, available as a manage
 Elasticsearch is the industry default for enterprise search. If you're building something that combines log analytics, security monitoring, and user-facing search on the same infrastructure, Elastic Cloud is the most complete platform.
 
 **Strengths:**
+
 - Richest feature set of any search platform
 - Vector search, hybrid search, ML ranking built in
 - Mature ecosystem and extensive documentation
@@ -129,6 +133,7 @@ Elasticsearch is the industry default for enterprise search. If you're building 
 Solr is the original open-source search platform, built on Apache Lucene (same as Elasticsearch). It's still widely used in enterprise environments where it was adopted a decade ago.
 
 **Strengths:**
+
 - Battle-tested at massive scale
 - Extremely flexible schema configuration
 - Strong enterprise support options
@@ -146,6 +151,7 @@ Solr is the original open-source search platform, built on Apache Lucene (same a
 Weaviate is a vector database with full-text search capabilities. It's not a direct Algolia alternative for traditional keyword search, but if your use case involves semantic search, RAG (retrieval-augmented generation), or AI-powered recommendations, it's worth evaluating.
 
 **Strengths:**
+
 - Native vector and hybrid search
 - GraphQL API
 - Strong integrations with OpenAI, Cohere, HuggingFace

@@ -1,13 +1,7 @@
 import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
 import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
-import {
-	BotIcon,
-	BrainIcon,
-	CodeIcon,
-	ServerIcon,
-	TerminalIcon,
-} from "lucide-react";
+import { BotIcon, BrainIcon, CodeIcon, ServerIcon, TerminalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 

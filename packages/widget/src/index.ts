@@ -115,16 +115,51 @@ const WIDGET_STYLES = `
 }
 
 .aac-facet-group {
-  margin-bottom: 20px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--aac-border);
+}
+
+.aac-facet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.aac-facet-header:hover {
+  opacity: 0.8;
 }
 
 .aac-facet-title {
   font-weight: 600;
   font-size: 14px;
   color: var(--aac-text);
-  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.aac-facet-toggle {
+  font-size: 12px;
+  color: var(--aac-text-secondary);
+  transition: transform 0.2s;
+  line-height: 1;
+}
+
+.aac-facet-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+
+.aac-facet-body {
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  padding-bottom: 12px;
+}
+
+.aac-facet-body.collapsed {
+  max-height: 0 !important;
+  padding-bottom: 0;
 }
 
 .aac-facet-item {
@@ -139,6 +174,78 @@ const WIDGET_STYLES = `
 
 .aac-facet-item input[type="checkbox"] {
   accent-color: var(--aac-primary);
+}
+
+.aac-color-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--aac-border);
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.aac-color-swatch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mobile filter drawer */
+.aac-filter-toggle-btn {
+  display: none;
+  width: 100%;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: var(--aac-primary);
+  color: white;
+  border: none;
+  border-radius: var(--aac-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.aac-filter-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .aac-filter-toggle-btn {
+    display: block;
+  }
+
+  .aac-facets {
+    display: none;
+  }
+
+  .aac-facets.mobile-open {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 16px 16px 0 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  }
+
+  .aac-filter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 999;
+  }
+
+  .aac-filter-overlay.visible {
+    display: block;
+  }
 }
 
 .aac-facet-count {
@@ -731,6 +838,42 @@ export class AacSearchWidget {
 				});
 			});
 		}
+
+		// Facet header toggle (collapse/expand)
+		const facetsContainer = this.root.querySelector(".aac-facets");
+		if (facetsContainer) {
+			facetsContainer.addEventListener("click", (e) => {
+				const header = (e.target as HTMLElement).closest(
+					".aac-facet-header",
+				) as HTMLElement | null;
+				if (!header) return;
+				const field = header.getAttribute("data-facet-field");
+				if (!field) return;
+				const body = this.root.querySelector(
+					`.aac-facet-body[data-facet-field="${field}"]`,
+				) as HTMLElement | null;
+				const toggle = header.querySelector(".aac-facet-toggle") as HTMLElement | null;
+				if (body && toggle) {
+					body.classList.toggle("collapsed");
+					toggle.classList.toggle("collapsed");
+					toggle.textContent = toggle.classList.contains("collapsed") ? "+" : "−";
+				}
+			});
+		}
+
+		// Mobile filter toggle
+		const filterToggle = this.root.querySelector("#aac-filter-toggle") as HTMLElement | null;
+		const filterOverlay = this.root.querySelector("#aac-filter-overlay") as HTMLElement | null;
+		if (filterToggle && filterOverlay) {
+			filterToggle.addEventListener("click", () => {
+				facetsContainer?.classList.toggle("mobile-open");
+				filterOverlay.classList.toggle("visible");
+			});
+			filterOverlay.addEventListener("click", () => {
+				facetsContainer?.classList.remove("mobile-open");
+				filterOverlay.classList.remove("visible");
+			});
+		}
 	}
 
 	private totalPages(): number {
@@ -785,24 +928,61 @@ export class AacSearchWidget {
 		for (const facet of this.state.facetCounts) {
 			if (facet.counts.length === 0) continue;
 
-			const label = facet.field_name
-				.replace(/_/g, " ")
-				.replace(/\b\w/g, (c) => c.toUpperCase());
+			const fieldName = facet.field_name;
+			const label = fieldName.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+			// Detect color facet by field name suffix or common color field names
+			const isColorFacet =
+				fieldName.endsWith("_color") ||
+				fieldName.endsWith("_colour") ||
+				fieldName === "color" ||
+				fieldName === "colour";
+
+			const selected = this.state.filters[fieldName] ?? [];
+			const isOpen = selected.length > 0;
 
 			html += `<div class="aac-facet-group">`;
-			html += `<div class="aac-facet-title">${escapeHtml(label)}</div>`;
+			html += `<div class="aac-facet-header" data-facet-field="${fieldName}">`;
+			html += `<span class="aac-facet-title">${escapeHtml(label)}</span>`;
+			html += `<span class="aac-facet-toggle ${isOpen ? "" : "collapsed"}">${isOpen ? "−" : "+"}</span>`;
+			html += `</div>`;
+			html += `<div class="aac-facet-body ${isOpen ? "" : "collapsed"}" data-facet-field="${fieldName}">`;
 
-			const selected = this.state.filters[facet.field_name] ?? [];
 			for (const count of facet.counts.slice(0, 10)) {
 				const checked = selected.includes(count.value) ? "checked" : "";
-				html += `<label class="aac-facet-item">`;
-				html += `<input type="checkbox" ${checked} data-field="${escapeHtml(facet.field_name)}" data-value="${escapeHtml(count.value)}" />`;
-				html += `<span>${escapeHtml(count.value)}</span>`;
-				html += `<span class="aac-facet-count">${count.count}</span>`;
-				html += `</label>`;
+
+				if (isColorFacet) {
+					// Color swatch rendering
+					const colorHex = count.value.toLowerCase();
+					const isHex = /^#?[0-9a-f]{3,8}$/.test(colorHex.replace("#", ""));
+					const bgColor = isHex
+						? `background-color: ${colorHex.startsWith("#") ? colorHex : `#${colorHex}`}`
+						: `background-image: linear-gradient(135deg, #f0f0f0, #d0d0d0)`;
+					html += `<label class="aac-facet-item">`;
+					html += `<input type="checkbox" ${checked} data-field="${escapeHtml(fieldName)}" data-value="${escapeHtml(count.value)}" />`;
+					html += `<span class="aac-color-swatch-wrapper">`;
+					html += `<span class="aac-color-swatch" style="${bgColor}"></span>`;
+					html += `<span>${escapeHtml(count.value)}</span>`;
+					html += `</span>`;
+					html += `<span class="aac-facet-count">${count.count}</span>`;
+					html += `</label>`;
+				} else {
+					// Standard text checkbox
+					html += `<label class="aac-facet-item">`;
+					html += `<input type="checkbox" ${checked} data-field="${escapeHtml(fieldName)}" data-value="${escapeHtml(count.value)}" />`;
+					html += `<span>${escapeHtml(count.value)}</span>`;
+					html += `<span class="aac-facet-count">${count.count}</span>`;
+					html += `</label>`;
+				}
 			}
 
-			html += `</div>`;
+			// Show "Show more" link if there are more than 10 values
+			if (facet.counts.length > 10) {
+				html += `<div style="font-size:12px;color:var(--aac-primary);cursor:pointer;padding:4px 0" data-show-more="${fieldName}">Show all ${facet.counts.length}...</div>`;
+			}
+
+			html += `</div>`; // facet-body
+			html += `</div>`; // facet-group
 		}
 
 		html += "</div>";
@@ -948,12 +1128,14 @@ export class AacSearchWidget {
 				</div>
 				${
 					this.state.query || this.state.results.length > 0
-						? `<div class="aac-layout">
-							${this.renderFacets()}
-							<div>
-								${this.renderResults()}
-							</div>
-						</div>`
+						? `<button class="aac-filter-toggle-btn" id="aac-filter-toggle">Filters</button>
+							<div class="aac-filter-overlay" id="aac-filter-overlay"></div>
+							<div class="aac-layout">
+								${this.renderFacets()}
+								<div>
+									${this.renderResults()}
+								</div>
+							</div>`
 						: `<div class="aac-no-results">${this.t("startTyping")}</div>`
 				}
 			</div>

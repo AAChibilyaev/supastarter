@@ -1,0 +1,69 @@
+---
+title: "Algolia vs AACSearch: We Did the Math"
+date: 2025-05-03
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: A transparent, data-driven cost comparison between Algolia and AACSearch across three real-world usage tiers — and why most teams save 5-10x.
+tags: [comparison, algolia, pricing, typesense]
+published: false
+---
+
+Every SaaS team evaluating search infrastructure hits the same question: Algolia is the market leader, but the pricing escalates fast. AACSearch is newer — does it deliver comparable quality at a fraction of the cost?
+
+We did the math across three usage tiers so you don't have to.
+
+## Methodology
+
+We compared AACSearch's Pro plan ($29/mo, 100K searches, 10K documents) and Enterprise plan ($299/mo, 1M searches, 100K documents) against Algolia's equivalent tiers using their published pricing at algolia.com/pricing.
+
+Both platforms offer: full-text search, faceted filtering, typo tolerance, analytics, and multi-tenant support.
+
+## Tier 1: Early-Stage SaaS (100K searches/mo)
+
+| Feature                  | Algolia                 | AACSearch                                  |
+| ------------------------ | ----------------------- | ------------------------------------------ |
+| Monthly cost             | $299/mo (Growth)        | $29/mo (Pro)                               |
+| Search operations        | 100K included           | 100K included                              |
+| Documents                | 10K                     | 10K                                        |
+| Analytics                | Basic                   | Full (query volume, CTR, popular searches) |
+| Zero-downtime reindexing | Enterprise only ($599+) | Included                                   |
+| i18n search UI           | Separate add-on         | Built-in, 5 languages                      |
+| Connectors               | API only                | PrestaShop, Bitrix, Next.js, React         |
+
+**Savings: 10x**
+
+## Tier 2: Growing Business (1M searches/mo)
+
+| Feature           | Algolia             | AACSearch            |
+| ----------------- | ------------------- | -------------------- |
+| Monthly cost      | $1,299/mo (Premium) | $299/mo (Enterprise) |
+| Search operations | 1M included         | 1M included          |
+| Documents         | 100K                | 100K                 |
+| Analytics         | Advanced            | Full                 |
+| SLA               | 99.9%               | 99.9%                |
+| SSO/SAML          | Enterprise plan     | Enterprise plan      |
+
+**Savings: 4.3x**
+
+## Tier 3: High-Volume (10M searches/mo)
+
+At this tier, Algolia requires a custom enterprise contract starting around $5,000/mo. AACSearch Enterprise can support this with custom pricing — typically $1,500-2,000/mo depending on document count and features.
+
+**Estimated savings: 3-5x**
+
+## The Hidden Costs
+
+Beyond the line item, there are costs Algolia doesn't advertise:
+
+1. **Zero-downtime reindexing** is an enterprise-only feature on Algolia (+$300/mo minimum). AACSearch includes it on all paid plans.
+2. **Search analytics** that Algolia charges extra for (click analytics, query suggestions) are built into AACSearch.
+3. **Multi-region** deployment on Algolia requires custom enterprise contracts; AACSearch offers it on the Enterprise plan.
+
+## The Trade-Off
+
+AACSearch uses Typesense under the hood (open source) rather than Algolia's proprietary engine. For standard search use cases — product search, site search, app search — quality is comparable. However, Algolia offers more advanced personalization and AI-powered ranking features that some enterprise teams may need.
+
+**Bottom line:** If you need a search engine that "just works" at a reasonable price, AACSearch saves you 5-10x. If you need Algolia's advanced AI personalization layer, the premium may be worth it.
+
+[Start for free →](https://aacsearch.com)

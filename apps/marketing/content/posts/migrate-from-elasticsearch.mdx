@@ -1,0 +1,143 @@
+---
+title: "How to Migrate from Elasticsearch in 20 Minutes"
+date: 2025-05-03
+image: https://picsum.photos/id/119/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: A step-by-step guide to migrating your search infrastructure from self-hosted Elasticsearch to AACSearch — no downtime, no data loss, and a 10x reduction in monthly costs.
+tags: [tutorial, migration, elasticsearch, getting-started]
+published: false
+---
+
+If you're running self-hosted Elasticsearch, you know the pain: JVM heap tuning, cluster health monitoring, shard rebalancing, snapshot repositorie... the list goes on. Meanwhile, your monthly cloud bill for that 3-node cluster is $300-500/mo.
+
+Migrating to AACSearch takes 20 minutes and cuts your search costs by 10x. Here's exactly how to do it.
+
+## Prerequisites
+
+- An AACSearch account ([free tier](https://aacsearch.com) — 10K documents)
+- Your current Elasticsearch index name
+- The `elasticdump` tool (`npm install elasticdump -g`)
+- Python 3.6+ (for the schema conversion script)
+
+## Step 1: Export Your Elasticsearch Mapping
+
+First, dump your index mapping and data from Elasticsearch:
+
+```bash
+# Export mapping
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./mapping.json \
+  --type=mapping
+
+# Export data
+elasticdump \
+  --input=http://localhost:9200/your-index \
+  --output=./data.json \
+  --type=data
+```
+
+## Step 2: Convert to Typesense Schema
+
+Typesense uses inferred schemas, so most conversions are automatic. However, you'll want to handle these ES-specific types:
+
+- `text` → `string` (Typesense auto-detects)
+- `keyword` → `string` (with `facet: true` for aggregations)
+- `integer` / `long` → `int64` or `float`
+- `nested` → flatten to a flat object (Typesense doesn't support nested objects)
+- `date` → `string` in ISO 8601 format (Typesense stores as string)
+
+Create a new index in AACSearch:
+
+1. Login to your dashboard
+2. Click **New Index** → name it (e.g., `products-v1`)
+3. Select **Import** → **Upload JSON**
+
+AACSearch will detect your schema automatically and create the Typesense collection.
+
+## Step 3: Upload Your Data
+
+The quickest way for small-to-medium datasets:
+
+```bash
+# Upload using the AACSearch API
+curl -X POST https://api.aacsearch.com/v1/collections/products-v1/documents/import \
+  -H "X-API-Key: ss_search_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d @data.json
+```
+
+For datasets over 100MB, use the dashboard's **Bulk Import** feature with chunked uploads (automatic).
+
+## Step 4: Update Your Application Code
+
+Replace your Elasticsearch client with the AACSearch client:
+
+**Before (Elasticsearch):**
+
+```javascript
+import { Client } from "@elastic/elasticsearch";
+
+const client = new Client({ node: "http://localhost:9200" });
+const { hits } = await client.search({
+	index: "products",
+	body: { query: { match: { name: "wireless headphones" } } },
+});
+```
+
+**After (AACSearch):**
+
+```javascript
+import { AACSearch } from "@repo/search-client";
+
+const search = new AACSearch({
+	apiKey: "ss_search_YOUR_KEY",
+});
+
+const results = await search.query("wireless headphones", {
+	collection: "products-v1",
+	filters: { inStock: true },
+});
+```
+
+## Step 5: Verify and Cut Over
+
+Run a smoke test:
+
+```bash
+# Test a few queries against AACSearch
+curl "https://api.aacsearch.com/v1/search?q=wireless+headphones&collection=products-v1" \
+  -H "X-API-Key: ss_search_YOUR_KEY"
+```
+
+Compare results with your current Elasticsearch output. For most setups, the relevance ranking will be comparable or better — Typesense's TF-IDF with configurable field weights gives you fine-grained control over result ordering.
+
+Once verified, point your production application to AACSearch and decommission your Elasticsearch cluster.
+
+## What About Zero-Downtime?
+
+Since your Elasticsearch cluster and AACSearch run independently during the migration, there's no downtime risk. You can:
+
+1. Keep both running in parallel (min-hours)
+2. Route a percentage of traffic to AACSearch to test
+3. Switch 100% when you're confident
+
+AACSearch's zero-downtime reindexing means future schema changes won't require another migration — just click "Reindex" in the dashboard.
+
+## Cost Comparison
+
+|              | Self-hosted ES (3 nodes)     | AACSearch Pro |
+| ------------ | ---------------------------- | ------------- |
+| Monthly cost | ~$350 (AWS m6g.large x3)     | $29/mo        |
+| Maintenance  | JVM tuning, backups, patches | None          |
+| Scaling      | Add nodes, rebalance shards  | Click upgrade |
+| Backups      | Manual snapshot lifecycle    | Automatic     |
+
+**Savings: 10x, plus your DevOps time back.**
+
+## Next Steps
+
+[Create your free AACSearch account →](https://aacsearch.com)
+
+Already migrated? [Share your experience →](https://github.com/AAChibilyaev/supastarter/discussions)

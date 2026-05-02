@@ -1,0 +1,108 @@
+---
+title: "Sucharchitektur für SaaS: Ein tiefer Einblick in Typesense"
+date: 2025-05-03
+image: https://picsum.photos/id/24/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Warum wir uns für Typesense als Suchmaschine für AACSearch entschieden haben — Architekturentscheidungen, Leistungsbenchmarks und die Abwägungen gegenüber Elasticsearch und Meilisearch.
+tags: [architecture, typesense, engineering, performance]
+published: false
+---
+
+Als wir uns daran machten, AACSearch zu entwickeln, haben wir jede größere Suchmaschine auf dem Markt evaluiert. Hier ist, warum Typesense gewonnen hat, wie wir die Architektur darum herum aufgebaut haben und wie die Leistung in der Produktion aussieht.
+
+## Warum nicht Elasticsearch?
+
+Elasticsearch ist leistungsstark, aber im Betrieb schwergewichtig. Ein verwalteter Elasticsearch-Cluster auf Elastic Cloud beginnt bei 95 $/Monat für 2 GB RAM — bevor überhaupt Suchfunktionen hinzugefügt werden. Noch wichtiger:
+
+- **Multi-Tenancy ist komplex**: jeder Mandant benötigt entweder einen separaten Index (ressourcenintensiv) oder ein komplexes Alias-Routing
+- **Speicher-Overhead**: Der JVM-Heap von Elasticsearch ist bekanntermaßen hungrig; ein 4-GB-Cluster kann realistisch nur etwa 1 Million kleine Dokumente indizieren
+- **Konfigurationsfläche**: Über 200 Einstellungen erzeugen eine DevOps-Steuer, die SaaS-Teams nicht zahlen sollten
+
+Typesense hingegen ist in C++ geschrieben — es startet in Millisekunden und verbraucht einen Bruchteil des Speichers.
+
+## Warum nicht Meilisearch?
+
+Meilisearch bietet eine hervorragende Entwicklererfahrung, aber zum Zeitpunkt der Evaluierung:
+
+- **Keine native Multi-Tenancy** — jeder Mandant benötigt einen eigenen Knoten oder eingebettete Token-Filterung
+- **Ausgerichtet auf Einzelmandanten-Anwendungsfälle** (Dokumentationen, Blogs) statt auf SaaS
+- **Weniger Bereitstellungsoptionen** für verwaltetes Hosting
+
+Das integrierte Collection-pro-Mandant-Modell von Typesense passt perfekt zur SaaS-Mandantenfähigkeit.
+
+## Multi-Tenant-Architektur
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│  API Layer  │────▶│  Ingest      │────▶│  Typesense  │
+│  (Hono/oRPC) │     │  Buffer      │     │  Cluster    │
+└─────────────┘     │  (Postgres)  │     └─────────────┘
+                    └──────────────┘
+                           │
+                    ┌──────┴──────┐
+                    │  Worker      │
+                    │  (bulk upsert)│
+                    └─────────────┘
+```
+
+Jeder Mandant (Organisation) erhält seine eigene Typesense-Collection. Der Ingest-Puffer stellt sicher, dass wir Typesense niemals mit gleichzeitigen Schreibzugriffen überlasten — öffentliche API-Anfragen gehen zuerst an Postgres, und ein Hintergrund-Worker übernimmt das eigentliche `bulkUpsert` an Typesense.
+
+**Mandantenisolierung**: Aufrufe enthalten eine `tenantId: verified.organizationId`. Bereichsspezifische API-Tokens schränken den Zugriff weiter ein — ein `scopedFilter` wird per UND-Verknüpfung mit den Filtern des Aufrufers kombiniert, um organisationsübergreifende Lesevorgänge zu verhindern.
+
+## Null-Ausfallzeit-Neuindizierung
+
+Dies ist die Killerfunktion von AACSearch. Wenn Sie Ihr Schema aktualisieren:
+
+1. Wir erstellen eine neue Collection (v2) mit dem aktualisierten Schema
+2. Wir streamen Ihre Dokumente von der aktuellen Collection (v1) zu v2
+3. Wir betreiben beide Collections parallel — v1 bedient den Traffic
+4. Sobald v2 vollständig indiziert ist, tauschen wir atomar den Alias aus
+5. v1 wird gelöscht
+
+Der gesamte Prozess erfolgt ohne eine einzige fehlgeschlagene Abfrage.
+
+## Leistungsbenchmarks
+
+Gemessen auf einem einzelnen Typesense-Knoten (8 GB RAM, 4 vCPU):
+
+| Abfragetyp                        | p50  | p95  | p99   |
+| --------------------------------- | ---- | ---- | ----- |
+| Einfache Schlüsselwortsuche       | 3ms  | 8ms  | 15ms  |
+| Facettenfilter + Suche            | 5ms  | 12ms | 22ms  |
+| Mehrfeldersuche (5 Felder)        | 4ms  | 10ms | 18ms  |
+| Geogefilterte Suche               | 6ms  | 15ms | 28ms  |
+| Semantische Suche (mit Embedding) | 45ms | 80ms | 120ms |
+
+Diese Benchmarks stammen von unserer gehosteten Infrastruktur (Coolify-managed Docker). Die Latenz variiert je nach Region, bleibt aber für die standardsuche in Nordamerika und Europa unter 50 ms (p99).
+
+## Schema-Entwurfsmuster
+
+Für die meisten SaaS-Anwendungsfälle funktioniert ein flaches Dokumentenmodell am besten:
+
+```typescript
+interface Product {
+	id: string;
+	name: string; // Volltextsuche
+	description: string; // Volltextsuche
+	category: string; // Facette
+	price: number; // Facette + Sortierung
+	tags: string[]; // Facette (mehrere)
+	inStock: boolean; // Filter
+	imageUrl: string; // nur Ergebnisanzeige
+	metadata: Record<string, unknown>; // Durchleitung
+}
+```
+
+Typesenses abgeleitetes Schema bedeutet, dass Sie Ihr Mapping nicht vorab definieren müssen. Für fortgeschrittene Anwendungsfälle können Sie feld-spezifische Gewichtungen, benutzerdefinierte Ranking-Regeln und Synonymgruppen über das AACSearch-Dashboard festlegen.
+
+## Fazit
+
+Typesense hat uns eine Suchmaschine geliefert, die:
+
+- **Schnell ist**: C++-Laufzeit, Abfragen unter 10 ms
+- **Von Haus aus mandantenfähig ist**: Collection-pro-Organisation-Modell
+- **Einfach ist**: abgeleitete Schemas, minimale Konfiguration
+- **Kosteneffizient ist**: 10x günstiger als gleich große Elasticsearch-Cluster
+
+Es war das richtige Fundament für AACSearch.

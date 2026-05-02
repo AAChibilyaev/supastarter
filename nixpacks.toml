@@ -7,16 +7,10 @@
 nixPkgs = ["nodejs_22", "pnpm"]
 
 [phases.install]
-cmds = [
-  "corepack enable pnpm",
-  "pnpm install --frozen-lockfile",
-]
+cmds = ["corepack enable pnpm", "pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = [
-  "pnpm --filter @repo/database generate",
-  "pnpm --filter saas build",
-]
+cmds = ["pnpm --filter @repo/database generate", "pnpm --filter saas build"]
 
 [start]
 cmd = "node apps/saas/.next/standalone/apps/saas/server.js"

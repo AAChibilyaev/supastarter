@@ -1,144 +1,110 @@
 ---
-title: "Self-Host Your Search Engine: AACsearch on Docker in Under 10 Minutes"
+title: "Getting Started with AACSearch: Add Search in 10 Minutes"
 date: 2026-02-12
 image: https://picsum.photos/id/0/1200/800
 authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: "Skip the SaaS bill. Run AACsearch on your own infrastructure with Docker Compose in under 10 minutes — full control, zero vendor lock-in, Typesense performance."
-tags: [self-host, docker, devops, search]
+excerpt: "From zero to production-ready search in 10 minutes — no infrastructure, no DevOps, no configuration files. Just sign up and start searching."
+tags: [getting-started, tutorial, search]
 published: true
 ---
 
-## Who Pays $12,000/Year for Search?
+## Why Store Search is Broken (and How to Fix It Fast)
 
 If you've priced Algolia for a mid-traffic e-commerce site, you know the sticker shock. At 100M searches per month you're looking at enterprise contracts. Elasticsearch is free but carries a hidden cost: a dedicated ops engineer who does nothing but manage clusters, handle memory pressure, and debug split-brain events.
 
-There's a third path. AACsearch lets you run Typesense — one of the fastest open-source search engines available — behind a fully managed control plane. You get the SaaS experience (API keys, multi-tenancy, analytics, a UI dashboard) while the search data stays on your hardware.
+There's a better path. AACSearch is a fully managed search-as-a-service — you get API keys, multi-tenancy, analytics, and a dashboard while we handle everything underneath. No servers, no configuration files, no maintenance windows.
 
-This post walks through spinning up AACsearch on your own server using Docker Compose. You'll go from zero to a running search API with a dashboard in under 10 minutes.
+This guide walks through adding AACSearch to your project from zero to first search result in under 10 minutes.
 
-## Prerequisites
+## What You'll Need
 
-- A Linux server (VPS, bare metal, or even your laptop for testing)
-- Docker ≥ 24 and Docker Compose ≥ 2.20
-- 2 CPU cores, 4 GB RAM minimum (8 GB recommended for production)
+- An AACSearch account (free tier covers up to 10,000 documents)
+- A product catalog — CSV, JSON, or a live PrestaShop / Bitrix / WooCommerce store
+- 10 minutes
 
-## Step 1: Pull the Compose File
+## Step 1: Create Your Search Index
 
-```bash
-curl -o docker-compose.yml \
-  https://raw.githubusercontent.com/AACSearch/aacsearch/main/deploy/docker-compose.yml
+After signing up, you land on the dashboard. Click **New Index** and give it a name (e.g., `products`). AACSearch will provision a search index for your organization automatically — no server selection, no node sizing, no configuration files.
+
+You'll see your index appear with a status of **Active** within seconds.
+
+## Step 2: Connect Your Data Source
+
+### Option A: Upload a CSV or JSON file
+
+Go to **Import** → **Upload File**. AACSearch infers field types automatically from your data. For a standard product catalog, it detects `name`, `price`, `description`, `category`, and `sku` fields without any manual schema definition.
+
+Upload a file with 1,000 products. You'll see the ingest progress in real time — typically under 10 seconds for 1,000 documents.
+
+### Option B: Connect via CMS Connector
+
+If you're running PrestaShop, Bitrix, or WooCommerce, install the native connector module:
+
+- **PrestaShop**: Admin → Module Manager → search "AACSearch" → Install
+- **Bitrix**: Marketplace → AACSearch → Install
+- **WooCommerce**: Plugins → Add New → search "AACSearch" → Install
+
+In your AACSearch dashboard, go to **Connectors** → **New Connector Token**. Copy the token and paste it into the module settings in your CMS. Click **Test Connection** — you should see a green confirmation with your index name and document count.
+
+Trigger a **Full Sync**. The connector exports your entire product catalog, enqueues it, and pushes it to the index. For a 50,000-product catalog, expect about 2–3 minutes.
+
+## Step 3: Test Search in the Playground
+
+In the dashboard, open the **Playground** tab. Type a product name or partial SKU. You'll see:
+
+- Ranked results with highlighted matches
+- Response time in milliseconds (typically 10–30ms)
+- Raw JSON output for debugging
+
+Try a typo — AACSearch's built-in fuzzy matching means `iphne` still returns iPhone results.
+
+## Step 4: Embed the Widget
+
+Go to **Widget** and copy the embed snippet. It looks like this:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="en"
+	async
+></script>
 ```
 
-The default compose file starts three services:
+Paste this into your store's `<head>` or before `</body>`. The widget renders a search button that opens a full-screen search overlay — no additional CSS or JavaScript required.
 
-| Service     | Purpose                                                 |
-| ----------- | ------------------------------------------------------- |
-| `typesense` | The Typesense search engine (data plane)                |
-| `aacsearch` | The AACsearch control plane (API, dashboard, analytics) |
-| `postgres`  | Metadata store for indexes, API keys, usage events      |
+It works in Shadow DOM, so your store's styles don't conflict with the widget's appearance.
 
-## Step 2: Configure Environment
+## Step 5: Verify in Production
 
-```bash
-cp .env.example .env
-```
+Open your store in an incognito window and click the search button. Type a product name. You should see instant results appearing as you type — no full page reload, no waiting.
 
-Open `.env` and set three values:
+Congratulations. You now have production-grade full-text search.
 
-```bash
-# Your domain or IP. Used for CORS and cookie config.
-AACSEARCH_URL=https://search.yourdomain.com
+## What's Happening Under the Hood
 
-# A random secret. Generate with: openssl rand -hex 32
-AACSEARCH_SECRET=your-secret-here
+When you type a character, the widget sends a query to AACSearch's public search endpoint authenticated with a read-only API key. The query hits your AACSearch index, returns ranked results with typo tolerance and prefix matching, and renders them in the overlay — all in under 50ms.
 
-# Typesense admin API key. Keep this internal — users never see it.
-TYPESENSE_API_KEY=your-typesense-key-here
-```
-
-That's it. The remaining defaults work for most deployments.
-
-## Step 3: Start the Stack
-
-```bash
-docker compose up -d
-```
-
-After 30–60 seconds, three containers are running:
-
-```bash
-docker compose ps
-# NAME              STATUS    PORTS
-# typesense         running   0.0.0.0:8108->8108/tcp
-# aacsearch         running   0.0.0.0:3000->3000/tcp
-# postgres          running   5432/tcp
-```
-
-The AACsearch dashboard is live at `http://localhost:3000`. Open it, create your first organization, and you're in.
-
-## Step 4: Create Your First Search Index
-
-From the dashboard (or via the REST API):
-
-```bash
-curl -X POST http://localhost:3000/api/v1/indexes \
-  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "products",
-    "schema": {
-      "fields": [
-        { "name": "name",  "type": "string" },
-        { "name": "price", "type": "float",  "facet": true },
-        { "name": "brand", "type": "string", "facet": true }
-      ],
-      "default_sorting_field": "price"
-    }
-  }'
-```
-
-## Step 5: Import Documents and Search
-
-```bash
-# Ingest 10,000 products in one request
-curl -X POST http://localhost:3000/api/v1/indexes/products/documents/bulk \
-  -H "Authorization: Bearer YOUR_SEARCH_KEY" \
-  -H "Content-Type: application/json" \
-  -d @products.json
-
-# Search
-curl "http://localhost:3000/api/v1/indexes/products/search?q=running+shoes&facet_by=brand"
-```
-
-Response time on commodity hardware: **< 5 ms** for a 500,000-document index.
+Your product updates sync automatically. When you change a price or add a new product in your CMS, the connector picks up the delta and pushes it to the index within minutes.
 
 ## What You Get Out of the Box
-
-Spinning up AACsearch self-hosted gives you the same feature set as the cloud plan:
 
 - **Multi-tenancy** — separate indexes per organization or customer
 - **Scoped search tokens** — narrow search results to a user's own data without a backend round-trip
 - **Analytics dashboard** — top queries, zero-result rates, click-through rate
 - **API key management** — create, rotate, and revoke search keys from the dashboard
-- **CMS connectors** — sync products from PrestaShop or Bitrix automatically
+- **CMS connectors** — sync products from PrestaShop, Bitrix, or WooCommerce automatically
 
-## Production Checklist
+## Next Steps
 
-Before pointing traffic at your self-hosted instance:
+- **Synonyms**: Add "phone → smartphone, mobile" in the Relevance tab to capture intent variations
+- **Curations**: Pin specific products to appear first for high-value queries
+- **Analytics**: After a week of traffic, check the Top Queries and Zero Results reports to find gaps
 
-- [ ] Put Nginx or Traefik in front with TLS (Let's Encrypt works fine)
-- [ ] Set `AACSEARCH_URL` to your actual HTTPS domain
-- [ ] Mount a volume for Typesense data: `typesense_data:/data`
-- [ ] Set up Postgres backups (daily `pg_dump` to S3 is sufficient)
-- [ ] Configure resource limits in Compose to prevent OOM conditions
-
-## When Cloud Is Still the Right Call
-
-Self-hosting is not for everyone. If your team has no ops capacity, or you need 99.95% SLA without managing infrastructure, the AACsearch cloud plan makes more sense. You get the same API, the same dashboard, and the same Typesense performance — we handle the servers.
-
-**The choice is yours.** AACsearch is designed to work the same way regardless of where it runs.
+Search is now running. The rest is optimization.
 
 ---
 
-Ready to run your own search engine? [Sign up for AACsearch →](https://app.aacsearch.com/signup)
+Ready to get started? [Sign up for AACSearch — free, no credit card required →](https://app.aacsearch.com/signup)

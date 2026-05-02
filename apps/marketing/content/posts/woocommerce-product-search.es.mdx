@@ -26,12 +26,12 @@ Los compradores que usan la búsqueda convierten 2–3× más que los que navega
 
 **Patrones de fallo comunes en la búsqueda de WooCommerce:**
 
-| El cliente escribe | WooCommerce devuelve | Debería devolver |
-| --- | --- | --- |
-| "sneakers" | Nada (productos etiquetados "zapatillas") | Nike Air Max, Adidas Ultraboost... |
-| "chaqueta mujer" (error tipográfico) | Nada | Chaquetas de mujer |
-| "azul" | Cada producto que menciona azul | Productos azules, ordenados por popularidad |
-| Escribe "za..." | Nada (sin autocompletado) | Sugerencias instantáneas |
+| El cliente escribe                   | WooCommerce devuelve                      | Debería devolver                            |
+| ------------------------------------ | ----------------------------------------- | ------------------------------------------- |
+| "sneakers"                           | Nada (productos etiquetados "zapatillas") | Nike Air Max, Adidas Ultraboost...          |
+| "chaqueta mujer" (error tipográfico) | Nada                                      | Chaquetas de mujer                          |
+| "azul"                               | Cada producto que menciona azul           | Productos azules, ordenados por popularidad |
+| Escribe "za..."                      | Nada (sin autocompletado)                 | Sugerencias instantáneas                    |
 
 ## La solución: búsqueda hospedada con conector WooCommerce
 
@@ -59,14 +59,14 @@ Haz clic en **Sincronizar todos los productos**. Para una tienda con 10.000 prod
 
 El conector mapea los campos de WooCommerce al índice de búsqueda:
 
-| Campo WooCommerce | Campo AACSearch | Buscable | Filtrable |
-| --- | --- | --- | --- |
-| Nombre del producto | title | ✅ | ❌ |
-| Descripción | description | ✅ | ❌ |
-| Precio | price | ❌ | ✅ |
-| Categorías | categories | ✅ | ✅ |
-| Atributos | attributes | ✅ | ✅ |
-| Estado de stock | in_stock | ❌ | ✅ |
+| Campo WooCommerce   | Campo AACSearch | Buscable | Filtrable |
+| ------------------- | --------------- | -------- | --------- |
+| Nombre del producto | title           | ✅       | ❌        |
+| Descripción         | description     | ✅       | ❌        |
+| Precio              | price           | ❌       | ✅        |
+| Categorías          | categories      | ✅       | ✅        |
+| Atributos           | attributes      | ✅       | ✅        |
+| Estado de stock     | in_stock        | ❌       | ✅        |
 
 ## Paso 4: Activar el widget de búsqueda
 
@@ -93,12 +93,14 @@ Este paso solo típicamente recupera el 15–25% de las búsquedas que antes dev
 ## Qué cambia después del cambio
 
 **Antes:**
+
 - Consulta MySQL LIKE, ~200–500ms
 - Sin tolerancia a errores tipográficos
 - Sin autocompletado
 - Tasa de cero resultados: típicamente 20–35%
 
 **Después:**
+
 - Búsqueda Typesense, < 50ms
 - Maneja 1–2 errores de caracteres automáticamente
 - Sugerencias instantáneas mientras escribes

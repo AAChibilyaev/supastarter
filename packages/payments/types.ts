@@ -111,7 +111,12 @@ export type CreateCustomerPortalLink = (params: {
 
 export type SetSubscriptionSeats = (params: { id: string; seats: number }) => Promise<void>;
 
-export type CancelSubscription = (id: string) => Promise<void>;
+export type CancelSubscriptionMode = "immediate" | "cancel_at_period_end";
+
+export type CancelSubscription = (
+	id: string,
+	options?: { mode?: CancelSubscriptionMode },
+) => Promise<void>;
 
 export type WebhookHandler = (req: Request) => Promise<Response>;
 

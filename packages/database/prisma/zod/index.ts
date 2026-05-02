@@ -252,7 +252,7 @@ export type PurchaseType = z.infer<typeof PurchaseTypeSchema>;
 
 // File: NotificationType.schema.ts
 
-export const NotificationTypeSchema = z.enum(['WELCOME', 'APP_UPDATE', 'AI_LOW_BALANCE', 'AI_TOPUP_PAID', 'AI_TOPUP_FAILED', 'AI_OVERAGE_REACHED'])
+export const NotificationTypeSchema = z.enum(['WELCOME', 'APP_UPDATE', 'AI_LOW_BALANCE', 'AI_TOPUP_PAID', 'AI_TOPUP_FAILED', 'AI_OVERAGE_REACHED', 'PAYMENT_FAILED'])
 
 export type NotificationType = z.infer<typeof NotificationTypeSchema>;
 

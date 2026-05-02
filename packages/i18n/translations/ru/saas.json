@@ -779,6 +779,9 @@
 				},
 				"AI_OVERAGE_REACHED": {
 					"label": "Превышен лимит AI-кошелька"
+				},
+				"PAYMENT_FAILED": {
+					"label": "Ошибка оплаты подписки"
 				}
 			},
 			"columns": {

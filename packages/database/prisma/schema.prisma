@@ -228,6 +228,7 @@ enum NotificationType {
   AI_TOPUP_PAID
   AI_TOPUP_FAILED
   AI_OVERAGE_REACHED
+  PAYMENT_FAILED
 }
 
 model Notification {

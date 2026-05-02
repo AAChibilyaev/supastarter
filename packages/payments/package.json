@@ -23,6 +23,7 @@
 		"@repo/billing-wallet": "workspace:*",
 		"@repo/database": "workspace:*",
 		"@repo/logs": "workspace:*",
+		"@repo/notifications": "workspace:*",
 		"dodopayments": "^2.26.0",
 		"stripe": "^22.0.0",
 		"ufo": "catalog:",

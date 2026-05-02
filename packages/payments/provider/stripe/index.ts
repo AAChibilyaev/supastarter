@@ -1,10 +1,12 @@
 import {
 	createPurchase,
+	db,
 	deletePurchaseBySubscriptionId,
 	getPurchaseBySubscriptionId,
 	updatePurchase,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { createNotification } from "@repo/notifications";
 import Stripe from "stripe";
 
 import { setCustomerIdToEntity } from "../../lib/customer";
@@ -116,11 +118,35 @@ export const setSubscriptionSeats: SetSubscriptionSeats = async ({ id, seats }) 
 	});
 };
 
-export const cancelSubscription: CancelSubscription = async (id) => {
+export const cancelSubscription: CancelSubscription = async (id, options) => {
 	const stripeClient = getStripeClient();
 
-	await stripeClient.subscriptions.cancel(id);
+	if (options?.mode === "cancel_at_period_end") {
+		await stripeClient.subscriptions.update(id, { cancel_at_period_end: true });
+	} else {
+		await stripeClient.subscriptions.cancel(id);
+	}
 };
+
+async function getPaymentRecipients(purchase: {
+	userId: string | null;
+	organizationId: string | null;
+}): Promise<string[]> {
+	if (purchase.userId) {
+		return [purchase.userId];
+	}
+	if (purchase.organizationId) {
+		const members = await db.member.findMany({
+			where: {
+				organizationId: purchase.organizationId,
+				role: { in: ["owner", "admin"] },
+			},
+			select: { userId: true },
+		});
+		return members.map((m) => m.userId);
+	}
+	return [];
+}
 
 export const webhookHandler: WebhookHandler = async (req) => {
 	const stripeClient = getStripeClient();
@@ -214,16 +240,16 @@ export const webhookHandler: WebhookHandler = async (req) => {
 				break;
 			}
 			case "customer.subscription.updated": {
-				const subscriptionId = event.data.object.id;
-
-				const existingPurchase = await getPurchaseBySubscriptionId(subscriptionId);
+				const sub = event.data.object;
+				const existingPurchase = await getPurchaseBySubscriptionId(sub.id);
 
 				if (existingPurchase) {
-					const priceId = event.data.object.items?.data[0].price?.id;
+					const priceId = sub.items?.data[0].price?.id;
+					const status = sub.cancel_at_period_end ? "canceling" : sub.status;
 
 					await updatePurchase({
 						id: existingPurchase.id,
-						status: event.data.object.status,
+						status,
 						...(priceId ? { priceId } : {}),
 					});
 				}
@@ -232,6 +258,101 @@ export const webhookHandler: WebhookHandler = async (req) => {
 			}
 			case "customer.subscription.deleted": {
 				await deletePurchaseBySubscriptionId(event.data.object.id);
+
+				break;
+			}
+			case "invoice.paid": {
+				const invoice = event.data.object;
+				const subscriptionId =
+					typeof invoice.parent?.subscription_details?.subscription === "string"
+						? invoice.parent.subscription_details.subscription
+						: null;
+
+				if (!subscriptionId) break;
+
+				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
+				if (!purchase) break;
+
+				await updatePurchase({ id: purchase.id, status: "active" });
+				logger.info("invoice.paid: purchase status set to active", {
+					purchaseId: purchase.id,
+				});
+
+				break;
+			}
+			case "invoice.payment_failed": {
+				const invoice = event.data.object;
+				const subscriptionId =
+					typeof invoice.parent?.subscription_details?.subscription === "string"
+						? invoice.parent.subscription_details.subscription
+						: null;
+
+				if (!subscriptionId) break;
+
+				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
+				if (!purchase) break;
+
+				await updatePurchase({ id: purchase.id, status: "past_due" });
+
+				const recipients = await getPaymentRecipients(purchase);
+				const link = invoice.hosted_invoice_url ?? null;
+
+				await Promise.all(
+					recipients.map((userId) =>
+						createNotification({
+							userId,
+							type: "PAYMENT_FAILED",
+							data: {
+								headline: "Subscription payment failed",
+								message: "Your subscription payment could not be processed.",
+								hosted_invoice_url: link,
+							},
+							link,
+						}).catch((err: unknown) =>
+							logger.error("invoice.payment_failed: createNotification failed", err),
+						),
+					),
+				);
+
+				break;
+			}
+			case "invoice.payment_action_required": {
+				const invoice = event.data.object;
+				const subscriptionId =
+					typeof invoice.parent?.subscription_details?.subscription === "string"
+						? invoice.parent.subscription_details.subscription
+						: null;
+
+				if (!subscriptionId) break;
+
+				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
+				if (!purchase) break;
+
+				await updatePurchase({ id: purchase.id, status: "past_due" });
+
+				const recipients = await getPaymentRecipients(purchase);
+				const hostedInvoiceUrl = invoice.hosted_invoice_url ?? null;
+
+				await Promise.all(
+					recipients.map((userId) =>
+						createNotification({
+							userId,
+							type: "PAYMENT_FAILED",
+							data: {
+								headline: "Payment action required",
+								message:
+									"Your subscription payment requires additional action to complete.",
+								hosted_invoice_url: hostedInvoiceUrl,
+							},
+							link: hostedInvoiceUrl,
+						}).catch((err: unknown) =>
+							logger.error(
+								"invoice.payment_action_required: createNotification failed",
+								err,
+							),
+						),
+					),
+				);
 
 				break;
 			}

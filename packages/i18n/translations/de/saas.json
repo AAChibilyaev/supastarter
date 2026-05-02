@@ -779,6 +779,9 @@
 				},
 				"AI_OVERAGE_REACHED": {
 					"label": "KI-Geldbörsen-Limit erreicht"
+				},
+				"PAYMENT_FAILED": {
+					"label": "Abonnementzahlung fehlgeschlagen"
 				}
 			},
 			"columns": {

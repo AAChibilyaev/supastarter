@@ -779,6 +779,9 @@
 				},
 				"AI_OVERAGE_REACHED": {
 					"label": "Limite IA atteinte"
+				},
+				"PAYMENT_FAILED": {
+					"label": "Échec du paiement de l'abonnement"
 				}
 			},
 			"columns": {

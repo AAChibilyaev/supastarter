@@ -1,0 +1,21 @@
+{
+	"extends": "@repo/tsconfig/base.json",
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"rootDir": ".",
+		"types": ["node"],
+		"strict": true,
+		"skipLibCheck": true,
+		"declaration": false,
+		"composite": false,
+		"resolveJsonModule": true,
+		"esModuleInterop": true
+	},
+	"include": [
+		"playwright.config.ts",
+		"src/**/*.ts",
+		"tests/**/*.ts"
+	]
+}

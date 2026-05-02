@@ -1,0 +1,25 @@
+{
+	"name": "@repo/e2e",
+	"version": "0.0.1",
+	"private": true,
+	"description": "E2E test suite for AACsearch — Playwright-based tests across search, auth, API keys, quota, connectors, and widget",
+	"scripts": {
+		"test": "playwright test",
+		"test:headed": "playwright test --headed",
+		"test:ui": "playwright test --ui",
+		"test:debug": "playwright test --debug",
+		"test:codegen": "playwright codegen",
+		"clean": "git clean -xdf .cache .turbo node_modules test-results playwright-report",
+		"type-check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@playwright/test": "catalog:",
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"dotenv-cli": "catalog:",
+		"typescript": "catalog:"
+	},
+	"dependencies": {
+		"dotenv": "^17.4.2"
+	}
+}

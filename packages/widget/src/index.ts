@@ -355,6 +355,19 @@ const WIDGET_STYLES = `
   opacity: 0.8;
 }
 
+/* Show more/less toggle for facet values */
+.aac-show-more {
+  font-size: 12px;
+  color: var(--aac-primary);
+  cursor: pointer;
+  padding: 6px 0 2px;
+  user-select: none;
+}
+
+.aac-show-more:hover {
+  opacity: 0.8;
+}
+
 .aac-results {
   display: grid;
   gap: 16px;
@@ -604,6 +617,8 @@ export class AacSearchWidget {
 	private batchQueue: BatchedEvent[] = [];
 	private batchTimer: ReturnType<typeof setTimeout> | null = null;
 	private static readonly BATCH_DELAY_MS = 500;
+	/** Track which facet groups are expanded beyond the default 10-item limit */
+	private expandedFacets: Set<string> = new Set();
 
 	private t(key: import("./translations").TranslationKey): string {
 		return translate(this.locale, key);
@@ -1129,6 +1144,25 @@ export class AacSearchWidget {
 			});
 		}
 
+		// Show more/less toggle for facets with 10+ values
+		if (facetsContainer) {
+			facetsContainer.addEventListener("click", (e) => {
+				const showMore = (e.target as HTMLElement).closest(
+					".aac-show-more",
+				) as HTMLElement | null;
+				if (!showMore) return;
+				const field = showMore.getAttribute("data-show-more");
+				if (!field) return;
+
+				if (this.expandedFacets.has(field)) {
+					this.expandedFacets.delete(field);
+				} else {
+					this.expandedFacets.add(field);
+				}
+				this.render();
+			});
+		}
+
 		// Mobile filter toggle
 		const filterToggle = this.root.querySelector("#aac-filter-toggle") as HTMLElement | null;
 		const filterOverlay = this.root.querySelector("#aac-filter-overlay") as HTMLElement | null;
@@ -1312,7 +1346,12 @@ export class AacSearchWidget {
 			html += `</div>`;
 			html += `<div class="aac-facet-body ${isOpen ? "" : "collapsed"}" data-facet-field="${fieldName}">`;
 
-			for (const count of facet.counts.slice(0, 10)) {
+			// Determine how many values to show (10 by default, all if expanded)
+			const isExpanded = this.expandedFacets.has(fieldName);
+			const visibleCount = isExpanded ? facet.counts.length : 10;
+			const remaining = facet.counts.length - 10;
+
+			for (const count of facet.counts.slice(0, visibleCount)) {
 				const checked = selected.includes(count.value) ? "checked" : "";
 
 				if (isColorFacet) {
@@ -1340,9 +1379,12 @@ export class AacSearchWidget {
 				}
 			}
 
-			// Show "Show more" link if there are more than 10 values
+			// Show "Show more/less" link if there are more than 10 values
 			if (facet.counts.length > 10) {
-				html += `<div style="font-size:12px;color:var(--aac-primary);cursor:pointer;padding:4px 0" data-show-more="${fieldName}">Show all ${facet.counts.length}...</div>`;
+				const showMoreText = isExpanded
+					? `Show less`
+					: `Show all ${facet.counts.length}...`;
+				html += `<div class="aac-show-more" data-show-more="${fieldName}">${showMoreText}</div>`;
 			}
 
 			html += `</div>`; // facet-body

@@ -52,20 +52,6 @@ const rows: FeatureRow[] = [
 		meilisearch: { type: "bool", value: true },
 	},
 	{
-		key: "opensource",
-		aacsearch: { type: "bool", value: true },
-		algolia: { type: "bool", value: false },
-		elasticsearch: { type: "bool", value: true },
-		meilisearch: { type: "bool", value: true },
-	},
-	{
-		key: "selfhost",
-		aacsearch: { type: "bool", value: true },
-		algolia: { type: "bool", value: false },
-		elasticsearch: { type: "bool", value: true },
-		meilisearch: { type: "bool", value: true },
-	},
-	{
 		key: "pricing",
 		aacsearch: { type: "bool", value: true },
 		algolia: { type: "bool", value: false },

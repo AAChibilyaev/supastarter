@@ -5,7 +5,6 @@ import {
 	BotIcon,
 	BrainIcon,
 	CodeIcon,
-	HardDriveIcon,
 	ServerIcon,
 	TerminalIcon,
 } from "lucide-react";
@@ -13,7 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface DevToolsItem {
-	key: "restApi" | "mcp" | "semanticSearch" | "typedSdk" | "selfHost" | "orpcControl";
+	key: "restApi" | "mcp" | "semanticSearch" | "typedSdk" | "orpcControl";
 	icon: ComponentType<{ className?: string }>;
 }
 
@@ -22,7 +21,6 @@ const items: DevToolsItem[] = [
 	{ key: "mcp", icon: BotIcon },
 	{ key: "semanticSearch", icon: BrainIcon },
 	{ key: "typedSdk", icon: CodeIcon },
-	{ key: "selfHost", icon: HardDriveIcon },
 	{ key: "orpcControl", icon: TerminalIcon },
 ];
 
@@ -31,7 +29,6 @@ const spanMap: Record<DevToolsItem["key"], string> = {
 	mcp: "md:col-span-1",
 	semanticSearch: "md:col-span-1",
 	typedSdk: "md:col-span-1",
-	selfHost: "md:col-span-1",
 	orpcControl: "md:col-span-2",
 };
 

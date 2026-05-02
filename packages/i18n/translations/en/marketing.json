@@ -76,9 +76,9 @@
 					"title": "Zero-downtime reindex",
 					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
 				},
-				"selfHost": {
-					"title": "One self-host path",
-					"description": "Same code as managed cloud. Helm chart and Docker compose, no proprietary server fork."
+				"enterpriseSecurity": {
+					"title": "Enterprise security",
+					"description": "SSO, audit log, IP allow-list, dedicated cluster, and 99.95% SLA. Security controls available from day one, not as an afterthought."
 				}
 			}
 		},
@@ -182,7 +182,6 @@
 			"developers": "Developers",
 			"faq": "FAQ",
 			"glossary": "Glossary",
-			"openSource": "Open Source",
 			"about": "About",
 			"security": "Security",
 			"careers": "Careers",
@@ -392,11 +391,11 @@
 			},
 			"technology": {
 				"title": "Technology",
-				"description": "Built on a lightning-fast open-source search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
+				"description": "Built on a lightning-fast search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
 			},
 			"openCore": {
-				"title": "Open core",
-				"description": "The server code is open source. Inspect what runs, self-host on your infrastructure, or use our managed cloud. No proprietary fork, no lock-in."
+				"title": "No lock-in",
+				"description": "Your data is always yours. Export indexes, migrate between plans, or switch to the Enterprise tier. No proprietary data format, no migration tax."
 			},
 			"team": {
 				"title": "Team",
@@ -487,7 +486,7 @@
 			},
 			"agency": {
 				"title": "Digital agency",
-				"description": "We deploy AACsearch for clients. The self-host path means clients who need on-prem get the same product as cloud customers.",
+				"description": "We deploy AACsearch for clients. Enterprise plans include dedicated infrastructure for teams with strict data residency requirements.",
 				"role": "Technical Director, digital agency"
 			}
 		}
@@ -534,8 +533,8 @@
 				"status": "planned"
 			},
 			"selfHost": {
-				"title": "Self-host quickstart v1.0",
-				"description": "Helm chart, Docker Compose, one-click deploy to Coolify. Same code as managed cloud.",
+				"title": "Enterprise deployment v1.0",
+				"description": "Dedicated cluster deployment, custom data residency, and on-prem options for regulated industries. Same managed API, your infrastructure.",
 				"status": "planned"
 			},
 			"vectorSearch": {
@@ -929,40 +928,6 @@
 			}
 		}
 	},
-	"featuresSelfHostPage": {
-		"title": "Self-hosting AACsearch",
-		"description": "Run AACsearch on your own infrastructure. Same code as managed cloud. Helm chart and Docker Compose included."
-	},
-	"featuresSelfHost": {
-		"title": "Your infrastructure, your rules",
-		"subtitle": "One codebase for managed cloud and self-hosted. No proprietary server fork. No vendor lock-in.",
-		"items": {
-			"openSource": {
-				"title": "Open source core",
-				"description": "The full server code is open source. Inspect every line, audit every dependency, fork if you must."
-			},
-			"dockerCompose": {
-				"title": "Docker Compose",
-				"description": "One command to start Postgres, MinIO, and AACsearch locally. Identical to the managed cloud architecture."
-			},
-			"helmChart": {
-				"title": "Helm chart",
-				"description": "Production Kubernetes deployment via Helm. Values file for resource limits, replicas, and storage class."
-			},
-			"coolify": {
-				"title": "Coolify one-click",
-				"description": "Deploy to Coolify with a single click. Environment variables pre-filled from your config."
-			},
-			"noFork": {
-				"title": "No proprietary fork",
-				"description": "Self-hosted and cloud run the same binary from the same repository. Features ship to both simultaneously."
-			},
-			"support": {
-				"title": "Self-host support",
-				"description": "Community support via GitHub for free tier. Enterprise self-host includes dedicated support and SLA."
-			}
-		}
-	},
 	"useCasesEcommercePage": {
 		"title": "Search for e-commerce",
 		"description": "Faceted filters, synonym expansion, zero-results handling, and real-time analytics — built for product catalogs."
@@ -1088,10 +1053,6 @@
 			"typedSdk": {
 				"title": "Typed browser SDK",
 				"description": "NPM package with full TypeScript types. Integrate in your dev tool's front end without guessing API shapes."
-			},
-			"selfHost": {
-				"title": "Self-hostable",
-				"description": "Run AACsearch in your infrastructure. Air-gapped deployment for security-sensitive developer tools."
 			},
 			"orpcControl": {
 				"title": "Programmatic control plane",
@@ -1297,9 +1258,13 @@
 				"title": "API key auth",
 				"description": "Configure with a ss_search_* API key. The MCP server inherits the key's scopes and rate limits."
 			},
-			"openSource": {
-				"title": "Open source",
-				"description": "The MCP server code is open source. Fork it, extend it, add custom tools for your workflow."
+			"enterpriseReady": {
+				"title": "Enterprise ready",
+				"description": "Scoped API key authentication, rate limiting, and tenant isolation. Integrate MCP into your enterprise workflows with confidence."
+			},
+			"extensible": {
+				"title": "Extensible",
+				"description": "Add custom tools for your workflow. Fork the MCP server, extend its capabilities, and integrate with your internal systems."
 			}
 		}
 	},
@@ -1314,8 +1279,6 @@
 				"vector": "Vector / semantic search",
 				"hybrid": "Hybrid search",
 				"realtime": "Real-time indexing",
-				"opensource": "Open source",
-				"selfhost": "Self-hostable",
 				"pricing": "Predictable pricing",
 				"managed": "Managed cloud",
 				"connector": "Connector API",
@@ -1343,7 +1306,7 @@
 		"items": {
 			"vsAlgolia": {
 				"title": "AACsearch vs Algolia",
-				"description": "Algolia is polished and has excellent docs. AACsearch is cheaper, open-source, and self-hostable. If you are spending $500+/mo on Algolia, AACsearch will cut that significantly."
+				"description": "Algolia is polished and has excellent docs. AACsearch is more affordable and built for multi-tenant teams. If you are spending $500+/mo on Algolia, AACsearch will cut that significantly."
 			},
 			"vsElasticsearch": {
 				"title": "AACsearch vs Elasticsearch",
@@ -1369,27 +1332,19 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs Algolia",
-		"description": "AACsearch vs Algolia: pricing, self-hosting, multi-tenant security, and migration guide. See why teams paying $200+/month on Algolia are switching to AACsearch."
+		"description": "AACsearch vs Algolia: pricing, multi-tenant security, and migration guide. See why teams paying $200+/month on Algolia are switching to AACsearch."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs Algolia",
-		"subtitle": "Algolia is the market leader with excellent DX. AACsearch is cheaper, open-source, and adds multi-tenant isolation.",
+		"subtitle": "Algolia is the market leader with excellent DX. AACsearch is more affordable and adds multi-tenant isolation with scoped tokens.",
 		"items": {
 			"pricing": {
 				"title": "Pricing",
 				"description": "Algolia charges per search operation and per record stored, with minimums. AACsearch charges per search-unit with no minimum beyond the free tier."
 			},
-			"selfHost": {
-				"title": "Self-hosting",
-				"description": "Algolia is SaaS-only — you cannot self-host it. AACsearch is self-hostable with the same codebase as cloud."
-			},
 			"multiTenancy": {
 				"title": "Multi-tenancy",
 				"description": "Algolia uses per-index API keys with user tokens. AACsearch uses HMAC scoped tokens with mandatory AND-combined filters."
-			},
-			"openSource": {
-				"title": "Open source",
-				"description": "Algolia is closed-source. AACsearch is open source — inspect the code, audit the logic, fork if needed."
 			},
 			"migration": {
 				"title": "Migration",
@@ -1397,7 +1352,7 @@
 			},
 			"verdict": {
 				"title": "When to choose AACsearch",
-				"description": "If you are spending $200+/mo on Algolia, or if self-hosting, multi-tenancy isolation, or open source matters to you."
+				"description": "If you are spending $200+/mo on Algolia, or if multi-tenancy isolation and predictable pricing matter to you."
 			}
 		},
 		"codeTitle": "Migration is hours, not weeks",
@@ -1468,40 +1423,6 @@
 			"verdict": {
 				"title": "When to choose AACsearch",
 				"description": "If you need multi-tenant isolation, a management API, CMS connectors, or analytics beyond basic query counts."
-			}
-		}
-	},
-	"openSourcePage": {
-		"title": "AACsearch open source",
-		"description": "The full AACsearch server code is open source. Inspect it, audit it, self-host it, or contribute."
-	},
-	"openSource": {
-		"title": "Open source at the core",
-		"subtitle": "No proprietary server fork. The code on GitHub is the same code running on managed cloud. Always.",
-		"items": {
-			"license": {
-				"title": "MIT licensed",
-				"description": "The AACsearch server is MIT licensed. Use it commercially, fork it, modify it — no restrictions."
-			},
-			"selfHost": {
-				"title": "Self-hostable",
-				"description": "Docker Compose and Helm chart included. Run AACsearch in your own cloud, on-prem, or air-gapped."
-			},
-			"transparency": {
-				"title": "Transparent security",
-				"description": "Every security decision is in the open. Inspect how keys are hashed, how tokens are signed, how tenants are isolated."
-			},
-			"contribute": {
-				"title": "Contribute",
-				"description": "Issues, PRs, and discussions welcome on GitHub. We review PRs within a week. Contributors get credited in the changelog."
-			},
-			"noLockIn": {
-				"title": "No vendor lock-in",
-				"description": "Your data is always yours. Export indexes, migrate to self-hosted, or switch providers. No proprietary data format."
-			},
-			"community": {
-				"title": "Community",
-				"description": "GitHub Discussions for questions, ideas, and show-and-tell. Discord for real-time chat with the team and other users."
 			}
 		}
 	},
@@ -2393,7 +2314,7 @@
 		"description": "AACsearch is built on Typesense. The difference: we add multi-tenancy, analytics, a hosted control plane, and managed ops on top."
 	},
 	"compareTypesense": {
-		"title": "Self-host vs. managed cloud",
+		"title": "Engine vs. managed cloud platform",
 		"subtitle": "Typesense is the engine we run. AACsearch wraps it with the SaaS layer your team needs to go from zero to production in an afternoon.",
 		"items": {
 			"hosting": {
@@ -2406,7 +2327,7 @@
 			},
 			"analytics": {
 				"title": "Search analytics",
-				"description": "AACsearch adds a full analytics pipeline: query logs, zero-result tracking, top queries, and a dashboard. Not included in Typesense OSS."
+				"description": "AACsearch adds a full analytics pipeline: query logs, zero-result tracking, top queries, and a dashboard. Not included in raw Typesense."
 			},
 			"connectors": {
 				"title": "CMS connectors",
@@ -2730,7 +2651,7 @@
 	},
 	"newsletterPage": {
 		"title": "Newsletter",
-		"description": "Monthly updates on search engineering, AACsearch releases, and the open-source projects we follow."
+		"description": "Monthly updates on search engineering, AACsearch releases, and the developer tools we follow."
 	},
 	"newsletter": {
 		"title": "Stay in the loop",
@@ -2742,7 +2663,7 @@
 			},
 			"content": {
 				"title": "What you will get",
-				"description": "Search engineering articles, AACsearch release notes, open-source highlights, and one community spotlight per issue."
+				"description": "Search engineering articles, AACsearch release notes, developer tool highlights, and one community spotlight per issue."
 			},
 			"past": {
 				"title": "Read past issues",
@@ -2764,7 +2685,7 @@
 	},
 	"communityPage": {
 		"title": "Community",
-		"description": "Join the AACsearch community — ask questions, share projects, contribute to open source, and shape the roadmap."
+		"description": "Join the AACsearch community — ask questions, share projects, contribute connectors, and shape the roadmap."
 	},
 	"community": {
 		"title": "Build search, together",
@@ -2893,8 +2814,8 @@
 				"description": "Yes. The AACsearch REST API is compatible with Algolia-style collection schemas. We provide a migration guide and one-time import tooling."
 			},
 			"selfHost": {
-				"title": "Can I self-host?",
-				"description": "Yes. AACsearch supports self-hosting. You can run the search engine yourself and use the AACsearch SDK against your own cluster."
+				"title": "Do you offer dedicated or on-prem deployment?",
+				"description": "Yes. Enterprise plans include a dedicated cluster in the region you choose. For regulated industries with strict data residency requirements, contact us to scope a custom deployment."
 			}
 		}
 	},

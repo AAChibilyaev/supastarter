@@ -76,9 +76,9 @@
 					"title": "Reindex ohne Downtime",
 					"description": "Index gegen neues Schema neu aufbauen, während Live-Traffic weiter den alten trifft. Atomarer Cut-over."
 				},
-				"selfHost": {
-					"title": "Ein Self-Host-Pfad",
-					"description": "Derselbe Code wie Managed Cloud. Helm-Chart und Docker Compose — kein proprietärer Server-Fork."
+				"enterpriseSecurity": {
+					"title": "Enterprise-Sicherheit",
+					"description": "SSO, Audit-Log, IP-Allowlist, dediziertes Cluster und 99,95% SLA. Sicherheitskontrollen von Anfang an — nicht nachträglich."
 				}
 			}
 		},
@@ -182,7 +182,6 @@
 			"developers": "Entwickler",
 			"faq": "FAQ",
 			"glossary": "Glossar",
-			"openSource": "Open Source",
 			"about": "Über uns",
 			"security": "Sicherheit",
 			"careers": "Karriere",
@@ -392,11 +391,11 @@
 			},
 			"technology": {
 				"title": "Technologie",
-				"description": "Aufgebaut auf einer blitzschnellen Open-Source-Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
+				"description": "Aufgebaut auf einer blitzschnellen Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
 			},
 			"openCore": {
-				"title": "Open Core",
-				"description": "Der Servercode ist Open Source. Prüfen Sie, was läuft, hosten Sie es selbst oder nutzen Sie unsere Managed Cloud. Kein proprietärer Fork, kein Lock-in."
+				"title": "Kein Lock-in",
+				"description": "Ihre Daten gehören immer Ihnen. Exportieren Sie Indizes, migrieren Sie zwischen Plänen oder wechseln Sie zum Enterprise-Tier. Kein proprietäres Datenformat, keine Migrationskosten."
 			},
 			"team": {
 				"title": "Team",
@@ -487,7 +486,7 @@
 			},
 			"agency": {
 				"title": "Digitalagentur",
-				"description": "Wir setzen AACsearch für Kunden ein. Der Self-Host-Pfad bedeutet, dass Kunden mit On-Premises-Anforderungen dasselbe Produkt wie Cloud-Kunden erhalten.",
+				"description": "Wir setzen AACsearch für Kunden ein. Enterprise-Pläne umfassen dedizierte Infrastruktur für Teams mit strengen Anforderungen an den Datenspeicherort.",
 				"role": "Technical Director, Digitalagentur"
 			}
 		}
@@ -534,8 +533,8 @@
 				"status": "planned"
 			},
 			"selfHost": {
-				"title": "Self-Host-Schnellstart v1.0",
-				"description": "Helm-Chart, Docker Compose, One-Click-Deploy auf Coolify. Identischer Code wie Managed Cloud.",
+				"title": "Enterprise-Deployment v1.0",
+				"description": "Dediziertes Cluster-Deployment, benutzerdefinierter Datenspeicherort und On-Premises-Optionen für regulierte Branchen.",
 				"status": "planned"
 			},
 			"vectorSearch": {
@@ -929,40 +928,6 @@
 			}
 		}
 	},
-	"featuresSelfHostPage": {
-		"title": "AACsearch selbst hosten",
-		"description": "AACsearch auf eigener Infrastruktur betreiben. Identischer Code wie Managed Cloud. Helm-Chart und Docker Compose inklusive."
-	},
-	"featuresSelfHost": {
-		"title": "Ihre Infrastruktur, Ihre Regeln",
-		"subtitle": "Eine Codebasis für Managed Cloud und Self-Hosted. Kein proprietärer Server-Fork. Kein Vendor-Lock-in.",
-		"items": {
-			"openSource": {
-				"title": "Open-Source-Kern",
-				"description": "Der vollständige Servercode ist Open Source. Jede Zeile inspizieren, jede Abhängigkeit prüfen, forken wenn nötig."
-			},
-			"dockerCompose": {
-				"title": "Docker Compose",
-				"description": "Ein Befehl startet Postgres, MinIO und AACsearch lokal. Identisch zur Managed-Cloud-Architektur."
-			},
-			"helmChart": {
-				"title": "Helm-Chart",
-				"description": "Produktions-Kubernetes-Deployment via Helm. Values-Datei für Ressource-Limits, Replicas und Storage-Class."
-			},
-			"coolify": {
-				"title": "Coolify One-Click",
-				"description": "Mit einem Klick auf Coolify deployen. Umgebungsvariablen werden aus Ihrer Konfiguration vorausgefüllt."
-			},
-			"noFork": {
-				"title": "Kein proprietärer Fork",
-				"description": "Self-Hosted und Cloud laufen dasselbe Binary aus demselben Repository. Features werden gleichzeitig an beide ausgeliefert."
-			},
-			"support": {
-				"title": "Self-Host-Support",
-				"description": "Community-Support via GitHub für den kostenlosen Tarif. Enterprise-Self-Host beinhaltet dedizierten Support und SLA."
-			}
-		}
-	},
 	"useCasesEcommercePage": {
 		"title": "Suche für E-Commerce",
 		"description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und Echtzeit-Analytics — für Produktkataloge entwickelt."
@@ -1088,10 +1053,6 @@
 			"typedSdk": {
 				"title": "Typisiertes Browser-SDK",
 				"description": "NPM-Paket mit vollständigen TypeScript-Typen. Im Frontend Ihres Entwicklertools integrieren, ohne API-Strukturen zu erraten."
-			},
-			"selfHost": {
-				"title": "Self-Hostbar",
-				"description": "AACsearch in Ihrer Infrastruktur betreiben. Air-Gap-Deployment für sicherheitssensible Entwicklertools."
 			},
 			"orpcControl": {
 				"title": "Programmgesteuerte Control Plane",
@@ -1297,9 +1258,13 @@
 				"title": "API-Key-Auth",
 				"description": "Mit einem ss_search_*-API-Key konfigurieren. Der MCP-Server übernimmt die Scopes und Rate-Limits des Keys."
 			},
-			"openSource": {
-				"title": "Open Source",
-				"description": "Der MCP-Server-Code ist Open Source. Forken, erweitern, eigene Tools für Ihren Workflow hinzufügen."
+			"enterpriseReady": {
+				"title": "Enterprise-bereit",
+				"description": "Scoped API-Key-Authentifizierung, Rate-Limiting und Tenant-Isolation. MCP sicher in Enterprise-Workflows integrieren."
+			},
+			"extensible": {
+				"title": "Erweiterbar",
+				"description": "Fügen Sie benutzerdefinierte Tools für Ihren Workflow hinzu. Erweitern Sie die MCP-Server-Funktionen und integrieren Sie Ihre internen Systeme."
 			}
 		}
 	},
@@ -1314,8 +1279,6 @@
 				"vector": "Vektor- / semantische Suche",
 				"hybrid": "Hybridsuche",
 				"realtime": "Echtzeit-Indizierung",
-				"opensource": "Open Source",
-				"selfhost": "Selbst hostbar",
 				"pricing": "Vorhersehbare Preise",
 				"managed": "Verwaltete Cloud",
 				"connector": "Connector-API",
@@ -1343,7 +1306,7 @@
 		"items": {
 			"vsAlgolia": {
 				"title": "AACsearch vs. Algolia",
-				"description": "Algolia ist ausgereift und hat ausgezeichnete Dokumentation. AACsearch ist günstiger, Open Source und self-hostbar. Wenn Sie $500+/Monat für Algolia ausgeben, wird AACsearch das deutlich reduzieren."
+				"description": "Algolia ist ausgereift und hat ausgezeichnete Dokumentation. AACsearch ist erschwinglicher und für Multi-Tenant-Teams konzipiert. Wenn Sie $500+/Monat für Algolia ausgeben, wird AACsearch das deutlich reduzieren."
 			},
 			"vsElasticsearch": {
 				"title": "AACsearch vs. Elasticsearch",
@@ -1369,27 +1332,19 @@
 	},
 	"compareAlgoliaPage": {
 		"title": "AACsearch vs. Algolia",
-		"description": "AACsearch vs. Algolia: Preise, Self-Hosting, Multi-Tenant-Sicherheit und Migration im Vergleich. Erfahren Sie, warum Teams mit 200+$/Monat auf AACsearch wechseln."
+		"description": "AACsearch vs. Algolia: Preise, Multi-Tenant-Sicherheit und Migration im Vergleich. Erfahren Sie, warum Teams mit 200+$/Monat auf AACsearch wechseln."
 	},
 	"compareAlgolia": {
 		"title": "AACsearch vs. Algolia",
-		"subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist günstiger, Open Source und bietet Multi-Tenant-Isolation.",
+		"subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist erschwinglicher und bietet Multi-Tenant-Isolation mit Scoped Tokens.",
 		"items": {
 			"pricing": {
 				"title": "Preise",
 				"description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz, mit Mindestbeträgen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif."
 			},
-			"selfHost": {
-				"title": "Self-Hosting",
-				"description": "Algolia ist reines SaaS — Sie können es nicht selbst hosten. AACsearch ist self-hostbar mit derselben Codebasis wie die Cloud."
-			},
 			"multiTenancy": {
 				"title": "Multi-Tenancy",
 				"description": "Algolia nutzt Index-spezifische API-Keys mit User-Tokens. AACsearch nutzt HMAC Scoped Tokens mit obligatorischen AND-kombinierten Filtern."
-			},
-			"openSource": {
-				"title": "Open Source",
-				"description": "Algolia ist Closed Source. AACsearch ist Open Source — Code inspizieren, Logik prüfen, forken wenn nötig."
 			},
 			"migration": {
 				"title": "Migration",
@@ -1397,7 +1352,7 @@
 			},
 			"verdict": {
 				"title": "Wann Sie AACsearch wählen sollten",
-				"description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Self-Hosting, Multi-Tenancy-Isolation oder Open Source für Sie wichtig ist."
+				"description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Multi-Tenancy-Isolation und planbare Preise für Sie wichtig sind."
 			}
 		},
 		"codeTitle": "Migration dauert Stunden, nicht Wochen",
@@ -1468,40 +1423,6 @@
 			"verdict": {
 				"title": "Wann Sie AACsearch wählen sollten",
 				"description": "Wenn Sie Multi-Tenant-Isolation, eine Management-API, CMS-Connectors oder Analytics über grundlegende Query-Zählungen hinaus benötigen."
-			}
-		}
-	},
-	"openSourcePage": {
-		"title": "AACsearch Open Source",
-		"description": "Der vollständige AACsearch-Servercode ist Open Source. Inspizieren, prüfen, selbst hosten oder beitragen."
-	},
-	"openSource": {
-		"title": "Open Source im Kern",
-		"subtitle": "Kein proprietärer Server-Fork. Der Code auf GitHub ist derselbe Code, der auf Managed Cloud läuft. Immer.",
-		"items": {
-			"license": {
-				"title": "MIT-lizenziert",
-				"description": "Der AACsearch-Server ist MIT-lizenziert. Kommerziell nutzen, forken, modifizieren — keine Einschränkungen."
-			},
-			"selfHost": {
-				"title": "Self-Hostbar",
-				"description": "Docker Compose und Helm-Chart inklusive. AACsearch in Ihrer eigenen Cloud, On-Premises oder Air-Gapped betreiben."
-			},
-			"transparency": {
-				"title": "Transparente Sicherheit",
-				"description": "Jede Sicherheitsentscheidung ist offen einsehbar. Prüfen Sie, wie Keys gehasht, Tokens signiert und Tenants isoliert werden."
-			},
-			"contribute": {
-				"title": "Beitragen",
-				"description": "Issues, PRs und Diskussionen auf GitHub willkommen. Wir prüfen PRs innerhalb einer Woche. Mitwirkende werden im Changelog aufgeführt."
-			},
-			"noLockIn": {
-				"title": "Kein Vendor-Lock-in",
-				"description": "Ihre Daten gehören Ihnen. Indexe exportieren, zu Self-Hosted migrieren oder Anbieter wechseln. Kein proprietäres Datenformat."
-			},
-			"community": {
-				"title": "Community",
-				"description": "GitHub Discussions für Fragen, Ideen und Präsentationen. Discord für Echtzeit-Chat mit dem Team und anderen Nutzern."
 			}
 		}
 	},
@@ -1674,7 +1595,7 @@
 	},
 	"communityPage": {
 		"title": "Community",
-		"description": "Tritt der AACsearch-Community bei – stelle Fragen, teile Projekte, trage zum Open Source bei und gestalte die Roadmap mit."
+		"description": "Tritt der AACsearch-Community bei – stelle Fragen, teile Projekte, trage Konnektoren bei und gestalte die Roadmap mit."
 	},
 	"community": {
 		"title": "Suche gemeinsam aufbauen",
@@ -1813,7 +1734,7 @@
 		"description": "AACsearch basiert auf Typesense. Der Unterschied: Wir fügen Multi-Tenancy, Analytik, eine gehostete Steuerungsebene und verwalteten Betrieb hinzu."
 	},
 	"compareTypesense": {
-		"title": "Self-Hosting vs. verwaltete Cloud",
+		"title": "Engine vs. verwaltete Cloud-Plattform",
 		"subtitle": "Typesense ist die Engine, die wir betreiben. AACsearch umhüllt sie mit der SaaS-Schicht, die dein Team braucht, um in einem Nachmittag in Produktion zu gehen.",
 		"items": {
 			"hosting": {
@@ -1826,7 +1747,7 @@
 			},
 			"analytics": {
 				"title": "Such-Analytik",
-				"description": "AACsearch ergänzt eine vollständige Analytik-Pipeline: Query-Logs, Zero-Result-Tracking, Top-Abfragen und ein Dashboard."
+				"description": "AACsearch ergänzt eine vollständige Analytik-Pipeline: Query-Logs, Zero-Result-Tracking, Top-Abfragen und ein Dashboard. Nicht in Typesense enthalten."
 			},
 			"connectors": {
 				"title": "CMS-Konnektoren",
@@ -1905,8 +1826,8 @@
 				"description": "Ja. Die AACsearch-REST-API ist kompatibel mit Algolia-ähnlichen Kollektion-Schemata. Wir bieten einen Migrationsleitfaden."
 			},
 			"selfHost": {
-				"title": "Kann ich selbst hosten?",
-				"description": "Ja. AACsearch verwendet Typesense als Such-Engine. Du kannst Typesense selbst betreiben und das AACsearch-SDK dagegen verwenden."
+				"title": "Bieten Sie dediziertes oder On-Premises-Deployment an?",
+				"description": "Ja. Enterprise-Pläne umfassen ein dediziertes Cluster in der von Ihnen gewählten Region. Für regulierte Branchen mit strengen Anforderungen kontaktieren Sie uns für ein benutzerdefiniertes Deployment."
 			}
 		}
 	},
@@ -2712,7 +2633,7 @@
 	},
 	"newsletterPage": {
 		"title": "AACsearch-Newsletter",
-		"description": "Wöchentliche Updates zu Produkt-Updates, Suchbranchennachrichten und neuen Entwicklerdokumenten."
+		"description": "Monatliche Updates zu Suchengineering, AACsearch-Releases und den Entwickler-Tools, die wir verfolgen."
 	},
 	"newsletter": {
 		"title": "Auf dem Laufenden bleiben",
@@ -2743,7 +2664,7 @@
 				"description": "Montags, ca. 08:00 Uhr MEZ. Kein Marketing, keine Werbung. Jederzeit abmeldbar."
 			},
 			"content": {
-				"description": "Artikel zum Such-Engineering, AACsearch-Versionshinweise, Open-Source-Highlights und ein Community-Spotlight pro Ausgabe.",
+				"description": "Artikel zum Such-Engineering, AACsearch-Versionshinweise, Entwickler-Tool-Highlights und ein Community-Spotlight pro Ausgabe.",
 				"title": "Was Sie erhalten"
 			},
 			"past": {

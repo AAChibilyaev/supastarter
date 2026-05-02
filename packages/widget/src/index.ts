@@ -254,6 +254,107 @@ const WIDGET_STYLES = `
   margin-left: auto;
 }
 
+/* Price range slider */
+.aac-price-range-container {
+  padding: 4px 0;
+}
+
+.aac-price-range-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--aac-text);
+  margin-bottom: 12px;
+}
+
+.aac-price-min,
+.aac-price-max {
+  background: var(--aac-bg);
+  padding: 2px 8px;
+  border: 1px solid var(--aac-border);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.aac-price-separator {
+  color: var(--aac-text-secondary);
+  font-size: 14px;
+}
+
+.aac-price-slider-track {
+  position: relative;
+  height: 36px;
+  margin-bottom: 8px;
+}
+
+.aac-price-range-input {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  z-index: 2;
+}
+
+.aac-price-range-input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--aac-border);
+}
+
+.aac-price-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--aac-primary);
+  border: 3px solid var(--aac-bg);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  pointer-events: all;
+  margin-top: -7px;
+}
+
+.aac-price-range-input::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--aac-border);
+}
+
+.aac-price-range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--aac-primary);
+  border: 3px solid var(--aac-bg);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.aac-price-range-clear {
+  font-size: 12px;
+  color: var(--aac-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+}
+
+.aac-price-range-clear:hover {
+  opacity: 0.8;
+}
+
 .aac-results {
   display: grid;
   gap: 16px;
@@ -431,10 +532,7 @@ const WIDGET_STYLES = `
 
 interface SearchState {
 	query: string;
-	results: Array<{
-		document: Record<string, unknown>;
-		highlights?: unknown[];
-	}>;
+	results: Array<{ document: unknown; highlights?: unknown[] }>;
 	found: number;
 	page: number;
 	perPage: number;
@@ -446,6 +544,7 @@ interface SearchState {
 	loading: boolean;
 	error: string | null;
 	filters: Record<string, string[]>;
+	priceRange: { min: number; max: number } | null;
 	sortBy: string;
 }
 
@@ -638,6 +737,7 @@ export class AacSearchWidget {
 			loading: false,
 			error: null,
 			filters: {},
+			priceRange: null,
 			sortBy: "",
 		};
 
@@ -673,6 +773,15 @@ export class AacSearchWidget {
 			for (const [field, values] of Object.entries(this.state.filters)) {
 				if (values.length > 0) {
 					filterParts.push(`${field}: [${values.map((v) => `\`${v}\``).join(", ")}]`);
+				}
+			}
+
+			// Add price range filter if set
+			if (this.state.priceRange !== null) {
+				const priceField = this.detectPriceField();
+				if (priceField) {
+					filterParts.push(`${priceField}:>=${this.state.priceRange.min}`);
+					filterParts.push(`${priceField}:<=${this.state.priceRange.max}`);
 				}
 			}
 
@@ -748,6 +857,79 @@ export class AacSearchWidget {
 		}));
 	}
 
+	/**
+	 * Detect the price field name from facet counts or known field patterns.
+	 * Returns the field name (e.g. "price", "sale_price") or null if none detected.
+	 */
+	private detectPriceField(): string | null {
+		const pricePatterns = ["price", "sale_price", "cost", "amount", "price_range"];
+		// First, check facetCounts for a known price field
+		for (const facet of this.state.facetCounts) {
+			if (pricePatterns.includes(facet.field_name)) {
+				return facet.field_name;
+			}
+			// Also match field names ending with _price
+			if (facet.field_name.endsWith("_price") || facet.field_name.endsWith("_cost")) {
+				return facet.field_name;
+			}
+		}
+		// Fallback: if no facet data, assume "price"
+		if (
+			pricePatterns.some((p) =>
+				this.state.results.some((r) => {
+					const doc = r.document as Record<string, unknown>;
+					return doc[p] !== undefined;
+				}),
+			)
+		) {
+			return "price";
+		}
+		return null;
+	}
+
+	/**
+	 * Determine sensible price bounds from the current results.
+	 * Returns { min, max } or falls back to defaults if no data.
+	 */
+	private detectPriceBounds(): { min: number; max: number } {
+		const priceField = this.detectPriceField();
+		if (!priceField) return { min: 0, max: 10000 };
+
+		let min = Infinity;
+		let max = -Infinity;
+		for (const hit of this.state.results) {
+			const doc = hit.document as Record<string, unknown>;
+			const val = doc[priceField] as number | undefined;
+			if (typeof val === "number" && !Number.isNaN(val)) {
+				if (val < min) min = val;
+				if (val > max) max = val;
+			}
+		}
+
+		// Also check sale_price if it's not the primary field
+		if (priceField !== "sale_price") {
+			for (const hit of this.state.results) {
+				const doc = hit.document as Record<string, unknown>;
+				const saleVal = doc.sale_price as number | undefined;
+				if (typeof saleVal === "number" && !Number.isNaN(saleVal)) {
+					if (saleVal < min) min = saleVal;
+					if (saleVal > max) max = saleVal;
+				}
+			}
+		}
+
+		if (!Number.isFinite(min) || !Number.isFinite(max)) {
+			return { min: 0, max: 10000 };
+		}
+
+		// Round to nice numbers: floor min down, ceil max up
+		const magnitude = Math.pow(10, Math.floor(Math.log10(max - min || 1)));
+		return {
+			min: Math.floor(min / magnitude) * magnitude,
+			max: Math.ceil(max / magnitude) * magnitude,
+		};
+	}
+
 	private toggleFilter(field: string, value: string): void {
 		const current = this.state.filters[field] ?? [];
 		const idx = current.indexOf(value);
@@ -768,6 +950,92 @@ export class AacSearchWidget {
 	private setSortBy(sortBy: string): void {
 		this.state = { ...this.state, sortBy };
 		void this.doSearch(1);
+	}
+
+	/**
+	 * Set the price range filter and re-search.
+	 * Pass null to clear the price filter.
+	 */
+	private setPriceRange(range: { min: number; max: number } | null): void {
+		this.state = { ...this.state, priceRange: range };
+		this.trackEvent({
+			type: "filter_used",
+			filters: { price_range: range ? [`${range.min}-${range.max}`] : [] },
+			query: this.state.query || undefined,
+		});
+		void this.doSearch(1);
+	}
+
+	private renderPriceRangeSlider(): string {
+		const priceField = this.detectPriceField();
+		if (!priceField) return "";
+
+		const bounds = this.detectPriceBounds();
+		const currentMin = this.state.priceRange?.min ?? bounds.min;
+		const currentMax = this.state.priceRange?.max ?? bounds.max;
+
+		return `
+			<div class="aac-facet-group">
+				<div class="aac-facet-header" data-facet-field="__price_range__">
+					<span class="aac-facet-title">Price</span>
+					<span class="aac-facet-toggle">−</span>
+				</div>
+				<div class="aac-facet-body" data-facet-field="__price_range__">
+					<div class="aac-price-range-container">
+						<div class="aac-price-range-values">
+							<span class="aac-price-min">${this.formatPriceValue(currentMin)}</span>
+							<span class="aac-price-separator">—</span>
+							<span class="aac-price-max">${this.formatPriceValue(currentMax)}</span>
+						</div>
+						<div class="aac-price-slider-track">
+							<input
+								type="range"
+								class="aac-price-range-input aac-price-range-min"
+								min="${bounds.min}"
+								max="${bounds.max}"
+								step="${Math.max(1, Math.round((bounds.max - bounds.min) / 100))}"
+								value="${currentMin}"
+								aria-label="Minimum price"
+							/>
+							<input
+								type="range"
+								class="aac-price-range-input aac-price-range-max"
+								min="${bounds.min}"
+								max="${bounds.max}"
+								step="${Math.max(1, Math.round((bounds.max - bounds.min) / 100))}"
+								value="${currentMax}"
+								aria-label="Maximum price"
+							/>
+						</div>
+						<button class="aac-price-range-clear" data-action="clear-price">Clear</button>
+					</div>
+				</div>
+			</div>`;
+	}
+
+	private formatPriceValue(val: number): string {
+		if (val >= 1000000) {
+			return `$${(val / 1000000).toFixed(1)}M`;
+		}
+		if (val >= 1000) {
+			return `$${(val / 1000).toFixed(val % 1000 === 0 ? 0 : 1)}K`;
+		}
+		if (Number.isInteger(val)) {
+			return `$${val}`;
+		}
+		return `$${val.toFixed(2)}`;
+	}
+
+	/**
+	 * Check if a field name is a price-related field that should use the range slider.
+	 */
+	private isPriceField(fieldName: string): boolean {
+		const pricePatterns = ["price", "sale_price", "cost", "amount", "price_range"];
+		return (
+			pricePatterns.includes(fieldName) ||
+			fieldName.endsWith("_price") ||
+			fieldName.endsWith("_cost")
+		);
 	}
 
 	private attachEvents(): void {
@@ -874,6 +1142,94 @@ export class AacSearchWidget {
 				filterOverlay.classList.remove("visible");
 			});
 		}
+
+		// Price range slider (delegated to facets container)
+		if (facetsContainer) {
+			let priceTimer: ReturnType<typeof setTimeout> | null = null;
+
+			facetsContainer.addEventListener("input", (e) => {
+				const target = e.target as HTMLInputElement | null;
+				if (!target || target.type !== "range") return;
+
+				const isMin = target.classList.contains("aac-price-range-min");
+				const isMax = target.classList.contains("aac-price-range-max");
+				if (!isMin && !isMax) return;
+
+				// Update displayed values immediately
+				const container = target.closest(
+					".aac-price-range-container",
+				) as HTMLElement | null;
+				if (container) {
+					const minValEl = container.querySelector(
+						".aac-price-min",
+					) as HTMLElement | null;
+					const maxValEl = container.querySelector(
+						".aac-price-max",
+					) as HTMLElement | null;
+
+					// Get current values from both sliders
+					const minInput = container.querySelector(
+						".aac-price-range-min",
+					) as HTMLInputElement | null;
+					const maxInput = container.querySelector(
+						".aac-price-range-max",
+					) as HTMLInputElement | null;
+
+					if (minInput && maxInput) {
+						const minVal = Math.min(
+							parseInt(minInput.value, 10),
+							parseInt(maxInput.value, 10),
+						);
+						const maxVal = Math.max(
+							parseInt(minInput.value, 10),
+							parseInt(maxInput.value, 10),
+						);
+
+						// Prevent handles from crossing
+						if (isMin && parseInt(target.value, 10) > parseInt(maxInput.value, 10)) {
+							target.value = String(parseInt(maxInput.value, 10));
+						} else if (
+							isMax &&
+							parseInt(target.value, 10) < parseInt(minInput.value, 10)
+						) {
+							target.value = String(parseInt(minInput.value, 10));
+						}
+
+						if (minValEl) minValEl.textContent = this.formatPriceValue(minVal);
+						if (maxValEl) maxValEl.textContent = this.formatPriceValue(maxVal);
+					}
+				}
+
+				// Debounced search
+				if (priceTimer !== null) clearTimeout(priceTimer);
+				priceTimer = setTimeout(() => {
+					priceTimer = null;
+					const minInput = this.root.querySelector(
+						".aac-price-range-min",
+					) as HTMLInputElement | null;
+					const maxInput = this.root.querySelector(
+						".aac-price-range-max",
+					) as HTMLInputElement | null;
+					if (minInput && maxInput) {
+						const minVal = parseInt(minInput.value, 10);
+						const maxVal = parseInt(maxInput.value, 10);
+						this.setPriceRange({
+							min: Math.min(minVal, maxVal),
+							max: Math.max(minVal, maxVal),
+						});
+					}
+				}, 400);
+			});
+
+			// Clear price range
+			facetsContainer.addEventListener("click", (e) => {
+				const btn = (e.target as HTMLElement).closest(
+					".aac-price-range-clear",
+				) as HTMLElement | null;
+				if (!btn) return;
+				this.setPriceRange(null);
+			});
+		}
 	}
 
 	private totalPages(): number {
@@ -925,10 +1281,18 @@ export class AacSearchWidget {
 
 		let html = '<div class="aac-facets">';
 
+		// Price range slider first if applicable
+		if (this.detectPriceField()) {
+			html += this.renderPriceRangeSlider();
+		}
+
 		for (const facet of this.state.facetCounts) {
 			if (facet.counts.length === 0) continue;
 
 			const fieldName = facet.field_name;
+
+			// Skip price fields — they're rendered as a range slider above
+			if (this.isPriceField(fieldName)) continue;
 			const label = fieldName.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 			// Detect color facet by field name suffix or common color field names

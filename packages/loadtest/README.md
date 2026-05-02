@@ -43,8 +43,8 @@ pnpm --filter @repo/loadtest all  # run sequentially
 **Target:** 1 000 requests/second, p99 < 100ms.
 
 - Two concurrent scenarios:
-  - **ramp_up**: ramps from 100 → 1 000 RPS over 2 min, sustains for 1 min
-  - **stress**: constant 50 RPS throughout (background noise traffic)
+    - **ramp_up**: ramps from 100 → 1 000 RPS over 2 min, sustains for 1 min
+    - **stress**: constant 50 RPS throughout (background noise traffic)
 - Queries: drawn from a 25-query pool (wildcards, common terms, UI labels)
 - Think time: 50–200ms between requests
 
@@ -77,6 +77,7 @@ pnpm --filter @repo/loadtest all  # run sequentially
 **Target:** 500 concurrent widget users, each performing 2–6 searches.
 
 Simulates a full widget user flow:
+
 1. Load widget script (`GET /api/widget/widget.js`)
 2. Think time (1–3s)
 3. Type 2–6 queries (mix of browse `"*"` and actual search terms)
@@ -92,13 +93,13 @@ Simulates a full widget user flow:
 
 ## Environment Variables
 
-| Variable       | Default                   | Required | Description                               |
-|----------------|---------------------------|----------|-------------------------------------------|
-| `BASE_URL`     | `http://localhost:3010`   | No       | AACsearch SaaS base URL                   |
-| `TYPESENSE_URL`| `http://localhost:8108`   | No       | Typesense direct URL (ingest tests)        |
-| `API_KEY`      | `""`                      | **Yes**  | Auth API key (scope depends on test type) |
-| `INDEX_ID`     | `""`                      | **Yes**  | Target index UUID                          |
-| `INDEX_SLUG`   | `""`                      | No       | Target index slug (falls back to INDEX_ID)|
+| Variable        | Default                 | Required | Description                                |
+| --------------- | ----------------------- | -------- | ------------------------------------------ |
+| `BASE_URL`      | `http://localhost:3010` | No       | AACsearch SaaS base URL                    |
+| `TYPESENSE_URL` | `http://localhost:8108` | No       | Typesense direct URL (ingest tests)        |
+| `API_KEY`       | `""`                    | **Yes**  | Auth API key (scope depends on test type)  |
+| `INDEX_ID`      | `""`                    | **Yes**  | Target index UUID                          |
+| `INDEX_SLUG`    | `""`                    | No       | Target index slug (falls back to INDEX_ID) |
 
 ## CI Integration
 
@@ -107,12 +108,12 @@ Add as a workflow step:
 ```yaml
 - name: Run load tests
   run: |
-    k6 run \
-      -e BASE_URL=${{ vars.STAGING_URL }} \
-      -e API_KEY=${{ secrets.STAGING_API_KEY }} \
-      -e INDEX_ID=${{ vars.INDEX_ID }} \
-      --out json=load-test-report.json \
-      packages/loadtest/scenarios/search-benchmark.js
+      k6 run \
+        -e BASE_URL=${{ vars.STAGING_URL }} \
+        -e API_KEY=${{ secrets.STAGING_API_KEY }} \
+        -e INDEX_ID=${{ vars.INDEX_ID }} \
+        --out json=load-test-report.json \
+        packages/loadtest/scenarios/search-benchmark.js
 ```
 
 ## Regression Detection

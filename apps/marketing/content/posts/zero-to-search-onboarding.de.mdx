@@ -1,0 +1,263 @@
+---
+title: Von Null zur Suche: Vollständiger AACsearch-Onboarding-Leitfaden
+date: 2025-05-01
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Die vollständige Schritt-für-Schritt-Anleitung, um Ihren ersten Suchindex mit AACsearch live zu schalten – von der Kontoerstellung bis zur Produktionsbereitstellung, mit Codebeispielen für jeden Integrationspfad.
+tags: [tutorial, onboarding, getting-started, guide]
+published: true
+---
+
+Dieser Leitfaden führt Sie von einem leeren AACsearch-Konto zu einem live-Sucherlebnis auf Ihrer Website. Egal, ob Sie eine Suche für einen E-Commerce-Shop, eine Dokumentationsseite oder eine SaaS-App hinzufügen – jeder Schritt wird abgedeckt.
+
+## Übersicht: Die 7 Schritte
+
+1. Konto und ersten Index erstellen
+2. Daten vorbereiten
+3. Dokumente importieren
+4. Suchverhalten konfigurieren
+5. Integrationspfad wählen
+6. In Produktion bereitstellen
+7. Überwachen und verbessern
+
+Gesamtzeit: 20-30 Minuten. Der Großteil entfällt auf die Datenvorbereitung – die technische Einrichtung dauert unter 5 Minuten.
+
+## Schritt 1: Konto erstellen
+
+Gehen Sie zu [aacsearch.com/signup](/signup) und erstellen Sie ein kostenloses Konto. Der kostenlose Tarif umfasst:
+
+- 1 Index
+- 10.000 Dokumente
+- Unbegrenzte Suchvorgänge
+- Integrierte Analysen
+- Community-Support
+
+Keine Kreditkarte erforderlich. Sie landen im Dashboard – Ihrer Kommandozentrale für alle Suchvorgänge.
+
+## Schritt 2: Ersten Index erstellen
+
+Klicken Sie im Dashboard auf **Neuer Index**. Sie benötigen:
+
+- **Index-Name:** `products`, `docs`, `blog` – passend zu Ihrem Datentyp
+- **Standard-Sortierfeld:** In der Regel `_text_match` (Relevanz) oder ein numerisches Feld wie `price`
+
+Der Index wird sofort bereitgestellt. Typesense erstellt die zugrundeliegende Sammlung, und Ihre API-Keys werden automatisch generiert.
+
+**API-Keys verstehen:**
+
+- **Nur-Suche-Key** (`ss_search_*`): Für die Browser-/Client-seitige Verwendung – kann suchen, aber keine Daten ändern
+- **Admin-Key** (`ss_admin_*`): Für serverseitige Vorgänge – kann Dokumente erstellen/aktualisieren/löschen
+- **Scope-Key** (`ss_scoped_*`): Für Multi-Tenant-Setups – auf bestimmte Filterbedingungen beschränkt
+
+Speichern Sie Ihren Admin-Key in Umgebungsvariablen. Der Such-Key kann öffentlich sein (er ist von Natur aus schreibgeschützt).
+
+## Schritt 3: Daten vorbereiten
+
+AACsearch arbeitet mit flachen, denormalisierten Dokumenten. Jedes Dokument ist ein JSON-Objekt mit einer maximalen Größe von 100KB.
+
+**E-Commerce-Produktbeispiel:**
+
+```json
+{
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"description": "Noise-cancelling wireless headphones with 30-hour battery life",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"image_url": "https://example.com/images/headphones.jpg",
+	"in_stock": true,
+	"rating": 4.5,
+	"tags": ["wireless", "audio", "bluetooth"]
+}
+```
+
+**Wichtige Regeln:**
+
+- Jedes Dokument benötigt ein eindeutiges `id`-Feld (String)
+- Arrays werden unterstützt (`tags`, `colors`, `sizes`) – sie werden automatisch zu Mehrwert-Facetten
+- Verschachtelung ist begrenzt – flachen Sie verwandte Daten im Dokument ab
+- Feldnamen verwenden `snake_case` (Typesense-Konvention)
+
+## Schritt 4: Dokumente importieren
+
+### Option A: Dashboard-Upload (Am besten für die Ersteinrichtung)
+
+1. Navigieren Sie zu Ihrem Index → **Importieren**
+2. Laden Sie eine JSON- oder CSV-Datei hoch (bis zu 100MB pro Upload)
+3. AACsearch erkennt Feldtypen automatisch (String, Zahl, Boolean, Array)
+4. Überprüfen Sie das erkannte Schema und nehmen Sie Anpassungen vor
+5. Klicken Sie auf **Importieren** – Dokumente werden sofort indexiert
+
+### Option B: API-Import (Am besten für laufende Synchronisation)
+
+```bash
+curl -X POST "https://api.aacsearch.com/indices/products/documents/import" \
+  -H "X-API-KEY: ss_admin_your_key" \
+  -H "Content-Type: application/json" \
+  -d '[
+    {"id": "1", "name": "Product 1", "price": 29.99},
+    {"id": "2", "name": "Product 2", "price": 49.99}
+  ]'
+```
+
+Batch-Größe: 10.000 Dokumente pro Anfrage ist optimal. Größere Batches können timeouten; kleinere Batches sind für Echtzeit-Updates geeignet.
+
+### Option C: Connector (Am besten für CMS-Plattformen)
+
+Wenn Sie PrestaShop, Bitrix24, WooCommerce oder Shopify verwenden, nutzen Sie den vorgefertigten Connector:
+
+```bash
+# PrestaShop-Connector-Setup
+composer require aacsearch/prestashop-connector
+php bin/console aacsearch:sync --store=my-store.com
+```
+
+Der Connector übernimmt Schema-Mapping, inkrementelle Updates und Lösch-Synchronisation.
+
+## Schritt 5: Suchverhalten konfigurieren
+
+### Durchsuchbare Felder
+
+Markieren Sie im Dashboard, welche Felder durchsuchbar sind:
+
+| Feld        | Durchsuchbar | Boost | Facette | Sortierbar |
+| ----------- | ------------ | ----- | ------- | ---------- |
+| name        | Ja           | 3x    | Nein    | Nein       |
+| description | Ja           | 1x    | Nein    | Nein       |
+| brand       | Ja           | 2x    | Ja      | Ja         |
+| category    | Nein         | —     | Ja      | Nein       |
+| price       | Nein         | —     | Ja      | Ja         |
+
+Boost steuert das Ranking: Eine Übereinstimmung in `name` (Boost 3x) wird höher eingestuft als eine Übereinstimmung in `description` (Boost 1x).
+
+### Tippfehlertoleranz
+
+Pro Index konfigurierbar:
+
+- **Max. Tippfehler:** 1 (Standard) oder 2 für kurze Felder wie SKU-Codes
+- **Exakte-Übereinstimmung-Boost:** Exakte Treffer werden 2x höher eingestuft als tippfehlerkorrigierte Treffer
+- **Präfix-Suche:** Abfragen finden Präfix-Übereinstimmungen (ermöglicht teilweise Eingabe)
+
+### Synonymgruppen
+
+Erstellen Sie Synonymgruppen für branchenspezifische Terminologie:
+
+```
+["sneakers", "trainers", "athletic shoes", "running shoes"]
+["laptop", "notebook", "macbook", "ultrabook"]
+["sofa", "couch", "settee", "loveseat"]
+```
+
+Jede Gruppe ist eine Liste äquivalenter Begriffe. Eine Suche nach „trainers" liefert Ergebnisse, die „sneakers" enthalten, und umgekehrt.
+
+## Schritt 6: Integrationspfad wählen
+
+### Pfad A: Widget (5 Minuten, null Code)
+
+Das AACsearch-Widget ist ein einfügbarer Script-Tag. Am besten geeignet für Dokumentationsseiten, Blogs und einfache E-Commerce-Shops.
+
+```html
+<script src="https://cdn.aacsearch.com/widget.js"></script>
+<div id="search"></div>
+<script>
+	new AACsearchWidget({
+		apiKey: "ss_search_your_key",
+		index: "products",
+		mountElement: "#search",
+	});
+</script>
+```
+
+### Pfad B: REST API (30 Minuten, volle Kontrolle)
+
+Verwenden Sie die REST API für benutzerdefinierte Frontends, mobile Apps oder serverseitige Suche.
+
+```javascript
+const response = await fetch("https://api.aacsearch.com/indices/products/search", {
+	method: "POST",
+	headers: {
+		"X-API-KEY": "ss_search_your_key",
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		q: "wireless headphones",
+		query_by: "name,description",
+		facet_by: "brand,category",
+		max_facet_values: 10,
+	}),
+});
+
+const results = await response.json();
+```
+
+### Pfad C: Server-seitiges SDK (15 Minuten, typsicher)
+
+Verfügbar für Node.js, Python, PHP, Go und Ruby.
+
+```typescript
+// npm install @aacsearch/client
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+	apiKey: process.env.AACSEARCH_ADMIN_KEY,
+});
+
+const results = await client.search("products", {
+	q: "wireless headphones",
+	search_fields: ["name", "description"],
+	facet_fields: ["brand", "category"],
+});
+```
+
+### Pfad D: Vorgefertigter Connector (10 Minuten, CMS-spezifisch)
+
+- **PrestaShop:** `composer require aacsearch/prestashop-connector`
+- **Bitrix24:** Aus dem Bitrix Marketplace installieren
+- **WooCommerce:** `wp plugin install aacsearch-woocommerce`
+- **Shopify:** AACsearch im Shopify App Store suchen
+
+## Schritt 7: In Produktion bereitstellen
+
+### Checkliste vor dem Start
+
+- [ ] API-Keys verwenden Umgebungsvariablen (nicht hartcodiert)
+- [ ] Nur-Suche-Keys werden Client-seitig verwendet (niemals Admin-Keys)
+- [ ] Rate-Limiting pro Tenant konfiguriert (falls Multi-Tenant)
+- [ ] CORS für Ihre Domain konfiguriert
+- [ ] Analyse-Tracking aktiviert
+- [ ] Ergebnislose Abfragen werden für die Inhaltslückenanalyse protokolliert
+- [ ] Widget an Ihr Branding angepasst (CSS-Variablen)
+- [ ] Mobile Ansicht getestet (Facetten-Drawer, Ergebniskarten)
+
+### Live gehen
+
+1. Wechseln Sie von Ihrem Test-Index zum Produktions-Index
+2. Überwachen Sie die Suchlatenz in den Dashboard-Analysen
+3. Prüfen Sie Berichte zu ergebnislosen Abfragen – dies sind Inhaltsmöglichkeiten
+4. Richten Sie eine wöchentliche Suchanalyse-Überprüfung ein
+
+## Häufige Probleme und Lösungen
+
+| Problem                               | Wahrscheinliche Ursache                     | Lösung                                                       |
+| ------------------------------------- | ------------------------------------------- | ------------------------------------------------------------ |
+| Keine Ergebnisse für jede Abfrage     | Dokumente noch nicht indexiert              | Dokumentanzahl im Dashboard prüfen → neu importieren         |
+| Tippfehlertoleranz funktioniert nicht | Feld nicht als durchsuchbar markiert        | Feld in den Schema-Einstellungen als durchsuchbar markieren  |
+| Widget wird nicht angezeigt           | Fehlendes CSS-Link oder Div-ID stimmt nicht | Prüfen, ob CSS geladen ist und mountElement-ID übereinstimmt |
+| Langsame Suche (>200ms)               | Zu viele durchsuchbare Felder               | Durchsuchbare Felder auf 3-5 wichtigste beschränken          |
+| Facettenwerte werden nicht angezeigt  | Feld nicht als Facette markiert             | Facettierung in den Schema-Einstellungen aktivieren          |
+| Tenant-übergreifende Daten sichtbar   | Kein Scope-API-Key                          | Scope-Keys mit `token_filter` pro Tenant erstellen           |
+| API gibt 401 zurück                   | Abgelaufener oder ungültiger API-Key        | Key im Dashboard neu generieren                              |
+| Import schlägt mit Timeout fehl       | Batch zu groß                               | In Batches von 10.000 Dokumenten aufteilen                   |
+
+## Nächste Schritte
+
+Ihre Suche ist live. Jetzt optimieren:
+
+- [Suchanalysen verfolgen](/search-analytics-guide), um die Benutzerabsicht zu verstehen
+- [Synonymgruppen konfigurieren](/docs/synonyms) für bessere Relevanz
+- [Echtzeit-Synchronisation einrichten](/docs/webhooks) mit Ihrem CMS
+- [Multi-Tenant-Architektur erkunden](/multi-tenant-search) für SaaS-Apps
+
+[Kostenlose Testversion starten →](/signup)

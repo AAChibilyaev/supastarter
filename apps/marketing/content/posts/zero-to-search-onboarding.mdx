@@ -38,12 +38,14 @@ No credit card required. You'll land on the dashboard — your command center fo
 ## Step 2: Create Your First Index
 
 Click **New Index** in the dashboard. You'll need:
+
 - **Index name:** `products`, `docs`, `blog` — match your data type
 - **Default sorting field:** Typically `_text_match` (relevance) or a numerical field like `price`
 
 The index is provisioned immediately. Typesense creates the underlying collection, and your API keys are generated automatically.
 
 **Understanding API Keys:**
+
 - **Search-only key** (`ss_search_*`): For browser/client-side use — can search but not modify data
 - **Admin key** (`ss_admin_*`): For server-side operations — can create/update/delete documents
 - **Scoped key** (`ss_scoped_*`): For multi-tenant setups — restricted to specific filter conditions
@@ -55,22 +57,24 @@ Store your admin key in environment variables. The search key can be public (it'
 AACsearch works with flat, denormalized documents. Each document is a JSON object with a maximum size of 100KB.
 
 **E-commerce product example:**
+
 ```json
 {
-  "id": "prod_001",
-  "name": "Wireless Bluetooth Headphones",
-  "description": "Noise-cancelling wireless headphones with 30-hour battery life",
-  "price": 79.99,
-  "brand": "SoundMax",
-  "category": "Electronics",
-  "image_url": "https://example.com/images/headphones.jpg",
-  "in_stock": true,
-  "rating": 4.5,
-  "tags": ["wireless", "audio", "bluetooth"]
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"description": "Noise-cancelling wireless headphones with 30-hour battery life",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"image_url": "https://example.com/images/headphones.jpg",
+	"in_stock": true,
+	"rating": 4.5,
+	"tags": ["wireless", "audio", "bluetooth"]
 }
 ```
 
 **Key rules:**
+
 - Every document needs a unique `id` field (string)
 - Arrays are supported (`tags`, `colors`, `sizes`) — they auto-become multi-value facets
 - Nesting is limited — flatten related data into the document
@@ -118,19 +122,20 @@ The connector handles schema mapping, incremental updates, and delete synchroniz
 
 In the dashboard, mark which fields are searchable:
 
-| Field        | Searchable | Boost | Facet | Sortable |
-| ------------ | ---------- | ----- | ----- | -------- |
-| name         | Yes        | 3x    | No    | No       |
-| description  | Yes        | 1x    | No    | No       |
-| brand        | Yes        | 2x    | Yes   | Yes      |
-| category     | No         | —     | Yes   | No       |
-| price        | No         | —     | Yes   | Yes      |
+| Field       | Searchable | Boost | Facet | Sortable |
+| ----------- | ---------- | ----- | ----- | -------- |
+| name        | Yes        | 3x    | No    | No       |
+| description | Yes        | 1x    | No    | No       |
+| brand       | Yes        | 2x    | Yes   | Yes      |
+| category    | No         | —     | Yes   | No       |
+| price       | No         | —     | Yes   | Yes      |
 
 Boost controls ranking: a match in `name` (boost 3x) ranks higher than a match in `description` (boost 1x).
 
 ### Typo Tolerance
 
 Configure per-index:
+
 - **Max typos:** 1 (default) or 2 for short fields like SKU codes
 - **Exact match boost:** Exact matches rank 2x higher than typo-corrected matches
 - **Prefix matching:** Queries match prefixes (handles partial typing)
@@ -157,11 +162,11 @@ The AACsearch widget is a drop-in script tag. Best for documentation sites, blog
 <script src="https://cdn.aacsearch.com/widget.js"></script>
 <div id="search"></div>
 <script>
-  new AACsearchWidget({
-    apiKey: 'ss_search_your_key',
-    index: 'products',
-    mountElement: '#search'
-  });
+	new AACsearchWidget({
+		apiKey: "ss_search_your_key",
+		index: "products",
+		mountElement: "#search",
+	});
 </script>
 ```
 
@@ -170,18 +175,18 @@ The AACsearch widget is a drop-in script tag. Best for documentation sites, blog
 Use the REST API for custom frontends, mobile apps, or server-side search.
 
 ```javascript
-const response = await fetch('https://api.aacsearch.com/indices/products/search', {
-  method: 'POST',
-  headers: {
-    'X-API-KEY': 'ss_search_your_key',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    q: 'wireless headphones',
-    query_by: 'name,description',
-    facet_by: 'brand,category',
-    max_facet_values: 10
-  })
+const response = await fetch("https://api.aacsearch.com/indices/products/search", {
+	method: "POST",
+	headers: {
+		"X-API-KEY": "ss_search_your_key",
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		q: "wireless headphones",
+		query_by: "name,description",
+		facet_by: "brand,category",
+		max_facet_values: 10,
+	}),
 });
 
 const results = await response.json();
@@ -193,16 +198,16 @@ Available for Node.js, Python, PHP, Go, and Ruby.
 
 ```typescript
 // npm install @aacsearch/client
-import { AACSearchClient } from '@aacsearch/client';
+import { AACSearchClient } from "@aacsearch/client";
 
 const client = new AACSearchClient({
-  apiKey: process.env.AACSEARCH_ADMIN_KEY,
+	apiKey: process.env.AACSEARCH_ADMIN_KEY,
 });
 
-const results = await client.search('products', {
-  q: 'wireless headphones',
-  search_fields: ['name', 'description'],
-  facet_fields: ['brand', 'category'],
+const results = await client.search("products", {
+	q: "wireless headphones",
+	search_fields: ["name", "description"],
+	facet_fields: ["brand", "category"],
 });
 ```
 
@@ -235,16 +240,16 @@ const results = await client.search('products', {
 
 ## Troubleshooting Common Issues
 
-| Problem                          | Likely Cause                          | Fix                                                   |
-| -------------------------------- | ------------------------------------- | ----------------------------------------------------- |
-| No results for any query         | Documents not indexed yet             | Check document count in dashboard → re-import         |
-| Typo tolerance not working       | Field not marked as searchable        | Mark field as searchable in schema settings           |
-| Widget not rendering             | Missing CSS link or div ID mismatch   | Verify CSS is loaded and mountElement ID matches      |
-| Slow search (>200ms)             | Too many searchable fields            | Limit searchable fields to 3-5 most important          |
-| Facet values not showing         | Field not marked as facet             | Enable faceting in schema settings                    |
-| Cross-tenant data visible        | No scoped API key                     | Create scoped keys with `token_filter` per tenant     |
-| API returning 401                | Expired or invalid API key            | Regenerate key from dashboard                         |
-| Import fails with timeout        | Batch too large                       | Split into batches of 10,000 documents                |
+| Problem                    | Likely Cause                        | Fix                                               |
+| -------------------------- | ----------------------------------- | ------------------------------------------------- |
+| No results for any query   | Documents not indexed yet           | Check document count in dashboard → re-import     |
+| Typo tolerance not working | Field not marked as searchable      | Mark field as searchable in schema settings       |
+| Widget not rendering       | Missing CSS link or div ID mismatch | Verify CSS is loaded and mountElement ID matches  |
+| Slow search (>200ms)       | Too many searchable fields          | Limit searchable fields to 3-5 most important     |
+| Facet values not showing   | Field not marked as facet           | Enable faceting in schema settings                |
+| Cross-tenant data visible  | No scoped API key                   | Create scoped keys with `token_filter` per tenant |
+| API returning 401          | Expired or invalid API key          | Regenerate key from dashboard                     |
+| Import fails with timeout  | Batch too large                     | Split into batches of 10,000 documents            |
 
 ## Next Steps
 

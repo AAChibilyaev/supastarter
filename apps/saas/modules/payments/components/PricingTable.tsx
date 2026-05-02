@@ -85,6 +85,30 @@ export function PricingTable({
 			: false,
 	);
 
+	// Calculate annual savings from the first eligible plan
+	const annualSavingsPercent = (() => {
+		for (const [, plan] of Object.entries(plans)) {
+			if (!("prices" in plan)) continue;
+			const prices = (plan as PaidPlan).prices;
+			const monthlyPrice = prices.find(
+				(p) =>
+					p.type === "subscription" &&
+					p.interval === "month" &&
+					p.currency === localeCurrency,
+			);
+			const yearlyPrice = prices.find(
+				(p) =>
+					p.type === "subscription" &&
+					p.interval === "year" &&
+					p.currency === localeCurrency,
+			);
+			if (monthlyPrice && yearlyPrice) {
+				return Math.round((1 - yearlyPrice.amount / 12 / monthlyPrice.amount) * 100);
+			}
+		}
+		return 0;
+	})();
+
 	return (
 		<div className={cn("@container", className)}>
 			{hasSubscriptions && (
@@ -96,7 +120,16 @@ export function PricingTable({
 					>
 						<TabsList className="border-foreground/10">
 							<TabsTrigger value="month">{t("pricing.monthly")}</TabsTrigger>
-							<TabsTrigger value="year">{t("pricing.yearly")}</TabsTrigger>
+							<TabsTrigger value="year">
+								{t("pricing.yearly")}
+								{annualSavingsPercent > 0 && (
+									<span className="ml-1.5 px-1.5 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary">
+										{t("pricing.savePercent", {
+											percent: annualSavingsPercent,
+										})}
+									</span>
+								)}
+							</TabsTrigger>
 						</TabsList>
 					</Tabs>
 				</div>

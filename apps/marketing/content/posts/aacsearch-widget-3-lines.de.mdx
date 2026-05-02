@@ -1,0 +1,258 @@
+---
+title: AACSearch Widget: Suche mit 3 Zeilen zu jeder Website hinzufügen
+date: 2025-05-01
+image: https://picsum.photos/id/60/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Fügen Sie jeder Website – statisch, dynamisch oder CMS – mit nur 3 Zeilen Code eine sofortige, tippfehlertolerante Suche hinzu. Kein React, kein Build-Schritt, keine NPM-Installation erforderlich.
+tags: [tutorial, widget, javascript, cms]
+published: true
+---
+
+Suche ist die einflussreichste Funktion, die Sie einer Website hinzufügen können – und mit dem AACsearch-Widget auch die einfachste. Drei Zeilen HTML verwandeln jede Seite in ein suchbares Erlebnis mit Autovervollständigung, Tastaturnavigation und Facettenfiltern.
+
+## Das 3-Zeilen-Setup
+
+Fügen Sie diese drei Zeilen zu jeder HTML-Seite hinzu:
+
+```html
+<script src="https://cdn.aacsearch.com/widget.js"></script>
+<link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css" />
+<div id="search-root"></div>
+```
+
+Dann in einem Script-Tag oder Ihrer Haupt-JavaScript-Datei:
+
+```javascript
+new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	mountElement: "#search-root",
+});
+```
+
+Das war's. Ihre Website hat jetzt eine vollwertige Suchleiste, die Ergebnisse anzeigt, während der Benutzer tippt.
+
+## Wie es funktioniert
+
+Das Widget verbindet sich direkt aus dem Browser mit der AACsearch-API. Wenn ein Benutzer tippt, führt das Widget folgende Schritte aus:
+
+1. Senden der Abfrage an AACsearch mit Ihrem API-Key und Index
+2. Empfangen passender Ergebnisse (typischerweise in unter 50ms)
+3. Rendern eines Overlays mit Produktkarten, Textausschnitten oder benutzerdefinierten Vorlagen
+4. Verwalten der Tastaturnavigation (Pfeiltasten, Enter, Escape)
+5. Aufzeichnen von Klick-Ereignissen für Analysen
+
+Kein Backend-Server, kein Build-Schritt, keine Datenbank-Synchronisation. Das Widget übernimmt jede Interaktion.
+
+## Was Sie sofort erhalten
+
+Das Widget wird mit diesen aktiven Funktionen ausgeliefert:
+
+| Funktion              | Beschreibung                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------- |
+| Autovervollständigung | Ergebnisse erscheinen während der Eingabe, entprellt bei 300ms                      |
+| Tastaturnavigation    | Pfeiltasten zum Navigieren, Enter zum Auswählen, Escape zum Schließen               |
+| Tippfehlertoleranz    | Falsch geschriebene Abfragen liefern dennoch relevante Ergebnisse                   |
+| Ergebnis-Ausschnitte  | Zeigt Titel, Auszug, Vorschaubild und Preis (konfigurierbar)                        |
+| Dark Mode             | Erkennt automatisch die Systemeinstellung, CSS-Variablen zur Anpassung              |
+| Mobile Responsive     | Volle Breite auf Mobilgeräten, unterer Drawer für Facetten auf kleinen Bildschirmen |
+| Analysen              | Zeichnet Suchanfragen, Klicks und ergebnislose Suchen auf                           |
+| Facettenfilter        | Zeigt Facettenfelder an, wenn Felder konfiguriert sind                              |
+
+## Anpassung des Aussehens
+
+Überschreiben Sie jeden visuellen Aspekt mit CSS-Variablen:
+
+```css
+:root {
+	--aacsearch-primary: #2563eb;
+	--aacsearch-bg: #ffffff;
+	--aacsearch-text: #1f2937;
+	--aacsearch-border: #e5e7eb;
+	--aacsearch-radius: 8px;
+	--aacsearch-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Überschreibungen */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--aacsearch-bg: #1f2937;
+		--aacsearch-text: #f9fafb;
+		--aacsearch-border: #374151;
+	}
+}
+```
+
+## Integrationsbeispiele
+
+### Statische HTML-Seite
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.aacsearch.com/widget.js" defer></script>
+		<link rel="stylesheet" href="https://cdn.aacsearch.com/widget.css" />
+	</head>
+	<body>
+		<header>
+			<div id="search-root"></div>
+		</header>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				new AACsearchWidget({
+					apiKey: "ss_search_demo_key",
+					index: "docs",
+					placeholder: "Dokumentation durchsuchen...",
+					mountElement: "#search-root",
+				});
+			});
+		</script>
+	</body>
+</html>
+```
+
+### WordPress (functions.php)
+
+```php
+function add_aacsearch_widget() {
+    wp_enqueue_script('aacsearch-widget', 'https://cdn.aacsearch.com/widget.js', [], null, true);
+    wp_enqueue_style('aacsearch-widget', 'https://cdn.aacsearch.com/widget.css');
+}
+add_action('wp_enqueue_scripts', 'add_aacsearch_widget');
+
+function render_aacsearch_widget() {
+    echo '<div id="search-root"></div>';
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new AACsearchWidget({
+                apiKey: "' . esc_js(get_option('aacsearch_api_key')) . '",
+                index: "wordpress_posts",
+                mountElement: "#search-root"
+            });
+        });
+    </script>';
+}
+add_action('wp_footer', 'render_aacsearch_widget');
+```
+
+### React / Next.js
+
+```tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export function AACSearchWidget() {
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!ref.current) return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "blog",
+		});
+
+		widget.mount(ref.current);
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={ref} />;
+}
+```
+
+### Vue.js
+
+```vue
+<template>
+	<div ref="searchRoot"></div>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+
+const searchRoot = ref(null);
+let widget = null;
+
+onMounted(() => {
+	widget = new AACsearchWidget({
+		apiKey: "ss_search_demo_key",
+		index: "products",
+		mountElement: searchRoot.value,
+	});
+});
+
+onUnmounted(() => widget?.destroy());
+</script>
+```
+
+## Erweiterte Konfiguration
+
+Das Widget akzeptiert diese Optionen für eine fein abgestimmte Steuerung:
+
+```javascript
+const search = new AACsearchWidget({
+	// Erforderlich
+	apiKey: "ss_search_...",
+	index: "products",
+
+	// Anzeige
+	placeholder: "Produkte durchsuchen...",
+	theme: "light", // 'light' | 'dark' | 'auto'
+	resultsPerPage: 12,
+	maxSuggestions: 5,
+
+	// Suchverhalten
+	searchableFields: ["name", "brand", "description", "sku"],
+	facetFields: ["brand", "category", "price"],
+	sortOptions: [
+		{ label: "Relevanz", value: "_text_match:desc" },
+		{ label: "Preis: aufsteigend", value: "price:asc" },
+	],
+
+	// Benutzerdefiniertes Rendering
+	resultTemplate: (item) => `
+    <div class="aacsearch-result">
+      <img src="${item.image}" alt="${item.name}" />
+      <div class="aacsearch-result-info">
+        <h3>${item.name}</h3>
+        <p class="price">$${item.price}</p>
+        <span class="brand">${item.brand}</span>
+      </div>
+    </div>
+  `,
+
+	// Analysen
+	trackClicks: true,
+	onSearch: (query, results) => console.log("Gesucht:", query, "Ergebnisse:", results.length),
+	onClick: (result) => console.log("Geklickt:", result.name),
+});
+```
+
+## Leistung
+
+- **Erstes Rendern:** < 200ms (Widget-JS ist ~35KB gzipped)
+- **Abfrageantwort:** < 50ms (P95 von US-West)
+- **Ergebnis-Rendering:** < 20ms (virtuelles Scrollen für große Ergebnismengen)
+- **Bundle-Größe:** 35KB JS + 8KB CSS (gzipped)
+
+## Einschränkungen
+
+Das Widget ist für die Suche konzipiert – nicht für den Aufbau eines vollständigen Shops. Verwenden Sie es für:
+
+- Dokumentations-Suche (beste Eignung)
+- E-Commerce-Produktsuche
+- Blog-/Inhaltssuche
+- SaaS-App-Befehlspalette
+
+Für komplexe Benutzeroberflächen (benutzerdefinierte Produktseiten, Checkout-Abläufe) verwenden Sie direkt die AACsearch REST API.
+
+## Was kommt als Nächstes
+
+- [Produktsuche mit Facettenfiltern aufbauen](/blog/building-faceted-product-search)
+- [WooCommerce-Integration ausprobieren](/integrations/woocommerce)
+- [Vollständige API-Referenz anzeigen](/docs/widget-api)
+
+[Suche in 5 Minuten zu Ihrer Website hinzufügen →](/signup)

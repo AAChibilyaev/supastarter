@@ -23,15 +23,15 @@ Log into your AACsearch dashboard and create a new index. When defining your sch
 
 ```json
 {
-  "name": "string",
-  "brand": { "type": "string", "facet": true },
-  "category": { "type": "string", "facet": true },
-  "price": { "type": "float", "facet": true },
-  "color": { "type": "string", "facet": true },
-  "size": { "type": "string", "facet": true },
-  "rating": { "type": "float", "facet": true },
-  "in_stock": { "type": "bool", "facet": true },
-  "tags": { "type": "string[]", "facet": true }
+	"name": "string",
+	"brand": { "type": "string", "facet": true },
+	"category": { "type": "string", "facet": true },
+	"price": { "type": "float", "facet": true },
+	"color": { "type": "string", "facet": true },
+	"size": { "type": "string", "facet": true },
+	"rating": { "type": "float", "facet": true },
+	"in_stock": { "type": "bool", "facet": true },
+	"tags": { "type": "string[]", "facet": true }
 }
 ```
 
@@ -43,30 +43,30 @@ Upload your product catalog via CSV, JSON, or API. Each product document should 
 
 ```json
 [
-  {
-    "id": "101",
-    "name": "Ultra Running Shoes",
-    "brand": "Nike",
-    "category": "Footwear",
-    "price": 129.99,
-    "color": "Black",
-    "size": "10",
-    "rating": 4.5,
-    "in_stock": true,
-    "tags": ["running", "outdoor", "men"]
-  },
-  {
-    "id": "102",
-    "name": "Trail Hiker Boots",
-    "brand": "Merrell",
-    "category": "Footwear",
-    "price": 159.99,
-    "color": "Brown",
-    "size": "11",
-    "rating": 4.7,
-    "in_stock": true,
-    "tags": ["hiking", "outdoor", "unisex"]
-  }
+	{
+		"id": "101",
+		"name": "Ultra Running Shoes",
+		"brand": "Nike",
+		"category": "Footwear",
+		"price": 129.99,
+		"color": "Black",
+		"size": "10",
+		"rating": 4.5,
+		"in_stock": true,
+		"tags": ["running", "outdoor", "men"]
+	},
+	{
+		"id": "102",
+		"name": "Trail Hiker Boots",
+		"brand": "Merrell",
+		"category": "Footwear",
+		"price": 159.99,
+		"color": "Brown",
+		"size": "11",
+		"rating": 4.7,
+		"in_stock": true,
+		"tags": ["hiking", "outdoor", "unisex"]
+	}
 ]
 ```
 
@@ -78,31 +78,32 @@ The AACsearch widget renders facets automatically. Initialize it with facet conf
 
 ```javascript
 const search = new AACsearchWidget({
-  apiKey: 'ss_search_your_api_key',
-  index: 'products',
-  facets: [
-    { field: 'brand', type: 'string', label: 'Brand' },
-    { field: 'category', type: 'string', label: 'Category' },
-    { field: 'price', type: 'range', label: 'Price Range' },
-    { field: 'color', type: 'string', label: 'Color' },
-    { field: 'rating', type: 'range', label: 'Rating' },
-    { field: 'in_stock', type: 'boolean', label: 'In Stock' }
-  ],
-  searchableFields: ['name', 'brand', 'category', 'tags'],
-  resultsPerPage: 24,
-  sortOptions: [
-    { label: 'Relevance', value: '_text_match:desc' },
-    { label: 'Price: Low to High', value: 'price:asc' },
-    { label: 'Price: High to Low', value: 'price:desc' },
-    { label: 'Rating', value: 'rating:desc' },
-    { label: 'Newest', value: 'id:desc' }
-  ]
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	facets: [
+		{ field: "brand", type: "string", label: "Brand" },
+		{ field: "category", type: "string", label: "Category" },
+		{ field: "price", type: "range", label: "Price Range" },
+		{ field: "color", type: "string", label: "Color" },
+		{ field: "rating", type: "range", label: "Rating" },
+		{ field: "in_stock", type: "boolean", label: "In Stock" },
+	],
+	searchableFields: ["name", "brand", "category", "tags"],
+	resultsPerPage: 24,
+	sortOptions: [
+		{ label: "Relevance", value: "_text_match:desc" },
+		{ label: "Price: Low to High", value: "price:asc" },
+		{ label: "Price: High to Low", value: "price:desc" },
+		{ label: "Rating", value: "rating:desc" },
+		{ label: "Newest", value: "id:desc" },
+	],
 });
 
-search.mount('#search-container');
+search.mount("#search-container");
 ```
 
 The widget handles:
+
 - Multi-select facets (user picks Nike AND Adidas)
 - Price range sliders (draggable histogram)
 - Color swatch rendering (color-type facets show circles)
@@ -120,13 +121,13 @@ Facets should feel natural, not overwhelming. Configure these in the AACsearch d
 
 Set facet display limits:
 
-| Facet        | Max values | Expand behavior      |
-| ------------ | ---------- | -------------------- |
-| Brand        | 8          | Show +N more         |
-| Category     | 10         | Show +N more         |
-| Color        | All        | Grid with swatches   |
-| Price        | Range      | Histogram slider     |
-| Rating       | 5          | Star rating selector |
+| Facet    | Max values | Expand behavior      |
+| -------- | ---------- | -------------------- |
+| Brand    | 8          | Show +N more         |
+| Category | 10         | Show +N more         |
+| Color    | All        | Grid with swatches   |
+| Price    | Range      | Histogram slider     |
+| Rating   | 5          | Star rating selector |
 
 ## Step 5: Add Relevance Boosts for Filtered Searches
 
@@ -144,49 +145,49 @@ Here's a complete implementation using the AACsearch widget with a Next.js app:
 
 ```tsx
 // app/products/page.tsx
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-const SearchPage = dynamic(() => import('./search-client'), { ssr: false });
+const SearchPage = dynamic(() => import("./search-client"), { ssr: false });
 
 export default function ProductsPage() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">All Products</h1>
-      <SearchPage />
-    </div>
-  );
+	return (
+		<div className="max-w-7xl mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-8">All Products</h1>
+			<SearchPage />
+		</div>
+	);
 }
 ```
 
 ```tsx
 // app/products/search-client.tsx
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export default function SearchClient() {
-  const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!containerRef.current || typeof window === 'undefined') return;
+	useEffect(() => {
+		if (!containerRef.current || typeof window === "undefined") return;
 
-    const widget = new AACsearchWidget({
-      apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
-      index: 'products',
-      facets: [
-        { field: 'category', type: 'string', label: 'Category' },
-        { field: 'brand', type: 'string', label: 'Brand' },
-        { field: 'price', type: 'range', label: 'Price Range' },
-      ],
-      searchableFields: ['name', 'brand', 'description'],
-    });
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "products",
+			facets: [
+				{ field: "category", type: "string", label: "Category" },
+				{ field: "brand", type: "string", label: "Brand" },
+				{ field: "price", type: "range", label: "Price Range" },
+			],
+			searchableFields: ["name", "brand", "description"],
+		});
 
-    widget.mount(containerRef.current);
+		widget.mount(containerRef.current);
 
-    return () => widget.destroy();
-  }, []);
+		return () => widget.destroy();
+	}, []);
 
-  return <div ref={containerRef} className="min-h-[600px]" />;
+	return <div ref={containerRef} className="min-h-[600px]" />;
 }
 ```
 

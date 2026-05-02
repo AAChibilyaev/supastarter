@@ -56,6 +56,8 @@
 		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratis",
 		"year": "{count, plural, one {año} other {{count} años}}",
 		"yearly": "Anual",
+		"savePercent": "Ahorra {percent}%",
+		"billedAnnually": "Facturado anualmente",
 		"perSeat": "asiento"
 	},
 	"consent": {

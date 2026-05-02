@@ -1,19 +1,19 @@
 ---
-title: AACSearch Widget: Add Search to Any Website with 3 Lines
+title: Widget de AACSearch: Añade Búsqueda a Cualquier Sitio Web con 3 Líneas
 date: 2025-05-01
 image: https://picsum.photos/id/60/1200/800
 authorName: Alex Chibilyaev
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: Add instant, typo-tolerant search to any website — static, dynamic, or CMS — with just 3 lines of code. No React, no build step, no NPM install required.
+excerpt: Añade búsqueda instantánea con tolerancia a errores tipográficos a cualquier sitio web — estático, dinámico o CMS — con solo 3 líneas de código. Sin React, sin paso de compilación, sin necesidad de NPM.
 tags: [tutorial, widget, javascript, cms]
 published: true
 ---
 
-Search is the most impactful feature you can add to a website — and with the AACsearch widget, it's also the easiest. Three lines of HTML turn any site into a searchable experience with autocomplete, keyboard navigation, and faceted filtering.
+La búsqueda es la funcionalidad de mayor impacto que puedes añadir a un sitio web — y con el Widget de AACsearch, también es la más fácil. Tres líneas de HTML convierten cualquier sitio en una experiencia de búsqueda con autocompletado, navegación por teclado y filtrado facetado.
 
-## The 3-Line Setup
+## La Configuración de 3 Líneas
 
-Add these three lines to any HTML page:
+Añade estas tres líneas a cualquier página HTML:
 
 ```html
 <script src="https://cdn.aacsearch.com/widget.js"></script>
@@ -21,7 +21,7 @@ Add these three lines to any HTML page:
 <div id="search-root"></div>
 ```
 
-Then in a script tag or your main JavaScript file:
+Luego, en una etiqueta script o en tu archivo principal de JavaScript:
 
 ```javascript
 new AACsearchWidget({
@@ -31,38 +31,38 @@ new AACsearchWidget({
 });
 ```
 
-That's it. Your site now has a full-featured search bar that returns results as the user types.
+Eso es todo. Tu sitio ahora tiene una barra de búsqueda completa que devuelve resultados mientras el usuario escribe.
 
-## How It Works
+## Cómo Funciona
 
-The widget connects directly to the AACsearch API from the browser. When a user types, the widget:
+El Widget se conecta directamente a la API de AACsearch desde el navegador. Cuando un usuario escribe, el Widget:
 
-1. Sends the query to AACsearch with your API key and index
-2. Receives matching results (typically in under 50ms)
-3. Renders an overlay with product cards, snippets, or custom templates
-4. Handles keyboard navigation (arrow keys, Enter, Escape)
-5. Tracks click events for analytics
+1. Envía la consulta a AACsearch con tu API key e índice
+2. Recibe los resultados coincidentes (típicamente en menos de 50ms)
+3. Renderiza una superposición con tarjetas de producto, fragmentos o plantillas personalizadas
+4. Maneja la navegación por teclado (flechas, Enter, Escape)
+5. Registra eventos de clic para analíticas
 
-No backend server, no build step, no database sync. The widget handles every interaction.
+Sin servidor backend, sin paso de compilación, sin sincronización de base de datos. El Widget maneja cada interacción.
 
-## What You Get Out of the Box
+## Lo Que Obtienes de Serie
 
-The widget ships with these features active:
+El Widget incluye estas funcionalidades activas:
 
-| Feature           | Description                                                     |
-| ----------------- | --------------------------------------------------------------- |
-| Autocomplete      | Results appear as you type, debounced at 300ms                  |
-| Keyboard nav      | Arrow keys to navigate, Enter to select, Escape to close        |
-| Typo tolerance    | Misspelled queries still return relevant results                |
-| Result snippets   | Shows title, excerpt, thumbnail, and price (configurable)       |
-| Dark mode         | Auto-detects system preference, CSS variables to customize      |
-| Mobile responsive | Full-width on mobile, bottom drawer for facets on small screens |
-| Analytics         | Tracks search queries, clicks, and zero-result searches         |
-| Faceted filters   | Display facet panels when fields are configured                 |
+| Característica           | Descripción                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Autocompletado           | Los resultados aparecen mientras escribes, con debounce de 300ms                    |
+| Navegación por teclado   | Flechas para navegar, Enter para seleccionar, Escape para cerrar                    |
+| Tolerancia a errores     | Consultas mal escritas aún devuelven resultados relevantes                          |
+| Fragmentos de resultados | Muestra título, extracto, miniatura y precio (configurable)                         |
+| Modo oscuro              | Detecta automáticamente la preferencia del sistema, variables CSS para personalizar |
+| Adaptable a móviles      | Ancho completo en móvil, cajón inferior para facetas en pantallas pequeñas          |
+| Analíticas               | Registra consultas de búsqueda, clics y búsquedas sin resultados                    |
+| Filtros facetados        | Muestra paneles de facetas cuando los campos están configurados                     |
 
-## Customizing the Look
+## Personalizar la Apariencia
 
-Override any visual aspect with CSS variables:
+Sobrescribe cualquier aspecto visual con variables CSS:
 
 ```css
 :root {
@@ -84,9 +84,9 @@ Override any visual aspect with CSS variables:
 }
 ```
 
-## Integration Examples
+## Ejemplos de Integración
 
-### Static HTML Site
+### Sitio HTML Estático
 
 ```html
 <!DOCTYPE html>
@@ -188,9 +188,9 @@ onUnmounted(() => widget?.destroy());
 </script>
 ```
 
-## Advanced Configuration
+## Configuración Avanzada
 
-The widget accepts these options for fine-grained control:
+El Widget acepta estas opciones para un control detallado:
 
 ```javascript
 const search = new AACsearchWidget({
@@ -231,28 +231,28 @@ const search = new AACsearchWidget({
 });
 ```
 
-## Performance
+## Rendimiento
 
-- **First render:** < 200ms (widget JS is ~35KB gzipped)
-- **Query response:** < 50ms (P95 from US West)
-- **Result rendering:** < 20ms (virtual scrolling for large result sets)
-- **Bundle size:** 35KB JS + 8KB CSS (gzipped)
+- **Primera renderización:** < 200ms (el JS del Widget es ~35KB comprimido con gzip)
+- **Respuesta de consulta:** < 50ms (P95 desde US West)
+- **Renderización de resultados:** < 20ms (scroll virtual para conjuntos grandes de resultados)
+- **Tamaño del bundle:** 35KB JS + 8KB CSS (comprimido con gzip)
 
-## Limitations
+## Limitaciones
 
-The widget is designed for search — not for building a complete storefront. Use it for:
+El Widget está diseñado para búsqueda — no para construir una tienda completa. Úsalo para:
 
-- Documentation site search (best fit)
-- E-commerce product search
-- Blog / content search
-- SaaS app command palette
+- Búsqueda en sitios de documentación (mejor ajuste)
+- Búsqueda de productos de comercio electrónico
+- Búsqueda de blogs / contenido
+- Paleta de comandos para apps SaaS
 
-For complex UIs (custom product pages, checkout flows), use the AACsearch REST API directly.
+Para interfaces complejas (páginas de producto personalizadas, flujos de pago), usa la API REST de AACsearch directamente.
 
-## What's Next
+## Lo Que Sigue
 
-- [Build a product search with faceted filters](/blog/building-faceted-product-search)
-- [Try the WooCommerce integration](/integrations/woocommerce)
-- [View the full API reference](/docs/widget-api)
+- [Construye una búsqueda de productos con filtros facetados](/blog/building-faceted-product-search)
+- [Prueba la integración con WooCommerce](/integrations/woocommerce)
+- [Consulta la referencia completa de la API](/docs/widget-api)
 
-[Add search to your site in 5 minutes →](/signup)
+[Añade búsqueda a tu sitio en 5 minutos →](/signup)

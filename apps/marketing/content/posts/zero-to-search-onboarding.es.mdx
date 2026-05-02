@@ -1,0 +1,263 @@
+---
+title: De Cero a Búsqueda: Guía Completa de Integración con AACsearch
+date: 2025-05-01
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: La guía completa paso a paso para poner en marcha tu primer índice de búsqueda con AACsearch — desde la creación de la cuenta hasta el despliegue en producción, con ejemplos de código para cada ruta de integración.
+tags: [tutorial, onboarding, getting-started, guide]
+published: true
+---
+
+Esta guía te lleva desde una cuenta vacía de AACsearch hasta una experiencia de búsqueda en vivo en tu sitio. Ya sea que estés añadiendo búsqueda a una tienda de comercio electrónico, un sitio de documentación o una app SaaS, cada paso está cubierto.
+
+## Resumen: El Viaje de 7 Pasos
+
+1. Crea tu cuenta y primer índice
+2. Prepara tus datos
+3. Importa documentos
+4. Configura el comportamiento de búsqueda
+5. Elige tu ruta de integración
+6. Despliega a producción
+7. Monitorea y mejora
+
+Tiempo total: 20-30 minutos. La mayor parte es preparación de datos — la configuración técnica toma menos de 5 minutos.
+
+## Paso 1: Crea tu Cuenta
+
+Ve a [aacsearch.com/signup](/signup) y crea una cuenta gratuita. El nivel gratuito incluye:
+
+- 1 índice
+- 10,000 documentos
+- Operaciones de búsqueda ilimitadas
+- Analíticas integradas
+- Soporte comunitario
+
+No se requiere tarjeta de crédito. Llegarás al Dashboard — tu centro de comando para todas las operaciones de búsqueda.
+
+## Paso 2: Crea tu Primer Índice
+
+Haz clic en **Nuevo Índice** en el Dashboard. Necesitarás:
+
+- **Nombre del índice:** `products`, `docs`, `blog` — que coincida con tu tipo de datos
+- **Campo de ordenación por defecto:** Generalmente `_text_match` (relevancia) o un campo numérico como `price`
+
+El índice se provisiona inmediatamente. Typesense crea la colección subyacente, y tus API keys se generan automáticamente.
+
+**Entendiendo las API Keys:**
+
+- **Key solo búsqueda** (`ss_search_*`): Para uso en navegador/cliente — puede buscar pero no modificar datos
+- **Key de administración** (`ss_admin_*`): Para operaciones del lado del servidor — puede crear/actualizar/eliminar documentos
+- **Key con ámbito** (`ss_scoped_*`): Para configuraciones multiinquilino — restringida a condiciones de filtro específicas
+
+Guarda tu key de administración en variables de entorno. La key de búsqueda puede ser pública (es de solo lectura por diseño).
+
+## Paso 3: Prepara tus Datos
+
+AACsearch funciona con documentos planos y desnormalizados. Cada documento es un objeto JSON con un tamaño máximo de 100KB.
+
+**Ejemplo de producto de comercio electrónico:**
+
+```json
+{
+	"id": "prod_001",
+	"name": "Wireless Bluetooth Headphones",
+	"description": "Noise-cancelling wireless headphones with 30-hour battery life",
+	"price": 79.99,
+	"brand": "SoundMax",
+	"category": "Electronics",
+	"image_url": "https://example.com/images/headphones.jpg",
+	"in_stock": true,
+	"rating": 4.5,
+	"tags": ["wireless", "audio", "bluetooth"]
+}
+```
+
+**Reglas clave:**
+
+- Cada documento necesita un campo `id` único (string)
+- Los arrays son compatibles (`tags`, `colors`, `sizes`) — se convierten automáticamente en facetas multivalor
+- El anidamiento es limitado — aplana los datos relacionados dentro del documento
+- Los nombres de campos usan `snake_case` (convención de Typesense)
+
+## Paso 4: Importa tus Documentos
+
+### Opción A: Subida desde el Dashboard (Mejor para primera configuración)
+
+1. Navega a tu índice → **Importar**
+2. Sube un archivo JSON o CSV (hasta 100MB por subida)
+3. AACsearch detecta automáticamente los tipos de campo (string, número, booleano, array)
+4. Revisa el esquema detectado y haz ajustes
+5. Haz clic en **Importar** — los documentos se indexan al instante
+
+### Opción B: Importación por API (Mejor para sincronización continua)
+
+```bash
+curl -X POST "https://api.aacsearch.com/indices/products/documents/import" \
+  -H "X-API-KEY: ss_admin_your_key" \
+  -H "Content-Type: application/json" \
+  -d '[
+    {"id": "1", "name": "Product 1", "price": 29.99},
+    {"id": "2", "name": "Product 2", "price": 49.99}
+  ]'
+```
+
+Tamaño de lote: 10,000 documentos por solicitud es óptimo. Lotes más grandes pueden agotar el tiempo de espera; lotes más pequeños son adecuados para actualizaciones en tiempo real.
+
+### Opción C: Conector (Mejor para plataformas CMS)
+
+Si usas PrestaShop, Bitrix24, WooCommerce o Shopify, usa el conector preconstruido:
+
+```bash
+# Configuración del conector PrestaShop
+composer require aacsearch/prestashop-connector
+php bin/console aacsearch:sync --store=my-store.com
+```
+
+El conector maneja el mapeo de esquemas, las actualizaciones incrementales y la sincronización de eliminaciones.
+
+## Paso 5: Configura el Comportamiento de Búsqueda
+
+### Campos Buscables
+
+En el Dashboard, marca qué campos son buscables:
+
+| Campo       | Buscable | Impulso | Faceta | Ordenable |
+| ----------- | -------- | ------- | ------ | --------- |
+| name        | Sí       | 3x      | No     | No        |
+| description | Sí       | 1x      | No     | No        |
+| brand       | Sí       | 2x      | Sí     | Sí        |
+| category    | No       | —       | Sí     | No        |
+| price       | No       | —       | Sí     | Sí        |
+
+El impulso controla el ranking: una coincidencia en `name` (impulso 3x) rankea más alto que una coincidencia en `description` (impulso 1x).
+
+### Tolerancia a Errores Tipográficos
+
+Configura por índice:
+
+- **Máx. errores:** 1 (por defecto) o 2 para campos cortos como códigos SKU
+- **Impulso de coincidencia exacta:** Las coincidencias exactas rankean 2x más que las corregidas por error tipográfico
+- **Coincidencia de prefijos:** Las consultas coinciden con prefijos (maneja escritura parcial)
+
+### Grupos de Sinónimos
+
+Crea grupos de sinónimos para terminología específica de la industria:
+
+```
+["sneakers", "trainers", "athletic shoes", "running shoes"]
+["laptop", "notebook", "macbook", "ultrabook"]
+["sofa", "couch", "settee", "loveseat"]
+```
+
+Cada grupo es una lista de términos equivalentes. Una búsqueda de "trainers" devuelve resultados que coinciden con "sneakers" y viceversa.
+
+## Paso 6: Elige tu Ruta de Integración
+
+### Ruta A: Widget (5 minutos, cero código)
+
+El Widget de AACsearch es una etiqueta script que se coloca directamente. Mejor para sitios de documentación, blogs y tiendas de comercio electrónico simples.
+
+```html
+<script src="https://cdn.aacsearch.com/widget.js"></script>
+<div id="search"></div>
+<script>
+	new AACsearchWidget({
+		apiKey: "ss_search_your_key",
+		index: "products",
+		mountElement: "#search",
+	});
+</script>
+```
+
+### Ruta B: API REST (30 minutos, control total)
+
+Usa la API REST para frontends personalizados, apps móviles o búsqueda del lado del servidor.
+
+```javascript
+const response = await fetch("https://api.aacsearch.com/indices/products/search", {
+	method: "POST",
+	headers: {
+		"X-API-KEY": "ss_search_your_key",
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		q: "wireless headphones",
+		query_by: "name,description",
+		facet_by: "brand,category",
+		max_facet_values: 10,
+	}),
+});
+
+const results = await response.json();
+```
+
+### Ruta C: SDK del lado del servidor (15 minutos, type-safe)
+
+Disponible para Node.js, Python, PHP, Go y Ruby.
+
+```typescript
+// npm install @aacsearch/client
+import { AACSearchClient } from "@aacsearch/client";
+
+const client = new AACSearchClient({
+	apiKey: process.env.AACSEARCH_ADMIN_KEY,
+});
+
+const results = await client.search("products", {
+	q: "wireless headphones",
+	search_fields: ["name", "description"],
+	facet_fields: ["brand", "category"],
+});
+```
+
+### Ruta D: Conector Preconstruido (10 minutos, específico para CMS)
+
+- **PrestaShop:** `composer require aacsearch/prestashop-connector`
+- **Bitrix24:** Instalar desde Bitrix Marketplace
+- **WooCommerce:** `wp plugin install aacsearch-woocommerce`
+- **Shopify:** Buscar AACsearch en Shopify App Store
+
+## Paso 7: Despliega a Producción
+
+### Lista de Verificación Pre-Lanzamiento
+
+- [ ] Las API keys usan variables de entorno (no hardcodeadas)
+- [ ] Keys de solo búsqueda usadas en el cliente (nunca keys de administración)
+- [ ] Límite de tasa configurado por inquilino (si es multiinquilino)
+- [ ] CORS configurado para tu dominio
+- [ ] Seguimiento de analíticas habilitado
+- [ ] Consultas sin resultados registradas para análisis de brechas de contenido
+- [ ] Widget tematizado para coincidir con tu marca (variables CSS)
+- [ ] Diseño móvil probado (cajón de facetas, tarjetas de resultado)
+
+### Puesta en Marcha
+
+1. Cambia de tu índice de prueba a tu índice de producción
+2. Monitorea la latencia de búsqueda en las analíticas del Dashboard
+3. Revisa los informes de consultas sin resultados — son oportunidades de contenido
+4. Configura una revisión semanal de analíticas de búsqueda
+
+## Solución de Problemas Comunes
+
+| Problema                                  | Causa Probable                                  | Solución                                                     |
+| ----------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| Sin resultados para cualquier consulta    | Documentos aún no indexados                     | Verifica el conteo de documentos en el Dashboard → reimporta |
+| La tolerancia a errores no funciona       | Campo no marcado como buscable                  | Marca el campo como buscable en la configuración del esquema |
+| El Widget no se renderiza                 | Falta el enlace CSS o el ID del div no coincide | Verifica que el CSS esté cargado y que mountElement coincida |
+| Búsqueda lenta (>200ms)                   | Demasiados campos buscables                     | Limita los campos buscables a 3-5 de los más importantes     |
+| Los valores de facetas no se muestran     | Campo no marcado como faceta                    | Habilita la facetación en la configuración del esquema       |
+| Datos multiinquilino visibles             | Sin key con ámbito                              | Crea keys con ámbito usando `token_filter` por inquilino     |
+| La API devuelve 401                       | API key expirada o inválida                     | Regenera la key desde el Dashboard                           |
+| La importación falla por tiempo de espera | Lote demasiado grande                           | Divide en lotes de 10,000 documentos                         |
+
+## Próximos Pasos
+
+Tu búsqueda está en vivo. Ahora optimiza:
+
+- [Seguimiento de analíticas de búsqueda](/search-analytics-guide) para entender la intención del usuario
+- [Configura grupos de sinónimos](/docs/synonyms) para mejor relevancia
+- [Configura sincronización en tiempo real](/docs/webhooks) con tu CMS
+- [Explora arquitectura multiinquilino](/multi-tenant-search) para apps SaaS
+
+[Comienza tu prueba gratuita →](/signup)

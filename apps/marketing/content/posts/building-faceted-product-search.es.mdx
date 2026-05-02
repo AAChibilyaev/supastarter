@@ -1,0 +1,207 @@
+---
+title: Cómo Construir una Búsqueda de Productos con Filtros Facetados
+date: 2025-05-01
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Aprende a construir una búsqueda de productos con filtros facetados usando AACsearch — rangos de precio, filtros de marca, muestras de color y navegación por categorías en menos de 30 minutos.
+tags: [tutorial, faceted-search, ecommerce, filters]
+published: true
+---
+
+El filtrado facetado es la diferencia entre "no encuentro lo que busco" y "exactamente lo que necesito". Los clientes que usan filtros convierten a una tasa 2-3 veces mayor que los que no lo hacen. En este tutorial, construirás una búsqueda facetada de productos lista para producción con AACsearch.
+
+## ¿Qué Son los Filtros Facetados?
+
+Los filtros facetados permiten a los usuarios reducir los resultados de búsqueda por atributos del producto: rango de precio, marca, tamaño, color, categoría, calificación — cualquier dimensión que sea importante para tus clientes. A diferencia de la navegación simple por categorías, las facetas se combinan. Un usuario puede filtrar por "Nike" + "zapatos para correr" + "menos de $150" + "talla 10" y ver solo los productos que coinciden.
+
+AACsearch maneja las facetas de forma nativa. Sin indexación personalizada, sin servicio de búsqueda externo. Declara qué campos son facetados, y el motor de búsqueda devuelve las opciones de filtro disponibles con cada consulta.
+
+## Paso 1: Configura tu Índice con Campos Facetados
+
+Inicia sesión en tu Dashboard de AACsearch y crea un nuevo índice. Al definir tu esquema, marca estos campos como `facet: true`:
+
+```json
+{
+	"name": "string",
+	"brand": { "type": "string", "facet": true },
+	"category": { "type": "string", "facet": true },
+	"price": { "type": "float", "facet": true },
+	"color": { "type": "string", "facet": true },
+	"size": { "type": "string", "facet": true },
+	"rating": { "type": "float", "facet": true },
+	"in_stock": { "type": "bool", "facet": true },
+	"tags": { "type": "string[]", "facet": true }
+}
+```
+
+Typesense indexa los valores de facetas en un bitmap — el filtrado en tiempo de consulta es submilisegundo independientemente del tamaño de la colección. Las facetas de precio se devuelven como agrupación de histograma con conteos por rango.
+
+## Paso 2: Importar Productos
+
+Sube tu catálogo de productos vía CSV, JSON o API. Cada documento de producto debe incluir los valores de las facetas:
+
+```json
+[
+	{
+		"id": "101",
+		"name": "Ultra Running Shoes",
+		"brand": "Nike",
+		"category": "Footwear",
+		"price": 129.99,
+		"color": "Black",
+		"size": "10",
+		"rating": 4.5,
+		"in_stock": true,
+		"tags": ["running", "outdoor", "men"]
+	},
+	{
+		"id": "102",
+		"name": "Trail Hiker Boots",
+		"brand": "Merrell",
+		"category": "Footwear",
+		"price": 159.99,
+		"color": "Brown",
+		"size": "11",
+		"rating": 4.7,
+		"in_stock": true,
+		"tags": ["hiking", "outdoor", "unisex"]
+	}
+]
+```
+
+Consejo profesional: mantén los documentos planos. Typesense funciona mejor con datos desnormalizados. Si tienes variantes de producto (tamaño, color), crea un documento por variante con un campo `parent_id` para agruparlos.
+
+## Paso 3: Conectar el Widget con Facetas
+
+El Widget de AACsearch renderiza las facetas automáticamente. Inicialízalo con la configuración de facetas:
+
+```javascript
+const search = new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	facets: [
+		{ field: "brand", type: "string", label: "Brand" },
+		{ field: "category", type: "string", label: "Category" },
+		{ field: "price", type: "range", label: "Price Range" },
+		{ field: "color", type: "string", label: "Color" },
+		{ field: "rating", type: "range", label: "Rating" },
+		{ field: "in_stock", type: "boolean", label: "In Stock" },
+	],
+	searchableFields: ["name", "brand", "category", "tags"],
+	resultsPerPage: 24,
+	sortOptions: [
+		{ label: "Relevance", value: "_text_match:desc" },
+		{ label: "Price: Low to High", value: "price:asc" },
+		{ label: "Price: High to Low", value: "price:desc" },
+		{ label: "Rating", value: "rating:desc" },
+		{ label: "Newest", value: "id:desc" },
+	],
+});
+
+search.mount("#search-container");
+```
+
+El Widget maneja:
+
+- Facetas multiselección (el usuario selecciona Nike Y Adidas)
+- Deslizadores de rango de precio (histograma arrastrable)
+- Renderizado de muestras de color (las facetas tipo color muestran círculos)
+- Etiquetas de filtros activos con botones para eliminar
+- Cajón de facetas adaptable a móviles
+
+## Paso 4: Configurar Reglas de Visualización
+
+Las facetas deben sentirse naturales, no abrumadoras. Configura esto en el Dashboard de AACsearch:
+
+**Colapsadas por defecto:** Categorías con más de 10 valores (mostrar enlace "Mostrar más")
+**Expandidas por defecto:** Rango de precio, calificación, disponibilidad
+**Buscar dentro de facetas:** Para marcas con 50+ valores, los usuarios pueden buscar en la lista de facetas
+**Orden de facetas:** Prioriza "Categoría" y "Marca" al inicio, coloca "Etiquetas" al final
+
+Establece límites de visualización de facetas:
+
+| Faceta       | Valores máx. | Comportamiento de expansión |
+| ------------ | ------------ | --------------------------- |
+| Marca        | 8            | Mostrar +N más              |
+| Categoría    | 10           | Mostrar +N más              |
+| Color        | Todos        | Cuadrícula con muestras     |
+| Precio       | Rango        | Deslizador de histograma    |
+| Calificación | 5            | Selector de estrellas       |
+
+## Paso 5: Agregar Impulsos de Relevancia para Búsquedas Filtradas
+
+Cuando un usuario filtra por marca, impulsa los productos de esa marca más arriba en los resultados. AACsearch admite reglas de ranking dinámicas:
+
+**Impulso de categoría:** Si el usuario selecciona "Calzado" → impulsa todo el calzado 1.5x
+**Impulso de novedades:** Productos agregados en los últimos 30 días obtienen 1.2x
+**Prioridad de disponibilidad:** Los productos agotados siempre aparecen después de los disponibles (al mismo nivel de relevancia)
+
+Configura esto en el Dashboard en Ajuste de Relevancia → Reglas de Ranking.
+
+## Ejemplo: Página de Comercio Electrónico Completa
+
+Aquí hay una implementación completa usando el Widget de AACsearch con una app Next.js:
+
+```tsx
+// app/products/page.tsx
+import dynamic from "next/dynamic";
+
+const SearchPage = dynamic(() => import("./search-client"), { ssr: false });
+
+export default function ProductsPage() {
+	return (
+		<div className="max-w-7xl mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-8">All Products</h1>
+			<SearchPage />
+		</div>
+	);
+}
+```
+
+```tsx
+// app/products/search-client.tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export default function SearchClient() {
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!containerRef.current || typeof window === "undefined") return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "products",
+			facets: [
+				{ field: "category", type: "string", label: "Category" },
+				{ field: "brand", type: "string", label: "Brand" },
+				{ field: "price", type: "range", label: "Price Range" },
+			],
+			searchableFields: ["name", "brand", "description"],
+		});
+
+		widget.mount(containerRef.current);
+
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={containerRef} className="min-h-[600px]" />;
+}
+```
+
+## Rendimiento a Escala
+
+- **50,000 productos, 50 facetas:** < 50ms de tiempo de respuesta (P95)
+- **500,000 productos, 100 facetas:** < 120ms de tiempo de respuesta
+- **Facetas multiselección:** Sin penalización de rendimiento — la intersección de bitmap es O(1)
+- **Búsquedas filtradas concurrentes:** 500+ QPS en el plan Scale
+
+## Próximos Pasos
+
+- Prueba la [demo en vivo de comercio electrónico](/use-cases/ecommerce-search)
+- Lee la [guía de personalización del widget](/docs/widget)
+- Revisa nuestro [conector para PrestaShop](/integrations/prestashop) para integración instantánea de tiendas
+
+¿Listo para construir? [Comienza gratis →](/signup)

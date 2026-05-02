@@ -1,0 +1,207 @@
+---
+title: Construire une Recherche Produit avec des Filtres à Facettes
+date: 2025-05-01
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Apprenez à construire une recherche produit avec des filtres à facettes en utilisant AACsearch — fourchettes de prix, filtres par marque, nuanciers de couleurs et navigation par catégorie en moins de 30 minutes.
+tags: [tutorial, faceted-search, ecommerce, filters]
+published: true
+---
+
+Le filtrage à facettes fait la différence entre « Je ne trouve pas ce que je cherche » et « Exactement ce qu'il me faut. » Les clients qui utilisent les filtres convertissent 2 à 3 fois plus que ceux qui ne les utilisent pas. Dans ce tutoriel, vous allez construire une recherche produit à facettes prête pour la production avec AACsearch.
+
+## Que Sont les Filtres à Facettes ?
+
+Les filtres à facettes permettent aux utilisateurs d'affiner les résultats de recherche par attributs produit : fourchette de prix, marque, taille, couleur, catégorie, note — toute dimension qui compte pour vos clients. Contrairement à la simple navigation par catégorie, les facettes se combinent. Un utilisateur peut filtrer par « Nike » + « chaussures de running » + « moins de 150 € » + « taille 10 » et voir uniquement les produits correspondants.
+
+AACsearch gère les facettes nativement. Pas d'indexation personnalisée, pas de service de recherche externe. Déclarez quels champs sont des facettes, et le moteur de recherche retourne les options de filtre disponibles avec chaque requête.
+
+## Étape 1 : Configurer Votre Index avec des Champs à Facettes
+
+Connectez-vous à votre Dashboard AACsearch et créez un nouvel index. Lors de la définition de votre schéma, marquez ces champs comme `facet: true` :
+
+```json
+{
+	"name": "string",
+	"brand": { "type": "string", "facet": true },
+	"category": { "type": "string", "facet": true },
+	"price": { "type": "float", "facet": true },
+	"color": { "type": "string", "facet": true },
+	"size": { "type": "string", "facet": true },
+	"rating": { "type": "float", "facet": true },
+	"in_stock": { "type": "bool", "facet": true },
+	"tags": { "type": "string[]", "facet": true }
+}
+```
+
+Typesense indexe les valeurs de facettes dans un bitmap — le filtrage au moment de la requête s'effectue en moins d'une milliseconde, quelle que soit la taille de la collection. Les facettes de prix sont retournées sous forme de regroupement d'histogramme avec des décomptes par plage.
+
+## Étape 2 : Importer les Produits
+
+Téléchargez votre catalogue produit via CSV, JSON ou API. Chaque document produit doit inclure les valeurs de facettes :
+
+```json
+[
+	{
+		"id": "101",
+		"name": "Ultra Running Shoes",
+		"brand": "Nike",
+		"category": "Footwear",
+		"price": 129.99,
+		"color": "Black",
+		"size": "10",
+		"rating": 4.5,
+		"in_stock": true,
+		"tags": ["running", "outdoor", "men"]
+	},
+	{
+		"id": "102",
+		"name": "Trail Hiker Boots",
+		"brand": "Merrell",
+		"category": "Footwear",
+		"price": 159.99,
+		"color": "Brown",
+		"size": "11",
+		"rating": 4.7,
+		"in_stock": true,
+		"tags": ["hiking", "outdoor", "unisex"]
+	}
+]
+```
+
+Conseil : Gardez les documents plats. Typesense fonctionne mieux avec des données dénormalisées. Si vous avez des variantes de produits (taille, couleur), créez un document par variante avec un champ `parent_id` pour les regrouper.
+
+## Étape 3 : Connecter le Widget avec les Facettes
+
+Le Widget AACsearch affiche les facettes automatiquement. Initialisez-le avec la configuration des facettes :
+
+```javascript
+const search = new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	facets: [
+		{ field: "brand", type: "string", label: "Brand" },
+		{ field: "category", type: "string", label: "Category" },
+		{ field: "price", type: "range", label: "Price Range" },
+		{ field: "color", type: "string", label: "Color" },
+		{ field: "rating", type: "range", label: "Rating" },
+		{ field: "in_stock", type: "boolean", label: "In Stock" },
+	],
+	searchableFields: ["name", "brand", "category", "tags"],
+	resultsPerPage: 24,
+	sortOptions: [
+		{ label: "Relevance", value: "_text_match:desc" },
+		{ label: "Price: Low to High", value: "price:asc" },
+		{ label: "Price: High to Low", value: "price:desc" },
+		{ label: "Rating", value: "rating:desc" },
+		{ label: "Newest", value: "id:desc" },
+	],
+});
+
+search.mount("#search-container");
+```
+
+Le widget gère :
+
+- Les facettes multi-sélection (l'utilisateur sélectionne Nike ET Adidas)
+- Les curseurs de plage de prix (histogramme déplaçable)
+- Le rendu des nuanciers de couleurs (les facettes de type couleur s'affichent en cercles)
+- Les étiquettes de filtres actifs avec boutons de suppression
+- Le tiroir de facettes adaptatif mobile
+
+## Étape 4 : Configurer les Règles d'Affichage
+
+Les facettes doivent sembler naturelles, pas écrasantes. Configurez-les dans le Dashboard AACsearch :
+
+**Replié par défaut :** Catégories avec plus de 10 valeurs (afficher le lien « Voir plus »)
+**Déplié par défaut :** Fourchette de prix, note, en stock
+**Recherche dans les facettes :** Pour les marques avec 50+ valeurs, les utilisateurs peuvent chercher dans la liste des facettes
+**Ordre des facettes :** Mettez « Catégorie » et « Marque » en haut, reléguez « Tags » en bas
+
+Définissez les limites d'affichage des facettes :
+
+| Facette   | Valeurs max | Comportement de dépliage    |
+| --------- | ----------- | --------------------------- |
+| Marque    | 8           | Afficher +N supplémentaires |
+| Catégorie | 10          | Afficher +N supplémentaires |
+| Couleur   | Toutes      | Grille avec nuanciers       |
+| Prix      | Plage       | Curseur d'histogramme       |
+| Note      | 5           | Sélecteur d'étoiles         |
+
+## Étape 5 : Ajouter des Boost de Pertinence pour les Recherches Filtrées
+
+Lorsqu'un utilisateur filtre par marque, boostez les produits de cette marque plus haut dans les résultats. AACsearch prend en charge les règles de classement dynamique :
+
+**Boost de catégorie :** Si l'utilisateur sélectionne « Footwear » → boostez tous les produits de chaussures par 1,5x
+**Boost des nouveaux arrivages :** Les produits ajoutés dans les 30 derniers jours reçoivent un boost de 1,2x
+**Priorité aux produits en stock :** Les produits en rupture apparaissent toujours après ceux en stock (au même niveau de pertinence)
+
+Configurez ces options dans le Dashboard sous Relevance Tuning → Ranking Rules.
+
+## Exemple : Page E-Commerce Complète
+
+Voici une implémentation complète utilisant le Widget AACsearch avec une application Next.js :
+
+```tsx
+// app/products/page.tsx
+import dynamic from "next/dynamic";
+
+const SearchPage = dynamic(() => import("./search-client"), { ssr: false });
+
+export default function ProductsPage() {
+	return (
+		<div className="max-w-7xl mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-8">All Products</h1>
+			<SearchPage />
+		</div>
+	);
+}
+```
+
+```tsx
+// app/products/search-client.tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export default function SearchClient() {
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!containerRef.current || typeof window === "undefined") return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "products",
+			facets: [
+				{ field: "category", type: "string", label: "Category" },
+				{ field: "brand", type: "string", label: "Brand" },
+				{ field: "price", type: "range", label: "Price Range" },
+			],
+			searchableFields: ["name", "brand", "description"],
+		});
+
+		widget.mount(containerRef.current);
+
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={containerRef} className="min-h-[600px]" />;
+}
+```
+
+## Performance à Grande Échelle
+
+- **50 000 produits, 50 facettes :** < 50 ms de temps de réponse (P95)
+- **500 000 produits, 100 facettes :** < 120 ms de temps de réponse
+- **Facettes multi-sélection :** Aucune pénalité de performance — l'intersection de bitmaps est en O(1)
+- **Recherches filtrées simultanées :** 500+ QPS sur le plan Scale
+
+## Prochaines Étapes
+
+- Essayez la [démo e-commerce en direct](/use-cases/ecommerce-search)
+- Lisez le [guide de personnalisation du widget](/docs/widget)
+- Consultez notre [connecteur PrestaShop](/integrations/prestashop) pour une intégration immédiate à votre boutique
+
+Prêt à construire ? [Commencez gratuitement →](/signup)

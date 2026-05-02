@@ -1,0 +1,207 @@
+---
+title: Produktsuche mit Facettenfiltern aufbauen
+date: 2025-05-01
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Erfahren Sie, wie Sie eine Produktsuche mit Facettenfiltern mit AACsearch aufbauen – Preisspannen, Markenfilter, Farbauswahl und Kategorienavigation in unter 30 Minuten.
+tags: [tutorial, faceted-search, ecommerce, filters]
+published: true
+---
+
+Facettenfilter sind der Unterschied zwischen „Ich finde nicht, was ich suche" und „Genau das, was ich brauche." Kunden, die Filter nutzen, konvertieren 2-3x häufiger als diejenigen, die es nicht tun. In diesem Tutorial bauen Sie eine produktionsreife facettierte Produktsuche mit AACsearch auf.
+
+## Was sind Facettenfilter?
+
+Facettenfilter ermöglichen es Benutzern, Suchergebnisse nach Produktattributen einzugrenzen: Preisbereich, Marke, Größe, Farbe, Kategorie, Bewertung – jede Dimension, die für Ihre Kunden wichtig ist. Im Gegensatz zur einfachen Kategorienavigation lassen sich Facetten kombinieren. Ein Benutzer kann nach „Nike" + „Laufschuhe" + „unter 150 €" + „Größe 42" filtern und sieht nur passende Produkte.
+
+AACsearch verarbeitet Facetten nativ. Kein benutzerdefiniertes Indexieren, kein externer Suchdienst. Deklarieren Sie, welche Felder facettiert sind, und die Suchmaschine gibt bei jeder Abfrage verfügbare Filteroptionen zurück.
+
+## Schritt 1: Index mit Facettenfeldern einrichten
+
+Melden Sie sich in Ihrem AACsearch-Dashboard an und erstellen Sie einen neuen Index. Markieren Sie bei der Definition Ihres Schemas diese Felder als `facet: true`:
+
+```json
+{
+	"name": "string",
+	"brand": { "type": "string", "facet": true },
+	"category": { "type": "string", "facet": true },
+	"price": { "type": "float", "facet": true },
+	"color": { "type": "string", "facet": true },
+	"size": { "type": "string", "facet": true },
+	"rating": { "type": "float", "facet": true },
+	"in_stock": { "type": "bool", "facet": true },
+	"tags": { "type": "string[]", "facet": true }
+}
+```
+
+Typesense indexiert Facettenwerte in einer Bitmap – das Filtern zur Abfragezeit erfolgt unabhängig von der Sammlungsgröße in unter einer Millisekunde. Preisfacetten werden als Histogramm mit Bereichszählungen zurückgegeben.
+
+## Schritt 2: Produkte importieren
+
+Laden Sie Ihren Produktkatalog per CSV, JSON oder API hoch. Jedes Produktdokument sollte die Facettenwerte enthalten:
+
+```json
+[
+	{
+		"id": "101",
+		"name": "Ultra Running Shoes",
+		"brand": "Nike",
+		"category": "Footwear",
+		"price": 129.99,
+		"color": "Black",
+		"size": "10",
+		"rating": 4.5,
+		"in_stock": true,
+		"tags": ["running", "outdoor", "men"]
+	},
+	{
+		"id": "102",
+		"name": "Trail Hiker Boots",
+		"brand": "Merrell",
+		"category": "Footwear",
+		"price": 159.99,
+		"color": "Brown",
+		"size": "11",
+		"rating": 4.7,
+		"in_stock": true,
+		"tags": ["hiking", "outdoor", "unisex"]
+	}
+]
+```
+
+Prof-Tipp: Halten Sie Dokumente flach. Typesense arbeitet am besten mit denormalisierten Daten. Wenn Sie Variantenprodukte (Größe, Farbe) haben, erstellen Sie ein Dokument pro Variante mit einem `parent_id`-Feld zur Gruppierung.
+
+## Schritt 3: Widget mit Facetten verbinden
+
+Das AACsearch-Widget rendert Facetten automatisch. Initialisieren Sie es mit der Facettenkonfiguration:
+
+```javascript
+const search = new AACsearchWidget({
+	apiKey: "ss_search_your_api_key",
+	index: "products",
+	facets: [
+		{ field: "brand", type: "string", label: "Marke" },
+		{ field: "category", type: "string", label: "Kategorie" },
+		{ field: "price", type: "range", label: "Preisspanne" },
+		{ field: "color", type: "string", label: "Farbe" },
+		{ field: "rating", type: "range", label: "Bewertung" },
+		{ field: "in_stock", type: "boolean", label: "Auf Lager" },
+	],
+	searchableFields: ["name", "brand", "category", "tags"],
+	resultsPerPage: 24,
+	sortOptions: [
+		{ label: "Relevanz", value: "_text_match:desc" },
+		{ label: "Preis: aufsteigend", value: "price:asc" },
+		{ label: "Preis: absteigend", value: "price:desc" },
+		{ label: "Bewertung", value: "rating:desc" },
+		{ label: "Neueste", value: "id:desc" },
+	],
+});
+
+search.mount("#search-container");
+```
+
+Das Widget übernimmt:
+
+- Mehrfachauswahl-Facetten (Benutzer wählt Nike UND Adidas)
+- Preisspannen-Schieberegler (ziehbares Histogramm)
+- Farbfeld-Darstellung (Farbe-Typ-Facetten zeigen Kreise)
+- Aktive Filter-Tags mit Entfernen-Buttons
+- Mobile-responsive Facetten-Drawer
+
+## Schritt 4: Anzeigeregeln konfigurieren
+
+Facetten sollten sich natürlich anfühlen, nicht überwältigend. Konfigurieren Sie diese im AACsearch-Dashboard:
+
+**Standardmäßig eingeklappt:** Kategorien mit mehr als 10 Werten („Mehr anzeigen"-Link einblenden)
+**Standardmäßig ausgeklappt:** Preisbereich, Bewertung, Lagerbestand
+**Suche innerhalb von Facetten:** Bei Marken mit 50+ Werten können Benutzer die Facettenliste durchsuchen
+**Facetten-Reihenfolge:** „Kategorie" und „Marke" nach oben, „Tags" nach unten
+
+Legen Sie Facetten-Anzeigegrenzen fest:
+
+| Facette   | Max. Werte | Ausklappverhalten      |
+| --------- | ---------- | ---------------------- |
+| Marke     | 8          | +N mehr anzeigen       |
+| Kategorie | 10         | +N mehr anzeigen       |
+| Farbe     | Alle       | Raster mit Farbfeldern |
+| Preis     | Bereich    | Histogramm-Schieber    |
+| Bewertung | 5          | Sternebewertung        |
+
+## Schritt 5: Relevanz-Boosts für gefilterte Suchen hinzufügen
+
+Wenn ein Benutzer nach Marke filtert, heben Sie die Produkte dieser Marke in den Ergebnissen höher an. AACsearch unterstützt dynamische Ranking-Regeln:
+
+**Kategorie-Boost:** Wenn der Benutzer „Footwear" auswählt → alle Schuhe um das 1,5-fache boosten
+**Neuheiten-Boost:** Produkte, die in den letzten 30 Tagen hinzugefügt wurden, erhalten 1,2-fachen Boost
+**Lagerbestand-Priorität:** Nicht vorrätige Produkte erscheinen immer nach vorrätigen (bei gleichem Relevanzniveau)
+
+Konfigurieren Sie dies im Dashboard unter Relevanz-Tuning → Ranking-Regeln.
+
+## Beispiel: Vollständige E-Commerce-Seite
+
+Hier eine vollständige Implementierung mit dem AACsearch-Widget in einer Next.js-App:
+
+```tsx
+// app/products/page.tsx
+import dynamic from "next/dynamic";
+
+const SearchPage = dynamic(() => import("./search-client"), { ssr: false });
+
+export default function ProductsPage() {
+	return (
+		<div className="max-w-7xl mx-auto px-4 py-8">
+			<h1 className="text-3xl font-bold mb-8">Alle Produkte</h1>
+			<SearchPage />
+		</div>
+	);
+}
+```
+
+```tsx
+// app/products/search-client.tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+
+export default function SearchClient() {
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (!containerRef.current || typeof window === "undefined") return;
+
+		const widget = new AACsearchWidget({
+			apiKey: process.env.NEXT_PUBLIC_AACSEARCH_API_KEY!,
+			index: "products",
+			facets: [
+				{ field: "category", type: "string", label: "Kategorie" },
+				{ field: "brand", type: "string", label: "Marke" },
+				{ field: "price", type: "range", label: "Preisspanne" },
+			],
+			searchableFields: ["name", "brand", "description"],
+		});
+
+		widget.mount(containerRef.current);
+
+		return () => widget.destroy();
+	}, []);
+
+	return <div ref={containerRef} className="min-h-[600px]" />;
+}
+```
+
+## Leistung bei Skalierung
+
+- **50.000 Produkte, 50 Facetten:** < 50ms Antwortzeit (P95)
+- **500.000 Produkte, 100 Facetten:** < 120ms Antwortzeit
+- **Mehrfachauswahl-Facetten:** Keine Leistungseinbußen – Bitmap-Schnittmenge ist O(1)
+- **Gleichzeitige gefilterte Suchen:** 500+ QPS im Scale-Tarif
+
+## Nächste Schritte
+
+- Probieren Sie die [Live-E-Commerce-Demo](/use-cases/ecommerce-search) aus
+- Lesen Sie den [Widget-Anpassungsleitfaden](/docs/widget)
+- Schauen Sie sich unseren [PrestaShop-Connector](/integrations/prestashop) für die sofortige Shop-Integration an
+
+Bereit loszulegen? [Kostenlos starten →](/signup)

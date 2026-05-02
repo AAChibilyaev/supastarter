@@ -15,9 +15,10 @@
  *   - INDEX_ID   the target index ID
  */
 
+import { randomIntBetween } from "https://jslib.k6.io/k6-utils/1.4.0/index.js";
 import { check, sleep, group } from "k6";
 import http from "k6/http";
-import { randomIntBetween } from "https://jslib.k6.io/k6-utils/1.4.0/index.js";
+
 import { BASE_URL, API_KEY, INDEX_ID, THRESHOLDS, apiHeaders, randomQuery } from "../lib/config.js";
 
 if (!API_KEY) {
@@ -95,21 +96,21 @@ export const options = {
 			executor: "ramping-vus",
 			startVUs: 50,
 			stages: [
-				{ target: 200, duration: "30s" },   // ramp up to 200 concurrent sessions
-				{ target: 500, duration: "30s" },   // ramp up to 500 concurrent
-				{ target: 500, duration: "60s" },   // sustain 500 for 1 min
-				{ target: 200, duration: "15s" },   // ramp down
-				{ target: 0,   duration: "15s" },
+				{ target: 200, duration: "30s" }, // ramp up to 200 concurrent sessions
+				{ target: 500, duration: "30s" }, // ramp up to 500 concurrent
+				{ target: 500, duration: "60s" }, // sustain 500 for 1 min
+				{ target: 200, duration: "15s" }, // ramp down
+				{ target: 0, duration: "15s" },
 			],
 			gracefulRampDown: "30s",
 		},
 	},
 	thresholds: {
-		"http_req_duration": ["p(99)<200", "p(95)<100"],
+		http_req_duration: ["p(99)<200", "p(95)<100"],
 		// Per-query-type thresholds
-		"http_req_duration{query_type:browse}":  ["p(99)<150"],
-		"http_req_duration{query_type:search}":  ["p(99)<300"],
-		"http_req_failed": ["rate<0.001"],
+		"http_req_duration{query_type:browse}": ["p(99)<150"],
+		"http_req_duration{query_type:search}": ["p(99)<300"],
+		http_req_failed: ["rate<0.001"],
 		checks: ["rate>0.99"],
 	},
 };

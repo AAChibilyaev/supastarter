@@ -2065,6 +2065,18 @@
 			"preview": {
 				"title": "Live-Vorschau",
 				"description": "Teste Relevanzänderungen mit echten Abfragen gegen deinen Live-Datensatz, bevor du speicherst."
+			},
+			"analytics": {
+				"description": "CTR und Zero-Result-Rate vor und nach einer Tuning-Änderung messen. Mit einem Klick zurückrollen, wenn Metriken sinken.",
+				"title": "Relevanz-Analytics"
+			},
+			"merchandising": {
+				"description": "Boost- und Pin-Konfigurationen als benannte Presets speichern. Ein Sale-Season-Preset auf alle Indizes mit einem Klick anwenden.",
+				"title": "Merchandising-Presets"
+			},
+			"scoring": {
+				"description": "Textrelevanz mit numerischen Signalen wie Preis, Aktualität oder Beliebtheit über eine konfigurierbare Scoring-Formel kombinieren.",
+				"title": "Benutzerdefiniertes Scoring"
 			}
 		}
 	},
@@ -2099,6 +2111,26 @@
 			"ui": {
 				"title": "Dashboard-UI",
 				"description": "Verwalte Stoppwortlisten über eine einfache Listenoberfläche. Keine API-Aufrufe für routinemäßige Aktualisierungen erforderlich."
+			},
+			"analytics": {
+				"description": "Erkennen, welche entfernten Stoppwörter mit Zero-Result-Anfragen korrelieren. Liste anhand echter Nutzerdaten optimieren.",
+				"title": "Stoppwort-Analytics"
+			},
+			"customStopwords": {
+				"description": "Eigene Stoppwortlisten zusätzlich zu den integrierten sprachspezifischen Standardlisten definieren. Domain-spezifische Störwörter sofort entfernen.",
+				"title": "Benutzerdefinierte Stoppwortlisten"
+			},
+			"languageAware": {
+				"description": "Eingebaute Stoppwortlisten für Englisch, Deutsch, Französisch, Spanisch und Russisch. Pro Kollektion überschreibbar oder erweiterbar.",
+				"title": "Sprachbewusste Standards"
+			},
+			"performance": {
+				"description": "Stoppwortfilterung läuft zur Query-Parse-Zeit, vor der Indexsuche. Kein messbarer Latenz-Overhead.",
+				"title": "Null Query-Overhead"
+			},
+			"realTime": {
+				"description": "Stoppwörter ohne Re-Indexierung hinzufügen oder entfernen. Änderungen wirken sofort bei der nächsten Anfrage.",
+				"title": "Updates ohne Ausfallzeit"
 			}
 		}
 	},
@@ -2133,6 +2165,26 @@
 			"analytics": {
 				"title": "Zero-Result-Analytik",
 				"description": "Sieh, welche Abfragen keine Ergebnisse zurückgeben. Das ist dein Leitfaden für neue Synonyme."
+			},
+			"csvImport": {
+				"description": "Synonympaare in großen Mengen aus einer CSV-Datei importieren. Vorhandene Synonymliste einfügen und sie wird sofort angewendet.",
+				"title": "CSV-Import"
+			},
+			"multiWay": {
+				"description": "Gleichwertige Begriffe auflisten: 'Pullover, Sweater, Strickjacke'. Jeder Begriff findet Dokumente, die einen anderen enthalten.",
+				"title": "Bidirektionale Synonyme"
+			},
+			"oneWay": {
+				"description": "'Sofa' auf 'Couch' abbilden, ohne die Umkehrung. Einweg-Regeln verwenden, wenn der Katalog den formalen Begriff nutzt, Nutzer aber den informellen tippen.",
+				"title": "Einweg-Synonyme"
+			},
+			"realTimeUpdate": {
+				"description": "Synonymregeln ohne Re-Indexierung hinzufügen oder entfernen. Änderungen wirken bei der nächsten Anfrage, nicht beim nächsten Deployment.",
+				"title": "Updates ohne Ausfallzeit"
+			},
+			"scope": {
+				"description": "Verschiedene Synonymbibliotheken pro Kollektion. Produkt-Index und Docs-Index können unabhängige Synonymregeln haben.",
+				"title": "Kollektionsweiter Umfang"
 			}
 		}
 	},
@@ -2167,6 +2219,18 @@
 			"fieldsControl": {
 				"title": "Pro-Feld-Kontrolle",
 				"description": "Deaktiviere Typo-Toleranz für genaue Felder wie SKU, Barcode oder E-Mail."
+			},
+			"accuracy": {
+				"description": "Kurze Anfragen mit vielen kurzen Wörtern überspringen die Tippfehler-Toleranz, um False Positives zu vermeiden. Konfigurierbare minimale Token-Länge.",
+				"title": "Hohe Präzision"
+			},
+			"customDictionary": {
+				"description": "Markennamen, Produktcodes und technische Begriffe auf die Whitelist setzen, die nie von der Tippfehler-Toleranz-Engine korrigiert werden sollen.",
+				"title": "Benutzerdefiniertes Wörterbuch"
+			},
+			"splitWords": {
+				"description": "'macbook pro' findet 'macbookpro' und umgekehrt. Split-Word-Erkennung erkennt fehlende Leerzeichen und zusammengesetzte Wörter.",
+				"title": "Geteilte Wortkorrektur"
 			}
 		}
 	},
@@ -2201,6 +2265,26 @@
 			"relevanceTuning": {
 				"title": "Relevanz-Tuning",
 				"description": "Der Prozess der Anpassung von Ranking-Signalen und -Gewichten, um Suchergebnisse zu verbessern."
+			},
+			"embedding": {
+				"description": "Eine numerische Vektorrepräsentation von Textsemantik. AACsearch kann Embeddings für semantische und hybride Suche speichern und abfragen.",
+				"title": "Embedding"
+			},
+			"facet": {
+				"description": "Ein filterbares Attribut, das zusammen mit Suchergebnissen mit Dokumentenzählungen zurückgegeben wird. Ermöglicht geführte Navigation ohne zusätzliche API-Aufrufe.",
+				"title": "Facette"
+			},
+			"relevance": {
+				"description": "Wie gut ein Dokument zu einer Anfrage passt. AACsearch kombiniert BM25-Textrelevanz, Vektorähnlichkeit, Feldgewichtungen und benutzerdefinierte Boost-Regeln.",
+				"title": "Relevanz"
+			},
+			"searchIndex": {
+				"description": "Eine Datenstruktur, die für schnellen Textzugriff optimiert ist. AACsearch pflegt eine Suchkollektion pro Index mit automatischem Alias-Management.",
+				"title": "Suchindex"
+			},
+			"searchUnit": {
+				"description": "AACsearch-Abrechnungseinheit. Eine Sucheinheit entspricht einer Suchanfrage oder einem indizierten Dokument. Wird zur Berechnung der monatlichen Plan-Zuteilung verwendet.",
+				"title": "Sucheinheit"
 			}
 		}
 	},
@@ -2235,6 +2319,22 @@
 			"mapping": {
 				"title": "Feld-Mapping",
 				"description": "Mappe Contentful-Felder auf AACsearch-Felder mit einer JSON-Konfiguration."
+			},
+			"analytics": {
+				"description": "Verstehen, welche Content-Einträge in der Suche erscheinen, welche Themen Lücken haben und wie die Suche das Content-Engagement fördert.",
+				"title": "Content-Analytics"
+			},
+			"app": {
+				"description": "Die AACsearch-App aus dem Contentful Marketplace installieren. Index-Mappings für jedes Content-Modell in der Benutzeroberfläche konfigurieren.",
+				"title": "Contentful-App"
+			},
+			"autoSync": {
+				"description": "Contentful sendet bei jedem Veröffentlichungsereignis einen Webhook. AACsearch verarbeitet den Payload und aktualisiert den Index in unter einer Sekunde.",
+				"title": "Publish-getriggerte Synchronisierung"
+			},
+			"widget": {
+				"description": "Das AACsearch-Browser-SDK mit jedem Contentful-gestützten Frontend verwenden. React-Hooks, Vue-Composables und Vanilla JS werden unterstützt.",
+				"title": "JavaScript-SDK"
 			}
 		}
 	},
@@ -2269,6 +2369,26 @@
 			"hooks": {
 				"title": "React-Hooks",
 				"description": "useAACSearch, useAACFacets und useAACInfiniteScroll sind out of the box verfügbar."
+			},
+			"analytics": {
+				"description": "Suchereignisse vom Vercel Edge Network tracken. Keine Cold Starts, kein Timeout-Risiko für leichtgewichtige Analytics-Aufrufe.",
+				"title": "Edge-kompatible Analytics"
+			},
+			"caching": {
+				"description": "Fetch mit next revalidate oder ISR verwenden, um Suchergebnisse zu cachen. AACsearch respektiert Standard-HTTP-Cache-Control-Header.",
+				"title": "Next.js Cache-Integration"
+			},
+			"sdk": {
+				"description": "Das AACsearch-npm-Paket installieren. Vollständige TypeScript-Typen, keine externen Abhängigkeiten, 8KB komprimiert. Funktioniert in jeder JS-Laufzeit.",
+				"title": "TypeScript-SDK"
+			},
+			"serverComponents": {
+				"description": "Die AACsearch-API direkt aus Server Components aufrufen. Keine Client-Bundle-Kosten, kein Hydration-Overhead für Suchergebnis-Seiten.",
+				"title": "React Server Components"
+			},
+			"widget": {
+				"description": "Das AACsearch-Widget mit einem Script-Tag zum Next.js-Layout hinzufügen oder das React-SDK für eine vollständig anpassbare Such-UI verwenden.",
+				"title": "Clientseitiges Widget"
 			}
 		}
 	},
@@ -2303,6 +2423,18 @@
 			"performance": {
 				"title": "Leistungsoptimiert",
 				"description": "Debouncing, clientseitiges Caching und Prefetching sind standardmäßig aktiviert."
+			},
+			"analytics": {
+				"description": "Das SDK enthält einen trackEvent-Aufruf für Ergebnisklicks, Filter-Nutzung und Zero-Result-Reporting. Speist das AACsearch-Dashboard.",
+				"title": "Event-Tracking"
+			},
+			"sdk": {
+				"description": "Das AACsearch-React-Paket installieren. Hooks für Suche, Autocomplete und Facetten. Vollständige TypeScript-Typen, keine Peer-Abhängigkeiten.",
+				"title": "React-SDK"
+			},
+			"ssr": {
+				"description": "Suchergebnisse serverseitig vorab laden und clientseitig ohne Flash of Empty Content hydrieren.",
+				"title": "SSR & Hydration"
 			}
 		}
 	},
@@ -2337,6 +2469,22 @@
 			"types": {
 				"title": "Typ-Generierung",
 				"description": "TypeScript-Typen aus Sanity-Schemas generieren und in AACsearch-Kollektions-Schemas verwenden."
+			},
+			"analytics": {
+				"description": "Verfolgen, welche Dokumenttypen gesucht werden, welche Anfragen scheitern und wie die Suche nachgelagerte Konversionen fördert.",
+				"title": "Suchanalytics"
+			},
+			"schemaSync": {
+				"description": "Beliebige Sanity-Schema-Typen auf eine AACsearch-Kollektion mappen. Portable Text, Referenzen und Arrays werden automatisch geflacht.",
+				"title": "Schema-bewusstes Indexieren"
+			},
+			"webhook": {
+				"description": "Sanity liefert Dokumentänderungen über HTTPS-Webhook an AACsearch. Neue Dokumente, Updates und Löschungen werden automatisch behandelt.",
+				"title": "Webhook-getriebene Synchronisierung"
+			},
+			"widget": {
+				"description": "Das AACsearch-Browser-SDK funktioniert mit jedem Sanity-gestützten Frontend. React-Hooks oder Vanilla-JS-Client verwenden.",
+				"title": "Frontend-Integration"
 			}
 		}
 	},
@@ -2371,6 +2519,22 @@
 			"multilingual": {
 				"title": "Mehrsprachige Shops",
 				"description": "Indiziere Produkte in mehreren Sprachen. AACsearch liefert Ergebnisse basierend auf der Store-Locale."
+			},
+			"install": {
+				"description": "Die AACsearch-App aus dem Shopify App Store installieren. Index mit API-Schlüssel verbinden und in Minuten live gehen.",
+				"title": "Ein-Klick-Installation"
+			},
+			"metafields": {
+				"description": "Shopify-Metafelder als durchsuch- und filterbare Felder indexieren. Benutzerdefinierte Produktattribute ohne Schema-Änderungen exponieren.",
+				"title": "Benutzerdefinierte Metafelder"
+			},
+			"productSync": {
+				"description": "Neue Produkte, Preisänderungen und Lagerbestandsaktualisierungen werden über Shopify-Webhooks mit AACsearch synchronisiert. Änderungen erscheinen in der Suche in unter einer Sekunde.",
+				"title": "Automatische Produktsynchronisierung"
+			},
+			"variantSync": {
+				"description": "Jede Produktvariante wird als separates Dokument indexiert. Kunden können direkt nach Größe, Farbe oder SKU suchen.",
+				"title": "Varianten-Indexierung"
 			}
 		}
 	},
@@ -2405,6 +2569,22 @@
 			"api": {
 				"title": "REST und GraphQL",
 				"description": "Proxyge AACsearch-Suche über Strapi-API-Endpunkte für sicherheitskonformes Key-Management."
+			},
+			"analytics": {
+				"description": "Sehen, welche Content-Typen den meisten Suchtraffic haben und welche Anfragen keine Ergebnisse liefern. Redaktionsentscheidungen mit Suchdaten treffen.",
+				"title": "Content-Suchanalytics"
+			},
+			"autoSync": {
+				"description": "Content synchronisiert bei afterCreate-, afterUpdate- und afterDelete-Strapi-Lifecycle-Hooks. Zero-Latenz-Updates.",
+				"title": "Lifecycle-Hook-Synchronisierung"
+			},
+			"webhook": {
+				"description": "Einen Strapi-Webhook als Fallback-Synchronisierungspfad konfigurieren. Garantiert die Lieferung, auch wenn der Lifecycle-Hook während einer Migration verpasst wird.",
+				"title": "Webhook-Fallback"
+			},
+			"widget": {
+				"description": "Das AACsearch-Browser-SDK verwenden, um Instant Search für das Strapi-gestützte Frontend zu bauen — React, Vue oder Vanilla JS.",
+				"title": "Frontend-Such-Widget"
 			}
 		}
 	},
@@ -2439,6 +2619,26 @@
 			"performance": {
 				"title": "Schnellere Ladezeiten",
 				"description": "AACsearch-Ergebnisse werden über CDN geliefert. Kein serverseitiges PHP-Rendering für Suchtreffer."
+			},
+			"analytics": {
+				"description": "Such-zu-Warenkorb-Konversion, Zero-Result-Rate und Top-Anfragen verfolgen. Lücken im Katalog aus echten Suchdaten identifizieren.",
+				"title": "Commerce-Analytics"
+			},
+			"install": {
+				"description": "Aus dem WordPress-Plugin-Verzeichnis installieren oder manuell hochladen. Erfordert WooCommerce 8.x und einen AACsearch-API-Schlüssel.",
+				"title": "Plugin-Installation"
+			},
+			"orderSearch": {
+				"description": "Bestellverlauf für eingeloggte Kunden indexieren. Schnelle, private Bestellsuche, die auf das authentifizierte Nutzerkonto beschränkt ist.",
+				"title": "Bestellsuche"
+			},
+			"productSync": {
+				"description": "Produkte synchronisieren bei Veröffentlichung, Update und Löschung. Lagerbestandsänderungen lösen automatische Index-Updates über WooCommerce-Webhooks aus.",
+				"title": "Produktsynchronisierung"
+			},
+			"variantSync": {
+				"description": "Kunden können nach bestimmten Variationen nach Attribut suchen — Farbe, Größe, Material — ohne zuerst zur Produktseite zu navigieren.",
+				"title": "Variationssuche"
 			}
 		}
 	},
@@ -2473,6 +2673,26 @@
 			"shortcode": {
 				"title": "Shortcode und Block",
 				"description": "Platziere eine AACsearch-Suchleiste überall auf deiner Seite mithilfe eines Shortcodes oder eines Gutenberg-Blocks."
+			},
+			"analytics": {
+				"description": "WordPress-Redakteure sehen Top-Anfragen, Zero-Result-Raten und suchgesteuerte Seitenaufrufe direkt im AACsearch-Dashboard.",
+				"title": "Suchanalytics"
+			},
+			"customTypes": {
+				"description": "Benutzerdefinierte Beitragstypen und Advanced Custom Fields als durchsuch- und facettierbare Attribute indexieren. Volle Kontrolle darüber, welche Felder exponiert werden.",
+				"title": "Benutzerdefinierte Beitragstypen & ACF"
+			},
+			"multiSite": {
+				"description": "Jede Site in einem WordPress-Multisite-Netzwerk erhält einen separaten AACsearch-Index mit eigenem API-Schlüssel und Analytics.",
+				"title": "Multisite-Unterstützung"
+			},
+			"postSync": {
+				"description": "Alle Beitragstypen synchronisieren bei Veröffentlichung und Update. Gelöschte Beiträge werden über WordPress-Hooks automatisch aus dem Index entfernt.",
+				"title": "Beitrags- und Seitensynchronisierung"
+			},
+			"widget": {
+				"description": "Das Standard-Such-Widget durch den AACsearch-Block ersetzen. Sofortige Ergebnisse, Facettenfilter und Tastaturnavigation.",
+				"title": "Gutenberg-Suchblock"
 			}
 		}
 	},
@@ -2507,6 +2727,26 @@
 			"frequency": {
 				"title": "Wöchentlich, kein Spam",
 				"description": "Montags, ca. 08:00 Uhr MEZ. Kein Marketing, keine Werbung. Jederzeit abmeldbar."
+			},
+			"content": {
+				"description": "Artikel zum Such-Engineering, AACsearch-Versionshinweise, Open-Source-Highlights und ein Community-Spotlight pro Ausgabe.",
+				"title": "Was Sie erhalten"
+			},
+			"past": {
+				"description": "Jeder Newsletter ist in unserem Blog archiviert. Vor dem Abonnieren lesen — Sie wissen genau, worauf Sie sich einlassen.",
+				"title": "Frühere Ausgaben lesen"
+			},
+			"privacy": {
+				"description": "Wir nutzen eine selbst gehostete Newsletter-Plattform. Ihre E-Mail wird nie mit Werbenetzwerken geteilt oder an Datenmakler verkauft.",
+				"title": "Ihre Daten bleiben Ihre"
+			},
+			"social": {
+				"description": "Newsletter-Highlights werden auf LinkedIn gepostet. Dort für kürzere Engineering-Updates folgen.",
+				"title": "Den Highlights folgen"
+			},
+			"unsubscribe": {
+				"description": "Jede E-Mail enthält einen Ein-Klick-Abmeldelink. Keine Dark Patterns, keine Bestätigungsdialoge.",
+				"title": "Ein-Klick-Abmeldung"
 			}
 		}
 	},
@@ -2541,6 +2781,18 @@
 			"founders": {
 				"title": "Gründerbiografien",
 				"description": "Kurzbiografien und Hochauflösungsfotos für Medienartikel und Konferenzprogramme."
+			},
+			"assets": {
+				"description": "Logo in SVG, PNG und Dark/Light-Varianten herunterladen. Nutzungsrichtlinien enthalten — Details auf der Markenseite.",
+				"title": "Marken-Assets"
+			},
+			"mediaKit": {
+				"description": "Logo-Dateien, Produkt-Screenshots, Gründerfotos und Markenrichtlinien in einem einzigen downloadbaren Zip.",
+				"title": "Medienkit"
+			},
+			"pressReleases": {
+				"description": "Offizielle Ankündigungen für Produkteinführungen, Finanzierungsrunden und wichtige Partnerschaften — formatiert und zur Weiterveröffentlichung bereit.",
+				"title": "Pressemitteilungen"
 			}
 		}
 	},
@@ -2575,6 +2827,10 @@
 			"overage": {
 				"title": "Überverbrauch",
 				"description": "Überschreitungen werden pro Sucheinheit fakturiert. Kein harter Stopp – dein Dienst bleibt immer online."
+			},
+			"custom": {
+				"description": "Nicht standardmäßige Anforderungen — On-Premise-Deployment, Datenspeichervereinbarungen, White-Labelling — werden als individuelle Verträge abgewickelt.",
+				"title": "Brauchen Sie etwas anderes?"
 			}
 		}
 	},
@@ -2609,6 +2865,14 @@
 			"changelog": {
 				"title": "Änderungsprotokoll",
 				"description": "Jedes Release dokumentiert, Upgradepfade klar."
+			},
+			"community": {
+				"description": "Fragen stellen, Integrationen teilen und Peer-Support im AACsearch-Community-Forum und Discord erhalten.",
+				"title": "Community"
+			},
+			"support": {
+				"description": "E-Mail-Support für Starter und höher. Enterprise-Pläne beinhalten einen dedizierten Slack-Kanal und vertragliches SLA.",
+				"title": "Support"
 			}
 		}
 	},
@@ -2677,6 +2941,18 @@
 			"multiCurrency": {
 				"title": "Mehrwährung & Sprachen",
 				"description": "Separate Kollektionen pro Sprache und Währung oder eine gemeinsame mit Locale-Filterung."
+			},
+			"filterNavigation": {
+				"description": "Dynamische Facetten für Kategorie, Marke, Preis, Farbe und Größe. Zählungen aktualisieren sich in Echtzeit, wenn Filter angewendet werden.",
+				"title": "Facettierte Navigation"
+			},
+			"inventory": {
+				"description": "Produktlagerbestandsaktualisierungen innerhalb von Sekunden einlesen. Ausverkaufte Artikel werden automatisch basierend auf Ihrem Verfügbarkeitsfeld herabgestuft.",
+				"title": "Echtzeit-Inventar"
+			},
+			"productSearch": {
+				"description": "Sofortige, tippfehlertolernate Produktsuche. Kunden finden das richtige Produkt, auch wenn sie es falsch schreiben oder Synonyme verwenden.",
+				"title": "Produktsuche"
 			}
 		}
 	},
@@ -2711,6 +2987,30 @@
 			"subscription": {
 				"title": "Zugangskontrolle",
 				"description": "Kennzeichne Inhalte als Premium oder Metered und filtere basierend auf dem Abonnementstatus des Nutzers."
+			},
+			"analytics": {
+				"description": "Sehen, welche Anfragen keine Ergebnisse haben, welche Themen trending sind und welche Artikel durch Suche vs. direkte Links entdeckt werden.",
+				"title": "Content-Analytics"
+			},
+			"contentSearch": {
+				"description": "Über Schlagzeilen, Fließtext, Tags, Autorenbiografien und Bildunterschriften suchen. Übereinstimmende Ausschnitte in Ergebnissen hervorheben.",
+				"title": "Volltext-Inhaltssuche"
+			},
+			"fullText": {
+				"description": "Konfigurierbare Feldgewichtungen bevorzugen Schlagzeilen gegenüber Fließtext. Aktualität für Nachrichten boosten oder Tiefe für Evergreen-Guides.",
+				"title": "Langform-Relevanz"
+			},
+			"multiLanguage": {
+				"description": "Separate Indizes pro Sprache oder einen einzigen mehrsprachigen Index führen. Locale-bewusstes Synonym-Management inklusive.",
+				"title": "Mehrsprachige Suche"
+			},
+			"realTimeSync": {
+				"description": "Webhook-getriebene Synchronisierung von Contentful, Strapi, WordPress oder Sanity. Veröffentlichte Artikel erscheinen in der Suche in unter einer Sekunde.",
+				"title": "Echtzeit-CMS-Synchronisierung"
+			},
+			"tagging": {
+				"description": "Nach Thema, Format, Datum, Autor oder Inhaltstyp filtern. Verschachtelte Facetten unterstützen komplexe redaktionelle Taxonomien.",
+				"title": "Tag- und Kategoriefacetten"
 			}
 		}
 	},
@@ -2745,6 +3045,22 @@
 			"regions": {
 				"title": "EU-Datenresidenz",
 				"description": "Wähle die EU-Region (Frankfurt) für DSGVO- und DORA-Konformität."
+			},
+			"accessControls": {
+				"description": "Schreibgeschützte Such-Token ausstellen, die auf bestimmte Kollektionen, Datumsbereiche oder Feldfilter beschränkt sind. Token sind HMAC-signiert und kurzlebig.",
+				"title": "Bereichsbegrenzte Zugriffskontrollen"
+			},
+			"auditLog": {
+				"description": "Jede Suchanfrage, jede Dokumentenaufnahme und jede Admin-Operation wird mit Zeitstempel, Akteur und Org-Kontext protokolliert.",
+				"title": "Prüfpfad"
+			},
+			"gdpr": {
+				"description": "Löschung und Pseudonymisierung auf Feldebene. Anfragen zum Recht auf Vergessenwerden werden innerhalb von Minuten auf Index-Ebene bearbeitet.",
+				"title": "DSGVO & CCPA konform"
+			},
+			"performance": {
+				"description": "Hochfrequente Finanzdaten in Echtzeit indexiert. P99-Suchlatenz bleibt unter 50ms bei jedem Transaktionsvolumen.",
+				"title": "Unter 50ms in großem Maßstab"
 			}
 		}
 	},
@@ -2779,6 +3095,22 @@
 			"scorm": {
 				"title": "LMS-Integration",
 				"description": "Integriere in Moodle, Canvas oder beliebige LMS-Plattformen über die REST-API."
+			},
+			"courseSearch": {
+				"description": "Sofortsuche über Titel, Beschreibungen, Lernziele und Dozentennamen. Tippfehlertolerant für Lerneranfragen.",
+				"title": "Kurs- und Lektionssuche"
+			},
+			"learningPaths": {
+				"description": "Facettierte Suche nach Fach, Niveau, Format, Dauer und Zertifizierung. Verschachtelte Kategorien entsprechen Ihrer Lehrplanstruktur.",
+				"title": "Strukturierte Navigation"
+			},
+			"multiLanguage": {
+				"description": "Inhalte in mehr als 50 Sprachen indexieren. Sprachbewusstes Stemming und separate Synonymbibliotheken pro Locale.",
+				"title": "Mehrsprachiger Inhalt"
+			},
+			"synonyms": {
+				"description": "Fachspezifische Begriffe abbilden: 'ML / maschinelles Lernen', 'JS / JavaScript'. Aus CSV importieren oder im Dashboard verwalten.",
+				"title": "Akademische Synonyme"
 			}
 		}
 	},
@@ -2813,6 +3145,26 @@
 			"multilingual": {
 				"title": "Mehrsprachige Inhalte",
 				"description": "Patienteninformationen in mehreren Sprachen durchsuchbar machen – mit Locale-basierten Kollektionen."
+			},
+			"auditLog": {
+				"description": "Jede Anfrage, jeder Ergebnisklick und jede Admin-Aktion mit Zeitstempel und Benutzerkontext für Compliance-Überprüfung protokolliert.",
+				"title": "Prüfpfad"
+			},
+			"clinicalTerms": {
+				"description": "Synonymbibliotheken für ICD-10-Codes, Medikamentennamen und medizinische Zustände. Unterstützt Laien- und klinische Terminologie im selben Index.",
+				"title": "Klinische Terminologie"
+			},
+			"hipaaReady": {
+				"description": "Tenant-Isolation, bereichsbegrenzte Zugriffstoken und kein PII-Logging in der Suchanalytics. Infrastruktur konfiguriert für HIPAA-Workloads.",
+				"title": "HIPAA-konforme Architektur"
+			},
+			"multiLanguage": {
+				"description": "Patientenseitige Suche in der bevorzugten Sprache des Nutzers. Spracherkennung und locale-bewusstes Such-Widget.",
+				"title": "Mehrsprachige Unterstützung"
+			},
+			"realTimeUpdates": {
+				"description": "Klinische Akten und Apothekendaten in unter einer Sekunde indexiert. Arzneimitteländerungen erscheinen sofort ohne vollständigen Re-Index.",
+				"title": "Echtzeit-Datensatzaktualisierungen"
 			}
 		}
 	},
@@ -2847,6 +3199,30 @@
 			"widget": {
 				"title": "Anpassbares Widget",
 				"description": "Das AACsearch-Widget ist vollständig stilisierbar. Passe es dem visuellen Design deines Spiels an."
+			},
+			"analytics": {
+				"description": "Sehen, wonach Spieler suchen, welche Anfragen in Sackgassen enden und wie die Suche Marktplatz-Konversionen fördert.",
+				"title": "Spiel-Analytics"
+			},
+			"geoSearch": {
+				"description": "Spieler und Server innerhalb einer konfigurierbaren Entfernung anzeigen. Radius- und Bounding-Box-Geoanfragen out of the box unterstützt.",
+				"title": "Geo-abgestimmte Suche"
+			},
+			"itemSearch": {
+				"description": "Über Millionen von Items nach Seltenheit, Typ, Stats und Preis suchen. Filter und Sortierungen aktualisieren sich in Echtzeit, wenn sich der Markt bewegt.",
+				"title": "Item- und Loot-Suche"
+			},
+			"multiSearch": {
+				"description": "Eine einzige Anfrage gleichzeitig über Items, Spieler und Gilden ausführen. Ein Round-Trip, zusammengeführte Ergebnisse, minimale Latenz.",
+				"title": "Multi-Index-Anfragen"
+			},
+			"playerSearch": {
+				"description": "Spieler nach Benutzername, Rang, Region und Spielstil finden. Unterstützt Präfix-Matching für Autocomplete in Lobby-Screens.",
+				"title": "Spieler-Profilsuche"
+			},
+			"realTimeSync": {
+				"description": "Index-Updates ausgelöst durch Spielereignisse — Item-Drops, Rangänderungen, Marktplatz-Listings — kommen in unter einer Sekunde an.",
+				"title": "Echtzeit-Ereignissynchronisierung"
 			}
 		}
 	},
@@ -2881,6 +3257,10 @@
 			"subscribe": {
 				"title": "Status-Abonnement",
 				"description": "Abonniere E-Mail- oder SMS-Benachrichtigungen für Incidents, die deinen Plan betreffen."
+			},
+			"analytics": {
+				"description": "Suchereigniserfassung, Aggregation und Dashboard-Updates. Typischerweise 60-90 Sekunden hinter der Echtzeit.",
+				"title": "Analytics-Pipeline"
 			}
 		}
 	},
@@ -2915,6 +3295,18 @@
 			"status": {
 				"title": "Systemstatus",
 				"description": "Überprüfe status.aacsearch.com für Echtzeit-Verfügbarkeit und Incident-History."
+			},
+			"chat": {
+				"description": "In-Dashboard-Live-Chat für Pro- und Business-Plan-Kunden. Verbindet direkt mit dem AACsearch-Support-Team während der Geschäftszeiten.",
+				"title": "Live-Chat"
+			},
+			"documentation": {
+				"description": "Vollständige API-Referenz, SDK-Leitfäden und Integrations-Tutorials. Versioniert, durchsuchbar und mit jedem Release aktualisiert.",
+				"title": "Dokumentation"
+			},
+			"slack": {
+				"description": "Enterprise-Kunden erhalten einen gemeinsamen Slack-Connect-Kanal mit dem AACsearch-Engineering- und Support-Team.",
+				"title": "Dedizierter Slack-Kanal"
 			}
 		}
 	},
@@ -2949,6 +3341,14 @@
 			"pentest": {
 				"title": "Penetrationstests",
 				"description": "Jährliche Penetrationstests durch einen unabhängigen Dritten. Ergebnisse auf Anfrage an Enterprise-Kunden."
+			},
+			"auditLog": {
+				"description": "Jede Admin-Aktion — Index-Erstellung, Schlüsselausstellung, Mitglieder-Einladung — wird mit Akteur-Identität, Zeitstempel und Org-Kontext protokolliert.",
+				"title": "Audit-Log"
+			},
+			"disclosure": {
+				"description": "Sicherheitslücke gefunden? E-Mail an security@aacsearch.com. Wir befolgen einen 90-tägigen koordinierten Offenlegungszeitplan und nennen alle Melder.",
+				"title": "Verantwortungsvolle Offenlegung"
 			}
 		}
 	},

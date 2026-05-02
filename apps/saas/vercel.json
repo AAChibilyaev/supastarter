@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/search-flush",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/expire-reservations",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/reconcile-tochka-topups",
+      "schedule": "*/15 * * * *"
+    }
+  ]
+}

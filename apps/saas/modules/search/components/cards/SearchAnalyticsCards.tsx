@@ -105,6 +105,11 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 		Array.isArray(analyticsData?.zeroResultQueries) &&
 		analyticsData!.zeroResultQueries.length > 0;
 
+	const latencyP50 = analyticsData?.latencyP50 ?? null;
+	const latencyP95 = analyticsData?.latencyP95 ?? null;
+	const latencyP99 = analyticsData?.latencyP99 ?? null;
+	const hasLatencyData = latencyP50 !== null || latencyP95 !== null || latencyP99 !== null;
+
 	// ── Chart data ────────────────────────────────────────────────────
 
 	const chartData = useMemo(() => {
@@ -229,6 +234,36 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 					)}
 				</StatsTile>
 			</div>
+
+			{/* Query Performance card */}
+			<Card>
+				<CardHeader>
+					<CardTitle>{t("search.analytics.queryPerformance")}</CardTitle>
+				</CardHeader>
+				<CardContent>
+					{hasLatencyData ? (
+						<div className="gap-4 grid grid-cols-3">
+							{[
+								{ label: t("search.analytics.latencyP50"), value: latencyP50 },
+								{ label: t("search.analytics.latencyP95"), value: latencyP95 },
+								{ label: t("search.analytics.latencyP99"), value: latencyP99 },
+							].map(({ label, value }) => (
+								<div key={label} className="gap-1 flex flex-col items-center">
+									<span className="text-xs text-muted-foreground">{label}</span>
+									<span className="text-2xl font-semibold tabular-nums">
+										{value !== null ? value : "—"}
+									</span>
+									<span className="text-xs text-muted-foreground">ms</span>
+								</div>
+							))}
+						</div>
+					) : (
+						<p className="text-sm text-muted-foreground">
+							{t("search.analytics.noLatencyData")}
+						</p>
+					)}
+				</CardContent>
+			</Card>
 
 			{/* Searches over time chart */}
 			{chartData.length > 0 && (

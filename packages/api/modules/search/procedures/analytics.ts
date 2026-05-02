@@ -31,6 +31,9 @@ export const analytics = protectedProcedure
 			),
 			ctr: z.number(),
 			searchesOverTime: z.array(z.object({ date: z.string(), count: z.number() })),
+			latencyP50: z.number().nullable(),
+			latencyP95: z.number().nullable(),
+			latencyP99: z.number().nullable(),
 		}),
 	)
 	.handler(async ({ input: { organizationId, period }, context: { user } }) => {
@@ -129,6 +132,21 @@ export const analytics = protectedProcedure
 			.sort(([a], [b]) => a.localeCompare(b))
 			.map(([date, count]) => ({ date, count }));
 
+		// ── Latency percentiles (p50/p95/p99) ──
+		type LatencyRow = { p50: number | null; p95: number | null; p99: number | null };
+		const latencyRows = await db.$queryRaw<LatencyRow[]>`
+			SELECT
+				percentile_cont(0.5)  WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p50,
+				percentile_cont(0.95) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p95,
+				percentile_cont(0.99) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p99
+			FROM search_usage_event
+			WHERE organization_id = ${organizationId}
+			  AND type = 'search_query'
+			  AND created_at >= ${since}
+			  AND metadata->>'latencyMs' IS NOT NULL
+		`;
+		const latency = latencyRows[0] ?? { p50: null, p95: null, p99: null };
+
 		return {
 			totalSearches,
 			totalSessions,
@@ -137,5 +155,8 @@ export const analytics = protectedProcedure
 			topClickedProducts,
 			ctr,
 			searchesOverTime,
+			latencyP50: latency.p50 !== null ? Math.round(latency.p50) : null,
+			latencyP95: latency.p95 !== null ? Math.round(latency.p95) : null,
+			latencyP99: latency.p99 !== null ? Math.round(latency.p99) : null,
 		};
 	});

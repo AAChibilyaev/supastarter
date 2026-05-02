@@ -995,7 +995,12 @@
 			"retentionBanner": "Votre plan {plan} conserve les données analytiques pendant {days} jours. Sélectionnez une période plus courte pour voir les données.",
 			"noData": "Aucune donnée disponible pour cette période.",
 			"noDataDescription": "Les données analytiques apparaîtront une fois que vos index de recherche commenceront à recevoir des requêtes.",
-			"freePlan": "Gratuit"
+			"freePlan": "Gratuit",
+			"queryPerformance": "Performance des requêtes",
+			"latencyP50": "p50",
+			"latencyP95": "p95",
+			"latencyP99": "p99",
+			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche."
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

@@ -983,7 +983,12 @@
 			"retentionBanner": "Ihr {plan}-Plan behält Analysedaten für {days} Tage. Wählen Sie einen kürzeren Zeitraum, um Daten zu sehen.",
 			"noData": "Keine Daten fur diesen Zeitraum verfugbar.",
 			"noDataDescription": "Analysedaten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
-			"freePlan": "Kostenlos"
+			"freePlan": "Kostenlos",
+			"queryPerformance": "Abfrage-Performance",
+			"latencyP50": "p50",
+			"latencyP95": "p95",
+			"latencyP99": "p99",
+			"noLatencyData": "Latenzdaten erscheinen nach der Verarbeitung von Suchanfragen."
 		},
 		"widget": {
 			"tab": "Widget",

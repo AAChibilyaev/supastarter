@@ -110,7 +110,7 @@ class Client
     }
 
     /**
-     * DELETE /api/connector/documents (batch)
+     * DELETE /connector/documents (batch, relative to apiUrl which already includes /api)
      *
      * Enqueues up to 500 external IDs per request for deletion.
      * Automatically chunks larger arrays.
@@ -126,7 +126,7 @@ class Client
 
         $total = 0;
         foreach (array_chunk($externalIds, 500) as $chunk) {
-            $result = $this->deleteWithBody('/api/connector/documents', ['externalIds' => $chunk]);
+            $result = $this->deleteWithBody('/connector/documents', ['externalIds' => $chunk]);
             if (isset($result['error'])) {
                 return $result;
             }

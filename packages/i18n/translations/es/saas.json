@@ -982,7 +982,12 @@
 			"retentionBanner": "Su plan {plan} conserva los datos analíticos durante {days} días. Seleccione un período más corto para ver los datos.",
 			"noData": "No hay datos disponibles para este periodo.",
 			"noDataDescription": "Los datos analíticos aparecerán una vez que tus índices de búsqueda comiencen a recibir consultas.",
-			"freePlan": "Gratis"
+			"freePlan": "Gratis",
+			"queryPerformance": "Rendimiento de consultas",
+			"latencyP50": "p50",
+			"latencyP95": "p95",
+			"latencyP99": "p99",
+			"noLatencyData": "Los datos de latencia aparecerán después de procesar consultas de búsqueda."
 		},
 		"widget": {
 			"tab": "Widget",

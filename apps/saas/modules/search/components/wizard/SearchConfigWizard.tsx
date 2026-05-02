@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
-import { cn } from "@repo/ui/lib/utils";
+import { Button, Card, CardContent, cn } from "@repo/ui";
 import { CheckIcon, FileUpIcon, Settings2Icon, Table2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -277,9 +275,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 	};
 
 	const toggleField = (idx: number, key: "facet" | "sort" | "index") => {
-		const updated = fields.map((f, i) =>
-			i === idx ? { ...f, [key]: !f[key as keyof typeof f] } : f,
-		);
+		const updated = fields.map((f, i) => (i === idx ? { ...f, [key]: !f[key] } : f));
 		onChange(updated);
 	};
 
@@ -386,7 +382,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 	);
 }
 
-// ─── Step 3: Search Config ───────────────────────────────────────────────────
+// ─── Step 3: Search Config ──────────────────────────────────────────────────
 
 interface StepSearchConfigProps {
 	fields: Array<{ name: string; type: string }>;
@@ -422,7 +418,7 @@ function StepSearchConfig({
 		onChange({ fieldWeights: { ...fieldWeights, [fieldName]: weight } });
 	};
 
-	const stringFields = fields.filter((f) => f.type === "string" || f.type.startsWith("string"));
+	const stringFields = fields.filter((f) => f.type === "string" || f.type.startsWith("string["));
 
 	return (
 		<div className="space-y-6">

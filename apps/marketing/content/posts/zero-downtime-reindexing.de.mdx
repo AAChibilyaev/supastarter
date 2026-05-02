@@ -1,0 +1,132 @@
+---
+title: "Zero-Downtime-Reindexierung: Wie AACSearch die Suche bei Schema-Änderungen am Laufen hält"
+date: 2025-05-22
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Schema-Änderungen und vollständige Reindexierungen sind die gefährlichsten Operationen in einer Such-Infrastruktur. Hier erklärt, wie AACSearch diese mit atomaren Alias-Wechseln und null Suchausfall bewältigt.
+tags: [technical, reindexing, architecture, typesense]
+published: true
+---
+
+Wer schon einmal eine Such-Infrastruktur in größerem Maßstab betrieben hat, kennt diesen Moment des Grauens: Das Index-Schema muss geändert werden, was eine vollständige Reindexierung erfordert – und das bedeutet entweder, dass die Suche ausfällt oder zwei Systeme parallel laufen müssen, mit manuellem Umschalten.
+
+Es gibt keine einfache Lösung – es sei denn, man hat eine alias-basierte Zero-Downtime-Reindexierung gebaut. AACSearch hat das getan. Hier ist genau, wie es funktioniert.
+
+## Das Problem mit traditioneller Reindexierung
+
+Ein Suchindex hat ein Schema: Feldnamen, Typen, Indexierungsstrategien und Sortierkonfigurationen. Wenn dieses Schema geändert werden muss – ein Feld hinzufügen, einen Feldtyp ändern, die Facettenkonfiguration aktualisieren – erfordert Typesense (und die meisten Suchmaschinen), dass die Collection gelöscht und neu erstellt wird.
+
+Der naive Ansatz:
+
+1. Die vorhandene Collection löschen
+2. Eine neue mit dem aktualisierten Schema erstellen
+3. Alle Dokumente neu importieren
+4. Die Anwendung so aktualisieren, dass sie auf die neue Collection zeigt
+
+Schritt 3 ist das Problem. Bei einem Katalog mit einer Million Dokumenten dauert das 5–15 Minuten. Während dieser Zeit liefert die Suche entweder keine Ergebnisse (Collection gelöscht) oder veraltete Ergebnisse aus dem alten Schema zurück.
+
+## Die Lösung: Versionierte Collections + Alias-Wechsel
+
+AACSearch verwendet ein Muster, das von Blue-Green-Deployments in Datenbanken bekannt ist: versionierte Collections mit einer Alias-Schicht.
+
+Jeder Suchindex in AACSearch entspricht einer Typesense-Collection mit folgendem Namen:
+
+```
+{orgShortId}_{indexSlug}_v{version}
+```
+
+Zum Beispiel `abc123_products_v1`.
+
+Wenn eine Index mit dem Namen `products` in der Organisation erstellt wird, legt AACSearch an:
+
+- Die Collection: `abc123_products_v1`
+- Einen Alias: `abc123_products` → `abc123_products_v1`
+
+Die Anwendung fragt immer den Alias ab, nie die versionierte Collection direkt. Der Alias ist ein Zeiger – er verweist auf die aktuell aktive Collection-Version.
+
+## Der Reindexierungs-Ablauf
+
+Wenn eine Reindexierung ausgelöst wird (über das Dashboard oder die API), passiert Folgendes:
+
+**Schritt 1: Neue Collection erstellen**
+
+AACSearch erstellt `abc123_products_v2` mit dem aktualisierten Schema. Die bestehende `abc123_products_v1` bleibt unverändert. Die Suche wird weiterhin aus `v1` über den Alias bedient.
+
+**Schritt 2: Neue Collection befüllen**
+
+Alle Dokumente aus dem Ingest-Buffer werden in `v2` gestreamt. Bei einem Katalog mit 500.000 Dokumenten dauert das 2–4 Minuten. Während dieser gesamten Zeit fragt die Anwendung weiterhin `v1` ab – die Suche ist aktiv und liefert aktuelle Ergebnisse.
+
+**Schritt 3: Verifizierung**
+
+Vor dem Alias-Wechsel führt AACSearch einen Verifizierungsschritt durch: Es wird geprüft, ob `v2` mindestens die erwartete Dokumentanzahl erhalten hat (mit einer 5%-Toleranz für Löschungen seit dem Start der Reindexierung). Schlägt die Verifizierung fehl – aufgrund eines Ingest-Fehlers oder Netzwerkproblems – wird die Reindexierung abgebrochen und `v1` bleibt aktiv. Kein Ausfall, keine unvollständigen Daten.
+
+**Schritt 4: Atomarer Alias-Wechsel**
+
+Nach erfolgreich bestandener Verifizierung wechselt AACSearch den Alias atomar:
+
+```
+abc123_products → abc123_products_v2
+```
+
+Ab diesem Zeitpunkt treffen alle neuen Suchanfragen auf `v2`. Der Wechsel dauert Mikrosekunden – es gibt keinen Moment, in dem der Alias auf nichts zeigt.
+
+**Schritt 5: Aufräumen**
+
+`v1` bleibt für einen konfigurierbaren Aufbewahrungszeitraum am Leben (Standard: bis zur nächsten erfolgreichen Reindexierung). Dies dient als sofortiges Rollback-Ziel: Wenn mit `v2` etwas nicht stimmt, kann der Alias manuell zurück auf `v1` gesetzt werden – ohne eine weitere vollständige Reindexierung.
+
+## Was eine Reindexierung auslöst
+
+Drei Ereignisse lösen eine Reindexierung in AACSearch aus:
+
+**Schema-Änderungen**: Wenn das Index-Schema aktualisiert wird (Feld hinzufügen, Facettenkonfiguration ändern, Suchgewichtungen aktualisieren), ist eine Reindexierung erforderlich, um die Änderungen auf vorhandene Dokumente anzuwenden. AACSearch stellt dies automatisch in die Warteschlange.
+
+**Manuelle Reindexierung**: Eine Reindexierung kann manuell über das Dashboard (Index → Reindizieren) oder die API ausgelöst werden. Nützlich, wenn umfangreiche Änderungen am Produktkatalog mit aktualisierten Scores neu gerankt werden sollen.
+
+**Connector-initiierte Reindexierung**: Wenn ein CMS-Connector eine vollständige Synchronisierung durchführt und die Dokumentanzahl sich erheblich ändert (>20% gegenüber der aktuellen Collection), kann AACSearch automatisch eine Reindexierung einleiten, um die Konsistenz sicherzustellen.
+
+## Ingest während der Reindexierung
+
+Ein wichtiges Detail für stark frequentierte Shops: Was passiert mit neuen Produkt-Updates, während die Reindexierung läuft?
+
+AACSearch verwendet einen DB-First-Ingest-Buffer. Wenn ein Dokument an AACSearch gesendet wird (über Connector oder API), wird es zunächst in eine PostgreSQL-Warteschlange geschrieben. Ein Hintergrund-Worker verarbeitet dann die Warteschlange und sendet Dokumente an Typesense.
+
+Während einer Reindexierung werden eingehende Dokumente wie gewohnt in die Warteschlange geschrieben. Der Reindexierungs-Worker liest aus derselben Warteschlange und befüllt `v2`. Nach dem Alias-Wechsel pusht der Ingest-Worker weiterhin Updates nach `v2`. Es gehen keine Dokumente verloren, und das Fenster potenziell veralteter Daten ist auf die Dauer der Reindexierung begrenzt.
+
+## Der Rollback-Fall
+
+Was passiert, wenn nach dem Alias-Wechsel etwas schiefgeht? Vielleicht hat `v2` einen Schema-Fehler, der sich nur bei bestimmten Anfragen zeigt.
+
+Da `v1` am Leben gehalten wird, ist der Rollback-Pfad schnell:
+
+1. Das Problem erkennen (über Analytics, Fehlerrate oder manuelle Prüfung)
+2. Den Alias zurücksetzen: `abc123_products → abc123_products_v1`
+3. Den Schema-Fehler in `v2` beheben
+4. Die Reindexierung erneut ausführen, um `v3` zu erstellen und vorwärts zu wechseln
+
+Für den Rollback ist kein vollständiger Re-Import erforderlich – es wird nur der Zeiger umgeschaltet.
+
+## Reindexierung per API auslösen
+
+Für automatisierte Deployments, bei denen eine Reindexierung programmatisch ausgelöst werden soll:
+
+```bash
+curl -X POST https://app.aacsearch.com/api/rpc/search.reindex \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexId": "YOUR_INDEX_ID" }'
+```
+
+Die Antwort enthält eine `jobId`, mit der der Status abgefragt werden kann. Der Job läuft asynchron ab – die Deployment-Pipeline sollte nicht darauf warten, es sei denn, schema-abhängige Features müssen vor dem Release der Anwendung live sein.
+
+## Zusammenfassung
+
+Zero-Downtime-Reindexierung ist kein Zauberwerk – sie ist eine Folge der Trennung von logischem Namen (dem Alias) und der physischen Collection. AACSearch handhabt dies automatisch, sodass man nie darüber nachdenken muss:
+
+- Schema-Änderungen → Reindexierung wird automatisch ausgelöst
+- Reindexierung läuft gegen eine neue versionierte Collection
+- Alias wechselt atomar, wenn bereit
+- Alte Version wird für Rollback aufbewahrt
+- Ingest läuft während der Reindexierung ohne Datenverlust weiter
+
+Das nächste Mal, wenn ein Facetten-Feld hinzugefügt oder eine Suchgewichtung geändert werden muss, fällt nur eine etwas höhere Dokumentanzahl im Dashboard auf – kein Suchausfall.

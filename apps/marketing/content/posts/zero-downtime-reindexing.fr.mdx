@@ -1,0 +1,132 @@
+---
+title: "Réindexation sans Interruption : Comment AACSearch Maintient la Recherche Active lors des Changements de Schéma"
+date: 2025-05-22
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Les changements de schéma et la réindexation complète sont les opérations les plus risquées d'une infrastructure de recherche. Voici comment AACSearch les gère avec zéro interruption grâce aux échanges atomiques d'alias.
+tags: [technical, reindexing, architecture, typesense]
+published: true
+---
+
+Si vous avez déjà exploité une infrastructure de recherche à grande échelle, vous connaissez ce moment d'appréhension : vous devez modifier le schéma de votre index, ce qui implique une réindexation complète, ce qui signifie soit que la recherche est indisponible, soit que vous faites tourner deux systèmes en parallèle avec une bascule manuelle.
+
+Il n'existe pas de bonne solution — sauf si vous avez construit une réindexation sans interruption basée sur des alias. C'est exactement ce qu'a fait AACSearch. Voici comment cela fonctionne en détail.
+
+## Le Problème de la Réindexation Traditionnelle
+
+Un index de recherche possède un schéma : noms de champs, types, stratégies d'indexation et configurations de tri. Lorsque vous devez modifier ce schéma — ajouter un champ, changer un type de champ, mettre à jour la configuration des facettes — Typesense (et la plupart des moteurs de recherche) exige de supprimer et recréer la collection.
+
+L'approche naïve :
+
+1. Supprimer la collection existante
+2. En créer une nouvelle avec le schéma mis à jour
+3. Réimporter tous les documents
+4. Mettre à jour l'application pour pointer vers la nouvelle collection
+
+L'étape 3 est le problème. Pour un catalogue d'un million de documents, cela prend 5 à 15 minutes. Pendant ce temps, la recherche ne retourne aucun résultat (collection supprimée) ou des résultats obsolètes issus de l'ancien schéma.
+
+## La Solution : Collections Versionnées + Échange d'Alias
+
+AACSearch utilise un pattern inspiré des déploiements blue-green en base de données : des collections versionnées avec une couche d'alias.
+
+Chaque index de recherche dans AACSearch correspond à une collection Typesense nommée :
+
+```
+{orgShortId}_{indexSlug}_v{version}
+```
+
+Par exemple, `abc123_products_v1`.
+
+Lorsque vous créez un index nommé `products` dans votre organisation, AACSearch crée :
+
+- La collection : `abc123_products_v1`
+- Un alias : `abc123_products` → `abc123_products_v1`
+
+Votre application interroge toujours l'alias, jamais la collection versionnée directement. L'alias est un pointeur — il résout vers la version de collection actuellement active.
+
+## Le Déroulement de la Réindexation
+
+Lorsque vous déclenchez une réindexation (via le tableau de bord ou l'API), voici exactement ce qui se passe :
+
+**Étape 1 : Création de la nouvelle collection**
+
+AACSearch crée `abc123_products_v2` avec le schéma mis à jour. La collection `abc123_products_v1` existante n'est pas touchée. La recherche continue d'être servie depuis `v1` via l'alias.
+
+**Étape 2 : Remplissage de la nouvelle collection**
+
+Tous les documents du buffer d'ingestion sont streamés dans `v2`. Pour un catalogue de 500 000 documents, cela prend 2 à 4 minutes. Pendant toute cette durée, votre application continue d'interroger `v1` — la recherche est active et retourne des résultats à jour.
+
+**Étape 3 : Vérification**
+
+Avant l'échange d'alias, AACSearch exécute une étape de vérification : elle s'assure que `v2` a reçu au moins le nombre de documents attendu (avec une marge de 5% pour tenir compte des suppressions survenues depuis le début de la réindexation). Si la vérification échoue — en raison d'une erreur d'ingestion ou d'un problème réseau — la réindexation est annulée et `v1` reste active. Aucune interruption, aucune donnée partielle.
+
+**Étape 4 : Échange atomique d'alias**
+
+Une fois la vérification réussie, AACSearch effectue l'échange d'alias de manière atomique :
+
+```
+abc123_products → abc123_products_v2
+```
+
+À partir de ce moment, toutes les nouvelles requêtes de recherche frappent `v2`. L'échange prend des microsecondes — il n'existe aucune fenêtre où l'alias ne pointe vers rien.
+
+**Étape 5 : Nettoyage**
+
+`v1` est conservée pendant une période de rétention configurable (par défaut : jusqu'à la prochaine réindexation réussie). Cela constitue une cible de rollback instantané : si quelque chose semble anormal dans `v2`, vous pouvez manuellement rebasculer l'alias vers `v1` sans avoir à relancer une réindexation complète.
+
+## Ce qui Déclenche une Réindexation
+
+Trois événements déclenchent une réindexation dans AACSearch :
+
+**Changements de schéma** : Lorsque vous mettez à jour le schéma de votre index (ajouter un champ, modifier la configuration des facettes, mettre à jour les poids de recherche), une réindexation est nécessaire pour appliquer les modifications aux documents existants. AACSearch planifie cela automatiquement.
+
+**Réindexation manuelle** : Vous pouvez déclencher une réindexation depuis le tableau de bord (Index → Réindexer) ou via l'API. Utile lorsque vous avez effectué des modifications massives dans votre catalogue produit qui doivent être reclassées avec un scoring mis à jour.
+
+**Réindexation initiée par un connecteur** : Lorsqu'un connecteur CMS effectue une synchronisation complète et que le nombre de documents change significativement (>20% par rapport à la collection actuelle), AACSearch peut lancer une réindexation automatique pour garantir la cohérence.
+
+## Ingestion Pendant la Réindexation
+
+Voici un détail important pour les boutiques à fort trafic : que se passe-t-il avec les nouvelles mises à jour de produits pendant que la réindexation est en cours ?
+
+AACSearch utilise un buffer d'ingestion DB-first. Lorsque vous envoyez un document à AACSearch (via un connecteur ou l'API), il est d'abord écrit dans une file d'attente PostgreSQL. Un worker en arrière-plan traite ensuite la file et envoie les documents à Typesense.
+
+Pendant une réindexation, les documents entrants sont écrits dans la file comme d'habitude. Le worker de réindexation lit depuis la même file et peuple `v2`. Après l'échange d'alias, le worker d'ingestion continue de pousser des mises à jour vers `v2`. Aucun document n'est perdu, et la fenêtre de données potentiellement obsolètes est bornée par la durée de la réindexation.
+
+## Le Scénario de Rollback
+
+Que se passe-t-il si quelque chose tourne mal après l'échange d'alias ? Peut-être que `v2` présente un bug de schéma qui ne se manifeste que sur certaines requêtes.
+
+Comme `v1` est conservée, le chemin de rollback est rapide :
+
+1. Détecter le problème (via l'analytics, le taux d'erreur ou une revue manuelle)
+2. Rebasculer l'alias : `abc123_products → abc123_products_v1`
+3. Corriger le problème de schéma dans `v2`
+4. Relancer la réindexation pour créer `v3` et avancer
+
+Aucune réimportation complète n'est nécessaire pour le rollback — vous changez simplement le pointeur.
+
+## Comment Déclencher une Réindexation via l'API
+
+Si vous automatisez vos déploiements et souhaitez déclencher une réindexation de manière programmatique :
+
+```bash
+curl -X POST https://app.aacsearch.com/api/rpc/search.reindex \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexId": "YOUR_INDEX_ID" }'
+```
+
+La réponse inclut un `jobId` que vous pouvez interroger pour connaître l'avancement. Le job se complète de manière asynchrone — ne bloquez pas votre pipeline de déploiement en attendant sa fin, sauf si vous avez besoin que les fonctionnalités dépendantes du schéma soient actives avant de publier votre application.
+
+## Résumé
+
+La réindexation sans interruption n'est pas de la magie — c'est la conséquence directe de la séparation entre le nom logique (l'alias) et la collection physique. AACSearch gère tout cela automatiquement afin que vous n'ayez jamais à y penser :
+
+- Changements de schéma → réindexation déclenchée automatiquement
+- La réindexation s'exécute sur une nouvelle collection versionnée
+- L'alias est échangé atomiquement dès que la collection est prête
+- L'ancienne version est conservée pour un éventuel rollback
+- L'ingestion continue pendant la réindexation sans perte de données
+
+La prochaine fois que vous devrez ajouter un champ de facette ou modifier un poids de recherche, la seule chose que vous remarquerez sera un nombre de documents légèrement plus élevé dans le tableau de bord — et non une interruption de la recherche.

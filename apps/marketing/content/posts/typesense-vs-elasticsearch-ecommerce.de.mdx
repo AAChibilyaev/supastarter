@@ -1,0 +1,132 @@
+---
+title: "Typesense vs Elasticsearch für E-Commerce-Suche: Was sollten Sie wählen?"
+date: 2025-05-29
+image: https://picsum.photos/id/55/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Elasticsearch ist der Industriestandard. Typesense ist der schnelle, fokussierte Herausforderer. Für E-Commerce-Suche im Speziellen — welche Engine gewinnt und wann eine verwaltete Option wie AACSearch beide obsolet macht.
+tags: [comparison, typesense, elasticsearch, ecommerce, search]
+published: true
+---
+
+Die zwei häufigsten Antworten auf „Welche Suchmaschine sollte ich für E-Commerce verwenden?" sind Elasticsearch und Typesense. Beide sind exzellente Softwarelösungen, die verwandte, aber unterschiedliche Probleme lösen. Die falsche Wahl für Ihren Kontext kostet Wochen an Engineering-Zeit.
+
+Hier ist der direkte Vergleich für E-Commerce-Anwendungsfälle — und eine ehrliche Einschätzung, wann Sie überhaupt nicht über Engines nachdenken sollten.
+
+## Wofür jede Engine optimiert ist
+
+**Elasticsearch** wurde für Log-Aggregation und Full-Text-Analytics im großen Maßstab entwickelt. Shopify, GitHub und Uber nutzen es, um Terabytes an Logs zu durchsuchen. Das Datenmodell (invertierter Index + BKD-Baum für Numerics), die Aggregations-Pipeline und die verteilte Architektur sind für diese Workloads optimiert. E-Commerce-Suche ist etwas, das es kann — aber nicht das, wofür es primär konzipiert wurde.
+
+**Typesense** wurde von Grund auf für interaktive Suche entwickelt. Die Frage, die es beantworten sollte: Wie liefert man relevante Ergebnisse in unter 50ms für einen Katalog mit 10 Millionen Produkten mit Tippfehlertoleranz, facettierter Navigation und individuellem Ranking? Alles in seiner Architektur — der In-Memory-Suchindex, die C++-Implementierung, das Schema-First-Collection-Modell — ergibt sich aus dieser Anforderung.
+
+Für E-Commerce-Produktsuche im Speziellen gewinnt Typesense das Architektur-Passform-Argument durch Design.
+
+## Performance
+
+### Query-Latenz
+
+| Engine        | Typisches p50 | Typisches p99 | Bei 1M Dokumenten |
+| ------------- | ------------- | ------------- | ----------------- |
+| Typesense     | 2–10ms        | 15–30ms       | 5–20ms            |
+| Elasticsearch | 20–50ms       | 100–200ms     | 50–150ms          |
+
+Diese Zahlen stammen aus veröffentlichten Benchmarks bei vergleichbaren Hardware-Tiers. Typesenses In-Memory-Index ist der Hauptgrund: Der gesamte Suchindex liegt im RAM, sodass es keinen Disk-I/O auf dem Hot Path gibt. Elasticsearch verwendet einen festplattengestützten Index mit OS-Page-Cache; im großen Maßstab führt dies zu Latenzvarianzen.
+
+Bei einem Search-as-you-type-Widget, bei dem jeder Tastendruck eine Anfrage auslöst, ist dieser Unterschied spürbar. Nutzer erleben Typesense-Anfragen als sofort; Elasticsearch-Anfragen als schnell (immer noch ausgezeichnet, aber messbar langsamer).
+
+### Indexierungs-Durchsatz
+
+Elasticsearch hat einen höheren rohen Indexierungs-Durchsatz für sehr große Kataloge (10M+ Dokumente). Seine verteilte Architektur ermöglicht horizontales Sharding über Knoten. Typesense ist standardmäßig Single-Node — bei sehr hohen Dokumentzahlen stoßen Sie an Speichergrenzen, bevor Sie an Durchsatzgrenzen stoßen.
+
+Für typische E-Commerce-Kataloge (10K–2M Produkte) ist keine Engine der Engpass. Bei 5M+ Dokumenten beginnt Elasticsearchs horizontale Skalierung relevant zu werden.
+
+## Betriebskomplexität
+
+Hier wird der Vergleich für die meisten Teams schmerzhaft.
+
+**Elasticsearch** erfordert dediziertes Betriebs-Fachwissen:
+
+- Cluster-Sizing: Master-Nodes, Data-Nodes, Coordinating-Nodes
+- Shard-Management: Anzahl der Shards, Shard-Rebalancing nach der Skalierung
+- JVM-Tuning: Heap-Größe, GC-Konfiguration
+- Index-Lifecycle-Management: Hot/Warm/Cold-Daten-Tiers
+- Snapshot und Restore: Backup-Strategie für Multi-Terabyte-Indizes
+- Sicherheit: X-Pack, rollenbasierte Zugriffskontrolle, TLS-Konfiguration
+
+Elasticsearch gut zu betreiben ist ein Vollzeitjob. Teams, die es schlecht betreiben, stoßen auf Split-Brain-Probleme, OOM-Fehler, langsame Anfragen durch überdimensionierte Shards und Replikationsverzögerungen, die zu veralteten Ergebnissen führen.
+
+**Typesense** ist dramatisch einfacher:
+
+- Einzelnes Binary (oder Docker-Image)
+- Konfiguration ist minimal: API-Key, Datenverzeichnis, Port
+- Schema wird pro Collection in JSON definiert
+- Backup ist eine einzelne Verzeichniskopie
+
+Ein Entwickler ohne Elasticsearch-Erfahrung kann Typesense an einem Nachmittag in der Produktion betreiben. Das ist ein Feature, keine Einschränkung.
+
+## Feature-Vergleich für E-Commerce
+
+| Feature                    | Typesense                 | Elasticsearch                                              |
+| -------------------------- | ------------------------- | ---------------------------------------------------------- |
+| Tippfehlertoleranz         | Nativ, konfigurierbar     | Über Fuzzy-Query (komplexer)                               |
+| Präfix-Suche               | Nativ                     | Über Edge-N-Gram (manuelle Konfiguration nötig)            |
+| Facettierte Navigation     | Nativ (facet_by)          | Über Aggregationen (mächtiger, komplexer)                  |
+| Geo-Suche                  | Nativ                     | Nativ                                                      |
+| Individuelles Ranking      | Nativ (sort_by)           | Über Function-Score-Query                                  |
+| Synonyme                   | Nativ                     | Über Synonym-Token-Filter                                  |
+| Kuratierungen/Pinning      | Nativ                     | Nicht nativ (erfordert Anwendungslogik)                    |
+| Machine-Learning-Ranking   | Über Typesense Rules      | Über Elasticsearch Learning to Rank (LTR)                  |
+| Echtzeit-Indexierung       | Nativ                     | Nahezu-Echtzeit (1-Sekunden-Refresh-Intervall)             |
+| Mehrsprachige Suche        | 8 Sprachen                | Vollständige Sprachanalyse-Suite                           |
+
+Für Standard-E-Commerce-Produktsuche — Namensabgleich, Kategoriefilterung, Preissortierung, facettierte Navigation — deckt Typesense alles ab, was Sie benötigen, mit einfacherer Konfiguration. Elasticsearchs tiefergehende Features (verschachtelte Aggregationen, Learning to Rank, mehrsprachige Analyzer) werden für komplexere Anwendungsfälle relevant: Marktplatzsuche mit komplexen Attributhierarchien, ML-gestützte Personalisierung oder Multi-Tenant-Kataloge mit komplexer Zugriffskontrolle.
+
+## Kosten
+
+### Self-Hosted
+
+Typesense ist speichereffizienter als Elasticsearch für Katalogsuch-Workloads. Ein Katalog mit 1 Million Produkten benötigt ungefähr:
+
+- **Typesense**: 2–4GB RAM (abhängig von Feldanzahl und Textlänge)
+- **Elasticsearch**: 8–16GB RAM (JVM-Overhead + OS-Page-Cache + Segment-Speicher)
+
+Zu Cloud-Preisen kann Typesense produktiv auf einem 20$/Monat-VPS betrieben werden. Elasticsearch benötigt typischerweise eine 80–200$/Monat-Instanz für äquivalente Kataloggröße.
+
+### Verwaltete Dienste
+
+| Option        | Self-Hosted                             | Verwaltet                                                           |
+| ------------- | --------------------------------------- | ------------------------------------------------------------------- |
+| Typesense     | Kostenlos (Open-Source)                 | Typesense Cloud (nutzungsbasiert) oder AACSearch                    |
+| Elasticsearch | Kostenlos (Open-Source, Basic-Features) | Elastic Cloud (ab 95$/Monat), AWS OpenSearch (ab 50$/Monat)         |
+
+Elastic Clouds Preise für einen produktiven E-Commerce-Workload beginnen bei 150–400$/Monat. AACSearch (Typesense-basiert) beginnt bei 29$/Monat für 1M Such-Einheiten.
+
+## Wann Sie welche wählen sollten
+
+**Wählen Sie Typesense (oder AACSearch), wenn:**
+
+- Sie E-Commerce-Produktsuche aufbauen (der primäre Anwendungsfall, für den es entwickelt wurde)
+- Sie die Suche in Tagen, nicht Wochen, zum Laufen bringen möchten
+- Sie PrestaShop oder Bitrix mit einem Standard-Produktkatalog betreiben
+- Budget eine Rolle spielt — Sie können 400+$/Monat für Elastic Cloud nicht rechtfertigen
+- Ihr Team keine dedizierten Such-Infrastruktur-Experten hat
+
+**Wählen Sie Elasticsearch, wenn:**
+
+- Sie Terabytes an Log-Daten oder Event-Streams durchsuchen müssen (der ursprüngliche Anwendungsfall)
+- Sie komplexe verschachtelte Aggregationen benötigen (z.B. Marktplatzsuche mit tief verschachtelten Attributen)
+- Sie ML-gestütztes Ranking benötigen (Learning to Rank Plugin)
+- Ihr Team bereits Elasticsearch-Expertise hat
+- Sie auf einer Plattform sind, wo Elasticsearch bereits Teil Ihrer Infrastruktur ist (z.B. ELK-Stack für Observability)
+
+## Die verwaltete Option: Warum die Engine-Wahl sekundär wird
+
+Hier ist, was wir am häufigsten sehen: Teams verbringen Wochen damit, Typesense vs Elasticsearch zu evaluieren, stellen die Infrastruktur auf, schreiben die Sync-Scripts, und verbringen dann weitere Monate damit, sie zu warten. Sechs Monate später haben sie 200+ Engineering-Stunden in Such-Infrastruktur statt in Produkt-Features investiert.
+
+Für E-Commerce im Speziellen ist die Engine-Wahl weit weniger wichtig als das Betriebsmodell. AACSearch betreibt Typesense im Hintergrund und verwaltet alles: Cluster-Bereitstellung, Schema-Migrationen, Reindexierung, Sync aus Ihrem CMS, Monitoring und das Such-Widget. Sie erhalten Typesenses Performance und Einfachheit, ohne irgendeine Infrastruktur zu betreiben.
+
+Der einzige Grund für Self-Hosting eines der beiden Engines ist, wenn Sie Anforderungen haben, die eine verwaltete Plattform nicht erfüllen kann — extrem hohe Dokumentzahlen, komplexe individuelle Ranking-Logik oder On-Premises-Datenresidenz-Anforderungen.
+
+Für die große Mehrheit der PrestaShop- und Bitrix-Händler ist die richtige Antwort nicht „welche Engine" — sondern „verwaltetes Typesense mit nativen CMS-Konnektoren."
+
+Das ist, was wir entwickelt haben.

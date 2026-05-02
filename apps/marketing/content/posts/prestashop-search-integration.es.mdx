@@ -1,0 +1,139 @@
+---
+title: Cómo añadir búsqueda a tu tienda PrestaShop
+date: 2025-05-15
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: La búsqueda nativa de PrestaShop es limitada. Aquí te mostramos cómo reemplazarla con AACSearch — búsqueda full-text de productos con tolerancia a errores tipográficos, resultados instantáneos y sincronización automática.
+tags: [prestashop, integration, tutorial, ecommerce]
+published: true
+---
+
+PrestaShop incluye un motor de búsqueda básico. Funciona para tiendas sencillas, pero pronto muestra sus limitaciones: sin tolerancia a errores tipográficos, sin coincidencia de prefijos, sin actualizaciones en tiempo real y con una clasificación que ignora las señales de conversión como el ranking de ventas o el margen.
+
+Si los clientes abandonan tu tienda porque no encuentran los productos, o si tu tasa de "sin resultados" supera el 10%, es momento de mejorar.
+
+Este tutorial explica cómo añadir AACSearch a una tienda PrestaShop — desde la instalación del módulo hasta el primer resultado de búsqueda en producción.
+
+## Qué añade AACSearch a PrestaShop
+
+Antes de entrar en la configuración, esto es lo que cambia cuando instalas AACSearch:
+
+- **Resultados instantáneos mientras escribes** — los resultados aparecen en 30–50 ms, antes de que el cliente termine su consulta
+- **Tolerancia a errores tipográficos** — "iphne 15" encuentra iPhone 15; "vestido negr" encuentra vestidos negros
+- **Coincidencia de prefijos** — "inalám" coincide con "auriculares inalámbricos", "teclado inalámbrico", etc.
+- **Sincronización automática** — los cambios de precio, nuevos productos y actualizaciones de stock aparecen en la búsqueda en cuestión de minutos
+- **Clasificación personalizada** — ordena por ventas, margen, nivel de stock o cualquier campo personalizado
+
+El motor de búsqueda nativo de PrestaShop no hace nada de esto de forma fiable.
+
+## Requisitos previos
+
+- PrestaShop 8.x (7.x con soporte parcial)
+- Una cuenta de AACSearch — [regístrate gratis](/)
+- Acceso de administrador al back office de PrestaShop
+- Acceso FTP o gestor de archivos (para subida manual si el marketplace no está disponible)
+
+## Paso 1: Crea tu índice en AACSearch
+
+Inicia sesión en tu panel de AACSearch. Haz clic en **Nuevo índice** y nómbralo `products` (o cualquier nombre que tenga sentido para tu tienda). El índice se crea de inmediato — sin necesidad de configuración en esta etapa.
+
+## Paso 2: Genera un token de conector
+
+En el panel de AACSearch, ve a **Conectores** en la barra lateral izquierda. Haz clic en **Nuevo token**. Asígnale un nombre (por ejemplo, "PrestaShop Producción") y copia el token — lo necesitarás en el Paso 3.
+
+Mantén este token en privado. Tiene acceso de escritura a tu índice y nunca debe aparecer en código del lado del cliente ni en repositorios públicos.
+
+## Paso 3: Instala el módulo de AACSearch
+
+### A través del Marketplace de PrestaShop (recomendado)
+
+En el back office de PrestaShop, ve a **Gestor de módulos** → **Marketplace** y busca "AACSearch". Haz clic en **Instalar**.
+
+### Mediante subida de ZIP
+
+Descarga el ZIP del módulo desde tu panel de AACSearch (en **Conectores** → **Descargar módulo**). En el back office, ve a **Gestor de módulos** → **Subir un módulo** y sube el ZIP.
+
+Tras la instalación, verás la página de configuración de AACSearch. Introduce:
+
+- **Token de conector**: pega el token del Paso 2
+- **Nombre del índice**: introduce el nombre del índice que creaste en el Paso 1 (por ejemplo, `products`)
+
+Haz clic en **Guardar y probar conexión**. Deberías ver un mensaje de éxito en verde con el nombre de tu organización y el recuento de documentos del índice (0 en esta etapa).
+
+## Paso 4: Ejecuta la sincronización inicial
+
+En la página de configuración del módulo de AACSearch, haz clic en **Sincronización completa**. Esto exporta todo tu catálogo de productos — nombres, descripciones, precios, categorías, imágenes, atributos — y lo envía a tu índice de AACSearch.
+
+La sincronización se ejecuta en segundo plano. Para un catálogo de 10.000 productos, normalmente tarda entre 1 y 3 minutos. Puedes seguir el progreso en la pestaña **Trabajos de sincronización** de tu panel de AACSearch.
+
+Cuando finalice la sincronización, el índice mostrará el recuento de documentos. Compruébalo en el Playground del panel: busca el nombre de un producto y confirma que aparecen los resultados.
+
+## Paso 5: Configura la sincronización incremental
+
+Las sincronizaciones completas son para la carga inicial. Para las actualizaciones continuas, configura la sincronización incremental:
+
+En la configuración del módulo, busca **Sincronización automática** y actívala. El intervalo predeterminado es cada 5 minutos — el conector comprueba los productos modificados desde la última sincronización y envía solo los cambios.
+
+Esto significa que cuando actualices un precio, añadas una nueva variante o cambies el estado del stock en PrestaShop, el cambio aparecerá en la búsqueda en menos de 5 minutos. Sin ninguna acción manual.
+
+## Paso 6: Incorpora el widget de búsqueda
+
+El widget de AACSearch reemplaza o complementa el cuadro de búsqueda de PrestaShop. Abre una superposición a pantalla completa con resultados de búsqueda instantáneos.
+
+### Automático (mediante hook del módulo)
+
+En la configuración del módulo, activa **Reemplazar búsqueda predeterminada**. El módulo se integra en el sistema de visualización de PrestaShop e inyecta el widget automáticamente. No es necesario editar plantillas.
+
+### Manual (para temas personalizados)
+
+Si prefieres la colocación manual, copia el fragmento del widget desde tu panel de AACSearch (pestaña **Widget**):
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="{language.iso_code}"
+	async
+></script>
+```
+
+Sustituye `{language.iso_code}` por la variable Smarty de PrestaShop para que el idioma del widget coincida con el idioma de la tienda. Añade este fragmento al `head.tpl` o `footer.tpl` de tu tema.
+
+## Paso 7: Verifica en producción
+
+Limpia la caché de PrestaShop (Parámetros avanzados → Rendimiento → Vaciar caché). Abre tu tienda en una ventana de incógnito y prueba el botón de búsqueda.
+
+Comprueba que:
+
+- Los resultados aparecen mientras escribes
+- La tolerancia a errores tipográficos funciona (`iphne` → iPhone)
+- Las imágenes de los productos se muestran en los resultados
+- Al hacer clic en un resultado te lleva a la página correcta del producto
+
+Si los resultados no aparecen, revisa primero el Playground en tu panel de AACSearch — esto permite aislar si el problema está en el índice (datos) o en el widget (visualización).
+
+## Solución de problemas comunes
+
+**Los productos no aparecen en los resultados tras la sincronización**
+
+Abre el Playground de AACSearch y busca la misma consulta. Si los resultados aparecen allí, el problema está en la configuración del widget (clave de API o ID de índice incorrectos). Si los resultados no aparecen en el Playground, revisa los registros del trabajo de sincronización para detectar errores.
+
+**Los precios aparecen desactualizados**
+
+La sincronización incremental se ejecuta cada 5 minutos de forma predeterminada. Para consultas sensibles al precio, puedes reducir el intervalo a 1 minuto en la configuración del módulo. Iniciar una sincronización incremental manual desde el panel fuerza una actualización inmediata.
+
+**El widget no se muestra**
+
+Revisa la consola del navegador para ver errores de JavaScript. Causas comunes: la Política de Seguridad de Contenido bloquea el script del widget, o un atributo `async` en conflicto. Prueba a añadir `crossorigin="anonymous"` a la etiqueta del script.
+
+## Próximos pasos
+
+Con AACSearch en funcionamiento, la experiencia de búsqueda base ya es notablemente superior al motor nativo de PrestaShop. El siguiente nivel de optimización:
+
+- **Analíticas**: Comprueba qué consultas no devuelven resultados — son productos que los clientes buscan pero no encuentran
+- **Sinónimos**: Añade sinónimos específicos del sector (por ejemplo, "monitor = pantalla = display") en la pestaña de Relevancia
+- **Curations**: Fija los productos de mayor margen para que aparezcan primero en las consultas comerciales
+
+La búsqueda está en marcha. Es hora de empezar a optimizar para la conversión.

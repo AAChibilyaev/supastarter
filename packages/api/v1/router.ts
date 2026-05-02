@@ -13,6 +13,7 @@
  *   PATCH  /v1/indexes/:indexId                 — update index (displayName, enabled)
  *   DELETE /v1/indexes/:indexId                 — delete index + Typesense cleanup
  *   GET    /v1/indexes/:indexId/stats           — index statistics
+ *   GET    /v1/indexes/:indexId/documents                      — list / browse documents
  *   PUT    /v1/indexes/:indexId/documents/:documentId         — upsert doc
  *   POST   /v1/indexes/:indexId/documents:batch               — batch upsert
  *   POST   /v1/indexes/:indexId/documents:batchDelete         — batch delete by IDs

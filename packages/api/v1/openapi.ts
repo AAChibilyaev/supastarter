@@ -298,6 +298,80 @@ export function generateOpenApiSpec() {
 			},
 
 			// ─── Documents ──────────────────────────────────────────────
+			"/indexes/{indexId}/documents": {
+				get: {
+					summary: "List documents",
+					description:
+						"Returns paginated documents from the index. Pass q=* (default) to browse " +
+						"all documents, or a search query to filter results. Requires search scope.",
+					tags: ["Documents"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+						},
+						{
+							name: "q",
+							in: "query",
+							required: false,
+							schema: { type: "string", default: "*" },
+							description: "Search query. Use * to return all documents.",
+						},
+						{
+							name: "page",
+							in: "query",
+							required: false,
+							schema: { type: "integer", minimum: 1, default: 1 },
+						},
+						{
+							name: "perPage",
+							in: "query",
+							required: false,
+							schema: { type: "integer", minimum: 1, maximum: 250, default: 20 },
+						},
+						{
+							name: "filterBy",
+							in: "query",
+							required: false,
+							schema: { type: "string" },
+							description: "Typesense filter expression (e.g. 'price:>100').",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Paginated document list",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											hits: {
+												type: "array",
+												description:
+													"Matched documents (Typesense hit objects)",
+											},
+											found: {
+												type: "integer",
+												description: "Total documents matching the query",
+											},
+											page: { type: "integer" },
+											perPage: { type: "integer" },
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Typesense query failed" },
+					},
+				},
+			},
 			"/indexes/{indexId}/documents/{documentId}": {
 				put: {
 					summary: "Upsert a single document",

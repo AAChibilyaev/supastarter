@@ -1,6 +1,7 @@
 /**
  * V1 Documents endpoints.
  *
+ *   GET    /v1/indexes/:indexId/documents                — list / browse documents
  *   PUT    /v1/indexes/:indexId/documents/:documentId    — upsert single document
  *   POST   /v1/indexes/:indexId/documents:batch           — batch upsert documents
  *   POST   /v1/indexes/:indexId/documents:batchDelete     — batch delete documents by IDs
@@ -14,12 +15,70 @@ import {
 	type Prisma,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { aliasName, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";
 
 import { requireScope } from "./auth";
 
 export const documentsApp = new Hono()
+	// ── List / browse documents ────────────────────────────────────
+	.get("/indexes/:indexId/documents", async (c) => {
+		const gated = await requireScope("search")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		if (indexId !== verified.indexId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const querySchema = z.object({
+			q: z.string().optional().default("*"),
+			page: z.coerce.number().int().min(1).optional().default(1),
+			perPage: z.coerce.number().int().min(1).max(250).optional().default(20),
+			filterBy: z.string().optional(),
+		});
+
+		const parsed = querySchema.safeParse({
+			q: c.req.query("q"),
+			page: c.req.query("page"),
+			perPage: c.req.query("perPage"),
+			filterBy: c.req.query("filterBy"),
+		});
+
+		if (!parsed.success) {
+			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
+		}
+
+		try {
+			const result = await searchDocuments({
+				alias: aliasName(verified.organizationId, verified.indexSlug),
+				tenantId: verified.organizationId,
+				q: parsed.data.q,
+				filterBy: parsed.data.filterBy,
+				perPage: parsed.data.perPage,
+				page: parsed.data.page,
+			});
+
+			void recordSearchUsage({
+				indexId: verified.indexId,
+				organizationId: verified.organizationId,
+				type: "search_query",
+			}).catch((error) => logger.error("Could not record search usage", { error }));
+
+			return c.json({
+				hits: result.hits,
+				found: result.found,
+				page: result.page,
+				perPage: result.perPage,
+			});
+		} catch (error) {
+			logger.error("V1 list documents failed", { error, indexId });
+			return c.json({ error: "search_failed", message: "Failed to retrieve documents" }, 502);
+		}
+	})
+
 	// ── Upsert single document ─────────────────────────────────────
 	.put("/indexes/:indexId/documents/:documentId", async (c) => {
 		const gated = await requireScope("ingest")(c);

@@ -79,7 +79,7 @@ async function gateConnectorRequest(c: Context): Promise<VerifiedConnector | Res
 
 const handshakeSchema = z.object({
 	moduleVersion: z.string(),
-	platform: z.enum(["prestashop", "bitrix"]),
+	platform: z.enum(["prestashop", "bitrix", "wordpress"]),
 });
 
 const syncProductSchema = z.object({

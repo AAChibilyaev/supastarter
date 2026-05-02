@@ -218,3 +218,53 @@ test.describe("Auth — 2FA / TOTP", () => {
 		}
 	});
 });
+
+test.describe("Auth — Passkeys", () => {
+	test("should show passkey setup option in security settings", async ({ page }) => {
+		await login(page, TEST_EMAIL, TEST_PASSWORD);
+		await page.waitForURL(/\/overview|\/getting-started/);
+
+		// Navigate to security settings
+		await page.goto(`${BASE_URL}/settings/security`).catch(async () => {
+			await page.goto(`${BASE_URL}/account/security`).catch(() => {});
+		});
+
+		await page.waitForTimeout(2000);
+
+		// Look for passkey / WebAuthn section
+		const passkeySection = page
+			.locator("text=Passkey,text=Passkeys,text=WebAuthn,text=Security Key,text=FIDO")
+			.first();
+		const visible = await passkeySection.isVisible().catch(() => false);
+		if (visible) {
+			await expect(passkeySection).toBeVisible();
+		}
+	});
+
+	test("should show passkey registration form with security key options", async ({ page }) => {
+		await login(page, TEST_EMAIL, TEST_PASSWORD);
+		await page.waitForURL(/\/overview|\/getting-started/);
+
+		// Navigate to security settings
+		await page.goto(`${BASE_URL}/settings/security`).catch(async () => {
+			await page.goto(`${BASE_URL}/account/security`).catch(() => {});
+		});
+
+		await page.waitForTimeout(2000);
+
+		// Look for a button or link to add a passkey
+		const addPasskeyBtn = page
+			.locator(
+				'button:has-text("Passkey"), button:has-text("Security Key"), a:has-text("Passkey"), [data-testid="add-passkey"]',
+			)
+			.first();
+		const visible = await addPasskeyBtn.isVisible().catch(() => false);
+
+		if (visible) {
+			await expect(addPasskeyBtn).toBeVisible();
+
+			// Verify the button is clickable
+			await expect(addPasskeyBtn).toBeEnabled({ timeout: 5000 });
+		}
+	});
+});

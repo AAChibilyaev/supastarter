@@ -6,7 +6,7 @@ export interface ConnectorCapabilities {
 }
 
 export interface ConnectorDefinition {
-	id: "prestashop" | "bitrix";
+	id: "prestashop" | "bitrix" | "wordpress";
 	displayName: string;
 	auth: "bearer";
 	syncModes: Array<"full" | "delta" | "delete">;
@@ -41,10 +41,23 @@ const CONNECTOR_REGISTRY: Record<ConnectorDefinition["id"], ConnectorDefinition>
 		},
 		minModuleVersion: "0.1.0",
 	},
+	wordpress: {
+		id: "wordpress",
+		displayName: "WordPress",
+		auth: "bearer",
+		syncModes: ["full", "delta", "delete"],
+		capabilities: {
+			supportsFullSync: true,
+			supportsDeltaSync: true,
+			supportsDelete: true,
+			supportsDiagnostics: true,
+		},
+		minModuleVersion: "0.1.0",
+	},
 };
 
 export function getConnectorDefinition(connectorId: string): ConnectorDefinition | null {
-	if (connectorId === "prestashop" || connectorId === "bitrix") {
+	if (connectorId === "prestashop" || connectorId === "bitrix" || connectorId === "wordpress") {
 		return CONNECTOR_REGISTRY[connectorId];
 	}
 	return null;

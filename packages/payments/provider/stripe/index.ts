@@ -120,6 +120,8 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 		user_id: userId || null,
 	};
 
+	const automaticTaxEnabled = process.env.STRIPE_AUTOMATIC_TAX === "true";
+
 	const response = await stripeClient.checkout.sessions.create({
 		mode: type === "subscription" ? "subscription" : "payment",
 		success_url: redirectUrl ?? "",
@@ -143,6 +145,14 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 						trial_period_days: trialPeriodDays,
 					},
 				}),
+		...(automaticTaxEnabled
+			? {
+					automatic_tax: { enabled: true },
+					tax_id_collection: { enabled: true },
+					billing_address_collection: "required",
+					...(customerId ? { customer_update: { address: "auto", name: "auto" } } : {}),
+				}
+			: {}),
 		metadata,
 	});
 

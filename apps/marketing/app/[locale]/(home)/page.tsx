@@ -3,6 +3,7 @@ import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { HeroWithCode } from "@home/components/HeroWithCode";
 import { HowItWorks } from "@home/components/HowItWorks";
 import { PricingPlans } from "@home/components/PricingPlans";
+import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -29,6 +30,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
 	return (
 		<>
+			<SoftwareApplicationSchema locale={locale} />
 			<HeroWithCode />
 			<HowItWorks />
 			<FeaturesGrid />

@@ -1,6 +1,9 @@
 import { CtaFooter } from "@home/components/CtaFooter";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { HowItWorks } from "@home/components/HowItWorks";
+import { BreadcrumbSchema } from "@seo/components/BreadcrumbSchema";
+import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
+import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -20,9 +23,16 @@ export default async function FeaturesPage(props: { params: Promise<{ locale: st
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "featuresPage" });
+	const baseUrl = getBaseUrl();
+
+	const breadcrumbs = [
+		{ name: "Home", url: `${baseUrl}/${locale}` },
+		{ name: "Features", url: `${baseUrl}/${locale}/features` },
+	];
 
 	return (
 		<>
+			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
@@ -33,6 +43,7 @@ export default async function FeaturesPage(props: { params: Promise<{ locale: st
 			</section>
 			<FeaturesGrid />
 			<HowItWorks />
+			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>
 	);

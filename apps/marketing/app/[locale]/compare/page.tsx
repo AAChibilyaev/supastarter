@@ -1,4 +1,7 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { BreadcrumbSchema } from "@seo/components/BreadcrumbSchema";
+import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
+import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -21,9 +24,16 @@ export default async function ComparePage(props: { params: Promise<{ locale: str
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "comparePage" });
+	const baseUrl = getBaseUrl();
+
+	const breadcrumbs = [
+		{ name: "Home", url: `${baseUrl}/${locale}` },
+		{ name: "Compare", url: `${baseUrl}/${locale}/compare` },
+	];
 
 	return (
 		<>
+			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
@@ -34,6 +44,7 @@ export default async function ComparePage(props: { params: Promise<{ locale: str
 			</section>
 			<CompareGrid />
 			<CompareTable />
+			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>
 	);

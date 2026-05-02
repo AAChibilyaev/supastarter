@@ -1,8 +1,27 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { BreadcrumbSchema } from "@seo/components/BreadcrumbSchema";
+import { FAQPageSchema } from "@seo/components/FAQPageSchema";
+import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
+import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CompareWeaviateGrid } from "../../../../modules/compare/components/CompareWeaviateGrid";
+
+const FAQ_ITEMS = [
+	{
+		question: "Why switch from Weaviate to AACsearch?",
+		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
+	},
+	{
+		question: "How does AACsearch pricing compare to Weaviate?",
+		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Weaviate pricing info would go here.",
+	},
+	{
+		question: "Is migration from Weaviate to AACsearch difficult?",
+		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
+	},
+];
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -20,9 +39,18 @@ export default async function CompareWeaviatePage(props: { params: Promise<{ loc
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "compareWeaviatePage" });
+	const baseUrl = getBaseUrl();
+
+	const breadcrumbs = [
+		{ name: "Home", url: `${baseUrl}/${locale}` },
+		{ name: "Compare", url: `${baseUrl}/${locale}/compare` },
+		{ name: "vs Weaviate", url: `${baseUrl}/${locale}/compare/weaviate` },
+	];
 
 	return (
 		<>
+			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
+			<FAQPageSchema items={FAQ_ITEMS} id={`/${locale}/compare/weaviate#faq`} />
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
@@ -32,6 +60,7 @@ export default async function CompareWeaviatePage(props: { params: Promise<{ loc
 				</div>
 			</section>
 			<CompareWeaviateGrid />
+			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>
 	);

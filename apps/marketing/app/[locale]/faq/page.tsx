@@ -1,4 +1,5 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { FAQPageSchema } from "@seo/components/FAQPageSchema";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -20,9 +21,22 @@ export default async function FaqPage(props: { params: Promise<{ locale: string 
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "faqPage" });
+	const faqT = await getTranslations({ locale, namespace: "faq" });
+
+	const faqItems = [
+		{ key: "searchUnit" as const },
+		{ key: "pricing" as const },
+		{ key: "scaling" as const },
+		{ key: "dataResidency" as const },
+		{ key: "migration" as const },
+	].map(({ key }) => ({
+		question: faqT(`items.${key}.title`),
+		answer: faqT(`items.${key}.description`),
+	}));
 
 	return (
 		<>
+			<FAQPageSchema items={faqItems} />
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>

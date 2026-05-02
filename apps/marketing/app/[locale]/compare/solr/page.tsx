@@ -1,8 +1,27 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { BreadcrumbSchema } from "@seo/components/BreadcrumbSchema";
+import { FAQPageSchema } from "@seo/components/FAQPageSchema";
+import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
+import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CompareSolrGrid } from "../../../../modules/compare/components/CompareSolrGrid";
+
+const FAQ_ITEMS = [
+	{
+		question: "Why switch from Solr to AACsearch?",
+		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
+	},
+	{
+		question: "How does AACsearch pricing compare to Solr?",
+		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Solr pricing info would go here.",
+	},
+	{
+		question: "Is migration from Solr to AACsearch difficult?",
+		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
+	},
+];
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -20,9 +39,18 @@ export default async function CompareSolrPage(props: { params: Promise<{ locale:
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "compareSolrPage" });
+	const baseUrl = getBaseUrl();
+
+	const breadcrumbs = [
+		{ name: "Home", url: `${baseUrl}/${locale}` },
+		{ name: "Compare", url: `${baseUrl}/${locale}/compare` },
+		{ name: "vs Solr", url: `${baseUrl}/${locale}/compare/solr` },
+	];
 
 	return (
 		<>
+			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
+			<FAQPageSchema items={FAQ_ITEMS} id={`/${locale}/compare/solr#faq`} />
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
@@ -32,6 +60,7 @@ export default async function CompareSolrPage(props: { params: Promise<{ locale:
 				</div>
 			</section>
 			<CompareSolrGrid />
+			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>
 	);

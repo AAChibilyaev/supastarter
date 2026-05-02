@@ -2,6 +2,8 @@ import { AnalyticsScript } from "@analytics";
 import { config } from "@config";
 import { config as i18nConfig } from "@i18n/config";
 import { cn } from "@repo/ui";
+import { OrganizationSchema } from "@seo/components/OrganizationSchema";
+import { WebSiteSchema } from "@seo/components/WebSiteSchema";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
@@ -88,6 +90,8 @@ export default async function MarketingLayout({
 			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
 		>
 			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
+				<OrganizationSchema locale={locale} />
+				<WebSiteSchema locale={locale} />
 				<ConsentProvider initialConsent={consentCookie?.value === "true"}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>

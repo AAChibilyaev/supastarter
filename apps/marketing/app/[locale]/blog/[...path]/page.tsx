@@ -1,6 +1,8 @@
 import { PostContent } from "@blog/components/PostContent";
 import { getPostBySlug, getPublishedPostPaths } from "@blog/lib/posts";
 import { LocaleLink, localeRedirect } from "@i18n/routing";
+import { BlogPostingSchema } from "@seo/components/BlogPostingSchema";
+import { BreadcrumbSchema } from "@seo/components/BreadcrumbSchema";
 import { getBaseUrl } from "@shared/lib/base-url";
 import { getActivePathFromUrlParam } from "@shared/lib/content";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -52,76 +54,102 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 	}
 
 	const { title, date, authorName, authorImage, tags, image, body } = post;
+	const baseUrl = getBaseUrl();
+	const postUrl = `${baseUrl}/${locale}/blog/${slug}`;
+	const imageUrl = image
+		? image.startsWith("http")
+			? image
+			: new URL(image, baseUrl).toString()
+		: undefined;
 
 	return (
-		<div className="py-16 container">
-			<div className="">
-				<div className="mb-12">
-					<LocaleLink href="/blog">&larr; {t("back")}</LocaleLink>
-				</div>
+		<>
+			<BreadcrumbSchema
+				items={[
+					{ name: "Blog", url: `${baseUrl}/${locale}/blog` },
+					{ name: title, url: postUrl },
+				]}
+				baseUrl={baseUrl}
+			/>
+			<BlogPostingSchema
+				headline={title}
+				datePublished={date}
+				description={post.excerpt}
+				authorName={authorName ?? undefined}
+				url={postUrl}
+				imageUrl={imageUrl}
+			/>
+			<div className="py-16 container">
+				<div className="">
+					<div className="mb-12">
+						<LocaleLink href="/blog">&larr; {t("back")}</LocaleLink>
+					</div>
 
-				<div className="max-w-2xl mx-auto text-center">
-					<h1 className="font-bold text-4xl">{title}</h1>
+					<div className="max-w-2xl mx-auto text-center">
+						<h1 className="font-bold text-4xl">{title}</h1>
 
-					<div className="mt-4 min-w-0 gap-4 sm:gap-6 flex items-center justify-center overflow-x-auto">
-						{authorName && (
-							<div className="flex shrink-0 items-center">
-								{authorImage && (
-									<div className="mr-2 size-8 relative overflow-hidden rounded-full">
-										<Image
-											src={authorImage}
-											alt={authorName}
-											fill
-											sizes="96px"
-											className="object-cover object-center"
-										/>
+						<div className="mt-4 min-w-0 gap-4 sm:gap-6 flex items-center justify-center overflow-x-auto">
+							{authorName && (
+								<div className="flex shrink-0 items-center">
+									{authorImage && (
+										<div className="mr-2 size-8 relative overflow-hidden rounded-full">
+											<Image
+												src={authorImage}
+												alt={authorName}
+												fill
+												sizes="96px"
+												className="object-cover object-center"
+											/>
+										</div>
+									)}
+									<div>
+										<p className="font-semibold text-sm opacity-50">
+											{authorName}
+										</p>
 									</div>
-								)}
-								<div>
-									<p className="font-semibold text-sm opacity-50">{authorName}</p>
 								</div>
-							</div>
-						)}
+							)}
 
-						<div className="mr-0 shrink-0">
-							<p className="text-sm opacity-30">
-								{Intl.DateTimeFormat("en-US").format(new Date(date))}
-							</p>
+							<div className="mr-0 shrink-0">
+								<p className="text-sm opacity-30">
+									{Intl.DateTimeFormat("en-US").format(new Date(date))}
+								</p>
+							</div>
+
+							{tags && (
+								<div className="gap-2 flex shrink-0 items-center">
+									{tags.map((tag) => (
+										<span
+											key={tag}
+											className="font-semibold text-xs tracking-wider shrink-0 whitespace-nowrap text-primary uppercase"
+										>
+											#{tag}
+										</span>
+									))}
+								</div>
+							)}
 						</div>
-
-						{tags && (
-							<div className="gap-2 flex shrink-0 items-center">
-								{tags.map((tag) => (
-									<span
-										key={tag}
-										className="font-semibold text-xs tracking-wider shrink-0 whitespace-nowrap text-primary uppercase"
-									>
-										#{tag}
-									</span>
-								))}
-							</div>
-						)}
 					</div>
 				</div>
-			</div>
 
-			{image && (
-				<div className="mt-6 aspect-video p-4 lg:p-6 relative overflow-hidden rounded-4xl bg-primary/10">
-					<Image
-						src={image}
-						alt={title}
-						fill
-						loading="eager"
-						fetchPriority="high"
-						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-						className="rounded-xl object-cover object-center"
-					/>
+				{image && (
+					<div className="mt-6 aspect-video p-4 lg:p-6 relative overflow-hidden rounded-4xl bg-primary/10">
+						<Image
+							src={image}
+							alt={title}
+							fill
+							loading="eager"
+							fetchPriority="high"
+							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							className="rounded-xl object-cover object-center"
+						/>
+					</div>
+				)}
+
+				<div className="pb-8">
+					<PostContent content={body} />
 				</div>
-			)}
-
-			<div className="pb-8">
-				<PostContent content={body} />
 			</div>
-		</div>
+		</>
 	);
 }

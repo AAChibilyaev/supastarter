@@ -126,7 +126,11 @@
 						"SLA 99,95 %, DPA signé"
 					]
 				}
-			}
+			},
+			"monthly": "Mensuel",
+			"yearly": "Annuel",
+			"yearlyDiscount": "Économisez 17 %",
+			"perYear": "/an"
 		},
 		"cta": {
 			"title": "Prêt à livrer la recherche ?",

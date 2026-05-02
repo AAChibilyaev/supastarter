@@ -46,15 +46,15 @@ export function PricingPlans() {
 								value="monthly"
 								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
 							>
-								Monthly
+								{t("home.pricing.monthly")}
 							</TabsTrigger>
 							<TabsTrigger
 								value="yearly"
 								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
 							>
-								Yearly
+								{t("home.pricing.yearly")}
 								<Badge status="success" className="ml-2 px-1.5 py-0 text-[10px]">
-									Save 17%
+									{t("home.pricing.yearlyDiscount")}
 								</Badge>
 							</TabsTrigger>
 						</TabsList>
@@ -103,7 +103,7 @@ export function PricingPlans() {
 											<span className="text-sm text-muted-foreground">
 												{interval === "monthly"
 													? t("home.pricing.perMonth")
-													: "/yr"}
+													: t("home.pricing.perYear")}
 											</span>
 										)}
 									</div>

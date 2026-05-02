@@ -126,7 +126,11 @@
 						"99.95% SLA, signed DPA"
 					]
 				}
-			}
+			},
+			"monthly": "Monthly",
+			"yearly": "Yearly",
+			"yearlyDiscount": "Save 17%",
+			"perYear": "/yr"
 		},
 		"cta": {
 			"title": "Ready to ship search?",

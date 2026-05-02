@@ -126,7 +126,11 @@
 						"99,95 % SLA, signierter DPA"
 					]
 				}
-			}
+			},
+			"monthly": "Monatlich",
+			"yearly": "Jährlich",
+			"yearlyDiscount": "17 % sparen",
+			"perYear": "/Jahr"
 		},
 		"cta": {
 			"title": "Bereit, Suche auszuliefern?",

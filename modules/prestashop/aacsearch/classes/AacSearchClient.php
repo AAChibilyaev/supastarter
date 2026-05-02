@@ -139,6 +139,34 @@ class AacSearchClient
     }
 
     /**
+     * Delete a batch of products from AACsearch.
+     * DELETE /api/connector/documents
+     *
+     * Accepts up to 500 IDs per API call; larger arrays are automatically
+     * split into 500-item chunks.
+     *
+     * @param array $externalIds Array of external product IDs to delete
+     *
+     * @return int Total number of deleted documents
+     *
+     * @throws Exception
+     */
+    public function batchDelete(array $externalIds)
+    {
+        if (empty($externalIds)) {
+            return 0;
+        }
+
+        $total = 0;
+        foreach (array_chunk($externalIds, 500) as $chunk) {
+            $response = $this->request('DELETE', '/api/connector/documents', ['externalIds' => $chunk]);
+            $total += (int) ($response['deleted'] ?? count($chunk));
+        }
+
+        return $total;
+    }
+
+    /**
      * Send diagnostics data to AACsearch.
      * POST /api/projects/{projectId}/diagnostics
      *
@@ -195,7 +223,7 @@ class AacSearchClient
             CURLOPT_FOLLOWLOCATION => false,
         ]);
 
-        if (!empty($body) && in_array($method, ['POST', 'PUT', 'PATCH'])) {
+        if (!empty($body) && in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
         }
 

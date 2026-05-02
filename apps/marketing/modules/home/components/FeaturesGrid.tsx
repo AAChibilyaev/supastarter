@@ -7,7 +7,7 @@ import {
 	GlobeLockIcon,
 	KeyRoundIcon,
 	LayersIcon,
-	ServerIcon,
+	ShieldCheckIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
@@ -19,7 +19,7 @@ interface FeatureItem {
 		| "rateLimitQuota"
 		| "multiSearch"
 		| "reindex"
-		| "selfHost";
+		| "enterpriseSecurity";
 	icon: ComponentType<{ className?: string }>;
 }
 
@@ -29,7 +29,7 @@ const items: FeatureItem[] = [
 	{ key: "rateLimitQuota", icon: GaugeIcon },
 	{ key: "multiSearch", icon: LayersIcon },
 	{ key: "reindex", icon: GitBranchIcon },
-	{ key: "selfHost", icon: ServerIcon },
+	{ key: "enterpriseSecurity", icon: ShieldCheckIcon },
 ];
 
 const spanMap: Record<FeatureItem["key"], string> = {
@@ -38,7 +38,7 @@ const spanMap: Record<FeatureItem["key"], string> = {
 	rateLimitQuota: "md:col-span-1",
 	multiSearch: "md:col-span-1",
 	reindex: "md:col-span-1",
-	selfHost: "md:col-span-2",
+	enterpriseSecurity: "md:col-span-2",
 };
 
 export function FeaturesGrid() {

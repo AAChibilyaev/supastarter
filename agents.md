@@ -1595,8 +1595,8 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-[auto-bridge snapshot @ 10 changes]
-Files: apps/marketing/sentry.client.config.ts (create), apps/saas/app/global-error.tsx (create), apps/saas/instrumentation.ts (create), apps/saas/sentry.edge.config.ts (create), apps/saas/sentry.server.config.ts (create), apps/saas/sentry.client.config.ts (create), apps/marketing/package.json (edit), apps/saas/package.json (edit), pnpm-workspace.yaml (edit)
+[Emergency bridge — running bridge was not updated]
+Files: packages/auth/auth.ts (edit), .env.local.example (edit), apps/marketing/content/posts/algolia-alternatives-2026.mdx (create), apps/marketing/content/posts/algolia-alternatives-2026.de.mdx (create)
 
 # === END COGNILAYER ===
 

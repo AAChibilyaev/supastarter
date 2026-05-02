@@ -9,7 +9,7 @@ import {
 	LinkIcon,
 	MegaphoneIcon,
 	SearchIcon,
-	ServerIcon,
+
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
@@ -22,7 +22,6 @@ interface RoadmapItem {
 		| "knowledge"
 		| "metering"
 		| "docs"
-		| "selfHost"
 		| "vectorSearch";
 	icon: ComponentType<{ className?: string }>;
 }
@@ -34,7 +33,6 @@ const items: RoadmapItem[] = [
 	{ key: "knowledge", icon: BrainCircuitIcon },
 	{ key: "metering", icon: GaugeIcon },
 	{ key: "docs", icon: BookOpenIcon },
-	{ key: "selfHost", icon: ServerIcon },
 	{ key: "vectorSearch", icon: SearchIcon },
 ];
 
@@ -45,7 +43,6 @@ const spanMap: Record<RoadmapItem["key"], string> = {
 	knowledge: "md:col-span-2",
 	metering: "md:col-span-2",
 	docs: "md:col-span-2",
-	selfHost: "md:col-span-2",
 	vectorSearch: "md:col-span-2",
 };
 

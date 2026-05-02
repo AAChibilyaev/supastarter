@@ -5,15 +5,15 @@ import {
 	ArrowRightIcon,
 	CreditCardIcon,
 	HashIcon,
+	HeadphonesIcon,
 	MapPinIcon,
-	ServerIcon,
 	TrendingUpIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface FaqGridItem {
-	key: "searchUnit" | "pricing" | "scaling" | "dataResidency" | "migration" | "selfHost";
+	key: "searchUnit" | "pricing" | "scaling" | "dataResidency" | "migration" | "support";
 	icon: ComponentType<{ className?: string }>;
 }
 
@@ -23,7 +23,7 @@ const items: FaqGridItem[] = [
 	{ key: "scaling", icon: TrendingUpIcon },
 	{ key: "dataResidency", icon: MapPinIcon },
 	{ key: "migration", icon: ArrowRightIcon },
-	{ key: "selfHost", icon: ServerIcon },
+	{ key: "support", icon: HeadphonesIcon },
 ];
 
 const spanMap: Record<FaqGridItem["key"], string> = {
@@ -32,7 +32,7 @@ const spanMap: Record<FaqGridItem["key"], string> = {
 	scaling: "md:col-span-1",
 	dataResidency: "md:col-span-1",
 	migration: "md:col-span-1",
-	selfHost: "md:col-span-2",
+	support: "md:col-span-2",
 };
 
 export function FaqGrid() {

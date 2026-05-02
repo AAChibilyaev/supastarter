@@ -5,32 +5,32 @@ import {
 	ArrowRightIcon,
 	CheckCircleIcon,
 	CreditCardIcon,
-	GitPullRequestIcon,
-	ServerIcon,
+	ShieldCheckIcon,
 	UsersIcon,
+	ZapIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareAlgoliaItem {
-	key: "pricing" | "selfHost" | "multiTenancy" | "openSource" | "migration" | "verdict";
+	key: "pricing" | "performance" | "multiTenancy" | "security" | "migration" | "verdict";
 	icon: ComponentType<{ className?: string }>;
 }
 
 const items: CompareAlgoliaItem[] = [
 	{ key: "pricing", icon: CreditCardIcon },
-	{ key: "selfHost", icon: ServerIcon },
+	{ key: "performance", icon: ZapIcon },
 	{ key: "multiTenancy", icon: UsersIcon },
-	{ key: "openSource", icon: GitPullRequestIcon },
+	{ key: "security", icon: ShieldCheckIcon },
 	{ key: "migration", icon: ArrowRightIcon },
 	{ key: "verdict", icon: CheckCircleIcon },
 ];
 
 const spanMap: Record<CompareAlgoliaItem["key"], string> = {
 	pricing: "md:col-span-2",
-	selfHost: "md:col-span-1",
+	performance: "md:col-span-1",
 	multiTenancy: "md:col-span-1",
-	openSource: "md:col-span-1",
+	security: "md:col-span-1",
 	migration: "md:col-span-1",
 	verdict: "md:col-span-2",
 };

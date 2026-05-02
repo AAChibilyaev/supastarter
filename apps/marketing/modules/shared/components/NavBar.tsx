@@ -97,7 +97,6 @@ export function NavBar() {
 				{ label: t("common.menu.developers"), href: "/developers" },
 				{ label: t("common.menu.faq"), href: "/faq" },
 				{ label: t("common.menu.glossary"), href: "/glossary" },
-				{ label: t("common.menu.openSource"), href: "/open-source" },
 			],
 		},
 		{

@@ -166,14 +166,6 @@ export function Footer() {
 							</li>
 							<li>
 								<LocaleLink
-									href="/open-source"
-									className="text-muted-foreground transition-colors hover:text-foreground"
-								>
-									{t("common.menu.openSource")}
-								</LocaleLink>
-							</li>
-							<li>
-								<LocaleLink
 									href="/status"
 									className="text-muted-foreground transition-colors hover:text-foreground"
 								>

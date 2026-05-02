@@ -4,16 +4,16 @@ import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import {
 	BotIcon,
 	CodeIcon,
-	GitPullRequestIcon,
 	KeyRoundIcon,
 	RadioIcon,
+	ShieldCheckIcon,
 	WrenchIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface McpItem {
-	key: "tools" | "claude" | "cursor" | "transport" | "authentication" | "openSource";
+	key: "tools" | "claude" | "cursor" | "transport" | "authentication" | "enterpriseReady";
 	icon: ComponentType<{ className?: string }>;
 }
 
@@ -23,7 +23,7 @@ const items: McpItem[] = [
 	{ key: "cursor", icon: CodeIcon },
 	{ key: "transport", icon: RadioIcon },
 	{ key: "authentication", icon: KeyRoundIcon },
-	{ key: "openSource", icon: GitPullRequestIcon },
+	{ key: "enterpriseReady", icon: ShieldCheckIcon },
 ];
 
 const spanMap: Record<McpItem["key"], string> = {
@@ -32,7 +32,7 @@ const spanMap: Record<McpItem["key"], string> = {
 	cursor: "md:col-span-1",
 	transport: "md:col-span-1",
 	authentication: "md:col-span-1",
-	openSource: "md:col-span-2",
+	enterpriseReady: "md:col-span-2",
 };
 
 export function McpGrid() {

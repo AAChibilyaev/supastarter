@@ -532,19 +532,20 @@ Widget trackEvent() → POST /api/events/track (Bearer ss_search_*)
 - **Scoped tokens**: `ss_scoped_*` prefix, HMAC over BETTER_AUTH_SECRET, narrows permissions (AND-combined)
 - **Connector tokens**: `ss_connector_*` prefix, reuse `SearchApiKey` with `connector_write` scope
 
-### Connector API (7 public endpoints)
+### Connector API (8 public endpoints)
 
 All mounted on `/api` with permissive CORS:
 
-| Method | Path                         | Purpose                           |
-| ------ | ---------------------------- | --------------------------------- |
-| POST   | `/api/connector/handshake`   | Verify token, return index info   |
-| POST   | `/api/connector/sync/full`   | Full sync — enqueue all products  |
-| POST   | `/api/connector/sync/delta`  | Delta sync — enqueue changed only |
-| DELETE | `/api/connector/documents`   | Delete documents by external IDs  |
-| GET    | `/api/connector/diagnostics` | Connection test                   |
-| GET    | `/api/connector/sync/status` | Sync job status                   |
-| POST   | `/api/connector/heartbeat`   | Keepalive                         |
+| Method | Path                                              | Purpose                                 |
+| ------ | ------------------------------------------------- | --------------------------------------- |
+| POST   | `/api/connectors/handshake`                       | Verify token, return index info         |
+| POST   | `/api/connectors/:connectorId/heartbeat`          | Keepalive                               |
+| POST   | `/api/projects/:projectId/sync/full`              | Full sync — enqueue all products        |
+| POST   | `/api/projects/:projectId/sync/delta`             | Delta sync — enqueue changed only       |
+| DELETE | `/api/projects/:projectId/products/:externalId`   | Delete single product by external ID    |
+| DELETE | `/api/connector/documents`                        | Batch delete documents by external IDs  |
+| POST   | `/api/projects/:projectId/diagnostics`            | Send diagnostics report                 |
+| GET    | `/api/projects/:projectId/sync/jobs/:jobId`       | Get sync job status                     |
 
 ### SCIM 2.0
 
@@ -1594,8 +1595,8 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-[Emergency bridge — running bridge was not updated]
-No changes or facts in this session.
+[auto-bridge snapshot @ 10 changes]
+Files: apps/marketing/sentry.client.config.ts (create), apps/saas/app/global-error.tsx (create), apps/saas/instrumentation.ts (create), apps/saas/sentry.edge.config.ts (create), apps/saas/sentry.server.config.ts (create), apps/saas/sentry.client.config.ts (create), apps/marketing/package.json (edit), apps/saas/package.json (edit), pnpm-workspace.yaml (edit)
 
 # === END COGNILAYER ===
 

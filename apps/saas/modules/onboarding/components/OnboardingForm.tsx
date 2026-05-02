@@ -5,21 +5,25 @@ import { useRouter } from "@shared/hooks/router";
 import { clearCache } from "@shared/lib/cache";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { withQuery } from "ufo";
 
 import { OnboardingAccountStep } from "./OnboardingAccountStep";
+import { OnboardingAddDocumentsStep } from "./OnboardingAddDocumentsStep";
+import { OnboardingApiKeyStep } from "./OnboardingApiKeyStep";
+import { OnboardingCreateIndexStep } from "./OnboardingCreateIndexStep";
+import { OnboardingInstallWidgetStep } from "./OnboardingInstallWidgetStep";
 
 export function OnboardingForm() {
 	const t = useTranslations();
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const [indexSlug, setIndexSlug] = useState("");
 
 	const stepSearchParam = searchParams.get("step");
 	const redirectTo = searchParams.get("redirectTo");
 	const onboardingStep = stepSearchParam ? Number.parseInt(stepSearchParam, 10) : 1;
 
-	// oxlint-disable-next-line no-unused-vars -- used for redirecting to the next step
 	const setStep = (step: number) => {
 		router.replace(
 			withQuery(window.location.search ?? "", {
@@ -37,20 +41,86 @@ export function OnboardingForm() {
 		router.replace(redirectTo ?? "/");
 	};
 
-	const steps = useMemo(() => {
-		const allSteps: { component: React.ReactNode }[] = [
-			{
-				component: <OnboardingAccountStep onCompleted={() => onCompleted()} />,
-			},
-		];
+	const steps = useMemo(
+		() => {
+			const allSteps: { component: React.ReactNode }[] = [
+				{
+					component: <OnboardingAccountStep onCompleted={() => setStep(2)} />,
+				},
+				{
+					component: (
+						<OnboardingCreateIndexStep
+							onCompleted={(slug) => {
+								setIndexSlug(slug);
+								setStep(3);
+							}}
+						/>
+					),
+				},
+				{
+					component: (
+						<OnboardingAddDocumentsStep
+							indexSlug={indexSlug}
+							onCompleted={() => setStep(4)}
+						/>
+					),
+				},
+				{
+					component: (
+						<OnboardingInstallWidgetStep
+							indexSlug={indexSlug}
+							onCompleted={() => setStep(5)}
+						/>
+					),
+				},
+				{
+					component: (
+						<OnboardingApiKeyStep
+							indexSlug={indexSlug}
+							onCompleted={() => onCompleted()}
+						/>
+					),
+				},
+			];
+			return allSteps;
+		},
+		[indexSlug], // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+	);
 
-		return allSteps;
-	}, []); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+	const stepTitle = (() => {
+		switch (onboardingStep) {
+			case 2:
+				return t("onboarding.createIndex.title");
+			case 3:
+				return t("onboarding.addDocuments.title");
+			case 4:
+				return t("onboarding.installWidget.title");
+			case 5:
+				return t("onboarding.apiKey.title");
+			default:
+				return t("onboarding.title");
+		}
+	})();
+
+	const stepDescription = (() => {
+		switch (onboardingStep) {
+			case 2:
+				return t("onboarding.createIndex.description");
+			case 3:
+				return t("onboarding.addDocuments.description");
+			case 4:
+				return t("onboarding.installWidget.description");
+			case 5:
+				return t("onboarding.apiKey.description");
+			default:
+				return t("onboarding.message");
+		}
+	})();
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">{t("onboarding.title")}</h1>
-			<p className="mt-2 mb-6 text-foreground/60">{t("onboarding.message")}</p>
+			<h1 className="font-bold text-xl md:text-2xl">{stepTitle}</h1>
+			<p className="mt-2 mb-6 text-foreground/60">{stepDescription}</p>
 
 			{steps.length > 1 && (
 				<div className="mb-6 gap-3 flex items-center">
@@ -64,7 +134,7 @@ export function OnboardingForm() {
 				</div>
 			)}
 
-			{steps[onboardingStep - 1].component}
+			{steps[onboardingStep - 1]?.component}
 		</div>
 	);
 }

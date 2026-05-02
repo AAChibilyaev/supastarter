@@ -1,0 +1,92 @@
+---
+title: "Analítica de Búsqueda: 5 Métricas que Todo Comerciante Debe Seguir"
+date: 2026-05-02
+image: https://picsum.photos/id/13/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Los visitantes que usan la búsqueda convierten 2–3× más. Sin embargo, la mayoría de comerciantes ignoran sus analíticas. Aquí están las 5 métricas que realmente impulsan los ingresos.
+tags: [analytics, search, ecommerce, metrics]
+published: true
+---
+
+Los visitantes que utilizan la barra de búsqueda de tu tienda son los compradores más motivados. Saben lo que quieren, lo están buscando activamente y los datos muestran que convierten 2–3× más que los visitantes que navegan. Cuando la búsqueda falla, se van inmediatamente — y normalmente no vuelven.
+
+AACSearch registra automáticamente cada evento de búsqueda: texto de consulta, conteo de resultados, resultados clicados, IDs de sesión y latencia. Pero los datos sin dirección son ruido. Aquí están las cinco métricas que realmente indican si tu búsqueda ayuda o perjudica.
+
+## 1. Tasa de Resultados Cero (Objetivo: Menos del 10%)
+
+La tasa de resultados cero es el porcentaje de búsquedas que no devuelven ningún documento. Una página sin resultados es un abandono garantizado — literalmente no hay nada que el usuario pueda hacer excepto irse.
+
+Una tasa saludable de resultados cero está por debajo del 10%. Si ves 15–20%, tu catálogo tiene lagunas o tu configuración de búsqueda tiene problemas.
+
+**Causas comunes:**
+- Los nombres de productos no coinciden con cómo buscan los clientes ("zapatillas" vs "zapatos para correr")
+- Errores tipográficos que la tolerancia no captura
+- Términos estacionales o de marca sin sinónimos
+
+**Solución:** Abre el panel de analíticas en AACSearch, ordena las consultas por tasa de resultados cero y añade sinónimos para los 10 términos principales. Una sola regla de sinónimos puede eliminar cientos de búsquedas fallidas por semana.
+
+## 2. Consultas Principales (Revisar Semanalmente)
+
+Tus consultas principales son tus clientes diciéndote directamente, a escala, exactamente qué quieren comprar. Es el activo de datos más subutilizado en el comercio electrónico.
+
+**Qué hacer:**
+- Mapea las 50 consultas principales a su resultado en primera posición. ¿Es el producto correcto?
+- Marca consultas con tasa de resultados cero superior al 5%
+- Usa curaciones para fijar manualmente el mejor resultado para términos de alto volumen
+
+## 3. Tasa de Clics (Objetivo: Más del 40%)
+
+Mide qué porcentaje de búsquedas resultan en al menos un clic. Una tasa baja significa que los usuarios ven resultados pero no están convencidos — la búsqueda funcionó mecánicamente, pero los resultados no coincidieron con la intención.
+
+**Causas comunes de baja tasa de clics:**
+- Producto incorrecto clasificado primero
+- Imágenes de producto ausentes en los resultados
+- Precios no visibles en la tarjeta de resultado
+- Resultados demasiado similares (sin variedad en el top 5)
+
+**Solución:** Revisa las consultas con menor tasa de clics. Usa curaciones para anular el ranking en consultas de alto valor específicas.
+
+## 4. Tasa de Abandono de Búsqueda (Objetivo: Menos del 25%)
+
+El porcentaje de sesiones donde la última acción fue una búsqueda — el usuario buscó, vio resultados y se fue sin hacer clic. Esto es diferente de los resultados cero: les mostraste algo, simplemente no fue convincente.
+
+**Solución:** Identifica consultas con alta tasa de abandono y alto conteo de resultados. Los resultados existen — ¿por qué los usuarios no hacen clic? Revisa el diseño de la tarjeta de resultado, las opciones de facetas y el orden de ranking.
+
+## 5. Posición Promedio de Resultados Clicados (Objetivo: Menos de 3)
+
+Muestra hasta dónde deben desplazarse los usuarios en promedio antes de encontrar lo que buscan. Si la posición promedio clicada es 6 o 7, tu ranking está mal — el producto correcto existe pero está enterrado.
+
+**Solución:** Activa el ajuste de relevancia en AACSearch. Incrementa el peso de los campos por los que los usuarios realmente buscan (nombre, marca, categoría) y reduce el peso de los campos menos relevantes.
+
+## Configurar Analíticas en AACSearch
+
+Si usas el widget alojado de AACSearch, las cinco métricas se rastrean automáticamente — sin configuración requerida. El widget envía un evento `search_query` por cada búsqueda y un evento `result_click` por cada clic.
+
+```json
+{
+  "type": "search_query",
+  "query": "zapatillas running",
+  "resultCount": 42,
+  "latencyMs": 18,
+  "sessionId": "sess_xyz"
+}
+```
+
+```json
+{
+  "type": "result_click",
+  "query": "zapatillas running",
+  "productId": "prod_8821",
+  "position": 2,
+  "sessionId": "sess_xyz"
+}
+```
+
+## Conclusión
+
+La analítica de búsqueda es el ciclo de retroalimentación más rápido entre tu catálogo y tus clientes. No necesitas ejecutar pruebas A/B ni contratar un equipo de datos. Necesitas mirar el panel una vez a la semana y actuar según lo que veas.
+
+Tasa de resultados cero muestra qué falta. Consultas principales muestran qué es popular. Tasa de clics muestra si los resultados coinciden con la intención. Tasa de abandono muestra si la experiencia convence. Posición promedio muestra si el ranking es correcto.
+
+Corrige esas cinco métricas y arreglarás tu búsqueda. Arregla tu búsqueda y moverás los ingresos.

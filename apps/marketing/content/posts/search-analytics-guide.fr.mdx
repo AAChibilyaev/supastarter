@@ -1,0 +1,92 @@
+---
+title: "Analytique de Recherche : 5 Métriques que Tout Marchand Devrait Suivre"
+date: 2026-05-02
+image: https://picsum.photos/id/13/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Les visiteurs qui utilisent la recherche convertissent 2–3× plus. Pourtant, la plupart des marchands ignorent leurs analytiques. Voici les 5 métriques qui impactent vraiment les revenus.
+tags: [analytics, search, ecommerce, metrics]
+published: true
+---
+
+Les visiteurs qui utilisent la barre de recherche de votre boutique sont les acheteurs les plus motivés. Ils savent ce qu'ils veulent, le cherchent activement, et les études montrent qu'ils convertissent 2–3× plus souvent que les visiteurs qui naviguent. Quand la recherche les déçoit, ils partent immédiatement — et ne reviennent généralement pas.
+
+AACSearch enregistre automatiquement chaque événement de recherche : texte de requête, nombre de résultats, résultats cliqués, IDs de session et latence. Mais les données sans direction ne sont que du bruit. Voici les cinq métriques qui indiquent réellement si votre recherche aide ou nuit.
+
+## 1. Taux de Résultats Zéro (Objectif : Moins de 10%)
+
+Le taux de résultats zéro est le pourcentage de recherches qui ne renvoient aucun document. Une page sans résultats est un abandon garanti — il n'y a littéralement rien que l'utilisateur puisse faire sinon partir.
+
+Un taux sain est inférieur à 10%. Si vous observez 15–20%, votre catalogue a des lacunes ou votre configuration de recherche a des problèmes.
+
+**Causes fréquentes :**
+- Les noms de produits ne correspondent pas à la façon dont les clients cherchent (« baskets » vs « chaussures de course »)
+- Des fautes de frappe non corrigées par la tolérance aux erreurs
+- Des termes saisonniers ou de marque sans synonymes
+
+**Solution :** Ouvrez le tableau de bord analytique d'AACSearch, triez les requêtes par taux de résultats zéro et ajoutez des synonymes pour les 10 termes principaux. Une seule règle de synonymes peut éliminer des centaines de recherches échouées par semaine.
+
+## 2. Requêtes Principales (Vérifier Hebdomadairement)
+
+Vos requêtes principales sont vos clients qui vous disent directement, à grande échelle, exactement ce qu'ils veulent acheter. C'est l'actif de données le plus sous-utilisé dans le commerce électronique.
+
+**Que faire :**
+- Mappez les 50 requêtes principales à leur résultat en première position. Est-ce le bon produit ?
+- Signalez les requêtes avec un taux de résultats zéro supérieur à 5%
+- Utilisez les curations pour épingler le meilleur résultat pour les termes à fort volume
+
+## 3. Taux de Clics (Objectif : Plus de 40%)
+
+Mesure quel pourcentage de recherches aboutit à au moins un clic. Un faible taux signifie que les utilisateurs voient des résultats mais ne sont pas convaincus — la recherche a fonctionné mécaniquement, mais les résultats ne correspondaient pas à l'intention.
+
+**Causes fréquentes d'un faible taux de clics :**
+- Mauvais produit classé en premier
+- Images produit manquantes dans les résultats
+- Prix non visibles dans la carte de résultat
+- Résultats trop similaires (pas de variété dans le top 5)
+
+**Solution :** Vérifiez les requêtes avec le taux de clics le plus bas. Utilisez les curations pour remplacer le classement sur des requêtes à haute valeur.
+
+## 4. Taux de Sortie après Recherche (Objectif : Moins de 25%)
+
+Le pourcentage de sessions où la dernière action était une recherche — l'utilisateur a cherché, vu des résultats et quitté sans cliquer. C'est différent des résultats zéro : vous leur avez montré quelque chose, c'était simplement peu convaincant.
+
+**Solution :** Identifiez les requêtes avec un taux de sortie élevé et un nombre de résultats élevé. Les résultats existent — pourquoi les utilisateurs ne cliquent-ils pas ? Vérifiez la conception de la carte de résultat, les options de facettes et l'ordre de classement.
+
+## 5. Position Moyenne des Résultats Cliqués (Objectif : Moins de 3)
+
+Montre jusqu'où les utilisateurs doivent défiler en moyenne avant de trouver ce qu'ils cherchent. Si la position moyenne cliquée est 6 ou 7, votre classement est mauvais — le bon produit existe mais est enfoui.
+
+**Solution :** Activez le réglage de pertinence dans AACSearch. Augmentez le poids des champs sur lesquels les utilisateurs recherchent réellement (nom, marque, catégorie) et réduisez le poids des champs moins pertinents.
+
+## Configurer les Analytiques dans AACSearch
+
+Si vous utilisez le widget hébergé d'AACSearch, les cinq métriques sont suivies automatiquement — aucune configuration requise. Le widget envoie un événement `search_query` pour chaque recherche et un événement `result_click` pour chaque clic.
+
+```json
+{
+  "type": "search_query",
+  "query": "chaussures de course",
+  "resultCount": 42,
+  "latencyMs": 18,
+  "sessionId": "sess_xyz"
+}
+```
+
+```json
+{
+  "type": "result_click",
+  "query": "chaussures de course",
+  "productId": "prod_8821",
+  "position": 2,
+  "sessionId": "sess_xyz"
+}
+```
+
+## Conclusion
+
+L'analytique de recherche est la boucle de rétroaction la plus rapide entre votre catalogue et vos clients. Vous n'avez pas besoin de mener des tests A/B ou d'embaucher une équipe de données. Vous devez regarder le tableau de bord une fois par semaine et agir selon ce que vous voyez.
+
+Taux de résultats zéro montre ce qui manque. Requêtes principales montrent ce qui est populaire. Taux de clics montre si les résultats correspondent à l'intention. Taux de sortie montre si l'expérience convainc. Position moyenne montre si le classement est correct.
+
+Corrigez ces cinq métriques et vous améliorerez votre recherche. Améliorez votre recherche et vous augmenterez vos revenus.

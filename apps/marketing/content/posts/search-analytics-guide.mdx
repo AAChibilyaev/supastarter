@@ -1,0 +1,98 @@
+---
+title: "Search Analytics: 5 Metrics Every Merchant Should Track"
+date: 2026-05-02
+image: https://picsum.photos/id/13/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Visitors who search convert 2–3× more than browsers. Yet most merchants never look at their search analytics. Here are the 5 metrics that actually move revenue — and how to fix them.
+tags: [analytics, search, ecommerce, metrics]
+published: true
+---
+
+Visitors who use your site's search bar are the most motivated shoppers on your store. They know what they want, they're actively looking for it, and research consistently shows they convert 2–3× more often than visitors who browse. When search fails them, they leave immediately — and usually don't come back.
+
+AACSearch logs every search event automatically: query text, result count, clicked results, session IDs, and response latency. But data without direction is noise. Here are the five metrics that actually tell you whether your search is helping or hurting.
+
+## 1. Zero-Results Rate (Target: Under 10%)
+
+The zero-results rate is the percentage of searches that return no documents at all. It's the most actionable metric in search analytics because a zero-results page is a guaranteed abandonment — there is literally nothing for the user to do except leave.
+
+A healthy zero-results rate is under 10%. If you're seeing 15–20%, your catalog has gaps or your search configuration has problems.
+
+**Common causes:**
+- Product names don't match how customers search ("trainers" vs "running shoes")
+- Typos that typo-tolerance isn't catching
+- Seasonal or brand-specific terms without synonyms
+
+**Fix:** Open the Analytics dashboard in AACSearch, sort queries by zero-results rate, and add synonyms for the top 10 terms. A single synonym rule — mapping "sneakers" to "running shoes" — can eliminate hundreds of failed searches per week.
+
+## 2. Top Queries (Review Weekly)
+
+Your top queries report is your customers telling you, directly and at scale, exactly what they want to buy. It's the most underused data asset in e-commerce.
+
+A product that appears in the top 20 search queries but doesn't rank in the top 5 results is a conversion problem. A term in the top 10 queries with no matching product is an inventory signal.
+
+**What to do:**
+- Map the top 50 queries to their current rank-1 result. Is it the right product?
+- Flag any top query with a zero-results rate above 5%
+- Use curations to manually pin the best result for your highest-volume terms
+
+## 3. Click-Through Rate (Target: Above 40%)
+
+CTR measures what percentage of searches result in at least one click. A low CTR means users are seeing results but aren't convinced by them — the search worked mechanically, but the results didn't match intent.
+
+**Common causes of low CTR:**
+- Wrong product ranked first
+- Missing product images in results
+- Prices not visible in the result card
+- Results are too similar (no variety in top 5)
+
+**Fix:** Check the lowest-CTR queries in your analytics dashboard. For each one, look at what AACSearch is returning and ask whether the top result is genuinely the best match. Use curations to override ranking for specific high-value queries.
+
+## 4. Search Exit Rate (Target: Under 25%)
+
+Search exit rate is the percentage of sessions where the user's last action was a search — they searched, saw results, and left without clicking anything. This is different from zero-results: you showed them something, it just wasn't convincing.
+
+A high search exit rate often points to a presentation problem: results exist but look wrong, prices are higher than expected, or the facet panel is confusing.
+
+**Fix:** Identify queries with high exit rate and high result count. The results exist — why aren't users clicking? Check the result card design, the facet options, and the rank order.
+
+## 5. Average Position of Clicked Results (Target: Under 3)
+
+This metric tells you, on average, how far down the result list users have to scroll before finding what they want. If the average clicked position is 6 or 7, your ranking is off — the right product exists but it's buried.
+
+**Fix:** Enable relevance tuning in AACSearch. Increase the weight of fields that users actually search by (name, brand, category) and reduce weight on less-relevant fields.
+
+## Setting Up Analytics in AACSearch
+
+If you're using the AACSearch hosted widget, all five of these metrics are tracked automatically — no configuration required. The widget sends a `search_query` event for every search and a `result_click` event for every click.
+
+```json
+{
+  "type": "search_query",
+  "query": "running shoes",
+  "resultCount": 42,
+  "latencyMs": 18,
+  "sessionId": "sess_xyz"
+}
+```
+
+```json
+{
+  "type": "result_click",
+  "query": "running shoes",
+  "productId": "prod_8821",
+  "position": 2,
+  "sessionId": "sess_xyz"
+}
+```
+
+If you're using the REST API or browser SDK directly, add these two events to your search and click handlers.
+
+## The Bottom Line
+
+Search analytics is the fastest feedback loop between your catalog and your customers. You don't need to run A/B tests or hire a data team. You need to look at the dashboard once a week and act on what you see.
+
+Zero-results rate tells you what's missing. Top queries tells you what's popular. CTR tells you whether results match intent. Exit rate tells you whether the experience convinces users. Average position tells you whether your ranking is right.
+
+Fix those five metrics and you'll fix your search. Fix your search and you'll move revenue.

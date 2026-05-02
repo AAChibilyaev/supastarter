@@ -1,0 +1,92 @@
+---
+title: "Such-Analytics: 5 Metriken, die jeder Händler verfolgen sollte"
+date: 2026-05-02
+image: https://picsum.photos/id/13/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Besucher, die die Suchleiste nutzen, konvertieren 2–3× häufiger. Dennoch ignorieren die meisten Händler ihre Such-Analytics. Hier sind die 5 Metriken, die den Umsatz wirklich beeinflussen.
+tags: [analytics, search, ecommerce, metrics]
+published: true
+---
+
+Besucher, die die Suchfunktion Ihres Shops nutzen, sind die motiviertesten Käufer. Sie wissen, was sie wollen, suchen aktiv danach und konvertieren nachweislich 2–3× häufiger als Besucher, die stöbern. Wenn die Suche sie enttäuscht, verlassen sie den Shop sofort.
+
+AACSearch protokolliert automatisch jedes Suchereignis: Suchbegriff, Trefferanzahl, angeklickte Ergebnisse, Session-IDs und Antwortlatenz. Daten ohne Richtung sind jedoch nur Rauschen. Hier sind die fünf Metriken, die wirklich aussagen, ob Ihre Suche hilft oder schadet.
+
+## 1. Null-Ergebnis-Rate (Ziel: unter 10%)
+
+Die Null-Ergebnis-Rate ist der Prozentsatz der Suchanfragen, die keine Dokumente zurückgeben. Eine Seite ohne Ergebnisse führt garantiert zum Absprung — es gibt buchstäblich nichts für den Nutzer zu tun außer zu gehen.
+
+Eine gesunde Null-Ergebnis-Rate liegt unter 10%. Bei 15–20% weist Ihr Katalog Lücken auf oder Ihre Suchkonfiguration hat Probleme.
+
+**Häufige Ursachen:**
+- Produktnamen stimmen nicht mit Kundensuchbegriffen überein („Trainer" vs „Laufschuhe")
+- Tippfehler werden von der Tippfehler-Toleranz nicht erfasst
+- Saisonale oder markenbezogene Begriffe ohne Synonyme
+
+**Lösung:** Öffnen Sie das Analytics-Dashboard in AACSearch, sortieren Sie Anfragen nach Null-Ergebnis-Rate und fügen Sie Synonyme für die Top-10-Begriffe hinzu. Eine einzige Synonymregel kann Hunderte fehlgeschlagene Suchen pro Woche eliminieren.
+
+## 2. Top-Suchanfragen (wöchentlich prüfen)
+
+Ihre Top-Suchanfragen sind Ihre Kunden, die Ihnen direkt und in großem Maßstab sagen, was sie kaufen möchten. Sie sind das am meisten unterschätzte Daten-Asset im E-Commerce.
+
+**Was tun:**
+- Ordnen Sie die Top-50-Anfragen ihrem aktuellen Erstplatzierten zu. Ist es das richtige Produkt?
+- Markieren Sie Anfragen mit einer Null-Ergebnis-Rate über 5%
+- Nutzen Sie Kurierungen, um das beste Ergebnis manuell zu priorisieren
+
+## 3. Klickrate (Ziel: über 40%)
+
+Die Klickrate misst, bei wie viel Prozent der Suchen mindestens einmal geklickt wird. Eine niedrige Klickrate bedeutet, dass Nutzer Ergebnisse sehen, aber nicht überzeugt sind.
+
+**Häufige Ursachen niedriger Klickrate:**
+- Falsches Produkt auf Rang 1
+- Fehlende Produktbilder in den Ergebnissen
+- Preise nicht in der Ergebniskarte sichtbar
+- Ergebnisse zu ähnlich (keine Vielfalt in den Top 5)
+
+**Lösung:** Prüfen Sie die Suchanfragen mit niedrigster Klickrate. Verwenden Sie Kurierungen für spezifische Anfragen mit hohem Wert.
+
+## 4. Such-Absprungrate (Ziel: unter 25%)
+
+Der Prozentsatz der Sitzungen, bei denen die letzte Aktion eine Suche war — der Nutzer hat gesucht, Ergebnisse gesehen und den Shop verlassen, ohne zu klicken. Dies unterscheidet sich von Null-Ergebnissen: Sie haben etwas gezeigt, aber es war nicht überzeugend.
+
+**Lösung:** Identifizieren Sie Suchanfragen mit hoher Absprungrate und hoher Trefferanzahl. Die Ergebnisse existieren — warum klicken die Nutzer nicht? Prüfen Sie das Design der Ergebniskarte, die Facetten-Optionen und die Rangreihenfolge.
+
+## 5. Durchschnittliche Position der angeklickten Ergebnisse (Ziel: unter 3)
+
+Diese Metrik zeigt, wie weit Nutzer durchschnittlich scrollen müssen, bevor sie das Gesuchte finden. Liegt der Durchschnitt bei 6 oder 7, ist Ihr Ranking falsch — das richtige Produkt existiert, ist aber vergraben.
+
+**Lösung:** Aktivieren Sie das Relevanz-Tuning in AACSearch. Erhöhen Sie das Gewicht der Felder, nach denen Nutzer tatsächlich suchen (Name, Marke, Kategorie), und reduzieren Sie das Gewicht weniger relevanter Felder.
+
+## Analytics in AACSearch einrichten
+
+Bei Verwendung des AACSearch-Widgets werden alle fünf Metriken automatisch verfolgt — keine Konfiguration erforderlich. Das Widget sendet bei jeder Suche ein `search_query`-Ereignis und bei jedem Klick ein `result_click`-Ereignis.
+
+```json
+{
+  "type": "search_query",
+  "query": "laufschuhe",
+  "resultCount": 42,
+  "latencyMs": 18,
+  "sessionId": "sess_xyz"
+}
+```
+
+```json
+{
+  "type": "result_click",
+  "query": "laufschuhe",
+  "productId": "prod_8821",
+  "position": 2,
+  "sessionId": "sess_xyz"
+}
+```
+
+## Fazit
+
+Such-Analytics ist die schnellste Rückkopplungsschleife zwischen Ihrem Katalog und Ihren Kunden. Sie müssen keine A/B-Tests durchführen oder ein Datenteam einstellen. Sie müssen einmal pro Woche auf das Dashboard schauen und danach handeln.
+
+Null-Ergebnis-Rate zeigt, was fehlt. Top-Anfragen zeigen, was beliebt ist. Klickrate zeigt, ob Ergebnisse der Absicht entsprechen. Absprungrate zeigt, ob die Erfahrung überzeugt. Durchschnittliche Position zeigt, ob das Ranking stimmt.
+
+Beheben Sie diese fünf Metriken und Sie verbessern Ihre Suche. Verbessern Sie Ihre Suche und Sie steigern Ihren Umsatz.

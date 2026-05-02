@@ -22,6 +22,27 @@ const searchInputSchema = z.object({
 	perPage: z.number().int().min(1).max(100).optional(),
 	page: z.number().int().min(1).max(1000).optional(),
 	highlightFields: z.string().optional(),
+	// ── Typo Tolerance ──
+	numTypos: z.number().int().min(0).max(3).optional(),
+	typoTokensThreshold: z.number().int().min(0).optional(),
+	dropTokensThreshold: z.number().int().min(0).optional(),
+	exact: z.union([z.boolean(), z.literal("true"), z.literal("false")]).optional(),
+	prioritizeExactMatch: z.boolean().optional(),
+	// ── Prefix & Infix ──
+	prefix: z
+		.union([z.boolean(), z.literal("true"), z.literal("false"), z.literal("auto")])
+		.optional(),
+	infix: z.enum(["off", "always", "fallback"]).optional(),
+	queryByWeights: z.string().optional(),
+	// ── Search Params Extensions ──
+	excludeFields: z.string().optional(),
+	highlightStartTag: z.string().optional(),
+	highlightEndTag: z.string().optional(),
+	overrideTags: z.string().optional(),
+	hybridConfidence: z.number().min(0).max(1).optional(),
+	// ── Faceted Search extensions ──
+	facetQuery: z.string().optional(),
+	maxFacetValues: z.number().int().min(1).optional(),
 });
 
 const multiSearchInputSchema = z.object({

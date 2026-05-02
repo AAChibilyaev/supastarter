@@ -8,6 +8,8 @@ import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
 import { NavBar } from "@shared/components/NavBar";
 import { MarketingThemeProvider } from "@shared/components/ThemeProvider";
+import { getBaseUrl } from "@shared/lib/base-url";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { Figtree } from "next/font/google";
@@ -22,9 +24,44 @@ const sansFont = Figtree({
 });
 
 const locales = Object.keys(i18nConfig.locales) as string[];
+const defaultLocale = i18nConfig.defaultLocale;
+
+const ogLocaleMap: Record<string, string> = {
+	en: "en_US",
+	de: "de_DE",
+	es: "es_ES",
+	fr: "fr_FR",
+	ru: "ru_RU",
+};
 
 export function generateStaticParams() {
 	return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+	const { locale } = await params;
+	const baseUrl = getBaseUrl();
+
+	const alternateLanguages: Record<string, string> = {};
+	for (const l of locales) {
+		const prefix = l === defaultLocale ? "" : `/${l}`;
+		alternateLanguages[l] = `${baseUrl}${prefix}`;
+	}
+	alternateLanguages["x-default"] = baseUrl;
+
+	return {
+		alternates: {
+			languages: alternateLanguages,
+		},
+		openGraph: {
+			locale: ogLocaleMap[locale] ?? locale,
+			alternateLocale: locales.filter((l) => l !== locale).map((l) => ogLocaleMap[l] ?? l),
+		},
+	};
 }
 
 export default async function MarketingLayout({

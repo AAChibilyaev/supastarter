@@ -13,6 +13,36 @@ function localePath(locale: string, path: string): string {
 	return `${prefix}${path}`;
 }
 
+type ChangeFrequency = MetadataRoute.Sitemap[number]["changeFrequency"];
+
+function getPagePriority(path: string): number {
+	if (path === "") return 1.0;
+	if (
+		["/features", "/pricing", "/integrations", "/use-cases", "/compare", "/blog"].includes(path)
+	)
+		return 0.9;
+	if (
+		path.startsWith("/features/") ||
+		path.startsWith("/use-cases/") ||
+		path.startsWith("/compare/") ||
+		path.startsWith("/integrations/") ||
+		path.startsWith("/solutions/")
+	)
+		return 0.8;
+	if (["/about", "/enterprise", "/security", "/ai-search", "/developers"].includes(path))
+		return 0.7;
+	return 0.5;
+}
+
+function getChangeFrequency(path: string): ChangeFrequency {
+	if (path === "") return "daily";
+	if (path === "/blog" || path === "/changelog") return "daily";
+	if (path === "/pricing" || path === "/pricing/plans") return "weekly";
+	if (path.startsWith("/features/") || path.startsWith("/integrations/")) return "monthly";
+	if (path.startsWith("/compare/")) return "monthly";
+	return "monthly";
+}
+
 const staticMarketingPages = [
 	"",
 	"/blog",
@@ -108,18 +138,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			locales.map((locale) => ({
 				url: new URL(localePath(locale, page), baseUrl).href,
 				lastModified: new Date(),
+				changeFrequency: getChangeFrequency(page),
+				priority: getPagePriority(page),
 			})),
 		),
 		...postPaths.flatMap((path) =>
 			locales.map((locale) => ({
 				url: new URL(localePath(locale, `/blog/${path}`), baseUrl).href,
 				lastModified: new Date(),
+				changeFrequency: "monthly" as ChangeFrequency,
+				priority: 0.7,
 			})),
 		),
 		...legalPaths.flatMap((path) =>
 			locales.map((locale) => ({
 				url: new URL(localePath(locale, `/legal/${path}`), baseUrl).href,
 				lastModified: new Date(),
+				changeFrequency: "yearly" as ChangeFrequency,
+				priority: 0.3,
 			})),
 		),
 	];

@@ -344,6 +344,38 @@ export const connectorApp = new Hono()
 		return c.json({ status: "deleted", externalId });
 	})
 
+	// DELETE /api/connector/documents — batch delete by externalIds
+	.delete("/connector/documents", async (c) => {
+		const verified = await gateConnectorRequest(c);
+		if (verified instanceof Response) return verified;
+
+		const body = await c.req.json().catch(() => null);
+		if (!body) return c.json({ error: "invalid_json" }, 400);
+
+		const parsed = z
+			.object({
+				externalIds: z.array(z.string()).min(1).max(500),
+			})
+			.safeParse(body);
+		if (!parsed.success) {
+			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
+		}
+
+		try {
+			await enqueueManySearchIngest(
+				verified.indexId,
+				verified.organizationId,
+				"delete",
+				parsed.data.externalIds.map((id) => ({ external_id: id })) as Prisma.InputJsonValue[],
+			);
+		} catch (error) {
+			logger.error("Batch delete failed", { error });
+			return c.json({ error: "delete_failed" }, 502);
+		}
+
+		return c.json({ deleted: parsed.data.externalIds.length });
+	})
+
 	// POST /api/projects/:projectId/diagnostics
 	.post("/projects/:projectId/diagnostics", async (c) => {
 		const verified = await gateConnectorRequest(c);

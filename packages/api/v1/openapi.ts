@@ -199,6 +199,32 @@ export function generateOpenApiSpec() {
 					},
 				},
 			},
+			"/indexes/{indexId}/stats": {
+				get: {
+					summary: "Get index statistics",
+					description:
+						"Returns live document count from Typesense, 30-day usage aggregates, " +
+						"ingest queue state, and active API key count for the specified index.",
+					tags: ["Indexes"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+					],
+					responses: {
+						"200": {
+							description: "Index statistics",
+							content: {
+								"application/json": {
+									schema: { $ref: "#/components/schemas/SearchIndexStats" },
+								},
+							},
+						},
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+					},
+				},
+			},
 
 			// ─── Documents ──────────────────────────────────────────────
 			"/indexes/{indexId}/documents/{documentId}": {
@@ -830,6 +856,39 @@ export function generateOpenApiSpec() {
 						createdAt: { type: "string", format: "date-time" },
 						indexSlug: { type: "string" },
 						indexDisplayName: { type: "string" },
+					},
+				},
+				SearchIndexStats: {
+					type: "object",
+					properties: {
+						id: { type: "string" },
+						slug: { type: "string" },
+						displayName: { type: "string" },
+						version: { type: "integer" },
+						documentCount: {
+							type: "integer",
+							description: "Live document count from Typesense (0 if unavailable)",
+						},
+						usage: {
+							type: "object",
+							properties: {
+								since: { type: "string", format: "date-time" },
+								totalSearches: { type: "integer" },
+								totalIndexed: { type: "integer" },
+								zeroResultCount: { type: "integer" },
+								clickCount: { type: "integer" },
+							},
+						},
+						ingestQueue: {
+							type: "object",
+							properties: {
+								pending: { type: "integer" },
+								failed: { type: "integer" },
+							},
+						},
+						apiKeysCount: { type: "integer" },
+						createdAt: { type: "string", format: "date-time" },
+						updatedAt: { type: "string", format: "date-time" },
 					},
 				},
 				ApiError: {

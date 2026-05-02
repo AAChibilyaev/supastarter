@@ -7,12 +7,18 @@
 
 import {
 	createSearchIndex,
+	db,
 	getSearchIndexById,
 	getSearchIndexBySlug,
 	listSearchIndexes,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import { createPhysicalCollection, ensureAlias } from "@repo/search";
+import {
+	createPhysicalCollection,
+	ensureAlias,
+	getTypesenseClient,
+	physicalCollectionName,
+} from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -158,6 +164,77 @@ export const indexesApp = new Hono()
 			version: index.version,
 			enabled: index.enabled,
 			schema: index.schema,
+			createdAt: index.createdAt,
+			updatedAt: index.updatedAt,
+		});
+	})
+
+	// ── Get index stats ────────────────────────────────────────────
+	.get("/indexes/:indexId/stats", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		const index = await getSearchIndexById(indexId);
+
+		if (!index || index.organizationId !== verified.organizationId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		// Live document count from Typesense (best-effort — 0 if unavailable)
+		let documentCount = 0;
+		try {
+			const client = getTypesenseClient();
+			const collName = physicalCollectionName(index.organizationId, index.slug, index.version);
+			const collection = await client.collections(collName).retrieve();
+			documentCount = collection.num_documents;
+		} catch (error) {
+			logger.warn("Could not retrieve Typesense collection stats", { indexId, error });
+		}
+
+		// Usage aggregation for last 30 days
+		const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+		const usageRows = await db.searchUsageEvent.groupBy({
+			by: ["type"],
+			where: { indexId, createdAt: { gte: since } },
+			_sum: { count: true },
+		});
+		const sumByType = Object.fromEntries(
+			usageRows.map((r) => [r.type, r._sum.count ?? 0]),
+		);
+
+		// Ingest queue + active key counts (parallel)
+		const [pendingCount, failedCount, activeKeysCount] = await Promise.all([
+			db.searchIngestBuffer.count({
+				where: { indexId, processedAt: null },
+			}),
+			db.searchIngestBuffer.count({
+				where: { indexId, processedAt: null, attempts: { gt: 0 } },
+			}),
+			db.searchApiKey.count({
+				where: { indexId, revokedAt: null },
+			}),
+		]);
+
+		return c.json({
+			id: index.id,
+			slug: index.slug,
+			displayName: index.displayName,
+			version: index.version,
+			documentCount,
+			usage: {
+				since: since.toISOString(),
+				totalSearches: sumByType["search_query"] ?? 0,
+				totalIndexed: sumByType["documents_indexed"] ?? 0,
+				zeroResultCount: sumByType["zero_results"] ?? 0,
+				clickCount: sumByType["click"] ?? 0,
+			},
+			ingestQueue: {
+				pending: pendingCount,
+				failed: failedCount,
+			},
+			apiKeysCount: activeKeysCount,
 			createdAt: index.createdAt,
 			updatedAt: index.updatedAt,
 		});

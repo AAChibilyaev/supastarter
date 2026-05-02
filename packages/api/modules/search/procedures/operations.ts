@@ -2,7 +2,11 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireSearchIndex, requireOrganizationAdmin } from "../lib/access";
+import {
+	requireSearchIndex,
+	requireOrganizationAdmin,
+	requireOrganizationMember,
+} from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
 // ── Presets ────────────────────────────────────────────────────
@@ -21,7 +25,8 @@ export const listPresets = protectedProcedure
 	})
 	.input(z.object({ organizationId: z.string(), slug: searchIndexSlugSchema }))
 	.output(z.array(presetSchema))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context }) => {
+		await requireOrganizationMember(input.organizationId, context.user.id);
 		await requireSearchIndex(input.organizationId, input.slug);
 		const client = getTypesenseClient();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,8 +71,10 @@ export const listAliases = protectedProcedure
 		tags: ["Search"],
 		summary: "List collection aliases",
 	})
+	.input(z.object({ organizationId: z.string() }))
 	.output(z.array(z.object({ name: z.string(), collection: z.string() })))
-	.handler(async () => {
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
 		const client = getTypesenseClient();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const aliases = (await (client as any).aliases().retrieve()) as any;
@@ -86,12 +93,14 @@ export const upsertAlias = protectedProcedure
 	})
 	.input(
 		z.object({
+			organizationId: z.string(),
 			name: z.string().min(1).max(200),
 			collection: z.string().min(1).max(200),
 		}),
 	)
 	.output(z.object({ name: z.string(), collection: z.string() }))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
 		const client = getTypesenseClient();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		await (client as any).aliases().upsert(input.name, {
@@ -109,9 +118,10 @@ export const createSnapshot = protectedProcedure
 		tags: ["Search"],
 		summary: "Create a database snapshot for backup",
 	})
-	.input(z.object({ snapshotPath: z.string().optional() }))
+	.input(z.object({ organizationId: z.string(), snapshotPath: z.string().optional() }))
 	.output(z.object({ success: z.boolean(), path: z.string().optional() }))
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
 		const client = getTypesenseClient();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const result = (await (client as any).operations().perform("snapshot", {

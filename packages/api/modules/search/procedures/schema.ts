@@ -29,7 +29,16 @@ export const getSchema = protectedProcedure
 	.output(
 		z.object({
 			name: z.string(),
-			fields: z.array(z.any()),
+			fields: z.array(
+				z.object({
+					name: z.string(),
+					type: z.string(),
+					optional: z.boolean().optional(),
+					facet: z.boolean().optional(),
+					index: z.boolean().optional(),
+					sort: z.boolean().optional(),
+				}),
+			),
 			defaultSortingField: z.string().nullable(),
 			enableNestedFields: z.boolean(),
 			numDocuments: z.number(),

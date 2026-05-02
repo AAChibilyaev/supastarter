@@ -876,86 +876,86 @@
 		"description": "Детальное сравнение AACsearch и Algolia. AACsearch обеспечивает такое же качество поиска в 5 раз дешевле — с мгновенным развёртыванием, встроенной аналитикой и релевантностью на Typesense."
 	},
 	"compareElasticsearch": {
-		"title": "AACsearch vs Elasticsearch — The Honest Comparison",
-		"subtitle": "Elasticsearch is a powerful general-purpose data platform. AACsearch is a purpose-built search API. Different tools for different jobs — here is when each makes sense.",
+		"title": "AACsearch vs Elasticsearch — Честное сравнение",
+		"subtitle": "Elasticsearch — мощная универсальная платформа для данных. AACsearch — специализированный поисковый API. Разные инструменты для разных задач — вот когда каждый из них имеет смысл.",
 		"items": {
 			"complexity": {
-				"title": "Operational complexity",
-				"description": "Elasticsearch requires cluster management, JVM tuning, shard optimization, and ongoing maintenance. AACsearch is a hosted API — zero-ops, no infrastructure to manage."
+				"title": "Сложность эксплуатации",
+				"description": "Elasticsearch требует управления кластером, настройки JVM, оптимизации шардов и постоянного обслуживания. AACsearch — это хостируемый API — нулевое администрирование, без управления инфраструктурой."
 			},
 			"latency": {
-				"title": "Search latency",
-				"description": "Elasticsearch p99 search latency is typically 100-400ms depending on cluster size and query complexity. AACsearch targets under 50ms p99 for product and document search workloads."
+				"title": "Задержка поиска",
+				"description": "Задержка поиска p99 в Elasticsearch обычно составляет 100-400мс в зависимости от размера кластера и сложности запроса. AACsearch нацелен на менее 50мс p99 для поиска товаров и документов."
 			},
 			"useCase": {
-				"title": "Use case fit",
-				"description": "Elasticsearch excels at log analytics, observability pipelines, full-text enterprise search, and complex aggregations. AACsearch excels at product search, help center search, and SaaS application search."
+				"title": "Соответствие сценариям",
+				"description": "Elasticsearch превосходен для аналитики логов, observability-пайплайнов, корпоративного полнотекстового поиска и сложных агрегаций. AACsearch превосходен для поиска товаров, поиска по базе знаний и поиска в SaaS-приложениях."
 			},
 			"cost": {
-				"title": "Cost",
-				"description": "Elasticsearch Cloud is expensive for pure search workloads — you pay for cluster nodes you don't need. AACsearch pricing is based on search-units — pay only for what you use."
+				"title": "Стоимость",
+				"description": "Elasticsearch Cloud дорог для чистого поиска — вы платите за узлы кластера, которые вам не нужны. Ценообразование AACsearch основано на поисковых единицах — платите только за то, что используете."
 			},
 			"schema": {
-				"title": "Schema management",
-				"description": "Elasticsearch mapping changes are complex and often require reindexing with downtime. AACsearch has zero-downtime alias-swap reindex — schema changes without any interruption."
+				"title": "Управление схемой",
+				"description": "Изменение маппинга в Elasticsearch сложно и часто требует переиндексации с простоем. В AACsearch переиндексация с заменой алиасов происходит без простоев — изменения схемы без прерывания работы."
 			},
 			"verdict": {
-				"title": "When to choose AACsearch",
-				"description": "If your use case is product search, help center, or SaaS full-text search — and you do not need log analytics or complex aggregations — AACsearch is the simpler, cheaper, faster option."
+				"title": "Когда выбрать AACsearch",
+				"description": "Если ваш сценарий — поиск товаров, база знаний или полнотекстовый поиск в SaaS — и вам не нужна аналитика логов или сложные агрегации — AACsearch будет проще, дешевле и быстрее."
 			}
 		},
-		"codeTitle": "Zero-ops search, not cluster management",
-		"codeSubtitle": "AACsearch is a managed search API. Elasticsearch requires cluster provisioning, JVM tuning, and ongoing maintenance.",
+		"codeTitle": "Поиск без администрирования, а не управление кластером",
+		"codeSubtitle": "AACsearch — управляемый поисковый API. Elasticsearch требует развёртывания кластера, настройки JVM и постоянного обслуживания.",
 		"table": {
-			"title": "Feature Comparison",
-			"subtitle": "A side-by-side look at how AACsearch and Elasticsearch compare across key dimensions",
+			"title": "Сравнение функций",
+			"subtitle": "Детальное сравнение AACsearch и Elasticsearch по ключевым параметрам",
 			"aacsearch": "AACsearch",
 			"elasticsearch": "Elasticsearch",
 			"features": {
 				"pricingModel": {
-					"title": "Pricing model",
-					"aacsearch": "Per-index, unlimited operations",
-					"elasticsearch": "Per node-hour + storage (cloud) or self-hosted infra cost"
+					"title": "Модель ценообразования",
+					"aacsearch": "За индекс, безлимитные операции",
+					"elasticsearch": "За нодо-часы + хранилище (облако) или стоимость своей инфраструктуры"
 				},
 				"entryPrice": {
-					"title": "Entry price",
-					"aacsearch": "Free (1 index, 10k docs)",
-					"elasticsearch": "Free (self-hosted) / ~$95/mo Elastic Cloud (2 nodes)"
+					"title": "Входная цена",
+					"aacsearch": "Бесплатно (1 индекс, 10k док.)",
+					"elasticsearch": "Бесплатно (self-hosted) / ~$95/мес Elastic Cloud (2 ноды)"
 				},
 				"midMarket": {
-					"title": "100k docs, 500k searches/mo",
+					"title": "100k док., 500k поисков/мес",
 					"aacsearch": "$99/mo",
-					"elasticsearch": "~$350-600/mo (Elastic Cloud, 3-node cluster, 120GB storage)"
+					"elasticsearch": "~$350-600/мес (Elastic Cloud, 3 ноды, 120ГБ)"
 				},
 				"enterprise": {
-					"title": "1M docs, 5M searches/mo",
+					"title": "1М док., 5М поисков/мес",
 					"aacsearch": "$499/mo",
-					"elasticsearch": "~$1,200-2,500/mo (Elastic Cloud, 5-10 node cluster)"
+					"elasticsearch": "~$1,200-2,500/мес (Elastic Cloud, 5-10 нод)"
 				},
 				"multiTenancy": {
-					"title": "Multi-tenancy",
-					"aacsearch": "Native (org-scoped API keys)",
-					"elasticsearch": "Requires separate indices or cross-cluster search setup"
+					"title": "Мультиарендность",
+					"aacsearch": "Встроенная (API-ключи с областью видимости)",
+					"elasticsearch": "Требует отдельных индексов или настройки кросс-кластерного поиска"
 				},
 				"analytics": {
-					"title": "Analytics dashboard",
-					"aacsearch": "Built-in (all plans)",
-					"elasticsearch": "Requires Kibana setup and maintenance"
+					"title": "Панель аналитики",
+					"aacsearch": "Встроенная (все тарифы)",
+					"elasticsearch": "Требует настройки и обслуживания Kibana"
 				},
 				"widget": {
-					"title": "Widget (embeddable UI)",
-					"aacsearch": "Included",
-					"elasticsearch": "Requires custom UI with Elasticsearch JS client"
+					"title": "Виджет (встраиваемый UI)",
+					"aacsearch": "Включён",
+					"elasticsearch": "Требует кастомного UI с Elasticsearch JS клиентом"
 				},
 				"connectors": {
-					"title": "CMS Connectors",
-					"aacsearch": "PrestaShop, Bitrix — native sync",
-					"elasticsearch": "None — custom integration needed"
+					"title": "CMS-коннекторы",
+					"aacsearch": "PrestaShop, Bitrix — нативная синхронизация",
+					"elasticsearch": "Нет — требуется кастомная интеграция"
 				},
 				"scopedTokens": {
-					"title": "Scoped API tokens",
-					"aacsearch": "Built-in HMAC tokens",
-					"elasticsearch": "Requires API key setup with role-based access control"
+					"title": "Токены с ограниченной областью",
+					"aacsearch": "Встроенные HMAC-токены",
+					"elasticsearch": "Требует настройки API-ключей с RBAC"
 				},
 				"geosearch": {
 					"title": "Geo-search",
@@ -963,22 +963,22 @@
 					"elasticsearch": "Yes (geo_shape, geo_point)"
 				},
 				"typoTolerance": {
-					"title": "Typo tolerance",
-					"aacsearch": "Configurable per-index",
-					"elasticsearch": "Requires custom analyzer configuration (fuzzy queries)"
+					"title": "Устойчивость к опечаткам",
+					"aacsearch": "Настраивается по индексу",
+					"elasticsearch": "Требует кастомной конфигурации анализатора (fuzzy queries)"
 				},
 				"relevanceTuning": {
-					"title": "Relevance tuning",
-					"aacsearch": "Rank formula, synonyms, custom ranking",
-					"elasticsearch": "BM25 scoring, function_score, custom similarity"
+					"title": "Настройка релевантности",
+					"aacsearch": "Формула ранжирования, синонимы, кастомная сортировка",
+					"elasticsearch": "BM25, function_score, кастомная схожесть"
 				},
 				"selfHost": {
-					"title": "Self-host option",
-					"aacsearch": "Full Typesense export, migrate anytime",
-					"elasticsearch": "Fully self-hostable — Elastic's main strength"
+					"title": "Self-host опция",
+					"aacsearch": "Полный экспорт Typesense, миграция в любое время",
+					"elasticsearch": "Полностью self-hostable — главное преимущество ES"
 				},
 				"searchEngine": {
-					"title": "Search engine",
+					"title": "Поисковый движок",
 					"aacsearch": "Typesense (open-source, C++)",
 					"elasticsearch": "Apache Lucene (open-source, Java)"
 				},
@@ -988,78 +988,78 @@
 					"elasticsearch": "99.9% (Elastic Cloud, higher tiers available)"
 				},
 				"logRetention": {
-					"title": "Log retention",
-					"aacsearch": "30 days (all plans)",
-					"elasticsearch": "Configurable (self-managed) / varies by Elastic Cloud plan"
+					"title": "Хранение логов",
+					"aacsearch": "30 дней (все тарифы)",
+					"elasticsearch": "Настраивается (self-managed) / зависит от тарифа Elastic Cloud"
 				}
 			}
 		},
 		"scenarios": {
-			"title": "Pricing Comparison Scenarios",
+			"title": "Сценарии сравнения цен",
 			"scenario1": {
-				"heading": "Small e-commerce (10k products, 50k searches/mo)",
-				"elasticsearch": "Elasticsearch: Self-hosted (free) or Elastic Cloud ~$95/mo (2-node cluster)",
-				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
-				"saving": "Saving: Up to $95/mo vs Elastic Cloud"
+				"heading": "Небольшой e-commerce (10k товаров, 50k поисков/мес)",
+				"elasticsearch": "Elasticsearch: Self-hosted (бесплатно) или Elastic Cloud ~$95/мес (2 ноды)",
+				"aacsearch": "AACsearch: Бесплатный тариф (1 индекс, 10k док.) — $0/мес",
+				"saving": "Экономия: до $95/мес vs Elastic Cloud"
 			},
 			"scenario2": {
-				"heading": "Mid-market (100k products, 500k searches/mo)",
-				"elasticsearch": "Elasticsearch: Elastic Cloud ~$350-600/mo (3-node, 120GB) + DevOps time for cluster management",
-				"aacsearch": "AACsearch: Scale plan $99/mo — zero ops, automatic scaling",
-				"saving": "Saving: ~$250-500/mo plus no DevOps overhead"
+				"heading": "Средний бизнес (100k товаров, 500k поисков/мес)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$350-600/мес (3 ноды, 120ГБ) + время DevOps на управление кластером",
+				"aacsearch": "AACsearch: Scale $99/мес — без администрирования, авто-масштабирование",
+				"saving": "Экономия: ~$250-500/мес + без затрат на DevOps"
 			},
 			"scenario3": {
-				"heading": "Enterprise (1M products, 5M searches/mo)",
-				"elasticsearch": "Elasticsearch: Elastic Cloud ~$1,200-2,500/mo (5-10 nodes) + dedicated SRE team",
-				"aacsearch": "AACsearch: Pro plan $499/mo",
-				"saving": "Saving: ~$700-2,000/mo plus full SRE cost elimination"
+				"heading": "Enterprise (1М товаров, 5М поисков/мес)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$1,200-2,500/мес (5-10 нод) + команда SRE",
+				"aacsearch": "AACsearch: Pro $499/мес",
+				"saving": "Экономия: ~$700-2,000/мес + полное исключение затрат на SRE"
 			}
 		},
 		"whyMigrate": {
-			"title": "Why Teams Migrate from Elasticsearch to AACsearch",
+			"title": "Почему команды мигрируют с Elasticsearch на AACsearch",
 			"items": [
-				"Zero-ops — No cluster provisioning, JVM tuning, or shard management. AACsearch is fully managed.",
-				"Automatic scaling — AACsearch handles traffic spikes without capacity planning or cluster resizing.",
-				"Predictable pricing — Flat per-index cost vs unpredictable node-hour + storage bills from Elastic Cloud.",
-				"Built-in analytics — Search analytics out of the box. No Kibana setup, no dashboard maintenance."
+				"Zero-ops — Никакого развёртывания кластеров, настройки JVM или управления шардами. AACsearch полностью управляемый.",
+				"Автоматическое масштабирование — AACsearch обрабатывает пики трафика без планирования ёмкости или изменения размера кластера.",
+				"Предсказуемое ценообразование — Фиксированная стоимость за индекс против непредсказуемых счетов за нодо-часы в Elastic Cloud.",
+				"Встроенная аналитика — Аналитика поиска из коробки. Никакой настройки Kibana, никакого обслуживания дашбордов."
 			]
 		},
 		"testimonial": {
-			"quote": "We spent more time managing our Elasticsearch cluster than actually building search features. Migrated to AACsearch in a weekend — zero ops, lower latency, and the dashboard showed us search gaps we had no visibility into before.",
-			"author": "CTO, B2B SaaS company (migrated from Elasticsearch Cloud)"
+			"quote": "Мы тратили больше времени на управление кластером Elasticsearch, чем на разработку поисковых функций. Мигрировали на AACsearch за выходные — ноль администрирования, меньшая задержка, и дашборд показал пробелы в поиске, о которых мы раньше не знали.",
+			"author": "CTO, B2B SaaS компания (мигрировали с Elasticsearch Cloud)"
 		},
 		"decisionMatrix": {
-			"title": "When to Choose Each Platform",
+			"title": "Когда выбирать каждую платформу",
 			"whenAACsearch": {
-				"heading": "Choose AACsearch if you:",
+				"heading": "Выберите AACsearch, если вы:",
 				"items": [
-					"Want zero-ops search — no cluster provisioning or JVM tuning",
-					"Need automatic scaling without capacity planning",
-					"Want search analytics, widget, and connectors included",
-					"Are paying Elastic Cloud bills and want predictable pricing",
-					"Build product search, help center, or SaaS application search"
+					"Хотите поиск без администрирования — без развёртывания кластера или настройки JVM",
+					"Нуждаетесь в автоматическом масштабировании без планирования ёмкости",
+					"Хотите аналитику поиска, виджет и коннекторы включёнными в продукт",
+					"Платите счета Elastic Cloud и хотите предсказуемое ценообразование",
+					"Создаёте поиск товаров, базы знаний или поиск в SaaS-приложениях"
 				]
 			},
 			"whenElasticsearch": {
-				"heading": "Choose Elasticsearch if you:",
+				"heading": "Выберите Elasticsearch, если вы:",
 				"items": [
-					"Need log analytics / observability pipelines (ELK stack)",
-					"Require complex aggregations and data analytics queries",
-					"Need on-prem control with full self-hosting flexibility",
-					"Have an existing Elasticsearch infrastructure with committed investment",
-					"Require advanced ES features (machine learning, graph exploration)"
+					"Нуждаетесь в аналитике логов / observability-пайплайнах (ELK стек)",
+					"Требуются сложные агрегации и аналитические запросы к данным",
+					"Нужен контроль on-prem с полной гибкостью self-hosting",
+					"Имеете существующую инфраструктуру Elasticsearch с инвестициями",
+					"Требуются продвинутые функции ES (машинное обучение, графовый анализ)"
 				]
 			}
 		},
 		"cta": {
-			"heading": "Ready to switch from Elasticsearch?",
-			"description": "Start a free trial — no credit card required. Zero-ops search in minutes, not weeks.",
-			"button": "Start Free Trial →"
+			"heading": "Готовы перейти с Elasticsearch?",
+			"description": "Начните бесплатный пробный период — без кредитной карты. Поиск без администрирования за минуты, а не за недели.",
+			"button": "Начать бесплатно →"
 		}
 	},
 	"compareElasticsearchPage": {
-		"title": "AACsearch vs Elasticsearch: The Honest Alternative (2026)",
-		"description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications."
+		"title": "AACsearch vs Elasticsearch: Честная альтернатива (2026)",
+		"description": "Детальное сравнение AACsearch и Elasticsearch. AACsearch предоставляет поиск без необходимости управлять инфраструктурой, автоматическое масштабирование, встроенную аналитику и предсказуемое ценообразование — без управления кластером Elasticsearch. Настоящая альтернатива Elasticsearch для современных приложений."
 	},
 	"compareMeilisearch": {
 		"title": "AACsearch vs Meilisearch",

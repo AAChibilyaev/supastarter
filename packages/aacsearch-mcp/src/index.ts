@@ -79,6 +79,103 @@ const searchStatsInputSchema = z.object({
 	indexSlug: z.string().optional(),
 });
 
+const createIndexInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+	slug: z.string().min(1).max(64),
+	displayName: z.string().min(1).max(120),
+	fields: z
+		.array(
+			z.object({
+				name: z.string().min(1),
+				type: z.enum([
+					"string",
+					"int32",
+					"int64",
+					"float",
+					"bool",
+					"string[]",
+					"int32[]",
+					"int64[]",
+					"float[]",
+					"bool[]",
+					"geopoint",
+					"geopoint[]",
+					"object",
+					"object[]",
+					"string*",
+					"image",
+				]),
+				facet: z.boolean().optional(),
+				optional: z.boolean().optional(),
+				index: z.boolean().optional(),
+				sort: z.boolean().optional(),
+				locale: z.string().optional(),
+				numDim: z.number().int().positive().optional(),
+			}),
+		)
+		.min(1),
+	defaultSortingField: z.string().optional(),
+});
+
+const updateIndexInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	indexId: z.string().min(1, "indexId is required"),
+	displayName: z.string().min(1).max(120).optional(),
+	enabled: z.boolean().optional(),
+});
+
+const deleteIndexInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	indexId: z.string().min(1, "indexId is required"),
+});
+
+const deleteDocumentInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	indexId: z.string().min(1, "indexId is required"),
+	documentId: z.string().min(1, "documentId is required"),
+});
+
+const listDocumentsInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	indexId: z.string().min(1, "indexId is required"),
+	page: z.number().int().min(1).optional(),
+	perPage: z.number().int().min(1).max(100).optional(),
+	q: z.string().optional(),
+	filterBy: z.string().optional(),
+});
+
+const createKeyInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+	indexSlug: z.string().min(1).max(64),
+	name: z.string().min(1).max(120),
+	scopes: z
+		.array(z.enum(["admin", "ingest", "search"]))
+		.min(1),
+	allowedOrigins: z.array(z.string().min(3).max(255)).max(20).optional(),
+	rateLimitPerMinute: z.number().int().min(1).max(60_000).optional(),
+	expiresAt: z.string().datetime().optional(),
+});
+
+const listKeysInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+});
+
+const revokeKeyInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	keyId: z.string().min(1, "keyId is required"),
+});
+
 // ── MCP tool definitions ────────────────────────────────────────────────
 
 interface ToolDefinition {
@@ -213,9 +310,264 @@ const tools: ToolDefinition[] = [
 			required: ["baseUrl", "apiKey", "projectId"],
 		},
 	},
+	{
+		name: "create_index",
+		description:
+			"Create a new search index with a schema. Requires slug, displayName, and an array of field definitions. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+				slug: {
+					type: "string",
+					description: "Unique index slug (lowercase, hyphens)",
+				},
+				displayName: {
+					type: "string",
+					description: "Human-readable display name",
+				},
+				fields: {
+					type: "array",
+					description: "Array of field definitions (name, type, facet, optional, index, sort)",
+					items: { type: "object" },
+				},
+				defaultSortingField: {
+					type: "string",
+					description: "Optional default field to sort results by",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId", "slug", "displayName", "fields"],
+		},
+	},
+	{
+		name: "update_index",
+		description:
+			"Update an existing search index (displayName, enabled status). Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID)",
+				},
+				displayName: {
+					type: "string",
+					description: "Optional new display name",
+				},
+				enabled: {
+					type: "boolean",
+					description: "Optional enable/disable the index",
+				},
+			},
+			required: ["baseUrl", "apiKey", "indexId"],
+		},
+	},
+	{
+		name: "delete_index",
+		description:
+			"Permanently delete a search index and its Typesense collection. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID) to delete",
+				},
+			},
+			required: ["baseUrl", "apiKey", "indexId"],
+		},
+	},
+	{
+		name: "delete_document",
+		description:
+			"Delete a single document from a search index by its document ID. Requires an ingest-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Ingest-scoped API key",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID)",
+				},
+				documentId: {
+					type: "string",
+					description: "Document ID to delete",
+				},
+			},
+			required: ["baseUrl", "apiKey", "indexId", "documentId"],
+		},
+	},
+	{
+		name: "list_documents",
+		description:
+			"List documents in a search index with optional pagination, search query, and filter. Returns documents, total count, and pagination info. Requires a search-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Search-scoped API key",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID)",
+				},
+				page: {
+					type: "number",
+					description: "Page number (default: 1)",
+				},
+				perPage: {
+					type: "number",
+					description: "Results per page (1-100, default: 20)",
+				},
+				q: {
+					type: "string",
+					description: "Search query (default: * for all documents)",
+				},
+				filterBy: {
+					type: "string",
+					description: "Optional filter expression (Typesense filter-by syntax)",
+				},
+			},
+			required: ["baseUrl", "apiKey", "indexId"],
+		},
+	},
+	{
+		name: "create_key",
+		description:
+			"Create a new API key for a search index with specified scopes (admin, ingest, search) and optional restrictions. Returns the key ID, prefix, and rawKey (shown once). Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key to authorize this operation",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+				indexSlug: {
+					type: "string",
+					description: "Slug of the index to create the key for",
+				},
+				name: {
+					type: "string",
+					description: "Human-readable name for the key",
+				},
+				scopes: {
+					type: "array",
+					description: "API key scopes: admin, ingest, or search",
+					items: { type: "string" },
+				},
+				allowedOrigins: {
+					type: "array",
+					description: "Optional CORS origin allowlist",
+					items: { type: "string" },
+				},
+				rateLimitPerMinute: {
+					type: "number",
+					description: "Optional rate limit per minute (1-60000)",
+				},
+				expiresAt: {
+					type: "string",
+					description: "Optional ISO datetime for key expiration",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId", "indexSlug", "name", "scopes"],
+		},
+	},
+	{
+		name: "list_keys",
+		description:
+			"List all API keys for a project, grouped by index. Returns key ID, name, prefix, scopes, and expiry for each key. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId"],
+		},
+	},
+	{
+		name: "revoke_key",
+		description:
+			"Revoke an API key by its ID. Once revoked, the key can no longer be used for any API calls. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				keyId: {
+					type: "string",
+					description: "Key ID (UUID) to revoke",
+				},
+			},
+			required: ["baseUrl", "apiKey", "keyId"],
+		},
+	},
 ];
 
-// ── Tool implementations ────────────────────────────────────────────────
+// ── Helper: fetch with auth ──────────────────────────────────────────────
 
 /**
  * Build the authorization header value from the apiKey.
@@ -226,41 +578,24 @@ function authHeader(apiKey: string): string {
 }
 
 /**
- * Search documents via the public search endpoint.
- * POST /api/search/public/:slug
+ * Perform an HTTP fetch to a V1 REST API endpoint with auth and error handling.
+ * Returns the MCP content result object.
  */
-async function toolSearch(params: Record<string, unknown>): Promise<unknown> {
-	const parsed = searchInputSchema.safeParse(params);
-	if (!parsed.success) {
-		return {
-			content: [
-				{
-					type: "text",
-					text: `Invalid input: ${JSON.stringify(parsed.error.issues)}`,
-				},
-			],
-			isError: true,
-		};
-	}
-
-	const { baseUrl, apiKey, indexSlug, q, filterBy, perPage, page } = parsed.data;
-	const url = `${baseUrl.replace(/\/+$/, "")}/api/search/public/${encodeURIComponent(indexSlug)}`;
-
+async function v1Fetch(
+	method: string,
+	url: string,
+	apiKey: string,
+	body?: Record<string, unknown>,
+): Promise<unknown> {
 	try {
-		const body: Record<string, unknown> = { q };
-		if (filterBy !== undefined) body.filterBy = filterBy;
-		if (perPage !== undefined) body.perPage = perPage;
-		if (page !== undefined) body.page = page;
+		const headers: Record<string, string> = { Authorization: authHeader(apiKey) };
+		const opts: RequestInit = { method, headers };
+		if (body !== undefined) {
+			headers["Content-Type"] = "application/json";
+			opts.body = JSON.stringify(body);
+		}
 
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: authHeader(apiKey),
-			},
-			body: JSON.stringify(body),
-		});
-
+		const response = await fetch(url, opts);
 		const text = await response.text();
 		let data: unknown;
 		try {
@@ -274,21 +609,14 @@ async function toolSearch(params: Record<string, unknown>): Promise<unknown> {
 				content: [
 					{
 						type: "text",
-						text: `Search failed (${response.status}): ${JSON.stringify(data)}`,
+						text: `${method} ${url} failed (${response.status}): ${JSON.stringify(data)}`,
 					},
 				],
 				isError: true,
 			};
 		}
 
-		return {
-			content: [
-				{
-					type: "text",
-					text: JSON.stringify(data, null, 2),
-				},
-			],
-		};
+		return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 	} catch (error) {
 		return {
 			content: [
@@ -303,6 +631,39 @@ async function toolSearch(params: Record<string, unknown>): Promise<unknown> {
 }
 
 /**
+ * Extract baseUrl and apiKey from validated params, build a V1 URL path.
+ */
+function v1Url(baseUrl: string, path: string): string {
+	return `${baseUrl.replace(/\/+$/, "")}${path}`;
+}
+
+// ── Tool implementations ────────────────────────────────────────────────
+
+/**
+ * Search documents via the public search endpoint.
+ * POST /api/search/public/:slug
+ */
+async function toolSearch(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = searchInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, indexSlug, q, filterBy, perPage, page } = parsed.data;
+	const url = v1Url(baseUrl, `/api/search/public/${encodeURIComponent(indexSlug)}`);
+
+	const body: Record<string, unknown> = { q };
+	if (filterBy !== undefined) body.filterBy = filterBy;
+	if (perPage !== undefined) body.perPage = perPage;
+	if (page !== undefined) body.page = page;
+
+	return v1Fetch("POST", url, apiKey, body);
+}
+
+/**
  * List indexes via the V1 REST API.
  * GET /v1/projects/:projectId/indexes
  */
@@ -310,26 +671,14 @@ async function toolListIndexes(params: Record<string, unknown>): Promise<unknown
 	const parsed = listIndexesInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{
-					type: "text",
-					text: `Invalid input: ${JSON.stringify(parsed.error.issues)}`,
-				},
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
 
 	const { baseUrl, apiKey, projectId } = parsed.data;
 
-	// If no projectId is provided, we first try to derive it.
-	// The V1 API requires the projectId in the URL path.
-	let pid = projectId;
-
-	if (!pid) {
-		// Attempt to get org from the key by calling the list endpoint
-		// with a random project ID to get an error with context, or
-		// fall back to instructing the user.
+	if (!projectId) {
 		return {
 			content: [
 				{
@@ -341,55 +690,8 @@ async function toolListIndexes(params: Record<string, unknown>): Promise<unknown
 		};
 	}
 
-	const url = `${baseUrl.replace(/\/+$/, "")}/v1/projects/${encodeURIComponent(pid)}/indexes`;
-
-	try {
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Authorization: authHeader(apiKey),
-			},
-		});
-
-		const text = await response.text();
-		let data: unknown;
-		try {
-			data = JSON.parse(text);
-		} catch {
-			data = text;
-		}
-
-		if (!response.ok) {
-			return {
-				content: [
-					{
-						type: "text",
-						text: `List indexes failed (${response.status}): ${JSON.stringify(data)}`,
-					},
-				],
-				isError: true,
-			};
-		}
-
-		return {
-			content: [
-				{
-					type: "text",
-					text: JSON.stringify(data, null, 2),
-				},
-			],
-		};
-	} catch (error) {
-		return {
-			content: [
-				{
-					type: "text",
-					text: `Network error: ${error instanceof Error ? error.message : String(error)}`,
-				},
-			],
-			isError: true,
-		};
-	}
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/indexes`);
+	return v1Fetch("GET", url, apiKey);
 }
 
 /**
@@ -400,68 +702,17 @@ async function toolUpsertDocument(params: Record<string, unknown>): Promise<unkn
 	const parsed = upsertDocumentInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{
-					type: "text",
-					text: `Invalid input: ${JSON.stringify(parsed.error.issues)}`,
-				},
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
 
 	const { baseUrl, apiKey, indexId, documentId, document } = parsed.data;
-	const url = `${baseUrl.replace(/\/+$/, "")}/v1/indexes/${encodeURIComponent(indexId)}/documents/${encodeURIComponent(documentId)}`;
-
-	try {
-		const response = await fetch(url, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: authHeader(apiKey),
-			},
-			body: JSON.stringify(document),
-		});
-
-		const text = await response.text();
-		let data: unknown;
-		try {
-			data = JSON.parse(text);
-		} catch {
-			data = text;
-		}
-
-		if (!response.ok) {
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Upsert document failed (${response.status}): ${JSON.stringify(data)}`,
-					},
-				],
-				isError: true,
-			};
-		}
-
-		return {
-			content: [
-				{
-					type: "text",
-					text: JSON.stringify(data, null, 2),
-				},
-			],
-		};
-	} catch (error) {
-		return {
-			content: [
-				{
-					type: "text",
-					text: `Network error: ${error instanceof Error ? error.message : String(error)}`,
-				},
-			],
-			isError: true,
-		};
-	}
+	const url = v1Url(
+		baseUrl,
+		`/v1/indexes/${encodeURIComponent(indexId)}/documents/${encodeURIComponent(documentId)}`,
+	);
+	return v1Fetch("PUT", url, apiKey, document);
 }
 
 /**
@@ -472,66 +723,186 @@ async function toolSearchStats(params: Record<string, unknown>): Promise<unknown
 	const parsed = searchStatsInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{
-					type: "text",
-					text: `Invalid input: ${JSON.stringify(parsed.error.issues)}`,
-				},
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
 
 	const { baseUrl, apiKey, projectId } = parsed.data;
-	const url = `${baseUrl.replace(/\/+$/, "")}/v1/projects/${encodeURIComponent(projectId)}/usage`;
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/usage`);
+	return v1Fetch("GET", url, apiKey);
+}
 
-	try {
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Authorization: authHeader(apiKey),
-			},
-		});
-
-		const text = await response.text();
-		let data: unknown;
-		try {
-			data = JSON.parse(text);
-		} catch {
-			data = text;
-		}
-
-		if (!response.ok) {
-			return {
-				content: [
-					{
-						type: "text",
-						text: `Search stats failed (${response.status}): ${JSON.stringify(data)}`,
-					},
-				],
-				isError: true,
-			};
-		}
-
+/**
+ * List documents in an index.
+ * GET /v1/indexes/:indexId/documents
+ */
+async function toolListDocuments(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = listDocumentsInputSchema.safeParse(params);
+	if (!parsed.success) {
 		return {
-			content: [
-				{
-					type: "text",
-					text: JSON.stringify(data, null, 2),
-				},
-			],
-		};
-	} catch (error) {
-		return {
-			content: [
-				{
-					type: "text",
-					text: `Network error: ${error instanceof Error ? error.message : String(error)}`,
-				},
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
+
+	const { baseUrl, apiKey, indexId, page, perPage, q, filterBy } = parsed.data;
+	const searchParams = new URLSearchParams();
+	if (page !== undefined) searchParams.set("page", String(page));
+	if (perPage !== undefined) searchParams.set("per_page", String(perPage));
+	if (q !== undefined) searchParams.set("q", q);
+	if (filterBy !== undefined) searchParams.set("filter_by", filterBy);
+	const query = searchParams.toString();
+	const url = v1Url(
+		baseUrl,
+		`/v1/indexes/${encodeURIComponent(indexId)}/documents${query ? `?${query}` : ""}`,
+	);
+	return v1Fetch("GET", url, apiKey);
+}
+
+/**
+ * Delete a single document from an index.
+ * DELETE /v1/indexes/:indexId/documents/:documentId
+ */
+async function toolDeleteDocument(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = deleteDocumentInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, indexId, documentId } = parsed.data;
+	const url = v1Url(
+		baseUrl,
+		`/v1/indexes/${encodeURIComponent(indexId)}/documents/${encodeURIComponent(documentId)}`,
+	);
+	return v1Fetch("DELETE", url, apiKey);
+}
+
+/**
+ * Create a new search index.
+ * POST /v1/projects/:projectId/indexes
+ */
+async function toolCreateIndex(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = createIndexInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId, slug, displayName, fields, defaultSortingField } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/indexes`);
+
+	const body: Record<string, unknown> = { slug, displayName, fields };
+	if (defaultSortingField !== undefined) body.defaultSortingField = defaultSortingField;
+
+	return v1Fetch("POST", url, apiKey, body);
+}
+
+/**
+ * Update an existing search index (displayName, enabled).
+ * PATCH /v1/indexes/:indexId
+ */
+async function toolUpdateIndex(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = updateIndexInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, indexId, displayName, enabled } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/indexes/${encodeURIComponent(indexId)}`);
+
+	const body: Record<string, unknown> = {};
+	if (displayName !== undefined) body.displayName = displayName;
+	if (enabled !== undefined) body.enabled = enabled;
+
+	return v1Fetch("PATCH", url, apiKey, body);
+}
+
+/**
+ * Delete a search index.
+ * DELETE /v1/indexes/:indexId
+ */
+async function toolDeleteIndex(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = deleteIndexInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, indexId } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/indexes/${encodeURIComponent(indexId)}`);
+	return v1Fetch("DELETE", url, apiKey);
+}
+
+/**
+ * Create a new API key.
+ * POST /v1/projects/:projectId/keys
+ */
+async function toolCreateKey(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = createKeyInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId, indexSlug, name, scopes, allowedOrigins, rateLimitPerMinute, expiresAt } =
+		parsed.data;
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/keys`);
+
+	const body: Record<string, unknown> = { indexSlug, name, scopes };
+	if (allowedOrigins !== undefined) body.allowedOrigins = allowedOrigins;
+	if (rateLimitPerMinute !== undefined) body.rateLimitPerMinute = rateLimitPerMinute;
+	if (expiresAt !== undefined) body.expiresAt = expiresAt;
+
+	return v1Fetch("POST", url, apiKey, body);
+}
+
+/**
+ * List API keys for a project.
+ * GET /v1/projects/:projectId/keys
+ */
+async function toolListKeys(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = listKeysInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/keys`);
+	return v1Fetch("GET", url, apiKey);
+}
+
+/**
+ * Revoke an API key by its ID.
+ * DELETE /v1/keys/:keyId
+ */
+async function toolRevokeKey(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = revokeKeyInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, keyId } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/keys/${encodeURIComponent(keyId)}`);
+	return v1Fetch("DELETE", url, apiKey);
 }
 
 // ── Tool dispatch ───────────────────────────────────────────────────────
@@ -543,6 +914,14 @@ const toolHandlers: Record<string, ToolHandler> = {
 	list_indexes: toolListIndexes,
 	upsert_document: toolUpsertDocument,
 	search_stats: toolSearchStats,
+	create_index: toolCreateIndex,
+	update_index: toolUpdateIndex,
+	delete_index: toolDeleteIndex,
+	delete_document: toolDeleteDocument,
+	list_documents: toolListDocuments,
+	create_key: toolCreateKey,
+	list_keys: toolListKeys,
+	revoke_key: toolRevokeKey,
 };
 
 // ── MCP message handler ─────────────────────────────────────────────────
@@ -637,6 +1016,7 @@ async function handleRequest(req: JsonRpcRequest): Promise<void> {
 async function main(): Promise<void> {
 	// Write a startup message to stderr (not stdout — stdout is for JSON-RPC)
 	process.stderr.write("AACsearch MCP server started (stdio JSON-RPC)\n");
+	process.stderr.write(`Registered ${tools.length} tools\n`);
 
 	let buffer = "";
 

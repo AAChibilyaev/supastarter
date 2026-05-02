@@ -1,4 +1,6 @@
-# Local Typesense stack for the @repo/search module.
+# Standalone Typesense stack for the @repo/search module.
+# NOTE: Typesense is already included in docker-compose.yml (main dev stack).
+# Use this file only when you want to run Typesense in isolation.
 # Start with: docker compose -f docker-compose.search.yml up -d
 
 services:

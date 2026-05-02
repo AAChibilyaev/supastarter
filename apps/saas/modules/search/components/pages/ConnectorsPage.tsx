@@ -440,20 +440,23 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 					<span className="font-medium text-sm">
 						{t("search.connector.syncJobs")} ({syncJobs?.length ?? 0})
 					</span>
-					<span
-						className="text-xs text-muted-foreground"
-						title={t("search.connector.syncJobsNote")}
-					>
+					<span className="text-xs text-muted-foreground">
 						<Clock className="mr-1 size-3 inline" />
 						{t("search.connector.syncJobsNote")}
 					</span>
 				</div>
-				<SyncJobsTable
-					jobs={syncJobs ?? []}
-					isLoading={syncJobsLoading}
-					onRetry={handleRetryJob}
-					retryingJobId={retryingJobId}
-				/>
+				{syncJobs?.length === 0 && !syncJobsLoading ? (
+					<div className="p-6 text-sm text-muted-foreground">
+						{t("search.connector.noJobLogs")}
+					</div>
+				) : (
+					<SyncJobsTable
+						jobs={syncJobs ?? []}
+						isLoading={syncJobsLoading}
+						onRetry={handleRetryJob}
+						retryingJobId={retryingJobId}
+					/>
+				)}
 			</div>
 
 			{/* Connector Wizard */}

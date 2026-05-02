@@ -829,7 +829,8 @@
 			"upperAndLowercase": "Upper & lowercase",
 			"number": "Number",
 			"specialCharacter": "Special character"
-		}
+		},
+		"close": "Закрыть"
 	},
 	"checkoutReturn": {
 		"title": "Processing your purchase",
@@ -1296,7 +1297,7 @@
 			"lastError": "Последняя ошибка: {error}",
 			"noHeartbeat": "No heartbeat yet",
 			"syncJobs": "Задачи синхронизации",
-			"syncJobsNote": "Показаны задачи с последнего перезапуска (в памяти).",
+			"syncJobsNote": "Показаны последние 50 заданий синхронизации.",
 			"activeConnectors": "Активные коннекторы",
 			"activeConnectorsDesc": "Токены коннекторов и статус heartbeat",
 			"noConnectors": "Коннекторы ещё не настроены. Нажмите 'Настроить' выше.",
@@ -1359,7 +1360,8 @@
 			"wizard": {
 				"noIndex": "Нет доступного индекса. Сначала создайте индекс.",
 				"tokenFailed": "Не удалось создать токен"
-			}
+			},
+			"jobFailures": "Сбоев"
 		},
 		"tabs": {
 			"indexes": "Индексы",

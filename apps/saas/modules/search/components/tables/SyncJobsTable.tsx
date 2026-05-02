@@ -1,5 +1,6 @@
 "use client";
 
+import type { ConnectorSyncJobView } from "@repo/database";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,23 +23,7 @@ import { useState } from "react";
 
 import { syncJobStatusBadge } from "../../lib/job-status";
 
-interface SyncJob {
-	id: string;
-	type: "full" | "delta";
-	status: "running" | "completed" | "failed";
-	indexId?: string;
-	organizationId?: string;
-	startedAt: string;
-	finishedAt: string | null;
-	duration: string | null;
-	itemsCount: number;
-	failuresCount: number;
-	events: Array<{
-		timestamp: string;
-		message: string;
-		level: "info" | "warn" | "error";
-	}>;
-}
+type SyncJob = ConnectorSyncJobView;
 
 interface SyncJobsTableProps {
 	jobs: SyncJob[];
@@ -53,7 +38,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 
 	if (isLoading) {
 		return (
-			<div className="p-6 rounded-lg border">
+			<div className="p-6">
 				<div className="text-foreground/60">{t("search.loading")}</div>
 			</div>
 		);
@@ -64,82 +49,76 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 	}
 
 	return (
-		<div className="rounded-lg border">
-			<details className="group">
-				<summary className="gap-2 px-6 py-4 font-medium text-sm flex cursor-pointer items-center hover:bg-muted/50">
-					<span className="transition-transform group-open:rotate-90">▶</span>
-					{t("search.connector.syncJobs")} ({jobs.length})
-				</summary>
-				<div className="overflow-x-auto border-t">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>{t("search.connector.jobId")}</TableHead>
-								<TableHead>{t("search.connector.jobType")}</TableHead>
-								<TableHead>{t("search.connector.jobStatus")}</TableHead>
-								<TableHead>{t("search.connector.jobStarted")}</TableHead>
-								<TableHead>{t("search.connector.jobDuration")}</TableHead>
-								<TableHead>{t("search.connector.jobItems")}</TableHead>
+		<>
+			<div className="overflow-x-auto">
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>{t("search.connector.jobId")}</TableHead>
+							<TableHead>{t("search.connector.jobType")}</TableHead>
+							<TableHead>{t("search.connector.jobStatus")}</TableHead>
+							<TableHead>{t("search.connector.jobStarted")}</TableHead>
+							<TableHead>{t("search.connector.jobDuration")}</TableHead>
+							<TableHead>{t("search.connector.jobItems")}</TableHead>
+							{onRetry && (
+								<TableHead>{t("search.connector.jobActions")}</TableHead>
+							)}
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{jobs.map((job) => (
+							<TableRow
+								key={job.id}
+								className="cursor-pointer hover:bg-muted/50"
+								onClick={() => setSelectedJob(job)}
+							>
+								<TableCell className="font-mono text-xs max-w-[160px] truncate">
+									{job.id}
+								</TableCell>
+								<TableCell className="text-xs capitalize">{job.type}</TableCell>
+								<TableCell>
+									<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
+										{job.status}
+									</Badge>
+								</TableCell>
+								<TableCell className="text-xs whitespace-nowrap">
+									{new Date(job.startedAt).toLocaleString()}
+								</TableCell>
+								<TableCell className="text-xs">{job.duration ?? "—"}</TableCell>
+								<TableCell className="text-xs">
+									{job.itemsCount}
+									{job.failuresCount > 0 && (
+										<span className="ml-1 text-destructive">
+											({job.failuresCount} {t("search.connector.jobFailures")})
+										</span>
+									)}
+								</TableCell>
 								{onRetry && (
-									<TableHead>{t("search.connector.jobActions")}</TableHead>
-								)}
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{jobs.map((job) => (
-								<TableRow
-									key={job.id}
-									className="cursor-pointer hover:bg-muted/50"
-									onClick={() => setSelectedJob(job)}
-								>
-									<TableCell className="font-mono text-xs max-w-[160px] truncate">
-										{job.id}
-									</TableCell>
-									<TableCell className="text-xs capitalize">{job.type}</TableCell>
 									<TableCell>
-										<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
-											{job.status}
-										</Badge>
-									</TableCell>
-									<TableCell className="text-xs whitespace-nowrap">
-										{new Date(job.startedAt).toLocaleString()}
-									</TableCell>
-									<TableCell className="text-xs">{job.duration ?? "—"}</TableCell>
-									<TableCell className="text-xs">
-										{job.itemsCount}
-										{job.failuresCount > 0 && (
-											<span className="ml-1 text-destructive">
-												({job.failuresCount} failures)
+										{job.status === "failed" ? (
+											<Button
+												variant="outline"
+												size="sm"
+												loading={retryingJobId === job.id}
+												onClick={(e) => {
+													e.stopPropagation();
+													onRetry(job.id);
+												}}
+											>
+												{t("search.connector.jobRetry")}
+											</Button>
+										) : (
+											<span className="text-xs text-muted-foreground">
+												—
 											</span>
 										)}
 									</TableCell>
-									{onRetry && (
-										<TableCell>
-											{job.status === "failed" ? (
-												<Button
-													variant="outline"
-													size="sm"
-													loading={retryingJobId === job.id}
-													onClick={(e) => {
-														e.stopPropagation();
-														onRetry(job.id);
-													}}
-												>
-													{t("search.connector.jobRetry")}
-												</Button>
-											) : (
-												<span className="text-xs text-muted-foreground">
-													—
-												</span>
-											)}
-										</TableCell>
-									)}
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</div>
-			</details>
+								)}
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
 
 			{/* Job detail drawer */}
 			<Sheet
@@ -150,7 +129,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 			>
 				<SheetContent className="sm:max-w-lg">
 					<SheetHeader>
-						<SheetTitle>{t("search.connector.jobDetail")}</SheetTitle>
+						<SheetTitle>{t("search.connector.jobDetailTitle")}</SheetTitle>
 						<SheetDescription>
 							{t("search.connector.jobId")}: {selectedJob?.id}
 						</SheetDescription>
@@ -204,7 +183,9 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									<p className="text-sm font-medium">{selectedJob.itemsCount}</p>
 								</div>
 								<div>
-									<span className="text-xs text-muted-foreground">Failures</span>
+									<span className="text-xs text-muted-foreground">
+										{t("search.connector.jobFailures")}
+									</span>
 									<p className="text-sm font-medium">
 										{selectedJob.failuresCount}
 									</p>
@@ -214,12 +195,12 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 							{/* Event log */}
 							<div>
 								<span className="text-xs mb-2 block text-muted-foreground">
-									Event log
+									{t("search.connector.jobEventLog")}
 								</span>
 								<div className="space-y-1 rounded p-3 max-h-[300px] overflow-y-auto bg-muted">
 									{selectedJob.events.length === 0 ? (
 										<span className="text-xs text-muted-foreground">
-											No events
+											{t("search.connector.noJobLogs")}
 										</span>
 									) : (
 										selectedJob.events.map((event, i) => (
@@ -250,13 +231,13 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									size="sm"
 									onClick={() => setSelectedJob(null)}
 								>
-									Close
+									{t("common.close")}
 								</Button>
 							</div>
 						</div>
 					)}
 				</SheetContent>
 			</Sheet>
-		</div>
+		</>
 	);
 }

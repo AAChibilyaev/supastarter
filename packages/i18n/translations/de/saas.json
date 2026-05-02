@@ -829,7 +829,8 @@
 			"system": "System",
 			"light": "Hell",
 			"dark": "Dunkel"
-		}
+		},
+		"close": "Schließen"
 	},
 	"checkoutReturn": {
 		"title": "Kauf wird verarbeitet",
@@ -1233,7 +1234,7 @@
 			"lastError": "Letzter Fehler: {error}",
 			"noHeartbeat": "Noch kein Heartbeat",
 			"syncJobs": "Sync-Jobs",
-			"syncJobsNote": "Zeigt Jobs seit dem letzten Neustart (In-Memory).",
+			"syncJobsNote": "Zeigt die letzten 50 Sync-Jobs.",
 			"activeConnectors": "Aktive Connectors",
 			"activeConnectorsDesc": "Connector-Tokens und ihr Heartbeat-Status",
 			"noConnectors": "Noch keine Connectors. Klicken Sie oben auf 'Einrichten'.",
@@ -1296,7 +1297,8 @@
 			"wizard": {
 				"noIndex": "Kein Index verfügbar. Erstellen Sie zuerst einen Index.",
 				"tokenFailed": "Token-Generierung fehlgeschlagen"
-			}
+			},
+			"jobFailures": "Fehler"
 		},
 		"tabs": {
 			"indexes": "Indizes",

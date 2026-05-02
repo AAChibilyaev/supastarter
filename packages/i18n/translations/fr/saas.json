@@ -829,7 +829,8 @@
 			"upperAndLowercase": "Majuscules et minuscules",
 			"number": "Chiffre",
 			"specialCharacter": "Caractère spécial"
-		}
+		},
+		"close": "Fermer"
 	},
 	"checkoutReturn": {
 		"title": "Traitement de votre achat",
@@ -1272,7 +1273,7 @@
 			"lastError": "Dernière erreur : {error}",
 			"noHeartbeat": "Pas encore de heartbeat",
 			"syncJobs": "Tâches de sync",
-			"syncJobsNote": "Affichage des tâches depuis le dernier redémarrage (en mémoire).",
+			"syncJobsNote": "Affichage des 50 derniers travaux de synchronisation.",
 			"activeConnectors": "Connecteurs actifs",
 			"activeConnectorsDesc": "Jetons de connecteur et leur statut de battement de cœur",
 			"noConnectors": "Pas encore de connecteurs. Cliquez sur 'Configurer' ci-dessus.",
@@ -1335,7 +1336,8 @@
 			"wizard": {
 				"noIndex": "Aucun index disponible. Créez d'abord un index.",
 				"tokenFailed": "Échec de la génération du token"
-			}
+			},
+			"jobFailures": "Échecs"
 		},
 		"tabs": {
 			"indexes": "Index",

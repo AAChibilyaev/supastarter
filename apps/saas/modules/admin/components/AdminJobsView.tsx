@@ -100,7 +100,7 @@ export function AdminJobsView() {
 										<span className="font-medium">{sync.type}</span>
 									</div>
 									<div className="gap-4 text-xs flex items-center text-muted-foreground">
-										<span>{sync.itemsCount} items</span>
+										<span>{t("jobs.itemsCount", { count: sync.itemsCount })}</span>
 										<span>{new Date(sync.startedAt).toLocaleString()}</span>
 									</div>
 								</div>

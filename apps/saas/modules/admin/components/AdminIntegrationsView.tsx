@@ -44,6 +44,7 @@ export function AdminIntegrationsView() {
 					ok={data.database.ok}
 					latencyMs={data.database.latencyMs}
 					error={data.database.error}
+					t={t}
 				/>
 
 				{/* Search Engine */}
@@ -53,6 +54,7 @@ export function AdminIntegrationsView() {
 					ok={data.typesense.ok}
 					latencyMs={data.typesense.latencyMs}
 					error={data.typesense.error}
+					t={t}
 				/>
 			</div>
 
@@ -64,6 +66,7 @@ export function AdminIntegrationsView() {
 					icon={<MailIcon className="size-4" />}
 					configured={data.mail.configured}
 					detail={data.mail.provider}
+					t={t}
 				/>
 
 				{/* Payments */}
@@ -72,6 +75,7 @@ export function AdminIntegrationsView() {
 					icon={<WalletIcon className="size-4" />}
 					configured={data.payments.configured}
 					detail={data.payments.providers.join(", ")}
+					t={t}
 				/>
 
 				{/* Storage */}
@@ -80,6 +84,7 @@ export function AdminIntegrationsView() {
 					icon={<DatabaseIcon className="size-4" />}
 					configured={data.storage.configured}
 					detail={data.storage.endpoint ?? t("integrations.notConfigured")}
+					t={t}
 				/>
 			</div>
 
@@ -120,12 +125,14 @@ function IntegrationCard({
 	ok,
 	latencyMs,
 	error,
+	t,
 }: {
 	title: string;
 	icon: React.ReactNode;
 	ok: boolean;
 	latencyMs?: number;
 	error?: string;
+	t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
 	return (
 		<Card>
@@ -140,10 +147,10 @@ function IntegrationCard({
 					<div className="gap-3 flex items-center">
 						<CheckCircle2Icon className="size-5 text-success" />
 						<div>
-							<p className="font-medium text-sm text-success">Connected</p>
+							<p className="font-medium text-sm text-success">{t("integrations.connected")}</p>
 							{latencyMs !== undefined && (
 								<p className="text-xs text-muted-foreground">
-									{latencyMs}ms latency
+									{t("integrations.latencyMs", { ms: latencyMs })}
 								</p>
 							)}
 						</div>
@@ -152,7 +159,7 @@ function IntegrationCard({
 					<div className="gap-2 flex items-start">
 						<XCircleIcon className="size-5 mt-0.5 shrink-0 text-destructive" />
 						<div>
-							<p className="font-medium text-sm text-destructive">Disconnected</p>
+							<p className="font-medium text-sm text-destructive">{t("integrations.disconnected")}</p>
 							{error && <p className="text-xs mt-1 text-muted-foreground">{error}</p>}
 						</div>
 					</div>
@@ -167,11 +174,13 @@ function ServiceCard({
 	icon,
 	configured,
 	detail,
+	t,
 }: {
 	title: string;
 	icon: React.ReactNode;
 	configured: boolean;
 	detail: string;
+	t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
 	return (
 		<Card>
@@ -183,15 +192,15 @@ function ServiceCard({
 			</CardHeader>
 			<CardContent className="gap-2 text-sm grid grid-cols-1">
 				<div className="gap-2 flex items-center justify-between">
-					<span className="text-muted-foreground">Status</span>
+					<span className="text-muted-foreground">{t("integrations.status")}</span>
 					{configured ? (
-						<Badge status="success">Configured</Badge>
+						<Badge status="success">{t("integrations.configured")}</Badge>
 					) : (
-						<Badge status="error">Not configured</Badge>
+						<Badge status="error">{t("integrations.notConfigured")}</Badge>
 					)}
 				</div>
 				<div className="gap-2 flex items-center justify-between">
-					<span className="text-muted-foreground">Provider</span>
+					<span className="text-muted-foreground">{t("integrations.provider")}</span>
 					<span className="font-medium">{detail}</span>
 				</div>
 			</CardContent>

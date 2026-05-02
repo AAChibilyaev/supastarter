@@ -1,1658 +1,1664 @@
 {
-	"admin": {
-		"menu": {
-			"organizations": "Organizations",
-			"users": "Users"
-		},
-		"organizations": {
-			"backToList": "Back to organizations",
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this organization? This action cannot be undone.",
-				"title": "Delete organization"
-			},
-			"create": "Create",
-			"delete": "Delete",
-			"deleteOrganization": {
-				"deleted": "Organization has been deleted successfully!",
-				"deleting": "Deleting organization...",
-				"notDeleted": "Organization could not be deleted. Please try again."
-			},
-			"edit": "Edit",
-			"form": {
-				"createTitle": "Create an organization",
-				"name": "Organization name",
-				"notifications": {
-					"error": "Could not save the organization. Please try again later.",
-					"success": "Organization has been saved."
-				},
-				"save": "Save",
-				"updateTitle": "Edit organization"
-			},
-			"loading": "Loading organizations...",
-			"membersCount": "{count} {count, plural, one {member} other {members}}",
-			"search": "Search for an organization...",
-			"title": "Manage organizations"
-		},
-		"title": "Administration",
-		"users": {
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this user? This action cannot be undone.",
-				"title": "Delete user"
-			},
-			"delete": "Delete",
-			"deleteUser": {
-				"deleted": "User has been deleted successfully!",
-				"deleting": "Deleting user...",
-				"notDeleted": "User could not be deleted. Please try again."
-			},
-			"emailVerified": {
-				"verified": "Email verified",
-				"waiting": "Email waiting for verification"
-			},
-			"impersonate": "Impersonate",
-			"impersonation": {
-				"impersonating": "Impersonating as {name}..."
-			},
-			"loading": "Loading users...",
-			"resendVerificationMail": {
-				"error": "Could not resend verification mail. Please try again.",
-				"submitting": "Resending verification mail...",
-				"success": "Verification mail has been sent.",
-				"title": "Resend verification mail"
-			},
-			"search": "Search for name or email...",
-			"title": "Manage users",
-			"assignAdminRole": "Assign admin role",
-			"removeAdminRole": "Remove admin role"
-		},
-		"description": "Manage your application.",
-		"config": {
-			"title": "Configuration",
-			"loadError": "Failed to load configuration data.",
-			"application": "Application",
-			"appName": "App name",
-			"nodeVersion": "Node.js version",
-			"runtimeEnv": "Runtime",
-			"platform": "Platform",
-			"uptime": "Uptime",
-			"typesenseHealth": "Search engine health",
-			"healthy": "Healthy",
-			"unhealthy": "Unhealthy",
-			"version": "Version",
-			"databaseStats": "Database statistics",
-			"users": "Users",
-			"organizations": "Organizations",
-			"searchIndexes": "Search indexes",
-			"apiKeys": "API keys",
-			"usageEvents": "Usage events",
-			"statsError": "Could not fetch stats.",
-			"services": "External services",
-			"configured": "Configured",
-			"notConfigured": "Not configured",
-			"pageTitle": "Runtime config",
-			"pageSubtitle": "Real-time system configuration, service health, and database statistics."
-		},
-		"integrations": {
-			"title": "Integrations",
-			"loadError": "Failed to check integration status.",
-			"database": "Database",
-			"typesense": "AACsearch Engine",
-			"mail": "Mail",
-			"payments": "Payments",
-			"storage": "Storage",
-			"walletProvider": "Wallet provider",
-			"configured": "Configured",
-			"notConfigured": "Not configured",
-			"endpoint": "Endpoint",
-			"pageTitle": "Integrations health",
-			"pageSubtitle": "Real-time connectivity checks for all configured external services."
-		},
-		"jobs": {
-			"title": "Jobs",
-			"loadError": "Failed to load job status.",
-			"backgroundJobs": "Background jobs",
-			"ready": "Ready",
-			"missingSecret": "Missing secret",
-			"recentSyncActivity": "Recent sync activity",
-			"totalJobs": "Total jobs",
-			"noSyncActivity": "No sync activity yet.",
-			"pageTitle": "Background jobs",
-			"pageSubtitle": "Cron job configuration status and recent sync job activity."
-		},
-		"overview": {
-			"usersTitle": "Users",
-			"organizationsTitle": "Organizations",
-			"unreadNotifications": "Unread notifications",
-			"noData": "No data",
-			"recentUsers": "Recent users",
-			"defaultRole": "user",
-			"openUsers": "Open users",
-			"recentOrganizations": "Recent organizations",
-			"noSlug": "No slug",
-			"membersCount": "{count} {count, plural, one {member} other {members}}",
-			"openOrganizations": "Open organizations",
-			"pageTitle": "Admin overview",
-			"pageSubtitle": "Operational summary across users, organizations and notifications."
-		},
-		"audit": {
-			"recentUserChanges": "Recent user changes",
-			"recentOrgChanges": "Recent organization changes",
-			"defaultRole": "user",
-			"noSlug": "No slug",
-			"pageTitle": "Audit view",
-			"pageSubtitle": "Recent user and organization changes available from admin data sources."
-		},
-		"notifications": {
-			"recentNotifications": "Recent notifications",
-			"markAllRead": "Mark all as read",
-			"markingRead": "Marking notifications as read...",
-			"markReadSuccess": "Done.",
-			"markReadError": "Could not mark all as read.",
-			"statusRead": "read",
-			"statusUnread": "unread",
-			"noNotifications": "No notifications yet.",
-			"pageTitle": "Notification control",
-			"pageSubtitle": "Review recent notifications and update delivery preferences."
-		},
-		"wallet": {
-			"manualAdjustment": "Manual wallet adjustment",
-			"searchOrgPlaceholder": "Search organization...",
-			"selectOrgPlaceholder": "Select organization",
-			"currentBalance": "Current balance",
-			"walletNotInitialized": "Wallet is not initialized for selected organization.",
-			"creditLabel": "Credit",
-			"debitLabel": "Debit",
-			"amountPlaceholder": "Amount (RUB)",
-			"applyButton": "Apply",
-			"reasonPlaceholder": "Reason (minimum 10 chars)",
-			"noWalletError": "Select an organization with initialized wallet first.",
-			"invalidAmountError": "Amount must be a positive number.",
-			"shortReasonError": "Reason must be at least 10 characters.",
-			"applyingAdjustment": "Applying adjustment...",
-			"adjustmentSuccess": "Wallet adjusted successfully.",
-			"adjustmentError": "Failed to adjust wallet.",
-			"latestTransactions": "Latest wallet transactions",
-			"noTransactions": "No transactions found.",
-			"pageTitle": "Wallet operations",
-			"pageSubtitle": "Manual AI wallet adjustments for organizations."
-		},
-		"security": {
-			"pageTitle": "Security operations",
-			"pageSubtitle": "Active sessions, passkeys and two-factor settings for the current admin account."
-		}
-	},
-	"app": {
-		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Open navigation",
-			"organizationSettings": "Organization settings",
-			"search": "Search",
-			"start": "Start"
-		},
-		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
-		},
-		"notifications": {
-			"title": "Notifications",
-			"empty": "No notifications yet.",
-			"markAllRead": "Mark all as read",
-			"fallbackTitle": "Notification",
-			"aria": {
-				"open": "Open notifications"
-			}
-		}
-	},
-	"auth": {
-		"errors": {
-			"invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
-			"unknown": "Something went wrong. Please try again.",
-			"userNotFound": "This user does not exists",
-			"failedToCreateUser": "Could not create user. Please try again.",
-			"failedToCreateSession": "Could not create a session. Please try again.",
-			"failedToUpdateUser": "Could not update user. Please try again.",
-			"failedToGetSession": "Could not get the session.",
-			"invalidPassword": "The entered password is incorrect.",
-			"invalidEmail": "The entered email is invalid.",
-			"invalidToken": "The token you entered is invalid or has expired.",
-			"credentialAccountNotFound": "Account not found.",
-			"emailCanNotBeUpdated": "Email could not be updated. Please try again.",
-			"emailNotVerified": "Please verify your email first before logging in.",
-			"failedToGetUserInfo": "Could not load user information.",
-			"idTokenNotSupported": "ID token is not supported.",
-			"passwordTooLong": "Password is too long.",
-			"passwordTooShort": "Password is too short.",
-			"providerNotFound": "This provider is not suppported.",
-			"socialAccountAlreadyLinked": "This account is already linked to a user.",
-			"userEmailNotFound": "Email not found.",
-			"userAlreadyExists": "This user already exists.",
-			"userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
-			"invalidInvitation": "The invitation is invalid or expired.",
-			"sessionExpired": "The session has expired.",
-			"failedToUnlinkLastAccount": "Failed to unlink account",
-			"accountNotFound": "Account not found"
-		},
-		"forgotPassword": {
-			"backToSignin": "Back to signin",
-			"email": "Email",
-			"hints": {
-				"linkNotSent": {
-					"message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
-					"title": "Link not sent"
-				},
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"message": "Please enter your email address and we will send you a link to reset your password.",
-			"submit": "Send link",
-			"title": "Forgot your password?"
-		},
-		"login": {
-			"continueWith": "Or continue with",
-			"createAnAccount": "Create an account",
-			"dontHaveAnAccount": "Don't have an account yet?",
-			"forgotPassword": "Forgot password?",
-			"hints": {
-				"invalidCredentials": "The email or password you entered are invalid. Please try again.",
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"loginWithPasskey": "Login with passkey",
-			"modes": {
-				"magicLink": "Magic link",
-				"password": "***"
-			},
-			"submit": "Sign in",
-			"subtitle": "Please enter your credentials to sign in.",
-			"title": "Welcome back",
-			"sendMagicLink": "Send magic link"
-		},
-		"resetPassword": {
-			"backToSignin": "Back to signin",
-			"hints": {
-				"error": "We are sorry, but we were unable to reset your password. Please try again.",
-				"success": "Your password has been reset successfully."
-			},
-			"message": "Please enter a new password.",
-			"newPassword": "New password",
-			"submit": "Reset password",
-			"title": "Reset your password"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Already have an account?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
-				"verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
-			},
-			"message": "We are happy that you want to join us. Please fill in the form below to create your account.",
-			"name": "Name",
-			"password": "***",
-			"signIn": "Sign in",
-			"submit": "Create account",
-			"title": "Create an account"
-		},
-		"verify": {
-			"title": "Verify your account",
-			"code": "One-time password",
-			"submit": "Verify",
-			"backToSignin": "Back to login",
-			"message": "Enter the one-time password from your authenticator app to continue."
-		}
-	},
-	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan."
-	},
-	"documentation": {
-		"title": "Documentation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
-		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
-		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
-		},
-		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
-		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account"
-	},
-	"organizations": {
-		"createForm": {
-			"name": "Organization name",
-			"notifications": {
-				"error": "We are sorry, but we were unable to create your organization. Please try again later.",
-				"success": "Your organization has been created. You can now invite members."
-			},
-			"submit": "Create organization",
-			"subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
-			"title": "Create an organization"
-		},
-		"invitationAlert": {
-			"description": "You need to sign in or create an account to join the organization.",
-			"title": "You have been invited to join an organization."
-		},
-		"invitationModal": {
-			"accept": "Accept",
-			"decline": "Decline",
-			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization",
-			"error": "An error occurred. Please try again."
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Create new organization",
-			"organizations": "Organizations",
-			"personalAccount": "Personal account"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Create new organization",
-			"title": "Your organizations"
-		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Member",
-			"owner": "Owner"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Organization name"
-			},
-			"deleteOrganization": {
-				"confirmation": "Are you sure you want to delete your organization?",
-				"description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
-				"submit": "Delete organization",
-				"title": "Delete organization"
-			},
-			"logo": {
-				"description": "Upload a logo for your organization.",
-				"title": "Organization logo"
-			},
-			"members": {
-				"activeMembers": "Active members",
-				"description": "See all active members and the pending invites of your organization.",
-				"invitations": {
-					"empty": "You have not invited any members yet.",
-					"expiresAt": "Expires at {date}",
-					"invitationStatus": {
-						"accepted": "Accepted",
-						"canceled": "Canceled",
-						"pending": "Pending",
-						"rejected": "Rejected"
-					},
-					"revoke": "Revoke invitation",
-					"resend": "Resend invitation"
-				},
-				"inviteMember": {
-					"description": "To invite a new member, send them an invitation.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "We were unable to invite the member. Please try again later.",
-							"title": "Could not invite member"
-						},
-						"success": {
-							"description": "The member has been invited.",
-							"title": "Member invited"
-						}
-					},
-					"role": "Role",
-					"submit": "Invite",
-					"title": "Invite member"
-				},
-				"leaveOrganization": "Leave organization",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Could not remove the member from your organization. Please try again."
-						},
-						"loading": {
-							"description": "Removing member from organization..."
-						},
-						"success": {
-							"description": "The member has been successfully removed from your organization."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "The invitation could not be revoked. Please try again later."
-						},
-						"loading": {
-							"description": "Revoking invitation..."
-						},
-						"success": {
-							"description": "The invitation has been revoked."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Could not update organization membership. Please try again."
-						},
-						"loading": {
-							"description": "Updating membership..."
-						},
-						"success": {
-							"description": "Membership was updated successfully"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Resending invitation..."
-						},
-						"success": {
-							"description": "Invitation sent"
-						},
-						"error": {
-							"description": "Could not sent invitation. Please try again."
-						}
-					}
-				},
-				"pendingInvitations": "Pending invitations",
-				"removeMember": "Remove member",
-				"title": "Members"
-			},
-			"notifications": {
-				"organizationDeleted": "Your organization has been deleted.",
-				"organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
-				"organizationNameUpdated": "Your organization name has been updated.",
-				"organizationNotDeleted": "We were unable to delete your organization. Please try again later."
-			},
-			"subtitle": "Manage the settings of the organization.",
-			"title": "Organization",
-			"dangerZone": {
-				"title": "Danger zone"
-			}
-		},
-		"start": {
-			"subtitle": "Welcome to the start page of this organization!"
-		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
-				},
-				"title": "Your avatar"
-			},
-			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
-				},
-				"title": "Your email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
-				},
-				"title": "Your name"
-			},
-			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
-				},
-				"submit": "Delete account",
-				"title": "Delete account"
-			},
-			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
-				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
-				},
-				"title": "Your language"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-					"title": "Active sessions",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session revoked"
-						}
-					},
-					"currentSession": "Current session"
-				},
-				"changePassword": {
-					"currentPassword": "Current password",
-					"newPassword": "New password",
-					"notifications": {
-						"error": "Could not update password",
-						"success": "Password was updated successfully"
-					},
-					"title": "Your password"
-				},
-				"connectedAccounts": {
-					"connect": "Connect",
-					"connected": "Connected",
-					"disconnect": "Disconnect",
-					"title": "Connected accounts"
-				},
-				"passkeys": {
-					"addPasskey": "Add passkey",
-					"description": "Use passkeys as a secure alternative to passwords.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Could not add passkey"
-							},
-							"success": {
-								"title": "Passkey added"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Could not delete passkey"
-							},
-							"loading": {
-								"title": "Deleting passkey..."
-							},
-							"success": {
-								"title": "Passkey deleted"
-							}
-						}
-					},
-					"title": "Passkeys"
-				},
-				"setPassword": {
-					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
-					"notifications": {
-						"error": "Could not send link to set password. Please try again.",
-						"success": "Check your inbox for the link to set your password."
-					},
-					"submit": "Set password",
-					"title": "Your password"
-				},
-				"title": "Security",
-				"twoFactor": {
-					"title": "Two-factor authentication",
-					"description": "Add an extra layer of security to your account.",
-					"dialog": {
-						"password": {
-							"title": "Verify with password",
-							"description": "Please verify your account by entering your password:",
-							"label": "Your password:"
-						},
-						"totpUrl": {
-							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-							"code": "Enter 6-digit code to verify the setup:",
-							"title": "Enable two-factor authentication"
-						}
-					},
-					"enable": "Enable two-factor authentication",
-					"notifications": {
-						"verify": {
-							"success": {
-								"title": "Two-factor authentication has been enabled successfully."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Could not verify your account with the provided password. Please try again."
-							}
-						},
-						"disable": {
-							"success": {
-								"title": "Two-factor authentication has been disabled successfully."
-							}
-						}
-					},
-					"disable": "Disable two-factor authentication",
-					"enabled": "You have two-factor authentication enabled for your account."
-				}
-			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Manage billing",
-				"notifications": {
-					"error": {
-						"title": "Could not create a customer portal session. Please try again."
-					}
-				}
-			},
-			"activePlan": {
-				"description": "Your current plan and usage limits for search and indexing.",
-				"notFound": "No plan information available.",
-				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
-				},
-				"title": "Your plan"
-			},
-			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
-			},
-			"aiCredits": {
-				"title": "AI credits",
-				"subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",
-				"balance": {
-					"title": "Wallet balance",
-					"includedRemaining": "Included this month",
-					"reserved": "Reserved",
-					"promo": "Promo credits",
-					"notInitialized": "Wallet is not initialized yet."
-				},
-				"topup": {
-					"button": "Top up",
-					"title": "Top up your AI wallet",
-					"description": "Choose an amount or enter a custom value in rubles.",
-					"customAmount": "Custom amount (P)",
-					"summary": "You will be charged {amount}",
-					"confirm": "Pay with Tochka",
-					"error": "Failed to create payment link. Please try again."
-				},
-				"errors": {
-					"insufficientFunds": "Insufficient AI credits. Top up your wallet."
-				}
-			},
-			"title": "Billing",
-			"usage": {
-				"searches": "Searches",
-				"documents": "Documents"
-			},
-			"limits": {
-				"maxIndexes": "Max indexes",
-				"maxDocuments": "Max documents",
-				"maxApiKeys": "Max API keys",
-				"rateLimit": "Rate limit",
-				"maxSearchesPerMonth": "Searches / month"
-			},
-			"features": {
-				"title": "Features",
-				"none": "No features configured"
-			},
-			"upgrade": "Upgrade plan"
-		},
-		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
-			"groups": {
-				"general": {
-					"title": "General"
-				},
-				"billing": {
-					"title": "Billing"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "App updates"
-				},
-				"AI_LOW_BALANCE": {
-					"label": "AI wallet balance is low"
-				},
-				"AI_TOPUP_PAID": {
-					"label": "AI wallet top-up confirmed"
-				},
-				"AI_TOPUP_FAILED": {
-					"label": "AI wallet top-up failed"
-				},
-				"AI_OVERAGE_REACHED": {
-					"label": "AI wallet overage limit reached"
-				}
-			},
-			"columns": {
-				"type": "Notification",
-				"inApp": "In-app",
-				"email": "Email"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Billing",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"notifications": "Notifications",
-				"security": "Security",
-				"title": "Account"
-			},
-			"organization": {
-				"billing": "Billing",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
-			}
-		},
-		"save": "Save"
-	},
-	"start": {
-		"subtitle": "See the latest stats of your awesome business.",
-		"welcome": "Welcome {name}!"
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
-		},
-		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
-		}
-	},
-	"checkoutReturn": {
-		"title": "Processing your purchase",
-		"description": "Please wait while we confirm your payment.",
-		"loading": "Confirming your purchase, please wait..."
-	},
-	"search": {
-		"title": "Search",
-		"subtitle": "Manage search indexes, API keys and usage for this organization.",
-		"loading": "Loading...",
-		"noIndexes": "No search indexes yet. Create your first one to get started.",
-		"noIndexesDescription": "Search indexes store your data and power search queries. Create one to get started.",
-		"selectIndex": "Select an index to manage its API keys.",
-		"apiKeysPage": {
-			"title": "API Keys"
-		},
-		"importJobsPage": {
-			"title": "Import Jobs",
-			"description": "Recent document import and sync activity from the ingest buffer."
-		},
-		"previewPage": {
-			"title": "Search Preview"
-		},
-		"fields": {
-			"displayName": "Display name",
-			"slug": "Slug",
-			"version": "Version",
-			"apiKeys": "API keys",
-			"defaultSortingField": "Default sorting field",
-			"schema": "Fields (JSON)"
-		},
-		"createIndex": {
-			"trigger": "Create index",
-			"title": "Create search index",
-			"description": "Provisions a search collection and alias scoped to this organization.",
-			"slugHelp": "Lowercase letters, digits and dashes. Used in API paths and as collection alias.",
-			"schemaHelp": "JSON array of field definitions. The 'tenant_id' field is added automatically.",
-			"submit": "Create",
-			"success": "Index created.",
-			"error": "Could not create index. Please try again.",
-			"startFromTemplate": "Start from a template:",
-			"autoFromName": "auto",
-			"builder": "Visual builder",
-			"json": "JSON",
-			"fieldsTitle": "Schema fields",
-			"fieldsCount": "{count} fields configured",
-			"addField": "Add field",
-			"removeField": "Remove field",
-			"moveUp": "Move up",
-			"moveDown": "Move down",
-			"errorsCount": "{count, plural, one {# field has an error} other {# fields have errors}}",
-			"noFields": "No fields yet — add one or pick a template.",
-			"noSort": "No default sort",
-			"noSortableHint": "Enable Sort on a numeric field first",
-			"tenantHint": "tenant_id is added automatically for isolation.",
-			"templates": {
-				"products": "Products",
-				"articles": "Articles",
-				"users": "Users",
-				"blank": "Blank"
-			},
-			"typeGroups": {
-				"text": "Text",
-				"number": "Number",
-				"boolean": "Boolean",
-				"advanced": "Advanced"
-			},
-			"toggles": {
-				"facet": "Facet",
-				"optional": "Optional",
-				"sort": "Sort"
-			},
-			"tooltips": {
-				"displayName": "Human-readable name shown in the dashboard. Does not affect the API.",
-				"slug": "Used in API paths and as the search collection alias. Lowercase letters, digits and dashes only.",
-				"fields": "Define the columns of your search collection. Fields can be made facetable, sortable, or optional.",
-				"facet": "Allow users to filter and group by this field (e.g. categories, tags, brand).",
-				"optional": "The field is allowed to be missing on documents. Required fields must be present in every document.",
-				"sort": "Allow sorting on this field (numeric fields can always be sorted).",
-				"defaultSort": "Field used to order results when no explicit sort is given. Must be numeric.",
-				"json": "Edit the schema as raw JSON. Switching back to the visual builder validates and re-syncs your changes.",
-				"idField": "Recommended unique identifier. AACsearch uses this as the primary key for upserts."
-			},
-			"errors": {
-				"duplicateName": "Field name must be unique",
-				"invalidJson": "Invalid JSON",
-				"empty": "Add at least one field",
-				"fieldsInvalid": "Fix the highlighted fields"
-			}
-		},
-		"apiKeys": {
-			"title": "API keys",
-			"description": "Search keys are validated by our backend before queries are executed. Admin credentials never leave the server.",
-			"create": "Create key",
-			"createDescription": "The raw key is shown once. Store it securely.",
-			"name": "Name",
-			"generate": "Generate key",
-			"created": "API key created.",
-			"revealOnce": "Copy this key now. You will not be able to see it again.",
-			"done": "Done",
-			"empty": "No API keys yet.",
-			"emptyDescription": "Create your first API key to start integrating search into your application.",
-			"tableName": "Name",
-			"tablePrefix": "Prefix",
-			"tableScopes": "Scopes",
-			"tableStatus": "Status",
-			"tableActions": "Actions",
-			"statusActive": "Active",
-			"statusRevoked": "Revoked",
-			"revoke": "Revoke",
-			"revokeConfirmTitle": "Revoke API key",
-			"revokeConfirmMessage": "Are you sure you want to revoke \"{name}\"? Clients using this key will stop working immediately.",
-			"revoked": "API key revoked.",
-			"error": "Operation failed.",
-			"namePlaceholder": "e.g. Production widget"
-		},
-		"usage": {
-			"title": "Usage",
-			"windowDays": "Last {days} days",
-			"searches": "Searches",
-			"documents": "Documents indexed",
-			"ingests": "Documents ingested",
-			"ofLimit": "of monthly limit",
-			"loadError": "Failed to load usage data."
-		},
-		"analytics": {
-			"tab": "Analytics",
-			"title": "Analytics",
-			"description": "Track search usage, top queries, zero-results, and trends.",
-			"totalSearches": "Total searches",
-			"totalSessions": "Sessions",
-			"ctr": "CTR",
-			"zeroResults": "Zero results",
-			"zeroResultRate": "Zero-result rate",
-			"comingSoon": "Coming soon",
-			"searchesOverTime": "Searches over time",
-			"topQueries": "Top queries",
-			"topClickedProducts": "Top clicked products",
-			"queryColumn": "Query",
-			"countColumn": "Count",
-			"productColumn": "Product",
-			"clicksColumn": "Clicks",
-			"rankColumn": "#",
-			"percentColumn": "% of total",
-			"period24h": "24h",
-			"period7d": "7 days",
-			"period30d": "30 days",
-			"documentsIndexed": "Documents indexed",
-			"failedSyncJobs": "Failed sync jobs",
-			"failed": "failed",
-			"retentionBanner": "Your {plan} plan retains analytics data for {days} days. Select a shorter period to see data.",
-			"noData": "No data available for this period.",
-			"noDataDescription": "Analytics data will appear once your search indexes start receiving queries.",
-			"freePlan": "Free"
-		},
-		"widget": {
-			"tab": "Widget",
-			"title": "Search Widget",
-			"description": "Embed a search widget on your storefront with one script tag.",
-			"apiKeyLabel": "API Key",
-			"apiKeyHint": "Paste your search-only API key (ss_search_...) or create a new one from the API Keys tab.",
-			"snippet": "Widget snippet",
-			"copySnippet": "Copy snippet",
-			"copied": "Widget snippet copied!",
-			"copyFailed": "Failed to copy snippet.",
-			"installInstructions": "Installation instructions",
-			"step1": "Add a container element: <div id=\"aac-search\"></div>",
-			"step2": "Paste the widget snippet before the closing </body> tag.",
-			"step3": "The widget will auto-initialize. Customize data-* attributes as needed."
-		},
-		"projects": {
-			"title": "Projects",
-			"apiKeys": "API keys",
-			"loadError": "Failed to load projects."
-		},
-		"overview": {
-			"title": "Overview",
-			"subtitle": "Past {days} days",
-			"totalSearches": "Total searches",
-			"searchesTrend": "Search trend",
-			"documentsIndexed": "Documents indexed",
-			"quotaUsage": "Quota usage",
-			"failedSyncJobs": "Failed sync jobs",
-			"searchesOverTime": "Searches over time",
-			"topQueries": "Top queries",
-			"activityFeed": "Recent activity",
-			"connectorStatus": "Connector status",
-			"period24h": "24h",
-			"period7d": "7 days",
-			"period30d": "30 days",
-			"quotaWarning": "You've used {percent}% of your search quota. Upgrade your plan to avoid disruption.",
-			"quotaExceeded": "You've exceeded your search quota ({percent}%). Some features may be limited.",
-			"connectorOnline": "All connectors online",
-			"connectorOffline": "Connector offline",
-			"connectorUnknown": "No connector configured",
-			"noData": "No data available",
-			"noDataDescription": "Data will appear once your search indexes start receiving queries.",
-			"refresh": "Refresh",
-			"activity": {
-				"indexCreated": "Index \"{name}\" created",
-				"keyRevoked": "{count, plural, one {# API key} other {# API keys}} for \"{name}\"",
-				"syncFailed": "Sync failed for index \"{name}\""
-			},
-			"indexVersion": "Index version",
-			"apiKeys": "API keys",
-			"searches": "Searches",
-			"indexes": "Indexes",
-			"documents": "Documents",
-			"plan": "Plan",
-			"quickActions": "Quick actions",
-			"manageIndexes": "Manage indexes",
-			"manageIndexesDesc": "Create and manage search indexes",
-			"viewAnalytics": "View analytics",
-			"viewAnalyticsDesc": "Track search usage and top queries",
-			"setupConnector": "Set up connector",
-			"setupConnectorDesc": "Connect PrestaShop or Bitrix module",
-			"managePlan": "Manage plan",
-			"graceUntil": "Read-only until {date}",
-			"active": "Active",
-			"indexedProducts": "Indexed products",
-			"apiKeysCount": "API keys",
-			"lastHeartbeat": "Last heartbeat",
-			"noHeartbeat": "Never",
-			"connectorToken": "Connector token",
-			"upgrade": "Upgrade plan",
-			"createIndex": "Create index",
-			"addConnector": "Add connector",
-			"viewAll": "View all",
-			"noSearchesYet": "You haven't sent any searches yet",
-			"emptyStateDescription": "Let's get started with your first search index.",
-			"getStarted": "Get started",
-			"quotaExceededBadge": "Exceeded",
-			"quotaUsedBadge": "{percent}% used",
-			"searchesLabel": "Searches",
-			"freePlan": "Free"
-		},
-		"gettingStarted": {
-			"title": "Getting Started",
-			"welcome": "Get started with search",
-			"subtitle": "Complete the steps below to start using search.",
-			"allDone": "All steps complete!",
-			"allDoneTitle": "You're all set!",
-			"allDoneDesc": "All onboarding steps are complete. You can now use search.",
-			"progress": "Setup progress",
-			"completed": "complete",
-			"step1Label": "Create a search index",
-			"step1Desc": "Create your first search index to store and organize your data.",
-			"step1Action": "Create index",
-			"step2Label": "Connect a source",
-			"step2Desc": "Generate a connector token to connect your data source.",
-			"step2Action": "Connect source",
-			"step3Label": "Run a sync",
-			"step3Desc": "Sync your data from your CMS or other sources.",
-			"step3Action": "Run sync",
-			"step4Label": "Test search",
-			"step4Desc": "Perform a test search to verify your setup.",
-			"step4Action": "Test search",
-			"step5Label": "Generate an API key",
-			"step5Desc": "Create an API key to allow search requests from your application.",
-			"step5Action": "Generate key",
-			"step6Label": "Embed the search widget",
-			"step6Desc": "Embed the search widget on your storefront.",
-			"step6Action": "Embed widget",
-			"done": "Done",
-			"pending": "To do",
-			"inProgress": "In progress",
-			"viewAnalytics": "View analytics",
-			"planCtaTitle": "Need more power?",
-			"planCtaDesc": "Upgrade your plan for higher limits and more features.",
-			"managePlan": "Manage plan",
-			"skipToDashboard": "Skip to dashboard"
-		},
-		"checklist": {
-			"title": "Setup checklist",
-			"steps": {
-				"createIndex": "Create index",
-				"createIndexDone": "Index created",
-				"generateApiKey": "Generate API key",
-				"generateApiKeyDone": "API key generated",
-				"installCmsModule": "Install CMS module",
-				"installCmsModuleDone": "CMS module installed",
-				"runFullSync": "Run full sync",
-				"runFullSyncDone": "Products synced",
-				"testSearch": "Test search",
-				"testSearchDone": "Search tested",
-				"enableWidget": "Enable widget",
-				"enableWidgetDone": "Widget enabled"
-			},
-			"stepDocs": "View docs",
-			"allDone": "All checks passed!"
-		},
-		"nav": {
-			"overview": "Overview",
-			"gettingStarted": "Getting Started",
-			"search": "Search",
-			"apiKeys": "API Keys",
-			"importJobs": "Import Jobs",
-			"searchPreview": "Search Preview",
-			"analytics": "Analytics",
-			"relevance": "Relevance",
-			"connectors": "Connectors",
-			"knowledge": "Knowledge"
-		},
-		"importJobs": {
-			"tab": "Import Jobs",
-			"title": "Import Jobs",
-			"description": "Recent document import and sync activity from the ingest buffer.",
-			"pending": "Pending",
-			"processing": "Processing",
-			"completed": "Completed",
-			"failed": "Failed",
-			"empty": "No import activity in the last 7 days.",
-			"emptyDescription": "Import jobs appear here when you sync data from your CMS or upload documents.",
-			"tableJobId": "Job ID",
-			"tableType": "Type",
-			"tableStatus": "Status",
-			"tableProgress": "Progress",
-			"tableErrors": "Errors",
-			"tableTime": "Time",
-			"viewTimeline": "Timeline",
-			"viewTable": "Table",
-			"successRate": "Success rate",
-			"indexed": "Indexed",
-			"retryQueue": "Retry Queue",
-			"retryAll": "Retry All",
-			"clearQueue": "Clear",
-			"nextRetry": "Next retry",
-			"retrySuccess": "{count} batch(es) queued for retry.",
-			"retryError": "Failed to retry batches. Please try again."
-		},
-		"preview": {
-			"tab": "Search Preview",
-			"title": "Search Preview",
-			"description": "Test search queries against this index and inspect the raw results.",
-			"placeholder": "Enter a search query…",
-			"search": "Search",
-			"noResults": "Run a query to see results here.",
-			"perPage": "Per page",
-			"page": "Page",
-			"highlightFields": "Highlight fields",
-			"highlightFieldsPlaceholder": "e.g. title, description",
-			"facetBy": "Facet by",
-			"facetByPlaceholder": "e.g. brand, category",
-			"stats": "{found} hits in {time}ms"
-		},
-		"relevance": {
-			"tab": "Relevance",
-			"title": "Relevance",
-			"description": "Manage synonyms, curations, and search result rankings."
-		},
-		"synonyms": {
-			"tab": "Synonyms",
-			"title": "Synonyms",
-			"description": "Configure search synonyms. When a user searches for the synonym term, results for the root term are shown instead.",
-			"add": "Add row",
-			"save": "Save synonyms",
-			"saved": "Synonyms saved.",
-			"error": "Failed to save synonyms.",
-			"empty": "No synonyms configured yet. Add a synonym pair to get started.",
-			"emptyDescription": "Synonyms map different search terms to the same root word, expanding your search coverage.",
-			"synonymColumn": "Synonym",
-			"rootColumn": "Root",
-			"tableActions": "Actions",
-			"remove": "Remove",
-			"removeConfirmTitle": "Remove synonym",
-			"removeConfirmMessage": "Are you sure you want to remove this synonym pair?"
-		},
-		"curations": {
-			"tab": "Curations",
-			"title": "Curations",
-			"description": "Pin or hide products for specific search queries to manually control search results.",
-			"add": "Add rule",
-			"save": "Save curations",
-			"saved": "Curations saved.",
-			"error": "Failed to save curations.",
-			"empty": "No curation rules yet. Add a rule to get started.",
-			"emptyDescription": "Curation rules let you pin or hide specific products for search queries to fine-tune results.",
-			"queryColumn": "Query",
-			"pinnedColumn": "Pinned IDs",
-			"hiddenColumn": "Hidden IDs",
-			"tableActions": "Actions",
-			"edit": "Edit",
-			"remove": "Remove",
-			"editTitle": "Edit curation rule",
-			"addTitle": "Add curation rule",
-			"dialogDescription": "Enter the search query and product IDs to pin or hide.",
-			"queryLabel": "Search query",
-			"queryPlaceholder": "e.g. running shoes",
-			"pinnedLabel": "Pinned product IDs (comma-separated)",
-			"pinnedPlaceholder": "prod-123, prod-456",
-			"hiddenLabel": "Hidden product IDs (comma-separated)",
-			"hiddenPlaceholder": "prod-789, prod-012",
-			"dialogSave": "Save rule",
-			"removeConfirmTitle": "Remove curation rule",
-			"removeConfirmMessage": "Are you sure you want to remove this curation rule?"
-		},
-		"connector": {
-			"title": "Connectors",
-			"subtitle": "Connect PrestaShop, Bitrix, or push docs directly via API",
-			"stepCounter": "Step {current} of {total}",
-			"runSyncDesc": "Trigger a full sync to index all products from your CMS.",
-			"runSyncCta": "Run full sync",
-			"syncTriggerHint": "Open your CMS admin panel and click 'Full sync' in the AACsearch module.",
-			"configStep1": {
-				"prestashop": "Paste the API URL into the AACsearch module settings in your PrestaShop admin.",
-				"bitrix": "Paste the API URL into the AACsearch module settings in your Bitrix admin.",
-				"directApi": "Use the API URL and token as the base URL and bearer token for your REST calls."
-			},
-			"configStep2": {
-				"prestashop": "Paste the connector token into the module settings field.",
-				"bitrix": "Paste the connector token into the module settings field.",
-				"directApi": "Include the token in the Authorization header: Bearer <token>"
-			},
-			"configStep3": "Save the configuration.",
-			"prestashop": "PrestaShop",
-			"prestashopDesc": "Full sync for products, categories, stock",
-			"bitrix": "1C-Bitrix",
-			"bitrixDesc": "Full sync for product catalogs",
-			"directApi": "Direct API",
-			"directApiDesc": "Push documents directly via REST API",
-			"setup": "Set up",
-			"manage": "Manage",
-			"viewDocs": "View docs",
-			"statusOnline": "Online",
-			"statusOffline": "Offline",
-			"statusUnknown": "Unknown",
-			"lastSync": "Last sync: {time}",
-			"lastError": "Last error: {error}",
-			"noHeartbeat": "No heartbeat yet",
-			"syncJobs": "Sync jobs",
-			"syncJobsNote": "Showing jobs from the last process restart (in-memory).",
-			"activeConnectors": "Active connectors",
-			"activeConnectorsDesc": "Connector tokens and their heartbeat status",
-			"noConnectors": "No connectors yet. Click 'Set up' on a source above.",
-			"wizardTitle": "Set up {source} connector",
-			"stepGenerateToken": "Generate token",
-			"stepDownloadModule": "Download module",
-			"stepConfigure": "Configure",
-			"stepTestConnection": "Test connection",
-			"stepRunSync": "Run first sync",
-			"tokenGenerated": "Your connector token",
-			"tokenCopyWarning": "Save this key — we can't show it again after you close this window",
-			"tokenCopied": "Copied!",
-			"downloadPrestashop": "Download PrestaShop module",
-			"downloadBitrix": "Download Bitrix module",
-			"testSuccess": "Connection successful — module is online!",
-			"testFailed": "Connection failed — check your module configuration",
-			"syncSuccess": "Sync started successfully",
-			"jobId": "Job ID",
-			"jobType": "Type",
-			"jobStatus": "Status",
-			"jobStarted": "Started",
-			"jobDuration": "Duration",
-			"jobItems": "Items / Failures",
-			"jobActions": "Actions",
-			"jobRetry": "Retry",
-			"typeFull": "Full",
-			"typeDelta": "Delta",
-			"statusPending": "Pending",
-			"statusRunning": "Running",
-			"statusCompleted": "Completed",
-			"statusFailed": "Failed",
-			"jobDetailTitle": "Job detail",
-			"jobEventLog": "Event log",
-			"noJobLogs": "No events logged",
-			"tokenLabel": "Connector token",
-			"tokenPlaceholder": "ss_connector_***",
-			"testHandshake": "Test handshake",
-			"handshakeSuccess": "Handshake successful",
-			"handshakeFailed": "Handshake failed",
-			"description": "Manage the CMS connector token and handshake status.",
-			"noConnectorKeys": "No connector keys. Create an API key with 'connector_write' scope in the API Keys tab.",
-			"lastHeartbeat": "Last heartbeat",
-			"syncNow": "Sync now",
-			"revokeToken": "Revoke",
-			"pipeline": {
-				"buffer": "Buffer",
-				"throughput": "Throughput",
-				"retryQueue": "Retry queue",
-				"failed": "Failed"
-			},
-			"time": {
-				"lessThanMinute": "<1 min",
-				"minutes": "{count} min",
-				"hoursMinutes": "{h}h {m}m",
-				"days": "{count}d",
-				"ago": "{time} ago"
-			},
-			"revokeError": "Failed to revoke token. Please try again.",
-			"retryError": "Failed to retry batches. Please try again.",
-			"wizard": {
-				"noIndex": "No index available. Create an index first.",
-				"tokenFailed": "Failed to generate token"
-			}
-		},
-		"tabs": {
-			"indexes": "Indexes",
-			"playground": "Playground",
-			"apiKeys": "API Keys",
-			"widget": "Widget"
-		},
-		"documents": {
-			"empty": "No documents in this index yet",
-			"emptyDescription": "Upload a CSV or use the API to add documents to this index.",
-			"importCsv": "Import CSV",
-			"importCsvDescription": "Select a CSV file to import documents. The first row must contain column headers matching the schema fields.",
-			"import": "Import",
-			"cancel": "Cancel",
-			"parseError": "Found {count} parsing error(s) in the CSV",
-			"parsedRows": "{count} rows parsed",
-			"importSuccess": "{count} documents enqueued for indexing",
-			"importError": "Failed to import documents",
-			"saved": "Document saved",
-			"saveError": "Failed to save document",
-			"deleted": "{count} document(s) deleted",
-			"deleteError": "Failed to delete documents",
-			"searchPlaceholder": "Search documents…",
-			"filter": "Filter",
-			"columns": "Columns",
-			"toggleColumns": "Toggle columns",
-			"compact": "Compact",
-			"comfortable": "Comfortable",
-			"exportCsv": "Export CSV",
-			"exportSelected": "Export selected",
-			"deleteSelected": "Delete selected",
-			"clearSelection": "Clear selection",
-			"selected": "{count} selected",
-			"showing": "Showing {from}–{to} of {total}",
-			"prev": "Previous",
-			"next": "Next",
-			"pageOf": "{page} / {total}",
-			"editDocument": "Edit Document",
-			"editDocumentDescription": "Edit the document fields below. Changes will be upserted.",
-			"rawDocument": "Raw JSON",
-			"save": "Save changes",
-			"notSet": "Not set",
-			"true": "True",
-			"false": "False",
-			"optional": "optional",
-			"bulkDeleteTitle": "Delete documents",
-			"bulkDeleteMessage": "Are you sure you want to delete {count} document(s)? This action cannot be undone.",
-			"noResults": "No documents match your search.",
-			"queryByPlaceholder": "Query by fields…",
-			"filterByPlaceholder": "Filter by expression…",
-			"clear": "Clear filters",
-			"columnId": "ID"
-		},
-		"playground": {
-			"title": "Search Playground",
-			"description": "Test advanced search queries against your index with all available options.",
-			"advanced": "Advanced options",
-			"advancedShow": "Show advanced options",
-			"advancedHide": "Hide advanced options",
-			"queryBy": "Query by fields",
-			"queryByPlaceholder": "Comma-separated field names (e.g. title, description)",
-			"filterBy": "Filter by",
-			"filterByPlaceholder": "e.g. price:>100 && inStock:=true",
-			"sortBy": "Sort by",
-			"sortByPlaceholder": "e.g. price:desc",
-			"perPage": "Results per page",
-			"run": "Run search",
-			"cmdEnter": "Cmd+Enter to search",
-			"hits": "Hits",
-			"facets": "Facets",
-			"rawJson": "Raw JSON",
-			"curlSnippet": "cURL equivalent",
-			"copy": "Copy",
-			"copied": "Copied!",
-			"responseTime": "Response time",
-			"hitCount": "Results",
-			"noDocuments": "No documents match your query.",
-			"debounceInfo": "Auto-searching (700ms debounce)",
-			"lastQueryRestored": "Last query restored from previous session.",
-			"noIndexes": "No indexes available. Create one first.",
-			"curlTitle": "cURL equivalent",
-			"searchFailed": "Search failed",
-			"copyFailed": "Failed to copy"
-		},
-		"indexActions": {
-			"actions": "Actions",
-			"reindex": "Reindex",
-			"viewSchema": "View schema",
-			"delete": "Delete index",
-			"deleteConfirmTitle": "Delete index",
-			"deleteConfirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone. All indexed data will be lost.",
-			"reindexConfirmTitle": "Reindex",
-			"reindexConfirmMessage": "Trigger a full reindex for \"{name}\"? This will reprocess all documents from the connector.",
-			"schemaTitle": "Schema for \"{name}\"",
-			"reindexed": "Reindex triggered.",
-			"deleted": "Index deleted."
-		},
-		"knowledge": {
-			"title": "Knowledge",
-			"subtitle": "RAG question-answering over your documents and catalogs",
-			"spaces": "Spaces",
-			"spacesDesc": "Personal/organization knowledge workspaces",
-			"activeSpace": "Active space",
-			"selectSpace": "Select space",
-			"newSpaceSlug": "New space slug",
-			"newSpaceName": "New space name",
-			"createSpace": "Create space",
-			"sources": "Sources",
-			"sourcesDesc": "CMS and file sources for this space",
-			"sourceName": "Source name",
-			"sourceType": "Source type",
-			"sourceConfig": "Source config (JSON)",
-			"addSource": "Add source",
-			"fileIngestion": "File ingestion",
-			"fileIngestionDesc": "Upload md/xml/pdf into selected space",
-			"fileInput": "File",
-			"ingestFile": "Ingest file",
-			"jobsAndMetrics": "Jobs & metrics",
-			"jobsAndMetricsDesc": "Operational visibility for ingestion and graph builds",
-			"sourcesMetric": "Sources",
-			"documentsMetric": "Documents",
-			"chunksMetric": "Chunks",
-			"graphEdgesMetric": "Graph edges",
-			"ragAsk": "RAG ask",
-			"ragAskDesc": "Hybrid retrieval with citations from your space",
-			"question": "Question",
-			"askButton": "Ask",
-			"graphExplain": "Graph explain",
-			"graphQuery": "Graph retrieval query",
-			"explainGraph": "Explain graph",
-			"fileSizeLimit": "File must be under 50MB",
-			"fileTypeLimit": "Only .md, .xml, .pdf files are accepted",
-			"createdSpace": "Knowledge space created",
-			"createdSource": "Data source created",
-			"ingestionStarted": "File ingestion started",
-			"answerGenerated": "Answer generated",
-			"graphExplained": "Graph explanation generated",
-			"permissionDenied": "You do not have permissions to create spaces",
-			"requiredFields": "Slug and name are required",
-			"noSpaceSelected": "Select a space and enter a question",
-			"slugPlaceholder": "catalog-knowledge",
-			"namePlaceholder": "Catalog knowledge",
-			"sourceNamePlaceholder": "Bitrix shop connector",
-			"questionPlaceholder": "What products mention API key rotation?",
-			"graphQueryPlaceholder": "connector diagnostics failures",
-			"graphQueryLabel": "Graph query",
-			"graphExplainDesc": "Inspect graph neighborhood for your query",
-			"citedFrom": "Cited from document",
-			"seedNodes": "Seed nodes",
-			"edges": "Edges",
-			"noSeedNodes": "No seed nodes matched.",
-			"noEdges": "No edges found.",
-			"loadingSpaces": "Loading spaces...",
-			"activeSpaceLabel": "Active space: {name} ({slug})",
-			"createSpaceError": "Failed to create knowledge space",
-			"sourceCreateError": "Failed to create data source",
-			"ingestError": "Failed to ingest file",
-			"answerError": "Failed to generate answer",
-			"graphExplainError": "Failed to explain graph retrieval",
-			"noPermissionSources": "You do not have permissions to create sources",
-			"selectSpaceAndSource": "Select space and provide source name",
-			"invalidSourceConfig": "Invalid source config",
-			"noPermissionIngest": "You do not have permissions to ingest files",
-			"selectSpaceAndFile": "Select a space and file",
-			"fileReadError": "Failed to read file",
-			"fileTypeInvalid": "Only .md, .xml, and .pdf files are supported",
-			"selectSpaceAndGraphQuery": "Select a space and enter graph query"
-		},
-		"collection": {
-			"title": "Collection",
-			"notFound": "Index not found",
-			"backToIndexes": "Back to indexes",
-			"collection": "Collection",
-			"alias": "Alias",
-			"tab": {
-				"overview": "Overview",
-				"schema": "Schema",
-				"documents": "Documents",
-				"api": "API",
-				"settings": "Settings"
-			},
-			"documentsTotal": "Documents",
-			"searchesWeek": "Searches (7d)",
-			"ingestEvents": "Ingest events",
-			"apiKeysCount": "API Keys",
-			"schemaOverview": "Schema fields",
-			"noSchema": "No schema fields available.",
-			"viewAllFields": "View all {count} fields",
-			"indexMeta": "Index metadata",
-			"slug": "Slug",
-			"collectionName": "Collection",
-			"aliasName": "Alias",
-			"schemaVersion": "Schema version",
-			"created": "Created",
-			"schemaFields": "Schema fields",
-			"fields": "fields",
-			"fieldName": "Field",
-			"fieldType": "Type",
-			"fieldFacet": "Facet",
-			"fieldSort": "Sort",
-			"fieldIndex": "Index",
-			"totalDocuments": "Total documents",
-			"loading": "Loading...",
-			"noDocuments": "No documents yet",
-			"noDocumentsDesc": "Push documents via the Connector API or SDK.",
-			"apiExamples": "API examples",
-			"searchExample": "Search example",
-			"indexEndpoint": "Index endpoint",
-			"settings": "Settings",
-			"displayName": "Display name",
-			"open": "Open",
-			"schemaEditor": {
-				"addField": "+ Add field",
-				"importJson": "Import JSON",
-				"exportJson": "Export JSON",
-				"previewDiff": "Preview diff",
-				"cancel": "Cancel",
-				"saveOnly": "Save schema only",
-				"saveReindex": "Save + reindex",
-				"defaultSort": "Default sort field:",
-				"noDefaultSort": "No default sort",
-				"empty": "No fields defined yet",
-				"addFirstField": "+ Add first field",
-				"clickToEdit": "Click to edit field name",
-				"unnamed": "unnamed",
-				"settings": "Settings",
-				"delete": "Delete",
-				"loadError": "Failed to load schema.",
-				"retry": "Retry",
-				"saved": "Schema updated.",
-				"saveError": "Failed to save schema.",
-				"importDialogTitle": "Import fields from JSON",
-				"importDialogDesc": "Paste a JSON array of field definitions to replace the current field list.",
-				"importAction": "Import",
-				"importMustBeArray": "Input must be a JSON array.",
-				"invalidJson": "Invalid JSON. Please check your input.",
-				"exported": "Schema JSON copied to clipboard.",
-				"exportError": "Failed to copy to clipboard.",
-				"diffTitle": "Schema changes",
-				"diffDesc": "Review the differences between the draft and saved schema.",
-				"noChanges": "No changes detected.",
-				"settingsTitle": "Settings for {name}",
-				"settingsDesc": "Configure advanced field options. These are stored locally until you save.",
-				"defaultValue": "Default value",
-				"defaultValuePlaceholder": "e.g. 0, false, empty string",
-				"locale": "Locale",
-				"validators": "Validators (JSON)"
-			},
-			"version": "Version",
-			"recentActivity": "Recent activity",
-			"noActivity": "No recent activity.",
-			"useApiKeys": "Authenticate requests using an API key.",
-			"manageSettings": "Manage index configuration.",
-			"defaultSortingField": "Default sort field",
-			"enabled": "Enabled",
-			"statusEnabled": "Enabled",
-			"statusDisabled": "Disabled",
-			"updatedAt": "Updated",
-			"dangerZone": "Danger zone",
-			"dangerZoneDesc": "Permanently delete this index and all its documents.",
-			"deleteWarning": "This action cannot be undone. All documents will be permanently lost.",
-			"deleteCollection": "Delete index",
-			"confirmDelete": "Delete index",
-			"confirmDeleteDesc": "This action is irreversible.",
-			"confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? All documents will be permanently removed.",
-			"cancel": "Cancel",
-			"delete": "Delete",
-			"noApiKeys": "No API keys yet. Create one to use these examples.",
-			"fieldOptional": "Optional",
-			"deleted": "Index deleted successfully",
-			"deleteError": "Failed to delete index"
-		},
-		"open": "Open",
-		"search": {
-			"vectorSearch": {
-				"description": "Search by meaning, not just keywords.",
-				"placeholder": "Describe what you're looking for...",
-				"field": "Vector field",
-				"results": "{count} results found",
-				"distance": "Distance: {distance}"
-			},
-			"hybridSearch": {
-				"description": "Combine keyword + semantic for best results.",
-				"alpha": "Semantic weight (alpha)",
-				"alphaHint": "0 = keywords, 1 = semantic"
-			},
-			"semanticSearch": {
-				"description": "Ask questions in plain language.",
-				"placeholder": "Ask a question about your data..."
-			},
-			"models": {
-				"description": "Configure embedding models for vector and hybrid search.",
-				"enabled": "Enable vector search"
-			},
-			"searchTabs": {
-				"vector": "Vector",
-				"hybrid": "Hybrid",
-				"semantic": "NL Search"
-			}
-		},
-		"geoSearch": {
-			"description": "Search by location with radius filtering.",
-			"lat": "Latitude",
-			"lng": "Longitude",
-			"radius": "Radius (km)"
-		},
-		"federatedSearch": {
-			"description": "Search across multiple indexes simultaneously.",
-			"addIndex": "Add index"
-		},
-		"groupedSearch": {
-			"groupBy": "Group by field"
-		},
-		"suggestions": "Query Suggestions",
-		"presets": "Search Presets",
-		"aliases": "Collection Aliases",
-		"snapshots": {
-			"create": "Create Snapshot"
-		},
-		"health": {
-			"ok": "Healthy",
-			"error": "Unhealthy"
-		},
-		"conversationalSearch": {
-			"description": "Ask questions and get AI-generated answers from your data."
-		},
-		"voiceSearch": {
-			"description": "Search by speaking. Audio is transcribed automatically."
-		},
-		"imageSearch": {
-			"description": "Search by uploading an image. AI describes it before searching."
-		},
-		"stemming": {
-			"description": "Manage stemming overrides for fine-grained text matching.",
-			"word": "Word",
-			"root": "Root"
-		},
-		"stopwords": {
-			"description": "Words in this list are ignored during search. Use it to filter out common words like articles and prepositions.",
-			"tab": "Stopwords",
-			"title": "Stopwords",
-			"add": "Add word",
-			"save": "Save stopwords",
-			"saved": "Stopwords saved.",
-			"error": "Failed to save stopwords.",
-			"empty": "No stopwords configured yet.",
-			"emptyDescription": "Stopwords are common words ignored during search to improve relevance. Add words like 'the', 'a', 'in'.",
-			"wordColumn": "Word",
-			"tableActions": "Actions",
-			"remove": "Remove",
-			"removeConfirmTitle": "Remove stopword",
-			"removeConfirmMessage": "Are you sure you want to remove this stopword?"
-		},
-		"clusterOps": {
-			"description": "Cluster-level operations and metrics.",
-			"vote": "Vote",
-			"debug": "Debug",
-			"metrics": "Metrics"
-		},
-		"analyticsRules": {
-			"description": "Custom analytics rules for tracking search metrics.",
-			"name": "Name",
-			"type": "Type",
-			"create": "Create Rule",
-			"delete": "Delete Rule"
-		},
-		"dynamicSearch": {
-			"description": "Advanced search with dynamic sorting and result diversification.",
-			"diversifyField": "Diversify field",
-			"maxPerValue": "Max per value"
-		}
-	},
-	"nav": {
-		"geoSearch": "Geo Search",
-		"federatedSearch": "Federated",
-		"settings": "Settings",
-		"switchOrganization": "Switch organization"
-	},
-	"__test": {}
+  "admin": {
+    "menu": {
+      "organizations": "Organizations",
+      "users": "Users"
+    },
+    "organizations": {
+      "backToList": "Back to organizations",
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this organization? This action cannot be undone.",
+        "title": "Delete organization"
+      },
+      "create": "Create",
+      "delete": "Delete",
+      "deleteOrganization": {
+        "deleted": "Organization has been deleted successfully!",
+        "deleting": "Deleting organization...",
+        "notDeleted": "Organization could not be deleted. Please try again."
+      },
+      "edit": "Edit",
+      "form": {
+        "createTitle": "Create an organization",
+        "name": "Organization name",
+        "notifications": {
+          "error": "Could not save the organization. Please try again later.",
+          "success": "Organization has been saved."
+        },
+        "save": "Save",
+        "updateTitle": "Edit organization"
+      },
+      "loading": "Loading organizations...",
+      "membersCount": "{count} {count, plural, one {member} other {members}}",
+      "search": "Search for an organization...",
+      "title": "Manage organizations"
+    },
+    "title": "Administration",
+    "users": {
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this user? This action cannot be undone.",
+        "title": "Delete user"
+      },
+      "delete": "Delete",
+      "deleteUser": {
+        "deleted": "User has been deleted successfully!",
+        "deleting": "Deleting user...",
+        "notDeleted": "User could not be deleted. Please try again."
+      },
+      "emailVerified": {
+        "verified": "Email verified",
+        "waiting": "Email waiting for verification"
+      },
+      "impersonate": "Impersonate",
+      "impersonation": {
+        "impersonating": "Impersonating as {name}..."
+      },
+      "loading": "Loading users...",
+      "resendVerificationMail": {
+        "error": "Could not resend verification mail. Please try again.",
+        "submitting": "Resending verification mail...",
+        "success": "Verification mail has been sent.",
+        "title": "Resend verification mail"
+      },
+      "search": "Search for name or email...",
+      "title": "Manage users",
+      "assignAdminRole": "Assign admin role",
+      "removeAdminRole": "Remove admin role"
+    },
+    "description": "Manage your application.",
+    "config": {
+      "title": "Configuration",
+      "loadError": "Failed to load configuration data.",
+      "application": "Application",
+      "appName": "App name",
+      "nodeVersion": "Node.js version",
+      "runtimeEnv": "Runtime",
+      "platform": "Platform",
+      "uptime": "Uptime",
+      "typesenseHealth": "Search engine health",
+      "healthy": "Healthy",
+      "unhealthy": "Unhealthy",
+      "version": "Version",
+      "databaseStats": "Database statistics",
+      "users": "Users",
+      "organizations": "Organizations",
+      "searchIndexes": "Search indexes",
+      "apiKeys": "API keys",
+      "usageEvents": "Usage events",
+      "statsError": "Could not fetch stats.",
+      "services": "External services",
+      "configured": "Configured",
+      "notConfigured": "Not configured",
+      "pageTitle": "Runtime config",
+      "pageSubtitle": "Real-time system configuration, service health, and database statistics."
+    },
+    "integrations": {
+      "title": "Integrations",
+      "loadError": "Failed to check integration status.",
+      "database": "Database",
+      "typesense": "AACsearch Engine",
+      "mail": "Mail",
+      "payments": "Payments",
+      "storage": "Storage",
+      "walletProvider": "Wallet provider",
+      "configured": "Configured",
+      "notConfigured": "Not configured",
+      "endpoint": "Endpoint",
+      "pageTitle": "Integrations health",
+      "pageSubtitle": "Real-time connectivity checks for all configured external services.",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "latencyMs": "{ms}ms latency",
+      "status": "Status",
+      "provider": "Provider"
+    },
+    "jobs": {
+      "title": "Jobs",
+      "loadError": "Failed to load job status.",
+      "backgroundJobs": "Background jobs",
+      "ready": "Ready",
+      "missingSecret": "Missing secret",
+      "recentSyncActivity": "Recent sync activity",
+      "totalJobs": "Total jobs",
+      "noSyncActivity": "No sync activity yet.",
+      "pageTitle": "Background jobs",
+      "pageSubtitle": "Cron job configuration status and recent sync job activity.",
+      "itemsCount": "{count} {count, plural, one {item} other {items}}"
+    },
+    "overview": {
+      "usersTitle": "Users",
+      "organizationsTitle": "Organizations",
+      "unreadNotifications": "Unread notifications",
+      "noData": "No data",
+      "recentUsers": "Recent users",
+      "defaultRole": "user",
+      "openUsers": "Open users",
+      "recentOrganizations": "Recent organizations",
+      "noSlug": "No slug",
+      "membersCount": "{count} {count, plural, one {member} other {members}}",
+      "openOrganizations": "Open organizations",
+      "pageTitle": "Admin overview",
+      "pageSubtitle": "Operational summary across users, organizations and notifications."
+    },
+    "audit": {
+      "recentUserChanges": "Recent user changes",
+      "recentOrgChanges": "Recent organization changes",
+      "defaultRole": "user",
+      "noSlug": "No slug",
+      "pageTitle": "Audit view",
+      "pageSubtitle": "Recent user and organization changes available from admin data sources."
+    },
+    "notifications": {
+      "recentNotifications": "Recent notifications",
+      "markAllRead": "Mark all as read",
+      "markingRead": "Marking notifications as read...",
+      "markReadSuccess": "Done.",
+      "markReadError": "Could not mark all as read.",
+      "statusRead": "read",
+      "statusUnread": "unread",
+      "noNotifications": "No notifications yet.",
+      "pageTitle": "Notification control",
+      "pageSubtitle": "Review recent notifications and update delivery preferences."
+    },
+    "wallet": {
+      "manualAdjustment": "Manual wallet adjustment",
+      "searchOrgPlaceholder": "Search organization...",
+      "selectOrgPlaceholder": "Select organization",
+      "currentBalance": "Current balance",
+      "walletNotInitialized": "Wallet is not initialized for selected organization.",
+      "creditLabel": "Credit",
+      "debitLabel": "Debit",
+      "amountPlaceholder": "Amount (RUB)",
+      "applyButton": "Apply",
+      "reasonPlaceholder": "Reason (minimum 10 chars)",
+      "noWalletError": "Select an organization with initialized wallet first.",
+      "invalidAmountError": "Amount must be a positive number.",
+      "shortReasonError": "Reason must be at least 10 characters.",
+      "applyingAdjustment": "Applying adjustment...",
+      "adjustmentSuccess": "Wallet adjusted successfully.",
+      "adjustmentError": "Failed to adjust wallet.",
+      "latestTransactions": "Latest wallet transactions",
+      "noTransactions": "No transactions found.",
+      "pageTitle": "Wallet operations",
+      "pageSubtitle": "Manual AI wallet adjustments for organizations."
+    },
+    "security": {
+      "pageTitle": "Security operations",
+      "pageSubtitle": "Active sessions, passkeys and two-factor settings for the current admin account."
+    }
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Open navigation",
+      "organizationSettings": "Organization settings",
+      "search": "Search",
+      "start": "Start"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "markAllRead": "Mark all as read",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Open notifications"
+      }
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
+      "unknown": "Something went wrong. Please try again.",
+      "userNotFound": "This user does not exists",
+      "failedToCreateUser": "Could not create user. Please try again.",
+      "failedToCreateSession": "Could not create a session. Please try again.",
+      "failedToUpdateUser": "Could not update user. Please try again.",
+      "failedToGetSession": "Could not get the session.",
+      "invalidPassword": "The entered password is incorrect.",
+      "invalidEmail": "The entered email is invalid.",
+      "invalidToken": "The token you entered is invalid or has expired.",
+      "credentialAccountNotFound": "Account not found.",
+      "emailCanNotBeUpdated": "Email could not be updated. Please try again.",
+      "emailNotVerified": "Please verify your email first before logging in.",
+      "failedToGetUserInfo": "Could not load user information.",
+      "idTokenNotSupported": "ID token is not supported.",
+      "passwordTooLong": "Password is too long.",
+      "passwordTooShort": "Password is too short.",
+      "providerNotFound": "This provider is not suppported.",
+      "socialAccountAlreadyLinked": "This account is already linked to a user.",
+      "userEmailNotFound": "Email not found.",
+      "userAlreadyExists": "This user already exists.",
+      "userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
+      "invalidInvitation": "The invitation is invalid or expired.",
+      "sessionExpired": "The session has expired.",
+      "failedToUnlinkLastAccount": "Failed to unlink account",
+      "accountNotFound": "Account not found"
+    },
+    "forgotPassword": {
+      "backToSignin": "Back to signin",
+      "email": "Email",
+      "hints": {
+        "linkNotSent": {
+          "message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
+          "title": "Link not sent"
+        },
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "message": "Please enter your email address and we will send you a link to reset your password.",
+      "submit": "Send link",
+      "title": "Forgot your password?"
+    },
+    "login": {
+      "continueWith": "Or continue with",
+      "createAnAccount": "Create an account",
+      "dontHaveAnAccount": "Don't have an account yet?",
+      "forgotPassword": "Forgot password?",
+      "hints": {
+        "invalidCredentials": "The email or password you entered are invalid. Please try again.",
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "loginWithPasskey": "Login with passkey",
+      "modes": {
+        "magicLink": "Magic link",
+        "password": "***"
+      },
+      "submit": "Sign in",
+      "subtitle": "Please enter your credentials to sign in.",
+      "title": "Welcome back",
+      "sendMagicLink": "Send magic link"
+    },
+    "resetPassword": {
+      "backToSignin": "Back to signin",
+      "hints": {
+        "error": "We are sorry, but we were unable to reset your password. Please try again.",
+        "success": "Your password has been reset successfully."
+      },
+      "message": "Please enter a new password.",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "title": "Reset your password"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Already have an account?",
+      "email": "Email",
+      "hints": {
+        "signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
+        "verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
+      },
+      "message": "We are happy that you want to join us. Please fill in the form below to create your account.",
+      "name": "Name",
+      "password": "***",
+      "signIn": "Sign in",
+      "submit": "Create account",
+      "title": "Create an account"
+    },
+    "verify": {
+      "title": "Verify your account",
+      "code": "One-time password",
+      "submit": "Verify",
+      "backToSignin": "Back to login",
+      "message": "Enter the one-time password from your authenticator app to continue."
+    }
+  },
+  "choosePlan": {
+    "title": "Choose your plan",
+    "description": "To continue, please select a plan."
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "Go to homepage"
+  },
+  "onboarding": {
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
+      "name": "Name"
+    },
+    "continue": "Continue",
+    "message": "Just a few quick steps to get you started.",
+    "notifications": {
+      "accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+    },
+    "pricing": {
+      "planSelected": "Your plan has been selected successfully.",
+      "skip": "Skip for now"
+    },
+    "step": "Step {step} / {total}",
+    "title": "Set up your account"
+  },
+  "organizations": {
+    "createForm": {
+      "name": "Organization name",
+      "notifications": {
+        "error": "We are sorry, but we were unable to create your organization. Please try again later.",
+        "success": "Your organization has been created. You can now invite members."
+      },
+      "submit": "Create organization",
+      "subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
+      "title": "Create an organization"
+    },
+    "invitationAlert": {
+      "description": "You need to sign in or create an account to join the organization.",
+      "title": "You have been invited to join an organization."
+    },
+    "invitationModal": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
+      "title": "Join the organization",
+      "error": "An error occurred. Please try again."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Create new organization",
+      "organizations": "Organizations",
+      "personalAccount": "Personal account"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Create new organization",
+      "title": "Your organizations"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Member",
+      "owner": "Owner"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Organization name"
+      },
+      "deleteOrganization": {
+        "confirmation": "Are you sure you want to delete your organization?",
+        "description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
+        "submit": "Delete organization",
+        "title": "Delete organization"
+      },
+      "logo": {
+        "description": "Upload a logo for your organization.",
+        "title": "Organization logo"
+      },
+      "members": {
+        "activeMembers": "Active members",
+        "description": "See all active members and the pending invites of your organization.",
+        "invitations": {
+          "empty": "You have not invited any members yet.",
+          "expiresAt": "Expires at {date}",
+          "invitationStatus": {
+            "accepted": "Accepted",
+            "canceled": "Canceled",
+            "pending": "Pending",
+            "rejected": "Rejected"
+          },
+          "revoke": "Revoke invitation",
+          "resend": "Resend invitation"
+        },
+        "inviteMember": {
+          "description": "To invite a new member, send them an invitation.",
+          "email": "Email",
+          "notifications": {
+            "error": {
+              "description": "We were unable to invite the member. Please try again later.",
+              "title": "Could not invite member"
+            },
+            "success": {
+              "description": "The member has been invited.",
+              "title": "Member invited"
+            }
+          },
+          "role": "Role",
+          "submit": "Invite",
+          "title": "Invite member"
+        },
+        "leaveOrganization": "Leave organization",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Could not remove the member from your organization. Please try again."
+            },
+            "loading": {
+              "description": "Removing member from organization..."
+            },
+            "success": {
+              "description": "The member has been successfully removed from your organization."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "The invitation could not be revoked. Please try again later."
+            },
+            "loading": {
+              "description": "Revoking invitation..."
+            },
+            "success": {
+              "description": "The invitation has been revoked."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Could not update organization membership. Please try again."
+            },
+            "loading": {
+              "description": "Updating membership..."
+            },
+            "success": {
+              "description": "Membership was updated successfully"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Resending invitation..."
+            },
+            "success": {
+              "description": "Invitation sent"
+            },
+            "error": {
+              "description": "Could not sent invitation. Please try again."
+            }
+          }
+        },
+        "pendingInvitations": "Pending invitations",
+        "removeMember": "Remove member",
+        "title": "Members"
+      },
+      "notifications": {
+        "organizationDeleted": "Your organization has been deleted.",
+        "organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
+        "organizationNameUpdated": "Your organization name has been updated.",
+        "organizationNotDeleted": "We were unable to delete your organization. Please try again later."
+      },
+      "subtitle": "Manage the settings of the organization.",
+      "title": "Organization",
+      "dangerZone": {
+        "title": "Danger zone"
+      }
+    },
+    "start": {
+      "subtitle": "Welcome to the start page of this organization!"
+    }
+  },
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+        "notifications": {
+          "error": "Could not update avatar",
+          "success": "Avatar was updated successfully"
+        },
+        "title": "Your avatar"
+      },
+      "changeEmail": {
+        "description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+        "notifications": {
+          "error": "Could not update email",
+          "success": "Email was updated successfully"
+        },
+        "title": "Your email"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Could not update name",
+          "success": "Name was updated successfully"
+        },
+        "title": "Your name"
+      },
+      "deleteAccount": {
+        "confirmation": "Are you sure you want to delete your account?",
+        "description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+        "notifications": {
+          "error": "Could not delete account",
+          "success": "Account was deleted successfully"
+        },
+        "submit": "Delete account",
+        "title": "Delete account"
+      },
+      "language": {
+        "description": "To change the language of the app for your account, select a language from the list and click save.",
+        "notifications": {
+          "error": "Could not update language",
+          "success": "Language was updated successfully"
+        },
+        "title": "Your language"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "These are all the active sessions of your account. Click the X to end a specifc session.",
+          "title": "Active sessions",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session revoked"
+            }
+          },
+          "currentSession": "Current session"
+        },
+        "changePassword": {
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "notifications": {
+            "error": "Could not update password",
+            "success": "Password was updated successfully"
+          },
+          "title": "Your password"
+        },
+        "connectedAccounts": {
+          "connect": "Connect",
+          "connected": "Connected",
+          "disconnect": "Disconnect",
+          "title": "Connected accounts"
+        },
+        "passkeys": {
+          "addPasskey": "Add passkey",
+          "description": "Use passkeys as a secure alternative to passwords.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Could not add passkey"
+              },
+              "success": {
+                "title": "Passkey added"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Could not delete passkey"
+              },
+              "loading": {
+                "title": "Deleting passkey..."
+              },
+              "success": {
+                "title": "Passkey deleted"
+              }
+            }
+          },
+          "title": "Passkeys"
+        },
+        "setPassword": {
+          "description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+          "notifications": {
+            "error": "Could not send link to set password. Please try again.",
+            "success": "Check your inbox for the link to set your password."
+          },
+          "submit": "Set password",
+          "title": "Your password"
+        },
+        "title": "Security",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Add an extra layer of security to your account.",
+          "dialog": {
+            "password": {
+              "title": "Verify with password",
+              "description": "Please verify your account by entering your password:",
+              "label": "Your password:"
+            },
+            "totpUrl": {
+              "description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
+              "code": "Enter 6-digit code to verify the setup:",
+              "title": "Enable two-factor authentication"
+            }
+          },
+          "enable": "Enable two-factor authentication",
+          "notifications": {
+            "verify": {
+              "success": {
+                "title": "Two-factor authentication has been enabled successfully."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Could not verify your account with the provided password. Please try again."
+              }
+            },
+            "disable": {
+              "success": {
+                "title": "Two-factor authentication has been disabled successfully."
+              }
+            }
+          },
+          "disable": "Disable two-factor authentication",
+          "enabled": "You have two-factor authentication enabled for your account."
+        }
+      },
+      "subtitle": "Manage the settings of your personal account.",
+      "title": "Account settings"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Manage billing",
+        "notifications": {
+          "error": {
+            "title": "Could not create a customer portal session. Please try again."
+          }
+        }
+      },
+      "activePlan": {
+        "description": "Your current plan and usage limits for search and indexing.",
+        "notFound": "No plan information available.",
+        "status": {
+          "active": "Active",
+          "canceled": "Canceled",
+          "expired": "Expired",
+          "incomplete": "Incomplete",
+          "past_due": "Past due",
+          "paused": "Paused",
+          "trialing": "Trialing",
+          "unpaid": "Unpaid"
+        },
+        "title": "Your plan"
+      },
+      "changePlan": {
+        "description": "Choose a plan to subscribe to.",
+        "title": "Change your plan"
+      },
+      "aiCredits": {
+        "title": "AI credits",
+        "subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",
+        "balance": {
+          "title": "Wallet balance",
+          "includedRemaining": "Included this month",
+          "reserved": "Reserved",
+          "promo": "Promo credits",
+          "notInitialized": "Wallet is not initialized yet."
+        },
+        "topup": {
+          "button": "Top up",
+          "title": "Top up your AI wallet",
+          "description": "Choose an amount or enter a custom value in rubles.",
+          "customAmount": "Custom amount (P)",
+          "summary": "You will be charged {amount}",
+          "confirm": "Pay with Tochka",
+          "error": "Failed to create payment link. Please try again."
+        },
+        "errors": {
+          "insufficientFunds": "Insufficient AI credits. Top up your wallet."
+        }
+      },
+      "title": "Billing",
+      "usage": {
+        "searches": "Searches",
+        "documents": "Documents"
+      },
+      "limits": {
+        "maxIndexes": "Max indexes",
+        "maxDocuments": "Max documents",
+        "maxApiKeys": "Max API keys",
+        "rateLimit": "Rate limit",
+        "maxSearchesPerMonth": "Searches / month"
+      },
+      "features": {
+        "title": "Features",
+        "none": "No features configured"
+      },
+      "upgrade": "Upgrade plan"
+    },
+    "notificationsPage": {
+      "title": "Notifications",
+      "description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
+      "groups": {
+        "general": {
+          "title": "General"
+        },
+        "billing": {
+          "title": "Billing"
+        }
+      },
+      "types": {
+        "APP_UPDATE": {
+          "label": "App updates"
+        },
+        "AI_LOW_BALANCE": {
+          "label": "AI wallet balance is low"
+        },
+        "AI_TOPUP_PAID": {
+          "label": "AI wallet top-up confirmed"
+        },
+        "AI_TOPUP_FAILED": {
+          "label": "AI wallet top-up failed"
+        },
+        "AI_OVERAGE_REACHED": {
+          "label": "AI wallet overage limit reached"
+        }
+      },
+      "columns": {
+        "type": "Notification",
+        "inApp": "In-app",
+        "email": "Email"
+      }
+    },
+    "menu": {
+      "account": {
+        "billing": "Billing",
+        "dangerZone": "Danger zone",
+        "general": "General",
+        "notifications": "Notifications",
+        "security": "Security",
+        "title": "Account"
+      },
+      "organization": {
+        "billing": "Billing",
+        "general": "General",
+        "members": "Members",
+        "title": "Organization",
+        "dangerZone": "Danger zone"
+      }
+    },
+    "save": "Save"
+  },
+  "start": {
+    "subtitle": "See the latest stats of your awesome business.",
+    "welcome": "Welcome {name}!"
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "continue": "Continue",
+      "verify": "Verify"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    }
+  },
+  "checkoutReturn": {
+    "title": "Processing your purchase",
+    "description": "Please wait while we confirm your payment.",
+    "loading": "Confirming your purchase, please wait..."
+  },
+  "search": {
+    "title": "Search",
+    "subtitle": "Manage search indexes, API keys and usage for this organization.",
+    "loading": "Loading...",
+    "noIndexes": "No search indexes yet. Create your first one to get started.",
+    "noIndexesDescription": "Search indexes store your data and power search queries. Create one to get started.",
+    "selectIndex": "Select an index to manage its API keys.",
+    "apiKeysPage": {
+      "title": "API Keys"
+    },
+    "importJobsPage": {
+      "title": "Import Jobs",
+      "description": "Recent document import and sync activity from the ingest buffer."
+    },
+    "previewPage": {
+      "title": "Search Preview"
+    },
+    "fields": {
+      "displayName": "Display name",
+      "slug": "Slug",
+      "version": "Version",
+      "apiKeys": "API keys",
+      "defaultSortingField": "Default sorting field",
+      "schema": "Fields (JSON)"
+    },
+    "createIndex": {
+      "trigger": "Create index",
+      "title": "Create search index",
+      "description": "Provisions a search collection and alias scoped to this organization.",
+      "slugHelp": "Lowercase letters, digits and dashes. Used in API paths and as collection alias.",
+      "schemaHelp": "JSON array of field definitions. The 'tenant_id' field is added automatically.",
+      "submit": "Create",
+      "success": "Index created.",
+      "error": "Could not create index. Please try again.",
+      "startFromTemplate": "Start from a template:",
+      "autoFromName": "auto",
+      "builder": "Visual builder",
+      "json": "JSON",
+      "fieldsTitle": "Schema fields",
+      "fieldsCount": "{count} fields configured",
+      "addField": "Add field",
+      "removeField": "Remove field",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "errorsCount": "{count, plural, one {# field has an error} other {# fields have errors}}",
+      "noFields": "No fields yet — add one or pick a template.",
+      "noSort": "No default sort",
+      "noSortableHint": "Enable Sort on a numeric field first",
+      "tenantHint": "tenant_id is added automatically for isolation.",
+      "templates": {
+        "products": "Products",
+        "articles": "Articles",
+        "users": "Users",
+        "blank": "Blank"
+      },
+      "typeGroups": {
+        "text": "Text",
+        "number": "Number",
+        "boolean": "Boolean",
+        "advanced": "Advanced"
+      },
+      "toggles": {
+        "facet": "Facet",
+        "optional": "Optional",
+        "sort": "Sort"
+      },
+      "tooltips": {
+        "displayName": "Human-readable name shown in the dashboard. Does not affect the API.",
+        "slug": "Used in API paths and as the search collection alias. Lowercase letters, digits and dashes only.",
+        "fields": "Define the columns of your search collection. Fields can be made facetable, sortable, or optional.",
+        "facet": "Allow users to filter and group by this field (e.g. categories, tags, brand).",
+        "optional": "The field is allowed to be missing on documents. Required fields must be present in every document.",
+        "sort": "Allow sorting on this field (numeric fields can always be sorted).",
+        "defaultSort": "Field used to order results when no explicit sort is given. Must be numeric.",
+        "json": "Edit the schema as raw JSON. Switching back to the visual builder validates and re-syncs your changes.",
+        "idField": "Recommended unique identifier. AACsearch uses this as the primary key for upserts."
+      },
+      "errors": {
+        "duplicateName": "Field name must be unique",
+        "invalidJson": "Invalid JSON",
+        "empty": "Add at least one field",
+        "fieldsInvalid": "Fix the highlighted fields"
+      }
+    },
+    "apiKeys": {
+      "title": "API keys",
+      "description": "Search keys are validated by our backend before queries are executed. Admin credentials never leave the server.",
+      "create": "Create key",
+      "createDescription": "The raw key is shown once. Store it securely.",
+      "name": "Name",
+      "generate": "Generate key",
+      "created": "API key created.",
+      "revealOnce": "Copy this key now. You will not be able to see it again.",
+      "done": "Done",
+      "empty": "No API keys yet.",
+      "emptyDescription": "Create your first API key to start integrating search into your application.",
+      "tableName": "Name",
+      "tablePrefix": "Prefix",
+      "tableScopes": "Scopes",
+      "tableStatus": "Status",
+      "tableActions": "Actions",
+      "statusActive": "Active",
+      "statusRevoked": "Revoked",
+      "revoke": "Revoke",
+      "revokeConfirmTitle": "Revoke API key",
+      "revokeConfirmMessage": "Are you sure you want to revoke \"{name}\"? Clients using this key will stop working immediately.",
+      "revoked": "API key revoked.",
+      "error": "Operation failed.",
+      "namePlaceholder": "e.g. Production widget"
+    },
+    "usage": {
+      "title": "Usage",
+      "windowDays": "Last {days} days",
+      "searches": "Searches",
+      "documents": "Documents indexed",
+      "ingests": "Documents ingested",
+      "ofLimit": "of monthly limit",
+      "loadError": "Failed to load usage data."
+    },
+    "analytics": {
+      "tab": "Analytics",
+      "title": "Analytics",
+      "description": "Track search usage, top queries, zero-results, and trends.",
+      "totalSearches": "Total searches",
+      "totalSessions": "Sessions",
+      "ctr": "CTR",
+      "zeroResults": "Zero results",
+      "zeroResultRate": "Zero-result rate",
+      "comingSoon": "Coming soon",
+      "searchesOverTime": "Searches over time",
+      "topQueries": "Top queries",
+      "topClickedProducts": "Top clicked products",
+      "queryColumn": "Query",
+      "countColumn": "Count",
+      "productColumn": "Product",
+      "clicksColumn": "Clicks",
+      "rankColumn": "#",
+      "percentColumn": "% of total",
+      "period24h": "24h",
+      "period7d": "7 days",
+      "period30d": "30 days",
+      "documentsIndexed": "Documents indexed",
+      "failedSyncJobs": "Failed sync jobs",
+      "failed": "failed",
+      "retentionBanner": "Your {plan} plan retains analytics data for {days} days. Select a shorter period to see data.",
+      "noData": "No data available for this period.",
+      "noDataDescription": "Analytics data will appear once your search indexes start receiving queries.",
+      "freePlan": "Free"
+    },
+    "widget": {
+      "tab": "Widget",
+      "title": "Search Widget",
+      "description": "Embed a search widget on your storefront with one script tag.",
+      "apiKeyLabel": "API Key",
+      "apiKeyHint": "Paste your search-only API key (ss_search_...) or create a new one from the API Keys tab.",
+      "snippet": "Widget snippet",
+      "copySnippet": "Copy snippet",
+      "copied": "Widget snippet copied!",
+      "copyFailed": "Failed to copy snippet.",
+      "installInstructions": "Installation instructions",
+      "step1": "Add a container element: <div id=\"aac-search\"></div>",
+      "step2": "Paste the widget snippet before the closing </body> tag.",
+      "step3": "The widget will auto-initialize. Customize data-* attributes as needed."
+    },
+    "projects": {
+      "title": "Projects",
+      "apiKeys": "API keys",
+      "loadError": "Failed to load projects."
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "Past {days} days",
+      "totalSearches": "Total searches",
+      "searchesTrend": "Search trend",
+      "documentsIndexed": "Documents indexed",
+      "quotaUsage": "Quota usage",
+      "failedSyncJobs": "Failed sync jobs",
+      "searchesOverTime": "Searches over time",
+      "topQueries": "Top queries",
+      "activityFeed": "Recent activity",
+      "connectorStatus": "Connector status",
+      "period24h": "24h",
+      "period7d": "7 days",
+      "period30d": "30 days",
+      "quotaWarning": "You've used {percent}% of your search quota. Upgrade your plan to avoid disruption.",
+      "quotaExceeded": "You've exceeded your search quota ({percent}%). Some features may be limited.",
+      "connectorOnline": "All connectors online",
+      "connectorOffline": "Connector offline",
+      "connectorUnknown": "No connector configured",
+      "noData": "No data available",
+      "noDataDescription": "Data will appear once your search indexes start receiving queries.",
+      "refresh": "Refresh",
+      "activity": {
+        "indexCreated": "Index \"{name}\" created",
+        "keyRevoked": "{count, plural, one {# API key} other {# API keys}} for \"{name}\"",
+        "syncFailed": "Sync failed for index \"{name}\""
+      },
+      "indexVersion": "Index version",
+      "apiKeys": "API keys",
+      "searches": "Searches",
+      "indexes": "Indexes",
+      "documents": "Documents",
+      "plan": "Plan",
+      "quickActions": "Quick actions",
+      "manageIndexes": "Manage indexes",
+      "manageIndexesDesc": "Create and manage search indexes",
+      "viewAnalytics": "View analytics",
+      "viewAnalyticsDesc": "Track search usage and top queries",
+      "setupConnector": "Set up connector",
+      "setupConnectorDesc": "Connect PrestaShop or Bitrix module",
+      "managePlan": "Manage plan",
+      "graceUntil": "Read-only until {date}",
+      "active": "Active",
+      "indexedProducts": "Indexed products",
+      "apiKeysCount": "API keys",
+      "lastHeartbeat": "Last heartbeat",
+      "noHeartbeat": "Never",
+      "connectorToken": "Connector token",
+      "upgrade": "Upgrade plan",
+      "createIndex": "Create index",
+      "addConnector": "Add connector",
+      "viewAll": "View all",
+      "noSearchesYet": "You haven't sent any searches yet",
+      "emptyStateDescription": "Let's get started with your first search index.",
+      "getStarted": "Get started",
+      "quotaExceededBadge": "Exceeded",
+      "quotaUsedBadge": "{percent}% used",
+      "searchesLabel": "Searches",
+      "freePlan": "Free"
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "welcome": "Get started with search",
+      "subtitle": "Complete the steps below to start using search.",
+      "allDone": "All steps complete!",
+      "allDoneTitle": "You're all set!",
+      "allDoneDesc": "All onboarding steps are complete. You can now use search.",
+      "progress": "Setup progress",
+      "completed": "complete",
+      "step1Label": "Create a search index",
+      "step1Desc": "Create your first search index to store and organize your data.",
+      "step1Action": "Create index",
+      "step2Label": "Connect a source",
+      "step2Desc": "Generate a connector token to connect your data source.",
+      "step2Action": "Connect source",
+      "step3Label": "Run a sync",
+      "step3Desc": "Sync your data from your CMS or other sources.",
+      "step3Action": "Run sync",
+      "step4Label": "Test search",
+      "step4Desc": "Perform a test search to verify your setup.",
+      "step4Action": "Test search",
+      "step5Label": "Generate an API key",
+      "step5Desc": "Create an API key to allow search requests from your application.",
+      "step5Action": "Generate key",
+      "step6Label": "Embed the search widget",
+      "step6Desc": "Embed the search widget on your storefront.",
+      "step6Action": "Embed widget",
+      "done": "Done",
+      "pending": "To do",
+      "inProgress": "In progress",
+      "viewAnalytics": "View analytics",
+      "planCtaTitle": "Need more power?",
+      "planCtaDesc": "Upgrade your plan for higher limits and more features.",
+      "managePlan": "Manage plan",
+      "skipToDashboard": "Skip to dashboard"
+    },
+    "checklist": {
+      "title": "Setup checklist",
+      "steps": {
+        "createIndex": "Create index",
+        "createIndexDone": "Index created",
+        "generateApiKey": "Generate API key",
+        "generateApiKeyDone": "API key generated",
+        "installCmsModule": "Install CMS module",
+        "installCmsModuleDone": "CMS module installed",
+        "runFullSync": "Run full sync",
+        "runFullSyncDone": "Products synced",
+        "testSearch": "Test search",
+        "testSearchDone": "Search tested",
+        "enableWidget": "Enable widget",
+        "enableWidgetDone": "Widget enabled"
+      },
+      "stepDocs": "View docs",
+      "allDone": "All checks passed!"
+    },
+    "nav": {
+      "overview": "Overview",
+      "gettingStarted": "Getting Started",
+      "search": "Search",
+      "apiKeys": "API Keys",
+      "importJobs": "Import Jobs",
+      "searchPreview": "Search Preview",
+      "analytics": "Analytics",
+      "relevance": "Relevance",
+      "connectors": "Connectors",
+      "knowledge": "Knowledge"
+    },
+    "importJobs": {
+      "tab": "Import Jobs",
+      "title": "Import Jobs",
+      "description": "Recent document import and sync activity from the ingest buffer.",
+      "pending": "Pending",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed",
+      "empty": "No import activity in the last 7 days.",
+      "emptyDescription": "Import jobs appear here when you sync data from your CMS or upload documents.",
+      "tableJobId": "Job ID",
+      "tableType": "Type",
+      "tableStatus": "Status",
+      "tableProgress": "Progress",
+      "tableErrors": "Errors",
+      "tableTime": "Time",
+      "viewTimeline": "Timeline",
+      "viewTable": "Table",
+      "successRate": "Success rate",
+      "indexed": "Indexed",
+      "retryQueue": "Retry Queue",
+      "retryAll": "Retry All",
+      "clearQueue": "Clear",
+      "nextRetry": "Next retry",
+      "retrySuccess": "{count} batch(es) queued for retry.",
+      "retryError": "Failed to retry batches. Please try again."
+    },
+    "preview": {
+      "tab": "Search Preview",
+      "title": "Search Preview",
+      "description": "Test search queries against this index and inspect the raw results.",
+      "placeholder": "Enter a search query…",
+      "search": "Search",
+      "noResults": "Run a query to see results here.",
+      "perPage": "Per page",
+      "page": "Page",
+      "highlightFields": "Highlight fields",
+      "highlightFieldsPlaceholder": "e.g. title, description",
+      "facetBy": "Facet by",
+      "facetByPlaceholder": "e.g. brand, category",
+      "stats": "{found} hits in {time}ms"
+    },
+    "relevance": {
+      "tab": "Relevance",
+      "title": "Relevance",
+      "description": "Manage synonyms, curations, and search result rankings."
+    },
+    "synonyms": {
+      "tab": "Synonyms",
+      "title": "Synonyms",
+      "description": "Configure search synonyms. When a user searches for the synonym term, results for the root term are shown instead.",
+      "add": "Add row",
+      "save": "Save synonyms",
+      "saved": "Synonyms saved.",
+      "error": "Failed to save synonyms.",
+      "empty": "No synonyms configured yet. Add a synonym pair to get started.",
+      "emptyDescription": "Synonyms map different search terms to the same root word, expanding your search coverage.",
+      "synonymColumn": "Synonym",
+      "rootColumn": "Root",
+      "tableActions": "Actions",
+      "remove": "Remove",
+      "removeConfirmTitle": "Remove synonym",
+      "removeConfirmMessage": "Are you sure you want to remove this synonym pair?"
+    },
+    "curations": {
+      "tab": "Curations",
+      "title": "Curations",
+      "description": "Pin or hide products for specific search queries to manually control search results.",
+      "add": "Add rule",
+      "save": "Save curations",
+      "saved": "Curations saved.",
+      "error": "Failed to save curations.",
+      "empty": "No curation rules yet. Add a rule to get started.",
+      "emptyDescription": "Curation rules let you pin or hide specific products for search queries to fine-tune results.",
+      "queryColumn": "Query",
+      "pinnedColumn": "Pinned IDs",
+      "hiddenColumn": "Hidden IDs",
+      "tableActions": "Actions",
+      "edit": "Edit",
+      "remove": "Remove",
+      "editTitle": "Edit curation rule",
+      "addTitle": "Add curation rule",
+      "dialogDescription": "Enter the search query and product IDs to pin or hide.",
+      "queryLabel": "Search query",
+      "queryPlaceholder": "e.g. running shoes",
+      "pinnedLabel": "Pinned product IDs (comma-separated)",
+      "pinnedPlaceholder": "prod-123, prod-456",
+      "hiddenLabel": "Hidden product IDs (comma-separated)",
+      "hiddenPlaceholder": "prod-789, prod-012",
+      "dialogSave": "Save rule",
+      "removeConfirmTitle": "Remove curation rule",
+      "removeConfirmMessage": "Are you sure you want to remove this curation rule?"
+    },
+    "connector": {
+      "title": "Connectors",
+      "subtitle": "Connect PrestaShop, Bitrix, or push docs directly via API",
+      "stepCounter": "Step {current} of {total}",
+      "runSyncDesc": "Trigger a full sync to index all products from your CMS.",
+      "runSyncCta": "Run full sync",
+      "syncTriggerHint": "Open your CMS admin panel and click 'Full sync' in the AACsearch module.",
+      "configStep1": {
+        "prestashop": "Paste the API URL into the AACsearch module settings in your PrestaShop admin.",
+        "bitrix": "Paste the API URL into the AACsearch module settings in your Bitrix admin.",
+        "directApi": "Use the API URL and token as the base URL and bearer token for your REST calls."
+      },
+      "configStep2": {
+        "prestashop": "Paste the connector token into the module settings field.",
+        "bitrix": "Paste the connector token into the module settings field.",
+        "directApi": "Include the token in the Authorization header: Bearer <token>"
+      },
+      "configStep3": "Save the configuration.",
+      "prestashop": "PrestaShop",
+      "prestashopDesc": "Full sync for products, categories, stock",
+      "bitrix": "1C-Bitrix",
+      "bitrixDesc": "Full sync for product catalogs",
+      "directApi": "Direct API",
+      "directApiDesc": "Push documents directly via REST API",
+      "setup": "Set up",
+      "manage": "Manage",
+      "viewDocs": "View docs",
+      "statusOnline": "Online",
+      "statusOffline": "Offline",
+      "statusUnknown": "Unknown",
+      "lastSync": "Last sync: {time}",
+      "lastError": "Last error: {error}",
+      "noHeartbeat": "No heartbeat yet",
+      "syncJobs": "Sync jobs",
+      "syncJobsNote": "Showing jobs from the last process restart (in-memory).",
+      "activeConnectors": "Active connectors",
+      "activeConnectorsDesc": "Connector tokens and their heartbeat status",
+      "noConnectors": "No connectors yet. Click 'Set up' on a source above.",
+      "wizardTitle": "Set up {source} connector",
+      "stepGenerateToken": "Generate token",
+      "stepDownloadModule": "Download module",
+      "stepConfigure": "Configure",
+      "stepTestConnection": "Test connection",
+      "stepRunSync": "Run first sync",
+      "tokenGenerated": "Your connector token",
+      "tokenCopyWarning": "Save this key — we can't show it again after you close this window",
+      "tokenCopied": "Copied!",
+      "downloadPrestashop": "Download PrestaShop module",
+      "downloadBitrix": "Download Bitrix module",
+      "testSuccess": "Connection successful — module is online!",
+      "testFailed": "Connection failed — check your module configuration",
+      "syncSuccess": "Sync started successfully",
+      "jobId": "Job ID",
+      "jobType": "Type",
+      "jobStatus": "Status",
+      "jobStarted": "Started",
+      "jobDuration": "Duration",
+      "jobItems": "Items / Failures",
+      "jobActions": "Actions",
+      "jobRetry": "Retry",
+      "typeFull": "Full",
+      "typeDelta": "Delta",
+      "statusPending": "Pending",
+      "statusRunning": "Running",
+      "statusCompleted": "Completed",
+      "statusFailed": "Failed",
+      "jobDetailTitle": "Job detail",
+      "jobEventLog": "Event log",
+      "noJobLogs": "No events logged",
+      "tokenLabel": "Connector token",
+      "tokenPlaceholder": "ss_connector_***",
+      "testHandshake": "Test handshake",
+      "handshakeSuccess": "Handshake successful",
+      "handshakeFailed": "Handshake failed",
+      "description": "Manage the CMS connector token and handshake status.",
+      "noConnectorKeys": "No connector keys. Create an API key with 'connector_write' scope in the API Keys tab.",
+      "lastHeartbeat": "Last heartbeat",
+      "syncNow": "Sync now",
+      "revokeToken": "Revoke",
+      "pipeline": {
+        "buffer": "Buffer",
+        "throughput": "Throughput",
+        "retryQueue": "Retry queue",
+        "failed": "Failed"
+      },
+      "time": {
+        "lessThanMinute": "<1 min",
+        "minutes": "{count} min",
+        "hoursMinutes": "{h}h {m}m",
+        "days": "{count}d",
+        "ago": "{time} ago"
+      },
+      "revokeError": "Failed to revoke token. Please try again.",
+      "retryError": "Failed to retry batches. Please try again.",
+      "wizard": {
+        "noIndex": "No index available. Create an index first.",
+        "tokenFailed": "Failed to generate token"
+      }
+    },
+    "tabs": {
+      "indexes": "Indexes",
+      "playground": "Playground",
+      "apiKeys": "API Keys",
+      "widget": "Widget"
+    },
+    "documents": {
+      "empty": "No documents in this index yet",
+      "emptyDescription": "Upload a CSV or use the API to add documents to this index.",
+      "importCsv": "Import CSV",
+      "importCsvDescription": "Select a CSV file to import documents. The first row must contain column headers matching the schema fields.",
+      "import": "Import",
+      "cancel": "Cancel",
+      "parseError": "Found {count} parsing error(s) in the CSV",
+      "parsedRows": "{count} rows parsed",
+      "importSuccess": "{count} documents enqueued for indexing",
+      "importError": "Failed to import documents",
+      "saved": "Document saved",
+      "saveError": "Failed to save document",
+      "deleted": "{count} document(s) deleted",
+      "deleteError": "Failed to delete documents",
+      "searchPlaceholder": "Search documents…",
+      "filter": "Filter",
+      "columns": "Columns",
+      "toggleColumns": "Toggle columns",
+      "compact": "Compact",
+      "comfortable": "Comfortable",
+      "exportCsv": "Export CSV",
+      "exportSelected": "Export selected",
+      "deleteSelected": "Delete selected",
+      "clearSelection": "Clear selection",
+      "selected": "{count} selected",
+      "showing": "Showing {from}–{to} of {total}",
+      "prev": "Previous",
+      "next": "Next",
+      "pageOf": "{page} / {total}",
+      "editDocument": "Edit Document",
+      "editDocumentDescription": "Edit the document fields below. Changes will be upserted.",
+      "rawDocument": "Raw JSON",
+      "save": "Save changes",
+      "notSet": "Not set",
+      "true": "True",
+      "false": "False",
+      "optional": "optional",
+      "bulkDeleteTitle": "Delete documents",
+      "bulkDeleteMessage": "Are you sure you want to delete {count} document(s)? This action cannot be undone.",
+      "noResults": "No documents match your search.",
+      "queryByPlaceholder": "Query by fields…",
+      "filterByPlaceholder": "Filter by expression…",
+      "clear": "Clear filters",
+      "columnId": "ID"
+    },
+    "playground": {
+      "title": "Search Playground",
+      "description": "Test advanced search queries against your index with all available options.",
+      "advanced": "Advanced options",
+      "advancedShow": "Show advanced options",
+      "advancedHide": "Hide advanced options",
+      "queryBy": "Query by fields",
+      "queryByPlaceholder": "Comma-separated field names (e.g. title, description)",
+      "filterBy": "Filter by",
+      "filterByPlaceholder": "e.g. price:>100 && inStock:=true",
+      "sortBy": "Sort by",
+      "sortByPlaceholder": "e.g. price:desc",
+      "perPage": "Results per page",
+      "run": "Run search",
+      "cmdEnter": "Cmd+Enter to search",
+      "hits": "Hits",
+      "facets": "Facets",
+      "rawJson": "Raw JSON",
+      "curlSnippet": "cURL equivalent",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "responseTime": "Response time",
+      "hitCount": "Results",
+      "noDocuments": "No documents match your query.",
+      "debounceInfo": "Auto-searching (700ms debounce)",
+      "lastQueryRestored": "Last query restored from previous session.",
+      "noIndexes": "No indexes available. Create one first.",
+      "curlTitle": "cURL equivalent",
+      "searchFailed": "Search failed",
+      "copyFailed": "Failed to copy"
+    },
+    "indexActions": {
+      "actions": "Actions",
+      "reindex": "Reindex",
+      "viewSchema": "View schema",
+      "delete": "Delete index",
+      "deleteConfirmTitle": "Delete index",
+      "deleteConfirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone. All indexed data will be lost.",
+      "reindexConfirmTitle": "Reindex",
+      "reindexConfirmMessage": "Trigger a full reindex for \"{name}\"? This will reprocess all documents from the connector.",
+      "schemaTitle": "Schema for \"{name}\"",
+      "reindexed": "Reindex triggered.",
+      "deleted": "Index deleted."
+    },
+    "knowledge": {
+      "title": "Knowledge",
+      "subtitle": "RAG question-answering over your documents and catalogs",
+      "spaces": "Spaces",
+      "spacesDesc": "Personal/organization knowledge workspaces",
+      "activeSpace": "Active space",
+      "selectSpace": "Select space",
+      "newSpaceSlug": "New space slug",
+      "newSpaceName": "New space name",
+      "createSpace": "Create space",
+      "sources": "Sources",
+      "sourcesDesc": "CMS and file sources for this space",
+      "sourceName": "Source name",
+      "sourceType": "Source type",
+      "sourceConfig": "Source config (JSON)",
+      "addSource": "Add source",
+      "fileIngestion": "File ingestion",
+      "fileIngestionDesc": "Upload md/xml/pdf into selected space",
+      "fileInput": "File",
+      "ingestFile": "Ingest file",
+      "jobsAndMetrics": "Jobs & metrics",
+      "jobsAndMetricsDesc": "Operational visibility for ingestion and graph builds",
+      "sourcesMetric": "Sources",
+      "documentsMetric": "Documents",
+      "chunksMetric": "Chunks",
+      "graphEdgesMetric": "Graph edges",
+      "ragAsk": "RAG ask",
+      "ragAskDesc": "Hybrid retrieval with citations from your space",
+      "question": "Question",
+      "askButton": "Ask",
+      "graphExplain": "Graph explain",
+      "graphQuery": "Graph retrieval query",
+      "explainGraph": "Explain graph",
+      "fileSizeLimit": "File must be under 50MB",
+      "fileTypeLimit": "Only .md, .xml, .pdf files are accepted",
+      "createdSpace": "Knowledge space created",
+      "createdSource": "Data source created",
+      "ingestionStarted": "File ingestion started",
+      "answerGenerated": "Answer generated",
+      "graphExplained": "Graph explanation generated",
+      "permissionDenied": "You do not have permissions to create spaces",
+      "requiredFields": "Slug and name are required",
+      "noSpaceSelected": "Select a space and enter a question",
+      "slugPlaceholder": "catalog-knowledge",
+      "namePlaceholder": "Catalog knowledge",
+      "sourceNamePlaceholder": "Bitrix shop connector",
+      "questionPlaceholder": "What products mention API key rotation?",
+      "graphQueryPlaceholder": "connector diagnostics failures",
+      "graphQueryLabel": "Graph query",
+      "graphExplainDesc": "Inspect graph neighborhood for your query",
+      "citedFrom": "Cited from document",
+      "seedNodes": "Seed nodes",
+      "edges": "Edges",
+      "noSeedNodes": "No seed nodes matched.",
+      "noEdges": "No edges found.",
+      "loadingSpaces": "Loading spaces...",
+      "activeSpaceLabel": "Active space: {name} ({slug})",
+      "createSpaceError": "Failed to create knowledge space",
+      "sourceCreateError": "Failed to create data source",
+      "ingestError": "Failed to ingest file",
+      "answerError": "Failed to generate answer",
+      "graphExplainError": "Failed to explain graph retrieval",
+      "noPermissionSources": "You do not have permissions to create sources",
+      "selectSpaceAndSource": "Select space and provide source name",
+      "invalidSourceConfig": "Invalid source config",
+      "noPermissionIngest": "You do not have permissions to ingest files",
+      "selectSpaceAndFile": "Select a space and file",
+      "fileReadError": "Failed to read file",
+      "fileTypeInvalid": "Only .md, .xml, and .pdf files are supported",
+      "selectSpaceAndGraphQuery": "Select a space and enter graph query"
+    },
+    "collection": {
+      "title": "Collection",
+      "notFound": "Index not found",
+      "backToIndexes": "Back to indexes",
+      "collection": "Collection",
+      "alias": "Alias",
+      "tab": {
+        "overview": "Overview",
+        "schema": "Schema",
+        "documents": "Documents",
+        "api": "API",
+        "settings": "Settings"
+      },
+      "documentsTotal": "Documents",
+      "searchesWeek": "Searches (7d)",
+      "ingestEvents": "Ingest events",
+      "apiKeysCount": "API Keys",
+      "schemaOverview": "Schema fields",
+      "noSchema": "No schema fields available.",
+      "viewAllFields": "View all {count} fields",
+      "indexMeta": "Index metadata",
+      "slug": "Slug",
+      "collectionName": "Collection",
+      "aliasName": "Alias",
+      "schemaVersion": "Schema version",
+      "created": "Created",
+      "schemaFields": "Schema fields",
+      "fields": "fields",
+      "fieldName": "Field",
+      "fieldType": "Type",
+      "fieldFacet": "Facet",
+      "fieldSort": "Sort",
+      "fieldIndex": "Index",
+      "totalDocuments": "Total documents",
+      "loading": "Loading...",
+      "noDocuments": "No documents yet",
+      "noDocumentsDesc": "Push documents via the Connector API or SDK.",
+      "apiExamples": "API examples",
+      "searchExample": "Search example",
+      "indexEndpoint": "Index endpoint",
+      "settings": "Settings",
+      "displayName": "Display name",
+      "open": "Open",
+      "schemaEditor": {
+        "addField": "+ Add field",
+        "importJson": "Import JSON",
+        "exportJson": "Export JSON",
+        "previewDiff": "Preview diff",
+        "cancel": "Cancel",
+        "saveOnly": "Save schema only",
+        "saveReindex": "Save + reindex",
+        "defaultSort": "Default sort field:",
+        "noDefaultSort": "No default sort",
+        "empty": "No fields defined yet",
+        "addFirstField": "+ Add first field",
+        "clickToEdit": "Click to edit field name",
+        "unnamed": "unnamed",
+        "settings": "Settings",
+        "delete": "Delete",
+        "loadError": "Failed to load schema.",
+        "retry": "Retry",
+        "saved": "Schema updated.",
+        "saveError": "Failed to save schema.",
+        "importDialogTitle": "Import fields from JSON",
+        "importDialogDesc": "Paste a JSON array of field definitions to replace the current field list.",
+        "importAction": "Import",
+        "importMustBeArray": "Input must be a JSON array.",
+        "invalidJson": "Invalid JSON. Please check your input.",
+        "exported": "Schema JSON copied to clipboard.",
+        "exportError": "Failed to copy to clipboard.",
+        "diffTitle": "Schema changes",
+        "diffDesc": "Review the differences between the draft and saved schema.",
+        "noChanges": "No changes detected.",
+        "settingsTitle": "Settings for {name}",
+        "settingsDesc": "Configure advanced field options. These are stored locally until you save.",
+        "defaultValue": "Default value",
+        "defaultValuePlaceholder": "e.g. 0, false, empty string",
+        "locale": "Locale",
+        "validators": "Validators (JSON)"
+      },
+      "version": "Version",
+      "recentActivity": "Recent activity",
+      "noActivity": "No recent activity.",
+      "useApiKeys": "Authenticate requests using an API key.",
+      "manageSettings": "Manage index configuration.",
+      "defaultSortingField": "Default sort field",
+      "enabled": "Enabled",
+      "statusEnabled": "Enabled",
+      "statusDisabled": "Disabled",
+      "updatedAt": "Updated",
+      "dangerZone": "Danger zone",
+      "dangerZoneDesc": "Permanently delete this index and all its documents.",
+      "deleteWarning": "This action cannot be undone. All documents will be permanently lost.",
+      "deleteCollection": "Delete index",
+      "confirmDelete": "Delete index",
+      "confirmDeleteDesc": "This action is irreversible.",
+      "confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? All documents will be permanently removed.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "noApiKeys": "No API keys yet. Create one to use these examples.",
+      "fieldOptional": "Optional",
+      "deleted": "Index deleted successfully",
+      "deleteError": "Failed to delete index"
+    },
+    "open": "Open",
+    "search": {
+      "vectorSearch": {
+        "description": "Search by meaning, not just keywords.",
+        "placeholder": "Describe what you're looking for...",
+        "field": "Vector field",
+        "results": "{count} results found",
+        "distance": "Distance: {distance}"
+      },
+      "hybridSearch": {
+        "description": "Combine keyword + semantic for best results.",
+        "alpha": "Semantic weight (alpha)",
+        "alphaHint": "0 = keywords, 1 = semantic"
+      },
+      "semanticSearch": {
+        "description": "Ask questions in plain language.",
+        "placeholder": "Ask a question about your data..."
+      },
+      "models": {
+        "description": "Configure embedding models for vector and hybrid search.",
+        "enabled": "Enable vector search"
+      },
+      "searchTabs": {
+        "vector": "Vector",
+        "hybrid": "Hybrid",
+        "semantic": "NL Search"
+      }
+    },
+    "geoSearch": {
+      "description": "Search by location with radius filtering.",
+      "lat": "Latitude",
+      "lng": "Longitude",
+      "radius": "Radius (km)"
+    },
+    "federatedSearch": {
+      "description": "Search across multiple indexes simultaneously.",
+      "addIndex": "Add index"
+    },
+    "groupedSearch": {
+      "groupBy": "Group by field"
+    },
+    "suggestions": "Query Suggestions",
+    "presets": "Search Presets",
+    "aliases": "Collection Aliases",
+    "snapshots": {
+      "create": "Create Snapshot"
+    },
+    "health": {
+      "ok": "Healthy",
+      "error": "Unhealthy"
+    },
+    "conversationalSearch": {
+      "description": "Ask questions and get AI-generated answers from your data."
+    },
+    "voiceSearch": {
+      "description": "Search by speaking. Audio is transcribed automatically."
+    },
+    "imageSearch": {
+      "description": "Search by uploading an image. AI describes it before searching."
+    },
+    "stemming": {
+      "description": "Manage stemming overrides for fine-grained text matching.",
+      "word": "Word",
+      "root": "Root"
+    },
+    "stopwords": {
+      "description": "Words in this list are ignored during search. Use it to filter out common words like articles and prepositions.",
+      "tab": "Stopwords",
+      "title": "Stopwords",
+      "add": "Add word",
+      "save": "Save stopwords",
+      "saved": "Stopwords saved.",
+      "error": "Failed to save stopwords.",
+      "empty": "No stopwords configured yet.",
+      "emptyDescription": "Stopwords are common words ignored during search to improve relevance. Add words like 'the', 'a', 'in'.",
+      "wordColumn": "Word",
+      "tableActions": "Actions",
+      "remove": "Remove",
+      "removeConfirmTitle": "Remove stopword",
+      "removeConfirmMessage": "Are you sure you want to remove this stopword?"
+    },
+    "clusterOps": {
+      "description": "Cluster-level operations and metrics.",
+      "vote": "Vote",
+      "debug": "Debug",
+      "metrics": "Metrics"
+    },
+    "analyticsRules": {
+      "description": "Custom analytics rules for tracking search metrics.",
+      "name": "Name",
+      "type": "Type",
+      "create": "Create Rule",
+      "delete": "Delete Rule"
+    },
+    "dynamicSearch": {
+      "description": "Advanced search with dynamic sorting and result diversification.",
+      "diversifyField": "Diversify field",
+      "maxPerValue": "Max per value"
+    }
+  },
+  "nav": {
+    "geoSearch": "Geo Search",
+    "federatedSearch": "Federated",
+    "settings": "Settings",
+    "switchOrganization": "Switch organization"
+  },
+  "__test": {}
 }

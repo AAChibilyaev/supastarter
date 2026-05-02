@@ -95,6 +95,12 @@ export default defineConfig({
 			testMatch: "tests/typesense-features/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "sdks",
+			dependencies: ["setup"],
+			testMatch: "tests/sdks/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

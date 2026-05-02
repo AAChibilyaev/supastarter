@@ -10,6 +10,10 @@ export function generateOpenApiSpec() {
 		info: {
 			title: "AACsearch API v1",
 			version: "1.0.0",
+		license: {
+			name: "MIT",
+			url: "https://opensource.org/licenses/MIT",
+		},
 			description:
 				"Versioned public REST API for AACsearch. Manages projects (organizations), " +
 				"search indexes, documents, API keys, and provides search/analytics endpoints.\n\n" +
@@ -42,7 +46,7 @@ export function generateOpenApiSpec() {
 											id: { type: "string" },
 											name: { type: "string" },
 											slug: { type: "string" },
-											logo: { type: "string", nullable: true },
+											logo: { type: ["string", "null"] },
 											membersCount: { type: "integer" },
 											createdAt: { type: "string", format: "date-time" },
 											updatedAt: { type: "string", format: "date-time" },
@@ -75,7 +79,7 @@ export function generateOpenApiSpec() {
 											pattern: "^[a-z0-9][a-z0-9-]*$",
 											maxLength: 64,
 										},
-										logo: { type: "string", format: "uri", nullable: true },
+										logo: { type: ["string", "null"], format: "uri" },
 									},
 								},
 							},
@@ -1184,7 +1188,7 @@ export function generateOpenApiSpec() {
 												items: { type: "string" },
 											},
 											rateLimitPerMinute: { type: "integer" },
-											expiresAt: { type: "string", nullable: true },
+											expiresAt: { type: ["string", "null"] },
 											createdAt: { type: "string", format: "date-time" },
 											rawKey: {
 												type: "string",
@@ -2019,9 +2023,9 @@ export function generateOpenApiSpec() {
 							items: { type: "string" },
 						},
 						rateLimitPerMinute: { type: "integer" },
-						expiresAt: { type: "string", format: "date-time", nullable: true },
-						revokedAt: { type: "string", format: "date-time", nullable: true },
-						lastUsedAt: { type: "string", format: "date-time", nullable: true },
+						expiresAt: { type: ["string", "null"], format: "date-time" },
+						revokedAt: { type: ["string", "null"], format: "date-time" },
+						lastUsedAt: { type: ["string", "null"], format: "date-time" },
 						createdAt: { type: "string", format: "date-time" },
 						indexSlug: { type: "string" },
 						indexDisplayName: { type: "string" },

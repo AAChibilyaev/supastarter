@@ -4,6 +4,7 @@
 	"scripts": {
 		"build": "dotenv -c -- turbo build",
 		"dev": "dotenv -c -- turbo dev --concurrency 15",
+		"generate:openapi": "cd packages/api && node ../../node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs scripts/generate-openapi.ts",
 		"type-check": "dotenv -c -- turbo type-check",
 		"start": "dotenv -c -- turbo start",
 		"lint": "oxlint .",
@@ -11,7 +12,8 @@
 		"clean": "turbo clean",
 		"test": "dotenv -c -- turbo test",
 		"format": "oxfmt .",
-		"format:check": "oxfmt --check ."
+		"format:check": "oxfmt --check .",
+		"validate:openapi": "redocly lint packages/api/openapi.yaml"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.4.1",
@@ -24,6 +26,7 @@
 		"papaparse": "^5.5.3"
 	},
 	"devDependencies": {
+		"@redocly/cli": "^2.30.3",
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
 		"dotenv-cli": "catalog:",

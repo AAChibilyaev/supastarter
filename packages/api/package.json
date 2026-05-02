@@ -4,6 +4,8 @@
 	"main": "./index.ts",
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
+		"generate:openapi": "node node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs packages/api/scripts/generate-openapi.ts",
+		"validate:openapi": "redocly lint packages/api/openapi.yaml",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
@@ -41,9 +43,11 @@
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
+		"@types/js-yaml": "^4.0.9",
 		"@types/react": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"encoding": "^0.1.13",
+		"js-yaml": "^4.1.1",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
 	}

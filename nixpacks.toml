@@ -1,0 +1,27 @@
+# Nixpacks configuration for Coolify (and Railway/Render) deployments
+# Used when deploying via "Nixpacks" build method instead of Dockerfile.
+# For full multi-service deployments (Postgres + MinIO + Typesense + cron),
+# prefer docker-compose.production.yml instead.
+
+[phases.setup]
+nixPkgs = ["nodejs_22", "pnpm"]
+
+[phases.install]
+cmds = [
+  "corepack enable pnpm",
+  "pnpm install --frozen-lockfile",
+]
+
+[phases.build]
+cmds = [
+  "pnpm --filter @repo/database generate",
+  "pnpm --filter saas build",
+]
+
+[start]
+cmd = "node apps/saas/.next/standalone/apps/saas/server.js"
+
+[variables]
+NEXT_OUTPUT_STANDALONE = "true"
+NEXT_TELEMETRY_DISABLED = "1"
+NODE_ENV = "production"

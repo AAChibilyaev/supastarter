@@ -1,0 +1,41 @@
+# Dependencies — reinstalled inside Docker
+node_modules
+**/node_modules
+
+# Build outputs — rebuilt inside Docker
+.next
+**/.next
+dist
+**/dist
+.turbo
+**/.turbo
+
+# Prisma generated — regenerated during build
+packages/database/prisma/generated
+packages/database/prisma/zod
+
+# Dev-only data volumes
+.data
+*.db
+*.sqlite
+
+# Git
+.git
+.gitignore
+
+# Dev env files (secrets injected via docker-compose environment or secrets)
+.env
+.env.local
+.env.*.local
+.env.paperclip
+
+# Docs, archives, and CMS modules (not needed for saas image)
+docs
+archive
+modules
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+*.log

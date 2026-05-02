@@ -1,0 +1,16 @@
+# AACSearch self-hosted cron schedule
+# Env vars injected by docker-compose: APP_URL, SEARCH_CRON_SECRET, WALLET_CRON_SECRET
+#
+# Format: minute hour day month weekday command
+
+# Flush search ingest buffer — runs every minute to minimize indexing lag
+* * * * * curl -sf -X POST "$APP_URL/api/cron/search-flush" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1
+
+# Run pending reindex jobs — every 2 minutes
+*/2 * * * * curl -sf -X POST "$APP_URL/api/cron/reindex-runner" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1
+
+# Expire stale wallet reservations — every 5 minutes
+*/5 * * * * curl -sf -X POST "$APP_URL/api/cron/expire-reservations" -H "Authorization: Bearer $WALLET_CRON_SECRET" > /proc/1/fd/1 2>&1
+
+# Reconcile pending Tochka top-up orders — every hour at :15
+15 * * * * curl -sf -X POST "$APP_URL/api/cron/reconcile-tochka-topups" -H "Authorization: Bearer $WALLET_CRON_SECRET" > /proc/1/fd/1 2>&1

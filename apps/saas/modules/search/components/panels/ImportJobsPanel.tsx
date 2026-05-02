@@ -3,6 +3,7 @@
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
+import { Progress } from "@repo/ui/components/progress";
 import {
 	Table,
 	TableBody,
@@ -15,6 +16,7 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+	AlertCircle,
 	CheckCircle2,
 	ChevronDown,
 	ChevronRight,
@@ -22,15 +24,278 @@ import {
 	ListIcon,
 	Loader2,
 	RotateCw,
+	UploadCloud,
 	XCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { useDropzone } from "react-dropzone";
 
 import { ingestJobStatusBadge } from "../../lib/job-status";
 import { KanbanBoard } from "../blocks/KanbanBoard";
 import type { KanbanColumn } from "../blocks/KanbanBoard";
 import { EmptyState } from "../cards/EmptyState";
+
+// ─── File-import helpers ────────────────────────────────────────────────────
+
+const IMPORT_BATCH_SIZE = 200;
+const IMPORT_MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+function chunkArray<T>(arr: T[], size: number): T[][] {
+	const result: T[][] = [];
+	for (let i = 0; i < arr.length; i += size) result.push(arr.slice(i, i + size));
+	return result;
+}
+
+function parseCsvLine(line: string): string[] {
+	const result: string[] = [];
+	let field = "";
+	let inQuotes = false;
+	for (let i = 0; i < line.length; i++) {
+		const ch = line[i];
+		if (ch === '"') {
+			if (inQuotes && line[i + 1] === '"') {
+				field += '"';
+				i++;
+			} else {
+				inQuotes = !inQuotes;
+			}
+		} else if (ch === "," && !inQuotes) {
+			result.push(field);
+			field = "";
+		} else {
+			field += ch;
+		}
+	}
+	result.push(field);
+	return result;
+}
+
+function parseCsvDocuments(text: string): Record<string, unknown>[] {
+	const lines = text
+		.split("\n")
+		.map((l) => l.trimEnd())
+		.filter((l) => l.length > 0);
+	if (lines.length < 2) throw new Error("csv_no_header");
+	const headers = parseCsvLine(lines[0]).map((h) => h.trim());
+	return lines.slice(1).map((line) => {
+		const values = parseCsvLine(line);
+		return Object.fromEntries(headers.map((h, i) => [h, values[i] ?? ""]));
+	});
+}
+
+function parseJsonDocuments(text: string): Record<string, unknown>[] {
+	let parsed: unknown;
+	try {
+		parsed = JSON.parse(text);
+	} catch {
+		throw new Error("invalid_json");
+	}
+	if (!Array.isArray(parsed)) throw new Error("json_not_array");
+	for (const doc of parsed as unknown[]) {
+		if (typeof doc !== "object" || doc === null || Array.isArray(doc)) {
+			throw new Error("json_not_objects");
+		}
+	}
+	return parsed as Record<string, unknown>[];
+}
+
+// ─── FileImportZone ────────────────────────────────────────────────────────
+
+type ImportPhase =
+	| { phase: "idle" }
+	| { phase: "parsing" }
+	| { phase: "uploading"; current: number; total: number; errors: string[] }
+	| { phase: "done"; queued: number; errors: string[] }
+	| { phase: "error"; message: string };
+
+interface FileImportZoneProps {
+	organizationId: string;
+	slug: string;
+	onImportComplete: () => void;
+}
+
+function FileImportZone({ organizationId, slug, onImportComplete }: FileImportZoneProps) {
+	const t = useTranslations();
+	const queryClient = useQueryClient();
+	const [state, setState] = useState<ImportPhase>({ phase: "idle" });
+
+	const importMutation = useMutation(orpc.search.importDocuments.mutationOptions());
+
+	const processFile = async (file: File) => {
+		if (file.size > IMPORT_MAX_FILE_BYTES) {
+			setState({ phase: "error", message: t("search.importJobs.upload.errorFileSize") });
+			return;
+		}
+		const lower = file.name.toLowerCase();
+		const isJson = lower.endsWith(".json");
+		const isCsv = lower.endsWith(".csv");
+		if (!isJson && !isCsv) {
+			setState({ phase: "error", message: t("search.importJobs.upload.errorFileType") });
+			return;
+		}
+
+		setState({ phase: "parsing" });
+
+		let documents: Record<string, unknown>[];
+		try {
+			const text = await file.text();
+			documents = isJson ? parseJsonDocuments(text) : parseCsvDocuments(text);
+		} catch (err) {
+			const msg = err instanceof Error ? err.message : "";
+			const translated =
+				msg === "csv_no_header"
+					? t("search.importJobs.upload.errorInvalidCsv")
+					: t("search.importJobs.upload.errorInvalidJson");
+			setState({ phase: "error", message: translated });
+			return;
+		}
+
+		const batches = chunkArray(documents, IMPORT_BATCH_SIZE);
+		const errors: string[] = [];
+		let queued = 0;
+
+		for (let i = 0; i < batches.length; i++) {
+			setState({
+				phase: "uploading",
+				current: i + 1,
+				total: batches.length,
+				errors: [...errors],
+			});
+			try {
+				const result = await importMutation.mutateAsync({
+					organizationId,
+					slug,
+					documents: batches[i],
+				});
+				queued += result.queued;
+			} catch (err) {
+				const errMsg = err instanceof Error ? err.message : "Unknown error";
+				errors.push(t("search.importJobs.upload.batchFailed", { n: i + 1, error: errMsg }));
+			}
+		}
+
+		setState({ phase: "done", queued, errors });
+		void queryClient.invalidateQueries({ queryKey: orpc.search.importJobs.key() });
+		onImportComplete();
+	};
+
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+		onDrop: (accepted) => {
+			const file = accepted[0];
+			if (file) void processFile(file);
+		},
+		accept: {
+			"application/json": [".json"],
+			"text/csv": [".csv"],
+			"text/plain": [".csv"],
+		},
+		multiple: false,
+		maxSize: IMPORT_MAX_FILE_BYTES,
+		onDropRejected: (rejections) => {
+			const isSize = rejections.some((r) =>
+				r.errors.some((e) => e.code === "file-too-large"),
+			);
+			setState({
+				phase: "error",
+				message: isSize
+					? t("search.importJobs.upload.errorFileSize")
+					: t("search.importJobs.upload.errorFileType"),
+			});
+		},
+		disabled: state.phase === "parsing" || state.phase === "uploading",
+	});
+
+	if (state.phase === "done") {
+		return (
+			<div className="gap-3 p-4 flex flex-col items-center rounded-lg border border-success/30 bg-success/5">
+				<CheckCircle2 className="size-8 text-success" />
+				<p className="text-sm font-medium">
+					{t("search.importJobs.upload.success", { count: state.queued })}
+				</p>
+				{state.errors.length > 0 && (
+					<div className="space-y-1 w-full">
+						{state.errors.map((e, i) => (
+							<p key={i} className="text-xs text-destructive">
+								{e}
+							</p>
+						))}
+					</div>
+				)}
+				<Button variant="outline" size="sm" onClick={() => setState({ phase: "idle" })}>
+					{t("search.importJobs.upload.title")}
+				</Button>
+			</div>
+		);
+	}
+
+	if (state.phase === "uploading") {
+		const pct = Math.round((state.current / state.total) * 100);
+		return (
+			<div className="p-4 space-y-3 rounded-lg border">
+				<p className="text-sm text-foreground/60">
+					{t("search.importJobs.upload.batching", {
+						current: state.current,
+						total: state.total,
+					})}
+				</p>
+				<Progress value={pct} className="h-2" />
+				{state.errors.length > 0 && (
+					<div className="space-y-1">
+						{state.errors.map((e, i) => (
+							<p key={i} className="text-xs text-destructive">
+								{e}
+							</p>
+						))}
+					</div>
+				)}
+			</div>
+		);
+	}
+
+	if (state.phase === "parsing") {
+		return (
+			<div className="gap-2 p-4 flex items-center justify-center rounded-lg border">
+				<Loader2 className="size-4 animate-spin text-foreground/60" />
+				<p className="text-sm text-foreground/60">
+					{t("search.importJobs.upload.parsing")}
+				</p>
+			</div>
+		);
+	}
+
+	return (
+		<div className="space-y-2">
+			<div
+				{...getRootProps()}
+				className={`gap-3 px-6 py-8 flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
+					isDragActive
+						? "border-primary bg-primary/5"
+						: "border-border hover:border-primary/50 hover:bg-muted/30"
+				}`}
+			>
+				<input {...getInputProps()} />
+				<UploadCloud
+					className={`size-8 ${isDragActive ? "text-primary" : "text-foreground/40"}`}
+				/>
+				<div className="text-center">
+					<p className="text-sm font-medium">{t("search.importJobs.upload.dropzone")}</p>
+					<p className="mt-1 text-xs text-foreground/50">
+						{t("search.importJobs.upload.fileTypes")}
+					</p>
+				</div>
+			</div>
+			{state.phase === "error" && (
+				<div className="gap-2 p-3 text-sm flex items-center rounded-md bg-destructive/10 text-destructive">
+					<AlertCircle className="size-4 shrink-0" />
+					{state.message}
+				</div>
+			)}
+		</div>
+	);
+}
+
+// ─── ImportJobsPanel ────────────────────────────────────────────────────────
 
 interface ImportJobsPanelProps {
 	organizationId: string;
@@ -195,6 +460,19 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 					</Button>
 				</div>
 			</div>
+
+			{/* File upload zone — only when an index slug is known */}
+			{slug && (
+				<FileImportZone
+					organizationId={organizationId}
+					slug={slug}
+					onImportComplete={() =>
+						void queryClient.invalidateQueries({
+							queryKey: orpc.search.importJobs.key(),
+						})
+					}
+				/>
+			)}
 
 			{/* Statistics bar */}
 			<div className="p-4 space-y-3 rounded-lg border">

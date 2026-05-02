@@ -1160,7 +1160,20 @@
 			"clearQueue": "Clear",
 			"nextRetry": "Next retry",
 			"retrySuccess": "{count} batch(es) queued for retry.",
-			"retryError": "Failed to retry batches. Please try again."
+			"retryError": "Failed to retry batches. Please try again.",
+			"upload": {
+				"title": "Upload File",
+				"dropzone": "Drag & drop a JSON or CSV file here, or click to browse",
+				"fileTypes": "Supports .json and .csv files",
+				"parsing": "Parsing file…",
+				"batching": "Uploading batch {current} of {total}…",
+				"success": "{count} document(s) queued for indexing",
+				"errorInvalidJson": "Invalid JSON: expected an array of objects",
+				"errorInvalidCsv": "Invalid CSV: file must have a header row",
+				"errorFileSize": "File too large (max 10 MB)",
+				"errorFileType": "Only .json and .csv files are accepted",
+				"batchFailed": "Batch {n} failed: {error}"
+			}
 		},
 		"preview": {
 			"tab": "Search Preview",

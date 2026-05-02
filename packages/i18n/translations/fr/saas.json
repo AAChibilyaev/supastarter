@@ -1022,7 +1022,20 @@
 			"clearQueue": "Effacer",
 			"nextRetry": "Prochain réessai",
 			"retrySuccess": "{count} lot(s) mis en file d'attente pour une nouvelle tentative.",
-			"retryError": "Échec de la nouvelle tentative pour les lots. Veuillez réessayer."
+			"retryError": "Échec de la nouvelle tentative pour les lots. Veuillez réessayer.",
+			"upload": {
+				"title": "Télécharger un fichier",
+				"dropzone": "Déposez un fichier JSON ou CSV ici, ou cliquez pour parcourir",
+				"fileTypes": "Prend en charge les fichiers .json et .csv",
+				"parsing": "Traitement du fichier…",
+				"batching": "Envoi du lot {current} sur {total}…",
+				"success": "{count} document(s) mis en file d'attente pour l'indexation",
+				"errorInvalidJson": "JSON invalide : tableau d'objets attendu",
+				"errorInvalidCsv": "CSV invalide : le fichier doit avoir une ligne d'en-tête",
+				"errorFileSize": "Fichier trop volumineux (max 10 Mo)",
+				"errorFileType": "Seuls les fichiers .json et .csv sont acceptés",
+				"batchFailed": "Lot {n} échoué : {error}"
+			}
 		},
 		"preview": {
 			"tab": "Aperçu recherche",

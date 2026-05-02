@@ -1148,7 +1148,20 @@
 			"clearQueue": "Leeren",
 			"nextRetry": "Nächste Wiederholung",
 			"retrySuccess": "{count} Charge(n) für erneuten Versuch in die Warteschlange gestellt.",
-			"retryError": "Erneuter Versuch fehlgeschlagen. Bitte versuchen Sie es erneut."
+			"retryError": "Erneuter Versuch fehlgeschlagen. Bitte versuchen Sie es erneut.",
+			"upload": {
+				"title": "Datei hochladen",
+				"dropzone": "JSON- oder CSV-Datei hier ablegen oder zum Durchsuchen klicken",
+				"fileTypes": "Unterstützt .json und .csv Dateien",
+				"parsing": "Datei wird verarbeitet…",
+				"batching": "Batch {current} von {total} wird hochgeladen…",
+				"success": "{count} Dokument(e) in die Warteschlange eingereiht",
+				"errorInvalidJson": "Ungültiges JSON: Array von Objekten erwartet",
+				"errorInvalidCsv": "Ungültige CSV: Datei muss eine Kopfzeile haben",
+				"errorFileSize": "Datei zu groß (max. 10 MB)",
+				"errorFileType": "Nur .json und .csv Dateien werden akzeptiert",
+				"batchFailed": "Batch {n} fehlgeschlagen: {error}"
+			}
 		},
 		"preview": {
 			"tab": "Suchvorschau",

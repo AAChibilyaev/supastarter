@@ -1147,7 +1147,20 @@
 			"clearQueue": "Limpiar",
 			"nextRetry": "Próximo reintento",
 			"retrySuccess": "{count} lote(s) en cola para reintento.",
-			"retryError": "Error al reintentar los lotes. Por favor, inténtelo de nuevo."
+			"retryError": "Error al reintentar los lotes. Por favor, inténtelo de nuevo.",
+			"upload": {
+				"title": "Subir archivo",
+				"dropzone": "Arrastra y suelta un archivo JSON o CSV aquí, o haz clic para explorar",
+				"fileTypes": "Compatible con archivos .json y .csv",
+				"parsing": "Procesando archivo…",
+				"batching": "Cargando lote {current} de {total}…",
+				"success": "{count} documento(s) en cola para indexación",
+				"errorInvalidJson": "JSON inválido: se esperaba un array de objetos",
+				"errorInvalidCsv": "CSV inválido: el archivo debe tener una fila de encabezado",
+				"errorFileSize": "Archivo demasiado grande (máx. 10 MB)",
+				"errorFileType": "Solo se aceptan archivos .json y .csv",
+				"batchFailed": "Lote {n} fallido: {error}"
+			}
 		},
 		"preview": {
 			"tab": "Vista Previa",

@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.SEARCH_CRON_SECRET;
 	if (!expected) {
+		logger.warn("SEARCH_CRON_SECRET is not set — search-flush cron will always reject requests");
 		return false;
 	}
 

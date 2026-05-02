@@ -671,7 +671,6 @@ export function russianSoundex(word: string): string {
 
 	for (let i = 0; i < lower.length; i++) {
 		const ch = lower[i];
-		const next = lower[i + 1] ?? "";
 
 		// Handle yo (ё) — normalize to e
 		const normalized = ch === "ё" ? "е" : ch;

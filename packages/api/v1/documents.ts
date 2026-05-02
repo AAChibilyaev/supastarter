@@ -5,6 +5,8 @@
  *   PUT    /v1/indexes/:indexId/documents/:documentId    — upsert single document
  *   POST   /v1/indexes/:indexId/documents:batch           — batch upsert documents
  *   POST   /v1/indexes/:indexId/documents:batchDelete     — batch delete documents by IDs
+ *   POST   /v1/indexes/:indexId/documents/delete-by-query — delete documents by filter expression
+ *   GET    /v1/indexes/:indexId/documents/export          — export documents as JSONL/JSON
  *   DELETE /v1/indexes/:indexId/documents/:documentId     — delete document
  */
 
@@ -18,6 +20,7 @@ import {
 import { logger } from "@repo/logs";
 import {
 	aliasName,
+	deleteByQuery,
 	exportDocumentsRaw,
 	physicalCollectionName,
 	searchDocuments,
@@ -352,5 +355,72 @@ export const documentsApp = new Hono()
 		} catch (error) {
 			logger.error("V1 export documents failed", { error, indexId });
 			return c.json({ error: "internal_error", message: "Failed to export documents" }, 502);
+		}
+	})
+
+	// ── Delete by query ────────────────────────────────────────────
+	.post("/indexes/:indexId/documents/delete-by-query", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const indexId = c.req.param("indexId");
+		if (indexId !== verified.indexId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const schema = z.object({
+			filterBy: z.string().min(1),
+		});
+
+		let body: unknown;
+		try {
+			body = await c.req.json();
+		} catch {
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
+		}
+
+		const parsed = schema.safeParse(body);
+		if (!parsed.success) {
+			return c.json(
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
+				400,
+			);
+		}
+
+		const index = await getSearchIndexById(indexId);
+		if (!index || index.organizationId !== verified.organizationId) {
+			return c.json({ error: "not_found", message: "Index not found" }, 404);
+		}
+
+		const collName = physicalCollectionName(
+			verified.organizationId,
+			verified.indexSlug,
+			index.version,
+		);
+
+		try {
+			const result = await deleteByQuery(collName, parsed.data.filterBy);
+			return c.json({
+				deleted: result.num_deleted ?? 0,
+				filterBy: parsed.data.filterBy,
+			});
+		} catch (error) {
+			logger.error("V1 delete by query failed", {
+				error,
+				indexId,
+				filterBy: parsed.data.filterBy,
+			});
+			return c.json(
+				{ error: "internal_error", message: "Failed to delete documents by query" },
+				502,
+			);
 		}
 	});

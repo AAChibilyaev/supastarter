@@ -25,8 +25,8 @@ export default async function BlogListPage(props: { params: Promise<{ locale: st
 			</div>
 
 			<div className="gap-8 md:grid-cols-2 grid">
-				{posts.map((post) => (
-					<PostListItem post={post} key={post.path} />
+				{posts.map((post, index) => (
+					<PostListItem post={post} key={post.path} priorityImage={index < 2} />
 				))}
 			</div>
 		</div>

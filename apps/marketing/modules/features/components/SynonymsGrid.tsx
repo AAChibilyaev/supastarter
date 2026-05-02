@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SynonymsGridItem {
-	key:
-		| "oneWay"
-		| "multiWay"
-		| "csvImport"
-		| "realTimeUpdate"
-		| "scope"
-		| "analytics";
+	key: "oneWay" | "multiWay" | "csvImport" | "realTimeUpdate" | "scope" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

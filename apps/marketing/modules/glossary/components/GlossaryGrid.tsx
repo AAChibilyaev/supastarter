@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface GlossaryGridItem {
-	key:
-		| "searchIndex"
-		| "facet"
-		| "relevance"
-		| "invertedIndex"
-		| "embedding"
-		| "searchUnit";
+	key: "searchIndex" | "facet" | "relevance" | "invertedIndex" | "embedding" | "searchUnit";
 	icon: ComponentType<{ className?: string }>;
 }
 

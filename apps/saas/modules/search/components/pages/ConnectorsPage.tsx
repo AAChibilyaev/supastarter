@@ -10,7 +10,6 @@ import {
 	CardTitle,
 } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { toastError } from "@repo/ui/components/toast";
 import {
 	Table,
 	TableBody,
@@ -19,6 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { toastError } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Cable, Clock, RefreshCw, XCircle } from "lucide-react";
@@ -389,7 +389,10 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 															<span className="gap-1 inline-flex items-center">
 																<Clock className="size-3" />
 																{t("search.connector.time.ago", {
-																	time: relativeTime(token.lastUsedAt, t),
+																	time: relativeTime(
+																		token.lastUsedAt,
+																		t,
+																	),
 																})}
 															</span>
 														) : (

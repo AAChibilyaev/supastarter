@@ -104,8 +104,6 @@ export function OverviewPage() {
 		enabled: Boolean(orgId),
 	});
 
-	if (!orgId || !slug) return null;
-
 	const isLoading = planLoading || usageLoading;
 
 	// ── KPI values ──────────────────────────────────────────────────
@@ -174,7 +172,7 @@ export function OverviewPage() {
 			label: a.label,
 			time: new Date(a.createdAt).toLocaleDateString(),
 		}));
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [recentActivityData]);
 
 	// ── Connector status ────────────────────────────────────────────
@@ -192,6 +190,10 @@ export function OverviewPage() {
 	// ── Quota color ─────────────────────────────────────────────────
 	const quotaColor =
 		quotaPercent >= 100 ? "destructive" : quotaPercent >= 80 ? "warning" : "success";
+
+	if (!orgId || !slug) {
+		return null;
+	}
 
 	if (isLoading) {
 		return (
@@ -285,7 +287,9 @@ export function OverviewPage() {
 						}
 						className="text-xs"
 					>
-						{quotaPercent >= 100 ? t("overview.quotaExceededBadge") : t("overview.quotaUsedBadge", { percent: Math.round(quotaPercent) })}
+						{quotaPercent >= 100
+							? t("overview.quotaExceededBadge")
+							: t("overview.quotaUsedBadge", { percent: Math.round(quotaPercent) })}
 					</Badge>
 				</StatsTile>
 

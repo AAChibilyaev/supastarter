@@ -147,7 +147,9 @@ function IntegrationCard({
 					<div className="gap-3 flex items-center">
 						<CheckCircle2Icon className="size-5 text-success" />
 						<div>
-							<p className="font-medium text-sm text-success">{t("integrations.connected")}</p>
+							<p className="font-medium text-sm text-success">
+								{t("integrations.connected")}
+							</p>
 							{latencyMs !== undefined && (
 								<p className="text-xs text-muted-foreground">
 									{t("integrations.latencyMs", { ms: latencyMs })}
@@ -159,7 +161,9 @@ function IntegrationCard({
 					<div className="gap-2 flex items-start">
 						<XCircleIcon className="size-5 mt-0.5 shrink-0 text-destructive" />
 						<div>
-							<p className="font-medium text-sm text-destructive">{t("integrations.disconnected")}</p>
+							<p className="font-medium text-sm text-destructive">
+								{t("integrations.disconnected")}
+							</p>
 							{error && <p className="text-xs mt-1 text-muted-foreground">{error}</p>}
 						</div>
 					</div>

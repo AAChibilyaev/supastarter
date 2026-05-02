@@ -65,31 +65,31 @@ Jeder Space verfolgt die Verwendung über die Prozedur `knowledge.usageMetrics`:
 
 Das Knowledge-Modul verwendet 7 dedizierte Prisma-Modelle:
 
-| Modell              | Zweck                                         |
-| ------------------- | --------------------------------------------- |
-| `KnowledgeSpace`    | Oberster Container, org- oder benutzereigen   |
-| `DataSource`        | Datei-Quell-Datensatz (Name, Typ, Status)     |
+| Modell              | Zweck                                            |
+| ------------------- | ------------------------------------------------ |
+| `KnowledgeSpace`    | Oberster Container, org- oder benutzereigen      |
+| `DataSource`        | Datei-Quell-Datensatz (Name, Typ, Status)        |
 | `IngestionJob`      | Ingestion-Tracking (Status, Fortschritt, Fehler) |
-| `KnowledgeDocument` | Verarbeitetes Dokument                        |
-| `KnowledgeChunk`    | Einzelner Text-Chunk für Retrieval            |
-| `GraphNode`         | Wissensgraph-Knoten (Konzept, Entität)        |
-| `GraphEdge`         | Beziehung zwischen Graphknoten                |
+| `KnowledgeDocument` | Verarbeitetes Dokument                           |
+| `KnowledgeChunk`    | Einzelner Text-Chunk für Retrieval               |
+| `GraphNode`         | Wissensgraph-Knoten (Konzept, Entität)           |
+| `GraphEdge`         | Beziehung zwischen Graphknoten                   |
 
 ### oRPC-Prozeduren
 
 Das Knowledge-Modul stellt 10 Prozeduren unter `packages/api/modules/knowledge/` bereit:
 
-| Prozedur            | Beschreibung                                      |
-| ------------------- | ------------------------------------------------- |
-| `listSpaces`        | Alle Spaces für den Eigentümer auflisten          |
-| `createSpace`       | Neuen Knowledge-Space erstellen                   |
-| `listSources`       | Datenquellen für einen Space auflisten            |
-| `createSource`      | Neue Datenquelle hinzufügen                       |
-| `listIngestionJobs` | Ingestion-Jobs für einen Space auflisten          |
-| `ingestFile`        | Datei hochladen und ingestieren                   |
-| `ask`               | Frage stellen (RAG-Retrieval + LLM-Antwort)       |
-| `graphragExplain`   | GraphRAG-Erklärungsabfrage                        |
-| `usageMetrics`      | Token- und Abfrage-Verwendungsstatistiken         |
+| Prozedur            | Beschreibung                                |
+| ------------------- | ------------------------------------------- |
+| `listSpaces`        | Alle Spaces für den Eigentümer auflisten    |
+| `createSpace`       | Neuen Knowledge-Space erstellen             |
+| `listSources`       | Datenquellen für einen Space auflisten      |
+| `createSource`      | Neue Datenquelle hinzufügen                 |
+| `listIngestionJobs` | Ingestion-Jobs für einen Space auflisten    |
+| `ingestFile`        | Datei hochladen und ingestieren             |
+| `ask`               | Frage stellen (RAG-Retrieval + LLM-Antwort) |
+| `graphragExplain`   | GraphRAG-Erklärungsabfrage                  |
+| `usageMetrics`      | Token- und Abfrage-Verwendungsstatistiken   |
 
 ---
 
@@ -101,18 +101,18 @@ Der Admin-Bereich ist nur für Benutzer mit der Website-Admin-Rolle sichtbar. Er
 
 ### Admin-Seiten
 
-| Pfad                   | Beschreibung                                          | Status                             |
-| ---------------------- | ----------------------------------------------------- | ---------------------------------- |
-| `/admin/`              | Admin-Dashboard-Root                                  | Funktional                         |
-| `/admin/organizations` | Alle Organisationen auflisten und verwalten           | Funktional                         |
-| `/admin/users`         | Alle Benutzer auflisten und verwalten, Imitierung     | Funktional                         |
-| `/admin/config`        | Systemkonfiguration                                   | Stub — ausstehend                  |
-| `/admin/security`      | Sicherheitseinstellungen und Sitzungsverwaltung       | Stub — ausstehend                  |
-| `/admin/integrations`  | Drittanbieter-Integrationseinstellungen               | Stub — ausstehend                  |
-| `/admin/audit`         | Audit-Log-Betrachter                                  | Stub — ausstehend                  |
+| Pfad                   | Beschreibung                                           | Status                           |
+| ---------------------- | ------------------------------------------------------ | -------------------------------- |
+| `/admin/`              | Admin-Dashboard-Root                                   | Funktional                       |
+| `/admin/organizations` | Alle Organisationen auflisten und verwalten            | Funktional                       |
+| `/admin/users`         | Alle Benutzer auflisten und verwalten, Imitierung      | Funktional                       |
+| `/admin/config`        | Systemkonfiguration                                    | Stub — ausstehend                |
+| `/admin/security`      | Sicherheitseinstellungen und Sitzungsverwaltung        | Stub — ausstehend                |
+| `/admin/integrations`  | Drittanbieter-Integrationseinstellungen                | Stub — ausstehend                |
+| `/admin/audit`         | Audit-Log-Betrachter                                   | Stub — ausstehend                |
 | `/admin/wallet`        | KI-Wallet-Admin (pro-Benutzer-Guthaben, Transaktionen) | Stub — aktive Entwicklung (v0.6) |
-| `/admin/jobs`          | Hintergrund-Job-Verwaltung                            | Stub — ausstehend                  |
-| `/admin/notifications` | System-Benachrichtigungsverwaltung                    | Stub — ausstehend                  |
+| `/admin/jobs`          | Hintergrund-Job-Verwaltung                             | Stub — ausstehend                |
+| `/admin/notifications` | System-Benachrichtigungsverwaltung                     | Stub — ausstehend                |
 
 ### KI-Wallet und Credits (v0.6 — aktive Entwicklung)
 
@@ -126,13 +126,13 @@ Das Wallet-Feature ist absichtlich halb-isoliert — wenn Ihre Aufgabe nicht die
 
 Persönliche Einstellungen befinden sich außerhalb des Org-Kontexts unter `/settings/`.
 
-| Pfad                           | Inhalt                                                       |
-| ------------------------------ | ------------------------------------------------------------ |
-| `/settings/general`            | Anzeigename, E-Mail, Profilfoto                              |
-| `/settings/security`           | Passwortänderung, 2FA (TOTP), Passkeys, OAuth-Verbindungen   |
-| `/settings/notifications`      | Pro-Typ-Benachrichtigungseinstellungen                       |
-| `/settings/billing`            | Persönliche Abrechnung, aktiver Plan, Zahlungsmethode        |
-| `/settings/billing/ai-credits` | KI-Wallet-Aufladung und Transaktionsverlauf (v0.6)           |
+| Pfad                           | Inhalt                                                     |
+| ------------------------------ | ---------------------------------------------------------- |
+| `/settings/general`            | Anzeigename, E-Mail, Profilfoto                            |
+| `/settings/security`           | Passwortänderung, 2FA (TOTP), Passkeys, OAuth-Verbindungen |
+| `/settings/notifications`      | Pro-Typ-Benachrichtigungseinstellungen                     |
+| `/settings/billing`            | Persönliche Abrechnung, aktiver Plan, Zahlungsmethode      |
+| `/settings/billing/ai-credits` | KI-Wallet-Aufladung und Transaktionsverlauf (v0.6)         |
 
 Sicherheitseinstellungen unterstützen: Passwort-Login, Magic-Link, Zwei-Faktor-Authentifizierung (TOTP über Authenticator-App), Passkey (WebAuthn) und OAuth (Google, GitHub).
 

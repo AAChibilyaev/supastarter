@@ -25,26 +25,26 @@ et peut changer entre les versions.
 
 ### 4xx — Erreurs client (ne pas réessayer automatiquement)
 
-| HTTP | Code `error`          | Cause                                                              |
-| ---- | --------------------- | ------------------------------------------------------------------ |
-| 400  | `invalid_request`     | JSON malformé ou champ requis manquant                             |
-| 400  | `invalid_filter`      | Syntaxe d'expression `filterBy` invalide                           |
-| 400  | `invalid_sort`        | Expression `sortBy` invalide                                       |
-| 401  | `unauthorized`        | Clé API ou token limité manquant, invalide ou expiré               |
-| 401  | `token_expired`       | La durée de vie du token limité est dépassée                       |
-| 403  | `forbidden`           | La clé n'a pas la portée requise (`search` ou `connector_write`)   |
+| HTTP | Code `error`          | Cause                                                               |
+| ---- | --------------------- | ------------------------------------------------------------------- |
+| 400  | `invalid_request`     | JSON malformé ou champ requis manquant                              |
+| 400  | `invalid_filter`      | Syntaxe d'expression `filterBy` invalide                            |
+| 400  | `invalid_sort`        | Expression `sortBy` invalide                                        |
+| 401  | `unauthorized`        | Clé API ou token limité manquant, invalide ou expiré                |
+| 401  | `token_expired`       | La durée de vie du token limité est dépassée                        |
+| 403  | `forbidden`           | La clé n'a pas la portée requise (`search` ou `connector_write`)    |
 | 403  | `origin_not_allowed`  | L'origine de la requête n'est pas dans `allowedOrigins` pour la clé |
-| 404  | `index_not_found`     | L'`indexSlug` spécifié n'existe pas pour cette organisation        |
-| 429  | `rate_limit_exceeded` | Limite de débit par clé dépassée                                   |
+| 404  | `index_not_found`     | L'`indexSlug` spécifié n'existe pas pour cette organisation         |
+| 429  | `rate_limit_exceeded` | Limite de débit par clé dépassée                                    |
 | 429  | `quota_exceeded`      | Le quota mensuel d'unités de recherche de l'organisation est épuisé |
 
 ### 5xx — Erreurs serveur (possibilité de nouvelle tentative avec backoff)
 
-| HTTP | Code `error`          | Cause                                                             |
-| ---- | --------------------- | ----------------------------------------------------------------- |
-| 502  | `search_failed`       | Erreur Typesense en amont (cluster inaccessible, timeout de requête) |
+| HTTP | Code `error`          | Cause                                                                       |
+| ---- | --------------------- | --------------------------------------------------------------------------- |
+| 502  | `search_failed`       | Erreur Typesense en amont (cluster inaccessible, timeout de requête)        |
 | 502  | `ingest_failed`       | Échec de la mise en file d'attente des documents dans le buffer d'ingestion |
-| 503  | `service_unavailable` | L'API AACsearch est temporairement indisponible                   |
+| 503  | `service_unavailable` | L'API AACsearch est temporairement indisponible                             |
 
 ## Limitation de débit
 
@@ -72,11 +72,11 @@ X-RateLimit-Reset: 1717201234
 
 Ces en-têtes sont inclus dans toutes les réponses réussies et les réponses de limitation de débit :
 
-| En-tête                 | Description                                       |
-| ----------------------- | ------------------------------------------------- |
-| `X-RateLimit-Limit`     | Total des requêtes autorisées par fenêtre         |
-| `X-RateLimit-Remaining` | Requêtes restantes dans la fenêtre actuelle       |
-| `X-RateLimit-Reset`     | Horodatage Unix lorsque la fenêtre se réinitialise |
+| En-tête                 | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| `X-RateLimit-Limit`     | Total des requêtes autorisées par fenêtre                   |
+| `X-RateLimit-Remaining` | Requêtes restantes dans la fenêtre actuelle                 |
+| `X-RateLimit-Reset`     | Horodatage Unix lorsque la fenêtre se réinitialise          |
 | `Retry-After`           | Secondes à attendre avant de réessayer (uniquement sur 429) |
 
 ## Épuisement du quota
@@ -97,14 +97,14 @@ pour restaurer immédiatement le quota.
 
 ## Stratégie de nouvelle tentative pour les clients
 
-| Classe d'erreur            | Action                                                          |
-| -------------------------- | --------------------------------------------------------------- |
-| 4xx (sauf 429)             | **Ne pas réessayer** — corriger la requête                      |
-| 429 `rate_limit_exceeded`  | Attendre les secondes `Retry-After`, puis réessayer             |
-| 429 `quota_exceeded`       | Ne pas réessayer jusqu'à la réinitialisation du quota ou la mise à niveau du plan |
-| 502 `search_failed`        | Réessayer une fois après 1 seconde ; si cela échoue à nouveau, afficher l'erreur à l'utilisateur |
-| 503                        | Réessayer avec backoff exponentiel : 1s → 2s → 4s → abandonner |
-| Erreur réseau              | Réessayer avec backoff exponentiel                              |
+| Classe d'erreur           | Action                                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------------------ |
+| 4xx (sauf 429)            | **Ne pas réessayer** — corriger la requête                                                       |
+| 429 `rate_limit_exceeded` | Attendre les secondes `Retry-After`, puis réessayer                                              |
+| 429 `quota_exceeded`      | Ne pas réessayer jusqu'à la réinitialisation du quota ou la mise à niveau du plan                |
+| 502 `search_failed`       | Réessayer une fois après 1 seconde ; si cela échoue à nouveau, afficher l'erreur à l'utilisateur |
+| 503                       | Réessayer avec backoff exponentiel : 1s → 2s → 4s → abandonner                                   |
+| Erreur réseau             | Réessayer avec backoff exponentiel                                                               |
 
 ### Comportement de nouvelle tentative du SDK
 

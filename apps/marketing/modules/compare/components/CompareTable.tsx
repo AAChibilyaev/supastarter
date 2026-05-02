@@ -12,9 +12,7 @@ import {
 import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-type CellValue =
-	| { type: "bool"; value: boolean }
-	| { type: "text"; key: string };
+type CellValue = { type: "bool"; value: boolean } | { type: "text"; key: string };
 
 interface FeatureRow {
 	key: string;
@@ -115,13 +113,13 @@ function BoolCell({ value, highlight }: { value: boolean; highlight?: boolean })
 	if (value) {
 		return (
 			<Badge status="success" className={highlight ? "font-semibold" : undefined}>
-				<Check className="inline-block mr-1 size-3" aria-hidden />
+				<Check className="mr-1 size-3 inline-block" aria-hidden />
 				{highlight ? null : null}
 			</Badge>
 		);
 	}
 	return (
-		<span className="inline-flex items-center justify-center size-7 rounded-full bg-destructive/10">
+		<span className="size-7 inline-flex items-center justify-center rounded-full bg-destructive/10">
 			<X className="size-3.5 text-destructive" aria-hidden />
 		</span>
 	);
@@ -157,7 +155,7 @@ export function CompareTable() {
 					<TableHeader>
 						<TableRow>
 							<TableHead className="w-56">{t("table.feature")}</TableHead>
-							<TableHead className="bg-primary/5 font-semibold text-foreground">
+							<TableHead className="font-semibold bg-primary/5 text-foreground">
 								{t("table.aacsearch")}
 							</TableHead>
 							<TableHead>Algolia</TableHead>

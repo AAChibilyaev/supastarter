@@ -51,12 +51,12 @@ Der API-Schlüssel-Tab zeigt alle Schlüssel für einen ausgewählten Index. Wä
 
 ### Schlüsselbereiche
 
-| Bereich           | Zweck                                                        |
-| ----------------- | ------------------------------------------------------------ |
-| `search`          | Nur-Lese-Suchanfragen. Sicher in Browser-Code einzubetten.   |
+| Bereich           | Zweck                                                          |
+| ----------------- | -------------------------------------------------------------- |
+| `search`          | Nur-Lese-Suchanfragen. Sicher in Browser-Code einzubetten.     |
 | `ingest`          | Schreibzugriff zum Einreichen von Dokumenten über die REST-API |
-| `admin`           | Vollzugriff — Collections erstellen/löschen, Schema verwalten |
-| `connector_write` | Von CMS-Modulen verwendet (siehe Connector-Token unten)      |
+| `admin`           | Vollzugriff — Collections erstellen/löschen, Schema verwalten  |
+| `connector_write` | Von CMS-Modulen verwendet (siehe Connector-Token unten)        |
 
 ### Schlüssel erstellen
 
@@ -116,14 +116,14 @@ Import-Jobs werden in der Datenbank verfolgt. Jeder Job zeigt:
 
 Die Seite `/[orgSlug]/getting-started` zeigt eine 6-Schritt-Checkliste, die ihren Zustand automatisch aus Ihren vorhandenen Daten ableitet — keine manuelle Eingabe erforderlich.
 
-| Schritt                          | Bedingung                                                              |
-| -------------------------------- | ---------------------------------------------------------------------- |
-| 1. Suchindex erstellen           | `SearchIndex`-Anzahl > 0 für die Org                                   |
-| 2. Connector-Token generieren    | `SearchApiKey` mit `connector_write`-Bereich existiert und ist nicht widerrufen |
-| 3. Daten synchronisieren         | `SearchUsageEvent` mit Ingest-Typ existiert                            |
-| 4. Suche durchführen             | `SearchUsageEvent` mit Such-Typ existiert                              |
-| 5. API-Schlüssel generieren      | `SearchApiKey` mit `search`-Bereich existiert und ist nicht widerrufen |
-| 6. Such-Widget einbetten         | Beginnt immer deaktiviert — Selbstbescheinigung durch den Benutzer     |
+| Schritt                       | Bedingung                                                                       |
+| ----------------------------- | ------------------------------------------------------------------------------- |
+| 1. Suchindex erstellen        | `SearchIndex`-Anzahl > 0 für die Org                                            |
+| 2. Connector-Token generieren | `SearchApiKey` mit `connector_write`-Bereich existiert und ist nicht widerrufen |
+| 3. Daten synchronisieren      | `SearchUsageEvent` mit Ingest-Typ existiert                                     |
+| 4. Suche durchführen          | `SearchUsageEvent` mit Such-Typ existiert                                       |
+| 5. API-Schlüssel generieren   | `SearchApiKey` mit `search`-Bereich existiert und ist nicht widerrufen          |
+| 6. Such-Widget einbetten      | Beginnt immer deaktiviert — Selbstbescheinigung durch den Benutzer              |
 
 Schritte 1–5 werden automatisch geprüft. Schritt 6 spiegelt das Widget-Einbetten wider, das serverseitig nicht erkannt werden kann.
 

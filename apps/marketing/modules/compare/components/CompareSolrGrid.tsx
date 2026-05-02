@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareSolrGridItem {
-	key:
-		| "modernApi"
-		| "setup"
-		| "performance"
-		| "multiTenancy"
-		| "analyticsBuiltin"
-		| "pricing";
+	key: "modernApi" | "setup" | "performance" | "multiTenancy" | "analyticsBuiltin" | "pricing";
 	icon: ComponentType<{ className?: string }>;
 }
 

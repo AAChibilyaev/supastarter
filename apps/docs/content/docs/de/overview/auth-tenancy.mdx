@@ -12,17 +12,17 @@ Auth wird durch [Better Auth](https://better-auth.com) bereitgestellt, konfiguri
 
 Aktivierte Features:
 
-| Feature                | Hinweise                                   |
-| ---------------------- | ------------------------------------------ |
-| E-Mail + Passwort      | Standardmäßiger Anmeldeablauf              |
-| Magic Links            | Passwortloser E-Mail-Login                 |
-| Passkeys               | WebAuthn                                   |
-| 2FA (TOTP)             | Zeitbasierte Einmalpasswörter              |
-| OAuth (Google, GitHub) | Social Login                               |
-| Organisationen         | Workspaces mit rollenbasierter Mitgliedschaft |
-| Einladungsbasierte Orgs | Optional; konfigurierbar                  |
-| Admin-Panel            | Internes Benutzer-/Org-Management          |
-| Sitzungsimitierung     | Für Support/Debug                          |
+| Feature                 | Hinweise                                      |
+| ----------------------- | --------------------------------------------- |
+| E-Mail + Passwort       | Standardmäßiger Anmeldeablauf                 |
+| Magic Links             | Passwortloser E-Mail-Login                    |
+| Passkeys                | WebAuthn                                      |
+| 2FA (TOTP)              | Zeitbasierte Einmalpasswörter                 |
+| OAuth (Google, GitHub)  | Social Login                                  |
+| Organisationen          | Workspaces mit rollenbasierter Mitgliedschaft |
+| Einladungsbasierte Orgs | Optional; konfigurierbar                      |
+| Admin-Panel             | Internes Benutzer-/Org-Management             |
+| Sitzungsimitierung      | Für Support/Debug                             |
 
 ## Organisationen als Workspaces
 
@@ -43,11 +43,11 @@ Benutzer → Member(Rolle) → Organisation
 
 oRPC-Prozeduren werden als einer von drei Typen aufgerufen:
 
-| Prozedurtyp          | Verfügbarer Kontext               | Verwendet für                          |
-| -------------------- | --------------------------------- | -------------------------------------- |
-| `publicProcedure`    | Keine Sitzung erforderlich        | Öffentlicher Suchhandler, Health-Check |
-| `protectedProcedure` | `context.user`, `context.session` | Authentifizierte Dashboard-Operationen |
-| `adminProcedure`     | `context.user` + Admin-Rollenprüfung | Nur-Admin-Operationen               |
+| Prozedurtyp          | Verfügbarer Kontext                  | Verwendet für                          |
+| -------------------- | ------------------------------------ | -------------------------------------- |
+| `publicProcedure`    | Keine Sitzung erforderlich           | Öffentlicher Suchhandler, Health-Check |
+| `protectedProcedure` | `context.user`, `context.session`    | Authentifizierte Dashboard-Operationen |
+| `adminProcedure`     | `context.user` + Admin-Rollenprüfung | Nur-Admin-Operationen                  |
 
 Zugriff auf die Sitzung in einer Server-Komponente:
 
@@ -95,11 +95,11 @@ API-Schlüssel sind der primäre Auth-Mechanismus für externe Aufrufer (CMS-Mod
 
 ### Schlüsseltypen und Präfixe
 
-| Präfix           | Bereich                     | Verwendet von                      |
-| ---------------- | --------------------------- | ---------------------------------- |
-| `ss_search_*`    | `search`                    | Browser-SDK, Widget – schreibgeschützt |
-| `ss_connector_*` | `connector_write`           | CMS-Module – Schreiben + Sync      |
-| `ss_scoped_*`    | Eingeschränkt von `ss_search_*` | Pro-Benutzer, pro-Filter-Token |
+| Präfix           | Bereich                         | Verwendet von                          |
+| ---------------- | ------------------------------- | -------------------------------------- |
+| `ss_search_*`    | `search`                        | Browser-SDK, Widget – schreibgeschützt |
+| `ss_connector_*` | `connector_write`               | CMS-Module – Schreiben + Sync          |
+| `ss_scoped_*`    | Eingeschränkt von `ss_search_*` | Pro-Benutzer, pro-Filter-Token         |
 
 ### Sicherheitsgarantien
 
@@ -149,10 +149,10 @@ Siehe [Pläne und Limits](/docs/overview/plans-and-limits) für die Plan-spezifi
 
 ## Rollenbasierter Zugriff innerhalb von Organisationen
 
-| Rolle    | Fähigkeiten                                          |
-| -------- | ---------------------------------------------------- |
-| `owner`  | Vollzugriff, kann Org übertragen, Abrechnung verwalten |
+| Rolle    | Fähigkeiten                                             |
+| -------- | ------------------------------------------------------- |
+| `owner`  | Vollzugriff, kann Org übertragen, Abrechnung verwalten  |
 | `admin`  | Indizes, Schlüssel, Mitglieder, Einstellungen verwalten |
-| `member` | Dashboard anzeigen, Suchen in der Vorschau ausführen |
+| `member` | Dashboard anzeigen, Suchen in der Vorschau ausführen    |
 
 Rollenprüfungen in oRPC-Prozeduren verwenden das von Better Auth bereitgestellte `context.session`-Objekt.

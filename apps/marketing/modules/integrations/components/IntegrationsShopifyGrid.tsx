@@ -13,13 +13,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsShopifyItem {
-	key:
-		| "install"
-		| "productSync"
-		| "variantSync"
-		| "metafields"
-		| "widget"
-		| "analytics";
+	key: "install" | "productSync" | "variantSync" | "metafields" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

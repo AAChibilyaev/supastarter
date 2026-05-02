@@ -50,9 +50,7 @@ export function SecurityGrid() {
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-lg text-muted-foreground">
-						{t("subtitle")}
-					</p>
+					<p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
 				</div>
 
 				<div className="mt-16 gap-4 md:grid-cols-4 grid grid-cols-1">

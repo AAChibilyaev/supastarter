@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface PrestashopItem {
-	key:
-		| "install"
-		| "autoSync"
-		| "fullExport"
-		| "widget"
-		| "diagnostics"
-		| "compatibility";
+	key: "install" | "autoSync" | "fullExport" | "widget" | "diagnostics" | "compatibility";
 	icon: ComponentType<{ className?: string }>;
 }
 

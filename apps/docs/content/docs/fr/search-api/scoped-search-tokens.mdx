@@ -9,14 +9,14 @@ ne quitte jamais votre serveur.
 
 ## Quand utiliser les tokens limités
 
-| Scénario                                                         | Utiliser un token limité ?              |
-| ---------------------------------------------------------------- | --------------------------------------- |
-| Boutique mono-tenant (une org, une boutique)                     | Non — la clé `ss_search_*` suffit       |
-| Application multi-tenant où les utilisateurs ne doivent voir que leurs propres produits | **Oui** |
-| Exposer la recherche à un tiers avec un accès restreint          | **Oui**                                 |
-| Limiter les résultats à un niveau de prix spécifique             | **Oui**                                 |
-| Widget d'intégration de courte durée avec expiration             | **Oui**                                 |
-| Aperçu du tableau de bord interne                                | Non — utiliser oRPC basé sur session    |
+| Scénario                                                                                | Utiliser un token limité ?           |
+| --------------------------------------------------------------------------------------- | ------------------------------------ |
+| Boutique mono-tenant (une org, une boutique)                                            | Non — la clé `ss_search_*` suffit    |
+| Application multi-tenant où les utilisateurs ne doivent voir que leurs propres produits | **Oui**                              |
+| Exposer la recherche à un tiers avec un accès restreint                                 | **Oui**                              |
+| Limiter les résultats à un niveau de prix spécifique                                    | **Oui**                              |
+| Widget d'intégration de courte durée avec expiration                                    | **Oui**                              |
+| Aperçu du tableau de bord interne                                                       | Non — utiliser oRPC basé sur session |
 
 ## Fonctionnement des tokens limités
 
@@ -112,11 +112,11 @@ Définissez `expiresInSeconds` pour limiter la validité du token. Après expira
 
 Durées de vie recommandées :
 
-| Contexte              | Durée de vie               |
-| --------------------- | -------------------------- |
-| Session widget        | 1 à 4 heures               |
-| Chargement de page unique | 15 à 30 minutes         |
-| Tests / développement | Pas d'expiration (omettre le champ) |
+| Contexte                  | Durée de vie                        |
+| ------------------------- | ----------------------------------- |
+| Session widget            | 1 à 4 heures                        |
+| Chargement de page unique | 15 à 30 minutes                     |
+| Tests / développement     | Pas d'expiration (omettre le champ) |
 
 Les tokens expirés sont rejetés côté serveur — aucun minuteur côté client ni mécanisme de rafraîchissement n'est nécessaire.
 

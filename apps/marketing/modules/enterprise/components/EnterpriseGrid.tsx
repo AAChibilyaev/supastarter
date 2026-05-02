@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface EnterpriseItem {
-	key:
-		| "sso"
-		| "dedicatedCluster"
-		| "auditLog"
-		| "sla"
-		| "prioritySupport"
-		| "customIntegrations";
+	key: "sso" | "dedicatedCluster" | "auditLog" | "sla" | "prioritySupport" | "customIntegrations";
 	icon: ComponentType<{ className?: string }>;
 }
 

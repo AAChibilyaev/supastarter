@@ -87,7 +87,8 @@ export function ConnectorWizard({
 			setRawKey(result.rawKey);
 			setStep(2);
 		} catch (error: unknown) {
-			const msg = error instanceof Error ? error.message : t("search.connector.wizard.tokenFailed");
+			const msg =
+				error instanceof Error ? error.message : t("search.connector.wizard.tokenFailed");
 			throw new Error(msg);
 		}
 	};

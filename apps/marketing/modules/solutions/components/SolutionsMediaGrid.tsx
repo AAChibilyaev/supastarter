@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SolutionsMediaItem {
-	key:
-		| "contentSearch"
-		| "tagging"
-		| "multiLanguage"
-		| "realTimeSync"
-		| "fullText"
-		| "analytics";
+	key: "contentSearch" | "tagging" | "multiLanguage" | "realTimeSync" | "fullText" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

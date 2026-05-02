@@ -44,18 +44,18 @@ modules/          # NO es un workspace Node — módulos PHP CMS
 
 Todo el tráfico entra a través de una **única aplicación Hono** en `packages/api/index.ts`, que monta rutas en orden:
 
-| Montaje                  | Propósito                                       |
-| ------------------------ | ----------------------------------------------- |
-| `/api`                   | Manejador de búsqueda pública (CORS permisivo)  |
-| `/api`                   | Eventos de analíticas del widget                |
-| `/api/widget/widget.js`  | Bundle JS del widget alojado                    |
-| `/api`                   | API de conector (módulos CMS)                   |
-| `/api`                   | Manejador de analíticas                         |
-| `/api`                   | SCIM 2.0 (aprovisionamiento de identidad)       |
-| `/api/v1`                | API REST v1 (15 endpoints, OpenAPI 3.1)         |
-| `/api/auth/**`           | Manejador Better Auth                           |
-| `/api/webhooks/payments` | Webhooks de proveedores de pago                 |
-| `/api/rpc/**`            | Manejador oRPC (11 módulos)                     |
+| Montaje                  | Propósito                                      |
+| ------------------------ | ---------------------------------------------- |
+| `/api`                   | Manejador de búsqueda pública (CORS permisivo) |
+| `/api`                   | Eventos de analíticas del widget               |
+| `/api/widget/widget.js`  | Bundle JS del widget alojado                   |
+| `/api`                   | API de conector (módulos CMS)                  |
+| `/api`                   | Manejador de analíticas                        |
+| `/api`                   | SCIM 2.0 (aprovisionamiento de identidad)      |
+| `/api/v1`                | API REST v1 (15 endpoints, OpenAPI 3.1)        |
+| `/api/auth/**`           | Manejador Better Auth                          |
+| `/api/webhooks/payments` | Webhooks de proveedores de pago                |
+| `/api/rpc/**`            | Manejador oRPC (11 módulos)                    |
 
 ## Módulos oRPC
 
@@ -126,18 +126,18 @@ intercambia el alias de forma atómica. La versión anterior permanece activa ha
 
 ## Elecciones tecnológicas
 
-| Capa                  | Tecnología                                     |
-| --------------------- | ---------------------------------------------- |
-| Framework             | Next.js 16 (App Router, RSC)                   |
-| API                   | Hono + oRPC 1.13                               |
-| Autenticación         | Better Auth 1.5                                |
-| ORM                   | Prisma 7 (activo) / Drizzle (referencia legacy)|
-| Motor de búsqueda     | Typesense 3                                    |
-| Validación            | Zod 4                                          |
-| Obtención de datos cliente | TanStack Query 5                          |
-| Formularios           | react-hook-form 7                              |
-| UI                    | Tailwind v4 + primitivas shadcn                |
-| Lint                  | Oxlint (no ESLint)                             |
-| Formato               | Oxfmt (no Prettier)                            |
-| Gestor de paquetes    | pnpm 10 con catálogo del workspace             |
-| Orquestación de compilación | Turborepo 2                              |
+| Capa                        | Tecnología                                      |
+| --------------------------- | ----------------------------------------------- |
+| Framework                   | Next.js 16 (App Router, RSC)                    |
+| API                         | Hono + oRPC 1.13                                |
+| Autenticación               | Better Auth 1.5                                 |
+| ORM                         | Prisma 7 (activo) / Drizzle (referencia legacy) |
+| Motor de búsqueda           | Typesense 3                                     |
+| Validación                  | Zod 4                                           |
+| Obtención de datos cliente  | TanStack Query 5                                |
+| Formularios                 | react-hook-form 7                               |
+| UI                          | Tailwind v4 + primitivas shadcn                 |
+| Lint                        | Oxlint (no ESLint)                              |
+| Formato                     | Oxfmt (no Prettier)                             |
+| Gestor de paquetes          | pnpm 10 con catálogo del workspace              |
+| Orquestación de compilación | Turborepo 2                                     |

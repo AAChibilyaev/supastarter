@@ -25,26 +25,26 @@ y puede cambiar entre versiones.
 
 ### 4xx — Errores del cliente (no reintentar automáticamente)
 
-| HTTP | Código `error`        | Causa                                                            |
-| ---- | --------------------- | ---------------------------------------------------------------- |
-| 400  | `invalid_request`     | JSON malformado o campo requerido faltante                       |
-| 400  | `invalid_filter`      | Sintaxis de expresión `filterBy` inválida                        |
-| 400  | `invalid_sort`        | Expresión `sortBy` inválida                                      |
-| 401  | `unauthorized`        | API key o token con ámbito faltante, inválido o expirado         |
-| 401  | `token_expired`       | El TTL del token con ámbito ha expirado                          |
-| 403  | `forbidden`           | La clave no tiene el ámbito requerido (`search` o `connector_write`) |
-| 403  | `origin_not_allowed`  | El origen de la solicitud no está en `allowedOrigins` para la clave |
-| 404  | `index_not_found`     | El `indexSlug` especificado no existe para esta organización     |
-| 429  | `rate_limit_exceeded` | Límite de velocidad por clave superado                           |
+| HTTP | Código `error`        | Causa                                                                    |
+| ---- | --------------------- | ------------------------------------------------------------------------ |
+| 400  | `invalid_request`     | JSON malformado o campo requerido faltante                               |
+| 400  | `invalid_filter`      | Sintaxis de expresión `filterBy` inválida                                |
+| 400  | `invalid_sort`        | Expresión `sortBy` inválida                                              |
+| 401  | `unauthorized`        | API key o token con ámbito faltante, inválido o expirado                 |
+| 401  | `token_expired`       | El TTL del token con ámbito ha expirado                                  |
+| 403  | `forbidden`           | La clave no tiene el ámbito requerido (`search` o `connector_write`)     |
+| 403  | `origin_not_allowed`  | El origen de la solicitud no está en `allowedOrigins` para la clave      |
+| 404  | `index_not_found`     | El `indexSlug` especificado no existe para esta organización             |
+| 429  | `rate_limit_exceeded` | Límite de velocidad por clave superado                                   |
 | 429  | `quota_exceeded`      | La cuota mensual de unidades de búsqueda de la organización está agotada |
 
 ### 5xx — Errores del servidor (puede reintentar con retroceso)
 
-| HTTP | Código `error`        | Causa                                                         |
-| ---- | --------------------- | ------------------------------------------------------------- |
+| HTTP | Código `error`        | Causa                                                                            |
+| ---- | --------------------- | -------------------------------------------------------------------------------- |
 | 502  | `search_failed`       | Error upstream de Typesense (clúster inalcanzable, tiempo de espera de consulta) |
-| 502  | `ingest_failed`       | No se pudieron poner en cola los documentos en el buffer de ingestión |
-| 503  | `service_unavailable` | La API de AACsearch no está disponible temporalmente          |
+| 502  | `ingest_failed`       | No se pudieron poner en cola los documentos en el buffer de ingestión            |
+| 503  | `service_unavailable` | La API de AACsearch no está disponible temporalmente                             |
 
 ## Límite de velocidad
 
@@ -72,11 +72,11 @@ X-RateLimit-Reset: 1717201234
 
 Estos encabezados se incluyen en todas las respuestas exitosas y con límite de velocidad:
 
-| Encabezado              | Descripción                                   |
-| ----------------------- | --------------------------------------------- |
-| `X-RateLimit-Limit`     | Total de solicitudes permitidas por ventana   |
-| `X-RateLimit-Remaining` | Solicitudes restantes en la ventana actual    |
-| `X-RateLimit-Reset`     | Marca de tiempo Unix cuando se resetea la ventana |
+| Encabezado              | Descripción                                          |
+| ----------------------- | ---------------------------------------------------- |
+| `X-RateLimit-Limit`     | Total de solicitudes permitidas por ventana          |
+| `X-RateLimit-Remaining` | Solicitudes restantes en la ventana actual           |
+| `X-RateLimit-Reset`     | Marca de tiempo Unix cuando se resetea la ventana    |
 | `Retry-After`           | Segundos a esperar antes de reintentar (solo en 429) |
 
 ## Agotamiento de cuota
@@ -97,14 +97,14 @@ para restaurar la cuota inmediatamente.
 
 ## Estrategia de reintento para clientes
 
-| Clase de error            | Acción                                                        |
-| ------------------------- | ------------------------------------------------------------- |
-| 4xx (excepto 429)         | **No reintentar** — corrija la solicitud                      |
-| 429 `rate_limit_exceeded` | Espere los segundos de `Retry-After`, luego reintente         |
-| 429 `quota_exceeded`      | No reintentar hasta que se resetee la cuota o se actualice el plan |
+| Clase de error            | Acción                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| 4xx (excepto 429)         | **No reintentar** — corrija la solicitud                                              |
+| 429 `rate_limit_exceeded` | Espere los segundos de `Retry-After`, luego reintente                                 |
+| 429 `quota_exceeded`      | No reintentar hasta que se resetee la cuota o se actualice el plan                    |
 | 502 `search_failed`       | Reintente una vez después de 1 segundo; si falla nuevamente, muestre error al usuario |
-| 503                       | Reintente con retroceso exponencial: 1s → 2s → 4s → abandone |
-| Error de red              | Reintente con retroceso exponencial                           |
+| 503                       | Reintente con retroceso exponencial: 1s → 2s → 4s → abandone                          |
+| Error de red              | Reintente con retroceso exponencial                                                   |
 
 ### Comportamiento de reintento del SDK
 

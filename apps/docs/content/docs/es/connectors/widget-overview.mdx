@@ -7,14 +7,14 @@ El widget de búsqueda alojado de AACsearch es una interfaz de búsqueda autocon
 
 ## Descripción técnica
 
-| Propiedad       | Valor                                                       |
-| --------------- | ----------------------------------------------------------- |
-| Implementación  | Vanilla JS, hecho a mano (sin InstantSearch.js, sin React)  |
+| Propiedad              | Valor                                                                       |
+| ---------------------- | --------------------------------------------------------------------------- |
+| Implementación         | Vanilla JS, hecho a mano (sin InstantSearch.js, sin React)                  |
 | Aislamiento de estilos | Shadow DOM — los estilos del widget no pueden filtrarse al CSS de su tienda |
-| Tamaño del bundle | ~14 KB minificado (salida dual IIFE + ESM)                |
-| Servido en      | `GET /api/widget/widget.js` (CORS habilitado, en caché)     |
-| Autenticación   | Requiere una API key `ss_search_*` incrustada en `data-api-key` |
-| Idiomas         | `en`, `de`, `es`, `fr`, `ru`                                |
+| Tamaño del bundle      | ~14 KB minificado (salida dual IIFE + ESM)                                  |
+| Servido en             | `GET /api/widget/widget.js` (CORS habilitado, en caché)                     |
+| Autenticación          | Requiere una API key `ss_search_*` incrustada en `data-api-key`             |
+| Idiomas                | `en`, `de`, `es`, `fr`, `ru`                                                |
 
 El widget nunca expone una clave de administrador de Typesense. Se comunica solo a través del endpoint de búsqueda pública usando la clave `ss_search_*` con ámbito que usted proporciona.
 
@@ -45,17 +45,17 @@ El widget se auto-inicializa cuando se carga el script. No se requiere código d
 
 Toda la configuración se realiza mediante atributos `data-*` en la etiqueta `<script>`.
 
-| Atributo           | Requerido | Predeterminado | Descripción                                   |
-| ------------------ | --------- | -------------- | --------------------------------------------- |
-| `data-base-url`    | Sí        | —              | URL base de su instancia de AACsearch         |
+| Atributo           | Requerido | Predeterminado | Descripción                                       |
+| ------------------ | --------- | -------------- | ------------------------------------------------- |
+| `data-base-url`    | Sí        | —              | URL base de su instancia de AACsearch             |
 | `data-api-key`     | Sí        | —              | Una clave `ss_search_*` (ámbito solo de búsqueda) |
-| `data-index-slug`  | Sí        | —              | Slug del índice de búsqueda a consultar       |
-| `data-container`   | Sí        | —              | Selector CSS para el elemento contenedor      |
-| `data-locale`      | No        | `"en"`         | Idioma de la UI: `en`, `de`, `es`, `fr` o `ru` |
-| `data-theme`       | No        | `"auto"`       | Tema de color: `"light"`, `"dark"` o `"auto"` |
-| `data-mode`        | No        | `"inline"`     | Modo de visualización: `"inline"` o `"modal"` |
-| `data-show-prices` | No        | `"true"`       | Mostrar precios de productos en los resultados |
-| `data-show-images` | No        | `"true"`       | Mostrar imágenes de productos en los resultados |
+| `data-index-slug`  | Sí        | —              | Slug del índice de búsqueda a consultar           |
+| `data-container`   | Sí        | —              | Selector CSS para el elemento contenedor          |
+| `data-locale`      | No        | `"en"`         | Idioma de la UI: `en`, `de`, `es`, `fr` o `ru`    |
+| `data-theme`       | No        | `"auto"`       | Tema de color: `"light"`, `"dark"` o `"auto"`     |
+| `data-mode`        | No        | `"inline"`     | Modo de visualización: `"inline"` o `"modal"`     |
+| `data-show-prices` | No        | `"true"`       | Mostrar precios de productos en los resultados    |
+| `data-show-images` | No        | `"true"`       | Mostrar imágenes de productos en los resultados   |
 
 ### Modo: inline vs modal
 
@@ -79,25 +79,25 @@ Si restringe la clave a orígenes específicos (`allowedOrigins`), añada el dom
 
 El widget maneja estos estados automáticamente:
 
-| Estado               | Lo que ve el usuario                                    |
-| -------------------- | ------------------------------------------------------- |
-| Inactivo (sin consulta) | Texto de marcador de posición                        |
-| Cargando             | Indicador de progreso "Buscando..."                     |
-| Resultados           | Cuadrícula de productos con facetas, controles de ordenación, paginación |
-| Sin resultados       | Estado vacío con sugerencia de probar un término diferente |
-| Error                | Estado degradado con entrada de búsqueda aún funcional  |
+| Estado                  | Lo que ve el usuario                                                     |
+| ----------------------- | ------------------------------------------------------------------------ |
+| Inactivo (sin consulta) | Texto de marcador de posición                                            |
+| Cargando                | Indicador de progreso "Buscando..."                                      |
+| Resultados              | Cuadrícula de productos con facetas, controles de ordenación, paginación |
+| Sin resultados          | Estado vacío con sugerencia de probar un término diferente               |
+| Error                   | Estado degradado con entrada de búsqueda aún funcional                   |
 
 ## Idiomas soportados
 
 Todas las cadenas de la UI están incrustadas en el bundle del widget. Sin obtenciones externas de i18n.
 
-| Idioma | Idioma   |
-| ------ | -------- |
-| `en`   | Inglés   |
-| `de`   | Alemán   |
-| `ru`   | Ruso     |
-| `es`   | Español  |
-| `fr`   | Francés  |
+| Idioma | Idioma  |
+| ------ | ------- |
+| `en`   | Inglés  |
+| `de`   | Alemán  |
+| `ru`   | Ruso    |
+| `es`   | Español |
+| `fr`   | Francés |
 
 ## Personalización CSS
 

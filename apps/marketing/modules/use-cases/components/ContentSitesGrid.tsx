@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface ContentSitesItem {
-	key:
-		| "contentIndexing"
-		| "instantSearch"
-		| "browserSdk"
-		| "changelog"
-		| "multilingual"
-		| "seo";
+	key: "contentIndexing" | "instantSearch" | "browserSdk" | "changelog" | "multilingual" | "seo";
 	icon: ComponentType<{ className?: string }>;
 }
 

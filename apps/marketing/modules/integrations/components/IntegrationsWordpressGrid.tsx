@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsWordpressItem {
-	key:
-		| "plugin"
-		| "postSync"
-		| "customTypes"
-		| "widget"
-		| "multiSite"
-		| "analytics";
+	key: "plugin" | "postSync" | "customTypes" | "widget" | "multiSite" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

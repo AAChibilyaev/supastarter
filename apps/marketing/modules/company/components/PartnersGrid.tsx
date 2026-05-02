@@ -1,13 +1,6 @@
 import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
-import {
-	CloudIcon,
-	HammerIcon,
-	PackageIcon,
-	PuzzleIcon,
-	SendIcon,
-	StarIcon,
-} from "lucide-react";
+import { CloudIcon, HammerIcon, PackageIcon, PuzzleIcon, SendIcon, StarIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 

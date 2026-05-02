@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareAlgoliaItem {
-	key:
-		| "pricing"
-		| "selfHost"
-		| "multiTenancy"
-		| "openSource"
-		| "migration"
-		| "verdict";
+	key: "pricing" | "selfHost" | "multiTenancy" | "openSource" | "migration" | "verdict";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareTypesenseGridItem {
-	key:
-		| "hosting"
-		| "multiTenancy"
-		| "analytics"
-		| "connectors"
-		| "pricing"
-		| "support";
+	key: "hosting" | "multiTenancy" | "analytics" | "connectors" | "pricing" | "support";
 	icon: ComponentType<{ className?: string }>;
 }
 

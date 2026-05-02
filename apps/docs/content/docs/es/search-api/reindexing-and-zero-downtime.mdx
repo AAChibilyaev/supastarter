@@ -31,16 +31,16 @@ El paso 4 (intercambio de alias) es atómico en Typesense. Las consultas siguen 
 
 ## Cuándo reindexar
 
-| Escenario                                | ¿Reindexación requerida?                      |
-| ---------------------------------------- | --------------------------------------------- |
-| Añadir un nuevo campo de faceta          | **Sí** — Typesense requiere migración de esquema |
-| Cambiar un tipo de campo                 | **Sí**                                        |
-| Añadir un nuevo campo de texto buscable  | **Sí**                                        |
-| Eliminar un campo                        | **Sí**                                        |
-| Actualizar contenido del documento       | No — usar upsert/sincronización delta         |
-| Cambiar reglas de sinónimos              | No — los sinónimos son un recurso separado    |
-| Cambiar opciones de ordenación           | No — `sortBy` es un parámetro de consulta     |
-| Cambiar reglas de curación               | No — las curaciones son un recurso separado   |
+| Escenario                               | ¿Reindexación requerida?                         |
+| --------------------------------------- | ------------------------------------------------ |
+| Añadir un nuevo campo de faceta         | **Sí** — Typesense requiere migración de esquema |
+| Cambiar un tipo de campo                | **Sí**                                           |
+| Añadir un nuevo campo de texto buscable | **Sí**                                           |
+| Eliminar un campo                       | **Sí**                                           |
+| Actualizar contenido del documento      | No — usar upsert/sincronización delta            |
+| Cambiar reglas de sinónimos             | No — los sinónimos son un recurso separado       |
+| Cambiar opciones de ordenación          | No — `sortBy` es un parámetro de consulta        |
+| Cambiar reglas de curación              | No — las curaciones son un recurso separado      |
 
 ## Activar reindexación
 

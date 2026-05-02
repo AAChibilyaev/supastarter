@@ -74,14 +74,14 @@ organization_id:={organizationId}
 
 Схема товаров по умолчанию включает следующие поля для фильтрации (помечены `facet: true`):
 
-| Поле           | Тип      | Пример фильтра                      |
-| -------------- | -------- | ----------------------------------- |
-| `brand`        | string   | `brand:=Sony`                       |
-| `categories`   | string[] | `categories:=[Electronics, Audio]`  |
-| `availability` | string   | `availability:=in_stock`            |
-| `price`        | float    | `price:[10..500]`                   |
-| `sale_price`   | float    | `sale_price:<100`                   |
-| `locale`       | string   | `locale:=en`                        |
+| Поле           | Тип      | Пример фильтра                     |
+| -------------- | -------- | ---------------------------------- |
+| `brand`        | string   | `brand:=Sony`                      |
+| `categories`   | string[] | `categories:=[Electronics, Audio]` |
+| `availability` | string   | `availability:=in_stock`           |
+| `price`        | float    | `price:[10..500]`                  |
+| `sale_price`   | float    | `sale_price:<100`                  |
+| `locale`       | string   | `locale:=en`                       |
 
 ## Фасетирование
 
@@ -161,13 +161,13 @@ organization_id:={organizationId}
 
 ### Типичные пресеты сортировки
 
-| Метка                     | Значение `sortBy`  |
-| ------------------------- | ------------------ |
-| Наиболее релевантные      | `_text_match:desc` |
-| Цена: сначала низкая      | `price:asc`        |
-| Цена: сначала высокая     | `price:desc`       |
-| Сначала новые             | `created_at:desc`  |
-| Цена со скидкой: сначала низкая | `sale_price:asc` |
+| Метка                           | Значение `sortBy`  |
+| ------------------------------- | ------------------ |
+| Наиболее релевантные            | `_text_match:desc` |
+| Цена: сначала низкая            | `price:asc`        |
+| Цена: сначала высокая           | `price:desc`       |
+| Сначала новые                   | `created_at:desc`  |
+| Цена со скидкой: сначала низкая | `sale_price:asc`   |
 
 ## Пагинация
 

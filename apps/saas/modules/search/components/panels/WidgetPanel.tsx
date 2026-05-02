@@ -10,6 +10,7 @@ import {
 } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
+import { Textarea } from "@repo/ui/components/textarea";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -58,10 +59,15 @@ export function WidgetPanel({ slug, baseUrl }: WidgetPanelProps) {
 				</div>
 
 				<div className="space-y-2">
-					<Label>{t("search.widget.snippet")}</Label>
-					<pre className="rounded p-4 text-sm max-h-48 overflow-x-auto bg-muted">
-						<code>{snippet}</code>
-					</pre>
+					<Label htmlFor="widget-snippet">{t("search.widget.snippet")}</Label>
+					<Textarea
+						id="widget-snippet"
+						readOnly
+						value={snippet}
+						rows={6}
+						spellCheck={false}
+						className="bg-muted max-h-48 min-h-0 resize-y font-mono text-sm"
+					/>
 				</div>
 
 				<Button onClick={copySnippet}>{t("search.widget.copySnippet")}</Button>

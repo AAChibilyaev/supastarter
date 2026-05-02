@@ -1,13 +1,39 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
 import { useTranslations } from "next-intl";
 
-const COMPANY_NAMES = ["TechCorp", "ShopNow", "DevHub", "CloudBase", "AppWorks", "DataFlow"] as const;
+const COMPANY_NAMES = [
+	"TechCorp",
+	"ShopNow",
+	"DevHub",
+	"CloudBase",
+	"AppWorks",
+	"DataFlow",
+] as const;
 
-type CustomerKey = "ecommerce" | "saasFounder" | "devTools" | "enterprise" | "marketplace" | "agency";
+type CustomerKey =
+	| "ecommerce"
+	| "saasFounder"
+	| "devTools"
+	| "enterprise"
+	| "marketplace"
+	| "agency";
 
-const CUSTOMER_KEYS: CustomerKey[] = ["ecommerce", "saasFounder", "devTools", "enterprise", "marketplace", "agency"];
+const CUSTOMER_KEYS: CustomerKey[] = [
+	"ecommerce",
+	"saasFounder",
+	"devTools",
+	"enterprise",
+	"marketplace",
+	"agency",
+];
 
 const STATS = [
 	{ value: "500+", label: "Companies worldwide" },
@@ -26,7 +52,7 @@ export function CustomersContent() {
 			{/* Stats bar */}
 			<section className="py-16 border-b border-border/60">
 				<div className="container">
-					<div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+					<div className="gap-8 md:grid-cols-4 grid grid-cols-2">
 						{STATS.map(({ value, label }) => (
 							<div key={value} className="text-center">
 								<p className="text-4xl font-bold tracking-tight">{value}</p>
@@ -40,11 +66,13 @@ export function CustomersContent() {
 			{/* Testimonials grid */}
 			<section className="py-24 border-b border-border/60">
 				<div className="container">
-					<h2 className="text-center font-medium text-3xl tracking-tight md:text-4xl text-balance">
+					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-center text-balance">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-center text-lg text-muted-foreground">{t("subtitle")}</p>
-					<div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+					<p className="mt-4 text-lg text-center text-muted-foreground">
+						{t("subtitle")}
+					</p>
+					<div className="mt-12 gap-6 md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1">
 						{CUSTOMER_KEYS.map((key) => (
 							<Card key={key} className="flex flex-col">
 								<CardHeader>
@@ -67,10 +95,10 @@ export function CustomersContent() {
 			{/* Logos section */}
 			<section className="py-16 border-b border-border/60">
 				<div className="container">
-					<p className="text-center text-sm font-medium uppercase tracking-widest text-muted-foreground">
+					<p className="text-sm font-medium tracking-widest text-center text-muted-foreground uppercase">
 						{LOGOS_LABEL}
 					</p>
-					<div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+					<div className="mt-8 gap-x-10 gap-y-4 flex flex-wrap items-center justify-center">
 						{COMPANY_NAMES.map((name) => (
 							<span
 								key={name}

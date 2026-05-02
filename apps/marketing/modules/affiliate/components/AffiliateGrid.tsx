@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface AffiliateGridItem {
-	key:
-		| "commission"
-		| "tracking"
-		| "creatives"
-		| "payments"
-		| "supportChannel"
-		| "apply";
+	key: "commission" | "tracking" | "creatives" | "payments" | "supportChannel" | "apply";
 	icon: ComponentType<{ className?: string }>;
 }
 

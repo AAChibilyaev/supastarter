@@ -17,13 +17,13 @@ La même clé API utilisée pour la recherche (`ss_search_*`) est utilisée pour
 
 ## Types d'événements
 
-| Type d'événement | Déclencheur                                 | Priorité |
-| ---------------- | ------------------------------------------- | -------- |
-| `search_query`   | L'utilisateur soumet une requête de recherche | P0     |
-| `zero_results`   | Une recherche ne retourne aucun résultat    | P0       |
-| `result_click`   | L'utilisateur clique sur un résultat produit | P0      |
-| `widget_open`    | Le widget est ouvert / devient visible      | P1       |
-| `filter_used`    | L'utilisateur applique ou modifie un filtre de facette | P1 |
+| Type d'événement | Déclencheur                                            | Priorité |
+| ---------------- | ------------------------------------------------------ | -------- |
+| `search_query`   | L'utilisateur soumet une requête de recherche          | P0       |
+| `zero_results`   | Une recherche ne retourne aucun résultat               | P0       |
+| `result_click`   | L'utilisateur clique sur un résultat produit           | P0       |
+| `widget_open`    | Le widget est ouvert / devient visible                 | P1       |
+| `filter_used`    | L'utilisateur applique ou modifie un filtre de facette | P1       |
 
 ## Transport
 
@@ -72,19 +72,19 @@ Vous pouvez envoyer un seul événement ou un lot de jusqu'à 50 événements.
 
 ### Référence des champs
 
-| Champ             | Type    | Longueur max | Description                                                          |
-| ----------------- | ------- | ------------ | -------------------------------------------------------------------- |
-| `type`            | string  | —            | Type d'événement (voir tableau ci-dessus)                            |
-| `sessionId`       | string  | 64           | ID de session éphémère (`crypto.randomUUID()` ou repli)              |
-| `anonymousUserId` | string  | 64           | ID d'utilisateur anonyme stable (par navigateur, peut être null en mode privé) |
+| Champ             | Type    | Longueur max | Description                                                                     |
+| ----------------- | ------- | ------------ | ------------------------------------------------------------------------------- |
+| `type`            | string  | —            | Type d'événement (voir tableau ci-dessus)                                       |
+| `sessionId`       | string  | 64           | ID de session éphémère (`crypto.randomUUID()` ou repli)                         |
+| `anonymousUserId` | string  | 64           | ID d'utilisateur anonyme stable (par navigateur, peut être null en mode privé)  |
 | `query`           | string  | 512          | La chaîne de requête de recherche (événements `search_query` et `zero_results`) |
-| `productId`       | string  | 128          | ID externe du produit (événements `result_click`)                    |
-| `position`        | integer | —            | Rang 1-indexé du résultat cliqué (événements `result_click`)         |
-| `filters`         | object  | —            | Filtres de facette actifs au moment de l'événement (événements `filter_used`) |
-| `sort`            | string  | 128          | Option de tri active                                                 |
-| `locale`          | string  | 16           | Locale depuis la config du widget                                    |
-| `referrer`        | string  | 512          | URL de la page (depuis `document.referrer`)                          |
-| `metadata`        | object  | 4 Ko         | Données supplémentaires opaques — sans PII                           |
+| `productId`       | string  | 128          | ID externe du produit (événements `result_click`)                               |
+| `position`        | integer | —            | Rang 1-indexé du résultat cliqué (événements `result_click`)                    |
+| `filters`         | object  | —            | Filtres de facette actifs au moment de l'événement (événements `filter_used`)   |
+| `sort`            | string  | 128          | Option de tri active                                                            |
+| `locale`          | string  | 16           | Locale depuis la config du widget                                               |
+| `referrer`        | string  | 512          | URL de la page (depuis `document.referrer`)                                     |
+| `metadata`        | object  | 4 Ko         | Données supplémentaires opaques — sans PII                                      |
 
 ### Génération de l'ID de session
 

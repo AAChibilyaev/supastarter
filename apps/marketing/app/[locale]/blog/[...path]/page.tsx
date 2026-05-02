@@ -111,6 +111,8 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 						src={image}
 						alt={title}
 						fill
+						loading="eager"
+						fetchPriority="high"
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						className="rounded-xl object-cover object-center"
 					/>

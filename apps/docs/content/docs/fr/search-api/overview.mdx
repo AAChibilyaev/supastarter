@@ -46,9 +46,9 @@ Spec OpenAPI : `GET /api/v1/openapi.json`
 
 Portées d'authentification pour v1 :
 
-| Préfixe       | Portée   | Niveau d'accès  |
-| ------------- | -------- | --------------- |
-| `aa_admin_*`  | `admin`  | Gestion complète |
+| Préfixe       | Portée   | Niveau d'accès       |
+| ------------- | -------- | -------------------- |
+| `aa_admin_*`  | `admin`  | Gestion complète     |
 | `aa_write_*`  | `write`  | Ingestion + écriture |
 | `aa_search_*` | `search` | Recherche uniquement |
 | `aa_scoped_*` | `scoped` | Recherche restreinte |
@@ -106,10 +106,10 @@ codes typés avant l'envoi de la réponse.
 
 ## Prise en charge SDK
 
-| Environnement      | Package                                           |
-| ------------------ | ------------------------------------------------- |
-| Navigateur / Node.js | `@repo/search-client`                           |
-| Widget de vitrine  | `packages/widget` (auto-installé via `<script>`) |
-| Agent IA (MCP)     | `packages/aacsearch-mcp`                          |
+| Environnement        | Package                                          |
+| -------------------- | ------------------------------------------------ |
+| Navigateur / Node.js | `@repo/search-client`                            |
+| Widget de vitrine    | `packages/widget` (auto-installé via `<script>`) |
+| Agent IA (MCP)       | `packages/aacsearch-mcp`                         |
 
 Consultez [SDK navigateur](/docs/getting-started/browser-sdk) pour la documentation du SDK client.

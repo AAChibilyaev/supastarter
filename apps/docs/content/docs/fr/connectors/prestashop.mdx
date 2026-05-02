@@ -49,17 +49,17 @@ Copiez le répertoire `modules/aacsearch/` dans le répertoire `modules/` de vot
 
 Ouvrez la page de configuration du module (**Modules → AACsearch → Configurer**) et remplissez :
 
-| Champ              | Description                                                              |
-| ------------------ | ------------------------------------------------------------------------ |
-| URL API AACsearch  | URL de base de votre instance AACsearch (par ex. `https://app.aacsearch.com`) |
-| ID du projet       | Votre ID d'organisation depuis le tableau de bord AACsearch              |
-| Token de connecteur | Le token `ss_connector_*` créé dans Tableau de bord → Connecteurs       |
-| Synchronisation activée | Activer les synchronisations delta automatiques sur les événements produits |
-| Widget activé      | Injecter le widget hébergé dans la boutique                              |
-| Locale             | Locale par défaut pour les résultats de recherche (par ex. `en`, `ru`)  |
-| Devise par défaut  | Code de devise utilisé dans les champs de prix                           |
-| Taille du lot      | Produits par requête de synchronisation (par défaut : 200, max : 1 000) |
-| Mode débogage      | Écrire des logs détaillés dans `/var/logs/aacsearch.log`                 |
+| Champ                   | Description                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| URL API AACsearch       | URL de base de votre instance AACsearch (par ex. `https://app.aacsearch.com`) |
+| ID du projet            | Votre ID d'organisation depuis le tableau de bord AACsearch                   |
+| Token de connecteur     | Le token `ss_connector_*` créé dans Tableau de bord → Connecteurs             |
+| Synchronisation activée | Activer les synchronisations delta automatiques sur les événements produits   |
+| Widget activé           | Injecter le widget hébergé dans la boutique                                   |
+| Locale                  | Locale par défaut pour les résultats de recherche (par ex. `en`, `ru`)        |
+| Devise par défaut       | Code de devise utilisé dans les champs de prix                                |
+| Taille du lot           | Produits par requête de synchronisation (par défaut : 200, max : 1 000)       |
+| Mode débogage           | Écrire des logs détaillés dans `/var/logs/aacsearch.log`                      |
 
 ### 3. Tester la connexion
 
@@ -101,12 +101,12 @@ L'exportateur mappe les champs de produit PrestaShop vers la structure de docume
 
 Le module enregistre ces hooks PrestaShop pour les synchronisations delta automatiques :
 
-| Hook                             | Déclencheur                                                            |
-| -------------------------------- | ---------------------------------------------------------------------- |
-| `displayHeader`                  | Injecte la balise `<script>` du widget dans le `<head>` de la boutique |
+| Hook                             | Déclencheur                                                                        |
+| -------------------------------- | ---------------------------------------------------------------------------------- |
+| `displayHeader`                  | Injecte la balise `<script>` du widget dans le `<head>` de la boutique             |
 | `actionProductUpdate`            | Se déclenche après la sauvegarde d'un produit — déclenche la synchronisation delta |
 | `actionObjectProductDeleteAfter` | Se déclenche après la suppression d'un produit — envoie une requête de suppression |
-| `actionUpdateQuantity`           | Changement de stock — déclenche la synchronisation delta               |
+| `actionUpdateQuantity`           | Changement de stock — déclenche la synchronisation delta                           |
 
 ## Injection du widget
 

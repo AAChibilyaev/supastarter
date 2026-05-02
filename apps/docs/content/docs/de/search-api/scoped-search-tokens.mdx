@@ -9,14 +9,14 @@ Schlüssel verlässt Ihren Server niemals.
 
 ## Wann eingeschränkte Token verwendet werden sollten
 
-| Szenario                                                           | Eingeschränktes Token verwenden?              |
-| ------------------------------------------------------------------ | --------------------------------------------- |
-| Single-Tenant-Storefront (eine Org, ein Shop)                      | Nein — `ss_search_*`-Schlüssel reicht aus     |
-| Multi-Tenant-App, wo Benutzer nur ihre eigenen Produkte sehen sollen | **Ja**                                      |
-| Suche einem Dritten mit eingeschränktem Zugriff zugänglich machen  | **Ja**                                        |
-| Ergebnisse auf eine bestimmte Preisstufe beschränken               | **Ja**                                        |
-| Kurzlebige Widget-Einbettung mit Ablauf                            | **Ja**                                        |
-| Interne Dashboard-Vorschau                                         | Nein — sitzungsbasiertes oRPC verwenden        |
+| Szenario                                                             | Eingeschränktes Token verwenden?          |
+| -------------------------------------------------------------------- | ----------------------------------------- |
+| Single-Tenant-Storefront (eine Org, ein Shop)                        | Nein — `ss_search_*`-Schlüssel reicht aus |
+| Multi-Tenant-App, wo Benutzer nur ihre eigenen Produkte sehen sollen | **Ja**                                    |
+| Suche einem Dritten mit eingeschränktem Zugriff zugänglich machen    | **Ja**                                    |
+| Ergebnisse auf eine bestimmte Preisstufe beschränken                 | **Ja**                                    |
+| Kurzlebige Widget-Einbettung mit Ablauf                              | **Ja**                                    |
+| Interne Dashboard-Vorschau                                           | Nein — sitzungsbasiertes oRPC verwenden   |
 
 ## Wie eingeschränkte Token funktionieren
 
@@ -112,11 +112,11 @@ Setzen Sie `expiresInSeconds`, um die Token-Gültigkeit zu begrenzen. Nach Ablau
 
 Empfohlene TTLs:
 
-| Kontext               | TTL                               |
-| --------------------- | --------------------------------- |
-| Widget-Sitzung        | 1–4 Stunden                       |
-| Einzelner Seitenaufruf | 15–30 Minuten                    |
-| Tests / Entwicklung   | Kein Ablauf (Feld weglassen)      |
+| Kontext                | TTL                          |
+| ---------------------- | ---------------------------- |
+| Widget-Sitzung         | 1–4 Stunden                  |
+| Einzelner Seitenaufruf | 15–30 Minuten                |
+| Tests / Entwicklung    | Kein Ablauf (Feld weglassen) |
 
 Abgelaufene Token werden serverseitig abgelehnt — es ist kein clientseitiger Timer oder Refresh-Mechanismus erforderlich.
 

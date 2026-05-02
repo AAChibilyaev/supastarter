@@ -52,17 +52,17 @@ Kopieren Sie das Verzeichnis `modules/bitrix/aac.search/` nach `/local/modules/a
 
 Öffnen Sie **Admin → aac.search → Einstellungen** und füllen Sie aus:
 
-| Feld              | Beschreibung                                                              |
-| ----------------- | ------------------------------------------------------------------------- |
-| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)    |
-| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                         |
-| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren           |
-| IBlock / Katalog  | Wählen Sie die IBlocks aus, die Ihren Produktkatalog enthalten            |
-| Preistyp          | Welchen Bitrix-Preistyp exportieren                                       |
-| Währung           | Währungscode für Preisfelder                                              |
-| Sync-Intervall    | Minuten zwischen Hintergrund-Agent-Synchronisierungsläufen               |
-| Widget-Modus      | `auto-inject`, `component` oder `manual` (siehe Widget-Abschnitt unten)  |
-| Debug-Modus       | Ausführliche Protokollierung aktivieren                                   |
+| Feld              | Beschreibung                                                            |
+| ----------------- | ----------------------------------------------------------------------- |
+| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)   |
+| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                       |
+| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren         |
+| IBlock / Katalog  | Wählen Sie die IBlocks aus, die Ihren Produktkatalog enthalten          |
+| Preistyp          | Welchen Bitrix-Preistyp exportieren                                     |
+| Währung           | Währungscode für Preisfelder                                            |
+| Sync-Intervall    | Minuten zwischen Hintergrund-Agent-Synchronisierungsläufen              |
+| Widget-Modus      | `auto-inject`, `component` oder `manual` (siehe Widget-Abschnitt unten) |
+| Debug-Modus       | Ausführliche Protokollierung aktivieren                                 |
 
 ### 3. Verbindung testen
 
@@ -107,13 +107,13 @@ Der `ProductExporter` bildet Bitrix-IBlock-Felder auf die Standard-Dokumentstruk
 
 Das Modul registriert IBlock-Ereignishandler für automatische Delta-Synchronisierungen:
 
-| Ereignis                     | Auslöser                                          |
-| ---------------------------- | ------------------------------------------------- |
-| `OnAfterIBlockElementAdd`    | Neues Produkt — Delta-Synchronisierung auslösen   |
+| Ereignis                     | Auslöser                                               |
+| ---------------------------- | ------------------------------------------------------ |
+| `OnAfterIBlockElementAdd`    | Neues Produkt — Delta-Synchronisierung auslösen        |
 | `OnAfterIBlockElementUpdate` | Produkt aktualisiert — Delta-Synchronisierung auslösen |
-| `OnAfterIBlockElementDelete` | Produkt gelöscht — Löschanfrage senden            |
-| `OnPriceUpdate`              | Preis geändert (erfordert Bitrix-Katalogmodul)    |
-| `OnIBlockSectionUpdate`      | Abschnitt/Kategorie aktualisiert                  |
+| `OnAfterIBlockElementDelete` | Produkt gelöscht — Löschanfrage senden                 |
+| `OnPriceUpdate`              | Preis geändert (erfordert Bitrix-Katalogmodul)         |
+| `OnIBlockSectionUpdate`      | Abschnitt/Kategorie aktualisiert                       |
 
 ## Hintergrund-Agent
 

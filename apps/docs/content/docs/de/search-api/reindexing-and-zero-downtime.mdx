@@ -31,16 +31,16 @@ Schritt 4 (Alias-Austausch) ist in Typesense atomar. Abfragen treffen während d
 
 ## Wann Reindex erforderlich ist
 
-| Szenario                               | Reindex erforderlich?                          |
-| -------------------------------------- | ---------------------------------------------- |
-| Neues Facettenfeld hinzufügen          | **Ja** — Typesense erfordert Schema-Migration  |
-| Feldtyp ändern                         | **Ja**                                         |
-| Neues durchsuchbares Textfeld hinzufügen | **Ja**                                       |
-| Feld entfernen                         | **Ja**                                         |
-| Dokumentinhalt aktualisieren           | Nein — Upsert/Delta-Sync verwenden             |
-| Synonymregeln ändern                   | Nein — Synonyme sind eine separate Ressource   |
-| Sortieroptionen ändern                 | Nein — `sortBy` ist ein Abfrageparameter       |
-| Kurationsregeln ändern                 | Nein — Kurationen sind eine separate Ressource |
+| Szenario                                 | Reindex erforderlich?                          |
+| ---------------------------------------- | ---------------------------------------------- |
+| Neues Facettenfeld hinzufügen            | **Ja** — Typesense erfordert Schema-Migration  |
+| Feldtyp ändern                           | **Ja**                                         |
+| Neues durchsuchbares Textfeld hinzufügen | **Ja**                                         |
+| Feld entfernen                           | **Ja**                                         |
+| Dokumentinhalt aktualisieren             | Nein — Upsert/Delta-Sync verwenden             |
+| Synonymregeln ändern                     | Nein — Synonyme sind eine separate Ressource   |
+| Sortieroptionen ändern                   | Nein — `sortBy` ist ein Abfrageparameter       |
+| Kurationsregeln ändern                   | Nein — Kurationen sind eine separate Ressource |
 
 ## Reindex auslösen
 

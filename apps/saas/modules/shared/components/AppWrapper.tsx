@@ -8,10 +8,10 @@ export function AppWrapper({ children }: PropsWithChildren) {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<SidebarInset>
-				<main className="h-full w-full overflow-y-auto">
-					<div className="p-6">{children}</div>
-				</main>
+			<SidebarInset className="min-h-0">
+				<div className="flex min-h-0 min-w-0 h-full flex-1 flex-col overflow-y-auto">
+					<div className="mx-auto w-full max-w-screen-2xl p-6">{children}</div>
+				</div>
 			</SidebarInset>
 		</SidebarProvider>
 	);

@@ -17,13 +17,13 @@ La misma API key utilizada para la búsqueda (`ss_search_*`) se usa para autenti
 
 ## Tipos de eventos
 
-| Tipo de evento | Disparador                              | Prioridad |
-| -------------- | --------------------------------------- | --------- |
-| `search_query` | El usuario envía una consulta de búsqueda | P0      |
-| `zero_results` | Una búsqueda no devuelve resultados     | P0        |
-| `result_click` | El usuario hace clic en un resultado de producto | P0 |
-| `widget_open`  | El widget se abre / se hace visible     | P1        |
-| `filter_used`  | El usuario aplica o cambia un filtro de faceta | P1  |
+| Tipo de evento | Disparador                                       | Prioridad |
+| -------------- | ------------------------------------------------ | --------- |
+| `search_query` | El usuario envía una consulta de búsqueda        | P0        |
+| `zero_results` | Una búsqueda no devuelve resultados              | P0        |
+| `result_click` | El usuario hace clic en un resultado de producto | P0        |
+| `widget_open`  | El widget se abre / se hace visible              | P1        |
+| `filter_used`  | El usuario aplica o cambia un filtro de faceta   | P1        |
 
 ## Transporte
 
@@ -65,26 +65,30 @@ Puede enviar un solo evento o un lote de hasta 50 eventos.
 {
 	"events": [
 		{ "type": "widget_open", "sessionId": "a1b2c3d4-..." },
-		{ "type": "search_query", "query": "zapatillas running azules", "sessionId": "a1b2c3d4-..." }
+		{
+			"type": "search_query",
+			"query": "zapatillas running azules",
+			"sessionId": "a1b2c3d4-..."
+		}
 	]
 }
 ```
 
 ### Referencia de campos
 
-| Campo             | Tipo    | Longitud máx. | Descripción                                                         |
-| ----------------- | ------- | -------------- | ------------------------------------------------------------------- |
-| `type`            | string  | —              | Tipo de evento (véase la tabla anterior)                            |
-| `sessionId`       | string  | 64             | ID de sesión efímero (`crypto.randomUUID()` o alternativa)          |
-| `anonymousUserId` | string  | 64             | ID de usuario anónimo estable (por navegador, puede ser nulo en modo privacidad) |
-| `query`           | string  | 512            | La cadena de consulta de búsqueda (eventos `search_query` y `zero_results`) |
-| `productId`       | string  | 128            | ID externo del producto (eventos `result_click`)                    |
-| `position`        | integer | —              | Rango indexado desde 1 del resultado clicado (eventos `result_click`) |
-| `filters`         | object  | —              | Filtros de faceta activos al momento del evento (eventos `filter_used`) |
-| `sort`            | string  | 128            | Opción de ordenación activa                                         |
-| `locale`          | string  | 16             | Idioma de la configuración del widget                               |
-| `referrer`        | string  | 512            | URL de la página (de `document.referrer`)                           |
-| `metadata`        | object  | 4 KB           | Datos adicionales opacos — sin PII                                  |
+| Campo             | Tipo    | Longitud máx. | Descripción                                                                      |
+| ----------------- | ------- | ------------- | -------------------------------------------------------------------------------- |
+| `type`            | string  | —             | Tipo de evento (véase la tabla anterior)                                         |
+| `sessionId`       | string  | 64            | ID de sesión efímero (`crypto.randomUUID()` o alternativa)                       |
+| `anonymousUserId` | string  | 64            | ID de usuario anónimo estable (por navegador, puede ser nulo en modo privacidad) |
+| `query`           | string  | 512           | La cadena de consulta de búsqueda (eventos `search_query` y `zero_results`)      |
+| `productId`       | string  | 128           | ID externo del producto (eventos `result_click`)                                 |
+| `position`        | integer | —             | Rango indexado desde 1 del resultado clicado (eventos `result_click`)            |
+| `filters`         | object  | —             | Filtros de faceta activos al momento del evento (eventos `filter_used`)          |
+| `sort`            | string  | 128           | Opción de ordenación activa                                                      |
+| `locale`          | string  | 16            | Idioma de la configuración del widget                                            |
+| `referrer`        | string  | 512           | URL de la página (de `document.referrer`)                                        |
+| `metadata`        | object  | 4 KB          | Datos adicionales opacos — sin PII                                               |
 
 ### Generación del ID de sesión
 

@@ -14,7 +14,8 @@ export const deleteIndex = protectedProcedure
 		path: "/search/indexes/{slug}",
 		tags: ["Search"],
 		summary: "Delete search index",
-		description: "Deletes the search index record, alias, versioned Typesense collections, and related documents.",
+		description:
+			"Deletes the search index record, alias, versioned Typesense collections, and related documents.",
 	})
 	.input(
 		z.object({

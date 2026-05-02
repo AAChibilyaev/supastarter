@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SolutionsItem {
-	key:
-		| "retail"
-		| "media"
-		| "fintech"
-		| "education"
-		| "healthcare"
-		| "gaming";
+	key: "retail" | "media" | "fintech" | "education" | "healthcare" | "gaming";
 	icon: ComponentType<{ className?: string }>;
 }
 

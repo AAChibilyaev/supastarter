@@ -74,7 +74,7 @@ export function RoadmapGrid() {
 								<div className="mb-3 size-10 flex items-center justify-center rounded-lg border border-border/60 bg-muted/50 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5">
 									<Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
 								</div>
-								<CardTitle className="flex items-center gap-2">
+								<CardTitle className="gap-2 flex items-center">
 									{t(`items.${key}.title`)}
 									<span
 										className={cn(

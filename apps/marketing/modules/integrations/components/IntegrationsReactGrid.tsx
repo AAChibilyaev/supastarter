@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsReactGridItem {
-	key:
-		| "sdk"
-		| "hooks"
-		| "components"
-		| "ssr"
-		| "typescript"
-		| "analytics";
+	key: "sdk" | "hooks" | "components" | "ssr" | "typescript" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

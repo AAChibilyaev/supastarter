@@ -51,12 +51,12 @@ La pestaña API Keys muestra todas las claves para un índice seleccionado. Sele
 
 ### Ámbitos de clave
 
-| Ámbito            | Propósito                                                        |
-| ----------------- | ---------------------------------------------------------------- |
+| Ámbito            | Propósito                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------- |
 | `search`          | Consultas de búsqueda de solo lectura. Seguro para incrustar en código del navegador. |
-| `ingest`          | Acceso de escritura para enviar documentos mediante la API REST  |
-| `admin`           | Acceso completo — crear/eliminar colecciones, gestionar esquema  |
-| `connector_write` | Usado por módulos CMS (véase tokens de conector a continuación)  |
+| `ingest`          | Acceso de escritura para enviar documentos mediante la API REST                       |
+| `admin`           | Acceso completo — crear/eliminar colecciones, gestionar esquema                       |
+| `connector_write` | Usado por módulos CMS (véase tokens de conector a continuación)                       |
 
 ### Crear una clave
 
@@ -116,14 +116,14 @@ Los trabajos de importación se rastrean en la base de datos. Cada trabajo muest
 
 La página `/[orgSlug]/getting-started` muestra una lista de verificación de 6 pasos que deriva automáticamente su estado de sus datos existentes — sin entrada manual requerida.
 
-| Paso                                 | Condición                                                             |
-| ------------------------------------ | --------------------------------------------------------------------- |
-| 1. Crear un índice de búsqueda       | Recuento de `SearchIndex` > 0 para la organización                    |
-| 2. Generar un token de conector      | Existe `SearchApiKey` con ámbito `connector_write` y no está revocado |
-| 3. Sincronizar sus datos             | Existe `SearchUsageEvent` con tipo de ingestión                       |
-| 4. Realizar una búsqueda             | Existe `SearchUsageEvent` con tipo de búsqueda                        |
-| 5. Generar una API key               | Existe `SearchApiKey` con ámbito `search` y no está revocado          |
-| 6. Incrustar el widget de búsqueda   | Siempre comienza sin marcar — auto-certificación por el usuario       |
+| Paso                               | Condición                                                             |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| 1. Crear un índice de búsqueda     | Recuento de `SearchIndex` > 0 para la organización                    |
+| 2. Generar un token de conector    | Existe `SearchApiKey` con ámbito `connector_write` y no está revocado |
+| 3. Sincronizar sus datos           | Existe `SearchUsageEvent` con tipo de ingestión                       |
+| 4. Realizar una búsqueda           | Existe `SearchUsageEvent` con tipo de búsqueda                        |
+| 5. Generar una API key             | Existe `SearchApiKey` con ámbito `search` y no está revocado          |
+| 6. Incrustar el widget de búsqueda | Siempre comienza sin marcar — auto-certificación por el usuario       |
 
 Los pasos 1–5 se verifican automáticamente. El paso 6 refleja la incrustación del widget, que no puede detectarse en el lado del servidor.
 

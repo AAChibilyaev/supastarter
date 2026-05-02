@@ -1,5 +1,5 @@
-import { CtaFooter } from "@home/components/CtaFooter";
 import { config } from "@config";
+import { CtaFooter } from "@home/components/CtaFooter";
 import { LocaleLink } from "@i18n/routing";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import type { Metadata } from "next";
@@ -208,7 +208,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
-					<p className="mt-4 text-xl text-muted-foreground text-balance max-w-2xl mx-auto">
+					<p className="mt-4 text-xl max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("description")}
 					</p>
 				</div>
@@ -217,11 +217,11 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 			<section className="py-16 border-b border-border/60">
 				<div className="container">
 					<h2 className="text-2xl font-semibold mb-8">{t("marketingTitle")}</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+					<div className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 grid grid-cols-1">
 						{marketingSections.map((section) => (
 							<Card key={section.key}>
 								<CardHeader className="pb-3">
-									<CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+									<CardTitle className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
 										{t(`sections.${section.key}`)}
 									</CardTitle>
 								</CardHeader>
@@ -230,8 +230,12 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 										{section.pages.map((page) => (
 											<li key={page.href}>
 												<LocaleLink
-													href={page.href as Parameters<typeof LocaleLink>[0]["href"]}
-													className="text-sm hover:text-primary transition-colors"
+													href={
+														page.href as Parameters<
+															typeof LocaleLink
+														>[0]["href"]
+													}
+													className="text-sm transition-colors hover:text-primary"
 												>
 													{page.label}
 												</LocaleLink>
@@ -249,11 +253,11 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 				<div className="container">
 					<h2 className="text-2xl font-semibold mb-2">{t("appTitle")}</h2>
 					{saasBase && (
-						<p className="text-sm text-muted-foreground mb-8">
+						<p className="text-sm mb-8 text-muted-foreground">
 							{t("saasNote", { base: saasBase })}
 						</p>
 					)}
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+					<div className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 grid grid-cols-1">
 						{[
 							{ key: "auth", pages: saasAuthPages },
 							{ key: "account", pages: saasAccountPages },
@@ -263,7 +267,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 						].map((section) => (
 							<Card key={section.key}>
 								<CardHeader className="pb-3">
-									<CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+									<CardTitle className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
 										{t(`sections.${section.key}`)}
 									</CardTitle>
 								</CardHeader>
@@ -272,7 +276,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 										{section.pages.map((page) =>
 											page.pattern ? (
 												<li key={page.href}>
-													<code className="text-xs text-muted-foreground font-mono bg-muted px-1.5 py-0.5 rounded">
+													<code className="text-xs font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
 														{page.href}
 													</code>
 													<span className="ml-1.5 text-xs text-muted-foreground">
@@ -282,10 +286,14 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 											) : (
 												<li key={page.href}>
 													<a
-														href={saasBase ? `${saasBase}${page.href}` : undefined}
+														href={
+															saasBase
+																? `${saasBase}${page.href}`
+																: undefined
+														}
 														target="_blank"
 														rel="noopener noreferrer"
-														className="text-sm hover:text-primary transition-colors"
+														className="text-sm transition-colors hover:text-primary"
 													>
 														{page.label}
 													</a>

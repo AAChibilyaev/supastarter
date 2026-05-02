@@ -9,14 +9,14 @@ nunca sale de su servidor.
 
 ## Cuándo usar tokens con ámbito
 
-| Escenario                                                          | ¿Usar token con ámbito?              |
-| ------------------------------------------------------------------ | ------------------------------------ |
-| Tienda de un solo tenant (una organización, una tienda)            | No — la clave `ss_search_*` es suficiente |
-| App multi-tenant donde los usuarios solo deben ver sus propios productos | **Sí**                         |
-| Exponer búsqueda a un tercero con acceso restringido               | **Sí**                               |
-| Limitar resultados a un nivel de precio específico                 | **Sí**                               |
-| Incrustación de widget de corta duración con expiración            | **Sí**                               |
-| Vista previa interna del panel                                     | No — usar oRPC basado en sesión      |
+| Escenario                                                                | ¿Usar token con ámbito?                   |
+| ------------------------------------------------------------------------ | ----------------------------------------- |
+| Tienda de un solo tenant (una organización, una tienda)                  | No — la clave `ss_search_*` es suficiente |
+| App multi-tenant donde los usuarios solo deben ver sus propios productos | **Sí**                                    |
+| Exponer búsqueda a un tercero con acceso restringido                     | **Sí**                                    |
+| Limitar resultados a un nivel de precio específico                       | **Sí**                                    |
+| Incrustación de widget de corta duración con expiración                  | **Sí**                                    |
+| Vista previa interna del panel                                           | No — usar oRPC basado en sesión           |
 
 ## Cómo funcionan los tokens con ámbito
 
@@ -112,11 +112,11 @@ Establezca `expiresInSeconds` para limitar la validez del token. Después de la 
 
 TTLs recomendados:
 
-| Contexto                | TTL                        |
-| ----------------------- | -------------------------- |
-| Sesión del widget       | 1–4 horas                  |
-| Carga de una sola página | 15–30 minutos             |
-| Prueba / desarrollo     | Sin expiración (omita el campo) |
+| Contexto                 | TTL                             |
+| ------------------------ | ------------------------------- |
+| Sesión del widget        | 1–4 horas                       |
+| Carga de una sola página | 15–30 minutos                   |
+| Prueba / desarrollo      | Sin expiración (omita el campo) |
 
 Los tokens expirados se rechazan en el servidor — no se necesita temporizador del cliente ni mecanismo de actualización.
 

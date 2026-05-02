@@ -96,7 +96,9 @@ export function StopwordsPanel({ organizationId, slug }: StopwordsPanelProps) {
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.stopwords.title")}</h3>
-					<p className="text-sm text-foreground/60">{t("search.stopwords.description")}</p>
+					<p className="text-sm text-foreground/60">
+						{t("search.stopwords.description")}
+					</p>
 				</div>
 				<div className="gap-2 flex">
 					<Button variant="outline" onClick={handleAddRow}>

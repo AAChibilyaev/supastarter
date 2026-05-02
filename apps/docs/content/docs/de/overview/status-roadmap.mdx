@@ -12,42 +12,42 @@ Diese Features existieren in der Codebasis und sind einsatzbereit.
 
 ### Kern-Suche
 
-| Feature                                     | Paket / Datei                         |
-| ------------------------------------------- | ------------------------------------- |
-| Typesense-Client (nur serverseitig)         | `packages/search/lib/client.ts`       |
+| Feature                                      | Paket / Datei                         |
+| -------------------------------------------- | ------------------------------------- |
+| Typesense-Client (nur serverseitig)          | `packages/search/lib/client.ts`       |
 | Collection-Schema-Verwaltung + Versionierung | `packages/search/lib/collections.ts`  |
-| DB-First-Ingest-Buffer                      | `packages/search/lib/buffer.ts`       |
-| searchDocuments / multiSearchDocuments      | `packages/search/lib/search.ts`       |
-| Zero-Downtime-Alias-Swap-Reindex            | `packages/search/lib/reindex.ts`      |
-| API-Schlüssel-Generierung + Hashing         | `packages/search/lib/keys.ts`         |
-| Browser-SDK                                 | `packages/search-client/src/index.ts` |
+| DB-First-Ingest-Buffer                       | `packages/search/lib/buffer.ts`       |
+| searchDocuments / multiSearchDocuments       | `packages/search/lib/search.ts`       |
+| Zero-Downtime-Alias-Swap-Reindex             | `packages/search/lib/reindex.ts`      |
+| API-Schlüssel-Generierung + Hashing          | `packages/search/lib/keys.ts`         |
+| Browser-SDK                                  | `packages/search-client/src/index.ts` |
 
 ### Authentifizierung & Mandantenfähigkeit
 
-| Feature                                          | Hinweise                                                        |
-| ------------------------------------------------ | --------------------------------------------------------------- |
-| Org-basierte Auth via Better Auth                | Organisationen sind der primäre Workspace                       |
+| Feature                                                  | Hinweise                                                |
+| -------------------------------------------------------- | ------------------------------------------------------- |
+| Org-basierte Auth via Better Auth                        | Organisationen sind der primäre Workspace               |
 | API-Schlüssel (gehasht, eingeschränkt, ursprungsbasiert) | Präfixe: `ss_search_*`, `ss_connector_*`, `ss_scoped_*` |
-| Eingeschränkte Suchtoken (HMAC)                  | Zustandslos, signiert über `BETTER_AUTH_SECRET`                 |
-| Plan-basierte Kontingentdurchsetzung             | `packages/api/modules/entitlements/`                            |
-| Rate-Limiting pro Schlüssel/IP                   | `packages/search/lib/keys.ts` + DB-Bucket                      |
+| Eingeschränkte Suchtoken (HMAC)                          | Zustandslos, signiert über `BETTER_AUTH_SECRET`         |
+| Plan-basierte Kontingentdurchsetzung                     | `packages/api/modules/entitlements/`                    |
+| Rate-Limiting pro Schlüssel/IP                           | `packages/search/lib/keys.ts` + DB-Bucket               |
 
 ### Widget & Connector
 
-| Feature                                | Hinweise                                                                                       |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Gehostetes Widget                      | `packages/widget/` — Vanilla JS, Shadow DOM, 14 KB                                            |
-| Connector-API                          | 7 Endpunkte: handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status    |
-| Connector-Token CRUD                   | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`               |
-| Sync-Job-Tracking (in-memory)          | Geht bei Neustart verloren – akzeptabel für MVP                                                |
+| Feature                       | Hinweise                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------ |
+| Gehostetes Widget             | `packages/widget/` — Vanilla JS, Shadow DOM, 14 KB                                         |
+| Connector-API                 | 7 Endpunkte: handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status |
+| Connector-Token CRUD          | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`           |
+| Sync-Job-Tracking (in-memory) | Geht bei Neustart verloren – akzeptabel für MVP                                            |
 
 ### Relevanzsteuerung
 
-| Feature                        | Hinweise                                  |
-| ------------------------------ | ----------------------------------------- |
-| Synonyme                       | `searchRouter.synonyms.{get,update}`      |
-| Kurationen                     | `searchRouter.curations.{get,update}`     |
-| Collection-Schema-Verwaltung   | `searchRouter.schema.{get,update}`        |
+| Feature                      | Hinweise                              |
+| ---------------------------- | ------------------------------------- |
+| Synonyme                     | `searchRouter.synonyms.{get,update}`  |
+| Kurationen                   | `searchRouter.curations.{get,update}` |
+| Collection-Schema-Verwaltung | `searchRouter.schema.{get,update}`    |
 
 ### Knowledge-Modul (R2.5)
 
@@ -61,18 +61,18 @@ RAG/GraphRAG über Dokumente. Separate Produktoberfläche von der Storefront-Suc
 
 Diese Features befinden sich in aktiver Entwicklung und können sich ändern.
 
-| Feature                                              | Status                                                                   |
-| ---------------------------------------------------- | ------------------------------------------------------------------------ |
-| v0.6-Metering (Tochka-Top-Up, Wallet)                | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/` |
-| `recordSearchUsage`-Rollup-Aggregation               | Rohe Zeilen vorhanden; `UsageCounter`-Tabelle verschoben                 |
-| Admin-Seiten (Audit, Wallet, Benachrichtigungen, Sicherheit) | Als Stubs committet – betrieblicher Inhalt noch offen               |
+| Feature                                                      | Status                                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| v0.6-Metering (Tochka-Top-Up, Wallet)                        | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/` |
+| `recordSearchUsage`-Rollup-Aggregation                       | Rohe Zeilen vorhanden; `UsageCounter`-Tabelle verschoben                |
+| Admin-Seiten (Audit, Wallet, Benachrichtigungen, Sicherheit) | Als Stubs committet – betrieblicher Inhalt noch offen                   |
 
 ## Entwurf / nicht verfolgt
 
-| Feature           | Hinweise                                                       |
-| ----------------- | -------------------------------------------------------------- |
-| PrestaShop-Modul  | `modules/prestashop/aacsearch/` — PHP, separater Commit-Track  |
-| Bitrix-Modul      | `modules/bitrix/aac.search/` — PHP, separater Commit-Track     |
+| Feature          | Hinweise                                                      |
+| ---------------- | ------------------------------------------------------------- |
+| PrestaShop-Modul | `modules/prestashop/aacsearch/` — PHP, separater Commit-Track |
+| Bitrix-Modul     | `modules/bitrix/aac.search/` — PHP, separater Commit-Track    |
 
 Diese Module haben die richtige Dateistruktur (`Aacsearch.php`, `config.xml`, `classes/`, `controllers/`, `views/`),
 werden aber nicht im Haupt-Repo verfolgt. Sie folgen dem in
@@ -80,15 +80,15 @@ werden aber nicht im Haupt-Repo verfolgt. Sie folgen dem in
 
 ## Geplant
 
-| Feature                                       | Ziel                         |
-| --------------------------------------------- | ---------------------------- |
-| Self-Host-Schnellstart + Helm-Chart           | v1.0                         |
-| `Project` als erstklassige DB-Entität         | v1.x (DB-Entsperr erforderlich) |
-| `WidgetConfig`-DB-Modell                      | v1.x (DB-Entsperr erforderlich) |
-| `AnalyticsEvent`-Erfassungsendpunkt           | v1.x                         |
-| `recentActivity`-Prozedur                     | v1.x                         |
-| Stoppwörter + Presets-Unter-Tabs              | v1.x                         |
-| Schema-Manager-UI                             | v1.x                         |
+| Feature                               | Ziel                            |
+| ------------------------------------- | ------------------------------- |
+| Self-Host-Schnellstart + Helm-Chart   | v1.0                            |
+| `Project` als erstklassige DB-Entität | v1.x (DB-Entsperr erforderlich) |
+| `WidgetConfig`-DB-Modell              | v1.x (DB-Entsperr erforderlich) |
+| `AnalyticsEvent`-Erfassungsendpunkt   | v1.x                            |
+| `recentActivity`-Prozedur             | v1.x                            |
+| Stoppwörter + Presets-Unter-Tabs      | v1.x                            |
+| Schema-Manager-UI                     | v1.x                            |
 
 ## Außerhalb des Umfangs (v1)
 
@@ -106,13 +106,13 @@ Folgendes ist **explizit nicht** für v1 geplant:
 
 ## Roadmap-Releases
 
-| Release | Ziel                                                   | Status               |
-| ------- | ------------------------------------------------------ | -------------------- |
-| R0      | Fundament — supastarter + AACsearch-Gerüst             | ✅ Fertig            |
-| R1      | Vertikaler Schnitt — Suche funktioniert end-to-end ohne CMS | ✅ Fertig          |
+| Release | Ziel                                                            | Status                    |
+| ------- | --------------------------------------------------------------- | ------------------------- |
+| R0      | Fundament — supastarter + AACsearch-Gerüst                      | ✅ Fertig                 |
+| R1      | Vertikaler Schnitt — Suche funktioniert end-to-end ohne CMS     | ✅ Fertig                 |
 | R2      | Connector Alpha — echte Shops beginnen mit der Synchronisierung | 🟡 Teilweise ausgeliefert |
-| R2.5    | Knowledge-Modul (RAG/GraphRAG)                         | ✅ Fertig            |
-| v0.5    | Marketing-Website-Rebranding in 5 Locales              | ✅ Fertig            |
-| v0.6    | Sucheinheiten-Metering mit Zahlungsanbieter verbunden  | 🟡 Aktive Entwicklung |
-| v0.7    | Öffentliche Dokumentations-Website                     | 🟡 Sie sind hier     |
-| v1.0    | Self-Host-Schnellstart + Helm-Chart                    | ⏳ Geplant           |
+| R2.5    | Knowledge-Modul (RAG/GraphRAG)                                  | ✅ Fertig                 |
+| v0.5    | Marketing-Website-Rebranding in 5 Locales                       | ✅ Fertig                 |
+| v0.6    | Sucheinheiten-Metering mit Zahlungsanbieter verbunden           | 🟡 Aktive Entwicklung     |
+| v0.7    | Öffentliche Dokumentations-Website                              | 🟡 Sie sind hier          |
+| v1.0    | Self-Host-Schnellstart + Helm-Chart                             | ⏳ Geplant                |

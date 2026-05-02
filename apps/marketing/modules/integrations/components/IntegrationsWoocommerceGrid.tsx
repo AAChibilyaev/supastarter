@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsWoocommerceItem {
-	key:
-		| "install"
-		| "productSync"
-		| "variantSync"
-		| "orderSearch"
-		| "widget"
-		| "analytics";
+	key: "install" | "productSync" | "variantSync" | "orderSearch" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

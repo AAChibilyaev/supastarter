@@ -31,16 +31,16 @@ L'étape 4 (basculement d'alias) est atomique dans Typesense. Les requêtes cont
 
 ## Quand réindexer
 
-| Scénario                            | Réindexation requise ?                          |
-| ----------------------------------- | ----------------------------------------------- |
-| Ajout d'un nouveau champ de facette | **Oui** — Typesense nécessite une migration de schéma |
-| Changement du type de champ         | **Oui**                                         |
-| Ajout d'un nouveau champ de texte indexable | **Oui**                                 |
-| Suppression d'un champ              | **Oui**                                         |
-| Mise à jour du contenu d'un document | Non — utiliser upsert/synchronisation delta    |
-| Changement des règles de synonymes  | Non — les synonymes sont une ressource séparée  |
-| Changement des options de tri       | Non — `sortBy` est un paramètre de requête      |
-| Changement des règles de curation   | Non — les curations sont une ressource séparée  |
+| Scénario                                    | Réindexation requise ?                                |
+| ------------------------------------------- | ----------------------------------------------------- |
+| Ajout d'un nouveau champ de facette         | **Oui** — Typesense nécessite une migration de schéma |
+| Changement du type de champ                 | **Oui**                                               |
+| Ajout d'un nouveau champ de texte indexable | **Oui**                                               |
+| Suppression d'un champ                      | **Oui**                                               |
+| Mise à jour du contenu d'un document        | Non — utiliser upsert/synchronisation delta           |
+| Changement des règles de synonymes          | Non — les synonymes sont une ressource séparée        |
+| Changement des options de tri               | Non — `sortBy` est un paramètre de requête            |
+| Changement des règles de curation           | Non — les curations sont une ressource séparée        |
 
 ## Déclencher la réindexation
 

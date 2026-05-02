@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsNextJsGridItem {
-	key:
-		| "sdk"
-		| "serverComponents"
-		| "appRouter"
-		| "caching"
-		| "widget"
-		| "analytics";
+	key: "sdk" | "serverComponents" | "appRouter" | "caching" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

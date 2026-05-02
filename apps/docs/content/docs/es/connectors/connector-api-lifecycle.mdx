@@ -17,10 +17,10 @@ El token se compara con registros hasheados en `SearchApiKey` donde `scopes` inc
 
 **Respuestas de error para autenticación inválida:**
 
-| Condición                       | Estado | Cuerpo                                  |
-| ------------------------------- | ------ | --------------------------------------- |
-| Sin encabezado `Authorization`  | 401    | `{ "error": "missing_bearer_token" }`   |
-| Token no encontrado o revocado  | 403    | `{ "error": "invalid_or_revoked_key" }` |
+| Condición                      | Estado | Cuerpo                                  |
+| ------------------------------ | ------ | --------------------------------------- |
+| Sin encabezado `Authorization` | 401    | `{ "error": "missing_bearer_token" }`   |
+| Token no encontrado o revocado | 403    | `{ "error": "invalid_or_revoked_key" }` |
 
 ## Endpoints
 
@@ -229,7 +229,11 @@ Consulte el estado de un trabajo de sincronización por su ID.
 	"failuresCount": 0,
 	"events": [
 		{ "timestamp": "...", "message": "Sincronización completa iniciada", "level": "info" },
-		{ "timestamp": "...", "message": "Sincronización completada: 500 elementos procesados", "level": "info" }
+		{
+			"timestamp": "...",
+			"message": "Sincronización completada: 500 elementos procesados",
+			"level": "info"
+		}
 	]
 }
 ```
@@ -266,16 +270,16 @@ Un módulo CMS típico sigue esta secuencia:
 
 ## Referencia de códigos de error
 
-| Código                   | Significado                                                   |
-| ------------------------ | ------------------------------------------------------------- |
-| `missing_bearer_token`   | Sin encabezado `Authorization: Bearer ...`                    |
-| `invalid_or_revoked_key` | Token no encontrado, ámbito incorrecto o revocado             |
-| `invalid_json`           | No se pudo analizar el cuerpo de la solicitud                 |
-| `invalid_input`          | Validación Zod fallida; array `details` tiene errores por campo |
-| `project_not_found`      | `:projectId` no coincide con la organización del token        |
-| `unsupported_connector`  | El campo `platform` no es `prestashop` o `bitrix`             |
-| `sync_failed`            | La puesta en cola en `SearchIngestBuffer` falló — reintente   |
-| `delete_failed`          | La puesta en cola de eliminación de documento falló — reintente |
+| Código                   | Significado                                                      |
+| ------------------------ | ---------------------------------------------------------------- |
+| `missing_bearer_token`   | Sin encabezado `Authorization: Bearer ...`                       |
+| `invalid_or_revoked_key` | Token no encontrado, ámbito incorrecto o revocado                |
+| `invalid_json`           | No se pudo analizar el cuerpo de la solicitud                    |
+| `invalid_input`          | Validación Zod fallida; array `details` tiene errores por campo  |
+| `project_not_found`      | `:projectId` no coincide con la organización del token           |
+| `unsupported_connector`  | El campo `platform` no es `prestashop` o `bitrix`                |
+| `sync_failed`            | La puesta en cola en `SearchIngestBuffer` falló — reintente      |
+| `delete_failed`          | La puesta en cola de eliminación de documento falló — reintente  |
 | `job_not_found`          | ID de trabajo no encontrado (puede haberse perdido al reiniciar) |
 
 ## Páginas relacionadas

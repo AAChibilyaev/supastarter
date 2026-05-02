@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/components/tooltip";
 import { MonitorCogIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 import { useEffect, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 

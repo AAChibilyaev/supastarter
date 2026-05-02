@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface DevToolsItem {
-	key:
-		| "restApi"
-		| "mcp"
-		| "semanticSearch"
-		| "typedSdk"
-		| "selfHost"
-		| "orpcControl";
+	key: "restApi" | "mcp" | "semanticSearch" | "typedSdk" | "selfHost" | "orpcControl";
 	icon: ComponentType<{ className?: string }>;
 }
 

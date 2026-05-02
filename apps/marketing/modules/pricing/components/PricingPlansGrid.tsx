@@ -1,24 +1,11 @@
 import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
-import {
-	Building2Icon,
-	CrownIcon,
-	GiftIcon,
-	RocketIcon,
-	StarIcon,
-	WrenchIcon,
-} from "lucide-react";
+import { Building2Icon, CrownIcon, GiftIcon, RocketIcon, StarIcon, WrenchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface PricingPlansGridItem {
-	key:
-		| "free"
-		| "starter"
-		| "pro"
-		| "business"
-		| "enterprise"
-		| "custom";
+	key: "free" | "starter" | "pro" | "business" | "enterprise" | "custom";
 	icon: ComponentType<{ className?: string }>;
 }
 

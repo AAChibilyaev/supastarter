@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsStrapiItem {
-	key:
-		| "plugin"
-		| "contentTypes"
-		| "autoSync"
-		| "webhook"
-		| "widget"
-		| "analytics";
+	key: "plugin" | "contentTypes" | "autoSync" | "webhook" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

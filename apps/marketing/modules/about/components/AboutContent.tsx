@@ -23,13 +23,13 @@ export function AboutContent() {
 			<section className="py-24 border-b border-border/60">
 				<div className="container">
 					<div className="max-w-3xl mx-auto text-center">
-						<p className="text-sm font-semibold uppercase tracking-widest text-primary">
+						<p className="text-sm font-semibold tracking-widest text-primary uppercase">
 							{t("mission.label")}
 						</p>
-						<blockquote className="mt-6 text-2xl md:text-3xl font-medium tracking-tight text-balance leading-snug">
+						<blockquote className="mt-6 text-2xl md:text-3xl font-medium tracking-tight leading-snug text-balance">
 							&ldquo;{t("mission.quote")}&rdquo;
 						</blockquote>
-						<p className="mt-6 text-lg text-muted-foreground text-balance">
+						<p className="mt-6 text-lg text-balance text-muted-foreground">
 							{t("mission.body")}
 						</p>
 					</div>
@@ -39,7 +39,7 @@ export function AboutContent() {
 			{/* Stats section */}
 			<section className="py-20 border-b border-border/60 bg-muted/30">
 				<div className="container">
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto text-center">
+					<div className="md:grid-cols-4 gap-8 max-w-4xl mx-auto grid grid-cols-2 text-center">
 						<div>
 							<div className="text-4xl font-bold text-foreground tabular-nums">
 								{t("stats.searches")}
@@ -85,7 +85,7 @@ export function AboutContent() {
 						</h2>
 					</div>
 
-					<div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+					<div className="mt-16 md:grid-cols-3 gap-6 max-w-5xl mx-auto grid grid-cols-1">
 						{whyItems.map(({ key, icon: Icon }) => (
 							<Card
 								key={key}

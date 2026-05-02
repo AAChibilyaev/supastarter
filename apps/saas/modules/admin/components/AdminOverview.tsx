@@ -105,7 +105,9 @@ export function AdminOverview() {
 											</p>
 										</div>
 										<span className="text-xs text-foreground/60">
-											{t("membersCount", { count: organization.membersCount })}
+											{t("membersCount", {
+												count: organization.membersCount,
+											})}
 										</span>
 									</div>
 								))}

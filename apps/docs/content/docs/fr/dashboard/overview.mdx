@@ -11,35 +11,35 @@ Le tableau de bord AACsearch est l'application SaaS protégée dans `apps/saas`.
 
 Tout ce qui concerne la recherche pour une organisation spécifique se trouve ici. Une organisation correspond à un locataire dans AACsearch — tous les indexes, clés API, analyses et facturations lui sont limités.
 
-| Chemin                        | Zone                                                          |
-| ----------------------------- | ------------------------------------------------------------- |
-| `/[orgSlug]/overview`         | Tableau de bord KPI, requêtes principales, fil d'activité, alertes de quota |
-| `/[orgSlug]/getting-started`  | Liste de contrôle d'intégration en 6 étapes                  |
-| `/[orgSlug]/search`           | Espace de travail de recherche (onglets Indexes, Playground, API Keys, Widget) |
-| `/[orgSlug]/api-keys`         | Clés API sur tous les indexes                                 |
-| `/[orgSlug]/import-jobs`      | Historique des jobs d'import                                  |
-| `/[orgSlug]/preview`          | Aperçu / terrain de jeu de recherche                         |
-| `/[orgSlug]/analytics`        | Analyses de recherche — CTR, requêtes principales, sessions   |
-| `/[orgSlug]/relevance`        | Synonymes, curations, mots vides, préréglages                |
+| Chemin                        | Zone                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------- |
+| `/[orgSlug]/overview`         | Tableau de bord KPI, requêtes principales, fil d'activité, alertes de quota     |
+| `/[orgSlug]/getting-started`  | Liste de contrôle d'intégration en 6 étapes                                     |
+| `/[orgSlug]/search`           | Espace de travail de recherche (onglets Indexes, Playground, API Keys, Widget)  |
+| `/[orgSlug]/api-keys`         | Clés API sur tous les indexes                                                   |
+| `/[orgSlug]/import-jobs`      | Historique des jobs d'import                                                    |
+| `/[orgSlug]/preview`          | Aperçu / terrain de jeu de recherche                                            |
+| `/[orgSlug]/analytics`        | Analyses de recherche — CTR, requêtes principales, sessions                     |
+| `/[orgSlug]/relevance`        | Synonymes, curations, mots vides, préréglages                                   |
 | `/[orgSlug]/connectors`       | Statut du module CMS, tokens connecteur, historique des jobs de synchronisation |
-| `/[orgSlug]/knowledge`        | Espaces de connaissance (RAG/GraphRAG — surface produit séparée) |
-| `/[orgSlug]/settings/general` | Paramètres de l'organisation                                  |
-| `/[orgSlug]/settings/members` | Gestion des membres, invitations                              |
-| `/[orgSlug]/settings/billing` | Facturation et plan de l'organisation                         |
+| `/[orgSlug]/knowledge`        | Espaces de connaissance (RAG/GraphRAG — surface produit séparée)                |
+| `/[orgSlug]/settings/general` | Paramètres de l'organisation                                                    |
+| `/[orgSlug]/settings/members` | Gestion des membres, invitations                                                |
+| `/[orgSlug]/settings/billing` | Facturation et plan de l'organisation                                           |
 
 ### Portée compte (`/...`)
 
 Les paramètres personnels et les outils d'administration se trouvent en dehors du contexte d'organisation.
 
-| Chemin                         | Zone                                               |
-| ------------------------------ | -------------------------------------------------- |
-| `/settings/general`            | Profil du compte                                   |
-| `/settings/security`           | Mot de passe, 2FA (TOTP, passkeys), connexions OAuth |
-| `/settings/notifications`      | Préférences de notification                        |
-| `/settings/billing`            | Facturation personnelle                            |
-| `/settings/billing/ai-credits` | Wallet IA (développement actif — v0.6)             |
-| `/knowledge`                   | Espaces de connaissance personnels                 |
-| `/chatbot`                     | Chatbot IA                                         |
+| Chemin                         | Zone                                                                              |
+| ------------------------------ | --------------------------------------------------------------------------------- |
+| `/settings/general`            | Profil du compte                                                                  |
+| `/settings/security`           | Mot de passe, 2FA (TOTP, passkeys), connexions OAuth                              |
+| `/settings/notifications`      | Préférences de notification                                                       |
+| `/settings/billing`            | Facturation personnelle                                                           |
+| `/settings/billing/ai-credits` | Wallet IA (développement actif — v0.6)                                            |
+| `/knowledge`                   | Espaces de connaissance personnels                                                |
+| `/chatbot`                     | Chatbot IA                                                                        |
 | `/admin/*`                     | Outils d'administration du site (utilisateurs admin uniquement — voir ci-dessous) |
 
 ## La page Vue d'ensemble
@@ -50,12 +50,12 @@ La page de vue d'ensemble de l'organisation (`/[orgSlug]/overview`) est la page 
 
 Quatre métriques résumées pour la période sélectionnée (24h / 7j / 30j) :
 
-| Tuile               | Source                                              |
-| ------------------- | --------------------------------------------------- |
-| Total des recherches | Consommation d'unités de recherche des habilitations du plan |
-| Documents indexés   | Nombre de documents des habilitations du plan       |
-| Utilisation du quota | `searches.percentUsed` depuis `entitlements.plan`  |
-| Jobs de synchronisation échoués | Dérivé du statut du pipeline d'ingestion |
+| Tuile                           | Source                                                       |
+| ------------------------------- | ------------------------------------------------------------ |
+| Total des recherches            | Consommation d'unités de recherche des habilitations du plan |
+| Documents indexés               | Nombre de documents des habilitations du plan                |
+| Utilisation du quota            | `searches.percentUsed` depuis `entitlements.plan`            |
+| Jobs de synchronisation échoués | Dérivé du statut du pipeline d'ingestion                     |
 
 Une bannière d'avertissement apparaît lorsque le quota atteint 80%, et une bannière d'erreur lorsqu'il est dépassé.
 

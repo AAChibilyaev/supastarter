@@ -12,17 +12,17 @@ L'authentification est fournie par [Better Auth](https://better-auth.com) config
 
 Fonctionnalités activées :
 
-| Fonctionnalité         | Notes                                  |
-| ---------------------- | -------------------------------------- |
-| E-mail + mot de passe  | Flux de connexion standard             |
-| Liens magiques         | Connexion par e-mail sans mot de passe |
-| Passkeys               | WebAuthn                               |
-| 2FA (TOTP)             | Mots de passe à usage unique temporels |
-| OAuth (Google, GitHub) | Connexion sociale                      |
-| Organisations          | Espaces de travail avec membres par rôle |
-| Orgs sur invitation    | Optionnel ; configurable               |
-| Panneau d'administration | Gestion interne des utilisateurs/orgs |
-| Impersonation de session | Pour le support/débogage              |
+| Fonctionnalité           | Notes                                    |
+| ------------------------ | ---------------------------------------- |
+| E-mail + mot de passe    | Flux de connexion standard               |
+| Liens magiques           | Connexion par e-mail sans mot de passe   |
+| Passkeys                 | WebAuthn                                 |
+| 2FA (TOTP)               | Mots de passe à usage unique temporels   |
+| OAuth (Google, GitHub)   | Connexion sociale                        |
+| Organisations            | Espaces de travail avec membres par rôle |
+| Orgs sur invitation      | Optionnel ; configurable                 |
+| Panneau d'administration | Gestion interne des utilisateurs/orgs    |
+| Impersonation de session | Pour le support/débogage                 |
 
 ## Les organisations comme espaces de travail
 
@@ -43,11 +43,11 @@ Utilisateur → Member(rôle) → Organisation
 
 Les procédures oRPC sont appelées selon l'un des trois types suivants :
 
-| Type de procédure    | Contexte disponible               | Utilisé pour                            |
-| -------------------- | --------------------------------- | --------------------------------------- |
-| `publicProcedure`    | Pas de session requise            | Handler de recherche public, vérification de santé |
-| `protectedProcedure` | `context.user`, `context.session` | Opérations de tableau de bord authentifié |
-| `adminProcedure`     | `context.user` + vérification du rôle admin | Opérations réservées aux administrateurs |
+| Type de procédure    | Contexte disponible                         | Utilisé pour                                       |
+| -------------------- | ------------------------------------------- | -------------------------------------------------- |
+| `publicProcedure`    | Pas de session requise                      | Handler de recherche public, vérification de santé |
+| `protectedProcedure` | `context.user`, `context.session`           | Opérations de tableau de bord authentifié          |
+| `adminProcedure`     | `context.user` + vérification du rôle admin | Opérations réservées aux administrateurs           |
 
 Accéder à la session dans un composant serveur :
 
@@ -95,11 +95,11 @@ Les clés API sont le mécanisme d'authentification principal pour les appelants
 
 ### Types de clés et préfixes
 
-| Préfixe          | Portée                      | Utilisé par                             |
-| ---------------- | --------------------------- | --------------------------------------- |
-| `ss_search_*`    | `search`                    | SDK navigateur, widget — lecture seule  |
-| `ss_connector_*` | `connector_write`           | Modules CMS — écriture + synchronisation |
-| `ss_scoped_*`    | Restreint depuis `ss_search_*` | Tokens par utilisateur/filtre         |
+| Préfixe          | Portée                         | Utilisé par                              |
+| ---------------- | ------------------------------ | ---------------------------------------- |
+| `ss_search_*`    | `search`                       | SDK navigateur, widget — lecture seule   |
+| `ss_connector_*` | `connector_write`              | Modules CMS — écriture + synchronisation |
+| `ss_scoped_*`    | Restreint depuis `ss_search_*` | Tokens par utilisateur/filtre            |
 
 ### Garanties de sécurité
 
@@ -149,10 +149,10 @@ Consultez [Plans et limites](/docs/overview/plans-and-limits) pour la politique 
 
 ## Accès basé sur les rôles au sein des organisations
 
-| Rôle     | Capacités                                              |
-| -------- | ------------------------------------------------------ |
+| Rôle     | Capacités                                                  |
+| -------- | ---------------------------------------------------------- |
 | `owner`  | Accès complet, peut transférer l'org, gérer la facturation |
-| `admin`  | Gérer les indexes, les clés, les membres, les paramètres |
+| `admin`  | Gérer les indexes, les clés, les membres, les paramètres   |
 | `member` | Voir le tableau de bord, exécuter des recherches en aperçu |
 
 Les vérifications de rôles dans les procédures oRPC utilisent l'objet `context.session` fourni par Better Auth.

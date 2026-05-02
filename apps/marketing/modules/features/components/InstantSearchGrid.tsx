@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface InstantSearchGridItem {
-	key:
-		| "asYouType"
-		| "debouncing"
-		| "caching"
-		| "prefetching"
-		| "latency"
-		| "widget";
+	key: "asYouType" | "debouncing" | "caching" | "prefetching" | "latency" | "widget";
 	icon: ComponentType<{ className?: string }>;
 }
 

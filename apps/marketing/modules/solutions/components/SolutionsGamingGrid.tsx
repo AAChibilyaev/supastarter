@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SolutionsGamingItem {
-	key:
-		| "itemSearch"
-		| "playerSearch"
-		| "geoSearch"
-		| "realTimeSync"
-		| "multiSearch"
-		| "analytics";
+	key: "itemSearch" | "playerSearch" | "geoSearch" | "realTimeSync" | "multiSearch" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

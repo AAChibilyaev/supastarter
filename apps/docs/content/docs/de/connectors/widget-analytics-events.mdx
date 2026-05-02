@@ -17,13 +17,13 @@ Derselbe API-Schlüssel, der für die Suche verwendet wird (`ss_search_*`), wird
 
 ## Ereignistypen
 
-| Ereignistyp    | Auslöser                                 | Priorität |
-| -------------- | ---------------------------------------- | --------- |
-| `search_query` | Benutzer sendet eine Suchanfrage         | P0        |
-| `zero_results` | Eine Suche gibt keine Treffer zurück     | P0        |
-| `result_click` | Benutzer klickt auf ein Produktergebnis  | P0        |
-| `widget_open`  | Widget wird geöffnet / sichtbar          | P1        |
-| `filter_used`  | Benutzer wendet einen Facettenfilter an oder ändert ihn | P1 |
+| Ereignistyp    | Auslöser                                                | Priorität |
+| -------------- | ------------------------------------------------------- | --------- |
+| `search_query` | Benutzer sendet eine Suchanfrage                        | P0        |
+| `zero_results` | Eine Suche gibt keine Treffer zurück                    | P0        |
+| `result_click` | Benutzer klickt auf ein Produktergebnis                 | P0        |
+| `widget_open`  | Widget wird geöffnet / sichtbar                         | P1        |
+| `filter_used`  | Benutzer wendet einen Facettenfilter an oder ändert ihn | P1        |
 
 ## Transport
 
@@ -72,19 +72,19 @@ Sie können ein einzelnes Ereignis oder einen Batch von bis zu 50 Ereignissen se
 
 ### Feldreferenz
 
-| Feld              | Typ     | Max. Länge | Beschreibung                                                              |
-| ----------------- | ------- | ---------- | ------------------------------------------------------------------------- |
-| `type`            | string  | —          | Ereignistyp (siehe Tabelle oben)                                          |
-| `sessionId`       | string  | 64         | Ephemere Sitzungs-ID (`crypto.randomUUID()` oder Fallback)                |
-| `anonymousUserId` | string  | 64         | Stabile anonyme Benutzer-ID (pro Browser, kann im Datenschutzmodus null sein) |
-| `query`           | string  | 512        | Die Suchanfragezeichenkette (Ereignisse `search_query` und `zero_results`) |
-| `productId`       | string  | 128        | Externe Produkt-ID (Ereignisse `result_click`)                            |
-| `position`        | integer | —          | 1-indizierter Rang des angeklickten Ergebnisses (Ereignisse `result_click`) |
+| Feld              | Typ     | Max. Länge | Beschreibung                                                                   |
+| ----------------- | ------- | ---------- | ------------------------------------------------------------------------------ |
+| `type`            | string  | —          | Ereignistyp (siehe Tabelle oben)                                               |
+| `sessionId`       | string  | 64         | Ephemere Sitzungs-ID (`crypto.randomUUID()` oder Fallback)                     |
+| `anonymousUserId` | string  | 64         | Stabile anonyme Benutzer-ID (pro Browser, kann im Datenschutzmodus null sein)  |
+| `query`           | string  | 512        | Die Suchanfragezeichenkette (Ereignisse `search_query` und `zero_results`)     |
+| `productId`       | string  | 128        | Externe Produkt-ID (Ereignisse `result_click`)                                 |
+| `position`        | integer | —          | 1-indizierter Rang des angeklickten Ergebnisses (Ereignisse `result_click`)    |
 | `filters`         | object  | —          | Aktive Facettenfilter zum Zeitpunkt des Ereignisses (Ereignisse `filter_used`) |
-| `sort`            | string  | 128        | Aktive Sortieroption                                                      |
-| `locale`          | string  | 16         | Locale aus der Widget-Konfiguration                                       |
-| `referrer`        | string  | 512        | Seiten-URL (aus `document.referrer`)                                      |
-| `metadata`        | object  | 4 KB       | Opake Zusatzdaten — keine PII                                             |
+| `sort`            | string  | 128        | Aktive Sortieroption                                                           |
+| `locale`          | string  | 16         | Locale aus der Widget-Konfiguration                                            |
+| `referrer`        | string  | 512        | Seiten-URL (aus `document.referrer`)                                           |
+| `metadata`        | object  | 4 KB       | Opake Zusatzdaten — keine PII                                                  |
 
 ### Sitzungs-ID-Generierung
 

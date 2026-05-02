@@ -44,18 +44,18 @@ modules/          # PAS un workspace Node — modules CMS PHP
 
 Tout le trafic entre par une **seule application Hono** dans `packages/api/index.ts`, qui monte les routes dans l'ordre :
 
-| Montage                  | Objectif                                  |
-| ------------------------ | ----------------------------------------- |
-| `/api`                   | Handler de recherche public (CORS permissif) |
-| `/api`                   | Événements analytiques du widget          |
-| `/api/widget/widget.js`  | Bundle JS du widget hébergé              |
-| `/api`                   | API Connecteur (modules CMS)              |
-| `/api`                   | Handler analytique                        |
-| `/api`                   | SCIM 2.0 (provisionnement d'identité)    |
+| Montage                  | Objectif                                            |
+| ------------------------ | --------------------------------------------------- |
+| `/api`                   | Handler de recherche public (CORS permissif)        |
+| `/api`                   | Événements analytiques du widget                    |
+| `/api/widget/widget.js`  | Bundle JS du widget hébergé                         |
+| `/api`                   | API Connecteur (modules CMS)                        |
+| `/api`                   | Handler analytique                                  |
+| `/api`                   | SCIM 2.0 (provisionnement d'identité)               |
 | `/api/v1`                | REST API v1 (15 points de terminaison, OpenAPI 3.1) |
-| `/api/auth/**`           | Handler Better Auth                       |
-| `/api/webhooks/payments` | Webhooks du fournisseur de paiement       |
-| `/api/rpc/**`            | Handler oRPC (11 modules)                 |
+| `/api/auth/**`           | Handler Better Auth                                 |
+| `/api/webhooks/payments` | Webhooks du fournisseur de paiement                 |
+| `/api/rpc/**`            | Handler oRPC (11 modules)                           |
 
 ## Modules oRPC
 
@@ -126,18 +126,18 @@ bascule l'alias de manière atomique. La version précédente reste active jusqu
 
 ## Choix technologiques
 
-| Couche               | Technologie                                      |
-| -------------------- | ------------------------------------------------ |
-| Framework            | Next.js 16 (App Router, RSC)                     |
-| API                  | Hono + oRPC 1.13                                 |
-| Auth                 | Better Auth 1.5                                  |
-| ORM                  | Prisma 7 (actif) / Drizzle (référence legacy)    |
-| Moteur de recherche  | Typesense 3                                      |
-| Validation           | Zod 4                                            |
-| Récupération de données client | TanStack Query 5                       |
-| Formulaires          | react-hook-form 7                                |
-| UI                   | Tailwind v4 + primitives shadcn                  |
-| Lint                 | Oxlint (pas ESLint)                              |
-| Formatage            | Oxfmt (pas Prettier)                             |
-| Gestionnaire de paquets | pnpm 10 avec catalogue workspace              |
-| Orchestration de build | Turborepo 2                                    |
+| Couche                         | Technologie                                   |
+| ------------------------------ | --------------------------------------------- |
+| Framework                      | Next.js 16 (App Router, RSC)                  |
+| API                            | Hono + oRPC 1.13                              |
+| Auth                           | Better Auth 1.5                               |
+| ORM                            | Prisma 7 (actif) / Drizzle (référence legacy) |
+| Moteur de recherche            | Typesense 3                                   |
+| Validation                     | Zod 4                                         |
+| Récupération de données client | TanStack Query 5                              |
+| Formulaires                    | react-hook-form 7                             |
+| UI                             | Tailwind v4 + primitives shadcn               |
+| Lint                           | Oxlint (pas ESLint)                           |
+| Formatage                      | Oxfmt (pas Prettier)                          |
+| Gestionnaire de paquets        | pnpm 10 avec catalogue workspace              |
+| Orchestration de build         | Turborepo 2                                   |

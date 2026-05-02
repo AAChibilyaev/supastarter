@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface UseCaseItem {
-	key:
-		| "ecommerce"
-		| "helpCenter"
-		| "multiTenant"
-		| "devTools"
-		| "internalTools"
-		| "contentSites";
+	key: "ecommerce" | "helpCenter" | "multiTenant" | "devTools" | "internalTools" | "contentSites";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -69,6 +69,9 @@ catalogs:
     '@tailwindcss/postcss':
       specifier: ^4.2.2
       version: 4.2.2
+    '@teispace/next-themes':
+      specifier: ^0.3.2
+      version: 0.3.2
     '@types/js-cookie':
       specifier: ^3.0.4
       version: 3.0.6
@@ -165,9 +168,6 @@ catalogs:
     next-intl:
       specifier: 4.9.0
       version: 4.9.0
-    next-themes:
-      specifier: ^0.4.6
-      version: 0.4.6
     nprogress:
       specifier: ^0.2.0
       version: 0.2.0
@@ -276,6 +276,9 @@ catalogs:
     zod:
       specifier: ^4.3.6
       version: 4.3.6
+
+overrides:
+  next-themes: npm:@teispace/next-themes@0.3.2
 
 importers:
 
@@ -467,9 +470,6 @@ importers:
       next-intl:
         specifier: 'catalog:'
         version: 4.9.0(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
-      next-themes:
-        specifier: 'catalog:'
-        version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       nprogress:
         specifier: 'catalog:'
         version: 0.2.0
@@ -681,6 +681,9 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@teispace/next-themes':
+        specifier: 'catalog:'
+        version: 0.3.2(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       ai:
         specifier: 'catalog:'
         version: 6.0.146(zod@4.3.6)
@@ -723,9 +726,6 @@ importers:
       next-intl:
         specifier: 'catalog:'
         version: 4.9.0(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
-      next-themes:
-        specifier: 'catalog:'
-        version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       nprogress:
         specifier: 'catalog:'
         version: 0.2.0
@@ -5463,6 +5463,16 @@ packages:
   '@tanstack/virtual-core@3.14.0':
     resolution: {integrity: sha512-JLANqGy/D6k4Ujmh8Tr25lGimuOXNiaVyXaCAZS0W+1390sADdGnyUdSWNIfd49gebtIxGMij4IktRVzrdr12Q==}
 
+  '@teispace/next-themes@0.3.2':
+    resolution: {integrity: sha512-x2rSAIwrQ6d6dJXqBSfLJOX7/Kg/lL4O82XpHlpu9S+HrwmEV/80mTYnHglddY6ZQgNfdzMXJSqVtOycsNwSww==}
+    peerDependencies:
+      next: '>=13.0.0'
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+    peerDependenciesMeta:
+      next:
+        optional: true
+
   '@turbo/darwin-64@2.9.4':
     resolution: {integrity: sha512-ZSlPqJ5Vqg/wgVw8P3AOVCIosnbBilOxLq7TMz3MN/9U46DUYfdG2jtfevNDufyxyrg98pcPs/GBgDRaaids6g==}
     cpu: [x64]
@@ -7915,12 +7925,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  next-themes@0.4.6:
-    resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
   next@16.1.7:
     resolution: {integrity: sha512-WM0L7WrSvKwoLegLYr6V+mz+RIofqQgVAfHhMp9a88ms0cFX8iX9ew+snpWlSBwpkURJOUdvCEt3uLl3NNzvWg==}
@@ -13369,6 +13373,13 @@ snapshots:
 
   '@tanstack/virtual-core@3.14.0': {}
 
+  '@teispace/next-themes@0.3.2(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    optionalDependencies:
+      next: 16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+
   '@turbo/darwin-64@2.9.4':
     optional: true
 
@@ -14931,7 +14942,7 @@ snapshots:
       fumadocs-core: 16.7.10(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.14)(lucide-react@1.7.0(react@19.2.4))(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod@4.3.6)
       lucide-react: 1.7.0(react@19.2.4)
       motion: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      next-themes: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      next-themes: '@teispace/next-themes@0.3.2(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)'
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
       react-medium-image-zoom: 5.4.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -16163,11 +16174,6 @@ snapshots:
       typescript: 6.0.2
     transitivePeerDependencies:
       - '@swc/helpers'
-
-  next-themes@0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
-    dependencies:
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
 
   next@16.1.7(@opentelemetry/api@1.9.0)(@playwright/test@1.59.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:

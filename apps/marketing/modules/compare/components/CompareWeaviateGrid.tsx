@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareWeaviateGridItem {
-	key:
-		| "hybridSearch"
-		| "facets"
-		| "typoTolerance"
-		| "multiTenancy"
-		| "pricing"
-		| "widget";
+	key: "hybridSearch" | "facets" | "typoTolerance" | "multiTenancy" | "pricing" | "widget";
 	icon: ComponentType<{ className?: string }>;
 }
 

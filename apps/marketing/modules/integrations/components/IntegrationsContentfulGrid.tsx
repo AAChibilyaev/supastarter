@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsContentfulItem {
-	key:
-		| "app"
-		| "contentTypes"
-		| "autoSync"
-		| "webhook"
-		| "widget"
-		| "analytics";
+	key: "app" | "contentTypes" | "autoSync" | "webhook" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

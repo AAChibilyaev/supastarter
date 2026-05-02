@@ -10,6 +10,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
+	cn,
 } from "@repo/ui";
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { BookIcon, HomeIcon, LogOutIcon, MoreVerticalIcon, SettingsIcon } from "lucide-react";
@@ -18,7 +19,14 @@ import Link from "next/link";
 
 import { ColorModeToggle } from "./ColorModeToggle";
 
-export function UserMenu({ showUserName }: { showUserName?: boolean }) {
+export function UserMenu({
+	showUserName,
+	compressed,
+}: {
+	showUserName?: boolean;
+	/** Square icon-rail trigger (e.g. collapsed sidebar) */
+	compressed?: boolean;
+}) {
 	const t = useTranslations();
 	const { user } = useSession();
 
@@ -40,26 +48,37 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 	}
 
 	const { name, email, image } = user;
+	const showExpandedRow = Boolean(showUserName) && !compressed;
 
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
 				<button
 					type="button"
-					className="gap-2 md:w-[100%+1rem] md:px-2 md:py-1.5 md:hover:bg-primary/5 flex w-full cursor-pointer items-center justify-between rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
+					className={cn(
+						"flex cursor-pointer items-center gap-2 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
+						compressed
+							? "size-8 shrink-0 justify-center p-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+							: "w-full justify-between md:w-[100%+1rem] md:px-2 md:py-1.5 md:hover:bg-primary/5",
+					)}
 					aria-label="User menu"
 				>
-					<span className="gap-2 flex items-center">
-						<UserAvatar name={name ?? ""} avatarUrl={image} />
-						{showUserName && (
-							<span className="leading-tight text-left">
-								<span className="font-medium text-sm">{name}</span>
-								<span className="text-xs block opacity-70">{email}</span>
-							</span>
+					<span
+						className={cn(
+							"flex items-center gap-2",
+							compressed && "justify-center",
 						)}
+					>
+						<UserAvatar name={name ?? ""} avatarUrl={image} />
+						{showExpandedRow ? (
+							<span className="text-left leading-tight">
+								<span className="font-medium text-sm">{name}</span>
+								<span className="block text-xs opacity-70">{email}</span>
+							</span>
+						) : null}
 					</span>
 
-					{showUserName && <MoreVerticalIcon className="size-4" />}
+					{showExpandedRow ? <MoreVerticalIcon className="size-4" /> : null}
 				</button>
 			</DropdownMenuTrigger>
 

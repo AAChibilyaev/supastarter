@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CurationsGridItem {
-	key:
-		| "pinned"
-		| "excluded"
-		| "promoted"
-		| "triggerKeywords"
-		| "schedule"
-		| "analytics";
+	key: "pinned" | "excluded" | "promoted" | "triggerKeywords" | "schedule" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -28,11 +28,21 @@ const getLocaleFromRequest = (request?: Request) => {
 	return (cookies[i18nConfig.localeCookieName] as Locale) ?? i18nConfig.defaultLocale;
 };
 
-const appUrl = getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3000);
+const appUrl = getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3010);
+
+const trustedOrigins = Array.from(
+	new Set([
+		appUrl,
+		"http://localhost:3000",
+		"http://localhost:3010",
+		"http://127.0.0.1:3000",
+		"http://127.0.0.1:3010",
+	]),
+);
 
 export const auth = betterAuth({
 	baseURL: appUrl,
-	trustedOrigins: [appUrl],
+	trustedOrigins,
 	database: prismaAdapter(db, {
 		provider: "postgresql",
 	}),
@@ -212,21 +222,21 @@ export const auth = betterAuth({
 	socialProviders: {
 		...(process.env.GOOGLE_CLIENT_ID?.trim() && process.env.GOOGLE_CLIENT_SECRET?.trim()
 			? {
-				google: {
-					clientId: process.env.GOOGLE_CLIENT_ID,
-					clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-					scope: ["email", "profile"],
-				},
-			}
+					google: {
+						clientId: process.env.GOOGLE_CLIENT_ID,
+						clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+						scope: ["email", "profile"],
+					},
+				}
 			: {}),
 		...(process.env.GITHUB_CLIENT_ID?.trim() && process.env.GITHUB_CLIENT_SECRET?.trim()
 			? {
-				github: {
-					clientId: process.env.GITHUB_CLIENT_ID,
-					clientSecret: process.env.GITHUB_CLIENT_SECRET,
-					scope: ["user:email"],
-				},
-			}
+					github: {
+						clientId: process.env.GITHUB_CLIENT_ID,
+						clientSecret: process.env.GITHUB_CLIENT_SECRET,
+						scope: ["user:email"],
+					},
+				}
 			: {}),
 	},
 	plugins: [
@@ -254,10 +264,7 @@ export const auth = betterAuth({
 				const locale = getLocaleFromRequest(request);
 				const existingUser = await getUserByEmail(email);
 
-				const url = new URL(
-					existingUser ? "/login" : "/signup",
-					getBaseUrl(process.env.NEXT_PUBLIC_SAAS_URL, 3000),
-				);
+				const url = new URL(existingUser ? "/login" : "/signup", appUrl);
 
 				url.searchParams.set("invitationId", id);
 				url.searchParams.set("email", email);

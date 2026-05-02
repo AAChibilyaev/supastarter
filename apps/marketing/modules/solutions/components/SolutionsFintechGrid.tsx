@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SolutionsFintechItem {
-	key:
-		| "tenantIsolation"
-		| "auditLog"
-		| "accessControls"
-		| "encryption"
-		| "gdpr"
-		| "performance";
+	key: "tenantIsolation" | "auditLog" | "accessControls" | "encryption" | "gdpr" | "performance";
 	icon: ComponentType<{ className?: string }>;
 }
 

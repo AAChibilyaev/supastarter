@@ -20,6 +20,8 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 	SidebarTrigger,
+	cn,
+	useSidebar,
 } from "@repo/ui";
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
@@ -61,6 +63,8 @@ export function AppSidebar() {
 	const t = useTranslations();
 	const pathname = usePathname();
 	const { user } = useSession();
+	const { state: sidebarState } = useSidebar();
+	const sidebarCollapsed = sidebarState === "collapsed";
 	const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
 
 	const basePath = activeOrganization ? `/${activeOrganization.slug}` : "";
@@ -222,16 +226,29 @@ export function AppSidebar() {
 
 	return (
 		<Sidebar collapsible="icon" variant="sidebar">
-			<SidebarHeader className="gap-3">
-				<div className="flex items-center justify-between">
-					<Link href="/" className="flex shrink-0 items-center">
+			<SidebarHeader className={cn("gap-3", sidebarCollapsed && "items-center")}>
+				<div
+					className={cn(
+						"flex w-full min-w-0 items-center gap-2",
+						sidebarCollapsed ? "justify-center" : "justify-between",
+					)}
+				>
+					<Link
+						href="/"
+						className={cn(
+							"flex shrink-0 items-center",
+							sidebarCollapsed && "hidden",
+						)}
+					>
 						<Logo withLabel={false} />
 					</Link>
-					<SidebarTrigger />
+					<SidebarTrigger className="shrink-0" />
 				</div>
-				<NotificationCenter className="shrink-0" />
+				<NotificationCenter
+					className={cn("shrink-0", sidebarCollapsed && "self-center")}
+				/>
 				{authConfig.organizations.enable && !authConfig.organizations.hideOrganization && (
-					<OrganzationSelect collapsed={false} />
+					<OrganzationSelect collapsed={sidebarCollapsed} />
 				)}
 			</SidebarHeader>
 			<SidebarContent>
@@ -292,8 +309,8 @@ export function AppSidebar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarFooter>
-				<UserMenu showUserName />
+			<SidebarFooter className={cn(sidebarCollapsed && "items-center")}>
+				<UserMenu compressed={sidebarCollapsed} showUserName={!sidebarCollapsed} />
 			</SidebarFooter>
 		</Sidebar>
 	);

@@ -46,11 +46,11 @@ OpenAPI-Spezifikation: `GET /api/v1/openapi.json`
 
 Auth-Bereiche für v1:
 
-| Präfix        | Bereich  | Zugriffsebene  |
-| ------------- | -------- | -------------- |
-| `aa_admin_*`  | `admin`  | Vollverwaltung |
-| `aa_write_*`  | `write`  | Ingest + Schreiben |
-| `aa_search_*` | `search` | Nur Suche      |
+| Präfix        | Bereich  | Zugriffsebene        |
+| ------------- | -------- | -------------------- |
+| `aa_admin_*`  | `admin`  | Vollverwaltung       |
+| `aa_write_*`  | `write`  | Ingest + Schreiben   |
+| `aa_search_*` | `search` | Nur Suche            |
 | `aa_scoped_*` | `scoped` | Eingeschränkte Suche |
 
 ## Anforderungsformat (öffentliche Suche)
@@ -106,10 +106,10 @@ auf typisierte Codes abgebildet, bevor die Antwort gesendet wird.
 
 ## SDK-Unterstützung
 
-| Umgebung          | Paket                                             |
-| ----------------- | ------------------------------------------------- |
-| Browser / Node.js | `@repo/search-client`                             |
+| Umgebung          | Paket                                                       |
+| ----------------- | ----------------------------------------------------------- |
+| Browser / Node.js | `@repo/search-client`                                       |
 | Storefront-Widget | `packages/widget` (automatisch installiert über `<script>`) |
-| KI-Agent (MCP)    | `packages/aacsearch-mcp`                          |
+| KI-Agent (MCP)    | `packages/aacsearch-mcp`                                    |
 
 Siehe [Browser-SDK](/docs/getting-started/browser-sdk) für die Client-SDK-Dokumentation.

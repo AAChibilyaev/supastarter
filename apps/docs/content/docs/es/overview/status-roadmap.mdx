@@ -12,42 +12,42 @@ Estas características existen en el código base y están listas para usar.
 
 ### Búsqueda principal
 
-| Característica                                    | Paquete / archivo                     |
-| ------------------------------------------------- | ------------------------------------- |
-| Cliente Typesense (solo lado del servidor)        | `packages/search/lib/client.ts`       |
-| Gestión del esquema de colección + versionado     | `packages/search/lib/collections.ts`  |
-| Buffer de ingestión con prioridad en base de datos | `packages/search/lib/buffer.ts`      |
-| searchDocuments / multiSearchDocuments            | `packages/search/lib/search.ts`       |
-| Reindexación con intercambio de alias sin tiempo de inactividad | `packages/search/lib/reindex.ts` |
-| Generación + hash de API keys                     | `packages/search/lib/keys.ts`         |
-| SDK del navegador                                 | `packages/search-client/src/index.ts` |
+| Característica                                                  | Paquete / archivo                     |
+| --------------------------------------------------------------- | ------------------------------------- |
+| Cliente Typesense (solo lado del servidor)                      | `packages/search/lib/client.ts`       |
+| Gestión del esquema de colección + versionado                   | `packages/search/lib/collections.ts`  |
+| Buffer de ingestión con prioridad en base de datos              | `packages/search/lib/buffer.ts`       |
+| searchDocuments / multiSearchDocuments                          | `packages/search/lib/search.ts`       |
+| Reindexación con intercambio de alias sin tiempo de inactividad | `packages/search/lib/reindex.ts`      |
+| Generación + hash de API keys                                   | `packages/search/lib/keys.ts`         |
+| SDK del navegador                                               | `packages/search-client/src/index.ts` |
 
 ### Autenticación y multi-tenencia
 
-| Característica                                         | Notas                                                    |
-| ------------------------------------------------------ | -------------------------------------------------------- |
-| Autenticación con ámbito de organización vía Better Auth | Las organizaciones son el workspace principal          |
-| API keys (hasheadas, con ámbito, restricción de origen) | Prefijos: `ss_search_*`, `ss_connector_*`, `ss_scoped_*` |
-| Tokens de búsqueda con ámbito (HMAC)                   | Sin estado, firmados sobre `BETTER_AUTH_SECRET`          |
-| Aplicación de cuota por plan                           | `packages/api/modules/entitlements/`                     |
-| Límite de velocidad por clave/IP                       | `packages/search/lib/keys.ts` + bucket de base de datos  |
+| Característica                                           | Notas                                                    |
+| -------------------------------------------------------- | -------------------------------------------------------- |
+| Autenticación con ámbito de organización vía Better Auth | Las organizaciones son el workspace principal            |
+| API keys (hasheadas, con ámbito, restricción de origen)  | Prefijos: `ss_search_*`, `ss_connector_*`, `ss_scoped_*` |
+| Tokens de búsqueda con ámbito (HMAC)                     | Sin estado, firmados sobre `BETTER_AUTH_SECRET`          |
+| Aplicación de cuota por plan                             | `packages/api/modules/entitlements/`                     |
+| Límite de velocidad por clave/IP                         | `packages/search/lib/keys.ts` + bucket de base de datos  |
 
 ### Widget y conector
 
-| Característica                        | Notas                                                                                      |
-| ------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Widget alojado                        | `packages/widget/` — Vanilla JS, Shadow DOM, 14 KB                                        |
-| API de conector                       | 7 endpoints: handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status |
-| CRUD de token de conector             | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`           |
-| Seguimiento de trabajos de sincronización (en memoria) | Se pierde al reiniciar — aceptable para MVP                             |
+| Característica                                         | Notas                                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Widget alojado                                         | `packages/widget/` — Vanilla JS, Shadow DOM, 14 KB                                         |
+| API de conector                                        | 7 endpoints: handshake, heartbeat, sync.full, sync.delta, delete, diagnostics, sync/status |
+| CRUD de token de conector                              | `searchRouter.{createConnectorToken, listConnectorTokens, revokeConnectorToken}`           |
+| Seguimiento de trabajos de sincronización (en memoria) | Se pierde al reiniciar — aceptable para MVP                                                |
 
 ### Controles de relevancia
 
-| Característica                        | Notas                                 |
-| ------------------------------------- | ------------------------------------- |
-| Sinónimos                             | `searchRouter.synonyms.{get,update}`  |
-| Curaciones                            | `searchRouter.curations.{get,update}` |
-| Gestión del esquema de colección      | `searchRouter.schema.{get,update}`    |
+| Característica                   | Notas                                 |
+| -------------------------------- | ------------------------------------- |
+| Sinónimos                        | `searchRouter.synonyms.{get,update}`  |
+| Curaciones                       | `searchRouter.curations.{get,update}` |
+| Gestión del esquema de colección | `searchRouter.schema.{get,update}`    |
 
 ### Módulo de conocimiento (R2.5)
 
@@ -61,16 +61,16 @@ RAG/GraphRAG sobre documentos. Superficie de producto separada de la búsqueda e
 
 Estas características están en desarrollo activo y pueden cambiar.
 
-| Característica                                                 | Estado                                                                  |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Medición v0.6 (recarga Tochka, wallet)                         | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/` |
-| Agregación de resumen de `recordSearchUsage`                   | Las filas crudas existen; tabla `UsageCounter` diferida                  |
-| Páginas de administración (auditoría, wallet, notificaciones, seguridad) | Confirmadas como stubs — contenido operativo pendiente         |
+| Característica                                                           | Estado                                                                  |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Medición v0.6 (recarga Tochka, wallet)                                   | `packages/billing-wallet/`, `packages/payments/provider/tochka-wallet/` |
+| Agregación de resumen de `recordSearchUsage`                             | Las filas crudas existen; tabla `UsageCounter` diferida                 |
+| Páginas de administración (auditoría, wallet, notificaciones, seguridad) | Confirmadas como stubs — contenido operativo pendiente                  |
 
 ## Esqueleto / sin rastrear
 
-| Característica    | Notas                                                        |
-| ----------------- | ------------------------------------------------------------ |
+| Característica    | Notas                                                                 |
+| ----------------- | --------------------------------------------------------------------- |
 | Módulo PrestaShop | `modules/prestashop/aacsearch/` — PHP, pista de confirmación separada |
 | Módulo Bitrix     | `modules/bitrix/aac.search/` — PHP, pista de confirmación separada    |
 
@@ -80,15 +80,15 @@ pero no se rastrean en el repositorio principal. Siguen el contrato de la API de
 
 ## Planificado
 
-| Característica                               | Objetivo                          |
-| -------------------------------------------- | --------------------------------- |
-| Inicio rápido autoalojado + Helm chart       | v1.0                              |
+| Característica                                | Objetivo                               |
+| --------------------------------------------- | -------------------------------------- |
+| Inicio rápido autoalojado + Helm chart        | v1.0                                   |
 | `Project` como entidad de primera clase en BD | v1.x (requiere descongelamiento de BD) |
-| Modelo BD `WidgetConfig`                     | v1.x (requiere descongelamiento de BD) |
-| Endpoint de captura de `AnalyticsEvent`      | v1.x                              |
-| Procedimiento `recentActivity`               | v1.x                              |
-| Sub-pestañas de Stopwords + Presets          | v1.x                              |
-| UI del Gestor de esquemas                    | v1.x                              |
+| Modelo BD `WidgetConfig`                      | v1.x (requiere descongelamiento de BD) |
+| Endpoint de captura de `AnalyticsEvent`       | v1.x                                   |
+| Procedimiento `recentActivity`                | v1.x                                   |
+| Sub-pestañas de Stopwords + Presets           | v1.x                                   |
+| UI del Gestor de esquemas                     | v1.x                                   |
 
 ## Fuera de alcance (v1)
 
@@ -106,13 +106,13 @@ Los siguientes están **explícitamente no planificados** para v1:
 
 ## Versiones de la hoja de ruta
 
-| Versión | Objetivo                                              | Estado               |
-| ------- | ----------------------------------------------------- | -------------------- |
-| R0      | Fundación — andamiaje supastarter + AACsearch         | ✅ Completado        |
-| R1      | Corte vertical — la búsqueda funciona de extremo a extremo sin CMS | ✅ Completado |
-| R2      | Alpha de conector — las tiendas reales comienzan a sincronizar | 🟡 Parcialmente lanzado |
-| R2.5    | Módulo de conocimiento (RAG/GraphRAG)                 | ✅ Completado        |
-| v0.5    | Rediseño del sitio de marketing en 5 idiomas          | ✅ Completado        |
-| v0.6    | Medición de unidades de búsqueda vinculada al proveedor de pago | 🟡 En desarrollo activo |
-| v0.7    | Sitio de documentación pública                        | 🟡 Aquí está usted  |
-| v1.0    | Inicio rápido autoalojado + Helm chart                | ⏳ Planificado       |
+| Versión | Objetivo                                                           | Estado                  |
+| ------- | ------------------------------------------------------------------ | ----------------------- |
+| R0      | Fundación — andamiaje supastarter + AACsearch                      | ✅ Completado           |
+| R1      | Corte vertical — la búsqueda funciona de extremo a extremo sin CMS | ✅ Completado           |
+| R2      | Alpha de conector — las tiendas reales comienzan a sincronizar     | 🟡 Parcialmente lanzado |
+| R2.5    | Módulo de conocimiento (RAG/GraphRAG)                              | ✅ Completado           |
+| v0.5    | Rediseño del sitio de marketing en 5 idiomas                       | ✅ Completado           |
+| v0.6    | Medición de unidades de búsqueda vinculada al proveedor de pago    | 🟡 En desarrollo activo |
+| v0.7    | Sitio de documentación pública                                     | 🟡 Aquí está usted      |
+| v1.0    | Inicio rápido autoalojado + Helm chart                             | ⏳ Planificado          |

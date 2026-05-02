@@ -46,12 +46,12 @@ Especificación OpenAPI: `GET /api/v1/openapi.json`
 
 Ámbitos de autenticación para v1:
 
-| Prefijo       | Ámbito   | Nivel de acceso     |
-| ------------- | -------- | ------------------- |
-| `aa_admin_*`  | `admin`  | Gestión completa    |
+| Prefijo       | Ámbito   | Nivel de acceso       |
+| ------------- | -------- | --------------------- |
+| `aa_admin_*`  | `admin`  | Gestión completa      |
 | `aa_write_*`  | `write`  | Ingestión + escritura |
-| `aa_search_*` | `search` | Solo búsqueda       |
-| `aa_scoped_*` | `scoped` | Búsqueda reducida   |
+| `aa_search_*` | `search` | Solo búsqueda         |
+| `aa_scoped_*` | `scoped` | Búsqueda reducida     |
 
 ## Formato de solicitud (búsqueda pública)
 
@@ -106,10 +106,10 @@ códigos tipados antes de enviar la respuesta.
 
 ## Soporte de SDK
 
-| Entorno           | Paquete                                           |
-| ----------------- | ------------------------------------------------- |
-| Navegador / Node.js | `@repo/search-client`                           |
-| Widget de tienda  | `packages/widget` (auto-instalado vía `<script>`) |
-| Agente de IA (MCP) | `packages/aacsearch-mcp`                        |
+| Entorno             | Paquete                                           |
+| ------------------- | ------------------------------------------------- |
+| Navegador / Node.js | `@repo/search-client`                             |
+| Widget de tienda    | `packages/widget` (auto-instalado vía `<script>`) |
+| Agente de IA (MCP)  | `packages/aacsearch-mcp`                          |
 
 Consulte [SDK del navegador](/docs/getting-started/browser-sdk) para la documentación del SDK cliente.

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface McpItem {
-	key:
-		| "tools"
-		| "claude"
-		| "cursor"
-		| "transport"
-		| "authentication"
-		| "openSource";
+	key: "tools" | "claude" | "cursor" | "transport" | "authentication" | "openSource";
 	icon: ComponentType<{ className?: string }>;
 }
 

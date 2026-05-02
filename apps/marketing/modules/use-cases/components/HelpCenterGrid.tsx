@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface HelpCenterItem {
-	key:
-		| "articleSearch"
-		| "knowledgeRag"
-		| "zeroResults"
-		| "multilingual"
-		| "widget"
-		| "analytics";
+	key: "articleSearch" | "knowledgeRag" | "zeroResults" | "multilingual" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

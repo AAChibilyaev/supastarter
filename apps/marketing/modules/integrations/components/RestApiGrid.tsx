@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface RestApiItem {
-	key:
-		| "endpoints"
-		| "openApi"
-		| "authentication"
-		| "webhooks"
-		| "rateLimit"
-		| "versioning";
+	key: "endpoints" | "openApi" | "authentication" | "webhooks" | "rateLimit" | "versioning";
 	icon: ComponentType<{ className?: string }>;
 }
 

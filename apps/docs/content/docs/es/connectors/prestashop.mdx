@@ -49,17 +49,17 @@ Copie el directorio `modules/aacsearch/` en el directorio `modules/` de su Prest
 
 Abra la página de configuración del módulo (**Módulos → AACsearch → Configurar**) y complete:
 
-| Campo                 | Descripción                                                            |
-| --------------------- | ---------------------------------------------------------------------- |
-| URL de la API de AACsearch | URL base de su instancia de AACsearch (p. ej. `https://app.aacsearch.com`) |
-| ID del proyecto       | Su ID de organización del panel de AACsearch                           |
-| Token de conector     | El token `ss_connector_*` creado en Panel → Conectores                 |
-| Sincronización habilitada | Activar sincronizaciones delta automáticas en eventos de producto  |
-| Widget habilitado     | Inyectar el widget alojado en la tienda                                |
-| Idioma                | Idioma predeterminado para los resultados de búsqueda (p. ej. `es`, `en`) |
-| Moneda predeterminada | Código de moneda usado en los campos de precio                         |
-| Tamaño de lote        | Productos por solicitud de sincronización (predeterminado: 200, máx.: 1000) |
-| Modo de depuración    | Escribir registros detallados en `/var/logs/aacsearch.log`             |
+| Campo                      | Descripción                                                                 |
+| -------------------------- | --------------------------------------------------------------------------- |
+| URL de la API de AACsearch | URL base de su instancia de AACsearch (p. ej. `https://app.aacsearch.com`)  |
+| ID del proyecto            | Su ID de organización del panel de AACsearch                                |
+| Token de conector          | El token `ss_connector_*` creado en Panel → Conectores                      |
+| Sincronización habilitada  | Activar sincronizaciones delta automáticas en eventos de producto           |
+| Widget habilitado          | Inyectar el widget alojado en la tienda                                     |
+| Idioma                     | Idioma predeterminado para los resultados de búsqueda (p. ej. `es`, `en`)   |
+| Moneda predeterminada      | Código de moneda usado en los campos de precio                              |
+| Tamaño de lote             | Productos por solicitud de sincronización (predeterminado: 200, máx.: 1000) |
+| Modo de depuración         | Escribir registros detallados en `/var/logs/aacsearch.log`                  |
 
 ### 3. Probar la conexión
 
@@ -101,12 +101,12 @@ El exportador mapea los campos de producto de PrestaShop a la siguiente estructu
 
 El módulo registra estos hooks de PrestaShop para sincronizaciones delta automáticas:
 
-| Hook                             | Disparador                                                        |
-| -------------------------------- | ----------------------------------------------------------------- |
-| `displayHeader`                  | Inyecta la etiqueta `<script>` del widget en el `<head>` de la tienda |
-| `actionProductUpdate`            | Se activa después de guardar un producto — activa sincronización delta |
+| Hook                             | Disparador                                                                     |
+| -------------------------------- | ------------------------------------------------------------------------------ |
+| `displayHeader`                  | Inyecta la etiqueta `<script>` del widget en el `<head>` de la tienda          |
+| `actionProductUpdate`            | Se activa después de guardar un producto — activa sincronización delta         |
 | `actionObjectProductDeleteAfter` | Se activa después de eliminar un producto — envía una solicitud de eliminación |
-| `actionUpdateQuantity`           | Cambio de stock — activa sincronización delta                     |
+| `actionUpdateQuantity`           | Cambio de stock — activa sincronización delta                                  |
 
 ## Inyección del widget
 

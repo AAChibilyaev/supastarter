@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface FaqGridItem {
-	key:
-		| "searchUnit"
-		| "pricing"
-		| "scaling"
-		| "dataResidency"
-		| "migration"
-		| "selfHost";
+	key: "searchUnit" | "pricing" | "scaling" | "dataResidency" | "migration" | "selfHost";
 	icon: ComponentType<{ className?: string }>;
 }
 

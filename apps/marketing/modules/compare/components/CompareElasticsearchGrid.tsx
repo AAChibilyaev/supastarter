@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareElasticsearchItem {
-	key:
-		| "complexity"
-		| "latency"
-		| "useCase"
-		| "cost"
-		| "schema"
-		| "verdict";
+	key: "complexity" | "latency" | "useCase" | "cost" | "schema" | "verdict";
 	icon: ComponentType<{ className?: string }>;
 }
 

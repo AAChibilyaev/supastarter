@@ -52,17 +52,17 @@ Copiez le répertoire `modules/bitrix/aac.search/` vers `/local/modules/aac.sear
 
 Ouvrez **Admin → aac.search → Paramètres** et remplissez :
 
-| Champ              | Description                                                               |
-| ------------------ | ------------------------------------------------------------------------- |
-| URL API AACsearch  | URL de base de votre instance AACsearch (par ex. `https://app.aacsearch.com`) |
-| ID du projet       | Votre ID d'organisation depuis le tableau de bord AACsearch               |
-| Token de connecteur | Le token `ss_connector_*` créé dans Tableau de bord → Connecteurs        |
-| IBlock / catalogue | Sélectionnez le/les iblock(s) contenant votre catalogue produits          |
-| Type de prix       | Quel type de prix Bitrix exporter                                         |
-| Devise             | Code de devise pour les champs de prix                                    |
-| Intervalle de synchronisation | Minutes entre les exécutions d'agents de synchronisation en arrière-plan |
-| Mode widget        | `auto-inject`, `component` ou `manual` (voir la section Widget ci-dessous) |
-| Mode débogage      | Activer les logs détaillés                                                |
+| Champ                         | Description                                                                   |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| URL API AACsearch             | URL de base de votre instance AACsearch (par ex. `https://app.aacsearch.com`) |
+| ID du projet                  | Votre ID d'organisation depuis le tableau de bord AACsearch                   |
+| Token de connecteur           | Le token `ss_connector_*` créé dans Tableau de bord → Connecteurs             |
+| IBlock / catalogue            | Sélectionnez le/les iblock(s) contenant votre catalogue produits              |
+| Type de prix                  | Quel type de prix Bitrix exporter                                             |
+| Devise                        | Code de devise pour les champs de prix                                        |
+| Intervalle de synchronisation | Minutes entre les exécutions d'agents de synchronisation en arrière-plan      |
+| Mode widget                   | `auto-inject`, `component` ou `manual` (voir la section Widget ci-dessous)    |
+| Mode débogage                 | Activer les logs détaillés                                                    |
 
 ### 3. Tester la connexion
 
@@ -107,13 +107,13 @@ L'`ProductExporter` mappe les champs iblock Bitrix vers la structure de document
 
 Le module enregistre des gestionnaires d'événements iblock pour les synchronisations delta automatiques :
 
-| Événement                    | Déclencheur                                        |
-| ---------------------------- | -------------------------------------------------- |
-| `OnAfterIBlockElementAdd`    | Nouveau produit — déclenche la synchronisation delta |
+| Événement                    | Déclencheur                                             |
+| ---------------------------- | ------------------------------------------------------- |
+| `OnAfterIBlockElementAdd`    | Nouveau produit — déclenche la synchronisation delta    |
 | `OnAfterIBlockElementUpdate` | Produit mis à jour — déclenche la synchronisation delta |
-| `OnAfterIBlockElementDelete` | Produit supprimé — envoie une requête de suppression |
-| `OnPriceUpdate`              | Prix modifié (nécessite le module catalogue Bitrix) |
-| `OnIBlockSectionUpdate`      | Section/catégorie mise à jour                      |
+| `OnAfterIBlockElementDelete` | Produit supprimé — envoie une requête de suppression    |
+| `OnPriceUpdate`              | Prix modifié (nécessite le module catalogue Bitrix)     |
+| `OnIBlockSectionUpdate`      | Section/catégorie mise à jour                           |
 
 ## Agent en arrière-plan
 

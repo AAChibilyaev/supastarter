@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface TrustGridItem {
-	key:
-		| "soc2"
-		| "gdpr"
-		| "encryption"
-		| "dataResidency"
-		| "auditLog"
-		| "disclosure";
+	key: "soc2" | "gdpr" | "encryption" | "dataResidency" | "auditLog" | "disclosure";
 	icon: ComponentType<{ className?: string }>;
 }
 

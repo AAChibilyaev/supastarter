@@ -17,10 +17,10 @@ Das Token wird gegen gehashte Datensätze in `SearchApiKey` abgeglichen, wo `sco
 
 **Fehlerantworten bei ungültiger Auth:**
 
-| Bedingung                  | Status | Body                                    |
-| -------------------------- | ------ | --------------------------------------- |
-| Kein `Authorization`-Header | 401   | `{ "error": "missing_bearer_token" }`   |
-| Token nicht gefunden oder widerrufen | 403 | `{ "error": "invalid_or_revoked_key" }` |
+| Bedingung                            | Status | Body                                    |
+| ------------------------------------ | ------ | --------------------------------------- |
+| Kein `Authorization`-Header          | 401    | `{ "error": "missing_bearer_token" }`   |
+| Token nicht gefunden oder widerrufen | 403    | `{ "error": "invalid_or_revoked_key" }` |
 
 ## Endpunkte
 
@@ -229,7 +229,11 @@ Den Status eines Synchronisierungsjobs anhand seiner ID abfragen.
 	"failuresCount": 0,
 	"events": [
 		{ "timestamp": "...", "message": "Vollsynchronisierung gestartet", "level": "info" },
-		{ "timestamp": "...", "message": "Synchronisierung abgeschlossen: 500 Elemente verarbeitet", "level": "info" }
+		{
+			"timestamp": "...",
+			"message": "Synchronisierung abgeschlossen: 500 Elemente verarbeitet",
+			"level": "info"
+		}
 	]
 }
 ```
@@ -266,17 +270,17 @@ Ein typisches CMS-Modul folgt dieser Reihenfolge:
 
 ## Fehlercode-Referenz
 
-| Code                     | Bedeutung                                                           |
-| ------------------------ | ------------------------------------------------------------------- |
-| `missing_bearer_token`   | Kein `Authorization: Bearer ...`-Header                             |
-| `invalid_or_revoked_key` | Token nicht gefunden, falscher Bereich oder widerrufen              |
-| `invalid_json`           | Anfrage-Body konnte nicht geparst werden                            |
+| Code                     | Bedeutung                                                                |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `missing_bearer_token`   | Kein `Authorization: Bearer ...`-Header                                  |
+| `invalid_or_revoked_key` | Token nicht gefunden, falscher Bereich oder widerrufen                   |
+| `invalid_json`           | Anfrage-Body konnte nicht geparst werden                                 |
 | `invalid_input`          | Zod-Validierung fehlgeschlagen; `details`-Array hat Fehler auf Feldebene |
-| `project_not_found`      | `:projectId` stimmt nicht mit der Organisation des Tokens überein   |
-| `unsupported_connector`  | `platform`-Feld ist nicht `prestashop` oder `bitrix`                |
-| `sync_failed`            | Einreihung in `SearchIngestBuffer` fehlgeschlagen — erneut versuchen |
-| `delete_failed`          | Dokumentlöschung-Einreihung fehlgeschlagen — erneut versuchen       |
-| `job_not_found`          | Job-ID nicht gefunden (kann bei Neustart verloren gegangen sein)    |
+| `project_not_found`      | `:projectId` stimmt nicht mit der Organisation des Tokens überein        |
+| `unsupported_connector`  | `platform`-Feld ist nicht `prestashop` oder `bitrix`                     |
+| `sync_failed`            | Einreihung in `SearchIngestBuffer` fehlgeschlagen — erneut versuchen     |
+| `delete_failed`          | Dokumentlöschung-Einreihung fehlgeschlagen — erneut versuchen            |
+| `job_not_found`          | Job-ID nicht gefunden (kann bei Neustart verloren gegangen sein)         |
 
 ## Verwandte Seiten
 

@@ -7,14 +7,14 @@ Das gehostete AACsearch-Widget ist eine in sich geschlossene Such-UI, die Sie mi
 
 ## Technische Übersicht
 
-| Eigenschaft     | Wert                                                         |
-| --------------- | ------------------------------------------------------------ |
-| Implementierung | Vanilla JS, handgefertigt (kein InstantSearch.js, kein React) |
-| Stil-Isolierung | Shadow DOM — Widget-Stile können nicht in Ihr Shop-CSS austreten |
-| Bundle-Größe    | ~14 KB minifiziert (IIFE + ESM Dual-Output)                 |
-| Bereitgestellt unter | `GET /api/widget/widget.js` (CORS-erlaubt, gecacht)    |
-| Auth            | Erfordert einen `ss_search_*`-API-Schlüssel in `data-api-key` |
-| Locales         | `en`, `de`, `es`, `fr`, `ru`                                 |
+| Eigenschaft          | Wert                                                             |
+| -------------------- | ---------------------------------------------------------------- |
+| Implementierung      | Vanilla JS, handgefertigt (kein InstantSearch.js, kein React)    |
+| Stil-Isolierung      | Shadow DOM — Widget-Stile können nicht in Ihr Shop-CSS austreten |
+| Bundle-Größe         | ~14 KB minifiziert (IIFE + ESM Dual-Output)                      |
+| Bereitgestellt unter | `GET /api/widget/widget.js` (CORS-erlaubt, gecacht)              |
+| Auth                 | Erfordert einen `ss_search_*`-API-Schlüssel in `data-api-key`    |
+| Locales              | `en`, `de`, `es`, `fr`, `ru`                                     |
 
 Das Widget legt niemals einen Typesense-Admin-Schlüssel offen. Es kommuniziert nur über den öffentlichen Suchendpunkt mit dem von Ihnen bereitgestellten eingeschränkten `ss_search_*`-Schlüssel.
 
@@ -45,17 +45,17 @@ Das Widget initialisiert sich automatisch, wenn das Skript geladen wird. Es ist 
 
 Alle Konfigurationen erfolgen über `data-*`-Attribute am `<script>`-Tag.
 
-| Attribut           | Erforderlich | Standard    | Beschreibung                                     |
-| ------------------ | ------------ | ----------- | ------------------------------------------------ |
-| `data-base-url`    | Ja           | —           | Basis-URL Ihrer AACsearch-Instanz                |
-| `data-api-key`     | Ja           | —           | Ein `ss_search_*`-Schlüssel (nur Such-Bereich)   |
-| `data-index-slug`  | Ja           | —           | Slug des abzufragenden Suchindex                 |
-| `data-container`   | Ja           | —           | CSS-Selektor für das Container-Element           |
-| `data-locale`      | Nein         | `"en"`      | UI-Locale: `en`, `de`, `es`, `fr` oder `ru`     |
-| `data-theme`       | Nein         | `"auto"`    | Farbthema: `"light"`, `"dark"` oder `"auto"`     |
-| `data-mode`        | Nein         | `"inline"`  | Anzeigemodus: `"inline"` oder `"modal"`          |
-| `data-show-prices` | Nein         | `"true"`    | Produktpreise in Ergebnissen anzeigen            |
-| `data-show-images` | Nein         | `"true"`    | Produktbilder in Ergebnissen anzeigen            |
+| Attribut           | Erforderlich | Standard   | Beschreibung                                   |
+| ------------------ | ------------ | ---------- | ---------------------------------------------- |
+| `data-base-url`    | Ja           | —          | Basis-URL Ihrer AACsearch-Instanz              |
+| `data-api-key`     | Ja           | —          | Ein `ss_search_*`-Schlüssel (nur Such-Bereich) |
+| `data-index-slug`  | Ja           | —          | Slug des abzufragenden Suchindex               |
+| `data-container`   | Ja           | —          | CSS-Selektor für das Container-Element         |
+| `data-locale`      | Nein         | `"en"`     | UI-Locale: `en`, `de`, `es`, `fr` oder `ru`    |
+| `data-theme`       | Nein         | `"auto"`   | Farbthema: `"light"`, `"dark"` oder `"auto"`   |
+| `data-mode`        | Nein         | `"inline"` | Anzeigemodus: `"inline"` oder `"modal"`        |
+| `data-show-prices` | Nein         | `"true"`   | Produktpreise in Ergebnissen anzeigen          |
+| `data-show-images` | Nein         | `"true"`   | Produktbilder in Ergebnissen anzeigen          |
 
 ### Modus: inline vs. modal
 
@@ -79,13 +79,13 @@ Wenn Sie den Schlüssel auf bestimmte Ursprünge beschränken (`allowedOrigins`)
 
 Das Widget verarbeitet diese Zustände automatisch:
 
-| Zustand              | Was der Benutzer sieht                                        |
-| -------------------- | ------------------------------------------------------------- |
-| Inaktiv (keine Anfrage) | Platzhaltertext-Aufforderung                               |
-| Wird geladen         | „Wird gesucht..."-Spinner                                    |
-| Ergebnisse           | Produktraster mit Facetten, Sortieroptionen, Seitenumbruch   |
-| Keine Ergebnisse     | Leerer Zustand mit Vorschlag, einen anderen Begriff zu versuchen |
-| Fehler               | Degradierter Zustand mit noch funktionierender Sucheingabe   |
+| Zustand                 | Was der Benutzer sieht                                           |
+| ----------------------- | ---------------------------------------------------------------- |
+| Inaktiv (keine Anfrage) | Platzhaltertext-Aufforderung                                     |
+| Wird geladen            | „Wird gesucht..."-Spinner                                        |
+| Ergebnisse              | Produktraster mit Facetten, Sortieroptionen, Seitenumbruch       |
+| Keine Ergebnisse        | Leerer Zustand mit Vorschlag, einen anderen Begriff zu versuchen |
+| Fehler                  | Degradierter Zustand mit noch funktionierender Sucheingabe       |
 
 ## Unterstützte Sprachen
 

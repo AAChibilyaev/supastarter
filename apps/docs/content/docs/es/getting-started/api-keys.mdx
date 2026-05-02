@@ -8,11 +8,11 @@ Todas las claves se almacenan como hashes bcrypt — el texto plano se muestra *
 
 ## Tipos de claves
 
-| Tipo              | Prefijo          | Ámbitos                   | Utilizada por                            |
-| ----------------- | ---------------- | ------------------------- | ---------------------------------------- |
-| Clave de búsqueda | `ss_search_*`    | `search`                  | SDK del navegador, widget, llamadas directas a la API |
-| Clave de conector | `ss_connector_*` | `connector_write`         | Módulos CMS (PrestaShop, Bitrix)         |
-| Token con ámbito  | `ss_scoped_*`    | Reducido desde clave de búsqueda | Delegación de token por usuario, por filtro |
+| Tipo              | Prefijo          | Ámbitos                          | Utilizada por                                         |
+| ----------------- | ---------------- | -------------------------------- | ----------------------------------------------------- |
+| Clave de búsqueda | `ss_search_*`    | `search`                         | SDK del navegador, widget, llamadas directas a la API |
+| Clave de conector | `ss_connector_*` | `connector_write`                | Módulos CMS (PrestaShop, Bitrix)                      |
+| Token con ámbito  | `ss_scoped_*`    | Reducido desde clave de búsqueda | Delegación de token por usuario, por filtro           |
 
 ## Generar una clave de búsqueda
 

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SaasItem {
-	key:
-		| "tenantIsolation"
-		| "scopedTokens"
-		| "multiIndex"
-		| "quota"
-		| "orpc"
-		| "reindex";
+	key: "tenantIsolation" | "scopedTokens" | "multiIndex" | "quota" | "orpc" | "reindex";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -2,10 +2,11 @@ import { config } from "@config";
 import { cn, Toaster } from "@repo/ui";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
+import { ThemeProvider } from "@teispace/next-themes";
+import { getTheme } from "@teispace/next-themes/server";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { ThemeProvider } from "next-themes";
 import { Figtree } from "next/font/google";
 
 import "./globals.css";
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: PropsWithChildren) {
 	const locale = await getLocale();
 	const messages = await getMessages();
+	const initialTheme = await getTheme();
 
 	return (
 		<html lang={locale} suppressHydrationWarning className={sansFont.variable}>
@@ -38,9 +40,10 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 					<NextIntlClientProvider messages={messages}>
 						<ThemeProvider
 							attribute="class"
+							defaultTheme={config.defaultTheme}
 							disableTransitionOnChange
 							enableSystem
-							defaultTheme={config.defaultTheme}
+							initialTheme={initialTheme ?? undefined}
 							themes={Array.from(config.enabledThemes)}
 						>
 							<ApiClientProvider>

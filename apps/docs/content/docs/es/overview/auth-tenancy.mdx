@@ -12,17 +12,17 @@ La autenticación es proporcionada por [Better Auth](https://better-auth.com) co
 
 Características habilitadas:
 
-| Característica             | Notas                                 |
-| -------------------------- | ------------------------------------- |
-| Correo electrónico + contraseña | Flujo de inicio de sesión estándar |
-| Magic links                | Inicio de sesión sin contraseña por correo electrónico |
-| Passkeys                   | WebAuthn                              |
-| 2FA (TOTP)                 | Contraseñas de un solo uso basadas en tiempo |
-| OAuth (Google, GitHub)     | Inicio de sesión social               |
-| Organizaciones             | Workspaces con membresía basada en roles |
-| Organizaciones solo por invitación | Opcional; configurable         |
-| Panel de administración    | Gestión interna de usuarios/organizaciones |
-| Suplantación de sesión     | Para soporte/depuración               |
+| Característica                     | Notas                                                  |
+| ---------------------------------- | ------------------------------------------------------ |
+| Correo electrónico + contraseña    | Flujo de inicio de sesión estándar                     |
+| Magic links                        | Inicio de sesión sin contraseña por correo electrónico |
+| Passkeys                           | WebAuthn                                               |
+| 2FA (TOTP)                         | Contraseñas de un solo uso basadas en tiempo           |
+| OAuth (Google, GitHub)             | Inicio de sesión social                                |
+| Organizaciones                     | Workspaces con membresía basada en roles               |
+| Organizaciones solo por invitación | Opcional; configurable                                 |
+| Panel de administración            | Gestión interna de usuarios/organizaciones             |
+| Suplantación de sesión             | Para soporte/depuración                                |
 
 ## Las organizaciones como workspaces
 
@@ -43,11 +43,11 @@ Usuario → Member(rol) → Organización
 
 Los procedimientos oRPC se llaman como uno de tres tipos:
 
-| Tipo de procedimiento  | Contexto disponible               | Usado para                              |
-| ---------------------- | --------------------------------- | --------------------------------------- |
-| `publicProcedure`      | No se requiere sesión             | Manejador de búsqueda pública, verificación de salud |
-| `protectedProcedure`   | `context.user`, `context.session` | Operaciones autenticadas del panel      |
-| `adminProcedure`       | `context.user` + verificación de rol de administrador | Operaciones solo de administrador |
+| Tipo de procedimiento | Contexto disponible                                   | Usado para                                           |
+| --------------------- | ----------------------------------------------------- | ---------------------------------------------------- |
+| `publicProcedure`     | No se requiere sesión                                 | Manejador de búsqueda pública, verificación de salud |
+| `protectedProcedure`  | `context.user`, `context.session`                     | Operaciones autenticadas del panel                   |
+| `adminProcedure`      | `context.user` + verificación de rol de administrador | Operaciones solo de administrador                    |
 
 Acceso a la sesión en un componente de servidor:
 
@@ -95,11 +95,11 @@ Las API keys son el mecanismo de autenticación principal para los llamadores ex
 
 ### Tipos de claves y prefijos
 
-| Prefijo          | Ámbito                       | Usado por                           |
-| ---------------- | ---------------------------- | ----------------------------------- |
+| Prefijo          | Ámbito                       | Usado por                                |
+| ---------------- | ---------------------------- | ---------------------------------------- |
 | `ss_search_*`    | `search`                     | SDK del navegador, widget — solo lectura |
 | `ss_connector_*` | `connector_write`            | Módulos CMS — escritura + sincronización |
-| `ss_scoped_*`    | Reducido desde `ss_search_*` | Tokens por usuario, por filtro      |
+| `ss_scoped_*`    | Reducido desde `ss_search_*` | Tokens por usuario, por filtro           |
 
 ### Garantías de seguridad
 
@@ -149,10 +149,10 @@ Consulte [Planes y límites](/docs/overview/plans-and-limits) para la política 
 
 ## Acceso basado en roles dentro de las organizaciones
 
-| Rol      | Capacidades                                          |
-| -------- | ---------------------------------------------------- |
+| Rol      | Capacidades                                                           |
+| -------- | --------------------------------------------------------------------- |
 | `owner`  | Acceso completo, puede transferir organización, gestionar facturación |
-| `admin`  | Gestionar índices, claves, miembros, configuración   |
-| `member` | Ver panel, ejecutar búsquedas en vista previa        |
+| `admin`  | Gestionar índices, claves, miembros, configuración                    |
+| `member` | Ver panel, ejecutar búsquedas en vista previa                         |
 
 Las verificaciones de roles en los procedimientos oRPC usan el objeto `context.session` proporcionado por Better Auth.

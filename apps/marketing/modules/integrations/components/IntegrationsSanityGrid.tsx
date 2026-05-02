@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface IntegrationsSanityGridItem {
-	key:
-		| "plugin"
-		| "schemaSync"
-		| "webhook"
-		| "groq"
-		| "widget"
-		| "analytics";
+	key: "plugin" | "schemaSync" | "webhook" | "groq" | "widget" | "analytics";
 	icon: ComponentType<{ className?: string }>;
 }
 

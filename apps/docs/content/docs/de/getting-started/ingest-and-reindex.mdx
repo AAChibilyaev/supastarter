@@ -135,13 +135,13 @@ const job = await orpc.search.reindex.call({
 
 ### Wann ein Reindex erforderlich ist
 
-| Szenario                          | Aktion                                         |
-| --------------------------------- | ---------------------------------------------- |
-| Neues Facettenfeld hinzugefügt    | Reindex erforderlich                           |
-| Feldtyp geändert                  | Reindex erforderlich                           |
-| Neues durchsuchbares Feld hinzugefügt | Reindex erforderlich                       |
-| Nur Dokumentinhalt aktualisiert   | Kein Reindex nötig – Dokument upserten         |
-| Synonymregeln geändert            | Kein Reindex nötig                             |
+| Szenario                              | Aktion                                 |
+| ------------------------------------- | -------------------------------------- |
+| Neues Facettenfeld hinzugefügt        | Reindex erforderlich                   |
+| Feldtyp geändert                      | Reindex erforderlich                   |
+| Neues durchsuchbares Feld hinzugefügt | Reindex erforderlich                   |
+| Nur Dokumentinhalt aktualisiert       | Kein Reindex nötig – Dokument upserten |
+| Synonymregeln geändert                | Kein Reindex nötig                     |
 
 ### Reindex und Kontingent
 

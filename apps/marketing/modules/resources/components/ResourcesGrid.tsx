@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface ResourcesGridItem {
-	key:
-		| "docs"
-		| "blog"
-		| "changelog"
-		| "tutorials"
-		| "community"
-		| "support";
+	key: "docs" | "blog" | "changelog" | "tutorials" | "community" | "support";
 	icon: ComponentType<{ className?: string }>;
 }
 

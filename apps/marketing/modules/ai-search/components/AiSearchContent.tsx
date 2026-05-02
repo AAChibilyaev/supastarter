@@ -90,7 +90,7 @@ export function AiSearchContent() {
 							<div
 								key={key}
 								className={cn(
-									"group rounded-xl border border-border/60 bg-card p-6",
+									"group p-6 rounded-xl border border-border/60 bg-card",
 									"transition-colors hover:border-primary/30 hover:bg-accent/5",
 								)}
 							>
@@ -120,7 +120,10 @@ export function AiSearchContent() {
 
 					<div className="mt-20 lg:grid-cols-4 gap-0 grid grid-cols-1">
 						{howItWorksSteps.map((step, i) => (
-							<div key={step} className="relative flex flex-col items-center text-center">
+							<div
+								key={step}
+								className="relative flex flex-col items-center text-center"
+							>
 								{/* Timeline connectors */}
 								<div className="mb-6 relative flex w-full items-center justify-center">
 									{/* Left connector (hidden on first) */}
@@ -134,7 +137,9 @@ export function AiSearchContent() {
 
 									{/* Number circle */}
 									<div className="size-12 shadow-sm z-10 flex items-center justify-center rounded-full border-2 border-primary/30 bg-background">
-										<span className="font-semibold text-sm text-primary">{i + 1}</span>
+										<span className="font-semibold text-sm text-primary">
+											{i + 1}
+										</span>
 									</div>
 
 									{/* Right connector (hidden on last) */}

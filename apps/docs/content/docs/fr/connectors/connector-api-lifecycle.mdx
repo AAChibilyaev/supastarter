@@ -17,10 +17,10 @@ Le token est comparé aux enregistrements hachés dans `SearchApiKey` où `scope
 
 **Réponses d'erreur pour une authentification invalide :**
 
-| Condition                    | Statut | Corps                                       |
-| ---------------------------- | ------ | ------------------------------------------- |
-| Pas d'en-tête `Authorization` | 401   | `{ "error": "missing_bearer_token" }`       |
-| Token non trouvé ou révoqué  | 403    | `{ "error": "invalid_or_revoked_key" }`     |
+| Condition                     | Statut | Corps                                   |
+| ----------------------------- | ------ | --------------------------------------- |
+| Pas d'en-tête `Authorization` | 401    | `{ "error": "missing_bearer_token" }`   |
+| Token non trouvé ou révoqué   | 403    | `{ "error": "invalid_or_revoked_key" }` |
 
 ## Points de terminaison
 
@@ -266,17 +266,17 @@ Un module CMS typique suit cette séquence :
 
 ## Référence des codes d'erreur
 
-| Code                     | Signification                                                         |
-| ------------------------ | --------------------------------------------------------------------- |
-| `missing_bearer_token`   | Pas d'en-tête `Authorization: Bearer ...`                             |
-| `invalid_or_revoked_key` | Token non trouvé, mauvaise portée ou révoqué                          |
-| `invalid_json`           | Le corps de la requête n'a pas pu être analysé                        |
+| Code                     | Signification                                                                |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| `missing_bearer_token`   | Pas d'en-tête `Authorization: Bearer ...`                                    |
+| `invalid_or_revoked_key` | Token non trouvé, mauvaise portée ou révoqué                                 |
+| `invalid_json`           | Le corps de la requête n'a pas pu être analysé                               |
 | `invalid_input`          | Validation Zod échouée ; le tableau `details` contient les erreurs par champ |
-| `project_not_found`      | `:projectId` ne correspond pas à l'organisation du token              |
-| `unsupported_connector`  | Le champ `platform` n'est pas `prestashop` ou `bitrix`                |
-| `sync_failed`            | La mise en file d'attente dans `SearchIngestBuffer` a échoué — réessayez |
-| `delete_failed`          | La mise en file d'attente de suppression du document a échoué — réessayez |
-| `job_not_found`          | ID de job non trouvé (peut avoir été perdu au redémarrage)            |
+| `project_not_found`      | `:projectId` ne correspond pas à l'organisation du token                     |
+| `unsupported_connector`  | Le champ `platform` n'est pas `prestashop` ou `bitrix`                       |
+| `sync_failed`            | La mise en file d'attente dans `SearchIngestBuffer` a échoué — réessayez     |
+| `delete_failed`          | La mise en file d'attente de suppression du document a échoué — réessayez    |
+| `job_not_found`          | ID de job non trouvé (peut avoir été perdu au redémarrage)                   |
 
 ## Pages associées
 

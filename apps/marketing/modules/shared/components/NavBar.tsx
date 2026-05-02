@@ -127,7 +127,10 @@ export function NavBar() {
 					)}
 				>
 					<div className="flex flex-1 justify-start">
-						<LocaleLink href="/" className="block hover:no-underline active:no-underline">
+						<LocaleLink
+							href="/"
+							className="block hover:no-underline active:no-underline"
+						>
 							<Logo />
 						</LocaleLink>
 					</div>
@@ -138,11 +141,11 @@ export function NavBar() {
 							<NavigationMenuList>
 								{navGroups.map((group) => (
 									<NavigationMenuItem key={group.label}>
-										<NavigationMenuTrigger className="bg-transparent text-sm font-medium text-foreground/80 hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent">
+										<NavigationMenuTrigger className="text-sm font-medium bg-transparent text-foreground/80 hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent">
 											{group.label}
 										</NavigationMenuTrigger>
 										<NavigationMenuContent>
-											<ul className="grid w-48 gap-0.5 p-2">
+											<ul className="w-48 gap-0.5 p-2 grid">
 												{group.items.map((item) =>
 													item.external ? (
 														<li key={item.href}>
@@ -150,7 +153,7 @@ export function NavBar() {
 																href={item.href}
 																target="_blank"
 																rel="noopener noreferrer"
-																className="block rounded-md px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
+																className="px-3 py-2 text-sm block rounded-md text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
 															>
 																{item.label}
 															</a>
@@ -159,7 +162,7 @@ export function NavBar() {
 														<li key={item.href}>
 															<LocaleLink
 																href={item.href}
-																className="block rounded-md px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
+																className="px-3 py-2 text-sm block rounded-md text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
 															>
 																{item.label}
 															</LocaleLink>
@@ -205,7 +208,7 @@ export function NavBar() {
 							</SheetTrigger>
 							<SheetContent className="w-[280px] overflow-y-auto" side="right">
 								<SheetTitle />
-								<div className="flex flex-col pt-2">
+								<div className="pt-2 flex flex-col">
 									{navGroups.map((group) => (
 										<MobileNavGroup
 											key={group.label}
@@ -261,14 +264,17 @@ function MobileNavGroup({
 	const [open, setOpen] = useState(false);
 	return (
 		<Collapsible open={open} onOpenChange={setOpen}>
-			<CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2 font-medium text-base text-foreground/80 hover:text-foreground">
+			<CollapsibleTrigger className="px-3 py-2 font-medium text-base flex w-full items-center justify-between text-foreground/80 hover:text-foreground">
 				{group.label}
 				<ChevronDown
-					className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")}
+					className={cn(
+						"h-4 w-4 transition-transform duration-200",
+						open && "rotate-180",
+					)}
 				/>
 			</CollapsibleTrigger>
 			<CollapsibleContent>
-				<div className="flex flex-col pl-3 pb-1">
+				<div className="pl-3 pb-1 flex flex-col">
 					{group.items.map((item) =>
 						item.external ? (
 							<a

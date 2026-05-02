@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface ComparePineconeGridItem {
-	key:
-		| "keywordSearch"
-		| "facets"
-		| "hybridSearch"
-		| "pricing"
-		| "performance"
-		| "widget";
+	key: "keywordSearch" | "facets" | "hybridSearch" | "pricing" | "performance" | "widget";
 	icon: ComponentType<{ className?: string }>;
 }
 

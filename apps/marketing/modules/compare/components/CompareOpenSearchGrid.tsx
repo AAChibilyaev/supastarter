@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareOpenSearchGridItem {
-	key:
-		| "complexity"
-		| "performance"
-		| "schema"
-		| "multiTenancy"
-		| "analytics"
-		| "pricing";
+	key: "complexity" | "performance" | "schema" | "multiTenancy" | "analytics" | "pricing";
 	icon: ComponentType<{ className?: string }>;
 }
 

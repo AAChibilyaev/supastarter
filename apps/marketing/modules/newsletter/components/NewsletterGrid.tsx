@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface NewsletterGridItem {
-	key:
-		| "frequency"
-		| "content"
-		| "past"
-		| "privacy"
-		| "unsubscribe"
-		| "social";
+	key: "frequency" | "content" | "past" | "privacy" | "unsubscribe" | "social";
 	icon: ComponentType<{ className?: string }>;
 }
 

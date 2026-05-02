@@ -169,7 +169,9 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 												<FormControl>
 													<Input
 														{...field}
-														placeholder={t("search.apiKeys.namePlaceholder")}
+														placeholder={t(
+															"search.apiKeys.namePlaceholder",
+														)}
 													/>
 												</FormControl>
 												<FormMessage />

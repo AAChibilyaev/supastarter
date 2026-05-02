@@ -44,18 +44,18 @@ modules/          # KEIN Node-Workspace — PHP-CMS-Module
 
 Gesamter Traffic kommt durch eine **einzelne Hono-App** unter `packages/api/index.ts`, die Routen in Reihenfolge einbindet:
 
-| Mount                    | Zweck                                   |
-| ------------------------ | --------------------------------------- |
+| Mount                    | Zweck                                       |
+| ------------------------ | ------------------------------------------- |
 | `/api`                   | Öffentlicher Suchhandler (permissives CORS) |
-| `/api`                   | Widget-Analytics-Ereignisse             |
-| `/api/widget/widget.js`  | Gehostetes Widget-JS-Bundle             |
-| `/api`                   | Connector-API (CMS-Module)              |
-| `/api`                   | Analytics-Handler                       |
-| `/api`                   | SCIM 2.0 (Identitätsbereitstellung)     |
-| `/api/v1`                | REST-API v1 (15 Endpunkte, OpenAPI 3.1) |
-| `/api/auth/**`           | Better-Auth-Handler                     |
-| `/api/webhooks/payments` | Zahlungsanbieter-Webhooks               |
-| `/api/rpc/**`            | oRPC-Handler (11 Module)                |
+| `/api`                   | Widget-Analytics-Ereignisse                 |
+| `/api/widget/widget.js`  | Gehostetes Widget-JS-Bundle                 |
+| `/api`                   | Connector-API (CMS-Module)                  |
+| `/api`                   | Analytics-Handler                           |
+| `/api`                   | SCIM 2.0 (Identitätsbereitstellung)         |
+| `/api/v1`                | REST-API v1 (15 Endpunkte, OpenAPI 3.1)     |
+| `/api/auth/**`           | Better-Auth-Handler                         |
+| `/api/webhooks/payments` | Zahlungsanbieter-Webhooks                   |
+| `/api/rpc/**`            | oRPC-Handler (11 Module)                    |
 
 ## oRPC-Module
 
@@ -126,18 +126,18 @@ Die vorherige Version bleibt erhalten, bis der nächste Reindex grün bestätigt
 
 ## Technologieentscheidungen
 
-| Schicht               | Technologie                                    |
-| --------------------- | ---------------------------------------------- |
-| Framework             | Next.js 16 (App Router, RSC)                   |
-| API                   | Hono + oRPC 1.13                               |
-| Auth                  | Better Auth 1.5                                |
-| ORM                   | Prisma 7 (aktiv) / Drizzle (Legacy-Referenz)   |
-| Suchmaschine          | Typesense 3                                    |
-| Validierung           | Zod 4                                          |
-| Client-Datenabruf     | TanStack Query 5                               |
-| Formulare             | react-hook-form 7                              |
-| UI                    | Tailwind v4 + shadcn-Primitive                 |
-| Linting               | Oxlint (nicht ESLint)                          |
-| Formatierung          | Oxfmt (nicht Prettier)                         |
-| Paketmanager          | pnpm 10 mit Workspace-Katalog                  |
-| Build-Orchestrierung  | Turborepo 2                                    |
+| Schicht              | Technologie                                  |
+| -------------------- | -------------------------------------------- |
+| Framework            | Next.js 16 (App Router, RSC)                 |
+| API                  | Hono + oRPC 1.13                             |
+| Auth                 | Better Auth 1.5                              |
+| ORM                  | Prisma 7 (aktiv) / Drizzle (Legacy-Referenz) |
+| Suchmaschine         | Typesense 3                                  |
+| Validierung          | Zod 4                                        |
+| Client-Datenabruf    | TanStack Query 5                             |
+| Formulare            | react-hook-form 7                            |
+| UI                   | Tailwind v4 + shadcn-Primitive               |
+| Linting              | Oxlint (nicht ESLint)                        |
+| Formatierung         | Oxfmt (nicht Prettier)                       |
+| Paketmanager         | pnpm 10 mit Workspace-Katalog                |
+| Build-Orchestrierung | Turborepo 2                                  |

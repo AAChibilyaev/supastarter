@@ -31,16 +31,16 @@ Alles, was mit der Suche für eine bestimmte Organisation zusammenhängt, befind
 
 Persönliche Einstellungen und Admin-Tools befinden sich außerhalb des Org-Kontexts.
 
-| Pfad                           | Bereich                                                    |
-| ------------------------------ | ---------------------------------------------------------- |
-| `/settings/general`            | Kontoprofil                                                |
-| `/settings/security`           | Passwort, 2FA (TOTP, Passkeys), OAuth-Verbindungen         |
-| `/settings/notifications`      | Benachrichtigungseinstellungen                             |
-| `/settings/billing`            | Persönliche Abrechnung                                     |
-| `/settings/billing/ai-credits` | KI-Wallet (aktive Entwicklung — v0.6)                     |
-| `/knowledge`                   | Persönliche Knowledge-Spaces                               |
-| `/chatbot`                     | KI-Chatbot                                                 |
-| `/admin/*`                     | Website-Admin-Tools (nur Admin-Benutzer — siehe unten)     |
+| Pfad                           | Bereich                                                |
+| ------------------------------ | ------------------------------------------------------ |
+| `/settings/general`            | Kontoprofil                                            |
+| `/settings/security`           | Passwort, 2FA (TOTP, Passkeys), OAuth-Verbindungen     |
+| `/settings/notifications`      | Benachrichtigungseinstellungen                         |
+| `/settings/billing`            | Persönliche Abrechnung                                 |
+| `/settings/billing/ai-credits` | KI-Wallet (aktive Entwicklung — v0.6)                  |
+| `/knowledge`                   | Persönliche Knowledge-Spaces                           |
+| `/chatbot`                     | KI-Chatbot                                             |
+| `/admin/*`                     | Website-Admin-Tools (nur Admin-Benutzer — siehe unten) |
 
 ## Die Übersichtsseite
 
@@ -50,12 +50,12 @@ Die Org-Übersichtsseite (`/[orgSlug]/overview`) ist die primäre Zielseite, nac
 
 Vier Zusammenfassungsmetriken für den ausgewählten Zeitraum (24h / 7d / 30d):
 
-| Kachel                | Quelle                                                    |
-| --------------------- | --------------------------------------------------------- |
-| Gesamtsuchen          | Sucheinheiten-Verbrauch aus Plan-Berechtigungen           |
-| Indizierte Dokumente  | Dokumentanzahl aus Plan-Berechtigungen                    |
-| Kontingentnutzung     | `searches.percentUsed` aus `entitlements.plan`            |
-| Fehlgeschlagene Sync-Jobs | Abgeleitet aus dem Ingest-Pipeline-Status              |
+| Kachel                    | Quelle                                          |
+| ------------------------- | ----------------------------------------------- |
+| Gesamtsuchen              | Sucheinheiten-Verbrauch aus Plan-Berechtigungen |
+| Indizierte Dokumente      | Dokumentanzahl aus Plan-Berechtigungen          |
+| Kontingentnutzung         | `searches.percentUsed` aus `entitlements.plan`  |
+| Fehlgeschlagene Sync-Jobs | Abgeleitet aus dem Ingest-Pipeline-Status       |
 
 Ein Warnbanner erscheint, wenn das Kontingent 80% erreicht, und ein Fehlerbanner, wenn es überschritten wird.
 

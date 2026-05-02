@@ -65,31 +65,31 @@ Cada espacio rastrea el uso mediante el procedimiento `knowledge.usageMetrics`: 
 
 El módulo de Conocimiento usa 7 modelos Prisma dedicados:
 
-| Modelo              | Propósito                                       |
-| ------------------- | ----------------------------------------------- |
+| Modelo              | Propósito                                                         |
+| ------------------- | ----------------------------------------------------------------- |
 | `KnowledgeSpace`    | Contenedor de nivel superior, propiedad de organización o usuario |
-| `DataSource`        | Registro de fuente de archivo (nombre, tipo, estado) |
-| `IngestionJob`      | Seguimiento de ingestión (estado, progreso, errores) |
-| `KnowledgeDocument` | Documento procesado                             |
-| `KnowledgeChunk`    | Fragmento de texto individual para recuperación |
-| `GraphNode`         | Nodo del grafo de conocimiento (concepto, entidad) |
-| `GraphEdge`         | Relación entre nodos del grafo                  |
+| `DataSource`        | Registro de fuente de archivo (nombre, tipo, estado)              |
+| `IngestionJob`      | Seguimiento de ingestión (estado, progreso, errores)              |
+| `KnowledgeDocument` | Documento procesado                                               |
+| `KnowledgeChunk`    | Fragmento de texto individual para recuperación                   |
+| `GraphNode`         | Nodo del grafo de conocimiento (concepto, entidad)                |
+| `GraphEdge`         | Relación entre nodos del grafo                                    |
 
 ### Procedimientos oRPC
 
 El módulo de conocimiento expone 10 procedimientos en `packages/api/modules/knowledge/`:
 
-| Procedimiento       | Descripción                                    |
-| ------------------- | ---------------------------------------------- |
-| `listSpaces`        | Listar todos los espacios para el propietario  |
-| `createSpace`       | Crear un nuevo espacio de conocimiento         |
-| `listSources`       | Listar fuentes de datos para un espacio        |
-| `createSource`      | Añadir una nueva fuente de datos               |
-| `listIngestionJobs` | Listar trabajos de ingestión para un espacio   |
-| `ingestFile`        | Cargar e ingestar un archivo                   |
+| Procedimiento       | Descripción                                           |
+| ------------------- | ----------------------------------------------------- |
+| `listSpaces`        | Listar todos los espacios para el propietario         |
+| `createSpace`       | Crear un nuevo espacio de conocimiento                |
+| `listSources`       | Listar fuentes de datos para un espacio               |
+| `createSource`      | Añadir una nueva fuente de datos                      |
+| `listIngestionJobs` | Listar trabajos de ingestión para un espacio          |
+| `ingestFile`        | Cargar e ingestar un archivo                          |
 | `ask`               | Hacer una pregunta (recuperación RAG + respuesta LLM) |
-| `graphragExplain`   | Consulta de explicación GraphRAG               |
-| `usageMetrics`      | Estadísticas de uso de tokens y consultas      |
+| `graphragExplain`   | Consulta de explicación GraphRAG                      |
+| `usageMetrics`      | Estadísticas de uso de tokens y consultas             |
 
 ---
 
@@ -101,18 +101,18 @@ La sección de administración solo es visible para los usuarios con el rol de a
 
 ### Páginas de administración
 
-| Ruta                   | Descripción                                              | Estado                           |
-| ---------------------- | -------------------------------------------------------- | -------------------------------- |
-| `/admin/`              | Raíz del panel de administración                         | Funcional                        |
-| `/admin/organizations` | Listar y gestionar todas las organizaciones              | Funcional                        |
-| `/admin/users`         | Listar y gestionar todos los usuarios, suplantación      | Funcional                        |
-| `/admin/config`        | Configuración del sistema                                | Stub — pendiente                 |
-| `/admin/security`      | Configuración de seguridad y gestión de sesiones         | Stub — pendiente                 |
-| `/admin/integrations`  | Configuración de integraciones de terceros               | Stub — pendiente                 |
-| `/admin/audit`         | Visor del registro de auditoría                          | Stub — pendiente                 |
+| Ruta                   | Descripción                                               | Estado                             |
+| ---------------------- | --------------------------------------------------------- | ---------------------------------- |
+| `/admin/`              | Raíz del panel de administración                          | Funcional                          |
+| `/admin/organizations` | Listar y gestionar todas las organizaciones               | Funcional                          |
+| `/admin/users`         | Listar y gestionar todos los usuarios, suplantación       | Funcional                          |
+| `/admin/config`        | Configuración del sistema                                 | Stub — pendiente                   |
+| `/admin/security`      | Configuración de seguridad y gestión de sesiones          | Stub — pendiente                   |
+| `/admin/integrations`  | Configuración de integraciones de terceros                | Stub — pendiente                   |
+| `/admin/audit`         | Visor del registro de auditoría                           | Stub — pendiente                   |
 | `/admin/wallet`        | Admin del wallet de IA (saldo por usuario, transacciones) | Stub — en desarrollo activo (v0.6) |
-| `/admin/jobs`          | Gestión de trabajos en segundo plano                     | Stub — pendiente                 |
-| `/admin/notifications` | Gestión de notificaciones del sistema                    | Stub — pendiente                 |
+| `/admin/jobs`          | Gestión de trabajos en segundo plano                      | Stub — pendiente                   |
+| `/admin/notifications` | Gestión de notificaciones del sistema                     | Stub — pendiente                   |
 
 ### Wallet de IA y créditos (v0.6 — en desarrollo activo)
 
@@ -126,13 +126,13 @@ La característica del wallet está intencionalmente semi-aislada — si su tare
 
 La configuración personal vive fuera del contexto de la organización en `/settings/`.
 
-| Ruta                           | Contenidos                                                     |
-| ------------------------------ | -------------------------------------------------------------- |
-| `/settings/general`            | Nombre de visualización, correo electrónico, foto de perfil    |
-| `/settings/security`           | Cambio de contraseña, 2FA (TOTP), passkeys, conexiones OAuth   |
-| `/settings/notifications`      | Preferencias de notificaciones por tipo                        |
-| `/settings/billing`            | Facturación personal, plan activo, método de pago              |
-| `/settings/billing/ai-credits` | Recarga del wallet de IA e historial de transacciones (v0.6)   |
+| Ruta                           | Contenidos                                                   |
+| ------------------------------ | ------------------------------------------------------------ |
+| `/settings/general`            | Nombre de visualización, correo electrónico, foto de perfil  |
+| `/settings/security`           | Cambio de contraseña, 2FA (TOTP), passkeys, conexiones OAuth |
+| `/settings/notifications`      | Preferencias de notificaciones por tipo                      |
+| `/settings/billing`            | Facturación personal, plan activo, método de pago            |
+| `/settings/billing/ai-credits` | Recarga del wallet de IA e historial de transacciones (v0.6) |
 
 La configuración de seguridad admite: inicio de sesión con contraseña, magic link, autenticación de dos factores (TOTP mediante aplicación de autenticación), passkey (WebAuthn) y OAuth (Google, GitHub).
 

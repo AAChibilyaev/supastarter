@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface PressGridItem {
-	key:
-		| "mediaKit"
-		| "boilerplate"
-		| "pressReleases"
-		| "coverage"
-		| "contact"
-		| "assets";
+	key: "mediaKit" | "boilerplate" | "pressReleases" | "coverage" | "contact" | "assets";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -65,30 +65,30 @@ Chaque espace suit l'utilisation via la procédure `knowledge.usageMetrics` : to
 
 Le module Knowledge utilise 7 modèles Prisma dédiés :
 
-| Modèle              | Objectif                                            |
-| ------------------- | --------------------------------------------------- |
+| Modèle              | Objectif                                                  |
+| ------------------- | --------------------------------------------------------- |
 | `KnowledgeSpace`    | Conteneur de premier niveau, propriété org ou utilisateur |
-| `DataSource`        | Enregistrement de source de fichier (nom, type, statut) |
-| `IngestionJob`      | Suivi de l'ingestion (statut, progression, erreurs) |
-| `KnowledgeDocument` | Document traité                                     |
-| `KnowledgeChunk`    | Morceau de texte individuel pour la récupération    |
-| `GraphNode`         | Nœud du graphe de connaissance (concept, entité)    |
-| `GraphEdge`         | Relation entre les nœuds du graphe                  |
+| `DataSource`        | Enregistrement de source de fichier (nom, type, statut)   |
+| `IngestionJob`      | Suivi de l'ingestion (statut, progression, erreurs)       |
+| `KnowledgeDocument` | Document traité                                           |
+| `KnowledgeChunk`    | Morceau de texte individuel pour la récupération          |
+| `GraphNode`         | Nœud du graphe de connaissance (concept, entité)          |
+| `GraphEdge`         | Relation entre les nœuds du graphe                        |
 
 ### Procédures oRPC
 
 Le module knowledge expose 10 procédures dans `packages/api/modules/knowledge/` :
 
-| Procédure           | Description                                          |
-| ------------------- | ---------------------------------------------------- |
-| `listSpaces`        | Lister tous les espaces pour le propriétaire         |
-| `createSpace`       | Créer un nouvel espace de connaissance               |
-| `listSources`       | Lister les sources de données pour un espace         |
-| `createSource`      | Ajouter une nouvelle source de données               |
-| `listIngestionJobs` | Lister les jobs d'ingestion pour un espace           |
-| `ingestFile`        | Télécharger et ingérer un fichier                    |
-| `ask`               | Poser une question (récupération RAG + réponse LLM)  |
-| `graphragExplain`   | Requête d'explication GraphRAG                       |
+| Procédure           | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `listSpaces`        | Lister tous les espaces pour le propriétaire          |
+| `createSpace`       | Créer un nouvel espace de connaissance                |
+| `listSources`       | Lister les sources de données pour un espace          |
+| `createSource`      | Ajouter une nouvelle source de données                |
+| `listIngestionJobs` | Lister les jobs d'ingestion pour un espace            |
+| `ingestFile`        | Télécharger et ingérer un fichier                     |
+| `ask`               | Poser une question (récupération RAG + réponse LLM)   |
+| `graphragExplain`   | Requête d'explication GraphRAG                        |
 | `usageMetrics`      | Statistiques d'utilisation des tokens et des requêtes |
 
 ---
@@ -101,18 +101,18 @@ La section d'administration n'est visible que pour les utilisateurs ayant le rô
 
 ### Pages d'administration
 
-| Chemin                 | Description                                       | Statut                                       |
-| ---------------------- | ------------------------------------------------- | -------------------------------------------- |
-| `/admin/`              | Racine du tableau de bord admin                   | Fonctionnel                                  |
-| `/admin/organizations` | Lister et gérer toutes les organisations          | Fonctionnel                                  |
-| `/admin/users`         | Lister et gérer tous les utilisateurs, impersonation | Fonctionnel                               |
-| `/admin/config`        | Configuration du système                          | Stub — en attente                            |
-| `/admin/security`      | Paramètres de sécurité et gestion des sessions    | Stub — en attente                            |
-| `/admin/integrations`  | Paramètres d'intégration tiers                    | Stub — en attente                            |
-| `/admin/audit`         | Visualiseur de journal d'audit                    | Stub — en attente                            |
-| `/admin/wallet`        | Admin du wallet IA (solde par utilisateur, transactions) | Stub — développement actif (v0.6)      |
-| `/admin/jobs`          | Gestion des jobs en arrière-plan                  | Stub — en attente                            |
-| `/admin/notifications` | Gestion des notifications système                 | Stub — en attente                            |
+| Chemin                 | Description                                              | Statut                            |
+| ---------------------- | -------------------------------------------------------- | --------------------------------- |
+| `/admin/`              | Racine du tableau de bord admin                          | Fonctionnel                       |
+| `/admin/organizations` | Lister et gérer toutes les organisations                 | Fonctionnel                       |
+| `/admin/users`         | Lister et gérer tous les utilisateurs, impersonation     | Fonctionnel                       |
+| `/admin/config`        | Configuration du système                                 | Stub — en attente                 |
+| `/admin/security`      | Paramètres de sécurité et gestion des sessions           | Stub — en attente                 |
+| `/admin/integrations`  | Paramètres d'intégration tiers                           | Stub — en attente                 |
+| `/admin/audit`         | Visualiseur de journal d'audit                           | Stub — en attente                 |
+| `/admin/wallet`        | Admin du wallet IA (solde par utilisateur, transactions) | Stub — développement actif (v0.6) |
+| `/admin/jobs`          | Gestion des jobs en arrière-plan                         | Stub — en attente                 |
+| `/admin/notifications` | Gestion des notifications système                        | Stub — en attente                 |
 
 ### Wallet IA et crédits (v0.6 — développement actif)
 
@@ -126,13 +126,13 @@ La fonctionnalité wallet est intentionnellement semi-isolée — si votre tâch
 
 Les paramètres personnels se trouvent en dehors du contexte org sous `/settings/`.
 
-| Chemin                         | Contenu                                                    |
-| ------------------------------ | ---------------------------------------------------------- |
-| `/settings/general`            | Nom d'affichage, e-mail, photo de profil                   |
+| Chemin                         | Contenu                                                            |
+| ------------------------------ | ------------------------------------------------------------------ |
+| `/settings/general`            | Nom d'affichage, e-mail, photo de profil                           |
 | `/settings/security`           | Changement de mot de passe, 2FA (TOTP), passkeys, connexions OAuth |
-| `/settings/notifications`      | Préférences de notification par type                       |
-| `/settings/billing`            | Facturation personnelle, plan actif, mode de paiement      |
-| `/settings/billing/ai-credits` | Recharge du wallet IA et historique des transactions (v0.6) |
+| `/settings/notifications`      | Préférences de notification par type                               |
+| `/settings/billing`            | Facturation personnelle, plan actif, mode de paiement              |
+| `/settings/billing/ai-credits` | Recharge du wallet IA et historique des transactions (v0.6)        |
 
 Les paramètres de sécurité prennent en charge : connexion par mot de passe, lien magique, authentification à deux facteurs (TOTP via application d'authentification), passkey (WebAuthn) et OAuth (Google, GitHub).
 

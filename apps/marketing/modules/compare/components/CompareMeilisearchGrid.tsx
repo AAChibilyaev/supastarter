@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareMeilisearchItem {
-	key:
-		| "engine"
-		| "hosted"
-		| "multiTenancy"
-		| "analytics"
-		| "connectors"
-		| "verdict";
+	key: "engine" | "hosted" | "multiTenancy" | "analytics" | "connectors" | "verdict";
 	icon: ComponentType<{ className?: string }>;
 }
 

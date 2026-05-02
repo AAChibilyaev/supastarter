@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CommunityGridItem {
-	key:
-		| "github"
-		| "discord"
-		| "forum"
-		| "showcase"
-		| "contribute"
-		| "roadmap";
+	key: "github" | "discord" | "forum" | "showcase" | "contribute" | "roadmap";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface BrandGridItem {
-	key:
-		| "logo"
-		| "colors"
-		| "typography"
-		| "guidelines"
-		| "assets"
-		| "contact";
+	key: "logo" | "colors" | "typography" | "guidelines" | "assets" | "contact";
 	icon: ComponentType<{ className?: string }>;
 }
 

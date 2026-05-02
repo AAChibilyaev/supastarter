@@ -46,6 +46,9 @@
 			"prisma",
 			"prisma-zod-generator",
 			"sharp"
-		]
+		],
+		"overrides": {
+			"next-themes": "npm:@teispace/next-themes@0.3.2"
+		}
 	}
 }

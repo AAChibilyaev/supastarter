@@ -5,7 +5,12 @@ import { LocaleLink } from "@i18n/routing";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 
-export function PostListItem({ post }: { post: Post }) {
+interface PostListItemProps {
+	post: Post;
+	priorityImage?: boolean;
+}
+
+export function PostListItem({ post, priorityImage = false }: PostListItemProps) {
 	const locale = useLocale();
 	const { title, excerpt, authorName, image, date, path, authorImage, tags } = post;
 
@@ -17,6 +22,8 @@ export function PostListItem({ post }: { post: Post }) {
 						src={image}
 						alt={title}
 						fill
+						loading={priorityImage ? "eager" : undefined}
+						fetchPriority={priorityImage ? "high" : undefined}
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 						className="object-cover object-center"
 					/>

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface StatusGridItem {
-	key:
-		| "api"
-		| "dashboard"
-		| "ingest"
-		| "analytics"
-		| "incidents"
-		| "subscribe";
+	key: "api" | "dashboard" | "ingest" | "analytics" | "incidents" | "subscribe";
 	icon: ComponentType<{ className?: string }>;
 }
 

@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface SupportGridItem {
-	key:
-		| "documentation"
-		| "community"
-		| "email"
-		| "chat"
-		| "slack"
-		| "sla";
+	key: "documentation" | "community" | "email" | "chat" | "slack" | "sla";
 	icon: ComponentType<{ className?: string }>;
 }
 

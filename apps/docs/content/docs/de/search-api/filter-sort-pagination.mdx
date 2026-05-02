@@ -74,14 +74,14 @@ Sie müssen diesen Filter nicht manuell hinzufügen — er wird immer angewendet
 
 Das Standard-Produktschema enthält diese filterbaren Felder (als `facet: true` markiert):
 
-| Feld           | Typ      | Beispielfilter                       |
-| -------------- | -------- | ------------------------------------ |
-| `brand`        | string   | `brand:=Sony`                        |
-| `categories`   | string[] | `categories:=[Electronics, Audio]`   |
-| `availability` | string   | `availability:=in_stock`             |
-| `price`        | float    | `price:[10..500]`                    |
-| `sale_price`   | float    | `sale_price:<100`                    |
-| `locale`       | string   | `locale:=de`                         |
+| Feld           | Typ      | Beispielfilter                     |
+| -------------- | -------- | ---------------------------------- |
+| `brand`        | string   | `brand:=Sony`                      |
+| `categories`   | string[] | `categories:=[Electronics, Audio]` |
+| `availability` | string   | `availability:=in_stock`           |
+| `price`        | float    | `price:[10..500]`                  |
+| `sale_price`   | float    | `sale_price:<100`                  |
+| `locale`       | string   | `locale:=de`                       |
 
 ## Facettierung
 
@@ -162,13 +162,13 @@ Sortiert zuerst nach Relevanzbewertung; innerhalb derselben Bewertung nach Preis
 
 ### Häufige Sortier-Presets
 
-| Bezeichnung              | `sortBy`-Wert      |
-| ------------------------ | ------------------ |
-| Relevanteste             | `_text_match:desc` |
-| Preis: günstigste zuerst | `price:asc`        |
-| Preis: teuerste zuerst   | `price:desc`       |
-| Neueste zuerst           | `created_at:desc`  |
-| Angebotspreis: günstigste zuerst | `sale_price:asc` |
+| Bezeichnung                      | `sortBy`-Wert      |
+| -------------------------------- | ------------------ |
+| Relevanteste                     | `_text_match:desc` |
+| Preis: günstigste zuerst         | `price:asc`        |
+| Preis: teuerste zuerst           | `price:desc`       |
+| Neueste zuerst                   | `created_at:desc`  |
+| Angebotspreis: günstigste zuerst | `sale_price:asc`   |
 
 ## Seitenumbruch
 

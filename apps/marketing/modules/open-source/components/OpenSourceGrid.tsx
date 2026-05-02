@@ -12,13 +12,7 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface OpenSourceItem {
-	key:
-		| "license"
-		| "selfHost"
-		| "transparency"
-		| "contribute"
-		| "noLockIn"
-		| "community";
+	key: "license" | "selfHost" | "transparency" | "contribute" | "noLockIn" | "community";
 	icon: ComponentType<{ className?: string }>;
 }
 

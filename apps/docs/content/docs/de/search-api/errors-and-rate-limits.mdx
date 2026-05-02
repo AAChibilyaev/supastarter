@@ -25,26 +25,26 @@ gedacht und kann sich zwischen Versionen ändern.
 
 ### 4xx — Client-Fehler (nicht automatisch wiederholen)
 
-| HTTP | `error`-Code          | Ursache                                                               |
-| ---- | --------------------- | --------------------------------------------------------------------- |
-| 400  | `invalid_request`     | Fehlerhaftes JSON oder fehlendes Pflichtfeld                          |
-| 400  | `invalid_filter`      | Ungültige `filterBy`-Ausdruckssyntax                                  |
-| 400  | `invalid_sort`        | Ungültiger `sortBy`-Ausdruck                                          |
-| 401  | `unauthorized`        | Fehlender, ungültiger oder abgelaufener API-Schlüssel oder Token      |
-| 401  | `token_expired`       | TTL des eingeschränkten Tokens ist abgelaufen                         |
+| HTTP | `error`-Code          | Ursache                                                                          |
+| ---- | --------------------- | -------------------------------------------------------------------------------- |
+| 400  | `invalid_request`     | Fehlerhaftes JSON oder fehlendes Pflichtfeld                                     |
+| 400  | `invalid_filter`      | Ungültige `filterBy`-Ausdruckssyntax                                             |
+| 400  | `invalid_sort`        | Ungültiger `sortBy`-Ausdruck                                                     |
+| 401  | `unauthorized`        | Fehlender, ungültiger oder abgelaufener API-Schlüssel oder Token                 |
+| 401  | `token_expired`       | TTL des eingeschränkten Tokens ist abgelaufen                                    |
 | 403  | `forbidden`           | Schlüssel hat nicht den erforderlichen Bereich (`search` oder `connector_write`) |
-| 403  | `origin_not_allowed`  | Anfrage-Ursprung nicht in `allowedOrigins` für den Schlüssel          |
-| 404  | `index_not_found`     | Der angegebene `indexSlug` existiert für diese Organisation nicht     |
-| 429  | `rate_limit_exceeded` | Rate-Limit pro Schlüssel überschritten                                |
-| 429  | `quota_exceeded`      | Monatliches Sucheinheiten-Kontingent für die Organisation erschöpft   |
+| 403  | `origin_not_allowed`  | Anfrage-Ursprung nicht in `allowedOrigins` für den Schlüssel                     |
+| 404  | `index_not_found`     | Der angegebene `indexSlug` existiert für diese Organisation nicht                |
+| 429  | `rate_limit_exceeded` | Rate-Limit pro Schlüssel überschritten                                           |
+| 429  | `quota_exceeded`      | Monatliches Sucheinheiten-Kontingent für die Organisation erschöpft              |
 
 ### 5xx — Server-Fehler (kann mit Backoff wiederholt werden)
 
-| HTTP | `error`-Code          | Ursache                                                                |
-| ---- | --------------------- | ---------------------------------------------------------------------- |
+| HTTP | `error`-Code          | Ursache                                                                    |
+| ---- | --------------------- | -------------------------------------------------------------------------- |
 | 502  | `search_failed`       | Vorgelagerter Typesense-Fehler (Cluster nicht erreichbar, Abfrage-Timeout) |
-| 502  | `ingest_failed`       | Dokumente konnten nicht in den Ingest-Buffer eingereiht werden         |
-| 503  | `service_unavailable` | AACsearch-API ist vorübergehend nicht verfügbar                        |
+| 502  | `ingest_failed`       | Dokumente konnten nicht in den Ingest-Buffer eingereiht werden             |
+| 503  | `service_unavailable` | AACsearch-API ist vorübergehend nicht verfügbar                            |
 
 ## Rate-Limiting
 
@@ -72,12 +72,12 @@ X-RateLimit-Reset: 1717201234
 
 Diese Header sind bei allen erfolgreichen und rate-limitierten Antworten enthalten:
 
-| Header                  | Beschreibung                                    |
-| ----------------------- | ----------------------------------------------- |
-| `X-RateLimit-Limit`     | Gesamtanfragen pro Fenster erlaubt              |
-| `X-RateLimit-Remaining` | Verbleibende Anfragen im aktuellen Fenster      |
+| Header                  | Beschreibung                                          |
+| ----------------------- | ----------------------------------------------------- |
+| `X-RateLimit-Limit`     | Gesamtanfragen pro Fenster erlaubt                    |
+| `X-RateLimit-Remaining` | Verbleibende Anfragen im aktuellen Fenster            |
 | `X-RateLimit-Reset`     | Unix-Zeitstempel, wenn das Fenster zurückgesetzt wird |
-| `Retry-After`           | Sekunden bis zum nächsten Versuch (nur bei 429) |
+| `Retry-After`           | Sekunden bis zum nächsten Versuch (nur bei 429)       |
 
 ## Kontingenterschöpfung
 
@@ -97,14 +97,14 @@ um das Kontingent sofort wiederherzustellen.
 
 ## Retry-Strategie für Clients
 
-| Fehlerklasse              | Aktion                                                              |
-| ------------------------- | ------------------------------------------------------------------- |
-| 4xx (außer 429)           | **Nicht wiederholen** — die Anfrage korrigieren                     |
-| 429 `rate_limit_exceeded` | `Retry-After`-Sekunden warten, dann erneut versuchen               |
-| 429 `quota_exceeded`      | Nicht wiederholen, bis Kontingent zurückgesetzt oder Plan upgraded  |
+| Fehlerklasse              | Aktion                                                                      |
+| ------------------------- | --------------------------------------------------------------------------- |
+| 4xx (außer 429)           | **Nicht wiederholen** — die Anfrage korrigieren                             |
+| 429 `rate_limit_exceeded` | `Retry-After`-Sekunden warten, dann erneut versuchen                        |
+| 429 `quota_exceeded`      | Nicht wiederholen, bis Kontingent zurückgesetzt oder Plan upgraded          |
 | 502 `search_failed`       | Einmal nach 1 Sekunde wiederholen; wenn erneut fehlschlägt, Fehler anzeigen |
-| 503                       | Exponentielles Backoff: 1s → 2s → 4s → aufgeben                    |
-| Netzwerkfehler            | Exponentielles Backoff                                              |
+| 503                       | Exponentielles Backoff: 1s → 2s → 4s → aufgeben                             |
+| Netzwerkfehler            | Exponentielles Backoff                                                      |
 
 ### SDK-Retry-Verhalten
 

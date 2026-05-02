@@ -135,13 +135,13 @@ const job = await orpc.search.reindex.call({
 
 ### Quand réindexer
 
-| Scénario                          | Action                                       |
-| --------------------------------- | -------------------------------------------- |
-| Ajout d'un nouveau champ de facette | Réindexation requise                        |
-| Changement du type de champ       | Réindexation requise                         |
-| Ajout d'un nouveau champ indexable | Réindexation requise                        |
+| Scénario                                      | Action                                             |
+| --------------------------------------------- | -------------------------------------------------- |
+| Ajout d'un nouveau champ de facette           | Réindexation requise                               |
+| Changement du type de champ                   | Réindexation requise                               |
+| Ajout d'un nouveau champ indexable            | Réindexation requise                               |
 | Mise à jour du contenu du document uniquement | Pas de réindexation — faites un upsert du document |
-| Changement des règles de synonymes | Pas de réindexation requise                 |
+| Changement des règles de synonymes            | Pas de réindexation requise                        |
 
 ### Réindexation et quota
 

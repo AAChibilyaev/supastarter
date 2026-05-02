@@ -8,11 +8,11 @@ Toutes les clés sont stockées sous forme de hachages bcrypt — le texte en cl
 
 ## Types de clés
 
-| Type           | Préfixe          | Portées                  | Utilisé par                                  |
-| -------------- | ---------------- | ------------------------ | -------------------------------------------- |
-| Clé de recherche | `ss_search_*`  | `search`                 | SDK navigateur, widget, appels API directs   |
-| Clé connecteur | `ss_connector_*` | `connector_write`        | Modules CMS (PrestaShop, Bitrix)             |
-| Token limité   | `ss_scoped_*`    | Restreint depuis la clé de recherche | Délégation de token par utilisateur/filtre |
+| Type             | Préfixe          | Portées                              | Utilisé par                                |
+| ---------------- | ---------------- | ------------------------------------ | ------------------------------------------ |
+| Clé de recherche | `ss_search_*`    | `search`                             | SDK navigateur, widget, appels API directs |
+| Clé connecteur   | `ss_connector_*` | `connector_write`                    | Modules CMS (PrestaShop, Bitrix)           |
+| Token limité     | `ss_scoped_*`    | Restreint depuis la clé de recherche | Délégation de token par utilisateur/filtre |
 
 ## Générer une clé de recherche
 

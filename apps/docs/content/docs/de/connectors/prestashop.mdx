@@ -49,17 +49,17 @@ Kopieren Sie das Verzeichnis `modules/aacsearch/` in Ihr PrestaShop-Verzeichnis 
 
 Öffnen Sie die Modulkonfigurationsseite (**Module → AACsearch → Konfigurieren**) und füllen Sie aus:
 
-| Feld              | Beschreibung                                                              |
-| ----------------- | ------------------------------------------------------------------------- |
-| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)    |
-| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                         |
-| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren           |
-| Sync aktiviert    | Automatische Delta-Synchronisierungen bei Produktereignissen aktivieren   |
-| Widget aktiviert  | Das gehostete Widget in das Storefront injizieren                         |
-| Locale            | Standard-Locale für Suchergebnisse (z. B. `de`, `en`)                    |
-| Standardwährung   | Währungscode für Preisfelder                                              |
-| Batch-Größe       | Produkte pro Synchronisierungsanfrage (Standard: 200, Max: 1000)          |
-| Debug-Modus       | Ausführliche Protokolle in `/var/logs/aacsearch.log` schreiben            |
+| Feld              | Beschreibung                                                            |
+| ----------------- | ----------------------------------------------------------------------- |
+| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://app.aacsearch.com`)   |
+| Projekt-ID        | Ihre Organisations-ID aus dem AACsearch-Dashboard                       |
+| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren         |
+| Sync aktiviert    | Automatische Delta-Synchronisierungen bei Produktereignissen aktivieren |
+| Widget aktiviert  | Das gehostete Widget in das Storefront injizieren                       |
+| Locale            | Standard-Locale für Suchergebnisse (z. B. `de`, `en`)                   |
+| Standardwährung   | Währungscode für Preisfelder                                            |
+| Batch-Größe       | Produkte pro Synchronisierungsanfrage (Standard: 200, Max: 1000)        |
+| Debug-Modus       | Ausführliche Protokolle in `/var/logs/aacsearch.log` schreiben          |
 
 ### 3. Verbindung testen
 
@@ -101,12 +101,12 @@ Der Exporter bildet PrestaShop-Produktfelder auf folgende Dokumentstruktur ab:
 
 Das Modul registriert diese PrestaShop-Hooks für automatische Delta-Synchronisierungen:
 
-| Hook                             | Auslöser                                                           |
-| -------------------------------- | ------------------------------------------------------------------ |
-| `displayHeader`                  | Injiziert das Widget-`<script>`-Tag in den Storefront-`<head>`    |
-| `actionProductUpdate`            | Wird nach dem Speichern eines Produkts ausgelöst — Delta-Sync      |
+| Hook                             | Auslöser                                                             |
+| -------------------------------- | -------------------------------------------------------------------- |
+| `displayHeader`                  | Injiziert das Widget-`<script>`-Tag in den Storefront-`<head>`       |
+| `actionProductUpdate`            | Wird nach dem Speichern eines Produkts ausgelöst — Delta-Sync        |
 | `actionObjectProductDeleteAfter` | Wird nach dem Löschen eines Produkts ausgelöst — Löschanfrage senden |
-| `actionUpdateQuantity`           | Lagerbestandsänderung — Delta-Sync auslösen                        |
+| `actionUpdateQuantity`           | Lagerbestandsänderung — Delta-Sync auslösen                          |
 
 ## Widget-Injektion
 

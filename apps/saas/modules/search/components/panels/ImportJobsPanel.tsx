@@ -11,6 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -25,8 +26,6 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
-
-import { toastError, toastSuccess } from "@repo/ui/components/toast";
 
 import { ingestJobStatusBadge } from "../../lib/job-status";
 import { KanbanBoard } from "../blocks/KanbanBoard";
@@ -117,25 +116,6 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 		},
 	});
 
-	const jobs = data?.jobs ?? [];
-	const summary = data?.summary;
-
-	if (isLoading) {
-		return (
-			<Card className="p-6 space-y-4">
-				<div className="text-foreground/60">{t("search.loading")}</div>
-			</Card>
-		);
-	}
-
-	const succeededCount = summary?.completed ?? 0;
-	const failedCount = summary?.failed ?? 0;
-	const pendingCount = summary ? summary.pending + summary.processing : 0;
-	const totalCount = summary?.total ?? succeededCount + failedCount + pendingCount;
-	const successRate = totalCount > 0 ? Math.round((succeededCount / totalCount) * 100) : 0;
-
-	const retryJobs = jobs.filter((j) => j.status === "failed" || j.status === "pending");
-
 	const kanbanColumns = useMemo<KanbanColumn[]>(() => {
 		const currentJobs = data?.jobs ?? [];
 		const statuses = ["pending", "processing", "completed", "failed"] as const;
@@ -162,6 +142,25 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			})),
 		}));
 	}, [data, t]);
+
+	const jobs = data?.jobs ?? [];
+	const summary = data?.summary;
+
+	if (isLoading) {
+		return (
+			<Card className="p-6 space-y-4">
+				<div className="text-foreground/60">{t("search.loading")}</div>
+			</Card>
+		);
+	}
+
+	const succeededCount = summary?.completed ?? 0;
+	const failedCount = summary?.failed ?? 0;
+	const pendingCount = summary ? summary.pending + summary.processing : 0;
+	const totalCount = summary?.total ?? succeededCount + failedCount + pendingCount;
+	const successRate = totalCount > 0 ? Math.round((succeededCount / totalCount) * 100) : 0;
+
+	const retryJobs = jobs.filter((j) => j.status === "failed" || j.status === "pending");
 
 	return (
 		<Card className="p-6 space-y-6">

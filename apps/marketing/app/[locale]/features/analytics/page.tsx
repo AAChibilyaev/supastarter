@@ -1,8 +1,17 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { CodeExampleSection } from "@shared/components/CodeExampleSection";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AnalyticsGrid } from "../../../../modules/features/components/AnalyticsGrid";
+
+const ANALYTICS_CODE = `// POST /api/events/track
+{
+  "type": "search_query",
+  "query": "sneakers",
+  "resultCount": 42,
+  "latencyMs": 23
+}`;
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -34,6 +43,11 @@ export default async function FeaturesAnalyticsPage(props: {
 				</div>
 			</section>
 			<AnalyticsGrid />
+			<CodeExampleSection
+				namespace="featuresAnalytics"
+				code={ANALYTICS_CODE}
+				language="json"
+			/>
 			<CtaFooter />
 		</>
 	);

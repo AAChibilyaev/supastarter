@@ -683,7 +683,9 @@
 				"title": "Seguimiento de eventos del widget",
 				"description": "widget_open, search_query, result_click, filter_used — todos capturados automáticamente desde el widget embebido."
 			}
-		}
+		},
+		"codeTitle": "Los eventos son automáticos",
+		"codeSubtitle": "El widget envía eventos de búsqueda por POST. Sin instrumentación adicional."
 	},
 	"featuresWidgetPage": {
 		"title": "Widget de búsqueda embebible",
@@ -717,7 +719,9 @@
 				"title": "14 KB comprimido",
 				"description": "Build dual IIFE + ESM. Carga inicial rápida, resultados de búsqueda instantáneos. Sin chunks asíncronos, sin importaciones dinámicas."
 			}
-		}
+		},
+		"codeTitle": "En funcionamiento en 60 segundos",
+		"codeSubtitle": "Copia. Pega. Reemplaza el token. La búsqueda instantánea está en vivo."
 	},
 	"featuresKnowledgePage": {
 		"title": "Base de conocimiento y RAG",
@@ -785,7 +789,9 @@
 				"title": "Historial de trabajos de sincronización",
 				"description": "Cada ejecución de sincronización se registra con hora de inicio, conteo de documentos, errores y duración. Reintenta lotes fallidos desde el dashboard."
 			}
-		}
+		},
+		"codeTitle": "Sincronización delta en una solicitud",
+		"codeSubtitle": "Envía solo los documentos cambiados. La API gestiona la deduplicación y los reintentos."
 	},
 	"featuresScopedTokensPage": {
 		"title": "Scoped tokens de búsqueda",
@@ -1393,7 +1399,9 @@
 				"title": "Cuándo elegir AACsearch",
 				"description": "Si estás gastando $200+/mes en Algolia, o si el self-hosting, el aislamiento multi-tenant o el open source son importantes para ti."
 			}
-		}
+		},
+		"codeTitle": "La migración es cuestión de horas, no semanas",
+		"codeSubtitle": "La API de búsqueda de AACsearch es similar a la de Algolia. Cambia el cliente, mantén los filtros."
 	},
 	"compareElasticsearchPage": {
 		"title": "AACsearch vs Elasticsearch",
@@ -2200,7 +2208,9 @@
 				"description": "El widget de AACsearch incluye una interfaz de búsqueda instantánea lista para usar. Una etiqueta script, sin configuración necesaria.",
 				"title": "Widget listo para usar"
 			}
-		}
+		},
+		"codeTitle": "Un script tag",
+		"codeSubtitle": "Inserta el widget en cualquier página HTML. Sin npm, sin bundler, sin framework."
 	},
 	"featuresRelevanceTuningPage": {
 		"title": "Ajuste de Relevancia",

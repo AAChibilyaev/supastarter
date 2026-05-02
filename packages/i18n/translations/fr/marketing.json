@@ -683,7 +683,9 @@
 				"title": "Suivi des événements widget",
 				"description": "widget_open, search_query, result_click, filter_used — tous capturés automatiquement par le widget intégrable."
 			}
-		}
+		},
+		"codeTitle": "Les événements sont automatiques",
+		"codeSubtitle": "Le widget envoie les événements de recherche via un POST. Rien à instrumenter."
 	},
 	"featuresWidgetPage": {
 		"title": "Widget de recherche intégrable",
@@ -717,7 +719,9 @@
 				"title": "14 Ko gzippé",
 				"description": "Build dual IIFE + ESM. Chargement initial rapide, résultats de recherche instantanés. Pas de chunks asynchrones, pas d'imports dynamiques."
 			}
-		}
+		},
+		"codeTitle": "En ligne en 60 secondes",
+		"codeSubtitle": "Copiez. Collez. Remplacez le token. La recherche instantanée est en ligne."
 	},
 	"featuresKnowledgePage": {
 		"title": "Base de connaissances & RAG",
@@ -785,7 +789,9 @@
 				"title": "Historique des jobs de sync",
 				"description": "Chaque sync est journalisée avec heure de départ, nombre de documents, erreurs et durée. Relancez les batches échoués depuis le dashboard."
 			}
-		}
+		},
+		"codeTitle": "Sync delta en une requête",
+		"codeSubtitle": "Envoyez uniquement les documents modifiés. L'API gère la déduplication et les tentatives."
 	},
 	"featuresScopedTokensPage": {
 		"title": "Scoped tokens de recherche",
@@ -1393,7 +1399,9 @@
 				"title": "Quand choisir AACsearch",
 				"description": "Si vous dépensez 200 $/mois ou plus sur Algolia, ou si le self-hosting, l'isolation multi-tenant ou l'open source comptent pour vous."
 			}
-		}
+		},
+		"codeTitle": "La migration prend des heures, pas des semaines",
+		"codeSubtitle": "L'API de recherche AACsearch ressemble à celle d'Algolia. Changez le client, gardez les filtres."
 	},
 	"compareElasticsearchPage": {
 		"title": "AACsearch vs Elasticsearch",
@@ -2200,7 +2208,9 @@
 				"description": "Le widget AACsearch est livré avec une interface de recherche instantanée prête à l'emploi. Une balise script, aucune configuration requise.",
 				"title": "Widget clé en main"
 			}
-		}
+		},
+		"codeTitle": "Une balise script",
+		"codeSubtitle": "Intégrez le widget dans n'importe quelle page HTML. Sans npm, sans bundler, sans framework."
 	},
 	"featuresRelevanceTuningPage": {
 		"title": "Réglage de la Pertinence",

@@ -1,8 +1,20 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { CodeExampleSection } from "@shared/components/CodeExampleSection";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { CompareAlgoliaGrid } from "../../../../modules/compare/components/CompareAlgoliaGrid";
+
+const COMPARE_ALGOLIA_CODE = `// Before: Algolia
+const { hits } = await index.search('query', {
+  filters: \`visible_by:\${userId}\`,
+});
+
+// After: AACsearch
+const results = await client.search({
+  q: 'query',
+  filter_by: combineFilters(userFilter, scopedToken),
+});`;
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -32,6 +44,11 @@ export default async function CompareAlgoliaPage(props: { params: Promise<{ loca
 				</div>
 			</section>
 			<CompareAlgoliaGrid />
+			<CodeExampleSection
+				namespace="compareAlgolia"
+				code={COMPARE_ALGOLIA_CODE}
+				language="typescript"
+			/>
 			<CtaFooter />
 		</>
 	);

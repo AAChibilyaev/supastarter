@@ -683,7 +683,9 @@
 				"title": "Widget-Event-Tracking",
 				"description": "widget_open, search_query, result_click, filter_used — alle automatisch vom einbettbaren Widget erfasst."
 			}
-		}
+		},
+		"codeTitle": "Events sind automatisch",
+		"codeSubtitle": "Das Widget sendet Such-Events per POST. Nichts zu instrumentieren."
 	},
 	"featuresWidgetPage": {
 		"title": "Einbettbares Such-Widget",
@@ -717,7 +719,9 @@
 				"title": "14 KB gzipped",
 				"description": "IIFE + ESM Dual-Build. Schnelles initiales Laden, sofortige Suchergebnisse. Keine Async-Chunks, keine Dynamic Imports."
 			}
-		}
+		},
+		"codeTitle": "In 60 Sekunden live",
+		"codeSubtitle": "Kopieren. Einfügen. Token ersetzen. Sofortsuche ist live."
 	},
 	"featuresKnowledgePage": {
 		"title": "Wissensbasis & RAG",
@@ -785,7 +789,9 @@
 				"title": "Sync-Job-Verlauf",
 				"description": "Jeder Sync-Lauf wird mit Startzeit, Dokumentenanzahl, Fehlern und Dauer protokolliert. Fehlgeschlagene Batches vom Dashboard aus erneut versuchen."
 			}
-		}
+		},
+		"codeTitle": "Delta-Sync in einer Anfrage",
+		"codeSubtitle": "Nur geänderte Dokumente senden. Die API übernimmt Deduplizierung und Wiederholungen."
 	},
 	"featuresScopedTokensPage": {
 		"title": "Scoped Search-Tokens",
@@ -1393,7 +1399,9 @@
 				"title": "Wann Sie AACsearch wählen sollten",
 				"description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Self-Hosting, Multi-Tenancy-Isolation oder Open Source für Sie wichtig ist."
 			}
-		}
+		},
+		"codeTitle": "Migration dauert Stunden, nicht Wochen",
+		"codeSubtitle": "Die AACsearch Such-API spiegelt Algolias wider. Client tauschen, Filter behalten."
 	},
 	"compareElasticsearchPage": {
 		"title": "AACsearch vs. Elasticsearch",
@@ -2036,7 +2044,9 @@
 				"title": "Drop-in-Widget",
 				"description": "Das AACsearch-Widget enthält Sofortsuche-UI out of the box. Ein Script-Tag, null Konfiguration erforderlich."
 			}
-		}
+		},
+		"codeTitle": "Ein Script-Tag",
+		"codeSubtitle": "Widget in jede HTML-Seite einbinden. Kein npm, kein Bundler, kein Framework."
 	},
 	"featuresRelevanceTuningPage": {
 		"title": "Relevanz-Tuning",

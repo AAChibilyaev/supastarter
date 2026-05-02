@@ -1,8 +1,17 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { CodeExampleSection } from "@shared/components/CodeExampleSection";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { WidgetGrid } from "../../../../modules/features/components/WidgetGrid";
+
+const WIDGET_CODE = `<!-- One script tag. Zero configuration. -->
+<script
+  src="https://cdn.aacsearch.com/widget/v1/widget.js"
+  data-key="ss_search_xxxx"
+  data-index="products"
+  data-placeholder="Search products..."
+></script>`;
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -32,6 +41,7 @@ export default async function FeaturesWidgetPage(props: { params: Promise<{ loca
 				</div>
 			</section>
 			<WidgetGrid />
+			<CodeExampleSection namespace="featuresWidget" code={WIDGET_CODE} language="html" />
 			<CtaFooter />
 		</>
 	);

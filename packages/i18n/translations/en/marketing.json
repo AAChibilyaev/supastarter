@@ -683,7 +683,9 @@
 				"title": "Widget event tracking",
 				"description": "widget_open, search_query, result_click, filter_used — all captured automatically from the embeddable widget."
 			}
-		}
+		},
+		"codeTitle": "Events are automatic",
+		"codeSubtitle": "The widget sends search events via a single POST. Nothing to instrument."
 	},
 	"featuresWidgetPage": {
 		"title": "Embeddable search widget",
@@ -717,7 +719,9 @@
 				"title": "14KB gzipped",
 				"description": "IIFE + ESM dual build. Fast initial load, instant search results. No async chunks, no dynamic imports."
 			}
-		}
+		},
+		"codeTitle": "Live in 60 seconds",
+		"codeSubtitle": "Copy. Paste. Replace the token. Instant search is live."
 	},
 	"featuresKnowledgePage": {
 		"title": "Knowledge base & RAG",
@@ -785,7 +789,9 @@
 				"title": "Sync job history",
 				"description": "Every sync run is logged with start time, document count, errors, and duration. Retry failed batches from the dashboard."
 			}
-		}
+		},
+		"codeTitle": "Delta sync in one request",
+		"codeSubtitle": "Send only changed documents. The API handles deduplication and retries."
 	},
 	"featuresScopedTokensPage": {
 		"title": "Scoped search tokens",
@@ -1393,7 +1399,9 @@
 				"title": "When to choose AACsearch",
 				"description": "If you are spending $200+/mo on Algolia, or if self-hosting, multi-tenancy isolation, or open source matters to you."
 			}
-		}
+		},
+		"codeTitle": "Migration is hours, not weeks",
+		"codeSubtitle": "The AACsearch search API mirrors Algolia's. Swap the client, keep the filters."
 	},
 	"compareElasticsearchPage": {
 		"title": "AACsearch vs Elasticsearch",
@@ -1900,7 +1908,9 @@
 				"title": "Drop-in widget",
 				"description": "The AACsearch widget ships with instant-search UI out of the box. One script tag, zero configuration required."
 			}
-		}
+		},
+		"codeTitle": "One script tag",
+		"codeSubtitle": "Drop the widget into any HTML page. No npm, no bundler, no framework."
 	},
 	"featuresFacetedSearchPage": {
 		"title": "Faceted Search & Navigation",

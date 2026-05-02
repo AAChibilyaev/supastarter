@@ -1,8 +1,13 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { CodeExampleSection } from "@shared/components/CodeExampleSection";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ConnectorsGrid } from "../../../../modules/features/components/ConnectorsGrid";
+
+const CONNECTORS_CODE = `curl -X POST https://app.aacsearch.com/api/connector/sync/delta \\
+  -H "Authorization: Bearer ss_connector_xxxx" \\
+  -d '{"documents": [{"id": "p123", "name": "Sneakers", "price": 9990}]}'`;
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -34,6 +39,11 @@ export default async function FeaturesConnectorsPage(props: {
 				</div>
 			</section>
 			<ConnectorsGrid />
+			<CodeExampleSection
+				namespace="featuresConnectors"
+				code={CONNECTORS_CODE}
+				language="bash"
+			/>
 			<CtaFooter />
 		</>
 	);

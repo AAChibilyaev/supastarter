@@ -1,29 +1,144 @@
 ---
-title: Awesome second post
-date: 2023-03-01
+title: "Search Relevance Tuning: Synonyms, Curations, and Stopwords That Actually Move Revenue"
+date: 2026-02-19
 image: https://picsum.photos/id/436/1200/800
-authorName: Jon Doe
+authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: This is my first post. I'm so excited!
-tags: [first, post]
+excerpt: "A practical guide to improving e-commerce search relevance. Learn how synonyms, curations, and stopwords work — and how to measure their impact on conversion rate."
+tags: [e-commerce, relevance, synonyms, curations, search]
 published: true
 ---
 
-## Hello world
+## The Search Gap That's Costing You Sales
 
-This is my first post. I'm so excited! This blog posts needs some more text lines to fill up the page, so I'm just going to write some random stuff here. I'm going to write about my favorite things, like:
+Your best-selling product shows up on page 3. A customer searches "sneakers" and gets zero results because your catalog uses "trainers." Someone types "cheap" and your search treats it as a keyword instead of ignoring it.
 
-### What's next?
+These are relevance problems. They're invisible in your analytics until someone correlates zero-result searches with cart abandonment — and when they do, the numbers are always worse than expected.
 
-I'm going to write a lot more posts. I'm going to write about my favorite things, like:
+The good news: relevance problems are solvable without a data science team. Three tools handle 80% of them: **synonyms**, **curations**, and **stopwords**.
 
-- Cats
-- Dogs
-- Pizza
+## Synonyms: When Customers Say It Differently
 
-You can even add some nice links here:
+A synonym rule tells the search engine to treat two or more terms as equivalent. There are two kinds:
 
-- [My favorite cat](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [My favorite dog](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [My favorite pizza](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Homepage](/)
+### Equivalent Synonyms (bidirectional)
+
+```json
+{
+	"synonyms": ["sneakers", "trainers", "kicks", "athletic shoes"]
+}
+```
+
+When a customer searches "kicks," results for "sneakers" and "trainers" appear alongside literal matches for "kicks." The reverse is also true.
+
+**Use this for:** regional vocabulary differences, brand name variations, industry jargon versus consumer terms.
+
+### One-Way Synonyms (unidirectional)
+
+```json
+{
+	"root": "laptop",
+	"synonyms": ["notebook computer", "portable computer"]
+}
+```
+
+Searching "laptop" returns results that match "notebook computer" — but searching "notebook computer" does NOT return results for "laptop." This is useful when one term is authoritative and the others are edge cases.
+
+**Use this for:** technical terms that map to a canonical product category, deprecated product names that redirect to current ones.
+
+### Measuring Synonym Impact
+
+In AACsearch Analytics, filter by query terms you've added synonyms for. Compare the zero-result rate before and after deployment. A well-placed synonym set typically reduces zero-result searches by 15–40% for the targeted terms.
+
+## Curations: Manual Override When Algorithms Aren't Enough
+
+Curations let you pin specific products to the top of search results, or exclude products that shouldn't appear for a given query.
+
+### Pinning a Product
+
+Your summer sale has a featured item. You want it first for searches like "sandals," "summer shoes," and "beach":
+
+```json
+{
+	"id": "summer-sale-curation",
+	"query": "sandals",
+	"includedHits": [{ "id": "product-1234", "position": 1 }]
+}
+```
+
+Product 1234 appears at position 1 regardless of relevance score. Everything else ranks normally below it.
+
+### Excluding Products
+
+A product is out of stock but you haven't removed it from the index yet. Or it's discontinued and you don't want it appearing for certain queries:
+
+```json
+{
+	"query": "running shoes",
+	"excludedHits": ["product-5678", "product-9012"]
+}
+```
+
+### When to Use Curations
+
+Curations are a scalpel, not a paintbrush. Reserve them for:
+
+- **Seasonal promotions** — pin sale items for relevant queries during a campaign
+- **New product launches** — ensure visibility for items that don't have review signals yet
+- **Safety recalls or legal exclusions** — remove specific products from appearing for certain searches
+
+Don't use curations to compensate for bad indexing. If 50 products need manual pinning, the underlying issue is probably schema or weighting — fix that instead.
+
+## Stopwords: Ignoring Words That Add Noise
+
+Stopwords are terms the search engine ignores entirely. Common English stopwords — "the," "a," "an," "and" — are usually handled automatically. E-commerce sites need custom stopwords for their specific context.
+
+### Common E-commerce Stopwords
+
+```json
+{
+	"stopwords": ["cheap", "buy", "purchase", "get", "find", "best", "good", "nice"]
+}
+```
+
+When a customer searches "buy cheap running shoes," the search engine processes "running shoes" — which is what they actually want. Without stopwords, "buy" and "cheap" become keywords that can dilute relevance scoring.
+
+### What NOT to Add as a Stopword
+
+Be careful with price-adjacent terms. "Cheap" is a stopword candidate because it's intent, not product data. "Discount" is trickier — some of your products might literally have "discount" in their name or description. Test before shipping.
+
+### The Stopwords Anti-Pattern
+
+Some teams add competitor brand names as stopwords to avoid showing their products when customers search for a competitor. This is a mistake — customers searching for a competitor are a conversion opportunity, not a problem. Show them your best alternative instead.
+
+## Putting It Together: A Relevance Audit
+
+Run this audit quarterly:
+
+1. **Export your top 100 zero-result queries.** These are your highest-priority synonym candidates.
+2. **Check your top 100 queries with a CTR below 5%.** Low CTR on high-volume terms means the wrong products are ranking first — curation candidates.
+3. **Review queries where customers add "cheap," "buy," or "get."** Add these to your stopwords list.
+4. **A/B test synonym sets** by deploying to one locale or traffic segment first.
+
+## Monitoring Relevance in AACsearch
+
+AACsearch Analytics shows:
+
+| Metric                       | What It Tells You                                         |
+| ---------------------------- | --------------------------------------------------------- |
+| Zero-result rate             | Which queries have no matches — synonym targets           |
+| CTR per query                | Which results customers don't click — curation candidates |
+| Top queries                  | Where your synonym and curation investment should focus   |
+| Result position distribution | Whether pinned products are actually appearing            |
+
+Check these dashboards weekly during an active relevance improvement cycle. Once things stabilize, monthly is enough.
+
+## Start Small, Measure Everything
+
+The trap in relevance tuning is doing too much at once and not knowing what moved the needle. Add one synonym set, measure for a week, then add another. Curations have immediate effect — you'll see CTR change within 24 hours of deployment.
+
+Relevance is never "done." New products introduce new vocabulary. Seasonal trends shift what customers search for. A quarterly review keeps you ahead of the drift.
+
+---
+
+Want to manage synonyms and curations from a dashboard without touching config files? [Try AACsearch free →](https://app.aacsearch.com/signup)

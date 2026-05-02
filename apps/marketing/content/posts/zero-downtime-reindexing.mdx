@@ -1,0 +1,132 @@
+---
+title: "Zero-Downtime Reindexing: How AACSearch Keeps Search Live During Schema Changes"
+date: 2025-05-22
+image: https://picsum.photos/id/48/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Schema changes and full reindexing are the most dangerous operations in search infrastructure. Here's how AACSearch handles them with zero search downtime using atomic alias swaps.
+tags: [technical, reindexing, architecture, typesense]
+published: true
+---
+
+If you've operated a search infrastructure at any scale, you know the moment of dread: you need to change your index schema, which means a full reindex, which means either search is down or you're running two systems in parallel and manually cutting over.
+
+There's no good answer — unless you've built alias-based zero-downtime reindexing. AACSearch has. Here's exactly how it works.
+
+## The Problem with Traditional Reindexing
+
+A search index has a schema: field names, types, indexing strategies, and sorting configurations. When you need to change that schema — add a field, change a field type, update facet configuration — Typesense (and most search engines) require you to drop and recreate the collection.
+
+The naive approach:
+
+1. Delete the existing collection
+2. Create a new one with the updated schema
+3. Re-import all documents
+4. Update your application to point at the new collection
+
+Step 3 is the problem. For a 1-million-document catalog, this takes 5–15 minutes. During that time, search either returns no results (collection deleted) or stale results from the old schema (if you rebuild in place and your engine supports it, which Typesense doesn't).
+
+## The Solution: Versioned Collections + Alias Swap
+
+AACSearch uses a pattern borrowed from database blue-green deployments: versioned collections with an alias layer.
+
+Every search index in AACSearch maps to a Typesense collection named:
+
+```
+{orgShortId}_{indexSlug}_v{version}
+```
+
+For example, `abc123_products_v1`.
+
+When you create an index named `products` in your organization, AACSearch creates:
+
+- The collection: `abc123_products_v1`
+- An alias: `abc123_products` → `abc123_products_v1`
+
+Your application always queries the alias, not the versioned collection. The alias is a pointer — it resolves to whichever collection version is currently active.
+
+## The Reindex Flow
+
+When you trigger a reindex (via the dashboard or API), here's exactly what happens:
+
+**Step 1: Create new collection**
+
+AACSearch creates `abc123_products_v2` with the updated schema. The existing `abc123_products_v1` is untouched. Search continues to serve from `v1` through the alias.
+
+**Step 2: Populate the new collection**
+
+All documents from your ingest buffer are streamed into `v2`. For a 500,000-document catalog, this takes 2–4 minutes. During this entire time, your application is still querying `v1` — search is live and returning current results.
+
+**Step 3: Verify**
+
+Before the alias swap, AACSearch runs a verification step: it checks that `v2` has received at least the expected document count (within a 5% margin to account for deletions since the reindex started). If verification fails — due to an ingest error or network issue — the reindex aborts and `v1` remains active. No downtime, no partial data.
+
+**Step 4: Atomic alias swap**
+
+Once verification passes, AACSearch swaps the alias atomically:
+
+```
+abc123_products → abc123_products_v2
+```
+
+From this point, all new search queries hit `v2`. The swap takes microseconds — there's no window where the alias points to nothing.
+
+**Step 5: Cleanup**
+
+`v1` is kept alive for a configurable retention period (default: until the next successful reindex). This acts as an instant rollback target: if something looks wrong with `v2`, you can manually swap the alias back to `v1` without another full reindex.
+
+## What Triggers a Reindex
+
+Three things trigger a reindex in AACSearch:
+
+**Schema changes**: When you update your index schema (add a field, change facet configuration, update search weights), a reindex is required to apply the changes to existing documents. AACSearch queues this automatically.
+
+**Manual reindex**: You can trigger a reindex from the dashboard (Index → Reindex) or via the API. Useful when you've made bulk changes to your product catalog that need to be re-ranked with updated scoring.
+
+**Connector-initiated reindex**: When a CMS connector performs a full sync and the document count changes significantly (>20% from the current collection), AACSearch may initiate an automatic reindex to ensure consistency.
+
+## Ingest During Reindex
+
+Here's a detail that matters for high-traffic stores: what happens to new product updates while the reindex is running?
+
+AACSearch uses a DB-first ingest buffer. When you send a document to AACSearch (via connector or API), it's written to a PostgreSQL queue first. A background worker then processes the queue and sends documents to Typesense.
+
+During a reindex, incoming documents are written to the queue as normal. The reindex worker reads from the same queue and populates `v2`. After the alias swap, the ingest worker continues pushing updates to `v2`. No documents are lost, and the window of potentially-stale data is bounded by the reindex duration.
+
+## The Rollback Story
+
+What if something goes wrong after the alias swap? Maybe `v2` has a schema bug that only manifests on certain queries.
+
+Because `v1` is kept alive, the rollback path is fast:
+
+1. Detect the problem (via analytics, error rate, or manual review)
+2. Swap the alias back: `abc123_products → abc123_products_v1`
+3. Fix the schema issue in `v2`
+4. Re-run the reindex to create `v3` and swap forward
+
+No full re-import required for the rollback — you're just switching the pointer.
+
+## How to Trigger a Reindex via API
+
+If you're automating deployments and want to trigger a reindex programmatically:
+
+```bash
+curl -X POST https://app.aacsearch.com/api/rpc/search.reindex \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "indexId": "YOUR_INDEX_ID" }'
+```
+
+The response includes a `jobId` you can poll for status. The job completes asynchronously — don't block your deployment pipeline on it unless you need schema-dependent features to be live before releasing your application.
+
+## Summary
+
+Zero-downtime reindexing isn't magic — it's a consequence of separating the logical name (the alias) from the physical collection. AACSearch handles this automatically so you never have to think about it:
+
+- Schema changes → reindex triggered automatically
+- Reindex runs against a new versioned collection
+- Alias swaps atomically when ready
+- Old version kept for rollback
+- Ingest continues during reindex without data loss
+
+The next time you need to add a facet field or change a search weight, the only thing you'll notice is a slightly higher document count in the dashboard — not a search outage.

@@ -1,0 +1,102 @@
+---
+title: "AACSearch vs Algolia: Side-by-Side Comparison"
+date: 2025-05-08
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia is the market leader in hosted search. AACSearch is the challenger built for CMS-first merchants. Here's an honest comparison across pricing, features, and developer experience.
+tags: [comparison, algolia, pricing, search]
+published: true
+---
+
+Algolia has dominated the hosted search market for a decade. If you've worked on a product with serious search requirements, you've probably evaluated it. It's excellent software — fast, reliable, and developer-friendly. It's also expensive, opinionated, and not designed for CMS merchants.
+
+AACSearch is built for exactly the audience Algolia underserves: PrestaShop and Bitrix stores that need enterprise-grade search without enterprise-grade complexity or pricing.
+
+Here's the honest comparison.
+
+## Pricing
+
+This is where the conversation usually starts — and where the difference is most stark.
+
+| Tier               | Algolia               | AACSearch            |
+| ------------------ | --------------------- | -------------------- |
+| Free               | 10,000 requests/month | 10,000 units/month   |
+| Paid starts at     | $0.50/1,000 requests  | $29/month (1M units) |
+| 1M requests/month  | ~$500/month           | $29/month            |
+| 10M requests/month | ~$4,500/month         | Contact sales        |
+
+A "unit" in AACSearch is one search request or one indexed document. A "request" in Algolia is one API call. The billing mechanics are similar — the prices are not.
+
+For a store with 50,000 products and 100,000 searches per month, Algolia costs roughly $75–150/month at standard rates. AACSearch costs $29/month. At 500,000 searches per month — typical for a mid-sized store in peak season — that gap widens to thousands of dollars per year.
+
+Algolia does offer discounts for startups and higher-volume contracts. But the list pricing makes AACSearch's economics clear.
+
+## CMS Integration
+
+Algolia has a Shopify integration and a community-maintained InstantSearch library. For PrestaShop and Bitrix, you're on your own: custom connectors, manual sync scripts, and schema management you build from scratch.
+
+AACSearch ships with native connectors for both platforms. Install the module, paste your connector token, and click Full Sync. Delta syncs run every few minutes automatically. Schema is inferred from your product catalog — you don't write a single JSON schema definition.
+
+| Feature               | Algolia                | AACSearch          |
+| --------------------- | ---------------------- | ------------------ |
+| PrestaShop connector  | Community/third-party  | Native, maintained |
+| Bitrix connector      | None                   | Native, maintained |
+| Auto schema inference | Manual                 | Automatic          |
+| Delta sync            | Webhook setup required | Automatic          |
+| Shopify               | Native                 | Not yet            |
+
+If you're on Shopify, Algolia is the better choice. If you're on PrestaShop or Bitrix, the integration story is reversed.
+
+## Search Quality
+
+Both platforms use industry-standard ranking approaches:
+
+- **Typo tolerance**: Both support fuzzy matching with configurable edit distance
+- **Prefix search**: Both support type-as-you-go search
+- **Custom ranking**: Both support ranking by custom numeric fields (price, sales rank, rating)
+- **Filters and facets**: Both support attribute-based filtering and faceted navigation
+
+The underlying difference is the engine: Algolia runs a proprietary search engine built in-house. AACSearch runs Typesense, an open-source engine designed to be Algolia-compatible. In most benchmarks, Typesense is faster at equivalent scale — it's written in C++ and achieves sub-millisecond response times at single-node scale.
+
+For typical e-commerce use cases, both return excellent results. The practical quality difference is negligible.
+
+## Developer Experience
+
+Algolia's developer experience is industry-leading. The documentation is thorough, the client libraries cover every major language and framework, and the InstantSearch component library makes building search UIs fast.
+
+AACSearch's developer experience is good for the core use cases — widget embed, API key management, index configuration — but it doesn't (yet) have the breadth of Algolia's ecosystem. If you need a heavily customized search UI built in React with faceted navigation across 50 attributes, Algolia's InstantSearch library will serve you better.
+
+| Feature              | Algolia                | AACSearch        |
+| -------------------- | ---------------------- | ---------------- |
+| Client SDKs          | 10+ languages          | JavaScript, REST |
+| UI component library | InstantSearch (mature) | Widget (focused) |
+| Documentation        | Comprehensive          | Growing          |
+| API design           | REST + event-driven    | REST + oRPC      |
+| Dashboard analytics  | Full suite             | Core analytics   |
+
+## Infrastructure and Reliability
+
+Algolia runs multi-region infrastructure with 99.99% uptime SLAs on paid plans. It handles hundreds of millions of queries per day globally.
+
+AACSearch runs on Typesense, which is battle-tested at scale by companies including Perplexity AI and Shopify (for internal tools). AACSearch manages the infrastructure for you — you don't interact with Typesense directly.
+
+For high-traffic production workloads, Algolia's global footprint is a real advantage. AACSearch is designed for CMS merchants where the scale requirements are typically different.
+
+## Summary: When to Choose Each
+
+**Choose Algolia if:**
+
+- You're on Shopify or need native integrations with major e-commerce platforms
+- You need a heavily customized search UI with InstantSearch components
+- You have budget for premium pricing and need enterprise SLAs
+- You're building a product where search is the core experience (e.g., a marketplace or SaaS with complex faceted search)
+
+**Choose AACSearch if:**
+
+- You're running PrestaShop or Bitrix
+- You want search running in 30 minutes without infrastructure work
+- You need Algolia-quality results at a fraction of the price
+- You want a widget that drops into any page with a single script tag
+
+The honest summary: Algolia built the best search platform on the market for web developers building custom experiences. AACSearch built the best search platform for CMS merchants who want results without complexity. They're solving different problems for different customers — the right choice depends on which problem you have.

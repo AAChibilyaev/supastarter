@@ -1,0 +1,102 @@
+---
+title: "AACSearch vs. Algolia: Comparativa lado a lado"
+date: 2025-05-08
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Algolia es el líder del mercado en búsqueda alojada. AACSearch es el retador diseñado para comerciantes centrados en CMS. Una comparativa honesta sobre precios, funcionalidades y experiencia de desarrollo.
+tags: [comparison, algolia, pricing, search]
+published: true
+---
+
+Algolia ha dominado el mercado de búsqueda alojada durante una década. Si has trabajado en un producto con requisitos de búsqueda serios, probablemente lo hayas evaluado. Es un software excelente — rápido, fiable y amigable para los desarrolladores. También es caro, opinionado y no está diseñado para comerciantes de CMS.
+
+AACSearch está construido exactamente para el público que Algolia no atiende bien: tiendas PrestaShop y Bitrix que necesitan búsqueda de nivel empresarial sin la complejidad ni los precios empresariales.
+
+Aquí está la comparativa honesta.
+
+## Precios
+
+Por aquí suele empezar la conversación — y es donde la diferencia es más notable.
+
+| Nivel                | Algolia                 | AACSearch              |
+| -------------------- | ----------------------- | ---------------------- |
+| Gratuito             | 10.000 solicitudes/mes  | 10.000 unidades/mes    |
+| De pago desde        | $0,50/1.000 solicitudes | $29/mes (1 M unidades) |
+| 1 M solicitudes/mes  | ~$500/mes               | $29/mes                |
+| 10 M solicitudes/mes | ~$4.500/mes             | Contactar ventas       |
+
+Una «unidad» en AACSearch es una solicitud de búsqueda o un documento indexado. Una «solicitud» en Algolia es una llamada a la API. La mecánica de facturación es similar — los precios, no.
+
+Para una tienda con 50.000 productos y 100.000 búsquedas al mes, Algolia cuesta aproximadamente $75–150/mes a tarifas estándar. AACSearch cuesta $29/mes. Con 500.000 búsquedas al mes — típico para una tienda mediana en temporada alta — esa diferencia se amplía a miles de dólares al año.
+
+Algolia ofrece descuentos para startups y contratos de mayor volumen. Pero el precio de lista deja clara la ventaja económica de AACSearch.
+
+## Integración con CMS
+
+Algolia tiene una integración con Shopify y una biblioteca InstantSearch mantenida por la comunidad. Para PrestaShop y Bitrix, debes arreglártelas por tu cuenta: conectores personalizados, scripts de sincronización manual y gestión de esquemas que construyes desde cero.
+
+AACSearch incluye conectores nativos para ambas plataformas. Instala el módulo, pega tu token de conector y haz clic en Sincronización completa. Las sincronizaciones delta se ejecutan automáticamente cada pocos minutos. El esquema se infiere de tu catálogo de productos — no escribes ni una sola definición de esquema JSON.
+
+| Función                          | Algolia                        | AACSearch         |
+| -------------------------------- | ------------------------------ | ----------------- |
+| Conector PrestaShop              | Comunidad/terceros             | Nativo, mantenido |
+| Conector Bitrix                  | No disponible                  | Nativo, mantenido |
+| Inferencia automática de esquema | Manual                         | Automática        |
+| Sincronización delta             | Requiere configuración webhook | Automática        |
+| Shopify                          | Nativo                         | Aún no            |
+
+Si usas Shopify, Algolia es la mejor opción. Si usas PrestaShop o Bitrix, la situación de integración se invierte.
+
+## Calidad de búsqueda
+
+Ambas plataformas utilizan enfoques de clasificación estándar de la industria:
+
+- **Tolerancia a errores tipográficos**: Ambas admiten coincidencia difusa con distancia de edición configurable
+- **Búsqueda por prefijo**: Ambas admiten búsqueda mientras se escribe
+- **Clasificación personalizada**: Ambas admiten clasificación por campos numéricos personalizados (precio, rango de ventas, valoración)
+- **Filtros y facetas**: Ambas admiten filtrado por atributos y navegación por facetas
+
+La diferencia de fondo es el motor: Algolia ejecuta un motor de búsqueda propietario desarrollado internamente. AACSearch ejecuta Typesense, un motor de código abierto diseñado para ser compatible con Algolia. En la mayoría de los benchmarks, Typesense es más rápido a escala equivalente — está escrito en C++ y alcanza tiempos de respuesta por debajo del milisegundo en un solo nodo.
+
+Para los casos de uso habituales de comercio electrónico, ambos devuelven excelentes resultados. La diferencia de calidad práctica es insignificante.
+
+## Experiencia de desarrollo
+
+La experiencia de desarrollo de Algolia es líder en la industria. La documentación es exhaustiva, las bibliotecas cliente cubren todos los lenguajes y frameworks principales, y la biblioteca de componentes InstantSearch facilita la construcción rápida de interfaces de búsqueda.
+
+La experiencia de desarrollo de AACSearch es buena para los casos de uso principales — integración del widget, gestión de claves API, configuración de índices — pero todavía no tiene la amplitud del ecosistema de Algolia. Si necesitas una interfaz de búsqueda muy personalizada construida en React con navegación por facetas a través de 50 atributos, la biblioteca InstantSearch de Algolia te servirá mejor.
+
+| Función                      | Algolia                | AACSearch         |
+| ---------------------------- | ---------------------- | ----------------- |
+| SDKs de cliente              | Más de 10 lenguajes    | JavaScript, REST  |
+| Biblioteca de componentes UI | InstantSearch (madura) | Widget (enfocado) |
+| Documentación                | Completa               | En crecimiento    |
+| Diseño de API                | REST + event-driven    | REST + oRPC       |
+| Analítica en dashboard       | Suite completa         | Analítica básica  |
+
+## Infraestructura y fiabilidad
+
+Algolia gestiona infraestructura multirregión con SLAs de tiempo de actividad del 99,99 % en planes de pago. Procesa cientos de millones de consultas diarias a nivel mundial.
+
+AACSearch funciona sobre Typesense, que ha sido probado a escala por empresas como Perplexity AI y Shopify (para herramientas internas). AACSearch gestiona la infraestructura por ti — no interactúas con Typesense directamente.
+
+Para cargas de trabajo de producción de alto tráfico, la presencia global de Algolia es una ventaja real. AACSearch está diseñado para comerciantes de CMS donde los requisitos de escala suelen ser diferentes.
+
+## Resumen: cuándo elegir cada uno
+
+**Elige Algolia si:**
+
+- Usas Shopify o necesitas integraciones nativas con las principales plataformas de comercio electrónico
+- Necesitas una interfaz de búsqueda muy personalizada con componentes InstantSearch
+- Tienes presupuesto para precios premium y necesitas SLAs empresariales
+- Estás construyendo un producto donde la búsqueda es la experiencia central (p. ej., un marketplace o SaaS con búsqueda facetada compleja)
+
+**Elige AACSearch si:**
+
+- Usas PrestaShop o Bitrix
+- Quieres tener la búsqueda funcionando en 30 minutos sin trabajo de infraestructura
+- Necesitas resultados de calidad Algolia a una fracción del precio
+- Quieres un widget que se integre en cualquier página con una sola etiqueta de script
+
+El resumen honesto: Algolia construyó la mejor plataforma de búsqueda del mercado para desarrolladores web que crean experiencias personalizadas. AACSearch construyó la mejor plataforma de búsqueda para comerciantes de CMS que quieren resultados sin complejidad. Están resolviendo problemas diferentes para clientes diferentes — la elección correcta depende del problema que tengas.

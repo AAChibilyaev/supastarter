@@ -1,29 +1,140 @@
 ---
-title: Toller zweiter Beitrag
-date: 2023-03-01
+title: "Suchrelevanz optimieren: Synonyme, Curations und Stoppwörter, die wirklich den Umsatz steigern"
+date: 2026-02-19
 image: https://picsum.photos/id/436/1200/800
-authorName: Jon Doe
+authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: Das ist mein erster Beitrag. Ich bin so aufgeregt!
-tags: [first, post]
+excerpt: "Ein praxisnaher Leitfaden zur Verbesserung der E-Commerce-Suchrelevanz. Erfahre, wie Synonyme, Curations und Stoppwörter funktionieren – und wie du ihre Auswirkung auf die Conversion-Rate messen kannst."
+tags: [e-commerce, relevance, synonyms, curations, search]
 published: true
 ---
 
-## Hallo Welt
+## Die Such-Lücke, die dir Umsatz kostet
 
-Das ist mein erster Beitrag. Ich bin so aufgeregt! Dieser Blogbeitrag braucht etwas mehr Text, daher schreibe ich hier einfach einige zufällige Dinge. Ich werde über meine Lieblingsdinge schreiben, wie:
+Dein meistverkauftes Produkt erscheint auf Seite 3. Ein Kunde sucht nach „Sneakers" und bekommt keine Ergebnisse, weil dein Katalog „Turnschuhe" verwendet. Jemand tippt „günstig" ein, und deine Suche behandelt es als Keyword statt es zu ignorieren.
 
-### Was kommt als nächstes?
+Das sind Relevanzprobleme. Sie sind in deinen Analytics unsichtbar, bis jemand Suchen ohne Ergebnisse mit Warenkorbabbrüchen korreliert – und dann sind die Zahlen immer schlimmer als erwartet.
 
-Ich werde noch viele weitere Beiträge schreiben. Ich werde über meine Lieblingsdinge schreiben, wie:
+Die gute Nachricht: Relevanzprobleme lassen sich ohne Data-Science-Team lösen. Drei Werkzeuge lösen 80% davon: **Synonyme**, **Curations** und **Stoppwörter**.
 
-- Katzen
-- Hunde
-- Pizza
+## Synonyme: Wenn Kunden es anders ausdrücken
 
-Sie können hier auch schöne Links hinzufügen:
+Eine Synonymregel weist die Suchmaschine an, zwei oder mehr Begriffe als gleichwertig zu behandeln. Es gibt zwei Arten:
 
-- [Meine Lieblingskatze](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Mein Lieblingshund](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Meine Lieblingspizza](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Startseite](/)
+### Äquivalente Synonyme (bidirektional)
+
+```json
+{
+	"synonyms": ["sneakers", "turnschuhe", "kicks", "sportschuhe"]
+}
+```
+
+Wenn ein Kunde nach „kicks" sucht, erscheinen Ergebnisse für „sneakers" und „turnschuhe" neben direkten Treffern für „kicks". Das gilt auch umgekehrt.
+
+**Verwende dies für:** regionale Vokabularunterschiede, Markennamen-Varianten, Fachbegriffe gegenüber Verbraucherbegriffen.
+
+### Einseitige Synonyme (unidirektional)
+
+```json
+{
+	"root": "laptop",
+	"synonyms": ["notebook", "tragbarer computer"]
+}
+```
+
+Die Suche nach „laptop" liefert Ergebnisse für „notebook" – aber die Suche nach „notebook" liefert KEINE Ergebnisse für „laptop". Das ist nützlich, wenn ein Begriff maßgebend ist und die anderen Randfälle sind.
+
+**Verwende dies für:** technische Begriffe, die einer kanonischen Produktkategorie zugeordnet sind, veraltete Produktnamen, die auf aktuelle umleiten.
+
+### Synonym-Wirkung messen
+
+Filtere in AACsearch Analytics nach den Suchbegriffen, für die du Synonyme hinzugefügt hast. Vergleiche die Zero-Result-Rate vor und nach der Einführung. Ein gut platzierter Synonymsatz reduziert Zero-Result-Suchen für die Zielbegriffe typischerweise um 15–40%.
+
+## Curations: Manuelles Überschreiben, wenn Algorithmen nicht ausreichen
+
+Curations ermöglichen es dir, bestimmte Produkte an die Spitze der Suchergebnisse zu setzen oder Produkte auszuschließen, die für eine bestimmte Anfrage nicht erscheinen sollen.
+
+### Ein Produkt anheften
+
+Dein Sommerschlussverkauf hat einen hervorgehobenen Artikel. Du möchtest, dass er bei Suchen wie „Sandalen", „Sommerschuhe" und „Strand" an erster Stelle steht:
+
+```json
+{
+	"id": "sommerschlussverkauf-curation",
+	"query": "sandalen",
+	"includedHits": [{ "id": "produkt-1234", "position": 1 }]
+}
+```
+
+Produkt 1234 erscheint unabhängig vom Relevanz-Score an Position 1. Alles andere rankiert normal darunter.
+
+### Produkte ausschließen
+
+Ein Produkt ist vergriffen, aber du hast es noch nicht aus dem Index entfernt. Oder es wurde eingestellt und soll für bestimmte Suchanfragen nicht mehr erscheinen:
+
+```json
+{
+	"query": "laufschuhe",
+	"excludedHits": ["produkt-5678", "produkt-9012"]
+}
+```
+
+### Wann Curations einsetzen
+
+Curations sind ein Skalpell, kein Pinsel. Nutze sie für:
+
+- **Saisonale Aktionen** — hefe Sale-Artikel für relevante Suchanfragen während einer Kampagne an
+- **Neue Produkteinführungen** — stelle Sichtbarkeit für Artikel sicher, die noch keine Bewertungssignale haben
+- **Sicherheitsrückrufe oder rechtliche Ausschlüsse** — entferne bestimmte Produkte aus bestimmten Suchanfragen
+
+Verwende keine Curations, um schlechte Indexierung zu kompensieren. Wenn 50 Produkte manuell angeheftet werden müssen, liegt das eigentliche Problem wahrscheinlich im Schema oder der Gewichtung.
+
+## Stoppwörter: Rauschende Wörter ignorieren
+
+Stoppwörter sind Begriffe, die die Suchmaschine vollständig ignoriert. Häufige Stoppwörter wie „der", „die", „das", „und" werden normalerweise automatisch behandelt. E-Commerce-Seiten benötigen benutzerdefinierte Stoppwörter für ihren spezifischen Kontext.
+
+### Häufige E-Commerce-Stoppwörter
+
+```json
+{
+	"stopwords": ["günstig", "kaufen", "erwerben", "finden", "bestes", "gutes", "schönes"]
+}
+```
+
+Wenn ein Kunde „günstige laufschuhe kaufen" sucht, verarbeitet die Suchmaschine „laufschuhe" – was er eigentlich will. Ohne Stoppwörter werden „günstig" und „kaufen" zu Keywords, die das Relevanz-Scoring verwässern können.
+
+### Was NICHT als Stoppwort hinzufügen
+
+Sei vorsichtig mit preisnahen Begriffen. „Günstig" ist ein Stoppwort-Kandidat, weil es Absicht, nicht Produktdaten ausdrückt. „Rabatt" ist kniffliger – einige deiner Produkte könnten buchstäblich „Rabatt" in ihrem Namen oder ihrer Beschreibung haben. Teste vor der Einführung.
+
+## Alles zusammenbringen: Ein Relevanz-Audit
+
+Führe dieses Audit vierteljährlich durch:
+
+1. **Exportiere deine Top 100 Zero-Result-Anfragen.** Das sind deine Synonymkandidaten mit höchster Priorität.
+2. **Prüfe deine Top 100 Anfragen mit einer CTR unter 5%.** Niedrige CTR bei hohem Volumen bedeutet, dass die falschen Produkte zuerst ranken – Curation-Kandidaten.
+3. **Überprüfe Anfragen, bei denen Kunden „günstig", „kaufen" oder „finden" hinzufügen.** Füge diese deiner Stoppwortliste hinzu.
+4. **A/B-teste Synonymsätze**, indem du zuerst in einem Gebietsschema oder Traffic-Segment einführst.
+
+## Relevanz in AACsearch überwachen
+
+AACsearch Analytics zeigt:
+
+| Metrik                       | Was es dir sagt                                                   |
+| ---------------------------- | ----------------------------------------------------------------- |
+| Zero-Result-Rate             | Welche Anfragen keine Treffer haben — Synonym-Ziele               |
+| CTR pro Anfrage              | Auf welche Ergebnisse Kunden nicht klicken — Curation-Kandidaten  |
+| Top-Anfragen                 | Wo deine Synonym- und Curation-Investition fokussiert sein sollte |
+| Ergebnispositions-Verteilung | Ob angeheftete Produkte tatsächlich erscheinen                    |
+
+Prüfe diese Dashboards während eines aktiven Relevanzverbesserungszyklus wöchentlich. Sobald sich die Dinge stabilisieren, reicht monatlich.
+
+## Klein anfangen, alles messen
+
+Die Falle bei der Relevanzoptimierung ist, zu viel auf einmal zu tun und nicht zu wissen, was den Ausschlag gegeben hat. Füge einen Synonymsatz hinzu, messe eine Woche lang, dann füge einen weiteren hinzu. Curations haben sofortige Wirkung – du wirst sehen, wie sich die CTR innerhalb von 24 Stunden nach der Einführung ändert.
+
+Relevanz ist nie „fertig". Neue Produkte führen neues Vokabular ein. Saisonale Trends verändern, wonach Kunden suchen. Eine vierteljährliche Überprüfung hält dich der Drift voraus.
+
+---
+
+Möchtest du Synonyme und Curations über ein Dashboard verwalten, ohne Konfigurationsdateien anzufassen? [AACsearch kostenlos testen →](https://app.aacsearch.com/signup)

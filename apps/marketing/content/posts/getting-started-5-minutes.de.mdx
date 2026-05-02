@@ -1,0 +1,91 @@
+---
+title: In 5 Minuten mit AACSearch starten
+date: 2025-05-01
+image: https://picsum.photos/id/11/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Füge deinem Shop in weniger als 5 Minuten produktionsreife Volltextsuche hinzu — ohne Infrastruktur, ohne DevOps, ohne Schema-Kenntnisse.
+tags: [tutorial, getting-started, search]
+published: true
+---
+
+Eine gute Suche aufzubauen ist schwer. Der Einstieg sollte es nicht sein. Diese Anleitung zeigt dir, wie du AACSearch zu deinem Projekt hinzufügst — von null bis zum ersten Suchergebnis in unter 5 Minuten.
+
+## Was du brauchst
+
+- Ein AACSearch-Konto (Free-Tier umfasst bis zu 10.000 Dokumente)
+- Einen Produktkatalog — CSV, JSON oder einen laufenden PrestaShop- / Bitrix-Shop
+- 5 Minuten
+
+## Schritt 1: Index erstellen
+
+Nach der Registrierung landest du im Dashboard. Klick auf **Neuer Index** und vergib einen Namen (z. B. `products`). AACSearch erstellt automatisch eine Typesense-Collection für deine Organisation — keine Serverauswahl, keine Node-Konfiguration, keine Konfigurationsdateien.
+
+Dein Index erscheint innerhalb von Sekunden mit dem Status **Aktiv**.
+
+## Schritt 2: Datenquelle verbinden
+
+### Option A: CSV- oder JSON-Datei hochladen
+
+Gehe zu **Import** → **Datei hochladen**. AACSearch erkennt Feldtypen automatisch aus deinen Daten. Bei einem Standard-Produktkatalog werden die Felder `name`, `price`, `description`, `category` und `sku` ohne manuelle Schema-Definition erkannt.
+
+Lade eine Datei mit 1.000 Produkten hoch. Du siehst den Ingest-Fortschritt in Echtzeit — typischerweise unter 10 Sekunden für 1.000 Dokumente.
+
+### Option B: CMS-Connector verwenden
+
+Wenn du PrestaShop oder Bitrix betreibst, installiere das native Connector-Modul:
+
+- **PrestaShop**: Admin → Modul-Manager → „AACSearch" suchen → Installieren
+- **Bitrix**: Marketplace → AACSearch → Installieren
+
+Gehe in deinem AACSearch-Dashboard zu **Connectors** → **Neues Connector-Token**. Kopiere das Token und füge es in die Modul-Einstellungen deines CMS ein. Klick auf **Verbindung testen** — du solltest eine grüne Bestätigung mit deinem Index-Namen und der Dokumentenanzahl sehen.
+
+Starte einen **Vollständigen Sync**. Der Connector exportiert deinen gesamten Produktkatalog, stellt ihn in die Warteschlange und überträgt ihn an den Index. Bei einem Katalog mit 50.000 Produkten dauert das ca. 2–3 Minuten.
+
+## Schritt 3: Suche im Playground testen
+
+Öffne im Dashboard den Tab **Playground**. Tippe einen Produktnamen oder eine Teil-SKU ein. Du siehst:
+
+- Sortierte Ergebnisse mit hervorgehobenen Treffern
+- Antwortzeit in Millisekunden (typischerweise 10–30 ms)
+- Rohes JSON-Output zum Debuggen
+
+Probier einen Tippfehler aus — AACSearch nutzt Typesenses eingebautes Fuzzy-Matching, sodass `iphne` immer noch iPhone-Ergebnisse liefert.
+
+## Schritt 4: Widget einbetten
+
+Gehe zu **Widget** und kopiere den Embed-Snippet. Er sieht so aus:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="de"
+	async
+></script>
+```
+
+Füge diesen Snippet in das `<head>`-Tag deines Shops oder vor `</body>` ein. Das Widget rendert einen Such-Button, der ein Vollbild-Suchoverlay öffnet — kein zusätzliches CSS oder JavaScript erforderlich.
+
+Es läuft im Shadow DOM, sodass die Styles deines Shops nicht mit dem Widget-Design kollidieren.
+
+## Schritt 5: In der Produktion prüfen
+
+Öffne deinen Shop in einem Inkognito-Fenster und klicke auf den Such-Button. Tippe einen Produktnamen ein. Du solltest sofortige Ergebnisse während der Eingabe sehen — kein Seitenneuaufbau, kein Warten.
+
+Herzlichen Glückwunsch. Du hast jetzt produktionsreife Volltextsuche.
+
+## Was im Hintergrund passiert
+
+Wenn du ein Zeichen tippst, sendet das Widget eine Anfrage an AACSearchs öffentlichen Such-Endpunkt, der mit einem Nur-Lese-API-Key authentifiziert ist. Die Anfrage trifft deine Typesense-Collection, liefert sortierte Ergebnisse mit Tippfehlertoleranz und Präfix-Matching und rendert sie im Overlay — alles in unter 50 ms.
+
+Deine Produktaktualisierungen werden automatisch synchronisiert. Wenn du einen Preis änderst oder ein neues Produkt in deinem CMS hinzufügst, erkennt der Connector die Änderung und überträgt sie innerhalb von Minuten an den Index.
+
+## Nächste Schritte
+
+- **Synonyme**: Füge „Handy → Smartphone, Mobiltelefon" im Tab Relevanz hinzu, um Absichtsvarianten abzudecken
+- **Kurationen**: Pinne bestimmte Produkte an, damit sie bei hochwertigsten Suchanfragen zuerst erscheinen
+- **Analyse**: Prüfe nach einer Woche Traffic die Berichte zu Top-Suchanfragen und Nullergebnissen, um Lücken zu finden
+
+Die Suche läuft. Der Rest ist Optimierung.

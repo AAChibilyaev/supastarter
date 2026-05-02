@@ -3471,5 +3471,171 @@
 				"description": "App de Shopify con sincronización de productos, variantes y metafields. Integración de widget incluida."
 			}
 		}
+	},
+	"integrationsNextJsSetup": {
+		"title": "Empieza en 3 pasos",
+		"subtitle": "No se requieren cambios en el backend. El SDK de AACsearch funciona directamente desde tu app Next.js.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Instala el paquete",
+			"description": "Ejecuta npm install @aacsearch/client en tu proyecto Next.js."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Configura tu cliente",
+			"description": "Crea un cliente de búsqueda con tu clave API y el slug del índice. Mantén la clave en el servidor o usa un token de solo lectura para componentes cliente."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Busca desde cualquier componente",
+			"description": "Llama a client.search() desde un Server Component o usa el hook useSearch en un Client Component. Los resultados están tipados."
+		},
+		"code": {
+			"title": "Ejemplo mínimo de Server Component"
+		},
+		"cta": "Leer la documentación completa"
+	},
+	"integrationsNextJsFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Funciona con Next.js 13, 14 y 15?",
+			"answer": "Sí. El SDK es compatible con Next.js 13, 14 y 15. Funciona tanto con App Router como con Pages Router sin ningún adaptador."
+		},
+		"q2": {
+			"question": "¿Puedo usarlo con Vercel Edge Runtime?",
+			"answer": "Sí. El cliente AACsearch usa la API Fetch estándar y es totalmente compatible con Vercel Edge Runtime y Cloudflare Workers."
+		},
+		"q3": {
+			"question": "¿Cómo protejo mi clave API en el cliente?",
+			"answer": "Usa un token con alcance restringido y permisos de solo lectura para la búsqueda del lado del cliente. Créalo desde tu panel de AACsearch — la clave de administrador completa permanece solo en el servidor."
+		}
+	},
+	"integrationsReactSetup": {
+		"title": "Añade búsqueda a tu app React en 3 pasos",
+		"subtitle": "Compatible con React 17, 18 y 19. Agnóstico al framework — Next.js, Remix, Vite y CRA son compatibles.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Instala el paquete",
+			"description": "Ejecuta npm install @aacsearch/react en tu proyecto."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Usa el hook useSearch",
+			"description": "Pasa tu clave API y el slug del índice. El hook devuelve resultados, estado de carga y una función setQuery."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Renderiza los resultados",
+			"description": "Itera sobre los resultados y muéstralos en tu propia UI. Sin componentes envolventes obligatorios — total libertad de estilos."
+		},
+		"code": {
+			"title": "Ejemplo mínimo de useSearch"
+		},
+		"cta": "Ver la referencia de la API"
+	},
+	"integrationsReactFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Qué versiones de React son compatibles?",
+			"answer": "React 17, 18 y 19 son compatibles. Los hooks usan state y efectos estándar de React — sin APIs inestables ni características experimentales."
+		},
+		"q2": {
+			"question": "¿Funciona con Next.js o Remix?",
+			"answer": "Sí. Los hooks de React funcionan en cualquier entorno React. Para Next.js Server Components, usa el paquete base @aacsearch/client sin dependencia de React."
+		},
+		"q3": {
+			"question": "¿Hay una librería de componentes o solo hooks?",
+			"answer": "Ambos. @aacsearch/react incluye hooks componibles (useSearch, useAutocomplete, useFacets) y componentes headless sin estilos. Trae tu propio CSS o Tailwind."
+		}
+	},
+	"integrationsPrestashopSetup": {
+		"title": "Instala en 5 minutos",
+		"subtitle": "No se requiere codificación PHP. El módulo gestiona la sincronización automáticamente tras la configuración.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Descarga el módulo",
+			"description": "Obtén aacsearch.zip desde tu panel de AACsearch en Connectors → PrestaShop."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Sube a PrestaShop",
+			"description": "Ve a Módulos > Gestor de módulos > Subir un módulo. Selecciona el ZIP y confirma."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Introduce tu token de conector",
+			"description": "Pega el token de conector de tu panel de AACsearch en la configuración del módulo y guarda."
+		},
+		"step4": {
+			"label": "Paso 4",
+			"title": "Ejecuta la exportación completa del catálogo",
+			"description": "Haz clic en \"Exportación completa\" en el panel de administración del módulo. Todo tu catálogo de productos se sincroniza en un lote."
+		},
+		"step5": {
+			"label": "Paso 5",
+			"title": "La búsqueda está activa",
+			"description": "Los productos aparecen en AACsearch de inmediato. Los guardados, actualizaciones y eliminaciones futuras se sincronizan automáticamente mediante los hooks de PrestaShop."
+		},
+		"cta": "Descargar el módulo"
+	},
+	"integrationsPrestashopFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Qué versiones de PrestaShop son compatibles?",
+			"answer": "PrestaShop 8.0 y 8.1 son totalmente compatibles. Se requiere PHP 8.1+. Funciona con todos los temas principales, incluidos Hummingbird y Classic."
+		},
+		"q2": {
+			"question": "¿El módulo ralentiza el guardado de productos?",
+			"answer": "No. La sincronización es asíncrona a través del buffer de ingest de AACsearch. El módulo encola la actualización y retorna de inmediato — sin llamadas bloqueantes a Typesense al guardar."
+		},
+		"q3": {
+			"question": "¿Puedo personalizar qué campos se indexan?",
+			"answer": "Sí. El módulo exporta todos los campos de producto por defecto. Puedes restringir atributos en la configuración del módulo o extender la clase Exporter para lógica personalizada."
+		}
+	},
+	"integrationsBitrixSetup": {
+		"title": "Instala en 5 minutos",
+		"subtitle": "No se requieren personalizaciones de Bitrix. El módulo se instala como un módulo estándar del marketplace de Bitrix.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Descarga el módulo",
+			"description": "Obtén el archivo aac.search desde tu panel de AACsearch en Connectors → 1C-Bitrix."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Descomprime en /local/modules/",
+			"description": "Extrae el archivo en /local/modules/aac.search/ en tu servidor Bitrix. Mantén la estructura de directorios intacta."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Instala desde el admin de Bitrix",
+			"description": "Ve a Admin de Bitrix → Marketplace → Módulos instalados. Encuentra \"AACsearch\" en la lista y haz clic en Instalar."
+		},
+		"step4": {
+			"label": "Paso 4",
+			"title": "Configura el conector",
+			"description": "Introduce tu token de conector y el ID de iBlock en la configuración del módulo. Elige el tipo de iBlock del catálogo y guarda."
+		},
+		"step5": {
+			"label": "Paso 5",
+			"title": "Ejecuta la sincronización inicial",
+			"description": "Haz clic en \"Ejecutar sincronización completa\" en la pestaña Diagnósticos. Todos los elementos del catálogo se indexan. Los cambios futuros se sincronizan automáticamente mediante manejadores de eventos."
+		},
+		"cta": "Descargar el módulo"
+	},
+	"integrationsBitrixFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Qué ediciones de Bitrix son compatibles?",
+			"answer": "Las ediciones Bitrix Site Manager y Business son compatibles. Se requiere PHP 8.1+. Usa el HttpClient estándar de Bitrix — no se necesitan librerías HTTP de terceros."
+		},
+		"q2": {
+			"question": "¿Cómo funciona el agente de sincronización en segundo plano?",
+			"answer": "El módulo registra un agente Bitrix que ejecuta una sincronización completa periódica para mayor fiabilidad. Captura cualquier cambio del catálogo que los manejadores de eventos en tiempo real hayan omitido."
+		},
+		"q3": {
+			"question": "¿Puedo personalizar qué propiedades de iBlock se indexan?",
+			"answer": "Sí. El módulo exporta todas las propiedades de producto por defecto. Puedes limitar los campos en la configuración del administrador o extender la clase ProductExporter para una selección de campos completamente personalizada."
+		}
 	}
 }

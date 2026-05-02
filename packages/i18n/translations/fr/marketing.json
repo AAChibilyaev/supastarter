@@ -3471,5 +3471,171 @@
 				"description": "Application Shopify avec synchronisation des produits, variantes et métachamps. Intégration du widget incluse."
 			}
 		}
+	},
+	"integrationsNextJsSetup": {
+		"title": "Démarrer en 3 étapes",
+		"subtitle": "Aucune modification du backend requise. Le SDK AACsearch fonctionne directement depuis votre application Next.js.",
+		"step1": {
+			"label": "Étape 1",
+			"title": "Installer le package",
+			"description": "Exécutez npm install @aacsearch/client dans votre projet Next.js."
+		},
+		"step2": {
+			"label": "Étape 2",
+			"title": "Configurer votre client",
+			"description": "Créez un client de recherche avec votre clé API et le slug d'index. Gardez la clé côté serveur ou utilisez un token en lecture seule pour les composants client."
+		},
+		"step3": {
+			"label": "Étape 3",
+			"title": "Rechercher depuis n'importe quel composant",
+			"description": "Appelez client.search() depuis un Server Component ou utilisez le hook useSearch dans un Client Component. Les résultats sont typés."
+		},
+		"code": {
+			"title": "Exemple minimal de Server Component"
+		},
+		"cta": "Lire la documentation complète"
+	},
+	"integrationsNextJsFaq": {
+		"title": "Questions fréquentes",
+		"q1": {
+			"question": "Fonctionne-t-il avec Next.js 13, 14 et 15 ?",
+			"answer": "Oui. Le SDK est compatible avec Next.js 13, 14 et 15. Il fonctionne avec l'App Router et le Pages Router sans adaptateurs."
+		},
+		"q2": {
+			"question": "Puis-je l'utiliser avec Vercel Edge Runtime ?",
+			"answer": "Oui. Le client AACsearch utilise l'API Fetch standard et est entièrement compatible avec Vercel Edge Runtime et Cloudflare Workers."
+		},
+		"q3": {
+			"question": "Comment protéger ma clé API côté client ?",
+			"answer": "Utilisez un token limité avec des permissions en lecture seule pour la recherche côté client. Créez-le depuis votre tableau de bord AACsearch — la clé admin complète reste uniquement côté serveur."
+		}
+	},
+	"integrationsReactSetup": {
+		"title": "Ajouter la recherche à votre app React en 3 étapes",
+		"subtitle": "Compatible avec React 17, 18 et 19. Agnostique au framework — Next.js, Remix, Vite et CRA sont supportés.",
+		"step1": {
+			"label": "Étape 1",
+			"title": "Installer le package",
+			"description": "Exécutez npm install @aacsearch/react dans votre projet."
+		},
+		"step2": {
+			"label": "Étape 2",
+			"title": "Utiliser le hook useSearch",
+			"description": "Passez votre clé API et le slug d'index. Le hook renvoie les résultats, l'état de chargement et une fonction setQuery."
+		},
+		"step3": {
+			"label": "Étape 3",
+			"title": "Afficher les résultats",
+			"description": "Parcourez les résultats et affichez-les dans votre propre UI. Aucun composant wrapper obligatoire — liberté totale de style."
+		},
+		"code": {
+			"title": "Exemple minimal de useSearch"
+		},
+		"cta": "Parcourir la référence API"
+	},
+	"integrationsReactFaq": {
+		"title": "Questions fréquentes",
+		"q1": {
+			"question": "Quelles versions de React sont supportées ?",
+			"answer": "React 17, 18 et 19 sont supportés. Les hooks utilisent le state et les effets React standard — pas d'APIs instables ni de fonctionnalités expérimentales."
+		},
+		"q2": {
+			"question": "Fonctionne-t-il avec Next.js ou Remix ?",
+			"answer": "Oui. Les hooks React fonctionnent dans n'importe quel environnement React. Pour les Server Components Next.js, utilisez le package de base @aacsearch/client sans dépendance React."
+		},
+		"q3": {
+			"question": "Y a-t-il une bibliothèque de composants ou seulement des hooks ?",
+			"answer": "@aacsearch/react inclut des hooks composables (useSearch, useAutocomplete, useFacets) et des composants headless non stylisés. Apportez votre propre CSS ou Tailwind."
+		}
+	},
+	"integrationsPrestashopSetup": {
+		"title": "Installer en 5 minutes",
+		"subtitle": "Aucun code PHP requis. Le module gère la synchronisation automatiquement après configuration.",
+		"step1": {
+			"label": "Étape 1",
+			"title": "Télécharger le module",
+			"description": "Récupérez aacsearch.zip depuis votre tableau de bord AACsearch sous Connecteurs → PrestaShop."
+		},
+		"step2": {
+			"label": "Étape 2",
+			"title": "Téléverser dans PrestaShop",
+			"description": "Allez dans Modules > Gestionnaire de modules > Téléverser un module. Sélectionnez le ZIP et confirmez."
+		},
+		"step3": {
+			"label": "Étape 3",
+			"title": "Saisir votre token de connecteur",
+			"description": "Collez le token de connecteur depuis votre tableau de bord AACsearch dans les paramètres du module et sauvegardez."
+		},
+		"step4": {
+			"label": "Étape 4",
+			"title": "Lancer l'export complet du catalogue",
+			"description": "Cliquez sur \"Export complet\" dans le panneau d'administration du module. Tout votre catalogue produit se synchronise en un seul lot."
+		},
+		"step5": {
+			"label": "Étape 5",
+			"title": "La recherche est en ligne",
+			"description": "Les produits apparaissent immédiatement dans AACsearch. Les futurs enregistrements, mises à jour et suppressions se synchronisent automatiquement via les hooks PrestaShop."
+		},
+		"cta": "Télécharger le module"
+	},
+	"integrationsPrestashopFaq": {
+		"title": "Questions fréquentes",
+		"q1": {
+			"question": "Quelles versions de PrestaShop sont supportées ?",
+			"answer": "PrestaShop 8.0 et 8.1 sont entièrement supportés. PHP 8.1+ requis. Compatible avec tous les thèmes majeurs, y compris Hummingbird et Classic."
+		},
+		"q2": {
+			"question": "Le module ralentit-il la sauvegarde des produits ?",
+			"answer": "Non. La synchronisation est asynchrone via le buffer d'ingest AACsearch. Le module met la mise à jour en file d'attente et retourne immédiatement — pas d'appels bloquants vers Typesense à la sauvegarde."
+		},
+		"q3": {
+			"question": "Puis-je personnaliser les champs indexés ?",
+			"answer": "Oui. Le module exporte tous les champs produit par défaut. Vous pouvez restreindre les attributs dans les paramètres du module ou étendre la classe Exporter pour une logique personnalisée."
+		}
+	},
+	"integrationsBitrixSetup": {
+		"title": "Installer en 5 minutes",
+		"subtitle": "Aucune personnalisation Bitrix requise. Le module s'installe comme un module standard du marketplace Bitrix.",
+		"step1": {
+			"label": "Étape 1",
+			"title": "Télécharger le module",
+			"description": "Récupérez l'archive aac.search depuis votre tableau de bord AACsearch sous Connecteurs → 1C-Bitrix."
+		},
+		"step2": {
+			"label": "Étape 2",
+			"title": "Décompresser dans /local/modules/",
+			"description": "Extrayez l'archive dans /local/modules/aac.search/ sur votre serveur Bitrix. Conservez la structure des répertoires intacte."
+		},
+		"step3": {
+			"label": "Étape 3",
+			"title": "Installer depuis l'admin Bitrix",
+			"description": "Allez dans Admin Bitrix → Marketplace → Modules installés. Trouvez \"AACsearch\" dans la liste et cliquez sur Installer."
+		},
+		"step4": {
+			"label": "Étape 4",
+			"title": "Configurer le connecteur",
+			"description": "Saisissez votre token de connecteur et l'ID iBlock dans les paramètres du module. Choisissez le type d'iBlock catalogue et sauvegardez."
+		},
+		"step5": {
+			"label": "Étape 5",
+			"title": "Lancer la synchronisation initiale",
+			"description": "Cliquez sur \"Lancer la synchronisation complète\" dans l'onglet Diagnostics. Tous les éléments du catalogue sont indexés. Les modifications futures se synchronisent automatiquement via les gestionnaires d'événements."
+		},
+		"cta": "Télécharger le module"
+	},
+	"integrationsBitrixFaq": {
+		"title": "Questions fréquentes",
+		"q1": {
+			"question": "Quelles éditions de Bitrix sont supportées ?",
+			"answer": "Les éditions Bitrix Site Manager et Business sont supportées. PHP 8.1+ requis. Utilise le HttpClient Bitrix standard — aucune bibliothèque HTTP tierce requise."
+		},
+		"q2": {
+			"question": "Comment fonctionne l'agent de synchronisation en arrière-plan ?",
+			"answer": "Le module enregistre un agent Bitrix qui exécute une synchronisation complète périodique pour la fiabilité. Il capture toutes les modifications du catalogue manquées par les gestionnaires d'événements en temps réel."
+		},
+		"q3": {
+			"question": "Puis-je personnaliser les propriétés d'iBlock indexées ?",
+			"answer": "Oui. Le module exporte toutes les propriétés produit par défaut. Vous pouvez limiter les champs dans les paramètres admin ou étendre la classe ProductExporter pour une sélection de champs entièrement personnalisée."
+		}
 	}
 }

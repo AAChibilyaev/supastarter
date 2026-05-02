@@ -66,18 +66,18 @@ Ein Entwickler ohne Elasticsearch-Erfahrung kann Typesense an einem Nachmittag i
 
 ## Feature-Vergleich für E-Commerce
 
-| Feature                    | Typesense                 | Elasticsearch                                              |
-| -------------------------- | ------------------------- | ---------------------------------------------------------- |
-| Tippfehlertoleranz         | Nativ, konfigurierbar     | Über Fuzzy-Query (komplexer)                               |
-| Präfix-Suche               | Nativ                     | Über Edge-N-Gram (manuelle Konfiguration nötig)            |
-| Facettierte Navigation     | Nativ (facet_by)          | Über Aggregationen (mächtiger, komplexer)                  |
-| Geo-Suche                  | Nativ                     | Nativ                                                      |
-| Individuelles Ranking      | Nativ (sort_by)           | Über Function-Score-Query                                  |
-| Synonyme                   | Nativ                     | Über Synonym-Token-Filter                                  |
-| Kuratierungen/Pinning      | Nativ                     | Nicht nativ (erfordert Anwendungslogik)                    |
-| Machine-Learning-Ranking   | Über Typesense Rules      | Über Elasticsearch Learning to Rank (LTR)                  |
-| Echtzeit-Indexierung       | Nativ                     | Nahezu-Echtzeit (1-Sekunden-Refresh-Intervall)             |
-| Mehrsprachige Suche        | 8 Sprachen                | Vollständige Sprachanalyse-Suite                           |
+| Feature                  | Typesense             | Elasticsearch                                   |
+| ------------------------ | --------------------- | ----------------------------------------------- |
+| Tippfehlertoleranz       | Nativ, konfigurierbar | Über Fuzzy-Query (komplexer)                    |
+| Präfix-Suche             | Nativ                 | Über Edge-N-Gram (manuelle Konfiguration nötig) |
+| Facettierte Navigation   | Nativ (facet_by)      | Über Aggregationen (mächtiger, komplexer)       |
+| Geo-Suche                | Nativ                 | Nativ                                           |
+| Individuelles Ranking    | Nativ (sort_by)       | Über Function-Score-Query                       |
+| Synonyme                 | Nativ                 | Über Synonym-Token-Filter                       |
+| Kuratierungen/Pinning    | Nativ                 | Nicht nativ (erfordert Anwendungslogik)         |
+| Machine-Learning-Ranking | Über Typesense Rules  | Über Elasticsearch Learning to Rank (LTR)       |
+| Echtzeit-Indexierung     | Nativ                 | Nahezu-Echtzeit (1-Sekunden-Refresh-Intervall)  |
+| Mehrsprachige Suche      | 8 Sprachen            | Vollständige Sprachanalyse-Suite                |
 
 Für Standard-E-Commerce-Produktsuche — Namensabgleich, Kategoriefilterung, Preissortierung, facettierte Navigation — deckt Typesense alles ab, was Sie benötigen, mit einfacherer Konfiguration. Elasticsearchs tiefergehende Features (verschachtelte Aggregationen, Learning to Rank, mehrsprachige Analyzer) werden für komplexere Anwendungsfälle relevant: Marktplatzsuche mit komplexen Attributhierarchien, ML-gestützte Personalisierung oder Multi-Tenant-Kataloge mit komplexer Zugriffskontrolle.
 
@@ -94,10 +94,10 @@ Zu Cloud-Preisen kann Typesense produktiv auf einem 20$/Monat-VPS betrieben werd
 
 ### Verwaltete Dienste
 
-| Option        | Self-Hosted                             | Verwaltet                                                           |
-| ------------- | --------------------------------------- | ------------------------------------------------------------------- |
-| Typesense     | Kostenlos (Open-Source)                 | Typesense Cloud (nutzungsbasiert) oder AACSearch                    |
-| Elasticsearch | Kostenlos (Open-Source, Basic-Features) | Elastic Cloud (ab 95$/Monat), AWS OpenSearch (ab 50$/Monat)         |
+| Option        | Self-Hosted                             | Verwaltet                                                   |
+| ------------- | --------------------------------------- | ----------------------------------------------------------- |
+| Typesense     | Kostenlos (Open-Source)                 | Typesense Cloud (nutzungsbasiert) oder AACSearch            |
+| Elasticsearch | Kostenlos (Open-Source, Basic-Features) | Elastic Cloud (ab 95$/Monat), AWS OpenSearch (ab 50$/Monat) |
 
 Elastic Clouds Preise für einen produktiven E-Commerce-Workload beginnen bei 150–400$/Monat. AACSearch (Typesense-basiert) beginnt bei 29$/Monat für 1M Such-Einheiten.
 

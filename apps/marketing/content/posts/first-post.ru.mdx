@@ -1,14 +1,144 @@
 ---
-title: Любимые вещи
-date: 2023-02-28
-image: https://picsum.photos/id/437/1200/800
-authorName: Jon Doe
+title: "Разверните собственный поисковый движок: AACsearch на Docker менее чем за 10 минут"
+date: 2026-02-12
+image: https://picsum.photos/id/0/1200/800
+authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: В этой статье я расскажу о своих любимых вещах.
-tags: [first, post]
+excerpt: "Забудьте о счетах SaaS. Запустите AACsearch на собственной инфраструктуре с Docker Compose менее чем за 10 минут — полный контроль, никакой привязки к вендору, производительность Typesense."
+tags: [self-host, docker, devops, search]
 published: true
 ---
 
-## Это заголовок
+## Кто платит $12 000 в год за поиск?
 
-У нас также есть отличный контент здесь. Что вы думаете?
+Если вы когда-либо рассчитывали стоимость Algolia для среднего интернет-магазина, вы знаете этот ценовой шок. При 100 миллионах поисковых запросов в месяц вы сразу попадаете в категорию enterprise-контрактов. Elasticsearch бесплатен, но несёт скрытые расходы: выделенный ops-инженер, который только и делает, что управляет кластерами, устраняет проблемы с памятью и разбирается с split-brain.
+
+Есть третий путь. AACsearch позволяет запускать Typesense — один из самых быстрых open-source поисковых движков — за полностью управляемым control plane. Вы получаете SaaS-опыт (API-ключи, мультиарендность, аналитику, UI-дашборд), а данные поиска остаются на вашем железе.
+
+В этой статье мы пошагово разберём запуск AACsearch на собственном сервере с Docker Compose: от нуля до рабочего поискового API с дашбордом менее чем за 10 минут.
+
+## Требования
+
+- Linux-сервер (VPS, bare metal или ноутбук для тестирования)
+- Docker ≥ 24 и Docker Compose ≥ 2.20
+- Минимум 2 ядра CPU и 4 ГБ RAM (8 ГБ рекомендуется для продакшна)
+
+## Шаг 1: Загрузка Compose-файла
+
+```bash
+curl -o docker-compose.yml \
+  https://raw.githubusercontent.com/AACSearch/aacsearch/main/deploy/docker-compose.yml
+```
+
+Стандартный Compose-файл запускает три сервиса:
+
+| Сервис      | Назначение                                                      |
+| ----------- | --------------------------------------------------------------- |
+| `typesense` | Поисковый движок Typesense (data plane)                         |
+| `aacsearch` | Control plane AACsearch (API, дашборд, аналитика)               |
+| `postgres`  | Хранилище метаданных: индексы, API-ключи, события использования |
+
+## Шаг 2: Настройка окружения
+
+```bash
+cp .env.example .env
+```
+
+Откройте `.env` и установите три значения:
+
+```bash
+# Ваш домен или IP. Используется для CORS и настройки cookie.
+AACSEARCH_URL=https://search.vashдомен.ru
+
+# Случайный секрет. Сгенерируйте: openssl rand -hex 32
+AACSEARCH_SECRET=ваш-секрет-здесь
+
+# Admin API-ключ Typesense. Только для внутреннего использования.
+TYPESENSE_API_KEY=ваш-typesense-ключ-здесь
+```
+
+Всё остальное работает с настройками по умолчанию для большинства деплоев.
+
+## Шаг 3: Запуск стека
+
+```bash
+docker compose up -d
+```
+
+Через 30–60 секунд три контейнера запущены:
+
+```bash
+docker compose ps
+# NAME              STATUS    PORTS
+# typesense         running   0.0.0.0:8108->8108/tcp
+# aacsearch         running   0.0.0.0:3000->3000/tcp
+# postgres          running   5432/tcp
+```
+
+Дашборд AACsearch доступен по адресу `http://localhost:3000`. Откройте его, создайте первую организацию — и вы готовы к работе.
+
+## Шаг 4: Создание первого поискового индекса
+
+Через дашборд или REST API:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/indexes \
+  -H "Authorization: Bearer ВАШ_ADMIN_КЛЮЧ" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "products",
+    "schema": {
+      "fields": [
+        { "name": "name",  "type": "string" },
+        { "name": "price", "type": "float",  "facet": true },
+        { "name": "brand", "type": "string", "facet": true }
+      ],
+      "default_sorting_field": "price"
+    }
+  }'
+```
+
+## Шаг 5: Импорт документов и поиск
+
+```bash
+# Загрузить 10 000 товаров одним запросом
+curl -X POST http://localhost:3000/api/v1/indexes/products/documents/bulk \
+  -H "Authorization: Bearer ВАШ_SEARCH_КЛЮЧ" \
+  -H "Content-Type: application/json" \
+  -d @products.json
+
+# Поиск
+curl "http://localhost:3000/api/v1/indexes/products/search?q=кроссовки&facet_by=brand"
+```
+
+Время ответа на стандартном железе: **< 5 мс** для индекса из 500 000 документов.
+
+## Что вы получаете сразу
+
+Self-hosted установка AACsearch предоставляет тот же набор функций, что и облачный план:
+
+- **Мультиарендность** — отдельные индексы для каждой организации или клиента
+- **Scoped Search Tokens** — ограничение результатов поиска данными конкретного пользователя без обращения к бэкенду
+- **Аналитический дашборд** — топ-запросы, доля нулевых результатов, CTR
+- **Управление API-ключами** — создание, ротация и отзыв ключей прямо из дашборда
+- **CMS-коннекторы** — автоматическая синхронизация товаров из PrestaShop или Bitrix
+
+## Чеклист для продакшна
+
+Перед тем как направить трафик на self-hosted инстанс:
+
+- [ ] Установите Nginx или Traefik с TLS (Let's Encrypt работает отлично)
+- [ ] Установите `AACSEARCH_URL` на ваш настоящий HTTPS-домен
+- [ ] Смонтируйте volume для данных Typesense: `typesense_data:/data`
+- [ ] Настройте бэкапы Postgres (ежедневный `pg_dump` в S3 достаточно)
+- [ ] Установите ресурсные лимиты в Compose для предотвращения OOM
+
+## Когда облако по-прежнему правильный выбор
+
+Self-hosting подходит не всем. Если у вашей команды нет ops-ресурсов или вам нужен SLA 99,95% без управления инфраструктурой, облачный план AACsearch более разумен. Вы получаете тот же API, тот же дашборд и ту же производительность Typesense — мы берём серверы на себя.
+
+**Выбор за вами.** AACsearch работает одинаково независимо от того, где он запущен.
+
+---
+
+Готовы запустить собственный поисковый движок? [Начать работу с AACsearch →](https://app.aacsearch.com/signup)

@@ -1,14 +1,144 @@
 ---
-title: Cosas favoritas
-date: 2023-02-28
-image: https://picsum.photos/id/437/1200/800
-authorName: Jon Doe
+title: "Hospeda tu propio motor de búsqueda: AACsearch con Docker en menos de 10 minutos"
+date: 2026-02-12
+image: https://picsum.photos/id/0/1200/800
+authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: En este artículo voy a contarles sobre mis cosas favoritas.
-tags: [first, post]
+excerpt: "Olvídate de las facturas SaaS. Ejecuta AACsearch en tu propia infraestructura con Docker Compose en menos de 10 minutos: control total, sin vendor lock-in, rendimiento de Typesense."
+tags: [self-host, docker, devops, search]
 published: true
 ---
 
-## Este es un título
+## ¿Quién paga 12.000 $/año por búsqueda?
 
-Y también tenemos contenido excelente aquí. ¿Qué piensas?
+Si has calculado el precio de Algolia para un sitio de e-commerce de tamaño medio, conoces el impacto. Con 100 millones de búsquedas al mes llegas rápidamente a contratos enterprise. Elasticsearch es gratuito, pero tiene costos ocultos: un ingeniero de operaciones dedicado que solo se ocupa de gestionar clústeres, presión de memoria y eventos de split-brain.
+
+Existe un tercer camino. AACsearch te permite ejecutar Typesense —uno de los motores de búsqueda open-source más rápidos disponibles— detrás de un control plane completamente administrado. Obtienes la experiencia SaaS (claves API, multi-tenant, analíticas, un dashboard UI) mientras los datos de búsqueda permanecen en tu hardware.
+
+Este artículo explica cómo configurar AACsearch en tu propio servidor con Docker Compose: de cero a una API de búsqueda funcionando con dashboard en menos de 10 minutos.
+
+## Requisitos previos
+
+- Un servidor Linux (VPS, bare metal o tu portátil para pruebas)
+- Docker ≥ 24 y Docker Compose ≥ 2.20
+- Mínimo 2 núcleos de CPU y 4 GB de RAM (8 GB recomendados para producción)
+
+## Paso 1: Descargar el archivo Compose
+
+```bash
+curl -o docker-compose.yml \
+  https://raw.githubusercontent.com/AACSearch/aacsearch/main/deploy/docker-compose.yml
+```
+
+El archivo Compose predeterminado inicia tres servicios:
+
+| Servicio    | Propósito                                                     |
+| ----------- | ------------------------------------------------------------- |
+| `typesense` | El motor de búsqueda Typesense (data plane)                   |
+| `aacsearch` | El control plane de AACsearch (API, dashboard, analíticas)    |
+| `postgres`  | Almacén de metadatos para índices, claves API, eventos de uso |
+
+## Paso 2: Configurar el entorno
+
+```bash
+cp .env.example .env
+```
+
+Abre `.env` y configura tres valores:
+
+```bash
+# Tu dominio o IP. Se usa para CORS y configuración de cookies.
+AACSEARCH_URL=https://search.tudominio.com
+
+# Un secreto aleatorio. Genera con: openssl rand -hex 32
+AACSEARCH_SECRET=tu-secreto-aqui
+
+# Clave API de administrador de Typesense. Solo uso interno.
+TYPESENSE_API_KEY=tu-clave-typesense-aqui
+```
+
+Los valores predeterminados restantes funcionan para la mayoría de los despliegues.
+
+## Paso 3: Iniciar el stack
+
+```bash
+docker compose up -d
+```
+
+Después de 30–60 segundos, tres contenedores están en ejecución:
+
+```bash
+docker compose ps
+# NAME              STATUS    PORTS
+# typesense         running   0.0.0.0:8108->8108/tcp
+# aacsearch         running   0.0.0.0:3000->3000/tcp
+# postgres          running   5432/tcp
+```
+
+El dashboard de AACsearch está disponible en `http://localhost:3000`. Ábrelo, crea tu primera organización y estás listo.
+
+## Paso 4: Crear tu primer índice de búsqueda
+
+Desde el dashboard o mediante la API REST:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/indexes \
+  -H "Authorization: Bearer TU_CLAVE_ADMIN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "products",
+    "schema": {
+      "fields": [
+        { "name": "name",  "type": "string" },
+        { "name": "price", "type": "float",  "facet": true },
+        { "name": "brand", "type": "string", "facet": true }
+      ],
+      "default_sorting_field": "price"
+    }
+  }'
+```
+
+## Paso 5: Importar documentos y buscar
+
+```bash
+# Importar 10.000 productos en una sola petición
+curl -X POST http://localhost:3000/api/v1/indexes/products/documents/bulk \
+  -H "Authorization: Bearer TU_CLAVE_SEARCH" \
+  -H "Content-Type: application/json" \
+  -d @products.json
+
+# Buscar
+curl "http://localhost:3000/api/v1/indexes/products/search?q=zapatillas&facet_by=brand"
+```
+
+Tiempo de respuesta en hardware estándar: **< 5 ms** para un índice de 500.000 documentos.
+
+## Qué obtienes de inmediato
+
+El setup self-hosted de AACsearch ofrece el mismo conjunto de funciones que el plan cloud:
+
+- **Multi-tenancy** — índices separados por organización o cliente
+- **Scoped Search Tokens** — restringe los resultados a los datos de un usuario sin un round-trip al backend
+- **Dashboard de analíticas** — consultas principales, tasa de resultados vacíos, tasa de clics
+- **Gestión de claves API** — crea, rota y revoca claves directamente desde el dashboard
+- **Conectores CMS** — sincroniza productos de PrestaShop o Bitrix automáticamente
+
+## Lista de verificación para producción
+
+Antes de dirigir tráfico a tu instancia self-hosted:
+
+- [ ] Coloca Nginx o Traefik con TLS (Let's Encrypt funciona perfectamente)
+- [ ] Establece `AACSEARCH_URL` en tu dominio HTTPS real
+- [ ] Monta un volumen para los datos de Typesense: `typesense_data:/data`
+- [ ] Configura backups de Postgres (un `pg_dump` diario a S3 es suficiente)
+- [ ] Establece límites de recursos en Compose para evitar condiciones OOM
+
+## Cuándo la nube sigue siendo la mejor opción
+
+El self-hosting no es para todos. Si tu equipo no tiene capacidad de operaciones o necesitas un SLA del 99,95% sin gestionar infraestructura, el plan cloud de AACsearch tiene más sentido. Obtienes la misma API, el mismo dashboard y el mismo rendimiento de Typesense: nosotros nos encargamos de los servidores.
+
+**La elección es tuya.** AACsearch funciona de la misma manera independientemente de dónde se ejecute.
+
+---
+
+¿Listo para ejecutar tu propio motor de búsqueda? [Empieza con AACsearch →](https://app.aacsearch.com/signup)

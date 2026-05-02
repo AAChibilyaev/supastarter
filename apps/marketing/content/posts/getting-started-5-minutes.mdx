@@ -1,0 +1,91 @@
+---
+title: Getting Started with AACSearch in 5 Minutes
+date: 2025-05-01
+image: https://picsum.photos/id/11/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Add production-ready full-text search to your store in under 5 minutes — no infrastructure, no DevOps, no schema expertise required.
+tags: [tutorial, getting-started, search]
+published: true
+---
+
+Getting search right is hard. Getting started shouldn't be. This guide walks you through adding AACSearch to your project from zero to first search result in under 5 minutes.
+
+## What You'll Need
+
+- An AACSearch account (free tier covers up to 10,000 documents)
+- A product catalog — CSV, JSON, or a live PrestaShop / Bitrix store
+- 5 minutes
+
+## Step 1: Create Your Index
+
+After signing up, you land on the dashboard. Click **New Index** and give it a name (e.g., `products`). AACSearch will provision a Typesense collection for your organization automatically — no server selection, no node sizing, no configuration files.
+
+You'll see your index appear with a status of **Active** within seconds.
+
+## Step 2: Connect Your Data Source
+
+### Option A: Upload a CSV or JSON file
+
+Go to **Import** → **Upload File**. AACSearch infers field types automatically from your data. For a standard product catalog, it detects `name`, `price`, `description`, `category`, and `sku` fields without any manual schema definition.
+
+Upload a file with 1,000 products. You'll see the ingest progress in real time — typically under 10 seconds for 1,000 documents.
+
+### Option B: Connect via CMS Connector
+
+If you're running PrestaShop or Bitrix, install the native connector module:
+
+- **PrestaShop**: Admin → Module Manager → search "AACSearch" → Install
+- **Bitrix**: Marketplace → AACSearch → Install
+
+In your AACSearch dashboard, go to **Connectors** → **New Connector Token**. Copy the token and paste it into the module settings in your CMS. Click **Test Connection** — you should see a green confirmation with your index name and document count.
+
+Trigger a **Full Sync**. The connector exports your entire product catalog, enqueues it, and pushes it to the index. For a 50,000-product catalog, expect about 2–3 minutes.
+
+## Step 3: Test Search in the Playground
+
+In the dashboard, open the **Playground** tab. Type a product name or partial SKU. You'll see:
+
+- Ranked results with highlighted matches
+- Response time in milliseconds (typically 10–30ms)
+- Raw JSON output for debugging
+
+Try a typo — AACSearch uses Typesense's built-in fuzzy matching, so `iphne` still returns iPhone results.
+
+## Step 4: Embed the Widget
+
+Go to **Widget** and copy the embed snippet. It looks like this:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="en"
+	async
+></script>
+```
+
+Paste this into your store's `<head>` or before `</body>`. The widget renders a search button that opens a full-screen search overlay — no additional CSS or JavaScript required.
+
+It works in Shadow DOM, so your store's styles don't conflict with the widget's appearance.
+
+## Step 5: Verify in Production
+
+Open your store in an incognito window and click the search button. Type a product name. You should see instant results appearing as you type — no full page reload, no waiting.
+
+Congratulations. You now have production-grade full-text search.
+
+## What's Happening Under the Hood
+
+When you type a character, the widget sends a query to AACSearch's public search endpoint authenticated with a read-only API key. The query hits your Typesense collection, returns ranked results with typo tolerance and prefix matching, and renders them in the overlay — all in under 50ms.
+
+Your product updates sync automatically. When you change a price or add a new product in your CMS, the connector picks up the delta and pushes it to the index within minutes.
+
+## Next Steps
+
+- **Synonyms**: Add "phone → smartphone, mobile" in the Relevance tab to capture intent variations
+- **Curations**: Pin specific products to appear first for high-value queries
+- **Analytics**: After a week of traffic, check the Top Queries and Zero Results reports to find gaps
+
+Search is now running. The rest is optimization.

@@ -1,14 +1,144 @@
 ---
-title: Favorite Things
-date: 2023-02-28
-image: https://picsum.photos/id/437/1200/800
-authorName: Jon Doe
+title: "Self-Host Your Search Engine: AACsearch on Docker in Under 10 Minutes"
+date: 2026-02-12
+image: https://picsum.photos/id/0/1200/800
+authorName: AACsearch Team
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: In this post I'm going to tell you about my favorite things.
-tags: [first, post]
+excerpt: "Skip the SaaS bill. Run AACsearch on your own infrastructure with Docker Compose in under 10 minutes — full control, zero vendor lock-in, Typesense performance."
+tags: [self-host, docker, devops, search]
 published: true
 ---
 
-## This is a heading
+## Who Pays $12,000/Year for Search?
 
-And we also have some great content here. What do you think?
+If you've priced Algolia for a mid-traffic e-commerce site, you know the sticker shock. At 100M searches per month you're looking at enterprise contracts. Elasticsearch is free but carries a hidden cost: a dedicated ops engineer who does nothing but manage clusters, handle memory pressure, and debug split-brain events.
+
+There's a third path. AACsearch lets you run Typesense — one of the fastest open-source search engines available — behind a fully managed control plane. You get the SaaS experience (API keys, multi-tenancy, analytics, a UI dashboard) while the search data stays on your hardware.
+
+This post walks through spinning up AACsearch on your own server using Docker Compose. You'll go from zero to a running search API with a dashboard in under 10 minutes.
+
+## Prerequisites
+
+- A Linux server (VPS, bare metal, or even your laptop for testing)
+- Docker ≥ 24 and Docker Compose ≥ 2.20
+- 2 CPU cores, 4 GB RAM minimum (8 GB recommended for production)
+
+## Step 1: Pull the Compose File
+
+```bash
+curl -o docker-compose.yml \
+  https://raw.githubusercontent.com/AACSearch/aacsearch/main/deploy/docker-compose.yml
+```
+
+The default compose file starts three services:
+
+| Service     | Purpose                                                 |
+| ----------- | ------------------------------------------------------- |
+| `typesense` | The Typesense search engine (data plane)                |
+| `aacsearch` | The AACsearch control plane (API, dashboard, analytics) |
+| `postgres`  | Metadata store for indexes, API keys, usage events      |
+
+## Step 2: Configure Environment
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set three values:
+
+```bash
+# Your domain or IP. Used for CORS and cookie config.
+AACSEARCH_URL=https://search.yourdomain.com
+
+# A random secret. Generate with: openssl rand -hex 32
+AACSEARCH_SECRET=your-secret-here
+
+# Typesense admin API key. Keep this internal — users never see it.
+TYPESENSE_API_KEY=your-typesense-key-here
+```
+
+That's it. The remaining defaults work for most deployments.
+
+## Step 3: Start the Stack
+
+```bash
+docker compose up -d
+```
+
+After 30–60 seconds, three containers are running:
+
+```bash
+docker compose ps
+# NAME              STATUS    PORTS
+# typesense         running   0.0.0.0:8108->8108/tcp
+# aacsearch         running   0.0.0.0:3000->3000/tcp
+# postgres          running   5432/tcp
+```
+
+The AACsearch dashboard is live at `http://localhost:3000`. Open it, create your first organization, and you're in.
+
+## Step 4: Create Your First Search Index
+
+From the dashboard (or via the REST API):
+
+```bash
+curl -X POST http://localhost:3000/api/v1/indexes \
+  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "products",
+    "schema": {
+      "fields": [
+        { "name": "name",  "type": "string" },
+        { "name": "price", "type": "float",  "facet": true },
+        { "name": "brand", "type": "string", "facet": true }
+      ],
+      "default_sorting_field": "price"
+    }
+  }'
+```
+
+## Step 5: Import Documents and Search
+
+```bash
+# Ingest 10,000 products in one request
+curl -X POST http://localhost:3000/api/v1/indexes/products/documents/bulk \
+  -H "Authorization: Bearer YOUR_SEARCH_KEY" \
+  -H "Content-Type: application/json" \
+  -d @products.json
+
+# Search
+curl "http://localhost:3000/api/v1/indexes/products/search?q=running+shoes&facet_by=brand"
+```
+
+Response time on commodity hardware: **< 5 ms** for a 500,000-document index.
+
+## What You Get Out of the Box
+
+Spinning up AACsearch self-hosted gives you the same feature set as the cloud plan:
+
+- **Multi-tenancy** — separate indexes per organization or customer
+- **Scoped search tokens** — narrow search results to a user's own data without a backend round-trip
+- **Analytics dashboard** — top queries, zero-result rates, click-through rate
+- **API key management** — create, rotate, and revoke search keys from the dashboard
+- **CMS connectors** — sync products from PrestaShop or Bitrix automatically
+
+## Production Checklist
+
+Before pointing traffic at your self-hosted instance:
+
+- [ ] Put Nginx or Traefik in front with TLS (Let's Encrypt works fine)
+- [ ] Set `AACSEARCH_URL` to your actual HTTPS domain
+- [ ] Mount a volume for Typesense data: `typesense_data:/data`
+- [ ] Set up Postgres backups (daily `pg_dump` to S3 is sufficient)
+- [ ] Configure resource limits in Compose to prevent OOM conditions
+
+## When Cloud Is Still the Right Call
+
+Self-hosting is not for everyone. If your team has no ops capacity, or you need 99.95% SLA without managing infrastructure, the AACsearch cloud plan makes more sense. You get the same API, the same dashboard, and the same Typesense performance — we handle the servers.
+
+**The choice is yours.** AACsearch is designed to work the same way regardless of where it runs.
+
+---
+
+Ready to run your own search engine? [Sign up for AACsearch →](https://app.aacsearch.com/signup)

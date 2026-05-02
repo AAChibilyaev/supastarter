@@ -3403,5 +3403,171 @@
 				"description": "Shopify-App mit Produkt-, Varianten- und Metafeld-Synchronisierung. Widget-Einbettung inklusive."
 			}
 		}
+	},
+	"integrationsNextJsSetup": {
+		"title": "In 3 Schritten loslegen",
+		"subtitle": "Keine Backend-Änderungen erforderlich. Das AACsearch SDK funktioniert direkt in deiner Next.js-App.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Paket installieren",
+			"description": "npm install @aacsearch/client in deinem Next.js-Projekt ausführen."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "Client konfigurieren",
+			"description": "Erstelle einen Such-Client mit deinem API-Schlüssel und Index-Slug. Halte den Schlüssel serverseitig oder verwende ein scoped Read-Only-Token für Client-Komponenten."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Von jeder Komponente suchen",
+			"description": "Rufe client.search() aus einer Server-Komponente auf oder verwende den useSearch-Hook in einer Client-Komponente. Die Ergebnisse sind typisiert."
+		},
+		"code": {
+			"title": "Minimales Server-Component-Beispiel"
+		},
+		"cta": "Vollständige Dokumentation lesen"
+	},
+	"integrationsNextJsFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Funktioniert es mit Next.js 13, 14 und 15?",
+			"answer": "Ja. Das SDK ist mit Next.js 13, 14 und 15 kompatibel. Es funktioniert sowohl mit dem App Router als auch mit dem Pages Router, ohne Adapter."
+		},
+		"q2": {
+			"question": "Kann ich es mit Vercel Edge Runtime verwenden?",
+			"answer": "Ja. Der AACsearch-Client verwendet die Standard-Fetch-API und ist vollständig mit Vercel Edge Runtime und Cloudflare Workers kompatibel."
+		},
+		"q3": {
+			"question": "Wie schütze ich meinen API-Schlüssel auf dem Client?",
+			"answer": "Verwende ein scoped Token mit Nur-Lese-Berechtigungen für die clientseitige Suche. Erstelle es in deinem AACsearch-Dashboard — der vollständige Admin-Schlüssel bleibt ausschließlich auf dem Server."
+		}
+	},
+	"integrationsReactSetup": {
+		"title": "Suche in 3 Schritten zu deiner React-App hinzufügen",
+		"subtitle": "Funktioniert mit React 17, 18 und 19. Framework-agnostisch — Next.js, Remix, Vite und CRA werden unterstützt.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Paket installieren",
+			"description": "npm install @aacsearch/react in deinem Projekt ausführen."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "Den useSearch-Hook verwenden",
+			"description": "Übergib deinen API-Schlüssel und den Index-Slug. Der Hook gibt Treffer, Ladezustand und eine setQuery-Funktion zurück."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Ergebnisse rendern",
+			"description": "Iteriere über die Treffer und zeige sie in deiner eigenen UI an. Keine Pflicht-Wrapper-Komponenten — volle Gestaltungsfreiheit."
+		},
+		"code": {
+			"title": "Minimales useSearch-Beispiel"
+		},
+		"cta": "API-Referenz durchsuchen"
+	},
+	"integrationsReactFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Welche React-Versionen werden unterstützt?",
+			"answer": "React 17, 18 und 19 werden unterstützt. Die Hooks verwenden standardmäßige React State und Effects — keine instabilen APIs oder experimentellen Features."
+		},
+		"q2": {
+			"question": "Funktioniert es mit Next.js oder Remix?",
+			"answer": "Ja. Die React Hooks funktionieren in jeder React-Umgebung. Für Next.js Server Components verwende das Basispaket @aacsearch/client ohne React-Abhängigkeit."
+		},
+		"q3": {
+			"question": "Gibt es eine Komponentenbibliothek oder nur Hooks?",
+			"answer": "Beides. @aacsearch/react enthält komponierbare Hooks (useSearch, useAutocomplete, useFacets) und ungestylte Headless-Komponenten. Bring dein eigenes CSS oder Tailwind mit."
+		}
+	},
+	"integrationsPrestashopSetup": {
+		"title": "In 5 Minuten installieren",
+		"subtitle": "Kein PHP-Code erforderlich. Das Modul synchronisiert nach der Konfiguration automatisch.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Modul herunterladen",
+			"description": "Lade aacsearch.zip aus deinem AACsearch-Dashboard unter Connectors → PrestaShop herunter."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "In PrestaShop hochladen",
+			"description": "Gehe zu Module > Modulverwaltung > Modul hochladen. Wähle das ZIP aus und bestätige."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Connector-Token eingeben",
+			"description": "Füge den Connector-Token aus deinem AACsearch-Dashboard in die Moduleinstellungen ein und speichere."
+		},
+		"step4": {
+			"label": "Schritt 4",
+			"title": "Vollständigen Katalog-Export ausführen",
+			"description": "Klicke im Modul-Admin-Panel auf \"Vollständiger Export\". Dein gesamter Produktkatalog wird in einem Batch synchronisiert."
+		},
+		"step5": {
+			"label": "Schritt 5",
+			"title": "Suche ist live",
+			"description": "Produkte erscheinen sofort in AACsearch. Zukünftige Speicherungen, Updates und Löschungen werden automatisch über PrestaShop-Hooks synchronisiert."
+		},
+		"cta": "Modul herunterladen"
+	},
+	"integrationsPrestashopFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Welche PrestaShop-Versionen werden unterstützt?",
+			"answer": "PrestaShop 8.0 und 8.1 werden vollständig unterstützt. PHP 8.1+ erforderlich. Funktioniert mit allen wichtigen Themes, einschließlich Hummingbird und Classic."
+		},
+		"q2": {
+			"question": "Verlangsamt das Modul das Speichern von Produkten?",
+			"answer": "Nein. Die Synchronisierung ist asynchron über den AACsearch-Ingest-Buffer. Das Modul stellt die Aktualisierung in die Warteschlange und kehrt sofort zurück — keine blockierenden Aufrufe an Typesense beim Speichern."
+		},
+		"q3": {
+			"question": "Kann ich anpassen, welche Felder indexiert werden?",
+			"answer": "Ja. Das Modul exportiert standardmäßig alle Produktfelder. Du kannst Attribute in den Moduleinstellungen einschränken oder die Exporter-Klasse für benutzerdefinierte Logik erweitern."
+		}
+	},
+	"integrationsBitrixSetup": {
+		"title": "In 5 Minuten installieren",
+		"subtitle": "Keine Bitrix-Anpassungen erforderlich. Das Modul installiert sich als Standard-Bitrix-Marketplace-Modul.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Modul herunterladen",
+			"description": "Lade das aac.search-Archiv aus deinem AACsearch-Dashboard unter Connectors → 1C-Bitrix herunter."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "In /local/modules/ entpacken",
+			"description": "Entpacke das Archiv nach /local/modules/aac.search/ auf deinem Bitrix-Server. Behalte die Verzeichnisstruktur bei."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Im Bitrix-Admin installieren",
+			"description": "Gehe zu Bitrix-Admin → Marketplace → Installierte Module. Suche \"AACsearch\" in der Liste und klicke auf Installieren."
+		},
+		"step4": {
+			"label": "Schritt 4",
+			"title": "Connector konfigurieren",
+			"description": "Gib deinen Connector-Token und die iBlock-ID in den Moduleinstellungen ein. Wähle den Katalog-iBlock-Typ und speichere."
+		},
+		"step5": {
+			"label": "Schritt 5",
+			"title": "Erste Synchronisation ausführen",
+			"description": "Klicke auf \"Vollständige Synchronisation ausführen\" auf dem Diagnose-Tab. Alle Katalogartikel werden indexiert. Zukünftige Änderungen synchronisieren automatisch über Event-Handler."
+		},
+		"cta": "Modul herunterladen"
+	},
+	"integrationsBitrixFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Welche Bitrix-Editionen werden unterstützt?",
+			"answer": "Bitrix Site Manager und Business-Editionen werden unterstützt. PHP 8.1+ erforderlich. Verwendet Standard-Bitrix-HttpClient — keine Drittanbieter-HTTP-Bibliotheken erforderlich."
+		},
+		"q2": {
+			"question": "Wie funktioniert der Hintergrund-Sync-Agent?",
+			"answer": "Das Modul registriert einen Bitrix-Agent, der regelmäßig eine vollständige Synchronisation zur Zuverlässigkeit durchführt. Er erfasst alle Katalogänderungen, die von Echtzeit-Event-Handlern verpasst wurden."
+		},
+		"q3": {
+			"question": "Kann ich anpassen, welche iBlock-Eigenschaften indexiert werden?",
+			"answer": "Ja. Das Modul exportiert standardmäßig alle Produkteigenschaften. Du kannst die Felder in den Admin-Einstellungen einschränken oder die ProductExporter-Klasse für vollständig benutzerdefinierte Feldauswahl erweitern."
+		}
 	}
 }

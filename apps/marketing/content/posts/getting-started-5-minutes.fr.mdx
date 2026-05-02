@@ -1,0 +1,91 @@
+---
+title: Démarrer avec AACSearch en 5 minutes
+date: 2025-05-01
+image: https://picsum.photos/id/11/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Ajoutez une recherche plein texte prête pour la production à votre boutique en moins de 5 minutes — sans infrastructure, sans DevOps, sans expertise en schémas.
+tags: [tutorial, getting-started, search]
+published: true
+---
+
+Bien faire la recherche est difficile. Commencer ne devrait pas l'être. Ce guide vous explique comment ajouter AACSearch à votre projet, de zéro au premier résultat de recherche, en moins de 5 minutes.
+
+## Ce dont vous avez besoin
+
+- Un compte AACSearch (l'offre gratuite couvre jusqu'à 10 000 documents)
+- Un catalogue de produits — CSV, JSON ou une boutique PrestaShop / Bitrix en ligne
+- 5 minutes
+
+## Étape 1 : Créer votre index
+
+Après l'inscription, vous arrivez sur le tableau de bord. Cliquez sur **Nouvel index** et donnez-lui un nom (p. ex. `products`). AACSearch provisionne automatiquement une collection Typesense pour votre organisation — sans sélection de serveur, sans dimensionnement de nœuds, sans fichiers de configuration.
+
+Votre index apparaît avec le statut **Actif** en quelques secondes.
+
+## Étape 2 : Connecter votre source de données
+
+### Option A : Importer un fichier CSV ou JSON
+
+Allez dans **Importer** → **Téléverser un fichier**. AACSearch déduit automatiquement les types de champs à partir de vos données. Pour un catalogue de produits standard, il détecte les champs `name`, `price`, `description`, `category` et `sku` sans aucune définition de schéma manuelle.
+
+Téléversez un fichier de 1 000 produits. Vous verrez la progression de l'ingestion en temps réel — généralement moins de 10 secondes pour 1 000 documents.
+
+### Option B : Connecter via un connecteur CMS
+
+Si vous utilisez PrestaShop ou Bitrix, installez le module connecteur natif :
+
+- **PrestaShop** : Admin → Gestionnaire de modules → rechercher « AACSearch » → Installer
+- **Bitrix** : Marketplace → AACSearch → Installer
+
+Dans votre tableau de bord AACSearch, allez dans **Connecteurs** → **Nouveau token de connecteur**. Copiez le token et collez-le dans les paramètres du module dans votre CMS. Cliquez sur **Tester la connexion** — vous devriez voir une confirmation verte avec le nom de votre index et le nombre de documents.
+
+Déclenchez une **Synchronisation complète**. Le connecteur exporte l'intégralité de votre catalogue de produits, le met en file d'attente et le pousse vers l'index. Pour un catalogue de 50 000 produits, comptez environ 2 à 3 minutes.
+
+## Étape 3 : Tester la recherche dans le Playground
+
+Dans le tableau de bord, ouvrez l'onglet **Playground**. Tapez un nom de produit ou une SKU partielle. Vous verrez :
+
+- Des résultats classés avec les correspondances surlignées
+- Le temps de réponse en millisecondes (généralement 10–30 ms)
+- La sortie JSON brute pour le débogage
+
+Essayez une faute de frappe — AACSearch utilise la correspondance floue intégrée de Typesense, donc `iphne` renvoie quand même des résultats pour iPhone.
+
+## Étape 4 : Intégrer le widget
+
+Allez dans **Widget** et copiez le snippet d'intégration. Il ressemble à ceci :
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="fr"
+	async
+></script>
+```
+
+Collez ce snippet dans le `<head>` de votre boutique ou avant `</body>`. Le widget affiche un bouton de recherche qui ouvre une superposition de recherche plein écran — aucun CSS ou JavaScript supplémentaire requis.
+
+Il fonctionne dans un Shadow DOM, de sorte que les styles de votre boutique n'entrent pas en conflit avec l'apparence du widget.
+
+## Étape 5 : Vérifier en production
+
+Ouvrez votre boutique dans une fenêtre de navigation privée et cliquez sur le bouton de recherche. Tapez un nom de produit. Vous devriez voir les résultats s'afficher instantanément au fur et à mesure que vous tapez — sans rechargement de page, sans attente.
+
+Félicitations. Vous disposez maintenant d'une recherche plein texte de qualité production.
+
+## Ce qui se passe en coulisses
+
+Lorsque vous tapez un caractère, le widget envoie une requête au point de terminaison de recherche public d'AACSearch, authentifié avec une clé API en lecture seule. La requête atteint votre collection Typesense, renvoie des résultats classés avec tolérance aux fautes de frappe et correspondance de préfixe, et les affiche dans la superposition — le tout en moins de 50 ms.
+
+Les mises à jour de vos produits se synchronisent automatiquement. Lorsque vous modifiez un prix ou ajoutez un nouveau produit dans votre CMS, le connecteur détecte le changement et le pousse vers l'index en quelques minutes.
+
+## Prochaines étapes
+
+- **Synonymes** : Ajoutez « téléphone → smartphone, mobile » dans l'onglet Pertinence pour capturer les variations d'intention
+- **Curations** : Épinglez des produits spécifiques pour qu'ils apparaissent en premier sur les requêtes à forte valeur
+- **Analytique** : Après une semaine de trafic, consultez les rapports sur les requêtes principales et les zéro résultat pour identifier les lacunes
+
+La recherche est en ligne. Le reste, c'est de l'optimisation.

@@ -1,0 +1,91 @@
+---
+title: Primeros pasos con AACSearch en 5 minutos
+date: 2025-05-01
+image: https://picsum.photos/id/11/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Agrega búsqueda de texto completo lista para producción a tu tienda en menos de 5 minutos, sin infraestructura, sin DevOps y sin conocimientos de esquemas.
+tags: [tutorial, getting-started, search]
+published: true
+---
+
+Hacer bien la búsqueda es difícil. Comenzar no debería serlo. Esta guía te muestra cómo agregar AACSearch a tu proyecto desde cero hasta el primer resultado de búsqueda en menos de 5 minutos.
+
+## Lo que necesitas
+
+- Una cuenta de AACSearch (el plan gratuito cubre hasta 10.000 documentos)
+- Un catálogo de productos — CSV, JSON o una tienda PrestaShop / Bitrix en funcionamiento
+- 5 minutos
+
+## Paso 1: Crea tu índice
+
+Después de registrarte, llegas al panel de control. Haz clic en **Nuevo índice** y asígnale un nombre (p. ej., `products`). AACSearch aprovisionará automáticamente una colección de Typesense para tu organización — sin selección de servidor, sin dimensionamiento de nodos, sin archivos de configuración.
+
+Tu índice aparecerá con el estado **Activo** en cuestión de segundos.
+
+## Paso 2: Conecta tu fuente de datos
+
+### Opción A: Subir un archivo CSV o JSON
+
+Ve a **Importar** → **Subir archivo**. AACSearch infiere los tipos de campo automáticamente a partir de tus datos. Para un catálogo de productos estándar, detecta los campos `name`, `price`, `description`, `category` y `sku` sin ninguna definición de esquema manual.
+
+Sube un archivo con 1.000 productos. Verás el progreso de ingesta en tiempo real — generalmente menos de 10 segundos para 1.000 documentos.
+
+### Opción B: Conectar mediante el conector de CMS
+
+Si usas PrestaShop o Bitrix, instala el módulo conector nativo:
+
+- **PrestaShop**: Admin → Gestor de módulos → buscar «AACSearch» → Instalar
+- **Bitrix**: Marketplace → AACSearch → Instalar
+
+En el panel de AACSearch, ve a **Conectores** → **Nuevo token de conector**. Copia el token y pégalo en la configuración del módulo en tu CMS. Haz clic en **Probar conexión** — deberías ver una confirmación en verde con el nombre de tu índice y el recuento de documentos.
+
+Activa una **Sincronización completa**. El conector exporta todo tu catálogo de productos, lo pone en cola y lo envía al índice. Para un catálogo de 50.000 productos, espera unos 2–3 minutos.
+
+## Paso 3: Prueba la búsqueda en el Playground
+
+En el panel, abre la pestaña **Playground**. Escribe el nombre de un producto o una SKU parcial. Verás:
+
+- Resultados ordenados con coincidencias resaltadas
+- Tiempo de respuesta en milisegundos (generalmente 10–30 ms)
+- Salida JSON sin procesar para depuración
+
+Prueba con un error tipográfico — AACSearch usa la coincidencia difusa incorporada de Typesense, por lo que `iphne` seguirá devolviendo resultados de iPhone.
+
+## Paso 4: Incrusta el widget
+
+Ve a **Widget** y copia el fragmento de código. Tiene este aspecto:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="es"
+	async
+></script>
+```
+
+Pega este fragmento en el `<head>` de tu tienda o antes de `</body>`. El widget muestra un botón de búsqueda que abre una superposición de búsqueda a pantalla completa — no se requiere CSS ni JavaScript adicional.
+
+Funciona en Shadow DOM, por lo que los estilos de tu tienda no entran en conflicto con la apariencia del widget.
+
+## Paso 5: Verifica en producción
+
+Abre tu tienda en una ventana de incógnito y haz clic en el botón de búsqueda. Escribe el nombre de un producto. Deberías ver resultados instantáneos mientras escribes — sin recarga de página, sin espera.
+
+Felicitaciones. Ahora tienes búsqueda de texto completo a nivel de producción.
+
+## Qué ocurre internamente
+
+Cuando escribes un carácter, el widget envía una consulta al endpoint de búsqueda público de AACSearch autenticado con una clave de API de solo lectura. La consulta llega a tu colección de Typesense, devuelve resultados ordenados con tolerancia a errores tipográficos y coincidencia de prefijo, y los muestra en la superposición — todo en menos de 50 ms.
+
+Las actualizaciones de tus productos se sincronizan automáticamente. Cuando cambias un precio o agregas un nuevo producto en tu CMS, el conector detecta el cambio y lo envía al índice en minutos.
+
+## Próximos pasos
+
+- **Sinónimos**: Agrega «celular → smartphone, móvil» en la pestaña Relevancia para capturar variaciones de intención
+- **Curaciones**: Ancla productos específicos para que aparezcan primero en las consultas de alto valor
+- **Analítica**: Después de una semana de tráfico, revisa los informes de consultas principales y resultados cero para encontrar brechas
+
+La búsqueda ya está en marcha. El resto es optimización.

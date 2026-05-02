@@ -1,0 +1,139 @@
+---
+title: How to Add Search to Your PrestaShop Store
+date: 2025-05-15
+image: https://picsum.photos/id/36/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: PrestaShop's native search is limited. Here's how to replace it with AACSearch — full-text product search with typo tolerance, instant results, and automatic sync.
+tags: [prestashop, integration, tutorial, ecommerce]
+published: true
+---
+
+PrestaShop ships with a basic search engine. It works for simple stores but falls apart quickly: no typo tolerance, no prefix matching, no real-time updates, and ranking that ignores conversion signals like sales rank or margin.
+
+If customers are leaving your store because they can't find products, or if your "no results" rate is above 10%, it's time to upgrade.
+
+This tutorial walks through adding AACSearch to a PrestaShop store — from module installation to first live search result.
+
+## What AACSearch Adds to PrestaShop
+
+Before we get into the setup, here's what changes when you install AACSearch:
+
+- **Instant results as you type** — results appear within 30–50ms, before the customer finishes their query
+- **Typo tolerance** — "iphne 15" finds iPhone 15; "blak dress" finds black dresses
+- **Prefix matching** — "wire" matches "wireless earbuds", "wired keyboard", etc.
+- **Automatic sync** — price changes, new products, and stock updates appear in search within minutes
+- **Custom ranking** — rank by sales, margin, stock level, or any custom field
+
+The native PrestaShop search doesn't do any of these things reliably.
+
+## Prerequisites
+
+- PrestaShop 8.x (7.x partially supported)
+- An AACSearch account — [sign up free](/)
+- Admin access to your PrestaShop back office
+- FTP or file manager access (for manual upload if marketplace isn't available)
+
+## Step 1: Create Your AACSearch Index
+
+Log into your AACSearch dashboard. Click **New Index** and name it `products` (or anything that makes sense for your store). Your index is created instantly — no configuration required at this stage.
+
+## Step 2: Generate a Connector Token
+
+In the AACSearch dashboard, go to **Connectors** in the left sidebar. Click **New Token**. Give it a name (e.g., "PrestaShop Production") and copy the token — you'll need it in Step 3.
+
+Keep this token private. It has write access to your index and should never appear in client-side code or public repositories.
+
+## Step 3: Install the AACSearch Module
+
+### Via PrestaShop Marketplace (recommended)
+
+In your PrestaShop back office, go to **Module Manager** → **Marketplace** and search for "AACSearch". Click **Install**.
+
+### Via ZIP upload
+
+Download the module ZIP from your AACSearch dashboard (under **Connectors** → **Download Module**). In the back office, go to **Module Manager** → **Upload a Module** and upload the ZIP.
+
+After installation, you'll see the AACSearch configuration page. Enter:
+
+- **Connector Token**: paste the token from Step 2
+- **Index Name**: enter the index name you created in Step 1 (e.g., `products`)
+
+Click **Save and Test Connection**. You should see a green success message with your organization name and the index document count (0 at this stage).
+
+## Step 4: Run the Initial Sync
+
+In the AACSearch module configuration page, click **Full Sync**. This exports your entire product catalog — names, descriptions, prices, categories, images, attributes — and pushes it to your AACSearch index.
+
+The sync runs in the background. For a catalog with 10,000 products, it typically takes 1–3 minutes. You can watch the progress in the **Sync Jobs** tab of your AACSearch dashboard.
+
+When the sync completes, your index shows the document count. Check the Playground in the dashboard to verify: search for a product name and confirm results appear.
+
+## Step 5: Configure Delta Sync
+
+Full syncs are for initial population. For ongoing updates, configure delta sync:
+
+In the module settings, find **Automatic Sync** and enable it. The default interval is every 5 minutes — the connector checks for products modified since the last sync and sends only the changes.
+
+This means: when you update a price, add a new variant, or change stock status in PrestaShop, the change appears in search within 5 minutes. No manual action required.
+
+## Step 6: Embed the Search Widget
+
+The AACSearch widget replaces or augments the PrestaShop search box. It opens a full-screen overlay with instant search results.
+
+### Automatic (via module hook)
+
+In the module configuration, enable **Replace Default Search**. The module hooks into PrestaShop's display system and injects the widget automatically. No template editing required.
+
+### Manual (for custom themes)
+
+If you prefer manual placement, copy the widget snippet from your AACSearch dashboard (**Widget** tab):
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-index-id="YOUR_INDEX_ID"
+	data-api-key="YOUR_SEARCH_KEY"
+	data-locale="{language.iso_code}"
+	async
+></script>
+```
+
+Replace `{language.iso_code}` with PrestaShop's Smarty variable so the widget locale matches the store language. Add this snippet to your theme's `head.tpl` or `footer.tpl`.
+
+## Step 7: Verify in Production
+
+Clear PrestaShop's cache (Advanced Parameters → Performance → Clear cache). Open your store in an incognito window and try the search button.
+
+Check for:
+
+- Results appearing as you type
+- Typo tolerance working (`iphne` → iPhone)
+- Product images rendering in results
+- Clicking a result taking you to the correct product page
+
+If results aren't appearing, check the Playground in your AACSearch dashboard first — this isolates whether the issue is the index (data) or the widget (display).
+
+## Troubleshooting Common Issues
+
+**Products not appearing in results after sync**
+
+Open the AACSearch Playground and search for the same query. If results appear there, the issue is in the widget configuration (wrong API key or index ID). If results don't appear in the Playground, check the sync job logs for errors.
+
+**Prices showing as outdated**
+
+Delta sync runs every 5 minutes by default. For price-sensitive queries, you can reduce the interval to 1 minute in the module settings. Triggering a manual delta sync in the dashboard forces an immediate update.
+
+**Widget not rendering**
+
+Check your browser console for JavaScript errors. Common causes: Content Security Policy blocking the widget script, or a conflicting `async` attribute. Try adding `crossorigin="anonymous"` to the script tag.
+
+## What's Next
+
+With AACSearch running, the baseline search experience is already dramatically better than PrestaShop's native engine. The next optimization layer:
+
+- **Analytics**: Check which queries return zero results — these are products customers want but can't find
+- **Synonyms**: Add domain-specific synonyms (e.g., "monitor = display = screen") in the Relevance tab
+- **Curations**: Pin high-margin products to appear first for commercial queries
+
+Search is live. Time to start optimizing for conversion.

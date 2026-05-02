@@ -3003,5 +3003,171 @@
 				"description": "Shopify app with product, variant, and metafield sync. Widget embed included."
 			}
 		}
+	},
+	"integrationsNextJsSetup": {
+		"title": "Get started in 3 steps",
+		"subtitle": "No backend changes required. The AACsearch SDK works directly from your Next.js app.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Install the package",
+			"description": "Run npm install @aacsearch/client in your Next.js project."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Configure your client",
+			"description": "Create a search client with your API key and index slug. Keep the key server-side or use a scoped read-only token for client components."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Search from any component",
+			"description": "Call client.search() from a Server Component or use the useSearch hook in a Client Component. Results are typed."
+		},
+		"code": {
+			"title": "Minimal Server Component example"
+		},
+		"cta": "Read the full docs"
+	},
+	"integrationsNextJsFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Does it work with Next.js 13, 14, and 15?",
+			"answer": "Yes. The SDK is compatible with Next.js 13, 14, and 15. It works with both the App Router and the Pages Router without any adapters."
+		},
+		"q2": {
+			"question": "Can I use it with Vercel Edge Runtime?",
+			"answer": "Yes. The AACsearch client uses the standard Fetch API and is fully compatible with Vercel Edge Runtime and Cloudflare Workers."
+		},
+		"q3": {
+			"question": "How do I protect my API key on the client?",
+			"answer": "Use a scoped token with read-only permissions for client-side search. Create it from your AACsearch dashboard — the full admin key stays on the server only."
+		}
+	},
+	"integrationsReactSetup": {
+		"title": "Add search to your React app in 3 steps",
+		"subtitle": "Works with React 17, 18, and 19. Framework-agnostic — Next.js, Remix, Vite, and CRA all supported.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Install the package",
+			"description": "Run npm install @aacsearch/react in your project."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Use the useSearch hook",
+			"description": "Pass your API key and index slug. The hook returns hits, loading state, and a setQuery function."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Render results",
+			"description": "Map over hits and display them in your own UI. No required wrapper components — full styling freedom."
+		},
+		"code": {
+			"title": "Minimal useSearch example"
+		},
+		"cta": "Browse the API reference"
+	},
+	"integrationsReactFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Which React versions are supported?",
+			"answer": "React 17, 18, and 19 are supported. The hooks use standard React state and effects — no unstable APIs or experimental features."
+		},
+		"q2": {
+			"question": "Does it work with Next.js or Remix?",
+			"answer": "Yes. The React hooks work in any React environment. For Next.js Server Components, use the base @aacsearch/client package which has no React dependency."
+		},
+		"q3": {
+			"question": "Is there a component library or just hooks?",
+			"answer": "Both. @aacsearch/react includes composable hooks (useSearch, useAutocomplete, useFacets) and unstyled headless components. Bring your own CSS or Tailwind."
+		}
+	},
+	"integrationsPrestashopSetup": {
+		"title": "Install in 5 minutes",
+		"subtitle": "No PHP coding required. The module handles sync automatically after configuration.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Download the module",
+			"description": "Get aacsearch.zip from your AACsearch dashboard under Connectors → PrestaShop."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Upload to PrestaShop",
+			"description": "Go to Modules > Module Manager > Upload a module. Select the ZIP and confirm."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Enter your connector token",
+			"description": "Paste the connector token from your AACsearch dashboard into the module settings and save."
+		},
+		"step4": {
+			"label": "Step 4",
+			"title": "Run full catalog export",
+			"description": "Click \"Full export\" in the module admin panel. Your entire product catalog syncs in one batch."
+		},
+		"step5": {
+			"label": "Step 5",
+			"title": "Search is live",
+			"description": "Products appear in AACsearch immediately. Future saves, updates, and deletes sync automatically via PrestaShop hooks."
+		},
+		"cta": "Download the module"
+	},
+	"integrationsPrestashopFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Which PrestaShop versions are supported?",
+			"answer": "PrestaShop 8.0 and 8.1 are fully supported. PHP 8.1+ required. Works with all major themes including Hummingbird and Classic."
+		},
+		"q2": {
+			"question": "Does the module slow down product saves?",
+			"answer": "No. Sync is asynchronous via the AACsearch ingest buffer. The module enqueues the update and returns immediately — no blocking calls to Typesense on save."
+		},
+		"q3": {
+			"question": "Can I customize which fields are indexed?",
+			"answer": "Yes. The module exports all product fields by default. You can restrict attributes in the module settings or extend the Exporter class for custom logic."
+		}
+	},
+	"integrationsBitrixSetup": {
+		"title": "Install in 5 minutes",
+		"subtitle": "No Bitrix customizations required. The module installs as a standard Bitrix marketplace module.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Download the module",
+			"description": "Get the aac.search archive from your AACsearch dashboard under Connectors → 1C-Bitrix."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Unpack to /local/modules/",
+			"description": "Extract the archive to /local/modules/aac.search/ on your Bitrix server. Keep the directory structure intact."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Install from Bitrix admin",
+			"description": "Go to Bitrix admin → Marketplace → Installed modules. Find \"AACsearch\" in the list and click Install."
+		},
+		"step4": {
+			"label": "Step 4",
+			"title": "Configure the connector",
+			"description": "Enter your connector token and iBlock ID in the module settings. Choose the catalog iBlock type and save."
+		},
+		"step5": {
+			"label": "Step 5",
+			"title": "Run initial sync",
+			"description": "Click \"Run full sync\" on the Diagnostics tab. All catalog items are indexed. Future changes sync automatically via event handlers."
+		},
+		"cta": "Download the module"
+	},
+	"integrationsBitrixFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Which Bitrix editions are supported?",
+			"answer": "Bitrix Site Manager and Business editions are supported. PHP 8.1+ required. Uses standard Bitrix HttpClient — no third-party HTTP libraries needed."
+		},
+		"q2": {
+			"question": "How does the background sync agent work?",
+			"answer": "The module registers a Bitrix agent that runs a periodic full sync for reliability. It catches any catalog changes missed by real-time event handlers, ensuring no products are out of sync."
+		},
+		"q3": {
+			"question": "Can I customize which iBlock properties are indexed?",
+			"answer": "Yes. The module exports all product properties by default. You can limit the fields in the admin settings or extend the ProductExporter class for fully custom field selection."
+		}
 	}
 }

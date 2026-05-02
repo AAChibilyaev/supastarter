@@ -1,29 +1,144 @@
 ---
-title: Increíble segundo artículo
-date: 2023-03-01
+title: "Ajuste de relevancia en búsqueda: Sinónimos, curaciones y palabras vacías que realmente incrementan ingresos"
+date: 2026-02-19
 image: https://picsum.photos/id/436/1200/800
-authorName: Jon Doe
+authorName: Equipo AACsearch
 authorImage: https://picsum.photos/id/433/200/200
-excerpt: ¡Este es mi primer artículo. Estoy muy emocionado!
-tags: [first, post]
+excerpt: "Una guía práctica para mejorar la relevancia de búsqueda en e-commerce. Aprende cómo funcionan los sinónimos, las curaciones y las palabras vacías — y cómo medir su impacto en la tasa de conversión."
+tags: [e-commerce, relevancia, sinónimos, curaciones, búsqueda]
 published: true
 ---
 
-## Hola mundo
+## El problema de relevancia que te está costando ventas
 
-¡Este es mi primer artículo. Estoy muy emocionado! Esta entrada del blog necesita algo más de texto para llenar la página, así que voy a escribir algunas cosas aleatorias aquí. Voy a escribir sobre mis cosas favoritas, como:
+Tu producto más vendido aparece en la página 3. Un cliente busca "zapatillas" y obtiene cero resultados porque tu catálogo usa "deportivas". Alguien escribe "barato" y tu búsqueda lo trata como una palabra clave en lugar de ignorarla.
 
-### ¿Qué sigue?
+Estos son problemas de relevancia. Son invisibles en tus análisis hasta que alguien correlaciona las búsquedas sin resultados con el abandono del carrito — y cuando lo hacen, los números siempre son peores de lo esperado.
 
-Voy a escribir muchos más artículos. Voy a escribir sobre mis cosas favoritas, como:
+La buena noticia: los problemas de relevancia son solucionables sin un equipo de ciencia de datos. Tres herramientas resuelven el 80% de ellos: **sinónimos**, **curaciones** y **palabras vacías**.
 
-- Gatos
-- Perros
-- Pizza
+## Sinónimos: Cuando los clientes lo dicen de otra manera
 
-Incluso puedes agregar algunos enlaces aquí:
+Una regla de sinónimos le dice al motor de búsqueda que trate dos o más términos como equivalentes. Hay dos tipos:
 
-- [Mi gato favorito](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Mi perro favorito](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Mi pizza favorita](https://www.youtube.com/watch?v=5dsGWM5XGdg)
-- [Inicio](/)
+### Sinónimos equivalentes (bidireccionales)
+
+```json
+{
+	"synonyms": ["zapatillas", "deportivas", "tenis", "calzado deportivo"]
+}
+```
+
+Cuando un cliente busca "tenis", los resultados para "zapatillas" y "deportivas" aparecen junto a las coincidencias literales de "tenis". Lo inverso también es verdad.
+
+**Úsalo para:** diferencias de vocabulario regional, variaciones de nombres de marca, jerga de la industria frente a términos del consumidor.
+
+### Sinónimos unidireccionales
+
+```json
+{
+	"root": "portátil",
+	"synonyms": ["ordenador portátil", "computadora portátil"]
+}
+```
+
+Buscar "portátil" devuelve resultados que coinciden con "ordenador portátil", pero buscar "ordenador portátil" NO devuelve resultados para "portátil". Esto es útil cuando un término es autoritativo y los otros son casos extremos.
+
+**Úsalo para:** términos técnicos que se asignan a una categoría de producto canónica, nombres de productos obsoletos que redirigen a los actuales.
+
+### Cómo medir el impacto de los sinónimos
+
+En AACsearch Analytics, filtra por los términos de consulta a los que has añadido sinónimos. Compara la tasa de resultados cero antes y después del despliegue. Un conjunto de sinónimos bien colocado típicamente reduce las búsquedas sin resultados entre un 15–40% para los términos objetivo.
+
+## Curaciones: Anulación manual cuando los algoritmos no son suficientes
+
+Las curaciones te permiten fijar productos específicos en la parte superior de los resultados de búsqueda, o excluir productos que no deberían aparecer para una consulta determinada.
+
+### Fijar un producto
+
+Tu venta de verano tiene un artículo destacado. Lo quieres primero para búsquedas como "sandalias", "zapatos de verano" y "playa":
+
+```json
+{
+	"id": "curación-venta-verano",
+	"query": "sandalias",
+	"includedHits": [{ "id": "producto-1234", "position": 1 }]
+}
+```
+
+El producto 1234 aparece en la posición 1 independientemente de la puntuación de relevancia. Todo lo demás se clasifica normalmente por debajo.
+
+### Excluir productos
+
+Un producto está agotado pero aún no lo has eliminado del índice. O está descontinuado y no quieres que aparezca para ciertas consultas:
+
+```json
+{
+	"query": "zapatillas para correr",
+	"excludedHits": ["producto-5678", "producto-9012"]
+}
+```
+
+### Cuándo usar curaciones
+
+Las curaciones son un bisturí, no un pincel. Reservalas para:
+
+- **Promociones estacionales** — fija artículos en oferta para consultas relevantes durante una campaña
+- **Lanzamientos de nuevos productos** — asegura visibilidad para artículos que aún no tienen señales de reseñas
+- **Retiradas de seguridad o exclusiones legales** — elimina productos específicos de ciertas búsquedas
+
+No uses curaciones para compensar una indexación deficiente. Si 50 productos necesitan fijación manual, el problema subyacente probablemente sea el esquema o el peso — arréglalo en su lugar.
+
+## Palabras vacías: Ignorar palabras que agregan ruido
+
+Las palabras vacías son términos que el motor de búsqueda ignora completamente. Las palabras vacías comunes en español — "el", "la", "un", "y" — generalmente se manejan automáticamente. Los sitios de e-commerce necesitan palabras vacías personalizadas para su contexto específico.
+
+### Palabras vacías comunes en e-commerce
+
+```json
+{
+	"stopwords": ["barato", "comprar", "adquirir", "conseguir", "encontrar", "mejor", "bueno"]
+}
+```
+
+Cuando un cliente busca "comprar zapatillas para correr baratas", el motor de búsqueda procesa "zapatillas para correr" — que es lo que realmente quiere. Sin palabras vacías, "comprar" y "barato" se convierten en palabras clave que pueden diluir la puntuación de relevancia.
+
+### Qué NO agregar como palabra vacía
+
+Ten cuidado con los términos relacionados con el precio. "Barato" es un candidato para palabra vacía porque es una intención, no un dato del producto. "Descuento" es más complicado — algunos de tus productos podrían tener literalmente "descuento" en su nombre o descripción. Prueba antes de implementar.
+
+### El antipatrón de palabras vacías
+
+Algunos equipos añaden nombres de marcas competidoras como palabras vacías para evitar mostrar sus productos cuando los clientes buscan un competidor. Esto es un error — los clientes que buscan un competidor son una oportunidad de conversión, no un problema. Muéstrales tu mejor alternativa en su lugar.
+
+## Juntándolo todo: Una auditoría de relevancia
+
+Realiza esta auditoría trimestralmente:
+
+1. **Exporta tus 100 principales consultas con cero resultados.** Estos son tus candidatos de máxima prioridad para sinónimos.
+2. **Verifica tus 100 principales consultas con un CTR inferior al 5%.** Un CTR bajo en términos de alto volumen significa que los productos incorrectos están clasificando primero — candidatos para curación.
+3. **Revisa las consultas donde los clientes agregan "barato", "comprar" o "conseguir".** Agrega estos a tu lista de palabras vacías.
+4. **Prueba A/B los conjuntos de sinónimos** desplegándolos primero en una región o segmento de tráfico.
+
+## Monitorizar la relevancia en AACsearch
+
+AACsearch Analytics muestra:
+
+| Métrica                              | Qué te dice                                               |
+| ------------------------------------ | --------------------------------------------------------- |
+| Tasa de resultados cero              | Qué consultas no tienen coincidencias — objetivos para sinónimos |
+| CTR por consulta                     | Qué resultados no hacen clic los clientes — candidatos para curación |
+| Consultas principales                | Dónde debe enfocarse tu inversión en sinónimos y curaciones |
+| Distribución de posición de resultados | Si los productos fijados realmente están apareciendo     |
+
+Revisa estos paneles semanalmente durante un ciclo activo de mejora de relevancia. Una vez que las cosas se estabilicen, mensualmente es suficiente.
+
+## Empieza pequeño, mide todo
+
+La trampa en el ajuste de relevancia es hacer demasiado a la vez y no saber qué movió la aguja. Agrega un conjunto de sinónimos, mide durante una semana, luego agrega otro. Las curaciones tienen efecto inmediato — verás el cambio en el CTR dentro de las 24 horas posteriores al despliegue.
+
+La relevancia nunca está "terminada". Los nuevos productos introducen nuevo vocabulario. Las tendencias estacionales cambian lo que buscan los clientes. Una revisión trimestral te mantiene por delante de la deriva.
+
+---
+
+¿Quieres gestionar sinónimos y curaciones desde un panel sin tocar archivos de configuración? [Prueba AACsearch gratis →](https://app.aacsearch.com/signup)

@@ -1532,7 +1532,8 @@
 				"locale": "Configuración regional",
 				"validators": "Validadores (JSON)",
 				"reindexStarted": "Reindexación iniciada",
-				"reindexError": "Error al iniciar la reindexación"
+				"reindexError": "Error al iniciar la reindexación",
+				"reindexWarning": "Los cambios en el esquema requieren una reindexación completa. Esto puede tardar varios minutos en colecciones grandes."
 			},
 			"version": "Versión",
 			"recentActivity": "Actividad reciente",

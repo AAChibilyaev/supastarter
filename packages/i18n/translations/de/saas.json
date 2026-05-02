@@ -1532,7 +1532,8 @@
 				"locale": "Gebietsschema",
 				"validators": "Validatoren (JSON)",
 				"reindexStarted": "Neuindizierung gestartet",
-				"reindexError": "Neuindizierung fehlgeschlagen"
+				"reindexError": "Neuindizierung fehlgeschlagen",
+				"reindexWarning": "Schemaänderungen erfordern eine vollständige Neuindizierung. Bei großen Sammlungen kann dies mehrere Minuten dauern."
 			},
 			"version": "Version",
 			"recentActivity": "Letzte Aktivität",

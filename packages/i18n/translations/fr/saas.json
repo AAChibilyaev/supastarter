@@ -1508,7 +1508,8 @@
 				"locale": "Locale",
 				"validators": "Validateurs (JSON)",
 				"reindexStarted": "Réindexation démarrée",
-				"reindexError": "Échec du démarrage de la réindexation"
+				"reindexError": "Échec du démarrage de la réindexation",
+				"reindexWarning": "Les modifications du schéma nécessitent une réindexation complète. Cela peut prendre plusieurs minutes pour les grandes collections."
 			},
 			"version": "Version",
 			"recentActivity": "Activité récente",

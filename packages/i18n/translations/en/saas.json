@@ -1532,7 +1532,8 @@
 				"locale": "Locale",
 				"validators": "Validators (JSON)",
 				"reindexStarted": "Reindex started",
-				"reindexError": "Failed to start reindex"
+				"reindexError": "Failed to start reindex",
+				"reindexWarning": "Changes to the schema require a full reindex. This may take several minutes for large collections."
 			},
 			"version": "Version",
 			"recentActivity": "Recent activity",

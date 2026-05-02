@@ -4,6 +4,7 @@ import { adminRouter } from "../modules/admin/router";
 import { aiRouter } from "../modules/ai/router";
 import { billingWalletRouter } from "../modules/billing-wallet/router";
 import { entitlementsRouter } from "../modules/entitlements/router";
+import { indexingRouter } from "../modules/indexing/router";
 import { knowledgeRouter } from "../modules/knowledge/router";
 import { notificationsRouter } from "../modules/notifications/router";
 import { organizationsRouter } from "../modules/organizations/router";
@@ -21,6 +22,7 @@ export const router = publicProcedure.router({
 	notifications: notificationsRouter,
 	search: searchRouter,
 	knowledge: knowledgeRouter,
+	indexing: indexingRouter,
 	billingWallet: billingWalletRouter,
 	entitlements: entitlementsRouter,
 });

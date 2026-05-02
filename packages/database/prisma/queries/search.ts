@@ -669,3 +669,232 @@ export async function hasActiveReindexJob(indexId: string): Promise<boolean> {
 	});
 	return count > 0;
 }
+
+// ─── Cancel Reindex ─────────────────────────────────────────────
+
+export async function cancelReindexJob(jobId: string): Promise<boolean> {
+	const result = await db.searchConnectorSyncJob.updateMany({
+		where: {
+			id: jobId,
+			type: "reindex",
+			status: { in: ["pending", "running"] },
+		},
+		data: {
+			status: "failed",
+			finishedAt: new Date(),
+			lastError: "Cancelled by user",
+		},
+	});
+	return result.count > 0;
+}
+
+// ─── Reindex History ────────────────────────────────────────────
+
+export async function getReindexJobById(jobId: string): Promise<ReindexJobView | null> {
+	const row = await db.searchConnectorSyncJob.findUnique({
+		where: { id: jobId },
+		include: { index: { select: { slug: true } } },
+	});
+	if (!row || row.type !== "reindex") return null;
+	return toReindexJobView(row);
+}
+
+export async function listReindexJobHistory(
+	organizationId: string,
+	limit = 20,
+	offset = 0,
+): Promise<{ jobs: ReindexJobView[]; total: number }> {
+	const [rows, total] = await Promise.all([
+		db.searchConnectorSyncJob.findMany({
+			where: { organizationId, type: "reindex" },
+			orderBy: { startedAt: "desc" },
+			take: limit,
+			skip: offset,
+			include: { index: { select: { slug: true } } },
+		}),
+		db.searchConnectorSyncJob.count({
+			where: { organizationId, type: "reindex" },
+		}),
+	]);
+	return { jobs: rows.map(toReindexJobView), total };
+}
+
+// ─── Reindex Schedule (stored in SearchConnectorSyncJob, type="reindex_schedule") ───
+
+export interface ReindexScheduleView {
+	id: string;
+	indexId: string;
+	organizationId: string;
+	slug: string;
+	cronExpression: string;
+	enabled: boolean;
+	lastRunAt: string | null;
+	createdAt: string;
+}
+
+interface ReindexScheduleEvent {
+	_type: "reindex_schedule";
+	cronExpression: string;
+	enabled: boolean;
+}
+
+function toReindexScheduleView(row: {
+	id: string;
+	indexId: string;
+	organizationId: string;
+	status: string;
+	startedAt: Date;
+	finishedAt: Date | null;
+	itemsCount: number;
+	events: Prisma.JsonValue;
+	index: { slug: string };
+}): ReindexScheduleView {
+	const events = row.events as unknown as unknown[];
+	const scheduleEvent = events[0] as ReindexScheduleEvent | undefined;
+	const cronExpression =
+		scheduleEvent?._type === "reindex_schedule" ? scheduleEvent.cronExpression : "* * * * *";
+	const enabled = scheduleEvent?._type === "reindex_schedule" ? scheduleEvent.enabled : true;
+	return {
+		id: row.id,
+		indexId: row.indexId,
+		organizationId: row.organizationId,
+		slug: row.index.slug,
+		cronExpression,
+		enabled,
+		lastRunAt: row.finishedAt?.toISOString() ?? null,
+		createdAt: row.startedAt.toISOString(),
+	};
+}
+
+export async function createReindexSchedule(input: {
+	indexId: string;
+	organizationId: string;
+	cronExpression: string;
+	enabled?: boolean;
+}): Promise<ReindexScheduleView> {
+	const scheduleEvent: ReindexScheduleEvent = {
+		_type: "reindex_schedule",
+		cronExpression: input.cronExpression,
+		enabled: input.enabled ?? true,
+	};
+	const row = await db.searchConnectorSyncJob.create({
+		data: {
+			indexId: input.indexId,
+			organizationId: input.organizationId,
+			type: "reindex_schedule",
+			status: "pending",
+			events: [scheduleEvent] as unknown as Prisma.InputJsonValue,
+		},
+		include: { index: { select: { slug: true } } },
+	});
+	return toReindexScheduleView(row);
+}
+
+export async function listReindexSchedules(organizationId: string): Promise<ReindexScheduleView[]> {
+	const rows = await db.searchConnectorSyncJob.findMany({
+		where: { organizationId, type: "reindex_schedule" },
+		orderBy: { startedAt: "desc" },
+		include: { index: { select: { slug: true } } },
+	});
+	return rows.map(toReindexScheduleView);
+}
+
+export async function getReindexSchedule(scheduleId: string): Promise<ReindexScheduleView | null> {
+	const row = await db.searchConnectorSyncJob.findUnique({
+		where: { id: scheduleId },
+		include: { index: { select: { slug: true } } },
+	});
+	if (!row || row.type !== "reindex_schedule") return null;
+	return toReindexScheduleView(row);
+}
+
+export async function updateReindexSchedule(
+	scheduleId: string,
+	input: {
+		cronExpression?: string;
+		enabled?: boolean;
+	},
+): Promise<ReindexScheduleView | null> {
+	const existing = await db.searchConnectorSyncJob.findUnique({
+		where: { id: scheduleId },
+	});
+	if (!existing || existing.type !== "reindex_schedule") return null;
+
+	const events = existing.events as unknown as unknown[];
+	const currentEvent = events[0] as ReindexScheduleEvent | undefined;
+	const scheduleEvent: ReindexScheduleEvent = {
+		_type: "reindex_schedule",
+		cronExpression: input.cronExpression ?? currentEvent?.cronExpression ?? "* * * * *",
+		enabled: input.enabled ?? currentEvent?.enabled ?? true,
+	};
+
+	const row = await db.searchConnectorSyncJob.update({
+		where: { id: scheduleId },
+		data: {
+			events: [scheduleEvent] as unknown as Prisma.InputJsonValue,
+		},
+		include: { index: { select: { slug: true } } },
+	});
+	return toReindexScheduleView(row);
+}
+
+export async function deleteReindexSchedule(scheduleId: string): Promise<boolean> {
+	const result = await db.searchConnectorSyncJob.deleteMany({
+		where: { id: scheduleId, type: "reindex_schedule" },
+	});
+	return result.count > 0;
+}
+
+// ─── Indexing Health Stats ──────────────────────────────────────
+
+export async function getIndexingHealthStats(organizationId: string) {
+	const now = new Date();
+	const hourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+	const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+	const [activeJobs, completedLastHour, failedLastHour, totalJobs, completedLastDay] =
+		await Promise.all([
+			db.searchConnectorSyncJob.count({
+				where: {
+					organizationId,
+					type: "reindex",
+					status: { in: ["pending", "running"] },
+				},
+			}),
+			db.searchConnectorSyncJob.count({
+				where: {
+					organizationId,
+					type: "reindex",
+					status: "completed",
+					finishedAt: { gte: hourAgo },
+				},
+			}),
+			db.searchConnectorSyncJob.count({
+				where: {
+					organizationId,
+					type: "reindex",
+					status: "failed",
+					finishedAt: { gte: hourAgo },
+				},
+			}),
+			db.searchConnectorSyncJob.count({
+				where: { organizationId, type: "reindex" },
+			}),
+			db.searchConnectorSyncJob.count({
+				where: {
+					organizationId,
+					type: "reindex",
+					status: "completed",
+					finishedAt: { gte: dayAgo },
+				},
+			}),
+		]);
+
+	return {
+		activeJobs,
+		completedLastHour,
+		completedLastDay,
+		failedLastHour,
+		totalJobs,
+	};
+}

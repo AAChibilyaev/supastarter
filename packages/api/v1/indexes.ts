@@ -186,7 +186,11 @@ export const indexesApp = new Hono()
 		let documentCount = 0;
 		try {
 			const client = getTypesenseClient();
-			const collName = physicalCollectionName(index.organizationId, index.slug, index.version);
+			const collName = physicalCollectionName(
+				index.organizationId,
+				index.slug,
+				index.version,
+			);
 			const collection = await client.collections(collName).retrieve();
 			documentCount = collection.num_documents;
 		} catch (error) {
@@ -200,9 +204,7 @@ export const indexesApp = new Hono()
 			where: { indexId, createdAt: { gte: since } },
 			_sum: { count: true },
 		});
-		const sumByType = Object.fromEntries(
-			usageRows.map((r) => [r.type, r._sum.count ?? 0]),
-		);
+		const sumByType = Object.fromEntries(usageRows.map((r) => [r.type, r._sum.count ?? 0]));
 
 		// Ingest queue + active key counts (parallel)
 		const [pendingCount, failedCount, activeKeysCount] = await Promise.all([

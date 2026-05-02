@@ -1,5 +1,6 @@
 import { logger } from "@repo/logs";
 import { flushAllSearchIngestBuffers } from "@repo/search";
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +30,27 @@ export async function POST(request: Request) {
 
 	try {
 		const result = await flushAllSearchIngestBuffers({ limitPerIndex: 500 });
+
+		// Report buffer lag as Sentry metric if unprocessed rows are accumulating
+		if (result.totalFailures > 0) {
+			Sentry.captureEvent({
+				message: `search-flush: ${result.totalFailures} failures out of ${result.totalFlushed} processed`,
+				level: "warning",
+				tags: {
+					"cron.job": "search-flush",
+					"cron.processedIndexes": String(result.processedIndexes),
+					"cron.totalFlushed": String(result.totalFlushed),
+					"cron.totalFailures": String(result.totalFailures),
+				},
+			});
+		}
+
 		return NextResponse.json(result);
 	} catch (error) {
 		logger.error("search-flush cron failed", { error });
+		Sentry.captureException(error, {
+			tags: { "cron.job": "search-flush" },
+		});
 		return NextResponse.json({ error: "flush_failed" }, { status: 500 });
 	}
 }

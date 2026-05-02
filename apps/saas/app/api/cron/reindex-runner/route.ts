@@ -9,6 +9,7 @@ import {
 	updateSearchIndexVersion,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import * as Sentry from "@sentry/nextjs";
 import {
 	aliasName,
 	reindexCollection,
@@ -132,6 +133,14 @@ export async function POST(request: Request) {
 				jobId: pendingJob.id,
 				slug: pendingJob.slug,
 				error,
+			});
+			Sentry.captureException(error, {
+				tags: {
+					"cron.job": "reindex-runner",
+					"reindex.jobId": pendingJob.id,
+					"reindex.slug": pendingJob.slug,
+					"reindex.organizationId": pendingJob.organizationId,
+				},
 			});
 			errors.push(`${pendingJob.id}: ${msg}`);
 		}

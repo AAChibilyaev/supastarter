@@ -114,6 +114,55 @@
 			"recentSyncActivity": "Недавняя активность синхронизации",
 			"totalJobs": "Всего задач",
 			"noSyncActivity": "Пока нет активности синхронизации."
+		},
+		"overview": {
+			"usersTitle": "Пользователи",
+			"organizationsTitle": "Организации",
+			"unreadNotifications": "Непрочитанные уведомления",
+			"noData": "Нет данных",
+			"recentUsers": "Последние пользователи",
+			"defaultRole": "пользователь",
+			"openUsers": "Открыть пользователей",
+			"recentOrganizations": "Последние организации",
+			"noSlug": "Без слага",
+			"membersCount": "{count} {count, plural, one {участник} few {участника} many {участников} other {участника}}",
+			"openOrganizations": "Открыть организации"
+		},
+		"audit": {
+			"recentUserChanges": "Последние изменения пользователей",
+			"recentOrgChanges": "Последние изменения организаций",
+			"defaultRole": "пользователь",
+			"noSlug": "Без слага"
+		},
+		"notifications": {
+			"recentNotifications": "Последние уведомления",
+			"markAllRead": "Отметить всё как прочитанное",
+			"markingRead": "Отмечаем уведомления как прочитанные...",
+			"markReadSuccess": "Готово.",
+			"markReadError": "Не удалось отметить все как прочитанные.",
+			"statusRead": "прочитано",
+			"statusUnread": "не прочитано",
+			"noNotifications": "Уведомлений пока нет."
+		},
+		"wallet": {
+			"manualAdjustment": "Ручная корректировка кошелька",
+			"searchOrgPlaceholder": "Поиск организации...",
+			"selectOrgPlaceholder": "Выберите организацию",
+			"currentBalance": "Текущий баланс",
+			"walletNotInitialized": "Кошелёк не инициализирован для выбранной организации.",
+			"creditLabel": "Пополнение",
+			"debitLabel": "Списание",
+			"amountPlaceholder": "Сумма (руб.)",
+			"applyButton": "Применить",
+			"reasonPlaceholder": "Причина (минимум 10 символов)",
+			"noWalletError": "Выберите организацию с инициализированным кошельком.",
+			"invalidAmountError": "Сумма должна быть положительным числом.",
+			"shortReasonError": "Причина должна содержать не менее 10 символов.",
+			"applyingAdjustment": "Применяем корректировку...",
+			"adjustmentSuccess": "Кошелёк успешно скорректирован.",
+			"adjustmentError": "Не удалось скорректировать кошелёк.",
+			"latestTransactions": "Последние транзакции кошелька",
+			"noTransactions": "Транзакции не найдены."
 		}
 	},
 	"app": {

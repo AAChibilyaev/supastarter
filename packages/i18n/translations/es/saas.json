@@ -114,6 +114,55 @@
 			"recentSyncActivity": "Actividad de sincronización reciente",
 			"totalJobs": "Tareas totales",
 			"noSyncActivity": "Aún no hay actividad de sincronización."
+		},
+		"overview": {
+			"usersTitle": "Usuarios",
+			"organizationsTitle": "Organizaciones",
+			"unreadNotifications": "Notificaciones no leídas",
+			"noData": "Sin datos",
+			"recentUsers": "Usuarios recientes",
+			"defaultRole": "usuario",
+			"openUsers": "Abrir usuarios",
+			"recentOrganizations": "Organizaciones recientes",
+			"noSlug": "Sin slug",
+			"membersCount": "{count} {count, plural, one {miembro} other {miembros}}",
+			"openOrganizations": "Abrir organizaciones"
+		},
+		"audit": {
+			"recentUserChanges": "Cambios de usuario recientes",
+			"recentOrgChanges": "Cambios de organización recientes",
+			"defaultRole": "usuario",
+			"noSlug": "Sin slug"
+		},
+		"notifications": {
+			"recentNotifications": "Notificaciones recientes",
+			"markAllRead": "Marcar todo como leído",
+			"markingRead": "Marcando notificaciones como leídas...",
+			"markReadSuccess": "Listo.",
+			"markReadError": "No se pudo marcar todo como leído.",
+			"statusRead": "leído",
+			"statusUnread": "no leído",
+			"noNotifications": "Sin notificaciones aún."
+		},
+		"wallet": {
+			"manualAdjustment": "Ajuste manual de wallet",
+			"searchOrgPlaceholder": "Buscar organización...",
+			"selectOrgPlaceholder": "Seleccionar organización",
+			"currentBalance": "Saldo actual",
+			"walletNotInitialized": "La wallet no está inicializada para la organización seleccionada.",
+			"creditLabel": "Crédito",
+			"debitLabel": "Débito",
+			"amountPlaceholder": "Importe (RUB)",
+			"applyButton": "Aplicar",
+			"reasonPlaceholder": "Motivo (mínimo 10 caracteres)",
+			"noWalletError": "Seleccione una organización con wallet inicializada.",
+			"invalidAmountError": "El importe debe ser un número positivo.",
+			"shortReasonError": "El motivo debe tener al menos 10 caracteres.",
+			"applyingAdjustment": "Aplicando ajuste...",
+			"adjustmentSuccess": "Wallet ajustada correctamente.",
+			"adjustmentError": "Error al ajustar la wallet.",
+			"latestTransactions": "Últimas transacciones de wallet",
+			"noTransactions": "No se encontraron transacciones."
 		}
 	},
 	"app": {

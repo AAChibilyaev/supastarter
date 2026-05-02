@@ -114,6 +114,55 @@
 			"recentSyncActivity": "Activité de synchronisation récente",
 			"totalJobs": "Total des tâches",
 			"noSyncActivity": "Aucune activité de synchronisation pour le moment."
+		},
+		"overview": {
+			"usersTitle": "Utilisateurs",
+			"organizationsTitle": "Organisations",
+			"unreadNotifications": "Notifications non lues",
+			"noData": "Aucune donnée",
+			"recentUsers": "Utilisateurs récents",
+			"defaultRole": "utilisateur",
+			"openUsers": "Ouvrir les utilisateurs",
+			"recentOrganizations": "Organisations récentes",
+			"noSlug": "Pas de slug",
+			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
+			"openOrganizations": "Ouvrir les organisations"
+		},
+		"audit": {
+			"recentUserChanges": "Modifications d'utilisateurs récentes",
+			"recentOrgChanges": "Modifications d'organisations récentes",
+			"defaultRole": "utilisateur",
+			"noSlug": "Pas de slug"
+		},
+		"notifications": {
+			"recentNotifications": "Notifications récentes",
+			"markAllRead": "Tout marquer comme lu",
+			"markingRead": "Marquage des notifications comme lues...",
+			"markReadSuccess": "Terminé.",
+			"markReadError": "Impossible de tout marquer comme lu.",
+			"statusRead": "lu",
+			"statusUnread": "non lu",
+			"noNotifications": "Aucune notification pour l'instant."
+		},
+		"wallet": {
+			"manualAdjustment": "Ajustement manuel du portefeuille",
+			"searchOrgPlaceholder": "Rechercher une organisation...",
+			"selectOrgPlaceholder": "Sélectionner une organisation",
+			"currentBalance": "Solde actuel",
+			"walletNotInitialized": "Le portefeuille n'est pas initialisé pour l'organisation sélectionnée.",
+			"creditLabel": "Crédit",
+			"debitLabel": "Débit",
+			"amountPlaceholder": "Montant (RUB)",
+			"applyButton": "Appliquer",
+			"reasonPlaceholder": "Raison (minimum 10 caractères)",
+			"noWalletError": "Sélectionnez une organisation avec un portefeuille initialisé.",
+			"invalidAmountError": "Le montant doit être un nombre positif.",
+			"shortReasonError": "La raison doit comporter au moins 10 caractères.",
+			"applyingAdjustment": "Application de l'ajustement...",
+			"adjustmentSuccess": "Portefeuille ajusté avec succès.",
+			"adjustmentError": "Échec de l'ajustement du portefeuille.",
+			"latestTransactions": "Dernières transactions du portefeuille",
+			"noTransactions": "Aucune transaction trouvée."
 		}
 	},
 	"app": {

@@ -114,6 +114,55 @@
 			"recentSyncActivity": "Letzte Sync-Aktivität",
 			"totalJobs": "Aufgaben insgesamt",
 			"noSyncActivity": "Noch keine Sync-Aktivität."
+		},
+		"overview": {
+			"usersTitle": "Benutzer",
+			"organizationsTitle": "Organisationen",
+			"unreadNotifications": "Ungelesene Benachrichtigungen",
+			"noData": "Keine Daten",
+			"recentUsers": "Aktuelle Benutzer",
+			"defaultRole": "Benutzer",
+			"openUsers": "Benutzer öffnen",
+			"recentOrganizations": "Aktuelle Organisationen",
+			"noSlug": "Kein Slug",
+			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+			"openOrganizations": "Organisationen öffnen"
+		},
+		"audit": {
+			"recentUserChanges": "Aktuelle Benutzeränderungen",
+			"recentOrgChanges": "Aktuelle Organisationsänderungen",
+			"defaultRole": "Benutzer",
+			"noSlug": "Kein Slug"
+		},
+		"notifications": {
+			"recentNotifications": "Aktuelle Benachrichtigungen",
+			"markAllRead": "Alle als gelesen markieren",
+			"markingRead": "Benachrichtigungen werden als gelesen markiert...",
+			"markReadSuccess": "Fertig.",
+			"markReadError": "Konnte nicht alle als gelesen markieren.",
+			"statusRead": "gelesen",
+			"statusUnread": "ungelesen",
+			"noNotifications": "Noch keine Benachrichtigungen."
+		},
+		"wallet": {
+			"manualAdjustment": "Manuelle Wallet-Anpassung",
+			"searchOrgPlaceholder": "Organisation suchen...",
+			"selectOrgPlaceholder": "Organisation auswählen",
+			"currentBalance": "Aktuelles Guthaben",
+			"walletNotInitialized": "Wallet ist für die ausgewählte Organisation nicht initialisiert.",
+			"creditLabel": "Gutschrift",
+			"debitLabel": "Belastung",
+			"amountPlaceholder": "Betrag (RUB)",
+			"applyButton": "Anwenden",
+			"reasonPlaceholder": "Grund (mindestens 10 Zeichen)",
+			"noWalletError": "Wählen Sie eine Organisation mit initialisiertem Wallet aus.",
+			"invalidAmountError": "Betrag muss eine positive Zahl sein.",
+			"shortReasonError": "Grund muss mindestens 10 Zeichen lang sein.",
+			"applyingAdjustment": "Anpassung wird angewendet...",
+			"adjustmentSuccess": "Wallet erfolgreich angepasst.",
+			"adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
+			"latestTransactions": "Letzte Wallet-Transaktionen",
+			"noTransactions": "Keine Transaktionen gefunden."
 		}
 	},
 	"app": {

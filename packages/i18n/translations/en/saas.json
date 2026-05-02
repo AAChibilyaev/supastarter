@@ -114,6 +114,55 @@
 			"recentSyncActivity": "Recent sync activity",
 			"totalJobs": "Total jobs",
 			"noSyncActivity": "No sync activity yet."
+		},
+		"overview": {
+			"usersTitle": "Users",
+			"organizationsTitle": "Organizations",
+			"unreadNotifications": "Unread notifications",
+			"noData": "No data",
+			"recentUsers": "Recent users",
+			"defaultRole": "user",
+			"openUsers": "Open users",
+			"recentOrganizations": "Recent organizations",
+			"noSlug": "No slug",
+			"membersCount": "{count} {count, plural, one {member} other {members}}",
+			"openOrganizations": "Open organizations"
+		},
+		"audit": {
+			"recentUserChanges": "Recent user changes",
+			"recentOrgChanges": "Recent organization changes",
+			"defaultRole": "user",
+			"noSlug": "No slug"
+		},
+		"notifications": {
+			"recentNotifications": "Recent notifications",
+			"markAllRead": "Mark all as read",
+			"markingRead": "Marking notifications as read...",
+			"markReadSuccess": "Done.",
+			"markReadError": "Could not mark all as read.",
+			"statusRead": "read",
+			"statusUnread": "unread",
+			"noNotifications": "No notifications yet."
+		},
+		"wallet": {
+			"manualAdjustment": "Manual wallet adjustment",
+			"searchOrgPlaceholder": "Search organization...",
+			"selectOrgPlaceholder": "Select organization",
+			"currentBalance": "Current balance",
+			"walletNotInitialized": "Wallet is not initialized for selected organization.",
+			"creditLabel": "Credit",
+			"debitLabel": "Debit",
+			"amountPlaceholder": "Amount (RUB)",
+			"applyButton": "Apply",
+			"reasonPlaceholder": "Reason (minimum 10 chars)",
+			"noWalletError": "Select an organization with initialized wallet first.",
+			"invalidAmountError": "Amount must be a positive number.",
+			"shortReasonError": "Reason must be at least 10 characters.",
+			"applyingAdjustment": "Applying adjustment...",
+			"adjustmentSuccess": "Wallet adjusted successfully.",
+			"adjustmentError": "Failed to adjust wallet.",
+			"latestTransactions": "Latest wallet transactions",
+			"noTransactions": "No transactions found."
 		}
 	},
 	"app": {

@@ -137,6 +137,9 @@
 			"subtitle": "Free tier covers most side-projects. No credit card.",
 			"primary": "Create an account",
 			"secondary": "Read the docs"
+		},
+		"logos": {
+			"title": "Trusted by innovative teams"
 		}
 	},
 	"notFound": {
@@ -409,9 +412,18 @@
 				"title": "Roadmap",
 				"description": "Public roadmap, voted by users. We ship incrementally — no big-bang releases. Changelog updated with every deployment."
 			}
-		}
-	},
-	"customersPage": {
+			}
+		},
+		"caseStudiesPage": {
+			"title": "Customer Case Studies",
+			"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+			"readCaseStudy": "Read case study",
+			"cta": {
+				"title": "Want to be our next case study?",
+				"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
+			}
+		},
+		"customersPage": {
 		"title": "Loved by Developers, Trusted by Businesses",
 		"description": "Join hundreds of companies using AACsearch to power fast, relevant search experiences.",
 		"stats": {

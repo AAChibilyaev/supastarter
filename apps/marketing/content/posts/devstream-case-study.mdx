@@ -1,0 +1,97 @@
+---
+title: "How DevStream Replaced Elasticsearch — Zero DevOps, 10x Faster Search"
+date: 2026-05-03
+image: https://picsum.photos/id/201/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "DevStream, a B2B SaaS platform for developer documentation, replaced a self-managed Elasticsearch cluster with AACsearch, eliminating 20 hours of DevOps overhead per week and cutting search latency by 10x."
+tags: [case-study, saas, elasticsearch, migration, devops]
+published: true
+---
+
+# How DevStream Replaced Elasticsearch — Zero DevOps, 10x Faster Search
+
+> _"Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight."_
+> — Priya Sharma, VP Engineering at DevStream
+
+---
+
+## Metadata
+
+- **Company:** DevStream — developer documentation platform serving 15,000+ technical teams
+- **Industry:** B2B SaaS
+- **Size:** 200k+ documentation articles, 1.5M+ monthly search queries
+- **Previous solution:** Self-managed Elasticsearch cluster (3 nodes, AWS EC2)
+- **Use case:** Full-text search across technical documentation
+- **AACsearch since:** February 2026
+
+---
+
+## 1. The Problem
+
+DevStream hosts documentation for 15,000+ technical teams, processing over 1.5 million search queries per month. Their search infrastructure — a self-managed 3-node Elasticsearch cluster on AWS — was originally deployed by a founding engineer who had since left the company.
+
+Over two years, the cluster became increasingly brittle:
+
+**DevOps drain.** A single engineer was spending roughly 4 hours per day on Elasticsearch maintenance: monitoring cluster health, managing index rotations, tuning shard allocation, and handling the occasional out-of-memory crash.
+
+**Performance degradation.** As the document corpus grew past 200k articles, search latency crept up. p95 query times reached 180ms during peak hours — far above the 50ms target for a good developer experience.
+
+**No disaster recovery.** The cluster had no automated backup strategy. A full crash would mean rebuilding from scratch — an estimated 3-day engineering effort.
+
+"We knew Elasticsearch was the wrong choice the moment we needed our first cluster resize," says Priya Sharma, VP Engineering at DevStream. "But migration felt too risky. We kept kicking the can down the road."
+
+---
+
+## 2. The Solution
+
+DevStream evaluated three alternatives: upgrading their Elasticsearch cluster (prohibitive cost), migrating to Typesense Cloud (good but limited multi-tenancy), and AACsearch.
+
+AACsearch won for three reasons:
+
+1. **Zero DevOps** — fully managed infrastructure with 99.9% SLA
+2. **Built-in multi-tenancy** — each customer's documentation is a separate search collection with isolated access
+3. **Per-index analytics** — visibility into which documentation sections are most searched, where users get stuck
+
+The migration was planned for a weekend but completed in 5 hours on a Tuesday:
+
+- **Data export:** Used Elasticsearch dump API to export all 200k+ documents as JSON
+- **Index creation:** Created 2 search collections in AACsearch (one for production docs, one for versioned/archived docs)
+- **Bulk import:** Used AACsearch bulk API to import all documents (~30 minutes)
+- **Widget integration:** Replaced the existing Elasticsearch frontend with AACsearch's embeddable widget
+- **Scoped tokens:** Created read-only API tokens for public documentation, admin tokens for internal indexing
+
+"We had planned a full weekend for the migration. We were done by lunchtime and spent the afternoon testing edge cases," says Sharma.
+
+---
+
+## 3. The Results
+
+| Metric                      | Before (Elasticsearch) | After (AACsearch) | Improvement        |
+| --------------------------- | ---------------------- | ----------------- | ------------------ |
+| DevOps hours/week           | 20h                    | 0h                | **100% reduction** |
+| Search latency (p95)        | 180ms                  | 18ms              | **10x faster**     |
+| Monthly infrastructure cost | $2,400 (EC2 + EBS)     | $199/mo           | **12x reduction**  |
+| Query throughput            | ~500 QPS (degrading)   | 2,000+ QPS        | **4x headroom**    |
+| Index management            | Manual (shard tuning)  | Automatic         | **Zero touch**     |
+| Disaster recovery           | None                   | Automatic backups | **Instant**        |
+
+**The bottom line:** DevStream eliminated 20 hours of DevOps work per week, cut infrastructure costs by 12x, and improved search latency by 10x. The engineering team redirected their freed-up hours to product development.
+
+---
+
+## 4. What DevStream's Customers Saw
+
+End users of the DevStream platform didn't notice the migration — except that search results appeared instantly instead of after a noticeable delay.
+
+"We surveyed our customers a week after the migration. The 'search experience' satisfaction score went from 68% to 92%," notes Sharma.
+
+---
+
+## 5. Technical Details
+
+- **Documents indexed:** 215,000 documentation articles across 2 collections
+- **Features used:** Full-text search, typo tolerance, faceted filtering by product/category, analytics
+- **Integrations:** Custom API for real-time doc indexing, embeddable widget
+- **Migration path:** Elasticsearch JSON export → AACsearch bulk API
+- **Current status:** Running for 3 months with zero incidents

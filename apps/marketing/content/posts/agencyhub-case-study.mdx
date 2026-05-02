@@ -1,0 +1,98 @@
+---
+title: "How AgencyHub Delivers Enterprise-Grade Search for 12 Clients at Startup Prices"
+date: 2026-05-03
+image: https://picsum.photos/id/219/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "AgencyHub, a digital agency serving mid-market e-commerce brands, uses AACsearch's multi-tenancy to deliver enterprise-grade search for 12 clients from a single dashboard — saving $4,000+/month in per-client infrastructure costs."
+tags: [case-study, agency, multi-tenancy, enterprise]
+published: true
+---
+
+# How AgencyHub Delivers Enterprise-Grade Search for 12 Clients at Startup Prices
+
+> _"With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard."_
+> — Marcus Weber, Technical Director at AgencyHub
+
+---
+
+## Metadata
+
+- **Company:** AgencyHub — full-service digital agency serving mid-market e-commerce brands
+- **Industry:** Agency / Web Development
+- **Size:** 12 active clients, 500k+ total products indexed, 800k+ monthly search queries
+- **Previous solution:** Mixed — some clients on Algolia, some on self-hosted Elasticsearch, some on Shopify's built-in search
+- **Use case:** Agency-managed search for e-commerce clients
+- **AACsearch since:** November 2025
+
+---
+
+## 1. The Problem
+
+AgencyHub manages e-commerce sites for 12 mid-market brands, each with 5,000–100,000 products. Their search infrastructure was a fragmented mess:
+
+**Algolia clients (5).** Each client had their own Algolia account with separate billing. Total: ~$2,500/month. The agency had to log into 5 different Algolia dashboards to monitor search quality.
+
+**Elasticsearch clients (3).** AgencyHub ran a shared Elasticsearch cluster and used application-level logic to separate client data. Any schema change risked affecting all clients on the cluster.
+
+**Shopify native search (4).** These clients used Shopify's built-in search — limited features, no analytics, and the agency couldn't optimize it.
+
+"The overhead was killing us," says Marcus Weber, Technical Director at AgencyHub. "We were managing 5 Algolia accounts, a fragile Elasticsearch cluster, and we couldn't upsell search improvements to our Shopify clients because we had nothing to offer."
+
+---
+
+## 2. The Solution
+
+AgencyHub consolidated all clients onto AACsearch for three reasons:
+
+1. **Multi-tenancy built-in** — each client gets isolated search collections with scoped API tokens, all under one account
+2. **White-label ready** — the embeddable widget is fully customizable, matching each client's branding
+3. **Per-client analytics** — separate analytics per client showing search volume, top queries, and zero-result rate
+
+The migration was executed client by client over two weeks:
+
+- **Algolia migration:** Used AACsearch's import API for direct migration. Average: 2 hours per client.
+- **Elasticsearch migration:** Exported per-client data and imported into separate collections. Average: 3 hours per client.
+- **Shopify upgrade:** For the 4 Shopify clients, AgencyHub installed the AACsearch widget as a search overlay, replacing Shopify's built-in search. Average: 1 hour per client.
+- **White-label branding:** Customized the search widget's CSS, colors, and fonts for each client's brand identity.
+
+"Each client got a detailed migration document. None of them noticed any downtime," says Weber.
+
+---
+
+## 3. The Results
+
+| Metric                              | Before (Mixed)    | After (AACsearch) | Improvement        |
+| ----------------------------------- | ----------------- | ----------------- | ------------------ |
+| Monthly search cost (all clients)   | ~$3,800           | $499 (Pro plan)   | **7.6x reduction** |
+| Time to onboard new client          | 3-5 days          | 15 minutes        | **99% faster**     |
+| Search latency (avg across clients) | 80-200ms          | 8-15ms            | **10x faster**     |
+| Client dashboards to monitor        | 9 separate logins | 1 dashboard       | **Single pane**    |
+| Client-reported search satisfaction | 3.8/5 (aggregate) | 4.6/5             | **+21%**           |
+| Search-related support tickets      | 12/month          | 2/month           | **83% reduction**  |
+
+**The bottom line:** AgencyHub reduced their search infrastructure costs from $3,800/month to $499/month, while improving search performance and adding analytics for all 12 clients — including the 4 who previously had only Shopify's basic search.
+
+---
+
+## 4. The Agency Model
+
+AgencyHub now offers "Enterprise Search" as a packaged add-on service:
+
+- **Setup fee:** $500 per client (one-time)
+- **Monthly management fee:** $200 per client
+- **Client cost:** Lower than what each client would pay individually for Algolia or Elasticsearch
+
+This generates $2,400/month in recurring revenue for AgencyHub, on top of the $499 they pay for the Pro plan — a 5x margin.
+
+"We've turned search from a cost center into a profit center," says Weber. "Our clients get better search than they could build themselves, and we make money on it."
+
+---
+
+## 5. Technical Details
+
+- **Documents indexed:** 500,000+ products across 12 collections
+- **Features used:** Multi-tenancy (scoped API tokens), faceted search, typo tolerance, custom ranking, analytics, white-label widget
+- **Integrations:** Custom API for real-time product updates, Shopify app, HTML/JS widget
+- **Agency-specific config:** Each client collection has custom ranking rules based on their product categories and priority fields
+- **Migration timeline:** 14 days total (all 12 clients migrated with zero downtime)

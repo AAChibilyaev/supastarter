@@ -8,6 +8,7 @@
 			"@home/*": ["./modules/home/*"],
 			"@blog/*": ["./modules/blog/*"],
 			"@i18n/*": ["./modules/i18n/*"],
+			"@case-studies/*": ["./modules/case-studies/*"],
 			"@changelog/*": ["./modules/changelog/*"],
 			"@legal/*": ["./modules/legal/*"],
 			"@seo/*": ["./modules/seo/*"],

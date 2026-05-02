@@ -137,6 +137,9 @@
 			"subtitle": "Der Free-Tier reicht für die meisten Side-Projects. Keine Kreditkarte nötig.",
 			"primary": "Konto erstellen",
 			"secondary": "Doku lesen"
+		},
+		"logos": {
+			"title": "Vertrauen innovative Teams"
 		}
 	},
 	"notFound": {
@@ -409,6 +412,15 @@
 				"title": "Roadmap",
 				"description": "Öffentliche Roadmap, durch Nutzer abgestimmt. Wir liefern inkrementell — keine Big-Bang-Releases. Der Changelog wird mit jedem Deployment aktualisiert."
 			}
+		}
+	},
+	"caseStudiesPage": {
+		"title": "Customer Case Studies",
+		"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+		"readCaseStudy": "Read case study",
+		"cta": {
+			"title": "Want to be our next case study?",
+			"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
 		}
 	},
 	"customersPage": {

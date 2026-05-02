@@ -1,0 +1,88 @@
+---
+title: "How NordikHome Cut Search Costs 5x and Boosted Discovery by 34%"
+date: 2026-05-03
+image: https://picsum.photos/id/26/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "NordikHome, a fast-growing Scandinavian furniture retailer, replaced Algolia with AACsearch and slashed their monthly search costs by 5x while improving product discovery metrics across the board."
+tags: [case-study, ecommerce, algolia, migration]
+published: true
+---
+
+# How NordikHome Cut Search Costs 5x and Boosted Discovery by 34% with AACsearch
+
+> _"Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had."_
+> — Erik Lindström, CTO at NordikHome
+
+---
+
+## Metadata
+
+- **Company:** NordikHome — Scandinavian furniture and home goods retailer
+- **Industry:** E-commerce
+- **Size:** 50,000+ products across 3 storefronts (SE, NO, DK), 200k+ monthly search queries
+- **Previous solution:** Algolia Growth Plan (~$499/mo)
+- **Use case:** Product search on e-commerce storefronts (3 country-specific sites)
+- **AACsearch since:** January 2026
+
+---
+
+## 1. The Problem
+
+NordikHome runs a multi-brand e-commerce operation with three localized storefronts serving Sweden, Norway, and Denmark. Each storefront had its own product catalog with country-specific pricing, availability, and promotions — but they all shared a single Algolia Growth Plan subscription at $499/month.
+
+As their catalog grew and seasonal traffic spikes became more pronounced, three critical issues emerged:
+
+**Unpredictable costs.** Algolia's per-search-operation billing meant every promotion, holiday campaign, or flash sale increased their bill significantly. During the December holiday season, their Algolia bill spiked to over $1,200.
+
+**Limited analytics on the Growth plan.** The Algolia Growth plan included only basic query tracking. NordikHome couldn't see which searches returned zero results, which products were frequently searched but not found, or how search behavior varied across their three markets.
+
+**Complex multi-tenancy.** Running separate Algolia indices for each country required custom middleware. Adding a new market (e.g., Finland) meant provisioning a new Algolia index and reconfiguring the middleware layer.
+
+"We were spending more on search infrastructure than on hosting our entire storefront," says Erik Lindström, CTO at NordikHome. "And we still couldn't answer basic questions like 'why are customers leaving without buying?'"
+
+---
+
+## 2. The Solution
+
+After evaluating self-hosted Typesense, Typesense Cloud, MeiliSearch, and Elasticsearch, NordikHome chose AACsearch for three reasons:
+
+1. **Predictable flat pricing** — $99/month for 50k documents with unlimited search operations
+2. **Built-in analytics** — no additional cost for search analytics, zero-result tracking, and trend reporting across all markets
+3. **Scoped API tokens** — each country's storefront gets isolated search collections with a single AACsearch account
+
+The implementation was remarkably fast:
+
+- **Migration:** Exported existing products as JSON from Algolia → bulk-uploaded to AACsearch index. Total time: 2 hours.
+- **Widget:** Dropped the HTML/JS search widget into their Next.js storefront, replacing Algolia InstantSearch. Time: 1 hour per storefront.
+- **Configuration:** Set up typo tolerance, faceted search for categories/sizes/colors, and custom ranking rules prioritizing in-stock items. Time: 1 hour.
+- **Scoped tokens:** Created 3 tokens for SE, NO, and DK storefronts, each scoped to their country-specific product catalog.
+
+"We were fully live in under 4 hours, including importing our complete product catalog," says Lindström. "The scoped tokens meant we didn't need any middleware — each storefront just uses its own token."
+
+---
+
+## 3. The Results
+
+| Metric                    | Before (Algolia)      | After (AACsearch) | Improvement           |
+| ------------------------- | --------------------- | ----------------- | --------------------- |
+| Monthly search cost       | $499/mo ($1,200 peak) | $99/mo            | **5x cost reduction** |
+| Search latency (p95)      | 45ms                  | 8ms               | **5.6x faster**       |
+| DevOps time for search    | 4h/week (monitoring)  | 0h/week           | **100% reduction**    |
+| Zero-result searches      | Unknown               | 12% → 3%\*        | **75% reduction**     |
+| Time to launch new market | 2-3 days              | 15 minutes        | **96% faster**        |
+| Product discovery rate    | 22%                   | 29.5%             | **+34% improvement**  |
+
+_\*After analytics insights showed top zero-result queries, NordikHome added synonym groups and new product tags, reducing no-result searches from 12% to 3%._
+
+**The bottom line:** NordikHome saved $4,800+/year in direct search costs, eliminated all DevOps overhead, and improved product discovery by 34% — all in one afternoon of work.
+
+---
+
+## 4. Technical Details
+
+- **Documents indexed:** 52,000 products across 3 collections
+- **Features used:** Faceted search, typo tolerance, custom ranking, scoped API tokens, analytics dashboard
+- **Integrations:** Next.js storefront, custom API for catalog updates
+- **Languages:** Swedish, Norwegian, Danish, English (product data)
+- **Migration path:** Algolia JSON export → AACsearch bulk import

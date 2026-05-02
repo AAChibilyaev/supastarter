@@ -2,6 +2,7 @@ import { CtaFooter } from "@home/components/CtaFooter";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { HeroWithCode } from "@home/components/HeroWithCode";
 import { HowItWorks } from "@home/components/HowItWorks";
+import { LogosWall } from "@home/components/LogosWall";
 import { PricingPlans } from "@home/components/PricingPlans";
 import { SoftwareApplicationSchema } from "@seo/components/SoftwareApplicationSchema";
 import type { Metadata } from "next";
@@ -35,6 +36,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			<HowItWorks />
 			<FeaturesGrid />
 			<PricingPlans />
+			<LogosWall />
 			<CtaFooter />
 		</>
 	);

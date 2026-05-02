@@ -137,6 +137,9 @@
 			"subtitle": "L'offre gratuite couvre la plupart des side-projects. Sans carte bancaire.",
 			"primary": "Créer un compte",
 			"secondary": "Lire la documentation"
+		},
+		"logos": {
+			"title": "Approuvé par des équipes innovantes"
 		}
 	},
 	"notFound": {
@@ -409,6 +412,15 @@
 				"title": "Feuille de route",
 				"description": "Feuille de route publique, votée par les utilisateurs. Nous livrons de manière incrémentale — pas de sorties massives. Changelog mis à jour à chaque déploiement."
 			}
+		}
+	},
+	"caseStudiesPage": {
+		"title": "Customer Case Studies",
+		"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+		"readCaseStudy": "Read case study",
+		"cta": {
+			"title": "Want to be our next case study?",
+			"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
 		}
 	},
 	"customersPage": {

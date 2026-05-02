@@ -568,6 +568,106 @@ export function generateOpenApiSpec() {
 				},
 			},
 
+			// ─── Export Documents ───────────────────────────────────────────
+			"/indexes/{indexId}/documents/export": {
+				get: {
+					summary: "Export documents",
+					description:
+						"Exports all or filtered documents from an index as JSONL or JSON.",
+					tags: ["Documents"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+						{
+							name: "filterBy",
+							in: "query",
+							required: false,
+							schema: { type: "string" },
+							description: "Typesense filter expression for partial export.",
+						},
+						{
+							name: "format",
+							in: "query",
+							required: false,
+							schema: { type: "string", enum: ["json", "jsonl"], default: "jsonl" },
+							description:
+								"Export format. jsonl=NDJSON stream (default), json=parsed array.",
+						},
+					],
+					responses: {
+						"200": {
+							description: "Exported documents (JSONL stream or JSON array)",
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to export documents" },
+					},
+				},
+			},
+
+			// ─── Delete by Query ─────────────────────────────────────────────
+			"/indexes/{indexId}/documents/delete-by-query": {
+				post: {
+					summary: "Delete documents by query",
+					description:
+						"Deletes all documents matching a Typesense filter expression. " +
+						"Requires admin scope. This is a direct Typesense operation (not buffered). " +
+						"Returns the number of deleted documents.",
+					tags: ["Documents"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["filterBy"],
+									properties: {
+										filterBy: {
+											type: "string",
+											description:
+												"Typesense filter expression. E.g. 'price:>100' or 'category:=electronics'",
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Documents deleted",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											deleted: {
+												type: "integer",
+												description: "Number of documents deleted",
+											},
+											filterBy: {
+												type: "string",
+												description: "The filter expression used",
+											},
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+						"404": { $ref: "#/components/responses/NotFound" },
+						"502": { description: "Failed to delete documents" },
+					},
+				},
+			},
+
 			// ─── Search ─────────────────────────────────────────────────
 			"/indexes/{indexId}/search": {
 				post: {
@@ -592,6 +692,148 @@ export function generateOpenApiSpec() {
 										perPage: { type: "integer", minimum: 1, maximum: 100 },
 										page: { type: "integer", minimum: 1, maximum: 1000 },
 										highlightFields: { type: "string" },
+										// ── Typo Tolerance ──
+										numTypos: {
+											type: "integer",
+											minimum: 0,
+											maximum: 3,
+											description:
+												"Number of typographical errors allowed (0-3). 2 is recommended for default behavior.",
+										},
+										typoTokensThreshold: {
+											type: "integer",
+											minimum: 0,
+											description:
+												"Minimum token weight for typo correction to apply.",
+										},
+										dropTokensThreshold: {
+											type: "integer",
+											minimum: 0,
+											description:
+												"Tokens below this weight are dropped from the query.",
+										},
+										exact: {
+											oneOf: [
+												{ type: "boolean" },
+												{ type: "string", enum: ["true", "false"] },
+											],
+											description:
+												"Exact search mode — strict match without typo tolerance.",
+										},
+										prioritizeExactMatch: {
+											type: "boolean",
+											description:
+												"Boost exact matches above typo-corrected results.",
+										},
+										// ── Prefix & Infix ──
+										prefix: {
+											oneOf: [
+												{ type: "boolean" },
+												{ type: "string", enum: ["true", "false", "auto"] },
+											],
+											description:
+												"Enable prefix search. 'auto' disables prefix when query is long enough.",
+										},
+										infix: {
+											type: "string",
+											enum: ["off", "always", "fallback"],
+											description:
+												"Enable infix (substring) search. Fallback=use only when prefix returns no results.",
+										},
+										queryByWeights: {
+											type: "string",
+											description:
+												"Comma-separated field weights. E.g. 'title:4,description:1'",
+										},
+										// ── Geo Search ──
+										polygonFilter: {
+											type: "object",
+											description:
+												"Search within an arbitrary polygon. Vertices as [lat, lng] pairs, minimum 3.",
+											properties: {
+												field: {
+													type: "string",
+													description:
+														"Geolocation field name (default: _geoloc)",
+												},
+												polygon: {
+													type: "array",
+													minItems: 3,
+													items: {
+														type: "array",
+														minItems: 2,
+														maxItems: 2,
+														items: { type: "number" },
+														description: "[lat, lng] coordinate pair",
+													},
+												},
+											},
+											required: ["polygon"],
+										},
+										boundingBoxFilter: {
+											type: "object",
+											description:
+												"Search within a rectangular bounding box defined by top-left and bottom-right corners.",
+											properties: {
+												field: {
+													type: "string",
+													description:
+														"Geolocation field name (default: _geoloc)",
+												},
+												bounding_box: {
+													type: "array",
+													minItems: 2,
+													maxItems: 2,
+													items: {
+														type: "object",
+														properties: {
+															lat: { type: "number" },
+															lng: { type: "number" },
+														},
+														required: ["lat", "lng"],
+													},
+												},
+											},
+											required: ["bounding_box"],
+										},
+										// ── Search Params Extensions ──
+										excludeFields: {
+											type: "string",
+											description:
+												"Comma-separated field names to exclude from results.",
+										},
+										highlightStartTag: {
+											type: "string",
+											description: "Custom start tag for field highlighting.",
+										},
+										highlightEndTag: {
+											type: "string",
+											description: "Custom end tag for field highlighting.",
+										},
+										overrideTags: {
+											type: "string",
+											description:
+												"Tags for curation/override results, comma-separated.",
+										},
+										hybridConfidence: {
+											type: "number",
+											minimum: 0,
+											maximum: 1,
+											description:
+												"Confidence threshold for hybrid search (0-1).",
+										},
+										// ── Faceted Search extensions ──
+										facetQuery: {
+											type: "string",
+											description:
+												"Search within facet values. E.g. 'color:=red || color:=blue'",
+										},
+										maxFacetValues: {
+											type: "integer",
+											minimum: 1,
+											description:
+												"Maximum number of facet values to return per facet.",
+										},
 									},
 								},
 							},
@@ -659,6 +901,152 @@ export function generateOpenApiSpec() {
 														maximum: 1000,
 													},
 													highlightFields: { type: "string" },
+													// ── Typo Tolerance ──
+													numTypos: {
+														type: "integer",
+														minimum: 0,
+														maximum: 3,
+														description:
+															"Number of typographical errors allowed (0-3).",
+													},
+													typoTokensThreshold: {
+														type: "integer",
+														minimum: 0,
+														description:
+															"Minimum token weight for typo correction.",
+													},
+													dropTokensThreshold: {
+														type: "integer",
+														minimum: 0,
+														description:
+															"Tokens below this weight are dropped.",
+													},
+													exact: {
+														oneOf: [
+															{ type: "boolean" },
+															{
+																type: "string",
+																enum: ["true", "false"],
+															},
+														],
+														description:
+															"Exact search mode without typo tolerance.",
+													},
+													prioritizeExactMatch: {
+														type: "boolean",
+														description:
+															"Boost exact matches above typo-corrected results.",
+													},
+													// ── Prefix & Infix ──
+													prefix: {
+														oneOf: [
+															{ type: "boolean" },
+															{
+																type: "string",
+																enum: ["true", "false", "auto"],
+															},
+														],
+														description:
+															"Enable prefix search. 'auto' disables on long queries.",
+													},
+													infix: {
+														type: "string",
+														enum: ["off", "always", "fallback"],
+														description:
+															"Enable infix (substring) search.",
+													},
+													queryByWeights: {
+														type: "string",
+														description:
+															"Comma-separated field weights.",
+													},
+													// ── Geo Search ──
+													polygonFilter: {
+														type: "object",
+														description: "Search within a polygon.",
+														properties: {
+															field: {
+																type: "string",
+																description:
+																	"Geolocation field (default: _geoloc)",
+															},
+															polygon: {
+																type: "array",
+																minItems: 3,
+																items: {
+																	type: "array",
+																	minItems: 2,
+																	maxItems: 2,
+																	items: { type: "number" },
+																	description: "[lat, lng] pair",
+																},
+															},
+														},
+														required: ["polygon"],
+													},
+													boundingBoxFilter: {
+														type: "object",
+														description:
+															"Search within a bounding box.",
+														properties: {
+															field: {
+																type: "string",
+																description:
+																	"Geolocation field (default: _geoloc)",
+															},
+															bounding_box: {
+																type: "array",
+																minItems: 2,
+																maxItems: 2,
+																items: {
+																	type: "object",
+																	properties: {
+																		lat: { type: "number" },
+																		lng: { type: "number" },
+																	},
+																	required: ["lat", "lng"],
+																},
+															},
+														},
+														required: ["bounding_box"],
+													},
+													// ── Search Extensions ──
+													excludeFields: {
+														type: "string",
+														description:
+															"Fields to exclude from results.",
+													},
+													highlightStartTag: {
+														type: "string",
+														description: "Custom highlight start tag.",
+													},
+													highlightEndTag: {
+														type: "string",
+														description: "Custom highlight end tag.",
+													},
+													overrideTags: {
+														type: "string",
+														description:
+															"Override/curation tags, comma-separated.",
+													},
+													hybridConfidence: {
+														type: "number",
+														minimum: 0,
+														maximum: 1,
+														description:
+															"Hybrid search confidence threshold (0-1).",
+													},
+													// ── Facet Extensions ──
+													facetQuery: {
+														type: "string",
+														description: "Search within facet values.",
+													},
+													maxFacetValues: {
+														type: "integer",
+														minimum: 1,
+														description:
+															"Maximum facet values per facet.",
+													},
 												},
 											},
 										},
@@ -703,6 +1091,7 @@ export function generateOpenApiSpec() {
 			},
 
 			// ─── API Keys ───────────────────────────────────────────────
+
 			"/projects/{projectId}/keys": {
 				get: {
 					summary: "List API keys in a project",

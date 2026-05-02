@@ -1,9 +1,9 @@
+import { getInvitation, getSession } from "@auth/lib/server";
 import { OrganizationInvitationModal } from "@organizations/components/OrganizationInvitationModal";
-import { auth } from "@repo/auth";
 import { getOrganizationById } from "@repo/database";
 import { AuthWrapper } from "@shared/components/AuthWrapper";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { withQuery } from "ufo";
 
 export default async function OrganizationInvitationPage({
 	params,
@@ -11,16 +11,25 @@ export default async function OrganizationInvitationPage({
 	params: Promise<{ invitationId: string }>;
 }) {
 	const { invitationId } = await params;
+	const invitation = await getInvitation(invitationId);
 
-	const invitation = await auth.api.getInvitation({
-		query: {
-			id: invitationId,
-		},
-		headers: await headers(),
-	});
-
-	if (!invitation) {
+	if (
+		!invitation ||
+		invitation.status !== "pending" ||
+		invitation.expiresAt.getTime() < Date.now()
+	) {
 		redirect("/");
+	}
+
+	const session = await getSession();
+
+	if (!session) {
+		redirect(
+			withQuery("/login", {
+				invitationId,
+				email: invitation.email,
+			}),
+		);
 	}
 
 	const organization = await getOrganizationById(invitation.organizationId);
@@ -28,8 +37,8 @@ export default async function OrganizationInvitationPage({
 	return (
 		<AuthWrapper>
 			<OrganizationInvitationModal
-				organizationName={invitation.organizationName}
-				organizationSlug={invitation.organizationSlug}
+				organizationName={invitation.organization.name}
+				organizationSlug={invitation.organization.slug ?? ""}
 				logoUrl={organization?.logo || undefined}
 				invitationId={invitationId}
 			/>

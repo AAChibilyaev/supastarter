@@ -22,7 +22,7 @@ export const usage = protectedProcedure
 	.output(
 		z.object({
 			since: z.string(),
-			rows: z.array(z.any()),
+			rows: z.array(z.object({ indexId: z.string(), type: z.string(), total: z.number() })),
 		}),
 	)
 	.handler(async ({ input: { organizationId, windowDays }, context: { user } }) => {

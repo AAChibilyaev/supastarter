@@ -103,17 +103,46 @@ Simulates a full widget user flow:
 
 ## CI Integration
 
-Add as a workflow step:
+The benchmark workflow (`.github/workflows/benchmark.yml`) runs load tests against staging:
+
+- **Manual trigger:** `gh workflow run benchmark.yml -f scenario=search -f index_id=<uuid>`
+- **Scheduled:** Runs nightly at 03:00 UTC against staging
+- **Regression gate:** Fails if any p99 > baseline × 1.2
+
+### Baselines
+
+Baseline values are stored in `.baseline.env`. Update after a known-good deployment:
+
+```bash
+k6 run scenarios/search-benchmark.js --summary-export=/tmp/summary.json
+jq '.metrics.http_req_duration.values."p(99)"' /tmp/summary.json
+# Update .baseline.env with the new value
+```
+
+To analyze results locally:
+
+```bash
+k6 run scenarios/search-benchmark.js --summary-export=/tmp/summary.json
+node lib/parse-results.js /tmp/summary.json
+```
+
+### GitHub Secrets Required
+
+| Secret               | Description                          |
+| -------------------- | ------------------------------------ |
+| `LOADTEST_API_KEY`   | Search-scoped key for the test index |
+| `LOADTEST_INDEX_ID`  | UUID of the index to benchmark       |
+| `STAGING_URL`        | Staging deployment base URL          |
+
+Add a step to the deploy workflow (optional, post-deploy performance gate):
 
 ```yaml
-- name: Run load tests
-  run: |
-      k6 run \
-        -e BASE_URL=${{ vars.STAGING_URL }} \
-        -e API_KEY=${{ secrets.STAGING_API_KEY }} \
-        -e INDEX_ID=${{ vars.INDEX_ID }} \
-        --out json=load-test-report.json \
-        packages/loadtest/scenarios/search-benchmark.js
+- name: Run performance benchmarks
+  uses: ./.github/actions/k6-benchmark
+  with:
+    url: ${{ secrets.STAGING_URL }}
+    api_key: ${{ secrets.LOADTEST_API_KEY }}
+    index_id: ${{ secrets.LOADTEST_INDEX_ID }}
 ```
 
 ## Regression Detection

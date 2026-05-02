@@ -1,0 +1,173 @@
+name: Performance Benchmark
+
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: "Target environment"
+                required: true
+                default: staging
+                type: choice
+                options:
+                    - staging
+                    - production
+                    - local
+            scenario:
+                description: "Benchmark scenario to run"
+                required: true
+                default: search
+                type: choice
+                options:
+                    - search
+                    - ingest
+                    - widget
+                    - all
+            api_key:
+                description: "API key for the target index (leave blank to use secret)"
+                required: false
+                default: ""
+            index_id:
+                description: "Target index UUID"
+                required: true
+                default: ""
+    schedule:
+        # Nightly run against staging at 03:00 UTC
+        - cron: "0 3 * * *"
+
+env:
+    K6_VERSION: 1.7.1
+
+jobs:
+    benchmark:
+        name: "Run ${{ github.event.inputs.scenario || 'search' }} benchmark"
+        runs-on: ubuntu-latest
+        # Schedule runs target staging by default
+        environment: ${{ github.event.inputs.environment || 'staging' }}
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install k6
+              run: |
+                  curl -fsSL https://github.com/grafana/k6/releases/download/v${{ env.K6_VERSION }}/k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz \
+                    | tar xz --strip-components=1 -C /usr/local/bin k6-v${{ env.K6_VERSION }}-linux-amd64/k6
+                  k6 version
+
+            - name: Set target URL
+              id: target
+              run: |
+                  ENV="${{ github.event.inputs.environment || 'staging' }}"
+                  if [ "$ENV" = "staging" ]; then
+                    echo "url=${{ secrets.STAGING_URL || 'http://localhost:3010' }}" >> "$GITHUB_OUTPUT"
+                  elif [ "$ENV" = "production" ]; then
+                    echo "url=${{ secrets.PRODUCTION_URL || 'http://localhost:3010' }}" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "url=http://localhost:3010" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Set API key and index ID
+              id: config
+              run: |
+                  API_KEY="${{ github.event.inputs.api_key || secrets.LOADTEST_API_KEY || '' }}"
+                  INDEX_ID="${{ github.event.inputs.index_id || secrets.LOADTEST_INDEX_ID || '' }}"
+                  echo "api_key=$API_KEY" >> "$GITHUB_OUTPUT"
+                  echo "index_id=$INDEX_ID" >> "$GITHUB_OUTPUT"
+                  if [ -z "$API_KEY" ] || [ -z "$INDEX_ID" ]; then
+                    echo "⚠️  Missing LOADTEST_API_KEY or LOADTEST_INDEX_ID — set as repo secrets"
+                    echo "warning=missing" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Run search benchmark
+              if: ${{ github.event.inputs.scenario == 'search' || github.event.inputs.scenario == 'all' || github.event_name == 'schedule' }}
+              id: search
+              continue-on-error: true
+              run: |
+                  mkdir -p /tmp/k6-results
+                  k6 run \
+                    -e BASE_URL="${{ steps.target.outputs.url }}" \
+                    -e API_KEY="${{ steps.config.outputs.api_key }}" \
+                    -e INDEX_ID="${{ steps.config.outputs.index_id }}" \
+                    --out json=/tmp/k6-results/search.json \
+                    --summary-export=/tmp/k6-results/search-summary.json \
+                    packages/loadtest/scenarios/search-benchmark.js
+
+            - name: Run ingest benchmark
+              if: ${{ github.event.inputs.scenario == 'ingest' || github.event.inputs.scenario == 'all' }}
+              id: ingest
+              continue-on-error: true
+              run: |
+                  mkdir -p /tmp/k6-results
+                  k6 run \
+                    -e BASE_URL="${{ steps.target.outputs.url }}" \
+                    -e API_KEY="${{ steps.config.outputs.api_key }}" \
+                    -e INDEX_ID="${{ steps.config.outputs.index_id }}" \
+                    --out json=/tmp/k6-results/ingest.json \
+                    --summary-export=/tmp/k6-results/ingest-summary.json \
+                    packages/loadtest/scenarios/ingest-benchmark.js
+
+            - name: Run widget benchmark
+              if: ${{ github.event.inputs.scenario == 'widget' || github.event.inputs.scenario == 'all' }}
+              id: widget
+              continue-on-error: true
+              run: |
+                  mkdir -p /tmp/k6-results
+                  k6 run \
+                    -e BASE_URL="${{ steps.target.outputs.url }}" \
+                    -e API_KEY="${{ steps.config.outputs.api_key }}" \
+                    -e INDEX_ID="${{ steps.config.outputs.index_id }}" \
+                    --out json=/tmp/k6-results/widget.json \
+                    --summary-export=/tmp/k6-results/widget-summary.json \
+                    packages/loadtest/scenarios/widget-sessions.js
+
+            - name: Check regression against baseline
+              id: regression
+              run: |
+                  # Load baselines
+                  source packages/loadtest/.baseline.env
+                  FAILURES=0
+                  SUMMARY=""
+
+                  check_result() {
+                    local label="$1" summary_file="$2" baseline_var="$3" multiplier="$4"
+                    if [ ! -f "$summary_file" ]; then
+                      echo "$label: SKIPPED (no result file)"
+                      return
+                    fi
+                    local p99
+                    p99=$(jq -r '.metrics.http_req_duration.values."p(99)" // empty' "$summary_file")
+                    if [ -z "$p99" ]; then
+                      echo "$label: no p99 data"
+                      return
+                    fi
+                    local baseline="${!baseline_var}"
+                    local threshold
+                    threshold=$(echo "$baseline * $multiplier" | bc 2>/dev/null || echo "999999")
+                    local pass
+                    pass=$(echo "$p99 < $threshold" | bc -l)
+                    if [ "$pass" = "1" ]; then
+                      echo "✅ $label: p99=${p99}ms (baseline=${baseline}ms, threshold=${threshold}ms)"
+                    else
+                      echo "❌ $label: p99=${p99}ms EXCEEDS threshold=${threshold}ms (baseline=${baseline}ms)"
+                      FAILURES=$((FAILURES + 1))
+                    fi
+                  }
+
+                  check_result "Search"  /tmp/k6-results/search-summary.json  SEARCH_P99_BASELINE_MS  1.2
+                  check_result "Ingest"  /tmp/k6-results/ingest-summary.json  INGEST_P95_BASELINE_MS  1.2
+                  check_result "Widget"  /tmp/k6-results/widget-summary.json  WIDGET_P99_BASELINE_MS  1.2
+
+                  echo "failures=$FAILURES" >> "$GITHUB_OUTPUT"
+
+            - name: Upload benchmark artifacts
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: k6-results
+                  path: /tmp/k6-results/
+                  retention-days: 30
+
+            - name: Fail on regression
+              if: steps.regression.outputs.failures != '0' && steps.regression.outputs.failures != ''
+              run: |
+                  echo "❌ Performance regression detected (${{ steps.regression.outputs.failures }} check(s) failed)"
+                  exit 1

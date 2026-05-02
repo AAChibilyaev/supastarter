@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BarChart3Icon, SearchIcon, InfoIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormatter } from "next-intl";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { EmptyState } from "./EmptyState";
@@ -39,17 +40,40 @@ const PERIOD_API: Record<PeriodKey, "last7" | "last30"> = {
 
 const FREE_RETENTION_DAYS = 7;
 
-type AnalyticsTab = "dashboard" | "failed" | "activity";
+type AnalyticsTab = "dashboard" | "failed" | "activity" | "top-queries";
 
 interface SearchAnalyticsCardsProps {
 	organizationId: string;
+	initialTab?: string;
 }
 
-export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsProps) {
+export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnalyticsCardsProps) {
 	const t = useTranslations();
 	const format = useFormatter();
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const pathname = usePathname();
 	const [period, setPeriod] = useState<PeriodKey>("7d");
-	const [activeTab, setActiveTab] = useState<AnalyticsTab>("dashboard");
+
+	// Sync active tab with URL search params so sidebar nav links work.
+	const urlTab = searchParams.get("tab") || initialTab || "dashboard";
+	const validTabs: AnalyticsTab[] = ["dashboard", "failed", "activity", "top-queries"];
+	const [activeTab, setActiveTabState] = useState<AnalyticsTab>(
+		validTabs.includes(urlTab as AnalyticsTab) ? (urlTab as AnalyticsTab) : "dashboard",
+	);
+
+	const setActiveTab = (tab: AnalyticsTab) => {
+		setActiveTabState(tab);
+		// Build new URL search params
+		const params = new URLSearchParams(searchParams.toString());
+		if (tab === "dashboard" || tab === "top-queries") {
+			params.delete("tab");
+		} else {
+			params.set("tab", tab);
+		}
+		const qs = params.toString();
+		router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+	};
 
 	const days = PERIOD_DAYS[period];
 
@@ -450,6 +474,7 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 
 			{/* Tab content */}
 			{activeTab === "dashboard" && renderDashboardTab()}
+			{activeTab === "top-queries" && renderDashboardTab()}
 			{activeTab === "failed" && renderFailedTab()}
 			{activeTab === "activity" && renderActivityTab()}
 		</div>

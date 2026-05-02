@@ -19,10 +19,13 @@ export async function generateMetadata({
 
 export default async function AnalyticsPage({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ organizationSlug: string }>;
+	searchParams: Promise<{ tab?: string }>;
 }) {
 	const { organizationSlug } = await params;
+	const { tab } = await searchParams;
 	const [{ organization }, t] = await Promise.all([
 		getSearchOrganizationRouteContext(organizationSlug),
 		getTranslations("search"),
@@ -35,7 +38,7 @@ export default async function AnalyticsPage({
 				subtitle={t("analytics.description")}
 				className="mb-0"
 			/>
-			<SearchAnalyticsCards organizationId={organization.id} />
+			<SearchAnalyticsCards organizationId={organization.id} initialTab={tab} />
 		</div>
 	);
 }

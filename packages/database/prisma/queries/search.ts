@@ -338,3 +338,139 @@ export async function markIngestRowsFailure(input: { id: string; error: string }
 		});
 	}
 }
+
+// ─── SearchConnectorSyncJob ──────────────────────────────────────
+
+function durationString(ms: number | null): string | null {
+	if (ms === null) return null;
+	return ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`;
+}
+
+function toSyncJobView(row: {
+	id: string;
+	type: string;
+	status: string;
+	indexId: string;
+	organizationId: string;
+	startedAt: Date;
+	finishedAt: Date | null;
+	durationMs: number | null;
+	itemsCount: number;
+	failuresCount: number;
+	events: Prisma.JsonValue;
+}): ConnectorSyncJobView {
+	return {
+		id: row.id,
+		type: row.type as "full" | "delta",
+		status: row.status as "running" | "completed" | "failed",
+		indexId: row.indexId,
+		organizationId: row.organizationId,
+		startedAt: row.startedAt.toISOString(),
+		finishedAt: row.finishedAt?.toISOString() ?? null,
+		duration: durationString(row.durationMs),
+		itemsCount: row.itemsCount,
+		failuresCount: row.failuresCount,
+		events: row.events as unknown as ConnectorSyncJobEvent[],
+	};
+}
+
+export async function createConnectorSyncJob(input: {
+	type: "full" | "delta";
+	indexId: string;
+	organizationId: string;
+}): Promise<ConnectorSyncJobView> {
+	const now = new Date();
+	const event: ConnectorSyncJobEvent = {
+		timestamp: now.toISOString(),
+		message: `${input.type === "full" ? "Full" : "Delta"} sync started`,
+		level: "info",
+	};
+	const row = await db.searchConnectorSyncJob.create({
+		data: {
+			indexId: input.indexId,
+			organizationId: input.organizationId,
+			type: input.type,
+			status: "running",
+			startedAt: now,
+			events: [event] as unknown as Prisma.InputJsonValue,
+		},
+	});
+	return toSyncJobView(row);
+}
+
+export async function completeConnectorSyncJob(
+	jobId: string,
+	result: { itemsCount: number; failuresCount?: number },
+): Promise<ConnectorSyncJobView | null> {
+	const existing = await db.searchConnectorSyncJob.findUnique({ where: { id: jobId } });
+	if (!existing) return null;
+	const finishedAt = new Date();
+	const durationMs = finishedAt.getTime() - existing.startedAt.getTime();
+	const event: ConnectorSyncJobEvent = {
+		timestamp: finishedAt.toISOString(),
+		message: `Sync completed: ${result.itemsCount} items processed`,
+		level: "info",
+	};
+	const existingEvents = (existing.events as unknown as ConnectorSyncJobEvent[]) ?? [];
+	const row = await db.searchConnectorSyncJob.update({
+		where: { id: jobId },
+		data: {
+			status: "completed",
+			finishedAt,
+			durationMs,
+			itemsCount: result.itemsCount,
+			failuresCount: result.failuresCount ?? 0,
+			events: [...existingEvents, event] as unknown as Prisma.InputJsonValue,
+		},
+	});
+	return toSyncJobView(row);
+}
+
+export async function failConnectorSyncJob(
+	jobId: string,
+	error: string,
+): Promise<ConnectorSyncJobView | null> {
+	const existing = await db.searchConnectorSyncJob.findUnique({ where: { id: jobId } });
+	if (!existing) return null;
+	const finishedAt = new Date();
+	const durationMs = finishedAt.getTime() - existing.startedAt.getTime();
+	const event: ConnectorSyncJobEvent = {
+		timestamp: finishedAt.toISOString(),
+		message: `Sync failed: ${error}`,
+		level: "error",
+	};
+	const existingEvents = (existing.events as unknown as ConnectorSyncJobEvent[]) ?? [];
+	const row = await db.searchConnectorSyncJob.update({
+		where: { id: jobId },
+		data: {
+			status: "failed",
+			finishedAt,
+			durationMs,
+			lastError: error.slice(0, 1000),
+			events: [...existingEvents, event] as unknown as Prisma.InputJsonValue,
+		},
+	});
+	return toSyncJobView(row);
+}
+
+export async function listConnectorSyncJobs(
+	organizationId: string,
+): Promise<ConnectorSyncJobView[]> {
+	const rows = await db.searchConnectorSyncJob.findMany({
+		where: { organizationId },
+		orderBy: { startedAt: "desc" },
+		take: 50,
+	});
+	return rows.map(toSyncJobView);
+}
+
+export async function getConnectorSyncJob(
+	jobId: string,
+	organizationId: string,
+): Promise<ConnectorSyncJobView | null> {
+	const row = await db.searchConnectorSyncJob.findFirst({
+		where: { id: jobId, organizationId },
+	});
+	if (!row) return null;
+	return toSyncJobView(row);
+}

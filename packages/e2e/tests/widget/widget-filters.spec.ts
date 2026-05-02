@@ -13,9 +13,7 @@ import { test, expect } from "../../src/fixtures";
 const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 
 test.describe("Widget Filter Chips", () => {
-	test("should render filter chips when facet checkboxes are selected", async ({
-		page,
-	}) => {
+	test("should render filter chips when facet checkboxes are selected", async ({ page }) => {
 		// Navigate to the widget script to ensure the widget is available
 		await page.goto(`${BASE_URL}/api/widget/widget.js`);
 
@@ -147,9 +145,7 @@ test.describe("Widget Filter Chips", () => {
 		expect(chipText).toContain("BrandA");
 	});
 
-	test("should remove filter when chip close button is clicked", async ({
-		page,
-	}) => {
+	test("should remove filter when chip close button is clicked", async ({ page }) => {
 		await page.goto(`${BASE_URL}/api/widget/widget.js`);
 
 		await page.setContent(`
@@ -224,9 +220,7 @@ test.describe("Widget Filter Chips", () => {
 		expect(await chips.count()).toBeGreaterThanOrEqual(1);
 
 		// Click remove button on the BrandA chip
-		const removeBtn = page.locator(
-			'.aac-filter-chip button[data-chip-remove="brand"]',
-		).first();
+		const removeBtn = page.locator('.aac-filter-chip button[data-chip-remove="brand"]').first();
 		await removeBtn.click();
 		await page.waitForTimeout(500);
 
@@ -235,9 +229,7 @@ test.describe("Widget Filter Chips", () => {
 		expect(await chipsAfter.count()).toBe(0);
 	});
 
-	test('should clear all filters when "Clear all" is clicked', async ({
-		page,
-	}) => {
+	test('should clear all filters when "Clear all" is clicked', async ({ page }) => {
 		await page.goto(`${BASE_URL}/api/widget/widget.js`);
 
 		await page.setContent(`

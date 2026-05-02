@@ -1,9 +1,9 @@
+import { generateNGrams, generateEdgeNGrams } from "../preprocessing/tokenization";
 /**
  * N-gram analysis for fuzzy matching and spell correction.
  * Provides trigram index, shingle matching, and edge n-gram generation.
  */
 import { sorensenDiceCoefficient } from "./distances";
-import { generateNGrams, generateEdgeNGrams } from "../preprocessing/tokenization";
 
 export { generateNGrams, generateEdgeNGrams };
 
@@ -69,9 +69,7 @@ export class TrigramsIndex {
 			}
 		}
 
-		return results
-			.sort((a, b) => b.score - a.score)
-			.map((r) => r.word);
+		return results.sort((a, b) => b.score - a.score).map((r) => r.word);
 	}
 
 	/**
@@ -123,7 +121,11 @@ export class ShingleMatcher {
 	/**
 	 * Find the best matching position of query within text using shingle overlap.
 	 */
-	public findBestMatch(text: string, query: string, shingleSize = 3): {
+	public findBestMatch(
+		text: string,
+		query: string,
+		shingleSize = 3,
+	): {
 		position: number;
 		similarity: number;
 	} {
@@ -145,7 +147,8 @@ export class ShingleMatcher {
 				if (windowShingles.has(shingle)) intersection++;
 			}
 
-			const similarity = intersection / (queryShingles.size + windowShingles.size - intersection);
+			const similarity =
+				intersection / (queryShingles.size + windowShingles.size - intersection);
 			if (similarity > bestSimilarity) {
 				bestSimilarity = similarity;
 				bestPosition = i;

@@ -51,7 +51,8 @@ function main() {
 
 	const failed = summary.metrics?.http_req_failed?.values?.rate ?? 0;
 	const checks = summary.metrics?.checks?.values?.passes ?? 0;
-	const totalChecks = summary.metrics?.checks?.values?.passes + (summary.metrics?.checks?.values?.fails ?? 0);
+	const totalChecks =
+		summary.metrics?.checks?.values?.passes + (summary.metrics?.checks?.values?.fails ?? 0);
 
 	console.log("\n═══════════════════════════════════════════");
 	console.log("  Performance Benchmark Results");
@@ -89,9 +90,13 @@ function main() {
 		const pass = actual < threshold;
 
 		if (pass) {
-			console.log(`    ✅ ${key}: ${actual.toFixed(1)}ms < ${threshold.toFixed(1)}ms (baseline: ${baseline}ms)`);
+			console.log(
+				`    ✅ ${key}: ${actual.toFixed(1)}ms < ${threshold.toFixed(1)}ms (baseline: ${baseline}ms)`,
+			);
 		} else {
-			console.log(`    ❌ ${key}: ${actual.toFixed(1)}ms ≥ ${threshold.toFixed(1)}ms (baseline: ${baseline}ms)`);
+			console.log(
+				`    ❌ ${key}: ${actual.toFixed(1)}ms ≥ ${threshold.toFixed(1)}ms (baseline: ${baseline}ms)`,
+			);
 		}
 	}
 

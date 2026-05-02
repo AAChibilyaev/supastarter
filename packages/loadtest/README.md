@@ -128,11 +128,11 @@ node lib/parse-results.js /tmp/summary.json
 
 ### GitHub Secrets Required
 
-| Secret               | Description                          |
-| -------------------- | ------------------------------------ |
-| `LOADTEST_API_KEY`   | Search-scoped key for the test index |
-| `LOADTEST_INDEX_ID`  | UUID of the index to benchmark       |
-| `STAGING_URL`        | Staging deployment base URL          |
+| Secret              | Description                          |
+| ------------------- | ------------------------------------ |
+| `LOADTEST_API_KEY`  | Search-scoped key for the test index |
+| `LOADTEST_INDEX_ID` | UUID of the index to benchmark       |
+| `STAGING_URL`       | Staging deployment base URL          |
 
 Add a step to the deploy workflow (optional, post-deploy performance gate):
 
@@ -140,9 +140,9 @@ Add a step to the deploy workflow (optional, post-deploy performance gate):
 - name: Run performance benchmarks
   uses: ./.github/actions/k6-benchmark
   with:
-    url: ${{ secrets.STAGING_URL }}
-    api_key: ${{ secrets.LOADTEST_API_KEY }}
-    index_id: ${{ secrets.LOADTEST_INDEX_ID }}
+      url: ${{ secrets.STAGING_URL }}
+      api_key: ${{ secrets.LOADTEST_API_KEY }}
+      index_id: ${{ secrets.LOADTEST_INDEX_ID }}
 ```
 
 ## Regression Detection

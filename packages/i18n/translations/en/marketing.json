@@ -2621,8 +2621,8 @@
 		}
 	},
 	"compareTypesensePage": {
-		"title": "AACsearch vs Typesense",
-		"description": "AACsearch is built on Typesense. The difference: we add multi-tenancy, analytics, a hosted control plane, and managed ops on top."
+		"title": "AACsearch vs Typesense Cloud: Better Alternative with Zero Lock-In (2026)",
+		"description": "Detailed AACsearch vs Typesense Cloud comparison. AACsearch adds managed multi-tenancy, analytics, search widget, and connectors on top of Typesense — all included with per-index pricing and zero lock-in. The true Typesense Cloud alternative."
 	},
 	"compareTypesense": {
 		"title": "Engine vs. managed cloud platform",
@@ -2652,6 +2652,162 @@
 				"title": "Dedicated support",
 				"description": "AACsearch plans include email support and an SLA. Typesense community support is forum-based with no response time guarantees."
 			}
+		},
+		"codeTitle": "Same engine, richer platform",
+		"codeSubtitle": "AACsearch adds multi-tenancy, analytics, and managed infrastructure on top of the same Typesense engine you already trust.",
+		"table": {
+			"title": "Feature Comparison",
+			"subtitle": "A side-by-side look at what each platform offers",
+			"aacsearch": "AACsearch",
+			"typesenseCloud": "Typesense Cloud",
+			"features": {
+				"searchEngine": {
+					"title": "Core search engine",
+					"aacsearch": "Typesense (same engine)",
+					"typesenseCloud": "Typesense (same engine)"
+				},
+				"managedHosting": {
+					"title": "Managed hosting",
+					"aacsearch": "Included",
+					"typesenseCloud": "Included"
+				},
+				"analytics": {
+					"title": "Analytics dashboard",
+					"aacsearch": "Built-in (all plans)",
+					"typesenseCloud": "Not available"
+				},
+				"widget": {
+					"title": "Search widget (embeddable)",
+					"aacsearch": "Included (Vanilla JS, React, Vue)",
+					"typesenseCloud": "Not available"
+				},
+				"connectors": {
+					"title": "CMS Connectors",
+					"aacsearch": "PrestaShop, Bitrix — native sync",
+					"typesenseCloud": "Not available"
+				},
+				"multiTenancy": {
+					"title": "Multi-tenant (orgs)",
+					"aacsearch": "Native, per-org API keys",
+					"typesenseCloud": "Must build yourself"
+				},
+				"scopedTokens": {
+					"title": "Scoped API tokens",
+					"aacsearch": "Built-in HMAC tokens",
+					"typesenseCloud": "Must build yourself"
+				},
+				"rateLimiting": {
+					"title": "Rate limiting",
+					"aacsearch": "Per-key, configurable",
+					"typesenseCloud": "Must build yourself"
+				},
+				"apiKeyManagement": {
+					"title": "API key management UI",
+					"aacsearch": "Dashboard UI",
+					"typesenseCloud": "Cloud console only"
+				},
+				"publicApi": {
+					"title": "Public API (search)",
+					"aacsearch": "REST + gRPC",
+					"typesenseCloud": "REST"
+				},
+				"userManagement": {
+					"title": "User management",
+					"aacsearch": "Built-in auth",
+					"typesenseCloud": "Must build yourself"
+				},
+				"pricing": {
+					"title": "Pricing model",
+					"aacsearch": "Per-index, unlimited operations",
+					"typesenseCloud": "Per node/hour + per-GB storage"
+				},
+				"entryPrice": {
+					"title": "Entry price",
+					"aacsearch": "Free (1 index, 10k docs)",
+					"typesenseCloud": "~$49/mo (1-node, 4GB)"
+				},
+				"midMarket": {
+					"title": "100k docs, 500k searches/mo",
+					"aacsearch": "$99/mo",
+					"typesenseCloud": "~$99/mo (2-node cluster) + middleware"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99.9% uptime",
+					"typesenseCloud": "99.9% uptime"
+				},
+				"selfHost": {
+					"title": "Self-host fallback",
+					"aacsearch": "Full Typesense export",
+					"typesenseCloud": "Same engine — portable"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Pricing Comparison Scenarios",
+			"scenario1": {
+				"heading": "Launch (10k docs, basic search)",
+				"typesenseCloud": "Typesense Cloud: $49/mo (1-node, no analytics, no multi-tenant)",
+				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) — all features included",
+				"saving": "Saving: $49/mo plus middleware build costs"
+			},
+			"scenario2": {
+				"heading": "Growth (100k docs, multi-tenant)",
+				"typesenseCloud": "Typesense Cloud: $99/mo (2-node) + $5k-20k one-time custom dev",
+				"aacsearch": "AACsearch: Scale plan $99/mo — all built-in, no custom dev",
+				"saving": "Saving: ~$5k-20k one-time plus ongoing maintenance"
+			},
+			"scenario3": {
+				"heading": "Scale (1M docs, analytics + connectors)",
+				"typesenseCloud": "Typesense Cloud: ~$299/mo (4-node) + custom dev ongoing",
+				"aacsearch": "AACsearch: Pro plan $499/mo — all built-in, zero dev",
+				"saving": "Saving: Significant dev cost elimination"
+			}
+		},
+		"whyMigrate": {
+			"title": "Why Teams Choose AACsearch Over Typesense Cloud",
+			"items": [
+				"Full product, not just infrastructure — AACsearch is search-as-a-service with API keys, multi-tenancy, analytics, dashboard, widget, and connectors out of the box",
+				"Multi-tenancy without the boilerplate — Each organization gets isolated search collections with scoped API tokens. Typesense Cloud requires you to build your own tenant isolation layer.",
+				"No middleware to build — Rate limiting, user management, webhook notifications, and API key management are all included. On Typesense Cloud you build everything yourself.",
+				"Predictable per-index pricing — Flat rate with unlimited operations. No surprise bills from node-hour + per-GB storage calculations."
+			]
+		},
+		"testimonial": {
+			"quote": "We started with Typesense Cloud but quickly realized we were spending more time building infrastructure around it than shipping search features. AACsearch gave us everything — multi-tenancy, analytics, the widget — without the middleware tax.",
+			"author": "Engineering Lead, B2B SaaS platform"
+		},
+		"decisionMatrix": {
+			"title": "When to Choose Each Platform",
+			"whenAACsearch": {
+				"heading": "Choose AACsearch if you:",
+				"items": [
+					"Want search-as-a-service — not just a database cluster",
+					"Need multi-tenant search for your SaaS product",
+					"Want analytics, widget, and connectors without building them",
+					"Are comparing Typesense pricing and want per-index predictability",
+					"Value Typesense portability — export and self-host anytime"
+				]
+			},
+			"whenTypesenseCloud": {
+				"heading": "Choose Typesense Cloud if you:",
+				"items": [
+					"Need raw Typesense API access and plan to build your own infrastructure",
+					"Already have a custom multi-tenancy solution in place",
+					"Don't need analytics, widgets, or CMS connectors",
+					"Prefer to manage infrastructure directly with full cluster control"
+				]
+			}
+		},
+		"analogy": {
+			"heading": "The Simple Difference",
+			"line1": "Typesense Cloud is like renting a server from AWS.",
+			"line2": "AACsearch is like Heroku for search — you get the platform, the tooling, and the dashboard."
+		},
+		"cta": {
+			"heading": "Ready to switch?",
+			"description": "Start a free trial — no credit card required. Powered by Typesense, no lock-in, export anytime.",
+			"button": "Start Free Trial →"
 		}
 	},
 	"compareOpenSearchPage": {

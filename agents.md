@@ -23,7 +23,7 @@ This AGENTS.md is designed for **fully autonomous operation**. The agent should:
 
 ```
 Name:        AACsearch
-Product:     Hosted search-as-a-service (Typesense-backed)
+Product:     Hosted search-as-a-service (AACsearch Engine)
 Base:        supastarter Next.js monorepo
 Stack:       TypeScript
 Style:       strict, interfaces > types, named exports, no enums, RSC-first

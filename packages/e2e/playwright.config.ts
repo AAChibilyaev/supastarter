@@ -101,6 +101,12 @@ export default defineConfig({
 			testMatch: "tests/sdks/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "index",
+			dependencies: ["setup"],
+			testMatch: "tests/index/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
 	],
 
 	webServer: [

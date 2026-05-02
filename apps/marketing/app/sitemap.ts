@@ -18,7 +18,15 @@ type ChangeFrequency = MetadataRoute.Sitemap[number]["changeFrequency"];
 function getPagePriority(path: string): number {
 	if (path === "") return 1.0;
 	if (
-		["/features", "/pricing", "/integrations", "/use-cases", "/compare", "/blog"].includes(path)
+		[
+			"/features",
+			"/pricing",
+			"/integrations",
+			"/connectors",
+			"/use-cases",
+			"/compare",
+			"/blog",
+		].includes(path)
 	)
 		return 0.9;
 	if (
@@ -50,6 +58,7 @@ const staticMarketingPages = [
 	"/features",
 	"/pricing",
 	"/integrations",
+	"/connectors",
 	"/security",
 	"/use-cases",
 	"/enterprise",

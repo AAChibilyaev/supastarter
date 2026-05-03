@@ -7,7 +7,7 @@ import {
 } from "./procedures/analytics-rules";
 import { bulkDeleteDocuments } from "./procedures/bulk-delete-documents";
 import { cloneIndex } from "./procedures/clone-index";
-import { performClusterOperation, clusterMetrics } from "./procedures/cluster-ops";
+import { performClusterOperation, clusterMetrics, configureSlowRequestLogging, clearClusterCache } from "./procedures/cluster-ops";
 import {
 	createConversationModel,
 	listConversationModels,
@@ -203,6 +203,8 @@ export const searchRouter = {
 	clusterOps: {
 		perform: performClusterOperation,
 		metrics: clusterMetrics,
+		configureSlowRequestLogging,
+		clearCache: clearClusterCache,
 	},
 	analyticsRules: {
 		list: listAnalyticsRules,

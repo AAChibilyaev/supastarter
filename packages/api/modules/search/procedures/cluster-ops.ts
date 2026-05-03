@@ -1,10 +1,10 @@
-import { getTypesenseClient } from "@repo/search";
+import { getTypesenseClient, typesenseFetch } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../lib/access";
 
-const clusterOperationSchema = z.enum(["vote", "debug", "metrics", "snapshot"]);
+const clusterOperationSchema = z.enum(["vote", "debug", "metrics", "snapshot", "compact", "cache_clear"]);
 
 export const performClusterOperation = protectedProcedure
 	.route({
@@ -76,6 +76,24 @@ export const performClusterOperation = protectedProcedure
 					data = {
 						success: (result?.success as boolean) ?? true,
 						snapshotPath: (result?.snapshot_path as string) ?? "",
+					};
+					break;
+				}
+				case "compact": {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const compactResult = await (client as any).operations().perform("db_compact");
+					data = {
+						success: true,
+						message: (compactResult?.message as string) ?? "Database compaction completed",
+					};
+					break;
+				}
+				case "cache_clear": {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const cacheResult = await (client as any).operations().perform("cache_clear");
+					data = {
+						success: true,
+						message: (cacheResult?.message as string) ?? "LRU cache cleared",
 					};
 					break;
 				}
@@ -200,5 +218,79 @@ export const triggerClusterSnapshot = protectedProcedure
 			};
 		} catch {
 			return { success: false, snapshotPath: "" };
+		}
+	});
+
+export const configureSlowRequestLogging = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/search/cluster/slow-request-logging",
+		tags: ["Search"],
+		summary: "Configure slow request logging threshold",
+		description:
+			"Sets the threshold (in milliseconds) above which requests are logged as slow. Uses Typesense /config endpoint.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			thresholdMs: z.number().int().min(100).max(30000).default(2000),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			thresholdMs: z.number(),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
+
+		try {
+			await typesenseFetch("POST", "/config", {
+				"log-slow-requests-time-ms": input.thresholdMs,
+			});
+
+			return {
+				success: true,
+				thresholdMs: input.thresholdMs,
+			};
+		} catch {
+			return { success: false, thresholdMs: input.thresholdMs };
+		}
+	});
+
+export const clearClusterCache = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/search/cluster/clear-cache",
+		tags: ["Search"],
+		summary: "Clear Typesense cluster LRU cache",
+		description:
+			"Clears the Typesense server's in-memory LRU cache. Useful after large schema changes or to reclaim memory.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			message: z.string(),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
+
+		const client = getTypesenseClient();
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const result = await (client as any).operations().perform("cache_clear");
+			return {
+				success: true,
+				message: (result?.message as string) ?? "LRU cache cleared",
+			};
+		} catch {
+			return { success: false, message: "Failed to clear cache" };
 		}
 	});

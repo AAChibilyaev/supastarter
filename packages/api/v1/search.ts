@@ -59,9 +59,13 @@ const searchInputSchema = z.object({
 	curationTags: z.string().optional(),
 	hybridConfidence: z.number().min(0).max(1).optional(),
 	// ── Faceted Search extensions ──
-	maxFacetValues: z.number().int().optional(),
+	maxFacetValues: z.number().int().min(1).optional(),
 	facetQuery: z.string().optional(),
 	facetSearch: z.string().optional(),
+	/** Percentage of documents to sample for facet counts (0–100). */
+	facetSamplePercent: z.number().min(0).max(100).optional(),
+	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetStrategy: z.enum(["exact", "intersection"]).optional(),
 });
 
 type SearchInput = z.infer<typeof searchInputSchema>;
@@ -148,6 +152,8 @@ export const searchApp = new Hono()
 			maxFacetValues: input.maxFacetValues,
 			facetQuery: input.facetQuery,
 			facetSearch: input.facetSearch,
+			facetSamplePercent: input.facetSamplePercent,
+			facetStrategy: input.facetStrategy,
 			polygonFilter: input.polygonFilter,
 			boundingBoxFilter: input.boundingBoxFilter,
 		});
@@ -156,7 +162,7 @@ export const searchApp = new Hono()
 
 		void recordSearchUsage({
 			organizationId: verified.organizationId,
-			type: "searches",
+			type: "search_query",
 			count: 1,
 		}).catch((e) => logger.error("Failed to record search usage", e));
 
@@ -216,7 +222,7 @@ export const searchApp = new Hono()
 
 		void recordSearchUsage({
 			organizationId: verified.organizationId,
-			type: "searches",
+			type: "search_query",
 			count: 1,
 		}).catch((e) => logger.error("Failed to record search usage", e));
 

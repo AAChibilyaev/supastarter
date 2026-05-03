@@ -10,6 +10,16 @@ const multiSearchEntrySchema = z.object({
 	queryBy: z.string().optional(),
 	filterBy: z.string().optional(),
 	facetBy: z.string().optional(),
+	/** Maximum number of facet values to return per field. */
+	maxFacetValues: z.number().int().min(1).optional(),
+	/** Filter facet values by a sub-query (autocomplete within facet values). */
+	facetQuery: z.string().optional(),
+	/** Search across facet values (typeahead within facet values). */
+	facetSearch: z.string().optional(),
+	/** Percentage of documents to sample for facet counts (0–100). */
+	facetSamplePercent: z.number().min(0).max(100).optional(),
+	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetStrategy: z.enum(["exact", "intersection"]).optional(),
 	sortBy: z.string().optional(),
 	collection: z.string().optional(),
 	groupBy: z.string().optional(),
@@ -80,6 +90,21 @@ export const federatedSearch = protectedProcedure
 					query_by: s.queryBy ?? "title,description",
 					filter_by: s.filterBy ?? "",
 					facet_by: s.facetBy ?? "",
+					...(s.maxFacetValues !== undefined && {
+						max_facet_values: s.maxFacetValues,
+					}),
+					...(s.facetQuery !== undefined && {
+						facet_query: s.facetQuery,
+					}),
+					...(s.facetSearch !== undefined && {
+						facet_search: s.facetSearch,
+					}),
+					...(s.facetSamplePercent !== undefined && {
+						facet_sample_percent: s.facetSamplePercent,
+					}),
+					...(s.facetStrategy !== undefined && {
+						facet_strategy: s.facetStrategy,
+					}),
 					...(s.sortBy && { sort_by: s.sortBy }),
 					...(s.groupBy && { group_by: s.groupBy }),
 					...(s.groupLimit !== undefined && { group_limit: s.groupLimit }),

@@ -30,6 +30,16 @@ export const dynamicSearch = protectedProcedure
 			page: z.number().int().min(1).default(1),
 			filterBy: z.string().optional(),
 			facetBy: z.string().optional(),
+			/** Maximum number of facet values to return per field. */
+			maxFacetValues: z.number().int().min(1).optional(),
+			/** Filter facet values by a sub-query (autocomplete within facet values). */
+			facetQuery: z.string().optional(),
+			/** Search across facet values (typeahead within facet values). */
+			facetSearch: z.string().optional(),
+			/** Percentage of documents to sample for facet counts (0–100). */
+			facetSamplePercent: z.number().min(0).max(100).optional(),
+			/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+			facetStrategy: z.enum(["exact", "intersection"]).optional(),
 			sortBy: z.string().optional(),
 			diversifyField: z.string().optional(),
 			diversifyMaxPerValue: z.number().int().min(1).max(250).default(3),
@@ -71,6 +81,11 @@ export const dynamicSearch = protectedProcedure
 
 		if (input.filterBy) searchParams.filter_by = input.filterBy;
 		if (input.facetBy) searchParams.facet_by = input.facetBy;
+		if (input.maxFacetValues) searchParams.max_facet_values = input.maxFacetValues;
+		if (input.facetQuery) searchParams.facet_query = input.facetQuery;
+		if (input.facetSearch) searchParams.facet_search = input.facetSearch;
+		if (input.facetSamplePercent) searchParams.facet_sample_percent = input.facetSamplePercent;
+		if (input.facetStrategy) searchParams.facet_strategy = input.facetStrategy;
 		if (input.sortBy) searchParams.sort_by = input.sortBy;
 		if (input.highlightFields) {
 			searchParams.highlight_fields = input.highlightFields;

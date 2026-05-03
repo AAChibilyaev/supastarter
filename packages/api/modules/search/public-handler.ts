@@ -1,12 +1,13 @@
 import { aggregateSearchUsage, recordActivationEvent, recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
 import { SymSpell, detectLanguage } from "@repo/nlp";
-import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
 import { getMetrics, trackSearchLatency } from "@repo/observability";
+import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
 
+import { sanitizeReferrer } from "../../lib/referrer-sanitizer";
 import { quotaCheck } from "../entitlements/middleware/quota-check";
 import { combineFilters, gatePublicSearchRequest } from "./lib/public-auth";
 import { chargeWalletOverage } from "./lib/quota";
@@ -79,6 +80,12 @@ const publicSearchInput = z.object({
 	maxFacetValues: z.number().int().min(1).optional(),
 	facetSampleSlope: z.number().min(0).max(1).optional(),
 	facetSampleThreshold: z.number().int().min(0).optional(),
+	/** Percentage of documents to sample for facet counts (0–100). */
+	facetSamplePercent: z.number().min(0).max(100).optional(),
+	/** Facet value search (typeahead within facet values). */
+	facetSearch: z.string().optional(),
+	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetStrategy: z.enum(["exact", "intersection"]).optional(),
 	// ── Negation (explicit) ──
 	negate: z.string().optional(),
 	// ── Wildcard toggle ──
@@ -224,7 +231,7 @@ export const publicSearchApp = new Hono()
 				resultCount: result.found,
 				latencyMs: result.searchTimeMs,
 				ua: c.req.header("user-agent") ?? null,
-				referrer: c.req.header("referer") ?? null,
+				referrer: sanitizeReferrer(c.req.header("referer")),
 				queryId: result.queryId ?? null,
 			};
 
@@ -239,7 +246,7 @@ export const publicSearchApp = new Hono()
 			void recordActivationEvent(verified.organizationId, "FIRST_SEARCH").catch(
 				(err: unknown) =>
 					logger.error("Failed to record FIRST_SEARCH activation event", {
-						error: err,
+						error: String(err),
 						organizationId: verified.organizationId,
 					}),
 			);

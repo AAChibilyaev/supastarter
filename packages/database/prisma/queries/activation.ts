@@ -288,3 +288,96 @@ export async function getCohortData(): Promise<CohortRow[]> {
 
 	return cohorts;
 }
+
+// ─── Health Score Distribution ─────────────────────────────────────
+
+/** Bucket ranges for health score distribution. */
+export interface HealthScoreBucket {
+	label: string; // e.g. "0-20", "21-40", etc.
+	minScore: number;
+	maxScore: number;
+	count: number;
+}
+
+/** Health score distribution across all organizations. */
+export interface HealthScoreDistribution {
+	totalOrgs: number;
+	activeOrgs: number; // orgs with at least one activation event
+	buckets: HealthScoreBucket[];
+}
+
+const DISTRIBUTION_WEIGHTS: Record<string, number> = {
+	EMAIL_VERIFIED: 10,
+	FIRST_COLLECTION: 15,
+	FIRST_DOCUMENT: 20,
+	FIRST_SEARCH: 20,
+	WIDGET_EMBEDDED: 15,
+	FIRST_TEAM_MEMBER: 10,
+	FIRST_INTEGRATION: 5,
+	FIRST_PAYMENT: 5,
+};
+
+const TOTAL_WEIGHT = Object.values(DISTRIBUTION_WEIGHTS).reduce((sum, w) => sum + w, 0);
+
+function computeHealthScore(eventTypes: string[]): number {
+	let score = 0;
+	const completedSet = new Set(eventTypes);
+	for (const [eventType, weight] of Object.entries(DISTRIBUTION_WEIGHTS)) {
+		if (completedSet.has(eventType)) {
+			score += Math.round((weight / TOTAL_WEIGHT) * 100);
+		}
+	}
+	return Math.min(score, 100);
+}
+
+const BUCKET_DEFS: Array<{ label: string; min: number; max: number }> = [
+	{ label: "0-20", min: 0, max: 20 },
+	{ label: "21-40", min: 21, max: 40 },
+	{ label: "41-60", min: 41, max: 60 },
+	{ label: "61-80", min: 61, max: 80 },
+	{ label: "81-100", min: 81, max: 100 },
+];
+
+export async function getHealthScoreDistribution(): Promise<HealthScoreDistribution> {
+	const [allEvents, totalOrgs] = await Promise.all([
+		db.activationEvent.findMany({
+			select: { organizationId: true, eventType: true },
+		}),
+		db.organization.count(),
+	]);
+
+	const uniqueOrgIds = new Set(allEvents.map((e) => e.organizationId));
+
+	// Initialize buckets
+	const buckets: HealthScoreBucket[] = BUCKET_DEFS.map((def) => ({
+		label: def.label,
+		minScore: def.min,
+		maxScore: def.max,
+		count: 0,
+	}));
+
+	// Group events by org for scoring
+	const orgEventMap = new Map<string, string[]>();
+	for (const evt of allEvents) {
+		const list = orgEventMap.get(evt.organizationId) ?? [];
+		list.push(evt.eventType);
+		orgEventMap.set(evt.organizationId, list);
+	}
+
+	for (const orgId of uniqueOrgIds) {
+		const eventTypes = orgEventMap.get(orgId) ?? [];
+		const score = computeHealthScore(eventTypes);
+		for (const bucket of buckets) {
+			if (score >= bucket.minScore && score <= bucket.maxScore) {
+				bucket.count++;
+				break;
+			}
+		}
+	}
+
+	return {
+		totalOrgs,
+		activeOrgs: uniqueOrgIds.size,
+		buckets,
+	};
+}

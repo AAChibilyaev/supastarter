@@ -1,4 +1,9 @@
-import { getCohortData, getFunnelData, getTimeToFirstValue } from "@repo/database";
+import {
+	getCohortData,
+	getFunnelData,
+	getHealthScoreDistribution,
+	getTimeToFirstValue,
+} from "@repo/database";
 
 import { adminProcedure } from "../../../orpc/procedures";
 
@@ -7,16 +12,18 @@ export const analytics = adminProcedure
 		method: "GET",
 		path: "/onboarding/analytics",
 		tags: ["Onboarding", "Admin"],
-		summary: "Get onboarding analytics (funnel, time-to-first-value, cohort data)",
+		summary:
+			"Get onboarding analytics (funnel, time-to-first-value, cohort data, health score distribution)",
 		description:
-			"Returns funnel completion rates with drop-off, median time to first search, and cohort analysis by signup week. Admin-only.",
+			"Returns funnel completion rates with drop-off, median time to first search, cohort analysis by signup week, and health score distribution across workspaces. Admin-only.",
 	})
 	.handler(async () => {
-		const [funnel, timeToFirstValue, cohorts] = await Promise.all([
+		const [funnel, timeToFirstValue, cohorts, healthScoreDistribution] = await Promise.all([
 			getFunnelData(),
 			getTimeToFirstValue(),
 			getCohortData(),
+			getHealthScoreDistribution(),
 		]);
 
-		return { funnel, timeToFirstValue, cohorts };
+		return { funnel, timeToFirstValue, cohorts, healthScoreDistribution };
 	});

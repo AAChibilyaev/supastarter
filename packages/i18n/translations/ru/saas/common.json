@@ -1,40 +1,40 @@
 {
 	"app": {
 		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Open navigation",
-			"organizationSettings": "Organization settings",
-			"search": "Search",
+			"accountSettings": "Настройки аккаунта",
+			"admin": "Администрирование",
+			"navigationTitle": "Меню",
+			"openNavigation": "Открыть навигацию",
+			"organizationSettings": "Настройки организации",
+			"search": "Поиск",
 			"mySearch": "Мой поиск",
 			"start": "Старт"
 		},
 		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
+			"accountSettings": "Настройки аккаунта",
+			"colorMode": "Тема",
+			"documentation": "Документация",
+			"home": "Главная",
+			"logout": "Выйти"
 		},
 		"notifications": {
-			"title": "Notifications",
-			"empty": "No notifications yet.",
-			"markAllRead": "Mark all as read",
-			"fallbackTitle": "Notification",
+			"title": "Уведомления",
+			"empty": "Уведомлений пока нет",
+			"markAllRead": "Прочитать всё",
+			"fallbackTitle": "Уведомление",
 			"aria": {
-				"open": "Open notifications"
+				"open": "Открыть уведомления"
 			}
 		}
 	},
 	"common": {
 		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
+			"cancel": "Отмена",
+			"confirm": "Подтвердить"
 		},
 		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
+			"continue": "Продолжить",
+			"verify": "Проверить"
 		},
 		"colorMode": {
 			"system": "Системная",
@@ -42,10 +42,10 @@
 			"dark": "Тёмная"
 		},
 		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
+			"minLength": "Мин. 8 символов",
+			"upperAndLowercase": "Заглавные и строчные",
+			"number": "Цифра",
+			"specialCharacter": "Спецсимвол"
 		},
 		"close": "Закрыть",
 		"clear": "Очистить",
@@ -67,11 +67,11 @@
 	},
 	"notFound": {
 		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
+		"title": "Страница не найдена",
+		"goToDashboard": "В дашборд",
 		"goToHomepage": "На главную"
 	},
 	"documentation": {
-		"title": "Documentation"
+		"title": "Документация"
 	}
 }

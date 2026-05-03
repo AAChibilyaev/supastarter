@@ -595,5 +595,77 @@
 		"removeWebhook": "Remove",
 		"saveSuccess": "Alert settings saved",
 		"saveError": "Failed to save alert settings"
+	},
+	"scim": {
+		"title": "SCIM Provisioning",
+		"description": "Automate user provisioning with SCIM 2.0",
+		"emptyState": {
+			"title": "Automate user provisioning with SCIM",
+			"description": "Connect your identity provider to automatically create, update, and deactivate users in your AACsearch organization.",
+			"cta": "Connect Identity Provider",
+			"planUpgrade": "Enterprise feature — available on Scale plan+"
+		},
+		"status": {
+			"active": "Active",
+			"inactive": "Inactive",
+			"lastSync": "Last sync",
+			"usersProvisioned": "Users provisioned",
+			"disconnect": "Disconnect",
+			"viewLogs": "View Logs"
+		},
+		"endpoint": {
+			"baseUrl": "SCIM Base URL",
+			"bearerToken": "Bearer Token",
+			"copy": "Copy",
+			"regenerate": "Regenerate",
+			"revoke": "Revoke",
+			"noToken": "No active token",
+			"lastUsed": "Last used"
+		},
+		"wizard": {
+			"title": "Connect Identity Provider",
+			"selectProvider": "Select your identity provider",
+			"configure": "Configure {provider} Connection",
+			"testConnection": "Test SCIM Connection",
+			"skipAndSave": "Skip Test & Save",
+			"complete": "Complete Setup",
+			"back": "Back",
+			"okta": "Okta",
+			"azureAd": "Azure AD",
+			"googleWorkspace": "Google Workspace",
+			"onelogin": "OneLogin",
+			"keycloak": "Keycloak",
+			"generic": "Other (SCIM v2)"
+		},
+		"test": {
+			"success": "Connection successful!",
+			"failure": "Connection failed",
+			"inProgress": "Testing connection...",
+			"stepConfig": "Service Provider Config",
+			"stepListUsers": "Listing Users",
+			"stepCreateUser": "Creating test user",
+			"stepCleanup": "Cleaning up test user",
+			"ok": "OK",
+			"error": "Error"
+		},
+		"logs": {
+			"title": "SCIM Audit Logs",
+			"description": "Review all SCIM provisioning activity for your organization",
+			"exportCsv": "Export CSV",
+			"action": "Action",
+			"user": "User",
+			"email": "Email",
+			"source": "Source",
+			"timestamp": "Timestamp",
+			"noLogs": "No SCIM activity yet",
+			"noLogsDescription": "SCIM audit logs will appear here once provisioning is configured and active.",
+			"actions": {
+				"user_created": "Created",
+				"user_updated": "Updated",
+				"user_deactivated": "Deactivated",
+				"group_created": "Group Created",
+				"group_synced": "Group Synced"
+			}
+		}
 	}
 }

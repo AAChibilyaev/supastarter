@@ -28,8 +28,8 @@
 	"home": {
 		"hero": {
 			"badge": "v0 — accepting early access",
-			"title": "Search your users actually feel.",
-			"subtitle": "A hosted search API with org-scoped tokens, per-key origin allow-lists, rate-limit and quota — built so you ship search instead of running infra.",
+			"title": "AACsearch — hosted search API for SaaS, docs, and catalogs",
+			"subtitle": "Scoped tokens, origin allow-lists, rate limits, multi-search, and zero-downtime reindex — out of the box. < 50ms p99.",
 			"getStarted": "Start free",
 			"documentation": "Read the docs",
 			"codeCaption": "search-client.ts",
@@ -41,28 +41,28 @@
 			"title": "Three calls. One afternoon.",
 			"step1": {
 				"title": "1. Push documents",
-				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — schema is whatever you send."
+				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — you define the schema."
 			},
 			"step2": {
 				"title": "2. Mint a search token",
-				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, a TTL."
+				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, and a TTL."
 			},
 			"step3": {
 				"title": "3. Search from the browser",
-				"description": "Use the typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
+				"description": "Typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
 			}
 		},
 		"features": {
-			"title": "What you actually get",
-			"subtitle": "No mystery boxes. Every feature here is shipping today.",
+			"title": "What you get out of the box",
+			"subtitle": "No «coming next quarter». Every feature ships today.",
 			"items": {
 				"scopedTokens": {
 					"title": "Scoped tokens",
-					"description": "Per-user, per-filter, TTL-bound. Mint server-side, ship to the browser, expire on schedule."
+					"description": "Issue short-lived tokens per user, per index, per filter set. Safer than public API keys in the browser — a leaked token can't query another index."
 				},
 				"originAllowlist": {
 					"title": "Origin allow-list",
-					"description": "Pin every key to specific origins. A leaked key from Twitter doesn't drain your quota."
+					"description": "Pin every API key to specific origins. Leak a key on Twitter? It won't work from another domain — your quota is safe."
 				},
 				"rateLimitQuota": {
 					"title": "Rate limit & quota",
@@ -70,15 +70,15 @@
 				},
 				"multiSearch": {
 					"title": "Multi-search",
-					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N requests."
+					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N separate requests."
 				},
 				"reindex": {
 					"title": "Zero-downtime reindex",
-					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
+					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old version. Cut over atomically — no downtime."
 				},
 				"enterpriseSecurity": {
-					"title": "Enterprise security",
-					"description": "SSO, audit log, IP allow-list, dedicated cluster, and 99.95% SLA. Security controls available from day one, not as an afterthought."
+					"title": "Enterprise-grade security",
+					"description": "SSO, audit log, IP allow-list, dedicated cluster, and 99.95% SLA. Security controls from day one — not as an add-on."
 				}
 			}
 		},
@@ -133,14 +133,14 @@
 			"perYear": "/yr"
 		},
 		"cta": {
-			"title": "Ready to ship search?",
-			"subtitle": "Free tier covers most side-projects. No credit card.",
-			"primary": "Create an account",
+			"title": "Ship search in one evening",
+			"subtitle": "The free tier covers most side projects. Upgrade in 5 minutes — your data stays. No credit card.",
+			"primary": "Create account",
 			"secondary": "Read the docs"
 		},
 		"testimonials": {
 			"title": "Real results from real teams",
-			"subtitle": "Hear from customers who transformed their search infrastructure with AACsearch.",
+			"subtitle": "4,500+ indexed sites · 2.5M+ documents · 99.99% uptime",
 			"prev": "Previous",
 			"next": "Next",
 			"prevLabel": "Previous testimonial",

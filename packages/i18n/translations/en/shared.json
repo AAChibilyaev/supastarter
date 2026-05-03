@@ -72,5 +72,43 @@
 		"message": "This site doesn't use cookies yet, but we added this banner to demo it to you.",
 		"allow": "Allow",
 		"decline": "Decline"
+	},
+	"regions": {
+		"title": "Data Residency",
+		"description": "Choose where your search data is stored. Data residency ensures your data stays within the geographic boundaries required by your compliance framework.",
+		"currentRegion": "Current Region",
+		"regionLabel": "Region",
+		"changeRegion": "Change Region",
+		"saving": "Saving...",
+		"saved": "Region updated",
+		"saveError": "Failed to update region",
+		"complianceFrameworks": "Compliance",
+		"dataLocation": "Data Location",
+		"migrateData": "Migrate Data",
+		"migrateDescription": "Migrate existing data from the current region to the new region.",
+		"migrationStarted": "Migration started",
+		"migrationComplete": "Migration complete",
+		"migrationFailed": "Migration failed",
+		"eu": {
+			"label": "Europe (Frankfurt)",
+			"location": "Frankfurt, Germany",
+			"compliance": "GDPR"
+		},
+		"us": {
+			"label": "United States (Virginia)",
+			"location": "Virginia, USA",
+			"compliance": "SOC2, CCPA"
+		},
+		"ru": {
+			"label": "Russia (Moscow)",
+			"location": "Moscow, Russia",
+			"compliance": "152-ФЗ, 242-ФЗ"
+		},
+		"defaultRegion": "Default Region",
+		"regionHealth": "Region Health",
+		"online": "Online",
+		"offline": "Offline",
+		"latency": "Latency",
+		"unknown": "Unknown"
 	}
 }

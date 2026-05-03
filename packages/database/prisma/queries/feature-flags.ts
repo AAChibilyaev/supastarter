@@ -117,3 +117,35 @@ export async function listOrganizationsForFlags(query?: string) {
 		take: 50,
 	});
 }
+
+// ─── Audit Log Queries (AAC-880) ─────────────────────────────────
+
+export async function createFeatureFlagAuditLog(data: {
+	flagId: string;
+	action: string;
+	field?: string | null;
+	oldValue?: string | null;
+	newValue?: string | null;
+	performedById?: string | null;
+	performedByType?: string;
+	organizationId?: string | null;
+}) {
+	return await db.featureFlagAuditLog.create({ data });
+}
+
+export async function listFeatureFlagAuditLogs(
+	flagId: string,
+	params?: { limit?: number; offset?: number },
+) {
+	const { limit = 50, offset = 0 } = params ?? {};
+	const [entries, total] = await Promise.all([
+		db.featureFlagAuditLog.findMany({
+			where: { flagId },
+			orderBy: { createdAt: "desc" },
+			take: limit,
+			skip: offset,
+		}),
+		db.featureFlagAuditLog.count({ where: { flagId } }),
+	]);
+	return { entries, total };
+}

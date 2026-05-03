@@ -8,6 +8,8 @@ import {
 	removeFeatureFlagOverride,
 	listFeatureFlagOverrides,
 	listOrganizationsForFlags,
+	createFeatureFlagAuditLog,
+	listFeatureFlagAuditLogs,
 } from "@repo/database";
 import { z } from "zod";
 
@@ -103,6 +105,18 @@ export const createFeatureFlagProcedure = adminProcedure
 				rolloutPercentage: rolloutPercentage ?? null,
 				createdBy: user.id,
 			});
+
+			// Audit log
+			await createFeatureFlagAuditLog({
+				flagId: flag.id,
+				action: "created",
+				field: null,
+				oldValue: null,
+				newValue: JSON.stringify({ key, title, type, enabled, rolloutPercentage }),
+				performedById: user.id,
+				performedByType: "user",
+			});
+
 			return { id: flag.id, key: flag.key };
 		},
 	);
@@ -124,8 +138,8 @@ export const updateFeatureFlagProcedure = adminProcedure
 			killSwitch: z.boolean().optional(),
 		}),
 	)
-	.handler(async ({ input: { id, ...data } }) => {
-		// Fetch the flag first to get the key for cache invalidation and SSE
+	.handler(async ({ input: { id, ...data }, context: { user } }) => {
+		// Fetch the flag first to get the key and current values for cache invalidation, SSE, and audit
 		const existing = await getFeatureFlag(id);
 		const flagKey = existing?.key;
 
@@ -138,6 +152,36 @@ export const updateFeatureFlagProcedure = adminProcedure
 		if (data.killSwitch !== undefined) cleanedData.killSwitch = data.killSwitch;
 
 		const result = await updateFeatureFlag(id, cleanedData);
+
+		// Audit log each changed field
+		if (existing) {
+			const fieldLabels: Record<string, string> = {
+				title: "title",
+				description: "description",
+				enabled: "enabled",
+				rolloutPercentage: "rolloutPercentage",
+				killSwitch: "killSwitch",
+			};
+
+			for (const [field, newValue] of Object.entries(cleanedData)) {
+				const fieldLabel = fieldLabels[field] ?? field;
+				const oldValue = (existing as Record<string, unknown>)[field];
+				const oldStr = oldValue !== undefined ? String(oldValue) : null;
+				const newStr = newValue !== undefined ? String(newValue) : null;
+
+				if (oldStr !== newStr) {
+					await createFeatureFlagAuditLog({
+						flagId: id,
+						action: "updated",
+						field: fieldLabel,
+						oldValue: oldStr,
+						newValue: newStr,
+						performedById: user.id,
+						performedByType: "user",
+					});
+				}
+			}
+		}
 
 		// Invalidate server-side cache and notify SSE clients
 		if (flagKey) {
@@ -169,10 +213,27 @@ export const deleteFeatureFlagProcedure = adminProcedure
 			success: z.boolean(),
 		}),
 	)
-	.handler(async ({ input: { id } }) => {
-		// Fetch the flag first to get the key for SSE notification
+	.handler(async ({ input: { id }, context: { user } }) => {
+		// Fetch the flag first to get the key for SSE notification and audit
 		const existing = await getFeatureFlag(id);
 		const flagKey = existing?.key;
+
+		// Audit log before deletion
+		if (existing) {
+			await createFeatureFlagAuditLog({
+				flagId: id,
+				action: "deleted",
+				field: null,
+				oldValue: JSON.stringify({
+					key: existing.key,
+					title: existing.title,
+					enabled: existing.enabled,
+				}),
+				newValue: null,
+				performedById: user.id,
+				performedByType: "user",
+			});
+		}
 
 		await deleteFeatureFlag(id);
 
@@ -220,12 +281,24 @@ export const setOverrideProcedure = adminProcedure
 			success: z.boolean(),
 		}),
 	)
-	.handler(async ({ input: { flagId, organizationId, enabled, reason } }) => {
+	.handler(async ({ input: { flagId, organizationId, enabled, reason }, context: { user } }) => {
 		// Fetch the flag to get the key for SSE notification
 		const flag = await getFeatureFlag(flagId);
 		const flagKey = flag?.key;
 
 		await setFeatureFlagOverride(flagId, organizationId, enabled, reason);
+
+		// Audit log
+		await createFeatureFlagAuditLog({
+			flagId,
+			action: "override_set",
+			field: "enabled",
+			oldValue: null,
+			newValue: String(enabled),
+			performedById: user.id,
+			performedByType: "user",
+			organizationId,
+		});
 
 		// Invalidate server-side cache and notify SSE clients
 		if (flagKey) {
@@ -259,12 +332,24 @@ export const removeOverrideProcedure = adminProcedure
 			success: z.boolean(),
 		}),
 	)
-	.handler(async ({ input: { flagId, organizationId } }) => {
+	.handler(async ({ input: { flagId, organizationId }, context: { user } }) => {
 		// Fetch the flag to get the key for SSE notification
 		const flag = await getFeatureFlag(flagId);
 		const flagKey = flag?.key;
 
 		await removeFeatureFlagOverride(flagId, organizationId);
+
+		// Audit log
+		await createFeatureFlagAuditLog({
+			flagId,
+			action: "override_removed",
+			field: null,
+			oldValue: null,
+			newValue: null,
+			performedById: user.id,
+			performedByType: "user",
+			organizationId,
+		});
 
 		// Invalidate server-side cache and notify SSE clients
 		if (flagKey) {
@@ -294,4 +379,24 @@ export const listOrgsForFlagsProcedure = adminProcedure
 	)
 	.handler(async ({ input: { query } }) => {
 		return await listOrganizationsForFlags(query);
+	});
+
+// ─── Audit Log Procedures (AAC-880) ─────────────────────────────
+
+export const listAuditLogsProcedure = adminProcedure
+	.route({
+		method: "GET",
+		path: "/admin/feature-flags/{flagId}/audit-logs",
+		tags: ["Administration"],
+		summary: "List audit log entries for a feature flag",
+	})
+	.input(
+		z.object({
+			flagId: z.string(),
+			limit: z.number().int().min(1).max(100).optional().default(50),
+			offset: z.number().int().min(0).optional().default(0),
+		}),
+	)
+	.handler(async ({ input: { flagId, limit, offset } }) => {
+		return await listFeatureFlagAuditLogs(flagId, { limit, offset });
 	});

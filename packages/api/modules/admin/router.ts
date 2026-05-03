@@ -3,6 +3,7 @@ import {
 	createFeatureFlagProcedure,
 	deleteFeatureFlagProcedure,
 	getFeatureFlagProcedure,
+	listAuditLogsProcedure,
 	listFeatureFlagsProcedure,
 	listOrgsForFlagsProcedure,
 	listOverridesProcedure,
@@ -64,6 +65,9 @@ export const adminRouter = {
 			list: listOverridesProcedure,
 			set: setOverrideProcedure,
 			remove: removeOverrideProcedure,
+		},
+		auditLogs: {
+			list: listAuditLogsProcedure,
 		},
 	},
 };

@@ -1,18 +1,23 @@
+import { randomUUID } from "node:crypto";
+
 import { logger } from "@repo/logs";
 
 import type { ChunkerOptions } from "./chunker";
 import { chunkText } from "./chunker";
+import { parseAudio } from "./parsers/audio";
 import { parseCsv } from "./parsers/csv";
 import { parseDocx } from "./parsers/docx";
 import { parseEpub } from "./parsers/epub";
+import { parseImage } from "./parsers/image";
 import { parseJson } from "./parsers/json";
 import { parseMd } from "./parsers/md";
 import { parsePdf } from "./parsers/pdf";
 import { parsePptx } from "./parsers/pptx";
 import { parseTxt } from "./parsers/txt";
 import { parseUrl } from "./parsers/url";
+import { parseVideo } from "./parsers/video";
 import { parseXlsx } from "./parsers/xlsx";
-import type { ParsedDocument, FileType } from "./types";
+import type { FileType, ParsedDocument } from "./types";
 import { detectFileType, SUPPORTED_MIME_TYPES } from "./types";
 
 type ParserFn = (content: Buffer | string, filename: string) => Promise<ParsedDocument>;
@@ -27,6 +32,9 @@ const parserRegistry: Record<string, ParserFn> = {
 	md: parseMd,
 	txt: parseTxt,
 	epub: parseEpub,
+	image: parseImage,
+	audio: parseAudio,
+	video: parseVideo,
 };
 
 export interface ProcessFileInput {

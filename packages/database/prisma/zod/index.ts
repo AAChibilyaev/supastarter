@@ -262,6 +262,12 @@ export const FeatureFlagOverrideScalarFieldEnumSchema = z.enum(['id', 'flagId', 
 
 export type FeatureFlagOverrideScalarFieldEnum = z.infer<typeof FeatureFlagOverrideScalarFieldEnumSchema>;
 
+// File: FeatureFlagAuditLogScalarFieldEnum.schema.ts
+
+export const FeatureFlagAuditLogScalarFieldEnumSchema = z.enum(['id', 'flagId', 'action', 'field', 'oldValue', 'newValue', 'performedById', 'performedByType', 'organizationId', 'createdAt'])
+
+export type FeatureFlagAuditLogScalarFieldEnum = z.infer<typeof FeatureFlagAuditLogScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -1117,4 +1123,22 @@ export const FeatureFlagOverrideSchema = z.object({
 });
 
 export type FeatureFlagOverrideType = z.infer<typeof FeatureFlagOverrideSchema>;
+
+
+// File: FeatureFlagAuditLog.schema.ts
+
+export const FeatureFlagAuditLogSchema = z.object({
+  id: z.string(),
+  flagId: z.string(),
+  action: z.string(),
+  field: z.string().nullish(),
+  oldValue: z.string().nullish(),
+  newValue: z.string().nullish(),
+  performedById: z.string().nullish(),
+  performedByType: z.string().default("user"),
+  organizationId: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type FeatureFlagAuditLogType = z.infer<typeof FeatureFlagAuditLogSchema>;
 

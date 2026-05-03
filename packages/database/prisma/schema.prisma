@@ -926,6 +926,7 @@ model FeatureFlag {
   createdBy String? // Agent ID or user ID
 
   overrides FeatureFlagOverride[]
+  auditLogs FeatureFlagAuditLog[]
 
   @@map("feature_flag")
 }
@@ -947,4 +948,32 @@ model FeatureFlagOverride {
   @@unique([flagId, organizationId])
   @@index([organizationId])
   @@map("feature_flag_override")
+}
+
+// Audit log for feature flag changes (AAC-880)
+// Records every create, update, delete, and override change for admin review.
+model FeatureFlagAuditLog {
+  id             String   @id @default(cuid())
+  flagId         String
+  flag           FeatureFlag @relation(fields: [flagId], references: [id], onDelete: Cascade)
+
+  // What action was performed
+  action         String   // "created" | "updated" | "deleted" | "override_set" | "override_removed"
+  field          String?  // Which field changed: "enabled", "killSwitch", "rolloutPercentage", "title", "description", "targetingRules", etc.
+  oldValue       String?  // Previous value (serialized — null for creates)
+  newValue       String?  // New value (serialized — null for deletes)
+
+  // Who did it
+  performedById String? // User ID or agent ID
+  performedByType String @default("user") // "user" | "agent"
+
+  // For override-related changes, the affected organization
+  organizationId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([flagId])
+  @@index([flagId, createdAt])
+  @@index([createdAt])
+  @@map("feature_flag_audit_log")
 }

@@ -135,6 +135,14 @@ export {
 	type IndexHealthResult,
 	type RegionHealthResult,
 } from "./lib/health";
+export {
+	migrateCollection,
+	migrateOrganizationData,
+	migrateAllOrganizations,
+	type MigrateCollectionInput,
+	type MigrationProgress,
+	type MigrationResult,
+} from "./lib/migration";
 export { sendSlackAlert, type SlackAlertPayload } from "./lib/slack";
 export {
 	buildPopularitySortBy,

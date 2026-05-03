@@ -2,49 +2,49 @@
 	"pricing": {
 		"choosePlan": "Plan auswählen",
 		"contactSales": "Vertrieb kontaktieren",
-		"description": "Wähle das passende Paket für dich aus.",
-		"getStarted": "Jetzt loslegen",
-		"month": "Monat",
+		"description": "Wählen Sie den Plan, der am besten zu Ihnen passt.",
+		"getStarted": "Loslegen",
+		"month": "{count, plural, one {Monat} other {{count} Monate}}",
 		"monthly": "Monatlich",
 		"products": {
 			"basic": {
-				"description": "Perfekt für den Einstieg",
+				"description": "Perfekt für kleine Teams.",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
+					"anotherFeature": "Ein weiteres großartiges Feature",
+					"limitedSupport": "Eingeschränkter Support"
 				},
 				"title": "Basic"
 			},
 			"enterprise": {
-				"description": "Maßgeschneiderter Plan für deine Anforderungen",
+				"description": "Maßgeschneiderter Plan für Ihre Anforderungen",
 				"features": {
-					"enterpriseSupport": "Support für Unternehmen",
+					"enterpriseSupport": "Enterprise-Support",
 					"unlimitedProjects": "Unbegrenzte Projekte"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Kostenloser Start",
+				"description": "Kostenlos starten",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
+					"anotherFeature": "Ein weiteres großartiges Feature",
+					"limitedSupport": "Eingeschränkter Support"
 				},
-				"title": "Free"
+				"title": "Kostenlos"
 			},
 			"lifetime": {
-				"description": "Einmal kaufen. Für immer verwenden.",
+				"description": "Einmal kaufen. Für immer nutzen.",
 				"features": {
 					"extendSupport": "Erweiterter Support",
 					"noRecurringCosts": "Keine wiederkehrenden Kosten"
 				},
-				"title": "Lifetime"
+				"title": "Lebenslang"
 			},
 			"pro": {
 				"description": "Am besten für Teams",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
+					"anotherFeature": "Ein weiteres großartiges Feature",
 					"fiveMembers": "Bis zu 5 Mitglieder",
-					"fullSupport": "Voller Support"
+					"fullSupport": "Vollständiger Support"
 				},
 				"title": "Pro"
 			}
@@ -53,24 +53,62 @@
 		"recommended": "Empfohlen",
 		"subscribe": "Abonnieren",
 		"title": "Preise",
-		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlose Testphase",
-		"year": "Jahr",
+		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlose Testversion",
+		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"yearly": "Jährlich",
-		"savePercent": "Spare {percent}%",
+		"savePercent": "{percent}% sparen",
 		"billedAnnually": "Jährliche Abrechnung",
-		"perSeat": "Sitz",
+		"perSeat": "Sitzplatz",
 		"nextInvoice": "Nächste Rechnung",
 		"synonyms": "Synonyme",
 		"curations": "Kurationen",
-		"customDomain": "Eigene Domain",
-		"customBranding": "Eigenes Branding",
-		"multiSearch": "Multi-Suche",
-		"scopedTokens": "Begrenzte Token",
+		"customDomain": "Benutzerdefinierte Domain",
+		"customBranding": "Benutzerdefiniertes Branding",
+		"multiSearch": "Mehrfachsuche",
+		"scopedTokens": "Bereichstoken",
 		"widget": "Widget"
 	},
 	"consent": {
-		"message": "Diese Website verwendet derzeit keine Cookies, aber wir haben dieses Banner hinzugefügt, um es dir zu zeigen.",
-		"allow": "Zulassen",
+		"message": "Diese Seite verwendet noch keine Cookies, aber wir haben dieses Banner hinzugefügt, um es Ihnen zu demonstrieren.",
+		"allow": "Erlauben",
 		"decline": "Ablehnen"
+	},
+	"regions": {
+		"title": "Datenresidenz",
+		"description": "Wählen Sie, wo Ihre Suchdaten gespeichert werden. Die Datenresidenz stellt sicher, dass Ihre Daten innerhalb der geografischen Grenzen bleiben, die von Ihrem Compliance-Rahmenwerk gefordert werden.",
+		"currentRegion": "Aktuelle Region",
+		"regionLabel": "Region",
+		"changeRegion": "Region ändern",
+		"saving": "Wird gespeichert...",
+		"saved": "Region aktualisiert",
+		"saveError": "Fehler beim Aktualisieren der Region",
+		"complianceFrameworks": "Compliance",
+		"dataLocation": "Standort",
+		"migrateData": "Daten migrieren",
+		"migrateDescription": "Vorhandene Daten von der aktuellen Region in die neue Region migrieren.",
+		"migrationStarted": "Migration gestartet",
+		"migrationComplete": "Migration abgeschlossen",
+		"migrationFailed": "Migration fehlgeschlagen",
+		"eu": {
+			"label": "Europa (Frankfurt)",
+			"location": "Frankfurt, Deutschland",
+			"compliance": "GDPR"
+		},
+		"us": {
+			"label": "Vereinigte Staaten (Virginia)",
+			"location": "Virginia, USA",
+			"compliance": "SOC2, CCPA"
+		},
+		"ru": {
+			"label": "Russland (Moskau)",
+			"location": "Moskau, Russland",
+			"compliance": "152-ФЗ, 242-ФЗ"
+		},
+		"defaultRegion": "Standardregion",
+		"regionHealth": "Region Gesundheit",
+		"online": "Online",
+		"offline": "Offline",
+		"latency": "Latenz",
+		"unknown": "Unbekannt"
 	}
 }

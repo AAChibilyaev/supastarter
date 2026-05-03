@@ -202,7 +202,7 @@ export function QuickstartSection() {
 					</div>
 
 					{/* Code panel */}
-					<div className="border-zinc-800 overflow-hidden rounded-tr-xl rounded-b-xl border bg-zinc-950">
+					<div className="border-zinc-800 bg-zinc-950 overflow-hidden rounded-tr-xl rounded-b-xl border">
 						{/* Toolbar */}
 						<div className="gap-2 border-zinc-800 px-4 py-2 bg-zinc-900/50 flex items-center justify-between border-b">
 							{/* Language tabs */}

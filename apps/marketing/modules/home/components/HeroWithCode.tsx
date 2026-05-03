@@ -75,8 +75,8 @@ export function HeroWithCode() {
 
 				{/* Right: code terminal */}
 				<div>
-					<div className="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
-						<div className="gap-2 border-b border-zinc-800 px-4 py-3 flex items-center">
+					<div className="border-zinc-800 bg-zinc-950 overflow-hidden rounded-lg border">
+						<div className="gap-2 border-zinc-800 px-4 py-3 flex items-center border-b">
 							<span className="size-2.5 rounded-full bg-muted-foreground/20" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/40" />

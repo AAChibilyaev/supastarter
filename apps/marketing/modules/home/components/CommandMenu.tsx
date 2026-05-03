@@ -68,7 +68,7 @@ export function CommandMenu({ open, onOpenChange, onModeSelect }: CommandMenuPro
 					<CommandEmpty>No results found.</CommandEmpty>
 
 					{/* Search modes — 5 input modes */}
-					<CommandGroup heading="Search by">
+					<CommandGroup heading="Search mode">
 						{(Object.entries(MODE_ICONS) as [SearchMode, typeof SearchIcon][]).map(
 							([key, Icon]) => {
 								const badge = MODE_BADGES[key];

@@ -31,7 +31,6 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 	const [initialized, setInitialized] = useState(false);
 
 	const { data, isLoading } = useQuery(
-		// @ts-expect-error — dynamic key from newly registered procedure
 		orpc.search.globalCurations.get.queryOptions({
 			input: { organizationId },
 			enabled: !!organizationId,
@@ -51,7 +50,6 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 	}
 
 	const updateMutation = useMutation({
-		// @ts-expect-error — dynamic key from newly registered procedure
 		...orpc.search.globalCurations.update.mutationOptions(),
 		onSuccess: (result) => {
 			setEntries(
@@ -62,7 +60,6 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 					filter: r.filter,
 				})),
 			);
-			// @ts-expect-error — dynamic key from newly registered procedure
 			void queryClient.invalidateQueries({
 				queryKey: orpc.search.globalCurations.get.queryKey({
 					input: { organizationId },
@@ -76,10 +73,7 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 	});
 
 	const handleAddSet = () => {
-		setEntries([
-			...entries,
-			{ query: "", pinnedIds: [], hiddenIds: [] },
-		]);
+		setEntries([...entries, { query: "", pinnedIds: [], hiddenIds: [] }]);
 	};
 
 	const handleRemoveSet = (index: number) => {
@@ -129,14 +123,14 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 
 	return (
 		<Card className="p-6 space-y-6">
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.globalCurations.title")}</h3>
 					<p className="text-sm text-foreground/60">
 						{t("search.globalCurations.description")}
 					</p>
 				</div>
-				<div className="flex gap-2">
+				<div className="gap-2 flex">
 					<Button variant="outline" onClick={handleAddSet}>
 						{t("search.globalCurations.addSet")}
 					</Button>
@@ -166,14 +160,12 @@ export function GlobalCurationsPanel({ organizationId }: GlobalCurationsPanelPro
 								<input
 									type="text"
 									value={entry.query}
-									onChange={(e) =>
-										handleChange(index, "query", e.target.value)
-									}
+									onChange={(e) => handleChange(index, "query", e.target.value)}
 									className="p-2.5 rounded text-sm w-full border bg-background"
 									placeholder={t("search.curations.queryPlaceholder")}
 								/>
 							</div>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="md:grid-cols-2 gap-4 grid grid-cols-1">
 								<div className="space-y-1.5">
 									<label className="text-sm font-medium">
 										{t("search.curations.pinnedLabel")}

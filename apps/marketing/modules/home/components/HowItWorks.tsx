@@ -82,20 +82,20 @@ function StepCard({ step, icon: Icon, title, description, badge }: StepCardProps
 				<div className="size-9 flex shrink-0 items-center justify-center rounded-lg bg-muted">
 					<Icon className="size-4 text-muted-foreground" />
 				</div>
-				<span className="font-mono text-xs font-medium text-muted-foreground/60 tracking-widest uppercase">
+				<span className="font-mono text-xs font-medium tracking-widest text-muted-foreground/60 uppercase">
 					Step {String(step).padStart(2, "0")}
 				</span>
 			</div>
 
 			{/* Title + description */}
 			<h3 className="text-base font-normal tracking-tight text-foreground">{title}</h3>
-			<p className="mt-2 text-sm font-light leading-relaxed text-pretty text-muted-foreground flex-1">
+			<p className="mt-2 text-sm font-light leading-relaxed flex-1 text-pretty text-muted-foreground">
 				{description}
 			</p>
 
 			{/* Technical badge */}
 			<div className="mt-5 pt-4 border-t border-border">
-				<span className="font-mono text-[11px] text-muted-foreground/70 break-all">
+				<span className="font-mono text-[11px] break-all text-muted-foreground/70">
 					{badge}
 				</span>
 			</div>

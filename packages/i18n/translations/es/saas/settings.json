@@ -591,9 +591,6 @@
 					"migrationStarted": "Migración de datos iniciada.",
 					"migrationComplete": "Migración de datos completada correctamente.",
 					"migrationError": "Migración fallida. Intente de nuevo."
-				},
-				"dataRetention": {
-					"title": "Retención de Datos"
 				}
 			},
 			"dataRetention": {

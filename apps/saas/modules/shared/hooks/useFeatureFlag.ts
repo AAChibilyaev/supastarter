@@ -29,11 +29,10 @@ export function useFeatureFlag(flagKey: string | null | undefined): boolean {
 
 	// Initial fetch via oRPC (server-side evaluation with all targeting rules)
 	const { data: result } = useQuery({
+		...orpc.featureFlags.check.queryOptions({
+			input: { flagKey: flagKey ?? "" },
+		}),
 		queryKey,
-		queryFn: async () => {
-			if (!orgId || !flagKey) return { enabled: false };
-			return orpc.featureFlags.check({ flagKey });
-		},
 		enabled: !!orgId && !!flagKey,
 		staleTime: 60_000, // 60s — matches server-side cache TTL
 	});

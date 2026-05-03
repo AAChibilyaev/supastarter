@@ -9,19 +9,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@repo/ui/components/table";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpenTextIcon, GlobeIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -57,7 +49,6 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 	const [initialized, setInitialized] = useState(false);
 
 	const { data, isLoading } = useQuery(
-		// @ts-expect-error — dynamic key from newly registered procedure
 		orpc.search.globalSynonyms.get.queryOptions({
 			input: { organizationId },
 			enabled: !!organizationId,
@@ -80,7 +71,6 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 	}
 
 	const updateMutation = useMutation({
-		// @ts-expect-error — dynamic key from newly registered procedure
 		...orpc.search.globalSynonyms.update.mutationOptions(),
 		onSuccess: (result) => {
 			setEntries(
@@ -93,7 +83,6 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 					excludedCollectionIds: r.excludedCollectionIds ?? [],
 				})),
 			);
-			// @ts-expect-error — dynamic key from newly registered procedure
 			void queryClient.invalidateQueries({
 				queryKey: orpc.search.globalSynonyms.get.queryKey({
 					input: { organizationId },
@@ -177,14 +166,14 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 
 	return (
 		<Card className="p-6 space-y-6">
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.globalSynonyms.title")}</h3>
 					<p className="text-sm text-foreground/60">
 						{t("search.globalSynonyms.description")}
 					</p>
 				</div>
-				<div className="flex gap-2">
+				<div className="gap-2 flex">
 					<Button variant="outline" onClick={handleAddSet}>
 						{t("search.globalSynonyms.addSet")}
 					</Button>
@@ -208,7 +197,7 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 				<div className="space-y-6">
 					{entries.map((entry, index) => (
 						<Card key={index} className="p-4 space-y-4 border">
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="md:grid-cols-2 gap-4 grid grid-cols-1">
 								<div className="space-y-1.5">
 									<label className="text-sm font-medium">
 										{t("search.globalSynonyms.nameLabel")}
@@ -261,16 +250,14 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 								/>
 							</div>
 
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="md:grid-cols-2 gap-4 grid grid-cols-1">
 								<div className="space-y-1.5">
 									<label className="text-sm font-medium">
 										{t("search.globalSynonyms.scopeLabel")}
 									</label>
 									<Select
 										value={entry.scope}
-										onValueChange={(v) =>
-											handleChange(index, "scope", v)
-										}
+										onValueChange={(v) => handleChange(index, "scope", v)}
 									>
 										<SelectTrigger>
 											<SelectValue />
@@ -297,36 +284,33 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 							</div>
 
 							{/* Excluded collections (only shown when scope=all) */}
-							{entry.scope === "all" &&
-								indexes &&
-								indexes.length > 0 && (
-									<div className="space-y-1.5">
-										<label className="text-sm font-medium">
-											{t("search.globalSynonyms.excludeLabel")}
-										</label>
-										<div className="flex flex-wrap gap-2">
-											{indexes.map((col) => {
-												const isExcluded =
-													entry.excludedCollectionIds.includes(col.id);
-												return (
-													<Button
-														key={col.id}
-														variant={
-															isExcluded ? "secondary" : "outline"
-														}
-														size="sm"
-														onClick={() =>
-															handleToggleExclusion(index, col.id)
-														}
-													>
-														{isExcluded ? "✕ " : ""}
-														{col.displayName || col.slug}
-													</Button>
-												);
-											})}
-										</div>
+							{entry.scope === "all" && indexes && indexes.length > 0 && (
+								<div className="space-y-1.5">
+									<label className="text-sm font-medium">
+										{t("search.globalSynonyms.excludeLabel")}
+									</label>
+									<div className="gap-2 flex flex-wrap">
+										{indexes.map((col) => {
+											const isExcluded = entry.excludedCollectionIds.includes(
+												col.id,
+											);
+											return (
+												<Button
+													key={col.id}
+													variant={isExcluded ? "secondary" : "outline"}
+													size="sm"
+													onClick={() =>
+														handleToggleExclusion(index, col.id)
+													}
+												>
+													{isExcluded ? "✕ " : ""}
+													{col.displayName || col.slug}
+												</Button>
+											);
+										})}
 									</div>
-								)}
+								</div>
+							)}
 						</Card>
 					))}
 				</div>

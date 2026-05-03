@@ -1,9 +1,9 @@
+import { getSearchIndexBySlug } from "@repo/database";
 import {
 	getGlobalSynonymSets,
 	globalSynonymSetsToPairs,
 	replaceGlobalSynonymSets,
 } from "@repo/database/prisma/queries/global-synonym-sets";
-import { getSearchIndexBySlug } from "@repo/database";
 import { logger } from "@repo/logs";
 import { typesenseFetch } from "@repo/search";
 import { z } from "zod";
@@ -45,9 +45,7 @@ async function syncGlobalToTypesense(
 		"/synonym_sets",
 	).catch(() => ({ synonym_sets: [] }));
 	const existingIds = new Set(
-		(existing.synonym_sets ?? [])
-			.filter((s) => s.id.startsWith(prefix))
-			.map((s) => s.id),
+		(existing.synonym_sets ?? []).filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
 	);
 	const newIds = new Set<string>();
 
@@ -235,10 +233,7 @@ export const getEffectiveGlobalSynonyms = protectedProcedure
 
 		const sets = await getGlobalSynonymSets(input.organizationId);
 		return sets
-			.filter(
-				(s) =>
-					s.scope === "all" && !s.excludedCollectionIds.includes(index.id),
-			)
+			.filter((s) => s.scope === "all" && !s.excludedCollectionIds.includes(index.id))
 			.map((s) => ({
 				id: s.id,
 				name: s.name,

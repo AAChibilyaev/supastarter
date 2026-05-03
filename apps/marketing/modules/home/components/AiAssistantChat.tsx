@@ -74,22 +74,22 @@ const MODE_COLORS: Record<SearchMode, string> = {
 };
 
 const MODE_PLACEHOLDERS: Record<SearchMode, string> = {
-	text: "Ask about search features...",
-	voice: "Ask about voice search...",
-	photo: "Ask about visual search...",
+	text: "Ask about indexed data or documentation...",
+	voice: "Ask about voice search integration...",
+	photo: "Ask about visual search setup...",
 	image: "Ask about image search...",
-	chat: "Ask me anything...",
+	chat: "Ask across your indexed data or docs...",
 };
 
 const WELCOME_MESSAGE =
-	"I'm your AACsearch AI assistant. I can help you understand search features, compare plans, find integrations, or troubleshoot issues. What can I help you with?";
+	"Ask about your indexed data, documentation or product context. AACsearch finds sources first, then generates an answer with citations.";
 
 const SUGGESTED_QUESTIONS = [
-	{ icon: "💡", text: "What can AACsearch do?" },
-	{ icon: "💰", text: "Compare pricing plans" },
-	{ icon: "🔧", text: "How to integrate?" },
-	{ icon: "⚡", text: "Migration guide" },
-	{ icon: "🔍", text: "Search API overview" },
+	{ text: "Compare pricing plans" },
+	{ text: "How to integrate?" },
+	{ text: "Migration guide" },
+	{ text: "Show SDK docs" },
+	{ text: "Check zero-results" },
 ];
 
 interface RichResponse {
@@ -101,43 +101,43 @@ interface RichResponse {
 const RESPONSES: Record<string, RichResponse[]> = {
 	general: [
 		{
-			text: "💡 **AACsearch** is a multimodal search engine that understands text, voice, and images. It's designed for products that need more than a basic search box.\n\n• **Full-text + semantic** hybrid search\n• **<50ms** response time\n• **SOC 2** compliant & secure\n• **Built-in analytics** & relevance tuning",
+			text: "AACsearch is a multimodal search engine that understands text, voice, and images. It's designed for products that need more than a basic search box.\n\n• **Full-text + semantic** hybrid search\n• **<50ms** response time\n• **SOC 2** compliant & secure\n• **Built-in analytics** & relevance tuning",
 			suggestions: [
 				"How does semantic search work?",
 				"What's the pricing?",
 				"Show me a demo",
 			],
-			cta: { label: "📖 Read docs", action: "docs" },
+			cta: { label: "Read docs", action: "docs" },
 		},
 	],
 	pricing: [
 		{
-			text: "💰 We offer three plans:\n\n**Free** — $0/mo • 1K documents • Basic search\n**Team** — $69/seat/mo • Semantic search • SSO\n**Enterprise** — Custom • White-label • Private cloud\n\nAll plans include a 14-day free trial with full features.",
+			text: "We offer three plans:\n\n**Free** — $0/mo • 1K documents • Basic search\n**Team** — $69/seat/mo • Semantic search • SSO\n**Enterprise** — Custom • White-label • Private cloud\n\nAll plans include a 14-day free trial with full features.",
 			suggestions: ["What's included in Free?", "Enterprise vs Team?", "Can I self-host?"],
-			cta: { label: "🚀 Start free trial", action: "signup" },
+			cta: { label: "Start free trial", action: "signup" },
 		},
 	],
 	integration: [
 		{
-			text: "🔧 Integration is straightforward:\n\n1️⃣ Create an API key in your dashboard\n2️⃣ Index documents via REST API\n3️⃣ Add the search widget to your frontend\n\n```\ncurl -X POST https://api.aacsearch.com/index \\\n  -H 'Authorization: Bearer YOUR_KEY'\n```\n\nWe have SDKs for React, Vue, Python, and more.",
+			text: "Integration is straightforward:\n\n1. Create an API key in your dashboard\n2. Index documents via REST API\n3. Add the search widget to your frontend\n\n```\ncurl -X POST https://api.aacsearch.com/index \\\n  -H 'Authorization: Bearer YOUR_KEY'\n```\n\nWe have SDKs for React, Vue, Python, and more.",
 			suggestions: ["React widget setup", "Python SDK guide", "API reference"],
-			cta: { label: "📖 Full API docs", action: "docs" },
+			cta: { label: "Full API docs", action: "docs" },
 		},
 	],
 	migration: [
 		{
-			text: "⚡ Migration from your current search provider takes **less than 1 hour** for a standard index.\n\n• **Import** your documents via REST API or SDK\n• **Configure** relevance tuning & filters\n• **Switch** your frontend to AACsearch widget\n\nWe provide migration tooling and dedicated support for Enterprise plans.",
+			text: "Migration from your current search provider takes **less than 1 hour** for a standard index.\n\n• **Import** your documents via REST API or SDK\n• **Configure** relevance tuning & filters\n• **Switch** your frontend to AACsearch widget\n\nWe provide migration tooling and dedicated support for Enterprise plans.",
 			suggestions: [
 				"Migrate from Algolia?",
 				"Migrate from Meilisearch?",
 				"Data format requirements",
 			],
-			cta: { label: "📖 Migration guide", action: "docs" },
+			cta: { label: "Migration guide", action: "docs" },
 		},
 	],
 	semantic: [
 		{
-			text: '🧠 **Hybrid search** combines keyword matching with semantic understanding:\n\n• **Keyword**: Exact matches, fast & precise\n• **Semantic**: Understands meaning & context\n• **AI-reranking**: Smart result ordering\n\nThis means a search for "budget-friendly sneakers" finds relevant results even if the exact words aren\'t in the document.',
+			text: '**Hybrid search** combines keyword matching with semantic understanding:\n\n• **Keyword**: Exact matches, fast & precise\n• **Semantic**: Understands meaning & context\n• **AI-reranking**: Smart result ordering\n\nThis means a search for "budget-friendly sneakers" finds relevant results even if the exact words aren\'t in the document.',
 			suggestions: [
 				"How to tune relevance?",
 				"Multi-language support?",
@@ -266,7 +266,7 @@ function generateResponse(query: string, mode: SearchMode): RichResponse | null 
 	// Mode-specific fallback
 	const modeResponses: Record<SearchMode, RichResponse> = {
 		text: {
-			text: `🔍 Searching for "${query}" across text indexes... I found relevant matches in your knowledge base. Here's what I'd recommend:\n\n• Use **hybrid search** for best results\n• Configure **filters** for precise queries\n• Check the **Analytics** dashboard for query insights`,
+			text: `Searching for "${query}" across text indexes... I found relevant matches in your knowledge base. Here's what I'd recommend:\n\n• Use **hybrid search** for best results\n• Configure **filters** for precise queries\n• Check the **Analytics** dashboard for query insights`,
 			suggestions: [
 				"How to improve search relevance?",
 				"Filter syntax guide",
@@ -544,7 +544,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 							<span className="text-sm font-light truncate text-foreground">
 								{hasMessages
 									? (currentSession?.title?.slice(0, 24) ?? "Chat")
-									: "AI Assistant"}
+									: "Search Copilot"}
 							</span>
 							<div className="gap-0.5 ml-auto flex items-center">
 								{MODES.map(({ key, icon: Icon }) => (
@@ -800,7 +800,6 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 											onClick={() => handleSuggestedClick(q.text)}
 											className="gap-2 px-3.5 py-2.5 text-sm font-light flex items-center rounded-lg border border-border/60 bg-muted/20 text-left text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground"
 										>
-											<span className="text-base">{q.icon}</span>
 											<span>{q.text}</span>
 										</button>
 									))}
@@ -869,7 +868,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 							<span className="text-sm font-light text-foreground">
 								{hasMessages
 									? (currentSession?.title?.slice(0, 24) ?? "Chat")
-									: "AI Assistant"}
+									: "Search Copilot"}
 							</span>
 							<div className="gap-0.5 ml-auto flex items-center">
 								{MODES.map(({ key, icon: Icon }) => (
@@ -1048,7 +1047,6 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 											onClick={() => handleSuggestedClick(q.text)}
 											className="gap-2 px-3.5 py-2.5 text-sm font-light flex items-center rounded-lg border border-border/60 bg-muted/20 text-left text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground"
 										>
-											<span className="text-base">{q.icon}</span>
 											<span>{q.text}</span>
 										</button>
 									))}

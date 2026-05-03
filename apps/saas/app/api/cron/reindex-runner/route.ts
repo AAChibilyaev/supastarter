@@ -8,11 +8,11 @@ import {
 	updateReindexJobProgress,
 	updateSearchIndexVersion,
 } from "@repo/database";
-import { getSynonymsByIndexId, rowsToSynonymPairs } from "@repo/database/prisma/queries/synonyms";
 import {
 	getEffectiveGlobalSynonymSets,
 	globalSynonymSetsToPairs,
 } from "@repo/database/prisma/queries/global-synonym-sets";
+import { getSynonymsByIndexId, rowsToSynonymPairs } from "@repo/database/prisma/queries/synonyms";
 import { logger } from "@repo/logs";
 import {
 	aliasName,

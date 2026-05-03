@@ -1,3 +1,4 @@
+import type { components } from "./generated/v2-types";
 /**
  * Server-side management client for the AACSearch v2 REST API.
  *
@@ -13,7 +14,6 @@
  */
 import { request } from "./transport";
 import type { ClientOptions } from "./types";
-import type { components } from "./generated/v2-types";
 
 export interface V2AdminClientOptions extends ClientOptions {
 	// No projectId required at construction — passed per-method where needed
@@ -145,10 +145,7 @@ export class V2AdminClient {
 	}
 
 	/** Create a new search index. */
-	async createIndex(
-		projectId: string,
-		data: V2CreateIndexInput,
-	): Promise<V2SearchIndex> {
+	async createIndex(projectId: string, data: V2CreateIndexInput): Promise<V2SearchIndex> {
 		return request<V2SearchIndex>(
 			this.baseUrl,
 			this.apiKey,
@@ -172,10 +169,7 @@ export class V2AdminClient {
 	}
 
 	/** Update index metadata. */
-	async updateIndex(
-		indexId: string,
-		data: V2UpdateIndexInput,
-	): Promise<V2SearchIndex> {
+	async updateIndex(indexId: string, data: V2UpdateIndexInput): Promise<V2SearchIndex> {
 		return request<V2SearchIndex>(
 			this.baseUrl,
 			this.apiKey,
@@ -213,10 +207,7 @@ export class V2AdminClient {
 	// ── Document operations ──────────────────────────────────────────
 
 	/** List documents with cursor-based pagination. */
-	async listDocuments(
-		indexId: string,
-		opts?: V2ListDocumentsOptions,
-	): Promise<unknown> {
+	async listDocuments(indexId: string, opts?: V2ListDocumentsOptions): Promise<unknown> {
 		const params = new URLSearchParams();
 		if (opts?.cursor) params.set("cursor", opts.cursor);
 		if (opts?.perPage) params.set("perPage", String(opts.perPage));
@@ -249,10 +240,7 @@ export class V2AdminClient {
 	}
 
 	/** Get a single document by ID. */
-	async getDocument(
-		indexId: string,
-		documentId: string,
-	): Promise<unknown> {
+	async getDocument(indexId: string, documentId: string): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -280,10 +268,7 @@ export class V2AdminClient {
 	}
 
 	/** Delete a single document. */
-	async deleteDocument(
-		indexId: string,
-		documentId: string,
-	): Promise<unknown> {
+	async deleteDocument(indexId: string, documentId: string): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -295,10 +280,7 @@ export class V2AdminClient {
 	}
 
 	/** Batch delete documents by IDs. */
-	async batchDeleteDocuments(
-		indexId: string,
-		ids: string[],
-	): Promise<unknown> {
+	async batchDeleteDocuments(indexId: string, ids: string[]): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -310,10 +292,7 @@ export class V2AdminClient {
 	}
 
 	/** Export documents as JSONL or JSON. */
-	async exportDocuments(
-		indexId: string,
-		format?: "jsonl" | "json",
-	): Promise<unknown> {
+	async exportDocuments(indexId: string, format?: "jsonl" | "json"): Promise<unknown> {
 		const params = format ? `?format=${format}` : "";
 		return request<unknown>(
 			this.baseUrl,
@@ -340,10 +319,7 @@ export class V2AdminClient {
 	}
 
 	/** Create a new API key for the project. */
-	async createKey(
-		projectId: string,
-		data: V2CreateKeyInput,
-	): Promise<unknown> {
+	async createKey(projectId: string, data: V2CreateKeyInput): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -381,10 +357,7 @@ export class V2AdminClient {
 	}
 
 	/** Create a synonym for an index. */
-	async createSynonym(
-		indexId: string,
-		data: V2CreateSynonymInput,
-	): Promise<unknown> {
+	async createSynonym(indexId: string, data: V2CreateSynonymInput): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -396,10 +369,7 @@ export class V2AdminClient {
 	}
 
 	/** Upsert (replace) synonyms for an index. */
-	async upsertSynonyms(
-		indexId: string,
-		data: V2CreateSynonymInput[],
-	): Promise<unknown> {
+	async upsertSynonyms(indexId: string, data: V2CreateSynonymInput[]): Promise<unknown> {
 		return request<unknown>(
 			this.baseUrl,
 			this.apiKey,
@@ -411,10 +381,7 @@ export class V2AdminClient {
 	}
 
 	/** Delete a synonym by its ID. */
-	async deleteSynonym(
-		indexId: string,
-		synonymId: string,
-	): Promise<unknown> {
+	async deleteSynonym(indexId: string, synonymId: string): Promise<unknown> {
 		const params = new URLSearchParams({ synonymId });
 		return request<unknown>(
 			this.baseUrl,

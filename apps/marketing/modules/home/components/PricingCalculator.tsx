@@ -27,8 +27,8 @@ function resolvePlan(docs: number, searches: number): PlanKey {
 
 export function PricingCalculator() {
 	const t = useTranslations();
-	const [docsIdx, setDocsIdx] = useState(2); // 10,000
-	const [searchesIdx, setSearchesIdx] = useState(2); // 25,000
+	const [docsIdx, setDocsIdx] = useState(2);
+	const [searchesIdx, setSearchesIdx] = useState(2);
 
 	const docs = DOCS_STEPS[docsIdx]!;
 	const searches = SEARCHES_STEPS[searchesIdx]!;
@@ -42,30 +42,24 @@ export function PricingCalculator() {
 				? "homePricingCalc.ctaPro"
 				: "homePricingCalc.ctaEnterprise";
 
-	const planColors: Record<PlanKey, string> = {
-		free: "text-muted-foreground",
-		pro: "text-primary",
-		enterprise: "text-foreground",
-	};
-
 	return (
-		<section className="section-padding border-b border-border">
+		<section className="section-padding border-b border-border/80 bg-muted/[0.015]">
 			<div className="container">
-				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
+				<div className="max-w-xl mx-auto text-center">
+					<h2 className="text-2xl font-semibold tracking-tight md:text-3xl leading-[1.08] text-balance text-foreground">
 						{t("homePricingCalc.title")}
 					</h2>
-					<p className="mt-4 text-lg font-light text-balance text-muted-foreground">
+					<p className="mt-4 text-base font-normal leading-relaxed text-balance text-muted-foreground/80">
 						{t("homePricingCalc.subtitle")}
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 max-w-2xl mx-auto">
-					<div className="p-6 md:p-10 space-y-8 rounded-xl border border-border bg-card">
+				<div className="mt-10 max-w-xl mx-auto">
+					<div className="p-6 md:p-8 space-y-7 rounded-2xl border border-border/50 bg-card shadow-[0_8px_28px_rgba(15,23,42,0.04)] dark:shadow-[0_8px_28px_rgba(0,0,0,0.15)]">
 						{/* Docs slider */}
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
-								<label className="text-sm font-light text-muted-foreground">
+								<label className="text-sm font-medium text-foreground/70">
 									{t("homePricingCalc.docsLabel")}
 								</label>
 								<span className="text-sm font-semibold text-foreground tabular-nums">
@@ -78,14 +72,14 @@ export function PricingCalculator() {
 								max={DOCS_STEPS.length - 1}
 								value={docsIdx}
 								onChange={(e) => setDocsIdx(Number(e.target.value))}
-								className="w-full cursor-pointer accent-primary"
+								className="h-1.5 [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:shadow-xs w-full cursor-pointer appearance-none rounded-full bg-border/40 accent-foreground [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-foreground"
 							/>
 						</div>
 
 						{/* Searches slider */}
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
-								<label className="text-sm font-light text-muted-foreground">
+								<label className="text-sm font-medium text-foreground/70">
 									{t("homePricingCalc.searchesLabel")}
 								</label>
 								<span className="text-sm font-semibold text-foreground tabular-nums">
@@ -98,47 +92,47 @@ export function PricingCalculator() {
 								max={SEARCHES_STEPS.length - 1}
 								value={searchesIdx}
 								onChange={(e) => setSearchesIdx(Number(e.target.value))}
-								className="w-full cursor-pointer accent-primary"
+								className="h-1.5 [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:shadow-xs w-full cursor-pointer appearance-none rounded-full bg-border/40 accent-foreground [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-foreground"
 							/>
 						</div>
 
 						{/* Units total */}
-						<div className="pt-2 flex items-center justify-between border-t border-border">
-							<span className="text-sm font-light text-muted-foreground">
+						<div className="pt-5 flex items-center justify-between border-t border-border/40">
+							<span className="text-sm font-medium text-muted-foreground/70">
 								{t("homePricingCalc.unitsLabel")}
 							</span>
-							<span className="text-sm font-semibold text-foreground tabular-nums">
+							<span className="text-base font-semibold text-foreground tabular-nums">
 								{formatNumber(docs + searches)}
 							</span>
 						</div>
 
 						{/* Recommended plan */}
-						<div className="p-5 sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col rounded-lg border border-border bg-muted/40">
-							<div>
-								<p className="text-xs font-light tracking-widest mb-1 text-muted-foreground uppercase">
+						<div className="gap-4 p-5 sm:flex-row sm:items-center sm:justify-between flex flex-col rounded-xl border border-border/50 bg-muted/30">
+							<div className="min-w-0">
+								<p className="mb-1 font-medium text-[11px] tracking-[0.06em] text-muted-foreground/60 uppercase">
 									{t("homePricingCalc.planLabel")}
 								</p>
-								<p className={`text-2xl font-semibold ${planColors[plan]}`}>
+								<p className="text-lg font-semibold text-foreground">
 									{t(`homePricingCalc.plans.${plan}.name`)}
-									<span className="ml-3 text-lg font-light text-muted-foreground">
+									<span className="ml-2 text-base font-normal text-muted-foreground/60">
 										{t(`homePricingCalc.plans.${plan}.price`)}
 									</span>
 								</p>
-								<p className="mt-1 text-sm font-light text-muted-foreground">
+								<p className="mt-0.5 text-sm font-normal text-muted-foreground/60">
 									{t(`homePricingCalc.plans.${plan}.limit`)}
 								</p>
 							</div>
 							<Button
 								variant={plan === "pro" ? "primary" : "outline"}
 								asChild
-								className="shrink-0"
+								className="shrink-0 rounded-xl"
 							>
 								<a href={ctaHref}>{t(ctaKey)}</a>
 							</Button>
 						</div>
 
 						{/* Fine print */}
-						<p className="text-xs font-light text-center text-muted-foreground">
+						<p className="text-xs font-normal leading-relaxed text-center text-muted-foreground/50">
 							{t("homePricingCalc.note")}
 						</p>
 					</div>

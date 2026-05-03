@@ -114,6 +114,18 @@ const publicSearchInput = z.object({
 	// ── Highlight Extensions (Typesense v0.30+) ──
 	highlightFullFields: z.string().optional(),
 	prioritizeTokenPosition: z.boolean().optional(),
+	// ── Range Facets ──
+	/** Numeric or date range facets: [{field, min, max}] */
+	rangeFacets: z
+		.array(
+			z.object({
+				field: z.string(),
+				min: z.union([z.number(), z.string()]),
+				max: z.union([z.number(), z.string()]),
+			}),
+		)
+		.max(20)
+		.optional(),
 });
 
 const multiSearchInput = z.object({
@@ -179,6 +191,7 @@ export const publicSearchApp = new Hono()
 		delete (searchParams as Record<string, unknown>).boundingBoxFilter;
 		delete (searchParams as Record<string, unknown>).multiLocation;
 		delete (searchParams as Record<string, unknown>).disjunctiveFacets;
+	delete (searchParams as Record<string, unknown>).rangeFacets;
 
 		// Build filter expression: scoped + user filter + geo filter + negate
 		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
@@ -231,6 +244,7 @@ export const publicSearchApp = new Hono()
 				...searchParams,
 				filterBy: combinedFilter,
 				...(parsed.data.multiLocation && { multiLocation: parsed.data.multiLocation }),
+			...(parsed.data.rangeFacets && { rangeFacets: parsed.data.rangeFacets }),
 			});
 
 			// Record search latency in Prometheus

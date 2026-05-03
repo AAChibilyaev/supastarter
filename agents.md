@@ -1,6 +1,9 @@
 # AACsearch — Autonomous Coding Agent
 
-> Full autonomous coding guide for AACsearch (search-as-a-service on supastarter Next.js monorepo).
+> Full autonomous coding guide for AACsearch (Search OS — Search Operating System for product-grade discovery).
+> AACsearch → AACSearch OS: единый слой для поиска, рекомендаций, GraphRAG, релевантности, аналитики и безопасного доступа.
+> Brand positioning: NOT "search-as-a-service", NOT "search API", NOT "Algolia alternative".
+> AACSearch OS is a Search Operating System: Input → Understanding → Retrieval → Intelligence → Control → Security.
 > Location: `/Users/aac/Projects/ts/supastarter/`
 > Symlink: `claude.md` → `agents.md` (do NOT edit claude.md directly)
 
@@ -22,8 +25,12 @@ This AGENTS.md is designed for **fully autonomous operation**. The agent should:
 ## 1. PROJECT DNA
 
 ```
-Name:        AACsearch
-Product:     Hosted search-as-a-service (AACsearch Engine)
+Name:        AACsearch (AACSearch OS)
+Product:     Search Operating System — единый слой для поиска, рекомендаций, GraphRAG, аналитики и безопасного доступа.
+             NOT "search-as-a-service". NOT "search API". NOT "Algolia alternative".
+             7 слоёв: Input → Understanding → Retrieval → Intelligence → Control → Security.
+Brand doc:   docs/plans/aacsearch/aacsearch-os-positioning.md
+Design doc:  docs/plans/aacsearch/design-redesign-gap-analysis.md
 Base:        supastarter Next.js monorepo
 Stack:       TypeScript
 Style:       strict, interfaces > types, named exports, no enums, RSC-first
@@ -1730,7 +1737,7 @@ Last: [first session]
 
 ## Last Session Bridge
 [Emergency bridge — running bridge was not updated]
-Files: /Users/aac/Projects/ts/sim/apps/aacflow/app/(auth)/login/page.tsx (edit), apps/marketing/modules/visuals/components/VisualFrame.tsx (create), apps/marketing/modules/visuals/components/MetricTile.tsx (create), apps/marketing/modules/visuals/components/MiniBarChart.tsx (create)
+Files: packages/i18n/scripts/batch_update.py (create), packages/i18n/scripts/batch_update.py (edit), apps/marketing/modules/home/components/HeroSection.tsx (edit), apps/marketing/modules/home/components/AiAssistantChat.tsx (edit), apps/marketing/modules/home/components/CommandMenu.tsx (edit), packages/ui/components/logo.tsx (edit)
 
 # === END COGNILAYER ===
 

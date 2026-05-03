@@ -63,7 +63,7 @@ For full migration (required on first deploy):
 
 ```bash
 # From your local machine with DATABASE_URL pointing at the production DB:
-DATABASE_URL="postgresql://postgres:<password>@<host>:5432/aacsearch" \
+DATABASE_URL="postgresql://postgres:***@<host>:5432/aacsearch" \
   pnpm --filter @repo/database migrate
 ```
 
@@ -79,6 +79,52 @@ docker compose -f docker-compose.production.yml logs -f app
 # Smoke test
 curl https://app.aacsearch.com/api/health
 ```
+
+---
+
+## Multi-Region Deployment (Data Residency)
+
+AACSearch supports deploying across multiple geographic regions for data residency compliance. Each region runs an independent stack (Typesense, PostgreSQL, MinIO).
+
+### Available Regions
+
+| Region | Code | Compliance      | Location           |
+| ------ | ---- | --------------- | ------------------ |
+| EU     | `eu` | GDPR            | Frankfurt, Germany |
+| US     | `us` | SOC2 / CCPA     | Virginia, USA      |
+| RU     | `ru` | 152-ФЗ / 242-ФЗ | Moscow, Russia     |
+
+### Region-Specific Environment Variables
+
+When deploying a single-region setup, only the base `TYPESENSE_HOST`/`TYPESENSE_PORT`/`TYPESENSE_ADMIN_API_KEY` are needed.
+
+For multi-region, add per-region Typesense endpoints to `.env.production`:
+
+| Variable                     | Required | Description                                      |
+| ---------------------------- | -------- | ------------------------------------------------ |
+| `TYPESENSE_HOST_EU`          | If EU    | EU Typesense host (e.g. `typesense-eu.internal`) |
+| `TYPESENSE_PORT_EU`          | If EU    | EU Typesense port                                |
+| `TYPESENSE_PROTOCOL_EU`      | No       | EU Typesense protocol (default: `http`)          |
+| `TYPESENSE_ADMIN_API_KEY_EU` | If EU    | EU Typesense admin API key                       |
+| `TYPESENSE_HOST_US`          | If US    | US Typesense host                                |
+| `TYPESENSE_PORT_US`          | If US    | US Typesense port                                |
+| `TYPESENSE_PROTOCOL_US`      | No       | US Typesense protocol                            |
+| `TYPESENSE_ADMIN_API_KEY_US` | If US    | US Typesense admin API key                       |
+| `TYPESENSE_HOST_RU`          | If RU    | RU Typesense host                                |
+| `TYPESENSE_PORT_RU`          | If RU    | RU Typesense port                                |
+| `TYPESENSE_PROTOCOL_RU`      | No       | RU Typesense protocol                            |
+| `TYPESENSE_ADMIN_API_KEY_RU` | If RU    | RU Typesense admin API key                       |
+
+### Deploying a Region
+
+See [`deploy/regions/README.md`](./deploy/regions/README.md) for the full deployment guide, including Docker Compose commands and per-region `.env.*` files.
+
+```bash
+# Quick deploy for EU region
+./deploy/regions/setup-region.sh eu
+```
+
+The application routes search queries to the closest healthy region, with automatic cross-region failover if a Typesense cluster becomes unavailable. The failover logic is latency-aware — queries are directed to the region with the lowest measured response time.
 
 ---
 

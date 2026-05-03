@@ -9,7 +9,7 @@ export function Logo({ withLabel = true, className }: { className?: string; with
 			)}
 		>
 			<svg className="size-10 text-[#fd366e]" viewBox="0 0 734 635">
-				<title>acme</title>
+				<title>AACsearch</title>
 				<path
 					opacity="0.2"
 					d="M282.102 232.435C328.904 205.42 404.785 205.42 451.588 232.435L697.946 374.634C744.748 401.648 744.748 445.447 697.946 472.462L451.588 614.661C404.785 641.676 328.904 641.676 282.102 614.661L35.7432 472.462C-11.059 445.447 -11.0589 401.648 35.7432 374.634L282.102 232.435Z"
@@ -27,7 +27,7 @@ export function Logo({ withLabel = true, className }: { className?: string; with
 					fill="currentColor"
 				/>
 			</svg>
-			{withLabel && <span className="ml-3 text-lg md:block hidden">acme</span>}
+			{withLabel && <span className="ml-3 text-lg md:block hidden">AACsearch</span>}
 		</span>
 	);
 }

@@ -90,6 +90,11 @@ export function createAacSearchClient(config: WidgetConfig) {
 					facetSamplePercent: params.facetSamplePercent as number | undefined,
 					facetSortBy: params.facetSortBy as string | undefined,
 					facetStrategy: params.facetStrategy as string | undefined,
+					rangeFacets: params.rangeFacets as Array<{
+						field: string;
+						min: number | string;
+						max: number | string;
+					}> | undefined,
 				};
 			});
 

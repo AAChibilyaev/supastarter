@@ -591,9 +591,6 @@
 					"migrationStarted": "Datenmigration gestartet.",
 					"migrationComplete": "Datenmigration erfolgreich abgeschlossen.",
 					"migrationError": "Migration fehlgeschlagen. Bitte versuchen Sie es erneut."
-				},
-				"dataRetention": {
-					"title": "Datenaufbewahrung"
 				}
 			},
 			"dataRetention": {

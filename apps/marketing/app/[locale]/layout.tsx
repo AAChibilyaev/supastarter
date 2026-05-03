@@ -100,7 +100,11 @@ export default async function MarketingLayout({
 		<html
 			lang={locale}
 			suppressHydrationWarning
-			className={cn(sansFont.variable, monoFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
+			className={cn(
+				sansFont.variable,
+				monoFont.variable,
+				config.defaultTheme === "dark" ? "dark" : undefined,
+			)}
 		>
 			<body className={cn("bg-background text-foreground antialiased")}>
 				<OrganizationSchema locale={locale} />

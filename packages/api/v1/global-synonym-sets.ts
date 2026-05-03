@@ -10,13 +10,14 @@
  *   GET    /v1/indexes/:indexId/effective-synonyms — get synsets that apply to this index
  */
 
+import { getSearchIndexById } from "@repo/database";
 import {
 	getEffectiveGlobalSynonymSets,
 	getGlobalSynonymSets,
 	globalSynonymSetsToPairs,
+	deleteGlobalSynonymSet,
 	replaceGlobalSynonymSets,
 } from "@repo/database/prisma/queries/global-synonym-sets";
-import { getSearchIndexById } from "@repo/database";
 import { logger } from "@repo/logs";
 import { aliasName, syncSynonymsToTypesense, typesenseFetch } from "@repo/search";
 import { Hono } from "hono";
@@ -42,9 +43,7 @@ async function syncGlobalToTypesense(
 		"/synonym_sets",
 	).catch(() => ({ synonym_sets: [] }));
 	const existingIds = new Set(
-		(existing.synonym_sets ?? [])
-			.filter((s) => s.id.startsWith(prefix))
-			.map((s) => s.id),
+		(existing.synonym_sets ?? []).filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
 	);
 	const newIds = new Set<string>();
 
@@ -64,7 +63,9 @@ async function syncGlobalToTypesense(
 
 	for (const id of existingIds) {
 		if (!newIds.has(id)) {
-			await typesenseFetch("DELETE", `/synonym_sets/${encodeURIComponent(id)}`).catch(() => undefined);
+			await typesenseFetch("DELETE", `/synonym_sets/${encodeURIComponent(id)}`).catch(
+				() => undefined,
+			);
 		}
 	}
 }
@@ -110,7 +111,10 @@ export const globalSynonymSetsApp = new Hono()
 				error,
 				organizationId: verified.organizationId,
 			});
-			return c.json({ error: "internal_error", message: "Failed to retrieve global synonym sets" }, 502);
+			return c.json(
+				{ error: "internal_error", message: "Failed to retrieve global synonym sets" },
+				502,
+			);
 		}
 	})
 
@@ -124,13 +128,20 @@ export const globalSynonymSetsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = globalSynsetInputSchema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -141,7 +152,11 @@ export const globalSynonymSetsApp = new Hono()
 
 			// Sync to Typesense
 			await syncGlobalToTypesense(verified.organizationId, [
-				{ root: parsed.data.root, synonyms: parsed.data.synonyms, locale: parsed.data.locale },
+				{
+					root: parsed.data.root,
+					synonyms: parsed.data.synonyms,
+					locale: parsed.data.locale,
+				},
 			]);
 
 			logger.info("Global synonym set created", {
@@ -169,7 +184,10 @@ export const globalSynonymSetsApp = new Hono()
 				error,
 				organizationId: verified.organizationId,
 			});
-			return c.json({ error: "internal_error", message: "Failed to create global synonym set" }, 502);
+			return c.json(
+				{ error: "internal_error", message: "Failed to create global synonym set" },
+				502,
+			);
 		}
 	})
 
@@ -187,13 +205,20 @@ export const globalSynonymSetsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = schema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -214,7 +239,11 @@ export const globalSynonymSetsApp = new Hono()
 			// Sync all to Typesense
 			await syncGlobalToTypesense(
 				verified.organizationId,
-				parsed.data.synonym_sets.map((s) => ({ root: s.root, synonyms: s.synonyms, locale: s.locale })),
+				parsed.data.synonym_sets.map((s) => ({
+					root: s.root,
+					synonyms: s.synonyms,
+					locale: s.locale,
+				})),
 			);
 
 			logger.info("Global synonym sets replaced", {
@@ -240,7 +269,55 @@ export const globalSynonymSetsApp = new Hono()
 				error,
 				organizationId: verified.organizationId,
 			});
-			return c.json({ error: "internal_error", message: "Failed to replace global synonym sets" }, 502);
+			return c.json(
+				{ error: "internal_error", message: "Failed to replace global synonym sets" },
+				502,
+			);
+		}
+	})
+
+	// Delete a single global synonym set
+	.delete("/synonym-sets/:synsetId", async (c) => {
+		const gated = await requireScope("admin")(c);
+		if (gated instanceof Response) return gated;
+		const { verified } = gated;
+
+		const synsetId = c.req.param("synsetId");
+		if (!synsetId) {
+			return c.json({ error: "invalid_input", message: "synsetId is required" }, 400);
+		}
+
+		try {
+			const deleted = await deleteGlobalSynonymSet(synsetId, verified.organizationId);
+			if (!deleted) {
+				return c.json({ error: "not_found", message: "Global synonym set not found" }, 404);
+			}
+
+			// Clean up Typesense
+			const prefix = `${GLOBAL_PREFIX}${sanitizeId(verified.organizationId)}_`;
+			const escapedRoot = sanitizeId(synsetId);
+			const typesenseId = `${prefix}${escapedRoot}`;
+			await typesenseFetch(
+				"DELETE",
+				`/synonym_sets/${encodeURIComponent(typesenseId)}`,
+			).catch(() => undefined);
+
+			logger.info("Global synonym set deleted", {
+				organizationId: verified.organizationId,
+				id: synsetId,
+			});
+
+			return c.json({ success: true }, 200);
+		} catch (error) {
+			logger.error("V1 delete global synonym set failed", {
+				error,
+				organizationId: verified.organizationId,
+				id: synsetId,
+			});
+			return c.json(
+				{ error: "internal_error", message: "Failed to delete global synonym set" },
+				502,
+			);
 		}
 	})
 

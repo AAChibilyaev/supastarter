@@ -591,9 +591,6 @@
 					"migrationStarted": "Перенос данных запущен.",
 					"migrationComplete": "Перенос данных успешно завершён.",
 					"migrationError": "Перенос не удался. Пожалуйста, попробуйте снова."
-				},
-				"dataRetention": {
-					"title": "Хранение данных (Retention)"
 				}
 			},
 			"dataRetention": {

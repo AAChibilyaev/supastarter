@@ -49,6 +49,85 @@ export interface FacetCount {
 
 export type FacetStrategy = "exact" | "intersection";
 
+/**
+ * A single range facet definition for numeric or date fields.
+ * Typesense syntax: field:range:(min..max)
+ * Use `*` for open-ended — RangeFacetValue.of("*", 100) means "0 to 100"
+ */
+export interface RangeFacetValue {
+	/** Field name to facet by range */
+	field: string;
+	/** Range lower bound. Use `*` for unbounded. */
+	min: number | string | "*";
+	/** Range upper bound. Use `*` for unbounded. */
+	max: number | string | "*";
+}
+
+/**
+ * Build a range facet string for the facet_by parameter.
+ * E.g. `buildRangeFacetBy("price", 0, 100)` → `"price:range:(0..100)"`
+ * E.g. `buildRangeFacetBy("price", 0, "*")` → `"price:range:(0..*)"`
+ */
+export function buildRangeFacetBy(range: RangeFacetValue): string {
+	return `${range.field}:range:(${range.min}..${range.max})`;
+}
+
+/**
+ * Build a facet_by string combining regular facets and range facets.
+ * Regular facets are passed as-is; range facets are converted to
+ * Typesense range syntax.
+ */
+export function buildFacetByWithRanges(
+	regularFacetBy: string | undefined,
+	rangeFacets: RangeFacetValue[] | undefined,
+): string | undefined {
+	const parts: string[] = [];
+	if (regularFacetBy) {
+		// Keep range-encoded facets separate — strip any ranges from regular
+		const regularParts = regularFacetBy
+			.split(",")
+			.map((f) => f.trim())
+			.filter((f) => f && !f.includes(":range:("));
+		parts.push(...regularParts);
+	}
+	if (rangeFacets?.length) {
+		parts.push(...rangeFacets.map(buildRangeFacetBy));
+	}
+	return parts.length > 0 ? parts.join(",") : undefined;
+}
+
+/**
+ * Parse a facet_by string into its components: regular fields and range facets.
+ */
+export function parseRangeFacets(facetBy: string): {
+	regular: string[];
+	ranges: RangeFacetValue[];
+} {
+	const regular: string[] = [];
+	const ranges: RangeFacetValue[] = [];
+
+	if (!facetBy) return { regular, ranges };
+
+	for (const part of facetBy.split(",")) {
+		const trimmed = part.trim();
+		if (!trimmed) continue;
+
+		// Check for range syntax: field:range:(min..max)
+		const rangeMatch = trimmed.match(/^([\w.-]+):range:\((.+?)\.\.(.+?)\)$/);
+		if (rangeMatch) {
+			ranges.push({
+				field: rangeMatch[1]!,
+				min: rangeMatch[2]!,
+				max: rangeMatch[3]!,
+			});
+		} else {
+			regular.push(trimmed);
+		}
+	}
+
+	return { regular, ranges };
+}
+
 export interface SearchDocumentsInput {
 	alias: string;
 	tenantId: string;
@@ -109,6 +188,13 @@ export interface SearchDocumentsInput {
 	hiddenHits?: string;
 	/** Curation set tag to filter search results by. */
 	curationTags?: string;
+	// ── Range Facets (Typesense v0.30+) ─────────────────────────
+	/**
+	 * Numeric or date range facets. Each entry generates a separate
+	 * field:range:(min..max) clause in the facet_by parameter.
+	 * Example: [{ field: "price", min: 0, max: 100 }] → price:range:(0..100)
+	 */
+	rangeFacets?: RangeFacetValue[];
 }
 
 export interface SearchDocumentsResult {
@@ -317,11 +403,14 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${input.vectorQueryEf})`);
 	}
 
+	// Merge regular facet_by with range facets
+	const effectiveFacetBy = buildFacetByWithRanges(input.facetBy, input.rangeFacets);
+
 	const params: TypesenseSearchParams = {
 		q: input.q,
 		query_by: input.queryBy ?? "",
 		filter_by: combineTenantFilter(input.tenantId, input.filterBy),
-		facet_by: input.facetBy,
+		facet_by: effectiveFacetBy,
 		sort_by: input.sortBy,
 		per_page: perPage,
 		page: input.page ?? 1,
@@ -460,12 +549,15 @@ function buildMultiSearchEntry(entry: MultiSearchEntry): Record<string, unknown>
 	if (vectorQuery !== undefined && entry.vectorQueryEf !== undefined) {
 		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${entry.vectorQueryEf})`);
 	}
+	// Merge regular facet_by with range facets
+	const effectiveFacetBy = buildFacetByWithRanges(entry.facetBy, entry.rangeFacets);
+
 	return {
 		collection: entry.alias,
 		q: entry.q,
 		query_by: entry.queryBy ?? "",
 		filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
-		facet_by: entry.facetBy,
+		facet_by: effectiveFacetBy,
 		sort_by: entry.sortBy,
 		per_page: perPage,
 		page: entry.page ?? 1,

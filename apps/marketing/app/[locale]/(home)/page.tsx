@@ -6,7 +6,6 @@ import { DocsEcosystemSection } from "@home/components/DocsEcosystemSection";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { FitSection } from "@home/components/FitSection";
 import { HeroSection } from "@home/components/HeroSection";
-import { PricingCalculator } from "@home/components/PricingCalculator";
 import { PricingFaq } from "@home/components/PricingFaq";
 import { PricingPlans } from "@home/components/PricingPlans";
 import { QuickstartSection } from "@home/components/QuickstartSection";
@@ -81,11 +80,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 16. Security — feature overview */}
 			<SecuritySection />
 
-			{/* 19. Pricing — plans + interactive calculator + FAQ */}
-
-			{/* 19. Pricing — plans + interactive calculator + FAQ */}
+			{/* Pricing — plans + FAQ */}
 			<PricingPlans />
-			<PricingCalculator />
 			<PricingFaq />
 
 			{/* 20. Docs ecosystem — SDK, API */}

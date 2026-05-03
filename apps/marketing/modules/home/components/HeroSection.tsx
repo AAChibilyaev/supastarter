@@ -36,17 +36,17 @@ const MODES: ModeOption[] = [
 ];
 
 const CHIPS = [
-	"sneakers like this photo",
-	"find error 401",
-	"show similar products",
-	"what changed in billing?",
-	"find this by screenshot",
+	"error 401 in docs",
+	"similar products by photo",
+	"order #1042",
+	"billing changes",
+	"find by screenshot",
 ];
 
 const MODE_STATS = [
 	{ value: "2.5M+", labelKey: "hero.statDocs" },
 	{ value: "< 50ms", labelKey: "hero.statLatency" },
-	{ value: "99.99%", labelKey: "hero.statUptime" },
+	{ value: "99.95%", labelKey: "hero.statUptime" },
 ];
 
 export function HeroSection() {
@@ -115,7 +115,6 @@ export function HeroSection() {
 	return (
 		<>
 			<CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} onModeSelect={openCmdForMode} />
-
 
 			{/* ─── Hero Section ───────────────────────────────── */}
 			<section ref={sectionRef} className="relative overflow-hidden bg-background">
@@ -206,12 +205,7 @@ export function HeroSection() {
 
 					{/* CTA */}
 					<div className="mt-8 gap-3 flex w-full items-center justify-center">
-						<Button
-							className="shrink-0"
-							size="lg"
-							variant="primary"
-							asChild
-						>
+						<Button className="shrink-0" size="lg" variant="primary" asChild>
 							<a href={config.saasUrl}>
 								{t("hero.getStarted")}
 								<ArrowRightIcon className="ml-2 size-4" />

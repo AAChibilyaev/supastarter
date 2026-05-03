@@ -26,14 +26,14 @@ Créez un token de connecteur depuis **Tableau de bord → Connecteurs → Nouve
 
 ## Modules CMS pris en charge
 
-| Plateforme               | Statut               | Notes                                                                  |
-| ------------------------ | -------------------- | ---------------------------------------------------------------------- |
-| Strapi 5.x               | Alpha                | Plugin npm avec lifecycle hooks ; [documentation](/docs/connectors/strapi) |
-| Contentful               | Guide d'intégration  | Synchronisation par webhook (aucun plugin nécessaire) ; [documentation](/docs/connectors/contentful) |
-| Sanity.io                | Guide d'intégration  | Export GROQ + écouteur en temps réel ; [documentation](/docs/connectors/sanity) |
-| PrestaShop 8.x           | Aperçu anticipé      | Squelette de module PHP existe ; suivi de commit séparé                |
-| 1C-Bitrix (auto-hébergé) | Aperçu anticipé      | Squelette de module PHP existe ; suivi de commit séparé                |
-| API directe              | Disponible           | N'importe quel système peut appeler l'API Connecteur avec un token     |
+| Plateforme               | Statut              | Notes                                                                                                |
+| ------------------------ | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| Strapi 5.x               | Alpha               | Plugin npm avec lifecycle hooks ; [documentation](/docs/connectors/strapi)                           |
+| Contentful               | Guide d'intégration | Synchronisation par webhook (aucun plugin nécessaire) ; [documentation](/docs/connectors/contentful) |
+| Sanity.io                | Guide d'intégration | Export GROQ + écouteur en temps réel ; [documentation](/docs/connectors/sanity)                      |
+| PrestaShop 8.x           | Aperçu anticipé     | Squelette de module PHP existe ; suivi de commit séparé                                              |
+| 1C-Bitrix (auto-hébergé) | Aperçu anticipé     | Squelette de module PHP existe ; suivi de commit séparé                                              |
+| API directe              | Disponible          | N'importe quel système peut appeler l'API Connecteur avec un token                                   |
 
 Le plugin Strapi est un paquet npm installé directement dans votre projet Strapi, offrant des lifecycle hooks, un mappage de types de contenu et un panneau d'administration. Pour Contentful et Sanity.io, AACsearch s'intègre au niveau webhook/requête GROQ — aucune installation de plugin nécessaire, juste une configuration dans le tableau de bord du CMS. Les modules PrestaShop et Bitrix sont suivis séparément du monorepo Node.js principal.
 

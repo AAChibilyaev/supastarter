@@ -197,19 +197,19 @@ function AddRuleDialog({
 							</Select>
 						</div>
 					</div>
-				<div className="space-y-2">
-					<label className="text-sm font-medium" htmlFor="add-desc">
-						Description
-						<Textarea
-							id="add-desc"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							placeholder="Optional description for this rule"
-							rows={2}
-							className="mt-1.5"
-						/>
-					</label>
-				</div>
+					<div className="space-y-2">
+						<label className="text-sm font-medium" htmlFor="add-desc">
+							Description
+							<Textarea
+								id="add-desc"
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+								placeholder="Optional description for this rule"
+								rows={2}
+								className="mt-1.5"
+							/>
+						</label>
+					</div>
 					<div className="p-3 text-sm rounded-lg bg-muted text-muted-foreground">
 						<p className="font-medium mb-1">
 							{t("settings.scim.provisioning.deprovisionNote")}
@@ -327,19 +327,19 @@ function EditRuleDialog({
 							</Select>
 						</div>
 					</div>
-				<div className="space-y-2">
-					<label className="text-sm font-medium" htmlFor="edit-desc">
-						Description
-						<Textarea
-							id="edit-desc"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							placeholder="Optional description"
-							rows={2}
-							className="mt-1.5"
-						/>
-					</label>
-				</div>
+					<div className="space-y-2">
+						<label className="text-sm font-medium" htmlFor="edit-desc">
+							Description
+							<Textarea
+								id="edit-desc"
+								value={description}
+								onChange={(e) => setDescription(e.target.value)}
+								placeholder="Optional description"
+								rows={2}
+								className="mt-1.5"
+							/>
+						</label>
+					</div>
 					<div className="gap-2 flex items-center">
 						<label className="gap-2 flex cursor-pointer items-center">
 							<input

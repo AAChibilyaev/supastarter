@@ -1,7 +1,4 @@
 {
-  "title": "projects",
-  "pages": [
-    "get",
-    "post"
-  ]
+	"title": "projects",
+	"pages": ["get", "post"]
 }

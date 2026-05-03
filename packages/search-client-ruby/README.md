@@ -159,73 +159,73 @@ usage["rows"].each { |row| puts "#{row["type"]}: #{row["totalCount"]}" }
 
 ### Search (SearchClient + AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
+| Method                       | Endpoint                                |
+| ---------------------------- | --------------------------------------- |
 | `search(index_slug, params)` | `POST /api/v2/indexes/{indexId}/search` |
-| `multi_search(searches)` | `POST /api/v2/multi-search` |
+| `multi_search(searches)`     | `POST /api/v2/multi-search`             |
 
 ### Projects (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `get_project` | `GET /api/v2/projects` |
-| `create_project(name, slug, ...)` | `POST /api/v2/projects` |
-| `get_project_by_id(project_id)` | `GET /api/v2/projects/{projectId}` |
+| Method                            | Endpoint                           |
+| --------------------------------- | ---------------------------------- |
+| `get_project`                     | `GET /api/v2/projects`             |
+| `create_project(name, slug, ...)` | `POST /api/v2/projects`            |
+| `get_project_by_id(project_id)`   | `GET /api/v2/projects/{projectId}` |
 
 ### Indexes (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `list_indexes(project_id)` | `GET /api/v2/projects/{projectId}/indexes` |
+| Method                          | Endpoint                                    |
+| ------------------------------- | ------------------------------------------- |
+| `list_indexes(project_id)`      | `GET /api/v2/projects/{projectId}/indexes`  |
 | `create_index(project_id, ...)` | `POST /api/v2/projects/{projectId}/indexes` |
-| `get_index(index_id)` | `GET /api/v2/indexes/{indexId}` |
-| `update_index(index_id, ...)` | `PATCH /api/v2/indexes/{indexId}` |
-| `delete_index(index_id)` | `DELETE /api/v2/indexes/{indexId}` |
-| `get_index_stats(index_id)` | `GET /api/v2/indexes/{indexId}/stats` |
+| `get_index(index_id)`           | `GET /api/v2/indexes/{indexId}`             |
+| `update_index(index_id, ...)`   | `PATCH /api/v2/indexes/{indexId}`           |
+| `delete_index(index_id)`        | `DELETE /api/v2/indexes/{indexId}`          |
+| `get_index_stats(index_id)`     | `GET /api/v2/indexes/{indexId}/stats`       |
 
 ### Documents (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `list_documents(index_id, ...)` | `GET /api/v2/indexes/{indexId}/documents` |
-| `upsert_documents(index_id, docs, ...)` | `POST /api/v2/indexes/{indexId}/documents` |
-| `get_document(index_id, doc_id)` | `GET /api/v2/indexes/{indexId}/documents/{documentId}` |
-| `upsert_document(index_id, doc_id, data)` | `PUT /api/v2/indexes/{indexId}/documents/{documentId}` |
-| `delete_document(index_id, doc_id)` | `DELETE /api/v2/indexes/{indexId}/documents/{documentId}` |
-| `batch_delete_documents(index_id, ids)` | `POST /api/v2/indexes/{indexId}/documents:batchDelete` |
-| `export_documents(index_id, ...)` | `GET /api/v2/indexes/{indexId}/documents:export` |
+| Method                                    | Endpoint                                                  |
+| ----------------------------------------- | --------------------------------------------------------- |
+| `list_documents(index_id, ...)`           | `GET /api/v2/indexes/{indexId}/documents`                 |
+| `upsert_documents(index_id, docs, ...)`   | `POST /api/v2/indexes/{indexId}/documents`                |
+| `get_document(index_id, doc_id)`          | `GET /api/v2/indexes/{indexId}/documents/{documentId}`    |
+| `upsert_document(index_id, doc_id, data)` | `PUT /api/v2/indexes/{indexId}/documents/{documentId}`    |
+| `delete_document(index_id, doc_id)`       | `DELETE /api/v2/indexes/{indexId}/documents/{documentId}` |
+| `batch_delete_documents(index_id, ids)`   | `POST /api/v2/indexes/{indexId}/documents:batchDelete`    |
+| `export_documents(index_id, ...)`         | `GET /api/v2/indexes/{indexId}/documents:export`          |
 
 ### API Keys (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `list_keys(project_id)` | `GET /api/v2/projects/{projectId}/keys` |
+| Method                        | Endpoint                                 |
+| ----------------------------- | ---------------------------------------- |
+| `list_keys(project_id)`       | `GET /api/v2/projects/{projectId}/keys`  |
 | `create_key(project_id, ...)` | `POST /api/v2/projects/{projectId}/keys` |
-| `revoke_key(key_id)` | `DELETE /api/v2/keys/{keyId}` |
+| `revoke_key(key_id)`          | `DELETE /api/v2/keys/{keyId}`            |
 
 ### Synonyms (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `list_synonyms(index_id)` | `GET /api/v2/indexes/{indexId}/synonyms` |
-| `create_synonym(index_id, synonym)` | `POST /api/v2/indexes/{indexId}/synonyms` |
-| `upsert_synonyms(index_id, synonyms)` | `PUT /api/v2/indexes/{indexId}/synonyms` |
+| Method                                 | Endpoint                                    |
+| -------------------------------------- | ------------------------------------------- |
+| `list_synonyms(index_id)`              | `GET /api/v2/indexes/{indexId}/synonyms`    |
+| `create_synonym(index_id, synonym)`    | `POST /api/v2/indexes/{indexId}/synonyms`   |
+| `upsert_synonyms(index_id, synonyms)`  | `PUT /api/v2/indexes/{indexId}/synonyms`    |
 | `delete_synonym(index_id, synonym_id)` | `DELETE /api/v2/indexes/{indexId}/synonyms` |
 
 ### Curations (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
-| `list_curations(index_id)` | `GET /api/v2/indexes/{indexId}/curations` |
-| `create_curation(index_id, curation)` | `POST /api/v2/indexes/{indexId}/curations` |
-| `upsert_curations(index_id, curations)` | `PUT /api/v2/indexes/{indexId}/curations` |
+| Method                                  | Endpoint                                   |
+| --------------------------------------- | ------------------------------------------ |
+| `list_curations(index_id)`              | `GET /api/v2/indexes/{indexId}/curations`  |
+| `create_curation(index_id, curation)`   | `POST /api/v2/indexes/{indexId}/curations` |
+| `upsert_curations(index_id, curations)` | `PUT /api/v2/indexes/{indexId}/curations`  |
 
 ### Analytics / Usage (AdminClient)
 
-| Method | Endpoint |
-|--------|----------|
+| Method                      | Endpoint                                     |
+| --------------------------- | -------------------------------------------- |
 | `get_analytics(project_id)` | `GET /api/v2/projects/{projectId}/analytics` |
-| `get_usage(project_id)` | `GET /api/v2/projects/{projectId}/usage` |
+| `get_usage(project_id)`     | `GET /api/v2/projects/{projectId}/usage`     |
 
 ## Error Handling
 

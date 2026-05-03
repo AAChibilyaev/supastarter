@@ -28,28 +28,28 @@
   "home": {
     "hero": {
       "badge": "v0 — Early Access verfügbar",
-      "title": "Suche, die Text, Sprache und Bilder versteht",
-      "subtitle": "Lassen Sie Ihre Nutzer per Text, Sprache, Foto, Bild oder KI-Chat suchen — mit einer API, einem Index, einer Analyse-Ebene und sicherem Scoped-Zugriff.",
+      "title": "Search OS für Produkte, Kataloge und Wissensdatenbanken",
+      "subtitle": "Ein Control Plane für Suche und Discovery: Text, Sprache, Bilder, Vector Search, Empfehlungen, Suggestions, GraphRAG, Scoped Access und Analytics.",
       "getStarted": "Kostenlos starten",
       "documentation": "Doku lesen",
       "codeCaption": "search-client.ts",
       "new": "NEU",
-      "featureBadge": "Search-as-a-Service",
+      "featureBadge": "Search OS",
       "imageAlt": "AACsearch Dashboard Screenshot",
-      "badgeLatency": "50ms p99",
-      "badgeSoc2": "SOC 2",
-      "badgeFulltext": "Volltext",
-      "badgeAnalytics": "Analytik",
+      "badgeLatency": "p99 < 50 ms",
+      "badgeSoc2": "Scoped-Zugriff",
+      "badgeFulltext": "Tenant-Isolation",
+      "badgeAnalytics": "Suchanalyse",
       "statDocs": "Indizierte Dokumente",
       "statLatency": "Suchlatenz",
-      "statUptime": "Uptime SLA",
-      "searchPlaceholder": "Suchen Sie per Text, Sprache, Bild oder Chat...",
+      "statUptime": "Enterprise SLA",
+      "searchPlaceholder": "Finden Sie ein Produkt, Dokument, Fehler, Benutzer oder eine Antwort…",
       "voicePlaceholder": "Tippen Sie auf das Mikrofon und sprechen Sie...",
       "chatPlaceholder": "Stellen Sie eine Frage zu Ihren Daten...",
       "mediaPlaceholder": "Laden Sie ein Foto für die visuelle Suche hoch..."
     },
     "howItWorks": {
-      "title": "So funktioniert AACsearch",
+      "title": "So funktioniert AACSearch OS",
       "step1": {
         "title": "Daten hochladen",
         "description": "Schema definieren und Dokumente per REST oder SDK importieren. Updates werden in unter einer Sekunde indiziert.",
@@ -65,42 +65,42 @@
         "description": "Den Token an das Browser-SDK oder die REST-API übergeben. Volltext, Facetten, Multi-Search — unter 50 ms p99.",
         "badge": "< 50 ms p99 · Facetten · Tippfehlertoleranz"
       },
-      "subtitle": "Drei API-Aufrufe. Ein Nachmittag. Gehostet, skaliert, gesichert."
+      "subtitle": "Von Eingabe bis Retrieval bis Control — eine Schicht für Suche, Discovery und Zugriff im gesamten Produkt."
     },
     "features": {
-      "title": "Was Sie tatsächlich bekommen",
-      "subtitle": "Keine Geheimnisse. Jedes Feature hier ist heute verfügbar.",
+      "title": "Was im Search OS enthalten ist",
+      "subtitle": "Keine Sammlung separater APIs — eine vollständige Schicht: Zugriff, Index, Relevanz, Analyse, Reindex und Multi-Tenant-Sicherheit.",
       "items": {
         "scopedTokens": {
           "title": "Scoped Tokens",
-          "description": "Pro Nutzer, pro Filter, mit TTL. Server-seitig erzeugt, in den Browser ausgeliefert, automatisch ablaufend."
+          "description": "Stellen Sie kurzlebige Token aus, die auf Benutzer, Index und Filterset beschränkt sind. Browser erhält nur ein eingeschränktes Suchrecht — keinen dauerhaften API-Schlüssel."
         },
         "originAllowlist": {
           "title": "Origin-Allowlist pro Key",
-          "description": "Jeden Key an konkrete Origins binden. Ein auf Twitter geleakter Key leert nicht Ihr Kontingent."
+          "description": "Binden Sie API-Schlüssel an vertrauenswürdige Origins. Selbst wenn ein Token außerhalb Ihrer Domain ausläuft, wird die Anfrage abgelehnt."
         },
         "rateLimitQuota": {
           "title": "Rate-Limit & Quota",
-          "description": "Pro Key pro Minute drosseln, monatliches Org-Kontingent — beides im Dashboard sichtbar, bevor Sie Limits erreichen."
+          "description": "Rate-Limit pro Schlüssel, monatliche Org-Kontingente und Vorab-Benachrichtigungen. Teams sehen den Verbrauch bevor er blockiert."
         },
         "multiSearch": {
           "title": "Multi-Search",
-          "description": "Mehrere Queries in einem Roundtrip. Cross-Collection-Autocomplete ohne N Requests."
+          "description": "Mehrere Suchen in einem Round-Trip: Autocomplete, sammlungsübergreifende Suche, gruppierte Ergebnisse und föderierte Suche ohne Kaskade von Anfragen."
         },
         "reindex": {
           "title": "Reindex ohne Downtime",
-          "description": "Index gegen neues Schema neu aufbauen, während Live-Traffic weiter den alten trifft. Atomarer Cut-over."
+          "description": "Indexaufbau und Schemaänderung während der Live-Traffic die alte Version trifft. Aliases atomisch wechseln — keine Ausfallzeit."
         },
         "enterpriseSecurity": {
-          "title": "Enterprise-Sicherheit",
-          "description": "SSO, Audit-Log, IP-Allowlist, dediziertes Cluster und 99,95% SLA. Sicherheitskontrollen von Anfang an — nicht nachträglich."
+          "title": "Enterprise-Kontrollen",
+          "description": "SSO, Audit-Log, IP-Allow-List, dedizierter Cluster, SLA und DPA für Teams mit Kontroll- und Compliance-Anforderungen."
         }
       }
     },
     "pricing": {
       "badge": "Preise",
-      "title": "Sie zahlen für Suchen und indexierte Dokumente. Mehr nicht.",
-      "subtitle": "1 Search-Unit = 1 Suchanfrage ODER 1 indexiertes Dokument. Jederzeit kündbar.",
+      "title": "Search OS Pläne",
+      "subtitle": "Nicht nur eine Such-API — eine vollständige Betriebsschicht. Wählen Sie den Plan, der zu Ihrer Produktphase passt.",
       "cta": "Kostenlos starten",
       "contact": "Vertrieb kontaktieren",
       "perMonth": "/Monat",
@@ -108,7 +108,7 @@
         "free": {
           "name": "Free",
           "price": "$0",
-          "description": "Zum Evaluieren, für Hobby-Projekte und Side-Products.",
+          "description": "Für Prototypen, Testindizes und erste Integrationen.",
           "features": [
             "10.000 Search-Units / Monat",
             "1 Index",
@@ -119,7 +119,7 @@
         "pro": {
           "name": "Pro",
           "price": "$29",
-          "description": "Produktionsreif für Indie-SaaS und kleine B2B-Teams.",
+          "description": "Für Produktions-Apps, die schnelle Suche, Scoped-Zugriff und Analysen benötigen.",
           "features": [
             "1 Mio. Search-Units / Monat",
             "10 Indexe",
@@ -132,7 +132,7 @@
         "enterprise": {
           "name": "Enterprise",
           "price": "Individuell",
-          "description": "Dedizierter Cluster, Audit-Log, 99,95 % SLA.",
+          "description": "Für Teams mit SSO, Audit-Log, dedizierter Region, SLA und vertraglichen Anforderungen.",
           "features": [
             "Unbegrenzte Search-Units",
             "SSO (SAML / OIDC)",
@@ -148,10 +148,10 @@
       "perYear": "/Jahr"
     },
     "cta": {
-      "title": "Bereit, Suche auszuliefern?",
-      "subtitle": "Der Free-Tier reicht für die meisten Side-Projects. Keine Kreditkarte nötig.",
-      "primary": "Konto erstellen",
-      "secondary": "Doku lesen"
+      "title": "Search OS in einem Abend starten",
+      "subtitle": "Erstellen Sie einen Index, fügen Sie Dokumente hinzu und verbinden Sie die Suche von Ihrer App. Free-Tier deckt ein Prototyp ab — Daten bleiben beim Upgrade erhalten.",
+      "primary": "Kostenlos starten",
+      "secondary": "Dokumentation öffnen"
     },
     "testimonials": {
       "title": "Real results from real teams",
@@ -207,7 +207,7 @@
       "pricing": "Preise",
       "privacyPolicy": "Datenschutz",
       "termsAndConditions": "AGB",
-      "tagline": "Search as a Service — Scoped Tokens, Origin-Allowlists und ein typisiertes Browser-SDK.",
+      "tagline": "Search OS für Produkte, Kataloge und Wissensdatenbanken: Index, Relevanz, Zugriff, Analyse und KI-Antworten in einer Schicht.",
       "legal": "Rechtliches",
       "status": "Status",
       "support": "Support",
@@ -1474,22 +1474,23 @@
     "tenantIsolation": "Jede Anfrage auf Ihre Organisation beschränkt — keine mandantenübergreifenden Lesezugriffe"
   },
   "homeFit": {
-    "title": "Ist AACsearch das Richtige für Sie?",
-    "perfectTitle": "Perfekt geeignet",
-    "skipTitle": "Überspringen, wenn",
+    "title": "Wann Sie Search OS und nicht nur Suche benötigen",
+    "perfectTitle": "Passt, wenn",
+    "skipTitle": "Nicht benötigt, wenn",
     "perfect": {
-      "0": "Sie benötigen Produktionssuche ohne ein dediziertes Such-Team",
-      "1": "Sie rufen die Suche aus dem Browser auf und können keine API-Schlüssel preisgeben",
-      "2": "Sie verwalten mehrere Mandanten oder Kunden auf einer Plattform",
-      "3": "Sie möchten vorhersehbare monatliche Kosten beim Skalieren",
-      "4": "Sie benötigen Analysen, um zu verstehen, wonach Nutzer suchen"
+      "0": "Die Suche läuft in der Produktion und darf nicht von einem dedizierten Such-Team abhängen.",
+      "1": "Benutzer suchen über den Browser und permanente API-Schlüssel können nicht offengelegt werden.",
+      "2": "Sie haben mehrere Tenants, Kunden, Regionen oder Storefronts auf einer Plattform.",
+      "3": "Sie möchten vorhersagbare monatliche Kosten bei wachsendem Index und Abfragevolumen.",
+      "4": "Sie benötigen Einblicke darin, wonach Benutzer suchen, wo sie nichts finden und was die Konversion treibt."
     },
     "skip": {
-      "0": "Sie benötigen vollständig selbst gehostete Suche auf Ihren eigenen Servern",
-      "1": "Ihre Daten dürfen Ihre Infrastruktur unter keinen Umständen verlassen",
-      "2": "Sie benötigen benutzerdefinierte Scoring-Plugins auf Lucene-Ebene",
-      "3": "Sie haben weniger als 1.000 Dokumente und Postgres ILIKE reicht aus"
-    }
+      "0": "Sie benötigen eine On-Premises-Suche ohne externe Abhängigkeiten.",
+      "1": "Ihre Daten dürfen Ihren Infrastrukturperimeter unter keinen Umständen verlassen.",
+      "2": "Sie benötigen tiefe Ranking-Anpassung auf der Ebene von Scoring-Plugins.",
+      "3": "Ihr Index hat weniger als 1 000 Dokumente und eine einfache Datenbankabfrage deckt den Anwendungsfall ab."
+    },
+    "subtitle": "AACsearch macht Sinn, wenn die Suche Konversion, Support, Navigation, Analyse und Zugriffssicherheit beeinflusst."
   },
   "homeLiveDemo": {
     "title": "Suche jetzt ausprobieren",
@@ -1539,8 +1540,141 @@
     "demo": "Demo"
   },
   "homeQuickstart": {
-    "title": "Integration in 15 Minuten",
-    "subtitle": "Index erstellen, Dokumente laden, Token ausstellen, Suche starten. Fertig.",
+    "title": "Integration ohne ein separates Such-Projekt",
+    "subtitle": "Erstellen Sie eine Sammlung, pushen Sie Dokumente, stellen Sie einen Scoped-Token aus und führen Sie Ihre erste Suche vom Browser oder Server aus.",
     "cta": "Vollständige Dokumentation ansehen"
+  },
+  "homeUseCases": {
+    "title": "Wo AACsearch zur Such-Schicht Ihres Produkts wird",
+    "subtitle": "AACsearch passt dort, wo die Suche nicht ein Eingabefeld ist, sondern Teil von Navigation, Support, Vertrieb und Produktanalyse.",
+    "items": {
+      "saas": {
+        "description": "Suche über Projekte, Aufgaben, Benutzer, Berichte, Einstellungen und Domain-Objekte. Benutzer finden jede Entität, ohne die App-Struktur zu kennen."
+      },
+      "docs": {
+        "description": "API-Methoden, SDK-Funktionen, Fehlercodes, Parameter, Migrationsleitfäden und Release Notes — in einer Such-Schicht mit Vorschlägen und KI-Antworten."
+      },
+      "ecommerce": {
+        "description": "Produkte, SKUs, Marken, Kategorien, Attribute und Facetten. Schnelle Katalogsuche mit Typo-Toleranz, Filtern und visueller Suche."
+      },
+      "internal": {
+        "description": "Dokumente, Richtlinien, Vorfälle, RFCs, Service-Owner und Runbooks. Hybridsuche findet exakte Einträge und semantische Treffer."
+      },
+      "marketplace": {
+        "description": "Anzeigen, Verkäufer, Kategorien, Geographie, Sprachen und Tenant-Isolation. Ein Such-Cluster für Tausende von Kunden und Storefronts."
+      }
+    }
+  },
+  "homeWhatUsersSearch": {
+    "title": "Die Suche beginnt mit der Nutzerabsicht, nicht dem Index",
+    "subtitle": "AACsearch verarbeitet verschiedene Absichtstypen: exakte Entitäten, unscharfe Abfragen, Kategorienavigation, natürliche Sprache und No-Result-Recovery."
+  },
+  "homeSearchUX": {
+    "title": "Such-UX, das sich wie ein Teil Ihres Produkts anfühlt",
+    "subtitle": "Autocomplete, Typo-Toleranz, Facetten, hervorgehobene Treffer, gruppierte Ergebnisse und No-Result-Recovery — keine Backend-Features, sondern die Oberfläche, die Benutzer sehen.",
+    "items": {
+      "autocomplete": {
+        "description": "Vorschläge ab dem ersten Zeichen. Tastaturnavigation, aktuelle Suchen, angeheftete Vorschläge und beliebte Anfragen."
+      },
+      "typo": {
+        "description": "AACsearch korrigiert 1–2 Fehler pro Wort, versteht Transliteration und bricht keine exakten Treffer."
+      },
+      "facets": {
+        "description": "Filter nach Marke, Preis, Kategorie, Verfügbarkeit und beliebigen benutzerdefinierten Attributen — mit Ergebnisanzahlen für jeden Wert."
+      }
+    }
+  },
+  "homeRelevance": {
+    "title": "Relevanz muss steuerbar sein",
+    "subtitle": "Geschwindigkeit ist wichtig, aber Produktsuche gewinnt durch Ergebnisqualität. AACsearch bietet Ihnen eine Control Plane für Ranking, Synonyme, Regeln und Experimente.",
+    "ranking": {
+      "description": "Feldgewichte, Exact-Match-Boost, Präfix-Suche und Partial-Match. Sie definieren, welche Felder und Match-Typen das Ranking am stärksten beeinflussen."
+    },
+    "synonyms": {
+      "description": "Verbinden Sie \"Laptop\" und \"Notebook\", \"Sneakers\" und \"Turnschuhe\", interne Abkürzungen und Benutzerbegriffe."
+    },
+    "curations": {
+      "description": "Ergebnisse anpinnen, Prioritätskategorien boosten und Werbeinhalte ohne Reindexierung verwalten."
+    }
+  },
+  "homeAnalytics": {
+    "title": "Suchanalyse zeigt, was Ihrem Produkt fehlt",
+    "subtitle": "Jede Anfrage ist ein Signal. AACsearch zeigt, wonach Benutzer suchen, wo sie nichts finden, welche Filter sie verwenden und welche Anfragen zur Konversion führen.",
+    "items": {
+      "topQueries": {
+        "description": "Die häufigsten Anfragen zeigen, welche Objekte, Produkte und Dokumente für Benutzer wirklich wichtig sind."
+      },
+      "noResults": {
+        "description": "Anfragen ohne Ergebnisse helfen, Lücken in Katalog, Dokumentation, Synonymen oder Filtern zu finden."
+      }
+    }
+  },
+  "homeAiAnswers": {
+    "title": "GraphRAG für Fragen, bei denen Beziehungen wichtig sind",
+    "subtitle": "Standard-RAG ruft ähnliche Chunks ab. GraphRAG nutzt Beziehungen zwischen Entitäten, um Fragen zu Ursachen, Abhängigkeiten, Eigentümern und Prozessen zu beantworten.",
+    "items": {
+      "citedAnswers": {
+        "description": "Die Antwort enthält Quellenlinks, damit Benutzer den Kontext überprüfen und das Originaldokument öffnen können.",
+        "title": "KI-Antworten mit zitierten Quellen"
+      },
+      "hybrid": {
+        "title": "Keyword + Vektor-Hybrid-Suche",
+        "description": "AACSearch OS kombiniert exakte Übereinstimmungen mit semantischer Ähnlichkeit, um Ergebnisse nach Keyword-Relevanz und Vektornähe zu ranken."
+      },
+      "rag": {
+        "title": "GraphRAG-Pipeline",
+        "description": "AACSearch OS erstellt einen Knowledge Graph über Dokumente, Produkte, Benutzer und Events. GraphRAG durchläuft Entitätsbeziehungen, um Fragen zu beantworten, bei denen der Kontext wichtig ist."
+      },
+      "searchFirst": {
+        "title": "Entitätsgraph und Beziehungen",
+        "description": "AACSearch OS extrahiert Entitäten — Produkte, Benutzer, Fehler, Vorfälle, Dokumente — und verbindet sie mit typisierten Beziehungen: besitzt, hängt ab von, verursacht durch, ähnlich wie, gekauft mit."
+      }
+    }
+  },
+  "homeSecurity": {
+    "title": "Sicherheit ist in der Such-Schicht eingebaut",
+    "subtitle": "Die Suche aus dem Browser darf keine permanenten Schlüssel preisgeben. AACsearch verwendet Scoped-Token, Origin-Allow-List und Tenant-Filter, damit jede Anfrage an den Benutzerkontext gebunden ist."
+  },
+  "homeDocsEcosystem": {
+    "title": "SDK, API und Verträge ohne Magie",
+    "subtitle": "TypeScript SDK, REST API, OpenAPI, Webhooks und React-Komponenten arbeiten auf denselben stabilen Verträgen.",
+    "items": {
+      "sdk": {
+        "description": "Typisiertes SDK für Browser- und Server-seitige Szenarien. Typ-Autocomplete, vorhersagbare Fehler und fertige Helfer."
+      },
+      "rest": {
+        "description": "HTTP API mit stabilen Verträgen für Indizierung, Suche, Token, Schlüssel und Analysen."
+      }
+    }
+  },
+  "homeTco": {
+    "title": "Vorhersagbare Unit-Economics für die Suche",
+    "subtitle": "AACsearch zählt Search-Units transparent: eine Suche oder ein indiziertes Dokument. Teams verstehen die Kosten von Index- und Traffic-Wachstum im Voraus."
+  },
+  "homeMigration": {
+    "title": "Migration von Algolia, Meilisearch oder Elasticsearch — in 1 Stunde",
+    "subtitle": "Zero-Downtime-Reindex, physischer Index-Dump oder direkte Synchronisation. Starten Sie die Integration ohne Ihren aktuellen Suchdienst zu stoppen."
+  },
+  "homeOsStack": {
+    "title": "Keine Such-API. Ein Search OS.",
+    "subtitle": "AACSearch OS verbindet Eingabe, Verständnis, Retrieval, Empfehlungen, GraphRAG, Analytics und Sicherheit in einer einheitlichen Schicht.",
+    "layers": {
+      "input": {
+        "label": "Input Layer",
+        "description": "Text, Sprache, Bild, Foto, Screenshot und Konversationsanfragen. Benutzer suchen so, wie sie denken."
+      },
+      "understanding": {
+        "label": "Understanding Layer",
+        "description": "Transkription, OCR, Embeddings, Absichtserkennung, Tippfehlerkorrektur und Query-Umschreibung."
+      },
+      "retrieval": {
+        "label": "Retrieval Layer",
+        "description": "Volltext, Vektor, Bildähnlichkeit, Facetten, Graph-Traversal und Multi-Search. Ein Retrieval-Core für verschiedene Datentypen."
+      },
+      "intelligence": {
+        "label": "Intelligence Layer",
+        "description": "Suggestions, Autocomplete, Empfehlungen, GraphRAG, KI-Antworten mit Zitaten und No-Result-Recovery. Von Suche zu Discovery."
+      }
+    }
   }
 }

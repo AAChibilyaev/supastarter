@@ -43,6 +43,16 @@ export const facetSearch = protectedProcedure
 			facetQueryNumTypos: z.number().int().min(0).max(2).optional(),
 			facetSampleSlope: z.number().min(0).max(1).optional(),
 			facetSampleThreshold: z.number().int().min(0).optional(),
+			rangeFacets: z
+				.array(
+					z.object({
+						field: z.string(),
+						min: z.union([z.number(), z.string()]),
+						max: z.union([z.number(), z.string()]),
+					}),
+				)
+				.max(20)
+				.optional(),
 		}),
 	)
 	.output(
@@ -81,6 +91,9 @@ export const facetSearch = protectedProcedure
 		}
 		if (input.facetSampleThreshold !== undefined) {
 			searchParams.facet_sample_threshold = input.facetSampleThreshold;
+		}
+		if (input.rangeFacets?.length) {
+			searchParams.facet_by = `${searchParams.facet_by ?? ''},${input.rangeFacets.map(r => `${r.field}:range:(${r.min}..${r.max})`).join(',')}`.replace(/^,/, '');
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

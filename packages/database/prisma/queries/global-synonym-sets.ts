@@ -127,8 +127,16 @@ export async function replaceGlobalSynonymSets(
 		return getGlobalSynonymSets(organizationId);
 	});
 }
+/** Delete a single global synonym set (cascades exclusions, then removes the Typesense synonym set). */
+export async function deleteGlobalSynonymSet(id: string, organizationId: string): Promise<boolean> {
+	const result = await db.globalSynonymSet.deleteMany({
+		where: { id, organizationId },
+	});
+	return result.count > 0;
+}
 
-/** Convert GlobalSynonymSetRow[] to SynonymPair[] for Typesense sync. */
+/**
+ * Convert GlobalSynonymSetRow[] to SynonymPair[] for Typesense sync. */
 export function globalSynonymSetsToPairs(
 	rows: GlobalSynonymSetRow[],
 ): { synonym: string; root: string }[] {

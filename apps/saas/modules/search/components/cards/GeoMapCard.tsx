@@ -51,12 +51,7 @@ function MapMarkers({ data, className }: { data: GeoRegionData[]; className?: st
 	const minRadius = 3;
 
 	return (
-		<svg
-			viewBox="0 0 200 120"
-			className={className}
-			fill="none"
-			aria-hidden="true"
-		>
+		<svg viewBox="0 0 200 120" className={className} fill="none" aria-hidden="true">
 			<WorldMapInner />
 			{data.map((region) => {
 				const centroid = regionCentroids[region.region];

@@ -51,6 +51,7 @@ import { analyticsApp } from "./analytics";
 import { billingApp } from "./billing";
 import { crawlerApp } from "./crawler";
 import { documentsApp } from "./documents";
+import { globalSynonymSetsApp } from "./global-synonym-sets";
 import { indexesApp } from "./indexes";
 import { keysApp } from "./keys";
 import { generateOpenApiSpec } from "./openapi";
@@ -62,7 +63,6 @@ import { spellCheckApp } from "./spell-check";
 import { suggestApp } from "./suggest";
 import { syncJobsApp } from "./sync-jobs";
 import { synonymsApp } from "./synonyms";
-import { globalSynonymSetsApp } from "./global-synonym-sets";
 
 const v1Router = new Hono()
 	.route("/", projectsApp)

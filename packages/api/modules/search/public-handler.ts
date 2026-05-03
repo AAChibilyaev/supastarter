@@ -102,6 +102,11 @@ const publicSearchInput = z.object({
 	wildcard: z.boolean().optional(),
 	// ── Distinct Dedup ──
 	distinct: z.union([z.string(), z.number()]).optional(),
+	// ── Curation & Override ──
+	/** Document IDs to pin at the top of results. */
+	pinnedHits: z.string().optional(),
+	/** Document IDs to hide/exclude from results. */
+	hiddenHits: z.string().optional(),
 	// ── MMR Diversification (Typesense v0.30+) ──
 	diversifyBasedOn: z.string().optional(),
 	// ── Token Join (Typesense v0.30+) ──

@@ -22,12 +22,17 @@ const multiSearchEntrySchema = z.object({
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
 	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
 	facetSortBy: z.string().optional(),
+	/** Document IDs to pin at the top of results (comma-separated). */
+	pinnedHits: z.string().optional(),
+	/** Document IDs to hide/exclude from results (comma-separated). */
+	hiddenHits: z.string().optional(),
+	/** Curation set tag to filter results by. */
+	curationTags: z.string().optional(),
 	sortBy: z.string().optional(),
 	collection: z.string().optional(),
 	groupBy: z.string().optional(),
 	groupLimit: z.number().int().min(1).max(100).optional(),
 	groupMissingValues: z.boolean().optional(),
-	pinnedHits: z.string().optional(),
 	/** Per-index weight/boost multiplier for blended results (1.0 = default) */
 	weight: z.number().min(0.1).max(10).optional(),
 });
@@ -117,6 +122,8 @@ export const federatedSearch = protectedProcedure
 						group_missing_values: s.groupMissingValues,
 					}),
 					...(s.pinnedHits && { pinned_hits: s.pinnedHits }),
+					...(s.hiddenHits && { hidden_hits: s.hiddenHits }),
+					...(s.curationTags && { curation_tags: s.curationTags }),
 				};
 			}),
 		);

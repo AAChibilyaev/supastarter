@@ -56,6 +56,10 @@ const searchInputSchema = z.object({
 	highlightEndTag: z.string().optional(),
 	// ── Curation ──
 	curationTags: z.string().optional(),
+	/** Document IDs to pin at the top of results. */
+	pinnedHits: z.string().optional(),
+	/** Document IDs to hide/exclude from results. */
+	hiddenHits: z.string().optional(),
 	// ── Hybrid ──
 	hybridConfidence: z.number().min(0).max(1).optional(),
 	// ── Facets ──
@@ -142,6 +146,9 @@ export const searchApp = new Hono()
 			facetSamplePercent: input.facetSamplePercent,
 			facetStrategy: input.facetStrategy,
 			facetSortBy: input.facetSortBy,
+			curationTags: input.curationTags,
+			pinnedHits: input.pinnedHits,
+			hiddenHits: input.hiddenHits,
 		});
 
 		endLatency();

@@ -102,6 +102,13 @@ export interface SearchDocumentsInput {
 	enableHighlightV1?: boolean;
 	/** Whether to group null/empty values as a separate group when using `group_by`. */
 	groupMissingValues?: boolean;
+	// ── Curation & Override (Typesense v0.30+) ─────────────────────
+	/** Document IDs to pin at the top of results. Comma-separated. */
+	pinnedHits?: string;
+	/** Document IDs to hide/exclude from results. Comma-separated. */
+	hiddenHits?: string;
+	/** Curation set tag to filter search results by. */
+	curationTags?: string;
 }
 
 export interface SearchDocumentsResult {
@@ -389,6 +396,16 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 					...(input.groupMissingValues !== undefined && {
 						group_missing_values: input.groupMissingValues,
 					}),
+					// ── Curation & Override ──
+					...(input.pinnedHits !== undefined && {
+						pinned_hits: input.pinnedHits,
+					}),
+					...(input.hiddenHits !== undefined && {
+						hidden_hits: input.hiddenHits,
+					}),
+					...(input.curationTags !== undefined && {
+						curation_tags: input.curationTags,
+					}),
 				} as any),
 	);
 
@@ -512,6 +529,16 @@ function buildMultiSearchEntry(entry: MultiSearchEntry): Record<string, unknown>
 		// ── Grouping ──
 		...(entry.groupMissingValues !== undefined && {
 			group_missing_values: entry.groupMissingValues,
+		}),
+		// ── Curation & Override ──
+		...(entry.pinnedHits !== undefined && {
+			pinned_hits: entry.pinnedHits,
+		}),
+		...(entry.hiddenHits !== undefined && {
+			hidden_hits: entry.hiddenHits,
+		}),
+		...(entry.curationTags !== undefined && {
+			curation_tags: entry.curationTags,
 		}),
 	};
 }

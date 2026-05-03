@@ -1,1900 +1,1904 @@
 {
-	"blog": {
-		"description": "Engineering notes from the AACsearch team",
-		"title": "AACsearch Blog",
-		"back": "Back to blog"
-	},
-	"changelog": {
-		"description": "What shipped, when, and what changed under the hood.",
-		"title": "Changelog"
-	},
-	"contact": {
-		"description": "Reach the team — billing, security disclosures, partnerships.",
-		"form": {
-			"email": "Email",
-			"message": "Message",
-			"name": "Name",
-			"notifications": {
-				"error": "Could not send your message. Please try again later.",
-				"success": "Got it — we'll reply within one business day."
-			},
-			"submit": "Send message"
-		},
-		"title": "Contact"
-	},
-	"documentation": {
-		"title": "Documentation"
-	},
-	"home": {
-		"hero": {
-			"badge": "v0 — accepting early access",
-			"title": "Multimodal search for products that need more than a search box",
-			"subtitle": "Let users search by text, voice, photo, image, or AI chat — with one API, one index, one analytics layer, and secure scoped access.",
-			"getStarted": "Start free",
-			"documentation": "Read the docs",
-			"codeCaption": "search-client.ts",
-			"new": "NEW",
-			"featureBadge": "Multimodal Search Layer",
-			"imageAlt": "AACsearch dashboard screenshot",
-			"badgeLatency": "50ms p99",
-			"badgeSoc2": "SOC 2",
-			"badgeFulltext": "Full-text",
-			"badgeAnalytics": "Analytics",
-			"searchPlaceholder": "Search anything by text, voice, image or chat...",
-			"voicePlaceholder": "Tap the microphone and speak your query...",
-			"chatPlaceholder": "Ask a question about your data...",
-			"mediaPlaceholder": "Upload a photo or image to search visually...",
-			"statDocs": "Documents indexed",
-			"statLatency": "Search latency",
-			"statUptime": "Uptime SLA"
-		},
-		"howItWorks": {
-			"title": "Three calls. One afternoon.",
-			"step1": {
-				"title": "1. Push documents",
-				"description": "POST your records to a per-org index. Bulk import or single-doc upsert — you define the schema."
-			},
-			"step2": {
-				"title": "2. Mint a search token",
-				"description": "Issue a short-lived scoped token from your dashboard or server. Locked to an index, an origin, and a TTL."
-			},
-			"step3": {
-				"title": "3. Search from the browser",
-				"description": "Typed browser SDK. Single search, multi-search (federated), faceted filters — under 50ms p99."
-			}
-		},
-		"features": {
-			"title": "What you get out of the box",
-			"subtitle": "No «coming next quarter». Every feature ships today.",
-			"items": {
-				"scopedTokens": {
-					"title": "Scoped tokens",
-					"description": "Issue short-lived tokens per user, per index, per filter set. Safer than public API keys in the browser — a leaked token can't query another index."
-				},
-				"originAllowlist": {
-					"title": "Origin allow-list",
-					"description": "Pin every API key to specific origins. Leak a key on Twitter? It won't work from another domain — your quota is safe."
-				},
-				"rateLimitQuota": {
-					"title": "Rate limit & quota",
-					"description": "Per-key per-minute throttling and per-org monthly quota — both visible in the dashboard before you hit them."
-				},
-				"multiSearch": {
-					"title": "Multi-search",
-					"description": "Run several queries in one round-trip. Build cross-collection autocomplete without N separate requests."
-				},
-				"reindex": {
-					"title": "Zero-downtime reindex",
-					"description": "Rebuild an index against a new schema while live traffic keeps hitting the old version. Cut over atomically — no downtime."
-				},
-				"enterpriseSecurity": {
-					"title": "Enterprise-grade security",
-					"description": "SSO, audit log, IP allow-list, dedicated cluster, and 99.95% SLA. Security controls from day one — not as an add-on."
-				}
-			}
-		},
-		"pricing": {
-			"badge": "Pricing",
-			"title": "Pay for searches and indexed docs. Nothing else.",
-			"subtitle": "1 search-unit = 1 search request OR 1 indexed document. Cancel anytime.",
-			"cta": "Start free",
-			"contact": "Contact sales",
-			"perMonth": "/mo",
-			"plans": {
-				"free": {
-					"name": "Free",
-					"price": "$0",
-					"description": "For evaluating, hobby projects and side-products.",
-					"features": [
-						"10K search-units / month",
-						"1 index",
-						"3 API keys",
-						"Community support"
-					]
-				},
-				"pro": {
-					"name": "Pro",
-					"price": "$29",
-					"description": "Production-ready for indie SaaS and small B2B teams.",
-					"features": [
-						"1M search-units / month",
-						"10 indexes",
-						"Unlimited keys & scoped tokens",
-						"Custom origin allow-list",
-						"Email support, 1 business day"
-					],
-					"highlight": "Most teams start here"
-				},
-				"enterprise": {
-					"name": "Enterprise",
-					"price": "Custom",
-					"description": "Dedicated cluster, audit log, 99.95% SLA.",
-					"features": [
-						"Unmetered search-units",
-						"SSO (SAML / OIDC)",
-						"Audit log + IP allow-list",
-						"Dedicated cluster region",
-						"99.95% SLA, signed DPA"
-					]
-				}
-			},
-			"monthly": "Monthly",
-			"yearly": "Yearly",
-			"yearlyDiscount": "Save 17%",
-			"perYear": "/yr"
-		},
-		"cta": {
-			"title": "Ship search in one evening",
-			"subtitle": "The free tier covers most side projects. Upgrade in 5 minutes — your data stays. No credit card.",
-			"primary": "Create account",
-			"secondary": "Read the docs"
-		},
-		"testimonials": {
-			"title": "Real results from real teams",
-			"subtitle": "4,500+ indexed sites · 2.5M+ documents · 99.99% uptime",
-			"prev": "Previous",
-			"next": "Next",
-			"prevLabel": "Previous testimonial",
-			"nextLabel": "Next testimonial",
-			"dotLabel": "Go to testimonial {number}",
-			"items": {
-				"nordikHome": {
-					"quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
-					"author": "Erik Lindström",
-					"role": "CTO",
-					"company": "NordikHome",
-					"initials": "EL"
-				},
-				"agencyHub": {
-					"quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
-					"author": "Marcus Weber",
-					"role": "Technical Director",
-					"company": "AgencyHub",
-					"initials": "MW"
-				},
-				"devStream": {
-					"quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
-					"author": "Priya Sharma",
-					"role": "VP Engineering",
-					"company": "DevStream",
-					"initials": "PS"
-				}
-			}
-		},
-		"logos": {
-			"title": "Trusted by innovative teams"
-		},
-		"trustBadges": {
-			"g2": "on G2",
-			"capterra": "on Capterra",
-			"companies": "companies",
-			"apps": "apps"
-		}
-	},
-	"homeUseCases": {
-		"title": "Who is AACsearch for",
-		"subtitle": "Industry-specific use cases with concrete examples of what users search for.",
-		"items": {
-			"saas": {
-				"title": "SaaS products",
-				"description": "Projects, tasks, users, reports, settings, domain objects — search across any entity inside your app.",
-				"searchExamples": "order #1042, user @ivanov, revenue report, webhook config, March invoice"
-			},
-			"docs": {
-				"title": "Docs / Developer portals",
-				"description": "API methods, SDK functions, error codes, parameters, migration guides, release notes.",
-				"searchExamples": "POST /collections, createIndex(), error 401, apiKey parameter, v2→v3 migration"
-			},
-			"ecommerce": {
-				"title": "E-commerce / Catalogs",
-				"description": "Products, SKUs, brands, categories, attributes, facets — faceted search with filters under 50ms on 1M+ products.",
-				"searchExamples": "Nike sneakers size 42, iPhone 15 Pro, Samsung brand in 'TV' category, in-stock items under $500"
-			},
-			"internal": {
-				"title": "Internal tools / Knowledge base",
-				"description": "Documents, policies, incidents, RFCs, owners, runbooks — semantic + full-text hybrid.",
-				"searchExamples": "remote work policy, incident INC-2024-04, CRITICAL playbook, billing service owner"
-			},
-			"marketplace": {
-				"title": "Marketplaces",
-				"description": "Listings, sellers, categories, geography, multilingual — thousands of tenants in one cluster.",
-				"searchExamples": "downtown apartments under $100k, seller 'TechStore', Electronics category, 1-day delivery items"
-			}
-		}
-	},
-	"homeWhatUsersSearch": {
-		"title": "Search by text, voice, photo, image, or AI chat",
-		"subtitle": "AACsearch isn't just a search box. Users can type, speak, snap, upload, or ask — and get the right result.",
-		"multimodalLabel": "Five input modes",
-		"items": {
-			"text": {
-				"title": "Text",
-				"description": "Type and find"
-			},
-			"voice": {
-				"title": "Voice",
-				"description": "Speak and search"
-			},
-			"photo": {
-				"title": "Photo",
-				"description": "Snap and find"
-			},
-			"image": {
-				"title": "Image",
-				"description": "Upload and match"
-			},
-			"chat": {
-				"title": "AI Chat",
-				"description": "Ask and discover"
-			},
-			"entity": {
-				"title": "Exact entities",
-				"description": "Order ID, SKU, error code, username or document name. AACsearch finds exact matches faster than Ctrl+F.",
-				"icon": "search"
-			},
-			"fuzzy": {
-				"title": "Fuzzy queries",
-				"description": "Users misspell, use transliteration, or abbreviate. Typo tolerance and prefix search fix to relevant results.",
-				"icon": "pencil"
-			},
-			"category": {
-				"title": "Category navigation",
-				"description": "Faceted filters: brand + price + availability + size. Multi-search across collections in one round-trip.",
-				"icon": "filter"
-			},
-			"answer": {
-				"title": "Natural language answers",
-				"description": "For docs and knowledge base — search-first, answer-augmented UX. Hybrid: result list + AI answer with citations.",
-				"icon": "message-square"
-			},
-			"autocomplete": {
-				"title": "Autocomplete & suggestions",
-				"description": "Show relevant suggestions from the first character. Keyboard navigation, recent searches, pinned suggestions.",
-				"icon": "forward"
-			},
-			"noResults": {
-				"title": "Zero-result handling",
-				"description": "No-result recovery: suggestions, similar queries, automatic filter expansion. Users never leave empty-handed.",
-				"icon": "search-x"
-			}
-		}
-	},
-	"homeSearchUX": {
-		"title": "What good search UX looks like",
-		"subtitle": "Not backend features — what users actually see. Autocomplete, typo tolerance, facets, highlighted matches — out of the box.",
-		"items": {
-			"autocomplete": {
-				"title": "Autocomplete + suggestions",
-				"description": "Suggestions from the first character. Keyboard navigation, recent searches, pinned items."
-			},
-			"typo": {
-				"title": "Typo tolerance",
-				"description": "'Nokai' finds Nokia. 'sneekers' finds sneakers. 1–2 typos per word — accepted by default."
-			},
-			"facets": {
-				"title": "Faceted filters",
-				"description": "Filters by brand, price, category, availability — with result count for each option."
-			},
-			"highlight": {
-				"title": "Highlighted matches",
-				"description": "Matching fragments are highlighted in results. Users immediately see why this document was returned."
-			},
-			"grouped": {
-				"title": "Grouped results",
-				"description": "Multi-search across collections: products separately, articles separately, orders separately — all in one request."
-			},
-			"recovery": {
-				"title": "No-result recovery",
-				"description": "Empty result → suggestions, similar queries, automatic filter expansion. Users don't leave."
-			}
-		}
-	},
-	"homeRelevance": {
-		"title": "Relevance & ranking control",
-		"subtitle": "Fast search without quality control isn't compelling. We give you the tools to tune relevance for your use case.",
-		"ranking": {
-			"title": "Ranking management",
-			"description": "Field weights, exact match boost, prefix vs partial match. Configure which fields affect result ordering."
-		},
-		"synonyms": {
-			"title": "Synonyms & stop words",
-			"description": "'laptop' = 'notebook', 'sneakers' = 'trainers'. Exclude non-significant words from search."
-		},
-		"curations": {
-			"title": "Business rules",
-			"description": "Pin specific results to the top. Promotions or weak inventory boosting — without reindexing."
-		},
-		"personalization": {
-			"title": "Personalization",
-			"description": "Scoped relevance by roles, groups, or tenants. Each tenant sees their own results."
-		},
-		"abTesting": {
-			"title": "A/B testing",
-			"description": "Compare two sets of relevance rules on live traffic. Metrics: CTR, zero-result rate, conversion."
-		}
-	},
-	"homeAnalytics": {
-		"title": "Search analytics — improve your product with data",
-		"subtitle": "Search isn't 'set and forget'. Analytics shows what users search for, what they don't find, and how to improve results.",
-		"items": {
-			"topQueries": {
-				"title": "Top queries",
-				"description": "Most frequent searches. Know what users need most without surveys."
-			},
-			"noResults": {
-				"title": "Zero-result queries",
-				"description": "Queries that found nothing. Each one is an opportunity to add content or configure a synonym."
-			},
-			"ctr": {
-				"title": "CTR by position",
-				"description": "What percentage of clicks does position 1 get? Position 2? Where does engagement drop?"
-			},
-			"filterUsage": {
-				"title": "Filter usage",
-				"description": "Which facets are popular? Which filters go unused? Simplify UX based on data."
-			},
-			"conversion": {
-				"title": "Post-search conversion",
-				"description": "How many search sessions led to a target action — purchase, view, form submission."
-			},
-			"quota": {
-				"title": "Per-key consumption",
-				"description": "Per-key and per-tenant usage analytics. Who's exceeding limits, where are anomalies."
-			}
-		}
-	},
-	"homeSecurity": {
-		"title": "Security & multi-tenant architecture",
-		"subtitle": "Search from the browser = tokens that narrow permissions, not expand them. Tenant isolation on every query.",
-		"items": {
-			"scopedTokens": {
-				"title": "Short-lived scoped tokens",
-				"description": "HMAC-signed tokens bound to an index, origin, and TTL. A leaked token only accesses one index for one hour."
-			},
-			"tenantIsolation": {
-				"title": "Tenant isolation",
-				"description": "Every search query is scoped to your organization ID. Cross-tenant reads are architecturally impossible."
-			},
-			"originRestriction": {
-				"title": "Origin restriction",
-				"description": "Pin every API key to specific origins. A browser-console leaked key won't work from another domain."
-			},
-			"sso": {
-				"title": "SSO + Audit log",
-				"description": "SAML/OIDC for enterprise. Every administrative action is logged with timestamp and actor."
-			},
-			"compliance": {
-				"title": "Compliance & DPA",
-				"description": "SOC 2, encryption at rest and in transit, dedicated cluster regions. Signed DPA for GDPR/CCPA."
-			},
-			"sla": {
-				"title": "99.95% SLA",
-				"description": "Contractually guaranteed uptime. Incident response, backups, restore procedures."
-			}
-		}
-	},
-	"homeQuickstart": {
-		"title": "Integration in 15 minutes",
-		"subtitle": "Create an index, push documents, issue a token, run a search. That's it.",
-		"steps": {
-			"create": {
-				"title": "1. Create an index",
-				"code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
-			},
-			"index": {
-				"title": "2. Push documents",
-				"code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Nike Sneakers\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Adidas Sneakers\", \"price\": 7500}\n]"
-			},
-			"token": {
-				"title": "3. Issue a scoped token",
-				"code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
-			},
-			"search": {
-				"title": "4. Search from the browser",
-				"code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"Nike sneakers\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
-			}
-		},
-		"cta": "View full documentation"
-	},
-	"homeAiAnswers": {
-		"title": "AI answers on top of search",
-		"subtitle": "Search-first, answer-augmented UX. For docs, knowledge bases, and support — answers with citations, not a black box.",
-		"items": {
-			"hybrid": {
-				"title": "Keyword + semantic hybrid",
-				"description": "Keyword precision + semantic understanding. Configurable weights for each use case."
-			},
-			"citedAnswers": {
-				"title": "Answers with citations",
-				"description": "Instead of a black box — an AI answer with source links. Users see where the answer came from."
-			},
-			"rag": {
-				"title": "RAG-ready pipeline",
-				"description": "Plug AACsearch into your RAG pipeline. Vector embeddings are generated automatically during indexing."
-			},
-			"searchFirst": {
-				"title": "Search-first UX",
-				"description": "Results first, answer second. Users can navigate to the source or read the generated answer."
-			}
-		}
-	},
-	"homeDocsEcosystem": {
-		"title": "SDK, API & ecosystem",
-		"subtitle": "TypeScript SDK, REST API, Next.js/React components, webhooks, and OpenAPI spec. No magic — just documented contracts.",
-		"items": {
-			"sdk": {
-				"title": "TypeScript SDK",
-				"description": "Typed browser SDK for React, Next.js, Vue, and vanilla JS. Autocomplete types in your IDE."
-			},
-			"rest": {
-				"title": "REST API",
-				"description": "OpenAPI spec available for client generation. All operations over HTTP."
-			},
-			"webhooks": {
-				"title": "Webhooks",
-				"description": "Indexing events, sync errors, quota breaches — subscribe to real-time changes."
-			},
-			"frameworks": {
-				"title": "Next.js / React",
-				"description": "SearchProvider, UseSearch hook, ready-made components for React and Next.js App Router."
-			},
-			"migration": {
-				"title": "Migration",
-				"description": "Zero-downtime reindex out of the box. Migrate from Algolia, Meilisearch, or Elasticsearch — physical index dump."
-			},
-			"playground": {
-				"title": "Playground",
-				"description": "Interactive console in the dashboard. Try queries, see results, copy ready-to-use code."
-			}
-		}
-	},
-	"homeTco": {
-		"title": "AACsearch vs Algolia — real cost comparison",
-		"subtitle": "Algolia charges per record every month. At 1M searches/month, AACsearch costs 5x less.",
-		"rows": {
-			"priceModel": {
-				"metric": "Pricing model",
-				"algolia": "$0.50 / 1K searches + $0.50 / record / month",
-				"aac": "$0.10 / 1K search-units. 1 unit = 1 search OR 1 document."
-			},
-			"oneMillion": {
-				"metric": "1M searches/mo + 10K docs",
-				"algolia": "$500 (search) + $5,000 (records) = $5,500/mo",
-				"aac": "$100/mo"
-			},
-			"tenMillion": {
-				"metric": "10M searches/mo + 100K docs",
-				"algolia": "$5,000 (search) + $50,000 (records) = $55,000/mo",
-				"aac": "$1,000/mo"
-			},
-			"overage": {
-				"metric": "Overage",
-				"algolia": "Auto overage at standard rates",
-				"aac": "Soft cap: dashboard warning. Hard cap: block until next cycle."
-			},
-			"records": {
-				"metric": "Record storage cost",
-				"algolia": "Every record costs money every month",
-				"aac": "Pay once at index time. Free thereafter."
-			},
-			"zeroDowntime": {
-				"metric": "Zero-downtime reindex",
-				"algolia": "Enterprise plan only",
-				"aac": "Included in all plans"
-			}
-		},
-		"cta": "Calculate your savings →"
-	},
-	"homeMigration": {
-		"title": "Migrate from Algolia, Meilisearch, or Elasticsearch — in 1 hour",
-		"subtitle": "Zero-downtime reindex, physical index dump, or direct sync. Start integration without stopping your current search.",
-		"steps": {
-			"export": {
-				"title": "1. Export your index",
-				"description": "Export your current index via your provider's API. AACsearch accepts JSON, NDJSON, and CSV."
-			},
-			"import": {
-				"title": "2. Import to AACsearch",
-				"description": "POST to /collections — indexing starts immediately. Via dashboard, CLI, or API."
-			},
-			"switch": {
-				"title": "3. Switch without downtime",
-				"description": "Live search stays on your old provider. New index builds in parallel. Atomic alias switch."
-			},
-			"monitor": {
-				"title": "4. Monitor and rollback",
-				"description": "Compare before/after metrics: latency, CTR, zero-result rate. One-click rollback if needed."
-			}
-		},
-		"cta": "Start migration"
-	},
-	"homePricingFaq": {
-		"title": "Pricing FAQ — unit economics explained",
-		"items": {
-			"unit": {
-				"q": "What counts as one search-unit?",
-				"a": "1 search request OR 1 indexed document. A document update = 1 unit. Reindex is not billed — only the final write to the new index."
-			},
-			"overage": {
-				"q": "What happens after exceeding the limit?",
-				"a": "Soft cap: you receive a dashboard warning and email notification. Hard cap: search is blocked until the next billing cycle. No surprise bills."
-			},
-			"comparison": {
-				"q": "How does AACsearch compare to Algolia on price?",
-				"a": "Algolia charges for every record every month. At 1M searches + 10K documents, Algolia costs ~$5,500/mo — AACsearch costs $100/mo. At 10M searches, the difference reaches 50x."
-			},
-			"free": {
-				"q": "What's included in the free tier?",
-				"a": "10,000 search-units/month, 1 index, 3 API keys. Enough for a prototype, MVP, or small side project."
-			},
-			"migration": {
-				"q": "How do I migrate from another provider?",
-				"a": "Zero-downtime reindex out of the box. Export your index → import into AACsearch → switch the alias. All online, no search interruption."
-			}
-		}
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"common": {
-		"footer": {
-			"blog": "Blog",
-			"features": "Features",
-			"pricing": "Pricing",
-			"privacyPolicy": "Privacy policy",
-			"termsAndConditions": "Terms",
-			"tagline": "Search as a service — scoped tokens, origin allow-lists, and a typed browser SDK.",
-			"legal": "Legal",
-			"status": "Status",
-			"support": "Support",
-			"trust": "Trust",
-			"brand": "Brand"
-		},
-		"menu": {
-			"blog": "Blog",
-			"changelog": "Changelog",
-			"contact": "Contact",
-			"dashboard": "Dashboard",
-			"docs": "Docs",
-			"features": "Features",
-			"login": "Sign in",
-			"pricing": "Pricing",
-			"product": "Product",
-			"solutions": "Solutions",
-			"resources": "Resources",
-			"company": "Company",
-			"enterprise": "Enterprise",
-			"roadmap": "Roadmap",
-			"useCases": "Use Cases",
-			"integrations": "Integrations",
-			"customers": "Customers",
-			"compare": "Compare",
-			"aiSearch": "AI Search",
-			"developers": "Developers",
-			"faq": "FAQ",
-			"glossary": "Glossary",
-			"about": "About",
-			"security": "Security",
-			"careers": "Careers",
-			"partners": "Partners",
-			"press": "Press"
-		},
-		"aria": {
-			"menu": "Menu",
-			"language": "Language"
-		},
-		"tableOfContents": {
-			"title": "On this page"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		}
-	},
-	"pricingPage": {
-		"title": "Simple, usage-based pricing",
-		"description": "Pay for searches and indexed documents. Nothing else. No seat fees, no hidden limits. Cancel anytime."
-	},
-	"securityPage": {
-		"title": "Security built into every layer",
-		"description": "API keys hashed and never stored in plaintext. Scoped tokens that narrow, never widen. Tenant isolation enforced at every query."
-	},
-	"security": {
-		"title": "Defense in depth",
-		"subtitle": "Every request goes through auth, rate limiting, quota check, and tenant isolation before touching your data.",
-		"items": {
-			"keyHashing": {
-				"title": "API key hashing",
-				"description": "All API keys are hashed with SHA-256 and stored as digests. The plaintext is shown once at creation and never again."
-			},
-			"scopedTokens": {
-				"title": "Scoped tokens",
-				"description": "HMAC-signed tokens are locked to a specific index, origin, and TTL. They narrow permissions — never widen them."
-			},
-			"originAllowlist": {
-				"title": "Origin allow-list",
-				"description": "Pin every API key to specific origins. A leaked key published on Twitter still can't drain your quota."
-			},
-			"rateLimiting": {
-				"title": "Rate limiting",
-				"description": "Per-key per-minute throttling, enforced server-side. Usage and limits are visible in the dashboard before you hit them."
-			},
-			"tenantIsolation": {
-				"title": "Tenant isolation",
-				"description": "Every search call is scoped to your organization ID. Cross-org reads are architecturally impossible — not just policy."
-			},
-			"auditLog": {
-				"title": "Audit log",
-				"description": "Every admin action is logged with timestamp, actor, and change. Available on Enterprise plans."
-			}
-		}
-	},
-	"enterprisePage": {
-		"title": "AACsearch for Enterprise",
-		"description": "Dedicated infrastructure, SSO, audit log, 99.95% SLA, and signed DPA — everything compliance and security teams require."
-	},
-	"enterprise": {
-		"title": "Built for regulated teams",
-		"subtitle": "Unmetered search, dedicated cluster, custom integrations. Contact us and we'll scope a plan for your requirements.",
-		"items": {
-			"sso": {
-				"title": "SSO (SAML / OIDC)",
-				"description": "Connect your identity provider — Okta, Azure AD, Google Workspace, or any SAML 2.0 / OIDC compliant IdP."
-			},
-			"dedicatedCluster": {
-				"title": "Dedicated cluster",
-				"description": "Your indexes run on isolated infrastructure in the region you choose. No noisy neighbours, no shared search nodes."
-			},
-			"auditLog": {
-				"title": "Audit log + IP allow-list",
-				"description": "Every admin action is timestamped and attributable. Lock access to a specific IP range for your ops team."
-			},
-			"sla": {
-				"title": "99.95% SLA + signed DPA",
-				"description": "Contractual uptime guarantee and a signed Data Processing Agreement covering GDPR and CCPA requirements."
-			},
-			"prioritySupport": {
-				"title": "Priority support",
-				"description": "Dedicated Slack channel. Sub-4-hour first response. Named technical account manager for onboarding and incidents."
-			},
-			"customIntegrations": {
-				"title": "Custom integrations",
-				"description": "We onboard your CMS, ERP, or proprietary data source. Connector API included; custom connectors on request."
-			}
-		}
-	},
-	"aboutPage": {
-		"title": "About AACsearch",
-		"description": "We're building the search infrastructure for the next generation of web applications.",
-		"mission": {
-			"label": "Our Mission",
-			"quote": "Search should be fast, relevant, and accessible to every developer.",
-			"body": "AACsearch was founded with a simple belief: great search should not require a team of engineers to maintain or a fortune to operate."
-		},
-		"stats": {
-			"searches": "10M+",
-			"searchesLabel": "Searches per day",
-			"companies": "500+",
-			"companiesLabel": "Companies trust us",
-			"uptime": "99.9%",
-			"uptimeLabel": "Uptime SLA",
-			"latency": "<50ms",
-			"latencyLabel": "Average latency"
-		},
-		"why": {
-			"title": "Why AACsearch",
-			"items": {
-				"speed": {
-					"title": "Blazing Fast",
-					"description": "Sub-50ms search responses at any scale, powered by our distributed search infrastructure."
-				},
-				"simple": {
-					"title": "Developer First",
-					"description": "Intuitive REST API, SDKs for every major language, and a dashboard that makes sense."
-				},
-				"open": {
-					"title": "Transparent Pricing",
-					"description": "No hidden fees, no lock-in. Pay only for what you use with clear, predictable pricing."
-				}
-			}
-		}
-	},
-	"about": {
-		"title": "Why we built AACsearch",
-		"subtitle": "Search infrastructure is hard. Managed services are expensive and opaque. We built the thing we wished existed.",
-		"items": {
-			"mission": {
-				"title": "Mission",
-				"description": "Make production-grade search available to every team — from two-person startups to regulated enterprises — without requiring a dedicated search engineer."
-			},
-			"technology": {
-				"title": "Technology",
-				"description": "Built on a lightning-fast search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
-			},
-			"openCore": {
-				"title": "No lock-in",
-				"description": "Your data is always yours. Export indexes, migrate between plans, or switch to the Enterprise tier. No proprietary data format, no migration tax."
-			},
-			"team": {
-				"title": "Team",
-				"description": "A small, focused team. We have shipped search at B2B SaaS companies, e-commerce platforms, and developer tools. We eat our own cooking."
-			},
-			"values": {
-				"title": "Values",
-				"description": "Simplicity over cleverness. Documented behaviour over magic. An API that a junior developer can use on day one and a senior can rely on in production."
-			},
-			"roadmap": {
-				"title": "Roadmap",
-				"description": "Public roadmap, voted by users. We ship incrementally — no big-bang releases. Changelog updated with every deployment."
-			}
-		}
-	},
-	"caseStudiesPage": {
-		"title": "Customer Case Studies",
-		"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
-		"readCaseStudy": "Read case study",
-		"cta": {
-			"title": "Want to be our next case study?",
-			"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
-		}
-	},
-	"customersPage": {
-		"title": "Loved by Developers, Trusted by Businesses",
-		"description": "Join hundreds of companies using AACsearch to power fast, relevant search experiences.",
-		"stats": {
-			"companies": "500+",
-			"companiesLabel": "Companies worldwide",
-			"searches": "10M+",
-			"searchesLabel": "Searches per day",
-			"uptime": "99.9%",
-			"uptimeLabel": "Platform uptime",
-			"rating": "4.9/5",
-			"ratingLabel": "Average rating"
-		},
-		"testimonials": {
-			"title": "Real results from real customers",
-			"items": {
-				"nordikHome": {
-					"quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
-					"author": "Erik Lindström",
-					"role": "CTO",
-					"company": "NordikHome"
-				},
-				"agencyHub": {
-					"quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
-					"author": "Marcus Weber",
-					"role": "Technical Director",
-					"company": "AgencyHub"
-				},
-				"devStream": {
-					"quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
-					"author": "Priya Sharma",
-					"role": "VP Engineering",
-					"company": "DevStream"
-				}
-			}
-		},
-		"caseStudies": {
-			"title": "Read their full stories",
-			"description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
-			"readFullStudy": "Read full case study →",
-			"items": {
-				"nordikHome": {
-					"title": "NordikHome: 5x Cost Reduction",
-					"excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
-				},
-				"agencyHub": {
-					"title": "AgencyHub: Multi-Tenant Search",
-					"excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
-				},
-				"devStream": {
-					"title": "DevStream: Zero DevOps, 10x Faster",
-					"excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
-				}
-			}
-		},
-		"logos": {
-			"title": "Trusted by teams at"
-		},
-		"cta": {
-			"title": "Join hundreds of companies",
-			"description": "Start your free trial today — no credit card required."
-		}
-	},
-	"customers": {
-		"title": "Trusted by builders",
-		"subtitle": "Early adopters who replaced Algolia, Elasticsearch, or hand-rolled solutions — and stopped worrying about search infra.",
-		"items": {
-			"ecommerce": {
-				"title": "E-commerce platform",
-				"description": "Replaced Algolia after the third surprise bill. AACsearch costs a fixed amount each month. The migration took three days. Search is better than before.",
-				"role": "CTO, 15-person e-commerce SaaS"
-			},
-			"saasFounder": {
-				"title": "B2B SaaS founder",
-				"description": "We needed per-tenant search without building infra. AACsearch scoped tokens meant we shipped in a weekend instead of a sprint.",
-				"role": "Founder, project management SaaS"
-			},
-			"devTools": {
-				"title": "Developer tools company",
-				"description": "MCP Server lets our AI features search over user data programmatically. One integration unlocked three new product features.",
-				"role": "VP Engineering, developer tools startup"
-			},
-			"enterprise": {
-				"title": "Enterprise platform",
-				"description": "Audit log, SSO, and dedicated cluster were the requirements. AACsearch Enterprise checked all three. The SLA is contractual.",
-				"role": "Head of Security, enterprise SaaS"
-			},
-			"marketplace": {
-				"title": "Marketplace startup",
-				"description": "Multi-search lets us run product, seller, and content queries in one request. The analytics show us exactly where users drop off.",
-				"role": "Lead Engineer, two-sided marketplace"
-			},
-			"agency": {
-				"title": "Digital agency",
-				"description": "We deploy AACsearch for clients. Enterprise plans include dedicated infrastructure for teams with strict data residency requirements.",
-				"role": "Technical Director, digital agency"
-			}
-		}
-	},
-	"roadmapPage": {
-		"title": "Product roadmap",
-		"description": "What shipped, what is in progress, and what is coming next. Updated after every sprint."
-	},
-	"roadmap": {
-		"title": "Where we are going",
-		"subtitle": "Incremental, public, and boring in the best way. No big-bang releases — just consistent delivery.",
-		"shipped": "Shipped",
-		"inProgress": "In progress",
-		"planned": "Planned",
-		"seeChangelog": "See changelog →",
-		"items": {
-			"searchCore": {
-				"title": "Search core v0.x",
-				"description": "Single-doc upsert, multi-search, browser SDK, scoped tokens, origin allow-list, rate-limit, quota, zero-downtime reindex, DB-first ingest.",
-				"status": "shipped"
-			},
-			"marketing": {
-				"title": "Marketing site v0.5",
-				"description": "Public marketing site with pricing, features, integrations, security, use-cases, and enterprise pages in 5 locales.",
-				"status": "shipped"
-			},
-			"connectors": {
-				"title": "CMS connectors R2",
-				"description": "PrestaShop 8.x and 1C-Bitrix modules. Connector API with handshake, full/delta sync, diagnostics, heartbeat.",
-				"status": "shipped"
-			},
-			"knowledge": {
-				"title": "Knowledge module R2.5",
-				"description": "RAG and GraphRAG over documents. 9 oRPC procedures, 7 Prisma models, file ingestion, chunking, retrieval.",
-				"status": "shipped"
-			},
-			"metering": {
-				"title": "Search-units metering v0.6",
-				"description": "Tochka wallet top-up, per-plan search-unit billing, analytics pipeline, wallet dashboard.",
-				"status": "inProgress"
-			},
-			"billing": {
-				"title": "Billing & payments",
-				"description": "Stripe subscriptions, customer portal, invoices, multi-currency support with Tochka Bank for Russian payments.",
-				"status": "shipped"
-			},
-			"analytics": {
-				"title": "Analytics & dashboards",
-				"description": "Real-time query analytics, usage metrics, failed queries, CTR tracking, and custom dashboards.",
-				"status": "inProgress"
-			},
-			"widget": {
-				"title": "Widget & embed SDK",
-				"description": "Drop-in search widget with Cmd+K modal, floating bubble, and full-page modes. React, Vue, Angular, and vanilla JS bundles.",
-				"status": "inProgress"
-			},
-			"aiNlp": {
-				"title": "NLP & AI search",
-				"description": "Spell correction, intent detection, AI query rewriting, and natural language search. Zero-click AI answers coming next.",
-				"status": "planned"
-			},
-			"docs": {
-				"title": "Public docs site v0.7",
-				"description": "Full documentation site with API reference, quick-start guides, and tutorials.",
-				"status": "planned"
-			},
-			"selfHost": {
-				"title": "Enterprise deployment v1.0",
-				"description": "Dedicated cluster deployment, custom data residency, and on-prem options for regulated industries. Same managed API, your infrastructure.",
-				"status": "planned"
-			},
-			"vectorSearch": {
-				"title": "Vector & hybrid search",
-				"description": "Semantic search via OpenAI embeddings. Hybrid BM25 + vector ranking. Already implemented in procedures.",
-				"status": "shipped"
-			},
-			"shopify": {
-				"title": "Shopify Integration",
-				"description": "Full Shopify app with product & variant sync, inventory tracking, real-time webhooks, multi-store support, and dashboard UI."
-			},
-			"embeddingProviders": {
-				"title": "Azure & GCP Embedding Providers",
-				"description": "Azure OpenAI and GCP Vertex AI embedding providers alongside existing OpenAI support. OpenAI-compatible API for custom endpoints."
-			},
-			"searchConfigurator": {
-				"title": "Search Configurator",
-				"description": "Visual wizard for configuring search collections, schema fields, ranking settings, and facets. Widget Builder with Configurator, Filters, and Install tabs."
-			},
-			"upgradeFlows": {
-				"title": "Upgrade & Downgrade Flows",
-				"description": "Streamlined plan upgrade modal with proration preview and plan comparison. Downgrade flow with data loss warnings and confirmation."
-			}
-		},
-		"shippedTitle": "Shipped",
-		"inProgressTitle": "In Progress",
-		"plannedTitle": "Planned",
-		"feedback": {
-			"title": "Have an idea?",
-			"description": "We read every feature request. Tell us what would make AACsearch better for you.",
-			"cta": "Suggest a feature"
-		},
-		"vote": "Vote",
-		"voted": "Voted",
-		"votes": "votes",
-		"emailCapture": {
-			"title": "Shape what we build next",
-			"description": "Vote to prioritize features and get early access updates. Join 700+ search teams.",
-			"placeholder": "you@company.com",
-			"subscribeAndVote": "Subscribe & Vote",
-			"skipAndVote": "No thanks, just vote",
-			"privacy": "No spam. Unsubscribe anytime.",
-			"success": "Thanks! Your vote is counted. Watch your inbox for updates."
-		}
-	},
-	"careersPage": {
-		"title": "Careers at AACsearch",
-		"description": "A small team building search infrastructure for the next generation of software products. Remote-first."
-	},
-	"careers": {
-		"title": "Work on search infrastructure",
-		"subtitle": "Small team, meaningful work. Every engineer ships to production. No committees, no sprints that miss.",
-		"openRoles": "Open roles",
-		"noRoles": "No open roles right now — but we are always interested in exceptional candidates.",
-		"applyPrompt": "Send us a note at",
-		"applyEmail": "jobs@aacsearch.com",
-		"items": {
-			"culture": {
-				"title": "Culture",
-				"description": "Remote-first, async-default. We write things down. Meetings are rare and have agendas. Results over hours."
-			},
-			"engineering": {
-				"title": "Engineering",
-				"description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. The stack is modern and documented. You will own features end-to-end."
-			},
-			"growth": {
-				"title": "Growth",
-				"description": "We are early. You will have outsized impact. The codebase is clean — no legacy debt to wade through."
-			},
-			"benefits": {
-				"title": "Benefits",
-				"description": "Competitive salary benchmarked to your location. Equity. Home office budget. No micromanagement."
-			},
-			"learning": {
-				"title": "Learning",
-				"description": "Conference budget. Paid books and courses. Time to explore new ideas that serve the product."
-			},
-			"hiring": {
-				"title": "Hiring process",
-				"description": "Two calls and a paid take-home. We respect your time. Decision in under two weeks from first contact."
-			}
-		}
-	},
-	"partnersPage": {
-		"title": "Partner with AACsearch",
-		"description": "Grow your business by integrating, reselling, or building on top of AACsearch. Join our partner ecosystem."
-	},
-	"partners": {
-		"title": "Grow with AACsearch",
-		"subtitle": "We are looking for agencies, consultants, and technology companies who want to embed search into their offerings.",
-		"items": {
-			"technology": {
-				"title": "Technology partners",
-				"description": "Build native integrations for your platform. Co-marketing, joint documentation, and technical support."
-			},
-			"implementation": {
-				"title": "Implementation partners",
-				"description": "Agencies and consultants who implement AACsearch for their clients. Revenue sharing and deal registration."
-			},
-			"reseller": {
-				"title": "Resellers",
-				"description": "Resell AACsearch under your own brand or bundle it into your product. White-label options available."
-			},
-			"cloud": {
-				"title": "Cloud marketplace",
-				"description": "Available on AWS Marketplace and Azure Marketplace. Transact via your existing cloud commitment."
-			},
-			"benefits": {
-				"title": "Partner benefits",
-				"description": "Partner portal, co-marketing support, dedicated channel manager, NFR licenses, and priority support SLA."
-			},
-			"apply": {
-				"title": "Apply to the program",
-				"description": "Fill in the form and a partner manager will respond within two business days. No exclusivity required."
-			}
-		}
-	},
-	"developersPage": {
-		"title": "Built for Developers",
-		"description": "A clean API, great docs, and SDKs that get out of your way. AACsearch integrates in minutes, not days.",
-		"hero": {
-			"badge": "Developer-First",
-			"codeCaption": "Add search to your app in 3 lines"
-		},
-		"features": {
-			"title": "Everything you need to ship search",
-			"api": {
-				"title": "REST API",
-				"description": "Clean, intuitive REST API with full OpenAPI 3.1 spec. Every endpoint documented with examples."
-			},
-			"sdks": {
-				"title": "Official SDKs",
-				"description": "JavaScript and TypeScript SDKs. Community SDKs for Python, Go, and PHP."
-			},
-			"browserSdk": {
-				"title": "Browser SDK",
-				"description": "Lightweight 14KB browser widget. Shadow DOM, 5 locales, analytics built-in. One script tag."
-			},
-			"connectorApi": {
-				"title": "Connector API",
-				"description": "7-endpoint API for CMS integrations. PrestaShop and Bitrix24 modules included out of the box."
-			},
-			"openapi": {
-				"title": "OpenAPI Spec",
-				"description": "Full OpenAPI 3.1 spec at /api/v1/openapi.json. Auto-generate client libraries in any language."
-			},
-			"dashboard": {
-				"title": "Analytics Dashboard",
-				"description": "Search analytics, zero-result tracking, top queries, and CTR — all in your dashboard."
-			}
-		},
-		"cta": {
-			"title": "Start building in minutes",
-			"description": "Free tier included. No credit card required."
-		}
-	},
-	"aiSearchPage": {
-		"title": "AI-Powered Search",
-		"description": "Go beyond keywords. AACsearch supports vector, hybrid, and semantic search out of the box — no ML expertise required.",
-		"badge": "Now in production",
-		"modes": {
-			"title": "Three search modes, one platform",
-			"vector": {
-				"title": "Vector Search",
-				"description": "Find semantically similar results even when exact keywords don't match. Uses embedding models to understand meaning."
-			},
-			"hybrid": {
-				"title": "Hybrid Search",
-				"description": "Combine keyword precision with semantic understanding. Configurable weights let you tune relevance for your use case."
-			},
-			"semantic": {
-				"title": "Semantic Re-ranking",
-				"description": "Re-rank results using AI to surface the most relevant hits at the top. Improves CTR without changing your indexing."
-			}
-		},
-		"useCases": {
-			"title": "Built for every use case",
-			"ecommerce": {
-				"title": "E-commerce",
-				"description": "Surface relevant products for queries like 'comfortable running shoes' even without exact keyword match."
-			},
-			"docs": {
-				"title": "Documentation",
-				"description": "Let users find answers with natural language questions across your entire knowledge base."
-			},
-			"knowledge": {
-				"title": "RAG Pipelines",
-				"description": "Connect AACsearch to your RAG pipeline for accurate, grounded AI responses."
-			},
-			"marketplace": {
-				"title": "Marketplace",
-				"description": "Match buyers and sellers using semantic similarity instead of rigid keyword filters."
-			}
-		},
-		"howItWorks": {
-			"title": "How it works",
-			"steps": {
-				"upload": {
-					"title": "Upload your data",
-					"description": "Connect your CMS, database, or upload files via API."
-				},
-				"model": {
-					"title": "Choose an embedding model",
-					"description": "Pick from built-in models or bring your own OpenAI embeddings."
-				},
-				"index": {
-					"title": "Vectors generated automatically",
-					"description": "AACsearch generates and stores vector embeddings during indexing."
-				},
-				"query": {
-					"title": "Query with natural language",
-					"description": "Your users search naturally — AACsearch returns the most semantically relevant results."
-				}
-			}
-		}
-	},
-	"pressPage": {
-		"title": "Press & Media",
-		"description": "Media kit, press releases, boilerplate, and contact details for journalists and media professionals."
-	},
-	"press": {
-		"title": "In the press",
-		"subtitle": "Find everything you need to cover AACsearch — our story, media kit, approved assets, and a direct line to our communications team.",
-		"items": {
-			"mediaKit": {
-				"title": "Media kit",
-				"description": "Logo files, product screenshots, founder photos, and brand guidelines in a single downloadable zip."
-			},
-			"boilerplate": {
-				"title": "Company boilerplate",
-				"description": "AACsearch is a hosted search-as-a-service platform. Founded in 2024, serving 500+ companies across 40 countries."
-			},
-			"pressReleases": {
-				"title": "Press releases",
-				"description": "Official announcements for product launches, funding rounds, and major partnerships — formatted and ready to republish."
-			},
-			"coverage": {
-				"title": "Press coverage",
-				"description": "Selected articles, podcast appearances, and conference talks featuring AACsearch and our team."
-			},
-			"contact": {
-				"title": "Media contact",
-				"description": "Send press inquiries to press@aacsearch.com. We respond to media requests within one business day."
-			},
-			"assets": {
-				"title": "Brand assets",
-				"description": "Download our logo in SVG, PNG, and dark/light variants. Usage guidelines included — see Brand page for full details."
-			},
-			"releases": {
-				"title": "Press releases",
-				"description": "Official announcements about AACsearch product launches, funding rounds, partnerships, and company milestones."
-			},
-			"founders": {
-				"title": "Founder stories",
-				"description": "Interviews and articles featuring AACsearch founders discussing the company mission, product vision, and industry perspective."
-			},
-			"kit": {
-				"title": "Press kit",
-				"description": "Download logos, brand assets, screenshots, and product fact sheets for media coverage and editorial use."
-			}
-		}
-	},
-	"brandPage": {
-		"title": "Brand Guidelines",
-		"description": "Logos, colours, typography, and usage rules. Everything you need to represent AACsearch correctly in your integrations and co-marketing."
-	},
-	"brand": {
-		"title": "How we look",
-		"subtitle": "Our brand is built on clarity and speed — the same values we bring to search. Use these assets to represent AACsearch accurately.",
-		"items": {
-			"logo": {
-				"title": "Logo",
-				"description": "Use the primary logo on light backgrounds and the reversed logo on dark. Minimum size 24px. Never stretch, rotate, or recolour."
-			},
-			"colors": {
-				"title": "Colours",
-				"description": "Primary: #0F172A (night). Accent: #6366F1 (indigo-500). Use the accent sparingly — for interactive elements and highlights only."
-			},
-			"typography": {
-				"title": "Typography",
-				"description": "Headings and body: Inter. Monospace: JetBrains Mono. Both available from Google Fonts and Fontsource."
-			},
-			"guidelines": {
-				"title": "Usage guidelines",
-				"description": "Do not use the AACsearch logo in a way that implies endorsement. Do not modify the logo. Attribution is always welcome but never required."
-			},
-			"assets": {
-				"title": "Asset downloads",
-				"description": "Download the full brand kit: SVG logo, favicon, og-image template, and colour palette in ASE, Sketch, and Figma format."
-			},
-			"contact": {
-				"title": "Brand questions",
-				"description": "For co-marketing materials, conference sponsorships, or unusual usage questions, email brand@aacsearch.com."
-			},
-			"logos": {
-				"title": "Logos & assets",
-				"description": "Download AACsearch logos in SVG, PNG, and vector formats. Color, monochrome, and dark-background variants included."
-			}
-		}
-	},
-	"resourcesPage": {
-		"title": "Resources",
-		"description": "Documentation, tutorials, case studies, and community links — everything you need to get the most from AACsearch."
-	},
-	"resources": {
-		"title": "Everything you need to ship search",
-		"subtitle": "From quickstart guides to deep-dive tutorials, our resource library covers every aspect of building with AACsearch.",
-		"items": {
-			"docs": {
-				"title": "Documentation",
-				"description": "API reference, SDK guides, schema design tips, and deployment guides. Versioned and searchable."
-			},
-			"blog": {
-				"title": "Engineering blog",
-				"description": "Deep dives into search relevance, vector search, multi-tenancy architecture, and AACsearch internals."
-			},
-			"changelog": {
-				"title": "Changelog",
-				"description": "Every feature, fix, and breaking change — logged with the deployment date and linked to the relevant documentation."
-			},
-			"tutorials": {
-				"title": "Tutorials",
-				"description": "Step-by-step guides for Shopify, WordPress, Next.js, and more. From zero to production in under an afternoon."
-			},
-			"community": {
-				"title": "Community",
-				"description": "Ask questions, share integrations, and get peer support in the AACsearch community forum and Discord."
-			},
-			"support": {
-				"title": "Support",
-				"description": "Email support for Starter and above. Enterprise plans include a dedicated Slack channel and contractual SLA."
-			},
-			"migration": {
-				"title": "Migration guides",
-				"description": "Step-by-step instructions for migrating from Typesense Cloud, Algolia, Elasticsearch, Meilisearch, and other search platforms to AACsearch."
-			},
-			"apiRef": {
-				"title": "API reference",
-				"description": "Complete OpenAPI 3.1 specification for all AACsearch endpoints. Browse endpoints, request schemas, and response examples."
-			},
-			"sdks": {
-				"title": "Client SDKs",
-				"description": "TypeScript/JavaScript, Python, PHP, and Go SDKs for the AACsearch API. Type-safe, well-documented, and published on package registries."
-			}
-		}
-	},
-	"glossaryPage": {
-		"title": "Search Glossary",
-		"description": "Plain-language definitions of search, indexing, and relevance concepts used across AACsearch documentation and the industry."
-	},
-	"glossary": {
-		"title": "The language of search",
-		"subtitle": "Search has its own vocabulary. Use this glossary to understand AACsearch documentation and communicate precisely with your team.",
-		"items": {
-			"searchIndex": {
-				"title": "Search index",
-				"description": "A data structure optimised for fast text retrieval. AACsearch maintains a search collection per index, with automatic alias management."
-			},
-			"facet": {
-				"title": "Facet",
-				"description": "A filterable attribute returned alongside search results with document counts. Enables guided navigation without additional API calls."
-			},
-			"relevance": {
-				"title": "Relevance",
-				"description": "How well a document matches a query. AACsearch combines BM25 text relevance, vector similarity, field weights, and custom boost rules."
-			},
-			"invertedIndex": {
-				"title": "Inverted index",
-				"description": "The core data structure of full-text search. Maps each token to the documents containing it. AACsearch maintains this automatically."
-			},
-			"embedding": {
-				"title": "Embedding",
-				"description": "A numeric vector representation of text semantics. AACsearch can store and query embeddings for semantic and hybrid search."
-			},
-			"searchUnit": {
-				"title": "Search unit",
-				"description": "AACsearch billing unit. One search unit equals one search query or one document indexed. Used to calculate your monthly plan allocation."
-			},
-			"bm25": {
-				"title": "BM25",
-				"description": "A ranking function that scores documents based on term frequency and inverse document frequency. AACsearch uses BM25 as the default text relevance algorithm."
-			},
-			"inverted": {
-				"title": "Inverted index",
-				"description": "A data structure mapping every unique term in a document collection to the documents containing it. Enables fast full-text search at scale."
-			},
-			"vector": {
-				"title": "Vector search",
-				"description": "A search method that finds documents based on semantic similarity using embeddings, rather than exact keyword matches. AACsearch supports hybrid keyword + vector search."
-			},
-			"facets": {
-				"title": "Facets",
-				"description": "Filters that let users narrow search results by categories, price ranges, ratings, and other attributes. AACsearch computes facet counts server-side on every query."
-			},
-			"relevanceTuning": {
-				"title": "Relevance tuning",
-				"description": "The process of adjusting search ranking to surface the most relevant results first. AACsearch supports field weights, boost rules, and custom scoring formulas."
-			},
-			"synonyms": {
-				"title": "Synonyms",
-				"description": "Words or phrases treated as equivalent during search. AACsearch supports one-way, multi-way, and multi-word synonym rules managed from the dashboard."
-			},
-			"typoTolerance": {
-				"title": "Typo tolerance",
-				"description": "The ability to return correct results even when the search query contains spelling errors. AACsearch uses configurable Levenshtein distance and phonetic matching."
-			}
-		}
-	},
-	"trustPage": {
-		"title": "Trust Center",
-		"description": "Security posture, compliance certifications, data residency options, and our responsible disclosure policy."
-	},
-	"trust": {
-		"title": "Built to earn your trust",
-		"subtitle": "AACsearch is designed from the ground up for security and compliance. Here is how we protect your data and your users.",
-		"items": {
-			"soc2": {
-				"title": "SOC 2 Type II",
-				"description": "AACsearch is SOC 2 Type II certified. The audit report is available under NDA to Enterprise plan customers."
-			},
-			"gdpr": {
-				"title": "GDPR & CCPA",
-				"description": "Data Processing Agreement available to all paying plans. Data residency in EU and US. Right-to-be-forgotten deletion within 72 hours."
-			},
-			"encryption": {
-				"title": "Encryption everywhere",
-				"description": "AES-256 at rest, TLS 1.3 in transit. API keys are stored as bcrypt hashes and never logged in plaintext."
-			},
-			"dataResidency": {
-				"title": "Data residency",
-				"description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
-			},
-			"auditLog": {
-				"title": "Audit log",
-				"description": "Every admin action — index creation, key issuance, member invitation — is logged with actor identity, timestamp, and org context."
-			},
-			"disclosure": {
-				"title": "Responsible disclosure",
-				"description": "Found a vulnerability? Email security@aacsearch.com. We follow a 90-day coordinated disclosure timeline and credit all reporters."
-			},
-			"audit": {
-				"title": "Third-party audits",
-				"description": "AACsearch undergoes regular security audits by independent third parties. Reports are available under NDA for enterprise customers."
-			},
-			"isolation": {
-				"title": "Tenant isolation",
-				"description": "Every organization data is isolated at the infrastructure level. Cross-tenant access is architecturally impossible, not just policy-enforced."
-			},
-			"tokens": {
-				"title": "Token-based authentication",
-				"description": "API keys are hashed at rest using bcrypt. Scoped tokens use HMAC signing with server-side secrets. Plaintext keys are shown once and never stored."
-			},
-			"accessControl": {
-				"title": "Access control",
-				"description": "Role-based access control (RBAC) with owner, admin, member, and viewer roles. API keys with granular permissions per index."
-			},
-			"pentest": {
-				"title": "Penetration testing",
-				"description": "Regular penetration tests by certified security firms. Summary reports are available to enterprise customers under NDA."
-			}
-		}
-	},
-	"newsletterPage": {
-		"title": "Newsletter",
-		"description": "Monthly updates on search engineering, AACsearch releases, and the developer tools we follow."
-	},
-	"newsletter": {
-		"title": "Stay in the loop",
-		"subtitle": "One email per month. Search engineering deep-dives, product updates, and links worth your time.",
-		"items": {
-			"frequency": {
-				"title": "Monthly cadence",
-				"description": "One email per month, every first Tuesday. No weekly digests, no daily updates — we respect your inbox."
-			},
-			"content": {
-				"title": "What you will get",
-				"description": "Search engineering articles, AACsearch release notes, developer tool highlights, and one community spotlight per issue."
-			},
-			"past": {
-				"title": "Read past issues",
-				"description": "Every newsletter is archived on our blog. Read before subscribing — you will know exactly what you are signing up for."
-			},
-			"privacy": {
-				"title": "Your data stays yours",
-				"description": "We use a self-hosted newsletter platform. Your email is never shared with ad networks or sold to data brokers."
-			},
-			"unsubscribe": {
-				"title": "One-click unsubscribe",
-				"description": "Every email has a one-click unsubscribe link. No dark patterns, no confirmation dialogs."
-			},
-			"social": {
-				"title": "Follow the highlights",
-				"description": "Newsletter highlights are posted on LinkedIn. Follow us there for shorter-form engineering updates."
-			},
-			"community": {
-				"title": "Community highlights",
-				"description": "A monthly roundup of the best AACsearch community projects, plugins, and success stories from developers worldwide."
-			},
-			"product": {
-				"title": "Product updates",
-				"description": "New features, performance improvements, and API changes. Changelog highlights delivered to your inbox monthly."
-			},
-			"tutorials": {
-				"title": "Tutorials & guides",
-				"description": "Step-by-step guides for setting up search, migrating from competitors, and integrating AACsearch with popular frameworks."
-			},
-			"benchmarks": {
-				"title": "Search benchmarks",
-				"description": "Industry benchmarks for search latency, zero-result rates, and CTR. See how your search performance compares to peers."
-			},
-			"industry": {
-				"title": "Industry insights",
-				"description": "Trends, best practices, and research in search and discovery. Curated for product, engineering, and growth teams."
-			},
-			"productUpdates": {
-				"title": "Product updates",
-				"description": "New features, performance improvements, and API changes delivered to your inbox monthly."
-			},
-			"searchTips": {
-				"title": "Search optimization tips",
-				"description": "Practical tips for improving search relevance, reducing zero-result rates, and tuning your indexes for better performance."
-			},
-			"showcase": {
-				"title": "Customer showcase",
-				"description": "See how other teams use AACsearch to power search across e-commerce, SaaS, media, and enterprise applications."
-			}
-		}
-	},
-	"communityPage": {
-		"title": "Community",
-		"description": "Join the AACsearch community — ask questions, share projects, contribute connectors, and shape the roadmap."
-	},
-	"community": {
-		"title": "Build search, together",
-		"subtitle": "AACsearch is built in public. The community votes on features, contributes connectors, and helps newcomers ship faster.",
-		"items": {
-			"github": {
-				"title": "GitHub",
-				"description": "Star the repo, open issues, or contribute a PR. All public roadmap items are tracked as GitHub issues."
-			},
-			"discord": {
-				"title": "Discord",
-				"description": "Real-time chat for questions, integrations, and troubleshooting. 500+ members, active every day."
-			},
-			"forum": {
-				"title": "Community forum",
-				"description": "Long-form Q&A for architecture questions, integration guides, and feature proposals. Fully searchable — powered by AACsearch."
-			},
-			"showcase": {
-				"title": "Showcase",
-				"description": "See what the community has built with AACsearch. Submit your project to be featured in the monthly newsletter."
-			},
-			"contribute": {
-				"title": "Contribute",
-				"description": "We accept contributions to connectors, SDK examples, and documentation. See CONTRIBUTING.md for guidelines."
-			},
-			"roadmap": {
-				"title": "Vote on the roadmap",
-				"description": "Every public roadmap item is open for community upvotes. The most-voted features ship first."
-			},
-			"events": {
-				"title": "Events & meetups",
-				"description": "Join AACsearch at industry events, webinars, and community meetups. Connect with the team and fellow developers."
-			}
-		}
-	},
-	"supportPage": {
-		"title": "Support",
-		"description": "Documentation, community, and direct support — whatever level of help your team needs to succeed with AACsearch."
-	},
-	"support": {
-		"title": "We have got your back",
-		"subtitle": "AACsearch support ranges from self-serve documentation to a dedicated Slack channel for Enterprise customers.",
-		"items": {
-			"documentation": {
-				"title": "Documentation",
-				"description": "Full API reference, SDK guides, and integration tutorials. Versioned, searchable, and updated with every release."
-			},
-			"community": {
-				"title": "Community forum",
-				"description": "Ask questions and get peer support. Most questions get an answer within a few hours from the community or the AACsearch team."
-			},
-			"email": {
-				"title": "Email support",
-				"description": "Email support is included with Starter and above plans. Response SLA: 1 business day for Starter, 4 hours for Pro."
-			},
-			"chat": {
-				"title": "Live chat",
-				"description": "In-dashboard live chat for Pro and Business plan customers. Connects directly to the AACsearch support team during business hours."
-			},
-			"slack": {
-				"title": "Dedicated Slack channel",
-				"description": "Enterprise customers get a shared Slack Connect channel with the AACsearch engineering and support team."
-			},
-			"sla": {
-				"title": "Support SLA",
-				"description": "Enterprise SLA: 99.95% uptime, 4-hour critical response, dedicated channel manager, and named technical contact."
-			},
-			"docs": {
-				"title": "Documentation",
-				"description": "Comprehensive guides, API reference, SDK documentation, and integration tutorials at docs.aacsearch.com."
-			},
-			"enterprise": {
-				"title": "Enterprise support",
-				"description": "Dedicated Slack channel, phone support, custom SLAs, and a named support engineer. Priority response time under 1 hour."
-			},
-			"onboarding": {
-				"title": "Onboarding assistance",
-				"description": "Free onboarding call for Pro and Enterprise plans. Our team helps you set up your index, configure the widget, and integrate the SDK."
-			},
-			"status": {
-				"title": "System status",
-				"description": "Real-time status dashboard showing uptime, latency, and incident history across all AACsearch services at status.aacsearch.com."
-			}
-		}
-	},
-	"statusPage": {
-		"title": "Service Status",
-		"description": "Real-time status of the AACsearch API, dashboard, and global infrastructure. Subscribe to incident notifications."
-	},
-	"status": {
-		"title": "System status",
-		"subtitle": "We measure uptime across every component of the AACsearch platform and publish incident reports within 24 hours.",
-		"items": {
-			"api": {
-				"title": "Search API",
-				"description": "The AACsearch public search API. Measures end-to-end latency and availability from five global probe locations."
-			},
-			"dashboard": {
-				"title": "Dashboard",
-				"description": "The AACsearch web dashboard and management API. Includes oRPC endpoints, auth, and organisation management."
-			},
-			"ingest": {
-				"title": "Ingest pipeline",
-				"description": "Document ingestion from the Connector API and REST API. Measures queue depth, processing latency, and error rate."
-			},
-			"analytics": {
-				"title": "Analytics pipeline",
-				"description": "Search event collection, aggregation, and dashboard updates. Typically lags real-time by 60-90 seconds."
-			},
-			"incidents": {
-				"title": "Incident history",
-				"description": "Every incident is documented with timeline, root cause, and remediation steps. Published within 24 hours of resolution."
-			},
-			"subscribe": {
-				"title": "Subscribe to alerts",
-				"description": "Get notified by email or webhook when incident status changes. Powered by our public status API."
-			},
-			"uptime": {
-				"title": "99.99% uptime SLA",
-				"description": "Enterprise plan includes a 99.99% uptime SLA with credits for any downtime. Real-time status at status.aacsearch.com."
-			},
-			"maintenance": {
-				"title": "Scheduled maintenance",
-				"description": "Planned maintenance windows are announced at least 24 hours in advance. Subscribe to status page notifications for real-time updates."
-			}
-		}
-	},
-	"faqPage": {
-		"title": "Frequently Asked Questions",
-		"description": "Quick answers to the most common questions about AACsearch pricing, setup, data, and support."
-	},
-	"faq": {
-		"title": "Common questions, clear answers",
-		"subtitle": "Cannot find your answer here? Search our documentation or ask in the community forum.",
-		"items": {
-			"searchUnit": {
-				"title": "What is a search unit?",
-				"description": "One search unit equals one search query OR one document indexed. Your monthly plan includes a set number of search units, pooled across all indexes."
-			},
-			"pricing": {
-				"title": "How does pricing work?",
-				"description": "AACsearch charges a flat monthly fee per plan tier. Overages are billed at a per-search-unit rate. No hidden fees, no egress charges."
-			},
-			"scaling": {
-				"title": "How does it scale?",
-				"description": "AACsearch scales horizontally. The hosted platform handles traffic spikes automatically. There is no per-replica or per-shard cost."
-			},
-			"dataResidency": {
-				"title": "Where is my data stored?",
-				"description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
-			},
-			"migration": {
-				"title": "Can I migrate from Algolia?",
-				"description": "Yes. The AACsearch REST API is compatible with Algolia-style collection schemas. We provide a migration guide and one-time import tooling."
-			},
-			"selfHost": {
-				"title": "Do you offer dedicated or on-prem deployment?",
-				"description": "Yes. Enterprise plans include a dedicated cluster in the region you choose. For regulated industries with strict data residency requirements, contact us to scope a custom deployment."
-			},
-			"data": {
-				"title": "Where is my data stored?",
-				"description": "AACsearch runs on AWS in the region closest to your user base. Data stays in the chosen region and never leaves without your authorization."
-			},
-			"limits": {
-				"title": "What are the plan limits?",
-				"description": "Free: 1,000 search-units/month, 1 index, 1 API key. Pro: 50,000 search-units/month, unlimited indexes, 10 API keys. Enterprise: custom limits and SLAs."
-			},
-			"migrate": {
-				"title": "How do I migrate from Typesense?",
-				"description": "AACsearch is built on Typesense and uses the same search core. Migrate by exporting your index schema and documents, then reindexing via the AACsearch API. Most users complete the move in under a day."
-			},
-			"support": {
-				"title": "What support options are available?",
-				"description": "Free plan: community support via Discord. Pro: email support within 24 hours. Enterprise: dedicated Slack channel and phone support with 1-hour SLA."
-			},
-			"typesense": {
-				"title": "How is AACsearch different from Typesense Cloud?",
-				"description": "AACsearch is a managed search platform built on Typesense with additional features: multi-tenancy, scoped tokens, analytics dashboard, CMS connectors, knowledge RAG, and a hosted widget — all included in the price."
-			}
-		}
-	},
-	"affiliatePage": {
-		"title": "Affiliate Program",
-		"description": "Earn recurring commissions by referring developers and companies to AACsearch. Join the affiliate program today."
-	},
-	"affiliate": {
-		"title": "Earn with AACsearch",
-		"subtitle": "Recommend AACsearch to your audience and earn 20% recurring commission on every paying customer you refer.",
-		"items": {
-			"commission": {
-				"title": "20% recurring commission",
-				"description": "Earn 20% of the monthly plan fee for every customer you refer, for the lifetime of their subscription. No cap, no expiry."
-			},
-			"tracking": {
-				"title": "Reliable attribution",
-				"description": "90-day cookie window. Affiliate attribution is tracked across devices via first-party cookies and UTM parameters."
-			},
-			"creatives": {
-				"title": "Marketing assets",
-				"description": "Banners, email templates, comparison tables, and code examples — all ready to embed in tutorials, newsletters, and social posts."
-			},
-			"payments": {
-				"title": "Monthly payouts",
-				"description": "Payouts processed on the 15th of every month via Stripe or wire transfer. Minimum payout threshold: $50."
-			},
-			"supportChannel": {
-				"title": "Affiliate support",
-				"description": "Dedicated affiliate manager, early access to new features, and a private affiliate Discord channel for networking."
-			},
-			"apply": {
-				"title": "Apply now",
-				"description": "Apply at affiliate.aacsearch.com. We review applications within 3 business days. No minimum audience size required."
-			},
-			"payouts": {
-				"title": "Generous payouts",
-				"description": "Earn 20% recurring commission on every subscription you refer. Paid monthly via Stripe, no minimum threshold."
-			},
-			"support": {
-				"title": "Dedicated affiliate support",
-				"description": "Get a personal affiliate manager, promotional materials, and a custom landing page for your audience."
-			}
-		}
-	},
-	"pricingPlansPage": {
-		"title": "Compare Plans",
-		"description": "Detailed feature comparison across Free, Starter, Pro, Business, and Enterprise plans."
-	},
-	"pricingPlans": {
-		"title": "Plans for every stage",
-		"subtitle": "Start free, upgrade when you need more search units, indexes, or support. All plans include the full API and dashboard.",
-		"items": {
-			"free": {
-				"title": "Free",
-				"description": "10,000 search units per month, 1 index, community support. Perfect for side projects and proof-of-concept implementations."
-			},
-			"starter": {
-				"title": "Starter",
-				"description": "250,000 search units per month, 5 indexes, email support. Ideal for small SaaS products and growing developer tools."
-			},
-			"pro": {
-				"title": "Pro",
-				"description": "1 million search units per month, 20 indexes, custom origin allow-lists, priority email support. Built for production SaaS."
-			},
-			"business": {
-				"title": "Business",
-				"description": "5 million search units per month, unlimited indexes, SSO, audit log, 4-hour email SLA. For teams that depend on search."
-			},
-			"enterprise": {
-				"title": "Enterprise",
-				"description": "Unmetered search units, dedicated cluster, 99.95% SLA, Slack support channel, and a named technical account manager."
-			},
-			"custom": {
-				"title": "Need something different?",
-				"description": "Non-standard requirements — on-prem deployment, data residency agreements, white-labelling — are handled as custom contracts."
-			},
-			"overage": {
-				"title": "Overage pricing",
-				"description": "Exceed your plan limit and pay only for what you use. Overage is billed at $0.50 per 1,000 search-units with no hard cap — search keeps working."
-			}
-		}
-	},
-	"allPagesPage": {
-		"title": "All Pages",
-		"description": "A complete index of all AACsearch pages — marketing site, features, integrations, and the application.",
-		"marketingTitle": "Marketing Site",
-		"appTitle": "Application",
-		"saasNote": "Application routes on {base}",
-		"sections": {
-			"core": "Core",
-			"features": "Features",
-			"useCases": "Use Cases",
-			"integrations": "Integrations",
-			"compare": "Compare",
-			"solutions": "Solutions",
-			"company": "Company",
-			"auth": "Authentication",
-			"account": "Account",
-			"organization": "Organization",
-			"admin": "Admin",
-			"misc": "Miscellaneous"
-		}
-	},
-	"connectorsPage": {
-		"title": "CMS Connectors",
-		"description": "Native PHP modules for PrestaShop and 1C-Bitrix. REST Connector API for everything else.",
-		"headlessCmsTitle": "Headless CMS connectors",
-		"headlessCmsSubtitle": "Plug AACsearch into your content infrastructure. Strapi, Contentful, and Sanity — all supported with native plugins.",
-		"headlessCmsItems": {
-			"strapi": {
-				"title": "Strapi",
-				"description": "Strapi plugin with lifecycle hook sync. Every content create, update, and delete triggers automatic index updates. Content types, dynamic zones, and media fields — all supported."
-			},
-			"contentful": {
-				"title": "Contentful",
-				"description": "Contentful app with webhook-based sync. Publish an entry and it appears in AACsearch within a second. Content model mapping, rich text handling, and locale-aware search included."
-			},
-			"sanity": {
-				"title": "Sanity",
-				"description": "Sanity Studio plugin with GROQ-powered indexing. Select exactly which fields to index with GROQ projections. Real-time sync via webhook — no cron jobs required."
-			}
-		},
-		"comingSoon": "Coming soon",
-		"comingSoonTitle": "More connectors on the way",
-		"comingSoonSubtitle": "WooCommerce and Shopify support is in development. Use the Connector API to build your own today.",
-		"comingSoonItems": {
-			"woocommerce": {
-				"title": "WooCommerce",
-				"description": "WordPress + WooCommerce plugin. Sync products, categories, and orders."
-			},
-			"shopify": {
-				"title": "Shopify",
-				"description": "Shopify app with product, variant, and metafield sync. Widget embed included."
-			}
-		}
-	},
-	"tutorialsPage": {
-		"title": "Video Tutorials",
-		"description": "Watch step-by-step guides to get the most out of AACsearch — from 5-minute setup to advanced integrations.",
-		"videos": {
-			"quickstart": {
-				"title": "5-Minute Quickstart",
-				"description": "Create an account, upload data, embed a search widget, and go live — all in under 5 minutes."
-			},
-			"ecommerce": {
-				"title": "E-commerce Search Setup",
-				"description": "Configure product search with faceted navigation, scoped tokens per storefront, and analytics."
-			},
-			"blog": {
-				"title": "Content / Blog Search",
-				"description": "Add instant full-text search to your blog or documentation site with typo tolerance."
-			},
-			"app": {
-				"title": "SaaS App Search",
-				"description": "Build multi-tenant search for your SaaS app with per-tenant isolation and scoped API keys."
-			}
-		}
-	},
-	"homePricingCalc": {
-		"title": "Estimate your cost",
-		"subtitle": "Move the sliders to see which plan fits your usage.",
-		"docsLabel": "Documents indexed",
-		"searchesLabel": "Monthly searches",
-		"unitsLabel": "search-units / month",
-		"planLabel": "Recommended plan",
-		"note": "1 search = 1 unit · 1 document indexed = 1 unit · autocomplete = 0.1 unit",
-		"ctaFree": "Start free",
-		"ctaPro": "Start Pro trial",
-		"ctaEnterprise": "Talk to sales",
-		"plans": {
-			"free": {
-				"name": "Free",
-				"price": "$0 / mo",
-				"limit": "Up to 10,000 units/mo · 1 index"
-			},
-			"pro": {
-				"name": "Pro",
-				"price": "$29 / mo",
-				"limit": "Up to 1,000,000 units/mo · 10 indexes"
-			},
-			"enterprise": {
-				"name": "Enterprise",
-				"price": "Custom",
-				"limit": "Unlimited units · unlimited indexes · SLA"
-			}
-		}
-	},
-	"homeArchitecture": {
-		"title": "How AACsearch works",
-		"subtitle": "Three paths, one platform. Your backend, your users, and your team — all connected to one search layer.",
-		"ingestLabel": "Ingest path",
-		"searchLabel": "Search path",
-		"manageLabel": "Manage",
-		"zeroDowntime": "Zero-downtime reindex via atomic alias swap",
-		"tenantIsolation": "Every query scoped to your organization — no cross-tenant reads"
-	},
-	"homeFit": {
-		"title": "Is AACsearch right for you?",
-		"perfectTitle": "Perfect fit",
-		"skipTitle": "You can skip it if",
-		"perfect": {
-			"0": "You need production search without a dedicated search team",
-			"1": "You call search from the browser and can't expose API keys",
-			"2": "You manage multiple tenants or customers on one platform",
-			"3": "You want predictable monthly cost as you scale",
-			"4": "You need analytics to understand what users search for"
-		},
-		"skip": {
-			"0": "You require fully self-hosted search on your own servers",
-			"1": "Your data cannot leave your infrastructure under any circumstances",
-			"2": "You need Lucene-level custom scoring plugins",
-			"3": "You have fewer than 1,000 documents and Postgres ILIKE is enough"
-		}
-	},
-	"homeLiveDemo": {
-		"title": "Try search right now",
-		"subtitle": "Pick a scenario, type a query — see typo tolerance, facets, and highlights in action.",
-		"didYouMean": "Did you mean:",
-		"whyResult": "Why this result?",
-		"noResults": "No exact matches — AACsearch suggests:",
-		"openPlayground": "Open full Playground"
-	},
-	"homeSecuritySandbox": {
-		"title": "See scoped tokens in action",
-		"subtitle": "Toggle constraints — see how AACsearch enforces browser security without exposing your API key.",
-		"ttlLabel": "Token TTL",
-		"originLabel": "Request origin",
-		"tenantLabel": "Tenant filter",
-		"leakLabel": "Simulate token leak",
-		"outcomeAllowed": "Search allowed",
-		"outcomeOrigin": "403 — Origin blocked",
-		"outcomeTenant": "403 — Tenant mismatch",
-		"outcomeExpired": "401 — Token expired",
-		"outcomeLeak": "Leak harmless — scoped token cannot call Admin API"
-	},
-	"demo": {
-		"title": "Live Demo — AACsearch Engine",
-		"description": "Try AACsearch with a pre-loaded fashion catalog. Search, filter, and see real-time results — no signup required.",
-		"heading": "Live Demo",
-		"subheading": "Explore a pre-loaded fashion catalog powered by AACsearch. Search, filter by category, and experience real-time results."
-	},
-	"breadcrumbs": {
-		"vs": {
-			"algolia": "vs Algolia",
-			"elasticsearch": "vs Elasticsearch",
-			"meilisearch": "vs Meilisearch",
-			"opensearch": "vs OpenSearch",
-			"pinecone": "vs Pinecone",
-			"solr": "vs Solr",
-			"typesense": "vs Typesense Cloud",
-			"weaviate": "vs Weaviate"
-		},
-		"home": "Home",
-		"compare": "Compare",
-		"features": "Features",
-		"pricing": "Pricing",
-		"integrations": "Integrations",
-		"useCases": "Use cases",
-		"solutions": "Solutions",
-		"demo": "Demo"
-	}
+  "blog": {
+    "description": "Engineering notes from the AACsearch team",
+    "title": "AACsearch Blog",
+    "back": "Back to blog"
+  },
+  "changelog": {
+    "description": "What shipped, when, and what changed under the hood.",
+    "title": "Changelog"
+  },
+  "contact": {
+    "description": "Reach the team — billing, security disclosures, partnerships.",
+    "form": {
+      "email": "Email",
+      "message": "Message",
+      "name": "Name",
+      "notifications": {
+        "error": "Could not send your message. Please try again later.",
+        "success": "Got it — we'll reply within one business day."
+      },
+      "submit": "Send message"
+    },
+    "title": "Contact"
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "home": {
+    "hero": {
+      "badge": "v0 — accepting early access",
+      "title": "Multimodal search for products that need more than a search box",
+      "subtitle": "Let users search by text, voice, photo, image, or AI chat — with one API, one index, one analytics layer, and secure scoped access.",
+      "getStarted": "Start free",
+      "documentation": "Read the docs",
+      "codeCaption": "search-client.ts",
+      "new": "NEW",
+      "featureBadge": "Multimodal Search Layer",
+      "imageAlt": "AACsearch dashboard screenshot",
+      "badgeLatency": "50ms p99",
+      "badgeSoc2": "SOC 2",
+      "badgeFulltext": "Full-text",
+      "badgeAnalytics": "Analytics",
+      "searchPlaceholder": "Search anything by text, voice, image or chat...",
+      "voicePlaceholder": "Tap the microphone and speak your query...",
+      "chatPlaceholder": "Ask a question about your data...",
+      "mediaPlaceholder": "Upload a photo or image to search visually...",
+      "statDocs": "Documents indexed",
+      "statLatency": "Search latency",
+      "statUptime": "Uptime SLA"
+    },
+    "howItWorks": {
+      "title": "How AACsearch works",
+      "step1": {
+        "title": "Push your data",
+        "description": "Define a schema and bulk-import documents via REST or SDK. Updates are enqueued and indexed in under a second.",
+        "badge": "POST /v1/indexes/{id}/documents"
+      },
+      "step2": {
+        "title": "Issue a scoped token",
+        "description": "Mint short-lived tokens from your server. Scope by index, origin, and tenant filter — API key never leaves your backend.",
+        "badge": "HMAC-signed · TTL: 1 h · scoped"
+      },
+      "step3": {
+        "title": "Search from anywhere",
+        "description": "Pass the scoped token to our browser SDK or REST API. Full-text, faceted, multi-search — all under 50 ms p99.",
+        "badge": "< 50 ms p99 · facets · typo-tolerance"
+      },
+      "subtitle": "Three API calls. One afternoon. Hosted, scaled, secured."
+    },
+    "features": {
+      "title": "What you get out of the box",
+      "subtitle": "No «coming next quarter». Every feature ships today.",
+      "items": {
+        "scopedTokens": {
+          "title": "Scoped tokens",
+          "description": "Issue short-lived tokens per user, per index, per filter set. Safer than public API keys in the browser — a leaked token can't query another index."
+        },
+        "originAllowlist": {
+          "title": "Origin allow-list",
+          "description": "Pin every API key to specific origins. Leak a key on Twitter? It won't work from another domain — your quota is safe."
+        },
+        "rateLimitQuota": {
+          "title": "Rate limit & quota",
+          "description": "Per-key per-minute throttling and per-org monthly quota — both visible in the dashboard before you hit them."
+        },
+        "multiSearch": {
+          "title": "Multi-search",
+          "description": "Run several queries in one round-trip. Build cross-collection autocomplete without N separate requests."
+        },
+        "reindex": {
+          "title": "Zero-downtime reindex",
+          "description": "Rebuild an index against a new schema while live traffic keeps hitting the old version. Cut over atomically — no downtime."
+        },
+        "enterpriseSecurity": {
+          "title": "Enterprise-grade security",
+          "description": "SSO, audit log, IP allow-list, dedicated cluster, and 99.95% SLA. Security controls from day one — not as an add-on."
+        }
+      }
+    },
+    "pricing": {
+      "badge": "Pricing",
+      "title": "Pay for searches and indexed docs. Nothing else.",
+      "subtitle": "1 search-unit = 1 search request OR 1 indexed document. Cancel anytime.",
+      "cta": "Start free",
+      "contact": "Contact sales",
+      "perMonth": "/mo",
+      "plans": {
+        "free": {
+          "name": "Free",
+          "price": "$0",
+          "description": "For evaluating, hobby projects and side-products.",
+          "features": [
+            "10K search-units / month",
+            "1 index",
+            "3 API keys",
+            "Community support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$29",
+          "description": "Production-ready for indie SaaS and small B2B teams.",
+          "features": [
+            "1M search-units / month",
+            "10 indexes",
+            "Unlimited keys & scoped tokens",
+            "Custom origin allow-list",
+            "Email support, 1 business day"
+          ],
+          "highlight": "Most teams start here"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "Custom",
+          "description": "Dedicated cluster, audit log, 99.95% SLA.",
+          "features": [
+            "Unmetered search-units",
+            "SSO (SAML / OIDC)",
+            "Audit log + IP allow-list",
+            "Dedicated cluster region",
+            "99.95% SLA, signed DPA"
+          ]
+        }
+      },
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyDiscount": "Save 17%",
+      "perYear": "/yr"
+    },
+    "cta": {
+      "title": "Ship search in one evening",
+      "subtitle": "The free tier covers most side projects. Upgrade in 5 minutes — your data stays. No credit card.",
+      "primary": "Create account",
+      "secondary": "Read the docs"
+    },
+    "testimonials": {
+      "title": "Real results from real teams",
+      "subtitle": "4,500+ indexed sites · 2.5M+ documents · 99.99% uptime",
+      "prev": "Previous",
+      "next": "Next",
+      "prevLabel": "Previous testimonial",
+      "nextLabel": "Next testimonial",
+      "dotLabel": "Go to testimonial {number}",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome",
+          "initials": "EL"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub",
+          "initials": "MW"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream",
+          "initials": "PS"
+        }
+      }
+    },
+    "logos": {
+      "title": "Trusted by innovative teams"
+    },
+    "trustBadges": {
+      "g2": "on G2",
+      "capterra": "on Capterra",
+      "companies": "companies",
+      "apps": "apps"
+    }
+  },
+  "homeUseCases": {
+    "title": "Who is AACsearch for",
+    "subtitle": "Industry-specific use cases with concrete examples of what users search for.",
+    "items": {
+      "saas": {
+        "title": "SaaS products",
+        "description": "Projects, tasks, users, reports, settings, domain objects — search across any entity inside your app.",
+        "searchExamples": "order #1042, user @ivanov, revenue report, webhook config, March invoice"
+      },
+      "docs": {
+        "title": "Docs / Developer portals",
+        "description": "API methods, SDK functions, error codes, parameters, migration guides, release notes.",
+        "searchExamples": "POST /collections, createIndex(), error 401, apiKey parameter, v2→v3 migration"
+      },
+      "ecommerce": {
+        "title": "E-commerce / Catalogs",
+        "description": "Products, SKUs, brands, categories, attributes, facets — faceted search with filters under 50ms on 1M+ products.",
+        "searchExamples": "Nike sneakers size 42, iPhone 15 Pro, Samsung brand in 'TV' category, in-stock items under $500"
+      },
+      "internal": {
+        "title": "Internal tools / Knowledge base",
+        "description": "Documents, policies, incidents, RFCs, owners, runbooks — semantic + full-text hybrid.",
+        "searchExamples": "remote work policy, incident INC-2024-04, CRITICAL playbook, billing service owner"
+      },
+      "marketplace": {
+        "title": "Marketplaces",
+        "description": "Listings, sellers, categories, geography, multilingual — thousands of tenants in one cluster.",
+        "searchExamples": "downtown apartments under $100k, seller 'TechStore', Electronics category, 1-day delivery items"
+      }
+    }
+  },
+  "homeWhatUsersSearch": {
+    "title": "Search by text, voice, photo, image, or AI chat",
+    "subtitle": "AACsearch isn't just a search box. Users can type, speak, snap, upload, or ask — and get the right result.",
+    "multimodalLabel": "Five input modes",
+    "items": {
+      "text": {
+        "title": "Text",
+        "description": "Type and find"
+      },
+      "voice": {
+        "title": "Voice",
+        "description": "Speak and search"
+      },
+      "photo": {
+        "title": "Photo",
+        "description": "Snap and find"
+      },
+      "image": {
+        "title": "Image",
+        "description": "Upload and match"
+      },
+      "chat": {
+        "title": "AI Chat",
+        "description": "Ask and discover"
+      },
+      "entity": {
+        "title": "Exact entities",
+        "description": "Order ID, SKU, error code, username or document name. AACsearch finds exact matches faster than Ctrl+F.",
+        "icon": "search"
+      },
+      "fuzzy": {
+        "title": "Fuzzy queries",
+        "description": "Users misspell, use transliteration, or abbreviate. Typo tolerance and prefix search fix to relevant results.",
+        "icon": "pencil"
+      },
+      "category": {
+        "title": "Category navigation",
+        "description": "Faceted filters: brand + price + availability + size. Multi-search across collections in one round-trip.",
+        "icon": "filter"
+      },
+      "answer": {
+        "title": "Natural language answers",
+        "description": "For docs and knowledge base — search-first, answer-augmented UX. Hybrid: result list + AI answer with citations.",
+        "icon": "message-square"
+      },
+      "autocomplete": {
+        "title": "Autocomplete & suggestions",
+        "description": "Show relevant suggestions from the first character. Keyboard navigation, recent searches, pinned suggestions.",
+        "icon": "forward"
+      },
+      "noResults": {
+        "title": "Zero-result handling",
+        "description": "No-result recovery: suggestions, similar queries, automatic filter expansion. Users never leave empty-handed.",
+        "icon": "search-x"
+      }
+    }
+  },
+  "homeSearchUX": {
+    "title": "What good search UX looks like",
+    "subtitle": "Not backend features — what users actually see. Autocomplete, typo tolerance, facets, highlighted matches — out of the box.",
+    "items": {
+      "autocomplete": {
+        "title": "Autocomplete + suggestions",
+        "description": "Suggestions from the first character. Keyboard navigation, recent searches, pinned items."
+      },
+      "typo": {
+        "title": "Typo tolerance",
+        "description": "'Nokai' finds Nokia. 'sneekers' finds sneakers. 1–2 typos per word — accepted by default."
+      },
+      "facets": {
+        "title": "Faceted filters",
+        "description": "Filters by brand, price, category, availability — with result count for each option."
+      },
+      "highlight": {
+        "title": "Highlighted matches",
+        "description": "Matching fragments are highlighted in results. Users immediately see why this document was returned."
+      },
+      "grouped": {
+        "title": "Grouped results",
+        "description": "Multi-search across collections: products separately, articles separately, orders separately — all in one request."
+      },
+      "recovery": {
+        "title": "No-result recovery",
+        "description": "Empty result → suggestions, similar queries, automatic filter expansion. Users don't leave."
+      }
+    }
+  },
+  "homeRelevance": {
+    "title": "Relevance & ranking control",
+    "subtitle": "Fast search without quality control isn't compelling. We give you the tools to tune relevance for your use case.",
+    "ranking": {
+      "title": "Ranking management",
+      "description": "Field weights, exact match boost, prefix vs partial match. Configure which fields affect result ordering."
+    },
+    "synonyms": {
+      "title": "Synonyms & stop words",
+      "description": "'laptop' = 'notebook', 'sneakers' = 'trainers'. Exclude non-significant words from search."
+    },
+    "curations": {
+      "title": "Business rules",
+      "description": "Pin specific results to the top. Promotions or weak inventory boosting — without reindexing."
+    },
+    "personalization": {
+      "title": "Personalization",
+      "description": "Scoped relevance by roles, groups, or tenants. Each tenant sees their own results."
+    },
+    "abTesting": {
+      "title": "A/B testing",
+      "description": "Compare two sets of relevance rules on live traffic. Metrics: CTR, zero-result rate, conversion."
+    }
+  },
+  "homeAnalytics": {
+    "title": "Search analytics — improve your product with data",
+    "subtitle": "Search isn't 'set and forget'. Analytics shows what users search for, what they don't find, and how to improve results.",
+    "items": {
+      "topQueries": {
+        "title": "Top queries",
+        "description": "Most frequent searches. Know what users need most without surveys."
+      },
+      "noResults": {
+        "title": "Zero-result queries",
+        "description": "Queries that found nothing. Each one is an opportunity to add content or configure a synonym."
+      },
+      "ctr": {
+        "title": "CTR by position",
+        "description": "What percentage of clicks does position 1 get? Position 2? Where does engagement drop?"
+      },
+      "filterUsage": {
+        "title": "Filter usage",
+        "description": "Which facets are popular? Which filters go unused? Simplify UX based on data."
+      },
+      "conversion": {
+        "title": "Post-search conversion",
+        "description": "How many search sessions led to a target action — purchase, view, form submission."
+      },
+      "quota": {
+        "title": "Per-key consumption",
+        "description": "Per-key and per-tenant usage analytics. Who's exceeding limits, where are anomalies."
+      }
+    }
+  },
+  "homeSecurity": {
+    "title": "Security & multi-tenant architecture",
+    "subtitle": "Search from the browser = tokens that narrow permissions, not expand them. Tenant isolation on every query.",
+    "items": {
+      "scopedTokens": {
+        "title": "Short-lived scoped tokens",
+        "description": "HMAC-signed tokens bound to an index, origin, and TTL. A leaked token only accesses one index for one hour."
+      },
+      "tenantIsolation": {
+        "title": "Tenant isolation",
+        "description": "Every search query is scoped to your organization ID. Cross-tenant reads are architecturally impossible."
+      },
+      "originRestriction": {
+        "title": "Origin restriction",
+        "description": "Pin every API key to specific origins. A browser-console leaked key won't work from another domain."
+      },
+      "sso": {
+        "title": "SSO + Audit log",
+        "description": "SAML/OIDC for enterprise. Every administrative action is logged with timestamp and actor."
+      },
+      "compliance": {
+        "title": "Compliance & DPA",
+        "description": "SOC 2, encryption at rest and in transit, dedicated cluster regions. Signed DPA for GDPR/CCPA."
+      },
+      "sla": {
+        "title": "99.95% SLA",
+        "description": "Contractually guaranteed uptime. Incident response, backups, restore procedures."
+      }
+    }
+  },
+  "homeQuickstart": {
+    "title": "Integration in 15 minutes",
+    "subtitle": "Create an index, push documents, issue a token, run a search. That's it.",
+    "steps": {
+      "create": {
+        "title": "1. Create an index",
+        "code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
+      },
+      "index": {
+        "title": "2. Push documents",
+        "code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Nike Sneakers\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Adidas Sneakers\", \"price\": 7500}\n]"
+      },
+      "token": {
+        "title": "3. Issue a scoped token",
+        "code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
+      },
+      "search": {
+        "title": "4. Search from the browser",
+        "code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"Nike sneakers\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
+      }
+    },
+    "cta": "View full documentation"
+  },
+  "homeAiAnswers": {
+    "title": "AI answers on top of search",
+    "subtitle": "Search-first, answer-augmented UX. For docs, knowledge bases, and support — answers with citations, not a black box.",
+    "items": {
+      "hybrid": {
+        "title": "Keyword + semantic hybrid",
+        "description": "Keyword precision + semantic understanding. Configurable weights for each use case."
+      },
+      "citedAnswers": {
+        "title": "Answers with citations",
+        "description": "Instead of a black box — an AI answer with source links. Users see where the answer came from."
+      },
+      "rag": {
+        "title": "RAG-ready pipeline",
+        "description": "Plug AACsearch into your RAG pipeline. Vector embeddings are generated automatically during indexing."
+      },
+      "searchFirst": {
+        "title": "Search-first UX",
+        "description": "Results first, answer second. Users can navigate to the source or read the generated answer."
+      }
+    }
+  },
+  "homeDocsEcosystem": {
+    "title": "SDK, API & ecosystem",
+    "subtitle": "TypeScript SDK, REST API, Next.js/React components, webhooks, and OpenAPI spec. No magic — just documented contracts.",
+    "items": {
+      "sdk": {
+        "title": "TypeScript SDK",
+        "description": "Typed browser SDK for React, Next.js, Vue, and vanilla JS. Autocomplete types in your IDE."
+      },
+      "rest": {
+        "title": "REST API",
+        "description": "OpenAPI spec available for client generation. All operations over HTTP."
+      },
+      "webhooks": {
+        "title": "Webhooks",
+        "description": "Indexing events, sync errors, quota breaches — subscribe to real-time changes."
+      },
+      "frameworks": {
+        "title": "Next.js / React",
+        "description": "SearchProvider, UseSearch hook, ready-made components for React and Next.js App Router."
+      },
+      "migration": {
+        "title": "Migration",
+        "description": "Zero-downtime reindex out of the box. Migrate from Algolia, Meilisearch, or Elasticsearch — physical index dump."
+      },
+      "playground": {
+        "title": "Playground",
+        "description": "Interactive console in the dashboard. Try queries, see results, copy ready-to-use code."
+      }
+    }
+  },
+  "homeTco": {
+    "title": "AACsearch vs Algolia — real cost comparison",
+    "subtitle": "Algolia charges per record every month. At 1M searches/month, AACsearch costs 5x less.",
+    "rows": {
+      "priceModel": {
+        "metric": "Pricing model",
+        "algolia": "$0.50 / 1K searches + $0.50 / record / month",
+        "aac": "$0.10 / 1K search-units. 1 unit = 1 search OR 1 document."
+      },
+      "oneMillion": {
+        "metric": "1M searches/mo + 10K docs",
+        "algolia": "$500 (search) + $5,000 (records) = $5,500/mo",
+        "aac": "$100/mo"
+      },
+      "tenMillion": {
+        "metric": "10M searches/mo + 100K docs",
+        "algolia": "$5,000 (search) + $50,000 (records) = $55,000/mo",
+        "aac": "$1,000/mo"
+      },
+      "overage": {
+        "metric": "Overage",
+        "algolia": "Auto overage at standard rates",
+        "aac": "Soft cap: dashboard warning. Hard cap: block until next cycle."
+      },
+      "records": {
+        "metric": "Record storage cost",
+        "algolia": "Every record costs money every month",
+        "aac": "Pay once at index time. Free thereafter."
+      },
+      "zeroDowntime": {
+        "metric": "Zero-downtime reindex",
+        "algolia": "Enterprise plan only",
+        "aac": "Included in all plans"
+      }
+    },
+    "cta": "Calculate your savings →"
+  },
+  "homeMigration": {
+    "title": "Migrate from Algolia, Meilisearch, or Elasticsearch — in 1 hour",
+    "subtitle": "Zero-downtime reindex, physical index dump, or direct sync. Start integration without stopping your current search.",
+    "steps": {
+      "export": {
+        "title": "1. Export your index",
+        "description": "Export your current index via your provider's API. AACsearch accepts JSON, NDJSON, and CSV."
+      },
+      "import": {
+        "title": "2. Import to AACsearch",
+        "description": "POST to /collections — indexing starts immediately. Via dashboard, CLI, or API."
+      },
+      "switch": {
+        "title": "3. Switch without downtime",
+        "description": "Live search stays on your old provider. New index builds in parallel. Atomic alias switch."
+      },
+      "monitor": {
+        "title": "4. Monitor and rollback",
+        "description": "Compare before/after metrics: latency, CTR, zero-result rate. One-click rollback if needed."
+      }
+    },
+    "cta": "Start migration"
+  },
+  "homePricingFaq": {
+    "title": "Pricing FAQ — unit economics explained",
+    "items": {
+      "unit": {
+        "q": "What counts as one search-unit?",
+        "a": "1 search request OR 1 indexed document. A document update = 1 unit. Reindex is not billed — only the final write to the new index."
+      },
+      "overage": {
+        "q": "What happens after exceeding the limit?",
+        "a": "Soft cap: you receive a dashboard warning and email notification. Hard cap: search is blocked until the next billing cycle. No surprise bills."
+      },
+      "comparison": {
+        "q": "How does AACsearch compare to Algolia on price?",
+        "a": "Algolia charges for every record every month. At 1M searches + 10K documents, Algolia costs ~$5,500/mo — AACsearch costs $100/mo. At 10M searches, the difference reaches 50x."
+      },
+      "free": {
+        "q": "What's included in the free tier?",
+        "a": "10,000 search-units/month, 1 index, 3 API keys. Enough for a prototype, MVP, or small side project."
+      },
+      "migration": {
+        "q": "How do I migrate from another provider?",
+        "a": "Zero-downtime reindex out of the box. Export your index → import into AACsearch → switch the alias. All online, no search interruption."
+      }
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "Go to homepage"
+  },
+  "common": {
+    "footer": {
+      "blog": "Blog",
+      "features": "Features",
+      "pricing": "Pricing",
+      "privacyPolicy": "Privacy policy",
+      "termsAndConditions": "Terms",
+      "tagline": "Search as a service — scoped tokens, origin allow-lists, and a typed browser SDK.",
+      "legal": "Legal",
+      "status": "Status",
+      "support": "Support",
+      "trust": "Trust",
+      "brand": "Brand"
+    },
+    "menu": {
+      "blog": "Blog",
+      "changelog": "Changelog",
+      "contact": "Contact",
+      "dashboard": "Dashboard",
+      "docs": "Docs",
+      "features": "Features",
+      "login": "Sign in",
+      "pricing": "Pricing",
+      "product": "Product",
+      "solutions": "Solutions",
+      "resources": "Resources",
+      "company": "Company",
+      "enterprise": "Enterprise",
+      "roadmap": "Roadmap",
+      "useCases": "Use Cases",
+      "integrations": "Integrations",
+      "customers": "Customers",
+      "compare": "Compare",
+      "aiSearch": "AI Search",
+      "developers": "Developers",
+      "faq": "FAQ",
+      "glossary": "Glossary",
+      "about": "About",
+      "security": "Security",
+      "careers": "Careers",
+      "partners": "Partners",
+      "press": "Press"
+    },
+    "aria": {
+      "menu": "Menu",
+      "language": "Language"
+    },
+    "tableOfContents": {
+      "title": "On this page"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "pricingPage": {
+    "title": "Simple, usage-based pricing",
+    "description": "Pay for searches and indexed documents. Nothing else. No seat fees, no hidden limits. Cancel anytime."
+  },
+  "securityPage": {
+    "title": "Security built into every layer",
+    "description": "API keys hashed and never stored in plaintext. Scoped tokens that narrow, never widen. Tenant isolation enforced at every query."
+  },
+  "security": {
+    "title": "Defense in depth",
+    "subtitle": "Every request goes through auth, rate limiting, quota check, and tenant isolation before touching your data.",
+    "items": {
+      "keyHashing": {
+        "title": "API key hashing",
+        "description": "All API keys are hashed with SHA-256 and stored as digests. The plaintext is shown once at creation and never again."
+      },
+      "scopedTokens": {
+        "title": "Scoped tokens",
+        "description": "HMAC-signed tokens are locked to a specific index, origin, and TTL. They narrow permissions — never widen them."
+      },
+      "originAllowlist": {
+        "title": "Origin allow-list",
+        "description": "Pin every API key to specific origins. A leaked key published on Twitter still can't drain your quota."
+      },
+      "rateLimiting": {
+        "title": "Rate limiting",
+        "description": "Per-key per-minute throttling, enforced server-side. Usage and limits are visible in the dashboard before you hit them."
+      },
+      "tenantIsolation": {
+        "title": "Tenant isolation",
+        "description": "Every search call is scoped to your organization ID. Cross-org reads are architecturally impossible — not just policy."
+      },
+      "auditLog": {
+        "title": "Audit log",
+        "description": "Every admin action is logged with timestamp, actor, and change. Available on Enterprise plans."
+      }
+    }
+  },
+  "enterprisePage": {
+    "title": "AACsearch for Enterprise",
+    "description": "Dedicated infrastructure, SSO, audit log, 99.95% SLA, and signed DPA — everything compliance and security teams require."
+  },
+  "enterprise": {
+    "title": "Built for regulated teams",
+    "subtitle": "Unmetered search, dedicated cluster, custom integrations. Contact us and we'll scope a plan for your requirements.",
+    "items": {
+      "sso": {
+        "title": "SSO (SAML / OIDC)",
+        "description": "Connect your identity provider — Okta, Azure AD, Google Workspace, or any SAML 2.0 / OIDC compliant IdP."
+      },
+      "dedicatedCluster": {
+        "title": "Dedicated cluster",
+        "description": "Your indexes run on isolated infrastructure in the region you choose. No noisy neighbours, no shared search nodes."
+      },
+      "auditLog": {
+        "title": "Audit log + IP allow-list",
+        "description": "Every admin action is timestamped and attributable. Lock access to a specific IP range for your ops team."
+      },
+      "sla": {
+        "title": "99.95% SLA + signed DPA",
+        "description": "Contractual uptime guarantee and a signed Data Processing Agreement covering GDPR and CCPA requirements."
+      },
+      "prioritySupport": {
+        "title": "Priority support",
+        "description": "Dedicated Slack channel. Sub-4-hour first response. Named technical account manager for onboarding and incidents."
+      },
+      "customIntegrations": {
+        "title": "Custom integrations",
+        "description": "We onboard your CMS, ERP, or proprietary data source. Connector API included; custom connectors on request."
+      }
+    }
+  },
+  "aboutPage": {
+    "title": "About AACsearch",
+    "description": "We're building the search infrastructure for the next generation of web applications.",
+    "mission": {
+      "label": "Our Mission",
+      "quote": "Search should be fast, relevant, and accessible to every developer.",
+      "body": "AACsearch was founded with a simple belief: great search should not require a team of engineers to maintain or a fortune to operate."
+    },
+    "stats": {
+      "searches": "10M+",
+      "searchesLabel": "Searches per day",
+      "companies": "500+",
+      "companiesLabel": "Companies trust us",
+      "uptime": "99.9%",
+      "uptimeLabel": "Uptime SLA",
+      "latency": "<50ms",
+      "latencyLabel": "Average latency"
+    },
+    "why": {
+      "title": "Why AACsearch",
+      "items": {
+        "speed": {
+          "title": "Blazing Fast",
+          "description": "Sub-50ms search responses at any scale, powered by our distributed search infrastructure."
+        },
+        "simple": {
+          "title": "Developer First",
+          "description": "Intuitive REST API, SDKs for every major language, and a dashboard that makes sense."
+        },
+        "open": {
+          "title": "Transparent Pricing",
+          "description": "No hidden fees, no lock-in. Pay only for what you use with clear, predictable pricing."
+        }
+      }
+    }
+  },
+  "about": {
+    "title": "Why we built AACsearch",
+    "subtitle": "Search infrastructure is hard. Managed services are expensive and opaque. We built the thing we wished existed.",
+    "items": {
+      "mission": {
+        "title": "Mission",
+        "description": "Make production-grade search available to every team — from two-person startups to regulated enterprises — without requiring a dedicated search engineer."
+      },
+      "technology": {
+        "title": "Technology",
+        "description": "Built on a lightning-fast search engine. We add multi-tenancy, API key management, analytics, and a hosted control plane on top."
+      },
+      "openCore": {
+        "title": "No lock-in",
+        "description": "Your data is always yours. Export indexes, migrate between plans, or switch to the Enterprise tier. No proprietary data format, no migration tax."
+      },
+      "team": {
+        "title": "Team",
+        "description": "A small, focused team. We have shipped search at B2B SaaS companies, e-commerce platforms, and developer tools. We eat our own cooking."
+      },
+      "values": {
+        "title": "Values",
+        "description": "Simplicity over cleverness. Documented behaviour over magic. An API that a junior developer can use on day one and a senior can rely on in production."
+      },
+      "roadmap": {
+        "title": "Roadmap",
+        "description": "Public roadmap, voted by users. We ship incrementally — no big-bang releases. Changelog updated with every deployment."
+      }
+    }
+  },
+  "caseStudiesPage": {
+    "title": "Customer Case Studies",
+    "description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+    "readCaseStudy": "Read case study",
+    "cta": {
+      "title": "Want to be our next case study?",
+      "description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
+    }
+  },
+  "customersPage": {
+    "title": "Loved by Developers, Trusted by Businesses",
+    "description": "Join hundreds of companies using AACsearch to power fast, relevant search experiences.",
+    "stats": {
+      "companies": "500+",
+      "companiesLabel": "Companies worldwide",
+      "searches": "10M+",
+      "searchesLabel": "Searches per day",
+      "uptime": "99.9%",
+      "uptimeLabel": "Platform uptime",
+      "rating": "4.9/5",
+      "ratingLabel": "Average rating"
+    },
+    "testimonials": {
+      "title": "Real results from real customers",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream"
+        }
+      }
+    },
+    "caseStudies": {
+      "title": "Read their full stories",
+      "description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
+      "readFullStudy": "Read full case study →",
+      "items": {
+        "nordikHome": {
+          "title": "NordikHome: 5x Cost Reduction",
+          "excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
+        },
+        "agencyHub": {
+          "title": "AgencyHub: Multi-Tenant Search",
+          "excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
+        },
+        "devStream": {
+          "title": "DevStream: Zero DevOps, 10x Faster",
+          "excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
+        }
+      }
+    },
+    "logos": {
+      "title": "Trusted by teams at"
+    },
+    "cta": {
+      "title": "Join hundreds of companies",
+      "description": "Start your free trial today — no credit card required."
+    }
+  },
+  "customers": {
+    "title": "Trusted by builders",
+    "subtitle": "Early adopters who replaced Algolia, Elasticsearch, or hand-rolled solutions — and stopped worrying about search infra.",
+    "items": {
+      "ecommerce": {
+        "title": "E-commerce platform",
+        "description": "Replaced Algolia after the third surprise bill. AACsearch costs a fixed amount each month. The migration took three days. Search is better than before.",
+        "role": "CTO, 15-person e-commerce SaaS"
+      },
+      "saasFounder": {
+        "title": "B2B SaaS founder",
+        "description": "We needed per-tenant search without building infra. AACsearch scoped tokens meant we shipped in a weekend instead of a sprint.",
+        "role": "Founder, project management SaaS"
+      },
+      "devTools": {
+        "title": "Developer tools company",
+        "description": "MCP Server lets our AI features search over user data programmatically. One integration unlocked three new product features.",
+        "role": "VP Engineering, developer tools startup"
+      },
+      "enterprise": {
+        "title": "Enterprise platform",
+        "description": "Audit log, SSO, and dedicated cluster were the requirements. AACsearch Enterprise checked all three. The SLA is contractual.",
+        "role": "Head of Security, enterprise SaaS"
+      },
+      "marketplace": {
+        "title": "Marketplace startup",
+        "description": "Multi-search lets us run product, seller, and content queries in one request. The analytics show us exactly where users drop off.",
+        "role": "Lead Engineer, two-sided marketplace"
+      },
+      "agency": {
+        "title": "Digital agency",
+        "description": "We deploy AACsearch for clients. Enterprise plans include dedicated infrastructure for teams with strict data residency requirements.",
+        "role": "Technical Director, digital agency"
+      }
+    }
+  },
+  "roadmapPage": {
+    "title": "Product roadmap",
+    "description": "What shipped, what is in progress, and what is coming next. Updated after every sprint."
+  },
+  "roadmap": {
+    "title": "Where we are going",
+    "subtitle": "Incremental, public, and boring in the best way. No big-bang releases — just consistent delivery.",
+    "shipped": "Shipped",
+    "inProgress": "In progress",
+    "planned": "Planned",
+    "seeChangelog": "See changelog →",
+    "items": {
+      "searchCore": {
+        "title": "Search core v0.x",
+        "description": "Single-doc upsert, multi-search, browser SDK, scoped tokens, origin allow-list, rate-limit, quota, zero-downtime reindex, DB-first ingest.",
+        "status": "shipped"
+      },
+      "marketing": {
+        "title": "Marketing site v0.5",
+        "description": "Public marketing site with pricing, features, integrations, security, use-cases, and enterprise pages in 5 locales.",
+        "status": "shipped"
+      },
+      "connectors": {
+        "title": "CMS connectors R2",
+        "description": "PrestaShop 8.x and 1C-Bitrix modules. Connector API with handshake, full/delta sync, diagnostics, heartbeat.",
+        "status": "shipped"
+      },
+      "knowledge": {
+        "title": "Knowledge module R2.5",
+        "description": "RAG and GraphRAG over documents. 9 oRPC procedures, 7 Prisma models, file ingestion, chunking, retrieval.",
+        "status": "shipped"
+      },
+      "metering": {
+        "title": "Search-units metering v0.6",
+        "description": "Tochka wallet top-up, per-plan search-unit billing, analytics pipeline, wallet dashboard.",
+        "status": "inProgress"
+      },
+      "billing": {
+        "title": "Billing & payments",
+        "description": "Stripe subscriptions, customer portal, invoices, multi-currency support with Tochka Bank for Russian payments.",
+        "status": "shipped"
+      },
+      "analytics": {
+        "title": "Analytics & dashboards",
+        "description": "Real-time query analytics, usage metrics, failed queries, CTR tracking, and custom dashboards.",
+        "status": "inProgress"
+      },
+      "widget": {
+        "title": "Widget & embed SDK",
+        "description": "Drop-in search widget with Cmd+K modal, floating bubble, and full-page modes. React, Vue, Angular, and vanilla JS bundles.",
+        "status": "inProgress"
+      },
+      "aiNlp": {
+        "title": "NLP & AI search",
+        "description": "Spell correction, intent detection, AI query rewriting, and natural language search. Zero-click AI answers coming next.",
+        "status": "planned"
+      },
+      "docs": {
+        "title": "Public docs site v0.7",
+        "description": "Full documentation site with API reference, quick-start guides, and tutorials.",
+        "status": "planned"
+      },
+      "selfHost": {
+        "title": "Enterprise deployment v1.0",
+        "description": "Dedicated cluster deployment, custom data residency, and on-prem options for regulated industries. Same managed API, your infrastructure.",
+        "status": "planned"
+      },
+      "vectorSearch": {
+        "title": "Vector & hybrid search",
+        "description": "Semantic search via OpenAI embeddings. Hybrid BM25 + vector ranking. Already implemented in procedures.",
+        "status": "shipped"
+      },
+      "shopify": {
+        "title": "Shopify Integration",
+        "description": "Full Shopify app with product & variant sync, inventory tracking, real-time webhooks, multi-store support, and dashboard UI."
+      },
+      "embeddingProviders": {
+        "title": "Azure & GCP Embedding Providers",
+        "description": "Azure OpenAI and GCP Vertex AI embedding providers alongside existing OpenAI support. OpenAI-compatible API for custom endpoints."
+      },
+      "searchConfigurator": {
+        "title": "Search Configurator",
+        "description": "Visual wizard for configuring search collections, schema fields, ranking settings, and facets. Widget Builder with Configurator, Filters, and Install tabs."
+      },
+      "upgradeFlows": {
+        "title": "Upgrade & Downgrade Flows",
+        "description": "Streamlined plan upgrade modal with proration preview and plan comparison. Downgrade flow with data loss warnings and confirmation."
+      }
+    },
+    "shippedTitle": "Shipped",
+    "inProgressTitle": "In Progress",
+    "plannedTitle": "Planned",
+    "feedback": {
+      "title": "Have an idea?",
+      "description": "We read every feature request. Tell us what would make AACsearch better for you.",
+      "cta": "Suggest a feature"
+    },
+    "vote": "Vote",
+    "voted": "Voted",
+    "votes": "votes",
+    "emailCapture": {
+      "title": "Shape what we build next",
+      "description": "Vote to prioritize features and get early access updates. Join 700+ search teams.",
+      "placeholder": "you@company.com",
+      "subscribeAndVote": "Subscribe & Vote",
+      "skipAndVote": "No thanks, just vote",
+      "privacy": "No spam. Unsubscribe anytime.",
+      "success": "Thanks! Your vote is counted. Watch your inbox for updates."
+    }
+  },
+  "careersPage": {
+    "title": "Careers at AACsearch",
+    "description": "A small team building search infrastructure for the next generation of software products. Remote-first."
+  },
+  "careers": {
+    "title": "Work on search infrastructure",
+    "subtitle": "Small team, meaningful work. Every engineer ships to production. No committees, no sprints that miss.",
+    "openRoles": "Open roles",
+    "noRoles": "No open roles right now — but we are always interested in exceptional candidates.",
+    "applyPrompt": "Send us a note at",
+    "applyEmail": "jobs@aacsearch.com",
+    "items": {
+      "culture": {
+        "title": "Culture",
+        "description": "Remote-first, async-default. We write things down. Meetings are rare and have agendas. Results over hours."
+      },
+      "engineering": {
+        "title": "Engineering",
+        "description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. The stack is modern and documented. You will own features end-to-end."
+      },
+      "growth": {
+        "title": "Growth",
+        "description": "We are early. You will have outsized impact. The codebase is clean — no legacy debt to wade through."
+      },
+      "benefits": {
+        "title": "Benefits",
+        "description": "Competitive salary benchmarked to your location. Equity. Home office budget. No micromanagement."
+      },
+      "learning": {
+        "title": "Learning",
+        "description": "Conference budget. Paid books and courses. Time to explore new ideas that serve the product."
+      },
+      "hiring": {
+        "title": "Hiring process",
+        "description": "Two calls and a paid take-home. We respect your time. Decision in under two weeks from first contact."
+      }
+    }
+  },
+  "partnersPage": {
+    "title": "Partner with AACsearch",
+    "description": "Grow your business by integrating, reselling, or building on top of AACsearch. Join our partner ecosystem."
+  },
+  "partners": {
+    "title": "Grow with AACsearch",
+    "subtitle": "We are looking for agencies, consultants, and technology companies who want to embed search into their offerings.",
+    "items": {
+      "technology": {
+        "title": "Technology partners",
+        "description": "Build native integrations for your platform. Co-marketing, joint documentation, and technical support."
+      },
+      "implementation": {
+        "title": "Implementation partners",
+        "description": "Agencies and consultants who implement AACsearch for their clients. Revenue sharing and deal registration."
+      },
+      "reseller": {
+        "title": "Resellers",
+        "description": "Resell AACsearch under your own brand or bundle it into your product. White-label options available."
+      },
+      "cloud": {
+        "title": "Cloud marketplace",
+        "description": "Available on AWS Marketplace and Azure Marketplace. Transact via your existing cloud commitment."
+      },
+      "benefits": {
+        "title": "Partner benefits",
+        "description": "Partner portal, co-marketing support, dedicated channel manager, NFR licenses, and priority support SLA."
+      },
+      "apply": {
+        "title": "Apply to the program",
+        "description": "Fill in the form and a partner manager will respond within two business days. No exclusivity required."
+      }
+    }
+  },
+  "developersPage": {
+    "title": "Built for Developers",
+    "description": "A clean API, great docs, and SDKs that get out of your way. AACsearch integrates in minutes, not days.",
+    "hero": {
+      "badge": "Developer-First",
+      "codeCaption": "Add search to your app in 3 lines"
+    },
+    "features": {
+      "title": "Everything you need to ship search",
+      "api": {
+        "title": "REST API",
+        "description": "Clean, intuitive REST API with full OpenAPI 3.1 spec. Every endpoint documented with examples."
+      },
+      "sdks": {
+        "title": "Official SDKs",
+        "description": "JavaScript and TypeScript SDKs. Community SDKs for Python, Go, and PHP."
+      },
+      "browserSdk": {
+        "title": "Browser SDK",
+        "description": "Lightweight 14KB browser widget. Shadow DOM, 5 locales, analytics built-in. One script tag."
+      },
+      "connectorApi": {
+        "title": "Connector API",
+        "description": "7-endpoint API for CMS integrations. PrestaShop and Bitrix24 modules included out of the box."
+      },
+      "openapi": {
+        "title": "OpenAPI Spec",
+        "description": "Full OpenAPI 3.1 spec at /api/v1/openapi.json. Auto-generate client libraries in any language."
+      },
+      "dashboard": {
+        "title": "Analytics Dashboard",
+        "description": "Search analytics, zero-result tracking, top queries, and CTR — all in your dashboard."
+      }
+    },
+    "cta": {
+      "title": "Start building in minutes",
+      "description": "Free tier included. No credit card required."
+    }
+  },
+  "aiSearchPage": {
+    "title": "AI-Powered Search",
+    "description": "Go beyond keywords. AACsearch supports vector, hybrid, and semantic search out of the box — no ML expertise required.",
+    "badge": "Now in production",
+    "modes": {
+      "title": "Three search modes, one platform",
+      "vector": {
+        "title": "Vector Search",
+        "description": "Find semantically similar results even when exact keywords don't match. Uses embedding models to understand meaning."
+      },
+      "hybrid": {
+        "title": "Hybrid Search",
+        "description": "Combine keyword precision with semantic understanding. Configurable weights let you tune relevance for your use case."
+      },
+      "semantic": {
+        "title": "Semantic Re-ranking",
+        "description": "Re-rank results using AI to surface the most relevant hits at the top. Improves CTR without changing your indexing."
+      }
+    },
+    "useCases": {
+      "title": "Built for every use case",
+      "ecommerce": {
+        "title": "E-commerce",
+        "description": "Surface relevant products for queries like 'comfortable running shoes' even without exact keyword match."
+      },
+      "docs": {
+        "title": "Documentation",
+        "description": "Let users find answers with natural language questions across your entire knowledge base."
+      },
+      "knowledge": {
+        "title": "RAG Pipelines",
+        "description": "Connect AACsearch to your RAG pipeline for accurate, grounded AI responses."
+      },
+      "marketplace": {
+        "title": "Marketplace",
+        "description": "Match buyers and sellers using semantic similarity instead of rigid keyword filters."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "steps": {
+        "upload": {
+          "title": "Upload your data",
+          "description": "Connect your CMS, database, or upload files via API."
+        },
+        "model": {
+          "title": "Choose an embedding model",
+          "description": "Pick from built-in models or bring your own OpenAI embeddings."
+        },
+        "index": {
+          "title": "Vectors generated automatically",
+          "description": "AACsearch generates and stores vector embeddings during indexing."
+        },
+        "query": {
+          "title": "Query with natural language",
+          "description": "Your users search naturally — AACsearch returns the most semantically relevant results."
+        }
+      }
+    }
+  },
+  "pressPage": {
+    "title": "Press & Media",
+    "description": "Media kit, press releases, boilerplate, and contact details for journalists and media professionals."
+  },
+  "press": {
+    "title": "In the press",
+    "subtitle": "Find everything you need to cover AACsearch — our story, media kit, approved assets, and a direct line to our communications team.",
+    "items": {
+      "mediaKit": {
+        "title": "Media kit",
+        "description": "Logo files, product screenshots, founder photos, and brand guidelines in a single downloadable zip."
+      },
+      "boilerplate": {
+        "title": "Company boilerplate",
+        "description": "AACsearch is a hosted search-as-a-service platform. Founded in 2024, serving 500+ companies across 40 countries."
+      },
+      "pressReleases": {
+        "title": "Press releases",
+        "description": "Official announcements for product launches, funding rounds, and major partnerships — formatted and ready to republish."
+      },
+      "coverage": {
+        "title": "Press coverage",
+        "description": "Selected articles, podcast appearances, and conference talks featuring AACsearch and our team."
+      },
+      "contact": {
+        "title": "Media contact",
+        "description": "Send press inquiries to press@aacsearch.com. We respond to media requests within one business day."
+      },
+      "assets": {
+        "title": "Brand assets",
+        "description": "Download our logo in SVG, PNG, and dark/light variants. Usage guidelines included — see Brand page for full details."
+      },
+      "releases": {
+        "title": "Press releases",
+        "description": "Official announcements about AACsearch product launches, funding rounds, partnerships, and company milestones."
+      },
+      "founders": {
+        "title": "Founder stories",
+        "description": "Interviews and articles featuring AACsearch founders discussing the company mission, product vision, and industry perspective."
+      },
+      "kit": {
+        "title": "Press kit",
+        "description": "Download logos, brand assets, screenshots, and product fact sheets for media coverage and editorial use."
+      }
+    }
+  },
+  "brandPage": {
+    "title": "Brand Guidelines",
+    "description": "Logos, colours, typography, and usage rules. Everything you need to represent AACsearch correctly in your integrations and co-marketing."
+  },
+  "brand": {
+    "title": "How we look",
+    "subtitle": "Our brand is built on clarity and speed — the same values we bring to search. Use these assets to represent AACsearch accurately.",
+    "items": {
+      "logo": {
+        "title": "Logo",
+        "description": "Use the primary logo on light backgrounds and the reversed logo on dark. Minimum size 24px. Never stretch, rotate, or recolour."
+      },
+      "colors": {
+        "title": "Colours",
+        "description": "Primary: #0F172A (night). Accent: #6366F1 (indigo-500). Use the accent sparingly — for interactive elements and highlights only."
+      },
+      "typography": {
+        "title": "Typography",
+        "description": "Headings and body: Inter. Monospace: JetBrains Mono. Both available from Google Fonts and Fontsource."
+      },
+      "guidelines": {
+        "title": "Usage guidelines",
+        "description": "Do not use the AACsearch logo in a way that implies endorsement. Do not modify the logo. Attribution is always welcome but never required."
+      },
+      "assets": {
+        "title": "Asset downloads",
+        "description": "Download the full brand kit: SVG logo, favicon, og-image template, and colour palette in ASE, Sketch, and Figma format."
+      },
+      "contact": {
+        "title": "Brand questions",
+        "description": "For co-marketing materials, conference sponsorships, or unusual usage questions, email brand@aacsearch.com."
+      },
+      "logos": {
+        "title": "Logos & assets",
+        "description": "Download AACsearch logos in SVG, PNG, and vector formats. Color, monochrome, and dark-background variants included."
+      }
+    }
+  },
+  "resourcesPage": {
+    "title": "Resources",
+    "description": "Documentation, tutorials, case studies, and community links — everything you need to get the most from AACsearch."
+  },
+  "resources": {
+    "title": "Everything you need to ship search",
+    "subtitle": "From quickstart guides to deep-dive tutorials, our resource library covers every aspect of building with AACsearch.",
+    "items": {
+      "docs": {
+        "title": "Documentation",
+        "description": "API reference, SDK guides, schema design tips, and deployment guides. Versioned and searchable."
+      },
+      "blog": {
+        "title": "Engineering blog",
+        "description": "Deep dives into search relevance, vector search, multi-tenancy architecture, and AACsearch internals."
+      },
+      "changelog": {
+        "title": "Changelog",
+        "description": "Every feature, fix, and breaking change — logged with the deployment date and linked to the relevant documentation."
+      },
+      "tutorials": {
+        "title": "Tutorials",
+        "description": "Step-by-step guides for Shopify, WordPress, Next.js, and more. From zero to production in under an afternoon."
+      },
+      "community": {
+        "title": "Community",
+        "description": "Ask questions, share integrations, and get peer support in the AACsearch community forum and Discord."
+      },
+      "support": {
+        "title": "Support",
+        "description": "Email support for Starter and above. Enterprise plans include a dedicated Slack channel and contractual SLA."
+      },
+      "migration": {
+        "title": "Migration guides",
+        "description": "Step-by-step instructions for migrating from Typesense Cloud, Algolia, Elasticsearch, Meilisearch, and other search platforms to AACsearch."
+      },
+      "apiRef": {
+        "title": "API reference",
+        "description": "Complete OpenAPI 3.1 specification for all AACsearch endpoints. Browse endpoints, request schemas, and response examples."
+      },
+      "sdks": {
+        "title": "Client SDKs",
+        "description": "TypeScript/JavaScript, Python, PHP, and Go SDKs for the AACsearch API. Type-safe, well-documented, and published on package registries."
+      }
+    }
+  },
+  "glossaryPage": {
+    "title": "Search Glossary",
+    "description": "Plain-language definitions of search, indexing, and relevance concepts used across AACsearch documentation and the industry."
+  },
+  "glossary": {
+    "title": "The language of search",
+    "subtitle": "Search has its own vocabulary. Use this glossary to understand AACsearch documentation and communicate precisely with your team.",
+    "items": {
+      "searchIndex": {
+        "title": "Search index",
+        "description": "A data structure optimised for fast text retrieval. AACsearch maintains a search collection per index, with automatic alias management."
+      },
+      "facet": {
+        "title": "Facet",
+        "description": "A filterable attribute returned alongside search results with document counts. Enables guided navigation without additional API calls."
+      },
+      "relevance": {
+        "title": "Relevance",
+        "description": "How well a document matches a query. AACsearch combines BM25 text relevance, vector similarity, field weights, and custom boost rules."
+      },
+      "invertedIndex": {
+        "title": "Inverted index",
+        "description": "The core data structure of full-text search. Maps each token to the documents containing it. AACsearch maintains this automatically."
+      },
+      "embedding": {
+        "title": "Embedding",
+        "description": "A numeric vector representation of text semantics. AACsearch can store and query embeddings for semantic and hybrid search."
+      },
+      "searchUnit": {
+        "title": "Search unit",
+        "description": "AACsearch billing unit. One search unit equals one search query or one document indexed. Used to calculate your monthly plan allocation."
+      },
+      "bm25": {
+        "title": "BM25",
+        "description": "A ranking function that scores documents based on term frequency and inverse document frequency. AACsearch uses BM25 as the default text relevance algorithm."
+      },
+      "inverted": {
+        "title": "Inverted index",
+        "description": "A data structure mapping every unique term in a document collection to the documents containing it. Enables fast full-text search at scale."
+      },
+      "vector": {
+        "title": "Vector search",
+        "description": "A search method that finds documents based on semantic similarity using embeddings, rather than exact keyword matches. AACsearch supports hybrid keyword + vector search."
+      },
+      "facets": {
+        "title": "Facets",
+        "description": "Filters that let users narrow search results by categories, price ranges, ratings, and other attributes. AACsearch computes facet counts server-side on every query."
+      },
+      "relevanceTuning": {
+        "title": "Relevance tuning",
+        "description": "The process of adjusting search ranking to surface the most relevant results first. AACsearch supports field weights, boost rules, and custom scoring formulas."
+      },
+      "synonyms": {
+        "title": "Synonyms",
+        "description": "Words or phrases treated as equivalent during search. AACsearch supports one-way, multi-way, and multi-word synonym rules managed from the dashboard."
+      },
+      "typoTolerance": {
+        "title": "Typo tolerance",
+        "description": "The ability to return correct results even when the search query contains spelling errors. AACsearch uses configurable Levenshtein distance and phonetic matching."
+      }
+    }
+  },
+  "trustPage": {
+    "title": "Trust Center",
+    "description": "Security posture, compliance certifications, data residency options, and our responsible disclosure policy."
+  },
+  "trust": {
+    "title": "Built to earn your trust",
+    "subtitle": "AACsearch is designed from the ground up for security and compliance. Here is how we protect your data and your users.",
+    "items": {
+      "soc2": {
+        "title": "SOC 2 Type II",
+        "description": "AACsearch is SOC 2 Type II certified. The audit report is available under NDA to Enterprise plan customers."
+      },
+      "gdpr": {
+        "title": "GDPR & CCPA",
+        "description": "Data Processing Agreement available to all paying plans. Data residency in EU and US. Right-to-be-forgotten deletion within 72 hours."
+      },
+      "encryption": {
+        "title": "Encryption everywhere",
+        "description": "AES-256 at rest, TLS 1.3 in transit. API keys are stored as bcrypt hashes and never logged in plaintext."
+      },
+      "dataResidency": {
+        "title": "Data residency",
+        "description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
+      },
+      "auditLog": {
+        "title": "Audit log",
+        "description": "Every admin action — index creation, key issuance, member invitation — is logged with actor identity, timestamp, and org context."
+      },
+      "disclosure": {
+        "title": "Responsible disclosure",
+        "description": "Found a vulnerability? Email security@aacsearch.com. We follow a 90-day coordinated disclosure timeline and credit all reporters."
+      },
+      "audit": {
+        "title": "Third-party audits",
+        "description": "AACsearch undergoes regular security audits by independent third parties. Reports are available under NDA for enterprise customers."
+      },
+      "isolation": {
+        "title": "Tenant isolation",
+        "description": "Every organization data is isolated at the infrastructure level. Cross-tenant access is architecturally impossible, not just policy-enforced."
+      },
+      "tokens": {
+        "title": "Token-based authentication",
+        "description": "API keys are hashed at rest using bcrypt. Scoped tokens use HMAC signing with server-side secrets. Plaintext keys are shown once and never stored."
+      },
+      "accessControl": {
+        "title": "Access control",
+        "description": "Role-based access control (RBAC) with owner, admin, member, and viewer roles. API keys with granular permissions per index."
+      },
+      "pentest": {
+        "title": "Penetration testing",
+        "description": "Regular penetration tests by certified security firms. Summary reports are available to enterprise customers under NDA."
+      }
+    }
+  },
+  "newsletterPage": {
+    "title": "Newsletter",
+    "description": "Monthly updates on search engineering, AACsearch releases, and the developer tools we follow."
+  },
+  "newsletter": {
+    "title": "Stay in the loop",
+    "subtitle": "One email per month. Search engineering deep-dives, product updates, and links worth your time.",
+    "items": {
+      "frequency": {
+        "title": "Monthly cadence",
+        "description": "One email per month, every first Tuesday. No weekly digests, no daily updates — we respect your inbox."
+      },
+      "content": {
+        "title": "What you will get",
+        "description": "Search engineering articles, AACsearch release notes, developer tool highlights, and one community spotlight per issue."
+      },
+      "past": {
+        "title": "Read past issues",
+        "description": "Every newsletter is archived on our blog. Read before subscribing — you will know exactly what you are signing up for."
+      },
+      "privacy": {
+        "title": "Your data stays yours",
+        "description": "We use a self-hosted newsletter platform. Your email is never shared with ad networks or sold to data brokers."
+      },
+      "unsubscribe": {
+        "title": "One-click unsubscribe",
+        "description": "Every email has a one-click unsubscribe link. No dark patterns, no confirmation dialogs."
+      },
+      "social": {
+        "title": "Follow the highlights",
+        "description": "Newsletter highlights are posted on LinkedIn. Follow us there for shorter-form engineering updates."
+      },
+      "community": {
+        "title": "Community highlights",
+        "description": "A monthly roundup of the best AACsearch community projects, plugins, and success stories from developers worldwide."
+      },
+      "product": {
+        "title": "Product updates",
+        "description": "New features, performance improvements, and API changes. Changelog highlights delivered to your inbox monthly."
+      },
+      "tutorials": {
+        "title": "Tutorials & guides",
+        "description": "Step-by-step guides for setting up search, migrating from competitors, and integrating AACsearch with popular frameworks."
+      },
+      "benchmarks": {
+        "title": "Search benchmarks",
+        "description": "Industry benchmarks for search latency, zero-result rates, and CTR. See how your search performance compares to peers."
+      },
+      "industry": {
+        "title": "Industry insights",
+        "description": "Trends, best practices, and research in search and discovery. Curated for product, engineering, and growth teams."
+      },
+      "productUpdates": {
+        "title": "Product updates",
+        "description": "New features, performance improvements, and API changes delivered to your inbox monthly."
+      },
+      "searchTips": {
+        "title": "Search optimization tips",
+        "description": "Practical tips for improving search relevance, reducing zero-result rates, and tuning your indexes for better performance."
+      },
+      "showcase": {
+        "title": "Customer showcase",
+        "description": "See how other teams use AACsearch to power search across e-commerce, SaaS, media, and enterprise applications."
+      }
+    }
+  },
+  "communityPage": {
+    "title": "Community",
+    "description": "Join the AACsearch community — ask questions, share projects, contribute connectors, and shape the roadmap."
+  },
+  "community": {
+    "title": "Build search, together",
+    "subtitle": "AACsearch is built in public. The community votes on features, contributes connectors, and helps newcomers ship faster.",
+    "items": {
+      "github": {
+        "title": "GitHub",
+        "description": "Star the repo, open issues, or contribute a PR. All public roadmap items are tracked as GitHub issues."
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "Real-time chat for questions, integrations, and troubleshooting. 500+ members, active every day."
+      },
+      "forum": {
+        "title": "Community forum",
+        "description": "Long-form Q&A for architecture questions, integration guides, and feature proposals. Fully searchable — powered by AACsearch."
+      },
+      "showcase": {
+        "title": "Showcase",
+        "description": "See what the community has built with AACsearch. Submit your project to be featured in the monthly newsletter."
+      },
+      "contribute": {
+        "title": "Contribute",
+        "description": "We accept contributions to connectors, SDK examples, and documentation. See CONTRIBUTING.md for guidelines."
+      },
+      "roadmap": {
+        "title": "Vote on the roadmap",
+        "description": "Every public roadmap item is open for community upvotes. The most-voted features ship first."
+      },
+      "events": {
+        "title": "Events & meetups",
+        "description": "Join AACsearch at industry events, webinars, and community meetups. Connect with the team and fellow developers."
+      }
+    }
+  },
+  "supportPage": {
+    "title": "Support",
+    "description": "Documentation, community, and direct support — whatever level of help your team needs to succeed with AACsearch."
+  },
+  "support": {
+    "title": "We have got your back",
+    "subtitle": "AACsearch support ranges from self-serve documentation to a dedicated Slack channel for Enterprise customers.",
+    "items": {
+      "documentation": {
+        "title": "Documentation",
+        "description": "Full API reference, SDK guides, and integration tutorials. Versioned, searchable, and updated with every release."
+      },
+      "community": {
+        "title": "Community forum",
+        "description": "Ask questions and get peer support. Most questions get an answer within a few hours from the community or the AACsearch team."
+      },
+      "email": {
+        "title": "Email support",
+        "description": "Email support is included with Starter and above plans. Response SLA: 1 business day for Starter, 4 hours for Pro."
+      },
+      "chat": {
+        "title": "Live chat",
+        "description": "In-dashboard live chat for Pro and Business plan customers. Connects directly to the AACsearch support team during business hours."
+      },
+      "slack": {
+        "title": "Dedicated Slack channel",
+        "description": "Enterprise customers get a shared Slack Connect channel with the AACsearch engineering and support team."
+      },
+      "sla": {
+        "title": "Support SLA",
+        "description": "Enterprise SLA: 99.95% uptime, 4-hour critical response, dedicated channel manager, and named technical contact."
+      },
+      "docs": {
+        "title": "Documentation",
+        "description": "Comprehensive guides, API reference, SDK documentation, and integration tutorials at docs.aacsearch.com."
+      },
+      "enterprise": {
+        "title": "Enterprise support",
+        "description": "Dedicated Slack channel, phone support, custom SLAs, and a named support engineer. Priority response time under 1 hour."
+      },
+      "onboarding": {
+        "title": "Onboarding assistance",
+        "description": "Free onboarding call for Pro and Enterprise plans. Our team helps you set up your index, configure the widget, and integrate the SDK."
+      },
+      "status": {
+        "title": "System status",
+        "description": "Real-time status dashboard showing uptime, latency, and incident history across all AACsearch services at status.aacsearch.com."
+      }
+    }
+  },
+  "statusPage": {
+    "title": "Service Status",
+    "description": "Real-time status of the AACsearch API, dashboard, and global infrastructure. Subscribe to incident notifications."
+  },
+  "status": {
+    "title": "System status",
+    "subtitle": "We measure uptime across every component of the AACsearch platform and publish incident reports within 24 hours.",
+    "items": {
+      "api": {
+        "title": "Search API",
+        "description": "The AACsearch public search API. Measures end-to-end latency and availability from five global probe locations."
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "The AACsearch web dashboard and management API. Includes oRPC endpoints, auth, and organisation management."
+      },
+      "ingest": {
+        "title": "Ingest pipeline",
+        "description": "Document ingestion from the Connector API and REST API. Measures queue depth, processing latency, and error rate."
+      },
+      "analytics": {
+        "title": "Analytics pipeline",
+        "description": "Search event collection, aggregation, and dashboard updates. Typically lags real-time by 60-90 seconds."
+      },
+      "incidents": {
+        "title": "Incident history",
+        "description": "Every incident is documented with timeline, root cause, and remediation steps. Published within 24 hours of resolution."
+      },
+      "subscribe": {
+        "title": "Subscribe to alerts",
+        "description": "Get notified by email or webhook when incident status changes. Powered by our public status API."
+      },
+      "uptime": {
+        "title": "99.99% uptime SLA",
+        "description": "Enterprise plan includes a 99.99% uptime SLA with credits for any downtime. Real-time status at status.aacsearch.com."
+      },
+      "maintenance": {
+        "title": "Scheduled maintenance",
+        "description": "Planned maintenance windows are announced at least 24 hours in advance. Subscribe to status page notifications for real-time updates."
+      }
+    }
+  },
+  "faqPage": {
+    "title": "Frequently Asked Questions",
+    "description": "Quick answers to the most common questions about AACsearch pricing, setup, data, and support."
+  },
+  "faq": {
+    "title": "Common questions, clear answers",
+    "subtitle": "Cannot find your answer here? Search our documentation or ask in the community forum.",
+    "items": {
+      "searchUnit": {
+        "title": "What is a search unit?",
+        "description": "One search unit equals one search query OR one document indexed. Your monthly plan includes a set number of search units, pooled across all indexes."
+      },
+      "pricing": {
+        "title": "How does pricing work?",
+        "description": "AACsearch charges a flat monthly fee per plan tier. Overages are billed at a per-search-unit rate. No hidden fees, no egress charges."
+      },
+      "scaling": {
+        "title": "How does it scale?",
+        "description": "AACsearch scales horizontally. The hosted platform handles traffic spikes automatically. There is no per-replica or per-shard cost."
+      },
+      "dataResidency": {
+        "title": "Where is my data stored?",
+        "description": "Choose EU (Frankfurt) or US (North Virginia) at sign-up. Data never leaves your selected region. Multi-region available on Enterprise."
+      },
+      "migration": {
+        "title": "Can I migrate from Algolia?",
+        "description": "Yes. The AACsearch REST API is compatible with Algolia-style collection schemas. We provide a migration guide and one-time import tooling."
+      },
+      "selfHost": {
+        "title": "Do you offer dedicated or on-prem deployment?",
+        "description": "Yes. Enterprise plans include a dedicated cluster in the region you choose. For regulated industries with strict data residency requirements, contact us to scope a custom deployment."
+      },
+      "data": {
+        "title": "Where is my data stored?",
+        "description": "AACsearch runs on AWS in the region closest to your user base. Data stays in the chosen region and never leaves without your authorization."
+      },
+      "limits": {
+        "title": "What are the plan limits?",
+        "description": "Free: 1,000 search-units/month, 1 index, 1 API key. Pro: 50,000 search-units/month, unlimited indexes, 10 API keys. Enterprise: custom limits and SLAs."
+      },
+      "migrate": {
+        "title": "How do I migrate from Typesense?",
+        "description": "AACsearch is built on Typesense and uses the same search core. Migrate by exporting your index schema and documents, then reindexing via the AACsearch API. Most users complete the move in under a day."
+      },
+      "support": {
+        "title": "What support options are available?",
+        "description": "Free plan: community support via Discord. Pro: email support within 24 hours. Enterprise: dedicated Slack channel and phone support with 1-hour SLA."
+      },
+      "typesense": {
+        "title": "How is AACsearch different from Typesense Cloud?",
+        "description": "AACsearch is a managed search platform built on Typesense with additional features: multi-tenancy, scoped tokens, analytics dashboard, CMS connectors, knowledge RAG, and a hosted widget — all included in the price."
+      }
+    }
+  },
+  "affiliatePage": {
+    "title": "Affiliate Program",
+    "description": "Earn recurring commissions by referring developers and companies to AACsearch. Join the affiliate program today."
+  },
+  "affiliate": {
+    "title": "Earn with AACsearch",
+    "subtitle": "Recommend AACsearch to your audience and earn 20% recurring commission on every paying customer you refer.",
+    "items": {
+      "commission": {
+        "title": "20% recurring commission",
+        "description": "Earn 20% of the monthly plan fee for every customer you refer, for the lifetime of their subscription. No cap, no expiry."
+      },
+      "tracking": {
+        "title": "Reliable attribution",
+        "description": "90-day cookie window. Affiliate attribution is tracked across devices via first-party cookies and UTM parameters."
+      },
+      "creatives": {
+        "title": "Marketing assets",
+        "description": "Banners, email templates, comparison tables, and code examples — all ready to embed in tutorials, newsletters, and social posts."
+      },
+      "payments": {
+        "title": "Monthly payouts",
+        "description": "Payouts processed on the 15th of every month via Stripe or wire transfer. Minimum payout threshold: $50."
+      },
+      "supportChannel": {
+        "title": "Affiliate support",
+        "description": "Dedicated affiliate manager, early access to new features, and a private affiliate Discord channel for networking."
+      },
+      "apply": {
+        "title": "Apply now",
+        "description": "Apply at affiliate.aacsearch.com. We review applications within 3 business days. No minimum audience size required."
+      },
+      "payouts": {
+        "title": "Generous payouts",
+        "description": "Earn 20% recurring commission on every subscription you refer. Paid monthly via Stripe, no minimum threshold."
+      },
+      "support": {
+        "title": "Dedicated affiliate support",
+        "description": "Get a personal affiliate manager, promotional materials, and a custom landing page for your audience."
+      }
+    }
+  },
+  "pricingPlansPage": {
+    "title": "Compare Plans",
+    "description": "Detailed feature comparison across Free, Starter, Pro, Business, and Enterprise plans."
+  },
+  "pricingPlans": {
+    "title": "Plans for every stage",
+    "subtitle": "Start free, upgrade when you need more search units, indexes, or support. All plans include the full API and dashboard.",
+    "items": {
+      "free": {
+        "title": "Free",
+        "description": "10,000 search units per month, 1 index, community support. Perfect for side projects and proof-of-concept implementations."
+      },
+      "starter": {
+        "title": "Starter",
+        "description": "250,000 search units per month, 5 indexes, email support. Ideal for small SaaS products and growing developer tools."
+      },
+      "pro": {
+        "title": "Pro",
+        "description": "1 million search units per month, 20 indexes, custom origin allow-lists, priority email support. Built for production SaaS."
+      },
+      "business": {
+        "title": "Business",
+        "description": "5 million search units per month, unlimited indexes, SSO, audit log, 4-hour email SLA. For teams that depend on search."
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "Unmetered search units, dedicated cluster, 99.95% SLA, Slack support channel, and a named technical account manager."
+      },
+      "custom": {
+        "title": "Need something different?",
+        "description": "Non-standard requirements — on-prem deployment, data residency agreements, white-labelling — are handled as custom contracts."
+      },
+      "overage": {
+        "title": "Overage pricing",
+        "description": "Exceed your plan limit and pay only for what you use. Overage is billed at $0.50 per 1,000 search-units with no hard cap — search keeps working."
+      }
+    }
+  },
+  "allPagesPage": {
+    "title": "All Pages",
+    "description": "A complete index of all AACsearch pages — marketing site, features, integrations, and the application.",
+    "marketingTitle": "Marketing Site",
+    "appTitle": "Application",
+    "saasNote": "Application routes on {base}",
+    "sections": {
+      "core": "Core",
+      "features": "Features",
+      "useCases": "Use Cases",
+      "integrations": "Integrations",
+      "compare": "Compare",
+      "solutions": "Solutions",
+      "company": "Company",
+      "auth": "Authentication",
+      "account": "Account",
+      "organization": "Organization",
+      "admin": "Admin",
+      "misc": "Miscellaneous"
+    }
+  },
+  "connectorsPage": {
+    "title": "CMS Connectors",
+    "description": "Native PHP modules for PrestaShop and 1C-Bitrix. REST Connector API for everything else.",
+    "headlessCmsTitle": "Headless CMS connectors",
+    "headlessCmsSubtitle": "Plug AACsearch into your content infrastructure. Strapi, Contentful, and Sanity — all supported with native plugins.",
+    "headlessCmsItems": {
+      "strapi": {
+        "title": "Strapi",
+        "description": "Strapi plugin with lifecycle hook sync. Every content create, update, and delete triggers automatic index updates. Content types, dynamic zones, and media fields — all supported."
+      },
+      "contentful": {
+        "title": "Contentful",
+        "description": "Contentful app with webhook-based sync. Publish an entry and it appears in AACsearch within a second. Content model mapping, rich text handling, and locale-aware search included."
+      },
+      "sanity": {
+        "title": "Sanity",
+        "description": "Sanity Studio plugin with GROQ-powered indexing. Select exactly which fields to index with GROQ projections. Real-time sync via webhook — no cron jobs required."
+      }
+    },
+    "comingSoon": "Coming soon",
+    "comingSoonTitle": "More connectors on the way",
+    "comingSoonSubtitle": "WooCommerce and Shopify support is in development. Use the Connector API to build your own today.",
+    "comingSoonItems": {
+      "woocommerce": {
+        "title": "WooCommerce",
+        "description": "WordPress + WooCommerce plugin. Sync products, categories, and orders."
+      },
+      "shopify": {
+        "title": "Shopify",
+        "description": "Shopify app with product, variant, and metafield sync. Widget embed included."
+      }
+    }
+  },
+  "tutorialsPage": {
+    "title": "Video Tutorials",
+    "description": "Watch step-by-step guides to get the most out of AACsearch — from 5-minute setup to advanced integrations.",
+    "videos": {
+      "quickstart": {
+        "title": "5-Minute Quickstart",
+        "description": "Create an account, upload data, embed a search widget, and go live — all in under 5 minutes."
+      },
+      "ecommerce": {
+        "title": "E-commerce Search Setup",
+        "description": "Configure product search with faceted navigation, scoped tokens per storefront, and analytics."
+      },
+      "blog": {
+        "title": "Content / Blog Search",
+        "description": "Add instant full-text search to your blog or documentation site with typo tolerance."
+      },
+      "app": {
+        "title": "SaaS App Search",
+        "description": "Build multi-tenant search for your SaaS app with per-tenant isolation and scoped API keys."
+      }
+    }
+  },
+  "homePricingCalc": {
+    "title": "Estimate your cost",
+    "subtitle": "Move the sliders to see which plan fits your usage.",
+    "docsLabel": "Documents indexed",
+    "searchesLabel": "Monthly searches",
+    "unitsLabel": "search-units / month",
+    "planLabel": "Recommended plan",
+    "note": "1 search = 1 unit · 1 document indexed = 1 unit · autocomplete = 0.1 unit",
+    "ctaFree": "Start free",
+    "ctaPro": "Start Pro trial",
+    "ctaEnterprise": "Talk to sales",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "$0 / mo",
+        "limit": "Up to 10,000 units/mo · 1 index"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$29 / mo",
+        "limit": "Up to 1,000,000 units/mo · 10 indexes"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "limit": "Unlimited units · unlimited indexes · SLA"
+      }
+    }
+  },
+  "homeArchitecture": {
+    "title": "How AACsearch works",
+    "subtitle": "Three paths, one platform. Your backend, your users, and your team — all connected to one search layer.",
+    "ingestLabel": "Ingest path",
+    "searchLabel": "Search path",
+    "manageLabel": "Manage",
+    "zeroDowntime": "Zero-downtime reindex via atomic alias swap",
+    "tenantIsolation": "Every query scoped to your organization — no cross-tenant reads"
+  },
+  "homeFit": {
+    "title": "Is AACsearch right for you?",
+    "perfectTitle": "Perfect fit",
+    "skipTitle": "You can skip it if",
+    "perfect": {
+      "0": "You need production search without a dedicated search team",
+      "1": "You call search from the browser and can't expose API keys",
+      "2": "You manage multiple tenants or customers on one platform",
+      "3": "You want predictable monthly cost as you scale",
+      "4": "You need analytics to understand what users search for"
+    },
+    "skip": {
+      "0": "You require fully self-hosted search on your own servers",
+      "1": "Your data cannot leave your infrastructure under any circumstances",
+      "2": "You need Lucene-level custom scoring plugins",
+      "3": "You have fewer than 1,000 documents and Postgres ILIKE is enough"
+    }
+  },
+  "homeLiveDemo": {
+    "title": "Try search right now",
+    "subtitle": "Pick a scenario, type a query — see typo tolerance, facets, and highlights in action.",
+    "didYouMean": "Did you mean:",
+    "whyResult": "Why this result?",
+    "noResults": "No exact matches — AACsearch suggests:",
+    "openPlayground": "Open full Playground"
+  },
+  "homeSecuritySandbox": {
+    "title": "See scoped tokens in action",
+    "subtitle": "Toggle constraints — see how AACsearch enforces browser security without exposing your API key.",
+    "ttlLabel": "Token TTL",
+    "originLabel": "Request origin",
+    "tenantLabel": "Tenant filter",
+    "leakLabel": "Simulate token leak",
+    "outcomeAllowed": "Search allowed",
+    "outcomeOrigin": "403 — Origin blocked",
+    "outcomeTenant": "403 — Tenant mismatch",
+    "outcomeExpired": "401 — Token expired",
+    "outcomeLeak": "Leak harmless — scoped token cannot call Admin API"
+  },
+  "demo": {
+    "title": "Live Demo — AACsearch Engine",
+    "description": "Try AACsearch with a pre-loaded fashion catalog. Search, filter, and see real-time results — no signup required.",
+    "heading": "Live Demo",
+    "subheading": "Explore a pre-loaded fashion catalog powered by AACsearch. Search, filter by category, and experience real-time results."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "vs Algolia",
+      "elasticsearch": "vs Elasticsearch",
+      "meilisearch": "vs Meilisearch",
+      "opensearch": "vs OpenSearch",
+      "pinecone": "vs Pinecone",
+      "solr": "vs Solr",
+      "typesense": "vs Typesense Cloud",
+      "weaviate": "vs Weaviate"
+    },
+    "home": "Home",
+    "compare": "Compare",
+    "features": "Features",
+    "pricing": "Pricing",
+    "integrations": "Integrations",
+    "useCases": "Use cases",
+    "solutions": "Solutions",
+    "demo": "Demo"
+  }
 }

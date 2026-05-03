@@ -1,1879 +1,1883 @@
 {
-	"blog": {
-		"description": "Инженерные заметки команды AACsearch",
-		"title": "Блог AACsearch",
-		"back": "Назад в блог"
-	},
-	"changelog": {
-		"description": "Что выкатили, когда и что изменилось под капотом.",
-		"title": "Changelog"
-	},
-	"contact": {
-		"description": "Связь с командой — биллинг, отчёты о безопасности, партнёрства.",
-		"form": {
-			"email": "E-mail",
-			"message": "Сообщение",
-			"name": "Имя",
-			"notifications": {
-				"error": "Не удалось отправить сообщение. Попробуйте позже.",
-				"success": "Получили — ответим в течение одного рабочего дня."
-			},
-			"submit": "Отправить сообщение"
-		},
-		"title": "Контакты"
-	},
-	"documentation": {
-		"title": "Документация"
-	},
-	"home": {
-		"hero": {
-			"badge": "v0 — открыт ранний доступ",
-			"title": "Поиск, который понимает текст, голос и изображения",
-			"subtitle": "Пусть пользователи ищут текстом, голосом, фото, картинкой или AI-диалогом — через один API, один индекс, единую аналитику и безопасный scoped-доступ.",
-			"getStarted": "Начать бесплатно",
-			"documentation": "Открыть документацию",
-			"codeCaption": "search-client.ts",
-			"new": "НОВОЕ",
-			"featureBadge": "Поиск как сервис",
-			"imageAlt": "Скриншот панели AACsearch",
-			"badgeLatency": "50ms p99",
-			"badgeSoc2": "SOC 2",
-			"badgeFulltext": "Полнотекстовый",
-			"badgeAnalytics": "Аналитика",
-			"statDocs": "Проиндексировано документов",
-			"statLatency": "Задержка поиска",
-			"statUptime": "SLA аптайма",
-			"searchPlaceholder": "Ищите что угодно текстом, голосом, фото или в диалоге...",
-			"voicePlaceholder": "Нажмите на микрофон и произнесите запрос...",
-			"chatPlaceholder": "Задайте вопрос о ваших данных...",
-			"mediaPlaceholder": "Загрузите фото или изображение для визуального поиска..."
-		},
-		"howItWorks": {
-			"title": "Три вызова. Один вечер.",
-			"step1": {
-				"title": "1. Загрузите документы",
-				"description": "POST-запрос с записями в индекс вашей организации. Массовый импорт или единичный upsert — схему задаёте вы."
-			},
-			"step2": {
-				"title": "2. Выпустите search-токен",
-				"description": "Создайте короткоживущий scoped-токен из дашборда или сервера. Привязан к индексу, источнику и времени жизни."
-			},
-			"step3": {
-				"title": "3. Ищите из браузера",
-				"description": "Типизированный browser SDK. Одиночный поиск, multi-search, faceted-фильтры — менее 50 мс p99."
-			}
-		},
-		"features": {
-			"title": "Что вы получаете из коробки",
-			"subtitle": "Без обещаний «в следующем квартале». Всё работает сегодня.",
-			"items": {
-				"scopedTokens": {
-					"title": "Scoped-токены",
-					"description": "Выпускайте короткоживущие токены на пользователя, индекс и набор фильтров. Безопаснее публичных API-ключей в браузере — утечка токена не даст доступ к чужому индексу."
-				},
-				"originAllowlist": {
-					"title": "Ограничение по источнику (origin allow-list)",
-					"description": "Привяжите каждый API-ключ к конкретным origin. Если ключ утёк в Twitter, он не сработает с другого домена — квота защищена."
-				},
-				"rateLimitQuota": {
-					"title": "Лимит запросов и квота",
-					"description": "Per-key лимит запросов в минуту и месячный лимит организации. Оба видны в дашборде до того, как вы упрётесь в ограничение."
-				},
-				"multiSearch": {
-					"title": "Multi-search (федеративный поиск)",
-					"description": "Несколько запросов за один round-trip. Автокомплит по коллекциям — без N отдельных запросов."
-				},
-				"reindex": {
-					"title": "Zero-downtime reindex",
-					"description": "Меняйте схему и пересобирайте индекс без перерыва в поиске. Живой трафик идёт на старую версию до атомарного переключения."
-				},
-				"enterpriseSecurity": {
-					"title": "Безопасность Enterprise-уровня",
-					"description": "SSO, audit-log, IP allow-list, выделенный кластер и SLA 99,95%. Контроли безопасности доступны с первого дня — не как дополнение."
-				}
-			}
-		},
-		"pricing": {
-			"badge": "Тарифы",
-			"title": "Платите за поиск и индексированные документы. Больше ни за что.",
-			"subtitle": "1 search-unit = 1 поисковый запрос или 1 проиндексированный документ. Отмена в любой момент.",
-			"cta": "Начать бесплатно",
-			"contact": "Связаться с продажами",
-			"perMonth": "/мес",
-			"plans": {
-				"free": {
-					"name": "Free",
-					"price": "$0",
-					"description": "Для оценки, хобби-проектов и сайд-продуктов.",
-					"features": [
-						"10 000 search-units / месяц",
-						"1 индекс",
-						"3 API-ключа",
-						"Поддержка сообщества"
-					]
-				},
-				"pro": {
-					"name": "Pro",
-					"price": "$29",
-					"description": "Готов к продакшену для indie-SaaS и небольших B2B-команд.",
-					"features": [
-						"1 млн search-units / месяц",
-						"10 индексов",
-						"Неограниченные ключи и scoped-токены",
-						"Кастомный allow-list origin",
-						"Поддержка по e-mail, 1 рабочий день"
-					],
-					"highlight": "Большинство начинает отсюда"
-				},
-				"enterprise": {
-					"name": "Enterprise",
-					"price": "Индивидуально",
-					"description": "Выделенный кластер, audit-log, SLA 99,95 %.",
-					"features": [
-						"Search-units без лимита",
-						"SSO (SAML / OIDC)",
-						"Audit-log и allow-list по IP",
-						"Выделенный регион кластера",
-						"SLA 99,95 %, подписанный DPA"
-					]
-				}
-			},
-			"monthly": "Ежемесячно",
-			"yearly": "Ежегодно",
-			"yearlyDiscount": "Скидка 17 %",
-			"perYear": "/год"
-		},
-		"cta": {
-			"title": "Запустите поиск за один вечер",
-			"subtitle": "Free-тарифа хватит для прототипа. Upgrade через 5 минут — данные не теряются. Без карты.",
-			"primary": "Создать аккаунт",
-			"secondary": "Открыть документацию"
-		},
-		"testimonials": {
-			"title": "Результаты, которые можно измерить",
-			"subtitle": "4 500+ проиндексированных сайтов • 2.5M+ документов • 99.99% uptime",
-			"prev": "Назад",
-			"next": "Далее",
-			"prevLabel": "Предыдущий отзыв",
-			"nextLabel": "Следующий отзыв",
-			"dotLabel": "Отзыв {number}",
-			"items": {
-				"nordikHome": {
-					"quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
-					"author": "Erik Lindström",
-					"role": "CTO",
-					"company": "NordikHome",
-					"initials": "EL"
-				},
-				"agencyHub": {
-					"quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
-					"author": "Marcus Weber",
-					"role": "Technical Director",
-					"company": "AgencyHub",
-					"initials": "MW"
-				},
-				"devStream": {
-					"quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
-					"author": "Priya Sharma",
-					"role": "VP Engineering",
-					"company": "DevStream",
-					"initials": "PS"
-				}
-			}
-		},
-		"logos": {
-			"title": "Внедрено в production у"
-		},
-		"trustBadges": {
-			"g2": "на G2",
-			"capterra": "на Capterra",
-			"companies": "компаний",
-			"apps": "приложений"
-		}
-	},
-	"homeUseCases": {
-		"title": "Для кого AACsearch",
-		"subtitle": "Отраслевые сценарии с конкретными примерами того, что ищут пользователи.",
-		"items": {
-			"saas": {
-				"title": "SaaS-продукты",
-				"description": "Проекты, задачи, пользователи, отчёты, настройки, объекты домена — поиск по любой entity внутри приложения.",
-				"searchExamples": "заказ #1042, пользователь @ivanov, отчёт по выручке, настройки webhook, инвойс за март"
-			},
-			"docs": {
-				"title": "Документация / Developer portals",
-				"description": "API-методы, SDK-функции, коды ошибок, параметры, гайды по миграции, release notes.",
-				"searchExamples": "POST /collections, createIndex(), error 401, параметр apiKey, гайды по миграции v2→v3"
-			},
-			"ecommerce": {
-				"title": "E-commerce / Каталоги",
-				"description": "Товары, артикулы, бренды, категории, атрибуты, фасеты — faceted search с фильтрами под 50ms на 1M+ товаров.",
-				"searchExamples": "кроссовки Nike размер 42, iPhone 15 Pro, бренд Samsung в категории 'TV', товары в наличии до $500"
-			},
-			"internal": {
-				"title": "Internal tools / Knowledge base",
-				"description": "Документы, политики, инциденты, RFC, владельцы, runbooks — semantic + full-text гибрид.",
-				"searchExamples": "политика удалённой работы, инцидент INC-2024-04, playbook по CRITICAL, владелец сервиса billing"
-			},
-			"marketplace": {
-				"title": "Маркетплейсы",
-				"description": "Объявления, продавцы, категории, география, мультиязычность — тысячи арендаторов в одном кластере.",
-				"searchExamples": "квартиры в центре до 100k, продавец «TechStore», категория Electronics, товары с доставкой за 1 день"
-			}
-		}
-	},
-	"homeWhatUsersSearch": {
-		"title": "Что ищут ваши пользователи",
-		"subtitle": "Ответ на вопрос «подойдёт ли это моему кейсу» через то, что ваши пользователи реально печатают в строке поиска.",
-		"items": {
-			"entity": {
-				"title": "Точные сущности",
-				"description": "ID заказа, артикул товара, код ошибки, имя пользователя или документа. AACsearch находит точное совпадение быстрее Ctrl+F.",
-				"icon": "search"
-			},
-			"fuzzy": {
-				"title": "Нечёткие запросы",
-				"description": "Пользователи ошибаются в названиях, пишут транслитом или сокращают. Typo tolerance и prefix search исправляют до релевантного результата.",
-				"icon": "pencil"
-			},
-			"category": {
-				"title": "Навигация по категориям",
-				"description": "Faceted-фильтры: бренд + цена + наличие + размер. Multi-search по коллекциям за один round-trip.",
-				"icon": "filter"
-			},
-			"answer": {
-				"title": "Ответы на естественном языке",
-				"description": "Для docs и knowledge base — search-first, answer-augmented UX. Гибрид: список результатов + ответ ИИ с цитатами.",
-				"icon": "message-square"
-			},
-			"autocomplete": {
-				"title": "Автокомплит и предложения",
-				"description": "Показывайте релевантные подсказки с первых символов. Keyboard navigation, recent searches, pinned suggestions.",
-				"icon": "forward"
-			},
-			"noResults": {
-				"title": "Что делать при нуле результатов",
-				"description": "No-result recovery: предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит с пустыми руками.",
-				"icon": "search-x"
-			}
-		}
-	},
-	"homeSearchUX": {
-		"title": "Как выглядит хороший search UX",
-		"subtitle": "Не backend-фичи, а то, что видит пользователь. Autocomplete, typo tolerance, facets, highlighted matches — из коробки.",
-		"items": {
-			"autocomplete": {
-				"title": "Autocomplete + suggestions",
-				"description": "Подсказки с первых символов. Keyboard navigation, recent searches, pinned items."
-			},
-			"typo": {
-				"title": "Typo tolerance",
-				"description": "«Нокиа» найдёт Nokia. «кРософки» найдёт кроссовки. 1–2 опечатки на слово — допустимо по умолчанию."
-			},
-			"facets": {
-				"title": "Faceted filters",
-				"description": "Фильтры по бренду, цене, категории, наличию — с подсчётом количества результатов для каждой опции."
-			},
-			"highlight": {
-				"title": "Highlighted matches",
-				"description": "Совпадающие фрагменты подсвечиваются в результатах. Пользователь сразу видит, почему вернулся именно этот документ."
-			},
-			"grouped": {
-				"title": "Группировка результатов",
-				"description": "Multi-search по коллекциям: товары отдельно, статьи отдельно, заказы отдельно — всё в одном запросе."
-			},
-			"recovery": {
-				"title": "No-result recovery",
-				"description": "Пустой результат → предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит."
-			}
-		}
-	},
-	"homeRelevance": {
-		"title": "Релевантность и контроль выдачи",
-		"subtitle": "Быстрый поиск без контроля качества — не убедителен. Даём инструменты, чтобы вы настраивали релевантность под свой кейс.",
-		"ranking": {
-			"title": "Управление ранжированием",
-			"description": "Field weights, exact match boost, prefix vs partial match. Настройте, какие поля влияют на порядок выдачи."
-		},
-		"synonyms": {
-			"title": "Синонимы и стоп-слова",
-			"description": "«ноутбук» = «laptop», «кеды» = «кроссовки». Исключите незначащие слова из поиска."
-		},
-		"curations": {
-			"title": "Правила бизнеса",
-			"description": "Закрепите конкретные результаты вверх выдачи. Пин слабого товара или промо-акции — без переиндексации."
-		},
-		"personalization": {
-			"title": "Персонализация",
-			"description": "Scoped relevance по ролям, группам или арендаторам. Каждый tenant видит свою выдачу."
-		},
-		"abTesting": {
-			"title": "A/B-тестирование",
-			"description": "Сравните два набора правил релевантности на живом трафике. Метрики: CTR, zero-result rate, конверсия."
-		}
-	},
-	"homeAnalytics": {
-		"title": "Поисковая аналитика — улучшайте продукт с помощью данных",
-		"subtitle": "Search — это не «настроили и забыли». Аналитика показывает, что ищут, что не находят и как улучшить выдачу.",
-		"items": {
-			"topQueries": {
-				"title": "Top queries",
-				"description": "Самые частые запросы. Узнайте, что пользователи ищут больше всего, без опросов."
-			},
-			"noResults": {
-				"title": "Zero-result queries",
-				"description": "Запросы, которые ничего не нашли. Каждый — возможность добавить контент или настроить синоним."
-			},
-			"ctr": {
-				"title": "CTR по позиции",
-				"description": "Какой процент кликов получает первая позиция? Вторая? Где падает вовлечение?"
-			},
-			"filterUsage": {
-				"title": "Использование фильтров",
-				"description": "Какие фасеты популярны? Какие фильтры никто не трогает? Упростите UX на основе данных."
-			},
-			"conversion": {
-				"title": "Конверсия после поиска",
-				"description": "Сколько сессий после поиска привели к целевому действию — покупке, просмотру, отправке формы."
-			},
-			"quota": {
-				"title": "Потребление по ключам",
-				"description": "Per-key и per-tenant аналитика использования. Кто превышает лимиты, где аномалии."
-			}
-		}
-	},
-	"homeSecurity": {
-		"title": "Безопасность и multi-tenant архитектура",
-		"subtitle": "Поиск из браузера = токены, которые сужают права, а не расширяют. Изоляция арендаторов на каждом запросе.",
-		"items": {
-			"scopedTokens": {
-				"title": "Short-lived scoped-токены",
-				"description": "HMAC-подписанные токены привязаны к индексу, origin и TTL. Утечка токена — доступ только к одному индексу на час."
-			},
-			"tenantIsolation": {
-				"title": "Изоляция арендаторов",
-				"description": "Каждый поисковый запрос ограничен ID организации. Архитектурно невозможно прочитать данные другого tenant."
-			},
-			"originRestriction": {
-				"title": "Ограничение по источнику",
-				"description": "Привяжите каждый API-ключ к конкретным origin. Утёкший в консоль браузера ключ не сработает с другого домена."
-			},
-			"sso": {
-				"title": "SSO + Audit log",
-				"description": "SAML/OIDC для enterprise. Каждое административное действие записывается с меткой времени и исполнителем."
-			},
-			"compliance": {
-				"title": "Compliance и DPA",
-				"description": "SOC 2, шифрование в покое и транзите, выделенные регионы кластера. Подписанный DPA для GDPR/CCPA."
-			},
-			"sla": {
-				"title": "SLA 99.95%",
-				"description": "Договорная гарантия доступности. Incident response, резервное копирование, восстановление."
-			}
-		}
-	},
-	"homeQuickstart": {
-		"title": "Интеграция за 15 минут",
-		"subtitle": "Создайте индекс, загрузите документы, выпустите токен, выполните поиск. Всё.",
-		"steps": {
-			"create": {
-				"title": "1. Создайте индекс",
-				"code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
-			},
-			"index": {
-				"title": "2. Загрузите документы",
-				"code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Кроссовки Nike\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Кроссовки Adidas\", \"price\": 7500}\n]"
-			},
-			"token": {
-				"title": "3. Выпустите scoped-токен",
-				"code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
-			},
-			"search": {
-				"title": "4. Ищите из браузера",
-				"code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"кроссовки Nike\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
-			}
-		},
-		"cta": "Посмотреть полную документацию"
-	},
-	"homeAiAnswers": {
-		"title": "AI-answers поверх поиска",
-		"subtitle": "Search-first, answer-augmented UX. Для документации, knowledge base и поддержки — ответы с цитатами, а не чёрный ящик.",
-		"items": {
-			"hybrid": {
-				"title": "Keyword + semantic hybrid",
-				"description": "Точность ключевых слов + семантическое понимание. Настраиваемые веса для каждого сценария."
-			},
-			"citedAnswers": {
-				"title": "Ответы с цитатами",
-				"description": "Вместо чёрного ящика — ответ ИИ со ссылками на источники. Пользователь видит, откуда взялся ответ."
-			},
-			"rag": {
-				"title": "RAG-ready pipeline",
-				"description": "Подключите AACsearch к вашему RAG-пайплайну. Векторные эмбеддинги генерируются автоматически."
-			},
-			"searchFirst": {
-				"title": "Search-first UX",
-				"description": "Сначала результаты, потом ответ. Пользователь может перейти к источнику или прочитать сгенерированный ответ."
-			}
-		}
-	},
-	"homeDocsEcosystem": {
-		"title": "SDK, API и ecosystem",
-		"subtitle": "TypeScript SDK, REST API, Next.js / React-компоненты, webhooks и OpenAPI-спецификация. Никакой магии — только документированные контракты.",
-		"items": {
-			"sdk": {
-				"title": "TypeScript SDK",
-				"description": "Типизированный browser SDK для React, Next.js, Vue и vanilla JS. Автокомплит типов в вашей IDE."
-			},
-			"rest": {
-				"title": "REST API",
-				"description": "OpenAPI-спецификация доступна для генерации клиентов. Все операции — через HTTP."
-			},
-			"webhooks": {
-				"title": "Webhooks",
-				"description": "События индексирования, ошибки синхронизации, превышение квоты — подпишитесь на изменения в реальном времени."
-			},
-			"frameworks": {
-				"title": "Next.js / React",
-				"description": "SearchProvider, UseSearch hook, готовые компоненты для React и Next.js App Router."
-			},
-			"migration": {
-				"title": "Миграция",
-				"description": "Zero-downtime reindex из коробки. Переходите с Algolia, Meilisearch или Elasticsearch — физический дамп индекса."
-			},
-			"playground": {
-				"title": "Playground",
-				"description": "Интерактивная консоль в дашборде. Пробуйте запросы, смотрите результаты, копируйте готовый код."
-			}
-		}
-	},
-	"homeTco": {
-		"title": "AACsearch vs Algolia — сравниваем реальную стоимость",
-		"subtitle": "Algolia считает каждую запись отдельно. На 1M поисковых запросов в месяц AACsearch стоит в 5 раз меньше.",
-		"rows": {
-			"priceModel": {
-				"metric": "Модель цены",
-				"algolia": "$0.50 / 1 000 запросов + $0.50 / запись / мес",
-				"aac": "$0.10 / 1 000 search-units. 1 unit = 1 поиск ИЛИ 1 документ."
-			},
-			"oneMillion": {
-				"metric": "1M запросов / мес + 10K док-в",
-				"algolia": "$500 (поиск) + $5 000 (записи) = $5 500 / мес",
-				"aac": "$100 / мес"
-			},
-			"tenMillion": {
-				"metric": "10M запросов / мес + 100K док-в",
-				"algolia": "$5 000 (поиск) + $50 000 (записи) = $55 000 / мес",
-				"aac": "$1 000 / мес"
-			},
-			"overage": {
-				"metric": "Overage / превышение",
-				"algolia": "Автоматические overage по стандартной цене",
-				"aac": "Soft cap: предупреждение в дашборде. Hard cap: блокировка до нового цикла."
-			},
-			"records": {
-				"metric": "Плата за записи",
-				"algolia": "Каждая запись стоит денег каждый месяц",
-				"aac": "Заплатили один раз при индексации. Далее — бесплатно."
-			},
-			"zeroDowntime": {
-				"metric": "Zero-downtime reindex",
-				"algolia": "Только с планом Enterprise",
-				"aac": "Из коробки на всех тарифах"
-			}
-		},
-		"cta": "Посчитать свою экономию →"
-	},
-	"homeMigration": {
-		"title": "Миграция из Algolia, Meilisearch или Elasticsearch — за 1 час",
-		"subtitle": "Zero-downtime reindex, физический дамп индекса или прямая синхронизация. Интеграцию можно запустить, не останавливая текущий поиск.",
-		"steps": {
-			"export": {
-				"title": "1. Экспорт индекса",
-				"description": "Экспортируйте текущий индекс через API вашего провайдера. AACsearch принимает JSON, NDJSON и CSV."
-			},
-			"import": {
-				"title": "2. Импорт в AACsearch",
-				"description": "POST-запрос к /collections — индексация начинается немедленно. Можно из дашборда, CLI или API."
-			},
-			"switch": {
-				"title": "3. Переключение без простоя",
-				"description": "Живой поиск идёт на старый провайдер. Новый индекс строится параллельно. Атомарное переключение алиаса."
-			},
-			"monitor": {
-				"title": "4. Мониторинг и откат",
-				"description": "Сравните метрики до/после: latency, CTR, zero-result rate. Если что-то пошло не так — откат за 1 секунду."
-			}
-		},
-		"cta": "Запустить миграцию"
-	},
-	"homePricingFaq": {
-		"title": "Вопросы о тарифах и unit-экономике",
-		"items": {
-			"unit": {
-				"q": "Что считается одним search-unit?",
-				"a": "1 поисковый запрос ИЛИ 1 проиндексированный документ. Апдейт документа = 1 unit. Reindex не тарифицируется — только финальная запись в новый индекс."
-			},
-			"overage": {
-				"q": "Что происходит после превышения лимита?",
-				"a": "Soft cap: вы получаете предупреждение в дашборде и по e-mail. Hard cap: поиск блокируется до начала нового тарифного периода. Никаких сюрпризов в счете."
-			},
-			"comparison": {
-				"q": "Как AACsearch сравнивается с Algolia по цене?",
-				"a": "Algolia взимает плату за каждую запись каждый месяц. На 1M запросов + 10K документов Algolia стоит ~$5 500/мес, AACsearch — $100/мес. На 10M запросов разница достигает 50x."
-			},
-			"free": {
-				"q": "Что входит в бесплатный тариф?",
-				"a": "10 000 search-units/мес, 1 индекс, 3 API-ключа. Хватит для прототипа, MVP или небольшого сайд-проекта."
-			},
-			"migration": {
-				"q": "Как перенести данные с другого провайдера?",
-				"a": "Zero-downtime reindex из коробки. Экспортируйте индекс → импортируйте в AACsearch → переключите алиас. Всё онлайн, без перерыва в поиске."
-			}
-		}
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Страница не найдена",
-		"goToDashboard": "В дашборд",
-		"goToHomepage": "На главную"
-	},
-	"common": {
-		"footer": {
-			"blog": "Блог",
-			"features": "Возможности",
-			"pricing": "Тарифы",
-			"privacyPolicy": "Конфиденциальность",
-			"termsAndConditions": "Условия",
-			"tagline": "Поиск как сервис — скоупированные токены, белые списки источников и типизированный SDK.",
-			"legal": "Правовая информация",
-			"status": "Статус",
-			"support": "Поддержка",
-			"trust": "Доверие",
-			"brand": "Бренд"
-		},
-		"menu": {
-			"blog": "Блог",
-			"changelog": "Changelog",
-			"contact": "Контакты",
-			"dashboard": "Дашборд",
-			"docs": "Документация",
-			"features": "Возможности",
-			"login": "Войти",
-			"pricing": "Тарифы",
-			"product": "Продукт",
-			"solutions": "Решения",
-			"resources": "Ресурсы",
-			"company": "Компания",
-			"enterprise": "Энтерпрайз",
-			"roadmap": "Дорожная карта",
-			"useCases": "Сценарии",
-			"integrations": "Интеграции",
-			"customers": "Клиенты",
-			"compare": "Сравнение",
-			"aiSearch": "ИИ-поиск",
-			"developers": "Разработчикам",
-			"faq": "FAQ",
-			"glossary": "Глоссарий",
-			"about": "О нас",
-			"security": "Безопасность",
-			"careers": "Вакансии",
-			"partners": "Партнёры",
-			"press": "Пресса"
-		},
-		"aria": {
-			"menu": "Меню",
-			"language": "Язык"
-		},
-		"tableOfContents": {
-			"title": "На этой странице"
-		},
-		"colorMode": {
-			"system": "Системная",
-			"light": "Светлая",
-			"dark": "Тёмная"
-		}
-	},
-	"pricingPage": {
-		"title": "Простая тарификация по объёму",
-		"description": "Платите только за поисковые запросы и проиндексированные документы. Никаких скрытых платежей. Отмена в любой момент."
-	},
-	"securityPage": {
-		"title": "Безопасность на каждом уровне",
-		"description": "API-ключи хешируются и никогда не хранятся в открытом виде. Ограниченные токены сужают права, но не расширяют. Изоляция арендаторов при каждом запросе."
-	},
-	"security": {
-		"title": "Многоуровневая защита",
-		"subtitle": "Каждый запрос проходит аутентификацию, ограничение запросов, проверку квоты и изоляцию арендаторов.",
-		"items": {
-			"keyHashing": {
-				"title": "Хеширование API-ключей",
-				"description": "Все API-ключи хешируются SHA-256 и хранятся в виде дайджестов. Открытый текст отображается только один раз при создании."
-			},
-			"scopedTokens": {
-				"title": "Ограниченные токены",
-				"description": "HMAC-подписанные токены привязаны к конкретному индексу, источнику и TTL. Они сужают права — никогда не расширяют."
-			},
-			"originAllowlist": {
-				"title": "Список разрешённых источников",
-				"description": "Привяжите каждый API-ключ к конкретным источникам. Утечка ключа не позволит исчерпать вашу квоту."
-			},
-			"rateLimiting": {
-				"title": "Ограничение запросов",
-				"description": "Серверное ограничение по ключу в минуту. Использование и лимиты видны в дашборде до их достижения."
-			},
-			"tenantIsolation": {
-				"title": "Изоляция арендаторов",
-				"description": "Каждый поисковый запрос ограничен ID вашей организации. Межорганизационные чтения архитектурно невозможны."
-			},
-			"auditLog": {
-				"title": "Журнал аудита",
-				"description": "Каждое административное действие записывается с меткой времени, исполнителем и изменением. Доступно в Enterprise-планах."
-			}
-		}
-	},
-	"enterprisePage": {
-		"title": "AACsearch для предприятий",
-		"description": "Выделенная инфраструктура, SSO, журнал аудита, SLA 99,95% и подписанный DPA — всё, что требуют команды по безопасности и соответствию."
-	},
-	"enterprise": {
-		"title": "Создан для регулируемых команд",
-		"subtitle": "Безлимитный поиск, выделенный кластер, кастомные интеграции. Свяжитесь с нами, и мы составим план под ваши требования.",
-		"items": {
-			"sso": {
-				"title": "SSO (SAML / OIDC)",
-				"description": "Подключите ваш IdP — Okta, Azure AD, Google Workspace или любой SAML 2.0 / OIDC-совместимый провайдер."
-			},
-			"dedicatedCluster": {
-				"title": "Выделенный кластер",
-				"description": "Ваши индексы работают на изолированной инфраструктуре в выбранном регионе. Без разделяемых поисковых узлов."
-			},
-			"auditLog": {
-				"title": "Журнал аудита + список IP",
-				"description": "Каждое административное действие записывается с меткой времени и исполнителем. Ограничьте доступ конкретным диапазоном IP."
-			},
-			"sla": {
-				"title": "SLA 99,95% + подписанный DPA",
-				"description": "Договорная гарантия времени работы и подписанное Соглашение об обработке данных, покрывающее GDPR и CCPA."
-			},
-			"prioritySupport": {
-				"title": "Приоритетная поддержка",
-				"description": "Выделенный Slack-канал. Первый ответ менее чем за 4 часа. Именной технический менеджер по работе с аккаунтом."
-			},
-			"customIntegrations": {
-				"title": "Кастомные интеграции",
-				"description": "Мы подключаем ваш CMS, ERP или проприетарный источник данных. Connector API включён; кастомные коннекторы — по запросу."
-			}
-		}
-	},
-	"aboutPage": {
-		"title": "О компании AACsearch",
-		"description": "Мы строим поисковую инфраструктуру для следующего поколения веб-приложений.",
-		"mission": {
-			"label": "Наша миссия",
-			"quote": "Поиск должен быть быстрым, релевантным и доступным для каждого разработчика.",
-			"body": "AACsearch была основана с простой убеждённостью: отличный поиск не должен требовать команды инженеров для обслуживания или целое состояние для эксплуатации."
-		},
-		"stats": {
-			"searches": "10M+",
-			"searchesLabel": "Поисков в день",
-			"companies": "500+",
-			"companiesLabel": "Компаний доверяют нам",
-			"uptime": "99,9%",
-			"uptimeLabel": "SLA доступности",
-			"latency": "<50мс",
-			"latencyLabel": "Средняя задержка"
-		},
-		"why": {
-			"title": "Почему AACsearch",
-			"items": {
-				"speed": {
-					"title": "Молниеносная скорость",
-					"description": "Ответы на поисковые запросы менее чем за 50 мс в любом масштабе, на базе нашей распределённой поисковой инфраструктуры."
-				},
-				"simple": {
-					"title": "Сначала разработчик",
-					"description": "Интуитивный REST API, SDK для всех основных языков программирования и понятная панель управления."
-				},
-				"open": {
-					"title": "Прозрачное ценообразование",
-					"description": "Никаких скрытых платежей, никакой привязки. Платите только за то, что используете, с чёткими и предсказуемыми ценами."
-				}
-			}
-		}
-	},
-	"partnersPage": {
-		"title": "Станьте партнёром AACsearch",
-		"description": "Развивайте свой бизнес, интегрируя, перепродавая или создавая продукты на основе AACsearch. Присоединяйтесь к нашей партнёрской экосистеме."
-	},
-	"partners": {
-		"title": "Расти вместе с AACsearch",
-		"subtitle": "Мы ищем агентства, консультантов и технологические компании, которые хотят интегрировать поиск в свои предложения.",
-		"items": {
-			"technology": {
-				"title": "Технологические партнёры",
-				"description": "Создавайте нативные интеграции для вашей платформы. Совместный маркетинг, документация и техническая поддержка."
-			},
-			"implementation": {
-				"title": "Партнёры по внедрению",
-				"description": "Агентства и консультанты, внедряющие AACsearch для своих клиентов. Разделение дохода и регистрация сделок."
-			},
-			"reseller": {
-				"title": "Реселлеры",
-				"description": "Перепродавайте AACsearch под своим брендом или включайте в свой продукт. Доступны варианты белой метки."
-			},
-			"cloud": {
-				"title": "Облачный маркетплейс",
-				"description": "Доступно в AWS Marketplace и Azure Marketplace. Транзакции через ваш существующий облачный бюджет."
-			},
-			"benefits": {
-				"title": "Преимущества партнёрства",
-				"description": "Партнёрский портал, поддержка совместного маркетинга, выделенный менеджер канала, NFR-лицензии и приоритетный SLA."
-			},
-			"apply": {
-				"title": "Подать заявку",
-				"description": "Заполните форму, и менеджер по партнёрству свяжется с вами в течение двух рабочих дней. Эксклюзивность не требуется."
-			}
-		}
-	},
-	"developersPage": {
-		"title": "Создано для Разработчиков",
-		"description": "Чистый API, хорошая документация и SDK, которые не мешают работе. AACsearch интегрируется за минуты, а не за дни.",
-		"hero": {
-			"badge": "Developer-First",
-			"codeCaption": "Добавьте поиск в приложение за 3 строки"
-		},
-		"features": {
-			"title": "Всё необходимое для внедрения поиска",
-			"api": {
-				"title": "REST API",
-				"description": "Чистый и интуитивный REST API с полной спецификацией OpenAPI 3.1. Каждый эндпоинт задокументирован с примерами."
-			},
-			"sdks": {
-				"title": "Официальные SDK",
-				"description": "SDK для JavaScript и TypeScript. Сообщественные SDK для Python, Go и PHP."
-			},
-			"browserSdk": {
-				"title": "Браузерный SDK",
-				"description": "Лёгкий браузерный виджет 14КБ. Shadow DOM, 5 языков, аналитика встроена. Один тег script."
-			},
-			"connectorApi": {
-				"title": "Connector API",
-				"description": "API из 7 эндпоинтов для интеграций с CMS. Модули для PrestaShop и Bitrix24 включены из коробки."
-			},
-			"openapi": {
-				"title": "Спецификация OpenAPI",
-				"description": "Полная спецификация OpenAPI 3.1 по адресу /api/v1/openapi.json. Автоматически генерируйте клиентские библиотеки на любом языке."
-			},
-			"dashboard": {
-				"title": "Аналитическая Панель",
-				"description": "Аналитика поиска, отслеживание нулевых результатов, топ запросов и CTR — всё в вашей панели управления."
-			}
-		},
-		"cta": {
-			"title": "Начните разработку за несколько минут",
-			"description": "Бесплатный тарифный план включён. Банковская карта не нужна."
-		}
-	},
-	"caseStudiesPage": {
-		"title": "Customer Case Studies",
-		"description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
-		"readCaseStudy": "Read case study",
-		"cta": {
-			"title": "Want to be our next case study?",
-			"description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
-		}
-	},
-	"customersPage": {
-		"title": "Любимый разработчиками, доверенный бизнесом",
-		"description": "Присоединяйтесь к сотням компаний, использующих AACsearch для быстрого и релевантного поиска.",
-		"stats": {
-			"companies": "500+",
-			"companiesLabel": "Компаний по всему миру",
-			"searches": "10M+",
-			"searchesLabel": "Поисковых запросов в день",
-			"uptime": "99,9%",
-			"uptimeLabel": "Доступность платформы",
-			"rating": "4,9/5",
-			"ratingLabel": "Средняя оценка"
-		},
-		"testimonials": {
-			"title": "Real results from real customers",
-			"items": {
-				"nordikHome": {
-					"quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
-					"author": "Erik Lindström",
-					"role": "CTO",
-					"company": "NordikHome"
-				},
-				"agencyHub": {
-					"quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
-					"author": "Marcus Weber",
-					"role": "Technical Director",
-					"company": "AgencyHub"
-				},
-				"devStream": {
-					"quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
-					"author": "Priya Sharma",
-					"role": "VP Engineering",
-					"company": "DevStream"
-				}
-			}
-		},
-		"caseStudies": {
-			"title": "Read their full stories",
-			"description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
-			"readFullStudy": "Read full case study →",
-			"items": {
-				"nordikHome": {
-					"title": "NordikHome: 5x Cost Reduction",
-					"excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
-				},
-				"agencyHub": {
-					"title": "AgencyHub: Multi-Tenant Search",
-					"excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
-				},
-				"devStream": {
-					"title": "DevStream: Zero DevOps, 10x Faster",
-					"excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
-				}
-			}
-		},
-		"logos": {
-			"title": "Доверяют команды в"
-		},
-		"cta": {
-			"title": "Присоединяйтесь к сотням компаний",
-			"description": "Начните бесплатный пробный период сегодня — карта не нужна."
-		}
-	},
-	"aiSearchPage": {
-		"title": "Поиск на основе ИИ",
-		"description": "Выйдите за рамки ключевых слов. AACsearch поддерживает векторный, гибридный и семантический поиск из коробки — без знаний ML.",
-		"badge": "В продакшене",
-		"modes": {
-			"title": "Три режима поиска, одна платформа",
-			"vector": {
-				"title": "Векторный поиск",
-				"description": "Находите семантически похожие результаты, даже если точные ключевые слова не совпадают. Использует модели эмбеддингов для понимания смысла."
-			},
-			"hybrid": {
-				"title": "Гибридный поиск",
-				"description": "Сочетайте точность ключевых слов с семантическим пониманием. Настраиваемые веса позволяют тонко настроить релевантность под ваш сценарий."
-			},
-			"semantic": {
-				"title": "Семантическое переранжирование",
-				"description": "Переранжируйте результаты с помощью ИИ, чтобы наиболее релевантные попадали наверх. Улучшает CTR без изменений в индексировании."
-			}
-		},
-		"useCases": {
-			"title": "Для любого сценария",
-			"ecommerce": {
-				"title": "Электронная коммерция",
-				"description": "Показывайте нужные товары по запросам вроде «удобные кроссовки для бега» даже без точного совпадения ключевых слов."
-			},
-			"docs": {
-				"title": "Документация",
-				"description": "Дайте пользователям искать ответы на естественном языке по всей базе знаний."
-			},
-			"knowledge": {
-				"title": "RAG-пайплайны",
-				"description": "Подключите AACsearch к вашему RAG-пайплайну для точных и обоснованных ответов ИИ."
-			},
-			"marketplace": {
-				"title": "Маркетплейс",
-				"description": "Соединяйте покупателей и продавцов через семантическое сходство вместо жёстких фильтров по ключевым словам."
-			}
-		},
-		"howItWorks": {
-			"title": "Как это работает",
-			"steps": {
-				"upload": {
-					"title": "Загрузите данные",
-					"description": "Подключите CMS, базу данных или загрузите файлы через API."
-				},
-				"model": {
-					"title": "Выберите модель эмбеддингов",
-					"description": "Используйте встроенные модели или подключите собственные эмбеддинги OpenAI."
-				},
-				"index": {
-					"title": "Векторы создаются автоматически",
-					"description": "AACsearch генерирует и хранит векторные эмбеддинги в процессе индексирования."
-				},
-				"query": {
-					"title": "Запросы на естественном языке",
-					"description": "Ваши пользователи ищут в естественном стиле — AACsearch возвращает семантически наиболее релевантные результаты."
-				}
-			}
-		}
-	},
-	"about": {
-		"title": "Почему мы создали AACsearch",
-		"subtitle": "Поисковая инфраструктура — это сложно. Управляемые сервисы дороги и непрозрачны. Мы создали то, чего сами давно хотели.",
-		"items": {
-			"mission": {
-				"title": "Миссия",
-				"description": "Сделать поиск производственного уровня доступным для любой команды — от двухчеловечного стартапа до регулируемого предприятия — без необходимости держать отдельного инженера по поиску."
-			},
-			"technology": {
-				"title": "Технология",
-				"description": "Построен на базе высокопроизводительного поискового движка. Мы добавляем мультиарендность, управление API-ключами, аналитику и управляющий контрольный план поверх."
-			},
-			"openCore": {
-				"title": "Без привязки к вендору",
-				"description": "Ваши данные всегда принадлежат вам. Экспортируйте индексы, переходите между тарифами или на уровень Enterprise. Никаких проприетарных форматов данных, никаких затрат на миграцию."
-			},
-			"team": {
-				"title": "Команда",
-				"description": "Небольшая, сфокусированная команда. Мы поставляли поиск для B2B SaaS-компаний, платформ электронной коммерции и инструментов для разработчиков. Мы сами используем то, что создаём."
-			},
-			"values": {
-				"title": "Ценности",
-				"description": "Простота важнее изощрённости. Задокументированное поведение важнее магии. API, с которым junior-разработчик разберётся в первый день, а senior сможет положиться на него в продакшне."
-			},
-			"roadmap": {
-				"title": "Дорожная карта",
-				"description": "Публичная дорожная карта, формируемая голосованием пользователей. Мы выпускаем обновления инкрементально — никаких масштабных релизов. Changelog обновляется с каждым деплоем."
-			}
-		}
-	},
-	"careers": {
-		"title": "Работайте над поисковой инфраструктурой",
-		"subtitle": "Небольшая команда, значимая работа. Каждый инженер выпускает изменения в продакшн. Никаких комитетов, никаких сорванных спринтов.",
-		"openRoles": "Открытые вакансии",
-		"noRoles": "Сейчас открытых вакансий нет — но мы всегда рады исключительным кандидатам.",
-		"applyPrompt": "Напишите нам на",
-		"applyEmail": "jobs@aacsearch.com",
-		"items": {
-			"culture": {
-				"title": "Культура",
-				"description": "Remote-first, асинхронный подход по умолчанию. Мы всё фиксируем письменно. Встречи редки и проводятся с повесткой. Результаты важнее часов."
-			},
-			"engineering": {
-				"title": "Разработка",
-				"description": "TypeScript, Next.js, AACsearch, Prisma, Hono. Стек современный и документированный. Вы будете владеть фичами от начала до конца."
-			},
-			"growth": {
-				"title": "Рост",
-				"description": "Мы на раннем этапе. У вас будет непропорционально большое влияние. Кодовая база чистая — никакого технического долга, с которым придётся разбираться."
-			},
-			"benefits": {
-				"title": "Льготы",
-				"description": "Конкурентная зарплата, привязанная к вашему местоположению. Доля в компании. Бюджет на домашний офис. Никакого микроменеджмента."
-			},
-			"learning": {
-				"title": "Обучение",
-				"description": "Бюджет на конференции. Оплачиваемые книги и курсы. Время на исследование новых идей, полезных для продукта."
-			},
-			"hiring": {
-				"title": "Процесс найма",
-				"description": "Два звонка и оплачиваемое тестовое задание. Мы уважаем ваше время. Решение в течение двух недель с первого контакта."
-			}
-		}
-	},
-	"careersPage": {
-		"title": "Карьера в AACsearch",
-		"description": "Небольшая команда, создающая поисковую инфраструктуру для нового поколения программных продуктов. Remote-first."
-	},
-	"customers": {
-		"title": "Нам доверяют создатели продуктов",
-		"subtitle": "Ранние последователи, которые заменили Algolia, Elasticsearch или самописные решения — и перестали беспокоиться о поисковой инфраструктуре.",
-		"items": {
-			"ecommerce": {
-				"title": "Платформа электронной коммерции",
-				"description": "Мы отказались от Algolia после третьего неожиданного счёта. AACsearch стоит фиксированную сумму каждый месяц. Миграция заняла три дня. Поиск стал лучше, чем раньше.",
-				"role": "CTO, SaaS для e-commerce на 15 человек"
-			},
-			"saasFounder": {
-				"title": "Основатель B2B SaaS",
-				"description": "Нам нужен был поиск с изоляцией по арендаторам без построения собственной инфраструктуры. Токены с ограниченной областью AACsearch позволили нам выпустить продукт за выходные вместо целого спринта.",
-				"role": "Основатель, SaaS для управления проектами"
-			},
-			"devTools": {
-				"title": "Компания разработчиков инструментов",
-				"description": "MCP Server позволяет нашим AI-функциям программно выполнять поиск по пользовательским данным. Одна интеграция открыла три новые функции продукта.",
-				"role": "VP Engineering, стартап инструментов для разработчиков"
-			},
-			"enterprise": {
-				"title": "Корпоративная платформа",
-				"description": "Журнал аудита, SSO и выделенный кластер были обязательными требованиями. AACsearch Enterprise закрыл все три пункта. SLA закреплён в контракте.",
-				"role": "Head of Security, корпоративный SaaS"
-			},
-			"marketplace": {
-				"title": "Стартап-маркетплейс",
-				"description": "Multi-search позволяет нам выполнять запросы по товарам, продавцам и контенту в одном запросе. Аналитика показывает нам точно, где пользователи уходят.",
-				"role": "Lead Engineer, двусторонний маркетплейс"
-			},
-			"agency": {
-				"title": "Цифровое агентство",
-				"description": "Мы разворачиваем AACsearch для клиентов. Тарифы Enterprise включают выделенную инфраструктуру для команд с жёсткими требованиями к хранению данных.",
-				"role": "Технический директор, цифровое агентство"
-			}
-		}
-	},
-	"roadmap": {
-		"title": "Куда мы движемся",
-		"subtitle": "Инкрементально, публично и предсказуемо — в лучшем смысле этого слова. Никаких масштабных релизов — только последовательная поставка.",
-		"shipped": "Готово",
-		"inProgress": "В работе",
-		"planned": "Запланировано",
-		"seeChangelog": "Смотреть changelog →",
-		"items": {
-			"searchCore": {
-				"title": "Ядро поиска v0.x",
-				"description": "Одиночный upsert документа, мульти-поиск, Browser SDK, ограниченные токены, список разрешённых источников, лимит запросов, квоты, переиндексация без простоев, ingest с приоритетом БД.",
-				"status": "shipped"
-			},
-			"marketing": {
-				"title": "Маркетинговый сайт v0.5",
-				"description": "Публичный маркетинговый сайт с ценами, возможностями, интеграциями, безопасностью, сценариями использования и корпоративными страницами на 5 языках.",
-				"status": "shipped"
-			},
-			"connectors": {
-				"title": "Коннекторы для CMS R2",
-				"description": "Модули для PrestaShop 8.x и 1С-Битрикс. Connector API с рукопожатием, полной и дельта-синхронизацией, диагностикой и keepalive.",
-				"status": "shipped"
-			},
-			"knowledge": {
-				"title": "Модуль знаний R2.5",
-				"description": "RAG и GraphRAG для документов. 9 oRPC-процедур, 7 Prisma-моделей, загрузка файлов, чанкинг, поиск.",
-				"status": "shipped"
-			},
-			"metering": {
-				"title": "Тарификация по единицам поиска v0.6",
-				"description": "Пополнение кошелька через Точку, тарификация по единицам поиска в зависимости от плана, аналитический конвейер, дашборд кошелька.",
-				"status": "inProgress"
-			},
-			"billing": {
-				"title": "Биллинг и платежи",
-				"description": "Подписки Stripe, портал клиента, счета, мультивалютная поддержка с Точка Банк для российских платежей.",
-				"status": "shipped"
-			},
-			"analytics": {
-				"title": "Аналитика и дашборды",
-				"description": "Аналитика запросов в реальном времени, метрики использования, неудачные запросы, отслеживание CTR и пользовательские дашборды.",
-				"status": "inProgress"
-			},
-			"widget": {
-				"title": "Виджет и Embed SDK",
-				"description": "Готовый виджет поиска с модалкой Cmd+K, плавающей кнопкой и полноэкранным режимом. Сборки для React, Vue, Angular и ванильного JS.",
-				"status": "inProgress"
-			},
-			"aiNlp": {
-				"title": "NLP и ИИ-поиск",
-				"description": "Исправление опечаток, определение намерений, ИИ-переписывание запросов и поиск на естественном языке. Zero-click ответы ИИ — следующий шаг.",
-				"status": "planned"
-			},
-			"docs": {
-				"title": "Публичная документация v0.7",
-				"description": "Полный сайт документации со справочником API, руководствами по быстрому старту и обучающими материалами.",
-				"status": "planned"
-			},
-			"selfHost": {
-				"title": "Enterprise-развёртывание v1.0",
-				"description": "Развёртывание выделенного кластера, пользовательская резидентность данных и on-prem варианты для регулируемых отраслей.",
-				"status": "planned"
-			},
-			"vectorSearch": {
-				"title": "Векторный и гибридный поиск",
-				"description": "Семантический поиск через эмбеддинги OpenAI. Гибридное ранжирование BM25 + вектор. Уже реализовано в процедурах.",
-				"status": "shipped"
-			},
-			"shopify": {
-				"title": "Интеграция с Shopify",
-				"description": "Полное приложение Shopify: синхронизация товаров и вариантов, отслеживание запасов, вебхуки в реальном времени, поддержка нескольких магазинов и панель управления."
-			},
-			"embeddingProviders": {
-				"title": "Провайдеры эмбеддингов Azure и GCP",
-				"description": "Провайдеры эмбеддингов Azure OpenAI и GCP Vertex AI в дополнение к существующей поддержке OpenAI. API, совместимая с OpenAI, для собственных endpoint'ов."
-			},
-			"searchConfigurator": {
-				"title": "Конфигуратор поиска",
-				"description": "Визуальный мастер настройки поисковых коллекций, полей схемы, параметров ранжирования и фильтров. Конструктор виджетов с вкладками Конфигуратор, Фильтры и Установка."
-			},
-			"upgradeFlows": {
-				"title": "Сценарии повышения и понижения тарифа",
-				"description": "Улучшенное модальное окно повышения тарифа с предпросмотром пропорции и сравнением планов. Сценарий понижения с предупреждениями о потере данных и подтверждением."
-			}
-		},
-		"shippedTitle": "Готово",
-		"inProgressTitle": "В разработке",
-		"plannedTitle": "Запланировано",
-		"feedback": {
-			"title": "Есть идея?",
-			"description": "Мы читаем каждый запрос функции. Расскажите, что сделало бы AACsearch лучше для вас.",
-			"cta": "Предложить функцию"
-		},
-		"vote": "Голосовать",
-		"voted": "Проголосовал",
-		"votes": "голосов",
-		"emailCapture": {
-			"title": "Влияйте на наш роадмап",
-			"description": "Голосуйте за функции и получайте ранний доступ. Присоединяйтесь к 700+ поисковым командам.",
-			"placeholder": "you@company.ru",
-			"subscribeAndVote": "Подписаться и голосовать",
-			"skipAndVote": "Нет, спасибо, просто голосовать",
-			"privacy": "Без спама. Отписка в любое время.",
-			"success": "Спасибо! Ваш голос учтён. Следите за обновлениями в почте."
-		}
-	},
-	"roadmapPage": {
-		"title": "Дорожная карта продукта",
-		"description": "Что готово, что в работе и что будет дальше. Обновляется после каждого спринта."
-	},
-	"affiliatePage": {
-		"title": "Партнёрская программа",
-		"description": "Зарабатывайте регулярные комиссионные, рекомендуя AACsearch разработчикам и компаниям. Присоединяйтесь к программе сегодня."
-	},
-	"affiliate": {
-		"title": "Зарабатывайте с AACsearch",
-		"subtitle": "Рекомендуйте AACsearch своей аудитории и получайте 20% регулярных комиссионных с каждого платящего клиента.",
-		"items": {
-			"commission": {
-				"title": "20% регулярных комиссионных",
-				"description": "Получайте 20% ежемесячного тарифа за каждого привлечённого клиента на протяжении всего срока подписки. Без ограничений и срока действия."
-			},
-			"tracking": {
-				"title": "Надёжная атрибуция",
-				"description": "90-дневное окно куки. Атрибуция отслеживается между устройствами через первичные куки и UTM-параметры."
-			},
-			"creatives": {
-				"title": "Маркетинговые материалы",
-				"description": "Баннеры, email-шаблоны, сравнительные таблицы и примеры кода — всё готово для встраивания в туториалы и рассылки."
-			},
-			"payments": {
-				"title": "Ежемесячные выплаты",
-				"description": "Выплаты 15-го числа каждого месяца через Stripe или банковский перевод. Минимальная сумма выплаты: $50."
-			},
-			"supportChannel": {
-				"title": "Поддержка партнёров",
-				"description": "Персональный менеджер партнёрской программы, ранний доступ к новым функциям и закрытый Discord-канал."
-			},
-			"apply": {
-				"title": "Подать заявку",
-				"description": "Зарегистрируйтесь на affiliate.aacsearch.com. Заявки рассматриваются в течение 3 рабочих дней. Минимальный размер аудитории не требуется."
-			},
-			"payouts": {
-				"title": "Щедрые выплаты",
-				"description": "Зарабатывайте 20% рекуррентной комиссии с каждой привлечённой подписки. Ежемесячные выплаты через Stripe, без минимального порога."
-			},
-			"support": {
-				"title": "Персональная поддержка",
-				"description": "Получите персонального менеджера, рекламные материалы и индивидуальную целевую страницу для вашей аудитории."
-			}
-		}
-	},
-	"brandPage": {
-		"title": "Руководство по бренду",
-		"description": "Логотипы, цвета, типографика и правила использования. Всё необходимое для корректного представления AACsearch."
-	},
-	"brand": {
-		"title": "Наш внешний вид",
-		"subtitle": "Наш бренд построен на ясности и скорости — тех же ценностях, что мы вкладываем в поиск. Используйте эти материалы для корректного представления AACsearch.",
-		"items": {
-			"logo": {
-				"title": "Логотип",
-				"description": "Используйте основной логотип на светлом фоне и инвертированный — на тёмном. Минимальный размер 24px. Не растягивайте, не вращайте, не перекрашивайте."
-			},
-			"colors": {
-				"title": "Цвета",
-				"description": "Основной: #0F172A (ночь). Акцент: #6366F1 (indigo-500). Акцент используйте экономно — только для интерактивных элементов и выделений."
-			},
-			"typography": {
-				"title": "Типографика",
-				"description": "Заголовки и текст: Inter. Моноширинный: JetBrains Mono. Оба доступны через Google Fonts и Fontsource."
-			},
-			"guidelines": {
-				"title": "Правила использования",
-				"description": "Не используйте логотип AACsearch в контексте, подразумевающем одобрение. Не изменяйте логотип. Указание авторства приветствуется, но не обязательно."
-			},
-			"assets": {
-				"title": "Загрузка материалов",
-				"description": "Скачайте полный брендовый кит: SVG-логотип, favicon, шаблон OG-изображения и цветовую палитру в форматах ASE, Sketch и Figma."
-			},
-			"contact": {
-				"title": "Вопросы по бренду",
-				"description": "Для совместных маркетинговых материалов, спонсорства конференций или нестандартных случаев использования пишите на brand@aacsearch.com."
-			},
-			"logos": {
-				"title": "Логотипы и материалы",
-				"description": "Скачайте логотипы AACsearch в форматах SVG, PNG и векторных. Цветные, монохромные и для тёмного фона."
-			}
-		}
-	},
-	"communityPage": {
-		"title": "Сообщество",
-		"description": "Присоединяйтесь к сообществу AACsearch — задавайте вопросы, делитесь проектами, создавайте коннекторы и формируйте дорожную карту."
-	},
-	"community": {
-		"title": "Создаём поиск вместе",
-		"subtitle": "AACsearch разрабатывается открыто. Сообщество голосует за функции, создаёт коннекторы и помогает новичкам запускаться быстрее.",
-		"items": {
-			"github": {
-				"title": "GitHub",
-				"description": "Поставьте звезду репозиторию, открывайте задачи или вносите изменения через PR. Все публичные пункты дорожной карты отслеживаются в GitHub Issues."
-			},
-			"discord": {
-				"title": "Discord",
-				"description": "Чат в реальном времени для вопросов, интеграций и устранения неполадок. 500+ участников, ежедневная активность."
-			},
-			"forum": {
-				"title": "Форум сообщества",
-				"description": "Развёрнутые Q&A для вопросов архитектуры, руководств по интеграции и предложений функций. Полностью доступен для поиска — работает на AACsearch."
-			},
-			"showcase": {
-				"title": "Витрина",
-				"description": "Смотрите, что сообщество создало с AACsearch. Отправьте свой проект для публикации в ежемесячной рассылке."
-			},
-			"contribute": {
-				"title": "Вклад в проект",
-				"description": "Мы принимаем вклады в коннекторы, примеры SDK и документацию. См. CONTRIBUTING.md для руководства."
-			},
-			"roadmap": {
-				"title": "Голосуйте за дорожную карту",
-				"description": "Каждый публичный пункт дорожной карты открыт для голосования сообщества. Наиболее популярные функции реализуются первыми."
-			},
-			"events": {
-				"title": "Мероприятия и встречи",
-				"description": "Присоединяйтесь к AACsearch на отраслевых мероприятиях, вебинарах и митапах сообщества. Общайтесь с командой и разработчиками."
-			}
-		}
-	},
-	"faqPage": {
-		"title": "Часто задаваемые вопросы",
-		"description": "Быстрые ответы на самые распространённые вопросы о ценах, настройке, данных и поддержке AACsearch."
-	},
-	"faq": {
-		"title": "Частые вопросы, чёткие ответы",
-		"subtitle": "Не нашли ответ? Поищите в документации или спросите на форуме сообщества.",
-		"items": {
-			"searchUnit": {
-				"title": "Что такое единица поиска?",
-				"description": "Одна единица поиска равна одному поисковому запросу ИЛИ одному проиндексированному документу. Ваш ежемесячный тариф включает определённое количество единиц, распределённых по всем индексам."
-			},
-			"pricing": {
-				"title": "Как работает ценообразование?",
-				"description": "AACsearch берёт фиксированную ежемесячную плату в зависимости от тарифного плана. Превышение лимита оплачивается по тарифу за единицу поиска. Никаких скрытых сборов."
-			},
-			"scaling": {
-				"title": "Как происходит масштабирование?",
-				"description": "AACsearch масштабируется горизонтально. Хостинговая платформа автоматически обрабатывает всплески трафика."
-			},
-			"dataResidency": {
-				"title": "Где хранятся мои данные?",
-				"description": "Выберите ЕС (Франкфурт) или США (Северная Виргиния) при регистрации. Данные никогда не покидают выбранный регион."
-			},
-			"migration": {
-				"title": "Можно ли мигрировать с Algolia?",
-				"description": "Да. REST API AACsearch совместим со схемами коллекций в стиле Algolia. Мы предоставляем руководство по миграции."
-			},
-			"selfHost": {
-				"title": "Предлагаете ли вы выделенное или on-prem развёртывание?",
-				"description": "Да. Тарифы Enterprise включают выделенный кластер в выбранном вами регионе. Для регулируемых отраслей со строгими требованиями свяжитесь с нами для разработки индивидуального развёртывания."
-			},
-			"data": {
-				"title": "Где хранятся мои данные?",
-				"description": "AACsearch работает на AWS в регионе, ближайшем к базе пользователей. Данные остаются в выбранном регионе и не покидают его без вашего разрешения."
-			},
-			"limits": {
-				"title": "Какие лимиты у тарифов?",
-				"description": "Бесплатный: 1000 поисковых единиц/месяц, 1 индекс, 1 API-ключ. Pro: 50 000 единиц/месяц, безлимитные индексы, 10 ключей. Enterprise: индивидуальные лимиты и SLA."
-			},
-			"migrate": {
-				"title": "Как мигрировать с Typesense?",
-				"description": "AACsearch построен на Typesense и использует тот же поисковый движок. Экспортируйте схему и документы, затем переиндексируйте через AACsearch API. Большинство пользователей завершают миграцию менее чем за день."
-			},
-			"support": {
-				"title": "Какие варианты поддержки доступны?",
-				"description": "Бесплатный: поддержка сообщества в Discord. Pro: поддержка по email в течение 24 часов. Enterprise: выделенный Slack-канал и телефонная поддержка с SLA 1 час."
-			},
-			"typesense": {
-				"title": "Чем AACsearch отличается от Typesense Cloud?",
-				"description": "AACsearch — это управляемая поисковая платформа на базе Typesense с дополнительными функциями: мультиарендность, ограниченные токены, аналитика, CMS-коннекторы, RAG и виджет — всё включено в цену."
-			}
-		}
-	},
-	"glossaryPage": {
-		"title": "Словарь поисковых терминов",
-		"description": "Простые объяснения концепций поиска — от инвертированного индекса до функции ранжирования BM25."
-	},
-	"glossary": {
-		"title": "Поисковые термины, объяснённые просто",
-		"subtitle": "Практический глоссарий для разработчиков, работающих с поисковыми сервисами. Никакого жаргона без объяснений.",
-		"items": {
-			"invertedIndex": {
-				"title": "Инвертированный индекс",
-				"description": "Структура данных, сопоставляющая каждый термин с документами, в которых он встречается. Основа быстрого полнотекстового поиска."
-			},
-			"bm25": {
-				"title": "BM25",
-				"description": "Best Match 25 — стандартная функция ранжирования для полнотекстового поиска. Учитывает частоту терминов и длину документа."
-			},
-			"facets": {
-				"title": "Фасеты",
-				"description": "Атрибуты фильтрации со счётчиками. Показывают пользователям, сколько результатов доступно для каждого значения фильтра."
-			},
-			"typoTolerance": {
-				"title": "Устойчивость к опечаткам",
-				"description": "Способность поискового движка находить документы несмотря на орфографические ошибки в запросе."
-			},
-			"synonyms": {
-				"title": "Синонимы",
-				"description": "Эквивалентные термины, которые должны возвращать одинаковые результаты поиска."
-			},
-			"relevanceTuning": {
-				"title": "Настройка релевантности",
-				"description": "Процесс корректировки сигналов и весов ранжирования для улучшения результатов поиска."
-			},
-			"embedding": {
-				"description": "Числовое векторное представление смысла текста. AACsearch может хранить и запрашивать эмбеддинги для семантического и гибридного поиска.",
-				"title": "Эмбеддинг"
-			},
-			"facet": {
-				"description": "Фильтруемый атрибут, возвращаемый вместе с результатами поиска с количеством документов. Обеспечивает навигацию с подсказками без дополнительных вызовов API.",
-				"title": "Фасет"
-			},
-			"relevance": {
-				"description": "Степень соответствия документа запросу. AACsearch сочетает текстовую релевантность BM25, векторное сходство, веса полей и пользовательские правила буста.",
-				"title": "Релевантность"
-			},
-			"searchIndex": {
-				"description": "Структура данных, оптимизированная для быстрого поиска текста. AACsearch ведёт коллекцию поиска для каждого индекса с автоматическим управлением псевдонимами.",
-				"title": "Поисковый индекс"
-			},
-			"searchUnit": {
-				"description": "Единица тарификации AACsearch. Одна единица поиска равна одному поисковому запросу или одному проиндексированному документу. Используется для расчёта ежемесячного лимита плана.",
-				"title": "Единица поиска"
-			},
-			"inverted": {
-				"title": "Инвертированный индекс",
-				"description": "Структура данных, сопоставляющая каждый уникальный термин коллекции документов с содержащими его документами. Обеспечивает быстрый полнотекстовый поиск в масштабе."
-			},
-			"vector": {
-				"title": "Векторный поиск",
-				"description": "Метод поиска, находящий документы на основе семантической близости через эмбеддинги. AACsearch поддерживает гибридный поиск по ключевым словам и векторам."
-			}
-		}
-	},
-	"newsletterPage": {
-		"title": "Рассылка AACsearch",
-		"description": "Ежемесячные обновления о поисковой инженерии, релизах AACsearch и инструментах для разработчиков, которые мы отслеживаем."
-	},
-	"newsletter": {
-		"title": "Будьте в курсе",
-		"subtitle": "Рассылка AACsearch выходит еженедельно. Обновления продукта, советы по поиску и бенчмарки — прямо в вашем почтовом ящике.",
-		"items": {
-			"productUpdates": {
-				"title": "Обновления продукта",
-				"description": "Новые функции, изменения API и улучшения производительности — с примерами кода."
-			},
-			"searchTips": {
-				"title": "Советы по поиску",
-				"description": "Практические советы по настройке релевантности, моделированию данных и поисковому UX — от нашей инженерной команды."
-			},
-			"benchmarks": {
-				"title": "Бенчмарки",
-				"description": "Ежемесячные бенчмарки задержки и пропускной способности из нашей тестовой лаборатории."
-			},
-			"industry": {
-				"title": "Новости отрасли",
-				"description": "Самые важные новости из мира поиска: новые модели, статьи и релизы open source."
-			},
-			"showcase": {
-				"title": "Витрина сообщества",
-				"description": "Интересные проекты от сообщества AACsearch и гостевые статьи от партнёров."
-			},
-			"frequency": {
-				"title": "Еженедельно, без спама",
-				"description": "По понедельникам, около 08:00 МСК. Никакого маркетинга, никакой рекламы. Отписаться можно в любой момент."
-			},
-			"content": {
-				"description": "Статьи по поисковой инженерии, примечания к релизам AACsearch, обзоры инструментов разработчика и один материал о сообществе в каждом выпуске.",
-				"title": "Что вы получите"
-			},
-			"past": {
-				"description": "Каждый выпуск новостной рассылки архивируется в нашем блоге. Прочитайте перед подпиской — вы будете точно знать, на что подписываетесь.",
-				"title": "Читать прошлые выпуски"
-			},
-			"privacy": {
-				"description": "Мы используем собственную платформу для рассылки. Ваш email никогда не передаётся рекламным сетям и не продаётся брокерам данных.",
-				"title": "Ваши данные остаются вашими"
-			},
-			"social": {
-				"description": "Основные материалы рассылки публикуются в LinkedIn. Подписывайтесь там для более коротких инженерных обновлений.",
-				"title": "Следите за основным"
-			},
-			"unsubscribe": {
-				"description": "В каждом письме есть ссылка для отписки в один клик. Никаких тёмных паттернов, никаких диалогов подтверждения.",
-				"title": "Отписка в один клик"
-			},
-			"community": {
-				"title": "Новости сообщества",
-				"description": "Ежемесячная подборка лучших проектов сообщества AACsearch, плагинов и историй успеха разработчиков со всего мира."
-			},
-			"product": {
-				"title": "Обновления продукта",
-				"description": "Новые функции, улучшения производительности и изменения API. Основные изменения доставляются на почту ежемесячно."
-			},
-			"tutorials": {
-				"title": "Учебные пособия",
-				"description": "Пошаговые руководства по настройке поиска, миграции с конкурентов и интеграции AACsearch с популярными фреймворками."
-			}
-		}
-	},
-	"pressPage": {
-		"title": "Пресса и СМИ",
-		"description": "Пресс-релизы, пресс-кит и контакты для журналистов и блогеров, пишущих об AACsearch."
-	},
-	"press": {
-		"title": "AACsearch в прессе",
-		"subtitle": "Пресс-релизы, интервью и медиаматериалы. Журналисты найдут здесь всё необходимое.",
-		"items": {
-			"releases": {
-				"title": "Пресс-релизы",
-				"description": "Все официальные пресс-релизы с 2024 года — анонсы продуктов, партнёрства и вехи."
-			},
-			"kit": {
-				"title": "Пресс-кит",
-				"description": "Пакет логотипов, скриншоты продукта, фотографии основателей и фактическая справка о компании — всё в одном ZIP."
-			},
-			"coverage": {
-				"title": "Публикации в СМИ",
-				"description": "Избранные статьи из отраслевых СМИ, блогов разработчиков и технических изданий."
-			},
-			"contact": {
-				"title": "Контакт для прессы",
-				"description": "Для запросов об интервью, демонстраций продукта и эксклюзивных материалов: press@aacsearch.com. Время ответа — до 24 часов."
-			},
-			"boilerplate": {
-				"title": "Стандартный текст о компании",
-				"description": "Стандартизированный текст описания компании для пресс-релизов и статей."
-			},
-			"founders": {
-				"title": "Биографии основателей",
-				"description": "Краткие биографии и фотографии высокого разрешения для публикаций в СМИ и программ конференций."
-			},
-			"assets": {
-				"description": "Скачайте логотип в форматах SVG, PNG и в светлом/тёмном вариантах. Руководство по использованию прилагается — подробности на странице бренда.",
-				"title": "Брендовые материалы"
-			},
-			"mediaKit": {
-				"description": "Файлы логотипа, скриншоты продукта, фотографии основателей и руководство по бренду в одном загружаемом zip-архиве.",
-				"title": "Медиакит"
-			},
-			"pressReleases": {
-				"description": "Официальные анонсы запусков продуктов, раундов финансирования и крупных партнёрств — отформатированы и готовы к перепечатке.",
-				"title": "Пресс-релизы"
-			}
-		}
-	},
-	"pricingPlansPage": {
-		"title": "Тарифы и цены",
-		"description": "Прозрачное ценообразование на основе использования. Начните бесплатно. Масштабируйтесь по мере роста."
-	},
-	"pricingPlans": {
-		"title": "Подходящий тариф для вашей команды",
-		"subtitle": "Все тарифы включают поиск с устойчивостью к опечаткам, фасеты, синонимы и индексирование в реальном времени. Масштабируйтесь, когда будете готовы.",
-		"items": {
-			"free": {
-				"title": "Бесплатный",
-				"description": "10 000 единиц поиска в месяц, 1 индекс, поддержка сообщества. Идеально для хобби-проектов и тестирования."
-			},
-			"starter": {
-				"title": "Начальный",
-				"description": "100 000 единиц поиска в месяц, 5 индексов, поддержка по email. Для небольших продакшн-сервисов."
-			},
-			"pro": {
-				"title": "Профессиональный",
-				"description": "1 млн единиц поиска в месяц, 10 индексов, приоритетная поддержка, пользовательский домен. Для растущих SaaS-продуктов."
-			},
-			"business": {
-				"title": "Бизнес",
-				"description": "10 млн единиц поиска в месяц, 50 индексов, SLA 99,9%, SSO. Для масштабно-чувствительных компаний."
-			},
-			"enterprise": {
-				"title": "Корпоративный",
-				"description": "Неограниченные единицы, выделенный кластер, SLA 99,95%, журнал аудита, SCIM-провизионирование. Для критически важных рабочих нагрузок."
-			},
-			"overage": {
-				"title": "Превышение",
-				"description": "Превышения оплачиваются за каждую единицу поиска. Жёсткой остановки нет — ваш сервис всегда остаётся онлайн."
-			},
-			"custom": {
-				"description": "Нестандартные требования — развёртывание на собственных серверах, соглашения о хранении данных, white-labelling — оформляются как индивидуальные контракты.",
-				"title": "Нужно что-то другое?"
-			}
-		}
-	},
-	"resourcesPage": {
-		"title": "Ресурсы",
-		"description": "Руководства, учебники, справочник API и лучшие практики для построения поиска с AACsearch."
-	},
-	"resources": {
-		"title": "Всё, что нужно для начала",
-		"subtitle": "От быстрого старта до продвинутой настройки релевантности — здесь вы найдёте всё.",
-		"items": {
-			"docs": {
-				"title": "Документация",
-				"description": "Полный справочник API, руководства по SDK и концептуальные объяснения — от начальной настройки до продвинутых тем."
-			},
-			"tutorials": {
-				"title": "Учебники",
-				"description": "Пошаговые руководства для распространённых сценариев: поиск в e-commerce, базы знаний и многоуровневые иерархии."
-			},
-			"apiRef": {
-				"title": "Справочник API",
-				"description": "Полная документация REST API с интерактивными примерами. Сгенерировано из OpenAPI 3.1."
-			},
-			"sdks": {
-				"title": "SDK",
-				"description": "SDK для браузера, клиент Node.js и CLI. Все на TypeScript, все опубликованы на npm."
-			},
-			"blog": {
-				"title": "Блог",
-				"description": "Технические статьи по поисковой инженерии, обновления продукта и кейс-стади."
-			},
-			"changelog": {
-				"title": "Журнал изменений",
-				"description": "Каждый релиз задокументирован, пути обновления понятны."
-			},
-			"community": {
-				"description": "Задавайте вопросы, делитесь интеграциями и получайте поддержку сообщества на форуме и в Discord AACsearch.",
-				"title": "Сообщество"
-			},
-			"support": {
-				"description": "Поддержка по электронной почте для тарифов Starter и выше. Корпоративные планы включают выделенный канал Slack и договорное SLA.",
-				"title": "Поддержка"
-			},
-			"migration": {
-				"title": "Руководства по миграции",
-				"description": "Пошаговые инструкции по миграции с Typesense Cloud, Algolia, Elasticsearch, Meilisearch и других поисковых платформ на AACsearch."
-			}
-		}
-	},
-	"statusPage": {
-		"title": "Статус системы",
-		"description": "Доступность в реальном времени и история инцидентов для всех сервисов AACsearch."
-	},
-	"status": {
-		"title": "Всегда доступен",
-		"subtitle": "Статус в реальном времени, история инцидентов и окна технического обслуживания для всех сервисов AACsearch.",
-		"items": {
-			"api": {
-				"title": "API поиска",
-				"description": "Доступность и задержка для основного эндпоинта API поиска. Обновляется каждую минуту."
-			},
-			"ingest": {
-				"title": "Конвейер загрузки",
-				"description": "Статус конвейера загрузки документов, включая задержку обработки."
-			},
-			"dashboard": {
-				"title": "Панель управления",
-				"description": "Доступность плоскости управления SaaS: вход, управление индексами и аналитика."
-			},
-			"incidents": {
-				"title": "История инцидентов",
-				"description": "Полная история инцидентов за последние 90 дней с анализом первопричин."
-			},
-			"maintenance": {
-				"title": "Плановое техническое обслуживание",
-				"description": "Запланированные окна технического обслуживания объявляются за 72 часа."
-			},
-			"subscribe": {
-				"title": "Подписка на статус",
-				"description": "Подпишитесь на уведомления по email или SMS о инцидентах, затрагивающих ваш тариф."
-			},
-			"analytics": {
-				"description": "Сбор событий поиска, агрегация и обновление дашборда. Обычно отстаёт от реального времени на 60–90 секунд.",
-				"title": "Аналитический конвейер"
-			},
-			"uptime": {
-				"title": "SLA 99,99% аптайма",
-				"description": "Тариф Enterprise включает гарантию 99,99% аптайма с кредитами при простоях. Статус в реальном времени на status.aacsearch.com."
-			}
-		}
-	},
-	"supportPage": {
-		"title": "Поддержка",
-		"description": "Получите помощь с AACsearch. Документация, форум сообщества, поддержка по электронной почте и корпоративный SLA."
-	},
-	"support": {
-		"title": "Мы здесь для вас",
-		"subtitle": "От документации для самообслуживания до выделенных инженеров — для каждого уровня зрелости есть свой путь поддержки.",
-		"items": {
-			"docs": {
-				"title": "Документация",
-				"description": "Исчерпывающие руководства, API-справочник, SDK-документация и руководства по интеграции на docs.aacsearch.com."
-			},
-			"community": {
-				"title": "Форум сообщества",
-				"description": "Задавайте публичные вопросы, общайтесь с другими разработчиками и смотрите прошлые решения."
-			},
-			"email": {
-				"title": "Поддержка по email",
-				"description": "Для тарифа Starter и выше. Время ответа — до 24 часов. Для критических проблем — в тот же день."
-			},
-			"sla": {
-				"title": "Корпоративный SLA",
-				"description": "Гарантия доступности 99,95%, выделенный менеджер по работе с клиентами и время реакции 4 часа для блокирующих проблем."
-			},
-			"onboarding": {
-				"title": "Помощь при онбординге",
-				"description": "Направленный онбординг для клиентов Pro и Enterprise. Помогаем с проектированием схемы и стратегией миграции."
-			},
-			"status": {
-				"title": "Статус системы",
-				"description": "Проверяйте status.aacsearch.com для получения доступности в реальном времени и истории инцидентов."
-			},
-			"chat": {
-				"description": "Чат в реальном времени в дашборде для клиентов тарифов Pro и Business. Соединяет напрямую с командой поддержки AACsearch в рабочее время.",
-				"title": "Онлайн-чат"
-			},
-			"documentation": {
-				"description": "Полный справочник API, руководства по SDK и обучающие материалы по интеграции. Версионированный, с поиском, обновляется с каждым релизом.",
-				"title": "Документация"
-			},
-			"slack": {
-				"description": "Корпоративные клиенты получают общий канал Slack Connect с инженерной командой и командой поддержки AACsearch.",
-				"title": "Выделенный канал Slack"
-			},
-			"enterprise": {
-				"title": "Поддержка Enterprise",
-				"description": "Выделенный Slack-канал, телефонная поддержка, индивидуальные SLA и закреплённый инженер поддержки. Приоритетное время ответа менее 1 часа."
-			}
-		}
-	},
-	"trustPage": {
-		"title": "Доверие и безопасность",
-		"description": "Как AACsearch защищает данные клиентов: шифрование, контроль доступа, резидентность данных и сертификаты соответствия."
-	},
-	"trust": {
-		"title": "Безопасность как основа",
-		"subtitle": "AACsearch создан с принципом Security by Default. Все меры, сертификаты и политики задокументированы здесь.",
-		"items": {
-			"encryption": {
-				"title": "Шифрование",
-				"description": "Данные шифруются в состоянии покоя (AES-256) и при передаче (TLS 1.3). Ключи управляются в HSM."
-			},
-			"accessControl": {
-				"title": "Контроль доступа",
-				"description": "Ключи API, scoped-токены, IP-белые списки и SCIM-провизионирование. Каждое действие записывается в журнал."
-			},
-			"dataResidency": {
-				"title": "Резидентность данных",
-				"description": "Выберите ЕС (Франкфурт) или США (Северная Виргиния) при регистрации. Кросс-региональная репликация — только с вашего согласия."
-			},
-			"soc2": {
-				"title": "SOC 2 Тип II (планируется)",
-				"description": "Аудит SOC 2 запланирован на Q4 2025. Существующие меры безопасности соответствуют критериям Trust Services SOC 2."
-			},
-			"gdpr": {
-				"title": "GDPR",
-				"description": "AACsearch действует как обработчик данных. Договор об обработке данных (DPA) доступен в тарифе Enterprise."
-			},
-			"pentest": {
-				"title": "Тесты на проникновение",
-				"description": "Ежегодные тесты на проникновение независимой третьей стороной. Результаты предоставляются корпоративным клиентам по запросу."
-			},
-			"auditLog": {
-				"description": "Каждое административное действие — создание индекса, выдача ключа, приглашение участника — регистрируется с идентификатором исполнителя, временной меткой и контекстом организации.",
-				"title": "Журнал аудита"
-			},
-			"disclosure": {
-				"description": "Обнаружили уязвимость? Напишите на security@aacsearch.com. Мы придерживаемся 90-дневного скоординированного срока раскрытия и указываем всех авторов сообщений.",
-				"title": "Ответственное раскрытие информации"
-			},
-			"audit": {
-				"title": "Аудиты третьих сторон",
-				"description": "AACsearch регулярно проходит аудиты безопасности независимыми сторонами. Отчёты доступны по NDA для корпоративных клиентов."
-			},
-			"isolation": {
-				"title": "Изоляция арендаторов",
-				"description": "Данные каждой организации изолированы на уровне инфраструктуры. Межарендаторный доступ архитектурно невозможен."
-			},
-			"tokens": {
-				"title": "Токен-аутентификация",
-				"description": "API-ключи хранятся в хешированном виде с использованием bcrypt. Ограниченные токены используют HMAC-подпись с серверными секретами."
-			}
-		}
-	},
-	"allPagesPage": {
-		"title": "Все страницы",
-		"description": "Полный индекс всех страниц AACsearch — маркетинговый сайт, функции, интеграции и приложение.",
-		"marketingTitle": "Маркетинговый сайт",
-		"appTitle": "Приложение",
-		"saasNote": "Маршруты приложения на {base}",
-		"sections": {
-			"core": "Основные",
-			"features": "Функции",
-			"useCases": "Сценарии",
-			"integrations": "Интеграции",
-			"compare": "Сравнения",
-			"solutions": "Решения",
-			"company": "Компания",
-			"auth": "Авторизация",
-			"account": "Аккаунт",
-			"organization": "Организация",
-			"admin": "Администратор",
-			"misc": "Разное"
-		}
-	},
-	"connectorsPage": {
-		"title": "CMS-коннекторы",
-		"description": "Нативные PHP-модули для PrestaShop и 1C-Bitrix. REST Connector API для всего остального.",
-		"headlessCmsTitle": "Headless CMS-коннекторы",
-		"headlessCmsSubtitle": "Подключите AACsearch к вашей контентной инфраструктуре. Strapi, Contentful и Sanity — все с нативными плагинами.",
-		"headlessCmsItems": {
-			"strapi": {
-				"title": "Strapi",
-				"description": "Плагин Strapi с синхронизацией через lifecycle-хуки. Создание, обновление и удаление контента автоматически обновляет индекс. Поддерживаются типы контента, динамические зоны и медиаполя."
-			},
-			"contentful": {
-				"title": "Contentful",
-				"description": "Приложение Contentful с вебхук-синхронизацией. Опубликуйте запись — и она появится в AACsearch за секунду. Сопоставление моделей контента, Rich Text и многоязычный поиск включены."
-			},
-			"sanity": {
-				"title": "Sanity",
-				"description": "Плагин Sanity Studio с индексацией через GROQ-запросы. Выбирайте только нужные поля. Реальная синхронизация через вебхуки — без CRON-задач."
-			}
-		},
-		"comingSoon": "Скоро",
-		"comingSoonTitle": "Больше коннекторов скоро",
-		"comingSoonSubtitle": "Поддержка WooCommerce и Shopify в разработке. Используйте Connector API, чтобы создать собственный коннектор уже сегодня.",
-		"comingSoonItems": {
-			"woocommerce": {
-				"title": "WooCommerce",
-				"description": "Плагин WordPress + WooCommerce. Синхронизация товаров, категорий и заказов."
-			},
-			"shopify": {
-				"title": "Shopify",
-				"description": "Приложение Shopify с синхронизацией товаров, вариантов и метафилдов. Встройка виджета включена."
-			}
-		}
-	},
-	"tutorialsPage": {
-		"title": "Видеоуроки",
-		"description": "Смотрите пошаговые руководства, чтобы получить максимум от AACsearch — от 5-минутной настройки до продвинутых интеграций.",
-		"videos": {
-			"quickstart": {
-				"title": "Быстрый старт за 5 минут",
-				"description": "Создайте аккаунт, загрузите данные, встройте виджет поиска и запуститесь — всё менее чем за 5 минут."
-			},
-			"ecommerce": {
-				"title": "Настройка поиска для e-commerce",
-				"description": "Настройте поиск товаров с фасетной навигацией, изолированными токенами для каждого магазина и аналитикой."
-			},
-			"blog": {
-				"title": "Поиск по контенту/блогу",
-				"description": "Добавьте мгновенный полнотекстовый поиск в блог или документацию с устойчивостью к опечаткам."
-			},
-			"app": {
-				"title": "Поиск для SaaS-приложений",
-				"description": "Создайте мультиарендный поиск для вашего SaaS-приложения с изоляцией данных и ограниченными API-ключами."
-			}
-		}
-	},
-	"homePricingCalc": {
-		"title": "Рассчитайте стоимость",
-		"subtitle": "Настройте ползунки, чтобы подобрать подходящий тарифный план.",
-		"docsLabel": "Проиндексированных документов",
-		"searchesLabel": "Поисковых запросов в месяц",
-		"unitsLabel": "поисковых единиц / месяц",
-		"planLabel": "Рекомендуемый тариф",
-		"note": "1 поиск = 1 единица · 1 документ = 1 единица · автодополнение = 0,1 единицы",
-		"ctaFree": "Начать бесплатно",
-		"ctaPro": "Начать пробный Pro",
-		"ctaEnterprise": "Связаться с отделом продаж",
-		"plans": {
-			"free": {
-				"name": "Бесплатно",
-				"price": "0 ₽ / мес",
-				"limit": "До 10 000 единиц/мес · 1 индекс"
-			},
-			"pro": {
-				"name": "Pro",
-				"price": "2 900 ₽ / мес",
-				"limit": "До 1 000 000 единиц/мес · 10 индексов"
-			},
-			"enterprise": {
-				"name": "Enterprise",
-				"price": "По запросу",
-				"limit": "Без ограничений · неограниченные индексы · SLA"
-			}
-		}
-	},
-	"homeArchitecture": {
-		"title": "Как работает AACsearch",
-		"subtitle": "Три потока, одна платформа. Ваш бэкенд, пользователи и команда — всё через единый поисковый слой.",
-		"ingestLabel": "Путь приёма данных",
-		"searchLabel": "Путь поиска",
-		"manageLabel": "Управление",
-		"zeroDowntime": "Переиндексация без простоя через атомарное переключение псевдонима",
-		"tenantIsolation": "Каждый запрос ограничен вашей организацией — перекрёстные чтения исключены"
-	},
-	"homeFit": {
-		"title": "AACsearch — ваш вариант?",
-		"perfectTitle": "Идеально подходит",
-		"skipTitle": "Можно пропустить, если",
-		"perfect": {
-			"0": "Нужен поиск в продакшене без отдельной команды по поиску",
-			"1": "Вы вызываете поиск из браузера и не можете раскрывать ключи API",
-			"2": "Вы управляете несколькими клиентами или арендаторами на одной платформе",
-			"3": "Нужны предсказуемые ежемесячные расходы при росте нагрузки",
-			"4": "Нужна аналитика, чтобы понять, что ищут ваши пользователи"
-		},
-		"skip": {
-			"0": "Вам нужен полностью самостоятельно размещённый поиск на своих серверах",
-			"1": "Ваши данные ни при каких обстоятельствах не могут покидать вашу инфраструктуру",
-			"2": "Вам нужны кастомные плагины оценки на уровне Lucene",
-			"3": "У вас менее 1000 документов и Postgres ILIKE вполне достаточно"
-		}
-	},
-	"homeLiveDemo": {
-		"title": "Попробуйте поиск прямо сейчас",
-		"subtitle": "Выберите сценарий, введите запрос — исправление опечаток, фасеты и подсветка в деле.",
-		"didYouMean": "Вы имели в виду:",
-		"whyResult": "Почему этот результат?",
-		"noResults": "Нет точных совпадений — AACsearch предлагает:",
-		"openPlayground": "Открыть Playground"
-	},
-	"homeSecuritySandbox": {
-		"title": "Scoped-токены в действии",
-		"subtitle": "Переключайте ограничения — AACsearch защищает браузер, не раскрывая ваш API-ключ.",
-		"ttlLabel": "TTL токена",
-		"originLabel": "Источник запроса",
-		"tenantLabel": "Фильтр арендатора",
-		"leakLabel": "Симулировать утечку токена",
-		"outcomeAllowed": "Поиск разрешён",
-		"outcomeOrigin": "403 — Источник заблокирован",
-		"outcomeTenant": "403 — Несоответствие арендатора",
-		"outcomeExpired": "401 — Токен истёк",
-		"outcomeLeak": "Утечка безвредна — scoped-токен не может вызвать Admin API"
-	},
-	"demo": {
-		"title": "Живое демо — AACsearch Engine",
-		"description": "Попробуйте AACsearch с предварительно загруженным каталогом моды. Ищите, фильтруйте и смотрите результаты в реальном времени — без регистрации.",
-		"heading": "Живое демо",
-		"subheading": "Исследуйте предварительно загруженный каталог моды на AACsearch. Ищите, фильтруйте по категориям и оцените результаты в реальном времени."
-	},
-	"breadcrumbs": {
-		"vs": {
-			"algolia": "с Algolia",
-			"elasticsearch": "с Elasticsearch",
-			"meilisearch": "с Meilisearch",
-			"opensearch": "с OpenSearch",
-			"pinecone": "с Pinecone",
-			"solr": "с Solr",
-			"typesense": "с Typesense Cloud",
-			"weaviate": "с Weaviate"
-		},
-		"home": "Главная",
-		"compare": "Сравнение",
-		"features": "Возможности",
-		"pricing": "Цены",
-		"integrations": "Интеграции",
-		"useCases": "Сценарии",
-		"solutions": "Решения",
-		"demo": "Демо"
-	}
+  "blog": {
+    "description": "Инженерные заметки команды AACsearch",
+    "title": "Блог AACsearch",
+    "back": "Назад в блог"
+  },
+  "changelog": {
+    "description": "Что выкатили, когда и что изменилось под капотом.",
+    "title": "Changelog"
+  },
+  "contact": {
+    "description": "Связь с командой — биллинг, отчёты о безопасности, партнёрства.",
+    "form": {
+      "email": "E-mail",
+      "message": "Сообщение",
+      "name": "Имя",
+      "notifications": {
+        "error": "Не удалось отправить сообщение. Попробуйте позже.",
+        "success": "Получили — ответим в течение одного рабочего дня."
+      },
+      "submit": "Отправить сообщение"
+    },
+    "title": "Контакты"
+  },
+  "documentation": {
+    "title": "Документация"
+  },
+  "home": {
+    "hero": {
+      "badge": "v0 — открыт ранний доступ",
+      "title": "Поиск, который понимает текст, голос и изображения",
+      "subtitle": "Пусть пользователи ищут текстом, голосом, фото, картинкой или AI-диалогом — через один API, один индекс, единую аналитику и безопасный scoped-доступ.",
+      "getStarted": "Начать бесплатно",
+      "documentation": "Открыть документацию",
+      "codeCaption": "search-client.ts",
+      "new": "НОВОЕ",
+      "featureBadge": "Поиск как сервис",
+      "imageAlt": "Скриншот панели AACsearch",
+      "badgeLatency": "50ms p99",
+      "badgeSoc2": "SOC 2",
+      "badgeFulltext": "Полнотекстовый",
+      "badgeAnalytics": "Аналитика",
+      "statDocs": "Проиндексировано документов",
+      "statLatency": "Задержка поиска",
+      "statUptime": "SLA аптайма",
+      "searchPlaceholder": "Ищите что угодно текстом, голосом, фото или в диалоге...",
+      "voicePlaceholder": "Нажмите на микрофон и произнесите запрос...",
+      "chatPlaceholder": "Задайте вопрос о ваших данных...",
+      "mediaPlaceholder": "Загрузите фото или изображение для визуального поиска..."
+    },
+    "howItWorks": {
+      "title": "Как работает AACsearch",
+      "step1": {
+        "title": "Загрузите данные",
+        "description": "Определите схему и импортируйте документы через REST или SDK. Обновления индексируются менее чем за секунду.",
+        "badge": "POST /v1/indexes/{id}/documents"
+      },
+      "step2": {
+        "title": "Выдайте токен с ограниченным доступом",
+        "description": "Выпускайте короткоживущие токены с сервера. Ограничены по индексу, origin и tenant — API-ключ не покидает бэкенд.",
+        "badge": "HMAC-подпись · TTL: 1 ч · scoped"
+      },
+      "step3": {
+        "title": "Ищите из любого места",
+        "description": "Передайте токен в браузерный SDK или REST API. Полнотекстовый поиск, фасеты, мультипоиск — менее 50 мс p99.",
+        "badge": "< 50 мс p99 · фасеты · опечатки"
+      },
+      "subtitle": "Три API-вызова. Один день. Хостинг, масштабирование, безопасность."
+    },
+    "features": {
+      "title": "Что вы получаете из коробки",
+      "subtitle": "Без обещаний «в следующем квартале». Всё работает сегодня.",
+      "items": {
+        "scopedTokens": {
+          "title": "Scoped-токены",
+          "description": "Выпускайте короткоживущие токены на пользователя, индекс и набор фильтров. Безопаснее публичных API-ключей в браузере — утечка токена не даст доступ к чужому индексу."
+        },
+        "originAllowlist": {
+          "title": "Ограничение по источнику (origin allow-list)",
+          "description": "Привяжите каждый API-ключ к конкретным origin. Если ключ утёк в Twitter, он не сработает с другого домена — квота защищена."
+        },
+        "rateLimitQuota": {
+          "title": "Лимит запросов и квота",
+          "description": "Per-key лимит запросов в минуту и месячный лимит организации. Оба видны в дашборде до того, как вы упрётесь в ограничение."
+        },
+        "multiSearch": {
+          "title": "Multi-search (федеративный поиск)",
+          "description": "Несколько запросов за один round-trip. Автокомплит по коллекциям — без N отдельных запросов."
+        },
+        "reindex": {
+          "title": "Zero-downtime reindex",
+          "description": "Меняйте схему и пересобирайте индекс без перерыва в поиске. Живой трафик идёт на старую версию до атомарного переключения."
+        },
+        "enterpriseSecurity": {
+          "title": "Безопасность Enterprise-уровня",
+          "description": "SSO, audit-log, IP allow-list, выделенный кластер и SLA 99,95%. Контроли безопасности доступны с первого дня — не как дополнение."
+        }
+      }
+    },
+    "pricing": {
+      "badge": "Тарифы",
+      "title": "Платите за поиск и индексированные документы. Больше ни за что.",
+      "subtitle": "1 search-unit = 1 поисковый запрос или 1 проиндексированный документ. Отмена в любой момент.",
+      "cta": "Начать бесплатно",
+      "contact": "Связаться с продажами",
+      "perMonth": "/мес",
+      "plans": {
+        "free": {
+          "name": "Free",
+          "price": "$0",
+          "description": "Для оценки, хобби-проектов и сайд-продуктов.",
+          "features": [
+            "10 000 search-units / месяц",
+            "1 индекс",
+            "3 API-ключа",
+            "Поддержка сообщества"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$29",
+          "description": "Готов к продакшену для indie-SaaS и небольших B2B-команд.",
+          "features": [
+            "1 млн search-units / месяц",
+            "10 индексов",
+            "Неограниченные ключи и scoped-токены",
+            "Кастомный allow-list origin",
+            "Поддержка по e-mail, 1 рабочий день"
+          ],
+          "highlight": "Большинство начинает отсюда"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "Индивидуально",
+          "description": "Выделенный кластер, audit-log, SLA 99,95 %.",
+          "features": [
+            "Search-units без лимита",
+            "SSO (SAML / OIDC)",
+            "Audit-log и allow-list по IP",
+            "Выделенный регион кластера",
+            "SLA 99,95 %, подписанный DPA"
+          ]
+        }
+      },
+      "monthly": "Ежемесячно",
+      "yearly": "Ежегодно",
+      "yearlyDiscount": "Скидка 17 %",
+      "perYear": "/год"
+    },
+    "cta": {
+      "title": "Запустите поиск за один вечер",
+      "subtitle": "Free-тарифа хватит для прототипа. Upgrade через 5 минут — данные не теряются. Без карты.",
+      "primary": "Создать аккаунт",
+      "secondary": "Открыть документацию"
+    },
+    "testimonials": {
+      "title": "Результаты, которые можно измерить",
+      "subtitle": "4 500+ проиндексированных сайтов • 2.5M+ документов • 99.99% uptime",
+      "prev": "Назад",
+      "next": "Далее",
+      "prevLabel": "Предыдущий отзыв",
+      "nextLabel": "Следующий отзыв",
+      "dotLabel": "Отзыв {number}",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome",
+          "initials": "EL"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub",
+          "initials": "MW"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream",
+          "initials": "PS"
+        }
+      }
+    },
+    "logos": {
+      "title": "Внедрено в production у"
+    },
+    "trustBadges": {
+      "g2": "на G2",
+      "capterra": "на Capterra",
+      "companies": "компаний",
+      "apps": "приложений"
+    }
+  },
+  "homeUseCases": {
+    "title": "Для кого AACsearch",
+    "subtitle": "Отраслевые сценарии с конкретными примерами того, что ищут пользователи.",
+    "items": {
+      "saas": {
+        "title": "SaaS-продукты",
+        "description": "Проекты, задачи, пользователи, отчёты, настройки, объекты домена — поиск по любой entity внутри приложения.",
+        "searchExamples": "заказ #1042, пользователь @ivanov, отчёт по выручке, настройки webhook, инвойс за март"
+      },
+      "docs": {
+        "title": "Документация / Developer portals",
+        "description": "API-методы, SDK-функции, коды ошибок, параметры, гайды по миграции, release notes.",
+        "searchExamples": "POST /collections, createIndex(), error 401, параметр apiKey, гайды по миграции v2→v3"
+      },
+      "ecommerce": {
+        "title": "E-commerce / Каталоги",
+        "description": "Товары, артикулы, бренды, категории, атрибуты, фасеты — faceted search с фильтрами под 50ms на 1M+ товаров.",
+        "searchExamples": "кроссовки Nike размер 42, iPhone 15 Pro, бренд Samsung в категории 'TV', товары в наличии до $500"
+      },
+      "internal": {
+        "title": "Internal tools / Knowledge base",
+        "description": "Документы, политики, инциденты, RFC, владельцы, runbooks — semantic + full-text гибрид.",
+        "searchExamples": "политика удалённой работы, инцидент INC-2024-04, playbook по CRITICAL, владелец сервиса billing"
+      },
+      "marketplace": {
+        "title": "Маркетплейсы",
+        "description": "Объявления, продавцы, категории, география, мультиязычность — тысячи арендаторов в одном кластере.",
+        "searchExamples": "квартиры в центре до 100k, продавец «TechStore», категория Electronics, товары с доставкой за 1 день"
+      }
+    }
+  },
+  "homeWhatUsersSearch": {
+    "title": "Что ищут ваши пользователи",
+    "subtitle": "Ответ на вопрос «подойдёт ли это моему кейсу» через то, что ваши пользователи реально печатают в строке поиска.",
+    "items": {
+      "entity": {
+        "title": "Точные сущности",
+        "description": "ID заказа, артикул товара, код ошибки, имя пользователя или документа. AACsearch находит точное совпадение быстрее Ctrl+F.",
+        "icon": "search"
+      },
+      "fuzzy": {
+        "title": "Нечёткие запросы",
+        "description": "Пользователи ошибаются в названиях, пишут транслитом или сокращают. Typo tolerance и prefix search исправляют до релевантного результата.",
+        "icon": "pencil"
+      },
+      "category": {
+        "title": "Навигация по категориям",
+        "description": "Faceted-фильтры: бренд + цена + наличие + размер. Multi-search по коллекциям за один round-trip.",
+        "icon": "filter"
+      },
+      "answer": {
+        "title": "Ответы на естественном языке",
+        "description": "Для docs и knowledge base — search-first, answer-augmented UX. Гибрид: список результатов + ответ ИИ с цитатами.",
+        "icon": "message-square"
+      },
+      "autocomplete": {
+        "title": "Автокомплит и предложения",
+        "description": "Показывайте релевантные подсказки с первых символов. Keyboard navigation, recent searches, pinned suggestions.",
+        "icon": "forward"
+      },
+      "noResults": {
+        "title": "Что делать при нуле результатов",
+        "description": "No-result recovery: предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит с пустыми руками.",
+        "icon": "search-x"
+      }
+    }
+  },
+  "homeSearchUX": {
+    "title": "Как выглядит хороший search UX",
+    "subtitle": "Не backend-фичи, а то, что видит пользователь. Autocomplete, typo tolerance, facets, highlighted matches — из коробки.",
+    "items": {
+      "autocomplete": {
+        "title": "Autocomplete + suggestions",
+        "description": "Подсказки с первых символов. Keyboard navigation, recent searches, pinned items."
+      },
+      "typo": {
+        "title": "Typo tolerance",
+        "description": "«Нокиа» найдёт Nokia. «кРософки» найдёт кроссовки. 1–2 опечатки на слово — допустимо по умолчанию."
+      },
+      "facets": {
+        "title": "Faceted filters",
+        "description": "Фильтры по бренду, цене, категории, наличию — с подсчётом количества результатов для каждой опции."
+      },
+      "highlight": {
+        "title": "Highlighted matches",
+        "description": "Совпадающие фрагменты подсвечиваются в результатах. Пользователь сразу видит, почему вернулся именно этот документ."
+      },
+      "grouped": {
+        "title": "Группировка результатов",
+        "description": "Multi-search по коллекциям: товары отдельно, статьи отдельно, заказы отдельно — всё в одном запросе."
+      },
+      "recovery": {
+        "title": "No-result recovery",
+        "description": "Пустой результат → предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит."
+      }
+    }
+  },
+  "homeRelevance": {
+    "title": "Релевантность и контроль выдачи",
+    "subtitle": "Быстрый поиск без контроля качества — не убедителен. Даём инструменты, чтобы вы настраивали релевантность под свой кейс.",
+    "ranking": {
+      "title": "Управление ранжированием",
+      "description": "Field weights, exact match boost, prefix vs partial match. Настройте, какие поля влияют на порядок выдачи."
+    },
+    "synonyms": {
+      "title": "Синонимы и стоп-слова",
+      "description": "«ноутбук» = «laptop», «кеды» = «кроссовки». Исключите незначащие слова из поиска."
+    },
+    "curations": {
+      "title": "Правила бизнеса",
+      "description": "Закрепите конкретные результаты вверх выдачи. Пин слабого товара или промо-акции — без переиндексации."
+    },
+    "personalization": {
+      "title": "Персонализация",
+      "description": "Scoped relevance по ролям, группам или арендаторам. Каждый tenant видит свою выдачу."
+    },
+    "abTesting": {
+      "title": "A/B-тестирование",
+      "description": "Сравните два набора правил релевантности на живом трафике. Метрики: CTR, zero-result rate, конверсия."
+    }
+  },
+  "homeAnalytics": {
+    "title": "Поисковая аналитика — улучшайте продукт с помощью данных",
+    "subtitle": "Search — это не «настроили и забыли». Аналитика показывает, что ищут, что не находят и как улучшить выдачу.",
+    "items": {
+      "topQueries": {
+        "title": "Top queries",
+        "description": "Самые частые запросы. Узнайте, что пользователи ищут больше всего, без опросов."
+      },
+      "noResults": {
+        "title": "Zero-result queries",
+        "description": "Запросы, которые ничего не нашли. Каждый — возможность добавить контент или настроить синоним."
+      },
+      "ctr": {
+        "title": "CTR по позиции",
+        "description": "Какой процент кликов получает первая позиция? Вторая? Где падает вовлечение?"
+      },
+      "filterUsage": {
+        "title": "Использование фильтров",
+        "description": "Какие фасеты популярны? Какие фильтры никто не трогает? Упростите UX на основе данных."
+      },
+      "conversion": {
+        "title": "Конверсия после поиска",
+        "description": "Сколько сессий после поиска привели к целевому действию — покупке, просмотру, отправке формы."
+      },
+      "quota": {
+        "title": "Потребление по ключам",
+        "description": "Per-key и per-tenant аналитика использования. Кто превышает лимиты, где аномалии."
+      }
+    }
+  },
+  "homeSecurity": {
+    "title": "Безопасность и multi-tenant архитектура",
+    "subtitle": "Поиск из браузера = токены, которые сужают права, а не расширяют. Изоляция арендаторов на каждом запросе.",
+    "items": {
+      "scopedTokens": {
+        "title": "Short-lived scoped-токены",
+        "description": "HMAC-подписанные токены привязаны к индексу, origin и TTL. Утечка токена — доступ только к одному индексу на час."
+      },
+      "tenantIsolation": {
+        "title": "Изоляция арендаторов",
+        "description": "Каждый поисковый запрос ограничен ID организации. Архитектурно невозможно прочитать данные другого tenant."
+      },
+      "originRestriction": {
+        "title": "Ограничение по источнику",
+        "description": "Привяжите каждый API-ключ к конкретным origin. Утёкший в консоль браузера ключ не сработает с другого домена."
+      },
+      "sso": {
+        "title": "SSO + Audit log",
+        "description": "SAML/OIDC для enterprise. Каждое административное действие записывается с меткой времени и исполнителем."
+      },
+      "compliance": {
+        "title": "Compliance и DPA",
+        "description": "SOC 2, шифрование в покое и транзите, выделенные регионы кластера. Подписанный DPA для GDPR/CCPA."
+      },
+      "sla": {
+        "title": "SLA 99.95%",
+        "description": "Договорная гарантия доступности. Incident response, резервное копирование, восстановление."
+      }
+    }
+  },
+  "homeQuickstart": {
+    "title": "Интеграция за 15 минут",
+    "subtitle": "Создайте индекс, загрузите документы, выпустите токен, выполните поиск. Всё.",
+    "steps": {
+      "create": {
+        "title": "1. Создайте индекс",
+        "code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
+      },
+      "index": {
+        "title": "2. Загрузите документы",
+        "code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Кроссовки Nike\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Кроссовки Adidas\", \"price\": 7500}\n]"
+      },
+      "token": {
+        "title": "3. Выпустите scoped-токен",
+        "code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
+      },
+      "search": {
+        "title": "4. Ищите из браузера",
+        "code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"кроссовки Nike\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
+      }
+    },
+    "cta": "Посмотреть полную документацию"
+  },
+  "homeAiAnswers": {
+    "title": "AI-answers поверх поиска",
+    "subtitle": "Search-first, answer-augmented UX. Для документации, knowledge base и поддержки — ответы с цитатами, а не чёрный ящик.",
+    "items": {
+      "hybrid": {
+        "title": "Keyword + semantic hybrid",
+        "description": "Точность ключевых слов + семантическое понимание. Настраиваемые веса для каждого сценария."
+      },
+      "citedAnswers": {
+        "title": "Ответы с цитатами",
+        "description": "Вместо чёрного ящика — ответ ИИ со ссылками на источники. Пользователь видит, откуда взялся ответ."
+      },
+      "rag": {
+        "title": "RAG-ready pipeline",
+        "description": "Подключите AACsearch к вашему RAG-пайплайну. Векторные эмбеддинги генерируются автоматически."
+      },
+      "searchFirst": {
+        "title": "Search-first UX",
+        "description": "Сначала результаты, потом ответ. Пользователь может перейти к источнику или прочитать сгенерированный ответ."
+      }
+    }
+  },
+  "homeDocsEcosystem": {
+    "title": "SDK, API и ecosystem",
+    "subtitle": "TypeScript SDK, REST API, Next.js / React-компоненты, webhooks и OpenAPI-спецификация. Никакой магии — только документированные контракты.",
+    "items": {
+      "sdk": {
+        "title": "TypeScript SDK",
+        "description": "Типизированный browser SDK для React, Next.js, Vue и vanilla JS. Автокомплит типов в вашей IDE."
+      },
+      "rest": {
+        "title": "REST API",
+        "description": "OpenAPI-спецификация доступна для генерации клиентов. Все операции — через HTTP."
+      },
+      "webhooks": {
+        "title": "Webhooks",
+        "description": "События индексирования, ошибки синхронизации, превышение квоты — подпишитесь на изменения в реальном времени."
+      },
+      "frameworks": {
+        "title": "Next.js / React",
+        "description": "SearchProvider, UseSearch hook, готовые компоненты для React и Next.js App Router."
+      },
+      "migration": {
+        "title": "Миграция",
+        "description": "Zero-downtime reindex из коробки. Переходите с Algolia, Meilisearch или Elasticsearch — физический дамп индекса."
+      },
+      "playground": {
+        "title": "Playground",
+        "description": "Интерактивная консоль в дашборде. Пробуйте запросы, смотрите результаты, копируйте готовый код."
+      }
+    }
+  },
+  "homeTco": {
+    "title": "AACsearch vs Algolia — сравниваем реальную стоимость",
+    "subtitle": "Algolia считает каждую запись отдельно. На 1M поисковых запросов в месяц AACsearch стоит в 5 раз меньше.",
+    "rows": {
+      "priceModel": {
+        "metric": "Модель цены",
+        "algolia": "$0.50 / 1 000 запросов + $0.50 / запись / мес",
+        "aac": "$0.10 / 1 000 search-units. 1 unit = 1 поиск ИЛИ 1 документ."
+      },
+      "oneMillion": {
+        "metric": "1M запросов / мес + 10K док-в",
+        "algolia": "$500 (поиск) + $5 000 (записи) = $5 500 / мес",
+        "aac": "$100 / мес"
+      },
+      "tenMillion": {
+        "metric": "10M запросов / мес + 100K док-в",
+        "algolia": "$5 000 (поиск) + $50 000 (записи) = $55 000 / мес",
+        "aac": "$1 000 / мес"
+      },
+      "overage": {
+        "metric": "Overage / превышение",
+        "algolia": "Автоматические overage по стандартной цене",
+        "aac": "Soft cap: предупреждение в дашборде. Hard cap: блокировка до нового цикла."
+      },
+      "records": {
+        "metric": "Плата за записи",
+        "algolia": "Каждая запись стоит денег каждый месяц",
+        "aac": "Заплатили один раз при индексации. Далее — бесплатно."
+      },
+      "zeroDowntime": {
+        "metric": "Zero-downtime reindex",
+        "algolia": "Только с планом Enterprise",
+        "aac": "Из коробки на всех тарифах"
+      }
+    },
+    "cta": "Посчитать свою экономию →"
+  },
+  "homeMigration": {
+    "title": "Миграция из Algolia, Meilisearch или Elasticsearch — за 1 час",
+    "subtitle": "Zero-downtime reindex, физический дамп индекса или прямая синхронизация. Интеграцию можно запустить, не останавливая текущий поиск.",
+    "steps": {
+      "export": {
+        "title": "1. Экспорт индекса",
+        "description": "Экспортируйте текущий индекс через API вашего провайдера. AACsearch принимает JSON, NDJSON и CSV."
+      },
+      "import": {
+        "title": "2. Импорт в AACsearch",
+        "description": "POST-запрос к /collections — индексация начинается немедленно. Можно из дашборда, CLI или API."
+      },
+      "switch": {
+        "title": "3. Переключение без простоя",
+        "description": "Живой поиск идёт на старый провайдер. Новый индекс строится параллельно. Атомарное переключение алиаса."
+      },
+      "monitor": {
+        "title": "4. Мониторинг и откат",
+        "description": "Сравните метрики до/после: latency, CTR, zero-result rate. Если что-то пошло не так — откат за 1 секунду."
+      }
+    },
+    "cta": "Запустить миграцию"
+  },
+  "homePricingFaq": {
+    "title": "Вопросы о тарифах и unit-экономике",
+    "items": {
+      "unit": {
+        "q": "Что считается одним search-unit?",
+        "a": "1 поисковый запрос ИЛИ 1 проиндексированный документ. Апдейт документа = 1 unit. Reindex не тарифицируется — только финальная запись в новый индекс."
+      },
+      "overage": {
+        "q": "Что происходит после превышения лимита?",
+        "a": "Soft cap: вы получаете предупреждение в дашборде и по e-mail. Hard cap: поиск блокируется до начала нового тарифного периода. Никаких сюрпризов в счете."
+      },
+      "comparison": {
+        "q": "Как AACsearch сравнивается с Algolia по цене?",
+        "a": "Algolia взимает плату за каждую запись каждый месяц. На 1M запросов + 10K документов Algolia стоит ~$5 500/мес, AACsearch — $100/мес. На 10M запросов разница достигает 50x."
+      },
+      "free": {
+        "q": "Что входит в бесплатный тариф?",
+        "a": "10 000 search-units/мес, 1 индекс, 3 API-ключа. Хватит для прототипа, MVP или небольшого сайд-проекта."
+      },
+      "migration": {
+        "q": "Как перенести данные с другого провайдера?",
+        "a": "Zero-downtime reindex из коробки. Экспортируйте индекс → импортируйте в AACsearch → переключите алиас. Всё онлайн, без перерыва в поиске."
+      }
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Страница не найдена",
+    "goToDashboard": "В дашборд",
+    "goToHomepage": "На главную"
+  },
+  "common": {
+    "footer": {
+      "blog": "Блог",
+      "features": "Возможности",
+      "pricing": "Тарифы",
+      "privacyPolicy": "Конфиденциальность",
+      "termsAndConditions": "Условия",
+      "tagline": "Поиск как сервис — скоупированные токены, белые списки источников и типизированный SDK.",
+      "legal": "Правовая информация",
+      "status": "Статус",
+      "support": "Поддержка",
+      "trust": "Доверие",
+      "brand": "Бренд"
+    },
+    "menu": {
+      "blog": "Блог",
+      "changelog": "Changelog",
+      "contact": "Контакты",
+      "dashboard": "Дашборд",
+      "docs": "Документация",
+      "features": "Возможности",
+      "login": "Войти",
+      "pricing": "Тарифы",
+      "product": "Продукт",
+      "solutions": "Решения",
+      "resources": "Ресурсы",
+      "company": "Компания",
+      "enterprise": "Энтерпрайз",
+      "roadmap": "Дорожная карта",
+      "useCases": "Сценарии",
+      "integrations": "Интеграции",
+      "customers": "Клиенты",
+      "compare": "Сравнение",
+      "aiSearch": "ИИ-поиск",
+      "developers": "Разработчикам",
+      "faq": "FAQ",
+      "glossary": "Глоссарий",
+      "about": "О нас",
+      "security": "Безопасность",
+      "careers": "Вакансии",
+      "partners": "Партнёры",
+      "press": "Пресса"
+    },
+    "aria": {
+      "menu": "Меню",
+      "language": "Язык"
+    },
+    "tableOfContents": {
+      "title": "На этой странице"
+    },
+    "colorMode": {
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    }
+  },
+  "pricingPage": {
+    "title": "Простая тарификация по объёму",
+    "description": "Платите только за поисковые запросы и проиндексированные документы. Никаких скрытых платежей. Отмена в любой момент."
+  },
+  "securityPage": {
+    "title": "Безопасность на каждом уровне",
+    "description": "API-ключи хешируются и никогда не хранятся в открытом виде. Ограниченные токены сужают права, но не расширяют. Изоляция арендаторов при каждом запросе."
+  },
+  "security": {
+    "title": "Многоуровневая защита",
+    "subtitle": "Каждый запрос проходит аутентификацию, ограничение запросов, проверку квоты и изоляцию арендаторов.",
+    "items": {
+      "keyHashing": {
+        "title": "Хеширование API-ключей",
+        "description": "Все API-ключи хешируются SHA-256 и хранятся в виде дайджестов. Открытый текст отображается только один раз при создании."
+      },
+      "scopedTokens": {
+        "title": "Ограниченные токены",
+        "description": "HMAC-подписанные токены привязаны к конкретному индексу, источнику и TTL. Они сужают права — никогда не расширяют."
+      },
+      "originAllowlist": {
+        "title": "Список разрешённых источников",
+        "description": "Привяжите каждый API-ключ к конкретным источникам. Утечка ключа не позволит исчерпать вашу квоту."
+      },
+      "rateLimiting": {
+        "title": "Ограничение запросов",
+        "description": "Серверное ограничение по ключу в минуту. Использование и лимиты видны в дашборде до их достижения."
+      },
+      "tenantIsolation": {
+        "title": "Изоляция арендаторов",
+        "description": "Каждый поисковый запрос ограничен ID вашей организации. Межорганизационные чтения архитектурно невозможны."
+      },
+      "auditLog": {
+        "title": "Журнал аудита",
+        "description": "Каждое административное действие записывается с меткой времени, исполнителем и изменением. Доступно в Enterprise-планах."
+      }
+    }
+  },
+  "enterprisePage": {
+    "title": "AACsearch для предприятий",
+    "description": "Выделенная инфраструктура, SSO, журнал аудита, SLA 99,95% и подписанный DPA — всё, что требуют команды по безопасности и соответствию."
+  },
+  "enterprise": {
+    "title": "Создан для регулируемых команд",
+    "subtitle": "Безлимитный поиск, выделенный кластер, кастомные интеграции. Свяжитесь с нами, и мы составим план под ваши требования.",
+    "items": {
+      "sso": {
+        "title": "SSO (SAML / OIDC)",
+        "description": "Подключите ваш IdP — Okta, Azure AD, Google Workspace или любой SAML 2.0 / OIDC-совместимый провайдер."
+      },
+      "dedicatedCluster": {
+        "title": "Выделенный кластер",
+        "description": "Ваши индексы работают на изолированной инфраструктуре в выбранном регионе. Без разделяемых поисковых узлов."
+      },
+      "auditLog": {
+        "title": "Журнал аудита + список IP",
+        "description": "Каждое административное действие записывается с меткой времени и исполнителем. Ограничьте доступ конкретным диапазоном IP."
+      },
+      "sla": {
+        "title": "SLA 99,95% + подписанный DPA",
+        "description": "Договорная гарантия времени работы и подписанное Соглашение об обработке данных, покрывающее GDPR и CCPA."
+      },
+      "prioritySupport": {
+        "title": "Приоритетная поддержка",
+        "description": "Выделенный Slack-канал. Первый ответ менее чем за 4 часа. Именной технический менеджер по работе с аккаунтом."
+      },
+      "customIntegrations": {
+        "title": "Кастомные интеграции",
+        "description": "Мы подключаем ваш CMS, ERP или проприетарный источник данных. Connector API включён; кастомные коннекторы — по запросу."
+      }
+    }
+  },
+  "aboutPage": {
+    "title": "О компании AACsearch",
+    "description": "Мы строим поисковую инфраструктуру для следующего поколения веб-приложений.",
+    "mission": {
+      "label": "Наша миссия",
+      "quote": "Поиск должен быть быстрым, релевантным и доступным для каждого разработчика.",
+      "body": "AACsearch была основана с простой убеждённостью: отличный поиск не должен требовать команды инженеров для обслуживания или целое состояние для эксплуатации."
+    },
+    "stats": {
+      "searches": "10M+",
+      "searchesLabel": "Поисков в день",
+      "companies": "500+",
+      "companiesLabel": "Компаний доверяют нам",
+      "uptime": "99,9%",
+      "uptimeLabel": "SLA доступности",
+      "latency": "<50мс",
+      "latencyLabel": "Средняя задержка"
+    },
+    "why": {
+      "title": "Почему AACsearch",
+      "items": {
+        "speed": {
+          "title": "Молниеносная скорость",
+          "description": "Ответы на поисковые запросы менее чем за 50 мс в любом масштабе, на базе нашей распределённой поисковой инфраструктуры."
+        },
+        "simple": {
+          "title": "Сначала разработчик",
+          "description": "Интуитивный REST API, SDK для всех основных языков программирования и понятная панель управления."
+        },
+        "open": {
+          "title": "Прозрачное ценообразование",
+          "description": "Никаких скрытых платежей, никакой привязки. Платите только за то, что используете, с чёткими и предсказуемыми ценами."
+        }
+      }
+    }
+  },
+  "partnersPage": {
+    "title": "Станьте партнёром AACsearch",
+    "description": "Развивайте свой бизнес, интегрируя, перепродавая или создавая продукты на основе AACsearch. Присоединяйтесь к нашей партнёрской экосистеме."
+  },
+  "partners": {
+    "title": "Расти вместе с AACsearch",
+    "subtitle": "Мы ищем агентства, консультантов и технологические компании, которые хотят интегрировать поиск в свои предложения.",
+    "items": {
+      "technology": {
+        "title": "Технологические партнёры",
+        "description": "Создавайте нативные интеграции для вашей платформы. Совместный маркетинг, документация и техническая поддержка."
+      },
+      "implementation": {
+        "title": "Партнёры по внедрению",
+        "description": "Агентства и консультанты, внедряющие AACsearch для своих клиентов. Разделение дохода и регистрация сделок."
+      },
+      "reseller": {
+        "title": "Реселлеры",
+        "description": "Перепродавайте AACsearch под своим брендом или включайте в свой продукт. Доступны варианты белой метки."
+      },
+      "cloud": {
+        "title": "Облачный маркетплейс",
+        "description": "Доступно в AWS Marketplace и Azure Marketplace. Транзакции через ваш существующий облачный бюджет."
+      },
+      "benefits": {
+        "title": "Преимущества партнёрства",
+        "description": "Партнёрский портал, поддержка совместного маркетинга, выделенный менеджер канала, NFR-лицензии и приоритетный SLA."
+      },
+      "apply": {
+        "title": "Подать заявку",
+        "description": "Заполните форму, и менеджер по партнёрству свяжется с вами в течение двух рабочих дней. Эксклюзивность не требуется."
+      }
+    }
+  },
+  "developersPage": {
+    "title": "Создано для Разработчиков",
+    "description": "Чистый API, хорошая документация и SDK, которые не мешают работе. AACsearch интегрируется за минуты, а не за дни.",
+    "hero": {
+      "badge": "Developer-First",
+      "codeCaption": "Добавьте поиск в приложение за 3 строки"
+    },
+    "features": {
+      "title": "Всё необходимое для внедрения поиска",
+      "api": {
+        "title": "REST API",
+        "description": "Чистый и интуитивный REST API с полной спецификацией OpenAPI 3.1. Каждый эндпоинт задокументирован с примерами."
+      },
+      "sdks": {
+        "title": "Официальные SDK",
+        "description": "SDK для JavaScript и TypeScript. Сообщественные SDK для Python, Go и PHP."
+      },
+      "browserSdk": {
+        "title": "Браузерный SDK",
+        "description": "Лёгкий браузерный виджет 14КБ. Shadow DOM, 5 языков, аналитика встроена. Один тег script."
+      },
+      "connectorApi": {
+        "title": "Connector API",
+        "description": "API из 7 эндпоинтов для интеграций с CMS. Модули для PrestaShop и Bitrix24 включены из коробки."
+      },
+      "openapi": {
+        "title": "Спецификация OpenAPI",
+        "description": "Полная спецификация OpenAPI 3.1 по адресу /api/v1/openapi.json. Автоматически генерируйте клиентские библиотеки на любом языке."
+      },
+      "dashboard": {
+        "title": "Аналитическая Панель",
+        "description": "Аналитика поиска, отслеживание нулевых результатов, топ запросов и CTR — всё в вашей панели управления."
+      }
+    },
+    "cta": {
+      "title": "Начните разработку за несколько минут",
+      "description": "Бесплатный тарифный план включён. Банковская карта не нужна."
+    }
+  },
+  "caseStudiesPage": {
+    "title": "Customer Case Studies",
+    "description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+    "readCaseStudy": "Read case study",
+    "cta": {
+      "title": "Want to be our next case study?",
+      "description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
+    }
+  },
+  "customersPage": {
+    "title": "Любимый разработчиками, доверенный бизнесом",
+    "description": "Присоединяйтесь к сотням компаний, использующих AACsearch для быстрого и релевантного поиска.",
+    "stats": {
+      "companies": "500+",
+      "companiesLabel": "Компаний по всему миру",
+      "searches": "10M+",
+      "searchesLabel": "Поисковых запросов в день",
+      "uptime": "99,9%",
+      "uptimeLabel": "Доступность платформы",
+      "rating": "4,9/5",
+      "ratingLabel": "Средняя оценка"
+    },
+    "testimonials": {
+      "title": "Real results from real customers",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream"
+        }
+      }
+    },
+    "caseStudies": {
+      "title": "Read their full stories",
+      "description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
+      "readFullStudy": "Read full case study →",
+      "items": {
+        "nordikHome": {
+          "title": "NordikHome: 5x Cost Reduction",
+          "excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
+        },
+        "agencyHub": {
+          "title": "AgencyHub: Multi-Tenant Search",
+          "excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
+        },
+        "devStream": {
+          "title": "DevStream: Zero DevOps, 10x Faster",
+          "excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
+        }
+      }
+    },
+    "logos": {
+      "title": "Доверяют команды в"
+    },
+    "cta": {
+      "title": "Присоединяйтесь к сотням компаний",
+      "description": "Начните бесплатный пробный период сегодня — карта не нужна."
+    }
+  },
+  "aiSearchPage": {
+    "title": "Поиск на основе ИИ",
+    "description": "Выйдите за рамки ключевых слов. AACsearch поддерживает векторный, гибридный и семантический поиск из коробки — без знаний ML.",
+    "badge": "В продакшене",
+    "modes": {
+      "title": "Три режима поиска, одна платформа",
+      "vector": {
+        "title": "Векторный поиск",
+        "description": "Находите семантически похожие результаты, даже если точные ключевые слова не совпадают. Использует модели эмбеддингов для понимания смысла."
+      },
+      "hybrid": {
+        "title": "Гибридный поиск",
+        "description": "Сочетайте точность ключевых слов с семантическим пониманием. Настраиваемые веса позволяют тонко настроить релевантность под ваш сценарий."
+      },
+      "semantic": {
+        "title": "Семантическое переранжирование",
+        "description": "Переранжируйте результаты с помощью ИИ, чтобы наиболее релевантные попадали наверх. Улучшает CTR без изменений в индексировании."
+      }
+    },
+    "useCases": {
+      "title": "Для любого сценария",
+      "ecommerce": {
+        "title": "Электронная коммерция",
+        "description": "Показывайте нужные товары по запросам вроде «удобные кроссовки для бега» даже без точного совпадения ключевых слов."
+      },
+      "docs": {
+        "title": "Документация",
+        "description": "Дайте пользователям искать ответы на естественном языке по всей базе знаний."
+      },
+      "knowledge": {
+        "title": "RAG-пайплайны",
+        "description": "Подключите AACsearch к вашему RAG-пайплайну для точных и обоснованных ответов ИИ."
+      },
+      "marketplace": {
+        "title": "Маркетплейс",
+        "description": "Соединяйте покупателей и продавцов через семантическое сходство вместо жёстких фильтров по ключевым словам."
+      }
+    },
+    "howItWorks": {
+      "title": "Как это работает",
+      "steps": {
+        "upload": {
+          "title": "Загрузите данные",
+          "description": "Подключите CMS, базу данных или загрузите файлы через API."
+        },
+        "model": {
+          "title": "Выберите модель эмбеддингов",
+          "description": "Используйте встроенные модели или подключите собственные эмбеддинги OpenAI."
+        },
+        "index": {
+          "title": "Векторы создаются автоматически",
+          "description": "AACsearch генерирует и хранит векторные эмбеддинги в процессе индексирования."
+        },
+        "query": {
+          "title": "Запросы на естественном языке",
+          "description": "Ваши пользователи ищут в естественном стиле — AACsearch возвращает семантически наиболее релевантные результаты."
+        }
+      }
+    }
+  },
+  "about": {
+    "title": "Почему мы создали AACsearch",
+    "subtitle": "Поисковая инфраструктура — это сложно. Управляемые сервисы дороги и непрозрачны. Мы создали то, чего сами давно хотели.",
+    "items": {
+      "mission": {
+        "title": "Миссия",
+        "description": "Сделать поиск производственного уровня доступным для любой команды — от двухчеловечного стартапа до регулируемого предприятия — без необходимости держать отдельного инженера по поиску."
+      },
+      "technology": {
+        "title": "Технология",
+        "description": "Построен на базе высокопроизводительного поискового движка. Мы добавляем мультиарендность, управление API-ключами, аналитику и управляющий контрольный план поверх."
+      },
+      "openCore": {
+        "title": "Без привязки к вендору",
+        "description": "Ваши данные всегда принадлежат вам. Экспортируйте индексы, переходите между тарифами или на уровень Enterprise. Никаких проприетарных форматов данных, никаких затрат на миграцию."
+      },
+      "team": {
+        "title": "Команда",
+        "description": "Небольшая, сфокусированная команда. Мы поставляли поиск для B2B SaaS-компаний, платформ электронной коммерции и инструментов для разработчиков. Мы сами используем то, что создаём."
+      },
+      "values": {
+        "title": "Ценности",
+        "description": "Простота важнее изощрённости. Задокументированное поведение важнее магии. API, с которым junior-разработчик разберётся в первый день, а senior сможет положиться на него в продакшне."
+      },
+      "roadmap": {
+        "title": "Дорожная карта",
+        "description": "Публичная дорожная карта, формируемая голосованием пользователей. Мы выпускаем обновления инкрементально — никаких масштабных релизов. Changelog обновляется с каждым деплоем."
+      }
+    }
+  },
+  "careers": {
+    "title": "Работайте над поисковой инфраструктурой",
+    "subtitle": "Небольшая команда, значимая работа. Каждый инженер выпускает изменения в продакшн. Никаких комитетов, никаких сорванных спринтов.",
+    "openRoles": "Открытые вакансии",
+    "noRoles": "Сейчас открытых вакансий нет — но мы всегда рады исключительным кандидатам.",
+    "applyPrompt": "Напишите нам на",
+    "applyEmail": "jobs@aacsearch.com",
+    "items": {
+      "culture": {
+        "title": "Культура",
+        "description": "Remote-first, асинхронный подход по умолчанию. Мы всё фиксируем письменно. Встречи редки и проводятся с повесткой. Результаты важнее часов."
+      },
+      "engineering": {
+        "title": "Разработка",
+        "description": "TypeScript, Next.js, AACsearch, Prisma, Hono. Стек современный и документированный. Вы будете владеть фичами от начала до конца."
+      },
+      "growth": {
+        "title": "Рост",
+        "description": "Мы на раннем этапе. У вас будет непропорционально большое влияние. Кодовая база чистая — никакого технического долга, с которым придётся разбираться."
+      },
+      "benefits": {
+        "title": "Льготы",
+        "description": "Конкурентная зарплата, привязанная к вашему местоположению. Доля в компании. Бюджет на домашний офис. Никакого микроменеджмента."
+      },
+      "learning": {
+        "title": "Обучение",
+        "description": "Бюджет на конференции. Оплачиваемые книги и курсы. Время на исследование новых идей, полезных для продукта."
+      },
+      "hiring": {
+        "title": "Процесс найма",
+        "description": "Два звонка и оплачиваемое тестовое задание. Мы уважаем ваше время. Решение в течение двух недель с первого контакта."
+      }
+    }
+  },
+  "careersPage": {
+    "title": "Карьера в AACsearch",
+    "description": "Небольшая команда, создающая поисковую инфраструктуру для нового поколения программных продуктов. Remote-first."
+  },
+  "customers": {
+    "title": "Нам доверяют создатели продуктов",
+    "subtitle": "Ранние последователи, которые заменили Algolia, Elasticsearch или самописные решения — и перестали беспокоиться о поисковой инфраструктуре.",
+    "items": {
+      "ecommerce": {
+        "title": "Платформа электронной коммерции",
+        "description": "Мы отказались от Algolia после третьего неожиданного счёта. AACsearch стоит фиксированную сумму каждый месяц. Миграция заняла три дня. Поиск стал лучше, чем раньше.",
+        "role": "CTO, SaaS для e-commerce на 15 человек"
+      },
+      "saasFounder": {
+        "title": "Основатель B2B SaaS",
+        "description": "Нам нужен был поиск с изоляцией по арендаторам без построения собственной инфраструктуры. Токены с ограниченной областью AACsearch позволили нам выпустить продукт за выходные вместо целого спринта.",
+        "role": "Основатель, SaaS для управления проектами"
+      },
+      "devTools": {
+        "title": "Компания разработчиков инструментов",
+        "description": "MCP Server позволяет нашим AI-функциям программно выполнять поиск по пользовательским данным. Одна интеграция открыла три новые функции продукта.",
+        "role": "VP Engineering, стартап инструментов для разработчиков"
+      },
+      "enterprise": {
+        "title": "Корпоративная платформа",
+        "description": "Журнал аудита, SSO и выделенный кластер были обязательными требованиями. AACsearch Enterprise закрыл все три пункта. SLA закреплён в контракте.",
+        "role": "Head of Security, корпоративный SaaS"
+      },
+      "marketplace": {
+        "title": "Стартап-маркетплейс",
+        "description": "Multi-search позволяет нам выполнять запросы по товарам, продавцам и контенту в одном запросе. Аналитика показывает нам точно, где пользователи уходят.",
+        "role": "Lead Engineer, двусторонний маркетплейс"
+      },
+      "agency": {
+        "title": "Цифровое агентство",
+        "description": "Мы разворачиваем AACsearch для клиентов. Тарифы Enterprise включают выделенную инфраструктуру для команд с жёсткими требованиями к хранению данных.",
+        "role": "Технический директор, цифровое агентство"
+      }
+    }
+  },
+  "roadmap": {
+    "title": "Куда мы движемся",
+    "subtitle": "Инкрементально, публично и предсказуемо — в лучшем смысле этого слова. Никаких масштабных релизов — только последовательная поставка.",
+    "shipped": "Готово",
+    "inProgress": "В работе",
+    "planned": "Запланировано",
+    "seeChangelog": "Смотреть changelog →",
+    "items": {
+      "searchCore": {
+        "title": "Ядро поиска v0.x",
+        "description": "Одиночный upsert документа, мульти-поиск, Browser SDK, ограниченные токены, список разрешённых источников, лимит запросов, квоты, переиндексация без простоев, ingest с приоритетом БД.",
+        "status": "shipped"
+      },
+      "marketing": {
+        "title": "Маркетинговый сайт v0.5",
+        "description": "Публичный маркетинговый сайт с ценами, возможностями, интеграциями, безопасностью, сценариями использования и корпоративными страницами на 5 языках.",
+        "status": "shipped"
+      },
+      "connectors": {
+        "title": "Коннекторы для CMS R2",
+        "description": "Модули для PrestaShop 8.x и 1С-Битрикс. Connector API с рукопожатием, полной и дельта-синхронизацией, диагностикой и keepalive.",
+        "status": "shipped"
+      },
+      "knowledge": {
+        "title": "Модуль знаний R2.5",
+        "description": "RAG и GraphRAG для документов. 9 oRPC-процедур, 7 Prisma-моделей, загрузка файлов, чанкинг, поиск.",
+        "status": "shipped"
+      },
+      "metering": {
+        "title": "Тарификация по единицам поиска v0.6",
+        "description": "Пополнение кошелька через Точку, тарификация по единицам поиска в зависимости от плана, аналитический конвейер, дашборд кошелька.",
+        "status": "inProgress"
+      },
+      "billing": {
+        "title": "Биллинг и платежи",
+        "description": "Подписки Stripe, портал клиента, счета, мультивалютная поддержка с Точка Банк для российских платежей.",
+        "status": "shipped"
+      },
+      "analytics": {
+        "title": "Аналитика и дашборды",
+        "description": "Аналитика запросов в реальном времени, метрики использования, неудачные запросы, отслеживание CTR и пользовательские дашборды.",
+        "status": "inProgress"
+      },
+      "widget": {
+        "title": "Виджет и Embed SDK",
+        "description": "Готовый виджет поиска с модалкой Cmd+K, плавающей кнопкой и полноэкранным режимом. Сборки для React, Vue, Angular и ванильного JS.",
+        "status": "inProgress"
+      },
+      "aiNlp": {
+        "title": "NLP и ИИ-поиск",
+        "description": "Исправление опечаток, определение намерений, ИИ-переписывание запросов и поиск на естественном языке. Zero-click ответы ИИ — следующий шаг.",
+        "status": "planned"
+      },
+      "docs": {
+        "title": "Публичная документация v0.7",
+        "description": "Полный сайт документации со справочником API, руководствами по быстрому старту и обучающими материалами.",
+        "status": "planned"
+      },
+      "selfHost": {
+        "title": "Enterprise-развёртывание v1.0",
+        "description": "Развёртывание выделенного кластера, пользовательская резидентность данных и on-prem варианты для регулируемых отраслей.",
+        "status": "planned"
+      },
+      "vectorSearch": {
+        "title": "Векторный и гибридный поиск",
+        "description": "Семантический поиск через эмбеддинги OpenAI. Гибридное ранжирование BM25 + вектор. Уже реализовано в процедурах.",
+        "status": "shipped"
+      },
+      "shopify": {
+        "title": "Интеграция с Shopify",
+        "description": "Полное приложение Shopify: синхронизация товаров и вариантов, отслеживание запасов, вебхуки в реальном времени, поддержка нескольких магазинов и панель управления."
+      },
+      "embeddingProviders": {
+        "title": "Провайдеры эмбеддингов Azure и GCP",
+        "description": "Провайдеры эмбеддингов Azure OpenAI и GCP Vertex AI в дополнение к существующей поддержке OpenAI. API, совместимая с OpenAI, для собственных endpoint'ов."
+      },
+      "searchConfigurator": {
+        "title": "Конфигуратор поиска",
+        "description": "Визуальный мастер настройки поисковых коллекций, полей схемы, параметров ранжирования и фильтров. Конструктор виджетов с вкладками Конфигуратор, Фильтры и Установка."
+      },
+      "upgradeFlows": {
+        "title": "Сценарии повышения и понижения тарифа",
+        "description": "Улучшенное модальное окно повышения тарифа с предпросмотром пропорции и сравнением планов. Сценарий понижения с предупреждениями о потере данных и подтверждением."
+      }
+    },
+    "shippedTitle": "Готово",
+    "inProgressTitle": "В разработке",
+    "plannedTitle": "Запланировано",
+    "feedback": {
+      "title": "Есть идея?",
+      "description": "Мы читаем каждый запрос функции. Расскажите, что сделало бы AACsearch лучше для вас.",
+      "cta": "Предложить функцию"
+    },
+    "vote": "Голосовать",
+    "voted": "Проголосовал",
+    "votes": "голосов",
+    "emailCapture": {
+      "title": "Влияйте на наш роадмап",
+      "description": "Голосуйте за функции и получайте ранний доступ. Присоединяйтесь к 700+ поисковым командам.",
+      "placeholder": "you@company.ru",
+      "subscribeAndVote": "Подписаться и голосовать",
+      "skipAndVote": "Нет, спасибо, просто голосовать",
+      "privacy": "Без спама. Отписка в любое время.",
+      "success": "Спасибо! Ваш голос учтён. Следите за обновлениями в почте."
+    }
+  },
+  "roadmapPage": {
+    "title": "Дорожная карта продукта",
+    "description": "Что готово, что в работе и что будет дальше. Обновляется после каждого спринта."
+  },
+  "affiliatePage": {
+    "title": "Партнёрская программа",
+    "description": "Зарабатывайте регулярные комиссионные, рекомендуя AACsearch разработчикам и компаниям. Присоединяйтесь к программе сегодня."
+  },
+  "affiliate": {
+    "title": "Зарабатывайте с AACsearch",
+    "subtitle": "Рекомендуйте AACsearch своей аудитории и получайте 20% регулярных комиссионных с каждого платящего клиента.",
+    "items": {
+      "commission": {
+        "title": "20% регулярных комиссионных",
+        "description": "Получайте 20% ежемесячного тарифа за каждого привлечённого клиента на протяжении всего срока подписки. Без ограничений и срока действия."
+      },
+      "tracking": {
+        "title": "Надёжная атрибуция",
+        "description": "90-дневное окно куки. Атрибуция отслеживается между устройствами через первичные куки и UTM-параметры."
+      },
+      "creatives": {
+        "title": "Маркетинговые материалы",
+        "description": "Баннеры, email-шаблоны, сравнительные таблицы и примеры кода — всё готово для встраивания в туториалы и рассылки."
+      },
+      "payments": {
+        "title": "Ежемесячные выплаты",
+        "description": "Выплаты 15-го числа каждого месяца через Stripe или банковский перевод. Минимальная сумма выплаты: $50."
+      },
+      "supportChannel": {
+        "title": "Поддержка партнёров",
+        "description": "Персональный менеджер партнёрской программы, ранний доступ к новым функциям и закрытый Discord-канал."
+      },
+      "apply": {
+        "title": "Подать заявку",
+        "description": "Зарегистрируйтесь на affiliate.aacsearch.com. Заявки рассматриваются в течение 3 рабочих дней. Минимальный размер аудитории не требуется."
+      },
+      "payouts": {
+        "title": "Щедрые выплаты",
+        "description": "Зарабатывайте 20% рекуррентной комиссии с каждой привлечённой подписки. Ежемесячные выплаты через Stripe, без минимального порога."
+      },
+      "support": {
+        "title": "Персональная поддержка",
+        "description": "Получите персонального менеджера, рекламные материалы и индивидуальную целевую страницу для вашей аудитории."
+      }
+    }
+  },
+  "brandPage": {
+    "title": "Руководство по бренду",
+    "description": "Логотипы, цвета, типографика и правила использования. Всё необходимое для корректного представления AACsearch."
+  },
+  "brand": {
+    "title": "Наш внешний вид",
+    "subtitle": "Наш бренд построен на ясности и скорости — тех же ценностях, что мы вкладываем в поиск. Используйте эти материалы для корректного представления AACsearch.",
+    "items": {
+      "logo": {
+        "title": "Логотип",
+        "description": "Используйте основной логотип на светлом фоне и инвертированный — на тёмном. Минимальный размер 24px. Не растягивайте, не вращайте, не перекрашивайте."
+      },
+      "colors": {
+        "title": "Цвета",
+        "description": "Основной: #0F172A (ночь). Акцент: #6366F1 (indigo-500). Акцент используйте экономно — только для интерактивных элементов и выделений."
+      },
+      "typography": {
+        "title": "Типографика",
+        "description": "Заголовки и текст: Inter. Моноширинный: JetBrains Mono. Оба доступны через Google Fonts и Fontsource."
+      },
+      "guidelines": {
+        "title": "Правила использования",
+        "description": "Не используйте логотип AACsearch в контексте, подразумевающем одобрение. Не изменяйте логотип. Указание авторства приветствуется, но не обязательно."
+      },
+      "assets": {
+        "title": "Загрузка материалов",
+        "description": "Скачайте полный брендовый кит: SVG-логотип, favicon, шаблон OG-изображения и цветовую палитру в форматах ASE, Sketch и Figma."
+      },
+      "contact": {
+        "title": "Вопросы по бренду",
+        "description": "Для совместных маркетинговых материалов, спонсорства конференций или нестандартных случаев использования пишите на brand@aacsearch.com."
+      },
+      "logos": {
+        "title": "Логотипы и материалы",
+        "description": "Скачайте логотипы AACsearch в форматах SVG, PNG и векторных. Цветные, монохромные и для тёмного фона."
+      }
+    }
+  },
+  "communityPage": {
+    "title": "Сообщество",
+    "description": "Присоединяйтесь к сообществу AACsearch — задавайте вопросы, делитесь проектами, создавайте коннекторы и формируйте дорожную карту."
+  },
+  "community": {
+    "title": "Создаём поиск вместе",
+    "subtitle": "AACsearch разрабатывается открыто. Сообщество голосует за функции, создаёт коннекторы и помогает новичкам запускаться быстрее.",
+    "items": {
+      "github": {
+        "title": "GitHub",
+        "description": "Поставьте звезду репозиторию, открывайте задачи или вносите изменения через PR. Все публичные пункты дорожной карты отслеживаются в GitHub Issues."
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "Чат в реальном времени для вопросов, интеграций и устранения неполадок. 500+ участников, ежедневная активность."
+      },
+      "forum": {
+        "title": "Форум сообщества",
+        "description": "Развёрнутые Q&A для вопросов архитектуры, руководств по интеграции и предложений функций. Полностью доступен для поиска — работает на AACsearch."
+      },
+      "showcase": {
+        "title": "Витрина",
+        "description": "Смотрите, что сообщество создало с AACsearch. Отправьте свой проект для публикации в ежемесячной рассылке."
+      },
+      "contribute": {
+        "title": "Вклад в проект",
+        "description": "Мы принимаем вклады в коннекторы, примеры SDK и документацию. См. CONTRIBUTING.md для руководства."
+      },
+      "roadmap": {
+        "title": "Голосуйте за дорожную карту",
+        "description": "Каждый публичный пункт дорожной карты открыт для голосования сообщества. Наиболее популярные функции реализуются первыми."
+      },
+      "events": {
+        "title": "Мероприятия и встречи",
+        "description": "Присоединяйтесь к AACsearch на отраслевых мероприятиях, вебинарах и митапах сообщества. Общайтесь с командой и разработчиками."
+      }
+    }
+  },
+  "faqPage": {
+    "title": "Часто задаваемые вопросы",
+    "description": "Быстрые ответы на самые распространённые вопросы о ценах, настройке, данных и поддержке AACsearch."
+  },
+  "faq": {
+    "title": "Частые вопросы, чёткие ответы",
+    "subtitle": "Не нашли ответ? Поищите в документации или спросите на форуме сообщества.",
+    "items": {
+      "searchUnit": {
+        "title": "Что такое единица поиска?",
+        "description": "Одна единица поиска равна одному поисковому запросу ИЛИ одному проиндексированному документу. Ваш ежемесячный тариф включает определённое количество единиц, распределённых по всем индексам."
+      },
+      "pricing": {
+        "title": "Как работает ценообразование?",
+        "description": "AACsearch берёт фиксированную ежемесячную плату в зависимости от тарифного плана. Превышение лимита оплачивается по тарифу за единицу поиска. Никаких скрытых сборов."
+      },
+      "scaling": {
+        "title": "Как происходит масштабирование?",
+        "description": "AACsearch масштабируется горизонтально. Хостинговая платформа автоматически обрабатывает всплески трафика."
+      },
+      "dataResidency": {
+        "title": "Где хранятся мои данные?",
+        "description": "Выберите ЕС (Франкфурт) или США (Северная Виргиния) при регистрации. Данные никогда не покидают выбранный регион."
+      },
+      "migration": {
+        "title": "Можно ли мигрировать с Algolia?",
+        "description": "Да. REST API AACsearch совместим со схемами коллекций в стиле Algolia. Мы предоставляем руководство по миграции."
+      },
+      "selfHost": {
+        "title": "Предлагаете ли вы выделенное или on-prem развёртывание?",
+        "description": "Да. Тарифы Enterprise включают выделенный кластер в выбранном вами регионе. Для регулируемых отраслей со строгими требованиями свяжитесь с нами для разработки индивидуального развёртывания."
+      },
+      "data": {
+        "title": "Где хранятся мои данные?",
+        "description": "AACsearch работает на AWS в регионе, ближайшем к базе пользователей. Данные остаются в выбранном регионе и не покидают его без вашего разрешения."
+      },
+      "limits": {
+        "title": "Какие лимиты у тарифов?",
+        "description": "Бесплатный: 1000 поисковых единиц/месяц, 1 индекс, 1 API-ключ. Pro: 50 000 единиц/месяц, безлимитные индексы, 10 ключей. Enterprise: индивидуальные лимиты и SLA."
+      },
+      "migrate": {
+        "title": "Как мигрировать с Typesense?",
+        "description": "AACsearch построен на Typesense и использует тот же поисковый движок. Экспортируйте схему и документы, затем переиндексируйте через AACsearch API. Большинство пользователей завершают миграцию менее чем за день."
+      },
+      "support": {
+        "title": "Какие варианты поддержки доступны?",
+        "description": "Бесплатный: поддержка сообщества в Discord. Pro: поддержка по email в течение 24 часов. Enterprise: выделенный Slack-канал и телефонная поддержка с SLA 1 час."
+      },
+      "typesense": {
+        "title": "Чем AACsearch отличается от Typesense Cloud?",
+        "description": "AACsearch — это управляемая поисковая платформа на базе Typesense с дополнительными функциями: мультиарендность, ограниченные токены, аналитика, CMS-коннекторы, RAG и виджет — всё включено в цену."
+      }
+    }
+  },
+  "glossaryPage": {
+    "title": "Словарь поисковых терминов",
+    "description": "Простые объяснения концепций поиска — от инвертированного индекса до функции ранжирования BM25."
+  },
+  "glossary": {
+    "title": "Поисковые термины, объяснённые просто",
+    "subtitle": "Практический глоссарий для разработчиков, работающих с поисковыми сервисами. Никакого жаргона без объяснений.",
+    "items": {
+      "invertedIndex": {
+        "title": "Инвертированный индекс",
+        "description": "Структура данных, сопоставляющая каждый термин с документами, в которых он встречается. Основа быстрого полнотекстового поиска."
+      },
+      "bm25": {
+        "title": "BM25",
+        "description": "Best Match 25 — стандартная функция ранжирования для полнотекстового поиска. Учитывает частоту терминов и длину документа."
+      },
+      "facets": {
+        "title": "Фасеты",
+        "description": "Атрибуты фильтрации со счётчиками. Показывают пользователям, сколько результатов доступно для каждого значения фильтра."
+      },
+      "typoTolerance": {
+        "title": "Устойчивость к опечаткам",
+        "description": "Способность поискового движка находить документы несмотря на орфографические ошибки в запросе."
+      },
+      "synonyms": {
+        "title": "Синонимы",
+        "description": "Эквивалентные термины, которые должны возвращать одинаковые результаты поиска."
+      },
+      "relevanceTuning": {
+        "title": "Настройка релевантности",
+        "description": "Процесс корректировки сигналов и весов ранжирования для улучшения результатов поиска."
+      },
+      "embedding": {
+        "description": "Числовое векторное представление смысла текста. AACsearch может хранить и запрашивать эмбеддинги для семантического и гибридного поиска.",
+        "title": "Эмбеддинг"
+      },
+      "facet": {
+        "description": "Фильтруемый атрибут, возвращаемый вместе с результатами поиска с количеством документов. Обеспечивает навигацию с подсказками без дополнительных вызовов API.",
+        "title": "Фасет"
+      },
+      "relevance": {
+        "description": "Степень соответствия документа запросу. AACsearch сочетает текстовую релевантность BM25, векторное сходство, веса полей и пользовательские правила буста.",
+        "title": "Релевантность"
+      },
+      "searchIndex": {
+        "description": "Структура данных, оптимизированная для быстрого поиска текста. AACsearch ведёт коллекцию поиска для каждого индекса с автоматическим управлением псевдонимами.",
+        "title": "Поисковый индекс"
+      },
+      "searchUnit": {
+        "description": "Единица тарификации AACsearch. Одна единица поиска равна одному поисковому запросу или одному проиндексированному документу. Используется для расчёта ежемесячного лимита плана.",
+        "title": "Единица поиска"
+      },
+      "inverted": {
+        "title": "Инвертированный индекс",
+        "description": "Структура данных, сопоставляющая каждый уникальный термин коллекции документов с содержащими его документами. Обеспечивает быстрый полнотекстовый поиск в масштабе."
+      },
+      "vector": {
+        "title": "Векторный поиск",
+        "description": "Метод поиска, находящий документы на основе семантической близости через эмбеддинги. AACsearch поддерживает гибридный поиск по ключевым словам и векторам."
+      }
+    }
+  },
+  "newsletterPage": {
+    "title": "Рассылка AACsearch",
+    "description": "Ежемесячные обновления о поисковой инженерии, релизах AACsearch и инструментах для разработчиков, которые мы отслеживаем."
+  },
+  "newsletter": {
+    "title": "Будьте в курсе",
+    "subtitle": "Рассылка AACsearch выходит еженедельно. Обновления продукта, советы по поиску и бенчмарки — прямо в вашем почтовом ящике.",
+    "items": {
+      "productUpdates": {
+        "title": "Обновления продукта",
+        "description": "Новые функции, изменения API и улучшения производительности — с примерами кода."
+      },
+      "searchTips": {
+        "title": "Советы по поиску",
+        "description": "Практические советы по настройке релевантности, моделированию данных и поисковому UX — от нашей инженерной команды."
+      },
+      "benchmarks": {
+        "title": "Бенчмарки",
+        "description": "Ежемесячные бенчмарки задержки и пропускной способности из нашей тестовой лаборатории."
+      },
+      "industry": {
+        "title": "Новости отрасли",
+        "description": "Самые важные новости из мира поиска: новые модели, статьи и релизы open source."
+      },
+      "showcase": {
+        "title": "Витрина сообщества",
+        "description": "Интересные проекты от сообщества AACsearch и гостевые статьи от партнёров."
+      },
+      "frequency": {
+        "title": "Еженедельно, без спама",
+        "description": "По понедельникам, около 08:00 МСК. Никакого маркетинга, никакой рекламы. Отписаться можно в любой момент."
+      },
+      "content": {
+        "description": "Статьи по поисковой инженерии, примечания к релизам AACsearch, обзоры инструментов разработчика и один материал о сообществе в каждом выпуске.",
+        "title": "Что вы получите"
+      },
+      "past": {
+        "description": "Каждый выпуск новостной рассылки архивируется в нашем блоге. Прочитайте перед подпиской — вы будете точно знать, на что подписываетесь.",
+        "title": "Читать прошлые выпуски"
+      },
+      "privacy": {
+        "description": "Мы используем собственную платформу для рассылки. Ваш email никогда не передаётся рекламным сетям и не продаётся брокерам данных.",
+        "title": "Ваши данные остаются вашими"
+      },
+      "social": {
+        "description": "Основные материалы рассылки публикуются в LinkedIn. Подписывайтесь там для более коротких инженерных обновлений.",
+        "title": "Следите за основным"
+      },
+      "unsubscribe": {
+        "description": "В каждом письме есть ссылка для отписки в один клик. Никаких тёмных паттернов, никаких диалогов подтверждения.",
+        "title": "Отписка в один клик"
+      },
+      "community": {
+        "title": "Новости сообщества",
+        "description": "Ежемесячная подборка лучших проектов сообщества AACsearch, плагинов и историй успеха разработчиков со всего мира."
+      },
+      "product": {
+        "title": "Обновления продукта",
+        "description": "Новые функции, улучшения производительности и изменения API. Основные изменения доставляются на почту ежемесячно."
+      },
+      "tutorials": {
+        "title": "Учебные пособия",
+        "description": "Пошаговые руководства по настройке поиска, миграции с конкурентов и интеграции AACsearch с популярными фреймворками."
+      }
+    }
+  },
+  "pressPage": {
+    "title": "Пресса и СМИ",
+    "description": "Пресс-релизы, пресс-кит и контакты для журналистов и блогеров, пишущих об AACsearch."
+  },
+  "press": {
+    "title": "AACsearch в прессе",
+    "subtitle": "Пресс-релизы, интервью и медиаматериалы. Журналисты найдут здесь всё необходимое.",
+    "items": {
+      "releases": {
+        "title": "Пресс-релизы",
+        "description": "Все официальные пресс-релизы с 2024 года — анонсы продуктов, партнёрства и вехи."
+      },
+      "kit": {
+        "title": "Пресс-кит",
+        "description": "Пакет логотипов, скриншоты продукта, фотографии основателей и фактическая справка о компании — всё в одном ZIP."
+      },
+      "coverage": {
+        "title": "Публикации в СМИ",
+        "description": "Избранные статьи из отраслевых СМИ, блогов разработчиков и технических изданий."
+      },
+      "contact": {
+        "title": "Контакт для прессы",
+        "description": "Для запросов об интервью, демонстраций продукта и эксклюзивных материалов: press@aacsearch.com. Время ответа — до 24 часов."
+      },
+      "boilerplate": {
+        "title": "Стандартный текст о компании",
+        "description": "Стандартизированный текст описания компании для пресс-релизов и статей."
+      },
+      "founders": {
+        "title": "Биографии основателей",
+        "description": "Краткие биографии и фотографии высокого разрешения для публикаций в СМИ и программ конференций."
+      },
+      "assets": {
+        "description": "Скачайте логотип в форматах SVG, PNG и в светлом/тёмном вариантах. Руководство по использованию прилагается — подробности на странице бренда.",
+        "title": "Брендовые материалы"
+      },
+      "mediaKit": {
+        "description": "Файлы логотипа, скриншоты продукта, фотографии основателей и руководство по бренду в одном загружаемом zip-архиве.",
+        "title": "Медиакит"
+      },
+      "pressReleases": {
+        "description": "Официальные анонсы запусков продуктов, раундов финансирования и крупных партнёрств — отформатированы и готовы к перепечатке.",
+        "title": "Пресс-релизы"
+      }
+    }
+  },
+  "pricingPlansPage": {
+    "title": "Тарифы и цены",
+    "description": "Прозрачное ценообразование на основе использования. Начните бесплатно. Масштабируйтесь по мере роста."
+  },
+  "pricingPlans": {
+    "title": "Подходящий тариф для вашей команды",
+    "subtitle": "Все тарифы включают поиск с устойчивостью к опечаткам, фасеты, синонимы и индексирование в реальном времени. Масштабируйтесь, когда будете готовы.",
+    "items": {
+      "free": {
+        "title": "Бесплатный",
+        "description": "10 000 единиц поиска в месяц, 1 индекс, поддержка сообщества. Идеально для хобби-проектов и тестирования."
+      },
+      "starter": {
+        "title": "Начальный",
+        "description": "100 000 единиц поиска в месяц, 5 индексов, поддержка по email. Для небольших продакшн-сервисов."
+      },
+      "pro": {
+        "title": "Профессиональный",
+        "description": "1 млн единиц поиска в месяц, 10 индексов, приоритетная поддержка, пользовательский домен. Для растущих SaaS-продуктов."
+      },
+      "business": {
+        "title": "Бизнес",
+        "description": "10 млн единиц поиска в месяц, 50 индексов, SLA 99,9%, SSO. Для масштабно-чувствительных компаний."
+      },
+      "enterprise": {
+        "title": "Корпоративный",
+        "description": "Неограниченные единицы, выделенный кластер, SLA 99,95%, журнал аудита, SCIM-провизионирование. Для критически важных рабочих нагрузок."
+      },
+      "overage": {
+        "title": "Превышение",
+        "description": "Превышения оплачиваются за каждую единицу поиска. Жёсткой остановки нет — ваш сервис всегда остаётся онлайн."
+      },
+      "custom": {
+        "description": "Нестандартные требования — развёртывание на собственных серверах, соглашения о хранении данных, white-labelling — оформляются как индивидуальные контракты.",
+        "title": "Нужно что-то другое?"
+      }
+    }
+  },
+  "resourcesPage": {
+    "title": "Ресурсы",
+    "description": "Руководства, учебники, справочник API и лучшие практики для построения поиска с AACsearch."
+  },
+  "resources": {
+    "title": "Всё, что нужно для начала",
+    "subtitle": "От быстрого старта до продвинутой настройки релевантности — здесь вы найдёте всё.",
+    "items": {
+      "docs": {
+        "title": "Документация",
+        "description": "Полный справочник API, руководства по SDK и концептуальные объяснения — от начальной настройки до продвинутых тем."
+      },
+      "tutorials": {
+        "title": "Учебники",
+        "description": "Пошаговые руководства для распространённых сценариев: поиск в e-commerce, базы знаний и многоуровневые иерархии."
+      },
+      "apiRef": {
+        "title": "Справочник API",
+        "description": "Полная документация REST API с интерактивными примерами. Сгенерировано из OpenAPI 3.1."
+      },
+      "sdks": {
+        "title": "SDK",
+        "description": "SDK для браузера, клиент Node.js и CLI. Все на TypeScript, все опубликованы на npm."
+      },
+      "blog": {
+        "title": "Блог",
+        "description": "Технические статьи по поисковой инженерии, обновления продукта и кейс-стади."
+      },
+      "changelog": {
+        "title": "Журнал изменений",
+        "description": "Каждый релиз задокументирован, пути обновления понятны."
+      },
+      "community": {
+        "description": "Задавайте вопросы, делитесь интеграциями и получайте поддержку сообщества на форуме и в Discord AACsearch.",
+        "title": "Сообщество"
+      },
+      "support": {
+        "description": "Поддержка по электронной почте для тарифов Starter и выше. Корпоративные планы включают выделенный канал Slack и договорное SLA.",
+        "title": "Поддержка"
+      },
+      "migration": {
+        "title": "Руководства по миграции",
+        "description": "Пошаговые инструкции по миграции с Typesense Cloud, Algolia, Elasticsearch, Meilisearch и других поисковых платформ на AACsearch."
+      }
+    }
+  },
+  "statusPage": {
+    "title": "Статус системы",
+    "description": "Доступность в реальном времени и история инцидентов для всех сервисов AACsearch."
+  },
+  "status": {
+    "title": "Всегда доступен",
+    "subtitle": "Статус в реальном времени, история инцидентов и окна технического обслуживания для всех сервисов AACsearch.",
+    "items": {
+      "api": {
+        "title": "API поиска",
+        "description": "Доступность и задержка для основного эндпоинта API поиска. Обновляется каждую минуту."
+      },
+      "ingest": {
+        "title": "Конвейер загрузки",
+        "description": "Статус конвейера загрузки документов, включая задержку обработки."
+      },
+      "dashboard": {
+        "title": "Панель управления",
+        "description": "Доступность плоскости управления SaaS: вход, управление индексами и аналитика."
+      },
+      "incidents": {
+        "title": "История инцидентов",
+        "description": "Полная история инцидентов за последние 90 дней с анализом первопричин."
+      },
+      "maintenance": {
+        "title": "Плановое техническое обслуживание",
+        "description": "Запланированные окна технического обслуживания объявляются за 72 часа."
+      },
+      "subscribe": {
+        "title": "Подписка на статус",
+        "description": "Подпишитесь на уведомления по email или SMS о инцидентах, затрагивающих ваш тариф."
+      },
+      "analytics": {
+        "description": "Сбор событий поиска, агрегация и обновление дашборда. Обычно отстаёт от реального времени на 60–90 секунд.",
+        "title": "Аналитический конвейер"
+      },
+      "uptime": {
+        "title": "SLA 99,99% аптайма",
+        "description": "Тариф Enterprise включает гарантию 99,99% аптайма с кредитами при простоях. Статус в реальном времени на status.aacsearch.com."
+      }
+    }
+  },
+  "supportPage": {
+    "title": "Поддержка",
+    "description": "Получите помощь с AACsearch. Документация, форум сообщества, поддержка по электронной почте и корпоративный SLA."
+  },
+  "support": {
+    "title": "Мы здесь для вас",
+    "subtitle": "От документации для самообслуживания до выделенных инженеров — для каждого уровня зрелости есть свой путь поддержки.",
+    "items": {
+      "docs": {
+        "title": "Документация",
+        "description": "Исчерпывающие руководства, API-справочник, SDK-документация и руководства по интеграции на docs.aacsearch.com."
+      },
+      "community": {
+        "title": "Форум сообщества",
+        "description": "Задавайте публичные вопросы, общайтесь с другими разработчиками и смотрите прошлые решения."
+      },
+      "email": {
+        "title": "Поддержка по email",
+        "description": "Для тарифа Starter и выше. Время ответа — до 24 часов. Для критических проблем — в тот же день."
+      },
+      "sla": {
+        "title": "Корпоративный SLA",
+        "description": "Гарантия доступности 99,95%, выделенный менеджер по работе с клиентами и время реакции 4 часа для блокирующих проблем."
+      },
+      "onboarding": {
+        "title": "Помощь при онбординге",
+        "description": "Направленный онбординг для клиентов Pro и Enterprise. Помогаем с проектированием схемы и стратегией миграции."
+      },
+      "status": {
+        "title": "Статус системы",
+        "description": "Проверяйте status.aacsearch.com для получения доступности в реальном времени и истории инцидентов."
+      },
+      "chat": {
+        "description": "Чат в реальном времени в дашборде для клиентов тарифов Pro и Business. Соединяет напрямую с командой поддержки AACsearch в рабочее время.",
+        "title": "Онлайн-чат"
+      },
+      "documentation": {
+        "description": "Полный справочник API, руководства по SDK и обучающие материалы по интеграции. Версионированный, с поиском, обновляется с каждым релизом.",
+        "title": "Документация"
+      },
+      "slack": {
+        "description": "Корпоративные клиенты получают общий канал Slack Connect с инженерной командой и командой поддержки AACsearch.",
+        "title": "Выделенный канал Slack"
+      },
+      "enterprise": {
+        "title": "Поддержка Enterprise",
+        "description": "Выделенный Slack-канал, телефонная поддержка, индивидуальные SLA и закреплённый инженер поддержки. Приоритетное время ответа менее 1 часа."
+      }
+    }
+  },
+  "trustPage": {
+    "title": "Доверие и безопасность",
+    "description": "Как AACsearch защищает данные клиентов: шифрование, контроль доступа, резидентность данных и сертификаты соответствия."
+  },
+  "trust": {
+    "title": "Безопасность как основа",
+    "subtitle": "AACsearch создан с принципом Security by Default. Все меры, сертификаты и политики задокументированы здесь.",
+    "items": {
+      "encryption": {
+        "title": "Шифрование",
+        "description": "Данные шифруются в состоянии покоя (AES-256) и при передаче (TLS 1.3). Ключи управляются в HSM."
+      },
+      "accessControl": {
+        "title": "Контроль доступа",
+        "description": "Ключи API, scoped-токены, IP-белые списки и SCIM-провизионирование. Каждое действие записывается в журнал."
+      },
+      "dataResidency": {
+        "title": "Резидентность данных",
+        "description": "Выберите ЕС (Франкфурт) или США (Северная Виргиния) при регистрации. Кросс-региональная репликация — только с вашего согласия."
+      },
+      "soc2": {
+        "title": "SOC 2 Тип II (планируется)",
+        "description": "Аудит SOC 2 запланирован на Q4 2025. Существующие меры безопасности соответствуют критериям Trust Services SOC 2."
+      },
+      "gdpr": {
+        "title": "GDPR",
+        "description": "AACsearch действует как обработчик данных. Договор об обработке данных (DPA) доступен в тарифе Enterprise."
+      },
+      "pentest": {
+        "title": "Тесты на проникновение",
+        "description": "Ежегодные тесты на проникновение независимой третьей стороной. Результаты предоставляются корпоративным клиентам по запросу."
+      },
+      "auditLog": {
+        "description": "Каждое административное действие — создание индекса, выдача ключа, приглашение участника — регистрируется с идентификатором исполнителя, временной меткой и контекстом организации.",
+        "title": "Журнал аудита"
+      },
+      "disclosure": {
+        "description": "Обнаружили уязвимость? Напишите на security@aacsearch.com. Мы придерживаемся 90-дневного скоординированного срока раскрытия и указываем всех авторов сообщений.",
+        "title": "Ответственное раскрытие информации"
+      },
+      "audit": {
+        "title": "Аудиты третьих сторон",
+        "description": "AACsearch регулярно проходит аудиты безопасности независимыми сторонами. Отчёты доступны по NDA для корпоративных клиентов."
+      },
+      "isolation": {
+        "title": "Изоляция арендаторов",
+        "description": "Данные каждой организации изолированы на уровне инфраструктуры. Межарендаторный доступ архитектурно невозможен."
+      },
+      "tokens": {
+        "title": "Токен-аутентификация",
+        "description": "API-ключи хранятся в хешированном виде с использованием bcrypt. Ограниченные токены используют HMAC-подпись с серверными секретами."
+      }
+    }
+  },
+  "allPagesPage": {
+    "title": "Все страницы",
+    "description": "Полный индекс всех страниц AACsearch — маркетинговый сайт, функции, интеграции и приложение.",
+    "marketingTitle": "Маркетинговый сайт",
+    "appTitle": "Приложение",
+    "saasNote": "Маршруты приложения на {base}",
+    "sections": {
+      "core": "Основные",
+      "features": "Функции",
+      "useCases": "Сценарии",
+      "integrations": "Интеграции",
+      "compare": "Сравнения",
+      "solutions": "Решения",
+      "company": "Компания",
+      "auth": "Авторизация",
+      "account": "Аккаунт",
+      "organization": "Организация",
+      "admin": "Администратор",
+      "misc": "Разное"
+    }
+  },
+  "connectorsPage": {
+    "title": "CMS-коннекторы",
+    "description": "Нативные PHP-модули для PrestaShop и 1C-Bitrix. REST Connector API для всего остального.",
+    "headlessCmsTitle": "Headless CMS-коннекторы",
+    "headlessCmsSubtitle": "Подключите AACsearch к вашей контентной инфраструктуре. Strapi, Contentful и Sanity — все с нативными плагинами.",
+    "headlessCmsItems": {
+      "strapi": {
+        "title": "Strapi",
+        "description": "Плагин Strapi с синхронизацией через lifecycle-хуки. Создание, обновление и удаление контента автоматически обновляет индекс. Поддерживаются типы контента, динамические зоны и медиаполя."
+      },
+      "contentful": {
+        "title": "Contentful",
+        "description": "Приложение Contentful с вебхук-синхронизацией. Опубликуйте запись — и она появится в AACsearch за секунду. Сопоставление моделей контента, Rich Text и многоязычный поиск включены."
+      },
+      "sanity": {
+        "title": "Sanity",
+        "description": "Плагин Sanity Studio с индексацией через GROQ-запросы. Выбирайте только нужные поля. Реальная синхронизация через вебхуки — без CRON-задач."
+      }
+    },
+    "comingSoon": "Скоро",
+    "comingSoonTitle": "Больше коннекторов скоро",
+    "comingSoonSubtitle": "Поддержка WooCommerce и Shopify в разработке. Используйте Connector API, чтобы создать собственный коннектор уже сегодня.",
+    "comingSoonItems": {
+      "woocommerce": {
+        "title": "WooCommerce",
+        "description": "Плагин WordPress + WooCommerce. Синхронизация товаров, категорий и заказов."
+      },
+      "shopify": {
+        "title": "Shopify",
+        "description": "Приложение Shopify с синхронизацией товаров, вариантов и метафилдов. Встройка виджета включена."
+      }
+    }
+  },
+  "tutorialsPage": {
+    "title": "Видеоуроки",
+    "description": "Смотрите пошаговые руководства, чтобы получить максимум от AACsearch — от 5-минутной настройки до продвинутых интеграций.",
+    "videos": {
+      "quickstart": {
+        "title": "Быстрый старт за 5 минут",
+        "description": "Создайте аккаунт, загрузите данные, встройте виджет поиска и запуститесь — всё менее чем за 5 минут."
+      },
+      "ecommerce": {
+        "title": "Настройка поиска для e-commerce",
+        "description": "Настройте поиск товаров с фасетной навигацией, изолированными токенами для каждого магазина и аналитикой."
+      },
+      "blog": {
+        "title": "Поиск по контенту/блогу",
+        "description": "Добавьте мгновенный полнотекстовый поиск в блог или документацию с устойчивостью к опечаткам."
+      },
+      "app": {
+        "title": "Поиск для SaaS-приложений",
+        "description": "Создайте мультиарендный поиск для вашего SaaS-приложения с изоляцией данных и ограниченными API-ключами."
+      }
+    }
+  },
+  "homePricingCalc": {
+    "title": "Рассчитайте стоимость",
+    "subtitle": "Настройте ползунки, чтобы подобрать подходящий тарифный план.",
+    "docsLabel": "Проиндексированных документов",
+    "searchesLabel": "Поисковых запросов в месяц",
+    "unitsLabel": "поисковых единиц / месяц",
+    "planLabel": "Рекомендуемый тариф",
+    "note": "1 поиск = 1 единица · 1 документ = 1 единица · автодополнение = 0,1 единицы",
+    "ctaFree": "Начать бесплатно",
+    "ctaPro": "Начать пробный Pro",
+    "ctaEnterprise": "Связаться с отделом продаж",
+    "plans": {
+      "free": {
+        "name": "Бесплатно",
+        "price": "0 ₽ / мес",
+        "limit": "До 10 000 единиц/мес · 1 индекс"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "2 900 ₽ / мес",
+        "limit": "До 1 000 000 единиц/мес · 10 индексов"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "По запросу",
+        "limit": "Без ограничений · неограниченные индексы · SLA"
+      }
+    }
+  },
+  "homeArchitecture": {
+    "title": "Как работает AACsearch",
+    "subtitle": "Три потока, одна платформа. Ваш бэкенд, пользователи и команда — всё через единый поисковый слой.",
+    "ingestLabel": "Путь приёма данных",
+    "searchLabel": "Путь поиска",
+    "manageLabel": "Управление",
+    "zeroDowntime": "Переиндексация без простоя через атомарное переключение псевдонима",
+    "tenantIsolation": "Каждый запрос ограничен вашей организацией — перекрёстные чтения исключены"
+  },
+  "homeFit": {
+    "title": "AACsearch — ваш вариант?",
+    "perfectTitle": "Идеально подходит",
+    "skipTitle": "Можно пропустить, если",
+    "perfect": {
+      "0": "Нужен поиск в продакшене без отдельной команды по поиску",
+      "1": "Вы вызываете поиск из браузера и не можете раскрывать ключи API",
+      "2": "Вы управляете несколькими клиентами или арендаторами на одной платформе",
+      "3": "Нужны предсказуемые ежемесячные расходы при росте нагрузки",
+      "4": "Нужна аналитика, чтобы понять, что ищут ваши пользователи"
+    },
+    "skip": {
+      "0": "Вам нужен полностью самостоятельно размещённый поиск на своих серверах",
+      "1": "Ваши данные ни при каких обстоятельствах не могут покидать вашу инфраструктуру",
+      "2": "Вам нужны кастомные плагины оценки на уровне Lucene",
+      "3": "У вас менее 1000 документов и Postgres ILIKE вполне достаточно"
+    }
+  },
+  "homeLiveDemo": {
+    "title": "Попробуйте поиск прямо сейчас",
+    "subtitle": "Выберите сценарий, введите запрос — исправление опечаток, фасеты и подсветка в деле.",
+    "didYouMean": "Вы имели в виду:",
+    "whyResult": "Почему этот результат?",
+    "noResults": "Нет точных совпадений — AACsearch предлагает:",
+    "openPlayground": "Открыть Playground"
+  },
+  "homeSecuritySandbox": {
+    "title": "Scoped-токены в действии",
+    "subtitle": "Переключайте ограничения — AACsearch защищает браузер, не раскрывая ваш API-ключ.",
+    "ttlLabel": "TTL токена",
+    "originLabel": "Источник запроса",
+    "tenantLabel": "Фильтр арендатора",
+    "leakLabel": "Симулировать утечку токена",
+    "outcomeAllowed": "Поиск разрешён",
+    "outcomeOrigin": "403 — Источник заблокирован",
+    "outcomeTenant": "403 — Несоответствие арендатора",
+    "outcomeExpired": "401 — Токен истёк",
+    "outcomeLeak": "Утечка безвредна — scoped-токен не может вызвать Admin API"
+  },
+  "demo": {
+    "title": "Живое демо — AACsearch Engine",
+    "description": "Попробуйте AACsearch с предварительно загруженным каталогом моды. Ищите, фильтруйте и смотрите результаты в реальном времени — без регистрации.",
+    "heading": "Живое демо",
+    "subheading": "Исследуйте предварительно загруженный каталог моды на AACsearch. Ищите, фильтруйте по категориям и оцените результаты в реальном времени."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "с Algolia",
+      "elasticsearch": "с Elasticsearch",
+      "meilisearch": "с Meilisearch",
+      "opensearch": "с OpenSearch",
+      "pinecone": "с Pinecone",
+      "solr": "с Solr",
+      "typesense": "с Typesense Cloud",
+      "weaviate": "с Weaviate"
+    },
+    "home": "Главная",
+    "compare": "Сравнение",
+    "features": "Возможности",
+    "pricing": "Цены",
+    "integrations": "Интеграции",
+    "useCases": "Сценарии",
+    "solutions": "Решения",
+    "demo": "Демо"
+  }
 }

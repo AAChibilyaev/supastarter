@@ -1,957 +1,957 @@
 {
-	"integrationsPage": {
-		"title": "Connectez AACsearch à votre stack",
-		"description": "Modules prêts à l'emploi pour les plateformes populaires. API REST et SDK navigateur pour le reste."
-	},
-	"integrations": {
-		"title": "Intégrations prêtes à l'emploi",
-		"subtitle": "Installation en quelques minutes. Synchronisation automatique. Recherche instantanée.",
-		"items": {
-			"prestashop": {
-				"title": "PrestaShop 8.x",
-				"description": "Module PHP clé en main. Synchronise produits, catégories et stock automatiquement à chaque sauvegarde."
-			},
-			"bitrix": {
-				"title": "1C-Bitrix",
-				"description": "Module Bitrix natif. Export de produits piloté par événements avec support complet du catalogue."
-			},
-			"restApi": {
-				"title": "API REST",
-				"description": "15 endpoints publics avec authentification par clé API. Compatible avec tout langage backend."
-			},
-			"browserSdk": {
-				"title": "SDK navigateur",
-				"description": "Client JavaScript typé. Recherche simple, multi-recherche fédérée, facettes — moins de 50 ms p99."
-			},
-			"mcpServer": {
-				"title": "Serveur MCP",
-				"description": "Intégration du protocole de contexte de modèle pour Claude, Cursor et autres agents IA."
-			},
-			"custom": {
-				"title": "Connecteur personnalisé",
-				"description": "L'API Connector à 7 endpoints vous permet de créer une synchronisation pour n'importe quelle source de données."
-			}
-		}
-	},
-	"integrationsPrestashopPage": {
-		"title": "Intégration PrestaShop",
-		"description": "Module PrestaShop 8.x natif pour AACsearch. Synchronisez votre catalogue produits automatiquement à chaque sauvegarde."
-	},
-	"integrationsPrestashop": {
-		"title": "AACsearch pour PrestaShop",
-		"subtitle": "Module PHP clé en main. Aucun développement API requis. Sync complète du catalogue, mises à jour en temps réel et widget de recherche en quelques minutes.",
-		"items": {
-			"install": {
-				"title": "Installation en un clic",
-				"description": "Téléversez le ZIP dans le gestionnaire de modules PrestaShop. Entrez votre token de connecteur. C'est fait."
-			},
-			"autoSync": {
-				"title": "Synchronisation automatique",
-				"description": "Les sauvegardes, mises à jour et suppressions de produits déclenchent une sync instantanée via les hooks d'événements PrestaShop. Pas de cron nécessaire."
-			},
-			"fullExport": {
-				"title": "Export complet du catalogue",
-				"description": "Export initial de tous les produits et catégories en un clic depuis le panneau admin du module."
-			},
-			"widget": {
-				"title": "Intégration du widget",
-				"description": "Activez le widget AACsearch dans les paramètres du module. Il s'injecte automatiquement dans le hook de recherche de votre thème."
-			},
-			"diagnostics": {
-				"title": "Panneau de diagnostics",
-				"description": "Testez la connexion, vérifiez la dernière heure de sync et consultez les journaux d'erreurs depuis le panneau admin du module."
-			},
-			"compatibility": {
-				"title": "Compatible PrestaShop 8.x",
-				"description": "Testé sur PrestaShop 8.0 et 8.1. PHP 8.1+. Compatible avec tous les thèmes principaux."
-			}
-		}
-	},
-	"integrationsBitrixPage": {
-		"title": "Intégration 1C-Bitrix",
-		"description": "Module 1C-Bitrix natif pour AACsearch. Synchronisez votre catalogue automatiquement avec des gestionnaires d'événements et des agents en arrière-plan."
-	},
-	"integrationsBitrix": {
-		"title": "AACsearch pour 1C-Bitrix",
-		"subtitle": "Module Bitrix natif avec mises à jour pilotées par événements et agent de sync en arrière-plan. Sans export manuel.",
-		"items": {
-			"eventHandlers": {
-				"title": "Gestionnaires d'événements",
-				"description": "La création, mise à jour et suppression de produits déclenchent une sync instantanée via les gestionnaires d'événements Bitrix. Latence inférieure à 1 seconde."
-			},
-			"backgroundAgent": {
-				"title": "Agent de sync en arrière-plan",
-				"description": "L'agent Bitrix effectue une sync complète périodique pour la fiabilité. Rattrape les changements manqués par les gestionnaires d'événements."
-			},
-			"catalogSupport": {
-				"title": "Support complet du catalogue",
-				"description": "Produits, propriétés, prix et niveaux de stock. Tous les champs de votre iBlock sont indexables."
-			},
-			"adminPanel": {
-				"title": "Panneau de paramètres admin",
-				"description": "Configurez le token de connecteur, le slug d'index et la fréquence de sync depuis les paramètres du module Bitrix."
-			},
-			"diagnostics": {
-				"title": "Page de diagnostics",
-				"description": "Testez la connexion, vérifiez l'état de l'index et les permissions depuis l'admin Bitrix."
-			},
-			"support": {
-				"title": "Compatible Bitrix Site Manager",
-				"description": "Testé sur Bitrix Site Manager et édition Business. PHP 8.1+. Utilise le HttpClient Bitrix standard."
-			}
-		}
-	},
-	"integrationsRestApiPage": {
-		"title": "Intégration API REST",
-		"description": "15 endpoints publics avec auth par clé API. Compatible avec tout langage backend ou plateforme. Spec OpenAPI 3.1 incluse."
-	},
-	"integrationsRestApi": {
-		"title": "Construisez votre propre intégration",
-		"subtitle": "Si nous n'avons pas de module natif pour votre plateforme, l'API REST couvre tous les cas d'usage.",
-		"items": {
-			"endpoints": {
-				"title": "15 endpoints",
-				"description": "CRUD d'index, CRUD de documents (unitaire + bulk), recherche, multi-search, analytique et gestion des clés API."
-			},
-			"openApi": {
-				"title": "OpenAPI 3.1",
-				"description": "Spec lisible par machine sur /api/v1/openapi.json. Générez un client en Python, Go, Ruby ou n'importe quel autre langage."
-			},
-			"authentication": {
-				"title": "Auth Bearer token",
-				"description": "Clés API préfixées ss_search_*, ss_connector_*, ou ss_scoped_*. Chaque préfixe porte des permissions différentes."
-			},
-			"webhooks": {
-				"title": "Webhooks sortants (bientôt)",
-				"description": "Recevez un webhook à la fin d'une sync, alerte de quota ou reindex terminé. Actuellement : API Connector pour le polling."
-			},
-			"rateLimit": {
-				"title": "Headers de rate limit",
-				"description": "Headers X-RateLimit-Limit et X-RateLimit-Remaining sur chaque réponse. Retry-After sur les 429."
-			},
-			"versioning": {
-				"title": "API versionnée",
-				"description": "Tous les endpoints publics sont sous /api/v1. Les breaking changes reçoivent un nouveau préfixe de version. Les anciennes versions sont conservées 12 mois."
-			}
-		}
-	},
-	"integrationsBrowserSdkPage": {
-		"title": "SDK navigateur",
-		"description": "Un client JavaScript typé pour AACsearch. Recherche simple, multi-search fédérée, facettes — sous 50 ms p99."
-	},
-	"integrationsBrowserSdk": {
-		"title": "Recherchez depuis le navigateur",
-		"subtitle": "Package NPM. Types TypeScript. Compatible avec React, Vue, Svelte, Astro ou JS pur. Pas de proxy backend requis.",
-		"items": {
-			"typedClient": {
-				"title": "Types TypeScript complets",
-				"description": "Autocomplétion sur chaque méthode. Pas de devinette sur les formes de réponse. Les types sont livrés avec le package — pas de @types/ nécessaire."
-			},
-			"singleSearch": {
-				"title": "Recherche simple",
-				"description": "search(indexSlug, query, options) → résultats typés. Facettes, filtres, tri, pagination — tout dans l'objet options."
-			},
-			"multiSearch": {
-				"title": "Multi-search (fédérée)",
-				"description": "multiSearch([...queries]) → tableau de résultats typés. Une requête HTTP, exécution parallèle, facettes indépendantes."
-			},
-			"tokenHandling": {
-				"title": "Support des scoped tokens",
-				"description": "Initialisez avec un scoped token éphémère de votre serveur. Le SDK l'attache automatiquement à chaque requête."
-			},
-			"errorHandling": {
-				"title": "Gestion d'erreurs typée",
-				"description": "Objets d'erreur typés avec slug (search_failed, quota_exceeded, rate_limited). Attrapez et gérez programmatiquement."
-			},
-			"lightweight": {
-				"title": "Moins de 5 Ko gzippé",
-				"description": "Build ESM tree-shakeable. Seules les méthodes que vous importez sont bundlées. Pas de dépendances runtime."
-			}
-		}
-	},
-	"integrationsMcpPage": {
-		"title": "Intégration serveur MCP",
-		"description": "Serveur Model Context Protocol pour agents IA. Claude, Cursor et tout client MCP peuvent chercher et gérer les index."
-	},
-	"integrationsMcp": {
-		"title": "Des agents IA qui cherchent dans vos données",
-		"subtitle": "Le serveur MCP AACsearch expose la recherche, la gestion d'index et les stats à tout assistant IA compatible MCP.",
-		"items": {
-			"tools": {
-				"title": "4 outils MCP",
-				"description": "search, list_indexes, upsert_document, search_stats — les opérations essentielles qu'un agent IA a besoin sur vos données."
-			},
-			"claude": {
-				"title": "Compatible avec Claude",
-				"description": "Ajoutez le serveur MCP AACsearch à Claude Code ou Claude Desktop. Posez des questions en langage naturel sur vos données indexées."
-			},
-			"cursor": {
-				"title": "Compatible avec Cursor",
-				"description": "Les fonctionnalités IA de Cursor peuvent chercher dans votre index de code, documentation ou données produit via l'intégration MCP."
-			},
-			"transport": {
-				"title": "Transport stdio",
-				"description": "JSON-RPC 2.0 sur stdio. Compatible avec tout client MCP. Pas de serveur HTTP requis — pointez simplement vers le binaire."
-			},
-			"authentication": {
-				"title": "Auth par clé API",
-				"description": "Configurez avec une clé API ss_search_*. Le serveur MCP hérite des scopes et rate limits de la clé."
-			},
-			"enterpriseReady": {
-				"title": "Prêt pour l'Enterprise",
-				"description": "Authentification par clé API scoped, limitation de débit et isolation des locataires. Intégrez MCP dans vos workflows enterprise en toute confiance."
-			},
-			"extensible": {
-				"title": "Extensible",
-				"description": "Ajoutez des outils personnalisés pour votre workflow. Étendez les capacités du serveur MCP et intégrez vos systèmes internes."
-			}
-		}
-	},
-	"integrationsContentfulPage": {
-		"title": "AACsearch pour Contentful",
-		"description": "Connectez Contentful à AACsearch et ajoutez une recherche instantanée et tolérante aux fautes à votre CMS."
-	},
-	"integrationsContentful": {
-		"title": "AACsearch pour Contentful",
-		"subtitle": "Synchronisez les entrées Contentful avec AACsearch et ajoutez la recherche instantanée à votre site basé sur le contenu.",
-		"items": {
-			"sync": {
-				"title": "Synchronisation automatique du contenu",
-				"description": "Publiez dans Contentful et les modifications apparaissent dans AACsearch en quelques secondes via webhooks."
-			},
-			"fields": {
-				"title": "Mappage de champs flexible",
-				"description": "Choisissez quels champs Contentful indexer et comment les mapper au schéma de recherche."
-			},
-			"locales": {
-				"title": "Support multilingue",
-				"description": "Indexez le contenu dans toutes vos langues Contentful et servez des résultats de recherche localisés."
-			},
-			"preview": {
-				"title": "Support du contenu brouillon",
-				"description": "Indexez optionnellement le contenu brouillon pour prévisualiser les résultats avant publication."
-			},
-			"analytics": {
-				"description": "Comprenez quelles entrées de contenu apparaissent dans la recherche, quels sujets ont des lacunes et comment la recherche stimule l'engagement du contenu.",
-				"title": "Analytique de contenu"
-			},
-			"app": {
-				"description": "Installez l'application AACsearch depuis le Marketplace Contentful. Configurez les mappages d'index pour chaque modèle de contenu dans l'interface.",
-				"title": "Application Contentful"
-			},
-			"autoSync": {
-				"description": "Contentful envoie un webhook à chaque événement de publication. AACsearch traite le payload et met à jour l'index en moins d'une seconde.",
-				"title": "Synchronisation déclenchée à la publication"
-			},
-			"contentTypes": {
-				"description": "Mappez n'importe quel champ de type de contenu à un attribut AACsearch. Les champs de texte enrichi sont automatiquement convertis en texte brut pour la recherche.",
-				"title": "Mappage du modèle de contenu"
-			},
-			"webhook": {
-				"description": "Configurez les webhooks Contentful dans votre tableau de bord AACsearch — sans code. Événements pour créer, mettre à jour, dépublier et archiver.",
-				"title": "Configuration du webhook"
-			},
-			"widget": {
-				"description": "Utilisez le SDK navigateur AACsearch avec n'importe quel frontend Contentful. Hooks React, composables Vue et JavaScript vanilla tous supportés.",
-				"title": "SDK JavaScript"
-			},
-			"localization": {
-				"title": "Support de localisation",
-				"description": "Synchronisez le contenu dans toutes les langues de Contentful. Chaque langue est mappée à une collection AACsearch distincte pour la recherche multilingue."
-			},
-			"mapping": {
-				"title": "Mappage de champs",
-				"description": "Mappez les champs de contenu Contentful aux champs d'index AACsearch. Transformez le texte enrichi en texte brut et extrayez les références imbriquées."
-			},
-			"richText": {
-				"title": "Gestion du texte enrichi",
-				"description": "Convertissez automatiquement les champs Rich Text de Contentful en texte brut pour l'indexation. Les ressources et entrées intégrées sont extraites et traitées."
-			}
-		}
-	},
-	"integrationsNextJsPage": {
-		"title": "AACsearch pour Next.js",
-		"description": "Ajoutez la recherche instantanée à votre application Next.js. Les Server Components, Route Handlers et Client Components sont pris en charge."
-	},
-	"integrationsNextJs": {
-		"title": "AACsearch pour Next.js",
-		"subtitle": "Ajoutez la recherche instantanée à votre application Next.js avec notre SDK officiel et nos composants React.",
-		"items": {
-			"sdk": {
-				"title": "SDK TypeScript",
-				"description": "Installez le package npm AACsearch. Types TypeScript complets, zéro dépendance externe, 8 Ko gzippé. Fonctionne dans n'importe quel runtime JS."
-			},
-			"ssr": {
-				"title": "Compatible SSR et SSG",
-				"description": "Hydratation côté serveur pour le SEO. Les résultats de recherche sont crawlables par les moteurs de recherche."
-			},
-			"routing": {
-				"title": "Synchronisation URL",
-				"description": "Synchronise automatiquement la requête de recherche et les filtres avec l'URL pour le partage et le retour arrière."
-			},
-			"typescript": {
-				"title": "TypeScript d'abord",
-				"description": "Support TypeScript complet avec types générés à partir du schéma de votre collection AACsearch. Autocomplétion pour les noms de champ, valeurs de filtre et formes de réponse."
-			},
-			"analytics": {
-				"description": "Suivez les événements de recherche depuis le réseau Vercel Edge. Pas de cold starts, pas de risque de timeout pour les appels d'analytique légers.",
-				"title": "Analytique compatible Edge"
-			},
-			"appRouter": {
-				"description": "Gestionnaires de route, actions serveur et streaming — tout fonctionne avec le SDK AACsearch. Aucun adaptateur spécial requis.",
-				"title": "Compatible App Router"
-			},
-			"caching": {
-				"description": "Utilisez fetch avec next revalidate ou ISR pour mettre en cache les résultats de recherche. AACsearch respecte les en-têtes HTTP Cache-Control standard.",
-				"title": "Intégration cache Next.js"
-			},
-			"serverComponents": {
-				"description": "Appelez l'API AACsearch directement depuis les Server Components. Aucun coût de bundle client, aucune surcharge d'hydratation pour les pages de résultats de recherche.",
-				"title": "React Server Components"
-			},
-			"widget": {
-				"description": "Ajoutez le widget AACsearch à votre layout Next.js avec une balise script, ou utilisez le SDK React pour une interface de recherche entièrement personnalisable.",
-				"title": "Widget côté client"
-			},
-			"edgeRuntime": {
-				"title": "Support Edge Runtime",
-				"description": "Utilisez le SDK AACsearch avec Next.js Edge Runtime pour une recherche de moins de 50 ms en périphérie. Fonctionne avec middleware et routes API edge."
-			},
-			"hooks": {
-				"title": "Hooks React",
-				"description": "Hooks useSearch, useFacets et useAutocomplete pour une UI de recherche déclarative dans Next.js App Router. Typés et compatibles serveur."
-			},
-			"routeHandlers": {
-				"title": "Gestionnaires de route",
-				"description": "Gestionnaires de route API côté serveur pour la génération de tokens limités, la recherche proxy et les endpoints d'analyse. Gardez les clés API sécurisées."
-			},
-			"ssg": {
-				"title": "Génération statique",
-				"description": "Pré-rendu des pages de recherche au moment de la construction avec les données AACsearch. Réduisez le time-to-first-byte tout en gardant les résultats à jour via ISR."
-			}
-		}
-	},
-	"integrationsReactPage": {
-		"title": "AACsearch pour React",
-		"description": "Ajoutez une recherche instantanée tolérante aux fautes à votre application React. Hooks, widgets et SDKs inclus."
-	},
-	"integrationsReact": {
-		"title": "AACsearch pour React",
-		"subtitle": "Composants et hooks React pour créer des interfaces de recherche puissantes et personnalisables.",
-		"items": {
-			"hooks": {
-				"title": "Hooks de recherche",
-				"description": "useSearch, useFacets, usePagination et plus. Créez des interfaces personnalisées avec une logique d'état gérée."
-			},
-			"components": {
-				"title": "Composants prêts à l'emploi",
-				"description": "SearchBox, Hits, Facets, Pagination, Highlight. Personnalisation complète via className et render props."
-			},
-			"headless": {
-				"title": "Headless quand vous en avez besoin",
-				"description": "Utilisez uniquement les hooks et construisez votre propre UI depuis zéro. Sans styles imposés."
-			},
-			"perf": {
-				"title": "Optimisé pour les performances",
-				"description": "Debounce, annulation de requêtes et cache intégrés pour éviter les re-rendus inutiles."
-			},
-			"analytics": {
-				"description": "Le SDK inclut un appel trackEvent pour les clics sur les résultats, l'utilisation des filtres et les rapports de résultats nuls. Alimente votre tableau de bord AACsearch.",
-				"title": "Suivi d'événements"
-			},
-			"sdk": {
-				"description": "Installez le package React AACsearch. Hooks pour la recherche, l'autocomplétion et les facettes. Types TypeScript complets, zéro dépendance pair.",
-				"title": "SDK React"
-			},
-			"ssr": {
-				"description": "Pré-chargez les résultats de recherche côté serveur et hydratez côté client sans flash de contenu vide.",
-				"title": "SSR et hydratation"
-			},
-			"typescript": {
-				"description": "Les types du SDK sont générés depuis la spécification OpenAPI d'AACsearch. Autocomplétion pour chaque champ de votre schéma de collection.",
-				"title": "Support TypeScript complet"
-			},
-			"customUI": {
-				"title": "Composants UI personnalisés",
-				"description": "Créez des UI de recherche entièrement personnalisées avec des composants React. Le SDK AACsearch fournit la couche de données — concevez votre propre boîte de recherche, facettes et grille de résultats."
-			},
-			"performance": {
-				"title": "Performance optimisée",
-				"description": "SDK tree-shakeable. Importez uniquement les hooks dont vous avez besoin. Taille du bundle inférieure à 5 Ko pour une implémentation de base."
-			},
-			"stateManagement": {
-				"title": "Gestion d'état",
-				"description": "L'état de recherche est géré en interne par le SDK. Se synchronise avec les paramètres d'URL, l'historique du navigateur et prend en charge l'état multi-recherche."
-			}
-		}
-	},
-	"integrationsSanityPage": {
-		"title": "AACsearch pour Sanity",
-		"description": "Connectez votre Sanity Studio à AACsearch. Le contenu se synchronise automatiquement à chaque publication."
-	},
-	"integrationsSanity": {
-		"title": "AACsearch pour Sanity",
-		"subtitle": "Connectez Sanity CMS à AACsearch pour une recherche instantanée sur votre contenu structuré.",
-		"items": {
-			"listener": {
-				"title": "Listener en temps réel",
-				"description": "Le connecteur écoute les événements de mutation Sanity et synchronise les modifications avec AACsearch instantanément."
-			},
-			"groq": {
-				"title": "Projections GROQ",
-				"description": "Utilisez GROQ pour définir exactement quels champs indexer, y compris les champs référencés et les tableaux de blocs."
-			},
-			"studio": {
-				"title": "Plugin pour Sanity Studio",
-				"description": "Prévisualisez les résultats de recherche directement dans Sanity Studio avant de publier."
-			},
-			"portable": {
-				"title": "Support Portable Text",
-				"description": "Extrait et nettoie automatiquement le texte des blocs Portable Text pour l'indexation."
-			},
-			"analytics": {
-				"description": "Suivez quels types de documents reçoivent le plus de trafic de recherche, quelles requêtes échouent et comment la découverte par recherche génère des conversions.",
-				"title": "Analytique de recherche"
-			},
-			"plugin": {
-				"description": "Installez sanity-plugin-aacsearch depuis npm. Gérez les mappages d'index et déclenchez des resynchronisations directement depuis Sanity Studio.",
-				"title": "Plugin Sanity Studio"
-			},
-			"schemaSync": {
-				"description": "Mappez n'importe quel type de schéma Sanity à une collection AACsearch. Le texte portable, les références et les tableaux sont aplatis automatiquement.",
-				"title": "Indexation avec reconnaissance de schéma"
-			},
-			"webhook": {
-				"description": "Sanity livre les modifications de documents à AACsearch via webhook HTTPS. Les nouveaux documents, mises à jour et suppressions sont tous gérés automatiquement.",
-				"title": "Synchronisation par webhook"
-			},
-			"widget": {
-				"description": "Le SDK navigateur AACsearch fonctionne avec n'importe quel frontend Sanity. Utilisez les hooks React ou le client JavaScript vanilla.",
-				"title": "Intégration frontend"
-			},
-			"multiDataset": {
-				"title": "Synchronisation multi-dataset",
-				"description": "Synchronisez plusieurs datasets Sanity vers des collections AACsearch distinctes. Chaque dataset conserve sa propre configuration de recherche."
-			},
-			"realtime": {
-				"title": "Synchronisation en temps réel",
-				"description": "Écoutez les mutations GROQ de Sanity et mettez à jour AACsearch en temps réel. Les changements se propagent en quelques secondes."
-			},
-			"types": {
-				"title": "Support des requêtes GROQ",
-				"description": "Utilisez des requêtes GROQ pour définir exactement quel contenu est synchronisé avec AACsearch. Filtrez, projetez et joignez des documents avec la syntaxe de requête Sanity."
-			}
-		}
-	},
-	"integrationsShopifyPage": {
-		"title": "AACsearch pour Shopify",
-		"description": "Remplacez la recherche par défaut de Shopify par AACsearch. Résultats instantanés, facettes et classement personnalisé."
-	},
-	"integrationsShopify": {
-		"title": "AACsearch pour Shopify",
-		"subtitle": "Remplacez la recherche Shopify par des résultats instantanés, des facettes et des recommandations.",
-		"items": {
-			"install": {
-				"title": "Installation en un clic",
-				"description": "Installez l'application AACsearch depuis le Shopify App Store. Connectez votre index avec votre clé API et vous êtes en ligne en quelques minutes."
-			},
-			"products": {
-				"title": "Synchronisation des produits",
-				"description": "Produits, variantes, collections et métachamps synchronisés automatiquement en temps réel."
-			},
-			"widget": {
-				"title": "Widget de recherche pour la boutique",
-				"description": "Widget personnalisable s'intégrant à n'importe quel thème Shopify. Compatible Online Store 2.0."
-			},
-			"analytics": {
-				"title": "Analytiques de recherche en boutique",
-				"description": "Découvrez ce que vos clients recherchent, ce qu'ils ne trouvent pas et ce qui convertit le mieux."
-			},
-			"metafields": {
-				"description": "Indexez les métachamps Shopify comme champs recherchables et filtrables. Exposez des attributs produit personnalisés sans modification de schéma.",
-				"title": "Métachamps personnalisés"
-			},
-			"productSync": {
-				"description": "Les nouveaux produits, changements de prix et mises à jour de stock se synchronisent avec AACsearch via les webhooks Shopify. Les changements apparaissent dans la recherche en moins d'une seconde.",
-				"title": "Synchronisation automatique des produits"
-			},
-			"variantSync": {
-				"description": "Chaque variante de produit est indexée comme un document séparé. Les clients peuvent rechercher par taille, couleur ou SKU directement.",
-				"title": "Indexation des variantes"
-			},
-			"facets": {
-				"title": "Facettes produit",
-				"description": "Les variantes, options et métachamps de produits Shopify sont automatiquement indexés comme facettes de recherche. Filtrez par taille, couleur, matériau ou attributs personnalisés."
-			},
-			"multilingual": {
-				"title": "Support multilingue",
-				"description": "Synchronisez le contenu des produits Shopify dans toutes les langues de la boutique. AACsearch indexe chaque langue séparément."
-			},
-			"sync": {
-				"title": "Synchronisation automatisée",
-				"description": "Synchronisation automatique des produits via webhooks Shopify. Les événements de création, mise à jour et suppression se propagent en temps réel."
-			},
-			"variants": {
-				"title": "Indexation des variantes",
-				"description": "Indexez les variantes Shopify comme documents de recherche séparés ou comme champs imbriqués. Chaque variante conserve son propre prix, stock et SKU."
-			}
-		}
-	},
-	"integrationsStrapiPage": {
-		"title": "AACsearch pour Strapi",
-		"description": "Connectez Strapi à AACsearch et ajoutez une recherche en texte intégral instantanée à chaque type de contenu."
-	},
-	"integrationsStrapi": {
-		"title": "AACsearch pour Strapi",
-		"subtitle": "Synchronisez le contenu Strapi avec AACsearch automatiquement via notre plugin officiel.",
-		"items": {
-			"plugin": {
-				"title": "Plugin officiel pour Strapi v4/v5",
-				"description": "Installez depuis le marketplace Strapi. Configurez dans le panneau d'administration sans code."
-			},
-			"lifecycle": {
-				"title": "Hooks de cycle de vie",
-				"description": "Le plugin intercepte les événements de création, mise à jour et suppression pour maintenir l'index synchronisé."
-			},
-			"content": {
-				"title": "Support des types de contenu",
-				"description": "Indexez n'importe quel type de contenu Strapi, y compris les composants, les zones dynamiques et les relations."
-			},
-			"populate": {
-				"title": "Relations peuplées",
-				"description": "Configurez quelles relations inclure dans le document de recherche pour enrichir les résultats."
-			},
-			"analytics": {
-				"description": "Voyez quels types de contenu reçoivent le plus de trafic de recherche et quelles requêtes ne trouvent pas de résultats. Guidez les décisions éditoriales avec les données de recherche.",
-				"title": "Analytique de recherche de contenu"
-			},
-			"autoSync": {
-				"description": "Le contenu se synchronise sur les hooks de cycle de vie afterCreate, afterUpdate et afterDelete de Strapi. Mises à jour à latence nulle.",
-				"title": "Synchronisation par hook de cycle de vie"
-			},
-			"contentTypes": {
-				"description": "Mappez n'importe quel type de contenu Strapi à une collection AACsearch. Relations imbriquées, zones dynamiques et champs média tous supportés.",
-				"title": "Tous les types de contenu"
-			},
-			"webhook": {
-				"description": "Configurez un webhook Strapi comme chemin de synchronisation de secours. Garantit la livraison même si le hook de cycle de vie est manqué lors d'une migration.",
-				"title": "Webhook de secours"
-			},
-			"widget": {
-				"description": "Utilisez le SDK navigateur AACsearch pour créer une recherche instantanée pour votre frontend Strapi — React, Vue ou JavaScript vanilla.",
-				"title": "Widget de recherche frontend"
-			},
-			"adminPanel": {
-				"title": "Intégration panneau d'administration",
-				"description": "Gérez AACsearch directement depuis le panneau d'administration Strapi. Visualisez l'état de l'index, déclenchez des synchronisations et surveillez les erreurs."
-			},
-			"api": {
-				"title": "Synchronisation REST API",
-				"description": "Synchronisez tout type de contenu Strapi via l'API REST. Définissez les types de collection à inclure ou exclure de l'indexation."
-			},
-			"localization": {
-				"title": "Support i18n",
-				"description": "Synchronisez le contenu localisé de Strapi vers des collections AACsearch distinctes par langue. Chaque langue conserve une configuration indépendante."
-			}
-		}
-	},
-	"integrationsWoocommercePage": {
-		"title": "AACsearch pour WooCommerce",
-		"description": "Remplacez la recherche par défaut de WordPress par AACsearch. Recherche instantanée tolérante aux fautes pour une meilleure découverte de produits."
-	},
-	"integrationsWoocommerce": {
-		"title": "AACsearch pour WooCommerce",
-		"subtitle": "Dynamisez la recherche dans votre boutique WooCommerce avec des résultats instantanés et des facettes intelligentes.",
-		"items": {
-			"plugin": {
-				"title": "Plugin WordPress/WooCommerce",
-				"description": "Installez depuis le répertoire de plugins WordPress. Configuration sans code depuis le tableau de bord WP."
-			},
-			"products": {
-				"title": "Synchronisation des produits",
-				"description": "Produits, variations, catégories, étiquettes et attributs synchronisés automatiquement."
-			},
-			"filters": {
-				"title": "Filtres de produits",
-				"description": "Filtres instantanés par prix, catégorie, attribut ou tout champ personnalisé WooCommerce."
-			},
-			"orders": {
-				"title": "Recherche dans l'admin",
-				"description": "Recherchez également les commandes, clients et produits dans le tableau de bord d'administration WooCommerce."
-			},
-			"analytics": {
-				"description": "Suivez la conversion recherche-panier, le taux de résultats nuls et les requêtes principales. Identifiez les lacunes de votre catalogue à partir des données de recherche réelles.",
-				"title": "Analytique commerce"
-			},
-			"install": {
-				"description": "Installez depuis le répertoire des plugins WordPress ou téléchargez manuellement. Nécessite WooCommerce 8.x et une clé API AACsearch.",
-				"title": "Installation du plugin"
-			},
-			"orderSearch": {
-				"description": "Indexez l'historique des commandes pour les clients connectés. Recherche de commandes rapide et privée, limitée au compte utilisateur authentifié.",
-				"title": "Recherche de commandes"
-			},
-			"productSync": {
-				"description": "Les produits se synchronisent à la publication, mise à jour et suppression. Les changements de stock déclenchent des mises à jour automatiques de l'index via les webhooks WooCommerce.",
-				"title": "Synchronisation des produits"
-			},
-			"variantSync": {
-				"description": "Les clients peuvent rechercher des variations spécifiques par attribut — couleur, taille, matériau — sans naviguer vers une page produit au préalable.",
-				"title": "Recherche de variations"
-			},
-			"widget": {
-				"description": "Widget clé en main pour votre thème WooCommerce. Affiche les résultats de recherche instantanée, les facettes et l'ajout au panier sans quitter la superposition.",
-				"title": "Widget boutique"
-			},
-			"attributes": {
-				"title": "Attributs produit",
-				"description": "Indexez les attributs de produits WooCommerce comme facettes de recherche. La couleur, la taille, le matériau et les attributs personnalisés deviennent des filtres cliquables."
-			},
-			"categories": {
-				"title": "Hiérarchie des catégories",
-				"description": "Préservez la structure arborescente des catégories WooCommerce dans AACsearch. Naviguez avec des facettes hiérarchiques respectant les relations parent-enfant."
-			},
-			"performance": {
-				"title": "Performance de recherche",
-				"description": "AACsearch gère la recherche WooCommerce à grande échelle. Latence de requête inférieure à 50 ms même sur des catalogues de 500 000+ produits."
-			},
-			"sync": {
-				"title": "Synchronisation automatisée",
-				"description": "Synchronisation automatique via hooks WooCommerce. Les modifications de produit se propagent à AACsearch en temps réel."
-			}
-		}
-	},
-	"integrationsWordpressPage": {
-		"title": "AACsearch pour WordPress",
-		"description": "Ajoutez une recherche instantanée tolérante aux fautes aux sites WordPress. Plugin disponible, aucune programmation requise."
-	},
-	"integrationsWordpress": {
-		"title": "AACsearch pour WordPress",
-		"subtitle": "Remplacez la recherche native de WordPress par des résultats instantanés et pertinents.",
-		"items": {
-			"plugin": {
-				"title": "Plugin WordPress",
-				"description": "Installez depuis le répertoire de plugins WordPress.org. Compatibilité avec WordPress 6.x."
-			},
-			"posts": {
-				"title": "Articles, pages et types personnalisés",
-				"description": "Indexez n'importe quel type d'article WordPress, y compris les types d'articles personnalisés et les taxonomies."
-			},
-			"acf": {
-				"title": "Support ACF et métadonnées",
-				"description": "Indexez les champs Advanced Custom Fields et n'importe quelle métadonnée d'article pour des résultats plus riches."
-			},
-			"gutenberg": {
-				"title": "Bloc Gutenberg",
-				"description": "Ajoutez un bloc de recherche propulsé par AACsearch à n'importe quelle page avec l'éditeur de blocs."
-			},
-			"analytics": {
-				"description": "Les éditeurs WordPress voient les requêtes principales, les taux de résultats nuls et les vues de page générées par la recherche directement dans le tableau de bord AACsearch.",
-				"title": "Analytique de recherche"
-			},
-			"customTypes": {
-				"description": "Indexez les types de publications personnalisés et les Advanced Custom Fields comme attributs recherchables et facettables. Contrôle total sur les champs exposés.",
-				"title": "Types de publications personnalisés et ACF"
-			},
-			"multiSite": {
-				"description": "Chaque site d'un réseau multisite WordPress obtient un index AACsearch séparé avec sa propre clé API et analytique.",
-				"title": "Support multisite"
-			},
-			"postSync": {
-				"description": "Tous les types de publications se synchronisent à la publication et à la mise à jour. Les publications supprimées sont retirées de l'index automatiquement via les hooks WordPress.",
-				"title": "Synchronisation des articles et pages"
-			},
-			"widget": {
-				"description": "Remplacez le widget de recherche par défaut par le bloc AACsearch. Résultats instantanés, filtres de facettes et navigation au clavier.",
-				"title": "Bloc de recherche Gutenberg"
-			},
-			"instant": {
-				"title": "Recherche instantanée",
-				"description": "Remplacez la recherche WordPress par défaut par des résultats instantanés. Recherchez dans les articles, pages, types de publication personnalisés et champs ACF simultanément."
-			},
-			"multilingual": {
-				"title": "Support WPML et Polylang",
-				"description": "Compatible avec WPML et Polylang pour les sites WordPress multilingues. Les résultats respectent automatiquement le contexte de langue actuel."
-			},
-			"postTypes": {
-				"title": "Types de publication personnalisés",
-				"description": "Indexez tout type de publication WordPress personnalisé. Chaque type peut avoir sa propre configuration de recherche et facettes."
-			},
-			"shortcode": {
-				"title": "Shortcode du widget",
-				"description": "Intégrez le widget AACsearch n'importe où dans WordPress avec un shortcode. Personnalisez le texte indicatif, la langue et les résultats par page."
-			}
-		}
-	},
-	"integrationsNextJsSetup": {
-		"title": "Démarrer en 3 étapes",
-		"subtitle": "Aucune modification du backend requise. Le SDK AACsearch fonctionne directement depuis votre application Next.js.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Installer le package",
-			"description": "Exécutez npm install @aacsearch/client dans votre projet Next.js."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Configurer votre client",
-			"description": "Créez un client de recherche avec votre clé API et le slug d'index. Gardez la clé côté serveur ou utilisez un token en lecture seule pour les composants client."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Rechercher depuis n'importe quel composant",
-			"description": "Appelez client.search() depuis un Server Component ou utilisez le hook useSearch dans un Client Component. Les résultats sont typés."
-		},
-		"code": {
-			"title": "Exemple minimal de Server Component"
-		},
-		"cta": "Lire la documentation complète"
-	},
-	"integrationsNextJsFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Fonctionne-t-il avec Next.js 13, 14 et 15 ?",
-			"answer": "Oui. Le SDK est compatible avec Next.js 13, 14 et 15. Il fonctionne avec l'App Router et le Pages Router sans adaptateurs."
-		},
-		"q2": {
-			"question": "Puis-je l'utiliser avec Vercel Edge Runtime ?",
-			"answer": "Oui. Le client AACsearch utilise l'API Fetch standard et est entièrement compatible avec Vercel Edge Runtime et Cloudflare Workers."
-		},
-		"q3": {
-			"question": "Comment protéger ma clé API côté client ?",
-			"answer": "Utilisez un token limité avec des permissions en lecture seule pour la recherche côté client. Créez-le depuis votre tableau de bord AACsearch — la clé admin complète reste uniquement côté serveur."
-		}
-	},
-	"integrationsReactSetup": {
-		"title": "Ajouter la recherche à votre app React en 3 étapes",
-		"subtitle": "Compatible avec React 17, 18 et 19. Agnostique au framework — Next.js, Remix, Vite et CRA sont supportés.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Installer le package",
-			"description": "Exécutez npm install @aacsearch/react dans votre projet."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Utiliser le hook useSearch",
-			"description": "Passez votre clé API et le slug d'index. Le hook renvoie les résultats, l'état de chargement et une fonction setQuery."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Afficher les résultats",
-			"description": "Parcourez les résultats et affichez-les dans votre propre UI. Aucun composant wrapper obligatoire — liberté totale de style."
-		},
-		"code": {
-			"title": "Exemple minimal de useSearch"
-		},
-		"cta": "Parcourir la référence API"
-	},
-	"integrationsReactFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Quelles versions de React sont supportées ?",
-			"answer": "React 17, 18 et 19 sont supportés. Les hooks utilisent le state et les effets React standard — pas d'APIs instables ni de fonctionnalités expérimentales."
-		},
-		"q2": {
-			"question": "Fonctionne-t-il avec Next.js ou Remix ?",
-			"answer": "Oui. Les hooks React fonctionnent dans n'importe quel environnement React. Pour les Server Components Next.js, utilisez le package de base @aacsearch/client sans dépendance React."
-		},
-		"q3": {
-			"question": "Y a-t-il une bibliothèque de composants ou seulement des hooks ?",
-			"answer": "@aacsearch/react inclut des hooks composables (useSearch, useAutocomplete, useFacets) et des composants headless non stylisés. Apportez votre propre CSS ou Tailwind."
-		}
-	},
-	"integrationsPrestashopSetup": {
-		"title": "Installer en 5 minutes",
-		"subtitle": "Aucun code PHP requis. Le module gère la synchronisation automatiquement après configuration.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Télécharger le module",
-			"description": "Récupérez aacsearch.zip depuis votre tableau de bord AACsearch sous Connecteurs → PrestaShop."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Téléverser dans PrestaShop",
-			"description": "Allez dans Modules > Gestionnaire de modules > Téléverser un module. Sélectionnez le ZIP et confirmez."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Saisir votre token de connecteur",
-			"description": "Collez le token de connecteur depuis votre tableau de bord AACsearch dans les paramètres du module et sauvegardez."
-		},
-		"step4": {
-			"label": "Étape 4",
-			"title": "Lancer l'export complet du catalogue",
-			"description": "Cliquez sur \"Export complet\" dans le panneau d'administration du module. Tout votre catalogue produit se synchronise en un seul lot."
-		},
-		"step5": {
-			"label": "Étape 5",
-			"title": "La recherche est en ligne",
-			"description": "Les produits apparaissent immédiatement dans AACsearch. Les futurs enregistrements, mises à jour et suppressions se synchronisent automatiquement via les hooks PrestaShop."
-		},
-		"cta": "Télécharger le module"
-	},
-	"integrationsPrestashopFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Quelles versions de PrestaShop sont supportées ?",
-			"answer": "PrestaShop 8.0 et 8.1 sont entièrement supportés. PHP 8.1+ requis. Compatible avec tous les thèmes majeurs, y compris Hummingbird et Classic."
-		},
-		"q2": {
-			"question": "Le module ralentit-il la sauvegarde des produits ?",
-			"answer": "Non. La synchronisation est asynchrone via le buffer d'ingest AACsearch. Le module met la mise à jour en file d'attente et retourne immédiatement — pas d'appels bloquants vers Typesense à la sauvegarde."
-		},
-		"q3": {
-			"question": "Puis-je personnaliser les champs indexés ?",
-			"answer": "Oui. Le module exporte tous les champs produit par défaut. Vous pouvez restreindre les attributs dans les paramètres du module ou étendre la classe Exporter pour une logique personnalisée."
-		}
-	},
-	"integrationsBitrixSetup": {
-		"title": "Installer en 5 minutes",
-		"subtitle": "Aucune personnalisation Bitrix requise. Le module s'installe comme un module standard du marketplace Bitrix.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Télécharger le module",
-			"description": "Récupérez l'archive aac.search depuis votre tableau de bord AACsearch sous Connecteurs → 1C-Bitrix."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Décompresser dans /local/modules/",
-			"description": "Extrayez l'archive dans /local/modules/aac.search/ sur votre serveur Bitrix. Conservez la structure des répertoires intacte."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Installer depuis l'admin Bitrix",
-			"description": "Allez dans Admin Bitrix → Marketplace → Modules installés. Trouvez \"AACsearch\" dans la liste et cliquez sur Installer."
-		},
-		"step4": {
-			"label": "Étape 4",
-			"title": "Configurer le connecteur",
-			"description": "Saisissez votre token de connecteur et l'ID iBlock dans les paramètres du module. Choisissez le type d'iBlock catalogue et sauvegardez."
-		},
-		"step5": {
-			"label": "Étape 5",
-			"title": "Lancer la synchronisation initiale",
-			"description": "Cliquez sur \"Lancer la synchronisation complète\" dans l'onglet Diagnostics. Tous les éléments du catalogue sont indexés. Les modifications futures se synchronisent automatiquement via les gestionnaires d'événements."
-		},
-		"cta": "Télécharger le module"
-	},
-	"integrationsBitrixFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Quelles éditions de Bitrix sont supportées ?",
-			"answer": "Les éditions Bitrix Site Manager et Business sont supportées. PHP 8.1+ requis. Utilise le HttpClient Bitrix standard — aucune bibliothèque HTTP tierce requise."
-		},
-		"q2": {
-			"question": "Comment fonctionne l'agent de synchronisation en arrière-plan ?",
-			"answer": "Le module enregistre un agent Bitrix qui exécute une synchronisation complète périodique pour la fiabilité. Il capture toutes les modifications du catalogue manquées par les gestionnaires d'événements en temps réel."
-		},
-		"q3": {
-			"question": "Puis-je personnaliser les propriétés d'iBlock indexées ?",
-			"answer": "Oui. Le module exporte toutes les propriétés produit par défaut. Vous pouvez limiter les champs dans les paramètres admin ou étendre la classe ProductExporter pour une sélection de champs entièrement personnalisée."
-		}
-	},
-	"integrationsStrapiSetup": {
-		"title": "Connectez Strapi à AACsearch en 3 étapes",
-		"subtitle": "Installez le plugin, configurez les types de contenu et la recherche est en ligne.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Installer le plugin",
-			"description": "Exécutez npm install sanity-plugin-aacsearch dans votre projet Strapi ou téléchargez le plugin depuis le tableau de bord AACsearch sous Connecteurs."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Configurer le mapping des types de contenu",
-			"description": "Dans les paramètres du plugin, sélectionnez les types de contenu Strapi à synchroniser. Mappez les champs aux attributs AACsearch."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "La recherche est en ligne",
-			"description": "Publiez une nouvelle entrée dans Strapi. Elle apparaît dans AACsearch en moins d'une seconde. Utilisez le SDK navigateur AACsearch pour la recherche instantanée."
-		},
-		"cta": "Télécharger le plugin"
-	},
-	"integrationsStrapiFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Quelles versions de Strapi sont prises en charge ?",
-			"answer": "Strapi 4.x et 5.x sont entièrement pris en charge. Le plugin utilise les hooks de cycle de vie standard de Strapi et l'API REST."
-		},
-		"q2": {
-			"question": "Le plugin ralentit-il l'enregistrement du contenu dans Strapi ?",
-			"answer": "Non. La synchronisation est asynchrone via le tampon d'ingestion AACsearch. Le hook met à jour la file d'attente et revient immédiatement."
-		},
-		"q3": {
-			"question": "Puis-je synchroniser uniquement certains types de contenu ?",
-			"answer": "Oui. Les paramètres du plugin vous permettent de sélectionner les types de contenu et les champs à synchroniser."
-		}
-	},
-	"integrationsContentfulSetup": {
-		"title": "Connectez Contentful à AACsearch en 3 étapes",
-		"subtitle": "Installez l'application, configurez les webhooks et votre contenu est searchable.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Installer l'application AACsearch",
-			"description": "Installez l'application AACsearch depuis le Contentful Marketplace. Accordez l'accès en lecture à votre espace et sélectionnez l'environnement à synchroniser."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Configurer le mapping du modèle de contenu",
-			"description": "Dans les paramètres de l'application, mappez chaque modèle de contenu Contentful à une collection AACsearch. Les champs Rich Text sont automatiquement convertis."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Configurer les webhooks",
-			"description": "Configurez les webhooks Contentful dans votre tableau de bord AACsearch. Les événements de publication et d'archivage déclenchent des mises à jour automatiques de l'index."
-		},
-		"cta": "Installer l'application"
-	},
-	"integrationsContentfulFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Est-ce que ça prend en charge les locales Contentful ?",
-			"answer": "Oui. Chaque locale Contentful est mappée à une collection AACsearch distincte. Vous pouvez activer la recherche dans une, plusieurs ou toutes les langues."
-		},
-		"q2": {
-			"question": "Comment fonctionne l'indexation des champs Rich Text ?",
-			"answer": "Les champs Rich Text de Contentful sont automatiquement convertis en texte brut lors de la synchronisation. Les ressources et entrées intégrées sont extraites et traitées."
-		},
-		"q3": {
-			"question": "Puis-je utiliser l'environnement de prévisualisation ?",
-			"answer": "Oui. L'intégration prend en charge la synchronisation depuis l'environnement de prévisualisation Contentful pour les tests avant publication."
-		}
-	},
-	"integrationsSanitySetup": {
-		"title": "Connectez Sanity à AACsearch en 3 étapes",
-		"subtitle": "Installez le plugin, écrivez une requête GROQ et votre contenu est searchable.",
-		"step1": {
-			"label": "Étape 1",
-			"title": "Installer le plugin Sanity",
-			"description": "Exécutez npm install sanity-plugin-aacsearch dans votre projet Sanity Studio. Ajoutez-le à votre tableau plugins dans sanity.config.ts."
-		},
-		"step2": {
-			"label": "Étape 2",
-			"title": "Écrire une projection GROQ",
-			"description": "Définissez les documents et champs à indexer à l'aide d'une requête GROQ. Seules les données nécessaires quittent votre jeu de données Sanity."
-		},
-		"step3": {
-			"label": "Étape 3",
-			"title": "Configurer la synchronisation par webhook",
-			"description": "Sanity livre les modifications de documents à AACsearch via webhook HTTPS. Les nouveaux documents, mises à jour et suppressions sont traités automatiquement."
-		},
-		"cta": "Télécharger le plugin"
-	},
-	"integrationsSanityFaq": {
-		"title": "Questions fréquentes",
-		"q1": {
-			"question": "Est-ce que ça prend en charge Portable Text ?",
-			"answer": "Oui. Les blocs Portable Text de Sanity sont convertis en texte brut searchable. La structure des en-têtes est préservée et les annotations en ligne sont extraites."
-		},
-		"q2": {
-			"question": "Puis-je synchroniser plusieurs datasets Sanity ?",
-			"answer": "Oui. Chaque dataset Sanity est mappé à une collection AACsearch distincte. Les datasets de production et de développement ont des configurations indépendantes."
-		},
-		"q3": {
-			"question": "Comment fonctionne la synchronisation en temps réel ?",
-			"answer": "Le plugin écoute les mutations GROQ de Sanity et met à jour AACsearch en temps réel. Les changements se propagent en quelques secondes après la publication."
-		}
-	}
+  "integrationsPage": {
+    "title": "Connectez AACsearch à votre stack",
+    "description": "Modules prêts à l'emploi pour les plateformes populaires. API REST et SDK navigateur pour le reste."
+  },
+  "integrations": {
+    "title": "Intégrations prêtes à l'emploi",
+    "subtitle": "Installation en quelques minutes. Synchronisation automatique. Recherche instantanée.",
+    "items": {
+      "prestashop": {
+        "title": "PrestaShop 8.x",
+        "description": "Module PHP clé en main. Synchronise produits, catégories et stock automatiquement à chaque sauvegarde."
+      },
+      "bitrix": {
+        "title": "1C-Bitrix",
+        "description": "Module Bitrix natif. Export de produits piloté par événements avec support complet du catalogue."
+      },
+      "restApi": {
+        "title": "API REST",
+        "description": "15 endpoints publics avec authentification par clé API. Compatible avec tout langage backend."
+      },
+      "browserSdk": {
+        "title": "SDK navigateur",
+        "description": "Client JavaScript typé. Recherche simple, multi-recherche fédérée, facettes — moins de 50 ms p99."
+      },
+      "mcpServer": {
+        "title": "Serveur MCP",
+        "description": "Intégration du protocole de contexte de modèle pour Claude, Cursor et autres agents IA."
+      },
+      "custom": {
+        "title": "Connecteur personnalisé",
+        "description": "L'API Connector à 7 endpoints vous permet de créer une synchronisation pour n'importe quelle source de données."
+      }
+    }
+  },
+  "integrationsPrestashopPage": {
+    "title": "Intégration PrestaShop",
+    "description": "Module PrestaShop 8.x natif pour AACsearch. Synchronisez votre catalogue produits automatiquement à chaque sauvegarde."
+  },
+  "integrationsPrestashop": {
+    "title": "AACsearch pour PrestaShop",
+    "subtitle": "Module PHP clé en main. Aucun développement API requis. Sync complète du catalogue, mises à jour en temps réel et widget de recherche en quelques minutes.",
+    "items": {
+      "install": {
+        "title": "Installation en un clic",
+        "description": "Téléversez le ZIP dans le gestionnaire de modules PrestaShop. Entrez votre token de connecteur. C'est fait."
+      },
+      "autoSync": {
+        "title": "Synchronisation automatique",
+        "description": "Les sauvegardes, mises à jour et suppressions de produits déclenchent une sync instantanée via les hooks d'événements PrestaShop. Pas de cron nécessaire."
+      },
+      "fullExport": {
+        "title": "Export complet du catalogue",
+        "description": "Export initial de tous les produits et catégories en un clic depuis le panneau admin du module."
+      },
+      "widget": {
+        "title": "Intégration du widget",
+        "description": "Activez le widget AACsearch dans les paramètres du module. Il s'injecte automatiquement dans le hook de recherche de votre thème."
+      },
+      "diagnostics": {
+        "title": "Panneau de diagnostics",
+        "description": "Testez la connexion, vérifiez la dernière heure de sync et consultez les journaux d'erreurs depuis le panneau admin du module."
+      },
+      "compatibility": {
+        "title": "Compatible PrestaShop 8.x",
+        "description": "Testé sur PrestaShop 8.0 et 8.1. PHP 8.1+. Compatible avec tous les thèmes principaux."
+      }
+    }
+  },
+  "integrationsBitrixPage": {
+    "title": "Intégration 1C-Bitrix",
+    "description": "Module 1C-Bitrix natif pour AACsearch. Synchronisez votre catalogue automatiquement avec des gestionnaires d'événements et des agents en arrière-plan."
+  },
+  "integrationsBitrix": {
+    "title": "AACsearch pour 1C-Bitrix",
+    "subtitle": "Module Bitrix natif avec mises à jour pilotées par événements et agent de sync en arrière-plan. Sans export manuel.",
+    "items": {
+      "eventHandlers": {
+        "title": "Gestionnaires d'événements",
+        "description": "La création, mise à jour et suppression de produits déclenchent une sync instantanée via les gestionnaires d'événements Bitrix. Latence inférieure à 1 seconde."
+      },
+      "backgroundAgent": {
+        "title": "Agent de sync en arrière-plan",
+        "description": "L'agent Bitrix effectue une sync complète périodique pour la fiabilité. Rattrape les changements manqués par les gestionnaires d'événements."
+      },
+      "catalogSupport": {
+        "title": "Support complet du catalogue",
+        "description": "Produits, propriétés, prix et niveaux de stock. Tous les champs de votre iBlock sont indexables."
+      },
+      "adminPanel": {
+        "title": "Panneau de paramètres admin",
+        "description": "Configurez le token de connecteur, le slug d'index et la fréquence de sync depuis les paramètres du module Bitrix."
+      },
+      "diagnostics": {
+        "title": "Page de diagnostics",
+        "description": "Testez la connexion, vérifiez l'état de l'index et les permissions depuis l'admin Bitrix."
+      },
+      "support": {
+        "title": "Compatible Bitrix Site Manager",
+        "description": "Testé sur Bitrix Site Manager et édition Business. PHP 8.1+. Utilise le HttpClient Bitrix standard."
+      }
+    }
+  },
+  "integrationsRestApiPage": {
+    "title": "Intégration API REST",
+    "description": "15 endpoints publics avec auth par clé API. Compatible avec tout langage backend ou plateforme. Spec OpenAPI 3.1 incluse."
+  },
+  "integrationsRestApi": {
+    "title": "Construisez votre propre intégration",
+    "subtitle": "Si nous n'avons pas de module natif pour votre plateforme, l'API REST couvre tous les cas d'usage.",
+    "items": {
+      "endpoints": {
+        "title": "15 endpoints",
+        "description": "CRUD d'index, CRUD de documents (unitaire + bulk), recherche, multi-search, analytique et gestion des clés API."
+      },
+      "openApi": {
+        "title": "OpenAPI 3.1",
+        "description": "Spec lisible par machine sur /api/v1/openapi.json. Générez un client en Python, Go, Ruby ou n'importe quel autre langage."
+      },
+      "authentication": {
+        "title": "Auth Bearer token",
+        "description": "Clés API préfixées ss_search_*, ss_connector_*, ou ss_scoped_*. Chaque préfixe porte des permissions différentes."
+      },
+      "webhooks": {
+        "title": "Webhooks sortants (bientôt)",
+        "description": "Recevez un webhook à la fin d'une sync, alerte de quota ou reindex terminé. Actuellement : API Connector pour le polling."
+      },
+      "rateLimit": {
+        "title": "Headers de rate limit",
+        "description": "Headers X-RateLimit-Limit et X-RateLimit-Remaining sur chaque réponse. Retry-After sur les 429."
+      },
+      "versioning": {
+        "title": "API versionnée",
+        "description": "Tous les endpoints publics sont sous /api/v1. Les breaking changes reçoivent un nouveau préfixe de version. Les anciennes versions sont conservées 12 mois."
+      }
+    }
+  },
+  "integrationsBrowserSdkPage": {
+    "title": "SDK navigateur",
+    "description": "Un client JavaScript typé pour AACsearch. Recherche simple, multi-search fédérée, facettes — sous 50 ms p99."
+  },
+  "integrationsBrowserSdk": {
+    "title": "Recherchez depuis le navigateur",
+    "subtitle": "Package NPM. Types TypeScript. Compatible avec React, Vue, Svelte, Astro ou JS pur. Pas de proxy backend requis.",
+    "items": {
+      "typedClient": {
+        "title": "Types TypeScript complets",
+        "description": "Autocomplétion sur chaque méthode. Pas de devinette sur les formes de réponse. Les types sont livrés avec le package — pas de @types/ nécessaire."
+      },
+      "singleSearch": {
+        "title": "Recherche simple",
+        "description": "search(indexSlug, query, options) → résultats typés. Facettes, filtres, tri, pagination — tout dans l'objet options."
+      },
+      "multiSearch": {
+        "title": "Multi-search (fédérée)",
+        "description": "multiSearch([...queries]) → tableau de résultats typés. Une requête HTTP, exécution parallèle, facettes indépendantes."
+      },
+      "tokenHandling": {
+        "title": "Support des scoped tokens",
+        "description": "Initialisez avec un scoped token éphémère de votre serveur. Le SDK l'attache automatiquement à chaque requête."
+      },
+      "errorHandling": {
+        "title": "Gestion d'erreurs typée",
+        "description": "Objets d'erreur typés avec slug (search_failed, quota_exceeded, rate_limited). Attrapez et gérez programmatiquement."
+      },
+      "lightweight": {
+        "title": "Moins de 5 Ko gzippé",
+        "description": "Build ESM tree-shakeable. Seules les méthodes que vous importez sont bundlées. Pas de dépendances runtime."
+      }
+    }
+  },
+  "integrationsMcpPage": {
+    "title": "Intégration serveur MCP",
+    "description": "Serveur Model Context Protocol pour agents IA. Claude, Cursor et tout client MCP peuvent chercher et gérer les index."
+  },
+  "integrationsMcp": {
+    "title": "Des agents IA qui cherchent dans vos données",
+    "subtitle": "Le serveur MCP AACsearch expose la recherche, la gestion d'index et les stats à tout assistant IA compatible MCP.",
+    "items": {
+      "tools": {
+        "title": "4 outils MCP",
+        "description": "search, list_indexes, upsert_document, search_stats — les opérations essentielles qu'un agent IA a besoin sur vos données."
+      },
+      "claude": {
+        "title": "Compatible avec Claude",
+        "description": "Ajoutez le serveur MCP AACsearch à Claude Code ou Claude Desktop. Posez des questions en langage naturel sur vos données indexées."
+      },
+      "cursor": {
+        "title": "Compatible avec Cursor",
+        "description": "Les fonctionnalités IA de Cursor peuvent chercher dans votre index de code, documentation ou données produit via l'intégration MCP."
+      },
+      "transport": {
+        "title": "Transport stdio",
+        "description": "JSON-RPC 2.0 sur stdio. Compatible avec tout client MCP. Pas de serveur HTTP requis — pointez simplement vers le binaire."
+      },
+      "authentication": {
+        "title": "Auth par clé API",
+        "description": "Configurez avec une clé API ss_search_*. Le serveur MCP hérite des scopes et rate limits de la clé."
+      },
+      "enterpriseReady": {
+        "title": "Prêt pour l'Enterprise",
+        "description": "Authentification par clé API scoped, limitation de débit et isolation des locataires. Intégrez MCP dans vos workflows enterprise en toute confiance."
+      },
+      "extensible": {
+        "title": "Extensible",
+        "description": "Ajoutez des outils personnalisés pour votre workflow. Étendez les capacités du serveur MCP et intégrez vos systèmes internes."
+      }
+    }
+  },
+  "integrationsContentfulPage": {
+    "title": "AACsearch pour Contentful",
+    "description": "Connectez Contentful à AACsearch et ajoutez une recherche instantanée et tolérante aux fautes à votre CMS."
+  },
+  "integrationsContentful": {
+    "title": "AACsearch pour Contentful",
+    "subtitle": "Synchronisez les entrées Contentful avec AACsearch et ajoutez la recherche instantanée à votre site basé sur le contenu.",
+    "items": {
+      "sync": {
+        "title": "Synchronisation automatique du contenu",
+        "description": "Publiez dans Contentful et les modifications apparaissent dans AACsearch en quelques secondes via webhooks."
+      },
+      "fields": {
+        "title": "Mappage de champs flexible",
+        "description": "Choisissez quels champs Contentful indexer et comment les mapper au schéma de recherche."
+      },
+      "locales": {
+        "title": "Support multilingue",
+        "description": "Indexez le contenu dans toutes vos langues Contentful et servez des résultats de recherche localisés."
+      },
+      "preview": {
+        "title": "Support du contenu brouillon",
+        "description": "Indexez optionnellement le contenu brouillon pour prévisualiser les résultats avant publication."
+      },
+      "analytics": {
+        "description": "Comprenez quelles entrées de contenu apparaissent dans la recherche, quels sujets ont des lacunes et comment la recherche stimule l'engagement du contenu.",
+        "title": "Analytique de contenu"
+      },
+      "app": {
+        "description": "Installez l'application AACsearch depuis le Marketplace Contentful. Configurez les mappages d'index pour chaque modèle de contenu dans l'interface.",
+        "title": "Application Contentful"
+      },
+      "autoSync": {
+        "description": "Contentful envoie un webhook à chaque événement de publication. AACsearch traite le payload et met à jour l'index en moins d'une seconde.",
+        "title": "Synchronisation déclenchée à la publication"
+      },
+      "contentTypes": {
+        "description": "Mappez n'importe quel champ de type de contenu à un attribut AACsearch. Les champs de texte enrichi sont automatiquement convertis en texte brut pour la recherche.",
+        "title": "Mappage du modèle de contenu"
+      },
+      "webhook": {
+        "description": "Configurez les webhooks Contentful dans votre tableau de bord AACsearch — sans code. Événements pour créer, mettre à jour, dépublier et archiver.",
+        "title": "Configuration du webhook"
+      },
+      "widget": {
+        "description": "Utilisez le SDK navigateur AACsearch avec n'importe quel frontend Contentful. Hooks React, composables Vue et JavaScript vanilla tous supportés.",
+        "title": "SDK JavaScript"
+      },
+      "localization": {
+        "title": "Support de localisation",
+        "description": "Synchronisez le contenu dans toutes les langues de Contentful. Chaque langue est mappée à une collection AACsearch distincte pour la recherche multilingue."
+      },
+      "mapping": {
+        "title": "Mappage de champs",
+        "description": "Mappez les champs de contenu Contentful aux champs d'index AACsearch. Transformez le texte enrichi en texte brut et extrayez les références imbriquées."
+      },
+      "richText": {
+        "title": "Gestion du texte enrichi",
+        "description": "Convertissez automatiquement les champs Rich Text de Contentful en texte brut pour l'indexation. Les ressources et entrées intégrées sont extraites et traitées."
+      }
+    }
+  },
+  "integrationsNextJsPage": {
+    "title": "AACsearch pour Next.js",
+    "description": "Ajoutez la recherche instantanée à votre application Next.js. Les Server Components, Route Handlers et Client Components sont pris en charge."
+  },
+  "integrationsNextJs": {
+    "title": "AACsearch pour Next.js",
+    "subtitle": "Ajoutez la recherche instantanée à votre application Next.js avec notre SDK officiel et nos composants React.",
+    "items": {
+      "sdk": {
+        "title": "SDK TypeScript",
+        "description": "Installez le package npm AACsearch. Types TypeScript complets, zéro dépendance externe, 8 Ko gzippé. Fonctionne dans n'importe quel runtime JS."
+      },
+      "ssr": {
+        "title": "Compatible SSR et SSG",
+        "description": "Hydratation côté serveur pour le SEO. Les résultats de recherche sont crawlables par les moteurs de recherche."
+      },
+      "routing": {
+        "title": "Synchronisation URL",
+        "description": "Synchronise automatiquement la requête de recherche et les filtres avec l'URL pour le partage et le retour arrière."
+      },
+      "typescript": {
+        "title": "TypeScript d'abord",
+        "description": "Support TypeScript complet avec types générés à partir du schéma de votre collection AACsearch. Autocomplétion pour les noms de champ, valeurs de filtre et formes de réponse."
+      },
+      "analytics": {
+        "description": "Suivez les événements de recherche depuis le réseau Vercel Edge. Pas de cold starts, pas de risque de timeout pour les appels d'analytique légers.",
+        "title": "Analytique compatible Edge"
+      },
+      "appRouter": {
+        "description": "Gestionnaires de route, actions serveur et streaming — tout fonctionne avec le SDK AACsearch. Aucun adaptateur spécial requis.",
+        "title": "Compatible App Router"
+      },
+      "caching": {
+        "description": "Utilisez fetch avec next revalidate ou ISR pour mettre en cache les résultats de recherche. AACsearch respecte les en-têtes HTTP Cache-Control standard.",
+        "title": "Intégration cache Next.js"
+      },
+      "serverComponents": {
+        "description": "Appelez l'API AACsearch directement depuis les Server Components. Aucun coût de bundle client, aucune surcharge d'hydratation pour les pages de résultats de recherche.",
+        "title": "React Server Components"
+      },
+      "widget": {
+        "description": "Ajoutez le widget AACsearch à votre layout Next.js avec une balise script, ou utilisez le SDK React pour une interface de recherche entièrement personnalisable.",
+        "title": "Widget côté client"
+      },
+      "edgeRuntime": {
+        "title": "Support Edge Runtime",
+        "description": "Utilisez le SDK AACsearch avec Next.js Edge Runtime pour une recherche de moins de 50 ms en périphérie. Fonctionne avec middleware et routes API edge."
+      },
+      "hooks": {
+        "title": "Hooks React",
+        "description": "Hooks useSearch, useFacets et useAutocomplete pour une UI de recherche déclarative dans Next.js App Router. Typés et compatibles serveur."
+      },
+      "routeHandlers": {
+        "title": "Gestionnaires de route",
+        "description": "Gestionnaires de route API côté serveur pour la génération de tokens limités, la recherche proxy et les endpoints d'analyse. Gardez les clés API sécurisées."
+      },
+      "ssg": {
+        "title": "Génération statique",
+        "description": "Pré-rendu des pages de recherche au moment de la construction avec les données AACsearch. Réduisez le time-to-first-byte tout en gardant les résultats à jour via ISR."
+      }
+    }
+  },
+  "integrationsReactPage": {
+    "title": "AACsearch pour React",
+    "description": "Ajoutez une recherche instantanée tolérante aux fautes à votre application React. Hooks, widgets et SDKs inclus."
+  },
+  "integrationsReact": {
+    "title": "AACsearch pour React",
+    "subtitle": "Composants et hooks React pour créer des interfaces de recherche puissantes et personnalisables.",
+    "items": {
+      "hooks": {
+        "title": "Hooks de recherche",
+        "description": "useSearch, useFacets, usePagination et plus. Créez des interfaces personnalisées avec une logique d'état gérée."
+      },
+      "components": {
+        "title": "Composants prêts à l'emploi",
+        "description": "SearchBox, Hits, Facets, Pagination, Highlight. Personnalisation complète via className et render props."
+      },
+      "headless": {
+        "title": "Headless quand vous en avez besoin",
+        "description": "Utilisez uniquement les hooks et construisez votre propre UI depuis zéro. Sans styles imposés."
+      },
+      "perf": {
+        "title": "Optimisé pour les performances",
+        "description": "Debounce, annulation de requêtes et cache intégrés pour éviter les re-rendus inutiles."
+      },
+      "analytics": {
+        "description": "Le SDK inclut un appel trackEvent pour les clics sur les résultats, l'utilisation des filtres et les rapports de résultats nuls. Alimente votre tableau de bord AACsearch.",
+        "title": "Suivi d'événements"
+      },
+      "sdk": {
+        "description": "Installez le package React AACsearch. Hooks pour la recherche, l'autocomplétion et les facettes. Types TypeScript complets, zéro dépendance pair.",
+        "title": "SDK React"
+      },
+      "ssr": {
+        "description": "Pré-chargez les résultats de recherche côté serveur et hydratez côté client sans flash de contenu vide.",
+        "title": "SSR et hydratation"
+      },
+      "typescript": {
+        "description": "Les types du SDK sont générés depuis la spécification OpenAPI d'AACsearch. Autocomplétion pour chaque champ de votre schéma de collection.",
+        "title": "Support TypeScript complet"
+      },
+      "customUI": {
+        "title": "Composants UI personnalisés",
+        "description": "Créez des UI de recherche entièrement personnalisées avec des composants React. Le SDK AACsearch fournit la couche de données — concevez votre propre boîte de recherche, facettes et grille de résultats."
+      },
+      "performance": {
+        "title": "Performance optimisée",
+        "description": "SDK tree-shakeable. Importez uniquement les hooks dont vous avez besoin. Taille du bundle inférieure à 5 Ko pour une implémentation de base."
+      },
+      "stateManagement": {
+        "title": "Gestion d'état",
+        "description": "L'état de recherche est géré en interne par le SDK. Se synchronise avec les paramètres d'URL, l'historique du navigateur et prend en charge l'état multi-recherche."
+      }
+    }
+  },
+  "integrationsSanityPage": {
+    "title": "AACsearch pour Sanity",
+    "description": "Connectez votre Sanity Studio à AACsearch. Le contenu se synchronise automatiquement à chaque publication."
+  },
+  "integrationsSanity": {
+    "title": "AACsearch pour Sanity",
+    "subtitle": "Connectez Sanity CMS à AACsearch pour une recherche instantanée sur votre contenu structuré.",
+    "items": {
+      "listener": {
+        "title": "Listener en temps réel",
+        "description": "Le connecteur écoute les événements de mutation Sanity et synchronise les modifications avec AACsearch instantanément."
+      },
+      "groq": {
+        "title": "Projections GROQ",
+        "description": "Utilisez GROQ pour définir exactement quels champs indexer, y compris les champs référencés et les tableaux de blocs."
+      },
+      "studio": {
+        "title": "Plugin pour Sanity Studio",
+        "description": "Prévisualisez les résultats de recherche directement dans Sanity Studio avant de publier."
+      },
+      "portable": {
+        "title": "Support Portable Text",
+        "description": "Extrait et nettoie automatiquement le texte des blocs Portable Text pour l'indexation."
+      },
+      "analytics": {
+        "description": "Suivez quels types de documents reçoivent le plus de trafic de recherche, quelles requêtes échouent et comment la découverte par recherche génère des conversions.",
+        "title": "Analytique de recherche"
+      },
+      "plugin": {
+        "description": "Installez sanity-plugin-aacsearch depuis npm. Gérez les mappages d'index et déclenchez des resynchronisations directement depuis Sanity Studio.",
+        "title": "Plugin Sanity Studio"
+      },
+      "schemaSync": {
+        "description": "Mappez n'importe quel type de schéma Sanity à une collection AACsearch. Le texte portable, les références et les tableaux sont aplatis automatiquement.",
+        "title": "Indexation avec reconnaissance de schéma"
+      },
+      "webhook": {
+        "description": "Sanity livre les modifications de documents à AACsearch via webhook HTTPS. Les nouveaux documents, mises à jour et suppressions sont tous gérés automatiquement.",
+        "title": "Synchronisation par webhook"
+      },
+      "widget": {
+        "description": "Le SDK navigateur AACsearch fonctionne avec n'importe quel frontend Sanity. Utilisez les hooks React ou le client JavaScript vanilla.",
+        "title": "Intégration frontend"
+      },
+      "multiDataset": {
+        "title": "Synchronisation multi-dataset",
+        "description": "Synchronisez plusieurs datasets Sanity vers des collections AACsearch distinctes. Chaque dataset conserve sa propre configuration de recherche."
+      },
+      "realtime": {
+        "title": "Synchronisation en temps réel",
+        "description": "Écoutez les mutations GROQ de Sanity et mettez à jour AACsearch en temps réel. Les changements se propagent en quelques secondes."
+      },
+      "types": {
+        "title": "Support des requêtes GROQ",
+        "description": "Utilisez des requêtes GROQ pour définir exactement quel contenu est synchronisé avec AACsearch. Filtrez, projetez et joignez des documents avec la syntaxe de requête Sanity."
+      }
+    }
+  },
+  "integrationsShopifyPage": {
+    "title": "AACsearch pour Shopify",
+    "description": "Remplacez la recherche par défaut de Shopify par AACsearch. Résultats instantanés, facettes et classement personnalisé."
+  },
+  "integrationsShopify": {
+    "title": "AACsearch pour Shopify",
+    "subtitle": "Remplacez la recherche Shopify par des résultats instantanés, des facettes et des recommandations.",
+    "items": {
+      "install": {
+        "title": "Installation en un clic",
+        "description": "Installez l'application AACsearch depuis le Shopify App Store. Connectez votre index avec votre clé API et vous êtes en ligne en quelques minutes."
+      },
+      "products": {
+        "title": "Synchronisation des produits",
+        "description": "Produits, variantes, collections et métachamps synchronisés automatiquement en temps réel."
+      },
+      "widget": {
+        "title": "Widget de recherche pour la boutique",
+        "description": "Widget personnalisable s'intégrant à n'importe quel thème Shopify. Compatible Online Store 2.0."
+      },
+      "analytics": {
+        "title": "Analytiques de recherche en boutique",
+        "description": "Découvrez ce que vos clients recherchent, ce qu'ils ne trouvent pas et ce qui convertit le mieux."
+      },
+      "metafields": {
+        "description": "Indexez les métachamps Shopify comme champs recherchables et filtrables. Exposez des attributs produit personnalisés sans modification de schéma.",
+        "title": "Métachamps personnalisés"
+      },
+      "productSync": {
+        "description": "Les nouveaux produits, changements de prix et mises à jour de stock se synchronisent avec AACsearch via les webhooks Shopify. Les changements apparaissent dans la recherche en moins d'une seconde.",
+        "title": "Synchronisation automatique des produits"
+      },
+      "variantSync": {
+        "description": "Chaque variante de produit est indexée comme un document séparé. Les clients peuvent rechercher par taille, couleur ou SKU directement.",
+        "title": "Indexation des variantes"
+      },
+      "facets": {
+        "title": "Facettes produit",
+        "description": "Les variantes, options et métachamps de produits Shopify sont automatiquement indexés comme facettes de recherche. Filtrez par taille, couleur, matériau ou attributs personnalisés."
+      },
+      "multilingual": {
+        "title": "Support multilingue",
+        "description": "Synchronisez le contenu des produits Shopify dans toutes les langues de la boutique. AACsearch indexe chaque langue séparément."
+      },
+      "sync": {
+        "title": "Synchronisation automatisée",
+        "description": "Synchronisation automatique des produits via webhooks Shopify. Les événements de création, mise à jour et suppression se propagent en temps réel."
+      },
+      "variants": {
+        "title": "Indexation des variantes",
+        "description": "Indexez les variantes Shopify comme documents de recherche séparés ou comme champs imbriqués. Chaque variante conserve son propre prix, stock et SKU."
+      }
+    }
+  },
+  "integrationsStrapiPage": {
+    "title": "AACsearch pour Strapi",
+    "description": "Connectez Strapi à AACsearch et ajoutez une recherche en texte intégral instantanée à chaque type de contenu."
+  },
+  "integrationsStrapi": {
+    "title": "AACsearch pour Strapi",
+    "subtitle": "Synchronisez le contenu Strapi avec AACsearch automatiquement via notre plugin officiel.",
+    "items": {
+      "plugin": {
+        "title": "Plugin officiel pour Strapi v4/v5",
+        "description": "Installez depuis le marketplace Strapi. Configurez dans le panneau d'administration sans code."
+      },
+      "lifecycle": {
+        "title": "Hooks de cycle de vie",
+        "description": "Le plugin intercepte les événements de création, mise à jour et suppression pour maintenir l'index synchronisé."
+      },
+      "content": {
+        "title": "Support des types de contenu",
+        "description": "Indexez n'importe quel type de contenu Strapi, y compris les composants, les zones dynamiques et les relations."
+      },
+      "populate": {
+        "title": "Relations peuplées",
+        "description": "Configurez quelles relations inclure dans le document de recherche pour enrichir les résultats."
+      },
+      "analytics": {
+        "description": "Voyez quels types de contenu reçoivent le plus de trafic de recherche et quelles requêtes ne trouvent pas de résultats. Guidez les décisions éditoriales avec les données de recherche.",
+        "title": "Analytique de recherche de contenu"
+      },
+      "autoSync": {
+        "description": "Le contenu se synchronise sur les hooks de cycle de vie afterCreate, afterUpdate et afterDelete de Strapi. Mises à jour à latence nulle.",
+        "title": "Synchronisation par hook de cycle de vie"
+      },
+      "contentTypes": {
+        "description": "Mappez n'importe quel type de contenu Strapi à une collection AACsearch. Relations imbriquées, zones dynamiques et champs média tous supportés.",
+        "title": "Tous les types de contenu"
+      },
+      "webhook": {
+        "description": "Configurez un webhook Strapi comme chemin de synchronisation de secours. Garantit la livraison même si le hook de cycle de vie est manqué lors d'une migration.",
+        "title": "Webhook de secours"
+      },
+      "widget": {
+        "description": "Utilisez le SDK navigateur AACsearch pour créer une recherche instantanée pour votre frontend Strapi — React, Vue ou JavaScript vanilla.",
+        "title": "Widget de recherche frontend"
+      },
+      "adminPanel": {
+        "title": "Intégration panneau d'administration",
+        "description": "Gérez AACsearch directement depuis le panneau d'administration Strapi. Visualisez l'état de l'index, déclenchez des synchronisations et surveillez les erreurs."
+      },
+      "api": {
+        "title": "Synchronisation REST API",
+        "description": "Synchronisez tout type de contenu Strapi via l'API REST. Définissez les types de collection à inclure ou exclure de l'indexation."
+      },
+      "localization": {
+        "title": "Support i18n",
+        "description": "Synchronisez le contenu localisé de Strapi vers des collections AACsearch distinctes par langue. Chaque langue conserve une configuration indépendante."
+      }
+    }
+  },
+  "integrationsWoocommercePage": {
+    "title": "AACsearch pour WooCommerce",
+    "description": "Remplacez la recherche par défaut de WordPress par AACsearch. Recherche instantanée tolérante aux fautes pour une meilleure découverte de produits."
+  },
+  "integrationsWoocommerce": {
+    "title": "AACsearch pour WooCommerce",
+    "subtitle": "Dynamisez la recherche dans votre boutique WooCommerce avec des résultats instantanés et des facettes intelligentes.",
+    "items": {
+      "plugin": {
+        "title": "Plugin WordPress/WooCommerce",
+        "description": "Installez depuis le répertoire de plugins WordPress. Configuration sans code depuis le tableau de bord WP."
+      },
+      "products": {
+        "title": "Synchronisation des produits",
+        "description": "Produits, variations, catégories, étiquettes et attributs synchronisés automatiquement."
+      },
+      "filters": {
+        "title": "Filtres de produits",
+        "description": "Filtres instantanés par prix, catégorie, attribut ou tout champ personnalisé WooCommerce."
+      },
+      "orders": {
+        "title": "Recherche dans l'admin",
+        "description": "Recherchez également les commandes, clients et produits dans le tableau de bord d'administration WooCommerce."
+      },
+      "analytics": {
+        "description": "Suivez la conversion recherche-panier, le taux de résultats nuls et les requêtes principales. Identifiez les lacunes de votre catalogue à partir des données de recherche réelles.",
+        "title": "Analytique commerce"
+      },
+      "install": {
+        "description": "Installez depuis le répertoire des plugins WordPress ou téléchargez manuellement. Nécessite WooCommerce 8.x et une clé API AACsearch.",
+        "title": "Installation du plugin"
+      },
+      "orderSearch": {
+        "description": "Indexez l'historique des commandes pour les clients connectés. Recherche de commandes rapide et privée, limitée au compte utilisateur authentifié.",
+        "title": "Recherche de commandes"
+      },
+      "productSync": {
+        "description": "Les produits se synchronisent à la publication, mise à jour et suppression. Les changements de stock déclenchent des mises à jour automatiques de l'index via les webhooks WooCommerce.",
+        "title": "Synchronisation des produits"
+      },
+      "variantSync": {
+        "description": "Les clients peuvent rechercher des variations spécifiques par attribut — couleur, taille, matériau — sans naviguer vers une page produit au préalable.",
+        "title": "Recherche de variations"
+      },
+      "widget": {
+        "description": "Widget clé en main pour votre thème WooCommerce. Affiche les résultats de recherche instantanée, les facettes et l'ajout au panier sans quitter la superposition.",
+        "title": "Widget boutique"
+      },
+      "attributes": {
+        "title": "Attributs produit",
+        "description": "Indexez les attributs de produits WooCommerce comme facettes de recherche. La couleur, la taille, le matériau et les attributs personnalisés deviennent des filtres cliquables."
+      },
+      "categories": {
+        "title": "Hiérarchie des catégories",
+        "description": "Préservez la structure arborescente des catégories WooCommerce dans AACsearch. Naviguez avec des facettes hiérarchiques respectant les relations parent-enfant."
+      },
+      "performance": {
+        "title": "Performance de recherche",
+        "description": "AACsearch gère la recherche WooCommerce à grande échelle. Latence de requête inférieure à 50 ms même sur des catalogues de 500 000+ produits."
+      },
+      "sync": {
+        "title": "Synchronisation automatisée",
+        "description": "Synchronisation automatique via hooks WooCommerce. Les modifications de produit se propagent à AACsearch en temps réel."
+      }
+    }
+  },
+  "integrationsWordpressPage": {
+    "title": "AACsearch pour WordPress",
+    "description": "Ajoutez une recherche instantanée tolérante aux fautes aux sites WordPress. Plugin disponible, aucune programmation requise."
+  },
+  "integrationsWordpress": {
+    "title": "AACsearch pour WordPress",
+    "subtitle": "Remplacez la recherche native de WordPress par des résultats instantanés et pertinents.",
+    "items": {
+      "plugin": {
+        "title": "Plugin WordPress",
+        "description": "Installez depuis le répertoire de plugins WordPress.org. Compatibilité avec WordPress 6.x."
+      },
+      "posts": {
+        "title": "Articles, pages et types personnalisés",
+        "description": "Indexez n'importe quel type d'article WordPress, y compris les types d'articles personnalisés et les taxonomies."
+      },
+      "acf": {
+        "title": "Support ACF et métadonnées",
+        "description": "Indexez les champs Advanced Custom Fields et n'importe quelle métadonnée d'article pour des résultats plus riches."
+      },
+      "gutenberg": {
+        "title": "Bloc Gutenberg",
+        "description": "Ajoutez un bloc de recherche propulsé par AACsearch à n'importe quelle page avec l'éditeur de blocs."
+      },
+      "analytics": {
+        "description": "Les éditeurs WordPress voient les requêtes principales, les taux de résultats nuls et les vues de page générées par la recherche directement dans le tableau de bord AACsearch.",
+        "title": "Analytique de recherche"
+      },
+      "customTypes": {
+        "description": "Indexez les types de publications personnalisés et les Advanced Custom Fields comme attributs recherchables et facettables. Contrôle total sur les champs exposés.",
+        "title": "Types de publications personnalisés et ACF"
+      },
+      "multiSite": {
+        "description": "Chaque site d'un réseau multisite WordPress obtient un index AACsearch séparé avec sa propre clé API et analytique.",
+        "title": "Support multisite"
+      },
+      "postSync": {
+        "description": "Tous les types de publications se synchronisent à la publication et à la mise à jour. Les publications supprimées sont retirées de l'index automatiquement via les hooks WordPress.",
+        "title": "Synchronisation des articles et pages"
+      },
+      "widget": {
+        "description": "Remplacez le widget de recherche par défaut par le bloc AACsearch. Résultats instantanés, filtres de facettes et navigation au clavier.",
+        "title": "Bloc de recherche Gutenberg"
+      },
+      "instant": {
+        "title": "Recherche instantanée",
+        "description": "Remplacez la recherche WordPress par défaut par des résultats instantanés. Recherchez dans les articles, pages, types de publication personnalisés et champs ACF simultanément."
+      },
+      "multilingual": {
+        "title": "Support WPML et Polylang",
+        "description": "Compatible avec WPML et Polylang pour les sites WordPress multilingues. Les résultats respectent automatiquement le contexte de langue actuel."
+      },
+      "postTypes": {
+        "title": "Types de publication personnalisés",
+        "description": "Indexez tout type de publication WordPress personnalisé. Chaque type peut avoir sa propre configuration de recherche et facettes."
+      },
+      "shortcode": {
+        "title": "Shortcode du widget",
+        "description": "Intégrez le widget AACsearch n'importe où dans WordPress avec un shortcode. Personnalisez le texte indicatif, la langue et les résultats par page."
+      }
+    }
+  },
+  "integrationsNextJsSetup": {
+    "title": "Démarrer en 3 étapes",
+    "subtitle": "Aucune modification du backend requise. Le SDK AACsearch fonctionne directement depuis votre application Next.js.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Installer le package",
+      "description": "Exécutez npm install @aacsearch/client dans votre projet Next.js."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Configurer votre client",
+      "description": "Créez un client de recherche avec votre clé API et le slug d'index. Gardez la clé côté serveur ou utilisez un token en lecture seule pour les composants client."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Rechercher depuis n'importe quel composant",
+      "description": "Appelez client.search() depuis un Server Component ou utilisez le hook useSearch dans un Client Component. Les résultats sont typés."
+    },
+    "code": {
+      "title": "Exemple minimal de Server Component"
+    },
+    "cta": "Lire la documentation complète"
+  },
+  "integrationsNextJsFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Fonctionne-t-il avec Next.js 13, 14 et 15 ?",
+      "answer": "Oui. Le SDK est compatible avec Next.js 13, 14 et 15. Il fonctionne avec l'App Router et le Pages Router sans adaptateurs."
+    },
+    "q2": {
+      "question": "Puis-je l'utiliser avec Vercel Edge Runtime ?",
+      "answer": "Oui. Le client AACsearch utilise l'API Fetch standard et est entièrement compatible avec Vercel Edge Runtime et Cloudflare Workers."
+    },
+    "q3": {
+      "question": "Comment protéger ma clé API côté client ?",
+      "answer": "Utilisez un token limité avec des permissions en lecture seule pour la recherche côté client. Créez-le depuis votre tableau de bord AACsearch — la clé admin complète reste uniquement côté serveur."
+    }
+  },
+  "integrationsReactSetup": {
+    "title": "Ajouter la recherche à votre app React en 3 étapes",
+    "subtitle": "Compatible avec React 17, 18 et 19. Agnostique au framework — Next.js, Remix, Vite et CRA sont supportés.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Installer le package",
+      "description": "Exécutez npm install @aacsearch/react dans votre projet."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Utiliser le hook useSearch",
+      "description": "Passez votre clé API et le slug d'index. Le hook renvoie les résultats, l'état de chargement et une fonction setQuery."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Afficher les résultats",
+      "description": "Parcourez les résultats et affichez-les dans votre propre UI. Aucun composant wrapper obligatoire — liberté totale de style."
+    },
+    "code": {
+      "title": "Exemple minimal de useSearch"
+    },
+    "cta": "Parcourir la référence API"
+  },
+  "integrationsReactFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Quelles versions de React sont supportées ?",
+      "answer": "React 17, 18 et 19 sont supportés. Les hooks utilisent le state et les effets React standard — pas d'APIs instables ni de fonctionnalités expérimentales."
+    },
+    "q2": {
+      "question": "Fonctionne-t-il avec Next.js ou Remix ?",
+      "answer": "Oui. Les hooks React fonctionnent dans n'importe quel environnement React. Pour les Server Components Next.js, utilisez le package de base @aacsearch/client sans dépendance React."
+    },
+    "q3": {
+      "question": "Y a-t-il une bibliothèque de composants ou seulement des hooks ?",
+      "answer": "@aacsearch/react inclut des hooks composables (useSearch, useAutocomplete, useFacets) et des composants headless non stylisés. Apportez votre propre CSS ou Tailwind."
+    }
+  },
+  "integrationsPrestashopSetup": {
+    "title": "Installer en 5 minutes",
+    "subtitle": "Aucun code PHP requis. Le module gère la synchronisation automatiquement après configuration.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Télécharger le module",
+      "description": "Récupérez aacsearch.zip depuis votre tableau de bord AACsearch sous Connecteurs → PrestaShop."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Téléverser dans PrestaShop",
+      "description": "Allez dans Modules > Gestionnaire de modules > Téléverser un module. Sélectionnez le ZIP et confirmez."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Saisir votre token de connecteur",
+      "description": "Collez le token de connecteur depuis votre tableau de bord AACsearch dans les paramètres du module et sauvegardez."
+    },
+    "step4": {
+      "label": "Étape 4",
+      "title": "Lancer l'export complet du catalogue",
+      "description": "Cliquez sur \"Export complet\" dans le panneau d'administration du module. Tout votre catalogue produit se synchronise en un seul lot."
+    },
+    "step5": {
+      "label": "Étape 5",
+      "title": "La recherche est en ligne",
+      "description": "Les produits apparaissent immédiatement dans AACsearch. Les futurs enregistrements, mises à jour et suppressions se synchronisent automatiquement via les hooks PrestaShop."
+    },
+    "cta": "Télécharger le module"
+  },
+  "integrationsPrestashopFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Quelles versions de PrestaShop sont supportées ?",
+      "answer": "PrestaShop 8.0 et 8.1 sont entièrement supportés. PHP 8.1+ requis. Compatible avec tous les thèmes majeurs, y compris Hummingbird et Classic."
+    },
+    "q2": {
+      "question": "Le module ralentit-il la sauvegarde des produits ?",
+      "answer": "Non. La synchronisation est asynchrone via le buffer d'ingest AACsearch. Le module met la mise à jour en file d'attente et retourne immédiatement — pas d'appels bloquants vers Typesense à la sauvegarde."
+    },
+    "q3": {
+      "question": "Puis-je personnaliser les champs indexés ?",
+      "answer": "Oui. Le module exporte tous les champs produit par défaut. Vous pouvez restreindre les attributs dans les paramètres du module ou étendre la classe Exporter pour une logique personnalisée."
+    }
+  },
+  "integrationsBitrixSetup": {
+    "title": "Installer en 5 minutes",
+    "subtitle": "Aucune personnalisation Bitrix requise. Le module s'installe comme un module standard du marketplace Bitrix.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Télécharger le module",
+      "description": "Récupérez l'archive aac.search depuis votre tableau de bord AACsearch sous Connecteurs → 1C-Bitrix."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Décompresser dans /local/modules/",
+      "description": "Extrayez l'archive dans /local/modules/aac.search/ sur votre serveur Bitrix. Conservez la structure des répertoires intacte."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Installer depuis l'admin Bitrix",
+      "description": "Allez dans Admin Bitrix → Marketplace → Modules installés. Trouvez \"AACsearch\" dans la liste et cliquez sur Installer."
+    },
+    "step4": {
+      "label": "Étape 4",
+      "title": "Configurer le connecteur",
+      "description": "Saisissez votre token de connecteur et l'ID iBlock dans les paramètres du module. Choisissez le type d'iBlock catalogue et sauvegardez."
+    },
+    "step5": {
+      "label": "Étape 5",
+      "title": "Lancer la synchronisation initiale",
+      "description": "Cliquez sur \"Lancer la synchronisation complète\" dans l'onglet Diagnostics. Tous les éléments du catalogue sont indexés. Les modifications futures se synchronisent automatiquement via les gestionnaires d'événements."
+    },
+    "cta": "Télécharger le module"
+  },
+  "integrationsBitrixFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Quelles éditions de Bitrix sont supportées ?",
+      "answer": "Les éditions Bitrix Site Manager et Business sont supportées. PHP 8.1+ requis. Utilise le HttpClient Bitrix standard — aucune bibliothèque HTTP tierce requise."
+    },
+    "q2": {
+      "question": "Comment fonctionne l'agent de synchronisation en arrière-plan ?",
+      "answer": "Le module enregistre un agent Bitrix qui exécute une synchronisation complète périodique pour la fiabilité. Il capture toutes les modifications du catalogue manquées par les gestionnaires d'événements en temps réel."
+    },
+    "q3": {
+      "question": "Puis-je personnaliser les propriétés d'iBlock indexées ?",
+      "answer": "Oui. Le module exporte toutes les propriétés produit par défaut. Vous pouvez limiter les champs dans les paramètres admin ou étendre la classe ProductExporter pour une sélection de champs entièrement personnalisée."
+    }
+  },
+  "integrationsStrapiSetup": {
+    "title": "Connectez Strapi à AACsearch en 3 étapes",
+    "subtitle": "Installez le plugin, configurez les types de contenu et la recherche est en ligne.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Installer le plugin",
+      "description": "Exécutez npm install sanity-plugin-aacsearch dans votre projet Strapi ou téléchargez le plugin depuis le tableau de bord AACsearch sous Connecteurs."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Configurer le mapping des types de contenu",
+      "description": "Dans les paramètres du plugin, sélectionnez les types de contenu Strapi à synchroniser. Mappez les champs aux attributs AACsearch."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "La recherche est en ligne",
+      "description": "Publiez une nouvelle entrée dans Strapi. Elle apparaît dans AACsearch en moins d'une seconde. Utilisez le SDK navigateur AACsearch pour la recherche instantanée."
+    },
+    "cta": "Télécharger le plugin"
+  },
+  "integrationsStrapiFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Quelles versions de Strapi sont prises en charge ?",
+      "answer": "Strapi 4.x et 5.x sont entièrement pris en charge. Le plugin utilise les hooks de cycle de vie standard de Strapi et l'API REST."
+    },
+    "q2": {
+      "question": "Le plugin ralentit-il l'enregistrement du contenu dans Strapi ?",
+      "answer": "Non. La synchronisation est asynchrone via le tampon d'ingestion AACsearch. Le hook met à jour la file d'attente et revient immédiatement."
+    },
+    "q3": {
+      "question": "Puis-je synchroniser uniquement certains types de contenu ?",
+      "answer": "Oui. Les paramètres du plugin vous permettent de sélectionner les types de contenu et les champs à synchroniser."
+    }
+  },
+  "integrationsContentfulSetup": {
+    "title": "Connectez Contentful à AACsearch en 3 étapes",
+    "subtitle": "Installez l'application, configurez les webhooks et votre contenu est searchable.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Installer l'application AACsearch",
+      "description": "Installez l'application AACsearch depuis le Contentful Marketplace. Accordez l'accès en lecture à votre espace et sélectionnez l'environnement à synchroniser."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Configurer le mapping du modèle de contenu",
+      "description": "Dans les paramètres de l'application, mappez chaque modèle de contenu Contentful à une collection AACsearch. Les champs Rich Text sont automatiquement convertis."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Configurer les webhooks",
+      "description": "Configurez les webhooks Contentful dans votre tableau de bord AACsearch. Les événements de publication et d'archivage déclenchent des mises à jour automatiques de l'index."
+    },
+    "cta": "Installer l'application"
+  },
+  "integrationsContentfulFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Est-ce que ça prend en charge les locales Contentful ?",
+      "answer": "Oui. Chaque locale Contentful est mappée à une collection AACsearch distincte. Vous pouvez activer la recherche dans une, plusieurs ou toutes les langues."
+    },
+    "q2": {
+      "question": "Comment fonctionne l'indexation des champs Rich Text ?",
+      "answer": "Les champs Rich Text de Contentful sont automatiquement convertis en texte brut lors de la synchronisation. Les ressources et entrées intégrées sont extraites et traitées."
+    },
+    "q3": {
+      "question": "Puis-je utiliser l'environnement de prévisualisation ?",
+      "answer": "Oui. L'intégration prend en charge la synchronisation depuis l'environnement de prévisualisation Contentful pour les tests avant publication."
+    }
+  },
+  "integrationsSanitySetup": {
+    "title": "Connectez Sanity à AACsearch en 3 étapes",
+    "subtitle": "Installez le plugin, écrivez une requête GROQ et votre contenu est searchable.",
+    "step1": {
+      "label": "Étape 1",
+      "title": "Installer le plugin Sanity",
+      "description": "Exécutez npm install sanity-plugin-aacsearch dans votre projet Sanity Studio. Ajoutez-le à votre tableau plugins dans sanity.config.ts."
+    },
+    "step2": {
+      "label": "Étape 2",
+      "title": "Écrire une projection GROQ",
+      "description": "Définissez les documents et champs à indexer à l'aide d'une requête GROQ. Seules les données nécessaires quittent votre jeu de données Sanity."
+    },
+    "step3": {
+      "label": "Étape 3",
+      "title": "Configurer la synchronisation par webhook",
+      "description": "Sanity livre les modifications de documents à AACsearch via webhook HTTPS. Les nouveaux documents, mises à jour et suppressions sont traités automatiquement."
+    },
+    "cta": "Télécharger le plugin"
+  },
+  "integrationsSanityFaq": {
+    "title": "Questions fréquentes",
+    "q1": {
+      "question": "Est-ce que ça prend en charge Portable Text ?",
+      "answer": "Oui. Les blocs Portable Text de Sanity sont convertis en texte brut searchable. La structure des en-têtes est préservée et les annotations en ligne sont extraites."
+    },
+    "q2": {
+      "question": "Puis-je synchroniser plusieurs datasets Sanity ?",
+      "answer": "Oui. Chaque dataset Sanity est mappé à une collection AACsearch distincte. Les datasets de production et de développement ont des configurations indépendantes."
+    },
+    "q3": {
+      "question": "Comment fonctionne la synchronisation en temps réel ?",
+      "answer": "Le plugin écoute les mutations GROQ de Sanity et met à jour AACsearch en temps réel. Les changements se propagent en quelques secondes après la publication."
+    }
+  }
 }

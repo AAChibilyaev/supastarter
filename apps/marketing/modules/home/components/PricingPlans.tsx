@@ -1,7 +1,6 @@
 "use client";
 
 import { config } from "@config";
-import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib";
 import { CheckIcon } from "lucide-react";
@@ -77,12 +76,12 @@ export function PricingPlans() {
 									plan.primary && "ring-1 ring-primary",
 								)}
 							>
-								<CardContent className="p-7 flex h-full flex-col">
+								<CardContent className="p-6 md:p-8 flex h-full flex-col gap-5">
 									{plan.primary && (
-										<div className="top-0 inset-x-0 h-0.5 absolute bg-primary" />
+										<div className="absolute top-0 inset-x-0 h-0.5 bg-primary" />
 									)}
 
-									<div className="mb-6">
+									<div>
 										<p className="font-normal text-base text-foreground">
 											{t(`home.pricing.plans.${plan.key}.name`)}
 										</p>
@@ -91,7 +90,7 @@ export function PricingPlans() {
 										</p>
 									</div>
 
-									<div className="mb-6 gap-1 flex items-baseline">
+									<div className="gap-1 flex items-baseline">
 										<span className="font-bold text-4xl tracking-tight text-foreground tabular-nums">
 											{t(`home.pricing.plans.${plan.key}.price`)}
 										</span>
@@ -104,23 +103,22 @@ export function PricingPlans() {
 										)}
 									</div>
 
-									<Button
-										className="w-full"
-										variant={plan.primary ? "primary" : "outline"}
-										asChild
+									<a
+										href={
+											plan.key === "enterprise"
+												? "/contact"
+												: (config.saasUrl ?? "/signup")
+										}
+										className={
+											plan.primary
+												? "inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/80 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background enabled:cursor-pointer"
+												: "inline-flex w-full items-center justify-center rounded-md border border-border bg-transparent px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background enabled:cursor-pointer"
+										}
 									>
-										<a
-											href={
-												plan.key === "enterprise"
-													? "/contact"
-													: (config.saasUrl ?? "/signup")
-											}
-										>
-											{t(`home.pricing.${plan.ctaKey}`)}
-										</a>
-									</Button>
+										{t(`home.pricing.${plan.ctaKey}`)}
+									</a>
 
-									<ul className="mt-6 gap-3 flex flex-col">
+									<ul className="gap-3 flex flex-col">
 										{features.map((feature) => (
 											<li
 												key={feature}

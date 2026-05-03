@@ -498,7 +498,8 @@
       "recommendationsAnalytics": "Personalized Analytics",
       "collections": "Collections",
       "collectionsGrid": "Grid",
-      "collectionsDocuments": "Documents"
+      "collectionsDocuments": "Documents",
+      "jobs": "Jobs Dashboard"
     },
     "recommendations": {
       "description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
@@ -1547,6 +1548,24 @@
       "deleteConfirmTitle": "Delete no-hit queries rule?",
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
+    },
+    "jobs": {
+      "title": "Jobs",
+      "allJobs": "All Jobs",
+      "import": "Import",
+      "sync": "Sync",
+      "reindex": "Reindex",
+      "emptyState": "No jobs yet",
+      "columns": {
+        "type": "Type",
+        "index": "Index",
+        "status": "Status",
+        "started": "Started",
+        "duration": "Duration",
+        "items": "Items",
+        "failures": "failures",
+        "progress": "Progress"
+      }
     }
   }
 }

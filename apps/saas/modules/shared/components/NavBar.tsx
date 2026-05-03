@@ -385,6 +385,7 @@ export function NavBar() {
 								pathname.startsWith(`${basePath}/search`) ||
 								pathname.startsWith(`${basePath}/api-keys`) ||
 								pathname.startsWith(`${basePath}/import-jobs`) ||
+								pathname.startsWith(`${basePath}/jobs`) ||
 								pathname.startsWith(`${basePath}/preview`),
 							subItems: [
 								{
@@ -394,6 +395,10 @@ export function NavBar() {
 								{
 									label: t("search.nav.apiKeys"),
 									href: `${basePath}/api-keys`,
+								},
+								{
+									label: t("search.nav.jobs"),
+									href: `${basePath}/jobs`,
 								},
 								{
 									label: t("search.nav.importJobs"),

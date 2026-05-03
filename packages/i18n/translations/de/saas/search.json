@@ -743,7 +743,8 @@
       "recommendationsAnalytics": "Personalisierte Anal.",
       "collections": "Sammlungen",
       "collectionsGrid": "Raster",
-      "collectionsDocuments": "Dokumente"
+      "collectionsDocuments": "Dokumente",
+      "jobs": "Jobs-Dashboard"
     },
     "recommendations": {
       "description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",
@@ -1547,6 +1548,24 @@
       "deleteConfirmTitle": "Delete no-hit queries rule?",
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
+    },
+    "jobs": {
+      "title": "Jobs",
+      "allJobs": "Alle Jobs",
+      "import": "Import",
+      "sync": "Sync",
+      "reindex": "Neu indizieren",
+      "emptyState": "Noch keine Jobs",
+      "columns": {
+        "type": "Typ",
+        "index": "Index",
+        "status": "Status",
+        "started": "Gestartet",
+        "duration": "Dauer",
+        "items": "Einträge",
+        "failures": "Fehler",
+        "progress": "Fortschritt"
+      }
     }
   }
 }

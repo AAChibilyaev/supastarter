@@ -52,7 +52,8 @@
       "recommendationsAnalytics": "Analytique perso.",
       "collections": "Collections",
       "collectionsGrid": "Grille",
-      "collectionsDocuments": "Documents"
+      "collectionsDocuments": "Documents",
+      "jobs": "Tableau des tâches"
     },
     "recommendations": {
       "description": "Configurez des recommandations de produits basées sur l'IA, y compris des articles similaires, des suggestions personnalisées et GraphRAG.",
@@ -1568,6 +1569,24 @@
       "deleteConfirmTitle": "Delete no-hit queries rule?",
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
+    },
+    "jobs": {
+      "title": "Tâches",
+      "allJobs": "Tous les travaux",
+      "import": "Importer",
+      "sync": "Synchroniser",
+      "reindex": "Réindexer",
+      "emptyState": "Pas encore de tâches",
+      "columns": {
+        "type": "Type",
+        "index": "Index",
+        "status": "Statut",
+        "started": "Démarré",
+        "duration": "Durée",
+        "items": "Éléments",
+        "failures": "échecs",
+        "progress": "Progression"
+      }
     }
   }
 }

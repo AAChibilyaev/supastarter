@@ -498,7 +498,8 @@
       "recommendationsAnalytics": "Персонализация",
       "collections": "Коллекции",
       "collectionsGrid": "Сетка",
-      "collectionsDocuments": "Документы"
+      "collectionsDocuments": "Документы",
+      "jobs": "Дашборд задач"
     },
     "recommendations": {
       "description": "Настройте рекомендации товаров на основе ИИ, включая похожие товары, персонализированные предложения и GraphRAG.",
@@ -1547,6 +1548,24 @@
       "deleteConfirmTitle": "Delete no-hit queries rule?",
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
+    },
+    "jobs": {
+      "title": "Задачи",
+      "allJobs": "Все задачи",
+      "import": "Импорт",
+      "sync": "Синхронизация",
+      "reindex": "Переиндексация",
+      "emptyState": "Задач пока нет",
+      "columns": {
+        "type": "Тип",
+        "index": "Индекс",
+        "status": "Статус",
+        "started": "Запущено",
+        "duration": "Длительность",
+        "items": "Элементы",
+        "failures": "ошибок",
+        "progress": "Прогресс"
+      }
     }
   }
 }

@@ -44,16 +44,10 @@ export const listInvoices = protectedProcedure
 		if (purchase.userId && purchase.userId !== user.id) {
 			throw new ORPCError("FORBIDDEN");
 		}
-		if (
-			purchase.organizationId &&
-			!purchase.userId?.startsWith("org_")
-		) {
+		if (purchase.organizationId && !purchase.userId?.startsWith("org_")) {
 			// Allow if user is in the organization
 			const { getOrganizationMembership } = await import("@repo/database");
-			const membership = await getOrganizationMembership(
-				purchase.organizationId,
-				user.id,
-			);
+			const membership = await getOrganizationMembership(purchase.organizationId, user.id);
 			if (!membership) {
 				throw new ORPCError("FORBIDDEN");
 			}

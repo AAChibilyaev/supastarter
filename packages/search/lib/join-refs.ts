@@ -42,11 +42,7 @@ const JOIN_PREFIX = "$";
  * // → "$Categories(name, strategy:nest_array)"
  * ```
  */
-export function joinRef(
-	collection: string,
-	fields: string[],
-	strategy?: "nest_array",
-): string {
+export function joinRef(collection: string, fields: string[], strategy?: "nest_array"): string {
 	const fieldList = fields.join(", ");
 	const strategyPart = strategy ? `, strategy:${strategy}` : "";
 	return `${JOIN_PREFIX}${collection}(${fieldList}${strategyPart})`;
@@ -81,10 +77,6 @@ export function joinFilter(collection: string, condition: string): string {
  * // → "$Categories(name:asc), price:desc"
  * ```
  */
-export function joinSort(
-	collection: string,
-	field: string,
-	order: "asc" | "desc" = "asc",
-): string {
+export function joinSort(collection: string, field: string, order: "asc" | "desc" = "asc"): string {
 	return `${JOIN_PREFIX}${collection}(${field}:${order})`;
 }

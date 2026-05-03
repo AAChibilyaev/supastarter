@@ -8,8 +8,7 @@ import {
 } from "ra-core";
 import { useEffect } from "react";
 
-import { i18nProvider as defaultI18nProvider } from "@/lib/i18nProvider";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuthCallback } from "./authentication";
 import { Layout } from "./layout";
 import { LoginPage } from "./login-page";
@@ -112,7 +111,7 @@ export const Admin = (props: CoreAdminProps) => {
 		dataProvider,
 		disableTelemetry,
 		error,
-		i18nProvider = defaultI18nProvider,
+		i18nProvider = undefined,
 		layout = Layout,
 		loading,
 		loginPage = LoginPage,

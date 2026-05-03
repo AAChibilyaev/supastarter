@@ -383,3 +383,111 @@ export async function buildUserProfile(
 		lastActive,
 	};
 }
+
+// ─── User Segment Definitions ───────────────────────────────────────────────
+
+/**
+ * Criteria for a custom user segment.
+ */
+export interface SegmentCriteria {
+	/** Minimum events a user must have to qualify */
+	minEvents?: number;
+	/** Maximum events a user can have (upper bound, e.g. for "new" users) */
+	maxEvents?: number;
+	/** Query patterns to match (substring match) */
+	queryPatterns?: string[];
+	/** Date range: last N days of activity to check */
+	lastActiveDays?: number;
+}
+
+const DEFAULT_LAST_ACTIVE_DAYS = 90;
+
+/**
+ * Compute stats for a single segment: number of unique users matching,
+ * average events per user, and total events in the time window.
+ */
+export async function computeSegmentStats(
+	organizationId: string,
+	criteria: SegmentCriteria,
+	windowDays = DEFAULT_LAST_ACTIVE_DAYS,
+): Promise<{
+	userCount: number;
+	averageEvents: number;
+	totalEvents: number;
+}> {
+	const since = new Date(Date.now() - windowDays * 24 * 60 * 60 * 1000);
+
+	const events = await db.searchUsageEvent.findMany({
+		where: {
+			organizationId,
+			createdAt: { gte: since },
+		},
+		select: { metadata: true, count: true },
+	});
+
+	// Group events by user
+	const userEvents = new Map<string, number[]>();
+	for (const ev of events) {
+		const meta = extractMeta(ev.metadata);
+		const uid =
+			(typeof meta.anonymousUserId === "string" ? meta.anonymousUserId : undefined) ??
+			(typeof meta.sessionId === "string" ? meta.sessionId : undefined);
+		if (!uid) continue;
+		if (!userEvents.has(uid)) {
+			userEvents.set(uid, []);
+		}
+		userEvents.get(uid)!.push(ev.count);
+	}
+
+	// Apply criteria filters
+	const matchingUsers: Array<{ eventCount: number; total: number }> = [];
+
+	for (const [, counts] of userEvents) {
+		const total = counts.reduce((a, b) => a + b, 0);
+		const eventCount = counts.length;
+
+		if (criteria.minEvents !== undefined && eventCount < criteria.minEvents) {
+			continue;
+		}
+		if (criteria.maxEvents !== undefined && eventCount > criteria.maxEvents) {
+			continue;
+		}
+
+		matchingUsers.push({ eventCount, total });
+	}
+
+	// TODO: queryPatterns filtering would need full event data (not just counts)
+	// For now, query patterns are stored but require fetching full events
+
+	const userCount = matchingUsers.length;
+	const totalEvents = matchingUsers.reduce((sum, u) => sum + u.total, 0);
+	const averageEvents = userCount > 0 ? Math.round(totalEvents / userCount) : 0;
+
+	return { userCount, averageEvents, totalEvents };
+}
+
+/**
+ * Predefined segment definitions that are always available.
+ */
+export const PREDEFINED_SEGMENTS = [
+	{
+		id: "new_users" as const,
+		name: "New Users",
+		description: "Users with fewer than 5 events — minimal engagement",
+		criteria: { maxEvents: 5, lastActiveDays: 90 },
+	},
+	{
+		id: "returning" as const,
+		name: "Returning Users",
+		description: "Users with 5–50 events — regular engagement",
+		criteria: { minEvents: 5, maxEvents: 50, lastActiveDays: 90 },
+	},
+	{
+		id: "vip" as const,
+		name: "VIP Users",
+		description: "Users with 50+ events — power users",
+		criteria: { minEvents: 50, lastActiveDays: 90 },
+	},
+] as const;
+
+export type PredefinedSegmentId = (typeof PREDEFINED_SEGMENTS)[number]["id"];

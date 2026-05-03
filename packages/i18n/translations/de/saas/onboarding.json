@@ -1,75 +1,75 @@
 {
-  "onboarding": {
-    "account": {
-      "avatar": "Avatar",
-      "avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
-      "name": "Name"
-    },
-    "continue": "Weiter",
-    "message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
-    "notifications": {
-      "accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. Bitte versuche es spater noch einmal."
-    },
-    "pricing": {
-      "planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
-      "skip": "Vorerst uberspringen"
-    },
-    "step": "Schritt {step} / {total}",
-    "title": "Richte dein Konto ein",
-    "createIndex": {
-      "title": "Erstellen Sie Ihren ersten Suchindex",
-      "description": "Geben Sie Ihrem Index einen Namen. Dokumente und Schema können danach hinzugefügt werden.",
-      "nameLabel": "Indexname",
-      "slugLabel": "Slug (URL-freundlicher Bezeichner)",
-      "slugHint": "Nur Kleinbuchstaben, Ziffern und Bindestriche",
-      "submit": "Index erstellen",
-      "success": "Index erfolgreich erstellt.",
-      "error": "Index konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
-      "noOrg": "Bitte erstellen Sie zuerst eine Organisation, bevor Sie einen Suchindex einrichten."
-    },
-    "addDocuments": {
-      "title": "Importieren Sie Ihre ersten Dokumente",
-      "description": "Fügen Sie ein JSON-Array von Objekten ein, um Ihren Index zu befüllen. Sie können später weitere Dokumente importieren.",
-      "pasteLabel": "Dokumente (JSON-Array)",
-      "placeholder": "[{\"id\":\"1\",\"title\":\"Hallo Welt\"}]",
-      "importButton": "Dokumente importieren",
-      "skip": "Vorerst überspringen",
-      "success": "Dokumente wurden zur Indizierung eingereiht.",
-      "parseError": "Ungültiges JSON. Bitte fügen Sie ein gültiges Array von Objekten ein.",
-      "error": "Dokumente konnten nicht importiert werden. Bitte versuchen Sie es erneut."
-    },
-    "installWidget": {
-      "title": "Suchwidget einbetten",
-      "description": "Kopieren Sie den folgenden Code-Schnipsel und fügen Sie ihn in das HTML Ihrer Website ein.",
-      "snippetLabel": "Widget-Code",
-      "copyButton": "Code kopieren",
-      "copied": "Code kopiert!",
-      "next": "Weiter",
-      "skip": "Vorerst überspringen"
-    },
-    "apiKey": {
-      "title": "Holen Sie sich Ihren API-Schlüssel",
-      "description": "Erstellen Sie einen Such-API-Schlüssel, um AACsearch in Ihre Anwendung zu integrieren. Kopieren Sie ihn — er wird nicht erneut angezeigt.",
-      "createButton": "API-Schlüssel erstellen",
-      "keyLabel": "Ihr API-Schlüssel (einmalig angezeigt)",
-      "copyButton": "Schlüssel kopieren",
-      "copied": "API-Schlüssel kopiert!",
-      "finish": "Zum Dashboard",
-      "error": "API-Schlüssel konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
-      "keyName": "Onboarding-Schlüssel"
-    }
-  },
-  "choosePlan": {
-    "title": "Wahle einen Plan",
-    "description": "Um weiterzumachen, wahle bitte einen Plan aus."
-  },
-  "checkoutReturn": {
-    "title": "Kauf wird verarbeitet",
-    "description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
-    "loading": "Ihr Kauf wird bestatigt, bitte warten..."
-  },
-  "start": {
-    "subtitle": "Sieh dir die neuesten Statistiken uber dein groartiges Unternehmen an.",
-    "welcome": "Willkommen {name}!"
-  }
+	"onboarding": {
+		"account": {
+			"avatar": "Avatar",
+			"avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
+			"name": "Name"
+		},
+		"continue": "Weiter",
+		"message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
+		"notifications": {
+			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. Bitte versuche es spater noch einmal."
+		},
+		"pricing": {
+			"planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
+			"skip": "Vorerst uberspringen"
+		},
+		"step": "Schritt {step} / {total}",
+		"title": "Richte dein Konto ein",
+		"createIndex": {
+			"title": "Erstellen Sie Ihren ersten Suchindex",
+			"description": "Geben Sie Ihrem Index einen Namen. Dokumente und Schema können danach hinzugefügt werden.",
+			"nameLabel": "Indexname",
+			"slugLabel": "Slug (URL-freundlicher Bezeichner)",
+			"slugHint": "Nur Kleinbuchstaben, Ziffern und Bindestriche",
+			"submit": "Index erstellen",
+			"success": "Index erfolgreich erstellt.",
+			"error": "Index konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+			"noOrg": "Bitte erstellen Sie zuerst eine Organisation, bevor Sie einen Suchindex einrichten."
+		},
+		"addDocuments": {
+			"title": "Importieren Sie Ihre ersten Dokumente",
+			"description": "Fügen Sie ein JSON-Array von Objekten ein, um Ihren Index zu befüllen. Sie können später weitere Dokumente importieren.",
+			"pasteLabel": "Dokumente (JSON-Array)",
+			"placeholder": "[{\"id\":\"1\",\"title\":\"Hallo Welt\"}]",
+			"importButton": "Dokumente importieren",
+			"skip": "Vorerst überspringen",
+			"success": "Dokumente wurden zur Indizierung eingereiht.",
+			"parseError": "Ungültiges JSON. Bitte fügen Sie ein gültiges Array von Objekten ein.",
+			"error": "Dokumente konnten nicht importiert werden. Bitte versuchen Sie es erneut."
+		},
+		"installWidget": {
+			"title": "Suchwidget einbetten",
+			"description": "Kopieren Sie den folgenden Code-Schnipsel und fügen Sie ihn in das HTML Ihrer Website ein.",
+			"snippetLabel": "Widget-Code",
+			"copyButton": "Code kopieren",
+			"copied": "Code kopiert!",
+			"next": "Weiter",
+			"skip": "Vorerst überspringen"
+		},
+		"apiKey": {
+			"title": "Holen Sie sich Ihren API-Schlüssel",
+			"description": "Erstellen Sie einen Such-API-Schlüssel, um AACsearch in Ihre Anwendung zu integrieren. Kopieren Sie ihn — er wird nicht erneut angezeigt.",
+			"createButton": "API-Schlüssel erstellen",
+			"keyLabel": "Ihr API-Schlüssel (einmalig angezeigt)",
+			"copyButton": "Schlüssel kopieren",
+			"copied": "API-Schlüssel kopiert!",
+			"finish": "Zum Dashboard",
+			"error": "API-Schlüssel konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+			"keyName": "Onboarding-Schlüssel"
+		}
+	},
+	"choosePlan": {
+		"title": "Wahle einen Plan",
+		"description": "Um weiterzumachen, wahle bitte einen Plan aus."
+	},
+	"checkoutReturn": {
+		"title": "Kauf wird verarbeitet",
+		"description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
+		"loading": "Ihr Kauf wird bestatigt, bitte warten..."
+	},
+	"start": {
+		"subtitle": "Sieh dir die neuesten Statistiken uber dein groartiges Unternehmen an.",
+		"welcome": "Willkommen {name}!"
+	}
 }

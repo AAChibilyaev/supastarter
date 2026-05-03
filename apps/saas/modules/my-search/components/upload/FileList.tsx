@@ -5,7 +5,7 @@ import { Card } from "@repo/ui/components/card";
 import { FileTextIcon, GlobeIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { formatFileSize } from "../lib/format";
+import { formatFileSize } from "../../lib/format";
 
 interface PendingFile {
 	id: string;

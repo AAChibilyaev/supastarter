@@ -9,9 +9,13 @@
 		"cssVariables": true,
 		"prefix": ""
 	},
+	"iconLibrary": "lucide",
 	"aliases": {
 		"components": "@/components",
 		"utils": "@/lib",
 		"lib": "@/lib"
+	},
+	"registries": {
+		"@billingsdk": "https://billingsdk.com/r/{name}.json"
 	}
 }

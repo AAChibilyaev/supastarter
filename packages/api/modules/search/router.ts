@@ -22,6 +22,7 @@ import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
+import { exportIndexDocuments } from "./procedures/export-documents";
 import { facetSearch } from "./procedures/facet-search";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
@@ -199,6 +200,7 @@ export const searchRouter = {
 		update: updateRankingRules,
 	},
 	dynamicSearch,
+	exportIndexDocuments,
 	facetSearch,
 	getOverageStatus,
 };

@@ -187,9 +187,9 @@ function detectLayout(text: string): KeyboardLayout | null {
 	if (!hasEnglish) return null;
 
 	// Detect by unique character sequences
-	const qwertyChars = lowercase.match(/[qwertyuiop\[\]asdfghjkl;'zxcvbnm,.\/]/g)?.length ?? 0;
+	const qwertyChars = lowercase.match(/[qwertyuiop[\]asdfghjkl;'zxcvbnm,./]/g)?.length ?? 0;
 	const azertyChars = lowercase.match(/[azertyuiop^$qsdfghjklmùwxcvbn,;:!]/g)?.length ?? 0;
-	const qwertzChars = lowercase.match(/[qwertzuiop\[\]asdfghjkl;'yxcvbnm,.\/]/g)?.length ?? 0;
+	const qwertzChars = lowercase.match(/[qwertzuiop[\]asdfghjkl;'yxcvbnm,./]/g)?.length ?? 0;
 
 	const total = lowercase.replace(/[^a-z]/g, "").length;
 	if (total === 0) return null;

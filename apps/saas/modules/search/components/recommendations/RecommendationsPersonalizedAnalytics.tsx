@@ -17,6 +17,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
+import { UserSegmentsPanel } from "./UserSegmentsPanel";
 
 interface RecommendationsPersonalizedAnalyticsProps {
 	organizationId: string;
@@ -82,6 +83,9 @@ export function RecommendationsPersonalizedAnalytics({
 
 	return (
 		<div className="space-y-4">
+			{/* User Segments Manager */}
+			<UserSegmentsPanel organizationId={organizationId} />
+
 			{/* Mode Selector */}
 			<Card>
 				<CardHeader>

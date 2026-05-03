@@ -1,5 +1,4 @@
 import { getSession } from "@auth/lib/server";
-import { getActiveOrganization } from "@auth/lib/server";
 import { MySearchIndexPage } from "@my-search/components/pages/MySearchIndexPage";
 import { redirect } from "next/navigation";
 
@@ -15,7 +14,11 @@ export default async function MySearchIndexRoute({ params }: Props) {
 	}
 
 	const { id } = await params;
-	const organization = await getActiveOrganization();
+	const organizationId = session.session.activeOrganizationId;
 
-	return <MySearchIndexPage organizationId={organization.id} indexId={id} />;
+	if (!organizationId) {
+		redirect("/");
+	}
+
+	return <MySearchIndexPage organizationId={organizationId} indexId={id} />;
 }

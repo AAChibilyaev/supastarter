@@ -27,6 +27,7 @@ export const getPlanInfo = protectedProcedure
 				rateLimitPerMinute: z.number(),
 				maxProjects: z.number(),
 			}),
+			overageRateUsdMicrosPerSearch: z.number(),
 			usage: z.object({
 				searches: z.object({
 					current: z.number(),
@@ -78,6 +79,7 @@ export const getPlanInfo = protectedProcedure
 				rateLimitPerMinute: plan.limits.rateLimitPerMinute,
 				maxProjects: plan.limits.maxProjects,
 			},
+			overageRateUsdMicrosPerSearch: plan.overageRateUsdMicrosPerSearch,
 			usage: {
 				searches: {
 					current: searchQuota.current,

@@ -216,8 +216,9 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 									{tConfig("facetSettingsTitle") ?? "Price Range Filter"}
 								</CardTitle>
 								<CardDescription>
-									Configure range sliders for numeric fields. Select a field above and set its type to
-									&quot;Range Slider&quot; to enable min/max and format options.
+									Configure range sliders for numeric fields. Select a field above
+									and set its type to &quot;Range Slider&quot; to enable min/max
+									and format options.
 								</CardDescription>
 							</CardHeader>
 							<CardContent>
@@ -228,8 +229,8 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 									</span>
 								</p>
 								<p className="mt-2 text-xs text-muted-foreground">
-									Tip: Set a facet's type to &quot;Range Slider&quot; above, then configure its min,
-									max, and display format.
+									Tip: Set a facet's type to &quot;Range Slider&quot; above, then
+									configure its min, max, and display format.
 								</p>
 							</CardContent>
 						</Card>

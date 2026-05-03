@@ -1,4 +1,3 @@
-import type { PopoverContentProps } from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import type { ChoicesProps, InputProps, SupportCreateSuggestionOptions } from "ra-core";
 import {
@@ -74,7 +73,7 @@ export const AutocompleteInput = (
 			translateChoice?: boolean;
 			placeholder?: string;
 			inputText?: React.ReactNode | ((option: any | undefined) => React.ReactNode);
-		} & Pick<PopoverProps, "modal">,
+		} & { modal?: boolean },
 ) => {
 	const {
 		filterToQuery = DefaultFilterToQuery,

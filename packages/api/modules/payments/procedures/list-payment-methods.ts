@@ -11,7 +11,7 @@ export const listPaymentMethods = protectedProcedure
 		path: "/payments/payment-methods",
 		tags: ["Payments"],
 		summary: "List saved payment methods",
-		description: "Get all saved card payment methods for a purchase\'s customer.",
+		description: "Get all saved card payment methods for a purchase's customer.",
 	})
 	.input(
 		z.object({

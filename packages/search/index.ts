@@ -37,10 +37,22 @@ export {
 	type SearchDocumentsResult,
 } from "./lib/search";
 export {
-	joinRef,
-	joinFilter,
-	joinSort,
-} from "./lib/join-refs";
+	checkIndexHealth,
+	checkIngestLag,
+	checkErrorRate,
+	detectAnomalies,
+	getDocumentDrift,
+	autoPauseIndexing,
+	shouldSendAlert,
+	markAlertSent,
+	buildAnomalyAlertSlackMessage,
+	type DriftResult,
+	type LagResult,
+	type ErrorRateResult,
+	type IndexHealthCheck,
+	type AnomalyEvent,
+} from "./lib/index-health";
+export { joinRef, joinFilter, joinSort } from "./lib/join-refs";
 export { processQuery, type ProcessedQuery } from "./lib/query-processor";
 export { flushSearchIngestBuffer } from "./lib/buffer";
 export {

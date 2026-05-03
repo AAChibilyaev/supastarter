@@ -347,7 +347,7 @@ export function looksLikeRussianTranslit(text: string): boolean {
 		/\bden\b/,
 		/\bnoch\b/,
 		/\butro\b/,
-		/\zavtra\b/,
+		/zavtra\b/,
 		/\bsegodnya\b/,
 		/\bvchera\b/,
 		/\bteper\b/,

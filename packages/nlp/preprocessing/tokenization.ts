@@ -91,7 +91,7 @@ export function tokenize(text: string, config: Partial<TokenizerConfig> = {}): T
 
 	// Remove punctuation
 	if (cfg.removePunctuation) {
-		processed = processed.replace(/[.,!?;:"'()\[\]{}@#$%^&*+=<>/\\|~`]/g, " ");
+		processed = processed.replace(/[.,!?;:"'()[\]{}@#$%^&*+=<>/\\|~`]/g, " ");
 	}
 
 	// Apply separators

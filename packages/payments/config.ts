@@ -39,6 +39,14 @@ export interface PaymentsConfigWithWallet extends PaymentsConfig {
 	searchLimits: Record<string, SearchPlanLimits>;
 }
 
+/** Read an integer env var with fallback. */
+function intFromEnv(key: string, fallback: number): number {
+	const raw = process.env[key];
+	if (raw === undefined || raw === "") return fallback;
+	const val = Number(raw);
+	return Number.isFinite(val) ? val : fallback;
+}
+
 export const config: PaymentsConfigWithWallet = {
 	billingAttachedTo: "user",
 	requireActiveSubscription: false,
@@ -58,22 +66,22 @@ export const config: PaymentsConfigWithWallet = {
 		free: {
 			searchPerMonth: 50_000,
 			indexedDocuments: 10_000,
-			overageRateUsdMicrosPerSearch: 0,
+			overageRateUsdMicrosPerSearch: intFromEnv("OVERAGE_RATE_FREE", 0),
 		},
 		starter: {
 			searchPerMonth: 1_000_000,
 			indexedDocuments: 250_000,
-			overageRateUsdMicrosPerSearch: 500,
+			overageRateUsdMicrosPerSearch: intFromEnv("OVERAGE_RATE_STARTER", 500),
 		},
 		pro: {
 			searchPerMonth: 10_000_000,
 			indexedDocuments: 2_000_000,
-			overageRateUsdMicrosPerSearch: 300,
+			overageRateUsdMicrosPerSearch: intFromEnv("OVERAGE_RATE_PRO", 300),
 		},
 		business: {
 			searchPerMonth: 50_000_000,
 			indexedDocuments: 10_000_000,
-			overageRateUsdMicrosPerSearch: 200,
+			overageRateUsdMicrosPerSearch: intFromEnv("OVERAGE_RATE_BUSINESS", 200),
 		},
 	},
 	plans: {

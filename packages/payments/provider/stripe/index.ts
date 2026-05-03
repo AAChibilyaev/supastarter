@@ -1143,9 +1143,10 @@ export const listInvoices: ListInvoices = async (subscriptionId: string) => {
 			amount: inv.total ?? 0,
 			currency: (inv.currency ?? "usd").toUpperCase(),
 			status: inv.status ?? "unknown",
-			paidAt: inv.status === "paid" && inv.status_transitions?.paid_at
-				? new Date(inv.status_transitions.paid_at * 1000).toISOString()
-				: null,
+			paidAt:
+				inv.status === "paid" && inv.status_transitions?.paid_at
+					? new Date(inv.status_transitions.paid_at * 1000).toISOString()
+					: null,
 			periodStart: inv.period_start
 				? new Date(inv.period_start * 1000).toISOString()
 				: new Date().toISOString(),

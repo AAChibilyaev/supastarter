@@ -1,5 +1,9 @@
 "use client";
 
+import { type DragEndEvent, DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -29,6 +33,15 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@repo/ui/components/pagination";
 import {
 	Select,
 	SelectContent,
@@ -70,6 +83,9 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import {
+	ArrowDownIcon,
+	ArrowUpDown,
+	ArrowUpIcon,
 	CheckIcon,
 	ChevronDownIcon,
 	ColumnsIcon,
@@ -124,6 +140,46 @@ function getStoredDensity(): Density {
 function setStoredDensity(density: Density) {
 	localStorage.setItem("documents-table-density", density);
 }
+
+// ─── Filter operators by field type ──────────────────────────────────────────
+
+const FILTER_OPERATORS_BY_TYPE: Record<string, Array<{ value: string; label: string }>> = {
+	string: [
+		{ value: "contains", label: "contains" },
+		{ value: "equals", label: "=" },
+		{ value: "starts_with", label: "starts with" },
+		{ value: "ends_with", label: "ends with" },
+		{ value: "not_empty", label: "not empty" },
+		{ value: "is_empty", label: "is empty" },
+	],
+	number: [
+		{ value: "equals", label: "=" },
+		{ value: "gt", label: ">" },
+		{ value: "gte", label: ">=" },
+		{ value: "lt", label: "<" },
+		{ value: "lte", label: "<=" },
+		{ value: "not_empty", label: "not empty" },
+		{ value: "is_empty", label: "is empty" },
+	],
+	bool: [
+		{ value: "equals", label: "=" },
+		{ value: "not_empty", label: "not empty" },
+		{ value: "is_empty", label: "is empty" },
+	],
+	default: [
+		{ value: "contains", label: "contains" },
+		{ value: "equals", label: "=" },
+		{ value: "not_empty", label: "not empty" },
+		{ value: "is_empty", label: "is empty" },
+	],
+};
+
+function getOperatorsForType(type: string) {
+	const normalized = type.startsWith("int") || type === "float" ? "number" : type;
+	return FILTER_OPERATORS_BY_TYPE[normalized] ?? FILTER_OPERATORS_BY_TYPE.default;
+}
+
+type FilterOperator = string;
 
 // ─── Field-type to Zod mapping ──────────────────────────────────────────────
 
@@ -340,6 +396,39 @@ function InlineCellEditor({
 	);
 }
 
+// ─── Draggable Column Header ─────────────────────────────────────────────────
+
+function DraggableColumnHeader({
+	id,
+	isDragDisabled,
+	children,
+}: {
+	id: string;
+	isDragDisabled?: boolean;
+	children: React.ReactNode;
+}) {
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+		id,
+		disabled: isDragDisabled,
+	});
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.4 : undefined,
+	};
+	return (
+		<div
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
+			className={`contents${isDragging ? " cursor-grabbing" : " cursor-grab"}`}
+		>
+			{children}
+		</div>
+	);
+}
+
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: DocumentsTableProps) {
@@ -356,17 +445,44 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const [filterOpen, setFilterOpen] = useState(false);
-	const [queryBy, setQueryBy] = useState("");
-	const [filterBy, setFilterBy] = useState("");
+	const [filterField, setFilterField] = useState("");
+	const [filterOperator, setFilterOperator] = useState("contains");
+	const [filterValue, setFilterValue] = useState("");
 
 	const [density, setDensity] = useState<Density>(getStoredDensity);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+	const [columnOrder, setColumnOrder] = useState<string[]>([]);
 
 	const [editSheetOpen, setEditSheetOpen] = useState(false);
 	const [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
+
+	// ── Current filter field type ──────────────────────────────────────────
+
+	const currentFilterFieldType = useMemo(() => {
+		if (!filterField) return null;
+		const f = documentFields.find((df) => df.name === filterField);
+		return f?.type ?? null;
+	}, [filterField, documentFields]);
+
+	// ── Apply filter to columnFilters ─────────────────────────────────────
+
+	useEffect(() => {
+		if (filterField && filterValue && filterOperator) {
+			setColumnFilters([
+				{ id: filterField, value: { operator: filterOperator, value: filterValue } },
+			]);
+		} else if (
+			filterField &&
+			(filterOperator === "not_empty" || filterOperator === "is_empty")
+		) {
+			setColumnFilters([{ id: filterField, value: { operator: filterOperator } }]);
+		} else {
+			setColumnFilters([]);
+		}
+	}, [filterField, filterOperator, filterValue]);
 
 	// ── Data fetching ───────────────────────────────────────────────────────
 
@@ -661,19 +777,56 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			columnVisibility,
 			columnFilters,
 			rowSelection,
+			columnOrder,
 		},
 		onSortingChange: setSorting,
 		onColumnVisibilityChange: setColumnVisibility,
 		onColumnFiltersChange: setColumnFilters,
 		onRowSelectionChange: setRowSelection,
+		onColumnOrderChange: setColumnOrder,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		enableRowSelection: true,
 		enableColumnResizing: true,
+		enableColumnOrdering: true,
 		columnResizeMode: "onChange",
 	});
+
+	// ── DnD sensors & handlers ─────────────────────────────────────────────
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: { distance: 5 },
+		}),
+	);
+
+	const handleDragEnd = useCallback(
+		(event: DragEndEvent) => {
+			const { active, over } = event;
+			if (!over || active.id === over.id) return;
+
+			const oldIndex = table.getAllLeafColumns().findIndex((col) => col.id === active.id);
+			const newIndex = table.getAllLeafColumns().findIndex((col) => col.id === over.id);
+			if (oldIndex === -1 || newIndex === -1) return;
+
+			const newOrder = [...columnOrder];
+			const [moved] = newOrder.splice(oldIndex, 1);
+			newOrder.splice(newIndex, 0, moved);
+			setColumnOrder(newOrder);
+		},
+		[columnOrder, table],
+	);
+
+	const sortableColumnIds = useMemo(
+		() =>
+			table
+				.getAllLeafColumns()
+				.filter((col) => col.id !== "select")
+				.map((col) => col.id),
+		[table],
+	);
 
 	// ── Bulk actions ────────────────────────────────────────────────────────
 
@@ -958,27 +1111,86 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 				{/* ── Collapsible filter row ─────────────────────────────────── */}
 				{filterOpen && (
-					<div className="gap-2 pt-1 pb-1 flex flex-wrap items-center">
-						<div className="min-w-[150px] flex-1">
-							<Input
-								placeholder={t("search.documents.queryByPlaceholder")}
-								value={queryBy}
-								onChange={(e) => setQueryBy(e.target.value)}
-							/>
-						</div>
-						<div className="min-w-[150px] flex-1">
-							<Input
-								placeholder={t("search.documents.filterByPlaceholder")}
-								value={filterBy}
-								onChange={(e) => setFilterBy(e.target.value)}
-							/>
-						</div>
+					<div className="gap-2 pt-1 pb-2 flex flex-wrap items-start">
+						{/* Field selector */}
+						<Select value={filterField} onValueChange={setFilterField}>
+							<SelectTrigger className="h-8 w-auto min-w-[120px]">
+								<SelectValue placeholder={t("search.documents.filterField")} />
+							</SelectTrigger>
+							<SelectContent>
+								{documentFields.map((f) => (
+									<SelectItem key={f.name} value={f.name}>
+										<span className="gap-2 inline-flex items-center">
+											{f.name}
+											<span className="text-[10px] text-muted-foreground">
+												{f.type}
+											</span>
+										</span>
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+
+						{/* Operator selector */}
+						<Select value={filterOperator} onValueChange={setFilterOperator}>
+							<SelectTrigger className="h-8 w-auto min-w-[100px]">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{filterField &&
+									getOperatorsForType(currentFilterFieldType ?? "").map((op) => (
+										<SelectItem key={op.value} value={op.value}>
+											{op.label}
+										</SelectItem>
+									))}
+							</SelectContent>
+						</Select>
+
+						{/* Value input */}
+						{filterOperator !== "not_empty" &&
+							filterOperator !== "is_empty" &&
+							(currentFilterFieldType === "bool" ? (
+								<div className="min-w-[150px] flex-1">
+									<Select value={filterValue} onValueChange={setFilterValue}>
+										<SelectTrigger className="h-8">
+											<SelectValue
+												placeholder={t("search.documents.selectValue")}
+											/>
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="true">
+												{t("search.documents.true")}
+											</SelectItem>
+											<SelectItem value="false">
+												{t("search.documents.false")}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
+							) : (
+								<div className="min-w-[150px] flex-1">
+									<Input
+										placeholder={t("search.documents.filterValuePlaceholder")}
+										value={filterValue}
+										onChange={(e) => setFilterValue(e.target.value)}
+										type={
+											currentFilterFieldType?.startsWith("int") ||
+											currentFilterFieldType === "float"
+												? "number"
+												: "text"
+										}
+										className="h-8"
+									/>
+								</div>
+							))}
+
 						<Button
 							variant="ghost"
 							size="sm"
 							onClick={() => {
-								setQueryBy("");
-								setFilterBy("");
+								setFilterField("");
+								setFilterOperator("contains");
+								setFilterValue("");
 							}}
 						>
 							<XIcon className="size-3.5" />
@@ -1008,126 +1220,156 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 				) : rows.length === 0 ? (
 					<EmptyDocumentsState onImport={() => setImportDialogOpen(true)} />
 				) : (
-					<div className="overflow-x-auto">
-						<Table>
-							<TableHeader className="top-0 sticky z-10 bg-card">
-								{table.getHeaderGroups().map((headerGroup) => (
-									<TableRow key={headerGroup.id}>
-										{headerGroup.headers.map((header) => (
-											<TableHead
-												key={header.id}
-												style={{ width: header.getSize() }}
-												className={`relative ${
-													header.column.getCanSort()
-														? "cursor-pointer select-none hover:text-foreground"
-														: ""
-												} ${header.column.getCanResize() ? "group" : ""}`}
-												onClick={header.column.getToggleSortingHandler()}
+					<DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+						<div className="overflow-x-auto">
+							<Table>
+								<TableHeader className="top-0 sticky z-10 bg-card">
+									{table.getHeaderGroups().map((headerGroup) => (
+										<TableRow key={headerGroup.id}>
+											<SortableContext
+												items={sortableColumnIds}
+												strategy={horizontalListSortingStrategy}
 											>
-												<div className="gap-1 flex items-center">
-													{flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
-													{{
-														asc: " \u25B2",
-														desc: " \u25BC",
-													}[header.column.getIsSorted() as string] ??
-														null}
-												</div>
-												{header.column.getCanResize() && (
-													<div
-														onDoubleClick={() =>
-															header.column.resetSize()
+												{headerGroup.headers.map((header) => (
+													<DraggableColumnHeader
+														key={header.id}
+														id={header.column.id}
+														isDragDisabled={
+															header.column.id === "select"
 														}
-														onMouseDown={header.getResizeHandler()}
-														onTouchStart={header.getResizeHandler()}
-														className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
-													/>
-												)}
-											</TableHead>
-										))}
-									</TableRow>
-								))}
-							</TableHeader>
-							<TableBody>
-								{table.getRowModel().rows.length === 0 ? (
-									<TableRow>
-										<TableCell
-											colSpan={columns.length}
-											className="py-12 text-center text-foreground/60"
-										>
-											{t("search.documents.noResults")}
-										</TableCell>
-									</TableRow>
-								) : (
-									table.getRowModel().rows.map((row, rowIndex) => (
-										<TableRow
-											key={row.id}
-											className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
-											onClick={() => {
-												const docRow = rows.find(
-													(r) => r.id === row.original.id,
-												);
-												if (docRow) openEditSheet(docRow);
-											}}
-										>
-											{row.getVisibleCells().map((cell, cellIndex) => {
-												const fieldName = cell.column.id;
-												const isEditing =
-													cellEdit?.rowId === row.original.id &&
-													cellEdit?.fieldName === fieldName;
-												return (
-													<TableCell
-														key={cell.id}
-														className={isEditing ? "p-0" : ""}
 													>
-														{isEditing ? (
-															<InlineCellEditor
-																field={documentFields.find(
-																	(f) => f.name === fieldName,
-																)}
-																value={cell.getValue()}
-																onSave={(val) =>
-																	handleCellSave(
-																		row.original.id,
-																		fieldName,
-																		val,
-																	)
-																}
-																onCancel={handleCancelEdit}
-																onNext={moveToNextCell}
-																onPrev={moveToPrevCell}
-																onDown={moveToNextRow}
-															/>
-														) : (
-															<div
-																className="rounded px-1 -mx-1 min-h-[24px] cursor-pointer hover:bg-muted/30"
-																onDoubleClick={(e) => {
-																	e.stopPropagation();
-																	handleCellClick(
-																		rowIndex,
-																		cellIndex,
-																		row.original.id,
-																		fieldName,
-																	);
-																}}
-															>
+														<TableHead
+															style={{ width: header.getSize() }}
+															className={`relative ${
+																header.column.getCanSort()
+																	? "cursor-pointer select-none hover:text-foreground"
+																	: ""
+															} ${header.column.getCanResize() ? "group" : ""}`}
+															onClick={header.column.getToggleSortingHandler()}
+														>
+															<div className="gap-1 flex items-center">
 																{flexRender(
-																	cell.column.columnDef.cell,
-																	cell.getContext(),
+																	header.column.columnDef.header,
+																	header.getContext(),
 																)}
+																{header.column.getCanSort() && (
+																	<span className="flex shrink-0 items-center">
+																		{header.column.getIsSorted() ===
+																		"asc" ? (
+																			<ArrowUpIcon className="size-3 text-primary" />
+																		) : header.column.getIsSorted() ===
+																		  "desc" ? (
+																			<ArrowDownIcon className="size-3 text-primary" />
+																		) : (
+																			<ArrowUpDown className="size-3 text-foreground/20" />
+																		)}
+																	</span>
+																)}
+																{header.column.getIsSorted() &&
+																	header.column.getSortIndex() >
+																		0 && (
+																		<span className="size-3.5 font-mono inline-flex items-center justify-center rounded-full bg-muted-foreground/20 text-[10px] leading-none text-foreground/60">
+																			{header.column.getSortIndex() +
+																				1}
+																		</span>
+																	)}
 															</div>
-														)}
-													</TableCell>
-												);
-											})}
+															{header.column.getCanResize() && (
+																<div
+																	onDoubleClick={() =>
+																		header.column.resetSize()
+																	}
+																	onMouseDown={header.getResizeHandler()}
+																	onTouchStart={header.getResizeHandler()}
+																	className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
+																/>
+															)}
+														</TableHead>
+													</DraggableColumnHeader>
+												))}
+											</SortableContext>
 										</TableRow>
-									))
-								)}
-							</TableBody>
-						</Table>
-					</div>
+									))}
+								</TableHeader>
+								<TableBody>
+									{table.getRowModel().rows.length === 0 ? (
+										<TableRow>
+											<TableCell
+												colSpan={columns.length}
+												className="py-12 text-center text-foreground/60"
+											>
+												{t("search.documents.noResults")}
+											</TableCell>
+										</TableRow>
+									) : (
+										table.getRowModel().rows.map((row, rowIndex) => (
+											<TableRow
+												key={row.id}
+												className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
+												onClick={() => {
+													const docRow = rows.find(
+														(r) => r.id === row.original.id,
+													);
+													if (docRow) openEditSheet(docRow);
+												}}
+											>
+												{row.getVisibleCells().map((cell, cellIndex) => {
+													const fieldName = cell.column.id;
+													const isEditing =
+														cellEdit?.rowId === row.original.id &&
+														cellEdit?.fieldName === fieldName;
+													return (
+														<TableCell
+															key={cell.id}
+															className={isEditing ? "p-0" : ""}
+														>
+															{isEditing ? (
+																<InlineCellEditor
+																	field={documentFields.find(
+																		(f) => f.name === fieldName,
+																	)}
+																	value={cell.getValue()}
+																	onSave={(val) =>
+																		handleCellSave(
+																			row.original.id,
+																			fieldName,
+																			val,
+																		)
+																	}
+																	onCancel={handleCancelEdit}
+																	onNext={moveToNextCell}
+																	onPrev={moveToPrevCell}
+																	onDown={moveToNextRow}
+																/>
+															) : (
+																<div
+																	className="rounded px-1 -mx-1 min-h-[24px] cursor-pointer hover:bg-muted/30"
+																	onDoubleClick={(e) => {
+																		e.stopPropagation();
+																		handleCellClick(
+																			rowIndex,
+																			cellIndex,
+																			row.original.id,
+																			fieldName,
+																		);
+																	}}
+																>
+																	{flexRender(
+																		cell.column.columnDef.cell,
+																		cell.getContext(),
+																	)}
+																</div>
+															)}
+														</TableCell>
+													);
+												})}
+											</TableRow>
+										))
+									)}
+								</TableBody>
+							</Table>
+						</div>
+					</DndContext>
 				)}
 			</Card>
 
@@ -1176,7 +1418,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								{[20, 50, 100].map((size) => (
+								{[15, 25, 50, 100].map((size) => (
 									<SelectItem key={size} value={String(size)}>
 										{size}
 									</SelectItem>
@@ -1185,27 +1427,118 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						</Select>
 					</div>
 
-					<div className="gap-2 flex items-center">
-						<Button
-							variant="ghost"
-							size="sm"
-							disabled={page <= 1}
-							onClick={() => setPage((p) => Math.max(1, p - 1))}
-						>
-							{t("search.documents.prev")}
-						</Button>
-						<span className="text-sm px-2 text-foreground/60">
-							{t("search.documents.pageOf", { page, total: totalPages })}
-						</span>
-						<Button
-							variant="ghost"
-							size="sm"
-							disabled={page >= totalPages}
-							onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-						>
-							{t("search.documents.next")}
-						</Button>
-					</div>
+					{totalPages > 1 && (
+						<Pagination>
+							<PaginationContent>
+								<PaginationItem>
+									<PaginationPrevious
+										onClick={(e) => {
+											e.preventDefault();
+											if (page > 1) setPage(page - 1);
+										}}
+										className={
+											page <= 1
+												? "pointer-events-none opacity-50"
+												: "cursor-pointer"
+										}
+									/>
+								</PaginationItem>
+
+								{/* Page numbers */}
+								{(() => {
+									const items: React.ReactNode[] = [];
+									const maxVisible = 5;
+									let startPage = Math.max(1, page - Math.floor(maxVisible / 2));
+									const endPage = Math.min(
+										totalPages,
+										startPage + maxVisible - 1,
+									);
+									if (endPage - startPage < maxVisible - 1) {
+										startPage = Math.max(1, endPage - maxVisible + 1);
+									}
+
+									if (startPage > 1) {
+										items.push(
+											<PaginationItem key={1}>
+												<PaginationLink
+													onClick={(e) => {
+														e.preventDefault();
+														setPage(1);
+													}}
+													className="cursor-pointer"
+												>
+													1
+												</PaginationLink>
+											</PaginationItem>,
+										);
+										if (startPage > 2) {
+											items.push(
+												<PaginationItem key="start-ellipsis">
+													<PaginationEllipsis />
+												</PaginationItem>,
+											);
+										}
+									}
+
+									for (let i = startPage; i <= endPage; i++) {
+										items.push(
+											<PaginationItem key={i}>
+												<PaginationLink
+													isActive={i === page}
+													onClick={(e) => {
+														e.preventDefault();
+														setPage(i);
+													}}
+													className="cursor-pointer"
+												>
+													{i}
+												</PaginationLink>
+											</PaginationItem>,
+										);
+									}
+
+									if (endPage < totalPages) {
+										if (endPage < totalPages - 1) {
+											items.push(
+												<PaginationItem key="end-ellipsis">
+													<PaginationEllipsis />
+												</PaginationItem>,
+											);
+										}
+										items.push(
+											<PaginationItem key={totalPages}>
+												<PaginationLink
+													onClick={(e) => {
+														e.preventDefault();
+														setPage(totalPages);
+													}}
+													className="cursor-pointer"
+												>
+													{totalPages}
+												</PaginationLink>
+											</PaginationItem>,
+										);
+									}
+
+									return items;
+								})()}
+
+								<PaginationItem>
+									<PaginationNext
+										onClick={(e) => {
+											e.preventDefault();
+											if (page < totalPages) setPage(page + 1);
+										}}
+										className={
+											page >= totalPages
+												? "pointer-events-none opacity-50"
+												: "cursor-pointer"
+										}
+									/>
+								</PaginationItem>
+							</PaginationContent>
+						</Pagination>
+					)}
 				</div>
 			)}
 

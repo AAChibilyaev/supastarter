@@ -25,7 +25,9 @@ function isAuthorized(request: Request): boolean {
 	return headerSecret === expected;
 }
 
-async function sendDripForDay(dripDay: number): Promise<{ sent: number; errors: number }> {
+async function sendDripForDay(
+	dripDay: (typeof DRIP_DAYS)[number],
+): Promise<{ sent: number; errors: number }> {
 	const templateId = `dripDay${dripDay}` as const;
 	const users = await findUsersForDripDay(dripDay);
 
@@ -40,7 +42,7 @@ async function sendDripForDay(dripDay: number): Promise<{ sent: number; errors: 
 
 	for (const user of users) {
 		try {
-			const context: Record<string, string> = { name: user.name };
+			const context: { name: string } & Record<string, string> = { name: user.name };
 
 			if (dripDay === 0) {
 				context.quickstartUrl = `${appUrl}/getting-started`;

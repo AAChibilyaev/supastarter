@@ -16,6 +16,7 @@
 			"@search/*": ["./modules/search/*"],
 			"@indexing/*": ["./modules/indexing/*"],
 			"@my-search/*": ["./modules/my-search/*"],
+			"@collections/*": ["./modules/collections/*"],
 			"@shared/*": ["./modules/shared/*"],
 			"@feedback/*": ["./modules/feedback/*"]
 		}

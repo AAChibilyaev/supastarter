@@ -49,6 +49,8 @@ export interface PlanInfo {
 	graceReadsUntil: Date | null;
 	graceWritesUntil: Date | null;
 	trialEndsAt: Date | null;
+	/** Overage rate in USD microcents per search for this plan. */
+	overageRateUsdMicrosPerSearch: number;
 }
 
 export interface QuotaInfo {
@@ -262,6 +264,8 @@ function buildFreePlan(): PlanInfo {
 		graceReadsUntil: null,
 		graceWritesUntil: null,
 		trialEndsAt: null,
+		overageRateUsdMicrosPerSearch:
+			paymentsConfig.searchLimits.free?.overageRateUsdMicrosPerSearch ?? 0,
 	};
 }
 
@@ -300,6 +304,8 @@ function buildPlanInfo(
 		graceReadsUntil,
 		graceWritesUntil,
 		trialEndsAt: null,
+		overageRateUsdMicrosPerSearch:
+			paymentsConfig.searchLimits[planId]?.overageRateUsdMicrosPerSearch ?? 0,
 	};
 }
 

@@ -169,12 +169,13 @@ export const DateTimeInput = ({
 			<FormControl>
 				<Input
 					id={id}
-					ref={inputRef}
 					name={name}
 					defaultValue={format(initialDefaultValueRef.current)}
 					key={inputKey}
 					type="datetime-local"
 					onChange={handleChange}
+					disabled={disabled}
+					readOnly={readOnly}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					className={clsx(
@@ -183,8 +184,6 @@ export const DateTimeInput = ({
 						"scheme-light dark:scheme-dark relative [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-100 appearance-none",
 						className,
 					)}
-					disabled={disabled || readOnly}
-					readOnly={readOnly}
 				/>
 			</FormControl>
 			<InputHelperText helperText={helperText} />

@@ -1,592 +1,592 @@
 {
-  "featuresPage": {
-    "title": "Every feature you need to ship search",
-    "description": "Scoped tokens, origin allow-lists, rate limiting, multi-search, zero-downtime reindex — all shipping today."
-  },
-  "featuresSearchApiPage": {
-    "title": "Search API",
-    "description": "A simple, powerful REST API for lightning-fast search over your data. Tenant-isolated, rate-limited, and observable."
-  },
-  "featuresSearchApi": {
-    "title": "The API your team deserves",
-    "subtitle": "15 REST endpoints. OpenAPI 3.1 spec. Browser SDK. No search cluster to manage.",
-    "items": {
-      "endpoints": {
-        "title": "15 public endpoints",
-        "description": "Full CRUD over indexes, documents, and API keys. Plus search, multi-search, analytics, and OpenAPI spec at /api/v1/openapi.json."
-      },
-      "openApi": {
-        "title": "OpenAPI 3.1 spec",
-        "description": "Machine-readable spec ships with every deployment. Generate clients in any language. Type-safe from day one."
-      },
-      "browserSdk": {
-        "title": "Typed browser SDK",
-        "description": "NPM package. Single search, multi-search (federated), facets. Under 50ms p99. Works in any framework."
-      },
-      "authentication": {
-        "title": "API key authentication",
-        "description": "Bearer token auth. Keys hashed at rest. Scoped tokens for browser use. Origin allow-list per key."
-      },
-      "tenancy": {
-        "title": "Built-in multi-tenancy",
-        "description": "Every request is isolated to your organization. Cross-org reads are architecturally impossible — not just policy."
-      },
-      "observability": {
-        "title": "Observability built in",
-        "description": "Every search is recorded with query, result count, latency, and user agent. Analytics and top-queries in the dashboard."
-      }
-    }
-  },
-  "featuresAnalyticsPage": {
-    "title": "Search analytics",
-    "description": "Track top queries, zero-result searches, and click-through rates. AACsearch analytics surface user intent automatically — no extra instrumentation required."
-  },
-  "featuresAnalytics": {
-    "title": "Turn searches into insights",
-    "subtitle": "Every query is an implicit user intent signal. AACsearch captures, aggregates, and surfaces them automatically.",
-    "items": {
-      "topQueries": {
-        "title": "Top queries",
-        "description": "See the most frequent search terms ranked by volume. Spot trends, emerging demand, and seasonal patterns."
-      },
-      "zeroResults": {
-        "title": "Zero-results tracking",
-        "description": "Every search that returns nothing is flagged. Build synonyms, add missing content, or surface alternatives."
-      },
-      "clickThrough": {
-        "title": "Click-through rate",
-        "description": "Track which results users click per query. Identify ranking problems before they hurt conversion."
-      },
-      "recentActivity": {
-        "title": "Recent activity feed",
-        "description": "Live feed of search events across your org. Filter by index, date range, or result count."
-      },
-      "usageSummary": {
-        "title": "Usage summary",
-        "description": "Monthly search-unit consumption, broken down by index. Forecast costs and plan capacity before hitting limits."
-      },
-      "widgetEvents": {
-        "title": "Widget event tracking",
-        "description": "widget_open, search_query, result_click, filter_used — all captured automatically from the embeddable widget."
-      }
-    },
-    "codeTitle": "Events are automatic",
-    "codeSubtitle": "The widget sends search events via a single POST. Nothing to instrument."
-  },
-  "featuresWidgetPage": {
-    "title": "Embeddable search widget",
-    "description": "A 14KB JavaScript widget with Shadow DOM isolation. Built-in analytics, 5 locales, zero framework dependency — drop instant search into any storefront in under an hour."
-  },
-  "featuresWidget": {
-    "title": "Search that drops into any page",
-    "subtitle": "Vanilla JS, no framework dependency, served from your AACsearch subdomain. Works on PrestaShop, Bitrix, WordPress, and custom storefronts.",
-    "items": {
-      "shadowDom": {
-        "title": "Shadow DOM isolation",
-        "description": "Widget styles never leak into your page. Your page styles never break the widget. Zero CSS conflicts."
-      },
-      "noFramework": {
-        "title": "No framework required",
-        "description": "Pure JavaScript IIFE. Works alongside React, Vue, plain HTML, or any CMS. No build step, no npm, no bundler."
-      },
-      "i18n": {
-        "title": "5-locale built-in",
-        "description": "English, German, Spanish, French, and Russian translations built into the widget bundle. Auto-detects locale."
-      },
-      "analytics": {
-        "title": "Analytics out of the box",
-        "description": "Tracks widget_open, search_query, zero_results, result_click, and filter_used automatically. No extra code."
-      },
-      "config": {
-        "title": "Data-attribute config",
-        "description": "Configure via data-* attributes on the script tag. No JavaScript required. Token, placeholder, locale — all attributes."
-      },
-      "performance": {
-        "title": "14KB gzipped",
-        "description": "IIFE + ESM dual build. Fast initial load, instant search results. No async chunks, no dynamic imports."
-      }
-    },
-    "codeTitle": "Live in 60 seconds",
-    "codeSubtitle": "Copy. Paste. Replace the token. Instant search is live."
-  },
-  "featuresKnowledgePage": {
-    "title": "Knowledge base & RAG",
-    "description": "Index your documents and answer questions over them with AI. Chunking, retrieval, and GraphRAG — included."
-  },
-  "featuresKnowledge": {
-    "title": "Q&A over your documents",
-    "subtitle": "Upload PDFs, DOCX, and text files. Ask questions in natural language. Get cited answers backed by your content.",
-    "items": {
-      "ingestion": {
-        "title": "Multi-format ingestion",
-        "description": "PDF, DOCX, TXT, and Markdown. Upload via the dashboard or the ingest-file API. Status tracked per ingestion job."
-      },
-      "chunking": {
-        "title": "Smart chunking",
-        "description": "Documents are split into semantic chunks with overlap. Chunk size and strategy configurable per knowledge space."
-      },
-      "retrieval": {
-        "title": "Semantic retrieval",
-        "description": "OpenAI embeddings for semantic similarity. BM25 for keyword precision. Hybrid scoring for best-of-both results."
-      },
-      "graphRag": {
-        "title": "GraphRAG",
-        "description": "Entity extraction builds a knowledge graph over your documents. Multi-hop reasoning surfaces connections plain search misses."
-      },
-      "citations": {
-        "title": "Cited answers",
-        "description": "Every answer includes source references with document name, chunk position, and relevance score."
-      },
-      "multiTenant": {
-        "title": "Per-tenant spaces",
-        "description": "Each org has isolated knowledge spaces. Users only see their own data. No cross-tenant information leakage."
-      }
-    }
-  },
-  "featuresConnectorsPage": {
-    "title": "CMS connectors",
-    "description": "Native PHP modules for PrestaShop 8.x and 1C-Bitrix. 7-endpoint REST Connector API for custom integrations. Full and delta sync with automatic retries on failure."
-  },
-  "featuresConnectors": {
-    "title": "Connect your data source",
-    "subtitle": "Pre-built modules handle the sync loop. The 7-endpoint Connector API lets you write a connector in any language.",
-    "items": {
-      "prestashop": {
-        "title": "PrestaShop 8.x",
-        "description": "PHP module. Event hooks on product save, update, and delete. Full catalog export with one click."
-      },
-      "bitrix": {
-        "title": "1C-Bitrix",
-        "description": "Native Bitrix module. Background agent for scheduled sync. Event handlers for real-time updates."
-      },
-      "connectorApi": {
-        "title": "Connector API",
-        "description": "7 endpoints: handshake, full sync, delta sync, delete, diagnostics, sync status, heartbeat. Build your own in any language."
-      },
-      "fullSync": {
-        "title": "Full & delta sync",
-        "description": "Full sync re-indexes the entire catalog. Delta sync processes only changed records. Schedule or trigger on demand."
-      },
-      "diagnostics": {
-        "title": "Diagnostics endpoint",
-        "description": "Test the connection, check index state, and verify token permissions without touching production data."
-      },
-      "syncJobs": {
-        "title": "Sync job history",
-        "description": "Every sync run is logged with start time, document count, errors, and duration. Retry failed batches from the dashboard."
-      }
-    },
-    "codeTitle": "Delta sync in one request",
-    "codeSubtitle": "Send only changed documents. The API handles deduplication and retries."
-  },
-  "featuresScopedTokensPage": {
-    "title": "Scoped search tokens",
-    "description": "HMAC-signed tokens that narrow permissions to a specific index, user, TTL, and filter — never widen them."
-  },
-  "featuresScopedTokens": {
-    "title": "Fine-grained access control",
-    "subtitle": "Issue a token server-side, ship it to the browser. It expires, it is locked to one index, and it can only AND-narrow the result set.",
-    "items": {
-      "hmacSigning": {
-        "title": "HMAC-signed",
-        "description": "Tokens are signed with your secret. Tampering or replay is cryptographically detectable."
-      },
-      "ttl": {
-        "title": "TTL-bound",
-        "description": "Every scoped token carries an expiry. Short-lived tokens for browser sessions; longer TTLs for server-to-server."
-      },
-      "filters": {
-        "title": "AND-combined filters",
-        "description": "A token can carry a mandatory filter (e.g. userId = 42). The server AND-combines it with the caller's filter — never OR."
-      },
-      "originLock": {
-        "title": "Origin locking",
-        "description": "Pin a token to specific origins. A token exported in JavaScript can only be used from your domain."
-      },
-      "indexScope": {
-        "title": "Index-scoped",
-        "description": "Each token is bound to a single index. Cross-index queries require a separate token per index."
-      },
-      "serverSide": {
-        "title": "Server-side issuance",
-        "description": "Tokens are issued by your backend via a single API call. The browser never sees your admin API key."
-      }
-    }
-  },
-  "featuresMultiSearchPage": {
-    "title": "Multi-search & federated queries",
-    "description": "Run multiple searches across different indexes in one HTTP request. Build cross-collection autocomplete under 50ms."
-  },
-  "featuresMultiSearch": {
-    "title": "One request, many results",
-    "subtitle": "Federated search across indexes, collections, and data types — without N round-trips from the browser.",
-    "items": {
-      "federation": {
-        "title": "Cross-index federation",
-        "description": "Query products, categories, and blog posts in one call. Merge and rank results client-side or let the API do it."
-      },
-      "autocomplete": {
-        "title": "Autocomplete",
-        "description": "Type-ahead suggestions across multiple collections in one request. Under 50ms p99 for instant feel."
-      },
-      "batchedRequests": {
-        "title": "Batched requests",
-        "description": "Up to 50 searches per multi-search request. Each with independent filters, sort, and facets."
-      },
-      "parallelExecution": {
-        "title": "Parallel execution",
-        "description": "All searches in a multi-search call execute in parallel on the server. Total latency = slowest single query."
-      },
-      "independentFacets": {
-        "title": "Independent facets",
-        "description": "Each search in the batch returns its own facet counts. Build multi-panel faceted UIs without extra requests."
-      },
-      "singleToken": {
-        "title": "Single token",
-        "description": "One scoped token authorizes all searches in the batch. Tenant isolation is enforced per query inside the batch."
-      }
-    }
-  },
-  "featuresReindexPage": {
-    "title": "Zero-downtime reindex",
-    "description": "Rebuild your index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
-  },
-  "featuresReindex": {
-    "title": "Schema changes without downtime",
-    "subtitle": "Version your indexes. Rebuild in the background. Swap the alias when ready. Rollback in one command.",
-    "items": {
-      "versioning": {
-        "title": "Versioned indexes",
-        "description": "Every index has a version number (e.g. org_products_v3). Aliases point to the active version transparently."
-      },
-      "aliasSwap": {
-        "title": "Atomic alias swap",
-        "description": "Reindex into a new version while traffic hits the old. Swap the alias in a single atomic operation — zero dropped requests."
-      },
-      "backgroundRebuild": {
-        "title": "Background rebuild",
-        "description": "Reindex runs out of band. Your API continues serving search from the current version throughout."
-      },
-      "rollback": {
-        "title": "One-command rollback",
-        "description": "If the new version has issues, point the alias back to the previous version. Traffic shifts instantly."
-      },
-      "schemaChanges": {
-        "title": "Schema evolution",
-        "description": "Add fields, change types, update facet settings — all handled by creating a new version, not mutating the live index."
-      },
-      "verification": {
-        "title": "Built-in verification",
-        "description": "After reindex, run a verification query before the alias swap. Catch missing documents before users notice."
-      }
-    }
-  },
-  "featuresRateLimitingPage": {
-    "title": "Rate limiting & quota",
-    "description": "Per-key per-minute throttling and per-org monthly quota. Both visible in the dashboard before you hit them."
-  },
-  "featuresRateLimiting": {
-    "title": "Protect your budget and your service",
-    "subtitle": "Configurable limits at every layer. You control what happens when limits are reached.",
-    "items": {
-      "perKeyThrottling": {
-        "title": "Per-key throttling",
-        "description": "Set requests-per-minute per API key. Burst traffic from one key does not affect others on your account."
-      },
-      "orgQuota": {
-        "title": "Monthly org quota",
-        "description": "Hard limit on search-units per month per organization. Configurable per plan. Dashboard shows usage in real time."
-      },
-      "graceful429": {
-        "title": "Graceful 429 responses",
-        "description": "Rate-limited requests return HTTP 429 with a Retry-After header. The browser SDK handles retries automatically."
-      },
-      "dashboardVisibility": {
-        "title": "Dashboard visibility",
-        "description": "Current usage, limit, and projected end-of-month consumption visible at a glance. No surprise overages."
-      },
-      "planBased": {
-        "title": "Plan-based limits",
-        "description": "Free, Pro, and Enterprise plans carry different quotas and rate limits. Upgrade without touching your integration."
-      },
-      "gracePeriod": {
-        "title": "Cancellation grace period",
-        "description": "7-day read-only grace on cancellation. Search keeps working while you migrate. Writes are blocked after cancellation."
-      }
-    }
-  },
-  "featuresGeoSearchPage": {
-    "title": "Geo Search",
-    "description": "Filter and sort results by location. Radius queries, bounding-box search, and distance sorting — all with sub-50ms latency."
-  },
-  "featuresGeoSearch": {
-    "title": "Location-aware search",
-    "subtitle": "Add a latitude/longitude field to your collection and AACsearch handles the rest — no geospatial specialist required.",
-    "items": {
-      "radiusSearch": {
-        "title": "Radius queries",
-        "description": "Return results within N km or miles of a point. Configurable unit, precision, and maximum result count."
-      },
-      "boundingBox": {
-        "title": "Bounding-box search",
-        "description": "Filter to a geographic rectangle using NE and SW coordinates. Useful for map-viewport search in web and mobile apps."
-      },
-      "distanceSorting": {
-        "title": "Distance sorting",
-        "description": "Sort results by distance from a given point. Combine with text relevance weights for proximity-aware ranking."
-      },
-      "multipleLocations": {
-        "title": "Multiple location fields",
-        "description": "Index multiple lat/lng fields per document — e.g. pickup and delivery locations — and query against either or both."
-      },
-      "performance": {
-        "title": "Sub-50ms latency",
-        "description": "Geo filtering runs inside AACsearch's search core. No external geospatial service, no extra round-trips."
-      },
-      "filters": {
-        "title": "Geo + attribute filters",
-        "description": "Combine geo filters with any other facet — price, category, availability — in a single query."
-      }
-    }
-  },
-  "featuresInstantSearchPage": {
-    "title": "Instant Search",
-    "description": "Search results appear as the user types. Sub-50ms P99 API latency, client-side caching, and built-in debouncing — instant search that works on any connection."
-  },
-  "featuresInstantSearch": {
-    "title": "Search that keeps up",
-    "subtitle": "AACsearch is designed for as-you-type use cases. The hosted widget and browser SDK handle debouncing, prefetching, and caching for you.",
-    "items": {
-      "asYouType": {
-        "title": "As-you-type results",
-        "description": "Results update on every keystroke. Prefix matching and typo tolerance mean relevant hits appear from the first character."
-      },
-      "debouncing": {
-        "title": "Built-in debouncing",
-        "description": "The widget and SDK debounce input automatically. Configurable delay (default 200ms) prevents unnecessary API calls."
-      },
-      "caching": {
-        "title": "Client-side caching",
-        "description": "Repeated queries return from the browser cache instantly. Cache is keyed by query + filters + locale."
-      },
-      "prefetching": {
-        "title": "Query prefetching",
-        "description": "Prefetch popular queries on page load so the first keystroke resolves from cache instead of a network request."
-      },
-      "latency": {
-        "title": "Sub-50ms API latency",
-        "description": "AACsearch P99 latency is under 50ms. Combined with edge caching, end-to-end time stays well under 100ms."
-      },
-      "widget": {
-        "title": "Drop-in widget",
-        "description": "The AACsearch widget ships with instant-search UI out of the box. One script tag, zero configuration required."
-      }
-    },
-    "codeTitle": "One script tag",
-    "codeSubtitle": "Drop the widget into any HTML page. No npm, no bundler, no framework."
-  },
-  "featuresFacetedSearchPage": {
-    "title": "Faceted Search & Navigation",
-    "description": "Dynamic facets with real-time counts. Give users the navigation controls that move them from query to result in one click."
-  },
-  "featuresFacetedSearch": {
-    "title": "Every filter, every click",
-    "subtitle": "AACsearch computes facet counts server-side on every query. No client-side post-filtering, no stale counts, no separate aggregation pass.",
-    "items": {
-      "dynamicFacets": {
-        "title": "Dynamic facets",
-        "description": "Define which fields are facetable in your collection schema. Counts are recomputed on every query with sub-millisecond overhead."
-      },
-      "countFacets": {
-        "title": "Accurate counts",
-        "description": "Facet counts reflect the current query context — apply a price filter and category counts update immediately."
-      },
-      "rangeFacets": {
-        "title": "Range facets",
-        "description": "Numeric range facets for price, rating, year, and custom fields. Configurable bucket sizes and display formats."
-      },
-      "nestedFacets": {
-        "title": "Nested category facets",
-        "description": "Multi-level category trees rendered as hierarchical facets. Breadcrumb navigation generated automatically."
-      },
-      "performance": {
-        "title": "No aggregation overhead",
-        "description": "Facet computation is co-located with search execution. One API call returns results and facet counts together."
-      },
-      "mobile": {
-        "title": "Mobile-first facets",
-        "description": "The widget renders facets as a collapsible drawer on mobile. Tap to open, tap to filter, tap to close."
-      }
-    }
-  },
-  "featuresTypoTolerancePage": {
-    "title": "Typo Tolerance",
-    "description": "Misspelled queries return correct results. Configurable edit distance, prefix matching, and split-word detection — with zero false positives."
-  },
-  "featuresTypoTolerance": {
-    "title": "Search that reads your mind",
-    "subtitle": "AACsearch applies typo tolerance per-query. Zero config needed — it works well out of the box and is tunable when required.",
-    "items": {
-      "editDistance": {
-        "title": "Configurable edit distance",
-        "description": "Levenshtein distance is configurable per token. Default: 1 typo for words with 5+ chars, 2 typos for words with 8+ chars."
-      },
-      "prefixMatch": {
-        "title": "Prefix matching",
-        "description": "Incomplete words match documents that start with the typed prefix. Powers as-you-type autocomplete without exact-match requirements."
-      },
-      "splitWords": {
-        "title": "Split-word correction",
-        "description": "'macbook pro' matches 'macbookpro' and vice versa. Split-word detection catches missed spaces and compound words."
-      },
-      "customDictionary": {
-        "title": "Custom dictionary",
-        "description": "Whitelist brand names, product codes, and technical terms that should never be corrected by the typo-tolerance engine."
-      },
-      "performance": {
-        "title": "Zero-latency overhead",
-        "description": "Typo tolerance is implemented inside AACsearch's search core. No extra round-trip, no external spell-check service."
-      },
-      "accuracy": {
-        "title": "High precision",
-        "description": "Short queries with many short words skip typo tolerance to avoid false positives. Configurable minimum token length."
-      }
-    }
-  },
-  "featuresSynonymsPage": {
-    "title": "Synonyms Management",
-    "description": "Map equivalent terms so users always find what they mean. One-way, two-way, and multi-term synonym rules — managed in the dashboard."
-  },
-  "featuresSynonyms": {
-    "title": "Every word they use, every document you have",
-    "subtitle": "Synonyms bridge the gap between how users describe things and how your catalogue names them. Manage rules in the dashboard, no redeploy needed.",
-    "items": {
-      "oneWay": {
-        "title": "One-way synonyms",
-        "description": "Map 'sofa to couch' without the reverse. Use one-way rules when your catalogue uses the formal term but users type the informal one."
-      },
-      "multiWay": {
-        "title": "Multi-way synonyms",
-        "description": "List equivalent terms: 'jumper, sweater, pullover, knitwear'. Any term matches documents containing any other."
-      },
-      "csvImport": {
-        "title": "CSV import",
-        "description": "Import synonym pairs in bulk from a CSV file. Paste your existing synonym list and it is applied instantly."
-      },
-      "realTimeUpdate": {
-        "title": "No-downtime updates",
-        "description": "Add or remove synonym rules without reindexing. Changes take effect on the next query, not the next deployment."
-      },
-      "scope": {
-        "title": "Per-collection scope",
-        "description": "Different synonym libraries per collection. Your products index and your docs index can have independent synonym rules."
-      },
-      "analytics": {
-        "title": "Synonym effectiveness",
-        "description": "See which synonym rules fire most often and which queries still return zero results despite synonym expansion."
-      }
-    }
-  },
-  "featuresRelevanceTuningPage": {
-    "title": "Relevance Tuning",
-    "description": "Control which results surface first. Field weights, boost rules, pinned items, and conditional ranking — all managed without code deploys."
-  },
-  "featuresRelevanceTuning": {
-    "title": "Results that match intent",
-    "subtitle": "AACsearch separates retrieval from ranking. Tune relevance in the dashboard — no schema migration, no reindex, no redeploy.",
-    "items": {
-      "fieldWeighting": {
-        "title": "Field weights",
-        "description": "Assign relative importance to title, description, tags, and custom fields. A title match outweighs a description match by default."
-      },
-      "boostRules": {
-        "title": "Boost rules",
-        "description": "Boost documents where in_stock is true or rating is 4.5+. Conditional boosts express merchandising logic declaratively."
-      },
-      "pinnedResults": {
-        "title": "Pinned results",
-        "description": "Fix specific documents to position 1, 2, or 3 for a given query. Used for sponsored results, featured products, and editorial picks."
-      },
-      "merchandising": {
-        "title": "Merchandising presets",
-        "description": "Save boost and pin configurations as named presets. Apply a Sale Season preset to all indexes in one click."
-      },
-      "scoring": {
-        "title": "Custom scoring",
-        "description": "Blend text relevance with numeric signals like price, recency, or popularity using a configurable scoring formula."
-      },
-      "analytics": {
-        "title": "Relevance analytics",
-        "description": "Measure CTR and zero-result rate before and after a tuning change. Roll back in one click if metrics regress."
-      }
-    }
-  },
-  "featuresCurationsPage": {
-    "title": "Curations & Pinning",
-    "description": "Override search results for specific queries. Pin products, exclude irrelevant hits, and schedule promotional placements — no engineering required."
-  },
-  "featuresCurations": {
-    "title": "Manual control, automatic delivery",
-    "subtitle": "Curations let merchandisers and editors override algorithmic results for high-value queries without touching the codebase.",
-    "items": {
-      "pinned": {
-        "title": "Pinned results",
-        "description": "Place specific documents at exact positions for a query. Sponsored items, featured products, or editorial picks stay where you put them."
-      },
-      "excluded": {
-        "title": "Excluded results",
-        "description": "Remove specific documents from a query result set entirely. Useful for out-of-season products or content under legal review."
-      },
-      "promoted": {
-        "title": "Promoted documents",
-        "description": "Elevate a document to the first page without assigning a fixed position. Promoted results compete at a higher score than organic results."
-      },
-      "triggerKeywords": {
-        "title": "Query triggers",
-        "description": "Curation rules activate on exact queries, prefix matches, or synonym matches. One rule can cover hundreds of query variants."
-      },
-      "schedule": {
-        "title": "Scheduled curations",
-        "description": "Set a start and end date on any curation rule. Promotional placements activate and deactivate automatically without manual intervention."
-      },
-      "analytics": {
-        "title": "Curation analytics",
-        "description": "Track impressions, clicks, and conversions for curated results. Compare against organic results to measure editorial lift."
-      }
-    }
-  },
-  "featuresStopwordsPage": {
-    "title": "Stopwords",
-    "description": "Remove noise words from queries automatically. Custom stopword lists per collection — improve precision without losing recall."
-  },
-  "featuresStopwords": {
-    "title": "Signal over noise",
-    "subtitle": "Stopwords remove words that add no search signal so index matching focuses on meaningful terms.",
-    "items": {
-      "customStopwords": {
-        "title": "Custom stopword lists",
-        "description": "Define your own stopword lists in addition to built-in language-specific defaults. Domain-specific noise words removed instantly."
-      },
-      "perCollection": {
-        "title": "Per-collection configuration",
-        "description": "Different stopword lists per collection. Your products index and knowledge base can have independent noise-word sets."
-      },
-      "languageAware": {
-        "title": "Language-aware defaults",
-        "description": "Built-in stopword lists for English, German, French, Spanish, and Russian. Override or extend per collection."
-      },
-      "analytics": {
-        "title": "Stopword analytics",
-        "description": "Identify which removed stopwords correlate with zero-result queries. Fine-tune your list based on real user data."
-      },
-      "realTime": {
-        "title": "No-downtime updates",
-        "description": "Add or remove stopwords without reindexing. Changes take effect immediately on the next query."
-      },
-      "performance": {
-        "title": "Zero query overhead",
-        "description": "Stopword filtering runs at query parse time, before index lookup. No measurable latency impact."
-      }
-    }
-  }
+	"featuresPage": {
+		"title": "Every feature you need to ship search",
+		"description": "Scoped tokens, origin allow-lists, rate limiting, multi-search, zero-downtime reindex — all shipping today."
+	},
+	"featuresSearchApiPage": {
+		"title": "Search API",
+		"description": "A simple, powerful REST API for lightning-fast search over your data. Tenant-isolated, rate-limited, and observable."
+	},
+	"featuresSearchApi": {
+		"title": "The API your team deserves",
+		"subtitle": "15 REST endpoints. OpenAPI 3.1 spec. Browser SDK. No search cluster to manage.",
+		"items": {
+			"endpoints": {
+				"title": "15 public endpoints",
+				"description": "Full CRUD over indexes, documents, and API keys. Plus search, multi-search, analytics, and OpenAPI spec at /api/v1/openapi.json."
+			},
+			"openApi": {
+				"title": "OpenAPI 3.1 spec",
+				"description": "Machine-readable spec ships with every deployment. Generate clients in any language. Type-safe from day one."
+			},
+			"browserSdk": {
+				"title": "Typed browser SDK",
+				"description": "NPM package. Single search, multi-search (federated), facets. Under 50ms p99. Works in any framework."
+			},
+			"authentication": {
+				"title": "API key authentication",
+				"description": "Bearer token auth. Keys hashed at rest. Scoped tokens for browser use. Origin allow-list per key."
+			},
+			"tenancy": {
+				"title": "Built-in multi-tenancy",
+				"description": "Every request is isolated to your organization. Cross-org reads are architecturally impossible — not just policy."
+			},
+			"observability": {
+				"title": "Observability built in",
+				"description": "Every search is recorded with query, result count, latency, and user agent. Analytics and top-queries in the dashboard."
+			}
+		}
+	},
+	"featuresAnalyticsPage": {
+		"title": "Search analytics",
+		"description": "Track top queries, zero-result searches, and click-through rates. AACsearch analytics surface user intent automatically — no extra instrumentation required."
+	},
+	"featuresAnalytics": {
+		"title": "Turn searches into insights",
+		"subtitle": "Every query is an implicit user intent signal. AACsearch captures, aggregates, and surfaces them automatically.",
+		"items": {
+			"topQueries": {
+				"title": "Top queries",
+				"description": "See the most frequent search terms ranked by volume. Spot trends, emerging demand, and seasonal patterns."
+			},
+			"zeroResults": {
+				"title": "Zero-results tracking",
+				"description": "Every search that returns nothing is flagged. Build synonyms, add missing content, or surface alternatives."
+			},
+			"clickThrough": {
+				"title": "Click-through rate",
+				"description": "Track which results users click per query. Identify ranking problems before they hurt conversion."
+			},
+			"recentActivity": {
+				"title": "Recent activity feed",
+				"description": "Live feed of search events across your org. Filter by index, date range, or result count."
+			},
+			"usageSummary": {
+				"title": "Usage summary",
+				"description": "Monthly search-unit consumption, broken down by index. Forecast costs and plan capacity before hitting limits."
+			},
+			"widgetEvents": {
+				"title": "Widget event tracking",
+				"description": "widget_open, search_query, result_click, filter_used — all captured automatically from the embeddable widget."
+			}
+		},
+		"codeTitle": "Events are automatic",
+		"codeSubtitle": "The widget sends search events via a single POST. Nothing to instrument."
+	},
+	"featuresWidgetPage": {
+		"title": "Embeddable search widget",
+		"description": "A 14KB JavaScript widget with Shadow DOM isolation. Built-in analytics, 5 locales, zero framework dependency — drop instant search into any storefront in under an hour."
+	},
+	"featuresWidget": {
+		"title": "Search that drops into any page",
+		"subtitle": "Vanilla JS, no framework dependency, served from your AACsearch subdomain. Works on PrestaShop, Bitrix, WordPress, and custom storefronts.",
+		"items": {
+			"shadowDom": {
+				"title": "Shadow DOM isolation",
+				"description": "Widget styles never leak into your page. Your page styles never break the widget. Zero CSS conflicts."
+			},
+			"noFramework": {
+				"title": "No framework required",
+				"description": "Pure JavaScript IIFE. Works alongside React, Vue, plain HTML, or any CMS. No build step, no npm, no bundler."
+			},
+			"i18n": {
+				"title": "5-locale built-in",
+				"description": "English, German, Spanish, French, and Russian translations built into the widget bundle. Auto-detects locale."
+			},
+			"analytics": {
+				"title": "Analytics out of the box",
+				"description": "Tracks widget_open, search_query, zero_results, result_click, and filter_used automatically. No extra code."
+			},
+			"config": {
+				"title": "Data-attribute config",
+				"description": "Configure via data-* attributes on the script tag. No JavaScript required. Token, placeholder, locale — all attributes."
+			},
+			"performance": {
+				"title": "14KB gzipped",
+				"description": "IIFE + ESM dual build. Fast initial load, instant search results. No async chunks, no dynamic imports."
+			}
+		},
+		"codeTitle": "Live in 60 seconds",
+		"codeSubtitle": "Copy. Paste. Replace the token. Instant search is live."
+	},
+	"featuresKnowledgePage": {
+		"title": "Knowledge base & RAG",
+		"description": "Index your documents and answer questions over them with AI. Chunking, retrieval, and GraphRAG — included."
+	},
+	"featuresKnowledge": {
+		"title": "Q&A over your documents",
+		"subtitle": "Upload PDFs, DOCX, and text files. Ask questions in natural language. Get cited answers backed by your content.",
+		"items": {
+			"ingestion": {
+				"title": "Multi-format ingestion",
+				"description": "PDF, DOCX, TXT, and Markdown. Upload via the dashboard or the ingest-file API. Status tracked per ingestion job."
+			},
+			"chunking": {
+				"title": "Smart chunking",
+				"description": "Documents are split into semantic chunks with overlap. Chunk size and strategy configurable per knowledge space."
+			},
+			"retrieval": {
+				"title": "Semantic retrieval",
+				"description": "OpenAI embeddings for semantic similarity. BM25 for keyword precision. Hybrid scoring for best-of-both results."
+			},
+			"graphRag": {
+				"title": "GraphRAG",
+				"description": "Entity extraction builds a knowledge graph over your documents. Multi-hop reasoning surfaces connections plain search misses."
+			},
+			"citations": {
+				"title": "Cited answers",
+				"description": "Every answer includes source references with document name, chunk position, and relevance score."
+			},
+			"multiTenant": {
+				"title": "Per-tenant spaces",
+				"description": "Each org has isolated knowledge spaces. Users only see their own data. No cross-tenant information leakage."
+			}
+		}
+	},
+	"featuresConnectorsPage": {
+		"title": "CMS connectors",
+		"description": "Native PHP modules for PrestaShop 8.x and 1C-Bitrix. 7-endpoint REST Connector API for custom integrations. Full and delta sync with automatic retries on failure."
+	},
+	"featuresConnectors": {
+		"title": "Connect your data source",
+		"subtitle": "Pre-built modules handle the sync loop. The 7-endpoint Connector API lets you write a connector in any language.",
+		"items": {
+			"prestashop": {
+				"title": "PrestaShop 8.x",
+				"description": "PHP module. Event hooks on product save, update, and delete. Full catalog export with one click."
+			},
+			"bitrix": {
+				"title": "1C-Bitrix",
+				"description": "Native Bitrix module. Background agent for scheduled sync. Event handlers for real-time updates."
+			},
+			"connectorApi": {
+				"title": "Connector API",
+				"description": "7 endpoints: handshake, full sync, delta sync, delete, diagnostics, sync status, heartbeat. Build your own in any language."
+			},
+			"fullSync": {
+				"title": "Full & delta sync",
+				"description": "Full sync re-indexes the entire catalog. Delta sync processes only changed records. Schedule or trigger on demand."
+			},
+			"diagnostics": {
+				"title": "Diagnostics endpoint",
+				"description": "Test the connection, check index state, and verify token permissions without touching production data."
+			},
+			"syncJobs": {
+				"title": "Sync job history",
+				"description": "Every sync run is logged with start time, document count, errors, and duration. Retry failed batches from the dashboard."
+			}
+		},
+		"codeTitle": "Delta sync in one request",
+		"codeSubtitle": "Send only changed documents. The API handles deduplication and retries."
+	},
+	"featuresScopedTokensPage": {
+		"title": "Scoped search tokens",
+		"description": "HMAC-signed tokens that narrow permissions to a specific index, user, TTL, and filter — never widen them."
+	},
+	"featuresScopedTokens": {
+		"title": "Fine-grained access control",
+		"subtitle": "Issue a token server-side, ship it to the browser. It expires, it is locked to one index, and it can only AND-narrow the result set.",
+		"items": {
+			"hmacSigning": {
+				"title": "HMAC-signed",
+				"description": "Tokens are signed with your secret. Tampering or replay is cryptographically detectable."
+			},
+			"ttl": {
+				"title": "TTL-bound",
+				"description": "Every scoped token carries an expiry. Short-lived tokens for browser sessions; longer TTLs for server-to-server."
+			},
+			"filters": {
+				"title": "AND-combined filters",
+				"description": "A token can carry a mandatory filter (e.g. userId = 42). The server AND-combines it with the caller's filter — never OR."
+			},
+			"originLock": {
+				"title": "Origin locking",
+				"description": "Pin a token to specific origins. A token exported in JavaScript can only be used from your domain."
+			},
+			"indexScope": {
+				"title": "Index-scoped",
+				"description": "Each token is bound to a single index. Cross-index queries require a separate token per index."
+			},
+			"serverSide": {
+				"title": "Server-side issuance",
+				"description": "Tokens are issued by your backend via a single API call. The browser never sees your admin API key."
+			}
+		}
+	},
+	"featuresMultiSearchPage": {
+		"title": "Multi-search & federated queries",
+		"description": "Run multiple searches across different indexes in one HTTP request. Build cross-collection autocomplete under 50ms."
+	},
+	"featuresMultiSearch": {
+		"title": "One request, many results",
+		"subtitle": "Federated search across indexes, collections, and data types — without N round-trips from the browser.",
+		"items": {
+			"federation": {
+				"title": "Cross-index federation",
+				"description": "Query products, categories, and blog posts in one call. Merge and rank results client-side or let the API do it."
+			},
+			"autocomplete": {
+				"title": "Autocomplete",
+				"description": "Type-ahead suggestions across multiple collections in one request. Under 50ms p99 for instant feel."
+			},
+			"batchedRequests": {
+				"title": "Batched requests",
+				"description": "Up to 50 searches per multi-search request. Each with independent filters, sort, and facets."
+			},
+			"parallelExecution": {
+				"title": "Parallel execution",
+				"description": "All searches in a multi-search call execute in parallel on the server. Total latency = slowest single query."
+			},
+			"independentFacets": {
+				"title": "Independent facets",
+				"description": "Each search in the batch returns its own facet counts. Build multi-panel faceted UIs without extra requests."
+			},
+			"singleToken": {
+				"title": "Single token",
+				"description": "One scoped token authorizes all searches in the batch. Tenant isolation is enforced per query inside the batch."
+			}
+		}
+	},
+	"featuresReindexPage": {
+		"title": "Zero-downtime reindex",
+		"description": "Rebuild your index against a new schema while live traffic keeps hitting the old one. Cut over atomically."
+	},
+	"featuresReindex": {
+		"title": "Schema changes without downtime",
+		"subtitle": "Version your indexes. Rebuild in the background. Swap the alias when ready. Rollback in one command.",
+		"items": {
+			"versioning": {
+				"title": "Versioned indexes",
+				"description": "Every index has a version number (e.g. org_products_v3). Aliases point to the active version transparently."
+			},
+			"aliasSwap": {
+				"title": "Atomic alias swap",
+				"description": "Reindex into a new version while traffic hits the old. Swap the alias in a single atomic operation — zero dropped requests."
+			},
+			"backgroundRebuild": {
+				"title": "Background rebuild",
+				"description": "Reindex runs out of band. Your API continues serving search from the current version throughout."
+			},
+			"rollback": {
+				"title": "One-command rollback",
+				"description": "If the new version has issues, point the alias back to the previous version. Traffic shifts instantly."
+			},
+			"schemaChanges": {
+				"title": "Schema evolution",
+				"description": "Add fields, change types, update facet settings — all handled by creating a new version, not mutating the live index."
+			},
+			"verification": {
+				"title": "Built-in verification",
+				"description": "After reindex, run a verification query before the alias swap. Catch missing documents before users notice."
+			}
+		}
+	},
+	"featuresRateLimitingPage": {
+		"title": "Rate limiting & quota",
+		"description": "Per-key per-minute throttling and per-org monthly quota. Both visible in the dashboard before you hit them."
+	},
+	"featuresRateLimiting": {
+		"title": "Protect your budget and your service",
+		"subtitle": "Configurable limits at every layer. You control what happens when limits are reached.",
+		"items": {
+			"perKeyThrottling": {
+				"title": "Per-key throttling",
+				"description": "Set requests-per-minute per API key. Burst traffic from one key does not affect others on your account."
+			},
+			"orgQuota": {
+				"title": "Monthly org quota",
+				"description": "Hard limit on search-units per month per organization. Configurable per plan. Dashboard shows usage in real time."
+			},
+			"graceful429": {
+				"title": "Graceful 429 responses",
+				"description": "Rate-limited requests return HTTP 429 with a Retry-After header. The browser SDK handles retries automatically."
+			},
+			"dashboardVisibility": {
+				"title": "Dashboard visibility",
+				"description": "Current usage, limit, and projected end-of-month consumption visible at a glance. No surprise overages."
+			},
+			"planBased": {
+				"title": "Plan-based limits",
+				"description": "Free, Pro, and Enterprise plans carry different quotas and rate limits. Upgrade without touching your integration."
+			},
+			"gracePeriod": {
+				"title": "Cancellation grace period",
+				"description": "7-day read-only grace on cancellation. Search keeps working while you migrate. Writes are blocked after cancellation."
+			}
+		}
+	},
+	"featuresGeoSearchPage": {
+		"title": "Geo Search",
+		"description": "Filter and sort results by location. Radius queries, bounding-box search, and distance sorting — all with sub-50ms latency."
+	},
+	"featuresGeoSearch": {
+		"title": "Location-aware search",
+		"subtitle": "Add a latitude/longitude field to your collection and AACsearch handles the rest — no geospatial specialist required.",
+		"items": {
+			"radiusSearch": {
+				"title": "Radius queries",
+				"description": "Return results within N km or miles of a point. Configurable unit, precision, and maximum result count."
+			},
+			"boundingBox": {
+				"title": "Bounding-box search",
+				"description": "Filter to a geographic rectangle using NE and SW coordinates. Useful for map-viewport search in web and mobile apps."
+			},
+			"distanceSorting": {
+				"title": "Distance sorting",
+				"description": "Sort results by distance from a given point. Combine with text relevance weights for proximity-aware ranking."
+			},
+			"multipleLocations": {
+				"title": "Multiple location fields",
+				"description": "Index multiple lat/lng fields per document — e.g. pickup and delivery locations — and query against either or both."
+			},
+			"performance": {
+				"title": "Sub-50ms latency",
+				"description": "Geo filtering runs inside AACsearch's search core. No external geospatial service, no extra round-trips."
+			},
+			"filters": {
+				"title": "Geo + attribute filters",
+				"description": "Combine geo filters with any other facet — price, category, availability — in a single query."
+			}
+		}
+	},
+	"featuresInstantSearchPage": {
+		"title": "Instant Search",
+		"description": "Search results appear as the user types. Sub-50ms P99 API latency, client-side caching, and built-in debouncing — instant search that works on any connection."
+	},
+	"featuresInstantSearch": {
+		"title": "Search that keeps up",
+		"subtitle": "AACsearch is designed for as-you-type use cases. The hosted widget and browser SDK handle debouncing, prefetching, and caching for you.",
+		"items": {
+			"asYouType": {
+				"title": "As-you-type results",
+				"description": "Results update on every keystroke. Prefix matching and typo tolerance mean relevant hits appear from the first character."
+			},
+			"debouncing": {
+				"title": "Built-in debouncing",
+				"description": "The widget and SDK debounce input automatically. Configurable delay (default 200ms) prevents unnecessary API calls."
+			},
+			"caching": {
+				"title": "Client-side caching",
+				"description": "Repeated queries return from the browser cache instantly. Cache is keyed by query + filters + locale."
+			},
+			"prefetching": {
+				"title": "Query prefetching",
+				"description": "Prefetch popular queries on page load so the first keystroke resolves from cache instead of a network request."
+			},
+			"latency": {
+				"title": "Sub-50ms API latency",
+				"description": "AACsearch P99 latency is under 50ms. Combined with edge caching, end-to-end time stays well under 100ms."
+			},
+			"widget": {
+				"title": "Drop-in widget",
+				"description": "The AACsearch widget ships with instant-search UI out of the box. One script tag, zero configuration required."
+			}
+		},
+		"codeTitle": "One script tag",
+		"codeSubtitle": "Drop the widget into any HTML page. No npm, no bundler, no framework."
+	},
+	"featuresFacetedSearchPage": {
+		"title": "Faceted Search & Navigation",
+		"description": "Dynamic facets with real-time counts. Give users the navigation controls that move them from query to result in one click."
+	},
+	"featuresFacetedSearch": {
+		"title": "Every filter, every click",
+		"subtitle": "AACsearch computes facet counts server-side on every query. No client-side post-filtering, no stale counts, no separate aggregation pass.",
+		"items": {
+			"dynamicFacets": {
+				"title": "Dynamic facets",
+				"description": "Define which fields are facetable in your collection schema. Counts are recomputed on every query with sub-millisecond overhead."
+			},
+			"countFacets": {
+				"title": "Accurate counts",
+				"description": "Facet counts reflect the current query context — apply a price filter and category counts update immediately."
+			},
+			"rangeFacets": {
+				"title": "Range facets",
+				"description": "Numeric range facets for price, rating, year, and custom fields. Configurable bucket sizes and display formats."
+			},
+			"nestedFacets": {
+				"title": "Nested category facets",
+				"description": "Multi-level category trees rendered as hierarchical facets. Breadcrumb navigation generated automatically."
+			},
+			"performance": {
+				"title": "No aggregation overhead",
+				"description": "Facet computation is co-located with search execution. One API call returns results and facet counts together."
+			},
+			"mobile": {
+				"title": "Mobile-first facets",
+				"description": "The widget renders facets as a collapsible drawer on mobile. Tap to open, tap to filter, tap to close."
+			}
+		}
+	},
+	"featuresTypoTolerancePage": {
+		"title": "Typo Tolerance",
+		"description": "Misspelled queries return correct results. Configurable edit distance, prefix matching, and split-word detection — with zero false positives."
+	},
+	"featuresTypoTolerance": {
+		"title": "Search that reads your mind",
+		"subtitle": "AACsearch applies typo tolerance per-query. Zero config needed — it works well out of the box and is tunable when required.",
+		"items": {
+			"editDistance": {
+				"title": "Configurable edit distance",
+				"description": "Levenshtein distance is configurable per token. Default: 1 typo for words with 5+ chars, 2 typos for words with 8+ chars."
+			},
+			"prefixMatch": {
+				"title": "Prefix matching",
+				"description": "Incomplete words match documents that start with the typed prefix. Powers as-you-type autocomplete without exact-match requirements."
+			},
+			"splitWords": {
+				"title": "Split-word correction",
+				"description": "'macbook pro' matches 'macbookpro' and vice versa. Split-word detection catches missed spaces and compound words."
+			},
+			"customDictionary": {
+				"title": "Custom dictionary",
+				"description": "Whitelist brand names, product codes, and technical terms that should never be corrected by the typo-tolerance engine."
+			},
+			"performance": {
+				"title": "Zero-latency overhead",
+				"description": "Typo tolerance is implemented inside AACsearch's search core. No extra round-trip, no external spell-check service."
+			},
+			"accuracy": {
+				"title": "High precision",
+				"description": "Short queries with many short words skip typo tolerance to avoid false positives. Configurable minimum token length."
+			}
+		}
+	},
+	"featuresSynonymsPage": {
+		"title": "Synonyms Management",
+		"description": "Map equivalent terms so users always find what they mean. One-way, two-way, and multi-term synonym rules — managed in the dashboard."
+	},
+	"featuresSynonyms": {
+		"title": "Every word they use, every document you have",
+		"subtitle": "Synonyms bridge the gap between how users describe things and how your catalogue names them. Manage rules in the dashboard, no redeploy needed.",
+		"items": {
+			"oneWay": {
+				"title": "One-way synonyms",
+				"description": "Map 'sofa to couch' without the reverse. Use one-way rules when your catalogue uses the formal term but users type the informal one."
+			},
+			"multiWay": {
+				"title": "Multi-way synonyms",
+				"description": "List equivalent terms: 'jumper, sweater, pullover, knitwear'. Any term matches documents containing any other."
+			},
+			"csvImport": {
+				"title": "CSV import",
+				"description": "Import synonym pairs in bulk from a CSV file. Paste your existing synonym list and it is applied instantly."
+			},
+			"realTimeUpdate": {
+				"title": "No-downtime updates",
+				"description": "Add or remove synonym rules without reindexing. Changes take effect on the next query, not the next deployment."
+			},
+			"scope": {
+				"title": "Per-collection scope",
+				"description": "Different synonym libraries per collection. Your products index and your docs index can have independent synonym rules."
+			},
+			"analytics": {
+				"title": "Synonym effectiveness",
+				"description": "See which synonym rules fire most often and which queries still return zero results despite synonym expansion."
+			}
+		}
+	},
+	"featuresRelevanceTuningPage": {
+		"title": "Relevance Tuning",
+		"description": "Control which results surface first. Field weights, boost rules, pinned items, and conditional ranking — all managed without code deploys."
+	},
+	"featuresRelevanceTuning": {
+		"title": "Results that match intent",
+		"subtitle": "AACsearch separates retrieval from ranking. Tune relevance in the dashboard — no schema migration, no reindex, no redeploy.",
+		"items": {
+			"fieldWeighting": {
+				"title": "Field weights",
+				"description": "Assign relative importance to title, description, tags, and custom fields. A title match outweighs a description match by default."
+			},
+			"boostRules": {
+				"title": "Boost rules",
+				"description": "Boost documents where in_stock is true or rating is 4.5+. Conditional boosts express merchandising logic declaratively."
+			},
+			"pinnedResults": {
+				"title": "Pinned results",
+				"description": "Fix specific documents to position 1, 2, or 3 for a given query. Used for sponsored results, featured products, and editorial picks."
+			},
+			"merchandising": {
+				"title": "Merchandising presets",
+				"description": "Save boost and pin configurations as named presets. Apply a Sale Season preset to all indexes in one click."
+			},
+			"scoring": {
+				"title": "Custom scoring",
+				"description": "Blend text relevance with numeric signals like price, recency, or popularity using a configurable scoring formula."
+			},
+			"analytics": {
+				"title": "Relevance analytics",
+				"description": "Measure CTR and zero-result rate before and after a tuning change. Roll back in one click if metrics regress."
+			}
+		}
+	},
+	"featuresCurationsPage": {
+		"title": "Curations & Pinning",
+		"description": "Override search results for specific queries. Pin products, exclude irrelevant hits, and schedule promotional placements — no engineering required."
+	},
+	"featuresCurations": {
+		"title": "Manual control, automatic delivery",
+		"subtitle": "Curations let merchandisers and editors override algorithmic results for high-value queries without touching the codebase.",
+		"items": {
+			"pinned": {
+				"title": "Pinned results",
+				"description": "Place specific documents at exact positions for a query. Sponsored items, featured products, or editorial picks stay where you put them."
+			},
+			"excluded": {
+				"title": "Excluded results",
+				"description": "Remove specific documents from a query result set entirely. Useful for out-of-season products or content under legal review."
+			},
+			"promoted": {
+				"title": "Promoted documents",
+				"description": "Elevate a document to the first page without assigning a fixed position. Promoted results compete at a higher score than organic results."
+			},
+			"triggerKeywords": {
+				"title": "Query triggers",
+				"description": "Curation rules activate on exact queries, prefix matches, or synonym matches. One rule can cover hundreds of query variants."
+			},
+			"schedule": {
+				"title": "Scheduled curations",
+				"description": "Set a start and end date on any curation rule. Promotional placements activate and deactivate automatically without manual intervention."
+			},
+			"analytics": {
+				"title": "Curation analytics",
+				"description": "Track impressions, clicks, and conversions for curated results. Compare against organic results to measure editorial lift."
+			}
+		}
+	},
+	"featuresStopwordsPage": {
+		"title": "Stopwords",
+		"description": "Remove noise words from queries automatically. Custom stopword lists per collection — improve precision without losing recall."
+	},
+	"featuresStopwords": {
+		"title": "Signal over noise",
+		"subtitle": "Stopwords remove words that add no search signal so index matching focuses on meaningful terms.",
+		"items": {
+			"customStopwords": {
+				"title": "Custom stopword lists",
+				"description": "Define your own stopword lists in addition to built-in language-specific defaults. Domain-specific noise words removed instantly."
+			},
+			"perCollection": {
+				"title": "Per-collection configuration",
+				"description": "Different stopword lists per collection. Your products index and knowledge base can have independent noise-word sets."
+			},
+			"languageAware": {
+				"title": "Language-aware defaults",
+				"description": "Built-in stopword lists for English, German, French, Spanish, and Russian. Override or extend per collection."
+			},
+			"analytics": {
+				"title": "Stopword analytics",
+				"description": "Identify which removed stopwords correlate with zero-result queries. Fine-tune your list based on real user data."
+			},
+			"realTime": {
+				"title": "No-downtime updates",
+				"description": "Add or remove stopwords without reindexing. Changes take effect immediately on the next query."
+			},
+			"performance": {
+				"title": "Zero query overhead",
+				"description": "Stopword filtering runs at query parse time, before index lookup. No measurable latency impact."
+			}
+		}
+	}
 }

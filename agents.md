@@ -35,32 +35,32 @@ Last:        Analytics events pipeline (events-public.ts, widget analytics)
 
 ### Tech Stack (exact versions)
 
-| Technology       | Version  | Notes                                                        |
-| ---------------- | -------- | ------------------------------------------------------------ |
-| Next.js          | ^16.2.0  | App Router, RSC, Server Actions                              |
-| React            | 19.2.4   | Server Components default                                    |
-| TypeScript       | 6.0.2    | strict, target ES6 (override to ES2020 for BigInt)           |
-| pnpm             | 10.28.2  | workspace catalog: versions via pnpm-workspace.yaml          |
-| Turborepo        | ^2.9.4   | dotenv -c wrapper                                            |
-| Tailwind CSS     | 4.2.2    | v4, no tailwind.config.ts, only @theme in theme.css          |
-| Shadcn UI        | —        | 27 primitives in packages/ui/components/                     |
-| Radix UI         | ^1.4.3   | accessible primitives                                        |
-| oRPC             | 1.13.13  | type-safe RPC + TanStack Query                               |
-| Hono             | ^4.12.11 | HTTP handler (mounts oRPC, webhooks, CORS, public endpoints) |
-| Better Auth      | 1.5.6    | auth, orgs, passkeys, 2FA, magic links, admin, OAuth         |
-| Prisma           | 7.6.0    | ACTIVE ORM — 33 models (not 25!)                             |
-| Drizzle (legacy) | ^0.45.2  | reference only — do NOT add new files                        |
-| Zod              | ^4.3.6   | validation                                                   |
-| TanStack Query   | ^5.96.2  | client data fetching                                         |
-| react-hook-form  | ^7.72.1  | forms                                                        |
-| Oxlint           | ^1.58.0  | LINT ONLY (NOT ESLint)                                       |
-| Oxfmt            | ^0.43.0  | FORMAT ONLY (NOT Prettier)                                   |
+| Technology       | Version  | Notes                                                         |
+| ---------------- | -------- | ------------------------------------------------------------- |
+| Next.js          | ^16.2.0  | App Router, RSC, Server Actions                               |
+| React            | 19.2.4   | Server Components default                                     |
+| TypeScript       | 6.0.2    | strict, target ES6 (override to ES2020 for BigInt)            |
+| pnpm             | 10.28.2  | workspace catalog: versions via pnpm-workspace.yaml           |
+| Turborepo        | ^2.9.4   | dotenv -c wrapper                                             |
+| Tailwind CSS     | 4.2.2    | v4, no tailwind.config.ts, only @theme in theme.css           |
+| Shadcn UI        | —        | 27 primitives in packages/ui/components/                      |
+| Radix UI         | ^1.4.3   | accessible primitives                                         |
+| oRPC             | 1.13.13  | type-safe RPC + TanStack Query                                |
+| Hono             | ^4.12.11 | HTTP handler (mounts oRPC, webhooks, CORS, public endpoints)  |
+| Better Auth      | 1.5.6    | auth, orgs, passkeys, 2FA, magic links, admin, OAuth          |
+| Prisma           | 7.6.0    | ACTIVE ORM — 33 models (not 25!)                              |
+| Drizzle (legacy) | ^0.45.2  | reference only — do NOT add new files                         |
+| Zod              | ^4.3.6   | validation                                                    |
+| TanStack Query   | ^5.96.2  | client data fetching                                          |
+| react-hook-form  | ^7.72.1  | forms                                                         |
+| Oxlint           | ^1.58.0  | LINT ONLY (NOT ESLint)                                        |
+| Oxfmt            | ^0.43.0  | FORMAT ONLY (NOT Prettier)                                    |
 | next-intl        | 4.9.0    | i18n — 5 locales x 4 scopes (saas+marketing split into files) |
-| Typesense        | ^3.0.0   | search engine                                                |
-| OpenAI SDK       | ^6.33.0  | AI features (knowledge RAG, GraphRAG)                        |
-| Vercel AI SDK    | ^6.0.146 | AI streaming                                                 |
-| Hono             | ^4.12.11 | HTTP server, CORS, static file serving                       |
-| Recharts         | ^3.8.1   | Charts (analytics dashboard)                                 |
+| Typesense        | ^3.0.0   | search engine                                                 |
+| OpenAI SDK       | ^6.33.0  | AI features (knowledge RAG, GraphRAG)                         |
+| Vercel AI SDK    | ^6.0.146 | AI streaming                                                  |
+| Hono             | ^4.12.11 | HTTP server, CORS, static file serving                        |
+| Recharts         | ^3.8.1   | Charts (analytics dashboard)                                  |
 
 ### Locales: 5 (NOT 4)
 
@@ -804,6 +804,7 @@ packages/i18n/translations/
 **Загрузка:** `get-messages.ts` сливает все split-файлы при загрузке через `Promise.all` + `Object.assign`. API приложений (`SaasMessages`, `MarketingMessages`, `getMessagesForLocale`) не изменился.
 
 **Редактировать переводы ТОЛЬКО через скрипт** (Invariant: запрещено редактировать JSON напрямую):
+
 ```bash
 python3 packages/i18n/scripts/i18n.py set saas search.myKey "en text" "de text" "es text" "fr text" "ru text"
 python3 packages/i18n/scripts/i18n.py set marketing featuresWidget.title "en" "de" "es" "fr" "ru"
@@ -812,12 +813,12 @@ python3 packages/i18n/scripts/i18n.py set marketing featuresWidget.title "en" "d
 
 ### Scope selection
 
-| Scope       | Файлы                      | Used by              |
-| ----------- | -------------------------- | -------------------- |
-| `saas`      | `saas/*.json` (8 файлов)   | apps/saas only       |
+| Scope       | Файлы                         | Used by              |
+| ----------- | ----------------------------- | -------------------- |
+| `saas`      | `saas/*.json` (8 файлов)      | apps/saas only       |
 | `marketing` | `marketing/*.json` (5 файлов) | apps/marketing only  |
-| `shared`    | `shared.json`              | Cross-app strings    |
-| `mail`      | `mail.json`                | Email templates only |
+| `shared`    | `shared.json`                 | Cross-app strings    |
+| `mail`      | `mail.json`                   | Email templates only |
 
 ### Usage
 

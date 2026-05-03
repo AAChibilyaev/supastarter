@@ -11,6 +11,13 @@ import { personalizedFromAnalytics } from "./procedures/personalized-from-analyt
 import { similar } from "./procedures/similar";
 import { testPersonalization } from "./procedures/test-personalization";
 import { trending } from "./procedures/trending";
+import {
+	createUserSegment,
+	deleteUserSegment,
+	getUserSegmentStats,
+	listUserSegments,
+	updateUserSegment,
+} from "./procedures/user-segments";
 
 export const recommendationsRouter = {
 	similar,
@@ -25,4 +32,9 @@ export const recommendationsRouter = {
 	alsoViewed,
 	graphrag,
 	graphragMultiSeed,
+	listUserSegments,
+	createUserSegment,
+	updateUserSegment,
+	deleteUserSegment,
+	getUserSegmentStats,
 };

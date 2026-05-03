@@ -4,7 +4,12 @@
 	"ignorePatterns": [
 		"**/.content-collections/**",
 		"**/prisma/zod/index.ts",
-		"packages/loadtest/**"
+		"packages/loadtest/**",
+		"**/*.cjs",
+		"**/*.mjs",
+		"modules/wordpress/**",
+		"**/public/**/*.js",
+		"apps/saas/public/**"
 	],
 	"options": {
 		"typeAware": true

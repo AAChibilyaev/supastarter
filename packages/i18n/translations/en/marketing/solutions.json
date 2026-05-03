@@ -1,440 +1,440 @@
 {
-  "useCasesPage": {
-    "title": "Search for every product and team",
-    "description": "From e-commerce storefronts to internal tools — AACsearch adapts to your data model and your team's scale."
-  },
-  "useCases": {
-    "title": "Built for your use case",
-    "subtitle": "One API, many shapes. Bring your data — AACsearch handles the indexing, ranking, and delivery.",
-    "items": {
-      "ecommerce": {
-        "title": "E-commerce product search",
-        "description": "Faceted filters, synonym expansion, zero-results handling, and per-user scoped tokens — all in a single search call."
-      },
-      "helpCenter": {
-        "title": "Help center & docs",
-        "description": "Index your knowledge base and surface relevant articles in milliseconds. Pair with the Knowledge module for Q&A over PDFs."
-      },
-      "multiTenant": {
-        "title": "Multi-tenant SaaS",
-        "description": "One AACsearch index per tenant, scoped tokens per end-user. Your customers never see each other's data — by design."
-      },
-      "devTools": {
-        "title": "Developer tools",
-        "description": "Semantic search over code, configs, and logs. MCP Server lets your AI agents search and update indexes programmatically."
-      },
-      "internalTools": {
-        "title": "Internal tools",
-        "description": "Fast search over CRM records, inventory, employee directories, or any internal dataset your team queries daily."
-      },
-      "contentSites": {
-        "title": "Content sites",
-        "description": "Instant search for blogs, changelogs, and documentation. The Browser SDK drops into any front end in under an hour."
-      }
-    }
-  },
-  "useCasesEcommercePage": {
-    "title": "Search for e-commerce",
-    "description": "Faceted filters, synonym expansion, zero-results handling, and real-time analytics — built for product catalogs."
-  },
-  "useCasesEcommerce": {
-    "title": "Product search that converts",
-    "subtitle": "Connect your catalog with the PrestaShop or Bitrix module. Live in an afternoon. Analytics from day one.",
-    "items": {
-      "facetedFilter": {
-        "title": "Faceted filtering",
-        "description": "Brand, category, price range, availability, attributes — any field in your schema becomes a facet. No extra config."
-      },
-      "synonyms": {
-        "title": "Synonym expansion",
-        "description": "Add synonyms in the dashboard. TV → television, sofa → couch. Users find products with natural language."
-      },
-      "zeroResults": {
-        "title": "Zero-results handling",
-        "description": "AACsearch tracks every no-result query. Use the list to add synonyms, products, or fallback suggestions."
-      },
-      "prestaShop": {
-        "title": "PrestaShop module",
-        "description": "Drop-in PHP module. Syncs on every product save, update, and delete. Full catalog export with one click."
-      },
-      "analytics": {
-        "title": "Conversion analytics",
-        "description": "Track CTR per query, top search terms, and filter usage. Identify ranking issues before they hurt revenue."
-      },
-      "widget": {
-        "title": "Drop-in widget",
-        "description": "14KB widget for your storefront. No build step, no npm. Works alongside your existing theme."
-      }
-    }
-  },
-  "useCasesSaasPage": {
-    "title": "Search for multi-tenant SaaS",
-    "description": "One AACsearch index per tenant, scoped tokens per end-user. Your customers never see each other's data."
-  },
-  "useCasesSaas": {
-    "title": "Search isolation built in",
-    "subtitle": "Tenant isolation is architectural — not just policy. Each org gets its own index, its own quota, its own keys.",
-    "items": {
-      "tenantIsolation": {
-        "title": "Per-tenant indexes",
-        "description": "Create one index per customer organization. Data never mingles. Deleting a tenant deletes their index."
-      },
-      "scopedTokens": {
-        "title": "Per-user scoped tokens",
-        "description": "Issue tokens server-side that lock to a userId filter. Your end-users search only their own records."
-      },
-      "multiIndex": {
-        "title": "Multi-index per tenant",
-        "description": "Up to 10 indexes per org on Pro. Products, orders, tickets, docs — separate indexes, one dashboard."
-      },
-      "quota": {
-        "title": "Per-tenant quota",
-        "description": "Track search-unit consumption per tenant. Attribute costs to customers. Bill accordingly."
-      },
-      "orpc": {
-        "title": "oRPC management API",
-        "description": "Programmatically create indexes, rotate keys, and pull analytics per tenant from your backend."
-      },
-      "reindex": {
-        "title": "Schema evolution",
-        "description": "Evolve your data model without downtime. Reindex each tenant in the background, swap aliases atomically."
-      }
-    }
-  },
-  "useCasesHelpCenterPage": {
-    "title": "Search for help centers & docs",
-    "description": "Index your knowledge base and surface relevant articles in milliseconds. Pair with the Knowledge module for AI Q&A."
-  },
-  "useCasesHelpCenter": {
-    "title": "Help users help themselves",
-    "subtitle": "Instant article search, zero-results tracking, and AI Q&A over PDFs — one integration, no search engineer required.",
-    "items": {
-      "articleSearch": {
-        "title": "Instant article search",
-        "description": "Full-text search over your help articles with typo tolerance and ranking by relevance. Results in under 50ms."
-      },
-      "knowledgeRag": {
-        "title": "AI Q&A (RAG)",
-        "description": "Users ask a question in natural language. The Knowledge module retrieves relevant chunks and generates a cited answer."
-      },
-      "zeroResults": {
-        "title": "Zero-results intelligence",
-        "description": "Every unanswered query is logged. Surface gaps in your documentation before customers escalate to support."
-      },
-      "multilingual": {
-        "title": "Multilingual support",
-        "description": "Index content in multiple languages. Search in the user's locale. Synonym libraries per language."
-      },
-      "widget": {
-        "title": "Drop-in search widget",
-        "description": "Add search to any help center in under an hour. Works on Docusaurus, GitBook, Notion, or custom portals."
-      },
-      "analytics": {
-        "title": "Search analytics",
-        "description": "Top queries, zero-results, and CTR show you what users actually look for — not what you think they do."
-      }
-    }
-  },
-  "useCasesDevToolsPage": {
-    "title": "Search for developer tools",
-    "description": "Semantic search over code, configs, and logs. MCP Server lets AI agents search and update indexes programmatically."
-  },
-  "useCasesDevTools": {
-    "title": "Search built for developers",
-    "subtitle": "REST API, typed SDK, MCP Server, and an oRPC control plane. No GUI required — automate everything.",
-    "items": {
-      "restApi": {
-        "title": "Full REST API",
-        "description": "15 endpoints, OpenAPI 3.1 spec, API key auth. Integrate from any language, any CI pipeline, any infra."
-      },
-      "mcp": {
-        "title": "MCP Server for AI agents",
-        "description": "Claude, Cursor, and any MCP client can search, list indexes, upsert documents, and pull stats programmatically."
-      },
-      "semanticSearch": {
-        "title": "Semantic search",
-        "description": "OpenAI embeddings over code comments, configs, and logs. Find relevant entries even with different terminology."
-      },
-      "typedSdk": {
-        "title": "Typed browser SDK",
-        "description": "NPM package with full TypeScript types. Integrate in your dev tool's front end without guessing API shapes."
-      },
-      "orpcControl": {
-        "title": "Programmatic control plane",
-        "description": "Create indexes, rotate keys, trigger reindex, and pull analytics from your build pipeline or deployment scripts."
-      }
-    }
-  },
-  "useCasesContentSitesPage": {
-    "title": "Search for content sites",
-    "description": "Instant search for blogs, changelogs, and documentation. The Browser SDK drops into any front end in under an hour."
-  },
-  "useCasesContentSites": {
-    "title": "Content search that keeps readers",
-    "subtitle": "Blog posts, changelogs, documentation, landing pages — indexed and searchable from day one.",
-    "items": {
-      "contentIndexing": {
-        "title": "Index anything",
-        "description": "MDX, Markdown, HTML, JSON feeds — any content format that produces structured records can be indexed."
-      },
-      "instantSearch": {
-        "title": "Instant search UI",
-        "description": "Results appear as the user types. Typo tolerance, highlight matching text, deep-link to anchor sections."
-      },
-      "browserSdk": {
-        "title": "Browser SDK",
-        "description": "Drop the typed SDK into your Next.js, Astro, Nuxt, or static site. One component, instant results."
-      },
-      "changelog": {
-        "title": "Changelog search",
-        "description": "Developers search changelogs to find when a behaviour changed. Index changelog entries and let them find it in seconds."
-      },
-      "multilingual": {
-        "title": "Multilingual content",
-        "description": "Index content per locale. Serve results in the user's language. Synonym libraries tuned per locale."
-      },
-      "seo": {
-        "title": "SEO-friendly",
-        "description": "Search is client-side — no server rendering required. Your static pages stay statically generated."
-      }
-    }
-  },
-  "solutionsPage": {
-    "title": "Industry Solutions",
-    "description": "AACsearch powers search for retail, media, fintech, education, healthcare, and gaming platforms worldwide."
-  },
-  "solutions": {
-    "title": "Search built for your industry",
-    "subtitle": "From product catalogues to clinical terminology, AACsearch adapts to the data model your team already uses.",
-    "items": {
-      "retail": {
-        "title": "Retail & E-commerce",
-        "description": "Product search with facets, synonyms, and instant filtering. Boosts, pin rules, and in-session merchandising included."
-      },
-      "media": {
-        "title": "Media & Publishing",
-        "description": "Full-text search over articles, tags, authors, and multimedia metadata. Multi-language support and relevance tuning out of the box."
-      },
-      "fintech": {
-        "title": "Financial Services",
-        "description": "Tenant-isolated search with audit log, per-key origin allow-lists, and encrypted index. GDPR and CCPA ready."
-      },
-      "education": {
-        "title": "Education & EdTech",
-        "description": "Course, lesson, and instructor search. Synonym libraries for academic terms, multi-language UI, and accessibility-first widget."
-      },
-      "healthcare": {
-        "title": "Healthcare",
-        "description": "HIPAA-ready search architecture. Clinical synonym dictionaries, audit trail, and role-based data access controls."
-      },
-      "gaming": {
-        "title": "Gaming",
-        "description": "Player profiles, item catalogues, and leaderboard search. Real-time index updates, geo search, and sub-50ms latency at any scale."
-      }
-    }
-  },
-  "solutionsRetailPage": {
-    "title": "Search for Retail & E-Commerce",
-    "description": "Shoppers find what they want faster. Store teams control results without code. Seamless sync with your product catalog."
-  },
-  "solutionsRetail": {
-    "title": "Search that converts",
-    "subtitle": "Every feature a retail team needs — product search, navigation, merchandising, and analytics — in one hosted platform.",
-    "items": {
-      "productSearch": {
-        "title": "Product search",
-        "description": "Instant, typo-tolerant product search. Customers find the right item even when they misspell it or use synonyms."
-      },
-      "filterNavigation": {
-        "title": "Faceted navigation",
-        "description": "Dynamic facets for category, brand, price, colour, and size. Counts update in real time as filters are applied."
-      },
-      "synonyms": {
-        "title": "Retail synonyms",
-        "description": "Manage 'sofa / couch', 'trainers / sneakers' and hundreds of retail synonym pairs. One CSV import, instant effect."
-      },
-      "inventory": {
-        "title": "Real-time inventory",
-        "description": "Ingest product stock updates within seconds. Sold-out items are demoted automatically based on your availability field."
-      },
-      "merchandising": {
-        "title": "Merchandising rules",
-        "description": "Pin promoted products to the top, exclude discontinued items, and boost seasonal lines — no code deploy required."
-      },
-      "analytics": {
-        "title": "Retail analytics",
-        "description": "Zero-result rate, top queries, click-through rate, and conversion funnel — all segmented by collection and locale."
-      }
-    }
-  },
-  "solutionsMediaPage": {
-    "title": "Search for Media & Publishing",
-    "description": "Surface the right article, video, or podcast the moment readers ask. Multi-language support and real-time content sync included."
-  },
-  "solutionsMedia": {
-    "title": "Discovery at editorial speed",
-    "subtitle": "Publish a new piece and it appears in search within seconds. Tag it, and readers find it across every surface of your platform.",
-    "items": {
-      "contentSearch": {
-        "title": "Full-text content search",
-        "description": "Search across headlines, body copy, tags, author bios, and captions. Highlight matching excerpts in results."
-      },
-      "tagging": {
-        "title": "Tag & category facets",
-        "description": "Filter by topic, format, date, author, or content type. Nested facets support complex editorial taxonomies."
-      },
-      "multiLanguage": {
-        "title": "Multi-language search",
-        "description": "Run separate indexes per language or a single multi-language index. Locale-aware synonym management included."
-      },
-      "realTimeSync": {
-        "title": "Real-time CMS sync",
-        "description": "Webhook-driven sync from Contentful, Strapi, WordPress, or Sanity. Published articles appear in search in under a second."
-      },
-      "fullText": {
-        "title": "Long-form relevance",
-        "description": "Configurable field weights favour headlines over body copy. Boost recency for news, or depth for evergreen guides."
-      },
-      "analytics": {
-        "title": "Content analytics",
-        "description": "See which queries have no results, which topics trend, and which articles get discovered through search vs direct links."
-      }
-    }
-  },
-  "solutionsFintechPage": {
-    "title": "Search for Financial Services",
-    "description": "Tenant-isolated, auditable search for financial data. GDPR, CCPA, and SOC 2-aligned from the start."
-  },
-  "solutionsFintech": {
-    "title": "Compliant search, without the complexity",
-    "subtitle": "AACsearch gives financial teams the performance of modern search with the access controls and audit trail compliance requires.",
-    "items": {
-      "tenantIsolation": {
-        "title": "Strict tenant isolation",
-        "description": "Every API call carries an org-scoped token. Cross-tenant reads are rejected at the protocol level — no application-layer gate required."
-      },
-      "auditLog": {
-        "title": "Audit trail",
-        "description": "Every search query, document ingest, and admin operation is logged with timestamp, actor, and org context."
-      },
-      "accessControls": {
-        "title": "Scoped access controls",
-        "description": "Issue read-only search tokens scoped to specific collections, date ranges, or field filters. Tokens are HMAC-signed and short-lived."
-      },
-      "encryption": {
-        "title": "Encryption at rest & in transit",
-        "description": "All data encrypted at rest (AES-256) and in transit (TLS 1.3). Key management handled by your cloud provider."
-      },
-      "gdpr": {
-        "title": "GDPR & CCPA ready",
-        "description": "Field-level deletion and pseudonymisation. Right-to-be-forgotten requests resolved at the index level within minutes."
-      },
-      "performance": {
-        "title": "Sub-50ms at scale",
-        "description": "High-frequency financial data indexed in real time. P99 search latency stays under 50ms at any transaction volume."
-      }
-    }
-  },
-  "solutionsEducationPage": {
-    "title": "Search for Education & EdTech",
-    "description": "Help learners discover courses, lessons, and instructors instantly. Multi-language support and accessible search widget included."
-  },
-  "solutionsEducation": {
-    "title": "Learning starts with discovery",
-    "subtitle": "AACsearch adapts to your learning platform — whether you index courses, lessons, instructors, or study materials.",
-    "items": {
-      "courseSearch": {
-        "title": "Course & lesson search",
-        "description": "Instant search across titles, descriptions, learning objectives, and instructor names. Typo-tolerant for learner queries."
-      },
-      "learningPaths": {
-        "title": "Structured navigation",
-        "description": "Faceted search by subject, level, format, duration, and certification. Nested categories map to your curriculum structure."
-      },
-      "multiLanguage": {
-        "title": "Multi-language content",
-        "description": "Index content in 50+ languages. Language-aware stemming and separate synonym libraries per locale."
-      },
-      "accessibility": {
-        "title": "Accessible search widget",
-        "description": "WCAG 2.1 AA compliant widget. Keyboard navigation, screen reader labels, and sufficient colour contrast built in."
-      },
-      "synonyms": {
-        "title": "Academic synonyms",
-        "description": "Map discipline-specific terms: 'ML / machine learning', 'JS / JavaScript'. Import from CSV or manage in the dashboard."
-      },
-      "analytics": {
-        "title": "Learning analytics",
-        "description": "Discover which topics learners search most, where they find no results, and which queries lead to enrollment."
-      }
-    }
-  },
-  "solutionsHealthcarePage": {
-    "title": "Search for Healthcare",
-    "description": "HIPAA-ready search architecture for patient portals, clinical tools, and health information systems."
-  },
-  "solutionsHealthcare": {
-    "title": "Clinical search, built responsibly",
-    "subtitle": "AACsearch gives healthcare teams fast, accurate search with the access controls and data segregation patient privacy requires.",
-    "items": {
-      "clinicalTerms": {
-        "title": "Clinical terminology",
-        "description": "Synonym libraries for ICD-10 codes, drug names, and medical conditions. Supports lay and clinical terminology in the same index."
-      },
-      "hipaaReady": {
-        "title": "HIPAA-aligned architecture",
-        "description": "Tenant isolation, scoped access tokens, and no PII logging in search analytics. Infrastructure configured for HIPAA workloads."
-      },
-      "auditLog": {
-        "title": "Audit trail",
-        "description": "Every query, every result click, and every admin action logged with timestamp and user context for compliance review."
-      },
-      "tenantIsolation": {
-        "title": "Patient data isolation",
-        "description": "Search tokens are org-scoped and HMAC-signed. Patients, practitioners, and admins each get a different access level at the token level."
-      },
-      "realTimeUpdates": {
-        "title": "Real-time record updates",
-        "description": "Clinical records and pharmacy data indexed in under a second. Formulary changes appear immediately without full reindex."
-      },
-      "multiLanguage": {
-        "title": "Multi-language support",
-        "description": "Patient-facing search in the user's preferred language. Language detection and locale-aware search widget."
-      }
-    }
-  },
-  "solutionsGamingPage": {
-    "title": "Search for Gaming Platforms",
-    "description": "Player profiles, item catalogues, and marketplace listings — searched at sub-50ms latency across millions of records."
-  },
-  "solutionsGaming": {
-    "title": "Search as fast as your game",
-    "subtitle": "Real-time item updates, geo-matched player search, and in-game marketplace listings — all indexed within seconds of an event.",
-    "items": {
-      "itemSearch": {
-        "title": "Item & loot search",
-        "description": "Search across millions of items by rarity, type, stats, and price. Filters and sort orders update in real time as the market moves."
-      },
-      "playerSearch": {
-        "title": "Player profile search",
-        "description": "Find players by username, rank, region, and playstyle. Supports prefix matching for autocomplete in lobby screens."
-      },
-      "geoSearch": {
-        "title": "Geo-matched search",
-        "description": "Surface players and servers within a configurable distance. Radius and bounding-box geo queries supported out of the box."
-      },
-      "realTimeSync": {
-        "title": "Real-time event sync",
-        "description": "Index updates triggered by game events — item drops, rank changes, marketplace listings — arrive in under a second."
-      },
-      "multiSearch": {
-        "title": "Multi-index queries",
-        "description": "Run a single request across items, players, and guilds simultaneously. One round-trip, merged results, minimal latency."
-      },
-      "analytics": {
-        "title": "Game analytics",
-        "description": "See what players search for, which queries hit dead ends, and how search drives marketplace conversions."
-      }
-    }
-  }
+	"useCasesPage": {
+		"title": "Search for every product and team",
+		"description": "From e-commerce storefronts to internal tools — AACsearch adapts to your data model and your team's scale."
+	},
+	"useCases": {
+		"title": "Built for your use case",
+		"subtitle": "One API, many shapes. Bring your data — AACsearch handles the indexing, ranking, and delivery.",
+		"items": {
+			"ecommerce": {
+				"title": "E-commerce product search",
+				"description": "Faceted filters, synonym expansion, zero-results handling, and per-user scoped tokens — all in a single search call."
+			},
+			"helpCenter": {
+				"title": "Help center & docs",
+				"description": "Index your knowledge base and surface relevant articles in milliseconds. Pair with the Knowledge module for Q&A over PDFs."
+			},
+			"multiTenant": {
+				"title": "Multi-tenant SaaS",
+				"description": "One AACsearch index per tenant, scoped tokens per end-user. Your customers never see each other's data — by design."
+			},
+			"devTools": {
+				"title": "Developer tools",
+				"description": "Semantic search over code, configs, and logs. MCP Server lets your AI agents search and update indexes programmatically."
+			},
+			"internalTools": {
+				"title": "Internal tools",
+				"description": "Fast search over CRM records, inventory, employee directories, or any internal dataset your team queries daily."
+			},
+			"contentSites": {
+				"title": "Content sites",
+				"description": "Instant search for blogs, changelogs, and documentation. The Browser SDK drops into any front end in under an hour."
+			}
+		}
+	},
+	"useCasesEcommercePage": {
+		"title": "Search for e-commerce",
+		"description": "Faceted filters, synonym expansion, zero-results handling, and real-time analytics — built for product catalogs."
+	},
+	"useCasesEcommerce": {
+		"title": "Product search that converts",
+		"subtitle": "Connect your catalog with the PrestaShop or Bitrix module. Live in an afternoon. Analytics from day one.",
+		"items": {
+			"facetedFilter": {
+				"title": "Faceted filtering",
+				"description": "Brand, category, price range, availability, attributes — any field in your schema becomes a facet. No extra config."
+			},
+			"synonyms": {
+				"title": "Synonym expansion",
+				"description": "Add synonyms in the dashboard. TV → television, sofa → couch. Users find products with natural language."
+			},
+			"zeroResults": {
+				"title": "Zero-results handling",
+				"description": "AACsearch tracks every no-result query. Use the list to add synonyms, products, or fallback suggestions."
+			},
+			"prestaShop": {
+				"title": "PrestaShop module",
+				"description": "Drop-in PHP module. Syncs on every product save, update, and delete. Full catalog export with one click."
+			},
+			"analytics": {
+				"title": "Conversion analytics",
+				"description": "Track CTR per query, top search terms, and filter usage. Identify ranking issues before they hurt revenue."
+			},
+			"widget": {
+				"title": "Drop-in widget",
+				"description": "14KB widget for your storefront. No build step, no npm. Works alongside your existing theme."
+			}
+		}
+	},
+	"useCasesSaasPage": {
+		"title": "Search for multi-tenant SaaS",
+		"description": "One AACsearch index per tenant, scoped tokens per end-user. Your customers never see each other's data."
+	},
+	"useCasesSaas": {
+		"title": "Search isolation built in",
+		"subtitle": "Tenant isolation is architectural — not just policy. Each org gets its own index, its own quota, its own keys.",
+		"items": {
+			"tenantIsolation": {
+				"title": "Per-tenant indexes",
+				"description": "Create one index per customer organization. Data never mingles. Deleting a tenant deletes their index."
+			},
+			"scopedTokens": {
+				"title": "Per-user scoped tokens",
+				"description": "Issue tokens server-side that lock to a userId filter. Your end-users search only their own records."
+			},
+			"multiIndex": {
+				"title": "Multi-index per tenant",
+				"description": "Up to 10 indexes per org on Pro. Products, orders, tickets, docs — separate indexes, one dashboard."
+			},
+			"quota": {
+				"title": "Per-tenant quota",
+				"description": "Track search-unit consumption per tenant. Attribute costs to customers. Bill accordingly."
+			},
+			"orpc": {
+				"title": "oRPC management API",
+				"description": "Programmatically create indexes, rotate keys, and pull analytics per tenant from your backend."
+			},
+			"reindex": {
+				"title": "Schema evolution",
+				"description": "Evolve your data model without downtime. Reindex each tenant in the background, swap aliases atomically."
+			}
+		}
+	},
+	"useCasesHelpCenterPage": {
+		"title": "Search for help centers & docs",
+		"description": "Index your knowledge base and surface relevant articles in milliseconds. Pair with the Knowledge module for AI Q&A."
+	},
+	"useCasesHelpCenter": {
+		"title": "Help users help themselves",
+		"subtitle": "Instant article search, zero-results tracking, and AI Q&A over PDFs — one integration, no search engineer required.",
+		"items": {
+			"articleSearch": {
+				"title": "Instant article search",
+				"description": "Full-text search over your help articles with typo tolerance and ranking by relevance. Results in under 50ms."
+			},
+			"knowledgeRag": {
+				"title": "AI Q&A (RAG)",
+				"description": "Users ask a question in natural language. The Knowledge module retrieves relevant chunks and generates a cited answer."
+			},
+			"zeroResults": {
+				"title": "Zero-results intelligence",
+				"description": "Every unanswered query is logged. Surface gaps in your documentation before customers escalate to support."
+			},
+			"multilingual": {
+				"title": "Multilingual support",
+				"description": "Index content in multiple languages. Search in the user's locale. Synonym libraries per language."
+			},
+			"widget": {
+				"title": "Drop-in search widget",
+				"description": "Add search to any help center in under an hour. Works on Docusaurus, GitBook, Notion, or custom portals."
+			},
+			"analytics": {
+				"title": "Search analytics",
+				"description": "Top queries, zero-results, and CTR show you what users actually look for — not what you think they do."
+			}
+		}
+	},
+	"useCasesDevToolsPage": {
+		"title": "Search for developer tools",
+		"description": "Semantic search over code, configs, and logs. MCP Server lets AI agents search and update indexes programmatically."
+	},
+	"useCasesDevTools": {
+		"title": "Search built for developers",
+		"subtitle": "REST API, typed SDK, MCP Server, and an oRPC control plane. No GUI required — automate everything.",
+		"items": {
+			"restApi": {
+				"title": "Full REST API",
+				"description": "15 endpoints, OpenAPI 3.1 spec, API key auth. Integrate from any language, any CI pipeline, any infra."
+			},
+			"mcp": {
+				"title": "MCP Server for AI agents",
+				"description": "Claude, Cursor, and any MCP client can search, list indexes, upsert documents, and pull stats programmatically."
+			},
+			"semanticSearch": {
+				"title": "Semantic search",
+				"description": "OpenAI embeddings over code comments, configs, and logs. Find relevant entries even with different terminology."
+			},
+			"typedSdk": {
+				"title": "Typed browser SDK",
+				"description": "NPM package with full TypeScript types. Integrate in your dev tool's front end without guessing API shapes."
+			},
+			"orpcControl": {
+				"title": "Programmatic control plane",
+				"description": "Create indexes, rotate keys, trigger reindex, and pull analytics from your build pipeline or deployment scripts."
+			}
+		}
+	},
+	"useCasesContentSitesPage": {
+		"title": "Search for content sites",
+		"description": "Instant search for blogs, changelogs, and documentation. The Browser SDK drops into any front end in under an hour."
+	},
+	"useCasesContentSites": {
+		"title": "Content search that keeps readers",
+		"subtitle": "Blog posts, changelogs, documentation, landing pages — indexed and searchable from day one.",
+		"items": {
+			"contentIndexing": {
+				"title": "Index anything",
+				"description": "MDX, Markdown, HTML, JSON feeds — any content format that produces structured records can be indexed."
+			},
+			"instantSearch": {
+				"title": "Instant search UI",
+				"description": "Results appear as the user types. Typo tolerance, highlight matching text, deep-link to anchor sections."
+			},
+			"browserSdk": {
+				"title": "Browser SDK",
+				"description": "Drop the typed SDK into your Next.js, Astro, Nuxt, or static site. One component, instant results."
+			},
+			"changelog": {
+				"title": "Changelog search",
+				"description": "Developers search changelogs to find when a behaviour changed. Index changelog entries and let them find it in seconds."
+			},
+			"multilingual": {
+				"title": "Multilingual content",
+				"description": "Index content per locale. Serve results in the user's language. Synonym libraries tuned per locale."
+			},
+			"seo": {
+				"title": "SEO-friendly",
+				"description": "Search is client-side — no server rendering required. Your static pages stay statically generated."
+			}
+		}
+	},
+	"solutionsPage": {
+		"title": "Industry Solutions",
+		"description": "AACsearch powers search for retail, media, fintech, education, healthcare, and gaming platforms worldwide."
+	},
+	"solutions": {
+		"title": "Search built for your industry",
+		"subtitle": "From product catalogues to clinical terminology, AACsearch adapts to the data model your team already uses.",
+		"items": {
+			"retail": {
+				"title": "Retail & E-commerce",
+				"description": "Product search with facets, synonyms, and instant filtering. Boosts, pin rules, and in-session merchandising included."
+			},
+			"media": {
+				"title": "Media & Publishing",
+				"description": "Full-text search over articles, tags, authors, and multimedia metadata. Multi-language support and relevance tuning out of the box."
+			},
+			"fintech": {
+				"title": "Financial Services",
+				"description": "Tenant-isolated search with audit log, per-key origin allow-lists, and encrypted index. GDPR and CCPA ready."
+			},
+			"education": {
+				"title": "Education & EdTech",
+				"description": "Course, lesson, and instructor search. Synonym libraries for academic terms, multi-language UI, and accessibility-first widget."
+			},
+			"healthcare": {
+				"title": "Healthcare",
+				"description": "HIPAA-ready search architecture. Clinical synonym dictionaries, audit trail, and role-based data access controls."
+			},
+			"gaming": {
+				"title": "Gaming",
+				"description": "Player profiles, item catalogues, and leaderboard search. Real-time index updates, geo search, and sub-50ms latency at any scale."
+			}
+		}
+	},
+	"solutionsRetailPage": {
+		"title": "Search for Retail & E-Commerce",
+		"description": "Shoppers find what they want faster. Store teams control results without code. Seamless sync with your product catalog."
+	},
+	"solutionsRetail": {
+		"title": "Search that converts",
+		"subtitle": "Every feature a retail team needs — product search, navigation, merchandising, and analytics — in one hosted platform.",
+		"items": {
+			"productSearch": {
+				"title": "Product search",
+				"description": "Instant, typo-tolerant product search. Customers find the right item even when they misspell it or use synonyms."
+			},
+			"filterNavigation": {
+				"title": "Faceted navigation",
+				"description": "Dynamic facets for category, brand, price, colour, and size. Counts update in real time as filters are applied."
+			},
+			"synonyms": {
+				"title": "Retail synonyms",
+				"description": "Manage 'sofa / couch', 'trainers / sneakers' and hundreds of retail synonym pairs. One CSV import, instant effect."
+			},
+			"inventory": {
+				"title": "Real-time inventory",
+				"description": "Ingest product stock updates within seconds. Sold-out items are demoted automatically based on your availability field."
+			},
+			"merchandising": {
+				"title": "Merchandising rules",
+				"description": "Pin promoted products to the top, exclude discontinued items, and boost seasonal lines — no code deploy required."
+			},
+			"analytics": {
+				"title": "Retail analytics",
+				"description": "Zero-result rate, top queries, click-through rate, and conversion funnel — all segmented by collection and locale."
+			}
+		}
+	},
+	"solutionsMediaPage": {
+		"title": "Search for Media & Publishing",
+		"description": "Surface the right article, video, or podcast the moment readers ask. Multi-language support and real-time content sync included."
+	},
+	"solutionsMedia": {
+		"title": "Discovery at editorial speed",
+		"subtitle": "Publish a new piece and it appears in search within seconds. Tag it, and readers find it across every surface of your platform.",
+		"items": {
+			"contentSearch": {
+				"title": "Full-text content search",
+				"description": "Search across headlines, body copy, tags, author bios, and captions. Highlight matching excerpts in results."
+			},
+			"tagging": {
+				"title": "Tag & category facets",
+				"description": "Filter by topic, format, date, author, or content type. Nested facets support complex editorial taxonomies."
+			},
+			"multiLanguage": {
+				"title": "Multi-language search",
+				"description": "Run separate indexes per language or a single multi-language index. Locale-aware synonym management included."
+			},
+			"realTimeSync": {
+				"title": "Real-time CMS sync",
+				"description": "Webhook-driven sync from Contentful, Strapi, WordPress, or Sanity. Published articles appear in search in under a second."
+			},
+			"fullText": {
+				"title": "Long-form relevance",
+				"description": "Configurable field weights favour headlines over body copy. Boost recency for news, or depth for evergreen guides."
+			},
+			"analytics": {
+				"title": "Content analytics",
+				"description": "See which queries have no results, which topics trend, and which articles get discovered through search vs direct links."
+			}
+		}
+	},
+	"solutionsFintechPage": {
+		"title": "Search for Financial Services",
+		"description": "Tenant-isolated, auditable search for financial data. GDPR, CCPA, and SOC 2-aligned from the start."
+	},
+	"solutionsFintech": {
+		"title": "Compliant search, without the complexity",
+		"subtitle": "AACsearch gives financial teams the performance of modern search with the access controls and audit trail compliance requires.",
+		"items": {
+			"tenantIsolation": {
+				"title": "Strict tenant isolation",
+				"description": "Every API call carries an org-scoped token. Cross-tenant reads are rejected at the protocol level — no application-layer gate required."
+			},
+			"auditLog": {
+				"title": "Audit trail",
+				"description": "Every search query, document ingest, and admin operation is logged with timestamp, actor, and org context."
+			},
+			"accessControls": {
+				"title": "Scoped access controls",
+				"description": "Issue read-only search tokens scoped to specific collections, date ranges, or field filters. Tokens are HMAC-signed and short-lived."
+			},
+			"encryption": {
+				"title": "Encryption at rest & in transit",
+				"description": "All data encrypted at rest (AES-256) and in transit (TLS 1.3). Key management handled by your cloud provider."
+			},
+			"gdpr": {
+				"title": "GDPR & CCPA ready",
+				"description": "Field-level deletion and pseudonymisation. Right-to-be-forgotten requests resolved at the index level within minutes."
+			},
+			"performance": {
+				"title": "Sub-50ms at scale",
+				"description": "High-frequency financial data indexed in real time. P99 search latency stays under 50ms at any transaction volume."
+			}
+		}
+	},
+	"solutionsEducationPage": {
+		"title": "Search for Education & EdTech",
+		"description": "Help learners discover courses, lessons, and instructors instantly. Multi-language support and accessible search widget included."
+	},
+	"solutionsEducation": {
+		"title": "Learning starts with discovery",
+		"subtitle": "AACsearch adapts to your learning platform — whether you index courses, lessons, instructors, or study materials.",
+		"items": {
+			"courseSearch": {
+				"title": "Course & lesson search",
+				"description": "Instant search across titles, descriptions, learning objectives, and instructor names. Typo-tolerant for learner queries."
+			},
+			"learningPaths": {
+				"title": "Structured navigation",
+				"description": "Faceted search by subject, level, format, duration, and certification. Nested categories map to your curriculum structure."
+			},
+			"multiLanguage": {
+				"title": "Multi-language content",
+				"description": "Index content in 50+ languages. Language-aware stemming and separate synonym libraries per locale."
+			},
+			"accessibility": {
+				"title": "Accessible search widget",
+				"description": "WCAG 2.1 AA compliant widget. Keyboard navigation, screen reader labels, and sufficient colour contrast built in."
+			},
+			"synonyms": {
+				"title": "Academic synonyms",
+				"description": "Map discipline-specific terms: 'ML / machine learning', 'JS / JavaScript'. Import from CSV or manage in the dashboard."
+			},
+			"analytics": {
+				"title": "Learning analytics",
+				"description": "Discover which topics learners search most, where they find no results, and which queries lead to enrollment."
+			}
+		}
+	},
+	"solutionsHealthcarePage": {
+		"title": "Search for Healthcare",
+		"description": "HIPAA-ready search architecture for patient portals, clinical tools, and health information systems."
+	},
+	"solutionsHealthcare": {
+		"title": "Clinical search, built responsibly",
+		"subtitle": "AACsearch gives healthcare teams fast, accurate search with the access controls and data segregation patient privacy requires.",
+		"items": {
+			"clinicalTerms": {
+				"title": "Clinical terminology",
+				"description": "Synonym libraries for ICD-10 codes, drug names, and medical conditions. Supports lay and clinical terminology in the same index."
+			},
+			"hipaaReady": {
+				"title": "HIPAA-aligned architecture",
+				"description": "Tenant isolation, scoped access tokens, and no PII logging in search analytics. Infrastructure configured for HIPAA workloads."
+			},
+			"auditLog": {
+				"title": "Audit trail",
+				"description": "Every query, every result click, and every admin action logged with timestamp and user context for compliance review."
+			},
+			"tenantIsolation": {
+				"title": "Patient data isolation",
+				"description": "Search tokens are org-scoped and HMAC-signed. Patients, practitioners, and admins each get a different access level at the token level."
+			},
+			"realTimeUpdates": {
+				"title": "Real-time record updates",
+				"description": "Clinical records and pharmacy data indexed in under a second. Formulary changes appear immediately without full reindex."
+			},
+			"multiLanguage": {
+				"title": "Multi-language support",
+				"description": "Patient-facing search in the user's preferred language. Language detection and locale-aware search widget."
+			}
+		}
+	},
+	"solutionsGamingPage": {
+		"title": "Search for Gaming Platforms",
+		"description": "Player profiles, item catalogues, and marketplace listings — searched at sub-50ms latency across millions of records."
+	},
+	"solutionsGaming": {
+		"title": "Search as fast as your game",
+		"subtitle": "Real-time item updates, geo-matched player search, and in-game marketplace listings — all indexed within seconds of an event.",
+		"items": {
+			"itemSearch": {
+				"title": "Item & loot search",
+				"description": "Search across millions of items by rarity, type, stats, and price. Filters and sort orders update in real time as the market moves."
+			},
+			"playerSearch": {
+				"title": "Player profile search",
+				"description": "Find players by username, rank, region, and playstyle. Supports prefix matching for autocomplete in lobby screens."
+			},
+			"geoSearch": {
+				"title": "Geo-matched search",
+				"description": "Surface players and servers within a configurable distance. Radius and bounding-box geo queries supported out of the box."
+			},
+			"realTimeSync": {
+				"title": "Real-time event sync",
+				"description": "Index updates triggered by game events — item drops, rank changes, marketplace listings — arrive in under a second."
+			},
+			"multiSearch": {
+				"title": "Multi-index queries",
+				"description": "Run a single request across items, players, and guilds simultaneously. One round-trip, merged results, minimal latency."
+			},
+			"analytics": {
+				"title": "Game analytics",
+				"description": "See what players search for, which queries hit dead ends, and how search drives marketplace conversions."
+			}
+		}
+	}
 }

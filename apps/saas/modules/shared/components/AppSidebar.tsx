@@ -50,6 +50,7 @@ import {
 	Volume2Icon,
 	BotIcon,
 	TagsIcon,
+	Columns3Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -339,6 +340,22 @@ export function AppSidebar() {
 								{
 									label: t("search.nav.widgetInstall"),
 									href: `${basePath}/widget?tab=install`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.collections"),
+							href: `${basePath}/collections`,
+							icon: Columns3Icon,
+							isActive: pathname.startsWith(`${basePath}/collections`),
+							subItems: [
+								{
+									label: t("search.nav.collectionsGrid"),
+									href: `${basePath}/collections`,
+								},
+								{
+									label: t("search.nav.collectionsDocuments"),
+									href: `${basePath}/collections?tab=documents`,
 								},
 							],
 						},

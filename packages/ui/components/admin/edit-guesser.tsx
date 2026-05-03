@@ -121,7 +121,7 @@ ${children.map((child) => `            ${child.getRepresentation()}`).join("\n")
 	reference: {
 		component: (props: any) => (
 			<ReferenceInput source={props.source} reference={props.reference}>
-				<AutocompleteInput />
+				<AutocompleteInput modal />
 			</ReferenceInput>
 		),
 		representation: (props: any) =>

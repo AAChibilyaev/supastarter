@@ -1,13 +1,16 @@
 import { AiAnswersSection } from "@home/components/AiAnswersSection";
 import { AnalyticsSection } from "@home/components/AnalyticsSection";
+import { ArchitectureSection } from "@home/components/ArchitectureSection";
 import { CtaFooter } from "@home/components/CtaFooter";
 import { DocsEcosystemSection } from "@home/components/DocsEcosystemSection";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
+import { FitSection } from "@home/components/FitSection";
 import { HeroSection } from "@home/components/HeroSection";
 import { HowItWorks } from "@home/components/HowItWorks";
 import { LiveDemoSection } from "@home/components/LiveDemoSection";
 import { LogosWall } from "@home/components/LogosWall";
 import { MigrationSection } from "@home/components/MigrationSection";
+import { PricingCalculator } from "@home/components/PricingCalculator";
 import { PricingFaq } from "@home/components/PricingFaq";
 import { PricingPlans } from "@home/components/PricingPlans";
 import { QuickstartSection } from "@home/components/QuickstartSection";
@@ -53,53 +56,60 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 3. For whom — segmented use cases */}
 			<UseCasesGrid />
 
-			{/* 4. What users search — unique diff. */}
+			{/* 4. Self-qualification — is it right for you? */}
+			<FitSection />
+
+			{/* 5. What users search — unique diff. */}
 			<WhatUsersSearchSection />
 
-			{/* 5. Search UX — autocomplete, facets, typo */}
+			{/* 6. Search UX — autocomplete, facets, typo */}
 			<SearchUXSection />
 
-			{/* 6. Features — core capabilities */}
+			{/* 7. Features — core capabilities */}
 			<FeaturesGrid />
 
-			{/* 7. Relevance — ranking control */}
+			{/* 8. Relevance — ranking control */}
 			<RelevanceSection />
 
-			{/* 8. Analytics — data-driven improvement */}
+			{/* 9. Analytics — data-driven improvement */}
 			<AnalyticsSection />
 
-			{/* 9. Migration — 1-hour switch */}
+			{/* 10. Migration — 1-hour switch */}
 			<MigrationSection />
 
-			{/* 10. TCO comparison — vs Algolia */}
+			{/* 11. TCO comparison — vs Algolia */}
 			<TcoComparison />
 
-			{/* 11. How it works — 3 steps */}
+			{/* 12. How it works — 3 steps */}
 			<HowItWorks />
 
-			{/* 12. Quickstart — code in 15 min */}
+			{/* 13. Architecture — system diagram for technical buyers */}
+			<ArchitectureSection />
+
+			{/* 14. Quickstart — code in 15 min */}
 			<QuickstartSection />
 
-			{/* 13. AI answers — answer layer */}
+			{/* 15. AI answers — answer layer */}
 			<AiAnswersSection />
 
-			{/* 14. Security — multi-tenant design */}
+			{/* 16. Security — multi-tenant design */}
 			<SecuritySection />
 
-			{/* 15. Live demo — interactive search */}
+			{/* 17. Live demo — interactive search */}
 			<LiveDemoSection />
 
-			{/* 16. Testimonials — social proof */}
+			{/* 18. Testimonials — social proof */}
 			<TestimonialCarousel />
 
-			{/* 17. Pricing — plans + FAQ */}
+			{/* 19. Pricing — plans + interactive calculator + FAQ */}
 			<PricingPlans />
+			<PricingCalculator />
 			<PricingFaq />
 
-			{/* 18. Docs ecosystem — SDK, API */}
+			{/* 20. Docs ecosystem — SDK, API */}
 			<DocsEcosystemSection />
 
-			{/* 19. Final CTA */}
+			{/* 21. Final CTA */}
 			<CtaFooter />
 		</>
 	);

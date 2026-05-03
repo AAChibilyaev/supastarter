@@ -1,772 +1,772 @@
 {
-	"featuresPage": {
-		"title": "Todas las funciones que necesitas para implementar búsqueda",
-		"description": "Tokens con alcance, listas de orígenes permitidos, límite de velocidad, búsqueda múltiple, reindexación sin tiempo de inactividad — todo disponible hoy."
-	},
-	"featuresSearchApiPage": {
-		"title": "API de búsqueda",
-		"description": "Una API REST simple y potente para búsqueda ultrarrápida sobre tus datos. Aislamiento de tenant, rate-limiting y observabilidad incluidos."
-	},
-	"featuresSearchApi": {
-		"title": "La API que tu equipo merece",
-		"subtitle": "15 endpoints REST. Especificación OpenAPI 3.1. SDK de navegador. Sin clúster de búsqueda que gestionar.",
-		"items": {
-			"endpoints": {
-				"title": "15 endpoints públicos",
-				"description": "CRUD completo sobre índices, documentos y claves API. Más búsqueda, multi-search, analíticas y especificación OpenAPI en /api/v1/openapi.json."
-			},
-			"openApi": {
-				"title": "Especificación OpenAPI 3.1",
-				"description": "Especificación legible por máquina incluida en cada despliegue. Genera clientes en cualquier lenguaje. Con tipado completo desde el primer día."
-			},
-			"browserSdk": {
-				"title": "SDK de navegador tipado",
-				"description": "Paquete NPM. Búsqueda simple, multi-search (federada), facetas. Menos de 50 ms p99. Funciona en cualquier framework."
-			},
-			"authentication": {
-				"title": "Autenticación con clave API",
-				"description": "Auth con Bearer token. Claves hasheadas en reposo. Scoped tokens para uso en el navegador. Allow-list de origen por clave."
-			},
-			"tenancy": {
-				"title": "Multi-tenancy incorporado",
-				"description": "Cada solicitud está aislada a tu organización. Los accesos entre organizaciones son arquitectónicamente imposibles — no solo por política."
-			},
-			"observability": {
-				"title": "Observabilidad incluida",
-				"description": "Cada búsqueda se registra con consulta, conteo de resultados, latencia y agente de usuario. Analíticas y consultas principales en el dashboard."
-			}
-		}
-	},
-	"featuresAnalyticsPage": {
-		"title": "Analíticas de búsqueda",
-		"description": "Rastrea consultas frecuentes, búsquedas sin resultados y CTR. La analítica de AACsearch revela la intención del usuario automáticamente, sin código adicional."
-	},
-	"featuresAnalytics": {
-		"title": "Convierte búsquedas en conocimiento",
-		"subtitle": "Cada consulta es una señal implícita de intención del usuario. AACsearch las captura, agrega y muestra automáticamente.",
-		"items": {
-			"topQueries": {
-				"title": "Consultas principales",
-				"description": "Ve los términos de búsqueda más frecuentes ordenados por volumen. Detecta tendencias, demanda emergente y patrones estacionales."
-			},
-			"zeroResults": {
-				"title": "Seguimiento de cero resultados",
-				"description": "Cada búsqueda sin resultados queda registrada. Crea sinónimos, añade contenido faltante o muestra alternativas."
-			},
-			"clickThrough": {
-				"title": "Tasa de clics",
-				"description": "Rastrea qué resultados hacen clic los usuarios por consulta. Identifica problemas de ranking antes de que afecten la conversión."
-			},
-			"recentActivity": {
-				"title": "Feed de actividad reciente",
-				"description": "Feed en vivo de eventos de búsqueda en tu organización. Filtra por índice, rango de fechas o conteo de resultados."
-			},
-			"usageSummary": {
-				"title": "Resumen de uso",
-				"description": "Consumo mensual de search-units desglosado por índice. Proyecta costos y planifica capacidad antes de alcanzar los límites."
-			},
-			"widgetEvents": {
-				"title": "Seguimiento de eventos del widget",
-				"description": "widget_open, search_query, result_click, filter_used — todos capturados automáticamente desde el widget embebido."
-			}
-		},
-		"codeTitle": "Los eventos son automáticos",
-		"codeSubtitle": "El widget envía eventos de búsqueda por POST. Sin instrumentación adicional."
-	},
-	"featuresWidgetPage": {
-		"title": "Widget de búsqueda embebible",
-		"description": "Widget JavaScript de 14 KB con aislamiento Shadow DOM. Analítica, 5 idiomas, sin framework — añade búsqueda instantánea a cualquier tienda en menos de una hora."
-	},
-	"featuresWidget": {
-		"title": "Búsqueda que se integra en cualquier página",
-		"subtitle": "JavaScript puro, sin dependencia de framework, servido desde tu subdominio de AACsearch. Funciona en PrestaShop, Bitrix, WordPress y tiendas personalizadas.",
-		"items": {
-			"shadowDom": {
-				"title": "Aislamiento Shadow DOM",
-				"description": "Los estilos del widget nunca se filtran a tu página. Los estilos de tu página nunca rompen el widget. Sin conflictos de CSS."
-			},
-			"noFramework": {
-				"title": "Sin framework requerido",
-				"description": "JavaScript puro en formato IIFE. Funciona junto a React, Vue, HTML plano o cualquier CMS. Sin paso de compilación, sin npm, sin bundler."
-			},
-			"i18n": {
-				"title": "5 idiomas incluidos",
-				"description": "Traducciones en inglés, alemán, español, francés y ruso integradas en el bundle del widget. Detecta el idioma automáticamente."
-			},
-			"analytics": {
-				"title": "Analíticas listas para usar",
-				"description": "Registra widget_open, search_query, zero_results, result_click y filter_used automáticamente. Sin código adicional."
-			},
-			"config": {
-				"title": "Configuración por atributos de datos",
-				"description": "Configura mediante atributos data-* en la etiqueta script. Sin JavaScript requerido. Token, placeholder, idioma — todo por atributos."
-			},
-			"performance": {
-				"title": "14 KB comprimido",
-				"description": "Build dual IIFE + ESM. Carga inicial rápida, resultados de búsqueda instantáneos. Sin chunks asíncronos, sin importaciones dinámicas."
-			}
-		},
-		"codeTitle": "En funcionamiento en 60 segundos",
-		"codeSubtitle": "Copia. Pega. Reemplaza el token. La búsqueda instantánea está en vivo."
-	},
-	"featuresKnowledgePage": {
-		"title": "Base de conocimiento y RAG",
-		"description": "Indexa tus documentos y responde preguntas sobre ellos con IA. Chunking, recuperación y GraphRAG incluidos."
-	},
-	"featuresKnowledge": {
-		"title": "Preguntas y respuestas sobre tus documentos",
-		"subtitle": "Sube PDFs, DOCX y archivos de texto. Haz preguntas en lenguaje natural. Obtén respuestas citadas respaldadas por tu contenido.",
-		"items": {
-			"ingestion": {
-				"title": "Ingesta en múltiples formatos",
-				"description": "PDF, DOCX, TXT y Markdown. Sube mediante el dashboard o la API de ingesta de archivos. Estado registrado por trabajo de ingesta."
-			},
-			"chunking": {
-				"title": "Chunking inteligente",
-				"description": "Los documentos se dividen en fragmentos semánticos con superposición. El tamaño y la estrategia de chunk son configurables por espacio de conocimiento."
-			},
-			"retrieval": {
-				"title": "Recuperación semántica",
-				"description": "Embeddings de OpenAI para similitud semántica. BM25 para precisión por palabras clave. Puntuación híbrida para los mejores resultados de ambos enfoques."
-			},
-			"graphRag": {
-				"title": "GraphRAG",
-				"description": "La extracción de entidades construye un grafo de conocimiento sobre tus documentos. El razonamiento multi-salto descubre conexiones que la búsqueda simple pasa por alto."
-			},
-			"citations": {
-				"title": "Respuestas citadas",
-				"description": "Cada respuesta incluye referencias a las fuentes con nombre del documento, posición del fragmento y puntuación de relevancia."
-			},
-			"multiTenant": {
-				"title": "Espacios por tenant",
-				"description": "Cada organización tiene espacios de conocimiento aislados. Los usuarios solo ven sus propios datos. Sin filtración de información entre tenants."
-			}
-		}
-	},
-	"featuresConnectorsPage": {
-		"title": "Conectores CMS",
-		"description": "Módulos PHP nativos para PrestaShop 8.x y 1C-Bitrix. API Connector REST de 7 endpoints. Sincronización completa y delta con reintentos automáticos en caso de fallo."
-	},
-	"featuresConnectors": {
-		"title": "Conecta tu fuente de datos",
-		"subtitle": "Los módulos precompilados gestionan el ciclo de sincronización. La API de conector de 7 endpoints te permite escribir un conector en cualquier lenguaje.",
-		"items": {
-			"prestashop": {
-				"title": "PrestaShop 8.x",
-				"description": "Módulo PHP. Hooks de eventos en guardado, actualización y eliminación de productos. Exportación completa del catálogo con un clic."
-			},
-			"bitrix": {
-				"title": "1C-Bitrix",
-				"description": "Módulo nativo de Bitrix. Agente en segundo plano para sincronización programada. Manejadores de eventos para actualizaciones en tiempo real."
-			},
-			"connectorApi": {
-				"title": "API de conector",
-				"description": "7 endpoints: handshake, sincronización completa, sincronización delta, eliminación, diagnósticos, estado de sincronización y heartbeat. Construye el tuyo en cualquier lenguaje."
-			},
-			"fullSync": {
-				"title": "Sincronización completa y delta",
-				"description": "La sincronización completa reindexará todo el catálogo. La sincronización delta procesa solo los registros modificados. Programa o activa a demanda."
-			},
-			"diagnostics": {
-				"title": "Endpoint de diagnósticos",
-				"description": "Prueba la conexión, verifica el estado del índice y comprueba los permisos del token sin tocar datos de producción."
-			},
-			"syncJobs": {
-				"title": "Historial de trabajos de sincronización",
-				"description": "Cada ejecución de sincronización se registra con hora de inicio, conteo de documentos, errores y duración. Reintenta lotes fallidos desde el dashboard."
-			}
-		},
-		"codeTitle": "Sincronización delta en una solicitud",
-		"codeSubtitle": "Envía solo los documentos cambiados. La API gestiona la deduplicación y los reintentos."
-	},
-	"featuresScopedTokensPage": {
-		"title": "Scoped tokens de búsqueda",
-		"description": "Tokens firmados con HMAC que reducen los permisos a un índice, usuario, TTL y filtro específicos — nunca los amplían."
-	},
-	"featuresScopedTokens": {
-		"title": "Control de acceso granular",
-		"subtitle": "Emite un token en el servidor y envíalo al navegador. Expira, está vinculado a un solo índice y solo puede reducir el conjunto de resultados mediante AND.",
-		"items": {
-			"hmacSigning": {
-				"title": "Firmado con HMAC",
-				"description": "Los tokens están firmados con tu secreto. La manipulación o reutilización es criptográficamente detectable."
-			},
-			"ttl": {
-				"title": "Con TTL definido",
-				"description": "Cada scoped token tiene una fecha de expiración. TTL corto para sesiones de navegador; TTL más largo para comunicaciones servidor a servidor."
-			},
-			"filters": {
-				"title": "Filtros combinados con AND",
-				"description": "Un token puede llevar un filtro obligatorio (por ejemplo, userId = 42). El servidor lo combina con AND con el filtro del llamador — nunca con OR."
-			},
-			"originLock": {
-				"title": "Bloqueo de origen",
-				"description": "Vincula un token a orígenes específicos. Un token exportado en JavaScript solo puede usarse desde tu dominio."
-			},
-			"indexScope": {
-				"title": "Con alcance de índice",
-				"description": "Cada token está vinculado a un único índice. Las consultas entre índices requieren un token separado por índice."
-			},
-			"serverSide": {
-				"title": "Emisión en el servidor",
-				"description": "Los tokens se emiten desde tu backend mediante una sola llamada API. El navegador nunca ve tu clave API de administrador."
-			}
-		}
-	},
-	"featuresMultiSearchPage": {
-		"title": "Multi-search y consultas federadas",
-		"description": "Ejecuta múltiples búsquedas en distintos índices en una sola petición HTTP. Construye autocompletado entre colecciones en menos de 50 ms."
-	},
-	"featuresMultiSearch": {
-		"title": "Una petición, muchos resultados",
-		"subtitle": "Búsqueda federada entre índices, colecciones y tipos de datos — sin N viajes de ida y vuelta desde el navegador.",
-		"items": {
-			"federation": {
-				"title": "Federación entre índices",
-				"description": "Consulta productos, categorías y artículos de blog en una sola llamada. Combina y ordena los resultados en el cliente o deja que lo haga la API."
-			},
-			"autocomplete": {
-				"title": "Autocompletado",
-				"description": "Sugerencias de escritura anticipada en múltiples colecciones en una sola petición. Menos de 50 ms p99 para una experiencia instantánea."
-			},
-			"batchedRequests": {
-				"title": "Peticiones agrupadas",
-				"description": "Hasta 50 búsquedas por petición multi-search. Cada una con filtros, orden y facetas independientes."
-			},
-			"parallelExecution": {
-				"title": "Ejecución en paralelo",
-				"description": "Todas las búsquedas en una llamada multi-search se ejecutan en paralelo en el servidor. La latencia total equivale a la consulta individual más lenta."
-			},
-			"independentFacets": {
-				"title": "Facetas independientes",
-				"description": "Cada búsqueda del lote devuelve sus propios conteos de facetas. Construye interfaces con facetas en múltiples paneles sin peticiones adicionales."
-			},
-			"singleToken": {
-				"title": "Un solo token",
-				"description": "Un scoped token autoriza todas las búsquedas del lote. El aislamiento de tenant se aplica por consulta dentro del lote."
-			}
-		}
-	},
-	"featuresReindexPage": {
-		"title": "Reindexación sin tiempo de inactividad",
-		"description": "Reconstruye tu índice con un nuevo esquema mientras el tráfico en vivo sigue usando el anterior. Cambio atómico."
-	},
-	"featuresReindex": {
-		"title": "Cambios de esquema sin interrupciones",
-		"subtitle": "Versiona tus índices. Reconstruye en segundo plano. Cambia el alias cuando estés listo. Reversión con un solo comando.",
-		"items": {
-			"versioning": {
-				"title": "Índices versionados",
-				"description": "Cada índice tiene un número de versión (por ejemplo, org_products_v3). Los alias apuntan a la versión activa de forma transparente."
-			},
-			"aliasSwap": {
-				"title": "Cambio atómico de alias",
-				"description": "Reindexación en una nueva versión mientras el tráfico usa la anterior. Cambia el alias en una sola operación atómica — sin peticiones perdidas."
-			},
-			"backgroundRebuild": {
-				"title": "Reconstrucción en segundo plano",
-				"description": "La reindexación se ejecuta fuera de banda. Tu API continúa sirviendo búsquedas desde la versión actual durante todo el proceso."
-			},
-			"rollback": {
-				"title": "Reversión con un comando",
-				"description": "Si la nueva versión tiene problemas, apunta el alias de vuelta a la versión anterior. El tráfico se redirige al instante."
-			},
-			"schemaChanges": {
-				"title": "Evolución del esquema",
-				"description": "Agrega campos, cambia tipos, actualiza configuraciones de facetas — todo mediante la creación de una nueva versión, sin mutar el índice en vivo."
-			},
-			"verification": {
-				"title": "Verificación incorporada",
-				"description": "Después de reindexar, ejecuta una consulta de verificación antes del cambio de alias. Detecta documentos faltantes antes de que los usuarios lo noten."
-			}
-		}
-	},
-	"featuresRateLimitingPage": {
-		"title": "Rate limiting y cuota",
-		"description": "Throttling por clave y por minuto, y cuota mensual por organización. Ambos visibles en el dashboard antes de alcanzarlos."
-	},
-	"featuresRateLimiting": {
-		"title": "Protege tu presupuesto y tu servicio",
-		"subtitle": "Límites configurables en cada capa. Tú controlas qué ocurre cuando se alcanzan los límites.",
-		"items": {
-			"perKeyThrottling": {
-				"title": "Throttling por clave",
-				"description": "Establece peticiones por minuto por clave API. El tráfico en ráfaga de una clave no afecta a las demás en tu cuenta."
-			},
-			"orgQuota": {
-				"title": "Cuota mensual por organización",
-				"description": "Límite máximo de search-units por mes por organización. Configurable por plan. El dashboard muestra el uso en tiempo real."
-			},
-			"graceful429": {
-				"title": "Respuestas 429 controladas",
-				"description": "Las peticiones limitadas devuelven HTTP 429 con un encabezado Retry-After. El SDK de navegador gestiona los reintentos automáticamente."
-			},
-			"dashboardVisibility": {
-				"title": "Visibilidad en el dashboard",
-				"description": "Uso actual, límite y consumo proyectado a fin de mes visibles de un vistazo. Sin excesos inesperados."
-			},
-			"planBased": {
-				"title": "Límites basados en el plan",
-				"description": "Los planes Free, Pro y Enterprise tienen cuotas y límites de velocidad distintos. Actualiza sin modificar tu integración."
-			},
-			"gracePeriod": {
-				"title": "Período de gracia por cancelación",
-				"description": "7 días de gracia en modo solo lectura al cancelar. La búsqueda sigue funcionando mientras migras. Las escrituras se bloquean tras la cancelación."
-			}
-		}
-	},
-	"featuresCurationsPage": {
-		"title": "Curaciones y Fijación",
-		"description": "Anula los resultados de búsqueda para consultas específicas. Fija productos, excluye resultados irrelevantes y programa colocaciones promocionales."
-	},
-	"featuresCurations": {
-		"title": "Curaciones",
-		"subtitle": "Controla exactamente qué resultados aparecen en qué posición para consultas específicas.",
-		"items": {
-			"pin": {
-				"title": "Anclar resultados",
-				"description": "Fuerza que documentos específicos aparezcan en la parte superior para consultas concretas. Perfecto para productos promocionados."
-			},
-			"hide": {
-				"title": "Ocultar resultados",
-				"description": "Excluye ciertos documentos de los resultados de búsqueda sin eliminarlos del índice."
-			},
-			"rules": {
-				"title": "Reglas basadas en consultas",
-				"description": "Aplica automáticamente filtros, clasificaciones u ordenaciones cuando la consulta coincide con un patrón."
-			},
-			"ab": {
-				"title": "Pruebas de curación",
-				"description": "Prueba distintas estrategias de curación y mide cuál genera mejor CTR y conversión."
-			},
-			"analytics": {
-				"description": "Rastrear impresiones, clics y conversiones de resultados curados. Compara con los resultados orgánicos para medir el impacto editorial.",
-				"title": "Análisis de curación"
-			},
-			"excluded": {
-				"description": "Elimina documentos específicos de un conjunto de resultados por completo. Útil para productos fuera de temporada o contenido bajo revisión legal.",
-				"title": "Resultados excluidos"
-			},
-			"pinned": {
-				"description": "Coloca documentos específicos en posiciones exactas para una consulta. Los artículos patrocinados, productos destacados o selecciones editoriales permanecen donde los pones.",
-				"title": "Resultados fijados"
-			},
-			"promoted": {
-				"description": "Eleva un documento a la primera página sin asignarle una posición fija. Los resultados promovidos compiten con una puntuación más alta que los orgánicos.",
-				"title": "Documentos promovidos"
-			},
-			"schedule": {
-				"description": "Establece una fecha de inicio y fin en cualquier regla de curación. Los posicionamientos promocionales se activan y desactivan automáticamente sin intervención manual.",
-				"title": "Curaciones programadas"
-			},
-			"triggerKeywords": {
-				"description": "Las reglas de curación se activan en consultas exactas, coincidencias de prefijo o coincidencias de sinónimos. Una regla puede cubrir cientos de variantes de consulta.",
-				"title": "Disparadores de consulta"
-			}
-		}
-	},
-	"featuresFacetedSearchPage": {
-		"title": "Búsqueda y Navegación por Facetas",
-		"description": "Facetas dinámicas con recuentos en tiempo real. Da a los usuarios los controles de navegación para pasar de la consulta al resultado en un clic."
-	},
-	"featuresFacetedSearch": {
-		"title": "Búsqueda facetada",
-		"subtitle": "Permite a los usuarios filtrar y navegar por los resultados de búsqueda mediante facetas potentes e intuitivas.",
-		"items": {
-			"dynamic": {
-				"title": "Facetas dinámicas",
-				"description": "Las facetas se actualizan en tiempo real al refinar los filtros, mostrando siempre recuentos precisos."
-			},
-			"hierarchical": {
-				"title": "Facetas jerárquicas",
-				"description": "Navega por categorías anidadas como Ropa > Hombre > Camisas con soporte jerárquico completo."
-			},
-			"numeric": {
-				"title": "Rangos numéricos",
-				"description": "Filtra por precio, valoración, fecha u otros valores numéricos con controles deslizantes y entradas de rango."
-			},
-			"multi": {
-				"title": "Selección múltiple",
-				"description": "Permite seleccionar varios valores de faceta para búsquedas combinadas más precisas."
-			},
-			"countFacets": {
-				"description": "Los recuentos de facetas reflejan el contexto de la consulta actual: aplica un filtro de precio y los recuentos de categoría se actualizan de inmediato.",
-				"title": "Recuentos precisos"
-			},
-			"dynamicFacets": {
-				"description": "Define qué campos son facetables en el esquema de tu colección. Los recuentos se recalculan en cada consulta con una sobrecarga inferior a un milisegundo.",
-				"title": "Facetas dinámicas"
-			},
-			"mobile": {
-				"description": "El widget renderiza las facetas como un cajón plegable en móviles. Toca para abrir, toca para filtrar, toca para cerrar.",
-				"title": "Facetas mobile-first"
-			},
-			"nestedFacets": {
-				"description": "Árboles de categorías multinivel renderizados como facetas jerárquicas. Navegación por migas de pan generada automáticamente.",
-				"title": "Facetas de categorías anidadas"
-			},
-			"performance": {
-				"description": "El cálculo de facetas es co-ubicado con la ejecución de la búsqueda. Una sola llamada a la API devuelve resultados y recuentos de facetas.",
-				"title": "Sin sobrecarga de agregación"
-			},
-			"rangeFacets": {
-				"description": "Facetas de rango numérico para precio, valoración, año y campos personalizados. Tamaños de grupo y formatos de visualización configurables.",
-				"title": "Facetas de rango"
-			}
-		}
-	},
-	"featuresGeoSearchPage": {
-		"title": "Búsqueda Geográfica",
-		"description": "Filtra y ordena resultados por ubicación. Consultas de radio, búsqueda por caja delimitadora y ordenación por distancia — todo con latencia inferior a 50 ms."
-	},
-	"featuresGeoSearch": {
-		"title": "Búsqueda geoespacial",
-		"subtitle": "Encuentra documentos próximos a una ubicación, dentro de un radio o en un área personalizada.",
-		"items": {
-			"radius": {
-				"title": "Búsqueda por radio",
-				"description": "Busca documentos dentro de un radio dado desde un punto lat/lon. Ideal para búsquedas de tipo «cerca de mí»."
-			},
-			"bounds": {
-				"title": "Búsqueda en caja delimitadora",
-				"description": "Filtra resultados dentro de un rectángulo geográfico. Útil para búsquedas en mapa con área de visualización."
-			},
-			"sort": {
-				"title": "Ordenar por distancia",
-				"description": "Devuelve resultados más cercanos primero. Combina con otros criterios de relevancia para una clasificación mixta."
-			},
-			"polygon": {
-				"title": "Filtrado por polígono",
-				"description": "Define formas personalizadas para filtrar resultados dentro de distritos, zonas de entrega u otras áreas."
-			},
-			"boundingBox": {
-				"description": "Filtra a un rectángulo geográfico usando coordenadas NE y SO. Útil para la búsqueda por ventana de mapa en aplicaciones web y móviles.",
-				"title": "Búsqueda por cuadro delimitador"
-			},
-			"distanceSorting": {
-				"description": "Ordena los resultados por distancia desde un punto dado. Combina con pesos de relevancia de texto para una clasificación consciente de la proximidad.",
-				"title": "Ordenación por distancia"
-			},
-			"filters": {
-				"description": "Combina filtros geográficos con cualquier otra faceta (precio, categoría, disponibilidad) en una sola consulta.",
-				"title": "Filtros geo + atributo"
-			},
-			"multipleLocations": {
-				"description": "Indexa múltiples campos lat/lng por documento (p. ej., ubicaciones de recogida y entrega) y consulta sobre uno o ambos.",
-				"title": "Múltiples campos de ubicación"
-			},
-			"performance": {
-				"description": "El filtrado geográfico se ejecuta dentro del núcleo de búsqueda de AACsearch. Sin servicio geoespacial externo, sin viajes de ida y vuelta adicionales.",
-				"title": "Latencia sub-50 ms"
-			},
-			"radiusSearch": {
-				"description": "Devuelve resultados dentro de N km o millas de un punto. Unidad, precisión y número máximo de resultados configurables.",
-				"title": "Consultas por radio"
-			}
-		}
-	},
-	"featuresInstantSearchPage": {
-		"title": "Búsqueda Instantánea",
-		"description": "Resultados mientras el usuario escribe. Latencia P99 bajo 50 ms, caché del lado del cliente, sin rebotes — búsqueda instantánea en cualquier conexión."
-	},
-	"featuresInstantSearch": {
-		"title": "Búsqueda instantánea",
-		"subtitle": "Muestra resultados mientras el usuario escribe, con latencia inferior a 50 ms en el percentil 99.",
-		"items": {
-			"latency": {
-				"title": "Menos de 50 ms en p99",
-				"description": "Motor optimizado para búsqueda en tiempo real. Los resultados llegan antes de que el usuario termine de escribir."
-			},
-			"typo": {
-				"title": "Tolerancia a errores tipográficos",
-				"description": "Encuentra resultados correctos incluso con errores tipográficos, coincidencias parciales y variaciones ortográficas."
-			},
-			"highlight": {
-				"title": "Resaltado de fragmentos",
-				"description": "Resalta los términos de búsqueda que coinciden directamente en el fragmento devuelto para orientar al usuario."
-			},
-			"prefix": {
-				"title": "Búsqueda prefija",
-				"description": "Devuelve resultados desde el primer carácter tecleado. Sin necesidad de completar la palabra."
-			},
-			"asYouType": {
-				"description": "Los resultados se actualizan con cada pulsación de tecla. La coincidencia de prefijo y la tolerancia a errores hacen que aparezcan resultados relevantes desde el primer carácter.",
-				"title": "Resultados mientras escribes"
-			},
-			"caching": {
-				"description": "Las consultas repetidas se devuelven desde la caché del navegador instantáneamente. La caché se identifica por consulta + filtros + locale.",
-				"title": "Caché del lado del cliente"
-			},
-			"debouncing": {
-				"description": "El widget y el SDK hacen debounce de la entrada automáticamente. Retraso configurable (200 ms por defecto) para evitar llamadas a la API innecesarias.",
-				"title": "Debounce integrado"
-			},
-			"prefetching": {
-				"description": "Precarga las consultas populares al cargar la página para que la primera pulsación se resuelva desde la caché en lugar de una petición de red.",
-				"title": "Precarga de consultas"
-			},
-			"widget": {
-				"description": "El widget de AACsearch incluye una interfaz de búsqueda instantánea lista para usar. Una etiqueta script, sin configuración necesaria.",
-				"title": "Widget listo para usar"
-			}
-		},
-		"codeTitle": "Un script tag",
-		"codeSubtitle": "Inserta el widget en cualquier página HTML. Sin npm, sin bundler, sin framework."
-	},
-	"featuresRelevanceTuningPage": {
-		"title": "Ajuste de Relevancia",
-		"description": "Ajusta pesos de campo, reglas de impulso y señales de clasificación — directamente desde el panel, sin reindexación."
-	},
-	"featuresRelevanceTuning": {
-		"title": "Ajuste de relevancia",
-		"subtitle": "Controla cómo se clasifican y puntúan los resultados de búsqueda para adaptarse a tu negocio.",
-		"items": {
-			"weights": {
-				"title": "Pesos por campo",
-				"description": "Asigna mayor importancia al título que a la descripción, o al nombre de la marca que al SKU."
-			},
-			"boost": {
-				"title": "Impulso numérico",
-				"description": "Impulsa automáticamente artículos mejor valorados, más vendidos o con mayor margen."
-			},
-			"decay": {
-				"title": "Decaimiento temporal",
-				"description": "Reduce gradualmente la relevancia de contenido antiguo para mantener frescos los resultados."
-			},
-			"custom": {
-				"title": "Puntuación personalizada",
-				"description": "Define tu propia fórmula de relevancia combinando múltiples campos y señales de negocio."
-			},
-			"analytics": {
-				"description": "Mide el CTR y la tasa de resultados cero antes y después de un cambio de ajuste. Revierte con un clic si las métricas empeoran.",
-				"title": "Análisis de relevancia"
-			},
-			"boostRules": {
-				"description": "Impulsa documentos donde in_stock es verdadero o la valoración es ≥ 4,5. Los boosts condicionales expresan la lógica de merchandising de forma declarativa.",
-				"title": "Reglas de impulso"
-			},
-			"fieldWeighting": {
-				"description": "Asigna importancia relativa a título, descripción, etiquetas y campos personalizados. Una coincidencia en el título supera a una en la descripción por defecto.",
-				"title": "Pesos de campo"
-			},
-			"merchandising": {
-				"description": "Guarda las configuraciones de boost y pin como presets con nombre. Aplica un preset de Temporada de Ventas a todos los índices con un clic.",
-				"title": "Presets de merchandising"
-			},
-			"pinnedResults": {
-				"description": "Fija documentos específicos en la posición 1, 2 o 3 para una consulta dada. Se usa para resultados patrocinados, productos destacados y selecciones editoriales.",
-				"title": "Resultados fijados"
-			},
-			"scoring": {
-				"description": "Combina la relevancia de texto con señales numéricas como precio, actualidad o popularidad usando una fórmula de puntuación configurable.",
-				"title": "Puntuación personalizada"
-			},
-			"customSorting": {
-				"title": "Órdenes de clasificación personalizados",
-				"description": "Define perfiles de ordenación para diferentes casos de uso: precio ascendente/descendente, más recientes, mejor valorados o campos personalizados."
-			},
-			"preview": {
-				"title": "Vista previa de clasificación",
-				"description": "Previsualiza cómo cambia el orden de los resultados al ajustar pesos, impulsos o configuraciones de decadencia, antes de aplicar al tráfico real."
-			},
-			"synonyms": {
-				"title": "Clasificación con sinónimos",
-				"description": "Impulsa los resultados donde el término de búsqueda coincide con la palabra original frente a una expansión de sinónimos."
-			}
-		}
-	},
-	"featuresStopwordsPage": {
-		"title": "Palabras de Parada",
-		"description": "Filtra palabras sin significado que generan ruido en la búsqueda. Gestiona listas de palabras de parada por colección desde el panel."
-	},
-	"featuresStopwords": {
-		"title": "Palabras vacías",
-		"subtitle": "Elimina términos de ruido de las consultas de búsqueda para mejorar la velocidad y la relevancia.",
-		"items": {
-			"builtin": {
-				"title": "Listas integradas por idioma",
-				"description": "Palabras vacías predefinidas para más de 15 idiomas. Actívalas con una línea de configuración."
-			},
-			"custom": {
-				"title": "Listas personalizadas",
-				"description": "Añade términos específicos de tu dominio que no aportan valor de búsqueda, como SKUs internos o códigos técnicos."
-			},
-			"realtime": {
-				"title": "Aplicación en tiempo real",
-				"description": "Los cambios en las listas de palabras vacías se aplican inmediatamente sin necesidad de reindexar."
-			},
-			"metrics": {
-				"title": "Métricas de impacto",
-				"description": "Observa cómo las palabras vacías afectan la cobertura de resultados y los tiempos de consulta en el panel de análisis."
-			},
-			"analytics": {
-				"description": "Identifica qué palabras vacías eliminadas se correlacionan con consultas sin resultados. Ajusta tu lista en base a datos reales de usuarios.",
-				"title": "Análisis de palabras vacías"
-			},
-			"customStopwords": {
-				"description": "Define tus propias listas de palabras vacías además de los valores predeterminados específicos del idioma. Las palabras de ruido específicas del dominio se eliminan al instante.",
-				"title": "Listas de palabras vacías personalizadas"
-			},
-			"languageAware": {
-				"description": "Listas de palabras vacías integradas para inglés, alemán, francés, español y ruso. Sobrescribe o amplía por colección.",
-				"title": "Valores predeterminados según idioma"
-			},
-			"perCollection": {
-				"description": "Diferentes listas de palabras vacías por colección. Tu índice de productos y tu base de conocimientos pueden tener conjuntos independientes de palabras de ruido.",
-				"title": "Configuración por colección"
-			},
-			"performance": {
-				"description": "El filtrado de palabras vacías se ejecuta en el momento del análisis de la consulta, antes de la búsqueda en el índice. Sin impacto medible en la latencia.",
-				"title": "Sin sobrecarga de consulta"
-			},
-			"realTime": {
-				"description": "Añade o elimina palabras vacías sin reindexar. Los cambios surten efecto inmediatamente en la siguiente consulta.",
-				"title": "Actualizaciones sin tiempo de inactividad"
-			},
-			"builtinLists": {
-				"title": "Listas por idioma",
-				"description": "Cada idioma tiene una lista de palabras vacías predeterminada optimizada para búsqueda. Se puede anular o ampliar por colección."
-			},
-			"customLists": {
-				"title": "Listas por colección",
-				"description": "Diferentes listas de palabras vacías para diferentes colecciones. Tu catálogo de productos y documentación pueden tener reglas independientes."
-			},
-			"indexTime": {
-				"title": "Filtrado en tiempo de indexación",
-				"description": "Elimina palabras vacías durante la indexación para reducir el tamaño del índice y mejorar el rendimiento en colecciones de alto tráfico."
-			},
-			"queryTime": {
-				"title": "Filtrado en tiempo de consulta",
-				"description": "Elimina palabras vacías en el momento de la consulta sin afectar al índice. Los cambios se aplican inmediatamente."
-			},
-			"ui": {
-				"title": "Gestión desde el panel",
-				"description": "Gestiona las palabras vacías desde el panel de AACsearch con un editor visual. Añade, elimina o prueba reglas antes de aplicarlas."
-			}
-		}
-	},
-	"featuresSynonymsPage": {
-		"title": "Gestión de Sinónimos",
-		"description": "Asegúrate de que los usuarios encuentren resultados sin importar qué términos usen. Los sinónimos se aplican instantáneamente."
-	},
-	"featuresSynonyms": {
-		"title": "Sinónimos",
-		"subtitle": "Asegúrate de que los usuarios encuentren lo que buscan sin importar las palabras que usen.",
-		"items": {
-			"oneWay": {
-				"title": "Sinónimos unidireccionales",
-				"description": "Mapea 'sofá a couch' sin el reverso. Usa reglas unidireccionales cuando tu catálogo usa el término formal pero los usuarios escriben el informal."
-			},
-			"multiWay": {
-				"title": "Sinónimos multidireccionales",
-				"description": "Lista términos equivalentes: 'jersey, suéter, pullover, ropa de punto'. Cualquier término coincide con documentos que contienen cualquier otro."
-			},
-			"realtime": {
-				"title": "Actualizaciones en tiempo real",
-				"description": "Los nuevos sinónimos se aplican al instante, sin necesidad de reindexar el catálogo."
-			},
-			"import": {
-				"title": "Importación masiva",
-				"description": "Importa diccionarios de sinónimos completos vía API o CSV. Soporta miles de pares."
-			},
-			"analytics": {
-				"description": "Ve qué reglas de sinónimos se activan con más frecuencia y qué consultas siguen devolviendo cero resultados a pesar de la expansión de sinónimos.",
-				"title": "Efectividad de los sinónimos"
-			},
-			"csvImport": {
-				"description": "Importa pares de sinónimos en bloque desde un archivo CSV. Pega tu lista de sinónimos existente y se aplica de inmediato.",
-				"title": "Importación CSV"
-			},
-			"realTimeUpdate": {
-				"description": "Añade o elimina reglas de sinónimos sin reindexar. Los cambios surten efecto en la siguiente consulta, no en el siguiente despliegue.",
-				"title": "Actualizaciones sin tiempo de inactividad"
-			},
-			"scope": {
-				"description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y tu índice de documentación pueden tener reglas de sinónimos independientes.",
-				"title": "Ámbito por colección"
-			},
-			"collectionScoped": {
-				"title": "Ámbito por colección",
-				"description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y de documentación pueden tener reglas independientes."
-			},
-			"equivalentSynonyms": {
-				"title": "Sinónimos equivalentes",
-				"description": "Define grupos de términos equivalentes donde cualquier término coincide con documentos que contengan cualquier otro."
-			},
-			"instantApplication": {
-				"title": "Aplicación instantánea",
-				"description": "Las nuevas reglas de sinónimos se aplican en la siguiente consulta. Sin reindexación, sin tiempo de inactividad."
-			},
-			"onewayExpansion": {
-				"title": "Expansión unidireccional",
-				"description": "Asigna un término a otro sin la inversa. Útil cuando el catálogo usa términos formales pero los usuarios buscan con informales."
-			},
-			"phraseMatching": {
-				"title": "Coincidencia de frases",
-				"description": "Soporte de sinónimos de varias palabras: teléfono móvil coincide con celular como frases completas, no como palabras individuales."
-			}
-		}
-	},
-	"featuresTypoTolerancePage": {
-		"title": "Tolerancia a Errores Tipográficos",
-		"description": "Los usuarios cometen errores. AACsearch aun así encuentra lo correcto. Niveles de coincidencia difusa configurables por colección."
-	},
-	"featuresTypoTolerance": {
-		"title": "Tolerancia a errores tipográficos",
-		"subtitle": "Encuentra resultados correctos aunque los usuarios cometan errores ortográficos.",
-		"items": {
-			"auto": {
-				"title": "Corrección automática",
-				"description": "Detecta y corrige errores tipográficos comunes automáticamente. Sin configuración necesaria."
-			},
-			"distance": {
-				"title": "Distancia de edición configurable",
-				"description": "Controla cuántos errores tipográficos se toleran según la longitud de la consulta."
-			},
-			"phonetic": {
-				"title": "Coincidencia fonética",
-				"description": "Encuentra resultados aunque el usuario deletree fonéticamente una palabra que no conoce."
-			},
-			"metrics": {
-				"title": "Análisis de correcciones",
-				"description": "Observa qué consultas se corrigen con más frecuencia para mejorar tu catálogo y etiquetado."
-			},
-			"accuracy": {
-				"description": "Las consultas cortas con muchas palabras cortas omiten la tolerancia a errores para evitar falsos positivos. Longitud mínima de token configurable.",
-				"title": "Alta precisión"
-			},
-			"customDictionary": {
-				"description": "Incluye en lista blanca nombres de marca, códigos de producto y términos técnicos que nunca deben ser corregidos por el motor de tolerancia a errores.",
-				"title": "Diccionario personalizado"
-			},
-			"editDistance": {
-				"description": "La distancia de Levenshtein es configurable por token. Por defecto: 1 error para palabras de 5+ caracteres, 2 errores para palabras de 8+ caracteres.",
-				"title": "Distancia de edición configurable"
-			},
-			"performance": {
-				"description": "La tolerancia a errores tipográficos está implementada en el núcleo de búsqueda de AACsearch. Sin viaje de ida y vuelta adicional, sin servicio externo de corrección ortográfica.",
-				"title": "Sin sobrecarga de latencia"
-			},
-			"prefixMatch": {
-				"description": "Las palabras incompletas coinciden con documentos que empiezan con el prefijo escrito. Potencia el autocompletado mientras escribes sin requisitos de coincidencia exacta.",
-				"title": "Coincidencia de prefijo"
-			},
-			"splitWords": {
-				"description": "'macbook pro' coincide con 'macbookpro' y viceversa. La detección de palabras divididas captura espacios omitidos y palabras compuestas.",
-				"title": "Corrección de palabras divididas"
-			},
-			"autoCorrect": {
-				"title": "Modo de autocorrección",
-				"description": "Sugiere y aplica correcciones tipográficas a la consulta del usuario. Devuelve resultados para la consulta corregida con una sugerencia."
-			},
-			"fieldsControl": {
-				"title": "Control por campo",
-				"description": "Activa la tolerancia a errores tipográficos solo en campos específicos. Ideal para búsquedas de título con campos SKU que necesitan coincidencia exacta."
-			},
-			"symbolStripping": {
-				"title": "Eliminación de símbolos",
-				"description": "Elimina signos de puntuación y caracteres especiales de las consultas antes de la coincidencia. Maneja guiones, apóstrofes y caracteres acentuados."
-			}
-		}
-	}
+  "featuresPage": {
+    "title": "Todas las funciones que necesitas para implementar búsqueda",
+    "description": "Tokens con alcance, listas de orígenes permitidos, límite de velocidad, búsqueda múltiple, reindexación sin tiempo de inactividad — todo disponible hoy."
+  },
+  "featuresSearchApiPage": {
+    "title": "API de búsqueda",
+    "description": "Una API REST simple y potente para búsqueda ultrarrápida sobre tus datos. Aislamiento de tenant, rate-limiting y observabilidad incluidos."
+  },
+  "featuresSearchApi": {
+    "title": "La API que tu equipo merece",
+    "subtitle": "15 endpoints REST. Especificación OpenAPI 3.1. SDK de navegador. Sin clúster de búsqueda que gestionar.",
+    "items": {
+      "endpoints": {
+        "title": "15 endpoints públicos",
+        "description": "CRUD completo sobre índices, documentos y claves API. Más búsqueda, multi-search, analíticas y especificación OpenAPI en /api/v1/openapi.json."
+      },
+      "openApi": {
+        "title": "Especificación OpenAPI 3.1",
+        "description": "Especificación legible por máquina incluida en cada despliegue. Genera clientes en cualquier lenguaje. Con tipado completo desde el primer día."
+      },
+      "browserSdk": {
+        "title": "SDK de navegador tipado",
+        "description": "Paquete NPM. Búsqueda simple, multi-search (federada), facetas. Menos de 50 ms p99. Funciona en cualquier framework."
+      },
+      "authentication": {
+        "title": "Autenticación con clave API",
+        "description": "Auth con Bearer token. Claves hasheadas en reposo. Scoped tokens para uso en el navegador. Allow-list de origen por clave."
+      },
+      "tenancy": {
+        "title": "Multi-tenancy incorporado",
+        "description": "Cada solicitud está aislada a tu organización. Los accesos entre organizaciones son arquitectónicamente imposibles — no solo por política."
+      },
+      "observability": {
+        "title": "Observabilidad incluida",
+        "description": "Cada búsqueda se registra con consulta, conteo de resultados, latencia y agente de usuario. Analíticas y consultas principales en el dashboard."
+      }
+    }
+  },
+  "featuresAnalyticsPage": {
+    "title": "Analíticas de búsqueda",
+    "description": "Rastrea consultas frecuentes, búsquedas sin resultados y CTR. La analítica de AACsearch revela la intención del usuario automáticamente, sin código adicional."
+  },
+  "featuresAnalytics": {
+    "title": "Convierte búsquedas en conocimiento",
+    "subtitle": "Cada consulta es una señal implícita de intención del usuario. AACsearch las captura, agrega y muestra automáticamente.",
+    "items": {
+      "topQueries": {
+        "title": "Consultas principales",
+        "description": "Ve los términos de búsqueda más frecuentes ordenados por volumen. Detecta tendencias, demanda emergente y patrones estacionales."
+      },
+      "zeroResults": {
+        "title": "Seguimiento de cero resultados",
+        "description": "Cada búsqueda sin resultados queda registrada. Crea sinónimos, añade contenido faltante o muestra alternativas."
+      },
+      "clickThrough": {
+        "title": "Tasa de clics",
+        "description": "Rastrea qué resultados hacen clic los usuarios por consulta. Identifica problemas de ranking antes de que afecten la conversión."
+      },
+      "recentActivity": {
+        "title": "Feed de actividad reciente",
+        "description": "Feed en vivo de eventos de búsqueda en tu organización. Filtra por índice, rango de fechas o conteo de resultados."
+      },
+      "usageSummary": {
+        "title": "Resumen de uso",
+        "description": "Consumo mensual de search-units desglosado por índice. Proyecta costos y planifica capacidad antes de alcanzar los límites."
+      },
+      "widgetEvents": {
+        "title": "Seguimiento de eventos del widget",
+        "description": "widget_open, search_query, result_click, filter_used — todos capturados automáticamente desde el widget embebido."
+      }
+    },
+    "codeTitle": "Los eventos son automáticos",
+    "codeSubtitle": "El widget envía eventos de búsqueda por POST. Sin instrumentación adicional."
+  },
+  "featuresWidgetPage": {
+    "title": "Widget de búsqueda embebible",
+    "description": "Widget JavaScript de 14 KB con aislamiento Shadow DOM. Analítica, 5 idiomas, sin framework — añade búsqueda instantánea a cualquier tienda en menos de una hora."
+  },
+  "featuresWidget": {
+    "title": "Búsqueda que se integra en cualquier página",
+    "subtitle": "JavaScript puro, sin dependencia de framework, servido desde tu subdominio de AACsearch. Funciona en PrestaShop, Bitrix, WordPress y tiendas personalizadas.",
+    "items": {
+      "shadowDom": {
+        "title": "Aislamiento Shadow DOM",
+        "description": "Los estilos del widget nunca se filtran a tu página. Los estilos de tu página nunca rompen el widget. Sin conflictos de CSS."
+      },
+      "noFramework": {
+        "title": "Sin framework requerido",
+        "description": "JavaScript puro en formato IIFE. Funciona junto a React, Vue, HTML plano o cualquier CMS. Sin paso de compilación, sin npm, sin bundler."
+      },
+      "i18n": {
+        "title": "5 idiomas incluidos",
+        "description": "Traducciones en inglés, alemán, español, francés y ruso integradas en el bundle del widget. Detecta el idioma automáticamente."
+      },
+      "analytics": {
+        "title": "Analíticas listas para usar",
+        "description": "Registra widget_open, search_query, zero_results, result_click y filter_used automáticamente. Sin código adicional."
+      },
+      "config": {
+        "title": "Configuración por atributos de datos",
+        "description": "Configura mediante atributos data-* en la etiqueta script. Sin JavaScript requerido. Token, placeholder, idioma — todo por atributos."
+      },
+      "performance": {
+        "title": "14 KB comprimido",
+        "description": "Build dual IIFE + ESM. Carga inicial rápida, resultados de búsqueda instantáneos. Sin chunks asíncronos, sin importaciones dinámicas."
+      }
+    },
+    "codeTitle": "En funcionamiento en 60 segundos",
+    "codeSubtitle": "Copia. Pega. Reemplaza el token. La búsqueda instantánea está en vivo."
+  },
+  "featuresKnowledgePage": {
+    "title": "Base de conocimiento y RAG",
+    "description": "Indexa tus documentos y responde preguntas sobre ellos con IA. Chunking, recuperación y GraphRAG incluidos."
+  },
+  "featuresKnowledge": {
+    "title": "Preguntas y respuestas sobre tus documentos",
+    "subtitle": "Sube PDFs, DOCX y archivos de texto. Haz preguntas en lenguaje natural. Obtén respuestas citadas respaldadas por tu contenido.",
+    "items": {
+      "ingestion": {
+        "title": "Ingesta en múltiples formatos",
+        "description": "PDF, DOCX, TXT y Markdown. Sube mediante el dashboard o la API de ingesta de archivos. Estado registrado por trabajo de ingesta."
+      },
+      "chunking": {
+        "title": "Chunking inteligente",
+        "description": "Los documentos se dividen en fragmentos semánticos con superposición. El tamaño y la estrategia de chunk son configurables por espacio de conocimiento."
+      },
+      "retrieval": {
+        "title": "Recuperación semántica",
+        "description": "Embeddings de OpenAI para similitud semántica. BM25 para precisión por palabras clave. Puntuación híbrida para los mejores resultados de ambos enfoques."
+      },
+      "graphRag": {
+        "title": "GraphRAG",
+        "description": "La extracción de entidades construye un grafo de conocimiento sobre tus documentos. El razonamiento multi-salto descubre conexiones que la búsqueda simple pasa por alto."
+      },
+      "citations": {
+        "title": "Respuestas citadas",
+        "description": "Cada respuesta incluye referencias a las fuentes con nombre del documento, posición del fragmento y puntuación de relevancia."
+      },
+      "multiTenant": {
+        "title": "Espacios por tenant",
+        "description": "Cada organización tiene espacios de conocimiento aislados. Los usuarios solo ven sus propios datos. Sin filtración de información entre tenants."
+      }
+    }
+  },
+  "featuresConnectorsPage": {
+    "title": "Conectores CMS",
+    "description": "Módulos PHP nativos para PrestaShop 8.x y 1C-Bitrix. API Connector REST de 7 endpoints. Sincronización completa y delta con reintentos automáticos en caso de fallo."
+  },
+  "featuresConnectors": {
+    "title": "Conecta tu fuente de datos",
+    "subtitle": "Los módulos precompilados gestionan el ciclo de sincronización. La API de conector de 7 endpoints te permite escribir un conector en cualquier lenguaje.",
+    "items": {
+      "prestashop": {
+        "title": "PrestaShop 8.x",
+        "description": "Módulo PHP. Hooks de eventos en guardado, actualización y eliminación de productos. Exportación completa del catálogo con un clic."
+      },
+      "bitrix": {
+        "title": "1C-Bitrix",
+        "description": "Módulo nativo de Bitrix. Agente en segundo plano para sincronización programada. Manejadores de eventos para actualizaciones en tiempo real."
+      },
+      "connectorApi": {
+        "title": "API de conector",
+        "description": "7 endpoints: handshake, sincronización completa, sincronización delta, eliminación, diagnósticos, estado de sincronización y heartbeat. Construye el tuyo en cualquier lenguaje."
+      },
+      "fullSync": {
+        "title": "Sincronización completa y delta",
+        "description": "La sincronización completa reindexará todo el catálogo. La sincronización delta procesa solo los registros modificados. Programa o activa a demanda."
+      },
+      "diagnostics": {
+        "title": "Endpoint de diagnósticos",
+        "description": "Prueba la conexión, verifica el estado del índice y comprueba los permisos del token sin tocar datos de producción."
+      },
+      "syncJobs": {
+        "title": "Historial de trabajos de sincronización",
+        "description": "Cada ejecución de sincronización se registra con hora de inicio, conteo de documentos, errores y duración. Reintenta lotes fallidos desde el dashboard."
+      }
+    },
+    "codeTitle": "Sincronización delta en una solicitud",
+    "codeSubtitle": "Envía solo los documentos cambiados. La API gestiona la deduplicación y los reintentos."
+  },
+  "featuresScopedTokensPage": {
+    "title": "Scoped tokens de búsqueda",
+    "description": "Tokens firmados con HMAC que reducen los permisos a un índice, usuario, TTL y filtro específicos — nunca los amplían."
+  },
+  "featuresScopedTokens": {
+    "title": "Control de acceso granular",
+    "subtitle": "Emite un token en el servidor y envíalo al navegador. Expira, está vinculado a un solo índice y solo puede reducir el conjunto de resultados mediante AND.",
+    "items": {
+      "hmacSigning": {
+        "title": "Firmado con HMAC",
+        "description": "Los tokens están firmados con tu secreto. La manipulación o reutilización es criptográficamente detectable."
+      },
+      "ttl": {
+        "title": "Con TTL definido",
+        "description": "Cada scoped token tiene una fecha de expiración. TTL corto para sesiones de navegador; TTL más largo para comunicaciones servidor a servidor."
+      },
+      "filters": {
+        "title": "Filtros combinados con AND",
+        "description": "Un token puede llevar un filtro obligatorio (por ejemplo, userId = 42). El servidor lo combina con AND con el filtro del llamador — nunca con OR."
+      },
+      "originLock": {
+        "title": "Bloqueo de origen",
+        "description": "Vincula un token a orígenes específicos. Un token exportado en JavaScript solo puede usarse desde tu dominio."
+      },
+      "indexScope": {
+        "title": "Con alcance de índice",
+        "description": "Cada token está vinculado a un único índice. Las consultas entre índices requieren un token separado por índice."
+      },
+      "serverSide": {
+        "title": "Emisión en el servidor",
+        "description": "Los tokens se emiten desde tu backend mediante una sola llamada API. El navegador nunca ve tu clave API de administrador."
+      }
+    }
+  },
+  "featuresMultiSearchPage": {
+    "title": "Multi-search y consultas federadas",
+    "description": "Ejecuta múltiples búsquedas en distintos índices en una sola petición HTTP. Construye autocompletado entre colecciones en menos de 50 ms."
+  },
+  "featuresMultiSearch": {
+    "title": "Una petición, muchos resultados",
+    "subtitle": "Búsqueda federada entre índices, colecciones y tipos de datos — sin N viajes de ida y vuelta desde el navegador.",
+    "items": {
+      "federation": {
+        "title": "Federación entre índices",
+        "description": "Consulta productos, categorías y artículos de blog en una sola llamada. Combina y ordena los resultados en el cliente o deja que lo haga la API."
+      },
+      "autocomplete": {
+        "title": "Autocompletado",
+        "description": "Sugerencias de escritura anticipada en múltiples colecciones en una sola petición. Menos de 50 ms p99 para una experiencia instantánea."
+      },
+      "batchedRequests": {
+        "title": "Peticiones agrupadas",
+        "description": "Hasta 50 búsquedas por petición multi-search. Cada una con filtros, orden y facetas independientes."
+      },
+      "parallelExecution": {
+        "title": "Ejecución en paralelo",
+        "description": "Todas las búsquedas en una llamada multi-search se ejecutan en paralelo en el servidor. La latencia total equivale a la consulta individual más lenta."
+      },
+      "independentFacets": {
+        "title": "Facetas independientes",
+        "description": "Cada búsqueda del lote devuelve sus propios conteos de facetas. Construye interfaces con facetas en múltiples paneles sin peticiones adicionales."
+      },
+      "singleToken": {
+        "title": "Un solo token",
+        "description": "Un scoped token autoriza todas las búsquedas del lote. El aislamiento de tenant se aplica por consulta dentro del lote."
+      }
+    }
+  },
+  "featuresReindexPage": {
+    "title": "Reindexación sin tiempo de inactividad",
+    "description": "Reconstruye tu índice con un nuevo esquema mientras el tráfico en vivo sigue usando el anterior. Cambio atómico."
+  },
+  "featuresReindex": {
+    "title": "Cambios de esquema sin interrupciones",
+    "subtitle": "Versiona tus índices. Reconstruye en segundo plano. Cambia el alias cuando estés listo. Reversión con un solo comando.",
+    "items": {
+      "versioning": {
+        "title": "Índices versionados",
+        "description": "Cada índice tiene un número de versión (por ejemplo, org_products_v3). Los alias apuntan a la versión activa de forma transparente."
+      },
+      "aliasSwap": {
+        "title": "Cambio atómico de alias",
+        "description": "Reindexación en una nueva versión mientras el tráfico usa la anterior. Cambia el alias en una sola operación atómica — sin peticiones perdidas."
+      },
+      "backgroundRebuild": {
+        "title": "Reconstrucción en segundo plano",
+        "description": "La reindexación se ejecuta fuera de banda. Tu API continúa sirviendo búsquedas desde la versión actual durante todo el proceso."
+      },
+      "rollback": {
+        "title": "Reversión con un comando",
+        "description": "Si la nueva versión tiene problemas, apunta el alias de vuelta a la versión anterior. El tráfico se redirige al instante."
+      },
+      "schemaChanges": {
+        "title": "Evolución del esquema",
+        "description": "Agrega campos, cambia tipos, actualiza configuraciones de facetas — todo mediante la creación de una nueva versión, sin mutar el índice en vivo."
+      },
+      "verification": {
+        "title": "Verificación incorporada",
+        "description": "Después de reindexar, ejecuta una consulta de verificación antes del cambio de alias. Detecta documentos faltantes antes de que los usuarios lo noten."
+      }
+    }
+  },
+  "featuresRateLimitingPage": {
+    "title": "Rate limiting y cuota",
+    "description": "Throttling por clave y por minuto, y cuota mensual por organización. Ambos visibles en el dashboard antes de alcanzarlos."
+  },
+  "featuresRateLimiting": {
+    "title": "Protege tu presupuesto y tu servicio",
+    "subtitle": "Límites configurables en cada capa. Tú controlas qué ocurre cuando se alcanzan los límites.",
+    "items": {
+      "perKeyThrottling": {
+        "title": "Throttling por clave",
+        "description": "Establece peticiones por minuto por clave API. El tráfico en ráfaga de una clave no afecta a las demás en tu cuenta."
+      },
+      "orgQuota": {
+        "title": "Cuota mensual por organización",
+        "description": "Límite máximo de search-units por mes por organización. Configurable por plan. El dashboard muestra el uso en tiempo real."
+      },
+      "graceful429": {
+        "title": "Respuestas 429 controladas",
+        "description": "Las peticiones limitadas devuelven HTTP 429 con un encabezado Retry-After. El SDK de navegador gestiona los reintentos automáticamente."
+      },
+      "dashboardVisibility": {
+        "title": "Visibilidad en el dashboard",
+        "description": "Uso actual, límite y consumo proyectado a fin de mes visibles de un vistazo. Sin excesos inesperados."
+      },
+      "planBased": {
+        "title": "Límites basados en el plan",
+        "description": "Los planes Free, Pro y Enterprise tienen cuotas y límites de velocidad distintos. Actualiza sin modificar tu integración."
+      },
+      "gracePeriod": {
+        "title": "Período de gracia por cancelación",
+        "description": "7 días de gracia en modo solo lectura al cancelar. La búsqueda sigue funcionando mientras migras. Las escrituras se bloquean tras la cancelación."
+      }
+    }
+  },
+  "featuresCurationsPage": {
+    "title": "Curaciones y Fijación",
+    "description": "Anula los resultados de búsqueda para consultas específicas. Fija productos, excluye resultados irrelevantes y programa colocaciones promocionales."
+  },
+  "featuresCurations": {
+    "title": "Curaciones",
+    "subtitle": "Controla exactamente qué resultados aparecen en qué posición para consultas específicas.",
+    "items": {
+      "pin": {
+        "title": "Anclar resultados",
+        "description": "Fuerza que documentos específicos aparezcan en la parte superior para consultas concretas. Perfecto para productos promocionados."
+      },
+      "hide": {
+        "title": "Ocultar resultados",
+        "description": "Excluye ciertos documentos de los resultados de búsqueda sin eliminarlos del índice."
+      },
+      "rules": {
+        "title": "Reglas basadas en consultas",
+        "description": "Aplica automáticamente filtros, clasificaciones u ordenaciones cuando la consulta coincide con un patrón."
+      },
+      "ab": {
+        "title": "Pruebas de curación",
+        "description": "Prueba distintas estrategias de curación y mide cuál genera mejor CTR y conversión."
+      },
+      "analytics": {
+        "description": "Rastrear impresiones, clics y conversiones de resultados curados. Compara con los resultados orgánicos para medir el impacto editorial.",
+        "title": "Análisis de curación"
+      },
+      "excluded": {
+        "description": "Elimina documentos específicos de un conjunto de resultados por completo. Útil para productos fuera de temporada o contenido bajo revisión legal.",
+        "title": "Resultados excluidos"
+      },
+      "pinned": {
+        "description": "Coloca documentos específicos en posiciones exactas para una consulta. Los artículos patrocinados, productos destacados o selecciones editoriales permanecen donde los pones.",
+        "title": "Resultados fijados"
+      },
+      "promoted": {
+        "description": "Eleva un documento a la primera página sin asignarle una posición fija. Los resultados promovidos compiten con una puntuación más alta que los orgánicos.",
+        "title": "Documentos promovidos"
+      },
+      "schedule": {
+        "description": "Establece una fecha de inicio y fin en cualquier regla de curación. Los posicionamientos promocionales se activan y desactivan automáticamente sin intervención manual.",
+        "title": "Curaciones programadas"
+      },
+      "triggerKeywords": {
+        "description": "Las reglas de curación se activan en consultas exactas, coincidencias de prefijo o coincidencias de sinónimos. Una regla puede cubrir cientos de variantes de consulta.",
+        "title": "Disparadores de consulta"
+      }
+    }
+  },
+  "featuresFacetedSearchPage": {
+    "title": "Búsqueda y Navegación por Facetas",
+    "description": "Facetas dinámicas con recuentos en tiempo real. Da a los usuarios los controles de navegación para pasar de la consulta al resultado en un clic."
+  },
+  "featuresFacetedSearch": {
+    "title": "Búsqueda facetada",
+    "subtitle": "Permite a los usuarios filtrar y navegar por los resultados de búsqueda mediante facetas potentes e intuitivas.",
+    "items": {
+      "dynamic": {
+        "title": "Facetas dinámicas",
+        "description": "Las facetas se actualizan en tiempo real al refinar los filtros, mostrando siempre recuentos precisos."
+      },
+      "hierarchical": {
+        "title": "Facetas jerárquicas",
+        "description": "Navega por categorías anidadas como Ropa > Hombre > Camisas con soporte jerárquico completo."
+      },
+      "numeric": {
+        "title": "Rangos numéricos",
+        "description": "Filtra por precio, valoración, fecha u otros valores numéricos con controles deslizantes y entradas de rango."
+      },
+      "multi": {
+        "title": "Selección múltiple",
+        "description": "Permite seleccionar varios valores de faceta para búsquedas combinadas más precisas."
+      },
+      "countFacets": {
+        "description": "Los recuentos de facetas reflejan el contexto de la consulta actual: aplica un filtro de precio y los recuentos de categoría se actualizan de inmediato.",
+        "title": "Recuentos precisos"
+      },
+      "dynamicFacets": {
+        "description": "Define qué campos son facetables en el esquema de tu colección. Los recuentos se recalculan en cada consulta con una sobrecarga inferior a un milisegundo.",
+        "title": "Facetas dinámicas"
+      },
+      "mobile": {
+        "description": "El widget renderiza las facetas como un cajón plegable en móviles. Toca para abrir, toca para filtrar, toca para cerrar.",
+        "title": "Facetas mobile-first"
+      },
+      "nestedFacets": {
+        "description": "Árboles de categorías multinivel renderizados como facetas jerárquicas. Navegación por migas de pan generada automáticamente.",
+        "title": "Facetas de categorías anidadas"
+      },
+      "performance": {
+        "description": "El cálculo de facetas es co-ubicado con la ejecución de la búsqueda. Una sola llamada a la API devuelve resultados y recuentos de facetas.",
+        "title": "Sin sobrecarga de agregación"
+      },
+      "rangeFacets": {
+        "description": "Facetas de rango numérico para precio, valoración, año y campos personalizados. Tamaños de grupo y formatos de visualización configurables.",
+        "title": "Facetas de rango"
+      }
+    }
+  },
+  "featuresGeoSearchPage": {
+    "title": "Búsqueda Geográfica",
+    "description": "Filtra y ordena resultados por ubicación. Consultas de radio, búsqueda por caja delimitadora y ordenación por distancia — todo con latencia inferior a 50 ms."
+  },
+  "featuresGeoSearch": {
+    "title": "Búsqueda geoespacial",
+    "subtitle": "Encuentra documentos próximos a una ubicación, dentro de un radio o en un área personalizada.",
+    "items": {
+      "radius": {
+        "title": "Búsqueda por radio",
+        "description": "Busca documentos dentro de un radio dado desde un punto lat/lon. Ideal para búsquedas de tipo «cerca de mí»."
+      },
+      "bounds": {
+        "title": "Búsqueda en caja delimitadora",
+        "description": "Filtra resultados dentro de un rectángulo geográfico. Útil para búsquedas en mapa con área de visualización."
+      },
+      "sort": {
+        "title": "Ordenar por distancia",
+        "description": "Devuelve resultados más cercanos primero. Combina con otros criterios de relevancia para una clasificación mixta."
+      },
+      "polygon": {
+        "title": "Filtrado por polígono",
+        "description": "Define formas personalizadas para filtrar resultados dentro de distritos, zonas de entrega u otras áreas."
+      },
+      "boundingBox": {
+        "description": "Filtra a un rectángulo geográfico usando coordenadas NE y SO. Útil para la búsqueda por ventana de mapa en aplicaciones web y móviles.",
+        "title": "Búsqueda por cuadro delimitador"
+      },
+      "distanceSorting": {
+        "description": "Ordena los resultados por distancia desde un punto dado. Combina con pesos de relevancia de texto para una clasificación consciente de la proximidad.",
+        "title": "Ordenación por distancia"
+      },
+      "filters": {
+        "description": "Combina filtros geográficos con cualquier otra faceta (precio, categoría, disponibilidad) en una sola consulta.",
+        "title": "Filtros geo + atributo"
+      },
+      "multipleLocations": {
+        "description": "Indexa múltiples campos lat/lng por documento (p. ej., ubicaciones de recogida y entrega) y consulta sobre uno o ambos.",
+        "title": "Múltiples campos de ubicación"
+      },
+      "performance": {
+        "description": "El filtrado geográfico se ejecuta dentro del núcleo de búsqueda de AACsearch. Sin servicio geoespacial externo, sin viajes de ida y vuelta adicionales.",
+        "title": "Latencia sub-50 ms"
+      },
+      "radiusSearch": {
+        "description": "Devuelve resultados dentro de N km o millas de un punto. Unidad, precisión y número máximo de resultados configurables.",
+        "title": "Consultas por radio"
+      }
+    }
+  },
+  "featuresInstantSearchPage": {
+    "title": "Búsqueda Instantánea",
+    "description": "Resultados mientras el usuario escribe. Latencia P99 bajo 50 ms, caché del lado del cliente, sin rebotes — búsqueda instantánea en cualquier conexión."
+  },
+  "featuresInstantSearch": {
+    "title": "Búsqueda instantánea",
+    "subtitle": "Muestra resultados mientras el usuario escribe, con latencia inferior a 50 ms en el percentil 99.",
+    "items": {
+      "latency": {
+        "title": "Menos de 50 ms en p99",
+        "description": "Motor optimizado para búsqueda en tiempo real. Los resultados llegan antes de que el usuario termine de escribir."
+      },
+      "typo": {
+        "title": "Tolerancia a errores tipográficos",
+        "description": "Encuentra resultados correctos incluso con errores tipográficos, coincidencias parciales y variaciones ortográficas."
+      },
+      "highlight": {
+        "title": "Resaltado de fragmentos",
+        "description": "Resalta los términos de búsqueda que coinciden directamente en el fragmento devuelto para orientar al usuario."
+      },
+      "prefix": {
+        "title": "Búsqueda prefija",
+        "description": "Devuelve resultados desde el primer carácter tecleado. Sin necesidad de completar la palabra."
+      },
+      "asYouType": {
+        "description": "Los resultados se actualizan con cada pulsación de tecla. La coincidencia de prefijo y la tolerancia a errores hacen que aparezcan resultados relevantes desde el primer carácter.",
+        "title": "Resultados mientras escribes"
+      },
+      "caching": {
+        "description": "Las consultas repetidas se devuelven desde la caché del navegador instantáneamente. La caché se identifica por consulta + filtros + locale.",
+        "title": "Caché del lado del cliente"
+      },
+      "debouncing": {
+        "description": "El widget y el SDK hacen debounce de la entrada automáticamente. Retraso configurable (200 ms por defecto) para evitar llamadas a la API innecesarias.",
+        "title": "Debounce integrado"
+      },
+      "prefetching": {
+        "description": "Precarga las consultas populares al cargar la página para que la primera pulsación se resuelva desde la caché en lugar de una petición de red.",
+        "title": "Precarga de consultas"
+      },
+      "widget": {
+        "description": "El widget de AACsearch incluye una interfaz de búsqueda instantánea lista para usar. Una etiqueta script, sin configuración necesaria.",
+        "title": "Widget listo para usar"
+      }
+    },
+    "codeTitle": "Un script tag",
+    "codeSubtitle": "Inserta el widget en cualquier página HTML. Sin npm, sin bundler, sin framework."
+  },
+  "featuresRelevanceTuningPage": {
+    "title": "Ajuste de Relevancia",
+    "description": "Ajusta pesos de campo, reglas de impulso y señales de clasificación — directamente desde el panel, sin reindexación."
+  },
+  "featuresRelevanceTuning": {
+    "title": "Ajuste de relevancia",
+    "subtitle": "Controla cómo se clasifican y puntúan los resultados de búsqueda para adaptarse a tu negocio.",
+    "items": {
+      "weights": {
+        "title": "Pesos por campo",
+        "description": "Asigna mayor importancia al título que a la descripción, o al nombre de la marca que al SKU."
+      },
+      "boost": {
+        "title": "Impulso numérico",
+        "description": "Impulsa automáticamente artículos mejor valorados, más vendidos o con mayor margen."
+      },
+      "decay": {
+        "title": "Decaimiento temporal",
+        "description": "Reduce gradualmente la relevancia de contenido antiguo para mantener frescos los resultados."
+      },
+      "custom": {
+        "title": "Puntuación personalizada",
+        "description": "Define tu propia fórmula de relevancia combinando múltiples campos y señales de negocio."
+      },
+      "analytics": {
+        "description": "Mide el CTR y la tasa de resultados cero antes y después de un cambio de ajuste. Revierte con un clic si las métricas empeoran.",
+        "title": "Análisis de relevancia"
+      },
+      "boostRules": {
+        "description": "Impulsa documentos donde in_stock es verdadero o la valoración es ≥ 4,5. Los boosts condicionales expresan la lógica de merchandising de forma declarativa.",
+        "title": "Reglas de impulso"
+      },
+      "fieldWeighting": {
+        "description": "Asigna importancia relativa a título, descripción, etiquetas y campos personalizados. Una coincidencia en el título supera a una en la descripción por defecto.",
+        "title": "Pesos de campo"
+      },
+      "merchandising": {
+        "description": "Guarda las configuraciones de boost y pin como presets con nombre. Aplica un preset de Temporada de Ventas a todos los índices con un clic.",
+        "title": "Presets de merchandising"
+      },
+      "pinnedResults": {
+        "description": "Fija documentos específicos en la posición 1, 2 o 3 para una consulta dada. Se usa para resultados patrocinados, productos destacados y selecciones editoriales.",
+        "title": "Resultados fijados"
+      },
+      "scoring": {
+        "description": "Combina la relevancia de texto con señales numéricas como precio, actualidad o popularidad usando una fórmula de puntuación configurable.",
+        "title": "Puntuación personalizada"
+      },
+      "customSorting": {
+        "title": "Órdenes de clasificación personalizados",
+        "description": "Define perfiles de ordenación para diferentes casos de uso: precio ascendente/descendente, más recientes, mejor valorados o campos personalizados."
+      },
+      "preview": {
+        "title": "Vista previa de clasificación",
+        "description": "Previsualiza cómo cambia el orden de los resultados al ajustar pesos, impulsos o configuraciones de decadencia, antes de aplicar al tráfico real."
+      },
+      "synonyms": {
+        "title": "Clasificación con sinónimos",
+        "description": "Impulsa los resultados donde el término de búsqueda coincide con la palabra original frente a una expansión de sinónimos."
+      }
+    }
+  },
+  "featuresStopwordsPage": {
+    "title": "Palabras de Parada",
+    "description": "Filtra palabras sin significado que generan ruido en la búsqueda. Gestiona listas de palabras de parada por colección desde el panel."
+  },
+  "featuresStopwords": {
+    "title": "Palabras vacías",
+    "subtitle": "Elimina términos de ruido de las consultas de búsqueda para mejorar la velocidad y la relevancia.",
+    "items": {
+      "builtin": {
+        "title": "Listas integradas por idioma",
+        "description": "Palabras vacías predefinidas para más de 15 idiomas. Actívalas con una línea de configuración."
+      },
+      "custom": {
+        "title": "Listas personalizadas",
+        "description": "Añade términos específicos de tu dominio que no aportan valor de búsqueda, como SKUs internos o códigos técnicos."
+      },
+      "realtime": {
+        "title": "Aplicación en tiempo real",
+        "description": "Los cambios en las listas de palabras vacías se aplican inmediatamente sin necesidad de reindexar."
+      },
+      "metrics": {
+        "title": "Métricas de impacto",
+        "description": "Observa cómo las palabras vacías afectan la cobertura de resultados y los tiempos de consulta en el panel de análisis."
+      },
+      "analytics": {
+        "description": "Identifica qué palabras vacías eliminadas se correlacionan con consultas sin resultados. Ajusta tu lista en base a datos reales de usuarios.",
+        "title": "Análisis de palabras vacías"
+      },
+      "customStopwords": {
+        "description": "Define tus propias listas de palabras vacías además de los valores predeterminados específicos del idioma. Las palabras de ruido específicas del dominio se eliminan al instante.",
+        "title": "Listas de palabras vacías personalizadas"
+      },
+      "languageAware": {
+        "description": "Listas de palabras vacías integradas para inglés, alemán, francés, español y ruso. Sobrescribe o amplía por colección.",
+        "title": "Valores predeterminados según idioma"
+      },
+      "perCollection": {
+        "description": "Diferentes listas de palabras vacías por colección. Tu índice de productos y tu base de conocimientos pueden tener conjuntos independientes de palabras de ruido.",
+        "title": "Configuración por colección"
+      },
+      "performance": {
+        "description": "El filtrado de palabras vacías se ejecuta en el momento del análisis de la consulta, antes de la búsqueda en el índice. Sin impacto medible en la latencia.",
+        "title": "Sin sobrecarga de consulta"
+      },
+      "realTime": {
+        "description": "Añade o elimina palabras vacías sin reindexar. Los cambios surten efecto inmediatamente en la siguiente consulta.",
+        "title": "Actualizaciones sin tiempo de inactividad"
+      },
+      "builtinLists": {
+        "title": "Listas por idioma",
+        "description": "Cada idioma tiene una lista de palabras vacías predeterminada optimizada para búsqueda. Se puede anular o ampliar por colección."
+      },
+      "customLists": {
+        "title": "Listas por colección",
+        "description": "Diferentes listas de palabras vacías para diferentes colecciones. Tu catálogo de productos y documentación pueden tener reglas independientes."
+      },
+      "indexTime": {
+        "title": "Filtrado en tiempo de indexación",
+        "description": "Elimina palabras vacías durante la indexación para reducir el tamaño del índice y mejorar el rendimiento en colecciones de alto tráfico."
+      },
+      "queryTime": {
+        "title": "Filtrado en tiempo de consulta",
+        "description": "Elimina palabras vacías en el momento de la consulta sin afectar al índice. Los cambios se aplican inmediatamente."
+      },
+      "ui": {
+        "title": "Gestión desde el panel",
+        "description": "Gestiona las palabras vacías desde el panel de AACsearch con un editor visual. Añade, elimina o prueba reglas antes de aplicarlas."
+      }
+    }
+  },
+  "featuresSynonymsPage": {
+    "title": "Gestión de Sinónimos",
+    "description": "Asegúrate de que los usuarios encuentren resultados sin importar qué términos usen. Los sinónimos se aplican instantáneamente."
+  },
+  "featuresSynonyms": {
+    "title": "Sinónimos",
+    "subtitle": "Asegúrate de que los usuarios encuentren lo que buscan sin importar las palabras que usen.",
+    "items": {
+      "oneWay": {
+        "title": "Sinónimos unidireccionales",
+        "description": "Mapea 'sofá a couch' sin el reverso. Usa reglas unidireccionales cuando tu catálogo usa el término formal pero los usuarios escriben el informal."
+      },
+      "multiWay": {
+        "title": "Sinónimos multidireccionales",
+        "description": "Lista términos equivalentes: 'jersey, suéter, pullover, ropa de punto'. Cualquier término coincide con documentos que contienen cualquier otro."
+      },
+      "realtime": {
+        "title": "Actualizaciones en tiempo real",
+        "description": "Los nuevos sinónimos se aplican al instante, sin necesidad de reindexar el catálogo."
+      },
+      "import": {
+        "title": "Importación masiva",
+        "description": "Importa diccionarios de sinónimos completos vía API o CSV. Soporta miles de pares."
+      },
+      "analytics": {
+        "description": "Ve qué reglas de sinónimos se activan con más frecuencia y qué consultas siguen devolviendo cero resultados a pesar de la expansión de sinónimos.",
+        "title": "Efectividad de los sinónimos"
+      },
+      "csvImport": {
+        "description": "Importa pares de sinónimos en bloque desde un archivo CSV. Pega tu lista de sinónimos existente y se aplica de inmediato.",
+        "title": "Importación CSV"
+      },
+      "realTimeUpdate": {
+        "description": "Añade o elimina reglas de sinónimos sin reindexar. Los cambios surten efecto en la siguiente consulta, no en el siguiente despliegue.",
+        "title": "Actualizaciones sin tiempo de inactividad"
+      },
+      "scope": {
+        "description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y tu índice de documentación pueden tener reglas de sinónimos independientes.",
+        "title": "Ámbito por colección"
+      },
+      "collectionScoped": {
+        "title": "Ámbito por colección",
+        "description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y de documentación pueden tener reglas independientes."
+      },
+      "equivalentSynonyms": {
+        "title": "Sinónimos equivalentes",
+        "description": "Define grupos de términos equivalentes donde cualquier término coincide con documentos que contengan cualquier otro."
+      },
+      "instantApplication": {
+        "title": "Aplicación instantánea",
+        "description": "Las nuevas reglas de sinónimos se aplican en la siguiente consulta. Sin reindexación, sin tiempo de inactividad."
+      },
+      "onewayExpansion": {
+        "title": "Expansión unidireccional",
+        "description": "Asigna un término a otro sin la inversa. Útil cuando el catálogo usa términos formales pero los usuarios buscan con informales."
+      },
+      "phraseMatching": {
+        "title": "Coincidencia de frases",
+        "description": "Soporte de sinónimos de varias palabras: teléfono móvil coincide con celular como frases completas, no como palabras individuales."
+      }
+    }
+  },
+  "featuresTypoTolerancePage": {
+    "title": "Tolerancia a Errores Tipográficos",
+    "description": "Los usuarios cometen errores. AACsearch aun así encuentra lo correcto. Niveles de coincidencia difusa configurables por colección."
+  },
+  "featuresTypoTolerance": {
+    "title": "Tolerancia a errores tipográficos",
+    "subtitle": "Encuentra resultados correctos aunque los usuarios cometan errores ortográficos.",
+    "items": {
+      "auto": {
+        "title": "Corrección automática",
+        "description": "Detecta y corrige errores tipográficos comunes automáticamente. Sin configuración necesaria."
+      },
+      "distance": {
+        "title": "Distancia de edición configurable",
+        "description": "Controla cuántos errores tipográficos se toleran según la longitud de la consulta."
+      },
+      "phonetic": {
+        "title": "Coincidencia fonética",
+        "description": "Encuentra resultados aunque el usuario deletree fonéticamente una palabra que no conoce."
+      },
+      "metrics": {
+        "title": "Análisis de correcciones",
+        "description": "Observa qué consultas se corrigen con más frecuencia para mejorar tu catálogo y etiquetado."
+      },
+      "accuracy": {
+        "description": "Las consultas cortas con muchas palabras cortas omiten la tolerancia a errores para evitar falsos positivos. Longitud mínima de token configurable.",
+        "title": "Alta precisión"
+      },
+      "customDictionary": {
+        "description": "Incluye en lista blanca nombres de marca, códigos de producto y términos técnicos que nunca deben ser corregidos por el motor de tolerancia a errores.",
+        "title": "Diccionario personalizado"
+      },
+      "editDistance": {
+        "description": "La distancia de Levenshtein es configurable por token. Por defecto: 1 error para palabras de 5+ caracteres, 2 errores para palabras de 8+ caracteres.",
+        "title": "Distancia de edición configurable"
+      },
+      "performance": {
+        "description": "La tolerancia a errores tipográficos está implementada en el núcleo de búsqueda de AACsearch. Sin viaje de ida y vuelta adicional, sin servicio externo de corrección ortográfica.",
+        "title": "Sin sobrecarga de latencia"
+      },
+      "prefixMatch": {
+        "description": "Las palabras incompletas coinciden con documentos que empiezan con el prefijo escrito. Potencia el autocompletado mientras escribes sin requisitos de coincidencia exacta.",
+        "title": "Coincidencia de prefijo"
+      },
+      "splitWords": {
+        "description": "'macbook pro' coincide con 'macbookpro' y viceversa. La detección de palabras divididas captura espacios omitidos y palabras compuestas.",
+        "title": "Corrección de palabras divididas"
+      },
+      "autoCorrect": {
+        "title": "Modo de autocorrección",
+        "description": "Sugiere y aplica correcciones tipográficas a la consulta del usuario. Devuelve resultados para la consulta corregida con una sugerencia."
+      },
+      "fieldsControl": {
+        "title": "Control por campo",
+        "description": "Activa la tolerancia a errores tipográficos solo en campos específicos. Ideal para búsquedas de título con campos SKU que necesitan coincidencia exacta."
+      },
+      "symbolStripping": {
+        "title": "Eliminación de símbolos",
+        "description": "Elimina signos de puntuación y caracteres especiales de las consultas antes de la coincidencia. Maneja guiones, apóstrofes y caracteres acentuados."
+      }
+    }
+  }
 }

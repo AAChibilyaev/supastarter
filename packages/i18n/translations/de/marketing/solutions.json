@@ -1,628 +1,628 @@
 {
-	"useCasesPage": {
-		"title": "Suche für jedes Produkt und Team",
-		"description": "Von E-Commerce-Storefronts bis hin zu internen Tools — AACsearch passt sich deinem Datenmodell an."
-	},
-	"useCases": {
-		"title": "Für deinen Anwendungsfall gebaut",
-		"subtitle": "Eine API, viele Formen. Bring deine Daten — AACsearch übernimmt Indizierung, Ranking und Auslieferung.",
-		"items": {
-			"ecommerce": {
-				"title": "E-Commerce-Produktsuche",
-				"description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und benutzerspezifische Tokens — alles in einem Suchaufruf."
-			},
-			"helpCenter": {
-				"title": "Hilfezentrum & Dokumentation",
-				"description": "Indiziere deine Wissensbasis und liefere relevante Artikel in Millisekunden. Mit dem Knowledge-Modul für PDF-Q&A kombinierbar."
-			},
-			"multiTenant": {
-				"title": "Multi-Tenant-SaaS",
-				"description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Deine Kunden sehen nie gegenseitig ihre Daten — by Design."
-			},
-			"devTools": {
-				"title": "Entwicklertools",
-				"description": "Semantische Suche über Code, Konfigurationen und Logs. Der MCP-Server ermöglicht KI-Agenten programmatischen Zugriff."
-			},
-			"internalTools": {
-				"title": "Interne Tools",
-				"description": "Schnelle Suche über CRM-Datensätze, Inventar, Mitarbeiterverzeichnisse und andere interne Datensätze."
-			},
-			"contentSites": {
-				"title": "Content-Websites",
-				"description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde einbinden."
-			}
-		}
-	},
-	"useCasesEcommercePage": {
-		"title": "Suche für E-Commerce",
-		"description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und Echtzeit-Analytics — für Produktkataloge entwickelt."
-	},
-	"useCasesEcommerce": {
-		"title": "Produktsuche, die konvertiert",
-		"subtitle": "Katalog mit dem PrestaShop- oder Bitrix-Modul verbinden. Nachmittags live. Analytics ab Tag eins.",
-		"items": {
-			"facetedFilter": {
-				"title": "Facettierte Filter",
-				"description": "Marke, Kategorie, Preisbereich, Verfügbarkeit, Attribute — jedes Feld in Ihrem Schema wird zur Facette. Keine zusätzliche Konfiguration."
-			},
-			"synonyms": {
-				"title": "Synonym-Erweiterung",
-				"description": "Synonyme im Dashboard hinzufügen. TV → Fernseher, Sofa → Couch. Nutzer finden Produkte mit natürlicher Sprache."
-			},
-			"zeroResults": {
-				"title": "Zero-Results-Handling",
-				"description": "AACsearch verfolgt jede Suche ohne Ergebnis. Nutzen Sie die Liste, um Synonyme, Produkte oder Fallback-Vorschläge hinzuzufügen."
-			},
-			"prestaShop": {
-				"title": "PrestaShop-Modul",
-				"description": "Drop-in-PHP-Modul. Synchronisiert bei jedem Produktspeichern, -aktualisieren und -löschen. Vollständiger Katalog-Export per Klick."
-			},
-			"analytics": {
-				"title": "Conversion-Analytics",
-				"description": "CTR pro Suchanfrage, Top-Suchbegriffe und Filter-Nutzung verfolgen. Ranking-Probleme erkennen, bevor sie den Umsatz beeinträchtigen."
-			},
-			"widget": {
-				"title": "Drop-in-Widget",
-				"description": "14-KB-Widget für Ihren Storefront. Kein Build-Schritt, kein npm. Funktioniert neben Ihrem bestehenden Theme."
-			}
-		}
-	},
-	"useCasesSaasPage": {
-		"title": "Suche für Multi-Tenant-SaaS",
-		"description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Ihre Kunden sehen nie gegenseitig ihre Daten."
-	},
-	"useCasesSaas": {
-		"title": "Such-Isolation eingebaut",
-		"subtitle": "Tenant-Isolation ist architektonisch — nicht nur Richtlinie. Jede Organisation erhält eigenen Index, eigene Quota, eigene Keys.",
-		"items": {
-			"tenantIsolation": {
-				"title": "Tenant-eigene Indexe",
-				"description": "Einen Index pro Kundenorganisation erstellen. Daten vermischen sich nie. Tenant löschen löscht deren Index."
-			},
-			"scopedTokens": {
-				"title": "Nutzer-spezifische Scoped Tokens",
-				"description": "Serverseitig Tokens ausstellen, die auf einen userId-Filter gesperrt sind. Ihre Endnutzer suchen nur in ihren eigenen Datensätzen."
-			},
-			"multiIndex": {
-				"title": "Multi-Index pro Tenant",
-				"description": "Bis zu 10 Indexe pro Organisation im Pro-Tarif. Produkte, Bestellungen, Tickets, Doku — separate Indexe, ein Dashboard."
-			},
-			"quota": {
-				"title": "Tenant-eigene Quota",
-				"description": "Search-Unit-Verbrauch pro Tenant verfolgen. Kosten Kunden zuordnen. Entsprechend abrechnen."
-			},
-			"orpc": {
-				"title": "oRPC Management-API",
-				"description": "Indexe programmgesteuert erstellen, Keys rotieren und Analytics pro Tenant aus Ihrem Backend abrufen."
-			},
-			"reindex": {
-				"title": "Schema-Evolution",
-				"description": "Datenmodell ohne Downtime weiterentwickeln. Jeden Tenant im Hintergrund re-indizieren, Aliase atomisch tauschen."
-			}
-		}
-	},
-	"useCasesHelpCenterPage": {
-		"title": "Suche für Hilfezentren & Dokumentation",
-		"description": "Wissensbasis indizieren und relevante Artikel in Millisekunden anzeigen. Mit dem Knowledge-Modul für KI-Q&A kombinieren."
-	},
-	"useCasesHelpCenter": {
-		"title": "Nutzern helfen, sich selbst zu helfen",
-		"subtitle": "Sofortige Artikel-Suche, Zero-Results-Tracking und KI-Q&A über PDFs — eine Integration, kein Such-Ingenieur erforderlich.",
-		"items": {
-			"articleSearch": {
-				"title": "Sofortige Artikel-Suche",
-				"description": "Volltextsuche über Ihre Hilfsartikel mit Tippfehler-Toleranz und Relevanz-Ranking. Ergebnisse in unter 50 ms."
-			},
-			"knowledgeRag": {
-				"title": "KI-Q&A (RAG)",
-				"description": "Nutzer stellen eine Frage in natürlicher Sprache. Das Knowledge-Modul ruft relevante Abschnitte ab und generiert eine zitierte Antwort."
-			},
-			"zeroResults": {
-				"title": "Zero-Results-Intelligenz",
-				"description": "Jede unbeantwortete Suchanfrage wird protokolliert. Lücken in Ihrer Dokumentation erkennen, bevor Kunden den Support kontaktieren."
-			},
-			"multilingual": {
-				"title": "Mehrsprachiger Support",
-				"description": "Inhalte in mehreren Sprachen indizieren. In der Sprache des Nutzers suchen. Synonym-Bibliotheken pro Sprache."
-			},
-			"widget": {
-				"title": "Drop-in-Such-Widget",
-				"description": "Suche in unter einer Stunde zu jedem Hilfezentrum hinzufügen. Funktioniert auf Docusaurus, GitBook, Notion oder eigenen Portalen."
-			},
-			"analytics": {
-				"title": "Such-Analytics",
-				"description": "Top-Suchanfragen, Zero-Results und CTR zeigen, wonach Nutzer tatsächlich suchen — nicht was Sie vermuten."
-			}
-		}
-	},
-	"useCasesDevToolsPage": {
-		"title": "Suche für Entwicklertools",
-		"description": "Semantische Suche über Code, Konfigurationen und Logs. MCP-Server ermöglicht KI-Agenten programmatischen Index-Zugriff."
-	},
-	"useCasesDevTools": {
-		"title": "Suche für Entwickler entwickelt",
-		"subtitle": "REST-API, typisiertes SDK, MCP-Server und eine oRPC Control Plane. Kein GUI erforderlich — alles automatisierbar.",
-		"items": {
-			"restApi": {
-				"title": "Vollständige REST-API",
-				"description": "15 Endpunkte, OpenAPI 3.1 Spec, API-Key-Auth. In jeder Sprache, jeder CI-Pipeline, jeder Infra integrierbar."
-			},
-			"mcp": {
-				"title": "MCP-Server für KI-Agenten",
-				"description": "Claude, Cursor und jeder MCP-Client kann programmgesteuert suchen, Indexe auflisten, Dokumente upserten und Statistiken abrufen."
-			},
-			"semanticSearch": {
-				"title": "Semantische Suche",
-				"description": "OpenAI-Embeddings über Code-Kommentare, Konfigurationen und Logs. Relevante Einträge auch bei abweichender Terminologie finden."
-			},
-			"typedSdk": {
-				"title": "Typisiertes Browser-SDK",
-				"description": "NPM-Paket mit vollständigen TypeScript-Typen. Im Frontend Ihres Entwicklertools integrieren, ohne API-Strukturen zu erraten."
-			},
-			"orpcControl": {
-				"title": "Programmgesteuerte Control Plane",
-				"description": "Indexe erstellen, Keys rotieren, Reindex auslösen und Analytics aus Ihrer Build-Pipeline oder Deployment-Skripten abrufen."
-			}
-		}
-	},
-	"useCasesContentSitesPage": {
-		"title": "Suche für Content-Websites",
-		"description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde in jedes Frontend einbinden."
-	},
-	"useCasesContentSites": {
-		"title": "Content-Suche, die Leser hält",
-		"subtitle": "Blogposts, Changelogs, Dokumentationen, Landing-Pages — von Tag eins indiziert und durchsuchbar.",
-		"items": {
-			"contentIndexing": {
-				"title": "Alles indizieren",
-				"description": "MDX, Markdown, HTML, JSON-Feeds — jedes Content-Format, das strukturierte Datensätze erzeugt, kann indiziert werden."
-			},
-			"instantSearch": {
-				"title": "Sofort-Such-UI",
-				"description": "Ergebnisse erscheinen während der Nutzer tippt. Tippfehler-Toleranz, Treffer hervorheben, Deep-Link zu Anker-Abschnitten."
-			},
-			"browserSdk": {
-				"title": "Browser-SDK",
-				"description": "Typisiertes SDK in Ihr Next.js, Astro, Nuxt oder statisches Site einbinden. Eine Komponente, sofortige Ergebnisse."
-			},
-			"changelog": {
-				"title": "Changelog-Suche",
-				"description": "Entwickler durchsuchen Changelogs, um zu finden, wann sich ein Verhalten geändert hat. Changelog-Einträge indizieren und in Sekunden finden lassen."
-			},
-			"multilingual": {
-				"title": "Mehrsprachige Inhalte",
-				"description": "Inhalte pro Locale indizieren. Ergebnisse in der Sprache des Nutzers ausliefern. Synonym-Bibliotheken pro Locale abgestimmt."
-			},
-			"seo": {
-				"title": "SEO-freundlich",
-				"description": "Suche ist clientseitig — kein Server-Rendering erforderlich. Ihre statischen Seiten bleiben statisch generiert."
-			}
-		}
-	},
-	"solutionsPage": {
-		"title": "AACsearch für jede Branche",
-		"description": "Maßgeschneiderte Suchlösungen für Einzelhandel, Medien, Fintech, Bildung, Gesundheitswesen und Gaming."
-	},
-	"solutions": {
-		"title": "Suche für jede Branche",
-		"subtitle": "AACsearch wurde für die Anforderungen verschiedener Branchen optimiert – von E-Commerce bis Healthcare.",
-		"items": {
-			"retail": {
-				"title": "Einzelhandel",
-				"description": "Sofortige Produktsuche mit Facetten, Preis-Filterung und standortbewusstem Ranking für Online-Shops."
-			},
-			"media": {
-				"title": "Medien",
-				"description": "Inhalts-Discovery für News-Sites, Streaming-Plattformen und digitale Verlage."
-			},
-			"fintech": {
-				"title": "Fintech",
-				"description": "Sichere, revisionsfähige Suche über Finanzdokumente, Transaktionen und Compliance-Inhalte."
-			},
-			"education": {
-				"title": "Bildung",
-				"description": "Kurssuche, Wissensmanagement und Lernmaterialien-Discovery für EdTech-Plattformen."
-			},
-			"healthcare": {
-				"title": "Gesundheitswesen",
-				"description": "HIPAA-konforme Suche über medizinische Inhalte und klinische Dokumente."
-			},
-			"gaming": {
-				"title": "Gaming",
-				"description": "Item-Suche, Spieler-Matchmaking und Community-Inhalts-Discovery für Gaming-Plattformen."
-			},
-			"ecommerce": {
-				"title": "E-Commerce-Suche",
-				"description": "Produktsuche mit Tippfehlertoleranz, Facettennavigation, Instant-Ergebnissen und Mehrwährungsunterstützung."
-			},
-			"enterprise": {
-				"title": "Enterprise-Suche",
-				"description": "Sichere, skalierbare Suche für Unternehmen. SSO, Audit-Logs, SLA-Garantien und dedizierter Support."
-			},
-			"saas": {
-				"title": "SaaS-Suche",
-				"description": "Suche, die sich in Ihr SaaS-Produkt integriert. Scoped Tokens für Mandantentrennung und White-Label-Optionen."
-			}
-		}
-	},
-	"solutionsRetailPage": {
-		"title": "AACsearch für Einzelhandel",
-		"description": "Sofortige Produktsuche, Facettennavigation und Merchandising-Tools für Online-Shops."
-	},
-	"solutionsRetail": {
-		"title": "Konversionen durch bessere Suche steigern",
-		"subtitle": "Shopper finden Produkte, die Ergebnisse schlechterer Suche verbergen. AACsearch bringt sie schneller zum Checkout.",
-		"items": {
-			"instantSearch": {
-				"title": "Sofortige Produktsuche",
-				"description": "Ergebnisse erscheinen beim ersten Tastendruck. Typo-Toleranz bedeutet, dass 'laufschuhe' trotzdem findet."
-			},
-			"facets": {
-				"title": "Facettennavigation",
-				"description": "Preis, Größe, Farbe und Verfügbarkeit – alle mit Echtzeitzählungen. Kunden verfeinern ohne Seitenreload."
-			},
-			"merchandising": {
-				"title": "Merchandising-Tools",
-				"description": "Pinne Bestseller, booste Sale-Artikel und begrabe Auslaufprodukte ohne Code."
-			},
-			"synonyms": {
-				"title": "Produktsynonyme",
-				"description": "Stelle sicher, dass 'Turnschuhe', 'Sneakers' und 'Sportschuhe' dieselben Ergebnisse finden."
-			},
-			"analytics": {
-				"title": "Commerce-Analytik",
-				"description": "Zero-Result-Abfragen, meistgesuchte Begriffe und CTR per Produkt. Dein Leitfaden für Kataloglücken."
-			},
-			"multiCurrency": {
-				"title": "Mehrwährung & Sprachen",
-				"description": "Separate Kollektionen pro Sprache und Währung oder eine gemeinsame mit Locale-Filterung."
-			},
-			"filterNavigation": {
-				"description": "Dynamische Facetten für Kategorie, Marke, Preis, Farbe und Größe. Zählungen aktualisieren sich in Echtzeit, wenn Filter angewendet werden.",
-				"title": "Facettierte Navigation"
-			},
-			"inventory": {
-				"description": "Produktlagerbestandsaktualisierungen innerhalb von Sekunden einlesen. Ausverkaufte Artikel werden automatisch basierend auf Ihrem Verfügbarkeitsfeld herabgestuft.",
-				"title": "Echtzeit-Inventar"
-			},
-			"productSearch": {
-				"description": "Sofortige, tippfehlertolernate Produktsuche. Kunden finden das richtige Produkt, auch wenn sie es falsch schreiben oder Synonyme verwenden.",
-				"title": "Produktsuche"
-			},
-			"catalog": {
-				"title": "Katalogsuche",
-				"description": "Produktkataloge nach Titel, Beschreibung, SKU, Marke und Kategorie durchsuchen. Tippfehlertolerant mit Facettenfilter."
-			},
-			"filters": {
-				"title": "Erweiterte Filter",
-				"description": "Preisschieberegler, Kategoriebäume und Attributauswahl. Alle Facettenzahlen in Echtzeit."
-			},
-			"merch": {
-				"title": "Merchandising",
-				"description": "Beworbene Produkte boosten, Bestseller anheften und saisonale Platzierungen planen."
-			}
-		}
-	},
-	"solutionsMediaPage": {
-		"title": "AACsearch für Medien",
-		"description": "Inhalts-Discovery für Nachrichtenwebsites, Streaming-Plattformen und digitale Verlage."
-	},
-	"solutionsMedia": {
-		"title": "Inhalte finden, die das Publikum begeistern",
-		"subtitle": "Von Nachrichtenarchiven bis zu Video-Bibliotheken – AACsearch indiziert deine Inhalte und liefert Ergebnisse in Millisekunden.",
-		"items": {
-			"articles": {
-				"title": "Artikel & Archivsuche",
-				"description": "Durchsuche Millionen von Artikeln über mehrere Jahre und Themen hinweg."
-			},
-			"video": {
-				"title": "Video- & Podcast-Suche",
-				"description": "Indiziere Transkripte und Metadaten für Suche über Audio- und Videoinhalte."
-			},
-			"recommendations": {
-				"title": "Ähnliche Inhalte",
-				"description": "Zeige verwandte Artikel, Videos und Episoden auf der Basis von Vektordistanz."
-			},
-			"multiformat": {
-				"title": "Multi-Format-Inhalte",
-				"description": "Indiziere Artikel, Galerien, Podcasts und Newsletter in einer einzigen Kollektion."
-			},
-			"trending": {
-				"title": "Trend-Boost",
-				"description": "Booste frisch veröffentlichte oder trending Inhalte in Suchergebnissen."
-			},
-			"subscription": {
-				"title": "Zugangskontrolle",
-				"description": "Kennzeichne Inhalte als Premium oder Metered und filtere basierend auf dem Abonnementstatus des Nutzers."
-			},
-			"analytics": {
-				"description": "Sehen, welche Anfragen keine Ergebnisse haben, welche Themen trending sind und welche Artikel durch Suche vs. direkte Links entdeckt werden.",
-				"title": "Content-Analytics"
-			},
-			"contentSearch": {
-				"description": "Über Schlagzeilen, Fließtext, Tags, Autorenbiografien und Bildunterschriften suchen. Übereinstimmende Ausschnitte in Ergebnissen hervorheben.",
-				"title": "Volltext-Inhaltssuche"
-			},
-			"fullText": {
-				"description": "Konfigurierbare Feldgewichtungen bevorzugen Schlagzeilen gegenüber Fließtext. Aktualität für Nachrichten boosten oder Tiefe für Evergreen-Guides.",
-				"title": "Langform-Relevanz"
-			},
-			"multiLanguage": {
-				"description": "Separate Indizes pro Sprache oder einen einzigen mehrsprachigen Index führen. Locale-bewusstes Synonym-Management inklusive.",
-				"title": "Mehrsprachige Suche"
-			},
-			"realTimeSync": {
-				"description": "Webhook-getriebene Synchronisierung von Contentful, Strapi, WordPress oder Sanity. Veröffentlichte Artikel erscheinen in der Suche in unter einer Sekunde.",
-				"title": "Echtzeit-CMS-Synchronisierung"
-			},
-			"tagging": {
-				"description": "Nach Thema, Format, Datum, Autor oder Inhaltstyp filtern. Verschachtelte Facetten unterstützen komplexe redaktionelle Taxonomien.",
-				"title": "Tag- und Kategoriefacetten"
-			},
-			"categories": {
-				"title": "Kategorienavigation",
-				"description": "Hierarchische Kategorienavigation für Medienseiten. Nach Thema, Region, Inhaltstyp und Veröffentlichungsdatum browsen."
-			},
-			"content": {
-				"title": "Inhaltsentdeckung",
-				"description": "Helfen Sie Lesern, Inhalte zu entdecken. Semantische Suche und Empfehlungen steigern Seitenaufrufe und Engagement."
-			},
-			"freshness": {
-				"title": "Aktualitätsranking",
-				"description": "Zeitverfall-Ranking stellt sicher, dass die neuesten Inhalte zuerst erscheinen."
-			},
-			"multilingual": {
-				"title": "Mehrsprachige Medien",
-				"description": "Inhalte in mehreren Sprachen indexieren und durchsuchen. Sprachspezifische Stoppwortbehandlung."
-			}
-		}
-	},
-	"solutionsFintechPage": {
-		"title": "AACsearch für Fintech",
-		"description": "Sichere, auditfähige Suche über Finanzdokumente, Transaktionen und Compliance-Inhalte."
-	},
-	"solutionsFintech": {
-		"title": "Suche für regulierte Daten",
-		"subtitle": "Finanzprodukte brauchen schnelle, präzise Suche mit klarer Datentrennung. AACsearch liefert beides.",
-		"items": {
-			"compliance": {
-				"title": "Compliance-Dokumentensuche",
-				"description": "Indiziere Regulierungstexte, interne Richtlinien und Audit-Trails für sofortigen Compliance-Lookup."
-			},
-			"transactions": {
-				"title": "Transaktionssuche",
-				"description": "Ermögliche Kunden, ihre Transaktionshistorie nach Händler, Betrag oder Kategorie zu durchsuchen."
-			},
-			"tenantIsolation": {
-				"title": "Mandantenisolierung",
-				"description": "Scoped Tokens stellen sicher, dass jeder Mandant nur seine eigenen Daten sieht – auf Abfrageebene durchgesetzt."
-			},
-			"auditLogs": {
-				"title": "Abfrage-Audit-Log",
-				"description": "Jede Suche wird mit Timestamp, Benutzer-ID und Parametern protokolliert. Exportierbar für Compliance."
-			},
-			"encryption": {
-				"title": "Verschlüsselung im Ruhezustand",
-				"description": "Alle indizierten Daten sind im Ruhezustand mit AES-256 verschlüsselt. Schlüssel-Rotation wird unterstützt."
-			},
-			"regions": {
-				"title": "EU-Datenresidenz",
-				"description": "Wähle die EU-Region (Frankfurt) für DSGVO- und DORA-Konformität."
-			},
-			"accessControls": {
-				"description": "Schreibgeschützte Such-Token ausstellen, die auf bestimmte Kollektionen, Datumsbereiche oder Feldfilter beschränkt sind. Token sind HMAC-signiert und kurzlebig.",
-				"title": "Bereichsbegrenzte Zugriffskontrollen"
-			},
-			"auditLog": {
-				"description": "Jede Suchanfrage, jede Dokumentenaufnahme und jede Admin-Operation wird mit Zeitstempel, Akteur und Org-Kontext protokolliert.",
-				"title": "Prüfpfad"
-			},
-			"gdpr": {
-				"description": "Löschung und Pseudonymisierung auf Feldebene. Anfragen zum Recht auf Vergessenwerden werden innerhalb von Minuten auf Index-Ebene bearbeitet.",
-				"title": "DSGVO & CCPA konform"
-			},
-			"performance": {
-				"description": "Hochfrequente Finanzdaten in Echtzeit indexiert. P99-Suchlatenz bleibt unter 50ms bei jedem Transaktionsvolumen.",
-				"title": "Unter 50ms in großem Maßstab"
-			},
-			"precision": {
-				"title": "Hochpräzise Suche",
-				"description": "Finanzsuche erfordert Präzision. AACsearch liefert exakte Übereinstimmungen für Kontonummern und Transaktions-IDs."
-			},
-			"security": {
-				"title": "Enterprise-Sicherheit",
-				"description": "Verschlüsselung ruhender und übertragener Daten, Audit-Logs, RBAC und IP-Allowlisting."
-			},
-			"speed": {
-				"title": "Sub-50ms Geschwindigkeit",
-				"description": "Finanzhändler benötigen Sub-50ms Suche. AACsearch liefert konstante niedrige Latenz."
-			}
-		}
-	},
-	"solutionsEducationPage": {
-		"title": "AACsearch für Bildung",
-		"description": "Kurssuche, Wissensmanagement und Lernmaterialien-Discovery für EdTech-Plattformen."
-	},
-	"solutionsEducation": {
-		"title": "Wissen leichter entdecken",
-		"subtitle": "Von der Kurskatalog-Suche bis zur Lernmaterial-Discovery – AACsearch macht Bildungsinhalte sofort zugänglich.",
-		"items": {
-			"catalog": {
-				"title": "Kurskatalog-Suche",
-				"description": "Durchsuchbarer Katalog mit Filter nach Thema, Level, Sprache, Dauer und Dozent."
-			},
-			"knowledge": {
-				"title": "Wissensdatenbanken",
-				"description": "Indiziere Lernmaterialien, FAQs und Dokumentation für sofortigen Studenten-Self-Service."
-			},
-			"multilingual": {
-				"title": "Mehrsprachige Inhalte",
-				"description": "Separate Kollektionen pro Sprache oder eine gemeinsame mit Locale-Filterung."
-			},
-			"accessibility": {
-				"title": "Barrierefreiheit",
-				"description": "Das AACsearch-Widget folgt ARIA-Best-Practices für Screen-Reader-Kompatibilität."
-			},
-			"analytics": {
-				"title": "Lern-Analytik",
-				"description": "Sieh, wonach Studenten suchen und was sie nicht finden. Leitfaden für Inhaltslücken."
-			},
-			"scorm": {
-				"title": "LMS-Integration",
-				"description": "Integriere in Moodle, Canvas oder beliebige LMS-Plattformen über die REST-API."
-			},
-			"courseSearch": {
-				"description": "Sofortsuche über Titel, Beschreibungen, Lernziele und Dozentennamen. Tippfehlertolerant für Lerneranfragen.",
-				"title": "Kurs- und Lektionssuche"
-			},
-			"learningPaths": {
-				"description": "Facettierte Suche nach Fach, Niveau, Format, Dauer und Zertifizierung. Verschachtelte Kategorien entsprechen Ihrer Lehrplanstruktur.",
-				"title": "Strukturierte Navigation"
-			},
-			"multiLanguage": {
-				"description": "Inhalte in mehr als 50 Sprachen indexieren. Sprachbewusstes Stemming und separate Synonymbibliotheken pro Locale.",
-				"title": "Mehrsprachiger Inhalt"
-			},
-			"synonyms": {
-				"description": "Fachspezifische Begriffe abbilden: 'ML / maschinelles Lernen', 'JS / JavaScript'. Aus CSV importieren oder im Dashboard verwalten.",
-				"title": "Akademische Synonyme"
-			},
-			"access": {
-				"title": "Zugriffskontrolle",
-				"description": "Rollenbasierte Zugriffskontrollen für Bildungssuche. Studenten, Dozenten und Administratoren sehen verschiedene Inhalte."
-			},
-			"courses": {
-				"title": "Kurssuche",
-				"description": "Suche über Kurskataloge nach Fach, Zeitplan, Dozent und Kredittyp. Echtzeit-Verfügbarkeit und Anmeldestatus."
-			},
-			"lms": {
-				"title": "LMS-Integration",
-				"description": "Integrieren Sie AACsearch mit Moodle, Canvas, Blackboard und anderen LMS-Plattformen."
-			}
-		}
-	},
-	"solutionsHealthcarePage": {
-		"title": "AACsearch für das Gesundheitswesen",
-		"description": "HIPAA-konforme Suche über medizinische Inhalte, klinische Dokumente und Patienteninformationen."
-	},
-	"solutionsHealthcare": {
-		"title": "Suche für medizinische Plattformen",
-		"subtitle": "Klinische Inhalte, Patientenmaterialien und Wissensdatenbanken – AACsearch hält sie durchsuchbar und sicher.",
-		"items": {
-			"clinical": {
-				"title": "Klinische Dokumentensuche",
-				"description": "Indiziere klinische Leitlinien, Protokolle und Formulare für sofortigen Kliniker-Lookup."
-			},
-			"patient": {
-				"title": "Patienteninformations-Portal",
-				"description": "Durchsuchbare Nachsorgeanleitungen, Medikamentenbeipackzettel und FAQ für Patienten."
-			},
-			"hipaa": {
-				"title": "HIPAA-Berücksichtigung",
-				"description": "Kein PII in Suchabfragen oder Antworten. Audit-Logs pro Abfrage für Compliance-Nachweis."
-			},
-			"medicalCoding": {
-				"title": "ICD/CPT-Code-Suche",
-				"description": "Typolerante Suche über ICD-10- und CPT-Code-Datenbanken für klinisches Coding."
-			},
-			"tenantIsolation": {
-				"title": "Abteilungsisolierung",
-				"description": "Scoped Tokens sichern Abteilungs- oder Einrichtungsdatentrennung auf Abfrageebene."
-			},
-			"multilingual": {
-				"title": "Mehrsprachige Inhalte",
-				"description": "Patienteninformationen in mehreren Sprachen durchsuchbar machen – mit Locale-basierten Kollektionen."
-			},
-			"auditLog": {
-				"description": "Jede Anfrage, jeder Ergebnisklick und jede Admin-Aktion mit Zeitstempel und Benutzerkontext für Compliance-Überprüfung protokolliert.",
-				"title": "Prüfpfad"
-			},
-			"clinicalTerms": {
-				"description": "Synonymbibliotheken für ICD-10-Codes, Medikamentennamen und medizinische Zustände. Unterstützt Laien- und klinische Terminologie im selben Index.",
-				"title": "Klinische Terminologie"
-			},
-			"hipaaReady": {
-				"description": "Tenant-Isolation, bereichsbegrenzte Zugriffstoken und kein PII-Logging in der Suchanalytics. Infrastruktur konfiguriert für HIPAA-Workloads.",
-				"title": "HIPAA-konforme Architektur"
-			},
-			"multiLanguage": {
-				"description": "Patientenseitige Suche in der bevorzugten Sprache des Nutzers. Spracherkennung und locale-bewusstes Such-Widget.",
-				"title": "Mehrsprachige Unterstützung"
-			},
-			"realTimeUpdates": {
-				"description": "Klinische Akten und Apothekendaten in unter einer Sekunde indexiert. Arzneimitteländerungen erscheinen sofort ohne vollständigen Re-Index.",
-				"title": "Echtzeit-Datensatzaktualisierungen"
-			},
-			"medical": {
-				"title": "Medizinische Suche",
-				"description": "Medizinische Literatur, Arzneimitteldatenbanken und klinische Studiendaten durchsuchen. Semantische Suche mit RAG."
-			}
-		}
-	},
-	"solutionsGamingPage": {
-		"title": "AACsearch für Gaming",
-		"description": "Item-Suche, Spieler-Matchmaking und Community-Inhalts-Discovery für Gaming-Plattformen."
-	},
-	"solutionsGaming": {
-		"title": "Schnelle Suche für Gaming-Plattformen",
-		"subtitle": "Ob Item-Shops, Game-Wikis oder Spieler-Directories – AACsearch liefert Echtzeitergebnisse für hohe Gleichzeitigkeit.",
-		"items": {
-			"items": {
-				"title": "Item-Datenbank-Suche",
-				"description": "Durchsuche Game-Items, Skins, Waffen und Ausrüstung mit typoleranten Abfragen und attributbasierten Facetten."
-			},
-			"players": {
-				"title": "Spieler-Discovery",
-				"description": "Suche nach Spielernamen, Rängen, Server und Spielstil. Nützlich für LFG- und Matchmaking-Features."
-			},
-			"wiki": {
-				"title": "Game-Wiki-Suche",
-				"description": "Mache dein Game-Wiki sofort durchsuchbar. Strategie-Guides, Lore und Patch-Notes findbar in Sekunden."
-			},
-			"realtime": {
-				"title": "Echtzeit-Updates",
-				"description": "Item-Stats und Spielerdaten aktualisieren sich in Echtzeit. Kein Cache-Invalidierungsproblem."
-			},
-			"highConcurrency": {
-				"title": "Hohe Gleichzeitigkeit",
-				"description": "AACsearch skaliert horizontal. Spitzen während Game-Releases oder Events werden automatisch aufgefangen."
-			},
-			"widget": {
-				"title": "Anpassbares Widget",
-				"description": "Das AACsearch-Widget ist vollständig stilisierbar. Passe es dem visuellen Design deines Spiels an."
-			},
-			"analytics": {
-				"description": "Sehen, wonach Spieler suchen, welche Anfragen in Sackgassen enden und wie die Suche Marktplatz-Konversionen fördert.",
-				"title": "Spiel-Analytics"
-			},
-			"geoSearch": {
-				"description": "Spieler und Server innerhalb einer konfigurierbaren Entfernung anzeigen. Radius- und Bounding-Box-Geoanfragen out of the box unterstützt.",
-				"title": "Geo-abgestimmte Suche"
-			},
-			"itemSearch": {
-				"description": "Über Millionen von Items nach Seltenheit, Typ, Stats und Preis suchen. Filter und Sortierungen aktualisieren sich in Echtzeit, wenn sich der Markt bewegt.",
-				"title": "Item- und Loot-Suche"
-			},
-			"multiSearch": {
-				"description": "Eine einzige Anfrage gleichzeitig über Items, Spieler und Gilden ausführen. Ein Round-Trip, zusammengeführte Ergebnisse, minimale Latenz.",
-				"title": "Multi-Index-Anfragen"
-			},
-			"playerSearch": {
-				"description": "Spieler nach Benutzername, Rang, Region und Spielstil finden. Unterstützt Präfix-Matching für Autocomplete in Lobby-Screens.",
-				"title": "Spieler-Profilsuche"
-			},
-			"realTimeSync": {
-				"description": "Index-Updates ausgelöst durch Spielereignisse — Item-Drops, Rangänderungen, Marktplatz-Listings — kommen in unter einer Sekunde an.",
-				"title": "Echtzeit-Ereignissynchronisierung"
-			},
-			"leaderboard": {
-				"title": "Bestenlistensuche",
-				"description": "Bestenlisten nach Spielername, Rang, Punktzahl, Gilde und Region durchsuchen und filtern."
-			},
-			"store": {
-				"title": "In-Game-Store-Suche",
-				"description": "Suche im In-Game-Item-Store. Skins, Waffen, Charaktere und Bundles nach Name, Typ, Seltenheit und Preis durchsuchen."
-			}
-		}
-	}
+  "useCasesPage": {
+    "title": "Suche für jedes Produkt und Team",
+    "description": "Von E-Commerce-Storefronts bis hin zu internen Tools — AACsearch passt sich deinem Datenmodell an."
+  },
+  "useCases": {
+    "title": "Für deinen Anwendungsfall gebaut",
+    "subtitle": "Eine API, viele Formen. Bring deine Daten — AACsearch übernimmt Indizierung, Ranking und Auslieferung.",
+    "items": {
+      "ecommerce": {
+        "title": "E-Commerce-Produktsuche",
+        "description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und benutzerspezifische Tokens — alles in einem Suchaufruf."
+      },
+      "helpCenter": {
+        "title": "Hilfezentrum & Dokumentation",
+        "description": "Indiziere deine Wissensbasis und liefere relevante Artikel in Millisekunden. Mit dem Knowledge-Modul für PDF-Q&A kombinierbar."
+      },
+      "multiTenant": {
+        "title": "Multi-Tenant-SaaS",
+        "description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Deine Kunden sehen nie gegenseitig ihre Daten — by Design."
+      },
+      "devTools": {
+        "title": "Entwicklertools",
+        "description": "Semantische Suche über Code, Konfigurationen und Logs. Der MCP-Server ermöglicht KI-Agenten programmatischen Zugriff."
+      },
+      "internalTools": {
+        "title": "Interne Tools",
+        "description": "Schnelle Suche über CRM-Datensätze, Inventar, Mitarbeiterverzeichnisse und andere interne Datensätze."
+      },
+      "contentSites": {
+        "title": "Content-Websites",
+        "description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde einbinden."
+      }
+    }
+  },
+  "useCasesEcommercePage": {
+    "title": "Suche für E-Commerce",
+    "description": "Facettierte Filter, Synonym-Erweiterung, Zero-Results-Handling und Echtzeit-Analytics — für Produktkataloge entwickelt."
+  },
+  "useCasesEcommerce": {
+    "title": "Produktsuche, die konvertiert",
+    "subtitle": "Katalog mit dem PrestaShop- oder Bitrix-Modul verbinden. Nachmittags live. Analytics ab Tag eins.",
+    "items": {
+      "facetedFilter": {
+        "title": "Facettierte Filter",
+        "description": "Marke, Kategorie, Preisbereich, Verfügbarkeit, Attribute — jedes Feld in Ihrem Schema wird zur Facette. Keine zusätzliche Konfiguration."
+      },
+      "synonyms": {
+        "title": "Synonym-Erweiterung",
+        "description": "Synonyme im Dashboard hinzufügen. TV → Fernseher, Sofa → Couch. Nutzer finden Produkte mit natürlicher Sprache."
+      },
+      "zeroResults": {
+        "title": "Zero-Results-Handling",
+        "description": "AACsearch verfolgt jede Suche ohne Ergebnis. Nutzen Sie die Liste, um Synonyme, Produkte oder Fallback-Vorschläge hinzuzufügen."
+      },
+      "prestaShop": {
+        "title": "PrestaShop-Modul",
+        "description": "Drop-in-PHP-Modul. Synchronisiert bei jedem Produktspeichern, -aktualisieren und -löschen. Vollständiger Katalog-Export per Klick."
+      },
+      "analytics": {
+        "title": "Conversion-Analytics",
+        "description": "CTR pro Suchanfrage, Top-Suchbegriffe und Filter-Nutzung verfolgen. Ranking-Probleme erkennen, bevor sie den Umsatz beeinträchtigen."
+      },
+      "widget": {
+        "title": "Drop-in-Widget",
+        "description": "14-KB-Widget für Ihren Storefront. Kein Build-Schritt, kein npm. Funktioniert neben Ihrem bestehenden Theme."
+      }
+    }
+  },
+  "useCasesSaasPage": {
+    "title": "Suche für Multi-Tenant-SaaS",
+    "description": "Ein AACsearch-Index pro Tenant, Scoped Tokens pro Endnutzer. Ihre Kunden sehen nie gegenseitig ihre Daten."
+  },
+  "useCasesSaas": {
+    "title": "Such-Isolation eingebaut",
+    "subtitle": "Tenant-Isolation ist architektonisch — nicht nur Richtlinie. Jede Organisation erhält eigenen Index, eigene Quota, eigene Keys.",
+    "items": {
+      "tenantIsolation": {
+        "title": "Tenant-eigene Indexe",
+        "description": "Einen Index pro Kundenorganisation erstellen. Daten vermischen sich nie. Tenant löschen löscht deren Index."
+      },
+      "scopedTokens": {
+        "title": "Nutzer-spezifische Scoped Tokens",
+        "description": "Serverseitig Tokens ausstellen, die auf einen userId-Filter gesperrt sind. Ihre Endnutzer suchen nur in ihren eigenen Datensätzen."
+      },
+      "multiIndex": {
+        "title": "Multi-Index pro Tenant",
+        "description": "Bis zu 10 Indexe pro Organisation im Pro-Tarif. Produkte, Bestellungen, Tickets, Doku — separate Indexe, ein Dashboard."
+      },
+      "quota": {
+        "title": "Tenant-eigene Quota",
+        "description": "Search-Unit-Verbrauch pro Tenant verfolgen. Kosten Kunden zuordnen. Entsprechend abrechnen."
+      },
+      "orpc": {
+        "title": "oRPC Management-API",
+        "description": "Indexe programmgesteuert erstellen, Keys rotieren und Analytics pro Tenant aus Ihrem Backend abrufen."
+      },
+      "reindex": {
+        "title": "Schema-Evolution",
+        "description": "Datenmodell ohne Downtime weiterentwickeln. Jeden Tenant im Hintergrund re-indizieren, Aliase atomisch tauschen."
+      }
+    }
+  },
+  "useCasesHelpCenterPage": {
+    "title": "Suche für Hilfezentren & Dokumentation",
+    "description": "Wissensbasis indizieren und relevante Artikel in Millisekunden anzeigen. Mit dem Knowledge-Modul für KI-Q&A kombinieren."
+  },
+  "useCasesHelpCenter": {
+    "title": "Nutzern helfen, sich selbst zu helfen",
+    "subtitle": "Sofortige Artikel-Suche, Zero-Results-Tracking und KI-Q&A über PDFs — eine Integration, kein Such-Ingenieur erforderlich.",
+    "items": {
+      "articleSearch": {
+        "title": "Sofortige Artikel-Suche",
+        "description": "Volltextsuche über Ihre Hilfsartikel mit Tippfehler-Toleranz und Relevanz-Ranking. Ergebnisse in unter 50 ms."
+      },
+      "knowledgeRag": {
+        "title": "KI-Q&A (RAG)",
+        "description": "Nutzer stellen eine Frage in natürlicher Sprache. Das Knowledge-Modul ruft relevante Abschnitte ab und generiert eine zitierte Antwort."
+      },
+      "zeroResults": {
+        "title": "Zero-Results-Intelligenz",
+        "description": "Jede unbeantwortete Suchanfrage wird protokolliert. Lücken in Ihrer Dokumentation erkennen, bevor Kunden den Support kontaktieren."
+      },
+      "multilingual": {
+        "title": "Mehrsprachiger Support",
+        "description": "Inhalte in mehreren Sprachen indizieren. In der Sprache des Nutzers suchen. Synonym-Bibliotheken pro Sprache."
+      },
+      "widget": {
+        "title": "Drop-in-Such-Widget",
+        "description": "Suche in unter einer Stunde zu jedem Hilfezentrum hinzufügen. Funktioniert auf Docusaurus, GitBook, Notion oder eigenen Portalen."
+      },
+      "analytics": {
+        "title": "Such-Analytics",
+        "description": "Top-Suchanfragen, Zero-Results und CTR zeigen, wonach Nutzer tatsächlich suchen — nicht was Sie vermuten."
+      }
+    }
+  },
+  "useCasesDevToolsPage": {
+    "title": "Suche für Entwicklertools",
+    "description": "Semantische Suche über Code, Konfigurationen und Logs. MCP-Server ermöglicht KI-Agenten programmatischen Index-Zugriff."
+  },
+  "useCasesDevTools": {
+    "title": "Suche für Entwickler entwickelt",
+    "subtitle": "REST-API, typisiertes SDK, MCP-Server und eine oRPC Control Plane. Kein GUI erforderlich — alles automatisierbar.",
+    "items": {
+      "restApi": {
+        "title": "Vollständige REST-API",
+        "description": "15 Endpunkte, OpenAPI 3.1 Spec, API-Key-Auth. In jeder Sprache, jeder CI-Pipeline, jeder Infra integrierbar."
+      },
+      "mcp": {
+        "title": "MCP-Server für KI-Agenten",
+        "description": "Claude, Cursor und jeder MCP-Client kann programmgesteuert suchen, Indexe auflisten, Dokumente upserten und Statistiken abrufen."
+      },
+      "semanticSearch": {
+        "title": "Semantische Suche",
+        "description": "OpenAI-Embeddings über Code-Kommentare, Konfigurationen und Logs. Relevante Einträge auch bei abweichender Terminologie finden."
+      },
+      "typedSdk": {
+        "title": "Typisiertes Browser-SDK",
+        "description": "NPM-Paket mit vollständigen TypeScript-Typen. Im Frontend Ihres Entwicklertools integrieren, ohne API-Strukturen zu erraten."
+      },
+      "orpcControl": {
+        "title": "Programmgesteuerte Control Plane",
+        "description": "Indexe erstellen, Keys rotieren, Reindex auslösen und Analytics aus Ihrer Build-Pipeline oder Deployment-Skripten abrufen."
+      }
+    }
+  },
+  "useCasesContentSitesPage": {
+    "title": "Suche für Content-Websites",
+    "description": "Sofortsuche für Blogs, Changelogs und Dokumentationen. Das Browser-SDK lässt sich in unter einer Stunde in jedes Frontend einbinden."
+  },
+  "useCasesContentSites": {
+    "title": "Content-Suche, die Leser hält",
+    "subtitle": "Blogposts, Changelogs, Dokumentationen, Landing-Pages — von Tag eins indiziert und durchsuchbar.",
+    "items": {
+      "contentIndexing": {
+        "title": "Alles indizieren",
+        "description": "MDX, Markdown, HTML, JSON-Feeds — jedes Content-Format, das strukturierte Datensätze erzeugt, kann indiziert werden."
+      },
+      "instantSearch": {
+        "title": "Sofort-Such-UI",
+        "description": "Ergebnisse erscheinen während der Nutzer tippt. Tippfehler-Toleranz, Treffer hervorheben, Deep-Link zu Anker-Abschnitten."
+      },
+      "browserSdk": {
+        "title": "Browser-SDK",
+        "description": "Typisiertes SDK in Ihr Next.js, Astro, Nuxt oder statisches Site einbinden. Eine Komponente, sofortige Ergebnisse."
+      },
+      "changelog": {
+        "title": "Changelog-Suche",
+        "description": "Entwickler durchsuchen Changelogs, um zu finden, wann sich ein Verhalten geändert hat. Changelog-Einträge indizieren und in Sekunden finden lassen."
+      },
+      "multilingual": {
+        "title": "Mehrsprachige Inhalte",
+        "description": "Inhalte pro Locale indizieren. Ergebnisse in der Sprache des Nutzers ausliefern. Synonym-Bibliotheken pro Locale abgestimmt."
+      },
+      "seo": {
+        "title": "SEO-freundlich",
+        "description": "Suche ist clientseitig — kein Server-Rendering erforderlich. Ihre statischen Seiten bleiben statisch generiert."
+      }
+    }
+  },
+  "solutionsPage": {
+    "title": "AACsearch für jede Branche",
+    "description": "Maßgeschneiderte Suchlösungen für Einzelhandel, Medien, Fintech, Bildung, Gesundheitswesen und Gaming."
+  },
+  "solutions": {
+    "title": "Suche für jede Branche",
+    "subtitle": "AACsearch wurde für die Anforderungen verschiedener Branchen optimiert – von E-Commerce bis Healthcare.",
+    "items": {
+      "retail": {
+        "title": "Einzelhandel",
+        "description": "Sofortige Produktsuche mit Facetten, Preis-Filterung und standortbewusstem Ranking für Online-Shops."
+      },
+      "media": {
+        "title": "Medien",
+        "description": "Inhalts-Discovery für News-Sites, Streaming-Plattformen und digitale Verlage."
+      },
+      "fintech": {
+        "title": "Fintech",
+        "description": "Sichere, revisionsfähige Suche über Finanzdokumente, Transaktionen und Compliance-Inhalte."
+      },
+      "education": {
+        "title": "Bildung",
+        "description": "Kurssuche, Wissensmanagement und Lernmaterialien-Discovery für EdTech-Plattformen."
+      },
+      "healthcare": {
+        "title": "Gesundheitswesen",
+        "description": "HIPAA-konforme Suche über medizinische Inhalte und klinische Dokumente."
+      },
+      "gaming": {
+        "title": "Gaming",
+        "description": "Item-Suche, Spieler-Matchmaking und Community-Inhalts-Discovery für Gaming-Plattformen."
+      },
+      "ecommerce": {
+        "title": "E-Commerce-Suche",
+        "description": "Produktsuche mit Tippfehlertoleranz, Facettennavigation, Instant-Ergebnissen und Mehrwährungsunterstützung."
+      },
+      "enterprise": {
+        "title": "Enterprise-Suche",
+        "description": "Sichere, skalierbare Suche für Unternehmen. SSO, Audit-Logs, SLA-Garantien und dedizierter Support."
+      },
+      "saas": {
+        "title": "SaaS-Suche",
+        "description": "Suche, die sich in Ihr SaaS-Produkt integriert. Scoped Tokens für Mandantentrennung und White-Label-Optionen."
+      }
+    }
+  },
+  "solutionsRetailPage": {
+    "title": "AACsearch für Einzelhandel",
+    "description": "Sofortige Produktsuche, Facettennavigation und Merchandising-Tools für Online-Shops."
+  },
+  "solutionsRetail": {
+    "title": "Konversionen durch bessere Suche steigern",
+    "subtitle": "Shopper finden Produkte, die Ergebnisse schlechterer Suche verbergen. AACsearch bringt sie schneller zum Checkout.",
+    "items": {
+      "instantSearch": {
+        "title": "Sofortige Produktsuche",
+        "description": "Ergebnisse erscheinen beim ersten Tastendruck. Typo-Toleranz bedeutet, dass 'laufschuhe' trotzdem findet."
+      },
+      "facets": {
+        "title": "Facettennavigation",
+        "description": "Preis, Größe, Farbe und Verfügbarkeit – alle mit Echtzeitzählungen. Kunden verfeinern ohne Seitenreload."
+      },
+      "merchandising": {
+        "title": "Merchandising-Tools",
+        "description": "Pinne Bestseller, booste Sale-Artikel und begrabe Auslaufprodukte ohne Code."
+      },
+      "synonyms": {
+        "title": "Produktsynonyme",
+        "description": "Stelle sicher, dass 'Turnschuhe', 'Sneakers' und 'Sportschuhe' dieselben Ergebnisse finden."
+      },
+      "analytics": {
+        "title": "Commerce-Analytik",
+        "description": "Zero-Result-Abfragen, meistgesuchte Begriffe und CTR per Produkt. Dein Leitfaden für Kataloglücken."
+      },
+      "multiCurrency": {
+        "title": "Mehrwährung & Sprachen",
+        "description": "Separate Kollektionen pro Sprache und Währung oder eine gemeinsame mit Locale-Filterung."
+      },
+      "filterNavigation": {
+        "description": "Dynamische Facetten für Kategorie, Marke, Preis, Farbe und Größe. Zählungen aktualisieren sich in Echtzeit, wenn Filter angewendet werden.",
+        "title": "Facettierte Navigation"
+      },
+      "inventory": {
+        "description": "Produktlagerbestandsaktualisierungen innerhalb von Sekunden einlesen. Ausverkaufte Artikel werden automatisch basierend auf Ihrem Verfügbarkeitsfeld herabgestuft.",
+        "title": "Echtzeit-Inventar"
+      },
+      "productSearch": {
+        "description": "Sofortige, tippfehlertolernate Produktsuche. Kunden finden das richtige Produkt, auch wenn sie es falsch schreiben oder Synonyme verwenden.",
+        "title": "Produktsuche"
+      },
+      "catalog": {
+        "title": "Katalogsuche",
+        "description": "Produktkataloge nach Titel, Beschreibung, SKU, Marke und Kategorie durchsuchen. Tippfehlertolerant mit Facettenfilter."
+      },
+      "filters": {
+        "title": "Erweiterte Filter",
+        "description": "Preisschieberegler, Kategoriebäume und Attributauswahl. Alle Facettenzahlen in Echtzeit."
+      },
+      "merch": {
+        "title": "Merchandising",
+        "description": "Beworbene Produkte boosten, Bestseller anheften und saisonale Platzierungen planen."
+      }
+    }
+  },
+  "solutionsMediaPage": {
+    "title": "AACsearch für Medien",
+    "description": "Inhalts-Discovery für Nachrichtenwebsites, Streaming-Plattformen und digitale Verlage."
+  },
+  "solutionsMedia": {
+    "title": "Inhalte finden, die das Publikum begeistern",
+    "subtitle": "Von Nachrichtenarchiven bis zu Video-Bibliotheken – AACsearch indiziert deine Inhalte und liefert Ergebnisse in Millisekunden.",
+    "items": {
+      "articles": {
+        "title": "Artikel & Archivsuche",
+        "description": "Durchsuche Millionen von Artikeln über mehrere Jahre und Themen hinweg."
+      },
+      "video": {
+        "title": "Video- & Podcast-Suche",
+        "description": "Indiziere Transkripte und Metadaten für Suche über Audio- und Videoinhalte."
+      },
+      "recommendations": {
+        "title": "Ähnliche Inhalte",
+        "description": "Zeige verwandte Artikel, Videos und Episoden auf der Basis von Vektordistanz."
+      },
+      "multiformat": {
+        "title": "Multi-Format-Inhalte",
+        "description": "Indiziere Artikel, Galerien, Podcasts und Newsletter in einer einzigen Kollektion."
+      },
+      "trending": {
+        "title": "Trend-Boost",
+        "description": "Booste frisch veröffentlichte oder trending Inhalte in Suchergebnissen."
+      },
+      "subscription": {
+        "title": "Zugangskontrolle",
+        "description": "Kennzeichne Inhalte als Premium oder Metered und filtere basierend auf dem Abonnementstatus des Nutzers."
+      },
+      "analytics": {
+        "description": "Sehen, welche Anfragen keine Ergebnisse haben, welche Themen trending sind und welche Artikel durch Suche vs. direkte Links entdeckt werden.",
+        "title": "Content-Analytics"
+      },
+      "contentSearch": {
+        "description": "Über Schlagzeilen, Fließtext, Tags, Autorenbiografien und Bildunterschriften suchen. Übereinstimmende Ausschnitte in Ergebnissen hervorheben.",
+        "title": "Volltext-Inhaltssuche"
+      },
+      "fullText": {
+        "description": "Konfigurierbare Feldgewichtungen bevorzugen Schlagzeilen gegenüber Fließtext. Aktualität für Nachrichten boosten oder Tiefe für Evergreen-Guides.",
+        "title": "Langform-Relevanz"
+      },
+      "multiLanguage": {
+        "description": "Separate Indizes pro Sprache oder einen einzigen mehrsprachigen Index führen. Locale-bewusstes Synonym-Management inklusive.",
+        "title": "Mehrsprachige Suche"
+      },
+      "realTimeSync": {
+        "description": "Webhook-getriebene Synchronisierung von Contentful, Strapi, WordPress oder Sanity. Veröffentlichte Artikel erscheinen in der Suche in unter einer Sekunde.",
+        "title": "Echtzeit-CMS-Synchronisierung"
+      },
+      "tagging": {
+        "description": "Nach Thema, Format, Datum, Autor oder Inhaltstyp filtern. Verschachtelte Facetten unterstützen komplexe redaktionelle Taxonomien.",
+        "title": "Tag- und Kategoriefacetten"
+      },
+      "categories": {
+        "title": "Kategorienavigation",
+        "description": "Hierarchische Kategorienavigation für Medienseiten. Nach Thema, Region, Inhaltstyp und Veröffentlichungsdatum browsen."
+      },
+      "content": {
+        "title": "Inhaltsentdeckung",
+        "description": "Helfen Sie Lesern, Inhalte zu entdecken. Semantische Suche und Empfehlungen steigern Seitenaufrufe und Engagement."
+      },
+      "freshness": {
+        "title": "Aktualitätsranking",
+        "description": "Zeitverfall-Ranking stellt sicher, dass die neuesten Inhalte zuerst erscheinen."
+      },
+      "multilingual": {
+        "title": "Mehrsprachige Medien",
+        "description": "Inhalte in mehreren Sprachen indexieren und durchsuchen. Sprachspezifische Stoppwortbehandlung."
+      }
+    }
+  },
+  "solutionsFintechPage": {
+    "title": "AACsearch für Fintech",
+    "description": "Sichere, auditfähige Suche über Finanzdokumente, Transaktionen und Compliance-Inhalte."
+  },
+  "solutionsFintech": {
+    "title": "Suche für regulierte Daten",
+    "subtitle": "Finanzprodukte brauchen schnelle, präzise Suche mit klarer Datentrennung. AACsearch liefert beides.",
+    "items": {
+      "compliance": {
+        "title": "Compliance-Dokumentensuche",
+        "description": "Indiziere Regulierungstexte, interne Richtlinien und Audit-Trails für sofortigen Compliance-Lookup."
+      },
+      "transactions": {
+        "title": "Transaktionssuche",
+        "description": "Ermögliche Kunden, ihre Transaktionshistorie nach Händler, Betrag oder Kategorie zu durchsuchen."
+      },
+      "tenantIsolation": {
+        "title": "Mandantenisolierung",
+        "description": "Scoped Tokens stellen sicher, dass jeder Mandant nur seine eigenen Daten sieht – auf Abfrageebene durchgesetzt."
+      },
+      "auditLogs": {
+        "title": "Abfrage-Audit-Log",
+        "description": "Jede Suche wird mit Timestamp, Benutzer-ID und Parametern protokolliert. Exportierbar für Compliance."
+      },
+      "encryption": {
+        "title": "Verschlüsselung im Ruhezustand",
+        "description": "Alle indizierten Daten sind im Ruhezustand mit AES-256 verschlüsselt. Schlüssel-Rotation wird unterstützt."
+      },
+      "regions": {
+        "title": "EU-Datenresidenz",
+        "description": "Wähle die EU-Region (Frankfurt) für DSGVO- und DORA-Konformität."
+      },
+      "accessControls": {
+        "description": "Schreibgeschützte Such-Token ausstellen, die auf bestimmte Kollektionen, Datumsbereiche oder Feldfilter beschränkt sind. Token sind HMAC-signiert und kurzlebig.",
+        "title": "Bereichsbegrenzte Zugriffskontrollen"
+      },
+      "auditLog": {
+        "description": "Jede Suchanfrage, jede Dokumentenaufnahme und jede Admin-Operation wird mit Zeitstempel, Akteur und Org-Kontext protokolliert.",
+        "title": "Prüfpfad"
+      },
+      "gdpr": {
+        "description": "Löschung und Pseudonymisierung auf Feldebene. Anfragen zum Recht auf Vergessenwerden werden innerhalb von Minuten auf Index-Ebene bearbeitet.",
+        "title": "DSGVO & CCPA konform"
+      },
+      "performance": {
+        "description": "Hochfrequente Finanzdaten in Echtzeit indexiert. P99-Suchlatenz bleibt unter 50ms bei jedem Transaktionsvolumen.",
+        "title": "Unter 50ms in großem Maßstab"
+      },
+      "precision": {
+        "title": "Hochpräzise Suche",
+        "description": "Finanzsuche erfordert Präzision. AACsearch liefert exakte Übereinstimmungen für Kontonummern und Transaktions-IDs."
+      },
+      "security": {
+        "title": "Enterprise-Sicherheit",
+        "description": "Verschlüsselung ruhender und übertragener Daten, Audit-Logs, RBAC und IP-Allowlisting."
+      },
+      "speed": {
+        "title": "Sub-50ms Geschwindigkeit",
+        "description": "Finanzhändler benötigen Sub-50ms Suche. AACsearch liefert konstante niedrige Latenz."
+      }
+    }
+  },
+  "solutionsEducationPage": {
+    "title": "AACsearch für Bildung",
+    "description": "Kurssuche, Wissensmanagement und Lernmaterialien-Discovery für EdTech-Plattformen."
+  },
+  "solutionsEducation": {
+    "title": "Wissen leichter entdecken",
+    "subtitle": "Von der Kurskatalog-Suche bis zur Lernmaterial-Discovery – AACsearch macht Bildungsinhalte sofort zugänglich.",
+    "items": {
+      "catalog": {
+        "title": "Kurskatalog-Suche",
+        "description": "Durchsuchbarer Katalog mit Filter nach Thema, Level, Sprache, Dauer und Dozent."
+      },
+      "knowledge": {
+        "title": "Wissensdatenbanken",
+        "description": "Indiziere Lernmaterialien, FAQs und Dokumentation für sofortigen Studenten-Self-Service."
+      },
+      "multilingual": {
+        "title": "Mehrsprachige Inhalte",
+        "description": "Separate Kollektionen pro Sprache oder eine gemeinsame mit Locale-Filterung."
+      },
+      "accessibility": {
+        "title": "Barrierefreiheit",
+        "description": "Das AACsearch-Widget folgt ARIA-Best-Practices für Screen-Reader-Kompatibilität."
+      },
+      "analytics": {
+        "title": "Lern-Analytik",
+        "description": "Sieh, wonach Studenten suchen und was sie nicht finden. Leitfaden für Inhaltslücken."
+      },
+      "scorm": {
+        "title": "LMS-Integration",
+        "description": "Integriere in Moodle, Canvas oder beliebige LMS-Plattformen über die REST-API."
+      },
+      "courseSearch": {
+        "description": "Sofortsuche über Titel, Beschreibungen, Lernziele und Dozentennamen. Tippfehlertolerant für Lerneranfragen.",
+        "title": "Kurs- und Lektionssuche"
+      },
+      "learningPaths": {
+        "description": "Facettierte Suche nach Fach, Niveau, Format, Dauer und Zertifizierung. Verschachtelte Kategorien entsprechen Ihrer Lehrplanstruktur.",
+        "title": "Strukturierte Navigation"
+      },
+      "multiLanguage": {
+        "description": "Inhalte in mehr als 50 Sprachen indexieren. Sprachbewusstes Stemming und separate Synonymbibliotheken pro Locale.",
+        "title": "Mehrsprachiger Inhalt"
+      },
+      "synonyms": {
+        "description": "Fachspezifische Begriffe abbilden: 'ML / maschinelles Lernen', 'JS / JavaScript'. Aus CSV importieren oder im Dashboard verwalten.",
+        "title": "Akademische Synonyme"
+      },
+      "access": {
+        "title": "Zugriffskontrolle",
+        "description": "Rollenbasierte Zugriffskontrollen für Bildungssuche. Studenten, Dozenten und Administratoren sehen verschiedene Inhalte."
+      },
+      "courses": {
+        "title": "Kurssuche",
+        "description": "Suche über Kurskataloge nach Fach, Zeitplan, Dozent und Kredittyp. Echtzeit-Verfügbarkeit und Anmeldestatus."
+      },
+      "lms": {
+        "title": "LMS-Integration",
+        "description": "Integrieren Sie AACsearch mit Moodle, Canvas, Blackboard und anderen LMS-Plattformen."
+      }
+    }
+  },
+  "solutionsHealthcarePage": {
+    "title": "AACsearch für das Gesundheitswesen",
+    "description": "HIPAA-konforme Suche über medizinische Inhalte, klinische Dokumente und Patienteninformationen."
+  },
+  "solutionsHealthcare": {
+    "title": "Suche für medizinische Plattformen",
+    "subtitle": "Klinische Inhalte, Patientenmaterialien und Wissensdatenbanken – AACsearch hält sie durchsuchbar und sicher.",
+    "items": {
+      "clinical": {
+        "title": "Klinische Dokumentensuche",
+        "description": "Indiziere klinische Leitlinien, Protokolle und Formulare für sofortigen Kliniker-Lookup."
+      },
+      "patient": {
+        "title": "Patienteninformations-Portal",
+        "description": "Durchsuchbare Nachsorgeanleitungen, Medikamentenbeipackzettel und FAQ für Patienten."
+      },
+      "hipaa": {
+        "title": "HIPAA-Berücksichtigung",
+        "description": "Kein PII in Suchabfragen oder Antworten. Audit-Logs pro Abfrage für Compliance-Nachweis."
+      },
+      "medicalCoding": {
+        "title": "ICD/CPT-Code-Suche",
+        "description": "Typolerante Suche über ICD-10- und CPT-Code-Datenbanken für klinisches Coding."
+      },
+      "tenantIsolation": {
+        "title": "Abteilungsisolierung",
+        "description": "Scoped Tokens sichern Abteilungs- oder Einrichtungsdatentrennung auf Abfrageebene."
+      },
+      "multilingual": {
+        "title": "Mehrsprachige Inhalte",
+        "description": "Patienteninformationen in mehreren Sprachen durchsuchbar machen – mit Locale-basierten Kollektionen."
+      },
+      "auditLog": {
+        "description": "Jede Anfrage, jeder Ergebnisklick und jede Admin-Aktion mit Zeitstempel und Benutzerkontext für Compliance-Überprüfung protokolliert.",
+        "title": "Prüfpfad"
+      },
+      "clinicalTerms": {
+        "description": "Synonymbibliotheken für ICD-10-Codes, Medikamentennamen und medizinische Zustände. Unterstützt Laien- und klinische Terminologie im selben Index.",
+        "title": "Klinische Terminologie"
+      },
+      "hipaaReady": {
+        "description": "Tenant-Isolation, bereichsbegrenzte Zugriffstoken und kein PII-Logging in der Suchanalytics. Infrastruktur konfiguriert für HIPAA-Workloads.",
+        "title": "HIPAA-konforme Architektur"
+      },
+      "multiLanguage": {
+        "description": "Patientenseitige Suche in der bevorzugten Sprache des Nutzers. Spracherkennung und locale-bewusstes Such-Widget.",
+        "title": "Mehrsprachige Unterstützung"
+      },
+      "realTimeUpdates": {
+        "description": "Klinische Akten und Apothekendaten in unter einer Sekunde indexiert. Arzneimitteländerungen erscheinen sofort ohne vollständigen Re-Index.",
+        "title": "Echtzeit-Datensatzaktualisierungen"
+      },
+      "medical": {
+        "title": "Medizinische Suche",
+        "description": "Medizinische Literatur, Arzneimitteldatenbanken und klinische Studiendaten durchsuchen. Semantische Suche mit RAG."
+      }
+    }
+  },
+  "solutionsGamingPage": {
+    "title": "AACsearch für Gaming",
+    "description": "Item-Suche, Spieler-Matchmaking und Community-Inhalts-Discovery für Gaming-Plattformen."
+  },
+  "solutionsGaming": {
+    "title": "Schnelle Suche für Gaming-Plattformen",
+    "subtitle": "Ob Item-Shops, Game-Wikis oder Spieler-Directories – AACsearch liefert Echtzeitergebnisse für hohe Gleichzeitigkeit.",
+    "items": {
+      "items": {
+        "title": "Item-Datenbank-Suche",
+        "description": "Durchsuche Game-Items, Skins, Waffen und Ausrüstung mit typoleranten Abfragen und attributbasierten Facetten."
+      },
+      "players": {
+        "title": "Spieler-Discovery",
+        "description": "Suche nach Spielernamen, Rängen, Server und Spielstil. Nützlich für LFG- und Matchmaking-Features."
+      },
+      "wiki": {
+        "title": "Game-Wiki-Suche",
+        "description": "Mache dein Game-Wiki sofort durchsuchbar. Strategie-Guides, Lore und Patch-Notes findbar in Sekunden."
+      },
+      "realtime": {
+        "title": "Echtzeit-Updates",
+        "description": "Item-Stats und Spielerdaten aktualisieren sich in Echtzeit. Kein Cache-Invalidierungsproblem."
+      },
+      "highConcurrency": {
+        "title": "Hohe Gleichzeitigkeit",
+        "description": "AACsearch skaliert horizontal. Spitzen während Game-Releases oder Events werden automatisch aufgefangen."
+      },
+      "widget": {
+        "title": "Anpassbares Widget",
+        "description": "Das AACsearch-Widget ist vollständig stilisierbar. Passe es dem visuellen Design deines Spiels an."
+      },
+      "analytics": {
+        "description": "Sehen, wonach Spieler suchen, welche Anfragen in Sackgassen enden und wie die Suche Marktplatz-Konversionen fördert.",
+        "title": "Spiel-Analytics"
+      },
+      "geoSearch": {
+        "description": "Spieler und Server innerhalb einer konfigurierbaren Entfernung anzeigen. Radius- und Bounding-Box-Geoanfragen out of the box unterstützt.",
+        "title": "Geo-abgestimmte Suche"
+      },
+      "itemSearch": {
+        "description": "Über Millionen von Items nach Seltenheit, Typ, Stats und Preis suchen. Filter und Sortierungen aktualisieren sich in Echtzeit, wenn sich der Markt bewegt.",
+        "title": "Item- und Loot-Suche"
+      },
+      "multiSearch": {
+        "description": "Eine einzige Anfrage gleichzeitig über Items, Spieler und Gilden ausführen. Ein Round-Trip, zusammengeführte Ergebnisse, minimale Latenz.",
+        "title": "Multi-Index-Anfragen"
+      },
+      "playerSearch": {
+        "description": "Spieler nach Benutzername, Rang, Region und Spielstil finden. Unterstützt Präfix-Matching für Autocomplete in Lobby-Screens.",
+        "title": "Spieler-Profilsuche"
+      },
+      "realTimeSync": {
+        "description": "Index-Updates ausgelöst durch Spielereignisse — Item-Drops, Rangänderungen, Marktplatz-Listings — kommen in unter einer Sekunde an.",
+        "title": "Echtzeit-Ereignissynchronisierung"
+      },
+      "leaderboard": {
+        "title": "Bestenlistensuche",
+        "description": "Bestenlisten nach Spielername, Rang, Punktzahl, Gilde und Region durchsuchen und filtern."
+      },
+      "store": {
+        "title": "In-Game-Store-Suche",
+        "description": "Suche im In-Game-Item-Store. Skins, Waffen, Charaktere und Bundles nach Name, Typ, Seltenheit und Preis durchsuchen."
+      }
+    }
+  }
 }

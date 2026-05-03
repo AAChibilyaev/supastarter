@@ -15,7 +15,7 @@ export type ActivationEventKind =
 	| "FIRST_PAYMENT";
 
 /** All known activation event types in order. */
-export const ALL_ACTIVATION_EVENTS: ActivationEventType[] = [
+export const ALL_ACTIVATION_EVENTS: ActivationEventKind[] = [
 	"EMAIL_VERIFIED",
 	"FIRST_COLLECTION",
 	"FIRST_DOCUMENT",

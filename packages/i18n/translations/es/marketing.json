@@ -149,6 +149,11 @@
 		},
 		"logos": {
 			"title": "Confiado por equipos innovadores"
+		},
+		"trustBadges": {
+			"g2": "on G2",
+			"capterra": "on Capterra",
+			"companies": "companies"
 		}
 	},
 	"notFound": {

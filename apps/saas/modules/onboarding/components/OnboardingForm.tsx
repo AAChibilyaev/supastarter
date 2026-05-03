@@ -1,8 +1,11 @@
 "use client";
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { authClient } from "@repo/auth/client";
 import { Progress } from "@repo/ui/components/progress";
 import { useRouter } from "@shared/hooks/router";
 import { clearCache } from "@shared/lib/cache";
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -19,6 +22,9 @@ export function OnboardingForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [indexSlug, setIndexSlug] = useState("");
+	const { activeOrganization } = useActiveOrganization();
+	const organizationId = activeOrganization?.id;
+	const recordEventMutation = useMutation(orpc.onboarding.recordEvent.mutationOptions());
 
 	const stepSearchParam = searchParams.get("step");
 	const redirectTo = searchParams.get("redirectTo");
@@ -41,6 +47,14 @@ export function OnboardingForm() {
 		router.replace(redirectTo ?? "/");
 	};
 
+	const recordEvent = (eventType: string) => {
+		if (!organizationId) return;
+		recordEventMutation.mutate({
+			organizationId,
+			eventType,
+		});
+	};
+
 	const steps = useMemo(
 		() => {
 			const allSteps: { component: React.ReactNode }[] = [
@@ -61,7 +75,10 @@ export function OnboardingForm() {
 					component: (
 						<OnboardingAddDocumentsStep
 							indexSlug={indexSlug}
-							onCompleted={() => setStep(4)}
+							onCompleted={() => {
+								recordEvent("FIRST_DOCUMENT");
+								setStep(4);
+							}}
 						/>
 					),
 				},
@@ -69,7 +86,10 @@ export function OnboardingForm() {
 					component: (
 						<OnboardingInstallWidgetStep
 							indexSlug={indexSlug}
-							onCompleted={() => setStep(5)}
+							onCompleted={() => {
+								recordEvent("WIDGET_EMBEDDED");
+								setStep(5);
+							}}
 						/>
 					),
 				},

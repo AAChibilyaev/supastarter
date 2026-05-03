@@ -2,7 +2,6 @@ import { auth } from "@repo/auth";
 import { applySubscriptionToWallet } from "@repo/billing-wallet";
 import { db } from "@repo/database";
 import { sendEmail } from "@repo/mail";
-import { startRegionHealthMonitor } from "@repo/search";
 import {
 	getMetrics,
 	httpMetricsMiddleware,
@@ -22,6 +21,7 @@ import {
 } from "@repo/payments";
 import { config as paymentsConfig } from "@repo/payments/config";
 import { invalidatePlanCache } from "@repo/payments/lib/entitlements";
+import { startRegionHealthMonitor } from "@repo/search";
 import { shopifyApp } from "@repo/shopify-connector";
 import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";

@@ -5,6 +5,13 @@ import { suggestSynonyms, type AISynonymSuggestionsResult } from "@repo/nlp";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -71,6 +78,7 @@ async function sampleCollectionText(
 }
 
 export const suggestAISynonyms = protectedProcedure
+	.use(creditGate("auto_synonym_generation", CREDIT_RATES.auto_synonym_generation))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/synonyms/suggest",
@@ -101,35 +109,51 @@ export const suggestAISynonyms = protectedProcedure
 			cached: z.boolean(),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationAdmin(input.organizationId, user);
+	.handler(async ({ input, context }) => {
+		const { creditReservationId } = context as unknown as CreditGateContext;
+		await requireOrganizationAdmin(input.organizationId, context.user);
 		await requireSearchIndex(input.organizationId, input.slug);
 
-		const sampleText = await sampleCollectionText(input.organizationId, input.slug);
+		try {
+			const sampleText = await sampleCollectionText(input.organizationId, input.slug);
 
-		logger.info("suggestAISynonyms: generating suggestions", {
-			organizationId: input.organizationId,
-			slug: input.slug,
-			rootWord: input.rootWord,
-			locale: input.locale,
-			hasSampleText: sampleText.length > 0,
-		});
+			logger.info("suggestAISynonyms: generating suggestions", {
+				organizationId: input.organizationId,
+				slug: input.slug,
+				rootWord: input.rootWord,
+				locale: input.locale,
+				hasSampleText: sampleText.length > 0,
+			});
 
-		const result = await suggestSynonyms(input.rootWord, sampleText, input.locale);
+			const result = await suggestSynonyms(input.rootWord, sampleText, input.locale);
 
-		return {
-			suggestions: result.suggestions.map((s) => ({
-				word: s.word,
-				score: s.score,
-				rationale: s.rationale,
-			})),
-			rootWord: result.rootWord,
-			locale: result.locale,
-			cached: result.cached,
-		};
+			// Commit flat-fee on success
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "auto_synonym_generation",
+				provider: "openai",
+				model: "gpt-4o-mini",
+				flatFeeKopecks: CREDIT_RATES.auto_synonym_generation,
+			});
+
+			return {
+				suggestions: result.suggestions.map((s) => ({
+					word: s.word,
+					score: s.score,
+					rationale: s.rationale,
+				})),
+				rootWord: result.rootWord,
+				locale: result.locale,
+				cached: result.cached,
+			};
+		} catch (err) {
+			await releaseCreditReservation(creditReservationId);
+			throw err;
+		}
 	});
 
 export const suggestAIGlobalSynonyms = protectedProcedure
+	.use(creditGate("auto_synonym_generation", CREDIT_RATES.auto_synonym_generation))
 	.route({
 		method: "POST",
 		path: "/search/global-synonyms/suggest",
@@ -159,51 +183,66 @@ export const suggestAIGlobalSynonyms = protectedProcedure
 			cached: z.boolean(),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationAdmin(input.organizationId, user);
+	.handler(async ({ input, context }) => {
+		const { creditReservationId } = context as unknown as CreditGateContext;
+		await requireOrganizationAdmin(input.organizationId, context.user);
 
-		// Sample text from all collections in the org (up to 5 docs across all collections)
-		let sampleText = "";
 		try {
-			const docs = await db.collectionDocument.findMany({
-				where: { organizationId: input.organizationId },
-				take: 5,
-				orderBy: { createdAt: "desc" },
-			});
+			// Sample text from all collections in the org (up to 5 docs across all collections)
+			let sampleText = "";
+			try {
+				const docs = await db.collectionDocument.findMany({
+					where: { organizationId: input.organizationId },
+					take: 5,
+					orderBy: { createdAt: "desc" },
+				});
 
-			const textParts: string[] = [];
-			for (const doc of docs) {
-				const data = doc.data as Record<string, unknown>;
-				const values: string[] = [];
-				for (const val of Object.values(data)) {
-					if (typeof val === "string" && val.length > 0) {
-						values.push(val);
-					} else if (typeof val === "number" || typeof val === "boolean") {
-						values.push(String(val));
+				const textParts: string[] = [];
+				for (const doc of docs) {
+					const data = doc.data as Record<string, unknown>;
+					const values: string[] = [];
+					for (const val of Object.values(data)) {
+						if (typeof val === "string" && val.length > 0) {
+							values.push(val);
+						} else if (typeof val === "number" || typeof val === "boolean") {
+							values.push(String(val));
+						}
+					}
+					if (values.length > 0) {
+						textParts.push(values.join(". "));
 					}
 				}
-				if (values.length > 0) {
-					textParts.push(values.join(". "));
-				}
+				sampleText = textParts.join("\n\n---\n\n").slice(0, 4000);
+			} catch (err) {
+				logger.warn("suggestAIGlobalSynonyms: failed to sample docs", {
+					organizationId: input.organizationId,
+					err,
+				});
 			}
-			sampleText = textParts.join("\n\n---\n\n").slice(0, 4000);
-		} catch (err) {
-			logger.warn("suggestAIGlobalSynonyms: failed to sample docs", {
-				organizationId: input.organizationId,
-				err,
+
+			const result = await suggestSynonyms(input.rootWord, sampleText, input.locale);
+
+			// Commit flat-fee on success
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "auto_synonym_generation",
+				provider: "openai",
+				model: "gpt-4o-mini",
+				flatFeeKopecks: CREDIT_RATES.auto_synonym_generation,
 			});
+
+			return {
+				suggestions: result.suggestions.map((s) => ({
+					word: s.word,
+					score: s.score,
+					rationale: s.rationale,
+				})),
+				rootWord: result.rootWord,
+				locale: result.locale,
+				cached: result.cached,
+			};
+		} catch (err) {
+			await releaseCreditReservation(creditReservationId);
+			throw err;
 		}
-
-		const result = await suggestSynonyms(input.rootWord, sampleText, input.locale);
-
-		return {
-			suggestions: result.suggestions.map((s) => ({
-				word: s.word,
-				score: s.score,
-				rationale: s.rationale,
-			})),
-			rootWord: result.rootWord,
-			locale: result.locale,
-			cached: result.cached,
-		};
 	});

@@ -75,6 +75,9 @@ export const CREDIT_RATES = {
 
 	/** Conversational assistant turn — per message (5 credits / 500 kopecks) */
 	conversation_turn: BigInt(500),
+
+	/** AI-powered synonym generation — per root word (2 credits / 200 kopecks) */
+	auto_synonym_generation: BigInt(200),
 } as const;
 
 export type CreditOperation = keyof typeof CREDIT_RATES;

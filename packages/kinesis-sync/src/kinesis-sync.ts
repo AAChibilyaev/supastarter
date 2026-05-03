@@ -331,12 +331,13 @@ export async function startKinesisSync(
 			// Poll loop
 			while (running && shardIterator) {
 				try {
-					const response: import("@aws-sdk/client-kinesis").GetRecordsCommandOutput = await kinesisClient.send(
-						new GetRecordsCommand({
-							ShardIterator: shardIterator,
-							Limit: bp.maxRecordsPerCall,
-						}),
-					);
+					const response: import("@aws-sdk/client-kinesis").GetRecordsCommandOutput =
+						await kinesisClient.send(
+							new GetRecordsCommand({
+								ShardIterator: shardIterator,
+								Limit: bp.maxRecordsPerCall,
+							}),
+						);
 
 					const records = response.Records ?? [];
 					shardIterator = response.NextShardIterator;
@@ -393,7 +394,8 @@ export async function startKinesisSync(
 									log(`Failed to process ${failed.length} events in batch`);
 									for (const f of failed) {
 										const dlqRecord = records.find(
-											(r: import("@aws-sdk/client-kinesis")._Record) => r.SequenceNumber === f.event.sequenceNumber,
+											(r: import("@aws-sdk/client-kinesis")._Record) =>
+												r.SequenceNumber === f.event.sequenceNumber,
 										);
 										if (dlqRecord) {
 											await sendToDlq(dlqRecord, shardId, f.error);

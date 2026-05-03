@@ -15,6 +15,7 @@ import { useState } from "react";
 import { EmptyState } from "../cards/EmptyState";
 import { CurationsPanel } from "../panels/CurationsPanel";
 import { SpellCorrectionPanel } from "../panels/SpellCorrectionPanel";
+import { StemmingPanel } from "../panels/StemmingPanel";
 import { StopwordsPanel } from "../panels/StopwordsPanel";
 import { SynonymsPanel } from "../panels/SynonymsPanel";
 
@@ -55,9 +56,8 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 						<TabsTrigger value="synonyms">{t("search.synonyms.tab")}</TabsTrigger>
 						<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
 						<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
-						<TabsTrigger value="spellCorrection">
-							{t("search.spellCorrection.tab")}
-						</TabsTrigger>
+						<TabsTrigger value="stemming">{t("search.stemming.tab")}</TabsTrigger>
+						<TabsTrigger value="spellCorrection">{t("search.spellCorrection.tab")}</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">
@@ -70,6 +70,10 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 
 					<TabsContent value="stopwords">
 						<StopwordsPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+
+					<TabsContent value="stemming">
+						<StemmingPanel organizationId={organizationId} slug={slug} />
 					</TabsContent>
 
 					<TabsContent value="spellCorrection">

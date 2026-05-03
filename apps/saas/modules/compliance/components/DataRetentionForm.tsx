@@ -104,10 +104,16 @@ export function DataRetentionForm() {
 		key: K,
 		value: RetentionConfigState[K],
 	) => {
-		setFormState((prev) => ({
-			...(prev ?? config ?? {}),
-			[key]: value,
-		}));
+		setFormState((prev) => {
+			const base = prev ?? {
+				searchUsageRetentionDays: config?.searchUsageRetentionDays ?? 365,
+				auditLogRetentionDays: config?.auditLogRetentionDays ?? 365,
+				ingestBufferRetentionDays: config?.ingestBufferRetentionDays ?? 90,
+				autoDeleteEnabled: config?.autoDeleteEnabled ?? true,
+				deletionSchedule: (config?.deletionSchedule ?? "daily") as "daily" | "weekly" | "monthly",
+			};
+			return { ...base, [key]: value };
+		});
 	};
 
 	if (isLoading) {

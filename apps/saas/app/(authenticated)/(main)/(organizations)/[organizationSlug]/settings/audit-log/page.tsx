@@ -3,7 +3,7 @@ import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { OrgAuditLogView } from "../../../../../../modules/compliance/components/OrgAuditLogView";
+import { OrgAuditLogView } from "../../../../../../../modules/compliance/components/OrgAuditLogView";
 
 export async function generateMetadata({
 	params,

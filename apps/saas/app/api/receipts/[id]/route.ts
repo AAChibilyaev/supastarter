@@ -56,7 +56,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 		const html = generateReceiptHtml(
 			{
 				id: order.id,
-				amount: order.amountKopecks,
+				amount: Number(order.amountKopecks),
 				currency: order.currency,
 				status: order.status,
 				createdAt: order.createdAt,

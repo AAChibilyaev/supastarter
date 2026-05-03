@@ -1,0 +1,45 @@
+{
+	"name": "@aacsearch/postgres-sync",
+	"version": "0.1.0",
+	"description": "PostgreSQL real-time sync connector for AACsearch — sync PG tables to AACsearch Engine via pg_notify, polling, or CDC",
+	"keywords": [
+		"aacsearch",
+		"cdc",
+		"connector",
+		"postgres",
+		"postgresql",
+		"search",
+		"sync"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nousresearch/aacsearch.git"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"type-check": "tsc --noEmit",
+		"prepublish": "pnpm build"
+	},
+	"dependencies": {
+		"pg": "^8.13.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"@types/pg": "^8.11.0",
+		"typescript": "^6.0.0"
+	}
+}

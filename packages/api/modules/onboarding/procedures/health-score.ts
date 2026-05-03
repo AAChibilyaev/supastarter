@@ -1,4 +1,3 @@
-import { ORPCError } from "@orpc/client";
 import { getActivationEvents } from "@repo/database";
 import { z } from "zod";
 
@@ -6,18 +5,19 @@ import { protectedProcedure } from "../../../orpc/procedures";
 
 // ─── Weight configuration ─────────────────────────────────────
 
+/** Default weights per milestone (sums to 100). */
 const HEALTH_WEIGHTS: Record<string, number> = {
 	EMAIL_VERIFIED: 10,
 	FIRST_COLLECTION: 15,
 	FIRST_DOCUMENT: 20,
-	FIRST_SEARCH: 15,
+	FIRST_SEARCH: 20,
 	WIDGET_EMBEDDED: 15,
 	FIRST_TEAM_MEMBER: 10,
 	FIRST_INTEGRATION: 5,
 	FIRST_PAYMENT: 5,
 };
 
-const TOTAL_WEIGHT = Object.values(HEALTH_WEIGHTS).reduce((sum, w) => sum + w, 0); // 95 — scale up to 100
+const TOTAL_WEIGHT = Object.values(HEALTH_WEIGHTS).reduce((sum, w) => sum + w, 0); // 100
 
 // ─── Procedure ────────────────────────────────────────────────
 
@@ -36,7 +36,7 @@ export const healthScore = protectedProcedure
 			organizationId: z.string(),
 		}),
 	)
-	.handler(async ({ input: { organizationId }, context: { user } }) => {
+	.handler(async ({ input: { organizationId } }) => {
 		const events = await getActivationEvents(organizationId);
 
 		const completedSet = new Set(events.map((e) => e.eventType));

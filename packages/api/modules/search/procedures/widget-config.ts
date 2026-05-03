@@ -5,13 +5,27 @@ import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
+const facetConfigSchema = z.object({
+	fieldName: z.string(),
+	displayName: z.string(),
+	sortOrder: z.enum(["count", "alpha"]).default("count"),
+	maxValues: z.number().min(1).max(1000).default(10),
+	multiSelect: z.boolean().default(true),
+	type: z.enum(["checkbox", "range", "toggle", "select"]).default("checkbox"),
+	collapsible: z.boolean().default(true),
+	rangeMin: z.number().optional(),
+	rangeMax: z.number().optional(),
+	numberFormat: z.enum(["number", "currency", "custom"]).optional(),
+	customFormat: z.string().optional(),
+});
+
 const widgetConfigSchema = z.object({
 	facetFields: z.array(z.string()).default([]),
+	facetConfigs: z.array(facetConfigSchema).default([]),
 	defaultSortField: z.string().optional(),
 	showPrices: z.boolean().default(true),
 	showImages: z.boolean().default(true),
 	theme: z.enum(["light", "dark", "auto"]).default("auto"),
-	// New fields for widget configurator
 	queryBy: z.array(z.string()).default([]),
 	placeholder: z.string().default("Search..."),
 	resultsPerPage: z.number().min(5).max(50).default(20),
@@ -20,6 +34,20 @@ const widgetConfigSchema = z.object({
 	searchButtonText: z.string().default("Search"),
 	accentColor: z.string().default("#6366f1"),
 	keyboardShortcut: z.boolean().default(true),
+	// Autocomplete settings
+	autocompleteEnabled: z.boolean().default(true),
+	autocompleteSource: z.enum(["analytics", "instant"]).default("analytics"),
+	autocompleteResults: z.number().min(3).max(10).default(5),
+	autocompleteDebounce: z.number().min(100).max(500).default(200),
+	autocompleteMinQuery: z.number().min(1).max(3).default(2),
+	autocompleteThumbnails: z.boolean().default(false),
+	autocompleteHighlight: z.boolean().default(true),
+	autocompleteRecent: z.boolean().default(false),
+	// Voice search settings
+	voiceEnabled: z.boolean().default(false),
+	voiceLanguage: z.string().default("auto"),
+	voiceTrigger: z.enum(["mic", "doubleTap"]).default("mic"),
+	voiceFallbackMessage: z.string().default(""),
 });
 
 export const getWidgetConfig = protectedProcedure

@@ -1105,9 +1105,9 @@
 			"tab": "Analytics",
 			"title": "Analytics",
 			"description": "Track search usage, top queries, zero-results, and trends.",
-			"totalSearches": "Total searches",
-			"totalSessions": "Sessions",
-			"ctr": "CTR",
+			"totalSearches": "Total Searches",
+			"totalSessions": "Widget Opens",
+			"ctr": "Click-through Rate",
 			"zeroResults": "Zero results",
 			"zeroResultRate": "Zero-result rate",
 			"comingSoon": "Coming soon",
@@ -1127,7 +1127,7 @@
 			"failedSyncJobs": "Failed sync jobs",
 			"failed": "failed",
 			"retentionBanner": "Your {plan} plan retains analytics data for {days} days. Select a shorter period to see data.",
-			"noData": "No data available for this period.",
+			"noData": "No analytics data yet",
 			"noDataDescription": "Analytics data will appear once your search indexes start receiving queries.",
 			"freePlan": "Free",
 			"queryPerformance": "Query Performance",
@@ -1205,7 +1205,10 @@
 			"voiceTrigger": "Trigger",
 			"voiceTriggerMic": "Mic button",
 			"voiceTriggerDoubleTap": "Double tap",
-			"voiceFallback": "Fallback message if browser not supported"
+			"voiceFallback": "Fallback message if browser not supported",
+			"voiceDisabled": "Voice search is disabled",
+			"analyticsWidgetMetrics": "Widget Performance",
+			"analyticsWidgetDesc": "Search metrics from the widget installation."
 		},
 		"configurator": {
 			"pageTitle": "Search Configurator",
@@ -2372,6 +2375,32 @@
 			"autoEmbedApiUrlHint": "Custom endpoint for OpenAI-compatible embedding services",
 			"autoEmbedToggle": "Enable auto-embedding",
 			"autoEmbedWarning": "Auto-embedded vectors are recalculated only when source fields change. A full reindex is required for existing documents."
+		},
+		"nohitsQueries": {
+			"title": "No-Hit Queries Rules",
+			"description": "Capture search queries that return zero results into a dedicated collection for analysis.",
+			"tab": "No-Hit Queries",
+			"createRule": "Create No-Hit Rule",
+			"createDialogTitle": "Create No-Hit Queries Rule",
+			"createDialogDesc": "Log search queries that return zero results into a collection for analysis.",
+			"ruleName": "Rule Name",
+			"sourceCollection": "Source Collection",
+			"selectCollection": "Select collection",
+			"destinationCollection": "Destination Collection",
+			"destinationHint": "Queries with zero results are logged to this collection.",
+			"cancel": "Cancel",
+			"create": "Create Rule",
+			"created": "No-hit queries rule created.",
+			"createError": "Failed to create no-hit queries rule.",
+			"deleted": "No-hit queries rule deleted.",
+			"deleteError": "Failed to delete no-hit queries rule.",
+			"empty": "No no-hit queries rules configured. Create one to start capturing zero-result queries.",
+			"name": "Name",
+			"actions": "Actions",
+			"required": "Please fill in all required fields.",
+			"deleteConfirmTitle": "Delete no-hit queries rule?",
+			"deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
+			"deleteConfirmAction": "Delete"
 		}
 	},
 	"sdks": {
@@ -2545,5 +2574,16 @@
 			"cta": "Get Started Free",
 			"socialProof": "Trusted by 100+ companies worldwide"
 		}
+	},
+	"widget": {
+		"voiceDisabled": "Voice search is disabled",
+		"analyticsWidgetMetrics": "Widget Performance",
+		"analyticsWidgetDesc": "Search metrics from the widget installation."
+	},
+	"analytics": {
+		"totalSearches": "Total Searches",
+		"totalSessions": "Widget Opens",
+		"ctr": "Click-through Rate",
+		"noData": "No analytics data yet"
 	}
 }

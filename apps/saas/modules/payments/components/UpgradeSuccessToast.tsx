@@ -1,34 +1,68 @@
 "use client";
 
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
+import { useRouter } from "@shared/hooks/router";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
-import { toast } from "sonner";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * Client component that shows a success toast when returning from Stripe Checkout
- * after a successful plan upgrade.
+ * Client component that shows a success alert when returning from Stripe Checkout
+ * after a successful plan upgrade and redirects to the dashboard after 3 seconds.
  *
  * Must be rendered inside Suspense boundaries (useSearchParams requirement).
  */
 export function UpgradeSuccessToast() {
 	const t = useTranslations("settings.billing");
+	const router = useRouter();
 	const searchParams = useSearchParams();
+	const [visible, setVisible] = useState(false);
+	const [countdown, setCountdown] = useState(3);
 	const hasShown = useRef(false);
 
+	const upgradeSuccess = searchParams.get("upgrade_success") === "true";
+	const planName = searchParams.get("plan");
+
 	useEffect(() => {
-		if (hasShown.current) return;
-		const upgradeSuccess = searchParams.get("upgrade_success");
-		if (upgradeSuccess === "true") {
-			hasShown.current = true;
-			toast.success(t("upgradeSuccess"));
+		if (!upgradeSuccess || hasShown.current) return;
+		hasShown.current = true;
+		setVisible(true);
 
-			// Clean up the URL param without full page reload
-			const url = new URL(window.location.href);
-			url.searchParams.delete("upgrade_success");
-			window.history.replaceState({}, "", url.toString());
-		}
-	}, [searchParams, t]);
+		// Start countdown and redirect
+		const timer = setInterval(() => {
+			setCountdown((prev) => {
+				if (prev <= 1) {
+					clearInterval(timer);
 
-	return null;
+					// Clean up the URL param without full page reload
+					const url = new URL(window.location.href);
+					url.searchParams.delete("upgrade_success");
+					url.searchParams.delete("plan");
+					window.history.replaceState({}, "", url.toString());
+
+					router.push("/");
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
+
+		return () => clearInterval(timer);
+	}, [upgradeSuccess, router]);
+
+	if (!visible || !upgradeSuccess) return null;
+
+	return (
+		<Alert className="mb-6 border-emerald-500/50 bg-emerald-50 dark:bg-emerald-950/20">
+			<AlertTitle className="text-lg font-semibold text-emerald-800 dark:text-emerald-300">
+				{t("upgradeSuccessTitle")}
+			</AlertTitle>
+			<AlertDescription className="text-emerald-700 dark:text-emerald-400">
+				{planName ? t("upgradeSuccessWithPlan", { plan: planName }) : t("upgradeSuccess")}
+				<span className="ml-2 text-sm text-muted-foreground">
+					{t("redirectingIn", { seconds: countdown })}
+				</span>
+			</AlertDescription>
+		</Alert>
+	);
 }

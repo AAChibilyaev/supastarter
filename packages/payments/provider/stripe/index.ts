@@ -696,6 +696,15 @@ export const webhookHandler: WebhookHandler = async (req) => {
 								),
 							),
 						);
+
+						// Invalidate plan cache so updated limits take effect immediately
+						if (purchaseAfterUpgrade.organizationId) {
+							invalidatePlanCache(purchaseAfterUpgrade.organizationId);
+						}
+						logger.info("Plan cache invalidated after checkout upgrade", {
+							subscriptionId: currentSubscriptionId,
+							organizationId: purchaseAfterUpgrade.organizationId,
+						});
 					}
 
 					break;

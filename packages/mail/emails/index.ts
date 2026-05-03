@@ -6,12 +6,15 @@ import { DripDay14 } from "./DripDay14";
 import { DripDay21 } from "./DripDay21";
 import { EmailVerification } from "./EmailVerification";
 import { ForgotPassword } from "./ForgotPassword";
+import { InvoicePaid } from "./InvoicePaid";
 import { MagicLink } from "./MagicLink";
 import { NewUser } from "./NewUser";
 import { Notification } from "./Notification";
 import { OrganizationInvitation } from "./OrganizationInvitation";
+import { PaymentFailed } from "./PaymentFailed";
 import { QuotaHardCapWarning } from "./QuotaHardCapWarning";
 import { QuotaSoftCapWarning } from "./QuotaSoftCapWarning";
+import { SubscriptionCancelled } from "./SubscriptionCancelled";
 import { SubscriptionUpgrade } from "./SubscriptionUpgrade";
 
 export const mailTemplates = {
@@ -30,4 +33,7 @@ export const mailTemplates = {
 	dripDay14: DripDay14,
 	dripDay21: DripDay21,
 	subscriptionUpgrade: SubscriptionUpgrade,
+	invoicePaid: InvoicePaid,
+	paymentFailed: PaymentFailed,
+	subscriptionCancelled: SubscriptionCancelled,
 } as const;

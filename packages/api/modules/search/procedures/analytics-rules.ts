@@ -64,6 +64,35 @@ const logParamsSchema = z.object({
 	destination: logDestinationConfigSchema,
 });
 
+// ── No-Hits Queries rule params ─────────────────────────────────────
+//
+// nohits_queries rules capture search queries that return zero results
+// and logs them into a dedicated collection for analysis/optimisation.
+//
+// Typesense docs: https://typesense.org/docs/30.0/api/analytics-rule.html
+
+const nohitsQueriesSourceSchema = z.object({
+	collections: z
+		.array(z.string().min(1))
+		.min(1)
+		.describe("Collections to watch for no-hit queries"),
+});
+
+const nohitsQueriesDestinationSchema = z.object({
+	collection: z
+		.string()
+		.min(1)
+		.describe("Destination collection where no-hit queries are logged"),
+});
+
+const nohitsQueriesParamsSchema = z.object({
+	source: nohitsQueriesSourceSchema,
+	destination: nohitsQueriesDestinationSchema,
+});
+
+type NoHitsQueriesParams = z.infer<typeof nohitsQueriesParamsSchema>;
+export type { NoHitsQueriesParams };
+
 // Keep loose schema for aggregation rules
 const aggregationParamsSchema = z.record(z.string(), z.unknown());
 
@@ -72,7 +101,7 @@ type LogParams = z.infer<typeof logParamsSchema>;
 
 const analyticsRuleSchema = z.object({
 	name: z.string().min(1).max(200),
-	type: z.enum(["counter", "aggregation", "log"]),
+	type: z.enum(["counter", "aggregation", "log", "nohits_queries"]),
 	params: z.record(z.string(), z.unknown()),
 });
 
@@ -81,8 +110,13 @@ export type AnalyticsRule = z.infer<typeof analyticsRuleSchema>;
 const createRuleInputSchema = z.object({
 	organizationId: z.string(),
 	name: z.string().min(1).max(200),
-	type: z.enum(["counter", "aggregation", "log"]),
-	params: z.union([counterParamsSchema, aggregationParamsSchema, logParamsSchema]),
+	type: z.enum(["counter", "aggregation", "log", "nohits_queries"]),
+	params: z.union([
+		counterParamsSchema,
+		aggregationParamsSchema,
+		logParamsSchema,
+		nohitsQueriesParamsSchema,
+	]),
 });
 
 function parseRuleParams(rule: {
@@ -93,7 +127,7 @@ function parseRuleParams(rule: {
 }): AnalyticsRule {
 	return {
 		name: rule.name,
-		type: rule.type as "counter" | "aggregation" | "log",
+		type: rule.type as "counter" | "aggregation" | "log" | "nohits_queries",
 		params: rule.params as Record<string, unknown>,
 	};
 }
@@ -209,4 +243,15 @@ export function parseLogRuleParams(params: Record<string, unknown>): LogParams |
 	return result.success ? result.data : null;
 }
 
-export { type CounterParams, type LogParams };
+/**
+ * Parse nohits_queries rule params from a generic analytics rule.
+ * Returns null if the rule is not a nohits_queries type or has unexpected shape.
+ */
+export function parseNohitsQueriesRuleParams(
+	params: Record<string, unknown>,
+): NoHitsQueriesParams | null {
+	const result = nohitsQueriesParamsSchema.safeParse(params);
+	return result.success ? result.data : null;
+}
+
+export { type CounterParams, type LogParams, type NoHitsQueriesParams };

@@ -2,9 +2,12 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import { WidgetAnalyticsPanel } from "@search/components/panels/WidgetAnalyticsPanel";
+import { WidgetAutocompletePanel } from "@search/components/panels/WidgetAutocompletePanel";
 import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
 import { WidgetFiltersPanel } from "@search/components/panels/WidgetFiltersPanel";
 import { WidgetInstallPanel } from "@search/components/panels/WidgetInstallPanel";
+import { WidgetVoicePanel } from "@search/components/panels/WidgetVoicePanel";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
@@ -71,36 +74,15 @@ export function WidgetPage({ organizationId }: WidgetPageProps) {
 			</TabsContent>
 
 			<TabsContent value="autocomplete" className="space-y-6 mt-6">
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">{tabLabel(t, "autocomplete")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
-					</CardContent>
-				</Card>
+				<WidgetAutocompletePanel organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="voice" className="space-y-6 mt-6">
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">{tabLabel(t, "voice")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
-					</CardContent>
-				</Card>
+				<WidgetVoicePanel organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="analytics" className="space-y-6 mt-6">
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">{tabLabel(t, "analytics")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
-					</CardContent>
-				</Card>
+				<WidgetAnalyticsPanel organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="install" className="space-y-6 mt-6">

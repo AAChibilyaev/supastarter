@@ -17,16 +17,9 @@ interface RecommendationsPageProps {
 	organizationId: string;
 }
 
-type TabId = "dashboard" | "similar" | "personalized" | "analytics" | "graphrag" | "settings";
+type TabId = "dashboard" | "similar" | "personalized" | "graphrag" | "settings";
 
-const TAB_IDS: TabId[] = [
-	"dashboard",
-	"similar",
-	"personalized",
-	"analytics",
-	"graphrag",
-	"settings",
-];
+const TAB_IDS: TabId[] = ["dashboard", "similar", "personalized", "graphrag", "settings"];
 
 export function RecommendationsPage({ organizationId }: RecommendationsPageProps) {
 	const t = useTranslations();
@@ -69,23 +62,6 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 		[organizationId],
 	);
 
-	const fetchPersonalized = useCallback(
-		async (_productId: string) => {
-			// Personalized needs a userId — for the test panel we use the current user
-			const result = await orpc.recommendations.personalized.call({
-				organizationId,
-				userId: "current",
-				limit: 10,
-			});
-			return result.results.map((r) => ({
-				id: r.id,
-				title: r.title,
-				score: r.score,
-			}));
-		},
-		[organizationId],
-	);
-
 	return (
 		<Tabs value={activeTab} onValueChange={setActiveTab}>
 			<TabsList>
@@ -113,16 +89,6 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 			</TabsContent>
 
 			<TabsContent value="personalized" className="mt-6 space-y-6">
-				<RecommendationsTestPanel
-					organizationId={organizationId}
-					fetchRecommendations={fetchPersonalized}
-					title={tr("recommendations.personalizedTab")}
-					emptyMessage={tr("recommendations.selectProduct")}
-					neo4jConnected={neo4jConnected}
-				/>
-			</TabsContent>
-
-			<TabsContent value="analytics" className="mt-6 space-y-6">
 				<RecommendationsPersonalizedAnalytics organizationId={organizationId} />
 			</TabsContent>
 

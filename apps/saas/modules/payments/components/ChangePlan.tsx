@@ -319,7 +319,7 @@ export function ChangePlan({
 			await createSessionMutation.mutateAsync({
 				newPlanId: selectedPlanId,
 				organizationId,
-				returnUrl: `${window.location.origin}/${organizationId ? window.location.pathname.split("/")[1] : ""}/settings/billing?upgrade_success=true`,
+				returnUrl: `${window.location.origin}/${organizationId ? window.location.pathname.split("/")[1] : ""}/settings/billing?upgrade_success=true&plan=${selectedPlanId}`,
 			});
 		} catch (sessionError) {
 			logger.error("Upgrade session creation failed", {

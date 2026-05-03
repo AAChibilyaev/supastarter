@@ -1108,7 +1108,7 @@
 			"title": "Аналитика поиска",
 			"description": "Отслеживайте использование поиска, популярные запросы, пустые результаты и тренды.",
 			"totalSearches": "Всего поисков",
-			"totalSessions": "Сессий",
+			"totalSessions": "Открытий виджета",
 			"ctr": "CTR",
 			"zeroResults": "Пустых результатов",
 			"zeroResultRate": "Доля пустых результатов",
@@ -1129,7 +1129,7 @@
 			"failedSyncJobs": "Ошибки синхронизации",
 			"failed": "ошибок",
 			"retentionBanner": "Ваш тариф {plan} хранит данные аналитики {days} дней. Выберите меньший период для просмотра данных.",
-			"noData": "Нет данных за этот период.",
+			"noData": "Данных аналитики пока нет",
 			"noDataDescription": "Данные аналитики появятся после получения запросов поисковыми индексами.",
 			"freePlan": "Бесплатный",
 			"queryPerformance": "Производительность запросов",
@@ -1207,7 +1207,10 @@
 			"voiceTrigger": "Триггер",
 			"voiceTriggerMic": "Кнопка микрофона",
 			"voiceTriggerDoubleTap": "Двойное нажатие",
-			"voiceFallback": "Запасное сообщение, если браузер не поддерживается"
+			"voiceFallback": "Запасное сообщение, если браузер не поддерживается",
+			"voiceDisabled": "Голосовой поиск отключён",
+			"analyticsWidgetMetrics": "Производительность виджета",
+			"analyticsWidgetDesc": "Метрики поиска с установленного виджета."
 		},
 		"configurator": {
 			"pageTitle": "Конфигуратор поиска",
@@ -2386,6 +2389,32 @@
 			"autoEmbedApiUrlHint": "Пользовательский endpoint для OpenAI-совместимых сервисов эмбеддинга",
 			"autoEmbedToggle": "Включить авто-эмбеддинг",
 			"autoEmbedWarning": "Авто-эмбеддинги пересчитываются только при изменении исходных полей. Для существующих документов требуется полный реиндекс."
+		},
+		"nohitsQueries": {
+			"title": "No-Hit Queries Rules",
+			"description": "Capture search queries that return zero results into a dedicated collection for analysis.",
+			"tab": "No-Hit Queries",
+			"createRule": "Create No-Hit Rule",
+			"createDialogTitle": "Create No-Hit Queries Rule",
+			"createDialogDesc": "Log search queries that return zero results into a collection for analysis.",
+			"ruleName": "Rule Name",
+			"sourceCollection": "Source Collection",
+			"selectCollection": "Select collection",
+			"destinationCollection": "Destination Collection",
+			"destinationHint": "Queries with zero results are logged to this collection.",
+			"cancel": "Cancel",
+			"create": "Create Rule",
+			"created": "No-hit queries rule created.",
+			"createError": "Failed to create no-hit queries rule.",
+			"deleted": "No-hit queries rule deleted.",
+			"deleteError": "Failed to delete no-hit queries rule.",
+			"empty": "No no-hit queries rules configured. Create one to start capturing zero-result queries.",
+			"name": "Name",
+			"actions": "Actions",
+			"required": "Please fill in all required fields.",
+			"deleteConfirmTitle": "Delete no-hit queries rule?",
+			"deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
+			"deleteConfirmAction": "Delete"
 		}
 	},
 	"sdks": {
@@ -2689,5 +2718,16 @@
 			}
 		},
 		"nextInvoice": "Следующий счет"
+	},
+	"widget": {
+		"voiceDisabled": "Голосовой поиск отключён",
+		"analyticsWidgetMetrics": "Производительность виджета",
+		"analyticsWidgetDesc": "Метрики поиска с установленного виджета."
+	},
+	"analytics": {
+		"totalSearches": "Всего поисков",
+		"totalSessions": "Открытий виджета",
+		"ctr": "CTR",
+		"noData": "Данных аналитики пока нет"
 	}
 }

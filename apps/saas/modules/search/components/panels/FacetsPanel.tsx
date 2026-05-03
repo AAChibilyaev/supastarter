@@ -15,7 +15,6 @@ import { Card } from "@repo/ui/components/card";
 import { cn } from "@repo/ui/lib/utils";
 import { GripVerticalIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 /** Single facet configuration */
 export interface FacetConfig {

@@ -1107,9 +1107,9 @@
 			"tab": "Analysen",
 			"title": "Analysen",
 			"description": "Verfolgen Sie Suchnutzung, Top-Suchanfragen, Null-Ergebnisse und Trends.",
-			"totalSearches": "Suchanfragen gesamt",
-			"totalSessions": "Sitzungen",
-			"ctr": "CTR",
+			"totalSearches": "Suchanfragen insgesamt",
+			"totalSessions": "Widget-Öffnungen",
+			"ctr": "Klickrate",
 			"zeroResults": "Null Ergebnisse",
 			"zeroResultRate": "Null-Ergebnis-Rate",
 			"comingSoon": "Demnächst",
@@ -1129,7 +1129,7 @@
 			"failedSyncJobs": "Fehlgeschlagene Sync-Jobs",
 			"failed": "fehlgeschlagen",
 			"retentionBanner": "Ihr {plan}-Plan behält Analysedaten für {days} Tage. Wählen Sie einen kürzeren Zeitraum, um Daten zu sehen.",
-			"noData": "Keine Daten fur diesen Zeitraum verfugbar.",
+			"noData": "Noch keine Analysedaten",
 			"noDataDescription": "Analysedaten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
 			"freePlan": "Kostenlos",
 			"queryPerformance": "Abfrage-Performance",
@@ -1207,7 +1207,10 @@
 			"voiceTrigger": "Auslöser",
 			"voiceTriggerMic": "Mikrofontaste",
 			"voiceTriggerDoubleTap": "Doppeltippen",
-			"voiceFallback": "Fallback-Nachricht, wenn Browser nicht unterstützt wird"
+			"voiceFallback": "Fallback-Nachricht, wenn Browser nicht unterstützt wird",
+			"voiceDisabled": "Sprachsuche ist deaktiviert",
+			"analyticsWidgetMetrics": "Widget-Leistung",
+			"analyticsWidgetDesc": "Suchmetriken von der Widget-Installation."
 		},
 		"configurator": {
 			"pageTitle": "Suchkonfigurator",
@@ -2386,6 +2389,32 @@
 			"autoEmbedApiUrlHint": "Benutzerdefinierter Endpunkt für OpenAI-kompatible Embedding-Dienste",
 			"autoEmbedToggle": "Auto-Embedding aktivieren",
 			"autoEmbedWarning": "Auto-Embeddings werden nur bei Änderung der Quellfelder neu berechnet. Ein vollständiger Reindex ist für vorhandene Dokumente erforderlich."
+		},
+		"nohitsQueries": {
+			"title": "No-Hit Queries Rules",
+			"description": "Capture search queries that return zero results into a dedicated collection for analysis.",
+			"tab": "No-Hit Queries",
+			"createRule": "Create No-Hit Rule",
+			"createDialogTitle": "Create No-Hit Queries Rule",
+			"createDialogDesc": "Log search queries that return zero results into a collection for analysis.",
+			"ruleName": "Rule Name",
+			"sourceCollection": "Source Collection",
+			"selectCollection": "Select collection",
+			"destinationCollection": "Destination Collection",
+			"destinationHint": "Queries with zero results are logged to this collection.",
+			"cancel": "Cancel",
+			"create": "Create Rule",
+			"created": "No-hit queries rule created.",
+			"createError": "Failed to create no-hit queries rule.",
+			"deleted": "No-hit queries rule deleted.",
+			"deleteError": "Failed to delete no-hit queries rule.",
+			"empty": "No no-hit queries rules configured. Create one to start capturing zero-result queries.",
+			"name": "Name",
+			"actions": "Actions",
+			"required": "Please fill in all required fields.",
+			"deleteConfirmTitle": "Delete no-hit queries rule?",
+			"deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
+			"deleteConfirmAction": "Delete"
 		}
 	},
 	"sdks": {
@@ -2639,5 +2668,16 @@
 			}
 		},
 		"nextInvoice": "Nächste Rechnung"
+	},
+	"widget": {
+		"voiceDisabled": "Sprachsuche ist deaktiviert",
+		"analyticsWidgetMetrics": "Widget-Leistung",
+		"analyticsWidgetDesc": "Suchmetriken von der Widget-Installation."
+	},
+	"analytics": {
+		"totalSearches": "Suchanfragen insgesamt",
+		"totalSessions": "Widget-Öffnungen",
+		"ctr": "Klickrate",
+		"noData": "Noch keine Analysedaten"
 	}
 }

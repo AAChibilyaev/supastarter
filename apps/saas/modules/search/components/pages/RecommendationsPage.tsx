@@ -36,9 +36,7 @@ export function RecommendationsPage({ organizationId: _organizationId }: Recomme
 			<TabsList>
 				{TAB_IDS.map((tab) => (
 					<TabsTrigger key={tab} value={tab}>
-						{t(
-							`nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any,
-						)}
+						{t(`nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any)}
 					</TabsTrigger>
 				))}
 			</TabsList>
@@ -46,9 +44,7 @@ export function RecommendationsPage({ organizationId: _organizationId }: Recomme
 			<TabsContent value="dashboard" className="space-y-6 mt-6">
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">
-							{t("recommendations.dashboardTitle")}
-						</CardTitle>
+						<CardTitle className="text-base">{t("recommendations.dashboardTitle")}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<EmptyState
@@ -64,9 +60,7 @@ export function RecommendationsPage({ organizationId: _organizationId }: Recomme
 					<Card>
 						<CardHeader>
 							<CardTitle className="text-base">
-								{t(
-									`nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any,
-								)}
+								{t(`nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any)}
 							</CardTitle>
 						</CardHeader>
 						<CardContent>

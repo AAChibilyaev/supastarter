@@ -271,10 +271,10 @@ pnpm --filter @repo/database generate
 1. Run `python3 scripts/generate_module.py <name> [--type public|protected|admin]` (from skill `scripts/`).
 2. Or manually create `packages/api/modules/<name>/{types.ts, procedures/<action>.ts, router.ts}`.
 3. Mount in `packages/api/orpc/router.ts`:
-    ```ts
-    import { fooRouter } from "../modules/foo/router";
-    export const router = publicProcedure.router({ ..., foo: fooRouter });
-    ```
+   ```ts
+   import { fooRouter } from "../modules/foo/router";
+   export const router = publicProcedure.router({ ..., foo: fooRouter });
+   ```
 4. Use from client: `useQuery(orpc.foo.<action>.queryOptions())`.
 
 ### Add a new database model

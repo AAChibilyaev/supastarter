@@ -43,10 +43,7 @@ export class Bm25Ranker {
 	private params: Bm25Parameters;
 	private stats: DocumentStats;
 
-	constructor(
-		stats: DocumentStats,
-		params: Partial<Bm25Parameters> = {},
-	) {
+	constructor(stats: DocumentStats, params: Partial<Bm25Parameters> = {}) {
 		this.params = { ...DEFAULT_PARAMS, ...params };
 		this.stats = stats;
 	}
@@ -54,18 +51,12 @@ export class Bm25Ranker {
 	/**
 	 * Calculate BM25 score for a single term in a document.
 	 */
-	private termScore(
-		termFreq: number,
-		docLength: number,
-		docFreq: number,
-	): number {
+	private termScore(termFreq: number, docLength: number, docFreq: number): number {
 		const { totalDocs, avgDocLength } = this.stats;
 		const { k1, b } = this.params;
 
 		// Inverse Document Frequency
-		const idf = Math.log(
-			(totalDocs - docFreq + 0.5) / (docFreq + 0.5) + 1,
-		);
+		const idf = Math.log((totalDocs - docFreq + 0.5) / (docFreq + 0.5) + 1);
 
 		// Term Frequency saturation
 		const tfNumerator = termFreq * (k1 + 1);
@@ -80,11 +71,7 @@ export class Bm25Ranker {
 	 * @param termFreqs — map of term → frequency in this document
 	 * @param docLength — document length in tokens
 	 */
-	scoreDocument(
-		queryTerms: string[],
-		termFreqs: Map<string, number>,
-		docLength: number,
-	): number {
+	scoreDocument(queryTerms: string[], termFreqs: Map<string, number>, docLength: number): number {
 		let score = 0;
 
 		for (const term of queryTerms) {
@@ -164,14 +151,13 @@ export class Bm25Ranker {
 			const df = this.stats.docFreq.get(term) || 0;
 			if (df === 0) continue;
 
-			const idf = Math.log(
-				(this.stats.totalDocs - df + 0.5) / (df + 0.5) + 1,
-			);
+			const idf = Math.log((this.stats.totalDocs - df + 0.5) / (df + 0.5) + 1);
 
 			const tfNumerator = combinedTf * (this.params.k1 + 1);
-			const tfDenominator = combinedTf + this.params.k1 * (
-				1 - this.params.b + this.params.b * (combinedLength / this.stats.avgDocLength)
-			);
+			const tfDenominator =
+				combinedTf +
+				this.params.k1 *
+					(1 - this.params.b + this.params.b * (combinedLength / this.stats.avgDocLength));
 
 			score += idf * (tfNumerator / tfDenominator);
 		}

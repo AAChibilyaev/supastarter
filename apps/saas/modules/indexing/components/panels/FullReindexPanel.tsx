@@ -100,13 +100,7 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 					? t("jobFailed")
 					: t("noActiveJob");
 
-	const statusVariant = isFailed
-		? "error"
-		: isCompleted
-			? "success"
-			: hasActiveJob
-				? "info"
-				: null;
+	const statusVariant = isFailed ? "error" : isCompleted ? "success" : hasActiveJob ? "info" : null;
 
 	const handleStartReindex = () => {
 		setShowConfirm(true);
@@ -134,33 +128,31 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 					</DialogHeader>
 
 					{showAdvanced && (
-						<div className="space-y-3 p-4 rounded-lg border">
-							<p className="text-sm font-medium">{t("advancedOptions")}</p>
-							<div className="gap-2 flex items-center">
-								<Checkbox
-									id="detect-schema"
-									checked={detectSchema}
-									onCheckedChange={(checked) => setDetectSchema(checked === true)}
-								/>
-								<Label htmlFor="detect-schema">{t("detectSchema")}</Label>
-							</div>
-							<div className="gap-2 flex items-center">
-								<Checkbox
-									id="regenerate-embeddings"
-									checked={regenerateEmbeddings}
-									onCheckedChange={(checked) =>
-										setRegenerateEmbeddings(checked === true)
-									}
-								/>
-								<Label htmlFor="regenerate-embeddings">
-									{t("regenerateEmbeddings")}
-								</Label>
-							</div>
-							<div className="gap-2 text-sm flex items-center text-muted-foreground">
-								<InfoIcon className="size-3.5 shrink-0" />
-								<span>{t("aliasSwap")}</span>
-							</div>
-						</div>
+						<Card>
+							<CardContent className="space-y-3 p-4">
+								<p className="text-sm font-medium">{t("advancedOptions")}</p>
+								<div className="gap-2 flex items-center">
+									<Checkbox
+										id="detect-schema"
+										checked={detectSchema}
+										onCheckedChange={(checked) => setDetectSchema(checked === true)}
+									/>
+									<Label htmlFor="detect-schema">{t("detectSchema")}</Label>
+								</div>
+								<div className="gap-2 flex items-center">
+									<Checkbox
+										id="regenerate-embeddings"
+										checked={regenerateEmbeddings}
+										onCheckedChange={(checked) => setRegenerateEmbeddings(checked === true)}
+									/>
+									<Label htmlFor="regenerate-embeddings">{t("regenerateEmbeddings")}</Label>
+								</div>
+								<div className="gap-2 text-sm flex items-center text-muted-foreground">
+									<InfoIcon className="size-3.5 shrink-0" />
+									<span>{t("aliasSwap")}</span>
+								</div>
+							</CardContent>
+						</Card>
 					)}
 
 					<DialogFooter className="gap-2 sm:gap-0">
@@ -171,11 +163,7 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 						>
 							{t("cancel")}
 						</Button>
-						<Button
-							variant="primary"
-							onClick={handleConfirm}
-							loading={reindexMutation.isPending}
-						>
+						<Button variant="primary" onClick={handleConfirm} loading={reindexMutation.isPending}>
 							{t("confirm")}
 						</Button>
 					</DialogFooter>
@@ -270,56 +258,52 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 								{t("advancedOptions")}
 							</Button>
 							{showAdvanced && (
-								<div className="space-y-2 p-3 rounded-lg border">
-									<div className="gap-2 flex items-center">
-										<Checkbox
-											id="detect-schema-panel"
-											checked={detectSchema}
-											onCheckedChange={(checked) =>
-												setDetectSchema(checked === true)
-											}
-										/>
-										<div className="gap-1 flex items-center">
-											<Label htmlFor="detect-schema-panel">
-												{t("detectSchema")}
-											</Label>
-											<Tooltip>
-												<TooltipTrigger asChild>
-													<InfoIcon className="size-3.5 text-muted-foreground" />
-												</TooltipTrigger>
-												<TooltipContent>
-													Automatically detect and apply schema changes
-												</TooltipContent>
-											</Tooltip>
+								<Card>
+									<CardContent className="space-y-2 p-3">
+										<div className="gap-2 flex items-center">
+											<Checkbox
+												id="detect-schema-panel"
+												checked={detectSchema}
+												onCheckedChange={(checked) => setDetectSchema(checked === true)}
+											/>
+											<div className="gap-1 flex items-center">
+												<Label htmlFor="detect-schema-panel">{t("detectSchema")}</Label>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<InfoIcon className="size-3.5 text-muted-foreground" />
+													</TooltipTrigger>
+													<TooltipContent>
+														Automatically detect and apply schema changes
+													</TooltipContent>
+												</Tooltip>
+											</div>
 										</div>
-									</div>
-									<div className="gap-2 flex items-center">
-										<Checkbox
-											id="regenerate-embeddings-panel"
-											checked={regenerateEmbeddings}
-											onCheckedChange={(checked) =>
-												setRegenerateEmbeddings(checked === true)
-											}
-										/>
-										<div className="gap-1 flex items-center">
-											<Label htmlFor="regenerate-embeddings-panel">
-												{t("regenerateEmbeddings")}
-											</Label>
-											<Tooltip>
-												<TooltipTrigger asChild>
-													<InfoIcon className="size-3.5 text-muted-foreground" />
-												</TooltipTrigger>
-												<TooltipContent>
-													Recompute vector embeddings for all documents
-												</TooltipContent>
-											</Tooltip>
+										<div className="gap-2 flex items-center">
+											<Checkbox
+												id="regenerate-embeddings-panel"
+												checked={regenerateEmbeddings}
+												onCheckedChange={(checked) => setRegenerateEmbeddings(checked === true)}
+											/>
+											<div className="gap-1 flex items-center">
+												<Label htmlFor="regenerate-embeddings-panel">
+													{t("regenerateEmbeddings")}
+												</Label>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<InfoIcon className="size-3.5 text-muted-foreground" />
+													</TooltipTrigger>
+													<TooltipContent>
+														Recompute vector embeddings for all documents
+													</TooltipContent>
+												</Tooltip>
+											</div>
 										</div>
-									</div>
-									<div className="gap-2 text-sm flex items-center text-muted-foreground">
-										<InfoIcon className="size-3.5 shrink-0" />
-										<span>{t("aliasSwap")}</span>
-									</div>
-								</div>
+										<div className="gap-2 text-sm flex items-center text-muted-foreground">
+											<InfoIcon className="size-3.5 shrink-0" />
+											<span>{t("aliasSwap")}</span>
+										</div>
+									</CardContent>
+								</Card>
 							)}
 						</div>
 					)}

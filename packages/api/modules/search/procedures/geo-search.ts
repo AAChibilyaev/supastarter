@@ -18,6 +18,20 @@ const geoBoundingBoxSchema = z.object({
 	]),
 });
 
+const geoMultiLocationSchema = z.object({
+	field: z.string().optional(),
+	locations: z
+		.array(
+			z.object({
+				lat: z.number().min(-90).max(90),
+				lng: z.number().min(-180).max(180),
+				radiusKm: z.number().min(0.1).max(40_075),
+			}),
+		)
+		.min(2)
+		.max(50),
+});
+
 export const geoSearch = protectedProcedure
 	.route({
 		method: "POST",
@@ -44,6 +58,8 @@ export const geoSearch = protectedProcedure
 				polygonFilter: geoPolygonSchema.optional(),
 				// ── Bounding box search ──
 				boundingBoxFilter: geoBoundingBoxSchema.optional(),
+				// ── Multi-location search ──
+				multiLocation: geoMultiLocationSchema.optional(),
 				perPage: z.number().int().min(1).max(250).default(20),
 				filterBy: z.string().optional(),
 				sortBy: z.string().optional(),
@@ -53,12 +69,13 @@ export const geoSearch = protectedProcedure
 					const hasRadius = data.lat !== undefined || data.lng !== undefined;
 					const hasPolygon = data.polygonFilter !== undefined;
 					const hasBbox = data.boundingBoxFilter !== undefined;
-					const modes = [hasRadius, hasPolygon, hasBbox].filter(Boolean).length;
+					const hasMulti = data.multiLocation !== undefined;
+					const modes = [hasRadius, hasPolygon, hasBbox, hasMulti].filter(Boolean).length;
 					return modes === 1;
 				},
 				{
 					message:
-						"Exactly one geo mode required: radius (lat/lng), polygon, or bounding box",
+						"Exactly one geo mode required: radius (lat/lng), polygon, bounding box, or multi-location",
 				},
 			),
 	)
@@ -94,6 +111,11 @@ export const geoSearch = protectedProcedure
 			const field = input.boundingBoxFilter.field ?? "_geoloc";
 			const { bounding_box } = input.boundingBoxFilter;
 			geoFilter = `${field}:(${bounding_box[0].lat}, ${bounding_box[0].lng}, ${bounding_box[1].lat}, ${bounding_box[1].lng})`;
+		} else if (input.multiLocation) {
+			const field = input.multiLocation.field ?? "_geoloc";
+			geoFilter = input.multiLocation.locations
+				.map((loc) => `${field}:(${loc.lat}, ${loc.lng}, ${loc.radiusKm} km)`)
+				.join(" || ");
 		}
 
 		const combinedFilter =

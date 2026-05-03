@@ -1,0 +1,9 @@
+{
+	"extends": "../../tooling/typescript/base.json",
+	"compilerOptions": {
+		"target": "ES2022",
+		"types": []
+	},
+	"include": ["**/*.ts"],
+	"exclude": ["dist", "build", "node_modules"]
+}

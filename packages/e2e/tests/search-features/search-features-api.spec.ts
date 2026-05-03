@@ -13,7 +13,13 @@
  */
 
 import { test, expect } from "../../src/fixtures";
-import { createTestIndex, createApiKey, seedDocuments, searchPublic, wait } from "../../src/helpers";
+import {
+	createTestIndex,
+	createApiKey,
+	seedDocuments,
+	searchPublic,
+	wait,
+} from "../../src/helpers";
 
 const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 const ADMIN_KEY = process.env.E2E_ADMIN_API_KEY || "test-admin-key";
@@ -51,12 +57,51 @@ test.describe("AAC-321 Search Features API", () => {
 
 		// Seed test documents
 		await seedDocuments(adminApiKey, BASE_URL, indexSlug, [
-			{ id: "1", title: "Nike Running Shoes", description: "Premium running shoes for athletes", price: 129.99, category: "shoes", location: "40.7128, -74.0060" },
-			{ id: "2", title: "Adidas Sneakers", description: "Casual sneakers for everyday wear", price: 89.99, category: "shoes", location: "40.7580, -73.9855" },
-			{ id: "3", title: "Puma Sports T-Shirt", description: "Breathable sports t-shirt for men", price: 39.99, category: "apparel", location: "51.5074, -0.1278" },
-			{ id: "4", title: "C++ Programming Guide", description: "Advanced C++ programming techniques and best practices", price: 49.99, category: "books" },
-			{ id: "5", title: "Hello World in C#", description: "Getting started with CSharp dotnet development", price: 29.99, category: "books" },
-			{ id: "6", title: "Reebok Running Shorts", description: "Lightweight shorts for running", price: 34.99, category: "apparel" },
+			{
+				id: "1",
+				title: "Nike Running Shoes",
+				description: "Premium running shoes for athletes",
+				price: 129.99,
+				category: "shoes",
+				location: "40.7128, -74.0060",
+			},
+			{
+				id: "2",
+				title: "Adidas Sneakers",
+				description: "Casual sneakers for everyday wear",
+				price: 89.99,
+				category: "shoes",
+				location: "40.7580, -73.9855",
+			},
+			{
+				id: "3",
+				title: "Puma Sports T-Shirt",
+				description: "Breathable sports t-shirt for men",
+				price: 39.99,
+				category: "apparel",
+				location: "51.5074, -0.1278",
+			},
+			{
+				id: "4",
+				title: "C++ Programming Guide",
+				description: "Advanced C++ programming techniques and best practices",
+				price: 49.99,
+				category: "books",
+			},
+			{
+				id: "5",
+				title: "Hello World in C#",
+				description: "Getting started with CSharp dotnet development",
+				price: 29.99,
+				category: "books",
+			},
+			{
+				id: "6",
+				title: "Reebok Running Shorts",
+				description: "Lightweight shorts for running",
+				price: 34.99,
+				category: "apparel",
+			},
 		]);
 
 		await wait(1000); // Let Typesense index
@@ -109,7 +154,9 @@ test.describe("AAC-321 Search Features API", () => {
 		});
 
 		test("should find documents by infix (fallback)", async () => {
-			const result = await searchPublic(indexSlug, "run", searchKey, BASE_URL, { infix: "fallback" });
+			const result = await searchPublic(indexSlug, "run", searchKey, BASE_URL, {
+				infix: "fallback",
+			});
 			expect(result.found).toBeGreaterThanOrEqual(1);
 		});
 	});
@@ -139,14 +186,17 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Batch Delete", () => {
 		test("should batch delete documents by IDs", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents:batchDelete`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${adminApiKey}`,
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents:batchDelete`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${adminApiKey}`,
+					},
+					body: JSON.stringify({ ids: ["4", "5"] }),
 				},
-				body: JSON.stringify({ ids: ["4", "5"] }),
-			});
+			);
 			expect(response.status).toBe(200);
 
 			await wait(500);
@@ -157,11 +207,14 @@ test.describe("AAC-321 Search Features API", () => {
 		});
 
 		test("should return 401 for unauthorized batch delete", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents:batchDelete`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ ids: ["1"] }),
-			});
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents:batchDelete`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ ids: ["1"] }),
+				},
+			);
 			expect(response.status).toBe(401);
 		});
 	});
@@ -170,14 +223,17 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Delete by Query", () => {
 		test("should delete documents by filter expression", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/delete-by-query`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${adminApiKey}`,
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/delete-by-query`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${adminApiKey}`,
+					},
+					body: JSON.stringify({ filterBy: "category:=apparel" }),
 				},
-				body: JSON.stringify({ filterBy: "category:=apparel" }),
-			});
+			);
 			expect(response.status).toBe(200);
 
 			await wait(500);
@@ -188,11 +244,14 @@ test.describe("AAC-321 Search Features API", () => {
 		});
 
 		test("should return 401 for unauthorized delete by query", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/delete-by-query`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ filterBy: "id:1" }),
-			});
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/delete-by-query`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ filterBy: "id:1" }),
+				},
+			);
 			expect(response.status).toBe(401);
 		});
 	});

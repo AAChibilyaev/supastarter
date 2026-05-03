@@ -2,7 +2,7 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card } from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
 	Dialog,
 	DialogContent,
@@ -133,9 +133,7 @@ function buildFieldSchema(fields: SchemaField[]) {
 		switch (f.type) {
 			case "int32":
 			case "int64":
-				shape[f.name] = f.optional
-					? z.coerce.number().int().optional()
-					: z.coerce.number().int();
+				shape[f.name] = f.optional ? z.coerce.number().int().optional() : z.coerce.number().int();
 				break;
 			case "float":
 				shape[f.name] = f.optional ? z.coerce.number().optional() : z.coerce.number();
@@ -448,10 +446,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	// ── Bulk actions ────────────────────────────────────────────────────────
 
-	const selectedRows = useMemo(
-		() => rows.filter((r) => rowSelection[r.id]),
-		[rows, rowSelection],
-	);
+	const selectedRows = useMemo(() => rows.filter((r) => rowSelection[r.id]), [rows, rowSelection]);
 
 	const selectedIds = useMemo(() => selectedRows.map((r) => r.id), [selectedRows]);
 
@@ -470,9 +465,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						queryKey: orpc.search.listDocuments.key(),
 					});
 				} catch (error) {
-					toastError(
-						error instanceof Error ? error.message : t("search.documents.deleteError"),
-					);
+					toastError(error instanceof Error ? error.message : t("search.documents.deleteError"));
 				}
 			},
 		});
@@ -613,9 +606,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="max-h-60 overflow-y-auto">
-							<DropdownMenuLabel>
-								{t("search.documents.toggleColumns")}
-							</DropdownMenuLabel>
+							<DropdownMenuLabel>{t("search.documents.toggleColumns")}</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							{table.getAllLeafColumns().map((col) => {
 								if (col.id === "select") return null;
@@ -675,9 +666,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						<DialogContent>
 							<DialogHeader>
 								<DialogTitle>{t("search.documents.importCsv")}</DialogTitle>
-								<DialogDescription>
-									{t("search.documents.importCsvDescription")}
-								</DialogDescription>
+								<DialogDescription>{t("search.documents.importCsvDescription")}</DialogDescription>
 							</DialogHeader>
 							<div className="space-y-4">
 								<div className="gap-4 flex items-center">
@@ -796,15 +785,11 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 												onClick={header.column.getToggleSortingHandler()}
 											>
 												<div className="gap-1 flex items-center">
-													{flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
+													{flexRender(header.column.columnDef.header, header.getContext())}
 													{{
 														asc: " \u25B2",
 														desc: " \u25BC",
-													}[header.column.getIsSorted() as string] ??
-														null}
+													}[header.column.getIsSorted() as string] ?? null}
 												</div>
 											</TableHead>
 										))}
@@ -827,18 +812,13 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 											key={row.id}
 											className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
 											onClick={() => {
-												const docRow = rows.find(
-													(r) => r.id === row.original.id,
-												);
+												const docRow = rows.find((r) => r.id === row.original.id);
 												if (docRow) openEditSheet(docRow);
 											}}
 										>
 											{row.getVisibleCells().map((cell) => (
 												<TableCell key={cell.id}>
-													{flexRender(
-														cell.column.columnDef.cell,
-														cell.getContext(),
-													)}
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
 												</TableCell>
 											))}
 										</TableRow>
@@ -852,23 +832,25 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 			{/* ── Bulk action bar ─────────────────────────────────────────── */}
 			{selectedIds.length > 0 && (
-				<div className="bottom-0 gap-2 p-3 shadow-md sticky z-20 flex flex-wrap items-center rounded-lg border bg-card">
-					<span className="text-sm mr-2 text-foreground/60">
-						{t("search.documents.selected", { count: selectedIds.length })}
-					</span>
-					<Button variant="ghost" size="sm" onClick={handleBulkExport}>
-						<DownloadIcon className="size-3.5" />
-						{t("search.documents.exportSelected")}
-					</Button>
-					<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
-						<Trash2Icon className="size-3.5" />
-						{t("search.documents.deleteSelected")}
-					</Button>
-					<Button variant="ghost" size="sm" onClick={handleClearSelection}>
-						<XIcon className="size-3.5" />
-						{t("search.documents.clearSelection")}
-					</Button>
-				</div>
+				<Card className="shadow-md sticky z-20">
+					<CardContent className="bottom-0 gap-2 p-3 flex flex-wrap items-center">
+						<span className="text-sm mr-2 text-foreground/60">
+							{t("search.documents.selected", { count: selectedIds.length })}
+						</span>
+						<Button variant="ghost" size="sm" onClick={handleBulkExport}>
+							<DownloadIcon className="size-3.5" />
+							{t("search.documents.exportSelected")}
+						</Button>
+						<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
+							<Trash2Icon className="size-3.5" />
+							{t("search.documents.deleteSelected")}
+						</Button>
+						<Button variant="ghost" size="sm" onClick={handleClearSelection}>
+							<XIcon className="size-3.5" />
+							{t("search.documents.clearSelection")}
+						</Button>
+					</CardContent>
+				</Card>
 			)}
 
 			{/* ── Pagination ────────────────────────────────────────────── */}
@@ -964,30 +946,18 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														<select
 															name={formField.name}
 															className="h-9 px-3 py-2 text-sm shadow-xs flex w-full rounded-md border border-input bg-card ring-offset-background focus:ring-1 focus:ring-ring focus:outline-hidden"
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
 															onChange={(e) => {
 																const val = e.target.value;
 																formField.onChange(
-																	val === "true"
-																		? true
-																		: val === "false"
-																			? false
-																			: val,
+																	val === "true" ? true : val === "false" ? false : val,
 																);
 															}}
 														>
-															<option value="">
-																{t("search.documents.notSet")}
-															</option>
-															<option value="true">
-																{t("search.documents.true")}
-															</option>
-															<option value="false">
-																{t("search.documents.false")}
-															</option>
+															<option value="">{t("search.documents.notSet")}</option>
+															<option value="true">{t("search.documents.true")}</option>
+															<option value="false">{t("search.documents.false")}</option>
 														</select>
 													) : field.type === "int32" ||
 													  field.type === "int64" ||
@@ -995,27 +965,17 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														<Input
 															name={formField.name}
 															type="number"
-															step={
-																field.type === "float" ? "any" : "1"
-															}
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															step={field.type === "float" ? "any" : "1"}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
-															onChange={(e) =>
-																formField.onChange(e.target.value)
-															}
+															onChange={(e) => formField.onChange(e.target.value)}
 														/>
 													) : (
 														<Input
 															name={formField.name}
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
-															onChange={(e) =>
-																formField.onChange(e.target.value)
-															}
+															onChange={(e) => formField.onChange(e.target.value)}
 														/>
 													)}
 												</FormControl>
@@ -1037,18 +997,10 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								)}
 
 								<SheetFooter>
-									<Button
-										variant="ghost"
-										type="button"
-										onClick={() => setEditSheetOpen(false)}
-									>
+									<Button variant="ghost" type="button" onClick={() => setEditSheetOpen(false)}>
 										{t("search.documents.cancel")}
 									</Button>
-									<Button
-										variant="primary"
-										type="submit"
-										loading={upsertMutation.isPending}
-									>
+									<Button variant="primary" type="submit" loading={upsertMutation.isPending}>
 										<Edit3Icon className="size-3.5" />
 										{t("search.documents.save")}
 									</Button>

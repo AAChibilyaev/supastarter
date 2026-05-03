@@ -192,13 +192,11 @@ const tools: ToolDefinition[] = [
 			properties: {
 				baseUrl: {
 					type: "string",
-					description:
-						"Base URL of the AACsearch deployment (e.g. https://app.example.com)",
+					description: "Base URL of the AACsearch deployment (e.g. https://app.example.com)",
 				},
 				apiKey: {
 					type: "string",
-					description:
-						"Search-scoped API key (ss_search_...) or scoped token (ss_scoped_...)",
+					description: "Search-scoped API key (ss_search_...) or scoped token (ss_scoped_...)",
 				},
 				indexSlug: {
 					type: "string",
@@ -242,8 +240,7 @@ const tools: ToolDefinition[] = [
 				},
 				projectId: {
 					type: "string",
-					description:
-						"Project/organization ID (optional — if omitted, derived from the API key)",
+					description: "Project/organization ID (optional — if omitted, derived from the API key)",
 				},
 			},
 			required: ["baseUrl", "apiKey"],
@@ -337,8 +334,7 @@ const tools: ToolDefinition[] = [
 				},
 				fields: {
 					type: "array",
-					description:
-						"Array of field definitions (name, type, facet, optional, index, sort)",
+					description: "Array of field definitions (name, type, facet, optional, index, sort)",
 					items: { type: "object" },
 				},
 				defaultSortingField: {
@@ -646,9 +642,7 @@ async function toolSearch(params: Record<string, unknown>): Promise<unknown> {
 	const parsed = searchInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -672,9 +666,7 @@ async function toolListIndexes(params: Record<string, unknown>): Promise<unknown
 	const parsed = listIndexesInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -705,9 +697,7 @@ async function toolUpsertDocument(params: Record<string, unknown>): Promise<unkn
 	const parsed = upsertDocumentInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -728,9 +718,7 @@ async function toolSearchStats(params: Record<string, unknown>): Promise<unknown
 	const parsed = searchStatsInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -748,9 +736,7 @@ async function toolListDocuments(params: Record<string, unknown>): Promise<unkno
 	const parsed = listDocumentsInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -777,9 +763,7 @@ async function toolDeleteDocument(params: Record<string, unknown>): Promise<unkn
 	const parsed = deleteDocumentInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -800,9 +784,7 @@ async function toolCreateIndex(params: Record<string, unknown>): Promise<unknown
 	const parsed = createIndexInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -825,9 +807,7 @@ async function toolUpdateIndex(params: Record<string, unknown>): Promise<unknown
 	const parsed = updateIndexInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -850,9 +830,7 @@ async function toolDeleteIndex(params: Record<string, unknown>): Promise<unknown
 	const parsed = deleteIndexInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -870,9 +848,7 @@ async function toolCreateKey(params: Record<string, unknown>): Promise<unknown> 
 	const parsed = createKeyInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -906,9 +882,7 @@ async function toolListKeys(params: Record<string, unknown>): Promise<unknown> {
 	const parsed = listKeysInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}
@@ -926,9 +900,7 @@ async function toolRevokeKey(params: Record<string, unknown>): Promise<unknown> 
 	const parsed = revokeKeyInputSchema.safeParse(params);
 	if (!parsed.success) {
 		return {
-			content: [
-				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
-			],
+			content: [{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` }],
 			isError: true,
 		};
 	}

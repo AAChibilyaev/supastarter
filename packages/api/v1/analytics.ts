@@ -26,10 +26,7 @@ export const analyticsApp = new Hono()
 
 		const period = (c.req.query("period") ?? "last7") as "last7" | "last30";
 		if (period !== "last7" && period !== "last30") {
-			return c.json(
-				{ error: "invalid_input", message: "period must be 'last7' or 'last30'" },
-				400,
-			);
+			return c.json({ error: "invalid_input", message: "period must be 'last7' or 'last30'" }, 400);
 		}
 
 		const windowDays = period === "last7" ? 7 : 30;
@@ -76,9 +73,7 @@ export const analyticsApp = new Hono()
 			.filter((e) => e.type === "result_click")
 			.reduce((sum, e) => sum + e.count, 0);
 		const topClickedProducts =
-			resultClicks > 0
-				? [{ productId: "all", title: "Result clicks", clicks: resultClicks }]
-				: [];
+			resultClicks > 0 ? [{ productId: "all", title: "Result clicks", clicks: resultClicks }] : [];
 
 		const ctr = totalSearches > 0 ? resultClicks / totalSearches : 0;
 
@@ -145,10 +140,7 @@ export const analyticsApp = new Hono()
 
 		const period = (c.req.query("period") ?? "last7") as "last7" | "last30";
 		if (period !== "last7" && period !== "last30") {
-			return c.json(
-				{ error: "invalid_input", message: "period must be 'last7' or 'last30'" },
-				400,
-			);
+			return c.json({ error: "invalid_input", message: "period must be 'last7' or 'last30'" }, 400);
 		}
 
 		const indexId = c.req.query("indexId") ?? null;

@@ -1,10 +1,10 @@
 "use client";
 
+import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
-import { orpc } from "@shared/lib/orpc-query-utils";
 import type { UploadJob } from "../components/upload/UploadProgress";
 
 function generateId(): string {
@@ -19,10 +19,20 @@ interface UseDocumentUploadOptions {
 export function useDocumentUpload({ organizationId, indexId }: UseDocumentUploadOptions) {
 	const queryClient = useQueryClient();
 	const [pendingFiles, setPendingFiles] = useState<
-		Array<{ id: string; file: File; status: "pending" | "uploading" | "done" | "error"; error?: string }>
+		Array<{
+			id: string;
+			file: File;
+			status: "pending" | "uploading" | "done" | "error";
+			error?: string;
+		}>
 	>([]);
 	const [pendingUrls, setPendingUrls] = useState<
-		Array<{ id: string; url: string; status: "pending" | "fetching" | "done" | "error"; error?: string }>
+		Array<{
+			id: string;
+			url: string;
+			status: "pending" | "fetching" | "done" | "error";
+			error?: string;
+		}>
 	>([]);
 	const [uploadJobs, setUploadJobs] = useState<UploadJob[]>([]);
 
@@ -74,9 +84,7 @@ export function useDocumentUpload({ organizationId, indexId }: UseDocumentUpload
 			onError: (_error, variables) => {
 				setPendingUrls((prev) =>
 					prev.map((u) =>
-						u.url === variables.url
-							? { ...u, status: "error" as const, error: _error.message }
-							: u,
+						u.url === variables.url ? { ...u, status: "error" as const, error: _error.message } : u,
 					),
 				);
 				setUploadJobs((prev) =>

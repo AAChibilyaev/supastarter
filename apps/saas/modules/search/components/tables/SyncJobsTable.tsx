@@ -70,14 +70,10 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 								className="cursor-pointer hover:bg-muted/50"
 								onClick={() => setSelectedJob(job)}
 							>
-								<TableCell className="font-mono text-xs max-w-[160px] truncate">
-									{job.id}
-								</TableCell>
+								<TableCell className="font-mono text-xs max-w-[160px] truncate">{job.id}</TableCell>
 								<TableCell className="text-xs capitalize">{job.type}</TableCell>
 								<TableCell>
-									<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
-										{job.status}
-									</Badge>
+									<Badge status={syncJobStatusBadge[job.status] ?? "info"}>{job.status}</Badge>
 								</TableCell>
 								<TableCell className="text-xs whitespace-nowrap">
 									{new Date(job.startedAt).toLocaleString()}
@@ -87,8 +83,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									{job.itemsCount}
 									{job.failuresCount > 0 && (
 										<span className="ml-1 text-destructive">
-											({job.failuresCount} {t("search.connector.jobFailures")}
-											)
+											({job.failuresCount} {t("search.connector.jobFailures")})
 										</span>
 									)}
 								</TableCell>
@@ -139,20 +134,14 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									<span className="text-xs text-muted-foreground">
 										{t("search.connector.jobType")}
 									</span>
-									<p className="text-sm font-medium capitalize">
-										{selectedJob.type}
-									</p>
+									<p className="text-sm font-medium capitalize">{selectedJob.type}</p>
 								</div>
 								<div>
 									<span className="text-xs text-muted-foreground">
 										{t("search.connector.jobStatus")}
 									</span>
 									<p className="text-sm font-medium">
-										<Badge
-											status={
-												syncJobStatusBadge[selectedJob.status] ?? "info"
-											}
-										>
+										<Badge status={syncJobStatusBadge[selectedJob.status] ?? "info"}>
 											{selectedJob.status}
 										</Badge>
 									</p>
@@ -169,9 +158,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									<span className="text-xs text-muted-foreground">
 										{t("search.connector.jobDuration")}
 									</span>
-									<p className="text-sm font-medium">
-										{selectedJob.duration ?? "—"}
-									</p>
+									<p className="text-sm font-medium">{selectedJob.duration ?? "—"}</p>
 								</div>
 								<div>
 									<span className="text-xs text-muted-foreground">
@@ -183,9 +170,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 									<span className="text-xs text-muted-foreground">
 										{t("search.connector.jobFailures")}
 									</span>
-									<p className="text-sm font-medium">
-										{selectedJob.failuresCount}
-									</p>
+									<p className="text-sm font-medium">{selectedJob.failuresCount}</p>
 								</div>
 							</div>
 
@@ -223,11 +208,7 @@ export function SyncJobsTable({ jobs, isLoading, onRetry, retryingJobId }: SyncJ
 							</div>
 
 							<div className="pt-2">
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setSelectedJob(null)}
-								>
+								<Button variant="outline" size="sm" onClick={() => setSelectedJob(null)}>
 									{t("common.close")}
 								</Button>
 							</div>

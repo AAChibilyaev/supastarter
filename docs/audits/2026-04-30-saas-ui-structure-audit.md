@@ -66,34 +66,34 @@ Previous problem: `apps/saas/modules/search/components/` mixed pages, dialogs, t
 Current structure:
 
 - `components/pages/`
-    - `CollectionDetail.tsx`
-    - `ConnectorsPage.tsx`
-    - `GettingStarted.tsx`
-    - `OverviewPage.tsx`
-    - `RelevanceTabs.tsx`
-    - `SearchDashboard.tsx`
+  - `CollectionDetail.tsx`
+  - `ConnectorsPage.tsx`
+  - `GettingStarted.tsx`
+  - `OverviewPage.tsx`
+  - `RelevanceTabs.tsx`
+  - `SearchDashboard.tsx`
 - `components/panels/`
-    - `CurationsPanel.tsx`
-    - `ImportJobsPanel.tsx`
-    - `PlaygroundPanel.tsx`
-    - `SearchApiKeysPanel.tsx`
-    - `SynonymsPanel.tsx`
-    - `WidgetPanel.tsx`
+  - `CurationsPanel.tsx`
+  - `ImportJobsPanel.tsx`
+  - `PlaygroundPanel.tsx`
+  - `SearchApiKeysPanel.tsx`
+  - `SynonymsPanel.tsx`
+  - `WidgetPanel.tsx`
 - `components/dialogs/`
-    - `ConnectorWizard.tsx`
-    - `CreateSearchIndexDialog.tsx`
+  - `ConnectorWizard.tsx`
+  - `CreateSearchIndexDialog.tsx`
 - `components/tables/`
-    - `DocumentsTable.tsx`
-    - `SearchIndexesList.tsx`
-    - `SyncJobsTable.tsx`
+  - `DocumentsTable.tsx`
+  - `SearchIndexesList.tsx`
+  - `SyncJobsTable.tsx`
 - `components/cards/`
-    - `ConnectorCard.tsx`
-    - `EmptyState.tsx`
-    - `SearchAnalyticsCards.tsx`
-    - `SearchUsageCard.tsx`
-    - `SearchUsageCards.tsx`
+  - `ConnectorCard.tsx`
+  - `EmptyState.tsx`
+  - `SearchAnalyticsCards.tsx`
+  - `SearchUsageCard.tsx`
+  - `SearchUsageCards.tsx`
 - `components/sections/`
-    - `BillingPlanInfo.tsx`
+  - `BillingPlanInfo.tsx`
 
 ### 2) Knowledge split into its own domain
 

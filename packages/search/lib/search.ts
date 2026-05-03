@@ -16,6 +16,13 @@ export interface GeoBoundingBoxFilter {
 	bounding_box: [{ lat: number; lng: number }, { lat: number; lng: number }];
 }
 
+export interface GeoMultiLocationFilter {
+	/** Geolocation field name (default: "_geoloc") */
+	field?: string;
+	/** Array of center points with individual radius in km */
+	locations: Array<{ lat: number; lng: number; radiusKm: number }>;
+}
+
 interface TypesenseSearchParams {
 	q: string;
 	query_by: string;
@@ -73,6 +80,7 @@ export interface SearchDocumentsInput {
 	// ── Geo Search ─────────────────────────────────────────────────
 	polygonFilter?: GeoPolygonFilter;
 	boundingBoxFilter?: GeoBoundingBoxFilter;
+	multiLocation?: GeoMultiLocationFilter;
 	// ── Search Params Extensions ───────────────────────────────────
 	excludeFields?: string;
 	highlightStartTag?: string;
@@ -101,18 +109,31 @@ function combineTenantFilter(tenantId: string, userFilter?: string): string {
 	return `${tenant} && (${userFilter})`;
 }
 
+function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
+	const field = filter.field ?? "_geoloc";
+	return filter.locations
+		.map((loc) => `${field}:(${loc.lat}, ${loc.lng}, ${loc.radiusKm} km)`)
+		.join(" || ");
+}
+
 export async function searchDocuments(input: SearchDocumentsInput): Promise<SearchDocumentsResult> {
 	const client = getTypesenseClient();
 
-	const perPage = Math.min(
-		Math.max(input.perPage ?? config.defaultPerPage, 1),
-		config.maxPerPage,
-	);
+	const perPage = Math.min(Math.max(input.perPage ?? config.defaultPerPage, 1), config.maxPerPage);
+
+	// Build combined filter: user filter + multi-location geo filter
+	let combinedUserFilter = input.filterBy;
+	if (input.multiLocation) {
+		const multiGeoFilter = buildMultiLocationFilter(input.multiLocation);
+		combinedUserFilter = combinedUserFilter
+			? `${combinedUserFilter} && (${multiGeoFilter})`
+			: multiGeoFilter;
+	}
 
 	const params: TypesenseSearchParams = {
 		q: input.q,
 		query_by: input.queryBy ?? "",
-		filter_by: combineTenantFilter(input.tenantId, input.filterBy),
+		filter_by: combineTenantFilter(input.tenantId, combinedUserFilter),
 		facet_by: input.facetBy,
 		sort_by: input.sortBy,
 		per_page: perPage,
@@ -194,11 +215,21 @@ export async function multiSearchDocuments(
 			Math.max(entry.perPage ?? config.defaultPerPage, 1),
 			config.maxPerPage,
 		);
+
+		// Build combined filter: user filter + multi-location geo filter
+		let combinedMultiFilter = entry.filterBy;
+		if (entry.multiLocation) {
+			const multiGeoFilter = buildMultiLocationFilter(entry.multiLocation);
+			combinedMultiFilter = combinedMultiFilter
+				? `${combinedMultiFilter} && (${multiGeoFilter})`
+				: multiGeoFilter;
+		}
+
 		return {
 			collection: entry.alias,
 			q: entry.q,
 			query_by: entry.queryBy ?? "",
-			filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
+			filter_by: combineTenantFilter(entry.tenantId, combinedMultiFilter),
 			facet_by: entry.facetBy,
 			sort_by: entry.sortBy,
 			per_page: perPage,

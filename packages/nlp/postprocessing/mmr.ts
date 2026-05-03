@@ -57,10 +57,7 @@ function cosineSimilarity(
 /**
  * Calculate Jaccard similarity between two term vector key sets.
  */
-function jaccardVectorSimilarity(
-	a: Map<string, number>,
-	b: Map<string, number>,
-): number {
+function jaccardVectorSimilarity(a: Map<string, number>, b: Map<string, number>): number {
 	const setA = new Set(a.keys());
 	const setB = new Set(b.keys());
 
@@ -136,10 +133,7 @@ export function mmrDiversify(
 						sel.vectorNorm!,
 					);
 				} else {
-					sim = jaccardVectorSimilarity(
-						candidate.vector,
-						sel.vector,
-					);
+					sim = jaccardVectorSimilarity(candidate.vector, sel.vector);
 				}
 				if (sim > maxSim) maxSim = sim;
 			}

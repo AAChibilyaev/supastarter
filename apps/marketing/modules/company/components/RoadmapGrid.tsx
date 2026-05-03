@@ -4,14 +4,18 @@ import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
 import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import {
+	BarChart3Icon,
 	BookOpenIcon,
 	BrainCircuitIcon,
 	CheckCircleIcon,
 	CloudIcon,
+	CreditCardIcon,
 	GaugeIcon,
 	LinkIcon,
 	MegaphoneIcon,
+	MonitorIcon,
 	SearchIcon,
+	SparklesIcon,
 	ThumbsUpIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -20,14 +24,18 @@ import type { ComponentType } from "react";
 
 interface RoadmapItem {
 	key:
-		| "searchCore"
-		| "marketing"
+		| "aiNlp"
+		| "analytics"
+		| "billing"
 		| "connectors"
-		| "knowledge"
-		| "metering"
 		| "docs"
+		| "knowledge"
+		| "marketing"
+		| "metering"
+		| "searchCore"
 		| "selfHost"
-		| "vectorSearch";
+		| "vectorSearch"
+		| "widget";
 	icon: ComponentType<{ className?: string }>;
 	initialVotes: number;
 }
@@ -40,6 +48,10 @@ const ALL_ITEMS: RoadmapItem[] = [
 	{ key: "connectors", icon: LinkIcon, initialVotes: 95 },
 	{ key: "knowledge", icon: BrainCircuitIcon, initialVotes: 127 },
 	{ key: "metering", icon: GaugeIcon, initialVotes: 89 },
+	{ key: "billing", icon: CreditCardIcon, initialVotes: 73 },
+	{ key: "analytics", icon: BarChart3Icon, initialVotes: 81 },
+	{ key: "widget", icon: MonitorIcon, initialVotes: 64 },
+	{ key: "aiNlp", icon: SparklesIcon, initialVotes: 112 },
 	{ key: "docs", icon: BookOpenIcon, initialVotes: 113 },
 	{ key: "selfHost", icon: CloudIcon, initialVotes: 156 },
 	{ key: "vectorSearch", icon: SearchIcon, initialVotes: 78 },
@@ -51,6 +63,10 @@ const spanMap: Record<RoadmapItem["key"], string> = {
 	connectors: "md:col-span-2",
 	knowledge: "md:col-span-2",
 	metering: "md:col-span-2",
+	billing: "md:col-span-2",
+	analytics: "md:col-span-2",
+	widget: "md:col-span-2",
+	aiNlp: "md:col-span-2",
 	docs: "md:col-span-2",
 	selfHost: "md:col-span-2",
 	vectorSearch: "md:col-span-2",
@@ -210,8 +226,7 @@ export function RoadmapGrid() {
 	const inProgress = ALL_ITEMS.filter((item) => t(`items.${item.key}.status`) === "inProgress");
 	const planned = ALL_ITEMS.filter(
 		(item) =>
-			t(`items.${item.key}.status`) !== "shipped" &&
-			t(`items.${item.key}.status`) !== "inProgress",
+			t(`items.${item.key}.status`) !== "shipped" && t(`items.${item.key}.status`) !== "inProgress",
 	);
 
 	return (
@@ -226,11 +241,7 @@ export function RoadmapGrid() {
 
 					<div className="mt-16">
 						<RoadmapSection status="shipped" titleKey="shippedTitle" items={shipped} />
-						<RoadmapSection
-							status="inProgress"
-							titleKey="inProgressTitle"
-							items={inProgress}
-						/>
+						<RoadmapSection status="inProgress" titleKey="inProgressTitle" items={inProgress} />
 						<RoadmapSection status="planned" titleKey="plannedTitle" items={planned} />
 					</div>
 				</div>
@@ -243,9 +254,7 @@ export function RoadmapGrid() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">
-							{t("feedback.description")}
-						</p>
+						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

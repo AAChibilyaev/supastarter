@@ -4,6 +4,7 @@ import { PricingTable } from "@payments/components/PricingTable";
 import { usePlanData } from "@payments/hooks/plan-data";
 import { usePurchases } from "@payments/hooks/purchases";
 import { Button } from "@repo/ui/components/button";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
 	Dialog,
 	DialogContent,
@@ -60,11 +61,7 @@ export function ChangePlan({
 				title={t("settings.billing.changePlan.title")}
 				description={t("settings.billing.changePlan.description")}
 			>
-				<PricingTable
-					organizationId={organizationId}
-					userId={userId}
-					activePlanId={activePlanId}
-				/>
+				<PricingTable organizationId={organizationId} userId={userId} activePlanId={activePlanId} />
 			</SettingsItem>
 		);
 	}
@@ -128,55 +125,50 @@ export function ChangePlan({
 											}
 										).prices
 									: [];
-							const price = prices.find(
-								(p) => p.type === "subscription" && p.currency === "USD",
-							);
+							const price = prices.find((p) => p.type === "subscription" && p.currency === "USD");
 
 							return (
-								<div
-									key={planId}
-									className="p-4 flex items-center justify-between rounded-lg border"
-								>
-									<div className="gap-3 flex items-center">
-										<BadgeCheckIcon className="size-5 text-primary" />
-										<div>
-											<div className="font-semibold">{data.title}</div>
-											{data.description && (
-												<div className="text-sm text-muted-foreground">
-													{data.description}
-												</div>
-											)}
-										</div>
-									</div>
-									<div className="gap-3 flex items-center">
-										{price && (
-											<div className="text-right">
-												<div className="font-semibold">
-													{format.number(price.amount, {
-														style: "currency",
-														currency: price.currency,
-													})}
-												</div>
-												{price.interval && (
-													<div className="text-xs text-muted-foreground">
-														/
-														{price.interval === "month"
-															? t("pricing.month", { count: 1 })
-															: t("pricing.year", { count: 1 })}
-													</div>
+								<Card key={planId} className="rounded-lg border">
+									<CardContent className="p-4 flex items-center justify-between">
+										<div className="gap-3 flex items-center">
+											<BadgeCheckIcon className="size-5 text-primary" />
+											<div>
+												<div className="font-semibold">{data.title}</div>
+												{data.description && (
+													<div className="text-sm text-muted-foreground">{data.description}</div>
 												)}
 											</div>
-										)}
-										<Button
-											variant="primary"
-											size="sm"
-											onClick={() => handleUpgrade(planId)}
-											loading={upgradeMutation.isPending}
-										>
-											{t("settings.billing.upgradePlan")}
-										</Button>
-									</div>
-								</div>
+										</div>
+										<div className="gap-3 flex items-center">
+											{price && (
+												<div className="text-right">
+													<div className="font-semibold">
+														{format.number(price.amount, {
+															style: "currency",
+															currency: price.currency,
+														})}
+													</div>
+													{price.interval && (
+														<div className="text-xs text-muted-foreground">
+															/
+															{price.interval === "month"
+																? t("pricing.month", { count: 1 })
+																: t("pricing.year", { count: 1 })}
+														</div>
+													)}
+												</div>
+											)}
+											<Button
+												variant="primary"
+												size="sm"
+												onClick={() => handleUpgrade(planId)}
+												loading={upgradeMutation.isPending}
+											>
+												{t("settings.billing.upgradePlan")}
+											</Button>
+										</div>
+									</CardContent>
+								</Card>
 							);
 						})}
 					</div>

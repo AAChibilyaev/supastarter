@@ -35,10 +35,7 @@ const DEFAULT_WEIGHTS: FeatureWeights = {
  * Calculate age-based recency score (0-1).
  * Uses exponential decay: newer docs get higher scores.
  */
-export function recencyScore(
-	createdAt: Date | number,
-	halfLifeDays: number = 30,
-): number {
+export function recencyScore(createdAt: Date | number, halfLifeDays: number = 30): number {
 	const created = createdAt instanceof Date ? createdAt.getTime() : createdAt;
 	const ageMs = Date.now() - created;
 	const ageDays = ageMs / (1000 * 60 * 60 * 24);
@@ -58,10 +55,7 @@ export function popularityScore(totalViews: number, maxViews: number): number {
 /**
  * Calculate freshness score (0-1) based on update frequency.
  */
-export function freshnessScore(
-	updatesPerDay: number,
-	maxUpdates: number = 10,
-): number {
+export function freshnessScore(updatesPerDay: number, maxUpdates: number = 10): number {
 	return Math.min(updatesPerDay / maxUpdates, 1);
 }
 
@@ -74,7 +68,7 @@ export function ctrScore(clicks: number, impressions: number): number {
 	// Smooth with Bayesian prior
 	const prior = 0.05; // 5% prior CTR
 	const priorWeight = 10; // equivalent to 10 impressions
-	return ((clicks + prior * priorWeight) / (impressions + priorWeight));
+	return (clicks + prior * priorWeight) / (impressions + priorWeight);
 }
 
 /**
@@ -85,9 +79,7 @@ export function authorityScore(
 	maxInbound: number = 1000,
 	pageRank?: number,
 ): number {
-	const linkScore = maxInbound > 0
-		? Math.min(inboundLinks / maxInbound, 1)
-		: 0;
+	const linkScore = maxInbound > 0 ? Math.min(inboundLinks / maxInbound, 1) : 0;
 
 	if (pageRank !== undefined) {
 		return linkScore * 0.4 + pageRank * 0.6;
@@ -136,24 +128,17 @@ export function extractFeatures(
 	},
 ): RankingFeatures {
 	return {
-		recency: doc.createdAt
-			? recencyScore(doc.createdAt)
-			: 0.5,
-		popularity: corpusStats?.maxViews && doc.views
-			? popularityScore(doc.views, corpusStats.maxViews)
-			: 0,
-		freshness: doc.updatesPerDay
-			? freshnessScore(doc.updatesPerDay)
-			: 0,
-		ctr: doc.clicks !== undefined && doc.impressions
-			? ctrScore(doc.clicks, doc.impressions)
-			: 0,
-		authority: doc.inboundLinks && corpusStats?.maxInbound
-			? authorityScore(doc.inboundLinks, corpusStats.maxInbound)
-			: 0,
-		completeness: doc.fields && doc.requiredFields
-			? completenessScore(doc.fields, doc.requiredFields)
-			: 0.5,
+		recency: doc.createdAt ? recencyScore(doc.createdAt) : 0.5,
+		popularity:
+			corpusStats?.maxViews && doc.views ? popularityScore(doc.views, corpusStats.maxViews) : 0,
+		freshness: doc.updatesPerDay ? freshnessScore(doc.updatesPerDay) : 0,
+		ctr: doc.clicks !== undefined && doc.impressions ? ctrScore(doc.clicks, doc.impressions) : 0,
+		authority:
+			doc.inboundLinks && corpusStats?.maxInbound
+				? authorityScore(doc.inboundLinks, corpusStats.maxInbound)
+				: 0,
+		completeness:
+			doc.fields && doc.requiredFields ? completenessScore(doc.fields, doc.requiredFields) : 0.5,
 	};
 }
 

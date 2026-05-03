@@ -52,21 +52,12 @@ export const naturalLanguageSearch = protectedProcedure
 				.array(
 					z.object({
 						field: z.string(),
-						type: z.enum([
-							"string",
-							"int32",
-							"int64",
-							"float",
-							"bool",
-							"string[]",
-						]),
+						type: z.enum(["string", "int32", "int64", "float", "bool", "string[]"]),
 						facet: z.boolean().optional(),
 					}),
 				)
 				.optional()
-				.describe(
-					"Optional schema of searchable fields to guide LLM filter extraction",
-				),
+				.describe("Optional schema of searchable fields to guide LLM filter extraction"),
 		}),
 	)
 	.output(
@@ -158,9 +149,7 @@ Respond ONLY with valid JSON:
 		const explanation = parsed.explanation ?? "";
 
 		// Build Typesense filter_by string
-		const filterBy = extractedFilters
-			.map((f) => `${f.field}${f.operator}${f.value}`)
-			.join(" && ");
+		const filterBy = extractedFilters.map((f) => `${f.field}${f.operator}${f.value}`).join(" && ");
 
 		// Phase 2: Execute the search with extracted filters
 		const client = getTypesenseClient();

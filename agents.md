@@ -90,10 +90,10 @@ Load the full context from this file. Scan sections relevant to the task. Load P
 ```markdown
 1. Read task text twice — note every constraint
 2. Classify scope by PRD:
-    - v0.x (search core) ✅ — PROCEED
-    - v0.5 (marketing site) ✅ — PROCEED
-    - v0.6/v0.7/v1.0 → DEFER — ask user
-    - wallet/ai-core/billing → DEFER — ask user
+   - v0.x (search core) ✅ — PROCEED
+   - v0.5 (marketing site) ✅ — PROCEED
+   - v0.6/v0.7/v1.0 → DEFER — ask user
+   - wallet/ai-core/billing → DEFER — ask user
 3. memory_search() for related facts and gotchas
 4. If touching existing code → code_search() for relevant symbols
 5. State plan in <plan> block before writing any code

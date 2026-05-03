@@ -75,9 +75,7 @@ export class CompletionSuggester {
 	/**
 	 * Learn from a corpus of (word, frequency) pairs.
 	 */
-	learnFromFrequencyMap(
-		frequencies: Record<string, number>,
-	): void {
+	learnFromFrequencyMap(frequencies: Record<string, number>): void {
 		for (const [word, freq] of Object.entries(frequencies)) {
 			this.trie.insert(word.toLowerCase(), freq);
 		}
@@ -86,10 +84,7 @@ export class CompletionSuggester {
 	/**
 	 * Get completion suggestions for a prefix.
 	 */
-	suggest(
-		prefix: string,
-		options?: CompletionOptions,
-	): CompletionResult[] {
+	suggest(prefix: string, options?: CompletionOptions): CompletionResult[] {
 		const opts = { ...this.options, ...options };
 		const normalized = prefix.toLowerCase().trim();
 
@@ -129,9 +124,7 @@ export class CompletionSuggester {
 	/**
 	 * Build a frequency map from query log data.
 	 */
-	buildFromQueryLog(
-		queries: Array<{ query: string; count: number }>,
-	): void {
+	buildFromQueryLog(queries: Array<{ query: string; count: number }>): void {
 		for (const { query, count } of queries) {
 			const normalized = query.toLowerCase().trim();
 			// Index the full query as a phrase
@@ -153,9 +146,7 @@ export class CompletionSuggester {
 		options?: CompletionOptions,
 	): CompletionResult[] {
 		const opts = { ...this.options, ...options };
-		const context = previousWords
-			.map((w) => w.toLowerCase().trim())
-			.filter(Boolean);
+		const context = previousWords.map((w) => w.toLowerCase().trim()).filter(Boolean);
 
 		if (context.length === 0) {
 			return this.suggest(currentPrefix, options);
@@ -199,12 +190,8 @@ export class CompletionSuggester {
 	 * Deserialize saved suggestor state.
 	 */
 	static fromJSON(data: Record<string, unknown>): CompletionSuggester {
-		const suggester = new CompletionSuggester(
-			data.options as CompletionOptions,
-		);
-		suggester.trie = WeightedTrie.fromJSON(
-			data.trie as Record<string, unknown>,
-		);
+		const suggester = new CompletionSuggester(data.options as CompletionOptions);
+		suggester.trie = WeightedTrie.fromJSON(data.trie as Record<string, unknown>);
 		return suggester;
 	}
 }

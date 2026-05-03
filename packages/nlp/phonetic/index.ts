@@ -817,8 +817,6 @@ export const PHONETIC_ALGORITHM_INFO = {
 		"English + Slavic/Germanic — primary + secondary codes for alternate pronunciations",
 	nysiis: "English — NY State identification system, 6-char code",
 	colognePhonetics: "German (Kölner Phonetik) — optimized for German pronunciation",
-	russianSoundex:
-		"Russian — adapted Soundex for Cyrillic phonetics, handles voiced/devoiced pairs",
-	russianMetaphone:
-		"Russian — handles vowel reduction, soft signs, consonant group normalization",
+	russianSoundex: "Russian — adapted Soundex for Cyrillic phonetics, handles voiced/devoiced pairs",
+	russianMetaphone: "Russian — handles vowel reduction, soft signs, consonant group normalization",
 } as const;

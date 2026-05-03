@@ -23,9 +23,7 @@ export async function applySubscriptionToWallet(
 	input: ApplySubscriptionInput,
 ): Promise<string | null> {
 	if ((input.organizationId == null) === (input.userId == null)) {
-		throw new Error(
-			"OWNER_REQUIRED_XOR: either organizationId or userId must be set, not both",
-		);
+		throw new Error("OWNER_REQUIRED_XOR: either organizationId or userId must be set, not both");
 	}
 
 	try {

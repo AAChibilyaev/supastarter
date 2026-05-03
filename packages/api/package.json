@@ -22,6 +22,7 @@
 		"@repo/auth": "workspace:*",
 		"@repo/billing-wallet": "workspace:*",
 		"@repo/database": "workspace:*",
+		"@repo/document-processor": "workspace:*",
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"@repo/mail": "workspace:*",

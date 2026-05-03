@@ -128,10 +128,7 @@ export function AdminWalletOps() {
 						placeholder={t("searchOrgPlaceholder")}
 					/>
 
-					<Select
-						value={effectiveOrganizationId}
-						onValueChange={setSelectedOrganizationId}
-					>
+					<Select value={effectiveOrganizationId} onValueChange={setSelectedOrganizationId}>
 						<SelectTrigger>
 							<SelectValue placeholder={t("selectOrgPlaceholder")} />
 						</SelectTrigger>
@@ -147,12 +144,14 @@ export function AdminWalletOps() {
 					{walletQuery.isLoading ? (
 						<Skeleton className="h-16 w-full" />
 					) : walletQuery.data ? (
-						<div className="p-3 text-sm rounded-md border">
-							<p className="text-foreground/60">{t("currentBalance")}</p>
-							<p className="font-semibold text-2xl">
-								{formatKopecks(walletQuery.data.availableBalanceKopecks)}
-							</p>
-						</div>
+						<Card className="rounded-md">
+							<CardContent className="p-3 text-sm">
+								<p className="text-foreground/60">{t("currentBalance")}</p>
+								<p className="font-semibold text-2xl">
+									{formatKopecks(walletQuery.data.availableBalanceKopecks)}
+								</p>
+							</CardContent>
+						</Card>
 					) : (
 						<p className="text-sm text-foreground/60">{t("walletNotInitialized")}</p>
 					)}
@@ -202,25 +201,20 @@ export function AdminWalletOps() {
 						<p className="text-sm text-foreground/60">{t("noTransactions")}</p>
 					) : (
 						transactionsQuery.data?.map((transaction) => (
-							<div
-								key={transaction.id}
-								className="p-3 text-sm flex items-center justify-between rounded-md border"
-							>
-								<div>
-									<p className="font-medium">
-										{transaction.direction.toUpperCase()}
-									</p>
-									<p className="text-foreground/60">{transaction.source}</p>
-								</div>
-								<div className="text-right">
-									<p className="font-medium">
-										{formatKopecks(transaction.amountKopecks)}
-									</p>
-									<p className="text-foreground/60">
-										{new Date(transaction.createdAt).toLocaleString()}
-									</p>
-								</div>
-							</div>
+							<Card key={transaction.id} className="rounded-md">
+								<CardContent className="p-3 text-sm flex items-center justify-between">
+									<div>
+										<p className="font-medium">{transaction.direction.toUpperCase()}</p>
+										<p className="text-foreground/60">{transaction.source}</p>
+									</div>
+									<div className="text-right">
+										<p className="font-medium">{formatKopecks(transaction.amountKopecks)}</p>
+										<p className="text-foreground/60">
+											{new Date(transaction.createdAt).toLocaleString()}
+										</p>
+									</div>
+								</CardContent>
+							</Card>
 						))
 					)}
 				</CardContent>

@@ -148,9 +148,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.curations.title")}</h3>
-					<p className="text-sm text-foreground/60">
-						{t("search.curations.description")}
-					</p>
+					<p className="text-sm text-foreground/60">{t("search.curations.description")}</p>
 				</div>
 				<div className="gap-2 flex">
 					<Dialog
@@ -174,15 +172,11 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 										? t("search.curations.editTitle")
 										: t("search.curations.addTitle")}
 								</DialogTitle>
-								<DialogDescription>
-									{t("search.curations.dialogDescription")}
-								</DialogDescription>
+								<DialogDescription>{t("search.curations.dialogDescription")}</DialogDescription>
 							</DialogHeader>
 							<div className="space-y-4">
 								<div className="space-y-2">
-									<label className="text-sm font-medium">
-										{t("search.curations.queryLabel")}
-									</label>
+									<label className="text-sm font-medium">{t("search.curations.queryLabel")}</label>
 									<input
 										type="text"
 										value={formQuery}
@@ -192,9 +186,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 									/>
 								</div>
 								<div className="space-y-2">
-									<label className="text-sm font-medium">
-										{t("search.curations.pinnedLabel")}
-									</label>
+									<label className="text-sm font-medium">{t("search.curations.pinnedLabel")}</label>
 									<input
 										type="text"
 										value={formPinned}
@@ -204,9 +196,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 									/>
 								</div>
 								<div className="space-y-2">
-									<label className="text-sm font-medium">
-										{t("search.curations.hiddenLabel")}
-									</label>
+									<label className="text-sm font-medium">{t("search.curations.hiddenLabel")}</label>
 									<input
 										type="text"
 										value={formHidden}
@@ -223,11 +213,7 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>
-					<Button
-						variant="primary"
-						onClick={handleSave}
-						loading={updateMutation.isPending}
-					>
+					<Button variant="primary" onClick={handleSave} loading={updateMutation.isPending}>
 						{t("search.curations.save")}
 					</Button>
 				</div>
@@ -263,18 +249,10 @@ export function CurationsPanel({ organizationId, slug }: CurationsPanelProps) {
 								</TableCell>
 								<TableCell className="text-right">
 									<div className="gap-1 flex justify-end">
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => openEditDialog(index)}
-										>
+										<Button variant="ghost" size="sm" onClick={() => openEditDialog(index)}>
 											{t("search.curations.edit")}
 										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => handleRemoveRule(index)}
-										>
+										<Button variant="ghost" size="sm" onClick={() => handleRemoveRule(index)}>
 											{t("search.curations.remove")}
 										</Button>
 									</div>

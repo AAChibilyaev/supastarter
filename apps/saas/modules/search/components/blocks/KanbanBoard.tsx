@@ -82,14 +82,9 @@ export function KanbanBoard({ columns, className, onItemClick }: KanbanBoardProp
 									onClick={() => onItemClick?.(item.id)}
 								>
 									<div className="gap-2 flex items-start justify-between">
-										<span className="text-sm font-medium leading-tight">
-											{item.title}
-										</span>
+										<span className="text-sm font-medium leading-tight">{item.title}</span>
 										{item.badge && (
-											<Badge
-												status={item.badge.status ?? "info"}
-												className="shrink-0 text-[10px]"
-											>
+											<Badge status={item.badge.status ?? "info"} className="shrink-0 text-[10px]">
 												{item.badge.label}
 											</Badge>
 										)}

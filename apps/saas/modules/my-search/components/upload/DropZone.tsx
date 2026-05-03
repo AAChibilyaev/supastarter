@@ -36,7 +36,8 @@ export function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
 			const fileArray = Array.from(files);
 
 			const invalid = fileArray.find(
-				(f) => !ACCEPTED_TYPES.includes(f.type) && !f.name.match(/\.(pdf|docx|txt|csv|json|md|epub)$/i),
+				(f) =>
+					!ACCEPTED_TYPES.includes(f.type) && !f.name.match(/\.(pdf|docx|txt|csv|json|md|epub)$/i),
 			);
 			if (invalid) {
 				setError(t("fileTypeNotSupported"));
@@ -105,7 +106,7 @@ export function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
 
 	return (
 		<div
-			className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
+			className={`p-8 relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed text-center transition-colors ${
 				isDragging
 					? "border-primary bg-primary/5"
 					: "border-muted-foreground/25 hover:border-muted-foreground/50"
@@ -132,7 +133,7 @@ export function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
 				multiple
 				onChange={handleInputChange}
 			/>
-			<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+			<div className="mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-muted">
 				<FileUpIcon className="h-6 w-6 text-muted-foreground" />
 			</div>
 			<p className="text-sm font-medium">{t("dropZoneText")}</p>
@@ -140,13 +141,13 @@ export function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
 			<p className="mt-1 text-xs text-muted-foreground">{t("dropZoneLimits")}</p>
 
 			{error && (
-				<div className="mt-3 flex items-center gap-2 rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive">
+				<div className="mt-3 gap-2 px-3 py-2 text-xs flex items-center rounded-md bg-destructive/10 text-destructive">
 					<XIcon className="h-3.5 w-3.5 shrink-0" />
 					<span>{error}</span>
 					<Button
 						variant="ghost"
 						size="icon"
-						className="ml-auto h-5 w-5"
+						className="h-5 w-5 ml-auto"
 						onClick={(e) => {
 							e.stopPropagation();
 							setError(null);

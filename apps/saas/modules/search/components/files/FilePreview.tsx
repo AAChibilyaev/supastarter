@@ -99,11 +99,7 @@ export function FilePreview({ file, onClose }: FilePreviewProps) {
 	);
 
 	const statusColor =
-		file.status === "indexed"
-			? "success"
-			: file.status === "processing"
-				? "warning"
-				: "error";
+		file.status === "indexed" ? "success" : file.status === "processing" ? "warning" : "error";
 
 	return (
 		<Dialog open onOpenChange={(open) => !open && onClose()}>
@@ -115,7 +111,7 @@ export function FilePreview({ file, onClose }: FilePreviewProps) {
 						</div>
 						<div className="min-w-0 flex-1">
 							<DialogTitle className="truncate">{file.name}</DialogTitle>
-							<DialogDescription className="flex gap-2 items-center mt-0.5">
+							<DialogDescription className="gap-2 mt-0.5 flex items-center">
 								<Badge status={statusColor}>{file.status}</Badge>
 								<span className="text-xs">{file.mimeType}</span>
 							</DialogDescription>
@@ -126,10 +122,7 @@ export function FilePreview({ file, onClose }: FilePreviewProps) {
 				{/* Metadata grid */}
 				<div className="gap-2 grid grid-cols-2">
 					{metadata.map(({ label, value }) => (
-						<div
-							key={label}
-							className="p-3 space-y-1 rounded-lg bg-muted/50"
-						>
+						<div key={label} className="p-3 space-y-1 rounded-lg bg-muted/50">
 							<p className="text-xs text-muted-foreground">{label}</p>
 							<p className="font-medium text-sm truncate">{value}</p>
 						</div>
@@ -137,7 +130,7 @@ export function FilePreview({ file, onClose }: FilePreviewProps) {
 				</div>
 
 				{/* Content preview area */}
-				<div className="p-4 min-h-[120px] rounded-lg border border-dashed bg-muted/30 flex flex-col items-center justify-center">
+				<div className="p-4 flex min-h-[120px] flex-col items-center justify-center rounded-lg border border-dashed bg-muted/30">
 					<FileIcon className="size-10 mb-2 text-muted-foreground/40" />
 					<p className="text-sm text-muted-foreground">
 						{file.type === "image"

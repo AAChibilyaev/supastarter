@@ -13,7 +13,7 @@ const RUSSIAN_SOFT_SIGN_FIXES: Record<string, string> = {
 
 /** Common Russian compound/split word fixes */
 const RUSSIAN_COMPOUND_FIXES: Record<string, string> = {
-	"не": "", // "незнаю" → "не знаю" handled in text level
+	не: "", // "незнаю" → "не знаю" handled in text level
 };
 
 /**
@@ -24,40 +24,37 @@ export function fixRussianSoftSign(text: string): string {
 	if (!text) return text;
 
 	// Fix -тся/-ться: if preceded by vowel or й, prefer -ться (infinitive)
-	return text.replace(
-		/([аеёиоуыэюяй])(тся|ться)\b/gi,
-		(_match, before, ending) => {
-			// Default to -ться (infinitive) after vowels
-			return before + "ться";
-		},
-	);
+	return text.replace(/([аеёиоуыэюяй])(тся|ться)\b/gi, (_match, before, ending) => {
+		// Default to -ться (infinitive) after vowels
+		return before + "ться";
+	});
 }
 
 /** Common spelling errors from phonetic confusion */
 const PHONETIC_FIXES: Record<string, string> = {
 	// English
-	"teh": "the",
-	"recieve": "receive",
-	"wierd": "weird",
-	"beleive": "believe",
-	"acheive": "achieve",
-	"adress": "address",
-	"calender": "calendar",
-	"definately": "definitely",
-	"seperate": "separate",
-	"occured": "occurred",
-	"occurence": "occurrence",
-	"priviledge": "privilege",
-	"publically": "publicly",
-	"thier": "their",
-	"truely": "truly",
-	"untill": "until",
-	"wich": "which",
+	teh: "the",
+	recieve: "receive",
+	wierd: "weird",
+	beleive: "believe",
+	acheive: "achieve",
+	adress: "address",
+	calender: "calendar",
+	definately: "definitely",
+	seperate: "separate",
+	occured: "occurred",
+	occurence: "occurrence",
+	priviledge: "privilege",
+	publically: "publicly",
+	thier: "their",
+	truely: "truly",
+	untill: "until",
+	wich: "which",
 	// Russian common errors
-	"сдесь": "здесь",
-	"зделать": "сделать",
-	"здавать": "сдавать",
-	"збор": "сбор",
+	сдесь: "здесь",
+	зделать: "сделать",
+	здавать: "сдавать",
+	збор: "сбор",
 };
 
 /**
@@ -85,10 +82,7 @@ export function fixPhoneticErrors(text: string): string {
 /**
  * Full grammar correction pipeline for a search query.
  */
-export function correctGrammar(
-	text: string,
-	language: StemmerLanguage = "en",
-): string {
+export function correctGrammar(text: string, language: StemmerLanguage = "en"): string {
 	if (!text) return text;
 
 	let result = text;

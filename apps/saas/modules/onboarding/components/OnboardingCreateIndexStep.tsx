@@ -89,8 +89,7 @@ export function OnboardingCreateIndexStep({ onCompleted }: Props) {
 										const current = form.getValues("slug");
 										if (
 											!current ||
-											current ===
-												slugify(form.getValues("displayName").slice(0, -1))
+											current === slugify(form.getValues("displayName").slice(0, -1))
 										) {
 											form.setValue("slug", slugify(e.target.value), {
 												shouldValidate: true,
@@ -113,9 +112,7 @@ export function OnboardingCreateIndexStep({ onCompleted }: Props) {
 							<FormControl>
 								<Input {...field} placeholder="my-store-products" />
 							</FormControl>
-							<FormDescription>
-								{t("onboarding.createIndex.slugHint")}
-							</FormDescription>
+							<FormDescription>{t("onboarding.createIndex.slugHint")}</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}

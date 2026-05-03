@@ -59,7 +59,11 @@ curl -X POST https://app.aacsearch.com/api/v1/indexes/products/documents \
 "To add search to a webpage, drop in our embed script:"
 
 ```html
-<script src="https://cdn.aacsearch.com/widget.js" data-index="products" data-api-key="ss_search_xxx"></script>
+<script
+	src="https://cdn.aacsearch.com/widget.js"
+	data-index="products"
+	data-api-key="ss_search_xxx"
+></script>
 ```
 
 **Narrator:**
@@ -82,13 +86,13 @@ Refresh the browser. Start typing 'runing shoes' — misspelled on purpose. AACs
 import { SearchClient } from "@aacsearch/client";
 
 const search = new SearchClient({
-  apiKey: "ss_search_xxx",
-  indexSlug: "products",
+	apiKey: "ss_search_xxx",
+	indexSlug: "products",
 });
 
 const { hits } = await search.search({
-  q: "wireless headphones",
-  queryBy: "title,description",
+	q: "wireless headphones",
+	queryBy: "title,description",
 });
 ```
 

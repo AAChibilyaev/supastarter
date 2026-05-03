@@ -135,10 +135,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = synonymInputSchema.safeParse(body);
@@ -193,10 +190,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -272,10 +266,7 @@ export const synonymsApp = new Hono()
 			return c.json(result);
 		} catch (error) {
 			logger.error("V1 list curations failed", { error, indexId, collectionName });
-			return c.json(
-				{ error: "internal_error", message: "Failed to retrieve curations" },
-				502,
-			);
+			return c.json({ error: "internal_error", message: "Failed to retrieve curations" }, 502);
 		}
 	})
 
@@ -293,10 +284,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = curationInputSchema.safeParse(body);
@@ -371,10 +359,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -455,10 +440,7 @@ export const synonymsApp = new Hono()
 			return c.json({ fields: sortingFields });
 		} catch (error) {
 			logger.error("V1 list sorting fields failed", { error, indexId });
-			return c.json(
-				{ error: "internal_error", message: "Failed to retrieve sorting fields" },
-				502,
-			);
+			return c.json({ error: "internal_error", message: "Failed to retrieve sorting fields" }, 502);
 		}
 	})
 
@@ -476,10 +458,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = sortingFieldSchema.safeParse(body);
@@ -548,10 +527,7 @@ export const synonymsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -600,10 +576,7 @@ export const synonymsApp = new Hono()
 			});
 		} catch (error) {
 			logger.error("V1 replace sorting fields failed", { error, indexId });
-			return c.json(
-				{ error: "internal_error", message: "Failed to replace sorting fields" },
-				502,
-			);
+			return c.json({ error: "internal_error", message: "Failed to replace sorting fields" }, 502);
 		}
 	})
 
@@ -624,9 +597,7 @@ export const synonymsApp = new Hono()
 		try {
 			const collection = client.collections(collName);
 			const currentSchema = await collection.retrieve();
-			const existingField = currentSchema.fields.find(
-				(f: SchemaField) => f.name === fieldName,
-			);
+			const existingField = currentSchema.fields.find((f: SchemaField) => f.name === fieldName);
 
 			if (!existingField) {
 				return c.json(
@@ -646,10 +617,7 @@ export const synonymsApp = new Hono()
 			return c.json({ name: fieldName, sort: false, removed: true });
 		} catch (error) {
 			logger.error("V1 remove sorting field failed", { error, indexId, fieldName });
-			return c.json(
-				{ error: "internal_error", message: "Failed to remove sorting field" },
-				502,
-			);
+			return c.json({ error: "internal_error", message: "Failed to remove sorting field" }, 502);
 		}
 	})
 

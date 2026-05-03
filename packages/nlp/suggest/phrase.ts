@@ -207,9 +207,7 @@ export class PhraseSuggester {
 	 * Deserialize saved state.
 	 */
 	static fromJSON(data: Record<string, unknown>): PhraseSuggester {
-		const suggester = new PhraseSuggester(
-			data.options as PhraseSuggesterOptions,
-		);
+		const suggester = new PhraseSuggester(data.options as PhraseSuggesterOptions);
 
 		const phrases = data.phrases as Record<string, number>;
 		if (phrases) {

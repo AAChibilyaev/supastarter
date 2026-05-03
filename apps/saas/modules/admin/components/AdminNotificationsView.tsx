@@ -62,20 +62,17 @@ export function AdminNotificationsView() {
 				</CardHeader>
 				<CardContent className="gap-2 grid grid-cols-1">
 					{(notificationsQuery.data as NotificationRow[] | undefined)?.map((item) => (
-						<div
-							key={item.id}
-							className="p-3 text-sm flex items-center justify-between rounded-md border"
-						>
-							<div>
-								<p className="font-medium">{item.type}</p>
-								<p className="text-foreground/60">
-									{new Date(item.createdAt).toLocaleString()}
-								</p>
-							</div>
-							<span className="text-xs text-foreground/60">
-								{item.read ? t("statusRead") : t("statusUnread")}
-							</span>
-						</div>
+						<Card key={item.id} className="rounded-md">
+							<CardContent className="p-3 text-sm flex items-center justify-between">
+								<div>
+									<p className="font-medium">{item.type}</p>
+									<p className="text-foreground/60">{new Date(item.createdAt).toLocaleString()}</p>
+								</div>
+								<span className="text-xs text-foreground/60">
+									{item.read ? t("statusRead") : t("statusUnread")}
+								</span>
+							</CardContent>
+						</Card>
 					))}
 					{!notificationsQuery.isLoading &&
 					(notificationsQuery.data as NotificationRow[] | undefined)?.length === 0 ? (

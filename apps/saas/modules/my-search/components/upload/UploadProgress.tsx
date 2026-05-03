@@ -30,7 +30,7 @@ export function UploadProgress({ jobs }: UploadProgressProps) {
 	const estimatedTime = jobs.some((j) => j.status === "pending" || j.status === "processing");
 
 	return (
-		<div className="space-y-3 rounded-lg border p-4">
+		<div className="space-y-3 p-4 rounded-lg border">
 			<div className="flex items-center justify-between">
 				<h4 className="text-sm font-medium">{t("uploadProgress")}</h4>
 				{estimatedTime && (
@@ -46,34 +46,34 @@ export function UploadProgress({ jobs }: UploadProgressProps) {
 
 			<div className="space-y-2">
 				{jobs.map((job) => (
-					<div key={job.id} className="flex items-center gap-3">
+					<div key={job.id} className="gap-3 flex items-center">
 						{job.type === "file" ? (
 							<FileTextIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
 						) : (
 							<GlobeIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
 						)}
 						<div className="min-w-0 flex-1">
-							<p className="truncate text-sm">{job.name}</p>
+							<p className="text-sm truncate">{job.name}</p>
 							{job.status === "pending" || job.status === "processing" ? (
 								<Progress value={job.progress} className="mt-1 h-1.5" />
 							) : job.status === "done" ? (
-								<div className="mt-0.5 flex items-center gap-1">
+								<div className="mt-0.5 gap-1 flex items-center">
 									<CheckCircleIcon className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
 									<span className="text-xs text-green-600 dark:text-green-400">
 										{t("completed").toLowerCase()}
 									</span>
 								</div>
 							) : (
-								<div className="mt-0.5 flex items-center gap-1">
+								<div className="mt-0.5 gap-1 flex items-center">
 									<XCircleIcon className="h-3.5 w-3.5 shrink-0 text-destructive" />
-									<span className="truncate text-xs text-destructive" title={job.error}>
+									<span className="text-xs truncate text-destructive" title={job.error}>
 										{job.error ?? t("failed")}
 									</span>
 								</div>
 							)}
 						</div>
 						{job.status === "processing" && (
-							<span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+							<span className="text-xs shrink-0 text-muted-foreground tabular-nums">
 								{job.progress}%
 							</span>
 						)}

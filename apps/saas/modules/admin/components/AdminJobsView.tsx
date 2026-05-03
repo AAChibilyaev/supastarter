@@ -36,29 +36,26 @@ export function AdminJobsView() {
 				</CardHeader>
 				<CardContent className="gap-3 grid grid-cols-1">
 					{data.jobs.map((job) => (
-						<div
-							key={job.path}
-							className="p-4 flex items-center justify-between rounded-lg border"
-						>
-							<div className="gap-1 grid grid-cols-1">
-								<p className="font-medium text-sm">{job.name}</p>
-								<p className="font-mono text-xs text-muted-foreground">
-									{job.path}
-								</p>
-							</div>
-							<div className="gap-3 flex items-center">
-								{job.secretPreview && (
-									<span className="font-mono text-xs text-muted-foreground">
-										{job.secretPreview}
-									</span>
-								)}
-								{job.configured ? (
-									<Badge status="success">{t("jobs.ready")}</Badge>
-								) : (
-									<Badge status="error">{t("jobs.missingSecret")}</Badge>
-								)}
-							</div>
-						</div>
+						<Card key={job.path} className="rounded-lg">
+							<CardContent className="p-4 flex items-center justify-between">
+								<div className="gap-1 grid grid-cols-1">
+									<p className="font-medium text-sm">{job.name}</p>
+									<p className="font-mono text-xs text-muted-foreground">{job.path}</p>
+								</div>
+								<div className="gap-3 flex items-center">
+									{job.secretPreview && (
+										<span className="font-mono text-xs text-muted-foreground">
+											{job.secretPreview}
+										</span>
+									)}
+									{job.configured ? (
+										<Badge status="success">{t("jobs.ready")}</Badge>
+									) : (
+										<Badge status="error">{t("jobs.missingSecret")}</Badge>
+									)}
+								</div>
+							</CardContent>
+						</Card>
 					))}
 				</CardContent>
 			</Card>
@@ -80,32 +77,29 @@ export function AdminJobsView() {
 					) : (
 						<div className="gap-2 grid grid-cols-1">
 							{data.recentSyncActivity.slice(0, 10).map((sync) => (
-								<div
-									key={sync.id}
-									className="p-3 text-sm flex items-center justify-between rounded-md border"
-								>
-									<div className="gap-2 flex items-center">
-										<Badge
-											status={
-												sync.status === "completed"
-													? "success"
-													: sync.status === "failed"
-														? "error"
-														: "warning"
-											}
-											className="text-xs"
-										>
-											{sync.status}
-										</Badge>
-										<span className="font-medium">{sync.type}</span>
-									</div>
-									<div className="gap-4 text-xs flex items-center text-muted-foreground">
-										<span>
-											{t("jobs.itemsCount", { count: sync.itemsCount })}
-										</span>
-										<span>{new Date(sync.startedAt).toLocaleString()}</span>
-									</div>
-								</div>
+								<Card key={sync.id} className="rounded-md">
+									<CardContent className="p-3 text-sm flex items-center justify-between">
+										<div className="gap-2 flex items-center">
+											<Badge
+												status={
+													sync.status === "completed"
+														? "success"
+														: sync.status === "failed"
+															? "error"
+															: "warning"
+												}
+												className="text-xs"
+											>
+												{sync.status}
+											</Badge>
+											<span className="font-medium">{sync.type}</span>
+										</div>
+										<div className="gap-4 text-xs flex items-center text-muted-foreground">
+											<span>{t("jobs.itemsCount", { count: sync.itemsCount })}</span>
+											<span>{new Date(sync.startedAt).toLocaleString()}</span>
+										</div>
+									</CardContent>
+								</Card>
 							))}
 						</div>
 					)}

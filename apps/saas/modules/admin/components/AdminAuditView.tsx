@@ -39,23 +39,20 @@ export function AdminAuditView() {
 								<Skeleton key={`audit-users-${index}`} className="h-10 w-full" />
 							))
 						: (usersQuery.data?.users ?? []).map((user) => (
-								<div
-									key={user.id}
-									className="p-3 text-sm flex items-center justify-between rounded-md border"
-								>
-									<div>
-										<p className="font-medium">{user.name ?? user.email}</p>
-										<p className="text-foreground/60">{user.email}</p>
-									</div>
-									<div className="text-right">
-										<p className="text-xs text-foreground/60">
-											{user.role ?? t("defaultRole")}
-										</p>
-										<p className="text-xs text-foreground/60">
-											{new Date(user.updatedAt).toLocaleString()}
-										</p>
-									</div>
-								</div>
+								<Card key={user.id} className="rounded-md">
+									<CardContent className="p-3 text-sm flex items-center justify-between">
+										<div>
+											<p className="font-medium">{user.name ?? user.email}</p>
+											<p className="text-foreground/60">{user.email}</p>
+										</div>
+										<div className="text-right">
+											<p className="text-xs text-foreground/60">{user.role ?? t("defaultRole")}</p>
+											<p className="text-xs text-foreground/60">
+												{new Date(user.updatedAt).toLocaleString()}
+											</p>
+										</div>
+									</CardContent>
+								</Card>
 							))}
 				</CardContent>
 			</Card>
@@ -70,25 +67,22 @@ export function AdminAuditView() {
 								<Skeleton key={`audit-orgs-${index}`} className="h-10 w-full" />
 							))
 						: (organizationsQuery.data?.organizations ?? []).map((organization) => (
-								<div
-									key={organization.id}
-									className="p-3 text-sm flex items-center justify-between rounded-md border"
-								>
-									<div>
-										<p className="font-medium">{organization.name}</p>
-										<p className="text-foreground/60">
-											{organization.slug ?? t("noSlug")}
-										</p>
-									</div>
-									<div className="text-right">
-										<p className="text-xs text-foreground/60">
-											{organization.membersCount} members
-										</p>
-										<p className="text-xs text-foreground/60">
-											{new Date(organization.createdAt).toLocaleString()}
-										</p>
-									</div>
-								</div>
+								<Card key={organization.id} className="rounded-md">
+									<CardContent className="p-3 text-sm flex items-center justify-between">
+										<div>
+											<p className="font-medium">{organization.name}</p>
+											<p className="text-foreground/60">{organization.slug ?? t("noSlug")}</p>
+										</div>
+										<div className="text-right">
+											<p className="text-xs text-foreground/60">
+												{organization.membersCount} members
+											</p>
+											<p className="text-xs text-foreground/60">
+												{new Date(organization.createdAt).toLocaleString()}
+											</p>
+										</div>
+									</CardContent>
+								</Card>
 							))}
 				</CardContent>
 			</Card>

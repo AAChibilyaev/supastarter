@@ -94,12 +94,7 @@
 					"name": "Free",
 					"price": "$0",
 					"description": "For evaluating, hobby projects and side-products.",
-					"features": [
-						"10K search-units / month",
-						"1 index",
-						"3 API keys",
-						"Community support"
-					]
+					"features": ["10K search-units / month", "1 index", "3 API keys", "Community support"]
 				},
 				"pro": {
 					"name": "Pro",
@@ -566,13 +561,33 @@
 				"title": "Knowledge module R2.5",
 				"description": "RAG and GraphRAG over documents. 9 oRPC procedures, 7 Prisma models, file ingestion, chunking, retrieval.",
 				"status": "shipped"
-			},
-			"metering": {
-				"title": "Search-units metering v0.6",
-				"description": "Tochka wallet top-up, per-plan search-unit billing, analytics pipeline, wallet dashboard.",
-				"status": "inProgress"
-			},
-			"docs": {
+		},
+		"metering": {
+			"title": "Search-units metering v0.6",
+			"description": "Tochka wallet top-up, per-plan search-unit billing, analytics pipeline, wallet dashboard.",
+			"status": "inProgress"
+		},
+		"billing": {
+			"title": "Billing & payments",
+			"description": "Stripe subscriptions, customer portal, invoices, multi-currency support with Tochka Bank for Russian payments.",
+			"status": "shipped"
+		},
+		"analytics": {
+			"title": "Analytics & dashboards",
+			"description": "Real-time query analytics, usage metrics, failed queries, CTR tracking, and custom dashboards.",
+			"status": "inProgress"
+		},
+		"widget": {
+			"title": "Widget & embed SDK",
+			"description": "Drop-in search widget with Cmd+K modal, floating bubble, and full-page modes. React, Vue, Angular, and vanilla JS bundles.",
+			"status": "inProgress"
+		},
+		"aiNlp": {
+			"title": "NLP & AI search",
+			"description": "Spell correction, intent detection, AI query rewriting, and natural language search. Zero-click AI answers coming next.",
+			"status": "planned"
+		},
+		"docs": {
 				"title": "Public docs site v0.7",
 				"description": "Full documentation site with API reference, quick-start guides, and tutorials.",
 				"status": "planned"

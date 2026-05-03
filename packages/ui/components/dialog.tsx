@@ -51,10 +51,7 @@ const DialogContent = ({
 );
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div
-		className={cn("space-y-1.5 sm:text-left flex flex-col text-center", className)}
-		{...props}
-	/>
+	<div className={cn("space-y-1.5 sm:text-left flex flex-col text-center", className)} {...props} />
 );
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

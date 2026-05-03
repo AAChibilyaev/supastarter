@@ -1,9 +1,11 @@
 "use client";
 
 import { Button, Card, CardContent, cn } from "@repo/ui";
-import { CheckIcon, FileUpIcon, Settings2Icon, Table2Icon } from "lucide-react";
+import { CheckIcon, FileUpIcon, ListFilterIcon, Settings2Icon, Table2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+
+import { FacetsPanel, type FacetConfig } from "../panels/FacetsPanel";
 
 interface StepInfo {
 	id: number;
@@ -15,6 +17,7 @@ const STEPS: StepInfo[] = [
 	{ id: 1, key: "dataSource", icon: FileUpIcon },
 	{ id: 2, key: "schema", icon: Table2Icon },
 	{ id: 3, key: "searchConfig", icon: Settings2Icon },
+	{ id: 4, key: "facets", icon: ListFilterIcon },
 ];
 
 interface StepData {
@@ -35,6 +38,8 @@ interface StepData {
 	prefixSearch: boolean;
 	infixSearch: "off" | "fallback" | "always";
 	exactMatch: boolean;
+	// Step 4: Facets Config
+	facetConfig: FacetConfig[];
 }
 
 interface SearchConfigWizardProps {
@@ -57,6 +62,7 @@ export function SearchConfigWizard({
 		prefixSearch: true,
 		infixSearch: "fallback",
 		exactMatch: true,
+		facetConfig: [],
 	});
 
 	const updateData = (patch: Partial<StepData>) => {
@@ -71,13 +77,15 @@ export function SearchConfigWizard({
 				return wizardData.fields.length > 0;
 			case 3:
 				return wizardData.searchableFields.length > 0;
+			case 4:
+				return true;
 			default:
 				return false;
 		}
 	};
 
 	const handleNext = () => {
-		if (currentStep < 3) {
+		if (currentStep < 4) {
 			setCurrentStep((s) => s + 1);
 		} else if (onComplete) {
 			onComplete(wizardData);
@@ -115,10 +123,7 @@ export function SearchConfigWizard({
 						</div>
 						{idx < STEPS.length - 1 && (
 							<div
-								className={cn(
-									"h-px flex-1",
-									currentStep > step.id ? "bg-primary" : "bg-border",
-								)}
+								className={cn("h-px flex-1", currentStep > step.id ? "bg-primary" : "bg-border")}
 							/>
 						)}
 					</div>
@@ -142,6 +147,15 @@ export function SearchConfigWizard({
 							t={t}
 						/>
 					)}
+					{currentStep === 4 && (
+						<StepFacets
+							fields={wizardData.fields}
+							configs={wizardData.facetConfig}
+							onChange={(facetConfig) => updateData({ facetConfig })}
+							t={t}
+						/>
+					)}
+
 					{currentStep === 3 && (
 						<StepSearchConfig
 							fields={wizardData.fields}
@@ -164,7 +178,7 @@ export function SearchConfigWizard({
 					{t("back")}
 				</Button>
 				<Button onClick={handleNext} disabled={!canProceed()}>
-					{currentStep === 3 ? t("finish") : t("next")}
+					{currentStep === 4 ? t("finish") : t("next")}
 				</Button>
 			</div>
 		</div>
@@ -229,13 +243,9 @@ function StepDataSource({ value, onChange, t }: StepDataSourceProps) {
 							</div>
 							<div className="flex-1">
 								<p className="font-medium">{t(opt.titleKey)}</p>
-								<p className="mt-1 text-sm text-muted-foreground">
-									{t(opt.descKey)}
-								</p>
+								<p className="mt-1 text-sm text-muted-foreground">{t(opt.descKey)}</p>
 							</div>
-							{value === opt.id && (
-								<CheckIcon className="size-5 shrink-0 text-primary" />
-							)}
+							{value === opt.id && <CheckIcon className="size-5 shrink-0 text-primary" />}
 						</CardContent>
 					</Card>
 				))}
@@ -300,7 +310,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 					<p className="text-xs text-muted-foreground/60">{t("schemaEmptyHint")}</p>
 				</div>
 			) : (
-				<div className="overflow-x-auto rounded-md border">
+				<Card className="overflow-x-auto rounded-md border"><CardContent className="p-0">
 					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b bg-muted/50">
@@ -376,7 +386,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 							))}
 						</tbody>
 					</table>
-				</div>
+				</CardContent></Card>
 			)}
 		</div>
 	);
@@ -430,7 +440,7 @@ function StepSearchConfig({
 			{/* Searchable fields */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-medium">{t("searchableFields")}</h4>
-				<div className="overflow-x-auto rounded-md border">
+				<Card className="overflow-x-auto rounded-md border"><CardContent className="p-0">
 					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b bg-muted/50">
@@ -471,9 +481,7 @@ function StepSearchConfig({
 											min={1}
 											max={100}
 											value={fieldWeights[field.name] ?? 1}
-											onChange={(e) =>
-												setWeight(field.name, Number(e.target.value))
-											}
+											onChange={(e) => setWeight(field.name, Number(e.target.value))}
 											disabled={!searchableFields.includes(field.name)}
 											className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
 										/>
@@ -482,11 +490,9 @@ function StepSearchConfig({
 							))}
 						</tbody>
 					</table>
-				</div>
+				</CardContent></Card>
 				{stringFields.length === 0 && (
-					<p className="py-4 text-sm text-center text-muted-foreground">
-						{t("noStringFields")}
-					</p>
+					<p className="py-4 text-sm text-center text-muted-foreground">{t("noStringFields")}</p>
 				)}
 			</div>
 
@@ -495,9 +501,7 @@ function StepSearchConfig({
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
 				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">
-							{t("typoTolerance")}
-						</label>
+						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}
@@ -547,6 +551,29 @@ function StepSearchConfig({
 					</label>
 				</div>
 			</div>
+		</div>
+	);
+}
+
+// ─── Step 4: Facets ─────────────────────────────────────────────────────────
+
+interface StepFacetsProps {
+	fields: Array<{ name: string; type: string; facet: boolean }>;
+	configs: FacetConfig[];
+	onChange: (configs: FacetConfig[]) => void;
+	t: (key: string) => string;
+}
+
+function StepFacets({ fields, configs, onChange, t }: StepFacetsProps) {
+	const facetFields = fields.filter((f) => f.facet).map((f) => f.name);
+
+	return (
+		<div className="space-y-4">
+			<div>
+				<h3 className="text-lg font-semibold">{t("step4Title")}</h3>
+				<p className="text-sm text-muted-foreground">{t("step4Description")}</p>
+			</div>
+			<FacetsPanel facetFields={facetFields} configs={configs} onChange={onChange} />
 		</div>
 	);
 }

@@ -49,7 +49,8 @@ export const ask = protectedProcedure
 		});
 		if (retrieved.chunks.length === 0) {
 			return {
-				answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
+				answer:
+					"I could not find supporting knowledge in this space yet. Upload data sources or files first.",
 				citations: [],
 				graphEdges: [],
 			};

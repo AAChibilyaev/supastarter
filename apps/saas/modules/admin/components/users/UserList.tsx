@@ -46,10 +46,7 @@ export function UserList() {
 	const t = useTranslations();
 	const queryClient = useQueryClient();
 	const { confirm } = useConfirmationAlert();
-	const [currentPage, setCurrentPage] = useQueryState(
-		"currentPage",
-		parseAsInteger.withDefault(1),
-	);
+	const [currentPage, setCurrentPage] = useQueryState("currentPage", parseAsInteger.withDefault(1));
 	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
 		leading: true,
@@ -170,17 +167,11 @@ export function UserList() {
 							avatarUrl={row.original.image}
 						/>
 						<div className="leading-tight">
-							<strong className="block">
-								{row.original.name ?? row.original.email}
-							</strong>
+							<strong className="block">{row.original.name ?? row.original.email}</strong>
 							<small className="gap-1 flex items-center text-foreground/60">
-								<span className="block">
-									{!!row.original.name && row.original.email}
-								</span>
+								<span className="block">{!!row.original.name && row.original.email}</span>
 								<EmailVerified verified={row.original.emailVerified} />
-								<strong className="block">
-									{row.original.role === "admin" ? "Admin" : ""}
-								</strong>
+								<strong className="block">{row.original.role === "admin" ? "Admin" : ""}</strong>
 							</small>
 						</div>
 					</div>
@@ -211,27 +202,19 @@ export function UserList() {
 									</DropdownMenuItem>
 
 									{!row.original.emailVerified && (
-										<DropdownMenuItem
-											onClick={() =>
-												resendVerificationMail(row.original.email)
-											}
-										>
+										<DropdownMenuItem onClick={() => resendVerificationMail(row.original.email)}>
 											<Repeat1Icon className="mr-2 size-4" />
 											{t("admin.users.resendVerificationMail.title")}
 										</DropdownMenuItem>
 									)}
 
 									{row.original.role !== "admin" ? (
-										<DropdownMenuItem
-											onClick={() => assignAdminRole(row.original.id)}
-										>
+										<DropdownMenuItem onClick={() => assignAdminRole(row.original.id)}>
 											<ShieldCheckIcon className="mr-2 size-4" />
 											{t("admin.users.assignAdminRole")}
 										</DropdownMenuItem>
 									) : (
-										<DropdownMenuItem
-											onClick={() => removeAdminRole(row.original.id)}
-										>
+										<DropdownMenuItem onClick={() => removeAdminRole(row.original.id)}>
 											<ShieldXIcon className="mr-2 size-4" />
 											{t("admin.users.removeAdminRole")}
 										</DropdownMenuItem>
@@ -242,9 +225,7 @@ export function UserList() {
 											confirm({
 												title: t("admin.users.confirmDelete.title"),
 												message: t("admin.users.confirmDelete.message"),
-												confirmLabel: t(
-													"admin.users.confirmDelete.confirm",
-												),
+												confirmLabel: t("admin.users.confirmDelete.confirm"),
 												destructive: true,
 												onConfirm: () => deleteUser(row.original.id),
 											})
@@ -286,7 +267,7 @@ export function UserList() {
 				className="mb-4"
 			/>
 
-			<div className="rounded-md border">
+			<Card className="rounded-md">
 				<Table>
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
@@ -301,10 +282,7 @@ export function UserList() {
 											key={cell.id}
 											className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
 										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
 										</TableCell>
 									))}
 								</TableRow>
@@ -325,7 +303,7 @@ export function UserList() {
 						)}
 					</TableBody>
 				</Table>
-			</div>
+			</Card>
 
 			{data?.total && data.total > ITEMS_PER_PAGE && (
 				<Pagination

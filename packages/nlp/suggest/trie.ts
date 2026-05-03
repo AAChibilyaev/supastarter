@@ -40,10 +40,7 @@ export class WeightedTrie {
 		for (let i = 0; i < word.length; i++) {
 			const char = word[i]!;
 			if (!node.children.has(char)) {
-				node.children.set(
-					char,
-					this.createNode("", i + 1),
-				);
+				node.children.set(char, this.createNode("", i + 1));
 			}
 			node = node.children.get(char)!;
 		}
@@ -162,11 +159,7 @@ export class WeightedTrie {
 	 * Fuzzy search within edit distance, using the trie for pruning.
 	 * Returns words within the given edit distance, sorted by frequency.
 	 */
-	fuzzySearch(
-		query: string,
-		maxDistance: number = 2,
-		maxResults: number = 10,
-	): string[] {
+	fuzzySearch(query: string, maxDistance: number = 2, maxResults: number = 10): string[] {
 		if (!query) return [];
 		const results: Array<{ word: string; distance: number; frequency: number }> = [];
 
@@ -254,10 +247,7 @@ export class WeightedTrie {
 	static fromJSON(data: Record<string, unknown>): WeightedTrie {
 		const trie = new WeightedTrie();
 
-		const deserialize = (
-			data: Record<string, unknown>,
-			depth: number,
-		): TrieNode => {
+		const deserialize = (data: Record<string, unknown>, depth: number): TrieNode => {
 			const node: TrieNode = {
 				children: new Map(),
 				value: (data.v as string) || "",
@@ -267,10 +257,7 @@ export class WeightedTrie {
 			const children = data.c as Record<string, unknown>;
 			if (children) {
 				for (const [char, childData] of Object.entries(children)) {
-					node.children.set(
-						char,
-						deserialize(childData as Record<string, unknown>, depth + 1),
-					);
+					node.children.set(char, deserialize(childData as Record<string, unknown>, depth + 1));
 				}
 			}
 			return node;

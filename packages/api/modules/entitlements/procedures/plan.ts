@@ -9,8 +9,7 @@ export const getPlanInfo = protectedProcedure
 		path: "/entitlements/plan",
 		tags: ["Entitlements"],
 		summary: "Get current plan info and usage",
-		description:
-			"Returns the organization's plan, feature availability, and current quota usage.",
+		description: "Returns the organization's plan, feature availability, and current quota usage.",
 	})
 	.input(z.object({ organizationId: z.string() }))
 	.output(

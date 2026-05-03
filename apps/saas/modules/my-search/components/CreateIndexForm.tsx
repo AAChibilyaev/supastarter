@@ -1,22 +1,21 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { toast } from "sonner";
-
+import { useSession } from "@auth/hooks/use-session";
+import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useSession } from "@auth/hooks/use-session";
-import { Button } from "@repo/ui/components/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { toast } from "sonner";
 
+import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { DropZone } from "./upload/DropZone";
 import { FileList } from "./upload/FileList";
-import { UrlInput } from "./upload/UrlInput";
 import { UploadProgress } from "./upload/UploadProgress";
-import { useDocumentUpload } from "../hooks/useDocumentUpload";
+import { UrlInput } from "./upload/UrlInput";
 
 interface CreateIndexFormProps {
 	onSuccess?: (indexId: string) => void;
@@ -74,8 +73,20 @@ export function CreateIndexForm({ onSuccess, onCancel }: CreateIndexFormProps) {
 
 	const handleAutoSlug = (name: string) => {
 		setDisplayName(name);
-		if (!slug || slug === displayName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")) {
-			setSlug(name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""));
+		if (
+			!slug ||
+			slug ===
+				displayName
+					.toLowerCase()
+					.replace(/\s+/g, "-")
+					.replace(/[^a-z0-9-]/g, "")
+		) {
+			setSlug(
+				name
+					.toLowerCase()
+					.replace(/\s+/g, "-")
+					.replace(/[^a-z0-9-]/g, ""),
+			);
 		}
 	};
 
@@ -109,13 +120,18 @@ export function CreateIndexForm({ onSuccess, onCancel }: CreateIndexFormProps) {
 			<UrlInput onUrlAdd={addUrl} disabled={!indexId && !createIndexMutation.isPending} />
 
 			{/* File List */}
-			<FileList files={pendingFiles} urls={pendingUrls} onRemoveFile={removeFile} onRemoveUrl={removeUrl} />
+			<FileList
+				files={pendingFiles}
+				urls={pendingUrls}
+				onRemoveFile={removeFile}
+				onRemoveUrl={removeUrl}
+			/>
 
 			{/* Upload Progress */}
 			<UploadProgress jobs={uploadJobs} />
 
 			{/* Actions */}
-			<div className="flex items-center justify-end gap-3">
+			<div className="gap-3 flex items-center justify-end">
 				{onCancel && (
 					<Button variant="outline" onClick={onCancel}>
 						{t("cancel")}

@@ -20,6 +20,16 @@ export { SpellCorrector, type CorrectionOptions, type CorrectionResult } from ".
 
 export { TrigramsIndex, ShingleMatcher } from "./ngrams";
 
-export { SymSpell, type SymSpellOptions, type SymSpellSuggestion, DEFAULT_SYMSPELL_OPTIONS } from "./symspell";
+export {
+	SymSpell,
+	type SymSpellOptions,
+	type SymSpellSuggestion,
+	DEFAULT_SYMSPELL_OPTIONS,
+} from "./symspell";
 
-export { ContextCorrector, type ContextCorrectionOptions, type ContextCorrectionResult, DEFAULT_CONTEXT_OPTIONS } from "./context-corrector";
+export {
+	ContextCorrector,
+	type ContextCorrectionOptions,
+	type ContextCorrectionResult,
+	DEFAULT_CONTEXT_OPTIONS,
+} from "./context-corrector";

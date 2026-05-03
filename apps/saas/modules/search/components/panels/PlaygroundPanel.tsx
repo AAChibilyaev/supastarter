@@ -183,10 +183,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 	const [resultTab, setResultTab] = useState<ResultTab>("hits");
 
 	// ---- Restore state on index change ----
-	const firstIndex = useMemo(
-		() => (indexes && indexes.length > 0 ? indexes[0] : null),
-		[indexes],
-	);
+	const firstIndex = useMemo(() => (indexes && indexes.length > 0 ? indexes[0] : null), [indexes]);
 
 	useEffect(() => {
 		if (!selectedSlug && firstIndex) {
@@ -370,9 +367,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 					onClick={() => setAdvancedOpen(!advancedOpen)}
 					className="text-sm font-medium text-primary hover:underline"
 				>
-					{advancedOpen
-						? t("search.playground.advancedHide")
-						: t("search.playground.advancedShow")}
+					{advancedOpen ? t("search.playground.advancedHide") : t("search.playground.advancedShow")}
 				</button>
 
 				{advancedOpen && (
@@ -408,9 +403,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 								min={1}
 								max={100}
 								value={perPage}
-								onChange={(e) =>
-									setPerPage(Number(e.target.value) || DEFAULT_PER_PAGE)
-								}
+								onChange={(e) => setPerPage(Number(e.target.value) || DEFAULT_PER_PAGE)}
 							/>
 						</div>
 					</div>
@@ -436,9 +429,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 						</span>
 						<span>
 							{t("search.playground.hitCount")}:{" "}
-							<span className="font-medium text-foreground tabular-nums">
-								{result.found}
-							</span>
+							<span className="font-medium text-foreground tabular-nums">{result.found}</span>
 						</span>
 					</div>
 
@@ -451,9 +442,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 							<TabsTrigger value="facets" disabled={!result.facetCounts?.length}>
 								{t("search.playground.facets")}
 							</TabsTrigger>
-							<TabsTrigger value="rawJson">
-								{t("search.playground.rawJson")}
-							</TabsTrigger>
+							<TabsTrigger value="rawJson">{t("search.playground.rawJson")}</TabsTrigger>
 						</TabsList>
 
 						<TabsContent value="hits">
@@ -464,11 +453,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 							) : (
 								<div className="space-y-2 max-h-[500px] overflow-y-auto">
 									{(result.hits as Record<string, unknown>[]).map((hit, i) => (
-										<HitCard
-											key={(hit.id as string) ?? i}
-											hit={hit}
-											index={i}
-										/>
+										<HitCard key={(hit.id as string) ?? i} hit={hit} index={i} />
 									))}
 								</div>
 							)}
@@ -479,9 +464,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 								<div className="space-y-4 max-h-[500px] overflow-y-auto">
 									{result.facetCounts.map((facet) => (
 										<div key={facet.fieldName}>
-											<h4 className="text-sm font-semibold mb-2 capitalize">
-												{facet.fieldName}
-											</h4>
+											<h4 className="text-sm font-semibold mb-2 capitalize">{facet.fieldName}</h4>
 											<div className="gap-1.5 flex flex-wrap">
 												{facet.counts.map((c) => (
 													<Badge key={c.value} status="info">
@@ -518,9 +501,7 @@ export function PlaygroundPanel({ organizationId }: PlaygroundPanelProps) {
 					<Card className="p-4 space-y-3">
 						<div className="gap-2 flex items-center">
 							<TerminalIcon className="size-4 text-foreground/40" />
-							<span className="text-sm font-medium">
-								{t("search.playground.curlTitle")}
-							</span>
+							<span className="text-sm font-medium">{t("search.playground.curlTitle")}</span>
 						</div>
 						<pre className="text-xs font-mono p-3 rounded overflow-x-auto bg-muted break-all whitespace-pre-wrap">
 							{buildCurl(selectedSlug, query, { queryBy, filterBy, sortBy, perPage })}

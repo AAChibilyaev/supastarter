@@ -95,10 +95,7 @@ export function AiChat() {
 
 	return (
 		<div className="max-w-3xl mx-auto flex h-[calc(100vh-10rem)] flex-col">
-			<div
-				ref={messagesContainerRef}
-				className="gap-4 py-8 flex flex-1 flex-col overflow-y-auto"
-			>
+			<div ref={messagesContainerRef} className="gap-4 py-8 flex flex-1 flex-col overflow-y-auto">
 				{messages.length === 0 && (
 					<div className="gap-6 flex flex-1 flex-col items-center justify-center">
 						<div className="gap-4 sm:grid-cols-2 grid w-full grid-cols-1">
@@ -122,9 +119,7 @@ export function AiChat() {
 										className="group gap-2 p-4 h-auto rounded-2xl bg-card text-center"
 									>
 										<Icon className="size-6 text-primary" />
-										<span className="text-sm text-foreground">
-											{suggestion.text}
-										</span>
+										<span className="text-sm text-foreground">{suggestion.text}</span>
 									</Button>
 								);
 							})}

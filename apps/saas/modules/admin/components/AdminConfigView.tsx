@@ -46,16 +46,10 @@ export function AdminConfigView() {
 					</CardHeader>
 					<CardContent className="gap-2 text-sm grid grid-cols-1">
 						<ConfigRow label={t("config.appName")} value={data.config.appName} />
-						<ConfigRow
-							label={t("config.nodeVersion")}
-							value={data.config.nodeVersion}
-						/>
+						<ConfigRow label={t("config.nodeVersion")} value={data.config.nodeVersion} />
 						<ConfigRow label={t("config.runtimeEnv")} value={data.config.runtimeEnv} />
 						<ConfigRow label={t("config.platform")} value={data.config.platform} />
-						<ConfigRow
-							label={t("config.uptime")}
-							value={formatUptime(data.config.uptime)}
-						/>
+						<ConfigRow label={t("config.uptime")} value={formatUptime(data.config.uptime)} />
 					</CardContent>
 				</Card>
 
@@ -71,15 +65,10 @@ export function AdminConfigView() {
 							<>
 								<div className="gap-2 flex items-center">
 									<CheckCircle2Icon className="size-4 text-success" />
-									<span className="font-medium text-success">
-										{t("config.healthy")}
-									</span>
+									<span className="font-medium text-success">{t("config.healthy")}</span>
 								</div>
 								{data.typesenseHealth.version && (
-									<ConfigRow
-										label={t("config.version")}
-										value={data.typesenseHealth.version}
-									/>
+									<ConfigRow label={t("config.version")} value={data.typesenseHealth.version} />
 								)}
 							</>
 						) : (
@@ -105,10 +94,7 @@ export function AdminConfigView() {
 				<CardContent>
 					{data.prismaStats.ok ? (
 						<div className="gap-4 md:grid-cols-4 text-sm grid grid-cols-2">
-							<StatBadge
-								label={t("config.users")}
-								value={data.prismaStats.userCount ?? 0}
-							/>
+							<StatBadge label={t("config.users")} value={data.prismaStats.userCount ?? 0} />
 							<StatBadge
 								label={t("config.organizations")}
 								value={data.prismaStats.organizationCount ?? 0}
@@ -117,10 +103,7 @@ export function AdminConfigView() {
 								label={t("config.searchIndexes")}
 								value={data.prismaStats.searchIndexCount ?? 0}
 							/>
-							<StatBadge
-								label={t("config.apiKeys")}
-								value={data.prismaStats.totalApiKeys ?? 0}
-							/>
+							<StatBadge label={t("config.apiKeys")} value={data.prismaStats.totalApiKeys ?? 0} />
 							<StatBadge
 								label={t("config.usageEvents")}
 								value={data.prismaStats.totalUsageEvents ?? 0}
@@ -146,9 +129,7 @@ export function AdminConfigView() {
 					<div className="gap-3 md:grid-cols-2 text-sm grid grid-cols-1">
 						{Object.entries(data.services).map(([key, configured]) => (
 							<div key={key} className="gap-2 flex items-center justify-between">
-								<span className="text-muted-foreground">
-									{formatServiceName(key)}
-								</span>
+								<span className="text-muted-foreground">{formatServiceName(key)}</span>
 								{configured ? (
 									<Badge status="success">{t("config.configured")}</Badge>
 								) : (
@@ -174,10 +155,12 @@ function ConfigRow({ label, value }: { label: string; value: string }) {
 
 function StatBadge({ label, value }: { label: string; value: number }) {
 	return (
-		<div className="p-3 rounded-lg border text-center">
-			<p className="font-semibold text-2xl tabular-nums">{value.toLocaleString()}</p>
-			<p className="text-xs mt-1 text-muted-foreground">{label}</p>
-		</div>
+		<Card className="rounded-lg text-center">
+			<CardContent className="p-3">
+				<p className="font-semibold text-2xl tabular-nums">{value.toLocaleString()}</p>
+				<p className="text-xs mt-1 text-muted-foreground">{label}</p>
+			</CardContent>
+		</Card>
 	);
 }
 

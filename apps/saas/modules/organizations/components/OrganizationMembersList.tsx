@@ -64,9 +64,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 						"organizations.settings.members.notifications.updateMembership.success.description",
 					);
 				},
-				error: t(
-					"organizations.settings.members.notifications.updateMembership.error.description",
-				),
+				error: t("organizations.settings.members.notifications.updateMembership.error.description"),
 			},
 		);
 	};
@@ -80,21 +78,15 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 				});
 			},
 			{
-				loading: t(
-					"organizations.settings.members.notifications.removeMember.loading.description",
-				),
+				loading: t("organizations.settings.members.notifications.removeMember.loading.description"),
 				success: () => {
 					void queryClient.invalidateQueries({
 						queryKey: fullOrganizationQueryKey(organizationId),
 					});
 
-					return t(
-						"organizations.settings.members.notifications.removeMember.success.description",
-					);
+					return t("organizations.settings.members.notifications.removeMember.success.description");
 				},
-				error: t(
-					"organizations.settings.members.notifications.removeMember.error.description",
-				),
+				error: t("organizations.settings.members.notifications.removeMember.error.description"),
 			},
 		);
 	};
@@ -128,12 +120,8 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 							<>
 								<OrganizationRoleSelect
 									value={row.original.role}
-									onSelect={async (value) =>
-										updateMemberRole(row.original.id, value)
-									}
-									disabled={
-										!userIsOrganizationAdmin || row.original.role === "owner"
-									}
+									onSelect={async (value) => updateMemberRole(row.original.id, value)}
+									disabled={!userIsOrganizationAdmin || row.original.role === "owner"}
 								/>
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
@@ -158,9 +146,7 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 												onClick={async () => removeMember(row.original.id)}
 											>
 												<LogOutIcon className="mr-2 size-4" />
-												{t(
-													"organizations.settings.members.leaveOrganization",
-												)}
+												{t("organizations.settings.members.leaveOrganization")}
 											</DropdownMenuItem>
 										)}
 									</DropdownMenuContent>

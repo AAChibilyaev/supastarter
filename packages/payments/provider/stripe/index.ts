@@ -519,16 +519,12 @@ export const webhookHandler: WebhookHandler = async (req) => {
 							type: "PAYMENT_FAILED",
 							data: {
 								headline: "Payment action required",
-								message:
-									"Your subscription payment requires additional action to complete.",
+								message: "Your subscription payment requires additional action to complete.",
 								hosted_invoice_url: hostedInvoiceUrl,
 							},
 							link: hostedInvoiceUrl,
 						}).catch((err: unknown) =>
-							logger.error(
-								"invoice.payment_action_required: createNotification failed",
-								err,
-							),
+							logger.error("invoice.payment_action_required: createNotification failed", err),
 						),
 					),
 				);

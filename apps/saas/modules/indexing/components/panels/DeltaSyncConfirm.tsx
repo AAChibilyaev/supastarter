@@ -38,11 +38,7 @@ export function DeltaSyncConfirm({
 					<DialogDescription>{t("confirmDescription")}</DialogDescription>
 				</DialogHeader>
 				<DialogFooter className="gap-2 sm:gap-0">
-					<Button
-						variant="outline"
-						onClick={() => onOpenChange(false)}
-						disabled={isLoading}
-					>
+					<Button variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
 						{t("cancel")}
 					</Button>
 					<Button variant="primary" onClick={onConfirm} loading={isLoading}>

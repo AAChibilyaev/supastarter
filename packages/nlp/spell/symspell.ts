@@ -294,10 +294,7 @@ export class SymSpell {
 
 		// Score each split
 		const results: SymSpellSuggestion[] = [];
-		const maxFreq = Math.max(
-			...Array.from(this.dictionary.values()).map((e) => e.frequency),
-			1,
-		);
+		const maxFreq = Math.max(...Array.from(this.dictionary.values()).map((e) => e.frequency), 1);
 
 		for (const split of splits) {
 			const compoundWord = split.join("");
@@ -441,8 +438,11 @@ export class SymSpell {
 		let best: { term: string; distance: number; frequency: number } | null = null;
 
 		for (const [term, s] of suggestions) {
-			if (!best || s.distance < best.distance ||
-				(s.distance === best.distance && s.frequency > best.frequency)) {
+			if (
+				!best ||
+				s.distance < best.distance ||
+				(s.distance === best.distance && s.frequency > best.frequency)
+			) {
 				best = { term, ...s };
 			}
 		}
@@ -453,10 +453,7 @@ export class SymSpell {
 	/**
 	 * Attempt to find compound word splits.
 	 */
-	private findCompounds(
-		word: string,
-		cfg: Required<SymSpellOptions>,
-	): string[][] {
+	private findCompounds(word: string, cfg: Required<SymSpellOptions>): string[][] {
 		const validSplits: string[][] = [];
 
 		this.findCompoundsRecursive(word, 0, [], validSplits, cfg);
@@ -518,8 +515,7 @@ export class SymSpell {
 		const frequencyScore = 0.3 * freqRatio;
 
 		// Length proximity bonus
-		const lengthRatio =
-			Math.min(inputLen, candidateLen) / Math.max(inputLen, candidateLen);
+		const lengthRatio = Math.min(inputLen, candidateLen) / Math.max(inputLen, candidateLen);
 		const lengthBonus = 0.05 * lengthRatio;
 
 		return Math.min(1, distanceScore * 0.65 + frequencyScore + lengthBonus);

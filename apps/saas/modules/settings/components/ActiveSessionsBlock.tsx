@@ -37,9 +37,7 @@ export function ActiveSessionsBlock() {
 			{
 				onSuccess: async () => {
 					toastSuccess(
-						t(
-							"settings.account.security.activeSessions.notifications.revokeSession.success",
-						),
+						t("settings.account.security.activeSessions.notifications.revokeSession.success"),
 					);
 
 					if (currentSession?.token === token) {
@@ -78,18 +76,13 @@ export function ActiveSessionsBlock() {
 					</div>
 				) : (
 					sessions?.map((session) => (
-						<div
-							key={session.id}
-							className="gap-4 p-4 flex justify-between rounded-2xl border"
-						>
+						<div key={session.id} className="gap-4 p-4 flex justify-between rounded-2xl border">
 							<div className="gap-2 flex">
 								<ComputerIcon className="size-6 shrink-0 text-primary/50" />
 								<div>
 									<strong className="text-sm block">
 										{session.id === currentSession?.id
-											? t(
-													"settings.account.security.activeSessions.currentSession",
-												)
+											? t("settings.account.security.activeSessions.currentSession")
 											: session.ipAddress}
 									</strong>
 									<small className="text-xs leading-tight block text-foreground/60">

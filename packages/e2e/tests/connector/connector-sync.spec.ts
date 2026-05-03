@@ -91,9 +91,7 @@ test.describe("Document Import", () => {
 				Authorization: `Bearer ${apiKey}`,
 			},
 			body: JSON.stringify({
-				documents: [
-					{ title: "Product D", body: "Single upsert", price: 19.99, tags: ["test"] },
-				],
+				documents: [{ title: "Product D", body: "Single upsert", price: 19.99, tags: ["test"] }],
 			}),
 		});
 

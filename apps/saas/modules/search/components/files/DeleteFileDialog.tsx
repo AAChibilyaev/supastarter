@@ -28,12 +28,7 @@ interface DeleteFileDialogProps {
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
-export function DeleteFileDialog({
-	file,
-	organizationId,
-	slug,
-	onClose,
-}: DeleteFileDialogProps) {
+export function DeleteFileDialog({ file, organizationId, slug, onClose }: DeleteFileDialogProps) {
 	const t = useTranslations("search");
 	const queryClient = useQueryClient();
 
@@ -80,7 +75,7 @@ export function DeleteFileDialog({
 					</div>
 				</DialogHeader>
 
-				<div className="p-4 space-y-1 rounded-lg bg-muted/50 text-sm">
+				<div className="p-4 space-y-1 text-sm rounded-lg bg-muted/50">
 					<p>
 						<span className="text-muted-foreground">{t("files.name")}: </span>
 						<span className="font-medium">{file.name}</span>
@@ -95,14 +90,8 @@ export function DeleteFileDialog({
 					<Button variant="outline" onClick={onClose} disabled={deleteMutation.isPending}>
 						{t("files.cancel")}
 					</Button>
-					<Button
-						variant="destructive"
-						onClick={handleDelete}
-						disabled={deleteMutation.isPending}
-					>
-						{deleteMutation.isPending && (
-							<Loader2Icon className="size-4 animate-spin" />
-						)}
+					<Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
+						{deleteMutation.isPending && <Loader2Icon className="size-4 animate-spin" />}
 						{t("files.delete")}
 					</Button>
 				</DialogFooter>

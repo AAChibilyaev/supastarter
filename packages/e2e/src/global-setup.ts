@@ -35,8 +35,7 @@ async function globalSetup(_config: FullConfig): Promise<void> {
 
 	// Store the base URL in environment for fixtures
 	process.env.E2E_SAAS_URL = baseURL;
-	process.env.E2E_MARKETING_URL =
-		process.env.NEXT_PUBLIC_MARKETING_URL || "http://localhost:3001";
+	process.env.E2E_MARKETING_URL = process.env.NEXT_PUBLIC_MARKETING_URL || "http://localhost:3001";
 
 	console.log("[E2E Setup] Global setup complete");
 }

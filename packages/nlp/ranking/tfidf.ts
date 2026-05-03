@@ -31,9 +31,7 @@ export class TfIdfRanker {
 		}
 
 		const df = this.stats.docFreq.get(term) || 0;
-		const value = df > 0
-			? Math.log(this.stats.totalDocs / (df + 1)) + 1
-			: 1;
+		const value = df > 0 ? Math.log(this.stats.totalDocs / (df + 1)) + 1 : 1;
 
 		this.idfCache.set(term, value);
 		return value;
@@ -60,10 +58,7 @@ export class TfIdfRanker {
 	/**
 	 * Build a TF-IDF vector for a document.
 	 */
-	buildVector(
-		termFreqs: Map<string, number>,
-		docLength: number,
-	): TfIdfVector {
+	buildVector(termFreqs: Map<string, number>, docLength: number): TfIdfVector {
 		const terms = new Map<string, number>();
 		let sumSquares = 0;
 

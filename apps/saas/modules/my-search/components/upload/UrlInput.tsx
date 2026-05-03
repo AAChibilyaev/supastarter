@@ -47,9 +47,9 @@ export function UrlInput({ onUrlAdd, disabled }: UrlInputProps) {
 
 	return (
 		<div className="space-y-1.5">
-			<div className="flex items-center gap-2">
+			<div className="gap-2 flex items-center">
 				<div className="relative flex-1">
-					<LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+					<LinkIcon className="left-3 h-4 w-4 pointer-events-none absolute top-1/2 -translate-y-1/2 text-muted-foreground" />
 					<Input
 						type="url"
 						placeholder={t("urlPlaceholder")}

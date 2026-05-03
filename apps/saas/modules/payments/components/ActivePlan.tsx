@@ -2,6 +2,7 @@
 
 import { usePlanData } from "@payments/hooks/plan-data";
 import { usePurchases } from "@payments/hooks/purchases";
+import { Card, CardContent } from "@repo/ui/components/card";
 import { SettingsItem } from "@shared/components/SettingsItem";
 import { BadgeCheckIcon, CheckIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
@@ -29,16 +30,14 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 
 	return (
 		<SettingsItem title={t("settings.billing.activePlan.title")}>
-			<div className="p-4 rounded-lg border">
-				<div className="">
+			<Card className="rounded-lg border">
+				<CardContent className="p-4">
 					<div className="gap-2 flex items-center">
 						<BadgeCheckIcon className="size-6 text-primary" />
 						<h4 className="font-bold text-lg text-primary">
 							<span>{activePlanData.title}</span>
 						</h4>
-						{activePlan.status && (
-							<SubscriptionStatusBadge status={activePlan.status} />
-						)}
+						{activePlan.status && <SubscriptionStatusBadge status={activePlan.status} />}
 					</div>
 
 					{!!activePlanData.features?.length && (
@@ -81,7 +80,7 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 							)}
 						</strong>
 					)}
-				</div>
+				</CardContent>
 
 				{"purchaseId" in activePlan && activePlan.purchaseId && (
 					<div className="mt-4 flex justify-end">
@@ -90,7 +89,7 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 						</div>
 					</div>
 				)}
-			</div>
+			</Card>
 		</SettingsItem>
 	);
 }

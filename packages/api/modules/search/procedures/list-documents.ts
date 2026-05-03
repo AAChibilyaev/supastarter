@@ -24,10 +24,7 @@ export const listDocuments = protectedProcedure
 		}),
 	)
 	.handler(
-		async ({
-			input: { organizationId, slug, page, perPage, searchQuery },
-			context: { user },
-		}) => {
+		async ({ input: { organizationId, slug, page, perPage, searchQuery }, context: { user } }) => {
 			await requireOrganizationMember(organizationId, user.id);
 			const index = await requireSearchIndex(organizationId, slug);
 

@@ -571,9 +571,29 @@
 				"title": "Medición de search-units v0.6",
 				"description": "Recarga de wallet Tochka, facturación de search-units por plan, pipeline de analíticas, dashboard de wallet.",
 				"status": "inProgress"
-			},
-			"docs": {
-				"title": "Sitio de documentación pública v0.7",
+		},
+		"billing": {
+			"title": "Facturación y pagos",
+			"description": "Suscripciones Stripe, portal del cliente, facturas, soporte multi-moneda con Tochka Bank para pagos en Rusia.",
+			"status": "shipped"
+		},
+		"analytics": {
+			"title": "Analíticas y paneles",
+			"description": "Analíticas de consultas en tiempo real, métricas de uso, consultas fallidas, seguimiento de CTR y paneles personalizados.",
+			"status": "inProgress"
+		},
+		"widget": {
+			"title": "Widget y SDK de inserción",
+			"description": "Widget de búsqueda prediseñado con modal Cmd+K, burbuja flotante y modos de página completa. Bundles para React, Vue, Angular y JS vainilla.",
+			"status": "inProgress"
+		},
+		"aiNlp": {
+			"title": "NLP y búsqueda con IA",
+			"description": "Corrección ortográfica, detección de intención, reescritura de consultas con IA y búsqueda en lenguaje natural. Próximamente respuestas IA con un solo clic.",
+			"status": "planned"
+		},
+		"docs": {
+			"title": "Sitio de documentación pública v0.7",
 				"description": "Sitio de documentación completo con referencia de API, guías de inicio rápido y tutoriales.",
 				"status": "planned"
 			},

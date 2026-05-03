@@ -30,6 +30,7 @@ export {
 	multiSearchDocuments,
 	searchDocuments,
 	type GeoBoundingBoxFilter,
+	type GeoMultiLocationFilter,
 	type GeoPolygonFilter,
 	type MultiSearchEntry,
 	type SearchDocumentsInput,

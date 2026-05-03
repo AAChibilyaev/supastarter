@@ -64,18 +64,17 @@ export function AdminOverview() {
 									<Skeleton key={`users-${index}`} className="h-10 w-full" />
 								))
 							: (usersQuery.data?.users ?? []).map((user) => (
-									<div
-										key={user.id}
-										className="p-3 text-sm flex items-center justify-between rounded-md border"
-									>
-										<div>
-											<p className="font-medium">{user.name ?? user.email}</p>
-											<p className="text-foreground/60">{user.email}</p>
-										</div>
-										<span className="text-xs text-foreground/60">
-											{user.role ?? t("defaultRole")}
-										</span>
-									</div>
+									<Card key={user.id} className="rounded-md">
+										<CardContent className="p-3 text-sm flex items-center justify-between">
+											<div>
+												<p className="font-medium">{user.name ?? user.email}</p>
+												<p className="text-foreground/60">{user.email}</p>
+											</div>
+											<span className="text-xs text-foreground/60">
+												{user.role ?? t("defaultRole")}
+											</span>
+										</CardContent>
+									</Card>
 								))}
 
 						<Button asChild variant="outline">
@@ -94,22 +93,19 @@ export function AdminOverview() {
 									<Skeleton key={`orgs-${index}`} className="h-10 w-full" />
 								))
 							: (organizationsQuery.data?.organizations ?? []).map((organization) => (
-									<div
-										key={organization.id}
-										className="p-3 text-sm flex items-center justify-between rounded-md border"
-									>
-										<div>
-											<p className="font-medium">{organization.name}</p>
-											<p className="text-foreground/60">
-												{organization.slug ?? t("noSlug")}
-											</p>
-										</div>
-										<span className="text-xs text-foreground/60">
-											{t("membersCount", {
-												count: organization.membersCount,
-											})}
-										</span>
-									</div>
+									<Card key={organization.id} className="rounded-md">
+										<CardContent className="p-3 text-sm flex items-center justify-between">
+											<div>
+												<p className="font-medium">{organization.name}</p>
+												<p className="text-foreground/60">{organization.slug ?? t("noSlug")}</p>
+											</div>
+											<span className="text-xs text-foreground/60">
+												{t("membersCount", {
+													count: organization.membersCount,
+												})}
+											</span>
+										</CardContent>
+									</Card>
 								))}
 
 						<Button asChild variant="outline">
@@ -142,9 +138,7 @@ function KpiCard({
 				{isLoading ? (
 					<Skeleton className="h-8 w-20" />
 				) : (
-					<p className="font-semibold text-3xl">
-						{typeof value === "number" ? value : fallback}
-					</p>
+					<p className="font-semibold text-3xl">{typeof value === "number" ? value : fallback}</p>
 				)}
 			</CardContent>
 		</Card>

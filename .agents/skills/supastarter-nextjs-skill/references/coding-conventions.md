@@ -10,17 +10,17 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
 ### Architecture Overview
 
 - Frontend lives in **multiple Next.js apps**:
-    - `apps/saas/` — protected SaaS app (App Router, port 3000)
-    - `apps/marketing/` — public marketing site (port 3001)
-    - `apps/docs/` — documentation (port 3002)
-    - `apps/mail-preview/` — email template preview (port 3003)
+  - `apps/saas/` — protected SaaS app (App Router, port 3000)
+  - `apps/marketing/` — public marketing site (port 3001)
+  - `apps/docs/` — documentation (port 3002)
+  - `apps/mail-preview/` — email template preview (port 3003)
 - Shared feature modules live under `apps/<app>/modules/` (e.g., `apps/saas/modules/auth`, `apps/marketing/modules/blog`).
 - Backend logic resides in `packages/*`:
-    - `api` — oRPC procedures and Hono HTTP handler.
-    - `auth` — Better Auth configuration plus invitation/passkey/organization helpers.
-    - `database` — **Prisma AND Drizzle** clients, schema, queries (both ORMs coexist).
-    - `notifications` — in-app + email notifications (`createNotification`, preferences, catalog).
-    - `ai`, `logs`, `mail`, `payments`, `storage`, `utils`, `i18n` for their respective domains.
+  - `api` — oRPC procedures and Hono HTTP handler.
+  - `auth` — Better Auth configuration plus invitation/passkey/organization helpers.
+  - `database` — **Prisma AND Drizzle** clients, schema, queries (both ORMs coexist).
+  - `notifications` — in-app + email notifications (`createNotification`, preferences, catalog).
+  - `ai`, `logs`, `mail`, `payments`, `storage`, `utils`, `i18n` for their respective domains.
 - Use the package exports (`@repo/api`, `@repo/auth`, `@repo/database`, `@repo/ui/components/*`, `@repo/notifications`) instead of deep relative imports.
 - Use per-app aliases for cross-module imports inside an app. **apps/saas** exports: `@auth/*`, `@shared/*`, `@organizations/*`, `@payments/*`, `@admin/*`, `@ai/*`, `@onboarding/*`, `@settings/*`, `@i18n/*`, `@search/*`, `@knowledge/*`, `@config`. **apps/marketing** exports: `@home/*`, `@blog/*`, `@changelog/*`, `@shared/*`, `@i18n/*`, `@config`.
 
@@ -61,9 +61,9 @@ Use this doc whenever you generate or update code in a supastarter Next.js repo.
 - Add API and data-fetching logic to `@repo/api` (single source of truth, reusable).
 - Group API logic in `packages/api/modules/<feature>/` — `types.ts` (zod schemas), `procedures/<action>.ts`, `router.ts` (router object). Mount the router in `packages/api/orpc/router.ts`.
 - Three procedure types from `packages/api/orpc/procedures.ts`:
-    - `publicProcedure` — no auth required
-    - `protectedProcedure` — adds `context.session` and `context.user` (throws `UNAUTHORIZED` otherwise)
-    - `adminProcedure` — requires `context.user.role === "admin"` (throws `FORBIDDEN` otherwise)
+  - `publicProcedure` — no auth required
+  - `protectedProcedure` — adds `context.session` and `context.user` (throws `UNAUTHORIZED` otherwise)
+  - `adminProcedure` — requires `context.user.role === "admin"` (throws `FORBIDDEN` otherwise)
 - Use the generated database clients from `@repo/database`; never instantiate Prisma or Drizzle directly in app code.
 - Honor caching/revalidation patterns already in the repo.
 - Client-side fetching: `import { orpc } from "@shared/lib/orpc-query-utils"` then `useQuery(orpc.<module>.<action>.queryOptions())` / `useMutation(orpc.<module>.<action>.mutationOptions())`.

@@ -69,11 +69,7 @@ export class ContextCorrector {
 	 * @param frequencies - Optional word frequency map
 	 * @param useSymSpell - Whether to use SymSpell for faster lookup (default: true)
 	 */
-	constructor(
-		dictionary: string[],
-		frequencies?: Map<string, number>,
-		useSymSpell = true,
-	) {
+	constructor(dictionary: string[], frequencies?: Map<string, number>, useSymSpell = true) {
 		this.corrector = new SpellCorrector(dictionary, frequencies);
 
 		if (useSymSpell) {
@@ -96,7 +92,9 @@ export class ContextCorrector {
 		this.totalTrigrams = 0;
 
 		for (const sentence of sentences) {
-			const clean = sentence.map((w) => w.toLowerCase().replace(/[^a-zа-яё0-9]/gi, "")).filter(Boolean);
+			const clean = sentence
+				.map((w) => w.toLowerCase().replace(/[^a-zа-яё0-9]/gi, ""))
+				.filter(Boolean);
 			if (clean.length === 0) continue;
 
 			// Count unigrams
@@ -125,7 +123,10 @@ export class ContextCorrector {
 	/**
 	 * Correct a sentence using context-aware spelling correction.
 	 */
-	public correctSentence(sentence: string, options?: Partial<ContextCorrectionOptions>): ContextCorrectionResult {
+	public correctSentence(
+		sentence: string,
+		options?: Partial<ContextCorrectionOptions>,
+	): ContextCorrectionResult {
 		const cfg = { ...DEFAULT_CONTEXT_OPTIONS, ...options };
 		const words = sentence.split(/\s+/).filter(Boolean);
 		if (words.length === 0) {

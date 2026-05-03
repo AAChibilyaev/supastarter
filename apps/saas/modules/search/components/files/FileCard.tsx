@@ -56,15 +56,11 @@ export function FileCard({ file, onPreview, onDelete }: FileCardProps) {
 	const Icon = getFileCardIcon(file.type);
 
 	const statusColor =
-		file.status === "indexed"
-			? "success"
-			: file.status === "processing"
-				? "warning"
-				: "error";
+		file.status === "indexed" ? "success" : file.status === "processing" ? "warning" : "error";
 
 	return (
 		<Card
-			className="group cursor-pointer transition-shadow hover:shadow-md"
+			className="group hover:shadow-md cursor-pointer transition-shadow"
 			onClick={() => onPreview(file)}
 		>
 			<CardHeader className="pb-3">
@@ -74,7 +70,7 @@ export function FileCard({ file, onPreview, onDelete }: FileCardProps) {
 					</div>
 					<div className="min-w-0 flex-1">
 						<CardTitle className="text-sm truncate">{file.name}</CardTitle>
-						<CardDescription className="flex gap-2 items-center mt-1">
+						<CardDescription className="gap-2 mt-1 flex items-center">
 							<Badge status={statusColor} className="text-[10px] uppercase">
 								{file.type}
 							</Badge>
@@ -100,7 +96,7 @@ export function FileCard({ file, onPreview, onDelete }: FileCardProps) {
 					<Button
 						variant="ghost"
 						size="sm"
-						className="opacity-0 size-8 p-0 text-muted-foreground group-hover:opacity-100 hover:text-destructive transition-opacity"
+						className="size-8 p-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
 						onClick={(e) => {
 							e.stopPropagation();
 							onDelete(file);

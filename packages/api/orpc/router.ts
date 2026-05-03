@@ -10,6 +10,7 @@ import { mySearchRouter } from "../modules/my-search/router";
 import { notificationsRouter } from "../modules/notifications/router";
 import { organizationsRouter } from "../modules/organizations/router";
 import { paymentsRouter } from "../modules/payments/router";
+import { recommendationsRouter } from "../modules/recommendations/router";
 import { searchRouter } from "../modules/search/router";
 import { usersRouter } from "../modules/users/router";
 import { publicProcedure } from "./procedures";
@@ -26,6 +27,7 @@ export const router = publicProcedure.router({
 	billingWallet: billingWalletRouter,
 	indexing: indexingRouter,
 	mySearch: mySearchRouter,
+	recommendations: recommendationsRouter,
 });
 
 export type ApiRouterClient = RouterClient<typeof router>;

@@ -4,16 +4,14 @@
  * Uses the same Bearer-token / SearchApiKey verification as public-handler.ts.
  * The raw key is verified via verifySearchApiKey from @repo/search.
  *
- * Key prefixes (roadmap — shape validation is handled by verifySearchApiKey):
- *   aa_admin_*   — server-side admin (full access)
- *   aa_write_*   — indexing only
- *   aa_search_*  — search only
- *   aa_scoped_*  — restricted frontend/search token
+ * Bearer tokens are Search API keys with prefix `ss_search_*` (shape check +
+ * hash lookup in verifySearchApiKey). Scopes live on the key record:
+ *   admin  — full CRUD on projects, indexes, keys (v1)
+ *   ingest — document write operations
+ *   search — search endpoints only
  *
- * For the v1 API we map:
- *   admin scope → full CRUD on projects, indexes, keys
- *   ingest scope → document write operations
- *   search scope → search endpoints only
+ * Connector (`ss_connector_*`) and scoped (`ss_scoped_*`) tokens use other
+ * handlers; they are not accepted here.
  */
 
 import { incrementRateLimitBucket } from "@repo/database";

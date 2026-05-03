@@ -78,9 +78,7 @@ export function OnboardingAccountStep({ onCompleted }: { onCompleted: () => void
 						<div>
 							<FormLabel>{t("onboarding.account.avatar")}</FormLabel>
 
-							<FormDescription>
-								{t("onboarding.account.avatarDescription")}
-							</FormDescription>
+							<FormDescription>{t("onboarding.account.avatarDescription")}</FormDescription>
 						</div>
 						<FormControl>
 							<UserAvatarUpload

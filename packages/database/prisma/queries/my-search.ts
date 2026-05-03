@@ -74,10 +74,7 @@ export interface IndexFileEntry {
 	sourceUrl?: string;
 }
 
-export async function addFileToIndex(
-	indexId: string,
-	file: IndexFileEntry,
-): Promise<void> {
+export async function addFileToIndex(indexId: string, file: IndexFileEntry): Promise<void> {
 	const index = await db.searchIndex.findUnique({
 		where: { id: indexId },
 		select: { schema: true },
@@ -122,10 +119,7 @@ export async function listFilesInIndex(
 	return (schema.files as IndexFileEntry[]) ?? [];
 }
 
-export async function removeFileFromIndex(
-	indexId: string,
-	fileId: string,
-): Promise<void> {
+export async function removeFileFromIndex(indexId: string, fileId: string): Promise<void> {
 	const index = await db.searchIndex.findUnique({
 		where: { id: indexId },
 		select: { schema: true },

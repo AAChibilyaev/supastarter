@@ -114,12 +114,8 @@ export function ReindexHistoryTable({ organizationId, indexSlug }: ReindexHistor
 					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b border-border">
-								<th className="px-4 py-3 font-medium text-left text-muted-foreground">
-									Status
-								</th>
-								<th className="px-4 py-3 font-medium text-left text-muted-foreground">
-									Progress
-								</th>
+								<th className="px-4 py-3 font-medium text-left text-muted-foreground">Status</th>
+								<th className="px-4 py-3 font-medium text-left text-muted-foreground">Progress</th>
 								<th className="px-4 py-3 font-medium md:table-cell hidden text-left text-muted-foreground">
 									Started
 								</th>

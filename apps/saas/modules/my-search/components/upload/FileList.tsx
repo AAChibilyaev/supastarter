@@ -3,6 +3,7 @@
 import { Button } from "@repo/ui/components/button";
 import { FileTextIcon, GlobeIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
+
 import { formatFileSize } from "../lib/format";
 
 interface PendingFile {
@@ -35,32 +36,29 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 
 	return (
 		<div className="space-y-2">
-			<h4 className="text-sm font-medium text-muted-foreground">
-				{t("selectedItems")}
-			</h4>
+			<h4 className="text-sm font-medium text-muted-foreground">{t("selectedItems")}</h4>
 			<div className="divide-y rounded-lg border">
 				{files.map((item) => (
-					<div key={item.id} className="flex items-center gap-3 px-4 py-3">
+					<div key={item.id} className="gap-3 px-4 py-3 flex items-center">
 						<FileTextIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
 						<div className="min-w-0 flex-1">
-							<p className="truncate text-sm font-medium">{item.file.name}</p>
-							<p className="text-xs text-muted-foreground">
-								{formatFileSize(item.file.size)}
-							</p>
+							<p className="text-sm font-medium truncate">{item.file.name}</p>
+							<p className="text-xs text-muted-foreground">{formatFileSize(item.file.size)}</p>
 						</div>
-						<div className="flex items-center gap-2">
+						<div className="gap-2 flex items-center">
 							{item.status === "uploading" && (
-								<span className="text-xs text-muted-foreground animate-pulse">
+								<span className="text-xs animate-pulse text-muted-foreground">
 									{t("uploading")}
 								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">
-									{t("uploaded")}
-								</span>
+								<span className="text-xs text-green-600 dark:text-green-400">{t("uploaded")}</span>
 							)}
 							{item.status === "error" && item.error && (
-								<span className="max-w-[200px] truncate text-xs text-destructive" title={item.error}>
+								<span
+									className="text-xs max-w-[200px] truncate text-destructive"
+									title={item.error}
+								>
 									{item.error}
 								</span>
 							)}
@@ -78,24 +76,23 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 					</div>
 				))}
 				{urls.map((item) => (
-					<div key={item.id} className="flex items-center gap-3 px-4 py-3">
+					<div key={item.id} className="gap-3 px-4 py-3 flex items-center">
 						<GlobeIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
 						<div className="min-w-0 flex-1">
-							<p className="truncate text-sm font-medium">{item.url}</p>
+							<p className="text-sm font-medium truncate">{item.url}</p>
 						</div>
-						<div className="flex items-center gap-2">
+						<div className="gap-2 flex items-center">
 							{item.status === "fetching" && (
-								<span className="text-xs text-muted-foreground animate-pulse">
-									{t("fetching")}
-								</span>
+								<span className="text-xs animate-pulse text-muted-foreground">{t("fetching")}</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">
-									{t("added")}
-								</span>
+								<span className="text-xs text-green-600 dark:text-green-400">{t("added")}</span>
 							)}
 							{item.status === "error" && item.error && (
-								<span className="max-w-[200px] truncate text-xs text-destructive" title={item.error}>
+								<span
+									className="text-xs max-w-[200px] truncate text-destructive"
+									title={item.error}
+								>
 									{item.error}
 								</span>
 							)}

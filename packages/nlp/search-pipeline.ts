@@ -3,14 +3,14 @@
  * Pre-processing → Spell Correction → Phonetic → Morphology → Synonyms → Ranking → Post-processing.
  */
 
-import type { StemmerLanguage } from "./morphology/stemmer";
-import { detectStemmerLanguage, stem } from "./morphology/stemmer";
 import { lemmatizeText } from "./morphology/lemmatizer";
 import { tagText } from "./morphology/pos-tagger";
-import { generateSnippet, highlightTerms } from "./postprocessing/snippet";
-import type { SnippetOptions } from "./postprocessing/snippet";
+import type { StemmerLanguage } from "./morphology/stemmer";
+import { detectStemmerLanguage, stem } from "./morphology/stemmer";
 import { mmrDiversify } from "./postprocessing/mmr";
 import type { MMRDocument, MMROptions } from "./postprocessing/mmr";
+import { generateSnippet, highlightTerms } from "./postprocessing/snippet";
+import type { SnippetOptions } from "./postprocessing/snippet";
 
 export interface SearchPipelineResult {
 	/** Original query */
@@ -49,10 +49,7 @@ const DEFAULT_PIPELINE_OPTIONS: PipelineOptions = {
 /**
  * Full search query analysis pipeline.
  */
-export function analyzeQuery(
-	query: string,
-	options?: PipelineOptions,
-): SearchPipelineResult {
+export function analyzeQuery(query: string, options?: PipelineOptions): SearchPipelineResult {
 	const opts = { ...DEFAULT_PIPELINE_OPTIONS, ...options };
 	const originalQuery = query.trim();
 
@@ -80,7 +77,12 @@ export function analyzeQuery(
 
 	// Step 3: POS tagging
 	const posTags = opts.enablePosTagging
-		? tagText(originalQuery, detectedLanguage, stem, lemmatizeText.length > 0 ? undefined : undefined)
+		? tagText(
+				originalQuery,
+				detectedLanguage,
+				stem,
+				lemmatizeText.length > 0 ? undefined : undefined,
+			)
 		: [];
 
 	// Step 4: Lemmatization
@@ -89,9 +91,7 @@ export function analyzeQuery(
 		: normalizedQuery;
 
 	// Step 5: Stemming
-	const stemmedTerms = opts.enableStemming
-		? tokens.map((t) => stem(t, detectedLanguage))
-		: tokens;
+	const stemmedTerms = opts.enableStemming ? tokens.map((t) => stem(t, detectedLanguage)) : tokens;
 
 	return {
 		originalQuery,
@@ -171,16 +171,9 @@ export function enhanceSearchResults(
 
 	if (opts.enableSnippets) {
 		for (const result of results) {
-			const snippet = generateSnippet(
-				result.text,
-				query,
-				opts.snippetOptions,
-			);
+			const snippet = generateSnippet(result.text, query, opts.snippetOptions);
 			snippets.set(result.id, snippet);
-			highlighted.set(
-				result.id,
-				highlightTerms(snippet || result.text, query),
-			);
+			highlighted.set(result.id, highlightTerms(snippet || result.text, query));
 		}
 	}
 
@@ -233,8 +226,6 @@ export function buildEnhancedQuery(
 
 	return {
 		query: enhancedQuery,
-		suggestions: analysis.stemmedTerms.filter(
-			(t) => t !== query.toLowerCase(),
-		),
+		suggestions: analysis.stemmedTerms.filter((t) => t !== query.toLowerCase()),
 	};
 }

@@ -36,9 +36,7 @@ export function DeltaSyncPanel({ organizationId, indexId }: DeltaSyncPanelProps)
 			onSuccess: (data) => {
 				setLastResult(data);
 				setShowConfirm(false);
-				toastSuccess(
-					t("jobCompleted") + ` — ${data.upserted} upserted, ${data.deleted} deleted`,
-				);
+				toastSuccess(t("jobCompleted") + ` — ${data.upserted} upserted, ${data.deleted} deleted`);
 			},
 			onError: (error) => {
 				toastError(error.message || t("errorGeneric"));
@@ -93,21 +91,15 @@ export function DeltaSyncPanel({ organizationId, indexId }: DeltaSyncPanelProps)
 				</CardHeader>
 				<CardContent className="space-y-4">
 					{/* Status */}
-					{isRunning && (
-						<p className="text-sm text-muted-foreground">{t("syncing")}...</p>
-					)}
+					{isRunning && <p className="text-sm text-muted-foreground">{t("syncing")}...</p>}
 
 					{/* Last result */}
 					{lastResult && (
 						<div className="gap-4 sm:grid-cols-4 grid grid-cols-2">
 							<Card>
 								<CardContent className="pt-6 text-center">
-									<p className="font-bold text-2xl">
-										{format.number(lastResult.processed)}
-									</p>
-									<p className="text-xs text-muted-foreground">
-										{t("processed")}
-									</p>
+									<p className="font-bold text-2xl">{format.number(lastResult.processed)}</p>
+									<p className="text-xs text-muted-foreground">{t("processed")}</p>
 								</CardContent>
 							</Card>
 							<Card>
@@ -128,12 +120,8 @@ export function DeltaSyncPanel({ organizationId, indexId }: DeltaSyncPanelProps)
 							</Card>
 							<Card>
 								<CardContent className="pt-6 text-center">
-									<p className="font-bold text-2xl">
-										{format.number(lastResult.remaining)}
-									</p>
-									<p className="text-xs text-muted-foreground">
-										{t("remaining")}
-									</p>
+									<p className="font-bold text-2xl">{format.number(lastResult.remaining)}</p>
+									<p className="text-xs text-muted-foreground">{t("remaining")}</p>
 								</CardContent>
 							</Card>
 						</div>

@@ -22,6 +22,20 @@ const geoBoundingBoxSchema = z.object({
 	]),
 });
 
+const geoMultiLocationSchema = z.object({
+	field: z.string().optional(),
+	locations: z
+		.array(
+			z.object({
+				lat: z.number().min(-90).max(90),
+				lng: z.number().min(-180).max(180),
+				radiusKm: z.number().min(0.1).max(40_075),
+			}),
+		)
+		.min(2)
+		.max(50),
+});
+
 const publicSearchInput = z.object({
 	q: z.string().default("*"),
 	queryBy: z.string().optional(),
@@ -46,6 +60,11 @@ const publicSearchInput = z.object({
 	// ── Geo Search ──
 	polygonFilter: geoPolygonSchema.optional(),
 	boundingBoxFilter: geoBoundingBoxSchema.optional(),
+	multiLocation: geoMultiLocationSchema.optional(),
+	lat: z.number().min(-90).max(90).optional(),
+	lng: z.number().min(-180).max(180).optional(),
+	radiusKm: z.number().min(0.1).max(40_075).optional(),
+	geoField: z.string().optional(),
 	// ── Search Params Extensions ──
 	excludeFields: z.string().optional(),
 	highlightStartTag: z.string().optional(),
@@ -108,9 +127,43 @@ export const publicSearchApp = new Hono()
 		};
 		delete (searchParams as Record<string, unknown>).negate;
 		delete (searchParams as Record<string, unknown>).wildcard;
+		delete (searchParams as Record<string, unknown>).lat;
+		delete (searchParams as Record<string, unknown>).lng;
+		delete (searchParams as Record<string, unknown>).radiusKm;
+		delete (searchParams as Record<string, unknown>).geoField;
+		delete (searchParams as Record<string, unknown>).polygonFilter;
+		delete (searchParams as Record<string, unknown>).boundingBoxFilter;
+		delete (searchParams as Record<string, unknown>).multiLocation;
 
-		// Build filter expression: scoped + user filter + negate
+		// Build filter expression: scoped + user filter + geo filter + negate
 		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
+
+		// Geo filter: simple radius (lat/lng)
+		if (parsed.data.lat !== undefined && parsed.data.lng !== undefined) {
+			const field = parsed.data.geoField ?? "_geoloc";
+			const radius = parsed.data.radiusKm ?? 50;
+			const geoExpr = `${field}:(${parsed.data.lat}, ${parsed.data.lng}, ${radius} km)`;
+			combinedFilter = combinedFilter ? `${combinedFilter} && ${geoExpr}` : geoExpr;
+		}
+
+		// Geo filter: polygon
+		if (parsed.data.polygonFilter) {
+			const field = parsed.data.polygonFilter.field ?? "_geoloc";
+			const vertices = parsed.data.polygonFilter.polygon
+				.map(([lat, lng]) => `(${lat}, ${lng})`)
+				.join(", ");
+			const geoExpr = `${field}:[${vertices}]`;
+			combinedFilter = combinedFilter ? `${combinedFilter} && ${geoExpr}` : geoExpr;
+		}
+
+		// Geo filter: bounding box
+		if (parsed.data.boundingBoxFilter) {
+			const field = parsed.data.boundingBoxFilter.field ?? "_geoloc";
+			const { bounding_box } = parsed.data.boundingBoxFilter;
+			const geoExpr = `${field}:(${bounding_box[0].lat}, ${bounding_box[0].lng}, ${bounding_box[1].lat}, ${bounding_box[1].lng})`;
+			combinedFilter = combinedFilter ? `${combinedFilter} && ${geoExpr}` : geoExpr;
+		}
+
 		if (parsed.data.negate) {
 			const negated = parsed.data.negate
 				.split(",")
@@ -119,9 +172,7 @@ export const publicSearchApp = new Hono()
 				.map((term) => `(${term})`)
 				.join(" || ");
 			if (negated) {
-				combinedFilter = combinedFilter
-					? `${combinedFilter} && !(${negated})`
-					: `!(${negated})`;
+				combinedFilter = combinedFilter ? `${combinedFilter} && !(${negated})` : `!(${negated})`;
 			}
 		}
 
@@ -131,6 +182,7 @@ export const publicSearchApp = new Hono()
 				tenantId: verified.organizationId,
 				...searchParams,
 				filterBy: combinedFilter,
+				...(parsed.data.multiLocation && { multiLocation: parsed.data.multiLocation }),
 			});
 
 			void recordSearchUsage({
@@ -168,8 +220,59 @@ export const publicSearchApp = new Hono()
 					const isRussian = lang === "ru";
 
 					const commonWords = isRussian
-						? ["и", "в", "не", "на", "я", "он", "с", "что", "по", "это", "как", "но", "для", "еще", "когда", "где", "товар", "цена", "название", "поиск", "результат", "запрос"]
-						: ["the", "and", "for", "are", "but", "not", "you", "all", "can", "was", "one", "has", "have", "been", "what", "when", "which", "with", "search", "find", "query", "result", "product", "price", "name", "title", "index"];
+						? [
+								"и",
+								"в",
+								"не",
+								"на",
+								"я",
+								"он",
+								"с",
+								"что",
+								"по",
+								"это",
+								"как",
+								"но",
+								"для",
+								"еще",
+								"когда",
+								"где",
+								"товар",
+								"цена",
+								"название",
+								"поиск",
+								"результат",
+								"запрос",
+							]
+						: [
+								"the",
+								"and",
+								"for",
+								"are",
+								"but",
+								"not",
+								"you",
+								"all",
+								"can",
+								"was",
+								"one",
+								"has",
+								"have",
+								"been",
+								"what",
+								"when",
+								"which",
+								"with",
+								"search",
+								"find",
+								"query",
+								"result",
+								"product",
+								"price",
+								"name",
+								"title",
+								"index",
+							];
 
 					const freqs = new Map<string, number>();
 					for (const w of commonWords) freqs.set(w, 100);

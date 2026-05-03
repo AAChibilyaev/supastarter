@@ -46,7 +46,7 @@ export function TutorialsGrid() {
 							{/* YouTube embed placeholder */}
 							<div className="mb-4 aspect-video -mx-2 -mt-2 relative overflow-hidden rounded-2xl bg-muted">
 								<div className="inset-0 absolute flex items-center justify-center">
-									<div className="size-16 flex items-center justify-center rounded-full bg-primary/10 transition-all group-hover:bg-primary/20 group-hover:scale-110">
+									<div className="size-16 flex items-center justify-center rounded-full bg-primary/10 transition-all group-hover:scale-110 group-hover:bg-primary/20">
 										<svg
 											className="ml-1 size-8 text-primary"
 											fill="currentColor"
@@ -57,12 +57,14 @@ export function TutorialsGrid() {
 										</svg>
 									</div>
 								</div>
-								<div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/60 text-xs text-white">
+								<div className="bottom-2 right-2 px-2 py-0.5 rounded bg-black/60 text-xs text-white absolute">
 									{video.duration}
 								</div>
 							</div>
 
-							<h3 className="font-semibold text-lg">{t(`videos.${video.key}.title`)}</h3>
+							<h3 className="font-semibold text-lg">
+								{t(`videos.${video.key}.title`)}
+							</h3>
 							<p className="mt-1 text-sm text-muted-foreground">
 								{t(`videos.${video.key}.description`)}
 							</p>

@@ -139,9 +139,7 @@ export const createFeedbackProcedure = publicProcedure
 			const session = await auth.api.getSession({ headers: context.headers });
 
 			const ipAddress =
-				context.headers.get("x-forwarded-for") ||
-				context.headers.get("x-real-ip") ||
-				undefined;
+				context.headers.get("x-forwarded-for") || context.headers.get("x-real-ip") || undefined;
 
 			const feedback = await createFeedback({
 				message: input.message,
@@ -312,26 +310,17 @@ export function FeedbackWidget({ className }: { className?: string }) {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>{t("feedback.form.type.label")}</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-									>
+									<Select onValueChange={field.onChange} defaultValue={field.value}>
 										<FormControl>
 											<SelectTrigger>
-												<SelectValue
-													placeholder={t(
-														"feedback.form.type.placeholder",
-													)}
-												/>
+												<SelectValue placeholder={t("feedback.form.type.placeholder")} />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											<SelectItem value="general">
 												{t("feedback.form.type.options.general")}
 											</SelectItem>
-											<SelectItem value="bug">
-												{t("feedback.form.type.options.bug")}
-											</SelectItem>
+											<SelectItem value="bug">{t("feedback.form.type.options.bug")}</SelectItem>
 											<SelectItem value="feature">
 												{t("feedback.form.type.options.feature")}
 											</SelectItem>
@@ -351,12 +340,7 @@ export function FeedbackWidget({ className }: { className?: string }) {
 										<FormItem>
 											<FormLabel>{t("feedback.form.name.label")}</FormLabel>
 											<FormControl>
-												<Input
-													placeholder={t(
-														"feedback.form.name.placeholder",
-													)}
-													{...field}
-												/>
+												<Input placeholder={t("feedback.form.name.placeholder")} {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -369,12 +353,7 @@ export function FeedbackWidget({ className }: { className?: string }) {
 										<FormItem>
 											<FormLabel>{t("feedback.form.email.label")}</FormLabel>
 											<FormControl>
-												<Input
-													placeholder={t(
-														"feedback.form.email.placeholder",
-													)}
-													{...field}
-												/>
+												<Input placeholder={t("feedback.form.email.placeholder")} {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -401,11 +380,7 @@ export function FeedbackWidget({ className }: { className?: string }) {
 							)}
 						/>
 
-						<Button
-							type="submit"
-							className="w-full"
-							loading={createFeedbackMutation.isPending}
-						>
+						<Button type="submit" className="w-full" loading={createFeedbackMutation.isPending}>
 							{t("feedback.form.submit")}
 						</Button>
 					</form>

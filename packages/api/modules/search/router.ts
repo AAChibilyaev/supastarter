@@ -26,6 +26,7 @@ import { listConnectorTokens } from "./procedures/list-connector-tokens";
 import { listDocuments } from "./procedures/list-documents";
 import { listIndexes } from "./procedures/list-indexes";
 import { listModels, getModelConfig, updateModelConfig } from "./procedures/models";
+import { naturalLanguageSearch } from "./procedures/natural-language-search";
 import { onboardingStatus } from "./procedures/onboarding-status";
 import {
 	createSnapshot,
@@ -46,8 +47,8 @@ import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
-import { naturalLanguageSearch } from "./procedures/natural-language-search";
 import { spellCheck } from "./procedures/spell-check";
+import { getSpellConfig, updateSpellConfig } from "./procedures/spell-config";
 import {
 	deleteStemmingOverride,
 	listStemmingOverrides,
@@ -111,6 +112,10 @@ export const searchRouter = {
 	querySuggestions,
 	naturalLanguageSearch,
 	spellCheck,
+	spellConfig: {
+		get: getSpellConfig,
+		update: updateSpellConfig,
+	},
 	listModels,
 	modelConfig: {
 		get: getModelConfig,

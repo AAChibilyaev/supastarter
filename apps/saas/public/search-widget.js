@@ -111,9 +111,7 @@
 				})
 				.catch(function (error) {
 					results.innerHTML = "";
-					results.appendChild(
-						el("div", { className: "ss-error" }, [escapeHtml(error.message)]),
-					);
+					results.appendChild(el("div", { className: "ss-error" }, [escapeHtml(error.message)]));
 				});
 		}, options.debounceMs || 200);
 

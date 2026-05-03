@@ -25,10 +25,7 @@ const DEFAULT_OPTIONS: SnippetOptions = {
 /**
  * Find all positions of query tokens in text (case-insensitive).
  */
-function findMatches(
-	text: string,
-	queryTokens: string[],
-): Array<{ start: number; end: number }> {
+function findMatches(text: string, queryTokens: string[]): Array<{ start: number; end: number }> {
 	const lower = text.toLowerCase();
 	const matches: Array<{ start: number; end: number }> = [];
 
@@ -78,18 +75,14 @@ export function generateSnippet(
 
 	if (queryTokens.length === 0) {
 		// No query tokens — return beginning of text
-		return text.length > opts.maxLength
-			? text.slice(0, opts.maxLength) + "…"
-			: text;
+		return text.length > opts.maxLength ? text.slice(0, opts.maxLength) + "…" : text;
 	}
 
 	const matches = findMatches(text, queryTokens);
 
 	if (matches.length === 0) {
 		// No matches — return beginning of text
-		return text.length > opts.maxLength
-			? text.slice(0, opts.maxLength) + "…"
-			: text;
+		return text.length > opts.maxLength ? text.slice(0, opts.maxLength) + "…" : text;
 	}
 
 	// Extract context windows around matches
@@ -165,14 +158,8 @@ export function highlightTerms(
 	let result = text;
 	for (let i = merged.length - 1; i >= 0; i--) {
 		const { start, end } = merged[i]!;
-		result =
-			result.slice(0, end) +
-			closeTag +
-			result.slice(end);
-		result =
-			result.slice(0, start) +
-			openTag +
-			result.slice(start);
+		result = result.slice(0, end) + closeTag + result.slice(end);
+		result = result.slice(0, start) + openTag + result.slice(start);
 	}
 
 	return result;

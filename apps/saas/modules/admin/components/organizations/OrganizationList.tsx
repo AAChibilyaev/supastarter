@@ -39,10 +39,7 @@ export function OrganizationList() {
 	const t = useTranslations();
 	const { confirm } = useConfirmationAlert();
 	const queryClient = useQueryClient();
-	const [currentPage, setCurrentPage] = useQueryState(
-		"currentPage",
-		parseAsInteger.withDefault(1),
-	);
+	const [currentPage, setCurrentPage] = useQueryState("currentPage", parseAsInteger.withDefault(1));
 	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
 	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
 		leading: true,
@@ -154,10 +151,7 @@ export function OrganizationList() {
 								</DropdownMenuTrigger>
 								<DropdownMenuContent>
 									<DropdownMenuItem asChild>
-										<Link
-											href={getOrganizationEditPath(id)}
-											className="flex items-center"
-										>
+										<Link href={getOrganizationEditPath(id)} className="flex items-center">
 											<EditIcon className="mr-2 size-4" />
 											{t("admin.organizations.edit")}
 										</Link>
@@ -166,12 +160,8 @@ export function OrganizationList() {
 										onClick={() =>
 											confirm({
 												title: t("admin.organizations.confirmDelete.title"),
-												message: t(
-													"admin.organizations.confirmDelete.message",
-												),
-												confirmLabel: t(
-													"admin.organizations.confirmDelete.confirm",
-												),
+												message: t("admin.organizations.confirmDelete.message"),
+												confirmLabel: t("admin.organizations.confirmDelete.confirm"),
 												destructive: true,
 												onConfirm: () => deleteOrganization(id),
 											})
@@ -222,7 +212,7 @@ export function OrganizationList() {
 				className="mb-4"
 			/>
 
-			<div className="rounded-md border">
+			<Card className="rounded-md">
 				<Table>
 					<TableBody>
 						{isLoading ? (
@@ -256,10 +246,7 @@ export function OrganizationList() {
 											key={cell.id}
 											className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
 										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
 										</TableCell>
 									))}
 								</TableRow>
@@ -273,7 +260,7 @@ export function OrganizationList() {
 						)}
 					</TableBody>
 				</Table>
-			</div>
+			</Card>
 
 			{!!data?.total && data.total > ITEMS_PER_PAGE && (
 				<Pagination

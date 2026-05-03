@@ -19,6 +19,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/components/table";
+import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
 	type ColumnDef,
@@ -37,7 +38,6 @@ import {
 	ImageIcon,
 	Trash2Icon,
 } from "lucide-react";
-import { orpc } from "@shared/lib/orpc-query-utils";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -159,7 +159,8 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 					id: (doc.id as string) ?? `file-${idx}`,
 					name: (doc.title as string) ?? (doc.name as string) ?? `document-${idx}`,
 					type: inferFileType(doc),
-					mimeType: (doc.mime_type as string) ?? (doc.content_type as string) ?? "application/octet-stream",
+					mimeType:
+						(doc.mime_type as string) ?? (doc.content_type as string) ?? "application/octet-stream",
 					sizeBytes: (doc.size as number) ?? (doc.file_size as number) ?? 0,
 					wordCount: doc.word_count as number | undefined,
 					pageCount: doc.page_count as number | undefined,
@@ -199,7 +200,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 					return (
 						<button
 							type="button"
-							className="gap-2 flex items-center hover:text-primary transition-colors"
+							className="gap-2 flex items-center transition-colors hover:text-primary"
 							onClick={() => setPreviewFile(row.original)}
 						>
 							<Icon className="size-4 shrink-0 text-muted-foreground" />
@@ -216,7 +217,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 				header: t("files.type"),
 				size: 80,
 				cell: ({ getValue }) => (
-					<Badge status="info" className="uppercase text-xs">
+					<Badge status="info" className="text-xs uppercase">
 						{getValue() as string}
 					</Badge>
 				),
@@ -240,9 +241,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 				cell: ({ getValue }) => {
 					const val = getValue() as number | undefined;
 					return val != null ? (
-						<span className="font-mono text-xs text-muted-foreground">
-							{val.toLocaleString()}
-						</span>
+						<span className="font-mono text-xs text-muted-foreground">{val.toLocaleString()}</span>
 					) : (
 						<span className="text-muted-foreground/40">&mdash;</span>
 					);
@@ -311,9 +310,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 		<div className="space-y-4">
 			{/* Header toolbar */}
 			<div className="gap-2 flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">
-					{t("files.count", { count: files.length })}
-				</p>
+				<p className="text-sm text-muted-foreground">{t("files.count", { count: files.length })}</p>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="outline" size="sm">
@@ -325,7 +322,8 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 					<DropdownMenuContent align="end">
 						<DropdownMenuLabel>{t("documents.toggleColumns")}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						{table.getAllLeafColumns()
+						{table
+							.getAllLeafColumns()
 							.filter((col) => col.id !== "actions")
 							.map((column) => (
 								<DropdownMenuCheckboxItem
@@ -357,10 +355,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 												: ""
 										}
 									>
-										{flexRender(
-											header.column.columnDef.header,
-											header.getContext(),
-										)}
+										{flexRender(header.column.columnDef.header, header.getContext())}
 										{{
 											asc: " \u2191",
 											desc: " \u2193",
@@ -391,10 +386,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
 										</TableCell>
 									))}
 								</TableRow>
@@ -405,9 +397,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 			</div>
 
 			{/* Preview dialog */}
-			{previewFile && (
-				<FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />
-			)}
+			{previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}
 
 			{/* Delete dialog */}
 			{deleteFile && (

@@ -121,13 +121,10 @@ export class MinHashDedup {
 	private numHashes: number;
 	private threshold: number;
 
-	constructor(
-		options?: Partial<DedupOptions & { numHashes: number }>,
-	) {
+	constructor(options?: Partial<DedupOptions & { numHashes: number }>) {
 		this.shingleSize = options?.shingleSize ?? 3;
-		this.numHashes = options && 'numHashes' in options
-			? (options as { numHashes: number }).numHashes
-			: 100;
+		this.numHashes =
+			options && "numHashes" in options ? (options as { numHashes: number }).numHashes : 100;
 		this.threshold = options?.threshold ?? 0.85;
 	}
 
@@ -163,7 +160,7 @@ export class MinHashDedup {
 		let hash = 0;
 		for (let i = 0; i < str.length; i++) {
 			const char = str.charCodeAt(i);
-			hash = ((hash << 5) - hash) + char;
+			hash = (hash << 5) - hash + char;
 			hash |= 0; // Convert to 32-bit int
 		}
 		return Math.abs(hash);

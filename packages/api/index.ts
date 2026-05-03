@@ -18,8 +18,8 @@ import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { eventsApp } from "./modules/search/events-public";
 import { publicSearchApp } from "./modules/search/public-handler";
-import { publicSpellCheckApp } from "./modules/search/spell-check-public";
 import { scimRouter } from "./modules/search/scim-public";
+import { publicSpellCheckApp } from "./modules/search/spell-check-public";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
 import { v1Router } from "./v1/router";
 export { listPurchases } from "./modules/payments/procedures/list-purchases";
@@ -41,10 +41,7 @@ export const app = new Hono()
 		try {
 			const fs = await import("node:fs/promises");
 			const path = await import("node:path");
-			const widgetPath = path.resolve(
-				process.cwd(),
-				"../../packages/widget/dist/index.global.js",
-			);
+			const widgetPath = path.resolve(process.cwd(), "../../packages/widget/dist/index.global.js");
 			const content = await fs.readFile(widgetPath, "utf-8");
 			return c.newResponse(content, 200, {
 				"Content-Type": "application/javascript",
@@ -56,10 +53,7 @@ export const app = new Hono()
 			try {
 				const fs = await import("node:fs/promises");
 				const path = await import("node:path");
-				const widgetPath = path.resolve(
-					process.cwd(),
-					"packages/widget/dist/index.global.js",
-				);
+				const widgetPath = path.resolve(process.cwd(), "packages/widget/dist/index.global.js");
 				const content = await fs.readFile(widgetPath, "utf-8");
 				return c.newResponse(content, 200, {
 					"Content-Type": "application/javascript",
@@ -174,11 +168,7 @@ async function syncIncludedCreditsAfterPaymentEvent(req: Request): Promise<void>
 		).aiWallet?.monthlyIncludedByPlan ?? {};
 	const rawValue = includedMap[planId];
 	const includedKopecks =
-		typeof rawValue === "bigint"
-			? rawValue
-			: rawValue !== undefined
-				? BigInt(rawValue)
-				: BigInt(0);
+		typeof rawValue === "bigint" ? rawValue : rawValue !== undefined ? BigInt(rawValue) : BigInt(0);
 
 	await applySubscriptionToWallet({
 		organizationId: purchase.organizationId,

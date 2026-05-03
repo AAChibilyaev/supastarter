@@ -94,12 +94,7 @@
 					"name": "Free",
 					"price": "$0",
 					"description": "Zum Evaluieren, für Hobby-Projekte und Side-Products.",
-					"features": [
-						"10.000 Search-Units / Monat",
-						"1 Index",
-						"3 API-Keys",
-						"Community-Support"
-					]
+					"features": ["10.000 Search-Units / Monat", "1 Index", "3 API-Keys", "Community-Support"]
 				},
 				"pro": {
 					"name": "Pro",
@@ -571,9 +566,29 @@
 				"title": "Search-Units-Metering v0.6",
 				"description": "Tochka-Wallet-Aufladung, planbasierte Search-Unit-Abrechnung, Analytics-Pipeline, Wallet-Dashboard.",
 				"status": "inProgress"
-			},
-			"docs": {
-				"title": "Öffentliche Doku-Website v0.7",
+		},
+		"billing": {
+			"title": "Abrechnung & Zahlungen",
+			"description": "Stripe-Abonnements, Kundenportal, Rechnungen, Multi-Währungs-Unterstützung mit Tochka Bank für russische Zahlungen.",
+			"status": "shipped"
+		},
+		"analytics": {
+			"title": "Analysen & Dashboards",
+			"description": "Echtzeit-Query-Analysen, Nutzungsmetriken, fehlgeschlagene Abfragen, CTR-Tracking und benutzerdefinierte Dashboards.",
+			"status": "inProgress"
+		},
+		"widget": {
+			"title": "Widget & Embed-SDK",
+			"description": "Einsatzbereites Such-Widget mit Cmd+K-Modal, schwebender Blase und Vollbildmodi. React-, Vue-, Angular- und Vanilla-JS-Bundles.",
+			"status": "inProgress"
+		},
+		"aiNlp": {
+			"title": "NLP & KI-Suche",
+			"description": "Rechtschreibkorrektur, Absichtserkennung, KI-Query-Umschreibung und natürlichsprachliche Suche. Zero-Click-KI-Antworten als Nächstes.",
+			"status": "planned"
+		},
+		"docs": {
+			"title": "Öffentliche Doku-Website v0.7",
 				"description": "Vollständige Dokumentationswebsite mit API-Referenz, Schnellstart-Anleitungen und Tutorials.",
 				"status": "planned"
 			},

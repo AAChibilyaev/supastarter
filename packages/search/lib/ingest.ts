@@ -2,7 +2,7 @@ import "server-only";
 import { logger } from "@repo/logs";
 
 import { config } from "../config";
-import { getTypesenseClient } from "./client";
+import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
 
 export interface BulkUpsertInput {
 	collection: string;
@@ -22,7 +22,7 @@ export async function bulkUpsert(input: BulkUpsertInput): Promise<BulkUpsertResu
 		return { total: 0, successCount: 0, failures: [] };
 	}
 
-	const client = getTypesenseClient();
+	const client = await getTypesenseClientForOrg(input.tenantId);
 	const collection = client.collections(input.collection).documents();
 
 	const tagged = input.documents.map((doc) => ({

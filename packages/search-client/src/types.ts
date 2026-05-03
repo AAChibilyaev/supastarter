@@ -72,10 +72,45 @@ export interface SearchResult {
 	perPage: number;
 	facetCounts?: FacetCount[];
 	searchTimeMs: number;
+	/** Query ID for associating analytics events (click, conversion, visit) with this search. */
+	queryId?: string | null;
 }
 
 export interface MultiSearchResult {
 	results: SearchResult[];
+}
+
+// ── Analytics Events ─────────────────────────────────────────────────────
+
+export type TrackEventType =
+	| "search_query"
+	| "zero_results"
+	| "result_click"
+	| "widget_open"
+	| "filter_used"
+	| "conversion"
+	| "visit"
+	| "click";
+
+export interface TrackEventInput {
+	type: TrackEventType;
+	sessionId?: string;
+	anonymousUserId?: string;
+	query?: string;
+	productId?: string;
+	position?: number;
+	filters?: Record<string, unknown>;
+	sort?: string;
+	locale?: string;
+	referrer?: string;
+	metadata?: Record<string, unknown>;
+	queryId?: string;
+	conversionType?: string;
+}
+
+export interface TrackEventResult {
+	accepted: number;
+	rejected: number;
 }
 
 // ── Index ────────────────────────────────────────────────────────────────

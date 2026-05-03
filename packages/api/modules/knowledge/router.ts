@@ -7,6 +7,7 @@ import { deleteSource } from "./procedures/delete-source";
 import { deleteSpace } from "./procedures/delete-space";
 import { graphragExplain } from "./procedures/graphrag-explain";
 import { ingestFile } from "./procedures/ingest-file";
+import { ingestUrl } from "./procedures/ingest-url";
 import { listFiles } from "./procedures/list-files";
 import { listIngestionJobs } from "./procedures/list-ingestion-jobs";
 import { listSources } from "./procedures/list-sources";
@@ -23,6 +24,7 @@ export const knowledgeRouter = {
 	deleteSource,
 	deleteSpace,
 	ingestFile,
+	ingestUrl,
 	listFiles,
 	deleteFile,
 	ask,

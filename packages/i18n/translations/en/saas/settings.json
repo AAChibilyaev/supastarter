@@ -513,7 +513,8 @@
 				"title": "Organization",
 				"dangerZone": "Danger zone",
 				"compliance": "Compliance",
-				"auditLog": "Audit Log"
+				"auditLog": "Audit Log",
+				"scim": "SCIM"
 			}
 		},
 		"save": "Save",

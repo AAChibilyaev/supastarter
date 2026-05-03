@@ -228,7 +228,8 @@
 			"geoMap": "Mapa geográfico",
 			"geoMapDescription": "Geografía de consultas de búsqueda — próximamente",
 			"abTestTitle": "Pruebas A/B",
-			"abTestDescription": "Ejecute experimentos A/B en su configuración de búsqueda."
+			"abTestDescription": "Ejecute experimentos A/B en su configuración de búsqueda.",
+			"ctrTrendDesc": "Tasa de clics en el tiempo"
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",
@@ -304,7 +305,31 @@
 			"imageSearchDesc": "Permite a los compradores buscar con una foto o cámara",
 			"imageSearchEnable": "Activar búsqueda por imagen",
 			"imageSearchHint": "Usa GPT-4o-mini para describir la imagen, luego búsqueda vectorial",
-			"imageSearchPreviewText": "Aparecerá un botón de cámara en la barra de búsqueda."
+			"imageSearchPreviewText": "Aparecerá un botón de cámara en la barra de búsqueda.",
+			"tab": "Widget",
+			"title": "Widget de búsqueda",
+			"apiKeyLabel": "Clave API",
+			"apiKeyHint": "Pegue su clave de API solo de búsqueda (ss_search_...) o cree una nueva en la pestaña Claves API.",
+			"configureTitle": "Configurar widget",
+			"configureDescription": "Seleccione facetas, ordenación y opciones visuales. El código se actualiza automáticamente.",
+			"copied": "¡Código del widget copiado!",
+			"copyFailed": "Error al copiar.",
+			"defaultSort": "Ordenación predeterminada",
+			"defaultSortNone": "Ninguna (relevancia)",
+			"defaultSortPlaceholder": "Seleccionar un campo...",
+			"displayOptions": "Opciones de visualización",
+			"facetFields": "Campos de faceta",
+			"installInstructions": "Instrucciones de instalación",
+			"saveConfig": "Guardar configuración",
+			"showImages": "Mostrar imágenes",
+			"showPrices": "Mostrar precios",
+			"step1": "Añada un elemento contenedor: <code>&lt;div id=\"aac-search\"&gt;&lt;/div&gt;</code>",
+			"step2": "Pegue el código del widget antes de la etiqueta <code>&lt;/body&gt;</code> de cierre.",
+			"step3": "El widget se inicializará automáticamente. Personalice los atributos data-* según sea necesario.",
+			"theme": "Tema",
+			"themeAuto": "Auto (sistema)",
+			"themeDark": "Oscuro",
+			"themeLight": "Claro"
 		},
 		"configurator": {
 			"pageTitle": "Configurador de búsqueda",
@@ -1002,7 +1027,8 @@
 				"uniqueUsers": "Unique Users",
 				"uniqueUsersDesc": "With search activity",
 				"ctr": "CTR",
-				"ctrDesc": "Click-through rate"
+				"ctrDesc": "Click-through rate",
+				"ctrTrend": "Tendencia de CTR"
 			},
 			"test": {
 				"title": "Probar personalización",

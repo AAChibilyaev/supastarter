@@ -229,7 +229,8 @@
 			"geoMap": "Geo Map",
 			"geoMapDescription": "Geografie der Suchanfragen — bald verfügbar",
 			"abTestTitle": "A/B-Tests",
-			"abTestDescription": "Führen Sie A/B-Experimente mit Ihrer Suchkonfiguration durch."
+			"abTestDescription": "Führen Sie A/B-Experimente mit Ihrer Suchkonfiguration durch.",
+			"ctrTrendDesc": "Klickrate im Zeitverlauf"
 		},
 		"widget": {
 			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",
@@ -305,7 +306,31 @@
 			"imageSearchDesc": "Lass Käufer per Foto oder Kamerabild suchen",
 			"imageSearchEnable": "Bildsuche aktivieren",
 			"imageSearchHint": "Verwendet GPT-4o-mini, um das Bild zu beschreiben, dann Vektorsuche",
-			"imageSearchPreviewText": "Ein Kamera-Button erscheint in der Suchleiste."
+			"imageSearchPreviewText": "Ein Kamera-Button erscheint in der Suchleiste.",
+			"tab": "Widget",
+			"title": "Such-Widget",
+			"apiKeyLabel": "API-Schlüssel",
+			"apiKeyHint": "Fügen Sie Ihren suchspezifischen API-Schlüssel (ss_search_...) ein oder erstellen Sie einen neuen im Reiter API-Schlüssel.",
+			"configureTitle": "Widget konfigurieren",
+			"configureDescription": "Wählen Sie Facetten, Sortierung und visuelle Optionen. Der Code wird automatisch aktualisiert.",
+			"copied": "Widget-Code kopiert!",
+			"copyFailed": "Kopieren fehlgeschlagen.",
+			"defaultSort": "Standardsortierung",
+			"defaultSortNone": "Keine (Relevanz)",
+			"defaultSortPlaceholder": "Feld auswählen...",
+			"displayOptions": "Anzeigeoptionen",
+			"facetFields": "Facettenfelder",
+			"installInstructions": "Installationsanleitung",
+			"saveConfig": "Konfiguration speichern",
+			"showImages": "Bilder anzeigen",
+			"showPrices": "Preise anzeigen",
+			"step1": "Fügen Sie ein Containerelement hinzu: <code>&lt;div id=\"aac-search\"&gt;&lt;/div&gt;</code>",
+			"step2": "Fügen Sie den Widget-Code vor dem schließenden <code>&lt;/body&gt;</code>-Tag ein.",
+			"step3": "Das Widget wird automatisch initialisiert. Passen Sie die data-*-Attribute nach Bedarf an.",
+			"theme": "Design",
+			"themeAuto": "Auto (System)",
+			"themeDark": "Dunkel",
+			"themeLight": "Hell"
 		},
 		"configurator": {
 			"pageTitle": "Suchkonfigurator",
@@ -963,7 +988,8 @@
 				"uniqueUsers": "Unique Users",
 				"uniqueUsersDesc": "With search activity",
 				"ctr": "CTR",
-				"ctrDesc": "Click-through rate"
+				"ctrDesc": "Click-through rate",
+				"ctrTrend": "CTR-Trend"
 			},
 			"test": {
 				"title": "Personalisierung testen",

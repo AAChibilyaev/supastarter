@@ -13,6 +13,7 @@ import {
 	updateFeatureFlagProcedure,
 } from "./procedures/feature-flags";
 import { findOrganization } from "./procedures/find-organization";
+import { forceDeleteUser } from "./procedures/force-delete-user";
 import {
 	getFxRateProcedure,
 	listFxRates,
@@ -34,6 +35,7 @@ import {
 export const adminRouter = {
 	users: {
 		list: listUsers,
+		forceDelete: forceDeleteUser,
 	},
 	organizations: {
 		list: listOrganizations,

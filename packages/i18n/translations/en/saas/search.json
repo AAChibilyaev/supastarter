@@ -160,6 +160,7 @@
 			"totalSessions": "Widget Opens",
 			"ctr": "Click-through Rate",
 			"ctrTrend": "CTR Trend",
+			"ctrTrendDesc": "Click-through rate over time",
 			"zeroResults": "Zero results",
 			"zeroResultRate": "Zero-result rate",
 			"comingSoon": "Coming soon",
@@ -305,7 +306,31 @@
 			"imageSearchDesc": "Let shoppers search by uploading a photo or taking a picture with their camera",
 			"imageSearchEnable": "Enable Image Search",
 			"imageSearchHint": "Uses GPT-4o-mini vision to describe the image, then vector search to find similar products",
-			"imageSearchPreviewText": "A camera button will appear in the search bar. Shoppers can upload a product photo to find visually similar items."
+			"imageSearchPreviewText": "A camera button will appear in the search bar. Shoppers can upload a product photo to find visually similar items.",
+			"tab": "Widget",
+			"title": "Search Widget",
+			"apiKeyLabel": "API Key",
+			"apiKeyHint": "Paste your search-only API key (ss_search_...) or create a new one in the API Keys tab.",
+			"configureTitle": "Configure Widget",
+			"configureDescription": "Select facets, sort, and visual options. The snippet is updated automatically.",
+			"copied": "Widget code copied!",
+			"copyFailed": "Failed to copy.",
+			"defaultSort": "Default Sort",
+			"defaultSortNone": "None (relevance)",
+			"defaultSortPlaceholder": "Select a field...",
+			"displayOptions": "Display Options",
+			"facetFields": "Facet Fields",
+			"installInstructions": "Installation Instructions",
+			"saveConfig": "Save Configuration",
+			"showImages": "Show images",
+			"showPrices": "Show prices",
+			"step1": "Add a container element: <code>&lt;div id=\"aac-search\"&gt;&lt;/div&gt;</code>",
+			"step2": "Paste the widget code before the closing <code>&lt;/body&gt;</code> tag.",
+			"step3": "The widget will initialize automatically. Customize data-* attributes as needed.",
+			"theme": "Theme",
+			"themeAuto": "Auto (system)",
+			"themeDark": "Dark",
+			"themeLight": "Light"
 		},
 		"configurator": {
 			"pageTitle": "Search Configurator",
@@ -612,6 +637,9 @@
 			"widgetAi": "AI Features"
 		},
 		"recommendations": {
+			"overview": {
+				"ctrTrend": "CTR Trend"
+			},
 			"description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
 			"dashboardTitle": "Recommendations Dashboard",
 			"similarTab": "Similar Items",

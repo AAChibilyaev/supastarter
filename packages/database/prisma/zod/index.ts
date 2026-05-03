@@ -12,7 +12,7 @@ export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevel
 
 // File: UserScalarFieldEnum.schema.ts
 
-export const UserScalarFieldEnumSchema = z.enum(['id', 'name', 'email', 'emailVerified', 'image', 'createdAt', 'updatedAt', 'username', 'role', 'banned', 'banReason', 'banExpires', 'onboardingComplete', 'dripStartedAt', 'paymentsCustomerId', 'locale', 'displayUsername', 'twoFactorEnabled', 'lastActiveOrganizationId'])
+export const UserScalarFieldEnumSchema = z.enum(['id', 'name', 'email', 'emailVerified', 'image', 'createdAt', 'updatedAt', 'username', 'role', 'banned', 'banReason', 'banExpires', 'onboardingComplete', 'dripStartedAt', 'paymentsCustomerId', 'locale', 'displayUsername', 'anonymized', 'twoFactorEnabled', 'lastActiveOrganizationId'])
 
 export type UserScalarFieldEnum = z.infer<typeof UserScalarFieldEnumSchema>;
 
@@ -298,6 +298,12 @@ export const ScimAuditLogScalarFieldEnumSchema = z.enum(['id', 'organizationId',
 
 export type ScimAuditLogScalarFieldEnum = z.infer<typeof ScimAuditLogScalarFieldEnumSchema>;
 
+// File: UserDeletionRequestScalarFieldEnum.schema.ts
+
+export const UserDeletionRequestScalarFieldEnumSchema = z.enum(['id', 'userId', 'reason', 'retentionUntil', 'status', 'cancellationToken', 'completedAt', 'createdAt', 'updatedAt'])
+
+export type UserDeletionRequestScalarFieldEnum = z.infer<typeof UserDeletionRequestScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -360,7 +366,7 @@ export type KnowledgeOwnerType = z.infer<typeof KnowledgeOwnerTypeSchema>;
 
 // File: KnowledgeSourceType.schema.ts
 
-export const KnowledgeSourceTypeSchema = z.enum(['CMS_PRESTASHOP', 'CMS_BITRIX', 'FILE_MD', 'FILE_XML', 'FILE_PDF', 'HTTP_SITEMAP', 'RSS'])
+export const KnowledgeSourceTypeSchema = z.enum(['CMS_PRESTASHOP', 'CMS_BITRIX', 'FILE_MD', 'FILE_XML', 'FILE_PDF', 'FILE_DOCX', 'FILE_XLSX', 'FILE_PPTX', 'FILE_EPUB', 'FILE_IMG', 'FILE_AUDIO', 'FILE_VIDEO', 'FILE_CSV', 'FILE_JSON', 'FILE_TXT', 'HTTP_SITEMAP', 'RSS'])
 
 export type KnowledgeSourceType = z.infer<typeof KnowledgeSourceTypeSchema>;
 
@@ -396,6 +402,7 @@ export const UserSchema = z.object({
   paymentsCustomerId: z.string().nullish(),
   locale: z.string().nullish(),
   displayUsername: z.string().nullish(),
+  anonymized: z.boolean(),
   twoFactorEnabled: z.boolean().nullish(),
   lastActiveOrganizationId: z.string().nullish(),
 });
@@ -1266,4 +1273,21 @@ export const ScimAuditLogSchema = z.object({
 });
 
 export type ScimAuditLogType = z.infer<typeof ScimAuditLogSchema>;
+
+
+// File: UserDeletionRequest.schema.ts
+
+export const UserDeletionRequestSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  reason: z.string().nullish(),
+  retentionUntil: z.date(),
+  status: z.string().default("pending"),
+  cancellationToken: z.string(),
+  completedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type UserDeletionRequestType = z.infer<typeof UserDeletionRequestSchema>;
 

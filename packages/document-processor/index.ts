@@ -1,7 +1,6 @@
 export { processFile, processUrl, detectFileType, SUPPORTED_MIME_TYPES } from "./lib/processor";
 export { chunkText } from "./lib/chunker";
 export type { ChunkTextResult } from "./lib/chunker";
-export type { ChunkerOptions } from "./lib/chunker";
 export type { ProcessFileResult, ProcessFileInput, ProcessUrlResult } from "./lib/processor";
 
 // Pipeline exports
@@ -35,6 +34,7 @@ export type {
 	ChunkResult,
 	FileType,
 	ChunkMetadata,
+	ChunkStrategy,
 	// Pipeline types
 	PipelineDocument,
 	ParsedPipelineDocument,
@@ -45,8 +45,7 @@ export type {
 	DeadLetterRecord,
 	PipelineStage,
 	PipelineConfig,
-	ChunkStrategy,
-	ChunkerOptions as ChunkerOptionsType,
+	ChunkerOptions,
 	CrawlOptions,
 	IndexOptions,
 } from "./lib/types";

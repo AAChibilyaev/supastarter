@@ -12,4 +12,5 @@ export { AdminClient } from "./admin-client";
 export type { AdminClientOptions } from "./admin-client";
 export { SearchClient } from "./search-client";
 export { SdkError } from "./types";
+export { type TrackEventInput, type TrackEventResult, type TrackEventType } from "./types";
 export * from "./types";

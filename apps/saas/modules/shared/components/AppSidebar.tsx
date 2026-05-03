@@ -138,6 +138,10 @@ export function AppSidebar() {
 							label: t("settings.menu.organization.auditLog"),
 							href: `${orgSettingsPrefix}/audit-log`,
 						},
+						{
+							label: t("settings.menu.organization.scim"),
+							href: `${orgSettingsPrefix}/scim`,
+						},
 					]
 				: undefined;
 

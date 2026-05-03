@@ -1,8 +1,25 @@
+import {
+	chunkText as docProcessorChunker,
+	type ChunkerOptions as DocProcessorChunkerOptions,
+	type ChunkTextResult as DocProcessorChunkResult,
+	ChunkStrategy,
+} from "@repo/document-processor";
+
+export type ChunkStrategy = "fixed" | "semantic" | "markdown" | "code";
+
 export interface TextChunk {
 	chunkIndex: number;
 	text: string;
 	tokenCount: number;
 	embedding: number[];
+}
+
+export interface ChunkOptions {
+	strategy?: ChunkStrategy;
+	chunkSize?: number; // max words per chunk
+	minChunkSize?: number;
+	maxChunkSize?: number;
+	overlap?: number; // overlap words
 }
 
 const VECTOR_SIZE = 128;
@@ -39,35 +56,6 @@ export function embedTextLocally(text: string): number[] {
 	return vector.map((value) => value / norm);
 }
 
-export function chunkText(text: string, chunkSize = 900, overlap = 180): TextChunk[] {
-	const normalized = text.replace(/\s+/g, " ").trim();
-	if (!normalized) return [];
-
-	const chunks: TextChunk[] = [];
-	let cursor = 0;
-	let index = 0;
-
-	while (cursor < normalized.length) {
-		const rawSlice = normalized.slice(cursor, cursor + chunkSize);
-		const chunkTextValue = rawSlice.trim();
-		if (chunkTextValue.length > 0) {
-			const tokenCount = tokenize(chunkTextValue).length;
-			chunks.push({
-				chunkIndex: index,
-				text: chunkTextValue,
-				tokenCount,
-				embedding: embedTextLocally(chunkTextValue),
-			});
-			index += 1;
-		}
-
-		if (cursor + chunkSize >= normalized.length) break;
-		cursor += Math.max(1, chunkSize - overlap);
-	}
-
-	return chunks;
-}
-
 export function cosineSimilarity(a: number[], b: number[]): number {
 	if (a.length !== b.length || a.length === 0) return 0;
 	let sum = 0;
@@ -75,4 +63,28 @@ export function cosineSimilarity(a: number[], b: number[]): number {
 		sum += a[i] * b[i];
 	}
 	return sum;
+}
+
+/**
+ * Chunk text using the full @repo/document-processor pipeline.
+ * Supports: fixed, semantic, markdown, code strategies.
+ *
+ * Falls back to local embedding for the knowledge chunk DB.
+ */
+export function chunkText(text: string, options?: ChunkOptions): TextChunk[] {
+	const opts: Partial<DocProcessorChunkerOptions> = {};
+	if (options?.strategy) opts.strategy = options.strategy;
+	if (options?.chunkSize) opts.maxWords = options.chunkSize;
+	if (options?.minChunkSize) opts.minChunkSize = options.minChunkSize;
+	if (options?.maxChunkSize) opts.maxChunkSize = options.maxChunkSize;
+	if (options?.overlap) opts.overlapWords = options.overlap;
+
+	const result: DocProcessorChunkResult = docProcessorChunker(text, opts);
+
+	return result.metadata.map((meta) => ({
+		chunkIndex: meta.index,
+		text: meta.text,
+		tokenCount: meta.wordCount,
+		embedding: embedTextLocally(meta.text),
+	}));
 }

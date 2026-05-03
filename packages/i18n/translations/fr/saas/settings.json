@@ -515,7 +515,8 @@
 				"title": "Organisation",
 				"dangerZone": "Zone de danger",
 				"compliance": "Conformité",
-				"auditLog": "Journal d'audit"
+				"auditLog": "Journal d'audit",
+				"scim": "SCIM"
 			}
 		},
 		"save": "Enregistrer",

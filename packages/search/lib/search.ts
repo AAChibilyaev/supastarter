@@ -1,6 +1,6 @@
 import "server-only";
 import { config } from "../config";
-import { getTypesenseClient } from "./client";
+import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
 
 export interface GeoPolygonFilter {
 	/** Geolocation field name (default: "_geoloc") */
@@ -218,7 +218,7 @@ export async function computeDisjunctiveFacetCounts(input: {
 
 	if (!disjunctiveFacets.length || !filterBy) return existingFacetCounts;
 
-	const client = getTypesenseClient();
+	const client = await getTypesenseClientForOrg(input.tenantId);
 
 	// Build a map of existing counts (non-disjunctive)
 	const existingMap = new Map<string, FacetCount>();
@@ -296,7 +296,7 @@ function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
 }
 
 export async function searchDocuments(input: SearchDocumentsInput): Promise<SearchDocumentsResult> {
-	const client = getTypesenseClient();
+	const client = await getTypesenseClientForOrg(input.tenantId);
 
 	const perPage = Math.min(
 		Math.max(input.perPage ?? config.defaultPerPage, 1),
@@ -410,7 +410,9 @@ export async function multiSearchDocuments(
 	entries: MultiSearchEntry[],
 ): Promise<SearchDocumentsResult[]> {
 	if (entries.length === 0) return [];
-	const client = getTypesenseClient();
+	const client = entries[0]?.tenantId
+		? await getTypesenseClientForOrg(entries[0].tenantId)
+		: getTypesenseClient();
 
 	const searches = entries.map((entry) => {
 		const perPage = Math.min(
@@ -501,9 +503,3 @@ export async function multiSearchDocuments(
 	return results.map((r, idx) => ({
 		hits: (r.hits as unknown[]) ?? [],
 		found: (r.found as number) ?? 0,
-		page: (r.page as number) ?? 1,
-		perPage: searches[idx].per_page,
-		facetCounts: (r.facet_counts as FacetCount[]) ?? [],
-		searchTimeMs: (r.search_time_ms as number) ?? 0,
-	}));
-}

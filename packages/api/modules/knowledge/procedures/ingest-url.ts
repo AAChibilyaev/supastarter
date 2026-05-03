@@ -1,5 +1,5 @@
 import { ORPCError } from "@orpc/client";
-import { detectFileType } from "@repo/document-processor";
+import { processUrl } from "@repo/document-processor";
 import {
 	createIngestionJob,
 	getKnowledgeSpaceBySlug,
@@ -8,7 +8,6 @@ import {
 	updateIngestionJob,
 	upsertKnowledgeDocument,
 } from "@repo/database";
-import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -21,33 +20,7 @@ import {
 } from "../../entitlements/middleware/credit-gate";
 import { requireKnowledgeOwnerAdmin } from "../lib/access";
 import { chunkText, type ChunkStrategy } from "../lib/chunking";
-import { parseIncomingFile } from "../lib/parsers";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
-
-/**
- * Map file type to KnowledgeSourceType enum value.
- */
-function inferFileSourceType(
-	fileName: string,
-	mimeType: string,
-): string {
-	const ft = detectFileType(fileName, mimeType);
-	switch (ft) {
-		case "pdf": return "FILE_PDF";
-		case "docx": return "FILE_DOCX";
-		case "xlsx": return "FILE_XLSX";
-		case "pptx": return "FILE_PPTX";
-		case "epub": return "FILE_EPUB";
-		case "image": return "FILE_IMG";
-		case "audio": return "FILE_AUDIO";
-		case "video": return "FILE_VIDEO";
-		case "csv": return "FILE_CSV";
-		case "json": return "FILE_JSON";
-		case "md": return "FILE_MD";
-		case "txt": return "FILE_TXT";
-		default: return "FILE_TXT";
-	}
-}
 
 async function checksum(text: string): Promise<string> {
 	const crypto = await import("node:crypto");
@@ -56,22 +29,20 @@ async function checksum(text: string): Promise<string> {
 
 const chunkStrategySchema = z.enum(["fixed", "semantic", "markdown", "code"]).optional();
 
-export const ingestFile = protectedProcedure
+export const ingestUrl = protectedProcedure
 	.use(creditGate("chat", CREDIT_RATES.chat))
 	.route({
 		method: "POST",
-		path: "/knowledge/ingest/file",
+		path: "/knowledge/ingest/url",
 		tags: ["Knowledge"],
-		summary: "Ingest a document file — supports pdf, docx, xlsx, pptx, epub, csv, json, md, txt, image, audio, video",
+		summary: "Ingest content from a URL — fetches HTML, extracts text, chunks, and indexes",
 	})
 	.input(
 		z.object({
 			ownerType: knowledgeOwnerTypeSchema,
 			ownerId: z.string(),
 			spaceSlug: knowledgeSpaceSlugSchema,
-			fileName: z.string().min(1),
-			mimeType: z.string().min(3),
-			contentBase64: z.string().min(1),
+			url: z.string().url().min(1),
 			language: z.string().max(12).optional(),
 			chunkStrategy: chunkStrategySchema,
 		}),
@@ -99,35 +70,32 @@ export const ingestFile = protectedProcedure
 				throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
 			}
 
-			// Stage 1: Parse the file
-			const parsed = await parseIncomingFile({
-				fileName: input.fileName,
-				mimeType: input.mimeType,
-				contentBase64: input.contentBase64,
-			});
+			// Check for HTTP_SITEMAP data source
+			const existingSources = await listDataSources(space.id);
+			const webSource = existingSources.find((s) => s.sourceType === "HTTP_SITEMAP");
 
-			// Stage 2: Chunk with selected strategy
+			// Fetch and parse URL via document-processor (already includes chunking)
+			const result = await processUrl({ url: input.url });
+			if (!result.document.content) {
+				throw new ORPCError("BAD_REQUEST", { message: "No content extracted from URL" });
+			}
+
+			// Apply knowledge chunking with selected strategy
 			const chunkOptions = input.chunkStrategy
 				? { strategy: input.chunkStrategy as ChunkStrategy }
 				: undefined;
-			const chunks = chunkText(parsed.text, chunkOptions);
+			const chunks = chunkText(result.document.content, chunkOptions);
 			if (chunks.length === 0) {
-				throw new ORPCError("BAD_REQUEST", { message: "No text extracted from file" });
+				throw new ORPCError("BAD_REQUEST", { message: "No content extracted from URL" });
 			}
 
-			const existingSources = await listDataSources(space.id);
-			const fileSource = existingSources.find((source) =>
-				source.sourceType.startsWith("FILE_"),
-			);
-
-			// Stage 3: Create ingestion job
+			// Create ingestion job
 			const job = await createIngestionJob({
 				knowledgeSpaceId: space.id,
-				dataSourceId: fileSource?.id,
-				mode: "file_upload",
+				dataSourceId: webSource?.id,
+				mode: "url_fetch",
 				inputMeta: {
-					fileName: input.fileName,
-					mimeType: input.mimeType,
+					url: input.url,
 					chunkStrategy: input.chunkStrategy ?? "fixed",
 				},
 			});
@@ -138,32 +106,26 @@ export const ingestFile = protectedProcedure
 				totalItems: chunks.length,
 			});
 
-			// Stage 4: Upsert document + chunks
-			const digest = await checksum(parsed.text);
+			// Upsert document
+			const digest = await checksum(result.document.content);
 			const document = await upsertKnowledgeDocument({
 				knowledgeSpaceId: space.id,
-				dataSourceId: fileSource?.id,
-				externalId: `file:${input.fileName}:${digest.slice(0, 12)}`,
-				sourceType: inferFileSourceType(input.fileName, input.mimeType) as any,
-				title: parsed.title,
-				mimeType: parsed.mimeType,
+				dataSourceId: webSource?.id,
+				externalId: `url:${input.url}:${digest.slice(0, 12)}`,
+				sourceType: "HTTP_SITEMAP",
+				title: result.document.title,
+				mimeType: result.document.mimeType,
 				language: input.language,
-				contentText: parsed.text,
+				contentText: result.document.content,
 				metadata: {
-					...parsed.metadata,
-					fileName: input.fileName,
+					...result.document.metadata,
+					sourceUrl: input.url,
 					chunkStrategy: input.chunkStrategy ?? "fixed",
-					originalFormat: inferFileSourceType(input.fileName, input.mimeType),
 				},
 				checksum: digest,
 			});
 
-			logger.info(
-				{ jobId: job.id, documentId: document.id, chunks: chunks.length, strategy: input.chunkStrategy ?? "fixed" },
-				"Ingested file and generating embeddings",
-			);
-
-			// Stage 5: Store chunks with local embeddings
+			// Store chunks
 			await replaceKnowledgeChunks({
 				knowledgeSpaceId: space.id,
 				documentId: document.id,
@@ -173,19 +135,19 @@ export const ingestFile = protectedProcedure
 					tokenCount: chunk.tokenCount,
 					embedding: chunk.embedding,
 					metadata: {
-						from: "file-upload",
+						from: "url-fetch",
+						sourceUrl: input.url,
 						chunkStrategy: input.chunkStrategy ?? "fixed",
 					},
 				})),
 			});
 
-			// Stage 6: Build graph from chunks
+			// Build graph
 			const savedChunks = chunks.map((chunk) => ({
 				id: `${document.id}:${chunk.chunkIndex}`,
 				text: chunk.text,
 			}));
 
-			// Import graph builder dynamically (it's in the knowledge module)
 			const { buildGraphFromChunks } = await import("../lib/graphrag");
 			await buildGraphFromChunks({
 				knowledgeSpaceId: space.id,
@@ -199,7 +161,6 @@ export const ingestFile = protectedProcedure
 				finishedAt: new Date(),
 			});
 
-			// Commit flat-fee usage on successful ingestion
 			await commitFlatFeeUsage({
 				reservationId: creditReservationId,
 				operation: "chat",
@@ -214,6 +175,7 @@ export const ingestFile = protectedProcedure
 				documentId: document.id,
 				chunks: chunks.length,
 				chunkStrategy: input.chunkStrategy ?? "fixed",
+				sourceUrl: input.url,
 			};
 		} catch (err) {
 			await releaseCreditReservation(creditReservationId);

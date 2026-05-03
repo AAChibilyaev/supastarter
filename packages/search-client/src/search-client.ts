@@ -5,7 +5,14 @@
  * Never bundle admin/write keys — those grant index management rights.
  */
 import { request } from "./transport";
-import type { MultiSearchResult, SearchClientOptions, SearchParams, SearchResult } from "./types";
+import type {
+	MultiSearchResult,
+	SearchClientOptions,
+	SearchParams,
+	SearchResult,
+	TrackEventInput,
+	TrackEventResult,
+} from "./types";
 
 export class SearchClient {
 	private readonly baseUrl: string;
@@ -45,5 +52,86 @@ export class SearchClient {
 			{ searches },
 			this.fetchImpl,
 		);
+	}
+
+	// ── Analytics Events ─────────────────────────────────────────────────
+
+	/**
+	 * Send a generic analytics event (click, conversion, visit, search_query, etc.).
+	 * Uses `sendBeacon` when available (document.hidden / pagehide) for reliable
+	 * page-exit tracking; falls back to `fetch` for synchronous sends.
+	 */
+	async trackEvent(input: TrackEventInput): Promise<TrackEventResult> {
+		const base = this.baseUrl.replace(/\/+$/, "");
+		const path = "/api/analytics/events/track";
+		const url = `${base}${path}`;
+		const body = JSON.stringify(input);
+
+		// Use sendBeacon for reliable page-exit tracking (no auth header possible,
+		// so apiKey is embedded in the body)
+		if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+			const sent = navigator.sendBeacon(url, body);
+			if (sent) {
+				return { accepted: 1, rejected: 0 };
+			}
+		}
+
+		// Fallback: use fetch with Bearer token
+		const res = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${this.apiKey}`,
+			},
+			body,
+		});
+
+		if (!res.ok) {
+			throw new Error(`trackEvent failed: ${res.status}`);
+		}
+
+		return res.json() as Promise<TrackEventResult>;
+	}
+
+	/**
+	 * Track a click on a search result document.
+	 * `queryId` should come from the preceding `search()` or `multiSearch()` response.
+	 */
+	async trackClick(docId: string, position: number, queryId?: string): Promise<TrackEventResult> {
+		return this.trackEvent({
+			type: "click",
+			productId: docId,
+			position,
+			queryId,
+		});
+	}
+
+	/**
+	 * Track a conversion (purchase, add-to-cart, signup, etc.) after a search.
+	 * `queryId` should come from the preceding `search()` or `multiSearch()` response.
+	 */
+	async trackConversion(
+		docId: string,
+		conversionType?: string,
+		queryId?: string,
+	): Promise<TrackEventResult> {
+		return this.trackEvent({
+			type: "conversion",
+			productId: docId,
+			conversionType,
+			queryId,
+		});
+	}
+
+	/**
+	 * Track a page view / visit associated with a search result.
+	 * `queryId` should come from the preceding `search()` or `multiSearch()` response.
+	 */
+	async trackVisit(docId?: string, queryId?: string): Promise<TrackEventResult> {
+		return this.trackEvent({
+			type: "visit",
+			productId: docId,
+			queryId,
+		});
 	}
 }

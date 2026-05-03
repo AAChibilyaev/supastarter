@@ -62,7 +62,7 @@ export class TrigramsIndex {
 
 		// Filter by Sørensen-Dice similarity
 		const results: { word: string; score: number }[] = [];
-		for (const [word, trigramHits] of scores) {
+		for (const [word] of scores) {
 			const diceScore = 1 - sorensenDiceCoefficient(lowerQuery, word);
 			if (diceScore >= threshold) {
 				results.push({ word, score: diceScore });

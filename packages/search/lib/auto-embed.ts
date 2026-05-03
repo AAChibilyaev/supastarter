@@ -137,34 +137,6 @@ export const EMBEDDING_MODELS = {
 
 export type EmbeddingModelName = keyof typeof EMBEDDING_MODELS;
 
-// ─── Provider Resolution ──────────────────────────────────────────────────────
-
-function getModelDef(model: string): EmbeddingModelDef {
-	const def = EMBEDDING_MODELS[model as EmbeddingModelName];
-	if (!def) {
-		// Accept any model with openai-compatible/ prefix dynamically
-		if (model.startsWith("openai-compatible/")) {
-			return {
-				name: model,
-				dimensions: 1536,
-				provider: "openai-compatible" as const,
-				maxInputTokens: 8192,
-			};
-		}
-		// Accept any model with vertex/ prefix dynamically
-		if (model.startsWith("vertex/")) {
-			return {
-				name: model,
-				dimensions: 768,
-				provider: "vertex" as const,
-				maxInputTokens: 2048,
-			};
-		}
-		throw new Error(`Unknown embedding model: ${model}`);
-	}
-	return def;
-}
-
 // ─── Field Detection for Auto-Embedding ───────────────────────────────────────
 
 /**

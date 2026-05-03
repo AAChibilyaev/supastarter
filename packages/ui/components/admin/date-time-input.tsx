@@ -152,7 +152,7 @@ export const DateTimeInput = ({
 	};
 
 	const { ref, name } = field;
-	const inputRef = useForkRef(ref, localInputRef);
+	useForkRef(ref, localInputRef);
 
 	return (
 		<FormField id={id} className={className} name={field.name}>

@@ -73,7 +73,7 @@ test.describe("Index Status Dashboard", () => {
 
 		// Verify page loaded with indexing-related content
 		const pageText = (await page.textContent("body").catch(() => "")) || "";
-		const hasIndexingContent =
+		const _hasIndexingContent =
 			pageText.includes("Index") ||
 			pageText.includes("index") ||
 			pageText.includes("sync") ||

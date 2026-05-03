@@ -3,7 +3,6 @@ import type { RouterClient } from "@orpc/server";
 import { adminRouter } from "../modules/admin/router";
 import { aiRouter } from "../modules/ai/router";
 import { billingWalletRouter } from "../modules/billing-wallet/router";
-import { entitlementsRouter } from "../modules/entitlements/router";
 import { feedbackRouter } from "../modules/feedback/router";
 import { indexingRouter } from "../modules/indexing/router";
 import { knowledgeRouter } from "../modules/knowledge/router";

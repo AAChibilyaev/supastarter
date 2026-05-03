@@ -1,5 +1,4 @@
 import { CollectionsPage } from "@collections/components/pages/CollectionsPage";
-import { getBaseUrl } from "@repo/utils";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,
@@ -22,7 +21,7 @@ export default async function CollectionsOverviewPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const { organization, canManage } = await getSearchOrganizationRouteContext(organizationSlug);
+	await getSearchOrganizationRouteContext(organizationSlug);
 
 	return <CollectionsPage />;
 }

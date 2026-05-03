@@ -1,5 +1,5 @@
 import { ORPCError } from "@orpc/client";
-import { aliasName, bulkUpsert, deleteByQuery, physicalCollectionName } from "@repo/search";
+import { bulkUpsert, deleteByQuery, physicalCollectionName } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -67,7 +67,7 @@ export const deltaSync = protectedProcedure
 			const doc = item.document as Record<string, unknown> | null;
 			if (item.action === "delete") {
 				if (doc?.id) {
-					deleteIds.push(String(doc.id));
+					deleteIds.push(String(doc.id as string | number));
 				}
 			} else if (doc) {
 				upsertDocs.push({ ...doc, [item.organizationId]: item.organizationId });

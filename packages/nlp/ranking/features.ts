@@ -64,7 +64,6 @@ export function freshnessScore(updatesPerDay: number, maxUpdates: number = 10): 
  */
 export function ctrScore(clicks: number, impressions: number): number {
 	if (impressions <= 0) return 0;
-	const raw = clicks / impressions;
 	// Smooth with Bayesian prior
 	const prior = 0.05; // 5% prior CTR
 	const priorWeight = 10; // equivalent to 10 impressions

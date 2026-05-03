@@ -485,7 +485,7 @@ export const upgradeSubscription: UpgradeSubscription = async ({
 export const getProrationPreview: GetProrationPreview = async ({
 	subscriptionId,
 	newPriceId,
-	seats,
+	seats: _seats,
 }) => {
 	const stripeClient = getStripeClient();
 

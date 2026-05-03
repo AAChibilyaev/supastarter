@@ -1,11 +1,5 @@
 import type { ActiveOrganization } from "../auth";
-import {
-	hasMinRole,
-	normalizeRole,
-	Permission,
-	requirePermission,
-	type OrganizationMemberRole,
-} from "./rbac";
+import { hasMinRole, normalizeRole, Permission, type OrganizationMemberRole } from "./rbac";
 
 /**
  * Get the requesting user's role within a specific organization.

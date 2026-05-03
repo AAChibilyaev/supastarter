@@ -38,18 +38,7 @@ import {
 	UserCogIcon,
 	SparklesIcon,
 	PuzzleIcon,
-	CodeIcon,
-	BookOpenIcon,
 	StarIcon,
-	FlameIcon,
-	AlertTriangleIcon,
-	ActivityIcon,
-	ScrollTextIcon,
-	WrenchIcon,
-	ShuffleIcon,
-	Volume2Icon,
-	BotIcon,
-	TagsIcon,
 	Columns3Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";

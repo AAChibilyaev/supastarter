@@ -10,7 +10,6 @@
  * Returns suggestions ranked by similarity + frequency.
  * Requires a search-scoped API key.
  */
-import { logger } from "@repo/logs";
 import {
 	SymSpell,
 	ContextCorrector,
@@ -247,7 +246,7 @@ const spellCheckInputSchema = z.object({
 // ── Helpers ───────────────────────────────────────────────────────
 
 async function buildIndexDictionary(
-	organizationId: string,
+	_organizationId: string,
 	indexSlug: string,
 ): Promise<{ dictionary: string[]; frequencies: Map<string, number> }> {
 	const client = getTypesenseClient();

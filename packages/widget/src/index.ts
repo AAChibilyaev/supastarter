@@ -1321,7 +1321,7 @@ export class AacSearchWidget {
 		const imageUrl = product.image_url as string | undefined;
 		const productUrl = product.product_url as string | undefined;
 		const categories = product.categories as string[] | undefined;
-		const productId =
+		const _productId =
 			(product.external_id as string | undefined) ?? (product.id as string | undefined);
 
 		let html = '<div class="aac-recs-item">';
@@ -1957,7 +1957,7 @@ export class AacSearchWidget {
 			// Determine how many values to show (10 by default, all if expanded)
 			const isExpanded = this.expandedFacets.has(fieldName);
 			const visibleCount = isExpanded ? facet.counts.length : 10;
-			const remaining = facet.counts.length - 10;
+			const _remaining = facet.counts.length - 10;
 
 			for (const count of facet.counts.slice(0, visibleCount)) {
 				const checked = selected.includes(count.value) ? "checked" : "";

@@ -10,9 +10,7 @@ import neo4j, {
 	type Driver,
 	type Session,
 	type ManagedTransaction,
-	type Result,
 	type QueryResult,
-	type RecordShape,
 } from "neo4j-driver";
 
 // Global process declaration for Node.js env vars
@@ -169,7 +167,7 @@ export async function closeDriver(driver?: Driver): Promise<void> {
  */
 export function resetDriver(): void {
 	if (internalDriver) {
-		internalDriver.close();
+		void internalDriver.close();
 		internalDriver = null;
 	}
 }

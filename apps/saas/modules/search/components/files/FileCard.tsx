@@ -9,7 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { FileIcon, FileTextIcon, GlobeIcon, ImageIcon, Trash2Icon } from "lucide-react";
+import { FileTextIcon, GlobeIcon, ImageIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { FileEntry } from "./FileTable";

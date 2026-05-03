@@ -226,6 +226,18 @@ export const ActivationEventScalarFieldEnumSchema = z.enum(['id', 'organizationI
 
 export type ActivationEventScalarFieldEnum = z.infer<typeof ActivationEventScalarFieldEnumSchema>;
 
+// File: CollectionScalarFieldEnum.schema.ts
+
+export const CollectionScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'slug', 'name', 'description', 'schema', 'documentCount', 'size', 'status', 'createdAt', 'updatedAt'])
+
+export type CollectionScalarFieldEnum = z.infer<typeof CollectionScalarFieldEnumSchema>;
+
+// File: CollectionDocumentScalarFieldEnum.schema.ts
+
+export const CollectionDocumentScalarFieldEnumSchema = z.enum(['id', 'collectionId', 'organizationId', 'data', 'rowNumber', 'createdAt', 'updatedAt'])
+
+export type CollectionDocumentScalarFieldEnum = z.infer<typeof CollectionDocumentScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -979,4 +991,38 @@ export const ActivationEventSchema = z.object({
 });
 
 export type ActivationEventType = z.infer<typeof ActivationEventSchema>;
+
+
+// File: Collection.schema.ts
+
+export const CollectionSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  slug: z.string(),
+  name: z.string(),
+  description: z.string().nullish(),
+  schema: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("[]"),
+  documentCount: z.number().int(),
+  size: z.bigint().default(BigInt(0)),
+  status: z.string().default("active"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type CollectionType = z.infer<typeof CollectionSchema>;
+
+
+// File: CollectionDocument.schema.ts
+
+export const CollectionDocumentSchema = z.object({
+  id: z.string(),
+  collectionId: z.string(),
+  organizationId: z.string(),
+  data: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  rowNumber: z.number().int(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type CollectionDocumentType = z.infer<typeof CollectionDocumentSchema>;
 

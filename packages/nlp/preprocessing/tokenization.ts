@@ -110,7 +110,6 @@ export function tokenize(text: string, config: Partial<TokenizerConfig> = {}): T
 	// Merge symbol tokens at their positions
 	const tokens: Token[] = [];
 	let tokenIndex = 0;
-	let charIndex = 0;
 
 	// Re-insert CJK characters
 	for (const raw of rawTokens) {

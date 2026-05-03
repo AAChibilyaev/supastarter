@@ -51,7 +51,6 @@ export function ShopifyStoreSettings({
 	open,
 	onOpenChange,
 }: ShopifyStoreSettingsProps) {
-	const t = useTranslations();
 	const tShopify = useTranslations("search.connector.shopify");
 	const queryClient = useQueryClient();
 

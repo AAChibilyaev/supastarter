@@ -18,7 +18,7 @@ interface DataTableToolbarProps {
 }
 
 export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
-	const { table, isLoading, columnFilters, totalRows, filterRows } = useDataTable();
+	const { table, columnFilters, totalRows, filterRows } = useDataTable();
 	const { open, setOpen } = useControls();
 	useHotKey(() => setOpen((prev) => !prev), "b");
 	const rows = {

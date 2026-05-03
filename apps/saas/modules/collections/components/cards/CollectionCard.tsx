@@ -11,14 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import {
-	CopyIcon,
-	DatabaseIcon,
-	DownloadIcon,
-	MoreHorizontalIcon,
-	SettingsIcon,
-	Trash2Icon,
-} from "lucide-react";
+import { CopyIcon, DatabaseIcon, DownloadIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 

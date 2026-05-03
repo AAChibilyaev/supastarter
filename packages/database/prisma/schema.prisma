@@ -157,6 +157,8 @@ model Organization {
   aiWallet           AiWallet?
   knowledgeSpaces    KnowledgeSpace[]
   activationEvents   ActivationEvent[]
+  collections        Collection[]
+  collectionDocuments CollectionDocument[]
 
   @@unique([slug])
   @@map("organization")
@@ -808,4 +810,45 @@ model ActivationEvent {
   @@unique([organizationId, eventType])
   @@index([organizationId])
   @@map("activation_event")
+}
+
+// ─── Collections & Documents ─────────────────────────────────────────────
+// Manage data in spreadsheet-like interface (Airtable/Excel style).
+// Collections belong to an organization and contain documents with flexible JSON data.
+
+model Collection {
+  id              String               @id @default(cuid())
+  organizationId  String
+  organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  slug            String
+  name            String
+  description     String?
+  schema          Json                 @default("[]")    // Array of field definitions
+  documentCount   Int                  @default(0)
+  size            BigInt               @default(0)
+  status          String               @default("active") // active | archived
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  documents       CollectionDocument[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@map("collection")
+}
+
+model CollectionDocument {
+  id              String       @id @default(cuid())
+  collectionId    String
+  collection      Collection   @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  data            Json         @default("{}")          // Flexible document fields
+  rowNumber       Int                                  // Sequential row number within collection
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@unique([collectionId, rowNumber])
+  @@index([collectionId, createdAt(sort: Desc)])
+  @@index([organizationId])
+  @@map("collection_document")
 }

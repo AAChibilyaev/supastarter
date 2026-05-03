@@ -4,6 +4,7 @@ export * from "./ai-wallets";
 export * from "./activation";
 export * from "./billing-analytics";
 export * from "./drip-emails";
+export * from "./collections";
 export * from "./knowledge";
 export * from "./organizations";
 export * from "./purchases";

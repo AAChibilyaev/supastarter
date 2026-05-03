@@ -23,7 +23,7 @@ type SpellLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
 async function buildIndexDictionary(
 	indexSlug: string,
-	language: SpellLanguage,
+	_language: SpellLanguage,
 ): Promise<{ dictionary: string[]; frequencies: Map<string, number> }> {
 	const client = getTypesenseClient();
 	const dictionary: string[] = [];

@@ -1,4 +1,3 @@
-import { ORPCError } from "@orpc/client";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

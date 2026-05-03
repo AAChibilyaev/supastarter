@@ -2,7 +2,7 @@
 
 import type { Post } from "@blog/types";
 import { LocaleLink } from "@i18n/routing";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 interface CaseStudiesGridProps {
@@ -11,7 +11,6 @@ interface CaseStudiesGridProps {
 
 export function CaseStudiesGrid({ caseStudies }: CaseStudiesGridProps) {
 	const t = useTranslations("caseStudiesPage");
-	const locale = useLocale();
 
 	return (
 		<section className="py-24">

@@ -16,7 +16,7 @@ const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 test.describe.configure({ mode: "serial" });
 
 test.describe("Project / Index Creation", () => {
-	test("should allow index creation via v1 API", async ({ apiClient }) => {
+	test("should allow index creation via v1 API", async ({ apiClient: _apiClient }) => {
 		const index = await createTestIndex(
 			process.env.E2E_ADMIN_API_KEY || "test-admin-key",
 			BASE_URL,

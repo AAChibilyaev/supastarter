@@ -83,11 +83,11 @@ export function ShopifyConnectorCard({
 	stores,
 	storeCount,
 	isLoading,
-	lastSyncAt,
+	lastSyncAt: _lastSyncAt,
 	onConnect,
 	onManage,
-	onDisconnect,
-	onSync,
+	onDisconnect: _onDisconnect,
+	onSync: _onSync,
 }: ShopifyConnectorCardProps) {
 	const t = useTranslations();
 

@@ -22,7 +22,7 @@ interface CreateIndexFormProps {
 	onCancel?: () => void;
 }
 
-export function CreateIndexForm({ onSuccess, onCancel }: CreateIndexFormProps) {
+export function CreateIndexForm({ onSuccess: _onSuccess, onCancel }: CreateIndexFormProps) {
 	const t = useTranslations("mySearch");
 	const { user } = useSession();
 	const queryClient = useQueryClient();
@@ -33,26 +33,18 @@ export function CreateIndexForm({ onSuccess, onCancel }: CreateIndexFormProps) {
 
 	const organizationId = user?.id ?? "";
 
-	const {
-		pendingFiles,
-		pendingUrls,
-		uploadJobs,
-		addFiles,
-		addUrl,
-		removeFile,
-		removeUrl,
-		isUploading,
-	} = useDocumentUpload({
-		organizationId,
-		indexId: indexId ?? "",
-	});
+	const { pendingFiles, pendingUrls, uploadJobs, addFiles, addUrl, removeFile, removeUrl } =
+		useDocumentUpload({
+			organizationId,
+			indexId: indexId ?? "",
+		});
 
 	const createIndexMutation = useMutation(
 		orpc.mySearch.createIndex.mutationOptions({
 			onSuccess: (data) => {
 				setIndexId(data.id);
 				toast.success(t("indexCreated"));
-				queryClient.invalidateQueries({
+				void queryClient.invalidateQueries({
 					queryKey: orpc.mySearch.listIndexes.queryKey({ input: { organizationId } }),
 				});
 			},

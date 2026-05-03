@@ -44,14 +44,14 @@ test.describe("Analytics Dashboard", () => {
 			const noData = page
 				.locator("text=no data,text=empty,text=No results,text=not found,text=zero")
 				.first();
-			const hasNoData = await noData.isVisible().catch(() => false);
+			const _hasNoData = await noData.isVisible().catch(() => false);
 
 			// Either way, we expect the page to render without error
 			expect(page.url()).toContain("/analytics");
 		}
 	});
 
-	test("should have analytics API endpoint accessible", async ({ apiClient }) => {
+	test("should have analytics API endpoint accessible", async ({ apiClient: _apiClient }) => {
 		// Test analytics API health
 		const response = await fetch(`${BASE_URL}/api/analytics/health`).catch(() => null);
 

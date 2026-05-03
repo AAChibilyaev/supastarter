@@ -70,7 +70,7 @@ async function openaiEmbeddings(texts: string[], model: string): Promise<Embeddi
 
 // ─── Google Generative AI (Gemini/PaLM) Provider ──────────────────────────────
 
-let cachedGoogleClient: unknown = null;
+let _cachedGoogleClient: unknown = null;
 
 // Google Generative Language API key
 const GOOGLE_API_KEY = process.env.GOOGLE_GENAI_API_KEY ?? "";
@@ -110,7 +110,6 @@ async function googleEmbedding(text: string, model: string): Promise<EmbeddingRe
 		throw new Error(`Google embedding API: no embedding in response`);
 	}
 
-	const def = getModelDef(model);
 	return {
 		vector: data.embedding.values,
 		model,
@@ -544,7 +543,7 @@ export async function generateEmbedding(
 		case "openai-compatible":
 			return openaiCompatibleEmbedding(text, model);
 		default:
-			throw new Error(`Unsupported embedding provider: ${def.provider}`);
+			throw new Error(`Unsupported embedding provider: ${String(def.provider)}`);
 	}
 }
 
@@ -571,7 +570,7 @@ export async function generateEmbeddings(
 		case "openai-compatible":
 			return openaiCompatibleEmbeddings(texts, model);
 		default:
-			throw new Error(`Unsupported embedding provider: ${def.provider}`);
+			throw new Error(`Unsupported embedding provider: ${String(def.provider)}`);
 	}
 }
 

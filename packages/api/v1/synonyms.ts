@@ -36,7 +36,6 @@ import {
 	typesenseFetch,
 	type CurationRule,
 	type SynonymPair,
-	type SynonymSetRecord,
 } from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";

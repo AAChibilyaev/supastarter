@@ -5,17 +5,6 @@
 
 import type { StemmerLanguage } from "./stemmer";
 
-/** Known soft-sign errors in Russian (wrong -> correct) */
-const RUSSIAN_SOFT_SIGN_FIXES: Record<string, string> = {
-	// -тся vs -ться (third person vs infinitive)
-	// Without context, prefer third person (more common in search)
-};
-
-/** Common Russian compound/split word fixes */
-const RUSSIAN_COMPOUND_FIXES: Record<string, string> = {
-	не: "", // "незнаю" → "не знаю" handled in text level
-};
-
 /**
  * Fix common soft-sign spelling errors in Russian text.
  * Pattern: words ending in -тся/-ться
@@ -24,7 +13,7 @@ export function fixRussianSoftSign(text: string): string {
 	if (!text) return text;
 
 	// Fix -тся/-ться: if preceded by vowel or й, prefer -ться (infinitive)
-	return text.replace(/([аеёиоуыэюяй])(тся|ться)\b/gi, (_match, before, ending) => {
+	return text.replace(/([аеёиоуыэюяй])(тся|ться)\b/gi, (_match, before) => {
 		// Default to -ться (infinitive) after vowels
 		return before + "ться";
 	});

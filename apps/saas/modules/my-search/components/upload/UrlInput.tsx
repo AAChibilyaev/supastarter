@@ -2,7 +2,7 @@
 
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
-import { GlobeIcon, LinkIcon, PlusIcon } from "lucide-react";
+import { GlobeIcon, LinkIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 

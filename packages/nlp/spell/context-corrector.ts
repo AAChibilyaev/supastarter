@@ -13,7 +13,7 @@
  */
 
 import { SpellCorrector, type CorrectionResult } from "./corrector";
-import { SymSpell, type SymSpellSuggestion } from "./symspell";
+import { SymSpell } from "./symspell";
 
 export interface ContextCorrectionOptions {
 	/** Maximum edit distance (default: 2) */

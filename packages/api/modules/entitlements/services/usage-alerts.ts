@@ -106,13 +106,6 @@ function updateAlertState(
 	};
 }
 
-// ─── Email helpers ──────────────────────────────────────────────
-
-function formatUsage(current: number, limit: number): string {
-	if (limit === -1) return `${current.toLocaleString()} / Unlimited`;
-	return `${current.toLocaleString()} / ${limit.toLocaleString()}`;
-}
-
 // ─── Main entry point ───────────────────────────────────────────
 
 /**
@@ -219,13 +212,6 @@ async function sendThresholdAlert(params: {
 		members,
 		slackWebhookUrl,
 	} = params;
-	// Slack message text still needs resource label
-	const resourceLabel = resource === "search" ? "search queries" : "indexed documents";
-	const usageStr = formatUsage(current, limit);
-	const headline =
-		threshold >= 100
-			? `Monthly ${resourceLabel} limit reached`
-			: `Monthly ${resourceLabel} usage at ${(percentUsed * 100).toFixed(0)}%`;
 	const dashboardLink = `/org/${org.id}/settings/billing`;
 
 	// Send email notifications to all owners/admins

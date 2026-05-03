@@ -2,7 +2,6 @@ import { cn } from "@repo/ui";
 import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
 import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import {
-	ArrowRightIcon,
 	CheckCircleIcon,
 	CpuIcon,
 	CreditCardIcon,

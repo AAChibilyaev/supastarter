@@ -8,7 +8,6 @@ export async function generateMetadata({
 }: {
 	params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-	const { locale } = await params;
 	return {
 		title: "Live Demo — AACsearch Engine",
 		description:

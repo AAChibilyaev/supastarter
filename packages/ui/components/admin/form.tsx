@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
 import { Loader2, Save } from "lucide-react";
-import type { CreateParams, RaRecord, TransformData, UpdateParams } from "ra-core";
+import type { RaRecord, TransformData } from "ra-core";
 import {
 	setSubmissionErrors,
 	useSaveContext,
@@ -232,7 +232,7 @@ const SaveButton = <RecordType extends RaRecord = RaRecord>(props: SaveButtonPro
 
 const defaultIcon = <Save className="h-4 w-4" />;
 
-interface Props<RecordType extends RaRecord = RaRecord, MutationOptionsError = unknown> {
+interface Props<RecordType extends RaRecord = RaRecord> {
 	className?: string;
 	disabled?: boolean;
 	icon?: React.ReactNode;

@@ -71,7 +71,7 @@ export const listInvoices = protectedProcedure
 				pdfUrl: inv.pdfUrl,
 				hostedUrl: inv.hostedUrl,
 			}));
-		} catch (e) {
+		} catch {
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {
 				message: "Failed to retrieve invoices",
 			});

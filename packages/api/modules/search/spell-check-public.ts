@@ -7,7 +7,6 @@ import {
 	normalizeYo,
 	transliterate,
 } from "@repo/nlp";
-import { aliasName } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -159,8 +158,6 @@ export const publicSpellCheckApp = new Hono()
 		const gated = await gatePublicSearchRequest(c, new Set([slug]));
 		if (gated instanceof Response) return gated;
 
-		const { verified } = gated;
-
 		let body: unknown;
 		try {
 			body = await c.req.json();
@@ -278,7 +275,7 @@ export const publicSpellCheckApp = new Hono()
 				mode,
 				dictionarySize: symspell.size,
 			});
-		} catch (error) {
+		} catch {
 			return c.json({ error: "spell_check_failed" }, 502);
 		}
 	});

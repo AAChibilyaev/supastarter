@@ -45,7 +45,7 @@ import { useMemo, useState } from "react";
 import { formatFileSize } from "../../lib/format";
 import { MySearchDeleteFileDialog } from "./MySearchDeleteFileDialog";
 import { MySearchFilePreview } from "./MySearchFilePreview";
-import { getFileStatusColor, inferFileType } from "./types";
+import { inferFileType } from "./types";
 import type { MySearchFileEntry, MySearchFileType } from "./types";
 
 // ─── Props ──────────────────────────────────────────────────────────────────

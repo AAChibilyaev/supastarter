@@ -269,7 +269,7 @@ export function fixCapsLock(text: string): string {
 	const lowerCount = (text.match(/[a-zа-яё]/g) || []).length;
 
 	// If most letters are uppercase, it's likely Caps Lock was on
-	if (upperCount > 0 && lowerCount === 0 && upperCount >= 3) {
+	if (lowerCount === 0 && upperCount >= 3) {
 		return text.toLowerCase();
 	}
 

@@ -27,7 +27,7 @@ interface ReindexPanelProps {
 export function ReindexPanel({
 	organizationId,
 	slug,
-	indexId,
+	indexId: _indexId,
 	hasActiveJob: _hasActiveJob,
 }: ReindexPanelProps) {
 	const t = useTranslations("search");
@@ -36,7 +36,7 @@ export function ReindexPanel({
 	const [pollingActive, setPollingActive] = useState(false);
 
 	// Poll for reindex job progress
-	const { data: pipelineStatus, isLoading: statusLoading } = useQuery(
+	const { data: pipelineStatus } = useQuery(
 		orpc.search.pipelineStatus.queryOptions({
 			input: { organizationId },
 			refetchInterval: pollingActive ? 3000 : false,
@@ -57,7 +57,7 @@ export function ReindexPanel({
 	// Reindex mutation
 	const reindexMutation = useMutation({
 		...orpc.search.reindex.mutationOptions(),
-		onSuccess: (result) => {
+		onSuccess: () => {
 			toastSuccess(t("collection.reindexStarted"));
 			setPollingActive(true);
 			void queryClient.invalidateQueries({

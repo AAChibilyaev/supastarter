@@ -96,7 +96,7 @@ export function chunkText(text: string, options: Partial<ChunkerOptions> = {}): 
 	}
 
 	// Filter out chunks below minChunkSize
-	const filteredChunks = chunks.filter((c, i) => {
+	const filteredChunks = chunks.filter((c) => {
 		if (countWords(c) < minChunkSize && chunks.length > 1) {
 			// Merge with previous or next chunk
 			return false;

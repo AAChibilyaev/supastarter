@@ -7,7 +7,6 @@ import {
 	damerauLevenshteinDistance,
 	jaroWinklerDistance,
 	type DistanceType,
-	type DistanceResult,
 } from "./distances";
 
 export interface CorrectionOptions {

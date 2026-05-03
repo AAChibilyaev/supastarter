@@ -1,31 +1,20 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { PageHeader } from "@shared/components/PageHeader";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
 import { PersonalSearch } from "../PersonalSearch";
-import { SearchResults, type SearchHit } from "../SearchResults";
+import { type SearchHit } from "../ResultCard";
+import { SearchResults } from "../SearchResults";
 
 export function MySearchCrossSearch() {
 	const t = useTranslations();
 	const [query, setQuery] = useState("");
 	const [page, setPage] = useState(1);
 	const [hasSearched, setHasSearched] = useState(false);
-
-	// Fetch all indexes for filtering
-	const { data: indexes } = useQuery(
-		orpc.mySearch.listIndexes.queryOptions({
-			input: { organizationId: "" }, // Will be overridden
-		}),
-		{ enabled: false },
-	);
 
 	// Cross-search mutation
 	const crossSearchMutation = useMutation(orpc.mySearch.crossSearch.mutationOptions({}));
@@ -77,7 +66,7 @@ export function MySearchCrossSearch() {
 				<PersonalSearch onSearch={handleSearch} />
 
 				<SearchResults
-					hits={(searchResults?.hits as SearchHit[]) ?? []}
+					hits={(searchResults?.hits as unknown as SearchHit[]) ?? []}
 					found={searchResults?.found ?? 0}
 					page={page}
 					perPage={20}

@@ -1482,7 +1482,26 @@
 			"selectSpaceAndFile": "Wählen Sie einen Bereich und eine Datei",
 			"fileReadError": "Datei konnte nicht gelesen werden",
 			"fileTypeInvalid": "Nur .md, .xml und .pdf-Dateien werden unterstützt",
-			"selectSpaceAndGraphQuery": "Wählen Sie einen Bereich und geben Sie eine Graph-Abfrage ein"
+			"selectSpaceAndGraphQuery": "Wählen Sie einen Bereich und geben Sie eine Graph-Abfrage ein",
+			"files": {
+				"title": "Dateien",
+				"empty": "Noch keine Dateien indiziert",
+				"delete": "Datei löschen",
+				"deleteConfirm": "Diese Datei und alle indizierten Inhalte löschen?",
+				"preview": "Vorschau",
+				"colFilename": "Dateiname",
+				"colType": "Typ",
+				"colChunks": "Abschnitte",
+				"colDate": "Datum",
+				"colActions": "Aktionen",
+				"previewContent": "Inhaltsvorschau",
+				"noContent": "Keine Inhaltsvorschau verfügbar",
+				"deleteSuccess": "Datei gelöscht",
+				"deleteError": "Datei konnte nicht gelöscht werden",
+				"loadError": "Dateien konnten nicht geladen werden",
+				"sortAsc": "Aufsteigend sortieren",
+				"sortDesc": "Absteigend sortieren"
+			}
 		},
 		"documents": {
 			"empty": "Noch keine Dokumente in diesem Index",

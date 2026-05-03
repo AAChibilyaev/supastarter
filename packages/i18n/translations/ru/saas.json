@@ -1528,7 +1528,26 @@
 			"selectSpaceAndFile": "Выберите пространство и файл",
 			"fileReadError": "Не удалось прочитать файл",
 			"fileTypeInvalid": "Поддерживаются только файлы .md, .xml и .pdf",
-			"selectSpaceAndGraphQuery": "Выберите пространство и введите запрос к графу"
+			"selectSpaceAndGraphQuery": "Выберите пространство и введите запрос к графу",
+			"files": {
+				"title": "Файлы",
+				"empty": "Нет проиндексированных файлов",
+				"delete": "Удалить файл",
+				"deleteConfirm": "Удалить этот файл и весь его проиндексированный контент?",
+				"preview": "Предпросмотр",
+				"colFilename": "Имя файла",
+				"colType": "Тип",
+				"colChunks": "Фрагменты",
+				"colDate": "Дата",
+				"colActions": "Действия",
+				"previewContent": "Предпросмотр содержимого",
+				"noContent": "Предпросмотр недоступен",
+				"deleteSuccess": "Файл удалён",
+				"deleteError": "Не удалось удалить файл",
+				"loadError": "Не удалось загрузить файлы",
+				"sortAsc": "Сортировать по возрастанию",
+				"sortDesc": "Сортировать по убыванию"
+			}
 		},
 		"collection": {
 			"title": "Коллекция",

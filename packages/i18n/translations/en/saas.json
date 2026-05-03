@@ -1528,7 +1528,26 @@
 			"selectSpaceAndFile": "Select a space and file",
 			"fileReadError": "Failed to read file",
 			"fileTypeInvalid": "Only .md, .xml, and .pdf files are supported",
-			"selectSpaceAndGraphQuery": "Select a space and enter graph query"
+			"selectSpaceAndGraphQuery": "Select a space and enter graph query",
+			"files": {
+				"title": "Files",
+				"empty": "No files indexed yet",
+				"delete": "Delete file",
+				"deleteConfirm": "Delete this file and all its indexed content?",
+				"preview": "Preview",
+				"colFilename": "Filename",
+				"colType": "Type",
+				"colChunks": "Chunks",
+				"colDate": "Date",
+				"colActions": "Actions",
+				"previewContent": "Content preview",
+				"noContent": "No content preview available",
+				"deleteSuccess": "File deleted",
+				"deleteError": "Failed to delete file",
+				"loadError": "Failed to load files",
+				"sortAsc": "Sort ascending",
+				"sortDesc": "Sort descending"
+			}
 		},
 		"collection": {
 			"title": "Collection",

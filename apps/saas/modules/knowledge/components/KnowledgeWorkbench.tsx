@@ -24,6 +24,8 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { FileTable } from "./FileTable";
+
 type OwnerType = "USER" | "ORGANIZATION";
 type SourceType =
 	| "CMS_PRESTASHOP"
@@ -699,6 +701,16 @@ export function KnowledgeWorkbench({
 					</CardContent>
 				</Card>
 			</div>
+
+			{/* File management table — shown when a space is selected */}
+			{selectedSpaceSlug && (
+				<FileTable
+					ownerType={ownerType}
+					ownerId={ownerId}
+					spaceSlug={selectedSpaceSlug}
+					canManage={canManage}
+				/>
+			)}
 
 			{spacesQuery.isLoading ? (
 				<p className="text-sm text-muted-foreground">

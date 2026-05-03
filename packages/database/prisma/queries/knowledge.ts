@@ -272,3 +272,24 @@ export async function listGraphEdgesForNodes(input: {
 		take: input.limit ?? 100,
 	});
 }
+
+export async function listKnowledgeDocuments(
+	knowledgeSpaceId: string,
+	options?: { limit?: number; sortBy?: "createdAt" | "updatedAt"; sortOrder?: "asc" | "desc" },
+) {
+	const sortBy = options?.sortBy ?? "createdAt";
+	const sortOrder = options?.sortOrder ?? "desc";
+	return db.knowledgeDocument.findMany({
+		where: { knowledgeSpaceId },
+		orderBy: { [sortBy]: sortOrder },
+		take: options?.limit ?? 200,
+		include: {
+			_count: { select: { chunks: true } },
+		},
+	});
+}
+
+export async function deleteKnowledgeDocument(id: string) {
+	// Chunks are cascade-deleted via FK constraint
+	return db.knowledgeDocument.delete({ where: { id } });
+}

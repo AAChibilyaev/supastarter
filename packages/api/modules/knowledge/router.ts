@@ -1,8 +1,10 @@
 import { ask } from "./procedures/ask";
 import { createSource } from "./procedures/create-source";
 import { createSpace } from "./procedures/create-space";
+import { deleteFile } from "./procedures/delete-file";
 import { graphragExplain } from "./procedures/graphrag-explain";
 import { ingestFile } from "./procedures/ingest-file";
+import { listFiles } from "./procedures/list-files";
 import { listIngestionJobs } from "./procedures/list-ingestion-jobs";
 import { listSources } from "./procedures/list-sources";
 import { listSpaces } from "./procedures/list-spaces";
@@ -14,6 +16,8 @@ export const knowledgeRouter = {
 	createSource,
 	listSources,
 	ingestFile,
+	listFiles,
+	deleteFile,
 	ask,
 	graphragExplain,
 	listIngestionJobs,

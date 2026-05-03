@@ -131,6 +131,10 @@ export {
 	decaySort,
 	hasDecaySort,
 	textMatchDecay,
+	evalSort,
+	randomSort,
+	bucketSort,
+	missingValues,
 	type DecayFunctionType,
 	type DecaySortParams,
 } from "./lib/sort";

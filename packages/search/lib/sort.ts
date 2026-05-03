@@ -116,3 +116,121 @@ export function textMatchDecay(
 ): string {
 	return `_text_match(${decayExpression}):${direction}`;
 }
+
+// ─── Conditional sorting (_eval) ──────────────────────────────────────────
+
+/**
+ * Build a conditional sort expression using `_eval()`.
+ *
+ * Evaluates a field equality condition — documents matching the condition
+ * get boosted, others stay at their natural position.
+ *
+ * Useful for query-time boosting without curation rules:
+ * - Boost specific brand products: `_eval(brand:Apple):desc`
+ * - Prioritize in-stock items: `_eval(stock:>0):desc`
+ *
+ * @param expression - The eval expression, e.g. `"brand:Apple"` or `"stock:>0"`
+ * @param direction - Sort direction: `"desc"` (default) or `"asc"`
+ *
+ * @returns A string like `_eval(brand:Apple):desc`
+ *
+ * @example
+ * ```ts
+ * evalSort("brand:Apple", "desc")
+ * // → "_eval(brand:Apple):desc"
+ *
+ * // Combined with other sort fields
+ * const sortBy = `${evalSort("stock:>0", "desc")},price:asc`;
+ * ```
+ */
+export function evalSort(expression: string, direction: "asc" | "desc" = "desc"): string {
+	return `_eval(${expression}):${direction}`;
+}
+
+// ─── Random sorting (_rand) ───────────────────────────────────────────────
+
+/**
+ * Build a random sort expression using `_rand()`.
+ *
+ * Returns results in random order on each query. Useful for:
+ * - A/B testing
+ * - "Surprise me" features
+ * - Rotating featured content
+ *
+ * Note: randomness is deterministic per query — each request gets a
+ * consistent random seed. Add `_rand():desc` as a secondary sort to
+ * shuffle results with the same primary sort score.
+ *
+ * @param direction - Sort direction: `"desc"` (default) or `"asc"`
+ *
+ * @returns A string like `_rand():desc`
+ *
+ * @example
+ * ```ts
+ * randomSort()
+ * // → "_rand():desc"
+ *
+ * // Shuffle within same text match score
+ * const sortBy = `_text_match:desc,${randomSort()}`;
+ * ```
+ */
+export function randomSort(direction: "asc" | "desc" = "desc"): string {
+	return `_rand():${direction}`;
+}
+
+// ─── Bucket sorting ───────────────────────────────────────────────────────
+
+/**
+ * Add bucket count to a sort expression.
+ *
+ * Buckets divide the sort results into N equal groups of relevance.
+ * Useful for ensuring diversity in results:
+ * - `_text_match:desc(buckets:10)` — spread results across 10 relevance buckets
+ * - `price:asc(buckets:5)` — group prices into 5 buckets
+ *
+ * @param sortExpression - The base sort expression (e.g. `"_text_match:desc"`)
+ * @param buckets - Number of buckets (positive integer)
+ *
+ * @returns A string like `_text_match:desc(buckets:10)`
+ *
+ * @example
+ * ```ts
+ * bucketSort("_text_match:desc", 10)
+ * // → "_text_match:desc(buckets:10)"
+ *
+ * bucketSort("popularity:desc", 5)
+ * // → "popularity:desc(buckets:5)"
+ * ```
+ */
+export function bucketSort(sortExpression: string, buckets: number): string {
+	return `${sortExpression}(buckets:${buckets})`;
+}
+
+// ─── Missing values in sorting ────────────────────────────────────────────
+
+/**
+ * Add missing_values control to a sort expression.
+ *
+ * Controls where null/missing field values should appear in sort results:
+ * - `"last"` (default if not specified): nulls appear at the end
+ * - `"first"`: nulls appear at the beginning
+ *
+ * Important for e-commerce: products without prices should appear last.
+ *
+ * @param sortExpression - The base sort expression (e.g. `"price:asc"`)
+ * @param position - Where to place null values: `"first"` or `"last"`
+ *
+ * @returns A string like `price:asc(missing_values:last)`
+ *
+ * @example
+ * ```ts
+ * missingValues("price:asc", "last")
+ * // → "price:asc(missing_values:last)"
+ *
+ * // Products without prices go to the end
+ * const sortBy = missingValues("price:asc", "last");
+ * ```
+ */
+export function missingValues(sortExpression: string, position: "first" | "last"): string {
+	return `${sortExpression}(missing_values:${position})`;
+}

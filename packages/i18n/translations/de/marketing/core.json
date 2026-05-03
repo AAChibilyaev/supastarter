@@ -37,6 +37,7 @@
 			"featureBadge": "Search OS",
 			"imageAlt": "AACsearch Dashboard Screenshot",
 			"badgeLatency": "p99 < 50 ms",
+			"badgeVector": "Vector + keyword",
 			"badgeSoc2": "Scoped-Zugriff",
 			"badgeFulltext": "Tenant-Isolation",
 			"badgeAnalytics": "Suchanalyse",

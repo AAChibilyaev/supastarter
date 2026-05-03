@@ -1750,7 +1750,7 @@ Last: [first session]
 ## Last Session Bridge
 
 [Emergency bridge — running bridge was not updated]
-Files: packages/i18n/scripts/batch_update.py (create), packages/i18n/scripts/batch_update.py (edit), apps/marketing/modules/home/components/HeroSection.tsx (edit), apps/marketing/modules/home/components/AiAssistantChat.tsx (edit), apps/marketing/modules/home/components/CommandMenu.tsx (edit), packages/ui/components/logo.tsx (edit)
+Files: apps/marketing/modules/home/components/OsStackSection.tsx (create), apps/marketing/modules/home/components/SuggestionsSection.tsx (create), apps/marketing/modules/home/components/GraphRagSection.tsx (create), apps/marketing/app/[locale]/(home)/page.tsx (create)
 
 # === END COGNILAYER ===
 

@@ -1127,7 +1127,12 @@
 			"importSuccess": "{count} sinónimo(s) importados correctamente.",
 			"importError": "Error al importar sinónimos.",
 			"importDryRun": "Vista previa en seco. {count} sinónimo(s) se importarían.",
-			"importFormat": "El formato debe ser CSV o JSON con campos root y synonym."
+			"importFormat": "El formato debe ser CSV o JSON con campos root y synonym.",
+			"aiSuggest": "Sugerir con IA",
+			"aiSuggestSuccess": "La IA sugirió {count} sinónimo(s). Haga clic para aceptar.",
+			"aiSuggestEmpty": "La IA no pudo sugerir sinónimos para este término raíz.",
+			"aiSuggestions": "Sugerencias de IA — haga clic para añadir:",
+			"dismiss": "Descartar"
 		},
 		"curations": {
 			"tab": "Curaciones",

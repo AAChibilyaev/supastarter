@@ -1,170 +1,168 @@
 import { execSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { writeFileSync, unlinkSync } from "node:fs";
+import { writeFileSync, unlinkSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, extname } from "node:path";
+
+import { logger } from "@repo/logs";
+import OpenAI from "openai";
 
 import type { ParsedDocument } from "../types";
 
 /**
- * Transcribe audio files using OpenAI Whisper (via whisper.cpp or local CLI).
+ * Parse audio files via Whisper speech-to-text transcription.
  *
- * Supported formats: MP3, WAV, OGG, FLAC, M4A, AAC, WMA, WebM
- *
- * Resolution priority:
- *   1. `whisper-cli` (whisper.cpp) — fastest, local, no GPU required
- *   2. `whisper` (OpenAI Whisper Python) — most accurate, needs Python + torch
+ * Pipeline:
+ *   1. Try whisper-cli (local Python package) — fast, offline
+ *   2. Fall back to OpenAI Whisper API (whisper-1) — requires API key
  *
  * Requires one of:
- *   - whisper.cpp compiled + `whisper-cli` in PATH
- *   - openai-whisper Python package installed
+ *   - `openai-whisper` Python package (pip install openai-whisper)
+ *   - `OPENAI_API_KEY` env var for API fallback
+ *   - `ffmpeg` for audio format conversion
  */
 export async function parseAudio(
 	content: Buffer | string,
 	filename: string,
 ): Promise<ParsedDocument> {
 	const buffer = typeof content === "string" ? Buffer.from(content, "utf-8") : content;
+	const ext = extname(filename).toLowerCase().replace(/^\./, "");
 
-	const ext = filename.split(".").pop()?.toLowerCase() ?? "mp3";
-	const tmpPath = join(tmpdir(), `${randomUUID()}.${ext}`);
+	// Normalize to a format whistle/ffmpeg can handle: convert to 16kHz mono WAV
+	const tmpDir = join(tmpdir(), `audio-${randomUUID()}`);
+	const inputPath = join(tmpdir(), `${randomUUID()}.${ext}`);
+	const wavPath = join(tmpDir, "audio.wav");
 
 	try {
-		writeFileSync(tmpPath, buffer);
+		execSync(`mkdir -p "${tmpDir}"`, { timeout: 5000 });
+		writeFileSync(inputPath, buffer);
 
-		const duration = getAudioDuration(tmpPath);
-		const transcription = transcribeAudio(tmpPath);
+		// Convert to 16kHz mono WAV using ffmpeg
+		try {
+			execSync(`ffmpeg -y -i "${inputPath}" -ar 16000 -ac 1 "${wavPath}" 2>/dev/null`, {
+				timeout: 60000,
+				encoding: "utf-8",
+			});
+		} catch {
+			// If ffmpeg fails, use the original file as-is
+			logger.warn({ filename }, "parseAudio: ffmpeg conversion failed, using raw input");
+			// Copy original to wavPath
+			const { copyFileSync } = await import("node:fs");
+			copyFileSync(inputPath, wavPath);
+		}
+
+		// Phase 1: Try whisper-cli (local)
+		let transcript = "";
+		let usedApi = false;
+
+		try {
+			transcript = await transcribeWithWhisperCli(wavPath);
+		} catch {
+			logger.info({ filename }, "parseAudio: whisper-cli unavailable, falling back to API");
+		}
+
+		// Phase 2: Fall back to OpenAI Whisper API
+		if (!transcript) {
+			try {
+				transcript = await transcribeWithOpenAI(wavPath);
+				usedApi = true;
+			} catch (err) {
+				logger.error({ err, filename }, "parseAudio: OpenAI Whisper API failed");
+			}
+		}
+
+		// Estimate duration from file size (rough: 16kHz 16-bit mono = 32KB/s)
+		const estimatedDurationSeconds = Math.round(buffer.length / 32000);
+
+		const wordCount = transcript.split(/\s+/).filter(Boolean).length;
 
 		return {
 			title: filename.replace(/\.[^.]+$/, ""),
-			content: transcription || "Unable to transcribe audio",
+			content: transcript || "Unable to transcribe audio",
 			mimeType: getAudioMimeType(ext),
 			metadata: {
-				durationSeconds: duration,
-				wordCount: transcription.split(/\s+/).filter(Boolean).length,
-				transcriptionEngine: getTranscriptionEngine(),
+				durationSeconds: estimatedDurationSeconds,
+				wordCount,
+				usedApi,
 				format: ext,
 			},
 		};
 	} finally {
+		// Cleanup
 		try {
-			unlinkSync(tmpPath);
+			unlinkSync(inputPath);
 		} catch {
-			// cleanup best-effort
+			// best-effort
+		}
+		try {
+			execSync(`rm -rf "${tmpDir}"`, { timeout: 5000 });
+		} catch {
+			// best-effort
 		}
 	}
 }
 
-function transcribeAudio(audioPath: string): string {
-	// Strategy 1: whisper.cpp CLI (fastest)
+/**
+ * Transcribe audio using the local whisper-cli tool.
+ * Expects `whisper` command available in PATH (from pip install openai-whisper).
+ */
+async function transcribeWithWhisperCli(wavPath: string): Promise<string> {
+	const result = execSync(
+		`whisper "${wavPath}" --model small --language en --output_format txt 2>/dev/null`,
+		{ encoding: "utf-8", timeout: 300000 }, // 5 min for long audio
+	);
+
+	// whisper-cli outputs to a .txt file alongside the input
+	const txtPath = wavPath.replace(/\.wav$/, ".txt");
 	try {
-		const text = execSync(
-			`whisper-cli --file "${audioPath}" --output-txt --no-timestamps 2>/dev/null`,
-			{ encoding: "utf-8", timeout: 300000, maxBuffer: 50 * 1024 * 1024 },
-		).trim();
-
-		// whisper-cli prints to stdout
-		if (text) return text;
+		const text = readFileSync(txtPath, "utf-8").trim();
+		return text;
 	} catch {
-		// fallthrough
-	}
-
-	// Strategy 2: whisper.cpp with different output mode
-	try {
-		const text = execSync(`whisper-cli -f "${audioPath}" -otxt -nt 2>/dev/null`, {
-			encoding: "utf-8",
-			timeout: 300000,
-			maxBuffer: 50 * 1024 * 1024,
-		}).trim();
-		if (text) return text;
-	} catch {
-		// fallthrough
-	}
-
-	// Strategy 3: OpenAI Whisper Python
-	try {
-		const text = execSync(
-			`python3 -c "
-import sys
-try:
-    import whisper
-    model = whisper.load_model('base')
-    result = model.transcribe('${audioPath.replace(/'/g, "'\\''")}')
-    print(result['text'])
-except Exception as e:
-    print(f'[WHISPER_ERROR] {e}', file=sys.stderr)
-    sys.exit(1)
-" 2>/dev/null`,
-			{ encoding: "utf-8", timeout: 600000, maxBuffer: 50 * 1024 * 1024 },
-		).trim();
-		if (text && !text.startsWith("[WHISPER_ERROR]")) return text;
-	} catch {
-		// fallthrough
-	}
-
-	// Strategy 4: ffmpeg + whisper.cpp (convert to 16kHz WAV first)
-	try {
-		const wavPath = audioPath.replace(/\.[^.]+$/, ".wav");
-		execSync(
-			`ffmpeg -y -i "${audioPath}" -ar 16000 -ac 1 -c:a pcm_s16le "${wavPath}" 2>/dev/null`,
-			{ timeout: 60000 },
-		);
-		const text = execSync(`whisper-cli -f "${wavPath}" -otxt -nt 2>/dev/null`, {
-			encoding: "utf-8",
-			timeout: 300000,
-			maxBuffer: 50 * 1024 * 1024,
-		}).trim();
-		try {
-			unlinkSync(wavPath);
-		} catch {
-			// cleanup
-		}
-		if (text) return text;
-	} catch {
-		// fallthrough
-	}
-
-	return "";
-}
-
-function getAudioDuration(audioPath: string): number {
-	try {
-		const result = execSync(
-			`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}" 2>/dev/null`,
-			{ encoding: "utf-8", timeout: 10000 },
-		).trim();
-		const seconds = parseFloat(result);
-		return isNaN(seconds) ? 0 : Math.round(seconds);
-	} catch {
-		return 0;
+		// Fallback to stdout
+		return result.trim();
 	}
 }
 
-function getTranscriptionEngine(): string {
-	try {
-		execSync("whisper-cli --version 2>/dev/null", { timeout: 5000 });
-		return "whisper.cpp";
-	} catch {
-		try {
-			execSync('python3 -c "import whisper; print(whisper.__version__)" 2>/dev/null', {
-				timeout: 5000,
-			});
-			return "openai-whisper";
-		} catch {
-			return "unknown";
-		}
-	}
+/**
+ * Transcribe audio using OpenAI Whisper API (whisper-1).
+ */
+let _openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+	if (_openaiClient) return _openaiClient;
+	_openaiClient = new OpenAI({
+		apiKey: process.env.OPENAI_API_KEY ?? "",
+	});
+	return _openaiClient;
 }
 
+async function transcribeWithOpenAI(wavPath: string): Promise<string> {
+	const { createReadStream } = await import("node:fs");
+	const client = getOpenAIClient();
+
+	const response = await client.audio.transcriptions.create({
+		model: "whisper-1",
+		file: createReadStream(wavPath),
+		language: "en",
+		response_format: "text",
+	});
+
+	return (response as unknown as string).trim();
+}
+
+/**
+ * Map audio file extension to MIME type.
+ */
 function getAudioMimeType(ext: string): string {
 	const mimeMap: Record<string, string> = {
 		mp3: "audio/mpeg",
 		wav: "audio/wav",
+		m4a: "audio/mp4",
 		ogg: "audio/ogg",
 		flac: "audio/flac",
-		m4a: "audio/mp4",
+		webm: "audio/webm",
 		aac: "audio/aac",
 		wma: "audio/x-ms-wma",
-		webm: "audio/webm",
 	};
 	return mimeMap[ext] ?? "application/octet-stream";
 }

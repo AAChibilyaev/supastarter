@@ -20,3 +20,6 @@ export type { EmbeddingVector, EmbeddingProvider } from "./embeddings";
 
 export { SynonymExpander } from "./expansion";
 export type { SynonymSource, SynonymExpanderConfig, ExpandedSynonym } from "./expansion";
+
+export { suggestSynonyms, clearSuggestionCache, suggestionCache } from "./ai-suggestions";
+export type { AISynonymSuggestion, AISynonymSuggestionsResult } from "./ai-suggestions";

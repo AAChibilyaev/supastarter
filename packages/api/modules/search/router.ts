@@ -117,8 +117,8 @@ import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
-import { voiceSearch } from "./procedures/voice-search";
 import { videoMomentSearch } from "./procedures/video-moment-search";
+import { voiceSearch } from "./procedures/voice-search";
 import {
 	createWebhook,
 	deleteWebhook,

@@ -8,7 +8,9 @@
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
 		"type-check": "tsc --noEmit"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"@repo/ai": "workspace:*"
+	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:"

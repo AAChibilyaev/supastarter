@@ -20,7 +20,7 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpenTextIcon, DownloadIcon, UploadIcon } from "lucide-react";
+import { BookOpenTextIcon, DownloadIcon, SparklesIcon, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -55,6 +55,12 @@ function triggerDownload(content: string, filename: string, mimeType: string) {
 	URL.revokeObjectURL(url);
 }
 
+interface AISynSuggestion {
+	word: string;
+	score: number;
+	rationale: string;
+}
+
 export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 	const t = useTranslations();
 	const queryClient = useQueryClient();
@@ -63,6 +69,9 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 	const [rows, setRows] = useState<SynonymRow[]>([]);
 	const [initialized, setInitialized] = useState(false);
 	const [importOpen, setImportOpen] = useState(false);
+	const [aiSuggestions, setAiSuggestions] = useState<Record<number, AISynSuggestion[]>>({});
+	const [suggestingIndex, setSuggestingIndex] = useState<number | null>(null);
+	const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number | null>(null);
 
 	const { data, isLoading } = useQuery(
 		orpc.search.synonyms.get.queryOptions({

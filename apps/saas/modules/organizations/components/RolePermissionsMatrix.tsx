@@ -13,30 +13,36 @@ import {
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-// ─── Permissions data ──────────────────────────────────────────────────────
+// ─── Permissions data — maps to Better Auth RBAC from packages/auth/lib/rbac.ts ──
 
 interface PermissionRow {
 	actionKey: string;
 	owner: boolean;
 	admin: boolean;
-	developer: boolean;
-	analyst: boolean;
+	member: boolean;
+	viewer: boolean;
 }
 
 const permissionsData: PermissionRow[] = [
-	{ actionKey: "createIndex", owner: true, admin: true, developer: false, analyst: false },
-	{ actionKey: "deleteIndex", owner: true, admin: true, developer: false, analyst: false },
-	{ actionKey: "manageSchema", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "createApiKey", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "importData", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "viewAnalytics", owner: true, admin: true, developer: true, analyst: true },
-	{ actionKey: "manageSynonyms", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "manageCurations", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "manageWidget", owner: true, admin: true, developer: true, analyst: false },
-	{ actionKey: "inviteMembers", owner: true, admin: true, developer: false, analyst: false },
-	{ actionKey: "changePlan", owner: true, admin: false, developer: false, analyst: false },
-	{ actionKey: "manageBilling", owner: true, admin: false, developer: false, analyst: false },
-	{ actionKey: "deleteOrg", owner: true, admin: false, developer: false, analyst: false },
+	// Workflow actions (EDIT_WORKFLOWS for owner/admin/member)
+	{ actionKey: "createIndex", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "deleteIndex", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "manageSchema", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "importData", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "manageSynonyms", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "manageCurations", owner: true, admin: true, member: true, viewer: false },
+	{ actionKey: "manageWidget", owner: true, admin: true, member: true, viewer: false },
+	// Integration / API actions (MANAGE_INTEGRATIONS for owner/admin)
+	{ actionKey: "createApiKey", owner: true, admin: true, member: false, viewer: false },
+	// Member management (MANAGE_MEMBERS for owner/admin)
+	{ actionKey: "inviteMembers", owner: true, admin: true, member: false, viewer: false },
+	// Billing actions (MANAGE_BILLING for owner/admin)
+	{ actionKey: "manageBilling", owner: true, admin: true, member: false, viewer: false },
+	{ actionKey: "changePlan", owner: true, admin: false, member: false, viewer: false },
+	// Organization-level (DELETE_ORGANIZATION for owner only)
+	{ actionKey: "deleteOrg", owner: true, admin: false, member: false, viewer: false },
+	// Viewing (VIEW_ANALYTICS for all)
+	{ actionKey: "viewAnalytics", owner: true, admin: true, member: true, viewer: true },
 ];
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -46,10 +52,10 @@ export function RolePermissionsMatrix() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const roles = [
-		{ key: "owner", label: t("organizations.settings.members.roles.owner") },
-		{ key: "admin", label: t("organizations.settings.members.roles.admin") },
-		{ key: "developer", label: t("organizations.settings.members.roles.developer") },
-		{ key: "analyst", label: t("organizations.settings.members.roles.analyst") },
+		{ key: "owner", label: t("organizations.roles.owner") },
+		{ key: "admin", label: t("organizations.roles.admin") },
+		{ key: "member", label: t("organizations.roles.member") },
+		{ key: "viewer", label: t("organizations.roles.viewer") },
 	] as const;
 
 	return (
@@ -86,7 +92,7 @@ export function RolePermissionsMatrix() {
 											`organizations.settings.members.permissions.actions.${row.actionKey}`,
 										)}
 									</TableCell>
-									{[row.owner, row.admin, row.developer, row.analyst].map(
+									{[row.owner, row.admin, row.member, row.viewer].map(
 										(allowed, i) => (
 											<TableCell key={i} className="text-center">
 												{allowed ? (

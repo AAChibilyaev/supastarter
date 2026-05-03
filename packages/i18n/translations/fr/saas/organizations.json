@@ -82,6 +82,25 @@
 					"submit": "Inviter",
 					"title": "Inviter un membre"
 				},
+				"permissions": {
+					"matrixTitle": "Permissions des rôles",
+					"action": "Action",
+					"actions": {
+						"createIndex": "Créer un index",
+						"deleteIndex": "Supprimer l'index",
+						"manageSchema": "Gérer le schéma",
+						"createApiKey": "Créer une clé API",
+						"importData": "Importer des données",
+						"viewAnalytics": "Voir les analyses",
+						"manageSynonyms": "Gérer les synonymes",
+						"manageCurations": "Gérer les curations",
+						"manageWidget": "Gérer le widget",
+						"inviteMembers": "Inviter des membres",
+						"changePlan": "Changer de forfait",
+						"manageBilling": "Gérer la facturation",
+						"deleteOrg": "Supprimer l'organisation"
+					}
+				},
 				"leaveOrganization": "Quitter l'organisation",
 				"notifications": {
 					"removeMember": {

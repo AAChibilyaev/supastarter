@@ -82,6 +82,25 @@
 					"submit": "Einladen",
 					"title": "Mitglied einladen"
 				},
+				"permissions": {
+					"matrixTitle": "Rollenberechtigungen",
+					"action": "Aktion",
+					"actions": {
+						"createIndex": "Index erstellen",
+						"deleteIndex": "Index löschen",
+						"manageSchema": "Schema verwalten",
+						"createApiKey": "API-Schlüssel erstellen",
+						"importData": "Daten importieren",
+						"viewAnalytics": "Analysen anzeigen",
+						"manageSynonyms": "Synonyme verwalten",
+						"manageCurations": "Kuratierung verwalten",
+						"manageWidget": "Widget verwalten",
+						"inviteMembers": "Mitglieder einladen",
+						"changePlan": "Plan ändern",
+						"manageBilling": "Abrechnung verwalten",
+						"deleteOrg": "Organisation löschen"
+					}
+				},
 				"leaveOrganization": "Organisation verlassen",
 				"notifications": {
 					"removeMember": {

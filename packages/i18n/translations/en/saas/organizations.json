@@ -82,6 +82,25 @@
 					"submit": "Invite",
 					"title": "Invite member"
 				},
+				"permissions": {
+					"matrixTitle": "Role Permissions",
+					"action": "Action",
+					"actions": {
+						"createIndex": "Create index",
+						"deleteIndex": "Delete index",
+						"manageSchema": "Manage schema",
+						"createApiKey": "Create API key",
+						"importData": "Import data",
+						"viewAnalytics": "View analytics",
+						"manageSynonyms": "Manage synonyms",
+						"manageCurations": "Manage curations",
+						"manageWidget": "Manage widget",
+						"inviteMembers": "Invite members",
+						"changePlan": "Change plan",
+						"manageBilling": "Manage billing",
+						"deleteOrg": "Delete organization"
+					}
+				},
 				"leaveOrganization": "Leave organization",
 				"notifications": {
 					"removeMember": {

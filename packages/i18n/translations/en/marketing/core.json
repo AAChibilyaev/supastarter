@@ -37,6 +37,7 @@
 			"featureBadge": "Search OS",
 			"imageAlt": "AACsearch dashboard screenshot",
 			"badgeLatency": "p99 < 50 ms",
+			"badgeVector": "Vector + keyword",
 			"badgeSoc2": "Scoped access",
 			"badgeFulltext": "Tenant isolation",
 			"badgeAnalytics": "Search analytics",

@@ -865,7 +865,12 @@
 			"importSuccess": "{count} synonyme(s) importé(s) avec succès.",
 			"importError": "Échec de l'importation des synonymes.",
 			"importDryRun": "Aperçu à blanc. {count} synonyme(s) seraient importés.",
-			"importFormat": "Le format doit être CSV ou JSON avec les champs root et synonym."
+			"importFormat": "Le format doit être CSV ou JSON avec les champs root et synonym.",
+			"aiSuggest": "Suggérer par IA",
+			"aiSuggestSuccess": "L'IA a suggéré {count} synonyme(s). Cliquez pour accepter.",
+			"aiSuggestEmpty": "L'IA n'a pu suggérer aucun synonyme pour ce terme racine.",
+			"aiSuggestions": "Suggestions IA — cliquez pour ajouter :",
+			"dismiss": "Ignorer"
 		},
 		"curations": {
 			"tab": "Curations",

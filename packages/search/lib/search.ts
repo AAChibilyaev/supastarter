@@ -139,6 +139,8 @@ export interface SearchDocumentsInput {
 	perPage?: number;
 	page?: number;
 	highlightFields?: string;
+	/** Comma-separated list of fields to exclude from the search response. */
+	excludeFields?: string;
 	/** Per-search HNSW ef parameter — controls recall quality for vector search (higher = better recall, slower). */
 	vectorQueryEf?: number;
 	/** Vector query string in Typesense format, e.g. "vec:([0.1, 0.2, ...], k:10)". */
@@ -481,11 +483,15 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 					...(input.enableHighlightV1 !== undefined && {
 						enable_highlight_v1: input.enableHighlightV1,
 					}),
-					// ── Grouping ──
-					...(input.groupMissingValues !== undefined && {
-						group_missing_values: input.groupMissingValues,
-					}),
-					// ── Curation & Override ──
+\t\t\t\t\t// ── Field Exclusion ──
+\t\t\t\t\t...(input.excludeFields !== undefined && {
+\t\t\t\t\t\texclude_fields: input.excludeFields,
+\t\t\t\t\t}),
+\t\t\t\t\t// ── Grouping ──
+\t\t\t\t\t...(input.groupMissingValues !== undefined && {
+\t\t\t\t\t\tgroup_missing_values: input.groupMissingValues,
+\t\t\t\t\t}),
+\t\t\t\t\t// ── Curation & Override ──
 					...(input.pinnedHits !== undefined && {
 						pinned_hits: input.pinnedHits,
 					}),
@@ -614,11 +620,19 @@ function buildMultiSearchEntry(entry: MultiSearchEntry): Record<string, unknown>
 		...(entry.cacheTtl !== undefined && {
 			cache_ttl: entry.cacheTtl,
 		}),
-		// ── Highlight ──
-		...(entry.enableHighlightV1 !== undefined && {
-			enable_highlight_v1: entry.enableHighlightV1,
-		}),
-		// ── Grouping ──
+\t\t// ── Caching ──
+\t\t...(entry.cacheTtl !== undefined && {
+\t\t\tcache_ttl: entry.cacheTtl,
+\t\t}),
+\t\t// ── Highlight ──
+\t\t...(entry.enableHighlightV1 !== undefined && {
+\t\t\tenable_highlight_v1: entry.enableHighlightV1,
+\t\t}),
+\t\t// ── Field Exclusion ──
+\t\t...(entry.excludeFields !== undefined && {
+\t\t\texclude_fields: entry.excludeFields,
+\t\t}),
+\t\t// ── Grouping ──
 		...(entry.groupMissingValues !== undefined && {
 			group_missing_values: entry.groupMissingValues,
 		}),

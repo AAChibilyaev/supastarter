@@ -901,7 +901,12 @@
 			"importSuccess": "Imported {count} synonym(s) successfully.",
 			"importError": "Failed to import synonyms.",
 			"importDryRun": "Dry-run preview. {count} synonym(s) would be imported.",
-			"importFormat": "Format must be CSV or JSON with root and synonym fields."
+			"importFormat": "Format must be CSV or JSON with root and synonym fields.",
+			"aiSuggest": "Suggest from AI",
+			"aiSuggestSuccess": "AI suggested {count} synonym(s). Click to accept.",
+			"aiSuggestEmpty": "AI could not suggest any synonyms for this root term.",
+			"aiSuggestions": "AI suggestions — click to add:",
+			"dismiss": "Dismiss"
 		},
 		"globalSynonyms": {
 			"title": "Global Synonyms",

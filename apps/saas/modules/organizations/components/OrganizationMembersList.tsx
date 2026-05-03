@@ -42,6 +42,7 @@ const roleBadgeConfig: Record<
 	owner: { status: "error", label: "Owner" },
 	admin: { status: "warning", label: "Admin" },
 	member: { status: "info", label: "Member" },
+	viewer: { status: "success", label: "Viewer" },
 };
 
 export function OrganizationMembersList({ organizationId }: { organizationId: string }) {

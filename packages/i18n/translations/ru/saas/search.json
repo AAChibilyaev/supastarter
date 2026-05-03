@@ -889,7 +889,12 @@
 			"importSuccess": "Импортировано {count} синоним(ов).",
 			"importError": "Не удалось импортировать синонимы.",
 			"importDryRun": "Пробный запуск. {count} синоним(ов) будет импортировано.",
-			"importFormat": "Формат должен быть CSV или JSON с полями root и synonym."
+			"importFormat": "Формат должен быть CSV или JSON с полями root и synonym.",
+			"aiSuggest": "Предложить через ИИ",
+			"aiSuggestSuccess": "ИИ предложил {count} синоним(ов). Нажмите, чтобы принять.",
+			"aiSuggestEmpty": "ИИ не смог предложить синонимы для этого корневого слова.",
+			"aiSuggestions": "Предложения ИИ — нажмите, чтобы добавить:",
+			"dismiss": "Закрыть"
 		},
 		"curations": {
 			"tab": "Курация",

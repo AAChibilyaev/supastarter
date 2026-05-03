@@ -47,7 +47,9 @@ COPY tooling/scripts/package.json    ./tooling/scripts/
 COPY tooling/tailwind/package.json   ./tooling/tailwind/
 COPY tooling/typescript/package.json ./tooling/typescript/
 
-RUN pnpm install --frozen-lockfile
+# docs postinstall needs full source (imports packages/api/v1/openapi.ts) — skip it here
+RUN pnpm install --frozen-lockfile --ignore-scripts && \
+    pnpm rebuild
 
 # ─── Stage 3: build ───────────────────────────────────────────────────────────
 FROM installer AS builder
@@ -56,6 +58,11 @@ COPY . .
 
 # Generate Prisma client (engineType = "client" — no binary needed)
 RUN pnpm --filter @repo/database generate
+
+# Docs postinstall needs the full source tree (imports packages/api/v1/openapi.ts)
+# Run it now that all files are available
+RUN pnpm --filter docs exec node --import tsx scripts/generate-api-ref.ts && \
+    pnpm --filter docs exec fumadocs-mdx
 
 # Build saas app in standalone mode so the runner stage is minimal
 ENV NEXT_OUTPUT_STANDALONE=true

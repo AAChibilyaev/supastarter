@@ -19,7 +19,7 @@ import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GlobeIcon } from "lucide-react";
+import { GlobeIcon, SparklesIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -64,6 +64,12 @@ function triggerDownload(content: string, filename: string, mimeType: string) {
 	URL.revokeObjectURL(url);
 }
 
+interface AISynSuggestion {
+	word: string;
+	score: number;
+	rationale: string;
+}
+
 export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps) {
 	const t = useTranslations();
 	const queryClient = useQueryClient();
@@ -73,6 +79,9 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 	const [entries, setEntries] = useState<GlobalSynonymEntry[]>([]);
 	const [initialized, setInitialized] = useState(false);
 	const [importOpen, setImportOpen] = useState(false);
+	const [aiSuggestions, setAiSuggestions] = useState<Record<number, AISynSuggestion[]>>({});
+	const [suggestingIndex, setSuggestingIndex] = useState<number | null>(null);
+	const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number | null>(null);
 
 	const { data, isLoading } = useQuery(
 		orpc.search.globalSynonyms.get.queryOptions({
@@ -127,6 +136,10 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 
 	const importMutation = useMutation({
 		...orpc.search.globalSynonyms.import.mutationOptions(),
+	});
+
+	const aiSuggestMutation = useMutation({
+		...orpc.search.globalSynonyms.suggest.mutationOptions(),
 	});
 
 	const handleAddSet = () => {
@@ -192,6 +205,49 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 			}
 		}
 		updateMutation.mutate({ organizationId, synonyms: entries });
+	};
+
+	const handleSuggestFromAI = async (index: number) => {
+		const entry = entries[index];
+		if (!entry.root.trim()) {
+			toastError(t("search.globalSynonyms.rootRequired"));
+			return;
+		}
+		setSuggestingIndex(index);
+		setActiveSuggestionIndex(index);
+		try {
+			const result = await aiSuggestMutation.mutateAsync({
+				organizationId,
+				rootWord: entry.root,
+				locale: entry.locale ?? "en",
+			});
+			setAiSuggestions((prev) => ({
+				...prev,
+				[index]: result.suggestions,
+			}));
+			if (result.suggestions.length > 0) {
+				toastSuccess(
+					t("search.synonyms.aiSuggestSuccess", { count: result.suggestions.length }),
+				);
+			} else {
+				toastError(t("search.synonyms.aiSuggestEmpty"));
+			}
+		} catch (err) {
+			toastError(err instanceof Error ? err.message : t("search.synonyms.error"));
+		} finally {
+			setSuggestingIndex(null);
+		}
+	};
+
+	const handleAcceptSuggestion = (entryIndex: number, suggestion: AISynSuggestion) => {
+		const updated = [...entries];
+		const entry = updated[entryIndex];
+		// Add the suggestion to the synonyms list if not already present
+		if (!entry.synonyms.some((s) => s.toLowerCase() === suggestion.word.toLowerCase())) {
+			entry.synonyms = [...entry.synonyms, suggestion.word];
+		}
+		setEntries(updated);
+		setActiveSuggestionIndex(null);
 	};
 
 	const handleExport = async (format: "csv" | "json") => {
@@ -300,15 +356,66 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 									<label className="text-sm font-medium">
 										{t("search.globalSynonyms.rootLabel")}
 									</label>
-									<input
-										type="text"
-										value={entry.root}
-										onChange={(e) =>
-											handleChange(index, "root", e.target.value)
-										}
-										className="p-2.5 rounded text-sm w-full border bg-background"
-										placeholder={t("search.globalSynonyms.rootPlaceholder")}
-									/>
+									<div className="gap-2 flex">
+										<input
+											type="text"
+											value={entry.root}
+											onChange={(e) =>
+												handleChange(index, "root", e.target.value)
+											}
+											className="p-2.5 rounded text-sm flex-1 border bg-background"
+											placeholder={t("search.globalSynonyms.rootPlaceholder")}
+										/>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => handleSuggestFromAI(index)}
+											loading={suggestingIndex === index}
+											disabled={!entry.root.trim()}
+											title={t("search.synonyms.aiSuggest")}
+										>
+											<SparklesIcon className="size-4" />
+										</Button>
+									</div>
+									{/* AI suggestion popover */}
+									{activeSuggestionIndex === index &&
+										aiSuggestions[index] &&
+										aiSuggestions[index].length > 0 && (
+											<div className="mt-2 p-3 space-y-2 rounded-md border bg-muted/30">
+												<p className="text-xs font-medium text-foreground/70">
+													{t("search.synonyms.aiSuggestions")}
+												</p>
+												<div className="gap-1.5 flex flex-wrap">
+													{aiSuggestions[index].map((s, si) => (
+														<Button
+															key={si}
+															variant="secondary"
+															size="sm"
+															className="gap-1"
+															onClick={() =>
+																handleAcceptSuggestion(index, s)
+															}
+														>
+															{s.word}
+															<span className="text-[10px] text-foreground/50 opacity-70">
+																{Math.round(s.score * 100)}%
+															</span>
+														</Button>
+													))}
+												</div>
+												<div className="flex justify-end">
+													<Button
+														variant="ghost"
+														size="xs"
+														onClick={() =>
+															setActiveSuggestionIndex(null)
+														}
+													>
+														{t("search.synonyms.dismiss")}
+													</Button>
+												</div>
+											</div>
+										)}
 								</div>
 							</div>
 

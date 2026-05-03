@@ -125,7 +125,10 @@ export async function parseVideoMoments(
 			moments,
 			metadata: {
 				momentCount: moments.length,
-				totalTranscriptWords: moments.reduce((s, m) => s + m.transcript.split(/\s+/).filter(Boolean).length, 0),
+				totalTranscriptWords: moments.reduce(
+					(s, m) => s + m.transcript.split(/\s+/).filter(Boolean).length,
+					0,
+				),
 				transcribedMoments: moments.filter((m) => m.transcript.length > 0).length,
 				format: ext,
 				sceneDetectionMethod: opts.method,
@@ -173,7 +176,9 @@ function detectScenes(
 			if (!isNaN(ts) && ts > 0 && ts < durationSeconds) {
 				timestamps.push(ts);
 				// Extract scene score from lavfi metadata if available
-				const scoreMatch = sceneData.match(new RegExp(`lavfi\\.scene_score[=:]([\\d.]+)`, "i"));
+				const scoreMatch = sceneData.match(
+					new RegExp(`lavfi\\.scene_score[=:]([\\d.]+)`, "i"),
+				);
 				if (scoreMatch) {
 					scores.push(parseFloat(scoreMatch[1]));
 				}
@@ -192,7 +197,10 @@ function detectScenes(
 /**
  * Split video duration into uniform segments.
  */
-function splitUniformly(durationSeconds: number, segmentDuration: number): Array<{ start: number; end: number }> {
+function splitUniformly(
+	durationSeconds: number,
+	segmentDuration: number,
+): Array<{ start: number; end: number }> {
 	const segments: Array<{ start: number; end: number }> = [];
 	for (let start = 0; start < durationSeconds; start += segmentDuration) {
 		const end = Math.min(start + segmentDuration, durationSeconds);
@@ -245,7 +253,12 @@ function mergeShortScenes(
  * Extract audio for a time segment and transcribe it.
  * Falls back: whisper-cli → openai-whisper Python → empty string.
  */
-function transcribeSegment(videoPath: string, startSeconds: number, endSeconds: number, segmentIndex: number): string {
+function transcribeSegment(
+	videoPath: string,
+	startSeconds: number,
+	endSeconds: number,
+	segmentIndex: number,
+): string {
 	const duration = endSeconds - startSeconds;
 	if (duration <= 0) return "";
 

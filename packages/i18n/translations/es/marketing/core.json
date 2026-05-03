@@ -37,6 +37,7 @@
 			"featureBadge": "Search OS",
 			"imageAlt": "Captura del panel AACsearch",
 			"badgeLatency": "p99 < 50 ms",
+			"badgeVector": "Vector + keyword",
 			"badgeSoc2": "Acceso con scope",
 			"badgeFulltext": "Aislamiento por tenant",
 			"badgeAnalytics": "Analítica de búsqueda",

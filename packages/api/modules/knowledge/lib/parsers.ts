@@ -1,4 +1,9 @@
-import { detectFileType, processFile, SUPPORTED_MIME_TYPES, parseVideoMoments } from "@repo/document-processor";
+import {
+	detectFileType,
+	processFile,
+	SUPPORTED_MIME_TYPES,
+	parseVideoMoments,
+} from "@repo/document-processor";
 import { logger } from "@repo/logs";
 
 export interface ParsedFileContent {
@@ -42,9 +47,7 @@ export async function parseIncomingFile(input: {
 				const transcriptParts: string[] = [];
 				for (const moment of videoMoments.moments) {
 					if (moment.transcript.trim()) {
-						transcriptParts.push(
-							`[${moment.timecode}] ${moment.transcript.trim()}`,
-						);
+						transcriptParts.push(`[${moment.timecode}] ${moment.transcript.trim()}`);
 					}
 				}
 
@@ -78,7 +81,10 @@ export async function parseIncomingFile(input: {
 				};
 			}
 		} catch (err) {
-			logger.warn({ err }, "Video moment parsing failed, falling back to standard video parser");
+			logger.warn(
+				{ err },
+				"Video moment parsing failed, falling back to standard video parser",
+			);
 		}
 		// Fall through to standard video parsing
 	}

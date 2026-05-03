@@ -691,12 +691,7 @@ interface PlanComparisonTableProps {
 	t: ReturnType<typeof useTranslations>;
 }
 
-function PlanComparisonTable({
-	plans,
-	selectedPlanId,
-	onSelectPlan,
-	t,
-}: PlanComparisonTableProps) {
+function PlanComparisonTable({ plans, selectedPlanId, onSelectPlan, t }: PlanComparisonTableProps) {
 	const allFeatures = useMemo(() => {
 		const featureSet = new Set<string>();
 		for (const plan of plans) {

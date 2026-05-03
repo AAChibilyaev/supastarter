@@ -15,6 +15,7 @@
  * It uses Shadow DOM for CSS isolation.
  */
 
+import { AutocompleteUI } from "./autocomplete-ui";
 import { ChatClient } from "./chat-client";
 import { ChatUI } from "./chat-ui";
 import { detectEntryPoint } from "./context-bridge";
@@ -41,6 +42,8 @@ export interface WidgetOptions {
 	voiceEnabled?: boolean;
 	/** Language for voice recognition, e.g. "ru", "en-US". "auto" uses widget locale. */
 	voiceLanguage?: string;
+	/** Enable autocomplete suggestions dropdown (typeahead) */
+	suggestions?: boolean;
 }
 
 const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
@@ -55,6 +58,7 @@ const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
 	imageSearch: false,
 	voiceEnabled: false,
 	voiceLanguage: "auto",
+	suggestions: false,
 };
 
 const WIDGET_STYLES = `
@@ -1087,6 +1091,8 @@ export class AacSearchWidget {
 	private static readonly BATCH_DELAY_MS = 500;
 	/** Track which facet groups are expanded beyond the default 10-item limit */
 	private expandedFacets: Set<string> = new Set();
+	/** Autocomplete dropdown instance (optional) */
+	private autocompleteUI: AutocompleteUI | null = null;
 
 	private t(key: import("./translations").TranslationKey): string {
 		return translate(this.locale, key);
@@ -1250,6 +1256,11 @@ export class AacSearchWidget {
 		this.render();
 		this.attachEvents();
 		this.trackEvent({ type: "widget_open" });
+
+		// Initialize autocomplete if enabled
+		if (this.options.suggestions) {
+			this.initAutocomplete();
+		}
 
 		// Flush pending batch on page unload
 		if (typeof document !== "undefined") {
@@ -1645,6 +1656,38 @@ export class AacSearchWidget {
 			recommendationsOpen: false,
 		};
 		this.render();
+	}
+
+	/**
+	 * Initialize the autocomplete suggestions dropdown.
+	 * Only called when options.suggestions is true.
+	 */
+	private initAutocomplete(): void {
+		const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
+		if (!input) return;
+
+		const client = createAacSearchClient({
+			baseUrl: this.options.baseUrl,
+			apiKey: this.options.apiKey,
+			indexSlug: this.options.indexSlug,
+		});
+
+		this.autocompleteUI = new AutocompleteUI({
+			inputEl: input,
+			shadowRoot: this.root,
+			fetchSuggestions: async (q: string) => {
+				const result = await client.getSuggestions(q, {
+					limit: 8,
+					popular: true,
+				});
+				return result;
+			},
+			onSelect: (text: string) => {
+				this.state = { ...this.state, query: text, page: 1 };
+				void this.doSearch(1);
+			},
+			locale: this.locale,
+		});
 	}
 
 	/** Render a single recommendations item card. */
@@ -2834,6 +2877,7 @@ export class AacSearchWidget {
 				imageSearch: dataset.imageSearch === "true",
 				voiceEnabled: dataset.voiceEnabled === "true",
 				voiceLanguage: dataset.voiceLanguage ?? "auto",
+				suggestions: dataset.suggestions === "true",
 			});
 		};
 

@@ -16,7 +16,7 @@ import { z } from "zod";
 
 const formSchema = z.object({
 	email: z.email(),
-	role: z.enum(["member", "owner", "admin"]),
+	role: z.enum(["member", "owner", "admin", "viewer"]),
 });
 
 export function InviteMemberForm({ organizationId }: { organizationId: string }) {

@@ -82,6 +82,25 @@
 					"submit": "Invite",
 					"title": "Invite member"
 				},
+				"permissions": {
+					"matrixTitle": "Разрешения ролей",
+					"action": "Действие",
+					"actions": {
+						"createIndex": "Создать индекс",
+						"deleteIndex": "Удалить индекс",
+						"manageSchema": "Управлять схемой",
+						"createApiKey": "Создать API-ключ",
+						"importData": "Импортировать данные",
+						"viewAnalytics": "Просматривать аналитику",
+						"manageSynonyms": "Управлять синонимами",
+						"manageCurations": "Управлять курациями",
+						"manageWidget": "Управлять виджетом",
+						"inviteMembers": "Приглашать участников",
+						"changePlan": "Изменить тариф",
+						"manageBilling": "Управлять биллингом",
+						"deleteOrg": "Удалить организацию"
+					}
+				},
 				"leaveOrganization": "Leave organization",
 				"notifications": {
 					"removeMember": {

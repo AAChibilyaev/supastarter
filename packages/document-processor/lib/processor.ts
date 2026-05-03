@@ -18,11 +18,12 @@ import { parseUrl } from "./parsers/url";
 import { parseVideo } from "./parsers/video";
 import { parseXlsx } from "./parsers/xlsx";
 import type { FileType, ParsedDocument } from "./types";
-import { detectFileType, SUPPORTED_MIME_TYPES } from "./types";
+import { SUPPORTED_MIME_TYPES, detectFileType } from "./types";
 
 type ParserFn = (content: Buffer | string, filename: string) => Promise<ParsedDocument>;
 
 const parserRegistry: Record<string, ParserFn> = {
+	audio: parseAudio,
 	pdf: parsePdf,
 	docx: parseDocx,
 	xlsx: parseXlsx,
@@ -33,7 +34,6 @@ const parserRegistry: Record<string, ParserFn> = {
 	txt: parseTxt,
 	epub: parseEpub,
 	image: parseImage,
-	audio: parseAudio,
 	video: parseVideo,
 };
 

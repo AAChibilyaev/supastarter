@@ -1087,7 +1087,12 @@
 			"importSuccess": "{count} Synonym(e) erfolgreich importiert.",
 			"importError": "Fehler beim Importieren der Synonyme.",
 			"importDryRun": "Trockenlauf-Vorschau. {count} Synonym(e) würden importiert werden.",
-			"importFormat": "Das Format muss CSV oder JSON mit root- und synonym-Feldern sein."
+			"importFormat": "Das Format muss CSV oder JSON mit root- und synonym-Feldern sein.",
+			"aiSuggest": "Von KI vorschlagen lassen",
+			"aiSuggestSuccess": "KI hat {count} Synonym(e) vorgeschlagen. Klicken zum Übernehmen.",
+			"aiSuggestEmpty": "KI konnte keine Synonyme für dieses Stichwort vorschlagen.",
+			"aiSuggestions": "KI-Vorschläge — zum Hinzufügen klicken:",
+			"dismiss": "Schließen"
 		},
 		"curations": {
 			"tab": "Kurationen",

@@ -23,7 +23,16 @@ export interface FacetConfig {
 	sortOrder: "count" | "alpha";
 	maxValues: number;
 	multiSelect: boolean;
+	type: "checkbox" | "range" | "toggle" | "select";
+	collapsible: boolean;
+	rangeMin?: number;
+	rangeMax?: number;
+	numberFormat?: "number" | "currency" | "custom";
+	customFormat?: string;
 }
+
+const FACET_TYPES = ["checkbox", "range", "toggle", "select"] as const;
+const NUMBER_FORMATS = ["number", "currency", "custom"] as const;
 
 interface FacetsPanelProps {
 	facetFields: string[];
@@ -61,83 +70,195 @@ function SortableFacetRow({
 			ref={setNodeRef}
 			style={style}
 			className={cn(
-				"gap-3 p-3 flex items-center rounded-lg border bg-card transition-colors",
+				"gap-3 p-3 flex flex-col rounded-lg border bg-card transition-colors",
 				isDragging && "shadow-lg opacity-50",
 			)}
 		>
-			{/* Drag handle */}
-			<button
-				type="button"
-				className="size-6 rounded flex shrink-0 cursor-grab items-center justify-center hover:bg-muted"
-				{...attributes}
-				{...listeners}
-			>
-				<GripVerticalIcon className="size-4 text-muted-foreground" />
-			</button>
-
-			{/* Field name (read-only) */}
-			<div className="min-w-0 w-32 shrink-0">
-				<p className="font-mono text-xs font-medium truncate">{facet.fieldName}</p>
-			</div>
-
-			{/* Display name */}
-			<div className="min-w-0 flex-1">
-				<input
-					type="text"
-					value={facet.displayName}
-					onChange={(e) => onUpdate(index, { displayName: e.target.value })}
-					placeholder={facet.fieldName}
-					className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
-				/>
-			</div>
-
-			{/* Sort order */}
-			<div className="w-28 shrink-0">
-				<select
-					value={facet.sortOrder}
-					onChange={(e) =>
-						onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })
-					}
-					className="h-8 rounded px-1 text-xs w-full border border-input bg-background"
+			{/* Primary row: drag + field + display name + controls */}
+			<div className="gap-3 flex items-center">
+				{/* Drag handle */}
+				<button
+					type="button"
+					className="size-6 rounded flex shrink-0 cursor-grab items-center justify-center hover:bg-muted"
+					{...attributes}
+					{...listeners}
 				>
-					<option value="count">{t("facetSortCount")}</option>
-					<option value="alpha">{t("facetSortAlpha")}</option>
-				</select>
+					<GripVerticalIcon className="size-4 text-muted-foreground" />
+				</button>
+
+				{/* Field name (read-only) */}
+				<div className="min-w-0 w-28 shrink-0">
+					<p className="font-mono text-xs font-medium truncate">{facet.fieldName}</p>
+				</div>
+
+				{/* Display name */}
+				<div className="min-w-0 flex-1">
+					<input
+						type="text"
+						value={facet.displayName}
+						onChange={(e) => onUpdate(index, { displayName: e.target.value })}
+						placeholder={facet.fieldName}
+						className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
+					/>
+				</div>
+
+				{/* Sort order */}
+				<div className="w-24 shrink-0">
+					<select
+						value={facet.sortOrder}
+						onChange={(e) =>
+							onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })
+						}
+						className="h-8 rounded px-1 text-xs w-full border border-input bg-background"
+					>
+						<option value="count">{t("facetSortCount")}</option>
+						<option value="alpha">{t("facetSortAlpha")}</option>
+					</select>
+				</div>
+
+				{/* Max values */}
+				<div className="w-14 shrink-0">
+					<input
+						type="number"
+						min={1}
+						max={1000}
+						value={facet.maxValues}
+						onChange={(e) =>
+							onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })
+						}
+						className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
+					/>
+				</div>
+
+				{/* Multi-select toggle */}
+				<label className="gap-1.5 flex shrink-0 cursor-pointer items-center">
+					<input
+						type="checkbox"
+						checked={facet.multiSelect}
+						onChange={(e) => onUpdate(index, { multiSelect: e.target.checked })}
+						className="size-4 rounded border-input accent-primary"
+					/>
+					<span className="text-xs md:inline hidden text-muted-foreground">
+						{t("facetMulti")}
+					</span>
+				</label>
+
+				{/* Remove button */}
+				<button
+					type="button"
+					onClick={() => onRemove(index)}
+					className="size-7 rounded flex shrink-0 items-center justify-center hover:bg-destructive/10 hover:text-destructive"
+				>
+					<Trash2Icon className="size-4" />
+				</button>
 			</div>
 
-			{/* Max values */}
-			<div className="w-16 shrink-0">
-				<input
-					type="number"
-					min={1}
-					max={1000}
-					value={facet.maxValues}
-					onChange={(e) =>
-						onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })
-					}
-					className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
-				/>
+			{/* Secondary row: type + collapsible + range config */}
+			<div className="ml-9 gap-4 flex flex-wrap items-center">
+				{/* Facet type */}
+				<div className="gap-1.5 flex items-center">
+					<span className="text-xs font-medium text-muted-foreground">
+						{t("facetType")}:
+					</span>
+					<select
+						value={facet.type}
+						onChange={(e) =>
+							onUpdate(index, { type: e.target.value as FacetConfig["type"] })
+						}
+						className="h-7 rounded px-1 text-xs border border-input bg-background"
+					>
+						{FACET_TYPES.map((type) => (
+							<option key={type} value={type}>
+								{t(`facetType${type.charAt(0).toUpperCase()}${type.slice(1)}`)}
+							</option>
+						))}
+					</select>
+				</div>
+
+				{/* Collapsible toggle */}
+				<label className="gap-1.5 flex cursor-pointer items-center">
+					<input
+						type="checkbox"
+						checked={facet.collapsible}
+						onChange={(e) => onUpdate(index, { collapsible: e.target.checked })}
+						className="size-3.5 rounded border-input accent-primary"
+					/>
+					<span className="text-xs text-muted-foreground">{t("facetCollapsible")}</span>
+				</label>
+
+				{/* Range config (only when type=range) */}
+				{facet.type === "range" && (
+					<>
+						<div className="gap-1.5 flex items-center">
+							<span className="text-xs text-muted-foreground">
+								{t("facetPriceRangeMin")}:
+							</span>
+							<input
+								type="number"
+								value={facet.rangeMin ?? ""}
+								onChange={(e) =>
+									onUpdate(index, {
+										rangeMin: e.target.value
+											? Number(e.target.value)
+											: undefined,
+									})
+								}
+								placeholder="0"
+								className="h-7 w-16 rounded px-1 text-xs border border-input bg-background"
+							/>
+						</div>
+						<div className="gap-1.5 flex items-center">
+							<span className="text-xs text-muted-foreground">
+								{t("facetPriceRangeMax")}:
+							</span>
+							<input
+								type="number"
+								value={facet.rangeMax ?? ""}
+								onChange={(e) =>
+									onUpdate(index, {
+										rangeMax: e.target.value
+											? Number(e.target.value)
+											: undefined,
+									})
+								}
+								placeholder="1000"
+								className="h-7 w-16 rounded px-1 text-xs border border-input bg-background"
+							/>
+						</div>
+						<div className="gap-1.5 flex items-center">
+							<span className="text-xs text-muted-foreground">
+								{t("facetPriceFormat")}:
+							</span>
+							<select
+								value={facet.numberFormat ?? "number"}
+								onChange={(e) =>
+									onUpdate(index, {
+										numberFormat: e.target.value as FacetConfig["numberFormat"],
+									})
+								}
+								className="h-7 rounded px-1 text-xs border border-input bg-background"
+							>
+								{NUMBER_FORMATS.map((fmt) => (
+									<option key={fmt} value={fmt}>
+										{t(
+											`facetFormat${fmt.charAt(0).toUpperCase()}${fmt.slice(1)}`,
+										)}
+									</option>
+								))}
+							</select>
+						</div>
+						{facet.numberFormat === "custom" && (
+							<input
+								type="text"
+								value={facet.customFormat ?? ""}
+								onChange={(e) => onUpdate(index, { customFormat: e.target.value })}
+								placeholder="${value}"
+								className="h-7 w-20 rounded px-1 text-xs border border-input bg-background"
+							/>
+						)}
+					</>
+				)}
 			</div>
-
-			{/* Multi-select toggle */}
-			<label className="gap-1.5 flex shrink-0 cursor-pointer items-center">
-				<input
-					type="checkbox"
-					checked={facet.multiSelect}
-					onChange={(e) => onUpdate(index, { multiSelect: e.target.checked })}
-					className="size-4 rounded border-input accent-primary"
-				/>
-				<span className="text-xs text-muted-foreground">{t("facetMulti")}</span>
-			</label>
-
-			{/* Remove button */}
-			<button
-				type="button"
-				onClick={() => onRemove(index)}
-				className="size-7 rounded flex shrink-0 items-center justify-center hover:bg-destructive/10 hover:text-destructive"
-			>
-				<Trash2Icon className="size-4" />
-			</button>
 		</div>
 	);
 }
@@ -164,11 +285,11 @@ function FacetsHeader({ t }: { t: (key: string) => string }) {
 	return (
 		<div className="gap-3 px-3 pb-2 md:flex text-xs font-medium hidden items-center text-muted-foreground">
 			<div className="w-6 shrink-0" />
-			<div className="w-32 shrink-0">{t("facetField")}</div>
+			<div className="w-28 shrink-0">{t("facetField")}</div>
 			<div className="flex-1">{t("facetDisplayName")}</div>
-			<div className="w-28 shrink-0">{t("facetSort")}</div>
-			<div className="w-16 shrink-0 text-center">{t("facetMax")}</div>
-			<div className="shrink-0" style={{ width: 60 }} />
+			<div className="w-24 shrink-0">{t("facetSort")}</div>
+			<div className="w-14 shrink-0 text-center">{t("facetMax")}</div>
+			<div className="shrink-0" style={{ width: 72 }} />
 			<div className="w-7 shrink-0" />
 		</div>
 	);
@@ -224,6 +345,8 @@ export function FacetsPanel({
 			sortOrder: "count" as const,
 			maxValues: 10,
 			multiSelect: true,
+			type: "checkbox" as const,
+			collapsible: true,
 		}));
 		onChange([...configs, ...newConfigs]);
 	};

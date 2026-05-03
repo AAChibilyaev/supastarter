@@ -139,6 +139,8 @@ export function SearchConfigWizard({
 					sortOrder: "count" as const,
 					maxValues: 10,
 					multiSelect: true,
+					type: "checkbox" as const,
+					collapsible: true,
 				})),
 			);
 		}

@@ -58,13 +58,27 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 		[schemaData],
 	);
 
+	// Numeric facetable fields (candidates for range slider)
+	const numericFacetableFields = useMemo(
+		() =>
+			(schemaData?.fields ?? []).filter(
+				(f) => f.facet && (f.type === "float" || f.type === "int32" || f.type === "int64"),
+			),
+		[schemaData],
+	);
+
 	const [facetConfigs, setFacetConfigs] = useState<FacetConfig[]>([]);
 
-	// Load saved config
+	// Load saved config from API (facetConfigs takes priority, fallback to facetFields)
 	useEffect(() => {
 		if (!widgetData?.config) return;
 		const cfg = widgetData.config;
-		if (cfg.facetFields.length > 0) {
+
+		if (cfg.facetConfigs && cfg.facetConfigs.length > 0) {
+			// Full configs available — use them directly
+			setFacetConfigs(cfg.facetConfigs);
+		} else if (cfg.facetFields && cfg.facetFields.length > 0) {
+			// Legacy format — migrate facetFields to facetConfigs
 			setFacetConfigs(
 				cfg.facetFields.map((name: string) => ({
 					fieldName: name,
@@ -72,6 +86,8 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 					sortOrder: "count" as const,
 					maxValues: 10,
 					multiSelect: true,
+					type: "checkbox" as const,
+					collapsible: true,
 				})),
 			);
 		} else {
@@ -95,6 +111,7 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 			slug: selectedIndexSlug,
 			config: {
 				facetFields: facetConfigs.map((c) => c.fieldName),
+				facetConfigs,
 				theme: widgetData?.config.theme ?? "auto",
 				placeholder: widgetData?.config.placeholder ?? "Search...",
 				resultsPerPage: widgetData?.config.resultsPerPage ?? 20,
@@ -107,6 +124,18 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 				showPrices: widgetData?.config.showPrices ?? true,
 				showImages: widgetData?.config.showImages ?? true,
 				queryBy: widgetData?.config.queryBy ?? [],
+				autocompleteEnabled: widgetData?.config.autocompleteEnabled ?? true,
+				autocompleteSource: widgetData?.config.autocompleteSource ?? "analytics",
+				autocompleteResults: widgetData?.config.autocompleteResults ?? 5,
+				autocompleteDebounce: widgetData?.config.autocompleteDebounce ?? 200,
+				autocompleteMinQuery: widgetData?.config.autocompleteMinQuery ?? 2,
+				autocompleteThumbnails: widgetData?.config.autocompleteThumbnails ?? false,
+				autocompleteHighlight: widgetData?.config.autocompleteHighlight ?? true,
+				autocompleteRecent: widgetData?.config.autocompleteRecent ?? false,
+				voiceEnabled: widgetData?.config.voiceEnabled ?? false,
+				voiceLanguage: widgetData?.config.voiceLanguage ?? "auto",
+				voiceTrigger: widgetData?.config.voiceTrigger ?? "mic",
+				voiceFallbackMessage: widgetData?.config.voiceFallbackMessage ?? "",
 			},
 		});
 	};
@@ -158,24 +187,54 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 			{schemaLoading ? (
 				<Skeleton className="h-64 rounded-lg" />
 			) : (
-				<Card>
-					<CardHeader className="pb-3">
-						<CardTitle className="text-base">
-							{tConfig("facetSettingsTitle") ?? "Facet Filters"}
-						</CardTitle>
-						<CardDescription>
-							{tConfig("facetSettingsDesc") ??
-								"Configure which fields appear as filters in the search widget."}
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<FacetsPanel
-							facetFields={facetableFields}
-							configs={facetConfigs}
-							onChange={setFacetConfigs}
-						/>
-					</CardContent>
-				</Card>
+				<>
+					{/* Facet filters card */}
+					<Card>
+						<CardHeader className="pb-3">
+							<CardTitle className="text-base">
+								{tConfig("facetSettingsTitle") ?? "Facet Filters"}
+							</CardTitle>
+							<CardDescription>
+								{tConfig("facetSettingsDesc") ??
+									"Configure which fields appear as filters in the search widget."}
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<FacetsPanel
+								facetFields={facetableFields}
+								configs={facetConfigs}
+								onChange={setFacetConfigs}
+							/>
+						</CardContent>
+					</Card>
+
+					{/* Price Range Filter card — only if numeric facet fields exist */}
+					{numericFacetableFields.length > 0 && (
+						<Card>
+							<CardHeader className="pb-3">
+								<CardTitle className="text-base">
+									{tConfig("facetSettingsTitle") ?? "Price Range Filter"}
+								</CardTitle>
+								<CardDescription>
+									Configure range sliders for numeric fields. Select a field above and set its type to
+									&quot;Range Slider&quot; to enable min/max and format options.
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<p className="text-sm text-muted-foreground">
+									Numeric facet fields available:{" "}
+									<span className="font-medium">
+										{numericFacetableFields.map((f) => f.name).join(", ")}
+									</span>
+								</p>
+								<p className="mt-2 text-xs text-muted-foreground">
+									Tip: Set a facet's type to &quot;Range Slider&quot; above, then configure its min,
+									max, and display format.
+								</p>
+							</CardContent>
+						</Card>
+					)}
+				</>
 			)}
 
 			<Button

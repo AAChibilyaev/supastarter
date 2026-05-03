@@ -9,14 +9,13 @@ import {
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationAccess } from "../lib/access";
-
 import {
-  type CreditGateContext,
-  commitFlatFeeUsage,
-  creditGate,
-  releaseCreditReservation,
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
 } from "../../entitlements/middleware/credit-gate";
+import { requireOrganizationAccess } from "../lib/access";
 
 export const graphrag = protectedProcedure
 	.use(creditGate("chat", BigInt(500)))
@@ -78,7 +77,11 @@ export const graphrag = protectedProcedure
 						return {
 							recommendations: [],
 							summary: "Neo4j graph database is not connected.",
-							context: { productTitle: "Unknown", productCategory: "", neighborCount: 0 },
+							context: {
+								productTitle: "Unknown",
+								productCategory: "",
+								neighborCount: 0,
+							},
 							llmUsed: false,
 							neo4jConnected: false,
 						};

@@ -235,7 +235,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 	const renderDashboardTab = () => (
 		<div className="space-y-6">
-				{/* KPI row */}
+			{/* KPI row */}
 			<div className="gap-4 md:grid-cols-2 lg:grid-cols-5 grid">
 				<StatsTile
 					title={t("search.analytics.totalSearches")}
@@ -503,18 +503,24 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							<TableHeader>
 								<TableRow>
 									<TableHead>{t("search.analytics.productColumn")}</TableHead>
-									<TableHead className="text-right">{t("search.analytics.clicksColumn")}</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.clicksColumn")}
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{analyticsData.topClickedProducts.map((row: { productId: string; title: string; clicks: number }) => (
-									<TableRow key={row.productId}>
-										<TableCell className="font-mono text-sm">{row.title}</TableCell>
-										<TableCell className="text-right tabular-nums">
-											{format.number(row.clicks)}
-										</TableCell>
-									</TableRow>
-								))}
+								{analyticsData.topClickedProducts.map(
+									(row: { productId: string; title: string; clicks: number }) => (
+										<TableRow key={row.productId}>
+											<TableCell className="font-mono text-sm">
+												{row.title}
+											</TableCell>
+											<TableCell className="text-right tabular-nums">
+												{format.number(row.clicks)}
+											</TableCell>
+										</TableRow>
+									),
+								)}
 							</TableBody>
 						</Table>
 					</CardContent>

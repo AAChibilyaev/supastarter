@@ -44,9 +44,7 @@ export function ShopifySyncHistory({
 	);
 
 	// Filter to Shopify jobs (by indexId containing "shopify")
-	const jobs = (allJobs ?? []).filter((job) =>
-		job.indexId.toLowerCase().includes("shopify"),
-	);
+	const jobs = (allJobs ?? []).filter((job) => job.indexId.toLowerCase().includes("shopify"));
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -73,7 +71,7 @@ export function ShopifySyncHistory({
 							))}
 						</div>
 					) : jobs.length === 0 ? (
-						<p className="text-sm text-muted-foreground py-4">
+						<p className="text-sm py-4 text-muted-foreground">
 							{t("search.connector.noJobLogs")}
 						</p>
 					) : (
@@ -96,7 +94,9 @@ export function ShopifySyncHistory({
 												: t("search.connector.typeDelta")}
 										</TableCell>
 										<TableCell>
-											<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
+											<Badge
+												status={syncJobStatusBadge[job.status] ?? "info"}
+											>
 												{job.status === "completed"
 													? t("search.connector.statusCompleted")
 													: job.status === "running"

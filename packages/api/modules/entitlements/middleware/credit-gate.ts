@@ -23,14 +23,14 @@ import { randomUUID } from "node:crypto";
 
 import { ORPCError, os } from "@orpc/server";
 import {
-  type CommitAiUsageInput,
-  type CommitAiUsageResult,
-  AiWalletInsufficientFundsError,
-  AiWalletFrozenError,
-  WalletNotFoundError,
-  commitAiUsage,
-  releaseAiReservation,
-  reserveAiCredits,
+	type CommitAiUsageInput,
+	type CommitAiUsageResult,
+	AiWalletInsufficientFundsError,
+	AiWalletFrozenError,
+	WalletNotFoundError,
+	commitAiUsage,
+	releaseAiReservation,
+	reserveAiCredits,
 } from "@repo/billing-wallet";
 import { getAiWalletByEntity } from "@repo/database";
 import { logger } from "@repo/logs";
@@ -64,9 +64,7 @@ export interface FlatFeeCommitInput {
 /**
  * Commit a flat-fee AI usage reservation on success.
  */
-export async function commitFlatFeeUsage(
-	input: FlatFeeCommitInput,
-): Promise<CommitAiUsageResult> {
+export async function commitFlatFeeUsage(input: FlatFeeCommitInput): Promise<CommitAiUsageResult> {
 	const markupBps = 2000; // 20% default markup
 	const totalChargeKopecks =
 		input.flatFeeKopecks + (input.flatFeeKopecks * BigInt(markupBps)) / BigInt(10000);
@@ -127,77 +125,73 @@ export async function releaseCreditReservation(
  *   For token-based operations the caller calculates based on input size.
  */
 export function creditGate(operation: string, estimatedCostKopecks: bigint) {
-	return os
-		.$context<Record<string, unknown>>()
-		.middleware(async ({ context, next }) => {
-			const session = (context as Record<string, unknown>).session as
-				| { activeOrganizationId?: string; userId: string }
-				| undefined;
-			const orgId = session?.activeOrganizationId;
-			const userId = session?.userId;
+	return os.$context<Record<string, unknown>>().middleware(async ({ context, next }) => {
+		const session = (context as Record<string, unknown>).session as
+			| { activeOrganizationId?: string; userId: string }
+			| undefined;
+		const orgId = session?.activeOrganizationId;
+		const userId = session?.userId;
 
-			if (!orgId && !userId) {
-				throw new ORPCError("FORBIDDEN", {
-					message: "No active organization or user session.",
-				});
-			}
+		if (!orgId && !userId) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "No active organization or user session.",
+			});
+		}
 
-			// 1. Resolve AiWallet for the org (or user as fallback)
-			const wallet = await getAiWalletByEntity(
-				orgId ? { organizationId: orgId } : { userId: userId! },
-			);
+		// 1. Resolve AiWallet for the org (or user as fallback)
+		const wallet = await getAiWalletByEntity(
+			orgId ? { organizationId: orgId } : { userId: userId! },
+		);
 
-			if (!wallet) {
+		if (!wallet) {
+			throw new ORPCError("FAILED_PRECONDITION", {
+				message: "AI Wallet not initialized. Visit Settings > Billing to activate.",
+			});
+		}
+
+		// 2. Generate a unique idempotency key for this reservation
+		const idempotencyKey = `credit-gate:${operation}:${wallet.id}:${randomUUID()}`;
+
+		// 3. Atomically reserve credits — the PG function checks balance internally
+		try {
+			const reservation = await reserveAiCredits({
+				walletId: wallet.id,
+				userId: userId ?? null,
+				organizationId: orgId ?? null,
+				operation,
+				estimatedKopecks: estimatedCostKopecks,
+				idempotencyKey,
+			});
+
+			// 4. Pass reservation info downstream for commit/release
+			return next({
+				context: {
+					creditReservationId: reservation.reservationId,
+					creditWalletId: wallet.id,
+					creditOperation: operation,
+					creditEstimatedKopecks: estimatedCostKopecks,
+				} satisfies CreditGateContext,
+			});
+		} catch (err) {
+			if (err instanceof AiWalletInsufficientFundsError) {
+				const required = Number(err.requiredKopecks) / 100;
+				const available = Number(err.availableKopecks) / 100;
 				throw new ORPCError("FAILED_PRECONDITION", {
-					message:
-						"AI Wallet not initialized. Visit Settings > Billing to activate.",
+					message: `Insufficient credits for "${operation}". Required: ${required.toFixed(2)}, Available: ${available.toFixed(2)}. Top up at Settings > Billing.`,
 				});
 			}
-
-			// 2. Generate a unique idempotency key for this reservation
-			const idempotencyKey = `credit-gate:${operation}:${wallet.id}:${randomUUID()}`;
-
-			// 3. Atomically reserve credits — the PG function checks balance internally
-			try {
-				const reservation = await reserveAiCredits({
-					walletId: wallet.id,
-					userId: userId ?? null,
-					organizationId: orgId ?? null,
-					operation,
-					estimatedKopecks: estimatedCostKopecks,
-					idempotencyKey,
+			if (err instanceof AiWalletFrozenError) {
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: `AI Wallet is frozen (${err.message}). Contact support to reactivate.`,
 				});
-
-				// 4. Pass reservation info downstream for commit/release
-				return next({
-					context: {
-						creditReservationId: reservation.reservationId,
-						creditWalletId: wallet.id,
-						creditOperation: operation,
-						creditEstimatedKopecks: estimatedCostKopecks,
-					} satisfies CreditGateContext,
-				});
-			} catch (err) {
-				if (err instanceof AiWalletInsufficientFundsError) {
-					const required = Number(err.requiredKopecks) / 100;
-					const available = Number(err.availableKopecks) / 100;
-					throw new ORPCError("FAILED_PRECONDITION", {
-						message: `Insufficient credits for "${operation}". Required: ${required.toFixed(2)}, Available: ${available.toFixed(2)}. Top up at Settings > Billing.`,
-					});
-				}
-				if (err instanceof AiWalletFrozenError) {
-					throw new ORPCError("FAILED_PRECONDITION", {
-						message: `AI Wallet is frozen (${err.message}). Contact support to reactivate.`,
-					});
-				}
-				if (err instanceof WalletNotFoundError) {
-					throw new ORPCError("FAILED_PRECONDITION", {
-						message:
-							"AI Wallet not found. Visit Settings > Billing to activate.",
-					});
-				}
-				// Unexpected error — let it propagate for 500-level handling
-				throw err;
 			}
-		});
+			if (err instanceof WalletNotFoundError) {
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: "AI Wallet not found. Visit Settings > Billing to activate.",
+				});
+			}
+			// Unexpected error — let it propagate for 500-level handling
+			throw err;
+		}
+	});
 }

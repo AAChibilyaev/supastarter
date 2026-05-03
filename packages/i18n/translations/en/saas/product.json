@@ -1,321 +1,321 @@
 {
-  "indexing": {
-    "dashboard": {
-      "title": "Index Management",
-      "subtitle": "Manage indexing, reindexing, and sync for this collection",
-      "documents": "Documents",
-      "todaySearches": "Today",
-      "size": "Size",
-      "avgLatency": "Avg Latency",
-      "liveVersion": "Live",
-      "indexHealth": "Index Health",
-      "last7Days": "Last 7 days",
-      "lastFullSync": "Last full sync",
-      "lastDeltaSync": "Last delta sync",
-      "nextScheduled": "Next scheduled",
-      "indexingProgress": "Indexing Progress",
-      "noData": "No indexing data yet",
-      "backToCollection": "Back to collection"
-    },
-    "delta": {
-      "title": "Delta Sync",
-      "syncNow": "Sync Now",
-      "syncing": "Syncing...",
-      "confirmTitle": "Start Delta Sync?",
-      "confirmDescription": "This will process only changed documents since the last sync. Existing data will be updated in-place with no downtime.",
-      "confirm": "Start Sync",
-      "cancel": "Cancel",
-      "lastSync": "Last delta sync",
-      "neverSynced": "Never synced",
-      "jobPending": "Sync pending...",
-      "jobRunning": "Syncing documents...",
-      "jobCompleted": "Sync completed successfully",
-      "jobFailed": "Sync failed",
-      "progress": "{processed} of {total} documents",
-      "noActiveJob": "No active sync job",
-      "errorExists": "A sync job is already running for this collection",
-      "errorGeneric": "Failed to start delta sync",
-      "processed": "Processed",
-      "upserted": "Upserted",
-      "deleted": "Deleted",
-      "remaining": "Remaining"
-    },
-    "reindex": {
-      "title": "Full Reindex",
-      "description": "Trigger a full reindex with zero-downtime alias swap. All documents will be re-processed through the indexing pipeline.",
-      "startReindex": "Start Reindex",
-      "reindexing": "Reindexing...",
-      "advancedOptions": "Advanced Options",
-      "detectSchema": "Auto-detect schema changes",
-      "regenerateEmbeddings": "Regenerate embeddings",
-      "aliasSwap": "Zero-downtime alias swap",
-      "jobPending": "Reindex pending...",
-      "jobRunning": "Reindexing {processed} of {total} documents...",
-      "jobCompleted": "Reindex completed successfully",
-      "jobFailed": "Reindex failed",
-      "noActiveJob": "No active reindex job",
-      "errorExists": "A reindex job is already running for this collection",
-      "errorSchemaRequired": "Index has no schema fields configured",
-      "confirmTitle": "Start Full Reindex?",
-      "confirmDescription": "This will create a new index version, stream all documents, and swap aliases. No downtime expected.",
-      "confirm": "Yes, Reindex",
-      "cancel": "Cancel"
-    }
-  },
-  "mySearch": {
-    "title": "My Search",
-    "subtitle": "Your personal search space — upload documents, index web pages, and search across all your materials.",
-    "noIndexes": "No search indexes yet",
-    "noIndexesDescription": "Create your first search index by uploading documents or adding URLs. Go fast — no organization needed.",
-    "createIndex": "Create Index",
-    "createNewIndex": "Create New Search Index",
-    "importFiles": "Import Files",
-    "emptyStateTitle": "Create your first index",
-    "createFromFiles": "From Files",
-    "createFromUrl": "From URL",
-    "cancel": "Cancel",
-    "creating": "Creating...",
-    "indexCreated": "Index created",
-    "indexCreateError": "Failed to create index",
-    "indexName": "Index name",
-    "indexNamePlaceholder": "e.g. My Documents",
-    "indexSlug": "Index slug",
-    "indexSlugPlaceholder": "e.g. my-documents",
-    "dropZoneLabel": "File upload area",
-    "dropZoneText": "Drop files here or click to upload",
-    "dropZoneFormats": "Supported: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
-    "dropZoneLimits": "Up to 100MB per file, 1GB total (Free Tier)",
-    "fileTypeNotSupported": "File type not supported",
-    "fileTooLarge": "File is too large (max 100MB)",
-    "totalTooLarge": "Total size exceeds limit (max 1GB)",
-    "urlPlaceholder": "Paste a URL to index...",
-    "addUrl": "Add URL",
-    "urlInvalid": "Invalid URL format",
-    "urlInvalidProtocol": "Only HTTP and HTTPS URLs are supported",
-    "selectedItems": "Selected items",
-    "uploading": "Uploading...",
-    "uploaded": "Uploaded",
-    "fetching": "Fetching...",
-    "added": "Added",
-    "uploadProgress": "Upload progress",
-    "estimatedTime": "Estimated time: a few seconds",
-    "completed": "Completed",
-    "failed": "Failed",
-    "files": {
-      "name": "Name",
-      "type": "Type",
-      "size": "Size",
-      "words": "Words",
-      "uploaded": "Uploaded",
-      "count": "{{count}} files",
-      "empty": "No files yet. Upload documents to start searching.",
-      "columns": "Columns",
-      "toggleColumns": "Toggle columns",
-      "delete": "Delete",
-      "deleteTitle": "Delete file",
-      "deleteDescription": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
-      "deleted": "{{name}} deleted",
-      "deleteError": "Failed to delete file",
-      "cancel": "Cancel",
-      "close": "Close",
-      "previewImage": "Click to open the image in a new tab",
-      "previewUrl": "Click to open the web page",
-      "previewGeneric": "Preview is not available for this file type"
-    },
-    "searchIndex": "Search Index",
-    "searchPlaceholder": "Search across your documents...",
-    "searchInputLabel": "Search query",
-    "searchPrompt": "Type a query above to start searching.",
-    "noResults": "No results found. Try a different search term.",
-    "resultsCount": "{{count}} results found in {{time}}ms",
-    "filterByType": "Filter by file type",
-    "allTypes": "All types",
-    "score": "Relevance",
-    "openSource": "Open source",
-    "dateFrom": "From",
-    "dateTo": "To",
-    "crossSearch": "Cross-Search",
-    "crossSearchDescription": "Search across all your personal indexes at once"
-  },
-  "widget": {
-    "voiceDisabled": "Voice search is disabled",
-    "analyticsWidgetMetrics": "Widget Performance",
-    "analyticsWidgetDesc": "Search metrics from the widget installation."
-  },
-  "sdks": {
-    "title": "SDKs & Client Libraries",
-    "subtitle": "Install AACSearch SDKs in your preferred language to integrate search into your application.",
-    "install": "Install",
-    "comingSoon": "Coming Soon",
-    "viewDocs": "View Docs",
-    "viewSource": "View Source",
-    "usageTitle": "Quick Start Example",
-    "usageDescription": "Get started with the TypeScript SDK in just a few lines of code.",
-    "nav": "SDKs"
-  },
-  "analytics": {
-    "totalSearches": "Total Searches",
-    "totalSessions": "Widget Opens",
-    "ctr": "Click-through Rate",
-    "noData": "No analytics data yet"
-  },
-  "feedback": {
-    "nps": {
-      "title": "How likely are you to recommend AACsearch?",
-      "question": "On a scale of 0-10, how likely are you to recommend AACsearch to a friend or colleague?",
-      "notLikely": "Not likely",
-      "extremelyLikely": "Extremely likely",
-      "followUp": {
-        "detractor": "What could we do better?",
-        "passive": "What keeps you from recommending us?",
-        "promoter": "What do you love most?"
-      },
-      "placeholder": "Your feedback helps us improve...",
-      "submit": "Submit feedback",
-      "dismiss": "Maybe later",
-      "thankYou": "Thank you for your feedback!",
-      "remindLater": "Remind me in 3 months"
-    },
-    "csat": {
-      "title": "How was your support experience?",
-      "question": "How satisfied were you with the support you received?",
-      "veryDissatisfied": "Very dissatisfied",
-      "dissatisfied": "Dissatisfied",
-      "neutral": "Neutral",
-      "satisfied": "Satisfied",
-      "verySatisfied": "Very satisfied",
-      "submit": "Submit",
-      "thankYou": "Thank you for your feedback!",
-      "skip": "Skip"
-    }
-  },
-  "referral": {
-    "program": {
-      "title": "Referral Program",
-      "description": "Invite friends and earn search credits when they upgrade",
-      "shareLink": "Share your referral link",
-      "yourLink": "Your referral link",
-      "copyLink": "Copy Link",
-      "linkCopied": "Link copied!",
-      "shareEmail": "Share via Email",
-      "shareTwitter": "Share via X",
-      "stats": {
-        "clicks": "Clicks",
-        "signups": "Signups",
-        "conversions": "Conversions",
-        "earnings": "Earnings",
-        "empty": "Share your link to start earning credits"
-      },
-      "reward": "Earn 20% of their first month",
-      "rewardDescription": "When someone you refer upgrades to a paid plan, you get 20% of their first month credited to your account",
-      "fraudNote": "Max 5 referrals per IP/email domain to prevent abuse",
-      "cta": "Invite friends → earn search credits!",
-      "dashboardBanner": "Love AACsearch? Share the love! Refer a friend and earn 20% of their first month."
-    },
-    "inviteEmail": {
-      "subject": "{name} thinks you'll love AACsearch!",
-      "greeting": "Hey there,",
-      "intro": "{name} has been using AACsearch and thinks you'll love it too!",
-      "valueProp": "Instant search-as-a-service — Algolia-quality at a fraction of the cost.",
-      "giftNote": "Get started free, no credit card required.",
-      "cta": "Get started with {name}'s referral",
-      "signoff": "Happy searching!\nThe AACsearch Team"
-    },
-    "confirmationEmail": {
-      "subject": "You earned search credits!",
-      "body": "Someone you referred just signed up for AACsearch. Once they complete their first payment, you'll get 20% credited to your account.",
-      "cta": "View your referral dashboard"
-    },
-    "landing": {
-      "title": "You've been invited to AACsearch",
-      "subtitle": "{name} is using AACsearch and thinks you'll love it!",
-      "tagline": "Search that just works — no servers, no DevOps.",
-      "features": {
-        "instant": "Instant search setup in 5 minutes",
-        "pricing": "Algolia-quality, 5x cheaper",
-        "trial": "14-day free trial, no credit card"
-      },
-      "cta": "Get Started Free",
-      "socialProof": "Trusted by 100+ companies worldwide"
-    }
-  },
-  "pricing": {
-    "products": {
-      "free": {
-        "title": "Free",
-        "description": "For testing and small projects",
-        "features": {
-          "searches": "50K searches/month",
-          "documents": "10K documents",
-          "indexes": "1 index",
-          "apiKeys": "3 API keys",
-          "support": "Community support"
-        }
-      },
-      "starter": {
-        "title": "Starter",
-        "description": "For growing projects and startups",
-        "features": {
-          "searches": "1M searches/month",
-          "documents": "250K documents",
-          "indexes": "5 indexes",
-          "apiKeys": "Unlimited API keys",
-          "analytics": "Basic analytics",
-          "support": "Email support"
-        }
-      },
-      "pro": {
-        "title": "Pro",
-        "description": "For professional applications",
-        "features": {
-          "searches": "10M searches/month",
-          "documents": "2M documents",
-          "indexes": "20 indexes",
-          "apiKeys": "Unlimited API keys",
-          "analytics": "Full analytics",
-          "synonyms": "Synonyms + curations",
-          "branding": "Custom branding",
-          "support": "Priority support"
-        }
-      },
-      "business": {
-        "title": "Business",
-        "description": "For high-volume production applications",
-        "features": {
-          "searches": "50M searches/month",
-          "documents": "10M documents",
-          "indexes": "Unlimited indexes",
-          "features": "All Pro features",
-          "support": "Dedicated support",
-          "sla": "SLA"
-        }
-      },
-      "enterprise": {
-        "title": "Enterprise",
-        "description": "For large-scale deployments",
-        "features": {
-          "searches": "Unlimited searches",
-          "documents": "Unlimited documents",
-          "indexes": "Unlimited indexes",
-          "features": "All Business features",
-          "cluster": "Dedicated cluster",
-          "sso": "SSO/SAML",
-          "sla": "99.95% SLA"
-        }
-      },
-      "lifetime": {
-        "title": "Lifetime",
-        "description": "One-time payment, starter features forever",
-        "features": {
-          "searches": "1M searches/month",
-          "documents": "250K documents",
-          "indexes": "5 indexes",
-          "apiKeys": "Unlimited API keys",
-          "analytics": "Basic analytics",
-          "support": "Email support",
-          "payment": "One-time payment"
-        }
-      }
-    }
-  }
+	"indexing": {
+		"dashboard": {
+			"title": "Index Management",
+			"subtitle": "Manage indexing, reindexing, and sync for this collection",
+			"documents": "Documents",
+			"todaySearches": "Today",
+			"size": "Size",
+			"avgLatency": "Avg Latency",
+			"liveVersion": "Live",
+			"indexHealth": "Index Health",
+			"last7Days": "Last 7 days",
+			"lastFullSync": "Last full sync",
+			"lastDeltaSync": "Last delta sync",
+			"nextScheduled": "Next scheduled",
+			"indexingProgress": "Indexing Progress",
+			"noData": "No indexing data yet",
+			"backToCollection": "Back to collection"
+		},
+		"delta": {
+			"title": "Delta Sync",
+			"syncNow": "Sync Now",
+			"syncing": "Syncing...",
+			"confirmTitle": "Start Delta Sync?",
+			"confirmDescription": "This will process only changed documents since the last sync. Existing data will be updated in-place with no downtime.",
+			"confirm": "Start Sync",
+			"cancel": "Cancel",
+			"lastSync": "Last delta sync",
+			"neverSynced": "Never synced",
+			"jobPending": "Sync pending...",
+			"jobRunning": "Syncing documents...",
+			"jobCompleted": "Sync completed successfully",
+			"jobFailed": "Sync failed",
+			"progress": "{processed} of {total} documents",
+			"noActiveJob": "No active sync job",
+			"errorExists": "A sync job is already running for this collection",
+			"errorGeneric": "Failed to start delta sync",
+			"processed": "Processed",
+			"upserted": "Upserted",
+			"deleted": "Deleted",
+			"remaining": "Remaining"
+		},
+		"reindex": {
+			"title": "Full Reindex",
+			"description": "Trigger a full reindex with zero-downtime alias swap. All documents will be re-processed through the indexing pipeline.",
+			"startReindex": "Start Reindex",
+			"reindexing": "Reindexing...",
+			"advancedOptions": "Advanced Options",
+			"detectSchema": "Auto-detect schema changes",
+			"regenerateEmbeddings": "Regenerate embeddings",
+			"aliasSwap": "Zero-downtime alias swap",
+			"jobPending": "Reindex pending...",
+			"jobRunning": "Reindexing {processed} of {total} documents...",
+			"jobCompleted": "Reindex completed successfully",
+			"jobFailed": "Reindex failed",
+			"noActiveJob": "No active reindex job",
+			"errorExists": "A reindex job is already running for this collection",
+			"errorSchemaRequired": "Index has no schema fields configured",
+			"confirmTitle": "Start Full Reindex?",
+			"confirmDescription": "This will create a new index version, stream all documents, and swap aliases. No downtime expected.",
+			"confirm": "Yes, Reindex",
+			"cancel": "Cancel"
+		}
+	},
+	"mySearch": {
+		"title": "My Search",
+		"subtitle": "Your personal search space — upload documents, index web pages, and search across all your materials.",
+		"noIndexes": "No search indexes yet",
+		"noIndexesDescription": "Create your first search index by uploading documents or adding URLs. Go fast — no organization needed.",
+		"createIndex": "Create Index",
+		"createNewIndex": "Create New Search Index",
+		"importFiles": "Import Files",
+		"emptyStateTitle": "Create your first index",
+		"createFromFiles": "From Files",
+		"createFromUrl": "From URL",
+		"cancel": "Cancel",
+		"creating": "Creating...",
+		"indexCreated": "Index created",
+		"indexCreateError": "Failed to create index",
+		"indexName": "Index name",
+		"indexNamePlaceholder": "e.g. My Documents",
+		"indexSlug": "Index slug",
+		"indexSlugPlaceholder": "e.g. my-documents",
+		"dropZoneLabel": "File upload area",
+		"dropZoneText": "Drop files here or click to upload",
+		"dropZoneFormats": "Supported: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
+		"dropZoneLimits": "Up to 100MB per file, 1GB total (Free Tier)",
+		"fileTypeNotSupported": "File type not supported",
+		"fileTooLarge": "File is too large (max 100MB)",
+		"totalTooLarge": "Total size exceeds limit (max 1GB)",
+		"urlPlaceholder": "Paste a URL to index...",
+		"addUrl": "Add URL",
+		"urlInvalid": "Invalid URL format",
+		"urlInvalidProtocol": "Only HTTP and HTTPS URLs are supported",
+		"selectedItems": "Selected items",
+		"uploading": "Uploading...",
+		"uploaded": "Uploaded",
+		"fetching": "Fetching...",
+		"added": "Added",
+		"uploadProgress": "Upload progress",
+		"estimatedTime": "Estimated time: a few seconds",
+		"completed": "Completed",
+		"failed": "Failed",
+		"files": {
+			"name": "Name",
+			"type": "Type",
+			"size": "Size",
+			"words": "Words",
+			"uploaded": "Uploaded",
+			"count": "{{count}} files",
+			"empty": "No files yet. Upload documents to start searching.",
+			"columns": "Columns",
+			"toggleColumns": "Toggle columns",
+			"delete": "Delete",
+			"deleteTitle": "Delete file",
+			"deleteDescription": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+			"deleted": "{{name}} deleted",
+			"deleteError": "Failed to delete file",
+			"cancel": "Cancel",
+			"close": "Close",
+			"previewImage": "Click to open the image in a new tab",
+			"previewUrl": "Click to open the web page",
+			"previewGeneric": "Preview is not available for this file type"
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source",
+		"dateFrom": "From",
+		"dateTo": "To",
+		"crossSearch": "Cross-Search",
+		"crossSearchDescription": "Search across all your personal indexes at once"
+	},
+	"widget": {
+		"voiceDisabled": "Voice search is disabled",
+		"analyticsWidgetMetrics": "Widget Performance",
+		"analyticsWidgetDesc": "Search metrics from the widget installation."
+	},
+	"sdks": {
+		"title": "SDKs & Client Libraries",
+		"subtitle": "Install AACSearch SDKs in your preferred language to integrate search into your application.",
+		"install": "Install",
+		"comingSoon": "Coming Soon",
+		"viewDocs": "View Docs",
+		"viewSource": "View Source",
+		"usageTitle": "Quick Start Example",
+		"usageDescription": "Get started with the TypeScript SDK in just a few lines of code.",
+		"nav": "SDKs"
+	},
+	"analytics": {
+		"totalSearches": "Total Searches",
+		"totalSessions": "Widget Opens",
+		"ctr": "Click-through Rate",
+		"noData": "No analytics data yet"
+	},
+	"feedback": {
+		"nps": {
+			"title": "How likely are you to recommend AACsearch?",
+			"question": "On a scale of 0-10, how likely are you to recommend AACsearch to a friend or colleague?",
+			"notLikely": "Not likely",
+			"extremelyLikely": "Extremely likely",
+			"followUp": {
+				"detractor": "What could we do better?",
+				"passive": "What keeps you from recommending us?",
+				"promoter": "What do you love most?"
+			},
+			"placeholder": "Your feedback helps us improve...",
+			"submit": "Submit feedback",
+			"dismiss": "Maybe later",
+			"thankYou": "Thank you for your feedback!",
+			"remindLater": "Remind me in 3 months"
+		},
+		"csat": {
+			"title": "How was your support experience?",
+			"question": "How satisfied were you with the support you received?",
+			"veryDissatisfied": "Very dissatisfied",
+			"dissatisfied": "Dissatisfied",
+			"neutral": "Neutral",
+			"satisfied": "Satisfied",
+			"verySatisfied": "Very satisfied",
+			"submit": "Submit",
+			"thankYou": "Thank you for your feedback!",
+			"skip": "Skip"
+		}
+	},
+	"referral": {
+		"program": {
+			"title": "Referral Program",
+			"description": "Invite friends and earn search credits when they upgrade",
+			"shareLink": "Share your referral link",
+			"yourLink": "Your referral link",
+			"copyLink": "Copy Link",
+			"linkCopied": "Link copied!",
+			"shareEmail": "Share via Email",
+			"shareTwitter": "Share via X",
+			"stats": {
+				"clicks": "Clicks",
+				"signups": "Signups",
+				"conversions": "Conversions",
+				"earnings": "Earnings",
+				"empty": "Share your link to start earning credits"
+			},
+			"reward": "Earn 20% of their first month",
+			"rewardDescription": "When someone you refer upgrades to a paid plan, you get 20% of their first month credited to your account",
+			"fraudNote": "Max 5 referrals per IP/email domain to prevent abuse",
+			"cta": "Invite friends → earn search credits!",
+			"dashboardBanner": "Love AACsearch? Share the love! Refer a friend and earn 20% of their first month."
+		},
+		"inviteEmail": {
+			"subject": "{name} thinks you'll love AACsearch!",
+			"greeting": "Hey there,",
+			"intro": "{name} has been using AACsearch and thinks you'll love it too!",
+			"valueProp": "Instant search-as-a-service — Algolia-quality at a fraction of the cost.",
+			"giftNote": "Get started free, no credit card required.",
+			"cta": "Get started with {name}'s referral",
+			"signoff": "Happy searching!\nThe AACsearch Team"
+		},
+		"confirmationEmail": {
+			"subject": "You earned search credits!",
+			"body": "Someone you referred just signed up for AACsearch. Once they complete their first payment, you'll get 20% credited to your account.",
+			"cta": "View your referral dashboard"
+		},
+		"landing": {
+			"title": "You've been invited to AACsearch",
+			"subtitle": "{name} is using AACsearch and thinks you'll love it!",
+			"tagline": "Search that just works — no servers, no DevOps.",
+			"features": {
+				"instant": "Instant search setup in 5 minutes",
+				"pricing": "Algolia-quality, 5x cheaper",
+				"trial": "14-day free trial, no credit card"
+			},
+			"cta": "Get Started Free",
+			"socialProof": "Trusted by 100+ companies worldwide"
+		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Free",
+				"description": "For testing and small projects",
+				"features": {
+					"searches": "50K searches/month",
+					"documents": "10K documents",
+					"indexes": "1 index",
+					"apiKeys": "3 API keys",
+					"support": "Community support"
+				}
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "For growing projects and startups",
+				"features": {
+					"searches": "1M searches/month",
+					"documents": "250K documents",
+					"indexes": "5 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Basic analytics",
+					"support": "Email support"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "For professional applications",
+				"features": {
+					"searches": "10M searches/month",
+					"documents": "2M documents",
+					"indexes": "20 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Full analytics",
+					"synonyms": "Synonyms + curations",
+					"branding": "Custom branding",
+					"support": "Priority support"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "For high-volume production applications",
+				"features": {
+					"searches": "50M searches/month",
+					"documents": "10M documents",
+					"indexes": "Unlimited indexes",
+					"features": "All Pro features",
+					"support": "Dedicated support",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "For large-scale deployments",
+				"features": {
+					"searches": "Unlimited searches",
+					"documents": "Unlimited documents",
+					"indexes": "Unlimited indexes",
+					"features": "All Business features",
+					"cluster": "Dedicated cluster",
+					"sso": "SSO/SAML",
+					"sla": "99.95% SLA"
+				}
+			},
+			"lifetime": {
+				"title": "Lifetime",
+				"description": "One-time payment, starter features forever",
+				"features": {
+					"searches": "1M searches/month",
+					"documents": "250K documents",
+					"indexes": "5 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Basic analytics",
+					"support": "Email support",
+					"payment": "One-time payment"
+				}
+			}
+		}
+	}
 }

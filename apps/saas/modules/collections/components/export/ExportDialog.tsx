@@ -101,9 +101,7 @@ export function ExportDialog({
 
 	const handleExport = () => {
 		const documentIds =
-			scope === "selected" && selectedIds && selectedIds.length > 0
-				? selectedIds
-				: undefined;
+			scope === "selected" && selectedIds && selectedIds.length > 0 ? selectedIds : undefined;
 
 		exportMutation.mutate({
 			organizationId,
@@ -133,8 +131,7 @@ export function ExportDialog({
 						{t("search.export.title") || "Export Documents"}
 					</DialogTitle>
 					<DialogDescription>
-						{t("search.export.description") ||
-							"Export documents from this collection"}
+						{t("search.export.description") || "Export documents from this collection"}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -199,7 +196,8 @@ export function ExportDialog({
 								<p className="text-xs text-muted-foreground">
 									{totalFiltered != null
 										? `${totalFiltered} documents`
-										: t("search.export.scopeAllDesc") || "Everything in this collection"}
+										: t("search.export.scopeAllDesc") ||
+											"Everything in this collection"}
 								</p>
 							</div>
 						</label>

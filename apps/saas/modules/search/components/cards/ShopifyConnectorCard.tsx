@@ -13,9 +13,9 @@ import { ShoppingCartIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-import type { ConnectorStatus } from "./ConnectorCard";
 import { ShopifyStoreSettings } from "../panels/ShopifyStoreSettings";
 import { ShopifySyncHistory } from "../panels/ShopifySyncHistory";
+import type { ConnectorStatus } from "./ConnectorCard";
 
 interface ShopifyConnectorCardProps {
 	organizationId: string;
@@ -66,7 +66,10 @@ export function ShopifyConnectorCard({ organizationId, status }: ShopifyConnecto
 							<p>{t("search.connectors.shopify.notConnected")}</p>
 						)}
 						{status.lastError && (
-							<p className="text-xs truncate text-destructive" title={status.lastError}>
+							<p
+								className="text-xs truncate text-destructive"
+								title={status.lastError}
+							>
 								{t("search.connector.lastError")}: {status.lastError}
 							</p>
 						)}
@@ -74,7 +77,11 @@ export function ShopifyConnectorCard({ organizationId, status }: ShopifyConnecto
 					<div className="mt-4 gap-2 flex flex-wrap">
 						{status.isConnected ? (
 							<>
-								<Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setSettingsOpen(true)}
+								>
 									{t("search.connector.manage")}
 								</Button>
 								<Button

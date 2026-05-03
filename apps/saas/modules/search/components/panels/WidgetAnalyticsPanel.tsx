@@ -101,9 +101,7 @@ export function WidgetAnalyticsPanel({ organizationId }: WidgetAnalyticsPanelPro
 					<Skeleton className="h-28" />
 				</div>
 			) : (
-				<SearchAnalyticsCards
-					organizationId={organizationId}
-				/>
+				<SearchAnalyticsCards organizationId={organizationId} />
 			)}
 
 			{/* Widget-specific metrics */}

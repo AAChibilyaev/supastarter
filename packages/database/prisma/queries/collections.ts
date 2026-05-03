@@ -289,10 +289,14 @@ export type ExportFormat = "csv" | "json" | "jsonl" | "xlsx";
 
 export async function exportCollectionDocuments(
 	collectionId: string,
-	_options: { schemaFields?: string[] } = {},
+	options: { documentIds?: string[]; schemaFields?: string[] } = {},
 ): Promise<CollectionDocumentView[]> {
+	const where: Prisma.CollectionDocumentWhereInput = { collectionId };
+	if (options.documentIds && options.documentIds.length > 0) {
+		where.id = { in: options.documentIds };
+	}
 	const rows = await db.collectionDocument.findMany({
-		where: { collectionId },
+		where,
 		orderBy: { rowNumber: "asc" },
 	});
 	return rows.map(mapDocument);
@@ -329,6 +333,43 @@ export function buildJsonContent(
 ): string {
 	const extracted = documents.map((doc) => doc.data);
 	return pretty ? JSON.stringify(extracted, null, 2) : JSON.stringify(extracted);
+}
+
+export function buildXlsxContent(
+	documents: CollectionDocumentView[],
+	schemaFields: string[],
+): Buffer {
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
+	const XLSX = require("xlsx");
+
+	const data = documents.map((doc) => {
+		const record = doc.data as Record<string, unknown>;
+		const row: Record<string, unknown> = {};
+		for (const field of schemaFields) {
+			row[field] = record?.[field] ?? null;
+		}
+		return row;
+	});
+
+	const wb = XLSX.utils.book_new();
+	const ws = XLSX.utils.json_to_sheet(data);
+
+	// Auto-fit column widths
+	const colWidths = schemaFields.map((field) => {
+		const maxLen = Math.max(
+			field.length,
+			...data.map((row) => {
+				const val = row[field];
+				return val != null ? String(val).length : 0;
+			}),
+		);
+		return { wch: Math.min(maxLen + 2, 60) };
+	});
+	ws["!cols"] = colWidths;
+
+	XLSX.utils.book_append_sheet(wb, ws, "Documents");
+	const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" }) as Buffer;
+	return buffer;
 }
 
 export interface CreateBatchDocumentsInput {

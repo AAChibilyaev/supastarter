@@ -1,322 +1,322 @@
 {
-  "indexing": {
-    "dashboard": {
-      "title": "Index-Verwaltung",
-      "subtitle": "Indizierung, Neuindizierung und Synchronisierung für diese Kollektion verwalten",
-      "documents": "Dokumente",
-      "todaySearches": "Heute",
-      "size": "Größe",
-      "avgLatency": "Durchschn. Latenz",
-      "liveVersion": "Live",
-      "indexHealth": "Index-Zustand",
-      "last7Days": "Letzte 7 Tage",
-      "lastFullSync": "Letzte Vollsync",
-      "lastDeltaSync": "Letzte Delta-Sync",
-      "nextScheduled": "Nächste geplante",
-      "indexingProgress": "Indizierungsfortschritt",
-      "noData": "Noch keine Indizierungsdaten",
-      "backToCollection": "Zurück zur Kollektion"
-    },
-    "delta": {
-      "title": "Delta-Synchronisation",
-      "syncNow": "Jetzt synchronisieren",
-      "syncing": "Synchronisiere...",
-      "confirmTitle": "Delta-Sync starten?",
-      "confirmDescription": "Es werden nur geänderte Dokumente seit der letzten Synchronisation verarbeitet. Bestehende Daten werden ohne Ausfallzeit aktualisiert.",
-      "confirm": "Sync starten",
-      "cancel": "Abbrechen",
-      "lastSync": "Letzte Delta-Sync",
-      "neverSynced": "Nie synchronisiert",
-      "jobPending": "Sync ausstehend...",
-      "jobRunning": "Dokumente werden synchronisiert...",
-      "jobCompleted": "Sync erfolgreich abgeschlossen",
-      "jobFailed": "Sync fehlgeschlagen",
-      "progress": "{processed} von {total} Dokumenten",
-      "noActiveJob": "Kein aktiver Sync-Job",
-      "errorExists": "Ein Sync-Job läuft bereits für diese Sammlung",
-      "errorGeneric": "Delta-Sync konnte nicht gestartet werden",
-      "processed": "Verarbeitet",
-      "upserted": "Aktualisiert",
-      "deleted": "Gelöscht",
-      "remaining": "Verbleibend"
-    },
-    "reindex": {
-      "title": "Vollständige Neuindizierung",
-      "description": "Eine vollständige Neuindizierung mit alias-swap ohne Ausfallzeiten auslösen. Alle Dokumente werden durch die Indizierungspipeline neu verarbeitet.",
-      "startReindex": "Neuindizierung starten",
-      "reindexing": "Indizierung läuft...",
-      "advancedOptions": "Erweiterte Optionen",
-      "detectSchema": "Schema-Änderungen automatisch erkennen",
-      "regenerateEmbeddings": "Embeddings neu generieren",
-      "aliasSwap": "Alias-Swap ohne Ausfallzeiten",
-      "jobPending": "Neuindizierung ausstehend...",
-      "jobRunning": "Indiziere {processed} von {total} Dokumenten...",
-      "jobCompleted": "Neuindizierung erfolgreich abgeschlossen",
-      "jobFailed": "Neuindizierung fehlgeschlagen",
-      "noActiveJob": "Kein aktiver Indizierungsauftrag",
-      "errorExists": "Für diese Sammlung läuft bereits eine Neuindizierung",
-      "errorSchemaRequired": "Das Index-Schema hat keine Felder konfiguriert",
-      "confirmTitle": "Vollständige Neuindizierung starten?",
-      "confirmDescription": "Dies erstellt eine neue Indexversion, streamt alle Dokumente und tauscht Aliase. Es werden keine Ausfallzeiten erwartet.",
-      "confirm": "Ja, neu indizieren",
-      "cancel": "Abbrechen"
-    }
-  },
-  "mySearch": {
-    "title": "Meine Suche",
-    "subtitle": "Ihr persönlicher Suchbereich — Dokumente hochladen, Webseiten indizieren und über alle Materialien suchen.",
-    "noIndexes": "Noch keine Suchindizes",
-    "noIndexesDescription": "Erstellen Sie Ihren ersten Suchindex durch Hochladen von Dokumenten oder Hinzufügen von URLs. Los geht's — keine Organisation erforderlich.",
-    "createIndex": "Index erstellen",
-    "createNewIndex": "Neuen Suchindex erstellen",
-    "importFiles": "Dateien importieren",
-    "emptyStateTitle": "Erstellen Sie Ihren ersten Index",
-    "createFromFiles": "Aus Dateien",
-    "createFromUrl": "Von URL",
-    "cancel": "Abbrechen",
-    "creating": "Wird erstellt...",
-    "indexCreated": "Index erstellt",
-    "indexCreateError": "Fehler beim Erstellen des Index",
-    "indexName": "Indexname",
-    "indexNamePlaceholder": "z.B. Meine Dokumente",
-    "indexSlug": "Index-Slug",
-    "indexSlugPlaceholder": "z.B. meine-dokumente",
-    "dropZoneLabel": "Datei-Upload-Bereich",
-    "dropZoneText": "Dateien hier ablegen oder zum Hochladen klicken",
-    "dropZoneFormats": "Unterstützt: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
-    "dropZoneLimits": "Bis zu 100MB pro Datei, 1GB gesamt (Free Tier)",
-    "fileTypeNotSupported": "Dateityp wird nicht unterstützt",
-    "fileTooLarge": "Datei ist zu groß (max. 100MB)",
-    "totalTooLarge": "Gesamtgröße überschreitet das Limit (max. 1GB)",
-    "urlPlaceholder": "URL zum Indizieren einfügen...",
-    "addUrl": "URL hinzufügen",
-    "urlInvalid": "Ungültiges URL-Format",
-    "urlInvalidProtocol": "Nur HTTP- und HTTPS-URLs werden unterstützt",
-    "selectedItems": "Ausgewählte Elemente",
-    "uploading": "Wird hochgeladen...",
-    "uploaded": "Hochgeladen",
-    "fetching": "Wird abgerufen...",
-    "added": "Hinzugefügt",
-    "uploadProgress": "Upload-Fortschritt",
-    "estimatedTime": "Geschätzte Zeit: wenige Sekunden",
-    "completed": "Abgeschlossen",
-    "failed": "Fehlgeschlagen",
-    "files": {
-      "name": "Name",
-      "type": "Typ",
-      "size": "Größe",
-      "words": "Wörter",
-      "uploaded": "Hochgeladen",
-      "count": "{{count}} Dateien",
-      "empty": "Noch keine Dateien. Laden Sie Dokumente hoch, um mit der Suche zu beginnen.",
-      "columns": "Spalten",
-      "toggleColumns": "Spalten umschalten",
-      "delete": "Löschen",
-      "deleteTitle": "Datei löschen",
-      "deleteDescription": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-      "deleted": "{{name}} gelöscht",
-      "deleteError": "Fehler beim Löschen der Datei",
-      "cancel": "Abbrechen",
-      "close": "Schließen",
-      "previewImage": "Klicken Sie, um das Bild in einem neuen Tab zu öffnen",
-      "previewUrl": "Klicken Sie, um die Webseite zu öffnen",
-      "previewGeneric": "Für diesen Dateityp ist keine Vorschau verfügbar"
-    },
-    "searchIndex": "Search Index",
-    "searchPlaceholder": "Search across your documents...",
-    "searchInputLabel": "Search query",
-    "searchPrompt": "Type a query above to start searching.",
-    "noResults": "No results found. Try a different search term.",
-    "resultsCount": "{{count}} results found in {{time}}ms",
-    "filterByType": "Filter by file type",
-    "allTypes": "All types",
-    "score": "Relevance",
-    "openSource": "Open source",
-    "dateFrom": "Von",
-    "dateTo": "Bis",
-    "crossSearch": "Übergreifende Suche",
-    "crossSearchDescription": "Durchsuchen Sie alle Ihre persönlichen Indizes auf einmal"
-  },
-  "widget": {
-    "voiceDisabled": "Sprachsuche ist deaktiviert",
-    "analyticsWidgetMetrics": "Widget-Leistung",
-    "analyticsWidgetDesc": "Suchmetriken von der Widget-Installation."
-  },
-  "sdks": {
-    "title": "SDKs & Client-Bibliotheken",
-    "subtitle": "Installieren Sie AACSearch SDKs in Ihrer bevorzugten Sprache, um die Suche in Ihre Anwendung zu integrieren.",
-    "install": "Installieren",
-    "comingSoon": "Demnächst",
-    "viewDocs": "Dokumentation",
-    "viewSource": "Quellcode",
-    "usageTitle": "Schnellstart-Beispiel",
-    "usageDescription": "Erste Schritte mit dem TypeScript SDK in nur wenigen Codezeilen.",
-    "nav": "SDKs"
-  },
-  "analytics": {
-    "totalSearches": "Suchanfragen insgesamt",
-    "totalSessions": "Widget-Öffnungen",
-    "ctr": "Klickrate",
-    "noData": "Noch keine Analysedaten"
-  },
-  "feedback": {
-    "nps": {
-      "title": "Wie wahrscheinlich ist es, dass Sie AACsearch weiterempfehlen?",
-      "question": "Auf einer Skala von 0-10: Wie wahrscheinlich würden Sie AACsearch einem Freund oder Kollegen weiterempfehlen?",
-      "notLikely": "Nicht wahrscheinlich",
-      "extremelyLikely": "Äußerst wahrscheinlich",
-      "followUp": {
-        "detractor": "Was könnten wir besser machen?",
-        "passive": "Was hält Sie davon ab, uns zu empfehlen?",
-        "promoter": "Was gefällt Ihnen am besten?"
-      },
-      "placeholder": "Ihr Feedback hilft uns, besser zu werden...",
-      "submit": "Feedback absenden",
-      "dismiss": "Vielleicht später",
-      "thankYou": "Vielen Dank für Ihr Feedback!",
-      "remindLater": "In 3 Monaten erinnern"
-    },
-    "csat": {
-      "title": "Wie war Ihre Support-Erfahrung?",
-      "question": "Wie zufrieden waren Sie mit dem Support, den Sie erhalten haben?",
-      "veryDissatisfied": "Sehr unzufrieden",
-      "dissatisfied": "Unzufrieden",
-      "neutral": "Neutral",
-      "satisfied": "Zufrieden",
-      "verySatisfied": "Sehr zufrieden",
-      "submit": "Absenden",
-      "thankYou": "Vielen Dank für Ihr Feedback!",
-      "skip": "Überspringen"
-    }
-  },
-  "referral": {
-    "program": {
-      "title": "Empfehlungsprogramm",
-      "description": "Lade Freunde ein und verdiene Suchguthaben, wenn sie upgraden",
-      "shareLink": "Teile deinen Empfehlungslink",
-      "yourLink": "Dein Empfehlungslink",
-      "copyLink": "Link kopieren",
-      "linkCopied": "Link kopiert!",
-      "shareEmail": "Per E-Mail teilen",
-      "shareTwitter": "Per X teilen",
-      "stats": {
-        "clicks": "Klicks",
-        "signups": "Anmeldungen",
-        "conversions": "Konversionen",
-        "earnings": "Verdienst",
-        "empty": "Teile deinen Link, um Guthaben zu verdienen"
-      },
-      "reward": "Verdiene 20% des ersten Monats",
-      "rewardDescription": "Wenn jemand, den du empfohlen hast, auf einen kostenpflichtigen Tarif upgradet, erhältst du 20% seines ersten Monats gutgeschrieben",
-      "fraudNote": "Max. 5 Empfehlungen pro IP/E-Mail-Domain zur Missbrauchsverhinderung",
-      "cta": "Lade Freunde ein → verdiene Suchguthaben!",
-      "dashboardBanner": "Liebst du AACsearch? Teile die Liebe! Empfiehl einen Freund und verdiene 20% seines ersten Monats."
-    },
-    "inviteEmail": {
-      "subject": "{name} denkt, du wirst AACsearch lieben!",
-      "greeting": "Hallo,",
-      "intro": "{name} nutzt AACsearch und denkt, du wirst es auch lieben!",
-      "valueProp": "Sofortige Search-as-a-Service — Algolia-Qualität zu einem Bruchteil der Kosten.",
-      "giftNote": "Starte kostenlos, keine Kreditkarte erforderlich.",
-      "cta": "Starte mit {name}s Empfehlung",
-      "signoff": "Viel Erfolg bei der Suche!\nDas AACsearch-Team"
-    },
-    "confirmationEmail": {
-      "subject": "Du hast Suchguthaben verdient!",
-      "body": "Jemand, den du empfohlen hast, hat sich gerade bei AACsearch angemeldet. Sobald er seine erste Zahlung abgeschlossen hat, erhältst du 20% gutgeschrieben.",
-      "cta": "Zum Empfehlungs-Dashboard"
-    },
-    "landing": {
-      "title": "Du wurdest zu AACsearch eingeladen",
-      "subtitle": "{name} nutzt AACsearch und denkt, du wirst es lieben!",
-      "tagline": "Suche, die einfach funktioniert — keine Server, kein DevOps.",
-      "features": {
-        "instant": "Sofortige Suche in 5 Minuten eingerichtet",
-        "pricing": "Algolia-Qualität, 5x günstiger",
-        "trial": "14-tägige kostenlose Testversion, keine Kreditkarte"
-      },
-      "cta": "Kostenlos starten",
-      "socialProof": "Von über 100 Unternehmen weltweit vertrauenswürdig"
-    }
-  },
-  "pricing": {
-    "products": {
-      "free": {
-        "title": "Kostenlos",
-        "description": "Für Tests und kleine Projekte",
-        "features": {
-          "searches": "50K Suchanfragen/Monat",
-          "documents": "10K Dokumente",
-          "indexes": "1 Index",
-          "apiKeys": "3 API-Schlüssel",
-          "support": "Community-Support"
-        }
-      },
-      "starter": {
-        "title": "Starter",
-        "description": "Für wachsende Projekte und Startups",
-        "features": {
-          "searches": "1M Suchanfragen/Monat",
-          "documents": "250K Dokumente",
-          "indexes": "5 Indizes",
-          "apiKeys": "Unbegrenzte API-Schlüssel",
-          "analytics": "Basis-Analyse",
-          "support": "E-Mail-Support"
-        }
-      },
-      "pro": {
-        "title": "Pro",
-        "description": "Für professionelle Anwendungen",
-        "features": {
-          "searches": "10M Suchanfragen/Monat",
-          "documents": "2M Dokumente",
-          "indexes": "20 Indizes",
-          "apiKeys": "Unbegrenzte API-Schlüssel",
-          "analytics": "Vollständige Analyse",
-          "synonyms": "Synonyme + Kurationen",
-          "branding": "Eigenes Branding",
-          "support": "Priority-Support"
-        }
-      },
-      "business": {
-        "title": "Business",
-        "description": "Für produktive Anwendungen mit hohem Volumen",
-        "features": {
-          "searches": "50M Suchanfragen/Monat",
-          "documents": "10M Dokumente",
-          "indexes": "Unbegrenzte Indizes",
-          "features": "Alle Pro-Funktionen",
-          "support": "Dedizierter Support",
-          "sla": "SLA"
-        }
-      },
-      "enterprise": {
-        "title": "Enterprise",
-        "description": "Für groß angelegte Bereitstellungen",
-        "features": {
-          "searches": "Unbegrenzte Suchanfragen",
-          "documents": "Unbegrenzte Dokumente",
-          "indexes": "Unbegrenzte Indizes",
-          "features": "Alle Business-Funktionen",
-          "cluster": "Dedizierter Cluster",
-          "sso": "SSO/SAML",
-          "sla": "99,95 % SLA"
-        }
-      },
-      "lifetime": {
-        "title": "Lebenslang",
-        "description": "Einmalzahlung, Starter-Funktionen für immer",
-        "features": {
-          "searches": "1M Suchanfragen/Monat",
-          "documents": "250K Dokumente",
-          "indexes": "5 Indizes",
-          "apiKeys": "Unbegrenzte API-Schlüssel",
-          "analytics": "Basis-Analyse",
-          "support": "E-Mail-Support",
-          "payment": "Einmalzahlung"
-        }
-      }
-    },
-    "nextInvoice": "Nächste Rechnung"
-  }
+	"indexing": {
+		"dashboard": {
+			"title": "Index-Verwaltung",
+			"subtitle": "Indizierung, Neuindizierung und Synchronisierung für diese Kollektion verwalten",
+			"documents": "Dokumente",
+			"todaySearches": "Heute",
+			"size": "Größe",
+			"avgLatency": "Durchschn. Latenz",
+			"liveVersion": "Live",
+			"indexHealth": "Index-Zustand",
+			"last7Days": "Letzte 7 Tage",
+			"lastFullSync": "Letzte Vollsync",
+			"lastDeltaSync": "Letzte Delta-Sync",
+			"nextScheduled": "Nächste geplante",
+			"indexingProgress": "Indizierungsfortschritt",
+			"noData": "Noch keine Indizierungsdaten",
+			"backToCollection": "Zurück zur Kollektion"
+		},
+		"delta": {
+			"title": "Delta-Synchronisation",
+			"syncNow": "Jetzt synchronisieren",
+			"syncing": "Synchronisiere...",
+			"confirmTitle": "Delta-Sync starten?",
+			"confirmDescription": "Es werden nur geänderte Dokumente seit der letzten Synchronisation verarbeitet. Bestehende Daten werden ohne Ausfallzeit aktualisiert.",
+			"confirm": "Sync starten",
+			"cancel": "Abbrechen",
+			"lastSync": "Letzte Delta-Sync",
+			"neverSynced": "Nie synchronisiert",
+			"jobPending": "Sync ausstehend...",
+			"jobRunning": "Dokumente werden synchronisiert...",
+			"jobCompleted": "Sync erfolgreich abgeschlossen",
+			"jobFailed": "Sync fehlgeschlagen",
+			"progress": "{processed} von {total} Dokumenten",
+			"noActiveJob": "Kein aktiver Sync-Job",
+			"errorExists": "Ein Sync-Job läuft bereits für diese Sammlung",
+			"errorGeneric": "Delta-Sync konnte nicht gestartet werden",
+			"processed": "Verarbeitet",
+			"upserted": "Aktualisiert",
+			"deleted": "Gelöscht",
+			"remaining": "Verbleibend"
+		},
+		"reindex": {
+			"title": "Vollständige Neuindizierung",
+			"description": "Eine vollständige Neuindizierung mit alias-swap ohne Ausfallzeiten auslösen. Alle Dokumente werden durch die Indizierungspipeline neu verarbeitet.",
+			"startReindex": "Neuindizierung starten",
+			"reindexing": "Indizierung läuft...",
+			"advancedOptions": "Erweiterte Optionen",
+			"detectSchema": "Schema-Änderungen automatisch erkennen",
+			"regenerateEmbeddings": "Embeddings neu generieren",
+			"aliasSwap": "Alias-Swap ohne Ausfallzeiten",
+			"jobPending": "Neuindizierung ausstehend...",
+			"jobRunning": "Indiziere {processed} von {total} Dokumenten...",
+			"jobCompleted": "Neuindizierung erfolgreich abgeschlossen",
+			"jobFailed": "Neuindizierung fehlgeschlagen",
+			"noActiveJob": "Kein aktiver Indizierungsauftrag",
+			"errorExists": "Für diese Sammlung läuft bereits eine Neuindizierung",
+			"errorSchemaRequired": "Das Index-Schema hat keine Felder konfiguriert",
+			"confirmTitle": "Vollständige Neuindizierung starten?",
+			"confirmDescription": "Dies erstellt eine neue Indexversion, streamt alle Dokumente und tauscht Aliase. Es werden keine Ausfallzeiten erwartet.",
+			"confirm": "Ja, neu indizieren",
+			"cancel": "Abbrechen"
+		}
+	},
+	"mySearch": {
+		"title": "Meine Suche",
+		"subtitle": "Ihr persönlicher Suchbereich — Dokumente hochladen, Webseiten indizieren und über alle Materialien suchen.",
+		"noIndexes": "Noch keine Suchindizes",
+		"noIndexesDescription": "Erstellen Sie Ihren ersten Suchindex durch Hochladen von Dokumenten oder Hinzufügen von URLs. Los geht's — keine Organisation erforderlich.",
+		"createIndex": "Index erstellen",
+		"createNewIndex": "Neuen Suchindex erstellen",
+		"importFiles": "Dateien importieren",
+		"emptyStateTitle": "Erstellen Sie Ihren ersten Index",
+		"createFromFiles": "Aus Dateien",
+		"createFromUrl": "Von URL",
+		"cancel": "Abbrechen",
+		"creating": "Wird erstellt...",
+		"indexCreated": "Index erstellt",
+		"indexCreateError": "Fehler beim Erstellen des Index",
+		"indexName": "Indexname",
+		"indexNamePlaceholder": "z.B. Meine Dokumente",
+		"indexSlug": "Index-Slug",
+		"indexSlugPlaceholder": "z.B. meine-dokumente",
+		"dropZoneLabel": "Datei-Upload-Bereich",
+		"dropZoneText": "Dateien hier ablegen oder zum Hochladen klicken",
+		"dropZoneFormats": "Unterstützt: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
+		"dropZoneLimits": "Bis zu 100MB pro Datei, 1GB gesamt (Free Tier)",
+		"fileTypeNotSupported": "Dateityp wird nicht unterstützt",
+		"fileTooLarge": "Datei ist zu groß (max. 100MB)",
+		"totalTooLarge": "Gesamtgröße überschreitet das Limit (max. 1GB)",
+		"urlPlaceholder": "URL zum Indizieren einfügen...",
+		"addUrl": "URL hinzufügen",
+		"urlInvalid": "Ungültiges URL-Format",
+		"urlInvalidProtocol": "Nur HTTP- und HTTPS-URLs werden unterstützt",
+		"selectedItems": "Ausgewählte Elemente",
+		"uploading": "Wird hochgeladen...",
+		"uploaded": "Hochgeladen",
+		"fetching": "Wird abgerufen...",
+		"added": "Hinzugefügt",
+		"uploadProgress": "Upload-Fortschritt",
+		"estimatedTime": "Geschätzte Zeit: wenige Sekunden",
+		"completed": "Abgeschlossen",
+		"failed": "Fehlgeschlagen",
+		"files": {
+			"name": "Name",
+			"type": "Typ",
+			"size": "Größe",
+			"words": "Wörter",
+			"uploaded": "Hochgeladen",
+			"count": "{{count}} Dateien",
+			"empty": "Noch keine Dateien. Laden Sie Dokumente hoch, um mit der Suche zu beginnen.",
+			"columns": "Spalten",
+			"toggleColumns": "Spalten umschalten",
+			"delete": "Löschen",
+			"deleteTitle": "Datei löschen",
+			"deleteDescription": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+			"deleted": "{{name}} gelöscht",
+			"deleteError": "Fehler beim Löschen der Datei",
+			"cancel": "Abbrechen",
+			"close": "Schließen",
+			"previewImage": "Klicken Sie, um das Bild in einem neuen Tab zu öffnen",
+			"previewUrl": "Klicken Sie, um die Webseite zu öffnen",
+			"previewGeneric": "Für diesen Dateityp ist keine Vorschau verfügbar"
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source",
+		"dateFrom": "Von",
+		"dateTo": "Bis",
+		"crossSearch": "Übergreifende Suche",
+		"crossSearchDescription": "Durchsuchen Sie alle Ihre persönlichen Indizes auf einmal"
+	},
+	"widget": {
+		"voiceDisabled": "Sprachsuche ist deaktiviert",
+		"analyticsWidgetMetrics": "Widget-Leistung",
+		"analyticsWidgetDesc": "Suchmetriken von der Widget-Installation."
+	},
+	"sdks": {
+		"title": "SDKs & Client-Bibliotheken",
+		"subtitle": "Installieren Sie AACSearch SDKs in Ihrer bevorzugten Sprache, um die Suche in Ihre Anwendung zu integrieren.",
+		"install": "Installieren",
+		"comingSoon": "Demnächst",
+		"viewDocs": "Dokumentation",
+		"viewSource": "Quellcode",
+		"usageTitle": "Schnellstart-Beispiel",
+		"usageDescription": "Erste Schritte mit dem TypeScript SDK in nur wenigen Codezeilen.",
+		"nav": "SDKs"
+	},
+	"analytics": {
+		"totalSearches": "Suchanfragen insgesamt",
+		"totalSessions": "Widget-Öffnungen",
+		"ctr": "Klickrate",
+		"noData": "Noch keine Analysedaten"
+	},
+	"feedback": {
+		"nps": {
+			"title": "Wie wahrscheinlich ist es, dass Sie AACsearch weiterempfehlen?",
+			"question": "Auf einer Skala von 0-10: Wie wahrscheinlich würden Sie AACsearch einem Freund oder Kollegen weiterempfehlen?",
+			"notLikely": "Nicht wahrscheinlich",
+			"extremelyLikely": "Äußerst wahrscheinlich",
+			"followUp": {
+				"detractor": "Was könnten wir besser machen?",
+				"passive": "Was hält Sie davon ab, uns zu empfehlen?",
+				"promoter": "Was gefällt Ihnen am besten?"
+			},
+			"placeholder": "Ihr Feedback hilft uns, besser zu werden...",
+			"submit": "Feedback absenden",
+			"dismiss": "Vielleicht später",
+			"thankYou": "Vielen Dank für Ihr Feedback!",
+			"remindLater": "In 3 Monaten erinnern"
+		},
+		"csat": {
+			"title": "Wie war Ihre Support-Erfahrung?",
+			"question": "Wie zufrieden waren Sie mit dem Support, den Sie erhalten haben?",
+			"veryDissatisfied": "Sehr unzufrieden",
+			"dissatisfied": "Unzufrieden",
+			"neutral": "Neutral",
+			"satisfied": "Zufrieden",
+			"verySatisfied": "Sehr zufrieden",
+			"submit": "Absenden",
+			"thankYou": "Vielen Dank für Ihr Feedback!",
+			"skip": "Überspringen"
+		}
+	},
+	"referral": {
+		"program": {
+			"title": "Empfehlungsprogramm",
+			"description": "Lade Freunde ein und verdiene Suchguthaben, wenn sie upgraden",
+			"shareLink": "Teile deinen Empfehlungslink",
+			"yourLink": "Dein Empfehlungslink",
+			"copyLink": "Link kopieren",
+			"linkCopied": "Link kopiert!",
+			"shareEmail": "Per E-Mail teilen",
+			"shareTwitter": "Per X teilen",
+			"stats": {
+				"clicks": "Klicks",
+				"signups": "Anmeldungen",
+				"conversions": "Konversionen",
+				"earnings": "Verdienst",
+				"empty": "Teile deinen Link, um Guthaben zu verdienen"
+			},
+			"reward": "Verdiene 20% des ersten Monats",
+			"rewardDescription": "Wenn jemand, den du empfohlen hast, auf einen kostenpflichtigen Tarif upgradet, erhältst du 20% seines ersten Monats gutgeschrieben",
+			"fraudNote": "Max. 5 Empfehlungen pro IP/E-Mail-Domain zur Missbrauchsverhinderung",
+			"cta": "Lade Freunde ein → verdiene Suchguthaben!",
+			"dashboardBanner": "Liebst du AACsearch? Teile die Liebe! Empfiehl einen Freund und verdiene 20% seines ersten Monats."
+		},
+		"inviteEmail": {
+			"subject": "{name} denkt, du wirst AACsearch lieben!",
+			"greeting": "Hallo,",
+			"intro": "{name} nutzt AACsearch und denkt, du wirst es auch lieben!",
+			"valueProp": "Sofortige Search-as-a-Service — Algolia-Qualität zu einem Bruchteil der Kosten.",
+			"giftNote": "Starte kostenlos, keine Kreditkarte erforderlich.",
+			"cta": "Starte mit {name}s Empfehlung",
+			"signoff": "Viel Erfolg bei der Suche!\nDas AACsearch-Team"
+		},
+		"confirmationEmail": {
+			"subject": "Du hast Suchguthaben verdient!",
+			"body": "Jemand, den du empfohlen hast, hat sich gerade bei AACsearch angemeldet. Sobald er seine erste Zahlung abgeschlossen hat, erhältst du 20% gutgeschrieben.",
+			"cta": "Zum Empfehlungs-Dashboard"
+		},
+		"landing": {
+			"title": "Du wurdest zu AACsearch eingeladen",
+			"subtitle": "{name} nutzt AACsearch und denkt, du wirst es lieben!",
+			"tagline": "Suche, die einfach funktioniert — keine Server, kein DevOps.",
+			"features": {
+				"instant": "Sofortige Suche in 5 Minuten eingerichtet",
+				"pricing": "Algolia-Qualität, 5x günstiger",
+				"trial": "14-tägige kostenlose Testversion, keine Kreditkarte"
+			},
+			"cta": "Kostenlos starten",
+			"socialProof": "Von über 100 Unternehmen weltweit vertrauenswürdig"
+		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Kostenlos",
+				"description": "Für Tests und kleine Projekte",
+				"features": {
+					"searches": "50K Suchanfragen/Monat",
+					"documents": "10K Dokumente",
+					"indexes": "1 Index",
+					"apiKeys": "3 API-Schlüssel",
+					"support": "Community-Support"
+				}
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "Für wachsende Projekte und Startups",
+				"features": {
+					"searches": "1M Suchanfragen/Monat",
+					"documents": "250K Dokumente",
+					"indexes": "5 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Basis-Analyse",
+					"support": "E-Mail-Support"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "Für professionelle Anwendungen",
+				"features": {
+					"searches": "10M Suchanfragen/Monat",
+					"documents": "2M Dokumente",
+					"indexes": "20 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Vollständige Analyse",
+					"synonyms": "Synonyme + Kurationen",
+					"branding": "Eigenes Branding",
+					"support": "Priority-Support"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "Für produktive Anwendungen mit hohem Volumen",
+				"features": {
+					"searches": "50M Suchanfragen/Monat",
+					"documents": "10M Dokumente",
+					"indexes": "Unbegrenzte Indizes",
+					"features": "Alle Pro-Funktionen",
+					"support": "Dedizierter Support",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Für groß angelegte Bereitstellungen",
+				"features": {
+					"searches": "Unbegrenzte Suchanfragen",
+					"documents": "Unbegrenzte Dokumente",
+					"indexes": "Unbegrenzte Indizes",
+					"features": "Alle Business-Funktionen",
+					"cluster": "Dedizierter Cluster",
+					"sso": "SSO/SAML",
+					"sla": "99,95 % SLA"
+				}
+			},
+			"lifetime": {
+				"title": "Lebenslang",
+				"description": "Einmalzahlung, Starter-Funktionen für immer",
+				"features": {
+					"searches": "1M Suchanfragen/Monat",
+					"documents": "250K Dokumente",
+					"indexes": "5 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Basis-Analyse",
+					"support": "E-Mail-Support",
+					"payment": "Einmalzahlung"
+				}
+			}
+		},
+		"nextInvoice": "Nächste Rechnung"
+	}
 }

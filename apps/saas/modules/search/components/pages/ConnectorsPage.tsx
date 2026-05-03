@@ -27,10 +27,10 @@ import { useState } from "react";
 
 import { ConnectorCard, type ConnectorStatus, type SourceType } from "../cards/ConnectorCard";
 import { EmptyState } from "../cards/EmptyState";
+import { ShopifyConnectorCard } from "../cards/ShopifyConnectorCard";
 import { ShopifyConnectorCard } from "../connectors/ShopifyConnectorCard";
 import { ShopifyStoreSettings } from "../connectors/ShopifyStoreSettings";
 import { ConnectorWizard } from "../dialogs/ConnectorWizard";
-import { ShopifyConnectorCard } from "../cards/ShopifyConnectorCard";
 import { SyncJobsTable } from "../tables/SyncJobsTable";
 
 interface ConnectorsPageProps {

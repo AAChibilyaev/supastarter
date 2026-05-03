@@ -23,13 +23,7 @@ interface ShopifyStoreSettingsProps {
 	organizationId: string;
 }
 
-const SHOPIFY_COLLECTIONS = [
-	"products",
-	"collections",
-	"variants",
-	"pages",
-	"blogs",
-] as const;
+const SHOPIFY_COLLECTIONS = ["products", "collections", "variants", "pages", "blogs"] as const;
 
 type ShopifyCollection = (typeof SHOPIFY_COLLECTIONS)[number];
 
@@ -99,7 +93,10 @@ export function ShopifyStoreSettings({
 										checked={selectedCollections.has(col)}
 										onCheckedChange={() => toggleCollection(col)}
 									/>
-									<Label htmlFor={`shopify-col-${col}`} className="capitalize text-sm">
+									<Label
+										htmlFor={`shopify-col-${col}`}
+										className="text-sm capitalize"
+									>
 										{col}
 									</Label>
 									{col === "products" && (

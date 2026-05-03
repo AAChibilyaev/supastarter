@@ -96,8 +96,7 @@ export const exportDocuments = protectedProcedure
 			case "xlsx": {
 				const buffer = buildXlsxContent(documents, fields);
 				content = buffer.toString("base64");
-				mimeType =
-					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+				mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 				extension = "xlsx";
 				isBase64 = true;
 				break;

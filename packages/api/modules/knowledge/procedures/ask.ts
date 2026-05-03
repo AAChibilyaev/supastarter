@@ -4,16 +4,15 @@ import { getKnowledgeSpaceBySlug } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireKnowledgeOwnerMember } from "../lib/access";
 import { retrieveKnowledge } from "../lib/retrieval";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
-
-import {
-  type CreditGateContext,
-  commitFlatFeeUsage,
-  creditGate,
-  releaseCreditReservation,
-} from "../../entitlements/middleware/credit-gate";
 
 export const ask = protectedProcedure
 	.use(creditGate("rag_answer", BigInt(500)))

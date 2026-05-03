@@ -513,10 +513,52 @@
 				"general": "Général",
 				"members": "Membres",
 				"title": "Organisation",
-				"dangerZone": "Zone de danger"
+				"dangerZone": "Zone de danger",
+				"compliance": "Conformité"
 			}
 		},
-		"save": "Enregistrer"
+		"save": "Enregistrer",
+		"compliance": {
+			"title": "Conformité",
+			"description": "Gérer les politiques de conservation des données et les paramètres de conformité",
+			"searchUsage": {
+				"title": "Conservation des données d'utilisation de la recherche",
+				"description": "Durée de conservation des journaux de requêtes de recherche et des événements d'utilisation"
+			},
+			"auditLog": {
+				"title": "Conservation des journaux d'audit",
+				"description": "Durée de conservation des journaux d'audit de l'organisation"
+			},
+			"ingestBuffer": {
+				"title": "Conservation du tampon d'ingestion",
+				"description": "Durée de conservation des données ingérées dans le tampon"
+			},
+			"autoDelete": {
+				"title": "Planification de la suppression automatique",
+				"description": "Configurer le nettoyage automatique des données expirées selon les périodes de conservation",
+				"enableLabel": "Activer la suppression automatique",
+				"scheduleLabel": "Fréquence de suppression",
+				"scheduleDaily": "Quotidien",
+				"scheduleWeekly": "Hebdomadaire",
+				"scheduleMonthly": "Mensuel"
+			},
+			"retentionOptions": {
+				"forever": "Conserver indéfiniment",
+				"sevenDays": "7 jours",
+				"fourteenDays": "14 jours",
+				"thirtyDays": "30 jours",
+				"ninetyDays": "90 jours",
+				"oneEightyDays": "180 jours",
+				"oneYear": "1 an",
+				"twoYears": "2 ans"
+			},
+			"save": "Enregistrer les modifications",
+			"cancel": "Annuler",
+			"notifications": {
+				"saved": "Politiques de conservation enregistrées avec succès",
+				"error": "Échec de l'enregistrement des politiques de conservation"
+			}
+		}
 	},
 	"alertsPage": {
 		"title": "Alertes",

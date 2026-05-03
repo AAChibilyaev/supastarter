@@ -129,6 +129,10 @@ export function AppSidebar() {
 									},
 								]
 							: []),
+						{
+							label: t("settings.menu.organization.compliance"),
+							href: `${orgSettingsPrefix}/compliance`,
+						},
 					]
 				: undefined;
 

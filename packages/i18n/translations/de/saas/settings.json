@@ -513,10 +513,52 @@
 				"general": "Allgemein",
 				"members": "Mitglieder",
 				"title": "Organisation",
-				"dangerZone": "Gefahrenzone"
+				"dangerZone": "Gefahrenzone",
+				"compliance": "Compliance"
 			}
 		},
-		"save": "Speichern"
+		"save": "Speichern",
+		"compliance": {
+			"title": "Compliance",
+			"description": "Datenaufbewahrungsrichtlinien und Compliance-Einstellungen verwalten",
+			"searchUsage": {
+				"title": "Aufbewahrung von Suchnutzungsdaten",
+				"description": "Wie lange Suchabfrageprotokolle und Nutzungsereignisse aufbewahrt werden sollen"
+			},
+			"auditLog": {
+				"title": "Aufbewahrung von Audit-Protokollen",
+				"description": "Wie lange Organisations-Audit-Protokolle aufbewahrt werden sollen"
+			},
+			"ingestBuffer": {
+				"title": "Aufbewahrung von Ingest-Puffern",
+				"description": "Wie lange aufgenommene Daten im Puffer aufbewahrt werden sollen"
+			},
+			"autoDelete": {
+				"title": "Automatischer Löschzeitplan",
+				"description": "Automatische Bereinigung abgelaufener Daten basierend auf Aufbewahrungsfristen konfigurieren",
+				"enableLabel": "Automatische Löschung aktivieren",
+				"scheduleLabel": "Löschhäufigkeit",
+				"scheduleDaily": "Täglich",
+				"scheduleWeekly": "Wöchentlich",
+				"scheduleMonthly": "Monatlich"
+			},
+			"retentionOptions": {
+				"forever": "Für immer behalten",
+				"sevenDays": "7 Tage",
+				"fourteenDays": "14 Tage",
+				"thirtyDays": "30 Tage",
+				"ninetyDays": "90 Tage",
+				"oneEightyDays": "180 Tage",
+				"oneYear": "1 Jahr",
+				"twoYears": "2 Jahre"
+			},
+			"save": "Änderungen speichern",
+			"cancel": "Abbrechen",
+			"notifications": {
+				"saved": "Aufbewahrungsrichtlinien erfolgreich gespeichert",
+				"error": "Fehler beim Speichern der Aufbewahrungsrichtlinien"
+			}
+		}
 	},
 	"alertsPage": {
 		"title": "Benachrichtigungen",

@@ -511,10 +511,52 @@
 				"general": "General",
 				"members": "Members",
 				"title": "Organization",
-				"dangerZone": "Danger zone"
+				"dangerZone": "Danger zone",
+				"compliance": "Compliance"
 			}
 		},
-		"save": "Save"
+		"save": "Save",
+		"compliance": {
+			"title": "Compliance",
+			"description": "Manage data retention policies and compliance settings",
+			"searchUsage": {
+				"title": "Search Usage Data Retention",
+				"description": "How long to retain search query logs and usage events"
+			},
+			"auditLog": {
+				"title": "Audit Log Retention",
+				"description": "How long to retain organization audit logs"
+			},
+			"ingestBuffer": {
+				"title": "Ingest Buffer Retention",
+				"description": "How long to retain ingested data in the buffer queue"
+			},
+			"autoDelete": {
+				"title": "Auto-deletion Schedule",
+				"description": "Configure automatic cleanup of expired data based on retention periods",
+				"enableLabel": "Enable auto-deletion",
+				"scheduleLabel": "Deletion frequency",
+				"scheduleDaily": "Daily",
+				"scheduleWeekly": "Weekly",
+				"scheduleMonthly": "Monthly"
+			},
+			"retentionOptions": {
+				"forever": "Keep forever",
+				"sevenDays": "7 days",
+				"fourteenDays": "14 days",
+				"thirtyDays": "30 days",
+				"ninetyDays": "90 days",
+				"oneEightyDays": "180 days",
+				"oneYear": "1 year",
+				"twoYears": "2 years"
+			},
+			"save": "Save changes",
+			"cancel": "Cancel",
+			"notifications": {
+				"saved": "Retention policies saved successfully",
+				"error": "Failed to save retention policies"
+			}
+		}
 	},
 	"alertsPage": {
 		"title": "Alerts",

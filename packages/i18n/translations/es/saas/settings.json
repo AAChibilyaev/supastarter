@@ -513,10 +513,52 @@
 				"general": "General",
 				"members": "Miembros",
 				"title": "Organizacion",
-				"dangerZone": "Zona de peligro"
+				"dangerZone": "Zona de peligro",
+				"compliance": "Cumplimiento"
 			}
 		},
-		"save": "Guardar"
+		"save": "Guardar",
+		"compliance": {
+			"title": "Cumplimiento normativo",
+			"description": "Gestionar políticas de retención de datos y configuración de cumplimiento",
+			"searchUsage": {
+				"title": "Retención de datos de uso de búsqueda",
+				"description": "Cuánto tiempo conservar los registros de consultas de búsqueda y eventos de uso"
+			},
+			"auditLog": {
+				"title": "Retención de registros de auditoría",
+				"description": "Cuánto tiempo conservar los registros de auditoría de la organización"
+			},
+			"ingestBuffer": {
+				"title": "Retención del búfer de ingesta",
+				"description": "Cuánto tiempo conservar los datos ingeridos en el búfer"
+			},
+			"autoDelete": {
+				"title": "Programación de eliminación automática",
+				"description": "Configurar la limpieza automática de datos caducados según los períodos de retención",
+				"enableLabel": "Activar eliminación automática",
+				"scheduleLabel": "Frecuencia de eliminación",
+				"scheduleDaily": "Diario",
+				"scheduleWeekly": "Semanal",
+				"scheduleMonthly": "Mensual"
+			},
+			"retentionOptions": {
+				"forever": "Conservar para siempre",
+				"sevenDays": "7 días",
+				"fourteenDays": "14 días",
+				"thirtyDays": "30 días",
+				"ninetyDays": "90 días",
+				"oneEightyDays": "180 días",
+				"oneYear": "1 año",
+				"twoYears": "2 años"
+			},
+			"save": "Guardar cambios",
+			"cancel": "Cancelar",
+			"notifications": {
+				"saved": "Políticas de retención guardadas correctamente",
+				"error": "Error al guardar las políticas de retención"
+			}
+		}
 	},
 	"alertsPage": {
 		"title": "Alertas",

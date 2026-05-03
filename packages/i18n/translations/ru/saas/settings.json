@@ -2,147 +2,147 @@
 	"settings": {
 		"account": {
 			"avatar": {
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+				"description": "Чтобы изменить аватар, нажмите на изображение и выберите файл для загрузки.",
 				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
+					"error": "Не удалось обновить аватар",
+					"success": "Аватар успешно обновлён"
 				},
-				"title": "Your avatar"
+				"title": "Ваш аватар"
 			},
 			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+				"description": "Чтобы изменить email, введите новый email и нажмите сохранить. Новый email нужно будет подтвердить.",
 				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
+					"error": "Не удалось обновить email",
+					"success": "Email успешно обновлён"
 				},
-				"title": "Your email"
+				"title": "Ваш email"
 			},
 			"changeName": {
 				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
+					"error": "Не удалось обновить имя",
+					"success": "Имя успешно обновлено"
 				},
-				"title": "Your name"
+				"title": "Ваше имя"
 			},
 			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+				"confirmation": "Вы уверены, что хотите удалить аккаунт?",
+				"description": "Безвозвратное удаление аккаунта. После удаления восстановление невозможно. Для подтверждения введите ваш пароль ниже:",
 				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
+					"error": "Не удалось удалить аккаунт",
+					"success": "Аккаунт успешно удалён"
 				},
-				"submit": "Delete account",
-				"title": "Delete account"
+				"submit": "Удалить аккаунт",
+				"title": "Удаление аккаунта"
 			},
 			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
+				"description": "Чтобы изменить язык интерфейса, выберите язык из списка и нажмите сохранить.",
 				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
+					"error": "Не удалось обновить язык",
+					"success": "Язык успешно обновлён"
 				},
-				"title": "Your language"
+				"title": "Ваш язык"
 			},
 			"security": {
 				"activeSessions": {
-					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-					"title": "Active sessions",
+					"description": "Все активные сессии вашего аккаунта. Нажмите X, чтобы завершить сессию.",
+					"title": "Активные сессии",
 					"notifications": {
 						"revokeSession": {
-							"success": "Session revoked"
+							"success": "Сессия завершена"
 						}
 					},
-					"currentSession": "Current session"
+					"currentSession": "Текущая сессия"
 				},
 				"changePassword": {
-					"currentPassword": "Current password",
-					"newPassword": "New password",
+					"currentPassword": "Текущий пароль",
+					"newPassword": "Новый пароль",
 					"notifications": {
-						"error": "Could not update password",
-						"success": "Password was updated successfully"
+						"error": "Не удалось обновить пароль",
+						"success": "Пароль успешно обновлён"
 					},
-					"title": "Your password"
+					"title": "Ваш пароль"
 				},
 				"connectedAccounts": {
-					"connect": "Connect",
-					"connected": "Connected",
-					"disconnect": "Disconnect",
-					"title": "Connected accounts"
+					"connect": "Подключить",
+					"connected": "Подключено",
+					"disconnect": "Отключить",
+					"title": "Подключённые аккаунты"
 				},
 				"passkeys": {
-					"addPasskey": "Add passkey",
-					"description": "Use passkeys as a secure alternative to passwords.",
+					"addPasskey": "Добавить passkey",
+					"description": "Используйте passkey как безопасную альтернативу паролям.",
 					"notifications": {
 						"addPasskey": {
 							"error": {
-								"title": "Could not add passkey"
+								"title": "Не удалось добавить passkey"
 							},
 							"success": {
-								"title": "Passkey added"
+								"title": "Passkey добавлен"
 							}
 						},
 						"deletePasskey": {
 							"error": {
-								"title": "Could not delete passkey"
+								"title": "Не удалось удалить passkey"
 							},
 							"loading": {
-								"title": "Deleting passkey..."
+								"title": "Удаление passkey..."
 							},
 							"success": {
-								"title": "Passkey deleted"
+								"title": "Passkey удалён"
 							}
 						}
 					},
 					"title": "Passkeys"
 				},
 				"setPassword": {
-					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+					"description": "Вы ещё не установили пароль. Нажмите кнопку ниже, чтобы получить ссылку для установки пароля, и следуйте инструкциям в письме.",
 					"notifications": {
-						"error": "Could not send link to set password. Please try again.",
-						"success": "Check your inbox for the link to set your password."
+						"error": "Не удалось отправить ссылку для установки пароля. Попробуйте снова.",
+						"success": "Проверьте почту — там ссылка для установки пароля."
 					},
-					"submit": "Set password",
-					"title": "Your password"
+					"submit": "Установить пароль",
+					"title": "Ваш пароль"
 				},
-				"title": "Security",
+				"title": "Безопасность",
 				"twoFactor": {
-					"title": "Two-factor authentication",
-					"description": "Add an extra layer of security to your account.",
+					"title": "Двухфакторная аутентификация",
+					"description": "Добавьте дополнительный уровень защиты аккаунта.",
 					"dialog": {
 						"password": {
-							"title": "Verify with password",
-							"description": "Please verify your account by entering your password:",
-							"label": "Your password:"
+							"title": "Подтверждение паролем",
+							"description": "Пожалуйста, подтвердите аккаунт, введя пароль:",
+							"label": "Ваш пароль:"
 						},
 						"totpUrl": {
-							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-							"code": "Enter 6-digit code to verify the setup:",
-							"title": "Enable two-factor authentication"
+							"description": "Используйте приложение-аутентификатор для сканирования QR-кода или введите секретный ключ вручную для настройки двухфакторной аутентификации.",
+							"code": "Введите 6-значный код для подтверждения настройки:",
+							"title": "Включить двухфакторную аутентификацию"
 						}
 					},
-					"enable": "Enable two-factor authentication",
+					"enable": "Включить двухфакторную аутентификацию",
 					"notifications": {
 						"verify": {
 							"success": {
-								"title": "Two-factor authentication has been enabled successfully."
+								"title": "Двухфакторная аутентификация успешно включена."
 							}
 						},
 						"enable": {
 							"error": {
-								"title": "Could not verify your account with the provided password. Please try again."
+								"title": "Не удалось подтвердить аккаунт указанным паролем. Попробуйте снова."
 							}
 						},
 						"disable": {
 							"success": {
-								"title": "Two-factor authentication has been disabled successfully."
+								"title": "Двухфакторная аутентификация успешно отключена."
 							}
 						}
 					},
-					"disable": "Disable two-factor authentication",
-					"enabled": "You have two-factor authentication enabled for your account."
+					"disable": "Отключить двухфакторную аутентификацию",
+					"enabled": "Двухфакторная аутентификация включена для вашего аккаунта."
 				}
 			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings"
+			"subtitle": "Управление настройками личного аккаунта.",
+			"title": "Настройки аккаунта"
 		},
 		"billing": {
 			"createCustomerPortal": {
@@ -461,11 +461,11 @@
 			}
 		},
 		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
+			"title": "Уведомления",
+			"description": "Выберите, как получать уведомления. Отключённые опции сохраняются; всё включено по умолчанию.",
 			"groups": {
 				"general": {
-					"title": "General"
+					"title": "Общие"
 				},
 				"billing": {
 					"title": "Биллинг"
@@ -473,7 +473,7 @@
 			},
 			"types": {
 				"APP_UPDATE": {
-					"label": "App updates"
+					"label": "Обновления приложения"
 				},
 				"AI_LOW_BALANCE": {
 					"label": "Баланс AI-кошелька низкий"
@@ -492,31 +492,82 @@
 				}
 			},
 			"columns": {
-				"type": "Notification",
-				"inApp": "In-app",
+				"type": "Уведомление",
+				"inApp": "В приложении",
 				"email": "Email"
 			}
 		},
 		"menu": {
 			"account": {
 				"billing": "Биллинг",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"notifications": "Notifications",
-				"security": "Security",
-				"title": "Account",
+				"dangerZone": "Опасная зона",
+				"general": "Общие",
+				"notifications": "Уведомления",
+				"security": "Безопасность",
+				"title": "Аккаунт",
 				"invoices": "Счета",
 				"paymentMethods": "Способы оплаты"
 			},
 			"organization": {
 				"billing": "Биллинг",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
+				"general": "Общие",
+				"members": "Участники",
+				"title": "Организация",
+				"dangerZone": "Опасная зона",
+				"compliance": "Комплаенс"
 			}
 		},
-		"save": "Save"
+		"save": "Сохранить",
+		"compliance": {
+			"title": "Комплаенс",
+			"description": "Управление политиками хранения и настройками комплаенса",
+			"auditLog": {
+				"title": "Хранение логов аудита",
+				"description": "Сколько хранить логи аудита организации"
+			},
+			"ingestBuffer": {
+				"title": "Хранение буфера приёма",
+				"description": "Сколько хранить входящие данные в буфере"
+			},
+			"autoDelete": {
+				"title": "Расписание авто-удаления",
+				"description": "Настройка авто-очистки устаревших данных",
+				"enableLabel": "Включить авто-удаление",
+				"scheduleLabel": "Частота удаления",
+				"scheduleDaily": "Ежедневно",
+				"scheduleWeekly": "Еженедельно",
+				"scheduleMonthly": "Ежемесячно"
+			},
+			"cancel": "Отмена",
+			"notifications": {
+				"saved": "Политики хранения успешно сохранены",
+				"error": "Не удалось сохранить политики хранения"
+			},
+			"retentionOptions": {
+				"sevenDays": "7 дней",
+				"fourteenDays": "14 дней",
+				"thirtyDays": "30 дней",
+				"ninetyDays": "90 дней",
+				"oneEightyDays": "180 дней",
+				"oneYear": "1 год",
+				"twoYears": "2 года",
+				"forever": "Хранить вечно"
+			},
+			"save": "Сохранить изменения",
+			"searchUsage": {
+				"title": "Хранение данных поиска",
+				"description": "Сколько хранить логи поисковых запросов и события использования"
+			}
+		},
+		"alertsPage": {
+			"title": "Оповещения",
+			"description": "Настройка оповещений для операций поиска",
+			"email": "Email",
+			"slack": "Slack",
+			"slackWebhookUrl": "Slack Webhook URL",
+			"slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+			"webhook": "Webhook"
+		}
 	},
 	"alertsPage": {
 		"title": "Оповещения",

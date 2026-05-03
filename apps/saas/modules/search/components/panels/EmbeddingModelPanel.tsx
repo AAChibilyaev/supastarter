@@ -50,6 +50,8 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 	const [enabled, setEnabled] = useState(false);
 	const [azureApiUrl, setAzureApiUrl] = useState("");
 	const [azureApiVersion, setAzureApiVersion] = useState("2024-02-01");
+	const [openaiCompatibleApiUrl, setOpenaiCompatibleApiUrl] = useState("");
+	const [openaiCompatibleApiKey, setOpenaiCompatibleApiKey] = useState("");
 	const [changed, setChanged] = useState(false);
 	const [initialized, setInitialized] = useState(false);
 
@@ -75,6 +77,7 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 
 	const selectedModel = models?.find((m) => m.name === embeddingModel);
 	const isAzure = selectedModel?.provider === "azure";
+	const isOpenaiCompatible = selectedModel?.provider === "openai-compatible";
 
 	// ── Initialize from fetched config ────────────────────────────
 
@@ -85,6 +88,8 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 		setEnabled(config.enabled);
 		setAzureApiUrl(config.azureApiUrl ?? "");
 		setAzureApiVersion(config.azureApiVersion ?? "2024-02-01");
+		setOpenaiCompatibleApiUrl(config.openaiCompatibleApiUrl ?? "");
+		setOpenaiCompatibleApiKey(config.openaiCompatibleApiKey ?? "");
 		setInitialized(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [config, initialized]);
@@ -116,6 +121,8 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 			enabled,
 			azureApiUrl: isAzure ? azureApiUrl : undefined,
 			azureApiVersion: isAzure ? azureApiVersion : undefined,
+			openaiCompatibleApiUrl: isOpenaiCompatible ? openaiCompatibleApiUrl : undefined,
+			openaiCompatibleApiKey: isOpenaiCompatible ? openaiCompatibleApiKey : undefined,
 		});
 	};
 
@@ -238,6 +245,50 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 								{t("embeddingModel.hybridAlphaHint")}
 							</p>
 						</div>
+
+						{/* OpenAI-compatible fields */}
+						{isOpenaiCompatible && (
+							<div className="space-y-4 p-4 rounded-lg border">
+								<p className="font-medium text-sm">
+									{t("embeddingModel.openaiCompatibleSection")}
+								</p>
+								<div className="space-y-2">
+									<Label htmlFor="openai-compat-url">
+										{t("embeddingModel.openaiCompatibleApiUrl")}
+									</Label>
+									<Input
+										id="openai-compat-url"
+										value={openaiCompatibleApiUrl}
+										onChange={(e) => {
+											setOpenaiCompatibleApiUrl(e.target.value);
+											setChanged(true);
+										}}
+										placeholder="http://localhost:11434/v1"
+									/>
+									<p className="text-xs text-muted-foreground">
+										{t("embeddingModel.openaiCompatibleApiUrlHint")}
+									</p>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="openai-compat-key">
+										{t("embeddingModel.openaiCompatibleApiKey")}
+									</Label>
+									<Input
+										id="openai-compat-key"
+										type="password"
+										value={openaiCompatibleApiKey}
+										onChange={(e) => {
+											setOpenaiCompatibleApiKey(e.target.value);
+											setChanged(true);
+										}}
+										placeholder={t("embeddingModel.openaiCompatibleApiKeyPlaceholder")}
+									/>
+									<p className="text-xs text-muted-foreground">
+										{t("embeddingModel.openaiCompatibleApiKeyHint")}
+									</p>
+								</div>
+							</div>
+						)}
 
 						{/* Azure-specific fields */}
 						{isAzure && (

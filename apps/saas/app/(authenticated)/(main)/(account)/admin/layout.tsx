@@ -11,6 +11,7 @@ import {
 	Building2Icon,
 	ClipboardListIcon,
 	CogIcon,
+	FlagIcon,
 	MapIcon,
 	PlaySquareIcon,
 	ShieldIcon,
@@ -93,6 +94,11 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
 								title: "Config",
 								href: "/admin/config",
 								icon: <CogIcon className="size-4 opacity-50" />,
+							},
+							{
+								title: "Feature Flags",
+								href: "/admin/feature-flags",
+								icon: <FlagIcon className="size-4 opacity-50" />,
 							},
 							{
 								title: "Security",

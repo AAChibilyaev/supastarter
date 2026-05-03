@@ -69,7 +69,11 @@ export const createFeatureFlagProcedure = adminProcedure
 	})
 	.input(
 		z.object({
-			key: z.string().min(1).max(64).regex(/^[a-z0-9_-]+$/),
+			key: z
+				.string()
+				.min(1)
+				.max(64)
+				.regex(/^[a-z0-9_-]+$/),
 			title: z.string().min(1).max(128),
 			description: z.string().optional(),
 			type: z.enum(["boolean", "variant"]).default("boolean"),
@@ -83,18 +87,23 @@ export const createFeatureFlagProcedure = adminProcedure
 			key: z.string(),
 		}),
 	)
-	.handler(async ({ input: { key, title, description, type, enabled, rolloutPercentage }, context: { user } }) => {
-		const flag = await createFeatureFlag({
-			key,
-			title,
-			description: description ?? null,
-			type,
-			enabled,
-			rolloutPercentage: rolloutPercentage ?? null,
-			createdBy: user.id,
-		});
-		return { id: flag.id, key: flag.key };
-	});
+	.handler(
+		async ({
+			input: { key, title, description, type, enabled, rolloutPercentage },
+			context: { user },
+		}) => {
+			const flag = await createFeatureFlag({
+				key,
+				title,
+				description: description ?? null,
+				type,
+				enabled,
+				rolloutPercentage: rolloutPercentage ?? null,
+				createdBy: user.id,
+			});
+			return { id: flag.id, key: flag.key };
+		},
+	);
 
 export const updateFeatureFlagProcedure = adminProcedure
 	.route({
@@ -118,7 +127,8 @@ export const updateFeatureFlagProcedure = adminProcedure
 		if (data.title !== undefined) cleanedData.title = data.title;
 		if (data.description !== undefined) cleanedData.description = data.description;
 		if (data.enabled !== undefined) cleanedData.enabled = data.enabled;
-		if (data.rolloutPercentage !== undefined) cleanedData.rolloutPercentage = data.rolloutPercentage;
+		if (data.rolloutPercentage !== undefined)
+			cleanedData.rolloutPercentage = data.rolloutPercentage;
 		if (data.killSwitch !== undefined) cleanedData.killSwitch = data.killSwitch;
 
 		return await updateFeatureFlag(id, cleanedData);

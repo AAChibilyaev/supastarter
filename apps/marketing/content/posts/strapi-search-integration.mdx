@@ -9,7 +9,7 @@ tags: [strapi, cms, integration, connector, headless, sync]
 published: false
 ---
 
-Strapi is one of the most popular headless CMS platforms — and for good reason. Its plugin ecosystem, REST + GraphQL APIs, and content-type builder make it a favorite for teams building custom digital experiences. But when it comes to *search*, Strapi's built-in capabilities are limited to database-level LIKE queries. That's where AACsearch comes in.
+Strapi is one of the most popular headless CMS platforms — and for good reason. Its plugin ecosystem, REST + GraphQL APIs, and content-type builder make it a favorite for teams building custom digital experiences. But when it comes to _search_, Strapi's built-in capabilities are limited to database-level LIKE queries. That's where AACsearch comes in.
 
 ## The Challenge
 
@@ -31,24 +31,24 @@ The connector hooks into Strapi's lifecycle events — `afterCreate`, `afterUpda
 ```typescript
 // Lifecycle hook in src/api/product/content-types/product/lifecycles.ts
 module.exports = {
-  async afterCreate(event) {
-    await aacsearch.index({
-      collection: "product",
-      document: mapProductToSearchDoc(event.result),
-    });
-  },
-  async afterUpdate(event) {
-    await aacsearch.update({
-      collection: "product",
-      document: mapProductToSearchDoc(event.result),
-    });
-  },
-  async afterDelete(event) {
-    await aacsearch.delete({
-      collection: "product",
-      id: event.result.id,
-    });
-  },
+	async afterCreate(event) {
+		await aacsearch.index({
+			collection: "product",
+			document: mapProductToSearchDoc(event.result),
+		});
+	},
+	async afterUpdate(event) {
+		await aacsearch.update({
+			collection: "product",
+			document: mapProductToSearchDoc(event.result),
+		});
+	},
+	async afterDelete(event) {
+		await aacsearch.delete({
+			collection: "product",
+			id: event.result.id,
+		});
+	},
 };
 ```
 
@@ -58,28 +58,28 @@ You define how each Strapi content type maps to a search collection. The mapping
 
 ```json
 {
-  "collections": [
-    {
-      "strapiContentType": "product",
-      "searchCollection": "products",
-      "fields": {
-        "title": { "type": "string", "searchable": true },
-        "description": { "type": "string", "searchable": true },
-        "price": { "type": "float", "facet": true },
-        "category": { "type": "string", "facet": true, "searchable": true },
-        "images": { "type": "string[]", "source": "media.url" },
-        "variants": {
-          "type": "object[]",
-          "fields": {
-            "sku": { "type": "string" },
-            "color": { "type": "string", "facet": true },
-            "size": { "type": "string", "facet": true },
-            "stock": { "type": "int32" }
-          }
-        }
-      }
-    }
-  ]
+	"collections": [
+		{
+			"strapiContentType": "product",
+			"searchCollection": "products",
+			"fields": {
+				"title": { "type": "string", "searchable": true },
+				"description": { "type": "string", "searchable": true },
+				"price": { "type": "float", "facet": true },
+				"category": { "type": "string", "facet": true, "searchable": true },
+				"images": { "type": "string[]", "source": "media.url" },
+				"variants": {
+					"type": "object[]",
+					"fields": {
+						"sku": { "type": "string" },
+						"color": { "type": "string", "facet": true },
+						"size": { "type": "string", "facet": true },
+						"stock": { "type": "int32" }
+					}
+				}
+			}
+		}
+	]
 }
 ```
 
@@ -119,4 +119,4 @@ This connector is ideal for:
 
 ---
 
-*AACsearch Strapi connector is in development. [Sign up for early access](https://aacsearch.com) to get notified when it launches.*
+_AACsearch Strapi connector is in development. [Sign up for early access](https://aacsearch.com) to get notified when it launches._

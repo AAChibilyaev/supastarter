@@ -54,7 +54,7 @@ export function TestimonialCarousel() {
 	const testimonial = TESTIMONIALS[activeIndex]!;
 
 	return (
-		<section className="py-16 md:py-24 border-b border-border">
+		<section className="section-padding border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
@@ -77,11 +77,11 @@ export function TestimonialCarousel() {
 						</blockquote>
 
 						<div className="mt-8 gap-4 pt-6 flex items-center border-t border-border">
-							<div className="size-10 text-sm font-semibold flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
+							<div className="size-10 text-sm font-light flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
 								{testimonial.initials}
 							</div>
 							<div>
-								<p className="text-sm font-semibold text-foreground">
+								<p className="text-sm font-light text-foreground">
 									{testimonial.author}
 								</p>
 								<p className="text-xs font-light text-muted-foreground">

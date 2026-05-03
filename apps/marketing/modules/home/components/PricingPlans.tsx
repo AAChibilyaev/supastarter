@@ -46,7 +46,7 @@ export function PricingPlans() {
 								type="button"
 								onClick={() => setInterval(v)}
 								className={cn(
-									"px-4 py-1.5 text-sm font-medium rounded-md transition-colors",
+									"px-4 py-1.5 text-sm font-light rounded-md transition-colors",
 									interval === v
 										? "shadow-sm bg-card text-foreground"
 										: "text-muted-foreground hover:text-foreground",
@@ -54,7 +54,7 @@ export function PricingPlans() {
 							>
 								{t(`home.pricing.${v}`)}
 								{v === "yearly" && (
-									<span className="ml-1.5 font-semibold text-[10px] text-success">
+									<span className="ml-1.5 font-light text-[10px] text-success">
 										{t("home.pricing.yearlyDiscount")}
 									</span>
 								)}

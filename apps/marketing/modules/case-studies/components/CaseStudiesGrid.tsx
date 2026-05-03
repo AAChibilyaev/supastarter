@@ -13,7 +13,7 @@ export function CaseStudiesGrid({ caseStudies }: CaseStudiesGridProps) {
 	const t = useTranslations("caseStudiesPage");
 
 	return (
-		<section className="py-24">
+		<section className="section-padding">
 			<div className="container">
 				<div className="gap-6 md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1">
 					{caseStudies.map((post) => {

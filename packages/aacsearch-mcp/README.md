@@ -15,26 +15,26 @@ pnpm --filter @repo/aacsearch-mcp type-check
 
 ## Tools (18 total)
 
-| Tool                     | Description                                          | Required API Key Scope |
-| ------------------------ | ---------------------------------------------------- | ---------------------- |
-| `search`                 | Search documents in a public index                   | `search` or scoped     |
-| `list_indexes`           | List all indexes in a project                        | `admin`                |
-| `upsert_document`        | Upsert a single document to an index                 | `ingest`               |
-| `search_stats`           | Get search usage statistics for a project            | `admin`                |
-| `create_index`           | Create a new search index with schema                | `admin`                |
-| `update_index`           | Update index displayName or enabled status           | `admin`                |
-| `delete_index`           | Permanently delete a search index                    | `admin`                |
-| `list_documents`         | List documents in an index with pagination/filtering | `search`               |
-| `delete_document`        | Delete a single document from an index               | `ingest`               |
-| `create_key`             | Create an API key with specific scopes               | `admin`                |
-| `list_keys`              | List all API keys for a project                      | `admin`                |
-| `revoke_key`             | Revoke an API key by ID                              | `admin`                |
-| `get_recommendations`    | AI-powered product/search recommendations            | `admin`                |
-| `track_event`            | Track search/conversion analytics events             | `search`               |
-| `trigger_reindex`        | Trigger a full reindex of a search index             | `admin`                |
-| `get_analytics`          | Search analytics metrics for a project               | `admin`                |
-| `trigger_crawler`        | Start a web crawl job into a search index            | `admin`                |
-| `list_connector_sync_jobs` | List all connector sync jobs for a project         | `admin`                |
+| Tool                       | Description                                          | Required API Key Scope |
+| -------------------------- | ---------------------------------------------------- | ---------------------- |
+| `search`                   | Search documents in a public index                   | `search` or scoped     |
+| `list_indexes`             | List all indexes in a project                        | `admin`                |
+| `upsert_document`          | Upsert a single document to an index                 | `ingest`               |
+| `search_stats`             | Get search usage statistics for a project            | `admin`                |
+| `create_index`             | Create a new search index with schema                | `admin`                |
+| `update_index`             | Update index displayName or enabled status           | `admin`                |
+| `delete_index`             | Permanently delete a search index                    | `admin`                |
+| `list_documents`           | List documents in an index with pagination/filtering | `search`               |
+| `delete_document`          | Delete a single document from an index               | `ingest`               |
+| `create_key`               | Create an API key with specific scopes               | `admin`                |
+| `list_keys`                | List all API keys for a project                      | `admin`                |
+| `revoke_key`               | Revoke an API key by ID                              | `admin`                |
+| `get_recommendations`      | AI-powered product/search recommendations            | `admin`                |
+| `track_event`              | Track search/conversion analytics events             | `search`               |
+| `trigger_reindex`          | Trigger a full reindex of a search index             | `admin`                |
+| `get_analytics`            | Search analytics metrics for a project               | `admin`                |
+| `trigger_crawler`          | Start a web crawl job into a search index            | `admin`                |
+| `list_connector_sync_jobs` | List all connector sync jobs for a project           | `admin`                |
 
 ### Tool Inputs
 

@@ -1,4 +1,15 @@
 import { getConfig } from "./procedures/config";
+import {
+	createFeatureFlagProcedure,
+	deleteFeatureFlagProcedure,
+	getFeatureFlagProcedure,
+	listFeatureFlagsProcedure,
+	listOrgsForFlagsProcedure,
+	listOverridesProcedure,
+	removeOverrideProcedure,
+	setOverrideProcedure,
+	updateFeatureFlagProcedure,
+} from "./procedures/feature-flags";
 import { findOrganization } from "./procedures/find-organization";
 import {
 	getFxRateProcedure,
@@ -25,6 +36,7 @@ export const adminRouter = {
 	organizations: {
 		list: listOrganizations,
 		find: findOrganization,
+		search: listOrgsForFlagsProcedure,
 	},
 	config: getConfig,
 	integrations: integrationChecks,
@@ -41,5 +53,17 @@ export const adminRouter = {
 		update: updateRoadmapItemProcedure,
 		delete: deleteRoadmapItemProcedure,
 		reorder: reorderRoadmapItemsProcedure,
+	},
+	featureFlags: {
+		list: listFeatureFlagsProcedure,
+		get: getFeatureFlagProcedure,
+		create: createFeatureFlagProcedure,
+		update: updateFeatureFlagProcedure,
+		delete: deleteFeatureFlagProcedure,
+		overrides: {
+			list: listOverridesProcedure,
+			set: setOverrideProcedure,
+			remove: removeOverrideProcedure,
+		},
 	},
 };

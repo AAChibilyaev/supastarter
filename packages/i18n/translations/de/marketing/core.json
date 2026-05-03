@@ -1345,6 +1345,22 @@
 	"connectorsPage": {
 		"title": "CMS-Konnektoren",
 		"description": "Native PHP-Module für PrestaShop und 1C-Bitrix. REST Connector API für alles andere.",
+		"headlessCmsTitle": "Headless CMS-Konnektoren",
+		"headlessCmsSubtitle": "Verbinden Sie AACsearch mit Ihrer Content-Infrastruktur. Strapi, Contentful und Sanity — alle mit nativen Plugins unterstützt.",
+		"headlessCmsItems": {
+			"strapi": {
+				"title": "Strapi",
+				"description": "Strapi-Plugin mit Lifecycle-Hook-Sync. Jedes Erstellen, Aktualisieren und Löschen von Inhalten löst automatische Indexaktualisierungen aus. Inhaltsarten, Dynamic Zones und Medienfelder — alle unterstützt."
+			},
+			"contentful": {
+				"title": "Contentful",
+				"description": "Contentful-App mit Webhook-basierter Synchronisierung. Veröffentlichen Sie einen Eintrag und er erscheint innerhalb einer Sekunde in AACsearch. Content-Modell-Mapping, Rich-Text-Verarbeitung und sprachbewusste Suche inklusive."
+			},
+			"sanity": {
+				"title": "Sanity",
+				"description": "Sanity-Studio-Plugin mit GROQ-gestützter Indexierung. Wählen Sie genau die Felder aus, die mit GROQ-Projektionen indexiert werden sollen. Echtzeit-Synchronisierung per Webhook — keine Cron-Jobs erforderlich."
+			}
+		},
 		"comingSoon": "Demnächst",
 		"comingSoonTitle": "Weitere Konnektoren folgen",
 		"comingSoonSubtitle": "WooCommerce- und Shopify-Unterstützung ist in Entwicklung. Nutzen Sie die Connector API, um Ihren eigenen zu erstellen.",

@@ -73,7 +73,7 @@ export function HeroSection() {
 				</div>
 
 				{/* Feature badges */}
-				<div className="mt-8 gap-2 flex w-full items-center justify-center">
+				<div className="mt-8 gap-2 flex w-full flex-wrap items-center justify-center">
 					{featureBadges.map(({ icon: Icon, label }) => (
 						<Badge
 							key={label}

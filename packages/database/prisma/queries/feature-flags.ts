@@ -1,5 +1,5 @@
-import type { Prisma } from "../prisma/client";
 import { db } from "../client";
+import type { Prisma } from "../generated/client";
 
 export async function listFeatureFlags() {
 	return await db.featureFlag.findMany({
@@ -26,7 +26,6 @@ export async function getFeatureFlag(id: string) {
 						},
 					},
 				},
-				orderBy: { createdAt: "desc" },
 			},
 		},
 	});
@@ -45,19 +44,7 @@ export async function createFeatureFlag(data: {
 	return await db.featureFlag.create({ data });
 }
 
-export async function updateFeatureFlag(
-	id: string,
-	data: {
-		title?: string;
-		description?: string | null;
-		enabled?: boolean;
-		rolloutPercentage?: number | null;
-		targetingRules?: Prisma.InputJsonValue | null;
-		killSwitch?: boolean;
-		variantValues?: string[];
-		variantDefault?: string | null;
-	},
-) {
+export async function updateFeatureFlag(id: string, data: Prisma.FeatureFlagUpdateInput) {
 	return await db.featureFlag.update({ where: { id }, data });
 }
 
@@ -108,7 +95,6 @@ export async function listFeatureFlagOverrides(flagId: string) {
 				},
 			},
 		},
-		orderBy: { createdAt: "desc" },
 	});
 }
 

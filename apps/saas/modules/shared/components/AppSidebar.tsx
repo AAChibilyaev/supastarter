@@ -221,6 +221,10 @@ export function AppSidebar() {
 									label: t("search.nav.analyticsCtr") ?? "CTR",
 									href: `${basePath}/analytics?tab=ctr`,
 								},
+								{
+									label: t("search.nav.analyticsAbTests"),
+									href: `${basePath}/analytics/ab-tests`,
+								},
 							],
 						},
 						{

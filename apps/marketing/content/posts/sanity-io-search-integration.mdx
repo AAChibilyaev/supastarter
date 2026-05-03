@@ -9,7 +9,7 @@ tags: [sanity, cms, integration, connector, headless, groq, realtime]
 published: false
 ---
 
-Sanity.io is the programmable CMS — built for structured content, real-time collaboration, and custom editing experiences. With GROQ (GROQ Query Language), Sanity gives you SQL-like querying over your content. But like any CMS, Sanity is a content *management* platform, not a search engine. For customer-facing search with typo tolerance, faceting, and relevance ranking, you need AACsearch.
+Sanity.io is the programmable CMS — built for structured content, real-time collaboration, and custom editing experiences. With GROQ (GROQ Query Language), Sanity gives you SQL-like querying over your content. But like any CMS, Sanity is a content _management_ platform, not a search engine. For customer-facing search with typo tolerance, faceting, and relevance ranking, you need AACsearch.
 
 ## Why Sanity Needs a Search Layer
 
@@ -53,28 +53,30 @@ Beyond periodic exports, the connector uses Sanity's real-time listener API for 
 import sanityClient from "@sanity/client";
 
 const client = sanityClient({
-  projectId: "your-project",
-  dataset: "production",
-  apiVersion: "2024-01-01",
-  useCdn: false,
+	projectId: "your-project",
+	dataset: "production",
+	apiVersion: "2024-01-01",
+	useCdn: false,
 });
 
 // Listen for mutations on products
-const subscription = client.listen(
-  '*[_type == "product"]',
-  {},
-  { includeResult: true, events: ["create", "update", "delete"] }
-).subscribe((event) => {
-  if (event.type === "mutation") {
-    // Handle document creation
-    if (event.result) {
-      aacsearch.index({
-        collection: "products",
-        document: mapSanityDoc(event.result),
-      });
-    }
-  }
-});
+const subscription = client
+	.listen(
+		'*[_type == "product"]',
+		{},
+		{ includeResult: true, events: ["create", "update", "delete"] },
+	)
+	.subscribe((event) => {
+		if (event.type === "mutation") {
+			// Handle document creation
+			if (event.result) {
+				aacsearch.index({
+					collection: "products",
+					document: mapSanityDoc(event.result),
+				});
+			}
+		}
+	});
 ```
 
 ### Image Asset Handling
@@ -90,29 +92,29 @@ Sanity's image pipeline is powerful but complex. The connector automatically:
 
 ```json
 {
-  "projectId": "your-sanity-project",
-  "dataset": "production",
-  "queries": [
-    {
-      "name": "products",
-      "groq": "*[_type == 'product' && defined(slug.current)]",
-      "collection": "products",
-      "schedule": "*/5 * * * *",
-      "realtime": true
-    },
-    {
-      "name": "articles",
-      "groq": "*[_type == 'article' && defined(slug.current) && publishAt < now()]",
-      "collection": "articles",
-      "schedule": "*/15 * * * *",
-      "realtime": true
-    }
-  ],
-  "imageOptions": {
-    "width": 800,
-    "quality": 80,
-    "format": "auto"
-  }
+	"projectId": "your-sanity-project",
+	"dataset": "production",
+	"queries": [
+		{
+			"name": "products",
+			"groq": "*[_type == 'product' && defined(slug.current)]",
+			"collection": "products",
+			"schedule": "*/5 * * * *",
+			"realtime": true
+		},
+		{
+			"name": "articles",
+			"groq": "*[_type == 'article' && defined(slug.current) && publishAt < now()]",
+			"collection": "articles",
+			"schedule": "*/15 * * * *",
+			"realtime": true
+		}
+	],
+	"imageOptions": {
+		"width": 800,
+		"quality": 80,
+		"format": "auto"
+	}
 }
 ```
 
@@ -143,4 +145,4 @@ Sanity's structured content model pairs exceptionally well with AACsearch:
 
 ---
 
-*AACsearch Sanity.io connector is in development. [Get early access](https://aacsearch.com) to be notified when it launches.*
+_AACsearch Sanity.io connector is in development. [Get early access](https://aacsearch.com) to be notified when it launches._

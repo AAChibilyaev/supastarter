@@ -13,7 +13,7 @@ Contentful is the leading API-first content platform. Its headless architecture,
 
 ## Why Contentful Needs a Dedicated Search Engine
 
-Contentful's search API is optimized for *finding content in the CMS*, not for *end-user search experiences*. The limitations are clear:
+Contentful's search API is optimized for _finding content in the CMS_, not for _end-user search experiences_. The limitations are clear:
 
 - **No relevance tuning**: You can't boost fields or apply ranking rules
 - **No typo tolerance**: Misspellings return zero results
@@ -31,7 +31,7 @@ The connector uses Contentful's webhook system. When content changes in Contentf
 
 ```
 Contentful Entry Created → Webhook → AACsearch Connector → Index Updated
-Contentful Entry Updated → Webhook → AACsearch Connector → Index Updated  
+Contentful Entry Updated → Webhook → AACsearch Connector → Index Updated
 Contentful Entry Deleted → Webhook → AACsearch Connector → Index Removed
 Contentful Entry Published → Webhook → AACsearch Connector → Made Searchable
 Contentful Entry Unpublished → Webhook → AACsearch Connector → Removed from Search
@@ -43,24 +43,27 @@ Contentful's content model is flexible — entries can have different content ty
 
 ```json
 {
-  "contentTypes": [
-    {
-      "contentfulType": "blogPost",
-      "searchCollection": "blog_posts",
-      "mapping": {
-        "title": { "from": "fields.title", "type": "string", "boost": 2 },
-        "slug": { "from": "fields.slug", "type": "string" },
-        "body": { "from": "fields.body", "type": "string" },
-        "author": { "from": "fields.author.fields.name", "type": "string" },
-        "tags": { "from": "fields.tags", "type": "string[]", "facet": true },
-        "publishedAt": { "from": "sys.publishedAt", "type": "string" },
-        "featuredImage": { "from": "fields.featuredImage.fields.file.url", "type": "string" }
-      },
-      "filters": {
-        "published": true
-      }
-    }
-  ]
+	"contentTypes": [
+		{
+			"contentfulType": "blogPost",
+			"searchCollection": "blog_posts",
+			"mapping": {
+				"title": { "from": "fields.title", "type": "string", "boost": 2 },
+				"slug": { "from": "fields.slug", "type": "string" },
+				"body": { "from": "fields.body", "type": "string" },
+				"author": { "from": "fields.author.fields.name", "type": "string" },
+				"tags": { "from": "fields.tags", "type": "string[]", "facet": true },
+				"publishedAt": { "from": "sys.publishedAt", "type": "string" },
+				"featuredImage": {
+					"from": "fields.featuredImage.fields.file.url",
+					"type": "string"
+				}
+			},
+			"filters": {
+				"published": true
+			}
+		}
+	]
 }
 ```
 
@@ -75,9 +78,9 @@ Contentful has first-class locale support. The connector handles this by:
 ```typescript
 // Client-side search for a specific locale
 const results = await aacsearch.search({
-  collection: "blog_posts",
-  q: "search query",
-  filter_by: `locale:=en`,
+	collection: "blog_posts",
+	q: "search query",
+	filter_by: `locale:=en`,
 });
 ```
 
@@ -104,14 +107,11 @@ The connector validates incoming webhooks using Contentful's signature verificat
 import crypto from "crypto";
 
 function verifyContentfulWebhook(payload: string, signature: string, secret: string): boolean {
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(payload)
-    .digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+	const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex");
+	return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
 }
 ```
 
 ---
 
-*AACsearch Contentful connector is in development. [Join the waitlist](https://aacsearch.com) for early access.*
+_AACsearch Contentful connector is in development. [Join the waitlist](https://aacsearch.com) for early access._

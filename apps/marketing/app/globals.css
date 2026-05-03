@@ -10,9 +10,17 @@
 
 @utility container {
 	margin-inline: auto;
-	padding-inline: 1.5rem;
+	padding-inline: 1rem;
 	width: 100%;
 	max-width: var(--container-7xl);
+
+	@variant sm {
+		padding-inline: 1.5rem;
+	}
+
+	@variant lg {
+		padding-inline: 2rem;
+	}
 }
 
 @utility no-scrollbar {
@@ -21,6 +29,21 @@
 	}
 	-ms-overflow-style: none;
 	scrollbar-width: none;
+}
+
+@utility section-padding {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+
+	@variant md {
+		padding-top: 4rem;
+		padding-bottom: 4rem;
+	}
+
+	@variant lg {
+		padding-top: 6rem;
+		padding-bottom: 6rem;
+	}
 }
 
 @layer base {
@@ -32,9 +55,42 @@
 		border-color: var(--border);
 	}
 
+	html {
+		overflow-x: hidden;
+	}
+
+	body {
+		overflow-x: hidden;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+	}
+
+	svg.lucide {
+		stroke-width: 1.5;
+	}
+
+	img,
+	video {
+		max-width: 100%;
+		height: auto;
+	}
+
+	/* Responsive tables: prevent overflow on mobile */
+	:where(table) {
+		width: 100%;
+	}
+
+	/* Ensure good word breaking on mobile */
 	p,
 	li,
-	blockquote {
+	blockquote,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		overflow-wrap: break-word;
 		word-break: break-word;
 	}

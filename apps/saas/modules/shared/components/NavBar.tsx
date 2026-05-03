@@ -439,6 +439,10 @@ export function NavBar() {
 									label: t("search.nav.analyticsActivity"),
 									href: `${basePath}/analytics`,
 								},
+								{
+									label: t("search.nav.analyticsAbTests"),
+									href: `${basePath}/analytics/ab-tests`,
+								},
 							],
 						},
 						{

@@ -103,14 +103,14 @@ export function NavBar() {
 							<LocaleLink
 								key={group.label}
 								href={group.items[0].href}
-								className="px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+								className="px-3 py-2 text-sm font-light text-foreground/80 transition-colors hover:text-foreground"
 							>
 								{group.label}
 							</LocaleLink>
 						))}
 						<LocaleLink
 							href="/contact"
-							className="px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+							className="px-3 py-2 text-sm font-light text-foreground/80 transition-colors hover:text-foreground"
 						>
 							{t("common.menu.contact")}
 						</LocaleLink>
@@ -144,7 +144,7 @@ export function NavBar() {
 									{navGroups.flatMap((group) => [
 										<div
 											key={group.label}
-											className="px-3 py-2 text-xs font-semibold tracking-wider text-foreground/50 uppercase"
+											className="px-3 py-2 text-xs font-light tracking-wider text-foreground/50 uppercase"
 										>
 											{group.label}
 										</div>,
@@ -168,7 +168,7 @@ export function NavBar() {
 													className={cn(
 														"px-3 py-1.5 text-sm block text-foreground/70",
 														localePathname.startsWith(item.href)
-															? "font-semibold text-foreground"
+															? "font-light text-foreground"
 															: "hover:text-foreground",
 													)}
 												>
@@ -181,7 +181,7 @@ export function NavBar() {
 									<LocaleLink
 										href="/contact"
 										onClick={handleMobileMenuClose}
-										className="px-3 py-2 font-medium text-base block shrink-0 text-foreground/80"
+										className="px-3 py-2 font-light text-base block shrink-0 text-foreground/80"
 									>
 										{t("common.menu.contact")}
 									</LocaleLink>

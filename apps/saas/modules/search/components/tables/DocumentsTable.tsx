@@ -51,6 +51,13 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@repo/ui/components/select";
+import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
@@ -1278,6 +1285,37 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 										})}
 									</div>
 								)}
+
+								{/* Import action mode selector */}
+								<div className="space-y-2">
+									<Label>{t("search.documents.importAction")}</Label>
+									<Select
+										value={importAction}
+										onValueChange={(val) =>
+											setImportAction(
+												val as "create" | "update" | "upsert" | "emplace",
+											)
+										}
+									>
+										<SelectTrigger>
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="create">
+												{t("search.documents.importAction_create")}
+											</SelectItem>
+											<SelectItem value="update">
+												{t("search.documents.importAction_update")}
+											</SelectItem>
+											<SelectItem value="upsert">
+												{t("search.documents.importAction_upsert")}
+											</SelectItem>
+											<SelectItem value="emplace">
+												{t("search.documents.importAction_emplace")}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
 							</div>
 							<DialogFooter>
 								<Button

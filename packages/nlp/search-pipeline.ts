@@ -11,6 +11,8 @@ import { mmrDiversify } from "./postprocessing/mmr";
 import type { MMRDocument, MMROptions } from "./postprocessing/mmr";
 import { generateSnippet, highlightTerms } from "./postprocessing/snippet";
 import type { SnippetOptions } from "./postprocessing/snippet";
+import { SynonymExpander } from "./synonyms/expansion";
+import type { ExpandedSynonym, SynonymExpanderConfig } from "./synonyms/expansion";
 
 export interface SearchPipelineResult {
 	/** Original query */
@@ -27,6 +29,10 @@ export interface SearchPipelineResult {
 	posTags: Array<{ word: string; pos: string; lemma: string }>;
 	/** Stemmed query terms */
 	stemmedTerms: string[];
+	/** Synonym-expanded query alternatives (if synonym expansion enabled) */
+	expandedQueries?: string[];
+	/** Per-word synonym expansions (if synonym expansion enabled) */
+	synonymExpansions?: Map<string, ExpandedSynonym[]>;
 }
 
 export interface PipelineOptions {
@@ -38,12 +44,36 @@ export interface PipelineOptions {
 	enableLemmatization?: boolean;
 	/** Enable stemming */
 	enableStemming?: boolean;
+	/** Enable synonym expansion via WordNet/RuWordNet/embeddings */
+	enableSynonyms?: boolean;
+	/** Synonym expansion configuration */
+	synonymOptions?: Partial<SynonymExpanderConfig>;
+}
+
+/**
+ * Lazy-initialized singleton SynonymExpander for the pipeline.
+ * Uses built-in WordNet (EN) and RuWordNet (RU) thesauruses.
+ */
+let pipelineExpander: SynonymExpander | null = null;
+
+function getPipelineExpander(): SynonymExpander {
+	if (!pipelineExpander) {
+		pipelineExpander = new SynonymExpander({
+			enableWordNet: true,
+			enableRuWordNet: true,
+			enableEmbeddings: false, // embeddings require external provider
+			maxResults: 5,
+			minScore: 0.3,
+		});
+	}
+	return pipelineExpander;
 }
 
 const DEFAULT_PIPELINE_OPTIONS: PipelineOptions = {
 	enablePosTagging: true,
 	enableLemmatization: true,
 	enableStemming: true,
+	enableSynonyms: false,
 };
 
 /**
@@ -95,6 +125,31 @@ export function analyzeQuery(query: string, options?: PipelineOptions): SearchPi
 		? tokens.map((t) => stem(t, detectedLanguage))
 		: tokens;
 
+	// Step 6: Synonym expansion
+	let expandedQueries: string[] | undefined;
+	let synonymExpansions: Map<string, ExpandedSynonym[]> | undefined;
+	if (opts.enableSynonyms) {
+		const expander = getPipelineExpander();
+		const config: Partial<SynonymExpanderConfig> = {
+			...opts.synonymOptions,
+			language: (detectedLanguage === "ru" ? "ru" : "en") as "ru" | "en",
+		};
+		const batchResult = expander.expandBatch(tokens, config);
+
+		// Collect per-word expansions
+		synonymExpansions = new Map();
+		for (const [word, synonyms] of batchResult) {
+			if (synonyms.length > 0) {
+				synonymExpansions.set(word, synonyms);
+			}
+		}
+
+		// Generate expanded query alternatives
+		if (synonymExpansions.size > 0) {
+			expandedQueries = expander.expandQuery(normalizedQuery, config);
+		}
+	}
+
 	return {
 		originalQuery,
 		normalizedQuery,
@@ -103,6 +158,8 @@ export function analyzeQuery(query: string, options?: PipelineOptions): SearchPi
 		tokens,
 		posTags: opts.enablePosTagging ? posTags : [],
 		stemmedTerms,
+		expandedQueries,
+		synonymExpansions,
 	};
 }
 
@@ -127,6 +184,8 @@ export interface EnhancedSearchResult {
 		id: string;
 		score: number;
 	}>;
+	/** Synonym-expanded query alternatives */
+	expandedQueries?: string[];
 }
 
 export interface EnhancedSearchOptions extends PipelineOptions {
@@ -205,6 +264,7 @@ export function enhanceSearchResults(
 		snippets,
 		highlighted,
 		diversifiedResults,
+		expandedQueries: analysis.expandedQueries,
 	};
 }
 
@@ -220,6 +280,7 @@ export function buildEnhancedQuery(
 	filters?: string;
 	didYouMean?: string;
 	suggestions?: string[];
+	expandedQueries?: string[];
 } {
 	const analysis = analyzeQuery(query, options);
 
@@ -229,5 +290,6 @@ export function buildEnhancedQuery(
 	return {
 		query: enhancedQuery,
 		suggestions: analysis.stemmedTerms.filter((t) => t !== query.toLowerCase()),
+		expandedQueries: analysis.expandedQueries,
 	};
 }

@@ -151,9 +151,9 @@
 			"title": "Нам доверяют инновационные команды"
 		},
 		"trustBadges": {
-			"g2": "on G2",
-			"capterra": "on Capterra",
-			"companies": "companies"
+			"g2": "на G2",
+			"capterra": "на Capterra",
+			"companies": "компаний"
 		}
 	},
 	"notFound": {

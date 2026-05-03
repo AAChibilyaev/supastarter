@@ -151,9 +151,9 @@
 			"title": "Approuvé par des équipes innovantes"
 		},
 		"trustBadges": {
-			"g2": "on G2",
-			"capterra": "on Capterra",
-			"companies": "companies"
+			"g2": "sur G2",
+			"capterra": "sur Capterra",
+			"companies": "entreprises"
 		}
 	},
 	"notFound": {

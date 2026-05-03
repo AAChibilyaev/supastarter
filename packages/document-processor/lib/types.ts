@@ -10,11 +10,13 @@ export interface ChunkResult {
 	chunkCount: number;
 }
 
-export type FileType = "pdf" | "docx" | "csv" | "json" | "md" | "txt" | "epub";
+export type FileType = "pdf" | "docx" | "xlsx" | "pptx" | "csv" | "json" | "md" | "txt" | "epub";
 
 export const SUPPORTED_MIME_TYPES: Record<string, FileType> = {
 	"application/pdf": "pdf",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+	"application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
 	"text/csv": "csv",
 	"application/json": "json",
 	"text/markdown": "md",
@@ -31,6 +33,10 @@ export function detectFileType(filename: string, mimeType?: string): FileType | 
 	const mimeMap: Record<string, FileType> = {
 		pdf: "pdf",
 		docx: "docx",
+		xlsx: "xlsx",
+		xls: "xlsx",
+		pptx: "pptx",
+		ppt: "pptx",
 		csv: "csv",
 		json: "json",
 		md: "md",

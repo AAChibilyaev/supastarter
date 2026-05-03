@@ -21,7 +21,7 @@ export function PricingPlans() {
 	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="py-16 md:py-24 border-b border-border">
+		<section id="pricing" className="section-padding border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<p className="mb-3 text-xs font-light tracking-widest text-muted-foreground uppercase">

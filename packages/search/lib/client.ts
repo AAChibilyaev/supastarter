@@ -3,7 +3,6 @@ import { Client } from "typesense";
 
 import { getTypesenseEnv } from "./env";
 import type { StorageRegion } from "./regions";
-import { DEFAULT_REGION } from "./regions";
 
 let cachedClient: Client | null = null;
 const cachedClients = new Map<StorageRegion, Client>();

@@ -8,8 +8,10 @@ import { parseEpub } from "./parsers/epub";
 import { parseJson } from "./parsers/json";
 import { parseMd } from "./parsers/md";
 import { parsePdf } from "./parsers/pdf";
+import { parsePptx } from "./parsers/pptx";
 import { parseTxt } from "./parsers/txt";
 import { parseUrl } from "./parsers/url";
+import { parseXlsx } from "./parsers/xlsx";
 import type { ParsedDocument, FileType } from "./types";
 import { detectFileType, SUPPORTED_MIME_TYPES } from "./types";
 
@@ -18,6 +20,8 @@ type ParserFn = (content: Buffer | string, filename: string) => Promise<ParsedDo
 const parserRegistry: Record<string, ParserFn> = {
 	pdf: parsePdf,
 	docx: parseDocx,
+	xlsx: parseXlsx,
+	pptx: parsePptx,
 	csv: parseCsv,
 	json: parseJson,
 	md: parseMd,

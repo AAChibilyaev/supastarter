@@ -17,9 +17,9 @@ export async function getOrganizationStorageRegion(organizationId: string): Prom
 		// Dynamic import to avoid pulling in Prisma on the client side
 		const { db } = await import("@repo/database");
 
-		const org = await prisma.organization.findUnique({
+		const org = await (db.organization.findUnique as any)({
 			where: { id: organizationId },
-			select: { storageRegion: true as never },
+			select: { storageRegion: true },
 		});
 
 		if (org && typeof org === "object" && "storageRegion" in (org as Record<string, unknown>)) {

@@ -11,9 +11,9 @@ import {
 } from "@repo/database";
 import { z } from "zod";
 
-import { publishFlagChange } from "../../feature-flags/sse-publisher";
 import { adminProcedure } from "../../../orpc/procedures";
 import { invalidateFlagCache } from "../../feature-flags/evaluator";
+import { publishFlagChange } from "../../feature-flags/sse-publisher";
 
 export const listFeatureFlagsProcedure = adminProcedure
 	.route({

@@ -15,7 +15,7 @@ export function LogosWall() {
 	const t = useTranslations("home");
 
 	return (
-		<section className="py-16 md:py-24 border-b border-border">
+		<section className="section-padding border-b border-border">
 			<div className="container">
 				<p className="text-xs font-light tracking-widest text-center text-muted-foreground/50 uppercase">
 					{t("logos.title")}

@@ -79,8 +79,7 @@ export async function parseXlsx(
 		return {
 			title,
 			content: contentText || "Unable to extract text from XLSX",
-			mimeType:
-				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 			metadata: {
 				sheetCount: sheets.length,
 				rowCount: sheets.reduce((sum, s) => sum + s.split("\n").length, 0),

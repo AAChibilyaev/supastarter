@@ -8,9 +8,9 @@ import { useEffect, useRef } from "react";
 /**
  * useFeatureFlag — React hook for client-side feature flag evaluation.
  *
- * 1. On mount, fetches the flag state via the `checkFeatureFlag` oRPC procedure.
- * 2. Opens an SSE connection to receive real-time flag change events.
- * 3. Updates cached state when a flag change event is received via SSE.
+ * Evaluates the flag via the server-side `checkFeatureFlag` oRPC procedure
+ * on mount, then opens an SSE connection for real-time updates when the
+ * flag is toggled or an override is changed by an admin.
  *
  * Usage:
  *   const isEnabled = useFeatureFlag("new-dashboard");
@@ -20,14 +20,14 @@ import { useEffect, useRef } from "react";
  * @returns boolean — true if the flag is enabled for the current organization
  */
 export function useFeatureFlag(flagKey: string | null | undefined): boolean {
-	const { data: session } = useSession();
-	const orgId = session?.session?.activeOrganizationId;
+	const { session } = useSession();
+	const orgId = session?.activeOrganizationId;
 	const queryClient = useQueryClient();
 
-	// Cache key for React Query — so different consumers share the same data
+	// React Query cache key
 	const queryKey = ["featureFlag", orgId, flagKey] as const;
 
-	// Initial fetch via oRPC (server-side evaluation)
+	// Initial fetch via oRPC (server-side evaluation with all targeting rules)
 	const { data: result } = useQuery({
 		queryKey,
 		queryFn: async () => {
@@ -38,13 +38,13 @@ export function useFeatureFlag(flagKey: string | null | undefined): boolean {
 		staleTime: 60_000, // 60s — matches server-side cache TTL
 	});
 
-	// SSE connection for real-time updates
+	// SSE connection for real-time push updates
 	const eventSourceRef = useRef<EventSource | null>(null);
 
 	useEffect(() => {
 		if (!orgId || !flagKey) return;
 
-		// Clean up any existing connection
+		// Close any existing connection before opening a new one
 		if (eventSourceRef.current) {
 			eventSourceRef.current.close();
 		}
@@ -53,7 +53,8 @@ export function useFeatureFlag(flagKey: string | null | undefined): boolean {
 		const eventSource = new EventSource(url);
 		eventSourceRef.current = eventSource;
 
-		eventSource.addEventListener("flag_change", (event) => {
+		// Listen for flag change events
+		eventSource.addEventListener("flag_change", (event: MessageEvent) => {
 			try {
 				const data = JSON.parse(event.data) as {
 					type: string;
@@ -62,10 +63,10 @@ export function useFeatureFlag(flagKey: string | null | undefined): boolean {
 					enabled?: boolean;
 				};
 
-				// Only update if this event matches our flag
+				// Only process events for the flag we're watching
 				if (data.flagKey !== flagKey) return;
 
-				// For override_updated with a specific org, only update if it's our org
+				// For per-org override updates: only care about our org
 				if (
 					data.type === "override_updated" &&
 					data.organizationId &&
@@ -74,29 +75,22 @@ export function useFeatureFlag(flagKey: string | null | undefined): boolean {
 					return;
 				}
 
-				// For flag_deleted, set to false
 				if (data.type === "flag_deleted") {
+					// Flag was deleted — set to false
 					queryClient.setQueryData(queryKey, { enabled: false });
 					return;
 				}
 
-				// For flag_updated and override_updated, update with the new state
+				// flag_updated or override_updated for our org
 				if (data.enabled !== undefined) {
 					queryClient.setQueryData(queryKey, { enabled: data.enabled });
 				}
 			} catch {
-				// Ignore malformed SSE events
+				// Ignore malformed SSE payloads
 			}
 		});
 
-		eventSource.addEventListener("connected", () => {
-			// SSE connection established — noop, we already have the initial fetch
-		});
-
-		eventSource.onerror = () => {
-			// Connection lost — React Query will serve stale data from cache.
-			// The browser will auto-reconnect after a brief delay.
-		};
+		// The browser auto-reconnects on connection loss
 
 		return () => {
 			eventSource.close();

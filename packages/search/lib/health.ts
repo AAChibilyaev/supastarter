@@ -3,8 +3,8 @@ import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
 import { getTypesenseClient } from "./client";
-import type { StorageRegion } from "./regions";
 import { aliasName } from "./collections";
+import type { StorageRegion } from "./regions";
 
 export type HealthStatus = "healthy" | "warning" | "critical";
 
@@ -226,7 +226,7 @@ export async function checkRegionHealth(region: StorageRegion): Promise<RegionHe
 		return {
 			region,
 			label: info?.label ?? region.toUpperCase(),
-			online: health === true || (health as Record<string, unknown>)?.ok === true,
+			online: health.ok,
 			latencyMs,
 			error: null,
 		};

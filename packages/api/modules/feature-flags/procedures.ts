@@ -1,24 +1,22 @@
 import { z } from "zod";
 
 import { protectedProcedure } from "../../orpc/procedures";
-import { requireOrganizationMember } from "../search/lib/access";
 import { isFeatureEnabled, invalidateFlagCache } from "./evaluator";
 
 /**
- * Check whether a feature flag is enabled for a specific organization.
- * Requires the caller to be a member of that organization.
+ * Check whether a feature flag is enabled for the caller's active organization.
+ * Derives the organization ID from the session context.
  */
 export const checkFeatureFlag = protectedProcedure
 	.route({
 		method: "GET",
 		path: "/feature-flags/check/{flagKey}",
 		tags: ["Feature Flags"],
-		summary: "Check if a feature flag is enabled for an organization",
+		summary: "Check if a feature flag is enabled for the current organization",
 	})
 	.input(
 		z.object({
 			flagKey: z.string().min(1).max(128),
-			organizationId: z.string().min(1),
 		}),
 	)
 	.output(
@@ -28,14 +26,17 @@ export const checkFeatureFlag = protectedProcedure
 			organizationId: z.string(),
 		}),
 	)
-	.handler(async ({ input: { flagKey, organizationId }, context: { user } }) => {
-		await requireOrganizationMember(organizationId, user.id);
+	.handler(async ({ input: { flagKey }, context: { session } }) => {
+		const organizationId = session.activeOrganizationId;
+		if (!organizationId) {
+			return { enabled: false, flagKey, organizationId: "" };
+		}
 		const enabled = await isFeatureEnabled(organizationId, flagKey);
 		return { enabled, flagKey, organizationId };
 	});
 
 /**
- * Batch check multiple feature flags for an organization.
+ * Batch check multiple feature flags for the caller's active organization.
  */
 export const batchCheckFlags = protectedProcedure
 	.route({
@@ -46,13 +47,15 @@ export const batchCheckFlags = protectedProcedure
 	})
 	.input(
 		z.object({
-			organizationId: z.string().min(1),
 			flagKeys: z.array(z.string().min(1).max(128)).min(1).max(50),
 		}),
 	)
 	.output(z.record(z.string(), z.boolean()))
-	.handler(async ({ input: { flagKeys, organizationId }, context: { user } }) => {
-		await requireOrganizationMember(organizationId, user.id);
+	.handler(async ({ input: { flagKeys }, context: { session } }) => {
+		const organizationId = session.activeOrganizationId;
+		if (!organizationId) {
+			return Object.fromEntries(flagKeys.map((k) => [k, false]));
+		}
 
 		const results: Record<string, boolean> = {};
 		for (const key of flagKeys) {

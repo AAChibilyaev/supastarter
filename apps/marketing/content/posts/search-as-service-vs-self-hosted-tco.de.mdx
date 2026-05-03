@@ -1,0 +1,184 @@
+---
+title: Search as a Service vs Self-Hosted: Analyse der Gesamtbetriebskosten
+date: 2025-05-01
+image: https://picsum.photos/id/29/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Eine detaillierte Analyse der Gesamtbetriebskosten (TCO) im Vergleich zwischen verwalteten Suchdiensten und selbst gehosteten Typesense-/Elasticsearch-Lösungen — inklusive Infrastruktur, Betrieb, Entwicklungszeit und Skalierungskosten.
+tags: [comparison, tco, self-hosted, managed, cost-analysis]
+published: true
+---
+
+Die Entscheidung zwischen Eigenentwicklung und Zukauf von Suchinfrastruktur ist selten so einfach wie der Vergleich monatlicher Abonnementpreise. Self-Hosting birgt versteckte Kosten in Form von Entwicklungszeit, Betriebsaufwand und Opportunitätskosten. Verwaltete Dienste haben zwar Aufschläge auf den Preis, beinhalten jedoch Wartung und Zuverlässigkeit.
+
+Dieser Beitrag schlüsselt die tatsächlichen Gesamtbetriebskosten beider Ansätze für drei typische Einsatzgrößen auf.
+
+## Kostenkategorien
+
+Ein fairer Vergleich muss Folgendes berücksichtigen:
+
+1. **Infrastruktur** — Server, Speicher, Bandbreite, Backups
+2. **Betrieb** — Überwachung, Alarmierung, Incident Response, Upgrades
+3. **Entwicklungszeit** — Erstsetup, Tuning, Wartung, Fehlersuche
+4. **Opportunitätskosten** — Was Ihr Team stattdessen entwickeln könnte
+5. **Skalierungskosten** — Kosten für die Kapazitätserweiterung bei Wachstum
+
+## Szenario 1: Kleine Bereitstellung (10.000 Dokumente, 50.000 Suchanfragen/Monat)
+
+### Self-Hosted (Typesense auf einer $10 VPS)
+
+| Posten                   | Monatliche Kosten | Anmerkungen                                   |
+| ------------------------ | ----------------- | --------------------------------------------- |
+| VPS (2 GB RAM, 2 vCPU)   | $10               | Digital Ocean / Hetzner                       |
+| Backups                  | $2                | Automatisierter Snapshot-Speicher             |
+| Monitoring               | $0                | Basis-Health-Check (kostenlos)                |
+| Domain + SSL             | $1                | Zertifikatserneuerung (amortisiert)           |
+| **Infrastruktur gesamt** | **$13/Monat**     |                                               |
+| Erstsetup                | $200              | 4 Stunden Senior Engineer @ $50/Stunde        |
+| Monatliche Wartung       | $50               | 1 Stunde/Monat für Updates, Tuning            |
+| Incident Response        | $25               | 30 Min./Monat im Schnitt (Ausfälle, Probleme) |
+| **Entwicklung gesamt**   | **$275/Monat**    | Amortisiert über 12 Monate                    |
+| **Tatsächliche TCO**     | **$288/Monat**    |                                               |
+
+### Managed (AACsearch Free Tier)
+
+| Posten               | Monatliche Kosten        |
+| -------------------- | ------------------------ |
+| Abonnement           | $0                       |
+| Einrichtungszeit     | $0 (30 Min., kostenfrei) |
+| Wartung              | $0 (durch Anbieter)      |
+| **Tatsächliche TCO** | **$0/Monat**             |
+
+**Fazit:** Im kleinen Maßstab ist der verwaltete Dienst kostenlos, während Self-Hosting $288/Monat kostet. Kein Vergleich.
+
+## Szenario 2: Mittlerer Maßstab (500.000 Dokumente, 1 Mio. Suchanfragen/Monat)
+
+### Self-Hosted (Typesense, 3-Knoten-Cluster)
+
+| Posten                   | Monatliche Kosten |
+| ------------------------ | ----------------- | -------------------------- |
+| 3 x VPS (4 GB, 2 vCPU)   | $72               |
+| Load Balancer            | $12               |
+| Backups (automatisiert)  | $15               |
+| Monitoring + Alarmierung | $20               |
+| **Infrastruktur gesamt** | **$119/Monat**    |
+| Erstsetup                | $1.000            | 20 Stunden Entwicklung     |
+| Monatliche Wartung       | $200              | 4 Stunden/Monat            |
+| Incident Response        | $100              | 2 Stunden/Monat im Schnitt |
+| Relevanz-Tuning          | $100              | 2 Stunden/Monat            |
+| **Entwicklung gesamt**   | **$525/Monat**    | Amortisiert über 12 Monate |
+| **Tatsächliche TCO**     | **$644/Monat**    |                            |
+
+### Managed (AACsearch Scale Plan)
+
+| Posten               | Monatliche Kosten |
+| -------------------- | ----------------- | ------------- |
+| Abonnement           | $99               |
+| Einrichtung + Tuning | $25               | 30 Min./Monat |
+| **Tatsächliche TCO** | **$124/Monat**    |
+
+**Ersparnis:** $520/Monat durch die Nutzung des verwalteten Suchdienstes. Außerdem entwickelt Ihr Team Produktfunktionen, anstatt Suchinfrastruktur zu verwalten.
+
+## Szenario 3: Großer Maßstab (5 Mio. Dokumente, 10 Mio. Suchanfragen/Monat)
+
+### Self-Hosted (Typesense oder Elasticsearch, 6-Knoten-Cluster)
+
+| Posten                   | Monatliche Kosten |
+| ------------------------ | ----------------- | -------------------------- |
+| 6 x VPS (8 GB, 4 vCPU)   | $288              |
+| Load Balancer            | $25               |
+| Backups                  | $50               |
+| Monitoring + APM         | $50               |
+| Datentransfer            | $30               |
+| **Infrastruktur gesamt** | **$443/Monat**    |
+| Erstsetup                | $3.000            | 60 Stunden Entwicklung     |
+| Monatliche Wartung       | $500              | 10 Stunden/Monat           |
+| Incident Response        | $250              | 5 Stunden/Monat im Schnitt |
+| Relevanz-Tuning          | $200              | 4 Stunden/Monat            |
+| Skalierungsplanung       | $100              | 2 Stunden/Monat            |
+| **Entwicklung gesamt**   | **$1.300/Monat**  | Amortisiert über 12 Monate |
+| **Tatsächliche TCO**     | **$1.743/Monat**  |                            |
+
+### Managed (AACsearch Pro Plan)
+
+| Posten               | Monatliche Kosten |
+| -------------------- | ----------------- | -------------- |
+| Abonnement           | $249              |
+| Einrichtung + Tuning | $50               | 1 Stunde/Monat |
+| **Tatsächliche TCO** | **$299/Monat**    |
+
+**Ersparnis:** $1.444/Monat durch die Nutzung des verwalteten Suchdienstes. Allein die eingesparte Entwicklungszeit könnte eine Teilzeitkraft finanzieren.
+
+## Versteckte Kosten von Self-Hosting
+
+Neben den Zahlen birgt Self-Hosting Risiken, die sich nur schwer beziffern lassen, bis sie eintreten:
+
+| Risiko               | Wahrscheinlichkeit | Auswirkung                   | Minderungskosten             |
+| -------------------- | ------------------ | ---------------------------- | ---------------------------- |
+| Cluster-Ausfall      | Niedrig            | Kompletter Suchausfall       | HA-Setup (2-fache Infra)     |
+| Datenkorruption      | Sehr niedrig       | Wiederherstellung aus Backup | RTO: 2–4 Stunden             |
+| Fehlerhaftes Upgrade | Mittel             | Rollback oder Behebung       | Staging-Umgebung ($50/Monat) |
+| Sicherheitslücke     | Niedrig            | Datenoffenlegung             | Patch-SLA                    |
+| Skalierungsnotfall   | Mittel             | Leistungseinbußen            | Notfallbereitstellung        |
+
+Die meisten Teams unterschätzen diese Risiken bei der Entscheidung zwischen Eigenentwicklung und Zukauf.
+
+## Versteckte Kosten verwalteter Dienste
+
+Ein verwalteter Suchdienst ist nicht risikofrei:
+
+| Risiko              | Wahrscheinlichkeit | Auswirkung               | Minderung                            |
+| ------------------- | ------------------ | ------------------------ | ------------------------------------ |
+| Vendor-Lock-in      | Niedrig            | Teure Migration          | AACsearch: vollständiger Datenexport |
+| Preiserhöhung       | Mittel             | Budgetauswirkung         | Jährliche Preissicherung             |
+| Feature-Lücken      | Niedrig            | Workarounds erforderlich | Vorab prüfen                         |
+| Latenz durch Region | Niedrig            | Langsamere Antworten     | Nächstgelegene Region wählen         |
+
+AACsearch mindert das Vendor-Lock-in-Risiko, indem der Dienst auf Typesense basiert – Sie können Ihren gesamten Datensatz jederzeit exportieren und auf Ihrem eigenen Typesense-Cluster betreiben.
+
+## Break-Even-Analyse
+
+Ab welcher Größe wird Self-Hosting günstiger als ein verwalteter Dienst?
+
+```
+Fixkosten Self-Hosting:  Setup ($200–3.000) + Monatlicher Betrieb ($50–500)
+Fixkosten Managed:       Monatliches Abonnement ($0–249)
+
+Break-Even-Punkt: Wenn monatliche Betriebskosten < Abonnement-Aufpreis
+```
+
+Für die meisten Teams wird der Break-Even-Punkt nie erreicht, weil:
+
+1. Entwicklungszeit mit Wachstumskosten verbunden ist – jede Stunde für Suchbetrieb könnte in Ihr Produkt investiert werden
+2. Die Infrastrukturkosten von Self-Hosting mit den Daten wachsen (mehr Server), während die Kosten verwalteter Dienste stabil bleiben
+3. Das Ausfallrisiko mit der Größe steigt, nicht sinkt
+
+## Die nicht-finanziellen Faktoren
+
+Manchmal ist Self-Hosting auch bei höheren Kosten sinnvoll:
+
+- **Compliance:** Daten dürfen Ihre Infrastruktur niemals verlassen
+- **Volle Kontrolle:** Sie benötigen benutzerdefiniertes Suchverhalten, das der Anbieter nicht unterstützt
+- **Bestehende Investitionen:** Sie verfügen bereits über ein Elasticsearch-Team und einen Cluster
+- **Offline-/abgeschottete Umgebung:** Ihre Anwendung läuft in einem isolierten Netzwerk
+
+Für alle anderen bietet ein verwalteter Suchdienst eine bessere Rendite.
+
+## Entscheidungsrahmen
+
+```text
+Ist Suche Ihr Kerndifferenzierungsmerkmal?
+├── Ja → Self-Hosting (Sie brauchen volle Kontrolle und werden investieren)
+└── Nein → Verwalteten Dienst nutzen
+        ├── < 50.000 Dokumente → Free Tier (AACsearch / Algolia)
+        ├── < 500.000 Dokumente → Starter-/Scale-Plan
+        └── > 500.000 Dokumente → Scale-/Pro-Plan
+```
+
+## Nächste Schritte
+
+- [Testen Sie AACsearch kostenlos](/signup) – sehen Sie selbst, ob der verwaltete Suchdienst für Sie geeignet ist
+- [Lesen Sie die Typesense-Self-Hosting-Anleitung](/blog/typesense-deep-dive), falls Sie selbst hosten müssen
+- [Vergleichen Sie die Preise](/pricing) für verschiedene Einsatzgrößen
+
+[Gesamtbetriebskosten mit dem Preiskalkulator berechnen →](/pricing)

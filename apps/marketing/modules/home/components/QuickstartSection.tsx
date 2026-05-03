@@ -119,8 +119,8 @@ token = client.tokens.create({
   -H "Authorization: Bearer ss_search_•••••••" \\
   -H "Content-Type: application/x-ndjson" \\
   --data-binary \\
-  '{"id":"1","title":"Nike Air Max 270","price":129.99,"brand":"Nike"}
-{"id":"2","title":"Adidas Ultraboost 23","price":179.99,"brand":"Adidas"}'`,
+  '{"id":"1","title":"Running Shoes Pro","price":129.99,"brand":"SportCo"}
+{"id":"2","title":"Urban Walker X","price":179.99,"brand":"CityGear"}'`,
 		token: `curl -X POST https://api.aacsearch.com/v1/tokens \\
   -H "Authorization: Bearer ss_search_•••••••" \\
   -H "Content-Type: application/json" \\

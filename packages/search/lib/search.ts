@@ -1,7 +1,7 @@
 import "server-only";
 import { config } from "../config";
-import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
-import { getClientWithFailover, withSearchFailover, recordRegionOnline, recordRegionOffline } from "./routing";
+import { getTypesenseClient } from "./client";
+import { withSearchFailover } from "./routing";
 
 export interface GeoPolygonFilter {
 	/** Geolocation field name (default: "_geoloc") */
@@ -219,8 +219,6 @@ export async function computeDisjunctiveFacetCounts(input: {
 
 	if (!disjunctiveFacets.length || !filterBy) return existingFacetCounts;
 
-	const client = await getTypesenseClientForOrg(input.tenantId);
-
 	// Build a map of existing counts (non-disjunctive)
 	const existingMap = new Map<string, FacetCount>();
 	for (const fc of existingFacetCounts) {
@@ -251,10 +249,14 @@ export async function computeDisjunctiveFacetCounts(input: {
 					page: 1,
 				};
 
-				const response = await client
-					.collections(aliasName)
-					.documents()
-					.search(subParams as any);
+				const { result: response } = await withSearchFailover(
+					{ organizationId: input.tenantId, allowRegionOverride: true },
+					async (failoverClient) =>
+						failoverClient
+							.collections(aliasName)
+							.documents()
+							.search(subParams as any),
+				);
 
 				const facetCounts = (response.facet_counts ?? []) as FacetCount[];
 				if (facetCounts.length > 0) {
@@ -305,7 +307,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 	let vectorQuery = input.vectorQuery;
 	if (vectorQuery !== undefined && input.vectorQueryEf !== undefined) {
 		// Append ef parameter to the vector query string, e.g. "vec:([...], k:10, ef:200)"
-		vectorQuery = vectorQuery.replace(/\\)$/, `, ef:${input.vectorQueryEf})`);
+		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${input.vectorQueryEf})`);
 	}
 
 	const params: TypesenseSearchParams = {
@@ -413,96 +415,113 @@ export async function multiSearchDocuments(
 	entries: MultiSearchEntry[],
 ): Promise<SearchDocumentsResult[]> {
 	if (entries.length === 0) return [];
-	const client = entries[0]?.tenantId
-		? await getTypesenseClientForOrg(entries[0].tenantId)
-		: getTypesenseClient();
+	const tenantId = entries[0]?.tenantId;
+	if (!tenantId) {
+		// No tenant — use default client (no failover possible)
+		const searches = entries.map((entry) => buildMultiSearchEntry(entry));
+		const client = getTypesenseClient();
+		const response = await client.multiSearch.perform({ searches: searches as any });
+		return parseMultiSearchResults(response, entries);
+	}
 
-	const searches = entries.map((entry) => {
-		const perPage = Math.min(
-			Math.max(entry.perPage ?? config.defaultPerPage, 1),
-			config.maxPerPage,
-		);
-		let vectorQuery = entry.vectorQuery;
-		if (vectorQuery !== undefined && entry.vectorQueryEf !== undefined) {
-			vectorQuery = vectorQuery.replace(/\)$/, `, ef:${entry.vectorQueryEf})`);
-		}
-		return {
-			collection: entry.alias,
-			q: entry.q,
-			query_by: entry.queryBy ?? "",
-			filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
-			facet_by: entry.facetBy,
-			sort_by: entry.sortBy,
-			per_page: perPage,
-			page: entry.page ?? 1,
-			highlight_fields: entry.highlightFields,
-			vector_query: vectorQuery,
-			...(entry.facetSampleSlope !== undefined && {
-				facet_sample_slope: entry.facetSampleSlope,
-			}),
-			...(entry.facetSampleThreshold !== undefined && {
-				facet_sample_threshold: entry.facetSampleThreshold,
-			}),
-			// ── Advanced facet params ──
-			...(entry.maxFacetValues !== undefined && {
-				max_facet_values: entry.maxFacetValues,
-			}),
-			...(entry.facetQuery !== undefined && {
-				facet_query: entry.facetQuery,
-			}),
-			...(entry.facetSearch !== undefined && {
-				facet_search: entry.facetSearch,
-			}),
-			...(entry.facetSamplePercent !== undefined && {
-				facet_sample_percent: entry.facetSamplePercent,
-			}),
-			...(entry.facetStrategy !== undefined && {
-				facet_strategy: entry.facetStrategy,
-			}),
-			...(entry.facetSortBy !== undefined && {
-				facet_sort_by: entry.facetSortBy,
-			}),
-			// ── Typo fine-tuning ──
-			...(entry.exhaustiveSearch !== undefined && {
-				exhaustive_search: entry.exhaustiveSearch,
-			}),
-			...(entry.synonymPrefix !== undefined && {
-				synonym_prefix: entry.synonymPrefix,
-			}),
-			...(entry.synonymNumTypos !== undefined && {
-				synonym_num_typos: entry.synonymNumTypos,
-			}),
-			...(entry.minLen1Typo !== undefined && {
-				min_len_1typo: entry.minLen1Typo,
-			}),
-			...(entry.minLen2Typo !== undefined && {
-				min_len_2typo: entry.minLen2Typo,
-			}),
-			...(entry.dropTokensMode !== undefined && {
-				drop_tokens_mode: entry.dropTokensMode,
-			}),
-			...(entry.maxCandidates !== undefined && {
-				max_candidates: entry.maxCandidates,
-			}),
-			// ── Caching ──
-			...(entry.cacheTtl !== undefined && {
-				cache_ttl: entry.cacheTtl,
-			}),
-			// ── Highlight ──
-			...(entry.enableHighlightV1 !== undefined && {
-				enable_highlight_v1: entry.enableHighlightV1,
-			}),
-			// ── Grouping ──
-			...(entry.groupMissingValues !== undefined && {
-				group_missing_values: entry.groupMissingValues,
-			}),
-		};
-	});
+	const searches = entries.map((entry) => buildMultiSearchEntry(entry));
 
-	const response = await client.multiSearch.perform({ searches: searches as any });
+	const { result: response } = await withSearchFailover(
+		{ organizationId: tenantId, allowRegionOverride: true },
+		async (client) => client.multiSearch.perform({ searches: searches as any }) as any,
+	);
+
+	return parseMultiSearchResults(response, entries);
+}
+
+function buildMultiSearchEntry(entry: MultiSearchEntry): Record<string, unknown> {
+	const perPage = Math.min(
+		Math.max(entry.perPage ?? config.defaultPerPage, 1),
+		config.maxPerPage,
+	);
+	let vectorQuery = entry.vectorQuery;
+	if (vectorQuery !== undefined && entry.vectorQueryEf !== undefined) {
+		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${entry.vectorQueryEf})`);
+	}
+	return {
+		collection: entry.alias,
+		q: entry.q,
+		query_by: entry.queryBy ?? "",
+		filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
+		facet_by: entry.facetBy,
+		sort_by: entry.sortBy,
+		per_page: perPage,
+		page: entry.page ?? 1,
+		highlight_fields: entry.highlightFields,
+		vector_query: vectorQuery,
+		...(entry.facetSampleSlope !== undefined && {
+			facet_sample_slope: entry.facetSampleSlope,
+		}),
+		...(entry.facetSampleThreshold !== undefined && {
+			facet_sample_threshold: entry.facetSampleThreshold,
+		}),
+		// ── Advanced facet params ──
+		...(entry.maxFacetValues !== undefined && {
+			max_facet_values: entry.maxFacetValues,
+		}),
+		...(entry.facetQuery !== undefined && {
+			facet_query: entry.facetQuery,
+		}),
+		...(entry.facetSearch !== undefined && {
+			facet_search: entry.facetSearch,
+		}),
+		...(entry.facetSamplePercent !== undefined && {
+			facet_sample_percent: entry.facetSamplePercent,
+		}),
+		...(entry.facetStrategy !== undefined && {
+			facet_strategy: entry.facetStrategy,
+		}),
+		...(entry.facetSortBy !== undefined && {
+			facet_sort_by: entry.facetSortBy,
+		}),
+		// ── Typo fine-tuning ──
+		...(entry.exhaustiveSearch !== undefined && {
+			exhaustive_search: entry.exhaustiveSearch,
+		}),
+		...(entry.synonymPrefix !== undefined && {
+			synonym_prefix: entry.synonymPrefix,
+		}),
+		...(entry.synonymNumTypos !== undefined && {
+			synonym_num_typos: entry.synonymNumTypos,
+		}),
+		...(entry.minLen1Typo !== undefined && {
+			min_len_1typo: entry.minLen1Typo,
+		}),
+		...(entry.minLen2Typo !== undefined && {
+			min_len_2typo: entry.minLen2Typo,
+		}),
+		...(entry.dropTokensMode !== undefined && {
+			drop_tokens_mode: entry.dropTokensMode,
+		}),
+		...(entry.maxCandidates !== undefined && {
+			max_candidates: entry.maxCandidates,
+		}),
+		// ── Caching ──
+		...(entry.cacheTtl !== undefined && {
+			cache_ttl: entry.cacheTtl,
+		}),
+		// ── Highlight ──
+		...(entry.enableHighlightV1 !== undefined && {
+			enable_highlight_v1: entry.enableHighlightV1,
+		}),
+		// ── Grouping ──
+		...(entry.groupMissingValues !== undefined && {
+			group_missing_values: entry.groupMissingValues,
+		}),
+	};
+}
+
+function parseMultiSearchResults(
+	response: unknown,
+	entries: MultiSearchEntry[],
+): SearchDocumentsResult[] {
 	const results =
 		(response as unknown as { results: Array<Record<string, unknown>> }).results ?? [];
-
 	return results.map((r, idx) => ({
 		hits: (r.hits as unknown[]) ?? [],
 		found: (r.found as number) ?? 0,

@@ -6,8 +6,6 @@ import { DocsEcosystemSection } from "@home/components/DocsEcosystemSection";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { FitSection } from "@home/components/FitSection";
 import { HeroSection } from "@home/components/HeroSection";
-import { LogosWall } from "@home/components/LogosWall";
-import { MigrationSection } from "@home/components/MigrationSection";
 import { PricingCalculator } from "@home/components/PricingCalculator";
 import { PricingFaq } from "@home/components/PricingFaq";
 import { PricingPlans } from "@home/components/PricingPlans";
@@ -47,9 +45,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 1. Hero — outcome-driven value prop */}
 			<HeroSection />
 
-			{/* 2. Trust bar — customer logos */}
-			<LogosWall />
-
 			{/* 3. For whom — segmented use cases */}
 			<UseCasesGrid />
 
@@ -70,9 +65,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
 			{/* 9. Analytics — data-driven improvement */}
 			<AnalyticsSection />
-
-			{/* 10. Migration — 1-hour switch */}
-			<MigrationSection />
 
 			{/* 11. TCO comparison — vs Algolia */}
 			<TcoComparison />

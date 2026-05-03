@@ -1,7 +1,7 @@
 import "server-only";
 import { logger } from "@repo/logs";
 
-import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
+import { getTypesenseClient } from "./client";
 import { checkRegionHealth } from "./health";
 import { AVAILABLE_REGIONS, DEFAULT_REGION, type StorageRegion } from "./regions";
 
@@ -340,7 +340,11 @@ export async function withSearchFailover<T>(
 	let failoverCount = 0;
 
 	// Try primary first (or best available), then cycle through failover candidates
-	const regionCandidates = getRegionFailoverOrder(primaryRegion, cache, options.allowRegionOverride);
+	const regionCandidates = getRegionFailoverOrder(
+		primaryRegion,
+		cache,
+		options.allowRegionOverride,
+	);
 
 	for (const region of regionCandidates) {
 		if (triedRegions.has(region)) continue;
@@ -411,6 +415,3 @@ function getRegionFailoverOrder(
 
 	return order;
 }
-
-/** @deprecated Use {@link withSearchFailover} for new code */
-export { getClientWithFailover };

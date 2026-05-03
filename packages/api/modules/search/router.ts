@@ -162,14 +162,14 @@ export const searchRouter = {
 		get: getSynonyms,
 		update: updateSynonyms,
 	},
-	curations: {
-		get: getCurations,
-		update: updateCurations,
-	},
 	globalSynonyms: {
 		get: getGlobalSynonyms,
 		update: updateGlobalSynonyms,
 		effective: getEffectiveGlobalSynonyms,
+	},
+	curations: {
+		get: getCurations,
+		update: updateCurations,
 	},
 	globalCurations: {
 		get: getGlobalCurations,

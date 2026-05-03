@@ -15,6 +15,8 @@ import { useState } from "react";
 import { EmptyState } from "../cards/EmptyState";
 import { CounterRulesPanel } from "../panels/CounterRulesPanel";
 import { CurationsPanel } from "../panels/CurationsPanel";
+import { GlobalCurationsPanel } from "../panels/GlobalCurationsPanel";
+import { GlobalSynonymsPanel } from "../panels/GlobalSynonymsPanel";
 import { NoHitsQueriesRulesPanel } from "../panels/NoHitsQueriesRulesPanel";
 import { QueryRulesPanel } from "../panels/QueryRulesPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
@@ -39,9 +41,17 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 	}
 
 	return (
-		<div className="space-y-4">
-			<div className="max-w-xs">
-				<Select value={selectedSlug} onValueChange={setSelectedSlug}>
+		<div className="space-y-8">
+			{/* Global synonyms — apply to all indexes */}
+			<GlobalSynonymsPanel organizationId={organizationId} />
+
+			{/* Global curations — apply to all indexes */}
+			<GlobalCurationsPanel organizationId={organizationId} />
+
+			{/* Per-index settings */}
+			<div className="space-y-4">
+				<div className="max-w-xs">
+					<Select value={selectedSlug} onValueChange={setSelectedSlug}>
 					<SelectTrigger>
 						<SelectValue placeholder={t("search.selectIndex")} />
 					</SelectTrigger>
@@ -118,5 +128,6 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 				<EmptyState variant="inline" description={t("search.selectIndex")} />
 			)}
 		</div>
-	);
+	</div>
+);
 }

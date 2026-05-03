@@ -2104,6 +2104,36 @@
 			"variantALeading": "Variante A mène de {diff}% CTR",
 			"variantBLeading": "Variante B mène de {diff}% CTR",
 			"variantsTied": "Variantes à égalité"
+		},
+		"globalSynonyms": {
+			"title": "Global Synonyms",
+			"description": "Synonym sets that apply to all indexes in this project. Changes take effect immediately.",
+			"addSet": "Add set",
+			"empty": "No global synonym sets configured yet.",
+			"emptyDescription": "Global synonym sets apply across all search indexes in your project, ensuring consistent search behavior.",
+			"nameLabel": "Set name",
+			"namePlaceholder": "e.g. Shoe synonyms",
+			"nameRequired": "Set name is required.",
+			"rootLabel": "Root term",
+			"rootPlaceholder": "e.g. shoes",
+			"rootRequired": "Root term is required.",
+			"synonymsLabel": "Synonyms (comma-separated)",
+			"synonymsPlaceholder": "e.g. sneakers, trainers, kicks",
+			"synonymsRequired": "At least one synonym is required.",
+			"scopeLabel": "Scope",
+			"scopeAll": "Apply to all indexes",
+			"scopeSelected": "Only selected indexes",
+			"excludeLabel": "Excluded collections"
+		},
+		"globalCurations": {
+			"title": "Global Curations",
+			"description": "Curation overrides that apply to all indexes in this project. Changes take effect immediately.",
+			"addSet": "Add set",
+			"save": "Save global curations",
+			"saved": "Global curations saved.",
+			"error": "Failed to save global curations.",
+			"empty": "No global curation sets configured yet.",
+			"emptyDescription": "Global curation sets apply across all search indexes, pinning or hiding results for specific queries everywhere."
 		}
 	}
 }

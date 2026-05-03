@@ -131,6 +131,8 @@ export {
 	checkIndexHealth,
 	checkAllRegionsHealth,
 	checkRegionHealth,
+	startRegionHealthMonitor,
+	stopRegionHealthMonitor,
 	type HealthStatus,
 	type IndexHealthResult,
 	type RegionHealthResult,
@@ -171,6 +173,8 @@ export {
 	recordRegionOnline,
 	recordRegionOffline,
 	clearHealthCache,
+	withSearchFailover,
+	type FailoverOperationOptions,
 	type FailoverResult,
 	type RegionHealthEntry,
 } from "./lib/routing";

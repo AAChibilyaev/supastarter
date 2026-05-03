@@ -241,3 +241,75 @@ export async function checkRegionHealth(region: StorageRegion): Promise<RegionHe
 		};
 	}
 }
+
+// ── Continuous Health Monitor ────────────────────────────────────
+
+const HEALTH_MONITOR_INTERVAL_MS = 30_000; // 30 seconds
+let healthMonitorInterval: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * Start a background interval that periodically checks health of ALL
+ * configured Typesense regions and updates the routing health cache.
+ *
+ * This provides proactive health tracking — the cache is kept warm
+ * even during idle periods, so `getClientWithFailover` always has
+ * recent latency data to make routing decisions.
+ *
+ * Call once at application startup. Safe to call multiple times
+ * (subsequent calls are no-ops while the monitor is running).
+ */
+export function startRegionHealthMonitor(): void {
+	if (healthMonitorInterval) return;
+
+	healthMonitorInterval = setInterval(async () => {
+		try {
+			const results = await checkAllRegionsHealth();
+			// Dynamically import routing to update its singleton health cache
+			const { recordRegionOnline, recordRegionOffline } = await import("./routing");
+			for (const result of results) {
+				if (result.online && result.latencyMs !== null) {
+					recordRegionOnline(result.region as StorageRegion, result.latencyMs);
+				} else {
+					recordRegionOffline(result.region as StorageRegion);
+				}
+			}
+		} catch (error) {
+			logger.error("Health monitor: region health check cycle failed", { error });
+		}
+	}, HEALTH_MONITOR_INTERVAL_MS);
+
+	// Run an immediate check — don't wait for first interval tick
+	void (async () => {
+		try {
+			const results = await checkAllRegionsHealth();
+			const { recordRegionOnline, recordRegionOffline } = await import("./routing");
+			for (const result of results) {
+				if (result.online && result.latencyMs !== null) {
+					recordRegionOnline(result.region as StorageRegion, result.latencyMs);
+				} else {
+					recordRegionOffline(result.region as StorageRegion);
+				}
+			}
+			logger.info("Health monitor: initial region health check complete", {
+				regions: results.map((r) => ({
+					region: r.region,
+					online: r.online,
+					latencyMs: r.latencyMs,
+				})),
+			});
+		} catch (error) {
+			logger.warn("Health monitor: initial region health check failed", { error });
+		}
+	})();
+}
+
+/**
+ * Stop the background health monitor.
+ * Useful for testing or graceful shutdown.
+ */
+export function stopRegionHealthMonitor(): void {
+	if (healthMonitorInterval) {
+		clearInterval(healthMonitorInterval);
+		healthMonitorInterval = null;
+	}
+}

@@ -2,10 +2,8 @@
 
 import { config } from "@config";
 import { cn } from "@repo/ui";
-import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent } from "@repo/ui/components/card";
-import { ArrowRightIcon, Code2Icon, GlobeIcon, ShieldIcon, ZapIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
@@ -26,47 +24,29 @@ const { hits, found } = await search.search({
   filterBy: "in_stock:=true",
 });`;
 
-const featureBadges = [
-	{ icon: ZapIcon, label: "50ms p99" },
-	{ icon: ShieldIcon, label: "Scoped tokens" },
-	{ icon: GlobeIcon, label: "Edge network" },
-	{ icon: Code2Icon, label: "SDK-first" },
-];
-
 export function HeroWithCode() {
 	const t = useTranslations();
 
 	return (
-		<section className="relative isolate overflow-hidden border-b border-border/60">
-			{/* Layered gradient background */}
-			<div className="inset-0 absolute -z-10 bg-gradient-to-br from-primary/5 via-background to-secondary/10" />
-			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.45_0_0/0.08),transparent_55%)]" />
-			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.45_0_0/0.05),transparent_50%)]" />
-
-			<div className="gap-10 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24 container grid">
-				{/* Left column: text + CTAs */}
+		<section className="border-b border-border py-16 lg:py-28">
+			<div className="container grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
+				{/* Left: text */}
 				<div className="flex flex-col justify-center">
-					{/* Announcement badge */}
-					<div className="mb-6 gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/5">
-						<span className="size-1.5 rounded-full bg-primary" />
-						<span className="font-medium text-primary">{t("home.hero.badge")}</span>
+					<div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
+						{t("home.hero.badge")}
 					</div>
 
-					{/* Gradient heading */}
-					<h1 className="font-bold text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance">
-						<span className="bg-gradient-to-r from-primary via-primary/80 to-foreground bg-clip-text text-transparent">
-							{t("home.hero.title")}
-						</span>
+					<h1 className="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] text-balance text-foreground">
+						{t("home.hero.title")}
 					</h1>
 
-					<p className="mt-5 max-w-xl text-lg text-pretty text-muted-foreground">
+					<p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground text-pretty">
 						{t("home.hero.subtitle")}
 					</p>
 
-					{/* CTA buttons — wrap on narrow widths */}
-					<div className="mt-8 gap-3 flex flex-wrap items-center">
+					<div className="mt-8 flex flex-wrap items-center gap-3">
 						<Button
-							className={cn(marketingCtaButtonClassName(true), "sm:w-auto w-full")}
+							className={cn(marketingCtaButtonClassName(true), "w-full sm:w-auto")}
 							size="lg"
 							variant="primary"
 							asChild
@@ -77,55 +57,32 @@ export function HeroWithCode() {
 							</a>
 						</Button>
 						{config.docsUrl && (
-							<Button className="sm:w-auto w-full" variant="ghost" size="lg" asChild>
+							<Button className="w-full sm:w-auto" variant="outline" size="lg" asChild>
 								<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
 							</Button>
 						)}
 					</div>
 
-					{/* Feature badge row — wrap on narrow widths */}
-					<div className="mt-6 gap-2 flex flex-wrap items-center">
-						{featureBadges.map(({ icon: Icon, label }) => (
-							<Badge
-								key={label}
-								status="info"
-								className="gap-1.5 px-3 py-1 text-xs font-medium whitespace-nowrap normal-case"
-							>
-								<Icon className="size-3" />
-								{label}
-							</Badge>
-						))}
-					</div>
-
-					{/* Trust badges — G2, Capterra, customer count */}
-					<div className="mt-6">
+					<div className="mt-8 border-t border-border pt-6">
 						<TrustBadge />
 					</div>
 				</div>
 
-				{/* Right column: glass-morphism code card */}
-				<div className="relative">
-					<Card className="shadow-2xl backdrop-blur-xl overflow-hidden border-border/60 bg-card/40 shadow-primary/5">
-						{/* Terminal title bar */}
-						<div className="gap-2 px-4 py-3 flex items-center border-b border-border/50">
-							<span className="size-2.5 bg-red-500/70 rounded-full" />
-							<span className="size-2.5 bg-amber-500/70 rounded-full" />
-							<span className="size-2.5 bg-emerald-500/70 rounded-full" />
-							<span className="ml-3 text-xs font-mono text-muted-foreground">
+				{/* Right: code terminal */}
+				<div>
+					<div className="overflow-hidden rounded-lg border border-border bg-[#0d0d10]">
+						<div className="flex items-center gap-2 border-b border-white/8 px-4 py-3">
+							<span className="size-2.5 rounded-full bg-red-500/70" />
+							<span className="size-2.5 rounded-full bg-amber-500/70" />
+							<span className="size-2.5 rounded-full bg-emerald-500/70" />
+							<span className="ml-3 font-mono text-xs text-white/35">
 								{t("home.hero.codeCaption")}
 							</span>
 						</div>
-
-						{/* Code block */}
-						<CardContent className="p-0">
-							<pre className="p-5 font-mono leading-relaxed overflow-x-auto text-[13px] text-foreground/90">
-								<code>{highlightCode(codeSample)}</code>
-							</pre>
-						</CardContent>
-					</Card>
-
-					{/* Ambient glow behind the card */}
-					<div className="-inset-4 blur-2xl absolute -z-10 rounded-2xl bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 opacity-50" />
+						<pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed text-white/75">
+							<code>{highlightCode(codeSample)}</code>
+						</pre>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -148,25 +105,19 @@ function highlightCode(source: string) {
 			let lastIndex = 0;
 			for (const match of part.value.matchAll(regex)) {
 				if (match.index === undefined) continue;
-				if (match.index > lastIndex) {
-					next.push({
-						value: part.value.slice(lastIndex, match.index),
-					});
-				}
+				if (match.index > lastIndex) next.push({ value: part.value.slice(lastIndex, match.index) });
 				next.push({ value: match[0], className });
 				lastIndex = match.index + match[0].length;
 			}
-			if (lastIndex < part.value.length) {
-				next.push({ value: part.value.slice(lastIndex) });
-			}
+			if (lastIndex < part.value.length) next.push({ value: part.value.slice(lastIndex) });
 		}
 		parts.length = 0;
 		parts.push(...next);
 	};
 
-	tokenize(strings, "text-amber-200");
-	tokenize(keywords, "text-violet-300");
-	tokenize(fns, "text-sky-300");
+	tokenize(strings, "text-amber-300/90");
+	tokenize(keywords, "text-violet-400/90");
+	tokenize(fns, "text-pink-400/90");
 
 	return parts.map((part, i) =>
 		part.className ? (

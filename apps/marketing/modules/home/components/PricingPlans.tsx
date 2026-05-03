@@ -2,9 +2,6 @@
 
 import { config } from "@config";
 import { cn } from "@repo/ui";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui";
-import { Badge } from "@repo/ui";
-import { Tabs, TabsList, TabsTrigger } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { CheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -25,125 +22,113 @@ export function PricingPlans() {
 	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="border-b border-border/60 py-14 md:py-24">
+		<section id="pricing" className="border-b border-border py-14 md:py-24">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<Badge status="info" className="mb-4">
+					<p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
 						{t("home.pricing.badge")}
-					</Badge>
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
+					</p>
+					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
 						{t("home.pricing.subtitle")}
 					</p>
 				</div>
 
+				{/* Billing toggle */}
 				<div className="mt-8 flex justify-center">
-					<Tabs value={interval} onValueChange={(v) => setInterval(v as BillingInterval)}>
-						<TabsList className="p-0.5 rounded-full border bg-muted/50">
-							<TabsTrigger
-								value="monthly"
-								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
+					<div className="flex items-center gap-1 rounded-lg border border-border bg-muted/50 p-1">
+						{(["monthly", "yearly"] as const).map((v) => (
+							<button
+								key={v}
+								type="button"
+								onClick={() => setInterval(v)}
+								className={cn(
+									"px-4 py-1.5 text-sm font-medium rounded-md transition-colors",
+									interval === v
+										? "bg-card text-foreground shadow-sm"
+										: "text-muted-foreground hover:text-foreground",
+								)}
 							>
-								{t("home.pricing.monthly")}
-							</TabsTrigger>
-							<TabsTrigger
-								value="yearly"
-								className="px-4 py-1.5 text-sm data-[state=active]:shadow-sm rounded-full data-[state=active]:border-0 data-[state=active]:bg-background data-[state=active]:text-foreground"
-							>
-								{t("home.pricing.yearly")}
-								<Badge status="success" className="ml-2 px-1.5 py-0 text-[10px]">
-									{t("home.pricing.yearlyDiscount")}
-								</Badge>
-							</TabsTrigger>
-						</TabsList>
-					</Tabs>
+								{t(`home.pricing.${v}`)}
+								{v === "yearly" && (
+									<span className="ml-1.5 text-[10px] font-semibold text-success">
+										{t("home.pricing.yearlyDiscount")}
+									</span>
+								)}
+							</button>
+						))}
+					</div>
 				</div>
 
-				<div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="mt-10 grid gap-px bg-border overflow-hidden rounded-lg border border-border sm:grid-cols-2 lg:grid-cols-3">
 					{plans.map((plan) => {
 						const features = Array.from({ length: plan.featuresCount }, (_, i) =>
 							t(`home.pricing.plans.${plan.key}.features.${i}`),
 						);
 
 						return (
-							<Card
+							<div
 								key={plan.key}
 								className={cn(
-									"relative flex flex-col",
-									plan.primary
-										? "shadow-lg border-primary/30 ring-1 shadow-primary/5 ring-primary/10"
-										: "",
+									"relative flex flex-col bg-card p-7",
+									plan.primary && "bg-primary/3",
 								)}
 							>
 								{plan.primary && (
-									<div className="-top-3 inset-x-0 absolute flex justify-center">
-										<Badge status="info" className="shadow-sm">
-											{t(`home.pricing.plans.${plan.key}.highlight`)}
-										</Badge>
-									</div>
+									<div className="absolute top-0 inset-x-0 h-0.5 bg-primary" />
 								)}
 
-								<CardHeader className={plan.primary ? "pt-8" : ""}>
-									<CardTitle>
+								<div className="mb-6">
+									<p className="font-semibold text-base text-foreground">
 										{t(`home.pricing.plans.${plan.key}.name`)}
-									</CardTitle>
-									<CardDescription>
+									</p>
+									<p className="mt-1 text-sm text-muted-foreground text-pretty">
 										{t(`home.pricing.plans.${plan.key}.description`)}
-									</CardDescription>
-								</CardHeader>
+									</p>
+								</div>
 
-								<CardContent className="flex-1">
-									<div className="gap-1 flex items-baseline">
-										<span className="font-bold text-4xl tracking-tight tabular-nums">
-											{t(`home.pricing.plans.${plan.key}.price`)}
+								<div className="mb-6 flex items-baseline gap-1">
+									<span className="font-bold text-4xl tracking-tight tabular-nums text-foreground">
+										{t(`home.pricing.plans.${plan.key}.price`)}
+									</span>
+									{plan.key !== "enterprise" && (
+										<span className="text-sm text-muted-foreground">
+											{interval === "monthly"
+												? t("home.pricing.perMonth")
+												: t("home.pricing.perYear")}
 										</span>
-										{plan.key !== "enterprise" && (
-											<span className="text-sm text-muted-foreground">
-												{interval === "monthly"
-													? t("home.pricing.perMonth")
-													: t("home.pricing.perYear")}
-											</span>
-										)}
-									</div>
+									)}
+								</div>
 
-									<ul className="mt-8 gap-3 flex flex-col">
-										{features.map((feature) => (
-											<li
-												key={feature}
-												className="gap-3 text-sm flex items-start"
-											>
-												<CheckIcon className="mt-0.5 size-4 shrink-0 text-success" />
-												<span className="text-muted-foreground">
-													{feature}
-												</span>
-											</li>
-										))}
-									</ul>
-								</CardContent>
-
-								<CardFooter>
-									<Button
-										className={cn(
-											"w-full",
-											marketingCtaButtonClassName(plan.primary),
-										)}
-										variant={plan.primary ? "primary" : "outline"}
-										asChild
+								<Button
+									className={cn("w-full", marketingCtaButtonClassName(plan.primary))}
+									variant={plan.primary ? "primary" : "outline"}
+									asChild
+								>
+									<a
+										href={
+											plan.key === "enterprise"
+												? "/contact"
+												: (config.saasUrl ?? "/signup")
+										}
 									>
-										<a
-											href={
-												plan.key === "enterprise"
-													? "/contact"
-													: (config.saasUrl ?? "/signup")
-											}
-										>
-											{t(`home.pricing.${plan.ctaKey}`)}
-										</a>
-									</Button>
-								</CardFooter>
-							</Card>
+										{t(`home.pricing.${plan.ctaKey}`)}
+									</a>
+								</Button>
+
+								<ul className="mt-6 flex flex-col gap-3">
+									{features.map((feature) => (
+										<li key={feature} className="flex items-start gap-3 text-sm">
+											<CheckIcon className="mt-0.5 size-4 shrink-0 text-primary" />
+											<span className="text-muted-foreground text-pretty">
+												{feature}
+											</span>
+										</li>
+									))}
+								</ul>
+							</div>
 						);
 					})}
 				</div>

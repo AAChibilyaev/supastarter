@@ -1,38 +1,40 @@
 import { config } from "@config";
-import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
+import { ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
 
 export function CtaFooter() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-14 md:py-24 relative overflow-hidden">
-			{/* Gradient backgrounds */}
-			<div className="-top-24 -right-24 size-96 blur-3xl absolute rounded-full bg-primary/10" />
-			<div className="-bottom-24 -left-24 size-96 blur-3xl absolute rounded-full bg-accent/20" />
-
-			<div className="relative container">
+		<section className="bg-foreground py-20 md:py-28">
+			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance text-background md:text-5xl">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+					<p className="mt-5 text-lg leading-relaxed text-background/55 text-pretty">
 						{t("home.cta.subtitle")}
 					</p>
-					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
+					<div className="mt-8 flex flex-wrap items-center justify-center gap-4">
 						<Button
-							className={cn(marketingCtaButtonClassName(true), "sm:w-auto w-full")}
 							size="lg"
 							variant="primary"
+							className="w-full sm:w-auto"
 							asChild
 						>
-							<a href={config.saasUrl ?? "/signup"}>{t("home.cta.primary")}</a>
+							<a href={config.saasUrl ?? "/signup"}>
+								{t("home.cta.primary")}
+								<ArrowRightIcon className="ml-2 size-4" />
+							</a>
 						</Button>
 						{config.docsUrl && (
-							<Button className="sm:w-auto w-full" size="lg" variant="ghost" asChild>
+							<Button
+								size="lg"
+								variant="ghost"
+								className="w-full sm:w-auto text-background/70 hover:text-background hover:bg-white/8"
+								asChild
+							>
 								<a href={config.docsUrl}>{t("home.cta.secondary")}</a>
 							</Button>
 						)}

@@ -1,14 +1,14 @@
 "use client";
 
+import { cn } from "@repo/ui";
 import { useTranslations } from "next-intl";
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Testimonial {
 	quote: string;
 	author: string;
 	role: string;
 	company: string;
-	avatar: string;
 	initials: string;
 }
 
@@ -18,7 +18,6 @@ const TESTIMONIALS: Testimonial[] = [
 		author: "Erik Lindström",
 		role: "CTO",
 		company: "NordikHome",
-		avatar: "",
 		initials: "EL",
 	},
 	{
@@ -26,7 +25,6 @@ const TESTIMONIALS: Testimonial[] = [
 		author: "Marcus Weber",
 		role: "Technical Director",
 		company: "AgencyHub",
-		avatar: "",
 		initials: "MW",
 	},
 	{
@@ -34,7 +32,6 @@ const TESTIMONIALS: Testimonial[] = [
 		author: "Priya Sharma",
 		role: "VP Engineering",
 		company: "DevStream",
-		avatar: "",
 		initials: "PS",
 	},
 ];
@@ -48,10 +45,6 @@ export function TestimonialCarousel() {
 		setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
 	}, []);
 
-	const prev = useCallback(() => {
-		setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-	}, []);
-
 	useEffect(() => {
 		if (isPaused) return;
 		const interval = setInterval(next, 6000);
@@ -61,80 +54,58 @@ export function TestimonialCarousel() {
 	const testimonial = TESTIMONIALS[activeIndex]!;
 
 	return (
-		<section className="border-b border-border/60 py-14 md:py-24">
+		<section className="border-b border-border py-14 md:py-24">
 			<div className="container">
-				<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-center text-balance">
-					{t("testimonials.title")}
-				</h2>
-				<p className="mt-4 text-lg leading-relaxed text-center text-muted-foreground">
-					{t("testimonials.subtitle")}
-				</p>
+				<div className="max-w-2xl mx-auto text-center">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+						{t("testimonials.title")}
+					</h2>
+					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+						{t("testimonials.subtitle")}
+					</p>
+				</div>
 
 				<div
 					className="mt-12 max-w-3xl mx-auto"
 					onMouseEnter={() => setIsPaused(true)}
 					onMouseLeave={() => setIsPaused(false)}
 				>
-					<div className="relative rounded-3xl border bg-card p-6 transition-all duration-300 sm:p-10">
-						{/* Quote icon */}
-						<div className="mb-4 text-6xl leading-none text-primary/20 select-none">
-							&ldquo;
-						</div>
-
-						<blockquote className="text-lg md:text-xl leading-relaxed text-foreground">
-							{testimonial.quote}
+					<div className="rounded-lg border border-border bg-card p-6 sm:p-10">
+						<blockquote className="text-lg md:text-xl leading-relaxed text-foreground text-pretty">
+							"{testimonial.quote}"
 						</blockquote>
 
-						<div className="mt-6 gap-4 flex items-center">
-							<div className="size-12 font-bold text-sm flex items-center justify-center rounded-full bg-primary/10 text-primary select-none">
+						<div className="mt-8 flex items-center gap-4 border-t border-border pt-6">
+							<div className="size-10 flex shrink-0 items-center justify-center rounded-full bg-primary font-semibold text-sm text-primary-foreground select-none">
 								{testimonial.initials}
 							</div>
 							<div>
-								<p className="font-semibold text-foreground">
+								<p className="font-semibold text-sm text-foreground">
 									{testimonial.author}
 								</p>
-								<p className="text-sm text-muted-foreground">
+								<p className="text-xs text-muted-foreground">
 									{testimonial.role}, {testimonial.company}
 								</p>
 							</div>
 						</div>
 					</div>
 
-					{/* Navigation dots */}
-					<div className="mt-6 gap-3 flex items-center justify-center">
+					{/* Progress dots */}
+					<div className="mt-5 flex items-center justify-center gap-2">
 						{TESTIMONIALS.map((_, index) => (
 							<button
 								key={index}
 								type="button"
 								onClick={() => setActiveIndex(index)}
-								className={`size-2.5 rounded-full transition-all duration-300 ${
+								className={cn(
+									"h-1.5 rounded-full transition-all duration-300",
 									index === activeIndex
 										? "w-8 bg-primary"
-										: "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-								}`}
+										: "w-1.5 bg-border hover:bg-muted-foreground/40",
+								)}
 								aria-label={t("testimonials.dotLabel", { number: index + 1 })}
 							/>
 						))}
-					</div>
-
-					{/* Prev/Next buttons */}
-					<div className="mt-4 gap-3 flex items-center justify-center">
-						<button
-							type="button"
-							onClick={prev}
-							className="px-4 py-2 text-sm rounded-xl border border-border/60 bg-card transition-colors hover:border-primary/30 hover:bg-accent/10"
-							aria-label={t("testimonials.prevLabel")}
-						>
-							&larr; {t("testimonials.prev")}
-						</button>
-						<button
-							type="button"
-							onClick={next}
-							className="px-4 py-2 text-sm rounded-xl border border-border/60 bg-card transition-colors hover:border-primary/30 hover:bg-accent/10"
-							aria-label={t("testimonials.nextLabel")}
-						>
-							{t("testimonials.next")} &rarr;
-						</button>
 					</div>
 				</div>
 			</div>

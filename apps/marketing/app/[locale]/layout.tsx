@@ -14,14 +14,14 @@ import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { Figtree } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import type { PropsWithChildren } from "react";
 
-const sansFont = Figtree({
+const sansFont = Plus_Jakarta_Sans({
 	weight: ["300", "400", "500", "600", "700", "800"],
-	subsets: ["latin"],
+	subsets: ["latin", "latin-ext"],
 	variable: "--font-sans",
 });
 

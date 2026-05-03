@@ -1,6 +1,3 @@
-import { cn } from "@repo/ui";
-import { Card, CardContent, CardDescription, CardTitle } from "@repo/ui";
-import { FeatureCardHeaderRow } from "@shared/components/FeatureCardHeaderRow";
 import {
 	GaugeIcon,
 	GitBranchIcon,
@@ -32,50 +29,36 @@ const items: FeatureItem[] = [
 	{ key: "enterpriseSecurity", icon: ShieldCheckIcon },
 ];
 
-const spanMap: Record<FeatureItem["key"], string> = {
-	scopedTokens: "md:col-span-2",
-	originAllowlist: "md:col-span-1",
-	rateLimitQuota: "md:col-span-1",
-	multiSearch: "md:col-span-1",
-	reindex: "md:col-span-1",
-	enterpriseSecurity: "md:col-span-2",
-};
-
 export function FeaturesGrid() {
 	const t = useTranslations();
 
 	return (
-		<section id="features" className="py-14 md:py-24 border-b border-border/60">
+		<section id="features" className="border-b border-border py-14 md:py-24">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
 						{t("home.features.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
 						{t("home.features.subtitle")}
 					</p>
 				</div>
 
-				<div className="mt-10 grid grid-cols-1 gap-4 md:mt-16 md:grid-cols-4">
+				<div className="mt-12 grid grid-cols-1 gap-px bg-border overflow-hidden rounded-lg border border-border sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
 					{items.map(({ key, icon: Icon }) => (
-						<Card
-							key={key}
-							className={cn(
-								"group transition-colors hover:border-primary/30 hover:bg-accent/5",
-								spanMap[key],
-							)}
-						>
-							<FeatureCardHeaderRow icon={Icon}>
-								<CardTitle className="font-semibold leading-snug">
+						<div key={key} className="flex flex-col gap-4 bg-card p-6 md:p-8">
+							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-primary/10">
+								<Icon className="size-5 text-primary" />
+							</div>
+							<div>
+								<h3 className="font-semibold text-base leading-snug text-foreground">
 									{t(`home.features.items.${key}.title`)}
-								</CardTitle>
-							</FeatureCardHeaderRow>
-							<CardContent>
-								<CardDescription className="text-sm leading-relaxed">
+								</h3>
+								<p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
 									{t(`home.features.items.${key}.description`)}
-								</CardDescription>
-							</CardContent>
-						</Card>
+								</p>
+							</div>
+						</div>
 					))}
 				</div>
 			</div>

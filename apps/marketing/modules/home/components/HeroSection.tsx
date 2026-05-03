@@ -227,19 +227,19 @@ export function HeroSection() {
 
 					{/* Feature badges */}
 					<div className="mt-8 gap-2 flex w-full flex-wrap items-center justify-center">
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-light text-primary">
+						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
 							<ZapIcon className="size-3" />
 							{t("hero.badgeLatency")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-light text-primary">
+						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
 							<ShieldIcon className="size-3" />
 							{t("hero.badgeSoc2")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-light text-primary">
+						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
 							<SearchIcon className="size-3" />
 							{t("hero.badgeFulltext")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-light text-primary">
+						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
 							<BarChart3Icon className="size-3" />
 							{t("hero.badgeAnalytics")}
 						</span>
@@ -262,16 +262,7 @@ export function HeroSection() {
 			</section>
 
 			{/* ─── AI Assistant Chat (auto on scroll) ──────────── */}
-			<div
-				className={`fixed z-50 transition-all duration-500 ease-in-out ${
-					showWidget
-						? "opacity-100 translate-y-0"
-						: "opacity-0 translate-y-6 pointer-events-none"
-				}`}
-				aria-hidden={!showWidget}
-			>
-				<AiAssistantChat onModeSelect={openCmdForMode} />
-			</div>
+			<AiAssistantChat visible={showWidget} onModeSelect={openCmdForMode} />
 		</>
 	);
 }

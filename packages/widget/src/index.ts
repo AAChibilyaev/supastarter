@@ -816,6 +816,49 @@ const WIDGET_STYLES = `
   color: var(--aac-primary);
   border-bottom-color: var(--aac-primary);
 }
+
+.aac-mic-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--aac-text-secondary);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.aac-mic-btn:hover {
+  color: var(--aac-primary);
+}
+
+.aac-mic-btn.aac-mic-listening {
+  color: #ef4444;
+  animation: aac-pulse 1s infinite;
+}
+
+@keyframes aac-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.aac-mic-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  margin-bottom: 4px;
+  z-index: 10;
+}
 `;
 
 interface SearchState {
@@ -1439,138 +1482,77 @@ export class AacSearchWidget {
 		void this.doSearch(1);
 	}
 
-	/**
-	 * Set the price range filter and re-search.
-	 * Pass null to clear the price filter.
-	 */
-	private setPriceRange(range: { min: number; max: number } | null): void {
-		this.state = { ...this.state, priceRange: range };
-		this.trackEvent({
-			type: "filter_used",
-			filters: { price_range: range ? [`${range.min}-${range.max}`] : [] },
-			query: this.state.query || undefined,
-		});
-		void this.doSearch(1);
+	private startVoiceSearch(): void {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const w = window as unknown as Record<string, unknown>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const SR = w["SpeechRecognition"] ?? w["webkitSpeechRecognition"];
+
+		if (!SR) {
+			this.showVoiceUnsupportedTooltip();
+			return;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const recognition = new (SR as new () => Record<string, unknown>)() as Record<string, unknown> & {
+			lang: string;
+			interimResults: boolean;
+			maxAlternatives: number;
+			start: () => void;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			onresult: ((e: any) => void) | null;
+			onend: (() => void) | null;
+			onerror: (() => void) | null;
+		};
+
+		recognition.lang = this.locale;
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+
+		this.setMicListening(true);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		recognition.onresult = (event: any) => {
+			const transcript = String(event.results[0][0].transcript);
+			// Update input value
+			const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
+			if (input) input.value = transcript;
+			this.state = { ...this.state, query: transcript };
+			void this.doSearch(1);
+		};
+
+		recognition.onerror = () => {
+			this.setMicListening(false);
+		};
+
+		recognition.onend = () => {
+			this.setMicListening(false);
+		};
+
+		recognition.start();
 	}
 
-	private renderPriceRangeSlider(): string {
-		const priceField = this.detectPriceField();
-		if (!priceField) return "";
-
-		const bounds = this.detectPriceBounds();
-		const currentMin = this.state.priceRange?.min ?? bounds.min;
-		const currentMax = this.state.priceRange?.max ?? bounds.max;
-
-		return `
-			<div class="aac-facet-group">
-				<div class="aac-facet-header" data-facet-field="__price_range__">
-					<span class="aac-facet-title">Price</span>
-					<span class="aac-facet-toggle">−</span>
-				</div>
-				<div class="aac-facet-body" data-facet-field="__price_range__">
-					<div class="aac-price-range-container">
-						<div class="aac-price-range-values">
-							<span class="aac-price-min">${this.formatPriceValue(currentMin)}</span>
-							<span class="aac-price-separator">—</span>
-							<span class="aac-price-max">${this.formatPriceValue(currentMax)}</span>
-						</div>
-						<div class="aac-price-slider-track">
-							<input
-								type="range"
-								class="aac-price-range-input aac-price-range-min"
-								min="${bounds.min}"
-								max="${bounds.max}"
-								step="${Math.max(1, Math.round((bounds.max - bounds.min) / 100))}"
-								value="${currentMin}"
-								aria-label="Minimum price"
-							/>
-							<input
-								type="range"
-								class="aac-price-range-input aac-price-range-max"
-								min="${bounds.min}"
-								max="${bounds.max}"
-								step="${Math.max(1, Math.round((bounds.max - bounds.min) / 100))}"
-								value="${currentMax}"
-								aria-label="Maximum price"
-							/>
-						</div>
-						<button class="aac-price-range-clear" data-action="clear-price">Clear</button>
-					</div>
-				</div>
-			</div>`;
+	private setMicListening(listening: boolean): void {
+		const btn = this.root.querySelector(".aac-mic-btn");
+		if (btn) {
+			btn.classList.toggle("aac-mic-listening", listening);
+			btn.setAttribute(
+				"aria-label",
+				listening ? this.t("listening") : this.t("voiceSearch"),
+			);
+		}
 	}
 
-	private formatPriceValue(val: number): string {
-		if (val >= 1000000) {
-			return `$${(val / 1000000).toFixed(1)}M`;
-		}
-		if (val >= 1000) {
-			return `$${(val / 1000).toFixed(val % 1000 === 0 ? 0 : 1)}K`;
-		}
-		if (Number.isInteger(val)) {
-			return `$${val}`;
-		}
-		return `$${val.toFixed(2)}`;
-	}
-
-	/**
-	 * Check if a field name is a price-related field that should use the range slider.
-	 */
-	private isPriceField(fieldName: string): boolean {
-		const pricePatterns = ["price", "sale_price", "cost", "amount", "price_range"];
-		return (
-			pricePatterns.includes(fieldName) ||
-			fieldName.endsWith("_price") ||
-			fieldName.endsWith("_cost")
-		);
-	}
-
-	/**
-	 * Render active filter chips — pills showing currently selected filters with remove button.
-	 * Only shown when at least one filter or price range is active.
-	 */
-	private renderFilterChips(): string {
-		const activeFilters: Array<{ field: string; label: string; value: string }> = [];
-
-		// Collect active text/checkbox filters
-		for (const [field, values] of Object.entries(this.state.filters)) {
-			if (values.length > 0) {
-				const groupLabel = field
-					.replace(/_/g, " ")
-					.replace(/\b\w/g, (c) => c.toUpperCase());
-				for (const val of values) {
-					activeFilters.push({ field, label: groupLabel, value: val });
-				}
-			}
-		}
-
-		// Add price range chip if active
-		const hasPriceChip = this.state.priceRange !== null;
-
-		if (activeFilters.length === 0 && !hasPriceChip) return "";
-
-		let html = '<div class="aac-filter-chips">';
-
-		for (const chip of activeFilters) {
-			html += `<span class="aac-filter-chip" data-chip-field="${escapeHtml(chip.field)}" data-chip-value="${escapeHtml(chip.value)}">`;
-			html += `${escapeHtml(chip.label)}: ${escapeHtml(chip.value)}`;
-			html += `<button class="aac-filter-chip-remove" data-chip-remove="${escapeHtml(chip.field)}" data-chip-remove-value="${escapeHtml(chip.value)}" aria-label="Remove ${escapeHtml(chip.label)}: ${escapeHtml(chip.value)}">&times;</button>`;
-			html += `</span>`;
-		}
-
-		// Price range chip
-		if (hasPriceChip && this.state.priceRange) {
-			html += `<span class="aac-filter-chip" data-chip-field="__price__" data-chip-value="${this.state.priceRange.min}-${this.state.priceRange.max}">`;
-			html += `Price: ${this.formatPriceValue(this.state.priceRange.min)} - ${this.formatPriceValue(this.state.priceRange.max)}`;
-			html += `<button class="aac-filter-chip-remove" data-chip-remove="__price__" aria-label="Remove price filter">&times;</button>`;
-			html += `</span>`;
-		}
-
-		// Clear all button
-		html += `<button class="aac-filter-chips-clear" data-action="clear-all-filters">Clear all</button>`;
-
-		html += "</div>";
-		return html;
+	private showVoiceUnsupportedTooltip(): void {
+		const btn = this.root.querySelector(".aac-mic-btn");
+		if (!btn) return;
+		// Remove any existing tooltip first
+		btn.querySelector(".aac-mic-tooltip")?.remove();
+		const tip = document.createElement("div");
+		tip.className = "aac-mic-tooltip";
+		tip.textContent = this.t("voiceNotSupported");
+		btn.appendChild(tip);
+		setTimeout(() => tip.remove(), 2000);
 	}
 
 	private attachEvents(): void {
@@ -1621,6 +1603,11 @@ export class AacSearchWidget {
 				}
 			});
 		}
+
+		// Mic button
+		this.root.querySelector(".aac-mic-btn")?.addEventListener("click", () => {
+			this.startVoiceSearch();
+		});
 
 		// Result clicks (delegated) — fires `result_click` analytics event
 		// before the browser navigates via the <a target="_blank">.
@@ -2147,7 +2134,7 @@ export class AacSearchWidget {
 		this.root.innerHTML = `
 			<style>${WIDGET_STYLES}</style>
 			<div class="aac-widget-container">
-				<div class="aac-search-box">
+				<div class="aac-search-box" style="position:relative;">
 				<input
 					type="text"
 					class="aac-search-input"
@@ -2155,6 +2142,14 @@ export class AacSearchWidget {
 					value="${escapeHtml(this.state.query)}"
 					aria-label="${this.t("searchLabel")}"
 				/>
+				<button class="aac-mic-btn" title="${this.t("voiceSearch")}" aria-label="${this.t("voiceSearch")}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+						<path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+						<line x1="12" y1="19" x2="12" y2="23"/>
+						<line x1="8" y1="23" x2="16" y2="23"/>
+					</svg>
+				</button>
 				</div>
 				${this.renderFilterChips()}
 				${

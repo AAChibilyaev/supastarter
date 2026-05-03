@@ -1,5 +1,5 @@
 /**
- * `aacsearch keys list|create|revoke` — API key management
+ * `aacsearch keys list|create|rotate|revoke` — API key management
  */
 
 import { createInterface } from "readline/promises";
@@ -8,7 +8,12 @@ import { Command } from "commander";
 
 import { ApiClient } from "../lib/client.js";
 import { loadConfig } from "../lib/config.js";
-import { formatCreatedKey, formatError, formatKeyList } from "../lib/formatter.js";
+import {
+	formatCreatedKey,
+	formatError,
+	formatKeyList,
+	formatRotatedKey,
+} from "../lib/formatter.js";
 
 export const keysCommand = new Command("keys")
 	.description("Manage API keys")
@@ -58,8 +63,9 @@ keysCommand
 		const config = loadConfig();
 		const client = new ApiClient(config);
 
-		const name = cmd.name;
-		const indexSlug = cmd.index;
+		const opts = cmd.opts();
+		const name = opts.name as string | undefined;
+		const indexSlug = opts.index as string | undefined;
 
 		try {
 			// Resolve project
@@ -70,10 +76,15 @@ keysCommand
 				process.exit(1);
 			}
 
-			// Interactive prompts for missing options
-			let resolvedName = name as string | undefined;
-			let resolvedIndex = indexSlug as string | undefined;
+			// Parse scopes from --scopes flag if provided
 			let resolvedScopes: string[] | undefined;
+			if (opts.scopes) {
+				resolvedScopes = (opts.scopes as string).split(",").map((s: string) => s.trim());
+			}
+
+			// Interactive prompts for missing options
+			let resolvedName = name;
+			let resolvedIndex = indexSlug;
 
 			if (!resolvedName || !resolvedIndex || !resolvedScopes) {
 				const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -121,16 +132,16 @@ keysCommand
 				scopes: resolvedScopes,
 			};
 
-			if (cmd.origins) {
-				body.allowedOrigins = (cmd.origins as string)
+			if (opts.origins) {
+				body.allowedOrigins = (opts.origins as string)
 					.split(",")
 					.map((o: string) => o.trim());
 			}
-			if (cmd.rateLimit) {
-				body.rateLimitPerMinute = parseInt(cmd.rateLimit as string, 10);
+			if (opts.rateLimit) {
+				body.rateLimitPerMinute = parseInt(opts.rateLimit as string, 10);
 			}
-			if (cmd.expires) {
-				body.expiresAt = cmd.expires;
+			if (opts.expires) {
+				body.expiresAt = opts.expires;
 			}
 
 			const result = await client.post<Record<string, unknown>>(
@@ -163,6 +174,80 @@ keysCommand
 			} else {
 				console.log("? API key could not be revoked.");
 			}
+		} catch (error) {
+			console.error(formatError(error));
+			process.exit(1);
+		}
+	});
+
+interface KeyEntry {
+	id: string;
+	name: string;
+	prefix: string;
+	scopes: string[];
+	indexSlug?: string;
+	indexDisplayName?: string;
+	allowedOrigins?: string[];
+	rateLimitPerMinute?: number;
+	expiresAt?: string;
+}
+
+// ── keys rotate ────────────────────────────────────────────────────────────
+keysCommand
+	.command("rotate <keyId>")
+	.description("Rotate an API key (create new key with same settings, revoke old)")
+	.action(async (keyId: string) => {
+		const config = loadConfig();
+		const client = new ApiClient(config);
+
+		try {
+			// Resolve project
+			const projects = await client.get<Array<{ id: string }>>("/v1/projects");
+			const project = projects?.[0];
+			if (!project?.id) {
+				console.error("Error: Could not find project. Is your API key valid?");
+				process.exit(1);
+			}
+
+			// Fetch the existing key details from the project keys list
+			const allKeys = await client.get<KeyEntry[]>(`/v1/projects/${project.id}/keys`);
+			const oldKey = allKeys.find((k) => k.id === keyId);
+			if (!oldKey) {
+				console.error(`Error: API key "${keyId.slice(0, 8)}..." not found.`);
+				process.exit(1);
+			}
+
+			if (oldKey.expiresAt) {
+				const expiresDate = new Date(oldKey.expiresAt);
+				if (expiresDate < new Date()) {
+					console.error(
+						`Error: Cannot rotate an expired API key (expired ${expiresDate.toISOString()}). Create a new key instead.`,
+					);
+					process.exit(1);
+				}
+			}
+
+			// Create new key with same settings
+			const body: Record<string, unknown> = {
+				indexSlug: oldKey.indexSlug,
+				name: oldKey.name,
+				scopes: oldKey.scopes,
+			};
+			if (oldKey.allowedOrigins?.length) body.allowedOrigins = oldKey.allowedOrigins;
+			if (oldKey.rateLimitPerMinute) body.rateLimitPerMinute = oldKey.rateLimitPerMinute;
+			if (oldKey.expiresAt) body.expiresAt = oldKey.expiresAt;
+
+			const newKey = await client.post<Record<string, unknown>>(
+				`/v1/projects/${project.id}/keys`,
+				body,
+			);
+
+			// Revoke old key
+			const revokeResult = await client.delete<{ id: string; revoked: boolean }>(
+				`/v1/keys/${keyId}`,
+			);
+
+			console.log(formatRotatedKey({ newKey, revoked: revokeResult.revoked }));
 		} catch (error) {
 			console.error(formatError(error));
 			process.exit(1);

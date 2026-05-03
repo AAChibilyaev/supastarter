@@ -194,6 +194,30 @@ export function formatCreatedKey(
 	return lines.join("\n");
 }
 
+export function formatRotatedKey(
+	result: { newKey: Record<string, unknown>; revoked: boolean },
+	options?: { json?: boolean },
+): string {
+	if (options?.json) {
+		return JSON.stringify(result, null, 2);
+	}
+
+	const lines: string[] = [];
+	lines.push("✓ API key rotated successfully");
+	lines.push("");
+
+	const rawKey = result.newKey.rawKey as string | undefined;
+	if (rawKey) {
+		lines.push("  ⚠️  New raw key (shown once):");
+		lines.push(`  ${rawKey}`);
+		lines.push("  Store it securely. It cannot be recovered later.");
+	}
+	lines.push("");
+	lines.push(`  Old key revoked: ${result.revoked ? "yes" : "no (already inactive)"}`);
+
+	return lines.join("\n");
+}
+
 export function formatError(error: unknown): string {
 	if (error && typeof error === "object" && "status" in error) {
 		const apiErr = error as { status: number; message: string; body?: string };

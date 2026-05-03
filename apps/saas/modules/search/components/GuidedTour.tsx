@@ -1,7 +1,6 @@
 "use client";
 
 const TOUR_DISMISSED_KEY = "aacsearch_guided_tour_dismissed";
-let tourInstance: unknown = null;
 
 /**
  * Creates a guided tour for the dashboard.

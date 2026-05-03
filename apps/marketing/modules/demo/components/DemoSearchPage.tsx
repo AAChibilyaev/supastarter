@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchIcon, XIcon, Loader2Icon } from "lucide-react";
+import { Loader2Icon, SearchIcon, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface DemoProduct {
@@ -70,7 +70,7 @@ export function DemoSearchPage() {
 
 			const data: DemoSearchResponse = await res.json();
 			setResults(data);
-		} catch (err) {
+		} catch {
 			setError("Could not connect to the demo server.");
 			setResults(null);
 		} finally {
@@ -80,7 +80,7 @@ export function DemoSearchPage() {
 
 	// Initial search on mount
 	useEffect(() => {
-		doSearch("*", null);
+		void doSearch("*", null);
 	}, [doSearch]);
 
 	// Debounced search on query change
@@ -88,14 +88,14 @@ export function DemoSearchPage() {
 		setQuery(value);
 		if (debounceRef.current) clearTimeout(debounceRef.current);
 		debounceRef.current = setTimeout(() => {
-			doSearch(value || "*", selectedCategory);
+			void doSearch(value || "*", selectedCategory);
 		}, 300);
 	};
 
 	// Category filter
 	const handleCategoryClick = (category: string | null) => {
 		setSelectedCategory(category);
-		doSearch(query || "*", category);
+		void doSearch(query || "*", category);
 	};
 
 	const categories = results?.facet_counts?.find((f) => f.field_name === "category")?.counts;

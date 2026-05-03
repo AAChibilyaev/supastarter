@@ -34,6 +34,7 @@ import { useState } from "react";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { SchemaEditorPanel } from "../panels/SchemaEditorPanel";
 import { DocumentsTable } from "../tables/DocumentsTable";
+import { FileTable } from "../files/FileTable";
 
 // ── Types ───────────────────────────────────────────────────────
 
@@ -75,6 +76,7 @@ export function CollectionDetail() {
 	const orgId = activeOrganization?.id;
 
 	const [activeTab, setActiveTab] = useState<TabId>("overview");
+	const [docView, setDocView] = useState<"table" | "files">("table");
 
 	// ── Fetch indexes ──────────────────────────────────────────────
 
@@ -452,12 +454,42 @@ $data = json_decode($response->getBody(), true);`;
 
 			{activeTab === "documents" && (
 				<div className="space-y-4">
+					{/* Sub-tab toggle: Documents table vs File list */}
+					<div className="gap-1 flex border-b">
+						<button
+							type="button"
+							onClick={() => setDocView("table")}
+							className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
+								docView === "table"
+									? "border-primary text-primary"
+									: "border-transparent text-muted-foreground hover:text-foreground"
+							}`}
+						>
+							{t("collection.tab.documents")}
+						</button>
+						<button
+							type="button"
+							onClick={() => setDocView("files")}
+							className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
+								docView === "files"
+									? "border-primary text-primary"
+									: "border-transparent text-muted-foreground hover:text-foreground"
+							}`}
+						>
+							{t("files.pageTitle")}
+						</button>
+					</div>
+
 					{orgId && indexSlug ? (
-						<DocumentsTable
-							organizationId={orgId}
-							slug={indexSlug}
-							fields={schemaFields}
-						/>
+						docView === "files" ? (
+							<FileTable organizationId={orgId} slug={indexSlug} />
+						) : (
+							<DocumentsTable
+								organizationId={orgId}
+								slug={indexSlug}
+								fields={schemaFields}
+							/>
+						)
 					) : (
 						<Card>
 							<CardContent className="py-12 flex flex-col items-center justify-center">
@@ -466,8 +498,6 @@ $data = json_decode($response->getBody(), true);`;
 							</CardContent>
 						</Card>
 					)}
-					{/* Fallback when DocumentsTable doesn't render */}
-					{/* DocumentsTable is always available; if it were not it would show an empty Card */}
 				</div>
 			)}
 

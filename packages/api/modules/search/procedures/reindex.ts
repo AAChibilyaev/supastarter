@@ -22,6 +22,8 @@ export const reindex = protectedProcedure
 			slug: searchIndexSlugSchema,
 			fields: z.array(searchFieldSchema).min(1).optional(),
 			defaultSortingField: z.string().optional(),
+			tokenSeparators: z.array(z.string().min(1)).optional(),
+			symbolTokensToIndex: z.array(z.string().min(1)).optional(),
 		}),
 	)
 	.output(
@@ -56,6 +58,8 @@ export const reindex = protectedProcedure
 			organizationId: input.organizationId,
 			fields: fields as unknown[],
 			defaultSortingField: input.defaultSortingField,
+			tokenSeparators: input.tokenSeparators,
+			symbolTokensToIndex: input.symbolTokensToIndex,
 		});
 
 		logger.info("Reindex job enqueued", {

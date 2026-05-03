@@ -493,11 +493,15 @@ interface ReindexParamsEvent {
 	_type: "reindex_params";
 	fields: unknown[];
 	defaultSortingField?: string;
+	tokenSeparators?: string[];
+	symbolTokensToIndex?: string[];
 }
 
 export interface ReindexJobParams {
 	fields: unknown[];
 	defaultSortingField?: string;
+	tokenSeparators?: string[];
+	symbolTokensToIndex?: string[];
 }
 
 function toReindexJobView(row: {
@@ -536,11 +540,15 @@ export async function createPendingReindexJob(input: {
 	organizationId: string;
 	fields: unknown[];
 	defaultSortingField?: string;
+	tokenSeparators?: string[];
+	symbolTokensToIndex?: string[];
 }): Promise<ReindexJobView> {
 	const paramsEvent: ReindexParamsEvent = {
 		_type: "reindex_params",
 		fields: input.fields,
 		defaultSortingField: input.defaultSortingField,
+		tokenSeparators: input.tokenSeparators,
+		symbolTokensToIndex: input.symbolTokensToIndex,
 	};
 	const row = await db.searchConnectorSyncJob.create({
 		data: {
@@ -578,7 +586,12 @@ export async function getReindexJobParams(jobId: string): Promise<ReindexJobPara
 	const events = row.events as unknown as unknown[];
 	const first = events[0] as ReindexParamsEvent | undefined;
 	if (!first || first._type !== "reindex_params") return null;
-	return { fields: first.fields, defaultSortingField: first.defaultSortingField };
+	return {
+		fields: first.fields,
+		defaultSortingField: first.defaultSortingField,
+		tokenSeparators: first.tokenSeparators,
+		symbolTokensToIndex: first.symbolTokensToIndex,
+	};
 }
 
 export async function updateReindexJobProgress(

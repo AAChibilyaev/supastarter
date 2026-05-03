@@ -73,6 +73,8 @@ export async function POST(request: Request) {
 				currentVersion: index.version,
 				fields: params.fields as never,
 				defaultSortingField: params.defaultSortingField,
+				tokenSeparators: params.tokenSeparators,
+				symbolTokensToIndex: params.symbolTokensToIndex,
 				onProgress: (done, total) =>
 					updateReindexJobProgress(pendingJob.id, done, total).catch(() => undefined),
 			});

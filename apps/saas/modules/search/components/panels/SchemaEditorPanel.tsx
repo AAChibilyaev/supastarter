@@ -41,7 +41,10 @@ type FieldType =
 	| "bool[]"
 	| "object"
 	| "object[]"
-	| "auto";
+	| "auto"
+	| "geopoint"
+	| "geopoint[]"
+	| "geojson";
 
 interface SchemaField {
 	name: string;
@@ -66,6 +69,9 @@ const FIELD_TYPES: FieldType[] = [
 	"object",
 	"object[]",
 	"auto",
+	"geopoint",
+	"geopoint[]",
+	"geojson",
 ];
 
 interface SchemaEditorPanelProps {
@@ -84,6 +90,8 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 	const [importOpen, setImportOpen] = useState(false);
 	const [importJson, setImportJson] = useState("");
 	const [diffOpen, setDiffOpen] = useState(false);
+	const [tokenSeparatorsInput, setTokenSeparatorsInput] = useState("");
+	const [symbolTokensInput, setSymbolTokensInput] = useState("");
 
 	const { data: schemaData, isLoading: schemaLoading } = useQuery(
 		orpc.search.schema.get.queryOptions({
@@ -98,6 +106,8 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 	if (!initialized && (schemaFields.length > 0 || !schemaLoading)) {
 		setDraft(schemaFields.map((f) => ({ ...f })) as SchemaField[]);
 		setDefaultSort(defaultSortingField ?? "");
+		setTokenSeparatorsInput((schemaData?.tokenSeparators ?? []).join(", "));
+		setSymbolTokensInput((schemaData?.symbolTokensToIndex ?? []).join(", "));
 		setInitialized(true);
 	}
 
@@ -136,11 +146,21 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 
 	const handleSave = (triggerReindex: boolean) => {
 		const validFields = draft.filter((f) => f.name.trim());
+		const tokenSeparators = tokenSeparatorsInput
+			.split(",")
+			.map((s) => s.trim())
+			.filter(Boolean);
+		const symbolTokensToIndex = symbolTokensInput
+			.split(",")
+			.map((s) => s.trim())
+			.filter(Boolean);
 		mutation.mutate({
 			organizationId,
 			slug,
 			fields: validFields,
 			defaultSortingField: defaultSort || undefined,
+			tokenSeparators: tokenSeparators.length > 0 ? tokenSeparators : undefined,
+			symbolTokensToIndex: symbolTokensToIndex.length > 0 ? symbolTokensToIndex : undefined,
 			triggerReindex,
 		});
 	};
@@ -249,6 +269,32 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 								))}
 							</SelectContent>
 						</Select>
+					</div>
+
+					{/* Token Separators */}
+					<div className="gap-2 flex flex-col">
+						<Label className="text-sm text-muted-foreground">
+							{t("tokenSeparators")}
+						</Label>
+						<Input
+							value={tokenSeparatorsInput}
+							onChange={(e) => setTokenSeparatorsInput(e.target.value)}
+							className="h-7 font-mono text-xs"
+							placeholder="+, #, @"
+						/>
+					</div>
+
+					{/* Symbol Tokens to Index */}
+					<div className="gap-2 flex flex-col">
+						<Label className="text-sm text-muted-foreground">
+							{t("symbolTokensToIndex")}
+						</Label>
+						<Input
+							value={symbolTokensInput}
+							onChange={(e) => setSymbolTokensInput(e.target.value)}
+							className="h-7 font-mono text-xs"
+							placeholder="#, +"
+						/>
 					</div>
 
 					{draft.length === 0 ? (
@@ -479,6 +525,8 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 										slug,
 										fields: validFields,
 										defaultSortingField: defaultSort || undefined,
+										tokenSeparators: tokenSeparators.length > 0 ? tokenSeparators : undefined,
+										symbolTokensToIndex: symbolTokensToIndex.length > 0 ? symbolTokensToIndex : undefined,
 										triggerReindex: false,
 									},
 									{

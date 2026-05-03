@@ -1,1956 +1,2009 @@
 {
-	"admin": {
-		"menu": {
-			"organizations": "Organisationen",
-			"users": "Benutzer"
-		},
-		"organizations": {
-			"backToList": "Zurück zu Organisationen",
-			"confirmDelete": {
-				"confirm": "Löschen",
-				"message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-				"title": "Organisation löschen"
-			},
-			"create": "Erstellen",
-			"delete": "Löschen",
-			"deleteOrganization": {
-				"deleted": "Die Organisation wurde erfolgreich gelöscht!",
-				"deleting": "Löschung der Organisation...",
-				"notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
-			},
-			"edit": "bearbeiten",
-			"form": {
-				"createTitle": "Erstellen eine Organisation",
-				"name": "Name der Organisation",
-				"notifications": {
-					"error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
-					"success": "Die Organisation wurde erfolgreich gespeichert."
-				},
-				"save": "Speichern",
-				"updateTitle": "Organisation bearbeiten"
-			},
-			"loading": "Organisationen laden...",
-			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-			"search": "Suche nach einer Organisation...",
-			"title": "Verwalten von Organisationen"
-		},
-		"title": "Administration",
-		"users": {
-			"confirmDelete": {
-				"confirm": "Löschen",
-				"message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-				"title": "Benutzer löschen"
-			},
-			"delete": "Löschen",
-			"deleteUser": {
-				"deleted": "Der Benutzer wurde erfolgreich gelöscht!",
-				"deleting": "Benutzer wird gelöscht...",
-				"notDeleted": "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
-			},
-			"emailVerified": {
-				"verified": "Email verifiziert",
-				"waiting": "E-Mail wartet auf Verifizierung"
-			},
-			"impersonate": "Imitieren",
-			"impersonation": {
-				"impersonating": "Ich gebe mich als {name} aus..."
-			},
-			"loading": "Benutzer werden geladen...",
-			"resendVerificationMail": {
-				"error": "Bestatigungsmail konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
-				"submitting": "Bestatigungsmail wird erneut gesendet...",
-				"success": "Bestatigungsmail wurde gesendet.",
-				"title": "Bestatigungsmail erneut senden"
-			},
-			"search": "Nach Name oder E-Mail suchen...",
-			"title": "Benutzer verwalten",
-			"assignAdminRole": "Administration-Rolle zuweisen",
-			"removeAdminRole": "Adminstrator-Rolle entfernen"
-		},
-		"description": "Verwalte deine Anwendung.",
-		"config": {
-			"title": "Konfiguration",
-			"loadError": "Konfigurationsdaten konnten nicht geladen werden.",
-			"application": "Anwendung",
-			"appName": "App-Name",
-			"nodeVersion": "Node.js-Version",
-			"runtimeEnv": "Laufzeit",
-			"platform": "Plattform",
-			"uptime": "Betriebszeit",
-			"typesenseHealth": "Search-Engine-Status",
-			"healthy": "Gesund",
-			"unhealthy": "Ungesund",
-			"version": "Version",
-			"databaseStats": "Datenbankstatistiken",
-			"users": "Benutzer",
-			"organizations": "Organisationen",
-			"searchIndexes": "Suchindexe",
-			"apiKeys": "API-Schlüssel",
-			"usageEvents": "Nutzungsereignisse",
-			"statsError": "Statistiken konnten nicht abgerufen werden.",
-			"services": "Externe Dienste",
-			"configured": "Konfiguriert",
-			"notConfigured": "Nicht konfiguriert",
-			"pageTitle": "Laufzeitkonfiguration",
-			"pageSubtitle": "Systemkonfiguration in Echtzeit, Dienstintegrität und Datenbankstatistiken."
-		},
-		"integrations": {
-			"title": "Integrationen",
-			"loadError": "Integrationsstatus konnte nicht geprüft werden.",
-			"database": "Datenbank",
-			"typesense": "AACsearch Engine",
-			"mail": "E-Mail",
-			"payments": "Zahlungen",
-			"storage": "Speicher",
-			"walletProvider": "Wallet-Anbieter",
-			"configured": "Konfiguriert",
-			"notConfigured": "Nicht konfiguriert",
-			"endpoint": "Endpunkt",
-			"pageTitle": "Integrationsstatus",
-			"pageSubtitle": "Echtzeit-Verbindungsprüfungen für alle konfigurierten externen Dienste.",
-			"connected": "Verbunden",
-			"disconnected": "Getrennt",
-			"latencyMs": "{ms}ms Latenz",
-			"status": "Status",
-			"provider": "Anbieter"
-		},
-		"jobs": {
-			"title": "Aufgaben",
-			"loadError": "Aufgabenstatus konnte nicht geladen werden.",
-			"backgroundJobs": "Hintergrundaufgaben",
-			"ready": "Bereit",
-			"missingSecret": "Fehlendes Geheimnis",
-			"recentSyncActivity": "Letzte Sync-Aktivität",
-			"totalJobs": "Aufgaben insgesamt",
-			"noSyncActivity": "Noch keine Sync-Aktivität.",
-			"pageTitle": "Hintergrundaufgaben",
-			"pageSubtitle": "Status der Cron-Job-Konfiguration und aktuelle Synchronisierungsaktivitäten.",
-			"itemsCount": "{count} {count, plural, one {Element} other {Elemente}}"
-		},
-		"overview": {
-			"usersTitle": "Benutzer",
-			"organizationsTitle": "Organisationen",
-			"unreadNotifications": "Ungelesene Benachrichtigungen",
-			"noData": "Keine Daten",
-			"recentUsers": "Aktuelle Benutzer",
-			"defaultRole": "Benutzer",
-			"openUsers": "Benutzer öffnen",
-			"recentOrganizations": "Aktuelle Organisationen",
-			"noSlug": "Kein Slug",
-			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-			"openOrganizations": "Organisationen öffnen",
-			"pageTitle": "Admin-Übersicht",
-			"pageSubtitle": "Betriebszusammenfassung für Benutzer, Organisationen und Benachrichtigungen."
-		},
-		"audit": {
-			"recentUserChanges": "Aktuelle Benutzeränderungen",
-			"recentOrgChanges": "Aktuelle Organisationsänderungen",
-			"defaultRole": "Benutzer",
-			"noSlug": "Kein Slug",
-			"pageTitle": "Audit-Ansicht",
-			"pageSubtitle": "Aktuelle Benutzer- und Organisationsänderungen aus Admin-Datenquellen."
-		},
-		"notifications": {
-			"recentNotifications": "Aktuelle Benachrichtigungen",
-			"markAllRead": "Alle als gelesen markieren",
-			"markingRead": "Benachrichtigungen werden als gelesen markiert...",
-			"markReadSuccess": "Fertig.",
-			"markReadError": "Konnte nicht alle als gelesen markieren.",
-			"statusRead": "gelesen",
-			"statusUnread": "ungelesen",
-			"noNotifications": "Noch keine Benachrichtigungen.",
-			"pageTitle": "Benachrichtigungsverwaltung",
-			"pageSubtitle": "Aktuelle Benachrichtigungen einsehen und Zustelleinstellungen aktualisieren."
-		},
-		"wallet": {
-			"manualAdjustment": "Manuelle Wallet-Anpassung",
-			"searchOrgPlaceholder": "Organisation suchen...",
-			"selectOrgPlaceholder": "Organisation auswählen",
-			"currentBalance": "Aktuelles Guthaben",
-			"walletNotInitialized": "Wallet ist für die ausgewählte Organisation nicht initialisiert.",
-			"creditLabel": "Gutschrift",
-			"debitLabel": "Belastung",
-			"amountPlaceholder": "Betrag (RUB)",
-			"applyButton": "Anwenden",
-			"reasonPlaceholder": "Grund (mindestens 10 Zeichen)",
-			"noWalletError": "Wählen Sie eine Organisation mit initialisiertem Wallet aus.",
-			"invalidAmountError": "Betrag muss eine positive Zahl sein.",
-			"shortReasonError": "Grund muss mindestens 10 Zeichen lang sein.",
-			"applyingAdjustment": "Anpassung wird angewendet...",
-			"adjustmentSuccess": "Wallet erfolgreich angepasst.",
-			"adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
-			"latestTransactions": "Letzte Wallet-Transaktionen",
-			"noTransactions": "Keine Transaktionen gefunden.",
-			"pageTitle": "Wallet-Operationen",
-			"pageSubtitle": "Manuelle KI-Wallet-Anpassungen für Organisationen."
-		},
-		"security": {
-			"pageTitle": "Sicherheitsoperationen",
-			"pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
-		}
-	},
-	"app": {
-		"menu": {
-			"accountSettings": "Kontoeinstellungen",
-			"admin": "Administration",
-			"navigationTitle": "Menu",
-			"openNavigation": "Navigation offnen",
-			"organizationSettings": "Organisationseinstellungen",
-			"search": "Suche",
-			"mySearch": "Meine Suche",
-			"start": "Start"
-		},
-		"userMenu": {
-			"accountSettings": "Kontoeinstellungen",
-			"colorMode": "Farbmodus",
-			"documentation": "Dokumentation",
-			"home": "Startseite",
-			"logout": "Abmelden"
-		},
-		"notifications": {
-			"title": "Benachrichtigungen",
-			"empty": "Noch keine Benachrichtigungen.",
-			"markAllRead": "Alle als gelesen markieren",
-			"fallbackTitle": "Benachrichtigung",
-			"aria": {
-				"open": "Benachrichtigungen offnen"
-			}
-		}
-	},
-	"auth": {
-		"errors": {
-			"credentialAccountNotFound": "Konto nicht gefunden.",
-			"emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
-			"emailNotVerified": "Bitte verifiziere zunachst deine E-Mail, bevor du dich anmeldest.",
-			"failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
-			"failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
-			"failedToGetSession": "Session konnte nicht geladen werden.",
-			"failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
-			"failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
-			"idTokenNotSupported": "ID-Token wird nicht unterstutzt.",
-			"invalidEmail": "Die eingegebene E-Mail ist ungultig.",
-			"invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungultig. Bitte uberprufe sie und versuche es erneut.",
-			"invalidInvitation": "Die Einladung ist ungultig oder abgelaufen.",
-			"invalidPassword": "Das eingegebene Passwort ist falsch.",
-			"invalidToken": "Das von dir eingegebene Token ist ungultig oder abgelaufen.",
-			"passwordTooLong": "Das Passwort ist zu lang.",
-			"passwordTooShort": "Das Passwort ist zu kurz.",
-			"providerNotFound": "Dieser Anbieter wird nicht unterstutzt.",
-			"socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknupft.",
-			"unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
-			"userAlreadyExists": "Dieser Benutzer existiert bereits.",
-			"userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
-			"userEmailNotFound": "E-Mail nicht gefunden.",
-			"userNotFound": "Dieser Benutzer existiert nicht",
-			"sessionExpired": "Die Sitzung ist abgelaufen.",
-			"accountNotFound": "Konto nicht gefunden",
-			"failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
-		},
-		"forgotPassword": {
-			"backToSignin": "Zuruck zum Login",
-			"email": "E-Mail",
-			"hints": {
-				"linkNotSent": {
-					"message": "Es tut uns leid, aber wir konnten keinen Link zum Zurucksetzen des Passworts senden. Bitte versuche es spater noch einmal.",
-					"title": "Link nicht gesendet"
-				},
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurucksetzen deines Passworts.",
-			"submit": "Link senden",
-			"title": "Hast du dein Passwort vergessen?"
-		},
-		"login": {
-			"continueWith": "Oder weiter mit",
-			"createAnAccount": "Ein Konto erstellen",
-			"dontHaveAnAccount": "Du hast noch kein Konto?",
-			"forgotPassword": "Passwort vergessen?",
-			"hints": {
-				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungultig. Bitte versuche es erneut.",
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"loginWithPasskey": "Anmeldung mit Passkey",
-			"modes": {
-				"magicLink": "Magischer Link",
-				"password": "***"
-			},
-			"submit": "Anmelden",
-			"subtitle": "Bitte gib deine Zugangsdaten ein, um dich anzumelden.",
-			"title": "Willkommen zuruck",
-			"sendMagicLink": "Anmelde-Link senden"
-		},
-		"resetPassword": {
-			"backToSignin": "Zuruck zu Signin",
-			"hints": {
-				"error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurucksetzen. Bitte versuche es erneut.",
-				"success": "Dein Passwort wurde erfolgreich zuruckgesetzt."
-			},
-			"message": "Bitte gib ein neues Passwort ein.",
-			"newPassword": "Neues Passwort",
-			"submit": "Passwort zurucksetzen",
-			"title": "Dein Passwort zurucksetzen"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Du hast bereits ein Konto?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. Bitte versuche es spater noch einmal.",
-				"verifyEmail": "Wir haben dir einen Link zur Bestatigung deiner E-Mail-Adresse gesendet. Bitte uberprufe deinen Posteingang."
-			},
-			"message": "Wir freuen uns, dass du dich uns anschließen mochtest. Bitte fulle das untenstehende Formular aus, um dein Konto zu erstellen.",
-			"name": "Name",
-			"password": "***",
-			"signIn": "Anmelden",
-			"submit": "Benutzerkonto erstellen",
-			"title": "Ein Konto erstellen"
-		},
-		"verify": {
-			"backToSignin": "Zuruck zur Anmeldung",
-			"code": "Einmaliges Passwort",
-			"message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
-			"submit": "Verifizieren",
-			"title": "Verifiziere dein Konto"
-		}
-	},
-	"choosePlan": {
-		"title": "Wahle einen Plan",
-		"description": "Um weiterzumachen, wahle bitte einen Plan aus."
-	},
-	"documentation": {
-		"title": "Dokumentation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Seite nicht gefunden",
-		"goToDashboard": "Zum Dashboard gehen",
-		"goToHomepage": "Zur Startseite"
-	},
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
-			"name": "Name"
-		},
-		"continue": "Weiter",
-		"message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
-		"notifications": {
-			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. Bitte versuche es spater noch einmal."
-		},
-		"pricing": {
-			"planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
-			"skip": "Vorerst uberspringen"
-		},
-		"step": "Schritt {step} / {total}",
-		"title": "Richte dein Konto ein",
-		"createIndex": {
-			"title": "Erstellen Sie Ihren ersten Suchindex",
-			"description": "Geben Sie Ihrem Index einen Namen. Dokumente und Schema können danach hinzugefügt werden.",
-			"nameLabel": "Indexname",
-			"slugLabel": "Slug (URL-freundlicher Bezeichner)",
-			"slugHint": "Nur Kleinbuchstaben, Ziffern und Bindestriche",
-			"submit": "Index erstellen",
-			"success": "Index erfolgreich erstellt.",
-			"error": "Index konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
-			"noOrg": "Bitte erstellen Sie zuerst eine Organisation, bevor Sie einen Suchindex einrichten."
-		},
-		"addDocuments": {
-			"title": "Importieren Sie Ihre ersten Dokumente",
-			"description": "Fügen Sie ein JSON-Array von Objekten ein, um Ihren Index zu befüllen. Sie können später weitere Dokumente importieren.",
-			"pasteLabel": "Dokumente (JSON-Array)",
-			"placeholder": "[{\"id\":\"1\",\"title\":\"Hallo Welt\"}]",
-			"importButton": "Dokumente importieren",
-			"skip": "Vorerst überspringen",
-			"success": "Dokumente wurden zur Indizierung eingereiht.",
-			"parseError": "Ungültiges JSON. Bitte fügen Sie ein gültiges Array von Objekten ein.",
-			"error": "Dokumente konnten nicht importiert werden. Bitte versuchen Sie es erneut."
-		},
-		"installWidget": {
-			"title": "Suchwidget einbetten",
-			"description": "Kopieren Sie den folgenden Code-Schnipsel und fügen Sie ihn in das HTML Ihrer Website ein.",
-			"snippetLabel": "Widget-Code",
-			"copyButton": "Code kopieren",
-			"copied": "Code kopiert!",
-			"next": "Weiter",
-			"skip": "Vorerst überspringen"
-		},
-		"apiKey": {
-			"title": "Holen Sie sich Ihren API-Schlüssel",
-			"description": "Erstellen Sie einen Such-API-Schlüssel, um AACsearch in Ihre Anwendung zu integrieren. Kopieren Sie ihn — er wird nicht erneut angezeigt.",
-			"createButton": "API-Schlüssel erstellen",
-			"keyLabel": "Ihr API-Schlüssel (einmalig angezeigt)",
-			"copyButton": "Schlüssel kopieren",
-			"copied": "API-Schlüssel kopiert!",
-			"finish": "Zum Dashboard",
-			"error": "API-Schlüssel konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
-			"keyName": "Onboarding-Schlüssel"
-		}
-	},
-	"organizations": {
-		"createForm": {
-			"name": "Name der Organisation",
-			"notifications": {
-				"error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es spater noch einmal.",
-				"success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
-			},
-			"submit": "Organisation erstellen",
-			"subtitle": "Gib einen Namen fur deine Organisation ein, um loszulegen. Du kannst den Namen spater in den Organisationseinstellungen andern.",
-			"title": "Erstelle eine Organisation"
-		},
-		"invitationAlert": {
-			"description": "Du bist eingeladen worden, einer Organisation beizutreten. Wenn du dich anmeldest oder registrierst, akzeptierst du automatisch die Einladung und trittst der Organisation bei.",
-			"title": "Einladung der Organisation annehmen"
-		},
-		"invitationModal": {
-			"accept": "Annehmen",
-			"decline": "Ablehnen",
-			"description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Mochtest du die Einladung annehmen und der Organisation beitreten?",
-			"title": "Organisation beitreten",
-			"error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Neue Organisation erstellen",
-			"organizations": "Organisationen",
-			"personalAccount": "Personliches Konto"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Neue Organisation erstellen",
-			"title": "Deine Organisationen"
-		},
-		"roles": {
-			"admin": "Administration",
-			"member": "Mitglied",
-			"owner": "Eigentumer"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Name der Organisation"
-			},
-			"deleteOrganization": {
-				"confirmation": "Bist du sicher, dass du deine Organisation loschen mochtest?",
-				"description": "Losche deine Organisation dauerhaft. Sobald du deine Organisation geloscht hast, gibt es kein Zuruck mehr. Zur Bestatigung gib bitte unten dein Passwort ein:",
-				"submit": "Organisation loschen",
-				"title": "Organisation loschen"
-			},
-			"logo": {
-				"description": "Lade ein Logo fur deine Organisation hoch.",
-				"title": "Logo der Organisation"
-			},
-			"members": {
-				"activeMembers": "Aktive Mitglieder",
-				"description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
-				"invitations": {
-					"empty": "Es wurden noch keine Mitglieder eingeladen.",
-					"expiresAt": "Lauft am {date} ab",
-					"invitationStatus": {
-						"accepted": "Angenommen",
-						"canceled": "Abgebrochen",
-						"pending": "Ausstehend",
-						"rejected": "Abgelehnt"
-					},
-					"revoke": "Einladung widerrufen",
-					"resend": "Einladung erneut senden"
-				},
-				"inviteMember": {
-					"description": "Um ein neues Mitglied einzuladen, sende ihm eine Einladung.",
-					"email": "E-Mail",
-					"notifications": {
-						"error": {
-							"description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es spater noch einmal.",
-							"title": "Mitglied konnte nicht eingeladen werden"
-						},
-						"success": {
-							"description": "Das Mitglied ist eingeladen worden.",
-							"title": "Eingeladenes Mitglied"
-						}
-					},
-					"role": "Rolle",
-					"submit": "Einladen",
-					"title": "Mitglied einladen"
-				},
-				"leaveOrganization": "Organisation verlassen",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Das Mitglied konnte nicht aus deiner Organisation entfernt werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Mitglied aus der Organisation entfernen..."
-						},
-						"success": {
-							"description": "Das Mitglied wurde erfolgreich aus deiner Organisation entfernt."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es spater noch einmal."
-						},
-						"loading": {
-							"description": "Widerruf der Einladung..."
-						},
-						"success": {
-							"description": "Die Einladung ist widerrufen worden."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Die Mitgliedschaft in der Organisation konnte nicht aktualisiert werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Aktualisierung der Mitgliedschaft..."
-						},
-						"success": {
-							"description": "Die Mitgliedschaft wurde erfolgreich aktualisiert"
-						}
-					},
-					"resendInvitation": {
-						"error": {
-							"description": "Die Einladung konnte nicht gesendet werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Einladung erneut senden..."
-						},
-						"success": {
-							"description": "Einladung verschickt"
-						}
-					}
-				},
-				"pendingInvitations": "Ausstehende Einladungen",
-				"removeMember": "Mitglied entfernen",
-				"title": "Mitglieder"
-			},
-			"notifications": {
-				"organizationDeleted": "Deine Organisation wurde geloscht.",
-				"organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es spater noch einmal.",
-				"organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
-				"organizationNotDeleted": "Wir konnten deine Organisation nicht loschen. Bitte versuche es spater noch einmal."
-			},
-			"subtitle": "Verwalte die Einstellungen der Organisation.",
-			"title": "Organisation",
-			"dangerZone": {
-				"title": "Gefahrenzone"
-			}
-		},
-		"start": {
-			"subtitle": "Willkommen auf der Startseite dieser Organisation!"
-		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "Um deinen Avatar zu andern, klicke auf das Bild in diesem Block und wahle eine Datei von deinem Computer zum Hochladen aus.",
-				"notifications": {
-					"error": "Avatar konnte nicht aktualisiert werden",
-					"success": "Avatar wurde erfolgreich aktualisiert"
-				},
-				"title": "Dein Avatar"
-			},
-			"changeEmail": {
-				"description": "Um deine E-Mail zu andern, andere sie im Eingabefeld und drucke auf Speichern. Du musst die neue E-Mail bestatigen, bevor sie aktiv wird.",
-				"notifications": {
-					"error": "E-Mail konnte nicht aktualisiert werden",
-					"success": "E-Mail wurde erfolgreich aktualisiert"
-				},
-				"title": "Deine E-Mail"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Name konnte nicht aktualisiert werden",
-					"success": "Name wurde erfolgreich aktualisiert"
-				},
-				"title": "Dein Name"
-			},
-			"deleteAccount": {
-				"confirmation": "Bist du sicher, dass du dein Konto loschen mochtest?",
-				"description": "Losche dein Konto dauerhaft. Sobald Du dein Konto geloscht hast, gibt es kein Zuruck mehr. Bitte sei dir sicher, bevor du hier weitermachst.",
-				"notifications": {
-					"error": "Konto konnte nicht geloscht werden",
-					"success": "Konto wurde erfolgreich geloscht"
-				},
-				"submit": "Konto loschen",
-				"title": "Konto loschen"
-			},
-			"language": {
-				"description": "Um die Sprache der App fur dein Konto zu andern, wahle eine Sprache aus der Liste aus und klicke auf Speichern.",
-				"notifications": {
-					"error": "Sprache konnte nicht aktualisiert werden",
-					"success": "Sprache wurde erfolgreich aktualisiert"
-				},
-				"title": "Deine Sprache"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "Dies sind alle aktiven Sitzungen deines Kontos. Klicke auf das X, um eine bestimmte Sitzung zu beenden.",
-					"title": "Aktive Sitzungen",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session beendet"
-						}
-					},
-					"currentSession": "Aktuelle Sitzung"
-				},
-				"changePassword": {
-					"currentPassword": "Aktuelles Passwort",
-					"newPassword": "Neues Passwort",
-					"notifications": {
-						"error": "Passwort kann nicht aktualisiert werden",
-						"success": "Passwort wurde erfolgreich aktualisiert"
-					},
-					"title": "Dein Passwort"
-				},
-				"connectedAccounts": {
-					"connect": "Verbinden",
-					"connected": "Verbunden",
-					"disconnect": "Trennen",
-					"title": "Verbundene Konten"
-				},
-				"passkeys": {
-					"addPasskey": "Passkey hinzufugen",
-					"description": "Verwende Passkeys als sichere alternative zu Passwortern.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Kann keinen Hauptschlussel hinzufugen"
-							},
-							"success": {
-								"title": "Passkey hinzugefugt"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Der Hauptschlussel konnte nicht geloscht werden"
-							},
-							"loading": {
-								"title": "Hauptschlussel loschen..."
-							},
-							"success": {
-								"title": "Passkey geloscht"
-							}
-						}
-					},
-					"title": "Passworter"
-				},
-				"setPassword": {
-					"description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortruck setzung durchlaufen. Klicke auf die Schaltflache unten, um eine E-Mail zum Zurucksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
-					"notifications": {
-						"error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
-						"success": "Prufen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
-					},
-					"submit": "Passwort festlegen",
-					"title": "Dein Passwort"
-				},
-				"title": "Sicherheit",
-				"twoFactor": {
-					"description": "Fuge deinem Konto eine zusatzliche Sicherheitsebene hinzu.",
-					"dialog": {
-						"password": {
-							"description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
-							"label": "Dein Passwort:",
-							"title": "Mit Passwort verifizieren"
-						},
-						"totpUrl": {
-							"code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestatigen:",
-							"description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
-							"title": "Zwei-Faktor-Authentifizierung aktivieren"
-						}
-					},
-					"disable": "Zwei-Faktor-Authentifizierung deaktivieren",
-					"enable": "Zwei-Faktor-Authentifizierung aktivieren",
-					"enabled": "Du hast die Zwei-Faktor-Authentifizierung fur dein Konto aktiviert.",
-					"notifications": {
-						"disable": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich deaktiviert."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Dein Konto konnte mit dem angegebenen Passwort nicht verifiziert werden. Bitte versuche es erneut."
-							}
-						},
-						"verify": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich aktiviert."
-							}
-						}
-					},
-					"title": "Zwei-Faktor-Authentifizierung"
-				}
-			},
-			"subtitle": "Verwalte die Einstellungen deines personlichen Kontos.",
-			"title": "Kontoeinstellungen"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Abrechung verwalten",
-				"notifications": {
-					"error": {
-						"title": "Es konnte keine Kundenportalsitzung erstellt werden. Bitte versuche es erneut."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Aktiv",
-					"canceled": "Gekundigt",
-					"expired": "Ausgelaufen",
-					"incomplete": "Unvollstandig",
-					"past_due": "Uberfallig",
-					"paused": "Pausiert",
-					"trialing": "Testversion",
-					"unpaid": "Unbezahlt"
-				},
-				"title": "Dein Plan",
-				"description": "Ihr aktueller Plan und Nutzungslimits für Suche und Indizierung.",
-				"notFound": "Keine Planinformationen verfügbar."
-			},
-			"changePlan": {
-				"description": "Wahle einen Plan aus, den du abonnieren mochtest.",
-				"title": "Andere deinen Plan"
-			},
-			"upgradePlan": "Plan upgraden",
-			"currentPlan": "Aktueller Plan",
-			"switchToAnnual": "Zu jährlicher Abrechnung wechseln",
-			"upgradeSuccess": "Plan erfolgreich aktualisiert",
-			"title": "Zahlung",
-			"aiCredits": {
-				"title": "KI-Guthaben",
-				"subtitle": "Nutzungsbasierte KI-Abrechnung. Laden Sie Ihre Geldbörse auf, um alle KI-Funktionen freizuschalten.",
-				"balance": {
-					"title": "Guthaben",
-					"includedRemaining": "Inklusiv diesen Monat",
-					"reserved": "Reserviert",
-					"promo": "Promo-Guthaben",
-					"notInitialized": "Die Geldbörse ist noch nicht initialisiert."
-				},
-				"topup": {
-					"button": "Aufladen",
-					"title": "KI-Geldbörse aufladen",
-					"description": "Wählen Sie einen Betrag oder geben Sie einen benutzerdefinierten Wert in Rubel ein.",
-					"customAmount": "Benutzerdefinierter Betrag (₽)",
-					"summary": "Sie werden {amount} belastet",
-					"confirm": "Mit Tochka bezahlen",
-					"error": "Zahlungslink konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
-				},
-				"errors": {
-					"insufficientFunds": "Unzureichendes KI-Guthaben. Laden Sie Ihre Geldbörse auf."
-				}
-			},
-			"features": {
-				"title": "Funktionen",
-				"none": "Keine konfigurierten Funktionen"
-			},
-			"limits": {
-				"maxIndexes": "Max. Indizes",
-				"maxDocuments": "Max. Dokumente",
-				"maxApiKeys": "Max. API-Schlüssel",
-				"rateLimit": "Rate-Limit",
-				"maxSearchesPerMonth": "Suchen / Monat"
-			},
-			"upgrade": "Plan upgraden",
-			"usage": {
-				"searches": "Suchen",
-				"documents": "Dokumente"
-			}
-		},
-		"notificationsPage": {
-			"title": "Benachrichtigungen",
-			"description": "Lege fest, wie du Benachrichtigungen erhaltst. Deaktivierte Optionen werden gespeichert; standardmaig ist alles aktiviert.",
-			"groups": {
-				"general": {
-					"title": "Allgemein"
-				},
-				"billing": {
-					"title": "Abrechnung"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "App-Updates"
-				},
-				"AI_LOW_BALANCE": {
-					"label": "KI-Guthaben ist niedrig"
-				},
-				"AI_TOPUP_PAID": {
-					"label": "KI-Geldbörse aufgeladen"
-				},
-				"AI_TOPUP_FAILED": {
-					"label": "Aufladung der KI-Geldbörse fehlgeschlagen"
-				},
-				"AI_OVERAGE_REACHED": {
-					"label": "KI-Geldbörsen-Limit erreicht"
-				},
-				"PAYMENT_FAILED": {
-					"label": "Abonnementzahlung fehlgeschlagen"
-				}
-			},
-			"columns": {
-				"type": "Benachrichtigung",
-				"inApp": "In der App",
-				"email": "E-Mail"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Abrechnung",
-				"dangerZone": "Danger-Zone",
-				"general": "Allgemein",
-				"notifications": "Benachrichtigungen",
-				"security": "Sicherheit",
-				"title": "Konto"
-			},
-			"organization": {
-				"billing": "Abrechnung",
-				"general": "Allgemein",
-				"members": "Mitglieder",
-				"title": "Organisation",
-				"dangerZone": "Gefahrenzone"
-			}
-		},
-		"save": "Speichern"
-	},
-	"start": {
-		"subtitle": "Sieh dir die neuesten Statistiken uber dein groartiges Unternehmen an.",
-		"welcome": "Willkommen {name}!"
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Abbrechen",
-			"confirm": "Bestatigen"
-		},
-		"actions": {
-			"continue": "Weiter",
-			"verify": "Uberprufen Sie"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 Zeichen",
-			"upperAndLowercase": "Gro- & Kleinbuchstaben",
-			"number": "Zahl",
-			"specialCharacter": "Sonderzeichen"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Hell",
-			"dark": "Dunkel"
-		},
-		"close": "Schließen"
-	},
-	"checkoutReturn": {
-		"title": "Kauf wird verarbeitet",
-		"description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
-		"loading": "Ihr Kauf wird bestatigt, bitte warten..."
-	},
-	"indexing": {
-		"dashboard": {
-			"title": "Index-Verwaltung",
-			"subtitle": "Indizierung, Neuindizierung und Synchronisierung für diese Kollektion verwalten",
-			"documents": "Dokumente",
-			"todaySearches": "Heute",
-			"size": "Größe",
-			"avgLatency": "Durchschn. Latenz",
-			"liveVersion": "Live",
-			"indexHealth": "Index-Zustand",
-			"last7Days": "Letzte 7 Tage",
-			"lastFullSync": "Letzte Vollsync",
-			"lastDeltaSync": "Letzte Delta-Sync",
-			"nextScheduled": "Nächste geplante",
-			"indexingProgress": "Indizierungsfortschritt",
-			"noData": "Noch keine Indizierungsdaten",
-			"backToCollection": "Zurück zur Kollektion"
-		},
-		"delta": {
-			"title": "Delta-Synchronisation",
-			"syncNow": "Jetzt synchronisieren",
-			"syncing": "Synchronisiere...",
-			"confirmTitle": "Delta-Sync starten?",
-			"confirmDescription": "Es werden nur geänderte Dokumente seit der letzten Synchronisation verarbeitet. Bestehende Daten werden ohne Ausfallzeit aktualisiert.",
-			"confirm": "Sync starten",
-			"cancel": "Abbrechen",
-			"lastSync": "Letzte Delta-Sync",
-			"neverSynced": "Nie synchronisiert",
-			"jobPending": "Sync ausstehend...",
-			"jobRunning": "Dokumente werden synchronisiert...",
-			"jobCompleted": "Sync erfolgreich abgeschlossen",
-			"jobFailed": "Sync fehlgeschlagen",
-			"progress": "{processed} von {total} Dokumenten",
-			"noActiveJob": "Kein aktiver Sync-Job",
-			"errorExists": "Ein Sync-Job läuft bereits für diese Sammlung",
-			"errorGeneric": "Delta-Sync konnte nicht gestartet werden",
-			"processed": "Verarbeitet",
-			"upserted": "Aktualisiert",
-			"deleted": "Gelöscht",
-			"remaining": "Verbleibend"
-		},
-		"reindex": {
-			"title": "Vollständige Neuindizierung",
-			"description": "Eine vollständige Neuindizierung mit alias-swap ohne Ausfallzeiten auslösen. Alle Dokumente werden durch die Indizierungspipeline neu verarbeitet.",
-			"startReindex": "Neuindizierung starten",
-			"reindexing": "Indizierung läuft...",
-			"advancedOptions": "Erweiterte Optionen",
-			"detectSchema": "Schema-Änderungen automatisch erkennen",
-			"regenerateEmbeddings": "Embeddings neu generieren",
-			"aliasSwap": "Alias-Swap ohne Ausfallzeiten",
-			"jobPending": "Neuindizierung ausstehend...",
-			"jobRunning": "Indiziere {processed} von {total} Dokumenten...",
-			"jobCompleted": "Neuindizierung erfolgreich abgeschlossen",
-			"jobFailed": "Neuindizierung fehlgeschlagen",
-			"noActiveJob": "Kein aktiver Indizierungsauftrag",
-			"errorExists": "Für diese Sammlung läuft bereits eine Neuindizierung",
-			"errorSchemaRequired": "Das Index-Schema hat keine Felder konfiguriert",
-			"confirmTitle": "Vollständige Neuindizierung starten?",
-			"confirmDescription": "Dies erstellt eine neue Indexversion, streamt alle Dokumente und tauscht Aliase. Es werden keine Ausfallzeiten erwartet.",
-			"confirm": "Ja, neu indizieren",
-			"cancel": "Abbrechen"
-		}
-	},
-	"search": {
-		"title": "Suche",
-		"subtitle": "Verwalten Sie Suchindizes, API-Keys und die Nutzung für diese Organisation.",
-		"loading": "Wird geladen...",
-		"noIndexes": "Noch keine Suchindexe. Erstellen Sie Ihren ersten Index, um zu beginnen.",
-		"noIndexesDescription": "Suchindexe speichern Ihre Daten und ermöglichen Suchabfragen. Erstellen Sie einen, um zu beginnen.",
-		"selectIndex": "Wahlen Sie einen Index aus, um seine API-Keys zu verwalten.",
-		"apiKeysPage": {
-			"title": "API Keys"
-		},
-		"importJobsPage": {
-			"title": "Import-Jobs",
-			"description": "Aktuelle Dokumentimport- und Synchronisierungsaktivität aus dem Ingest-Puffer."
-		},
-		"previewPage": {
-			"title": "Suchvorschau"
-		},
-		"fields": {
-			"displayName": "Anzeigename",
-			"slug": "Slug",
-			"version": "Version",
-			"apiKeys": "API-Keys",
-			"defaultSortingField": "Standard-Sortierfeld",
-			"schema": "Felder (JSON)"
-		},
-		"createIndex": {
-			"trigger": "Index erstellen",
-			"title": "Suchindex erstellen",
-			"description": "Erstellt eine Suchsammlung und einen Alias, die auf diese Organisation beschränkt sind.",
-			"slugHelp": "Kleinbuchstaben, Ziffern und Bindestriche. Wird in API-Pfaden und als Sammlungs-Alias verwendet.",
-			"schemaHelp": "JSON-Array von Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefügt.",
-			"submit": "Erstellen",
-			"success": "Index wurde erstellt.",
-			"error": "Index konnte nicht erstellt werden. Bitte erneut versuchen.",
-			"startFromTemplate": "Mit Vorlage starten:",
-			"autoFromName": "auto",
-			"builder": "Visueller Editor",
-			"json": "JSON",
-			"fieldsTitle": "Schema-Felder",
-			"fieldsCount": "{count} Felder konfiguriert",
-			"addField": "Feld hinzufugen",
-			"removeField": "Feld entfernen",
-			"moveUp": "Nach oben",
-			"moveDown": "Nach unten",
-			"errorsCount": "{count, plural, one {# Feld enthält einen Fehler} other {# Felder enthalten Fehler}}",
-			"noFields": "Noch keine Felder — fugen Sie eines hinzu oder wahlen Sie eine Vorlage.",
-			"noSort": "Keine Standard-Sortierung",
-			"noSortableHint": "Aktivieren Sie zuerst Sort fur ein numerisches Feld",
-			"tenantHint": "tenant_id wird zur Isolation automatisch hinzugefugt.",
-			"templates": {
-				"products": "Produkte",
-				"articles": "Artikel",
-				"users": "Benutzer",
-				"blank": "Leer"
-			},
-			"typeGroups": {
-				"text": "Text",
-				"number": "Zahl",
-				"boolean": "Boolean",
-				"advanced": "Erweitert"
-			},
-			"toggles": {
-				"facet": "Facette",
-				"optional": "Optional",
-				"sort": "Sortieren"
-			},
-			"tooltips": {
-				"displayName": "Lesbarer Name, der im Dashboard angezeigt wird. Hat keinen Einfluss auf die API.",
-				"slug": "Wird in API-Pfaden und als Suchsammlungs-Alias verwendet. Nur Kleinbuchstaben, Ziffern und Bindestriche.",
-				"fields": "Definieren Sie die Spalten Ihrer Suchsammlung. Felder konnen facettierbar, sortierbar oder optional sein.",
-				"facet": "Erlaubt Filterung und Gruppierung nach diesem Feld (z. B. Kategorien, Tags, Marke).",
-				"optional": "Das Feld darf in Dokumenten fehlen. Pflichtfelder mussen in jedem Dokument vorhanden sein.",
-				"sort": "Sortierung fur dieses Feld erlauben (numerische Felder konnen immer sortiert werden).",
-				"defaultSort": "Feld zur Sortierung der Ergebnisse, wenn keine explizite Sortierung angegeben ist. Muss numerisch sein.",
-				"json": "Schema als reines JSON bearbeiten. Beim Wechsel zuruck zum visuellen Editor werden Anderungen validiert und ubernommen.",
-				"idField": "Empfohlener eindeutiger Bezeichner. AACsearch verwendet diesen Wert als Primärschlüssel beim Upsert."
-			},
-			"errors": {
-				"duplicateName": "Feldname muss eindeutig sein",
-				"invalidJson": "Ungultiges JSON",
-				"empty": "Mindestens ein Feld hinzufugen",
-				"fieldsInvalid": "Beheben Sie die markierten Felder"
-			}
-		},
-		"apiKeys": {
-			"title": "API-Keys",
-			"description": "Suchschlüssel werden serverseitig validiert, bevor Anfragen ausgeführt werden. Admin-Zugangsdaten verlassen den Server niemals.",
-			"create": "Schlussel erstellen",
-			"createDescription": "Der Rohschlussel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
-			"name": "Name",
-			"generate": "Schlussel generieren",
-			"created": "API-Key wurde erstellt.",
-			"revealOnce": "Kopieren Sie diesen Schlussel jetzt. Er wird Ihnen nicht wieder angezeigt.",
-			"done": "Fertig",
-			"empty": "Noch keine API-Keys.",
-			"emptyDescription": "Erstellen Sie Ihren ersten API-Key, um die Suche in Ihre Anwendung zu integrieren.",
-			"tableName": "Name",
-			"tablePrefix": "Prafix",
-			"tableScopes": "Berechtigungen",
-			"tableStatus": "Status",
-			"tableActions": "Aktionen",
-			"statusActive": "Aktiv",
-			"statusRevoked": "Widerrufen",
-			"revoke": "Widerrufen",
-			"revokeConfirmTitle": "API-Key widerrufen",
-			"revokeConfirmMessage": "Mochten Sie \"{name}\" wirklich widerrufen? Clients, die diesen Schlussel verwenden, funktionieren sofort nicht mehr.",
-			"revoked": "API-Key widerrufen.",
-			"error": "Vorgang fehlgeschlagen.",
-			"namePlaceholder": "z.B. Produktions-Widget"
-		},
-		"usage": {
-			"title": "Nutzung",
-			"windowDays": "Letzte {days} Tage",
-			"searches": "Suchanfragen",
-			"documents": "Indizierte Dokumente",
-			"ingests": "Indizierte Dokumente",
-			"ofLimit": "des monatlichen Limits",
-			"loadError": "Nutzungsdaten konnten nicht geladen werden."
-		},
-		"analytics": {
-			"tab": "Analysen",
-			"title": "Analysen",
-			"description": "Verfolgen Sie Suchnutzung, Top-Suchanfragen, Null-Ergebnisse und Trends.",
-			"totalSearches": "Suchanfragen gesamt",
-			"totalSessions": "Sitzungen",
-			"ctr": "CTR",
-			"zeroResults": "Null Ergebnisse",
-			"zeroResultRate": "Null-Ergebnis-Rate",
-			"comingSoon": "Demnächst",
-			"searchesOverTime": "Suchanfragen im Zeitverlauf",
-			"topQueries": "Top Suchanfragen",
-			"topClickedProducts": "Top geklickte Produkte",
-			"queryColumn": "Suchanfrage",
-			"countColumn": "Anzahl",
-			"productColumn": "Produkt",
-			"clicksColumn": "Klicks",
-			"rankColumn": "#",
-			"percentColumn": "% der Gesamtanzahl",
-			"period24h": "24h",
-			"period7d": "7 Tage",
-			"period30d": "30 Tage",
-			"documentsIndexed": "Indizierte Dokumente",
-			"failedSyncJobs": "Fehlgeschlagene Sync-Jobs",
-			"failed": "fehlgeschlagen",
-			"retentionBanner": "Ihr {plan}-Plan behält Analysedaten für {days} Tage. Wählen Sie einen kürzeren Zeitraum, um Daten zu sehen.",
-			"noData": "Keine Daten fur diesen Zeitraum verfugbar.",
-			"noDataDescription": "Analysedaten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
-			"freePlan": "Kostenlos",
-			"queryPerformance": "Abfrage-Performance",
-			"latencyP50": "p50",
-			"latencyP95": "p95",
-			"latencyP99": "p99",
-			"noLatencyData": "Latenzdaten erscheinen nach der Verarbeitung von Suchanfragen.",
-			"failedQueries": "Fehlgeschlagene Suchanfragen",
-			"ofTotalSearches": "der Gesamtsuchanfragen",
-			"totalFailedQueries": "insgesamt fehlgeschlagen",
-			"noFailedQueries": "Keine fehlgeschlagenen Suchanfragen in diesem Zeitraum.",
-			"tabDashboard": "Dashboard",
-			"tabFailed": "Fehlgeschlagene",
-			"tabActivity": "Aktivität",
-			"uniqueFailedQueries": "Einzigartige fehlgeschlagene",
-			"recentActivity": "Letzte Aktivität",
-			"noActivity": "Keine aktuellen Aktivitäten."
-		},
-		"widget": {
-			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",
-			"configuratorTitle": "Widget-Konfigurator",
-			"comingSoon": "Demnächst verfügbar",
-			"comingSoonDescription": "Der Widget-Konfigurationsassistent wird entwickelt. Schauen Sie bald wieder vorbei für Filter, Autovervollständigung, Sprachsuche und Einbettungsoptionen."
-		},
-		"configurator": {
-			"pageTitle": "Suchkonfigurator",
-			"pageDescription": "Richten Sie Ihre Suche in 3 einfachen Schritten ein. Wählen Sie eine Datenquelle, konfigurieren Sie Ihr Schema und optimieren Sie das Suchverhalten.",
-			"step1Title": "Datenquelle",
-			"step1Description": "Wählen Sie, wie Sie Ihre Daten in AACSearch importieren möchten.",
-			"step2Title": "Schema",
-			"step2Description": "Felder automatisch erkennen und Such-, Facetten- und Sortierverhalten konfigurieren.",
-			"step3Title": "Suchkonfiguration",
-			"step3Description": "Feinabstimmung der Suche: welche Felder durchsuchbar sind, deren Gewichtung und Ranking-Optionen.",
-			"sourceCSV": "CSV-Datei",
-			"sourceCSVDesc": "Laden Sie eine CSV-Datei mit bis zu 500.000 Zeilen hoch. Spaltenüberschriften werden zu Feldern.",
-			"sourceJSON": "JSON-Datei",
-			"sourceJSONDesc": "Laden Sie eine JSON-Datei mit einem Array von Objekten hoch.",
-			"sourceCMS": "CMS-Connector",
-			"sourceCMSDesc": "Verbinden Sie WordPress, WooCommerce, PrestaShop oder andere CMS.",
-			"sourceAPI": "API / Webhook",
-			"sourceAPIDesc": "Daten programmatisch über unsere REST-API pushen.",
-			"autoDetect": "Felder automatisch erkennen",
-			"schemaEmpty": "Noch keine Felder konfiguriert",
-			"schemaEmptyHint": "Laden Sie eine Datenquelle hoch oder klicken Sie auf „Automatisch erkennen\", um zu beginnen.",
-			"fieldName": "Feld",
-			"fieldType": "Typ",
-			"fieldSearch": "Suche",
-			"fieldFacet": "Facette",
-			"fieldSort": "Sortierung",
-			"searchableFields": "Durchsuchbare Felder",
-			"searchable": "Aktiviert",
-			"weight": "Gewichtung",
-			"noStringFields": "Keine Textfelder verfügbar. Fügen Sie Felder vom Typ String hinzu, um die Suche zu aktivieren.",
-			"ranking": "Ranking-Einstellungen",
-			"typoTolerance": "Toleranz für Tippfehler",
-			"typoOff": "Aus",
-			"typo1": "1 Tippfehler (streng)",
-			"typo2": "2 Tippfehler (Standard)",
-			"typo4": "4 Tippfehler (unscharf)",
-			"infixSearch": "Infix-Suche",
-			"infixOff": "Aus",
-			"infixFallback": "Rückfall (Standard)",
-			"infixAlways": "Immer aktiv",
-			"prefixSearch": "Präfix-Suche",
-\t\t\t"exactMatch": "Prioritize exact matches",
-\t\t\t"facetFieldsAvailable": "{count} fields available for faceting",
-\t\t\t"facetAddAll": "Add all fields",
-\t\t\t"facetNoneSelected": "No facet fields configured. Click \"Add all fields\" to configure facets.",
-\t\t\t"facetNoFields": "No facet-capable fields",
-\t\t\t"facetNoFieldsHint": "Mark fields as Facet in the Schema step to enable facet configuration.",
-\t\t\t"facetField": "Field",
-\t\t\t"facetDisplayName": "Display name",
-\t\t\t"facetSort": "Sort by",
-\t\t\t"facetSortCount": "Count",
-\t\t\t"facetSortAlpha": "Alphabetical",
-\t\t\t"facetMax": "Max",
-\t\t\t"facetMulti": "Multi-select",
-\t\t\t"step4Title": "Facets",
-\t\t\t"step4Description": "Configure how search facets appear and behave. Reorder, rename, and set display options.",
-\t\t\t"back": "Zurück",
-			"next": "Weiter",
-			"finish": "Abschließen und Index erstellen"
-		},
-		"projects": {
-			"title": "Projekte",
-			"apiKeys": "API-Schlüssel",
-			"loadError": "Projekte konnten nicht geladen werden."
-		},
-		"overview": {
-			"title": "Übersicht",
-			"subtitle": "Letzte {days} Tage",
-			"totalSearches": "Suchanfragen gesamt",
-			"searchesTrend": "Such-Trend",
-			"documentsIndexed": "Indizierte Dokumente",
-			"quotaUsage": "Kontingentnutzung",
-			"failedSyncJobs": "Fehlgeschlagene Sync-Jobs",
-			"searchesOverTime": "Suchanfragen im Zeitverlauf",
-			"topQueries": "Top Suchanfragen",
-			"activityFeed": "Letzte Aktivitäten",
-			"connectorStatus": "Connector-Status",
-			"period24h": "24h",
-			"period7d": "7 Tage",
-			"period30d": "30 Tage",
-			"quotaWarning": "Du hast {percent}% deines Suchkontingents verbraucht. Upgrade deinen Plan, um Unterbrechungen zu vermeiden.",
-			"quotaExceeded": "Du hast dein Suchkontingent überschritten ({percent}%). Einige Funktionen sind möglicherweise eingeschränkt.",
-			"connectorOnline": "Alle Connectors online",
-			"connectorOffline": "Connector offline",
-			"connectorUnknown": "Kein Connector konfiguriert",
-			"noData": "Keine Daten verfügbar",
-			"noDataDescription": "Daten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
-			"refresh": "Aktualisieren",
-			"activity": {
-				"indexCreated": "Index \"{name}\" erstellt",
-				"keyRevoked": "{count, plural, one {# API-Key} other {# API-Keys}} für \"{name}\"",
-				"syncFailed": "Sync für Index \"{name}\" fehlgeschlagen"
-			},
-			"indexVersion": "Index-Version",
-			"apiKeys": "API-Schlüssel",
-			"searches": "Suchanfragen",
-			"indexes": "Indizes",
-			"documents": "Dokumente",
-			"plan": "Plan",
-			"quickActions": "Schnellaktionen",
-			"manageIndexes": "Indizes verwalten",
-			"manageIndexesDesc": "Erstellen und verwalten Sie Suchindexe",
-			"viewAnalytics": "Analysen anzeigen",
-			"viewAnalyticsDesc": "Suchnutzung und Top-Anfragen verfolgen",
-			"setupConnector": "Connector einrichten",
-			"setupConnectorDesc": "PrestaShop oder Bitrix-Modul verbinden",
-			"managePlan": "Plan verwalten",
-			"graceUntil": "Schreibgeschützt bis {date}",
-			"active": "Aktiv",
-			"indexedProducts": "Indizierte Produkte",
-			"apiKeysCount": "API-Schlüssel",
-			"lastHeartbeat": "Letzter Heartbeat",
-			"noHeartbeat": "Nie",
-			"connectorToken": "Connector-Token",
-			"upgrade": "Tarif upgraden",
-			"createIndex": "Index erstellen",
-			"addConnector": "Connector hinzufügen",
-			"viewAll": "Alle anzeigen",
-			"noSearchesYet": "Du hast noch keine Suchanfragen gesendet",
-			"emptyStateDescription": "Erstelle deinen ersten Suchindex und lege los.",
-			"getStarted": "Loslegen",
-			"quotaExceededBadge": "Überschritten",
-			"quotaUsedBadge": "{percent}% genutzt",
-			"searchesLabel": "Suchen",
-			"freePlan": "Kostenlos",
-			"activeReindexJobs": "Aktive Neuindizierungsaufgaben",
-			"reindexProgress": "{processed} / {total} Dokumente"
-		},
-		"gettingStarted": {
-			"title": "Erste Schritte",
-			"welcome": "Los geht's mit der Suche",
-			"subtitle": "Führe die folgenden Schritte aus, um die Suche zu nutzen.",
-			"allDone": "Alle Schritte abgeschlossen!",
-			"allDoneTitle": "Du bist bereit!",
-			"allDoneDesc": "Alle Onboarding-Schritte sind abgeschlossen. Du kannst jetzt die Suche nutzen.",
-			"progress": "Einrichtungsfortschritt",
-			"completed": "abgeschlossen",
-			"step1Label": "Suchindex erstellen",
-			"step1Desc": "Erstelle deinen ersten Suchindex, um Daten zu speichern und zu organisieren.",
-			"step1Action": "Index erstellen",
-			"step2Label": "Quelle verbinden",
-			"step2Desc": "Generiere einen Connector-Token, um deine Datenquelle zu verbinden.",
-			"step2Action": "Quelle verbinden",
-			"step3Label": "Sync ausführen",
-			"step3Desc": "Synchronisiere deine Daten aus deinem CMS oder anderen Quellen.",
-			"step3Action": "Sync starten",
-			"step4Label": "Suche testen",
-			"step4Desc": "Führe eine Testsache durch, um deine Einrichtung zu überprüfen.",
-			"step4Action": "Suche testen",
-			"step5Label": "API-Key generieren",
-			"step5Desc": "Erstelle einen API-Key, um Suchanfragen von deiner Anwendung zu erlauben.",
-			"step5Action": "Key generieren",
-			"step6Label": "Widget einbetten",
-			"step6Desc": "Bette das Such-Widget in deinen Onlineshop ein.",
-			"step6Action": "Widget einbetten",
-			"done": "Erledigt",
-			"pending": "Ausstehend",
-			"inProgress": "In Bearbeitung",
-			"viewAnalytics": "Analysen anzeigen",
-			"planCtaTitle": "Mehr Leistung nötig?",
-			"planCtaDesc": "Upgrade deinen Plan für höhere Limits und mehr Funktionen.",
-			"managePlan": "Plan verwalten",
-			"skipToDashboard": "Zum Dashboard"
-		},
-		"checklist": {
-			"title": "Setup-Checkliste",
-			"steps": {
-				"createIndex": "Index erstellen",
-				"createIndexDone": "Index erstellt",
-				"generateApiKey": "API-Key generieren",
-				"generateApiKeyDone": "API-Key generiert",
-				"installCmsModule": "CMS-Modul installieren",
-				"installCmsModuleDone": "CMS-Modul installiert",
-				"runFullSync": "Vollsynchronisation durchführen",
-				"runFullSyncDone": "Produkte synchronisiert",
-				"testSearch": "Suche testen",
-				"testSearchDone": "Suche getestet",
-				"enableWidget": "Widget aktivieren",
-				"enableWidgetDone": "Widget aktiviert"
-			},
-			"stepDocs": "Dokumentation anzeigen",
-			"allDone": "Alle Prüfungen bestanden!"
-		},
-		"importJobs": {
-			"tab": "Import-Jobs",
-			"title": "Import-Jobs",
-			"description": "Letzte Dokumentenimport- und Synchronisierungsaktivität aus dem Ingest-Puffer.",
-			"pending": "Ausstehend",
-			"processing": "Verarbeitung",
-			"completed": "Abgeschlossen",
-			"failed": "Fehlgeschlagen",
-			"empty": "Keine Importaktivität in den letzten 7 Tagen.",
-			"emptyDescription": "Import-Jobs erscheinen hier, wenn Sie Daten aus Ihrem CMS synchronisieren.",
-			"tableJobId": "Job-ID",
-			"tableType": "Typ",
-			"tableStatus": "Status",
-			"tableProgress": "Fortschritt",
-			"tableErrors": "Fehler",
-			"tableTime": "Zeit",
-			"viewTimeline": "Zeitleiste",
-			"viewTable": "Tabelle",
-			"successRate": "Erfolgsrate",
-			"indexed": "Indiziert",
-			"retryQueue": "Wiederholungswarteschlange",
-			"retryAll": "Alle wiederholen",
-			"clearQueue": "Leeren",
-			"nextRetry": "Nächste Wiederholung",
-			"retrySuccess": "{count} Charge(n) für erneuten Versuch in die Warteschlange gestellt.",
-			"retryError": "Erneuter Versuch fehlgeschlagen. Bitte versuchen Sie es erneut.",
-			"upload": {
-				"title": "Datei hochladen",
-				"dropzone": "JSON- oder CSV-Datei hier ablegen oder zum Durchsuchen klicken",
-				"fileTypes": "Unterstützt .json und .csv Dateien",
-				"parsing": "Datei wird verarbeitet…",
-				"batching": "Batch {current} von {total} wird hochgeladen…",
-				"success": "{count} Dokument(e) in die Warteschlange eingereiht",
-				"errorInvalidJson": "Ungültiges JSON: Array von Objekten erwartet",
-				"errorInvalidCsv": "Ungültige CSV: Datei muss eine Kopfzeile haben",
-				"errorFileSize": "Datei zu groß (max. 10 MB)",
-				"errorFileType": "Nur .json und .csv Dateien werden akzeptiert",
-				"batchFailed": "Batch {n} fehlgeschlagen: {error}"
-			}
-		},
-		"preview": {
-			"tab": "Suchvorschau",
-			"title": "Suchvorschau",
-			"description": "Testen Sie Suchanfragen gegen diesen Index und prüfen Sie die Rohdaten.",
-			"placeholder": "Suchanfrage eingeben…",
-			"search": "Suchen",
-			"noResults": "Führen Sie eine Abfrage aus, um Ergebnisse zu sehen.",
-			"perPage": "Pro Seite",
-			"page": "Seite",
-			"highlightFields": "Hervorhebungsfelder",
-			"highlightFieldsPlaceholder": "z.B. title, description",
-			"facetBy": "Facette",
-			"facetByPlaceholder": "z.B. brand, category",
-			"stats": "{found} Treffer in {time} ms"
-		},
-		"connector": {
-			"title": "Connectors",
-			"subtitle": "PrestaShop, Bitrix verbinden oder Dokumente direkt per API pushen",
-			"stepCounter": "Schritt {current} von {total}",
-			"runSyncDesc": "Starten Sie eine vollstandige Synchronisation, um alle Produkte aus Ihrem CMS zu indizieren.",
-			"runSyncCta": "Vollstandige Synchronisation starten",
-			"syncTriggerHint": "Offnen Sie Ihren CMS-Adminbereich und klicken Sie im AACsearch-Modul auf 'Full sync'.",
-			"configStep1": {
-				"prestashop": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres PrestaShop-Admins ein.",
-				"bitrix": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres Bitrix-Admins ein.",
-				"directApi": "Verwenden Sie die API-URL und das Token als Basis-URL und Bearer-Token fur Ihre REST-Aufrufe."
-			},
-			"configStep2": {
-				"prestashop": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
-				"bitrix": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
-				"directApi": "Geben Sie das Token im Authorization-Header an: Bearer <token>"
-			},
-			"configStep3": "Speichern Sie die Konfiguration.",
-			"prestashop": "PrestaShop",
-			"prestashopDesc": "Vollsynchronisation für Produkte, Kategorien, Lagerbestand",
-			"bitrix": "1C-Bitrix",
-			"bitrixDesc": "Vollsynchronisation für Produktkataloge",
-			"directApi": "Direct API",
-			"directApiDesc": "Dokumente direkt per REST API pushen",
-			"setup": "Einrichten",
-			"manage": "Verwalten",
-			"viewDocs": "Dokumentation",
-			"statusOnline": "Online",
-			"statusOffline": "Offline",
-			"statusUnknown": "Unbekannt",
-			"lastSync": "Letzte Sync: {time}",
-			"lastError": "Letzter Fehler: {error}",
-			"noHeartbeat": "Noch kein Heartbeat",
-			"syncJobs": "Sync-Jobs",
-			"syncJobsNote": "Zeigt die letzten 50 Sync-Jobs.",
-			"activeConnectors": "Aktive Connectors",
-			"activeConnectorsDesc": "Connector-Tokens und ihr Heartbeat-Status",
-			"noConnectors": "Noch keine Connectors. Klicken Sie oben auf 'Einrichten'.",
-			"wizardTitle": "{source} Connector einrichten",
-			"stepGenerateToken": "Token generieren",
-			"stepDownloadModule": "Modul herunterladen",
-			"stepConfigure": "Konfigurieren",
-			"stepTestConnection": "Verbindung testen",
-			"stepRunSync": "Erste Synchronisation",
-			"tokenGenerated": "Ihr Connector-Token",
-			"tokenCopyWarning": "Speichern Sie diesen Schlüssel — wir können ihn nach dem Schließen nicht mehr anzeigen",
-			"tokenCopied": "Kopiert!",
-			"downloadPrestashop": "PrestaShop-Modul herunterladen",
-			"downloadBitrix": "Bitrix-Modul herunterladen",
-			"testSuccess": "Verbindung erfolgreich — Modul ist online!",
-			"testFailed": "Verbindung fehlgeschlagen — überprüfen Sie die Modulkonfiguration",
-			"syncSuccess": "Sync erfolgreich gestartet",
-			"jobId": "Job-ID",
-			"jobType": "Typ",
-			"jobStatus": "Status",
-			"jobStarted": "Gestartet",
-			"jobDuration": "Dauer",
-			"jobItems": "Elemente / Fehler",
-			"jobActions": "Aktionen",
-			"jobRetry": "Wiederholen",
-			"typeFull": "Voll",
-			"typeDelta": "Delta",
-			"statusPending": "Ausstehend",
-			"statusRunning": "Läuft",
-			"statusCompleted": "Abgeschlossen",
-			"statusFailed": "Fehlgeschlagen",
-			"jobDetailTitle": "Job-Details",
-			"jobEventLog": "Ereignisprotokoll",
-			"noJobLogs": "Keine Ereignisse protokolliert",
-			"tokenLabel": "Connector-Token",
-			"tokenPlaceholder": "ss_connector_***",
-			"testHandshake": "Handshake testen",
-			"handshakeSuccess": "Handshake erfolgreich",
-			"handshakeFailed": "Handshake fehlgeschlagen",
-			"description": "Verwalten Sie das Connector-Token und den Handshake-Status.",
-			"noConnectorKeys": "Keine Connector-Keys. Erstellen Sie einen API-Key mit dem Bereich 'connector_write' im Reiter API Keys.",
-			"lastHeartbeat": "Letzter Heartbeat",
-			"syncNow": "Jetzt syncen",
-			"revokeToken": "Widerrufen",
-			"pipeline": {
-				"buffer": "Puffer",
-				"throughput": "Durchsatz",
-				"retryQueue": "Wiederholungs-Warteschlange",
-				"failed": "Fehlgeschlagen"
-			},
-			"time": {
-				"lessThanMinute": "<1 Min.",
-				"minutes": "{count} Min.",
-				"hoursMinutes": "{h}Std. {m}Min.",
-				"days": "{count}T",
-				"ago": "vor {time}"
-			},
-			"revokeError": "Token konnte nicht widerrufen werden. Bitte versuche es erneut.",
-			"retryError": "Stapel konnten nicht wiederholt werden. Bitte versuche es erneut.",
-			"wizard": {
-				"noIndex": "Kein Index verfügbar. Erstellen Sie zuerst einen Index.",
-				"tokenFailed": "Token-Generierung fehlgeschlagen"
-			},
-			"jobFailures": "Fehler"
-		},
-		"tabs": {
-			"indexes": "Indizes",
-			"playground": "Playground",
-			"apiKeys": "API-Schlüssel",
-			"widget": "Widget"
-		},
-		"playground": {
-			"title": "Such-Playground",
-			"description": "Testen Sie erweiterte Suchabfragen mit allen verfügbaren Optionen.",
-			"advanced": "Erweiterte Optionen",
-			"advancedShow": "Erweiterte Optionen anzeigen",
-			"advancedHide": "Erweiterte Optionen ausblenden",
-			"queryBy": "Suchfelder",
-			"queryByPlaceholder": "Kommagetrennte Feldnamen (z.B. title, description)",
-			"filterBy": "Filter",
-			"filterByPlaceholder": "z.B. price:>100 && inStock:=true",
-			"sortBy": "Sortierung",
-			"sortByPlaceholder": "z.B. price:desc",
-			"perPage": "Ergebnisse pro Seite",
-			"run": "Suche ausführen",
-			"cmdEnter": "Cmd+Enter zum Suchen",
-			"hits": "Treffer",
-			"facets": "Facetten",
-			"rawJson": "Rohdaten (JSON)",
-			"curlSnippet": "cURL-Befehl",
-			"copy": "Kopieren",
-			"copied": "Kopiert!",
-			"responseTime": "Antwortzeit",
-			"hitCount": "Ergebnisse",
-			"noDocuments": "Keine Dokumente entsprechen Ihrer Abfrage.",
-			"debounceInfo": "Automatische Suche (700ms Verzögerung)",
-			"lastQueryRestored": "Letzte Abfrage aus vorheriger Sitzung wiederhergestellt.",
-			"noIndexes": "Keine Indizes verfügbar. Erstellen Sie zuerst einen.",
-			"curlTitle": "cURL-Befehl",
-			"searchFailed": "Suche fehlgeschlagen",
-			"copyFailed": "Kopieren fehlgeschlagen"
-		},
-		"indexActions": {
-			"actions": "Aktionen",
-			"reindex": "Neu indizieren",
-			"viewSchema": "Schema anzeigen",
-			"delete": "Index löschen",
-			"deleteConfirmTitle": "Index löschen",
-			"deleteConfirmMessage": "Möchten Sie \"{name}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-			"reindexConfirmTitle": "Neu indizieren",
-			"reindexConfirmMessage": "Vollständige Neuindizierung für \"{name}\" auslösen?",
-			"schemaTitle": "Schema für \"{name}\"",
-			"reindexed": "Neuindizierung ausgelöst.",
-			"deleted": "Index gelöscht."
-		},
-		"nav": {
-			"overview": "Übersicht",
-			"gettingStarted": "Erste Schritte",
-			"search": "Suche",
-			"indexes": "Indizes",
-			"apiKeys": "API-Schlüssel",
-			"importJobs": "Import-Jobs",
-			"searchPreview": "Suchvorschau",
-			"playground": "Testumgebung",
-			"analytics": "Analysen",
-			"analyticsDashboard": "Dashboard",
-			"analyticsTopQueries": "Top-Anfragen",
-			"analyticsFailed": "Fehlgeschlagene Anfragen",
-			"analyticsActivity": "Aktivitätsprotokoll",
-			"relevance": "Relevanz",
-			"relevanceSynonyms": "Synonyme",
-			"relevanceCurations": "Kuratierungen",
-			"relevanceStemming": "Stemming",
-			"relevanceStopwords": "Stoppwörter",
-			"relevanceRanking": "Ranking",
-			"relevanceSpell": "Rechtschreibkorrektur",
-			"connectors": "Connectors",
-			"connectorsCMS": "CMS-Connectors",
-			"connectorsWebhooks": "Webhooks",
-			"connectorsSDK": "SDK",
-			"knowledge": "Wissen",
-			"knowledgeSpaces": "Wissensbereiche",
-			"knowledgeDocuments": "Dokumente",
-			"knowledgeSearch": "Suche",
-			"recommendations": "Empfehlungen",
-			"recommendationsDashboard": "Dashboard",
-			"recommendationsSimilar": "Ähnliche Elemente",
-			"recommendationsPersonalized": "Personalisierte",
-			"recommendationsGraphRAG": "GraphRAG",
-			"recommendationsSettings": "Einstellungen",
-			"widget": "Widget",
-			"widgetConfigurator": "Konfigurator",
-			"widgetFilters": "Filter",
-			"widgetAutocomplete": "Autovervollständigung",
-			"widgetVoice": "Sprachsuche",
-			"widgetAnalytics": "Analysen",
-			"widgetInstall": "Installieren"
-		},
-		"recommendations": {
-			"description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",
-			"dashboardTitle": "Dashboard für Empfehlungen",
-			"comingSoon": "Demnächst verfügbar",
-			"comingSoonDescription": "KI-gestützte Empfehlungen werden entwickelt. Schauen Sie bald wieder vorbei für ähnliche Artikel, personalisierte Vorschläge und GraphRAG-gestützte Erklärungen."
-		},
-		"synonyms": {
-			"tab": "Synonyme",
-			"title": "Synonyme",
-			"description": "Konfigurieren Sie Suchsynonyme. Wenn ein Benutzer nach dem Synonym sucht, werden Ergebnisse für den Grundbegriff angezeigt.",
-			"add": "Zeile hinzufügen",
-			"save": "Synonyme speichern",
-			"saved": "Synonyme gespeichert.",
-			"error": "Fehler beim Speichern der Synonyme.",
-			"empty": "Noch keine Synonyme konfiguriert. Fügen Sie ein Synonympaar hinzu, um zu beginnen.",
-			"emptyDescription": "Synonyme ordnen verschiedenen Suchbegriffen dasselbe Stammwort zu und erweitern so Ihre Suchabdeckung.",
-			"synonymColumn": "Synonym",
-			"rootColumn": "Stammwort",
-			"tableActions": "Aktionen",
-			"remove": "Entfernen",
-			"removeConfirmTitle": "Synonym entfernen",
-			"removeConfirmMessage": "Sind Sie sicher, dass Sie dieses Synonympaar entfernen möchten?"
-		},
-		"curations": {
-			"tab": "Kurationen",
-			"title": "Kurationen",
-			"description": "Produkte für bestimmte Suchanfragen fixieren oder ausblenden, um Suchergebnisse manuell zu steuern.",
-			"add": "Regel hinzufügen",
-			"save": "Kurationen speichern",
-			"saved": "Kurationen gespeichert.",
-			"error": "Fehler beim Speichern der Kurationen.",
-			"empty": "Noch keine Kurationsregeln. Fügen Sie eine Regel hinzu, um zu beginnen.",
-			"emptyDescription": "Kurationsregeln ermöglichen es Ihnen, Produkte für Suchanfragen zu fixieren oder auszublenden.",
-			"queryColumn": "Suchanfrage",
-			"pinnedColumn": "Fixierte IDs",
-			"hiddenColumn": "Ausgeblendete IDs",
-			"tableActions": "Aktionen",
-			"edit": "Bearbeiten",
-			"remove": "Entfernen",
-			"editTitle": "Kurationsregel bearbeiten",
-			"addTitle": "Kurationsregel hinzufügen",
-			"dialogDescription": "Geben Sie die Suchanfrage und Produkt-IDs zum Fixieren oder Ausblenden ein.",
-			"queryLabel": "Suchanfrage",
-			"queryPlaceholder": "z.B. Laufschuhe",
-			"pinnedLabel": "Fixierte Produkt-IDs (kommagetrennt)",
-			"pinnedPlaceholder": "prod-123, prod-456",
-			"hiddenLabel": "Ausgeblendete Produkt-IDs (kommagetrennt)",
-			"hiddenPlaceholder": "prod-789, prod-012",
-			"dialogSave": "Regel speichern",
-			"removeConfirmTitle": "Kurationsregel entfernen",
-			"removeConfirmMessage": "Sind Sie sicher, dass Sie diese Kurationsregel entfernen möchten?"
-		},
-		"relevance": {
-			"tab": "Relevanz",
-			"title": "Relevanz",
-			"description": "Verwalten Sie Synonyme, Kuratierungen und Rankings der Suchergebnisse."
-		},
-		"knowledge": {
-			"title": "Wissensbasis",
-			"subtitle": "RAG-Fragen und -Antworten über Ihre Dokumente und Kataloge",
-			"spaces": "Arbeitsbereiche",
-			"spacesDesc": "Persönliche und Organisations-Wissensbereiche",
-			"activeSpace": "Aktiver Bereich",
-			"selectSpace": "Bereich auswählen",
-			"newSpaceSlug": "Slug des neuen Bereichs",
-			"newSpaceName": "Name des neuen Bereichs",
-			"createSpace": "Bereich erstellen",
-			"sources": "Quellen",
-			"sourcesDesc": "CMS- und Datei-Quellen für diesen Bereich",
-			"sourceName": "Quellenname",
-			"sourceType": "Quellentyp",
-			"sourceConfig": "Quellenkonfiguration (JSON)",
-			"addSource": "Quelle hinzufügen",
-			"fileIngestion": "Datei-Ingest",
-			"fileIngestionDesc": "MD/XML/PDF in den ausgewählten Bereich hochladen",
-			"fileInput": "Datei",
-			"ingestFile": "Datei ingestieren",
-			"jobsAndMetrics": "Jobs & Metriken",
-			"jobsAndMetricsDesc": "Betriebliche Transparenz für Ingest und Graph-Builds",
-			"sourcesMetric": "Quellen",
-			"documentsMetric": "Dokumente",
-			"chunksMetric": "Chunks",
-			"graphEdgesMetric": "Graph-Kanten",
-			"ragAsk": "RAG-Abfrage",
-			"ragAskDesc": "Hybridsuche mit Zitaten aus Ihrem Bereich",
-			"question": "Frage",
-			"askButton": "Fragen",
-			"graphExplain": "Graph-Erklärung",
-			"graphQuery": "Graph-Abfrage",
-			"explainGraph": "Graph erklären",
-			"fileSizeLimit": "Datei muss kleiner als 50 MB sein",
-			"fileTypeLimit": "Nur .md, .xml, .pdf-Dateien werden akzeptiert",
-			"createdSpace": "Wissensbereich erstellt",
-			"createdSource": "Datenquelle erstellt",
-			"ingestionStarted": "Datei-Ingest gestartet",
-			"answerGenerated": "Antwort generiert",
-			"graphExplained": "Graph-Erklärung generiert",
-			"permissionDenied": "Sie haben keine Berechtigung, Bereiche zu erstellen",
-			"requiredFields": "Slug und Name sind erforderlich",
-			"noSpaceSelected": "Wählen Sie einen Bereich und geben Sie eine Frage ein",
-			"slugPlaceholder": "catalog-knowledge",
-			"namePlaceholder": "Katalog-Wissen",
-			"sourceNamePlaceholder": "Bitrix-Shop-Connector",
-			"questionPlaceholder": "Welche Produkte erwähnen API-Schlüssel-Rotation?",
-			"graphQueryPlaceholder": "Connector-Diagnose-Fehler",
-			"graphQueryLabel": "Graph-Abfrage",
-			"graphExplainDesc": "Graph-Nachbarschaft für Ihre Abfrage untersuchen",
-			"citedFrom": "Zitiert aus Dokument",
-			"seedNodes": "Startknoten",
-			"edges": "Kanten",
-			"noSeedNodes": "Keine Startknoten gefunden.",
-			"noEdges": "Keine Kanten gefunden.",
-			"loadingSpaces": "Bereiche werden geladen...",
-			"activeSpaceLabel": "Aktiver Bereich: {name} ({slug})",
-			"createSpaceError": "Wissensbereich konnte nicht erstellt werden",
-			"sourceCreateError": "Datenquelle konnte nicht erstellt werden",
-			"ingestError": "Datei konnte nicht ingestiert werden",
-			"answerError": "Antwort konnte nicht generiert werden",
-			"graphExplainError": "Graph-Erklärung ist fehlgeschlagen",
-			"noPermissionSources": "Sie haben keine Berechtigung, Quellen zu erstellen",
-			"selectSpaceAndSource": "Wählen Sie einen Bereich und geben Sie den Quellnamen an",
-			"invalidSourceConfig": "Ungültige Quellenkonfiguration",
-			"noPermissionIngest": "Sie haben keine Berechtigung zum Hochladen von Dateien",
-			"selectSpaceAndFile": "Wählen Sie einen Bereich und eine Datei",
-			"fileReadError": "Datei konnte nicht gelesen werden",
-			"fileTypeInvalid": "Nur .md, .xml und .pdf-Dateien werden unterstützt",
-			"selectSpaceAndGraphQuery": "Wählen Sie einen Bereich und geben Sie eine Graph-Abfrage ein"
-		},
-		"documents": {
-			"empty": "Noch keine Dokumente in diesem Index",
-			"emptyDescription": "Laden Sie eine CSV hoch oder verwenden Sie die API, um Dokumente hinzuzufügen.",
-			"importCsv": "CSV importieren",
-			"importCsvDescription": "Wählen Sie eine CSV-Datei zum Importieren aus. Die erste Zeile muss Spaltenüberschriften enthalten, die den Schemafeldern entsprechen.",
-			"import": "Importieren",
-			"cancel": "Abbrechen",
-			"parseError": "{count} Parse-Fehler in der CSV gefunden",
-			"parsedRows": "{count} Zeilen geparst",
-			"importSuccess": "{count} Dokumente zur Indexierung vorgemerkt",
-			"importError": "Fehler beim Importieren der Dokumente",
-			"saved": "Dokument gespeichert",
-			"saveError": "Fehler beim Speichern des Dokuments",
-			"deleted": "{count} Dokument(e) gelöscht",
-			"deleteError": "Fehler beim Löschen der Dokumente",
-			"searchPlaceholder": "Dokumente durchsuchen…",
-			"filter": "Filter",
-			"columns": "Spalten",
-			"toggleColumns": "Spalten ein-/ausblenden",
-			"compact": "Kompakt",
-			"comfortable": "Komfortabel",
-			"exportCsv": "CSV exportieren",
-			"exportSelected": "Auswahl exportieren",
-			"deleteSelected": "Auswahl löschen",
-			"clearSelection": "Auswahl aufheben",
-			"selected": "{count} ausgewählt",
-			"showing": "Zeige {from}–{to} von {total}",
-			"prev": "Zurück",
-			"next": "Weiter",
-			"pageOf": "{page} / {total}",
-			"editDocument": "Dokument bearbeiten",
-			"editDocumentDescription": "Bearbeiten Sie die Dokumentfelder unten. Änderungen werden übernommen.",
-			"rawDocument": "Rohdaten (JSON)",
-			"save": "Änderungen speichern",
-			"notSet": "Nicht gesetzt",
-			"true": "Wahr",
-			"false": "Falsch",
-			"optional": "optional",
-			"bulkDeleteTitle": "Dokumente löschen",
-			"bulkDeleteMessage": "Sind Sie sicher, dass Sie {count} Dokument(e) löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.",
-			"noResults": "Keine Dokumente entsprechen Ihrer Suche.",
-			"queryByPlaceholder": "Felder durchsuchen…",
-			"filterByPlaceholder": "Filterausdruck…",
-			"clear": "Filter zurücksetzen",
-			"columnId": "ID"
-		},
-		"collection": {
-			"title": "Sammlung",
-			"notFound": "Index nicht gefunden",
-			"backToIndexes": "Zurück zu den Indizes",
-			"collection": "Sammlung",
-			"alias": "Alias",
-			"tab": {
-				"overview": "Übersicht",
-				"schema": "Schema",
-				"documents": "Dokumente",
-				"api": "API",
-				"settings": "Einstellungen",
-				"ranking": "Ranking"
-			},
-			"documentsTotal": "Dokumente",
-			"searchesWeek": "Suchen (7T)",
-			"ingestEvents": "Import-Ereignisse",
-			"apiKeysCount": "API-Schlüssel",
-			"schemaOverview": "Schemafelder",
-			"noSchema": "Keine Schemafelder verfügbar.",
-			"viewAllFields": "Alle {count} Felder anzeigen",
-			"indexMeta": "Index-Metadaten",
-			"slug": "Slug",
-			"collectionName": "Sammlung",
-			"aliasName": "Alias",
-			"schemaVersion": "Schema-Version",
-			"created": "Erstellt",
-			"schemaFields": "Schemafelder",
-			"fields": "Felder",
-			"fieldName": "Feld",
-			"fieldType": "Typ",
-			"fieldFacet": "Facette",
-			"fieldSort": "Sortierung",
-			"fieldIndex": "Index",
-			"totalDocuments": "Dokumente insgesamt",
-			"loading": "Laden...",
-			"noDocuments": "Noch keine Dokumente",
-			"noDocumentsDesc": "Dokumente über die Connector-API oder das SDK hochladen.",
-			"apiExamples": "API-Beispiele",
-			"searchExample": "Suchbeispiel",
-			"indexEndpoint": "Index-Endpunkt",
-			"settings": "Einstellungen",
-			"displayName": "Anzeigename",
-			"open": "Öffnen",
-			"schemaEditor": {
-				"addField": "+ Feld hinzufügen",
-				"importJson": "JSON importieren",
-				"exportJson": "JSON exportieren",
-				"previewDiff": "Vorschau Änderungen",
-				"cancel": "Abbrechen",
-				"saveOnly": "Nur Schema speichern",
-				"saveReindex": "Speichern + neu indizieren",
-				"defaultSort": "Standard-Sortierfeld:",
-				"noDefaultSort": "Keine Standardsortierung",
-				"empty": "Noch keine Felder definiert",
-				"addFirstField": "+ Erstes Feld hinzufügen",
-				"clickToEdit": "Klicken zum Bearbeiten",
-				"unnamed": "unbenannt",
-				"settings": "Einstellungen",
-				"delete": "Löschen",
-				"loadError": "Schema konnte nicht geladen werden.",
-				"retry": "Wiederholen",
-				"saved": "Schema aktualisiert.",
-				"saveError": "Schema konnte nicht gespeichert werden.",
-				"importDialogTitle": "Felder aus JSON importieren",
-				"importDialogDesc": "Fügen Sie ein JSON-Array mit Felddefinitionen ein, um die aktuelle Feldliste zu ersetzen.",
-				"importAction": "Importieren",
-				"importMustBeArray": "Eingabe muss ein JSON-Array sein.",
-				"invalidJson": "Ungültiges JSON. Bitte überprüfen Sie Ihre Eingabe.",
-				"exported": "Schema-JSON in die Zwischenablage kopiert.",
-				"exportError": "Fehler beim Kopieren in die Zwischenablage.",
-				"diffTitle": "Schema-Änderungen",
-				"diffDesc": "Überprüfen Sie die Unterschiede zwischen Entwurf und gespeichertem Schema.",
-				"noChanges": "Keine Änderungen festgestellt.",
-				"settingsTitle": "Einstellungen für {name}",
-				"settingsDesc": "Erweiterte Feldoptionen konfigurieren. Diese werden lokal gespeichert, bis Sie speichern.",
-				"defaultValue": "Standardwert",
-				"defaultValuePlaceholder": "z.B. 0, false, Leerstring",
-				"locale": "Gebietsschema",
-				"validators": "Validatoren (JSON)",
-				"reindexStarted": "Neuindizierung gestartet",
-				"reindexError": "Neuindizierung fehlgeschlagen",
-				"reindexWarning": "Schemaänderungen erfordern eine vollständige Neuindizierung. Bei großen Sammlungen kann dies mehrere Minuten dauern."
-			},
-			"version": "Version",
-			"recentActivity": "Letzte Aktivität",
-			"noActivity": "Keine aktuelle Aktivität.",
-			"useApiKeys": "Anfragen mit einem API-Schlüssel authentifizieren.",
-			"manageSettings": "Indexkonfiguration verwalten.",
-			"defaultSortingField": "Standard-Sortierfeld",
-			"enabled": "Aktiviert",
-			"statusEnabled": "Aktiviert",
-			"statusDisabled": "Deaktiviert",
-			"updatedAt": "Aktualisiert",
-			"dangerZone": "Gefahrenbereich",
-			"dangerZoneDesc": "Diesen Index und alle seine Dokumente dauerhaft löschen.",
-			"deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Dokumente gehen dauerhaft verloren.",
-			"deleteCollection": "Index löschen",
-			"confirmDelete": "Index löschen",
-			"confirmDeleteDesc": "Diese Aktion ist irreversibel.",
-			"confirmDeleteMessage": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Alle Dokumente werden dauerhaft entfernt.",
-			"cancel": "Abbrechen",
-			"delete": "Löschen",
-			"noApiKeys": "Noch keine API-Schlüssel. Erstellen Sie einen, um diese Beispiele zu verwenden.",
-			"fieldOptional": "Optional",
-			"deleted": "Index erfolgreich gelöscht",
-			"deleteError": "Index konnte nicht gelöscht werden"
-		},
-		"open": "Öffnen",
-		"search": {
-			"vectorSearch": {
-				"description": "Suche nach Bedeutung.",
-				"placeholder": "Beschreiben Sie, wonach Sie suchen...",
-				"field": "Vektorfeld",
-				"results": "{count} Ergebnisse",
-				"distance": "Distanz: {distance}"
-			},
-			"hybridSearch": {
-				"description": "Keyword + Semantik kombinieren.",
-				"alpha": "Semantisches Gewicht (Alpha)",
-				"alphaHint": "0 = Keywords, 1 = Semantik"
-			},
-			"semanticSearch": {
-				"description": "Fragen in natürlicher Sprache.",
-				"placeholder": "Fragen zu Ihren Daten..."
-			},
-			"models": {
-				"description": "Embedding-Modelle konfigurieren.",
-				"enabled": "Vektorsuche aktivieren"
-			},
-			"searchTabs": {
-				"vector": "Vektor",
-				"hybrid": "Hybrid",
-				"semantic": "NL-Suche"
-			}
-		},
-		"geoSearch": {
-			"description": "Suche nach Standort.",
-			"lat": "Breitengrad",
-			"lng": "Längengrad",
-			"radius": "Radius (km)"
-		},
-		"federatedSearch": {
-			"description": "Suche über mehrere Indizes.",
-			"addIndex": "Index hinzufügen"
-		},
-		"groupedSearch": {
-			"groupBy": "Gruppieren nach"
-		},
-		"suggestions": "Suchvorschläge",
-		"presets": "Suchvoreinstellungen",
-		"aliases": "Sammlungsaliase",
-		"snapshots": {
-			"create": "Snapshot erstellen"
-		},
-		"health": {
-			"ok": "Gesund",
-			"error": "Fehlerhaft"
-		},
-		"conversationalSearch": {
-			"description": "Stellen Sie Fragen und erhalten Sie KI-generierte Antworten aus Ihren Daten."
-		},
-		"voiceSearch": {
-			"description": "Suchen per Sprache. Audio wird automatisch transkribiert."
-		},
-		"imageSearch": {
-			"description": "Suchen Sie durch Hochladen eines Bildes. KI beschreibt es vor der Suche."
-		},
-		"stemming": {
-			"description": "Verwalten Sie Stemming-Überschreibungen für präzise Textübereinstimmung.",
-			"word": "Wort",
-			"root": "Stamm"
-		},
-		"stopwords": {
-			"description": "Wörter in dieser Liste werden bei der Suche ignoriert. Verwenden Sie sie, um häufige Wörter wie Artikel und Präpositionen herauszufiltern.",
-			"tab": "Stoppwörter",
-			"title": "Stoppwörter",
-			"add": "Wort hinzufügen",
-			"save": "Stoppwörter speichern",
-			"saved": "Stoppwörter gespeichert.",
-			"error": "Fehler beim Speichern der Stoppwörter.",
-			"empty": "Noch keine Stoppwörter konfiguriert.",
-			"emptyDescription": "Stoppwörter sind häufige Wörter, die bei der Suche ignoriert werden, um die Relevanz zu verbessern.",
-			"wordColumn": "Wort",
-			"tableActions": "Aktionen",
-			"remove": "Entfernen",
-			"removeConfirmTitle": "Stoppwort entfernen",
-			"removeConfirmMessage": "Möchten Sie dieses Stoppwort wirklich entfernen?"
-		},
-		"clusterOps": {
-			"description": "Cluster-Operationen und Metriken.",
-			"vote": "Abstimmung",
-			"debug": "Debug",
-			"metrics": "Metriken"
-		},
-		"analyticsRules": {
-			"description": "Benutzerdefinierte Analyseregeln für Suchmetriken.",
-			"name": "Name",
-			"type": "Typ",
-			"create": "Regel erstellen",
-			"delete": "Regel löschen"
-		},
-		"dynamicSearch": {
-			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
-			"diversifyField": "Diversifikationsfeld",
-			"maxPerValue": "Max pro Wert"
-		},
-		"rankingRules": {
-			"title": "Ranking-Regeln",
-			"description": "Konfigurieren Sie, wie Suchergebnisse für diesen Index bewertet und sortiert werden.",
-			"save": "Ranking-Regeln speichern",
-			"saved": "Ranking-Regeln gespeichert.",
-			"error": "Fehler beim Speichern der Ranking-Regeln.",
-			"fieldWeights": "Feld-Gewichtungen",
-			"fieldWeightsHint": "Steuern Sie, wie stark jedes Feld zur Relevanzbewertung beiträgt. Höheres Gewicht = wichtiger.",
-			"noFields": "Keine String-Felder verfügbar",
-			"noFieldsHint": "Fügen Sie zuerst String-Felder zum Schema hinzu.",
-			"fieldColumn": "Feld",
-			"weightColumn": "Gewicht",
-			"generalSettings": "Allgemeine Einstellungen",
-			"generalSettingsHint": "Konfigurieren Sie Tippfehlertoleranz, Standardsortierung und Suchmodi.",
-			"defaultSortField": "Standard-Sortierfeld",
-			"noDefaultSort": "Automatisch (Relevanz)",
-			"typoTolerance": "Tippfehlertoleranz",
-			"typoOff": "Aus (keine Tippfehler)",
-			"typo1": "1 Tippfehler erlaubt",
-			"typo2": "2 Tippfehler erlaubt",
-			"typo4": "4 Tippfehler erlaubt",
-			"infixSearch": "Infix-Suche",
-			"infixOff": "Aus",
-			"infixFallback": "Fallback (Standard)",
-			"infixAlways": "Immer",
-			"prefixSearch": "Präfix-Suche",
-			"exactMatch": "Exakte Übereinstimmung priorisieren",
-			"customRules": "Benutzerdefinierte Ranking-Regeln",
-			"customRulesHint": "Fortgeschrittene Ranking-Ausdrücke zur Überschreibung der Relevanzbewertung.",
-			"addRule": "Regel hinzufügen",
-			"noCustomRules": "Keine benutzerdefinierten Regeln konfiguriert",
-			"noCustomRulesHint": "Fügen Sie benutzerdefinierte Ranking-Ausdrücke hinzu.",
-			"rulePlaceholder": "z.B. _text_match(bill_count):desc"
-		}
-	},
-	"sdks": {
-		"title": "SDKs & Client-Bibliotheken",
-		"subtitle": "Installieren Sie AACSearch SDKs in Ihrer bevorzugten Sprache, um die Suche in Ihre Anwendung zu integrieren.",
-		"install": "Installieren",
-		"comingSoon": "Demnächst",
-		"viewDocs": "Dokumentation",
-		"viewSource": "Quellcode",
-		"usageTitle": "Schnellstart-Beispiel",
-		"usageDescription": "Erste Schritte mit dem TypeScript SDK in nur wenigen Codezeilen.",
-		"nav": "SDKs"
-	},
-	"nav": {
-		"geoSearch": "Geosuche",
-		"federatedSearch": "Föderiert",
-		"settings": "Einstellungen",
-		"switchOrganization": "Organisation wechseln"
-	},
-	"mySearch": {
-		"title": "Meine Suche",
-		"subtitle": "Ihr persönlicher Suchbereich — Dokumente hochladen, Webseiten indizieren und über alle Materialien suchen.",
-		"noIndexes": "Noch keine Suchindizes",
-		"noIndexesDescription": "Erstellen Sie Ihren ersten Suchindex durch Hochladen von Dokumenten oder Hinzufügen von URLs. Los geht's — keine Organisation erforderlich.",
-		"createIndex": "Neuen Index erstellen",
-		"importFiles": "Dateien importieren",
-		"emptyStateTitle": "Erstellen Sie Ihren ersten Index",
-		"createFromFiles": "Aus Dateien",
-		"createFromUrl": "Von URL"
-	},
-	"__test": {}
+  "admin": {
+    "menu": {
+      "organizations": "Organisationen",
+      "users": "Benutzer"
+    },
+    "organizations": {
+      "backToList": "Zurück zu Organisationen",
+      "confirmDelete": {
+        "confirm": "Löschen",
+        "message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "title": "Organisation löschen"
+      },
+      "create": "Erstellen",
+      "delete": "Löschen",
+      "deleteOrganization": {
+        "deleted": "Die Organisation wurde erfolgreich gelöscht!",
+        "deleting": "Löschung der Organisation...",
+        "notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
+      },
+      "edit": "bearbeiten",
+      "form": {
+        "createTitle": "Erstellen eine Organisation",
+        "name": "Name der Organisation",
+        "notifications": {
+          "error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
+          "success": "Die Organisation wurde erfolgreich gespeichert."
+        },
+        "save": "Speichern",
+        "updateTitle": "Organisation bearbeiten"
+      },
+      "loading": "Organisationen laden...",
+      "membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+      "search": "Suche nach einer Organisation...",
+      "title": "Verwalten von Organisationen"
+    },
+    "title": "Administration",
+    "users": {
+      "confirmDelete": {
+        "confirm": "Löschen",
+        "message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "title": "Benutzer löschen"
+      },
+      "delete": "Löschen",
+      "deleteUser": {
+        "deleted": "Der Benutzer wurde erfolgreich gelöscht!",
+        "deleting": "Benutzer wird gelöscht...",
+        "notDeleted": "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
+      },
+      "emailVerified": {
+        "verified": "Email verifiziert",
+        "waiting": "E-Mail wartet auf Verifizierung"
+      },
+      "impersonate": "Imitieren",
+      "impersonation": {
+        "impersonating": "Ich gebe mich als {name} aus..."
+      },
+      "loading": "Benutzer werden geladen...",
+      "resendVerificationMail": {
+        "error": "Bestatigungsmail konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
+        "submitting": "Bestatigungsmail wird erneut gesendet...",
+        "success": "Bestatigungsmail wurde gesendet.",
+        "title": "Bestatigungsmail erneut senden"
+      },
+      "search": "Nach Name oder E-Mail suchen...",
+      "title": "Benutzer verwalten",
+      "assignAdminRole": "Administration-Rolle zuweisen",
+      "removeAdminRole": "Adminstrator-Rolle entfernen"
+    },
+    "description": "Verwalte deine Anwendung.",
+    "config": {
+      "title": "Konfiguration",
+      "loadError": "Konfigurationsdaten konnten nicht geladen werden.",
+      "application": "Anwendung",
+      "appName": "App-Name",
+      "nodeVersion": "Node.js-Version",
+      "runtimeEnv": "Laufzeit",
+      "platform": "Plattform",
+      "uptime": "Betriebszeit",
+      "typesenseHealth": "Search-Engine-Status",
+      "healthy": "Gesund",
+      "unhealthy": "Ungesund",
+      "version": "Version",
+      "databaseStats": "Datenbankstatistiken",
+      "users": "Benutzer",
+      "organizations": "Organisationen",
+      "searchIndexes": "Suchindexe",
+      "apiKeys": "API-Schlüssel",
+      "usageEvents": "Nutzungsereignisse",
+      "statsError": "Statistiken konnten nicht abgerufen werden.",
+      "services": "Externe Dienste",
+      "configured": "Konfiguriert",
+      "notConfigured": "Nicht konfiguriert",
+      "pageTitle": "Laufzeitkonfiguration",
+      "pageSubtitle": "Systemkonfiguration in Echtzeit, Dienstintegrität und Datenbankstatistiken."
+    },
+    "integrations": {
+      "title": "Integrationen",
+      "loadError": "Integrationsstatus konnte nicht geprüft werden.",
+      "database": "Datenbank",
+      "typesense": "AACsearch Engine",
+      "mail": "E-Mail",
+      "payments": "Zahlungen",
+      "storage": "Speicher",
+      "walletProvider": "Wallet-Anbieter",
+      "configured": "Konfiguriert",
+      "notConfigured": "Nicht konfiguriert",
+      "endpoint": "Endpunkt",
+      "pageTitle": "Integrationsstatus",
+      "pageSubtitle": "Echtzeit-Verbindungsprüfungen für alle konfigurierten externen Dienste.",
+      "connected": "Verbunden",
+      "disconnected": "Getrennt",
+      "latencyMs": "{ms}ms Latenz",
+      "status": "Status",
+      "provider": "Anbieter"
+    },
+    "jobs": {
+      "title": "Aufgaben",
+      "loadError": "Aufgabenstatus konnte nicht geladen werden.",
+      "backgroundJobs": "Hintergrundaufgaben",
+      "ready": "Bereit",
+      "missingSecret": "Fehlendes Geheimnis",
+      "recentSyncActivity": "Letzte Sync-Aktivität",
+      "totalJobs": "Aufgaben insgesamt",
+      "noSyncActivity": "Noch keine Sync-Aktivität.",
+      "pageTitle": "Hintergrundaufgaben",
+      "pageSubtitle": "Status der Cron-Job-Konfiguration und aktuelle Synchronisierungsaktivitäten.",
+      "itemsCount": "{count} {count, plural, one {Element} other {Elemente}}"
+    },
+    "overview": {
+      "usersTitle": "Benutzer",
+      "organizationsTitle": "Organisationen",
+      "unreadNotifications": "Ungelesene Benachrichtigungen",
+      "noData": "Keine Daten",
+      "recentUsers": "Aktuelle Benutzer",
+      "defaultRole": "Benutzer",
+      "openUsers": "Benutzer öffnen",
+      "recentOrganizations": "Aktuelle Organisationen",
+      "noSlug": "Kein Slug",
+      "membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+      "openOrganizations": "Organisationen öffnen",
+      "pageTitle": "Admin-Übersicht",
+      "pageSubtitle": "Betriebszusammenfassung für Benutzer, Organisationen und Benachrichtigungen."
+    },
+    "audit": {
+      "recentUserChanges": "Aktuelle Benutzeränderungen",
+      "recentOrgChanges": "Aktuelle Organisationsänderungen",
+      "defaultRole": "Benutzer",
+      "noSlug": "Kein Slug",
+      "pageTitle": "Audit-Ansicht",
+      "pageSubtitle": "Aktuelle Benutzer- und Organisationsänderungen aus Admin-Datenquellen."
+    },
+    "notifications": {
+      "recentNotifications": "Aktuelle Benachrichtigungen",
+      "markAllRead": "Alle als gelesen markieren",
+      "markingRead": "Benachrichtigungen werden als gelesen markiert...",
+      "markReadSuccess": "Fertig.",
+      "markReadError": "Konnte nicht alle als gelesen markieren.",
+      "statusRead": "gelesen",
+      "statusUnread": "ungelesen",
+      "noNotifications": "Noch keine Benachrichtigungen.",
+      "pageTitle": "Benachrichtigungsverwaltung",
+      "pageSubtitle": "Aktuelle Benachrichtigungen einsehen und Zustelleinstellungen aktualisieren."
+    },
+    "wallet": {
+      "manualAdjustment": "Manuelle Wallet-Anpassung",
+      "searchOrgPlaceholder": "Organisation suchen...",
+      "selectOrgPlaceholder": "Organisation auswählen",
+      "currentBalance": "Aktuelles Guthaben",
+      "walletNotInitialized": "Wallet ist für die ausgewählte Organisation nicht initialisiert.",
+      "creditLabel": "Gutschrift",
+      "debitLabel": "Belastung",
+      "amountPlaceholder": "Betrag (RUB)",
+      "applyButton": "Anwenden",
+      "reasonPlaceholder": "Grund (mindestens 10 Zeichen)",
+      "noWalletError": "Wählen Sie eine Organisation mit initialisiertem Wallet aus.",
+      "invalidAmountError": "Betrag muss eine positive Zahl sein.",
+      "shortReasonError": "Grund muss mindestens 10 Zeichen lang sein.",
+      "applyingAdjustment": "Anpassung wird angewendet...",
+      "adjustmentSuccess": "Wallet erfolgreich angepasst.",
+      "adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
+      "latestTransactions": "Letzte Wallet-Transaktionen",
+      "noTransactions": "Keine Transaktionen gefunden.",
+      "pageTitle": "Wallet-Operationen",
+      "pageSubtitle": "Manuelle KI-Wallet-Anpassungen für Organisationen."
+    },
+    "security": {
+      "pageTitle": "Sicherheitsoperationen",
+      "pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
+    }
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Kontoeinstellungen",
+      "admin": "Administration",
+      "navigationTitle": "Menu",
+      "openNavigation": "Navigation offnen",
+      "organizationSettings": "Organisationseinstellungen",
+      "search": "Suche",
+      "mySearch": "Meine Suche",
+      "start": "Start"
+    },
+    "userMenu": {
+      "accountSettings": "Kontoeinstellungen",
+      "colorMode": "Farbmodus",
+      "documentation": "Dokumentation",
+      "home": "Startseite",
+      "logout": "Abmelden"
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "empty": "Noch keine Benachrichtigungen.",
+      "markAllRead": "Alle als gelesen markieren",
+      "fallbackTitle": "Benachrichtigung",
+      "aria": {
+        "open": "Benachrichtigungen offnen"
+      }
+    }
+  },
+  "auth": {
+    "errors": {
+      "credentialAccountNotFound": "Konto nicht gefunden.",
+      "emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
+      "emailNotVerified": "Bitte verifiziere zunachst deine E-Mail, bevor du dich anmeldest.",
+      "failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
+      "failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
+      "failedToGetSession": "Session konnte nicht geladen werden.",
+      "failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
+      "failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
+      "idTokenNotSupported": "ID-Token wird nicht unterstutzt.",
+      "invalidEmail": "Die eingegebene E-Mail ist ungultig.",
+      "invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungultig. Bitte uberprufe sie und versuche es erneut.",
+      "invalidInvitation": "Die Einladung ist ungultig oder abgelaufen.",
+      "invalidPassword": "Das eingegebene Passwort ist falsch.",
+      "invalidToken": "Das von dir eingegebene Token ist ungultig oder abgelaufen.",
+      "passwordTooLong": "Das Passwort ist zu lang.",
+      "passwordTooShort": "Das Passwort ist zu kurz.",
+      "providerNotFound": "Dieser Anbieter wird nicht unterstutzt.",
+      "socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknupft.",
+      "unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "userAlreadyExists": "Dieser Benutzer existiert bereits.",
+      "userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
+      "userEmailNotFound": "E-Mail nicht gefunden.",
+      "userNotFound": "Dieser Benutzer existiert nicht",
+      "sessionExpired": "Die Sitzung ist abgelaufen.",
+      "accountNotFound": "Konto nicht gefunden",
+      "failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
+    },
+    "forgotPassword": {
+      "backToSignin": "Zuruck zum Login",
+      "email": "E-Mail",
+      "hints": {
+        "linkNotSent": {
+          "message": "Es tut uns leid, aber wir konnten keinen Link zum Zurucksetzen des Passworts senden. Bitte versuche es spater noch einmal.",
+          "title": "Link nicht gesendet"
+        },
+        "linkSent": {
+          "message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
+          "title": "Link gesendet"
+        }
+      },
+      "message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurucksetzen deines Passworts.",
+      "submit": "Link senden",
+      "title": "Hast du dein Passwort vergessen?"
+    },
+    "login": {
+      "continueWith": "Oder weiter mit",
+      "createAnAccount": "Ein Konto erstellen",
+      "dontHaveAnAccount": "Du hast noch kein Konto?",
+      "forgotPassword": "Passwort vergessen?",
+      "hints": {
+        "invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungultig. Bitte versuche es erneut.",
+        "linkSent": {
+          "message": "Wir haben dir einen Link zum Fortfahren gesendet. Bitte uberprufe deinen Posteingang.",
+          "title": "Link gesendet"
+        }
+      },
+      "loginWithPasskey": "Anmeldung mit Passkey",
+      "modes": {
+        "magicLink": "Magischer Link",
+        "password": "***"
+      },
+      "submit": "Anmelden",
+      "subtitle": "Bitte gib deine Zugangsdaten ein, um dich anzumelden.",
+      "title": "Willkommen zuruck",
+      "sendMagicLink": "Anmelde-Link senden"
+    },
+    "resetPassword": {
+      "backToSignin": "Zuruck zu Signin",
+      "hints": {
+        "error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurucksetzen. Bitte versuche es erneut.",
+        "success": "Dein Passwort wurde erfolgreich zuruckgesetzt."
+      },
+      "message": "Bitte gib ein neues Passwort ein.",
+      "newPassword": "Neues Passwort",
+      "submit": "Passwort zurucksetzen",
+      "title": "Dein Passwort zurucksetzen"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Du hast bereits ein Konto?",
+      "email": "Email",
+      "hints": {
+        "signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. Bitte versuche es spater noch einmal.",
+        "verifyEmail": "Wir haben dir einen Link zur Bestatigung deiner E-Mail-Adresse gesendet. Bitte uberprufe deinen Posteingang."
+      },
+      "message": "Wir freuen uns, dass du dich uns anschließen mochtest. Bitte fulle das untenstehende Formular aus, um dein Konto zu erstellen.",
+      "name": "Name",
+      "password": "***",
+      "signIn": "Anmelden",
+      "submit": "Benutzerkonto erstellen",
+      "title": "Ein Konto erstellen"
+    },
+    "verify": {
+      "backToSignin": "Zuruck zur Anmeldung",
+      "code": "Einmaliges Passwort",
+      "message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
+      "submit": "Verifizieren",
+      "title": "Verifiziere dein Konto"
+    }
+  },
+  "choosePlan": {
+    "title": "Wahle einen Plan",
+    "description": "Um weiterzumachen, wahle bitte einen Plan aus."
+  },
+  "documentation": {
+    "title": "Dokumentation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Seite nicht gefunden",
+    "goToDashboard": "Zum Dashboard gehen",
+    "goToHomepage": "Zur Startseite"
+  },
+  "onboarding": {
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
+      "name": "Name"
+    },
+    "continue": "Weiter",
+    "message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
+    "notifications": {
+      "accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. Bitte versuche es spater noch einmal."
+    },
+    "pricing": {
+      "planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
+      "skip": "Vorerst uberspringen"
+    },
+    "step": "Schritt {step} / {total}",
+    "title": "Richte dein Konto ein",
+    "createIndex": {
+      "title": "Erstellen Sie Ihren ersten Suchindex",
+      "description": "Geben Sie Ihrem Index einen Namen. Dokumente und Schema können danach hinzugefügt werden.",
+      "nameLabel": "Indexname",
+      "slugLabel": "Slug (URL-freundlicher Bezeichner)",
+      "slugHint": "Nur Kleinbuchstaben, Ziffern und Bindestriche",
+      "submit": "Index erstellen",
+      "success": "Index erfolgreich erstellt.",
+      "error": "Index konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+      "noOrg": "Bitte erstellen Sie zuerst eine Organisation, bevor Sie einen Suchindex einrichten."
+    },
+    "addDocuments": {
+      "title": "Importieren Sie Ihre ersten Dokumente",
+      "description": "Fügen Sie ein JSON-Array von Objekten ein, um Ihren Index zu befüllen. Sie können später weitere Dokumente importieren.",
+      "pasteLabel": "Dokumente (JSON-Array)",
+      "placeholder": "[{\"id\":\"1\",\"title\":\"Hallo Welt\"}]",
+      "importButton": "Dokumente importieren",
+      "skip": "Vorerst überspringen",
+      "success": "Dokumente wurden zur Indizierung eingereiht.",
+      "parseError": "Ungültiges JSON. Bitte fügen Sie ein gültiges Array von Objekten ein.",
+      "error": "Dokumente konnten nicht importiert werden. Bitte versuchen Sie es erneut."
+    },
+    "installWidget": {
+      "title": "Suchwidget einbetten",
+      "description": "Kopieren Sie den folgenden Code-Schnipsel und fügen Sie ihn in das HTML Ihrer Website ein.",
+      "snippetLabel": "Widget-Code",
+      "copyButton": "Code kopieren",
+      "copied": "Code kopiert!",
+      "next": "Weiter",
+      "skip": "Vorerst überspringen"
+    },
+    "apiKey": {
+      "title": "Holen Sie sich Ihren API-Schlüssel",
+      "description": "Erstellen Sie einen Such-API-Schlüssel, um AACsearch in Ihre Anwendung zu integrieren. Kopieren Sie ihn — er wird nicht erneut angezeigt.",
+      "createButton": "API-Schlüssel erstellen",
+      "keyLabel": "Ihr API-Schlüssel (einmalig angezeigt)",
+      "copyButton": "Schlüssel kopieren",
+      "copied": "API-Schlüssel kopiert!",
+      "finish": "Zum Dashboard",
+      "error": "API-Schlüssel konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+      "keyName": "Onboarding-Schlüssel"
+    }
+  },
+  "organizations": {
+    "createForm": {
+      "name": "Name der Organisation",
+      "notifications": {
+        "error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es spater noch einmal.",
+        "success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
+      },
+      "submit": "Organisation erstellen",
+      "subtitle": "Gib einen Namen fur deine Organisation ein, um loszulegen. Du kannst den Namen spater in den Organisationseinstellungen andern.",
+      "title": "Erstelle eine Organisation"
+    },
+    "invitationAlert": {
+      "description": "Du bist eingeladen worden, einer Organisation beizutreten. Wenn du dich anmeldest oder registrierst, akzeptierst du automatisch die Einladung und trittst der Organisation bei.",
+      "title": "Einladung der Organisation annehmen"
+    },
+    "invitationModal": {
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Mochtest du die Einladung annehmen und der Organisation beitreten?",
+      "title": "Organisation beitreten",
+      "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "organizations": "Organisationen",
+      "personalAccount": "Personliches Konto"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "title": "Deine Organisationen"
+    },
+    "roles": {
+      "admin": "Administration",
+      "member": "Mitglied",
+      "owner": "Eigentumer"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Name der Organisation"
+      },
+      "deleteOrganization": {
+        "confirmation": "Bist du sicher, dass du deine Organisation loschen mochtest?",
+        "description": "Losche deine Organisation dauerhaft. Sobald du deine Organisation geloscht hast, gibt es kein Zuruck mehr. Zur Bestatigung gib bitte unten dein Passwort ein:",
+        "submit": "Organisation loschen",
+        "title": "Organisation loschen"
+      },
+      "logo": {
+        "description": "Lade ein Logo fur deine Organisation hoch.",
+        "title": "Logo der Organisation"
+      },
+      "members": {
+        "activeMembers": "Aktive Mitglieder",
+        "description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
+        "invitations": {
+          "empty": "Es wurden noch keine Mitglieder eingeladen.",
+          "expiresAt": "Lauft am {date} ab",
+          "invitationStatus": {
+            "accepted": "Angenommen",
+            "canceled": "Abgebrochen",
+            "pending": "Ausstehend",
+            "rejected": "Abgelehnt"
+          },
+          "revoke": "Einladung widerrufen",
+          "resend": "Einladung erneut senden"
+        },
+        "inviteMember": {
+          "description": "Um ein neues Mitglied einzuladen, sende ihm eine Einladung.",
+          "email": "E-Mail",
+          "notifications": {
+            "error": {
+              "description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es spater noch einmal.",
+              "title": "Mitglied konnte nicht eingeladen werden"
+            },
+            "success": {
+              "description": "Das Mitglied ist eingeladen worden.",
+              "title": "Eingeladenes Mitglied"
+            }
+          },
+          "role": "Rolle",
+          "submit": "Einladen",
+          "title": "Mitglied einladen"
+        },
+        "leaveOrganization": "Organisation verlassen",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Das Mitglied konnte nicht aus deiner Organisation entfernt werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Mitglied aus der Organisation entfernen..."
+            },
+            "success": {
+              "description": "Das Mitglied wurde erfolgreich aus deiner Organisation entfernt."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es spater noch einmal."
+            },
+            "loading": {
+              "description": "Widerruf der Einladung..."
+            },
+            "success": {
+              "description": "Die Einladung ist widerrufen worden."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Die Mitgliedschaft in der Organisation konnte nicht aktualisiert werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Aktualisierung der Mitgliedschaft..."
+            },
+            "success": {
+              "description": "Die Mitgliedschaft wurde erfolgreich aktualisiert"
+            }
+          },
+          "resendInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht gesendet werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Einladung erneut senden..."
+            },
+            "success": {
+              "description": "Einladung verschickt"
+            }
+          }
+        },
+        "pendingInvitations": "Ausstehende Einladungen",
+        "removeMember": "Mitglied entfernen",
+        "title": "Mitglieder"
+      },
+      "notifications": {
+        "organizationDeleted": "Deine Organisation wurde geloscht.",
+        "organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es spater noch einmal.",
+        "organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
+        "organizationNotDeleted": "Wir konnten deine Organisation nicht loschen. Bitte versuche es spater noch einmal."
+      },
+      "subtitle": "Verwalte die Einstellungen der Organisation.",
+      "title": "Organisation",
+      "dangerZone": {
+        "title": "Gefahrenzone"
+      }
+    },
+    "start": {
+      "subtitle": "Willkommen auf der Startseite dieser Organisation!"
+    }
+  },
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "Um deinen Avatar zu andern, klicke auf das Bild in diesem Block und wahle eine Datei von deinem Computer zum Hochladen aus.",
+        "notifications": {
+          "error": "Avatar konnte nicht aktualisiert werden",
+          "success": "Avatar wurde erfolgreich aktualisiert"
+        },
+        "title": "Dein Avatar"
+      },
+      "changeEmail": {
+        "description": "Um deine E-Mail zu andern, andere sie im Eingabefeld und drucke auf Speichern. Du musst die neue E-Mail bestatigen, bevor sie aktiv wird.",
+        "notifications": {
+          "error": "E-Mail konnte nicht aktualisiert werden",
+          "success": "E-Mail wurde erfolgreich aktualisiert"
+        },
+        "title": "Deine E-Mail"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Name konnte nicht aktualisiert werden",
+          "success": "Name wurde erfolgreich aktualisiert"
+        },
+        "title": "Dein Name"
+      },
+      "deleteAccount": {
+        "confirmation": "Bist du sicher, dass du dein Konto loschen mochtest?",
+        "description": "Losche dein Konto dauerhaft. Sobald Du dein Konto geloscht hast, gibt es kein Zuruck mehr. Bitte sei dir sicher, bevor du hier weitermachst.",
+        "notifications": {
+          "error": "Konto konnte nicht geloscht werden",
+          "success": "Konto wurde erfolgreich geloscht"
+        },
+        "submit": "Konto loschen",
+        "title": "Konto loschen"
+      },
+      "language": {
+        "description": "Um die Sprache der App fur dein Konto zu andern, wahle eine Sprache aus der Liste aus und klicke auf Speichern.",
+        "notifications": {
+          "error": "Sprache konnte nicht aktualisiert werden",
+          "success": "Sprache wurde erfolgreich aktualisiert"
+        },
+        "title": "Deine Sprache"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "Dies sind alle aktiven Sitzungen deines Kontos. Klicke auf das X, um eine bestimmte Sitzung zu beenden.",
+          "title": "Aktive Sitzungen",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session beendet"
+            }
+          },
+          "currentSession": "Aktuelle Sitzung"
+        },
+        "changePassword": {
+          "currentPassword": "Aktuelles Passwort",
+          "newPassword": "Neues Passwort",
+          "notifications": {
+            "error": "Passwort kann nicht aktualisiert werden",
+            "success": "Passwort wurde erfolgreich aktualisiert"
+          },
+          "title": "Dein Passwort"
+        },
+        "connectedAccounts": {
+          "connect": "Verbinden",
+          "connected": "Verbunden",
+          "disconnect": "Trennen",
+          "title": "Verbundene Konten"
+        },
+        "passkeys": {
+          "addPasskey": "Passkey hinzufugen",
+          "description": "Verwende Passkeys als sichere alternative zu Passwortern.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Kann keinen Hauptschlussel hinzufugen"
+              },
+              "success": {
+                "title": "Passkey hinzugefugt"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Der Hauptschlussel konnte nicht geloscht werden"
+              },
+              "loading": {
+                "title": "Hauptschlussel loschen..."
+              },
+              "success": {
+                "title": "Passkey geloscht"
+              }
+            }
+          },
+          "title": "Passworter"
+        },
+        "setPassword": {
+          "description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortruck setzung durchlaufen. Klicke auf die Schaltflache unten, um eine E-Mail zum Zurucksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
+          "notifications": {
+            "error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
+            "success": "Prufen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
+          },
+          "submit": "Passwort festlegen",
+          "title": "Dein Passwort"
+        },
+        "title": "Sicherheit",
+        "twoFactor": {
+          "description": "Fuge deinem Konto eine zusatzliche Sicherheitsebene hinzu.",
+          "dialog": {
+            "password": {
+              "description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
+              "label": "Dein Passwort:",
+              "title": "Mit Passwort verifizieren"
+            },
+            "totpUrl": {
+              "code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestatigen:",
+              "description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
+              "title": "Zwei-Faktor-Authentifizierung aktivieren"
+            }
+          },
+          "disable": "Zwei-Faktor-Authentifizierung deaktivieren",
+          "enable": "Zwei-Faktor-Authentifizierung aktivieren",
+          "enabled": "Du hast die Zwei-Faktor-Authentifizierung fur dein Konto aktiviert.",
+          "notifications": {
+            "disable": {
+              "success": {
+                "title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich deaktiviert."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Dein Konto konnte mit dem angegebenen Passwort nicht verifiziert werden. Bitte versuche es erneut."
+              }
+            },
+            "verify": {
+              "success": {
+                "title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich aktiviert."
+              }
+            }
+          },
+          "title": "Zwei-Faktor-Authentifizierung"
+        }
+      },
+      "subtitle": "Verwalte die Einstellungen deines personlichen Kontos.",
+      "title": "Kontoeinstellungen"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Abrechung verwalten",
+        "notifications": {
+          "error": {
+            "title": "Es konnte keine Kundenportalsitzung erstellt werden. Bitte versuche es erneut."
+          }
+        }
+      },
+      "activePlan": {
+        "status": {
+          "active": "Aktiv",
+          "canceled": "Gekundigt",
+          "expired": "Ausgelaufen",
+          "incomplete": "Unvollstandig",
+          "past_due": "Uberfallig",
+          "paused": "Pausiert",
+          "trialing": "Testversion",
+          "unpaid": "Unbezahlt"
+        },
+        "title": "Dein Plan",
+        "description": "Ihr aktueller Plan und Nutzungslimits für Suche und Indizierung.",
+        "notFound": "Keine Planinformationen verfügbar."
+      },
+      "changePlan": {
+        "description": "Wahle einen Plan aus, den du abonnieren mochtest.",
+        "title": "Andere deinen Plan"
+      },
+      "upgradePlan": "Plan upgraden",
+      "currentPlan": "Aktueller Plan",
+      "switchToAnnual": "Zu jährlicher Abrechnung wechseln",
+      "upgradeSuccess": "Plan erfolgreich aktualisiert",
+      "title": "Zahlung",
+      "aiCredits": {
+        "title": "KI-Guthaben",
+        "subtitle": "Nutzungsbasierte KI-Abrechnung. Laden Sie Ihre Geldbörse auf, um alle KI-Funktionen freizuschalten.",
+        "balance": {
+          "title": "Guthaben",
+          "includedRemaining": "Inklusiv diesen Monat",
+          "reserved": "Reserviert",
+          "promo": "Promo-Guthaben",
+          "notInitialized": "Die Geldbörse ist noch nicht initialisiert."
+        },
+        "topup": {
+          "button": "Aufladen",
+          "title": "KI-Geldbörse aufladen",
+          "description": "Wählen Sie einen Betrag oder geben Sie einen benutzerdefinierten Wert in Rubel ein.",
+          "customAmount": "Benutzerdefinierter Betrag (₽)",
+          "summary": "Sie werden {amount} belastet",
+          "confirm": "Mit Tochka bezahlen",
+          "error": "Zahlungslink konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+        },
+        "errors": {
+          "insufficientFunds": "Unzureichendes KI-Guthaben. Laden Sie Ihre Geldbörse auf."
+        }
+      },
+      "features": {
+        "title": "Funktionen",
+        "none": "Keine konfigurierten Funktionen"
+      },
+      "limits": {
+        "maxIndexes": "Max. Indizes",
+        "maxDocuments": "Max. Dokumente",
+        "maxApiKeys": "Max. API-Schlüssel",
+        "rateLimit": "Rate-Limit",
+        "maxSearchesPerMonth": "Suchen / Monat"
+      },
+      "upgrade": "Plan upgraden",
+      "usage": {
+        "searches": "Suchen",
+        "documents": "Dokumente"
+      }
+    },
+    "notificationsPage": {
+      "title": "Benachrichtigungen",
+      "description": "Lege fest, wie du Benachrichtigungen erhaltst. Deaktivierte Optionen werden gespeichert; standardmaig ist alles aktiviert.",
+      "groups": {
+        "general": {
+          "title": "Allgemein"
+        },
+        "billing": {
+          "title": "Abrechnung"
+        }
+      },
+      "types": {
+        "APP_UPDATE": {
+          "label": "App-Updates"
+        },
+        "AI_LOW_BALANCE": {
+          "label": "KI-Guthaben ist niedrig"
+        },
+        "AI_TOPUP_PAID": {
+          "label": "KI-Geldbörse aufgeladen"
+        },
+        "AI_TOPUP_FAILED": {
+          "label": "Aufladung der KI-Geldbörse fehlgeschlagen"
+        },
+        "AI_OVERAGE_REACHED": {
+          "label": "KI-Geldbörsen-Limit erreicht"
+        },
+        "PAYMENT_FAILED": {
+          "label": "Abonnementzahlung fehlgeschlagen"
+        }
+      },
+      "columns": {
+        "type": "Benachrichtigung",
+        "inApp": "In der App",
+        "email": "E-Mail"
+      }
+    },
+    "menu": {
+      "account": {
+        "billing": "Abrechnung",
+        "dangerZone": "Danger-Zone",
+        "general": "Allgemein",
+        "notifications": "Benachrichtigungen",
+        "security": "Sicherheit",
+        "title": "Konto"
+      },
+      "organization": {
+        "billing": "Abrechnung",
+        "general": "Allgemein",
+        "members": "Mitglieder",
+        "title": "Organisation",
+        "dangerZone": "Gefahrenzone"
+      }
+    },
+    "save": "Speichern"
+  },
+  "start": {
+    "subtitle": "Sieh dir die neuesten Statistiken uber dein groartiges Unternehmen an.",
+    "welcome": "Willkommen {name}!"
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Abbrechen",
+      "confirm": "Bestatigen"
+    },
+    "actions": {
+      "continue": "Weiter",
+      "verify": "Uberprufen Sie"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 Zeichen",
+      "upperAndLowercase": "Gro- & Kleinbuchstaben",
+      "number": "Zahl",
+      "specialCharacter": "Sonderzeichen"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "close": "Schließen"
+  },
+  "checkoutReturn": {
+    "title": "Kauf wird verarbeitet",
+    "description": "Bitte warten Sie, wahrend wir Ihre Zahlung bestatigen.",
+    "loading": "Ihr Kauf wird bestatigt, bitte warten..."
+  },
+  "indexing": {
+    "dashboard": {
+      "title": "Index-Verwaltung",
+      "subtitle": "Indizierung, Neuindizierung und Synchronisierung für diese Kollektion verwalten",
+      "documents": "Dokumente",
+      "todaySearches": "Heute",
+      "size": "Größe",
+      "avgLatency": "Durchschn. Latenz",
+      "liveVersion": "Live",
+      "indexHealth": "Index-Zustand",
+      "last7Days": "Letzte 7 Tage",
+      "lastFullSync": "Letzte Vollsync",
+      "lastDeltaSync": "Letzte Delta-Sync",
+      "nextScheduled": "Nächste geplante",
+      "indexingProgress": "Indizierungsfortschritt",
+      "noData": "Noch keine Indizierungsdaten",
+      "backToCollection": "Zurück zur Kollektion"
+    },
+    "delta": {
+      "title": "Delta-Synchronisation",
+      "syncNow": "Jetzt synchronisieren",
+      "syncing": "Synchronisiere...",
+      "confirmTitle": "Delta-Sync starten?",
+      "confirmDescription": "Es werden nur geänderte Dokumente seit der letzten Synchronisation verarbeitet. Bestehende Daten werden ohne Ausfallzeit aktualisiert.",
+      "confirm": "Sync starten",
+      "cancel": "Abbrechen",
+      "lastSync": "Letzte Delta-Sync",
+      "neverSynced": "Nie synchronisiert",
+      "jobPending": "Sync ausstehend...",
+      "jobRunning": "Dokumente werden synchronisiert...",
+      "jobCompleted": "Sync erfolgreich abgeschlossen",
+      "jobFailed": "Sync fehlgeschlagen",
+      "progress": "{processed} von {total} Dokumenten",
+      "noActiveJob": "Kein aktiver Sync-Job",
+      "errorExists": "Ein Sync-Job läuft bereits für diese Sammlung",
+      "errorGeneric": "Delta-Sync konnte nicht gestartet werden",
+      "processed": "Verarbeitet",
+      "upserted": "Aktualisiert",
+      "deleted": "Gelöscht",
+      "remaining": "Verbleibend"
+    },
+    "reindex": {
+      "title": "Vollständige Neuindizierung",
+      "description": "Eine vollständige Neuindizierung mit alias-swap ohne Ausfallzeiten auslösen. Alle Dokumente werden durch die Indizierungspipeline neu verarbeitet.",
+      "startReindex": "Neuindizierung starten",
+      "reindexing": "Indizierung läuft...",
+      "advancedOptions": "Erweiterte Optionen",
+      "detectSchema": "Schema-Änderungen automatisch erkennen",
+      "regenerateEmbeddings": "Embeddings neu generieren",
+      "aliasSwap": "Alias-Swap ohne Ausfallzeiten",
+      "jobPending": "Neuindizierung ausstehend...",
+      "jobRunning": "Indiziere {processed} von {total} Dokumenten...",
+      "jobCompleted": "Neuindizierung erfolgreich abgeschlossen",
+      "jobFailed": "Neuindizierung fehlgeschlagen",
+      "noActiveJob": "Kein aktiver Indizierungsauftrag",
+      "errorExists": "Für diese Sammlung läuft bereits eine Neuindizierung",
+      "errorSchemaRequired": "Das Index-Schema hat keine Felder konfiguriert",
+      "confirmTitle": "Vollständige Neuindizierung starten?",
+      "confirmDescription": "Dies erstellt eine neue Indexversion, streamt alle Dokumente und tauscht Aliase. Es werden keine Ausfallzeiten erwartet.",
+      "confirm": "Ja, neu indizieren",
+      "cancel": "Abbrechen"
+    }
+  },
+  "search": {
+    "title": "Suche",
+    "subtitle": "Verwalten Sie Suchindizes, API-Keys und die Nutzung für diese Organisation.",
+    "loading": "Wird geladen...",
+    "noIndexes": "Noch keine Suchindexe. Erstellen Sie Ihren ersten Index, um zu beginnen.",
+    "noIndexesDescription": "Suchindexe speichern Ihre Daten und ermöglichen Suchabfragen. Erstellen Sie einen, um zu beginnen.",
+    "selectIndex": "Wahlen Sie einen Index aus, um seine API-Keys zu verwalten.",
+    "apiKeysPage": {
+      "title": "API Keys"
+    },
+    "importJobsPage": {
+      "title": "Import-Jobs",
+      "description": "Aktuelle Dokumentimport- und Synchronisierungsaktivität aus dem Ingest-Puffer."
+    },
+    "previewPage": {
+      "title": "Suchvorschau"
+    },
+    "fields": {
+      "displayName": "Anzeigename",
+      "slug": "Slug",
+      "version": "Version",
+      "apiKeys": "API-Keys",
+      "defaultSortingField": "Standard-Sortierfeld",
+      "schema": "Felder (JSON)"
+    },
+    "createIndex": {
+      "trigger": "Index erstellen",
+      "title": "Suchindex erstellen",
+      "description": "Erstellt eine Suchsammlung und einen Alias, die auf diese Organisation beschränkt sind.",
+      "slugHelp": "Kleinbuchstaben, Ziffern und Bindestriche. Wird in API-Pfaden und als Sammlungs-Alias verwendet.",
+      "schemaHelp": "JSON-Array von Felddefinitionen. Das Feld 'tenant_id' wird automatisch hinzugefügt.",
+      "submit": "Erstellen",
+      "success": "Index wurde erstellt.",
+      "error": "Index konnte nicht erstellt werden. Bitte erneut versuchen.",
+      "startFromTemplate": "Mit Vorlage starten:",
+      "autoFromName": "auto",
+      "builder": "Visueller Editor",
+      "json": "JSON",
+      "fieldsTitle": "Schema-Felder",
+      "fieldsCount": "{count} Felder konfiguriert",
+      "addField": "Feld hinzufugen",
+      "removeField": "Feld entfernen",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "errorsCount": "{count, plural, one {# Feld enthält einen Fehler} other {# Felder enthalten Fehler}}",
+      "noFields": "Noch keine Felder — fugen Sie eines hinzu oder wahlen Sie eine Vorlage.",
+      "noSort": "Keine Standard-Sortierung",
+      "noSortableHint": "Aktivieren Sie zuerst Sort fur ein numerisches Feld",
+      "tenantHint": "tenant_id wird zur Isolation automatisch hinzugefugt.",
+      "templates": {
+        "products": "Produkte",
+        "articles": "Artikel",
+        "users": "Benutzer",
+        "blank": "Leer"
+      },
+      "typeGroups": {
+        "text": "Text",
+        "number": "Zahl",
+        "boolean": "Boolean",
+        "advanced": "Erweitert"
+      },
+      "toggles": {
+        "facet": "Facette",
+        "optional": "Optional",
+        "sort": "Sortieren"
+      },
+      "tooltips": {
+        "displayName": "Lesbarer Name, der im Dashboard angezeigt wird. Hat keinen Einfluss auf die API.",
+        "slug": "Wird in API-Pfaden und als Suchsammlungs-Alias verwendet. Nur Kleinbuchstaben, Ziffern und Bindestriche.",
+        "fields": "Definieren Sie die Spalten Ihrer Suchsammlung. Felder konnen facettierbar, sortierbar oder optional sein.",
+        "facet": "Erlaubt Filterung und Gruppierung nach diesem Feld (z. B. Kategorien, Tags, Marke).",
+        "optional": "Das Feld darf in Dokumenten fehlen. Pflichtfelder mussen in jedem Dokument vorhanden sein.",
+        "sort": "Sortierung fur dieses Feld erlauben (numerische Felder konnen immer sortiert werden).",
+        "defaultSort": "Feld zur Sortierung der Ergebnisse, wenn keine explizite Sortierung angegeben ist. Muss numerisch sein.",
+        "json": "Schema als reines JSON bearbeiten. Beim Wechsel zuruck zum visuellen Editor werden Anderungen validiert und ubernommen.",
+        "idField": "Empfohlener eindeutiger Bezeichner. AACsearch verwendet diesen Wert als Primärschlüssel beim Upsert."
+      },
+      "errors": {
+        "duplicateName": "Feldname muss eindeutig sein",
+        "invalidJson": "Ungultiges JSON",
+        "empty": "Mindestens ein Feld hinzufugen",
+        "fieldsInvalid": "Beheben Sie die markierten Felder"
+      }
+    },
+    "apiKeys": {
+      "title": "API-Keys",
+      "description": "Suchschlüssel werden serverseitig validiert, bevor Anfragen ausgeführt werden. Admin-Zugangsdaten verlassen den Server niemals.",
+      "create": "Schlussel erstellen",
+      "createDescription": "Der Rohschlussel wird nur einmal angezeigt. Bewahren Sie ihn sicher auf.",
+      "name": "Name",
+      "generate": "Schlussel generieren",
+      "created": "API-Key wurde erstellt.",
+      "revealOnce": "Kopieren Sie diesen Schlussel jetzt. Er wird Ihnen nicht wieder angezeigt.",
+      "done": "Fertig",
+      "empty": "Noch keine API-Keys.",
+      "emptyDescription": "Erstellen Sie Ihren ersten API-Key, um die Suche in Ihre Anwendung zu integrieren.",
+      "tableName": "Name",
+      "tablePrefix": "Prafix",
+      "tableScopes": "Berechtigungen",
+      "tableStatus": "Status",
+      "tableActions": "Aktionen",
+      "statusActive": "Aktiv",
+      "statusRevoked": "Widerrufen",
+      "revoke": "Widerrufen",
+      "revokeConfirmTitle": "API-Key widerrufen",
+      "revokeConfirmMessage": "Mochten Sie \"{name}\" wirklich widerrufen? Clients, die diesen Schlussel verwenden, funktionieren sofort nicht mehr.",
+      "revoked": "API-Key widerrufen.",
+      "error": "Vorgang fehlgeschlagen.",
+      "namePlaceholder": "z.B. Produktions-Widget"
+    },
+    "usage": {
+      "title": "Nutzung",
+      "windowDays": "Letzte {days} Tage",
+      "searches": "Suchanfragen",
+      "documents": "Indizierte Dokumente",
+      "ingests": "Indizierte Dokumente",
+      "ofLimit": "des monatlichen Limits",
+      "loadError": "Nutzungsdaten konnten nicht geladen werden."
+    },
+    "analytics": {
+      "tab": "Analysen",
+      "title": "Analysen",
+      "description": "Verfolgen Sie Suchnutzung, Top-Suchanfragen, Null-Ergebnisse und Trends.",
+      "totalSearches": "Suchanfragen gesamt",
+      "totalSessions": "Sitzungen",
+      "ctr": "CTR",
+      "zeroResults": "Null Ergebnisse",
+      "zeroResultRate": "Null-Ergebnis-Rate",
+      "comingSoon": "Demnächst",
+      "searchesOverTime": "Suchanfragen im Zeitverlauf",
+      "topQueries": "Top Suchanfragen",
+      "topClickedProducts": "Top geklickte Produkte",
+      "queryColumn": "Suchanfrage",
+      "countColumn": "Anzahl",
+      "productColumn": "Produkt",
+      "clicksColumn": "Klicks",
+      "rankColumn": "#",
+      "percentColumn": "% der Gesamtanzahl",
+      "period24h": "24h",
+      "period7d": "7 Tage",
+      "period30d": "30 Tage",
+      "documentsIndexed": "Indizierte Dokumente",
+      "failedSyncJobs": "Fehlgeschlagene Sync-Jobs",
+      "failed": "fehlgeschlagen",
+      "retentionBanner": "Ihr {plan}-Plan behält Analysedaten für {days} Tage. Wählen Sie einen kürzeren Zeitraum, um Daten zu sehen.",
+      "noData": "Keine Daten fur diesen Zeitraum verfugbar.",
+      "noDataDescription": "Analysedaten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
+      "freePlan": "Kostenlos",
+      "queryPerformance": "Abfrage-Performance",
+      "latencyP50": "p50",
+      "latencyP95": "p95",
+      "latencyP99": "p99",
+      "noLatencyData": "Latenzdaten erscheinen nach der Verarbeitung von Suchanfragen.",
+      "failedQueries": "Fehlgeschlagene Suchanfragen",
+      "ofTotalSearches": "der Gesamtsuchanfragen",
+      "totalFailedQueries": "insgesamt fehlgeschlagen",
+      "noFailedQueries": "Keine fehlgeschlagenen Suchanfragen in diesem Zeitraum.",
+      "tabDashboard": "Dashboard",
+      "tabFailed": "Fehlgeschlagene",
+      "tabActivity": "Aktivität",
+      "uniqueFailedQueries": "Einzigartige fehlgeschlagene",
+      "recentActivity": "Letzte Aktivität",
+      "noActivity": "Keine aktuellen Aktivitäten."
+    },
+    "widget": {
+      "description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",
+      "configuratorTitle": "Widget-Konfigurator",
+      "comingSoon": "Demnächst verfügbar",
+      "comingSoonDescription": "Der Widget-Konfigurationsassistent wird entwickelt. Schauen Sie bald wieder vorbei für Filter, Autovervollständigung, Sprachsuche und Einbettungsoptionen."
+    },
+    "configurator": {
+      "pageTitle": "Suchkonfigurator",
+      "pageDescription": "Richten Sie Ihre Suche in 3 einfachen Schritten ein. Wählen Sie eine Datenquelle, konfigurieren Sie Ihr Schema und optimieren Sie das Suchverhalten.",
+      "step1Title": "Datenquelle",
+      "step1Description": "Wählen Sie, wie Sie Ihre Daten in AACSearch importieren möchten.",
+      "step2Title": "Schema",
+      "step2Description": "Felder automatisch erkennen und Such-, Facetten- und Sortierverhalten konfigurieren.",
+      "step3Title": "Suchkonfiguration",
+      "step3Description": "Feinabstimmung der Suche: welche Felder durchsuchbar sind, deren Gewichtung und Ranking-Optionen.",
+      "sourceCSV": "CSV-Datei",
+      "sourceCSVDesc": "Laden Sie eine CSV-Datei mit bis zu 500.000 Zeilen hoch. Spaltenüberschriften werden zu Feldern.",
+      "sourceJSON": "JSON-Datei",
+      "sourceJSONDesc": "Laden Sie eine JSON-Datei mit einem Array von Objekten hoch.",
+      "sourceCMS": "CMS-Connector",
+      "sourceCMSDesc": "Verbinden Sie WordPress, WooCommerce, PrestaShop oder andere CMS.",
+      "sourceAPI": "API / Webhook",
+      "sourceAPIDesc": "Daten programmatisch über unsere REST-API pushen.",
+      "autoDetect": "Felder automatisch erkennen",
+      "schemaEmpty": "Noch keine Felder konfiguriert",
+      "schemaEmptyHint": "Laden Sie eine Datenquelle hoch oder klicken Sie auf „Automatisch erkennen\", um zu beginnen.",
+      "fieldName": "Feld",
+      "fieldType": "Typ",
+      "fieldSearch": "Suche",
+      "fieldFacet": "Facette",
+      "fieldSort": "Sortierung",
+      "searchableFields": "Durchsuchbare Felder",
+      "searchable": "Aktiviert",
+      "weight": "Gewichtung",
+      "noStringFields": "Keine Textfelder verfügbar. Fügen Sie Felder vom Typ String hinzu, um die Suche zu aktivieren.",
+      "ranking": "Ranking-Einstellungen",
+      "typoTolerance": "Toleranz für Tippfehler",
+      "typoOff": "Aus",
+      "typo1": "1 Tippfehler (streng)",
+      "typo2": "2 Tippfehler (Standard)",
+      "typo4": "4 Tippfehler (unscharf)",
+      "infixSearch": "Infix-Suche",
+      "infixOff": "Aus",
+      "infixFallback": "Rückfall (Standard)",
+      "infixAlways": "Immer aktiv",
+      "prefixSearch": "Präfix-Suche",
+      "exactMatch": "Prioritize exact matches",
+      "facetFieldsAvailable": "{count} Felder für Facetten verfügbar",
+      "facetAddAll": "Alle Felder hinzufügen",
+      "facetNoneSelected": "Keine Facettenfelder konfiguriert. Klicken Sie auf \"Alle Felder hinzufügen\".",
+      "facetNoFields": "Keine facettenfähigen Felder",
+      "facetNoFieldsHint": "Markieren Sie Felder im Schema-Schritt als Facette, um die Facettenkonfiguration zu aktivieren.",
+      "facetField": "Feld",
+      "facetDisplayName": "Anzeigename",
+      "facetSort": "Sortieren nach",
+      "facetSortCount": "Anzahl",
+      "facetSortAlpha": "Alphabetisch",
+      "facetMax": "Max",
+      "facetMulti": "Mehrfachauswahl",
+      "step4Title": "Facetten",
+      "step4Description": "Konfigurieren Sie, wie Suchfacetten angezeigt werden und sich verhalten. Neu anordnen, umbenennen und Anzeigeoptionen festlegen.",
+      "back": "Zurück",
+      "next": "Weiter",
+      "finish": "Abschließen und Index erstellen"
+    },
+    "projects": {
+      "title": "Projekte",
+      "apiKeys": "API-Schlüssel",
+      "loadError": "Projekte konnten nicht geladen werden."
+    },
+    "overview": {
+      "title": "Übersicht",
+      "subtitle": "Letzte {days} Tage",
+      "totalSearches": "Suchanfragen gesamt",
+      "searchesTrend": "Such-Trend",
+      "documentsIndexed": "Indizierte Dokumente",
+      "quotaUsage": "Kontingentnutzung",
+      "failedSyncJobs": "Fehlgeschlagene Sync-Jobs",
+      "searchesOverTime": "Suchanfragen im Zeitverlauf",
+      "topQueries": "Top Suchanfragen",
+      "activityFeed": "Letzte Aktivitäten",
+      "connectorStatus": "Connector-Status",
+      "period24h": "24h",
+      "period7d": "7 Tage",
+      "period30d": "30 Tage",
+      "quotaWarning": "Du hast {percent}% deines Suchkontingents verbraucht. Upgrade deinen Plan, um Unterbrechungen zu vermeiden.",
+      "quotaExceeded": "Du hast dein Suchkontingent überschritten ({percent}%). Einige Funktionen sind möglicherweise eingeschränkt.",
+      "connectorOnline": "Alle Connectors online",
+      "connectorOffline": "Connector offline",
+      "connectorUnknown": "Kein Connector konfiguriert",
+      "noData": "Keine Daten verfügbar",
+      "noDataDescription": "Daten werden angezeigt, sobald Ihre Suchindexe Anfragen erhalten.",
+      "refresh": "Aktualisieren",
+      "activity": {
+        "indexCreated": "Index \"{name}\" erstellt",
+        "keyRevoked": "{count, plural, one {# API-Key} other {# API-Keys}} für \"{name}\"",
+        "syncFailed": "Sync für Index \"{name}\" fehlgeschlagen"
+      },
+      "indexVersion": "Index-Version",
+      "apiKeys": "API-Schlüssel",
+      "searches": "Suchanfragen",
+      "indexes": "Indizes",
+      "documents": "Dokumente",
+      "plan": "Plan",
+      "quickActions": "Schnellaktionen",
+      "manageIndexes": "Indizes verwalten",
+      "manageIndexesDesc": "Erstellen und verwalten Sie Suchindexe",
+      "viewAnalytics": "Analysen anzeigen",
+      "viewAnalyticsDesc": "Suchnutzung und Top-Anfragen verfolgen",
+      "setupConnector": "Connector einrichten",
+      "setupConnectorDesc": "PrestaShop oder Bitrix-Modul verbinden",
+      "managePlan": "Plan verwalten",
+      "graceUntil": "Schreibgeschützt bis {date}",
+      "active": "Aktiv",
+      "indexedProducts": "Indizierte Produkte",
+      "apiKeysCount": "API-Schlüssel",
+      "lastHeartbeat": "Letzter Heartbeat",
+      "noHeartbeat": "Nie",
+      "connectorToken": "Connector-Token",
+      "upgrade": "Tarif upgraden",
+      "createIndex": "Index erstellen",
+      "addConnector": "Connector hinzufügen",
+      "viewAll": "Alle anzeigen",
+      "noSearchesYet": "Du hast noch keine Suchanfragen gesendet",
+      "emptyStateDescription": "Erstelle deinen ersten Suchindex und lege los.",
+      "getStarted": "Loslegen",
+      "quotaExceededBadge": "Überschritten",
+      "quotaUsedBadge": "{percent}% genutzt",
+      "searchesLabel": "Suchen",
+      "freePlan": "Kostenlos",
+      "activeReindexJobs": "Aktive Neuindizierungsaufgaben",
+      "reindexProgress": "{processed} / {total} Dokumente"
+    },
+    "gettingStarted": {
+      "title": "Erste Schritte",
+      "welcome": "Los geht's mit der Suche",
+      "subtitle": "Führe die folgenden Schritte aus, um die Suche zu nutzen.",
+      "allDone": "Alle Schritte abgeschlossen!",
+      "allDoneTitle": "Du bist bereit!",
+      "allDoneDesc": "Alle Onboarding-Schritte sind abgeschlossen. Du kannst jetzt die Suche nutzen.",
+      "progress": "Einrichtungsfortschritt",
+      "completed": "abgeschlossen",
+      "step1Label": "Suchindex erstellen",
+      "step1Desc": "Erstelle deinen ersten Suchindex, um Daten zu speichern und zu organisieren.",
+      "step1Action": "Index erstellen",
+      "step2Label": "Quelle verbinden",
+      "step2Desc": "Generiere einen Connector-Token, um deine Datenquelle zu verbinden.",
+      "step2Action": "Quelle verbinden",
+      "step3Label": "Sync ausführen",
+      "step3Desc": "Synchronisiere deine Daten aus deinem CMS oder anderen Quellen.",
+      "step3Action": "Sync starten",
+      "step4Label": "Suche testen",
+      "step4Desc": "Führe eine Testsache durch, um deine Einrichtung zu überprüfen.",
+      "step4Action": "Suche testen",
+      "step5Label": "API-Key generieren",
+      "step5Desc": "Erstelle einen API-Key, um Suchanfragen von deiner Anwendung zu erlauben.",
+      "step5Action": "Key generieren",
+      "step6Label": "Widget einbetten",
+      "step6Desc": "Bette das Such-Widget in deinen Onlineshop ein.",
+      "step6Action": "Widget einbetten",
+      "done": "Erledigt",
+      "pending": "Ausstehend",
+      "inProgress": "In Bearbeitung",
+      "viewAnalytics": "Analysen anzeigen",
+      "planCtaTitle": "Mehr Leistung nötig?",
+      "planCtaDesc": "Upgrade deinen Plan für höhere Limits und mehr Funktionen.",
+      "managePlan": "Plan verwalten",
+      "skipToDashboard": "Zum Dashboard"
+    },
+    "checklist": {
+      "title": "Setup-Checkliste",
+      "steps": {
+        "createIndex": "Index erstellen",
+        "createIndexDone": "Index erstellt",
+        "generateApiKey": "API-Key generieren",
+        "generateApiKeyDone": "API-Key generiert",
+        "installCmsModule": "CMS-Modul installieren",
+        "installCmsModuleDone": "CMS-Modul installiert",
+        "runFullSync": "Vollsynchronisation durchführen",
+        "runFullSyncDone": "Produkte synchronisiert",
+        "testSearch": "Suche testen",
+        "testSearchDone": "Suche getestet",
+        "enableWidget": "Widget aktivieren",
+        "enableWidgetDone": "Widget aktiviert"
+      },
+      "stepDocs": "Dokumentation anzeigen",
+      "allDone": "Alle Prüfungen bestanden!"
+    },
+    "importJobs": {
+      "tab": "Import-Jobs",
+      "title": "Import-Jobs",
+      "description": "Letzte Dokumentenimport- und Synchronisierungsaktivität aus dem Ingest-Puffer.",
+      "pending": "Ausstehend",
+      "processing": "Verarbeitung",
+      "completed": "Abgeschlossen",
+      "failed": "Fehlgeschlagen",
+      "empty": "Keine Importaktivität in den letzten 7 Tagen.",
+      "emptyDescription": "Import-Jobs erscheinen hier, wenn Sie Daten aus Ihrem CMS synchronisieren.",
+      "tableJobId": "Job-ID",
+      "tableType": "Typ",
+      "tableStatus": "Status",
+      "tableProgress": "Fortschritt",
+      "tableErrors": "Fehler",
+      "tableTime": "Zeit",
+      "viewTimeline": "Zeitleiste",
+      "viewTable": "Tabelle",
+      "successRate": "Erfolgsrate",
+      "indexed": "Indiziert",
+      "retryQueue": "Wiederholungswarteschlange",
+      "retryAll": "Alle wiederholen",
+      "clearQueue": "Leeren",
+      "nextRetry": "Nächste Wiederholung",
+      "retrySuccess": "{count} Charge(n) für erneuten Versuch in die Warteschlange gestellt.",
+      "retryError": "Erneuter Versuch fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "upload": {
+        "title": "Datei hochladen",
+        "dropzone": "JSON- oder CSV-Datei hier ablegen oder zum Durchsuchen klicken",
+        "fileTypes": "Unterstützt .json und .csv Dateien",
+        "parsing": "Datei wird verarbeitet…",
+        "batching": "Batch {current} von {total} wird hochgeladen…",
+        "success": "{count} Dokument(e) in die Warteschlange eingereiht",
+        "errorInvalidJson": "Ungültiges JSON: Array von Objekten erwartet",
+        "errorInvalidCsv": "Ungültige CSV: Datei muss eine Kopfzeile haben",
+        "errorFileSize": "Datei zu groß (max. 10 MB)",
+        "errorFileType": "Nur .json und .csv Dateien werden akzeptiert",
+        "batchFailed": "Batch {n} fehlgeschlagen: {error}"
+      }
+    },
+    "preview": {
+      "tab": "Suchvorschau",
+      "title": "Suchvorschau",
+      "description": "Testen Sie Suchanfragen gegen diesen Index und prüfen Sie die Rohdaten.",
+      "placeholder": "Suchanfrage eingeben…",
+      "search": "Suchen",
+      "noResults": "Führen Sie eine Abfrage aus, um Ergebnisse zu sehen.",
+      "perPage": "Pro Seite",
+      "page": "Seite",
+      "highlightFields": "Hervorhebungsfelder",
+      "highlightFieldsPlaceholder": "z.B. title, description",
+      "facetBy": "Facette",
+      "facetByPlaceholder": "z.B. brand, category",
+      "stats": "{found} Treffer in {time} ms"
+    },
+    "connector": {
+      "title": "Connectors",
+      "subtitle": "PrestaShop, Bitrix verbinden oder Dokumente direkt per API pushen",
+      "stepCounter": "Schritt {current} von {total}",
+      "runSyncDesc": "Starten Sie eine vollstandige Synchronisation, um alle Produkte aus Ihrem CMS zu indizieren.",
+      "runSyncCta": "Vollstandige Synchronisation starten",
+      "syncTriggerHint": "Offnen Sie Ihren CMS-Adminbereich und klicken Sie im AACsearch-Modul auf 'Full sync'.",
+      "configStep1": {
+        "prestashop": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres PrestaShop-Admins ein.",
+        "bitrix": "Fugen Sie die API-URL in die AACsearch-Moduleinstellungen Ihres Bitrix-Admins ein.",
+        "directApi": "Verwenden Sie die API-URL und das Token als Basis-URL und Bearer-Token fur Ihre REST-Aufrufe."
+      },
+      "configStep2": {
+        "prestashop": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
+        "bitrix": "Fugen Sie das Connector-Token in das Modul-Einstellungsfeld ein.",
+        "directApi": "Geben Sie das Token im Authorization-Header an: Bearer <token>"
+      },
+      "configStep3": "Speichern Sie die Konfiguration.",
+      "prestashop": "PrestaShop",
+      "prestashopDesc": "Vollsynchronisation für Produkte, Kategorien, Lagerbestand",
+      "bitrix": "1C-Bitrix",
+      "bitrixDesc": "Vollsynchronisation für Produktkataloge",
+      "directApi": "Direct API",
+      "directApiDesc": "Dokumente direkt per REST API pushen",
+      "setup": "Einrichten",
+      "manage": "Verwalten",
+      "viewDocs": "Dokumentation",
+      "statusOnline": "Online",
+      "statusOffline": "Offline",
+      "statusUnknown": "Unbekannt",
+      "lastSync": "Letzte Sync: {time}",
+      "lastError": "Letzter Fehler: {error}",
+      "noHeartbeat": "Noch kein Heartbeat",
+      "syncJobs": "Sync-Jobs",
+      "syncJobsNote": "Zeigt die letzten 50 Sync-Jobs.",
+      "activeConnectors": "Aktive Connectors",
+      "activeConnectorsDesc": "Connector-Tokens und ihr Heartbeat-Status",
+      "noConnectors": "Noch keine Connectors. Klicken Sie oben auf 'Einrichten'.",
+      "wizardTitle": "{source} Connector einrichten",
+      "stepGenerateToken": "Token generieren",
+      "stepDownloadModule": "Modul herunterladen",
+      "stepConfigure": "Konfigurieren",
+      "stepTestConnection": "Verbindung testen",
+      "stepRunSync": "Erste Synchronisation",
+      "tokenGenerated": "Ihr Connector-Token",
+      "tokenCopyWarning": "Speichern Sie diesen Schlüssel — wir können ihn nach dem Schließen nicht mehr anzeigen",
+      "tokenCopied": "Kopiert!",
+      "downloadPrestashop": "PrestaShop-Modul herunterladen",
+      "downloadBitrix": "Bitrix-Modul herunterladen",
+      "testSuccess": "Verbindung erfolgreich — Modul ist online!",
+      "testFailed": "Verbindung fehlgeschlagen — überprüfen Sie die Modulkonfiguration",
+      "syncSuccess": "Sync erfolgreich gestartet",
+      "jobId": "Job-ID",
+      "jobType": "Typ",
+      "jobStatus": "Status",
+      "jobStarted": "Gestartet",
+      "jobDuration": "Dauer",
+      "jobItems": "Elemente / Fehler",
+      "jobActions": "Aktionen",
+      "jobRetry": "Wiederholen",
+      "typeFull": "Voll",
+      "typeDelta": "Delta",
+      "statusPending": "Ausstehend",
+      "statusRunning": "Läuft",
+      "statusCompleted": "Abgeschlossen",
+      "statusFailed": "Fehlgeschlagen",
+      "jobDetailTitle": "Job-Details",
+      "jobEventLog": "Ereignisprotokoll",
+      "noJobLogs": "Keine Ereignisse protokolliert",
+      "tokenLabel": "Connector-Token",
+      "tokenPlaceholder": "ss_connector_***",
+      "testHandshake": "Handshake testen",
+      "handshakeSuccess": "Handshake erfolgreich",
+      "handshakeFailed": "Handshake fehlgeschlagen",
+      "description": "Verwalten Sie das Connector-Token und den Handshake-Status.",
+      "noConnectorKeys": "Keine Connector-Keys. Erstellen Sie einen API-Key mit dem Bereich 'connector_write' im Reiter API Keys.",
+      "lastHeartbeat": "Letzter Heartbeat",
+      "syncNow": "Jetzt syncen",
+      "revokeToken": "Widerrufen",
+      "pipeline": {
+        "buffer": "Puffer",
+        "throughput": "Durchsatz",
+        "retryQueue": "Wiederholungs-Warteschlange",
+        "failed": "Fehlgeschlagen"
+      },
+      "time": {
+        "lessThanMinute": "<1 Min.",
+        "minutes": "{count} Min.",
+        "hoursMinutes": "{h}Std. {m}Min.",
+        "days": "{count}T",
+        "ago": "vor {time}"
+      },
+      "revokeError": "Token konnte nicht widerrufen werden. Bitte versuche es erneut.",
+      "retryError": "Stapel konnten nicht wiederholt werden. Bitte versuche es erneut.",
+      "wizard": {
+        "noIndex": "Kein Index verfügbar. Erstellen Sie zuerst einen Index.",
+        "tokenFailed": "Token-Generierung fehlgeschlagen"
+      },
+      "jobFailures": "Fehler"
+    },
+    "tabs": {
+      "indexes": "Indizes",
+      "playground": "Playground",
+      "apiKeys": "API-Schlüssel",
+      "widget": "Widget"
+    },
+    "playground": {
+      "title": "Such-Playground",
+      "description": "Testen Sie erweiterte Suchabfragen mit allen verfügbaren Optionen.",
+      "advanced": "Erweiterte Optionen",
+      "advancedShow": "Erweiterte Optionen anzeigen",
+      "advancedHide": "Erweiterte Optionen ausblenden",
+      "queryBy": "Suchfelder",
+      "queryByPlaceholder": "Kommagetrennte Feldnamen (z.B. title, description)",
+      "filterBy": "Filter",
+      "filterByPlaceholder": "z.B. price:>100 && inStock:=true",
+      "sortBy": "Sortierung",
+      "sortByPlaceholder": "z.B. price:desc",
+      "perPage": "Ergebnisse pro Seite",
+      "run": "Suche ausführen",
+      "cmdEnter": "Cmd+Enter zum Suchen",
+      "hits": "Treffer",
+      "facets": "Facetten",
+      "rawJson": "Rohdaten (JSON)",
+      "curlSnippet": "cURL-Befehl",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "responseTime": "Antwortzeit",
+      "hitCount": "Ergebnisse",
+      "noDocuments": "Keine Dokumente entsprechen Ihrer Abfrage.",
+      "debounceInfo": "Automatische Suche (700ms Verzögerung)",
+      "lastQueryRestored": "Letzte Abfrage aus vorheriger Sitzung wiederhergestellt.",
+      "noIndexes": "Keine Indizes verfügbar. Erstellen Sie zuerst einen.",
+      "curlTitle": "cURL-Befehl",
+      "searchFailed": "Suche fehlgeschlagen",
+      "copyFailed": "Kopieren fehlgeschlagen"
+    },
+    "indexActions": {
+      "actions": "Aktionen",
+      "reindex": "Neu indizieren",
+      "viewSchema": "Schema anzeigen",
+      "delete": "Index löschen",
+      "deleteConfirmTitle": "Index löschen",
+      "deleteConfirmMessage": "Möchten Sie \"{name}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "reindexConfirmTitle": "Neu indizieren",
+      "reindexConfirmMessage": "Vollständige Neuindizierung für \"{name}\" auslösen?",
+      "schemaTitle": "Schema für \"{name}\"",
+      "reindexed": "Neuindizierung ausgelöst.",
+      "deleted": "Index gelöscht."
+    },
+    "nav": {
+      "overview": "Übersicht",
+      "gettingStarted": "Erste Schritte",
+      "search": "Suche",
+      "indexes": "Indizes",
+      "apiKeys": "API-Schlüssel",
+      "importJobs": "Import-Jobs",
+      "searchPreview": "Suchvorschau",
+      "playground": "Testumgebung",
+      "analytics": "Analysen",
+      "analyticsDashboard": "Dashboard",
+      "analyticsTopQueries": "Top-Anfragen",
+      "analyticsFailed": "Fehlgeschlagene Anfragen",
+      "analyticsActivity": "Aktivitätsprotokoll",
+      "relevance": "Relevanz",
+      "relevanceSynonyms": "Synonyme",
+      "relevanceCurations": "Kuratierungen",
+      "relevanceStemming": "Stemming",
+      "relevanceStopwords": "Stoppwörter",
+      "relevanceRanking": "Ranking",
+      "relevanceSpell": "Rechtschreibkorrektur",
+      "connectors": "Connectors",
+      "connectorsCMS": "CMS-Connectors",
+      "connectorsWebhooks": "Webhooks",
+      "connectorsSDK": "SDK",
+      "knowledge": "Wissen",
+      "knowledgeSpaces": "Wissensbereiche",
+      "knowledgeDocuments": "Dokumente",
+      "knowledgeSearch": "Suche",
+      "recommendations": "Empfehlungen",
+      "recommendationsDashboard": "Dashboard",
+      "recommendationsSimilar": "Ähnliche Elemente",
+      "recommendationsPersonalized": "Personalisierte",
+      "recommendationsGraphRAG": "GraphRAG",
+      "recommendationsSettings": "Einstellungen",
+      "widget": "Widget",
+      "widgetConfigurator": "Konfigurator",
+      "widgetFilters": "Filter",
+      "widgetAutocomplete": "Autovervollständigung",
+      "widgetVoice": "Sprachsuche",
+      "widgetAnalytics": "Analysen",
+      "widgetInstall": "Installieren"
+    },
+    "recommendations": {
+      "description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",
+      "dashboardTitle": "Dashboard für Empfehlungen",
+      "comingSoon": "Demnächst verfügbar",
+      "comingSoonDescription": "KI-gestützte Empfehlungen werden entwickelt. Schauen Sie bald wieder vorbei für ähnliche Artikel, personalisierte Vorschläge und GraphRAG-gestützte Erklärungen."
+    },
+    "synonyms": {
+      "tab": "Synonyme",
+      "title": "Synonyme",
+      "description": "Konfigurieren Sie Suchsynonyme. Wenn ein Benutzer nach dem Synonym sucht, werden Ergebnisse für den Grundbegriff angezeigt.",
+      "add": "Zeile hinzufügen",
+      "save": "Synonyme speichern",
+      "saved": "Synonyme gespeichert.",
+      "error": "Fehler beim Speichern der Synonyme.",
+      "empty": "Noch keine Synonyme konfiguriert. Fügen Sie ein Synonympaar hinzu, um zu beginnen.",
+      "emptyDescription": "Synonyme ordnen verschiedenen Suchbegriffen dasselbe Stammwort zu und erweitern so Ihre Suchabdeckung.",
+      "synonymColumn": "Synonym",
+      "rootColumn": "Stammwort",
+      "tableActions": "Aktionen",
+      "remove": "Entfernen",
+      "removeConfirmTitle": "Synonym entfernen",
+      "removeConfirmMessage": "Sind Sie sicher, dass Sie dieses Synonympaar entfernen möchten?"
+    },
+    "curations": {
+      "tab": "Kurationen",
+      "title": "Kurationen",
+      "description": "Produkte für bestimmte Suchanfragen fixieren oder ausblenden, um Suchergebnisse manuell zu steuern.",
+      "add": "Regel hinzufügen",
+      "save": "Kurationen speichern",
+      "saved": "Kurationen gespeichert.",
+      "error": "Fehler beim Speichern der Kurationen.",
+      "empty": "Noch keine Kurationsregeln. Fügen Sie eine Regel hinzu, um zu beginnen.",
+      "emptyDescription": "Kurationsregeln ermöglichen es Ihnen, Produkte für Suchanfragen zu fixieren oder auszublenden.",
+      "queryColumn": "Suchanfrage",
+      "pinnedColumn": "Fixierte IDs",
+      "hiddenColumn": "Ausgeblendete IDs",
+      "tableActions": "Aktionen",
+      "edit": "Bearbeiten",
+      "remove": "Entfernen",
+      "editTitle": "Kurationsregel bearbeiten",
+      "addTitle": "Kurationsregel hinzufügen",
+      "dialogDescription": "Geben Sie die Suchanfrage und Produkt-IDs zum Fixieren oder Ausblenden ein.",
+      "queryLabel": "Suchanfrage",
+      "queryPlaceholder": "z.B. Laufschuhe",
+      "pinnedLabel": "Fixierte Produkt-IDs (kommagetrennt)",
+      "pinnedPlaceholder": "prod-123, prod-456",
+      "hiddenLabel": "Ausgeblendete Produkt-IDs (kommagetrennt)",
+      "hiddenPlaceholder": "prod-789, prod-012",
+      "dialogSave": "Regel speichern",
+      "removeConfirmTitle": "Kurationsregel entfernen",
+      "removeConfirmMessage": "Sind Sie sicher, dass Sie diese Kurationsregel entfernen möchten?"
+    },
+    "relevance": {
+      "tab": "Relevanz",
+      "title": "Relevanz",
+      "description": "Verwalten Sie Synonyme, Kuratierungen und Rankings der Suchergebnisse."
+    },
+    "knowledge": {
+      "title": "Wissensbasis",
+      "subtitle": "RAG-Fragen und -Antworten über Ihre Dokumente und Kataloge",
+      "spaces": "Arbeitsbereiche",
+      "spacesDesc": "Persönliche und Organisations-Wissensbereiche",
+      "activeSpace": "Aktiver Bereich",
+      "selectSpace": "Bereich auswählen",
+      "newSpaceSlug": "Slug des neuen Bereichs",
+      "newSpaceName": "Name des neuen Bereichs",
+      "createSpace": "Bereich erstellen",
+      "sources": "Quellen",
+      "sourcesDesc": "CMS- und Datei-Quellen für diesen Bereich",
+      "sourceName": "Quellenname",
+      "sourceType": "Quellentyp",
+      "sourceConfig": "Quellenkonfiguration (JSON)",
+      "addSource": "Quelle hinzufügen",
+      "fileIngestion": "Datei-Ingest",
+      "fileIngestionDesc": "MD/XML/PDF in den ausgewählten Bereich hochladen",
+      "fileInput": "Datei",
+      "ingestFile": "Datei ingestieren",
+      "jobsAndMetrics": "Jobs & Metriken",
+      "jobsAndMetricsDesc": "Betriebliche Transparenz für Ingest und Graph-Builds",
+      "sourcesMetric": "Quellen",
+      "documentsMetric": "Dokumente",
+      "chunksMetric": "Chunks",
+      "graphEdgesMetric": "Graph-Kanten",
+      "ragAsk": "RAG-Abfrage",
+      "ragAskDesc": "Hybridsuche mit Zitaten aus Ihrem Bereich",
+      "question": "Frage",
+      "askButton": "Fragen",
+      "graphExplain": "Graph-Erklärung",
+      "graphQuery": "Graph-Abfrage",
+      "explainGraph": "Graph erklären",
+      "fileSizeLimit": "Datei muss kleiner als 50 MB sein",
+      "fileTypeLimit": "Nur .md, .xml, .pdf-Dateien werden akzeptiert",
+      "createdSpace": "Wissensbereich erstellt",
+      "createdSource": "Datenquelle erstellt",
+      "ingestionStarted": "Datei-Ingest gestartet",
+      "answerGenerated": "Antwort generiert",
+      "graphExplained": "Graph-Erklärung generiert",
+      "permissionDenied": "Sie haben keine Berechtigung, Bereiche zu erstellen",
+      "requiredFields": "Slug und Name sind erforderlich",
+      "noSpaceSelected": "Wählen Sie einen Bereich und geben Sie eine Frage ein",
+      "slugPlaceholder": "catalog-knowledge",
+      "namePlaceholder": "Katalog-Wissen",
+      "sourceNamePlaceholder": "Bitrix-Shop-Connector",
+      "questionPlaceholder": "Welche Produkte erwähnen API-Schlüssel-Rotation?",
+      "graphQueryPlaceholder": "Connector-Diagnose-Fehler",
+      "graphQueryLabel": "Graph-Abfrage",
+      "graphExplainDesc": "Graph-Nachbarschaft für Ihre Abfrage untersuchen",
+      "citedFrom": "Zitiert aus Dokument",
+      "seedNodes": "Startknoten",
+      "edges": "Kanten",
+      "noSeedNodes": "Keine Startknoten gefunden.",
+      "noEdges": "Keine Kanten gefunden.",
+      "loadingSpaces": "Bereiche werden geladen...",
+      "activeSpaceLabel": "Aktiver Bereich: {name} ({slug})",
+      "createSpaceError": "Wissensbereich konnte nicht erstellt werden",
+      "sourceCreateError": "Datenquelle konnte nicht erstellt werden",
+      "ingestError": "Datei konnte nicht ingestiert werden",
+      "answerError": "Antwort konnte nicht generiert werden",
+      "graphExplainError": "Graph-Erklärung ist fehlgeschlagen",
+      "noPermissionSources": "Sie haben keine Berechtigung, Quellen zu erstellen",
+      "selectSpaceAndSource": "Wählen Sie einen Bereich und geben Sie den Quellnamen an",
+      "invalidSourceConfig": "Ungültige Quellenkonfiguration",
+      "noPermissionIngest": "Sie haben keine Berechtigung zum Hochladen von Dateien",
+      "selectSpaceAndFile": "Wählen Sie einen Bereich und eine Datei",
+      "fileReadError": "Datei konnte nicht gelesen werden",
+      "fileTypeInvalid": "Nur .md, .xml und .pdf-Dateien werden unterstützt",
+      "selectSpaceAndGraphQuery": "Wählen Sie einen Bereich und geben Sie eine Graph-Abfrage ein"
+    },
+    "documents": {
+      "empty": "Noch keine Dokumente in diesem Index",
+      "emptyDescription": "Laden Sie eine CSV hoch oder verwenden Sie die API, um Dokumente hinzuzufügen.",
+      "importCsv": "CSV importieren",
+      "importCsvDescription": "Wählen Sie eine CSV-Datei zum Importieren aus. Die erste Zeile muss Spaltenüberschriften enthalten, die den Schemafeldern entsprechen.",
+      "import": "Importieren",
+      "cancel": "Abbrechen",
+      "parseError": "{count} Parse-Fehler in der CSV gefunden",
+      "parsedRows": "{count} Zeilen geparst",
+      "importSuccess": "{count} Dokumente zur Indexierung vorgemerkt",
+      "importError": "Fehler beim Importieren der Dokumente",
+      "saved": "Dokument gespeichert",
+      "saveError": "Fehler beim Speichern des Dokuments",
+      "deleted": "{count} Dokument(e) gelöscht",
+      "deleteError": "Fehler beim Löschen der Dokumente",
+      "searchPlaceholder": "Dokumente durchsuchen…",
+      "filter": "Filter",
+      "columns": "Spalten",
+      "toggleColumns": "Spalten ein-/ausblenden",
+      "compact": "Kompakt",
+      "comfortable": "Komfortabel",
+      "exportCsv": "CSV exportieren",
+      "exportSelected": "Auswahl exportieren",
+      "deleteSelected": "Auswahl löschen",
+      "clearSelection": "Auswahl aufheben",
+      "selected": "{count} ausgewählt",
+      "showing": "Zeige {from}–{to} von {total}",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "pageOf": "{page} / {total}",
+      "editDocument": "Dokument bearbeiten",
+      "editDocumentDescription": "Bearbeiten Sie die Dokumentfelder unten. Änderungen werden übernommen.",
+      "rawDocument": "Rohdaten (JSON)",
+      "save": "Änderungen speichern",
+      "notSet": "Nicht gesetzt",
+      "true": "Wahr",
+      "false": "Falsch",
+      "optional": "optional",
+      "bulkDeleteTitle": "Dokumente löschen",
+      "bulkDeleteMessage": "Sind Sie sicher, dass Sie {count} Dokument(e) löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.",
+      "noResults": "Keine Dokumente entsprechen Ihrer Suche.",
+      "queryByPlaceholder": "Felder durchsuchen…",
+      "filterByPlaceholder": "Filterausdruck…",
+      "clear": "Filter zurücksetzen",
+      "columnId": "ID"
+    },
+    "files": {
+      "name": "Name",
+      "type": "Typ",
+      "size": "Größe",
+      "words": "Wörter",
+      "status": "Status",
+      "uploaded": "Hochgeladen",
+      "pages": "Seiten",
+      "delete": "Löschen",
+      "deleteTitle": "Datei löschen",
+      "deleteDescription": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleted": "\"{name}\" gelöscht",
+      "deleteError": "Fehler beim Löschen der Datei",
+      "cancel": "Abbrechen",
+      "count": "{count} Datei(en)",
+      "empty": "Keine Dateien gefunden",
+      "close": "Schließen",
+      "previewImage": "Bildvorschau nicht verfügbar",
+      "previewUrl": "Webseitenvorschau nicht verfügbar",
+      "previewGeneric": "Dateivorschau nicht verfügbar",
+      "pageTitle": "Dateien"
+    },
+    "collection": {
+      "title": "Sammlung",
+      "notFound": "Index nicht gefunden",
+      "backToIndexes": "Zurück zu den Indizes",
+      "collection": "Sammlung",
+      "alias": "Alias",
+      "tab": {
+        "overview": "Übersicht",
+        "schema": "Schema",
+        "documents": "Dokumente",
+        "api": "API",
+        "settings": "Einstellungen",
+        "ranking": "Ranking"
+      },
+      "documentsTotal": "Dokumente",
+      "searchesWeek": "Suchen (7T)",
+      "ingestEvents": "Import-Ereignisse",
+      "apiKeysCount": "API-Schlüssel",
+      "schemaOverview": "Schemafelder",
+      "noSchema": "Keine Schemafelder verfügbar.",
+      "viewAllFields": "Alle {count} Felder anzeigen",
+      "indexMeta": "Index-Metadaten",
+      "slug": "Slug",
+      "collectionName": "Sammlung",
+      "aliasName": "Alias",
+      "schemaVersion": "Schema-Version",
+      "created": "Erstellt",
+      "schemaFields": "Schemafelder",
+      "fields": "Felder",
+      "fieldName": "Feld",
+      "fieldType": "Typ",
+      "fieldFacet": "Facette",
+      "fieldSort": "Sortierung",
+      "fieldIndex": "Index",
+      "totalDocuments": "Dokumente insgesamt",
+      "loading": "Laden...",
+      "noDocuments": "Noch keine Dokumente",
+      "noDocumentsDesc": "Dokumente über die Connector-API oder das SDK hochladen.",
+      "apiExamples": "API-Beispiele",
+      "searchExample": "Suchbeispiel",
+      "indexEndpoint": "Index-Endpunkt",
+      "settings": "Einstellungen",
+      "displayName": "Anzeigename",
+      "open": "Öffnen",
+      "schemaEditor": {
+        "addField": "+ Feld hinzufügen",
+        "importJson": "JSON importieren",
+        "exportJson": "JSON exportieren",
+        "previewDiff": "Vorschau Änderungen",
+        "cancel": "Abbrechen",
+        "saveOnly": "Nur Schema speichern",
+        "saveReindex": "Speichern + neu indizieren",
+        "defaultSort": "Standard-Sortierfeld:",
+        "noDefaultSort": "Keine Standardsortierung",
+        "empty": "Noch keine Felder definiert",
+        "addFirstField": "+ Erstes Feld hinzufügen",
+        "clickToEdit": "Klicken zum Bearbeiten",
+        "unnamed": "unbenannt",
+        "settings": "Einstellungen",
+        "delete": "Löschen",
+        "loadError": "Schema konnte nicht geladen werden.",
+        "retry": "Wiederholen",
+        "saved": "Schema aktualisiert.",
+        "saveError": "Schema konnte nicht gespeichert werden.",
+        "importDialogTitle": "Felder aus JSON importieren",
+        "importDialogDesc": "Fügen Sie ein JSON-Array mit Felddefinitionen ein, um die aktuelle Feldliste zu ersetzen.",
+        "importAction": "Importieren",
+        "importMustBeArray": "Eingabe muss ein JSON-Array sein.",
+        "invalidJson": "Ungültiges JSON. Bitte überprüfen Sie Ihre Eingabe.",
+        "exported": "Schema-JSON in die Zwischenablage kopiert.",
+        "exportError": "Fehler beim Kopieren in die Zwischenablage.",
+        "diffTitle": "Schema-Änderungen",
+        "diffDesc": "Überprüfen Sie die Unterschiede zwischen Entwurf und gespeichertem Schema.",
+        "noChanges": "Keine Änderungen festgestellt.",
+        "settingsTitle": "Einstellungen für {name}",
+        "settingsDesc": "Erweiterte Feldoptionen konfigurieren. Diese werden lokal gespeichert, bis Sie speichern.",
+        "defaultValue": "Standardwert",
+        "defaultValuePlaceholder": "z.B. 0, false, Leerstring",
+        "locale": "Gebietsschema",
+        "validators": "Validatoren (JSON)",
+        "reindexStarted": "Neuindizierung gestartet",
+        "reindexError": "Neuindizierung fehlgeschlagen",
+        "reindexWarning": "Schemaänderungen erfordern eine vollständige Neuindizierung. Bei großen Sammlungen kann dies mehrere Minuten dauern.",
+        "tokenSeparators": "Token-Trennzeichen (kommagetrennt)",
+        "symbolTokensToIndex": "Zu indexierende Symbol-Token (kommagetrennt)"
+      },
+      "version": "Version",
+      "recentActivity": "Letzte Aktivität",
+      "noActivity": "Keine aktuelle Aktivität.",
+      "useApiKeys": "Anfragen mit einem API-Schlüssel authentifizieren.",
+      "manageSettings": "Indexkonfiguration verwalten.",
+      "defaultSortingField": "Standard-Sortierfeld",
+      "enabled": "Aktiviert",
+      "statusEnabled": "Aktiviert",
+      "statusDisabled": "Deaktiviert",
+      "updatedAt": "Aktualisiert",
+      "dangerZone": "Gefahrenbereich",
+      "dangerZoneDesc": "Diesen Index und alle seine Dokumente dauerhaft löschen.",
+      "deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Dokumente gehen dauerhaft verloren.",
+      "deleteCollection": "Index löschen",
+      "confirmDelete": "Index löschen",
+      "confirmDeleteDesc": "Diese Aktion ist irreversibel.",
+      "confirmDeleteMessage": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Alle Dokumente werden dauerhaft entfernt.",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "noApiKeys": "Noch keine API-Schlüssel. Erstellen Sie einen, um diese Beispiele zu verwenden.",
+      "fieldOptional": "Optional",
+      "deleted": "Index erfolgreich gelöscht",
+      "deleteError": "Index konnte nicht gelöscht werden"
+    },
+    "open": "Öffnen",
+    "search": {
+      "vectorSearch": {
+        "description": "Suche nach Bedeutung.",
+        "placeholder": "Beschreiben Sie, wonach Sie suchen...",
+        "field": "Vektorfeld",
+        "results": "{count} Ergebnisse",
+        "distance": "Distanz: {distance}"
+      },
+      "hybridSearch": {
+        "description": "Keyword + Semantik kombinieren.",
+        "alpha": "Semantisches Gewicht (Alpha)",
+        "alphaHint": "0 = Keywords, 1 = Semantik"
+      },
+      "semanticSearch": {
+        "description": "Fragen in natürlicher Sprache.",
+        "placeholder": "Fragen zu Ihren Daten..."
+      },
+      "models": {
+        "description": "Embedding-Modelle konfigurieren.",
+        "enabled": "Vektorsuche aktivieren"
+      },
+      "searchTabs": {
+        "vector": "Vektor",
+        "hybrid": "Hybrid",
+        "semantic": "NL-Suche"
+      }
+    },
+    "geoSearch": {
+      "description": "Suche nach Standort.",
+      "lat": "Breitengrad",
+      "lng": "Längengrad",
+      "radius": "Radius (km)"
+    },
+    "federatedSearch": {
+      "description": "Suche über mehrere Indizes.",
+      "addIndex": "Index hinzufügen"
+    },
+    "groupedSearch": {
+      "groupBy": "Gruppieren nach"
+    },
+    "suggestions": "Suchvorschläge",
+    "presets": "Suchvoreinstellungen",
+    "aliases": "Sammlungsaliase",
+    "snapshots": {
+      "create": "Snapshot erstellen"
+    },
+    "health": {
+      "ok": "Gesund",
+      "error": "Fehlerhaft"
+    },
+    "conversationalSearch": {
+      "description": "Stellen Sie Fragen und erhalten Sie KI-generierte Antworten aus Ihren Daten."
+    },
+    "voiceSearch": {
+      "description": "Suchen per Sprache. Audio wird automatisch transkribiert."
+    },
+    "imageSearch": {
+      "description": "Suchen Sie durch Hochladen eines Bildes. KI beschreibt es vor der Suche."
+    },
+    "stemming": {
+      "description": "Verwalten Sie Stemming-Überschreibungen für präzise Textübereinstimmung.",
+      "word": "Wort",
+      "root": "Stamm"
+    },
+    "stopwords": {
+      "description": "Wörter in dieser Liste werden bei der Suche ignoriert. Verwenden Sie sie, um häufige Wörter wie Artikel und Präpositionen herauszufiltern.",
+      "tab": "Stoppwörter",
+      "title": "Stoppwörter",
+      "add": "Wort hinzufügen",
+      "save": "Stoppwörter speichern",
+      "saved": "Stoppwörter gespeichert.",
+      "error": "Fehler beim Speichern der Stoppwörter.",
+      "empty": "Noch keine Stoppwörter konfiguriert.",
+      "emptyDescription": "Stoppwörter sind häufige Wörter, die bei der Suche ignoriert werden, um die Relevanz zu verbessern.",
+      "wordColumn": "Wort",
+      "tableActions": "Aktionen",
+      "remove": "Entfernen",
+      "removeConfirmTitle": "Stoppwort entfernen",
+      "removeConfirmMessage": "Möchten Sie dieses Stoppwort wirklich entfernen?"
+    },
+    "clusterOps": {
+      "description": "Cluster-Operationen und Metriken.",
+      "vote": "Abstimmung",
+      "debug": "Debug",
+      "metrics": "Metriken"
+    },
+    "analyticsRules": {
+      "description": "Benutzerdefinierte Analyseregeln für Suchmetriken.",
+      "name": "Name",
+      "type": "Typ",
+      "create": "Regel erstellen",
+      "delete": "Regel löschen"
+    },
+    "dynamicSearch": {
+      "description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
+      "diversifyField": "Diversifikationsfeld",
+      "maxPerValue": "Max pro Wert"
+    },
+    "rankingRules": {
+      "title": "Ranking-Regeln",
+      "description": "Konfigurieren Sie, wie Suchergebnisse für diesen Index bewertet und sortiert werden.",
+      "save": "Ranking-Regeln speichern",
+      "saved": "Ranking-Regeln gespeichert.",
+      "error": "Fehler beim Speichern der Ranking-Regeln.",
+      "fieldWeights": "Feld-Gewichtungen",
+      "fieldWeightsHint": "Steuern Sie, wie stark jedes Feld zur Relevanzbewertung beiträgt. Höheres Gewicht = wichtiger.",
+      "noFields": "Keine String-Felder verfügbar",
+      "noFieldsHint": "Fügen Sie zuerst String-Felder zum Schema hinzu.",
+      "fieldColumn": "Feld",
+      "weightColumn": "Gewicht",
+      "generalSettings": "Allgemeine Einstellungen",
+      "generalSettingsHint": "Konfigurieren Sie Tippfehlertoleranz, Standardsortierung und Suchmodi.",
+      "defaultSortField": "Standard-Sortierfeld",
+      "noDefaultSort": "Automatisch (Relevanz)",
+      "typoTolerance": "Tippfehlertoleranz",
+      "typoOff": "Aus (keine Tippfehler)",
+      "typo1": "1 Tippfehler erlaubt",
+      "typo2": "2 Tippfehler erlaubt",
+      "typo4": "4 Tippfehler erlaubt",
+      "infixSearch": "Infix-Suche",
+      "infixOff": "Aus",
+      "infixFallback": "Fallback (Standard)",
+      "infixAlways": "Immer",
+      "prefixSearch": "Präfix-Suche",
+      "exactMatch": "Exakte Übereinstimmung priorisieren",
+      "customRules": "Benutzerdefinierte Ranking-Regeln",
+      "customRulesHint": "Fortgeschrittene Ranking-Ausdrücke zur Überschreibung der Relevanzbewertung.",
+      "addRule": "Regel hinzufügen",
+      "noCustomRules": "Keine benutzerdefinierten Regeln konfiguriert",
+      "noCustomRulesHint": "Fügen Sie benutzerdefinierte Ranking-Ausdrücke hinzu.",
+      "rulePlaceholder": "z.B. _text_match(bill_count):desc"
+    }
+  },
+  "sdks": {
+    "title": "SDKs & Client-Bibliotheken",
+    "subtitle": "Installieren Sie AACSearch SDKs in Ihrer bevorzugten Sprache, um die Suche in Ihre Anwendung zu integrieren.",
+    "install": "Installieren",
+    "comingSoon": "Demnächst",
+    "viewDocs": "Dokumentation",
+    "viewSource": "Quellcode",
+    "usageTitle": "Schnellstart-Beispiel",
+    "usageDescription": "Erste Schritte mit dem TypeScript SDK in nur wenigen Codezeilen.",
+    "nav": "SDKs"
+  },
+  "nav": {
+    "geoSearch": "Geosuche",
+    "federatedSearch": "Föderiert",
+    "settings": "Einstellungen",
+    "switchOrganization": "Organisation wechseln"
+  },
+  "mySearch": {
+    "title": "Meine Suche",
+    "subtitle": "Ihr persönlicher Suchbereich — Dokumente hochladen, Webseiten indizieren und über alle Materialien suchen.",
+    "noIndexes": "Noch keine Suchindizes",
+    "noIndexesDescription": "Erstellen Sie Ihren ersten Suchindex durch Hochladen von Dokumenten oder Hinzufügen von URLs. Los geht's — keine Organisation erforderlich.",
+    "createIndex": "Index erstellen",
+    "createNewIndex": "Neuen Suchindex erstellen",
+    "importFiles": "Dateien importieren",
+    "emptyStateTitle": "Erstellen Sie Ihren ersten Index",
+    "createFromFiles": "Aus Dateien",
+    "createFromUrl": "Von URL",
+    "cancel": "Abbrechen",
+    "creating": "Wird erstellt...",
+    "indexCreated": "Index erstellt",
+    "indexCreateError": "Fehler beim Erstellen des Index",
+    "indexName": "Indexname",
+    "indexNamePlaceholder": "z.B. Meine Dokumente",
+    "indexSlug": "Index-Slug",
+    "indexSlugPlaceholder": "z.B. meine-dokumente",
+    "dropZoneLabel": "Datei-Upload-Bereich",
+    "dropZoneText": "Dateien hier ablegen oder zum Hochladen klicken",
+    "dropZoneFormats": "Unterstützt: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
+    "dropZoneLimits": "Bis zu 100MB pro Datei, 1GB gesamt (Free Tier)",
+    "fileTypeNotSupported": "Dateityp wird nicht unterstützt",
+    "fileTooLarge": "Datei ist zu groß (max. 100MB)",
+    "totalTooLarge": "Gesamtgröße überschreitet das Limit (max. 1GB)",
+    "urlPlaceholder": "URL zum Indizieren einfügen...",
+    "addUrl": "URL hinzufügen",
+    "urlInvalid": "Ungültiges URL-Format",
+    "urlInvalidProtocol": "Nur HTTP- und HTTPS-URLs werden unterstützt",
+    "selectedItems": "Ausgewählte Elemente",
+    "uploading": "Wird hochgeladen...",
+    "uploaded": "Hochgeladen",
+    "fetching": "Wird abgerufen...",
+    "added": "Hinzugefügt",
+    "uploadProgress": "Upload-Fortschritt",
+    "estimatedTime": "Geschätzte Zeit: wenige Sekunden",
+    "completed": "Abgeschlossen",
+    "failed": "Fehlgeschlagen"
+  },
+  "__test": {}
 }

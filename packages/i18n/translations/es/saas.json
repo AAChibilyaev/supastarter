@@ -2179,7 +2179,7 @@
 			"reward": "Gana el 20% de su primer mes",
 			"rewardDescription": "Cuando alguien que recomendaste se actualice a un plan de pago, recibirás el 20% de su primer mes acreditado en tu cuenta",
 			"fraudNote": "Máx. 5 referidos por dominio de IP/correo para prevenir abusos",
-			"cta": "¡Invita amigos → gana créditos de búsqueda!",
+			"cta": "¡Invita amigos y gana créditos de búsqueda!",
 			"dashboardBanner": "¿Amas AACsearch? ¡Comparte el amor! Recomienda a un amigo y gana el 20% de su primer mes."
 		},
 		"inviteEmail": {
@@ -2189,7 +2189,7 @@
 			"valueProp": "Búsqueda como servicio instantánea — calidad Algolia a una fracción del costo.",
 			"giftNote": "Comienza gratis, sin tarjeta de crédito.",
 			"cta": "Comienza con la recomendación de {name}",
-			"signoff": "¡Feliz búsqueda!\nEl equipo de AACsearch",
+			"signoff": "¡Feliz búsqueda!\nEl equipo de AACsearch"
 		},
 		"confirmationEmail": {
 			"subject": "¡Ganaste créditos de búsqueda!",

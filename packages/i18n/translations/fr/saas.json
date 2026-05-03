@@ -2233,5 +2233,55 @@
 				"socialProof": "Reconnu par plus de 100 entreprises dans le monde"
 			}
 		}
+	},
+	"referral": {
+		"program": {
+			"title": "Programme de Parrainage",
+			"description": "Invitez vos amis et gagnez des crédits de recherche lorsqu’ils passent à une offre payante",
+			"shareLink": "Partagez votre lien de parrainage",
+			"yourLink": "Votre lien de parrainage",
+			"copyLink": "Copier le lien",
+			"linkCopied": "Lien copié !",
+			"shareEmail": "Partager par e-mail",
+			"shareTwitter": "Partager sur X",
+			"stats": {
+				"clicks": "Clics",
+				"signups": "Inscriptions",
+				"conversions": "Conversions",
+				"earnings": "Gains",
+				"empty": "Partagez votre lien pour commencer à gagner des crédits"
+			},
+			"reward": "Gagnez 20 % de leur premier mois",
+			"rewardDescription": "Lorsqu’une personne que vous avez parrainée passe à un forfait payant, vous recevez 20 % de son premier mois crédité sur votre compte",
+			"fraudNote": "Max 5 parrainages par domaine IP/e-mail pour éviter les abus",
+			"cta": "Invitez des amis et gagnez des crédits de recherche !",
+			"dashboardBanner": "Vous aimez AACsearch ? Partagez l’amour ! Parrainez un ami et gagnez 20 % de son premier mois."
+		},
+		"inviteEmail": {
+			"subject": "{name} pense que vous allez adorer AACsearch !",
+			"greeting": "Bonjour,",
+			"intro": "{name} utilise AACsearch et pense que vous aussi vous allez adorer !",
+			"valueProp": "Search-as-a-Service instantané — qualité Algolia à une fraction du coût.",
+			"giftNote": "Commencez gratuitement, sans carte de crédit.",
+			"cta": "Commencez avec le parrainage de {name}",
+			"signoff": "Bonne recherche !\nL’équipe AACsearch"
+		},
+		"confirmationEmail": {
+			"subject": "Vous avez gagné des crédits de recherche !",
+			"body": "Quelqu’un que vous avez parrainé vient de s’inscrire sur AACsearch. Dès qu’il effectuera son premier paiement, vous recevrez 20 % crédités sur votre compte.",
+			"cta": "Voir votre tableau de bord de parrainage"
+		},
+		"landing": {
+			"title": "Vous êtes invité sur AACsearch",
+			"subtitle": "{name} utilise AACsearch et pense que vous allez adorer !",
+			"tagline": "Une recherche qui fonctionne simplement — pas de serveurs, pas de DevOps.",
+			"features": {
+				"instant": "Configuration instantanée de la recherche en 5 minutes",
+				"pricing": "Qualité Algolia, 5x moins cher",
+				"trial": "Essai gratuit de 14 jours, sans carte de crédit"
+			},
+			"cta": "Commencez gratuitement",
+			"socialProof": "Approuvé par plus de 100 entreprises dans le monde"
+		}
 	}
 }

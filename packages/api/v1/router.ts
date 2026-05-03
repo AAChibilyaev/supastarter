@@ -53,6 +53,7 @@ import { keysApp } from "./keys";
 import { generateOpenApiSpec } from "./openapi";
 import { projectsApp } from "./projects";
 import { searchApp } from "./search";
+import { spellCheckApp } from "./spell-check";
 import { synonymsApp } from "./synonyms";
 
 const v1Router = new Hono()
@@ -60,6 +61,7 @@ const v1Router = new Hono()
 	.route("/", indexesApp)
 	.route("/", documentsApp)
 	.route("/", searchApp)
+	.route("/", spellCheckApp)
 	.route("/", keysApp)
 	.route("/", analyticsApp)
 	.route("/", synonymsApp);

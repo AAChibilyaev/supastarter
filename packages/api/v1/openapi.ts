@@ -99,9 +99,7 @@ export function generateOpenApiSpec() {
 					summary: "Get project by ID",
 					tags: ["Projects"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "id", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
 					responses: {
 						"200": { description: "Project details" },
 						"401": { $ref: "#/components/responses/Unauthorized" },
@@ -185,9 +183,7 @@ export function generateOpenApiSpec() {
 					summary: "Get search index by ID",
 					tags: ["Indexes"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					responses: {
 						"200": {
 							description: "Index details",
@@ -208,9 +204,7 @@ export function generateOpenApiSpec() {
 						"Updates mutable index fields (displayName, enabled). At least one field must be provided.",
 					tags: ["Indexes"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					requestBody: {
 						required: true,
 						content: {
@@ -248,9 +242,7 @@ export function generateOpenApiSpec() {
 						"This is irreversible — all indexed documents will be lost.",
 					tags: ["Indexes"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					responses: {
 						"200": {
 							description: "Index deleted",
@@ -282,9 +274,7 @@ export function generateOpenApiSpec() {
 						"ingest queue state, and active API key count for the specified index.",
 					tags: ["Indexes"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					responses: {
 						"200": {
 							description: "Index statistics",
@@ -354,8 +344,7 @@ export function generateOpenApiSpec() {
 										properties: {
 											hits: {
 												type: "array",
-												description:
-													"Matched documents (Typesense hit objects)",
+												description: "Matched documents (Typesense hit objects)",
 											},
 											found: {
 												type: "integer",
@@ -396,8 +385,7 @@ export function generateOpenApiSpec() {
 							"application/json": {
 								schema: {
 									type: "object",
-									description:
-										"Document fields. The id from the path is merged into the body.",
+									description: "Document fields. The id from the path is merged into the body.",
 									additionalProperties: true,
 								},
 							},
@@ -463,9 +451,7 @@ export function generateOpenApiSpec() {
 					summary: "Batch upsert documents",
 					tags: ["Documents"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					requestBody: {
 						required: true,
 						content: {
@@ -517,9 +503,7 @@ export function generateOpenApiSpec() {
 						"Documents are removed asynchronously via the ingest worker.",
 					tags: ["Documents"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					requestBody: {
 						required: true,
 						content: {
@@ -550,13 +534,11 @@ export function generateOpenApiSpec() {
 										properties: {
 											queued: {
 												type: "integer",
-												description:
-													"Number of rows inserted into the ingest queue",
+												description: "Number of rows inserted into the ingest queue",
 											},
 											accepted: {
 												type: "integer",
-												description:
-													"Number of IDs received in the request",
+												description: "Number of IDs received in the request",
 											},
 										},
 									},
@@ -576,8 +558,7 @@ export function generateOpenApiSpec() {
 			"/indexes/{indexId}/documents/export": {
 				get: {
 					summary: "Export documents",
-					description:
-						"Exports all or filtered documents from an index as JSONL or JSON.",
+					description: "Exports all or filtered documents from an index as JSONL or JSON.",
 					tags: ["Documents"],
 					security: [{ BearerAuth: [] }],
 					parameters: [
@@ -594,8 +575,7 @@ export function generateOpenApiSpec() {
 							in: "query",
 							required: false,
 							schema: { type: "string", enum: ["json", "jsonl"], default: "jsonl" },
-							description:
-								"Export format. jsonl=NDJSON stream (default), json=parsed array.",
+							description: "Export format. jsonl=NDJSON stream (default), json=parsed array.",
 						},
 					],
 					responses: {
@@ -621,9 +601,7 @@ export function generateOpenApiSpec() {
 						"Returns the number of deleted documents.",
 					tags: ["Documents"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					requestBody: {
 						required: true,
 						content: {
@@ -678,9 +656,7 @@ export function generateOpenApiSpec() {
 					summary: "Search a single index",
 					tags: ["Search"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "indexId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "indexId", in: "path", required: true, schema: { type: "string" } }],
 					requestBody: {
 						required: true,
 						content: {
@@ -707,27 +683,20 @@ export function generateOpenApiSpec() {
 										typoTokensThreshold: {
 											type: "integer",
 											minimum: 0,
-											description:
-												"Minimum token weight for typo correction to apply.",
+											description: "Minimum token weight for typo correction to apply.",
 										},
 										dropTokensThreshold: {
 											type: "integer",
 											minimum: 0,
-											description:
-												"Tokens below this weight are dropped from the query.",
+											description: "Tokens below this weight are dropped from the query.",
 										},
 										exact: {
-											oneOf: [
-												{ type: "boolean" },
-												{ type: "string", enum: ["true", "false"] },
-											],
-											description:
-												"Exact search mode — strict match without typo tolerance.",
+											oneOf: [{ type: "boolean" }, { type: "string", enum: ["true", "false"] }],
+											description: "Exact search mode — strict match without typo tolerance.",
 										},
 										prioritizeExactMatch: {
 											type: "boolean",
-											description:
-												"Boost exact matches above typo-corrected results.",
+											description: "Boost exact matches above typo-corrected results.",
 										},
 										// ── Prefix & Infix ──
 										prefix: {
@@ -746,8 +715,7 @@ export function generateOpenApiSpec() {
 										},
 										queryByWeights: {
 											type: "string",
-											description:
-												"Comma-separated field weights. E.g. 'title:4,description:1'",
+											description: "Comma-separated field weights. E.g. 'title:4,description:1'",
 										},
 										// ── Geo Search ──
 										polygonFilter: {
@@ -757,8 +725,7 @@ export function generateOpenApiSpec() {
 											properties: {
 												field: {
 													type: "string",
-													description:
-														"Geolocation field name (default: _geoloc)",
+													description: "Geolocation field name (default: _geoloc)",
 												},
 												polygon: {
 													type: "array",
@@ -781,8 +748,7 @@ export function generateOpenApiSpec() {
 											properties: {
 												field: {
 													type: "string",
-													description:
-														"Geolocation field name (default: _geoloc)",
+													description: "Geolocation field name (default: _geoloc)",
 												},
 												bounding_box: {
 													type: "array",
@@ -803,8 +769,7 @@ export function generateOpenApiSpec() {
 										// ── Search Params Extensions ──
 										excludeFields: {
 											type: "string",
-											description:
-												"Comma-separated field names to exclude from results.",
+											description: "Comma-separated field names to exclude from results.",
 										},
 										highlightStartTag: {
 											type: "string",
@@ -816,27 +781,23 @@ export function generateOpenApiSpec() {
 										},
 										overrideTags: {
 											type: "string",
-											description:
-												"Tags for curation/override results, comma-separated.",
+											description: "Tags for curation/override results, comma-separated.",
 										},
 										hybridConfidence: {
 											type: "number",
 											minimum: 0,
 											maximum: 1,
-											description:
-												"Confidence threshold for hybrid search (0-1).",
+											description: "Confidence threshold for hybrid search (0-1).",
 										},
 										// ── Faceted Search extensions ──
 										facetQuery: {
 											type: "string",
-											description:
-												"Search within facet values. E.g. 'color:=red || color:=blue'",
+											description: "Search within facet values. E.g. 'color:=red || color:=blue'",
 										},
 										maxFacetValues: {
 											type: "integer",
 											minimum: 1,
-											description:
-												"Maximum number of facet values to return per facet.",
+											description: "Maximum number of facet values to return per facet.",
 										},
 									},
 								},
@@ -910,20 +871,17 @@ export function generateOpenApiSpec() {
 														type: "integer",
 														minimum: 0,
 														maximum: 3,
-														description:
-															"Number of typographical errors allowed (0-3).",
+														description: "Number of typographical errors allowed (0-3).",
 													},
 													typoTokensThreshold: {
 														type: "integer",
 														minimum: 0,
-														description:
-															"Minimum token weight for typo correction.",
+														description: "Minimum token weight for typo correction.",
 													},
 													dropTokensThreshold: {
 														type: "integer",
 														minimum: 0,
-														description:
-															"Tokens below this weight are dropped.",
+														description: "Tokens below this weight are dropped.",
 													},
 													exact: {
 														oneOf: [
@@ -933,13 +891,11 @@ export function generateOpenApiSpec() {
 																enum: ["true", "false"],
 															},
 														],
-														description:
-															"Exact search mode without typo tolerance.",
+														description: "Exact search mode without typo tolerance.",
 													},
 													prioritizeExactMatch: {
 														type: "boolean",
-														description:
-															"Boost exact matches above typo-corrected results.",
+														description: "Boost exact matches above typo-corrected results.",
 													},
 													// ── Prefix & Infix ──
 													prefix: {
@@ -950,19 +906,16 @@ export function generateOpenApiSpec() {
 																enum: ["true", "false", "auto"],
 															},
 														],
-														description:
-															"Enable prefix search. 'auto' disables on long queries.",
+														description: "Enable prefix search. 'auto' disables on long queries.",
 													},
 													infix: {
 														type: "string",
 														enum: ["off", "always", "fallback"],
-														description:
-															"Enable infix (substring) search.",
+														description: "Enable infix (substring) search.",
 													},
 													queryByWeights: {
 														type: "string",
-														description:
-															"Comma-separated field weights.",
+														description: "Comma-separated field weights.",
 													},
 													// ── Geo Search ──
 													polygonFilter: {
@@ -971,8 +924,7 @@ export function generateOpenApiSpec() {
 														properties: {
 															field: {
 																type: "string",
-																description:
-																	"Geolocation field (default: _geoloc)",
+																description: "Geolocation field (default: _geoloc)",
 															},
 															polygon: {
 																type: "array",
@@ -990,13 +942,11 @@ export function generateOpenApiSpec() {
 													},
 													boundingBoxFilter: {
 														type: "object",
-														description:
-															"Search within a bounding box.",
+														description: "Search within a bounding box.",
 														properties: {
 															field: {
 																type: "string",
-																description:
-																	"Geolocation field (default: _geoloc)",
+																description: "Geolocation field (default: _geoloc)",
 															},
 															bounding_box: {
 																type: "array",
@@ -1017,8 +967,7 @@ export function generateOpenApiSpec() {
 													// ── Search Extensions ──
 													excludeFields: {
 														type: "string",
-														description:
-															"Fields to exclude from results.",
+														description: "Fields to exclude from results.",
 													},
 													highlightStartTag: {
 														type: "string",
@@ -1030,15 +979,13 @@ export function generateOpenApiSpec() {
 													},
 													overrideTags: {
 														type: "string",
-														description:
-															"Override/curation tags, comma-separated.",
+														description: "Override/curation tags, comma-separated.",
 													},
 													hybridConfidence: {
 														type: "number",
 														minimum: 0,
 														maximum: 1,
-														description:
-															"Hybrid search confidence threshold (0-1).",
+														description: "Hybrid search confidence threshold (0-1).",
 													},
 													// ── Facet Extensions ──
 													facetQuery: {
@@ -1048,8 +995,7 @@ export function generateOpenApiSpec() {
 													maxFacetValues: {
 														type: "integer",
 														minimum: 1,
-														description:
-															"Maximum facet values per facet.",
+														description: "Maximum facet values per facet.",
 													},
 												},
 											},
@@ -1192,8 +1138,7 @@ export function generateOpenApiSpec() {
 											createdAt: { type: "string", format: "date-time" },
 											rawKey: {
 												type: "string",
-												description:
-													"The full API key. Only returned once.",
+												description: "The full API key. Only returned once.",
 											},
 										},
 									},
@@ -1212,9 +1157,7 @@ export function generateOpenApiSpec() {
 					summary: "Revoke API key",
 					tags: ["API Keys"],
 					security: [{ BearerAuth: [] }],
-					parameters: [
-						{ name: "keyId", in: "path", required: true, schema: { type: "string" } },
-					],
+					parameters: [{ name: "keyId", in: "path", required: true, schema: { type: "string" } }],
 					responses: {
 						"200": {
 							description: "Key revoked",
@@ -1489,8 +1432,7 @@ export function generateOpenApiSpec() {
 				},
 				put: {
 					summary: "Upsert curations (bulk replace)",
-					description:
-						"Replaces all curation rules for the index. Missing rules are deleted.",
+					description: "Replaces all curation rules for the index. Missing rules are deleted.",
 					tags: ["Curations"],
 					security: [{ BearerAuth: [] }],
 					parameters: [
@@ -1937,9 +1879,143 @@ export function generateOpenApiSpec() {
 					},
 				},
 			},
+			"/projects/{projectId}/spell-check": {
+				post: {
+					summary: "Spell check a search query",
+					description:
+						"Applies AACsearch's NLP pipeline: language detection, keyboard layout fix (RU↔EN), " +
+						"transliteration detection, diacritics normalization, Yo/ё normalization, " +
+						"SymSpell fast dictionary correction. Returns suggestions ranked by similarity + frequency. " +
+						"Optionally builds dictionary from the specified index's documents for better results.",
+					tags: ["Search"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "projectId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Project (organization) ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["text"],
+									properties: {
+										text: {
+											type: "string",
+											minLength: 1,
+											maxLength: 1000,
+											description: "The search query text to check",
+										},
+										language: {
+											type: "string",
+											enum: ["ru", "en", "de", "es", "fr"],
+											description: "Optional language hint (auto-detected if omitted)",
+										},
+										mode: {
+											type: "string",
+											enum: ["auto", "suggest"],
+											default: "auto",
+											description: "auto = auto-correct, suggest = return suggestions only",
+										},
+										maxSuggestions: {
+											type: "integer",
+											minimum: 1,
+											maximum: 20,
+											default: 5,
+											description: "Maximum suggestions per word",
+										},
+										indexSlug: {
+											type: "string",
+											maxLength: 64,
+											description:
+												"Optional index slug — builds dictionary from that index's documents",
+										},
+										useContextCorrection: {
+											type: "boolean",
+											default: false,
+											description: "Use context-aware correction with surrounding words",
+										},
+										whitelist: {
+											type: "array",
+											items: { type: "string" },
+											maxItems: 100,
+											description: "Words to never correct (brand names, SKUs, etc.)",
+										},
+										splitCompounds: {
+											type: "boolean",
+											default: false,
+											description: "Try compound word splitting (German, Finnish)",
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Spell check result",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											original: { type: "string" },
+											corrected: { type: "string" },
+											didYouMean: { type: "string" },
+											suggestions: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														word: { type: "string" },
+														corrected: { type: "string" },
+														options: {
+															type: "array",
+															items: {
+																type: "object",
+																properties: {
+																	text: { type: "string" },
+																	score: { type: "number" },
+																	algorithm: { type: "string" },
+																},
+															},
+														},
+													},
+												},
+											},
+											appliedFixes: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														type: { type: "string" },
+														description: { type: "string" },
+														original: { type: "string" },
+														result: { type: "string" },
+													},
+												},
+											},
+											detectedLanguage: { type: "string" },
+											mode: { type: "string", enum: ["auto", "suggest"] },
+											dictionarySize: { type: "integer" },
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+					},
+				},
+			},
 		},
-
-		// ─── Components ──────────────────────────────────────────────
 		components: {
 			securitySchemes: {
 				BearerAuth: {
@@ -1947,8 +2023,8 @@ export function generateOpenApiSpec() {
 					scheme: "bearer",
 					bearerFormat: "API key",
 					description:
-						"API key generated via the dashboard or the v1 API. " +
-						"Supported prefixes: aa_admin_*, aa_write_*, aa_search_*, aa_scoped_*.",
+						"Search API key (`ss_search_*`) from the dashboard or keys API. " +
+						"Scopes (search, ingest, admin) are stored on the key; each route requires the matching scope.",
 				},
 			},
 			schemas: {

@@ -8,7 +8,7 @@
  * All payloads are validated with Zod.
  */
 
-import { createHash, createHmac } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 
 import { db, enqueueManySearchIngest, recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
@@ -151,6 +151,67 @@ function normalizeProduct(p: z.infer<typeof syncProductSchema>) {
 		created_at: p.created_at ?? Math.floor(Date.now() / 1000),
 		updated_at: p.updated_at ?? Math.floor(Date.now() / 1000),
 	};
+}
+
+// ─── Webhook Helpers ────────────────────────────────────────────
+
+interface WebhookSecretConfig {
+	secret: string;
+	enabled: boolean;
+}
+
+/**
+ * Read the webhook signing secret from the SearchIndex schema JSON.
+ * Stored under the `_webhookConfig` key.
+ */
+function getWebhookSecretFromSchema(index: {
+	schema: Prisma.JsonValue;
+}): WebhookSecretConfig | null {
+	const rawSchema =
+		typeof index.schema === "object" && index.schema !== null
+			? (index.schema as Record<string, unknown>)
+			: {};
+	const webhookConfig = rawSchema._webhookConfig as
+		| { secret?: string; enabled?: boolean }
+		| undefined;
+	if (!webhookConfig?.secret) return null;
+	return {
+		secret: webhookConfig.secret,
+		enabled: webhookConfig.enabled !== false,
+	};
+}
+
+/**
+ * Verify an HMAC-SHA256 webhook signature.
+ * Expected header: X-Webhook-Signature: sha256=<hex>
+ * Uses constant-time comparison to prevent timing attacks.
+ */
+function verifyWebhookSignature(
+	body: string,
+	signatureHeader: string | undefined,
+	secret: string,
+): boolean {
+	if (!signatureHeader) return false;
+
+	// Parse: "sha256=<hex>" or just bare hex
+	const prefix = "sha256=";
+	let expectedSig: string;
+	if (signatureHeader.startsWith(prefix)) {
+		expectedSig = signatureHeader.slice(prefix.length);
+	} else {
+		expectedSig = signatureHeader;
+	}
+
+	const computed = createHmac("sha256", secret).update(body).digest("hex");
+
+	try {
+		const expectedBuf = Buffer.from(expectedSig, "hex");
+		const computedBuf = Buffer.from(computed, "hex");
+		if (expectedBuf.length !== computedBuf.length) return false;
+		return timingSafeEqual(expectedBuf, computedBuf);
+	} catch {
+		return false;
+	}
 }
 
 // ─── Routes ─────────────────────────────────────────────────────
@@ -417,6 +478,7 @@ export const connectorApp = new Hono()
 
 	// POST /api/webhooks/sync/:indexSlug — generic webhook for any service
 	.post("/webhooks/sync/:indexSlug", async (c) => {
+		const startTime = Date.now();
 		try {
 			const verified = await gateConnectorRequest(c);
 			if (verified instanceof Response) return verified;
@@ -427,8 +489,40 @@ export const connectorApp = new Hono()
 				return c.json({ error: "slug_mismatch" }, 403);
 			}
 
-			const body = await c.req.json().catch(() => null);
-			if (!body) return c.json({ error: "invalid_json" }, 400);
+			// Read raw body for HMAC verification, then parse JSON
+			const rawBody = await c.req.text().catch(() => null);
+			if (!rawBody) return c.json({ error: "empty_body" }, 400);
+
+			// HMAC-SHA256 signature verification (if webhook secret is configured)
+			const index = await db.searchIndex.findUnique({
+				where: { id: verified.indexId },
+				select: { schema: true },
+			});
+			const webhookSecret = index ? getWebhookSecretFromSchema(index) : null;
+			const signatureHeader = c.req.header("X-Webhook-Signature");
+
+			if (webhookSecret && webhookSecret.enabled) {
+				if (!verifyWebhookSignature(rawBody, signatureHeader, webhookSecret.secret)) {
+					logger.warn("Webhook signature verification failed", {
+						indexSlug: verified.indexSlug,
+						organizationId: verified.organizationId,
+					});
+					return c.json({ error: "invalid_signature" }, 401);
+				}
+			} else if (signatureHeader) {
+				// Signature provided but no secret configured — warn but accept
+				logger.warn("Webhook signature header present but no secret configured", {
+					indexSlug: verified.indexSlug,
+					organizationId: verified.organizationId,
+				});
+			}
+
+			let body: unknown;
+			try {
+				body = JSON.parse(rawBody);
+			} catch {
+				return c.json({ error: "invalid_json" }, 400);
+			}
 
 			const parsed = z
 				.object({
@@ -462,6 +556,7 @@ export const connectorApp = new Hono()
 				externalIdsCount: externalIds.length,
 				indexSlug: verified.indexSlug,
 				organizationId: verified.organizationId,
+				signatureVerified: webhookSecret?.enabled ? true : false,
 			});
 
 			try {
@@ -481,20 +576,30 @@ export const connectorApp = new Hono()
 					);
 				}
 
+				const durationMs = Date.now() - startTime;
+				const itemsProcessed = action === "upsert" ? documents.length : externalIds.length;
+
+				// Record delivery log for connector dashboard
 				void recordSearchUsage({
 					indexId: verified.indexId,
 					organizationId: verified.organizationId,
-					type: "sync_job" as const,
-					count: action === "upsert" ? documents.length : externalIds.length,
-					metadata: { source: "webhook", action, indexSlug: verified.indexSlug },
-				}).catch((err: Error) =>
-					logger.warn("webhook usage record failed", { err }),
-				);
+					type: "webhook_delivery" as const,
+					count: 1,
+					metadata: {
+						source: "webhook",
+						action,
+						itemsProcessed,
+						indexSlug: verified.indexSlug,
+						durationMs,
+						signatureVerified: webhookSecret?.enabled ? true : false,
+						userAgent: c.req.header("user-agent") ?? null,
+					},
+				}).catch((err: Error) => logger.warn("webhook delivery log failed", { err }));
 
 				return c.json({
 					status: "accepted",
 					action,
-					itemsProcessed: action === "upsert" ? documents.length : externalIds.length,
+					itemsProcessed,
 				});
 			} catch (error) {
 				logger.error("Webhook sync enqueue failed", {

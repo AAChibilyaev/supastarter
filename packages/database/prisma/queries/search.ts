@@ -35,6 +35,7 @@ export const SEARCH_USAGE_EVENT_TYPES = {
 	widgetQuery: "widget_query",
 	filterApplied: "filter_applied",
 	syncJob: "sync_job",
+	webhookDelivery: "webhook_delivery",
 } as const;
 
 export type SearchUsageMetricType =

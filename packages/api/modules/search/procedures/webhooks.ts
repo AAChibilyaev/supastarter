@@ -1,9 +1,10 @@
 import { ORPCError } from "@orpc/client";
-import { db } from "@repo/database";
+import { db, type Prisma } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationAdmin } from "../lib/access";
+import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
+import { searchIndexSlugSchema } from "../types";
 
 export const WEBHOOK_EVENTS = [
 	"index.created",
@@ -178,4 +179,142 @@ export const deleteWebhook = protectedProcedure
 		});
 
 		return { success: true };
+	});
+
+// ─── Incoming Webhook Receiver Config ────────────────────────────
+// These manage the webhook signing secret used by the generic webhook
+// receiver endpoint (POST /api/webhooks/sync/:indexSlug).
+// The secret is stored in SearchIndex.schema._webhookConfig.
+
+const webhookReceiverConfigSchema = z.object({
+	secret: z.string().min(16).max(256).describe("HMAC-SHA256 signing secret"),
+	enabled: z.boolean().default(true),
+});
+
+export const getWebhookReceiverConfig = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/search/indexes/{slug}/webhook-receiver-config",
+		tags: ["Search"],
+		summary: "Get webhook receiver config",
+		description:
+			"Returns the webhook signing configuration for a search index. The secret is masked for security.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			slug: searchIndexSlugSchema,
+		}),
+	)
+	.output(
+		z.object({
+			hasSecret: z.boolean(),
+			enabled: z.boolean(),
+			secretPreview: z.string(),
+		}),
+	)
+	.handler(async ({ input }) => {
+		const index = await db.searchIndex.findFirst({
+			where: { slug: input.slug, organizationId: input.organizationId },
+			select: { schema: true },
+		});
+		if (!index) throw new ORPCError("NOT_FOUND", { message: "Index not found" });
+
+		const rawSchema =
+			typeof index.schema === "object" && index.schema !== null
+				? (index.schema as Record<string, unknown>)
+				: {};
+		const webhookConfig = rawSchema._webhookConfig as
+			| { secret?: string; enabled?: boolean }
+			| undefined;
+
+		if (!webhookConfig?.secret) {
+			return { hasSecret: false, enabled: false, secretPreview: "" };
+		}
+
+		const preview =
+			webhookConfig.secret.length > 8 ? webhookConfig.secret.slice(0, 4) + "****" : "****";
+
+		return {
+			hasSecret: true,
+			enabled: webhookConfig.enabled !== false,
+			secretPreview: preview,
+		};
+	});
+
+export const saveWebhookReceiverConfig = protectedProcedure
+	.route({
+		method: "PUT",
+		path: "/search/indexes/{slug}/webhook-receiver-config",
+		tags: ["Search"],
+		summary: "Save webhook receiver config",
+		description:
+			"Sets the webhook signing secret for a search index. The secret is used to verify HMAC-SHA256 signatures on incoming webhook payloads.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			slug: searchIndexSlugSchema,
+			config: webhookReceiverConfigSchema,
+		}),
+	)
+	.output(z.object({ ok: z.boolean() }))
+	.handler(async ({ input, context: { user } }) => {
+		await requireOrganizationAdmin(input.organizationId, user);
+		const index = await requireSearchIndex(input.organizationId, input.slug);
+
+		const rawSchema =
+			typeof index.schema === "object" && index.schema !== null
+				? (index.schema as Record<string, unknown>)
+				: {};
+
+		await db.searchIndex.update({
+			where: { id: index.id },
+			data: {
+				schema: {
+					...rawSchema,
+					_webhookConfig: {
+						secret: input.config.secret,
+						enabled: input.config.enabled,
+					},
+				} as Prisma.InputJsonValue,
+			},
+		});
+
+		return { ok: true };
+	});
+
+export const deleteWebhookReceiverConfig = protectedProcedure
+	.route({
+		method: "DELETE",
+		path: "/search/indexes/{slug}/webhook-receiver-config",
+		tags: ["Search"],
+		summary: "Delete webhook receiver config",
+		description:
+			"Removes the webhook signing secret for a search index, disabling signature verification.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			slug: searchIndexSlugSchema,
+		}),
+	)
+	.output(z.object({ ok: z.boolean() }))
+	.handler(async ({ input, context: { user } }) => {
+		await requireOrganizationAdmin(input.organizationId, user);
+		const index = await requireSearchIndex(input.organizationId, input.slug);
+
+		const rawSchema =
+			typeof index.schema === "object" && index.schema !== null
+				? (index.schema as Record<string, unknown>)
+				: {};
+
+		const { _webhookConfig: _, ...rest } = rawSchema;
+
+		await db.searchIndex.update({
+			where: { id: index.id },
+			data: { schema: rest as Prisma.InputJsonValue },
+		});
+
+		return { ok: true };
 	});

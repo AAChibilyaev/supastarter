@@ -7,7 +7,12 @@ import {
 } from "./procedures/analytics-rules";
 import { bulkDeleteDocuments } from "./procedures/bulk-delete-documents";
 import { cloneIndex } from "./procedures/clone-index";
-import { performClusterOperation, clusterMetrics, configureSlowRequestLogging, clearClusterCache } from "./procedures/cluster-ops";
+import {
+	performClusterOperation,
+	clusterMetrics,
+	configureSlowRequestLogging,
+	clearClusterCache,
+} from "./procedures/cluster-ops";
 import {
 	createConversationModel,
 	listConversationModels,
@@ -83,7 +88,14 @@ import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
 import { voiceSearch } from "./procedures/voice-search";
-import { createWebhook, deleteWebhook, listWebhooks } from "./procedures/webhooks";
+import {
+	createWebhook,
+	deleteWebhook,
+	listWebhooks,
+	deleteWebhookReceiverConfig,
+	getWebhookReceiverConfig,
+	saveWebhookReceiverConfig,
+} from "./procedures/webhooks";
 import { getWidgetConfig, saveWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {
@@ -220,6 +232,11 @@ export const searchRouter = {
 		list: listWebhooks,
 		create: createWebhook,
 		delete: deleteWebhook,
+	},
+	webhookReceiverConfig: {
+		get: getWebhookReceiverConfig,
+		save: saveWebhookReceiverConfig,
+		delete: deleteWebhookReceiverConfig,
 	},
 	alertRules: {
 		get: getAlertRules,

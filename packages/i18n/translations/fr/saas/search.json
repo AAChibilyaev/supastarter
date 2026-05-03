@@ -1086,7 +1086,22 @@
 			"deleteByFilterTitle": "Supprimer des documents par filtre",
 			"deleteByFilterMessage": "Êtes-vous sûr de vouloir supprimer tous les documents correspondant à \"{filterBy}\" ? Cette action est irréversible.",
 			"deleteByFilterSuccess": "{count} document(s) supprimé(s)",
-			"columnId": "ID"
+			"columnId": "ID",
+			"addRow": "Ajouter une ligne",
+			"duplicateRow": "Dupliquer la ligne",
+			"bulkEdit": "Édition en masse",
+			"bulkEditTitle": "Édition en masse",
+			"bulkEditDescription": "Définir une valeur de champ pour {count} documents sélectionnés",
+			"bulkEditFieldLabel": "Champ",
+			"bulkEditFieldPlaceholder": "Sélectionner un champ...",
+			"bulkEditValueLabel": "Nouvelle valeur",
+			"bulkEditValuePlaceholder": "Entrez une nouvelle valeur",
+			"bulkEditApply": "Appliquer",
+			"bulkEditSuccess": "Documents mis à jour",
+			"bulkEditError": "Échec de la mise à jour des documents",
+			"bulkDeleteSuccess": "{count} documents supprimés",
+			"rowAdded": "Ligne ajoutée",
+			"createError": "Échec de la création du document"
 		},
 		"files": {
 			"name": "Nom",

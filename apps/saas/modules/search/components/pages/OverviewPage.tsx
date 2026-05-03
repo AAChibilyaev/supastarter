@@ -121,6 +121,7 @@ export function OverviewPage() {
 	const searchesLimit = planInfo?.usage.searches.limit ?? 0;
 	const isUnlimitedSearches = planInfo?.usage.searches.isUnlimited ?? false;
 	const searchesPercent = planInfo?.usage.searches.percentUsed ?? 0;
+	const softCapThreshold = planInfo?.softCapThreshold ?? 80;
 
 	const docsUsed = planInfo?.usage.documents.current ?? 0;
 	const docsLimit = planInfo?.usage.documents.limit ?? 0;
@@ -199,7 +200,11 @@ export function OverviewPage() {
 
 	// ── Quota color ─────────────────────────────────────────────────
 	const quotaColor =
-		quotaPercent >= 100 ? "destructive" : quotaPercent >= 80 ? "warning" : "success";
+		quotaPercent >= 100
+			? "destructive"
+			: quotaPercent >= softCapThreshold
+				? "warning"
+				: "success";
 
 	if (!orgId || !slug) {
 		return null;
@@ -240,7 +245,7 @@ export function OverviewPage() {
 			</div>
 
 			{/* Quota warning banner */}
-			{quotaPercent >= 80 && (
+			{quotaPercent >= softCapThreshold && (
 				<Card
 					className={`border-l-4 ${
 						quotaPercent >= 100 ? "border-l-destructive" : "border-l-foreground/20"

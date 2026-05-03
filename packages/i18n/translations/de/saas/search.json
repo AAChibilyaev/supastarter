@@ -1089,7 +1089,22 @@
 			"deleteByFilterTitle": "Dokumente nach Filter löschen",
 			"deleteByFilterMessage": "Sind Sie sicher, dass Sie alle Dokumente löschen möchten, die \"{filterBy}\" entsprechen? Diese Aktion kann nicht rückgängig gemacht werden.",
 			"deleteByFilterSuccess": "{count} Dokument(e) gelöscht",
-			"columnId": "ID"
+			"columnId": "ID",
+			"addRow": "Zeile hinzufügen",
+			"duplicateRow": "Zeile duplizieren",
+			"bulkEdit": "Massenbearbeitung",
+			"bulkEditTitle": "Massenbearbeitung",
+			"bulkEditDescription": "Feldwert für alle {count} ausgewählten Dokumente festlegen",
+			"bulkEditFieldLabel": "Feld",
+			"bulkEditFieldPlaceholder": "Feld auswählen...",
+			"bulkEditValueLabel": "Neuer Wert",
+			"bulkEditValuePlaceholder": "Neuen Wert eingeben",
+			"bulkEditApply": "Anwenden",
+			"bulkEditSuccess": "Dokumente aktualisiert",
+			"bulkEditError": "Fehler beim Aktualisieren der Dokumente",
+			"bulkDeleteSuccess": "{count} Dokumente gelöscht",
+			"rowAdded": "Zeile hinzugefügt",
+			"createError": "Fehler beim Erstellen des Dokuments"
 		},
 		"files": {
 			"name": "Name",

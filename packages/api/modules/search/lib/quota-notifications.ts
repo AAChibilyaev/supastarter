@@ -9,7 +9,7 @@
  * caller (the search response path).  Errors are caught and logged.
  */
 
-import { db, type Prisma } from "@repo/database";
+import { db, getAiWalletByEntity, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 
@@ -17,11 +17,53 @@ import { sendEmail } from "@repo/mail";
 // Constants
 // ---------------------------------------------------------------------------
 
-const SOFT_CAP_PCT = 80;
+const DEFAULT_SOFT_CAP_PCT = 80;
 const HARD_CAP_PCT = 100;
 
 const NOTIFICATION_TYPE_SOFT = "soft_cap_notified";
 const NOTIFICATION_TYPE_HARD = "hard_cap_notified";
+
+// ---------------------------------------------------------------------------
+// Configurable threshold — read from org.metadata.softCapThreshold
+// ---------------------------------------------------------------------------
+
+interface OrgMeta {
+	softCapThreshold?: number;
+}
+
+/**
+ * Parse org metadata JSON.
+ */
+function parseOrgMeta(raw: string | null): OrgMeta {
+	if (!raw) return {};
+	try {
+		const parsed = JSON.parse(raw);
+		if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+			return parsed as OrgMeta;
+		}
+		return {};
+	} catch {
+		return {};
+	}
+}
+
+/**
+ * Resolve the soft cap threshold percentage for an org.
+ * Defaults to 80 if not configured in org.metadata.
+ */
+async function resolveSoftCapThreshold(orgId: string): Promise<number> {
+	try {
+		const org = await db.organization.findUnique({
+			where: { id: orgId },
+			select: { metadata: true },
+		});
+		if (!org?.metadata) return DEFAULT_SOFT_CAP_PCT;
+		const meta = parseOrgMeta(org.metadata);
+		return meta.softCapThreshold ?? DEFAULT_SOFT_CAP_PCT;
+	} catch {
+		return DEFAULT_SOFT_CAP_PCT;
+	}
+}
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -38,10 +80,18 @@ export function triggerQuotaNotificationsAsync(
 	indexId: string,
 	percentUsed: number,
 	periodStart: Date,
+	softCapThreshold?: number,
 ): void {
 	void Promise.resolve().then(async () => {
 		try {
-			await triggerQuotaNotificationsImpl(orgId, indexId, percentUsed, periodStart);
+			const threshold = softCapThreshold ?? (await resolveSoftCapThreshold(orgId));
+			await triggerQuotaNotificationsImpl(
+				orgId,
+				indexId,
+				percentUsed,
+				periodStart,
+				threshold,
+			);
 		} catch (error) {
 			logger.error("quota-notifications: unhandled error", {
 				error,
@@ -60,17 +110,21 @@ async function triggerQuotaNotificationsImpl(
 	indexId: string,
 	percentUsed: number,
 	periodStart: Date,
+	softCapThreshold: number,
 ): Promise<void> {
-	// ── Soft cap (80%) ────────────────────────────────────────────────
-	if (percentUsed >= SOFT_CAP_PCT && percentUsed < HARD_CAP_PCT) {
+	// ── Soft cap (configurable, default 80%) ──────────────────────────
+	if (percentUsed >= softCapThreshold && percentUsed < HARD_CAP_PCT) {
 		const alreadySent = await wasNotifiedThisPeriod(orgId, NOTIFICATION_TYPE_SOFT, periodStart);
 		if (!alreadySent) {
 			logger.info("quota-notifications: sending soft cap warning", {
 				orgId,
 				percentUsed,
+				threshold: softCapThreshold,
 			});
-			await sendQuotaEmail(orgId, "soft");
+			await sendQuotaEmail(orgId, "soft", softCapThreshold);
 			await recordNotificationSent(indexId, orgId, NOTIFICATION_TYPE_SOFT);
+			// Log to AiWalletTransaction as soft_cap_warning (fire-and-forget)
+			void logSoftCapWarning(orgId, percentUsed, softCapThreshold, periodStart);
 			return;
 		}
 	}
@@ -87,6 +141,70 @@ async function triggerQuotaNotificationsImpl(
 			await recordNotificationSent(indexId, orgId, NOTIFICATION_TYPE_HARD);
 			return;
 		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// AiWalletTransaction logging
+// ---------------------------------------------------------------------------
+
+/**
+ * Create an AiWalletTransaction record for the soft cap warning event.
+ * Fire-and-forget — errors are caught and logged.
+ */
+async function logSoftCapWarning(
+	orgId: string,
+	percentUsed: number,
+	threshold: number,
+	periodStart: Date,
+): Promise<void> {
+	try {
+		const wallet = await getAiWalletByEntity({ organizationId: orgId });
+		if (!wallet) {
+			logger.debug("quota-notifications: no wallet for soft cap log", { orgId });
+			return;
+		}
+
+		// Idempotency key: one entry per org per billing period
+		const periodKey = periodStart.toISOString().slice(0, 7); // "YYYY-MM"
+		const idempotencyKey = `soft_cap_warning_${orgId}_${periodKey}`;
+
+		// Check if already logged this period (dedup)
+		const existing = await db.aiWalletTransaction.findUnique({
+			where: { idempotencyKey },
+			select: { id: true },
+		});
+		if (existing) return;
+
+		await db.aiWalletTransaction.create({
+			data: {
+				walletId: wallet.id,
+				organizationId: orgId,
+				type: "soft_cap_warning",
+				direction: "credit",
+				amountKopecks: BigInt(0),
+				currency: "RUB",
+				source: "system",
+				idempotencyKey,
+				metadata: {
+					percentUsed: Math.round(percentUsed),
+					threshold,
+					periodStart: periodStart.toISOString(),
+				} as Prisma.InputJsonValue,
+			},
+		});
+
+		logger.info("quota-notifications: soft cap warning logged to wallet", {
+			orgId,
+			walletId: wallet.id,
+			percentUsed: Math.round(percentUsed),
+			threshold,
+		});
+	} catch (error) {
+		logger.error("quota-notifications: failed to log soft cap warning", {
+			error,
+			orgId,
+		});
 	}
 }
 
@@ -134,7 +252,11 @@ async function recordNotificationSent(indexId: string, orgId: string, type: stri
 // Email sending
 // ---------------------------------------------------------------------------
 
-async function sendQuotaEmail(orgId: string, threshold: "soft" | "hard"): Promise<void> {
+async function sendQuotaEmail(
+	orgId: string,
+	threshold: "soft" | "hard",
+	softCapPct?: number,
+): Promise<void> {
 	// Get org + plan info
 	const org = await db.organization.findUnique({
 		where: { id: orgId },
@@ -179,7 +301,7 @@ async function sendQuotaEmail(orgId: string, threshold: "soft" | "hard"): Promis
 				context: {
 					orgName: org.name,
 					planName,
-					percentUsed: SOFT_CAP_PCT,
+					percentUsed: softCapPct ?? DEFAULT_SOFT_CAP_PCT,
 					remaining: 0,
 					billingUrl,
 				},

@@ -24,10 +24,7 @@ program
 	.version(pkg.version)
 	.hook("preAction", async (_thisCommand, actionCommand) => {
 		// Skip auth check for login, init, and keys create (keys create needs interactive prompts)
-		if (
-			actionCommand.name() === "login" ||
-			actionCommand.name() === "init"
-		) {
+		if (actionCommand.name() === "login" || actionCommand.name() === "init") {
 			return;
 		}
 		const config = loadConfig();

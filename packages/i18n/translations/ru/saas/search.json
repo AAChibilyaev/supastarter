@@ -974,7 +974,22 @@
 			"deleteByFilterTitle": "Удалить документы по фильтру",
 			"deleteByFilterMessage": "Вы уверены, что хотите удалить все документы, соответствующие \"{filterBy}\"? Это действие нельзя отменить.",
 			"deleteByFilterSuccess": "{count} документ(ов) удалено",
-			"columnId": "ID"
+			"columnId": "ID",
+			"addRow": "Добавить строку",
+			"duplicateRow": "Дублировать строку",
+			"bulkEdit": "Массовое редактирование",
+			"bulkEditTitle": "Массовое редактирование",
+			"bulkEditDescription": "Установить значение поля для всех {count} выбранных документов",
+			"bulkEditFieldLabel": "Поле",
+			"bulkEditFieldPlaceholder": "Выберите поле...",
+			"bulkEditValueLabel": "Новое значение",
+			"bulkEditValuePlaceholder": "Введите новое значение",
+			"bulkEditApply": "Применить",
+			"bulkEditSuccess": "Документы обновлены",
+			"bulkEditError": "Не удалось обновить документы",
+			"bulkDeleteSuccess": "Удалено {count} документов",
+			"rowAdded": "Строка добавлена",
+			"createError": "Не удалось создать документ"
 		},
 		"files": {
 			"name": "Имя",

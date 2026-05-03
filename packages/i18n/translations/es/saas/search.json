@@ -1089,7 +1089,22 @@
 			"deleteByFilterTitle": "Eliminar documentos por filtro",
 			"deleteByFilterMessage": "¿Está seguro de que desea eliminar todos los documentos que coinciden con \"{filterBy}\"? Esta acción no se puede deshacer.",
 			"deleteByFilterSuccess": "{count} documento(s) eliminado(s)",
-			"columnId": "ID"
+			"columnId": "ID",
+			"addRow": "Añadir fila",
+			"duplicateRow": "Duplicar fila",
+			"bulkEdit": "Edición masiva",
+			"bulkEditTitle": "Edición masiva",
+			"bulkEditDescription": "Establecer valor de campo para todos los {count} documentos seleccionados",
+			"bulkEditFieldLabel": "Campo",
+			"bulkEditFieldPlaceholder": "Seleccionar campo...",
+			"bulkEditValueLabel": "Nuevo valor",
+			"bulkEditValuePlaceholder": "Ingrese nuevo valor",
+			"bulkEditApply": "Aplicar",
+			"bulkEditSuccess": "Documentos actualizados",
+			"bulkEditError": "Error al actualizar documentos",
+			"bulkDeleteSuccess": "{count} documentos eliminados",
+			"rowAdded": "Fila añadida",
+			"createError": "Error al crear documento"
 		},
 		"files": {
 			"name": "Nombre",

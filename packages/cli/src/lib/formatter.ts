@@ -21,17 +21,13 @@ export function formatTable<T extends Record<string, string>>(
 	const colWidths = columns.map((col, i) => {
 		const key = keys[i] ?? col.header;
 		const headerLen = col.header.length;
-		const maxDataLen = Math.max(
-			...rows.map((r) => String(r[key] ?? "").length),
-		);
+		const maxDataLen = Math.max(...rows.map((r) => String(r[key] ?? "").length));
 		const maxW = options?.maxWidth ?? 80;
 		return Math.min(Math.max(headerLen, maxDataLen), maxW);
 	});
 
 	// Header
-	const headerLine = columns
-		.map((col, i) => col.header.padEnd(colWidths[i]))
-		.join("  ");
+	const headerLine = columns.map((col, i) => col.header.padEnd(colWidths[i])).join("  ");
 	const separator = colWidths.map((w) => "─".repeat(w)).join("──");
 
 	const lines: string[] = [headerLine, separator];
@@ -112,7 +108,11 @@ export function formatSearchResults(
 		});
 
 		lines.push(
-			formatTable(rows, keys.map((k) => ({ header: k })), { maxWidth: 40 }),
+			formatTable(
+				rows,
+				keys.map((k) => ({ header: k })),
+				{ maxWidth: 40 },
+			),
 		);
 	}
 
@@ -179,7 +179,9 @@ export function formatCreatedKey(
 	lines.push(`  ID:     ${(key.id as string) ?? "?"}`);
 	lines.push(`  Name:   ${(key.name as string) ?? "?"}`);
 	lines.push(`  Prefix: ${(key.prefix as string) ?? "?"}`);
-	lines.push(`  Scopes: ${Array.isArray(key.scopes) ? (key.scopes as string[]).join(", ") : "?"}`);
+	lines.push(
+		`  Scopes: ${Array.isArray(key.scopes) ? (key.scopes as string[]).join(", ") : "?"}`,
+	);
 
 	const rawKey = key.rawKey as string | undefined;
 	if (rawKey) {

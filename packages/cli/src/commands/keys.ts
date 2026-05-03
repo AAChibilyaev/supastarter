@@ -79,9 +79,9 @@ keysCommand
 				const rl = createInterface({ input: process.stdin, output: process.stdout });
 
 				// List indexes for user to pick from
-				const indexes = await client.get<
-					Array<{ slug: string; displayName: string }>
-				>(`/v1/projects/${project.id}/indexes`);
+				const indexes = await client.get<Array<{ slug: string; displayName: string }>>(
+					`/v1/projects/${project.id}/indexes`,
+				);
 
 				if (!resolvedName) {
 					resolvedName = await rl.question("Key name: ");
@@ -122,7 +122,9 @@ keysCommand
 			};
 
 			if (cmd.origins) {
-				body.allowedOrigins = (cmd.origins as string).split(",").map((o: string) => o.trim());
+				body.allowedOrigins = (cmd.origins as string)
+					.split(",")
+					.map((o: string) => o.trim());
 			}
 			if (cmd.rateLimit) {
 				body.rateLimitPerMinute = parseInt(cmd.rateLimit as string, 10);

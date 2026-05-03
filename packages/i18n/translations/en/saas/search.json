@@ -974,7 +974,22 @@
 			"deleteByFilterTitle": "Delete documents by filter",
 			"deleteByFilterMessage": "Are you sure you want to delete all documents matching \"{filterBy}\"? This action cannot be undone.",
 			"deleteByFilterSuccess": "{count} document(s) deleted",
-			"columnId": "ID"
+			"columnId": "ID",
+			"addRow": "Add Row",
+			"duplicateRow": "Duplicate Row",
+			"bulkEdit": "Bulk Edit",
+			"bulkEditTitle": "Bulk Edit",
+			"bulkEditDescription": "Set a field value for all {count} selected documents",
+			"bulkEditFieldLabel": "Field",
+			"bulkEditFieldPlaceholder": "Select a field...",
+			"bulkEditValueLabel": "New Value",
+			"bulkEditValuePlaceholder": "Enter new value",
+			"bulkEditApply": "Apply",
+			"bulkEditSuccess": "Documents updated",
+			"bulkEditError": "Failed to update documents",
+			"bulkDeleteSuccess": "Deleted {count} documents",
+			"rowAdded": "Row added",
+			"createError": "Failed to create document"
 		},
 		"files": {
 			"name": "Name",

@@ -7,7 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
+import { AddUrlCard } from "../AddUrlCard";
 import { AIAskPanel } from "../AIAskPanel";
+import { MySearchFileTable } from "../files/MySearchFileTable";
 import { PersonalSearch } from "../PersonalSearch";
 import { SearchResults, type SearchHit } from "../SearchResults";
 
@@ -83,6 +85,12 @@ export function MySearchIndexPage({ organizationId, indexId }: MySearchIndexPage
 			/>
 
 			<div className="mt-6 space-y-6">
+				{/* Add URL card */}
+				<AddUrlCard organizationId={organizationId} indexId={indexId} />
+
+				{/* File table */}
+				<MySearchFileTable organizationId={organizationId} indexId={indexId} />
+
 				{/* AI Ask panel */}
 				<AIAskPanel organizationId={organizationId} indexId={indexId} />
 

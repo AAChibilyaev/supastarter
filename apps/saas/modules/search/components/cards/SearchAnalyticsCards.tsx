@@ -3,6 +3,13 @@
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@repo/ui/components/select";
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -55,6 +62,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	const router = useRouter();
 	const pathname = usePathname();
 	const [period, setPeriod] = useState<PeriodKey>("7d");
+	const [selectedIndexId, setSelectedIndexId] = useState<string>("");
 
 	// Sync active tab with URL search params so sidebar nav links work.
 	const urlTab = searchParams.get("tab") || initialTab || "dashboard";
@@ -80,23 +88,34 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 	// ── Data queries ──────────────────────────────────────────────────
 
+	// Fetch indexes for the filter dropdown
+	const { data: indexes = [] } = useQuery(
+		orpc.search.listIndexes.queryOptions({
+			input: { organizationId },
+			enabled: !!organizationId,
+		}),
+	);
+
+	// indexId filter: empty string = all indexes
+	const filterIndexId = selectedIndexId || undefined;
+
 	const { data: usageData, isLoading: usageLoading } = useQuery(
 		orpc.search.usageSummary.queryOptions({
-			input: { organizationId, period: PERIOD_API[period] },
+			input: { organizationId, period: PERIOD_API[period], indexId: filterIndexId },
 			enabled: !!organizationId,
 		}),
 	);
 
 	const { data: analyticsData, isLoading: analyticsLoading } = useQuery(
 		orpc.search.analytics.queryOptions({
-			input: { organizationId, period: PERIOD_API[period] },
+			input: { organizationId, period: PERIOD_API[period], indexId: filterIndexId },
 			enabled: !!organizationId,
 		}),
 	);
 
 	const { data: topQueriesData, isLoading: topQueriesLoading } = useQuery(
 		orpc.search.topQueries.queryOptions({
-			input: { organizationId, days, limit: 10 },
+			input: { organizationId, days, limit: 10, indexId: filterIndexId },
 			enabled: !!organizationId,
 		}),
 	);
@@ -426,7 +445,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 	return (
 		<div className="space-y-6">
-			{/* Period switcher */}
+			{/* Controls row: tabs + index filter + period switch */}
 			<div className="flex items-center justify-between">
 				<Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AnalyticsTab)}>
 					<TabsList>
@@ -440,13 +459,32 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 					</TabsList>
 				</Tabs>
 
-				<Tabs value={period} onValueChange={(v) => setPeriod(v as PeriodKey)}>
-					<TabsList>
-						<TabsTrigger value="24h">{t("search.analytics.period24h")}</TabsTrigger>
-						<TabsTrigger value="7d">{t("search.analytics.period7d")}</TabsTrigger>
-						<TabsTrigger value="30d">{t("search.analytics.period30d")}</TabsTrigger>
-					</TabsList>
-				</Tabs>
+				<div className="gap-2 flex items-center">
+					{/* Index filter dropdown */}
+					{indexes.length > 0 && (
+						<Select value={selectedIndexId} onValueChange={setSelectedIndexId}>
+							<SelectTrigger className="w-48">
+								<SelectValue placeholder={t("search.analytics.allIndexes")} />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="">{t("search.analytics.allIndexes")}</SelectItem>
+								{indexes.map((idx) => (
+									<SelectItem key={idx.id} value={idx.id}>
+										{idx.displayName}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
+
+					<Tabs value={period} onValueChange={(v) => setPeriod(v as PeriodKey)}>
+						<TabsList>
+							<TabsTrigger value="24h">{t("search.analytics.period24h")}</TabsTrigger>
+							<TabsTrigger value="7d">{t("search.analytics.period7d")}</TabsTrigger>
+							<TabsTrigger value="30d">{t("search.analytics.period30d")}</TabsTrigger>
+						</TabsList>
+					</Tabs>
+				</div>
 			</div>
 
 			{/* Retention banner */}

@@ -31,7 +31,8 @@ create_dashboard() {
   local filters="$3"
 
   echo "Creating dashboard: $name"
-  curl -sf -X POST "$API_BASE/api/projects/$PROJECT_ID/dashboards/" \
+  local tmpfile; tmpfile=$(mktemp)
+  if curl -sf -X POST "$API_BASE/api/projects/$PROJECT_ID/dashboards/" \
     -H "$AUTH_HEADER" \
     -H "$CONTENT_TYPE" \
     -d "{
@@ -39,7 +40,12 @@ create_dashboard() {
       \"description\": \"$description\",
       \"pinned\": true,
       \"filters\": $filters
-    }" | python3 -c "import sys,json;d=json.load(sys.stdin);print(f'  Created: {d.get(\"id\",\"unknown\")} — {d.get(\"name\",\"\")}')"
+    }" > "$tmpfile"; then
+    python3 -c "import sys,json;d=json.load(open(sys.argv[1]));print(f'  Created: {d.get(\"id\",\"unknown\")} — {d.get(\"name\",\"\")}')" "$tmpfile"
+  else
+    echo "  FAILED to create dashboard: $name"
+  fi
+  rm -f "$tmpfile"
 }
 
 echo "────────────────────────────────────────────────────"

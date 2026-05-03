@@ -1093,7 +1093,8 @@
 			"tabActivity": "Aktivität",
 			"uniqueFailedQueries": "Einzigartige fehlgeschlagene",
 			"recentActivity": "Letzte Aktivität",
-			"noActivity": "Keine aktuellen Aktivitäten."
+			"noActivity": "Keine aktuellen Aktivitäten.",
+			"allIndexes": "Alle Indizes"
 		},
 		"widget": {
 			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",

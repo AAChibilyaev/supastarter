@@ -1080,6 +1080,7 @@
 			"noDataDescription": "Analytics data will appear once your search indexes start receiving queries.",
 			"freePlan": "Free",
 			"queryPerformance": "Query Performance",
+			"allIndexes": "All indexes",
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",

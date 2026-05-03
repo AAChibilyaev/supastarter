@@ -1283,7 +1283,8 @@
 			"tabActivity": "Activité",
 			"uniqueFailedQueries": "Requêtes échouées uniques",
 			"recentActivity": "Activité récente",
-			"noActivity": "Aucune activité récente."
+			"noActivity": "Aucune activité récente.",
+			"allIndexes": "Tous les index"
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

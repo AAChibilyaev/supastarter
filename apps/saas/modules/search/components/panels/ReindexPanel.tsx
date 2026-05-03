@@ -2,7 +2,13 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -18,7 +24,12 @@ interface ReindexPanelProps {
 	hasActiveJob: boolean;
 }
 
-export function ReindexPanel({ organizationId, slug, indexId, hasActiveJob: _hasActiveJob }: ReindexPanelProps) {
+export function ReindexPanel({
+	organizationId,
+	slug,
+	indexId,
+	hasActiveJob: _hasActiveJob,
+}: ReindexPanelProps) {
 	const t = useTranslations("search");
 	const queryClient = useQueryClient();
 	const { confirm } = useConfirmationAlert();
@@ -91,7 +102,9 @@ export function ReindexPanel({ organizationId, slug, indexId, hasActiveJob: _has
 					<div className="mb-4 space-y-3">
 						<div className="gap-2 flex items-center">
 							<RefreshCwIcon className="size-4 animate-spin text-primary" />
-							<span className="text-sm font-medium">{t("collection.reindexInProgress")}</span>
+							<span className="text-sm font-medium">
+								{t("collection.reindexInProgress")}
+							</span>
 						</div>
 
 						{/* Progress bar */}
@@ -102,9 +115,10 @@ export function ReindexPanel({ organizationId, slug, indexId, hasActiveJob: _has
 							/>
 						</div>
 
-						<div className="flex items-center justify-between text-xs text-muted-foreground">
+						<div className="text-xs flex items-center justify-between text-muted-foreground">
 							<span>
-								{currentJob.processed} / {currentJob.total} {t("collection.reindexDocuments")}
+								{currentJob.processed} / {currentJob.total}{" "}
+								{t("collection.reindexDocuments")}
 							</span>
 							<span>{progressPercent}%</span>
 						</div>
@@ -114,9 +128,7 @@ export function ReindexPanel({ organizationId, slug, indexId, hasActiveJob: _has
 				{/* Completed job message */}
 				{currentJob && currentJob.processed >= currentJob.total && currentJob.total > 0 && (
 					<div className="mb-4">
-						<Badge status="success">
-							{t("collection.reindexCompleted")}
-						</Badge>
+						<Badge status="success">{t("collection.reindexCompleted")}</Badge>
 						<p className="mt-2 text-xs text-muted-foreground">
 							{currentJob.processed} {t("collection.reindexDocumentsProcessed")}
 						</p>
@@ -131,8 +143,8 @@ export function ReindexPanel({ organizationId, slug, indexId, hasActiveJob: _has
 						</p>
 
 						{/* Advanced options info */}
-						<div className="gap-2 p-3 flex items-start rounded-lg border border-amber-500/20 bg-amber-500/5">
-							<AlertTriangleIcon className="mt-0.5 size-4 shrink-0 text-amber-500" />
+						<div className="gap-2 p-3 border-amber-500/20 bg-amber-500/5 flex items-start rounded-lg border">
+							<AlertTriangleIcon className="mt-0.5 size-4 text-amber-500 shrink-0" />
 							<div>
 								<p className="text-xs font-medium text-amber-600 dark:text-amber-400">
 									{t("collection.reindexWarning")}

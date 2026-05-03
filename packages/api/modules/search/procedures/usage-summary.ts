@@ -18,6 +18,7 @@ export const usageSummary = protectedProcedure
 		z.object({
 			organizationId: z.string(),
 			period: z.enum(["last7", "last30"]),
+			indexId: z.string().optional(),
 		}),
 	)
 	.output(
@@ -30,7 +31,7 @@ export const usageSummary = protectedProcedure
 			periodEnd: z.string(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, period }, context: { user } }) => {
+	.handler(async ({ input: { organizationId, period, indexId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 
 		const windowDays = period === "last7" ? 7 : 30;
@@ -41,6 +42,7 @@ export const usageSummary = protectedProcedure
 			by: ["type"],
 			where: {
 				organizationId,
+				...(indexId ? { indexId } : {}),
 				createdAt: { gte: since },
 			},
 			_sum: { count: true },

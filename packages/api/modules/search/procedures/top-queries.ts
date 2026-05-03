@@ -20,9 +20,10 @@ export const topQueries = protectedProcedure
 			organizationId: z.string(),
 			days: z.number().int().min(1).max(365).optional().default(7),
 			limit: z.number().int().min(1).max(100).optional().default(10),
+			indexId: z.string().optional(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, days, limit }, context: { user } }) => {
+	.handler(async ({ input: { organizationId, days, limit, indexId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 
 		const since = new Date(Date.now() - days * DAY_MS);
@@ -31,6 +32,7 @@ export const topQueries = protectedProcedure
 			by: ["type"],
 			where: {
 				organizationId,
+				...(indexId ? { indexId } : {}),
 				createdAt: { gte: since },
 			},
 			_sum: { count: true },

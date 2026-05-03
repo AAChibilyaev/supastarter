@@ -1092,7 +1092,8 @@
 			"tabActivity": "Actividad",
 			"uniqueFailedQueries": "Consultas fallidas únicas",
 			"recentActivity": "Actividad reciente",
-			"noActivity": "No hay actividad reciente."
+			"noActivity": "No hay actividad reciente.",
+			"allIndexes": "Todos los índices"
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",

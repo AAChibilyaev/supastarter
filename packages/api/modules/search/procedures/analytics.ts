@@ -18,6 +18,7 @@ export const analytics = protectedProcedure
 		z.object({
 			organizationId: z.string(),
 			period: z.enum(["last7", "last30"]),
+			indexId: z.string().optional(),
 		}),
 	)
 	.output(
@@ -36,7 +37,7 @@ export const analytics = protectedProcedure
 			latencyP99: z.number().nullable(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, period }, context: { user } }) => {
+	.handler(async ({ input: { organizationId, period, indexId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 
 		const windowDays = period === "last7" ? 7 : 30;
@@ -46,6 +47,7 @@ export const analytics = protectedProcedure
 		const events = await db.searchUsageEvent.findMany({
 			where: {
 				organizationId,
+				...(indexId ? { indexId } : {}),
 				createdAt: { gte: since },
 			},
 			orderBy: { createdAt: "asc" },
@@ -134,17 +136,34 @@ export const analytics = protectedProcedure
 
 		// ── Latency percentiles (p50/p95/p99) ──
 		type LatencyRow = { p50: number | null; p95: number | null; p99: number | null };
-		const latencyRows = await db.$queryRaw<LatencyRow[]>`
-			SELECT
-				percentile_cont(0.5)  WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p50,
-				percentile_cont(0.95) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p95,
-				percentile_cont(0.99) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p99
-			FROM search_usage_event
-			WHERE organization_id = ${organizationId}
-			  AND type = 'search_query'
-			  AND created_at >= ${since}
-			  AND metadata->>'latencyMs' IS NOT NULL
-		`;
+
+		let latencyRows: LatencyRow[];
+		if (indexId) {
+			latencyRows = await db.$queryRaw<LatencyRow[]>`
+				SELECT
+					percentile_cont(0.5)  WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p50,
+					percentile_cont(0.95) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p95,
+					percentile_cont(0.99) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p99
+				FROM search_usage_event
+				WHERE organization_id = ${organizationId}
+				  AND index_id = ${indexId}
+				  AND type = 'search_query'
+				  AND created_at >= ${since}
+				  AND metadata->>'latencyMs' IS NOT NULL
+			`;
+		} else {
+			latencyRows = await db.$queryRaw<LatencyRow[]>`
+				SELECT
+					percentile_cont(0.5)  WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p50,
+					percentile_cont(0.95) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p95,
+					percentile_cont(0.99) WITHIN GROUP (ORDER BY CAST(metadata->>'latencyMs' AS FLOAT)) AS p99
+				FROM search_usage_event
+				WHERE organization_id = ${organizationId}
+				  AND type = 'search_query'
+				  AND created_at >= ${since}
+				  AND metadata->>'latencyMs' IS NOT NULL
+			`;
+		}
 		const latency = latencyRows[0] ?? { p50: null, p95: null, p99: null };
 
 		return {

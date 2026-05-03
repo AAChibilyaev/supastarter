@@ -1,6 +1,7 @@
 import { notifyLowBalance } from "@repo/billing-wallet";
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
+import { processAutoRechargePayments } from "@repo/payments";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		// Find all active wallets that have auto-recharge enabled
+		// Phase 1: Check all auto-recharge-enabled wallets for low balance
 		const wallets = await db.aiWallet.findMany({
 			where: {
 				autoRechargeEnabled: true,
@@ -35,15 +36,15 @@ export async function POST(request: Request) {
 
 		logger.info("auto-recharge cron: checking wallets", { count: wallets.length });
 
-		let triggered = 0;
-		let errors = 0;
+		let notifications = 0;
+		let notifyErrors = 0;
 
 		for (const wallet of wallets) {
 			try {
 				await notifyLowBalance(wallet.id);
-				triggered++;
+				notifications++;
 			} catch (err) {
-				errors++;
+				notifyErrors++;
 				logger.error("auto-recharge cron: wallet check failed", {
 					walletId: wallet.id,
 					error: String(err),
@@ -51,10 +52,14 @@ export async function POST(request: Request) {
 			}
 		}
 
+		// Phase 2: Process pending auto-recharge orders via Stripe
+		const paymentResult = await processAutoRechargePayments();
+
 		return NextResponse.json({
 			checked: wallets.length,
-			triggered,
-			errors,
+			notifications,
+			notifyErrors,
+			payments: paymentResult,
 		});
 	} catch (error) {
 		logger.error("auto-recharge cron failed", { error: String(error) });

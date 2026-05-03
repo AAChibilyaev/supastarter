@@ -1,3 +1,4 @@
+import { applyTopupCredit, notifyTopupFailed, notifyTopupPaid } from "@repo/billing-wallet";
 import {
 	createPurchase,
 	db,
@@ -632,7 +633,8 @@ export const webhookHandler: WebhookHandler = async (req) => {
 				// Get plan name from the plan config
 				let planName = purchase.priceId;
 				try {
-					const { getPlanIdByProviderPriceId } = await import("../../lib/provider-price-ids");
+					const { getPlanIdByProviderPriceId } =
+						await import("../../lib/provider-price-ids");
 					const planId = getPlanIdByProviderPriceId(purchase.priceId);
 					if (planId) {
 						planName = String(planId);
@@ -688,6 +690,85 @@ export const webhookHandler: WebhookHandler = async (req) => {
 					}),
 				]);
 
+				break;
+			}
+
+			// ── Auto-Recharge PaymentIntents ──────────────────────────
+			case "payment_intent.succeeded": {
+				const pi = event.data.object as Stripe.PaymentIntent;
+				const isAutoRecharge = pi.metadata?.auto_recharge_order_id != null;
+				if (isAutoRecharge) {
+					const orderId = pi.metadata.auto_recharge_order_id;
+					const walletId = pi.metadata.wallet_id;
+					const amountKopecks = BigInt(pi.amount_received ?? pi.amount) * BigInt(100);
+
+					try {
+						const result = await applyTopupCredit({
+							providerOperationId: pi.id,
+							providerPaymentId: pi.id,
+							amountKopecks,
+							eventId: `webhook_pi:${pi.id}`,
+						});
+
+						if (result.applied) {
+							await db.walletTopupOrder.update({
+								where: { id: orderId },
+								data: { status: "paid", paidAt: new Date() },
+							});
+							if (walletId) {
+								await notifyTopupPaid({ walletId, amountKopecks, orderId });
+							}
+						}
+
+						logger.info("stripe.webhook: auto-recharge paid", {
+							orderId,
+							piId: pi.id,
+							amountKopecks: Number(amountKopecks),
+						});
+					} catch (err) {
+						logger.error("stripe.webhook: auto-recharge applyTopupCredit failed", {
+							orderId,
+							piId: pi.id,
+							error: String(err),
+						});
+					}
+				}
+				break;
+			}
+
+			case "payment_intent.payment_failed": {
+				const pi = event.data.object as Stripe.PaymentIntent;
+				const isAutoRecharge = pi.metadata?.auto_recharge_order_id != null;
+				if (isAutoRecharge) {
+					const orderId = pi.metadata.auto_recharge_order_id;
+					const walletId = pi.metadata.wallet_id;
+
+					await db.walletTopupOrder.update({
+						where: { id: orderId },
+						data: {
+							status: "failed",
+							metadata: {
+								failureReason: pi.last_payment_error?.message ?? "unknown",
+								failedAt: new Date().toISOString(),
+								stripeStatus: pi.status,
+							},
+						},
+					});
+
+					if (walletId) {
+						await notifyTopupFailed({
+							walletId,
+							orderId,
+							reason: pi.last_payment_error?.message ?? "Payment failed",
+						});
+					}
+
+					logger.error("stripe.webhook: auto-recharge payment failed", {
+						orderId,
+						piId: pi.id,
+						error: pi.last_payment_error?.message,
+					});
+				}
 				break;
 			}
 

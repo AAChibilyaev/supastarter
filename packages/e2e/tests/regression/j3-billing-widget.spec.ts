@@ -29,7 +29,7 @@ test.describe("J3: Billing & Upgrade Flow", () => {
 
 		expect(page.url()).toContain("/settings/billing");
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasBillingContent =
 			bodyText.includes("Billing") ||
 			bodyText.includes("billing") ||
@@ -52,7 +52,7 @@ test.describe("J3: Billing & Upgrade Flow", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Common upgrade CTA patterns
 		const hasUpgradeCTA =
@@ -81,7 +81,7 @@ test.describe("J3: Billing & Upgrade Flow", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasPlanStatus =
 			bodyText.includes("Free") ||
 			bodyText.includes("free") ||
@@ -164,7 +164,7 @@ test.describe("J4: Widget → Analytics Pipeline", () => {
 
 		expect(page.url()).toContain("/search");
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasWidgetContent =
 			bodyText.includes("widget") ||
 			bodyText.includes("Widget") ||
@@ -187,7 +187,7 @@ test.describe("J4: Widget → Analytics Pipeline", () => {
 
 		expect(page.url()).toContain("/analytics");
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasAnalyticsContent =
 			bodyText.includes("Analytics") ||
 			bodyText.includes("analytics") ||

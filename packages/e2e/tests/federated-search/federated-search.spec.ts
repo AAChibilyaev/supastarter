@@ -399,7 +399,7 @@ test.describe("Federated Search — UI Navigation", () => {
 
 		expect(page.url()).toContain("/search");
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasSearchContent =
 			bodyText.includes("search") ||
 			bodyText.includes("Search") ||

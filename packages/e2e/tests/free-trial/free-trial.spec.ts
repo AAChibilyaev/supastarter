@@ -28,7 +28,7 @@ test.describe("Free Trial — Billing & Entitlements", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(3000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Should show billing page content
 		expect(page.url()).toContain("/settings/billing");
@@ -56,7 +56,7 @@ test.describe("Free Trial — Billing & Entitlements", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Either shows trial status or upgrade prompt
 		const hasTrialOrUpgrade =
@@ -82,7 +82,7 @@ test.describe("Free Trial — Billing & Entitlements", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Analytics page should indicate retention period or data availability
 		expect(page.url()).toContain("/analytics");
@@ -99,7 +99,7 @@ test.describe("Free Trial — Billing & Entitlements", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Upgrade/pricing CTA presence
 		const hasUpgradeCTA =
@@ -130,7 +130,7 @@ test.describe("Free Trial — Billing & Entitlements", () => {
 		await page.waitForTimeout(2000);
 
 		// Overview should load with search-related content
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasSearchContent =
 			bodyText.includes("search") ||
 			bodyText.includes("Search") ||

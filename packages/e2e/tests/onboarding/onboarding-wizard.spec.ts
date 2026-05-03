@@ -108,7 +108,7 @@ test.describe("Getting Started — Checklist Dashboard", () => {
 
 		expect(onExpectedPage).toBeTruthy();
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasOnboardingContent =
 			bodyText.includes("getting started") ||
 			bodyText.includes("Getting Started") ||
@@ -139,7 +139,7 @@ test.describe("Getting Started — Checklist Dashboard", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Look for progress indicators
 		const hasProgressIndicators =
@@ -163,7 +163,7 @@ test.describe("Getting Started — Checklist Dashboard", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Common step-related terms across onboarding UIs
 		const hasStepContent =

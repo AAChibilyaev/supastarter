@@ -55,7 +55,7 @@ test.describe("Analytics Dashboard — Observability Stack", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Should show either empty state content or chart/metric containers
 		const hasEmptyState =
@@ -123,7 +123,7 @@ test.describe("Analytics Dashboard — Observability Stack", () => {
 		await page.waitForLoadState("networkidle");
 		await page.waitForTimeout(2000);
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 
 		// Check for common period labels
 		const hasPeriodSelector =

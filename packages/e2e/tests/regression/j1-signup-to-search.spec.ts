@@ -138,7 +138,7 @@ test.describe("J1: Signup → First Search", () => {
 		// Search preview tab should be accessible
 		expect(page.url()).toContain("/search");
 
-		const bodyText = await page.textContent("body").catch(() => "");
+		const bodyText = (await page.textContent("body").catch(() => "")) ?? "";
 		const hasSearchContent =
 			bodyText.includes("search") ||
 			bodyText.includes("Search") ||

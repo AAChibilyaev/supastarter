@@ -37,7 +37,7 @@
  */
 
 /** Supported Typesense decay function types */
-export type DecayFunctionType = "gauss" | "linear" | "exp";
+export type DecayFunctionType = "gauss" | "linear" | "exp" | "diff";
 
 /** Parameters for constructing a decay sort expression */
 export interface DecaySortParams {

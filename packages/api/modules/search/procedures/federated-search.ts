@@ -10,6 +10,7 @@ const multiSearchEntrySchema = z.object({
 	queryBy: z.string().optional(),
 	filterBy: z.string().optional(),
 	facetBy: z.string().optional(),
+	sortBy: z.string().optional(),
 	collection: z.string().optional(),
 	groupBy: z.string().optional(),
 	groupLimit: z.number().int().min(1).max(100).optional(),
@@ -74,6 +75,7 @@ export const federatedSearch = protectedProcedure
 					query_by: s.queryBy ?? "title,description",
 					filter_by: s.filterBy ?? "",
 					facet_by: s.facetBy ?? "",
+					...(s.sortBy && { sort_by: s.sortBy }),
 					...(s.groupBy && { group_by: s.groupBy }),
 					...(s.groupLimit !== undefined && { group_limit: s.groupLimit }),
 					...(s.groupMissingValues !== undefined && {

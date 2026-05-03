@@ -24,6 +24,7 @@ export const groupedSearch = protectedProcedure
 			groupLimit: z.number().int().min(1).max(100).default(3),
 			perPage: z.number().int().min(1).max(250).default(20),
 			filterBy: z.string().optional(),
+			sortBy: z.string().optional(),
 		}),
 	)
 	.output(
@@ -59,6 +60,7 @@ export const groupedSearch = protectedProcedure
 				group_limit: input.groupLimit,
 				per_page: input.perPage,
 				filter_by: input.filterBy ?? undefined,
+				sort_by: input.sortBy ?? undefined,
 			} as any)) as any;
 
 		return {

@@ -114,33 +114,33 @@ const publicSearchInput = z.object({
 	// ── Highlight Extensions (Typesense v0.30+) ──
 	highlightFullFields: z.string().optional(),
 	prioritizeTokenPosition: z.boolean().optional(),
-\t// ── Range Facets ──
-\t/** Numeric or date range facets: [{field, min, max}] */
-\trangeFacets: z
-\t\t.array(
-\t\t\tz.object({
-\t\t\t\tfield: z.string(),
-\t\t\t\tmin: z.union([z.number(), z.string()]),
-\t\t\t\tmax: z.union([z.number(), z.string()]),
-\t\t\t}),
-\t\t)
-\t\t.max(20)
-\t\t.optional(),
-\t// ── Negative / Exclusion Facets ──
-\t/**
-\t * Array of facet value exclusions. Each entry specifies a field and value
-\t * that should be excluded from results using NOT logic (field:!=value).
-\t * These are merged into the filter_by expression automatically.
-\t */
-\texcludeFilters: z
-\t\t.array(
-\t\t\tz.object({
-\t\t\t\tfield: z.string(),
-\t\t\t\tvalue: z.string(),
-\t\t\t}),
-\t\t)
-\t\t.max(50)
-\t\t.optional(),
+	// ── Range Facets ──
+	/** Numeric or date range facets: [{field, min, max}] */
+	rangeFacets: z
+		.array(
+			z.object({
+				field: z.string(),
+				min: z.union([z.number(), z.string()]),
+				max: z.union([z.number(), z.string()]),
+			}),
+		)
+		.max(20)
+		.optional(),
+	// ── Negative / Exclusion Facets ──
+	/**
+	 * Array of facet value exclusions. Each entry specifies a field and value
+	 * that should be excluded from results using NOT logic (field:!=value).
+	 * These are merged into the filter_by expression automatically.
+	 */
+	excludeFilters: z
+		.array(
+			z.object({
+				field: z.string(),
+				value: z.string(),
+			}),
+		)
+		.max(50)
+		.optional(),
 });
 
 const multiSearchInput = z.object({
@@ -205,11 +205,11 @@ export const publicSearchApp = new Hono()
 		delete (searchParams as Record<string, unknown>).polygonFilter;
 		delete (searchParams as Record<string, unknown>).boundingBoxFilter;
 		delete (searchParams as Record<string, unknown>).multiLocation;
-\t\tdelete (searchParams as Record<string, unknown>).disjunctiveFacets;
-\t\tdelete (searchParams as Record<string, unknown>).rangeFacets;
-\t\tdelete (searchParams as Record<string, unknown>).excludeFilters;
+		delete (searchParams as Record<string, unknown>).disjunctiveFacets;
+		delete (searchParams as Record<string, unknown>).rangeFacets;
+		delete (searchParams as Record<string, unknown>).excludeFilters;
 
-\t\t// Build filter expression: scoped + user filter + geo filter + negate + excludeFilters
+		// Build filter expression: scoped + user filter + geo filter + negate + excludeFilters
 		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
 
 		// Geo filter: simple radius (lat/lng)
@@ -238,34 +238,34 @@ export const publicSearchApp = new Hono()
 			combinedFilter = combinedFilter ? `${combinedFilter} && ${geoExpr}` : geoExpr;
 		}
 
-\t\tif (parsed.data.negate) {
-\t\t\tconst negated = parsed.data.negate
-\t\t\t\t.split(",")
-\t\t\t\t.map((t) => t.trim())
-\t\t\t\t.filter(Boolean)
-\t\t\t\t.map((term) => `(${term})`)
-\t\t\t\t.join(" || ");
-\t\t\tif (negated) {
-\t\t\t\tcombinedFilter = combinedFilter
-\t\t\t\t\t? `${combinedFilter} && !(${negated})`
-\t\t\t\t\t: `!(${negated})`;
-\t\t\t}
-\t\t}
+		if (parsed.data.negate) {
+			const negated = parsed.data.negate
+				.split(",")
+				.map((t) => t.trim())
+				.filter(Boolean)
+				.map((term) => `(${term})`)
+				.join(" || ");
+			if (negated) {
+				combinedFilter = combinedFilter
+					? `${combinedFilter} && !(${negated})`
+					: `!(${negated})`;
+			}
+		}
 
-\t\t// Exclude filters: build NOT expressions for excluded facet values
-\t\tif (parsed.data.excludeFilters?.length) {
-\t\t\tconst excludeExprs = parsed.data.excludeFilters.map(
-\t\t\t\t(ef) => `${ef.field}:!=${ef.value}`,
-\t\t\t);
-\t\t\tconst excludeClause = excludeExprs.join(" && ");
-\t\t\tif (excludeClause) {
-\t\t\t\tcombinedFilter = combinedFilter
-\t\t\t\t\t? `${combinedFilter} && ${excludeClause}`
-\t\t\t\t\t: excludeClause;
-\t\t\t}
-\t\t}
+		// Exclude filters: build NOT expressions for excluded facet values
+		if (parsed.data.excludeFilters?.length) {
+			const excludeExprs = parsed.data.excludeFilters.map(
+				(ef) => `${ef.field}:!=${ef.value}`,
+			);
+			const excludeClause = excludeExprs.join(" && ");
+			if (excludeClause) {
+				combinedFilter = combinedFilter
+					? `${combinedFilter} && ${excludeClause}`
+					: excludeClause;
+			}
+		}
 
-\t\ttry {
+		try {
 			const endTracking = trackSearchLatency(getMetrics(), verified.indexSlug);
 			const result = await searchDocuments({
 				alias: aliasName(verified.organizationId, verified.indexSlug),

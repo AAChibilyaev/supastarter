@@ -18,18 +18,18 @@ import { useTranslations } from "next-intl";
 
 /** Single facet configuration */
 export interface FacetConfig {
-\tfieldName: string;
-\tdisplayName: string;
-\tsortOrder: "count" | "alpha";
-\tmaxValues: number;
-\tmultiSelect: boolean;
-\tnegatable: boolean;
-\ttype: "checkbox" | "range" | "toggle" | "select";
-\tcollapsible: boolean;
-\trangeMin?: number;
-\trangeMax?: number;
-\tnumberFormat?: "number" | "currency" | "custom";
-\tcustomFormat?: string;
+	fieldName: string;
+	displayName: string;
+	sortOrder: "count" | "alpha";
+	maxValues: number;
+	multiSelect: boolean;
+	negatable: boolean;
+	type: "checkbox" | "range" | "toggle" | "select";
+	collapsible: boolean;
+	rangeMin?: number;
+	rangeMax?: number;
+	numberFormat?: "number" | "currency" | "custom";
+	customFormat?: string;
 }
 
 const FACET_TYPES = ["checkbox", "range", "toggle", "select"] as const;
@@ -177,28 +177,28 @@ function SortableFacetRow({
 				</div>
 
 				{/* Collapsible toggle */}
-\t\t\t\t<label className="gap-1.5 flex cursor-pointer items-center">
-\t\t\t\t\t<input
-\t\t\t\t\t\ttype="checkbox"
-\t\t\t\t\t\tchecked={facet.collapsible}
-\t\t\t\t\t\tonChange={(e) => onUpdate(index, { collapsible: e.target.checked })}
-\t\t\t\t\t\tclassName="size-3.5 rounded border-input accent-primary"
-\t\t\t\t\t/>
-\t\t\t\t\t<span className="text-xs text-muted-foreground">{t("facetCollapsible")}</span>
-\t\t\t\t</label>
+				<label className="gap-1.5 flex cursor-pointer items-center">
+					<input
+						type="checkbox"
+						checked={facet.collapsible}
+						onChange={(e) => onUpdate(index, { collapsible: e.target.checked })}
+						className="size-3.5 rounded border-input accent-primary"
+					/>
+					<span className="text-xs text-muted-foreground">{t("facetCollapsible")}</span>
+				</label>
 
-\t\t\t\t{/* Negatable toggle */}
-\t\t\t\t<label className="gap-1.5 flex cursor-pointer items-center">
-\t\t\t\t\t<input
-\t\t\t\t\t\ttype="checkbox"
-\t\t\t\t\t\tchecked={facet.negatable}
-\t\t\t\t\t\tonChange={(e) => onUpdate(index, { negatable: e.target.checked })}
-\t\t\t\t\t\tclassName="size-3.5 rounded border-input accent-primary"
-\t\t\t\t\t/>
-\t\t\t\t\t<span className="text-xs text-muted-foreground">{t("facetNegatable")}</span>
-\t\t\t\t</label>
+				{/* Negatable toggle */}
+				<label className="gap-1.5 flex cursor-pointer items-center">
+					<input
+						type="checkbox"
+						checked={facet.negatable}
+						onChange={(e) => onUpdate(index, { negatable: e.target.checked })}
+						className="size-3.5 rounded border-input accent-primary"
+					/>
+					<span className="text-xs text-muted-foreground">{t("facetNegatable")}</span>
+				</label>
 
-\t\t\t\t{/* Range config (only when type=range) */}
+				{/* Range config (only when type=range) */}
 				{facet.type === "range" && (
 					<>
 						<div className="gap-1.5 flex items-center">
@@ -351,16 +351,16 @@ export function FacetsPanel({
 		const toAdd = facetFields.filter((f) => !existingNames.has(f));
 		if (toAdd.length === 0) return;
 
-\t\tconst newConfigs: FacetConfig[] = toAdd.map((fieldName) => ({
-\t\t\tfieldName,
-\t\t\tdisplayName: fieldName,
-\t\t\tsortOrder: "count" as const,
-\t\t\tmaxValues: 10,
-\t\t\tmultiSelect: true,
-\t\t\tnegatable: false,
-\t\t\ttype: "checkbox" as const,
-\t\t\tcollapsible: true,
-\t\t}));
+		const newConfigs: FacetConfig[] = toAdd.map((fieldName) => ({
+			fieldName,
+			displayName: fieldName,
+			sortOrder: "count" as const,
+			maxValues: 10,
+			multiSelect: true,
+			negatable: false,
+			type: "checkbox" as const,
+			collapsible: true,
+		}));
 		onChange([...configs, ...newConfigs]);
 	};
 

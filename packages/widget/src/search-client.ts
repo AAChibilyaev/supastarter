@@ -9,12 +9,12 @@
  */
 
 export interface WidgetConfig {
-\t/** AACsearch API base URL, e.g. https://app.aacsearch.com */
-\tbaseUrl: string;
-\t/** Search-only API key (ss_search_...) or scoped token (ss_scoped_...) */
-\tapiKey: string;
-\t/** Public index slug */
-\tindexSlug: string;
+	/** AACsearch API base URL, e.g. https://app.aacsearch.com */
+	baseUrl: string;
+	/** Search-only API key (ss_search_...) or scoped token (ss_scoped_...) */
+	apiKey: string;
+	/** Public index slug */
+	indexSlug: string;
 }
 
 /**
@@ -22,8 +22,8 @@ export interface WidgetConfig {
  * via NOT logic in filter_by (field:!=value syntax).
  */
 export interface ExcludedFacetValue {
-\tfield: string;
-\tvalue: string;
+	field: string;
+	value: string;
 }
 
 interface SearchResponse {
@@ -99,18 +99,18 @@ export function createAacSearchClient(config: WidgetConfig) {
 					facetSamplePercent: params.facetSamplePercent as number | undefined,
 					facetSortBy: params.facetSortBy as string | undefined,
 					facetStrategy: params.facetStrategy as string | undefined,
-\t\t\t\t\trangeFacets: params.rangeFacets as
-\t\t\t\t\t\t| Array<{
-\t\t\t\t\t\t\t\tfield: string;
-\t\t\t\t\t\t\t\tmin: number | string;
-\t\t\t\t\t\t\t\tmax: number | string;
-\t\t\t\t\t\t  }>
-\t\t\t\t\t\t| undefined,
-\t\t\t\t\texcludeFields: params.excludeFields as string | undefined,
-\t\t\t\t\texcludeFilters: params.excludeFilters as
-\t\t\t\t\t\t| Array<{ field: string; value: string }>
-\t\t\t\t\t\t| undefined,
-\t\t\t\t};
+					rangeFacets: params.rangeFacets as
+						| Array<{
+								field: string;
+								min: number | string;
+								max: number | string;
+						  }>
+						| undefined,
+					excludeFields: params.excludeFields as string | undefined,
+					excludeFilters: params.excludeFilters as
+						| Array<{ field: string; value: string }>
+						| undefined,
+				};
 			});
 
 			return fetch(`${baseUrl}/api/search/public/multi`, {

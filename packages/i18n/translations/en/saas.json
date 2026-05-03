@@ -193,6 +193,19 @@
       "pageSubtitle": "Funnel completion rates, time-to-first-value, and cohort analysis",
       "exportCsv": "Export CSV",
       "error": "Failed to load analytics data"
+    },
+    "billingAnalytics": {
+      "pageTitle": "Billing Analytics",
+      "pageSubtitle": "MRR, churn rate, and revenue overview.",
+      "mrr": "Monthly Recurring Revenue",
+      "activeSubscriptions": "Active Subscriptions",
+      "churnRate": "Churn Rate (last month)",
+      "revenueChart": "Revenue Over Time",
+      "subscriptionsByPlan": "Subscriptions by Plan",
+      "revenue": "Revenue",
+      "plan": "Plan",
+      "subscribers": "Subscribers",
+      "mrrPerPlan": "MRR"
     }
   },
   "app": {
@@ -776,6 +789,39 @@
         "noOverage": "No overage billing configured",
         "unlimited": "Unlimited",
         "searchesUsed": "{{used}} / {{limit}} searches used"
+      },
+      "upgradeModal": {
+        "title": "Upgrade your plan",
+        "currentPlan": "Current plan",
+        "comparePlans": "Compare plans",
+        "prorationPreview": "Proration preview",
+        "feature": "Feature",
+        "current": "Current",
+        "select": "Select",
+        "currentRemaining": "Credit from current plan",
+        "newPlanCost": "New plan cost (prorated)",
+        "totalDueToday": "Total due today",
+        "totalCredit": "Total credit",
+        "noPaymentNeeded": "No payment needed",
+        "redirectingToStripe": "Redirecting to payment...",
+        "confirmUpgrade": "Confirm upgrade",
+        "upgradeError": "Something went wrong. Please try again."
+      },
+      "downgradeModal": {
+        "title": "Confirm downgrade",
+        "warningTitle": "You're about to downgrade",
+        "dataLossWarning": "Downgrading will reduce your plan limits. Some documents, searches, and features may become unavailable.",
+        "whatChanges": "What changes",
+        "currentLimit": "Current",
+        "newLimit": "New",
+        "limitChanges": "Limit changes",
+        "featureDowngrades": "Features that will be disabled",
+        "noFeatureLoss": "No features will be lost with this downgrade",
+        "prorationCredit": "You'll receive a prorated credit of {amount}",
+        "gracePeriod": "After downgrade, you'll have a 7-day grace period where searches are still readable, but indexing is paused immediately.",
+        "confirmDowngrade": "Confirm downgrade",
+        "cancelDowngrade": "Cancel",
+        "downgradeProcessing": "Processing downgrade..."
       }
     },
     "notificationsPage": {

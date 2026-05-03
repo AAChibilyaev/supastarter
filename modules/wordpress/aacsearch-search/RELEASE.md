@@ -5,8 +5,8 @@
 1. A WordPress.org plugin developer account
 2. SVN access to `plugins.svn.wordpress.org/aacsearch-search/` (request via plugins@wordpress.org)
 3. GitHub secrets configured in the repository:
-   - `SVN_USERNAME` — WordPress.org SVN username
-   - `SVN_PASSWORD` — WordPress.org SVN password (application password)
+    - `SVN_USERNAME` — WordPress.org SVN username
+    - `SVN_PASSWORD` — WordPress.org SVN password (application password)
 
 ## Initial SVN Setup (one-time)
 
@@ -36,6 +36,7 @@ svn commit -m "Initial release 1.0.0"
 ### Step 1: Update version numbers
 
 Update the version in:
+
 1. `modules/wordpress/aacsearch-search/aacsearch-search.php` — `Version: X.X.X` header and `AACSEARCH_SEARCH_VERSION` constant
 2. `modules/wordpress/aacsearch-search/readme.txt` — `Stable tag: X.X.X`
 3. `modules/wordpress/aacsearch-search/package.json` — `"version": "X.X.X"`
@@ -56,6 +57,7 @@ git push origin main --tags
 ### Step 4: Automated deploy
 
 Pushing a tag matching `wordpress-v*` triggers the GitHub Actions workflow at `.github/workflows/deploy-wordpress.yml`, which:
+
 1. Checks out the repository
 2. Installs npm dependencies and builds Gutenberg blocks
 3. Deploys to WordPress.org SVN via `10up/action-wordpress-plugin-deploy`
@@ -64,14 +66,15 @@ Monitor the workflow run in GitHub Actions. The plugin is live on WordPress.org 
 
 ## Tag Format
 
-| Tag Pattern | Purpose |
-|-------------|---------|
+| Tag Pattern        | Purpose               |
+| ------------------ | --------------------- |
 | `wordpress-v1.0.0` | Plugin release v1.0.0 |
 | `wordpress-v1.1.0` | Plugin release v1.1.0 |
 
 ## Plugin Assets
 
 WordPress.org assets (banners, icons, screenshots) live in `.wordpress-org/`:
+
 - `icon-128x128.svg` — plugin icon (Square, 128×128)
 - `icon-256x256.svg` — plugin icon (Square, 256×256)
 - `banner-772x250.svg` — plugin banner (772×250)

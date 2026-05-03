@@ -2,6 +2,7 @@ export * from "./ai-pricing";
 export * from "./ai-usage";
 export * from "./ai-wallets";
 export * from "./activation";
+export * from "./billing-analytics";
 export * from "./drip-emails";
 export * from "./knowledge";
 export * from "./organizations";

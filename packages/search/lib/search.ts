@@ -54,6 +54,8 @@ interface TypesenseSearchParams {
 	// ── Faceted Search extensions ──────────────────────────────────
 	facet_query?: string;
 	max_facet_values?: number;
+	// ── MMR Diversification (Typesense v0.30+) ─────────────────────
+	diversify_based_on?: string;
 }
 
 export interface SearchDocumentsInput {
@@ -90,6 +92,8 @@ export interface SearchDocumentsInput {
 	// ── Faceted Search extensions ──────────────────────────────────
 	facetQuery?: string;
 	maxFacetValues?: number;
+	// ── MMR Diversification (Typesense v0.30+) ─────────────────────
+	diversifyBasedOn?: string;
 }
 
 export interface SearchDocumentsResult {

@@ -15,14 +15,35 @@ const prismaClientSingleton = () => {
 };
 
 declare global {
-	var prisma: PrismaClient;
+	var prisma: PrismaClient | undefined;
 }
 
-// oxlint-disable-next-line no-redeclare -- This is a singleton
-const prisma = globalThis.prisma || prismaClientSingleton();
+let prismaModuleCache: PrismaClient | undefined;
 
-if (process.env.NODE_ENV !== "production") {
-	globalThis.prisma = prisma;
+function getPrisma(): PrismaClient {
+	if (globalThis.prisma) {
+		return globalThis.prisma;
+	}
+	if (prismaModuleCache) {
+		return prismaModuleCache;
+	}
+	const client = prismaClientSingleton();
+	prismaModuleCache = client;
+	if (process.env.NODE_ENV !== "production") {
+		globalThis.prisma = client;
+	}
+	return client;
 }
 
-export { prisma as db };
+/**
+ * Lazy proxy so importing `@repo/database` does not connect or throw until the first query.
+ * Call sites that require a database must still set `DATABASE_URL` before any Prisma use.
+ */
+export const db: PrismaClient = new Proxy({} as PrismaClient, {
+	get(_target, prop, receiver) {
+		if (prop === "then" || prop === "catch" || prop === "finally") {
+			return undefined;
+		}
+		return Reflect.get(getPrisma() as object, prop, receiver);
+	},
+});

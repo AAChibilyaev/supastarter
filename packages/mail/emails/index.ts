@@ -12,6 +12,7 @@ import { Notification } from "./Notification";
 import { OrganizationInvitation } from "./OrganizationInvitation";
 import { QuotaHardCapWarning } from "./QuotaHardCapWarning";
 import { QuotaSoftCapWarning } from "./QuotaSoftCapWarning";
+import { SubscriptionUpgrade } from "./SubscriptionUpgrade";
 
 export const mailTemplates = {
 	magicLink: MagicLink,
@@ -28,4 +29,5 @@ export const mailTemplates = {
 	dripDay7: DripDay7,
 	dripDay14: DripDay14,
 	dripDay21: DripDay21,
+	subscriptionUpgrade: SubscriptionUpgrade,
 } as const;

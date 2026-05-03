@@ -111,5 +111,15 @@
 		"bodyBlocked": "Your organization {orgName} ({planName} plan) has reached its monthly search limit. New searches are currently blocked.",
 		"bodyOverage": "Your organization {orgName} ({planName} plan) has reached its monthly search limit. Overage billing is active — searches continue at your plan's overage rate.",
 		"cta": "View billing"
+	},
+	"subscriptionUpgrade": {
+		"subject": "Your plan has been upgraded to {planName}",
+		"greeting": "Hi {orgName},",
+		"body": "Your plan has been upgraded to **{planName}**! You now have access to all the features included in this plan.",
+		"nextBillingDate": "Your next billing date:",
+		"manageSubscription": "Manage subscription",
+		"cta": "Open AACsearch Engine dashboard to start using new features:",
+		"openDashboard": "Open Dashboard",
+		"signoff": "— The AACsearch Engine Team"
 	}
 }

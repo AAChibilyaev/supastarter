@@ -98,7 +98,11 @@ export function DataTableViewOptions() {
 													/>
 												</div>
 												<span>
-													{column.columnDef.meta?.label || column.id}
+													{(
+														column.columnDef.meta as
+															| Record<string, string>
+															| undefined
+													)?.label || column.id}
 												</span>
 												<span
 													data-slot="command-shortcut"

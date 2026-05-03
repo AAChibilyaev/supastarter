@@ -57,7 +57,7 @@ const orientationConfig = {
 	},
 };
 
-interface SortableProps<TData extends { id: UniqueIdentifier }> extends DndContextProps {
+interface SortableProps<TData extends { id: UniqueIdentifier }> {
 	value: TData[];
 	onValueChange?: (items: TData[]) => void;
 	onMove?: (event: { activeIndex: number; overIndex: number }) => void;
@@ -66,9 +66,9 @@ interface SortableProps<TData extends { id: UniqueIdentifier }> extends DndConte
 	strategy?: SortableContextProps["strategy"];
 	orientation?: "vertical" | "horizontal" | "mixed";
 	overlay?: React.ReactNode | null;
-	onDragStart?: DndContextProps["onDragStart"];
-	onDragEnd?: DndContextProps["onDragEnd"];
-	onDragCancel?: DndContextProps["onDragCancel"];
+	onDragStart?: (event: DragStartEvent) => void;
+	onDragEnd?: (event: DragEndEvent) => void;
+	onDragCancel?: (event: DragCancelEvent) => void;
 	children?: React.ReactNode;
 }
 
@@ -149,7 +149,7 @@ const dropAnimationOpts: DropAnimation = {
 	}),
 };
 
-interface SortableOverlayProps extends React.ComponentPropsWithRef<typeof DragOverlay> {
+interface SortableOverlayProps {
 	activeId?: UniqueIdentifier | null;
 	children?: React.ReactNode;
 	dropAnimation?: DropAnimation;
@@ -160,7 +160,7 @@ function SortableOverlay({
 	dropAnimation = dropAnimationOpts,
 	children,
 	...props
-}: SortableOverlayProps) {
+}: SortableOverlayProps & Record<string, unknown>) {
 	return (
 		<DragOverlay dropAnimation={dropAnimation} {...props}>
 			{activeId ? (

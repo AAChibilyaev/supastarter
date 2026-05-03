@@ -620,16 +620,45 @@ export const config = {
 
 ---
 
-## 8. UI COMPONENT CATALOG (quick reference)
+## 8. shadcn/ui SYSTEM & COMPONENT CATALOG
 
-### 📖 Official shadcn Docs
+### 📖 shadcn v4 Philosophy ("Copy-Paste, Not npm Install")
 
-- **LLMs.txt:** https://ui.shadcn.com/llms.txt
-- **MCP Server:** https://ui.shadcn.com/docs/mcp — AI can browse/search/install components
-- **Available:** 39/59 official components installed in `packages/ui/components/`
-- **Install missing:** `pnpm dlx shadcn@latest add <component-name>` before writing custom CSS
-- **Missing-but-useful:** calendar, date-picker, combobox, radio-group, slider, resizable, carousel, menubar, toggle-group
-- **Style ecosystem:** originui.com, magicui.design, aceternity.com, 21st.dev
+**Core principle:** shadcn is NOT a component library — it's HOW you build YOUR component library.
+
+- Every component file is COPIED into your repo (`packages/ui/components/`). You own the full code.
+- Edit the SOURCE files directly. **Never wrap shadcn components** — modify the `.tsx` if you need different styles.
+- Composition over props: compose `Card > CardHeader > CardTitle > CardContent` — don't add props like `<Card title="..." content="..." />`.
+- Components receive `className` via `cn()` utility — always merge, never strip.
+- The `data-slot` pattern (v4): use `data-slot="card"`, `data-slot="button"` etc. for CSS targeting instead of complex class selectors.
+
+### 🔴 HARD INVARIANTS
+
+1. **NO raw card divs** — always use `<Card>` from `@repo/ui`
+2. **NO wrapping shadcn components** — edit the .tsx source directly
+3. **NO `*` barrel imports** — `import { Button } from "@repo/ui/components/button"`, NOT `from "@repo/ui"`
+4. **NO app logic inside `packages/ui/`** — business logic belongs in `apps/*/modules/`
+5. **Button does NOT support `forwardRef`** — use native `<button>` + `buttonVariants()` for refs
+6. **IMPORT via `@repo/ui/components/<name>`** — **always** use components path, not barrel
+
+### 🛠 shadcn CLI (v4)
+
+```bash
+# Install missing component
+pnpm dlx shadcn@latest add <component> -c packages/ui
+
+# Search available components
+pnpm dlx shadcn@latest search
+
+# Get docs from CLI
+pnpm dlx shadcn@latest docs
+
+# Migrate from old styles
+pnpm dlx shadcn@latest migrate
+
+# Info about project setup
+pnpm dlx shadcn@latest info
+```
 
 ### 🔴 HARD RULE: NO raw card divs — USE shadcn Card
 
@@ -645,14 +674,12 @@ export const config = {
 **Правильно:**
 
 ```tsx
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 
-<Card className="rounded-lg border">                          ← стили через className
-<Card><CardContent className="p-4 space-y-3">...</CardContent></Card>  ← с кастомной паддинг
-<Card className="overflow-x-auto rounded-lg border"><CardContent className="p-0">  ← table wrapper
+<Card className="rounded-lg border">
+<Card><CardContent className="p-4 space-y-3">...</CardContent></Card>
+<Card className="overflow-x-auto rounded-lg border"><CardContent className="p-0">
 ```
-
-**Исключения** (не заменять на Card): иконки-контейнеры (size-\*), dropzone с dashed border, `<pre>` код-блоки, input/styled элементы форм.
 
 **Card API:**
 
@@ -665,25 +692,50 @@ CardContent = <div className="p-6 pt-0">
 CardFooter  = <div className="p-6 pt-0 flex items-center">
 ```
 
-### Layer 1 — `@repo/ui/components/*` (48 primitives)
+### 🎯 Component Reuse Rules
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `card`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `field`, `form`, `hover-card`, `input`, `input-otp`, `kbd`, `label`, `logo`, `menubar`, `navigation-menu`, `popover`, `progress`, `radio-group`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `slider`, `sonner`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`
+**3-layer ranking (always check BEFORE creating new):**
 
-Button variants: `primary` (default), `secondary`, `outline`, `ghost`, `destructive`, `link`. Has `loading` prop.
-Badge uses `status` prop (not `variant`): `success` / `info` / `warning` / `error`.
+1. **`@repo/ui/components/*`** — shadcn primitives (52 installed)
+2. **`apps/*/modules/shared/components/`** — app-level shared blocks
+3. **`apps/*/modules/<feature>/components/`** — feature-specific
 
-### Layer 2 — SaaS Shared (`@shared/components/*`)
+**Key patterns:**
+
+- **Composition:** shadcn uses compound components. Compose in app-level files, don't add props.
+- **asChild / Slot:** Radix-based components support `asChild` for polymorphic rendering.
+- **Button `loading` prop** — use instead of custom loading states. No Spinner inside buttons.
+- **`cn()`** from `@repo/ui` — always for className merging. Never clsx/twMerge directly.
+
+### 📦 Layer 1 — `@repo/ui/components/*` (75 components)
+
+**52 shadcn primitives:**
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `field`, `form`, `hover-card`, `input`, `input-otp`, `kbd`, `label`, `logo`, `menubar`, `navigation-menu`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `slider`, `sonner`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`
+
+**13 Landing blocks** (from PageAI-Pro/page-ui, 1.6K⭐):
+`GlowBg`, `LandingBand`, `LandingFeature`, `LandingFeatureList`, `LandingPricingSection`, `LandingPricingPlan`, `LandingFooter`, `LandingFooterColumn`, `LandingFooterLink`, `LandingPrimaryCta`, `LandingSaleCta`, `LandingVideoPlayer`, `LandingImage`
+
+**6 Chat components** (from jakobhoeg/shadcn-chat, 1.6K⭐):
+`ChatBubble`, `ChatInput`, `ChatMessageList`, `ExpandableChat`, `MessageLoading` — в `components/chat/`
+
+**4 Specialized components:**
+`Tour`, `Timeline`, `Stepper` (`defineStepper`, `Stepper.Root`, etc.), `Billing` (re-export hub для billingsdk)
+
+**Button variants:** `primary` (default), `secondary`, `outline`, `ghost`, `destructive`, `link`. Has `loading` prop. **NO forwardRef** — use native button + `buttonVariants()`.
+**Badge:** uses `status` prop: `success` / `info` / `warning` / `error`.
+
+### 🏗 Layer 2 — SaaS Shared (`@shared/components/*`)
 
 `AppWrapper`, `AuthWrapper`, `ClientProviders`, `ApiClientProvider`, `ConsentProvider` + `ConsentBanner`, `ConfirmationAlertProvider`, `NavBar`, `Footer`, `UserMenu`, `UserAvatar`, `NotificationCenter`, `ColorModeToggle`, `LocaleSwitch`, `Pagination`, `PageHeader`, `TabGroup`, `SettingsList` + `SettingsItem`, `StatsTile`, `StatsTileChart`, `PasswordInput`
 
 Hooks: `@shared/hooks/locale-currency`, `@shared/lib/sidebar-context`.
 
-### Layer 3 — Search feature components (29 files)
+### 🔧 Layer 3 — Search feature components (29 files)
 
 `apps/saas/modules/search/components/`:
 `BillingPlanInfo`, `ConnectorCard`, `ConnectorWizard`, `ConnectorsPage`, `CreateSearchIndexDialog`, `CurationsPanel`, `DashboardOverview`, `EmptyState`, `GettingStarted`, `ImportJobsPanel`, `IndexRowActions`, `KnowledgeWorkbench`, `OverviewPage`, `PlaygroundPanel`, `ProjectOverview`, `ProjectsList`, `RelevanceTabs`, `SearchAnalyticsCards`, `SearchApiKeysPage`, `SearchApiKeysPanel`, `SearchDashboard`, `SearchIndexesList`, `SearchPreview`, `SearchPreviewPage`, `SearchUsageCard`, `SearchUsageCards`, `SyncJobsTable`, `SynonymsPanel`, `WidgetPanel`
 
-### NEVER create from scratch (hard NO list):
+### 🚫 NEVER create from scratch (hard NO list):
 
 - ❌ `Pagination` — use `@shared/components/Pagination`
 - ❌ `UserAvatar` / `OrganizationLogo` — handle initials + sizes
@@ -695,13 +747,16 @@ Hooks: `@shared/hooks/locale-currency`, `@shared/lib/sidebar-context`.
 - ❌ Active org hook — use `@organizations/hooks/use-active-organization`
 - ❌ `Loading` / `Spinner` / `LoadingButton` — Button has `loading` prop; use `Skeleton` / `Spinner`
 - ❌ Form wrappers — use shadcn `Form*` directly with react-hook-form
+- ❌ Wrapping shadcn components — edit the .tsx directly
+- ❌ Barrel imports from `@repo/ui` — use `@repo/ui/components/<name>`
+- ❌ forwardRef on Button — doesn't support it; use native `<button>` + `buttonVariants()`
 
-### Marketing shared components
+### 🌐 Marketing shared components
 
 `apps/marketing/modules/shared/components/`:
 `NavBar`, `Footer`, `ClientProviders`, `ConsentProvider` + `ConsentBanner`, `ColorModeToggle`, `ThemeProvider`, `LocaleSwitch`
 
-### Marketing home page sections
+### 🏠 Marketing home page sections
 
 `apps/marketing/modules/home/components/`:
 `HeroSection`, `HeroWithCode`, `FeaturesGrid`, `HowItWorks`, `CtaFooter`, `PricingPlans`, `ContactForm`

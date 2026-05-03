@@ -58,7 +58,15 @@
 		"yearly": "Anual",
 		"savePercent": "Ahorra {percent}%",
 		"billedAnnually": "Facturado anualmente",
-		"perSeat": "asiento"
+		"perSeat": "asiento",
+		"nextInvoice": "Próxima factura",
+		"synonyms": "Sinónimos",
+		"curations": "Curaciones",
+		"customDomain": "Dominio personalizado",
+		"customBranding": "Marca personalizada",
+		"multiSearch": "Búsqueda múltiple",
+		"scopedTokens": "Tokens limitados",
+		"widget": "Widget"
 	},
 	"consent": {
 		"message": "Este sitio no utiliza cookies aún, pero hemos añadido este banner para mostrártelo.",

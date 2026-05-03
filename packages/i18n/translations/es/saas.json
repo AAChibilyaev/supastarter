@@ -193,6 +193,19 @@
       "pageSubtitle": "Tasas de finalización del embudo, tiempo hasta el primer valor y análisis de cohortes",
       "exportCsv": "Exportar CSV",
       "error": "No se pudieron cargar los datos analíticos"
+    },
+    "billingAnalytics": {
+      "pageTitle": "Billing Analytics",
+      "pageSubtitle": "MRR, churn rate, and revenue overview.",
+      "mrr": "Monthly Recurring Revenue",
+      "activeSubscriptions": "Active Subscriptions",
+      "churnRate": "Churn Rate (last month)",
+      "revenueChart": "Revenue Over Time",
+      "subscriptionsByPlan": "Subscriptions by Plan",
+      "revenue": "Revenue",
+      "plan": "Plan",
+      "subscribers": "Subscribers",
+      "mrrPerPlan": "MRR"
     }
   },
   "app": {
@@ -791,7 +804,26 @@
         "upgradeSuccess": "¡Plan mejorado exitosamente!",
         "upgradeError": "Error al mejorar el plan. Inténtalo de nuevo.",
         "noPaymentNeeded": "No se necesita pago",
-        "comparePlans": "Comparar planes"
+        "comparePlans": "Comparar planes",
+        "feature": "Característica",
+        "current": "Actual",
+        "select": "Seleccionar"
+      },
+      "downgradeModal": {
+        "title": "Confirmar degradación",
+        "warningTitle": "Está a punto de degradar su plan",
+        "dataLossWarning": "La degradación reducirá los límites de su plan. Algunos documentos, búsquedas y funciones pueden dejar de estar disponibles.",
+        "whatChanges": "Qué cambia",
+        "currentLimit": "Actual",
+        "newLimit": "Nuevo",
+        "limitChanges": "Cambios en límites",
+        "featureDowngrades": "Funciones que se desactivarán",
+        "noFeatureLoss": "No se perderán funciones con esta degradación",
+        "prorationCredit": "Recibirá un crédito prorrateado de {amount}",
+        "gracePeriod": "Después de la degradación, tendrá 7 días de gracia durante los cuales las búsquedas seguirán siendo legibles, pero la indexación se detendrá de inmediato.",
+        "confirmDowngrade": "Confirmar degradación",
+        "cancelDowngrade": "Cancelar",
+        "downgradeProcessing": "Procesando degradación..."
       }
     },
     "notificationsPage": {

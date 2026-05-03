@@ -193,6 +193,19 @@
       "pageSubtitle": "Funnel-Abschlussraten, Zeit bis zum ersten Wert und Kohortenanalyse",
       "exportCsv": "CSV exportieren",
       "error": "Analytik-Daten konnten nicht geladen werden"
+    },
+    "billingAnalytics": {
+      "pageTitle": "Billing Analytics",
+      "pageSubtitle": "MRR, churn rate, and revenue overview.",
+      "mrr": "Monthly Recurring Revenue",
+      "activeSubscriptions": "Active Subscriptions",
+      "churnRate": "Churn Rate (last month)",
+      "revenueChart": "Revenue Over Time",
+      "subscriptionsByPlan": "Subscriptions by Plan",
+      "revenue": "Revenue",
+      "plan": "Plan",
+      "subscribers": "Subscribers",
+      "mrrPerPlan": "MRR"
     }
   },
   "app": {
@@ -791,7 +804,26 @@
         "upgradeSuccess": "Tarif erfolgreich upgegradet!",
         "upgradeError": "Upgrade fehlgeschlagen. Bitte versuchen Sie es erneut.",
         "noPaymentNeeded": "Keine Zahlung erforderlich",
-        "comparePlans": "Tarife vergleichen"
+        "comparePlans": "Tarife vergleichen",
+        "feature": "Funktion",
+        "current": "Aktuell",
+        "select": "Auswählen"
+      },
+      "downgradeModal": {
+        "title": "Downgrade bestätigen",
+        "warningTitle": "Sie führen ein Downgrade durch",
+        "dataLossWarning": "Ein Downgrade reduziert Ihre Planlimits. Einige Dokumente, Suchanfragen und Funktionen könnten nicht mehr verfügbar sein.",
+        "whatChanges": "Was sich ändert",
+        "currentLimit": "Aktuell",
+        "newLimit": "Neu",
+        "limitChanges": "Limit-Änderungen",
+        "featureDowngrades": "Funktionen, die deaktiviert werden",
+        "noFeatureLoss": "Bei diesem Downgrade gehen keine Funktionen verloren",
+        "prorationCredit": "Sie erhalten eine anteilige Gutschrift von {amount}",
+        "gracePeriod": "Nach dem Downgrade haben Sie 7 Tage Zeit, in denen Suchanfragen noch lesbar sind, aber die Indexierung wird sofort pausiert.",
+        "confirmDowngrade": "Downgrade bestätigen",
+        "cancelDowngrade": "Abbrechen",
+        "downgradeProcessing": "Downgrade wird verarbeitet..."
       }
     },
     "notificationsPage": {

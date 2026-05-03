@@ -104,5 +104,15 @@
 		"bodyBlocked": "Tu organización {orgName} (plan {planName}) ha alcanzado su límite mensual de búsqueda. Las nuevas búsquedas están actualmente bloqueadas.",
 		"bodyOverage": "Tu organización {orgName} (plan {planName}) ha alcanzado su límite mensual de búsqueda. La facturación por excedente está activa: las búsquedas continúan a la tarifa de tu plan.",
 		"cta": "Ver facturación"
+	},
+	"subscriptionUpgrade": {
+		"subject": "Tu plan ha sido actualizado a {planName}",
+		"greeting": "Hola {orgName},",
+		"body": "¡Tu plan ha sido actualizado a **{planName}**! Ahora tienes acceso a todas las funciones incluidas en este plan.",
+		"nextBillingDate": "Tu próxima fecha de facturación:",
+		"manageSubscription": "Gestionar suscripción",
+		"cta": "Abre el panel de AACsearch Engine para empezar a usar las nuevas funciones:",
+		"openDashboard": "Abrir panel",
+		"signoff": "— El equipo de AACsearch Engine"
 	}
 }

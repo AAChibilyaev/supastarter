@@ -193,6 +193,19 @@
       "pageSubtitle": "Taux de complétion de l'entonnoir, temps jusqu'à la première valeur et analyse de cohorte",
       "exportCsv": "Exporter CSV",
       "error": "Échec du chargement des données analytiques"
+    },
+    "billingAnalytics": {
+      "pageTitle": "Billing Analytics",
+      "pageSubtitle": "MRR, churn rate, and revenue overview.",
+      "mrr": "Monthly Recurring Revenue",
+      "activeSubscriptions": "Active Subscriptions",
+      "churnRate": "Churn Rate (last month)",
+      "revenueChart": "Revenue Over Time",
+      "subscriptionsByPlan": "Subscriptions by Plan",
+      "revenue": "Revenue",
+      "plan": "Plan",
+      "subscribers": "Subscribers",
+      "mrrPerPlan": "MRR"
     }
   },
   "app": {
@@ -791,7 +804,26 @@
         "upgradeSuccess": "Forfait mis à niveau avec succès !",
         "upgradeError": "Échec de la mise à niveau du forfait. Veuillez réessayer.",
         "noPaymentNeeded": "Aucun paiement nécessaire",
-        "comparePlans": "Comparer les forfaits"
+        "comparePlans": "Comparer les forfaits",
+        "feature": "Fonctionnalité",
+        "current": "Actuel",
+        "select": "Sélectionner"
+      },
+      "downgradeModal": {
+        "title": "Confirmer la rétrogradation",
+        "warningTitle": "Vous êtes sur le point de rétrograder",
+        "dataLossWarning": "La rétrogradation réduira les limites de votre forfait. Certains documents, recherches et fonctionnalités peuvent devenir indisponibles.",
+        "whatChanges": "Ce qui change",
+        "currentLimit": "Actuel",
+        "newLimit": "Nouveau",
+        "limitChanges": "Changements de limites",
+        "featureDowngrades": "Fonctionnalités qui seront désactivées",
+        "noFeatureLoss": "Aucune fonctionnalité ne sera perdue avec cette rétrogradation",
+        "prorationCredit": "Vous recevrez un crédit proratisé de {amount}",
+        "gracePeriod": "Après la rétrogradation, vous aurez une période de grâce de 7 jours où les recherches restent lisibles, mais l'indexation est immédiatement interrompue.",
+        "confirmDowngrade": "Confirmer la rétrogradation",
+        "cancelDowngrade": "Annuler",
+        "downgradeProcessing": "Traitement de la rétrogradation..."
       }
     },
     "notificationsPage": {

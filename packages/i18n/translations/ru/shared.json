@@ -58,7 +58,15 @@
 		"yearly": "Yearly",
 		"savePercent": "Скидка {percent}%",
 		"billedAnnually": "Оплата за год",
-		"perSeat": "место"
+		"perSeat": "место",
+		"nextInvoice": "Следующий счёт",
+		"synonyms": "Синонимы",
+		"curations": "Курация",
+		"customDomain": "Свой домен",
+		"customBranding": "Свой брендинг",
+		"multiSearch": "Мульти-поиск",
+		"scopedTokens": "Ограниченные токены",
+		"widget": "Виджет"
 	},
 	"consent": {
 		"message": "Этот сайт пока не использует cookies, но мы добавили этот баннер чтобы показать вам.",

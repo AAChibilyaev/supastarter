@@ -281,7 +281,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 											setOpenaiCompatibleApiKey(e.target.value);
 											setChanged(true);
 										}}
-										placeholder={t("embeddingModel.openaiCompatibleApiKeyPlaceholder")}
+										placeholder={t(
+											"embeddingModel.openaiCompatibleApiKeyPlaceholder",
+										)}
 									/>
 									<p className="text-xs text-muted-foreground">
 										{t("embeddingModel.openaiCompatibleApiKeyHint")}

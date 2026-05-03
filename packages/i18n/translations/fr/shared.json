@@ -58,7 +58,15 @@
 		"yearly": "Annuel",
 		"savePercent": "Économisez {percent}%",
 		"billedAnnually": "Facturé annuellement",
-		"perSeat": "place"
+		"perSeat": "place",
+		"nextInvoice": "Prochaine facture",
+		"synonyms": "Synonymes",
+		"curations": "Curations",
+		"customDomain": "Domaine personnalisé",
+		"customBranding": "Marque personnalisée",
+		"multiSearch": "Multi-recherche",
+		"scopedTokens": "Jetons limités",
+		"widget": "Widget"
 	},
 	"consent": {
 		"message": "Ce site n'utilise pas encore de cookies, mais nous avons ajouté cette bannière pour vous la montrer.",

@@ -58,7 +58,15 @@
 		"yearly": "Yearly",
 		"savePercent": "Save {percent}%",
 		"billedAnnually": "Billed annually",
-		"perSeat": "seat"
+		"perSeat": "seat",
+		"nextInvoice": "Next invoice",
+		"synonyms": "Synonyms",
+		"curations": "Curations",
+		"customDomain": "Custom domain",
+		"customBranding": "Custom branding",
+		"multiSearch": "Multi-search",
+		"scopedTokens": "Scoped tokens",
+		"widget": "Widget"
 	},
 	"consent": {
 		"message": "This site doesn't use cookies yet, but we added this banner to demo it to you.",

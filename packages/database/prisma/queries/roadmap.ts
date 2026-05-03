@@ -30,6 +30,9 @@ function toView(item: Prisma.RoadmapItemGetPayload<{}>): RoadmapItemView {
 }
 
 export async function listRoadmapItems(): Promise<RoadmapItemView[]> {
+	if (!process.env.DATABASE_URL?.trim()) {
+		return [];
+	}
 	const items = await db.roadmapItem.findMany({
 		orderBy: { sortOrder: "asc" },
 	});
@@ -37,6 +40,9 @@ export async function listRoadmapItems(): Promise<RoadmapItemView[]> {
 }
 
 export async function getRoadmapItemByKey(key: string): Promise<RoadmapItemView | null> {
+	if (!process.env.DATABASE_URL?.trim()) {
+		return null;
+	}
 	const item = await db.roadmapItem.findUnique({
 		where: { key },
 	});

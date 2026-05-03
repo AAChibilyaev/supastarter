@@ -58,7 +58,15 @@
 		"yearly": "Jährlich",
 		"savePercent": "Spare {percent}%",
 		"billedAnnually": "Jährliche Abrechnung",
-		"perSeat": "Sitz"
+		"perSeat": "Sitz",
+		"nextInvoice": "Nächste Rechnung",
+		"synonyms": "Synonyme",
+		"curations": "Kurationen",
+		"customDomain": "Eigene Domain",
+		"customBranding": "Eigenes Branding",
+		"multiSearch": "Multi-Suche",
+		"scopedTokens": "Begrenzte Token",
+		"widget": "Widget"
 	},
 	"consent": {
 		"message": "Diese Website verwendet derzeit keine Cookies, aber wir haben dieses Banner hinzugefügt, um es dir zu zeigen.",

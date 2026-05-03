@@ -111,5 +111,15 @@
 		"bodyBlocked": "Deine Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Neue Suchanfragen sind derzeit blockiert.",
 		"bodyOverage": "Deine Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Die Überschreitungsabrechnung ist aktiv – Suchanfragen werden zum Überschreitungssatz deines Tarifs fortgesetzt.",
 		"cta": "Abrechnung anzeigen"
+	},
+	"subscriptionUpgrade": {
+		"subject": "Ihr Plan wurde auf {planName} aktualisiert",
+		"greeting": "Hallo {orgName},",
+		"body": "Ihr Plan wurde auf **{planName}** aktualisiert! Sie haben jetzt Zugriff auf alle Funktionen dieses Plans.",
+		"nextBillingDate": "Ihr nächstes Abrechnungsdatum:",
+		"manageSubscription": "Abonnement verwalten",
+		"cta": "Öffnen Sie das AACsearch Engine Dashboard, um neue Funktionen zu nutzen:",
+		"openDashboard": "Dashboard öffnen",
+		"signoff": "— Das AACsearch Engine Team"
 	}
 }

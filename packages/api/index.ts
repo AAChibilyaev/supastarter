@@ -2,12 +2,14 @@ import { auth } from "@repo/auth";
 import { applySubscriptionToWallet } from "@repo/billing-wallet";
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
+import { sendEmail } from "@repo/mail";
 import {
 	getPlanIdByProviderPriceId,
 	walletWebhookHandler,
 	webhookHandler as paymentsWebhookHandler,
 } from "@repo/payments";
 import { config as paymentsConfig } from "@repo/payments/config";
+import { invalidatePlanCache } from "@repo/payments/lib/entitlements";
 import { shopifyApp } from "@repo/shopify-connector";
 import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";
@@ -108,6 +110,9 @@ export const app = new Hono()
 		void syncIncludedCreditsAfterPaymentEvent(cloned).catch((e) =>
 			logger.error("syncIncludedCreditsAfterPaymentEvent failed", e),
 		);
+		void sendUpgradeWelcomeEmails(cloned).catch((e) =>
+			logger.error("sendUpgradeWelcomeEmails failed", e),
+		);
 		return response;
 	})
 	// Wallet provider webhook (Tochka one-time top-ups)
@@ -196,4 +201,140 @@ async function syncIncludedCreditsAfterPaymentEvent(req: Request): Promise<void>
 		subscriptionId: purchase.subscriptionId ?? "",
 		includedKopecks,
 	});
+}
+
+/**
+ * Hook invoked after the unified payments webhook handler completes.
+ * Detects `customer.subscription.updated` events where a subscription's price
+ * changed (plan upgrade/downgrade) and sends a welcome/confirmation email
+ * to the org owners/admins. Non-blocking.
+ */
+async function sendUpgradeWelcomeEmails(req: Request): Promise<void> {
+	let body: string;
+	try {
+		body = await req.text();
+	} catch {
+		return;
+	}
+
+	let event: {
+		type?: string;
+		data?: {
+			object?: {
+				id?: string;
+				customer?: string;
+				items?: { data?: Array<{ price?: { id?: string } }> };
+				previous_attributes?: Record<string, unknown>;
+				cancel_at_period_end?: boolean;
+				status?: string;
+				current_period_end?: number;
+			};
+		};
+	};
+	try {
+		event = JSON.parse(body);
+	} catch {
+		return;
+	}
+
+	// Only handle subscription updates where the plan/price actually changed
+	if (event.type !== "customer.subscription.updated") return;
+
+	const sub = event.data?.object;
+	if (!sub?.id || !sub?.customer) return;
+
+	// Skip cancellations and other non-price-change updates
+	if (sub.cancel_at_period_end) return;
+	if (!sub.previous_attributes) return;
+
+	// Check if the items (price) attribute changed
+	const prevAttrs = sub.previous_attributes as Record<string, unknown>;
+	if (!prevAttrs.items && !prevAttrs["items.data"]) return;
+
+	// Get the new price ID to determine the plan
+	const newPriceId = sub.items?.data?.[0]?.price?.id;
+	if (!newPriceId) return;
+
+	const planId = getPlanIdByProviderPriceId(newPriceId);
+	if (!planId) return;
+
+	// Look up the purchase to find the org/user
+	const purchase = await db.purchase.findFirst({
+		where: { customerId: sub.customer as string, type: "SUBSCRIPTION" },
+		orderBy: { createdAt: "desc" },
+	});
+	if (!purchase) return;
+
+	const organizationId = purchase.organizationId;
+	if (!organizationId) return;
+
+	// Invalidate plan cache for immediate effect
+	invalidatePlanCache(organizationId);
+
+	// Get organization name
+	const organization = await db.organization.findUnique({
+		where: { id: organizationId },
+		select: { name: true },
+	});
+	const orgName = organization?.name ?? "Your Organization";
+
+	// Get plan display name
+	const planDisplayName = planId.charAt(0).toUpperCase() + planId.slice(1);
+
+	// Calculate next billing date
+	const periodEnd = sub.current_period_end;
+	const nextBillingDate = periodEnd
+		? new Date(periodEnd * 1000).toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+			})
+		: "N/A";
+
+	// Get SaaS URL for links
+	const saasUrl = process.env.NEXT_PUBLIC_SAAS_URL ?? "http://localhost:3000";
+	const manageSubscriptionUrl = `${saasUrl}/org/${organizationId}/settings/billing`;
+	const dashboardUrl = `${saasUrl}/org/${organizationId}/overview`;
+
+	// Send email to org owners/admins
+	try {
+		const members = await db.member.findMany({
+			where: {
+				organizationId,
+				role: { in: ["owner", "admin"] },
+			},
+			select: { userId: true },
+		});
+
+		for (const member of members) {
+			const user = await db.user.findUnique({
+				where: { id: member.userId },
+				select: { email: true, locale: true },
+			});
+			if (!user?.email) continue;
+
+			const locale = (user.locale as string | null | undefined) ?? "en";
+
+			await sendEmail({
+				to: user.email,
+				locale: locale as "en" | "de" | "es" | "fr" | "ru",
+				templateId: "subscriptionUpgrade",
+				context: {
+					orgName,
+					planName: planDisplayName,
+					nextBillingDate,
+					manageSubscriptionUrl,
+					dashboardUrl,
+				},
+			});
+
+			logger.info("Sent upgrade welcome email", {
+				userId: member.userId,
+				planId,
+				organizationId,
+			});
+		}
+	} catch (e) {
+		logger.error("Failed to send upgrade welcome emails", e);
+	}
 }

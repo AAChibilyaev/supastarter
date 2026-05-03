@@ -5,6 +5,7 @@ import { SettingsMenu } from "@settings/components/SettingsMenu";
 import { PageHeader } from "@shared/components/PageHeader";
 import {
 	ActivityIcon,
+	BanknoteIcon,
 	BellIcon,
 	Building2Icon,
 	ClipboardListIcon,

@@ -193,6 +193,19 @@
       "pageSubtitle": "Статистика прохождения этапов, время до первого поиска и когортный анализ",
       "exportCsv": "Экспорт CSV",
       "error": "Не удалось загрузить данные аналитики"
+    },
+    "billingAnalytics": {
+      "pageTitle": "Billing Analytics",
+      "pageSubtitle": "MRR, churn rate, and revenue overview.",
+      "mrr": "Monthly Recurring Revenue",
+      "activeSubscriptions": "Active Subscriptions",
+      "churnRate": "Churn Rate (last month)",
+      "revenueChart": "Revenue Over Time",
+      "subscriptionsByPlan": "Subscriptions by Plan",
+      "revenue": "Revenue",
+      "plan": "Plan",
+      "subscribers": "Subscribers",
+      "mrrPerPlan": "MRR"
     }
   },
   "app": {
@@ -791,7 +804,26 @@
         "upgradeSuccess": "Тариф успешно обновлён!",
         "upgradeError": "Не удалось обновить тариф. Попробуйте ещё раз.",
         "noPaymentNeeded": "Платёж не требуется",
-        "comparePlans": "Сравнить тарифы"
+        "comparePlans": "Сравнить тарифы",
+        "feature": "Функция",
+        "current": "Текущий",
+        "select": "Выбрать"
+      },
+      "downgradeModal": {
+        "title": "Подтвердить понижение",
+        "warningTitle": "Вы собираетесь понизить тариф",
+        "dataLossWarning": "Понижение тарифа уменьшит лимиты вашего плана. Некоторые документы, поисковые запросы и функции могут стать недоступными.",
+        "whatChanges": "Что изменится",
+        "currentLimit": "Текущий",
+        "newLimit": "Новый",
+        "limitChanges": "Изменения лимитов",
+        "featureDowngrades": "Функции, которые будут отключены",
+        "noFeatureLoss": "При этом понижении ни одна функция не будет потеряна",
+        "prorationCredit": "Вы получите пропорциональный кредит в размере {amount}",
+        "gracePeriod": "После понижения у вас будет 7-дневный льготный период, в течение которого поиск останется читаемым, но индексация будет немедленно приостановлена.",
+        "confirmDowngrade": "Подтвердить понижение",
+        "cancelDowngrade": "Отмена",
+        "downgradeProcessing": "Обработка понижения..."
       }
     },
     "notificationsPage": {

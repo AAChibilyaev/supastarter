@@ -56,6 +56,13 @@ interface TypesenseSearchParams {
 	max_facet_values?: number;
 	// ── MMR Diversification (Typesense v0.30+) ─────────────────────
 	diversify_based_on?: string;
+	// ── Distinct Dedup ────────────────────────────────────────────
+	distinct?: string | number;
+	// ── Token Join (Typesense v0.30+) ─────────────────────────────
+	split_join_tokens?: "always" | "fallback" | "off";
+	// ── Highlight Extensions (Typesense v0.30+) ───────────────────
+	highlight_full_fields?: string;
+	prioritize_token_position?: boolean;
 }
 
 export interface SearchDocumentsInput {
@@ -94,6 +101,13 @@ export interface SearchDocumentsInput {
 	maxFacetValues?: number;
 	// ── MMR Diversification (Typesense v0.30+) ─────────────────────
 	diversifyBasedOn?: string;
+	// ── Distinct Dedup ────────────────────────────────────────────
+	distinct?: string | number;
+	// ── Token Join (Typesense v0.30+) ─────────────────────────────
+	splitJoinTokens?: "always" | "fallback" | "off";
+	// ── Highlight Extensions (Typesense v0.30+) ───────────────────
+	highlightFullFields?: string;
+	prioritizeTokenPosition?: boolean;
 }
 
 export interface SearchDocumentsResult {
@@ -186,6 +200,17 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		// ── Faceted Search extensions ──
 		...(input.facetQuery !== undefined && { facet_query: input.facetQuery }),
 		...(input.maxFacetValues !== undefined && { max_facet_values: input.maxFacetValues }),
+		// ── Distinct Dedup ──
+		...(input.distinct !== undefined && { distinct: input.distinct }),
+		// ── Token Join ──
+		...(input.splitJoinTokens !== undefined && { split_join_tokens: input.splitJoinTokens }),
+		// ── Highlight Extensions ──
+		...(input.highlightFullFields !== undefined && {
+			highlight_full_fields: input.highlightFullFields,
+		}),
+		...(input.prioritizeTokenPosition !== undefined && {
+			prioritize_token_position: input.prioritizeTokenPosition,
+		}),
 	};
 
 	const response = await client
@@ -286,6 +311,19 @@ export async function multiSearchDocuments(
 			// ── Faceted Search extensions ──
 			...(entry.facetQuery !== undefined && { facet_query: entry.facetQuery }),
 			...(entry.maxFacetValues !== undefined && { max_facet_values: entry.maxFacetValues }),
+			// ── Distinct Dedup ──
+			...(entry.distinct !== undefined && { distinct: entry.distinct }),
+			// ── Token Join ──
+			...(entry.splitJoinTokens !== undefined && {
+				split_join_tokens: entry.splitJoinTokens,
+			}),
+			// ── Highlight Extensions ──
+			...(entry.highlightFullFields !== undefined && {
+				highlight_full_fields: entry.highlightFullFields,
+			}),
+			...(entry.prioritizeTokenPosition !== undefined && {
+				prioritize_token_position: entry.prioritizeTokenPosition,
+			}),
 		};
 	});
 

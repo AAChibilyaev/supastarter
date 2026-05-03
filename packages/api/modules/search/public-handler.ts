@@ -79,6 +79,13 @@ const publicSearchInput = z.object({
 	negate: z.string().optional(),
 	// ── Wildcard toggle ──
 	wildcard: z.boolean().optional(),
+	// ── Distinct Dedup ──
+	distinct: z.union([z.string(), z.number()]).optional(),
+	// ── Token Join (Typesense v0.30+) ──
+	splitJoinTokens: z.enum(["always", "fallback", "off"]).optional(),
+	// ── Highlight Extensions (Typesense v0.30+) ──
+	highlightFullFields: z.string().optional(),
+	prioritizeTokenPosition: z.boolean().optional(),
 });
 
 const multiSearchInput = z.object({

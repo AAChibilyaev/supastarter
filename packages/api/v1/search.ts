@@ -59,6 +59,13 @@ const searchInputSchema = z.object({
 	// ── Faceted Search extensions ──
 	facetQuery: z.string().optional(),
 	maxFacetValues: z.number().int().min(1).optional(),
+	// ── Distinct Dedup ──
+	distinct: z.union([z.string(), z.number()]).optional(),
+	// ── Token Join (Typesense v0.30+) ──
+	splitJoinTokens: z.enum(["always", "fallback", "off"]).optional(),
+	// ── Highlight Extensions (Typesense v0.30+) ──
+	highlightFullFields: z.string().optional(),
+	prioritizeTokenPosition: z.boolean().optional(),
 });
 
 const multiSearchInputSchema = z.object({

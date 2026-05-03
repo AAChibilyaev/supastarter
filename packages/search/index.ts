@@ -129,8 +129,11 @@ export {
 export {
 	checkAllIndexesHealth,
 	checkIndexHealth,
+	checkAllRegionsHealth,
+	checkRegionHealth,
 	type HealthStatus,
 	type IndexHealthResult,
+	type RegionHealthResult,
 } from "./lib/health";
 export { sendSlackAlert, type SlackAlertPayload } from "./lib/slack";
 export {

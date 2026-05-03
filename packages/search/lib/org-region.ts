@@ -15,7 +15,7 @@ import { DEFAULT_REGION, isValidRegion } from "./regions";
 export async function getOrganizationStorageRegion(organizationId: string): Promise<StorageRegion> {
 	try {
 		// Dynamic import to avoid pulling in Prisma on the client side
-		const { prisma } = await import("@repo/database");
+		const { db } = await import("@repo/database");
 
 		const org = await prisma.organization.findUnique({
 			where: { id: organizationId },

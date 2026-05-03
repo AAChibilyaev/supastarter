@@ -18,6 +18,7 @@ import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { TrialBanner } from "@payments/components/TrialBanner";
 import { useQuery } from "@tanstack/react-query";
 import {
 	ActivityIcon,
@@ -265,6 +266,8 @@ export function OverviewPage() {
 					</SelectContent>
 				</Select>
 			</div>
+
+			<TrialBanner organizationId={orgId ?? ""} orgSlug={slug} />
 
 			{/* Quota warning banner */}
 			{quotaPercent >= softCapThreshold && (

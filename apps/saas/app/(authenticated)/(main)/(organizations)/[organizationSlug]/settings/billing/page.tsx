@@ -6,6 +6,7 @@ import { ChangePlan } from "@payments/components/ChangePlan";
 import { InvoiceHistory } from "@payments/components/InvoiceHistory";
 import { OverageTransactionHistory } from "@payments/components/OverageTransactionHistory";
 import { TopUpDialog } from "@payments/components/TopUpDialog";
+import { TrialBanner } from "@payments/components/TrialBanner";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
@@ -57,6 +58,8 @@ export default async function BillingSettingsPage({
 	return (
 		<>
 			<PageHeader title={t("title")} subtitle={t("changePlan.description")} />
+
+			<TrialBanner organizationId={organization.id} orgSlug={organizationSlug} />
 
 			{/* AACsearch-specific plan info + overage status */}
 			<div className="mb-6 space-y-4">

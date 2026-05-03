@@ -210,6 +210,12 @@ export interface CrawlOptions {
 	timeoutMs: number;
 	allowedPatterns?: RegExp[];
 	excludedPatterns?: RegExp[];
+	/**
+	 * Optional sitemap URL to use for URL discovery instead of HTML link extraction.
+	 * Supports sitemap.xml and sitemap index files.
+	 * When set, the crawler uses sitemap entries as the initial URL pool.
+	 */
+	sitemapUrl?: string;
 }
 
 export const DEFAULT_CRAWL_OPTIONS: CrawlOptions = {

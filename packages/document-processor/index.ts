@@ -9,6 +9,7 @@ export { DocumentPipeline } from "./lib/pipeline";
 export { ProgressTracker } from "./lib/progress";
 export { DeadLetterQueue } from "./lib/dlq";
 export { crawlUrl } from "./lib/crawler";
+export { parseSitemap, discoverSitemapsFromRobotsTxt } from "./lib/sitemap";
 export { processFileToPipeline, processUrlToPipeline } from "./lib/search-bridge";
 
 // Parser exports (for advanced use)

@@ -1,6 +1,7 @@
 import { logger } from "@repo/logs";
 
 import { parseUrl } from "./parsers/url";
+import { parseSitemap, discoverSitemapsFromRobotsTxt } from "./sitemap";
 import type { CrawlOptions, ParsedDocument, PipelineDocument } from "./types";
 import { DEFAULT_CRAWL_OPTIONS } from "./types";
 
@@ -17,7 +18,39 @@ export async function crawlUrl(
 	const opts = { ...DEFAULT_CRAWL_OPTIONS, ...options };
 	const discovered = new Map<string, PipelineDocument>();
 	const visited = new Set<string>();
-	const queue: Array<{ url: string; depth: number }> = [{ url, depth: 0 }];
+
+	// ── Sitemap-based seed discovery ─────────────────────────────
+	let sitemapUrls: string[] = [];
+	if (opts.sitemapUrl) {
+		logger.info(`[Crawler] Using sitemap for URL discovery: ${opts.sitemapUrl}`);
+		sitemapUrls = await parseSitemap(opts.sitemapUrl, {
+			userAgent: opts.userAgent,
+			timeoutMs: opts.timeoutMs,
+		});
+		logger.info(`[Crawler] Sitemap yielded ${sitemapUrls.length} URLs`);
+	} else {
+		// Auto-discover sitemaps from robots.txt if not explicitly provided
+		const autoSitemaps = await discoverSitemapsFromRobotsTxt(url, {
+			userAgent: opts.userAgent,
+		});
+		if (autoSitemaps.length > 0) {
+			logger.info(`[Crawler] Auto-discovered ${autoSitemaps.length} sitemaps from robots.txt`);
+			for (const sitemapUrl of autoSitemaps) {
+				const urls = await parseSitemap(sitemapUrl, {
+					userAgent: opts.userAgent,
+					timeoutMs: opts.timeoutMs,
+				});
+				sitemapUrls.push(...urls);
+			}
+			logger.info(`[Crawler] Sitemaps yielded ${sitemapUrls.length} total URLs`);
+		}
+	}
+
+	// Seed the queue: from sitemap URLs or starting URL
+	const queue: Array<{ url: string; depth: number }> =
+		sitemapUrls.length > 0
+			? sitemapUrls.map((su) => ({ url: su, depth: 0 }))
+			: [{ url, depth: 0 }];
 
 	let robotsDisallowed: Set<string> | null = null;
 	if (opts.respectRobotsTxt) {

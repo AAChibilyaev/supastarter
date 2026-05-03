@@ -13,6 +13,7 @@ import { requireScope } from "./auth";
 const crawlSchema = z.object({
 	url: z.string().url(),
 	indexId: z.string(),
+	sitemapUrl: z.string().url().optional(),
 	maxPages: z.number().int().min(1).max(10000).optional().default(100),
 	selector: z.string().optional(),
 });
@@ -70,6 +71,7 @@ export const crawlerApp = new Hono().post("/projects/:projectId/crawl", async (c
 					_type: "crawl_params",
 					url,
 					maxPages,
+					sitemapUrl: parsed.data.sitemapUrl ?? null,
 					selector: selector ?? null,
 				},
 			] as unknown as import("@repo/database").Prisma.InputJsonValue,

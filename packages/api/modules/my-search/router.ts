@@ -1,4 +1,5 @@
 import { addUrl } from "./procedures/add-url";
+import { ask } from "./procedures/ask";
 import { createIndex } from "./procedures/create-index";
 import { crossSearch } from "./procedures/cross-search";
 import { deleteFile } from "./procedures/delete-file";
@@ -18,4 +19,5 @@ export const mySearchRouter = {
 	deleteFile,
 	searchIndex,
 	crossSearch,
+	ask,
 };

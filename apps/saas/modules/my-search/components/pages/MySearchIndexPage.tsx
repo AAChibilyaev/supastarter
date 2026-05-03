@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
+import { AIAskPanel } from "../AIAskPanel";
 import { PersonalSearch } from "../PersonalSearch";
 import { SearchResults, type SearchHit } from "../SearchResults";
 
@@ -81,7 +82,10 @@ export function MySearchIndexPage({ organizationId, indexId }: MySearchIndexPage
 				subtitle={index?.slug}
 			/>
 
-			<div className="mt-6 space-y-4">
+			<div className="mt-6 space-y-6">
+				{/* AI Ask panel */}
+				<AIAskPanel organizationId={organizationId} indexId={indexId} />
+
 				{/* Search input */}
 				<PersonalSearch onSearch={handleSearch} />
 

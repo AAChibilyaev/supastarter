@@ -4,13 +4,13 @@
 	"description": "AACsearch InstantSearch.js adapter — drop-in replacement for the Algolia search client in the InstantSearch ecosystem",
 	"keywords": [
 		"aacsearch",
-		"instantsearch",
-		"algolia",
-		"search",
 		"adapter",
+		"algolia",
+		"angular-instantsearch",
+		"instantsearch",
 		"react-instantsearch",
-		"vue-instantsearch",
-		"angular-instantsearch"
+		"search",
+		"vue-instantsearch"
 	],
 	"homepage": "https://aacsearch.com/docs/sdks/instantsearch",
 	"bugs": "https://github.com/aacsearch/supastarter/issues",

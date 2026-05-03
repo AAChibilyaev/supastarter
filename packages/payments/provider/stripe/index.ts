@@ -122,6 +122,48 @@ export const cancelSubscription: CancelSubscription = async (id) => {
 	await stripeClient.subscriptions.cancel(id);
 };
 
+export interface StripeInvoice {
+	id: string;
+	date: number | null;
+	amountPaid: number;
+	currency: string;
+	status: string | null;
+	invoicePdf: string | null;
+	hostedInvoiceUrl: string | null;
+	number: string | null;
+}
+
+export const listCustomerInvoices = async ({
+	customerId,
+	limit = 10,
+	startingAfter,
+}: {
+	customerId: string;
+	limit?: number;
+	startingAfter?: string;
+}): Promise<{ invoices: StripeInvoice[]; hasMore: boolean }> => {
+	const stripe = getStripeClient();
+
+	const response = await stripe.invoices.list({
+		customer: customerId,
+		limit,
+		...(startingAfter ? { starting_after: startingAfter } : {}),
+	});
+
+	const invoices: StripeInvoice[] = response.data.map((invoice: Stripe.Invoice) => ({
+		id: invoice.id,
+		date: invoice.created,
+		amountPaid: invoice.amount_paid,
+		currency: invoice.currency,
+		status: invoice.status ?? null,
+		invoicePdf: invoice.invoice_pdf ?? null,
+		hostedInvoiceUrl: invoice.hosted_invoice_url ?? null,
+		number: invoice.number ?? null,
+	}));
+
+	return { invoices, hasMore: response.has_more };
+};
+
 export const webhookHandler: WebhookHandler = async (req) => {
 	const stripeClient = getStripeClient();
 

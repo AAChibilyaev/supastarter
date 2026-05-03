@@ -751,6 +751,14 @@
 			"usage": {
 				"searches": "Búsquedas",
 				"documents": "Documentos"
+			},
+			"invoices": {
+				"title": "Historial de facturas",
+				"emptyState": "Aún no hay facturas",
+				"downloadPdf": "Descargar PDF",
+				"paid": "Pagado",
+				"pending": "Pendiente",
+				"failed": "Fallido"
 			}
 		},
 		"notificationsPage": {

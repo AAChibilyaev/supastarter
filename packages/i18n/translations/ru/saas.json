@@ -751,7 +751,15 @@
 				"title": "Функции",
 				"none": "Нет настроенных функций"
 			},
-			"upgrade": "Улучшить план"
+			"upgrade": "Улучшить план",
+			"invoices": {
+				"title": "История счетов",
+				"emptyState": "Счетов пока нет",
+				"downloadPdf": "Скачать PDF",
+				"paid": "Оплачен",
+				"pending": "Ожидает",
+				"failed": "Ошибка"
+			}
 		},
 		"notificationsPage": {
 			"title": "Notifications",

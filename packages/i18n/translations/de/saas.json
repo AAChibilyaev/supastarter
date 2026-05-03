@@ -751,6 +751,14 @@
 			"usage": {
 				"searches": "Suchen",
 				"documents": "Dokumente"
+			},
+			"invoices": {
+				"title": "Rechnungsverlauf",
+				"emptyState": "Noch keine Rechnungen",
+				"downloadPdf": "PDF herunterladen",
+				"paid": "Bezahlt",
+				"pending": "Ausstehend",
+				"failed": "Fehlgeschlagen"
 			}
 		},
 		"notificationsPage": {

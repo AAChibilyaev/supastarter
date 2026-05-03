@@ -2,6 +2,7 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { AiWalletCard } from "@payments/components/AiWalletCard";
 import { ChangePlan } from "@payments/components/ChangePlan";
+import { InvoiceHistory } from "@payments/components/InvoiceHistory";
 import { TopUpDialog } from "@payments/components/TopUpDialog";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
@@ -78,6 +79,10 @@ export default async function BillingSettingsPage({
 					</SettingsList>
 				</div>
 			)}
+
+			<div className="mt-8">
+				<InvoiceHistory organizationId={organization.id} />
+			</div>
 		</>
 	);
 }

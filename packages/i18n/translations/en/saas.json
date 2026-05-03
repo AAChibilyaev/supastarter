@@ -751,7 +751,15 @@
 				"title": "Features",
 				"none": "No features configured"
 			},
-			"upgrade": "Upgrade plan"
+			"upgrade": "Upgrade plan",
+			"invoices": {
+				"title": "Invoice History",
+				"emptyState": "No invoices yet",
+				"downloadPdf": "Download PDF",
+				"paid": "Paid",
+				"pending": "Pending",
+				"failed": "Failed"
+			}
 		},
 		"notificationsPage": {
 			"title": "Notifications",

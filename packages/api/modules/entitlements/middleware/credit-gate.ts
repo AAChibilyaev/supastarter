@@ -83,13 +83,13 @@ export async function commitFlatFeeUsage(
 		pricingRuleId: null,
 		promptTokens: 0,
 		completionTokens: 0,
-		inputCostKopecks: 0n,
-		outputCostKopecks: 0n,
+		inputCostKopecks: BigInt(0),
+		outputCostKopecks: BigInt(0),
 		flatFeeKopecks: input.flatFeeKopecks,
 		markupBps,
 		totalChargeKopecks,
-		providerCostUsdMicros: 0n,
-		fxRateRubPerUsdMicros: 0n,
+		providerCostUsdMicros: BigInt(0),
+		fxRateRubPerUsdMicros: BigInt(0),
 		requestId: input.requestId ?? null,
 		status: input.status ?? "success",
 		metadata: input.metadata ?? { operation: input.operation },
@@ -154,7 +154,8 @@ export function creditGate(operation: string, estimatedCostKopecks: bigint) {
 
 		if (!wallet) {
 			throw new ORPCError("FAILED_PRECONDITION", {
-				message: "AI Wallet not initialized. Visit Settings > Billing to activate.",
+				message:
+					"AI Wallet not initialized. Visit Settings > Billing to activate.",
 			});
 		}
 
@@ -187,7 +188,8 @@ export function creditGate(operation: string, estimatedCostKopecks: bigint) {
 			}
 			if (err instanceof WalletNotFoundError) {
 				throw new ORPCError("FAILED_PRECONDITION", {
-					message: "AI Wallet not found. Visit Settings > Billing to activate.",
+					message:
+						"AI Wallet not found. Visit Settings > Billing to activate.",
 				});
 			}
 			// Unexpected error — let it propagate for 500-level handling

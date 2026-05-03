@@ -82,7 +82,8 @@
 		"readCaseStudy": "Die vollständige Fallstudie lesen",
 		"orMore": "Weitere Ressourcen:",
 		"visitBlog": "Besuche unser Blog",
-		"subject": "Wie 50.000 Produkte ihre Suche in 35 ms fanden"
+		"subject": "Wie 50.000 Produkte ihre Suche in 35 ms fanden",
+		"teaser": ""
 	},
 	"dripDay21": {
 		"greeting": "Hey {name},",

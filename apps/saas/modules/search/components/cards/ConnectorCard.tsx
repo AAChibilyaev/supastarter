@@ -9,10 +9,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { type LucideIcon, BlocksIcon, GlobeIcon, ServerIcon } from "lucide-react";
+import { type LucideIcon, BlocksIcon, GlobeIcon, ServerIcon, ShoppingCartIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export type SourceType = "prestashop" | "bitrix" | "directApi";
+export type SourceType = "prestashop" | "bitrix" | "directApi" | "shopify";
 
 export interface ConnectorStatus {
 	isConnected: boolean;
@@ -31,6 +31,7 @@ const sourceIcons: Record<SourceType, LucideIcon> = {
 	prestashop: BlocksIcon,
 	bitrix: GlobeIcon,
 	directApi: ServerIcon,
+	shopify: ShoppingCartIcon,
 };
 
 export function ConnectorCard({ type, status, onSetup, onManage }: ConnectorCardProps) {

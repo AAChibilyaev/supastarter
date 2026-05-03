@@ -19,6 +19,7 @@
 		"drizzle-orm": "catalog:",
 		"drizzle-zod": "catalog:",
 		"pg": "catalog:",
+		"xlsx": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

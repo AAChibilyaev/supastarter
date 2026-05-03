@@ -30,13 +30,14 @@ import { EmptyState } from "../cards/EmptyState";
 import { ShopifyConnectorCard } from "../connectors/ShopifyConnectorCard";
 import { ShopifyStoreSettings } from "../connectors/ShopifyStoreSettings";
 import { ConnectorWizard } from "../dialogs/ConnectorWizard";
+import { ShopifyConnectorCard } from "../cards/ShopifyConnectorCard";
 import { SyncJobsTable } from "../tables/SyncJobsTable";
 
 interface ConnectorsPageProps {
 	organizationId: string;
 }
 
-const CONNECTOR_SOURCES: SourceType[] = ["prestashop", "bitrix", "directApi"];
+const CONNECTOR_SOURCES: SourceType[] = ["prestashop", "bitrix", "shopify", "directApi"];
 
 const SAAS_BASE_URL = process.env.NEXT_PUBLIC_SAAS_URL || "http://localhost:3000";
 
@@ -64,6 +65,7 @@ function deriveSourceType(name: string): SourceType {
 	const lower = name.toLowerCase();
 	if (lower.includes("prestashop")) return "prestashop";
 	if (lower.includes("bitrix")) return "bitrix";
+	if (lower.includes("shopify")) return "shopify";
 	return "directApi";
 }
 
@@ -173,6 +175,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	const sourceStatusMap: Record<SourceType, ConnectorStatus> = {
 		prestashop: EMPTY_CONNECTOR_STATUS,
 		bitrix: EMPTY_CONNECTOR_STATUS,
+		shopify: EMPTY_CONNECTOR_STATUS,
 		directApi: EMPTY_CONNECTOR_STATUS,
 	};
 
@@ -327,44 +330,22 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 
 			{/* Row 1: Connector Cards */}
 			<div className="gap-6 md:grid-cols-4 grid">
-				{CONNECTOR_SOURCES.map((source) => (
-					<ConnectorCard
-						key={source}
-						type={source}
-						status={sourceStatusMap[source]}
-						onSetup={() => handleSetup(source)}
-					/>
-				))}
-
-				{/* Shopify card */}
-				<ShopifyConnectorCard
-					stores={(shopifyStores ?? []).map((s) => ({
-						id: s.id,
-						shop: s.shop,
-						name: s.name,
-						domain: s.domain,
-						syncStatus: s.syncStatus,
-						syncError: s.syncError,
-						lastSyncAt: s.lastSyncAt?.toISOString() ?? null,
-						installedAt: s.installedAt.toISOString(),
-					}))}
-					storeCount={shopifyStores?.length ?? 0}
-					isConnected={(shopifyStores?.length ?? 0) > 0}
-					isLoading={shopifyLoading}
-					lastSyncAt={shopifyStores?.[0]?.lastSyncAt?.toISOString() ?? null}
-					onConnect={() => {
-						if (organizationId) {
-							window.location.href = `${SAAS_BASE_URL}/api/shopify/install?shop=&organizationId=${organizationId}`;
-						}
-					}}
-					onManage={(storeId) => setShopifyStoreDialog({ open: true, storeId })}
-					onDisconnect={() => {
-						// Disconnect handled via store settings dialog
-					}}
-					onSync={() => {
-						// Sync triggered from store settings dialog
-					}}
-				/>
+				{CONNECTOR_SOURCES.map((source) =>
+					source === "shopify" ? (
+						<ShopifyConnectorCard
+							key={source}
+							organizationId={organizationId}
+							status={sourceStatusMap[source]}
+						/>
+					) : (
+						<ConnectorCard
+							key={source}
+							type={source}
+							status={sourceStatusMap[source]}
+							onSetup={() => handleSetup(source)}
+						/>
+					),
+				)}
 			</div>
 
 			{/* Row 2: Active connectors table */}

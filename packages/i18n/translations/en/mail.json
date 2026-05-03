@@ -82,7 +82,8 @@
 		"readCaseStudy": "Read the full case study",
 		"orMore": "More resources:",
 		"visitBlog": "Visit our blog",
-		"subject": "How 50,000 products found their search in 35ms"
+		"subject": "How 50,000 products found their search in 35ms",
+		"teaser": ""
 	},
 	"dripDay21": {
 		"greeting": "Hey {name},",

@@ -28,19 +28,19 @@ import {
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
-const ACTIONS = [
-	{ value: "", label: "allActions" },
-	{ value: "config_created", label: "configCreated" },
-	{ value: "config_updated", label: "configUpdated" },
-	{ value: "config_deleted", label: "configDeleted" },
-	{ value: "token_regenerated", label: "tokenRegenerated" },
-	{ value: "test_connection", label: "testConnection" },
-	{ value: "sync_started", label: "syncStarted" },
-	{ value: "sync_completed", label: "syncCompleted" },
-	{ value: "sync_failed", label: "syncFailed" },
-	{ value: "user_provisioned", label: "userProvisioned" },
-	{ value: "user_deprovisioned", label: "userDeprovisioned" },
-	{ value: "group_provisioned", label: "groupProvisioned" },
+const ACTION_FILTERS = [
+	{ value: "", label: "All Actions" },
+	{ value: "config_created", label: "Config Created" },
+	{ value: "config_updated", label: "Config Updated" },
+	{ value: "config_deleted", label: "Config Deleted" },
+	{ value: "token_regenerated", label: "Token Regenerated" },
+	{ value: "test_connection", label: "Test Connection" },
+	{ value: "sync_started", label: "Sync Started" },
+	{ value: "sync_completed", label: "Sync Completed" },
+	{ value: "sync_failed", label: "Sync Failed" },
+	{ value: "user_provisioned", label: "User Provisioned" },
+	{ value: "user_deprovisioned", label: "User Deprovisioned" },
+	{ value: "group_provisioned", label: "Group Provisioned" },
 ] as const;
 
 interface AuditLogEntry {
@@ -65,22 +65,22 @@ interface ScimAuditTableProps {
 	organizationId: string;
 }
 
-const ACTION_LABEL_KEYS: Record<string, string> = {
-	config_created: "scim.logs.actionConfigCreated",
-	config_updated: "scim.logs.actionConfigUpdated",
-	config_deleted: "scim.logs.actionConfigDeleted",
-	token_regenerated: "scim.logs.actionTokenRegenerated",
-	test_connection: "scim.logs.actionTestConnection",
-	sync_started: "scim.logs.actionSyncStarted",
-	sync_completed: "scim.logs.actionSyncCompleted",
-	sync_failed: "scim.logs.actionSyncFailed",
-	user_provisioned: "scim.logs.actionUserProvisioned",
-	user_deprovisioned: "scim.logs.actionUserDeprovisioned",
-	group_provisioned: "scim.logs.actionGroupProvisioned",
+const ACTION_LABELS: Record<string, string> = {
+	config_created: "Config Created",
+	config_updated: "Config Updated",
+	config_deleted: "Config Deleted",
+	token_regenerated: "Token Regenerated",
+	test_connection: "Test Connection",
+	sync_started: "Sync Started",
+	sync_completed: "Sync Completed",
+	sync_failed: "Sync Failed",
+	user_provisioned: "User Provisioned",
+	user_deprovisioned: "User Deprovisioned",
+	group_provisioned: "Group Provisioned",
 };
 
 export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	const [logs, setLogs] = useState<AuditLogEntry[]>([]);
 	const [pagination, setPagination] = useState<PaginationInfo>({
 		page: 1,
@@ -125,7 +125,7 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 	}, [organizationId, pagination.page, pagination.limit, actionFilter]);
 
 	useEffect(() => {
-		fetchLogs();
+		void fetchLogs();
 	}, [fetchLogs]);
 
 	const formatDate = (iso: string) => {
@@ -143,13 +143,10 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 	};
 
 	const getActionLabel = (action: string): string => {
-		const key = ACTION_LABEL_KEYS[action] ?? action;
-		try {
-			return t(key);
-		} catch {
-			// Fallback: humanize the action name
-			return action.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-		}
+		return (
+			ACTION_LABELS[action] ??
+			action.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+		);
 	};
 
 	const handlePageChange = (page: number) => {
@@ -190,7 +187,7 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 			{/* Filters */}
 			<div className="gap-3 flex flex-wrap items-center">
 				<div className="gap-2 flex items-center">
-					<p className="text-sm text-muted-foreground">{t("scim.logs.filterAction")}</p>
+					<p className="text-sm text-muted-foreground">Filter by Action</p>
 					<Select
 						value={actionFilter}
 						onValueChange={(value) => {
@@ -199,12 +196,12 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 						}}
 					>
 						<SelectTrigger className="w-44">
-							<SelectValue placeholder={t("scim.logs.allActions")} />
+							<SelectValue placeholder="All Actions" />
 						</SelectTrigger>
 						<SelectContent>
-							{ACTIONS.map((action) => (
+							{ACTION_FILTERS.map((action) => (
 								<SelectItem key={action.value} value={action.value}>
-									{t(`scim.logs.${action.label}`)}
+									{action.label}
 								</SelectItem>
 							))}
 						</SelectContent>
@@ -213,7 +210,7 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 
 				<div className="ml-auto">
 					<Button variant="outline" size="sm" onClick={handleExport}>
-						{t("scim.logs.exportCsv")}
+						{t("settings.scim.logs.exportCsv")}
 					</Button>
 				</div>
 			</div>
@@ -223,11 +220,11 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead>{t("scim.logs.timestamp")}</TableHead>
-							<TableHead>{t("scim.logs.action")}</TableHead>
-							<TableHead>{t("scim.logs.target")}</TableHead>
-							<TableHead>{t("scim.logs.result")}</TableHead>
-							<TableHead>{t("scim.logs.details")}</TableHead>
+							<TableHead>{t("settings.scim.logs.timestamp")}</TableHead>
+							<TableHead>{t("settings.scim.logs.action")}</TableHead>
+							<TableHead>Target</TableHead>
+							<TableHead>Result</TableHead>
+							<TableHead>Details</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -255,7 +252,7 @@ export function ScimAuditTable({ organizationId }: ScimAuditTableProps) {
 									colSpan={5}
 									className="py-8 text-sm text-center text-muted-foreground"
 								>
-									{t("scim.logs.empty")}
+									{t("scim.logs.noLogs")}
 								</TableCell>
 							</TableRow>
 						) : (

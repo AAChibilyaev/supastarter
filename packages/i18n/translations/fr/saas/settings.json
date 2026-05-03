@@ -636,11 +636,13 @@
 				"configure": "Configurer la connexion {provider}",
 				"testConnection": "Tester la connexion SCIM",
 				"skipAndSave": "Ignorer le test et enregistrer",
-				"complete": "Terminer la configuration"
+				"complete": "Terminer la configuration",
+				"tokenWarning": "Enregistrez ce token maintenant. Il ne sera plus affiché."
 			},
 			"test": {
 				"success": "Connexion réussie !",
-				"failure": "Échec de la connexion"
+				"failure": "Échec de la connexion",
+				"inProgress": "Test de connexion en cours..."
 			},
 			"logs": {
 				"title": "Journaux d'audit SCIM",

@@ -631,11 +631,13 @@
 				"configure": "Configure {provider} Connection",
 				"testConnection": "Test SCIM Connection",
 				"skipAndSave": "Skip Test & Save",
-				"complete": "Complete Setup"
+				"complete": "Complete Setup",
+				"tokenWarning": "Save this token now. It will not be shown again."
 			},
 			"test": {
 				"success": "Connection successful!",
-				"failure": "Connection failed"
+				"failure": "Connection failed",
+				"inProgress": "Testing connection..."
 			},
 			"logs": {
 				"title": "SCIM Audit Logs",

@@ -636,11 +636,13 @@
 				"configure": "{provider} Verbindung konfigurieren",
 				"testConnection": "SCIM-Verbindung testen",
 				"skipAndSave": "Test überspringen & speichern",
-				"complete": "Einrichtung abschließen"
+				"complete": "Einrichtung abschließen",
+				"tokenWarning": "Speichern Sie diesen Token jetzt. Er wird nicht wieder angezeigt."
 			},
 			"test": {
 				"success": "Verbindung erfolgreich!",
-				"failure": "Verbindung fehlgeschlagen"
+				"failure": "Verbindung fehlgeschlagen",
+				"inProgress": "Verbindung wird getestet..."
 			},
 			"logs": {
 				"title": "SCIM Audit Logs",

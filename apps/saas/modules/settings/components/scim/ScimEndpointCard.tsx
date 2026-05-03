@@ -22,7 +22,7 @@ export function ScimEndpointCard({
 	onRevoke,
 	organizationId,
 }: ScimEndpointCardProps) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	const [showToken, setShowToken] = useState(false);
 	const [copiedIndex, setCopiedIndex] = useState<"url" | "token" | null>(null);
 
@@ -34,7 +34,6 @@ export function ScimEndpointCard({
 			setCopiedIndex(type);
 			setTimeout(() => setCopiedIndex(null), 2000);
 		} catch {
-			// Fallback for older browsers
 			const textarea = document.createElement("textarea");
 			textarea.value = value;
 			document.body.appendChild(textarea);
@@ -49,13 +48,13 @@ export function ScimEndpointCard({
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>{t("scim.endpoint.baseUrl")}</CardTitle>
+				<CardTitle>{t("settings.scim.endpoint.baseUrl")}</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-4">
 				{/* SCIM Base URL */}
 				<div className="space-y-2">
 					<label className="text-sm text-muted-foreground">
-						{t("scim.endpoint.baseUrl")}
+						{t("settings.scim.endpoint.baseUrl")}
 					</label>
 					<div className="gap-2 flex">
 						<Input value={scimBaseUrl} readOnly className="font-mono text-xs" />
@@ -63,20 +62,18 @@ export function ScimEndpointCard({
 							variant="outline"
 							size="icon"
 							onClick={() => handleCopy(scimBaseUrl, "url")}
-							title={t("scim.endpoint.copy")}
+							title={t("settings.scim.endpoint.copy")}
 						>
 							<Copy className="size-4" />
 						</Button>
 					</div>
-					{copiedIndex === "url" && (
-						<p className="text-xs text-success">{t("scim.endpoint.copied")}</p>
-					)}
+					{copiedIndex === "url" && <p className="text-xs text-success">Copied!</p>}
 				</div>
 
 				{/* Bearer Token */}
 				<div className="space-y-2">
 					<label className="text-sm text-muted-foreground">
-						{t("scim.endpoint.bearerToken")}
+						{t("settings.scim.endpoint.bearerToken")}
 					</label>
 					<div className="gap-2 flex">
 						<div className="relative flex-1">
@@ -105,25 +102,23 @@ export function ScimEndpointCard({
 							variant="outline"
 							size="icon"
 							onClick={() => handleCopy(bearerTokenPrefix, "token")}
-							title={t("scim.endpoint.copy")}
+							title={t("settings.scim.endpoint.copy")}
 						>
 							<Copy className="size-4" />
 						</Button>
 					</div>
-					{copiedIndex === "token" && (
-						<p className="text-xs text-success">{t("scim.endpoint.copied")}</p>
-					)}
+					{copiedIndex === "token" && <p className="text-xs text-success">Copied!</p>}
 				</div>
 
 				{/* Action buttons */}
 				<div className="gap-3 pt-2 flex flex-wrap">
 					<Button variant="outline" size="sm" onClick={onRegenerate}>
 						<RefreshCw className="size-3.5 mr-1.5" />
-						{t("scim.endpoint.regenerate")}
+						{t("settings.scim.endpoint.regenerate")}
 					</Button>
 					<Button variant="destructive" size="sm" onClick={onRevoke}>
 						<Trash2 className="size-3.5 mr-1.5" />
-						{t("scim.endpoint.revoke")}
+						{t("settings.scim.endpoint.revoke")}
 					</Button>
 				</div>
 
@@ -131,8 +126,7 @@ export function ScimEndpointCard({
 				{endpointUrl && (
 					<div className="pt-2 border-t">
 						<p className="text-xs text-muted-foreground">
-							{t("scim.endpoint.externalUrl")}:{" "}
-							<span className="font-mono">{endpointUrl}</span>
+							External URL: <span className="font-mono">{endpointUrl}</span>
 						</p>
 					</div>
 				)}

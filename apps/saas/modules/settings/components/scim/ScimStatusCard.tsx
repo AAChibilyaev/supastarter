@@ -28,7 +28,7 @@ export function ScimStatusCard({
 	usersProvisioned,
 	lastSyncStatus,
 }: ScimStatusCardProps) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 
 	const formatDate = (iso: string) => {
 		try {
@@ -50,7 +50,7 @@ export function ScimStatusCard({
 				{/* Provider */}
 				<div className="space-y-1">
 					<p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-						{t("scim.provider")}
+						Provider
 					</p>
 					<p className="text-sm font-medium">{PROVIDER_LABELS[provider] ?? provider}</p>
 				</div>
@@ -58,7 +58,7 @@ export function ScimStatusCard({
 				{/* Status */}
 				<div className="space-y-1">
 					<p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-						{t("scim.status.label")}
+						Status
 					</p>
 					<div className="gap-2 flex items-center">
 						{isActive ? (
@@ -67,7 +67,7 @@ export function ScimStatusCard({
 								className="gap-1 inline-flex items-center normal-case"
 							>
 								<CheckCircle2 className="size-3" />
-								{t("scim.status.active")}
+								{t("settings.scim.status.active")}
 							</Badge>
 						) : (
 							<Badge
@@ -75,7 +75,7 @@ export function ScimStatusCard({
 								className="gap-1 inline-flex items-center normal-case"
 							>
 								<XCircle className="size-3" />
-								{t("scim.status.inactive")}
+								{t("settings.scim.status.inactive")}
 							</Badge>
 						)}
 					</div>
@@ -84,19 +84,15 @@ export function ScimStatusCard({
 				{/* Last sync */}
 				<div className="space-y-1">
 					<p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-						{t("scim.status.lastSync")}
+						{t("settings.scim.status.lastSync")}
 					</p>
 					<div className="gap-1.5 flex items-center">
 						<RefreshCw className="size-3.5 text-muted-foreground" />
-						<p className="text-sm">
-							{lastSyncAt ? formatDate(lastSyncAt) : t("scim.status.never")}
-						</p>
+						<p className="text-sm">{lastSyncAt ? formatDate(lastSyncAt) : "Never"}</p>
 					</div>
 					{lastSyncStatus && (
 						<p className="text-xs text-muted-foreground/60">
-							{lastSyncStatus === "success"
-								? t("scim.status.syncSuccess")
-								: t("scim.status.syncFailed")}
+							{lastSyncStatus === "success" ? "Sync succeeded" : "Sync failed"}
 						</p>
 					)}
 				</div>
@@ -104,7 +100,7 @@ export function ScimStatusCard({
 				{/* Users provisioned */}
 				<div className="space-y-1">
 					<p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-						{t("scim.status.usersProvisioned")}
+						{t("settings.scim.status.usersProvisioned")}
 					</p>
 					<div className="gap-1.5 flex items-center">
 						<Users className="size-3.5 text-muted-foreground" />

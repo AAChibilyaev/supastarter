@@ -24,30 +24,33 @@ interface ScimWizardProps {
 }
 
 function TestProgress() {
+	const t = useTranslations();
 	return (
 		<div className="gap-3 py-8 flex flex-col items-center">
 			<Loader2 className="size-8 animate-spin text-primary" />
-			<p className="text-sm text-muted-foreground">Testing connection...</p>
+			<p className="text-sm text-muted-foreground">{t("settings.scim.test.inProgress")}</p>
 		</div>
 	);
 }
 
 function TestSuccess() {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	return (
 		<div className="gap-3 py-8 flex flex-col items-center">
 			<CheckCircle2 className="size-10 text-success" />
-			<p className="text-sm font-medium text-success">{t("scim.test.success")}</p>
+			<p className="text-sm font-medium text-success">{t("settings.scim.test.success")}</p>
 		</div>
 	);
 }
 
 function TestFailure({ detail }: { detail: string }) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	return (
 		<div className="gap-3 py-8 flex flex-col items-center">
 			<XCircle className="size-10 text-destructive" />
-			<p className="text-sm font-medium text-destructive">{t("scim.test.failure")}</p>
+			<p className="text-sm font-medium text-destructive">
+				{t("settings.scim.test.failure")}
+			</p>
 			{detail && (
 				<p className="text-xs max-w-md text-center text-muted-foreground">{detail}</p>
 			)}
@@ -56,7 +59,7 @@ function TestFailure({ detail }: { detail: string }) {
 }
 
 export function ScimWizard({ organizationId }: ScimWizardProps) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	const router = useRouter();
 
 	const [step, setStep] = useState(1);
@@ -95,12 +98,11 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 			}
 
 			const data = await response.json();
-			// The API returns bearerToken only on creation
 			if (data.bearerToken) {
 				setBearerToken(data.bearerToken);
 			}
 		} catch {
-			toastError(t("scim.wizard.configError"));
+			toastError("Failed to create SCIM configuration");
 		}
 	};
 
@@ -120,28 +122,28 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 
 			if (data.success) {
 				setTestResult("success");
-				toastSuccess(t("scim.test.success"));
+				toastSuccess(t("settings.scim.test.success"));
 			} else {
 				setTestResult("failure");
 				setTestDetail(data.detail ?? "");
-				toastError(t("scim.test.failure"));
+				toastError(t("settings.scim.test.failure"));
 			}
 		} catch {
 			setTestResult("failure");
 			setTestDetail("Connection failed — unable to reach SCIM endpoint");
-			toastError(t("scim.test.failure"));
+			toastError(t("settings.scim.test.failure"));
 		} finally {
 			setIsTesting(false);
 		}
 	};
 
 	const handleComplete = () => {
-		toastSuccess(t("scim.wizard.complete"));
+		toastSuccess("Setup complete");
 		router.push(`/settings/scim`);
 	};
 
 	const handleSkipAndSave = () => {
-		toastSuccess(t("scim.wizard.complete"));
+		toastSuccess("Setup complete");
 		router.push(`/settings/scim`);
 	};
 
@@ -173,7 +175,7 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 			{step === 1 && (
 				<Card>
 					<CardHeader>
-						<CardTitle>{t("scim.wizard.selectProvider")}</CardTitle>
+						<CardTitle>{t("settings.scim.wizard.selectProvider")}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="gap-4 sm:grid-cols-3 grid grid-cols-2">
@@ -204,7 +206,7 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 								disabled={!selectedProvider}
 								onClick={handleContinueToConfigure}
 							>
-								{t("common.continue")}
+								{t("common.actions.continue")}
 							</Button>
 						</div>
 					</CardContent>
@@ -216,17 +218,20 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 				<Card>
 					<CardHeader>
 						<CardTitle>
-							{t("scim.wizard.configure", {
+							{t("settings.scim.wizard.configure", {
 								provider:
 									PROVIDERS.find((p) => p.id === selectedProvider)?.label ??
-									selectedProvider,
+									selectedProvider ??
+									"Identity Provider",
 							})}
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-6">
 						{/* SCIM Base URL */}
 						<div className="space-y-2">
-							<p className="text-sm font-medium">{t("scim.endpoint.baseUrl")}</p>
+							<p className="text-sm font-medium">
+								{t("settings.scim.endpoint.baseUrl")}
+							</p>
 							<div className="p-3 font-mono text-xs rounded-lg bg-muted break-all">
 								{scimBaseUrl}
 							</div>
@@ -234,48 +239,53 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 
 						{/* Bearer Token */}
 						<div className="space-y-2">
-							<p className="text-sm font-medium">{t("scim.endpoint.bearerToken")}</p>
+							<p className="text-sm font-medium">
+								{t("settings.scim.endpoint.bearerToken")}
+							</p>
 							<div className="p-3 font-mono text-xs rounded-lg bg-muted break-all">
 								{bearerToken ?? "Generating..."}
 							</div>
-							<p className="text-xs text-warning">{t("scim.wizard.tokenWarning")}</p>
+							<p className="text-xs text-warning">
+								{t("settings.scim.wizard.tokenWarning")}
+							</p>
 						</div>
 
 						{/* Supported features */}
 						<div className="space-y-2">
-							<p className="text-sm font-medium">
-								{t("scim.wizard.supportedFeatures")}
-							</p>
+							<p className="text-sm font-medium">Supported SCIM Features</p>
 							<div className="gap-2 flex flex-wrap">
-								<Badge status="success">{t("scim.wizard.featureUsers")}</Badge>
-								<Badge status="success">{t("scim.wizard.featureGroups")}</Badge>
-								<Badge status="info">{t("scim.wizard.featurePush")}</Badge>
-								<Badge status="info">{t("scim.wizard.featureAuth")}</Badge>
+								<Badge status="success">Users</Badge>
+								<Badge status="success">Groups</Badge>
+								<Badge status="info">Push Sync</Badge>
+								<Badge status="info">Bearer Auth</Badge>
 							</div>
 						</div>
 
-						{/* Provider-specific instructions placeholder */}
+						{/* Provider-specific instructions */}
 						<div className="p-3 text-sm rounded-lg bg-muted text-muted-foreground">
-							<p className="font-medium mb-1">{t("scim.wizard.instructions")}</p>
-							<p>{t("scim.wizard.instructionsText")}</p>
+							<p className="font-medium mb-1">Setup Instructions</p>
+							<p>
+								Copy the SCIM Base URL and Bearer Token above into your identity
+								provider's SCIM provisioning settings.
+							</p>
 						</div>
 
 						<div className="flex justify-between">
 							<Button variant="ghost" onClick={() => setStep(1)}>
-								{t("common.back")}
+								{t("common.actions.back")}
 							</Button>
 							<div className="gap-2 flex">
 								<Button variant="outline" onClick={handleSkipAndSave}>
-									{t("scim.wizard.skipAndSave")}
+									{t("settings.scim.wizard.skipAndSave")}
 								</Button>
 								<Button
 									variant="primary"
 									onClick={() => {
 										setStep(3);
-										handleTestConnection();
+										void handleTestConnection();
 									}}
 								>
-									{t("scim.wizard.testConnection")}
+									{t("settings.scim.wizard.testConnection")}
 								</Button>
 							</div>
 						</div>
@@ -287,7 +297,7 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 			{step === 3 && (
 				<Card>
 					<CardHeader>
-						<CardTitle>{t("scim.wizard.testConnection")}</CardTitle>
+						<CardTitle>{t("settings.scim.wizard.testConnection")}</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4">
 						{testResult === "loading" && <TestProgress />}
@@ -297,7 +307,7 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 						{testResult !== "loading" && (
 							<div className="flex justify-between">
 								<Button variant="ghost" onClick={() => setStep(2)}>
-									{t("common.back")}
+									{t("common.actions.back")}
 								</Button>
 								<div className="gap-2 flex">
 									{testResult === "failure" && (
@@ -306,11 +316,11 @@ export function ScimWizard({ organizationId }: ScimWizardProps) {
 											onClick={handleTestConnection}
 											disabled={isTesting}
 										>
-											{t("common.retry")}
+											Retry
 										</Button>
 									)}
 									<Button variant="primary" onClick={handleComplete}>
-										{t("scim.wizard.complete")}
+										{t("settings.scim.wizard.complete")}
 									</Button>
 								</div>
 							</div>

@@ -31,7 +31,7 @@ interface ScimOverviewPanelProps {
 }
 
 export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
-	const t = useTranslations("settings");
+	const t = useTranslations();
 	const { confirm } = useConfirmationAlert();
 
 	const [config, setConfig] = useState<ScimConfig | null>(null);
@@ -68,9 +68,8 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 	}, [organizationId]);
 
 	useEffect(() => {
-		fetchConfig();
+		void fetchConfig();
 	}, [fetchConfig]);
-
 	const handleRegenerate = async () => {
 		try {
 			const response = await fetch(`/api/scim/config/${organizationId}/regenerate-token`, {
@@ -85,19 +84,19 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 
 			const data = await response.json();
 			setTokenPrefix(data.bearerTokenPrefix);
-			toastSuccess(t("scim.endpoint.tokenRegenerated"));
+			toastSuccess("Token regenerated successfully");
 		} catch (err) {
-			toastError(err instanceof Error ? err.message : t("scim.endpoint.regenerateError"));
+			toastError(err instanceof Error ? err.message : "Failed to regenerate token");
 		}
 	};
 
 	const handleRevoke = () => {
 		confirm({
-			title: t("scim.disconnectDialog.title"),
-			message: t("scim.disconnectDialog.description"),
+			title: t("settings.scim.disconnectDialog.title"),
+			message: t("settings.scim.disconnectDialog.description"),
 			destructive: true,
-			confirmLabel: t("scim.disconnectDialog.confirm"),
-			cancelLabel: t("scim.disconnectDialog.cancel"),
+			confirmLabel: t("settings.scim.disconnectDialog.confirm"),
+			cancelLabel: t("settings.scim.disconnectDialog.cancel"),
 			onConfirm: async () => {
 				try {
 					const response = await fetch(`/api/scim/config/${organizationId}`, {
@@ -110,11 +109,9 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 					}
 
 					setConfig(null);
-					toastSuccess(t("scim.disconnectDialog.disconnected"));
+					toastSuccess("SCIM disconnected");
 				} catch (err) {
-					toastError(
-						err instanceof Error ? err.message : t("scim.disconnectDialog.error"),
-					);
+					toastError(err instanceof Error ? err.message : "Failed to disconnect SCIM");
 				}
 			},
 		});
@@ -133,7 +130,7 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 			<Card className="p-8 text-center">
 				<p className="text-sm mb-4 text-destructive">{error}</p>
 				<Button variant="outline" onClick={fetchConfig}>
-					{t("common.retry")}
+					Retry
 				</Button>
 			</Card>
 		);
@@ -168,7 +165,7 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 				<Button asChild variant="ghost" size="sm">
 					<Link href="scim/logs">
 						<ScrollText className="size-3.5 mr-1.5" />
-						{t("scim.endpoint.viewLogs")}
+						{t("settings.scim.endpoint.viewLogs")}
 					</Link>
 				</Button>
 			</div>

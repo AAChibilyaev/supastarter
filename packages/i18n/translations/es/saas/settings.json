@@ -636,11 +636,13 @@
 				"configure": "Configurar conexión {provider}",
 				"testConnection": "Probar conexión SCIM",
 				"skipAndSave": "Saltar prueba y guardar",
-				"complete": "Completar configuración"
+				"complete": "Completar configuración",
+				"tokenWarning": "Guarde este token ahora. No se volverá a mostrar."
 			},
 			"test": {
 				"success": "¡Conexión exitosa!",
-				"failure": "Conexión fallida"
+				"failure": "Conexión fallida",
+				"inProgress": "Probando conexión..."
 			},
 			"logs": {
 				"title": "Registros de auditoría SCIM",

@@ -38,6 +38,16 @@ export interface CollectionFieldInput {
 	hnsw_params?: HnswParams;
 	/** When true, the field value is truncated to fit within the token limit */
 	truncate?: boolean;
+	/** When false, the field value is not stored on disk — only used for filtering/searching */
+	store?: boolean;
+	/** Enable range index for numeric fields — optimizes range/filter queries */
+	range_index?: boolean;
+	/** Max number of characters per token for string fields (Typesense v30+) */
+	truncate_len?: number;
+	/** Enable stemming at index time for string fields */
+	stem?: boolean;
+	/** Distance metric for vector fields: cosine similarity or inner product */
+	vec_dist?: "cosine" | "ip";
 }
 
 export interface CreatePhysicalCollectionInput {

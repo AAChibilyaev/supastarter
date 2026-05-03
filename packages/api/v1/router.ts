@@ -48,6 +48,7 @@
 import { Hono } from "hono";
 
 import { analyticsApp } from "./analytics";
+import { billingApp } from "./billing";
 import { documentsApp } from "./documents";
 import { indexesApp } from "./indexes";
 import { keysApp } from "./keys";
@@ -67,7 +68,8 @@ const v1Router = new Hono()
 	.route("/", suggestApp)
 	.route("/", keysApp)
 	.route("/", analyticsApp)
-	.route("/", synonymsApp);
+	.route("/", synonymsApp)
+	.route("/", billingApp);
 
 // OpenAPI spec (no auth required for API discovery)
 v1Router.get("/openapi.json", (c) => c.json(generateOpenApiSpec()));

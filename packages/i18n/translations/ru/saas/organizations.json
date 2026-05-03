@@ -1,152 +1,152 @@
 {
-	"organizations": {
-		"createForm": {
-			"name": "Organization name",
-			"notifications": {
-				"error": "We are sorry, but we were unable to create your organization. Please try again later.",
-				"success": "Your organization has been created. You can now invite members."
-			},
-			"submit": "Create organization",
-			"subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
-			"title": "Create an organization"
-		},
-		"invitationAlert": {
-			"description": "You need to sign in or create an account to join the organization.",
-			"title": "You have been invited to join an organization."
-		},
-		"invitationModal": {
-			"accept": "Accept",
-			"decline": "Decline",
-			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization",
-			"error": "Произошла ошибка. Пожалуйста, попробуйте ещё раз."
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Create new organization",
-			"organizations": "Organizations",
-			"personalAccount": "Personal account"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Create new organization",
-			"title": "Your organizations"
-		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Участник",
-			"owner": "Владелец",
-			"viewer": "Просмотрщик"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Organization name"
-			},
-			"deleteOrganization": {
-				"confirmation": "Are you sure you want to delete your organization?",
-				"description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
-				"submit": "Delete organization",
-				"title": "Delete organization"
-			},
-			"logo": {
-				"description": "Upload a logo for your organization.",
-				"title": "Organization logo"
-			},
-			"members": {
-				"activeMembers": "Active members",
-				"description": "See all active members and the pending invites of your organization.",
-				"invitations": {
-					"empty": "You have not invited any members yet.",
-					"expiresAt": "Expires at {date}",
-					"invitationStatus": {
-						"accepted": "Accepted",
-						"canceled": "Canceled",
-						"pending": "Pending",
-						"rejected": "Rejected"
-					},
-					"revoke": "Revoke invitation",
-					"resend": "Resend invitation"
-				},
-				"inviteMember": {
-					"description": "To invite a new member, send them an invitation.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "We were unable to invite the member. Please try again later.",
-							"title": "Could not invite member"
-						},
-						"success": {
-							"description": "The member has been invited.",
-							"title": "Member invited"
-						}
-					},
-					"role": "Role",
-					"submit": "Invite",
-					"title": "Invite member"
-				},
-				"leaveOrganization": "Leave organization",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Could not remove the member from your organization. Please try again."
-						},
-						"loading": {
-							"description": "Removing member from organization..."
-						},
-						"success": {
-							"description": "The member has been successfully removed from your organization."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "The invitation could not be revoked. Please try again later."
-						},
-						"loading": {
-							"description": "Revoking invitation..."
-						},
-						"success": {
-							"description": "The invitation has been revoked."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Could not update organization membership. Please try again."
-						},
-						"loading": {
-							"description": "Updating membership..."
-						},
-						"success": {
-							"description": "Membership was updated successfully"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Resending invitation..."
-						},
-						"success": {
-							"description": "Invitation sent"
-						},
-						"error": {
-							"description": "Could not sent invitation. Please try again."
-						}
-					}
-				},
-				"pendingInvitations": "Pending invitations",
-				"removeMember": "Remove member",
-				"title": "Members"
-			},
-			"notifications": {
-				"organizationDeleted": "Your organization has been deleted.",
-				"organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
-				"organizationNameUpdated": "Your organization name has been updated.",
-				"organizationNotDeleted": "We were unable to delete your organization. Please try again later."
-			},
-			"subtitle": "Manage the settings of the organization.",
-			"title": "Organization",
-			"dangerZone": {
-				"title": "Danger zone"
-			}
-		},
-		"start": {
-			"subtitle": "Welcome to the start page of this organization!"
-		}
-	}
+  "organizations": {
+    "createForm": {
+      "name": "Organization name",
+      "notifications": {
+        "error": "We are sorry, but we were unable to create your organization. Please try again later.",
+        "success": "Your organization has been created. You can now invite members."
+      },
+      "submit": "Create organization",
+      "subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
+      "title": "Create an organization"
+    },
+    "invitationAlert": {
+      "description": "You need to sign in or create an account to join the organization.",
+      "title": "You have been invited to join an organization."
+    },
+    "invitationModal": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
+      "title": "Join the organization",
+      "error": "Произошла ошибка. Пожалуйста, попробуйте ещё раз."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Create new organization",
+      "organizations": "Organizations",
+      "personalAccount": "Personal account"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Create new organization",
+      "title": "Your organizations"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Участник",
+      "owner": "Владелец",
+      "viewer": "Просмотрщик"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Organization name"
+      },
+      "deleteOrganization": {
+        "confirmation": "Are you sure you want to delete your organization?",
+        "description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
+        "submit": "Delete organization",
+        "title": "Delete organization"
+      },
+      "logo": {
+        "description": "Upload a logo for your organization.",
+        "title": "Organization logo"
+      },
+      "members": {
+        "activeMembers": "Active members",
+        "description": "See all active members and the pending invites of your organization.",
+        "invitations": {
+          "empty": "You have not invited any members yet.",
+          "expiresAt": "Expires at {date}",
+          "invitationStatus": {
+            "accepted": "Accepted",
+            "canceled": "Canceled",
+            "pending": "Pending",
+            "rejected": "Rejected"
+          },
+          "revoke": "Revoke invitation",
+          "resend": "Resend invitation"
+        },
+        "inviteMember": {
+          "description": "To invite a new member, send them an invitation.",
+          "email": "Email",
+          "notifications": {
+            "error": {
+              "description": "We were unable to invite the member. Please try again later.",
+              "title": "Could not invite member"
+            },
+            "success": {
+              "description": "The member has been invited.",
+              "title": "Member invited"
+            }
+          },
+          "role": "Role",
+          "submit": "Invite",
+          "title": "Invite member"
+        },
+        "leaveOrganization": "Leave organization",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Could not remove the member from your organization. Please try again."
+            },
+            "loading": {
+              "description": "Removing member from organization..."
+            },
+            "success": {
+              "description": "The member has been successfully removed from your organization."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "The invitation could not be revoked. Please try again later."
+            },
+            "loading": {
+              "description": "Revoking invitation..."
+            },
+            "success": {
+              "description": "The invitation has been revoked."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Could not update organization membership. Please try again."
+            },
+            "loading": {
+              "description": "Updating membership..."
+            },
+            "success": {
+              "description": "Membership was updated successfully"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Resending invitation..."
+            },
+            "success": {
+              "description": "Invitation sent"
+            },
+            "error": {
+              "description": "Could not sent invitation. Please try again."
+            }
+          }
+        },
+        "pendingInvitations": "Pending invitations",
+        "removeMember": "Remove member",
+        "title": "Members"
+      },
+      "notifications": {
+        "organizationDeleted": "Your organization has been deleted.",
+        "organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
+        "organizationNameUpdated": "Your organization name has been updated.",
+        "organizationNotDeleted": "We were unable to delete your organization. Please try again later."
+      },
+      "subtitle": "Manage the settings of the organization.",
+      "title": "Organization",
+      "dangerZone": {
+        "title": "Danger zone"
+      }
+    },
+    "start": {
+      "subtitle": "Welcome to the start page of this organization!"
+    }
+  }
 }

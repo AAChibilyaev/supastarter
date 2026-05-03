@@ -1,77 +1,77 @@
 {
-	"app": {
-		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Open navigation",
-			"organizationSettings": "Organization settings",
-			"search": "Search",
-			"mySearch": "My Search",
-			"start": "Start"
-		},
-		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
-		},
-		"notifications": {
-			"title": "Notifications",
-			"empty": "No notifications yet.",
-			"markAllRead": "Mark all as read",
-			"fallbackTitle": "Notification",
-			"aria": {
-				"open": "Open notifications"
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
-		},
-		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
-		},
-		"close": "Close",
-		"clear": "Clear",
-		"previous": "Previous",
-		"next": "Next",
-		"loading": "Loading...",
-		"selected": "Selected",
-		"duplicate": "Duplicate",
-		"export": "Export",
-		"delete": "Delete",
-		"comingSoon": "Coming soon",
-		"refresh": "Refresh"
-	},
-	"nav": {
-		"geoSearch": "Geo Search",
-		"federatedSearch": "Federated",
-		"settings": "Settings",
-		"switchOrganization": "Switch organization"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"documentation": {
-		"title": "Documentation"
-	}
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Open navigation",
+      "organizationSettings": "Organization settings",
+      "search": "Search",
+      "mySearch": "My Search",
+      "start": "Start"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "markAllRead": "Mark all as read",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Open notifications"
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "continue": "Continue",
+      "verify": "Verify"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    },
+    "close": "Close",
+    "clear": "Clear",
+    "previous": "Previous",
+    "next": "Next",
+    "loading": "Loading...",
+    "selected": "Selected",
+    "duplicate": "Duplicate",
+    "export": "Export",
+    "delete": "Delete",
+    "comingSoon": "Coming soon",
+    "refresh": "Refresh"
+  },
+  "nav": {
+    "geoSearch": "Geo Search",
+    "federatedSearch": "Federated",
+    "settings": "Settings",
+    "switchOrganization": "Switch organization"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "Go to homepage"
+  },
+  "documentation": {
+    "title": "Documentation"
+  }
 }

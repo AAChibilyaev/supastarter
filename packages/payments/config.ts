@@ -47,6 +47,12 @@ function intFromEnv(key: string, fallback: number): number {
 	return Number.isFinite(val) ? val : fallback;
 }
 
+/** Helper: read a Stripe price ID from env or fall back to a default placeholder. */
+function priceIdFromEnv(key: string): string | undefined {
+	const raw = process.env[key];
+	return raw && raw.length > 0 ? raw : undefined;
+}
+
 export const config: PaymentsConfigWithWallet = {
 	billingAttachedTo: "user",
 	requireActiveSubscription: false,

@@ -103,7 +103,7 @@ export function CustomersContent() {
 							{COMPANY_NAMES.map((name) => (
 								<span
 									key={name}
-									className="text-lg font-semibold shrink-0 whitespace-nowrap text-muted-foreground/60 select-none"
+									className="text-lg font-semibold shrink-0 whitespace-nowrap text-muted-foreground select-none"
 								>
 									{name}
 								</span>

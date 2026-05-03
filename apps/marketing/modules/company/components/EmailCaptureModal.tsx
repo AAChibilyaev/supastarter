@@ -138,7 +138,7 @@ export function EmailCaptureModal({
 								</button>
 							</form>
 
-							<p className="mt-4 text-xs text-muted-foreground/60">{t("privacy")}</p>
+							<p className="mt-4 text-xs text-muted-foreground">{t("privacy")}</p>
 						</>
 					)}
 				</Dialog.Content>

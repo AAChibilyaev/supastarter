@@ -17,6 +17,7 @@
 		"@orpc/openapi": "catalog:",
 		"@orpc/server": "catalog:",
 		"@orpc/zod": "catalog:",
+		"@repo/analytics": "workspace:*",
 		"@repo/ai": "workspace:*",
 		"@repo/ai-core": "workspace:*",
 		"@repo/auth": "workspace:*",

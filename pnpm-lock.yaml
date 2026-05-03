@@ -1058,6 +1058,9 @@ importers:
       '@repo/ai-core':
         specifier: workspace:*
         version: link:../ai-core
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
       '@repo/auth':
         specifier: workspace:*
         version: link:../auth

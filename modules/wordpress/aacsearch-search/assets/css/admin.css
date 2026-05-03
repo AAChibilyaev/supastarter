@@ -2,53 +2,53 @@
  * AACsearch Search Admin Styles
  */
 .aacsearch-admin-wrap {
-    max-width: 960px;
+	max-width: 960px;
 }
 
 .aacsearch-admin-wrap .form-table th {
-    width: 200px;
+	width: 200px;
 }
 
 .aacsearch-admin-wrap .form-table input[type="url"],
 .aacsearch-admin-wrap .form-table input[type="text"],
 .aacsearch-admin-wrap .form-table input[type="password"] {
-    width: 400px;
+	width: 400px;
 }
 
 .aacsearch-admin-wrap .form-table fieldset {
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #fff;
+	max-height: 300px;
+	overflow-y: auto;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #fff;
 }
 
 .aacsearch-admin-wrap #aacsearch-connection-status {
-    font-size: 13px;
-    line-height: 28px;
+	font-size: 13px;
+	line-height: 28px;
 }
 
 .aacsearch-admin-wrap #aacsearch-connection-status.success {
-    color: #46b450;
+	color: #46b450;
 }
 
 .aacsearch-admin-wrap #aacsearch-connection-status.error {
-    color: #dc3232;
+	color: #dc3232;
 }
 
 .aacsearch-admin-wrap .widefat td.error {
-    background-color: #fbeaea;
+	background-color: #fbeaea;
 }
 
 .aacsearch-admin-wrap .button + .button {
-    margin-left: 6px;
+	margin-left: 6px;
 }
 
 @media screen and (max-width: 782px) {
-    .aacsearch-admin-wrap .form-table input[type="url"],
-    .aacsearch-admin-wrap .form-table input[type="text"],
-    .aacsearch-admin-wrap .form-table input[type="password"] {
-        width: 100%;
-    }
+	.aacsearch-admin-wrap .form-table input[type="url"],
+	.aacsearch-admin-wrap .form-table input[type="text"],
+	.aacsearch-admin-wrap .form-table input[type="password"] {
+		width: 100%;
+	}
 }

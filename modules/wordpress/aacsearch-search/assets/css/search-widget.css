@@ -1,0 +1,427 @@
+/**
+ * AACsearch Search Widget Styles
+ *
+ * Styles for the instant search UI, autocomplete popup, and search results page.
+ */
+
+/* ─── Container ──────────────────────────────────────────── */
+
+.aacsearch-wrap,
+.aacsearch-autocomplete-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    color: #333;
+}
+
+/* ─── Search Box ─────────────────────────────────────────── */
+
+.aacsearch-search-box {
+    margin-bottom: 20px;
+}
+
+.aacsearch-input {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 18px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.aacsearch-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* ─── Stats ─────────────────────────────────────────────── */
+
+.aacsearch-stats {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+
+/* ─── Layout ────────────────────────────────────────────── */
+
+.aacsearch-layout {
+    display: flex;
+    gap: 24px;
+}
+
+.aacsearch-filters {
+    flex: 0 0 240px;
+    min-width: 200px;
+}
+
+.aacsearch-results {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ─── Filters ───────────────────────────────────────────── */
+
+.aacsearch-filters h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+}
+
+.aacsearch-filter-categories,
+.aacsearch-filter-tags {
+    margin-bottom: 24px;
+}
+
+.aacsearch-refinement-list label,
+.aacsearch-tag-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.aacsearch-refinement-list label:hover,
+.aacsearch-tag-list label:hover {
+    color: #6366f1;
+}
+
+.aacsearch-refinement-list input[type="checkbox"],
+.aacsearch-tag-list input[type="checkbox"] {
+    accent-color: #6366f1;
+}
+
+/* ─── Sort By ───────────────────────────────────────────── */
+
+.aacsearch-sort-by {
+    margin-bottom: 16px;
+    text-align: right;
+}
+
+.aacsearch-sort-select {
+    padding: 8px 32px 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    appearance: auto;
+}
+
+/* ─── Results Grid ──────────────────────────────────────── */
+
+.aacsearch-hits {
+    display: grid;
+    gap: 20px;
+}
+
+.aacsearch-results[data-columns="1"] .aacsearch-hits { grid-template-columns: 1fr; }
+.aacsearch-results[data-columns="2"] .aacsearch-hits { grid-template-columns: 1fr 1fr; }
+.aacsearch-results[data-columns="3"] .aacsearch-hits { grid-template-columns: 1fr 1fr 1fr; }
+.aacsearch-results[data-columns="4"] .aacsearch-hits { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* ─── Result Card ───────────────────────────────────────── */
+
+.aacsearch-hit {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.aacsearch-hit:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.aacsearch-hit-thumb {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    background: #f3f4f6;
+}
+
+.aacsearch-hit-body {
+    padding: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.aacsearch-hit-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+}
+
+.aacsearch-hit-title a {
+    color: #111827;
+    text-decoration: none;
+}
+
+.aacsearch-hit-title a:hover {
+    color: #6366f1;
+}
+
+.aacsearch-hit-excerpt {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0 0 10px 0;
+    flex: 1;
+}
+
+.aacsearch-hit-meta {
+    font-size: 12px;
+    color: #9ca3af;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aacsearch-hit-breadcrumb {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 6px;
+}
+
+.aacsearch-hit-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* ─── Highlight ─────────────────────────────────────────── */
+
+.aacsearch-hit-title .aacsearch-highlight,
+.aacsearch-hit-excerpt .aacsearch-highlight {
+    background: #fef08a;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* ─── Pagination ────────────────────────────────────────── */
+
+.aacsearch-pagination {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.aacsearch-pagination a,
+.aacsearch-pagination span {
+    display: inline-block;
+    padding: 8px 14px;
+    margin: 0 2px;
+    font-size: 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.aacsearch-pagination a {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.aacsearch-pagination a:hover {
+    background: #e5e7eb;
+}
+
+.aacsearch-pagination .aacsearch-page-active {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+}
+
+/* ─── Autocomplete ──────────────────────────────────────── */
+
+.aacsearch-autocomplete-wrap {
+    position: relative;
+    max-width: 100%;
+}
+
+.aacsearch-autocomplete-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.aacsearch-autocomplete-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.aacsearch-autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+}
+
+.aacsearch-autocomplete-dropdown.aacsearch-open {
+    display: block;
+}
+
+.aacsearch-autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.aacsearch-autocomplete-item:hover,
+.aacsearch-autocomplete-item.aacsearch-active {
+    background: #f3f4f6;
+}
+
+.aacsearch-autocomplete-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+
+.aacsearch-autocomplete-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.aacsearch-autocomplete-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aacsearch-autocomplete-category {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.aacsearch-autocomplete-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: #e5e7eb;
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.aacsearch-autocomplete-empty {
+    padding: 20px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+/* ─── Loading ───────────────────────────────────────────── */
+
+.aacsearch-hits.aacsearch-loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.aacsearch-loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.aacsearch-loading-spinner::after {
+    content: '';
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: aacsearch-spin 0.7s linear infinite;
+}
+
+@keyframes aacsearch-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Mobile ────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .aacsearch-layout {
+        flex-direction: column;
+    }
+
+    .aacsearch-filters {
+        flex: none;
+        width: 100%;
+    }
+
+    .aacsearch-input {
+        font-size: 16px;
+        padding: 12px 14px;
+    }
+
+    .aacsearch-hits {
+        grid-template-columns: 1fr !important;
+    }
+
+    .aacsearch-hit-thumb {
+        height: 140px;
+    }
+
+    /* Autocomplete: fullscreen takeover on mobile */
+    .aacsearch-autocomplete-dropdown {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: none;
+        z-index: 9999;
+        border-radius: 0;
+        border: none;
+        padding-top: 60px;
+    }
+
+    .aacsearch-autocomplete-dropdown.aacsearch-open {
+        display: block;
+    }
+}

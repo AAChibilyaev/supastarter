@@ -63,6 +63,14 @@ require_once AACSEARCH_SEARCH_DIR . 'includes/class-indexer.php';
 require_once AACSEARCH_SEARCH_DIR . 'includes/class-sync.php';
 require_once AACSEARCH_SEARCH_DIR . 'includes/class-admin.php';
 
+// ─── Frontend ───────────────────────────────────────────────────
+
+require_once AACSEARCH_SEARCH_DIR . 'includes/class-frontend.php';
+
+// ─── Elementor Widgets (loaded only if Elementor is active) ────
+
+require_once AACSEARCH_SEARCH_DIR . 'includes/class-elementor.php';
+
 // ─── Activation / Deactivation ──────────────────────────────────
 
 register_activation_hook(__FILE__, 'aacsearch_search_activate');
@@ -131,6 +139,10 @@ function aacsearch_search_load_textdomain()
 
 add_action('plugins_loaded', ['AACSearch_Admin', 'init']);
 
+// ─── Initialize Frontend ─────────────────────────────────────────
+
+add_action('plugins_loaded', ['AACSearch_Frontend', 'init']);
+
 // ─── Initialize Real-time Sync ──────────────────────────────────
 
 add_action('plugins_loaded', 'aacsearch_search_init_sync');
@@ -161,43 +173,5 @@ function aacsearch_search_init_sync()
 
 // ─── Shortcodes ──────────────────────────────────────────────────
 
-add_shortcode('aacsearch_search', 'aacsearch_search_shortcode_search');
-
-/**
- * Render the AACsearch instant search interface.
- *
- * Usage: [aacsearch_search post_types="post,page" per_page="10"]
- *
- * @param array  $atts Shortcode attributes.
- * @param string $content Enclosed content (unused).
- *
- * @return string HTML output.
- */
-function aacsearch_search_shortcode_search($atts, $content = '')
-{
-    $atts = shortcode_atts([
-        'post_types' => '',
-        'per_page'   => '10',
-    ], $atts);
-
-    $search_key = get_option(AACSearch_Admin::OPTION_SEARCH_KEY, '');
-    $index_slug = get_option(AACSearch_Admin::OPTION_INDEX_SLUG, '');
-    $api_url    = get_option(AACSearch_Admin::OPTION_API_URL, '');
-
-    if (empty($search_key) || empty($index_slug)) {
-        return '<p>' . esc_html__('AACsearch is not configured. Please configure the plugin in Settings.', 'aacsearch-search') . '</p>';
-    }
-
-    wp_enqueue_style('aacsearch-search');
-    wp_enqueue_script('aacsearch-search');
-
-    $config = [
-        'apiUrl'    => esc_url($api_url),
-        'searchKey' => esc_js($search_key),
-        'indexSlug' => esc_js($index_slug),
-        'postTypes' => !empty($atts['post_types']) ? explode(',', $atts['post_types']) : [],
-        'perPage'   => (int) $atts['per_page'],
-    ];
-
-    return '<div class="aacsearch-search-container" data-config="' . esc_attr(wp_json_encode($config)) . '"></div>';
-}
+// Shortcodes are registered by AACSearch_Frontend via class-frontend.php
+// The [aacsearch_search] shortcode is now handled by the frontend class.

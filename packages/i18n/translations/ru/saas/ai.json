@@ -1,0 +1,22 @@
+{
+	"ai": {
+		"chat": {
+			"title": "ИИ-чат",
+			"history": "История",
+			"noSessions": "История пуста",
+			"newChat": "Новый чат",
+			"placeholder": "Спросите о AACsearch, ваших проиндексированных данных или получите помощь по интеграции.",
+			"inputPlaceholder": "Спросите о AACsearch или ваших данных...",
+			"failedToSend": "Не удалось отправить сообщение",
+			"searchHistory": "Поиск по истории...",
+			"messages": "{count} сообщ.",
+			"exportChat": "Экспорт",
+			"exportMarkdown": "Экспорт в Markdown",
+			"exportJson": "Экспорт в JSON",
+			"copyToClipboard": "Скопировать в буфер обмена",
+			"copiedToClipboard": "Скопировано в буфер обмена",
+			"exportedSuccess": "Успешно экспортировано",
+			"clearConversation": "Очистить чат"
+		}
+	}
+}

@@ -14,17 +14,27 @@ import { ChatInput } from "@repo/ui/components/chat/chat-input";
 import { ChatMessageList } from "@repo/ui/components/chat/chat-message-list";
 import MessageLoading from "@repo/ui/components/chat/message-loading";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
 } from "@repo/ui/components/sheet";
-import { toastError } from "@repo/ui/components/toast";
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/components/tooltip";
 import { orpcClient } from "@shared/lib/orpc-client";
 import {
 	BotIcon,
+	ClipboardIcon,
+	DownloadIcon,
+	FileJsonIcon,
+	FileTextIcon,
 	HistoryIcon,
 	PlusIcon,
 	SearchIcon,
@@ -33,12 +43,11 @@ import {
 	Trash2Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Streamdown } from "streamdown";
 
 import "streamdown/styles.css";
-
-import { useAiChatSessions } from "../hooks/use-ai-chat-sessions";
+import { useAiChatSessions, type ChatSession } from "../hooks/use-ai-chat-sessions";
 
 // ── Suggested Prompts ──────────────────────────────────────────────────
 
@@ -65,6 +74,62 @@ const PROMPT_SUGGESTIONS = [
 	},
 ];
 
+// ── Helpers ─────────────────────────────────────────────────────────────
+
+function sessionToMarkdown(session: ChatSession): string {
+	const lines: string[] = [];
+	lines.push(`# ${session.title}`);
+	lines.push("");
+	lines.push(`> Exported on ${new Date(session.createdAt).toISOString().split("T")[0]}`);
+	lines.push("");
+
+	for (const msg of session.messages) {
+		const role = msg.role === "user" ? "**You**" : "**AI**";
+		lines.push(`${role}:`);
+		lines.push("");
+		lines.push(msg.text);
+		lines.push("");
+	}
+	return lines.join("\n");
+}
+
+function sessionToJson(session: ChatSession): string {
+	return JSON.stringify(
+		{
+			title: session.title,
+			exportedAt: new Date().toISOString(),
+			messages: session.messages.map((m) => ({
+				role: m.role,
+				text: m.text,
+				timestamp: new Date(m.timestamp).toISOString(),
+			})),
+		},
+		null,
+		2,
+	);
+}
+
+function downloadFile(content: string, filename: string, mimeType: string) {
+	const blob = new Blob([content], { type: mimeType });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = filename;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
+}
+
+async function copyToClipboard(text: string): Promise<boolean> {
+	try {
+		await navigator.clipboard.writeText(text);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 // ── History Sidebar ────────────────────────────────────────────────────
 
 function HistorySidebar({
@@ -73,14 +138,31 @@ function HistorySidebar({
 	onSelect,
 	onDelete,
 	onNewChat,
+	onExportMarkdown,
+	onExportJson,
+	onCopy,
 }: {
 	sessions: ReturnType<typeof useAiChatSessions>["sessions"];
 	activeSessionId: string | null;
 	onSelect: (id: string) => void;
 	onDelete: (id: string) => void;
 	onNewChat: () => void;
+	onExportMarkdown: (session: ChatSession) => void;
+	onExportJson: (session: ChatSession) => void;
+	onCopy: (session: ChatSession) => void;
 }) {
 	const t = useTranslations("ai.chat");
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const filteredSessions = useMemo(() => {
+		if (!searchQuery.trim()) return sessions;
+		const q = searchQuery.toLowerCase();
+		return sessions.filter(
+			(s) =>
+				s.title.toLowerCase().includes(q) ||
+				s.messages.some((m) => m.text.toLowerCase().includes(q)),
+		);
+	}, [sessions, searchQuery]);
 
 	return (
 		<div className="flex h-full flex-col">
@@ -90,17 +172,34 @@ function HistorySidebar({
 					<PlusIcon className="size-3.5" />
 				</Button>
 			</div>
+
+			{/* Search */}
+			<div className="px-3 py-2 border-b">
+				<div className="relative">
+					<SearchIcon className="left-2.5 size-3.5 absolute top-1/2 -translate-y-1/2 text-muted-foreground" />
+					<input
+						type="text"
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						placeholder={t("searchHistory") ?? "Search conversations..."}
+						className="py-1.5 pr-2.5 pl-7 text-xs w-full rounded-md border bg-background focus:ring-1 focus:ring-primary focus:outline-hidden"
+					/>
+				</div>
+			</div>
+
 			<div className="flex-1 overflow-y-auto">
-				{sessions.length === 0 ? (
-					<div className="px-4 py-8 text-center text-sm text-muted-foreground">
-						{t("noSessions") ?? "No conversations yet"}
+				{filteredSessions.length === 0 ? (
+					<div className="px-4 py-8 text-sm text-center text-muted-foreground">
+						{searchQuery
+							? "No matching conversations"
+							: (t("noSessions") ?? "No conversations yet")}
 					</div>
 				) : (
-					sessions.map((session) => (
+					filteredSessions.map((session) => (
 						<div
 							key={session.id}
 							className={cn(
-								"group px-3 py-2.5 flex items-center justify-between border-b hover:bg-muted/50 cursor-pointer transition-colors",
+								"group px-3 py-2.5 flex cursor-pointer items-center justify-between border-b transition-colors hover:bg-muted/50",
 								session.id === activeSessionId && "bg-muted",
 							)}
 							onClick={() => onSelect(session.id)}
@@ -111,22 +210,66 @@ function HistorySidebar({
 							}}
 						>
 							<div className="min-w-0 flex-1">
-								<p className="truncate text-sm font-medium">{session.title}</p>
+								<p className="text-sm font-medium truncate">{session.title}</p>
 								<p className="text-xs text-muted-foreground">
-									{session.messages.length} messages
+									{t("messages", { count: session.messages.length })}
 								</p>
 							</div>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="size-7 opacity-0 group-hover:opacity-100 shrink-0"
-								onClick={(e) => {
-									e.stopPropagation();
-									onDelete(session.id);
-								}}
-							>
-								<Trash2Icon className="size-3.5 text-destructive" />
-							</Button>
+							<div className="gap-0.5 flex shrink-0 items-center opacity-0 group-hover:opacity-100">
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button
+											variant="ghost"
+											size="icon"
+											className="size-7"
+											onClick={(e) => e.stopPropagation()}
+										>
+											<DownloadIcon className="size-3.5" />
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent align="end">
+										<DropdownMenuItem
+											onClick={(e) => {
+												e.stopPropagation();
+												onExportMarkdown(session);
+											}}
+										>
+											<FileTextIcon className="mr-2 size-3.5" />
+											{t("exportMarkdown") ?? "Export as Markdown"}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={(e) => {
+												e.stopPropagation();
+												onExportJson(session);
+											}}
+										>
+											<FileJsonIcon className="mr-2 size-3.5" />
+											{t("exportJson") ?? "Export as JSON"}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={(e) => {
+												e.stopPropagation();
+												onCopy(session);
+											}}
+										>
+											<ClipboardIcon className="mr-2 size-3.5" />
+											{t("copyToClipboard") ?? "Copy to clipboard"}
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+
+								<Button
+									variant="ghost"
+									size="icon"
+									className="size-7"
+									onClick={(e) => {
+										e.stopPropagation();
+										onDelete(session.id);
+									}}
+								>
+									<Trash2Icon className="size-3.5 text-destructive" />
+								</Button>
+							</div>
 						</div>
 					))
 				)}
@@ -258,11 +401,46 @@ export function AiChat() {
 		[deleteSession],
 	);
 
+	const handleExportMarkdown = useCallback(
+		async (session: ChatSession) => {
+			const slug = session.title
+				.replace(/[^a-zA-Z0-9\s-]/g, "")
+				.replace(/\s+/g, "-")
+				.toLowerCase();
+			downloadFile(sessionToMarkdown(session), `aacsearch-chat-${slug}.md`, "text/markdown");
+			toastSuccess(t("exportedSuccess") ?? "Exported successfully");
+		},
+		[t],
+	);
+
+	const handleExportJson = useCallback(
+		async (session: ChatSession) => {
+			const slug = session.title
+				.replace(/[^a-zA-Z0-9\s-]/g, "")
+				.replace(/\s+/g, "-")
+				.toLowerCase();
+			downloadFile(sessionToJson(session), `aacsearch-chat-${slug}.json`, "application/json");
+			toastSuccess(t("exportedSuccess") ?? "Exported successfully");
+		},
+		[t],
+	);
+
+	const handleCopy = useCallback(
+		async (session: ChatSession) => {
+			const ok = await copyToClipboard(sessionToMarkdown(session));
+			if (ok) {
+				toastSuccess(t("copiedToClipboard") ?? "Copied to clipboard");
+			} else {
+				toastError("Failed to copy");
+			}
+		},
+		[t],
+	);
+
 	// Scroll to bottom on new messages
 	useEffect(() => {
 		if (messagesContainerRef.current) {
-			messagesContainerRef.current.scrollTop =
-				messagesContainerRef.current.scrollHeight;
+			messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
 		}
 	}, [messages.length, status]);
 
@@ -279,18 +457,21 @@ export function AiChat() {
 	return (
 		<div className="relative flex h-[calc(100vh-10rem)] flex-row">
 			{/* History Sidebar (desktop) */}
-			<div className="hidden w-64 shrink-0 border-r md:block">
+			<div className="w-64 md:block hidden shrink-0 border-r">
 				<HistorySidebar
 					sessions={sessions}
 					activeSessionId={activeSessionId}
 					onSelect={handleSelectSession}
 					onDelete={handleDeleteSession}
 					onNewChat={handleNewChat}
+					onExportMarkdown={handleExportMarkdown}
+					onExportJson={handleExportJson}
+					onCopy={handleCopy}
 				/>
 			</div>
 
 			{/* Main Chat Area */}
-			<div className="flex min-w-0 flex-1 flex-col">
+			<div className="min-w-0 flex flex-1 flex-col">
 				{/* Header */}
 				<div className="px-4 py-3 flex items-center justify-between border-b">
 					<div className="gap-2 flex items-center">
@@ -303,7 +484,9 @@ export function AiChat() {
 							</SheetTrigger>
 							<SheetContent side="left" className="w-72 p-0">
 								<SheetHeader className="px-4 py-3 border-b">
-									<SheetTitle className="text-sm">{t("history") ?? "History"}</SheetTitle>
+									<SheetTitle className="text-sm">
+										{t("history") ?? "History"}
+									</SheetTitle>
 								</SheetHeader>
 								<HistorySidebar
 									sessions={sessions}
@@ -311,35 +494,92 @@ export function AiChat() {
 									onSelect={handleSelectSession}
 									onDelete={handleDeleteSession}
 									onNewChat={handleNewChat}
+									onExportMarkdown={handleExportMarkdown}
+									onExportJson={handleExportJson}
+									onCopy={handleCopy}
 								/>
 							</SheetContent>
 						</Sheet>
 
 						<BotIcon className="size-4 text-primary" />
 						<span className="font-medium text-sm">
-							{activeSession?.title ?? "AI Chatbot"}
+							{activeSession?.title ?? t("title") ?? "AI Chatbot"}
 						</span>
 						{activeSession && (
 							<Badge variant="secondary" className="text-xs font-mono">
-								{activeSession.messages.length} msg
+								{t("messages", { count: activeSession.messages.length })}
 							</Badge>
 						)}
 					</div>
-					<Button variant="ghost" size="sm" className="gap-1.5" onClick={handleNewChat}>
-						<PlusIcon className="size-3.5" />
-						<span className="text-xs">{t("newChat") ?? "New"}</span>
-					</Button>
+
+					{/* Header actions */}
+					<div className="gap-1 flex items-center">
+						{activeSession && (
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										variant="ghost"
+										size="icon"
+										className="size-8"
+										onClick={() => handleCopy(activeSession)}
+									>
+										<ClipboardIcon className="size-3.5" />
+									</Button>
+								</TooltipTrigger>
+								<TooltipContent>
+									{t("copyToClipboard") ?? "Copy to clipboard"}
+								</TooltipContent>
+							</Tooltip>
+						)}
+						{activeSession && (
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="ghost" size="icon" className="size-8">
+										<DownloadIcon className="size-3.5" />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end">
+									<DropdownMenuItem
+										onClick={() =>
+											activeSession && handleExportMarkdown(activeSession)
+										}
+									>
+										<FileTextIcon className="mr-2 size-3.5" />
+										{t("exportMarkdown") ?? "Export as Markdown"}
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={() =>
+											activeSession && handleExportJson(activeSession)
+										}
+									>
+										<FileJsonIcon className="mr-2 size-3.5" />
+										{t("exportJson") ?? "Export as JSON"}
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						)}
+						<Button
+							variant="ghost"
+							size="sm"
+							className="gap-1.5"
+							onClick={handleNewChat}
+						>
+							<PlusIcon className="size-3.5" />
+							<span className="text-xs">{t("newChat") ?? "New"}</span>
+						</Button>
+					</div>
 				</div>
 
 				{/* Messages Area */}
 				<ChatMessageList ref={messagesContainerRef} className="flex-1 overflow-y-auto">
 					{messages.length === 0 && (
-						<div className="flex h-full flex-col items-center justify-center gap-6">
+						<div className="gap-6 flex h-full flex-col items-center justify-center">
 							<BotIcon className="size-12 text-muted-foreground/20" />
-							<p className="max-w-md text-center text-sm text-muted-foreground">
-								{t("placeholder") ?? "Ask anything about AACsearch, your indexed data, or get help with integration."}
+							<p className="max-w-md text-sm text-center text-muted-foreground">
+								{t("placeholder") ??
+									"Ask anything about AACsearch, your indexed data, or get help with integration."}
 							</p>
-							<div className="grid w-full max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+							<div className="max-w-lg gap-3 sm:grid-cols-2 grid w-full grid-cols-1">
 								{PROMPT_SUGGESTIONS.map((suggestion, index) => {
 									const Icon = suggestion.icon;
 									return (
@@ -364,8 +604,14 @@ export function AiChat() {
 						const isUser = message.role === "user";
 						const parts = message.parts;
 						return (
-							<ChatBubble key={message.id ?? idx} variant={isUser ? "sent" : "received"}>
-								<ChatBubbleAvatar fallback={isUser ? "U" : "AI"} className="size-8" />
+							<ChatBubble
+								key={message.id ?? idx}
+								variant={isUser ? "sent" : "received"}
+							>
+								<ChatBubbleAvatar
+									fallback={isUser ? "U" : "AI"}
+									className="size-8"
+								/>
 								<ChatBubbleMessage variant={isUser ? "sent" : "received"}>
 									{parts?.map((part, partIdx) =>
 										part.type === "text" ? (
@@ -413,7 +659,8 @@ export function AiChat() {
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 							placeholder={
-								t("inputPlaceholder") ?? "Ask about AACsearch or your indexed data..."
+								t("inputPlaceholder") ??
+								"Ask about AACsearch or your indexed data..."
 							}
 							disabled={isStreaming}
 							onKeyDown={(e) => {

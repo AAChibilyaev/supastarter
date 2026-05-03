@@ -8,6 +8,7 @@ const SAAS_FILES = [
 	"search",
 	"settings",
 	"admin",
+	"ai",
 	"organizations",
 	"auth",
 	"onboarding",

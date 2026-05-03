@@ -1,0 +1,22 @@
+{
+	"ai": {
+		"chat": {
+			"title": "KI-Chatbot",
+			"history": "Verlauf",
+			"noSessions": "Noch keine Unterhaltungen",
+			"newChat": "Neu",
+			"placeholder": "Fragen Sie alles zu AACsearch, Ihren indizierten Daten oder zur Integration.",
+			"inputPlaceholder": "Fragen zu AACsearch oder Ihren Daten...",
+			"failedToSend": "Nachricht konnte nicht gesendet werden",
+			"searchHistory": "Unterhaltungen durchsuchen...",
+			"messages": "{count} Nachrichten",
+			"exportChat": "Exportieren",
+			"exportMarkdown": "Als Markdown exportieren",
+			"exportJson": "Als JSON exportieren",
+			"copyToClipboard": "In Zwischenablage kopieren",
+			"copiedToClipboard": "In Zwischenablage kopiert",
+			"exportedSuccess": "Erfolgreich exportiert",
+			"clearConversation": "Unterhaltung löschen"
+		}
+	}
+}

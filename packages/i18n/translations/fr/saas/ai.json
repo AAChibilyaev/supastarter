@@ -1,0 +1,22 @@
+{
+	"ai": {
+		"chat": {
+			"title": "Chatbot IA",
+			"history": "Historique",
+			"noSessions": "Aucune conversation pour l'instant",
+			"newChat": "Nouveau",
+			"placeholder": "Demandez tout sur AACsearch, vos données indexées, ou obtenez de l'aide sur l'intégration.",
+			"inputPlaceholder": "Interrogez AACsearch ou vos données...",
+			"failedToSend": "Échec de l'envoi du message",
+			"searchHistory": "Rechercher des conversations...",
+			"messages": "{count} messages",
+			"exportChat": "Exporter",
+			"exportMarkdown": "Exporter en Markdown",
+			"exportJson": "Exporter en JSON",
+			"copyToClipboard": "Copier dans le presse-papiers",
+			"copiedToClipboard": "Copié dans le presse-papiers",
+			"exportedSuccess": "Exporté avec succès",
+			"clearConversation": "Effacer la conversation"
+		}
+	}
+}

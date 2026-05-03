@@ -35,9 +35,7 @@ function autoTitle(messages: ChatMessage[]): string {
 	const firstUserMsg = messages.find((m) => m.role === "user");
 	if (!firstUserMsg) return "New Chat";
 	const text = firstUserMsg.text.trim();
-	return text.length > AUTO_TITLE_LENGTH
-		? `${text.slice(0, AUTO_TITLE_LENGTH)}...`
-		: text;
+	return text.length > AUTO_TITLE_LENGTH ? `${text.slice(0, AUTO_TITLE_LENGTH)}...` : text;
 }
 
 function loadSessions(): ChatSession[] {
@@ -88,10 +86,7 @@ export function useAiChatSessions() {
 		[sessions, activeSessionId],
 	);
 
-	const activeMessages = useMemo(
-		() => activeSession?.messages ?? [],
-		[activeSession],
-	);
+	const activeMessages = useMemo(() => activeSession?.messages ?? [], [activeSession]);
 
 	const sortedSessions = useMemo(
 		() => [...sessions].sort((a, b) => b.updatedAt - a.updatedAt),
@@ -159,12 +154,9 @@ export function useAiChatSessions() {
 		);
 	}, [activeSessionId]);
 
-	const switchSession = useCallback(
-		(sessionId: string) => {
-			setActiveSessionId(sessionId);
-		},
-		[],
-	);
+	const switchSession = useCallback((sessionId: string) => {
+		setActiveSessionId(sessionId);
+	}, []);
 
 	/**
 	 * Hydrate sessions from server data (for future server-side persistence).

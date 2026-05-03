@@ -47,6 +47,7 @@ interface TypesenseSearchParams {
 	bounding_box?: Record<string, unknown>;
 	// ── Search Params Extensions ───────────────────────────────────
 	exclude_fields?: string;
+	include_fields?: string;
 	highlight_start_tag?: string;
 	highlight_end_tag?: string;
 	curation_tags?: string;
@@ -92,6 +93,7 @@ export interface SearchDocumentsInput {
 	multiLocation?: GeoMultiLocationFilter;
 	// ── Search Params Extensions ───────────────────────────────────
 	excludeFields?: string;
+	includeFields?: string;
 	highlightStartTag?: string;
 	highlightEndTag?: string;
 	curationTags?: string;
@@ -191,6 +193,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		}),
 		// ── Search Params Extensions ──
 		...(input.excludeFields !== undefined && { exclude_fields: input.excludeFields }),
+		...(input.includeFields !== undefined && { include_fields: input.includeFields }),
 		...(input.highlightStartTag !== undefined && {
 			highlight_start_tag: input.highlightStartTag,
 		}),
@@ -298,6 +301,7 @@ export async function multiSearchDocuments(
 			}),
 			// ── Search Params Extensions ──
 			...(entry.excludeFields !== undefined && { exclude_fields: entry.excludeFields }),
+			...(entry.includeFields !== undefined && { include_fields: entry.includeFields }),
 			...(entry.highlightStartTag !== undefined && {
 				highlight_start_tag: entry.highlightStartTag,
 			}),

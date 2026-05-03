@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-05-03]
+
+### Added
+- **Search**: Exposed `include_fields` JOIN parameter in search procedures. `SearchDocumentsInput.includeFields` now accepts Typesense JOIN syntax like `$Category(id, name)` for cross-collection field inclusion. (AAC-569)
+
+
 ## 2026-04-30
 
 ### Changed

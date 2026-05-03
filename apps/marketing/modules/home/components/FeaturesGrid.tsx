@@ -33,28 +33,28 @@ export function FeaturesGrid() {
 	const t = useTranslations();
 
 	return (
-		<section id="features" className="border-b border-border py-14 md:py-24">
+		<section id="features" className="py-14 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.features.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+					<p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
 						{t("home.features.subtitle")}
 					</p>
 				</div>
 
-				<div className="mt-12 grid grid-cols-1 gap-px bg-border overflow-hidden rounded-lg border border-border sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
+				<div className="mt-12 sm:grid-cols-2 lg:grid-cols-3 md:mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border">
 					{items.map(({ key, icon: Icon }) => (
-						<div key={key} className="flex flex-col gap-4 bg-card p-6 md:p-8">
-							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-primary/10">
-								<Icon className="size-5 text-primary" />
+						<div key={key} className="gap-4 p-6 md:p-8 flex flex-col bg-card">
+							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
+								<Icon className="size-5 text-muted-foreground" />
 							</div>
 							<div>
-								<h3 className="font-semibold text-base leading-snug text-foreground">
+								<h3 className="font-semibold text-lg leading-snug text-foreground">
 									{t(`home.features.items.${key}.title`)}
 								</h3>
-								<p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
+								<p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
 									{t(`home.features.items.${key}.description`)}
 								</p>
 							</div>

@@ -22,23 +22,23 @@ export function PricingPlans() {
 	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="border-b border-border py-14 md:py-24">
+		<section id="pricing" className="py-14 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
+					<p className="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
 						{t("home.pricing.badge")}
 					</p>
-					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+					<p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
 						{t("home.pricing.subtitle")}
 					</p>
 				</div>
 
 				{/* Billing toggle */}
 				<div className="mt-8 flex justify-center">
-					<div className="flex items-center gap-1 rounded-lg border border-border bg-muted/50 p-1">
+					<div className="gap-1 p-1 flex items-center rounded-lg border border-border bg-muted/50">
 						{(["monthly", "yearly"] as const).map((v) => (
 							<button
 								key={v}
@@ -47,13 +47,13 @@ export function PricingPlans() {
 								className={cn(
 									"px-4 py-1.5 text-sm font-medium rounded-md transition-colors",
 									interval === v
-										? "bg-card text-foreground shadow-sm"
+										? "shadow-sm bg-card text-foreground"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
 								{t(`home.pricing.${v}`)}
 								{v === "yearly" && (
-									<span className="ml-1.5 text-[10px] font-semibold text-success">
+									<span className="ml-1.5 font-semibold text-[10px] text-success">
 										{t("home.pricing.yearlyDiscount")}
 									</span>
 								)}
@@ -62,7 +62,7 @@ export function PricingPlans() {
 					</div>
 				</div>
 
-				<div className="mt-10 grid gap-px bg-border overflow-hidden rounded-lg border border-border sm:grid-cols-2 lg:grid-cols-3">
+				<div className="mt-10 sm:grid-cols-2 lg:grid-cols-3 grid gap-px overflow-hidden rounded-lg border border-border bg-border">
 					{plans.map((plan) => {
 						const features = Array.from({ length: plan.featuresCount }, (_, i) =>
 							t(`home.pricing.plans.${plan.key}.features.${i}`),
@@ -72,25 +72,25 @@ export function PricingPlans() {
 							<div
 								key={plan.key}
 								className={cn(
-									"relative flex flex-col bg-card p-7",
+									"p-7 relative flex flex-col bg-card",
 									plan.primary && "bg-primary/3",
 								)}
 							>
 								{plan.primary && (
-									<div className="absolute top-0 inset-x-0 h-0.5 bg-primary" />
+									<div className="top-0 inset-x-0 h-0.5 absolute bg-primary" />
 								)}
 
 								<div className="mb-6">
 									<p className="font-semibold text-base text-foreground">
 										{t(`home.pricing.plans.${plan.key}.name`)}
 									</p>
-									<p className="mt-1 text-sm text-muted-foreground text-pretty">
+									<p className="mt-1 text-sm text-pretty text-muted-foreground">
 										{t(`home.pricing.plans.${plan.key}.description`)}
 									</p>
 								</div>
 
-								<div className="mb-6 flex items-baseline gap-1">
-									<span className="font-bold text-4xl tracking-tight tabular-nums text-foreground">
+								<div className="mb-6 gap-1 flex items-baseline">
+									<span className="font-bold text-4xl tracking-tight text-foreground tabular-nums">
 										{t(`home.pricing.plans.${plan.key}.price`)}
 									</span>
 									{plan.key !== "enterprise" && (
@@ -103,7 +103,10 @@ export function PricingPlans() {
 								</div>
 
 								<Button
-									className={cn("w-full", marketingCtaButtonClassName(plan.primary))}
+									className={cn(
+										"w-full",
+										marketingCtaButtonClassName(plan.primary),
+									)}
 									variant={plan.primary ? "primary" : "outline"}
 									asChild
 								>
@@ -118,11 +121,14 @@ export function PricingPlans() {
 									</a>
 								</Button>
 
-								<ul className="mt-6 flex flex-col gap-3">
+								<ul className="mt-6 gap-3 flex flex-col">
 									{features.map((feature) => (
-										<li key={feature} className="flex items-start gap-3 text-sm">
-											<CheckIcon className="mt-0.5 size-4 shrink-0 text-primary" />
-											<span className="text-muted-foreground text-pretty">
+										<li
+											key={feature}
+											className="gap-3 text-sm flex items-start"
+										>
+											<CheckIcon className="mt-0.5 size-4 shrink-0 text-foreground/40" />
+											<span className="text-pretty text-muted-foreground">
 												{feature}
 											</span>
 										</li>

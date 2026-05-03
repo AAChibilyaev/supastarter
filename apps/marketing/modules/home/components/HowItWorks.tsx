@@ -6,19 +6,19 @@ export function HowItWorks() {
 	const t = useTranslations();
 
 	return (
-		<section className="border-b border-border py-14 md:py-24">
+		<section className="py-14 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.howItWorks.title")}
 					</h2>
 				</div>
 
-				<div className="mt-16 grid grid-cols-1 gap-0 lg:grid-cols-3 md:mt-20">
+				<div className="mt-16 gap-0 lg:grid-cols-3 md:mt-20 grid grid-cols-1">
 					{steps.map((step, i) => (
 						<div
 							key={step}
-							className="pb-12 last:pb-0 lg:pb-0 relative flex flex-col items-center text-center px-6"
+							className="pb-12 last:pb-0 lg:pb-0 px-6 relative flex flex-col items-center text-center"
 						>
 							{/* Connector line */}
 							<div className="mb-8 relative flex w-full items-center justify-center">
@@ -29,8 +29,8 @@ export function HowItWorks() {
 									<div className="-top-10 h-10 lg:hidden absolute left-1/2 w-px bg-border" />
 								)}
 
-								{/* Number circle — solid pink */}
-								<div className="size-14 z-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground">
+								{/* Number circle */}
+								<div className="size-14 z-10 flex items-center justify-center rounded-full bg-foreground text-background">
 									<span className="font-bold text-lg">{i + 1}</span>
 								</div>
 
@@ -45,7 +45,7 @@ export function HowItWorks() {
 							<h3 className="font-semibold text-lg text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
-							<p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground text-pretty">
+							<p className="mt-3 max-w-xs text-sm leading-relaxed text-pretty text-muted-foreground">
 								{t(`home.howItWorks.${step}.description`)}
 							</p>
 						</div>

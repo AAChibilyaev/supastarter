@@ -7,22 +7,17 @@ export function CtaFooter() {
 	const t = useTranslations();
 
 	return (
-		<section className="bg-foreground py-20 md:py-28">
+		<section className="py-20 md:py-28 bg-foreground">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance text-background md:text-5xl">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-5xl text-balance text-background">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-5 text-lg leading-relaxed text-background/55 text-pretty">
+					<p className="mt-5 text-lg leading-relaxed text-pretty text-background/55">
 						{t("home.cta.subtitle")}
 					</p>
-					<div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-						<Button
-							size="lg"
-							variant="primary"
-							className="w-full sm:w-auto"
-							asChild
-						>
+					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
+						<Button size="lg" variant="primary" className="sm:w-auto w-full" asChild>
 							<a href={config.saasUrl ?? "/signup"}>
 								{t("home.cta.primary")}
 								<ArrowRightIcon className="ml-2 size-4" />
@@ -32,7 +27,7 @@ export function CtaFooter() {
 							<Button
 								size="lg"
 								variant="ghost"
-								className="w-full sm:w-auto text-background/70 hover:text-background hover:bg-white/8"
+								className="sm:w-auto w-full text-background/60 hover:text-background hover:bg-background/10"
 								asChild
 							>
 								<a href={config.docsUrl}>{t("home.cta.secondary")}</a>

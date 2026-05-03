@@ -54,13 +54,13 @@ export function TestimonialCarousel() {
 	const testimonial = TESTIMONIALS[activeIndex]!;
 
 	return (
-		<section className="border-b border-border py-14 md:py-24">
+		<section className="py-14 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("testimonials.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-muted-foreground text-pretty">
+					<p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
 						{t("testimonials.subtitle")}
 					</p>
 				</div>
@@ -70,13 +70,13 @@ export function TestimonialCarousel() {
 					onMouseEnter={() => setIsPaused(true)}
 					onMouseLeave={() => setIsPaused(false)}
 				>
-					<div className="rounded-lg border border-border bg-card p-6 sm:p-10">
-						<blockquote className="text-lg md:text-xl leading-relaxed text-foreground text-pretty">
+					<div className="p-6 sm:p-10 rounded-lg border border-border bg-card">
+						<blockquote className="text-lg md:text-xl leading-relaxed text-pretty text-foreground">
 							"{testimonial.quote}"
 						</blockquote>
 
-						<div className="mt-8 flex items-center gap-4 border-t border-border pt-6">
-							<div className="size-10 flex shrink-0 items-center justify-center rounded-full bg-primary font-semibold text-sm text-primary-foreground select-none">
+						<div className="mt-8 gap-4 pt-6 flex items-center border-t border-border">
+							<div className="size-10 font-semibold text-sm flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
 								{testimonial.initials}
 							</div>
 							<div>
@@ -91,7 +91,7 @@ export function TestimonialCarousel() {
 					</div>
 
 					{/* Progress dots */}
-					<div className="mt-5 flex items-center justify-center gap-2">
+					<div className="mt-5 gap-2 flex items-center justify-center">
 						{TESTIMONIALS.map((_, index) => (
 							<button
 								key={index}

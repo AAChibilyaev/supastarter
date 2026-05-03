@@ -1,6 +1,10 @@
+import { randomUUID } from "node:crypto";
+
 import { ORPCError } from "@orpc/client";
+import { reserveAiCredits } from "@repo/billing-wallet";
 import {
 	createIngestionJob,
+	getAiWalletByEntity,
 	getKnowledgeSpaceBySlug,
 	listDataSources,
 	replaceKnowledgeChunks,
@@ -14,9 +18,7 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
-	type CreditGateContext,
 	commitFlatFeeUsage,
-	creditGate,
 	releaseCreditReservation,
 } from "../../entitlements/middleware/credit-gate";
 import { requireKnowledgeOwnerAdmin } from "../lib/access";
@@ -66,8 +68,44 @@ async function checksum(text: string): Promise<string> {
 
 const chunkStrategySchema = z.enum(["fixed", "semantic", "markdown", "code"]).optional();
 
+/**
+ * Map file type to the appropriate credit operation for billing.
+ */
+function getCreditOperation(fileType: string | null): string {
+	switch (fileType) {
+		case "image":
+			return "embedding";
+		case "audio":
+		case "video":
+			return "audio_transcription";
+		default:
+			return "chat";
+	}
+}
+
+/**
+ * Compute the credit cost for a file based on its type and metadata.
+ * - image: flat rate (embedding = 200 kopecks)
+ * - audio: per-minute rate (audio_transcription = 500 kopecks/min, rounded up)
+ * - video: per-minute rate (audio_transcription = 500 kopecks/min, since video goes through audio transcription)
+ * - documents: flat chat rate (500 kopecks)
+ */
+function computeCreditCost(fileType: string | null, metadata: Record<string, unknown>): bigint {
+	switch (fileType) {
+		case "image":
+			return CREDIT_RATES.embedding;
+		case "audio":
+		case "video": {
+			const durationSeconds = (metadata.durationSeconds as number) ?? 0;
+			const minutes = Math.max(1, Math.ceil(durationSeconds / 60));
+			return CREDIT_RATES.audio_transcription * BigInt(minutes);
+		}
+		default:
+			return CREDIT_RATES.chat;
+	}
+}
+
 export const ingestFile = protectedProcedure
-	.use(creditGate("chat", CREDIT_RATES.chat))
 	.route({
 		method: "POST",
 		path: "/knowledge/ingest/file",
@@ -90,7 +128,12 @@ export const ingestFile = protectedProcedure
 	)
 	.handler(async ({ input, context: { ...rest } }) => {
 		const user = (rest as Record<string, unknown>).user as { id: string };
-		const { creditReservationId } = rest as unknown as CreditGateContext;
+		const session = (rest as Record<string, unknown>).session as
+			| { activeOrganizationId?: string; userId: string }
+			| undefined;
+
+		// Declare reservation outside try for catch-block access
+		let creditReservationId: string | null = null;
 
 		try {
 			await requireKnowledgeOwnerAdmin(
@@ -117,6 +160,36 @@ export const ingestFile = protectedProcedure
 				mimeType: input.mimeType,
 				contentBase64: input.contentBase64,
 			});
+
+			// Determine the file type for credit computation
+			const fileType = detectFileType(input.fileName, input.mimeType);
+
+			// Compute credit operation and cost based on file type
+			const creditOp = getCreditOperation(fileType);
+			const creditCost = computeCreditCost(fileType, parsed.metadata);
+
+			// Resolve wallet and reserve credits
+			const orgId = session?.activeOrganizationId;
+			const walletUserId = session?.userId;
+			const wallet = await getAiWalletByEntity(
+				orgId ? { organizationId: orgId } : { userId: walletUserId! },
+			);
+			if (!wallet) {
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: "AI Wallet not initialized. Visit Settings > Billing to activate.",
+				});
+			}
+
+			const idempotencyKey = `credit-gate:${creditOp}:${wallet.id}:${randomUUID()}`;
+			const reservation = await reserveAiCredits({
+				walletId: wallet.id,
+				userId: walletUserId ?? null,
+				organizationId: orgId ?? null,
+				operation: creditOp,
+				estimatedKopecks: creditCost,
+				idempotencyKey,
+			});
+			creditReservationId = reservation.reservationId;
 
 			// Stage 2: Chunk with selected strategy
 			const chunkOptions = input.chunkStrategy
@@ -229,13 +302,13 @@ export const ingestFile = protectedProcedure
 				finishedAt: new Date(),
 			});
 
-			// Commit flat-fee usage on successful ingestion
+			// Commit per-file-type usage on successful ingestion
 			await commitFlatFeeUsage({
-				reservationId: creditReservationId,
-				operation: "chat",
+				reservationId: creditReservationId!,
+				operation: creditOp,
 				provider: "aacsearch",
-				model: "graphrag",
-				flatFeeKopecks: CREDIT_RATES.chat,
+				model: creditOp === "embedding" ? "multimodal-image" : "graphrag",
+				flatFeeKopecks: creditCost,
 			});
 
 			return {
@@ -246,7 +319,9 @@ export const ingestFile = protectedProcedure
 				chunkStrategy: input.chunkStrategy ?? "fixed",
 			};
 		} catch (err) {
-			await releaseCreditReservation(creditReservationId);
+			if (creditReservationId) {
+				await releaseCreditReservation(creditReservationId);
+			}
 			throw err;
 		}
 	});

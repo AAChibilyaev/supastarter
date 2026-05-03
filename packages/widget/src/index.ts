@@ -1819,9 +1819,14 @@ export class AacSearchWidget {
 			});
 
 			if (resp.ok) {
-				const data = await resp.json() as {
+				const data = (await resp.json()) as {
 					answer?: string;
-					sources?: Array<{ id?: unknown; title?: string; url?: string; imageUrl?: string }>;
+					sources?: Array<{
+						id?: unknown;
+						title?: string;
+						url?: string;
+						imageUrl?: string;
+					}>;
 				};
 				this.state = {
 					...this.state,
@@ -1949,7 +1954,7 @@ export class AacSearchWidget {
 
 			if (!resp.ok) throw new Error("image_search_failed");
 
-			const data = await resp.json() as {
+			const data = (await resp.json()) as {
 				caption?: string;
 				hits?: Array<{
 					id?: unknown;
@@ -2649,7 +2654,12 @@ export class AacSearchWidget {
 				// Chat or hybrid mode
 				try {
 					const entryContext = detectEntryPoint({
-						entryPoint: dataset.entryPoint as "home" | "catalog" | "search_results" | "product_card" | undefined,
+						entryPoint: dataset.entryPoint as
+							| "home"
+							| "catalog"
+							| "search_results"
+							| "product_card"
+							| undefined,
 						productId: dataset.productId,
 						categorySlug: dataset.categorySlug,
 						searchQuery: dataset.searchQuery,
@@ -2666,7 +2676,15 @@ export class AacSearchWidget {
 					});
 
 					// Build translations map for ChatUI
-					const chatI18nKeys = ["chat_placeholder", "chat_send", "chat_typing", "chat_escalated", "chat_new_chat", "chat_error", "close"] as const;
+					const chatI18nKeys = [
+						"chat_placeholder",
+						"chat_send",
+						"chat_typing",
+						"chat_escalated",
+						"chat_new_chat",
+						"chat_error",
+						"close",
+					] as const;
 					const chatTranslations: Record<string, string> = {};
 					for (const key of chatI18nKeys) {
 						chatTranslations[key] = tFn(locale, key);
@@ -2720,15 +2738,18 @@ export class AacSearchWidget {
 							chatUI?.clearMessages();
 						},
 						onOpenHistory: () => {
-							client.listConversations().then((convs) => {
-								chatUI?.loadHistoryItems(convs, async (id) => {
-									const loaded = await client.loadConversation(id);
-									if (loaded && chatUI) {
-										conversationId = loaded.id;
-										chatUI.loadMessages(loaded.messages);
-									}
-								});
-							}).catch(() => {});
+							client
+								.listConversations()
+								.then((convs) => {
+									chatUI?.loadHistoryItems(convs, async (id) => {
+										const loaded = await client.loadConversation(id);
+										if (loaded && chatUI) {
+											conversationId = loaded.id;
+											chatUI.loadMessages(loaded.messages);
+										}
+									});
+								})
+								.catch(() => {});
 						},
 					});
 				} catch (err) {

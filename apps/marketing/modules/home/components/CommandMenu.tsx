@@ -69,20 +69,22 @@ export function CommandMenu({ open, onOpenChange, onModeSelect }: CommandMenuPro
 
 					{/* Search modes — 5 input modes */}
 					<CommandGroup heading="Search by">
-						{(Object.entries(MODE_ICONS) as [SearchMode, typeof SearchIcon][]).map(([key, Icon]) => {
-							const badge = MODE_BADGES[key];
-							return (
-								<CommandItem key={key} onSelect={() => handleModeSelect(key)}>
-									<Icon className="size-4 shrink-0" />
-									<span className="flex-1">{badge.label}</span>
-									{badge.status && (
-										<span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-light text-muted-foreground">
-											{badge.status}
-										</span>
-									)}
-								</CommandItem>
-							);
-						})}
+						{(Object.entries(MODE_ICONS) as [SearchMode, typeof SearchIcon][]).map(
+							([key, Icon]) => {
+								const badge = MODE_BADGES[key];
+								return (
+									<CommandItem key={key} onSelect={() => handleModeSelect(key)}>
+										<Icon className="size-4 shrink-0" />
+										<span className="flex-1">{badge.label}</span>
+										{badge.status && (
+											<span className="px-2 py-0.5 font-light rounded-full bg-muted text-[10px] text-muted-foreground">
+												{badge.status}
+											</span>
+										)}
+									</CommandItem>
+								);
+							},
+						)}
 					</CommandGroup>
 
 					<CommandSeparator />
@@ -109,13 +111,15 @@ export function CommandMenu({ open, onOpenChange, onModeSelect }: CommandMenuPro
 						</CommandItem>
 						<CommandItem
 							onSelect={() => {
-								navigator.clipboard.writeText("Visit https://aacsearch.com/docs to get started");
+								navigator.clipboard.writeText(
+									"Visit https://aacsearch.com/docs to get started",
+								);
 								onOpenChange(false);
 							}}
 						>
 							<CodeIcon className="size-4 shrink-0" />
 							<span>Quickstart guide</span>
-							<CopyIcon className="ml-auto size-3 text-muted-foreground" />
+							<CopyIcon className="size-3 ml-auto text-muted-foreground" />
 						</CommandItem>
 						<CommandItem
 							onSelect={() => {
@@ -134,7 +138,9 @@ export function CommandMenu({ open, onOpenChange, onModeSelect }: CommandMenuPro
 					<CommandGroup heading="Search tips">
 						<CommandItem disabled>
 							<SearchIcon className="size-4 shrink-0" />
-							<span className="text-muted-foreground">Press ⌘K anytime to search</span>
+							<span className="text-muted-foreground">
+								Press ⌘K anytime to search
+							</span>
 						</CommandItem>
 					</CommandGroup>
 				</CommandList>

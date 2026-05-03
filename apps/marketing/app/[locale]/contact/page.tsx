@@ -16,9 +16,11 @@ export default async function ContactPage(props: { params: Promise<{ locale: str
 	const t = await getTranslations({ locale, namespace: "contact" });
 	return (
 		<section className="section-padding">
-			<div className="container max-w-xl">
+			<div className="max-w-xl container">
 				<div className="mb-12 pt-8 text-center">
-					<h1 className="mb-2 font-bold text-4xl md:text-5xl lg:text-6xl">{t("title")}</h1>
+					<h1 className="mb-2 font-bold text-4xl md:text-5xl lg:text-6xl">
+						{t("title")}
+					</h1>
 					<p className="text-lg font-light text-balance opacity-50">{t("description")}</p>
 				</div>
 

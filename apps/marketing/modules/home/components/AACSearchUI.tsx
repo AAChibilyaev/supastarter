@@ -204,9 +204,9 @@ export function AACSearchUI() {
 	return (
 		<>
 			{/* Desktop search bar trigger */}
-			<div className="relative mx-auto max-w-2xl">
+			<div className="max-w-2xl relative mx-auto">
 				<div
-					className="group relative cursor-pointer rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-md hover:border-muted-foreground/20"
+					className="group shadow-sm hover:shadow-md relative cursor-pointer rounded-xl border border-border bg-card transition-all duration-300 hover:border-muted-foreground/20"
 					role="button"
 					tabIndex={0}
 					onClick={() => setOpen(true)}
@@ -218,17 +218,17 @@ export function AACSearchUI() {
 					}}
 					aria-label="Open AACsearch"
 				>
-					<div className="flex h-12 items-center gap-3 px-4 sm:h-14 sm:px-5">
+					<div className="h-12 gap-3 px-4 sm:h-14 sm:px-5 flex items-center">
 						<SearchIcon className="size-4 shrink-0 text-muted-foreground/60 transition-colors group-hover:text-muted-foreground" />
-						<span className="flex-1 text-left text-sm font-light text-muted-foreground/50 transition-colors group-hover:text-muted-foreground/70">
+						<span className="text-sm font-light flex-1 text-left text-muted-foreground/50 transition-colors group-hover:text-muted-foreground/70">
 							Search anything — text, voice, images...
 						</span>
-						<div className="flex items-center gap-1">
+						<div className="gap-1 flex items-center">
 							{MODES.map(({ key, icon: Icon }) => (
 								<span
 									key={key}
 									className={cn(
-										"flex size-7 items-center justify-center rounded-md sm:size-8",
+										"size-7 sm:size-8 flex items-center justify-center rounded-md",
 										mode === key
 											? "bg-muted text-foreground"
 											: "text-muted-foreground/30",
@@ -238,7 +238,7 @@ export function AACSearchUI() {
 								</span>
 							))}
 						</div>
-						<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/60 bg-muted/30 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/50 sm:inline-flex">
+						<span className="gap-0.5 px-1.5 py-0.5 font-medium sm:inline-flex hidden shrink-0 items-center rounded-md border border-border/60 bg-muted/30 text-[10px] text-muted-foreground/50">
 							<KeyboardIcon className="size-2.5" />
 							<span>K</span>
 						</span>
@@ -260,14 +260,14 @@ export function AACSearchUI() {
 						</div>
 
 						{/* Mode icons in header */}
-						<div className="flex items-center gap-0.5 pr-3">
+						<div className="gap-0.5 pr-3 flex items-center">
 							{MODES.map(({ key, icon: Icon }) => (
 								<button
 									key={key}
 									type="button"
 									onClick={() => handleModeSelect(key)}
 									className={cn(
-										"flex size-8 items-center justify-center rounded-md transition-colors",
+										"size-8 flex items-center justify-center rounded-md transition-colors",
 										mode === key
 											? "bg-muted text-foreground"
 											: "text-muted-foreground/40 hover:text-muted-foreground",
@@ -283,8 +283,8 @@ export function AACSearchUI() {
 					<CommandList>
 						{/* Loading state */}
 						{loading && (
-							<div className="flex items-center justify-center py-12">
-								<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="py-12 flex items-center justify-center">
+								<div className="gap-2 text-sm flex items-center text-muted-foreground">
 									<div className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
 									<span>Searching...</span>
 								</div>
@@ -305,18 +305,20 @@ export function AACSearchUI() {
 												if (hit.url) window.open(hit.url, "_self");
 												setOpen(false);
 											}}
-											className="flex flex-col items-start gap-0.5 py-3"
+											className="gap-0.5 py-3 flex flex-col items-start"
 										>
-											<div className="flex items-center gap-2 w-full">
+											<div className="gap-2 flex w-full items-center">
 												<SearchIcon className="size-3.5 shrink-0 text-muted-foreground/50" />
-												<span className="text-sm font-medium">{hit.title}</span>
+												<span className="text-sm font-medium">
+													{hit.title}
+												</span>
 												{hit.category && (
-													<span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground/70">
+													<span className="px-2 py-0.5 ml-auto rounded-full bg-muted text-[10px] text-muted-foreground/70">
 														{hit.category}
 													</span>
 												)}
 											</div>
-											<p className="pl-6 text-xs text-muted-foreground/60 line-clamp-1">
+											<p className="pl-6 text-xs line-clamp-1 text-muted-foreground/60">
 												{hit.description}
 											</p>
 										</CommandItem>
@@ -329,11 +331,11 @@ export function AACSearchUI() {
 						{!loading && query && results.length === 0 && (
 							<CommandEmpty>
 								<div className="py-12 text-center">
-									<SearchIcon className="mx-auto size-8 text-muted-foreground/20 mb-3" />
+									<SearchIcon className="size-8 mb-3 mx-auto text-muted-foreground/20" />
 									<p className="text-sm text-muted-foreground/60">
 										No results for &ldquo;{query}&rdquo;
 									</p>
-									<p className="text-xs text-muted-foreground/40 mt-1">
+									<p className="text-xs mt-1 text-muted-foreground/40">
 										Try a different search mode above
 									</p>
 								</div>
@@ -352,7 +354,7 @@ export function AACSearchUI() {
 											<Icon className="size-4 shrink-0" />
 											<span className="flex-1">{label}</span>
 											{MODE_STATUS[key] && (
-												<span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground/60">
+												<span className="px-2 py-0.5 rounded-full bg-muted text-[10px] text-muted-foreground/60">
 													{MODE_STATUS[key]}
 												</span>
 											)}
@@ -409,11 +411,11 @@ export function AACSearchUI() {
 						)}
 					</CommandList>
 
-					<div className="border-t px-4 py-2 flex items-center justify-between text-[10px] text-muted-foreground/50">
+					<div className="px-4 py-2 flex items-center justify-between border-t text-[10px] text-muted-foreground/50">
 						<span>Powered by AACsearch Engine</span>
 						<span>
-							<KeyboardIcon className="inline size-2.5 mr-0.5" />
-							K Open · ↑↓ Navigate · Esc Close
+							<KeyboardIcon className="size-2.5 mr-0.5 inline" />K Open · ↑↓ Navigate
+							· Esc Close
 						</span>
 					</div>
 				</Command>

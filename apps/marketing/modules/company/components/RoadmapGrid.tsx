@@ -192,7 +192,7 @@ function RoadmapCard({
 						{isShipped && changelogSlug ? (
 							<a
 								href={`/changelog#${changelogSlug}`}
-								className="gap-1.5 px-3 py-1.5 text-xs font-medium border-border bg-muted text-muted-foreground hover:bg-muted/80 inline-flex items-center rounded-lg border transition-colors"
+								className="gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg border border-border bg-muted text-muted-foreground transition-colors hover:bg-muted/80"
 							>
 								{t("seeChangelog")}
 							</a>

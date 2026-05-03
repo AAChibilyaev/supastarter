@@ -1,7 +1,7 @@
 import { tool } from "@repo/ai";
-import { z } from "zod";
-import { getTypesenseClient } from "@repo/search";
 import { logger } from "@repo/logs";
+import { getTypesenseClient } from "@repo/search";
+import { z } from "zod";
 
 const inputSchema = z.object({
 	productId: z.string().describe("Product ID to get details for"),
@@ -11,7 +11,10 @@ const inputSchema = z.object({
 		.describe("Specific aspects needed, e.g. ['size_guide', 'materials', 'use_cases']"),
 });
 
-export function createGetProductDetailsTool(params: { indexSlug: string; knowledgeSpaceId?: string }) {
+export function createGetProductDetailsTool(params: {
+	indexSlug: string;
+	knowledgeSpaceId?: string;
+}) {
 	return tool({
 		description:
 			"Get detailed information about a specific product: full specifications, materials, use cases, size guide, and expert notes. Use this for detailed product questions and size help.",

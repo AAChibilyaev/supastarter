@@ -1,7 +1,8 @@
 import { tool } from "@repo/ai";
-import { z } from "zod";
-import { retrieveKnowledge } from "../../../knowledge/lib/retrieval";
 import { logger } from "@repo/logs";
+import { z } from "zod";
+
+import { retrieveKnowledge } from "../../../knowledge/lib/retrieval";
 
 const inputSchema = z.object({
 	query: z.string().describe("Question or topic to search for in the knowledge base"),
@@ -14,7 +15,11 @@ export function createSearchKnowledgeTool(knowledgeSpaceId: string) {
 		inputSchema,
 		execute: async (input) => {
 			try {
-				const result = await retrieveKnowledge({ knowledgeSpaceId, query: input.query, limit: 5 });
+				const result = await retrieveKnowledge({
+					knowledgeSpaceId,
+					query: input.query,
+					limit: 5,
+				});
 				return {
 					found: result.chunks.length,
 					content: result.chunks.map((c) => ({

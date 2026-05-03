@@ -105,9 +105,10 @@ export const getOrgRegion = protectedProcedure
 			select: { storageRegion: true },
 		});
 
-		const region = org.storageRegion && isValidRegion(org.storageRegion)
-			? org.storageRegion
-			: DEFAULT_REGION;
+		const region =
+			org.storageRegion && isValidRegion(org.storageRegion)
+				? org.storageRegion
+				: DEFAULT_REGION;
 
 		return buildRegionResponse(region);
 	});
@@ -145,9 +146,10 @@ export const setOrgRegion = protectedProcedure
 			select: { storageRegion: true, name: true },
 		});
 
-		const previousRegion = org.storageRegion && isValidRegion(org.storageRegion)
-			? org.storageRegion
-			: DEFAULT_REGION;
+		const previousRegion =
+			org.storageRegion && isValidRegion(org.storageRegion)
+				? org.storageRegion
+				: DEFAULT_REGION;
 
 		await db.organization.update({
 			where: { id: organizationId },

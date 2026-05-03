@@ -93,9 +93,7 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-muted-foreground">
-									{t("added")}
-								</span>
+								<span className="text-xs text-muted-foreground">{t("added")}</span>
 							)}
 							{item.status === "error" && item.error && (
 								<span

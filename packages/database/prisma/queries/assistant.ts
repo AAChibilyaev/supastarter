@@ -97,10 +97,7 @@ export async function resolveConversation(id: string) {
 	});
 }
 
-export async function escalateConversation(
-	id: string,
-	escalationMeta: Record<string, unknown>,
-) {
+export async function escalateConversation(id: string, escalationMeta: Record<string, unknown>) {
 	return db.assistantConversation.update({
 		where: { id },
 		data: {
@@ -120,10 +117,7 @@ export async function getConversationHistory(id: string, limit = 10) {
 	return messages;
 }
 
-export async function updateConversationMetadata(
-	id: string,
-	patch: Record<string, unknown>,
-) {
+export async function updateConversationMetadata(id: string, patch: Record<string, unknown>) {
 	const conversation = await db.assistantConversation.findUnique({
 		where: { id },
 		select: { metadata: true },
@@ -135,15 +129,17 @@ export async function updateConversationMetadata(
 	});
 }
 
-export async function getAssistantAnalytics(
-	organizationId: string,
-	from: Date,
-	to: Date,
-) {
+export async function getAssistantAnalytics(organizationId: string, from: Date, to: Date) {
 	const [total, resolved, escalated, conversations] = await Promise.all([
-		db.assistantConversation.count({ where: { organizationId, startedAt: { gte: from, lte: to } } }),
-		db.assistantConversation.count({ where: { organizationId, status: "resolved", startedAt: { gte: from, lte: to } } }),
-		db.assistantConversation.count({ where: { organizationId, status: "escalated", startedAt: { gte: from, lte: to } } }),
+		db.assistantConversation.count({
+			where: { organizationId, startedAt: { gte: from, lte: to } },
+		}),
+		db.assistantConversation.count({
+			where: { organizationId, status: "resolved", startedAt: { gte: from, lte: to } },
+		}),
+		db.assistantConversation.count({
+			where: { organizationId, status: "escalated", startedAt: { gte: from, lte: to } },
+		}),
 		db.assistantConversation.findMany({
 			where: { organizationId, startedAt: { gte: from, lte: to } },
 			select: { messageCount: true, mode: true },
@@ -152,7 +148,10 @@ export async function getAssistantAnalytics(
 
 	const avgTurns =
 		conversations.length > 0
-			? conversations.reduce((s: number, c: { messageCount: number }) => s + c.messageCount, 0) / conversations.length
+			? conversations.reduce(
+					(s: number, c: { messageCount: number }) => s + c.messageCount,
+					0,
+				) / conversations.length
 			: 0;
 
 	const modeDistribution: Record<string, number> = {};

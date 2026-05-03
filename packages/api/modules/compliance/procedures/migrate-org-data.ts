@@ -66,84 +66,89 @@ export const migrateOrgData = protectedProcedure
 			message: z.string(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, sourceRegion, destRegion, updateRegionAfterMigration }, context }) => {
-		await requireOrganizationAdmin(organizationId, context.user);
+	.handler(
+		async ({
+			input: { organizationId, sourceRegion, destRegion, updateRegionAfterMigration },
+			context,
+		}) => {
+			await requireOrganizationAdmin(organizationId, context.user);
 
-		// Validate regions
-		if (!isValidRegionCode(sourceRegion)) {
-			return {
-				success: false,
-				results: [],
-				message: `Invalid source region: ${sourceRegion}. Valid: ${AVAILABLE_REGIONS.map((r) => r.code).join(", ")}`,
-			};
-		}
-		if (!isValidRegionCode(destRegion)) {
-			return {
-				success: false,
-				results: [],
-				message: `Invalid destination region: ${destRegion}. Valid: ${AVAILABLE_REGIONS.map((r) => r.code).join(", ")}`,
-			};
-		}
-		if (sourceRegion === destRegion) {
-			return {
-				success: false,
-				results: [],
-				message: "Source and destination regions must be different.",
-			};
-		}
-
-		try {
-			const results = await migrateOrganizationData(
-				organizationId,
-				organizationId,
-				sourceRegion as import("@repo/search").StorageRegion,
-				destRegion as import("@repo/search").StorageRegion,
-			);
-
-			const allSucceeded = results.every((r) => r.success);
-			const totalMigrated = results.reduce((sum, r) => sum + r.progress.imported, 0);
-			const totalFailures = results.reduce((sum, r) => sum + r.progress.failures, 0);
-
-			// Auto-update the organization's storage region if requested and success
-			if (updateRegionAfterMigration && allSucceeded) {
-				await db.organization.update({
-					where: { id: organizationId },
-					data: { storageRegion: destRegion },
-				});
-				logger.info("Organization region auto-updated after migration", {
-					organizationId,
-					newRegion: destRegion,
-				});
+			// Validate regions
+			if (!isValidRegionCode(sourceRegion)) {
+				return {
+					success: false,
+					results: [],
+					message: `Invalid source region: ${sourceRegion}. Valid: ${AVAILABLE_REGIONS.map((r) => r.code).join(", ")}`,
+				};
+			}
+			if (!isValidRegionCode(destRegion)) {
+				return {
+					success: false,
+					results: [],
+					message: `Invalid destination region: ${destRegion}. Valid: ${AVAILABLE_REGIONS.map((r) => r.code).join(", ")}`,
+				};
+			}
+			if (sourceRegion === destRegion) {
+				return {
+					success: false,
+					results: [],
+					message: "Source and destination regions must be different.",
+				};
 			}
 
-			return {
-				success: allSucceeded,
-				results: results.map((r) => ({
-					success: r.success,
-					collection: r.collection,
-					sourceRegion: r.sourceRegion,
-					destRegion: r.destRegion,
-					progress: r.progress,
-					durationMs: r.durationMs,
-				})),
-				message: allSucceeded
-					? `Migration completed successfully. ${totalMigrated} documents migrated to ${destRegion.toUpperCase()}.${updateRegionAfterMigration ? ` Organization region updated to ${destRegion.toUpperCase()}.` : ""}`
-					: `Migration completed with ${totalFailures} failures. ${totalMigrated} documents migrated. Check logs for details.`,
-			};
-		} catch (error) {
-			logger.error("Migration failed", {
-				organizationId,
-				sourceRegion,
-				destRegion,
-				error,
-			});
-			return {
-				success: false,
-				results: [],
-				message: `Migration failed: ${error instanceof Error ? error.message : String(error)}`,
-			};
-		}
-	});
+			try {
+				const results = await migrateOrganizationData(
+					organizationId,
+					organizationId,
+					sourceRegion as import("@repo/search").StorageRegion,
+					destRegion as import("@repo/search").StorageRegion,
+				);
+
+				const allSucceeded = results.every((r) => r.success);
+				const totalMigrated = results.reduce((sum, r) => sum + r.progress.imported, 0);
+				const totalFailures = results.reduce((sum, r) => sum + r.progress.failures, 0);
+
+				// Auto-update the organization's storage region if requested and success
+				if (updateRegionAfterMigration && allSucceeded) {
+					await db.organization.update({
+						where: { id: organizationId },
+						data: { storageRegion: destRegion },
+					});
+					logger.info("Organization region auto-updated after migration", {
+						organizationId,
+						newRegion: destRegion,
+					});
+				}
+
+				return {
+					success: allSucceeded,
+					results: results.map((r) => ({
+						success: r.success,
+						collection: r.collection,
+						sourceRegion: r.sourceRegion,
+						destRegion: r.destRegion,
+						progress: r.progress,
+						durationMs: r.durationMs,
+					})),
+					message: allSucceeded
+						? `Migration completed successfully. ${totalMigrated} documents migrated to ${destRegion.toUpperCase()}.${updateRegionAfterMigration ? ` Organization region updated to ${destRegion.toUpperCase()}.` : ""}`
+						: `Migration completed with ${totalFailures} failures. ${totalMigrated} documents migrated. Check logs for details.`,
+				};
+			} catch (error) {
+				logger.error("Migration failed", {
+					organizationId,
+					sourceRegion,
+					destRegion,
+					error,
+				});
+				return {
+					success: false,
+					results: [],
+					message: `Migration failed: ${error instanceof Error ? error.message : String(error)}`,
+				};
+			}
+		},
+	);
 
 function isValidRegionCode(code: string): boolean {
 	return AVAILABLE_REGIONS.some((r) => r.code === code);

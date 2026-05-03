@@ -201,7 +201,7 @@ export function FeatureFlagsView() {
 	return (
 		<div className="gap-6 flex flex-col">
 			{globalKillSwitch?.active && (
-				<div className="p-3 flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/5 text-destructive text-sm">
+				<div className="p-3 gap-2 text-sm flex items-center rounded-lg border border-destructive/50 bg-destructive/5 text-destructive">
 					<span className="font-medium">{t("globalKillSwitchTitle")}</span>
 					<span className="text-destructive/80">{t("globalKillSwitchDescription")}</span>
 				</div>

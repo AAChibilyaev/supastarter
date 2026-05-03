@@ -50,15 +50,11 @@ const COLUMN_CLASSES: Record<number, string> = {
 	6: "grid-cols-3 sm:grid-cols-6",
 };
 
-export function GlassIcons({
-	items,
-	className,
-	columns = 3,
-}: GlassIconsProps) {
+export function GlassIcons({ items, className, columns = 3 }: GlassIconsProps) {
 	return (
 		<div
 			className={cn(
-				"grid gap-8 overflow-visible",
+				"gap-8 grid overflow-visible",
 				COLUMN_CLASSES[columns] ?? COLUMN_CLASSES[3],
 				className,
 			)}
@@ -90,10 +86,10 @@ function GlassIconButton({ item }: { item: GlassIconItem }) {
 			<span
 				aria-hidden="true"
 				className={cn(
-					"absolute inset-0 block rounded-[1.25em]",
+					"inset-0 absolute block rounded-[1.25em]",
 					"[box-shadow:0.5em_-0.5em_0.75em_hsla(223,10%,10%,0.15)]",
 					"[transition:transform_0.3s_cubic-bezier(0.83,0,0.17,1)]",
-					"[transform:rotate(15deg)] [transform-origin:100%_100%]",
+					"[transform-origin:100%_100%] [transform:rotate(15deg)]",
 					"group-hover:[transform:rotate(25deg)_translate3d(-0.5em,-0.5em,0.5em)]",
 					"group-focus-visible:[transform:rotate(25deg)_translate3d(-0.5em,-0.5em,0.5em)]",
 				)}
@@ -104,7 +100,7 @@ function GlassIconButton({ item }: { item: GlassIconItem }) {
 			<span
 				aria-hidden="true"
 				className={cn(
-					"absolute inset-0 flex items-center justify-center rounded-[1.25em]",
+					"inset-0 absolute flex items-center justify-center rounded-[1.25em]",
 					"bg-white/15 backdrop-blur-[0.75em]",
 					"[box-shadow:0_0_0_0.1em_rgba(255,255,255,0.3)_inset]",
 					"[transition:transform_0.3s_cubic-bezier(0.83,0,0.17,1)]",
@@ -121,11 +117,11 @@ function GlassIconButton({ item }: { item: GlassIconItem }) {
 			{/* Label beneath */}
 			<span
 				className={cn(
-					"absolute right-0 left-0 top-full whitespace-nowrap text-center text-[1em] leading-loose",
+					"right-0 left-0 leading-loose absolute top-full text-center text-[1em] whitespace-nowrap",
 					"opacity-0 [transition:opacity_0.3s_cubic-bezier(0.83,0,0.17,1),transform_0.3s_cubic-bezier(0.83,0,0.17,1)]",
 					"[transform:translateY(0)]",
-					"group-hover:opacity-100 group-hover:[transform:translateY(20%)]",
-					"group-focus-visible:opacity-100 group-focus-visible:[transform:translateY(20%)]",
+					"group-hover:[transform:translateY(20%)] group-hover:opacity-100",
+					"group-focus-visible:[transform:translateY(20%)] group-focus-visible:opacity-100",
 				)}
 			>
 				{item.label}

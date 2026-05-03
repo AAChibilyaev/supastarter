@@ -65,7 +65,9 @@ PROCESS:
 FORMAT: Group by category (footwear, clothing, equipment, accessories). Mark items as Essential / Recommended / Optional.`;
 }
 
-function buildProductContextInjection(productContext: PromptBuilderParams["productContext"]): string {
+function buildProductContextInjection(
+	productContext: PromptBuilderParams["productContext"],
+): string {
 	if (!productContext) return "";
 	return `
 CURRENT CONTEXT: The user is viewing product "${productContext.productTitle ?? productContext.productId}" (ID: ${productContext.productId}${productContext.categorySlug ? `, category: ${productContext.categorySlug}` : ""}). Use this as starting context for the conversation.`;

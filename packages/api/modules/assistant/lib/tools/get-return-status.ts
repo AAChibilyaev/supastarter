@@ -1,5 +1,6 @@
 import { tool } from "@repo/ai";
 import { z } from "zod";
+
 import { type OmsConnector } from "../../connectors/oms-connector";
 
 const inputSchema = z.object({
@@ -14,7 +15,10 @@ export function createGetReturnStatusTool(omsConnector: OmsConnector, sessionUse
 		inputSchema,
 		execute: async (input) => {
 			if (!sessionUserId) {
-				return { error: "authentication_required", message: "Для проверки возврата необходимо войти в аккаунт." };
+				return {
+					error: "authentication_required",
+					message: "Для проверки возврата необходимо войти в аккаунт.",
+				};
 			}
 			const id = input.returnId ?? input.orderId ?? "";
 			const result = await omsConnector.getReturnStatus(id, sessionUserId);

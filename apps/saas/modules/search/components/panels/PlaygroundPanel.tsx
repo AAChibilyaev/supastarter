@@ -145,7 +145,7 @@ function HitCard({
 							<span
 								// biome-ignore lint/security/noDangerouslySetInnerHtml: highlight comes from server
 								dangerouslySetInnerHTML={{ __html: snippet }}
-								className="[&>mark]:bg-muted [&>mark]:px-0.5 [&>mark]:rounded"
+								className="[&>mark]:px-0.5 [&>mark]:rounded [&>mark]:bg-muted"
 							/>
 						) : (
 							<StringValue value={value} />

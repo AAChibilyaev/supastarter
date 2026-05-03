@@ -8,6 +8,7 @@
 
 import { randomUUID } from "node:crypto";
 
+import { streamText, textModel } from "@repo/ai";
 import {
 	appendMessage,
 	createConversation,
@@ -17,25 +18,22 @@ import {
 	updateConversationMetadata,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import { streamText, textModel } from "@repo/ai";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { gatePublicSearchRequest } from "../search/lib/public-auth";
 import { quotaCheck } from "../entitlements/middleware/quota-check";
-
+import { gatePublicSearchRequest } from "../search/lib/public-auth";
+import { getConnectorsForOrg } from "./connectors/registry";
+import { createEscalationService } from "./lib/escalation/escalation-service";
 import { classifyIntent } from "./lib/intent-classifier";
 import { buildSystemPrompt } from "./lib/prompts/prompt-builder";
 import { checkUserMessage, sanitizeOutput } from "./lib/safety-guard";
-import { getConnectorsForOrg } from "./connectors/registry";
-
-import { createSearchProductsTool } from "./lib/tools/search-products";
 import { createCheckAvailabilityTool } from "./lib/tools/check-availability";
-import { createGetProductDetailsTool } from "./lib/tools/get-product-details";
-import { createSearchKnowledgeTool } from "./lib/tools/search-knowledge";
-import { createGetSimilarProductsTool } from "./lib/tools/get-similar-products";
 import { createEscalateToOperatorTool } from "./lib/tools/escalate-to-operator";
-import { createEscalationService } from "./lib/escalation/escalation-service";
+import { createGetProductDetailsTool } from "./lib/tools/get-product-details";
+import { createGetSimilarProductsTool } from "./lib/tools/get-similar-products";
+import { createSearchKnowledgeTool } from "./lib/tools/search-knowledge";
+import { createSearchProductsTool } from "./lib/tools/search-products";
 
 export const assistantPublicApp = new Hono()
 	.use(
@@ -90,7 +88,13 @@ export const assistantPublicApp = new Hono()
 			return c.json({ error: "message required" }, 400);
 		}
 
-		const { message, conversationId: reqConvId, sessionId, indexSlug = "products", locale = "ru" } = body;
+		const {
+			message,
+			conversationId: reqConvId,
+			sessionId,
+			indexSlug = "products",
+			locale = "ru",
+		} = body;
 
 		// Content filter
 		const safety = checkUserMessage(message);
@@ -117,7 +121,9 @@ export const assistantPublicApp = new Hono()
 
 		const historyMessages = await getConversationHistory(conversationId, 10);
 		const metadata = (conversation?.metadata ?? {}) as Record<string, unknown>;
-		const cachedMode = metadata.lastMode as import("./lib/intent-classifier").AssistantMode | undefined;
+		const cachedMode = metadata.lastMode as
+			| import("./lib/intent-classifier").AssistantMode
+			| undefined;
 
 		const classification = await classifyIntent(message, { cachedMode });
 		const mode = classification.mode;
@@ -129,7 +135,14 @@ export const assistantPublicApp = new Hono()
 			mode,
 			brandName: "AACsearch",
 			locale,
-			availableTools: ["search_products", "check_availability", "get_product_details", "search_knowledge", "get_similar_products", "escalate_to_operator"],
+			availableTools: [
+				"search_products",
+				"check_availability",
+				"get_product_details",
+				"search_knowledge",
+				"get_similar_products",
+				"escalate_to_operator",
+			],
 		});
 
 		const connectors = await getConnectorsForOrg(organizationId);
@@ -138,19 +151,26 @@ export const assistantPublicApp = new Hono()
 			where: { id: organizationId },
 			select: { metadata: true },
 		});
-		const orgMeta = JSON.parse((orgForEsc?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const orgMeta = JSON.parse((orgForEsc?.metadata as string | null) ?? "{}") as Record<
+			string,
+			unknown
+		>;
 		const ac = (orgMeta.assistantConfig ?? {}) as Record<string, unknown>;
 		const escalationService = createEscalationService({
 			webhookUrl: (ac.escalationWebhookUrl as string | undefined) || undefined,
 			emailTo: (ac.escalationEmailTo as string | undefined) || undefined,
-			workingHoursStart: typeof ac.workingHoursStart === "number" ? ac.workingHoursStart : undefined,
-			workingHoursEnd: typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
+			workingHoursStart:
+				typeof ac.workingHoursStart === "number" ? ac.workingHoursStart : undefined,
+			workingHoursEnd:
+				typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
 		});
 
-		const knowledgeSpace = await db.knowledgeSpace.findFirst({
-			where: { organizationId, ownerType: "ORGANIZATION" },
-			select: { id: true },
-		}).catch(() => null);
+		const knowledgeSpace = await db.knowledgeSpace
+			.findFirst({
+				where: { organizationId, ownerType: "ORGANIZATION" },
+				select: { id: true },
+			})
+			.catch(() => null);
 		const knowledgeSpaceId = knowledgeSpace?.id ?? "";
 
 		const tools = {
@@ -218,7 +238,10 @@ export const assistantPublicApp = new Hono()
 						outputTokens: usage?.outputTokens ?? null,
 					});
 				} catch (err) {
-					logger.warn({ conversationId, error: err }, "assistantPublic: failed to save assistant message");
+					logger.warn(
+						{ conversationId, error: err },
+						"assistantPublic: failed to save assistant message",
+					);
 				}
 			},
 		});

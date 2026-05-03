@@ -12,13 +12,19 @@ export type UserConditions = Pick<
 >;
 
 export interface LoyaltyConnector {
-	getUserConditions(userId: string, context?: { productId?: string; categoryId?: string }): Promise<UserConditions>;
+	getUserConditions(
+		userId: string,
+		context?: { productId?: string; categoryId?: string },
+	): Promise<UserConditions>;
 	getPurchaseHistory(userId: string, limit: number): Promise<string[]>;
 	getViewHistory(userId: string, limit: number): Promise<string[]>;
 }
 
 export class MockLoyaltyConnector implements LoyaltyConnector {
-	async getUserConditions(_userId: string, _context?: { productId?: string; categoryId?: string }): Promise<UserConditions> {
+	async getUserConditions(
+		_userId: string,
+		_context?: { productId?: string; categoryId?: string },
+	): Promise<UserConditions> {
 		return {
 			segment: "regular",
 			bonusBalance: 1250,
@@ -27,7 +33,9 @@ export class MockLoyaltyConnector implements LoyaltyConnector {
 					code: "SPORT10",
 					description: "Скидка 10% на спортивную одежду",
 					discount: 10,
-					validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString("ru-RU"),
+					validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(
+						"ru-RU",
+					),
 				},
 			],
 			personalDiscountsByCategory: {},
@@ -76,12 +84,17 @@ export class HttpLoyaltyConnector implements LoyaltyConnector {
 		}
 	}
 
-	async getUserConditions(userId: string, context?: { productId?: string; categoryId?: string }): Promise<UserConditions> {
+	async getUserConditions(
+		userId: string,
+		context?: { productId?: string; categoryId?: string },
+	): Promise<UserConditions> {
 		const params = new URLSearchParams();
 		if (context?.productId) params.set("productId", context.productId);
 		if (context?.categoryId) params.set("categoryId", context.categoryId);
 		return (
-			(await this.fetch<UserConditions>(`/users/${encodeURIComponent(userId)}/conditions?${params.toString()}`)) ?? {
+			(await this.fetch<UserConditions>(
+				`/users/${encodeURIComponent(userId)}/conditions?${params.toString()}`,
+			)) ?? {
 				segment: "new",
 				installmentAvailable: false,
 			}
@@ -89,10 +102,18 @@ export class HttpLoyaltyConnector implements LoyaltyConnector {
 	}
 
 	async getPurchaseHistory(userId: string, limit: number): Promise<string[]> {
-		return (await this.fetch<string[]>(`/users/${encodeURIComponent(userId)}/purchases?limit=${limit}`)) ?? [];
+		return (
+			(await this.fetch<string[]>(
+				`/users/${encodeURIComponent(userId)}/purchases?limit=${limit}`,
+			)) ?? []
+		);
 	}
 
 	async getViewHistory(userId: string, limit: number): Promise<string[]> {
-		return (await this.fetch<string[]>(`/users/${encodeURIComponent(userId)}/views?limit=${limit}`)) ?? [];
+		return (
+			(await this.fetch<string[]>(
+				`/users/${encodeURIComponent(userId)}/views?limit=${limit}`,
+			)) ?? []
+		);
 	}
 }

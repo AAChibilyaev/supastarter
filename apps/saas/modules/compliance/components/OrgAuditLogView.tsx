@@ -135,7 +135,8 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 		}),
 	);
 
-	const members = (membersData as Array<{ id: string; name: string | null; email: string }>) ?? [];
+	const members =
+		(membersData as Array<{ id: string; name: string | null; email: string }>) ?? [];
 
 	// ── CSV export ──
 
@@ -170,7 +171,7 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 			setExportDialogOpen(false);
 		} catch (err) {
 			toastError(
-				err instanceof Error ? err.message : t("auditLog.exportError") ?? "Export failed",
+				err instanceof Error ? err.message : (t("auditLog.exportError") ?? "Export failed"),
 			);
 		}
 	}, [organizationId, filterAction, filterUser, exportDateFrom, exportDateTo, t]);
@@ -261,7 +262,7 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 							/>
 						</div>
 
-						<div className="flex items-center gap-2">
+						<div className="gap-2 flex items-center">
 							{(filterAction || filterUser || dateFrom || dateTo) && (
 								<Button
 									variant="ghost"
@@ -360,7 +361,8 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 						<EmptyState
 							icon={<SearchXIcon className="h-8 w-8" />}
 							description={
-								t("auditLog.empty") ?? "No audit log entries match the current filters."
+								t("auditLog.empty") ??
+								"No audit log entries match the current filters."
 							}
 						/>
 					) : (
@@ -382,7 +384,7 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 								<TableBody>
 									{entries.map((entry) => (
 										<TableRow key={entry.id}>
-											<TableCell className="text-xs text-muted-foreground whitespace-nowrap tabular-nums">
+											<TableCell className="text-xs whitespace-nowrap text-muted-foreground tabular-nums">
 												{format.dateTime(new Date(entry.createdAt), {
 													year: "numeric",
 													month: "short",
@@ -392,7 +394,7 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 												})}
 											</TableCell>
 											<TableCell>
-												<div className="flex items-center gap-2">
+												<div className="gap-2 flex items-center">
 													<div className="flex flex-col">
 														<span className="text-sm font-medium">
 															{entry.user.name ?? entry.user.email}
@@ -412,21 +414,30 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 												{entry.targetType ? (
 													<span className="font-mono text-xs">
 														{entry.targetType}
-														{entry.targetId ? `:${entry.targetId.slice(0, 12)}` : ""}
+														{entry.targetId
+															? `:${entry.targetId.slice(0, 12)}`
+															: ""}
 													</span>
 												) : (
-													<span className="text-xs text-muted-foreground">—</span>
+													<span className="text-xs text-muted-foreground">
+														—
+													</span>
 												)}
 											</TableCell>
 											<TableCell className="max-w-[200px]">
 												{entry.details ? (
-													<span className="text-xs text-muted-foreground truncate block">
+													<span className="text-xs block truncate text-muted-foreground">
 														{typeof entry.details === "object"
-															? JSON.stringify(entry.details).slice(0, 80)
+															? JSON.stringify(entry.details).slice(
+																	0,
+																	80,
+																)
 															: String(entry.details).slice(0, 80)}
 													</span>
 												) : (
-													<span className="text-xs text-muted-foreground">—</span>
+													<span className="text-xs text-muted-foreground">
+														—
+													</span>
 												)}
 											</TableCell>
 										</TableRow>
@@ -443,7 +454,7 @@ export function OrgAuditLogView({ organizationId }: OrgAuditLogViewProps) {
 								{t("auditLog.page") ?? "Page"} {page + 1} {t("auditLog.of") ?? "of"}{" "}
 								{totalPages}
 							</span>
-							<div className="flex items-center gap-2">
+							<div className="gap-2 flex items-center">
 								<Button
 									variant="outline"
 									size="sm"

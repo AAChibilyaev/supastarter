@@ -1,6 +1,13 @@
 import { useTranslations } from "next-intl";
 
-const ROWS = ["priceModel", "oneMillion", "tenMillion", "overage", "records", "zeroDowntime"] as const;
+const ROWS = [
+	"priceModel",
+	"oneMillion",
+	"tenMillion",
+	"overage",
+	"records",
+	"zeroDowntime",
+] as const;
 
 export function TcoComparison() {
 	const t = useTranslations();
@@ -18,14 +25,14 @@ export function TcoComparison() {
 				</div>
 
 				<div className="mt-12 md:mt-16 overflow-x-auto rounded-xl border border-border">
-					<table className="w-full text-sm">
+					<table className="text-sm w-full">
 						<thead>
 							<tr className="border-b border-border bg-muted/50">
-								<th className="p-4 text-left font-medium text-foreground/70" />
-								<th className="p-4 text-left font-semibold text-foreground">
+								<th className="p-4 font-medium text-left text-foreground/70" />
+								<th className="p-4 font-semibold text-left text-foreground">
 									Algolia
 								</th>
-								<th className="p-4 text-left font-semibold text-primary">
+								<th className="p-4 font-semibold text-left text-primary">
 									AACsearch
 								</th>
 							</tr>
@@ -33,7 +40,7 @@ export function TcoComparison() {
 						<tbody>
 							{ROWS.map((row) => (
 								<tr key={row} className="border-b border-border last:border-0">
-									<td className="p-4 font-medium text-foreground whitespace-nowrap">
+									<td className="p-4 font-medium whitespace-nowrap text-foreground">
 										{t(`homeTco.rows.${row}.metric`)}
 									</td>
 									<td className="p-4 text-muted-foreground">

@@ -1,30 +1,21 @@
 "use client";
 
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import {
 	ChatBubble,
 	ChatBubbleAvatar,
 	ChatBubbleMessage,
 } from "@repo/ui/components/chat/chat-bubble";
 import { ChatMessageList } from "@repo/ui/components/chat/chat-message-list";
-import { Button } from "@repo/ui/components/button";
-import { Badge } from "@repo/ui/components/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-} from "@repo/ui/components/sheet";
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@repo/ui/components/sheet";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
-import {
-	MessageSquareIcon,
-	CalendarIcon,
-	ChevronRightIcon,
-} from "lucide-react";
+import { MessageSquareIcon, CalendarIcon, ChevronRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -76,7 +67,7 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 	if (conversations.length === 0) {
 		return (
 			<Card>
-				<CardContent className="flex flex-col items-center justify-center py-16 text-center">
+				<CardContent className="py-16 flex flex-col items-center justify-center text-center">
 					<MessageSquareIcon className="mb-4 size-12 text-muted-foreground/30" />
 					<p className="font-medium">{t("history.empty")}</p>
 				</CardContent>
@@ -88,7 +79,7 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle className="flex items-center gap-2 text-base">
+					<CardTitle className="gap-2 text-base flex items-center">
 						<MessageSquareIcon className="size-4" />
 						{t("history.title")}
 					</CardTitle>
@@ -96,7 +87,12 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 				<CardContent className="p-0">
 					<ScrollArea className="h-[600px]">
 						{conversations.map((conv, idx) => {
-							const msgs = (conv as unknown as { messages?: { role: string; content: string }[] }).messages ?? [];
+							const msgs =
+								(
+									conv as unknown as {
+										messages?: { role: string; content: string }[];
+									}
+								).messages ?? [];
 							const firstMsg = msgs.find((m) => m.role === "user");
 							const preview = (firstMsg?.content ?? "—").slice(0, 80);
 
@@ -105,21 +101,24 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 									{idx > 0 && <Separator />}
 									<button
 										type="button"
-										className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/50"
+										className="gap-3 px-4 py-3 flex w-full items-start justify-between text-left transition-colors hover:bg-muted/50"
 										onClick={() => setSelectedId(conv.id)}
 									>
 										<div className="min-w-0 flex-1">
-											<div className="mb-1 flex items-center gap-2">
-												<Badge variant="secondary" className="text-xs capitalize">
+											<div className="mb-1 gap-2 flex items-center">
+												<Badge
+													variant="secondary"
+													className="text-xs capitalize"
+												>
 													{conv.status}
 												</Badge>
-												<span className="text-xs capitalize text-muted-foreground">
+												<span className="text-xs text-muted-foreground capitalize">
 													{conv.mode?.replace(/_/g, " ")}
 												</span>
 											</div>
-											<p className="truncate text-sm">{preview}</p>
-											<div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
-												<span className="flex items-center gap-1">
+											<p className="text-sm truncate">{preview}</p>
+											<div className="mt-1 gap-3 text-xs flex items-center text-muted-foreground">
+												<span className="gap-1 flex items-center">
 													<CalendarIcon className="size-3" />
 													{formatDate(conv.startedAt)}
 												</span>
@@ -137,10 +136,15 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 				</CardContent>
 			</Card>
 
-			<Sheet open={!!selectedId} onOpenChange={(open) => { if (!open) setSelectedId(null); }}>
-				<SheetContent side="right" className="flex w-full flex-col gap-0 sm:max-w-lg">
-					<SheetHeader className="border-b pb-3">
-						<SheetTitle className="flex items-center gap-2 text-sm">
+			<Sheet
+				open={!!selectedId}
+				onOpenChange={(open) => {
+					if (!open) setSelectedId(null);
+				}}
+			>
+				<SheetContent side="right" className="gap-0 sm:max-w-lg flex w-full flex-col">
+					<SheetHeader className="pb-3 border-b">
+						<SheetTitle className="gap-2 text-sm flex items-center">
 							<MessageSquareIcon className="size-4" />
 							{t("history.title")}
 						</SheetTitle>
@@ -156,21 +160,28 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 						) : selectedConversation ? (
 							<ChatMessageList smooth className="flex-1">
 								{(
-									(selectedConversation as unknown as {
-										messages?: { role: string; content: string }[];
-									}).messages ?? []
+									(
+										selectedConversation as unknown as {
+											messages?: { role: string; content: string }[];
+										}
+									).messages ?? []
 								)
 									.filter((m) => m.role === "user" || m.role === "assistant")
 									.map((message, idx) => {
 										const isUser = message.role === "user";
 										return (
-											<ChatBubble key={idx} variant={isUser ? "sent" : "received"}>
+											<ChatBubble
+												key={idx}
+												variant={isUser ? "sent" : "received"}
+											>
 												<ChatBubbleAvatar
 													fallback={isUser ? "U" : "AI"}
 													className="size-7"
 												/>
-												<ChatBubbleMessage variant={isUser ? "sent" : "received"}>
-													<span className="whitespace-pre-wrap text-sm">
+												<ChatBubbleMessage
+													variant={isUser ? "sent" : "received"}
+												>
+													<span className="text-sm whitespace-pre-wrap">
 														{message.content}
 													</span>
 												</ChatBubbleMessage>
@@ -180,7 +191,7 @@ export function AssistantHistoryPanel({ organizationId }: Props) {
 							</ChatMessageList>
 						) : null}
 
-						<div className="border-t p-3">
+						<div className="p-3 border-t">
 							<Button
 								variant="outline"
 								size="sm"

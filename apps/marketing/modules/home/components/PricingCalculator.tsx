@@ -6,7 +6,9 @@ import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 const DOCS_STEPS = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 5000000];
-const SEARCHES_STEPS = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 5000000, 50000000];
+const SEARCHES_STEPS = [
+	5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 5000000, 50000000,
+];
 
 function formatNumber(n: number): string {
 	if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`;
@@ -32,8 +34,7 @@ export function PricingCalculator() {
 	const searches = SEARCHES_STEPS[searchesIdx]!;
 	const plan = useMemo(() => resolvePlan(docs, searches), [docs, searches]);
 
-	const ctaHref =
-		plan === "enterprise" ? "/contact" : (config.saasUrl ?? "/signup");
+	const ctaHref = plan === "enterprise" ? "/contact" : (config.saasUrl ?? "/signup");
 	const ctaKey =
 		plan === "free"
 			? "homePricingCalc.ctaFree"
@@ -60,7 +61,7 @@ export function PricingCalculator() {
 				</div>
 
 				<div className="mt-12 md:mt-16 max-w-2xl mx-auto">
-					<div className="rounded-xl border border-border bg-card p-6 md:p-10 space-y-8">
+					<div className="p-6 md:p-10 space-y-8 rounded-xl border border-border bg-card">
 						{/* Docs slider */}
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
@@ -77,7 +78,7 @@ export function PricingCalculator() {
 								max={DOCS_STEPS.length - 1}
 								value={docsIdx}
 								onChange={(e) => setDocsIdx(Number(e.target.value))}
-								className="w-full accent-primary cursor-pointer"
+								className="w-full cursor-pointer accent-primary"
 							/>
 						</div>
 
@@ -97,24 +98,24 @@ export function PricingCalculator() {
 								max={SEARCHES_STEPS.length - 1}
 								value={searchesIdx}
 								onChange={(e) => setSearchesIdx(Number(e.target.value))}
-								className="w-full accent-primary cursor-pointer"
+								className="w-full cursor-pointer accent-primary"
 							/>
 						</div>
 
 						{/* Units total */}
-						<div className="pt-2 border-t border-border flex items-center justify-between">
+						<div className="pt-2 flex items-center justify-between border-t border-border">
 							<span className="text-sm font-light text-muted-foreground">
 								{t("homePricingCalc.unitsLabel")}
 							</span>
-							<span className="text-sm font-semibold tabular-nums text-foreground">
+							<span className="text-sm font-semibold text-foreground tabular-nums">
 								{formatNumber(docs + searches)}
 							</span>
 						</div>
 
 						{/* Recommended plan */}
-						<div className="rounded-lg border border-border bg-muted/40 p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+						<div className="p-5 sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col rounded-lg border border-border bg-muted/40">
 							<div>
-								<p className="text-xs font-light uppercase tracking-widest text-muted-foreground mb-1">
+								<p className="text-xs font-light tracking-widest mb-1 text-muted-foreground uppercase">
 									{t("homePricingCalc.planLabel")}
 								</p>
 								<p className={`text-2xl font-semibold ${planColors[plan]}`}>

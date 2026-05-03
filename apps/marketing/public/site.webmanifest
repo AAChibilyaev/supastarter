@@ -1,16 +1,16 @@
 {
-  "name": "AACsearch",
-  "short_name": "AACsearch",
-  "description": "Hosted search-as-a-service API — instant full-text search, built-in analytics, and AI-powered recommendations.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#fd366e",
-  "icons": [
-    {
-      "src": "/apple-touch-icon.svg",
-      "sizes": "180x180",
-      "type": "image/svg+xml"
-    }
-  ]
+	"name": "AACsearch",
+	"short_name": "AACsearch",
+	"description": "Hosted search-as-a-service API — instant full-text search, built-in analytics, and AI-powered recommendations.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#fd366e",
+	"icons": [
+		{
+			"src": "/apple-touch-icon.svg",
+			"sizes": "180x180",
+			"type": "image/svg+xml"
+		}
+	]
 }

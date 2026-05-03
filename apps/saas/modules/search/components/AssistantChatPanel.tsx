@@ -2,6 +2,9 @@
 
 import { useChat } from "@ai-sdk/react";
 import { eventIteratorToStream } from "@orpc/client";
+import { cn } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import {
 	ChatBubble,
 	ChatBubbleAvatar,
@@ -10,12 +13,9 @@ import {
 import { ChatInput } from "@repo/ui/components/chat/chat-input";
 import { ChatMessageList } from "@repo/ui/components/chat/chat-message-list";
 import MessageLoading from "@repo/ui/components/chat/message-loading";
-import { Button } from "@repo/ui/components/button";
-import { Badge } from "@repo/ui/components/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/components/tooltip";
-import { cn } from "@repo/ui";
-import { orpcClient } from "@shared/lib/orpc-client";
 import { toastError } from "@repo/ui/components/toast";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/components/tooltip";
+import { orpcClient } from "@shared/lib/orpc-client";
 import {
 	PlusIcon,
 	SendIcon,
@@ -29,6 +29,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useCallback, useRef, useState } from "react";
 import { Streamdown } from "streamdown";
+
 import "streamdown/styles.css";
 
 interface Props {
@@ -50,8 +51,11 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 			async sendMessages(options) {
 				const userMsg = options.messages.at(-1);
 				const text =
-					(userMsg?.parts?.find((p) => p.type === "text") as { type: "text"; text: string } | undefined)
-						?.text ?? "";
+					(
+						userMsg?.parts?.find((p) => p.type === "text") as
+							| { type: "text"; text: string }
+							| undefined
+					)?.text ?? "";
 
 				let convId = conversationId;
 				if (!convId) {
@@ -85,10 +89,11 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 		},
 		onFinish({ message }) {
 			if (!ttsEnabled || typeof window === "undefined" || !window.speechSynthesis) return;
-			const text = message.parts
-				?.filter((p) => p.type === "text")
-				.map((p) => (p as { type: "text"; text: string }).text)
-				.join("") ?? "";
+			const text =
+				message.parts
+					?.filter((p) => p.type === "text")
+					.map((p) => (p as { type: "text"; text: string }).text)
+					.join("") ?? "";
 			if (!text) return;
 			window.speechSynthesis.cancel();
 			const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ""));
@@ -152,10 +157,10 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 	const isStreaming = status === "streaming" || status === "submitted";
 
 	return (
-		<div className="flex h-[calc(100vh-16rem)] flex-col rounded-lg border bg-background shadow-sm">
+		<div className="shadow-sm flex h-[calc(100vh-16rem)] flex-col rounded-lg border bg-background">
 			{/* Header */}
-			<div className="flex items-center justify-between border-b px-4 py-3">
-				<div className="flex items-center gap-2">
+			<div className="px-4 py-3 flex items-center justify-between border-b">
+				<div className="gap-2 flex items-center">
 					<BotIcon className="size-4 text-primary" />
 					<span className="font-medium text-sm">{t("title")}</span>
 					{conversationId && (
@@ -164,7 +169,7 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 						</Badge>
 					)}
 				</div>
-				<div className="flex items-center gap-1">
+				<div className="gap-1 flex items-center">
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
@@ -173,14 +178,23 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 								onClick={toggleTts}
 								className={cn("size-8", ttsEnabled && "text-primary")}
 							>
-								{ttsEnabled ? <Volume2Icon className="size-4" /> : <VolumeXIcon className="size-4" />}
+								{ttsEnabled ? (
+									<Volume2Icon className="size-4" />
+								) : (
+									<VolumeXIcon className="size-4" />
+								)}
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>{ttsEnabled ? t("speakOff") : t("speakOn")}</TooltipContent>
 					</Tooltip>
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Button variant="ghost" size="icon" onClick={startNewChat} className="size-8">
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={startNewChat}
+								className="size-8"
+							>
 								<PlusIcon className="size-4" />
 							</Button>
 						</TooltipTrigger>
@@ -192,7 +206,7 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 			{/* Messages */}
 			<ChatMessageList smooth className="flex-1">
 				{messages.length === 0 && (
-					<div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+					<div className="gap-3 flex h-full flex-col items-center justify-center text-center">
 						<BotIcon className="size-10 text-muted-foreground/30" />
 						<p className="max-w-xs text-sm text-muted-foreground">{t("placeholder")}</p>
 					</div>
@@ -245,7 +259,7 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 			</ChatMessageList>
 
 			{/* Input */}
-			<div className="flex items-end gap-2 border-t p-3">
+			<div className="gap-2 p-3 flex items-end border-t">
 				<div className="relative flex-1 rounded-lg border bg-background focus-within:ring-1 focus-within:ring-primary">
 					<ChatInput
 						ref={inputRef}
@@ -257,7 +271,7 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 								void handleSend(e.currentTarget.value);
 							}
 						}}
-						className="min-h-[42px] border-0 pr-8 focus-visible:ring-0"
+						className="pr-8 min-h-[42px] border-0 focus-visible:ring-0"
 					/>
 					<Tooltip>
 						<TooltipTrigger asChild>
@@ -265,14 +279,18 @@ export function AssistantChatPanel({ organizationId, locale = "ru" }: Props) {
 								variant="ghost"
 								size="icon"
 								className={cn(
-									"absolute right-1 bottom-1 size-7",
+									"right-1 bottom-1 size-7 absolute",
 									isListening && "animate-pulse text-destructive",
 								)}
 								onClick={startVoice}
 								disabled={isStreaming}
 								type="button"
 							>
-								{isListening ? <MicOffIcon className="size-3" /> : <MicIcon className="size-3" />}
+								{isListening ? (
+									<MicOffIcon className="size-3" />
+								) : (
+									<MicIcon className="size-3" />
+								)}
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>{t("voice")}</TooltipContent>

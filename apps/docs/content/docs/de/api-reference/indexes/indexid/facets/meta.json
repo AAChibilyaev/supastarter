@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/facets",
-  "pages": [
-    "get"
-  ]
+	"title": "indexes/indexid/facets",
+	"pages": ["get"]
 }

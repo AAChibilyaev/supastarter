@@ -86,7 +86,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
 										isCurrent &&
 											"border-primary bg-primary text-primary-foreground",
 										isCompleted &&
-											"bg-muted border-border text-muted-foreground",
+											"border-border bg-muted text-muted-foreground",
 										isUpcoming && "border-border text-muted-foreground",
 									)}
 								>

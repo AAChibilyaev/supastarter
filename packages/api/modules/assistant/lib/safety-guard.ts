@@ -66,7 +66,10 @@ export function checkUserMessage(message: string): SafetyCheckResult {
 export function validateServiceOutput(output: string): SafetyCheckResult {
 	for (const pattern of SERVICE_HALLUCINATION_PATTERNS) {
 		if (pattern.test(output)) {
-			logger.warn({ pattern: pattern.toString() }, "Potential service hallucination detected");
+			logger.warn(
+				{ pattern: pattern.toString() },
+				"Potential service hallucination detected",
+			);
 			return {
 				safe: false,
 				reason: "hallucination",

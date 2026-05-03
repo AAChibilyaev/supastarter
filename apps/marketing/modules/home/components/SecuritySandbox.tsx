@@ -45,11 +45,41 @@ export function SecuritySandbox() {
 
 	const outcomes: Record<OutcomeType, Outcome> = useMemo(
 		() => ({
-			allowed: { type: "allowed", icon: "✓", color: "text-success", bgColor: "bg-success/10", borderColor: "border-success/30" },
-			origin: { type: "origin", icon: "✗", color: "text-destructive", bgColor: "bg-destructive/10", borderColor: "border-destructive/30" },
-			tenant: { type: "tenant", icon: "✗", color: "text-destructive", bgColor: "bg-destructive/10", borderColor: "border-destructive/30" },
-			expired: { type: "expired", icon: "✗", color: "text-muted-foreground", bgColor: "bg-muted", borderColor: "border-border" },
-			leak: { type: "leak", icon: "✓", color: "text-success", bgColor: "bg-success/10", borderColor: "border-success/30" },
+			allowed: {
+				type: "allowed",
+				icon: "✓",
+				color: "text-success",
+				bgColor: "bg-success/10",
+				borderColor: "border-success/30",
+			},
+			origin: {
+				type: "origin",
+				icon: "✗",
+				color: "text-destructive",
+				bgColor: "bg-destructive/10",
+				borderColor: "border-destructive/30",
+			},
+			tenant: {
+				type: "tenant",
+				icon: "✗",
+				color: "text-destructive",
+				bgColor: "bg-destructive/10",
+				borderColor: "border-destructive/30",
+			},
+			expired: {
+				type: "expired",
+				icon: "✗",
+				color: "text-muted-foreground",
+				bgColor: "bg-muted",
+				borderColor: "border-border",
+			},
+			leak: {
+				type: "leak",
+				icon: "✓",
+				color: "text-success",
+				bgColor: "bg-success/10",
+				borderColor: "border-success/30",
+			},
 		}),
 		[],
 	);
@@ -84,17 +114,28 @@ export function SecuritySandbox() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div className="mt-12 md:mt-16 max-w-4xl md:grid-cols-2 gap-6 mx-auto grid grid-cols-1">
 					{/* Controls */}
-					<div className="rounded-xl border border-border bg-card p-6 md:p-8 space-y-6">
-						<p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Token constraints</p>
+					<div className="p-6 md:p-8 space-y-6 rounded-xl border border-border bg-card">
+						<p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
+							Token constraints
+						</p>
 
 						{/* TTL */}
 						<ToggleField
 							label={t("ttlLabel")}
 							options={[
-								{ value: "valid", label: "1 hour (valid)", active: ttl === "valid" },
-								{ value: "expired", label: "Expired", active: ttl === "expired", danger: true },
+								{
+									value: "valid",
+									label: "1 hour (valid)",
+									active: ttl === "valid",
+								},
+								{
+									value: "expired",
+									label: "Expired",
+									active: ttl === "expired",
+									danger: true,
+								},
 							]}
 							onChange={(v) => setTtl(v as TtlOption)}
 						/>
@@ -103,8 +144,17 @@ export function SecuritySandbox() {
 						<ToggleField
 							label={t("originLabel")}
 							options={[
-								{ value: "allowed", label: "myapp.com (allowed)", active: origin === "allowed" },
-								{ value: "blocked", label: "attacker.site", active: origin === "blocked", danger: true },
+								{
+									value: "allowed",
+									label: "myapp.com (allowed)",
+									active: origin === "allowed",
+								},
+								{
+									value: "blocked",
+									label: "attacker.site",
+									active: origin === "blocked",
+									danger: true,
+								},
 							]}
 							onChange={(v) => setOrigin(v as OriginOption)}
 						/>
@@ -113,20 +163,31 @@ export function SecuritySandbox() {
 						<ToggleField
 							label={t("tenantLabel")}
 							options={[
-								{ value: "match", label: "tenant_id = acme", active: tenant === "match" },
-								{ value: "mismatch", label: "tenant_id = evil", active: tenant === "mismatch", danger: true },
+								{
+									value: "match",
+									label: "tenant_id = acme",
+									active: tenant === "match",
+								},
+								{
+									value: "mismatch",
+									label: "tenant_id = evil",
+									active: tenant === "mismatch",
+									danger: true,
+								},
 							]}
 							onChange={(v) => setTenant(v as TenantOption)}
 						/>
 
 						{/* Token leak */}
 						<div>
-							<p className="text-xs font-light text-muted-foreground mb-2">{t("leakLabel")}</p>
+							<p className="text-xs font-light mb-2 text-muted-foreground">
+								{t("leakLabel")}
+							</p>
 							<button
 								type="button"
 								onClick={() => setLeaked((p) => !p)}
 								className={cn(
-									"relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none",
+									"h-6 w-11 relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none",
 									leaked ? "bg-muted-foreground/30" : "bg-muted",
 								)}
 								role="switch"
@@ -134,7 +195,7 @@ export function SecuritySandbox() {
 							>
 								<span
 									className={cn(
-										"pointer-events-none inline-block size-5 rounded-full bg-white shadow-lg ring-0 transition-transform",
+										"size-5 bg-white shadow-lg pointer-events-none inline-block rounded-full ring-0 transition-transform",
 										leaked ? "translate-x-5" : "translate-x-0",
 									)}
 								/>
@@ -143,20 +204,22 @@ export function SecuritySandbox() {
 					</div>
 
 					{/* Visual flow + outcome */}
-					<div className="flex flex-col gap-4">
+					<div className="gap-4 flex flex-col">
 						{/* Flow diagram */}
-						<div className="rounded-xl border border-border bg-card p-6">
-							<p className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-5">Request flow</p>
+						<div className="p-6 rounded-xl border border-border bg-card">
+							<p className="text-xs font-medium tracking-widest mb-5 text-muted-foreground uppercase">
+								Request flow
+							</p>
 							<div className="space-y-2">
 								{FLOW_NODES.map((node, i) => {
 									const isBlocked = blockNode === i;
 									const isPast = blockNode !== null && i > blockNode;
 									const isActive = blockNode === null || i <= blockNode;
 									return (
-										<div key={node} className="flex items-center gap-2">
+										<div key={node} className="gap-2 flex items-center">
 											<div
 												className={cn(
-													"flex-1 rounded-lg border px-3 py-2 text-sm font-light transition-all duration-300",
+													"px-3 py-2 text-sm font-light flex-1 rounded-lg border transition-all duration-300",
 													isBlocked
 														? "border-destructive/40 bg-destructive/10 text-destructive"
 														: isPast
@@ -168,13 +231,21 @@ export function SecuritySandbox() {
 											>
 												{node}
 												{isBlocked && (
-													<span className="ml-2 text-[10px] font-medium opacity-70">
-														{outcomeType === "expired" ? "401" : "403"} →
+													<span className="ml-2 font-medium text-[10px] opacity-70">
+														{outcomeType === "expired" ? "401" : "403"}{" "}
+														→
 													</span>
 												)}
 											</div>
 											{i < FLOW_NODES.length - 1 && (
-												<div className={cn("text-base transition-all", isPast ? "text-muted-foreground/20" : "text-muted-foreground/40")}>
+												<div
+													className={cn(
+														"text-base transition-all",
+														isPast
+															? "text-muted-foreground/20"
+															: "text-muted-foreground/40",
+													)}
+												>
 													↓
 												</div>
 											)}
@@ -185,8 +256,19 @@ export function SecuritySandbox() {
 						</div>
 
 						{/* Outcome badge */}
-						<div className={cn("rounded-xl border p-5 flex items-start gap-3 transition-all duration-300", outcome.bgColor, outcome.borderColor)}>
-							<span className={cn("text-2xl font-bold leading-none mt-0.5", outcome.color)}>
+						<div
+							className={cn(
+								"p-5 gap-3 flex items-start rounded-xl border transition-all duration-300",
+								outcome.bgColor,
+								outcome.borderColor,
+							)}
+						>
+							<span
+								className={cn(
+									"text-2xl font-bold mt-0.5 leading-none",
+									outcome.color,
+								)}
+							>
 								{outcome.icon}
 							</span>
 							<div>
@@ -195,12 +277,15 @@ export function SecuritySandbox() {
 								</p>
 								{outcomeType === "allowed" && (
 									<p className="mt-1 text-xs font-light text-muted-foreground">
-										Token valid · Origin trusted · Tenant matched · filter_by: tenant_id=acme applied
+										Token valid · Origin trusted · Tenant matched · filter_by:
+										tenant_id=acme applied
 									</p>
 								)}
 								{outcomeType === "leak" && (
 									<p className="mt-1 text-xs font-light text-muted-foreground">
-										Scoped tokens only allow search. Even if leaked, attacker cannot access Admin API, read other tenants, or modify indexes.
+										Scoped tokens only allow search. Even if leaked, attacker
+										cannot access Admin API, read other tenants, or modify
+										indexes.
 									</p>
 								)}
 							</div>
@@ -232,7 +317,7 @@ function ToggleField({
 }) {
 	return (
 		<div>
-			<p className="text-xs font-light text-muted-foreground mb-2">{label}</p>
+			<p className="text-xs font-light mb-2 text-muted-foreground">{label}</p>
 			<div className="gap-2 flex flex-wrap">
 				{options.map((opt) => (
 					<button
@@ -242,9 +327,9 @@ function ToggleField({
 						className={cn(
 							"px-3 py-1.5 text-xs rounded-lg border transition-all",
 							opt.active && opt.danger
-								? "bg-destructive/10 border-destructive/40 text-destructive"
+								? "border-destructive/40 bg-destructive/10 text-destructive"
 								: opt.active
-									? "bg-success/10 border-success/30 text-success"
+									? "border-success/30 bg-success/10 text-success"
 									: "border-border bg-muted/30 text-muted-foreground hover:text-foreground",
 						)}
 					>

@@ -46,7 +46,11 @@ export class ChatClient {
 				sessionId: this.sessionId,
 				entryPoint: options.entryPoint,
 				productContext: options.productId
-					? { productId: options.productId, productTitle: options.productTitle, categorySlug: options.categorySlug }
+					? {
+							productId: options.productId,
+							productTitle: options.productTitle,
+							categorySlug: options.categorySlug,
+						}
 					: undefined,
 				searchContext: options.searchQuery ? { query: options.searchQuery } : undefined,
 				userToken: options.userToken,

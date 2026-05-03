@@ -12,13 +12,13 @@ import { NavBar } from "@shared/components/NavBar";
 import { MarketingThemeProvider } from "@shared/components/ThemeProvider";
 import { getBaseUrl } from "@shared/lib/base-url";
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import type { PropsWithChildren } from "react";
-import type { Viewport } from "next";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -96,9 +96,7 @@ export default async function MarketingLayout({
 			suppressHydrationWarning
 			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
 		>
-		<body
-			className={cn("bg-background text-foreground antialiased")}
-		>
+			<body className={cn("bg-background text-foreground antialiased")}>
 				<OrganizationSchema locale={locale} />
 				<WebSiteSchema locale={locale} />
 				<ConsentProvider initialConsent={consentCookie?.value === "true"}>

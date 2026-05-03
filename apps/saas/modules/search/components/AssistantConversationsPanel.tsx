@@ -37,7 +37,7 @@ function StatCard({
 						<p className="text-sm text-muted-foreground">{label}</p>
 						<p className="mt-1 text-2xl font-semibold">{display}</p>
 					</div>
-					<div className="rounded-full bg-primary/10 p-3">
+					<div className="p-3 rounded-full bg-primary/10">
 						<Icon className="size-5 text-primary" />
 					</div>
 				</div>
@@ -68,7 +68,7 @@ export function AssistantConversationsPanel({ organizationId }: Props) {
 
 	if (isLoading) {
 		return (
-			<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid">
 				{[...Array(4)].map((_, i) => (
 					<Card key={i}>
 						<CardContent className="p-6">
@@ -83,10 +83,12 @@ export function AssistantConversationsPanel({ organizationId }: Props) {
 	if (!data || data.totalConversations === 0) {
 		return (
 			<Card>
-				<CardContent className="flex flex-col items-center justify-center py-16 text-center">
+				<CardContent className="py-16 flex flex-col items-center justify-center text-center">
 					<MessageSquareIcon className="mb-4 size-12 text-muted-foreground/40" />
 					<p className="font-medium">{t("empty")}</p>
-					<p className="mt-1 max-w-sm text-sm text-muted-foreground">{t("emptyDescription")}</p>
+					<p className="mt-1 max-w-sm text-sm text-muted-foreground">
+						{t("emptyDescription")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -94,7 +96,7 @@ export function AssistantConversationsPanel({ organizationId }: Props) {
 
 	return (
 		<div className="space-y-6">
-			<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid">
 				<StatCard
 					icon={MessageSquareIcon}
 					label={t("totalConversations")}
@@ -130,13 +132,14 @@ export function AssistantConversationsPanel({ organizationId }: Props) {
 							{Object.entries(data.modeDistribution)
 								.sort(([, a], [, b]) => b - a)
 								.map(([mode, count]) => {
-									const pct = data.totalConversations > 0
-										? Math.round((count / data.totalConversations) * 100)
-										: 0;
+									const pct =
+										data.totalConversations > 0
+											? Math.round((count / data.totalConversations) * 100)
+											: 0;
 									return (
 										<div key={mode} className="space-y-1">
-											<div className="flex justify-between text-sm">
-												<span className="capitalize text-muted-foreground">
+											<div className="text-sm flex justify-between">
+												<span className="text-muted-foreground capitalize">
 													{mode.replace(/_/g, " ")}
 												</span>
 												<span className="font-medium">{pct}%</span>

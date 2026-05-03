@@ -143,8 +143,8 @@ export function ReindexPanel({
 						</p>
 
 						{/* Advanced options info */}
-						<div className="gap-2 p-3 border-border bg-muted flex items-start rounded-lg border">
-							<AlertTriangleIcon className="mt-0.5 size-4 text-muted-foreground shrink-0" />
+						<div className="gap-2 p-3 flex items-start rounded-lg border border-border bg-muted">
+							<AlertTriangleIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
 							<div>
 								<p className="text-xs font-medium text-muted-foreground">
 									{t("collection.reindexWarning")}

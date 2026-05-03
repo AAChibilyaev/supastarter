@@ -1,275 +1,275 @@
 {
-  "export": {
-    "title": "Dokumente exportieren",
-    "description": "Alle Dokumente aus diesem Index als Datei herunterladen.",
-    "format": "Format",
-    "filterBy": "Filter (optional)",
-    "filterPlaceholder": "z.B. category:=shoes",
-    "filterHint": "Typesense-Filterausdruck. Leer lassen, um alle Dokumente zu exportieren.",
-    "download": "Herunterladen",
-    "failed": "Export fehlgeschlagen"
-  },
-  "abTest": {
-    "title": "A/B-Tests",
-    "description": "Beschreibung",
-    "createNew": "Neuer A/B-Test",
-    "createTitle": "A/B-Test erstellen",
-    "createDescription": "Konfigurieren Sie einen neuen A/B-Test zum Vergleich von Suchkonfigurationen.",
-    "testName": "Testname",
-    "testNamePlaceholder": "z.B. Produktsuche Ranking v2",
-    "descriptionPlaceholder": "Was testen Sie?",
-    "configBQueryBy": "Config B — query_by",
-    "queryByPlaceholder": "e.g. title,description,tags",
-    "trafficSplit": "Traffic-Aufteilung",
-    "startDate": "Startdatum",
-    "endDate": "Enddatum",
-    "cancel": "Abbrechen",
-    "startTest": "Test starten",
-    "createdSuccess": "A/B-Test erfolgreich erstellt!",
-    "createFailed": "Fehler beim Erstellen des A/B-Tests",
-    "nameRequired": "Bitte geben Sie einen Testnamen ein",
-    "configRequired": "Bitte konfigurieren Sie mindestens ein Feld für Variante B",
-    "status_draft": "Entwurf",
-    "status_running": "Aktiv",
-    "status_stopped": "Gestoppt",
-    "status_completed": "Abgeschlossen",
-    "winner": "Gewinner",
-    "winnerA": "A übernehmen",
-    "winnerB": "B übernehmen",
-    "currentConfig": "Aktuell (A)",
-    "queryBy": "query_by",
-    "rankingRules": "Ranking Rules",
-    "synonyms": "Synonyms",
-    "synonymRules": "synonym rules",
-    "configDiff": "Konfigurationsunterschied",
-    "stopTest": "Test stoppen",
-    "declareWinner": "Gewinner erklären:",
-    "stoppedSuccess": "A/B-Test gestoppt",
-    "failedToStop": "Fehler beim Stoppen des A/B-Tests",
-    "winnerApplied": "Gewinner erfolgreich übernommen!",
-    "failedToApply": "Fehler beim Übernehmen des Gewinners",
-    "noTests": "Noch keine A/B-Tests",
-    "noTestsDescription": "Erstellen Sie einen A/B-Test, um verschiedene Suchkonfigurationen zu vergleichen.",
-    "noIndexes": "Keine Suchindizes",
-    "noIndexesDescription": "Erstellen Sie zuerst einen Suchindex, bevor Sie A/B-Tests durchführen.",
-    "selectIndex": "Index auswählen",
-    "selectIndexFirst": "Index auswählen",
-    "selectIndexFirstDescription": "Wählen Sie einen Suchindex aus, um seine A/B-Tests anzuzeigen und zu verwalten.",
-    "allTests": "Alle Tests",
-    "activeTests": "Aktive Tests",
-    "name": "Name",
-    "status": "Status"
-  },
-  "alertsPage": {
-    "title": "Benachrichtigungen",
-    "subtitle": "Schwellenwerte und Benachrichtigungskanäle für Nutzungswarnungen konfigurieren",
-    "searchQuota": "Suchkontingent",
-    "ingestQuota": "Importkontingent",
-    "thresholds": "Schwellenwerte",
-    "threshold": "{percent}% genutzt",
-    "channels": "Benachrichtigungskanäle",
-    "cooldown": "Abklingzeit",
-    "cooldownHours": "{hours}h zwischen Benachrichtigungen",
-    "edit": "Bearbeiten",
-    "save": "Speichern",
-    "cancel": "Abbrechen",
-    "enable": "Aktivieren",
-    "disable": "Deaktivieren",
-    "email": "E-Mail",
-    "webhook": "Webhook",
-    "slack": "Slack",
-    "slackWebhookUrl": "Slack Webhook URL",
-    "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
-    "deliveryChannels": "Zustellungskanäle",
-    "alertHistory": "Alarmverlauf",
-    "noAlerts": "Noch keine Alarme ausgelöst",
-    "alertTriggered": "Alarm ausgelöst",
-    "alertResolved": "Alarm behoben",
-    "resource": "Ressource",
-    "thresholdLabel": "Schwellenwert",
-    "triggeredAt": "Ausgelöst am",
-    "resolvedAt": "Behoben am",
-    "status": "Status",
-    "ruleEnabled": "Alarmregel aktiviert",
-    "ruleDisabled": "Alarmregel deaktiviert",
-    "configureChannels": "Konfigurieren Sie auch eine Slack Webhook-URL für Slack-Benachrichtigungen",
-    "addWebhook": "Slack Webhook hinzufügen",
-    "removeWebhook": "Entfernen",
-    "saveSuccess": "Alarmeinstellungen gespeichert",
-    "saveError": "Fehler beim Speichern der Alarmeinstellungen"
-  },
-  "scim": {
-    "title": "SCIM Provisioning",
-    "description": "Automatisieren Sie die Benutzerbereitstellung mit SCIM 2.0",
-    "emptyState": {
-      "title": "Benutzerbereitstellung mit SCIM automatisieren",
-      "description": "Verbinden Sie Ihren Identitätsanbieter, um Benutzer in Ihrer AACsearch-Organisation automatisch zu erstellen, zu aktualisieren und zu deaktivieren.",
-      "cta": "Identitätsanbieter verbinden",
-      "planUpgrade": "Enterprise-Funktion — verfügbar ab Scale Plan+"
-    },
-    "status": {
-      "active": "Aktiv",
-      "inactive": "Inaktiv",
-      "lastSync": "Letzte Synchronisation",
-      "usersProvisioned": "Bereitgestellte Benutzer",
-      "disconnect": "Trennen",
-      "viewLogs": "Protokolle anzeigen"
-    },
-    "endpoint": {
-      "baseUrl": "SCIM Base URL",
-      "bearerToken": "Bearer Token",
-      "copy": "Kopieren",
-      "regenerate": "Neu generieren",
-      "revoke": "Widerrufen",
-      "noToken": "Kein aktives Token",
-      "lastUsed": "Zuletzt verwendet"
-    },
-    "wizard": {
-      "title": "Identitätsanbieter verbinden",
-      "selectProvider": "Wählen Sie Ihren Identitätsanbieter",
-      "configure": "{provider}-Verbindung konfigurieren",
-      "testConnection": "SCIM-Verbindung testen",
-      "skipAndSave": "Test überspringen & speichern",
-      "complete": "Einrichtung abschließen",
-      "back": "Zurück",
-      "okta": "Okta",
-      "azureAd": "Azure AD",
-      "googleWorkspace": "Google Workspace",
-      "onelogin": "OneLogin",
-      "keycloak": "Keycloak",
-      "generic": "Andere (SCIM v2)"
-    },
-    "test": {
-      "success": "Verbindung erfolgreich!",
-      "failure": "Verbindung fehlgeschlagen",
-      "inProgress": "Verbindung wird getestet...",
-      "stepConfig": "Service-Provider-Konfiguration",
-      "stepListUsers": "Benutzer auflisten",
-      "stepCreateUser": "Testbenutzer erstellen",
-      "stepCleanup": "Testbenutzer bereinigen",
-      "ok": "OK",
-      "error": "Fehler"
-    },
-    "logs": {
-      "title": "SCIM-Prüfprotokolle",
-      "description": "Überprüfen Sie die gesamte SCIM-Bereitstellungsaktivität für Ihre Organisation",
-      "exportCsv": "CSV exportieren",
-      "action": "Aktion",
-      "user": "Benutzer",
-      "email": "E-Mail",
-      "source": "Quelle",
-      "timestamp": "Zeitstempel",
-      "noLogs": "Noch keine SCIM-Aktivität",
-      "noLogsDescription": "SCIM-Prüfprotokolle erscheinen hier, sobald die Bereitstellung konfiguriert und aktiv ist.",
-      "actions": {
-        "user_created": "Erstellt",
-        "user_updated": "Aktualisiert",
-        "user_deactivated": "Deaktiviert",
-        "group_created": "Gruppe erstellt",
-        "group_synced": "Gruppe synchronisiert"
-      }
-    }
-  },
-  "app": {
-    "menu": {
-      "accountSettings": "Kontoeinstellungen",
-      "admin": "Administration",
-      "navigationTitle": "Menu",
-      "openNavigation": "Navigation offnen",
-      "organizationSettings": "Organisationseinstellungen",
-      "search": "Suche",
-      "mySearch": "Meine Suche",
-      "start": "Start"
-    },
-    "userMenu": {
-      "accountSettings": "Kontoeinstellungen",
-      "colorMode": "Farbmodus",
-      "documentation": "Dokumentation",
-      "home": "Startseite",
-      "logout": "Abmelden"
-    },
-    "notifications": {
-      "title": "Benachrichtigungen",
-      "empty": "Noch keine Benachrichtigungen.",
-      "markAllRead": "Alle als gelesen markieren",
-      "fallbackTitle": "Benachrichtigung",
-      "aria": {
-        "open": "Benachrichtigungen offnen"
-      }
-    }
-  },
-  "common": {
-    "confirmation": {
-      "cancel": "Abbrechen",
-      "confirm": "Bestatigen"
-    },
-    "actions": {
-      "continue": "Weiter",
-      "verify": "Uberprufen Sie"
-    },
-    "passwordCriteria": {
-      "minLength": "Min. 8 Zeichen",
-      "upperAndLowercase": "Gro- & Kleinbuchstaben",
-      "number": "Zahl",
-      "specialCharacter": "Sonderzeichen"
-    },
-    "colorMode": {
-      "system": "System",
-      "light": "Hell",
-      "dark": "Dunkel"
-    },
-    "close": "Schließen",
-    "clear": "Löschen",
-    "previous": "Zurück",
-    "next": "Weiter",
-    "loading": "Laden...",
-    "selected": "Ausgewählt",
-    "duplicate": "Duplizieren",
-    "export": "Exportieren",
-    "delete": "Löschen",
-    "comingSoon": "Demnächst",
-    "refresh": "Aktualisieren"
-  },
-  "nav": {
-    "geoSearch": "Geosuche",
-    "federatedSearch": "Föderiert",
-    "settings": "Einstellungen",
-    "switchOrganization": "Organisation wechseln"
-  },
-  "notFound": {
-    "code": "404",
-    "title": "Seite nicht gefunden",
-    "goToDashboard": "Zum Dashboard gehen",
-    "goToHomepage": "Zur Startseite"
-  },
-  "documentation": {
-    "title": "Dokumentation"
-  },
-  "assistant": {
-    "settings": {
-      "title": "Assistent-Einstellungen",
-      "enableChat": "Konversationsassistent aktivieren",
-      "assistantName": "Name des Assistenten"
-    },
-    "analytics": {
-      "title": "Assistent-Analytik",
-      "resolutionRate": "Lösungsrate",
-      "escalationRate": "Eskalationsrate"
-    },
-    "chat": {
-      "title": "Live Chat",
-      "newChat": "Neues Gespräch",
-      "placeholder": "Nachricht eingeben...",
-      "send": "Senden",
-      "speakOn": "Sprache aktivieren",
-      "speakOff": "Sprache deaktivieren",
-      "voice": "Spracheingabe"
-    },
-    "history": {
-      "title": "Gesprächsverlauf",
-      "empty": "Noch keine Gespräche",
-      "view": "Anzeigen",
-      "messages": "Nachrichten"
-    }
-  }
+	"export": {
+		"title": "Dokumente exportieren",
+		"description": "Alle Dokumente aus diesem Index als Datei herunterladen.",
+		"format": "Format",
+		"filterBy": "Filter (optional)",
+		"filterPlaceholder": "z.B. category:=shoes",
+		"filterHint": "Typesense-Filterausdruck. Leer lassen, um alle Dokumente zu exportieren.",
+		"download": "Herunterladen",
+		"failed": "Export fehlgeschlagen"
+	},
+	"abTest": {
+		"title": "A/B-Tests",
+		"description": "Beschreibung",
+		"createNew": "Neuer A/B-Test",
+		"createTitle": "A/B-Test erstellen",
+		"createDescription": "Konfigurieren Sie einen neuen A/B-Test zum Vergleich von Suchkonfigurationen.",
+		"testName": "Testname",
+		"testNamePlaceholder": "z.B. Produktsuche Ranking v2",
+		"descriptionPlaceholder": "Was testen Sie?",
+		"configBQueryBy": "Config B — query_by",
+		"queryByPlaceholder": "e.g. title,description,tags",
+		"trafficSplit": "Traffic-Aufteilung",
+		"startDate": "Startdatum",
+		"endDate": "Enddatum",
+		"cancel": "Abbrechen",
+		"startTest": "Test starten",
+		"createdSuccess": "A/B-Test erfolgreich erstellt!",
+		"createFailed": "Fehler beim Erstellen des A/B-Tests",
+		"nameRequired": "Bitte geben Sie einen Testnamen ein",
+		"configRequired": "Bitte konfigurieren Sie mindestens ein Feld für Variante B",
+		"status_draft": "Entwurf",
+		"status_running": "Aktiv",
+		"status_stopped": "Gestoppt",
+		"status_completed": "Abgeschlossen",
+		"winner": "Gewinner",
+		"winnerA": "A übernehmen",
+		"winnerB": "B übernehmen",
+		"currentConfig": "Aktuell (A)",
+		"queryBy": "query_by",
+		"rankingRules": "Ranking Rules",
+		"synonyms": "Synonyms",
+		"synonymRules": "synonym rules",
+		"configDiff": "Konfigurationsunterschied",
+		"stopTest": "Test stoppen",
+		"declareWinner": "Gewinner erklären:",
+		"stoppedSuccess": "A/B-Test gestoppt",
+		"failedToStop": "Fehler beim Stoppen des A/B-Tests",
+		"winnerApplied": "Gewinner erfolgreich übernommen!",
+		"failedToApply": "Fehler beim Übernehmen des Gewinners",
+		"noTests": "Noch keine A/B-Tests",
+		"noTestsDescription": "Erstellen Sie einen A/B-Test, um verschiedene Suchkonfigurationen zu vergleichen.",
+		"noIndexes": "Keine Suchindizes",
+		"noIndexesDescription": "Erstellen Sie zuerst einen Suchindex, bevor Sie A/B-Tests durchführen.",
+		"selectIndex": "Index auswählen",
+		"selectIndexFirst": "Index auswählen",
+		"selectIndexFirstDescription": "Wählen Sie einen Suchindex aus, um seine A/B-Tests anzuzeigen und zu verwalten.",
+		"allTests": "Alle Tests",
+		"activeTests": "Aktive Tests",
+		"name": "Name",
+		"status": "Status"
+	},
+	"alertsPage": {
+		"title": "Benachrichtigungen",
+		"subtitle": "Schwellenwerte und Benachrichtigungskanäle für Nutzungswarnungen konfigurieren",
+		"searchQuota": "Suchkontingent",
+		"ingestQuota": "Importkontingent",
+		"thresholds": "Schwellenwerte",
+		"threshold": "{percent}% genutzt",
+		"channels": "Benachrichtigungskanäle",
+		"cooldown": "Abklingzeit",
+		"cooldownHours": "{hours}h zwischen Benachrichtigungen",
+		"edit": "Bearbeiten",
+		"save": "Speichern",
+		"cancel": "Abbrechen",
+		"enable": "Aktivieren",
+		"disable": "Deaktivieren",
+		"email": "E-Mail",
+		"webhook": "Webhook",
+		"slack": "Slack",
+		"slackWebhookUrl": "Slack Webhook URL",
+		"slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+		"deliveryChannels": "Zustellungskanäle",
+		"alertHistory": "Alarmverlauf",
+		"noAlerts": "Noch keine Alarme ausgelöst",
+		"alertTriggered": "Alarm ausgelöst",
+		"alertResolved": "Alarm behoben",
+		"resource": "Ressource",
+		"thresholdLabel": "Schwellenwert",
+		"triggeredAt": "Ausgelöst am",
+		"resolvedAt": "Behoben am",
+		"status": "Status",
+		"ruleEnabled": "Alarmregel aktiviert",
+		"ruleDisabled": "Alarmregel deaktiviert",
+		"configureChannels": "Konfigurieren Sie auch eine Slack Webhook-URL für Slack-Benachrichtigungen",
+		"addWebhook": "Slack Webhook hinzufügen",
+		"removeWebhook": "Entfernen",
+		"saveSuccess": "Alarmeinstellungen gespeichert",
+		"saveError": "Fehler beim Speichern der Alarmeinstellungen"
+	},
+	"scim": {
+		"title": "SCIM Provisioning",
+		"description": "Automatisieren Sie die Benutzerbereitstellung mit SCIM 2.0",
+		"emptyState": {
+			"title": "Benutzerbereitstellung mit SCIM automatisieren",
+			"description": "Verbinden Sie Ihren Identitätsanbieter, um Benutzer in Ihrer AACsearch-Organisation automatisch zu erstellen, zu aktualisieren und zu deaktivieren.",
+			"cta": "Identitätsanbieter verbinden",
+			"planUpgrade": "Enterprise-Funktion — verfügbar ab Scale Plan+"
+		},
+		"status": {
+			"active": "Aktiv",
+			"inactive": "Inaktiv",
+			"lastSync": "Letzte Synchronisation",
+			"usersProvisioned": "Bereitgestellte Benutzer",
+			"disconnect": "Trennen",
+			"viewLogs": "Protokolle anzeigen"
+		},
+		"endpoint": {
+			"baseUrl": "SCIM Base URL",
+			"bearerToken": "Bearer Token",
+			"copy": "Kopieren",
+			"regenerate": "Neu generieren",
+			"revoke": "Widerrufen",
+			"noToken": "Kein aktives Token",
+			"lastUsed": "Zuletzt verwendet"
+		},
+		"wizard": {
+			"title": "Identitätsanbieter verbinden",
+			"selectProvider": "Wählen Sie Ihren Identitätsanbieter",
+			"configure": "{provider}-Verbindung konfigurieren",
+			"testConnection": "SCIM-Verbindung testen",
+			"skipAndSave": "Test überspringen & speichern",
+			"complete": "Einrichtung abschließen",
+			"back": "Zurück",
+			"okta": "Okta",
+			"azureAd": "Azure AD",
+			"googleWorkspace": "Google Workspace",
+			"onelogin": "OneLogin",
+			"keycloak": "Keycloak",
+			"generic": "Andere (SCIM v2)"
+		},
+		"test": {
+			"success": "Verbindung erfolgreich!",
+			"failure": "Verbindung fehlgeschlagen",
+			"inProgress": "Verbindung wird getestet...",
+			"stepConfig": "Service-Provider-Konfiguration",
+			"stepListUsers": "Benutzer auflisten",
+			"stepCreateUser": "Testbenutzer erstellen",
+			"stepCleanup": "Testbenutzer bereinigen",
+			"ok": "OK",
+			"error": "Fehler"
+		},
+		"logs": {
+			"title": "SCIM-Prüfprotokolle",
+			"description": "Überprüfen Sie die gesamte SCIM-Bereitstellungsaktivität für Ihre Organisation",
+			"exportCsv": "CSV exportieren",
+			"action": "Aktion",
+			"user": "Benutzer",
+			"email": "E-Mail",
+			"source": "Quelle",
+			"timestamp": "Zeitstempel",
+			"noLogs": "Noch keine SCIM-Aktivität",
+			"noLogsDescription": "SCIM-Prüfprotokolle erscheinen hier, sobald die Bereitstellung konfiguriert und aktiv ist.",
+			"actions": {
+				"user_created": "Erstellt",
+				"user_updated": "Aktualisiert",
+				"user_deactivated": "Deaktiviert",
+				"group_created": "Gruppe erstellt",
+				"group_synced": "Gruppe synchronisiert"
+			}
+		}
+	},
+	"app": {
+		"menu": {
+			"accountSettings": "Kontoeinstellungen",
+			"admin": "Administration",
+			"navigationTitle": "Menu",
+			"openNavigation": "Navigation offnen",
+			"organizationSettings": "Organisationseinstellungen",
+			"search": "Suche",
+			"mySearch": "Meine Suche",
+			"start": "Start"
+		},
+		"userMenu": {
+			"accountSettings": "Kontoeinstellungen",
+			"colorMode": "Farbmodus",
+			"documentation": "Dokumentation",
+			"home": "Startseite",
+			"logout": "Abmelden"
+		},
+		"notifications": {
+			"title": "Benachrichtigungen",
+			"empty": "Noch keine Benachrichtigungen.",
+			"markAllRead": "Alle als gelesen markieren",
+			"fallbackTitle": "Benachrichtigung",
+			"aria": {
+				"open": "Benachrichtigungen offnen"
+			}
+		}
+	},
+	"common": {
+		"confirmation": {
+			"cancel": "Abbrechen",
+			"confirm": "Bestatigen"
+		},
+		"actions": {
+			"continue": "Weiter",
+			"verify": "Uberprufen Sie"
+		},
+		"passwordCriteria": {
+			"minLength": "Min. 8 Zeichen",
+			"upperAndLowercase": "Gro- & Kleinbuchstaben",
+			"number": "Zahl",
+			"specialCharacter": "Sonderzeichen"
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Hell",
+			"dark": "Dunkel"
+		},
+		"close": "Schließen",
+		"clear": "Löschen",
+		"previous": "Zurück",
+		"next": "Weiter",
+		"loading": "Laden...",
+		"selected": "Ausgewählt",
+		"duplicate": "Duplizieren",
+		"export": "Exportieren",
+		"delete": "Löschen",
+		"comingSoon": "Demnächst",
+		"refresh": "Aktualisieren"
+	},
+	"nav": {
+		"geoSearch": "Geosuche",
+		"federatedSearch": "Föderiert",
+		"settings": "Einstellungen",
+		"switchOrganization": "Organisation wechseln"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "Seite nicht gefunden",
+		"goToDashboard": "Zum Dashboard gehen",
+		"goToHomepage": "Zur Startseite"
+	},
+	"documentation": {
+		"title": "Dokumentation"
+	},
+	"assistant": {
+		"settings": {
+			"title": "Assistent-Einstellungen",
+			"enableChat": "Konversationsassistent aktivieren",
+			"assistantName": "Name des Assistenten"
+		},
+		"analytics": {
+			"title": "Assistent-Analytik",
+			"resolutionRate": "Lösungsrate",
+			"escalationRate": "Eskalationsrate"
+		},
+		"chat": {
+			"title": "Live Chat",
+			"newChat": "Neues Gespräch",
+			"placeholder": "Nachricht eingeben...",
+			"send": "Senden",
+			"speakOn": "Sprache aktivieren",
+			"speakOff": "Sprache deaktivieren",
+			"voice": "Spracheingabe"
+		},
+		"history": {
+			"title": "Gesprächsverlauf",
+			"empty": "Noch keine Gespräche",
+			"view": "Anzeigen",
+			"messages": "Nachrichten"
+		}
+	}
 }

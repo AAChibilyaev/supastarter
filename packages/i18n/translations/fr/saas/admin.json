@@ -1,296 +1,296 @@
 {
-  "admin": {
-    "menu": {
-      "organizations": "Organisations",
-      "users": "Utilisateurs"
-    },
-    "organizations": {
-      "backToList": "Retour aux organisations",
-      "confirmDelete": {
-        "confirm": "Supprimer",
-        "message": "Êtes-vous sûr de vouloir supprimer cette organisation ? Cette action est irréversible.",
-        "title": "Supprimer l'organisation"
-      },
-      "create": "Créer",
-      "delete": "Supprimer",
-      "deleteOrganization": {
-        "deleted": "L'organisation a été supprimée avec succès !",
-        "deleting": "Suppression de l'organisation...",
-        "notDeleted": "L'organisation n'a pas pu être supprimée. Veuillez réessayer."
-      },
-      "edit": "Modifier",
-      "form": {
-        "createTitle": "Créer une organisation",
-        "name": "Nom de l'organisation",
-        "notifications": {
-          "error": "Impossible d'enregistrer l'organisation. Veuillez réessayer plus tard.",
-          "success": "L'organisation a été enregistrée."
-        },
-        "save": "Enregistrer",
-        "updateTitle": "Modifier l'organisation"
-      },
-      "loading": "Chargement des organisations...",
-      "membersCount": "{count} {count, plural, one {membre} other {membres}}",
-      "search": "Rechercher une organisation...",
-      "title": "Gérer les organisations"
-    },
-    "title": "Administration",
-    "users": {
-      "confirmDelete": {
-        "confirm": "Supprimer",
-        "message": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
-        "title": "Supprimer l'utilisateur"
-      },
-      "delete": "Supprimer",
-      "deleteUser": {
-        "deleted": "L'utilisateur a été supprimé avec succès !",
-        "deleting": "Suppression de l'utilisateur...",
-        "notDeleted": "L'utilisateur n'a pas pu être supprimé. Veuillez réessayer."
-      },
-      "emailVerified": {
-        "verified": "E-mail vérifié",
-        "waiting": "E-mail en attente de vérification"
-      },
-      "impersonate": "Usurper",
-      "impersonation": {
-        "impersonating": "Connexion en tant que {name}..."
-      },
-      "loading": "Chargement des utilisateurs...",
-      "resendVerificationMail": {
-        "error": "Impossible de renvoyer l'e-mail de vérification. Veuillez réessayer.",
-        "submitting": "Renvoyant l'e-mail de vérification...",
-        "success": "L'e-mail de vérification a été envoyé.",
-        "title": "Renvoyer l'e-mail de vérification"
-      },
-      "search": "Rechercher par nom ou e-mail...",
-      "title": "Gérer les utilisateurs",
-      "assignAdminRole": "Attribuer le rôle administrateur",
-      "removeAdminRole": "Retirer le rôle administrateur"
-    },
-    "description": "Gérez votre application.",
-    "config": {
-      "title": "Configuration",
-      "loadError": "Échec du chargement des données de configuration.",
-      "application": "Application",
-      "appName": "Nom de l'application",
-      "nodeVersion": "Version Node.js",
-      "runtimeEnv": "Environnement",
-      "platform": "Plateforme",
-      "uptime": "Temps d'activité",
-      "typesenseHealth": "Santé du moteur de recherche",
-      "healthy": "Sain",
-      "unhealthy": "Malsain",
-      "version": "Version",
-      "databaseStats": "Statistiques de la base de données",
-      "users": "Utilisateurs",
-      "organizations": "Organisations",
-      "searchIndexes": "Index de recherche",
-      "apiKeys": "Clés API",
-      "usageEvents": "Événements d'utilisation",
-      "statsError": "Impossible de récupérer les statistiques.",
-      "services": "Services externes",
-      "configured": "Configuré",
-      "notConfigured": "Non configuré",
-      "pageTitle": "Configuration d'exécution",
-      "pageSubtitle": "Configuration du système en temps réel, état des services et statistiques de la base de données."
-    },
-    "integrations": {
-      "title": "Intégrations",
-      "loadError": "Échec de la vérification du statut d'intégration.",
-      "database": "Base de données",
-      "typesense": "AACsearch Engine",
-      "mail": "E-mail",
-      "payments": "Paiements",
-      "storage": "Stockage",
-      "walletProvider": "Fournisseur de portefeuille",
-      "configured": "Configuré",
-      "notConfigured": "Non configuré",
-      "endpoint": "Endpoint",
-      "pageTitle": "État des intégrations",
-      "pageSubtitle": "Vérifications de connectivité en temps réel pour tous les services externes configurés.",
-      "connected": "Connecté",
-      "disconnected": "Déconnecté",
-      "latencyMs": "Latence {ms}ms",
-      "status": "Statut",
-      "provider": "Fournisseur"
-    },
-    "jobs": {
-      "title": "Tâches",
-      "loadError": "Échec du chargement du statut des tâches.",
-      "backgroundJobs": "Tâches d'arrière-plan",
-      "ready": "Prêt",
-      "missingSecret": "Secret manquant",
-      "recentSyncActivity": "Activité de synchronisation récente",
-      "totalJobs": "Total des tâches",
-      "noSyncActivity": "Aucune activité de synchronisation pour le moment.",
-      "pageTitle": "Tâches en arrière-plan",
-      "pageSubtitle": "État de la configuration des tâches planifiées et activité de synchronisation récente.",
-      "itemsCount": "{count} {count, plural, one {élément} other {éléments}}"
-    },
-    "overview": {
-      "usersTitle": "Utilisateurs",
-      "organizationsTitle": "Organisations",
-      "unreadNotifications": "Notifications non lues",
-      "noData": "Aucune donnée",
-      "recentUsers": "Utilisateurs récents",
-      "defaultRole": "utilisateur",
-      "openUsers": "Ouvrir les utilisateurs",
-      "recentOrganizations": "Organisations récentes",
-      "noSlug": "Pas de slug",
-      "membersCount": "{count} {count, plural, one {membre} other {membres}}",
-      "openOrganizations": "Ouvrir les organisations",
-      "pageTitle": "Vue d'ensemble administration",
-      "pageSubtitle": "Résumé opérationnel des utilisateurs, organisations et notifications."
-    },
-    "audit": {
-      "recentUserChanges": "Modifications d'utilisateurs récentes",
-      "recentOrgChanges": "Modifications d'organisations récentes",
-      "defaultRole": "utilisateur",
-      "noSlug": "Pas de slug",
-      "pageTitle": "Vue d'audit",
-      "pageSubtitle": "Modifications récentes des utilisateurs et organisations disponibles depuis les sources de données d'administration."
-    },
-    "notifications": {
-      "recentNotifications": "Notifications récentes",
-      "markAllRead": "Tout marquer comme lu",
-      "markingRead": "Marquage des notifications comme lues...",
-      "markReadSuccess": "Terminé.",
-      "markReadError": "Impossible de tout marquer comme lu.",
-      "statusRead": "lu",
-      "statusUnread": "non lu",
-      "noNotifications": "Aucune notification pour l'instant.",
-      "pageTitle": "Gestion des notifications",
-      "pageSubtitle": "Consulter les notifications récentes et mettre à jour les préférences de livraison."
-    },
-    "wallet": {
-      "manualAdjustment": "Ajustement manuel du portefeuille",
-      "searchOrgPlaceholder": "Rechercher une organisation...",
-      "selectOrgPlaceholder": "Sélectionner une organisation",
-      "currentBalance": "Solde actuel",
-      "walletNotInitialized": "Le portefeuille n'est pas initialisé pour l'organisation sélectionnée.",
-      "creditLabel": "Crédit",
-      "debitLabel": "Débit",
-      "amountPlaceholder": "Montant (RUB)",
-      "applyButton": "Appliquer",
-      "reasonPlaceholder": "Raison (minimum 10 caractères)",
-      "noWalletError": "Sélectionnez une organisation avec un portefeuille initialisé.",
-      "invalidAmountError": "Le montant doit être un nombre positif.",
-      "shortReasonError": "La raison doit comporter au moins 10 caractères.",
-      "applyingAdjustment": "Application de l'ajustement...",
-      "adjustmentSuccess": "Portefeuille ajusté avec succès.",
-      "adjustmentError": "Échec de l'ajustement du portefeuille.",
-      "latestTransactions": "Dernières transactions du portefeuille",
-      "noTransactions": "Aucune transaction trouvée.",
-      "pageTitle": "Opérations de portefeuille",
-      "pageSubtitle": "Ajustements manuels du portefeuille IA pour les organisations."
-    },
-    "security": {
-      "pageTitle": "Opérations de sécurité",
-      "pageSubtitle": "Sessions actives, clés d'accès et paramètres de double facteur pour le compte administrateur actuel."
-    },
-    "onboarding": {
-      "pageTitle": "Analytiques d'Onboarding",
-      "pageSubtitle": "Taux de complétion de l'entonnoir, temps jusqu'à la première valeur et analyse de cohorte",
-      "exportCsv": "Exporter CSV",
-      "error": "Échec du chargement des données analytiques"
-    },
-    "billingAnalytics": {
-      "pageTitle": "Billing Analytics",
-      "pageSubtitle": "MRR, churn rate, and revenue overview.",
-      "mrr": "Monthly Recurring Revenue",
-      "activeSubscriptions": "Active Subscriptions",
-      "churnRate": "Churn Rate (last month)",
-      "revenueChart": "Revenue Over Time",
-      "subscriptionsByPlan": "Subscriptions by Plan",
-      "revenue": "Revenue",
-      "plan": "Plan",
-      "subscribers": "Subscribers",
-      "mrrPerPlan": "MRR"
-    },
-    "roadmap": {
-      "pageTitle": "Gestion de la feuille de route",
-      "pageSubtitle": "Ajouter, modifier, réorganiser et supprimer des éléments de la feuille de route publique.",
-      "menu": {
-        "roadmap": "Feuille de route"
-      },
-      "addItem": "Ajouter un élément",
-      "itemsCount": "{count} {count, plural, one {élément} other {éléments}}",
-      "empty": "Aucun élément de feuille de route pour l'instant. Créez le premier.",
-      "createTitle": "Nouvel élément de feuille de route",
-      "createDescription": "Ajouter une nouvelle fonctionnalité à la feuille de route publique.",
-      "editTitle": "Modifier l'élément de feuille de route",
-      "editDescription": "Mettre à jour un élément existant de la feuille de route.",
-      "form": {
-        "key": "Clé",
-        "title": "Titre",
-        "description": "Description",
-        "status": "Statut",
-        "quarter": "Trimestre",
-        "iconName": "Nom de l'icône",
-        "changelogSlug": "Slug du changelog",
-        "changelogSlugPlaceholder": "ex. vector-search-launch",
-        "cancel": "Annuler",
-        "save": "Enregistrer",
-        "saving": "Enregistrement...",
-        "create": "Créer"
-      },
-      "status": {
-        "shipped": "Expédié",
-        "inProgress": "En cours",
-        "planned": "Prévu"
-      },
-      "confirmDelete": {
-        "title": "Supprimer l'élément de feuille de route",
-        "message": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
-        "confirm": "Supprimer",
-        "cancel": "Annuler"
-      }
-    },
-    "featureFlags": {
-      "pageTitle": "Feature Flags",
-      "pageSubtitle": "Gérer les feature flags pour le déploiement progressif de nouvelles fonctionnalités dans toutes les organisations",
-      "subtitle": "Activer/désactiver les flags, configurer le déploiement en pourcentage et définir des interrupteurs d'urgence",
-      "loading": "Chargement des feature flags...",
-      "noFlags": "Aucun feature flag configuré. Crée ton premier flag pour commencer.",
-      "createFlag": "Créer un Flag",
-      "createDialogTitle": "Créer un Nouveau Feature Flag",
-      "createDialogDescription": "Ajoute un nouveau feature flag pour contrôler le déploiement des fonctionnalités.",
-      "keyLabel": "Clé du Flag",
-      "keyHint": "Minuscules, tirets et underscores uniquement. Exemple : analytics-v2",
-      "titleLabel": "Titre",
-      "descriptionLabel": "Description",
-      "rolloutLabel": "Déploiement %",
-      "notSet": "Non défini",
-      "enabledLabel": "Activé",
-      "enableHint": "Lorsqu'il est activé, la fonctionnalité est disponible pour les cibles correspondantes",
-      "enabled": "Oui",
-      "disabled": "Non",
-      "active": "Actif",
-      "inactive": "Inactif",
-      "overridesLabel": "Dérogations org",
-      "overrideCount": "{count} dérogation(s)",
-      "noOverrides": "Aucune dérogation",
-      "killSwitchLabel": "Interrupteur d'urgence",
-      "killSwitchBadge": "DÉSACTIVÉ",
-      "noDescription": "Aucune description",
-      "cancel": "Annuler",
-      "createButton": "Créer le Flag",
-      "deleteButton": "Supprimer le Flag",
-      "deleteSuccess": "Feature flag supprimé",
-      "deleteError": "Échec de la suppression du feature flag",
-      "updateSuccess": "Feature flag mis à jour",
-      "updateError": "Échec de la mise à jour du feature flag",
-      "createSuccess": "Feature flag créé",
-      "createError": "Échec de la création du feature flag",
-      "killSwitchEnabled": "Interrupteur d'urgence activé — flag désactivé pour toutes les orgs",
-      "killSwitchDisabled": "Interrupteur d'urgence désactivé",
-      "auditLogButton": "Journal d'audit",
-      "auditLogTitle": "Historique des modifications",
-      "auditLogDescription": "Toutes les modifications apportées à ce feature flag, y compris qui les a faites et quand.",
-      "auditLogEmpty": "Aucune modification enregistrée pour ce flag.",
-      "auditLogMore": "Et {count} entrées supplémentaires…",
-      "globalKillSwitchTitle": "Interrupteur général activé",
-      "globalKillSwitchDescription": "Tous les feature flags sont forcés en désactivé par la variable d'environnement FEATURE_FLAGS_KILL_SWITCH. Cela remplace tous les paramètres par flag, les surcharges et les règles de déploiement."
-    }
-  }
+	"admin": {
+		"menu": {
+			"organizations": "Organisations",
+			"users": "Utilisateurs"
+		},
+		"organizations": {
+			"backToList": "Retour aux organisations",
+			"confirmDelete": {
+				"confirm": "Supprimer",
+				"message": "Êtes-vous sûr de vouloir supprimer cette organisation ? Cette action est irréversible.",
+				"title": "Supprimer l'organisation"
+			},
+			"create": "Créer",
+			"delete": "Supprimer",
+			"deleteOrganization": {
+				"deleted": "L'organisation a été supprimée avec succès !",
+				"deleting": "Suppression de l'organisation...",
+				"notDeleted": "L'organisation n'a pas pu être supprimée. Veuillez réessayer."
+			},
+			"edit": "Modifier",
+			"form": {
+				"createTitle": "Créer une organisation",
+				"name": "Nom de l'organisation",
+				"notifications": {
+					"error": "Impossible d'enregistrer l'organisation. Veuillez réessayer plus tard.",
+					"success": "L'organisation a été enregistrée."
+				},
+				"save": "Enregistrer",
+				"updateTitle": "Modifier l'organisation"
+			},
+			"loading": "Chargement des organisations...",
+			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
+			"search": "Rechercher une organisation...",
+			"title": "Gérer les organisations"
+		},
+		"title": "Administration",
+		"users": {
+			"confirmDelete": {
+				"confirm": "Supprimer",
+				"message": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
+				"title": "Supprimer l'utilisateur"
+			},
+			"delete": "Supprimer",
+			"deleteUser": {
+				"deleted": "L'utilisateur a été supprimé avec succès !",
+				"deleting": "Suppression de l'utilisateur...",
+				"notDeleted": "L'utilisateur n'a pas pu être supprimé. Veuillez réessayer."
+			},
+			"emailVerified": {
+				"verified": "E-mail vérifié",
+				"waiting": "E-mail en attente de vérification"
+			},
+			"impersonate": "Usurper",
+			"impersonation": {
+				"impersonating": "Connexion en tant que {name}..."
+			},
+			"loading": "Chargement des utilisateurs...",
+			"resendVerificationMail": {
+				"error": "Impossible de renvoyer l'e-mail de vérification. Veuillez réessayer.",
+				"submitting": "Renvoyant l'e-mail de vérification...",
+				"success": "L'e-mail de vérification a été envoyé.",
+				"title": "Renvoyer l'e-mail de vérification"
+			},
+			"search": "Rechercher par nom ou e-mail...",
+			"title": "Gérer les utilisateurs",
+			"assignAdminRole": "Attribuer le rôle administrateur",
+			"removeAdminRole": "Retirer le rôle administrateur"
+		},
+		"description": "Gérez votre application.",
+		"config": {
+			"title": "Configuration",
+			"loadError": "Échec du chargement des données de configuration.",
+			"application": "Application",
+			"appName": "Nom de l'application",
+			"nodeVersion": "Version Node.js",
+			"runtimeEnv": "Environnement",
+			"platform": "Plateforme",
+			"uptime": "Temps d'activité",
+			"typesenseHealth": "Santé du moteur de recherche",
+			"healthy": "Sain",
+			"unhealthy": "Malsain",
+			"version": "Version",
+			"databaseStats": "Statistiques de la base de données",
+			"users": "Utilisateurs",
+			"organizations": "Organisations",
+			"searchIndexes": "Index de recherche",
+			"apiKeys": "Clés API",
+			"usageEvents": "Événements d'utilisation",
+			"statsError": "Impossible de récupérer les statistiques.",
+			"services": "Services externes",
+			"configured": "Configuré",
+			"notConfigured": "Non configuré",
+			"pageTitle": "Configuration d'exécution",
+			"pageSubtitle": "Configuration du système en temps réel, état des services et statistiques de la base de données."
+		},
+		"integrations": {
+			"title": "Intégrations",
+			"loadError": "Échec de la vérification du statut d'intégration.",
+			"database": "Base de données",
+			"typesense": "AACsearch Engine",
+			"mail": "E-mail",
+			"payments": "Paiements",
+			"storage": "Stockage",
+			"walletProvider": "Fournisseur de portefeuille",
+			"configured": "Configuré",
+			"notConfigured": "Non configuré",
+			"endpoint": "Endpoint",
+			"pageTitle": "État des intégrations",
+			"pageSubtitle": "Vérifications de connectivité en temps réel pour tous les services externes configurés.",
+			"connected": "Connecté",
+			"disconnected": "Déconnecté",
+			"latencyMs": "Latence {ms}ms",
+			"status": "Statut",
+			"provider": "Fournisseur"
+		},
+		"jobs": {
+			"title": "Tâches",
+			"loadError": "Échec du chargement du statut des tâches.",
+			"backgroundJobs": "Tâches d'arrière-plan",
+			"ready": "Prêt",
+			"missingSecret": "Secret manquant",
+			"recentSyncActivity": "Activité de synchronisation récente",
+			"totalJobs": "Total des tâches",
+			"noSyncActivity": "Aucune activité de synchronisation pour le moment.",
+			"pageTitle": "Tâches en arrière-plan",
+			"pageSubtitle": "État de la configuration des tâches planifiées et activité de synchronisation récente.",
+			"itemsCount": "{count} {count, plural, one {élément} other {éléments}}"
+		},
+		"overview": {
+			"usersTitle": "Utilisateurs",
+			"organizationsTitle": "Organisations",
+			"unreadNotifications": "Notifications non lues",
+			"noData": "Aucune donnée",
+			"recentUsers": "Utilisateurs récents",
+			"defaultRole": "utilisateur",
+			"openUsers": "Ouvrir les utilisateurs",
+			"recentOrganizations": "Organisations récentes",
+			"noSlug": "Pas de slug",
+			"membersCount": "{count} {count, plural, one {membre} other {membres}}",
+			"openOrganizations": "Ouvrir les organisations",
+			"pageTitle": "Vue d'ensemble administration",
+			"pageSubtitle": "Résumé opérationnel des utilisateurs, organisations et notifications."
+		},
+		"audit": {
+			"recentUserChanges": "Modifications d'utilisateurs récentes",
+			"recentOrgChanges": "Modifications d'organisations récentes",
+			"defaultRole": "utilisateur",
+			"noSlug": "Pas de slug",
+			"pageTitle": "Vue d'audit",
+			"pageSubtitle": "Modifications récentes des utilisateurs et organisations disponibles depuis les sources de données d'administration."
+		},
+		"notifications": {
+			"recentNotifications": "Notifications récentes",
+			"markAllRead": "Tout marquer comme lu",
+			"markingRead": "Marquage des notifications comme lues...",
+			"markReadSuccess": "Terminé.",
+			"markReadError": "Impossible de tout marquer comme lu.",
+			"statusRead": "lu",
+			"statusUnread": "non lu",
+			"noNotifications": "Aucune notification pour l'instant.",
+			"pageTitle": "Gestion des notifications",
+			"pageSubtitle": "Consulter les notifications récentes et mettre à jour les préférences de livraison."
+		},
+		"wallet": {
+			"manualAdjustment": "Ajustement manuel du portefeuille",
+			"searchOrgPlaceholder": "Rechercher une organisation...",
+			"selectOrgPlaceholder": "Sélectionner une organisation",
+			"currentBalance": "Solde actuel",
+			"walletNotInitialized": "Le portefeuille n'est pas initialisé pour l'organisation sélectionnée.",
+			"creditLabel": "Crédit",
+			"debitLabel": "Débit",
+			"amountPlaceholder": "Montant (RUB)",
+			"applyButton": "Appliquer",
+			"reasonPlaceholder": "Raison (minimum 10 caractères)",
+			"noWalletError": "Sélectionnez une organisation avec un portefeuille initialisé.",
+			"invalidAmountError": "Le montant doit être un nombre positif.",
+			"shortReasonError": "La raison doit comporter au moins 10 caractères.",
+			"applyingAdjustment": "Application de l'ajustement...",
+			"adjustmentSuccess": "Portefeuille ajusté avec succès.",
+			"adjustmentError": "Échec de l'ajustement du portefeuille.",
+			"latestTransactions": "Dernières transactions du portefeuille",
+			"noTransactions": "Aucune transaction trouvée.",
+			"pageTitle": "Opérations de portefeuille",
+			"pageSubtitle": "Ajustements manuels du portefeuille IA pour les organisations."
+		},
+		"security": {
+			"pageTitle": "Opérations de sécurité",
+			"pageSubtitle": "Sessions actives, clés d'accès et paramètres de double facteur pour le compte administrateur actuel."
+		},
+		"onboarding": {
+			"pageTitle": "Analytiques d'Onboarding",
+			"pageSubtitle": "Taux de complétion de l'entonnoir, temps jusqu'à la première valeur et analyse de cohorte",
+			"exportCsv": "Exporter CSV",
+			"error": "Échec du chargement des données analytiques"
+		},
+		"billingAnalytics": {
+			"pageTitle": "Billing Analytics",
+			"pageSubtitle": "MRR, churn rate, and revenue overview.",
+			"mrr": "Monthly Recurring Revenue",
+			"activeSubscriptions": "Active Subscriptions",
+			"churnRate": "Churn Rate (last month)",
+			"revenueChart": "Revenue Over Time",
+			"subscriptionsByPlan": "Subscriptions by Plan",
+			"revenue": "Revenue",
+			"plan": "Plan",
+			"subscribers": "Subscribers",
+			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Gestion de la feuille de route",
+			"pageSubtitle": "Ajouter, modifier, réorganiser et supprimer des éléments de la feuille de route publique.",
+			"menu": {
+				"roadmap": "Feuille de route"
+			},
+			"addItem": "Ajouter un élément",
+			"itemsCount": "{count} {count, plural, one {élément} other {éléments}}",
+			"empty": "Aucun élément de feuille de route pour l'instant. Créez le premier.",
+			"createTitle": "Nouvel élément de feuille de route",
+			"createDescription": "Ajouter une nouvelle fonctionnalité à la feuille de route publique.",
+			"editTitle": "Modifier l'élément de feuille de route",
+			"editDescription": "Mettre à jour un élément existant de la feuille de route.",
+			"form": {
+				"key": "Clé",
+				"title": "Titre",
+				"description": "Description",
+				"status": "Statut",
+				"quarter": "Trimestre",
+				"iconName": "Nom de l'icône",
+				"changelogSlug": "Slug du changelog",
+				"changelogSlugPlaceholder": "ex. vector-search-launch",
+				"cancel": "Annuler",
+				"save": "Enregistrer",
+				"saving": "Enregistrement...",
+				"create": "Créer"
+			},
+			"status": {
+				"shipped": "Expédié",
+				"inProgress": "En cours",
+				"planned": "Prévu"
+			},
+			"confirmDelete": {
+				"title": "Supprimer l'élément de feuille de route",
+				"message": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
+				"confirm": "Supprimer",
+				"cancel": "Annuler"
+			}
+		},
+		"featureFlags": {
+			"pageTitle": "Feature Flags",
+			"pageSubtitle": "Gérer les feature flags pour le déploiement progressif de nouvelles fonctionnalités dans toutes les organisations",
+			"subtitle": "Activer/désactiver les flags, configurer le déploiement en pourcentage et définir des interrupteurs d'urgence",
+			"loading": "Chargement des feature flags...",
+			"noFlags": "Aucun feature flag configuré. Crée ton premier flag pour commencer.",
+			"createFlag": "Créer un Flag",
+			"createDialogTitle": "Créer un Nouveau Feature Flag",
+			"createDialogDescription": "Ajoute un nouveau feature flag pour contrôler le déploiement des fonctionnalités.",
+			"keyLabel": "Clé du Flag",
+			"keyHint": "Minuscules, tirets et underscores uniquement. Exemple : analytics-v2",
+			"titleLabel": "Titre",
+			"descriptionLabel": "Description",
+			"rolloutLabel": "Déploiement %",
+			"notSet": "Non défini",
+			"enabledLabel": "Activé",
+			"enableHint": "Lorsqu'il est activé, la fonctionnalité est disponible pour les cibles correspondantes",
+			"enabled": "Oui",
+			"disabled": "Non",
+			"active": "Actif",
+			"inactive": "Inactif",
+			"overridesLabel": "Dérogations org",
+			"overrideCount": "{count} dérogation(s)",
+			"noOverrides": "Aucune dérogation",
+			"killSwitchLabel": "Interrupteur d'urgence",
+			"killSwitchBadge": "DÉSACTIVÉ",
+			"noDescription": "Aucune description",
+			"cancel": "Annuler",
+			"createButton": "Créer le Flag",
+			"deleteButton": "Supprimer le Flag",
+			"deleteSuccess": "Feature flag supprimé",
+			"deleteError": "Échec de la suppression du feature flag",
+			"updateSuccess": "Feature flag mis à jour",
+			"updateError": "Échec de la mise à jour du feature flag",
+			"createSuccess": "Feature flag créé",
+			"createError": "Échec de la création du feature flag",
+			"killSwitchEnabled": "Interrupteur d'urgence activé — flag désactivé pour toutes les orgs",
+			"killSwitchDisabled": "Interrupteur d'urgence désactivé",
+			"auditLogButton": "Journal d'audit",
+			"auditLogTitle": "Historique des modifications",
+			"auditLogDescription": "Toutes les modifications apportées à ce feature flag, y compris qui les a faites et quand.",
+			"auditLogEmpty": "Aucune modification enregistrée pour ce flag.",
+			"auditLogMore": "Et {count} entrées supplémentaires…",
+			"globalKillSwitchTitle": "Interrupteur général activé",
+			"globalKillSwitchDescription": "Tous les feature flags sont forcés en désactivé par la variable d'environnement FEATURE_FLAGS_KILL_SWITCH. Cela remplace tous les paramètres par flag, les surcharges et les règles de déploiement."
+		}
+	}
 }

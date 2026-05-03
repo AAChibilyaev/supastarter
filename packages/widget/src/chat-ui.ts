@@ -1,5 +1,5 @@
-import { type EntryPointContext } from "./context-bridge";
 import { type ConversationSummary, type HistoryMessage } from "./chat-client";
+import { type EntryPointContext } from "./context-bridge";
 
 export interface ChatUIOptions {
 	container: HTMLElement;
@@ -287,16 +287,27 @@ const CHAT_STYLES = `
 }
 `;
 
-function getStarterSuggestions(entryPoint: EntryPointContext, t: (key: string) => string): string[] {
+function getStarterSuggestions(
+	entryPoint: EntryPointContext,
+	t: (key: string) => string,
+): string[] {
 	switch (entryPoint.entryPoint) {
 		case "product_card":
 			return [t("suggestion_size"), t("suggestion_compare"), t("suggestion_similar")];
 		case "catalog":
 			return [t("suggestion_help_choose"), t("suggestion_best_for"), t("suggestion_budget")];
 		case "search_results":
-			return [t("suggestion_refine"), t("suggestion_explain_diff"), t("suggestion_recommend")];
+			return [
+				t("suggestion_refine"),
+				t("suggestion_explain_diff"),
+				t("suggestion_recommend"),
+			];
 		default:
-			return [t("suggestion_start_sport"), t("suggestion_order_status"), t("suggestion_outfit")];
+			return [
+				t("suggestion_start_sport"),
+				t("suggestion_order_status"),
+				t("suggestion_outfit"),
+			];
 	}
 }
 
@@ -306,7 +317,10 @@ function simpleMarkdown(text: string): string {
 		.replace(/\*(.*?)\*/g, "<em>$1</em>")
 		.replace(/`(.*?)`/g, "<code>$1</code>")
 		.replace(/\n/g, "<br>")
-		.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+		.replace(
+			/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+			'<a href="$2" target="_blank" rel="noopener">$1</a>',
+		);
 }
 
 function formatRelative(dateStr: string | Date): string {
@@ -376,9 +390,15 @@ export class ChatUI {
 				<button class="aac-chat-icon-btn" data-action="close" title="${this.t("close")}" aria-label="${this.t("close")}">&#x2715;</button>
 			</div>
 		`;
-		header.querySelector<HTMLButtonElement>('[data-action="close"]')!.addEventListener("click", () => this.opts.onClose?.());
-		header.querySelector<HTMLButtonElement>('[data-action="new"]')!.addEventListener("click", () => this.opts.onNewChat?.());
-		header.querySelector<HTMLButtonElement>('[data-action="history"]')!.addEventListener("click", () => this.openHistoryPanel());
+		header
+			.querySelector<HTMLButtonElement>('[data-action="close"]')!
+			.addEventListener("click", () => this.opts.onClose?.());
+		header
+			.querySelector<HTMLButtonElement>('[data-action="new"]')!
+			.addEventListener("click", () => this.opts.onNewChat?.());
+		header
+			.querySelector<HTMLButtonElement>('[data-action="history"]')!
+			.addEventListener("click", () => this.openHistoryPanel());
 
 		this.ttsBtn = header.querySelector<HTMLButtonElement>('[data-action="tts"]')!;
 		this.ttsBtn.addEventListener("click", () => {
@@ -457,7 +477,8 @@ export class ChatUI {
 				<button class="aac-chat-icon-btn" style="color:rgba(255,255,255,0.7)" data-action="close-history">&#x2715;</button>
 			</div>
 		`;
-		this.historyPanel.querySelector<HTMLButtonElement>('[data-action="close-history"]')!
+		this.historyPanel
+			.querySelector<HTMLButtonElement>('[data-action="close-history"]')!
 			.addEventListener("click", () => this.closeHistoryPanel());
 
 		this.historyList = document.createElement("div");
@@ -548,10 +569,7 @@ export class ChatUI {
 	}
 
 	// Called from outside to populate history list
-	loadHistoryItems(
-		conversations: ConversationSummary[],
-		onSelect: (id: string) => void,
-	): void {
+	loadHistoryItems(conversations: ConversationSummary[], onSelect: (id: string) => void): void {
 		this.historyList.innerHTML = "";
 
 		if (conversations.length === 0) {
@@ -643,7 +661,8 @@ export class ChatUI {
 				simpleMarkdown(this.streamingContent) + this.buildSpeakBtn(this.streamingContent);
 
 			// Attach speak button handler
-			const speakBtn = this.streamingBubble.querySelector<HTMLButtonElement>(".aac-chat-speak-btn");
+			const speakBtn =
+				this.streamingBubble.querySelector<HTMLButtonElement>(".aac-chat-speak-btn");
 			if (speakBtn) {
 				speakBtn.addEventListener("click", (e) => {
 					e.stopPropagation();

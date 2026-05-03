@@ -88,12 +88,12 @@ export function TestimonialCarousel() {
 								key={index}
 								type="button"
 								onClick={() => setActiveIndex(index)}
-								className="flex items-center justify-center p-3"
+								className="p-3 flex items-center justify-center"
 								aria-label={t("testimonials.dotLabel", { number: index + 1 })}
 							>
 								<span
 									className={cn(
-										"block size-2.5 rounded-full transition-all duration-300",
+										"size-2.5 block rounded-full transition-all duration-300",
 										index === activeIndex
 											? "bg-foreground"
 											: "bg-muted-foreground/30 hover:bg-muted-foreground/50",

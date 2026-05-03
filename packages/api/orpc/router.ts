@@ -1,8 +1,8 @@
 import type { RouterClient } from "@orpc/server";
 
 import { adminRouter } from "../modules/admin/router";
-import { assistantRouter } from "../modules/assistant/router";
 import { aiRouter } from "../modules/ai/router";
+import { assistantRouter } from "../modules/assistant/router";
 import { auditLogRouter } from "../modules/audit-log/router";
 import { billingWalletRouter } from "../modules/billing-wallet/router";
 import { collectionsRouter } from "../modules/collections/router";

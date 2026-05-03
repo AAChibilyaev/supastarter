@@ -879,9 +879,7 @@ function ProrationPreviewCard({ preview, isLoading, t, format }: ProrationPrevie
 						</div>
 						<span
 							className={`text-sm font-bold ${
-								immediateAmount > 0
-									? "text-foreground"
-									: "text-muted-foreground"
+								immediateAmount > 0 ? "text-foreground" : "text-muted-foreground"
 							}`}
 						>
 							{format.number(Math.abs(immediateAmount), currencyFormat)}

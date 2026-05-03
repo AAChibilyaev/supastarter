@@ -31,17 +31,17 @@ import { stream } from "hono/streaming";
 // Import scrubbed logger to wrap all log output with PII redaction
 // This automatically applies scrubValue() to all log payloads
 import { logger } from "./lib/scrubbed-logger";
+import { assistantPublicApp } from "./modules/assistant/assistant-public";
 import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { subscribeToFlagChanges } from "./modules/feature-flags/sse-publisher";
+import { aiSearchPublicApp } from "./modules/search/ai-search-public";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { demoApp } from "./modules/search/demo-public";
 import { eventsApp } from "./modules/search/events-public";
-import { assistantPublicApp } from "./modules/assistant/assistant-public";
-import { aiSearchPublicApp } from "./modules/search/ai-search-public";
 import { publicSearchApp } from "./modules/search/public-handler";
-import { scimRouter } from "./modules/search/scim-public";
 import { scimConfigRouter } from "./modules/search/scim-config";
+import { scimRouter } from "./modules/search/scim-public";
 import { shareApp } from "./modules/search/share-public";
 import { publicSpellCheckApp } from "./modules/search/spell-check-public";
 import { openApiHandler, rpcHandler } from "./orpc/handler";

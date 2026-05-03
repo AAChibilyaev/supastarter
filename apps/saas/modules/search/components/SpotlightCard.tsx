@@ -1,7 +1,7 @@
 "use client";
 
-import { SpotlightCard as SpotlightCardPrimitive } from "@repo/ui/components/spotlight-card";
 import { cn } from "@repo/ui";
+import { SpotlightCard as SpotlightCardPrimitive } from "@repo/ui/components/spotlight-card";
 import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 
@@ -47,7 +47,7 @@ export function SearchResultSpotlightCard({
 		<SpotlightCardPrimitive
 			spotlightColor={spotlightColor}
 			className={cn(
-				"group cursor-pointer p-5 transition-colors hover:border-primary/40",
+				"group p-5 cursor-pointer transition-colors hover:border-primary/40",
 				onClick && "cursor-pointer",
 				className,
 			)}
@@ -66,24 +66,24 @@ export function SearchResultSpotlightCard({
 			}
 		>
 			{/* Header row */}
-			<div className="relative z-20 flex items-start justify-between gap-3">
+			<div className="gap-3 relative z-20 flex items-start justify-between">
 				<div className="min-w-0 flex-1">
 					{/* Rank + category */}
-					<div className="mb-1.5 flex items-center gap-2">
+					<div className="mb-1.5 gap-2 flex items-center">
 						{rank !== undefined && (
-							<span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">
+							<span className="h-5 w-5 font-semibold flex shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] text-primary">
 								{rank}
 							</span>
 						)}
 						{category && (
-							<span className="truncate rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+							<span className="px-2 py-0.5 font-medium truncate rounded-full bg-muted text-[11px] text-muted-foreground">
 								{category}
 							</span>
 						)}
 					</div>
 
 					{/* Title */}
-					<h4 className="truncate text-sm font-semibold leading-snug text-foreground group-hover:text-primary transition-colors">
+					<h4 className="text-sm font-semibold leading-snug truncate text-foreground transition-colors group-hover:text-primary">
 						{title}
 					</h4>
 				</div>
@@ -91,7 +91,7 @@ export function SearchResultSpotlightCard({
 				{/* Score badge */}
 				{score !== undefined && (
 					<span
-						className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 text-[11px] font-mono text-primary"
+						className="rounded px-1.5 py-0.5 font-mono shrink-0 bg-primary/10 text-[11px] text-primary"
 						title="Relevance score"
 					>
 						{score.toFixed(2)}
@@ -101,14 +101,14 @@ export function SearchResultSpotlightCard({
 
 			{/* Description */}
 			{description && (
-				<p className="relative z-20 mt-2 line-clamp-2 text-xs text-muted-foreground leading-relaxed">
+				<p className="mt-2 text-xs leading-relaxed relative z-20 line-clamp-2 text-muted-foreground">
 					{description}
 				</p>
 			)}
 
 			{/* URL */}
 			{url && (
-				<div className="relative z-20 mt-3 flex items-center gap-1 text-[11px] text-muted-foreground/70">
+				<div className="mt-3 gap-1 relative z-20 flex items-center text-[11px] text-muted-foreground/70">
 					<ExternalLinkIcon className="h-3 w-3 shrink-0" />
 					<span className="truncate">{url}</span>
 				</div>

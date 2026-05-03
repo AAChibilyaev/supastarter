@@ -28,7 +28,9 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
 		<main className="section-padding min-h-screen">
 			<div className="container">
 				<div className="max-w-3xl mb-12 mx-auto text-center">
-					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">{t("heading")}</h1>
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+						{t("heading")}
+					</h1>
 					<p className="text-lg text-muted-foreground">{t("subheading")}</p>
 				</div>
 				<DemoSearchPage />

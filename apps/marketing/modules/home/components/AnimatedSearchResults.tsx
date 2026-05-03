@@ -63,8 +63,7 @@ const DEFAULT_RESULTS: SearchResult[] = [
 	{
 		id: "4",
 		title: "Sennheiser Momentum 4 Wireless",
-		description:
-			"60-hour battery, adaptive noise cancellation, premium sound",
+		description: "60-hour battery, adaptive noise cancellation, premium sound",
 		category: "Electronics",
 		score: 0.91,
 		badge: "new",
@@ -151,7 +150,7 @@ function AnimatedResultItem({
 					onClick();
 				}
 			}}
-			className="mb-3 w-full cursor-pointer bg-transparent p-0 text-left outline-none"
+			className="mb-3 p-0 w-full cursor-pointer bg-transparent text-left outline-none"
 			style={{
 				transform: mounted && visible ? "scale(1)" : "scale(0.85)",
 				opacity: mounted && visible ? 1 : 0,
@@ -160,16 +159,16 @@ function AnimatedResultItem({
 		>
 			<div
 				className={cn(
-					"rounded-xl border p-3.5 transition-colors",
+					"p-3.5 rounded-xl border transition-colors",
 					isSelected
 						? "border-primary/40 bg-primary/5"
 						: "border-border/60 bg-card hover:border-border",
 				)}
 			>
-				<div className="flex items-start justify-between gap-3">
+				<div className="gap-3 flex items-start justify-between">
 					<div className="min-w-0 flex-1">
 						{/* Category + badge */}
-						<div className="mb-1 flex items-center gap-1.5">
+						<div className="mb-1 gap-1.5 flex items-center">
 							<TagIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
 							<span className="text-[11px] text-muted-foreground">
 								{result.category}
@@ -177,7 +176,7 @@ function AnimatedResultItem({
 							{result.badge && (
 								<span
 									className={cn(
-										"rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+										"px-1.5 py-0.5 font-semibold rounded-full text-[10px]",
 										BADGE_STYLES[result.badge],
 									)}
 								>
@@ -189,7 +188,7 @@ function AnimatedResultItem({
 						{/* Title */}
 						<p
 							className={cn(
-								"truncate text-sm font-medium leading-snug transition-colors",
+								"text-sm font-medium leading-snug truncate transition-colors",
 								isSelected ? "text-primary" : "text-foreground",
 							)}
 						>
@@ -197,13 +196,13 @@ function AnimatedResultItem({
 						</p>
 
 						{/* Description */}
-						<p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+						<p className="mt-0.5 text-xs line-clamp-1 text-muted-foreground">
 							{result.description}
 						</p>
 					</div>
 
 					{/* Score */}
-					<div className="flex shrink-0 items-center gap-1">
+					<div className="gap-1 flex shrink-0 items-center">
 						<StarIcon className="h-3 w-3 text-yellow-500" />
 						<span className="font-mono text-[11px] text-muted-foreground">
 							{(result.score * 100).toFixed(0)}%
@@ -232,9 +231,7 @@ export function AnimatedSearchResults({
 		const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
 		setTopOpacity(Math.min(scrollTop / 50, 1));
 		const dist = scrollHeight - (scrollTop + clientHeight);
-		setBottomOpacity(
-			scrollHeight <= clientHeight ? 0 : Math.min(dist / 50, 1),
-		);
+		setBottomOpacity(scrollHeight <= clientHeight ? 0 : Math.min(dist / 50, 1));
 	}, []);
 
 	// Arrow key navigation
@@ -256,16 +253,18 @@ export function AnimatedSearchResults({
 	}, [results, selectedIndex, onResultClick]);
 
 	return (
-		<div className={cn("w-full overflow-hidden rounded-2xl border bg-card shadow-sm", className)}>
+		<div
+			className={cn("shadow-sm w-full overflow-hidden rounded-2xl border bg-card", className)}
+		>
 			{/* Simulated search bar */}
-			<div className="flex items-center gap-2.5 border-b px-4 py-3">
+			<div className="gap-2.5 px-4 py-3 flex items-center border-b">
 				<SearchIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
-				<span className="flex-1 text-sm text-foreground">{query}</span>
-				<div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+				<span className="text-sm flex-1 text-foreground">{query}</span>
+				<div className="gap-1 flex items-center text-[11px] text-muted-foreground">
 					<ZapIcon className="h-3 w-3 text-yellow-500" />
 					<span>12ms</span>
 				</div>
-				<span className="rounded bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">
+				<span className="rounded px-1.5 py-0.5 bg-muted text-[11px] text-muted-foreground">
 					{results.length} results
 				</span>
 			</div>
@@ -275,7 +274,7 @@ export function AnimatedSearchResults({
 				<div
 					ref={listRef}
 					onScroll={handleScroll}
-					className="overflow-y-auto p-3 [scrollbar-width:thin]"
+					className="p-3 overflow-y-auto [scrollbar-width:thin]"
 					style={{ maxHeight }}
 				>
 					{results.map((result, index) => (
@@ -297,12 +296,12 @@ export function AnimatedSearchResults({
 					<>
 						<div
 							aria-hidden="true"
-							className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-card to-transparent transition-opacity duration-300"
+							className="inset-x-0 top-0 h-10 pointer-events-none absolute bg-gradient-to-b from-card to-transparent transition-opacity duration-300"
 							style={{ opacity: topOpacity }}
 						/>
 						<div
 							aria-hidden="true"
-							className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-card to-transparent transition-opacity duration-300"
+							className="inset-x-0 bottom-0 h-16 pointer-events-none absolute bg-gradient-to-t from-card to-transparent transition-opacity duration-300"
 							style={{ opacity: bottomOpacity }}
 						/>
 					</>

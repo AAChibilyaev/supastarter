@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Separator } from "@repo/ui/components/separator";
@@ -122,7 +128,9 @@ export function AssistantSettingsPanel({ organizationId }: Props) {
 					<div className="flex items-center justify-between">
 						<div className="space-y-1">
 							<Label htmlFor="enabled">{t("enableChat")}</Label>
-							<p className="text-sm text-muted-foreground">{t("enableChatDescription")}</p>
+							<p className="text-sm text-muted-foreground">
+								{t("enableChatDescription")}
+							</p>
 						</div>
 						<Switch
 							id="enabled"
@@ -162,7 +170,9 @@ export function AssistantSettingsPanel({ organizationId }: Props) {
 								placeholder="https://yourapp.com/api/escalation-webhook"
 								{...register("escalationWebhookUrl")}
 							/>
-							<p className="text-xs text-muted-foreground">{t("webhookUrlDescription")}</p>
+							<p className="text-xs text-muted-foreground">
+								{t("webhookUrlDescription")}
+							</p>
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="escalationEmailTo">{t("emailTo")}</Label>
@@ -175,9 +185,12 @@ export function AssistantSettingsPanel({ organizationId }: Props) {
 						</div>
 						<div className="space-y-2">
 							<Label>{t("workingHours")}</Label>
-							<div className="grid grid-cols-2 gap-4">
+							<div className="gap-4 grid grid-cols-2">
 								<div className="space-y-1">
-									<Label htmlFor="workingHoursStart" className="text-xs text-muted-foreground">
+									<Label
+										htmlFor="workingHoursStart"
+										className="text-xs text-muted-foreground"
+									>
 										{t("workingHoursStart")}
 									</Label>
 									<Input
@@ -189,7 +202,10 @@ export function AssistantSettingsPanel({ organizationId }: Props) {
 									/>
 								</div>
 								<div className="space-y-1">
-									<Label htmlFor="workingHoursEnd" className="text-xs text-muted-foreground">
+									<Label
+										htmlFor="workingHoursEnd"
+										className="text-xs text-muted-foreground"
+									>
 										{t("workingHoursEnd")}
 									</Label>
 									<Input
@@ -214,7 +230,7 @@ export function AssistantSettingsPanel({ organizationId }: Props) {
 						<CardDescription>{t("connectorsDescription")}</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<div className="grid gap-4 sm:grid-cols-2">
+						<div className="gap-4 sm:grid-cols-2 grid">
 							<div className="space-y-2">
 								<Label htmlFor="omsBaseUrl">{t("omsUrl")}</Label>
 								<Input

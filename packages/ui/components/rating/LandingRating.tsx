@@ -43,7 +43,7 @@ export const LandingRating = ({
 									/>
 
 									<StarHalfIcon
-										className="text-muted-foreground/30 fill-muted-foreground/30 relative z-10 h-full w-full"
+										className="relative z-10 h-full w-full fill-muted-foreground/30 text-muted-foreground/30"
 										aria-hidden="true"
 									/>
 								</div>
@@ -51,7 +51,8 @@ export const LandingRating = ({
 								<StarIcon
 									key={index}
 									className={cn("h-full w-full", {
-										"text-muted-foreground/30 fill-muted-foreground/30": index < rating,
+										"fill-muted-foreground/30 text-muted-foreground/30":
+											index < rating,
 										"text-gray-300 fill-gray-300": index >= rating,
 									})}
 									aria-hidden="true"

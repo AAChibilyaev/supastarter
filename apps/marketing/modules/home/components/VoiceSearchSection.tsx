@@ -14,7 +14,7 @@ export function VoiceSearchSection() {
 		<section className="section-padding border-b border-border">
 			<div className="container">
 				<div className="max-w-3xl mx-auto text-center">
-					<span className="mb-4 gap-2 px-3 py-1 text-xs font-semibold tracking-widest inline-flex w-fit items-center rounded-md border border-border bg-secondary text-muted-foreground uppercase mx-auto">
+					<span className="mb-4 gap-2 px-3 py-1 text-xs font-semibold tracking-widest mx-auto inline-flex w-fit items-center rounded-md border border-border bg-secondary text-muted-foreground uppercase">
 						<MicIcon className="size-3" />
 						Voice
 					</span>
@@ -33,11 +33,11 @@ export function VoiceSearchSection() {
 						<div className="flex flex-col items-center justify-center text-center">
 							<button
 								onClick={() => setDemoActive(!demoActive)}
-				className={`size-20 flex items-center justify-center rounded-full border-2 transition-all ${
-							demoActive
-								? "border-foreground/20 bg-foreground/5 scale-110 shadow-lg"
-								: "border-border bg-muted hover:border-foreground/20 hover:bg-muted/80"
-						}`}
+								className={`size-20 flex items-center justify-center rounded-full border-2 transition-all ${
+									demoActive
+										? "shadow-lg scale-110 border-foreground/20 bg-foreground/5"
+										: "border-border bg-muted hover:border-foreground/20 hover:bg-muted/80"
+								}`}
 							>
 								<MicIcon
 									className={`size-8 transition-colors ${
@@ -55,7 +55,10 @@ export function VoiceSearchSection() {
 										<div
 											key={i}
 											className="w-1 rounded-full bg-foreground/60"
-											style={{ height: `${h}px`, animationDelay: `${i * 0.1}s` }}
+											style={{
+												height: `${h}px`,
+												animationDelay: `${i * 0.1}s`,
+											}}
 										/>
 									))}
 								</div>
@@ -65,33 +68,37 @@ export function VoiceSearchSection() {
 						{/* Feature cards */}
 						<div className="gap-4 grid">
 							<div className="gap-3 px-5 py-4 flex items-start rounded-lg border border-border bg-card">
-								<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+								<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 									<MicIcon className="size-5 text-muted-foreground" />
 								</div>
 								<div>
-									<h3 className="text-sm font-medium text-foreground">Push-to-talk</h3>
+									<h3 className="text-sm font-medium text-foreground">
+										Push-to-talk
+									</h3>
 									<p className="mt-0.5 text-xs font-light leading-relaxed text-muted-foreground">
-										Microphone activates only on tap. No constant listening, no privacy
-										concerns.
+										Microphone activates only on tap. No constant listening, no
+										privacy concerns.
 									</p>
 								</div>
 							</div>
 
 							<div className="gap-3 px-5 py-4 flex items-start rounded-lg border border-border bg-card">
-								<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+								<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 									<FileTextIcon className="size-5 text-muted-foreground" />
 								</div>
 								<div>
-									<h3 className="text-sm font-medium text-foreground">Live transcript</h3>
+									<h3 className="text-sm font-medium text-foreground">
+										Live transcript
+									</h3>
 									<p className="mt-0.5 text-xs font-light leading-relaxed text-muted-foreground">
-										See what the system heard. Edit transcript before searching. Visual
-										results always alongside voice.
+										See what the system heard. Edit transcript before searching.
+										Visual results always alongside voice.
 									</p>
 								</div>
 							</div>
 
 							<div className="gap-3 px-5 py-4 flex items-start rounded-lg border border-border bg-card">
-								<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+								<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 									<HistoryIcon className="size-5 text-muted-foreground" />
 								</div>
 								<div>
@@ -99,8 +106,8 @@ export function VoiceSearchSection() {
 										Voice history & fallback
 									</h3>
 									<p className="mt-0.5 text-xs font-light leading-relaxed text-muted-foreground">
-										Last voice query is saved. Fallback to text if recognition is
-										unclear. Clear privacy state indicator.
+										Last voice query is saved. Fallback to text if recognition
+										is unclear. Clear privacy state indicator.
 									</p>
 								</div>
 							</div>

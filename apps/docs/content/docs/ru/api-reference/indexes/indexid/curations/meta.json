@@ -1,8 +1,4 @@
 {
-  "title": "indexes/indexid/curations",
-  "pages": [
-    "get",
-    "post",
-    "put"
-  ]
+	"title": "indexes/indexid/curations",
+	"pages": ["get", "post", "put"]
 }

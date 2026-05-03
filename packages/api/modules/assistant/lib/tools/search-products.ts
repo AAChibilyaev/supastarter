@@ -1,14 +1,34 @@
 import { tool } from "@repo/ai";
-import { z } from "zod";
-import { generateEmbedding, formatVectorQuery, getTypesenseClient } from "@repo/search";
 import { logger } from "@repo/logs";
-import { type PersonalizationContext, injectPersonalizationIntoSearch } from "../personalization-context";
+import { generateEmbedding, formatVectorQuery, getTypesenseClient } from "@repo/search";
+import { z } from "zod";
+
+import {
+	type PersonalizationContext,
+	injectPersonalizationIntoSearch,
+} from "../personalization-context";
 
 const inputSchema = z.object({
-	query: z.string().describe("Search query — product name, category, or description of what the user needs"),
-	filters: z.string().optional().describe("Typesense filter expression, e.g. 'price:<5000 && brand:=Nike'"),
-	limit: z.number().int().min(1).max(10).optional().default(5).describe("Number of results to return"),
-	semantic: z.boolean().optional().default(true).describe("Use semantic/vector search for better matching"),
+	query: z
+		.string()
+		.describe("Search query — product name, category, or description of what the user needs"),
+	filters: z
+		.string()
+		.optional()
+		.describe("Typesense filter expression, e.g. 'price:<5000 && brand:=Nike'"),
+	limit: z
+		.number()
+		.int()
+		.min(1)
+		.max(10)
+		.optional()
+		.default(5)
+		.describe("Number of results to return"),
+	semantic: z
+		.boolean()
+		.optional()
+		.default(true)
+		.describe("Use semantic/vector search for better matching"),
 });
 
 export function createSearchProductsTool(params: {
@@ -39,7 +59,11 @@ export function createSearchProductsTool(params: {
 				if (input.semantic !== false) {
 					try {
 						const embeddingResult = await generateEmbedding(input.query);
-						const vectorQuery = formatVectorQuery(embeddingResult.vector, "embedding", input.limit ?? 5);
+						const vectorQuery = formatVectorQuery(
+							embeddingResult.vector,
+							"embedding",
+							input.limit ?? 5,
+						);
 						searchParams.vector_query = vectorQuery;
 						// alpha=0.7: 70% keyword + 30% vector for product discovery balance
 						searchParams.exclude_fields = "";
@@ -49,11 +73,17 @@ export function createSearchProductsTool(params: {
 				}
 
 				if (params.personalizationContext) {
-					searchParams = injectPersonalizationIntoSearch(searchParams, params.personalizationContext);
+					searchParams = injectPersonalizationIntoSearch(
+						searchParams,
+						params.personalizationContext,
+					);
 				}
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const results = (await client.collections(params.indexSlug).documents().search(searchParams as any)) as {
+				const results = (await client
+					.collections(params.indexSlug)
+					.documents()
+					.search(searchParams as any)) as {
 					hits?: Array<{ document: Record<string, unknown> }>;
 					found?: number;
 				};
@@ -76,7 +106,10 @@ export function createSearchProductsTool(params: {
 					})),
 				};
 			} catch (err) {
-				logger.warn({ err, query: input.query, indexSlug: params.indexSlug }, "search_products tool failed");
+				logger.warn(
+					{ err, query: input.query, indexSlug: params.indexSlug },
+					"search_products tool failed",
+				);
 				return { found: 0, products: [], error: "search_failed" };
 			}
 		},

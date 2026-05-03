@@ -77,9 +77,9 @@ export function HeroWithCode() {
 				<div>
 					<div className="overflow-hidden rounded-lg border border-border bg-[#0d0d10]">
 						<div className="gap-2 border-white/8 px-4 py-3 flex items-center border-b">
-	<span className="size-2.5 rounded-full bg-muted-foreground/20" />
-								<span className="size-2.5 rounded-full bg-muted-foreground/30" />
-								<span className="size-2.5 rounded-full bg-muted-foreground/40" />
+							<span className="size-2.5 rounded-full bg-muted-foreground/20" />
+							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
+							<span className="size-2.5 rounded-full bg-muted-foreground/40" />
 							<span className="ml-3 font-mono text-xs text-white/35">
 								{t("home.hero.codeCaption")}
 							</span>

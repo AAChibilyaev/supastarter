@@ -1,8 +1,4 @@
 {
-  "title": "indexes/indexid",
-  "pages": [
-    "get",
-    "patch",
-    "delete"
-  ]
+	"title": "indexes/indexid",
+	"pages": ["get", "patch", "delete"]
 }

@@ -41,9 +41,13 @@ export class MockOmsConnector implements OmsConnector {
 			orderId,
 			status: "in_transit",
 			lastUpdate: new Date().toISOString(),
-			estimatedDelivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString("ru-RU"),
+			estimatedDelivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString(
+				"ru-RU",
+			),
 			trackingUrl: `https://example.com/track/${orderId}`,
-			items: [{ productId: "mock-product-1", title: "Тестовый товар", quantity: 1, price: 4990 }],
+			items: [
+				{ productId: "mock-product-1", title: "Тестовый товар", quantity: 1, price: 4990 },
+			],
 		};
 	}
 
@@ -53,7 +57,9 @@ export class MockOmsConnector implements OmsConnector {
 			orderId: "mock-order-123",
 			status: "processing",
 			amount: 4990,
-			estimatedDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString("ru-RU"),
+			estimatedDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString(
+				"ru-RU",
+			),
 			instructions: "Возврат будет зачислен на вашу карту в течение 5 рабочих дней.",
 		};
 	}
@@ -104,10 +110,16 @@ export class HttpOmsConnector implements OmsConnector {
 	}
 
 	async getReturnStatus(returnId: string, userId: string): Promise<ReturnStatus | null> {
-		return this.fetch<ReturnStatus>(`/returns/${returnId}?userId=${encodeURIComponent(userId)}`);
+		return this.fetch<ReturnStatus>(
+			`/returns/${returnId}?userId=${encodeURIComponent(userId)}`,
+		);
 	}
 
 	async getOrderHistory(userId: string, limit: number): Promise<OrderSummary[]> {
-		return (await this.fetch<OrderSummary[]>(`/users/${encodeURIComponent(userId)}/orders?limit=${limit}`)) ?? [];
+		return (
+			(await this.fetch<OrderSummary[]>(
+				`/users/${encodeURIComponent(userId)}/orders?limit=${limit}`,
+			)) ?? []
+		);
 	}
 }

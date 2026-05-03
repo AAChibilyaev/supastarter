@@ -30,18 +30,15 @@ export function SpotlightCard({
 	const [hovered, setHovered] = React.useState(false);
 	const [position, setPosition] = React.useState({ x: "50%", y: "50%" });
 
-	const handleMouseMove = React.useCallback(
-		(e: React.MouseEvent<HTMLDivElement>) => {
-			const el = divRef.current;
-			if (!el) return;
-			const rect = el.getBoundingClientRect();
-			setPosition({
-				x: `${e.clientX - rect.left}px`,
-				y: `${e.clientY - rect.top}px`,
-			});
-		},
-		[],
-	);
+	const handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+		const el = divRef.current;
+		if (!el) return;
+		const rect = el.getBoundingClientRect();
+		setPosition({
+			x: `${e.clientX - rect.left}px`,
+			y: `${e.clientY - rect.top}px`,
+		});
+	}, []);
 
 	return (
 		<div
@@ -59,7 +56,7 @@ export function SpotlightCard({
 			{/* spotlight overlay */}
 			<div
 				aria-hidden="true"
-				className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-500"
+				className="inset-0 pointer-events-none absolute z-10 rounded-[inherit] transition-opacity duration-500"
 				style={{
 					opacity: hovered ? 0.6 : 0,
 					background: `radial-gradient(circle at ${position.x} ${position.y}, ${spotlightColor}, transparent 80%)`,

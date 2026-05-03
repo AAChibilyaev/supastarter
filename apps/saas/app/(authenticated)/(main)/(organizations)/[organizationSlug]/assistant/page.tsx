@@ -1,3 +1,4 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { AssistantChatPanel } from "@search/components/AssistantChatPanel";
 import { AssistantConversationsPanel } from "@search/components/AssistantConversationsPanel";
 import { AssistantHistoryPanel } from "@search/components/AssistantHistoryPanel";
@@ -7,9 +8,8 @@ import {
 	getSearchOrganizationRouteContext,
 } from "@search/lib/server";
 import { PageHeader } from "@shared/components/PageHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
-import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({
 	params,

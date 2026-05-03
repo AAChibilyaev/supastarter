@@ -16,11 +16,12 @@
  * Auth: Session cookie (Better Auth) with org admin/owner role
  */
 
+import { createHash, randomBytes } from "node:crypto";
+
 import { auth } from "@repo/auth";
 import { db } from "@repo/database";
 import type { Context } from "hono";
 import { Hono } from "hono";
-import { createHash, randomBytes } from "node:crypto";
 import { z } from "zod";
 
 // ─── Helpers ─────────────────────────────────────────────────
@@ -38,20 +39,13 @@ function generateScimToken(): { rawToken: string; hash: string; prefix: string }
 	};
 }
 
-function hashScimToken(rawToken: string): string {
-	return createHash("sha256").update(rawToken).digest("hex");
-}
-
 // ─── Auth middleware ───────────────────────────────────────────
 
 /**
  * Extract session from the request and verify the user is an admin/owner of the org.
  * Returns the userId on success, or sends an error response and returns null.
  */
-async function requireOrgAdmin(
-	c: Context,
-	orgId: string,
-): Promise<{ userId: string } | null> {
+async function requireOrgAdmin(c: Context, orgId: string): Promise<{ userId: string } | null> {
 	try {
 		const session = await auth.api.getSession({
 			headers: c.req.raw.headers,
@@ -86,9 +80,7 @@ async function requireOrgAdmin(
 // ─── Zod schema for create/update ─────────────────────────────
 
 const upsertConfigSchema = z.object({
-	provider: z
-		.enum(["okta", "azure_ad", "google_workspace", "keycloak", "other"])
-		.optional(),
+	provider: z.enum(["okta", "azure_ad", "google_workspace", "keycloak", "other"]).optional(),
 	endpointUrl: z.string().url().optional().nullable(),
 	syncEnabled: z.boolean().optional(),
 });
@@ -144,10 +136,7 @@ export const scimConfigRouter = new Hono()
 
 		const parsed = upsertConfigSchema.safeParse(body);
 		if (!parsed.success) {
-			return c.json(
-				{ error: "Invalid request body", issues: parsed.error.issues },
-				400,
-			);
+			return c.json({ error: "Invalid request body", issues: parsed.error.issues }, 400);
 		}
 
 		// Generate a new bearer token on creation
@@ -453,7 +442,8 @@ export const scimConfigRouter = new Hono()
 		});
 
 		// Build CSV
-		const header = "id,organizationId,action,target,success,details,performedBy,ipAddress,createdAt\n";
+		const header =
+			"id,organizationId,action,target,success,details,performedBy,ipAddress,createdAt\n";
 		const rows = logs
 			.map(
 				(l) =>

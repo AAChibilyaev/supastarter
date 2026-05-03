@@ -1,8 +1,12 @@
 import { db } from "@repo/database";
 
-import { type OmsConnector, MockOmsConnector, HttpOmsConnector } from "./oms-connector";
-import { type LoyaltyConnector, MockLoyaltyConnector, HttpLoyaltyConnector } from "./loyalty-connector";
 import { type InventoryConnector, MockInventoryConnector } from "./inventory-connector";
+import {
+	type LoyaltyConnector,
+	MockLoyaltyConnector,
+	HttpLoyaltyConnector,
+} from "./loyalty-connector";
+import { type OmsConnector, MockOmsConnector, HttpOmsConnector } from "./oms-connector";
 
 export interface ConnectorRegistry {
 	oms: OmsConnector;
@@ -17,14 +21,19 @@ export interface AssistantConnectorConfig {
 
 const registryCache = new Map<string, ConnectorRegistry>();
 
-export function getConnectors(organizationId: string, config?: AssistantConnectorConfig): ConnectorRegistry {
+export function getConnectors(
+	organizationId: string,
+	config?: AssistantConnectorConfig,
+): ConnectorRegistry {
 	if (registryCache.has(organizationId)) {
 		return registryCache.get(organizationId)!;
 	}
 
 	const registry: ConnectorRegistry = {
 		oms: config?.oms ? new HttpOmsConnector(config.oms) : new MockOmsConnector(),
-		loyalty: config?.loyalty ? new HttpLoyaltyConnector(config.loyalty) : new MockLoyaltyConnector(),
+		loyalty: config?.loyalty
+			? new HttpLoyaltyConnector(config.loyalty)
+			: new MockLoyaltyConnector(),
 		inventory: new MockInventoryConnector(),
 	};
 
@@ -51,7 +60,10 @@ export async function getConnectorsForOrg(organizationId: string): Promise<Conne
 		config.oms = { baseUrl: ac.omsBaseUrl as string, apiKey: ac.omsApiKey as string };
 	}
 	if (ac.loyaltyBaseUrl && ac.loyaltyApiKey) {
-		config.loyalty = { baseUrl: ac.loyaltyBaseUrl as string, apiKey: ac.loyaltyApiKey as string };
+		config.loyalty = {
+			baseUrl: ac.loyaltyBaseUrl as string,
+			apiKey: ac.loyaltyApiKey as string,
+		};
 	}
 
 	return getConnectors(organizationId, config);

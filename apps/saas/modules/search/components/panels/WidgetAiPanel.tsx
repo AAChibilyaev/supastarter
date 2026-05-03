@@ -120,7 +120,9 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 		return (
 			<Card>
 				<CardContent className="py-12 flex flex-col items-center text-center">
-					<p className="text-sm text-muted-foreground">{t("widgetConfigurator.noIndexes")}</p>
+					<p className="text-sm text-muted-foreground">
+						{t("widgetConfigurator.noIndexes")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -149,7 +151,7 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 			{/* AI Answers */}
 			<Card className="shadow-sm">
 				<CardHeader>
-					<CardTitle className="text-base flex items-center gap-2">
+					<CardTitle className="text-base gap-2 flex items-center">
 						<SparklesIcon className="size-4 text-primary" />
 						{t("widget.aiAnswersTitle")}
 					</CardTitle>
@@ -159,7 +161,7 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 					<div className="gap-3 flex items-center justify-between">
 						<div>
 							<Label htmlFor="ai-answers-enable">{t("widget.aiAnswersEnable")}</Label>
-							<p className="text-xs text-muted-foreground mt-1">
+							<p className="text-xs mt-1 text-muted-foreground">
 								{t("widget.aiAnswersHint")}
 							</p>
 						</div>
@@ -171,8 +173,8 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 					</div>
 
 					{aiAnswers && (
-						<div className="rounded-lg border bg-muted/40 p-3">
-							<div className="flex items-center gap-2 text-xs text-primary font-semibold uppercase tracking-wide mb-2">
+						<div className="p-3 rounded-lg border bg-muted/40">
+							<div className="gap-2 text-xs font-semibold tracking-wide mb-2 flex items-center text-primary uppercase">
 								<SparklesIcon className="size-3" />
 								{t("widget.aiAnswersPreview")}
 							</div>
@@ -187,7 +189,7 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 			{/* Image Search */}
 			<Card className="shadow-sm">
 				<CardHeader>
-					<CardTitle className="text-base flex items-center gap-2">
+					<CardTitle className="text-base gap-2 flex items-center">
 						<CameraIcon className="size-4 text-primary" />
 						{t("widget.imageSearchTitle")}
 					</CardTitle>
@@ -196,8 +198,10 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 				<CardContent className="space-y-4">
 					<div className="gap-3 flex items-center justify-between">
 						<div>
-							<Label htmlFor="image-search-enable">{t("widget.imageSearchEnable")}</Label>
-							<p className="text-xs text-muted-foreground mt-1">
+							<Label htmlFor="image-search-enable">
+								{t("widget.imageSearchEnable")}
+							</Label>
+							<p className="text-xs mt-1 text-muted-foreground">
 								{t("widget.imageSearchHint")}
 							</p>
 						</div>
@@ -209,8 +213,8 @@ export function WidgetAiPanel({ organizationId }: WidgetAiPanelProps) {
 					</div>
 
 					{imageSearch && (
-						<div className="rounded-lg border bg-muted/40 p-3 flex items-center gap-3">
-							<div className="size-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+						<div className="p-3 gap-3 flex items-center rounded-lg border bg-muted/40">
+							<div className="size-10 flex flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
 								<CameraIcon className="size-5 text-primary" />
 							</div>
 							<p className="text-sm text-muted-foreground">

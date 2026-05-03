@@ -35,9 +35,7 @@ export function TrialBanner({
 
 	return (
 		<Alert className="mb-6 border-border bg-muted">
-			<AlertTitle className="text-muted-foreground">
-				{t("trialBannerTitle")}
-			</AlertTitle>
+			<AlertTitle className="text-muted-foreground">{t("trialBannerTitle")}</AlertTitle>
 			<AlertDescription className="text-muted-foreground">
 				<span>{t("trialBannerMessage", { days: trialInfo.daysRemaining })}</span>
 				<Button variant="primary" size="sm" className="ml-3" asChild>

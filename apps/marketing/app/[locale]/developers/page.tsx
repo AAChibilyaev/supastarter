@@ -64,9 +64,9 @@ console.log(results.hits);`;
 						<div className="shadow-lg overflow-hidden rounded-lg border border-border/60 bg-card/80">
 							{/* Terminal title bar */}
 							<div className="gap-2 px-4 py-3 flex items-center border-b border-border/50 bg-muted/30">
-								<span className="size-2.5 bg-muted-foreground/20 rounded-full" />
-								<span className="size-2.5 bg-muted-foreground/40 rounded-full" />
-								<span className="size-2.5 bg-muted-foreground/60 rounded-full" />
+								<span className="size-2.5 rounded-full bg-muted-foreground/20" />
+								<span className="size-2.5 rounded-full bg-muted-foreground/40" />
+								<span className="size-2.5 rounded-full bg-muted-foreground/60" />
 								<span className="ml-3 text-xs font-mono text-muted-foreground">
 									search.ts
 								</span>

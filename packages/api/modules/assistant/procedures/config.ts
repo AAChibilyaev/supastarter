@@ -31,7 +31,10 @@ export const getAssistantConfigProcedure = protectedProcedure
 			select: { metadata: true },
 		});
 
-		const meta = JSON.parse((org?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const meta = JSON.parse((org?.metadata as string | null) ?? "{}") as Record<
+			string,
+			unknown
+		>;
 		return assistantConfigSchema.parse(meta.assistantConfig ?? {});
 	});
 
@@ -51,7 +54,10 @@ export const saveAssistantConfigProcedure = protectedProcedure
 			select: { metadata: true },
 		});
 
-		const meta = JSON.parse((org?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const meta = JSON.parse((org?.metadata as string | null) ?? "{}") as Record<
+			string,
+			unknown
+		>;
 
 		await db.organization.update({
 			where: { id: input.organizationId },

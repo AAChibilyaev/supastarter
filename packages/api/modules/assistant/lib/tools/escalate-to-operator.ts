@@ -11,7 +11,9 @@ export interface EscalationService {
 }
 
 const inputSchema = z.object({
-	reason: z.string().describe("Brief reason for escalation, e.g. 'User dissatisfied with order resolution'"),
+	reason: z
+		.string()
+		.describe("Brief reason for escalation, e.g. 'User dissatisfied with order resolution'"),
 	urgency: z.enum(["normal", "high"]).optional().default("normal"),
 });
 

@@ -1,5 +1,6 @@
 import { tool } from "@repo/ai";
 import { z } from "zod";
+
 import { type OmsConnector } from "../../connectors/oms-connector";
 
 const inputSchema = z.object({
@@ -13,7 +14,10 @@ export function createGetOrderStatusTool(omsConnector: OmsConnector, sessionUser
 		inputSchema,
 		execute: async (input) => {
 			if (!sessionUserId) {
-				return { error: "authentication_required", message: "Для проверки заказа необходимо войти в аккаунт." };
+				return {
+					error: "authentication_required",
+					message: "Для проверки заказа необходимо войти в аккаунт.",
+				};
 			}
 			const result = await omsConnector.getOrderStatus(input.orderId, sessionUserId);
 			if (!result) {

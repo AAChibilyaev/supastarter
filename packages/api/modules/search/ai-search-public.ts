@@ -9,13 +9,13 @@
  *   POST /api/search/ai/image   — image-to-vector search (GPT-4o-mini vision → embedding → Typesense)
  */
 
-import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/search";
 import { logger } from "@repo/logs";
+import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { gatePublicSearchRequest } from "./lib/public-auth";
 import { quotaCheck } from "../entitlements/middleware/quota-check";
+import { gatePublicSearchRequest } from "./lib/public-auth";
 
 export const aiSearchPublicApp = new Hono()
 	.use(
@@ -52,7 +52,8 @@ export const aiSearchPublicApp = new Hono()
 		const query: string = body.query.slice(0, 2000);
 		const indexSlug: string = body.indexSlug ?? "products";
 		const queryBy: string = body.queryBy ?? "title,description";
-		const filterBy: string | undefined = typeof body.filterBy === "string" ? body.filterBy : undefined;
+		const filterBy: string | undefined =
+			typeof body.filterBy === "string" ? body.filterBy : undefined;
 		const perPage: number = Math.min(Math.max(Number(body.perPage ?? 5), 1), 20);
 
 		const client = getTypesenseClient();
@@ -67,7 +68,10 @@ export const aiSearchPublicApp = new Hono()
 			if (filterBy) searchParams.filter_by = filterBy;
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const results = (await client.collections(indexSlug).documents().search(searchParams as any)) as any;
+			const results = (await client
+				.collections(indexSlug)
+				.documents()
+				.search(searchParams as any)) as any;
 			const searchTimeMs = Date.now() - searchStart;
 
 			const hits: any[] = results.hits ?? [];
@@ -100,7 +104,8 @@ export const aiSearchPublicApp = new Hono()
 						{
 							role: "user",
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							content: `Context:\n${contextChunks.join("\n")}\n\nQuestion: ${query}` as any,
+							content:
+								`Context:\n${contextChunks.join("\n")}\n\nQuestion: ${query}` as any,
 						},
 					],
 					max_tokens: 300,
@@ -108,12 +113,18 @@ export const aiSearchPublicApp = new Hono()
 				});
 				answer = completion.choices[0]?.message?.content ?? "";
 			} catch (llmErr) {
-				logger.warn({ llmErr, query, organizationId }, "ai-search-public: LLM answer failed");
+				logger.warn(
+					{ llmErr, query, organizationId },
+					"ai-search-public: LLM answer failed",
+				);
 			}
 
 			return c.json({ answer, sources, found: results.found ?? 0, searchTimeMs });
 		} catch (err) {
-			logger.warn({ err, query, indexSlug, organizationId }, "ai-search-public: answer failed");
+			logger.warn(
+				{ err, query, indexSlug, organizationId },
+				"ai-search-public: answer failed",
+			);
 			return c.json({ error: "search_failed" }, 500);
 		}
 	})
@@ -137,7 +148,13 @@ export const aiSearchPublicApp = new Hono()
 		const body = await c.req.json().catch(() => null);
 		if (!body) return c.json({ error: "body required" }, 400);
 
-		const { imageUrl, imageBase64, indexSlug = "products", field = "embedding", filterBy } = body;
+		const {
+			imageUrl,
+			imageBase64,
+			indexSlug = "products",
+			field = "embedding",
+			filterBy,
+		} = body;
 
 		if (!imageUrl && !imageBase64) {
 			return c.json({ error: "imageUrl or imageBase64 required" }, 400);
@@ -191,7 +208,10 @@ export const aiSearchPublicApp = new Hono()
 			if (typeof filterBy === "string") searchParams.filter_by = filterBy;
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const results = (await client.collections(indexSlug).documents().search(searchParams as any)) as any;
+			const results = (await client
+				.collections(indexSlug)
+				.documents()
+				.search(searchParams as any)) as any;
 			const searchTimeMs = Date.now() - searchStart;
 
 			const hits: any[] = results.hits ?? [];
@@ -210,7 +230,10 @@ export const aiSearchPublicApp = new Hono()
 				searchTimeMs,
 			});
 		} catch (err) {
-			logger.warn({ err, indexSlug, organizationId }, "ai-search-public: image search failed");
+			logger.warn(
+				{ err, indexSlug, organizationId },
+				"ai-search-public: image search failed",
+			);
 			return c.json({ error: "image_search_failed" }, 500);
 		}
 	});

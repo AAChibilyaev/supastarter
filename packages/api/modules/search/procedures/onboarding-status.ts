@@ -101,8 +101,12 @@ export const onboardingStatus = protectedProcedure
 			where: { id: organizationId },
 			select: { metadata: true },
 		});
-		const meta = JSON.parse((orgMeta?.metadata as string | null) ?? "{}") as Record<string, unknown>;
-		const hasAssistantEnabled = (meta.assistantConfig as Record<string, unknown> | undefined)?.enabled === true;
+		const meta = JSON.parse((orgMeta?.metadata as string | null) ?? "{}") as Record<
+			string,
+			unknown
+		>;
+		const hasAssistantEnabled =
+			(meta.assistantConfig as Record<string, unknown> | undefined)?.enabled === true;
 
 		const steps = [
 			{ step: 1, label: "Create a search index", completed: hasIndex },

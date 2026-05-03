@@ -15,7 +15,7 @@ export function PricingFaq() {
 		<section className="section-padding border-b border-border bg-muted/30">
 			<div className="container">
 				<div className="max-w-2xl mx-auto">
-					<h2 className="text-2xl md:text-3xl font-light tracking-tight text-balance text-center">
+					<h2 className="text-2xl md:text-3xl font-light tracking-tight text-center text-balance">
 						{t("homePricingFaq.title")}
 					</h2>
 
@@ -30,7 +30,7 @@ export function PricingFaq() {
 									<button
 										type="button"
 										onClick={() => setOpenItem(isOpen ? null : item)}
-										className="w-full px-5 py-4 flex items-center justify-between text-left text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
+										className="px-5 py-4 text-sm font-medium flex w-full items-center justify-between text-left text-foreground transition-colors hover:bg-muted/50"
 									>
 										<span>{t(`homePricingFaq.items.${item}.q`)}</span>
 										<ChevronDownIcon

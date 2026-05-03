@@ -167,7 +167,7 @@ export function QuickstartSection() {
 
 				<div className="mt-12 md:mt-16 max-w-3xl mx-auto">
 					{/* Step tabs */}
-					<div className="gap-1 flex flex-wrap mb-0">
+					<div className="gap-1 mb-0 flex flex-wrap">
 						{STEPS.map((step, idx) => {
 							const isActive = activeStep === step;
 							const isDone = idx < STEPS.indexOf(activeStep);
@@ -177,15 +177,15 @@ export function QuickstartSection() {
 									type="button"
 									onClick={() => setActiveStep(step)}
 									className={cn(
-										"flex items-center gap-2 px-4 py-2.5 text-sm rounded-t-lg border border-b-0 transition-all",
+										"gap-2 px-4 py-2.5 text-sm flex items-center rounded-t-lg border border-b-0 transition-all",
 										isActive
-											? "bg-[#0d0d10] text-white/90 border-white/10"
-											: "bg-muted/50 text-muted-foreground hover:text-foreground border-border",
+											? "text-white/90 border-white/10 bg-[#0d0d10]"
+											: "border-border bg-muted/50 text-muted-foreground hover:text-foreground",
 									)}
 								>
 									<span
 										className={cn(
-											"size-4 text-[10px] rounded-md flex items-center justify-center font-semibold shrink-0",
+											"size-4 font-semibold flex shrink-0 items-center justify-center rounded-md text-[10px]",
 											isDone
 												? "bg-success/20 text-success"
 												: isActive
@@ -195,16 +195,16 @@ export function QuickstartSection() {
 									>
 										{isDone ? <CheckIcon className="size-2.5" /> : idx + 1}
 									</span>
-									<span className="hidden sm:inline">{STEP_SHORT[step]}</span>
+									<span className="sm:inline hidden">{STEP_SHORT[step]}</span>
 								</button>
 							);
 						})}
 					</div>
 
 					{/* Code panel */}
-					<div className="overflow-hidden rounded-b-xl rounded-tr-xl border border-white/10 bg-[#0d0d10]">
+					<div className="border-white/10 overflow-hidden rounded-tr-xl rounded-b-xl border bg-[#0d0d10]">
 						{/* Toolbar */}
-						<div className="flex items-center justify-between gap-2 border-b border-white/8 px-4 py-2 bg-white/[0.03]">
+						<div className="gap-2 border-white/8 px-4 py-2 bg-white/[0.03] flex items-center justify-between border-b">
 							{/* Language tabs */}
 							<div className="gap-1 flex">
 								{(["js", "python", "curl"] as Lang[]).map((l) => (
@@ -219,13 +219,17 @@ export function QuickstartSection() {
 												: "text-white/40 hover:text-white/60",
 										)}
 									>
-										{l === "js" ? "JavaScript" : l === "python" ? "Python" : "cURL"}
+										{l === "js"
+											? "JavaScript"
+											: l === "python"
+												? "Python"
+												: "cURL"}
 									</button>
 								))}
 							</div>
 
 							{/* Traffic lights + copy */}
-							<div className="flex items-center gap-3">
+							<div className="gap-3 flex items-center">
 								<div className="gap-1.5 flex items-center">
 									<span className="size-2.5 rounded-full bg-muted-foreground/20" />
 									<span className="size-2.5 rounded-full bg-muted-foreground/30" />
@@ -234,7 +238,7 @@ export function QuickstartSection() {
 								<button
 									type="button"
 									onClick={copy}
-									className="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors"
+									className="gap-1.5 px-2.5 py-1 text-xs text-white/40 hover:text-white/70 hover:bg-white/5 flex items-center rounded-md transition-colors"
 									aria-label="Copy code"
 								>
 									{copied ? (
@@ -247,13 +251,16 @@ export function QuickstartSection() {
 							</div>
 						</div>
 
-						<pre className="p-5 font-mono leading-relaxed overflow-x-auto text-[13px] text-white/75 min-h-[220px]">
+						<pre className="p-5 font-mono leading-relaxed text-white/75 min-h-[220px] overflow-x-auto text-[13px]">
 							<code>{code}</code>
 						</pre>
 					</div>
 
-					<p className="mt-4 text-center text-sm font-light text-muted-foreground">
-						<a href="/developers" className="text-primary underline-offset-4 hover:underline">
+					<p className="mt-4 text-sm font-light text-center text-muted-foreground">
+						<a
+							href="/developers"
+							className="text-primary underline-offset-4 hover:underline"
+						>
 							{t("homeQuickstart.cta")} →
 						</a>
 					</p>

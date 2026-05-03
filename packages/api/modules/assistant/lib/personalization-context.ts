@@ -86,7 +86,8 @@ export function injectPersonalizationIntoSearch(
 
 	// Region filter for availability
 	if (context.region) {
-		const existing = typeof result.filter_by === "string" && result.filter_by ? result.filter_by : "";
+		const existing =
+			typeof result.filter_by === "string" && result.filter_by ? result.filter_by : "";
 		result.filter_by = existing
 			? `${existing} && region:=[${context.region},all]`
 			: `region:=[${context.region},all]`;

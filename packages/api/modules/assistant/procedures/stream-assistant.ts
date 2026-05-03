@@ -1,5 +1,7 @@
 import { streamToEventIterator } from "@orpc/client";
 import { ORPCError } from "@orpc/server";
+// oxlint-disable-next-line typescript/consistent-type-imports
+import { streamText, textModel } from "@repo/ai";
 import {
 	appendMessage,
 	createConversation,
@@ -9,8 +11,6 @@ import {
 	updateConversationMetadata,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-// oxlint-disable-next-line typescript/consistent-type-imports
-import { streamText, textModel } from "@repo/ai";
 import z from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -22,22 +22,20 @@ import {
 	releaseCreditReservation,
 } from "../../entitlements/middleware/credit-gate";
 import { requireOrganizationMember } from "../../search/lib/access";
-
+import { getConnectorsForOrg } from "../connectors/registry";
+import { createEscalationService } from "../lib/escalation/escalation-service";
 import { classifyIntent } from "../lib/intent-classifier";
 import { buildSystemPrompt } from "../lib/prompts/prompt-builder";
 import { checkUserMessage, sanitizeOutput } from "../lib/safety-guard";
-import { getConnectorsForOrg } from "../connectors/registry";
-
-import { createSearchProductsTool } from "../lib/tools/search-products";
 import { createCheckAvailabilityTool } from "../lib/tools/check-availability";
-import { createGetOrderStatusTool } from "../lib/tools/get-order-status";
-import { createGetReturnStatusTool } from "../lib/tools/get-return-status";
-import { createGetUserConditionsTool } from "../lib/tools/get-user-conditions";
-import { createGetProductDetailsTool } from "../lib/tools/get-product-details";
-import { createSearchKnowledgeTool } from "../lib/tools/search-knowledge";
-import { createGetSimilarProductsTool } from "../lib/tools/get-similar-products";
 import { createEscalateToOperatorTool } from "../lib/tools/escalate-to-operator";
-import { createEscalationService } from "../lib/escalation/escalation-service";
+import { createGetOrderStatusTool } from "../lib/tools/get-order-status";
+import { createGetProductDetailsTool } from "../lib/tools/get-product-details";
+import { createGetReturnStatusTool } from "../lib/tools/get-return-status";
+import { createGetSimilarProductsTool } from "../lib/tools/get-similar-products";
+import { createGetUserConditionsTool } from "../lib/tools/get-user-conditions";
+import { createSearchKnowledgeTool } from "../lib/tools/search-knowledge";
+import { createSearchProductsTool } from "../lib/tools/search-products";
 
 export const streamAssistant = protectedProcedure
 	.use(creditGate("conversation_turn", CREDIT_RATES.conversation_turn))
@@ -90,7 +88,9 @@ export const streamAssistant = protectedProcedure
 				entryPoint: input.entryPoint ?? null,
 				metadata: {
 					locale: input.locale,
-					...(input.productContext ? { currentProductId: input.productContext.productId } : {}),
+					...(input.productContext
+						? { currentProductId: input.productContext.productId }
+						: {}),
 				},
 			});
 			conversationId = newConv.id;
@@ -108,7 +108,9 @@ export const streamAssistant = protectedProcedure
 		const personalization = metadata.personalization as Record<string, unknown> | undefined;
 
 		// --- Classify intent ---
-		const cachedMode = metadata.lastMode as import("../lib/intent-classifier").AssistantMode | undefined;
+		const cachedMode = metadata.lastMode as
+			| import("../lib/intent-classifier").AssistantMode
+			| undefined;
 		const classification = await classifyIntent(input.message, { cachedMode });
 		const mode = classification.mode;
 
@@ -122,12 +124,23 @@ export const streamAssistant = protectedProcedure
 			brandName: "AACsearch",
 			locale: input.locale ?? "ru",
 			availableTools: [
-				"search_products", "check_availability", "get_order_status",
-				"get_return_status", "get_user_conditions", "get_product_details",
-				"search_knowledge", "get_similar_products", "escalate_to_operator",
+				"search_products",
+				"check_availability",
+				"get_order_status",
+				"get_return_status",
+				"get_user_conditions",
+				"get_product_details",
+				"search_knowledge",
+				"get_similar_products",
+				"escalate_to_operator",
 			],
 			...(input.productContext
-				? { productContext: { productId: input.productContext.productId, categorySlug: input.productContext.categorySlug } }
+				? {
+						productContext: {
+							productId: input.productContext.productId,
+							categorySlug: input.productContext.categorySlug,
+						},
+					}
 				: {}),
 			userSegment: (personalization as { segment?: string } | undefined)?.segment,
 		});
@@ -140,19 +153,26 @@ export const streamAssistant = protectedProcedure
 			where: { id: input.organizationId },
 			select: { metadata: true },
 		});
-		const orgMeta = JSON.parse((orgForEsc?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const orgMeta = JSON.parse((orgForEsc?.metadata as string | null) ?? "{}") as Record<
+			string,
+			unknown
+		>;
 		const ac = (orgMeta.assistantConfig ?? {}) as Record<string, unknown>;
 		const escalationService = createEscalationService({
 			webhookUrl: (ac.escalationWebhookUrl as string | undefined) || undefined,
 			emailTo: (ac.escalationEmailTo as string | undefined) || undefined,
-			workingHoursStart: typeof ac.workingHoursStart === "number" ? ac.workingHoursStart : undefined,
-			workingHoursEnd: typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
+			workingHoursStart:
+				typeof ac.workingHoursStart === "number" ? ac.workingHoursStart : undefined,
+			workingHoursEnd:
+				typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
 		});
 
-		const knowledgeSpace = await db.knowledgeSpace.findFirst({
-			where: { organizationId: input.organizationId, ownerType: "ORGANIZATION" },
-			select: { id: true },
-		}).catch(() => null);
+		const knowledgeSpace = await db.knowledgeSpace
+			.findFirst({
+				where: { organizationId: input.organizationId, ownerType: "ORGANIZATION" },
+				select: { id: true },
+			})
+			.catch(() => null);
 		const knowledgeSpaceId = knowledgeSpace?.id ?? "";
 
 		const tools = {
@@ -161,9 +181,13 @@ export const streamAssistant = protectedProcedure
 			get_order_status: createGetOrderStatusTool(connectors.oms, user.id),
 			get_return_status: createGetReturnStatusTool(connectors.oms, user.id),
 			get_user_conditions: createGetUserConditionsTool(connectors.loyalty, user.id),
-			get_product_details: createGetProductDetailsTool({ indexSlug: input.indexSlug ?? "products" }),
+			get_product_details: createGetProductDetailsTool({
+				indexSlug: input.indexSlug ?? "products",
+			}),
 			search_knowledge: createSearchKnowledgeTool(knowledgeSpaceId),
-			get_similar_products: createGetSimilarProductsTool({ organizationId: input.organizationId }),
+			get_similar_products: createGetSimilarProductsTool({
+				organizationId: input.organizationId,
+			}),
 			escalate_to_operator: createEscalateToOperatorTool({
 				conversationId: conversationId!,
 				organizationId: input.organizationId,
@@ -175,8 +199,9 @@ export const streamAssistant = protectedProcedure
 		type SimpleMsgRole = "user" | "assistant";
 		const llmMessages = [
 			...historyMessages
-				.filter((m): m is typeof m & { role: SimpleMsgRole } =>
-					m.role === "user" || m.role === "assistant",
+				.filter(
+					(m): m is typeof m & { role: SimpleMsgRole } =>
+						m.role === "user" || m.role === "assistant",
 				)
 				.map((m) => ({ role: m.role, content: m.content })),
 			{ role: "user" as const, content: input.message },
@@ -210,22 +235,27 @@ export const streamAssistant = protectedProcedure
 		});
 
 		// Persist assistant response after stream resolves (fire-and-forget)
-		Promise.resolve(response.text).then(async (text) => {
-			try {
-				const safeText = sanitizeOutput(text);
-				const usage = await response.usage;
-				await appendMessage({
-					conversationId: conversationId!,
-					role: "assistant",
-					content: safeText,
-					latencyMs: Date.now() - turnStart,
-					inputTokens: usage?.inputTokens ?? null,
-					outputTokens: usage?.outputTokens ?? null,
-				});
-			} catch (saveErr) {
-				logger.warn({ conversationId, error: saveErr }, "streamAssistant: failed to persist assistant message");
-			}
-		}).catch(() => {});
+		Promise.resolve(response.text)
+			.then(async (text) => {
+				try {
+					const safeText = sanitizeOutput(text);
+					const usage = await response.usage;
+					await appendMessage({
+						conversationId: conversationId!,
+						role: "assistant",
+						content: safeText,
+						latencyMs: Date.now() - turnStart,
+						inputTokens: usage?.inputTokens ?? null,
+						outputTokens: usage?.outputTokens ?? null,
+					});
+				} catch (saveErr) {
+					logger.warn(
+						{ conversationId, error: saveErr },
+						"streamAssistant: failed to persist assistant message",
+					);
+				}
+			})
+			.catch(() => {});
 
 		return streamToEventIterator(response.toUIMessageStream());
 	});

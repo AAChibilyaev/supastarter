@@ -13,26 +13,32 @@ interface FlowProps {
 
 function Flow({ color, badge, steps }: FlowProps) {
 	return (
-		<div className="flex flex-col gap-0">
-			<span
-				className={`self-start mb-3 px-2 py-0.5 text-xs font-medium rounded-md ${color}`}
-			>
+		<div className="gap-0 flex flex-col">
+			<span className={`mb-3 px-2 py-0.5 text-xs font-medium self-start rounded-md ${color}`}>
 				{badge}
 			</span>
-			<div className="flex flex-wrap items-center gap-0">
+			<div className="gap-0 flex flex-wrap items-center">
 				{steps.map((step, i) => (
 					<div key={step.label} className="flex items-center">
-						<div className="rounded-lg border border-border bg-card px-4 py-2.5 text-center min-w-[110px]">
-							<p className="text-sm font-normal text-foreground whitespace-nowrap">{step.label}</p>
+						<div className="px-4 py-2.5 min-w-[110px] rounded-lg border border-border bg-card text-center">
+							<p className="text-sm font-normal whitespace-nowrap text-foreground">
+								{step.label}
+							</p>
 							{step.note && (
-								<p className="mt-0.5 text-[10px] font-light text-muted-foreground whitespace-nowrap">
+								<p className="mt-0.5 font-light text-[10px] whitespace-nowrap text-muted-foreground">
 									{step.note}
 								</p>
 							)}
 						</div>
 						{i < steps.length - 1 && (
 							<div className="mx-2 flex items-center text-muted-foreground/50">
-								<svg width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true">
+								<svg
+									width="20"
+									height="12"
+									viewBox="0 0 20 12"
+									fill="none"
+									aria-hidden="true"
+								>
 									<path
 										d="M0 6H17M17 6L12 1M17 6L12 11"
 										stroke="currentColor"
@@ -65,7 +71,7 @@ export function ArchitectureSection() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 max-w-4xl mx-auto rounded-xl border border-border bg-card overflow-hidden">
+				<div className="mt-12 md:mt-16 max-w-4xl mx-auto overflow-hidden rounded-xl border border-border bg-card">
 					{/* Diagram grid */}
 					<div className="p-6 md:p-10 space-y-8 overflow-x-auto">
 						<Flow
@@ -102,7 +108,7 @@ export function ArchitectureSection() {
 					</div>
 
 					{/* Footer callouts */}
-					<div className="px-6 md:px-10 py-4 border-t border-border bg-muted/30 flex flex-col sm:flex-row gap-4 sm:gap-8">
+					<div className="px-6 md:px-10 py-4 sm:flex-row gap-4 sm:gap-8 flex flex-col border-t border-border bg-muted/30">
 						<p className="text-xs font-light text-muted-foreground">
 							<span className="font-medium text-foreground">↻ </span>
 							{t("zeroDowntime")}

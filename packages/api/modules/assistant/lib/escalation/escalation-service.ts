@@ -1,6 +1,8 @@
+import { randomUUID } from "node:crypto";
+
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
-import { randomUUID } from "node:crypto";
+
 import { type EscalationService } from "../tools/escalate-to-operator";
 
 export interface EscalationChannelConfig {
@@ -96,7 +98,10 @@ export function createEscalationService(channelConfig: EscalationChannelConfig):
 					: "15-30 минут"
 				: "следующий рабочий день";
 
-			logger.info({ ticketId, conversationId, organizationId, reason }, "Conversation escalated to operator");
+			logger.info(
+				{ ticketId, conversationId, organizationId, reason },
+				"Conversation escalated to operator",
+			);
 
 			return { ticketId, estimatedWaitTime };
 		},

@@ -2,13 +2,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import { WidgetAiPanel } from "@search/components/panels/WidgetAiPanel";
 import { WidgetAnalyticsPanel } from "@search/components/panels/WidgetAnalyticsPanel";
 import { WidgetAutocompletePanel } from "@search/components/panels/WidgetAutocompletePanel";
 import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
 import { WidgetFiltersPanel } from "@search/components/panels/WidgetFiltersPanel";
 import { WidgetInstallPanel } from "@search/components/panels/WidgetInstallPanel";
 import { WidgetVoicePanel } from "@search/components/panels/WidgetVoicePanel";
-import { WidgetAiPanel } from "@search/components/panels/WidgetAiPanel";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";

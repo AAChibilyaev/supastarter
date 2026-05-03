@@ -1,6 +1,6 @@
 import { tool } from "@repo/ai";
-import { z } from "zod";
 import { logger } from "@repo/logs";
+import { z } from "zod";
 
 const inputSchema = z.object({
 	productId: z.string().describe("Product ID to find similar items for"),
@@ -9,7 +9,10 @@ const inputSchema = z.object({
 
 export function createGetSimilarProductsTool(params: {
 	organizationId: string;
-	neo4jQuery?: (cypher: string, params: Record<string, unknown>) => Promise<{ records: Array<Record<string, unknown>> }>;
+	neo4jQuery?: (
+		cypher: string,
+		params: Record<string, unknown>,
+	) => Promise<{ records: Array<Record<string, unknown>> }>;
 }) {
 	return tool({
 		description:
@@ -26,7 +29,11 @@ export function createGetSimilarProductsTool(params: {
 					 WHERE rec.organizationId = $organizationId
 					 RETURN rec.id as id, rec.title as title, rec.price as price, rec.imageUrl as imageUrl
 					 LIMIT $limit`,
-					{ productId: input.productId, organizationId: params.organizationId, limit: input.limit ?? 4 },
+					{
+						productId: input.productId,
+						organizationId: params.organizationId,
+						limit: input.limit ?? 4,
+					},
 				);
 
 				return {

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { AiAssistantChat } from "./AiAssistantChat";
 import { CommandMenu } from "./CommandMenu";
 
@@ -114,21 +115,14 @@ export function HeroSection() {
 
 	return (
 		<>
-			<CommandMenu
-				open={cmdOpen}
-				onOpenChange={setCmdOpen}
-				onModeSelect={openCmdForMode}
-			/>
+			<CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} onModeSelect={openCmdForMode} />
 
 			{/* ─── Hero Section ───────────────────────────────── */}
-			<section
-				ref={sectionRef}
-				className="relative overflow-hidden bg-background"
-			>
+			<section ref={sectionRef} className="relative overflow-hidden bg-background">
 				<div className="section-padding relative z-10 container">
 					{/* Heading */}
-					<div className="mx-auto max-w-3xl text-center">
-						<h1 className="text-4xl font-light tracking-tight text-balance md:text-5xl lg:text-6xl text-foreground">
+					<div className="max-w-3xl mx-auto text-center">
+						<h1 className="text-4xl font-light tracking-tight md:text-5xl lg:text-6xl text-balance text-foreground">
 							{t("hero.title")}
 						</h1>
 						<p className="mt-6 max-w-2xl text-base sm:text-lg font-light mx-auto text-balance text-muted-foreground">
@@ -137,9 +131,9 @@ export function HeroSection() {
 					</div>
 
 					{/* Search bar */}
-					<div className="mx-auto mt-10 max-w-2xl">
+					<div className="mt-10 max-w-2xl mx-auto">
 						<div
-							className="group relative cursor-pointer rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-md hover:border-muted-foreground/20"
+							className="group shadow-sm hover:shadow-md relative cursor-pointer rounded-xl border border-border bg-card transition-all duration-300 hover:border-muted-foreground/20"
 							role="button"
 							tabIndex={0}
 							onClick={() => setCmdOpen(true)}
@@ -153,15 +147,15 @@ export function HeroSection() {
 							}}
 							aria-label="Open search command menu"
 						>
-							<div className="flex h-12 items-center gap-3 px-4 sm:h-14 sm:px-5">
+							<div className="h-12 gap-3 px-4 sm:h-14 sm:px-5 flex items-center">
 								<SearchIcon className="size-4 shrink-0 text-muted-foreground/60 transition-colors group-hover:text-muted-foreground" />
 
-								<span className="flex-1 text-left text-sm font-light text-muted-foreground/50 transition-colors group-hover:text-muted-foreground/70">
+								<span className="text-sm font-light flex-1 text-left text-muted-foreground/50 transition-colors group-hover:text-muted-foreground/70">
 									{getPlaceholder()}
 								</span>
 
 								<div
-									className={`flex items-center gap-0.5 transition-all duration-300 ${
+									className={`gap-0.5 flex items-center transition-all duration-300 ${
 										isHovered
 											? "w-auto opacity-100"
 											: "w-0 overflow-hidden opacity-0"
@@ -176,10 +170,10 @@ export function HeroSection() {
 												e.stopPropagation();
 												openCmdForMode(key);
 											}}
-											className={`flex size-7 items-center justify-center rounded-md transition-all duration-200 sm:size-8 ${
+											className={`size-7 sm:size-8 flex items-center justify-center rounded-md transition-all duration-200 ${
 												mode === key
 													? `${modeActiveColors[key]} bg-muted`
-													: "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/50"
+													: "text-muted-foreground/40 hover:bg-muted/50 hover:text-muted-foreground"
 											}`}
 											aria-label={`Search by ${key}`}
 										>
@@ -188,7 +182,7 @@ export function HeroSection() {
 									))}
 								</div>
 
-								<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/60 bg-muted/30 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/50 transition-all group-hover:border-border group-hover:text-muted-foreground sm:inline-flex">
+								<span className="gap-0.5 px-1.5 py-0.5 font-medium sm:inline-flex hidden shrink-0 items-center rounded-md border border-border/60 bg-muted/30 text-[10px] text-muted-foreground/50 transition-all group-hover:border-border group-hover:text-muted-foreground">
 									<KeyboardIcon className="size-2.5" />
 									<span>K</span>
 								</span>
@@ -202,7 +196,7 @@ export function HeroSection() {
 									key={chip}
 									type="button"
 									onClick={() => setCmdOpen(true)}
-									className="inline-flex cursor-pointer items-center rounded-full border border-border/60 bg-muted/30 px-3 py-1 text-xs font-light text-muted-foreground/70 transition-all hover:border-muted-foreground/30 hover:bg-muted/50 hover:text-foreground"
+									className="px-3 py-1 text-xs font-light inline-flex cursor-pointer items-center rounded-full border border-border/60 bg-muted/30 text-muted-foreground/70 transition-all hover:border-muted-foreground/30 hover:bg-muted/50 hover:text-foreground"
 								>
 									{chip}
 								</button>
@@ -212,7 +206,12 @@ export function HeroSection() {
 
 					{/* CTA */}
 					<div className="mt-8 gap-3 flex w-full items-center justify-center">
-						<Button className="shrink-0 bg-[#fd366e] text-white hover:bg-[#fd366e]/80" size="lg" variant="primary" asChild>
+						<Button
+							className="text-white shrink-0 bg-[#fd366e] hover:bg-[#fd366e]/80"
+							size="lg"
+							variant="primary"
+							asChild
+						>
 							<a href={config.saasUrl}>
 								{t("hero.getStarted")}
 								<ArrowRightIcon className="ml-2 size-4" />
@@ -227,19 +226,19 @@ export function HeroSection() {
 
 					{/* Feature badges */}
 					<div className="mt-8 gap-2 flex w-full flex-wrap items-center justify-center">
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
+						<span className="gap-1.5 px-3 py-1 text-xs font-light inline-flex items-center rounded-full bg-muted text-muted-foreground">
 							<ZapIcon className="size-3" />
 							{t("hero.badgeLatency")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
+						<span className="gap-1.5 px-3 py-1 text-xs font-light inline-flex items-center rounded-full bg-muted text-muted-foreground">
 							<ShieldIcon className="size-3" />
 							{t("hero.badgeSoc2")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
+						<span className="gap-1.5 px-3 py-1 text-xs font-light inline-flex items-center rounded-full bg-muted text-muted-foreground">
 							<SearchIcon className="size-3" />
 							{t("hero.badgeFulltext")}
 						</span>
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-light text-muted-foreground">
+						<span className="gap-1.5 px-3 py-1 text-xs font-light inline-flex items-center rounded-full bg-muted text-muted-foreground">
 							<BarChart3Icon className="size-3" />
 							{t("hero.badgeAnalytics")}
 						</span>

@@ -1,84 +1,84 @@
 {
-  "onboarding": {
-    "account": {
-      "avatar": "Avatar",
-      "avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-      "name": "Name"
-    },
-    "continue": "Continue",
-    "message": "Just a few quick steps to get you started.",
-    "notifications": {
-      "accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
-    },
-    "pricing": {
-      "planSelected": "Your plan has been selected successfully.",
-      "skip": "Skip for now"
-    },
-    "skipConfirmTitle": "Skip this step?",
-    "skipConfirmDescription": "You can come back to this step later from your dashboard.",
-    "skipConfirmAction": "Yes, skip it",
-    "skipConfirmCancel": "Stay on this step",
-    "step": "Step {step} / {total}",
-    "stepLabel_one": "Account",
-    "stepLabel_two": "Index",
-    "stepLabel_three": "Documents",
-    "stepLabel_four": "Widget",
-    "stepLabel_five": "API Key",
-    "title": "Set up your account",
-    "createIndex": {
-      "title": "Create your first search index",
-      "description": "Give your index a name. You can add documents and configure the schema afterwards.",
-      "nameLabel": "Index name",
-      "slugLabel": "Slug (URL-friendly identifier)",
-      "slugHint": "Lowercase letters, digits and dashes only",
-      "submit": "Create index",
-      "success": "Index created successfully.",
-      "error": "Failed to create index. Please try again.",
-      "noOrg": "Please create an organization first before setting up a search index."
-    },
-    "addDocuments": {
-      "title": "Import your first documents",
-      "description": "Paste a JSON array of objects to seed your index. You can import more documents later.",
-      "pasteLabel": "Documents (JSON array)",
-      "placeholder": "[{\"id\":\"1\",\"title\":\"Hello World\"}]",
-      "importButton": "Import documents",
-      "skip": "Skip for now",
-      "success": "Documents queued for indexing.",
-      "parseError": "Invalid JSON. Please paste a valid array of objects.",
-      "error": "Failed to import documents. Please try again."
-    },
-    "installWidget": {
-      "title": "Embed the search widget",
-      "description": "Copy the snippet below and paste it into your website's HTML to add the search widget.",
-      "snippetLabel": "Widget snippet",
-      "copyButton": "Copy snippet",
-      "copied": "Snippet copied!",
-      "next": "Next",
-      "skip": "Skip for now"
-    },
-    "apiKey": {
-      "title": "Get your API key",
-      "description": "Create a search API key to integrate AACsearch into your application. Copy it — it won't be shown again.",
-      "createButton": "Create API key",
-      "keyLabel": "Your API key (shown once)",
-      "copyButton": "Copy key",
-      "copied": "API key copied!",
-      "finish": "Go to dashboard",
-      "error": "Failed to create API key. Please try again.",
-      "keyName": "Onboarding key"
-    }
-  },
-  "choosePlan": {
-    "title": "Choose your plan",
-    "description": "To continue, please select a plan."
-  },
-  "checkoutReturn": {
-    "title": "Processing your purchase",
-    "description": "Please wait while we confirm your payment.",
-    "loading": "Confirming your purchase, please wait..."
-  },
-  "start": {
-    "subtitle": "See the latest stats of your awesome business.",
-    "welcome": "Welcome {name}!"
-  }
+	"onboarding": {
+		"account": {
+			"avatar": "Avatar",
+			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
+			"name": "Name"
+		},
+		"continue": "Continue",
+		"message": "Just a few quick steps to get you started.",
+		"notifications": {
+			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+		},
+		"pricing": {
+			"planSelected": "Your plan has been selected successfully.",
+			"skip": "Skip for now"
+		},
+		"skipConfirmTitle": "Skip this step?",
+		"skipConfirmDescription": "You can come back to this step later from your dashboard.",
+		"skipConfirmAction": "Yes, skip it",
+		"skipConfirmCancel": "Stay on this step",
+		"step": "Step {step} / {total}",
+		"stepLabel_one": "Account",
+		"stepLabel_two": "Index",
+		"stepLabel_three": "Documents",
+		"stepLabel_four": "Widget",
+		"stepLabel_five": "API Key",
+		"title": "Set up your account",
+		"createIndex": {
+			"title": "Create your first search index",
+			"description": "Give your index a name. You can add documents and configure the schema afterwards.",
+			"nameLabel": "Index name",
+			"slugLabel": "Slug (URL-friendly identifier)",
+			"slugHint": "Lowercase letters, digits and dashes only",
+			"submit": "Create index",
+			"success": "Index created successfully.",
+			"error": "Failed to create index. Please try again.",
+			"noOrg": "Please create an organization first before setting up a search index."
+		},
+		"addDocuments": {
+			"title": "Import your first documents",
+			"description": "Paste a JSON array of objects to seed your index. You can import more documents later.",
+			"pasteLabel": "Documents (JSON array)",
+			"placeholder": "[{\"id\":\"1\",\"title\":\"Hello World\"}]",
+			"importButton": "Import documents",
+			"skip": "Skip for now",
+			"success": "Documents queued for indexing.",
+			"parseError": "Invalid JSON. Please paste a valid array of objects.",
+			"error": "Failed to import documents. Please try again."
+		},
+		"installWidget": {
+			"title": "Embed the search widget",
+			"description": "Copy the snippet below and paste it into your website's HTML to add the search widget.",
+			"snippetLabel": "Widget snippet",
+			"copyButton": "Copy snippet",
+			"copied": "Snippet copied!",
+			"next": "Next",
+			"skip": "Skip for now"
+		},
+		"apiKey": {
+			"title": "Get your API key",
+			"description": "Create a search API key to integrate AACsearch into your application. Copy it — it won't be shown again.",
+			"createButton": "Create API key",
+			"keyLabel": "Your API key (shown once)",
+			"copyButton": "Copy key",
+			"copied": "API key copied!",
+			"finish": "Go to dashboard",
+			"error": "Failed to create API key. Please try again.",
+			"keyName": "Onboarding key"
+		}
+	},
+	"choosePlan": {
+		"title": "Choose your plan",
+		"description": "To continue, please select a plan."
+	},
+	"checkoutReturn": {
+		"title": "Processing your purchase",
+		"description": "Please wait while we confirm your payment.",
+		"loading": "Confirming your purchase, please wait..."
+	},
+	"start": {
+		"subtitle": "See the latest stats of your awesome business.",
+		"welcome": "Welcome {name}!"
+	}
 }

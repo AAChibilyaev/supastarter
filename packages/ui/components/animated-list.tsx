@@ -60,16 +60,14 @@ function AnimatedItem<T>({
 			) : (
 				<div
 					className={cn(
-						"rounded-lg px-4 py-3 transition-colors",
+						"px-4 py-3 rounded-lg transition-colors",
 						isSelected
 							? "bg-primary/15 text-primary"
-							: "bg-muted/60 hover:bg-muted text-foreground",
+							: "bg-muted/60 text-foreground hover:bg-muted",
 						itemClassName,
 					)}
 				>
-					<p className="m-0 text-sm">
-						{typeof item === "string" ? item : String(item)}
-					</p>
+					<p className="m-0 text-sm">{typeof item === "string" ? item : String(item)}</p>
 				</div>
 			)}
 		</motion.div>
@@ -104,8 +102,7 @@ export function AnimatedList<T = string>({
 	maxHeight = "400px",
 }: AnimatedListProps<T>) {
 	const listRef = React.useRef<HTMLDivElement>(null);
-	const [selectedIndex, setSelectedIndex] =
-		React.useState(initialSelectedIndex);
+	const [selectedIndex, setSelectedIndex] = React.useState(initialSelectedIndex);
 	const [keyboardNav, setKeyboardNav] = React.useState(false);
 	const [topGradientOpacity, setTopGradientOpacity] = React.useState(0);
 	const [bottomGradientOpacity, setBottomGradientOpacity] = React.useState(1);
@@ -122,20 +119,14 @@ export function AnimatedList<T = string>({
 		[onItemSelect],
 	);
 
-	const handleScroll = React.useCallback(
-		(e: React.UIEvent<HTMLDivElement>) => {
-			const { scrollTop, scrollHeight, clientHeight } =
-				e.currentTarget;
-			setTopGradientOpacity(Math.min(scrollTop / 50, 1));
-			const bottomDistance = scrollHeight - (scrollTop + clientHeight);
-			setBottomGradientOpacity(
-				scrollHeight <= clientHeight
-					? 0
-					: Math.min(bottomDistance / 50, 1),
-			);
-		},
-		[],
-	);
+	const handleScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
+		const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+		setTopGradientOpacity(Math.min(scrollTop / 50, 1));
+		const bottomDistance = scrollHeight - (scrollTop + clientHeight);
+		setBottomGradientOpacity(
+			scrollHeight <= clientHeight ? 0 : Math.min(bottomDistance / 50, 1),
+		);
+	}, []);
 
 	React.useEffect(() => {
 		if (!enableArrowNavigation) return;
@@ -196,9 +187,8 @@ export function AnimatedList<T = string>({
 				ref={listRef}
 				onScroll={handleScroll}
 				className={cn(
-					"overflow-y-auto p-4",
-					!displayScrollbar &&
-						"[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+					"p-4 overflow-y-auto",
+					!displayScrollbar && "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
 				)}
 				style={{ maxHeight }}
 			>
@@ -222,12 +212,12 @@ export function AnimatedList<T = string>({
 				<>
 					<div
 						aria-hidden="true"
-						className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-background to-transparent transition-opacity duration-300"
+						className="inset-x-0 top-0 h-12 pointer-events-none absolute bg-gradient-to-b from-background to-transparent transition-opacity duration-300"
 						style={{ opacity: topGradientOpacity }}
 					/>
 					<div
 						aria-hidden="true"
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent transition-opacity duration-300"
+						className="inset-x-0 bottom-0 h-24 pointer-events-none absolute bg-gradient-to-t from-background to-transparent transition-opacity duration-300"
 						style={{ opacity: bottomGradientOpacity }}
 					/>
 				</>

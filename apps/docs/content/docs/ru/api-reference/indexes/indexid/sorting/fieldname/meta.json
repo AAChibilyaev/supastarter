@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/sorting/fieldname",
-  "pages": [
-    "delete"
-  ]
+	"title": "indexes/indexid/sorting/fieldname",
+	"pages": ["delete"]
 }

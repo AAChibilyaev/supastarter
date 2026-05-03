@@ -2,25 +2,25 @@
 
 ## 1. Headline Analysis
 
-| Компания | H1 | Что продают |
-|----------|-----|-------------|
-| **Algolia** | "AI Search That Converts" | Business outcome (конверсия) |
-| **Meilisearch** | "Instant out-of-the-box search" | Developer simplicity (zero config) |
-| **Elasticsearch** | "The world's most popular search engine" | Authority + ecosystem scale |
+| Компания          | H1                                       | Что продают                        |
+| ----------------- | ---------------------------------------- | ---------------------------------- |
+| **Algolia**       | "AI Search That Converts"                | Business outcome (конверсия)       |
+| **Meilisearch**   | "Instant out-of-the-box search"          | Developer simplicity (zero config) |
+| **Elasticsearch** | "The world's most popular search engine" | Authority + ecosystem scale        |
 
 **AACsearch currently:** "AACsearch — hosted search API для SaaS, документации и каталогов" — product description, не value proposition.
 
-**Recommendation:** Нужен H1, который продаёт **конкретный бизнес-результат**, а не описание продукта. Вариант: *"Search API, который конвертирует. Без команды SRE."*
+**Recommendation:** Нужен H1, который продаёт **конкретный бизнес-результат**, а не описание продукта. Вариант: _"Search API, который конвертирует. Без команды SRE."_
 
 ---
 
 ## 2. Customer Logos (Trust Bar)
 
-| Компания | Что показывают | Где |
-|----------|---------------|-----|
-| **Algolia** | Stripe, Under Armour, Lacoste, Shopify | Сразу под Hero |
-| **Meilisearch** | Bolt, Deepgram, Clearbit, Strapi | После Why Meilisearch |
-| **Elastic** | Uber, Netflix, Microsoft, Salesforce | После use cases |
+| Компания        | Что показывают                         | Где                   |
+| --------------- | -------------------------------------- | --------------------- |
+| **Algolia**     | Stripe, Under Armour, Lacoste, Shopify | Сразу под Hero        |
+| **Meilisearch** | Bolt, Deepgram, Clearbit, Strapi       | После Why Meilisearch |
+| **Elastic**     | Uber, Netflix, Microsoft, Salesforce   | После use cases       |
 
 **AACsearch:** ✅ LogosWall есть, но без названий реальных клиентов. Нужны конкретные логотипы компаний, которые используют AACsearch.
 
@@ -28,11 +28,11 @@
 
 ## 3. Relevance & Analytics — как продают
 
-| Компания | Ключевой месседж |
-|----------|-----------------|
-| **Algolia** | "A/B test ranking configs to optimize relevance" + Merchandising Studio |
-| **Meilisearch** | "Tunable ranking" — ручная настройка (words, proximity, attribute) |
-| **Elastic** | Search Profiling в Kibana + Painless scripts для кастомной релевантности |
+| Компания        | Ключевой месседж                                                         |
+| --------------- | ------------------------------------------------------------------------ |
+| **Algolia**     | "A/B test ranking configs to optimize relevance" + Merchandising Studio  |
+| **Meilisearch** | "Tunable ranking" — ручная настройка (words, proximity, attribute)       |
+| **Elastic**     | Search Profiling в Kibana + Painless scripts для кастомной релевантности |
 
 **AACsearch current:** ✅ RelevanceSection + AnalyticsSection добавлены (новые).
 
@@ -42,11 +42,11 @@
 
 ## 4. Security & Multi-tenancy — как продают
 
-| Компания | Позиционирование |
-|----------|-----------------|
-| **Algolia** | Secured API keys per user/index; SOC 2 / HIPAA |
-| **Meilisearch** | API key levels (admin/search/private) — не main headline |
-| **Elastic** | RBAC, field-level security, document-level security — очень strong |
+| Компания        | Позиционирование                                                   |
+| --------------- | ------------------------------------------------------------------ |
+| **Algolia**     | Secured API keys per user/index; SOC 2 / HIPAA                     |
+| **Meilisearch** | API key levels (admin/search/private) — не main headline           |
+| **Elastic**     | RBAC, field-level security, document-level security — очень strong |
 
 **AACsearch current:** ✅ SecuritySection добавлен.
 
@@ -56,11 +56,11 @@
 
 ## 5. Pricing — unit economics
 
-| Компания | Модель | Типичная цена |
-|----------|--------|---------------|
-| **Algolia** | Per search + per record | $0.50/1k searches + $0.50/record (Essential) |
-| **Meilisearch** | Compute hr + per 10k searches | $1.00/GB-hr + $0.50/10k searches |
-| **Elastic** | vCPU/RAM/storage hourly | $0.07/hr start |
+| Компания        | Модель                        | Типичная цена                                |
+| --------------- | ----------------------------- | -------------------------------------------- |
+| **Algolia**     | Per search + per record       | $0.50/1k searches + $0.50/record (Essential) |
+| **Meilisearch** | Compute hr + per 10k searches | $1.00/GB-hr + $0.50/10k searches             |
+| **Elastic**     | vCPU/RAM/storage hourly       | $0.07/hr start                               |
 
 **AACsearch current:** "1 search-unit = 1 search or 1 indexed document".
 
@@ -70,11 +70,11 @@
 
 ## 6. AI / Answers — ключевой тренд
 
-| Компания | AI позиционирование |
-|----------|-------------------|
-| **Algolia** | NeuralSearch — AI ranking (core product) |
-| **Meilisearch** | Hybrid search (preview) — minimal |
-| **Elastic** | ESRE, Vector Search, ELSER, RAG — heavy investment |
+| Компания        | AI позиционирование                                |
+| --------------- | -------------------------------------------------- |
+| **Algolia**     | NeuralSearch — AI ranking (core product)           |
+| **Meilisearch** | Hybrid search (preview) — minimal                  |
+| **Elastic**     | ESRE, Vector Search, ELSER, RAG — heavy investment |
 
 **AACsearch current:** ✅ AiAnswersSection добавлен.
 
@@ -98,16 +98,16 @@ AACsearch NOW:  Hero → Logos → UseCases → WhatUsers → SearchUX → Featu
 
 ## 8. Что AACsearch уже имеет, чего нет у конкурентов
 
-| Блок | Есть у AAC? | Есть у Algolia? | Есть у Meilisearch? | Есть у Elastic? |
-|------|-------------|-----------------|-------------------|----------------|
-| **"Что ищут пользователи"** | ✅ **Новый** | ❌ | ❌ | ❌ |
-| **Search UX (autocomplete, facets, highlight)** | ✅ **Новый** | Частично | Частично | Частично |
-| **Relevance + Analytics (отдельные блоки)** | ✅ **Новый** | ✅ (1 блок) | ❌ | ✅ (в Kibana) |
-| **Security detail block** | ✅ **Новый** | В Enterprise | ❌ | ✅ |
-| **Quickstart code (4 шага)** | ✅ **Новый** | 1 snippet | 1 curl example | 1 snippet |
-| **AI answers блок** | ✅ **Новый** | Неявно | ❌ | ✅ (RAG) |
-| **Docs/SDK ecosystem** | ✅ **Новый** | ✅ | Частично | ✅ |
-| **Use cases segmented** | ✅ **Новый** | ✅ | ❌ | ✅ |
+| Блок                                            | Есть у AAC?  | Есть у Algolia? | Есть у Meilisearch? | Есть у Elastic? |
+| ----------------------------------------------- | ------------ | --------------- | ------------------- | --------------- |
+| **"Что ищут пользователи"**                     | ✅ **Новый** | ❌              | ❌                  | ❌              |
+| **Search UX (autocomplete, facets, highlight)** | ✅ **Новый** | Частично        | Частично            | Частично        |
+| **Relevance + Analytics (отдельные блоки)**     | ✅ **Новый** | ✅ (1 блок)     | ❌                  | ✅ (в Kibana)   |
+| **Security detail block**                       | ✅ **Новый** | В Enterprise    | ❌                  | ✅              |
+| **Quickstart code (4 шага)**                    | ✅ **Новый** | 1 snippet       | 1 curl example      | 1 snippet       |
+| **AI answers блок**                             | ✅ **Новый** | Неявно          | ❌                  | ✅ (RAG)        |
+| **Docs/SDK ecosystem**                          | ✅ **Новый** | ✅              | Частично            | ✅              |
+| **Use cases segmented**                         | ✅ **Новый** | ✅              | ❌                  | ✅              |
 
 ---
 
@@ -168,5 +168,5 @@ CtaFooter
 4. **"AI-powered relevance. No ML engineers required."**
 
 **Моя рекомендация:** Комбинация #1 + #3.
-H1: *"Search that converts. Without the infra team."*
-Sub: *"Hosted search API with scoped tokens, multi-tenant isolation, and AI relevance — pay 5x less than Algolia. Migrate in 1 hour."*
+H1: _"Search that converts. Without the infra team."_
+Sub: _"Hosted search API with scoped tokens, multi-tenant isolation, and AI relevance — pay 5x less than Algolia. Migrate in 1 hour."_

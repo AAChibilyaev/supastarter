@@ -1,11 +1,5 @@
 import { Card, CardContent } from "@repo/ui/components/card";
-import {
-	ArrowUpDownIcon,
-	BookTextIcon,
-	PinIcon,
-	UserIcon,
-	FlaskConicalIcon,
-} from "lucide-react";
+import { ArrowUpDownIcon, BookTextIcon, PinIcon, UserIcon, FlaskConicalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
@@ -41,12 +35,12 @@ export function RelevanceSection() {
 					{items.map(({ key, icon: Icon }) => (
 						<Card key={key}>
 							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">
-								<div className="flex items-center gap-4">
+								<div className="gap-4 flex items-center">
 									<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
 										<Icon className="size-5 text-muted-foreground" />
 									</div>
 									<h3 className="text-lg font-light">
-									{t(`homeRelevance.${key}.title`)}
+										{t(`homeRelevance.${key}.title`)}
 									</h3>
 								</div>
 								<p className="text-sm font-light leading-relaxed text-pretty text-muted-foreground">

@@ -20,7 +20,7 @@ export const LandingDiscount = ({
 }) => {
 	return (
 		<p className={cn("gap-1 text-sm flex flex-wrap items-center", className)}>
-			<span className="text-muted-foreground gap-1 flex flex-shrink-0 items-center">
+			<span className="gap-1 flex flex-shrink-0 items-center text-muted-foreground">
 				<GiftIcon
 					className={cn("w-5 h-5 -top-0.5 relative", animated ? "animate-pulse" : "")}
 				/>{" "}

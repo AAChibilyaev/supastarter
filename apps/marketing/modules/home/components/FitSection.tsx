@@ -16,18 +16,20 @@ export function FitSection() {
 					</h2>
 				</div>
 
-				<div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+				<div className="mt-12 md:mt-16 md:grid-cols-2 gap-6 max-w-4xl mx-auto grid grid-cols-1">
 					{/* Perfect fit */}
-					<div className="rounded-xl border border-border bg-card p-6 md:p-8">
-						<div className="flex items-center gap-2 mb-5">
-							<div className="size-7 rounded-md bg-success/15 flex items-center justify-center shrink-0">
+					<div className="p-6 md:p-8 rounded-xl border border-border bg-card">
+						<div className="gap-2 mb-5 flex items-center">
+							<div className="size-7 flex shrink-0 items-center justify-center rounded-md bg-success/15">
 								<CheckIcon className="size-4 text-success" />
 							</div>
-							<h3 className="text-base font-light text-foreground">{t("perfectTitle")}</h3>
+							<h3 className="text-base font-light text-foreground">
+								{t("perfectTitle")}
+							</h3>
 						</div>
 						<ul className="space-y-3">
 							{Array.from({ length: PERFECT_COUNT }, (_, i) => (
-								<li key={i} className="flex items-start gap-3">
+								<li key={i} className="gap-3 flex items-start">
 									<CheckIcon className="mt-0.5 size-4 shrink-0 text-success/60" />
 									<span className="text-sm font-light leading-relaxed text-pretty text-muted-foreground">
 										{t(`perfect.${i}`)}
@@ -38,16 +40,18 @@ export function FitSection() {
 					</div>
 
 					{/* Skip if */}
-					<div className="rounded-xl border border-border bg-card p-6 md:p-8">
-						<div className="flex items-center gap-2 mb-5">
-							<div className="size-7 rounded-md bg-muted flex items-center justify-center shrink-0">
+					<div className="p-6 md:p-8 rounded-xl border border-border bg-card">
+						<div className="gap-2 mb-5 flex items-center">
+							<div className="size-7 flex shrink-0 items-center justify-center rounded-md bg-muted">
 								<XIcon className="size-4 text-muted-foreground" />
 							</div>
-							<h3 className="text-base font-light text-foreground">{t("skipTitle")}</h3>
+							<h3 className="text-base font-light text-foreground">
+								{t("skipTitle")}
+							</h3>
 						</div>
 						<ul className="space-y-3">
 							{Array.from({ length: SKIP_COUNT }, (_, i) => (
-								<li key={i} className="flex items-start gap-3">
+								<li key={i} className="gap-3 flex items-start">
 									<XIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground/50" />
 									<span className="text-sm font-light leading-relaxed text-pretty text-muted-foreground">
 										{t(`skip.${i}`)}

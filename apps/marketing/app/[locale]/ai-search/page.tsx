@@ -29,7 +29,9 @@ export default async function AiSearchPage(props: { params: Promise<{ locale: st
 					<div className="mb-4 flex justify-center">
 						<Badge status="success">{t("badge")}</Badge>
 					</div>
-					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">{t("title")}</h1>
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
+						{t("title")}
+					</h1>
 					<p className="mt-4 text-xl max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("description")}
 					</p>

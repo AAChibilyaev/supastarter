@@ -70,8 +70,7 @@ const imageDemo = {
 
 const chatDemo = {
 	question: "How to configure scoped token for a tenant?",
-	answer:
-		"Use the createScopedToken() API with the organizationId claim. Set allowedActions to restrict endpoints.",
+	answer: "Use the createScopedToken() API with the organizationId claim. Set allowedActions to restrict endpoints.",
 	sources: [
 		{ label: "Security → Scoped tokens", href: "#" },
 		{ label: "API reference → createToken()", href: "#" },
@@ -106,7 +105,7 @@ export function MultimodalSearchPlayground() {
 									"gap-2 px-4 py-2 text-sm font-medium inline-flex items-center rounded-md transition-colors",
 									activeTab === key
 										? "bg-foreground text-background"
-										: "text-muted-foreground hover:text-foreground hover:bg-muted",
+										: "text-muted-foreground hover:bg-muted hover:text-foreground",
 								)}
 							>
 								<Icon className="size-4" />
@@ -120,7 +119,7 @@ export function MultimodalSearchPlayground() {
 					</div>
 
 					{/* Demo panel */}
-					<div className="mt-6 overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+					<div className="mt-6 shadow-sm overflow-hidden rounded-lg border border-border bg-card">
 						{activeTab === "text" && <TextDemo />}
 						{activeTab === "voice" && <VoiceDemo />}
 						{activeTab === "photo" && <PhotoDemo />}
@@ -129,7 +128,7 @@ export function MultimodalSearchPlayground() {
 					</div>
 
 					{/* Input mode label */}
-					<p className="mt-4 text-center text-xs font-light text-muted-foreground">
+					<p className="mt-4 text-xs font-light text-center text-muted-foreground">
 						One search engine.{" "}
 						<span className="font-medium text-foreground">Five input modes.</span>
 					</p>
@@ -144,7 +143,7 @@ function TextDemo() {
 		<div className="p-5 md:p-8">
 			<div className="gap-2 px-3 py-2 flex items-center rounded-md border border-border bg-background">
 				<SearchIcon className="size-4 shrink-0 text-muted-foreground" />
-				<span className="flex-1 text-sm">{textDemo.query}</span>
+				<span className="text-sm flex-1">{textDemo.query}</span>
 				<Badge status="info" className="text-xs normal-case">
 					Typo corrected
 				</Badge>
@@ -160,25 +159,27 @@ function TextDemo() {
 						key={r.title}
 						className={cn(
 							"gap-3 px-4 py-3 flex items-center rounded-md border transition-colors",
-							r.inStock ? "border-border bg-background" : "border-border/50 bg-muted/50 opacity-60",
+							r.inStock
+								? "border-border bg-background"
+								: "border-border/50 bg-muted/50 opacity-60",
 						)}
 					>
-						<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+						<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 							<SearchIcon className="size-4 text-muted-foreground" />
 						</div>
-						<div className="flex-1 min-w-0">
+						<div className="min-w-0 flex-1">
 							<div className="text-sm font-medium text-foreground">{r.title}</div>
 							<div className="text-xs font-light text-muted-foreground">
 								{r.brand} · Size {r.size} · {r.price}
 							</div>
 						</div>
 						{!r.inStock && (
-							<Badge status="warning" className="text-xs normal-case shrink-0">
+							<Badge status="warning" className="text-xs shrink-0 normal-case">
 								Out of stock
 							</Badge>
 						)}
 						{r.inStock && (
-							<Badge status="success" className="text-xs normal-case shrink-0">
+							<Badge status="success" className="text-xs shrink-0 normal-case">
 								In stock
 							</Badge>
 						)}
@@ -191,7 +192,7 @@ function TextDemo() {
 				{["Nike", "Size: 42", "In Stock", "Price: $50–$200"].map((facet) => (
 					<Badge
 						key={facet}
-						className="gap-1 px-2.5 py-1 text-xs font-light normal-case cursor-pointer bg-secondary text-muted-foreground border-border"
+						className="gap-1 px-2.5 py-1 text-xs font-light cursor-pointer border-border bg-secondary text-muted-foreground normal-case"
 					>
 						{facet}
 						<XIcon className="size-3" />
@@ -213,18 +214,22 @@ function VoiceDemo() {
 					className={cn(
 						"size-16 flex items-center justify-center rounded-full transition-all",
 						listening
-							? "bg-foreground/5 shadow-lg scale-110"
-							: "bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80",
+							? "shadow-lg scale-110 bg-foreground/5"
+							: "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground",
 					)}
 				>
-					<MicIcon className={cn("size-7", listening && "text-muted-foreground animate-pulse")} />
+					<MicIcon
+						className={cn("size-7", listening && "animate-pulse text-muted-foreground")}
+					/>
 				</button>
 
 				{listening ? (
 					<div className="mt-4">
 						<div className="gap-1.5 flex items-center justify-center">
 							<span className="size-2 animate-pulse rounded-full bg-foreground/60" />
-							<span className="text-sm font-light text-muted-foreground">Listening...</span>
+							<span className="text-sm font-light text-muted-foreground">
+								Listening...
+							</span>
 						</div>
 						<div className="mt-4 gap-1 flex items-center justify-center">
 							{[1, 2, 3, 4, 5, 4, 3, 2].map((h, i) => (
@@ -246,13 +251,13 @@ function VoiceDemo() {
 			{!listening && (
 				<>
 					{/* Transcript */}
-					<div className="mt-6 rounded-md border border-border bg-background p-4">
+					<div className="mt-6 p-4 rounded-md border border-border bg-background">
 						<div className="text-xs font-light text-muted-foreground">Transcript</div>
 						<p className="mt-1 text-sm text-foreground">{voiceDemo.transcript}</p>
 					</div>
 
 					{/* Parsed */}
-					<div className="mt-3 rounded-md border border-border bg-background p-4">
+					<div className="mt-3 p-4 rounded-md border border-border bg-background">
 						<div className="text-xs font-light text-muted-foreground">Parsed query</div>
 						<div className="mt-1 text-sm text-foreground">
 							query = <span className="font-mono">{voiceDemo.parsed.query}</span>
@@ -277,8 +282,8 @@ function PhotoDemo() {
 		<div className="p-5 md:p-8">
 			{!uploaded ? (
 				<div className="flex flex-col items-center text-center">
-					<div className="size-24 rounded-md border-2 border-dashed border-border bg-muted/50 flex items-center justify-center">
-					<CameraIcon className="size-6 text-muted-foreground" />
+					<div className="size-24 flex items-center justify-center rounded-md border-2 border-dashed border-border bg-muted/50">
+						<CameraIcon className="size-6 text-muted-foreground" />
 					</div>
 					<Button
 						onClick={() => setUploaded(true)}
@@ -295,7 +300,7 @@ function PhotoDemo() {
 			) : (
 				<>
 					<div className="gap-3 flex items-start">
-						<div className="size-16 shrink-0	rounded-md bg-gradient-to-br from-muted to-muted/50 border flex items-center justify-center">
+						<div className="size-16 flex shrink-0 items-center justify-center rounded-md border bg-gradient-to-br from-muted to-muted/50">
 							<CameraIcon className="size-6 text-muted-foreground" />
 						</div>
 						<div className="flex-1">
@@ -304,7 +309,10 @@ function PhotoDemo() {
 							</div>
 							<div className="mt-1.5 gap-1.5 flex flex-wrap">
 								{photoDemo.detected.map((d) => (
-									<Badge key={d} className="text-xs normal-case bg-secondary text-muted-foreground border-border">
+									<Badge
+										key={d}
+										className="text-xs border-border bg-secondary text-muted-foreground normal-case"
+									>
 										{d}
 									</Badge>
 								))}
@@ -318,14 +326,20 @@ function PhotoDemo() {
 								key={r.title}
 								className="gap-3 px-4 py-3 flex items-center rounded-md border border-border bg-background"
 							>
-								<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+								<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 									<SearchIcon className="size-4 text-muted-foreground" />
 								</div>
-								<div className="flex-1 min-w-0">
-									<div className="text-sm font-medium text-foreground">{r.title}</div>
-									<div className="text-xs font-light text-muted-foreground">{r.price}</div>
+								<div className="min-w-0 flex-1">
+									<div className="text-sm font-medium text-foreground">
+										{r.title}
+									</div>
+									<div className="text-xs font-light text-muted-foreground">
+										{r.price}
+									</div>
 								</div>
-								<span className="text-xs font-medium text-foreground/60">{r.match}</span>
+								<span className="text-xs font-medium text-foreground/60">
+									{r.match}
+								</span>
 							</div>
 						))}
 					</div>
@@ -339,7 +353,7 @@ function ImageDemo() {
 	return (
 		<div className="p-5 md:p-8">
 			<div className="gap-3 flex items-start">
-				<div className="size-16 shrink-0	rounded-md bg-gradient-to-br from-muted to-muted/50 border flex items-center justify-center">
+				<div className="size-16 flex shrink-0 items-center justify-center rounded-md border bg-gradient-to-br from-muted to-muted/50">
 					<ImageIcon className="size-6 text-muted-foreground" />
 				</div>
 				<div className="flex-1">
@@ -356,12 +370,14 @@ function ImageDemo() {
 						key={r.title}
 						className="gap-3 px-4 py-3 flex items-center rounded-md border border-border bg-background"
 					>
-						<div className="size-10 shrink-0 rounded-md bg-muted flex items-center justify-center">
+						<div className="size-10 flex shrink-0 items-center justify-center rounded-md bg-muted">
 							<ImageIcon className="size-4 text-muted-foreground" />
 						</div>
-						<div className="flex-1 min-w-0">
+						<div className="min-w-0 flex-1">
 							<div className="text-sm font-medium text-foreground">{r.title}</div>
-							<div className="text-xs font-light text-muted-foreground">{r.category}</div>
+							<div className="text-xs font-light text-muted-foreground">
+								{r.category}
+							</div>
 						</div>
 						<span className="text-xs font-medium text-muted-foreground">{r.match}</span>
 					</div>
@@ -390,11 +406,16 @@ function ChatDemo() {
 	return (
 		<div className="p-5 md:p-8">
 			{!answered ? (
-				<div className="flex items-center text-center flex-col">
-					<div className="size-12 rounded-md bg-secondary flex items-center justify-center">
+				<div className="flex flex-col items-center text-center">
+					<div className="size-12 flex items-center justify-center rounded-md bg-secondary">
 						<MessageSquareIcon className="size-6 text-foreground/60" />
 					</div>
-					<Button onClick={() => setAnswered(true)} variant="default" size="md" className="mt-4">
+					<Button
+						onClick={() => setAnswered(true)}
+						variant="default"
+						size="md"
+						className="mt-4"
+					>
 						Ask: {chatDemo.question}
 					</Button>
 					<p className="mt-2 text-xs font-light text-muted-foreground">
@@ -403,21 +424,23 @@ function ChatDemo() {
 				</div>
 			) : (
 				<>
-					<div className="rounded-md bg-secondary border border-border p-4">
-						<div className="flex items-start gap-3">
-							<SparklesIcon className="size-4 shrink-0 mt-0.5 text-foreground/50" />
-							<p className="text-sm leading-relaxed text-foreground">{chatDemo.answer}</p>
+					<div className="p-4 rounded-md border border-border bg-secondary">
+						<div className="gap-3 flex items-start">
+							<SparklesIcon className="size-4 mt-0.5 shrink-0 text-foreground/50" />
+							<p className="text-sm leading-relaxed text-foreground">
+								{chatDemo.answer}
+							</p>
 						</div>
 					</div>
 
 					<div className="mt-4">
-						<div className="text-xs font-light text-muted-foreground mb-2">Sources</div>
+						<div className="text-xs font-light mb-2 text-muted-foreground">Sources</div>
 						<div className="gap-2 grid">
 							{chatDemo.sources.map((s) => (
 								<a
 									key={s.label}
 									href={s.href}
-									className="gap-2 px-3 py-2 text-sm inline-flex items-center rounded-md border border-border bg-background hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+									className="gap-2 px-3 py-2 text-sm inline-flex items-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
 								>
 									<ChevronRightIcon className="size-3 text-foreground/40" />
 									{s.label}
@@ -427,7 +450,9 @@ function ChatDemo() {
 					</div>
 
 					<div className="mt-4">
-						<div className="text-xs font-light text-muted-foreground mb-2">Follow up</div>
+						<div className="text-xs font-light mb-2 text-muted-foreground">
+							Follow up
+						</div>
 						<div className="gap-2 flex flex-wrap">
 							{chatDemo.followUp.map((f) => (
 								<Button key={f} size="sm" variant="secondary" className="text-xs">

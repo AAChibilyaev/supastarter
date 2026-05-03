@@ -19,10 +19,10 @@ export function MigrationSection() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 gap-6 grid grid-cols-1 sm:grid-cols-2">
+				<div className="mt-12 md:mt-16 gap-6 sm:grid-cols-2 grid grid-cols-1">
 					{STEPS.map((step, i) => (
 						<div key={step} className="gap-4 flex items-start">
-							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-medium text-foreground/60">
+							<div className="size-10 text-sm font-medium flex shrink-0 items-center justify-center rounded-lg bg-muted text-foreground/60">
 								{stepIndex[i]}
 							</div>
 							<div className="min-w-0">

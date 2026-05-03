@@ -6,8 +6,11 @@ import z from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationMember } from "../../search/lib/access";
-import { buildPersonalizationContext, type PersonalizationConnectors } from "../lib/personalization-context";
 import { getConnectors } from "../connectors/registry";
+import {
+	buildPersonalizationContext,
+	type PersonalizationConnectors,
+} from "../lib/personalization-context";
 
 export const createConversationProcedure = protectedProcedure
 	.input(
@@ -39,7 +42,12 @@ export const createConversationProcedure = protectedProcedure
 			entryPoint: input.entryPoint ?? null,
 			metadata: {
 				locale: input.locale ?? "en",
-				...(input.productContext ? { currentProductId: input.productContext.productId, currentCategory: input.productContext.categorySlug } : {}),
+				...(input.productContext
+					? {
+							currentProductId: input.productContext.productId,
+							currentCategory: input.productContext.categorySlug,
+						}
+					: {}),
 				...(input.searchContext ? { searchQuery: input.searchContext.query } : {}),
 			},
 		});
@@ -53,7 +61,8 @@ export const createConversationProcedure = protectedProcedure
 						const conds = await registry.loyalty.getUserConditions(uid);
 						return conds;
 					},
-					getPurchaseHistory: (uid, limit) => registry.loyalty.getPurchaseHistory(uid, limit),
+					getPurchaseHistory: (uid, limit) =>
+						registry.loyalty.getPurchaseHistory(uid, limit),
 					getViewHistory: (uid, limit) => registry.loyalty.getViewHistory(uid, limit),
 				};
 				const personalization = await buildPersonalizationContext(
@@ -64,7 +73,10 @@ export const createConversationProcedure = protectedProcedure
 				);
 				await updateConversationMetadata(conversation.id, { personalization });
 			} catch (err) {
-				logger.warn({ conversationId: conversation.id, error: err }, "createConversation: personalization build failed");
+				logger.warn(
+					{ conversationId: conversation.id, error: err },
+					"createConversation: personalization build failed",
+				);
 			}
 		});
 

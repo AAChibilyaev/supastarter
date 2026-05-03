@@ -76,9 +76,9 @@ export function PricingPlans() {
 									plan.primary && "ring-1 ring-primary",
 								)}
 							>
-								<CardContent className="p-6 md:p-8 flex h-full flex-col gap-5">
+								<CardContent className="p-6 md:p-8 gap-5 flex h-full flex-col">
 									{plan.primary && (
-										<div className="absolute top-0 inset-x-0 h-0.5 bg-primary" />
+										<div className="top-0 inset-x-0 h-0.5 absolute bg-primary" />
 									)}
 
 									<div>
@@ -111,8 +111,8 @@ export function PricingPlans() {
 										}
 										className={
 											plan.primary
-												? "inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/80 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background enabled:cursor-pointer"
-												: "inline-flex w-full items-center justify-center rounded-md border border-border bg-transparent px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background enabled:cursor-pointer"
+												? "px-4 py-2.5 text-sm font-semibold shadow-sm inline-flex w-full items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-hidden enabled:cursor-pointer"
+												: "px-4 py-2.5 text-sm font-semibold shadow-sm inline-flex w-full items-center justify-center rounded-md border border-border bg-transparent text-foreground transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-hidden enabled:cursor-pointer"
 										}
 									>
 										{t(`home.pricing.${plan.ctaKey}`)}

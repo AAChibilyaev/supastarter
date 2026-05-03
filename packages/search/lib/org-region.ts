@@ -1,5 +1,6 @@
 import "server-only";
 import type { Prisma } from "@repo/database";
+
 import type { StorageRegion } from "./regions";
 import { DEFAULT_REGION, isValidRegion } from "./regions";
 
@@ -14,10 +15,10 @@ export async function getOrganizationStorageRegion(organizationId: string): Prom
 		// Dynamic import to avoid pulling in Prisma on the client side
 		const { db } = await import("@repo/database");
 
-		const org = await db.organization.findUnique({
+		const org = (await db.organization.findUnique({
 			where: { id: organizationId },
 			select: { storageRegion: true },
-		}) as { storageRegion: string | null } | null;
+		})) as { storageRegion: string | null } | null;
 
 		if (org?.storageRegion && isValidRegion(org.storageRegion)) {
 			return org.storageRegion;

@@ -6,6 +6,7 @@ import { TopUpDialog } from "@payments/components/TopUpDialog";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
+import { OverageStatusCard } from "@search/components/sections/OverageStatusCard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -58,8 +59,9 @@ export default async function BillingSettingsPage({
 			<PageHeader title={t("title")} subtitle={t("changePlan.description")} />
 
 			{/* AACsearch-specific plan info */}
-			<div className="mb-6">
+			<div className="mb-6 space-y-6">
 				<BillingPlanInfo />
+				<OverageStatusCard />
 			</div>
 
 			<SettingsList>

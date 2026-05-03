@@ -757,6 +757,19 @@
 			"usage": {
 				"searches": "Recherches",
 				"documents": "Documents"
+			},
+			"overageStatus": {
+				"title": "Utilisation du quota de recherche",
+				"description": "Votre utilisation actuelle et votre statut de dépassement.",
+				"normal": "Normal",
+				"softCap": "Limite bientôt atteinte",
+				"hardCap": "Limite atteinte",
+				"overageActive": "Dépassement actif",
+				"walletBalance": "Portefeuille de dépassement",
+				"remaining": "restant",
+				"noOverage": "Aucun dépassement configuré",
+				"unlimited": "Illimité",
+				"searchesUsed": "{{used}} / {{limit}} recherches utilisées"
 			}
 		},
 		"notificationsPage": {

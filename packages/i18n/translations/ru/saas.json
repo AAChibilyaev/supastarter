@@ -757,7 +757,20 @@
 				"title": "Функции",
 				"none": "Нет настроенных функций"
 			},
-			"upgrade": "Улучшить план"
+			"upgrade": "Улучшить план",
+			"overageStatus": {
+				"title": "Использование квоты поиска",
+				"description": "Текущее использование поиска и статус превышения.",
+				"normal": "Норма",
+				"softCap": "Приближение к лимиту",
+				"hardCap": "Лимит достигнут",
+				"overageActive": "Превышение активно",
+				"walletBalance": "Кошелёк превышения",
+				"remaining": "осталось",
+				"noOverage": "Превышение не настроено",
+				"unlimited": "Безлимитно",
+				"searchesUsed": "Использовано {{used}} из {{limit}} поисков"
+			}
 		},
 		"notificationsPage": {
 			"title": "Notifications",

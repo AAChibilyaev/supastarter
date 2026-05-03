@@ -757,6 +757,19 @@
 			"usage": {
 				"searches": "Suchen",
 				"documents": "Dokumente"
+			},
+			"overageStatus": {
+				"title": "Suchkontingent-Nutzung",
+				"description": "Ihre aktuelle Suchnutzung und Ihr Überschreitungsstatus.",
+				"normal": "Normal",
+				"softCap": "Limit bald erreicht",
+				"hardCap": "Limit erreicht",
+				"overageActive": "Überlauf aktiv",
+				"walletBalance": "Überlauf-Wallet",
+				"remaining": "übrig",
+				"noOverage": "Kein Überlauf konfiguriert",
+				"unlimited": "Unbegrenzt",
+				"searchesUsed": "{{used}} / {{limit}} Suchanfragen genutzt"
 			}
 		},
 		"notificationsPage": {

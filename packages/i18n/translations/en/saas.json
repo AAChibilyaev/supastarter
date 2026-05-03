@@ -757,7 +757,20 @@
 				"title": "Features",
 				"none": "No features configured"
 			},
-			"upgrade": "Upgrade plan"
+			"upgrade": "Upgrade plan",
+			"overageStatus": {
+				"title": "Search quota usage",
+				"description": "Your current search usage and overage status.",
+				"normal": "Normal",
+				"softCap": "Approaching limit",
+				"hardCap": "Limit reached",
+				"overageActive": "Overage active",
+				"walletBalance": "Overage wallet",
+				"remaining": "remaining",
+				"noOverage": "No overage billing configured",
+				"unlimited": "Unlimited",
+				"searchesUsed": "{{used}} / {{limit}} searches used"
+			}
 		},
 		"notificationsPage": {
 			"title": "Notifications",

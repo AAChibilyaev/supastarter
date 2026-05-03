@@ -37,6 +37,7 @@ import {
 	upsertAlias,
 	upsertPreset,
 } from "./procedures/operations";
+import { getOverageStatus } from "./procedures/overage-status";
 import { pipelineStatus } from "./procedures/pipelineStatus";
 import { querySuggestions } from "./procedures/query-suggestions";
 import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
@@ -164,4 +165,5 @@ export const searchRouter = {
 		update: updateRankingRules,
 	},
 	dynamicSearch,
+	getOverageStatus,
 };

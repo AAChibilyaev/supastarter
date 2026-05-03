@@ -757,6 +757,19 @@
 			"usage": {
 				"searches": "Búsquedas",
 				"documents": "Documentos"
+			},
+			"overageStatus": {
+				"title": "Uso de cuota de búsqueda",
+				"description": "Su uso actual de búsqueda y estado de excedente.",
+				"normal": "Normal",
+				"softCap": "Límite próximo",
+				"hardCap": "Límite alcanzado",
+				"overageActive": "Excedente activo",
+				"walletBalance": "Billetera de excedente",
+				"remaining": "restante",
+				"noOverage": "Sin configuración de excedente",
+				"unlimited": "Ilimitado",
+				"searchesUsed": "{{used}} / {{limit}} búsquedas usadas"
 			}
 		},
 		"notificationsPage": {

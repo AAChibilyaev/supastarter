@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/client";
 import { streamToEventIterator } from "@orpc/client";
-import { openai, streamText, textModel } from "@repo/ai";
-import { getKnowledgeSpaceBySlug } from "@repo/database";
+import { createUIMessageStream, openai, streamText, textModel } from "@repo/ai";
+import { getKnowledgeSpaceBySlug, getSpaceRagConfig } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -95,10 +95,12 @@ export const askStream = protectedProcedure
 			throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
 		}
 
-		// 3. Merge config with defaults
+		// 3. Load persisted RAG config and merge with request overrides
+		const persistedConfig = await getSpaceRagConfig(space.id);
 		const config: RagConfig = mergeRagConfig({
+			...persistedConfig,
 			...input.ragConfig,
-			systemPrompt: input.systemPrompt ?? "",
+			systemPrompt: input.systemPrompt ?? persistedConfig?.systemPrompt ?? "",
 		});
 
 		// 4. Retrieve knowledge
@@ -166,7 +168,7 @@ export const askStream = protectedProcedure
 					content: msg.content,
 				})),
 			],
-			maxTokens: config.maxOutputTokens,
+			maxOutputTokens: config.maxOutputTokens,
 		});
 
 		// Commit charge immediately (stream may be long-lived)

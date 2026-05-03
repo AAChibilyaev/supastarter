@@ -1,6 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { generateText, openai, textModel } from "@repo/ai";
-import { getKnowledgeSpaceBySlug } from "@repo/database";
+import { getKnowledgeSpaceBySlug, getSpaceRagConfig } from "@repo/database";
 import { logger } from "@repo/logs";
 import { z } from "zod";
 
@@ -96,10 +96,12 @@ export const ask = protectedProcedure
 			throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
 		}
 
-		// 3. Merge config with defaults
+		// 3. Load persisted RAG config and merge with request overrides
+		const persistedConfig = await getSpaceRagConfig(space.id);
 		const config: RagConfig = mergeRagConfig({
+			...persistedConfig,
 			...input.ragConfig,
-			systemPrompt: input.systemPrompt ?? "",
+			systemPrompt: input.systemPrompt ?? persistedConfig?.systemPrompt ?? "",
 		});
 
 		// 4. Retrieve knowledge
@@ -164,7 +166,7 @@ export const ask = protectedProcedure
 						content: msg.content,
 					})),
 				],
-				maxTokens: config.maxOutputTokens,
+				maxOutputTokens: config.maxOutputTokens,
 			});
 		} catch (err) {
 			await releaseCreditReservation(creditReservationId);

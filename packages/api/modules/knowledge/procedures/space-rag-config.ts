@@ -50,6 +50,7 @@ export const getRagConfig = protectedProcedure
 				retrievalLimit: 8,
 				includeGraphEdges: true,
 				systemPrompt: "",
+				model: undefined,
 			}
 		);
 	});
@@ -75,6 +76,7 @@ export const updateRagConfig = protectedProcedure
 				retrievalLimit: z.number().int().min(1).max(50).default(8),
 				includeGraphEdges: z.boolean().default(true),
 				systemPrompt: z.string().max(4000).default(""),
+				model: z.string().max(64).optional(),
 			}),
 		}),
 	)

@@ -45,7 +45,7 @@ export const createConversationProcedure = protectedProcedure
 		});
 
 		// Build personalization context in background — don't block response
-		Promise.resolve().then(async () => {
+		void Promise.resolve().then(async () => {
 			try {
 				const registry = getConnectors(orgId);
 				const personalizationConnectors: PersonalizationConnectors = {

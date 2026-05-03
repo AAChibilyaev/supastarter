@@ -1,77 +1,188 @@
 {
-	"app": {
-		"menu": {
-			"accountSettings": "Configuracion de la cuenta",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Abrir navegacion",
-			"organizationSettings": "Configuracion de la organizacion",
-			"search": "Buscar",
-			"mySearch": "Mi Búsqueda",
-			"start": "Inicio"
-		},
-		"userMenu": {
-			"accountSettings": "Configuracion de la cuenta",
-			"colorMode": "Modo de color",
-			"documentation": "Documentacion",
-			"home": "Inicio",
-			"logout": "Cerrar sesion"
-		},
-		"notifications": {
-			"title": "Notificaciones",
-			"empty": "Aun no hay notificaciones.",
-			"markAllRead": "Marcar todo como leido",
-			"fallbackTitle": "Notificacion",
-			"aria": {
-				"open": "Abrir notificaciones"
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancelar",
-			"confirm": "Confirmar"
-		},
-		"actions": {
-			"continue": "Continuar",
-			"verify": "Verificar"
-		},
-		"colorMode": {
-			"system": "Sistema",
-			"light": "Claro",
-			"dark": "Oscuro"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 caracteres",
-			"upperAndLowercase": "Mayusculas y minusculas",
-			"number": "Numero",
-			"specialCharacter": "Caracter especial"
-		},
-		"close": "Cerrar",
-		"clear": "Limpiar",
-		"previous": "Anterior",
-		"next": "Siguiente",
-		"loading": "Cargando...",
-		"selected": "Seleccionado",
-		"duplicate": "Duplicar",
-		"export": "Exportar",
-		"delete": "Eliminar",
-		"comingSoon": "Próximamente",
-		"refresh": "Actualizar"
-	},
-	"nav": {
-		"geoSearch": "Búsqueda geográfica",
-		"federatedSearch": "Federada",
-		"settings": "Configuración",
-		"switchOrganization": "Cambiar organización"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Pagina no encontrada",
-		"goToDashboard": "Ir al panel",
-		"goToHomepage": "Ir a la pagina de inicio"
-	},
-	"documentation": {
-		"title": "Documentacion"
-	}
+  "export": {
+    "title": "Exportar documentos",
+    "description": "Descargar todos los documentos de este índice como archivo.",
+    "format": "Formato",
+    "filterBy": "Filtro (opcional)",
+    "filterPlaceholder": "ej. category:=shoes",
+    "filterHint": "Expresión de filtro de Typesense. Deje vacío para exportar todos los documentos.",
+    "download": "Descargar",
+    "failed": "Exportación fallida"
+  },
+  "abTest": {
+    "title": "Pruebas A/B",
+    "description": "Descripción",
+    "createNew": "Nueva prueba A/B",
+    "createTitle": "Crear prueba A/B",
+    "createDescription": "Configure una nueva prueba A/B para comparar configuraciones de búsqueda.",
+    "testName": "Nombre de la prueba",
+    "testNamePlaceholder": "ej. Clasificación de búsqueda de productos v2",
+    "descriptionPlaceholder": "¿Qué está probando?",
+    "configBQueryBy": "Config B — query_by",
+    "queryByPlaceholder": "e.g. title,description,tags",
+    "trafficSplit": "División de tráfico",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "cancel": "Cancelar",
+    "startTest": "Iniciar prueba",
+    "createdSuccess": "¡Prueba A/B creada exitosamente!",
+    "createFailed": "Error al crear la prueba A/B",
+    "nameRequired": "Por favor ingrese un nombre para la prueba",
+    "configRequired": "Configure al menos un campo para la variante B",
+    "status_draft": "Borrador",
+    "status_running": "Activa",
+    "status_stopped": "Detenida",
+    "status_completed": "Completada",
+    "winner": "Ganador",
+    "winnerA": "Aplicar A",
+    "winnerB": "Aplicar B",
+    "currentConfig": "Actual (A)",
+    "queryBy": "query_by",
+    "rankingRules": "Ranking Rules",
+    "synonyms": "Synonyms",
+    "synonymRules": "synonym rules",
+    "configDiff": "Diferencia de configuración",
+    "stopTest": "Detener prueba",
+    "declareWinner": "Declarar ganador:",
+    "stoppedSuccess": "Prueba A/B detenida",
+    "failedToStop": "Error al detener la prueba A/B",
+    "winnerApplied": "¡Ganador aplicado exitosamente!",
+    "failedToApply": "Error al aplicar el ganador",
+    "noTests": "Aún no hay pruebas A/B",
+    "noTestsDescription": "Cree una prueba A/B para comparar diferentes configuraciones de búsqueda.",
+    "noIndexes": "No hay índices de búsqueda",
+    "noIndexesDescription": "Cree un índice de búsqueda primero antes de ejecutar pruebas A/B.",
+    "selectIndex": "Seleccionar índice",
+    "selectIndexFirst": "Seleccionar un índice",
+    "selectIndexFirstDescription": "Elija un índice de búsqueda para ver y gestionar sus pruebas A/B.",
+    "allTests": "Todas las pruebas",
+    "activeTests": "Pruebas activas",
+    "name": "Nombre",
+    "status": "Estado"
+  },
+  "alertsPage": {
+    "title": "Alertas",
+    "subtitle": "Configurar umbrales y canales de notificación para alertas de uso",
+    "searchQuota": "Cuota de búsqueda",
+    "ingestQuota": "Cuota de importación",
+    "thresholds": "Umbrales",
+    "threshold": "{percent}% usado",
+    "channels": "Canales de notificación",
+    "cooldown": "Enfriamiento",
+    "cooldownHours": "{hours}h entre notificaciones",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "enable": "Habilitar",
+    "disable": "Deshabilitar",
+    "email": "Correo electrónico",
+    "webhook": "Webhook",
+    "slack": "Slack",
+    "slackWebhookUrl": "URL de Webhook de Slack",
+    "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+    "deliveryChannels": "Canales de entrega",
+    "alertHistory": "Historial de alertas",
+    "noAlerts": "Aún no se han activado alertas",
+    "alertTriggered": "Alerta activada",
+    "alertResolved": "Alerta resuelta",
+    "resource": "Recurso",
+    "thresholdLabel": "Umbral",
+    "triggeredAt": "Activado el",
+    "resolvedAt": "Resuelto el",
+    "status": "Estado",
+    "ruleEnabled": "Regla de alerta habilitada",
+    "ruleDisabled": "Regla de alerta deshabilitada",
+    "configureChannels": "Configure también una URL de webhook de Slack para notificaciones de Slack",
+    "addWebhook": "Agregar Webhook de Slack",
+    "removeWebhook": "Eliminar",
+    "saveSuccess": "Configuración de alertas guardada",
+    "saveError": "Error al guardar la configuración de alertas"
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Configuracion de la cuenta",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Abrir navegacion",
+      "organizationSettings": "Configuracion de la organizacion",
+      "search": "Buscar",
+      "mySearch": "Mi Búsqueda",
+      "start": "Inicio"
+    },
+    "userMenu": {
+      "accountSettings": "Configuracion de la cuenta",
+      "colorMode": "Modo de color",
+      "documentation": "Documentacion",
+      "home": "Inicio",
+      "logout": "Cerrar sesion"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "empty": "Aun no hay notificaciones.",
+      "markAllRead": "Marcar todo como leido",
+      "fallbackTitle": "Notificacion",
+      "aria": {
+        "open": "Abrir notificaciones"
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "actions": {
+      "continue": "Continuar",
+      "verify": "Verificar"
+    },
+    "colorMode": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 caracteres",
+      "upperAndLowercase": "Mayusculas y minusculas",
+      "number": "Numero",
+      "specialCharacter": "Caracter especial"
+    },
+    "close": "Cerrar",
+    "clear": "Limpiar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "loading": "Cargando...",
+    "selected": "Seleccionado",
+    "duplicate": "Duplicar",
+    "export": "Exportar",
+    "delete": "Eliminar",
+    "comingSoon": "Próximamente",
+    "refresh": "Actualizar"
+  },
+  "nav": {
+    "geoSearch": "Búsqueda geográfica",
+    "federatedSearch": "Federada",
+    "settings": "Configuración",
+    "switchOrganization": "Cambiar organización"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Pagina no encontrada",
+    "goToDashboard": "Ir al panel",
+    "goToHomepage": "Ir a la pagina de inicio"
+  },
+  "documentation": {
+    "title": "Documentacion"
+  },
+  "assistant": {
+    "settings": {
+      "title": "Configuración del asistente",
+      "enableChat": "Habilitar asistente conversacional",
+      "assistantName": "Nombre del asistente"
+    },
+    "analytics": {
+      "title": "Análisis del asistente",
+      "resolutionRate": "Tasa de resolución",
+      "escalationRate": "Tasa de escalación"
+    }
+  }
 }

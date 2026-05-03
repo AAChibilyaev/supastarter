@@ -1,77 +1,260 @@
 {
-	"app": {
-		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Open navigation",
-			"organizationSettings": "Organization settings",
-			"search": "Search",
-			"mySearch": "My Search",
-			"start": "Start"
-		},
-		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
-		},
-		"notifications": {
-			"title": "Notifications",
-			"empty": "No notifications yet.",
-			"markAllRead": "Mark all as read",
-			"fallbackTitle": "Notification",
-			"aria": {
-				"open": "Open notifications"
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
-		},
-		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
-		},
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
-		},
-		"close": "Close",
-		"clear": "Clear",
-		"previous": "Previous",
-		"next": "Next",
-		"loading": "Loading...",
-		"selected": "Selected",
-		"duplicate": "Duplicate",
-		"export": "Export",
-		"delete": "Delete",
-		"comingSoon": "Coming soon",
-		"refresh": "Refresh"
-	},
-	"nav": {
-		"geoSearch": "Geo Search",
-		"federatedSearch": "Federated",
-		"settings": "Settings",
-		"switchOrganization": "Switch organization"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"documentation": {
-		"title": "Documentation"
-	}
+  "export": {
+    "title": "Export Documents",
+    "description": "Download all documents from this index as a file.",
+    "format": "Format",
+    "filterBy": "Filter (optional)",
+    "filterPlaceholder": "e.g. category:=shoes",
+    "filterHint": "Typesense filter expression. Leave empty to export all documents.",
+    "download": "Download",
+    "failed": "Export failed"
+  },
+  "abTest": {
+    "title": "A/B Tests",
+    "description": "Description",
+    "createNew": "New A/B Test",
+    "createTitle": "Create A/B Test",
+    "createDescription": "Configure a new A/B test to compare search configurations.",
+    "testName": "Test Name",
+    "testNamePlaceholder": "e.g. Product Search Ranking v2",
+    "descriptionPlaceholder": "What are you testing?",
+    "configBQueryBy": "Config B — query_by",
+    "queryByPlaceholder": "e.g. title,description,tags",
+    "trafficSplit": "Traffic Split",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "cancel": "Cancel",
+    "startTest": "Start Test",
+    "createdSuccess": "A/B test created successfully!",
+    "createFailed": "Failed to create A/B test",
+    "nameRequired": "Please enter a test name",
+    "configRequired": "Please configure at least one field for variant B",
+    "status_draft": "Draft",
+    "status_running": "Running",
+    "status_stopped": "Stopped",
+    "status_completed": "Completed",
+    "winner": "Winner",
+    "winnerA": "Apply A",
+    "winnerB": "Apply B",
+    "currentConfig": "Current (A)",
+    "queryBy": "query_by",
+    "rankingRules": "Ranking Rules",
+    "synonyms": "Synonyms",
+    "synonymRules": "synonym rules",
+    "configDiff": "Config Difference",
+    "stopTest": "Stop Test",
+    "declareWinner": "Declare winner:",
+    "stoppedSuccess": "A/B test stopped",
+    "failedToStop": "Failed to stop A/B test",
+    "winnerApplied": "Winner applied successfully!",
+    "failedToApply": "Failed to apply winner",
+    "noTests": "No A/B tests yet",
+    "noTestsDescription": "Create an A/B test to compare different search configurations.",
+    "noIndexes": "No search indexes",
+    "noIndexesDescription": "Create a search index first before running A/B tests.",
+    "selectIndex": "Select index",
+    "selectIndexFirst": "Select an index",
+    "selectIndexFirstDescription": "Choose a search index to view and manage its A/B tests.",
+    "allTests": "All Tests",
+    "activeTests": "Active Tests",
+    "name": "Name",
+    "status": "Status"
+  },
+  "alertsPage": {
+    "title": "Alerts",
+    "subtitle": "Configure thresholds and notification channels for usage alerts",
+    "searchQuota": "Search Quota",
+    "ingestQuota": "Ingest Quota",
+    "thresholds": "Thresholds",
+    "threshold": "{percent}% used",
+    "channels": "Notification Channels",
+    "cooldown": "Cooldown",
+    "cooldownHours": "{hours}h between notifications",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enable": "Enable",
+    "disable": "Disable",
+    "email": "Email",
+    "webhook": "Webhook",
+    "slack": "Slack",
+    "slackWebhookUrl": "Slack Webhook URL",
+    "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+    "deliveryChannels": "Delivery Channels",
+    "alertHistory": "Alert History",
+    "noAlerts": "No alerts triggered yet",
+    "alertTriggered": "Alert triggered",
+    "alertResolved": "Alert resolved",
+    "resource": "Resource",
+    "thresholdLabel": "Threshold",
+    "triggeredAt": "Triggered at",
+    "resolvedAt": "Resolved at",
+    "status": "Status",
+    "ruleEnabled": "Alert rule enabled",
+    "ruleDisabled": "Alert rule disabled",
+    "configureChannels": "Also configure a Slack webhook URL for Slack notifications",
+    "addWebhook": "Add Slack Webhook",
+    "removeWebhook": "Remove",
+    "saveSuccess": "Alert settings saved",
+    "saveError": "Failed to save alert settings"
+  },
+  "scim": {
+    "title": "SCIM Provisioning",
+    "description": "Automate user provisioning with SCIM 2.0",
+    "emptyState": {
+      "title": "Automate user provisioning with SCIM",
+      "description": "Connect your identity provider to automatically create, update, and deactivate users in your AACsearch organization.",
+      "cta": "Connect Identity Provider",
+      "planUpgrade": "Enterprise feature — available on Scale plan+"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "lastSync": "Last sync",
+      "usersProvisioned": "Users provisioned",
+      "disconnect": "Disconnect",
+      "viewLogs": "View Logs"
+    },
+    "endpoint": {
+      "baseUrl": "SCIM Base URL",
+      "bearerToken": "Bearer Token",
+      "copy": "Copy",
+      "regenerate": "Regenerate",
+      "revoke": "Revoke",
+      "noToken": "No active token",
+      "lastUsed": "Last used"
+    },
+    "wizard": {
+      "title": "Connect Identity Provider",
+      "selectProvider": "Select your identity provider",
+      "configure": "Configure {provider} Connection",
+      "testConnection": "Test SCIM Connection",
+      "skipAndSave": "Skip Test & Save",
+      "complete": "Complete Setup",
+      "back": "Back",
+      "okta": "Okta",
+      "azureAd": "Azure AD",
+      "googleWorkspace": "Google Workspace",
+      "onelogin": "OneLogin",
+      "keycloak": "Keycloak",
+      "generic": "Other (SCIM v2)"
+    },
+    "test": {
+      "success": "Connection successful!",
+      "failure": "Connection failed",
+      "inProgress": "Testing connection...",
+      "stepConfig": "Service Provider Config",
+      "stepListUsers": "Listing Users",
+      "stepCreateUser": "Creating test user",
+      "stepCleanup": "Cleaning up test user",
+      "ok": "OK",
+      "error": "Error"
+    },
+    "logs": {
+      "title": "SCIM Audit Logs",
+      "description": "Review all SCIM provisioning activity for your organization",
+      "exportCsv": "Export CSV",
+      "action": "Action",
+      "user": "User",
+      "email": "Email",
+      "source": "Source",
+      "timestamp": "Timestamp",
+      "noLogs": "No SCIM activity yet",
+      "noLogsDescription": "SCIM audit logs will appear here once provisioning is configured and active.",
+      "actions": {
+        "user_created": "Created",
+        "user_updated": "Updated",
+        "user_deactivated": "Deactivated",
+        "group_created": "Group Created",
+        "group_synced": "Group Synced"
+      }
+    }
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Open navigation",
+      "organizationSettings": "Organization settings",
+      "search": "Search",
+      "mySearch": "My Search",
+      "start": "Start"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "markAllRead": "Mark all as read",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Open notifications"
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "continue": "Continue",
+      "verify": "Verify"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    },
+    "close": "Close",
+    "clear": "Clear",
+    "previous": "Previous",
+    "next": "Next",
+    "loading": "Loading...",
+    "selected": "Selected",
+    "duplicate": "Duplicate",
+    "export": "Export",
+    "delete": "Delete",
+    "comingSoon": "Coming soon",
+    "refresh": "Refresh"
+  },
+  "nav": {
+    "geoSearch": "Geo Search",
+    "federatedSearch": "Federated",
+    "settings": "Settings",
+    "switchOrganization": "Switch organization"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "Go to homepage"
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "assistant": {
+    "settings": {
+      "title": "Assistant Settings",
+      "enableChat": "Enable conversational assistant",
+      "assistantName": "Assistant name"
+    },
+    "analytics": {
+      "title": "Assistant analytics",
+      "resolutionRate": "Resolution rate",
+      "escalationRate": "Escalation rate"
+    }
+  }
 }

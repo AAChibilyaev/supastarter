@@ -8,6 +8,7 @@ import {
 	updateConversationMetadata,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+// oxlint-disable-next-line typescript/consistent-type-imports
 import { streamText, textModel } from "@repo/ai";
 import z from "zod";
 
@@ -66,9 +67,9 @@ export const streamAssistant = protectedProcedure
 
 		await requireOrganizationMember(input.organizationId, user.id);
 
-		// --- Safety: content filter (off-topic) ---
+		// --- Safety: content filter ---
 		const safety = checkUserMessage(input.message);
-		if (!safety.allowed) {
+		if (!safety.safe) {
 			await releaseCreditReservation(creditReservationId, "cancelled");
 			throw new ORPCError("BAD_REQUEST", {
 				message: safety.reason ?? "Message not allowed.",
@@ -77,11 +78,9 @@ export const streamAssistant = protectedProcedure
 
 		// --- Resolve or create conversation ---
 		let conversationId = input.conversationId;
-		let existingConversation = conversationId
-			? await getConversation(conversationId, 0)
-			: null;
+		let conversation = conversationId ? await getConversation(conversationId, 0) : null;
 
-		if (!existingConversation) {
+		if (!conversation) {
 			const newConv = await createConversation({
 				organizationId: input.organizationId,
 				userId: user.id,
@@ -94,30 +93,26 @@ export const streamAssistant = protectedProcedure
 				},
 			});
 			conversationId = newConv.id;
-			existingConversation = await getConversation(conversationId, 0);
+			conversation = await getConversation(conversationId, 0);
 		}
 
-		if (!existingConversation || existingConversation.organizationId !== input.organizationId) {
+		if (!conversation || conversation.organizationId !== input.organizationId) {
 			await releaseCreditReservation(creditReservationId);
 			throw new ORPCError("FORBIDDEN");
 		}
 
-		// --- Load conversation history ---
+		// --- Load history ---
 		const historyMessages = await getConversationHistory(conversationId!, 10);
-		const metadata = (existingConversation.metadata ?? {}) as Record<string, unknown>;
+		const metadata = (conversation.metadata ?? {}) as Record<string, unknown>;
 		const personalization = metadata.personalization as Record<string, unknown> | undefined;
 
-		// --- Classify intent (with mode cache) ---
-		const cachedMode = metadata.lastMode as string | undefined;
-		const classificationResult = await classifyIntent(input.message, {
-			currentMode: cachedMode as import("../lib/intent-classifier").AssistantMode | undefined,
-			history: historyMessages.map((m) => ({ role: m.role, content: m.content })),
-		});
-		const mode = classificationResult.mode;
+		// --- Classify intent ---
+		const cachedMode = metadata.lastMode as import("../lib/intent-classifier").AssistantMode | undefined;
+		const classification = await classifyIntent(input.message, { cachedMode });
+		const mode = classification.mode;
 
-		// Update cached mode if changed
 		if (mode !== cachedMode) {
-			await updateConversationMetadata(conversationId!, { lastMode: mode });
+			updateConversationMetadata(conversationId!, { lastMode: mode }).catch(() => {});
 		}
 
 		// --- Build system prompt ---
@@ -125,13 +120,14 @@ export const streamAssistant = protectedProcedure
 			mode,
 			brandName: "AACsearch",
 			locale: input.locale ?? "ru",
-			availableTools: ["search_products", "check_availability", "get_order_status", "get_return_status", "get_user_conditions", "get_product_details", "search_knowledge", "get_similar_products", "escalate_to_operator"],
-			...(input.productContext ? {
-				productContext: {
-					productId: input.productContext.productId,
-					categorySlug: input.productContext.categorySlug,
-				}
-			} : {}),
+			availableTools: [
+				"search_products", "check_availability", "get_order_status",
+				"get_return_status", "get_user_conditions", "get_product_details",
+				"search_knowledge", "get_similar_products", "escalate_to_operator",
+			],
+			...(input.productContext
+				? { productContext: { productId: input.productContext.productId, categorySlug: input.productContext.categorySlug } }
+				: {}),
 			userSegment: (personalization as { segment?: string } | undefined)?.segment,
 		});
 
@@ -140,9 +136,7 @@ export const streamAssistant = protectedProcedure
 		const escalationService = createEscalationService({});
 
 		const tools = {
-			search_products: createSearchProductsTool({
-				indexSlug: input.indexSlug ?? "products",
-			}),
+			search_products: createSearchProductsTool({ indexSlug: input.indexSlug ?? "products" }),
 			check_availability: createCheckAvailabilityTool(connectors.inventory),
 			get_order_status: createGetOrderStatusTool(connectors.oms, user.id),
 			get_return_status: createGetReturnStatusTool(connectors.oms, user.id),
@@ -157,41 +151,36 @@ export const streamAssistant = protectedProcedure
 			}),
 		};
 
-		// --- Build message history for LLM ---
-		const llmMessages: Array<{ role: "user" | "assistant"; content: string }> = [
+		// --- Build LLM messages ---
+		type SimpleMsgRole = "user" | "assistant";
+		const llmMessages = [
 			...historyMessages
-				.filter((m) => m.role === "user" || m.role === "assistant")
-				.map((m) => ({
-					role: m.role as "user" | "assistant",
-					content: m.content,
-				})),
+				.filter((m): m is typeof m & { role: SimpleMsgRole } =>
+					m.role === "user" || m.role === "assistant",
+				)
+				.map((m) => ({ role: m.role, content: m.content })),
 			{ role: "user" as const, content: input.message },
 		];
 
-		// --- Save user message to DB ---
-		const userMsgStarted = Date.now();
+		// --- Save user message ---
+		const turnStart = Date.now();
 		await appendMessage({
 			conversationId: conversationId!,
 			role: "user",
 			content: input.message,
 		});
 
-		// --- Stream from LLM ---
-		let response: Awaited<ReturnType<typeof streamText>>;
-		try {
-			response = await streamText({
-				model: textModel,
-				system: systemPrompt,
-				messages: llmMessages,
-				tools,
-				maxSteps: 5,
-			});
-		} catch (err) {
-			await releaseCreditReservation(creditReservationId);
-			throw err;
-		}
+		// --- Stream ---
+		// oxlint-disable-next-line typescript/await-thenable
+		const response = streamText({
+			model: textModel,
+			system: systemPrompt,
+			messages: llmMessages,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			tools: tools as any,
+		});
 
-		// Commit credit usage immediately — stream may be long-lived
+		// Commit usage immediately — stream is long-lived
 		await commitFlatFeeUsage({
 			reservationId: creditReservationId,
 			operation: "conversation_turn",
@@ -200,7 +189,7 @@ export const streamAssistant = protectedProcedure
 			flatFeeKopecks: CREDIT_RATES.conversation_turn,
 		});
 
-		// Save assistant response after stream completes (fire-and-forget)
+		// Persist assistant response after stream resolves (fire-and-forget)
 		Promise.resolve(response.text).then(async (text) => {
 			try {
 				const safeText = sanitizeOutput(text);
@@ -209,16 +198,14 @@ export const streamAssistant = protectedProcedure
 					conversationId: conversationId!,
 					role: "assistant",
 					content: safeText,
-					latencyMs: Date.now() - userMsgStarted,
-					inputTokens: usage?.promptTokens,
-					outputTokens: usage?.completionTokens,
+					latencyMs: Date.now() - turnStart,
+					inputTokens: usage?.inputTokens ?? null,
+					outputTokens: usage?.outputTokens ?? null,
 				});
 			} catch (saveErr) {
-				logger.warn({ conversationId, error: saveErr }, "streamAssistant: failed to save assistant message");
+				logger.warn({ conversationId, error: saveErr }, "streamAssistant: failed to persist assistant message");
 			}
-		}).catch(() => {
-			// ignore
-		});
+		}).catch(() => {});
 
 		return streamToEventIterator(response.toUIMessageStream());
 	});

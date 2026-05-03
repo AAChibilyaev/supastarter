@@ -37,6 +37,7 @@ import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { demoApp } from "./modules/search/demo-public";
 import { eventsApp } from "./modules/search/events-public";
+import { assistantPublicApp } from "./modules/assistant/assistant-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { scimRouter } from "./modules/search/scim-public";
 import { shareApp } from "./modules/search/share-public";
@@ -81,6 +82,8 @@ export const app = new Hono()
 	.route("/", publicSpellCheckApp)
 	// Public analytics events endpoint (widget/SDK; same Bearer + own CORS)
 	.route("/", eventsApp)
+	// Public assistant endpoint for anonymous widget users (permissive CORS, Bearer ss_search_*)
+	.route("/", assistantPublicApp)
 	// Widget JS serving (static file, accessible from any origin for storefronts)
 	.get("/widget/widget.js", async (c) => {
 		try {

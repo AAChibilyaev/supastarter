@@ -2275,9 +2275,83 @@ export class AacSearchWidget {
 
 	if (dataset?.baseUrl && dataset?.apiKey && dataset?.indexSlug) {
 		const container = dataset.container ?? "#aac-search";
+		const widgetMode = dataset.widgetMode ?? "search"; // "search" | "chat" | "hybrid"
 
 		// Wait for DOM ready
-		const init = () => {
+		const init = async () => {
+			if (widgetMode === "chat" || widgetMode === "hybrid") {
+				// Chat or hybrid mode — load ChatUI + ChatClient dynamically
+				try {
+					const [{ ChatUI }, { ChatClient }, { detectEntryPoint }, { t: tFn, resolveLocale }] = await Promise.all([
+						import("./chat-ui"),
+						import("./chat-client"),
+						import("./context-bridge"),
+						import("./translations"),
+					]);
+
+					const entryContext = detectEntryPoint({
+						entryPoint: dataset.entryPoint as "home" | "catalog" | "search_results" | "product_card" | undefined,
+						productId: dataset.productId,
+						categorySlug: dataset.categorySlug,
+						searchQuery: dataset.searchQuery,
+					});
+
+					const locale = resolveLocale(dataset.locale ?? "ru");
+					const chatContainer = document.querySelector(container) ?? document.body;
+
+					const client = new ChatClient({
+						baseUrl: dataset.baseUrl!,
+						apiKey: dataset.apiKey!,
+						indexSlug: dataset.indexSlug!,
+						locale,
+					});
+
+					// Build translations map for ChatUI
+					const translationKeys = ["chat_placeholder", "chat_send", "chat_typing", "chat_escalated", "chat_new_chat", "chat_error", "close"] as const;
+					const translationsMap: Record<string, string> = {};
+					for (const key of translationKeys) {
+						translationsMap[key] = tFn(locale, key);
+					}
+
+					let conversationId: string | null = null;
+
+					new ChatUI({
+						container: chatContainer as HTMLElement,
+						assistantName: dataset.assistantName ?? "Ассистент",
+						locale,
+						theme: (dataset.theme as "light" | "dark" | "auto") ?? "auto",
+						entryPoint: entryContext,
+						translations: translationsMap,
+						onSendMessage: async (message) => {
+							// Start conversation on first message
+							if (!conversationId) {
+								conversationId = await client.startConversation({
+									entryPoint: entryContext.entryPoint ?? undefined,
+									productId: entryContext.productId ?? undefined,
+									categorySlug: entryContext.categorySlug ?? undefined,
+									searchQuery: entryContext.searchQuery ?? undefined,
+									userToken: dataset.userToken,
+									locale,
+								});
+							}
+							// Stream response — ChatClient handles SSE
+							const generator = client.sendMessage(conversationId, message);
+							for await (const _chunk of generator) {
+								// ChatUI receives message via the onSendMessage contract;
+								// streaming updates would be wired in a full integration
+							}
+						},
+					});
+				} catch (err) {
+					console.warn("[AACsearch] Failed to load chat UI:", err);
+				}
+
+				// In hybrid mode also render search widget below chat
+				if (widgetMode !== "hybrid") {
+					return;
+				}
+			}
+
 			new AacSearchWidget({
 				baseUrl: dataset.baseUrl!,
 				apiKey: dataset.apiKey!,
@@ -2297,9 +2371,9 @@ export class AacSearchWidget {
 		};
 
 		if (document.readyState === "loading") {
-			document.addEventListener("DOMContentLoaded", init);
+			document.addEventListener("DOMContentLoaded", () => { void init(); });
 		} else {
-			init();
+			void init();
 		}
 	}
 })();

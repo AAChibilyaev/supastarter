@@ -99,7 +99,7 @@ function applyRules(message: string): ClassificationResult | null {
 	}
 	for (const pattern of BUNDLE_PATTERNS) {
 		if (pattern.test(message)) {
-			return { mode: "bundle", confidence: 0.90, source: "rule" };
+			return { mode: "bundle", confidence: 0.9, source: "rule" };
 		}
 	}
 	return null;
@@ -155,7 +155,9 @@ Respond with: {"mode": "<category>", "confidence": <0.0-1.0>}`,
 			"bundle",
 		]);
 
-		const mode = validModes.has(parsed.mode ?? "") ? (parsed.mode as AssistantMode) : "product_consultation";
+		const mode = validModes.has(parsed.mode ?? "")
+			? (parsed.mode as AssistantMode)
+			: "product_consultation";
 		const confidence = typeof parsed.confidence === "number" ? parsed.confidence : 0.6;
 
 		return { mode, confidence, source: "llm" };

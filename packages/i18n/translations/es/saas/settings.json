@@ -1,673 +1,635 @@
 {
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "Para cambiar tu avatar, haz clic en la imagen de este bloque y selecciona un archivo de tu computadora para subir.",
-				"notifications": {
-					"error": "No se pudo actualizar el avatar",
-					"success": "El avatar se actualizo correctamente"
-				},
-				"title": "Tu avatar"
-			},
-			"changeEmail": {
-				"description": "Para cambiar tu email, introduce el nuevo email y pulsa guardar. Tendras que confirmar el nuevo email antes de que se active.",
-				"notifications": {
-					"error": "No se pudo actualizar el email",
-					"success": "El email se actualizo correctamente"
-				},
-				"title": "Tu email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "No se pudo actualizar el nombre",
-					"success": "El nombre se actualizo correctamente"
-				},
-				"title": "Tu nombre"
-			},
-			"deleteAccount": {
-				"confirmation": "Estas seguro de que quieres eliminar tu cuenta?",
-				"description": "Elimina permanentemente tu cuenta. Una vez que elimines tu cuenta, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
-				"notifications": {
-					"error": "No se pudo eliminar la cuenta",
-					"success": "La cuenta se elimino correctamente"
-				},
-				"submit": "Eliminar cuenta",
-				"title": "Eliminar cuenta"
-			},
-			"language": {
-				"description": "Para cambiar el idioma de la aplicacion para tu cuenta, selecciona un idioma de la lista y haz clic en guardar.",
-				"notifications": {
-					"error": "No se pudo actualizar el idioma",
-					"success": "El idioma se actualizo correctamente"
-				},
-				"title": "Tu idioma"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "Estas son todas las sesiones activas de tu cuenta. Haz clic en la X para finalizar una sesion especifica.",
-					"title": "Sesiones activas",
-					"notifications": {
-						"revokeSession": {
-							"success": "Sesion revocada"
-						}
-					},
-					"currentSession": "Sesion actual"
-				},
-				"changePassword": {
-					"currentPassword": "Contrasena actual",
-					"newPassword": "Nueva contrasena",
-					"notifications": {
-						"error": "No se pudo actualizar la contrasena",
-						"success": "La contrasena se actualizo correctamente"
-					},
-					"title": "Tu contrasena"
-				},
-				"connectedAccounts": {
-					"connect": "Conectar",
-					"connected": "Conectado",
-					"disconnect": "Desconectar",
-					"title": "Cuentas conectadas"
-				},
-				"passkeys": {
-					"addPasskey": "Anadir passkey",
-					"description": "Usa passkeys como una alternativa segura a las contrasenas.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "No se pudo anadir el passkey"
-							},
-							"success": {
-								"title": "Passkey anadido"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "No se pudo eliminar el passkey"
-							},
-							"loading": {
-								"title": "Eliminando passkey..."
-							},
-							"success": {
-								"title": "Passkey eliminado"
-							}
-						}
-					},
-					"title": "Passkeys"
-				},
-				"setPassword": {
-					"description": "Aun no has establecido una contrasena. Para establecerla, debes seguir el flujo de restablecimiento de contrasena. Haz clic en el boton de abajo para enviar un email para restablecer tu contrasena y sigue las instrucciones del email.",
-					"notifications": {
-						"error": "No se pudo enviar el enlace para establecer la contrasena. Intentelo de nuevo.",
-						"success": "Revisa tu bandeja de entrada para el enlace para establecer tu contrasena."
-					},
-					"submit": "Establecer contrasena",
-					"title": "Tu contrasena"
-				},
-				"title": "Seguridad",
-				"twoFactor": {
-					"title": "Autenticacion de dos factores",
-					"description": "Anade una capa extra de seguridad a tu cuenta.",
-					"dialog": {
-						"password": {
-							"title": "Verificar con contrasena",
-							"description": "Verifica tu cuenta introduciendo tu contrasena:",
-							"label": "Tu contrasena:"
-						},
-						"totpUrl": {
-							"description": "Usa tu aplicacion de autenticacion preferida y escanea el codigo QR o introduce el secreto manualmente para configurar la autenticacion de dos factores.",
-							"code": "Introduce el codigo de 6 digitos para verificar la configuracion:",
-							"title": "Activar autenticacion de dos factores"
-						}
-					},
-					"enable": "Activar autenticacion de dos factores",
-					"notifications": {
-						"verify": {
-							"success": {
-								"title": "La autenticacion de dos factores se ha activado correctamente."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "No se pudo verificar tu cuenta con la contrasena proporcionada. Intentelo de nuevo."
-							}
-						},
-						"disable": {
-							"success": {
-								"title": "La autenticacion de dos factores se ha desactivado correctamente."
-							}
-						}
-					},
-					"disable": "Desactivar autenticacion de dos factores",
-					"enabled": "Tienes la autenticacion de dos factores activada para tu cuenta."
-				}
-			},
-			"subtitle": "Gestiona la configuracion de tu cuenta personal.",
-			"title": "Configuracion de la cuenta"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Gestionar facturacion",
-				"notifications": {
-					"error": {
-						"title": "No se pudo crear una sesion del portal de clientes. Intentelo de nuevo."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Activo",
-					"canceled": "Cancelado",
-					"expired": "Expirado",
-					"incomplete": "Incompleto",
-					"past_due": "Vencido",
-					"paused": "Pausado",
-					"trialing": "Prueba",
-					"unpaid": "No pagado"
-				},
-				"title": "Tu plan",
-				"description": "Su plan actual y límites de uso para búsqueda e indexación.",
-				"notFound": "No hay información del plan disponible."
-			},
-			"changePlan": {
-				"description": "Elige un plan para suscribirte.",
-				"title": "Cambiar tu plan"
-			},
-			"upgradePlan": "Actualizar plan",
-			"currentPlan": "Plan actual",
-			"switchToAnnual": "Cambiar a anual",
-			"upgradeSuccess": "Plan actualizado con éxito",
-			"upgradeSuccessTitle": "Plan actualizado!",
-			"upgradeSuccessWithPlan": "Tu plan ha sido actualizado a {plan}. Disfruta de las nuevas funciones y límites aumentados.",
-			"redirectingIn": "Redirigiendo en {seconds}s...",
-			"aiCredits": {
-				"title": "Créditos AI",
-				"subtitle": "Uso de IA de pago por uso. Recargue su cartera para desbloquear todas las funciones de IA.",
-				"balance": {
-					"title": "Saldo de la cartera",
-					"includedRemaining": "Incluido este mes",
-					"reserved": "Reservado",
-					"promo": "Créditos promocionales",
-					"notInitialized": "La cartera aún no está inicializada."
-				},
-				"topup": {
-					"button": "Recargar",
-					"title": "Recargar cartera AI",
-					"description": "Elija una cantidad o introduzca un valor personalizado en rublos.",
-					"customAmount": "Cantidad personalizada (₽)",
-					"summary": "Se le cobrará {amount}",
-					"confirm": "Pagar con Tochka",
-					"error": "No se pudo crear el enlace de pago. Inténtelo de nuevo."
-				},
-				"errors": {
-					"insufficientFunds": "Créditos AI insuficientes. Recargue su cartera."
-				},
-				"chart": {
-					"title": "Uso de créditos",
-					"daily": "Diario",
-					"weekly": "Semanal",
-					"monthly": "Mensual",
-					"kopecks": "Costo",
-					"events": "Eventos"
-				},
-				"consumption": {
-					"title": "Historial de consumo",
-					"date": "Fecha",
-					"operation": "Operación",
-					"provider": "Proveedor",
-					"model": "Modelo",
-					"tokens": "Tokens",
-					"charge": "Cargo",
-					"empty": "Aún no hay eventos de uso."
-				},
-				"rateCard": {
-					"title": "Tarifas",
-					"operation": "Operación",
-					"provider": "Proveedor",
-					"model": "Modelo",
-					"inputPer1M": "Entrada / 1M tokens",
-					"outputPer1M": "Salida / 1M tokens",
-					"embeddingPer1M": "Embedding / 1M tokens",
-					"flatFee": "Tarifa fija",
-					"empty": "No hay reglas de precios configuradas."
-				},
-				"lowBalance": {
-					"title": "Créditos bajos",
-					"message": "Su saldo de crédito disponible es bajo ({balance} restante).",
-					"topUp": "Recargar ahora"
-				}
-			},
-			"title": "Facturacion",
-			"features": {
-				"title": "Características",
-				"none": "No hay características configuradas"
-			},
-			"limits": {
-				"maxIndexes": "Máx. índices",
-				"maxDocuments": "Máx. documentos",
-				"maxApiKeys": "Máx. claves API",
-				"rateLimit": "Límite de velocidad",
-				"maxSearchesPerMonth": "Búsquedas / mes"
-			},
-			"upgrade": "Mejorar plan",
-			"usage": {
-				"searches": "Búsquedas",
-				"documents": "Documentos"
-			},
-			"overageStatus": {
-				"title": "Uso de cuota de búsqueda",
-				"description": "Su uso actual de búsqueda y estado de excedente.",
-				"normal": "Normal",
-				"softCap": "Límite próximo",
-				"hardCap": "Límite alcanzado",
-				"overageActive": "Excedente activo",
-				"walletBalance": "Billetera de excedente",
-				"remaining": "restante",
-				"noOverage": "Sin configuración de excedente",
-				"unlimited": "Ilimitado",
-				"searchesUsed": "{{used}} / {{limit}} búsquedas usadas"
-			},
-			"upgradeModal": {
-				"title": "Mejorar plan",
-				"currentPlan": "Plan actual",
-				"selectPlan": "Selecciona un plan para mejorar",
-				"prorationPreview": "Vista previa de prorrateo",
-				"currentRemaining": "Valor restante del plan actual",
-				"newPlanCost": "Nuevo plan (prorrateado)",
-				"totalDueToday": "Total a pagar hoy",
-				"totalCredit": "Crédito total",
-				"confirmUpgrade": "Confirmar mejora",
-				"redirectingToStripe": "Redirigiendo a Stripe...",
-				"upgradeSuccess": "¡Plan mejorado exitosamente!",
-				"upgradeError": "Error al mejorar el plan. Inténtalo de nuevo.",
-				"noPaymentNeeded": "No se necesita pago",
-				"comparePlans": "Comparar planes",
-				"feature": "Característica",
-				"current": "Actual",
-				"select": "Seleccionar"
-			},
-			"downgradeModal": {
-				"title": "Confirmar degradación",
-				"warningTitle": "Está a punto de degradar su plan",
-				"dataLossWarning": "La degradación reducirá los límites de su plan. Algunos documentos, búsquedas y funciones pueden dejar de estar disponibles.",
-				"whatChanges": "Qué cambia",
-				"currentLimit": "Actual",
-				"newLimit": "Nuevo",
-				"limitChanges": "Cambios en límites",
-				"featureDowngrades": "Funciones que se desactivarán",
-				"noFeatureLoss": "No se perderán funciones con esta degradación",
-				"prorationCredit": "Recibirá un crédito prorrateado de {amount}",
-				"gracePeriod": "Después de la degradación, tendrá 7 días de gracia durante los cuales las búsquedas seguirán siendo legibles, pero la indexación se detendrá de inmediato.",
-				"confirmDowngrade": "Confirmar degradación",
-				"cancelDowngrade": "Cancelar",
-				"downgradeProcessing": "Procesando degradación..."
-			},
-			"invoiceHistory": {
-				"title": "Historial de Facturas",
-				"description": "Ver y descargar facturas anteriores.",
-				"date": "Fecha",
-				"amount": "Monto",
-				"status": {
-					"paid": "Pagado",
-					"open": "Pendiente",
-					"uncollectible": "Incobrable",
-					"void": "Anulado",
-					"draft": "Borrador"
-				},
-				"actions": "Acciones",
-				"downloadPdf": "Descargar PDF",
-				"notAvailable": "No disponible",
-				"previous": "Anterior",
-				"next": "Siguiente",
-				"pageInfo": "{{start}}–{{end}} de {{total}}",
-				"empty": "Aún no hay facturas. Las facturas aparecerán aquí después de su primer pago.",
-				"loading": "Cargando facturas...",
-				"downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo.",
-				"statusLabel": "Estado",
-				"page": "Page {page}",
-				"convertedAmount": "Monto Convertido",
-				"displayCurrency": "Mostrar",
-				"selectCurrency": "Mostrar moneda",
-				"displayCurrencyLabel": "Seleccionar moneda de visualización",
-				"originalCurrency": "Original (Moneda de Stripe)"
-			},
-			"paymentMethod": {
-				"title": "Método de Pago",
-				"description": "Su método de pago actual.",
-				"card": "Tarjeta",
-				"maskedNumber": "•••• {{last4}}",
-				"expiry": "{{month}}/{{year}}",
-				"manage": "Gestionar",
-				"loading": "Cargando método de pago...",
-				"addCard": "Añadir tarjeta",
-				"addCardTitle": "Añadir un nuevo método de pago",
-				"addCardDescription": "Introduzca los datos de su tarjeta a continuación.",
-				"addCardConfirm": "Añadir tarjeta",
-				"cardAdded": "Tarjeta añadida correctamente",
-				"defaultLabel": "Por defecto",
-				"setDefault": "Establecer como predeterminado",
-				"defaultSuccess": "Método de pago predeterminado actualizado",
-				"defaultError": "No se pudo actualizar el método de pago predeterminado",
-				"deleteDialogTitle": "¿Eliminar tarjeta?",
-				"deleteDialogDescription": "¿Está seguro de que desea eliminar {card}?",
-				"deleteConfirm": "Eliminar",
-				"deleteSuccess": "Tarjeta eliminada",
-				"deleteError": "No se pudo eliminar la tarjeta",
-				"emptyState": "No hay métodos de pago guardados",
-				"preparing": "Preparando formulario de tarjeta...",
-				"setupError": "No se pudo preparar el formulario. Inténtelo de nuevo."
-			},
-			"invoices": {
-				"title": "Historial de facturas",
-				"emptyState": "Aún no hay facturas",
-				"downloadPdf": "Descargar PDF",
-				"status": {
-					"paid": "Pagado",
-					"pending": "Pendiente",
-					"failed": "Fallido"
-				}
-			},
-			"tabs": {
-				"overview": "Resumen",
-				"paymentMethods": "Métodos de pago",
-				"invoices": "Facturas",
-				"aiCredits": "Créditos IA"
-			},
-			"paymentMethods": {
-				"title": "Métodos de pago",
-				"empty": "No hay métodos de pago guardados",
-				"addCard": "Añadir método de pago",
-				"default": "Predeterminado",
-				"setDefault": "Establecer como predeterminado",
-				"delete": "Eliminar tarjeta",
-				"deleteConfirmTitle": "¿Eliminar esta tarjeta?",
-				"deleteConfirmMessage": "Esta tarjeta se eliminará de su cuenta."
-			},
-			"transactionHistory": {
-				"title": "Historial de transacciones",
-				"description": "Transacciones recientes de la wallet y cargos por exceso",
-				"empty": "Aún no hay transacciones",
-				"date": "Fecha",
-				"type": "Tipo",
-				"source": "Origen",
-				"amount": "Monto"
-			},
-			"autoRecharge": {
-				"title": "Recarga automática",
-				"description": "Recargue su wallet automáticamente cuando el saldo baje de un umbral",
-				"thresholdLabel": "Umbral de recarga",
-				"thresholdPlaceholder": "p.ej. 500",
-				"thresholdHint": "Cuando su saldo baje de este monto (en RUB), se activará la recarga automática",
-				"topupLabel": "Monto de recarga",
-				"topupPlaceholder": "p.ej. 1000",
-				"topupHint": "Monto a agregar cada vez que se active la recarga automática (mín 1 RUB)",
-				"rub": "RUB",
-				"submit": "Configurar recarga automática",
-				"saving": "Guardando...",
-				"setupSuccess": "Recarga automática configurada exitosamente",
-				"setupError": "Error al configurar la recarga automática",
-				"invalidValues": "Por favor ingrese montos válidos",
-				"disabled": "Desactivar recarga automática",
-				"disabling": "Desactivando...",
-				"statusActive": "La recarga automática está activa. Su billetera se recargará automáticamente cuando el saldo caiga por debajo del umbral."
-			},
-			"trialBannerTitle": "Prueba gratuita",
-			"trialBannerMessage": "Tu prueba Pro termina en {days} día{days, plural, =1 {} other {s}}. Actualiza para mantener tus funciones Pro.",
-			"trialBannerUpgrade": "Actualizar ahora",
-			"subscriptionManagement": {
-				"cancelButton": "Cancelar suscripción",
-				"cancelDialogTitle": "¿Cancelar suscripción?",
-				"cancelDialogDescription": "Su suscripción se cancelará al final del período de facturación actual. Seguirá teniendo acceso hasta entonces.",
-				"cancelDialogConfirm": "Confirmar cancelación",
-				"cancelDialogCancel": "Mantener suscripción",
-				"cancelSuccess": "La suscripción se cancelará al final del período",
-				"cancelError": "No se pudo cancelar la suscripción",
-				"pauseButton": "Pausar suscripción",
-				"pauseDialogTitle": "¿Pausar suscripción?",
-				"pauseDialogDescription": "Los pagos se pausarán. Puede reanudar su suscripción en cualquier momento. El tiempo no utilizado se acreditará.",
-				"pauseDialogConfirm": "Pausar suscripción",
-				"pauseDialogCancel": "Mantener activa",
-				"pauseSuccess": "Suscripción pausada exitosamente",
-				"pauseError": "No se pudo pausar la suscripción",
-				"resumeButton": "Reanudar suscripción",
-				"resumeSuccess": "Suscripción reanudada exitosamente",
-				"resumeError": "No se pudo reanudar la suscripción"
-			},
-			"invoice": {
-				"title": "Configuración de facturación",
-				"taxInfo": "Información fiscal",
-				"legalName": "Nombre legal de la empresa",
-				"legalNameHint": "Nombre legal completo tal como debe aparecer en las facturas",
-				"taxIdType": "Tipo de identificación fiscal",
-				"taxId": "NIF / IVA",
-				"taxIdHint": "p.ej. NIF español, EU VAT number, US EIN",
-				"address": "Dirección de la empresa",
-				"addressHint": "Dirección comercial registrada para facturas",
-				"invoiceEmail": "Email de facturación",
-				"invoiceEmailHint": "Dirección de correo donde enviar las facturas",
-				"save": "Guardar configuración",
-				"saved": "Configuración de factura guardada correctamente",
-				"error": "Error al guardar la configuración de factura",
-				"empty": "No hay configuración de factura",
-				"receiptTitle": "Recibos de pago",
-				"receiptEmpty": "Aún no hay recibos de pago",
-				"receiptDate": "Fecha",
-				"receiptAmount": "Monto",
-				"receiptStatus": "Estado",
-				"receiptActions": "Acciones",
-				"receiptDownload": "Descargar recibo",
-				"receiptStatusCompleted": "Completado",
-				"receiptStatusPending": "Pendiente",
-				"receiptStatusFailed": "Fallido"
-			}
-		},
-		"notificationsPage": {
-			"title": "Notificaciones",
-			"description": "Elige como recibes las notificaciones. Las opciones desactivadas se almacenan; todo esta activado por defecto.",
-			"groups": {
-				"general": {
-					"title": "General"
-				},
-				"billing": {
-					"title": "Facturacion"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "Actualizaciones de la app"
-				},
-				"AI_LOW_BALANCE": {
-					"label": "El saldo AI es bajo"
-				},
-				"AI_TOPUP_PAID": {
-					"label": "Recarga AI confirmada"
-				},
-				"AI_TOPUP_FAILED": {
-					"label": "Recarga AI fallida"
-				},
-				"AI_OVERAGE_REACHED": {
-					"label": "Límite AI alcanzado"
-				},
-				"PAYMENT_FAILED": {
-					"label": "Pago de suscripción fallido"
-				}
-			},
-			"columns": {
-				"type": "Notificacion",
-				"inApp": "En la app",
-				"email": "Email"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Facturacion",
-				"dangerZone": "Zona de peligro",
-				"general": "General",
-				"notifications": "Notificaciones",
-				"security": "Seguridad",
-				"title": "Cuenta",
-				"invoices": "Facturas",
-				"paymentMethods": "Métodos de pago"
-			},
-			"organization": {
-				"billing": "Facturacion",
-				"general": "General",
-				"members": "Miembros",
-				"title": "Organizacion",
-				"dangerZone": "Zona de peligro",
-				"compliance": "Cumplimiento"
-			}
-		},
-		"save": "Guardar",
-		"compliance": {
-			"title": "Cumplimiento normativo",
-			"description": "Gestionar políticas de retención de datos y configuración de cumplimiento",
-			"searchUsage": {
-				"title": "Retención de datos de uso de búsqueda",
-				"description": "Cuánto tiempo conservar los registros de consultas de búsqueda y eventos de uso"
-			},
-			"auditLog": {
-				"title": "Retención de registros de auditoría",
-				"description": "Cuánto tiempo conservar los registros de auditoría de la organización"
-			},
-			"ingestBuffer": {
-				"title": "Retención del búfer de ingesta",
-				"description": "Cuánto tiempo conservar los datos ingeridos en el búfer"
-			},
-			"autoDelete": {
-				"title": "Programación de eliminación automática",
-				"description": "Configurar la limpieza automática de datos caducados según los períodos de retención",
-				"enableLabel": "Activar eliminación automática",
-				"scheduleLabel": "Frecuencia de eliminación",
-				"scheduleDaily": "Diario",
-				"scheduleWeekly": "Semanal",
-				"scheduleMonthly": "Mensual"
-			},
-			"retentionOptions": {
-				"forever": "Conservar para siempre",
-				"sevenDays": "7 días",
-				"fourteenDays": "14 días",
-				"thirtyDays": "30 días",
-				"ninetyDays": "90 días",
-				"oneEightyDays": "180 días",
-				"oneYear": "1 año",
-				"twoYears": "2 años"
-			},
-			"save": "Guardar cambios",
-			"cancel": "Cancelar",
-			"notifications": {
-				"saved": "Políticas de retención guardadas correctamente",
-				"error": "Error al guardar las políticas de retención"
-			}
-		},
-		"scim": {
-			"title": "Aprovisionamiento SCIM",
-			"description": "Automatice el aprovisionamiento de usuarios con SCIM 2.0",
-			"emptyState": {
-				"title": "Automatice el aprovisionamiento de usuarios con SCIM",
-				"description": "Conecte su proveedor de identidad para crear, actualizar y desactivar usuarios automáticamente en su organización AACsearch.",
-				"cta": "Conectar proveedor de identidad",
-				"planUpgrade": "Función Enterprise — disponible en el plan Scale+"
-			},
-			"status": {
-				"active": "Activo",
-				"inactive": "Inactivo",
-				"lastSync": "Última sincronización",
-				"usersProvisioned": "Usuarios aprovisionados",
-				"disconnect": "Desconectar",
-				"viewLogs": "Ver registros"
-			},
-			"endpoint": {
-				"baseUrl": "SCIM Base URL",
-				"bearerToken": "Bearer Token",
-				"copy": "Copiar",
-				"regenerate": "Regenerar",
-				"revoke": "Revocar",
-				"noToken": "No hay token activo",
-				"lastUsed": "Último uso"
-			},
-			"wizard": {
-				"title": "Conectar proveedor de identidad",
-				"selectProvider": "Seleccione su proveedor de identidad",
-				"configure": "Configurar conexión de {provider}",
-				"testConnection": "Probar conexión SCIM",
-				"skipAndSave": "Omitir prueba y guardar",
-				"complete": "Completar configuración",
-				"back": "Atrás",
-				"okta": "Okta",
-				"azureAd": "Azure AD",
-				"googleWorkspace": "Google Workspace",
-				"onelogin": "OneLogin",
-				"keycloak": "Keycloak",
-				"generic": "Otro (SCIM v2)"
-			},
-			"test": {
-				"success": "¡Conexión exitosa!",
-				"failure": "Conexión fallida",
-				"inProgress": "Probando conexión...",
-				"stepConfig": "Configuración del proveedor de servicio",
-				"stepListUsers": "Listando usuarios",
-				"stepCreateUser": "Creando usuario de prueba",
-				"stepCleanup": "Limpiando usuario de prueba",
-				"ok": "OK",
-				"error": "Error"
-			},
-			"logs": {
-				"title": "Registros de auditoría SCIM",
-				"description": "Revise toda la actividad de aprovisionamiento SCIM de su organización",
-				"exportCsv": "Exportar CSV",
-				"action": "Acción",
-				"user": "Usuario",
-				"email": "Email",
-				"source": "Origen",
-				"timestamp": "Marca de tiempo",
-				"noLogs": "Aún no hay actividad SCIM",
-				"noLogsDescription": "Los registros de auditoría SCIM aparecerán aquí cuando el aprovisionamiento esté configurado y activo.",
-				"actions": {
-					"user_created": "Creado",
-					"user_updated": "Actualizado",
-					"user_deactivated": "Desactivado",
-					"group_created": "Grupo creado",
-					"group_synced": "Grupo sincronizado"
-				}
-			}
-		}
-	},
-	"alertsPage": {
-		"title": "Alertas",
-		"subtitle": "Configurar umbrales y canales de notificación para alertas de uso",
-		"searchQuota": "Cuota de búsqueda",
-		"ingestQuota": "Cuota de importación",
-		"thresholds": "Umbrales",
-		"threshold": "{percent}% usado",
-		"channels": "Canales de notificación",
-		"cooldown": "Enfriamiento",
-		"cooldownHours": "{hours}h entre notificaciones",
-		"edit": "Editar",
-		"save": "Guardar",
-		"cancel": "Cancelar",
-		"enable": "Habilitar",
-		"disable": "Deshabilitar",
-		"email": "Correo electrónico",
-		"webhook": "Webhook",
-		"slack": "Slack",
-		"slackWebhookUrl": "URL de Webhook de Slack",
-		"slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
-		"deliveryChannels": "Canales de entrega",
-		"alertHistory": "Historial de alertas",
-		"noAlerts": "Aún no se han activado alertas",
-		"alertTriggered": "Alerta activada",
-		"alertResolved": "Alerta resuelta",
-		"resource": "Recurso",
-		"thresholdLabel": "Umbral",
-		"triggeredAt": "Activado el",
-		"resolvedAt": "Resuelto el",
-		"status": "Estado",
-		"ruleEnabled": "Regla de alerta habilitada",
-		"ruleDisabled": "Regla de alerta deshabilitada",
-		"configureChannels": "Configure también una URL de webhook de Slack para notificaciones de Slack",
-		"addWebhook": "Agregar Webhook de Slack",
-		"removeWebhook": "Eliminar",
-		"saveSuccess": "Configuración de alertas guardada",
-		"saveError": "Error al guardar la configuración de alertas"
-	}
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "Para cambiar tu avatar, haz clic en la imagen de este bloque y selecciona un archivo de tu computadora para subir.",
+        "notifications": {
+          "error": "No se pudo actualizar el avatar",
+          "success": "El avatar se actualizo correctamente"
+        },
+        "title": "Tu avatar"
+      },
+      "changeEmail": {
+        "description": "Para cambiar tu email, introduce el nuevo email y pulsa guardar. Tendras que confirmar el nuevo email antes de que se active.",
+        "notifications": {
+          "error": "No se pudo actualizar el email",
+          "success": "El email se actualizo correctamente"
+        },
+        "title": "Tu email"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "No se pudo actualizar el nombre",
+          "success": "El nombre se actualizo correctamente"
+        },
+        "title": "Tu nombre"
+      },
+      "deleteAccount": {
+        "confirmation": "Estas seguro de que quieres eliminar tu cuenta?",
+        "description": "Elimina permanentemente tu cuenta. Una vez que elimines tu cuenta, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
+        "notifications": {
+          "error": "No se pudo eliminar la cuenta",
+          "success": "La cuenta se elimino correctamente"
+        },
+        "submit": "Eliminar cuenta",
+        "title": "Eliminar cuenta"
+      },
+      "language": {
+        "description": "Para cambiar el idioma de la aplicacion para tu cuenta, selecciona un idioma de la lista y haz clic en guardar.",
+        "notifications": {
+          "error": "No se pudo actualizar el idioma",
+          "success": "El idioma se actualizo correctamente"
+        },
+        "title": "Tu idioma"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "Estas son todas las sesiones activas de tu cuenta. Haz clic en la X para finalizar una sesion especifica.",
+          "title": "Sesiones activas",
+          "notifications": {
+            "revokeSession": {
+              "success": "Sesion revocada"
+            }
+          },
+          "currentSession": "Sesion actual"
+        },
+        "changePassword": {
+          "currentPassword": "Contrasena actual",
+          "newPassword": "Nueva contrasena",
+          "notifications": {
+            "error": "No se pudo actualizar la contrasena",
+            "success": "La contrasena se actualizo correctamente"
+          },
+          "title": "Tu contrasena"
+        },
+        "connectedAccounts": {
+          "connect": "Conectar",
+          "connected": "Conectado",
+          "disconnect": "Desconectar",
+          "title": "Cuentas conectadas"
+        },
+        "passkeys": {
+          "addPasskey": "Anadir passkey",
+          "description": "Usa passkeys como una alternativa segura a las contrasenas.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "No se pudo anadir el passkey"
+              },
+              "success": {
+                "title": "Passkey anadido"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "No se pudo eliminar el passkey"
+              },
+              "loading": {
+                "title": "Eliminando passkey..."
+              },
+              "success": {
+                "title": "Passkey eliminado"
+              }
+            }
+          },
+          "title": "Passkeys"
+        },
+        "setPassword": {
+          "description": "Aun no has establecido una contrasena. Para establecerla, debes seguir el flujo de restablecimiento de contrasena. Haz clic en el boton de abajo para enviar un email para restablecer tu contrasena y sigue las instrucciones del email.",
+          "notifications": {
+            "error": "No se pudo enviar el enlace para establecer la contrasena. Intentelo de nuevo.",
+            "success": "Revisa tu bandeja de entrada para el enlace para establecer tu contrasena."
+          },
+          "submit": "Establecer contrasena",
+          "title": "Tu contrasena"
+        },
+        "title": "Seguridad",
+        "twoFactor": {
+          "title": "Autenticacion de dos factores",
+          "description": "Anade una capa extra de seguridad a tu cuenta.",
+          "dialog": {
+            "password": {
+              "title": "Verificar con contrasena",
+              "description": "Verifica tu cuenta introduciendo tu contrasena:",
+              "label": "Tu contrasena:"
+            },
+            "totpUrl": {
+              "description": "Usa tu aplicacion de autenticacion preferida y escanea el codigo QR o introduce el secreto manualmente para configurar la autenticacion de dos factores.",
+              "code": "Introduce el codigo de 6 digitos para verificar la configuracion:",
+              "title": "Activar autenticacion de dos factores"
+            }
+          },
+          "enable": "Activar autenticacion de dos factores",
+          "notifications": {
+            "verify": {
+              "success": {
+                "title": "La autenticacion de dos factores se ha activado correctamente."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "No se pudo verificar tu cuenta con la contrasena proporcionada. Intentelo de nuevo."
+              }
+            },
+            "disable": {
+              "success": {
+                "title": "La autenticacion de dos factores se ha desactivado correctamente."
+              }
+            }
+          },
+          "disable": "Desactivar autenticacion de dos factores",
+          "enabled": "Tienes la autenticacion de dos factores activada para tu cuenta."
+        }
+      },
+      "subtitle": "Gestiona la configuracion de tu cuenta personal.",
+      "title": "Configuracion de la cuenta"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Gestionar facturacion",
+        "notifications": {
+          "error": {
+            "title": "No se pudo crear una sesion del portal de clientes. Intentelo de nuevo."
+          }
+        }
+      },
+      "activePlan": {
+        "status": {
+          "active": "Activo",
+          "canceled": "Cancelado",
+          "expired": "Expirado",
+          "incomplete": "Incompleto",
+          "past_due": "Vencido",
+          "paused": "Pausado",
+          "trialing": "Prueba",
+          "unpaid": "No pagado"
+        },
+        "title": "Tu plan",
+        "description": "Su plan actual y límites de uso para búsqueda e indexación.",
+        "notFound": "No hay información del plan disponible."
+      },
+      "changePlan": {
+        "description": "Elige un plan para suscribirte.",
+        "title": "Cambiar tu plan"
+      },
+      "upgradePlan": "Actualizar plan",
+      "currentPlan": "Plan actual",
+      "switchToAnnual": "Cambiar a anual",
+      "upgradeSuccess": "Plan actualizado con éxito",
+      "upgradeSuccessTitle": "Plan actualizado!",
+      "upgradeSuccessWithPlan": "Tu plan ha sido actualizado a {plan}. Disfruta de las nuevas funciones y límites aumentados.",
+      "redirectingIn": "Redirigiendo en {seconds}s...",
+      "aiCredits": {
+        "title": "Créditos AI",
+        "subtitle": "Uso de IA de pago por uso. Recargue su cartera para desbloquear todas las funciones de IA.",
+        "balance": {
+          "title": "Saldo de la cartera",
+          "includedRemaining": "Incluido este mes",
+          "reserved": "Reservado",
+          "promo": "Créditos promocionales",
+          "notInitialized": "La cartera aún no está inicializada."
+        },
+        "topup": {
+          "button": "Recargar",
+          "title": "Recargar cartera AI",
+          "description": "Elija una cantidad o introduzca un valor personalizado en rublos.",
+          "customAmount": "Cantidad personalizada (₽)",
+          "summary": "Se le cobrará {amount}",
+          "confirm": "Pagar con Tochka",
+          "error": "No se pudo crear el enlace de pago. Inténtelo de nuevo."
+        },
+        "errors": {
+          "insufficientFunds": "Créditos AI insuficientes. Recargue su cartera."
+        },
+        "chart": {
+          "title": "Uso de créditos",
+          "daily": "Diario",
+          "weekly": "Semanal",
+          "monthly": "Mensual",
+          "kopecks": "Costo",
+          "events": "Eventos"
+        },
+        "consumption": {
+          "title": "Historial de consumo",
+          "date": "Fecha",
+          "operation": "Operación",
+          "provider": "Proveedor",
+          "model": "Modelo",
+          "tokens": "Tokens",
+          "charge": "Cargo",
+          "empty": "Aún no hay eventos de uso."
+        },
+        "rateCard": {
+          "title": "Tarifas",
+          "operation": "Operación",
+          "provider": "Proveedor",
+          "model": "Modelo",
+          "inputPer1M": "Entrada / 1M tokens",
+          "outputPer1M": "Salida / 1M tokens",
+          "embeddingPer1M": "Embedding / 1M tokens",
+          "flatFee": "Tarifa fija",
+          "empty": "No hay reglas de precios configuradas."
+        },
+        "lowBalance": {
+          "title": "Créditos bajos",
+          "message": "Su saldo de crédito disponible es bajo ({balance} restante).",
+          "topUp": "Recargar ahora"
+        }
+      },
+      "title": "Facturacion",
+      "features": {
+        "title": "Características",
+        "none": "No hay características configuradas"
+      },
+      "limits": {
+        "maxIndexes": "Máx. índices",
+        "maxDocuments": "Máx. documentos",
+        "maxApiKeys": "Máx. claves API",
+        "rateLimit": "Límite de velocidad",
+        "maxSearchesPerMonth": "Búsquedas / mes"
+      },
+      "upgrade": "Mejorar plan",
+      "usage": {
+        "searches": "Búsquedas",
+        "documents": "Documentos"
+      },
+      "overageStatus": {
+        "title": "Uso de cuota de búsqueda",
+        "description": "Su uso actual de búsqueda y estado de excedente.",
+        "normal": "Normal",
+        "softCap": "Límite próximo",
+        "hardCap": "Límite alcanzado",
+        "overageActive": "Excedente activo",
+        "walletBalance": "Billetera de excedente",
+        "remaining": "restante",
+        "noOverage": "Sin configuración de excedente",
+        "unlimited": "Ilimitado",
+        "searchesUsed": "{{used}} / {{limit}} búsquedas usadas"
+      },
+      "upgradeModal": {
+        "title": "Mejorar plan",
+        "currentPlan": "Plan actual",
+        "selectPlan": "Selecciona un plan para mejorar",
+        "prorationPreview": "Vista previa de prorrateo",
+        "currentRemaining": "Valor restante del plan actual",
+        "newPlanCost": "Nuevo plan (prorrateado)",
+        "totalDueToday": "Total a pagar hoy",
+        "totalCredit": "Crédito total",
+        "confirmUpgrade": "Confirmar mejora",
+        "redirectingToStripe": "Redirigiendo a Stripe...",
+        "upgradeSuccess": "¡Plan mejorado exitosamente!",
+        "upgradeError": "Error al mejorar el plan. Inténtalo de nuevo.",
+        "noPaymentNeeded": "No se necesita pago",
+        "comparePlans": "Comparar planes",
+        "feature": "Característica",
+        "current": "Actual",
+        "select": "Seleccionar"
+      },
+      "downgradeModal": {
+        "title": "Confirmar degradación",
+        "warningTitle": "Está a punto de degradar su plan",
+        "dataLossWarning": "La degradación reducirá los límites de su plan. Algunos documentos, búsquedas y funciones pueden dejar de estar disponibles.",
+        "whatChanges": "Qué cambia",
+        "currentLimit": "Actual",
+        "newLimit": "Nuevo",
+        "limitChanges": "Cambios en límites",
+        "featureDowngrades": "Funciones que se desactivarán",
+        "noFeatureLoss": "No se perderán funciones con esta degradación",
+        "prorationCredit": "Recibirá un crédito prorrateado de {amount}",
+        "gracePeriod": "Después de la degradación, tendrá 7 días de gracia durante los cuales las búsquedas seguirán siendo legibles, pero la indexación se detendrá de inmediato.",
+        "confirmDowngrade": "Confirmar degradación",
+        "cancelDowngrade": "Cancelar",
+        "downgradeProcessing": "Procesando degradación..."
+      },
+      "invoiceHistory": {
+        "title": "Historial de Facturas",
+        "description": "Ver y descargar facturas anteriores.",
+        "date": "Fecha",
+        "amount": "Monto",
+        "status": {
+          "paid": "Pagado",
+          "open": "Pendiente",
+          "uncollectible": "Incobrable",
+          "void": "Anulado",
+          "draft": "Borrador"
+        },
+        "actions": "Acciones",
+        "downloadPdf": "Descargar PDF",
+        "notAvailable": "No disponible",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "pageInfo": "{{start}}–{{end}} de {{total}}",
+        "empty": "Aún no hay facturas. Las facturas aparecerán aquí después de su primer pago.",
+        "loading": "Cargando facturas...",
+        "downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo.",
+        "statusLabel": "Estado",
+        "page": "Page {page}",
+        "convertedAmount": "Monto Convertido",
+        "displayCurrency": "Mostrar",
+        "selectCurrency": "Mostrar moneda",
+        "displayCurrencyLabel": "Seleccionar moneda de visualización",
+        "originalCurrency": "Original (Moneda de Stripe)"
+      },
+      "paymentMethod": {
+        "title": "Método de Pago",
+        "description": "Su método de pago actual.",
+        "card": "Tarjeta",
+        "maskedNumber": "•••• {{last4}}",
+        "expiry": "{{month}}/{{year}}",
+        "manage": "Gestionar",
+        "loading": "Cargando método de pago...",
+        "addCard": "Añadir tarjeta",
+        "addCardTitle": "Añadir un nuevo método de pago",
+        "addCardDescription": "Introduzca los datos de su tarjeta a continuación.",
+        "addCardConfirm": "Añadir tarjeta",
+        "cardAdded": "Tarjeta añadida correctamente",
+        "defaultLabel": "Por defecto",
+        "setDefault": "Establecer como predeterminado",
+        "defaultSuccess": "Método de pago predeterminado actualizado",
+        "defaultError": "No se pudo actualizar el método de pago predeterminado",
+        "deleteDialogTitle": "¿Eliminar tarjeta?",
+        "deleteDialogDescription": "¿Está seguro de que desea eliminar {card}?",
+        "deleteConfirm": "Eliminar",
+        "deleteSuccess": "Tarjeta eliminada",
+        "deleteError": "No se pudo eliminar la tarjeta",
+        "emptyState": "No hay métodos de pago guardados",
+        "preparing": "Preparando formulario de tarjeta...",
+        "setupError": "No se pudo preparar el formulario. Inténtelo de nuevo."
+      },
+      "invoices": {
+        "title": "Historial de facturas",
+        "emptyState": "Aún no hay facturas",
+        "downloadPdf": "Descargar PDF",
+        "status": {
+          "paid": "Pagado",
+          "pending": "Pendiente",
+          "failed": "Fallido"
+        }
+      },
+      "tabs": {
+        "overview": "Resumen",
+        "paymentMethods": "Métodos de pago",
+        "invoices": "Facturas",
+        "aiCredits": "Créditos IA"
+      },
+      "paymentMethods": {
+        "title": "Métodos de pago",
+        "empty": "No hay métodos de pago guardados",
+        "addCard": "Añadir método de pago",
+        "default": "Predeterminado",
+        "setDefault": "Establecer como predeterminado",
+        "delete": "Eliminar tarjeta",
+        "deleteConfirmTitle": "¿Eliminar esta tarjeta?",
+        "deleteConfirmMessage": "Esta tarjeta se eliminará de su cuenta."
+      },
+      "transactionHistory": {
+        "title": "Historial de transacciones",
+        "description": "Transacciones recientes de la wallet y cargos por exceso",
+        "empty": "Aún no hay transacciones",
+        "date": "Fecha",
+        "type": "Tipo",
+        "source": "Origen",
+        "amount": "Monto"
+      },
+      "autoRecharge": {
+        "title": "Recarga automática",
+        "description": "Recargue su wallet automáticamente cuando el saldo baje de un umbral",
+        "thresholdLabel": "Umbral de recarga",
+        "thresholdPlaceholder": "p.ej. 500",
+        "thresholdHint": "Cuando su saldo baje de este monto (en RUB), se activará la recarga automática",
+        "topupLabel": "Monto de recarga",
+        "topupPlaceholder": "p.ej. 1000",
+        "topupHint": "Monto a agregar cada vez que se active la recarga automática (mín 1 RUB)",
+        "rub": "RUB",
+        "submit": "Configurar recarga automática",
+        "saving": "Guardando...",
+        "setupSuccess": "Recarga automática configurada exitosamente",
+        "setupError": "Error al configurar la recarga automática",
+        "invalidValues": "Por favor ingrese montos válidos",
+        "disabled": "Desactivar recarga automática",
+        "disabling": "Desactivando...",
+        "statusActive": "La recarga automática está activa. Su billetera se recargará automáticamente cuando el saldo caiga por debajo del umbral."
+      },
+      "trialBannerTitle": "Prueba gratuita",
+      "trialBannerMessage": "Tu prueba Pro termina en {days} día{days, plural, =1 {} other {s}}. Actualiza para mantener tus funciones Pro.",
+      "trialBannerUpgrade": "Actualizar ahora",
+      "subscriptionManagement": {
+        "cancelButton": "Cancelar suscripción",
+        "cancelDialogTitle": "¿Cancelar suscripción?",
+        "cancelDialogDescription": "Su suscripción se cancelará al final del período de facturación actual. Seguirá teniendo acceso hasta entonces.",
+        "cancelDialogConfirm": "Confirmar cancelación",
+        "cancelDialogCancel": "Mantener suscripción",
+        "cancelSuccess": "La suscripción se cancelará al final del período",
+        "cancelError": "No se pudo cancelar la suscripción",
+        "pauseButton": "Pausar suscripción",
+        "pauseDialogTitle": "¿Pausar suscripción?",
+        "pauseDialogDescription": "Los pagos se pausarán. Puede reanudar su suscripción en cualquier momento. El tiempo no utilizado se acreditará.",
+        "pauseDialogConfirm": "Pausar suscripción",
+        "pauseDialogCancel": "Mantener activa",
+        "pauseSuccess": "Suscripción pausada exitosamente",
+        "pauseError": "No se pudo pausar la suscripción",
+        "resumeButton": "Reanudar suscripción",
+        "resumeSuccess": "Suscripción reanudada exitosamente",
+        "resumeError": "No se pudo reanudar la suscripción"
+      },
+      "invoice": {
+        "title": "Configuración de facturación",
+        "taxInfo": "Información fiscal",
+        "legalName": "Nombre legal de la empresa",
+        "legalNameHint": "Nombre legal completo tal como debe aparecer en las facturas",
+        "taxIdType": "Tipo de identificación fiscal",
+        "taxId": "NIF / IVA",
+        "taxIdHint": "p.ej. NIF español, EU VAT number, US EIN",
+        "address": "Dirección de la empresa",
+        "addressHint": "Dirección comercial registrada para facturas",
+        "invoiceEmail": "Email de facturación",
+        "invoiceEmailHint": "Dirección de correo donde enviar las facturas",
+        "save": "Guardar configuración",
+        "saved": "Configuración de factura guardada correctamente",
+        "error": "Error al guardar la configuración de factura",
+        "empty": "No hay configuración de factura",
+        "receiptTitle": "Recibos de pago",
+        "receiptEmpty": "Aún no hay recibos de pago",
+        "receiptDate": "Fecha",
+        "receiptAmount": "Monto",
+        "receiptStatus": "Estado",
+        "receiptActions": "Acciones",
+        "receiptDownload": "Descargar recibo",
+        "receiptStatusCompleted": "Completado",
+        "receiptStatusPending": "Pendiente",
+        "receiptStatusFailed": "Fallido"
+      }
+    },
+    "notificationsPage": {
+      "title": "Notificaciones",
+      "description": "Elige como recibes las notificaciones. Las opciones desactivadas se almacenan; todo esta activado por defecto.",
+      "groups": {
+        "general": {
+          "title": "General"
+        },
+        "billing": {
+          "title": "Facturacion"
+        }
+      },
+      "types": {
+        "APP_UPDATE": {
+          "label": "Actualizaciones de la app"
+        },
+        "AI_LOW_BALANCE": {
+          "label": "El saldo AI es bajo"
+        },
+        "AI_TOPUP_PAID": {
+          "label": "Recarga AI confirmada"
+        },
+        "AI_TOPUP_FAILED": {
+          "label": "Recarga AI fallida"
+        },
+        "AI_OVERAGE_REACHED": {
+          "label": "Límite AI alcanzado"
+        },
+        "PAYMENT_FAILED": {
+          "label": "Pago de suscripción fallido"
+        }
+      },
+      "columns": {
+        "type": "Notificacion",
+        "inApp": "En la app",
+        "email": "Email"
+      }
+    },
+    "menu": {
+      "account": {
+        "billing": "Facturacion",
+        "dangerZone": "Zona de peligro",
+        "general": "General",
+        "notifications": "Notificaciones",
+        "security": "Seguridad",
+        "title": "Cuenta",
+        "invoices": "Facturas",
+        "paymentMethods": "Métodos de pago"
+      },
+      "organization": {
+        "billing": "Facturacion",
+        "general": "General",
+        "members": "Miembros",
+        "title": "Organizacion",
+        "dangerZone": "Zona de peligro",
+        "compliance": "Cumplimiento"
+      }
+    },
+    "save": "Guardar",
+    "compliance": {
+      "title": "Cumplimiento normativo",
+      "description": "Gestionar políticas de retención de datos y configuración de cumplimiento",
+      "searchUsage": {
+        "title": "Retención de datos de uso de búsqueda",
+        "description": "Cuánto tiempo conservar los registros de consultas de búsqueda y eventos de uso"
+      },
+      "auditLog": {
+        "title": "Retención de registros de auditoría",
+        "description": "Cuánto tiempo conservar los registros de auditoría de la organización"
+      },
+      "ingestBuffer": {
+        "title": "Retención del búfer de ingesta",
+        "description": "Cuánto tiempo conservar los datos ingeridos en el búfer"
+      },
+      "autoDelete": {
+        "title": "Programación de eliminación automática",
+        "description": "Configurar la limpieza automática de datos caducados según los períodos de retención",
+        "enableLabel": "Activar eliminación automática",
+        "scheduleLabel": "Frecuencia de eliminación",
+        "scheduleDaily": "Diario",
+        "scheduleWeekly": "Semanal",
+        "scheduleMonthly": "Mensual"
+      },
+      "retentionOptions": {
+        "forever": "Conservar para siempre",
+        "sevenDays": "7 días",
+        "fourteenDays": "14 días",
+        "thirtyDays": "30 días",
+        "ninetyDays": "90 días",
+        "oneEightyDays": "180 días",
+        "oneYear": "1 año",
+        "twoYears": "2 años"
+      },
+      "save": "Guardar cambios",
+      "cancel": "Cancelar",
+      "notifications": {
+        "saved": "Políticas de retención guardadas correctamente",
+        "error": "Error al guardar las políticas de retención"
+      }
+    },
+    "scim": {
+      "title": "Aprovisionamiento SCIM",
+      "description": "Automatice el aprovisionamiento de usuarios con SCIM 2.0",
+      "emptyState": {
+        "title": "Automatice el aprovisionamiento de usuarios con SCIM",
+        "description": "Conecte su proveedor de identidad para crear, actualizar y desactivar usuarios automáticamente en su organización AACsearch.",
+        "cta": "Conectar proveedor de identidad",
+        "planUpgrade": "Función Enterprise — disponible en el plan Scale+"
+      },
+      "status": {
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "lastSync": "Última sincronización",
+        "usersProvisioned": "Usuarios aprovisionados",
+        "disconnect": "Desconectar",
+        "viewLogs": "Ver registros"
+      },
+      "endpoint": {
+        "baseUrl": "SCIM Base URL",
+        "bearerToken": "Bearer Token",
+        "copy": "Copiar",
+        "regenerate": "Regenerar",
+        "revoke": "Revocar",
+        "noToken": "No hay token activo",
+        "lastUsed": "Último uso"
+      },
+      "wizard": {
+        "title": "Conectar proveedor de identidad",
+        "selectProvider": "Seleccione su proveedor de identidad",
+        "configure": "Configurar conexión de {provider}",
+        "testConnection": "Probar conexión SCIM",
+        "skipAndSave": "Omitir prueba y guardar",
+        "complete": "Completar configuración",
+        "back": "Atrás",
+        "okta": "Okta",
+        "azureAd": "Azure AD",
+        "googleWorkspace": "Google Workspace",
+        "onelogin": "OneLogin",
+        "keycloak": "Keycloak",
+        "generic": "Otro (SCIM v2)"
+      },
+      "test": {
+        "success": "¡Conexión exitosa!",
+        "failure": "Conexión fallida",
+        "inProgress": "Probando conexión...",
+        "stepConfig": "Configuración del proveedor de servicio",
+        "stepListUsers": "Listando usuarios",
+        "stepCreateUser": "Creando usuario de prueba",
+        "stepCleanup": "Limpiando usuario de prueba",
+        "ok": "OK",
+        "error": "Error"
+      },
+      "logs": {
+        "title": "Registros de auditoría SCIM",
+        "description": "Revise toda la actividad de aprovisionamiento SCIM de su organización",
+        "exportCsv": "Exportar CSV",
+        "action": "Acción",
+        "user": "Usuario",
+        "email": "Email",
+        "source": "Origen",
+        "timestamp": "Marca de tiempo",
+        "noLogs": "Aún no hay actividad SCIM",
+        "noLogsDescription": "Los registros de auditoría SCIM aparecerán aquí cuando el aprovisionamiento esté configurado y activo.",
+        "actions": {
+          "user_created": "Creado",
+          "user_updated": "Actualizado",
+          "user_deactivated": "Desactivado",
+          "group_created": "Grupo creado",
+          "group_synced": "Grupo sincronizado"
+        }
+      }
+    }
+  }
 }

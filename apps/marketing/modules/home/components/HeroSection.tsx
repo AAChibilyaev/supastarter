@@ -262,7 +262,7 @@ export function HeroSection() {
 			</section>
 
 			{/* ─── AI Assistant Chat (auto on scroll) ──────────── */}
-			<AiAssistantChat visible={showWidget} onModeSelect={openCmdForMode} />
+			<AiAssistantChat visible={showWidget} />
 		</>
 	);
 }

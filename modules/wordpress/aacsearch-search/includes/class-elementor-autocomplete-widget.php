@@ -15,50 +15,32 @@ if (!defined('ABSPATH')) {
 
 class AACSearch_Elementor_Autocomplete_Widget extends \Elementor\Widget_Base
 {
-    /**
-     * Get widget name.
-     *
-     * @return string
-     */
     public function get_name()
     {
         return 'aacsearch_autocomplete';
     }
 
-    /**
-     * Get widget title.
-     *
-     * @return string
-     */
     public function get_title()
     {
         return __('AACsearch Autocomplete', 'aacsearch-search');
     }
 
-    /**
-     * Get widget icon.
-     *
-     * @return string
-     */
     public function get_icon()
     {
-        return 'eicon-search-bold';
+        return 'eicon-site-search';
     }
 
-    /**
-     * Get widget categories.
-     *
-     * @return array
-     */
     public function get_categories()
     {
-        return ['general'];
+        return ['general', 'aacsearch'];
     }
 
-    /**
-     * Register widget controls.
-     */
-    protected function _register_controls()
+    public function get_keywords()
+    {
+        return ['search', 'autocomplete', 'aacsearch', 'typeahead', 'suggest'];
+    }
+
+    protected function register_controls()
     {
         $this->start_controls_section('content_section', [
             'label' => __('Autocomplete Settings', 'aacsearch-search'),
@@ -85,9 +67,6 @@ class AACSearch_Elementor_Autocomplete_Widget extends \Elementor\Widget_Base
         $this->end_controls_section();
     }
 
-    /**
-     * Render the widget output.
-     */
     protected function render()
     {
         $settings = $this->get_settings_for_display();

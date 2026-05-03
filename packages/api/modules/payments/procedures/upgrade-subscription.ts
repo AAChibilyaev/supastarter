@@ -111,7 +111,6 @@ export const upgradeSubscription = protectedProcedure
 			});
 		}
 	});
-}
 
 /**
  * Fire-and-forget helper to send upgrade notification to org admins or the user.

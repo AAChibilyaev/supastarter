@@ -2,6 +2,7 @@ import { Translate } from "ra-core";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import { useIsMobile } from "../../hooks/use-mobile";
 import {
 	Breadcrumb as BaseBreadcrumb,
 	BreadcrumbEllipsis,
@@ -22,7 +23,6 @@ import {
 	DrawerTrigger,
 } from "../drawer";
 import { Separator } from "../separator";
-import { useIsMobile } from "../../hooks/use-mobile";
 
 /**
  * A breadcrumb navigation component with mobile drawer support.

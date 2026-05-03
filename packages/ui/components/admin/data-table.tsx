@@ -31,25 +31,15 @@ import type { ReactNode } from "react";
 import { Children, createElement, isValidElement, useCallback } from "react";
 import { useNavigate } from "react-router";
 
-import {
-	BulkActionsToolbar,
-	BulkActionsToolbarChildren,
-} from "./bulk-actions-toolbar";
-import { ColumnsSelector, ColumnsSelectorItem } from "./columns-button";
-import { NumberField } from "./number-field";
+import { cn } from "../../lib";
 import { Alert, AlertDescription } from "../alert";
 import { Button } from "../button";
 import { Checkbox } from "../checkbox";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "../table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
-import { cn } from "../../lib";
+import { BulkActionsToolbar, BulkActionsToolbarChildren } from "./bulk-actions-toolbar";
+import { ColumnsSelector, ColumnsSelectorItem } from "./columns-button";
+import { NumberField } from "./number-field";
 
 const defaultBulkActionButtons = <BulkActionsToolbarChildren />;
 

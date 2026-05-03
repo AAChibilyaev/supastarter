@@ -1,8 +1,8 @@
 import { History, SearchX } from "lucide-react";
 import { Translate, useAuthenticated } from "ra-core";
 
-import { Loading } from "./loading";
 import { Button } from "../button";
+import { Loading } from "./loading";
 
 /**
  * Fallback page displayed when no route matches the current URL.

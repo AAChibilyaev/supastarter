@@ -4,9 +4,9 @@ import * as React from "react";
 import type { ReactNode } from "react";
 import { Children } from "react";
 
+import { cn } from "../../lib";
 import { CancelButton } from "./cancel-button";
 import { SaveButton } from "./form";
-import { cn } from "../../lib";
 
 /**
  * A simple form layout with vertical stacking, validation, and default toolbar.

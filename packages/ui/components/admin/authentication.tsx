@@ -2,9 +2,9 @@ import { CircleAlert, LockIcon } from "lucide-react";
 import { Translate, useHandleAuthCallback, useTranslate } from "ra-core";
 import { Link } from "react-router";
 
-import { Loading } from "./loading";
-import { Button } from "../button";
 import { cn } from "../../lib";
+import { Button } from "../button";
+import { Loading } from "./loading";
 
 /**
  * A standalone page to be used as a redirection target for external authentication services (e.g. OAuth)

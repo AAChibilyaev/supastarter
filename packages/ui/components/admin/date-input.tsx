@@ -2,10 +2,10 @@ import type { InputProps } from "ra-core";
 import { useInput, FieldTitle, useEvent, useResourceContext } from "ra-core";
 import * as React from "react";
 
+import { cn } from "../../lib";
+import { Input } from "../input";
 import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import { Input } from "../input";
-import { cn } from "../../lib";
 
 /**
  * Date picker input for editing date values in "YYYY-MM-DD" format.

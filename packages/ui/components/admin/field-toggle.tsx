@@ -2,8 +2,8 @@ import { GripVertical } from "lucide-react";
 import { FieldTitle, useResourceContext } from "ra-core";
 import * as React from "react";
 
-import { Switch } from "../switch";
 import { cn } from "../../lib";
+import { Switch } from "../switch";
 
 /**
  * A toggleable field item with drag-and-drop reordering, used by ColumnsSelector

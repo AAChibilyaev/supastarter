@@ -2,9 +2,8 @@ import { useInput, FieldTitle } from "ra-core";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback } from "react";
 
-import { FormError, FormField, FormLabel } from "./form";
 import { Switch } from "../switch";
-
+import { FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
 
 /**

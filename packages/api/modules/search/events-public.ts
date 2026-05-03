@@ -11,11 +11,7 @@
 
 import { recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
-import {
-	isForwardableEvent,
-	widgetEventToAnalyticsEvent,
-	sendAnalyticsEvent,
-} from "@repo/search";
+import { isForwardableEvent, widgetEventToAnalyticsEvent, sendAnalyticsEvent } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";

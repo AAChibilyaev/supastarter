@@ -3,8 +3,8 @@ import { Translate, useListContext } from "ra-core";
 import type { MouseEvent } from "react";
 import { useState } from "react";
 
-import { Button } from "../button";
 import { cn } from "../../lib";
+import { Button } from "../button";
 
 /**
  * A button that selects all records (up to a limit) for the current list.

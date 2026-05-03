@@ -2,12 +2,12 @@ import type { ChoicesProps, InputProps } from "ra-core";
 import { FieldTitle, useChoices, useChoicesContext, useInput } from "ra-core";
 import * as React from "react";
 
-import { FormField, FormControl, FormLabel, FormError } from "./form";
-import { InputHelperText } from "./input-helper-text";
+import { cn } from "../../lib";
 import { Label } from "../label";
 import { RadioGroup, RadioGroupItem } from "../radio-group";
 import { Skeleton } from "../skeleton";
-import { cn } from "../../lib";
+import { FormField, FormControl, FormLabel, FormError } from "./form";
+import { InputHelperText } from "./input-helper-text";
 
 /**
  * Single-select input rendered as a list of radio buttons, arranged vertically or horizontally.

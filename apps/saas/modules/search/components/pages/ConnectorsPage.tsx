@@ -27,6 +27,8 @@ import { useState } from "react";
 
 import { ConnectorCard, type ConnectorStatus, type SourceType } from "../cards/ConnectorCard";
 import { EmptyState } from "../cards/EmptyState";
+import { ShopifyConnectorCard } from "../connectors/ShopifyConnectorCard";
+import { ShopifyStoreSettings } from "../connectors/ShopifyStoreSettings";
 import { ConnectorWizard } from "../dialogs/ConnectorWizard";
 import { SyncJobsTable } from "../tables/SyncJobsTable";
 
@@ -35,6 +37,8 @@ interface ConnectorsPageProps {
 }
 
 const CONNECTOR_SOURCES: SourceType[] = ["prestashop", "bitrix", "directApi"];
+
+const SAAS_BASE_URL = process.env.NEXT_PUBLIC_SAAS_URL || "http://localhost:3000";
 
 const EMPTY_CONNECTOR_STATUS: ConnectorStatus = {
 	isConnected: false,
@@ -103,6 +107,34 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			input: { organizationId },
 		}),
 	);
+
+	// ── Shopify stores ────────────────────────────────────────────
+
+	const { data: shopifyStores, isLoading: shopifyLoading } = useQuery<
+		Array<{
+			id: string;
+			shop: string;
+			name: string | null;
+			email: string | null;
+			domain: string | null;
+			syncStatus: string;
+			syncError: string | null;
+			lastSyncAt: Date | null;
+			installedAt: Date;
+			indexId: string | null;
+			index: { id: string; slug: string; displayName: string } | null;
+		}>
+	>(
+		orpc.search.listShopifyStores.queryOptions({
+			input: { organizationId },
+			enabled: !!organizationId,
+		}),
+	);
+
+	const [shopifyStoreDialog, setShopifyStoreDialog] = useState<{
+		open: boolean;
+		storeId: string | null;
+	}>({ open: false, storeId: null });
 
 	const { data: pipelineStatus, isLoading: pipelineLoading } = useQuery(
 		orpc.search.pipelineStatus.queryOptions({
@@ -294,7 +326,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			)}
 
 			{/* Row 1: Connector Cards */}
-			<div className="gap-6 md:grid-cols-3 grid">
+			<div className="gap-6 md:grid-cols-4 grid">
 				{CONNECTOR_SOURCES.map((source) => (
 					<ConnectorCard
 						key={source}
@@ -303,6 +335,36 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 						onSetup={() => handleSetup(source)}
 					/>
 				))}
+
+				{/* Shopify card */}
+				<ShopifyConnectorCard
+					stores={(shopifyStores ?? []).map((s) => ({
+						id: s.id,
+						shop: s.shop,
+						name: s.name,
+						domain: s.domain,
+						syncStatus: s.syncStatus,
+						syncError: s.syncError,
+						lastSyncAt: s.lastSyncAt?.toISOString() ?? null,
+						installedAt: s.installedAt.toISOString(),
+					}))}
+					storeCount={shopifyStores?.length ?? 0}
+					isConnected={(shopifyStores?.length ?? 0) > 0}
+					isLoading={shopifyLoading}
+					lastSyncAt={shopifyStores?.[0]?.lastSyncAt?.toISOString() ?? null}
+					onConnect={() => {
+						if (organizationId) {
+							window.location.href = `${SAAS_BASE_URL}/api/shopify/install?shop=&organizationId=${organizationId}`;
+						}
+					}}
+					onManage={(storeId) => setShopifyStoreDialog({ open: true, storeId })}
+					onDisconnect={() => {
+						// Disconnect handled via store settings dialog
+					}}
+					onSync={() => {
+						// Sync triggered from store settings dialog
+					}}
+				/>
 			</div>
 
 			{/* Row 2: Active connectors table */}
@@ -466,6 +528,29 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 				source={wizardSource}
 				organizationId={organizationId}
 			/>
+
+			{/* Shopify Store Settings */}
+			{shopifyStoreDialog.storeId && shopifyStores && (
+				<ShopifyStoreSettings
+					organizationId={organizationId}
+					store={
+						shopifyStores
+							.filter((s) => s.id === shopifyStoreDialog.storeId)
+							.map((s) => ({
+								id: s.id,
+								shop: s.shop,
+								name: s.name,
+								domain: s.domain,
+								syncStatus: s.syncStatus,
+								syncError: s.syncError,
+								lastSyncAt: s.lastSyncAt?.toISOString() ?? null,
+								installedAt: s.installedAt.toISOString(),
+							}))[0]
+					}
+					open={shopifyStoreDialog.open}
+					onOpenChange={(open) => setShopifyStoreDialog((prev) => ({ ...prev, open }))}
+				/>
+			)}
 		</div>
 	);
 }

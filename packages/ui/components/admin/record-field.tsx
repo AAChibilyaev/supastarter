@@ -4,8 +4,8 @@ import { FieldTitle, useRecordContext, useResourceContext, useTranslate } from "
 import type { ReactNode, ElementType, HTMLAttributes } from "react";
 import { createElement } from "react";
 
-import { TextField } from "./text-field";
 import { cn } from "../../lib";
+import { TextField } from "./text-field";
 
 /**
  * Displays a labeled field-value pair with flexible rendering options.

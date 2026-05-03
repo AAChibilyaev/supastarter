@@ -8,12 +8,11 @@ import {
 } from "ra-core";
 import * as React from "react";
 
+import { cn } from "../../lib";
+import { Label } from "../label";
+import { Skeleton } from "../skeleton";
 import { FormError, FormField } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import { Label } from "../label";
-import { cn } from "../../lib";
-
-import { Skeleton } from "../ui/skeleton";
 
 /**
  * Creates a list of sub-forms for editing arrays of data embedded inside a record.

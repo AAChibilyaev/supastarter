@@ -1,7 +1,7 @@
 import { RecordContextProvider, RecordRepresentation, useListContext } from "ra-core";
 
-import { Badge } from "../badge";
 import { cn } from "../../lib";
+import { Badge } from "../badge";
 
 /**
  * Renders a horizontal list of records from a ListContext, displaying each as a badge.

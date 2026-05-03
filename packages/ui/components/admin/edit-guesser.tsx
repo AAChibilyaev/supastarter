@@ -89,9 +89,7 @@ const EditViewGuesser = (props: EditGuesserProps) => {
 				`Guessed Edit:
 
 ${components
-	.map(
-		(component) => `import { ${component} } from "./${kebabCase(component)}";`,
-	)
+	.map((component) => `import { ${component} } from "./${kebabCase(component)}";`)
 	.join("\n")}
 
 export const ${capitalize(singularize(resource))}Edit = () => (

@@ -13,14 +13,13 @@ import { useEffect, useState, isValidElement, Children } from "react";
 
 import { ArrayField } from "./array-field";
 import { BadgeField } from "./badge-field";
+import { DateField } from "./date-field";
 import { NumberField } from "./number-field";
 import { RecordField } from "./record-field";
 import { ReferenceArrayField } from "./reference-array-field";
 import { ReferenceField } from "./reference-field";
 import { ShowView } from "./show";
 import { SingleFieldList } from "./single-field-list";
-
-import { DateField } from "./date-field";
 
 /**
  * A show page that automatically generates fields from your data.
@@ -82,9 +81,7 @@ const ShowViewGuesser = (props: ShowGuesserProps) => {
 				`Guessed Show:
 
 ${components
-	.map(
-		(component) => `import { ${component} } from "./${kebabCase(component)}";`,
-	)
+	.map((component) => `import { ${component} } from "./${kebabCase(component)}";`)
 	.join("\n")}
 
 export const ${capitalize(singularize(resource))}Show = () => (

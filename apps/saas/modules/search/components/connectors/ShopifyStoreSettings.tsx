@@ -32,9 +32,7 @@ interface ShopifyStoreSettingsProps {
 	onOpenChange: (open: boolean) => void;
 }
 
-function getSyncStatusBadge(
-	status: string,
-): "success" | "warning" | "error" | "info" {
+function getSyncStatusBadge(status: string): "success" | "warning" | "error" | "info" {
 	switch (status) {
 		case "active":
 			return "success";
@@ -96,9 +94,7 @@ export function ShopifyStoreSettings({
 
 				<div className="space-y-4">
 					<div className="gap-4 flex items-center justify-between">
-						<span className="text-sm font-medium">
-							{tShopify("syncStatus")}
-						</span>
+						<span className="text-sm font-medium">{tShopify("syncStatus")}</span>
 						<Badge status={getSyncStatusBadge(store.syncStatus)}>
 							{store.syncStatus === "active"
 								? tShopify("statusActive")
@@ -136,7 +132,7 @@ export function ShopifyStoreSettings({
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3 space-y-1.5">
-							<div className="gap-2 flex items-center justify-between text-xs">
+							<div className="gap-2 text-xs flex items-center justify-between">
 								<span className="text-muted-foreground">
 									{tShopify("storeDomain")}
 								</span>
@@ -151,7 +147,7 @@ export function ShopifyStoreSettings({
 								</a>
 							</div>
 							{store.lastSyncAt && (
-								<div className="gap-2 flex items-center justify-between text-xs">
+								<div className="gap-2 text-xs flex items-center justify-between">
 									<span className="text-muted-foreground">
 										{tShopify("lastSync")}
 									</span>

@@ -1,10 +1,10 @@
 import type { InputProps } from "ra-core";
 import { useInput, useResourceContext, FieldTitle } from "ra-core";
 
-import { FormControl, FormError, FormField, FormLabel } from "./form";
-import { InputHelperText } from "./input-helper-text";
 import { Input } from "../input";
 import { Textarea } from "../textarea";
+import { FormControl, FormError, FormField, FormLabel } from "./form";
+import { InputHelperText } from "./input-helper-text";
 
 export type TextInputProps = InputProps & {
 	multiline?: boolean;

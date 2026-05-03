@@ -1,4 +1,3 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
 import type {
 	ExtractRecordPaths,
 	LinkToType,
@@ -71,9 +70,8 @@ export interface ReferenceFieldProps<
 	ReferenceRecordType extends RaRecord = RaRecord,
 > extends Partial<ReferenceFieldViewProps<ReferenceRecordType>> {
 	children?: ReactNode;
-	queryOptions?: UseQueryOptions<RaRecord[], Error> & {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		meta?: any;
+	queryOptions?: {
+		meta?: Record<string, unknown>;
 	};
 	record?: RecordType;
 	reference: string;

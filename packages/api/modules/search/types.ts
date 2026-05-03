@@ -37,6 +37,7 @@ export const searchFieldSchema = z.object({
 	optional: z.boolean().optional(),
 	index: z.boolean().optional(),
 	sort: z.boolean().optional(),
+	reference: z.string().optional(),
 	embed: embedConfigSchema.optional(),
 });
 

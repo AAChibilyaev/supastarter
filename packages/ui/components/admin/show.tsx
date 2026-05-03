@@ -13,9 +13,9 @@ import {
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 
+import { cn } from "../../lib";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbPage } from "./breadcrumb";
 import { EditButton } from "./edit-button";
-import { cn } from "../../lib";
 
 export interface ShowProps extends ShowViewProps, Omit<ShowBaseProps, "children"> {}
 

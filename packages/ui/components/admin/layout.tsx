@@ -3,6 +3,8 @@ import type { ErrorInfo } from "react";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
+import { cn } from "../../lib";
+import { SidebarProvider, SidebarTrigger } from "../sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { Error } from "./error";
 import { Loading } from "./loading";
@@ -11,8 +13,6 @@ import { Notification } from "./notification";
 import { RefreshButton } from "./refresh-button";
 import { ThemeModeToggle } from "./theme-mode-toggle";
 import { UserMenu } from "./user-menu";
-import { SidebarProvider, SidebarTrigger } from "../sidebar";
-import { cn } from "../../lib";
 
 /**
  * The main application layout with sidebar, header, and content area.

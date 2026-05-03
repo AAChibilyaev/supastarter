@@ -3,10 +3,10 @@ import { FieldTitle, useInput, useResourceContext } from "ra-core";
 import * as React from "react";
 import { useEffect, useState } from "react";
 
+import { Input } from "../input";
 import { FormControl, FormField, FormLabel } from "./form";
 import { FormError } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import { Input } from "../input";
 
 /**
  * Input component for numeric values (integers and floats) with parsing and formatting support.

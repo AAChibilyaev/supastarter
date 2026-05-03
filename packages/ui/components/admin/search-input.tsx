@@ -3,10 +3,10 @@ import { useTranslate } from "ra-core";
 import { useCallback } from "react";
 import { useWatch, useFormContext } from "react-hook-form";
 
+import { cn } from "../../lib";
+import { Button } from "../button";
 import type { TextInputProps } from "./text-input";
 import { TextInput } from "./text-input";
-import { Button } from "../button";
-import { cn } from "../../lib";
 
 /**
  * Text input with a search icon, designed for filter forms without a label.

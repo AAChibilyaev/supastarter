@@ -28,6 +28,7 @@ export interface CollectionFieldInput {
 	optional?: boolean;
 	index?: boolean;
 	sort?: boolean;
+	reference?: string;
 	embed?: {
 		from: string[];
 		model_config?: {

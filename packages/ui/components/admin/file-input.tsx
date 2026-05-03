@@ -7,10 +7,10 @@ import { Children, isValidElement, useEffect } from "react";
 import type { DropzoneOptions, FileRejection, DropEvent, DropzoneInputProps } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 
+import { cn } from "../../lib";
+import { Button } from "../button.tsx";
 import { FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import { Button } from "../button.tsx";
-import { cn } from "../../lib";
 
 /**
  * File upload input with drag-and-drop support and preview capabilities.

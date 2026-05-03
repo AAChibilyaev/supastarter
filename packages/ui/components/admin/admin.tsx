@@ -8,13 +8,14 @@ import {
 } from "ra-core";
 import { useEffect } from "react";
 
+import { i18nProvider as defaultI18nProvider } from "@/lib/i18nProvider";
+
 import { AuthCallback } from "./authentication";
 import { Layout } from "./layout";
 import { LoginPage } from "./login-page";
 import { NotFound } from "./not-found";
 import { Ready } from "./ready";
 import { ThemeProvider } from "./theme-provider";
-import { i18nProvider as defaultI18nProvider } from "@/lib/i18nProvider";
 
 const defaultStore = localStorageStore();
 

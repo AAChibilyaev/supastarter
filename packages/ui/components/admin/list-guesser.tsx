@@ -131,9 +131,7 @@ const ListViewGuesser = (props: Omit<ListViewProps, "children"> & { enableLog?: 
 					`Guessed List:
 
 ${components
-	.map(
-		(component) => `import { ${component} } from "./${kebabCase(component)}";`,
-	)
+	.map((component) => `import { ${component} } from "./${kebabCase(component)}";`)
 	.join("\n")}
 
 export const ${capitalize(singularize(resource))}List = () => (

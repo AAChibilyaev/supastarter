@@ -14,10 +14,9 @@ import {
 import * as React from "react";
 import { useCallback } from "react";
 
-import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { Badge } from "../badge";
 import { Command, CommandGroup, CommandItem, CommandList } from "../command";
-
+import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
 
 /**

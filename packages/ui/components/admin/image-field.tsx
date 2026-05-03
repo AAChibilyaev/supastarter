@@ -3,8 +3,8 @@ import { type ExtractRecordPaths, type HintedString, useFieldValue, useTranslate
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { HTMLAttributes } from "react";
 
-import type { FieldProps } from "../../lib/field.type.ts";
 import { cn } from "../../lib";
+import type { FieldProps } from "../../lib/field.type.ts";
 
 /**
  * Displays an image or a list of images from a record field inside an img element or a ul of img elements.

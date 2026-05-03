@@ -9,6 +9,7 @@ import {
 import * as React from "react";
 import { memo } from "react";
 
+import { useIsMobile } from "../../hooks/use-mobile";
 import { Button } from "../button";
 import {
 	DropdownMenu,
@@ -17,7 +18,6 @@ import {
 	DropdownMenuTrigger,
 } from "../dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
-import { useIsMobile } from "../../hooks/use-mobile";
 
 type ButtonProps = React.ComponentProps<typeof Button>;
 

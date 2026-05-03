@@ -86,9 +86,7 @@ export function widgetEventToAnalyticsEvent(
  *
  * Best-effort: logs errors, never throws, so it doesn't block the calling code.
  */
-export async function sendAnalyticsEvent(
-	event: AnalyticsEvent,
-): Promise<void> {
+export async function sendAnalyticsEvent(event: AnalyticsEvent): Promise<void> {
 	try {
 		const env = getTypesenseEnv();
 		const url = `${env.protocol}://${env.host}:${env.port}/analytics/events`;
@@ -124,8 +122,6 @@ export async function sendAnalyticsEvent(
  * Send multiple analytics events to Typesense in parallel.
  * All events are independent (no batch endpoint on Typesense).
  */
-export async function sendAnalyticsEvents(
-	events: AnalyticsEvent[],
-): Promise<void> {
+export async function sendAnalyticsEvents(events: AnalyticsEvent[]): Promise<void> {
 	await Promise.allSettled(events.map(sendAnalyticsEvent));
 }

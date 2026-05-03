@@ -13,11 +13,10 @@ import {
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 
-import { Breadcrumb, BreadcrumbItem, BreadcrumbPage } from "./breadcrumb";
-import { ShowButton } from "./show-button";
 import { cn } from "../../lib";
-
+import { Breadcrumb, BreadcrumbItem, BreadcrumbPage } from "./breadcrumb";
 import { DeleteButton } from "./delete-button";
+import { ShowButton } from "./show-button";
 
 export interface EditProps extends EditViewProps, EditBaseProps {}
 

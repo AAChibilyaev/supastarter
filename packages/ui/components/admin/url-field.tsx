@@ -2,8 +2,8 @@ import { genericMemo, useFieldValue, useTranslate } from "ra-core";
 import type { AnchorHTMLAttributes } from "react";
 import * as React from "react";
 
-import type { FieldProps } from "../../lib/field.type.ts";
 import { cn } from "../../lib";
+import type { FieldProps } from "../../lib/field.type.ts";
 
 /**
  * Displays a URL as a clickable hyperlink.

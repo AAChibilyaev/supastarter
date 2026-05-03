@@ -25,11 +25,11 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import type { UseFieldArrayReturn } from "react-hook-form";
 
-import { Confirm } from "./confirm";
-import { IconButtonWithTooltip } from "./icon-button-with-tooltip.tsx";
+import { cn } from "../../lib";
 import { Button } from "../button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
-import { cn } from "../../lib";
+import { Confirm } from "./confirm";
+import { IconButtonWithTooltip } from "./icon-button-with-tooltip.tsx";
 
 type GetItemLabelFunc = (index: number) => string | ReactElement;
 

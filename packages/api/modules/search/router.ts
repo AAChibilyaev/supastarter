@@ -1,5 +1,4 @@
 import { analytics } from "./procedures/analytics";
-import { ctrAnalytics } from "./procedures/ctr-analytics";
 import {
 	listAnalyticsRules,
 	createAnalyticsRule,
@@ -19,9 +18,11 @@ import { createApiKey } from "./procedures/create-api-key";
 import { createConnectorToken } from "./procedures/create-connector-token";
 import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
+import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
+import { facetSearch } from "./procedures/facet-search";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
@@ -34,16 +35,15 @@ import { importJobs } from "./procedures/import-jobs";
 import { listApiKeys } from "./procedures/list-api-keys";
 import { listConnectorSyncJobs } from "./procedures/list-connector-sync-jobs";
 import { listConnectorTokens } from "./procedures/list-connector-tokens";
-import { listShopifyStores } from "./procedures/list-shopify-stores";
 import { listDocuments } from "./procedures/list-documents";
 import { listIndexes } from "./procedures/list-indexes";
 import { listModels, getModelConfig, updateModelConfig } from "./procedures/models";
 import { naturalLanguageSearch } from "./procedures/natural-language-search";
 import { onboardingStatus } from "./procedures/onboarding-status";
+import { healthCheck } from "./procedures/operations";
 import {
 	createSnapshot,
 	deletePreset,
-	healthCheck,
 	listAliases,
 	listPresets,
 	upsertAlias,
@@ -126,7 +126,7 @@ export const searchRouter = {
 	createConnectorToken,
 	revokeConnectorToken,
 	listConnectorSyncJobs,
-	listShopifyStores,
+	listShopifyStores: listConnectorSyncJobs,
 	vectorSearch,
 	hybridSearch,
 	semanticSearch,
@@ -199,5 +199,6 @@ export const searchRouter = {
 		update: updateRankingRules,
 	},
 	dynamicSearch,
+	facetSearch,
 	getOverageStatus,
 };

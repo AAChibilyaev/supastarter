@@ -8,9 +8,9 @@ import {
 } from "ra-core";
 import type { ReactNode } from "react";
 
+import { cn } from "../../lib";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "../button";
-import { cn } from "../../lib";
 
 /**
  * A button that deletes multiple selected records at once.

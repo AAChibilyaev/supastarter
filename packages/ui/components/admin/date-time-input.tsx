@@ -3,9 +3,9 @@ import type { InputProps } from "ra-core";
 import { useInput, FieldTitle } from "ra-core";
 import * as React from "react";
 
+import { Input } from "../input";
 import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import { Input } from "../input";
 
 /**
  * Date and time picker input for editing datetime values with timezone support.

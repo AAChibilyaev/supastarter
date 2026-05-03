@@ -12,12 +12,12 @@ import {
 import type { ReactElement, ReactNode } from "react";
 import { Link } from "react-router";
 
+import { cn } from "../../lib";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbPage } from "./breadcrumb";
 import { CreateButton } from "./create-button";
 import { ExportButton } from "./export-button";
 import { FilterButton, FilterForm } from "./filter-form";
 import { ListPagination } from "./list-pagination";
-import { cn } from "../../lib";
 
 /**
  * A complete list page with breadcrumb, title, filters, and pagination.

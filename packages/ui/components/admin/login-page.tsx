@@ -2,9 +2,9 @@ import { Form, required, useLogin, useNotify } from "ra-core";
 import { useState } from "react";
 import type { SubmitHandler, FieldValues } from "react-hook-form";
 
+import { Button } from "../button";
 import { Notification } from "./notification";
 import { TextInput } from "./text-input";
-import { Button } from "../button";
 
 /**
  * Login page displayed when authentication is enabled and the user is not authenticated.

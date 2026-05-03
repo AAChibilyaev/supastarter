@@ -5,8 +5,8 @@ import { useListContext, useTranslate } from "ra-core";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-import { Button } from "../button";
 import { cn } from "../../lib";
+import { Button } from "../button";
 
 /**
  * A button that toggles a specific filter value on/off.

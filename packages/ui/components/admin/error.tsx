@@ -3,12 +3,7 @@ import { useResetErrorBoundaryOnLocationChange, Translate } from "ra-core";
 import type { HtmlHTMLAttributes, ErrorInfo } from "react";
 import type { FallbackProps } from "react-error-boundary";
 
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "../accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../accordion";
 import { Button } from "../button";
 
 /**

@@ -3,9 +3,8 @@ import type { InputProps } from "ra-core";
 import { useInput, useResourceContext, FieldTitle, useTranslate } from "ra-core";
 import * as React from "react";
 
-import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { Badge } from "../badge";
-
+import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
 
 export type TextArrayInputProps = InputProps & {

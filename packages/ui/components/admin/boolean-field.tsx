@@ -1,9 +1,9 @@
 import { Check, type LucideIcon, X } from "lucide-react";
 import { RaRecord, useFieldValue, useTranslate } from "ra-core";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
-import type { FieldProps } from "../../lib/field.type";
 import { cn } from "../../lib";
+import type { FieldProps } from "../../lib/field.type";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
 
 /**
  * Displays a boolean value as a colored check or close icon.

@@ -1,28 +1,15 @@
 "use client";
 
 import { Badge } from "@repo/ui/components/badge";
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface ShopifySyncHistoryProps {
 	organizationId: string;
 	storeId: string;
-}
-
-interface SyncEvent {
-	id: string;
-	type: string;
-	status: string;
-	startedAt: string;
-	finishedAt: string | null;
-	itemsCount: number;
-	failuresCount: number;
-	lastError: string | null;
 }
 
 function getSyncStatusColor(
@@ -58,20 +45,15 @@ function relativeTime(
 
 export function ShopifySyncHistory({
 	organizationId,
-	storeId,
 }: ShopifySyncHistoryProps) {
 	const t = useTranslations();
 	const tShopify = useTranslations("search.connector.shopify");
 
-	const { data: syncJobs, isLoading } = useQuery({
-		...orpc.search.listConnectorSyncJobs.queryOptions({
+	const { data: syncJobs, isLoading } = useQuery(
+		orpc.search.listConnectorSyncJobs.queryOptions({
 			input: { organizationId },
 		}),
-		select: (jobs) =>
-			(jobs as SyncEvent[])
-				.filter(() => true)
-				.slice(0, 10),
-	});
+	);
 
 	if (isLoading) {
 		return (
@@ -97,7 +79,7 @@ export function ShopifySyncHistory({
 
 	return (
 		<div className="space-y-2">
-			{syncJobs.map((job: any) => (
+			{syncJobs.slice(0, 10).map((job: any) => (
 				<div
 					key={job.id}
 					className="gap-3 p-3 flex items-center justify-between rounded-lg border border-border"
@@ -122,9 +104,7 @@ export function ShopifySyncHistory({
 							</Badge>
 						</div>
 						<div className="gap-2 mt-0.5 flex items-center text-xs text-muted-foreground">
-							<span>
-								{relativeTime(job.startedAt, t)}
-							</span>
+							<span>{relativeTime(job.startedAt, t)}</span>
 							{job.itemsCount > 0 && (
 								<>
 									<span>·</span>

@@ -5,12 +5,12 @@
 
 ## 📍 Quick Links
 
-| Resource | URL |
-|----------|-----|
-| Official Docs (LLM) | https://ui.shadcn.com/llms.txt |
-| MCP Server (AI browsing) | https://ui.shadcn.com/docs/mcp |
-| awesome-shadcn-ui | github: birobirobiro/awesome-shadcn-ui (19.5K ⭐) |
-| Component CLI | `pnpm dlx shadcn@latest add <name> -c packages/ui` |
+| Resource                 | URL                                                |
+| ------------------------ | -------------------------------------------------- |
+| Official Docs (LLM)      | https://ui.shadcn.com/llms.txt                     |
+| MCP Server (AI browsing) | https://ui.shadcn.com/docs/mcp                     |
+| awesome-shadcn-ui        | github: birobirobiro/awesome-shadcn-ui (19.5K ⭐)  |
+| Component CLI            | `pnpm dlx shadcn@latest add <name> -c packages/ui` |
 
 ## 🏗 Project Setup
 
@@ -42,43 +42,43 @@ toggle-group  tooltip
 
 ### 13 Landing Blocks (PageAI-Pro/page-ui, 1.6K⭐)
 
-| Component | Purpose |
-|-----------|---------|
-| `GlowBg` | SVG radial gradient glow background |
-| `LandingBand` | Brand-colored full-width band section |
-| `LandingFeature` | Single feature card with icon |
-| `LandingFeatureList` | Features grid section with glow bg |
-| `LandingPricingSection` | Pricing section wrapper |
-| `LandingPricingPlan` | Individual pricing plan card |
-| `LandingFooter` | Landing page footer with columns |
-| `LandingFooterColumn` | Footer column layout |
-| `LandingFooterLink` | Footer navigation link |
-| `LandingPrimaryCta` | Hero-equivalent CTA (image/text/video) |
-| `LandingSaleCta` | Sale/conversion CTA section |
-| `LandingVideoPlayer` | Video player with play overlay |
-| `LandingImage` | Native `<img>` wrapper |
+| Component               | Purpose                                |
+| ----------------------- | -------------------------------------- |
+| `GlowBg`                | SVG radial gradient glow background    |
+| `LandingBand`           | Brand-colored full-width band section  |
+| `LandingFeature`        | Single feature card with icon          |
+| `LandingFeatureList`    | Features grid section with glow bg     |
+| `LandingPricingSection` | Pricing section wrapper                |
+| `LandingPricingPlan`    | Individual pricing plan card           |
+| `LandingFooter`         | Landing page footer with columns       |
+| `LandingFooterColumn`   | Footer column layout                   |
+| `LandingFooterLink`     | Footer navigation link                 |
+| `LandingPrimaryCta`     | Hero-equivalent CTA (image/text/video) |
+| `LandingSaleCta`        | Sale/conversion CTA section            |
+| `LandingVideoPlayer`    | Video player with play overlay         |
+| `LandingImage`          | Native `<img>` wrapper                 |
 
 ### 6 Chat Components (jakobhoeg/shadcn-chat, 1.6K⭐)
 
 Path: `packages/ui/components/chat/`
 
-| Component | Description |
-|-----------|-------------|
-| `ChatBubble` | Chat bubble + avatar + message + timestamp + actions |
-| `ChatInput` | Text input (native `<textarea>`) |
-| `ChatMessageList` | Scrollable message list with auto-scroll |
-| `ExpandableChat` | Expandable FAB chat widget (bottom-right/left) |
-| `MessageLoading` | Animated loading dots SVG |
-| `useAutoScroll` | Hook for auto-scrolling chat |
+| Component         | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `ChatBubble`      | Chat bubble + avatar + message + timestamp + actions |
+| `ChatInput`       | Text input (native `<textarea>`)                     |
+| `ChatMessageList` | Scrollable message list with auto-scroll             |
+| `ExpandableChat`  | Expandable FAB chat widget (bottom-right/left)       |
+| `MessageLoading`  | Animated loading dots SVG                            |
+| `useAutoScroll`   | Hook for auto-scrolling chat                         |
 
 ### 4 Specialized Components
 
-| Component | Source | Description |
-|-----------|--------|-------------|
-| `Tour` | NiazMorshed2007/shadcn-tour (285⭐) | Product tour (581 lines) |
-| `Timeline` | timDeHof/shadcn-timeline (306⭐) | Timeline component (538 lines) |
-| `Stepper` | damianricobelli/stepperize (1.6K⭐) | Step wizard via npm `@stepperize/react` |
-| `Billing` | dodopayments/billingsdk (448⭐) | Billing UI hub via `@billingsdk/cli` |
+| Component  | Source                              | Description                             |
+| ---------- | ----------------------------------- | --------------------------------------- |
+| `Tour`     | NiazMorshed2007/shadcn-tour (285⭐) | Product tour (581 lines)                |
+| `Timeline` | timDeHof/shadcn-timeline (306⭐)    | Timeline component (538 lines)          |
+| `Stepper`  | damianricobelli/stepperize (1.6K⭐) | Step wizard via npm `@stepperize/react` |
+| `Billing`  | dodopayments/billingsdk (448⭐)     | Billing UI hub via `@billingsdk/cli`    |
 
 ### Key Dependencies Added
 
@@ -102,10 +102,10 @@ pnpm dlx shadcn@latest search
 
 ## ⏳ Pending (blocked by npm registry)
 
-| Package | CLI Command |
-|---------|-------------|
-| marmelab/shadcn-admin-kit (875⭐) | `pnpm add @react-admin/ra-shadcn --filter @repo/ui` |
-| openstatusHQ/data-table-filters (2K⭐) | copy src from GitHub |
+| Package                                | CLI Command                                         |
+| -------------------------------------- | --------------------------------------------------- |
+| marmelab/shadcn-admin-kit (875⭐)      | `pnpm add @react-admin/ra-shadcn --filter @repo/ui` |
+| openstatusHQ/data-table-filters (2K⭐) | copy src from GitHub                                |
 
 ## 📚 Best Practices Summary
 

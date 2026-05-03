@@ -1,4 +1,3 @@
-import * as PopoverPrimitive from "@radix-ui/react-popover";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as diacritic from "diacritic";
@@ -19,16 +18,17 @@ import {
 	type HintedString,
 	type ExtractRecordPaths,
 } from "ra-core";
+import { Popover as PopoverPrimitive } from "radix-ui";
 import { useState, useEffect, Children, type ComponentProps, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-import { FieldToggle } from "./field-toggle";
+import { useIsMobile } from "../../hooks/use-mobile";
+import { cn } from "../../lib";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Popover, PopoverTrigger } from "../popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip";
-import { useIsMobile } from "../../hooks/use-mobile";
-import { cn } from "../../lib";
+import { FieldToggle } from "./field-toggle";
 
 /**
  * Renders a button that lets users show / hide columns in a DataTable

@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useListPaginationContext, Translate, useTranslate } from "ra-core";
 
+import { cn } from "../../lib";
 import {
 	Pagination,
 	PaginationContent,
@@ -8,14 +9,7 @@ import {
 	PaginationItem,
 	PaginationLink,
 } from "../pagination";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "../select";
-import { cn } from "../../lib";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select";
 
 /**
  * A pagination component with page numbers and rows per page selector.

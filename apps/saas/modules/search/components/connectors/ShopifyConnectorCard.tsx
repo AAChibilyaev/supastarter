@@ -10,8 +10,8 @@ import {
 	CardTitle,
 } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { StoreIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { type LucideIcon, StoreIcon } from "lucide-react";
 
 export type ShopifyStoreInfo = {
 	id: string;
@@ -36,9 +36,7 @@ interface ShopifyConnectorCardProps {
 	onSync: (storeId: string) => void;
 }
 
-function getStatusBadge(
-	syncStatus: string,
-): "success" | "warning" | "error" | "info" {
+function getStatusBadge(syncStatus: string): "success" | "warning" | "error" | "info" {
 	switch (syncStatus) {
 		case "active":
 			return "success";
@@ -137,7 +135,7 @@ export function ShopifyConnectorCard({
 									<p className="text-sm font-medium truncate">
 										{store.name || store.shop}
 									</p>
-									<p className="text-xs text-muted-foreground truncate">
+									<p className="text-xs truncate text-muted-foreground">
 										{store.domain || store.shop}
 										{store.lastSyncAt && (
 											<>

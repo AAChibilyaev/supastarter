@@ -3,8 +3,8 @@ import type { ExtractRecordPaths, HintedString } from "ra-core";
 import { useFieldValue, useTranslate } from "ra-core";
 import type { HTMLAttributes } from "react";
 
-import type { FieldProps } from "../../lib/field.type.ts";
 import { cn } from "../../lib";
+import type { FieldProps } from "../../lib/field.type.ts";
 
 /**
  * Displays a downloadable file link with customizable title and target.

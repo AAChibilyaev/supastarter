@@ -1,6 +1,6 @@
 import { Check, Moon, Sun } from "lucide-react";
 
-import { useTheme } from "./use-theme";
+import { cn } from "../../lib";
 import { Button } from "../button";
 import {
 	DropdownMenu,
@@ -8,7 +8,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "../dropdown-menu";
-import { cn } from "../../lib";
+import { useTheme } from "./use-theme";
 
 /**
  * Toggle button that lets users switch between light, dark, and system UI themes.

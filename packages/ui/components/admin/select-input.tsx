@@ -12,17 +12,11 @@ import {
 import type { ComponentProps, ReactElement } from "react";
 import { useCallback, useEffect } from "react";
 
+import { cn } from "../../lib";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select";
+import { Skeleton } from "../skeleton";
 import { FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "../select";
-import { Skeleton } from "../skeleton";
-import { cn } from "../../lib";
 
 /**
  * Dropdown select input for choosing a single value from a list of options.

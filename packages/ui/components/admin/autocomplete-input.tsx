@@ -1,4 +1,3 @@
-import { PopoverProps } from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import type { ChoicesProps, InputProps, SupportCreateSuggestionOptions } from "ra-core";
 import {
@@ -11,11 +10,12 @@ import {
 	useEvent,
 	useSupportCreateSuggestion,
 } from "ra-core";
+import { PopoverProps } from "radix-ui";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { useCallback } from "react";
 
-import { FormControl, FormError, FormField, FormLabel } from "./form";
+import { cn } from "../../lib";
 import { Button } from "../button";
 import {
 	Command,
@@ -26,8 +26,7 @@ import {
 	CommandList,
 } from "../command";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import { cn } from "../../lib";
-
+import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
 
 /**

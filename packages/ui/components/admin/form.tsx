@@ -1,6 +1,4 @@
-import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
-import type { UseMutationOptions } from "@tanstack/react-query";
 import { Loader2, Save } from "lucide-react";
 import type { CreateParams, RaRecord, TransformData, UpdateParams } from "ra-core";
 import {
@@ -10,14 +8,15 @@ import {
 	ValidationError,
 	warning,
 } from "ra-core";
+import { Label as LabelPrimitive } from "radix-ui";
 import * as React from "react";
 import type { MouseEventHandler } from "react";
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { FormProvider, useFormContext, useFormState } from "react-hook-form";
 
-import { Button } from "../button.tsx";
-import { Label } from "../label";
 import { cn } from "../../lib";
+import { Button } from "../button";
+import { Label } from "../label";
 
 const Form = FormProvider;
 
@@ -238,11 +237,11 @@ interface Props<RecordType extends RaRecord = RaRecord, MutationOptionsError = u
 	disabled?: boolean;
 	icon?: React.ReactNode;
 	label?: string;
-	mutationOptions?: UseMutationOptions<
-		RecordType,
-		MutationOptionsError,
-		CreateParams<RecordType> | UpdateParams<RecordType>
-	>;
+	mutationOptions?: {
+		onError?: (error: Error) => void;
+		onSuccess?: (data: RecordType) => void;
+		meta?: Record<string, unknown>;
+	};
 	transform?: TransformData;
 	variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
 }

@@ -19,7 +19,7 @@ import type { HtmlHTMLAttributes, ReactNode } from "react";
 import { useCallback, useEffect, useState, isValidElement } from "react";
 import { useNavigate } from "react-router";
 
-import { AddSavedQueryDialog, RemoveSavedQueryDialog } from "./saved-queries";
+import { cn } from "../../lib";
 import { Button } from "../button";
 import {
 	DropdownMenu,
@@ -28,7 +28,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "../dropdown-menu";
-import { cn } from "../../lib";
+import { AddSavedQueryDialog, RemoveSavedQueryDialog } from "./saved-queries";
 
 /**
  * A form for filter inputs with live updates. Included by default in List.

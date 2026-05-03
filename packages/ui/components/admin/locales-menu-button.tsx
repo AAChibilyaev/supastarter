@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { useLocales, useLocaleState } from "ra-core";
 
+import { cn } from "../../lib";
 import { Button } from "../button";
 import {
 	DropdownMenu,
@@ -8,7 +9,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "../dropdown-menu";
-import { cn } from "../../lib";
 
 /**
  * Language switcher button that displays a menu allowing users to select the interface language.

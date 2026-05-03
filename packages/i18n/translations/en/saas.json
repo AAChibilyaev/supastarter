@@ -1361,7 +1361,9 @@
 				"noIndex": "No index available. Create an index first.",
 				"tokenFailed": "Failed to generate token"
 			},
-			"jobFailures": "Failures"
+			"jobFailures": "Failures",
+			"shopify": "Shopify",
+			"shopifyDesc": "Sync products from your Shopify store"
 		},
 		"tabs": {
 			"indexes": "Indexes",
@@ -1735,6 +1737,20 @@
 			"description": "Advanced search with dynamic sorting and result diversification.",
 			"diversifyField": "Diversify field",
 			"maxPerValue": "Max per value"
+		},
+		"connectors": {
+			"shopify": {
+				"title": "Shopify",
+				"description": "Sync your Shopify products to search",
+				"connectStore": "Connect Shopify Store",
+				"notConnected": "Not connected",
+				"syncNow": "Sync Now",
+				"syncHistory": "Shopify Sync History",
+				"collectionsLabel": "Collections to index",
+				"recommended": "Recommended",
+				"autoSync": "Auto-sync",
+				"autoSyncDesc": "Automatically sync on product changes in Shopify"
+			}
 		}
 	},
 	"nav": {

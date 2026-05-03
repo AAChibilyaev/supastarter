@@ -1337,7 +1337,9 @@
 				"noIndex": "Aucun index disponible. Créez d'abord un index.",
 				"tokenFailed": "Échec de la génération du token"
 			},
-			"jobFailures": "Échecs"
+			"jobFailures": "Échecs",
+			"shopify": "Shopify",
+			"shopifyDesc": "Synchroniser les produits de votre boutique Shopify"
 		},
 		"tabs": {
 			"indexes": "Index",
@@ -1735,6 +1737,20 @@
 			"apiKeys": "Clés API",
 			"loadError": "Impossible de charger les projets.",
 			"title": "Projets"
+		},
+		"connectors": {
+			"shopify": {
+				"title": "Shopify",
+				"description": "Synchroniser vos produits Shopify pour la recherche",
+				"connectStore": "Connecter la boutique Shopify",
+				"notConnected": "Non connecté",
+				"syncNow": "Synchroniser maintenant",
+				"syncHistory": "Historique de synchronisation Shopify",
+				"collectionsLabel": "Collections à indexer",
+				"recommended": "Recommandé",
+				"autoSync": "Synchronisation automatique",
+				"autoSyncDesc": "Synchroniser automatiquement lors de modifications produits dans Shopify"
+			}
 		}
 	},
 	"nav": {

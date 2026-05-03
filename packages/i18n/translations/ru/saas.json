@@ -1361,7 +1361,9 @@
 				"noIndex": "Нет доступного индекса. Сначала создайте индекс.",
 				"tokenFailed": "Не удалось создать токен"
 			},
-			"jobFailures": "Сбоев"
+			"jobFailures": "Сбоев",
+			"shopify": "Shopify",
+			"shopifyDesc": "Синхронизация товаров из вашего магазина Shopify"
 		},
 		"tabs": {
 			"indexes": "Индексы",
@@ -1735,6 +1737,20 @@
 			"description": "Расширенный поиск с динамической сортировкой и диверсификацией результатов.",
 			"diversifyField": "Поле диверсификации",
 			"maxPerValue": "Макс на значение"
+		},
+		"connectors": {
+			"shopify": {
+				"title": "Shopify",
+				"description": "Синхронизация товаров Shopify в поиск",
+				"connectStore": "Подключить магазин Shopify",
+				"notConnected": "Не подключено",
+				"syncNow": "Синхронизировать сейчас",
+				"syncHistory": "История синхронизации Shopify",
+				"collectionsLabel": "Коллекции для индексации",
+				"recommended": "Рекомендуется",
+				"autoSync": "Автосинхронизация",
+				"autoSyncDesc": "Автоматически синхронизировать при изменениях товаров в Shopify"
+			}
 		}
 	},
 	"nav": {

@@ -28,13 +28,14 @@ import { useState } from "react";
 import { ConnectorCard, type ConnectorStatus, type SourceType } from "../cards/ConnectorCard";
 import { EmptyState } from "../cards/EmptyState";
 import { ConnectorWizard } from "../dialogs/ConnectorWizard";
+import { ShopifyConnectorCard } from "../cards/ShopifyConnectorCard";
 import { SyncJobsTable } from "../tables/SyncJobsTable";
 
 interface ConnectorsPageProps {
 	organizationId: string;
 }
 
-const CONNECTOR_SOURCES: SourceType[] = ["prestashop", "bitrix", "directApi"];
+const CONNECTOR_SOURCES: SourceType[] = ["prestashop", "bitrix", "shopify", "directApi"];
 
 const EMPTY_CONNECTOR_STATUS: ConnectorStatus = {
 	isConnected: false,
@@ -60,6 +61,7 @@ function deriveSourceType(name: string): SourceType {
 	const lower = name.toLowerCase();
 	if (lower.includes("prestashop")) return "prestashop";
 	if (lower.includes("bitrix")) return "bitrix";
+	if (lower.includes("shopify")) return "shopify";
 	return "directApi";
 }
 
@@ -141,6 +143,7 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 	const sourceStatusMap: Record<SourceType, ConnectorStatus> = {
 		prestashop: EMPTY_CONNECTOR_STATUS,
 		bitrix: EMPTY_CONNECTOR_STATUS,
+		shopify: EMPTY_CONNECTOR_STATUS,
 		directApi: EMPTY_CONNECTOR_STATUS,
 	};
 
@@ -294,15 +297,23 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			)}
 
 			{/* Row 1: Connector Cards */}
-			<div className="gap-6 md:grid-cols-3 grid">
-				{CONNECTOR_SOURCES.map((source) => (
-					<ConnectorCard
-						key={source}
-						type={source}
-						status={sourceStatusMap[source]}
-						onSetup={() => handleSetup(source)}
-					/>
-				))}
+			<div className="gap-6 md:grid-cols-4 grid">
+				{CONNECTOR_SOURCES.map((source) =>
+					source === "shopify" ? (
+						<ShopifyConnectorCard
+							key={source}
+							organizationId={organizationId}
+							status={sourceStatusMap[source]}
+						/>
+					) : (
+						<ConnectorCard
+							key={source}
+							type={source}
+							status={sourceStatusMap[source]}
+							onSetup={() => handleSetup(source)}
+						/>
+					),
+				)}
 			</div>
 
 			{/* Row 2: Active connectors table */}

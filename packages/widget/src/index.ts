@@ -1058,12 +1058,17 @@ type BatchedEvent = {
 		| "result_click"
 		| "widget_open"
 		| "filter_used"
-		| "recommendations_click";
+		| "recommendations_click"
+		| "click"
+		| "conversion"
+		| "visit";
 	query?: string;
 	productId?: string;
 	position?: number;
 	filters?: Record<string, unknown>;
 	sort?: string;
+	queryId?: string;
+	conversionType?: string;
 	sessionId: string;
 	locale: string;
 	referrer?: string;
@@ -1098,12 +1103,17 @@ export class AacSearchWidget {
 			| "result_click"
 			| "widget_open"
 			| "filter_used"
-			| "recommendations_click";
+			| "recommendations_click"
+			| "click"
+			| "conversion"
+			| "visit";
 		query?: string;
 		productId?: string;
 		position?: number;
 		filters?: Record<string, unknown>;
 		sort?: string;
+		queryId?: string;
+		conversionType?: string;
 	}): void {
 		try {
 			this.batchQueue.push({

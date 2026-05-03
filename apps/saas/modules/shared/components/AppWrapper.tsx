@@ -5,6 +5,7 @@ import { NpsModal } from "@feedback/components/NpsModal";
 import { SidebarInset, SidebarProvider } from "@repo/ui";
 import { createDashboardTour } from "@search/components/GuidedTour";
 import { AppSidebar } from "@shared/components/AppSidebar";
+import { MobileBottomNav } from "@shared/components/MobileBottomNav";
 import type { PropsWithChildren } from "react";
 
 import "shepherd.js/dist/css/shepherd.css";
@@ -24,12 +25,13 @@ export function AppWrapper({ children }: PropsWithChildren) {
 		<SidebarProvider>
 			<AppSidebar />
 			<SidebarInset className="min-h-0">
-				<div className="min-h-0 min-w-0 flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
+				<div className="min-h-0 min-w-0 flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto pb-16 md:pb-0">
 					<div className="max-w-screen-2xl p-4 sm:p-6 lg:p-8 mx-auto w-full">
 						{children}
 					</div>
 				</div>
 			</SidebarInset>
+			<MobileBottomNav />
 			<CsatBanner />
 			<NpsModal />
 		</SidebarProvider>

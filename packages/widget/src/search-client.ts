@@ -138,6 +138,7 @@ export function createAacSearchClient(config: WidgetConfig) {
 					nbPages: Math.ceil(r.found / r.perPage),
 					hitsPerPage: r.perPage,
 					processingTimeMS: r.searchTimeMs,
+					queryId: r.queryId,
 					facets: r.facetCounts?.reduce(
 						(acc, fc) => {
 							acc[fc.field_name] = fc.counts.reduce(

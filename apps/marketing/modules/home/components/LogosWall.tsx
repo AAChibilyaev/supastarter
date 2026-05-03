@@ -17,7 +17,7 @@ export function LogosWall() {
 	return (
 		<section className="section-padding border-b border-border">
 			<div className="container">
-				<p className="text-xs font-light tracking-widest text-center text-muted-foreground/50 uppercase">
+				<p className="text-xs font-light tracking-widest text-center text-muted-foreground/70 uppercase">
 					{t("logos.title")}
 				</p>
 
@@ -25,7 +25,7 @@ export function LogosWall() {
 					{LOGOS.map((name) => (
 						<span
 							key={name}
-							className="text-sm font-light tracking-tight text-muted-foreground/35 transition-colors duration-200 select-none hover:text-muted-foreground/65"
+							className="text-sm font-light tracking-tight text-muted-foreground/60 transition-colors duration-200 select-none hover:text-muted-foreground/80"
 						>
 							{name}
 						</span>

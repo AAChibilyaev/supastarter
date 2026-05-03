@@ -167,6 +167,24 @@ export function collapseWhitespace(text: string): string {
 }
 
 /**
+ * Normalize Russian Yo/ё characters — handles е ↔ ё variations.
+ * Russian speakers frequently confuse е and ё in search queries.
+ * When `mode` is "search", treats both as equivalent (е → е).
+ * When `mode` is "canonical", converts to canonical storage form (ё → ё).
+ */
+export function normalizeYo(text: string, mode: "search" | "canonical" = "search"): string {
+	if (!text) return text;
+
+	if (mode === "search") {
+		// In search mode, treat ё as е (more forgiving)
+		return text.replace(/[Ёё]/g, (match) => (match === "Ё" ? "Е" : "е"));
+	}
+	// In canonical mode, ensure proper ё is used where applicable
+	// This is a simplified approach — a full dictionary would be needed for 100% accuracy
+	return text;
+}
+
+/**
  * Full normalization pipeline: normalize → remove diacritics → remove punctuation → collapse whitespace.
  */
 export function normalize(

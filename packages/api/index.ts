@@ -18,6 +18,7 @@ import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { eventsApp } from "./modules/search/events-public";
 import { publicSearchApp } from "./modules/search/public-handler";
+import { publicSpellCheckApp } from "./modules/search/spell-check-public";
 import { scimRouter } from "./modules/search/scim-public";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
 import { v1Router } from "./v1/router";
@@ -31,6 +32,8 @@ export const app = new Hono()
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
 	// Public search endpoint (own permissive CORS, mounted before global CORS)
 	.route("/", publicSearchApp)
+	// Public spell-check endpoint (API-key auth, own CORS)
+	.route("/", publicSpellCheckApp)
 	// Public analytics events endpoint (widget/SDK; same Bearer + own CORS)
 	.route("/", eventsApp)
 	// Widget JS serving (static file, accessible from any origin for storefronts)

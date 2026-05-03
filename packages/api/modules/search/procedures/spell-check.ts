@@ -1,8 +1,4 @@
-import { SpellCorrector } from "@repo/nlp";
-import { detectLanguage } from "@repo/nlp";
-import { fixKeyboardLayout, fixCapsLock } from "@repo/nlp";
-import { normalize } from "@repo/nlp";
-import { transliterate } from "@repo/nlp";
+import { SymSpell, ContextCorrector, detectLanguage, fixKeyboardLayout, fixCapsLock, normalize, normalizeYo, transliterate } from "@repo/nlp";
 import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
@@ -14,6 +10,99 @@ const SPELL_MODES = ["auto", "suggest"] as const;
 const SUPPORTED_LANGUAGES = ["ru", "en", "de", "es", "fr"] as const;
 type SpellLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
+// ─── Shared helper: build a SymSpell dictionary from an index ───────────────
+
+async function buildIndexDictionary(
+	indexSlug: string,
+	language: SpellLanguage,
+): Promise<{ dictionary: string[]; frequencies: Map<string, number> }> {
+	const client = getTypesenseClient();
+	const dictionary: string[] = [];
+	const frequencies = new Map<string, number>();
+
+	try {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const schema = (await (client as any).collections(indexSlug).retrieve()) as any;
+		if (schema?.fields) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const stringFields = (schema.fields as any[])
+				.filter((f: any) => f.type === "string")
+				.map((f: any) => f.name);
+
+			for (const field of stringFields.slice(0, 5)) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const docs = (await (client as any)
+					.collections(indexSlug)
+					.documents()
+					.search({
+						q: "*",
+						query_by: field,
+						limit: 200,
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					})) as any;
+
+				if (docs?.hits) {
+					for (const hit of docs.hits) {
+						const val = hit?.document?.[field];
+						if (typeof val === "string") {
+							const words = val.split(/\s+/).filter(Boolean);
+							for (const w of words) {
+								const lower = w.toLowerCase().replace(/[^a-zа-яё0-9]/gi, "");
+								if (lower) {
+									dictionary.push(lower);
+									frequencies.set(lower, (frequencies.get(lower) ?? 0) + 1);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	} catch {
+		// Proceed without index-specific dictionary
+	}
+
+	return { dictionary, frequencies };
+}
+
+// ─── Common dictionary words ───────────────────────────────────────────────
+
+const COMMON_ENGLISH = [
+	"the", "and", "for", "are", "but", "not", "you", "all", "can", "had",
+	"her", "was", "one", "our", "out", "has", "have", "been", "some", "them",
+	"than", "what", "when", "which", "will", "with", "your", "about", "their",
+	"would", "could", "should", "there", "where", "after", "before", "between",
+	"through", "during", "without", "because", "however", "therefore", "moreover",
+	"search", "find", "query", "result", "index", "document", "collection",
+	"product", "price", "name", "title", "description", "category", "brand",
+	"hello", "world", "test", "data", "user", "admin", "api", "key", "token",
+	"aacsearch", "engine", "widget", "dashboard", "page", "home", "login",
+	"signup", "register", "email", "password", "settings", "profile", "account",
+	"help", "support", "contact", "about", "blog", "news", "shop", "store",
+	"cart", "checkout", "order", "payment", "shipping", "address", "phone",
+];
+
+const COMMON_RUSSIAN = [
+	"и", "в", "не", "на", "я", "быть", "он", "с", "что", "а", "по", "это",
+	"она", "они", "мы", "как", "из", "у", "к", "от", "за", "так", "но", "его",
+	"ее", "все", "или", "же", "то", "о", "для", "еще", "те", "когда", "где",
+	"кто", "что", "есть", "нет", "да", "товар", "цена", "название", "описание",
+	"категория", "бренд", "поиск", "результат", "запрос", "документ",
+	"коллекция", "продукт", "имя", "привет", "мир", "тест", "данные",
+	"пользователь", "админ", "ключ", "поисковый", "движок", "панель",
+	"управления", "страница", "домой", "вход", "регистрация", "почта",
+	"пароль", "настройки", "профиль", "аккаунт", "помощь", "поддержка",
+	"контакты", "блог", "новости", "магазин", "корзина", "оформление",
+	"заказ", "оплата", "доставка", "адрес", "телефон", "большой", "маленький",
+	"хороший", "плохой", "новый", "старый", "красивый", "дешевый", "дорогой",
+	"красный", "синий", "зеленый", "белый", "черный", "русский", "английский",
+	"работа", "человек", "время", "день", "ночь", "утро", "завтра", "сегодня",
+	"вчера", "теперь", "нужно", "можно", "нельзя", "спасибо", "пожалуйста",
+	"здравствуйте", "до", "свидания",
+];
+
+// ─── oRPC Procedure ────────────────────────────────────────────────────────
+
 export const spellCheck = protectedProcedure
 	.route({
 		method: "POST",
@@ -22,8 +111,9 @@ export const spellCheck = protectedProcedure
 		summary: "Check and correct spelling in search queries",
 		description:
 			"Applies AACSearch's NLP pipeline: language detection, keyboard layout fix (RU↔EN), " +
-			"transliteration detection, diacritics normalization, and multi-algorithm spell correction. " +
-			"Returns suggestions ranked by similarity + frequency.",
+			"transliteration detection, diacritics normalization, Yo/ё normalization, " +
+			"SymSpell fast dictionary correction, and multi-algorithm distance correction. " +
+			"Returns suggestions ranked by similarity + frequency + context.",
 	})
 	.input(
 		z.object({
@@ -42,6 +132,18 @@ export const spellCheck = protectedProcedure
 			maxSuggestions: z.number().int().min(1).max(20).default(5),
 			/** Optional index slug — if provided, builds dictionary from the index's documents */
 			indexSlug: z.string().min(1).max(64).optional(),
+			/**
+			 * Use context-aware correction using surrounding words (default: false).
+			 * Requires training data for best results; falls back to standard correction.
+			 */
+			useContextCorrection: z.boolean().default(false),
+			/**
+			 * Whitelist of words to never correct (brand names, SKUs, technical terms).
+			 * These are always preserved as-is regardless of edit distance.
+			 */
+			whitelist: z.array(z.string()).max(100).optional(),
+			/** Try compound word splitting (German, Finnish). Default: false */
+			splitCompounds: z.boolean().default(false),
 		}),
 	)
 	.output(
@@ -85,10 +187,22 @@ export const spellCheck = protectedProcedure
 			detectedLanguage: z.string(),
 			/** Correction mode used */
 			mode: z.enum(SPELL_MODES),
+			/** Dictionary size (number of words in the correction dictionary) */
+			dictionarySize: z.number().optional(),
 		}),
 	)
 	.handler(async ({ input, context }) => {
-		const { organizationId, text, language: langHint, mode, maxSuggestions, indexSlug } = input;
+		const {
+			organizationId,
+			text,
+			language: langHint,
+			mode,
+			maxSuggestions,
+			indexSlug,
+			useContextCorrection,
+			whitelist,
+			splitCompounds,
+		} = input;
 
 		await requireOrganizationMember(organizationId, context.user.id);
 
@@ -103,6 +217,7 @@ export const spellCheck = protectedProcedure
 		const detectedLanguage: SpellLanguage =
 			langHint ?? (detectLanguage(text) as SpellLanguage) ?? "en";
 		const isRussian = detectedLanguage === "ru" || (text.match(/[а-яё]/i)?.length ?? 0) > 0;
+		const lang = isRussian ? "ru" : "en";
 
 		// Step 2: Normalization (diacritics, unicode)
 		const normalized = normalize(text, { unicodeForm: "NFD" });
@@ -117,6 +232,20 @@ export const spellCheck = protectedProcedure
 		}
 
 		let processedText = normalized;
+
+		// Step 2b: Yo/ё normalization (Russian)
+		if (isRussian) {
+			const yoNormalized = normalizeYo(processedText, "search");
+			if (yoNormalized !== processedText) {
+				fixes.push({
+					type: "yo-normalization",
+					description: "Yo/ё normalization (ё → е for search)",
+					original: processedText,
+					result: yoNormalized,
+				});
+				processedText = yoNormalized;
+			}
+		}
 
 		// Step 3: Keyboard layout fix (for Russian text typed in Latin layout)
 		if (isRussian && /[a-zA-Z]/.test(processedText)) {
@@ -163,7 +292,38 @@ export const spellCheck = protectedProcedure
 			}
 		}
 
-		// Step 5: Spell correction
+		// Step 5: Build SymSpell dictionary
+		const { dictionary: indexWords, frequencies: indexFreqs } = indexSlug
+			? await buildIndexDictionary(indexSlug, lang)
+			: { dictionary: [], frequencies: new Map<string, number>() };
+
+		const commonWords = lang === "ru" ? COMMON_RUSSIAN : COMMON_ENGLISH;
+		const allWords = [...commonWords, ...indexWords];
+		const allFreqs = new Map<string, number>();
+
+		// Merge frequencies: common words first, then index words
+		for (const w of commonWords) {
+			allFreqs.set(w, (allFreqs.get(w) ?? 0) + 100); // Higher base frequency for common words
+		}
+		for (const [w, f] of indexFreqs) {
+			allFreqs.set(w, (allFreqs.get(w) ?? 0) + f);
+		}
+
+		// Build SymSpell
+		const symspell = new SymSpell({
+			maxEditDistance: 2,
+			verbosity: 2,
+			maxResults: maxSuggestions,
+			splitCompoundWords: splitCompounds,
+		});
+		symspell.createDictionary(allWords, allFreqs);
+
+		// Add whitelist
+		if (whitelist && whitelist.length > 0) {
+			symspell.addToWhitelist(whitelist);
+		}
+
+		// Step 6: Spell correction
 		const words = processedText.split(/\s+/).filter(Boolean);
 		const wordSuggestions: Array<{
 			word: string;
@@ -171,232 +331,76 @@ export const spellCheck = protectedProcedure
 			options: Array<{ text: string; score: number; algorithm: string }>;
 		}> = [];
 
-		// Build dictionary from index if available
-		let dictionary: string[] = [];
-
-		if (indexSlug) {
-			try {
-				const client = getTypesenseClient();
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				const schema = (await (client as any).collections(indexSlug).retrieve()) as any;
-				if (schema?.fields) {
-					// Extract values from string fields to build a rough dictionary
-					const stringFields = schema.fields
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						.filter((f: any) => f.type === "string")
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						.map((f: any) => f.name);
-
-					for (const field of stringFields.slice(0, 5)) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						const docs = (await (client as any)
-							.collections(indexSlug)
-							.documents()
-							.search({
-								q: "*",
-								query_by: field,
-								limit: 100,
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							})) as any;
-
-						if (docs?.hits) {
-							for (const hit of docs.hits) {
-								const val = hit?.document?.[field];
-								if (typeof val === "string") {
-									dictionary.push(...val.split(/\s+/).filter(Boolean));
-								}
-							}
-						}
-					}
-				}
-			} catch {
-				// Proceed without index-specific dictionary
-			}
-		}
-
-		// Use a basic dictionary for common English and Russian words as fallback
-		const commonEnglish = [
-			"the",
-			"and",
-			"for",
-			"are",
-			"but",
-			"not",
-			"you",
-			"all",
-			"can",
-			"had",
-			"her",
-			"was",
-			"one",
-			"our",
-			"out",
-			"has",
-			"have",
-			"been",
-			"some",
-			"them",
-			"than",
-			"what",
-			"when",
-			"which",
-			"will",
-			"with",
-			"your",
-			"about",
-			"their",
-			"would",
-			"could",
-			"should",
-			"there",
-			"where",
-			"after",
-			"before",
-			"between",
-			"through",
-			"during",
-			"without",
-			"because",
-			"however",
-			"therefore",
-			"moreover",
-			"search",
-			"find",
-			"query",
-			"result",
-			"index",
-			"document",
-			"collection",
-			"product",
-			"price",
-			"name",
-			"title",
-			"description",
-			"category",
-			"brand",
-			"hello",
-			"world",
-			"test",
-			"data",
-			"user",
-			"admin",
-			"api",
-			"key",
-			"token",
-			"aacsearch",
-			"typesense",
-			"search",
-			"engine",
-			"widget",
-			"dashboard",
-		];
-
-		const commonRussian = [
-			"и",
-			"в",
-			"не",
-			"на",
-			"я",
-			"быть",
-			"он",
-			"с",
-			"что",
-			"а",
-			"по",
-			"это",
-			"она",
-			"они",
-			"мы",
-			"как",
-			"из",
-			"у",
-			"к",
-			"от",
-			"за",
-			"так",
-			"но",
-			"его",
-			"ее",
-			"все",
-			"или",
-			"же",
-			"то",
-			"о",
-			"для",
-			"еще",
-			"те",
-			"когда",
-			"где",
-			"кто",
-			"что",
-			"есть",
-			"нет",
-			"да",
-			"товар",
-			"цена",
-			"название",
-			"описание",
-			"категория",
-			"бренд",
-			"поиск",
-			"результат",
-			"запрос",
-			"документ",
-			"коллекция",
-			"продукт",
-			"имя",
-			"привет",
-			"мир",
-			"тест",
-			"данные",
-			"пользователь",
-			"админ",
-			"ключ",
-		];
-
-		dictionary.push(...commonEnglish, ...commonRussian);
-		const uniqueDictionary = [...new Set(dictionary.map((w) => w.toLowerCase()))];
-
-		const corrector = new SpellCorrector(uniqueDictionary);
-
-		// Check each word
 		let correctedWords: string[] = [];
 		let hasChanges = false;
 
-		for (const word of words) {
-			const results = corrector.correct(word, {
+		if (useContextCorrection && words.length > 1) {
+			// Use context-aware correction
+			const contextCorrector = new ContextCorrector(allWords, allFreqs);
+			if (whitelist && whitelist.length > 0) {
+				contextCorrector.addToDictionary(whitelist);
+			}
+
+			const contextResult = contextCorrector.correctSentence(processedText, {
 				maxDistance: 2,
-				maxResults: maxSuggestions,
-				language: isRussian ? "ru" : "en",
-				minScore: 0.5,
+				maxCandidates: maxSuggestions,
+				minScore: 0.4,
+				contextWindow: 1,
 			});
 
-			const bestResult = results[0];
-			const isCorrect =
-				bestResult &&
-				bestResult.original === bestResult.suggestion &&
-				bestResult.score === 1;
+			for (const wc of contextResult.wordCorrections) {
+				wordSuggestions.push({
+					word: wc.original,
+					corrected: wc.corrected,
+					options: wc.alternatives.map((a) => ({
+						text: a.word,
+						score: a.score,
+						algorithm: "context-aware",
+					})),
+				});
 
-			const options = (results ?? [])
-				.filter((r) => r.original !== r.suggestion)
-				.slice(0, maxSuggestions)
-				.map((r) => ({
-					text: r.suggestion,
-					score: r.score,
-					algorithm: r.algorithm,
-				}));
+				if (wc.wasCorrected) hasChanges = true;
+			}
 
-			wordSuggestions.push({
-				word,
-				corrected: bestResult && !isCorrect ? bestResult.suggestion : word,
-				options,
-			});
+			correctedWords = contextResult.correctedSentence.split(/\s+/).filter(Boolean);
+			if (contextResult.hasChanges && hasChanges) {
+				fixes.push({
+					type: "context-spell-correction",
+					description: "Context-aware spelling correction applied",
+					original: processedText,
+					result: contextResult.correctedSentence,
+				});
+			}
+		} else {
+			// Standard SymSpell correction for each word
+			for (const word of words) {
+				const results = symspell.lookup(word);
 
-			if (bestResult && !isCorrect && mode === "auto") {
-				correctedWords.push(bestResult.suggestion);
-				hasChanges = true;
-			} else {
-				correctedWords.push(word);
+				const exactMatch = results.find((r) => r.distance === 0);
+				const bestResult = results[0];
+				const isCorrect = !!exactMatch;
+
+				const options = results
+					.filter((r) => r.distance > 0)
+					.slice(0, maxSuggestions)
+					.map((r) => ({
+						text: r.term,
+						score: r.score,
+						algorithm: r.distance <= 1 ? "symspell-close" : "symspell-fuzzy",
+					}));
+
+				wordSuggestions.push({
+					word,
+					corrected: bestResult && !isCorrect ? bestResult.term : word,
+					options,
+				});
+
+				if (bestResult && !isCorrect && mode === "auto") {
+					correctedWords.push(bestResult.term);
+					hasChanges = true;
+				} else {
+					correctedWords.push(word);
+				}
 			}
 		}
 
@@ -419,5 +423,6 @@ export const spellCheck = protectedProcedure
 			appliedFixes: fixes,
 			detectedLanguage,
 			mode,
+			dictionarySize: symspell.size,
 		};
 	});

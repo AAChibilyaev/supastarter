@@ -1,5 +1,6 @@
 import { aggregateSearchUsage, recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
+import { SymSpell, detectLanguage, normalize } from "@repo/nlp";
 import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -159,6 +160,46 @@ export const publicSearchApp = new Hono()
 				}).catch((error) => logger.error("Could not record zero_results", { error }));
 			}
 
+			// Compute did-you-mean when results are empty
+			let didYouMean: string | undefined;
+			if (result.found === 0 && processed.q && processed.q !== "*" && processed.q.length > 2) {
+				try {
+					const lang = detectLanguage(processed.q) ?? "en";
+					const isRussian = lang === "ru";
+
+					const commonWords = isRussian
+						? ["и", "в", "не", "на", "я", "он", "с", "что", "по", "это", "как", "но", "для", "еще", "когда", "где", "товар", "цена", "название", "поиск", "результат", "запрос"]
+						: ["the", "and", "for", "are", "but", "not", "you", "all", "can", "was", "one", "has", "have", "been", "what", "when", "which", "with", "search", "find", "query", "result", "product", "price", "name", "title", "index"];
+
+					const freqs = new Map<string, number>();
+					for (const w of commonWords) freqs.set(w, 100);
+
+					const symspell = new SymSpell({ maxEditDistance: 2, verbosity: 2, maxResults: 5 });
+					symspell.createDictionary(commonWords, freqs);
+
+					const words = processed.q.split(/\s+/).filter(Boolean);
+					const correctedWords: string[] = [];
+					let hasCorrection = false;
+
+					for (const word of words) {
+						const results = symspell.lookup(word);
+						const exactMatch = results.find((r) => r.distance === 0);
+						if (results[0] && !exactMatch) {
+							correctedWords.push(results[0].term);
+							hasCorrection = true;
+						} else {
+							correctedWords.push(word);
+						}
+					}
+
+					if (hasCorrection) {
+						didYouMean = correctedWords.join(" ");
+					}
+				} catch {
+					// Silent fail on did-you-mean
+				}
+			}
+
 			return c.json({
 				hits: result.hits,
 				found: result.found,
@@ -166,6 +207,7 @@ export const publicSearchApp = new Hono()
 				perPage: result.perPage,
 				facetCounts: result.facetCounts,
 				searchTimeMs: result.searchTimeMs,
+				didYouMean,
 			});
 		} catch (error) {
 			logger.error("Public search failed", { error, slug, indexId: verified.indexId });

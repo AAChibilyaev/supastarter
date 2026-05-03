@@ -1318,6 +1318,7 @@
 			"comingSoonDescription": "AI-powered recommendations are being built. Check back soon for similar items, personalized suggestions, and GraphRAG-powered explanations.",
 			"pickProduct": "Pick a product to see recommendations",
 			"searchProducts": "Search products...",
+			"getRecommendations": "Get Recommendations",
 			"noResults": "No matching products found",
 			"selectProduct": "Select a product from the search results to preview its recommendations",
 			"resultsCount": "Results ({{count}})",

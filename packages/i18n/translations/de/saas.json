@@ -1523,6 +1523,7 @@
 			"comingSoonDescription": "KI-gestützte Empfehlungen werden entwickelt. Schauen Sie bald wieder vorbei für ähnliche Artikel, personalisierte Vorschläge und GraphRAG-gestützte Erklärungen.",
 			"pickProduct": "Wählen Sie ein Produkt, um Empfehlungen zu sehen",
 			"searchProducts": "Produkte suchen...",
+			"getRecommendations": "Empfehlungen abrufen",
 			"noResults": "Keine passenden Produkte gefunden",
 			"selectProduct": "Wählen Sie ein Produkt aus den Suchergebnissen, um dessen Empfehlungen anzuzeigen",
 			"resultsCount": "Ergebnisse ({{count}})",

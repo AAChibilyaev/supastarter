@@ -1511,7 +1511,7 @@
 			"widgetAnalytics": "Analíticas",
 			"widgetInstall": "Instalar"
 		},
-				"recommendations": {
+		"recommendations": {
 			"description": "Configure recomendaciones de productos impulsadas por IA, incluyendo artículos similares, sugerencias personalizadas y GraphRAG.",
 			"dashboardTitle": "Panel de recomendaciones",
 			"similarTab": "Artículos similares",
@@ -1522,6 +1522,7 @@
 			"comingSoonDescription": "Las recomendaciones impulsadas por IA están en desarrollo. Vuelva pronto para ver artículos similares, sugerencias personalizadas y explicaciones basadas en GraphRAG.",
 			"pickProduct": "Seleccione un producto para ver recomendaciones",
 			"searchProducts": "Buscar productos...",
+			"getRecommendations": "Obtener recomendaciones",
 			"noResults": "No se encontraron productos coincidentes",
 			"selectProduct": "Seleccione un producto de los resultados de búsqueda para ver sus recomendaciones",
 			"resultsCount": "Resultados ({{count}})",

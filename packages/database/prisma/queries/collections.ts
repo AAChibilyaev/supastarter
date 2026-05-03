@@ -289,7 +289,12 @@ export type ExportFormat = "csv" | "json" | "jsonl" | "xlsx";
 
 export async function exportCollectionDocuments(
 	collectionId: string,
-	options: { documentIds?: string[]; schemaFields?: string[] } = {},
+	options: {
+		documentIds?: string[];
+		schemaFields?: string[];
+		/** Simple field=value filter applied in-memory after fetch */
+		filter?: Record<string, unknown>;
+	} = {},
 ): Promise<CollectionDocumentView[]> {
 	const where: Prisma.CollectionDocumentWhereInput = { collectionId };
 	if (options.documentIds && options.documentIds.length > 0) {
@@ -299,7 +304,20 @@ export async function exportCollectionDocuments(
 		where,
 		orderBy: { rowNumber: "asc" },
 	});
-	return rows.map(mapDocument);
+
+	// In-memory filter matching on JSON data fields
+	let filtered = rows.map(mapDocument);
+	if (options.filter && Object.keys(options.filter).length > 0) {
+		filtered = filtered.filter((doc) => {
+			const data = doc.data as Record<string, unknown>;
+			return Object.entries(options.filter!).every(([key, value]) => {
+				if (value === undefined || value === null || value === "") return true;
+				return data?.[key] === value;
+			});
+		});
+	}
+
+	return filtered;
 }
 
 export async function buildCsvContent(
@@ -314,7 +332,13 @@ export async function buildCsvContent(
 				.map((field) => {
 					const val = data?.[field];
 					if (val == null) return "";
-					const str = String(val);
+\t\t\t\t\t// Safe stringification — handle objects/arrays vs primitives
+\t\t\t\t\tconst str =
+\t\t\t\t\t\ttypeof val === "object"
+\t\t\t\t\t\t\t? JSON.stringify(val)
+\t\t\t\t\t\t\t: typeof val === "string"
+\t\t\t\t\t\t\t\t? val
+\t\t\t\t\t\t\t\t: `${val}`;
 					// Escape CSV: wrap in quotes if contains comma, quote, or newline
 					if (str.includes(",") || str.includes('"') || str.includes("\n")) {
 						return `"${str.replace(/"/g, '""')}"`;
@@ -360,7 +384,7 @@ export function buildXlsxContent(
 			field.length,
 			...data.map((row) => {
 				const val = row[field];
-				return val != null ? String(val).length : 0;
+				return val != null ? JSON.stringify(val).length : 0;
 			}),
 		);
 		return { wch: Math.min(maxLen + 2, 60) };

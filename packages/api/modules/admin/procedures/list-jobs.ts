@@ -24,6 +24,11 @@ const JOB_DEFINITIONS = [
 		path: "/api/cron/index-health-check",
 		secretEnv: "SEARCH_CRON_SECRET",
 	},
+	{
+		name: "Send drip emails cron",
+		path: "/api/cron/send-drip-emails",
+		secretEnv: "SEARCH_CRON_SECRET",
+	},
 ] as const;
 
 export const listJobs = adminProcedure

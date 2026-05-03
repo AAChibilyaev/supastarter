@@ -28,6 +28,7 @@ model User {
   banReason                String?
   banExpires               DateTime?
   onboardingComplete       Boolean                      @default(false)
+  dripStartedAt            DateTime?
   paymentsCustomerId       String?
   locale                   String?
   displayUsername          String?

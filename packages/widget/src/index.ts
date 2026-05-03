@@ -1494,7 +1494,10 @@ export class AacSearchWidget {
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const recognition = new (SR as new () => Record<string, unknown>)() as Record<string, unknown> & {
+		const recognition = new (SR as new () => Record<string, unknown>)() as Record<
+			string,
+			unknown
+		> & {
 			lang: string;
 			interimResults: boolean;
 			maxAlternatives: number;
@@ -1536,10 +1539,7 @@ export class AacSearchWidget {
 		const btn = this.root.querySelector(".aac-mic-btn");
 		if (btn) {
 			btn.classList.toggle("aac-mic-listening", listening);
-			btn.setAttribute(
-				"aria-label",
-				listening ? this.t("listening") : this.t("voiceSearch"),
-			);
+			btn.setAttribute("aria-label", listening ? this.t("listening") : this.t("voiceSearch"));
 		}
 	}
 

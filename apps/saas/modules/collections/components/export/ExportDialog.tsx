@@ -19,6 +19,7 @@ import {
 	FileJsonIcon,
 	FileSpreadsheetIcon,
 	FileTextIcon,
+	FilterIcon,
 	Table2Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -40,6 +41,10 @@ interface ExportDialogProps {
 	selectedIds?: string[];
 	/** Estimated total documents in the current filtered view */
 	totalFiltered?: number;
+	/** Current active filters to apply to the export (field → value) */
+	filterBy?: Record<string, unknown>;
+	/** Human-readable description of active filters (e.g. "category: shoes") */
+	filterDescription?: string;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -82,10 +87,14 @@ export function ExportDialog({
 	schemaFields,
 	selectedIds,
 	totalFiltered,
+	filterBy,
+	filterDescription,
 }: ExportDialogProps) {
 	const t = useTranslations();
 	const [format, setFormat] = useState<ExportFormat>("csv");
-	const [scope, setScope] = useState<ExportScope>("all");
+	const [scope, setScope] = useState<ExportScope>(
+		filterBy && Object.keys(filterBy).length > 0 ? "filtered" : "all",
+	);
 
 	const exportMutation = useMutation(
 		orpc.collections.export.mutationOptions({
@@ -102,6 +111,10 @@ export function ExportDialog({
 	const handleExport = () => {
 		const documentIds =
 			scope === "selected" && selectedIds && selectedIds.length > 0 ? selectedIds : undefined;
+		const activeFilterBy =
+			scope === "filtered" && filterBy && Object.keys(filterBy).length > 0
+				? filterBy
+				: undefined;
 
 		exportMutation.mutate({
 			organizationId,
@@ -109,6 +122,7 @@ export function ExportDialog({
 			format,
 			fields: schemaFields && schemaFields.length > 0 ? schemaFields : undefined,
 			documentIds,
+			filterBy: activeFilterBy,
 		});
 	};
 
@@ -121,6 +135,7 @@ export function ExportDialog({
 
 	const isExporting = exportMutation.isPending;
 	const hasSelection = selectedIds && selectedIds.length > 0;
+	const hasFilters = filterBy && Object.keys(filterBy).length > 0;
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -201,6 +216,26 @@ export function ExportDialog({
 								</p>
 							</div>
 						</label>
+						{hasFilters && (
+							<label
+								className={`gap-3 p-2.5 flex cursor-pointer items-center rounded-lg border transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${isExporting ? "cursor-not-allowed opacity-50" : ""}`}
+							>
+								<RadioGroupItem value="filtered" disabled={isExporting} />
+								<div className="gap-2 flex flex-col">
+									<div className="gap-1.5 inline-flex items-center">
+										<FilterIcon className="size-3.5 text-primary" />
+										<p className="font-medium text-sm">
+											{t("search.export.scopeFiltered") || "Filtered only"}
+										</p>
+									</div>
+									<p className="text-xs text-muted-foreground">
+										{filterDescription ||
+											t("search.export.scopeFilteredDesc") ||
+											"Only documents matching current filters"}
+									</p>
+								</div>
+							</label>
+						)}
 						{hasSelection && (
 							<label
 								className={`gap-3 p-2.5 flex cursor-pointer items-center rounded-lg border transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${isExporting ? "cursor-not-allowed opacity-50" : ""}`}

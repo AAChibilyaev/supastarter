@@ -26,7 +26,8 @@
 		"@tanstack/react-virtual": "^3.13.24",
 		"@types/papaparse": "^5.5.2",
 		"oxlint-tsgolint": "^0.20.0",
-		"papaparse": "^5.5.3"
+		"papaparse": "^5.5.3",
+		"xlsx": "catalog:"
 	},
 	"devDependencies": {
 		"@redocly/cli": "^2.30.3",

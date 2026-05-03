@@ -1,5 +1,6 @@
 import { db } from "../client";
 import { Prisma } from "../generated/client";
+import { startDripSequence } from "./drip-emails";
 
 /**
  * Activation event types that track onboarding funnel progress.
@@ -29,13 +30,20 @@ export const ALL_ACTIVATION_EVENTS: ActivationEventKind[] = [
 /**
  * Record an activation event for an organization.
  * Uses upsert so it's idempotent — re-recording the same event is a no-op.
+ * On the FIRST activation event ever for the org, starts the drip email
+ * sequence for all owner/admin members.
  */
 export async function recordActivationEvent(
 	organizationId: string,
 	eventType: ActivationEventKind,
 	metadata?: Record<string, unknown>,
 ) {
-	return db.activationEvent.upsert({
+	const isFirstEvent =
+		(await db.activationEvent.count({
+			where: { organizationId },
+		})) === 0;
+
+	const event = await db.activationEvent.upsert({
 		where: {
 			organizationId_eventType: { organizationId, eventType },
 		},
@@ -46,6 +54,25 @@ export async function recordActivationEvent(
 		},
 		update: {},
 	});
+
+	// Start drip sequence on the first activation event
+	if (isFirstEvent) {
+		const members = await db.member.findMany({
+			where: {
+				organizationId,
+				role: { in: ["owner", "admin"] },
+			},
+			select: { userId: true },
+		});
+
+		for (const member of members) {
+			await startDripSequence(member.userId, event.completedAt).catch(() => {
+				// Non-blocking — drip start failures should not break activation recording
+			});
+		}
+	}
+
+	return event;
 }
 
 /**

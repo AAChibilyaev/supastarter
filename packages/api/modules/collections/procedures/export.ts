@@ -24,6 +24,8 @@ export const exportDocuments = protectedProcedure
 			fields: z.array(z.string()).optional(),
 			/** Optional document IDs for selection-aware export */
 			documentIds: z.array(z.string()).optional(),
+			/** Optional JSON filter for field-value matching (e.g. {"category": "shoes"}) */
+			filterBy: z.record(z.string(), z.unknown()).optional(),
 		}),
 	)
 	.output(
@@ -55,6 +57,7 @@ export const exportDocuments = protectedProcedure
 
 		const documents = await exportCollectionDocuments(collection.id, {
 			documentIds: input.documentIds,
+			filter: input.filterBy,
 		});
 
 		// Determine fields: from input, schema, or auto-detect

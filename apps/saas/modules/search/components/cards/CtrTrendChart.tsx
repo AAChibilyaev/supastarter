@@ -41,7 +41,10 @@ export function CtrTrendChart({ data }: CtrTrendChartProps) {
 			<CardContent>
 				{hasData ? (
 					<ResponsiveContainer width="100%" height={200}>
-						<LineChart data={chartData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+						<LineChart
+							data={chartData}
+							margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
+						>
 							<CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
 							<XAxis
 								dataKey="date"
@@ -83,7 +86,7 @@ export function CtrTrendChart({ data }: CtrTrendChartProps) {
 						</LineChart>
 					</ResponsiveContainer>
 				) : (
-					<p className="py-8 text-center text-sm text-muted-foreground">
+					<p className="py-8 text-sm text-center text-muted-foreground">
 						{t("search.analytics.noData")}
 					</p>
 				)}

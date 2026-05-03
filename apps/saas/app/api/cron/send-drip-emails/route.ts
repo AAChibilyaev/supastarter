@@ -65,7 +65,6 @@ async function sendDripForDay(
 				to: user.email,
 				templateId,
 				context,
-				locale: "en",
 			});
 
 			await recordDripSent(user.userId, dripDay);

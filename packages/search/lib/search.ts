@@ -203,6 +203,8 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		// ── Faceted Search extensions ──
 		...(input.facetQuery !== undefined && { facet_query: input.facetQuery }),
 		...(input.maxFacetValues !== undefined && { max_facet_values: input.maxFacetValues }),
+		// ── MMR Diversification ──
+		...(input.diversifyBasedOn !== undefined && { diversify_based_on: input.diversifyBasedOn }),
 		// ── Distinct Dedup ──
 		...(input.distinct !== undefined && { distinct: input.distinct }),
 		// ── Token Join ──
@@ -315,6 +317,10 @@ export async function multiSearchDocuments(
 			// ── Faceted Search extensions ──
 			...(entry.facetQuery !== undefined && { facet_query: entry.facetQuery }),
 			...(entry.maxFacetValues !== undefined && { max_facet_values: entry.maxFacetValues }),
+			// ── MMR Diversification ──
+			...(entry.diversifyBasedOn !== undefined && {
+				diversify_based_on: entry.diversifyBasedOn,
+			}),
 			// ── Distinct Dedup ──
 			...(entry.distinct !== undefined && { distinct: entry.distinct }),
 			// ── Token Join ──

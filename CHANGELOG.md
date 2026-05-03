@@ -4,6 +4,7 @@
 
 ### Added
 - **Search**: Exposed `include_fields` JOIN parameter in search procedures. `SearchDocumentsInput.includeFields` now accepts Typesense JOIN syntax like `$Category(id, name)` for cross-collection field inclusion. (AAC-569)
+- **Search**: Wired MMR diversification — `diversify_based_on` parameter now properly passed to Typesense in both `searchDocuments()` and `multiSearchDocuments()`. (AAC-574)
 
 
 ## 2026-04-30

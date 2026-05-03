@@ -96,9 +96,9 @@ export default async function MarketingLayout({
 			suppressHydrationWarning
 			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
 		>
-			<body
-				className={cn("min-h-dvh min-h-screen bg-background text-foreground antialiased")}
-			>
+		<body
+			className={cn("bg-background text-foreground antialiased")}
+		>
 				<OrganizationSchema locale={locale} />
 				<WebSiteSchema locale={locale} />
 				<ConsentProvider initialConsent={consentCookie?.value === "true"}>

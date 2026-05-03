@@ -75,16 +75,16 @@ export function HeroWithCode() {
 
 				{/* Right: code terminal */}
 				<div>
-					<div className="overflow-hidden rounded-lg border border-border bg-[#0d0d10]">
-						<div className="gap-2 border-white/8 px-4 py-3 flex items-center border-b">
+					<div className="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
+						<div className="gap-2 border-b border-zinc-800 px-4 py-3 flex items-center">
 							<span className="size-2.5 rounded-full bg-muted-foreground/20" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="size-2.5 rounded-full bg-muted-foreground/40" />
-							<span className="ml-3 font-mono text-xs text-white/35">
+							<span className="ml-3 font-mono text-xs text-zinc-600">
 								{t("home.hero.codeCaption")}
 							</span>
 						</div>
-						<pre className="p-5 font-mono leading-relaxed text-white/75 overflow-x-auto text-[13px]">
+						<pre className="p-5 font-mono leading-relaxed text-zinc-300 overflow-x-auto text-[13px]">
 							<code>{highlightCode(codeSample)}</code>
 						</pre>
 					</div>
@@ -121,9 +121,9 @@ function highlightCode(source: string) {
 		parts.push(...next);
 	};
 
-	tokenize(strings, "text-muted-foreground/70");
-	tokenize(keywords, "text-muted-foreground/50");
-	tokenize(fns, "text-muted-foreground/80");
+	tokenize(strings, "text-zinc-400");
+	tokenize(keywords, "text-zinc-600");
+	tokenize(fns, "text-zinc-200");
 
 	return parts.map((part, i) =>
 		part.className ? (

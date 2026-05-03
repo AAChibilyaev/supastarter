@@ -179,7 +179,7 @@ export function QuickstartSection() {
 									className={cn(
 										"gap-2 px-4 py-2.5 text-sm flex items-center rounded-t-lg border border-b-0 transition-all",
 										isActive
-											? "text-white/90 border-white/10 bg-[#0d0d10]"
+											? "text-zinc-100 border-zinc-800 bg-zinc-950"
 											: "border-border bg-muted/50 text-muted-foreground hover:text-foreground",
 									)}
 								>
@@ -189,7 +189,7 @@ export function QuickstartSection() {
 											isDone
 												? "bg-success/20 text-success"
 												: isActive
-													? "bg-white/10 text-white/70"
+													? "bg-zinc-700/50 text-zinc-300"
 													: "bg-muted text-muted-foreground",
 										)}
 									>
@@ -202,9 +202,9 @@ export function QuickstartSection() {
 					</div>
 
 					{/* Code panel */}
-					<div className="border-white/10 overflow-hidden rounded-tr-xl rounded-b-xl border bg-[#0d0d10]">
+					<div className="border-zinc-800 overflow-hidden rounded-tr-xl rounded-b-xl border bg-zinc-950">
 						{/* Toolbar */}
-						<div className="gap-2 border-white/8 px-4 py-2 bg-white/[0.03] flex items-center justify-between border-b">
+						<div className="gap-2 border-zinc-800 px-4 py-2 bg-zinc-900/50 flex items-center justify-between border-b">
 							{/* Language tabs */}
 							<div className="gap-1 flex">
 								{(["js", "python", "curl"] as Lang[]).map((l) => (
@@ -215,8 +215,8 @@ export function QuickstartSection() {
 										className={cn(
 											"px-2.5 py-1 text-xs rounded-md transition-colors",
 											lang === l
-												? "bg-white/10 text-white/90"
-												: "text-white/40 hover:text-white/60",
+												? "bg-zinc-700/40 text-zinc-100"
+												: "text-zinc-500 hover:text-zinc-300",
 										)}
 									>
 										{l === "js"
@@ -238,7 +238,7 @@ export function QuickstartSection() {
 								<button
 									type="button"
 									onClick={copy}
-									className="gap-1.5 px-2.5 py-1 text-xs text-white/40 hover:text-white/70 hover:bg-white/5 flex items-center rounded-md transition-colors"
+									className="gap-1.5 px-2.5 py-1 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 flex items-center rounded-md transition-colors"
 									aria-label="Copy code"
 								>
 									{copied ? (
@@ -251,7 +251,7 @@ export function QuickstartSection() {
 							</div>
 						</div>
 
-						<pre className="p-5 font-mono leading-relaxed text-white/75 min-h-[220px] overflow-x-auto text-[13px]">
+						<pre className="p-5 font-mono leading-relaxed text-zinc-300 min-h-[220px] overflow-x-auto text-[13px]">
 							<code>{code}</code>
 						</pre>
 					</div>

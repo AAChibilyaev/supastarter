@@ -31,10 +31,10 @@ export function PricingPlans() {
 					<Badge status="info" className="mb-4">
 						{t("home.pricing.badge")}
 					</Badge>
-					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-4 text-lg text-muted-foreground">
+					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
 						{t("home.pricing.subtitle")}
 					</p>
 				</div>
@@ -96,7 +96,7 @@ export function PricingPlans() {
 
 								<CardContent className="flex-1">
 									<div className="gap-1 flex items-baseline">
-										<span className="font-medium text-4xl tracking-tight">
+										<span className="font-bold text-4xl tracking-tight tabular-nums">
 											{t(`home.pricing.plans.${plan.key}.price`)}
 										</span>
 										{plan.key !== "enterprise" && (

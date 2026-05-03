@@ -1,5 +1,6 @@
 @layer base {
 	:root {
+		--font-family-heading: var(--font-sans);
 		--border: #d8d8dd;
 		--input: #d8d8dd;
 		--ring: #fd366e;

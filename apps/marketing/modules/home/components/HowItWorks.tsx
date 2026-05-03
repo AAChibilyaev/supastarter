@@ -9,7 +9,7 @@ export function HowItWorks() {
 		<section className="py-24 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
 						{t("home.howItWorks.title")}
 					</h2>
 				</div>
@@ -46,7 +46,7 @@ export function HowItWorks() {
 							</div>
 
 							{/* Step content */}
-							<h3 className="font-medium text-lg text-foreground">
+							<h3 className="font-semibold text-lg text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
 							<p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">

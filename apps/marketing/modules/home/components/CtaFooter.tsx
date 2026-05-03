@@ -16,10 +16,10 @@ export function CtaFooter() {
 
 			<div className="relative container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-4 text-lg text-muted-foreground">{t("home.cta.subtitle")}</p>
+					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">{t("home.cta.subtitle")}</p>
 					<div className="mt-8 w-full overflow-x-auto">
 						<div className="gap-4 mx-auto flex w-max items-center justify-center">
 							<Button

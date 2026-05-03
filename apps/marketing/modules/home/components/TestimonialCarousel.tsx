@@ -63,10 +63,10 @@ export function TestimonialCarousel() {
 	return (
 		<section className="py-24 border-b border-border/60">
 			<div className="container">
-				<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-center text-balance">
+				<h2 className="font-semibold text-3xl tracking-tight leading-tight text-center text-balance md:text-4xl">
 					{t("testimonials.title")}
 				</h2>
-				<p className="mt-4 text-lg text-center text-muted-foreground">
+				<p className="mt-4 text-lg leading-relaxed text-center text-muted-foreground">
 					{t("testimonials.subtitle")}
 				</p>
 

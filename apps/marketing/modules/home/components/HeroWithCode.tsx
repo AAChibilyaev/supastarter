@@ -53,13 +53,13 @@ export function HeroWithCode() {
 					</div>
 
 					{/* Gradient heading */}
-					<h1 className="font-semibold text-4xl tracking-tight md:text-5xl lg:text-6xl text-balance">
+					<h1 className="font-bold text-5xl tracking-tight leading-[1.05] text-balance md:text-6xl lg:text-7xl">
 						<span className="bg-gradient-to-r from-primary via-primary/80 to-foreground bg-clip-text text-transparent">
 							{t("home.hero.title")}
 						</span>
 					</h1>
 
-					<p className="mt-5 max-w-xl text-base md:text-lg text-pretty text-muted-foreground">
+					<p className="mt-5 max-w-xl text-lg text-pretty text-muted-foreground">
 						{t("home.hero.subtitle")}
 					</p>
 

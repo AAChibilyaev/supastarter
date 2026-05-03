@@ -24,6 +24,11 @@ export function getTypesenseEnv(): TypesenseEnv {
 		throw new Error("TYPESENSE_ADMIN_API_KEY is not set");
 	}
 
+	// Wrap IPv6 literals in brackets (e.g. "::1" → "[::1]")
+	// so URL construction like `${host}:${port}` produces valid "[::1]:8108"
+	// Hostnames (Docker service names, domain names) are passed through unchanged.
+	const normalizedHost = host.includes(":") && !host.startsWith("[") ? `[${host}]` : host;
+
 	const protocolRaw = (process.env.TYPESENSE_PROTOCOL ?? "http").toLowerCase();
 	if (protocolRaw !== "http" && protocolRaw !== "https") {
 		throw new Error("TYPESENSE_PROTOCOL must be 'http' or 'https'");
@@ -35,6 +40,6 @@ export function getTypesenseEnv(): TypesenseEnv {
 		throw new Error("TYPESENSE_PORT must be a number");
 	}
 
-	cached = { host, port, protocol: protocolRaw, adminApiKey };
+	cached = { host: normalizedHost, port, protocol: protocolRaw, adminApiKey };
 	return cached;
 }

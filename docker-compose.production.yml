@@ -204,8 +204,18 @@ services:
 networks:
     internal:
         driver: bridge
+        enable_ipv6: true
+        ipam:
+            config:
+                - subnet: 172.21.0.0/16
+                - subnet: fd00:dead:beef:21::/56
     public:
         driver: bridge
+        enable_ipv6: true
+        ipam:
+            config:
+                - subnet: 172.22.0.0/16
+                - subnet: fd00:dead:beef:22::/56
 
 volumes:
     postgres_data:

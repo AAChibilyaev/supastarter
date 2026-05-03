@@ -1,6 +1,14 @@
 # Docker Compose configuration for local development
 # Provides PostgreSQL database, MinIO S3-compatible storage, and Typesense search
 
+networks:
+    default:
+        enable_ipv6: true
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                - subnet: fd00:dead:beef:20::/56
+
 services:
     postgres:
         image: postgres:16-alpine

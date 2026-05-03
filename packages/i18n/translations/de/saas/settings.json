@@ -287,7 +287,9 @@
 				"pageInfo": "{{start}}–{{end}} von {{total}}",
 				"empty": "Noch keine Rechnungen. Rechnungen erscheinen hier nach Ihrer ersten Zahlung.",
 				"loading": "Rechnungen werden geladen...",
-				"downloadError": "Rechnungs-PDF konnte nicht geöffnet werden. Bitte versuchen Sie es erneut."
+				"downloadError": "Rechnungs-PDF konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.",
+				"statusLabel": "Status",
+				"page": "Seite {{page}}"
 			},
 			"paymentMethod": {
 				"title": "Zahlungsmethode",

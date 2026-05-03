@@ -285,7 +285,9 @@
 				"pageInfo": "{{start}}–{{end}} of {{total}}",
 				"empty": "No invoices yet. Invoices will appear here after your first payment.",
 				"loading": "Loading invoices...",
-				"downloadError": "Could not open invoice PDF. Please try again."
+				"downloadError": "Could not open invoice PDF. Please try again.",
+				"statusLabel": "Status",
+				"page": "Page {{page}}"
 			},
 			"paymentMethod": {
 				"title": "Payment Method",

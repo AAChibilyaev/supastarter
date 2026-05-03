@@ -5,14 +5,13 @@ import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
+\tTable,
+\tTableBody,
+\tTableCell,
+\tTableHead,
+\tTableHeader,
+\tTableRow,
 } from "@repo/ui/components/table";
-import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
@@ -38,13 +37,19 @@ function getStatusBadge(status: InvoiceStatus) {
 
 function getStatusLabel(status: InvoiceStatus, t: ReturnType<typeof useTranslations>) {
 	if (status === "paid") {
-		return t("settings.billing.invoices.paid");
+		return t("settings.billing.invoiceHistory.status.paid");
 	}
-	if (status === "open" || status === "draft") {
-		return t("settings.billing.invoices.pending");
+	if (status === "open") {
+		return t("settings.billing.invoiceHistory.status.open");
 	}
-	if (status === "void" || status === "uncollectible") {
-		return t("settings.billing.invoices.failed");
+	if (status === "draft") {
+		return t("settings.billing.invoiceHistory.status.draft");
+	}
+	if (status === "void") {
+		return t("settings.billing.invoiceHistory.status.void");
+	}
+	if (status === "uncollectible") {
+		return t("settings.billing.invoiceHistory.status.uncollectible");
 	}
 	return status ?? "—";
 }
@@ -88,7 +93,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>{t("settings.billing.invoices.title")}</CardTitle>
+				<CardTitle>{t("settings.billing.invoiceHistory.title")}</CardTitle>
 			</CardHeader>
 			<CardContent className="p-0">
 				{isLoading ? (
@@ -99,17 +104,17 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 					</div>
 				) : invoices.length === 0 ? (
 					<div className="p-6 text-sm text-center text-muted-foreground">
-						{t("settings.billing.invoices.emptyState")}
+						{t("settings.billing.invoiceHistory.empty")}
 					</div>
 				) : (
 					<>
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>Date</TableHead>
-									<TableHead>Amount</TableHead>
-									<TableHead>Status</TableHead>
-									<TableHead className="text-right">Actions</TableHead>
+									<TableHead>{t("settings.billing.invoiceHistory.date")}</TableHead>
+									<TableHead>{t("settings.billing.invoiceHistory.amount")}</TableHead>
+									<TableHead>{t("settings.billing.invoiceHistory.statusLabel")}</TableHead>
+									<TableHead className="text-right">{t("settings.billing.invoiceHistory.actions")}</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -145,7 +150,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 														download
 													>
 														<DownloadIcon className="size-4 mr-1" />
-														{t("settings.billing.invoices.downloadPdf")}
+														{t("settings.billing.invoiceHistory.downloadPdf")}
 													</a>
 												</Button>
 											)}
@@ -163,10 +168,10 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 									disabled={currentPage === 1}
 									onClick={handlePrevPage}
 								>
-									Previous
+									{t("settings.billing.invoiceHistory.previous")}
 								</Button>
 								<span className="text-sm text-muted-foreground">
-									Page {currentPage}
+									{t("settings.billing.invoiceHistory.page", { page: currentPage })}
 								</span>
 								<Button
 									variant="ghost"
@@ -174,7 +179,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 									disabled={!hasMore}
 									onClick={handleNextPage}
 								>
-									Next
+									{t("settings.billing.invoiceHistory.next")}
 								</Button>
 							</div>
 						)}

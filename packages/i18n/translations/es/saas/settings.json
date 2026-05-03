@@ -287,7 +287,9 @@
 				"pageInfo": "{{start}}–{{end}} de {{total}}",
 				"empty": "Aún no hay facturas. Las facturas aparecerán aquí después de su primer pago.",
 				"loading": "Cargando facturas...",
-				"downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo."
+				"downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo.",
+				"statusLabel": "Estado",
+				"page": "Página {{page}}"
 			},
 			"paymentMethod": {
 				"title": "Método de Pago",

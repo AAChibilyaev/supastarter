@@ -95,13 +95,13 @@ export function HeroWithCode() {
 								{label}
 							</Badge>
 						))}
-						</div>
-
-						{/* Trust badges — G2, Capterra, customer count */}
-						<div className="mt-6">
-							<TrustBadge />
-						</div>
 					</div>
+
+					{/* Trust badges — G2, Capterra, customer count */}
+					<div className="mt-6">
+						<TrustBadge />
+					</div>
+				</div>
 
 				{/* Right column: glass-morphism code card */}
 				<div className="relative">

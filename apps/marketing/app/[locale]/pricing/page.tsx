@@ -1,5 +1,6 @@
 import { CtaFooter } from "@home/components/CtaFooter";
 import { PricingPlans } from "@home/components/PricingPlans";
+import { TrustBadge } from "@home/components/TrustBadge";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -30,6 +31,9 @@ export default async function PricingPage(props: { params: Promise<{ locale: str
 					</p>
 				</div>
 			</section>
+			<div className="flex justify-center py-6 border-b border-border/60">
+				<TrustBadge />
+			</div>
 			<PricingPlans />
 			<CtaFooter />
 		</>

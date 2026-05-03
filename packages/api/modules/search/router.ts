@@ -37,6 +37,7 @@ import {
 } from "./procedures/operations";
 import { pipelineStatus } from "./procedures/pipelineStatus";
 import { querySuggestions } from "./procedures/query-suggestions";
+import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
 import { recentActivity } from "./procedures/recent-activity";
 import { reindex } from "./procedures/reindex";
 import { retryFailedBatches } from "./procedures/retry-failed-batches";
@@ -45,7 +46,6 @@ import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
 import { listStemmingOverrides, upsertStemmingOverride } from "./procedures/stemming";
-import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
 import { listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";

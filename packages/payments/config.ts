@@ -59,6 +59,28 @@ export const config: PaymentsConfigWithWallet = {
 		business: { searchPerMonth: 50_000_000, indexedDocuments: 10_000_000 },
 	},
 	plans: {
+		starter: {
+			prices: [
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_STARTER_MONTHLY as string,
+					interval: "month",
+					amount: 12,
+					currency: "USD",
+					seatBased: false,
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_STARTER_YEARLY as string,
+					interval: "year",
+					amount: 120,
+					currency: "USD",
+					seatBased: false,
+					trialPeriodDays: 7,
+				},
+			],
+		},
 		pro: {
 			recommended: true,
 			prices: [

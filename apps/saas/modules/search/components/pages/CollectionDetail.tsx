@@ -16,18 +16,28 @@ import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvid
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import { Activity, ChevronLeftIcon, Code2, Database, Key, Layers, Settings } from "lucide-react";
+import {
+	Activity,
+	ChevronLeftIcon,
+	Code2,
+	Database,
+	Key,
+	Layers,
+	Settings,
+	TrendingUp,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { SchemaEditorPanel } from "../panels/SchemaEditorPanel";
 import { DocumentsTable } from "../tables/DocumentsTable";
 
 // ── Types ───────────────────────────────────────────────────────
 
-type TabId = "overview" | "schema" | "documents" | "api" | "settings";
+type TabId = "overview" | "schema" | "documents" | "ranking" | "api" | "settings";
 
 interface TabConfig {
 	id: TabId;
@@ -185,6 +195,11 @@ export function CollectionDetail() {
 			id: "api",
 			label: t("collection.tab.api"),
 			icon: <Code2 className="size-4" />,
+		},
+		{
+			id: "ranking",
+			label: t("collection.tab.ranking"),
+			icon: <TrendingUp className="size-4" />,
 		},
 		{
 			id: "settings",
@@ -454,6 +469,12 @@ $data = json_decode($response->getBody(), true);`;
 					{/* Fallback when DocumentsTable doesn't render */}
 					{/* DocumentsTable is always available; if it were not it would show an empty Card */}
 				</div>
+			)}
+
+			{/* ── Tab: Ranking ─────────────────────────────────────── */}
+
+			{activeTab === "ranking" && orgId && indexSlug && (
+				<RankingRulesPanel organizationId={orgId} slug={indexSlug} />
 			)}
 
 			{/* ── Tab: API ──────────────────────────────────────────── */}

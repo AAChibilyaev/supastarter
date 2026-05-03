@@ -134,21 +134,17 @@ export function AppSidebar() {
 
 		return [
 			...(activeOrganization
-				? [/* organization items above */]
-				: [
+				? [
 						{
 							label: t("app.menu.mySearch"),
 							href: "/my-search",
 							icon: StarIcon,
-							isActive: pathname === "/my-search" || pathname.startsWith("/my-search/"),
+							isActive:
+								pathname === "/my-search" || pathname.startsWith("/my-search/"),
 						},
 						{
-							label: t("app.menu.start"),
-							href: startHref,
-							icon: HomeIcon,
-							isActive: pathname === "/" || pathname === basePath,
-						},
-					]),
+							label: t("search.nav.overview"),
+							href: `${basePath}/overview`,
 							icon: HomeIcon,
 							isActive: pathname === `${basePath}/overview` || pathname === basePath,
 						},
@@ -334,6 +330,13 @@ export function AppSidebar() {
 						},
 					]
 				: [
+						{
+							label: t("app.menu.mySearch"),
+							href: "/my-search",
+							icon: StarIcon,
+							isActive:
+								pathname === "/my-search" || pathname.startsWith("/my-search/"),
+						},
 						{
 							label: t("app.menu.start"),
 							href: startHref,

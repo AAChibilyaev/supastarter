@@ -21,7 +21,9 @@ export function CustomersCaseStudies({ caseStudies }: CustomersCaseStudiesProps)
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("caseStudies.title")}
 					</h2>
-					<p className="mt-4 text-lg text-muted-foreground">{t("caseStudies.description")}</p>
+					<p className="mt-4 text-lg text-muted-foreground">
+						{t("caseStudies.description")}
+					</p>
 				</div>
 
 				<div className="mt-16 gap-6 md:grid-cols-3 grid grid-cols-1">
@@ -33,7 +35,7 @@ export function CustomersCaseStudies({ caseStudies }: CustomersCaseStudiesProps)
 								className="group transition-all duration-300 hover:border-primary/30 hover:bg-accent/5"
 							>
 								{image && (
-									<div className="aspect-[16/9] relative overflow-hidden rounded-t-xl">
+									<div className="relative aspect-[16/9] overflow-hidden rounded-t-xl">
 										<Image
 											src={image}
 											alt={title}
@@ -50,7 +52,7 @@ export function CustomersCaseStudies({ caseStudies }: CustomersCaseStudiesProps)
 									</CardDescription>
 									<LocaleLink
 										href={`/blog/${path}`}
-										className="mt-4 gap-1.5 inline-flex items-center text-sm font-medium text-primary hover:underline"
+										className="mt-4 gap-1.5 text-sm font-medium inline-flex items-center text-primary hover:underline"
 									>
 										{t("caseStudies.readFullStudy")}
 										<ArrowRightIcon className="size-3.5" />

@@ -21,9 +21,9 @@ import { useFormatter } from "next-intl";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { ActivityLog } from "./ActivityLog";
 import { EmptyState } from "./EmptyState";
 import { FailedQueriesTable } from "./FailedQueriesTable";
-import { ActivityLog } from "./ActivityLog";
 
 type PeriodKey = "24h" | "7d" | "30d";
 
@@ -422,9 +422,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 		</div>
 	);
 
-	const renderActivityTab = () => (
-		<ActivityLog organizationId={organizationId} limit={50} />
-	);
+	const renderActivityTab = () => <ActivityLog organizationId={organizationId} limit={50} />;
 
 	return (
 		<div className="space-y-6">

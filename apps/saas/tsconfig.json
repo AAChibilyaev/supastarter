@@ -15,6 +15,7 @@
 			"@onboarding/*": ["./modules/onboarding/*"],
 			"@search/*": ["./modules/search/*"],
 			"@indexing/*": ["./modules/indexing/*"],
+			"@my-search/*": ["./modules/my-search/*"],
 			"@shared/*": ["./modules/shared/*"]
 		}
 	},

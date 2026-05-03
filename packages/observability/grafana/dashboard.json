@@ -1,0 +1,311 @@
+{
+	"title": "AACsearch Engine — Infrastructure",
+	"uid": "aacsearch-infra",
+	"version": 1,
+	"schemaVersion": 39,
+	"tags": ["aacsearch", "infrastructure", "prometheus"],
+	"time": { "from": "now-6h", "to": "now" },
+	"timezone": "browser",
+	"refresh": "30s",
+	"panels": [
+		{
+			"title": "Ingest Queue Depth",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "short",
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "yellow", "value": 500 },
+							{ "color": "red", "value": 1000 }
+						]
+					},
+					"min": 0,
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_ingest_queue_depth",
+					"legendFormat": "pending items",
+					"refId": "A"
+				}
+			],
+			"description": "Number of unprocessed items in the SearchIngestBuffer. Alert threshold: > 1000."
+		},
+		{
+			"title": "Search Latency — p99 (ms)",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "ms",
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "yellow", "value": 300 },
+							{ "color": "red", "value": 500 }
+						]
+					},
+					"min": 0,
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_search_duration_summary_ms{quantile=\"0.99\"}",
+					"legendFormat": "p99 — {{index_slug}}",
+					"refId": "A"
+				}
+			],
+			"description": "p99 search request duration in milliseconds. Alert threshold: > 500ms."
+		},
+		{
+			"title": "Search Latency — Average & p95 (ms)",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "ms",
+					"min": 0,
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_search_duration_summary_ms{quantile=\"0.5\"}",
+					"legendFormat": "p50 — {{index_slug}}",
+					"refId": "A"
+				},
+				{
+					"expr": "aacsearch_search_duration_summary_ms{quantile=\"0.95\"}",
+					"legendFormat": "p95 — {{index_slug}}",
+					"refId": "B"
+				}
+			],
+			"description": "Median and p95 search latency."
+		},
+		{
+			"title": "Search Latency — Histogram (rate)",
+			"type": "heatmap",
+			"gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "req/s",
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"calculate": false,
+				"legend": { "showLegend": false },
+				"tooltip": { "mode": "single" }
+			},
+			"targets": [
+				{
+					"expr": "sum(rate(aacsearch_search_duration_ms_bucket[1m])) by (le)",
+					"legendFormat": "le={{le}}",
+					"refId": "A"
+				}
+			],
+			"description": "Heatmap of search request durations over time."
+		},
+		{
+			"title": "Ingest Error Rate",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 6, "x": 12, "y": 8 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "percentunit",
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "yellow", "value": 0.01 },
+							{ "color": "red", "value": 0.05 }
+						]
+					},
+					"min": 0,
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_ingest_error_rate",
+					"legendFormat": "error rate",
+					"refId": "A"
+				}
+			],
+			"description": "Ratio of failed ingest jobs to total ingest jobs in the last 24h."
+		},
+		{
+			"title": "Active API Keys",
+			"type": "stat",
+			"gridPos": { "h": 8, "w": 6, "x": 18, "y": 8 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "short",
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [{ "color": "green", "value": null }]
+					},
+					"min": 0,
+					"custom": { "displayMode": "list" }
+				}
+			},
+			"options": {
+				"colorMode": "background",
+				"graphMode": "area",
+				"justifyMode": "auto",
+				"orientation": "horizontal",
+				"reduceOptions": {
+					"calcs": ["lastNotNull"],
+					"fields": "",
+					"values": false
+				},
+				"textMode": "auto"
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_active_api_keys",
+					"legendFormat": "active keys",
+					"refId": "A"
+				}
+			],
+			"description": "Number of active (non-revoked, non-expired) search API keys."
+		},
+		{
+			"title": "Default Metrics — CPU",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 0, "y": 16 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"custom": { "displayMode": "list" },
+					"min": 0
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "rate(aacsearch_process_cpu_seconds_total[1m])",
+					"legendFormat": "CPU (cores)",
+					"refId": "A"
+				},
+				{
+					"expr": "rate(aacsearch_nodejs_eventloop_lag_seconds[1m])",
+					"legendFormat": "Event loop lag",
+					"refId": "B"
+				}
+			],
+			"description": "CPU usage and event loop lag from default Prometheus metrics."
+		},
+		{
+			"title": "Default Metrics — Memory",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 8, "y": 16 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "bytes",
+					"custom": { "displayMode": "list" },
+					"min": 0
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "aacsearch_process_resident_memory_bytes",
+					"legendFormat": "RSS",
+					"refId": "A"
+				},
+				{
+					"expr": "aacsearch_nodejs_heap_size_total_bytes",
+					"legendFormat": "Heap total",
+					"refId": "B"
+				},
+				{
+					"expr": "aacsearch_nodejs_heap_size_used_bytes",
+					"legendFormat": "Heap used",
+					"refId": "C"
+				},
+				{
+					"expr": "aacsearch_nodejs_external_memory_bytes",
+					"legendFormat": "External",
+					"refId": "D"
+				}
+			],
+			"description": "Memory usage breakdown."
+		},
+		{
+			"title": "Default Metrics — HTTP & GC",
+			"type": "timeseries",
+			"gridPos": { "h": 8, "w": 8, "x": 16, "y": 16 },
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"fieldConfig": {
+				"defaults": {
+					"unit": "short",
+					"custom": { "displayMode": "list" },
+					"min": 0
+				}
+			},
+			"options": {
+				"legend": { "displayMode": "table", "showLegend": true },
+				"tooltip": { "mode": "multi" }
+			},
+			"targets": [
+				{
+					"expr": "rate(aacsearch_nodejs_active_handles_total[1m])",
+					"legendFormat": "Active handles",
+					"refId": "A"
+				},
+				{
+					"expr": "rate(aacsearch_nodejs_gc_duration_seconds_sum[1m])",
+					"legendFormat": "GC duration",
+					"refId": "B"
+				}
+			],
+			"description": "Active handles and GC duration."
+		}
+	],
+	"rows": [],
+	"graphTooltip": 1,
+	"links": [
+		{
+			"title": "Alerts",
+			"url": "http://localhost:3000/monitoring/alerts",
+			"type": "link"
+		}
+	]
+}

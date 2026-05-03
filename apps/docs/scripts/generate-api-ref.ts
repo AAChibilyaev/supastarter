@@ -1,9 +1,11 @@
 /**
  * generate-api-ref.ts
  *
- * Generates API reference MDX pages from the AACsearch v1 OpenAPI 3.1 spec.
+ * Generates API reference MDX pages from the AACsearch v1 OpenAPI 3.1 spec
+ * for ALL supported locales (en, de, es, fr, ru).
+ *
  * Uses fumadocs-openapi's generateFiles() to create endpoint pages,
- * auto-grouped by tag.
+ * auto-grouped by route.
  *
  * Run before fumadocs-mdx so the MDX loader picks up the generated files.
  *
@@ -15,9 +17,10 @@ import * as path from "node:path";
 import { generateFiles } from "fumadocs-openapi";
 import { createOpenAPI } from "fumadocs-openapi/server";
 
+const LOCALES = ["en", "de", "es", "fr", "ru"] as const;
+
 async function main(): Promise<void> {
 	const REPO_ROOT = path.resolve(process.cwd(), "../..");
-	const outputDir = path.resolve(process.cwd(), "content/docs/en/api-reference");
 
 	// Import and execute the v1 OpenAPI spec generator
 	const { generateOpenApiSpec } = await import(
@@ -32,28 +35,36 @@ async function main(): Promise<void> {
 		}),
 	});
 
-	await generateFiles({
-		input: server,
-		output: outputDir,
-		// Group pages by route — /projects/{id} → /api-reference/projects/{id}
-		groupBy: "route",
-		// Generate meta.json files for navigation
-		meta: {
-			groupStyle: "separator",
-		},
-		// Add description text to each page body
-		includeDescription: true,
-		// Custom frontmatter for Fumadocs compatibility
-		frontmatter(title, description) {
-			return {
-				title,
-				description: description ?? "",
-				full: true,
-			};
-		},
-	});
+	// Generate API ref pages for each locale
+	for (const locale of LOCALES) {
+		const outputDir = path.resolve(
+			process.cwd(),
+			`content/docs/${locale}/api-reference`,
+		);
 
-	console.log(`[generate-api-ref] MDX pages written to ${outputDir}`);
+		await generateFiles({
+			input: server,
+			output: outputDir,
+			// Group pages by route — /projects/{id} → /api-reference/projects/{id}
+			groupBy: "route",
+			// Generate meta.json files for navigation
+			meta: {
+				groupStyle: "separator",
+			},
+			// Add description text to each page body
+			includeDescription: true,
+			// Custom frontmatter for Fumadocs compatibility
+			frontmatter(title, description) {
+				return {
+					title,
+					description: description ?? "",
+					full: true,
+				};
+			},
+		});
+
+		console.log(`[generate-api-ref] MDX pages written to ${outputDir}`);
+	}
 }
 
 main().catch((err) => {

@@ -1,0 +1,200 @@
+---
+title: Runbook аварийного восстановления
+description: PostgreSQL PITR, снапшоты Typesense, репликация S3 и процедуры восстановления AACsearch.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+# Runbook аварийного восстановления
+
+Данный runbook описывает процедуры аварийного восстановления платформы AACsearch. Целевой RTO: **1 час**. Целевой RPO: **15 минут**.
+
+## Архитектура бэкапов
+
+| Компонент      | Метод                        | Расписание  | Хранилище           |
+| -------------- | ---------------------------- | ----------- | ------------------- |
+| PostgreSQL     | WAL-G continuous archiving   | Непрерывно  | S3 (WAL сегменты)   |
+| Typesense      | Snapshot API                 | Каждые 6ч   | S3                  |
+| Приложение     | Git (код) + Coolify          | При деплое  | GitHub + Coolify    |
+| Загруженные    | Прямая запись в S3           | Real-time   | Cross-region S3     |
+
+## Предварительные требования
+
+Перед любой операцией восстановления убедитесь:
+
+- [ ] WAL-G установлен на сервере базы данных
+- [ ] S3 bucket с правильными IAM permissions доступен
+- [ ] Typesense admin API key доступен
+- [ ] Есть доступ к Coolify admin
+
+## Быстрое восстановление (RTO < 1ч)
+
+### 1. Восстановление PostgreSQL из WAL-G
+
+```bash
+# Настройка окружения
+export PGDATABASE=aacsearch
+export PGHOST=localhost
+export PGUSER=postgres
+export WALG_S3_PREFIX=s3://aacsearch-backups/postgres/
+
+# Список доступных бэкапов
+wal-g backup-list
+
+# Восстановление последнего полного бэкапа
+wal-g backup-fetch /var/lib/postgresql/data LATEST
+
+# Создание recovery signal
+touch /var/lib/postgresql/data/recovery.signal
+
+# Запуск PostgreSQL
+systemctl start postgresql
+
+# Проверка восстановления
+psql -c "SELECT pg_is_in_recovery();"
+```
+
+### 2. Восстановление Typesense из снапшота
+
+```bash
+# Скачивание последнего снапшота из S3
+aws s3 cp s3://aacsearch-backups/typesense/latest-snapshot.tar.gz /tmp/
+
+# Остановка Typesense
+systemctl stop typesense-server
+
+# Извлечение снапшота в директорию данных
+tar -xzf /tmp/latest-snapshot.tar.gz -C /var/lib/typesense/data/
+
+# Запуск Typesense
+systemctl start typesense-server
+
+# Проверка восстановления
+curl "http://localhost:8108/health" -H "X-TYPESENSE-API-KEY: $TYPESENSE_ADMIN_KEY"
+```
+
+### 3. Проверка работоспособности приложения
+
+```bash
+# Проверка health endpoint API
+curl -s http://localhost:3000/api/health
+
+# Проверка Prometheus metrics
+curl -s http://localhost:3000/api/metrics | grep aacsearch
+
+# Проверка поиска
+curl -X POST http://localhost:3000/api/v1/indexes/example/search \
+  -H "Content-Type: application/json" \
+  -d '{"q": "*", "perPage": 1}'
+```
+
+## Регулярные бэкапы
+
+### PostgreSQL (WAL-G)
+
+WAL-G настроен на непрерывное архивирование WAL. Полные бэкапы запускаются ежедневно через cron:
+
+```bash
+# Ежедневный полный бэкап в 02:00 UTC
+0 2 * * * wal-g backup-push /var/lib/postgresql/data
+
+# Проверка последнего бэкапа
+wal-g backup-list
+```
+
+### Снапшот Typesense
+
+Скрипт снапшота и загрузки (`/usr/local/bin/typesense-snapshot.sh`):
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+SNAPSHOT_DIR=/tmp/typesense-snapshot
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+S3_BUCKET=s3://aacsearch-backups/typesense/
+
+# Trigger Typesense snapshot via API
+curl -X POST "http://localhost:8108/snapshots" \
+  -H "X-TYPESENSE-API-KEY: $TYPESENSE_ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{{\"snapshot_path\": \"$SNAPSHOT_DIR\"}}"
+
+# Компрессия и загрузка
+tar -czf /tmp/typesense-$TIMESTAMP.tar.gz -C $SNAPSHOT_DIR .
+aws s3 cp /tmp/typesense-$TIMESTAMP.tar.gz $S3_BUCKET
+
+# Очистка
+rm -rf $SNAPSHOT_DIR /tmp/typesense-$TIMESTAMP.tar.gz
+
+# Обновление указателя на последний снапшот
+echo $TIMESTAMP | aws s3 cp - $S3_BUCKET/latest-snapshot.txt
+```
+
+Установка через cron (каждые 6 часов):
+
+```bash
+0 */6 * * * /usr/local/bin/typesense-snapshot.sh
+```
+
+## Конфигурация бэкапов в Coolify
+
+В Coolify настройте следующее расписание бэкапов:
+
+1. Перейдите в ваш ресурс → **Backups**
+2. Включите **Automated Backups**
+3. Расписание: `0 2 * * *` (ежедневно в 02:00 UTC)
+4. Количество хранимых бэкапов: 7
+5. Хранилище: S3-compatible
+6. Настройте S3 credentials:
+   - Endpoint: `https://s3.amazonaws.com`
+   - Bucket: `aacsearch-backups`
+   - Region: `us-east-1`
+
+## Ежемесячная DR-тренировка
+
+Проводите тренировку в **первый понедельник каждого месяца**.
+
+1. **Проверка spare-окружения**
+   - [ ] Убедитесь, что spare-окружение доступно
+   - [ ] Проверьте возможность деплоя из текущего git ref
+
+2. **Восстановление PostgreSQL**
+   - [ ] Скачайте последний WAL-G бэкап
+   - [ ] Восстановите и проверьте целостность БД
+   - [ ] Запустите `VACUUM ANALYZE`
+
+3. **Восстановление Typesense**
+   - [ ] Скачайте последний снапшот
+   - [ ] Восстановите и проверьте результаты поиска
+
+4. **Тестирование приложения**
+   - [ ] Проверьте `/api/health`
+   - [ ] Выполните тестовый поисковый запрос
+   - [ ] Проверьте аутентификацию API ключей
+   - [ ] Проверьте, что widget JS отдаётся корректно
+
+5. **Проверка метрик**
+   - [ ] Prometheus targets в UP
+   - [ ] Grafana панели показывают данные
+   - [ ] Нет критических алертов
+
+6. **Подписание**
+   - [ ] Запишите результаты тренировки в wiki
+   - [ ] Отметьте найденные проблемы
+   - [ ] Обновите runbook при необходимости
+
+## Контакты для алертов
+
+| Роль             | Контакт                           |
+| ---------------- | --------------------------------- |
+| Инфраструктура   | Через PagerDuty (schedule: infra) |
+| Администратор БД | Через PagerDuty (schedule: dba)   |
+| Безопасность     | security@aacsearch.com            |
+
+## Связанные ресурсы
+
+- [Prometheus Alert Rules](/monitoring/alerts) — конфигурация Alertmanager
+- [Grafana Dashboards](/monitoring/dashboards) — панели инфраструктуры
+- [WAL-G Documentation](https://github.com/wal-g/wal-g) — инструмент бэкапа PostgreSQL
+- [Typesense Snapshots](https://typesense.org/docs/guide/snapshot-backups.html) — руководство по бэкапу Typesense

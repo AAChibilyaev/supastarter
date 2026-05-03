@@ -4,6 +4,18 @@ import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import {
+	getMetrics,
+	metricsHandler,
+	collectIngestQueueDepth,
+	collectActiveApiKeys,
+	collectErrorRate,
+	httpMetricsMiddleware,
+	getTracer,
+	initTracing,
+	tracedHonoMiddleware,
+} from "@repo/observability";
+import type { PrometheusMetrics } from "@repo/observability";
+import {
 	getPlanIdByProviderPriceId,
 	walletWebhookHandler,
 	webhookHandler as paymentsWebhookHandler,
@@ -31,10 +43,32 @@ export { listPurchases } from "./modules/payments/procedures/list-purchases";
 
 export { router } from "./orpc/router";
 
+// ── Metrics registry ──────────────────────────────────────────────
+
+const metrics = getMetrics();
+
+// Async collectors that run on /metrics scrape
+const metricsCollectors: Array<(m: PrometheusMetrics) => Promise<void>> = [
+	collectIngestQueueDepth,
+	collectActiveApiKeys,
+	collectErrorRate,
+];
+
+// ── OpenTelemetry Tracing ─────────────────────────────────────────
+
+// Initialize OTel SDK. Wired early so all subsequent middleware and
+// route handlers are instrumented. Disabled by default; enable with
+// AACSEARCH_ENABLE_TRACING=true and configure OTEL_EXPORTER_OTLP_ENDPOINT.
+initTracing();
+
+// ── App ───────────────────────────────────────────────────────────
+
 export const app = new Hono()
 	.basePath("/api")
 	// Logger middleware
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
+	// OpenTelemetry tracing middleware (auto-instruments HTTP requests)
+	.use(tracedHonoMiddleware(getTracer()))
 	// Public search endpoint (own permissive CORS, mounted before global CORS)
 	.route("/", publicSearchApp)
 	// Public spell-check endpoint (API-key auth, own CORS)
@@ -121,6 +155,8 @@ export const app = new Hono()
 	.route("/", tochkaWebhookApp)
 	// Health check
 	.get("/health", (c) => c.text("OK"))
+	// Prometheus metrics endpoint — no auth (internal monitoring only)
+	.get("/metrics", (c) => metricsHandler(c, metrics, metricsCollectors))
 	// oRPC handlers (for RPC and OpenAPI)
 	.use("*", async (c, next) => {
 		const context = {

@@ -1,0 +1,208 @@
+---
+title: Disaster Recovery Runbook
+description: PostgreSQL PITR, Typesense snapshots, S3 replication, and recovery procedures for AACsearch.
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Disaster Recovery Runbook
+
+This runbook covers recovery procedures for the AACsearch platform. Target RTO: **1 hour**. Target RPO: **15 minutes**.
+
+## Backup Architecture
+
+| Component      | Method                     | Schedule   | Storage           |
+| -------------- | -------------------------- | ---------- | ----------------- |
+| PostgreSQL     | WAL-G continuous archiving | Continuous | S3 (WAL segments) |
+| Typesense      | Snapshot API               | Every 6h   | S3                |
+| Application    | Git (code) + Coolify       | Per deploy | GitHub + Coolify  |
+| Uploaded files | Direct S3 (replicated)     | Real-time  | Cross-region S3   |
+
+## Prerequisites
+
+Before any recovery operation, ensure:
+
+- [ ] WAL-G installed on the database server
+- [ ] S3 bucket with proper IAM permissions is accessible
+- [ ] Typesense admin API key is available
+- [ ] Coolify admin access is available
+
+## Quick Recovery (RTO < 1h)
+
+### 1. Restore PostgreSQL from WAL-G
+
+```bash
+# Set environment
+export PGDATABASE=aacsearch
+export PGHOST=localhost
+export PGUSER=postgres
+export WALG_S3_PREFIX=s3://aacsearch-backups/postgres/
+
+# List available backups
+wal-g backup-list
+
+# Restore latest full backup
+wal-g backup-fetch /var/lib/postgresql/data LATEST
+
+# Create recovery signal
+touch /var/lib/postgresql/data/recovery.signal
+
+# Configure recovery target (omit for latest)
+# echo "recovery_target_time = '2026-05-03 12:00:00 UTC'" >> /var/lib/postgresql/data/postgresql.conf
+
+# Start PostgreSQL
+systemctl start postgresql
+
+# Verify recovery
+psql -c "SELECT pg_is_in_recovery();"
+# Should return 't' during recovery, then 'f' when complete
+```
+
+### 2. Restore Typesense from Snapshot
+
+```bash
+# Download latest snapshot from S3
+aws s3 cp s3://aacsearch-backups/typesense/latest-snapshot.tar.gz /tmp/
+
+# Stop Typesense
+systemctl stop typesense-server
+
+# Extract snapshot to data directory
+tar -xzf /tmp/latest-snapshot.tar.gz -C /var/lib/typesense/data/
+
+# Start Typesense
+systemctl start typesense-server
+
+# Verify restoration
+curl "http://localhost:8108/health" -H "X-TYPESENSE-API-KEY: $TYPESENSE_ADMIN_KEY"
+# Should return {"ok": true}
+```
+
+### 3. Verify Application Health
+
+```bash
+# Check API health endpoint
+curl -s http://localhost:3000/api/health
+# Expected: "OK"
+
+# Check Prometheus metrics endpoint
+curl -s http://localhost:3000/api/metrics | grep aacsearch
+
+# Verify search works
+curl -X POST http://localhost:3000/api/v1/indexes/example/search \
+  -H "Content-Type: application/json" \
+  -d '{"q": "*", "perPage": 1}'
+```
+
+## Scheduled Backups
+
+### PostgreSQL (WAL-G)
+
+WAL-G is configured for continuous WAL archiving. Full backups run daily via cron:
+
+```bash
+# Daily full backup at 02:00 UTC
+0 2 * * * wal-g backup-push /var/lib/postgresql/data
+
+# Verify last backup
+wal-g backup-list
+```
+
+### Typesense Snapshot
+
+Snapshot and upload script (`/usr/local/bin/typesense-snapshot.sh`):
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+SNAPSHOT_DIR=/tmp/typesense-snapshot
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+S3_BUCKET=s3://aacsearch-backups/typesense/
+
+# Trigger Typesense snapshot via API
+curl -X POST "http://localhost:8108/snapshots" \
+  -H "X-TYPESENSE-API-KEY: $TYPESENSE_ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{\"snapshot_path\": \"$SNAPSHOT_DIR\"}"
+
+# Compress and upload
+tar -czf /tmp/typesense-$TIMESTAMP.tar.gz -C $SNAPSHOT_DIR .
+aws s3 cp /tmp/typesense-$TIMESTAMP.tar.gz $S3_BUCKET
+
+# Cleanup
+rm -rf $SNAPSHOT_DIR /tmp/typesense-$TIMESTAMP.tar.gz
+
+# Update latest pointer
+echo $TIMESTAMP | aws s3 cp - $S3_BUCKET/latest-snapshot.txt
+```
+
+Install via cron (every 6 hours):
+
+```bash
+0 */6 * * * /usr/local/bin/typesense-snapshot.sh
+```
+
+## Coolify Backup Configuration
+
+In Coolify, configure the following backup schedule:
+
+1. Navigate to your resource → **Backups**
+2. Enable **Automated Backups**
+3. Set **Schedule**: `0 2 * * *` (daily at 02:00 UTC)
+4. Set **Number of backups to keep**: 7
+5. Set **Storage**: S3-compatible
+6. Configure S3 credentials:
+    - Endpoint: `https://s3.amazonaws.com`
+    - Bucket: `aacsearch-backups`
+    - Region: `us-east-1`
+    - Access Key: `<from 1Password>`
+    - Secret Key: `<from 1Password>`
+
+## Monthly DR Drill Checklist
+
+Run this drill on the **first Monday of every month**.
+
+1. **Spare environment check**
+    - [ ] Verify spare environment exists and is accessible
+    - [ ] Check Coolify can deploy from the current git ref
+
+2. **Restore PostgreSQL**
+    - [ ] Download latest WAL-G backup
+    - [ ] Restore and verify database integrity
+    - [ ] Run `VACUUM ANALYZE` and check for corruption
+
+3. **Restore Typesense**
+    - [ ] Download latest snapshot
+    - [ ] Restore and verify search results
+
+4. **Application test**
+    - [ ] Verify `/api/health` returns OK
+    - [ ] Run a test search query
+    - [ ] Verify API key authentication
+    - [ ] Check widget JS is served correctly
+
+5. **Metrics verification**
+    - [ ] Prometheus targets are up
+    - [ ] Grafana dashboards show data
+    - [ ] No critical alerts firing
+
+6. **Sign-off**
+    - [ ] Log drill results in company wiki
+    - [ ] Note any issues found and file follow-up issues
+    - [ ] Update runbook if gaps were found
+
+## Alert Contacts
+
+| Role           | Contact                         |
+| -------------- | ------------------------------- |
+| Infrastructure | Via PagerDuty (schedule: infra) |
+| Database Admin | Via PagerDuty (schedule: dba)   |
+| Security       | security@aacsearch.com          |
+
+## Related
+
+- [Prometheus Alert Rules](/monitoring/alerts) — Alertmanager configuration
+- [Grafana Dashboards](/monitoring/dashboards) — Infrastructure dashboards
+- [WAL-G Documentation](https://github.com/wal-g/wal-g) — PostgreSQL backup tool
+- [Typesense Snapshots](https://typesense.org/docs/guide/snapshot-backups.html) — Typesense backup guide

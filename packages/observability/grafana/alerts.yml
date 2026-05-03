@@ -1,0 +1,161 @@
+# AACsearch Engine — Prometheus Alerting Rules
+#
+# Deploy to your Prometheus server's rules directory (e.g., /etc/prometheus/rules/)
+# and reference in prometheus.yml:
+#
+#   rule_files:
+#     - /etc/prometheus/rules/aacsearch_alerts.yml
+#
+# Alertmanager should be configured to route these to PagerDuty, OpsGenie, Slack, etc.
+
+groups:
+    - name: aacsearch_alerts
+      interval: 30s
+      rules:
+          # ── Search Performance ──────────────────────────────────────────
+          - alert: HighSearchLatency
+            expr: |
+                aacsearch_search_duration_summary_ms{quantile="0.99"} > 500
+            for: 5m
+            labels:
+                severity: critical
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "p99 search latency {{ $value | humanizeDuration }} — exceeds 500ms threshold"
+                description: >
+                    Search latency at the 99th percentile has been above 500ms for more than 5 minutes.
+                    Current p99: {{ $value | humanizeDuration }} on index "{{ $labels.index_slug }}".
+                    Action: Check Typesense cluster health, network congestion, or query complexity.
+                runbook_url: "https://docs.aacsearch.dev/runbooks/high-search-latency"
+
+          - alert: SearchLatencyDegraded
+            expr: |
+                aacsearch_search_duration_summary_ms{quantile="0.95"} > 300
+            for: 10m
+            labels:
+                severity: warning
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "p95 search latency {{ $value | humanizeDuration }} — degraded performance"
+                description: >
+                    Search latency at the 95th percentile has been above 300ms for more than 10 minutes.
+                    Current p95: {{ $value | humanizeDuration }} on index "{{ $labels.index_slug }}".
+                    Action: Monitor. Investigate if sustained.
+
+          # ── Ingest Pipeline ─────────────────────────────────────────────
+          - alert: LargeIngestBacklog
+            expr: |
+                aacsearch_ingest_queue_depth > 1000
+            for: 5m
+            labels:
+                severity: critical
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "Ingest queue backlog {{ $value | humanizeNumber }} items — exceeds 1,000 threshold"
+                description: >
+                    The search ingest buffer has accumulated more than 1,000 unprocessed items for over 5 minutes.
+                    Current depth: {{ $value }}.
+                    Action: Check the ingest worker is running. Scale worker replicas or investigate DB/network issues.
+                runbook_url: "https://docs.aacsearch.dev/runbooks/ingest-backlog"
+
+          - alert: IngestBacklogWarning
+            expr: |
+                aacsearch_ingest_queue_depth > 500
+            for: 10m
+            labels:
+                severity: warning
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "Ingest queue backlog {{ $value | humanizeNumber }} — approaching threshold"
+                description: >
+                    The search ingest buffer depth has exceeded 500 items for over 10 minutes.
+                    Current depth: {{ $value }}.
+                    Action: Monitor. If growing, investigate.
+
+          # ── Error Rate ──────────────────────────────────────────────────
+          - alert: HighIngestErrorRate
+            expr: |
+                aacsearch_ingest_error_rate > 0.1
+            for: 5m
+            labels:
+                severity: critical
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "Ingest error rate {{ $value | humanizePercent }} — exceeds 10%"
+                description: >
+                    The ratio of failed ingest jobs to total ingest jobs has exceeded 10% over a 24-hour window.
+                    Current error rate: {{ $value | humanizePercent }}.
+                    Action: Check Typesense connectivity, document validation, and ingest worker logs.
+                runbook_url: "https://docs.aacsearch.dev/runbooks/high-ingest-error-rate"
+
+          - alert: ElevatingIngestErrorRate
+            expr: |
+                aacsearch_ingest_error_rate > 0.05
+            for: 10m
+            labels:
+                severity: warning
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "Ingest error rate {{ $value | humanizePercent }} — above 5%"
+                description: >
+                    The ingest error rate has exceeded 5% for more than 10 minutes.
+                    Current error rate: {{ $value | humanizePercent }}.
+                    Action: Monitor. Investigate if continuing to rise.
+
+          # ── Service Health ─────────────────────────────────────────────
+          - alert: AACsearchInstanceDown
+            expr: |
+                up{job=~".*aacsearch.*"} == 0
+            for: 1m
+            labels:
+                severity: critical
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "AACsearch instance {{ $labels.instance }} is down"
+                description: >
+                    Prometheus target {{ $labels.instance }} (job: {{ $labels.job }}) has been unreachable
+                    for over 1 minute.
+                    Action: Restart the service or investigate the server.
+                runbook_url: "https://docs.aacsearch.dev/runbooks/instance-down"
+
+          - alert: HighMemoryUsage
+            expr: |
+                aacsearch_process_resident_memory_bytes > 1 * 1024 * 1024 * 1024  # 1 GiB
+            for: 5m
+            labels:
+                severity: warning
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "Node.js RSS memory {{ $value | humanize1024 }} — exceeds 1 GiB"
+                description: >
+                    The Node.js process resident set size has exceeded 1 GiB for more than 5 minutes.
+                    Current RSS: {{ $value | humanize1024 }}.
+                    Action: Investigate memory leak. Consider increasing --max-old-space-size.
+
+          # ── API Health ──────────────────────────────────────────────────
+          - alert: ElevatedErrorResponseRate
+            expr: |
+                rate(aacsearch_api_requests_total{status=~"5.."}[5m])
+                /
+                rate(aacsearch_api_requests_total[5m])
+                > 0.05
+            for: 5m
+            labels:
+                severity: critical
+                team: infrastructure
+                service: aacsearch
+            annotations:
+                summary: "5xx error rate {{ $value | humanizePercent }} — exceeds 5%"
+                description: >
+                    The rate of 5xx responses has exceeded 5% of total API requests for more than 5 minutes.
+                    Current error rate: {{ $value | humanizePercent }}.
+                    Action: Check server health, Typesense connectivity, and recent deployments.
+                runbook_url: "https://docs.aacsearch.dev/runbooks/elevated-5xx-rate"

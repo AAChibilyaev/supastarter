@@ -1,0 +1,120 @@
+# AACsearch Engine — Alert Rules
+#
+# Prometheus alerting rules for the infrastructure observability stack.
+# Configure these in your Prometheus server (prometheus.yml rule_files).
+
+groups:
+    - name: aacsearch-ingest
+      interval: 30s
+      rules:
+          # Ingest queue backlog — items not being processed fast enough
+          - alert: IngestQueueBacklog
+            expr: aacsearch_ingest_queue_depth > 1000
+            for: 2m
+            labels:
+                severity: critical
+                team: infrastructure
+            annotations:
+                summary: "Ingest queue depth is {{ $value }} — threshold 1000"
+                description: |
+                    The search ingest buffer has {{ $value }} unprocessed items.
+                    This indicates the ingest worker cannot keep up with incoming data.
+                    Action: Check the ingest worker logs and Typesense cluster health.
+
+          # Ingest queue warning — approaching backlog threshold
+          - alert: IngestQueueWarning
+            expr: aacsearch_ingest_queue_depth > 500
+            for: 5m
+            labels:
+                severity: warning
+                team: infrastructure
+            annotations:
+                summary: "Ingest queue depth is {{ $value }} — approaching threshold"
+                description: |
+                    Ingest queue at {{ $value }} items. Investigate before it reaches 1000.
+
+    - name: aacsearch-latency
+      interval: 30s
+      rules:
+          # High search latency (p99) — user-facing impact
+          - alert: SearchLatencyHigh
+            expr: aacsearch_search_duration_summary_ms{quantile="0.99"} > 500
+            for: 2m
+            labels:
+                severity: critical
+                team: infrastructure
+            annotations:
+                summary: "p99 search latency {{ $value }}ms on {{ $labels.index_slug }}"
+                description: |
+                    p99 search latency is {{ $value }}ms on index "{{ $labels.index_slug }}"
+                    (threshold: 500ms). Users may be experiencing slow search results.
+                    Action: Check Typesense cluster load, review slow queries, scale if needed.
+
+          # Moderate search latency (p99) — early warning
+          - alert: SearchLatencyWarning
+            expr: aacsearch_search_duration_summary_ms{quantile="0.99"} > 300
+            for: 5m
+            labels:
+                severity: warning
+                team: infrastructure
+            annotations:
+                summary: "p99 search latency {{ $value }}ms on {{ $labels.index_slug }}"
+
+    - name: aacsearch-errors
+      interval: 30s
+      rules:
+          # High ingest error rate
+          - alert: IngestErrorRateHigh
+            expr: aacsearch_ingest_error_rate > 0.05
+            for: 2m
+            labels:
+                severity: critical
+                team: infrastructure
+            annotations:
+                summary: "Ingest error rate {{ $value | humanizePercentage }}"
+                description: |
+                    The ingest error rate is {{ $value | humanizePercentage }} (threshold: 5%).
+                    This means documents are failing to index.
+                    Action: Check SearchIngestBuffer for failed rows. Review Typesense connectivity.
+
+          - alert: IngestErrorRateWarning
+            expr: aacsearch_ingest_error_rate > 0.01
+            for: 5m
+            labels:
+                severity: warning
+                team: infrastructure
+            annotations:
+                summary: "Ingest error rate {{ $value | humanizePercentage }}"
+
+    - name: aacsearch-system
+      interval: 30s
+      rules:
+          # Instance down
+          - alert: InstanceDown
+            expr: up{job="aacsearch-api"} == 0
+            for: 1m
+            labels:
+                severity: critical
+                team: infrastructure
+            annotations:
+                summary: "AACsearch API instance {{ $labels.instance }} is down"
+
+          # High memory usage
+          - alert: HighMemoryUsage
+            expr: aacsearch_process_resident_memory_bytes > 1e9
+            for: 5m
+            labels:
+                severity: warning
+                team: infrastructure
+            annotations:
+                summary: "Memory usage {{ $value | humanize1024 }} — threshold: 1 GB"
+
+          # High event loop lag
+          - alert: EventLoopLag
+            expr: aacsearch_nodejs_eventloop_lag_seconds > 1
+            for: 1m
+            labels:
+                severity: warning
+                team: infrastructure
+            annotations:
+                summary: "Event loop lag {{ $value }}s"

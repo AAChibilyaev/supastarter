@@ -166,8 +166,8 @@ export function CollectionsPage() {
 	if (!orgSlug) {
 		return (
 			<EmptyState
-				title={t("search.collection.selectOrg")}
-				description={t("search.collection.selectOrgDescription")}
+				title={t("collection.selectOrg")}
+				description={t("collection.selectOrgDescription")}
 				icon={Columns3Icon}
 			/>
 		);
@@ -178,18 +178,15 @@ export function CollectionsPage() {
 			{/* Header */}
 			<div className="gap-4 sm:items-center sm:flex-row flex flex-col items-start justify-between">
 				<div>
-					<h1 className="font-bold text-2xl tracking-tight">
-						{t("search.nav.collections")}
-					</h1>
+					<h1 className="font-bold text-2xl tracking-tight">{t("nav.collections")}</h1>
 					<p className="text-sm text-muted-foreground">
-						{t("search.collections.subtitle") ||
-							"Manage your search indexes and documents"}
+						{t("collections.subtitle") || "Manage your search indexes and documents"}
 					</p>
 				</div>
 				<Button variant="primary" asChild>
 					<a href={`/${orgSlug}/search?tab=create`}>
 						<PlusIcon className="size-4" />
-						{t("search.collection.new") || "New Collection"}
+						{t("collection.new") || "New Collection"}
 					</a>
 				</Button>
 			</div>
@@ -198,9 +195,7 @@ export function CollectionsPage() {
 			<div className="sm:max-w-md relative">
 				<SearchIcon className="left-2.5 size-4 absolute top-1/2 -translate-y-1/2 text-foreground/40" />
 				<Input
-					placeholder={
-						t("search.collections.searchPlaceholder") || "Search collections..."
-					}
+					placeholder={t("collections.searchPlaceholder") || "Search collections..."}
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
 					className="pl-8"
@@ -221,22 +216,16 @@ export function CollectionsPage() {
 				<CollectionGridSkeleton />
 			) : collections.length === 0 ? (
 				<EmptyState
-					title={
-						searchQuery
-							? t("search.collections.noResults")
-							: t("search.collections.empty")
-					}
+					title={searchQuery ? t("collections.noResults") : t("collections.empty")}
 					description={
-						searchQuery
-							? t("search.collections.noResultsDescription")
-							: t("search.collections.emptyDescription")
+						searchQuery ? t("collections.noResultsDescription") : t("collections.emptyDescription")
 					}
 					icon={Columns3Icon}
 					action={
 						searchQuery
 							? undefined
 							: {
-									label: t("search.collection.createFirst"),
+									label: t("collection.createFirst"),
 									href: `/${orgSlug}/search?tab=create`,
 								}
 					}
@@ -285,15 +274,10 @@ export function CollectionsPage() {
 			>
 				<DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
 					<DialogHeader>
-						<DialogTitle>
-							{t("search.collection.schemaEditor") || "Schema Editor"}
-						</DialogTitle>
+						<DialogTitle>{t("collection.schemaEditor") || "Schema Editor"}</DialogTitle>
 					</DialogHeader>
 					{schemaCollectionSlug && (
-						<SchemaEditorPanel
-							organizationId={orgId ?? ""}
-							slug={schemaCollectionSlug}
-						/>
+						<SchemaEditorPanel organizationId={orgId ?? ""} slug={schemaCollectionSlug} />
 					)}
 				</DialogContent>
 			</Dialog>

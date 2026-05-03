@@ -13,8 +13,14 @@ import {
 	ZapIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { ComponentType } from "react";
 
-const SUGGESTION_ITEMS = [
+interface ListItem {
+	icon: ComponentType<{ className?: string }>;
+	label: string;
+}
+
+const SUGGESTION_ITEMS: ListItem[] = [
 	{ icon: SearchIcon, label: "Autocomplete" },
 	{ icon: ZapIcon, label: "Query completions" },
 	{ icon: ClockIcon, label: "Recent searches" },
@@ -24,7 +30,7 @@ const SUGGESTION_ITEMS = [
 	{ icon: ArrowRightIcon, label: "No-result suggestions" },
 ];
 
-const RECOMMENDATION_ITEMS = [
+const RECOMMENDATION_ITEMS: ListItem[] = [
 	{ icon: ShoppingBagIcon, label: "Similar items" },
 	{ icon: BookOpenIcon, label: "Related documents" },
 	{ icon: HashIcon, label: "Frequently searched together" },
@@ -54,8 +60,8 @@ export function SuggestionsSection() {
 					<Card>
 						<CardContent className="p-6 md:p-8 flex h-full flex-col">
 							<div className="mb-5">
-								<div className="size-10 bg-blue-500/10 mb-4 flex items-center justify-center rounded-lg">
-									<SearchIcon className="size-5 text-blue-500" />
+								<div className="size-10 mb-4 flex items-center justify-center rounded-lg bg-muted">
+									<SearchIcon className="size-5 text-muted-foreground" />
 								</div>
 								<h3 className="text-lg font-medium text-foreground">
 									{t("suggestionsTitle")}
@@ -70,7 +76,7 @@ export function SuggestionsSection() {
 										key={label}
 										className="gap-2.5 text-sm font-light flex items-center text-muted-foreground"
 									>
-										<Icon className="size-3.5 text-blue-500/60 shrink-0" />
+										<Icon className="size-3.5 shrink-0 text-muted-foreground/50" />
 										{label}
 									</li>
 								))}
@@ -82,8 +88,8 @@ export function SuggestionsSection() {
 					<Card>
 						<CardContent className="p-6 md:p-8 flex h-full flex-col">
 							<div className="mb-5">
-								<div className="size-10 bg-violet-500/10 mb-4 flex items-center justify-center rounded-lg">
-									<SparklesIcon className="size-5 text-violet-500" />
+								<div className="size-10 mb-4 flex items-center justify-center rounded-lg bg-muted">
+									<SparklesIcon className="size-5 text-muted-foreground" />
 								</div>
 								<h3 className="text-lg font-medium text-foreground">
 									{t("recommendationsTitle")}
@@ -98,7 +104,7 @@ export function SuggestionsSection() {
 										key={label}
 										className="gap-2.5 text-sm font-light flex items-center text-muted-foreground"
 									>
-										<Icon className="size-3.5 text-violet-500/60 shrink-0" />
+										<Icon className="size-3.5 shrink-0 text-muted-foreground/50" />
 										{label}
 									</li>
 								))}

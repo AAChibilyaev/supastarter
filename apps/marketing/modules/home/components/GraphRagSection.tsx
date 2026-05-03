@@ -40,8 +40,8 @@ export function GraphRagSection() {
 							<Card key={key}>
 								<CardContent className="p-6 gap-4 flex flex-col">
 									<div className="gap-4 flex items-center">
-										<div className="size-10 bg-emerald-500/10 flex shrink-0 items-center justify-center rounded-lg">
-											<Icon className="size-5 text-emerald-600 dark:text-emerald-400" />
+										<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
+											<Icon className="size-5 text-muted-foreground" />
 										</div>
 										<h3 className="text-base font-medium text-foreground">
 											{t(`features.${key}.title`)}
@@ -57,11 +57,10 @@ export function GraphRagSection() {
 
 					{/* Right: example queries + graph diagram */}
 					<div className="space-y-4">
-						{/* Example queries */}
 						<Card>
 							<CardContent className="p-6 md:p-8">
 								<div className="gap-2 mb-5 flex items-center">
-									<GitBranchIcon className="size-4 text-emerald-500" />
+									<GitBranchIcon className="size-4 text-muted-foreground" />
 									<span className="text-xs font-medium tracking-widest text-muted-foreground/60 uppercase">
 										Example queries
 									</span>
@@ -69,8 +68,8 @@ export function GraphRagSection() {
 								<ul className="space-y-3">
 									{QUERY_KEYS.map((qk) => (
 										<li key={qk} className="gap-3 flex items-start">
-											<span className="mt-0.5 size-5 border-emerald-500/30 bg-emerald-500/5 flex shrink-0 items-center justify-center rounded-full border">
-												<span className="size-1.5 bg-emerald-500/60 rounded-full" />
+											<span className="mt-0.5 size-5 flex shrink-0 items-center justify-center rounded-full border border-border bg-muted/50">
+												<span className="size-1.5 rounded-full bg-muted-foreground/40" />
 											</span>
 											<span className="text-sm font-light text-foreground/80">
 												{t(`exampleQueries.${qk}`)}
@@ -81,7 +80,6 @@ export function GraphRagSection() {
 							</CardContent>
 						</Card>
 
-						{/* Graph diagram */}
 						<Card>
 							<CardContent className="p-6">
 								<div className="font-mono mb-4 tracking-widest text-[10px] text-muted-foreground/50 uppercase">
@@ -114,7 +112,7 @@ function GraphDiagram() {
 					key={node.label}
 					className={`px-3 py-1.5 rounded-md ${
 						node.main
-							? "border-emerald-500/30 bg-emerald-500/5 font-medium border text-foreground"
+							? "font-medium border border-border bg-muted/50 text-foreground"
 							: "pl-5 text-muted-foreground/70"
 					}`}
 				>

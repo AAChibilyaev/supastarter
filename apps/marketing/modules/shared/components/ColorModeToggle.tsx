@@ -51,7 +51,7 @@ export function ColorModeToggle() {
 			>
 				{/* Active indicator */}
 				<div
-					className="left-0.5 top-0.5 h-7 w-7 shadow-sm ease-in-out absolute rounded-full border border-border bg-background transition-transform duration-200"
+					className="left-0.5 top-0.5 h-7 w-7 shadow-sm ease-in-out absolute rounded-full border border-border bg-background transition-transform duration-200 pointer-events-none"
 					style={{
 						transform: `translateX(${activeIndex * 100}%)`,
 					}}

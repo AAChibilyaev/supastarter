@@ -18,6 +18,13 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	viewportFit: "cover",
+};
 
 const sansFont = Plus_Jakarta_Sans({
 	weight: ["300", "400", "500", "600", "700", "800"],

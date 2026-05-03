@@ -6,7 +6,7 @@ import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { ThemeProvider } from "@teispace/next-themes";
 import { getTheme } from "@teispace/next-themes/server";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Figtree } from "next/font/google";
@@ -29,6 +29,12 @@ export const metadata: Metadata = {
 		default: config.appName,
 		template: `%s | ${config.appName}`,
 	},
+};
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {

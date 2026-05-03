@@ -41,6 +41,8 @@ const WIDGET_TO_TYPESENSE_TYPE: Record<string, { type: string; name: string }> =
 	zero_results: { type: "search", name: "zero_results" },
 	widget_open: { type: "visit", name: "widget_open" },
 	filter_used: { type: "click", name: "filter_used" },
+	conversion: { type: "conversion", name: "conversion_event" },
+	visit: { type: "visit", name: "page_visit" },
 };
 
 /**

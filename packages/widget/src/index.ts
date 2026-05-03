@@ -1286,6 +1286,100 @@ export class AacSearchWidget {
 	}
 
 	/**
+	 * Format a numeric price value for display using the widget's locale.
+	 */
+	private formatPriceValue(value: number): string {
+		const currency = this.options.currency ?? "USD";
+		const locale = this.state.locale ?? "en";
+		return formatPrice(value, currency, locale);
+	}
+
+	/**
+	 * Check whether a field name corresponds to a price/cost field.
+	 */
+	private isPriceField(fieldName: string): boolean {
+		const pricePatterns = ["price", "sale_price", "cost", "amount", "price_range"];
+		if (pricePatterns.includes(fieldName)) return true;
+		if (fieldName.endsWith("_price") || fieldName.endsWith("_cost")) return true;
+		return false;
+	}
+
+	/**
+	 * Set the active price range filter and trigger a new search.
+	 * Passing null clears the price range.
+	 */
+	private setPriceRange(range: { min: number; max: number } | null): void {
+		this.state = { ...this.state, priceRange: range, page: 1 };
+		this.doSearch();
+	}
+
+	/**
+	 * Render the price range slider HTML for the facets panel.
+	 */
+	private renderPriceRangeSlider(): string {
+		const priceField = this.detectPriceField();
+		if (!priceField) return "";
+
+		const bounds = this.detectPriceBounds();
+		const currentRange = this.state.priceRange ?? bounds;
+
+		return \`
+			<div class="aac-price-range">
+				<div class="aac-price-range-header">
+					<span class="aac-facet-title">\${priceField.replace(/_/g, " ").replace(/\\b\\w/g, (c) => c.toUpperCase())}</span>
+				</div>
+				<div class="aac-price-range-inputs">
+					<input type="number" class="aac-price-range-min" value="\${currentRange.min}" min="\${bounds.min}" max="\${bounds.max}" />
+					<span class="aac-price-range-separator">—</span>
+					<input type="number" class="aac-price-range-max" value="\${currentRange.max}" min="\${bounds.min}" max="\${bounds.max}" />
+				</div>
+				<div class="aac-price-range-values">
+					<span class="aac-price-range-val-min">\${this.formatPriceValue(currentRange.min)}</span>
+					<span class="aac-price-range-val-max">\${this.formatPriceValue(currentRange.max)}</span>
+				</div>
+				\${currentRange !== bounds ? \`<button class="aac-price-range-clear" type="button">Clear</button>\` : ""}
+			</div>
+		\`;
+	}
+
+	/**
+	 * Render active filter chips (selected facets + price range) above results.
+	 * Each chip has a remove button.
+	 */
+	private renderFilterChips(): string {
+		const chips: string[] = [];
+		const { filters, priceRange } = this.state;
+
+		// Render facet filter chips
+		for (const [field, values] of Object.entries(filters)) {
+			for (const value of values) {
+				const label = field.replace(/_/g, " ") + ": " + value;
+				chips.push(\`
+					<span class="aac-chip" data-chip-field="\${field}">
+						\${escapeHtml(label)}
+						<button type="button" data-chip-remove="\${field}" data-chip-remove-value="\${value}" aria-label="Remove filter">&times;</button>
+					</span>
+				\`);
+			}
+		}
+
+		// Render price range chip
+		if (priceRange) {
+			const label = \`Price: \${this.formatPriceValue(priceRange.min)} — \${this.formatPriceValue(priceRange.max)}\`;
+			chips.push(\`
+				<span class="aac-chip aac-chip-price">
+					\${escapeHtml(label)}
+					<button type="button" data-action="clear-price-range" aria-label="Clear price range">&times;</button>
+				</span>
+			\`);
+		}
+
+		if (chips.length === 0) return "";
+
+		return \`<div class="aac-filter-chips">\${chips.join("")}</div>\`;
+	}
+
+	/**
 	 * Fetch recommendations (similar products) from the recommendations API.
 	 */
 	private async fetchRecommendations(productId: string): Promise<void> {

@@ -25,6 +25,8 @@ const EVENT_TYPES = [
 	"result_click",
 	"widget_open",
 	"filter_used",
+	"conversion",
+	"visit",
 ] as const;
 
 // ─── Zod schema ───────────────────────────────────────────────

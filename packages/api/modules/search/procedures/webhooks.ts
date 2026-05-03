@@ -3,7 +3,11 @@ import { db, type Prisma } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
+import {
+	requireOrganizationAdmin,
+	requireOrganizationMember,
+	requireSearchIndex,
+} from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
 export const WEBHOOK_EVENTS = [
@@ -317,4 +321,91 @@ export const deleteWebhookReceiverConfig = protectedProcedure
 		});
 
 		return { ok: true };
+	});
+
+// ─── Webhook Delivery Log ────────────────────────────────────────
+
+const deliveryEventOutputSchema = z.object({
+	id: z.string(),
+	indexId: z.string(),
+	type: z.string(),
+	count: z.number(),
+	metadata: z.record(z.string(), z.unknown()).nullable(),
+	createdAt: z.string(),
+});
+
+export const listWebhookDeliveries = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/search/webhooks/deliveries",
+		tags: ["Search"],
+		summary: "List webhook delivery events",
+		description:
+			"Returns recent webhook delivery events (webhook_delivery type) for the organization.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			limit: z.number().int().min(1).max(200).optional().default(50),
+			offset: z.number().int().min(0).optional().default(0),
+		}),
+	)
+	.output(
+		z.object({
+			events: z.array(deliveryEventOutputSchema),
+			total: z.number(),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationMember(input.organizationId, context.user.id);
+
+		type EventRow = {
+			id: string;
+			index_id: string;
+			type: string;
+			count: number;
+			metadata: Record<string, unknown> | null;
+			created_at: Date;
+		};
+		type CountRow = { total: bigint };
+
+		const [events, totalRow] = await Promise.all([
+			db.$queryRawUnsafe<EventRow[]>(
+				`SELECT
+					event.id,
+					event.index_id,
+					event.type,
+					event.count,
+					event.metadata,
+					event.created_at
+				FROM search_usage_event event
+				WHERE event.organization_id = $1
+				  AND event.type = 'webhook_delivery'
+				ORDER BY event.created_at DESC
+				LIMIT $2
+				OFFSET $3`,
+				input.organizationId,
+				input.limit,
+				input.offset,
+			),
+			db.$queryRawUnsafe<CountRow[]>(
+				`SELECT COUNT(*)::bigint AS total
+				FROM search_usage_event event
+				WHERE event.organization_id = $1
+				  AND event.type = 'webhook_delivery'`,
+				input.organizationId,
+			),
+		]);
+
+		return {
+			events: events.map((e) => ({
+				id: e.id,
+				indexId: e.index_id,
+				type: e.type,
+				count: Number(e.count),
+				metadata: e.metadata as Record<string, unknown> | null,
+				createdAt: e.created_at.toISOString(),
+			})),
+			total: Number(totalRow[0]?.total ?? 0),
+		};
 	});

@@ -34,6 +34,7 @@ import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
 import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
+import { deleteDocumentsByFilter } from "./procedures/delete-documents-by-filter";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
 import { exportIndexDocuments } from "./procedures/export-documents";
@@ -101,6 +102,7 @@ import {
 	deleteWebhookReceiverConfig,
 	getWebhookReceiverConfig,
 	saveWebhookReceiverConfig,
+	listWebhookDeliveries,
 } from "./procedures/webhooks";
 import { getWidgetConfig, saveWidgetConfig } from "./procedures/widget-config";
 
@@ -112,6 +114,7 @@ export const searchRouter = {
 	exportDocuments: exportIndexDocuments,
 	truncateIndex,
 	updateDocumentsByFilter: updateDocumentsByFilterProcedure,
+	deleteDocumentsByFilter,
 	importDocuments,
 	importJobs,
 	upsertDocument,
@@ -244,6 +247,7 @@ export const searchRouter = {
 		list: listWebhooks,
 		create: createWebhook,
 		delete: deleteWebhook,
+		deliveries: listWebhookDeliveries,
 	},
 	webhookReceiverConfig: {
 		get: getWebhookReceiverConfig,

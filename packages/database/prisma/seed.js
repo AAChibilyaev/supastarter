@@ -92,18 +92,6 @@ const seedItems = [
 		changelogSlug: null,
 	},
 	{
-		key: "widget",
-		title: "Widget & embed SDK",
-		description:
-			"Drop-in search widget with Cmd+K modal, floating button, custom theme engine, and React/Vanilla SDK.",
-		status: "inProgress",
-		quarter: "Q2 2026",
-		iconName: "MonitorIcon",
-		voteCount: 64,
-		sortOrder: 8,
-		changelogSlug: null,
-	},
-	{
 		key: "aiNlp",
 		title: "NLP & AI search",
 		description:
@@ -150,6 +138,66 @@ const seedItems = [
 		voteCount: 78,
 		sortOrder: 12,
 		changelogSlug: "vector-hybrid-search",
+	},
+	{
+		key: "widget",
+		title: "Widget & embed SDK",
+		description:
+			"Drop-in search widget with Cmd+K modal, floating button, custom theme engine, and React/Vanilla SDK. Visual Builder with Configurator, Filters, Autocomplete, and Install tabs.",
+		status: "shipped",
+		quarter: "Q2 2026",
+		iconName: "MonitorIcon",
+		voteCount: 64,
+		sortOrder: 8,
+		changelogSlug: "widget-builder-v1",
+	},
+	{
+		key: "shopify",
+		title: "Shopify Integration",
+		description:
+			"Full Shopify app with product & variant sync, inventory tracking, real-time webhooks via Google Pub/Sub, multi-store support, and dashboard UI with connector settings.",
+		status: "shipped",
+		quarter: "Q2 2026",
+		iconName: "LinkIcon",
+		voteCount: 95,
+		sortOrder: 13,
+		changelogSlug: "shopify-integration",
+	},
+	{
+		key: "embeddingProviders",
+		title: "Azure & GCP Embedding Providers",
+		description:
+			"Azure OpenAI and GCP Vertex AI embedding providers alongside existing OpenAI support. OpenAI-compatible API provider for custom endpoints. Configurable via dashboard settings.",
+		status: "shipped",
+		quarter: "Q2 2026",
+		iconName: "CloudIcon",
+		voteCount: 67,
+		sortOrder: 14,
+		changelogSlug: "embedding-providers",
+	},
+	{
+		key: "searchConfigurator",
+		title: "Search Configurator",
+		description:
+			"Visual wizard for configuring search collections, schema fields, ranking settings, and facet configuration. Widget Builder with Configurator, Filters, Install, and Autocomplete tabs.",
+		status: "shipped",
+		quarter: "Q2 2026",
+		iconName: "MonitorIcon",
+		voteCount: 72,
+		sortOrder: 15,
+		changelogSlug: "search-configurator",
+	},
+	{
+		key: "upgradeFlows",
+		title: "Upgrade & Downgrade Flows",
+		description:
+			"Streamlined plan upgrade modal with proration preview and plan comparison table. Downgrade flow with data loss warnings and confirmation dialog.",
+		status: "shipped",
+		quarter: "Q2 2026",
+		iconName: "CreditCardIcon",
+		voteCount: 58,
+		sortOrder: 16,
+		changelogSlug: "upgrade-downgrade",
 	},
 ];
 

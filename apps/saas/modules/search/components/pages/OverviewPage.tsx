@@ -1,6 +1,7 @@
 "use client";
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
+import { TrialBanner } from "@payments/components/TrialBanner";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
@@ -18,15 +19,17 @@ import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { TrialBanner } from "@payments/components/TrialBanner";
 import { useQuery } from "@tanstack/react-query";
 import {
 	ActivityIcon,
 	AlertTriangleIcon,
 	ArrowRightIcon,
+	CodeIcon,
 	DatabaseIcon,
+	FileUpIcon,
 	HelpCircleIcon,
 	KeyIcon,
+	PlusCircleIcon,
 	RefreshCwIcon,
 	RocketIcon,
 	SearchIcon,
@@ -370,6 +373,77 @@ export function OverviewPage() {
 					)}
 				</StatsTile>
 			</div>
+
+			{/* Quick Actions */}
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-base">{t("overview.quickActions")}</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid">
+						<Button
+							variant="outline"
+							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							asChild
+						>
+							<Link href={`/${slug}/search`}>
+								<PlusCircleIcon className="size-5 shrink-0 text-primary" />
+								<div className="min-w-0">
+									<div className="text-sm font-medium">{t("overview.createIndex")}</div>
+									<div className="text-xs text-muted-foreground truncate">
+										{t("overview.manageIndexesDesc")}
+									</div>
+								</div>
+							</Link>
+						</Button>
+						<Button
+							variant="outline"
+							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							asChild
+						>
+							<Link href={`/${slug}/import-jobs`}>
+								<FileUpIcon className="size-5 shrink-0 text-primary" />
+								<div className="min-w-0">
+									<div className="text-sm font-medium">{t("overview.import.data") ?? "Import Data"}</div>
+									<div className="text-xs text-muted-foreground truncate">
+										{t("import.description")}
+									</div>
+								</div>
+							</Link>
+						</Button>
+						<Button
+							variant="outline"
+							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							asChild
+						>
+							<Link href={`/${slug}/preview`}>
+								<SearchIcon className="size-5 shrink-0 text-primary" />
+								<div className="min-w-0">
+									<div className="text-sm font-medium">{t("preview.title")}</div>
+									<div className="text-xs text-muted-foreground truncate">
+										{t("preview.description")}
+									</div>
+								</div>
+							</Link>
+						</Button>
+						<Button
+							variant="outline"
+							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							asChild
+						>
+							<Link href={`/${slug}/widget`}>
+								<CodeIcon className="size-5 shrink-0 text-primary" />
+								<div className="min-w-0">
+									<div className="text-sm font-medium">{t("widget.installScriptTitle")}</div>
+									<div className="text-xs text-muted-foreground truncate">
+										{t("widget.description")}
+									</div>
+								</div>
+							</Link>
+						</Button>
+					</div>
+				</CardContent>
+			</Card>
 
 			{/* Row 2: Charts (2 columns on lg) */}
 			<div className="gap-6 lg:grid-cols-2 grid">

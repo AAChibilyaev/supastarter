@@ -320,9 +320,7 @@ export const getProrationPreview: GetProrationPreview = async ({
 
 	// Get both price objects to compare amounts
 	const oldPrice = currentItem.price;
-	const newPriceObj = await retryStripeCall(() =>
-		stripeClient.prices.retrieve(newPriceId),
-	);
+	const newPriceObj = await retryStripeCall(() => stripeClient.prices.retrieve(newPriceId));
 
 	if (!oldPrice || !newPriceObj) {
 		throw new Error("Could not retrieve price information");
@@ -334,8 +332,12 @@ export const getProrationPreview: GetProrationPreview = async ({
 
 	// Calculate proration based on remaining days in the current period
 	const now = Math.floor(Date.now() / 1000);
-	const periodStart = subscription.current_period_start;
-	const periodEnd = subscription.current_period_end;
+	const sub = subscription as unknown as {
+		current_period_start: number;
+		current_period_end: number;
+	};
+	const periodStart = sub.current_period_start;
+	const periodEnd = sub.current_period_end;
 	const totalPeriodDays = periodEnd - periodStart;
 	const remainingDays = periodEnd - now;
 	const fractionRemaining = totalPeriodDays > 0 ? remainingDays / totalPeriodDays : 0;

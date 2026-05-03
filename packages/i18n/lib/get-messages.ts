@@ -13,6 +13,7 @@ const SAAS_FILES = [
 	"onboarding",
 	"product",
 	"common",
+	"feedback",
 ] as const;
 const MARKETING_FILES = ["core", "compare", "features", "integrations", "solutions"] as const;
 

@@ -10,6 +10,7 @@ import { createRequire } from "module";
 import { program } from "commander";
 
 import { collectionsCommand } from "../commands/collections.js";
+import { completionCommand } from "../commands/completion.js";
 import { documentsCommand } from "../commands/documents.js";
 import { initCommand } from "../commands/init.js";
 import { keysCommand } from "../commands/keys.js";
@@ -43,6 +44,7 @@ program
 
 program.addCommand(loginCommand);
 program.addCommand(initCommand);
+program.addCommand(completionCommand);
 program.addCommand(collectionsCommand);
 program.addCommand(documentsCommand);
 program.addCommand(searchCommand);

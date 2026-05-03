@@ -14,6 +14,7 @@ import type saasOrganizations from "./translations/en/saas/organizations.json";
 import type saasProduct from "./translations/en/saas/product.json";
 import type saasSearch from "./translations/en/saas/search.json";
 import type saasSettings from "./translations/en/saas/settings.json";
+import type saasFeedback from "./translations/en/saas/feedback.json";
 import type sharedMessages from "./translations/en/shared.json";
 
 export interface LocaleDefinition {
@@ -55,7 +56,8 @@ type AllSaasMessages = typeof saasSearch &
 	typeof saasAuth &
 	typeof saasOnboarding &
 	typeof saasProduct &
-	typeof saasCommon;
+	typeof saasCommon &
+	typeof saasFeedback;
 
 type AllMarketingMessages = typeof marketingCore &
 	typeof marketingCompare &

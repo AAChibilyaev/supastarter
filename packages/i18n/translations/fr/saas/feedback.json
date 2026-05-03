@@ -1,0 +1,19 @@
+{
+    "feedback": {
+        "nps": {
+            "title": "Recommanderiez-vous AACsearch à votre entourage ?",
+            "question": "Sur une échelle de 0 à 10, quelle est la probabilité que vous recommandiez AACsearch à un collègue ou un ami ?",
+            "scaleStart": "Pas du tout probable",
+            "scaleEnd": "Extrêmement probable",
+            "detractorFollowUp": "Que pourrions-nous améliorer ?",
+            "passiveFollowUp": "Qu'est-ce qui vous empêche de nous recommander ?",
+            "promoterFollowUp": "Qu'est-ce que vous aimez le plus chez AACsearch ?",
+            "feedbackPlaceholder": "Dites-nous en plus (optionnel)",
+            "submit": "Envoyer",
+            "dismiss": "Peut-être plus tard",
+            "thanks": "Merci pour votre retour !",
+            "thanksDescription": "Votre réponse nous aide à construire une meilleure plateforme de recherche pour tous.",
+            "frequency": "Une fois tous les 90 jours"
+        }
+    }
+}

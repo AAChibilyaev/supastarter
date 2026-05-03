@@ -243,7 +243,8 @@ function convertAlgolia(data: Record<string, unknown>): ConvertedData {
 	});
 
 	// Infer slug from data if present
-	const slug = (data.indexName as string) ?? (data.name as string) ?? "algolia-migration";
+	const rawData = data as Record<string, unknown>;
+	const slug = (rawData.indexName as string) ?? (rawData.name as string) ?? "algolia-migration";
 
 	return {
 		collectionSlug: slug,
@@ -274,7 +275,7 @@ function convertElasticsearch(data: Record<string, unknown>): ConvertedData {
 
 	return {
 		collectionSlug: slug,
-		documents,
+		documents: docs,
 	};
 }
 
@@ -296,6 +297,6 @@ function convertSolr(data: Record<string, unknown>): ConvertedData {
 
 	return {
 		collectionSlug: slug,
-		documents,
+		documents: docs,
 	};
 }

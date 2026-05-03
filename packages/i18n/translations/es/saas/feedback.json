@@ -1,0 +1,19 @@
+{
+    "feedback": {
+        "nps": {
+            "title": "¿Qué probabilidad hay de que recomiende AACsearch?",
+            "question": "En una escala del 0 al 10, ¿qué probabilidad hay de que recomiende AACsearch a un colega o amigo?",
+            "scaleStart": "Nada probable",
+            "scaleEnd": "Extremadamente probable",
+            "detractorFollowUp": "¿Qué podríamos hacer mejor?",
+            "passiveFollowUp": "¿Qué le impide recomendarnos?",
+            "promoterFollowUp": "¿Qué es lo que más le gusta de AACsearch?",
+            "feedbackPlaceholder": "Cuéntenos más (opcional)",
+            "submit": "Enviar comentarios",
+            "dismiss": "Quizás más tarde",
+            "thanks": "¡Gracias por sus comentarios!",
+            "thanksDescription": "Su respuesta nos ayuda a crear una mejor plataforma de búsqueda para todos.",
+            "frequency": "Una vez cada 90 días"
+        }
+    }
+}

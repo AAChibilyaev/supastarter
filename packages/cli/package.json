@@ -21,10 +21,12 @@
 		"@repo/logs": "workspace:*",
 		"commander": "12.1.0",
 		"conf": "13.1.0",
+		"js-yaml": "^4.1.1",
 		"open": "10.1.0"
 	},
 	"devDependencies": {
 		"@repo/tsconfig": "workspace:*",
+		"@types/js-yaml": "^4.0.9",
 		"@types/node": "catalog:",
 		"tsx": "catalog:",
 		"typescript": "catalog:"

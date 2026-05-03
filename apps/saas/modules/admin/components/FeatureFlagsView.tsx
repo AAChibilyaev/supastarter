@@ -62,9 +62,7 @@ function AuditLogDialog({ flagId, flagKey }: { flagId: string; flagKey: string }
 
 	const { data, isLoading } = useQuery({
 		...orpc.admin.featureFlags.auditLogs.list.queryOptions({
-			flagId,
-			limit: 50,
-			offset: 0,
+			input: { flagId, limit: 50, offset: 0 },
 		}),
 		enabled: open,
 	});

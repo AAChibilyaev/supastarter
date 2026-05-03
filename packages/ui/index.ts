@@ -108,3 +108,8 @@ export * from "./components/chat/chat-input";
 export * from "./components/chat/chat-message-list";
 export * from "./components/chat/expandable-chat";
 export * from "./components/chat/message-loading";
+
+// --- react-bits adaptations ---
+export * from "./components/spotlight-card";
+export * from "./components/glass-icons";
+export * from "./components/animated-list";

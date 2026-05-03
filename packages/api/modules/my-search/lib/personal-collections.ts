@@ -3,6 +3,7 @@ import {
 	aliasName,
 	bulkUpsert,
 	deleteByQuery,
+	generateEmbeddings,
 	getTypesenseClient,
 	physicalCollectionName,
 	searchConfig,
@@ -22,7 +23,15 @@ export const PERSONAL_CHUNK_FIELDS = [
 	{ name: "file_type", type: "string", facet: true, index: true },
 	{ name: "source_url", type: "string", optional: true },
 	{ name: "uploaded_at", type: "int64", sort: true },
+	// Vector field for hybrid search (1536-dim for text-embedding-3-small)
+	{ name: "embedding", type: "float[]", num_dim: 1536, index: true, optional: true },
 ] as const;
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+const EMBEDDING_MODEL = "text-embedding-3-small";
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -54,7 +63,8 @@ function chunkPhysicalName(organizationId: string, slug: string, version: number
  *
  * Creates a physical collection with the `_chunks` naming convention and
  * upserts a corresponding alias so consumers can use a version-agnostic
- * reference.
+ * reference. If the collection already exists, attempts to add the `embedding`
+ * field for hybrid search support.
  *
  * @param organizationId - The owning organization's ID (used as the tenant).
  * @param slug            - The personal search index slug.
@@ -74,11 +84,36 @@ export async function ensurePersonalSearchCollection(
 	// Check if the physical collection already exists.
 	try {
 		await client.collections(physicalName).retrieve();
-		logger.info("Personal chunk collection already exists — ensuring alias", {
+		logger.info("Personal chunk collection already exists — ensuring alias + embedding field", {
 			physicalName,
 			alias,
 		});
 		await client.aliases().upsert(alias, { collection_name: physicalName });
+
+		// Attempt to add the embedding field if the collection lacks it.
+		try {
+			await client.collections(physicalName).update({
+				fields: [
+					{
+						name: "embedding",
+						type: "float[]",
+						num_dim: 1536,
+						index: true,
+						optional: true,
+					},
+				],
+			});
+			logger.info("Added embedding field to existing personal chunk collection", {
+				physicalName,
+			});
+		} catch (fieldError) {
+			// Field may already exist — that's fine.
+			logger.debug("Embedding field add skipped (may already exist)", {
+				physicalName,
+				error: fieldError,
+			});
+		}
+
 		return { alias, physicalName };
 	} catch {
 		// Collection does not exist — create it below.
@@ -100,7 +135,9 @@ export async function ensurePersonalSearchCollection(
 		enable_nested_fields: true,
 	});
 
-	logger.info("Created personal chunk physical collection", { physicalName });
+	logger.info("Created personal chunk physical collection with embedding field", {
+		physicalName,
+	});
 
 	// Upsert the alias so future lookups use the version-agnostic name.
 	await client.aliases().upsert(alias, { collection_name: physicalName });
@@ -113,7 +150,8 @@ export async function ensurePersonalSearchCollection(
  * Indexes document chunks into the personal search Typesense collection.
  *
  * Each entry in `input.chunks` becomes one Typesense document with
- * `chunk_id = "{fileId}_{index}"`.
+ * `chunk_id = "{fileId}_{index}"`. Chunk content is auto-embedded using
+ * the configured embedding model for hybrid search support.
  *
  * @param organizationId - The owning organization's ID (used as the tenant).
  * @param slug            - The personal search index slug.
@@ -136,6 +174,26 @@ export async function indexPersonalDocumentChunks(
 	const alias = chunkAliasName(organizationId, slug);
 	const now = Math.floor(Date.now() / 1000);
 
+	// Generate embeddings for all chunks if possible (non-blocking: failures
+	// are logged, the index operation still proceeds).
+	let embeddings: number[][] | null = null;
+	try {
+		const result = await generateEmbeddings(input.chunks, EMBEDDING_MODEL);
+		embeddings = result.map((r) => r.vector);
+		logger.info("Generated embeddings for personal document chunks", {
+			fileId: input.fileId,
+			chunkCount: input.chunks.length,
+		});
+	} catch (error) {
+		logger.warn(
+			"Failed to generate embeddings for personal document chunks — continuing without",
+			{
+				fileId: input.fileId,
+				error,
+			},
+		);
+	}
+
 	const documents = input.chunks.map((content, index) => ({
 		index_id: slug,
 		file_id: input.fileId,
@@ -145,6 +203,7 @@ export async function indexPersonalDocumentChunks(
 		file_type: input.fileType,
 		source_url: input.sourceUrl ?? null,
 		uploaded_at: now,
+		...(embeddings ? { embedding: embeddings[index] } : {}),
 	}));
 
 	const result = await bulkUpsert({
@@ -157,6 +216,7 @@ export async function indexPersonalDocumentChunks(
 		fileId: input.fileId,
 		filename: input.filename,
 		chunkCount: documents.length,
+		embedded: embeddings ? documents.length : 0,
 		successCount: result.successCount,
 		failureCount: result.failures.length,
 	});

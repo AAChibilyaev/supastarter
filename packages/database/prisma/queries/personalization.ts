@@ -59,14 +59,15 @@ export async function getUserClickHistory(
 	});
 
 	// Filter by anonymousUserId/sessionId in application layer (JSON fields)
-	const filtered = anonymousUserId || sessionId
-		? events.filter((ev) => {
-				const meta = extractMeta(ev.metadata);
-				if (anonymousUserId && meta.anonymousUserId === anonymousUserId) return true;
-				if (sessionId && meta.sessionId === sessionId) return true;
-				return false;
-			})
-		: events;
+	const filtered =
+		anonymousUserId || sessionId
+			? events.filter((ev) => {
+					const meta = extractMeta(ev.metadata);
+					if (anonymousUserId && meta.anonymousUserId === anonymousUserId) return true;
+					if (sessionId && meta.sessionId === sessionId) return true;
+					return false;
+				})
+			: events;
 
 	return filtered
 		.slice(0, limit)

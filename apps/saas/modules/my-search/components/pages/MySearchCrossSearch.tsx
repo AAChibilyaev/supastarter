@@ -28,9 +28,7 @@ export function MySearchCrossSearch() {
 	);
 
 	// Cross-search mutation
-	const crossSearchMutation = useMutation(
-		orpc.mySearch.crossSearch.mutationOptions({}),
-	);
+	const crossSearchMutation = useMutation(orpc.mySearch.crossSearch.mutationOptions({}));
 
 	const handleSearch = useCallback(
 		(q: string) => {

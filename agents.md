@@ -665,9 +665,9 @@ CardContent = <div className="p-6 pt-0">
 CardFooter  = <div className="p-6 pt-0 flex items-center">
 ```
 
-### Layer 1 — `@repo/ui/components/*` (39 primitives)
+### Layer 1 — `@repo/ui/components/*` (48 primitives)
 
-`accordion`, `alert`, `alert-dialog`, `avatar`, `badge`, `breadcrumb`, `button`, `card`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `form`, `hover-card`, `input`, `input-otp`, `label`, `logo`, `navigation-menu`, `popover`, `progress`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `toggle`, `tooltip`
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `card`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `field`, `form`, `hover-card`, `input`, `input-otp`, `kbd`, `label`, `logo`, `menubar`, `navigation-menu`, `popover`, `progress`, `radio-group`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `slider`, `sonner`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`
 
 Button variants: `primary` (default), `secondary`, `outline`, `ghost`, `destructive`, `link`. Has `loading` prop.
 Badge uses `status` prop (not `variant`): `success` / `info` / `warning` / `error`.

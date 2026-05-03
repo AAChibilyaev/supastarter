@@ -1040,6 +1040,9 @@ importers:
       '@repo/payments':
         specifier: workspace:*
         version: link:../payments
+      '@repo/recommendations':
+        specifier: workspace:*
+        version: link:../recommendations
       '@repo/search':
         specifier: workspace:*
         version: link:../search

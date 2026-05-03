@@ -10,6 +10,7 @@ import { logger } from "@repo/logs";
 
 import { config } from "../config";
 import { aliasName, physicalCollectionName } from "./collections";
+import { autoEmbedDocuments } from "./embeddings";
 import { bulkUpsert, deleteByQuery } from "./ingest";
 
 export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
@@ -26,6 +27,18 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 	const upserts = rows.filter((row) => row.action === "upsert");
 	const deletes = rows.filter((row) => row.action === "delete");
 	const collection = aliasName(index.organizationId, index.slug);
+
+	// Auto-embed documents before upserting to Typesense
+	if (upserts.length > 0) {
+		const documents = upserts.map((row) => row.document as Record<string, unknown>);
+		const embedResult = await autoEmbedDocuments(documents);
+		if (embedResult.embedded > 0) {
+			logger.debug(
+				{ indexId, embedded: embedResult.embedded, skipped: embedResult.skipped },
+				"Auto-embedded documents during ingest flush",
+			);
+		}
+	}
 
 	const successIds: string[] = [];
 	const failures: { id: string; error: string }[] = [];

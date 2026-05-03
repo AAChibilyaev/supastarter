@@ -20,7 +20,9 @@ export type AacEventName =
 	| "aac_plan_downgraded"
 	| "aac_subscription_cancelled"
 	| "aac_api_key_created"
-	| "aac_connector_connected";
+	| "aac_connector_connected"
+	| "aac_nps_submitted"
+	| "aac_csat_submitted";
 
 export type AacEventProperties = Record<string, string | number | boolean | null>;
 

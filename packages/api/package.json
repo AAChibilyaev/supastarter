@@ -29,6 +29,7 @@
 		"@repo/nlp": "workspace:*",
 		"@repo/notifications": "workspace:*",
 		"@repo/payments": "workspace:*",
+		"@repo/recommendations": "workspace:*",
 		"@repo/search": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/utils": "workspace:*",

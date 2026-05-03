@@ -140,6 +140,10 @@ model NpsSurveyResponse {
 
 ### PostHog Dashboards to Create
 
+See dedicated setup guide: `apps/marketing/content/specs/posthog-dashboards-setup.md`
+
+Automation script: `apps/marketing/content/specs/setup-posthog-dashboards.sh`
+
 1. **Activation Funnel**
     - Step-by-step conversion: signup → project → search → widget
     - Weekly trend line

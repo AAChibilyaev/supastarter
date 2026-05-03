@@ -220,3 +220,54 @@ MATCH (p:Product)
 WHERE p.updatedAt < datetime() - duration($staleAge)
 DETACH DELETE p
 `;
+
+// ─── GRAPHRAG QUERIES ──────────────────────────────────────────────────────────
+
+/**
+ * Full graph neighborhood for a product — used by GraphRAG to build
+ * enriched context for LLM-powered recommendations.
+ * Returns: similar products, also-bought, category mates, product details.
+ */
+export const GRAPH_RAG_CONTEXT = `
+MATCH (p:Product {id: $productId})
+OPTIONAL MATCH (p)-[sim:SIMILAR_TO]->(similar:Product)
+OPTIONAL MATCH (p)-[:IN_CATEGORY]->(c:Category)<-[:IN_CATEGORY]-(categoryMate:Product)
+  WHERE categoryMate.id <> $productId
+OPTIONAL MATCH (p)<-[ab:ALSO_BOUGHT]-(alsoBought:Product)
+WITH p, c, similar, categoryMate, alsoBought,
+     collect(DISTINCT {id: similar.id, title: similar.title, score: sim.score, type: sim.type, relation: "similar"}) AS similarList,
+     collect(DISTINCT {id: categoryMate.id, title: categoryMate.title, relation: "same_category"}) AS sameCategoryList,
+     collect(DISTINCT {id: alsoBought.id, title: alsoBought.title, score: ab.score, relation: "also_bought"}) AS alsoBoughtList
+RETURN
+    p.id AS productId,
+    p.title AS title,
+    p.category AS category,
+    labels(p) AS labels,
+    [sim IN similarList WHERE sim.id IS NOT NULL | sim] AS similarProducts,
+    [catMate IN sameCategoryList WHERE catMate.id IS NOT NULL | catMate] AS sameCategory,
+    [abItem IN alsoBoughtList WHERE abItem.id IS NOT NULL | abItem] AS alsoBought
+`;
+
+/**
+ * Cross-product graph context for multiple product seeds.
+ * Used when GraphRAG is seeded from multiple products (e.g. user's viewed history).
+ */
+export const GRAPH_RAG_MULTI_SEED = `
+MATCH (p:Product)
+WHERE p.id IN $productIds
+OPTIONAL MATCH (p)-[sim:SIMILAR_TO]->(similar:Product)
+  WHERE NOT similar.id IN $productIds
+OPTIONAL MATCH (p)-[:IN_CATEGORY]->(c:Category)<-[:IN_CATEGORY]-(catMate:Product)
+  WHERE NOT catMate.id IN $productIds
+OPTIONAL MATCH (p)<-[ab:ALSO_BOUGHT]-(alsoBought:Product)
+  WHERE NOT alsoBought.id IN $productIds
+WITH p, similar, c, catMate, alsoBought
+RETURN
+    p.id AS seedProductId,
+    p.title AS seedTitle,
+    collect(DISTINCT {id: similar.id, title: similar.title, score: sim.score, relation: "similar"}) +
+    collect(DISTINCT {id: catMate.id, title: catMate.title, relation: "same_category"}) +
+    collect(DISTINCT {id: alsoBought.id, title: alsoBought.title, score: ab.score, relation: "also_bought"})
+  AS recommendations
+LIMIT 100
+`;

@@ -34,4 +34,8 @@ export {
 
 export type { ProductInput, SimilarityInput } from "./lib/graph-sync";
 
+export { getGraphRagRecommendations, getMultiSeedGraphRagRecommendations } from "./lib/graphrag";
+
+export type { GraphRagInput, GraphRagResult, GraphRagMultiSeedResult } from "./lib/graphrag";
+
 export * as CypherQueries from "./lib/queries.cypher";

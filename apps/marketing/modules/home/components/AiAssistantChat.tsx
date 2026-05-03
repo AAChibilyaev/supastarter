@@ -448,245 +448,251 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 		[handleSubmit],
 	);
 
-	/* ─── RENDER ─────────────────────────────────────── */
+		/* ─── RENDER ─────────────────────────────────────── */
 
-	return (
+	// ── Mobile Chat Panel (full-screen overlay) ───────────
+	const mobileChatPanel = (
 		<div
-			className="fixed bottom-0 right-0 z-50 sm:bottom-6 sm:right-6 sm:block"
+			className={cn(
+				"fixed inset-0 z-50 flex flex-col overflow-hidden bg-card sm:hidden transition-all duration-300 ease-out",
+				open
+					? "pointer-events-auto visible opacity-100"
+					: "pointer-events-none invisible opacity-0",
+			)}
 		>
-			{/* ─── Chat Panel ───────────────────────────── */}
+			{/* Header */}
+			<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3.5">
+				<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+					<SparklesIcon className="size-3.5 text-muted-foreground" />
+					<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
+				</div>
+				{view === "history" ? (
+					<>
+						<span className="text-sm font-light text-foreground">History</span>
+						<button type="button" onClick={() => setView("chat")}
+							className="ml-auto flex size-7 items-center justify-center rounded-md text-muted-foreground/50 text-xs transition-colors hover:text-muted-foreground">← Back</button>
+					</>
+				) : (
+					<>
+						<span className="text-sm font-light text-foreground">
+							{hasMessages ? currentSession?.title?.slice(0, 24) ?? "Chat" : "AI Assistant"}
+						</span>
+						<div className="ml-auto flex items-center gap-0.5">
+							{MODES.map(({ key, icon: Icon }) => (
+								<button key={key} type="button" onClick={() => handleModeClick(key)}
+									className={cn("flex size-7 items-center justify-center rounded-md transition-colors",
+										activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40")}
+									aria-label={`Search by ${key}`}>
+									<Icon className="size-3.5" />
+								</button>
+							))}
+						</div>
+						<button type="button" onClick={openHistory}
+							className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+							aria-label="Chat history"><ClockIcon className="size-3.5" /></button>
+						<button type="button" onClick={startNewChat}
+							className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+							aria-label="New chat"><PlusIcon className="size-3.5" /></button>
+					</>
+				)}
+				<button type="button" onClick={() => setOpen(false)}
+					className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+					aria-label="Close assistant"><XIcon className="size-4" /></button>
+			</div>
+
+			{view === "history" ? (
+				<div className="flex-1 overflow-y-auto p-4">
+					{sessions.length === 0 ? (
+						<div className="flex flex-col items-center justify-center h-full text-center">
+							<ClockIcon className="size-8 text-muted-foreground/30 mb-3" />
+							<p className="text-sm font-light text-muted-foreground/50">No chat history yet</p>
+						</div>
+					) : (
+						<div className="space-y-6">{groupSessionsByDate(sessions).map((group) => (
+							<div key={group.label}>
+								<h4 className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-wider mb-2 px-1">{group.label}</h4>
+								<div className="space-y-1">{group.sessions.map((session) => (
+									<button key={session.id} type="button" onClick={() => selectSession(session)}
+										className={cn("group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+											session.id === currentSessionId ? "bg-muted" : "hover:bg-muted/50")}>
+										<MessageSquareIcon className="size-3.5 shrink-0 text-muted-foreground/50" />
+										<div className="flex-1 min-w-0">
+											<p className="text-sm font-light text-foreground truncate">{session.title}</p>
+											<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages · {formatTimestamp(session.updatedAt)}</p>
+										</div>
+										<button type="button" onClick={(e) => deleteSession(e, session.id)}
+											className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
+											aria-label="Delete chat"><Trash2Icon className="size-3" /></button>
+									</button>
+								))}</div>
+							</div>
+						))}</div>
+					)}
+					<div className="mt-4"><Button variant="outline" size="sm" onClick={startNewChat} className="w-full rounded-lg"><PlusIcon className="mr-1.5 size-3.5" /> New Chat</Button></div>
+				</div>
+			) : (
+				<>
+					<div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20">
+						<div className="space-y-4">
+							<ChatBubble variant="received" layout="ai">
+								<ChatBubbleMessage variant="received" layout="ai">
+									<div className="space-y-3">
+										<div className="flex items-center gap-2">
+											<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+												<SparklesIcon className="size-3 text-muted-foreground" />
+											</div>
+											<span className="text-xs font-medium text-foreground/80">AACsearch Assistant</span>
+										</div>
+										<p className="text-sm font-light text-muted-foreground leading-relaxed">{WELCOME_MESSAGE}</p>
+									</div>
+								</ChatBubbleMessage>
+							</ChatBubble>
+						</div>
+						{messages.map((msg) => (
+							<ChatBubble key={msg.id} variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+								<ChatBubbleMessage variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+									{msg.mode && msg.role === "user" && (
+										<div className="mb-1 flex items-center gap-1">
+											<span className="text-[10px] font-medium text-muted-foreground/50">{MODES.find((m) => m.key === msg.mode)?.label}</span>
+										</div>
+									)}
+									<p className={cn("text-sm font-light leading-relaxed whitespace-pre-wrap", msg.role === "assistant" && "text-muted-foreground")}>{msg.text}</p>
+								</ChatBubbleMessage>
+							</ChatBubble>
+						))}
+						{isLoading && (
+							<ChatBubble variant="received" layout="ai">
+								<ChatBubbleMessage variant="received" layout="ai" isLoading />
+							</ChatBubble>
+						)}
+						{!hasMessages && (
+							<div className="flex flex-col gap-2 pt-2">
+								{SUGGESTED_QUESTIONS.map((q) => (
+									<button key={q.text} type="button" onClick={() => handleSuggestedClick(q.text)}
+										className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3.5 py-2.5 text-left text-sm font-light text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground">
+										<span className="text-base">{q.icon}</span>
+										<span>{q.text}</span>
+									</button>
+								))}
+							</div>
+						)}
+					</div>
+					<div className="shrink-0 border-t border-border p-3">
+						<form onSubmit={handleSubmit} className="flex items-end gap-2">
+							<div className="relative flex-1">
+								<ChatInput ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)}
+									onKeyDown={handleKeyDown} placeholder={MODE_PLACEHOLDERS[activeMode]}
+									className="min-h-10 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm font-light placeholder:text-muted-foreground/50 focus:border-muted-foreground/30 focus:outline-none" />
+							</div>
+							<Button type="submit" size="icon" variant="primary" disabled={!input.trim() || isLoading}
+								className="flex size-10 shrink-0 items-center justify-center rounded-lg"><ArrowRightIcon className="size-4" /></Button>
+						</form>
+					</div>
+				</>
+			)}
+		</div>
+	);
+
+	// ── Desktop Container (floating toggle + panel) ────────
+	const desktopContainer = (
+		<div className="hidden sm:block fixed bottom-6 right-6 z-50">
 			<div
 				className={cn(
-					"absolute right-0 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 backdrop-blur-xl transition-all duration-300 ease-out origin-bottom-right",
-					open
-						? "pointer-events-auto visible scale-100 opacity-100"
-						: "pointer-events-none invisible scale-95 opacity-0",
-					"bottom-0 sm:bottom-[calc(100%+12px)] w-full sm:w-[440px] sm:h-[600px] h-dvh sm:rounded-2xl rounded-none sm:max-h-[600px]",
+					"absolute bottom-[calc(100%+12px)] right-0 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 backdrop-blur-xl transition-all duration-300 ease-out origin-bottom-right",
+					open ? "pointer-events-auto visible scale-100 opacity-100" : "pointer-events-none invisible scale-95 opacity-0",
+					"w-[440px] h-[600px] max-h-[600px]",
 				)}
 			>
-				{/* ── Header ────────────────────────────── */}
-				<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3.5 sm:py-3">
+				<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3">
 					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
 						<SparklesIcon className="size-3.5 text-muted-foreground" />
 						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
 					</div>
-
 					{view === "history" ? (
-						<>
-							<span className="text-sm font-light text-foreground">History</span>
-							<button
-								type="button"
-								onClick={() => setView("chat")}
-								className="ml-auto flex size-7 items-center justify-center rounded-md text-muted-foreground/50 text-xs transition-colors hover:text-muted-foreground"
-							>
-								← Back
-							</button>
-						</>
+						<><span className="text-sm font-light text-foreground">History</span>
+							<button type="button" onClick={() => setView("chat")}
+								className="ml-auto flex size-7 items-center justify-center rounded-md text-muted-foreground/50 text-xs transition-colors hover:text-muted-foreground">← Back</button></>
 					) : (
-						<>
-							<span className="text-sm font-light text-foreground">
-								{hasMessages ? currentSession?.title?.slice(0, 24) ?? "Chat" : "AI Assistant"}
-							</span>
-
-							{/* Modes */}
-							<div className="ml-auto flex items-center gap-0.5">
-								{MODES.map(({ key, icon: Icon }) => (
-									<button
-										key={key}
-										type="button"
-										onClick={() => handleModeClick(key)}
-										className={cn(
-											"flex size-7 items-center justify-center rounded-md transition-colors",
-											activeMode === key
-												? `${MODE_COLORS[key]} bg-muted`
-												: "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40",
-										)}
-										aria-label={`Search by ${key}`}
-									>
-										<Icon className="size-3.5" />
-									</button>
-								))}
-							</div>
-
-							{/* History button */}
-							<button
-								type="button"
-								onClick={openHistory}
+						<><span className="text-sm font-light text-foreground">{hasMessages ? currentSession?.title?.slice(0, 24) ?? "Chat" : "AI Assistant"}</span>
+							<div className="ml-auto flex items-center gap-0.5">{MODES.map(({ key, icon: Icon }) => (
+								<button key={key} type="button" onClick={() => handleModeClick(key)}
+									className={cn("flex size-7 items-center justify-center rounded-md transition-colors",
+										activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40")}
+									aria-label={`Search by ${key}`}><Icon className="size-3.5" /></button>
+							))}</div>
+							<button type="button" onClick={openHistory}
 								className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-								aria-label="Chat history"
-							>
-								<ClockIcon className="size-3.5" />
-							</button>
-
-							{/* New chat */}
-							<button
-								type="button"
-								onClick={startNewChat}
+								aria-label="Chat history"><ClockIcon className="size-3.5" /></button>
+							<button type="button" onClick={startNewChat}
 								className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-								aria-label="New chat"
-							>
-								<PlusIcon className="size-3.5" />
-							</button>
+								aria-label="New chat"><PlusIcon className="size-3.5" /></button>
 						</>
 					)}
-
-					<button
-						type="button"
-						onClick={() => setOpen(false)}
+					<button type="button" onClick={() => setOpen(false)}
 						className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-						aria-label="Close assistant"
-					>
-						<XIcon className="size-4" />
-					</button>
+						aria-label="Close"><XIcon className="size-4" /></button>
 				</div>
 
-				{/* ── Body ─────────────────────────────── */}
-
-				{/* History View */}
 				{view === "history" ? (
 					<div className="flex-1 overflow-y-auto p-4">
 						{sessions.length === 0 ? (
 							<div className="flex flex-col items-center justify-center h-full text-center">
 								<ClockIcon className="size-8 text-muted-foreground/30 mb-3" />
-								<p className="text-sm font-light text-muted-foreground/50">
-									No chat history yet
-								</p>
+								<p className="text-sm font-light text-muted-foreground/50">No chat history yet</p>
 							</div>
 						) : (
-							<div className="space-y-6">
-								{groupSessionsByDate(sessions).map((group) => (
-									<div key={group.label}>
-										<h4 className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-wider mb-2 px-1">
-											{group.label}
-										</h4>
-										<div className="space-y-1">
-											{group.sessions.map((session) => (
-												<button
-													key={session.id}
-													type="button"
-													onClick={() => selectSession(session)}
-													className={cn(
-														"group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-														session.id === currentSessionId
-															? "bg-muted"
-															: "hover:bg-muted/50",
-													)}
-												>
-													<MessageSquareIcon className="size-3.5 shrink-0 text-muted-foreground/50" />
-													<div className="flex-1 min-w-0">
-														<p className="text-sm font-light text-foreground truncate">
-															{session.title}
-														</p>
-														<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">
-															{session.messages.length} messages ·{" "}
-															{formatTimestamp(session.updatedAt)}
-														</p>
-													</div>
-													<button
-														type="button"
-														onClick={(e) => deleteSession(e, session.id)}
-														className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-muted-foreground group-hover:opacity-100"
-														aria-label="Delete chat"
-													>
-														<Trash2Icon className="size-3" />
-													</button>
-												</button>
-											))}
-										</div>
-									</div>
-								))}
-							</div>
+							<div className="space-y-6">{groupSessionsByDate(sessions).map((group) => (
+								<div key={group.label}>
+									<h4 className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-wider mb-2 px-1">{group.label}</h4>
+									<div className="space-y-1">{group.sessions.map((session) => (
+										<button key={session.id} type="button" onClick={() => selectSession(session)}
+											className={cn("group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+												session.id === currentSessionId ? "bg-muted" : "hover:bg-muted/50")}>
+											<MessageSquareIcon className="size-3.5 shrink-0 text-muted-foreground/50" />
+											<div className="flex-1 min-w-0">
+												<p className="text-sm font-light text-foreground truncate">{session.title}</p>
+												<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages · {formatTimestamp(session.updatedAt)}</p>
+											</div>
+											<button type="button" onClick={(e) => deleteSession(e, session.id)}
+												className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
+												aria-label="Delete chat"><Trash2Icon className="size-3" /></button>
+										</button>
+									))}</div>
+								</div>
+							))}</div>
 						)}
-
-						<div className="mt-4">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={startNewChat}
-								className="w-full rounded-lg"
-							>
-								<PlusIcon className="mr-1.5 size-3.5" />
-								New Chat
-							</Button>
-						</div>
+						<div className="mt-4"><Button variant="outline" size="sm" onClick={startNewChat} className="w-full rounded-lg"><PlusIcon className="mr-1.5 size-3.5" /> New Chat</Button></div>
 					</div>
 				) : (
-					/* Chat View */
 					<>
-						<div
-							ref={scrollRef}
-							className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
-						>
-							{/* Welcome message */}
+						<div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
 							<div className="space-y-4">
 								<ChatBubble variant="received" layout="ai">
 									<ChatBubbleMessage variant="received" layout="ai">
 										<div className="space-y-3">
 											<div className="flex items-center gap-2">
-												<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
-													<SparklesIcon className="size-3 text-muted-foreground" />
-												</div>
-												<span className="text-xs font-medium text-foreground/80">
-													AACsearch Assistant
-												</span>
+												<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50"><SparklesIcon className="size-3 text-muted-foreground" /></div>
+												<span className="text-xs font-medium text-foreground/80">AACsearch Assistant</span>
 											</div>
-											<p className="text-sm font-light text-muted-foreground leading-relaxed">
-												{WELCOME_MESSAGE}
-											</p>
+											<p className="text-sm font-light text-muted-foreground leading-relaxed">{WELCOME_MESSAGE}</p>
 										</div>
 									</ChatBubbleMessage>
 								</ChatBubble>
 							</div>
-
-							{/* Messages */}
 							{messages.map((msg) => (
-								<ChatBubble
-									key={msg.id}
-									variant={msg.role === "user" ? "sent" : "received"}
-									layout={msg.role === "user" ? "default" : "ai"}
-								>
-									<ChatBubbleMessage
-										variant={msg.role === "user" ? "sent" : "received"}
-										layout={msg.role === "user" ? "default" : "ai"}
-									>
-										{msg.mode && msg.role === "user" && (
-											<div className="mb-1 flex items-center gap-1">
-												<span
-													className={cn("text-[10px] font-medium", MODE_COLORS[msg.mode])}
-												>
-													{MODES.find((m) => m.key === msg.mode)?.label}
-												</span>
-											</div>
-										)}
-										<p
-											className={cn(
-												"text-sm font-light leading-relaxed whitespace-pre-wrap",
-												msg.role === "assistant" && "text-muted-foreground",
-											)}
-										>
-											{msg.text}
-										</p>
+								<ChatBubble key={msg.id} variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+									<ChatBubbleMessage variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+										{msg.mode && msg.role === "user" && <div className="mb-1 flex items-center gap-1"><span className="text-[10px] font-medium text-muted-foreground/50">{MODES.find((m) => m.key === msg.mode)?.label}</span></div>}
+										<p className={cn("text-sm font-light leading-relaxed whitespace-pre-wrap", msg.role === "assistant" && "text-muted-foreground")}>{msg.text}</p>
 									</ChatBubbleMessage>
 								</ChatBubble>
 							))}
-
-							{/* Loading */}
-							{isLoading && (
-								<ChatBubble variant="received" layout="ai">
-									<ChatBubbleMessage variant="received" layout="ai" isLoading />
-								</ChatBubble>
-							)}
-
-							{/* Suggested questions — only if no messages yet */}
+							{isLoading && <ChatBubble variant="received" layout="ai"><ChatBubbleMessage variant="received" layout="ai" isLoading /></ChatBubble>}
 							{!hasMessages && (
 								<div className="flex flex-col gap-2 pt-2">
 									{SUGGESTED_QUESTIONS.map((q) => (
-										<button
-											key={q.text}
-											type="button"
-											onClick={() => handleSuggestedClick(q.text)}
-											className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3.5 py-2.5 text-left text-sm font-light text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground"
-										>
+										<button key={q.text} type="button" onClick={() => handleSuggestedClick(q.text)}
+											className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3.5 py-2.5 text-left text-sm font-light text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground">
 											<span className="text-base">{q.icon}</span>
 											<span>{q.text}</span>
 										</button>
@@ -694,149 +700,97 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 								</div>
 							)}
 						</div>
-
-						{/* ── Footer ────────────────────────── */}
 						<div className="shrink-0 border-t border-border p-3">
 							<form onSubmit={handleSubmit} className="flex items-end gap-2">
 								<div className="relative flex-1">
-									<div className="pointer-events-none absolute bottom-full left-0 mb-1 flex items-center gap-1 px-1">
-										<span
-											className={cn(
-												"text-[10px] font-medium transition-colors",
-												MODE_COLORS[activeMode],
-											)}
-										>
-											{MODES.find((m) => m.key === activeMode)?.label}
-										</span>
-									</div>
-									<ChatInput
-										ref={inputRef}
-										value={input}
-										onChange={(e) => setInput(e.target.value)}
-										onKeyDown={handleKeyDown}
-										placeholder={MODE_PLACEHOLDERS[activeMode]}
-										className="min-h-10 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm font-light placeholder:text-muted-foreground/50 focus:border-muted-foreground/30 focus:outline-none"
-									/>
+									<ChatInput ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)}
+										onKeyDown={handleKeyDown} placeholder={MODE_PLACEHOLDERS[activeMode]}
+										className="min-h-10 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-sm font-light placeholder:text-muted-foreground/50 focus:border-muted-foreground/30 focus:outline-none" />
 								</div>
-								<Button
-									type="submit"
-									size="icon"
-									variant="primary"
-									disabled={!input.trim() || isLoading}
-									className="flex size-10 shrink-0 items-center justify-center rounded-lg"
-								>
-									<ArrowRightIcon className="size-4" />
-								</Button>
+								<Button type="submit" size="icon" variant="primary" disabled={!input.trim() || isLoading}
+									className="flex size-10 shrink-0 items-center justify-center rounded-lg"><ArrowRightIcon className="size-4" /></Button>
 							</form>
 						</div>
 					</>
 				)}
 			</div>
 
-			{/* ─── Toggle Pill (desktop only, scroll-animated) ── */}
-			<div
-				className={cn(
-					"hidden sm:block transition-all duration-500 ease-in-out",
-					visible
-						? "opacity-100 translate-y-0"
-						: "opacity-0 translate-y-8 pointer-events-none",
-				)}
-			>
-				<button
-					type="button"
-					onClick={() => {
-						setOpen(!open);
-						if (!open) setView("chat");
-					}}
-					className={cn(
-						"ml-auto flex items-center gap-3 rounded-2xl border border-border/60 bg-card/90 px-4 py-2.5 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:border-border hover:shadow-xl hover:shadow-black/10 sm:px-5 sm:py-3",
-						open && "opacity-0 pointer-events-none",
-					)}
-				>
-				<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
-					<SparklesIcon className="size-4 text-muted-foreground" />
-					<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
-				</div>
-				<span className="text-sm font-light text-muted-foreground/70 whitespace-nowrap">
-					Ask AI...
-				</span>
-				{sessions.length > 0 && (
-					<span className="flex size-5 items-center justify-center rounded-full bg-muted text-[9px] font-medium text-muted-foreground">
-						{sessions.length > 9 ? "9+" : sessions.length}
-					</span>
-				)}
-				<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/50 bg-muted/40 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/60 sm:inline-flex">
-					<KeyboardIcon className="size-2.5" />
-					<span>K</span>
-				</span>
-				</button>
-			</div>
-
-			{/* ─── Mobile Bottom Bar ──────────────────────── */}
-			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-2 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
-				{/* Hamburger menu */}
-				<button
-					type="button"
-					onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
-					className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors active:bg-muted/60"
-					aria-label="Open menu"
-				>
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-						<line x1="4" y1="6" x2="20" y2="6" />
-						<line x1="4" y1="12" x2="20" y2="12" />
-						<line x1="4" y1="18" x2="20" y2="18" />
-					</svg>
-				</button>
-
-				<div className="mx-1.5 h-7 w-px shrink-0 bg-border/60" />
-
-				{/* Main trigger — shows ALL capabilities as inline labels */}
-				<button
-					type="button"
-					onClick={() => {
-						setOpen(!open);
-						if (!open) setView("chat");
-					}}
-					className="flex flex-1 items-center gap-1.5 rounded-lg px-2.5 py-2 transition-colors active:bg-muted/40 truncate"
-				>
-					<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
-						<SparklesIcon className="size-4 text-primary" />
+			{/* Desktop toggle pill */}
+			<div className={cn("transition-all duration-500 ease-in-out",
+					visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none")}>
+				<button type="button" onClick={() => { setOpen(!open); if (!open) setView("chat"); }}
+					className={cn("ml-auto flex items-center gap-3 rounded-2xl border border-border/60 bg-card/90 px-4 py-2.5 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:border-border hover:shadow-xl hover:shadow-black/10 sm:px-5 sm:py-3",
+						open && "opacity-0 pointer-events-none")}>
+					<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+						<SparklesIcon className="size-4 text-muted-foreground" />
+						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
 					</div>
-
-					{/* Capability chips — shown inline, not clickable */}
-					<div className="flex items-center gap-1 min-w-0 truncate">
-						<span className="text-sm font-light text-muted-foreground/90 whitespace-nowrap">
-							Ask AI
-						</span>
-						<span className="text-muted-foreground/20 mx-0.5">·</span>
-						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
-							⌨️Text
-						</span>
-						<span className="text-muted-foreground/20">·</span>
-						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
-							🎤Voice
-						</span>
-						<span className="text-muted-foreground/20">·</span>
-						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
-							📷Photo
-						</span>
-						<span className="text-muted-foreground/20">·</span>
-						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
-							🖼️Image
-						</span>
-						<span className="text-muted-foreground/20">·</span>
-						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
-							💬Chat
-						</span>
-					</div>
-
+					<span className="text-sm font-light text-muted-foreground/70 whitespace-nowrap">Ask AI...</span>
 					{sessions.length > 0 && (
-						<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground ml-auto">
+						<span className="flex size-5 items-center justify-center rounded-full bg-muted text-[9px] font-medium text-muted-foreground">
 							{sessions.length > 9 ? "9+" : sessions.length}
 						</span>
 					)}
+					<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/50 bg-muted/40 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/60 sm:inline-flex">
+						<KeyboardIcon className="size-2.5" /><span>K</span>
+					</span>
 				</button>
 			</div>
 		</div>
+	);
+
+	// ── Mobile Bottom Bar ────────────────────────────────
+	const mobileBottomBar = (
+		<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+			<button type="button"
+				onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
+				className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-muted/60 transition-colors"
+				aria-label="Open menu">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+					<line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" />
+				</svg>
+			</button>
+			<div className="mx-1.5 h-7 w-px shrink-0 bg-border/60" />
+
+			{/* Main Ask AI trigger */}
+			<button type="button" onClick={() => { setOpen(true); setView("chat"); }}
+				className="flex flex-1 items-center gap-2 rounded-lg px-2.5 py-2 transition-colors active:bg-muted/40 truncate">
+				<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
+					<SparklesIcon className="size-4 text-primary" />
+				</div>
+				<div className="flex items-center gap-1 min-w-0 truncate">
+					<span className="text-sm font-light text-muted-foreground/90 whitespace-nowrap">Ask AI</span>
+				</div>
+				{sessions.length > 0 && (
+					<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground ml-auto">
+						{sessions.length > 9 ? "9+" : sessions.length}
+					</span>
+				)}
+			</button>
+
+			<div className="mx-1 h-6 w-px shrink-0 bg-border/40" />
+
+			{/* Clickable mode chips */}
+			<div className="flex items-center gap-0.5 overflow-x-auto scrollbar-none">
+				{MODES.map(({ key, icon: Icon }) => (
+					<button key={key} type="button"
+						onClick={() => { setActiveMode(key); setOpen(true); setView("chat"); }}
+						className={cn("flex flex-col items-center justify-center rounded-lg transition-colors active:scale-95 px-2 py-1 gap-0.5",
+							activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/50 active:text-foreground")}
+						aria-label={`Search by ${key}`}>
+						<Icon className="size-4" />
+						<span className="text-[9px] font-light leading-none">{key === "text" ? "Text" : key === "voice" ? "Voice" : key === "photo" ? "Photo" : key === "image" ? "Image" : "Chat"}</span>
+					</button>
+				))}
+			</div>
+		</div>
+	);
+
+	return (
+		<>
+			{mobileChatPanel}
+			{desktopContainer}
+			{mobileBottomBar}
+		</>
 	);
 }

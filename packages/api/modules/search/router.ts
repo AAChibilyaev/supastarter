@@ -12,11 +12,6 @@ import {
 	updateConversationModel,
 	deleteConversationModel,
 } from "./procedures/conversation-models";
-import {
-	listConversationModels,
-	createConversationModel,
-	deleteConversationModel,
-} from "./procedures/conversation-models";
 import { conversationalSearch } from "./procedures/conversational-search";
 import { listConversations, getConversation, deleteConversation } from "./procedures/conversations";
 import { createApiKey } from "./procedures/create-api-key";

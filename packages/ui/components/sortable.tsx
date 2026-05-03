@@ -11,6 +11,9 @@ import {
 	defaultDropAnimationSideEffects,
 	DndContext,
 	DragOverlay,
+	type DragStartEvent,
+	type DragEndEvent,
+	type DragCancelEvent,
 	KeyboardSensor,
 	MouseSensor,
 	TouchSensor,
@@ -63,6 +66,10 @@ interface SortableProps<TData extends { id: UniqueIdentifier }> extends DndConte
 	strategy?: SortableContextProps["strategy"];
 	orientation?: "vertical" | "horizontal" | "mixed";
 	overlay?: React.ReactNode | null;
+	onDragStart?: DndContextProps["onDragStart"];
+	onDragEnd?: DndContextProps["onDragEnd"];
+	onDragCancel?: DndContextProps["onDragCancel"];
+	children?: React.ReactNode;
 }
 
 function Sortable<TData extends { id: UniqueIdentifier }>({
@@ -93,11 +100,11 @@ function Sortable<TData extends { id: UniqueIdentifier }>({
 		<DndContext
 			modifiers={modifiers ?? config.modifiers}
 			sensors={sensors}
-			onDragStart={(event) => {
+			onDragStart={(event: DragStartEvent) => {
 				setActiveId(event.active.id);
 				onDragStart?.(event);
 			}}
-			onDragEnd={(event) => {
+			onDragEnd={(event: DragEndEvent) => {
 				const { active, over } = event;
 				if (over && active.id !== over?.id) {
 					const activeIndex = value.findIndex((item) => item.id === active.id);
@@ -112,8 +119,8 @@ function Sortable<TData extends { id: UniqueIdentifier }>({
 				setActiveId(null);
 				onDragEnd?.(event);
 			}}
-			onDragCancel={(event) => {
-				setActiveId?.(null);
+			onDragCancel={(event: DragCancelEvent) => {
+				setActiveId(null);
 				onDragCancel?.(event);
 			}}
 			collisionDetection={collisionDetection}
@@ -144,6 +151,8 @@ const dropAnimationOpts: DropAnimation = {
 
 interface SortableOverlayProps extends React.ComponentPropsWithRef<typeof DragOverlay> {
 	activeId?: UniqueIdentifier | null;
+	children?: React.ReactNode;
+	dropAnimation?: DropAnimation;
 }
 
 function SortableOverlay({

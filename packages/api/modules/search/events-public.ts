@@ -30,6 +30,7 @@ const eventSchema = z.object({
 		"filter_used",
 		"conversion",
 		"visit",
+		"click",
 	]),
 	sessionId: z.string().min(1).max(64).optional(),
 	anonymousUserId: z.string().min(1).max(64).optional(),
@@ -41,6 +42,8 @@ const eventSchema = z.object({
 	locale: z.string().max(16).optional(),
 	referrer: z.string().max(512).optional(),
 	metadata: z.record(z.string(), z.unknown()).optional(),
+	queryId: z.string().max(128).optional(),
+	conversionType: z.string().max(64).optional(),
 });
 
 const trackInputSchema = z.union([
@@ -60,6 +63,7 @@ const TYPE_TO_USAGE = {
 	filter_used: "filter_applied",
 	conversion: "conversion",
 	visit: "visit",
+	click: "click",
 } as const;
 
 function capUa(ua: string | undefined): string | null {
@@ -113,6 +117,8 @@ export const eventsApp = new Hono()
 					locale: ev.locale ?? null,
 					referrer: sanitizeReferrer(ev.referrer ?? null),
 					ua,
+					queryId: ev.queryId ?? null,
+					conversionType: ev.conversionType ?? null,
 					extra: ev.metadata ?? null,
 				};
 

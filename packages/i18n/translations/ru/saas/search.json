@@ -227,7 +227,9 @@
 			"ctrByPosition": "CTR by Position",
 			"ctrByIndex": "CTR by Index",
 			"geoMap": "Гео-карта",
-			"geoMapDescription": "География поисковых запросов — скоро"
+			"geoMapDescription": "География поисковых запросов — скоро",
+			"abTestTitle": "A/B-тесты",
+			"abTestDescription": "Запускайте A/B-тесты для конфигурации поиска."
 		},
 		"widget": {
 			"description": "Настройте и кастомизируйте виджет поиска. Установите фильтры, автодополнение, голосовой поиск и встройте его на свой сайт.",
@@ -591,6 +593,7 @@
 			"collectionsGrid": "Сетка",
 			"collectionsDocuments": "Документы",
 			"jobs": "Задачи",
+			"indexHealth": "Здоровье индексов",
 			"relevanceQualityScore": "Качество поиска",
 			"assistant": "Ассистент",
 			"widgetAi": "AI-функции"

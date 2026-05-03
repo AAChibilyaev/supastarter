@@ -1015,6 +1015,7 @@ interface SearchState {
 	aiAnswerSources: Array<{ id?: unknown; title?: string; url?: string; imageUrl?: string }>;
 	imageCaption: string;
 	imageSearchLoading: boolean;
+	lastQueryId: string | null;
 }
 
 function formatPrice(price: number, currency = "USD", locale = "en"): string {
@@ -1242,6 +1243,7 @@ export class AacSearchWidget {
 			aiAnswerSources: [],
 			imageCaption: "",
 			imageSearchLoading: false,
+			lastQueryId: null,
 		};
 
 		// Render and attach events
@@ -1256,6 +1258,45 @@ export class AacSearchWidget {
 			});
 			window.addEventListener("pagehide", () => this.flushBeacon());
 		}
+	}
+
+	/**
+	 * Track a click event on a search result, associated with the most recent query.
+	 * Can be called externally when the widget user implements their own click handling.
+	 */
+	trackClick(docId: string, position?: number): void {
+		this.trackEvent({
+			type: "click",
+			productId: docId,
+			position,
+			queryId: this.state.lastQueryId ?? undefined,
+		});
+	}
+
+	/**
+	 * Track a conversion event (e.g., add-to-cart, purchase) associated with the most recent query.
+	 * @param docId - The document/product ID that was converted on
+	 * @param conversionType - Type of conversion, e.g. "add_to_cart", "purchase"
+	 */
+	trackConversion(docId: string, conversionType?: string): void {
+		this.trackEvent({
+			type: "conversion",
+			productId: docId,
+			queryId: this.state.lastQueryId ?? undefined,
+			conversionType,
+		});
+	}
+
+	/**
+	 * Track a visit event (e.g., page/product page view) associated with the most recent query.
+	 * @param docId - The document/product ID being viewed
+	 */
+	trackVisit(docId?: string): void {
+		this.trackEvent({
+			type: "visit",
+			productId: docId,
+			queryId: this.state.lastQueryId ?? undefined,
+		});
 	}
 
 	private async doSearch(page = 1): Promise<void> {
@@ -1327,6 +1368,7 @@ export class AacSearchWidget {
 				error: null,
 				page,
 				facetCounts: this.parseFacets(result.facets ?? {}),
+				lastQueryId: result.queryId,
 			};
 
 			// Analytics: search_query (and zero_results when applicable).
@@ -2080,6 +2122,7 @@ export class AacSearchWidget {
 					productId: productId || undefined,
 					position: position > 0 ? position : undefined,
 					query: this.state.query || undefined,
+					queryId: this.state.lastQueryId ?? undefined,
 				});
 			});
 		}

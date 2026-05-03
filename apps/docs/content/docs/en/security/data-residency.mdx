@@ -9,11 +9,11 @@ AACsearch offers multi-region data storage so you can choose where your search d
 
 ## Available Regions
 
-| Region | Code | Location | Compliance |
-|--------|------|----------|------------|
-| Europe | `eu` | Frankfurt, Germany | GDPR |
-| United States | `us` | Virginia, USA | SOC 2, CCPA |
-| Russia | `ru` | Moscow, Russia | 152-ФЗ, 242-ФЗ |
+| Region        | Code | Location           | Compliance     |
+| ------------- | ---- | ------------------ | -------------- |
+| Europe        | `eu` | Frankfurt, Germany | GDPR           |
+| United States | `us` | Virginia, USA      | SOC 2, CCPA    |
+| Russia        | `ru` | Moscow, Russia     | 152-ФЗ, 242-ФЗ |
 
 Each region runs a fully independent AACsearch stack with its own:
 
@@ -46,7 +46,7 @@ To change your data storage region:
 3. Select a new region from the dropdown
 4. Click **Update Region** to save the change
 
-> **Important**: Changing the region updates the routing target for *new* data only. Existing search data remains in the original region until you run a data migration.
+> **Important**: Changing the region updates the routing target for _new_ data only. Existing search data remains in the original region until you run a data migration.
 
 ## Data Migration Between Regions
 
@@ -57,17 +57,20 @@ When you change your storage region, existing search data stays in the previous 
 3. If you select **Update region after migration**, the migration tool will automatically update your organization's region setting after all data is copied
 
 Migration uses a **copy-and-verify** approach:
+
 - Data is exported from the source Typesense cluster
 - Each document is imported into the destination cluster using upsert (emplace) semantics
 - The source data is preserved until you confirm the migration is successful
 - Progress is reported per search index
 
 **What gets migrated:**
+
 - All search documents in every index
 - Search index schemas and configuration
 - Synonym sets
 
 **What does NOT get migrated:**
+
 - Search API keys (these are stored in the database, not in Typesense)
 - Usage logs and analytics data
 - Organization metadata (name, members, etc.)
@@ -75,6 +78,7 @@ Migration uses a **copy-and-verify** approach:
 ## Region Health Monitoring
 
 The Compliance settings page shows the operational status of your current region, including:
+
 - Online/offline status of the Typesense cluster
 - Current latency (ms)
 - Any error messages if the cluster is unreachable
@@ -97,9 +101,9 @@ AACsearch supports region-aware CDN configuration. Each region can have its own 
 1. **DNS Configuration**: Set up geo-routed DNS entries (e.g., using AWS Route 53 or Cloudflare) that direct users to the nearest CDN endpoint based on their geographic location.
 
 2. **CDN Setup**: Deploy a CDN distribution (CloudFront, Cloudflare, or Fastly) per region:
-   - **EU region**: Origin → your Frankfurt Typesense node
-   - **US region**: Origin → your Virginia Typesense node
-   - **RU region**: Origin → your Moscow Typesense node
+    - **EU region**: Origin → your Frankfurt Typesense node
+    - **US region**: Origin → your Virginia Typesense node
+    - **RU region**: Origin → your Moscow Typesense node
 
 3. **API Gateway**: The AACsearch API gateway uses region-aware routing. When a search query arrives, the gateway determines the organization's storage region and routes the request to the correct Typesense cluster.
 

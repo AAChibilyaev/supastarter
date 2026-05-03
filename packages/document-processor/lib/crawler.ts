@@ -34,7 +34,9 @@ export async function crawlUrl(
 			userAgent: opts.userAgent,
 		});
 		if (autoSitemaps.length > 0) {
-			logger.info(`[Crawler] Auto-discovered ${autoSitemaps.length} sitemaps from robots.txt`);
+			logger.info(
+				`[Crawler] Auto-discovered ${autoSitemaps.length} sitemaps from robots.txt`,
+			);
 			for (const sitemapUrl of autoSitemaps) {
 				const urls = await parseSitemap(sitemapUrl, {
 					userAgent: opts.userAgent,

@@ -80,6 +80,7 @@ export function widgetEventToAnalyticsEvent(
 		type: mapping.type,
 		name: mapping.name,
 		data,
+		query_id: (meta.queryId as string) ?? undefined,
 	};
 }
 

@@ -1,6 +1,4 @@
 import "server-only";
-import type { Prisma } from "@repo/database";
-
 import type { StorageRegion } from "./regions";
 import { DEFAULT_REGION, isValidRegion } from "./regions";
 

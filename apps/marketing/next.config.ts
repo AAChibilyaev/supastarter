@@ -6,7 +6,7 @@ const withNextIntl = nextIntlPlugin("./i18n.ts");
 
 const nextConfig: NextConfig = {
 	transpilePackages: ["@repo/i18n", "@repo/ui"],
-	allowedDevOrigins: ["macbook.tabby-dace.ts.net"],
+	allowedDevOrigins: ["macbook.tabby-dace.ts.net", "100.108.198.22"],
 	images: {
 		remotePatterns: [
 			{

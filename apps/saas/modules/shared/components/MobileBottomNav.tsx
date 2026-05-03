@@ -86,16 +86,14 @@ export function MobileBottomNav() {
 
 	return (
 		<nav className="md:hidden bottom-0 left-0 right-0 backdrop-blur-lg safe-area-bottom fixed z-50 border-t border-border bg-background/95">
-			<div className="h-16 safe-area-bottom px-2 flex items-center justify-around">
+			<div className="h-16 px-2 flex items-center justify-around">
 				{items.map((item) => (
 					<Link
 						key={item.href}
 						href={item.href}
 						className={cn(
-							"gap-0.5 min-w-0 flex h-full min-h-11 flex-1 flex-col items-center justify-center rounded-md transition-colors cursor-pointer active:scale-95",
-							item.isActive
-								? "text-primary"
-								: "text-muted-foreground",
+							"gap-0.5 min-w-0 min-h-11 flex h-full flex-1 cursor-pointer flex-col items-center justify-center rounded-md transition-colors active:scale-95",
+							item.isActive ? "text-primary" : "text-muted-foreground",
 						)}
 					>
 						<item.icon className={cn("size-5", item.isActive && "stroke-[2.5]")} />
@@ -123,7 +121,7 @@ function MobileSidebarTrigger() {
 	return (
 		<Link
 			href={`${pathname}?sidebar=true`}
-			className="gap-0.5 min-w-0 flex h-full min-h-11 flex-1 flex-col items-center justify-center rounded-md text-muted-foreground transition-colors cursor-pointer active:scale-95"
+			className="gap-0.5 min-w-0 min-h-11 flex h-full flex-1 cursor-pointer flex-col items-center justify-center rounded-md text-muted-foreground transition-colors active:scale-95"
 			aria-label="Open menu"
 		>
 			<MenuIcon className="size-5" />

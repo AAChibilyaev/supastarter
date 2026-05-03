@@ -8,6 +8,8 @@
  * All payloads are validated with Zod.
  */
 
+import { createHash, createHmac } from "node:crypto";
+
 import { db, enqueueManySearchIngest, recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 import type { Context } from "hono";
@@ -409,4 +411,101 @@ export const connectorApp = new Hono()
 		const job = await getSyncJob(c.req.param("jobId"), verified.organizationId);
 		if (!job) return c.json({ error: "job_not_found" }, 404);
 		return c.json(job);
+	})
+
+	// ─── Generic Webhook Receiver ────────────────────────────────────
+
+	// POST /api/webhooks/sync/:indexSlug — generic webhook for any service
+	.post("/webhooks/sync/:indexSlug", async (c) => {
+		try {
+			const verified = await gateConnectorRequest(c);
+			if (verified instanceof Response) return verified;
+
+			// Verify the slug matches
+			const urlSlug = c.req.param("indexSlug");
+			if (urlSlug !== verified.indexSlug) {
+				return c.json({ error: "slug_mismatch" }, 403);
+			}
+
+			const body = await c.req.json().catch(() => null);
+			if (!body) return c.json({ error: "invalid_json" }, 400);
+
+			const parsed = z
+				.object({
+					action: z.enum(["upsert", "delete"]),
+					documents: z
+						.array(z.record(z.string(), z.unknown()))
+						.max(100)
+						.optional()
+						.default([]),
+					externalIds: z.array(z.string()).max(100).optional().default([]),
+				})
+				.safeParse(body);
+
+			if (!parsed.success) {
+				return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
+			}
+
+			const { action, documents, externalIds } = parsed.data;
+
+			// Validate: upsert needs documents, delete needs externalIds
+			if (action === "upsert" && documents.length === 0) {
+				return c.json({ error: "documents_required_for_upsert" }, 400);
+			}
+			if (action === "delete" && externalIds.length === 0) {
+				return c.json({ error: "externalIds_required_for_delete" }, 400);
+			}
+
+			logger.info("Webhook sync received", {
+				action,
+				documentsCount: documents.length,
+				externalIdsCount: externalIds.length,
+				indexSlug: verified.indexSlug,
+				organizationId: verified.organizationId,
+			});
+
+			try {
+				if (action === "upsert") {
+					await enqueueManySearchIngest(
+						verified.indexId,
+						verified.organizationId,
+						"upsert",
+						documents as Prisma.InputJsonValue[],
+					);
+				} else {
+					await enqueueManySearchIngest(
+						verified.indexId,
+						verified.organizationId,
+						"delete",
+						externalIds.map((id) => ({ external_id: id })) as Prisma.InputJsonValue[],
+					);
+				}
+
+				void recordSearchUsage({
+					indexId: verified.indexId,
+					organizationId: verified.organizationId,
+					type: "sync_job" as const,
+					count: action === "upsert" ? documents.length : externalIds.length,
+					metadata: { source: "webhook", action, indexSlug: verified.indexSlug },
+				}).catch((err: Error) =>
+					logger.warn("webhook usage record failed", { err }),
+				);
+
+				return c.json({
+					status: "accepted",
+					action,
+					itemsProcessed: action === "upsert" ? documents.length : externalIds.length,
+				});
+			} catch (error) {
+				logger.error("Webhook sync enqueue failed", {
+					error,
+					indexSlug: verified.indexSlug,
+					action,
+				});
+				return c.json({ error: "sync_failed" }, 502);
+			}
+		} catch (error) {
+			logger.error("Webhook handler error", { error });
+			return c.json({ error: "internal_error" }, 500);
+		}
 	});

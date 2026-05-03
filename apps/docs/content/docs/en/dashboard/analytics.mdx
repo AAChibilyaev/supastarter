@@ -1,0 +1,120 @@
+---
+title: "Analytics Dashboard"
+description: "Search analytics and metrics — CTR, top queries, failed queries, activity log, and period-based dashboards."
+---
+
+The Analytics page at `/[orgSlug]/analytics` provides insight into how your search indexes are performing. It is organized into tabs, each covering a different angle on your search data.
+
+Data is sourced from `SearchUsageEvent` rows aggregated by the `usageSummary`, `analytics`, `topQueries`, and `activity` oRPC procedures.
+
+## Period selector
+
+A period selector at the top of the page controls the time window for all tabs:
+
+| Period | Retention                     |
+| ------ | ----------------------------- |
+| 24h    | Available on all plans        |
+| 7d     | Free: 7 days; Paid: available |
+| 30d    | Paid plans only               |
+
+The period is stored in URL state — bookmarking or sharing the link preserves the selection.
+
+## Dashboard tab
+
+The main analytics view shows search volume and performance at a glance.
+
+### KPI tiles
+
+Four summary tiles give you the headline numbers:
+
+| Tile                    | Source                                    |
+| ----------------------- | ----------------------------------------- |
+| Total searches          | Aggregated `SearchUsageEvent` count       |
+| Unique searchers        | Distinct session / key count              |
+| Avg. click-through rate | Ratio of click events to search events    |
+| Avg. latency            | Mean search response time in milliseconds |
+
+### Search volume chart
+
+A time-series bar chart shows search requests per day (or hour for the 24h period). Hovering over a bar shows the exact count for that time slot.
+
+### Top queries (inline)
+
+A compact list of the 5 most frequent search queries during the period, with click counts. Click **View all** to switch to the Top Queries tab.
+
+## Top Queries tab
+
+A ranked table of the most frequent search queries:
+
+| Column        | Description                           |
+| ------------- | ------------------------------------- |
+| Query         | The search text                       |
+| Searches      | Total search count                    |
+| Clicks        | Number of times users clicked results |
+| CTR           | Click-through rate                    |
+| Results found | Documents returned (averaged)         |
+| Zero results  | Whether this query returned no hits   |
+
+Use this tab to identify:
+
+- **Popular searches** — what users are looking for most
+- **Zero-result queries** — content gaps you should fill
+- **Low-CTR queries** — relevance tuning candidates
+
+The list is limited to the top 10 queries for the selected period.
+
+## Failed tab
+
+The Failed Queries tab shows search requests that returned errors. Each entry includes:
+
+| Column       | Description                        |
+| ------------ | ---------------------------------- |
+| Timestamp    | When the error occurred            |
+| Query text   | The search query that failed       |
+| Error code   | HTTP status or internal error code |
+| Error detail | Human-readable error description   |
+| Index slug   | Which index was being queried      |
+
+Common error types:
+
+- **rate_limit_exceeded** — the API key exceeded its rate limit
+- **search_quota_exceeded** — the organization has exhausted its plan quota
+- **collection_not_found** — the index slug doesn't match an active collection
+- **internal_error** — an unexpected server error (check the server logs)
+
+Failed queries are retained for 7 days on all plans.
+
+## Activity tab
+
+The Activity tab shows a chronological feed of events across all indexes in the organization:
+
+| Event type         | Source                                    |
+| ------------------ | ----------------------------------------- |
+| Index created      | `SearchIndex` creation event              |
+| API key created    | `SearchApiKey` creation                   |
+| Reindex started    | Reindex job initiated                     |
+| Reindex completed  | Reindex job finished (success or failure) |
+| Sync job completed | Connector sync job finished               |
+| Quota warning      | First time quota exceeded 80% threshold   |
+
+Each event shows:
+
+- **Timestamp** — when the event occurred
+- **Description** — what happened and which index/key was affected
+- **Status** — success, failure, or in-progress indicator
+
+## Data sources
+
+All analytics data comes from these Prisma models:
+
+| Model                   | Role                                        |
+| ----------------------- | ------------------------------------------- |
+| `SearchUsageEvent`      | Search request and click event log          |
+| `SearchActivityEvent`   | Admin activity log (index, key, job events) |
+| `SearchRateLimitBucket` | Rate limit tracking (debug only)            |
+
+## Related pages
+
+- [Dashboard Overview](/docs/dashboard/overview)
+- [Relevance Tuning](/docs/dashboard/relevance-tuning)
+- [Search Workspace](/docs/dashboard/search-workspace)

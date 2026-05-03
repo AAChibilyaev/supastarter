@@ -1,4 +1,11 @@
 {
-	"title": "Панель управления и операции",
-	"pages": ["overview", "search-workspace", "knowledge-and-admin"]
+	"title": "Dashboard & Operations",
+	"pages": [
+		"overview",
+		"search-workspace",
+		"analytics",
+		"relevance-tuning",
+		"index-management",
+		"knowledge-and-admin"
+	]
 }

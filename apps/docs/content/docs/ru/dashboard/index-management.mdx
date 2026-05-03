@@ -1,0 +1,134 @@
+     1|---
+title: "Управление индексами"
+description: "Мониторинг состояния индексов, запуск переиндексации, управление дельта-синхронизацией и просмотр информации о последней синхронизации."
+     4|---
+     5|
+     6|The Index Management page at `/[orgSlug]/search/[indexSlug]/indexing` provides tools for monitoring and maintaining your search index. It covers index health metrics, reindex operations, delta synchronization, and sync history.
+     7|
+     8|## Index status cards
+     9|
+    10|The top section shows four summary cards with real-time metrics for the selected index:
+    11|
+    12|| Card           | Data source                               |
+    13|| -------------- | ----------------------------------------- |
+    14|| Documents      | Total document count in the collection    |
+    15|| Searches today | Search requests served today              |
+    16|| Size           | Storage size in MB/GB (if available)      |
+    17|| Avg. latency   | Mean search response time in milliseconds |
+    18|
+    19|A badge next to the index name indicates whether the collection is **Live** (serving traffic).
+    20|
+    21|## Health chart
+    22|
+    23|A 7-day bar chart compares:
+    24|
+    25|- **Documents** — total document count (static across the period)
+    26|- **Searches** — daily search request volume
+    27|
+    28|This gives a quick visual sense of whether search usage is growing or declining.
+    29|
+    30|## Last sync info
+    31|
+    32|Shows when the last full sync completed. This is derived from the most recent `sync_job` activity event for the index. A timestamp of "never" indicates no sync has been recorded yet.
+    33|
+    34|---
+    35|
+    36|## Full reindex
+    37|
+    38|The **Full Reindex** panel lets you rebuild an index with zero downtime. It creates a new versioned Typesense collection (`{orgShortId}_{slug}_v{n+1}`), populates it from the current data source, verifies it, and atomically swaps the alias so the new version starts serving traffic immediately.
+    39|
+    40|### When to reindex
+    41|
+    42|- After changing the **collection schema** (e.g. adding a new searchable field)
+    43|- After modifying **stopword** lists
+    44|- After a major **data migration** or bulk document update
+    45|- To recover from a corrupted or inconsistent collection state
+    46|
+    47|### Advanced options
+    48|
+    49|Click **Show advanced** to configure additional reindex behavior:
+    50|
+    51|| Option                | Description                                           |
+    52|| --------------------- | ----------------------------------------------------- |
+    53|| Detect schema         | Re-detect the collection schema from the current data |
+    54|| Regenerate embeddings | Recompute AI embeddings for all documents             |
+    55|
+    56|### Progress tracking
+    57|
+    58|After triggering a reindex, the panel shows real-time progress:
+    59|
+    60|- **Status** — pending, running, completed, or failed
+    61|- **Progress bar** — percentage of the job completed
+    62|- **Cancel** — abort a running reindex if needed
+    63|
+    64|The reindex job ID is tracked and polled every 3 seconds until completion.
+    65|
+    66|---
+    67|
+    68|## Delta sync
+    69|
+    70|The **Delta Sync** panel synchronizes only the changes since the last sync operation, rather than rebuilding the entire index. This is faster and more efficient for incremental updates.
+    71|
+    72|### When to use delta sync
+    73|
+    74|- After the CMS connector has pushed new or updated documents
+    75|- To process pending items in the `SearchIngestBuffer` table
+    76|- For regular, scheduled synchronization (e.g., hourly)
+    77|
+    78|### Results
+    79|
+    80|After a delta sync completes, the panel shows:
+    81|
+    82|| Metric    | Description                       |
+    83|| --------- | --------------------------------- |
+    84|| Processed | Total items processed             |
+    85|| Upserted  | Documents created or updated      |
+    86|| Deleted   | Documents removed                 |
+    87|| Remaining | Items still pending in the buffer |
+    88|
+    89|### Delta sync vs. full reindex
+    90|
+    91|| Aspect         | Delta sync                | Full reindex                     |
+    92|| -------------- | ------------------------- | -------------------------------- |
+    93|| Scope          | Changed documents only    | All documents                    |
+    94|| Speed          | Fast (seconds to minutes) | Slow (minutes to hours)          |
+    95|| Downtime       | None (no alias swap)      | Zero-downtime (alias swap)       |
+    96|| Schema changes | Not affected              | Rebuilt with new schema          |
+    97|| Use case       | Daily incremental updates | Schema changes, major migrations |
+    98|
+    99|---
+
+100|
+101|## Reindex history
+102|
+103|The page maintains a record of past reindex operations. Each entry shows:
+104|
+105|| Column | Description |
+106|| ------------- | -------------------------------------- |
+107|| Job ID | Unique identifier for the job |
+108|| Status | pending / running / completed / failed |
+109|| Started at | When the job was initiated |
+110|| Completed at | When the job finished (if done) |
+111|| Error message | Error details (if failed) |
+112|
+113|## API reference
+114|
+115|Index management operations are available as oRPC procedures in `packages/api/modules/indexing/`:
+116|
+117|| Procedure | Description |
+118|| -------------------------- | ---------------------------- |
+119|| `indexing.reindex` | Start a full reindex |
+120|| `indexing.deltaSync` | Run incremental delta sync |
+121|| `indexing.cancelReindex` | Cancel a running reindex |
+122|| `indexing.reindexStatus` | Poll reindex job status |
+123|| `indexing.reindexHistory` | List past reindex jobs |
+124|| `indexing.healthStats` | Get index health statistics |
+125|| `indexing.schedule.list` | List scheduled reindex tasks |
+126|| `indexing.schedule.create` | Create a scheduled reindex |
+127|
+128|## Related pages
+129|
+130|- [Search Workspace](/docs/dashboard/search-workspace)
+131|- [Getting Started: Ingest and Reindex](/docs/getting-started/ingest-and-reindex)
+132|- [Search API: Reindexing & Zero-Downtime](/docs/search-api/reindexing-and-zero-downtime)
+133|

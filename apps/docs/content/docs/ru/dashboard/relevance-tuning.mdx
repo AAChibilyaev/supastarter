@@ -1,0 +1,132 @@
+     1|---
+title: "Настройка релевантности"
+description: "Тонкая настройка результатов поиска с помощью синонимов, кураций и стоп-слов — доступно на странице релевантности."
+     4|---
+     5|
+     6|The Relevance page at `/[orgSlug]/relevance` lets you fine-tune how the AACsearch Engine ranks and filters results for your indexes. It is organized into three tabs: **Synonyms**, **Curations**, and **Stopwords**.
+     7|
+     8|Each tab requires a selected index slug. If no index is selected, the page shows a prompt to choose one.
+     9|
+    10|---
+    11|
+    12|## Synonyms
+    13|
+    14|Synonyms let you define equivalences between search terms. When a user searches for a synonym root, documents matching any of its synonym words are returned.
+    15|
+    16|### How synonyms work
+    17|
+    18|A synonym maps one or more variant terms to a **root term**:
+    19|
+    20|```
+    21|"jeans"   →  "pants"
+    22|"trainers" → "sneakers"
+    23|"mobile"  →  "phone" (if locale = en)
+    24|```
+    25|
+    26|When a query contains a synonym root, AACsearch expands the query to also match documents that contain the synonym variants. This is implemented via Typesense synonym collections.
+    27|
+    28|### Managing synonyms
+    29|
+    30|From the Synonyms tab you can:
+    31|
+    32|- **Add a synonym** — enter the root term and one or more synonym variants (comma-separated)
+    33|- **Edit a synonym** — modify the root or variants inline
+    34|- **Delete a synonym** — remove the mapping; existing indexed documents are unaffected, but future queries will stop expanding
+    35|
+    36|Synonyms are stored in a dedicated Typesense collection per index and served through the `search.synonyms` oRPC procedures.
+    37|
+    38|### Example
+    39|
+    40|| Root       | Synonyms          | Query "pants" also matches documents with... |
+    41|| ---------- | ----------------- | -------------------------------------------- |
+    42|| `pants`    | `jeans, trousers` | `jeans`, `trousers`                          |
+    43|| `sneakers` | `trainers`        | `trainers`                                   |
+    44|| `phone`    | `mobile`          | `mobile`                                     |
+    45|
+    46|### Feature availability
+    47|
+    48|The Synonyms feature is available on **Starter** plans and above. It is gated behind the `synonyms` feature flag in the entitlements system.
+    49|
+    50|---
+    51|
+    52|## Curations
+    53|
+    54|Curations let you pin or hide specific documents for a given search query. This is useful for:
+    55|
+    56|- **Promoting** a specific product to the top of search results for a branded query
+    57|- **Hiding** discontinued or out-of-stock items from certain search terms
+    58|- **Merchandising** seasonal products for relevant queries
+    59|
+    60|### How curations work
+    61|
+    62|Each curation rule applies to a single **query string** and specifies:
+    63|
+    64|- **Pinned document IDs** — documents that should appear at the top of results (in order)
+    65|- **Hidden document IDs** — documents that should be excluded from results
+    66|
+    67|```
+    68|Rule: query = "summer sale"
+    69|  → Pin: ["tshirt-123", "shorts-456"]
+    70|  → Hide: ["winter-coat-789"]
+    71|```
+    72|
+    73|When a user searches for "summer sale", the two pinned products will appear first, and the winter coat will be filtered out.
+    74|
+    75|### Managing curations
+    76|
+    77|From the Curations tab you can:
+    78|
+    79|- **Add a curation** — enter a query, then add pinned document IDs (imported products) and/or hidden document IDs
+    80|- **Edit a curation** — modify the pinned/hidden document lists
+    81|- **Delete a curation** — remove the rule; subsequent searches for that query will return default ranking
+    82|
+    83|### Document IDs
+    84|
+    85|Pinned and hidden IDs must correspond to the `id` field of documents that exist in your Typesense collection. IDs are case-sensitive and must match exactly.
+    86|
+    87|---
+    88|
+    89|## Stopwords
+    90|
+    91|Stopwords are common words that are excluded from the search index. They reduce noise in search results and improve performance by skipping words that carry little meaning.
+    92|
+    93|### Default stopwords
+    94|
+    95|AACsearch comes with a built-in set of stopwords per locale. For English, these include words like:
+    96|
+    97|`a, an, the, is, it, in, on, at, for, to, of, and, or, but, with, without`
+    98|
+    99|### Managing stopwords
+
+100|
+101|From the Stopwords tab you can:
+102|
+103|- **View** the current stopwords list for a selected index
+104|- **Add** stopwords — enter one or more words (comma-separated)
+105|- **Remove** stopwords — delete a word from the list
+106|
+107|Changes to stopwords are applied via a **reindex** — existing documents already in the Typesense collection are not automatically re-processed. After changing stopwords, trigger a reindex for the changes to take full effect.
+108|
+109|---
+110|
+111|## API access
+112|
+113|All three relevance features are available through oRPC procedures at `packages/api/modules/search/procedures/`:
+114|
+115|| Feature | oRPC procedure | Method |
+116|| --------- | ------------------------- | ------ |
+117|| Synonyms | `search.synonyms.get` | GET |
+118|| Synonyms | `search.synonyms.save` | PUT |
+119|| Curations | `search.curations.get` | GET |
+120|| Curations | `search.curations.save` | PUT |
+121|| Stopwords | `search.stopwords.list` | GET |
+122|| Stopwords | `search.stopwords.upsert` | PUT |
+123|
+124|All procedures require the caller's organization ID and index slug as input.
+125|
+126|## Related pages
+127|
+128|- [Search Workspace](/docs/dashboard/search-workspace)
+129|- [Analytics Dashboard](/docs/dashboard/analytics)
+130|- [Plans & Limits](/docs/overview/plans-and-limits)
+131|

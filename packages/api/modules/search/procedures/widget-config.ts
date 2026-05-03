@@ -11,6 +11,15 @@ const widgetConfigSchema = z.object({
 	showPrices: z.boolean().default(true),
 	showImages: z.boolean().default(true),
 	theme: z.enum(["light", "dark", "auto"]).default("auto"),
+	// New fields for widget configurator
+	queryBy: z.array(z.string()).default([]),
+	placeholder: z.string().default("Search..."),
+	resultsPerPage: z.number().min(5).max(50).default(20),
+	showThumbnails: z.boolean().default(true),
+	showSearchButton: z.boolean().default(true),
+	searchButtonText: z.string().default("Search"),
+	accentColor: z.string().default("#6366f1"),
+	keyboardShortcut: z.boolean().default(true),
 });
 
 export const getWidgetConfig = protectedProcedure
@@ -142,7 +151,20 @@ function buildSnippet({
 	baseUrl: string;
 	indexSlug: string;
 	apiKeyPrefix: string;
-	config: { theme: string; defaultSortField?: string; showPrices: boolean; showImages: boolean };
+	config: {
+		theme: string;
+		defaultSortField?: string;
+		showPrices: boolean;
+		showImages: boolean;
+		placeholder: string;
+		resultsPerPage: number;
+		showThumbnails: boolean;
+		showSearchButton: boolean;
+		searchButtonText: string;
+		accentColor: string;
+		keyboardShortcut: boolean;
+		queryBy?: string[];
+	};
 	facetsAttr?: string;
 }) {
 	const lines = [
@@ -153,7 +175,17 @@ function buildSnippet({
 		`  data-index-slug="${indexSlug}"`,
 		`  data-container="#aac-search"`,
 		`  data-theme="${config.theme}"`,
+		`  data-placeholder="${config.placeholder}"`,
+		`  data-results-per-page="${config.resultsPerPage}"`,
+		`  data-accent-color="${config.accentColor}"`,
 	];
+	if (config.queryBy && config.queryBy.length > 0)
+		lines.push(`  data-query-by="${config.queryBy.join(",")}"`);
+	if (!config.showThumbnails) lines.push(`  data-show-thumbnails="false"`);
+	if (!config.showSearchButton) lines.push(`  data-show-search-button="false"`);
+	if (config.searchButtonText !== "Search")
+		lines.push(`  data-search-button-text="${config.searchButtonText}"`);
+	if (!config.keyboardShortcut) lines.push(`  data-keyboard-shortcut="false"`);
 	if (facetsAttr) lines.push(`  data-facets="${facetsAttr}"`);
 	if (config.defaultSortField) lines.push(`  data-sort="${config.defaultSortField}"`);
 	if (!config.showPrices) lines.push(`  data-show-prices="false"`);

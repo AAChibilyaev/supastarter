@@ -48,3 +48,4 @@ export * from "./components/radio-group";
 export * from "./components/slider";
 export { SonnerToaster } from "./components/sonner";
 export * from "./components/toggle-group";
+export * from "./components/pagination";

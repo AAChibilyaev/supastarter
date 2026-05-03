@@ -15,24 +15,49 @@ const sourceSchema = z.object({
 	textMatch: z.string().optional(),
 });
 
+/**
+ * Conversational search using Typesense native RAG (v0.26+ conversation API).
+ *
+ * When a conversationModelId is provided, Typesense handles the entire RAG pipeline:
+ * document retrieval → LLM context injection → answer generation.
+ * Conversation history is managed automatically via conversation_id.
+ *
+ * Falls back to the manual OpenAI RAG approach when no conversationModelId is given.
+ */
 export const conversationalSearch = protectedProcedure
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
 		tags: ["Search"],
-		summary: "RAG conversational search using OpenAI",
+		summary: "RAG conversational search (Typesense native or manual OpenAI)",
 		description:
-			"Searches the index for relevant documents, then uses OpenAI to generate a contextual answer with cited sources.",
+			"Searches the index and generates a contextual answer with cited sources. " +
+			"When conversationModelId is provided, uses Typesense native RAG with the registered " +
+			"conversation model. Otherwise falls back to manual OpenAI-based RAG.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
 			slug: searchIndexSlugSchema,
 			query: z.string().min(1).max(5000),
+
+			// Typesense native RAG params
+			conversationModelId: z
+				.string()
+				.optional()
+				.describe("Typesense conversation model ID (enables native RAG)"),
+			conversationId: z
+				.string()
+				.optional()
+				.describe("Existing conversation ID to continue a session"),
+
+			// Fallback manual RAG params
 			history: z.array(messageSchema).max(20).default([]),
 			model: z.string().default("gpt-4o-mini"),
+
 			queryBy: z.string().optional(),
 			filterBy: z.string().optional(),
+			perPage: z.number().int().min(1).max(50).default(5),
 		}),
 	)
 	.output(
@@ -41,6 +66,8 @@ export const conversationalSearch = protectedProcedure
 			sources: z.array(sourceSchema),
 			found: z.number(),
 			searchTimeMs: z.number(),
+			conversationId: z.string().optional(),
+			conversationHistory: z.array(messageSchema).optional(),
 		}),
 	)
 	.handler(async ({ input, context }) => {
@@ -48,12 +75,73 @@ export const conversationalSearch = protectedProcedure
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
 		const client = getTypesenseClient();
+		const searchStartTime = Date.now();
 
+		if (input.conversationModelId) {
+			// === Typesense Native RAG ===
+			// Typesense handles document retrieval, context injection, and LLM answer generation.
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const params: Record<string, unknown> = {
+				q: input.query,
+				query_by: input.queryBy ?? "title,description",
+				per_page: input.perPage,
+				conversation_model_id: input.conversationModelId,
+			};
+
+			if (input.filterBy) params.filter_by = input.filterBy;
+			if (input.conversationId) params.conversation_id = input.conversationId;
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const results = (await client
+				.collections(index.slug)
+				.documents()
+				.search(params as any)) as any;
+
+			const searchTimeMs = Date.now() - searchStartTime;
+
+			const hits: any[] = results.hits ?? [];
+			const conversationHistory: Array<Record<string, unknown>> =
+				results.conversation_history ?? [];
+
+			// Extract the LLM answer — it's the last assistant turn in conversation_history
+			let answer = "Unable to generate an answer.";
+			const assistantTurns = conversationHistory.filter(
+				(turn: Record<string, unknown>) => turn.role === "assistant",
+			);
+			if (assistantTurns.length > 0) {
+				answer = (assistantTurns[assistantTurns.length - 1].content ?? answer) as string;
+			}
+
+			// Extract or generate a conversation_id from the response
+			const responseConversationId =
+				(results.conversation_id as string | undefined) ??
+				input.conversationId ??
+				undefined;
+
+			return {
+				answer,
+				sources: hits.map((hit: any) => ({
+					document: hit.document as Record<string, unknown>,
+					textMatch: (hit.text_match_info?.snippet ?? hit.highlight?.snippet) as
+						| string
+						| undefined,
+				})),
+				found: results.found ?? 0,
+				searchTimeMs,
+				conversationId: responseConversationId,
+				conversationHistory: conversationHistory.map((turn: Record<string, unknown>) => ({
+					role: (turn.role as "user" | "assistant") ?? "assistant",
+					content: (turn.content ?? "") as string,
+				})),
+			};
+		}
+
+		// === Legacy Manual RAG (fallback) ===
 		// Phase 1: search for relevant documents
 		const searchParams: Record<string, unknown> = {
 			q: input.query,
 			query_by: input.queryBy ?? "title,description",
-			per_page: 5,
+			per_page: input.perPage,
 		};
 		if (input.filterBy) searchParams.filter_by = input.filterBy;
 
@@ -66,7 +154,7 @@ export const conversationalSearch = protectedProcedure
 		const hits: any[] = results.hits ?? [];
 		const sources = hits.map((hit: any) => ({
 			document: hit.document as Record<string, unknown>,
-			textMatch: hit.text_match as string | undefined,
+			textMatch: hit.text_match_info?.snippet as string | undefined,
 		}));
 
 		// Phase 2: build context from sources and generate answer with OpenAI
@@ -103,10 +191,12 @@ export const conversationalSearch = protectedProcedure
 			answer = "Conversational search is unavailable at this moment.";
 		}
 
+		const searchTimeMs = Date.now() - searchStartTime;
+
 		return {
 			answer,
 			sources,
 			found: results.found ?? 0,
-			searchTimeMs: results.search_time_ms ?? 0,
+			searchTimeMs,
 		};
 	});

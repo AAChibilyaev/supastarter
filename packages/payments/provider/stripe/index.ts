@@ -10,7 +10,9 @@ import { createNotification } from "@repo/notifications";
 import Stripe from "stripe";
 
 import { setCustomerIdToEntity } from "../../lib/customer";
+import { invalidatePlanCache } from "../../lib/entitlements";
 import { getPlanIdByProviderPriceId } from "../../lib/provider-price-ids";
+import type { CreateUpgradeSession } from "../../types";
 import type {
 	CancelSubscription,
 	CreateCheckoutLink,
@@ -241,6 +243,186 @@ export const detachPaymentMethod = async (paymentMethodId: string): Promise<void
 	await stripeClient.paymentMethods.detach(paymentMethodId);
 };
 
+export const createUpgradeSession: CreateUpgradeSession = async (params) => {
+	const stripeClient = getStripeClient();
+	const { subscriptionId, newPriceId, customerId, organizationId, userId, returnUrl } = params;
+
+	// Retrieve the current subscription to get the existing item
+	const subscription = await retryStripeCall(() =>
+		stripeClient.subscriptions.retrieve(subscriptionId),
+	);
+
+	if (!subscription) {
+		throw new Error(`Subscription ${subscriptionId} not found`);
+	}
+
+	const currentItem = subscription.items?.data[0];
+	if (!currentItem) {
+		throw new Error(`No items found on subscription ${subscriptionId}`);
+	}
+
+	const currentPriceId = currentItem.price.id;
+	if (currentPriceId === newPriceId) {
+		return {
+			type: "direct_update" as const,
+			success: true,
+			immediateAmount: 0,
+			currency: (currentItem.price.currency ?? "usd").toUpperCase(),
+			creditAmount: 0,
+			nextInvoiceAmount: currentItem.price.unit_amount ?? null,
+		};
+	}
+
+	// Get accurate proration via Stripe SDK v22 createPreview
+	const upcomingInvoice = await retryStripeCall(() =>
+		stripeClient.invoices.createPreview({
+			customer: customerId,
+			subscription: subscriptionId,
+			subscription_details: {
+				items: [{ id: currentItem.id, deleted: true }, { price: newPriceId }],
+				proration_behavior: "create_prorations",
+				billing_cycle_anchor: "unchanged",
+			},
+		}),
+	);
+
+	const currency = (upcomingInvoice.currency ?? "usd").toUpperCase();
+	const amountDue = upcomingInvoice.amount_due;
+	const amountPaid = upcomingInvoice.amount_paid;
+	const immediateAmount = amountDue - amountPaid;
+
+	// Credit = sum of negative proration line items for unused time
+	const creditLines = upcomingInvoice.lines.data.filter(
+		(line: {
+			amount: number;
+			parent?: {
+				subscription_item_details?: { proration: boolean } | null;
+				invoice_item_details?: { proration: boolean } | null;
+			} | null;
+		}) =>
+			line.amount < 0 &&
+			(line.parent?.subscription_item_details?.proration ??
+				line.parent?.invoice_item_details?.proration ??
+				false),
+	);
+	const creditAmount = Math.abs(creditLines.reduce((sum, line) => sum + line.amount, 0));
+
+	// Next full invoice amount = new price (non-proration items)
+	const nextInvoiceAmount = upcomingInvoice.lines.data
+		.filter(
+			(line: {
+				amount: number;
+				pricing?: {
+					price_details?: {
+						price: string | { id: string };
+					} | null;
+				} | null;
+				parent?: {
+					subscription_item_details?: { proration: boolean } | null;
+					invoice_item_details?: { proration: boolean } | null;
+				} | null;
+			}) => {
+				const linePriceId =
+					typeof line.pricing?.price_details?.price === "object"
+						? line.pricing.price_details.price.id
+						: line.pricing?.price_details?.price;
+				const isProration =
+					line.parent?.subscription_item_details?.proration ??
+					line.parent?.invoice_item_details?.proration ??
+					false;
+				return linePriceId === newPriceId && !isProration;
+			},
+		)
+		.reduce((sum, line) => sum + line.amount, 0);
+
+	// If payment is needed, create a Checkout session
+	if (immediateAmount > 0) {
+		const metadata: Record<string, string> = {
+			upgrade_subscription: "true",
+			current_subscription_id: subscriptionId,
+			new_price_id: newPriceId,
+		};
+		if (organizationId) {
+			metadata.organization_id = organizationId;
+		}
+		if (userId) {
+			metadata.user_id = userId;
+		}
+
+		const session = await retryStripeCall(() =>
+			stripeClient.checkout.sessions.create({
+				mode: "payment",
+				customer: customerId,
+				line_items: [
+					{
+						price_data: {
+							currency: upcomingInvoice.currency ?? "usd",
+							product_data: {
+								name: `Plan upgrade — prorated amount`,
+							},
+							unit_amount: immediateAmount,
+						},
+						quantity: 1,
+					},
+				],
+				metadata,
+				success_url: returnUrl,
+				cancel_url: returnUrl,
+			}),
+		);
+
+		logger.info("Upgrade Checkout session created", {
+			subscriptionId,
+			from: currentPriceId,
+			to: newPriceId,
+			immediateAmount,
+			sessionId: session.id,
+		});
+
+		return {
+			type: "checkout" as const,
+			url: session.url,
+			immediateAmount,
+			currency,
+			creditAmount,
+			nextInvoiceAmount,
+		};
+	}
+
+	// No payment needed — update subscription directly
+	await retryStripeCall(() =>
+		stripeClient.subscriptions.update(subscriptionId, {
+			items: [
+				{
+					id: currentItem.id,
+					deleted: true,
+				},
+				{
+					price: newPriceId,
+				},
+			],
+			proration_behavior: "create_prorations",
+			billing_cycle_anchor: "unchanged",
+			off_session: true,
+		}),
+	);
+
+	logger.info("Subscription upgraded directly (no payment needed)", {
+		subscriptionId,
+		from: currentPriceId,
+		to: newPriceId,
+		immediateAmount,
+	});
+
+	return {
+		type: "direct_update" as const,
+		success: true,
+		immediateAmount,
+		currency,
+		creditAmount,
+		nextInvoiceAmount,
+	};
+};
 export const upgradeSubscription: UpgradeSubscription = async ({
 	subscriptionId,
 	newPriceId,
@@ -427,6 +609,61 @@ export const webhookHandler: WebhookHandler = async (req) => {
 			case "checkout.session.completed": {
 				const { mode, metadata, customer, id } = event.data.object;
 
+				// Handle upgrade subscription checkout (payment for prorated upgrade amount)
+				if (metadata?.upgrade_subscription === "true") {
+					const currentSubscriptionId = metadata.current_subscription_id;
+					const newPriceId = metadata.new_price_id;
+
+					if (!currentSubscriptionId || !newPriceId) {
+						return new Response("Missing upgrade metadata.", {
+							status: 400,
+						});
+					}
+
+					// Retrieve the current subscription to get the existing item IDs
+					const subscription = await retryStripeCall(() =>
+						stripeClient.subscriptions.retrieve(currentSubscriptionId),
+					);
+
+					if (!subscription) {
+						return new Response("Subscription not found.", {
+							status: 404,
+						});
+					}
+
+					const currentItem = subscription.items?.data[0];
+					if (!currentItem) {
+						return new Response("No items found on subscription.", {
+							status: 404,
+						});
+					}
+
+					// Now update the subscription with the new price
+					await retryStripeCall(() =>
+						stripeClient.subscriptions.update(currentSubscriptionId, {
+							items: [
+								{
+									id: currentItem.id,
+									deleted: true,
+								},
+								{
+									price: newPriceId,
+								},
+							],
+							proration_behavior: "none",
+							billing_cycle_anchor: "unchanged",
+							off_session: true,
+						}),
+					);
+
+					logger.info("Subscription upgraded via Checkout payment", {
+						subscriptionId: currentSubscriptionId,
+						to: newPriceId,
+					});
+
+					break;
+				}
+
 				if (mode === "subscription") {
 					break;
 				}
@@ -501,6 +738,11 @@ export const webhookHandler: WebhookHandler = async (req) => {
 						status,
 						...(priceId ? { priceId } : {}),
 					});
+
+					// Invalidate plan cache so updated limits take effect immediately
+					if (existingPurchase.organizationId) {
+						invalidatePlanCache(existingPurchase.organizationId);
+					}
 				}
 
 				break;

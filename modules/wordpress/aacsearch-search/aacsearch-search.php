@@ -67,6 +67,11 @@ require_once AACSEARCH_SEARCH_DIR . 'includes/class-admin.php';
 
 require_once AACSEARCH_SEARCH_DIR . 'includes/class-frontend.php';
 
+// ─── Gutenberg Blocks (loaded in all contexts) ─────────────────
+
+require_once AACSEARCH_SEARCH_DIR . 'includes/class-blocks.php';
+add_action('plugins_loaded', ['AACSearch_Blocks', 'init']);
+
 // ─── Elementor Widgets (loaded only if Elementor is active) ────
 
 require_once AACSEARCH_SEARCH_DIR . 'includes/class-elementor.php';

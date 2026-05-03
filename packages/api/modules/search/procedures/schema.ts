@@ -37,6 +37,11 @@ export const getSchema = protectedProcedure
 					facet: z.boolean().optional(),
 					index: z.boolean().optional(),
 					sort: z.boolean().optional(),
+					embed: z
+						.object({
+							from: z.array(z.string()).optional(),
+						})
+						.optional(),
 				}),
 			),
 			defaultSortingField: z.string().nullable(),

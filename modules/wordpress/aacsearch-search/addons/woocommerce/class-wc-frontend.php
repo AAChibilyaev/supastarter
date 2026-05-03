@@ -16,6 +16,16 @@ if (!defined('ABSPATH')) {
 class AACSearch_WC_Frontend
 {
     /**
+     * Async index event hook name (matches base sync pattern).
+     */
+    const ASYNC_INDEX_HOOK = 'aacsearch_wc_async_index_product';
+
+    /**
+     * Async delete event hook name.
+     */
+    const ASYNC_DELETE_HOOK = 'aacsearch_wc_async_delete_product';
+
+    /**
      * Initialize WC frontend hooks.
      */
     public static function init()
@@ -38,12 +48,18 @@ class AACSearch_WC_Frontend
         // Inject WC-specific config for the JS widget
         add_action('wp_head', [$this, 'inject_wc_config']);
 
-        // Product sync hooks
+        // ─── Product Sync Hooks (async via wp-cron) ──────────
+        // These schedule single events instead of blocking the request.
+        // wp_schedule_single_event debounces duplicates by hook+args.
         add_action('woocommerce_update_product', [$this, 'on_product_update'], 10, 1);
         add_action('woocommerce_new_product', [$this, 'on_product_update'], 10, 1);
         add_action('woocommerce_trash_product', [$this, 'on_product_delete'], 10, 1);
         add_action('woocommerce_delete_product', [$this, 'on_product_delete'], 10, 1);
         add_action('woocommerce_product_object_updated_props', [$this, 'on_stock_change'], 10, 2);
+
+        // ─── Async Event Handlers ────────────────────────────
+        add_action(self::ASYNC_INDEX_HOOK, [$this, 'handle_async_index'], 10, 1);
+        add_action(self::ASYNC_DELETE_HOOK, [$this, 'handle_async_delete'], 10, 1);
     }
 
     /**
@@ -203,7 +219,10 @@ class AACSearch_WC_Frontend
     }
 
     /**
-     * Handle product update — sync to AACsearch.
+     * Handle product update — schedule async sync to AACsearch.
+     *
+     * Uses wp_schedule_single_event for background indexing so that
+     * checkout and admin flows are not blocked by the API call.
      *
      * @param int $product_id Product ID.
      */
@@ -213,29 +232,25 @@ class AACSearch_WC_Frontend
             return;
         }
 
-        $api_url       = get_option(AACSearch_Admin::OPTION_API_URL, '');
-        $connector_key = get_option(AACSearch_Admin::OPTION_CONNECTOR_KEY, '');
-        $index_slug    = get_option(AACSearch_Admin::OPTION_INDEX_SLUG, '');
-
-        if (empty($api_url) || empty($connector_key) || empty($index_slug)) {
-            return;
+        // Schedule async index (debounced: no duplicate pending events)
+        if (!wp_next_scheduled(self::ASYNC_INDEX_HOOK, [$product_id])) {
+            wp_schedule_single_event(time(), self::ASYNC_INDEX_HOOK, [$product_id]);
         }
 
-        $wc_indexer = new AACSearch_WC_Indexer($api_url, $connector_key, $index_slug);
-        $wc_indexer->index_product($product_id);
-
-        // If variable product, also sync variations
+        // If variable product, also schedule variations
         $product = wc_get_product($product_id);
         if ($product && $product->is_type('variable')) {
             $variations = $product->get_children();
             foreach ($variations as $vid) {
-                $wc_indexer->index_product($vid);
+                if (!wp_next_scheduled(self::ASYNC_INDEX_HOOK, [$vid])) {
+                    wp_schedule_single_event(time(), self::ASYNC_INDEX_HOOK, [$vid]);
+                }
             }
         }
     }
 
     /**
-     * Handle product deletion — remove from AACsearch.
+     * Handle product deletion — schedule async removal from AACsearch.
      *
      * @param int $product_id Product ID.
      */
@@ -245,22 +260,15 @@ class AACSearch_WC_Frontend
             return;
         }
 
-        $api_url       = get_option(AACSearch_Admin::OPTION_API_URL, '');
-        $connector_key = get_option(AACSearch_Admin::OPTION_CONNECTOR_KEY, '');
-        $index_slug    = get_option(AACSearch_Admin::OPTION_INDEX_SLUG, '');
-
-        if (empty($api_url) || empty($connector_key) || empty($index_slug)) {
-            return;
+        if (!wp_next_scheduled(self::ASYNC_DELETE_HOOK, [$product_id])) {
+            wp_schedule_single_event(time(), self::ASYNC_DELETE_HOOK, [$product_id]);
         }
-
-        $wc_indexer = new AACSearch_WC_Indexer($api_url, $connector_key, $index_slug);
-        $wc_indexer->delete_post($product_id);
     }
 
     /**
-     * Handle stock changes — sync updated products.
+     * Handle stock changes — schedule async sync.
      *
-     * @param WC_Product $product    The product that was updated.
+     * @param WC_Product $product       The product that was updated.
      * @param array      $updated_props Array of updated property names.
      */
     public function on_stock_change($product, $updated_props)
@@ -271,5 +279,43 @@ class AACSearch_WC_Frontend
         }
 
         $this->on_product_update($product->get_id());
+    }
+
+    /**
+     * Handle async product index event (fired by wp-cron).
+     *
+     * @param int $product_id Product ID to index.
+     */
+    public function handle_async_index($product_id)
+    {
+        $api_url       = get_option(AACSearch_Admin::OPTION_API_URL, '');
+        $connector_key = get_option(AACSearch_Admin::OPTION_CONNECTOR_KEY, '');
+        $index_slug    = get_option(AACSearch_Admin::OPTION_INDEX_SLUG, '');
+
+        if (empty($api_url) || empty($connector_key) || empty($index_slug)) {
+            return;
+        }
+
+        $wc_indexer = new AACSearch_WC_Indexer($api_url, $connector_key, $index_slug);
+        $wc_indexer->index_product($product_id);
+    }
+
+    /**
+     * Handle async product delete event (fired by wp-cron).
+     *
+     * @param int $product_id Product ID to delete from AACsearch.
+     */
+    public function handle_async_delete($product_id)
+    {
+        $api_url       = get_option(AACSearch_Admin::OPTION_API_URL, '');
+        $connector_key = get_option(AACSearch_Admin::OPTION_CONNECTOR_KEY, '');
+        $index_slug    = get_option(AACSearch_Admin::OPTION_INDEX_SLUG, '');
+
+        if (empty($api_url) || empty($connector_key) || empty($index_slug)) {
+            return;
+        }
+
+        $wc_indexer = new AACSearch_WC_Indexer($api_url, $connector_key, $index_slug);
+        $wc_indexer->delete_post($product_id);
     }
 }

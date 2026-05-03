@@ -5,7 +5,15 @@ import {
 	deleteAnalyticsRule,
 } from "./procedures/analytics-rules";
 import { performClusterOperation, clusterMetrics } from "./procedures/cluster-ops";
+import {
+	createConversationModel,
+	listConversationModels,
+	getConversationModel,
+	updateConversationModel,
+	deleteConversationModel,
+} from "./procedures/conversation-models";
 import { conversationalSearch } from "./procedures/conversational-search";
+import { listConversations, getConversation, deleteConversation } from "./procedures/conversations";
 import { createApiKey } from "./procedures/create-api-key";
 import { createConnectorToken } from "./procedures/create-connector-token";
 import { createIndex } from "./procedures/create-index";
@@ -58,6 +66,10 @@ import {
 import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-config";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
+import {
+	getGlobalSynonyms,
+	updateGlobalSynonyms,
+} from "./procedures/global-synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
@@ -139,6 +151,18 @@ export const searchRouter = {
 	snapshot: createSnapshot,
 	health: healthCheck,
 	conversationalSearch,
+	conversationModels: {
+		create: createConversationModel,
+		list: listConversationModels,
+		get: getConversationModel,
+		update: updateConversationModel,
+		delete: deleteConversationModel,
+	},
+	conversations: {
+		list: listConversations,
+		get: getConversation,
+		delete: deleteConversation,
+	},
 	voiceSearch,
 	imageSearch,
 	stemming: {

@@ -11,7 +11,7 @@ export const onboardingStatus = protectedProcedure
 		tags: ["Search"],
 		summary: "Get onboarding checklist status",
 		description:
-			"Derives a 6-step onboarding checklist status from existing database tables. Read-only — no new DB writes.",
+			"Derives an 8-step onboarding checklist status from existing database tables. Read-only — no new DB writes.",
 	})
 	.input(
 		z.object({
@@ -82,6 +82,18 @@ export const onboardingStatus = protectedProcedure
 		// Step 6: widget embedded — always false, self-attestation by user
 		const widgetEmbedded = false;
 
+		// Step 7: has analytics events (multiple search events or click events)
+		const analyticsEventCount = await db.searchUsageEvent.count({
+			where: {
+				organizationId,
+				type: { in: ["search_query", "search", "click", "analytics"] },
+			},
+		});
+		const hasAnalytics = analyticsEventCount > 1;
+
+		// Step 8: relevance configured — self-attestation (no dedicated DB model yet)
+		const hasRelevanceConfig = false;
+
 		const steps = [
 			{ step: 1, label: "Create a search index", completed: hasIndex },
 			{ step: 2, label: "Generate a connector token", completed: hasConnectorToken },
@@ -89,6 +101,8 @@ export const onboardingStatus = protectedProcedure
 			{ step: 4, label: "Perform a search", completed: hasSearch },
 			{ step: 5, label: "Generate an API key", completed: hasApiKey },
 			{ step: 6, label: "Embed the search widget", completed: widgetEmbedded },
+			{ step: 7, label: "View analytics", completed: hasAnalytics },
+			{ step: 8, label: "Configure relevance rules", completed: hasRelevanceConfig },
 		];
 
 		const completedCount = steps.filter((s) => s.completed).length;

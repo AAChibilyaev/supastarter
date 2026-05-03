@@ -1,15 +1,19 @@
 /**
- * Shopify OAuth Hono routes — install redirect, callback, status endpoints.
+ * Shopify OAuth Hono routes — install redirect, callback, status, sync endpoints.
  *
  * Routes:
  *   GET  /api/shopify/install?shop=...&organizationId=...
- *        → Redirect merchant to Shopify OAuth authorization
+ *        -> Redirect merchant to Shopify OAuth authorization
  *   GET  /api/shopify/callback?shop=...&code=...&hmac=...&state=...
- *        → OAuth callback, exchanges code for token, stores in DB
+ *        -> OAuth callback, exchanges code for token, stores in DB
  *   GET  /api/shopify/:storeId/status
- *        → Get store connection status
+ *        -> Get store connection status
+ *   POST /api/shopify/:storeId/sync
+ *        -> Trigger full product + variant sync
+ *   POST /api/shopify/:storeId/sync/delta
+ *        -> Trigger delta sync (updated since last sync)
  *   POST /api/shopify/webhooks/app/uninstalled
- *        → Shopify app uninstall webhook
+ *        -> Shopify app uninstall webhook
  */
 
 import { logger } from "@repo/logs";
@@ -25,11 +29,17 @@ import {
 	markStoreUninstalled,
 	saveShopifyStore,
 } from "./oauth";
-import type { ShopifyOAuthConfig } from "./types";
+import { runDeltaSync, runFullSync } from "./sync";
 
 // ─── Config ─────────────────────────────────────────────────────
 
-function getOAuthConfig(): ShopifyOAuthConfig {
+interface ShopifyEnvConfig {
+	apiKey: string;
+	apiSecret: string;
+	redirectUri: string;
+}
+
+function getOAuthConfig(): ShopifyEnvConfig {
 	const apiKey = process.env.SHOPIFY_API_KEY;
 	const apiSecret = process.env.SHOPIFY_API_SECRET;
 	const redirectUri = process.env.SHOPIFY_REDIRECT_URI;
@@ -50,7 +60,7 @@ const installQuerySchema = z.object({
 	shop: z
 		.string()
 		.min(1)
-		.regex(/\.myshopify\.com$/, "Invalid Shopify shop domain"),
+		.regex(/\\.myshopify\\.com$/, "Invalid Shopify shop domain"),
 	organizationId: z.string().min(1),
 });
 
@@ -177,41 +187,218 @@ export const shopifyApp = new Hono()
 	.get("/shopify/:storeId/status", async (c) => {
 		try {
 			const storeId = c.req.param("storeId");
-			const store = await getStoreByShop(storeId);
-
-			if (!store) {
-				// Try by ID
-				const { db } = await import("@repo/database");
-				const found = await db.shopifyStore.findUnique({
-					where: { id: storeId },
-					select: {
-						id: true,
-						shop: true,
-						name: true,
-						syncStatus: true,
-						installedAt: true,
-						lastSyncAt: true,
-						syncError: true,
-						organizationId: true,
-					},
-				});
-				if (!found) return c.json({ error: "store_not_found" }, 404);
-				return c.json(found);
-			}
-
-			return c.json({
-				id: store.id,
-				shop: store.shop,
-				name: store.name,
-				syncStatus: store.syncStatus,
-				installedAt: store.installedAt,
-				lastSyncAt: store.lastSyncAt,
-				syncError: store.syncError,
-				organizationId: store.organizationId,
+			const { db } = await import("@repo/database");
+			const store = await db.shopifyStore.findUnique({
+				where: { id: storeId },
+				select: {
+					id: true,
+					shop: true,
+					name: true,
+					syncStatus: true,
+					installedAt: true,
+					lastSyncAt: true,
+					syncError: true,
+					organizationId: true,
+				},
 			});
+
+			if (!store) return c.json({ error: "store_not_found" }, 404);
+			return c.json(store);
 		} catch (error) {
 			logger.error("Shopify status check failed", { error });
 			return c.json({ error: "status_failed" }, 500);
+		}
+	})
+
+	// POST /api/shopify/:storeId/sync — trigger full product sync
+	.post("/shopify/:storeId/sync", async (c) => {
+		try {
+			const storeId = c.req.param("storeId");
+			const { db } = await import("@repo/database");
+
+			const store = await db.shopifyStore.findUnique({
+				where: { id: storeId },
+				select: {
+					id: true,
+					shop: true,
+					organizationId: true,
+					indexId: true,
+					syncStatus: true,
+				},
+			});
+
+			if (!store) return c.json({ error: "store_not_found" }, 404);
+			if (!store.indexId) {
+				return c.json(
+					{ error: "no_index_configured", message: "Connect a search index first" },
+					400,
+				);
+			}
+			if (store.syncStatus === "syncing") {
+				return c.json(
+					{ error: "sync_in_progress", message: "A sync is already running" },
+					409,
+				);
+			}
+
+			// Mark store as syncing
+			await db.shopifyStore.update({
+				where: { id: storeId },
+				data: { syncStatus: "syncing", syncError: null },
+			});
+
+			// Create the authenticated client
+			const client = createShopifyClient(store.shop, store.id);
+
+			// Run sync in background
+			runFullSync(client, {
+				shop: store.shop,
+				indexId: store.indexId,
+				organizationId: store.organizationId,
+				includeMetafields: true,
+			})
+				.then(async (result) => {
+					await db.shopifyStore.update({
+						where: { id: storeId },
+						data: {
+							syncStatus: result.failuresCount > 0 ? "error" : "active",
+							lastSyncAt: new Date(),
+							syncError: result.failuresCount > 0 ? result.errors.join("; ") : null,
+						},
+					});
+
+					logger.info("Shopify full sync completed via route", {
+						storeId,
+						itemsCount: result.itemsCount,
+						failuresCount: result.failuresCount,
+					});
+				})
+				.catch(async (err) => {
+					const msg = err instanceof Error ? err.message : String(err);
+
+					await db.shopifyStore.update({
+						where: { id: storeId },
+						data: { syncStatus: "error", syncError: msg },
+					});
+
+					logger.error("Shopify full sync route failed", { storeId, error: msg });
+				});
+
+			return c.json({
+				status: "sync_started",
+				type: "full",
+				message:
+					"Full product sync started. Check status via GET /api/shopify/:storeId/status",
+			});
+		} catch (error) {
+			logger.error("Shopify sync trigger failed", { error });
+			return c.json(
+				{
+					error: "sync_trigger_failed",
+					message: error instanceof Error ? error.message : "Unknown error",
+				},
+				500,
+			);
+		}
+	})
+
+	// POST /api/shopify/:storeId/sync/delta — trigger delta sync
+	.post("/shopify/:storeId/sync/delta", async (c) => {
+		try {
+			const storeId = c.req.param("storeId");
+			const { db } = await import("@repo/database");
+
+			const store = await db.shopifyStore.findUnique({
+				where: { id: storeId },
+				select: {
+					id: true,
+					shop: true,
+					organizationId: true,
+					indexId: true,
+					lastSyncAt: true,
+					syncStatus: true,
+				},
+			});
+
+			if (!store) return c.json({ error: "store_not_found" }, 404);
+			if (!store.indexId) {
+				return c.json(
+					{ error: "no_index_configured", message: "Connect a search index first" },
+					400,
+				);
+			}
+			if (store.syncStatus === "syncing") {
+				return c.json(
+					{ error: "sync_in_progress", message: "A sync is already running" },
+					409,
+				);
+			}
+
+			// Mark store as syncing
+			await db.shopifyStore.update({
+				where: { id: storeId },
+				data: { syncStatus: "syncing", syncError: null },
+			});
+
+			// Default to 24h ago if never synced
+			const updatedSince =
+				store.lastSyncAt?.toISOString() ??
+				new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+			// Create the authenticated client
+			const client = createShopifyClient(store.shop, store.id);
+
+			// Run delta sync in background
+			runDeltaSync(client, {
+				shop: store.shop,
+				indexId: store.indexId,
+				organizationId: store.organizationId,
+				updatedSince,
+				includeMetafields: true,
+			})
+				.then(async (result) => {
+					await db.shopifyStore.update({
+						where: { id: storeId },
+						data: {
+							syncStatus: result.failuresCount > 0 ? "error" : "active",
+							lastSyncAt: new Date(),
+							syncError: result.failuresCount > 0 ? result.errors.join("; ") : null,
+						},
+					});
+
+					logger.info("Shopify delta sync completed via route", {
+						storeId,
+						itemsCount: result.itemsCount,
+						updatedSince,
+					});
+				})
+				.catch(async (err) => {
+					const msg = err instanceof Error ? err.message : String(err);
+
+					await db.shopifyStore.update({
+						where: { id: storeId },
+						data: { syncStatus: "error", syncError: msg },
+					});
+
+					logger.error("Shopify delta sync route failed", { storeId, error: msg });
+				});
+
+			return c.json({
+				status: "delta_sync_started",
+				type: "delta",
+				since: updatedSince,
+				message:
+					"Delta sync started. Only products updated since the last sync will be indexed.",
+			});
+		} catch (error) {
+			logger.error("Shopify delta sync trigger failed", { error });
+			return c.json(
+				{
+					error: "delta_sync_trigger_failed",
+					message: error instanceof Error ? error.message : "Unknown error",
+				},
+				500,
+			);
 		}
 	})
 

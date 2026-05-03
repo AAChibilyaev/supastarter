@@ -24,3 +24,7 @@ export {
 export { createShopifyClient } from "./client";
 export { encryptToken, decryptToken } from "./crypto";
 export type { ShopifyOAuthConfig, ShopifyTokenResult, ShopifySyncStatus } from "./types";
+export { runFullSync, runDeltaSync } from "./sync";
+export type { SyncResult, SyncOptions } from "./sync";
+export { flattenProductToDocuments, documentToExternalId, parseExternalId } from "./product-mapper";
+export type { AacSearchProductDocument } from "./product-mapper";

@@ -278,6 +278,8 @@ class AACSearch_WC_Indexer extends AACSearch_Indexer
             'brands'          => $brands,
             'attributes'      => $attributes,
             'is_variation'    => $is_variation,
+            // WPML / multilingual (populated if WPML is active)
+            'language'        => $this->get_product_language($product_id),
         ];
 
         /**
@@ -289,5 +291,45 @@ class AACSearch_WC_Indexer extends AACSearch_Indexer
          * @param WC_Product $product  The WooCommerce product object.
          */
         return apply_filters('aacsearch_document_fields', $document, $post ?? null);
+    }
+
+    /**
+     * Get the product language for WPML/Polylang compatibility.
+     *
+     * Detects the current content language using WPML's wpml_get_language_information()
+     * or Polylang's pll_get_post_language(). Falls back to an empty string
+     * if no multilingual plugin is active.
+     *
+     * @param int $product_id Product ID.
+     *
+     * @return string Language code (e.g. 'en', 'de', 'ru') or empty string.
+     */
+    protected function get_product_language($product_id)
+    {
+        // WPML — preferred API
+        if (function_exists('wpml_get_language_information')) {
+            $info = wpml_get_language_information(null, $product_id);
+            if (is_array($info) && !empty($info['language_code'])) {
+                return $info['language_code'];
+            }
+        }
+
+        // WPML — fallback for older versions
+        if (function_exists('icl_object_id') && defined('ICL_LANGUAGE_CODE')) {
+            $lang_info = apply_filters('wpml_post_language_details', [], $product_id);
+            if (is_array($lang_info) && !empty($lang_info['language_code'])) {
+                return $lang_info['language_code'];
+            }
+        }
+
+        // Polylang
+        if (function_exists('pll_get_post_language')) {
+            $lang = pll_get_post_language($product_id);
+            if (!empty($lang)) {
+                return $lang;
+            }
+        }
+
+        return '';
     }
 }

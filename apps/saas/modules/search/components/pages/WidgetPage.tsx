@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
 import { EmptyState } from "@search/components/cards/EmptyState";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,7 +23,7 @@ const TAB_IDS: TabId[] = [
 	"install",
 ];
 
-export function WidgetPage({ organizationId: _organizationId }: WidgetPageProps) {
+export function WidgetPage({ organizationId }: WidgetPageProps) {
 	const t = useTranslations("search");
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -49,17 +50,7 @@ export function WidgetPage({ organizationId: _organizationId }: WidgetPageProps)
 			</TabsList>
 
 			<TabsContent value="configurator" className="space-y-6 mt-6">
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">{t("widget.configuratorTitle")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<EmptyState
-							title={t("widget.comingSoon")}
-							description={t("widget.comingSoonDescription")}
-						/>
-					</CardContent>
-				</Card>
+				<WidgetConfiguratorPanel organizationId={organizationId} />
 			</TabsContent>
 
 			{TAB_IDS.filter((t) => t !== "configurator").map((tab) => (

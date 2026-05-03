@@ -28,6 +28,14 @@ export interface CollectionFieldInput {
 	optional?: boolean;
 	index?: boolean;
 	sort?: boolean;
+	embed?: {
+		from: string[];
+		model_config?: {
+			model_name?: string;
+			api_key?: string;
+			api_url?: string;
+		};
+	};
 }
 
 export interface CreatePhysicalCollectionInput {

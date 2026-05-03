@@ -125,6 +125,23 @@ export type UpgradeSubscription = (params: {
 	prorationBehavior?: "create_prorations" | "always_invoice" | "none";
 }) => Promise<void>;
 
+export type CreateUpgradeSession = (params: {
+	subscriptionId: string;
+	newPriceId: string;
+	customerId: string;
+	organizationId?: string;
+	userId?: string;
+	returnUrl: string;
+}) => Promise<{
+	type: "checkout" | "direct_update";
+	url?: string | null;
+	success?: boolean;
+	immediateAmount: number;
+	currency: string;
+	creditAmount: number;
+	nextInvoiceAmount: number | null;
+}>;
+
 export type GetProrationPreview = (params: {
 	subscriptionId: string;
 	newPriceId: string;

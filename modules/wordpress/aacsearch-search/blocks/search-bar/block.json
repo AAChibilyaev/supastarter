@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "aacsearch/search-bar",
+    "title": "AACsearch Search Bar",
+    "category": "widgets",
+    "icon": "search",
+    "description": "AACsearch Instant Search input bar — search-as-you-type with filters and results.",
+    "keywords": ["search", "aacsearch", "instant search", "ajax"],
+    "version": "1.0.0",
+    "textdomain": "aacsearch-search",
+    "editorScript": "file:./index.js",
+    "attributes": {
+        "placeholder": {
+            "type": "string",
+            "default": "Search..."
+        },
+        "queryBy": {
+            "type": "string",
+            "default": "post_title"
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": ["wide", "full"],
+        "color": {
+            "background": true,
+            "text": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    }
+}

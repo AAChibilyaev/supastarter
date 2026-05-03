@@ -18,7 +18,7 @@ interface Bucket {
 
 const buckets = new Map<string, Bucket>();
 
-const MAX_TOKENS = 40
+const MAX_TOKENS = 40;
 const REFILL_INTERVAL_MS = 1000; // 1 second
 const REFILL_RATE = 40; // 40 tokens per second
 
@@ -67,6 +67,7 @@ export interface ShopifyProduct {
 	product_type?: string;
 	handle?: string;
 	status?: string;
+	tags?: string;
 	variants: ShopifyVariant[];
 	images: ShopifyImage[];
 	options: ShopifyOption[];
@@ -84,6 +85,8 @@ export interface ShopifyVariant {
 	compare_at_price?: string;
 	inventory_quantity: number;
 	inventory_item_id?: number;
+	inventory_management?: string | null;
+	image_id?: number | null;
 	requires_shipping?: boolean;
 	taxable?: boolean;
 	barcode?: string;
@@ -135,15 +138,18 @@ export interface ShopifyGraphQLResponse<T> {
 	errors?: Array<{ message: string; extensions?: Record<string, unknown> }>;
 }
 
-class ShopifyAdminClient {
+export class ShopifyAdminClient {
 	private readonly baseUrl: string;
 	private readonly storeId: string;
 	private accessToken: string | null = null;
 
-	constructor(shop: string, storeId: string) {
+	constructor(shop: string, storeId: string, accessToken?: string) {
 		const cleanShop = shop.replace(/^https?:\/\//, "").replace(/\/$/, "");
 		this.baseUrl = `https://${cleanShop}/admin/api/2024-10`;
 		this.storeId = storeId;
+		if (accessToken) {
+			this.accessToken = accessToken;
+		}
 	}
 
 	/** Ensure the access token is loaded and cached */
@@ -305,6 +311,10 @@ class ShopifyAdminClient {
 }
 
 /** Create a Shopify Admin API client for a given store */
-export function createShopifyClient(shop: string, storeId: string): ShopifyAdminClient {
-	return new ShopifyAdminClient(shop, storeId);
+export function createShopifyClient(
+	shop: string,
+	storeId: string,
+	accessToken?: string,
+): ShopifyAdminClient {
+	return new ShopifyAdminClient(shop, storeId, accessToken);
 }

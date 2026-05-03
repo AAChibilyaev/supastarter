@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "aacsearch/autocomplete",
+    "title": "AACsearch Autocomplete",
+    "category": "widgets",
+    "icon": "editor-insert-emoticon",
+    "description": "AACsearch inline autocomplete search field — search-as-you-type dropdown suggestions.",
+    "keywords": ["autocomplete", "search", "aacsearch", "suggest", "typeahead"],
+    "version": "1.0.0",
+    "textdomain": "aacsearch-search",
+    "editorScript": "file:./index.js",
+    "attributes": {
+        "placeholder": {
+            "type": "string",
+            "default": "Search..."
+        },
+        "queryBy": {
+            "type": "string",
+            "default": "post_title"
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": ["wide", "full"],
+        "color": {
+            "background": true,
+            "text": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    }
+}

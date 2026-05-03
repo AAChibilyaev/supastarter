@@ -1,0 +1,13 @@
+{
+	"name": "aacsearch-search-blocks",
+	"version": "1.0.0",
+	"private": true,
+	"description": "AACsearch WordPress Gutenberg blocks build.",
+	"scripts": {
+		"build": "wp-scripts build --config blocks/webpack.config.js",
+		"start": "wp-scripts start --config blocks/webpack.config.js"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.0.0"
+	}
+}

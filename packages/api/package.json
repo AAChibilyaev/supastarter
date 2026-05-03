@@ -31,6 +31,7 @@
 		"@repo/payments": "workspace:*",
 		"@repo/recommendations": "workspace:*",
 		"@repo/search": "workspace:*",
+		"@repo/shopify-connector": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"@scalar/hono-api-reference": "^0.10.6",

@@ -2,11 +2,11 @@ import "server-only";
 import type { Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 
+import { config } from "../config";
 import { getTypesenseClient } from "./client";
 import { aliasName } from "./collections";
-import type { StorageRegion } from "./regions";
 import { deleteByQuery } from "./ingest";
-import { config } from "../config";
+import type { StorageRegion } from "./regions";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -54,9 +54,7 @@ export interface MigrationResult {
  * NOTE: This is a "copy and verify" operation. The source collection is preserved.
  * Use `deleteFromSource` if you want to remove documents after migration.
  */
-export async function migrateCollection(
-	input: MigrateCollectionInput,
-): Promise<MigrationResult> {
+export async function migrateCollection(input: MigrateCollectionInput): Promise<MigrationResult> {
 	const { collectionName, sourceRegion, destRegion, filterBy, batchSize = 100 } = input;
 	const startTime = Date.now();
 

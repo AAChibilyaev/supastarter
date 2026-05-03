@@ -1,19 +1,23 @@
-import "server-only";
+import { DocumentPipeline, detectFileType } from "@repo/document-processor";
+import { bulkUpsert, generateEmbeddings } from "@repo/search";
 import { z } from "zod";
 
-import { DocumentPipeline, detectFileType } from "@repo/document-processor";
-
-import { authedProcedure } from "../../../lib/authed-procedure";
-import { generateEmbeddings, bulkUpsert } from "@repo/search";
+import { protectedProcedure } from "../../../orpc/procedures";
 
 /**
  * Process and index a document file.
  *
  * POST /indexing/documents/process-file
- * Body: { filename, content (base64), mimeType?, chunkStrategy?, embeddingModel?, collection? }
  */
-export const processDocumentFile = authedProcedure
-	.metadata({ resource: "documents", action: "create" })
+export const processDocumentFile = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/indexing/documents/process-file",
+		tags: ["Document Pipeline"],
+		summary: "Process and index a document file",
+		description:
+			"Accepts a base64-encoded file, runs it through the 5-stage pipeline (parse → chunk → embed → index), and returns indexing results.",
+	})
 	.input(
 		z.object({
 			filename: z.string().min(1).describe("Source filename with extension"),
@@ -27,10 +31,7 @@ export const processDocumentFile = authedProcedure
 				.string()
 				.default("text-embedding-3-small")
 				.describe("Embedding model name"),
-			collection: z
-				.string()
-				.default("documents")
-				.describe("Typesense collection name"),
+			collection: z.string().default("documents").describe("Typesense collection name"),
 		}),
 	)
 	.output(
@@ -43,9 +44,14 @@ export const processDocumentFile = authedProcedure
 			stage: z.string(),
 		}),
 	)
-	.mutation(async ({ ctx, input }) => {
+	.handler(async ({ input, context: { user } }) => {
 		const { filename, content, mimeType, chunkStrategy, embeddingModel, collection } = input;
-		const tenantId = ctx.organizationId;
+
+		// Get org ID from user context
+		const organizationId = (user as Record<string, unknown>).organizationId as string;
+		if (!organizationId) {
+			throw new Error("Organization ID required");
+		}
 
 		// Decode base64 content
 		const buffer = Buffer.from(content, "base64");
@@ -70,16 +76,16 @@ export const processDocumentFile = authedProcedure
 			}>,
 		) => {
 			const docs = documents.map((d, i) => ({
-				id: `${tenantId}:doc:${Buffer.from(d.text).toString("base64url").slice(0, 32)}:${i}`,
+				id: `${organizationId}:doc:${Buffer.from(d.text).toString("base64url").slice(0, 32)}:${i}`,
 				text: d.text,
 				embedding: d.embedding,
-				tenant_id: tenantId,
+				tenant_id: organizationId,
 				...d.metadata,
 			}));
 
 			const result = await bulkUpsert({
 				collection,
-				tenantId,
+				tenantId: organizationId,
 				documents: docs as Record<string, unknown>[],
 				action: "upsert",
 			});
@@ -91,7 +97,7 @@ export const processDocumentFile = authedProcedure
 			}));
 		};
 
-		const result = await pipeline.processFile(
+		const pipelineResult = await pipeline.processFile(
 			filename,
 			buffer,
 			mimeType,
@@ -101,10 +107,10 @@ export const processDocumentFile = authedProcedure
 		);
 
 		return {
-			documentId: result.id,
-			title: result.title,
-			chunkCount: result.chunks.length,
-			indexedCount: result.indexResults.filter((r) => r.success).length,
+			documentId: pipelineResult.id,
+			title: pipelineResult.title,
+			chunkCount: pipelineResult.chunks.length,
+			indexedCount: pipelineResult.indexResults.filter((r) => r.success).length,
 			fileType,
 			stage: "completed",
 		};
@@ -114,10 +120,16 @@ export const processDocumentFile = authedProcedure
  * Process and index documents from a URL (crawl).
  *
  * POST /indexing/documents/process-url
- * Body: { url, maxDepth?, maxPages?, chunkStrategy?, embeddingModel?, collection? }
  */
-export const processDocumentUrl = authedProcedure
-	.metadata({ resource: "documents", action: "create" })
+export const processDocumentUrl = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/indexing/documents/process-url",
+		tags: ["Document Pipeline"],
+		summary: "Crawl a URL and index discovered content",
+		description:
+			"Crawls a URL (respecting maxDepth/maxPages), parses each page, chunks, embeds, and indexes into Typesense.",
+	})
 	.input(
 		z.object({
 			url: z.string().url().describe("Starting URL to crawl"),
@@ -131,10 +143,7 @@ export const processDocumentUrl = authedProcedure
 				.string()
 				.default("text-embedding-3-small")
 				.describe("Embedding model name"),
-			collection: z
-				.string()
-				.default("documents")
-				.describe("Typesense collection name"),
+			collection: z.string().default("documents").describe("Typesense collection name"),
 		}),
 	)
 	.output(
@@ -152,9 +161,9 @@ export const processDocumentUrl = authedProcedure
 			),
 		}),
 	)
-	.mutation(async ({ ctx, input }) => {
+	.handler(async ({ input, context: { user } }) => {
 		const { url, maxDepth, maxPages, chunkStrategy, embeddingModel, collection } = input;
-		const tenantId = ctx.organizationId;
+		const organizationId = (user as Record<string, unknown>).organizationId as string;
 
 		const pipeline = new DocumentPipeline();
 
@@ -171,16 +180,16 @@ export const processDocumentUrl = authedProcedure
 			}>,
 		) => {
 			const docs = documents.map((d, i) => ({
-				id: `${tenantId}:url:${Buffer.from(d.text).toString("base64url").slice(0, 32)}:${i}`,
+				id: `${organizationId}:url:${Buffer.from(d.text).toString("base64url").slice(0, 32)}:${i}`,
 				text: d.text,
 				embedding: d.embedding,
-				tenant_id: tenantId,
+				tenant_id: organizationId,
 				...d.metadata,
 			}));
 
 			const result = await bulkUpsert({
 				collection,
-				tenantId,
+				tenantId: organizationId,
 				documents: docs as Record<string, unknown>[],
 				action: "upsert",
 			});
@@ -217,55 +226,18 @@ export const processDocumentUrl = authedProcedure
 	});
 
 /**
- * Get pipeline progress for a document.
- *
- * GET /indexing/documents/progress/:documentId
- */
-export const getDocumentProgress = authedProcedure
-	.metadata({ resource: "documents", action: "read" })
-	.input(
-		z.object({
-			documentId: z.string().describe("Document ID from process-file response"),
-		}),
-	)
-	.output(
-		z
-			.object({
-				documentId: z.string(),
-				sourceUri: z.string(),
-				stage: z.string(),
-				status: z.string(),
-				progress: z.number(),
-				message: z.string(),
-				error: z.string().optional(),
-			})
-			.nullable(),
-	)
-	.query(async ({ input }) => {
-		const pipeline = new DocumentPipeline();
-		const tracker = pipeline.getProgressTracker();
-		const progress = tracker.get(input.documentId);
-
-		if (!progress) return null;
-
-		return {
-			documentId: progress.documentId,
-			sourceUri: progress.sourceUri,
-			stage: progress.stage,
-			status: progress.status,
-			progress: progress.progress,
-			message: progress.message,
-			error: progress.error,
-		};
-	});
-
-/**
  * Get dead-letter queue status.
  *
  * GET /indexing/documents/dlq
  */
-export const getDeadLetterQueueStatus = authedProcedure
-	.metadata({ resource: "documents", action: "read" })
+export const getDeadLetterQueueStatus = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/indexing/documents/dlq",
+		tags: ["Document Pipeline"],
+		summary: "Get dead-letter queue status",
+		description: "Returns count of failed documents in the dead-letter queue.",
+	})
 	.input(z.object({}))
 	.output(
 		z.object({
@@ -274,7 +246,7 @@ export const getDeadLetterQueueStatus = authedProcedure
 			exhausted: z.number(),
 		}),
 	)
-	.query(async () => {
+	.handler(async () => {
 		const pipeline = new DocumentPipeline();
 		const dlq = pipeline.getDeadLetterQueue();
 		return dlq.count();
@@ -285,8 +257,13 @@ export const getDeadLetterQueueStatus = authedProcedure
  *
  * POST /indexing/documents/retry-failed
  */
-export const retryFailedDocuments = authedProcedure
-	.metadata({ resource: "documents", action: "update" })
+export const retryFailedDocuments = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/indexing/documents/retry-failed",
+		tags: ["Document Pipeline"],
+		summary: "Retry failed document pipeline jobs",
+	})
 	.input(
 		z.object({
 			embeddingModel: z.string().default("text-embedding-3-small"),
@@ -298,7 +275,7 @@ export const retryFailedDocuments = authedProcedure
 			retriedCount: z.number(),
 		}),
 	)
-	.mutation(async ({ input }) => {
+	.handler(async ({ input }) => {
 		const pipeline = new DocumentPipeline();
 
 		const embeddingFn = async (chunks: string[]) => {

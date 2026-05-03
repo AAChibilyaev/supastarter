@@ -157,6 +157,262 @@
 			"apps": "приложений"
 		}
 	},
+	"homeUseCases": {
+		"title": "Для кого AACsearch",
+		"subtitle": "Отраслевые сценарии с конкретными примерами того, что ищут пользователи.",
+		"items": {
+			"saas": {
+				"title": "SaaS-продукты",
+				"description": "Проекты, задачи, пользователи, отчёты, настройки, объекты домена — поиск по любой entity внутри приложения.",
+				"searchExamples": "заказ #1042, пользователь @ivanov, отчёт по выручке, настройки webhook, инвойс за март"
+			},
+			"docs": {
+				"title": "Документация / Developer portals",
+				"description": "API-методы, SDK-функции, коды ошибок, параметры, гайды по миграции, release notes.",
+				"searchExamples": "POST /collections, createIndex(), error 401, параметр apiKey, гайды по миграции v2→v3"
+			},
+			"ecommerce": {
+				"title": "E-commerce / Каталоги",
+				"description": "Товары, артикулы, бренды, категории, атрибуты, фасеты — faceted search с фильтрами под 50ms на 1M+ товаров.",
+				"searchExamples": "кроссовки Nike размер 42, iPhone 15 Pro, бренд Samsung в категории 'TV', товары в наличии до $500"
+			},
+			"internal": {
+				"title": "Internal tools / Knowledge base",
+				"description": "Документы, политики, инциденты, RFC, владельцы, runbooks — semantic + full-text гибрид.",
+				"searchExamples": "политика удалённой работы, инцидент INC-2024-04, playbook по CRITICAL, владелец сервиса billing"
+			},
+			"marketplace": {
+				"title": "Маркетплейсы",
+				"description": "Объявления, продавцы, категории, география, мультиязычность — тысячи арендаторов в одном кластере.",
+				"searchExamples": "квартиры в центре до 100k, продавец «TechStore», категория Electronics, товары с доставкой за 1 день"
+			}
+		}
+	},
+	"homeWhatUsersSearch": {
+		"title": "Что ищут ваши пользователи",
+		"subtitle": "Ответ на вопрос «подойдёт ли это моему кейсу» через то, что ваши пользователи реально печатают в строке поиска.",
+		"items": {
+			"entity": {
+				"title": "Точные сущности",
+				"description": "ID заказа, артикул товара, код ошибки, имя пользователя или документа. AACsearch находит точное совпадение быстрее Ctrl+F.",
+				"icon": "search"
+			},
+			"fuzzy": {
+				"title": "Нечёткие запросы",
+				"description": "Пользователи ошибаются в названиях, пишут транслитом или сокращают. Typo tolerance и prefix search исправляют до релевантного результата.",
+				"icon": "pencil"
+			},
+			"category": {
+				"title": "Навигация по категориям",
+				"description": "Faceted-фильтры: бренд + цена + наличие + размер. Multi-search по коллекциям за один round-trip.",
+				"icon": "filter"
+			},
+			"answer": {
+				"title": "Ответы на естественном языке",
+				"description": "Для docs и knowledge base — search-first, answer-augmented UX. Гибрид: список результатов + ответ ИИ с цитатами.",
+				"icon": "message-square"
+			},
+			"autocomplete": {
+				"title": "Автокомплит и предложения",
+				"description": "Показывайте релевантные подсказки с первых символов. Keyboard navigation, recent searches, pinned suggestions.",
+				"icon": "forward"
+			},
+			"noResults": {
+				"title": "Что делать при нуле результатов",
+				"description": "No-result recovery: предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит с пустыми руками.",
+				"icon": "search-x"
+			}
+		}
+	},
+	"homeSearchUX": {
+		"title": "Как выглядит хороший search UX",
+		"subtitle": "Не backend-фичи, а то, что видит пользователь. Autocomplete, typo tolerance, facets, highlighted matches — из коробки.",
+		"items": {
+			"autocomplete": {
+				"title": "Autocomplete + suggestions",
+				"description": "Подсказки с первых символов. Keyboard navigation, recent searches, pinned items."
+			},
+			"typo": {
+				"title": "Typo tolerance",
+				"description": "«Нокиа» найдёт Nokia. «кРософки» найдёт кроссовки. 1–2 опечатки на слово — допустимо по умолчанию."
+			},
+			"facets": {
+				"title": "Faceted filters",
+				"description": "Фильтры по бренду, цене, категории, наличию — с подсчётом количества результатов для каждой опции."
+			},
+			"highlight": {
+				"title": "Highlighted matches",
+				"description": "Совпадающие фрагменты подсвечиваются в результатах. Пользователь сразу видит, почему вернулся именно этот документ."
+			},
+			"grouped": {
+				"title": "Группировка результатов",
+				"description": "Multi-search по коллекциям: товары отдельно, статьи отдельно, заказы отдельно — всё в одном запросе."
+			},
+			"recovery": {
+				"title": "No-result recovery",
+				"description": "Пустой результат → предложения, похожие запросы, автоматическое расширение фильтров. Пользователь не уходит."
+			}
+		}
+	},
+	"homeRelevance": {
+		"title": "Релевантность и контроль выдачи",
+		"subtitle": "Быстрый поиск без контроля качества — не убедителен. Даём инструменты, чтобы вы настраивали релевантность под свой кейс.",
+		"ranking": {
+			"title": "Управление ранжированием",
+			"description": "Field weights, exact match boost, prefix vs partial match. Настройте, какие поля влияют на порядок выдачи."
+		},
+		"synonyms": {
+			"title": "Синонимы и стоп-слова",
+			"description": "«ноутбук» = «laptop», «кеды» = «кроссовки». Исключите незначащие слова из поиска."
+		},
+		"curations": {
+			"title": "Правила бизнеса",
+			"description": "Закрепите конкретные результаты вверх выдачи. Пин слабого товара или промо-акции — без переиндексации."
+		},
+		"personalization": {
+			"title": "Персонализация",
+			"description": "Scoped relevance по ролям, группам или арендаторам. Каждый tenant видит свою выдачу."
+		},
+		"abTesting": {
+			"title": "A/B-тестирование",
+			"description": "Сравните два набора правил релевантности на живом трафике. Метрики: CTR, zero-result rate, конверсия."
+		}
+	},
+	"homeAnalytics": {
+		"title": "Поисковая аналитика — улучшайте продукт с помощью данных",
+		"subtitle": "Search — это не «настроили и забыли». Аналитика показывает, что ищут, что не находят и как улучшить выдачу.",
+		"items": {
+			"topQueries": {
+				"title": "Top queries",
+				"description": "Самые частые запросы. Узнайте, что пользователи ищут больше всего, без опросов."
+			},
+			"noResults": {
+				"title": "Zero-result queries",
+				"description": "Запросы, которые ничего не нашли. Каждый — возможность добавить контент или настроить синоним."
+			},
+			"ctr": {
+				"title": "CTR по позиции",
+				"description": "Какой процент кликов получает первая позиция? Вторая? Где падает вовлечение?"
+			},
+			"filterUsage": {
+				"title": "Использование фильтров",
+				"description": "Какие фасеты популярны? Какие фильтры никто не трогает? Упростите UX на основе данных."
+			},
+			"conversion": {
+				"title": "Конверсия после поиска",
+				"description": "Сколько сессий после поиска привели к целевому действию — покупке, просмотру, отправке формы."
+			},
+			"quota": {
+				"title": "Потребление по ключам",
+				"description": "Per-key и per-tenant аналитика использования. Кто превышает лимиты, где аномалии."
+			}
+		}
+	},
+	"homeSecurity": {
+		"title": "Безопасность и multi-tenant архитектура",
+		"subtitle": "Поиск из браузера = токены, которые сужают права, а не расширяют. Изоляция арендаторов на каждом запросе.",
+		"items": {
+			"scopedTokens": {
+				"title": "Short-lived scoped-токены",
+				"description": "HMAC-подписанные токены привязаны к индексу, origin и TTL. Утечка токена — доступ только к одному индексу на час."
+			},
+			"tenantIsolation": {
+				"title": "Изоляция арендаторов",
+				"description": "Каждый поисковый запрос ограничен ID организации. Архитектурно невозможно прочитать данные другого tenant."
+			},
+			"originRestriction": {
+				"title": "Ограничение по источнику",
+				"description": "Привяжите каждый API-ключ к конкретным origin. Утёкший в консоль браузера ключ не сработает с другого домена."
+			},
+			"sso": {
+				"title": "SSO + Audit log",
+				"description": "SAML/OIDC для enterprise. Каждое административное действие записывается с меткой времени и исполнителем."
+			},
+			"compliance": {
+				"title": "Compliance и DPA",
+				"description": "SOC 2, шифрование в покое и транзите, выделенные регионы кластера. Подписанный DPA для GDPR/CCPA."
+			},
+			"sla": {
+				"title": "SLA 99.95%",
+				"description": "Договорная гарантия доступности. Incident response, резервное копирование, восстановление."
+			}
+		}
+	},
+	"homeQuickstart": {
+		"title": "Интеграция за 15 минут",
+		"subtitle": "Создайте индекс, загрузите документы, выпустите токен, выполните поиск. Всё.",
+		"steps": {
+			"create": {
+				"title": "1. Создайте индекс",
+				"code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
+			},
+			"index": {
+				"title": "2. Загрузите документы",
+				"code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Кроссовки Nike\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Кроссовки Adidas\", \"price\": 7500}\n]"
+			},
+			"token": {
+				"title": "3. Выпустите scoped-токен",
+				"code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
+			},
+			"search": {
+				"title": "4. Ищите из браузера",
+				"code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"кроссовки Nike\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
+			}
+		},
+		"cta": "Попробовать в Playground →"
+	},
+	"homeAiAnswers": {
+		"title": "AI-answers поверх поиска",
+		"subtitle": "Search-first, answer-augmented UX. Для документации, knowledge base и поддержки — ответы с цитатами, а не чёрный ящик.",
+		"items": {
+			"hybrid": {
+				"title": "Keyword + semantic hybrid",
+				"description": "Точность ключевых слов + семантическое понимание. Настраиваемые веса для каждого сценария."
+			},
+			"citedAnswers": {
+				"title": "Ответы с цитатами",
+				"description": "Вместо чёрного ящика — ответ ИИ со ссылками на источники. Пользователь видит, откуда взялся ответ."
+			},
+			"rag": {
+				"title": "RAG-ready pipeline",
+				"description": "Подключите AACsearch к вашему RAG-пайплайну. Векторные эмбеддинги генерируются автоматически."
+			},
+			"searchFirst": {
+				"title": "Search-first UX",
+				"description": "Сначала результаты, потом ответ. Пользователь может перейти к источнику или прочитать сгенерированный ответ."
+			}
+		}
+	},
+	"homeDocsEcosystem": {
+		"title": "SDK, API и ecosystem",
+		"subtitle": "TypeScript SDK, REST API, Next.js / React-компоненты, webhooks и OpenAPI-спецификация. Никакой магии — только документированные контракты.",
+		"items": {
+			"sdk": {
+				"title": "TypeScript SDK",
+				"description": "Типизированный browser SDK для React, Next.js, Vue и vanilla JS. Автокомплит типов в вашей IDE."
+			},
+			"rest": {
+				"title": "REST API",
+				"description": "OpenAPI-спецификация доступна для генерации клиентов. Все операции — через HTTP."
+			},
+			"webhooks": {
+				"title": "Webhooks",
+				"description": "События индексирования, ошибки синхронизации, превышение квоты — подпишитесь на изменения в реальном времени."
+			},
+			"frameworks": {
+				"title": "Next.js / React",
+				"description": "SearchProvider, UseSearch hook, готовые компоненты для React и Next.js App Router."
+			},
+			"migration": {
+				"title": "Миграция",
+				"description": "Zero-downtime reindex из коробки. Переходите с Algolia, Meilisearch или Elasticsearch — физический дамп индекса."
+			},
+			"playground": {
+				"title": "Playground",
+				"description": "Интерактивная консоль в дашборде. Пробуйте запросы, смотрите результаты, копируйте готовый код."
+			}
+		}
+	},
 	"notFound": {
 		"code": "404",
 		"title": "Страница не найдена",

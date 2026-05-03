@@ -1,9 +1,6 @@
 import { db } from "@repo/database";
-import {
-	AVAILABLE_REGIONS,
-	migrateOrganizationData,
-} from "@repo/search";
 import { logger } from "@repo/logs";
+import { AVAILABLE_REGIONS, migrateOrganizationData } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

@@ -1,12 +1,8 @@
 import { logger } from "@repo/logs";
 
-import type {
-	CrawlOptions,
-	ParsedDocument,
-	PipelineDocument,
-} from "./types";
-import { DEFAULT_CRAWL_OPTIONS } from "./types";
 import { parseUrl } from "./parsers/url";
+import type { CrawlOptions, ParsedDocument, PipelineDocument } from "./types";
+import { DEFAULT_CRAWL_OPTIONS } from "./types";
 
 /**
  * Recursive web crawler (Stage 1 of the 5-stage pipeline).
@@ -103,10 +99,7 @@ export async function crawlUrl(
 /**
  * Fetch and parse robots.txt for disallowed paths.
  */
-async function fetchRobotsTxt(
-	url: string,
-	userAgent: string,
-): Promise<Set<string> | null> {
+async function fetchRobotsTxt(url: string, userAgent: string): Promise<Set<string> | null> {
 	try {
 		const baseUrl = new URL(url);
 		const robotsUrl = `${baseUrl.origin}/robots.txt`;

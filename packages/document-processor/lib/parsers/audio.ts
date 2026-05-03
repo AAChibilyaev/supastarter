@@ -70,10 +70,11 @@ function transcribeAudio(audioPath: string): string {
 
 	// Strategy 2: whisper.cpp with different output mode
 	try {
-		const text = execSync(
-			`whisper-cli -f "${audioPath}" -otxt -nt 2>/dev/null`,
-			{ encoding: "utf-8", timeout: 300000, maxBuffer: 50 * 1024 * 1024 },
-		).trim();
+		const text = execSync(`whisper-cli -f "${audioPath}" -otxt -nt 2>/dev/null`, {
+			encoding: "utf-8",
+			timeout: 300000,
+			maxBuffer: 50 * 1024 * 1024,
+		}).trim();
 		if (text) return text;
 	} catch {
 		// fallthrough
@@ -107,10 +108,11 @@ except Exception as e:
 			`ffmpeg -y -i "${audioPath}" -ar 16000 -ac 1 -c:a pcm_s16le "${wavPath}" 2>/dev/null`,
 			{ timeout: 60000 },
 		);
-		const text = execSync(
-			`whisper-cli -f "${wavPath}" -otxt -nt 2>/dev/null`,
-			{ encoding: "utf-8", timeout: 300000, maxBuffer: 50 * 1024 * 1024 },
-		).trim();
+		const text = execSync(`whisper-cli -f "${wavPath}" -otxt -nt 2>/dev/null`, {
+			encoding: "utf-8",
+			timeout: 300000,
+			maxBuffer: 50 * 1024 * 1024,
+		}).trim();
 		try {
 			unlinkSync(wavPath);
 		} catch {
@@ -143,7 +145,7 @@ function getTranscriptionEngine(): string {
 		return "whisper.cpp";
 	} catch {
 		try {
-			execSync("python3 -c \"import whisper; print(whisper.__version__)\" 2>/dev/null", {
+			execSync('python3 -c "import whisper; print(whisper.__version__)" 2>/dev/null', {
 				timeout: 5000,
 			});
 			return "openai-whisper";

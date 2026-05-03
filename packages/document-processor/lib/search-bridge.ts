@@ -1,7 +1,7 @@
 import { logger } from "@repo/logs";
 
-import type { IndexedPipelineDocument } from "./types";
 import { DocumentPipeline } from "./pipeline";
+import type { IndexedPipelineDocument } from "./types";
 
 export type { DocumentPipeline } from "./pipeline";
 

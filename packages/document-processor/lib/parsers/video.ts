@@ -82,10 +82,9 @@ function extractEmbeddedSubtitles(videoPath: string): string {
 		const subOutPath = join(subtitlesDir, "subs.srt");
 
 		// Extract first subtitle stream to SRT
-		execSync(
-			`ffmpeg -y -i "${videoPath}" -map 0:s:0 "${subOutPath}" 2>/dev/null`,
-			{ timeout: 120000 },
-		);
+		execSync(`ffmpeg -y -i "${videoPath}" -map 0:s:0 "${subOutPath}" 2>/dev/null`, {
+			timeout: 120000,
+		});
 
 		// Parse SRT to plain text
 		try {
@@ -122,10 +121,11 @@ function extractAudioAndTranscribe(videoPath: string): string {
 
 		// Try whisper-cli first
 		try {
-			const text = execSync(
-				`whisper-cli -f "${audioPath}" -otxt -nt 2>/dev/null`,
-				{ encoding: "utf-8", timeout: 300000, maxBuffer: 50 * 1024 * 1024 },
-			).trim();
+			const text = execSync(`whisper-cli -f "${audioPath}" -otxt -nt 2>/dev/null`, {
+				encoding: "utf-8",
+				timeout: 300000,
+				maxBuffer: 50 * 1024 * 1024,
+			}).trim();
 			if (text) return text;
 		} catch {
 			// fallthrough
@@ -183,8 +183,12 @@ function extractVideoMetadata(videoPath: string): Record<string, unknown> {
 		);
 		const data = JSON.parse(probe);
 
-		const videoStream = data.streams?.find((s: { codec_type: string }) => s.codec_type === "video");
-		const audioStream = data.streams?.find((s: { codec_type: string }) => s.codec_type === "audio");
+		const videoStream = data.streams?.find(
+			(s: { codec_type: string }) => s.codec_type === "video",
+		);
+		const audioStream = data.streams?.find(
+			(s: { codec_type: string }) => s.codec_type === "audio",
+		);
 
 		return {
 			videoCodec: videoStream?.codec_name ?? null,

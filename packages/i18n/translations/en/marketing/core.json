@@ -153,7 +153,264 @@
 		"trustBadges": {
 			"g2": "on G2",
 			"capterra": "on Capterra",
-			"companies": "companies"
+			"companies": "companies",
+			"apps": "apps"
+		}
+	},
+	"homeUseCases": {
+		"title": "Who is AACsearch for",
+		"subtitle": "Industry-specific use cases with concrete examples of what users search for.",
+		"items": {
+			"saas": {
+				"title": "SaaS products",
+				"description": "Projects, tasks, users, reports, settings, domain objects — search across any entity inside your app.",
+				"searchExamples": "order #1042, user @ivanov, revenue report, webhook config, March invoice"
+			},
+			"docs": {
+				"title": "Docs / Developer portals",
+				"description": "API methods, SDK functions, error codes, parameters, migration guides, release notes.",
+				"searchExamples": "POST /collections, createIndex(), error 401, apiKey parameter, v2→v3 migration"
+			},
+			"ecommerce": {
+				"title": "E-commerce / Catalogs",
+				"description": "Products, SKUs, brands, categories, attributes, facets — faceted search with filters under 50ms on 1M+ products.",
+				"searchExamples": "Nike sneakers size 42, iPhone 15 Pro, Samsung brand in 'TV' category, in-stock items under $500"
+			},
+			"internal": {
+				"title": "Internal tools / Knowledge base",
+				"description": "Documents, policies, incidents, RFCs, owners, runbooks — semantic + full-text hybrid.",
+				"searchExamples": "remote work policy, incident INC-2024-04, CRITICAL playbook, billing service owner"
+			},
+			"marketplace": {
+				"title": "Marketplaces",
+				"description": "Listings, sellers, categories, geography, multilingual — thousands of tenants in one cluster.",
+				"searchExamples": "downtown apartments under $100k, seller 'TechStore', Electronics category, 1-day delivery items"
+			}
+		}
+	},
+	"homeWhatUsersSearch": {
+		"title": "What your users search for",
+		"subtitle": "Answering 'is this for my case' by showing what users actually type into the search box.",
+		"items": {
+			"entity": {
+				"title": "Exact entities",
+				"description": "Order ID, SKU, error code, username or document name. AACsearch finds exact matches faster than Ctrl+F.",
+				"icon": "search"
+			},
+			"fuzzy": {
+				"title": "Fuzzy queries",
+				"description": "Users misspell, use transliteration, or abbreviate. Typo tolerance and prefix search fix to relevant results.",
+				"icon": "pencil"
+			},
+			"category": {
+				"title": "Category navigation",
+				"description": "Faceted filters: brand + price + availability + size. Multi-search across collections in one round-trip.",
+				"icon": "filter"
+			},
+			"answer": {
+				"title": "Natural language answers",
+				"description": "For docs and knowledge base — search-first, answer-augmented UX. Hybrid: result list + AI answer with citations.",
+				"icon": "message-square"
+			},
+			"autocomplete": {
+				"title": "Autocomplete & suggestions",
+				"description": "Show relevant suggestions from the first character. Keyboard navigation, recent searches, pinned suggestions.",
+				"icon": "forward"
+			},
+			"noResults": {
+				"title": "Zero-result handling",
+				"description": "No-result recovery: suggestions, similar queries, automatic filter expansion. Users never leave empty-handed.",
+				"icon": "search-x"
+			}
+		}
+	},
+	"homeSearchUX": {
+		"title": "What good search UX looks like",
+		"subtitle": "Not backend features — what users actually see. Autocomplete, typo tolerance, facets, highlighted matches — out of the box.",
+		"items": {
+			"autocomplete": {
+				"title": "Autocomplete + suggestions",
+				"description": "Suggestions from the first character. Keyboard navigation, recent searches, pinned items."
+			},
+			"typo": {
+				"title": "Typo tolerance",
+				"description": "'Nokai' finds Nokia. 'sneekers' finds sneakers. 1–2 typos per word — accepted by default."
+			},
+			"facets": {
+				"title": "Faceted filters",
+				"description": "Filters by brand, price, category, availability — with result count for each option."
+			},
+			"highlight": {
+				"title": "Highlighted matches",
+				"description": "Matching fragments are highlighted in results. Users immediately see why this document was returned."
+			},
+			"grouped": {
+				"title": "Grouped results",
+				"description": "Multi-search across collections: products separately, articles separately, orders separately — all in one request."
+			},
+			"recovery": {
+				"title": "No-result recovery",
+				"description": "Empty result → suggestions, similar queries, automatic filter expansion. Users don't leave."
+			}
+		}
+	},
+	"homeRelevance": {
+		"title": "Relevance & ranking control",
+		"subtitle": "Fast search without quality control isn't compelling. We give you the tools to tune relevance for your use case.",
+		"ranking": {
+			"title": "Ranking management",
+			"description": "Field weights, exact match boost, prefix vs partial match. Configure which fields affect result ordering."
+		},
+		"synonyms": {
+			"title": "Synonyms & stop words",
+			"description": "'laptop' = 'notebook', 'sneakers' = 'trainers'. Exclude non-significant words from search."
+		},
+		"curations": {
+			"title": "Business rules",
+			"description": "Pin specific results to the top. Promotions or weak inventory boosting — without reindexing."
+		},
+		"personalization": {
+			"title": "Personalization",
+			"description": "Scoped relevance by roles, groups, or tenants. Each tenant sees their own results."
+		},
+		"abTesting": {
+			"title": "A/B testing",
+			"description": "Compare two sets of relevance rules on live traffic. Metrics: CTR, zero-result rate, conversion."
+		}
+	},
+	"homeAnalytics": {
+		"title": "Search analytics — improve your product with data",
+		"subtitle": "Search isn't 'set and forget'. Analytics shows what users search for, what they don't find, and how to improve results.",
+		"items": {
+			"topQueries": {
+				"title": "Top queries",
+				"description": "Most frequent searches. Know what users need most without surveys."
+			},
+			"noResults": {
+				"title": "Zero-result queries",
+				"description": "Queries that found nothing. Each one is an opportunity to add content or configure a synonym."
+			},
+			"ctr": {
+				"title": "CTR by position",
+				"description": "What percentage of clicks does position 1 get? Position 2? Where does engagement drop?"
+			},
+			"filterUsage": {
+				"title": "Filter usage",
+				"description": "Which facets are popular? Which filters go unused? Simplify UX based on data."
+			},
+			"conversion": {
+				"title": "Post-search conversion",
+				"description": "How many search sessions led to a target action — purchase, view, form submission."
+			},
+			"quota": {
+				"title": "Per-key consumption",
+				"description": "Per-key and per-tenant usage analytics. Who's exceeding limits, where are anomalies."
+			}
+		}
+	},
+	"homeSecurity": {
+		"title": "Security & multi-tenant architecture",
+		"subtitle": "Search from the browser = tokens that narrow permissions, not expand them. Tenant isolation on every query.",
+		"items": {
+			"scopedTokens": {
+				"title": "Short-lived scoped tokens",
+				"description": "HMAC-signed tokens bound to an index, origin, and TTL. A leaked token only accesses one index for one hour."
+			},
+			"tenantIsolation": {
+				"title": "Tenant isolation",
+				"description": "Every search query is scoped to your organization ID. Cross-tenant reads are architecturally impossible."
+			},
+			"originRestriction": {
+				"title": "Origin restriction",
+				"description": "Pin every API key to specific origins. A browser-console leaked key won't work from another domain."
+			},
+			"sso": {
+				"title": "SSO + Audit log",
+				"description": "SAML/OIDC for enterprise. Every administrative action is logged with timestamp and actor."
+			},
+			"compliance": {
+				"title": "Compliance & DPA",
+				"description": "SOC 2, encryption at rest and in transit, dedicated cluster regions. Signed DPA for GDPR/CCPA."
+			},
+			"sla": {
+				"title": "99.95% SLA",
+				"description": "Contractually guaranteed uptime. Incident response, backups, restore procedures."
+			}
+		}
+	},
+	"homeQuickstart": {
+		"title": "Integration in 15 minutes",
+		"subtitle": "Create an index, push documents, issue a token, run a search. That's it.",
+		"steps": {
+			"create": {
+				"title": "1. Create an index",
+				"code": "POST /collections\n{\n  \"name\": \"products\",\n  \"fields\": [\n    {\"name\": \"title\", \"type\": \"string\"},\n    {\"name\": \"price\", \"type\": \"float\"}\n  ]\n}"
+			},
+			"index": {
+				"title": "2. Push documents",
+				"code": "PUT /collections/products/documents\n[\n  {\"id\": \"1\", \"title\": \"Nike Sneakers\", \"price\": 8900},\n  {\"id\": \"2\", \"title\": \"Adidas Sneakers\", \"price\": 7500}\n]"
+			},
+			"token": {
+				"title": "3. Issue a scoped token",
+				"code": "POST /api-keys/scoped\n{\n  \"index\": \"products\",\n  \"origin\": \"https://myshop.com\",\n  \"ttl\": \"1h\"\n}\n→ ss_search_abc123... (expires in 1h)"
+			},
+			"search": {
+				"title": "4. Search from the browser",
+				"code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"Nike sneakers\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
+			}
+		},
+		"cta": "Try in Playground →"
+	},
+	"homeAiAnswers": {
+		"title": "AI answers on top of search",
+		"subtitle": "Search-first, answer-augmented UX. For docs, knowledge bases, and support — answers with citations, not a black box.",
+		"items": {
+			"hybrid": {
+				"title": "Keyword + semantic hybrid",
+				"description": "Keyword precision + semantic understanding. Configurable weights for each use case."
+			},
+			"citedAnswers": {
+				"title": "Answers with citations",
+				"description": "Instead of a black box — an AI answer with source links. Users see where the answer came from."
+			},
+			"rag": {
+				"title": "RAG-ready pipeline",
+				"description": "Plug AACsearch into your RAG pipeline. Vector embeddings are generated automatically during indexing."
+			},
+			"searchFirst": {
+				"title": "Search-first UX",
+				"description": "Results first, answer second. Users can navigate to the source or read the generated answer."
+			}
+		}
+	},
+	"homeDocsEcosystem": {
+		"title": "SDK, API & ecosystem",
+		"subtitle": "TypeScript SDK, REST API, Next.js/React components, webhooks, and OpenAPI spec. No magic — just documented contracts.",
+		"items": {
+			"sdk": {
+				"title": "TypeScript SDK",
+				"description": "Typed browser SDK for React, Next.js, Vue, and vanilla JS. Autocomplete types in your IDE."
+			},
+			"rest": {
+				"title": "REST API",
+				"description": "OpenAPI spec available for client generation. All operations over HTTP."
+			},
+			"webhooks": {
+				"title": "Webhooks",
+				"description": "Indexing events, sync errors, quota breaches — subscribe to real-time changes."
+			},
+			"frameworks": {
+				"title": "Next.js / React",
+				"description": "SearchProvider, UseSearch hook, ready-made components for React and Next.js App Router."
+			},
+			"migration": {
+				"title": "Migration",
+				"description": "Zero-downtime reindex out of the box. Migrate from Algolia, Meilisearch, or Elasticsearch — physical index dump."
+			},
+			"playground": {
+				"title": "Playground",
+				"description": "Interactive console in the dashboard. Try queries, see results, copy ready-to-use code."
+			}
 		}
 	},
 	"notFound": {

@@ -19,23 +19,25 @@ Enterprise customers need SCIM (System for Cross-domain Identity Management) to 
 
 ## 2. User Stories
 
-| ID | Story | Priority |
-|----|-------|----------|
-| US-1 | As an org admin, I want to connect my IdP (Okta, Azure AD, Google Workspace) via a guided wizard so that my users are automatically provisioned | P0 |
-| US-2 | As an org admin, I want to view current SCIM provisioning status (active/inactive, last sync) | P0 |
-| US-3 | As an org admin, I want to generate/copy a SCIM bearer token for my IdP configuration | P1 |
-| US-4 | As an org admin, I want to see SCIM sync audit logs (who was provisioned/deprovisioned, when) | P1 |
-| US-5 | As an org admin, I want to revoke a SCIM token if compromised | P1 |
-| US-6 | As an org admin, I want to test the SCIM connection before going live | P2 |
+| ID   | Story                                                                                                                                           | Priority |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| US-1 | As an org admin, I want to connect my IdP (Okta, Azure AD, Google Workspace) via a guided wizard so that my users are automatically provisioned | P0       |
+| US-2 | As an org admin, I want to view current SCIM provisioning status (active/inactive, last sync)                                                   | P0       |
+| US-3 | As an org admin, I want to generate/copy a SCIM bearer token for my IdP configuration                                                           | P1       |
+| US-4 | As an org admin, I want to see SCIM sync audit logs (who was provisioned/deprovisioned, when)                                                   | P1       |
+| US-5 | As an org admin, I want to revoke a SCIM token if compromised                                                                                   | P1       |
+| US-6 | As an org admin, I want to test the SCIM connection before going live                                                                           | P2       |
 
 ---
 
 ## 3. Pages & Routes
 
 ### 3.1 SCIM Overview Page
+
 **Route:** `/org/[slug]/settings/scim`
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Settings > SCIM Provisioning                        │
@@ -69,14 +71,17 @@ Enterprise customers need SCIM (System for Cross-domain Identity Management) to 
 ```
 
 **States:**
+
 - **Empty state (no connection):** Show "Connect Identity Provider" CTA button with large illustration
 - **Active state:** Full dashboard as shown above
 - **Error state:** Alert banner if token is invalid or IdP unreachable
 
 ### 3.2 IdP Connection Wizard
+
 **Route:** `/org/[slug]/settings/scim/connect`
 
 **Step 1 — Select IdP:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Select your identity provider                      │
@@ -92,6 +97,7 @@ Enterprise customers need SCIM (System for Cross-domain Identity Management) to 
 ```
 
 **Step 2 — Configure:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Configure Okta Connection                          │
@@ -118,6 +124,7 @@ Enterprise customers need SCIM (System for Cross-domain Identity Management) to 
 ```
 
 **Step 3 — Test Connection:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │  Test SCIM Connection                               │
@@ -135,15 +142,18 @@ Enterprise customers need SCIM (System for Cross-domain Identity Management) to 
 ```
 
 ### 3.3 SCIM Audit Logs
+
 **Route:** `/org/[slug]/settings/scim/logs`
 
 **Table view:**
+
 - Columns: Timestamp, Action (Created/Updated/Deactivated), User, Email, Source (Okta/Azure AD/manual)
 - Filters: Date range, Action type, Source
 - Pagination (20 per page)
 - Export to CSV option
 
 ### 3.4 Empty State / Disconnected
+
 **Route:** `/org/[slug]/settings/scim` (when no IdP connected)
 
 ```
@@ -178,30 +188,30 @@ model ScimConfiguration {
   id              String   @id @default(cuid())
   organizationId  String
   organization    Organization @relation(fields: [organizationId], references: [id])
-  
+
   // IdP connection
   provider        String   // "okta" | "azure_ad" | "google_workspace" | "onelogin" | "keycloak" | "generic"
   displayName     String?  // Friendly name like "Acme Corp Okta"
   isActive        Boolean  @default(false)
-  
+
   // Authentication
   bearerToken     String   // Hashed (like SearchApiKey — show once)
   tokenPrefix     String   // First 8 chars for identification
   tokenCreatedAt  DateTime @default(now())
   tokenLastUsedAt DateTime?
-  
+
   // Sync status
   lastSyncAt      DateTime?
   lastSyncStatus  String?  // "success" | "error" | "in_progress"
   lastSyncError   String?
   usersProvisioned Int     @default(0)
-  
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   // Relations
   auditLogs       ScimAuditLog[]
-  
+
   @@unique([organizationId, provider])
 }
 
@@ -210,7 +220,7 @@ model ScimAuditLog {
   scimConfigId    String
   scimConfig      ScimConfiguration @relation(fields: [scimConfigId], references: [id])
   organizationId  String
-  
+
   action          String   // "user_created" | "user_updated" | "user_deactivated" | "group_created" | "group_synced"
   scimResourceType String  // "User" | "Group"
   scimResourceId  String   // The id in our system
@@ -219,9 +229,9 @@ model ScimAuditLog {
   detail          String?  // Additional context
   success         Boolean  @default(true)
   errorMessage    String?
-  
+
   createdAt       DateTime @default(now())
-  
+
   @@index([scimConfigId, createdAt])
   @@index([organizationId, createdAt])
 }
@@ -231,38 +241,38 @@ model ScimAuditLog {
 
 ## 5. API Endpoints (New)
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| `GET` | `/api/scim/config/:orgId` | Get current SCIM configuration |
-| `POST` | `/api/scim/config/:orgId` | Save SCIM configuration (provider, token) |
-| `DELETE` | `/api/scim/config/:orgId` | Disconnect SCIM (delete config, revoke token) |
-| `POST` | `/api/scim/config/:orgId/regenerate-token` | Generate new bearer token |
-| `POST` | `/api/scim/config/:orgId/test` | Test SCIM connection against the IdP |
-| `GET` | `/api/scim/config/:orgId/logs` | Paginated audit logs |
-| `GET` | `/api/scim/config/:orgId/logs/export` | CSV export of audit logs |
+| Method   | Path                                       | Purpose                                       |
+| -------- | ------------------------------------------ | --------------------------------------------- |
+| `GET`    | `/api/scim/config/:orgId`                  | Get current SCIM configuration                |
+| `POST`   | `/api/scim/config/:orgId`                  | Save SCIM configuration (provider, token)     |
+| `DELETE` | `/api/scim/config/:orgId`                  | Disconnect SCIM (delete config, revoke token) |
+| `POST`   | `/api/scim/config/:orgId/regenerate-token` | Generate new bearer token                     |
+| `POST`   | `/api/scim/config/:orgId/test`             | Test SCIM connection against the IdP          |
+| `GET`    | `/api/scim/config/:orgId/logs`             | Paginated audit logs                          |
+| `GET`    | `/api/scim/config/:orgId/logs/export`      | CSV export of audit logs                      |
 
 ---
 
 ## 6. File Implementation Plan
 
-| File | Purpose |
-|------|---------|
-| `packages/database/prisma/migrations/xxx_scim_config.ts` | Prisma schema migration |
-| `packages/api/modules/scim-config/router.ts` | SCIM config management API |
-| `packages/api/modules/scim-config/procedures/*.ts` | oRPC procedures for CRUD |
-| `apps/saas/modules/settings/components/scim/ScimOverview.tsx` | Main SCIM settings page |
-| `apps/saas/modules/settings/components/scim/ScimWizard.tsx` | IdP connection wizard |
-| `apps/saas/modules/settings/components/scim/ScimWizardStepIdp.tsx` | Step 1: IdP selector |
-| `apps/saas/modules/settings/components/scim/ScimWizardStepConfig.tsx` | Step 2: Configuration |
-| `apps/saas/modules/settings/components/scim/ScimWizardStepTest.tsx` | Step 3: Test connection |
-| `apps/saas/modules/settings/components/scim/ScimStatusCard.tsx` | Status card |
-| `apps/saas/modules/settings/components/scim/ScimEndpointCard.tsx` | SCIM URL + token card |
-| `apps/saas/modules/settings/components/scim/ScimAuditTable.tsx` | Audit log table |
-| `apps/saas/modules/settings/components/scim/ScimEmptyState.tsx` | Empty/disconnected state |
-| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/page.tsx` | Page route |
-| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/connect/page.tsx` | Wizard route |
-| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/logs/page.tsx` | Logs route |
-| `packages/i18n/translations/*/saas.json` | i18n: `settings.scim.*` keys |
+| File                                                                   | Purpose                      |
+| ---------------------------------------------------------------------- | ---------------------------- |
+| `packages/database/prisma/migrations/xxx_scim_config.ts`               | Prisma schema migration      |
+| `packages/api/modules/scim-config/router.ts`                           | SCIM config management API   |
+| `packages/api/modules/scim-config/procedures/*.ts`                     | oRPC procedures for CRUD     |
+| `apps/saas/modules/settings/components/scim/ScimOverview.tsx`          | Main SCIM settings page      |
+| `apps/saas/modules/settings/components/scim/ScimWizard.tsx`            | IdP connection wizard        |
+| `apps/saas/modules/settings/components/scim/ScimWizardStepIdp.tsx`     | Step 1: IdP selector         |
+| `apps/saas/modules/settings/components/scim/ScimWizardStepConfig.tsx`  | Step 2: Configuration        |
+| `apps/saas/modules/settings/components/scim/ScimWizardStepTest.tsx`    | Step 3: Test connection      |
+| `apps/saas/modules/settings/components/scim/ScimStatusCard.tsx`        | Status card                  |
+| `apps/saas/modules/settings/components/scim/ScimEndpointCard.tsx`      | SCIM URL + token card        |
+| `apps/saas/modules/settings/components/scim/ScimAuditTable.tsx`        | Audit log table              |
+| `apps/saas/modules/settings/components/scim/ScimEmptyState.tsx`        | Empty/disconnected state     |
+| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/page.tsx`         | Page route                   |
+| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/connect/page.tsx` | Wizard route                 |
+| `apps/saas/app/\[locale\]/org/\[slug\]/settings/scim/logs/page.tsx`    | Logs route                   |
+| `packages/i18n/translations/*/saas.json`                               | i18n: `settings.scim.*` keys |
 
 ---
 

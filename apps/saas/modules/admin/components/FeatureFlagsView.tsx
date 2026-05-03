@@ -56,13 +56,7 @@ function formatAuditValue(action: string, field: string | null, value: string | 
 
 // ─── Audit Log Dialog ────────────────────────────────────────────
 
-function AuditLogDialog({
-	flagId,
-	flagKey,
-}: {
-	flagId: string;
-	flagKey: string;
-}) {
+function AuditLogDialog({ flagId, flagKey }: { flagId: string; flagKey: string }) {
 	const t = useTranslations("admin.featureFlags");
 	const [open, setOpen] = useState(false);
 
@@ -91,11 +85,11 @@ function AuditLogDialog({
 				</DialogHeader>
 
 				{isLoading ? (
-					<div className="py-8 text-center text-sm text-foreground/60">
+					<div className="py-8 text-sm text-center text-foreground/60">
 						{t("loading")}
 					</div>
 				) : !data || data.entries.length === 0 ? (
-					<div className="py-8 text-center text-sm text-foreground/60">
+					<div className="py-8 text-sm text-center text-foreground/60">
 						{t("auditLogEmpty")}
 					</div>
 				) : (
@@ -103,9 +97,9 @@ function AuditLogDialog({
 						{data.entries.map((entry) => (
 							<div
 								key={entry.id}
-								className="p-3 flex flex-col gap-1.5 rounded-lg border text-sm"
+								className="p-3 gap-1.5 text-sm flex flex-col rounded-lg border"
 							>
-								<div className="flex items-center gap-2">
+								<div className="gap-2 flex items-center">
 									<Badge
 										variant={
 											(AUDIT_ACTION_COLORS[entry.action] as
@@ -120,7 +114,7 @@ function AuditLogDialog({
 										{new Date(entry.createdAt).toLocaleString()}
 									</span>
 									{entry.organizationId && (
-										<span className="text-xs text-foreground/40 ml-auto font-mono">
+										<span className="text-xs font-mono ml-auto text-foreground/40">
 											org: {entry.organizationId.slice(0, 8)}…
 										</span>
 									)}
@@ -129,11 +123,19 @@ function AuditLogDialog({
 								{entry.field && (
 									<div className="text-xs text-foreground/70">
 										<span className="font-medium">{entry.field}:</span>{" "}
-										{formatAuditValue(entry.action, entry.field, entry.oldValue)}
+										{formatAuditValue(
+											entry.action,
+											entry.field,
+											entry.oldValue,
+										)}
 										{entry.newValue !== null && (
 											<>
 												{" → "}
-												{formatAuditValue(entry.action, entry.field, entry.newValue)}
+												{formatAuditValue(
+													entry.action,
+													entry.field,
+													entry.newValue,
+												)}
 											</>
 										)}
 									</div>

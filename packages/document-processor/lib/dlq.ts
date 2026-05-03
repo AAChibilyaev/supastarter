@@ -1,4 +1,11 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from "node:fs";
+import {
+	appendFileSync,
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	writeFileSync,
+	unlinkSync,
+} from "node:fs";
 import { join } from "node:path";
 
 import { logger } from "@repo/logs";
@@ -27,11 +34,7 @@ export class DeadLetterQueue {
 	/**
 	 * Push a failed document to the dead-letter queue.
 	 */
-	push(
-		document: PipelineDocument,
-		failedStage: PipelineStage,
-		error: Error,
-	): DeadLetterRecord {
+	push(document: PipelineDocument, failedStage: PipelineStage, error: Error): DeadLetterRecord {
 		const backoffHours = this.calculateBackoffHours(0);
 		const record: DeadLetterRecord = {
 			id: `${document.id}-${Date.now()}`,

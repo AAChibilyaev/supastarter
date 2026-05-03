@@ -33,7 +33,10 @@ import type {
 } from "./types";
 import { DEFAULT_PIPELINE_CONFIG, detectFileType } from "./types";
 
-type ParserFn = (content: Buffer | string, filename: string) => Promise<{
+type ParserFn = (
+	content: Buffer | string,
+	filename: string,
+) => Promise<{
 	title: string;
 	content: string;
 	mimeType: string;
@@ -99,7 +102,13 @@ export class DocumentPipeline {
 		mimeType?: string,
 		chunkOptions?: Partial<ChunkerOptions>,
 		embeddingFn?: (chunks: string[]) => Promise<number[][]>,
-		indexFn?: (documents: Array<{ text: string; embedding?: number[]; metadata: Record<string, unknown> }>) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
+		indexFn?: (
+			documents: Array<{
+				text: string;
+				embedding?: number[];
+				metadata: Record<string, unknown>;
+			}>,
+		) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
 	): Promise<IndexedPipelineDocument> {
 		const documentId = randomUUID();
 		const sourceUri = filename;
@@ -164,7 +173,13 @@ export class DocumentPipeline {
 		crawlOptions?: Partial<CrawlOptions>,
 		chunkOptions?: Partial<ChunkerOptions>,
 		embeddingFn?: (chunks: string[]) => Promise<number[][]>,
-		indexFn?: (documents: Array<{ text: string; embedding?: number[]; metadata: Record<string, unknown> }>) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
+		indexFn?: (
+			documents: Array<{
+				text: string;
+				embedding?: number[];
+				metadata: Record<string, unknown>;
+			}>,
+		) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
 	): Promise<IndexedPipelineDocument[]> {
 		const results: IndexedPipelineDocument[] = [];
 
@@ -218,7 +233,13 @@ export class DocumentPipeline {
 	 */
 	async retryFailed(
 		embeddingFn?: (chunks: string[]) => Promise<number[][]>,
-		indexFn?: (documents: Array<{ text: string; embedding?: number[]; metadata: Record<string, unknown> }>) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
+		indexFn?: (
+			documents: Array<{
+				text: string;
+				embedding?: number[];
+				metadata: Record<string, unknown>;
+			}>,
+		) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
 	): Promise<number> {
 		const records = this.dlq.popReadyForRetry();
 		let successCount = 0;
@@ -252,12 +273,21 @@ export class DocumentPipeline {
 
 	// ─── Stage 1: Crawl ───────────────────────────────────────────
 
-	private async stageCrawl(url: string, options?: Partial<CrawlOptions>): Promise<PipelineDocument[]> {
+	private async stageCrawl(
+		url: string,
+		options?: Partial<CrawlOptions>,
+	): Promise<PipelineDocument[]> {
 		this.progress.update("global", "crawl", "in_progress", 10, `Crawling ${url}`);
 
 		const documents = await crawlUrl(url, options);
 
-		this.progress.update("global", "crawl", "completed", 100, `Crawled ${documents.length} pages`);
+		this.progress.update(
+			"global",
+			"crawl",
+			"completed",
+			100,
+			`Crawled ${documents.length} pages`,
+		);
 
 		return documents;
 	}
@@ -360,7 +390,13 @@ export class DocumentPipeline {
 
 	private async stageIndex(
 		doc: EmbeddedPipelineDocument,
-		indexFn: (documents: Array<{ text: string; embedding?: number[]; metadata: Record<string, unknown> }>) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
+		indexFn: (
+			documents: Array<{
+				text: string;
+				embedding?: number[];
+				metadata: Record<string, unknown>;
+			}>,
+		) => Promise<Array<{ chunkIndex: number; indexedId: string; success: boolean }>>,
 	): Promise<IndexedPipelineDocument> {
 		this.progress.update(doc.id, "index", "in_progress", 90, "Indexing chunks");
 

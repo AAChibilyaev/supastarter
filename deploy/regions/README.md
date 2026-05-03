@@ -181,8 +181,8 @@ invalidation on document upsert.
 2. Create `docker-compose.yml` (override file)
 3. Create `.env.<code>` with region-specific config
 4. Add the region to `packages/search/lib/regions.ts`:
-   - Add region code to `StorageRegion` type
-   - Add entry to `AVAILABLE_REGIONS` array
+    - Add region code to `StorageRegion` type
+    - Add entry to `AVAILABLE_REGIONS` array
 5. Add i18n labels in all 5 locales (`packages/i18n/translations/{en,de,es,fr,ru}/shared.json`)
 6. Update this README
 7. Add region-specific env vars to `.env.local.example`

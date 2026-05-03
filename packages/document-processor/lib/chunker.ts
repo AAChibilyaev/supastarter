@@ -20,10 +20,7 @@ export interface ChunkTextResult {
 /**
  * Main entry: chunk text using the configured strategy.
  */
-export function chunkText(
-	text: string,
-	options: Partial<ChunkerOptions> = {},
-): ChunkTextResult {
+export function chunkText(text: string, options: Partial<ChunkerOptions> = {}): ChunkTextResult {
 	const opts = { ...DEFAULT_CHUNKER_OPTIONS, ...options };
 
 	if (!text || text.trim().length === 0) {
@@ -201,7 +198,11 @@ function isSemanticBoundary(current: string, previous: string): boolean {
 	if (/^[A-Z][A-Z\s]{3,}$/.test(current.trim())) return true;
 
 	// Transitional phrases
-	if (/\b(however|therefore|meanwhile|in conclusion|firstly|secondly|finally|in addition|moreover|furthermore|consequently|nevertheless|on the other hand|in contrast|specifically|for example|as a result)\b/i.test(current)) {
+	if (
+		/\b(however|therefore|meanwhile|in conclusion|firstly|secondly|finally|in addition|moreover|furthermore|consequently|nevertheless|on the other hand|in contrast|specifically|for example|as a result)\b/i.test(
+			current,
+		)
+	) {
 		return true;
 	}
 
@@ -456,19 +457,10 @@ function splitCodeByFunction(code: string, language: string): string[] {
 			break;
 		case "python":
 		case "py":
-			patterns = [
-				/^def\s+\w+/m,
-				/^class\s+\w+/m,
-				/^async\s+def\s+\w+/m,
-				/@\w+/m,
-			];
+			patterns = [/^def\s+\w+/m, /^class\s+\w+/m, /^async\s+def\s+\w+/m, /@\w+/m];
 			break;
 		case "go":
-			patterns = [
-				/^func\s+\w+/m,
-				/^type\s+\w+\s+struct/m,
-				/^type\s+\w+\s+interface/m,
-			];
+			patterns = [/^func\s+\w+/m, /^type\s+\w+\s+struct/m, /^type\s+\w+\s+interface/m];
 			break;
 		case "rust":
 		case "rs":

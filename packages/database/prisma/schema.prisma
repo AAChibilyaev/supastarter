@@ -891,7 +891,31 @@ model NpsSurveyResponse {
   @@map("nps_survey_response")
 }
 
-// ─── Feature Flags ──────────────────────────────────────────────
+// Audit log for tracking user actions across the platform.
+// Used by the audit-log API module for per-organization action tracking.
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  action         String   // e.g. "create_index", "update_rules", "add_member"
+  targetType     String?  // e.g. "index", "api_key", "member"
+  targetId       String?
+  details        Json?    // Flexible payload with action-specific context
+  ipAddress      String?
+  userAgent      String?
+
+  createdAt DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_log")
+}
+
 // Internal feature flag system for gradual rollout (AAC-176 EPIC).
 // Flags are global; overrides are per-organization.
 

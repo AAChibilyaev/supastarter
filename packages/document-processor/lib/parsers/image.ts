@@ -54,10 +54,10 @@ export async function parseImage(
 		}
 
 		const finalText = usedPsm6
-			? execSync(
-					`tesseract "${tmpPath}" stdout --oem 1 --psm 6 -l ${language} 2>/dev/null`,
-					{ encoding: "utf-8", timeout: 60000 },
-				).trim()
+			? execSync(`tesseract "${tmpPath}" stdout --oem 1 --psm 6 -l ${language} 2>/dev/null`, {
+					encoding: "utf-8",
+					timeout: 60000,
+				}).trim()
 			: text;
 
 		return {

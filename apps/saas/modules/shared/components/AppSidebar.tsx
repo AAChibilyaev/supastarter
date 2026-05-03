@@ -257,6 +257,10 @@ export function AppSidebar() {
 									label: t("search.nav.relevanceSpell"),
 									href: `${basePath}/relevance?tab=spell`,
 								},
+								{
+									label: t("search.nav.relevanceQualityScore"),
+									href: `${basePath}/relevance?tab=qualityScore`,
+								},
 							],
 						},
 						{

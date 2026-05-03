@@ -2,7 +2,6 @@ import { cancelReindex } from "./procedures/cancel-reindex";
 import { deltaSync } from "./procedures/delta-sync";
 import {
 	getDeadLetterQueueStatus,
-	getDocumentProgress,
 	processDocumentFile,
 	processDocumentUrl,
 	retryFailedDocuments,
@@ -27,7 +26,6 @@ export const indexingRouter = {
 	documents: {
 		processFile: processDocumentFile,
 		processUrl: processDocumentUrl,
-		progress: getDocumentProgress,
 		dlq: getDeadLetterQueueStatus,
 		retryFailed: retryFailedDocuments,
 	},

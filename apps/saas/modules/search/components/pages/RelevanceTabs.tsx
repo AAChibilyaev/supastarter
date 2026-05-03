@@ -14,11 +14,11 @@ import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
 import { CounterRulesPanel } from "../panels/CounterRulesPanel";
-import { SearchQualityScorePanel } from "../panels/SearchQualityScorePanel";
 import { CurationsPanel } from "../panels/CurationsPanel";
 import { NoHitsQueriesRulesPanel } from "../panels/NoHitsQueriesRulesPanel";
 import { QueryRulesPanel } from "../panels/QueryRulesPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
+import { SearchQualityScorePanel } from "../panels/SearchQualityScorePanel";
 import { SpellCorrectionPanel } from "../panels/SpellCorrectionPanel";
 import { StemmingPanel } from "../panels/StemmingPanel";
 import { StopwordsPanel } from "../panels/StopwordsPanel";

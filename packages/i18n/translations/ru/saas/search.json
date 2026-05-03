@@ -221,7 +221,6 @@
 			"exportSuccess": "Отчёт скачан!",
 			"exportNoData": "Нет данных",
 			"dateColumn": "Дата",
-			"productColumn": "Товар",
 			"tabCTR": "CTR",
 			"ctrDashboard": "CTR Dashboard",
 			"ctrDashboardDescription": "Click-through rate per query, position, and index.",
@@ -575,7 +574,8 @@
 			"collections": "Коллекции",
 			"collectionsGrid": "Сетка",
 			"collectionsDocuments": "Документы",
-			"jobs": "Задачи"
+			"jobs": "Задачи",
+			"relevanceQualityScore": "Качество поиска"
 		},
 		"recommendations": {
 			"description": "Настройте рекомендации товаров на основе ИИ, включая похожие товары, персонализированные предложения и GraphRAG.",
@@ -1903,6 +1903,42 @@
 			"unknown": "Неизвестно",
 			"activatedDescription": "Ваше рабочее пространство полностью настроено и активно.",
 			"notActivatedDescription": "Завершите шаги настройки, чтобы активировать рабочее пространство."
+		},
+		"qualityScore": {
+			"tab": "Качество поиска",
+			"title": "Оценка качества поиска",
+			"subtitle": "Состояние релевантности за последние {days} дней",
+			"period7d": "7 дней",
+			"period30d": "30 дней",
+			"totalSearches": "Всего поисков",
+			"zeroResultRate": "Доля нулевых результатов",
+			"ctr": "CTR",
+			"latencyP99": "P99 задержка",
+			"healthBreakdown": "Разбивка оценки",
+			"factorZeroResults": "Нулевые результаты",
+			"factorCTR": "Рейтинг кликов",
+			"factorLatency": "Задержка",
+			"ctrTrend": "Тренд CTR",
+			"indexBreakdown": "CTR по индексам",
+			"indexBreakdownDesc": "Производительность кликов по каждому индексу",
+			"searches": "Поиски",
+			"clicks": "Клики",
+			"suggestions": "Рекомендации по улучшению",
+			"topZeroResults": "Топ запросов без результатов",
+			"noData": "Нет данных о качестве поиска",
+			"noDataDescription": "Собирайте данные аналитики, выполняя поисковые запросы, чтобы увидеть метрики качества.",
+			"excellent": "Отлично",
+			"good": "Хорошо",
+			"fair": "Удовлетворительно",
+			"poor": "Плохо",
+			"suggest": {
+				"synonyms": "Добавить синонимы",
+				"synonymsDesc": "Сократите запросы без результатов с помощью наборов синонимов",
+				"curations": "Настроить курации",
+				"curationsDesc": "Улучшите CTR, закрепив популярные результаты",
+				"ranking": "Настроить ранжирование",
+				"rankingDesc": "Оптимизируйте веса полей и допуск опечаток"
+			}
 		}
 	},
 	"export": {
@@ -1917,13 +1953,12 @@
 	},
 	"abTest": {
 		"title": "A/B-тесты",
-		"description": "Запускайте A/B-эксперименты над конфигурацией поиска.",
+		"description": "Описание",
 		"createNew": "Новый A/B-тест",
 		"createTitle": "Создать A/B-тест",
 		"createDescription": "Настройте новый A/B-тест для сравнения конфигураций поиска.",
 		"testName": "Название теста",
 		"testNamePlaceholder": "например, Ранжирование поиска товаров v2",
-		"description": "Описание",
 		"descriptionPlaceholder": "Что вы тестируете?",
 		"configBQueryBy": "Config B — query_by",
 		"queryByPlaceholder": "e.g. title,description,tags",

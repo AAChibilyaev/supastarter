@@ -89,7 +89,9 @@ export default async function MarketingLayout({
 			suppressHydrationWarning
 			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
 		>
-			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
+			<body
+				className={cn("min-h-dvh min-h-screen bg-background text-foreground antialiased")}
+			>
 				<OrganizationSchema locale={locale} />
 				<WebSiteSchema locale={locale} />
 				<ConsentProvider initialConsent={consentCookie?.value === "true"}>
@@ -98,7 +100,7 @@ export default async function MarketingLayout({
 							<MarketingThemeProvider defaultTheme={config.defaultTheme}>
 								<NavBar />
 
-								<main className="min-h-screen">{children}</main>
+								<main className="min-h-dvh min-h-screen">{children}</main>
 
 								<Footer />
 

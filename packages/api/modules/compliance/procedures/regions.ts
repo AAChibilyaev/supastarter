@@ -1,10 +1,10 @@
 import { db } from "@repo/database";
 import { checkAllRegionsHealth, type RegionHealthResult } from "@repo/search";
+import { AVAILABLE_REGIONS, DEFAULT_REGION, isValidRegion } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../../search/lib/access";
-import { AVAILABLE_REGIONS, DEFAULT_REGION, isValidRegion } from "@repo/search";
 
 // ── Constants ─────────────────────────────────────────────────────
 
@@ -47,8 +47,7 @@ function getRegionInfo(region: string) {
 function readStorageRegion(rawMetadata: string | null): OrgRegionResponse {
 	const metadata = parseOrgMetadata(rawMetadata);
 	const stored = metadata[STORAGE_REGION_META_KEY];
-	const region =
-		typeof stored === "string" && isValidRegion(stored) ? stored : DEFAULT_REGION;
+	const region = typeof stored === "string" && isValidRegion(stored) ? stored : DEFAULT_REGION;
 
 	const info = getRegionInfo(region);
 	return {

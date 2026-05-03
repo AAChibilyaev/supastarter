@@ -221,8 +221,6 @@
 			"exportSuccess": "Report downloaded!",
 			"exportNoData": "No data",
 			"dateColumn": "Date",
-			"productColumn": "Product",
-
 			"tabCTR": "CTR",
 			"ctrDashboard": "CTR Dashboard",
 			"ctrDashboardDescription": "Click-through rate per query, position, and index.",
@@ -592,7 +590,8 @@
 			"collectionsGrid": "Grid",
 			"collectionsDocuments": "Documents",
 			"jobs": "Jobs",
-			"indexHealth": "Index Health"
+			"indexHealth": "Index Health",
+			"relevanceQualityScore": "Search Quality"
 		},
 		"recommendations": {
 			"description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
@@ -1231,7 +1230,7 @@
 			"ingestError": "Failed to ingest file",
 			"answerError": "Failed to generate answer",
 			"askStreamButton": "Ask (Stream)",
-			"streaming": "Streaming\u2026",
+			"streaming": "Streaming…",
 			"stop": "Stop",
 			"sourceDeleted": "Source deleted",
 			"sourceDeleteError": "Failed to delete source",
@@ -1907,6 +1906,42 @@
 			"requests": "Requests",
 			"pendingWrites": "Pending Writes",
 			"apiStats": "API Statistics"
+		},
+		"qualityScore": {
+			"tab": "Search Quality",
+			"title": "Search Quality Score",
+			"subtitle": "Relevance health over the past {days} days",
+			"period7d": "7 days",
+			"period30d": "30 days",
+			"totalSearches": "Total Searches",
+			"zeroResultRate": "Zero-result Rate",
+			"ctr": "CTR",
+			"latencyP99": "P99 Latency",
+			"healthBreakdown": "Score Breakdown",
+			"factorZeroResults": "Zero Results",
+			"factorCTR": "Click-through Rate",
+			"factorLatency": "Latency",
+			"ctrTrend": "CTR Trend",
+			"indexBreakdown": "Index-level CTR",
+			"indexBreakdownDesc": "Per-index click-through rate performance",
+			"searches": "Searches",
+			"clicks": "Clicks",
+			"suggestions": "Improvement Suggestions",
+			"topZeroResults": "Top Zero-result Queries",
+			"noData": "No search quality data yet",
+			"noDataDescription": "Collect analytics data by running searches to see quality metrics.",
+			"excellent": "Excellent",
+			"good": "Good",
+			"fair": "Fair",
+			"poor": "Poor",
+			"suggest": {
+				"synonyms": "Add Synonyms",
+				"synonymsDesc": "Reduce zero-result queries with synonym sets",
+				"curations": "Adjust Curations",
+				"curationsDesc": "Improve CTR by pinning popular results",
+				"ranking": "Tune Ranking",
+				"rankingDesc": "Optimize field weights and typo tolerance"
+			}
 		}
 	},
 	"export": {
@@ -1921,13 +1956,12 @@
 	},
 	"abTest": {
 		"title": "A/B Tests",
-		"description": "Run A/B experiments on your search configuration.",
+		"description": "Description",
 		"createNew": "New A/B Test",
 		"createTitle": "Create A/B Test",
 		"createDescription": "Configure a new A/B test to compare search configurations.",
 		"testName": "Test Name",
 		"testNamePlaceholder": "e.g. Product Search Ranking v2",
-		"description": "Description",
 		"descriptionPlaceholder": "What are you testing?",
 		"configBQueryBy": "Config B — query_by",
 		"queryByPlaceholder": "e.g. title,description,tags",

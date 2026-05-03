@@ -2,7 +2,13 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/components/card";
 import {
 	Select,
 	SelectContent,
@@ -71,12 +77,15 @@ function calculateQualityScore(
 	const zeroResultScore = Math.max(0, Math.round((1 - zeroResultRate * 2) * 100));
 
 	// CTR score: 20%+ = 100, 0% = 0
-	const ctrScore = Math.min(100, Math.max(0, Math.round((ctrValue * 5) * 100)));
+	const ctrScore = Math.min(100, Math.max(0, Math.round(ctrValue * 5 * 100)));
 
 	// Latency score: <100ms p99 = 100, 1000ms+ p99 = 0
 	const latencyScore =
 		latencyP99 !== null
-			? Math.max(0, Math.min(100, Math.round((1 - Math.max(0, latencyP99 - 100) / 900) * 100)))
+			? Math.max(
+					0,
+					Math.min(100, Math.round((1 - Math.max(0, latencyP99 - 100) / 900) * 100)),
+				)
 			: 50; // neutral if no data
 
 	const composite = Math.round(zeroResultScore * 0.35 + ctrScore * 0.35 + latencyScore * 0.3);
@@ -223,7 +232,7 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 					<CardTitle className="text-base">{t("search.qualityScore.title")}</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="py-8 text-center text-sm text-muted-foreground">
+					<div className="py-8 text-sm text-center text-muted-foreground">
 						{t("search.loading")}
 					</div>
 				</CardContent>
@@ -281,7 +290,7 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 				<CardContent className="gap-6 pt-6 sm:flex-row sm:items-center flex flex-col">
 					<div className="flex shrink-0 flex-col items-center">
 						<div
-							className={`flex size-20 items-center justify-center rounded-full text-3xl font-bold ${
+							className={`size-20 text-3xl font-bold flex items-center justify-center rounded-full ${
 								scores.rating === "excellent" || scores.rating === "good"
 									? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
 									: scores.rating === "fair"
@@ -295,27 +304,29 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 							{t(healthConfig.label)}
 						</Badge>
 					</div>
-					<div className="min-w-0 flex-1 space-y-1">
+					<div className="min-w-0 space-y-1 flex-1">
 						<p className="text-sm font-medium">
 							{t("search.qualityScore.healthBreakdown")}
 						</p>
 						<div className="gap-4 flex flex-wrap">
-							<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="gap-2 text-sm flex items-center text-muted-foreground">
 								<CheckCircleIcon className="size-4 text-green-500" />
 								<span>
-									{t("search.qualityScore.factorZeroResults")}: {scores.zeroResultScore}/100
+									{t("search.qualityScore.factorZeroResults")}:{" "}
+									{scores.zeroResultScore}/100
 								</span>
 							</div>
-							<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="gap-2 text-sm flex items-center text-muted-foreground">
 								<TrendingUpIcon className="size-4 text-blue-500" />
 								<span>
 									{t("search.qualityScore.factorCTR")}: {scores.ctrScore}/100
 								</span>
 							</div>
-							<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="gap-2 text-sm flex items-center text-muted-foreground">
 								<InfoIcon className="size-4 text-purple-500" />
 								<span>
-									{t("search.qualityScore.factorLatency")}: {scores.latencyScore}/100
+									{t("search.qualityScore.factorLatency")}: {scores.latencyScore}
+									/100
 								</span>
 							</div>
 						</div>
@@ -355,7 +366,9 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 			{chartData.length > 0 && (
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">{t("search.qualityScore.ctrTrend")}</CardTitle>
+						<CardTitle className="text-base">
+							{t("search.qualityScore.ctrTrend")}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<StatsTileChart
@@ -368,7 +381,9 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 									color: "hsl(var(--chart-2))",
 								},
 							}}
-							tooltipFormatter={(value) => format.number(Number(value), { style: "percent" })}
+							tooltipFormatter={(value) =>
+								format.number(Number(value), { style: "percent" })
+							}
 						/>
 					</CardContent>
 				</Card>
@@ -381,25 +396,31 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 						<CardTitle className="text-base">
 							{t("search.qualityScore.indexBreakdown")}
 						</CardTitle>
-						<CardDescription>{t("search.qualityScore.indexBreakdownDesc")}</CardDescription>
+						<CardDescription>
+							{t("search.qualityScore.indexBreakdownDesc")}
+						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<div className="gap-4 grid sm:grid-cols-2 lg:grid-cols-3">
+						<div className="gap-4 sm:grid-cols-2 lg:grid-cols-3 grid">
 							{ctrData.byIndex.map((idx) => (
 								<div
 									key={idx.indexName}
-									className="rounded-lg border p-4 space-y-2"
+									className="p-4 space-y-2 rounded-lg border"
 								>
 									<p className="text-sm font-medium truncate">{idx.indexName}</p>
-									<div className="flex items-center justify-between text-sm text-muted-foreground">
+									<div className="text-sm flex items-center justify-between text-muted-foreground">
 										<span>{t("search.qualityScore.searches")}</span>
-										<span className="tabular-nums">{format.number(idx.searches)}</span>
+										<span className="tabular-nums">
+											{format.number(idx.searches)}
+										</span>
 									</div>
-									<div className="flex items-center justify-between text-sm text-muted-foreground">
+									<div className="text-sm flex items-center justify-between text-muted-foreground">
 										<span>{t("search.qualityScore.clicks")}</span>
-										<span className="tabular-nums">{format.number(idx.clicks)}</span>
+										<span className="tabular-nums">
+											{format.number(idx.clicks)}
+										</span>
 									</div>
-									<div className="flex items-center justify-between text-sm font-medium">
+									<div className="text-sm font-medium flex items-center justify-between">
 										<span>{t("search.qualityScore.ctr")}</span>
 										<span className="tabular-nums">
 											{format.number(idx.ctr, { style: "percent" })}
@@ -416,7 +437,7 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 			{suggestions.length > 0 && (
 				<Card>
 					<CardHeader>
-						<CardTitle className="flex items-center gap-2 text-base">
+						<CardTitle className="gap-2 text-base flex items-center">
 							<AlertTriangleIcon className="size-4 text-amber-500" />
 							{t("search.qualityScore.suggestions")}
 						</CardTitle>
@@ -435,12 +456,14 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 										<a href={suggestion.href}>
 											<SuggestionIcon className="size-5 shrink-0 text-primary" />
 											<div className="min-w-0">
-												<div className="text-sm font-medium">{suggestion.label}</div>
+												<div className="text-sm font-medium">
+													{suggestion.label}
+												</div>
 												<div className="text-xs truncate text-muted-foreground">
 													{suggestion.description}
 												</div>
 											</div>
-											<ArrowRightIcon className="ml-auto size-4 shrink-0 text-muted-foreground" />
+											<ArrowRightIcon className="size-4 ml-auto shrink-0 text-muted-foreground" />
 										</a>
 									</Button>
 								);
@@ -455,24 +478,28 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 				analyticsData!.zeroResultQueries.length > 0 && (
 					<Card>
 						<CardHeader>
-							<CardTitle className="flex items-center gap-2 text-base">
+							<CardTitle className="gap-2 text-base flex items-center">
 								<TrendingDownIcon className="size-4 text-red-500" />
 								{t("search.qualityScore.topZeroResults")}
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-2">
-								{analyticsData!.zeroResultQueries.slice(0, 10).map((q: { query: string; count: number }) => (
-									<div
-										key={q.query}
-										className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2"
-									>
-										<span className="font-mono text-sm truncate">{q.query}</span>
-										<span className="text-sm text-muted-foreground tabular-nums">
-											{q.count}×
-										</span>
-									</div>
-								))}
+								{analyticsData!.zeroResultQueries
+									.slice(0, 10)
+									.map((q: { query: string; count: number }) => (
+										<div
+											key={q.query}
+											className="px-3 py-2 flex items-center justify-between rounded-md bg-muted/50"
+										>
+											<span className="font-mono text-sm truncate">
+												{q.query}
+											</span>
+											<span className="text-sm text-muted-foreground tabular-nums">
+												{q.count}×
+											</span>
+										</div>
+									))}
 							</div>
 						</CardContent>
 					</Card>

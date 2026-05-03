@@ -9,6 +9,7 @@ import { logger } from "@repo/logs";
 import { checkQuota, checkHardLimit, invalidatePlanCache } from "@repo/payments/lib/entitlements";
 import type { Context } from "hono";
 
+import { getOrgWalletOverage } from "../../search/lib/quota";
 import { checkAndSendQuotaAlerts } from "../services/usage-alerts";
 
 export interface QuotaContext {
@@ -17,6 +18,7 @@ export interface QuotaContext {
 		remaining: number;
 		isSoft: boolean;
 		percentUsed: number;
+		isOverage?: boolean;
 	};
 }
 
@@ -30,6 +32,7 @@ export async function quotaCheck(
 	resource: "search" | "ingest",
 ): Promise<{
 	allowed: boolean;
+	isOverage?: boolean;
 	status?: number;
 	error?: string;
 	quota?: QuotaContext["planQuota"];
@@ -38,7 +41,25 @@ export async function quotaCheck(
 		const quota = await checkQuota(orgId, resource);
 		const hardLimit = checkHardLimit(quota.current, quota.limit);
 
-		if (!quota.allowed) {
+		if (!quota.allowed || quota.isHardCap) {
+			// Check wallet overage before returning 429
+			const walletOverage = await getOrgWalletOverage(orgId);
+			if (
+				walletOverage.overageEnabled &&
+				walletOverage.overageUsedKopecks < walletOverage.overageLimitKopecks
+			) {
+				return {
+					allowed: true,
+					isOverage: true,
+					quota: {
+						allowed: true,
+						remaining: 0,
+						isSoft: false,
+						percentUsed: hardLimit.percentUsed,
+						isOverage: true,
+					},
+				};
+			}
 			return {
 				allowed: false,
 				status: 429,

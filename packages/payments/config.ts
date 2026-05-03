@@ -30,6 +30,8 @@ export interface AiWalletConfig {
 export interface SearchPlanLimits {
 	searchPerMonth: number;
 	indexedDocuments: number;
+	/** Overage rate in USD microcents per search operation (0 = no overage). */
+	overageRateUsdMicrosPerSearch: number;
 }
 
 export interface PaymentsConfigWithWallet extends PaymentsConfig {
@@ -53,10 +55,26 @@ export const config: PaymentsConfigWithWallet = {
 		maxOverageKopecks: BigInt(10_000), // 100 ₽
 	},
 	searchLimits: {
-		free: { searchPerMonth: 50_000, indexedDocuments: 10_000 },
-		starter: { searchPerMonth: 1_000_000, indexedDocuments: 250_000 },
-		pro: { searchPerMonth: 10_000_000, indexedDocuments: 2_000_000 },
-		business: { searchPerMonth: 50_000_000, indexedDocuments: 10_000_000 },
+		free: {
+			searchPerMonth: 50_000,
+			indexedDocuments: 10_000,
+			overageRateUsdMicrosPerSearch: 0,
+		},
+		starter: {
+			searchPerMonth: 1_000_000,
+			indexedDocuments: 250_000,
+			overageRateUsdMicrosPerSearch: 500,
+		},
+		pro: {
+			searchPerMonth: 10_000_000,
+			indexedDocuments: 2_000_000,
+			overageRateUsdMicrosPerSearch: 300,
+		},
+		business: {
+			searchPerMonth: 50_000_000,
+			indexedDocuments: 10_000_000,
+			overageRateUsdMicrosPerSearch: 200,
+		},
 	},
 	plans: {
 		starter: {

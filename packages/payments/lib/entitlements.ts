@@ -10,6 +10,7 @@
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
+import { config as paymentsConfig } from "../config";
 import { getPlanIdByProviderPriceId } from "../index";
 
 // ─── Types ──────────────────────────────────────────────────────
@@ -59,6 +60,14 @@ export interface QuotaInfo {
 	isUnlimited: boolean;
 	periodStart: Date;
 	periodEnd: Date;
+	/** Percentage of limit used (0.0 – 1.0+). */
+	percentUsed: number;
+	/** True when percentUsed >= 0.8 (80% soft cap). */
+	isSoftCap: boolean;
+	/** True when percentUsed >= 1.0 (100% hard cap). */
+	isHardCap: boolean;
+	/** Overage rate in USD microcents per search for the active plan. */
+	overageRateUsdMicrosPerSearch: number;
 }
 
 // ─── Feature matrix ─────────────────────────────────────────────
@@ -331,6 +340,10 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isUnlimited: false,
 			periodStart: period.start,
 			periodEnd: period.end,
+			percentUsed: 0,
+			isSoftCap: false,
+			isHardCap: false,
+			overageRateUsdMicrosPerSearch: 0,
 		};
 	}
 
@@ -345,6 +358,10 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isUnlimited: false,
 			periodStart: period.start,
 			periodEnd: period.end,
+			percentUsed: 0,
+			isSoftCap: false,
+			isHardCap: false,
+			overageRateUsdMicrosPerSearch: 0,
 		};
 	}
 
@@ -360,6 +377,10 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isUnlimited: true,
 			periodStart: period.start,
 			periodEnd: period.end,
+			percentUsed: 0,
+			isSoftCap: false,
+			isHardCap: false,
+			overageRateUsdMicrosPerSearch: 0,
 		};
 	}
 
@@ -374,6 +395,9 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			_sum: { count: true },
 		});
 		const current = Number(agg._sum.count ?? 0);
+		const percentUsed = limit > 0 ? current / limit : 0;
+		const overageRate =
+			paymentsConfig.searchLimits[plan.planId]?.overageRateUsdMicrosPerSearch ?? 0;
 		return {
 			resource,
 			allowed: current < limit,
@@ -383,6 +407,10 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isUnlimited: false,
 			periodStart: period.start,
 			periodEnd: period.end,
+			percentUsed,
+			isSoftCap: percentUsed >= 0.8,
+			isHardCap: percentUsed >= 1.0,
+			overageRateUsdMicrosPerSearch: overageRate,
 		};
 	} catch (error) {
 		logger.error("checkQuota failed", { error, orgId, resource });
@@ -395,6 +423,10 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isUnlimited: false,
 			periodStart: period.start,
 			periodEnd: period.end,
+			percentUsed: 0,
+			isSoftCap: false,
+			isHardCap: false,
+			overageRateUsdMicrosPerSearch: 0,
 		};
 	}
 }

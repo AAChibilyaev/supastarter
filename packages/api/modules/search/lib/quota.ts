@@ -1,8 +1,10 @@
 import {
 	aggregateSearchUsage,
+	getAiWalletByOrganizationId,
 	getOrganizationById,
 	getPurchasesByOrganizationId,
 } from "@repo/database";
+import { logger } from "@repo/logs";
 import { getPlanIdByProviderPriceId } from "@repo/payments";
 import { config as paymentsConfig } from "@repo/payments/config";
 
@@ -81,4 +83,42 @@ export async function resolveOrgPlanQuota(organizationId: string): Promise<Quota
 
 export function invalidateOrgQuotaCache(organizationId: string): void {
 	cache.delete(organizationId);
+}
+
+// ─── Wallet overage helpers ─────────────────────────────────────
+
+export interface WalletOverageInfo {
+	overageEnabled: boolean;
+	overageLimitKopecks: bigint;
+	overageUsedKopecks: bigint;
+}
+
+/**
+ * Check if an org has wallet-based overage available.
+ * Fail-open: returns { overageEnabled: false } on any error.
+ */
+export async function getOrgWalletOverage(orgId: string): Promise<WalletOverageInfo> {
+	try {
+		const wallet = await getAiWalletByOrganizationId(orgId);
+		if (!wallet) {
+			return {
+				overageEnabled: false,
+				overageLimitKopecks: BigInt(0),
+				overageUsedKopecks: BigInt(0),
+			};
+		}
+		const overageEnabled = wallet.overageLimitKopecks > BigInt(0);
+		return {
+			overageEnabled,
+			overageLimitKopecks: wallet.overageLimitKopecks,
+			overageUsedKopecks: wallet.overageUsedKopecks,
+		};
+	} catch (error) {
+		logger.error("getOrgWalletOverage failed", { error, orgId });
+		return {
+			overageEnabled: false,
+			overageLimitKopecks: BigInt(0),
+			overageUsedKopecks: BigInt(0),
+		};
+	}
 }

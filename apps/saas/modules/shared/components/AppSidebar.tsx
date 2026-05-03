@@ -28,6 +28,7 @@ import { UserMenu } from "@shared/components/UserMenu";
 import {
 	ActivityIcon,
 	BarChart3Icon,
+	BotIcon,
 	BriefcaseIcon,
 	CableIcon,
 	HomeIcon,
@@ -360,6 +361,22 @@ export function AppSidebar() {
 								{
 									label: t("search.nav.widgetInstall"),
 									href: `${basePath}/widget?tab=install`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.assistant"),
+							href: `${basePath}/assistant`,
+							icon: BotIcon,
+							isActive: pathname.startsWith(`${basePath}/assistant`),
+							subItems: [
+								{
+									label: t("search.assistant.settings.title"),
+									href: `${basePath}/assistant?tab=settings`,
+								},
+								{
+									label: t("search.assistant.analytics.title"),
+									href: `${basePath}/assistant?tab=analytics`,
 								},
 							],
 						},

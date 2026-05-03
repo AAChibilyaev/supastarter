@@ -182,6 +182,16 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 			href: `/${slug}/relevance`,
 			done: serverSteps.find((step) => step.step === 8)?.completed ?? false,
 		},
+		{
+			key: "activateAssistant",
+			serverStep: 9,
+			labelKey: "step9Label",
+			descKey: "step9Desc",
+			actionKey: "step9Action",
+			icon: SparklesIcon,
+			href: `/${slug}/assistant`,
+			done: serverSteps.find((step) => step.step === 9)?.completed ?? false,
+		},
 	];
 
 	const openConnectorWizard = (source: ConnectorSource) => {

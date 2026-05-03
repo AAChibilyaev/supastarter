@@ -57,7 +57,8 @@
       "collectionsDocuments": "Documents",
       "jobs": "Tâches",
       "indexHealth": "Santé de l'index",
-      "relevanceQualityScore": "Qualité de recherche"
+      "relevanceQualityScore": "Qualité de recherche",
+      "assistant": "Assistant"
     },
     "recommendations": {
       "description": "Configurez des recommandations de produits basées sur l'IA, y compris des articles similaires, des suggestions personnalisées et GraphRAG.",
@@ -738,7 +739,10 @@
       "step7Action": "Voir les analyses →",
       "step8Label": "Configurer la pertinence",
       "step8Desc": "Affinez le classement avec des synonymes, des boosts et des règles.",
-      "step8Action": "Configurer la pertinence →"
+      "step8Action": "Configurer la pertinence →",
+      "step9Label": "Activer l'assistant IA",
+      "step9Desc": "Activez l'assistant IA conversationnel",
+      "step9Action": "Configurer l'Assistant"
     },
     "overview": {
       "title": "Aperçu",
@@ -1986,6 +1990,44 @@
         "curationsDesc": "Améliorer le CTR en épinglant les résultats populaires",
         "ranking": "Optimiser le classement",
         "rankingDesc": "Optimiser les poids des champs et la tolérance aux fautes"
+      }
+    },
+    "assistant": {
+      "page": {
+        "title": "Assistant IA",
+        "description": "Configurez et surveillez votre assistant de chat IA"
+      },
+      "settings": {
+        "title": "Paramètres de l'Assistant",
+        "enableChat": "Activer l'Assistant de Chat IA",
+        "enableChatDescription": "Permettre aux clients de discuter avec votre assistant IA",
+        "assistantName": "Nom de l'Assistant",
+        "assistantNamePlaceholder": "ex. Alex, Emma ou votre nom de marque",
+        "escalation": "Paramètres d'Escalade",
+        "webhookUrl": "URL du Webhook d'Escalade",
+        "webhookUrlDescription": "Une requête POST est envoyée ici lors d'une escalade",
+        "emailTo": "E-mail d'Escalade",
+        "workingHours": "Heures de Travail (UTC+3)",
+        "workingHoursStart": "Heure de début",
+        "workingHoursEnd": "Heure de fin",
+        "connectors": "Connecteurs Externes",
+        "connectorsDescription": "Connectez votre OMS et systèmes de fidélité",
+        "omsUrl": "URL de Base OMS",
+        "omsKey": "Clé API OMS",
+        "loyaltyUrl": "URL du Système de Fidélité",
+        "loyaltyKey": "Clé API Fidélité",
+        "save": "Enregistrer les Paramètres",
+        "saveSuccess": "Paramètres enregistrés avec succès"
+      },
+      "analytics": {
+        "title": "Analyse des Conversations",
+        "totalConversations": "Total des conversations",
+        "resolutionRate": "Taux de résolution",
+        "escalationRate": "Taux d'escalade",
+        "avgTurns": "Tours moyens jusqu'à résolution",
+        "modeDistribution": "Modes de conversation",
+        "empty": "Pas encore de conversations",
+        "emptyDescription": "Activez l'assistant et les conversations apparaîtront ici"
       }
     }
   }

@@ -506,7 +506,10 @@
       "step7Action": "Analysen anzeigen →",
       "step8Label": "Relevanz konfigurieren",
       "step8Desc": "Passen Sie die Suche mit Synonymen, Boosts und Regeln an.",
-      "step8Action": "Relevanz konfigurieren →"
+      "step8Action": "Relevanz konfigurieren →",
+      "step9Label": "KI-Assistenten aktivieren",
+      "step9Desc": "Aktivieren Sie den konversationalen KI-Assistenten",
+      "step9Action": "Assistenten konfigurieren"
     },
     "checklist": {
       "title": "Setup-Checkliste",
@@ -836,7 +839,8 @@
       "collectionsDocuments": "Dokumente",
       "jobs": "Jobs",
       "indexHealth": "Index-Gesundheit",
-      "relevanceQualityScore": "Suchqualität"
+      "relevanceQualityScore": "Suchqualität",
+      "assistant": "Assistent"
     },
     "recommendations": {
       "description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",
@@ -1941,6 +1945,44 @@
         "curationsDesc": "CTR durch Fixieren beliebter Ergebnisse verbessern",
         "ranking": "Ranking optimieren",
         "rankingDesc": "Feldgewichte und Tippfehlertoleranz einstellen"
+      }
+    },
+    "assistant": {
+      "page": {
+        "title": "KI-Assistent",
+        "description": "KI-Chat-Assistenten konfigurieren und überwachen"
+      },
+      "settings": {
+        "title": "Assistent-Einstellungen",
+        "enableChat": "KI-Chat-Assistenten aktivieren",
+        "enableChatDescription": "Kunden ermöglichen, mit Ihrem KI-Assistenten zu chatten",
+        "assistantName": "Name des Assistenten",
+        "assistantNamePlaceholder": "z.B. Alex, Emma oder Ihr Markenname",
+        "escalation": "Eskalations-Einstellungen",
+        "webhookUrl": "Eskalations-Webhook-URL",
+        "webhookUrlDescription": "Hier wird ein POST-Request gesendet, wenn ein Gespräch eskaliert wird",
+        "emailTo": "Eskalations-E-Mail",
+        "workingHours": "Arbeitszeiten (UTC+3)",
+        "workingHoursStart": "Startzeit",
+        "workingHoursEnd": "Endzeit",
+        "connectors": "Externe Konnektoren",
+        "connectorsDescription": "Verbinden Sie Ihr OMS und Loyalitätssysteme",
+        "omsUrl": "OMS Basis-URL",
+        "omsKey": "OMS API-Schlüssel",
+        "loyaltyUrl": "Loyalitätssystem-URL",
+        "loyaltyKey": "Loyalitäts-API-Schlüssel",
+        "save": "Einstellungen speichern",
+        "saveSuccess": "Einstellungen erfolgreich gespeichert"
+      },
+      "analytics": {
+        "title": "Konversationsanalyse",
+        "totalConversations": "Gespräche gesamt",
+        "resolutionRate": "Lösungsrate",
+        "escalationRate": "Eskalationsrate",
+        "avgTurns": "Durchschn. Schritte zur Lösung",
+        "modeDistribution": "Gesprächsmodi",
+        "empty": "Noch keine Gespräche",
+        "emptyDescription": "Aktivieren Sie den Assistenten und Gespräche erscheinen hier"
       }
     }
   }

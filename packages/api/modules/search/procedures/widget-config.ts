@@ -48,6 +48,10 @@ const widgetConfigSchema = z.object({
 	voiceLanguage: z.string().default("auto"),
 	voiceTrigger: z.enum(["mic", "doubleTap"]).default("mic"),
 	voiceFallbackMessage: z.string().default(""),
+	// Chat assistant settings
+	chatEnabled: z.boolean().default(false),
+	chatAssistantName: z.string().default(""),
+	widgetMode: z.enum(["search", "chat", "hybrid"]).default("search"),
 });
 
 export const getWidgetConfig = protectedProcedure
@@ -192,6 +196,9 @@ function buildSnippet({
 		accentColor: string;
 		keyboardShortcut: boolean;
 		queryBy?: string[];
+		chatEnabled?: boolean;
+		chatAssistantName?: string;
+		widgetMode?: string;
 	};
 	facetsAttr?: string;
 }) {
@@ -218,6 +225,10 @@ function buildSnippet({
 	if (config.defaultSortField) lines.push(`  data-sort="${config.defaultSortField}"`);
 	if (!config.showPrices) lines.push(`  data-show-prices="false"`);
 	if (!config.showImages) lines.push(`  data-show-images="false"`);
+	if (config.widgetMode && config.widgetMode !== "search")
+		lines.push(`  data-widget-mode="${config.widgetMode}"`);
+	if (config.chatEnabled) lines.push(`  data-chat-enabled="true"`);
+	if (config.chatAssistantName) lines.push(`  data-assistant-name="${config.chatAssistantName}"`);
 	lines.push(`></script>`);
 	return lines.join("\n");
 }

@@ -8,8 +8,8 @@ export const assistantAnalyticsProcedure = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string(),
-			from: z.string().datetime(),
-			to: z.string().datetime(),
+			from: z.string(),
+			to: z.string(),
 		}),
 	)
 	.handler(async ({ input, context }) => {

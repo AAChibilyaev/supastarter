@@ -96,6 +96,14 @@ export const onboardingStatus = protectedProcedure
 		// Step 8: relevance configured — check activation event
 		const hasRelevanceConfig = await hasActivationEvent(organizationId, "RELEVANCE_CONFIGURED");
 
+		// Step 9: assistant enabled — read from org metadata
+		const orgMeta = await db.organization.findUnique({
+			where: { id: organizationId },
+			select: { metadata: true },
+		});
+		const meta = JSON.parse((orgMeta?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const hasAssistantEnabled = (meta.assistantConfig as Record<string, unknown> | undefined)?.enabled === true;
+
 		const steps = [
 			{ step: 1, label: "Create a search index", completed: hasIndex },
 			{ step: 2, label: "Generate a connector token", completed: hasConnectorToken },
@@ -105,6 +113,7 @@ export const onboardingStatus = protectedProcedure
 			{ step: 6, label: "Embed the search widget", completed: widgetEmbedded },
 			{ step: 7, label: "View analytics", completed: hasAnalytics },
 			{ step: 8, label: "Configure relevance rules", completed: hasRelevanceConfig },
+			{ step: 9, label: "Activate AI assistant", completed: hasAssistantEnabled },
 		];
 
 		const completedCount = steps.filter((s) => s.completed).length;

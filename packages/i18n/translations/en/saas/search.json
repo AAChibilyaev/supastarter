@@ -519,7 +519,10 @@
       "step7Action": "View analytics →",
       "step8Label": "Configure relevance",
       "step8Desc": "Fine-tune search ranking with synonyms, boosts, and rules.",
-      "step8Action": "Configure relevance →"
+      "step8Action": "Configure relevance →",
+      "step9Label": "Activate AI assistant",
+      "step9Desc": "Enable the conversational AI assistant to help customers find products and get support",
+      "step9Action": "Configure Assistant"
     },
     "checklist": {
       "title": "Setup checklist",
@@ -591,7 +594,8 @@
       "collectionsDocuments": "Documents",
       "jobs": "Jobs",
       "indexHealth": "Index Health",
-      "relevanceQualityScore": "Search Quality"
+      "relevanceQualityScore": "Search Quality",
+      "assistant": "Assistant"
     },
     "recommendations": {
       "description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
@@ -1941,6 +1945,44 @@
         "curationsDesc": "Improve CTR by pinning popular results",
         "ranking": "Tune Ranking",
         "rankingDesc": "Optimize field weights and typo tolerance"
+      }
+    },
+    "assistant": {
+      "page": {
+        "title": "AI Assistant",
+        "description": "Configure and monitor your AI-powered chat assistant"
+      },
+      "settings": {
+        "title": "Assistant Settings",
+        "enableChat": "Enable AI Chat Assistant",
+        "enableChatDescription": "Allow customers to chat with your AI assistant on your storefront",
+        "assistantName": "Assistant Name",
+        "assistantNamePlaceholder": "e.g. Alex, Emma, or your brand name",
+        "escalation": "Escalation Settings",
+        "webhookUrl": "Escalation Webhook URL",
+        "webhookUrlDescription": "A POST request is sent here when a conversation is escalated to an operator",
+        "emailTo": "Escalation Email",
+        "workingHours": "Working Hours (UTC+3)",
+        "workingHoursStart": "Start Hour",
+        "workingHoursEnd": "End Hour",
+        "connectors": "External Connectors",
+        "connectorsDescription": "Connect your OMS and loyalty systems to enable order status and personalization features",
+        "omsUrl": "OMS Base URL",
+        "omsKey": "OMS API Key",
+        "loyaltyUrl": "Loyalty System URL",
+        "loyaltyKey": "Loyalty API Key",
+        "save": "Save Settings",
+        "saveSuccess": "Settings saved successfully"
+      },
+      "analytics": {
+        "title": "Conversation Analytics",
+        "totalConversations": "Total Conversations",
+        "resolutionRate": "Resolution Rate",
+        "escalationRate": "Escalation Rate",
+        "avgTurns": "Avg. Turns to Resolution",
+        "modeDistribution": "Conversation Modes",
+        "empty": "No conversations yet",
+        "emptyDescription": "Enable the assistant and conversations will appear here once customers start chatting"
       }
     }
   }

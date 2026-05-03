@@ -323,7 +323,12 @@
 				"loading": "Загрузка счетов...",
 				"downloadError": "Не удалось открыть PDF счета. Попробуйте снова.",
 				"statusLabel": "Статус",
-				"page": "Страница {{page}}"
+				"page": "Страница {{page}}",
+				"convertedAmount": "Сконвертированная сумма",
+				"displayCurrency": "Отображение",
+				"selectCurrency": "Валюта отображения",
+				"displayCurrencyLabel": "Выберите валюту отображения",
+				"originalCurrency": "Оригинал (валюта Stripe)"
 			},
 			"paymentMethod": {
 				"title": "Способ оплаты",

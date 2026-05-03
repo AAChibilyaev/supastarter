@@ -1,6 +1,7 @@
 "use client";
 
 import { InvoiceStatusBadge } from "@payments/components/InvoiceStatusBadge";
+import { PreferredCurrencySelector } from "@payments/components/PreferredCurrencySelector";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -28,18 +29,32 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 
 	const startingAfter = cursorStack[cursorStack.length - 1];
 
+	// Fetch preferred currency for the organization
+	const { data: prefCurrencyData } = useQuery(
+		orpc.payments.getPreferredCurrency.queryOptions({
+			input: { organizationId: organizationId ?? "" },
+		}),
+		{
+			enabled: !!organizationId,
+		},
+	);
+
+	const preferredCurrency = prefCurrencyData?.preferredCurrency ?? undefined;
+
 	const { data, isLoading } = useQuery(
 		orpc.payments.listInvoices.queryOptions({
 			input: {
 				organizationId,
 				limit: ITEMS_PER_PAGE,
 				startingAfter,
+				preferredCurrency,
 			},
 		}),
 	);
 
 	const invoices = data?.invoices ?? [];
 	const hasMore = data?.hasMore ?? false;
+	const conversionApplied = data?.conversionApplied ?? false;
 
 	const handleNextPage = () => {
 		if (hasMore && invoices.length > 0) {
@@ -56,10 +71,23 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 		}
 	};
 
+	const formatAmount = (amount: number, currency: string) => {
+		return format.number(amount / 100, {
+			style: "currency",
+			currency: currency.toUpperCase(),
+		});
+	};
+
 	return (
 		<Card>
-			<CardHeader>
+			<CardHeader className="flex flex-row items-center justify-between">
 				<CardTitle>{t("settings.billing.invoiceHistory.title")}</CardTitle>
+				{organizationId && (
+					<PreferredCurrencySelector
+						organizationId={organizationId}
+						currentCurrency={preferredCurrency}
+					/>
+				)}
 			</CardHeader>
 			<CardContent className="p-0">
 				{isLoading ? (
@@ -83,6 +111,11 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 									<TableHead>
 										{t("settings.billing.invoiceHistory.amount")}
 									</TableHead>
+									{conversionApplied && (
+										<TableHead>
+											{t("settings.billing.invoiceHistory.convertedAmount")}
+										</TableHead>
+									)}
 									<TableHead>
 										{t("settings.billing.invoiceHistory.statusLabel")}
 									</TableHead>
@@ -104,11 +137,35 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 												: "—"}
 										</TableCell>
 										<TableCell className="text-sm font-medium">
-											{format.number(invoice.amountPaid / 100, {
-												style: "currency",
-												currency: invoice.currency.toUpperCase(),
-											})}
+											{formatAmount(invoice.amountPaid, invoice.currency)}
 										</TableCell>
+										{conversionApplied && invoice.convertedAmount && (
+											<TableCell className="text-sm text-muted-foreground">
+												<span className="font-medium">
+													{formatAmount(
+														invoice.convertedAmount.amount,
+														invoice.convertedAmount.currency,
+													)}
+												</span>
+												{invoice.convertedAmount.rate && (
+													<span className="ml-1 text-xs text-muted-foreground">
+														(1 {invoice.currency.toUpperCase()} ={" "}
+														{format.number(
+															invoice.convertedAmount.rate,
+															{
+																style: "decimal",
+																minimumFractionDigits: 2,
+																maximumFractionDigits: 4,
+															},
+														)}{" "}
+														{invoice.convertedAmount.currency})
+													</span>
+												)}
+											</TableCell>
+										)}
+										{conversionApplied && !invoice.convertedAmount && (
+											<TableCell className="text-sm text-muted-foreground" />
+										)}
 										<TableCell>
 											<InvoiceStatusBadge status={invoice.status ?? ""} />
 										</TableCell>

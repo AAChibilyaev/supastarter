@@ -323,7 +323,12 @@
 				"loading": "Cargando facturas...",
 				"downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo.",
 				"statusLabel": "Estado",
-				"page": "Página {{page}}"
+				"page": "Page {page}",
+				"convertedAmount": "Monto Convertido",
+				"displayCurrency": "Mostrar",
+				"selectCurrency": "Mostrar moneda",
+				"displayCurrencyLabel": "Seleccionar moneda de visualización",
+				"originalCurrency": "Original (Moneda de Stripe)"
 			},
 			"paymentMethod": {
 				"title": "Método de Pago",

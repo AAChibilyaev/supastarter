@@ -323,7 +323,12 @@
 				"loading": "Chargement des factures...",
 				"downloadError": "Impossible d'ouvrir le PDF de la facture. Veuillez réessayer.",
 				"statusLabel": "Statut",
-				"page": "Page {{page}}"
+				"page": "Page {page}",
+				"convertedAmount": "Montant Converti",
+				"displayCurrency": "Afficher",
+				"selectCurrency": "Afficher la devise",
+				"displayCurrencyLabel": "Choisir la devise d'affichage",
+				"originalCurrency": "Original (Devise Stripe)"
 			},
 			"paymentMethod": {
 				"title": "Méthode de Paiement",

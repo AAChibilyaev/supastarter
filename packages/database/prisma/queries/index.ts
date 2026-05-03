@@ -17,3 +17,4 @@ export * from "./personalization";
 export * from "./roadmap";
 export * from "./newsletter";
 export * from "./nps";
+export * from "./fx-rate";

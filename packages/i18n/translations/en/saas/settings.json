@@ -321,7 +321,12 @@
 				"loading": "Loading invoices...",
 				"downloadError": "Could not open invoice PDF. Please try again.",
 				"statusLabel": "Status",
-				"page": "Page {{page}}"
+				"page": "Page {{page}}",
+				"convertedAmount": "Converted Amount",
+				"displayCurrency": "Display",
+				"selectCurrency": "Display currency",
+				"displayCurrencyLabel": "Select display currency",
+				"originalCurrency": "Original (Stripe currency)"
 			},
 			"paymentMethod": {
 				"title": "Payment Method",

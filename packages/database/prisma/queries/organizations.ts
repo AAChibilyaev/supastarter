@@ -142,3 +142,49 @@ export async function updateOrganization(
 		data: organization,
 	});
 }
+
+/**
+ * Get the organization's preferred display currency from its metadata.
+ * Returns null if not set, "USD" by default.
+ */
+export async function getOrganizationPreferredCurrency(
+	organizationId: string,
+): Promise<string | null> {
+	const org = await db.organization.findUnique({
+		where: { id: organizationId },
+		select: { metadata: true },
+	});
+
+	if (!org?.metadata) return null;
+
+	try {
+		const parsed = JSON.parse(org.metadata) as Record<string, unknown>;
+		const currency = parsed.preferredCurrency;
+		return typeof currency === "string" && currency.length === 3
+			? currency.toUpperCase()
+			: null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Set the organization's preferred display currency in its metadata.
+ */
+export async function setOrganizationPreferredCurrency(
+	organizationId: string,
+	currency: string | null,
+): Promise<void> {
+	const org = await db.organization.findUnique({
+		where: { id: organizationId },
+		select: { metadata: true },
+	});
+
+	const current = org?.metadata ? (JSON.parse(org.metadata) as Record<string, unknown>) : {};
+	const updated = { ...current, preferredCurrency: currency };
+
+	await db.organization.update({
+		where: { id: organizationId },
+		data: { metadata: JSON.stringify(updated) },
+	});
+}

@@ -13,6 +13,8 @@ import { listPaymentMethods } from "./procedures/list-payment-methods";
 import { listPurchases } from "./procedures/list-purchases";
 import { listReceipts } from "./procedures/list-receipts";
 import { pauseSubscription } from "./procedures/pause-subscription";
+import { getPreferredCurrency } from "./procedures/preferred-currency";
+import { setPreferredCurrency } from "./procedures/preferred-currency";
 import { resumeSubscription } from "./procedures/resume-subscription";
 import { setDefaultPaymentMethod } from "./procedures/set-default-payment-method";
 import { updateTaxInfo } from "./procedures/update-tax-info";
@@ -27,15 +29,17 @@ export const paymentsRouter = {
 	createUpgradeSession,
 	deletePaymentMethod,
 	detachPaymentMethod,
+	getPreferredCurrency,
 	getProrationPreview,
+	getTaxInfo,
 	listInvoices,
 	listPaymentMethods,
 	listPurchases,
 	pauseSubscription,
 	resumeSubscription,
 	setDefaultPaymentMethod,
+	setPreferredCurrency,
 	updateTaxInfo,
-	getTaxInfo,
 	listReceipts,
 	upgradeSubscription,
 };

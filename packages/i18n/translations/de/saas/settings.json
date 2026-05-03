@@ -323,7 +323,12 @@
 				"loading": "Rechnungen werden geladen...",
 				"downloadError": "Rechnungs-PDF konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.",
 				"statusLabel": "Status",
-				"page": "Seite {{page}}"
+				"page": "Page {page}",
+				"convertedAmount": "Umgerechneter Betrag",
+				"displayCurrency": "Anzeige",
+				"selectCurrency": "Währung anzeigen",
+				"displayCurrencyLabel": "Anzeigewährung wählen",
+				"originalCurrency": "Original (Stripe-Währung)"
 			},
 			"paymentMethod": {
 				"title": "Zahlungsmethode",

@@ -1,5 +1,8 @@
 import { db } from "@repo/database";
+import { logger } from "@repo/logs";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+
+import { convertInvoiceAmount } from "./fx-rate";
 
 export interface InvoiceLineItem {
 	description: string;
@@ -25,13 +28,20 @@ export interface InvoiceData {
 	total: number;
 	status: "paid" | "pending" | "failed";
 	lines: InvoiceLineItem[];
+	/** Optional converted amount for multi-currency display */
+	convertedTotal?: number;
+	convertedCurrency?: string;
+	convertedRate?: number;
 }
 
 /**
  * Generate an invoice from purchase/subscription data.
  * Returns InvoiceData computed from the Purchase record.
  */
-export async function generateInvoiceData(purchaseId: string): Promise<InvoiceData | null> {
+export async function generateInvoiceData(
+	purchaseId: string,
+	preferredCurrency?: string,
+): Promise<InvoiceData | null> {
 	const purchase = await db.purchase.findUnique({
 		where: { id: purchaseId },
 		include: { organization: true, user: true },
@@ -49,7 +59,7 @@ export async function generateInvoiceData(purchaseId: string): Promise<InvoiceDa
 	const shortId = purchase.id.slice(-8);
 	const invoiceNumber = `INV-${datePart}-${shortId}`;
 
-	return {
+	const invoice: InvoiceData = {
 		id: purchase.id,
 		invoiceNumber,
 		organizationId: purchase.organizationId ?? purchase.userId ?? "",
@@ -79,14 +89,33 @@ export async function generateInvoiceData(purchaseId: string): Promise<InvoiceDa
 			},
 		],
 	};
+
+	// Multi-currency conversion if preferred currency is specified
+	if (preferredCurrency && preferredCurrency.toUpperCase() !== "USD") {
+		try {
+			const converted = await convertInvoiceAmount(amount, "USD", preferredCurrency);
+			if (converted !== null) {
+				invoice.convertedTotal = Math.round(converted);
+				invoice.convertedCurrency = preferredCurrency.toUpperCase();
+				invoice.convertedRate = amount > 0 ? converted / amount : undefined;
+			}
+		} catch (err) {
+			logger.warn({ err, preferredCurrency }, "Failed to convert invoice amount for PDF");
+		}
+	}
+
+	return invoice;
 }
 
 /**
  * Generate a PDF invoice from purchase data.
  * Returns the PDF as a Buffer ready for download.
  */
-export async function generateInvoicePdf(purchaseId: string): Promise<Buffer | null> {
-	const invoice = await generateInvoiceData(purchaseId);
+export async function generateInvoicePdf(
+	purchaseId: string,
+	preferredCurrency?: string,
+): Promise<Buffer | null> {
+	const invoice = await generateInvoiceData(purchaseId, preferredCurrency);
 	if (!invoice) return null;
 
 	const pdfDoc = await PDFDocument.create();
@@ -225,6 +254,7 @@ export async function generateInvoicePdf(purchaseId: string): Promise<Buffer | n
 	});
 	y -= 16;
 
+	// Show original total
 	const totalLabel = "Total:";
 	const totalValue = `${invoice.currency} ${invoice.total.toFixed(2)}`;
 
@@ -242,6 +272,41 @@ export async function generateInvoicePdf(purchaseId: string): Promise<Buffer | n
 		font: fontBold,
 		color: rgb(0.2, 0.2, 0.2),
 	});
+
+	// Show converted total if multi-currency
+	if (invoice.convertedTotal !== undefined && invoice.convertedCurrency) {
+		y -= 20;
+		const convertedLabel = `Total (${invoice.convertedCurrency}):`;
+		const convertedValue = `${invoice.convertedCurrency} ${(invoice.convertedTotal / 100).toFixed(2)}`;
+
+		page.drawText(convertedLabel, {
+			x: 350,
+			y,
+			size: 10,
+			font,
+			color: rgb(0.4, 0.4, 0.4),
+		});
+		page.drawText(convertedValue, {
+			x: 430,
+			y,
+			size: 10,
+			font: fontBold,
+			color: rgb(0.4, 0.4, 0.4),
+		});
+
+		// Show exchange rate
+		if (invoice.convertedRate !== undefined) {
+			y -= 14;
+			const rateText = `1 ${invoice.currency} = ${invoice.convertedRate.toFixed(4)} ${invoice.convertedCurrency}`;
+			page.drawText(rateText, {
+				x: 350,
+				y,
+				size: 8,
+				font,
+				color: rgb(0.6, 0.6, 0.6),
+			});
+		}
+	}
 
 	const pdfBytes = await pdfDoc.save();
 	return Buffer.from(pdfBytes);

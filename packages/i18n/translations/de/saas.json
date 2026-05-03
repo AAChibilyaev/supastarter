@@ -1735,6 +1735,16 @@
 			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
 			"diversifyField": "Diversifikationsfeld",
 			"maxPerValue": "Max pro Wert"
+		},
+		"mySearch": {
+			"usage": {
+				"title": "Meine Suchnutzung",
+				"files": "Dateien",
+				"storage": "Speicher",
+				"aiAsks": "KI-Fragen",
+				"unlimited": "Unbegrenzt",
+				"upgradeCta": "Plan upgraden"
+			}
 		}
 	},
 	"nav": {

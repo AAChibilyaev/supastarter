@@ -1735,6 +1735,16 @@
 			"description": "Advanced search with dynamic sorting and result diversification.",
 			"diversifyField": "Diversify field",
 			"maxPerValue": "Max per value"
+		},
+		"mySearch": {
+			"usage": {
+				"title": "My Search Usage",
+				"files": "Files",
+				"storage": "Storage",
+				"aiAsks": "AI Asks",
+				"unlimited": "Unlimited",
+				"upgradeCta": "Upgrade Plan"
+			}
 		}
 	},
 	"nav": {

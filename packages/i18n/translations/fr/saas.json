@@ -1735,6 +1735,16 @@
 			"apiKeys": "Clés API",
 			"loadError": "Impossible de charger les projets.",
 			"title": "Projets"
+		},
+		"mySearch": {
+			"usage": {
+				"title": "Utilisation de Ma Recherche",
+				"files": "Fichiers",
+				"storage": "Stockage",
+				"aiAsks": "Demandes IA",
+				"unlimited": "Illimité",
+				"upgradeCta": "Mettre à niveau"
+			}
 		}
 	},
 	"nav": {

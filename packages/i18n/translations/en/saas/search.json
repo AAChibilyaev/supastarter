@@ -206,6 +206,12 @@
 			"topQueriesDescription": "Most popular search queries across your indexes.",
 			"exportReport": "Export Report",
 			"exportReportTooltip": "Download analytics data as CSV",
+
+			"tabCTR": "CTR",
+			"ctrDashboard": "CTR Dashboard",
+			"ctrDashboardDescription": "Click-through rate per query, position, and index.",
+			"ctrByPosition": "CTR by Position",
+			"ctrByIndex": "CTR by Index",
 			"geoMap": "Geo Map",
 			"geoMapDescription": "Search query geography — coming soon"
 		},
@@ -532,6 +538,7 @@
 			"analyticsTopQueries": "Top Queries",
 			"analyticsFailed": "Failed Queries",
 			"analyticsActivity": "Activity Log",
+			"analyticsCtr": "CTR",
 			"relevance": "Relevance",
 			"relevanceSynonyms": "Synonyms",
 			"relevanceCurations": "Curations",

@@ -35,6 +35,7 @@ import { useFormatter } from "next-intl";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { CTRDashboard } from "./CTRDashboard";
 import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
 import { FailedQueriesTable } from "./FailedQueriesTable";
@@ -55,7 +56,7 @@ const PERIOD_API: Record<PeriodKey, "last7" | "last30"> = {
 
 const FREE_RETENTION_DAYS = 7;
 
-type AnalyticsTab = "dashboard" | "failed" | "activity" | "top-queries";
+type AnalyticsTab = "dashboard" | "failed" | "activity" | "top-queries" | "ctr";
 
 interface SearchAnalyticsCardsProps {
 	organizationId: string;
@@ -73,7 +74,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 	// Sync active tab with URL search params so sidebar nav links work.
 	const urlTab = searchParams.get("tab") || initialTab || "dashboard";
-	const validTabs: AnalyticsTab[] = ["dashboard", "failed", "activity", "top-queries"];
+	const validTabs: AnalyticsTab[] = ["dashboard", "failed", "activity", "top-queries", "ctr"];
 	const [activeTab, setActiveTabState] = useState<AnalyticsTab>(
 		validTabs.includes(urlTab as AnalyticsTab) ? (urlTab as AnalyticsTab) : "dashboard",
 	);
@@ -82,7 +83,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 		setActiveTabState(tab);
 		// Build new URL search params
 		const params = new URLSearchParams(searchParams.toString());
-		if (tab === "dashboard" || tab === "top-queries") {
+		if (tab === "dashboard" || tab === "top-queries" || tab === "ctr") {
 			params.delete("tab");
 		} else {
 			params.set("tab", tab);
@@ -579,6 +580,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 						<TabsTrigger value="top-queries">{t("search.analytics.tabTopQueries")}</TabsTrigger>
 						<TabsTrigger value="failed">{t("search.analytics.tabFailed")}</TabsTrigger>
 						<TabsTrigger value="activity">{t("search.analytics.tabActivity")}</TabsTrigger>
+						<TabsTrigger value="ctr">{t("search.analytics.tabCTR") ?? "CTR"}</TabsTrigger>
 					</TabsList>
 				</Tabs>
 
@@ -647,6 +649,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 			{activeTab === "top-queries" && renderTopQueriesTab()}
 			{activeTab === "failed" && renderFailedTab()}
 			{activeTab === "activity" && renderActivityTab()}
+			{activeTab === "ctr" && <CTRDashboard organizationId={organizationId} />}
 		</div>
 	);
 }

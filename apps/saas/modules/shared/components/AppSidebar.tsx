@@ -120,8 +120,7 @@ export function AppSidebar() {
 							label: t("settings.menu.organization.members"),
 							href: `${orgSettingsPrefix}/members`,
 						},
-						...(paymentsConfig.billingAttachedTo === "organization" &&
-						isOrganizationAdmin
+						...(paymentsConfig.billingAttachedTo === "organization" && isOrganizationAdmin
 							? [
 									{
 										label: t("settings.menu.organization.billing"),
@@ -139,8 +138,7 @@ export function AppSidebar() {
 							label: t("app.menu.mySearch"),
 							href: "/my-search",
 							icon: StarIcon,
-							isActive:
-								pathname === "/my-search" || pathname.startsWith("/my-search/"),
+							isActive: pathname === "/my-search" || pathname.startsWith("/my-search/"),
 						},
 						{
 							label: t("search.nav.overview"),
@@ -212,6 +210,10 @@ export function AppSidebar() {
 								{
 									label: t("search.nav.analyticsActivity"),
 									href: `${basePath}/analytics?tab=activity`,
+								},
+								{
+									label: t("search.nav.analyticsCtr") ?? "CTR",
+									href: `${basePath}/analytics?tab=ctr`,
 								},
 							],
 						},
@@ -381,8 +383,7 @@ export function AppSidebar() {
 							label: t("app.menu.mySearch"),
 							href: "/my-search",
 							icon: StarIcon,
-							isActive:
-								pathname === "/my-search" || pathname.startsWith("/my-search/"),
+							isActive: pathname === "/my-search" || pathname.startsWith("/my-search/"),
 						},
 						...(showStartNav
 							? [
@@ -435,10 +436,7 @@ export function AppSidebar() {
 						sidebarCollapsed ? "justify-center" : "justify-between",
 					)}
 				>
-					<Link
-						href="/"
-						className={cn("flex shrink-0 items-center", sidebarCollapsed && "hidden")}
-					>
+					<Link href="/" className={cn("flex shrink-0 items-center", sidebarCollapsed && "hidden")}>
 						<Logo withLabel={false} />
 					</Link>
 					<SidebarTrigger className="shrink-0" />
@@ -471,10 +469,7 @@ export function AppSidebar() {
 													<SidebarMenuSubItem key={subItem.href}>
 														<SidebarMenuSubButton
 															asChild
-															isActive={isNavSubItemActive(
-																pathname,
-																subItem.href,
-															)}
+															isActive={isNavSubItemActive(pathname, subItem.href)}
 														>
 															<Link href={subItem.href}>
 																<span>{subItem.label}</span>

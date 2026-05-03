@@ -99,7 +99,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 		return (
 			<div className="space-y-6">
 				<Skeleton className="h-8 w-64" />
-				<div className="gap-4 grid grid-cols-4">
+				<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-2">
 					<Skeleton className="h-24" />
 					<Skeleton className="h-24" />
 					<Skeleton className="h-24" />
@@ -120,52 +120,36 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 
 			{/* Summary cards */}
 			{summary && (
-				<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid">
+				<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-2">
 					<Card>
 						<CardContent className="gap-2 pt-6 flex flex-col items-center text-center">
 							<CheckCircle2Icon className="size-8 text-success" />
-							<span className="text-2xl font-bold tabular-nums">
-								{summary.healthy}
-							</span>
-							<span className="text-sm text-muted-foreground">
-								{t("indexHealth.healthy")}
-							</span>
+							<span className="text-2xl font-bold tabular-nums">{summary.healthy}</span>
+							<span className="text-sm text-muted-foreground">{t("indexHealth.healthy")}</span>
 						</CardContent>
 					</Card>
 
 					<Card>
 						<CardContent className="gap-2 pt-6 flex flex-col items-center text-center">
 							<AlertTriangleIcon className="size-8 text-warning" />
-							<span className="text-2xl font-bold tabular-nums">
-								{summary.warning}
-							</span>
-							<span className="text-sm text-muted-foreground">
-								{t("indexHealth.warning")}
-							</span>
+							<span className="text-2xl font-bold tabular-nums">{summary.warning}</span>
+							<span className="text-sm text-muted-foreground">{t("indexHealth.warning")}</span>
 						</CardContent>
 					</Card>
 
 					<Card>
 						<CardContent className="gap-2 pt-6 flex flex-col items-center text-center">
 							<AlertCircleIcon className="size-8 text-destructive" />
-							<span className="text-2xl font-bold tabular-nums">
-								{summary.critical}
-							</span>
-							<span className="text-sm text-muted-foreground">
-								{t("indexHealth.critical")}
-							</span>
+							<span className="text-2xl font-bold tabular-nums">{summary.critical}</span>
+							<span className="text-sm text-muted-foreground">{t("indexHealth.critical")}</span>
 						</CardContent>
 					</Card>
 
 					<Card>
 						<CardContent className="gap-2 pt-6 flex flex-col items-center text-center">
 							<DatabaseIcon className="size-8 text-muted-foreground" />
-							<span className="text-2xl font-bold tabular-nums">
-								{summary.totalIndexes}
-							</span>
-							<span className="text-sm text-muted-foreground">
-								{t("indexHealth.total")}
-							</span>
+							<span className="text-2xl font-bold tabular-nums">{summary.totalIndexes}</span>
+							<span className="text-sm text-muted-foreground">{t("indexHealth.total")}</span>
 						</CardContent>
 					</Card>
 				</div>
@@ -198,12 +182,8 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 										{statusIcon(idx.status, "size-5")}
 									</div>
 									<div className="min-w-0">
-										<CardTitle className="text-base truncate">
-											{idx.displayName}
-										</CardTitle>
-										<p className="text-xs font-mono truncate text-muted-foreground">
-											{idx.slug}
-										</p>
+										<CardTitle className="text-base truncate">{idx.displayName}</CardTitle>
+										<p className="text-xs font-mono truncate text-muted-foreground">{idx.slug}</p>
 									</div>
 								</div>
 								<Badge
@@ -248,9 +228,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 										<span className="text-xs text-muted-foreground">
 											{t("indexHealth.lastActivity")}
 										</span>
-										<p className="font-medium text-xs">
-											{timeAgo(idx.lastActivityAt)}
-										</p>
+										<p className="font-medium text-xs">{timeAgo(idx.lastActivityAt)}</p>
 									</div>
 									<div className="space-y-1">
 										<span className="text-xs text-muted-foreground">
@@ -273,9 +251,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 								{idx.activeReindex && (
 									<div className="gap-2 text-sm flex items-center">
 										<RefreshCwIcon className="size-3.5 animate-spin text-primary" />
-										<span className="text-xs text-primary">
-											{t("indexHealth.reindexing")}
-										</span>
+										<span className="text-xs text-primary">{t("indexHealth.reindexing")}</span>
 									</div>
 								)}
 
@@ -287,10 +263,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 											<span>{idx.ingestBufferDepth.toLocaleString()}</span>
 										</div>
 										<Progress
-											value={Math.min(
-												(idx.ingestBufferDepth / 10000) * 100,
-												100,
-											)}
+											value={Math.min((idx.ingestBufferDepth / 10000) * 100, 100)}
 											className="h-1.5"
 										/>
 									</div>
@@ -321,9 +294,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 					<CardHeader>
 						<div className="gap-2 flex items-center">
 							<CpuIcon className="size-5 text-muted-foreground" />
-							<CardTitle className="text-base">
-								{t("indexHealth.clusterMetrics")}
-							</CardTitle>
+							<CardTitle className="text-base">{t("indexHealth.clusterMetrics")}</CardTitle>
 						</div>
 					</CardHeader>
 					<CardContent>
@@ -378,27 +349,21 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 						</div>
 
 						{/* API stats */}
-						{apiStats?.success &&
-							apiStats.stats &&
-							Object.keys(apiStats.stats).length > 0 && (
-								<div className="mt-6 pt-4 border-t border-border">
-									<p className="mb-3 text-sm font-medium text-muted-foreground">
-										{t("indexHealth.apiStats")}
-									</p>
-									<div className="gap-2 sm:grid-cols-3 lg:grid-cols-4 text-sm grid grid-cols-2">
-										{Object.entries(apiStats.stats).map(([key, value]) => (
-											<div key={key} className="space-y-0.5">
-												<p className="text-xs font-mono truncate text-muted-foreground">
-													{key}
-												</p>
-												<p className="font-medium tabular-nums">
-													{String(value)}
-												</p>
-											</div>
-										))}
-									</div>
+						{apiStats?.success && apiStats.stats && Object.keys(apiStats.stats).length > 0 && (
+							<div className="mt-6 pt-4 border-t border-border">
+								<p className="mb-3 text-sm font-medium text-muted-foreground">
+									{t("indexHealth.apiStats")}
+								</p>
+								<div className="gap-2 sm:grid-cols-3 lg:grid-cols-4 text-sm grid grid-cols-2">
+									{Object.entries(apiStats.stats).map(([key, value]) => (
+										<div key={key} className="space-y-0.5">
+											<p className="text-xs font-mono truncate text-muted-foreground">{key}</p>
+											<p className="font-medium tabular-nums">{String(value)}</p>
+										</div>
+									))}
 								</div>
-							)}
+							</div>
+						)}
 					</CardContent>
 				</Card>
 			)}

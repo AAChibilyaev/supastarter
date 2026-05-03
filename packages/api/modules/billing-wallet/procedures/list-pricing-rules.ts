@@ -1,8 +1,6 @@
 import { listAiPricingRules } from "@repo/database";
-import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { pricingRuleDtoSchema } from "../types";
 
 export const listPricingRules = protectedProcedure
 	.route({
@@ -13,8 +11,6 @@ export const listPricingRules = protectedProcedure
 		description:
 			"Returns all active and historical AI pricing rules grouped by provider, model, and operation. Used by the dashboard rate card display.",
 	})
-	.input(z.void())
-	.output(z.array(pricingRuleDtoSchema))
 	.handler(async () => {
 		const rules = await listAiPricingRules();
 		return rules.map((r) => ({
@@ -23,10 +19,10 @@ export const listPricingRules = protectedProcedure
 			model: r.model,
 			operation: r.operation,
 			currency: r.currency,
-			inputPer1MTokensKopecks: r.inputPer1MTokensKopecks,
-			outputPer1MTokensKopecks: r.outputPer1MTokensKopecks,
-			embeddingPer1MTokensKopecks: r.embeddingPer1MTokensKopecks,
-			flatFeeKopecks: r.flatFeeKopecks,
+			inputPer1MTokensKopecks: r.inputPer1MTokensKopecks?.toString() ?? null,
+			outputPer1MTokensKopecks: r.outputPer1MTokensKopecks?.toString() ?? null,
+			embeddingPer1MTokensKopecks: r.embeddingPer1MTokensKopecks?.toString() ?? null,
+			flatFeeKopecks: r.flatFeeKopecks.toString(),
 			markupBps: r.markupBps,
 			effectiveFrom: r.effectiveFrom,
 			effectiveTo: r.effectiveTo,

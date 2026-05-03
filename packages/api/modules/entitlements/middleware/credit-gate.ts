@@ -1,86 +1,110 @@
 /**
  * Credit-gate middleware for oRPC procedures.
  *
- * Reserves AI wallet credits before the handler runs and commits or releases
- * the reservation based on success/failure.
- *
- * Usage:
- *   export const myProcedure = protectedProcedure
- *     .use(creditGate("operation_name", BigInt(500)))
- *     .handler(async ({ context, ...rest }) => {
- *       const { creditReservationId } = rest as unknown as CreditGateContext;
- *       try {
- *         // ... do AI work ...
- *         await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
- *         return result;
- *       } catch (err) {
- *         await releaseCreditReservation(context, creditReservationId);
- *         throw err;
- *       }
- *     });
+ * Atomic balance check + reserve before paid operations.
+ * Injects reservation info into context for downstream commit/release.
  */
 
 import { randomUUID } from "node:crypto";
 
 import { ORPCError } from "@orpc/server";
 import {
+	type CommitAiUsageInput,
+	type CommitAiUsageResult,
 	AiWalletInsufficientFundsError,
-	reserveAiCredits,
-	releaseAiReservation,
+	AiWalletFrozenError,
+	WalletNotFoundError,
 	commitAiUsage,
+	releaseAiReservation,
+	reserveAiCredits,
 } from "@repo/billing-wallet";
-import { getAiWalletByOrganizationId, getAiWalletByUserId } from "@repo/database";
+import { getAiWalletByEntity } from "@repo/database";
 import { logger } from "@repo/logs";
 
+/**
+ * Context extension injected by creditGate on successful reservation.
+ */
 export interface CreditGateContext {
 	creditReservationId: string;
 	creditWalletId: string;
-	creditIdempotencyKey: string;
-}
-
-type ProtectedContext = {
-	user: { id: string };
-	session: { activeOrganizationId?: string };
-};
-
-/**
- * Resolve the AI wallet for the current user/org context.
- * Prefers organization wallet when there is an active org.
- */
-async function resolveWalletForContext(
-	context: ProtectedContext,
-): Promise<{ walletId: string; userId: string | null; organizationId: string | null } | null> {
-	const orgId = context.session?.activeOrganizationId ?? undefined;
-
-	if (orgId) {
-		const wallet = await getAiWalletByOrganizationId(orgId);
-		if (wallet) {
-			return {
-				walletId: wallet.id,
-				userId: null,
-				organizationId: orgId,
-			};
-		}
-	}
-
-	const wallet = await getAiWalletByUserId(context.user.id);
-	if (wallet) {
-		return {
-			walletId: wallet.id,
-			userId: context.user.id,
-			organizationId: null,
-		};
-	}
-
-	return null;
+	creditOperation: string;
+	creditEstimatedKopecks: bigint;
 }
 
 /**
- * Middleware that reserves AI wallet credits before the handler executes.
- * Injects `creditReservationId`, `creditWalletId`, and `creditIdempotencyKey`
- * into the context for use by `commitFlatFeeUsage` / `releaseCreditReservation`.
+ * Flat-fee commit input for fixed-price operations (RAG, AI Answer, etc.).
  */
-export function creditGate(operation: string, estimatedCostKopecks: bigint) {
+export interface FlatFeeCommitInput {
+	reservationId: string;
+	operation: string;
+	provider: string;
+	model: string;
+	flatFeeKopecks: bigint;
+	status?: CommitAiUsageInput["status"];
+	requestId?: string;
+	metadata?: Record<string, unknown>;
+}
+
+/**
+ * Commit a flat-fee AI usage reservation on success.
+ */
+export async function commitFlatFeeUsage(input: FlatFeeCommitInput): Promise<CommitAiUsageResult> {
+	const markupBps = 2000; // 20% default markup
+	const totalChargeKopecks =
+		input.flatFeeKopecks + (input.flatFeeKopecks * BigInt(markupBps)) / BigInt(10000);
+
+	return commitAiUsage({
+		reservationId: input.reservationId,
+		idempotencyKey: `commit:${input.reservationId}`,
+		provider: input.provider,
+		model: input.model,
+		pricingRuleId: null,
+		promptTokens: 0,
+		completionTokens: 0,
+		inputCostKopecks: BigInt(0),
+		outputCostKopecks: BigInt(0),
+		flatFeeKopecks: input.flatFeeKopecks,
+		markupBps,
+		totalChargeKopecks,
+		providerCostUsdMicros: BigInt(0),
+		fxRateRubPerUsdMicros: BigInt(0),
+		requestId: input.requestId ?? null,
+		status: input.status ?? "success",
+		metadata: input.metadata ?? { operation: input.operation },
+	});
+}
+
+/**
+ * Release a credit reservation on error.
+ * Fire-and-forget: logs but does not throw (avoids masking the original error).
+ */
+export async function releaseCreditReservation(
+	reservationId: string,
+	reason: "error" | "cancelled" = "error",
+): Promise<void> {
+	try {
+		await releaseAiReservation({
+			reservationId,
+			idempotencyKey: `release:${reservationId}`,
+			reason,
+		});
+	} catch (releaseErr) {
+		logger.error(
+			{ reservationId, reason, error: releaseErr },
+			"releaseCreditReservation: failed to release reservation",
+		);
+	}
+}
+
+/**
+ * Middleware that checks and reserves credits before a paid operation.
+ *
+ * Resolves the org/user AiWallet, atomically checks balance and reserves
+ * credits, then injects reservation info into context for downstream
+ * commit or release.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function creditGate(operation: string, estimatedCostKopecks: bigint): any {
 	return async ({
 		context,
 		next,
@@ -88,113 +112,67 @@ export function creditGate(operation: string, estimatedCostKopecks: bigint) {
 		context: Record<string, unknown>;
 		next: (opts?: { context?: Record<string, unknown> }) => Promise<unknown>;
 	}) => {
-		const protectedCtx = context as unknown as ProtectedContext;
-		const idempotencyKey = `credit-gate:${operation}:${randomUUID()}`;
+		const session = context.session as
+			| { activeOrganizationId?: string; userId: string }
+			| undefined;
+		const orgId = session?.activeOrganizationId;
+		const userId = session?.userId;
 
-		const walletInfo = await resolveWalletForContext(protectedCtx).catch((err) => {
-			logger.error({ err, operation }, "creditGate: failed to resolve wallet");
-			return null;
-		});
-
-		if (!walletInfo) {
-			throw new ORPCError("PAYMENT_REQUIRED", {
-				message:
-					"No AI wallet found. Please top up your AI credits at /settings/billing/ai-credits.",
+		if (!orgId && !userId) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "No active organization or user session.",
 			});
 		}
 
-		let reservationId: string;
+		const wallet = await getAiWalletByEntity(
+			orgId ? { organizationId: orgId } : { userId: userId! },
+		);
+
+		if (!wallet) {
+			throw new ORPCError("FAILED_PRECONDITION", {
+				message: "AI Wallet not initialized. Visit Settings > Billing to activate.",
+			});
+		}
+
+		const idempotencyKey = `credit-gate:${operation}:${wallet.id}:${randomUUID()}`;
+
 		try {
-			const result = await reserveAiCredits({
-				walletId: walletInfo.walletId,
-				userId: walletInfo.userId,
-				organizationId: walletInfo.organizationId,
+			const reservation = await reserveAiCredits({
+				walletId: wallet.id,
+				userId: userId ?? null,
+				organizationId: orgId ?? null,
 				operation,
 				estimatedKopecks: estimatedCostKopecks,
 				idempotencyKey,
 			});
-			reservationId = result.reservationId;
+
+			return next({
+				context: {
+					creditReservationId: reservation.reservationId,
+					creditWalletId: wallet.id,
+					creditOperation: operation,
+					creditEstimatedKopecks: estimatedCostKopecks,
+				} satisfies CreditGateContext,
+			});
 		} catch (err) {
 			if (err instanceof AiWalletInsufficientFundsError) {
-				const fundsErr = err as AiWalletInsufficientFundsError;
-				throw new ORPCError("PAYMENT_REQUIRED", {
-					message: `Insufficient AI credits. Required: ${fundsErr.requiredKopecks} kopecks, available: ${fundsErr.availableKopecks} kopecks. Top up at /settings/billing/ai-credits.`,
+				const required = Number(err.requiredKopecks) / 100;
+				const available = Number(err.availableKopecks) / 100;
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: `Insufficient credits for "${operation}". Required: ${required.toFixed(2)}, Available: ${available.toFixed(2)}. Top up at Settings > Billing.`,
 				});
 			}
-			logger.error({ err, operation }, "creditGate: failed to reserve credits");
-			throw new ORPCError("INTERNAL_SERVER_ERROR", {
-				message: "Failed to reserve AI credits.",
-			});
+			if (err instanceof AiWalletFrozenError) {
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: `AI Wallet is frozen (${err.message}). Contact support to reactivate.`,
+				});
+			}
+			if (err instanceof WalletNotFoundError) {
+				throw new ORPCError("FAILED_PRECONDITION", {
+					message: "AI Wallet not found. Visit Settings > Billing to activate.",
+				});
+			}
+			throw err;
 		}
-
-		return next({
-			context: {
-				...context,
-				creditReservationId: reservationId,
-				creditWalletId: walletInfo.walletId,
-				creditIdempotencyKey: idempotencyKey,
-			},
-		});
 	};
-}
-
-/**
- * Commit a flat-fee AI usage charge after a successful operation.
- * Call this inside the handler after the AI work completes.
- */
-export async function commitFlatFeeUsage(
-	context: Record<string, unknown>,
-	reservationId: string,
-	actualCostKopecks: bigint,
-): Promise<void> {
-	const idempotencyKey =
-		(context.creditIdempotencyKey as string | undefined) ??
-		`commit-flat-fee:${reservationId}:${randomUUID()}`;
-
-	try {
-		await commitAiUsage({
-			reservationId,
-			idempotencyKey: `${idempotencyKey}:commit`,
-			provider: "flat_fee",
-			model: "flat_fee",
-			pricingRuleId: null,
-			promptTokens: 0,
-			completionTokens: 0,
-			inputCostKopecks: BigInt(0),
-			outputCostKopecks: BigInt(0),
-			flatFeeKopecks: actualCostKopecks,
-			markupBps: 0,
-			totalChargeKopecks: actualCostKopecks,
-			providerCostUsdMicros: BigInt(0),
-			fxRateRubPerUsdMicros: BigInt(0),
-			status: "success",
-		});
-	} catch (err) {
-		logger.error({ err, reservationId }, "commitFlatFeeUsage: failed to commit AI usage");
-		// Do not re-throw — commit failure should not fail the user request
-	}
-}
-
-/**
- * Release a credit reservation after an operation failure.
- * Call this inside the catch block of the handler.
- */
-export async function releaseCreditReservation(
-	context: Record<string, unknown>,
-	reservationId: string,
-): Promise<void> {
-	const idempotencyKey =
-		(context.creditIdempotencyKey as string | undefined) ??
-		`release:${reservationId}:${randomUUID()}`;
-
-	try {
-		await releaseAiReservation({
-			reservationId,
-			idempotencyKey: `${idempotencyKey}:release`,
-			reason: "error",
-		});
-	} catch (err) {
-		logger.error({ err, reservationId }, "releaseCreditReservation: failed to release reservation");
-		// Do not re-throw — release failure should not mask the original error
-	}
 }

@@ -33,6 +33,7 @@ import { useState } from "react";
 
 import { FileTable } from "../files/FileTable";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
+import { ReindexPanel } from "../panels/ReindexPanel";
 import { SchemaEditorPanel } from "../panels/SchemaEditorPanel";
 import { DocumentsTable } from "../tables/DocumentsTable";
 
@@ -576,6 +577,13 @@ $data = json_decode($response->getBody(), true);`;
 							/>
 						</CardContent>
 					</Card>
+
+					<ReindexPanel
+						organizationId={orgId ?? ""}
+						slug={index.slug}
+						indexId={index.id}
+						hasActiveJob={false}
+					/>
 
 					{/* Danger zone */}
 					<Card className="border-destructive/50">

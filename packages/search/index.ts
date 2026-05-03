@@ -12,6 +12,7 @@ export {
 	swapAliasToVersion,
 	type CollectionFieldInput,
 	type CreatePhysicalCollectionInput,
+	type FieldType,
 	type HnswParams,
 } from "./lib/collections";
 export {

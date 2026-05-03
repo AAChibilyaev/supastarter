@@ -13,7 +13,8 @@ export type ActivationEventKind =
 	| "WIDGET_EMBEDDED"
 	| "FIRST_TEAM_MEMBER"
 	| "FIRST_INTEGRATION"
-	| "FIRST_PAYMENT";
+	| "FIRST_PAYMENT"
+	| "RELEVANCE_CONFIGURED";
 
 /** All known activation event types in order. */
 export const ALL_ACTIVATION_EVENTS: ActivationEventKind[] = [
@@ -25,6 +26,7 @@ export const ALL_ACTIVATION_EVENTS: ActivationEventKind[] = [
 	"FIRST_TEAM_MEMBER",
 	"FIRST_INTEGRATION",
 	"FIRST_PAYMENT",
+	"RELEVANCE_CONFIGURED",
 ];
 
 /**

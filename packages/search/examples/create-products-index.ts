@@ -8,7 +8,7 @@
  */
 import { createSearchIndex, getSearchIndexBySlug } from "@repo/database";
 
-import { createPhysicalCollection, ensureAlias } from "../index";
+import { createPhysicalCollection, ensureAlias, type CollectionFieldInput } from "../index";
 
 const SLUG = "products";
 
@@ -43,7 +43,7 @@ async function main() {
 		organizationId,
 		slug: SLUG,
 		version: created.version,
-		fields,
+		fields: fields as CollectionFieldInput[],
 		defaultSortingField: "created_at",
 	});
 	await ensureAlias(organizationId, SLUG, created.version);

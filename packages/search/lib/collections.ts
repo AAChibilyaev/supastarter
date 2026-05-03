@@ -22,6 +22,27 @@ export function aliasName(organizationId: string, slug: string): string {
 	return `${config.collectionPrefix}_${sanitize(organizationId)}_${sanitize(slug)}`;
 }
 
+export type FieldType =
+	| "string"
+	| "int32"
+	| "int64"
+	| "float"
+	| "bool"
+	| "geopoint"
+	| "geopolygon"
+	| "geopoint[]"
+	| "string[]"
+	| "int32[]"
+	| "int64[]"
+	| "float[]"
+	| "bool[]"
+	| "object"
+	| "object[]"
+	| "auto"
+	| "string*"
+	| "geojson"
+	| "image";
+
 export interface HnswParams {
 	ef_construction?: number;
 	M?: number;
@@ -29,7 +50,7 @@ export interface HnswParams {
 
 export interface CollectionFieldInput {
 	name: string;
-	type: string;
+	type: FieldType;
 	facet?: boolean;
 	optional?: boolean;
 	index?: boolean;

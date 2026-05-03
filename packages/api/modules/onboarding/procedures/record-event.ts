@@ -14,6 +14,7 @@ const ACTIVATION_EVENT_TYPES = [
 	"FIRST_TEAM_MEMBER",
 	"FIRST_INTEGRATION",
 	"FIRST_PAYMENT",
+	"RELEVANCE_CONFIGURED",
 ] as const;
 
 export const recordEvent = protectedProcedure

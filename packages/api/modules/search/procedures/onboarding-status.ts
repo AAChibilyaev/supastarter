@@ -1,4 +1,4 @@
-import { db } from "@repo/database";
+import { db, hasActivationEvent } from "@repo/database";
 import { resolveOrgPlan } from "@repo/payments/lib/entitlements";
 import { z } from "zod";
 
@@ -81,8 +81,8 @@ export const onboardingStatus = protectedProcedure
 		});
 		const hasApiKey = apiKeyCount > 0;
 
-		// Step 6: widget embedded — always false, self-attestation by user
-		const widgetEmbedded = false;
+		// Step 6: widget embedded — check activation event
+		const widgetEmbedded = await hasActivationEvent(organizationId, "WIDGET_EMBEDDED");
 
 		// Step 7: has analytics events (multiple search events or click events)
 		const analyticsEventCount = await db.searchUsageEvent.count({
@@ -93,8 +93,8 @@ export const onboardingStatus = protectedProcedure
 		});
 		const hasAnalytics = analyticsEventCount > 1;
 
-		// Step 8: relevance configured — self-attestation (no dedicated DB model yet)
-		const hasRelevanceConfig = false;
+		// Step 8: relevance configured — check activation event
+		const hasRelevanceConfig = await hasActivationEvent(organizationId, "RELEVANCE_CONFIGURED");
 
 		const steps = [
 			{ step: 1, label: "Create a search index", completed: hasIndex },

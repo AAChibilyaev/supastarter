@@ -62,6 +62,8 @@ const searchInputSchema = z.object({
 	maxFacetValues: z.number().int().min(1).optional(),
 	// ── Distinct Dedup ──
 	distinct: z.union([z.string(), z.number()]).optional(),
+	// ── MMR Diversification (Typesense v0.30+) ──
+	diversifyBasedOn: z.string().optional(),
 	// ── Token Join (Typesense v0.30+) ──
 	splitJoinTokens: z.enum(["always", "fallback", "off"]).optional(),
 	// ── Highlight Extensions (Typesense v0.30+) ──

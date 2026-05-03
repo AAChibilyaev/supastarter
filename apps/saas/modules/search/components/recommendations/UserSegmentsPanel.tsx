@@ -26,7 +26,7 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangleIcon, PencilIcon, PlusIcon, Trash2Icon, UsersIcon } from "lucide-react";
+import { PencilIcon, PlusIcon, Trash2Icon, UsersIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -53,24 +53,6 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 		orpc.recommendations.getUserSegmentStats.queryOptions({
 			input: { organizationId, window: 90 },
 			enabled: Boolean(organizationId),
-		}),
-	);
-
-	const createMutation = useMutation(
-		orpc.recommendations.createUserSegment.mutationOptions({
-			onSuccess: () => {
-				toastSuccess(tr("recommendations.segments.created"));
-				setCreateOpen(false);
-				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.listUserSegments.queryKey(),
-				});
-				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.getUserSegmentStats.queryKey(),
-				});
-			},
-			onError: () => {
-				toastError(tr("recommendations.segments.createError"));
-			},
 		}),
 	);
 

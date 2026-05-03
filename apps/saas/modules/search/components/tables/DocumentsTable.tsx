@@ -459,31 +459,6 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const [editSheetOpen, setEditSheetOpen] = useState(false);
 	const [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
 
-	// ── Current filter field type ──────────────────────────────────────────
-
-	const currentFilterFieldType = useMemo(() => {
-		if (!filterField) return null;
-		const f = documentFields.find((df) => df.name === filterField);
-		return f?.type ?? null;
-	}, [filterField, documentFields]);
-
-	// ── Apply filter to columnFilters ─────────────────────────────────────
-
-	useEffect(() => {
-		if (filterField && filterValue && filterOperator) {
-			setColumnFilters([
-				{ id: filterField, value: { operator: filterOperator, value: filterValue } },
-			]);
-		} else if (
-			filterField &&
-			(filterOperator === "not_empty" || filterOperator === "is_empty")
-		) {
-			setColumnFilters([{ id: filterField, value: { operator: filterOperator } }]);
-		} else {
-			setColumnFilters([]);
-		}
-	}, [filterField, filterOperator, filterValue]);
-
 	// ── Data fetching ───────────────────────────────────────────────────────
 
 	const { data: schemaData, isLoading: schemaLoading } = useQuery(
@@ -502,6 +477,31 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		() => fields.filter((f) => f.name !== "tenant_id" && f.name !== "id"),
 		[fields],
 	);
+
+	// ── Current filter field type ──────────────────────────────────────────
+
+	const currentFilterFieldType = useMemo(() => {
+		if (!filterField) return null;
+		const f = fields.find((df) => df.name === filterField);
+		return f?.type ?? null;
+	}, [filterField, fields]);
+
+	// ── Apply filter to columnFilters ─────────────────────────────────────
+
+	useEffect(() => {
+		if (filterField && filterValue && filterOperator) {
+			setColumnFilters([
+				{ id: filterField, value: { operator: filterOperator, value: filterValue } },
+			]);
+		} else if (
+			filterField &&
+			(filterOperator === "not_empty" || filterOperator === "is_empty")
+		) {
+			setColumnFilters([{ id: filterField, value: { operator: filterOperator } }]);
+		} else {
+			setColumnFilters([]);
+		}
+	}, [filterField, filterOperator, filterValue]);
 
 	const { data: docsData, isLoading: docsLoading } = useQuery(
 		orpc.search.listDocuments.queryOptions({
@@ -790,7 +790,6 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		getPaginationRowModel: getPaginationRowModel(),
 		enableRowSelection: true,
 		enableColumnResizing: true,
-		enableColumnOrdering: true,
 		columnResizeMode: "onChange",
 	});
 

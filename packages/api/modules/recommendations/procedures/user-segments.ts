@@ -64,8 +64,6 @@ const PREDEFINED_WITH_TYPE: PredefinedSegment[] = PREDEFINED_SEGMENTS.map((s) =>
 	type: "predefined" as const,
 }));
 
-type SegmentWithType = PredefinedSegment | (UserSegment & { type: "custom" | "predefined" });
-
 // ─── List User Segments ────────────────────────────────────────────────────
 
 export const listUserSegments = protectedProcedure

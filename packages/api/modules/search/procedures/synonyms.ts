@@ -14,6 +14,7 @@ import { searchIndexSlugSchema } from "../types";
 const synonymSchema = z.object({
 	synonym: z.string().min(1).max(255),
 	root: z.string().min(1).max(255),
+	locale: z.string().min(2).max(5).optional(),
 });
 
 export const getSynonyms = protectedProcedure

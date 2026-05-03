@@ -91,8 +91,14 @@ export async function getSynonymRootsByIndexId(indexId: string): Promise<string[
 }
 
 /** Convert SynonymRow[] to SynonymPair[] (for Typesense sync). */
-export function rowsToSynonymPairs(rows: SynonymRow[]): { synonym: string; root: string }[] {
-	return rows.map((r) => ({ synonym: r.synonym, root: r.root }));
+export function rowsToSynonymPairs(
+	rows: SynonymRow[],
+): { synonym: string; root: string; locale?: string }[] {
+	return rows.map((r) => ({
+		synonym: r.synonym,
+		root: r.root,
+		...(r.locale ? { locale: r.locale } : {}),
+	}));
 }
 
 /** Validate synonym import entries for duplicates and invalid values. */

@@ -188,6 +188,7 @@ export const synonymsApp = new Hono()
 				z.object({
 					root: z.string().min(1).max(256),
 					synonym: z.string().min(1).max(256),
+					locale: z.string().min(2).max(5).optional(),
 				}),
 			),
 		});

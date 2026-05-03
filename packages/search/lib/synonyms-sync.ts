@@ -6,6 +6,8 @@ import { getTypesenseEnv } from "./env";
 export interface SynonymPair {
 	synonym: string;
 	root: string;
+	/** Optional locale scope (en, de, es, fr, ru). Null/undefined = universal. */
+	locale?: string;
 }
 
 export interface CurationRule {
@@ -54,29 +56,37 @@ export async function syncSynonymsToTypesense(
 		existingIds = new Set();
 	}
 
-	// Group by root: { root -> [synonym, ...] }
-	const grouped = new Map<string, string[]>();
+	// Group by root + locale: { "root@@locale" -> [synonym, ...] }
+	// Universal synonyms (no locale) use "root@@" as key
+	const grouped = new Map<string, { root: string; locale: string | undefined; synonyms: string[] }>();
 	for (const pair of synonyms) {
-		const list = grouped.get(pair.root) ?? [];
-		list.push(pair.synonym);
-		grouped.set(pair.root, list);
+		const key = `${pair.root}@@${pair.locale ?? ""}`;
+		const existing = grouped.get(key);
+		if (existing) {
+			existing.synonyms.push(pair.synonym);
+		} else {
+			grouped.set(key, { root: pair.root, locale: pair.locale, synonyms: [pair.synonym] });
+		}
 	}
 
 	const newIds = new Set<string>();
 
-	for (const [root, synonymList] of grouped) {
-		const id = `syn_${sanitizeId(collectionName)}_${sanitizeId(root)}`;
+	for (const [, entry] of grouped) {
+		// Build locale-aware ID: syn_{collection}_{locale}_{root} or syn_{collection}_{root}
+		const localePart = entry.locale ? `${sanitizeId(entry.locale)}_` : "";
+		const id = `syn_${sanitizeId(collectionName)}_${localePart}${sanitizeId(entry.root)}`;
 		newIds.add(id);
 		try {
 			await typesenseFetch("PUT", `/synonym_sets/${encodeURIComponent(id)}`, {
-				root,
-				synonyms: synonymList,
+				root: entry.root,
+				synonyms: entry.synonyms,
 			});
 		} catch (err) {
 			logger.error("syncSynonymsToTypesense: failed to upsert synonym set", {
 				collectionName,
 				id,
-				root,
+				root: entry.root,
+				locale: entry.locale,
 				err,
 			});
 		}

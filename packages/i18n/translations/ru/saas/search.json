@@ -1069,7 +1069,20 @@
 			"noIndexes": "Нет доступных индексов. Создайте сначала.",
 			"curlTitle": "cURL equivalent",
 			"searchFailed": "Ошибка поиска",
-			"copyFailed": "Ошибка копирования"
+			"copyFailed": "Ошибка копирования",
+			"federatedMode": "Федеративный поиск",
+			"federatedModeHint": "Поиск по нескольким индексам с объединёнными результатами",
+			"singleIndex": "Один индекс",
+			"multiIndex": "Несколько индексов",
+			"selectIndexes": "Выберите индексы для мульти-поиска",
+			"indexWeight": "Вес",
+			"addIndexToSearch": "Добавить в поиск",
+			"sourceIndex": "Индекс-источник",
+			"unionResults": "Объединить результаты",
+			"dedupResults": "Удалить дубликаты",
+			"perIndexWeight": "Вес: {weight}",
+			"federatedSearchTotal": "Всего по {count} индексам",
+			"removeIndex": "Удалить"
 		},
 		"indexActions": {
 			"actions": "Действия",

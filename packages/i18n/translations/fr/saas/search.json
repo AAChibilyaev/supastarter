@@ -963,7 +963,20 @@
 			"noIndexes": "Aucun index disponible. Créez-en un d'abord.",
 			"curlTitle": "Équivalent cURL",
 			"searchFailed": "Recherche échouée",
-			"copyFailed": "Échec de la copie"
+			"copyFailed": "Échec de la copie",
+			"federatedMode": "Recherche fédérée",
+			"federatedModeHint": "Rechercher dans plusieurs index avec résultats fusionnés",
+			"singleIndex": "Index unique",
+			"multiIndex": "Plusieurs index",
+			"selectIndexes": "Sélectionner les index pour la recherche multi-index",
+			"indexWeight": "Pondération",
+			"addIndexToSearch": "Ajouter à la recherche",
+			"sourceIndex": "Index source",
+			"unionResults": "Fusionner les résultats",
+			"dedupResults": "Dédupliquer",
+			"perIndexWeight": "Pondération: {weight}",
+			"federatedSearchTotal": "Total pour {count} index",
+			"removeIndex": "Supprimer"
 		},
 		"indexActions": {
 			"actions": "Actions",

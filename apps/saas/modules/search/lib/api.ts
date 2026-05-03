@@ -90,3 +90,9 @@ export function useUpdateModelConfigMutation() {
 		},
 	});
 }
+
+// ── Federated Search ─────────────────────────────────────────────
+
+export function useFederatedSearchMutation() {
+	return useMutation(orpc.search.federatedSearch.mutationOptions());
+}

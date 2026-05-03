@@ -702,7 +702,20 @@
 			"noIndexes": "No hay índices disponibles. Crea uno primero.",
 			"curlTitle": "Equivalente cURL",
 			"searchFailed": "Búsqueda fallida",
-			"copyFailed": "Error al copiar"
+			"copyFailed": "Error al copiar",
+			"federatedMode": "Búsqueda federada",
+			"federatedModeHint": "Buscar en múltiples índices con resultados combinados",
+			"singleIndex": "Índice único",
+			"multiIndex": "Múltiples índices",
+			"selectIndexes": "Seleccionar índices para búsqueda múltiple",
+			"indexWeight": "Peso",
+			"addIndexToSearch": "Agregar a la búsqueda",
+			"sourceIndex": "Índice de origen",
+			"unionResults": "Unir resultados",
+			"dedupResults": "Deduplicar",
+			"perIndexWeight": "Peso: {weight}",
+			"federatedSearchTotal": "Total para {count} índices",
+			"removeIndex": "Eliminar"
 		},
 		"indexActions": {
 			"actions": "Acciones",

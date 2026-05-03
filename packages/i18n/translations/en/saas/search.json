@@ -1070,7 +1070,20 @@
 			"noIndexes": "No indexes available. Create one first.",
 			"curlTitle": "cURL equivalent",
 			"searchFailed": "Search failed",
-			"copyFailed": "Failed to copy"
+			"copyFailed": "Failed to copy",
+			"federatedMode": "Federated search",
+			"federatedModeHint": "Search across multiple indexes with blended results",
+			"singleIndex": "Single index",
+			"multiIndex": "Multi-index",
+			"selectIndexes": "Select indexes for multi-index search",
+			"indexWeight": "Weight",
+			"addIndexToSearch": "Add to search",
+			"sourceIndex": "Source index",
+			"unionResults": "Union results",
+			"dedupResults": "Deduplicate",
+			"perIndexWeight": "Weight: {weight}",
+			"federatedSearchTotal": "Total for {count} indexes",
+			"removeIndex": "Remove"
 		},
 		"indexActions": {
 			"actions": "Actions",

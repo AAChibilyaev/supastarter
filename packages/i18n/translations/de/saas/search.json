@@ -703,7 +703,20 @@
 			"noIndexes": "Keine Indizes verfügbar. Erstellen Sie zuerst einen.",
 			"curlTitle": "cURL-Befehl",
 			"searchFailed": "Suche fehlgeschlagen",
-			"copyFailed": "Kopieren fehlgeschlagen"
+			"copyFailed": "Kopieren fehlgeschlagen",
+			"federatedMode": "Föderierte Suche",
+			"federatedModeHint": "Suche über mehrere Indizes mit gemischten Ergebnissen",
+			"singleIndex": "Einzelner Index",
+			"multiIndex": "Mehrere Indizes",
+			"selectIndexes": "Indizes für die Mehrfachsuche auswählen",
+			"indexWeight": "Gewichtung",
+			"addIndexToSearch": "Zur Suche hinzufügen",
+			"sourceIndex": "Quellindex",
+			"unionResults": "Ergebnisse vereinen",
+			"dedupResults": "Duplikate entfernen",
+			"perIndexWeight": "Gewichtung: {weight}",
+			"federatedSearchTotal": "Gesamt für {count} Indizes",
+			"removeIndex": "Entfernen"
 		},
 		"indexActions": {
 			"actions": "Aktionen",

@@ -33,6 +33,8 @@ import { hybridSearch } from "./procedures/hybrid-search";
 import { imageSearch } from "./procedures/image-search";
 import { importDocuments } from "./procedures/import-documents";
 import { importJobs } from "./procedures/import-jobs";
+import { indexHealth } from "./procedures/index-health";
+import { indexHealthHistory } from "./procedures/index-health-history";
 import { listApiKeys } from "./procedures/list-api-keys";
 import { listConnectorSyncJobs } from "./procedures/list-connector-sync-jobs";
 import { listConnectorTokens } from "./procedures/list-connector-tokens";
@@ -99,6 +101,8 @@ export const searchRouter = {
 	saveWidgetConfig,
 	analytics,
 	ctrAnalytics,
+	indexHealth,
+	indexHealthHistory,
 	pipelineStatus,
 	listDocuments,
 	onboardingStatus,

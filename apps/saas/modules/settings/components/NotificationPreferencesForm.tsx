@@ -1,7 +1,7 @@
 "use client";
 
 import { NOTIFICATION_GROUPS } from "@repo/notifications/catalog";
-import { Card, Switch } from "@repo/ui";
+import { Card, CardContent, Switch } from "@repo/ui";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";

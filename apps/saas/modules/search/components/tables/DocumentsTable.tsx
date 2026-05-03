@@ -496,10 +496,6 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [importFile, setImportFile] = useState<File | null>(null);
-	const documentFields = useMemo(
-		() => fields.filter((f) => f.name !== "tenant_id" && f.name !== "id"),
-		[fields],
-	);
 	const [importParsed, setImportParsed] = useState<Record<string, unknown>[]>([]);
 
 	// ── Debounced search ────────────────────────────────────────────────────

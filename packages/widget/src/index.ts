@@ -37,6 +37,10 @@ export interface WidgetOptions {
 	aiAnswers?: boolean;
 	/** Enable image/photo search via camera button */
 	imageSearch?: boolean;
+	/** Enable voice search via mic button */
+	voiceEnabled?: boolean;
+	/** Language for voice recognition, e.g. "ru", "en-US". "auto" uses widget locale. */
+	voiceLanguage?: string;
 }
 
 const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
@@ -49,6 +53,8 @@ const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
 	recommendationsLimit: 5,
 	aiAnswers: false,
 	imageSearch: false,
+	voiceEnabled: false,
+	voiceLanguage: "auto",
 };
 
 const WIDGET_STYLES = `
@@ -932,6 +938,44 @@ const WIDGET_STYLES = `
   font-style: italic;
 }
 
+.aac-ai-answer-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.aac-ai-answer-source-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  background: var(--aac-bg);
+  border: 1px solid var(--aac-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--aac-text);
+  max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.aac-ai-answer-source-item:hover {
+  border-color: var(--aac-primary);
+  color: var(--aac-primary);
+}
+
+.aac-ai-answer-source-img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
 .aac-image-caption {
   font-size: 12px;
   color: var(--aac-text-secondary);
@@ -968,7 +1012,7 @@ interface SearchState {
 	recommendationsOpen: boolean;
 	aiAnswer: string;
 	aiAnswerLoading: boolean;
-	aiAnswerSources: Array<{ id?: unknown; title?: string; url?: string }>;
+	aiAnswerSources: Array<{ id?: unknown; title?: string; url?: string; imageUrl?: string }>;
 	imageCaption: string;
 	imageSearchLoading: boolean;
 }
@@ -1559,10 +1603,10 @@ export class AacSearchWidget {
 		const imageUrl = product.image_url as string | undefined;
 		const productUrl = product.product_url as string | undefined;
 		const categories = product.categories as string[] | undefined;
-		const _productId =
+		const productId =
 			(product.external_id as string | undefined) ?? (product.id as string | undefined);
 
-		let html = '<div class="aac-recs-item">';
+		let html = `<div class="aac-recs-item"${productId ? ` data-product-id="${escapeHtml(String(productId))}"` : ""}>`;
 
 		if (imageUrl) {
 			html += `<img class="aac-recs-item-image" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" loading="lazy" />`;
@@ -1703,7 +1747,10 @@ export class AacSearchWidget {
 			onerror: (() => void) | null;
 		};
 
-		recognition.lang = this.locale;
+		recognition.lang =
+			this.options.voiceLanguage && this.options.voiceLanguage !== "auto"
+				? this.options.voiceLanguage
+				: this.locale;
 		recognition.interimResults = false;
 		recognition.maxAlternatives = 1;
 
@@ -1774,7 +1821,7 @@ export class AacSearchWidget {
 			if (resp.ok) {
 				const data = await resp.json() as {
 					answer?: string;
-					sources?: Array<{ id?: unknown; title?: string; url?: string }>;
+					sources?: Array<{ id?: unknown; title?: string; url?: string; imageUrl?: string }>;
 				};
 				this.state = {
 					...this.state,
@@ -1819,6 +1866,20 @@ export class AacSearchWidget {
 			return;
 		}
 
+		const sourcesHtml = this.state.aiAnswerSources.length
+			? `<div class="aac-ai-answer-sources">${this.state.aiAnswerSources
+					.slice(0, 4)
+					.map(
+						(s) =>
+							`<a href="${escapeHtml(s.url ?? "#")}" target="_blank" rel="noopener" class="aac-ai-answer-source-item">${
+								s.imageUrl
+									? `<img src="${escapeHtml(s.imageUrl)}" alt="" class="aac-ai-answer-source-img" loading="lazy">`
+									: ""
+							}${escapeHtml(s.title ?? "")}</a>`,
+					)
+					.join("")}</div>`
+			: "";
+
 		container.innerHTML = `
 			<div class="aac-ai-answer">
 				<div class="aac-ai-answer-header">
@@ -1826,6 +1887,7 @@ export class AacSearchWidget {
 					${this.t("aiAnswer")}
 				</div>
 				<div class="aac-ai-answer-text">${escapeHtml(this.state.aiAnswer)}</div>
+				${sourcesHtml}
 			</div>
 		`;
 	}
@@ -2322,7 +2384,6 @@ export class AacSearchWidget {
 			// Determine how many values to show (10 by default, all if expanded)
 			const isExpanded = this.expandedFacets.has(fieldName);
 			const visibleCount = isExpanded ? facet.counts.length : 10;
-			const _remaining = facet.counts.length - 10;
 
 			for (const count of facet.counts.slice(0, visibleCount)) {
 				const checked = selected.includes(count.value) ? "checked" : "";
@@ -2537,14 +2598,18 @@ export class AacSearchWidget {
 				</button>`
 						: ""
 				}
-				<button class="aac-mic-btn" title="${this.t("voiceSearch")}" aria-label="${this.t("voiceSearch")}">
+				${
+					this.options.voiceEnabled
+						? `<button class="aac-mic-btn" title="${this.t("voiceSearch")}" aria-label="${this.t("voiceSearch")}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
 						<path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
 						<line x1="12" y1="19" x2="12" y2="23"/>
 						<line x1="8" y1="23" x2="16" y2="23"/>
 					</svg>
-				</button>
+				</button>`
+						: ""
+				}
 				</div>
 				${imageCaptionHtml}
 				<div class="aac-ai-answer-container"></div>
@@ -2659,6 +2724,8 @@ export class AacSearchWidget {
 					: 5,
 				aiAnswers: dataset.aiAnswers === "true",
 				imageSearch: dataset.imageSearch === "true",
+				voiceEnabled: dataset.voiceEnabled === "true",
+				voiceLanguage: dataset.voiceLanguage ?? "auto",
 			});
 		};
 

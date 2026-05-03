@@ -204,6 +204,8 @@ function buildSnippet({
 		widgetMode?: string;
 		aiAnswers?: boolean;
 		imageSearch?: boolean;
+		voiceEnabled?: boolean;
+		voiceLanguage?: string;
 	};
 	facetsAttr?: string;
 }) {
@@ -236,6 +238,9 @@ function buildSnippet({
 	if (config.chatAssistantName) lines.push(`  data-assistant-name="${config.chatAssistantName}"`);
 	if (config.aiAnswers) lines.push(`  data-ai-answers="true"`);
 	if (config.imageSearch) lines.push(`  data-image-search="true"`);
+	if (config.voiceEnabled) lines.push(`  data-voice-enabled="true"`);
+	if (config.voiceLanguage && config.voiceLanguage !== "auto")
+		lines.push(`  data-voice-language="${config.voiceLanguage}"`);
 	lines.push(`></script>`);
 	return lines.join("\n");
 }

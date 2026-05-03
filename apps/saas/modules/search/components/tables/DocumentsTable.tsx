@@ -33,6 +33,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import {
 	Pagination,
 	PaginationContent,
@@ -785,6 +786,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [importFile, setImportFile] = useState<File | null>(null);
 	const [importParsed, setImportParsed] = useState<Record<string, unknown>[]>([]);
+	const [importAction, setImportAction] = useState<"create" | "update" | "upsert" | "emplace">(
+		"upsert",
+	);
 
 	// ── TanStack Table ──────────────────────────────────────────────────────
 
@@ -1142,6 +1146,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			organizationId,
 			slug,
 			documents: importParsed,
+			action: importAction,
 		});
 	};
 

@@ -1,6 +1,15 @@
 "use client";
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
+import {
+	AlertDialog,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@repo/ui/components/alert-dialog";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -10,6 +19,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
+import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
@@ -79,6 +89,8 @@ export function CollectionDetail() {
 
 	const [activeTab, setActiveTab] = useState<TabId>("overview");
 	const [docView, setDocView] = useState<"table" | "files">("table");
+	const [truncateDialogOpen, setTruncateDialogOpen] = useState(false);
+	const [truncateConfirmPhrase, setTruncateConfirmPhrase] = useState("");
 
 	// ── Fetch indexes ──────────────────────────────────────────────
 
@@ -142,6 +154,22 @@ export function CollectionDetail() {
 			},
 			onError: () => {
 				toastError(t("collection.deleteError"));
+			},
+		}),
+	);
+
+	// ── Truncate mutation ──────────────────────────────────────────
+
+	const truncateMutation = useMutation(
+		orpc.search.truncateIndex.mutationOptions({
+			onSuccess: () => {
+				toastSuccess(t("collection.truncateSuccess"));
+				setTruncateDialogOpen(false);
+				setTruncateConfirmPhrase("");
+				router.refresh();
+			},
+			onError: () => {
+				toastError(t("collection.truncateError"));
 			},
 		}),
 	);
@@ -596,32 +624,112 @@ $data = json_decode($response->getBody(), true);`;
 							</CardTitle>
 							<CardDescription>{t("collection.dangerZoneDesc")}</CardDescription>
 						</CardHeader>
-						<CardContent>
-							<p className="text-sm mb-4 text-muted-foreground">
-								{t("collection.deleteWarning")}
-							</p>
-							<Button
-								variant="destructive"
-								onClick={() => {
-									if (!orgId) return;
-									confirm({
-										title: t("collection.confirmDelete"),
-										message: t("collection.confirmDeleteDesc"),
-										confirmLabel: t("collection.delete"),
-										destructive: true,
-										onConfirm: () => {
-											deleteMutation.mutate({
-												organizationId: orgId,
-												slug: index.slug,
-											});
-										},
-									});
-								}}
-							>
-								{t("collection.deleteCollection")}
-							</Button>
+						<CardContent className="space-y-6">
+							{/* Truncate section */}
+							<div className="space-y-4">
+								<div>
+									<h4 className="font-medium text-sm">
+										{t("collection.truncate")}
+									</h4>
+									<p className="text-sm text-muted-foreground">
+										{t("collection.truncateDesc")}
+									</p>
+								</div>
+								<Button
+									variant="outline"
+									className="border-destructive/50 text-destructive hover:text-destructive"
+									onClick={() => setTruncateDialogOpen(true)}
+								>
+									{t("collection.truncate")}
+								</Button>
+							</div>
+
+							<hr className="border-destructive/20" />
+
+							{/* Delete section */}
+							<div className="space-y-4">
+								<div>
+									<h4 className="font-medium text-sm">
+										{t("collection.deleteCollection")}
+									</h4>
+									<p className="text-sm text-muted-foreground">
+										{t("collection.deleteWarning")}
+									</p>
+								</div>
+								<Button
+									variant="destructive"
+									onClick={() => {
+										if (!orgId) return;
+										confirm({
+											title: t("collection.confirmDelete"),
+											message: t("collection.confirmDeleteDesc"),
+											confirmLabel: t("collection.delete"),
+											destructive: true,
+											onConfirm: () => {
+												deleteMutation.mutate({
+													organizationId: orgId,
+													slug: index.slug,
+												});
+											},
+										});
+									}}
+								>
+									{t("collection.deleteCollection")}
+								</Button>
+							</div>
 						</CardContent>
 					</Card>
+
+					{/* Truncate confirmation dialog */}
+					<AlertDialog
+						open={truncateDialogOpen}
+						onOpenChange={(open) => {
+							setTruncateDialogOpen(open);
+							if (!open) setTruncateConfirmPhrase("");
+						}}
+					>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									{t("collection.truncateConfirm", {
+										name: index.displayName ?? index.slug,
+									})}
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									{t("collection.truncateConfirmDesc")}
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<div className="py-4">
+								<Input
+									placeholder={t("collection.truncateSlugPlaceholder")}
+									value={truncateConfirmPhrase}
+									onChange={(e) => setTruncateConfirmPhrase(e.target.value)}
+								/>
+							</div>
+							<AlertDialogFooter>
+								<AlertDialogCancel>{t("collection.cancel")}</AlertDialogCancel>
+								<Button
+									variant="destructive"
+									disabled={
+										truncateConfirmPhrase !== index.slug ||
+										truncateMutation.isPending
+									}
+									onClick={() => {
+										if (!orgId) return;
+										truncateMutation.mutate({
+											organizationId: orgId,
+											slug: index.slug,
+											confirmPhrase: truncateConfirmPhrase,
+										});
+									}}
+								>
+									{truncateMutation.isPending
+										? t("collection.loading")
+										: t("collection.truncate")}
+								</Button>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</div>
 			)}
 		</div>

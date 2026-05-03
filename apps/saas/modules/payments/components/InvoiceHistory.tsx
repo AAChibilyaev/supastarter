@@ -5,12 +5,12 @@ import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
-\tTable,
-\tTableBody,
-\tTableCell,
-\tTableHead,
-\tTableHeader,
-\tTableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@repo/ui/components/table";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";

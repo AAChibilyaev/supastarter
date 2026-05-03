@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -13,14 +12,16 @@ import {
 } from "@repo/ui/components/card";
 import {
 	CopyIcon,
-	DatabaseIcon,
 	DownloadIcon,
 	ImportIcon,
 	Settings2Icon,
+	SlidersHorizontalIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+
+import { CollectionStats } from "./CollectionStats";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -36,26 +37,7 @@ export interface CollectionData {
 	createdAt: string;
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function formatBytes(mb: number): string {
-	if (mb < 1) return `${Math.round(mb * 1000)} KB`;
-	if (mb > 1000) return `${(mb / 1000).toFixed(1)} GB`;
-	return `${Math.round(mb)} MB`;
-}
-
-function formatRelativeTime(dateStr: string): string {
-	const date = new Date(dateStr);
-	const now = new Date();
-	const diffMs = now.getTime() - date.getTime();
-	const diffMin = Math.floor(diffMs / 60_000);
-	if (diffMin < 1) return "just now";
-	if (diffMin < 60) return `${diffMin}m ago`;
-	const diffHr = Math.floor(diffMin / 60);
-	if (diffHr < 24) return `${diffHr}h ago`;
-	const diffDay = Math.floor(diffHr / 24);
-	return `${diffDay}d ago`;
-}
+// ─── Component ───────────────────────────────────────────────────────────────
 
 interface CollectionCardProps {
 	collection: CollectionData;
@@ -66,8 +48,6 @@ interface CollectionCardProps {
 	onExport?: (slug: string) => void;
 	onSchema?: (slug: string) => void;
 }
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 export function CollectionCard({
 	collection,
@@ -108,39 +88,12 @@ export function CollectionCard({
 				</div>
 			</CardHeader>
 			<CardContent className="gap-3 pb-3 flex flex-1 flex-col">
-				{/* Stats */}
-				<div className="gap-1.5 text-sm flex flex-wrap">
-					<div className="gap-1 inline-flex items-center text-muted-foreground">
-						<DatabaseIcon className="size-3.5" />
-						<span>{collection.numDocuments.toLocaleString()} docs</span>
-					</div>
-					{collection.sizeMb != null && (
-						<span className="text-muted-foreground">
-							{"\u00B7"} {formatBytes(collection.sizeMb)}
-						</span>
-					)}
-					{collection.lastActivityAt && (
-						<span className="text-muted-foreground">
-							{"\u00B7"} {formatRelativeTime(collection.lastActivityAt)}
-						</span>
-					)}
-				</div>
-
-				{/* Usage bar */}
-				<div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-					<div
-						className={cn(
-							"h-full rounded-full transition-all",
-							usagePercent > 90
-								? "bg-destructive"
-								: usagePercent > 70
-									? "bg-warning"
-									: "bg-primary",
-						)}
-						style={{ width: `${Math.max(usagePercent, 4)}%` }}
-					/>
-				</div>
-				<span className="text-xs text-muted-foreground">{usagePercent}% of quota used</span>
+				<CollectionStats
+					numDocuments={collection.numDocuments}
+					sizeMb={collection.sizeMb}
+					lastActivityAt={collection.lastActivityAt}
+					usagePercent={usagePercent}
+				/>
 			</CardContent>
 			<CardFooter className="gap-1 pt-0">
 				<Button variant="outline" size="sm" asChild className="flex-1">
@@ -164,6 +117,16 @@ export function CollectionCard({
 						onClick={() => onSchema?.(collection.slug)}
 					>
 						<Settings2Icon className="size-3.5" />
+					</Button>
+					<Button
+						variant="ghost"
+						size="icon"
+						title={t("search.collection.collectionSettings") || "Settings"}
+						asChild
+					>
+						<Link href={`/${organizationSlug}/collections/${collection.slug}/settings`}>
+							<SlidersHorizontalIcon className="size-3.5" />
+						</Link>
 					</Button>
 					<Button
 						variant="ghost"

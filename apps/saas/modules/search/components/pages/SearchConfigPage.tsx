@@ -16,7 +16,7 @@ export function SearchConfigPage({ organizationId }: { organizationId: string })
 		orpc.search.saveWidgetConfig.mutationOptions({
 			onSuccess: (_, variables) => {
 				logger.info("Widget config saved", { slug: variables.slug });
-				router.push(`/${slug}/search?tab=widget`);
+				router.push(`/${slug}/widget?tab=install`);
 			},
 			onError: (error) => {
 				logger.error("Failed to save widget config", { error });

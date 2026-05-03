@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { FacetsPanel, type FacetConfig } from "../panels/FacetsPanel";
 
@@ -109,6 +109,50 @@ export function SearchConfigWizard({
 		enabled: Boolean(organizationId),
 	});
 
+	// Load existing widget config when an index is selected (pre-populate defaults)
+	const { data: existingConfig } = useQuery({
+		...orpc.search.widgetConfig.queryOptions({
+			input: {
+				organizationId,
+				indexSlug: selectedIndexSlug ?? "",
+			},
+		}),
+		enabled: Boolean(organizationId) && Boolean(selectedIndexSlug),
+		retry: false,
+	});
+
+	// Populate form fields from saved config, if any
+	useEffect(() => {
+		if (!existingConfig?.config) return;
+		const cfg = existingConfig.config;
+
+		// Step 3: search config
+		if (cfg.queryBy.length > 0) {
+			setSearchableFields(cfg.queryBy);
+		}
+		// Step 4: facet config (field names only → basic FacetConfig objects)
+		if (cfg.facetFields.length > 0) {
+			setFacetConfig(
+				cfg.facetFields.map((name) => ({
+					fieldName: name,
+					displayName: name,
+					sortOrder: "count" as const,
+					maxValues: 10,
+					multiSelect: true,
+				})),
+			);
+		}
+		// Step 5: widget appearance
+		setTheme(cfg.theme);
+		setPlaceholder(cfg.placeholder === "Search..." ? "Search products..." : cfg.placeholder);
+		setResultsPerPage(cfg.resultsPerPage);
+		setShowThumbnails(cfg.showThumbnails);
+		setShowSearchButton(cfg.showSearchButton);
+		setSearchButtonText(cfg.searchButtonText);
+		setAccentColor(cfg.accentColor);
+		setKeyboardShortcut(cfg.keyboardShortcut);
+	}, [existingConfig]);
+
 	const activeIndex = useMemo(() => {
 		if (!selectedIndexSlug || !indexes) return null;
 		return indexes.find((i) => i.slug === selectedIndexSlug) ?? null;
@@ -118,19 +162,21 @@ export function SearchConfigWizard({
 	const handleIndexSelect = (slug: string) => {
 		setSelectedIndexSlug(slug);
 		const index = indexes?.find((i) => i.slug === slug);
-		if (index?.schema && typeof index.schema === "object") {
-			const schema = index.schema as Record<string, unknown>;
-			const schemaFields = (schema.fields as Record<string, unknown>[]) ?? [];
-			if (schemaFields.length > 0) {
-				const parsed: FieldDef[] = schemaFields.map((f: Record<string, unknown>) => ({
-					name: String(f.name ?? ""),
-					type: String(f.type ?? "string"),
-					facet: Boolean(f.facet),
-					sort: Boolean(f.sort),
-					index: Boolean(f.index ?? true),
-				}));
-				setFields(parsed);
-				setSearchableFields(parsed.filter((f) => f.index).map((f) => f.name));
+		if (index && "schema" in index) {
+			const schema = (index as any).schema as Record<string, unknown> | null;
+			if (schema && typeof schema === "object" && schema.fields) {
+				const schemaFields = (schema.fields as Record<string, unknown>[]) ?? [];
+				if (schemaFields.length > 0) {
+					const parsed: FieldDef[] = schemaFields.map((f: Record<string, unknown>) => ({
+						name: String((f.name as string | undefined) ?? ""),
+						type: String((f.type as string | undefined) ?? "string"),
+						facet: Boolean(f.facet),
+						sort: Boolean(f.sort),
+						index: Boolean(f.index ?? true),
+					}));
+					setFields(parsed);
+					setSearchableFields(parsed.filter((f) => f.index).map((f) => f.name));
+				}
 			}
 		}
 		// Move to next step
@@ -267,7 +313,7 @@ export function SearchConfigWizard({
 					{currentStep === 5 && (
 						<StepPreview
 							selectedIndexSlug={selectedIndexSlug ?? ""}
-							activeIndexName={activeIndex?.name ?? ""}
+							activeIndexName={activeIndex?.displayName ?? ""}
 							searchableFields={searchableFields}
 							facetFields={facetFields}
 							defaultSortField={fields.find((f) => f.sort)?.name}
@@ -303,7 +349,7 @@ export function SearchConfigWizard({
 // ─── Step 1: Select Index ─────────────────────────────────────────────────────
 
 interface StepSelectIndexProps {
-	indexes: Array<{ slug: string; name: string; documentCount: number; updatedAt: string }>;
+	indexes: Array<{ slug: string; displayName: string; apiKeysCount: number }>;
 	isLoading: boolean;
 	selectedSlug: string | null;
 	onSelect: (slug: string) => void;
@@ -343,9 +389,9 @@ function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: Step
 						>
 							<CardContent className="gap-4 p-4 sm:flex-row sm:items-center flex flex-col">
 								<div className="min-w-0 flex-1">
-									<p className="font-medium">{index.name}</p>
+									<p className="font-medium">{index.displayName}</p>
 									<p className="text-sm text-muted-foreground">
-										{index.documentCount.toLocaleString()} documents
+										{index.apiKeysCount} keys
 									</p>
 								</div>
 								<div className="gap-2 flex shrink-0 items-center">

@@ -29,39 +29,22 @@ import {
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
-	ActivityIcon,
-	BanIcon,
 	BarChart3Icon,
-	BookTextIcon,
 	CableIcon,
 	ChevronRightIcon,
-	Code2,
-	FileTextIcon,
-	FilterIcon,
-	GripVerticalIcon,
 	HomeIcon,
-	LayersIcon,
 	LightbulbIcon,
 	MenuIcon,
-	MicIcon,
-	NetworkIcon,
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
-	PinIcon,
 	RocketIcon,
-	ScissorsIcon,
 	SearchIcon,
 	SettingsIcon,
 	ShieldUserIcon,
-	ShuffleIcon,
 	SlidersHorizontalIcon,
 	SparklesIcon,
-	TrendingUpIcon,
 	UserCogIcon,
-	WandIcon,
-	WebhookIcon,
 	WrenchIcon,
-	XCircleIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -120,9 +103,7 @@ function NavMenuList({
 						<menuItem.icon
 							className={cn(
 								"size-5 shrink-0",
-								menuItem.isActive
-									? "text-foreground"
-									: "text-muted-foreground opacity-60",
+								menuItem.isActive ? "text-foreground" : "text-muted-foreground opacity-60",
 							)}
 						/>
 					);
@@ -143,9 +124,7 @@ function NavMenuList({
 													{parentIcon}
 												</Link>
 											</TooltipTrigger>
-											<TooltipContent side="right">
-												{menuItem.label}
-											</TooltipContent>
+											<TooltipContent side="right">{menuItem.label}</TooltipContent>
 										</Tooltip>
 									</li>
 								);
@@ -166,23 +145,14 @@ function NavMenuList({
 													</button>
 												</DropdownMenuTrigger>
 											</TooltipTrigger>
-											<TooltipContent side="right">
-												{menuItem.label}
-											</TooltipContent>
+											<TooltipContent side="right">{menuItem.label}</TooltipContent>
 										</Tooltip>
-										<DropdownMenuContent
-											side="right"
-											align="start"
-											sideOffset={8}
-										>
+										<DropdownMenuContent side="right" align="start" sideOffset={8}>
 											<DropdownMenuLabel className="font-normal text-muted-foreground">
 												{menuItem.label}
 											</DropdownMenuLabel>
 											{menuItem.subItems.map((subItem) => {
-												const subActive = isNavSubItemActive(
-													pathname,
-													subItem.href,
-												);
+												const subActive = isNavSubItemActive(pathname, subItem.href);
 												return (
 													<DropdownMenuItem key={subItem.href} asChild>
 														<Link
@@ -205,12 +175,7 @@ function NavMenuList({
 
 						return (
 							<li key={menuItem.href} className="gap-0.5 flex flex-col">
-								<Link
-									href={menuItem.href}
-									onClick={onLinkClick}
-									className={parentClasses}
-									prefetch
-								>
+								<Link href={menuItem.href} onClick={onLinkClick} className={parentClasses} prefetch>
 									{parentIcon}
 									<span
 										className={cn({
@@ -230,10 +195,7 @@ function NavMenuList({
 										/>
 										<ul className="gap-0.5 pl-9 flex flex-col">
 											{menuItem.subItems.map((subItem) => {
-												const subActive = isNavSubItemActive(
-													pathname,
-													subItem.href,
-												);
+												const subActive = isNavSubItemActive(pathname, subItem.href);
 												return (
 													<li key={subItem.href}>
 														<Link
@@ -241,8 +203,7 @@ function NavMenuList({
 															onClick={onLinkClick}
 															className={cn(
 																"py-1.5 pl-2 pr-3 text-sm flex w-full items-center rounded-md text-muted-foreground transition-colors hover:bg-accent/50",
-																subActive &&
-																	"font-semibold text-foreground",
+																subActive && "font-semibold text-foreground",
 															)}
 															prefetch
 														>
@@ -259,12 +220,7 @@ function NavMenuList({
 					}
 
 					const menuItemContent = (
-						<Link
-							href={menuItem.href}
-							onClick={onLinkClick}
-							className={parentClasses}
-							prefetch
-						>
+						<Link href={menuItem.href} onClick={onLinkClick} className={parentClasses} prefetch>
 							{parentIcon}
 							{!isCollapsedEffective && (
 								<span
@@ -361,8 +317,7 @@ export function NavBar() {
 							label: t("search.nav.apiKeys"),
 							href: `${orgSettingsPrefix}/api-keys`,
 						},
-						...(paymentsConfig.billingAttachedTo === "organization" &&
-						isOrganizationAdmin
+						...(paymentsConfig.billingAttachedTo === "organization" && isOrganizationAdmin
 							? [
 									{
 										label: t("settings.menu.organization.billing"),
@@ -694,24 +649,23 @@ export function NavBar() {
 							</div>
 						</div>
 
-						{authConfig.organizations.enable &&
-							!authConfig.organizations.hideOrganization && (
-								<>
-									{!isCollapsedEffective && (
-										<span className="md:hidden opacity-30">
-											<ChevronRightIcon className="size-4" />
-										</span>
-									)}
+						{authConfig.organizations.enable && !authConfig.organizations.hideOrganization && (
+							<>
+								{!isCollapsedEffective && (
+									<span className="md:hidden opacity-30">
+										<ChevronRightIcon className="size-4" />
+									</span>
+								)}
 
-									<OrganzationSelect
-										className={cn(
-											isCollapsedEffective ? "md:mt-2" : "md:mt-3 md:mb-1.5",
-											isCollapsedEffective && "md:flex md:justify-center",
-										)}
-										collapsed={isCollapsedEffective}
-									/>
-								</>
-							)}
+								<OrganzationSelect
+									className={cn(
+										isCollapsedEffective ? "md:mt-2" : "md:mt-3 md:mb-1.5",
+										isCollapsedEffective && "md:flex md:justify-center",
+									)}
+									collapsed={isCollapsedEffective}
+								/>
+							</>
+						)}
 					</div>
 
 					<div className="mr-0 gap-2 md:hidden ml-auto flex items-center justify-end">

@@ -4,13 +4,6 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../lib/access";
 
-const conversationSchema = z.object({
-	id: z.number(),
-	conversation: z.array(z.record(z.string(), z.unknown())),
-	lastUpdated: z.number(),
-	ttl: z.number(),
-});
-
 export const listConversations = protectedProcedure
 	.route({
 		method: "GET",

@@ -22,7 +22,7 @@ const seedRules = [
 	{
 		provider: "aacsearch",
 		model: "ai_answer",
-		operation: "rag_answer",
+		operation: "ai_answer",
 		flatFeeKopecks: 3n,
 		notes: "AI Answer (zero-click) — 3 credits per inline answer card",
 	},
@@ -38,7 +38,7 @@ const seedRules = [
 	{
 		provider: "aacsearch",
 		model: "embedding",
-		operation: "embedding",
+		operation: "embedding_tokens_1k",
 		flatFeeKopecks: 1n,
 		notes: "Custom embedding — 1 credit per 1K tokens",
 	},
@@ -54,7 +54,7 @@ const seedRules = [
 	{
 		provider: "aacsearch",
 		model: "hype",
-		operation: "embedding",
+		operation: "hype_index",
 		flatFeeKopecks: 3n,
 		notes: "HyPE indexing — 3 credits per document",
 	},
@@ -81,6 +81,38 @@ const seedRules = [
 		operation: "chat",
 		flatFeeKopecks: 5n,
 		notes: "Audio transcription — 5 credits per minute",
+	},
+	// Chat / file ingest / voice search: 5 credits per operation
+	{
+		provider: "aacsearch",
+		model: "chat",
+		operation: "chat",
+		flatFeeKopecks: 5n,
+		notes: "Chat / file ingest / voice search — 5 credits per operation",
+	},
+	// Image search (Vision + embedding): 3 credits per query
+	{
+		provider: "aacsearch",
+		model: "image_search",
+		operation: "image_search",
+		flatFeeKopecks: 3n,
+		notes: "Image search (Vision API + embedding) — 3 credits per query",
+	},
+	// My Search RAG: 5 credits per turn
+	{
+		provider: "aacsearch",
+		model: "my_search",
+		operation: "my_search_rag",
+		flatFeeKopecks: 5n,
+		notes: "My Search RAG — 5 credits per turn",
+	},
+	// Natural language query: 1 credit per query
+	{
+		provider: "aacsearch",
+		model: "nlq",
+		operation: "natural_language_query",
+		flatFeeKopecks: 1n,
+		notes: "Natural language search query — 1 credit per query",
 	},
 ];
 
@@ -120,7 +152,7 @@ async function main() {
 				`  ✓ ${rule.provider}/${rule.model}/${rule.operation} = ${rule.flatFeeKopecks} kopecks`,
 			);
 		}
-		console.log("Seeding complete — 9 AI pricing rules inserted/updated.");
+		console.log("Seeding complete — 13 AI pricing rules inserted/updated.");
 	} finally {
 		client.release();
 		await pool.end();

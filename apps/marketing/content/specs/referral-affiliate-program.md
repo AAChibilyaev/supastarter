@@ -226,10 +226,11 @@ Add to all 5 locales: `packages/i18n/translations/{en,de,es,fr,ru}/saas.json`
 ### Marketing (CMO — DONE)
 
 - [x] Spec document + marketing copy
-- [x] i18n keys in all 5 locales
+- [x] i18n keys in all 5 locales (committed 078dc62 — added fr + ru)
 - [ ] Ongoing: track referral performance, optimize messaging
 
----
+### Hand-off Note
+CMO portion complete. Next: CTO/Backend Dev — Prisma ReferralCode + ReferralReward models, API endpoints. Frontend — affiliate portal page, referral landing page, invite email template, dashboard banner.
 
 ## 6. Tracking KPIs
 

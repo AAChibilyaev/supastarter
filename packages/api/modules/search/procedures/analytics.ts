@@ -103,21 +103,33 @@ export const analytics = protectedProcedure
 		const zeroResultQueries =
 			zeroResultCount > 0 ? [{ query: "zero_results", count: zeroResultCount }] : [];
 
-		// ── Top clicked products ──
-		const resultClicks = events
-			.filter((e) => e.type === "result_click")
-			.reduce((sum, e) => sum + e.count, 0);
+		// ── Top clicked products (from metadata productId) ──
+		type ProductClickRow = { product_id: string; total_clicks: bigint };
+		const idxFilter = indexId ? `AND event.index_id = '${indexId}'` : "";
+		const productClicksRaw = await db.$queryRawUnsafe<ProductClickRow[]>(
+			`SELECT
+				COALESCE(event.metadata->>'productId', 'unknown') AS product_id,
+				SUM(event.count)::bigint AS total_clicks
+			 FROM search_usage_event event
+			 WHERE event.organization_id = $1
+			   AND event.type = 'result_click'
+			   AND event.created_at >= $2
+			   AND event.metadata->>'productId' IS NOT NULL
+			   ${idxFilter}
+			 GROUP BY product_id
+			 ORDER BY total_clicks DESC
+			 LIMIT 10`,
+			organizationId,
+			since,
+		);
 
-		const topClickedProducts =
-			resultClicks > 0
-				? [
-						{
-							productId: "all",
-							title: "Result clicks",
-							clicks: resultClicks,
-						},
-					]
-				: [];
+		const topClickedProducts = productClicksRaw.map((row) => ({
+			productId: row.product_id,
+			title: row.product_id,
+			clicks: Number(row.total_clicks),
+		}));
+
+		const resultClicks = topClickedProducts.reduce((sum, p) => sum + p.clicks, 0);
 
 		// ── CTR (click-through rate) ──
 		const ctr = totalSearches > 0 ? resultClicks / totalSearches : 0;

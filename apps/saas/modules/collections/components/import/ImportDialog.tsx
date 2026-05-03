@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@repo/ui/components/button";
 import { Progress } from "@repo/ui/components/progress";
 import {
 	Dialog,
@@ -12,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/ta
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UploadIcon } from "lucide-react";
+import { RotateCcwIcon, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useRef, useState } from "react";
 
@@ -65,7 +66,35 @@ export function ImportDialog({
 		total: 0,
 		status: "idle",
 	});
+	const [importedCount, setImportedCount] = useState(0);
 	const abortRef = useRef(false);
+	const importedIdsRef = useRef<string[]>([]);
+
+	// ── Delete batch mutation (for undo) ──────────────────────────────────
+
+	const deleteBatchMutation = useMutation(
+		orpc.collections.documents.deleteBatch.mutationOptions({
+			onSuccess: (result) => {
+				toastSuccess(
+					t("search.import.undoSuccess", { count: result.count }) ??
+						`Undo successful — ${result.count} documents removed`,
+				);
+				importedIdsRef.current = [];
+				setImportedCount(0);
+				setProgress({ current: 0, total: 0, status: "idle" });
+				void queryClient.invalidateQueries({
+					queryKey: orpc.collections.documents.list.key(),
+				});
+				handleClose();
+			},
+			onError: (err) => {
+				toastError(
+					t("search.import.undoError") ??
+						`Undo failed: ${err instanceof Error ? err.message : "Unknown error"}`,
+				);
+			},
+		}),
+	);
 
 	// ── Auto-map columns on data change ──────────────────────────────────────
 
@@ -121,6 +150,7 @@ export function ImportDialog({
 		}
 
 		abortRef.current = false;
+		importedIdsRef.current = [];
 		setProgress({ current: 0, total: chunks.length, status: "importing" });
 
 		try {
@@ -128,26 +158,31 @@ export function ImportDialog({
 			for (let i = 0; i < chunks.length; i++) {
 				if (abortRef.current) break;
 
-				await importChunkMutation.mutateAsync({
+				const result = await importChunkMutation.mutateAsync({
 					organizationId,
 					slug,
 					documents: chunks[i],
 				});
+
+				// Track created document IDs for undo
+				if (Array.isArray(result)) {
+					for (const doc of result) {
+						if (doc?.id) {
+							importedIdsRef.current.push(doc.id);
+						}
+					}
+				}
 
 				importedCount += chunks[i].length;
 				setProgress({ current: i + 1, total: chunks.length, status: "importing" });
 			}
 
 			if (!abortRef.current) {
+				setImportedCount(importedCount);
 				setProgress({ current: chunks.length, total: chunks.length, status: "done" });
-				toastSuccess(
-					t("search.import.success", { count: importedCount }) ||
-						`Imported ${importedCount} documents`,
-				);
 				void queryClient.invalidateQueries({
 					queryKey: orpc.collections.documents.list.key(),
 				});
-				handleClose();
 			}
 		} catch (err) {
 			setProgress((p) => ({ ...p, status: "error" }));
@@ -164,8 +199,24 @@ export function ImportDialog({
 		setProgress({ current: 0, total: 0, status: "idle" });
 	}, []);
 
+	const handleUndo = useCallback(() => {
+		const ids = importedIdsRef.current;
+		if (ids.length === 0) {
+			handleClose();
+			return;
+		}
+		deleteBatchMutation.mutate({
+			organizationId,
+			slug,
+			ids,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [organizationId, slug, deleteBatchMutation]);
+
 	const handleClose = () => {
 		abortRef.current = true;
+		importedIdsRef.current = [];
+		setImportedCount(0);
 		setParsedData(null);
 		setColumnMapping({});
 		setActiveTab(TAB_FILE);
@@ -177,6 +228,7 @@ export function ImportDialog({
 		schemaFieldNames.length > 0 ? schemaFieldNames : parsedData ? parsedData.columns : [];
 
 	const isImporting = progress.status === "importing";
+	const isDone = progress.status === "done";
 
 	return (
 		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
@@ -187,12 +239,47 @@ export function ImportDialog({
 						{t("search.import.title") || "Import Documents"}
 					</DialogTitle>
 					<DialogDescription>
-						{t("search.import.description") ||
-							"Import documents from CSV, TSV, JSON, or paste from Excel/Sheets"}
+						{isDone
+							? t("search.import.importComplete") ||
+								`${importedCount} documents imported successfully`
+							: t("search.import.description") ||
+								"Import documents from CSV, TSV, JSON, or paste from Excel/Sheets"}
 					</DialogDescription>
 				</DialogHeader>
 
-				{parsedData ? (
+				{isDone ? (
+					/* ── Done state with undo ───────────────────────────────────── */
+					<div className="space-y-4">
+						<div className="gap-3 p-4 flex items-center rounded-lg border bg-primary/5">
+							<div className="size-3 rounded-full bg-primary" />
+							<div className="flex-1">
+								<p className="font-medium text-sm">
+									{t("search.import.importComplete") || "Import complete"}
+								</p>
+								<p className="text-xs text-muted-foreground">
+									{t("search.import.importedCount", { count: importedCount }) ??
+										`${importedCount} documents imported`}
+								</p>
+							</div>
+						</div>
+
+						<div className="gap-2 flex justify-end">
+							<Button
+								variant="outline"
+								onClick={handleUndo}
+								disabled={deleteBatchMutation.isPending}
+							>
+								<RotateCcwIcon className="size-4" />
+								{deleteBatchMutation.isPending
+									? t("search.import.undoing") || "Undoing..."
+									: t("search.import.undo") || "Undo Import"}
+							</Button>
+							<Button variant="primary" onClick={handleClose}>
+								{t("common.done") || "Done"}
+							</Button>
+						</div>
+					</div>
+				) : parsedData ? (
 					<div className="space-y-4">
 						<ImportPreview
 							data={parsedData}

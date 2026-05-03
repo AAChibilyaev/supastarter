@@ -33,6 +33,7 @@
 	"dripDay0": {
 		"greeting": "Hallo {name},",
 		"body": "Willkommen bei AACsearch Engine! Du hast den besten Weg gewählt, um erstklassige Suche in dein Produkt zu bringen. Keine Server, kein Ops-Team, keine Kopfschmerzen.\n\nHier ist dein Schnellstartplan – dauert etwa 5 Minuten:",
+		"whatsNext": "",
 		"step1": "1. Erstelle deine erste Such-Collection und definiere, was du indexieren möchtest",
 		"step2": "2. Lade deine Dokumente hoch – CSV, JSON oder verbinde ein CMS",
 		"step3": "3. Führe deine erste Suchanfrage aus und sieh Ergebnisse sofort",

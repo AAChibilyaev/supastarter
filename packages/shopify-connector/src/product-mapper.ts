@@ -1,3 +1,4 @@
+import type { CategoryMap } from "./category-sync";
 /**
  * Shopify → AACsearch document mapper.
  *
@@ -10,15 +11,7 @@
  * repeated on each variant document for searchability.
  */
 import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "./client";
-
-// ─── Optional types from related modules (loaded when available) ──
-// These types are used by product-mapper but defined in separate modules
-// that may not exist yet (inventory-sync.ts, category-sync.ts — AAC-561).
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type InventoryMap = Record<string, any>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CategoryMap = Record<string, any>;
+import type { InventoryMap } from "./inventory-sync";
 
 // ─── Document schema ─────────────────────────────────────────
 
@@ -223,7 +216,7 @@ export function flattenProductToDocuments(
 			brand: product.vendor ?? "",
 			categories,
 			category_ids: categoryMap?.has(product.id)
-				? categoryMap.get(product.id)!.categoryIds
+				? categoryMap.get(product.id)!.categoryIds.map(String)
 				: [],
 			tags: product.tags
 				? product.tags

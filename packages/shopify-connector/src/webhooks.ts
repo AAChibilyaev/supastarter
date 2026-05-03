@@ -15,13 +15,16 @@
  * - Webhook deregistration on store disconnect
  */
 
-import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
+import { buildCategoryMap } from "./category-sync";
+import type { CategoryMap } from "./category-sync";
 import { type ShopifyAdminClient, createShopifyClient } from "./client";
+import { fetchInventoryLevels } from "./inventory-sync";
+import type { InventoryMap } from "./inventory-sync";
 import { getStoreByShop } from "./oauth";
 import { flattenProductToDocuments } from "./product-mapper";
-import { type SyncOptions, enqueueDocumentBatch } from "./sync";
+import { enqueueDocumentBatch } from "./sync";
 
 // ─── Constants ─────────────────────────────────────────────────
 
@@ -153,10 +156,40 @@ async function flushBuffer(shop: string): Promise<void> {
 			),
 		];
 
+		// Pre-fetch category map for enrichment
+		let webhookCategoryMap: CategoryMap | undefined;
+		if (uniqueProductIds.length > 0 || collectionEvents.length > 0) {
+			try {
+				webhookCategoryMap = await buildCategoryMap(client);
+			} catch (err) {
+				logger.warn("Failed to build category map for webhook enrichment", { shop, err });
+			}
+		}
+
 		for (const productId of uniqueProductIds) {
 			try {
 				const { product } = await client.getProduct(productId);
-				const docs = flattenProductToDocuments(product, shop);
+
+				// Fetch accurate inventory levels for this product's variants
+				let inventoryMap: InventoryMap | undefined;
+				const itemIds = product.variants
+					.map((v: { inventory_item_id?: number }) => v.inventory_item_id)
+					.filter((id: number | undefined): id is number => id !== undefined);
+				if (itemIds.length > 0) {
+					try {
+						inventoryMap = await fetchInventoryLevels(client, itemIds);
+					} catch (err) {
+						logger.warn("Failed to fetch inventory for webhook product", {
+							productId,
+							err,
+						});
+					}
+				}
+
+				const docs = flattenProductToDocuments(product, shop, undefined, {
+					inventoryMap,
+					categoryMap: webhookCategoryMap,
+				});
 				await enqueueDocumentBatch(store.indexId, store.organizationId, docs);
 			} catch (error) {
 				logger.error("Webhook product upsert failed", {
@@ -178,6 +211,7 @@ async function flushBuffer(shop: string): Promise<void> {
 					organizationId: store.organizationId ?? store.id,
 				},
 				collectionEvents,
+				webhookCategoryMap,
 			);
 		}
 
@@ -228,6 +262,7 @@ async function processCollectionChanges(
 	client: ShopifyAdminClient,
 	store: { id: string; shop: string; indexId: string; organizationId: string },
 	events: CoalescedEvent[],
+	categoryMap?: CategoryMap,
 ): Promise<void> {
 	const collectionIds = [
 		...new Set(
@@ -249,8 +284,10 @@ async function processCollectionChanges(
 			// We re-fetch each product to update its collection metadata
 			for (const collect of collects.collects ?? []) {
 				try {
-					const { product } = await client.getProduct(collect.product_id);
-					const docs = flattenProductToDocuments(product, store.shop);
+					const product = (await client.getProduct(collect.product_id)).product;
+					const docs = flattenProductToDocuments(product, store.shop, undefined, {
+						categoryMap,
+					});
 					await enqueueDocumentBatch(store.indexId, store.organizationId, docs);
 				} catch {
 					// Individual product failures are non-fatal
@@ -328,22 +365,6 @@ export async function deregisterStoreWebhooks(client: ShopifyAdminClient): Promi
 }
 
 // ─── Single webhook handler ─────────────────────────────────────
-
-interface WebhookPayload {
-	// Products webhook payload
-	id?: number;
-	title?: string;
-	product_id?: number;
-	admin_graphql_api_id?: string;
-	// Collections webhook payload
-	collection_id?: number;
-	// Generic Shopify webhook fields
-	myshopify_domain?: string;
-	domain?: string;
-	shop?: string;
-	// Raw body for HMAC parsing
-	rawBody?: string;
-}
 
 /**
  * Process a single incoming webhook request.

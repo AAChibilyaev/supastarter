@@ -353,7 +353,9 @@
 				"general": "Allgemein",
 				"notifications": "Benachrichtigungen",
 				"security": "Sicherheit",
-				"title": "Konto"
+				"title": "Konto",
+				"invoices": "Rechnungen",
+				"paymentMethods": "Zahlungsmethoden"
 			},
 			"organization": {
 				"billing": "Abrechnung",

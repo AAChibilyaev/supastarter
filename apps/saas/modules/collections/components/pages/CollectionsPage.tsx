@@ -3,6 +3,7 @@
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
@@ -17,6 +18,7 @@ import { useMemo, useState } from "react";
 import { CollectionCard, type CollectionData } from "../cards/CollectionCard";
 import { ExportDialog } from "../export/ExportDialog";
 import { ImportDialog } from "../import/ImportDialog";
+import { SchemaEditorPanel } from "../schema/SchemaEditorPanel";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -58,6 +60,7 @@ export function CollectionsPage() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [importCollectionSlug, setImportCollectionSlug] = useState<string | null>(null);
 	const [exportCollectionSlug, setExportCollectionSlug] = useState<string | null>(null);
+	const [schemaCollectionSlug, setSchemaCollectionSlug] = useState<string | null>(null);
 
 	// ── Fetch indexes (collections = search indexes) ──────────────────────
 
@@ -156,6 +159,10 @@ export function CollectionsPage() {
 		setExportCollectionSlug(slug);
 	};
 
+	const handleSchema = (slug: string) => {
+		setSchemaCollectionSlug(slug);
+	};
+
 	// ── Render ─────────────────────────────────────────────────────────────
 
 	if (!orgSlug) {
@@ -247,6 +254,7 @@ export function CollectionsPage() {
 							onDuplicate={handleDuplicate}
 							onImport={handleImport}
 							onExport={handleExport}
+							onSchema={handleSchema}
 						/>
 					))}
 				</div>
@@ -269,6 +277,28 @@ export function CollectionsPage() {
 				organizationId={orgId ?? ""}
 				slug={exportCollectionSlug ?? ""}
 			/>
+
+			{/* Schema Editor Dialog */}
+			<Dialog
+				open={schemaCollectionSlug !== null}
+				onOpenChange={(open) => {
+					if (!open) setSchemaCollectionSlug(null);
+				}}
+			>
+				<DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+					<DialogHeader>
+						<DialogTitle>
+							{t("search.collection.schemaEditor") || "Schema Editor"}
+						</DialogTitle>
+					</DialogHeader>
+					{schemaCollectionSlug && (
+						<SchemaEditorPanel
+							organizationId={orgId ?? ""}
+							slug={schemaCollectionSlug}
+						/>
+					)}
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 }

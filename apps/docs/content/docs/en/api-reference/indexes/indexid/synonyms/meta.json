@@ -1,0 +1,8 @@
+{
+  "title": "indexes/indexid/synonyms",
+  "pages": [
+    "get",
+    "post",
+    "put"
+  ]
+}

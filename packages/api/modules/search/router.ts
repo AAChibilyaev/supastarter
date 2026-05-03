@@ -75,6 +75,7 @@ import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-conf
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { truncateIndex } from "./procedures/truncate-index";
+import { updateDocumentsByFilterProcedure } from "./procedures/update-documents-by-filter";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
@@ -89,6 +90,7 @@ export const searchRouter = {
 	deleteIndex,
 	exportDocuments: exportIndexDocuments,
 	truncateIndex,
+	updateDocumentsByFilter: updateDocumentsByFilterProcedure,
 	importDocuments,
 	importJobs,
 	upsertDocument,

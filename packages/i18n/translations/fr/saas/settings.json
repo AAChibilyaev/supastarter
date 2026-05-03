@@ -353,7 +353,9 @@
 				"general": "Général",
 				"notifications": "Notifications",
 				"security": "Sécurité",
-				"title": "Compte"
+				"title": "Compte",
+				"invoices": "Factures",
+				"paymentMethods": "Moyens de paiement"
 			},
 			"organization": {
 				"billing": "Facturation",

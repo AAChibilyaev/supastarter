@@ -1,8 +1,4 @@
 {
-    "title": "SDKs",
-    "pages": [
-        "node",
-        "python",
-        "go"
-    ]
+	"title": "SDKs",
+	"pages": ["node", "python", "go"]
 }

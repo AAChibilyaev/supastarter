@@ -353,7 +353,9 @@
 				"general": "General",
 				"notifications": "Notifications",
 				"security": "Security",
-				"title": "Account"
+				"title": "Account",
+				"invoices": "Счета",
+				"paymentMethods": "Способы оплаты"
 			},
 			"organization": {
 				"billing": "Биллинг",

@@ -25,6 +25,7 @@ export {
 	bulkUpsert,
 	deleteByQuery,
 	truncateCollection,
+	updateDocumentsByFilter,
 	type BulkUpsertInput,
 	type BulkUpsertResult,
 } from "./lib/ingest";

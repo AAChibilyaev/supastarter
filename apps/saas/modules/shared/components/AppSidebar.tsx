@@ -94,6 +94,14 @@ export function AppSidebar() {
 							label: t("settings.menu.account.billing"),
 							href: "/settings/billing",
 						},
+						{
+							label: t("settings.menu.account.invoices"),
+							href: "/settings/billing/invoices",
+						},
+						{
+							label: t("settings.menu.account.paymentMethods"),
+							href: "/settings/billing/payment-methods",
+						},
 					]
 				: []),
 		];

@@ -13,7 +13,10 @@ import type {
 	CancelSubscription,
 	CreateCheckoutLink,
 	CreateCustomerPortalLink,
+	CreateUpgradeSession,
+	GetProrationPreview,
 	SetSubscriptionSeats,
+	UpgradeSubscription,
 	WebhookHandler,
 } from "../../types";
 
@@ -120,6 +123,257 @@ export const cancelSubscription: CancelSubscription = async (id) => {
 	const stripeClient = getStripeClient();
 
 	await stripeClient.subscriptions.cancel(id);
+};
+
+export interface StripePaymentMethod {
+	id: string;
+	brand: string | null;
+	last4: string | null;
+	expMonth: number | null;
+	expYear: number | null;
+	isDefault: boolean;
+}
+
+export const listPaymentMethods = async (customerId: string): Promise<StripePaymentMethod[]> => {
+	const stripe = getStripeClient();
+
+	const customer = await stripe.customers.retrieve(customerId);
+	const defaultPmId =
+		!customer.deleted &&
+		typeof customer === "object" &&
+		customer.invoice_settings?.default_payment_method
+			? (customer.invoice_settings.default_payment_method as string)
+			: null;
+
+	const response = await stripe.paymentMethods.list({
+		customer: customerId,
+		type: "card",
+	});
+
+	return response.data.map((pm) => ({
+		id: pm.id,
+		brand: pm.card?.brand ?? null,
+		last4: pm.card?.last4 ?? null,
+		expMonth: pm.card?.exp_month ?? null,
+		expYear: pm.card?.exp_year ?? null,
+		isDefault: pm.id === defaultPmId,
+	}));
+};
+
+export const detachPaymentMethod = async (paymentMethodId: string): Promise<void> => {
+	const stripe = getStripeClient();
+	await stripe.paymentMethods.detach(paymentMethodId);
+};
+
+export const setDefaultPaymentMethod = async (
+	customerId: string,
+	paymentMethodId: string,
+): Promise<void> => {
+	const stripe = getStripeClient();
+	await stripe.customers.update(customerId, {
+		invoice_settings: { default_payment_method: paymentMethodId },
+	});
+};
+
+export const createSetupIntent = async (
+	customerId: string,
+	redirectUrl?: string,
+): Promise<{ clientSecret: string }> => {
+	const stripe = getStripeClient();
+
+	const setupIntent = await stripe.setupIntents.create({
+		customer: customerId,
+		usage: "off_session",
+		...(redirectUrl ? { return_url: redirectUrl } : {}),
+	});
+
+	return { clientSecret: setupIntent.client_secret! };
+};
+
+export interface ProrationPreviewResult {
+	prorationDate: number;
+	immediateAmount: number;
+	currency: string;
+	nextInvoiceAmount: number | null;
+	creditAmount: number;
+}
+
+export const getProrationPreview: GetProrationPreview = async ({ subscriptionId, newPriceId }) => {
+	const stripe = getStripeClient();
+
+	// Retrieve the subscription to get the current item
+	const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+	const subscriptionItemId = subscription.items.data[0]?.id;
+
+	if (!subscriptionItemId) {
+		throw new Error("No subscription items found");
+	}
+
+	// Create a proration preview by creating an upcoming invoice
+	const upcoming = await stripe.invoices.retrieveUpcoming({
+		subscription: subscriptionId,
+		subscription_items: [
+			{
+				id: subscriptionItemId,
+				price: newPriceId,
+				clear_usage: false,
+			},
+		],
+		subscription_proration_date: Math.floor(Date.now() / 1000),
+	});
+
+	const lines = upcoming.lines.data || [];
+	let immediateAmount = 0;
+	let nextInvoiceAmount = 0;
+
+	for (const line of lines) {
+		if (line.period) {
+			// Line is in the current period — proration
+			if (line.proration) {
+				immediateAmount += line.amount;
+			} else {
+				nextInvoiceAmount += line.amount;
+			}
+		}
+	}
+
+	// Calculate credit from existing balance
+	const creditAmount = Math.max(0, -(upcoming.starting_balance ?? 0));
+
+	return {
+		prorationDate: upcoming.created,
+		immediateAmount,
+		currency: upcoming.currency,
+		nextInvoiceAmount,
+		creditAmount,
+	};
+};
+
+export const upgradeSubscription: UpgradeSubscription = async ({
+	subscriptionId,
+	newPriceId,
+	prorationBehavior = "create_prorations",
+}) => {
+	const stripe = getStripeClient();
+
+	const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+	const subscriptionItemId = subscription.items.data[0]?.id;
+
+	if (!subscriptionItemId) {
+		throw new Error("No subscription items found");
+	}
+
+	await stripe.subscriptions.update(subscriptionId, {
+		items: [
+			{
+				id: subscriptionItemId,
+				price: newPriceId,
+			},
+		],
+		proration_behavior: prorationBehavior,
+	});
+};
+
+export interface UpgradeSessionResult {
+	type: "checkout" | "direct_update";
+	url?: string | null;
+	success?: boolean;
+	immediateAmount: number;
+	currency: string;
+	creditAmount: number;
+	nextInvoiceAmount: number | null;
+}
+
+export const createUpgradeSession: CreateUpgradeSession = async ({
+	subscriptionId,
+	newPriceId,
+	customerId,
+	returnUrl,
+}) => {
+	const stripe = getStripeClient();
+
+	// Check if immediate payment is needed via proration preview
+	const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+	const subscriptionItemId = subscription.items.data[0]?.id;
+
+	if (!subscriptionItemId) {
+		throw new Error("No subscription items found");
+	}
+
+	// Preview the upcoming invoice to see if there's an immediate charge
+	const upcoming = await stripe.invoices.retrieveUpcoming({
+		customer: customerId,
+		subscription: subscriptionId,
+		subscription_items: [
+			{
+				id: subscriptionItemId,
+				price: newPriceId,
+				clear_usage: false,
+			},
+		],
+		subscription_proration_date: Math.floor(Date.now() / 1000),
+	});
+
+	const lines = upcoming.lines.data || [];
+	let immediateAmount = 0;
+	let nextInvoiceAmount = 0;
+
+	for (const line of lines) {
+		if (line.proration) {
+			immediateAmount += line.amount;
+		} else if (line.period) {
+			nextInvoiceAmount += line.amount;
+		}
+	}
+
+	const creditAmount = Math.max(0, -(upcoming.starting_balance ?? 0));
+
+	// If there's no immediate charge, update the subscription directly
+	if (immediateAmount <= 0) {
+		await stripe.subscriptions.update(subscriptionId, {
+			items: [
+				{
+					id: subscriptionItemId,
+					price: newPriceId,
+				},
+			],
+			proration_behavior: "create_prorations",
+		});
+
+		return {
+			type: "direct_update",
+			success: true,
+			immediateAmount,
+			currency: upcoming.currency,
+			creditAmount,
+			nextInvoiceAmount,
+		};
+	}
+
+	// Otherwise, create a checkout session for the immediate payment
+	const session = await stripe.checkout.sessions.create({
+		mode: "setup",
+		customer: customerId,
+		success_url: returnUrl,
+		cancel_url: returnUrl,
+		setup_intent_data: {
+			metadata: {
+				subscription_id: subscriptionId,
+			},
+		},
+		...(subscription
+			? { subscription_data: { items: [{ id: subscriptionItemId, price: newPriceId }] } }
+			: {}),
+	});
+
+	return {
+		type: "checkout",
+		url: session.url,
+		immediateAmount,
+		currency: upcoming.currency,
+		creditAmount,
+		nextInvoiceAmount,
+	};
 };
 
 export interface StripeInvoice {

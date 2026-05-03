@@ -8,6 +8,7 @@ export interface BulkUpsertInput {
 	collection: string;
 	tenantId: string;
 	documents: Record<string, unknown>[];
+	action?: "create" | "update" | "upsert" | "emplace";
 }
 
 export interface BulkUpsertResult {
@@ -36,7 +37,7 @@ export async function bulkUpsert(input: BulkUpsertInput): Promise<BulkUpsertResu
 	while (cursor < tagged.length) {
 		const batch = tagged.slice(cursor, cursor + config.ingestBatchSize);
 		try {
-			const response = await collection.import(batch, { action: "upsert" });
+			const response = await collection.import(batch, { action: input.action ?? "upsert" });
 			const lines = Array.isArray(response) ? response : [];
 
 			lines.forEach((line, index) => {
@@ -70,8 +71,16 @@ export async function deleteByQuery(collection: string, filterBy: string) {
 	const client = getTypesenseClient();
 	return client.collections(collection).documents().delete({ filter_by: filterBy });
 }
-
 export async function truncateCollection(collection: string) {
 	const client = getTypesenseClient();
 	return client.collections(collection).documents().delete();
+}
+
+export async function updateDocumentsByFilter(
+	collection: string,
+	updates: Record<string, unknown>,
+	filterBy: string,
+) {
+	const client = getTypesenseClient();
+	return client.collections(collection).documents().update(updates, { filter_by: filterBy });
 }

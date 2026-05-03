@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+src/aacsearch/__init__.py
+src/aacsearch/_admin_client.py
+src/aacsearch/_exceptions.py
+src/aacsearch/_search_client.py
+src/aacsearch/_transport.py
+src/aacsearch.egg-info/PKG-INFO
+src/aacsearch.egg-info/SOURCES.txt
+src/aacsearch.egg-info/dependency_links.txt
+src/aacsearch.egg-info/requires.txt
+src/aacsearch.egg-info/top_level.txt

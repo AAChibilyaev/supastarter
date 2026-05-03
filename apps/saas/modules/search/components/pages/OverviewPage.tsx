@@ -22,12 +22,14 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	ActivityIcon,
 	AlertTriangleIcon,
+	ArrowRightIcon,
 	DatabaseIcon,
 	HelpCircleIcon,
 	KeyIcon,
 	RefreshCwIcon,
 	RocketIcon,
 	SearchIcon,
+	SparklesIcon,
 	WifiIcon,
 	WifiOffIcon,
 } from "lucide-react";
@@ -124,6 +126,13 @@ export function OverviewPage() {
 		refetchInterval: 3000,
 	});
 
+	const { data: onboardingData } = useQuery({
+		...orpc.search.onboardingStatus.queryOptions({
+			input: { organizationId: orgId ?? "" },
+		}),
+		enabled: Boolean(orgId),
+	});
+
 	const isLoading = planLoading || usageLoading;
 
 	// ── KPI values ──────────────────────────────────────────────────
@@ -216,6 +225,9 @@ export function OverviewPage() {
 				? "warning"
 				: "success";
 
+	// ── Expansion signal ─────────────────────────────────────────────
+	const showUpgradePrompt = onboardingData?.showUpgradePrompt ?? false;
+
 	if (!orgId || !slug) {
 		return null;
 	}
@@ -280,24 +292,25 @@ export function OverviewPage() {
 				</Card>
 			)}
 
-			{/* Expansion signal: health = 100 → upgrade prompt */}
-			{healthScoreData?.score === 100 && planInfo?.planId === "free" && (
-				<Card className="border-l-amber-500 bg-amber-500/5 border-l-4">
+			{/* Expansion signal: upgrade prompt when health_score = 100 on free plan */}
+			{showUpgradePrompt && (
+				<Card className="border-primary/30 bg-primary/5">
 					<CardContent className="gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between flex flex-col">
-						<div className="gap-2 flex items-center">
-							<RocketIcon className="size-6 text-amber-500 shrink-0" />
-							<div>
+						<div className="gap-3 flex items-start">
+							<SparklesIcon className="mt-0.5 size-5 shrink-0 text-primary" />
+							<div className="space-y-1">
 								<p className="text-sm font-semibold">
-									{t("overview.expansionTitle")}
+									{t("overview.expansion.upgradeTitle")}
 								</p>
 								<p className="text-sm text-muted-foreground">
-									{t("overview.expansionDescription")}
+									{t("overview.expansion.upgradeDesc")}
 								</p>
 							</div>
 						</div>
-						<Button asChild>
+						<Button size="sm" asChild className="shrink-0">
 							<Link href={`/${slug}/settings/billing`}>
-								{t("overview.expansionCta")}
+								{t("overview.expansion.upgradeCta")}
+								<ArrowRightIcon className="ml-2 size-4" />
 							</Link>
 						</Button>
 					</CardContent>

@@ -73,6 +73,10 @@ export default async function BillingSettingsPage({
 					<AiWalletCard organizationId={organization.id} />
 				</SettingsList>
 			</div>
+
+			<div className="mt-8">
+				<InvoiceHistory organizationId={organization.id} />
+			</div>
 		</>
 	);
 }

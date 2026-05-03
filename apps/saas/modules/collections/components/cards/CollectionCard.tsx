@@ -11,7 +11,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { CopyIcon, DatabaseIcon, DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
+import {
+	CopyIcon,
+	DatabaseIcon,
+	DownloadIcon,
+	ImportIcon,
+	Settings2Icon,
+	Trash2Icon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -57,6 +64,7 @@ interface CollectionCardProps {
 	onDuplicate?: (id: string) => void;
 	onImport?: (id: string) => void;
 	onExport?: (slug: string) => void;
+	onSchema?: (slug: string) => void;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -68,6 +76,7 @@ export function CollectionCard({
 	onDuplicate,
 	onImport,
 	onExport,
+	onSchema,
 }: CollectionCardProps) {
 	const t = useTranslations();
 
@@ -147,6 +156,14 @@ export function CollectionCard({
 						onClick={() => onImport?.(collection.id)}
 					>
 						<ImportIcon className="size-3.5" />
+					</Button>
+					<Button
+						variant="ghost"
+						size="icon"
+						title={t("search.collection.schema") || "Schema"}
+						onClick={() => onSchema?.(collection.slug)}
+					>
+						<Settings2Icon className="size-3.5" />
 					</Button>
 					<Button
 						variant="ghost"

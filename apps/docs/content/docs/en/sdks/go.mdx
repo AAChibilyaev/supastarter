@@ -7,10 +7,10 @@ description: Install and use the aacsearch-go SDK for search, index management, 
 
 The `github.com/aacsearch/aacsearch-go` Go module provides two clients:
 
-| Client | Scope | Key Prefix | Use Case |
-|--------|-------|-----------|----------|
+| Client         | Scope       | Key Prefix    | Use Case                            |
+| -------------- | ----------- | ------------- | ----------------------------------- |
 | `SearchClient` | search-only | `ss_search_*` | Public search from backend services |
-| `AdminClient` | full CRUD | `aa_admin_*` | Server-side management, CLI tools |
+| `AdminClient`  | full CRUD   | `aa_admin_*`  | Server-side management, CLI tools   |
 
 ## Installation
 
@@ -157,15 +157,15 @@ if err != nil {
 
 ## API Reference
 
-| Category | Methods |
-|----------|---------|
-| Project | `GetProject`, `CreateProject`, `GetProjectByID` |
-| Index Management | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats` |
-| Documents | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments` |
-| Search | `Search`, `MultiSearch` |
-| API Keys | `ListKeys`, `CreateKey`, `RevokeKey` |
-| Analytics | `GetAnalytics`, `GetUsage` |
-| Synonyms | `ListSynonyms`, `CreateSynonym`, `UpsertSynonyms`, `DeleteSynonym` |
-| Curations | `ListCurations`, `CreateCuration`, `UpsertCurations`, `DeleteCuration` |
-| Sorting Fields | `ListSortingFields`, `CreateSortingField`, `ReplaceSortingFields`, `DeleteSortingField` |
-| Facets | `ListFacets` |
+| Category         | Methods                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| Project          | `GetProject`, `CreateProject`, `GetProjectByID`                                                     |
+| Index Management | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats`             |
+| Documents        | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments` |
+| Search           | `Search`, `MultiSearch`                                                                             |
+| API Keys         | `ListKeys`, `CreateKey`, `RevokeKey`                                                                |
+| Analytics        | `GetAnalytics`, `GetUsage`                                                                          |
+| Synonyms         | `ListSynonyms`, `CreateSynonym`, `UpsertSynonyms`, `DeleteSynonym`                                  |
+| Curations        | `ListCurations`, `CreateCuration`, `UpsertCurations`, `DeleteCuration`                              |
+| Sorting Fields   | `ListSortingFields`, `CreateSortingField`, `ReplaceSortingFields`, `DeleteSortingField`             |
+| Facets           | `ListFacets`                                                                                        |

@@ -32,7 +32,7 @@ export function AIAskPanel({ organizationId, indexId }: AIAskPanelProps) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="flex items-center gap-2">
+				<CardTitle className="gap-2 flex items-center">
 					<SparklesIcon className="h-4 w-4 text-primary" />
 					{t("title")}
 				</CardTitle>
@@ -56,33 +56,31 @@ export function AIAskPanel({ organizationId, indexId }: AIAskPanelProps) {
 					</Button>
 				</form>
 
-				{askMutation.isError && (
-					<p className="text-sm text-destructive">{t("noAnswer")}</p>
-				)}
+				{askMutation.isError && <p className="text-sm text-destructive">{t("noAnswer")}</p>}
 
 				{result && (
 					<div className="space-y-4">
 						{/* Answer */}
-						<div className="rounded-md bg-muted p-4 text-sm whitespace-pre-wrap">
+						<div className="p-4 text-sm rounded-md bg-muted whitespace-pre-wrap">
 							{result.answer}
 						</div>
 
 						{/* Sources */}
 						{result.sources.length > 0 && (
 							<div className="space-y-2">
-								<p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+								<p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
 									{t("sources")}
 								</p>
 								<ul className="space-y-2">
 									{result.sources.map((source, idx) => (
 										<li
 											key={source.chunkId}
-											className="rounded-md border bg-background p-3 text-sm"
+											className="p-3 text-sm rounded-md border bg-background"
 										>
 											<p className="font-medium text-foreground">
 												[{idx + 1}] {source.filename}
 											</p>
-											<p className="mt-1 text-muted-foreground line-clamp-3">
+											<p className="mt-1 line-clamp-3 text-muted-foreground">
 												{source.excerpt}
 											</p>
 										</li>

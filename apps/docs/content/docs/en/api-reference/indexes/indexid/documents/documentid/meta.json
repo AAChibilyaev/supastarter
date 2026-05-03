@@ -1,0 +1,7 @@
+{
+  "title": "indexes/indexid/documents/documentid",
+  "pages": [
+    "delete",
+    "put"
+  ]
+}

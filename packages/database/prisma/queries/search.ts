@@ -267,7 +267,7 @@ export async function enqueueSearchIngest(input: {
 export async function enqueueManySearchIngest(
 	indexId: string,
 	organizationId: string,
-	action: "upsert" | "delete",
+\taction: "create" | "update" | "upsert" | "emplace" | "delete",
 	documents: Prisma.InputJsonValue[],
 ): Promise<number> {
 	if (documents.length === 0) return 0;

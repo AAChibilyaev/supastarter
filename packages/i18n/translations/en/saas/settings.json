@@ -294,7 +294,24 @@
 				"maskedNumber": "•••• {{last4}}",
 				"expiry": "{{month}}/{{year}}",
 				"manage": "Manage",
-				"loading": "Loading payment method..."
+				"loading": "Loading payment method...",
+				"addCard": "Add Card",
+				"addCardTitle": "Add a new payment method",
+				"addCardDescription": "Enter your card details below.",
+				"addCardConfirm": "Add Card",
+				"cardAdded": "Card added successfully",
+				"defaultLabel": "Default",
+				"setDefault": "Set as default",
+				"defaultSuccess": "Default payment method updated",
+				"defaultError": "Could not update default payment method",
+				"deleteDialogTitle": "Remove card?",
+				"deleteDialogDescription": "Are you sure you want to remove {card}?",
+				"deleteConfirm": "Remove",
+				"deleteSuccess": "Card removed",
+				"deleteError": "Could not remove card",
+				"emptyState": "No saved payment methods",
+				"preparing": "Preparing card form...",
+				"setupError": "Could not prepare card form. Please try again."
 			},
 			"invoices": {
 				"title": "Invoice History",
@@ -351,7 +368,9 @@
 				"general": "General",
 				"notifications": "Notifications",
 				"security": "Security",
-				"title": "Account"
+				"title": "Account",
+				"invoices": "Invoices",
+				"paymentMethods": "Payment Methods"
 			},
 			"organization": {
 				"billing": "Billing",

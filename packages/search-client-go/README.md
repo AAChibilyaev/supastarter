@@ -139,7 +139,7 @@ if err != nil {
 ## API Coverage
 
 | Category         | Methods                                                                                             |
-|------------------|-----------------------------------------------------------------------------------------------------|
+| ---------------- | --------------------------------------------------------------------------------------------------- |
 | Project          | `GetProject`, `CreateProject`, `GetProjectByID`                                                     |
 | Index Management | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats`             |
 | Documents        | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments` |

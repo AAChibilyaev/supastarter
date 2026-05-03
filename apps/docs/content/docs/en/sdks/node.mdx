@@ -3,17 +3,17 @@ title: Node.js SDK
 description: Install and use the @aacsearch/client Node.js SDK for search, index management, synonyms, curations, and more.
 ---
 
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
-import { Steps, Step } from 'fumadocs-ui/components/steps';
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+import { Steps, Step } from "fumadocs-ui/components/steps";
 
 # Node.js SDK (`@aacsearch/client`)
 
 The `@aacsearch/client` npm package provides two clients:
 
-| Client | Scope | Key Prefix | Bundle-safe | Use Case |
-|--------|-------|-----------|-------------|----------|
-| `SearchClient` | search-only | `ss_search_*` | Yes | Browser widgets, frontend |
-| `AdminClient` | full CRUD | `aa_admin_*` | No | Server-side scripts, CLI, CI/CD |
+| Client         | Scope       | Key Prefix    | Bundle-safe | Use Case                        |
+| -------------- | ----------- | ------------- | ----------- | ------------------------------- |
+| `SearchClient` | search-only | `ss_search_*` | Yes         | Browser widgets, frontend       |
+| `AdminClient`  | full CRUD   | `aa_admin_*`  | No          | Server-side scripts, CLI, CI/CD |
 
 > **Security rule**: never embed admin keys in browser code. Use `SearchClient` for frontend and proxy admin operations through your own backend.
 
@@ -28,6 +28,7 @@ npm install @aacsearch/client
 # or
 pnpm add @aacsearch/client
 ```
+
 </Step>
 </Steps>
 
@@ -39,9 +40,9 @@ pnpm add @aacsearch/client
 import { SearchClient } from "@aacsearch/client";
 
 const client = new SearchClient({
-  baseUrl: "https://app.aacsearch.com",
-  apiKey: "ss_search_...",
-  indexSlug: "products",
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "ss_search_...",
+	indexSlug: "products",
 });
 ```
 
@@ -49,9 +50,9 @@ const client = new SearchClient({
 
 ```ts
 const result = await client.search({
-  q: "running shoes",
-  queryBy: "title,description",
-  facetBy: "category,brand",
+	q: "running shoes",
+	queryBy: "title,description",
+	facetBy: "category,brand",
 });
 
 console.log(result.hits, result.found);
@@ -64,8 +65,8 @@ Execute multiple queries in a single round-trip:
 
 ```ts
 const { results } = await client.multiSearch([
-  { q: "nike", queryBy: "title" },
-  { q: "adidas", queryBy: "title", filterBy: "in_stock:=true" },
+	{ q: "nike", queryBy: "title" },
+	{ q: "adidas", queryBy: "title", filterBy: "in_stock:=true" },
 ]);
 ```
 
@@ -77,9 +78,9 @@ const { results } = await client.multiSearch([
 import { AdminClient } from "@aacsearch/client";
 
 const admin = new AdminClient({
-  baseUrl: "https://app.aacsearch.com",
-  apiKey: "aa_admin_...",
-  projectId: "org_xxx", // your organization ID
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "aa_admin_...",
+	projectId: "org_xxx", // your organization ID
 });
 ```
 
@@ -88,14 +89,14 @@ const admin = new AdminClient({
 ```ts
 // Create index
 await admin.createIndex({
-  slug: "products",
-  displayName: "Products",
-  fields: [
-    { name: "title", type: "string" },
-    { name: "price", type: "float", facet: true },
-    { name: "category", type: "string", facet: true },
-  ],
-  defaultSortingField: "price",
+	slug: "products",
+	displayName: "Products",
+	fields: [
+		{ name: "title", type: "string" },
+		{ name: "price", type: "float", facet: true },
+		{ name: "category", type: "string", facet: true },
+	],
+	defaultSortingField: "price",
 });
 
 // List indexes
@@ -110,15 +111,15 @@ const stats = await admin.getIndexStats(indexes[0].id);
 ```ts
 // Upsert single
 await admin.upsertDocument("index_id", "doc_1", {
-  title: "Running Shoes",
-  price: 89.99,
-  category: "Footwear",
+	title: "Running Shoes",
+	price: 89.99,
+	category: "Footwear",
 });
 
 // Batch upsert (up to 5000)
 await admin.batchUpsertDocuments("index_id", [
-  { id: "doc_2", title: "T-Shirt", price: 29.99 },
-  { id: "doc_3", title: "Cap", price: 14.99 },
+	{ id: "doc_2", title: "T-Shirt", price: 29.99 },
+	{ id: "doc_3", title: "Cap", price: 14.99 },
 ]);
 
 // Batch delete
@@ -130,11 +131,11 @@ await admin.batchDeleteDocuments("index_id", ["doc_2", "doc_3"]);
 ```ts
 // Create key
 const { rawKey, id } = await admin.createKey({
-  indexSlug: "products",
-  name: "My App Key",
-  scopes: ["search"],
-  allowedOrigins: ["https://myapp.com"],
-  rateLimitPerMinute: 60,
+	indexSlug: "products",
+	name: "My App Key",
+	scopes: ["search"],
+	allowedOrigins: ["https://myapp.com"],
+	rateLimitPerMinute: 60,
 });
 console.log("Save this key — shown once:", rawKey);
 
@@ -147,8 +148,8 @@ await admin.revokeKey(id);
 ```ts
 // Synonyms
 await admin.createSynonym("index_id", {
-  root: "shoe",
-  replacements: ["sneaker", "trainer"],
+	root: "shoe",
+	replacements: ["sneaker", "trainer"],
 });
 
 // Curations
@@ -173,54 +174,54 @@ import { SdkError, SearchClient } from "@aacsearch/client";
 const client = new SearchClient({ baseUrl, apiKey, indexSlug: "test" });
 
 try {
-  await client.search({ q: "test" });
+	await client.search({ q: "test" });
 } catch (err) {
-  if (err instanceof SdkError) {
-    switch (err.code) {
-      case "rate_limited":
-        // Back off and retry
-        break;
-      case "quota_exceeded":
-        // Contact billing
-        break;
-      case "unauthorized":
-        // API key is invalid
-        break;
-      default:
-        console.error(err.message, err.details);
-    }
-  }
+	if (err instanceof SdkError) {
+		switch (err.code) {
+			case "rate_limited":
+				// Back off and retry
+				break;
+			case "quota_exceeded":
+				// Contact billing
+				break;
+			case "unauthorized":
+				// API key is invalid
+				break;
+			default:
+				console.error(err.message, err.details);
+		}
+	}
 }
 ```
 
 ### Error Codes
 
-| Code | When | HTTP Status |
-|------|------|-------------|
-| `missing_bearer_token` | No auth header | 401 |
-| `unauthorized` | Empty or invalid token format | 401 |
-| `forbidden` | Invalid/expired/revoked API key | 403 |
-| `not_found` | Resource not found | 404 |
-| `conflict` | Slug already used | 409 |
-| `rate_limited` | Per-key rate limit exceeded | 429 |
-| `quota_exceeded` | Monthly plan limits exceeded | 402 |
-| `invalid_input` | Validation error in request body | 400 |
-| `search_failed` | Upstream Typesense error | 502 |
-| `network_error` | Fetch failed or connection refused | 0 |
+| Code                   | When                               | HTTP Status |
+| ---------------------- | ---------------------------------- | ----------- |
+| `missing_bearer_token` | No auth header                     | 401         |
+| `unauthorized`         | Empty or invalid token format      | 401         |
+| `forbidden`            | Invalid/expired/revoked API key    | 403         |
+| `not_found`            | Resource not found                 | 404         |
+| `conflict`             | Slug already used                  | 409         |
+| `rate_limited`         | Per-key rate limit exceeded        | 429         |
+| `quota_exceeded`       | Monthly plan limits exceeded       | 402         |
+| `invalid_input`        | Validation error in request body   | 400         |
+| `search_failed`        | Upstream Typesense error           | 502         |
+| `network_error`        | Fetch failed or connection refused | 0           |
 
 ## API Reference
 
 Full API coverage of the Node.js SDK:
 
-| Category | Methods |
-|----------|---------|
-| Project | `getProject`, `createProject`, `getProjectById` |
-| Index Management | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats` |
-| Documents | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
-| Search | `search`, `multiSearch` |
-| API Keys | `listKeys`, `createKey`, `revokeKey` |
-| Analytics | `getAnalytics`, `getUsage` |
-| Synonyms | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym` |
-| Curations | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration` |
-| Sorting Fields | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField` |
-| Facets | `listFacets` |
+| Category         | Methods                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| Project          | `getProject`, `createProject`, `getProjectById`                                                     |
+| Index Management | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Documents        | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Search           | `search`, `multiSearch`                                                                             |
+| API Keys         | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analytics        | `getAnalytics`, `getUsage`                                                                          |
+| Synonyms         | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Curations        | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Sorting Fields   | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Facets           | `listFacets`                                                                                        |

@@ -105,10 +105,7 @@ export async function recordDripSent(userId: string, dripDay: number) {
  * Sets `dripStartedAt` to the given timestamp (defaults to now).
  * Idempotent — won't overwrite an existing start date.
  */
-export async function startDripSequence(
-	userId: string,
-	startedAt: Date = new Date(),
-) {
+export async function startDripSequence(userId: string, startedAt: Date = new Date()) {
 	// Only set if not already started
 	await db.user.updateMany({
 		where: {

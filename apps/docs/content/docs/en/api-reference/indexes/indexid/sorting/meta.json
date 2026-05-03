@@ -1,0 +1,8 @@
+{
+  "title": "indexes/indexid/sorting",
+  "pages": [
+    "get",
+    "post",
+    "put"
+  ]
+}

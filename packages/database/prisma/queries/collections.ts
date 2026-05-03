@@ -332,13 +332,8 @@ export async function buildCsvContent(
 				.map((field) => {
 					const val = data?.[field];
 					if (val == null) return "";
-\t\t\t\t\t// Safe stringification — handle objects/arrays vs primitives
-\t\t\t\t\tconst str =
-\t\t\t\t\t\ttypeof val === "object"
-\t\t\t\t\t\t\t? JSON.stringify(val)
-\t\t\t\t\t\t\t: typeof val === "string"
-\t\t\t\t\t\t\t\t? val
-\t\t\t\t\t\t\t\t: `${val}`;
+					// Safe stringification for CSV
+					const str = typeof val === "string" ? val : JSON.stringify(val);
 					// Escape CSV: wrap in quotes if contains comma, quote, or newline
 					if (str.includes(",") || str.includes('"') || str.includes("\n")) {
 						return `"${str.replace(/"/g, '""')}"`;

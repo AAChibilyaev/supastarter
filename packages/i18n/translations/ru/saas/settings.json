@@ -558,87 +558,6 @@
 				"title": "Хранение данных поиска",
 				"description": "Сколько хранить логи поисковых запросов и события использования"
 			}
-		},
-		"alertsPage": {
-			"title": "Оповещения",
-			"description": "Настройка оповещений для операций поиска",
-			"email": "Email",
-			"slack": "Slack",
-			"slackWebhookUrl": "Slack Webhook URL",
-			"slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
-			"webhook": "Webhook"
-		},
-		"scim": {
-			"title": "SCIM Provisioning",
-			"description": "Automate user provisioning with SCIM 2.0",
-			"emptyState": {
-				"title": "Automate user provisioning with SCIM",
-				"description": "Connect your identity provider to automatically create, update, and deactivate users in your AACsearch organization.",
-				"cta": "Connect Identity Provider",
-				"planUpgrade": "Enterprise feature - available on Scale plan+"
-			},
-			"status": {
-				"active": "Active",
-				"inactive": "Inactive",
-				"lastSync": "Last sync",
-				"usersProvisioned": "Users provisioned",
-				"disconnect": "Disconnect",
-				"viewLogs": "View Logs"
-			},
-			"endpoint": {
-				"baseUrl": "SCIM Base URL",
-				"bearerToken": "Bearer Token",
-				"copy": "Copy",
-				"regenerate": "Regenerate",
-				"revoke": "Revoke",
-				"noToken": "No active token",
-				"lastUsed": "Last used"
-			},
-			"wizard": {
-				"title": "Connect Identity Provider",
-				"selectProvider": "Select your identity provider",
-				"configure": "Configure {provider} Connection",
-				"testConnection": "Test SCIM Connection",
-				"skipAndSave": "Skip Test & Save",
-				"complete": "Complete Setup",
-				"back": "Back",
-				"okta": "Okta",
-				"azureAd": "Azure AD",
-				"googleWorkspace": "Google Workspace",
-				"onelogin": "OneLogin",
-				"keycloak": "Keycloak",
-				"generic": "Other (SCIM v2)"
-			},
-			"test": {
-				"success": "Connection successful!",
-				"failure": "Connection failed",
-				"inProgress": "Testing connection...",
-				"stepConfig": "Service Provider Config",
-				"stepListUsers": "Listing Users",
-				"stepCreateUser": "Creating test user",
-				"stepCleanup": "Cleaning up test user",
-				"ok": "OK",
-				"error": "Error"
-			},
-			"logs": {
-				"title": "SCIM Audit Logs",
-				"description": "Review all SCIM provisioning activity for your organization",
-				"exportCsv": "Export CSV",
-				"action": "Action",
-				"user": "User",
-				"email": "Email",
-				"source": "Source",
-				"timestamp": "Timestamp",
-				"noLogs": "No SCIM activity yet",
-				"noLogsDescription": "SCIM audit logs will appear here once provisioning is configured and active.",
-				"actions": {
-					"user_created": "Created",
-					"user_updated": "Updated",
-					"user_deactivated": "Deactivated",
-					"group_created": "Group Created",
-					"group_synced": "Group Synced"
-				}
-			}
 		}
 	},
 	"alertsPage": {
@@ -678,5 +597,77 @@
 		"removeWebhook": "Удалить",
 		"saveSuccess": "Настройки оповещений сохранены",
 		"saveError": "Ошибка сохранения настроек оповещений"
+	},
+	"scim": {
+		"title": "SCIM Provisioning",
+		"description": "Автоматизируйте управление пользователями с помощью SCIM 2.0",
+		"emptyState": {
+			"title": "Автоматизируйте управление пользователями с помощью SCIM",
+			"description": "Подключите ваш Identity Provider, чтобы автоматически создавать, обновлять и деактивировать пользователей в вашей организации AACsearch.",
+			"cta": "Подключить Identity Provider",
+			"planUpgrade": "Функция Enterprise — доступна на тарифе Scale+"
+		},
+		"status": {
+			"active": "Active",
+			"inactive": "Inactive",
+			"lastSync": "Последняя синхронизация",
+			"usersProvisioned": "Пользователей создано",
+			"disconnect": "Отключить",
+			"viewLogs": "Просмотр логов"
+		},
+		"endpoint": {
+			"baseUrl": "SCIM Base URL",
+			"bearerToken": "Bearer Token",
+			"copy": "Копировать",
+			"regenerate": "Перегенерировать",
+			"revoke": "Отозвать",
+			"noToken": "Нет активного токена",
+			"lastUsed": "Последнее использование"
+		},
+		"wizard": {
+			"title": "Подключить Identity Provider",
+			"selectProvider": "Выберите ваш Identity Provider",
+			"configure": "Настройка подключения {provider}",
+			"testConnection": "Проверить SCIM-подключение",
+			"skipAndSave": "Пропустить проверку и сохранить",
+			"complete": "Завершить настройку",
+			"back": "Назад",
+			"okta": "Okta",
+			"azureAd": "Azure AD",
+			"googleWorkspace": "Google Workspace",
+			"onelogin": "OneLogin",
+			"keycloak": "Keycloak",
+			"generic": "Другое (SCIM v2)"
+		},
+		"test": {
+			"success": "Подключение успешно!",
+			"failure": "Подключение не удалось",
+			"inProgress": "Проверка подключения...",
+			"stepConfig": "Конфигурация Service Provider",
+			"stepListUsers": "Список пользователей",
+			"stepCreateUser": "Создание тестового пользователя",
+			"stepCleanup": "Очистка тестового пользователя",
+			"ok": "OK",
+			"error": "Ошибка"
+		},
+		"logs": {
+			"title": "SCIM Audit Logs",
+			"description": "Просмотр всей активности SCIM-провижининга в вашей организации",
+			"exportCsv": "Экспорт CSV",
+			"action": "Действие",
+			"user": "Пользователь",
+			"email": "Email",
+			"source": "Источник",
+			"timestamp": "Время",
+			"noLogs": "Активности SCIM пока нет",
+			"noLogsDescription": "Журналы аудита SCIM появятся здесь после настройки и активации провижининга.",
+			"actions": {
+				"user_created": "Создан",
+				"user_updated": "Обновлён",
+				"user_deactivated": "Деактивирован",
+				"group_created": "Группа создана",
+				"group_synced": "Группа синхронизирована"
+			}
+		}
 	}
 }

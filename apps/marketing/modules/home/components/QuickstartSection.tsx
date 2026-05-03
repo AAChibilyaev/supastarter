@@ -32,7 +32,7 @@ export function QuickstartSection() {
 								</span>
 							</div>
 							<pre className="p-4 font-mono leading-relaxed overflow-x-auto text-[13px] text-white/75">
-								<code>{t(`homeQuickstart.steps.${step}.code`)}</code>
+								<code>{t.raw(`homeQuickstart.steps.${step}.code`) as string}</code>
 							</pre>
 						</div>
 					))}

@@ -226,7 +226,9 @@
 			"ctrByPosition": "CTR by Position",
 			"ctrByIndex": "CTR by Index",
 			"geoMap": "Mapa geográfico",
-			"geoMapDescription": "Geografía de consultas de búsqueda — próximamente"
+			"geoMapDescription": "Geografía de consultas de búsqueda — próximamente",
+			"abTestTitle": "Pruebas A/B",
+			"abTestDescription": "Ejecute experimentos A/B en su configuración de búsqueda."
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",
@@ -677,7 +679,47 @@
 				"noIndex": "No hay índice disponible. Cree un índice primero.",
 				"tokenFailed": "Error al generar el token"
 			},
-			"jobFailures": "Fallos"
+			"jobFailures": "Fallos",
+			"shopify": {
+				"title": "Tienda en línea",
+				"desc": "Sincronice productos de su plataforma de comercio electrónico. Conecte tiendas mediante OAuth.",
+				"connectStore": "Conectar tienda en línea",
+				"manage": "Administrar tiendas",
+				"notConnected": "No conectado",
+				"connected": "{count} tienda(s) conectada(s)",
+				"andMore": "y {count} más",
+				"noStores": "No hay tiendas conectadas. Conecte una tienda en línea para sincronizar productos.",
+				"statusActive": "Conectado",
+				"statusSyncing": "Sincronizando",
+				"statusError": "Error",
+				"statusPending": "Pendiente",
+				"synced": "Sincronizado",
+				"installedOn": "Instalado",
+				"syncStatus": "Estado de sincronización",
+				"searchIndex": "Índice de búsqueda",
+				"selectIndex": "Seleccionar índice de búsqueda...",
+				"triggerSync": "Iniciar sincronización completa",
+				"syncStarted": "¡Sincronización completa iniciada con éxito!",
+				"syncError": "Error al iniciar la sincronización",
+				"connectionDetails": "Detalles de conexión",
+				"storeDomain": "Dominio de la tienda",
+				"lastSync": "Última sincronización",
+				"settingsSaved": "¡Configuración de tienda guardada!",
+				"settingsError": "Error al guardar la configuración",
+				"disconnectStore": "Desconectar tienda",
+				"disconnectWarning": "Esto eliminará todos los productos sincronizados y detendrá futuras sincronizaciones. Esta acción no se puede deshacer.",
+				"confirmDisconnect": "Sí, desconectar",
+				"disconnected": "Tienda desconectada correctamente",
+				"disconnectError": "Error al desconectar la tienda",
+				"noSyncHistory": "Aún no hay historial de sincronización. Inicie una sincronización para ver resultados.",
+				"syncFull": "Sincronización completa",
+				"syncDelta": "Sincronización delta",
+				"syncCompleted": "Completado",
+				"syncRunning": "En ejecución",
+				"syncFailed": "Falló",
+				"itemsSynced": "{count} elementos sincronizados",
+				"syncFailures": "{count} fallos"
+			}
 		},
 		"shopify": {
 			"title": "Tienda en línea",
@@ -832,6 +874,7 @@
 			"collectionsGrid": "Cuadrícula",
 			"collectionsDocuments": "Documentos",
 			"jobs": "Trabajos",
+			"indexHealth": "Salud del índice",
 			"relevanceQualityScore": "Calidad de búsqueda"
 		},
 		"recommendations": {

@@ -558,77 +558,77 @@
 				"saved": "Politiques de conservation enregistrées avec succès",
 				"error": "Échec de l'enregistrement des politiques de conservation"
 			}
+	}
+},
+	"scim": {
+		"title": "Provisionnement SCIM",
+		"description": "Automatisez le provisionnement des utilisateurs avec SCIM 2.0",
+		"emptyState": {
+			"title": "Automatisez le provisionnement des utilisateurs avec SCIM",
+			"description": "Connectez votre fournisseur d'identité pour créer, mettre à jour et désactiver automatiquement les utilisateurs dans votre organisation AACsearch.",
+			"cta": "Connecter le fournisseur d'identité",
+			"planUpgrade": "Fonctionnalité Entreprise — disponible sur le forfait Scale et supérieur"
 		},
-		"scim": {
-			"title": "SCIM Provisioning",
-			"description": "Automate user provisioning with SCIM 2.0",
-			"emptyState": {
-				"title": "Automate user provisioning with SCIM",
-				"description": "Connect your identity provider to automatically create, update, and deactivate users in your AACsearch organization.",
-				"cta": "Connect Identity Provider",
-				"planUpgrade": "Enterprise feature - available on Scale plan+"
-			},
-			"status": {
-				"active": "Active",
-				"inactive": "Inactive",
-				"lastSync": "Last sync",
-				"usersProvisioned": "Users provisioned",
-				"disconnect": "Disconnect",
-				"viewLogs": "View Logs"
-			},
-			"endpoint": {
-				"baseUrl": "SCIM Base URL",
-				"bearerToken": "Bearer Token",
-				"copy": "Copy",
-				"regenerate": "Regenerate",
-				"revoke": "Revoke",
-				"noToken": "No active token",
-				"lastUsed": "Last used"
-			},
-			"wizard": {
-				"title": "Connect Identity Provider",
-				"selectProvider": "Select your identity provider",
-				"configure": "Configure {provider} Connection",
-				"testConnection": "Test SCIM Connection",
-				"skipAndSave": "Skip Test & Save",
-				"complete": "Complete Setup",
-				"back": "Back",
-				"okta": "Okta",
-				"azureAd": "Azure AD",
-				"googleWorkspace": "Google Workspace",
-				"onelogin": "OneLogin",
-				"keycloak": "Keycloak",
-				"generic": "Other (SCIM v2)"
-			},
-			"test": {
-				"success": "Connection successful!",
-				"failure": "Connection failed",
-				"inProgress": "Testing connection...",
-				"stepConfig": "Service Provider Config",
-				"stepListUsers": "Listing Users",
-				"stepCreateUser": "Creating test user",
-				"stepCleanup": "Cleaning up test user",
-				"ok": "OK",
-				"error": "Error"
-			},
-			"logs": {
-				"title": "SCIM Audit Logs",
-				"description": "Review all SCIM provisioning activity for your organization",
-				"exportCsv": "Export CSV",
-				"action": "Action",
-				"user": "User",
-				"email": "Email",
-				"source": "Source",
-				"timestamp": "Timestamp",
-				"noLogs": "No SCIM activity yet",
-				"noLogsDescription": "SCIM audit logs will appear here once provisioning is configured and active.",
-				"actions": {
-					"user_created": "Created",
-					"user_updated": "Updated",
-					"user_deactivated": "Deactivated",
-					"group_created": "Group Created",
-					"group_synced": "Group Synced"
-				}
+		"status": {
+			"active": "Actif",
+			"inactive": "Inactif",
+			"lastSync": "Dernière synchronisation",
+			"usersProvisioned": "Utilisateurs provisionnés",
+			"disconnect": "Déconnecter",
+			"viewLogs": "Voir les journaux"
+		},
+		"endpoint": {
+			"baseUrl": "SCIM Base URL",
+			"bearerToken": "Bearer Token",
+			"copy": "Copier",
+			"regenerate": "Régénérer",
+			"revoke": "Révoquer",
+			"noToken": "Aucun jeton actif",
+			"lastUsed": "Dernière utilisation"
+		},
+		"wizard": {
+			"title": "Connecter le fournisseur d'identité",
+			"selectProvider": "Sélectionnez votre fournisseur d'identité",
+			"configure": "Configurer la connexion {provider}",
+			"testConnection": "Tester la connexion SCIM",
+			"skipAndSave": "Ignorer le test et enregistrer",
+			"complete": "Terminer la configuration",
+			"back": "Retour",
+			"okta": "Okta",
+			"azureAd": "Azure AD",
+			"googleWorkspace": "Google Workspace",
+			"onelogin": "OneLogin",
+			"keycloak": "Keycloak",
+			"generic": "Autre (SCIM v2)"
+		},
+		"test": {
+			"success": "Connexion réussie !",
+			"failure": "Connexion échouée",
+			"inProgress": "Test de la connexion...",
+			"stepConfig": "Configuration du fournisseur de service",
+			"stepListUsers": "Liste des utilisateurs",
+			"stepCreateUser": "Création d'un utilisateur test",
+			"stepCleanup": "Nettoyage de l'utilisateur test",
+			"ok": "OK",
+			"error": "Erreur"
+		},
+		"logs": {
+			"title": "Journaux d'audit SCIM",
+			"description": "Consultez toute l'activité de provisionnement SCIM de votre organisation",
+			"exportCsv": "Exporter CSV",
+			"action": "Action",
+			"user": "Utilisateur",
+			"email": "E-mail",
+			"source": "Source",
+			"timestamp": "Horodatage",
+			"noLogs": "Aucune activité SCIM pour le moment",
+			"noLogsDescription": "Les journaux d'audit SCIM apparaîtront ici une fois le provisionnement configuré et actif.",
+			"actions": {
+				"user_created": "Créé",
+				"user_updated": "Mis à jour",
+				"user_deactivated": "Désactivé",
+				"group_created": "Groupe créé",
+				"group_synced": "Groupe synchronisé"
 			}
 		}
 	},

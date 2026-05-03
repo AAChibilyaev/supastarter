@@ -56,6 +56,7 @@
 			"collectionsGrid": "Grille",
 			"collectionsDocuments": "Documents",
 			"jobs": "Tâches",
+			"indexHealth": "Santé de l'index",
 			"relevanceQualityScore": "Qualité de recherche"
 		},
 		"recommendations": {
@@ -315,7 +316,10 @@
 			"voiceFallback": "Message de secours si le navigateur n'est pas pris en charge",
 			"voiceDisabled": "La recherche vocale est désactivée",
 			"analyticsWidgetMetrics": "Performance du widget",
-			"analyticsWidgetDesc": "Métriques de recherche depuis l'installation du widget."
+			"analyticsWidgetDesc": "Métriques de recherche depuis l'installation du widget.",
+			"configuratorTitle": "Configurateur de widget",
+			"comingSoon": "Bientôt disponible",
+			"comingSoonDescription": "L'assistant de configuration du widget est en cours de développement. Revenez bientôt pour les filtres, l'autocomplétion, la recherche vocale et les options d'intégration."
 		},
 		"configurator": {
 			"pageTitle": "Configuration de recherche",
@@ -595,6 +599,21 @@
 			"latencyP95": "p95",
 			"latencyP99": "p99",
 			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche.",
+			"allIndexes": "Tous les index",
+			"failedQueries": "Requêtes échouées",
+			"ofTotalSearches": "du total des recherches",
+			"totalFailedQueries": "total échoué",
+			"noFailedQueries": "Aucune requête échouée durant cette période.",
+			"tabDashboard": "Tableau de bord",
+			"tabFailed": "Requêtes échouées",
+			"tabActivity": "Activité",
+			"uniqueFailedQueries": "Requêtes échouées uniques",
+			"recentActivity": "Activité récente",
+			"noActivity": "Aucune activité récente à afficher.",
+			"searchesColumn": "Recherches",
+			"ctrColumn": "CTR",
+			"abTestTitle": "Tests A/B",
+			"abTestDescription": "Lancez des expériences A/B sur votre configuration de recherche.",
 			"ctrTrendDesc": "Taux de clics dans le temps",
 			"tabTopQueries": "Requêtes principales",
 			"topQueriesTitle": "Requêtes de recherche",

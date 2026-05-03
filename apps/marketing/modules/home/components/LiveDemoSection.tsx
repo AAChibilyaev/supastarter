@@ -1,3 +1,5 @@
+"use client";
+
 export function LiveDemoSection() {
 	return (
 		<section className="section-padding border-b border-border">

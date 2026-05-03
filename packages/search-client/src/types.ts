@@ -49,6 +49,10 @@ export interface SearchParams {
 	// ── Faceted Search extensions ──
 	facetQuery?: string;
 	maxFacetValues?: number;
+	/** Aggressiveness of adaptive facet sampling (0–1). Lower = more aggressive sampling. */
+	facetSampleSlope?: number;
+	/** Minimum number of documents before adaptive facet sampling kicks in. */
+	facetSampleThreshold?: number;
 }
 
 export interface SearchHit {

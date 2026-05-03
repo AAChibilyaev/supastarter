@@ -50,6 +50,10 @@ export interface SearchDocumentsInput {
 	vectorQueryEf?: number;
 	/** Vector query string in Typesense format, e.g. "vec:([0.1, 0.2, ...], k:10)". */
 	vectorQuery?: string;
+	/** Aggressiveness of adaptive facet sampling (0–1). Lower = more aggressive sampling. */
+	facetSampleSlope?: number;
+	/** Minimum number of documents before adaptive facet sampling kicks in. */
+	facetSampleThreshold?: number;
 }
 
 export interface SearchDocumentsResult {
@@ -105,7 +109,13 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 	const response = await client
 		.collections(input.alias)
 		.documents()
-		.search(params as any);
+		.search({
+			...params,
+			...(input.facetSampleSlope !== undefined && { facet_sample_slope: input.facetSampleSlope }),
+			...(input.facetSampleThreshold !== undefined && {
+				facet_sample_threshold: input.facetSampleThreshold,
+			}),
+		} as any);
 
 	return {
 		hits: response.hits ?? [],
@@ -151,6 +161,10 @@ export async function multiSearchDocuments(
 			page: entry.page ?? 1,
 			highlight_fields: entry.highlightFields,
 			vector_query: vectorQuery,
+			...(entry.facetSampleSlope !== undefined && { facet_sample_slope: entry.facetSampleSlope }),
+			...(entry.facetSampleThreshold !== undefined && {
+				facet_sample_threshold: entry.facetSampleThreshold,
+			}),
 		};
 	});
 

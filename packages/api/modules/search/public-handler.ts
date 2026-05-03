@@ -76,6 +76,8 @@ const publicSearchInput = z.object({
 	// ── Faceted Search extensions ──
 	facetQuery: z.string().optional(),
 	maxFacetValues: z.number().int().min(1).optional(),
+	facetSampleSlope: z.number().min(0).max(1).optional(),
+	facetSampleThreshold: z.number().int().min(0).optional(),
 	// ── Negation (explicit) ──
 	negate: z.string().optional(),
 	// ── Wildcard toggle ──

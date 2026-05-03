@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { quotaCheck } from "../entitlements/middleware/quota-check";
 import { combineFilters, gatePublicSearchRequest } from "./lib/public-auth";
+import { chargeWalletOverage } from "./lib/quota";
 
 const geoPolygonSchema = z.object({
 	field: z.string().optional(),
@@ -106,6 +107,14 @@ export const publicSearchApp = new Hono()
 			return c.json({ error: quota.error ?? "quota_exceeded" }, 429);
 		}
 
+		// Fire-and-forget: charge wallet for overage searches
+		if (quota.isOverage) {
+			void chargeWalletOverage({
+				orgId: verified.organizationId,
+				searchCount: 1,
+			}).catch((err) => logger.error("Could not charge wallet overage", { error: err }));
+		}
+
 		let body: unknown;
 		try {
 			body = await c.req.json();
@@ -172,9 +181,7 @@ export const publicSearchApp = new Hono()
 				.map((term) => `(${term})`)
 				.join(" || ");
 			if (negated) {
-				combinedFilter = combinedFilter
-					? `${combinedFilter} && !(${negated})`
-					: `!(${negated})`;
+				combinedFilter = combinedFilter ? `${combinedFilter} && !(${negated})` : `!(${negated})`;
 			}
 		}
 
@@ -216,12 +223,7 @@ export const publicSearchApp = new Hono()
 
 			// Compute did-you-mean when results are empty
 			let didYouMean: string | undefined;
-			if (
-				result.found === 0 &&
-				processed.q &&
-				processed.q !== "*" &&
-				processed.q.length > 2
-			) {
+			if (result.found === 0 && processed.q && processed.q !== "*" && processed.q.length > 2) {
 				try {
 					const lang = detectLanguage(processed.q) ?? "en";
 					const isRussian = lang === "ru";
@@ -350,6 +352,14 @@ export const publicSearchApp = new Hono()
 		const parsed = multiSearchInput.safeParse(body);
 		if (!parsed.success) {
 			return c.json({ error: "invalid_input", details: z.treeifyError(parsed.error) }, 400);
+		}
+
+		// Fire-and-forget: charge wallet for overage searches
+		if (quotaMulti.isOverage) {
+			void chargeWalletOverage({
+				orgId: verified.organizationId,
+				searchCount: parsed.data.searches.length,
+			}).catch((err) => logger.error("Could not charge wallet overage", { error: err }));
 		}
 
 		try {

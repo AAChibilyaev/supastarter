@@ -91,5 +91,18 @@
 		"openInApp": "Öffne diese Benachrichtigung in der App:",
 		"subject": "Neue Benachrichtigung",
 		"view": "Anzeigen"
+	},
+	"quotaSoftCap": {
+		"subject": "Sie haben 80 % Ihres Suchkontingents ausgeschöpft",
+		"title": "Suchkontingent-Warnung",
+		"body": "Ihre Organisation {orgName} ({planName}-Tarif) hat {percentUsed}% ihres monatlichen Suchkontingents ({remaining} verbleibende Suchanfragen) genutzt.",
+		"cta": "Abrechnung verwalten"
+	},
+	"quotaHardCap": {
+		"subject": "Suchkontingent erreicht",
+		"title": "Monatliches Suchlimit erreicht",
+		"bodyBlocked": "Ihre Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Neue Suchanfragen werden derzeit blockiert.",
+		"bodyOverage": "Ihre Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Die Überzahlungsabrechnung ist aktiv — Suchanfragen werden zu Ihrem Tarifsatz fortgesetzt.",
+		"cta": "Abrechnung anzeigen"
 	}
 }

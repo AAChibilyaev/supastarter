@@ -10,6 +10,8 @@ import { MagicLink } from "./MagicLink";
 import { NewUser } from "./NewUser";
 import { Notification } from "./Notification";
 import { OrganizationInvitation } from "./OrganizationInvitation";
+import { QuotaHardCapWarning } from "./QuotaHardCapWarning";
+import { QuotaSoftCapWarning } from "./QuotaSoftCapWarning";
 
 export const mailTemplates = {
 	magicLink: MagicLink,
@@ -18,6 +20,8 @@ export const mailTemplates = {
 	organizationInvitation: OrganizationInvitation,
 	emailVerification: EmailVerification,
 	notification: Notification,
+	quotaSoftCap: QuotaSoftCapWarning,
+	quotaHardCap: QuotaHardCapWarning,
 	dripDay0: DripDay0,
 	dripDay1: DripDay1,
 	dripDay3: DripDay3,

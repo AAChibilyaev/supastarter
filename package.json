@@ -30,6 +30,7 @@
 		"@redocly/cli": "^2.30.3",
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
+		"dotenv": "catalog:",
 		"dotenv-cli": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",

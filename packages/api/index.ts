@@ -17,6 +17,7 @@ import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { eventsApp } from "./modules/search/events-public";
+import { demoApp } from "./modules/search/demo-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { scimRouter } from "./modules/search/scim-public";
 import { publicSpellCheckApp } from "./modules/search/spell-check-public";
@@ -73,6 +74,8 @@ export const app = new Hono()
 	})
 	// Connector API (CMS modules — permissive CORS, mounted before global CORS)
 	.route("/", connectorApp)
+	// Demo sandbox search (no auth, pre-loaded fashion catalog)
+	.route("/", demoApp)
 	// Analytics events endpoint (permissive CORS for widget/SDK)
 	.route("/", analyticsApp)
 	// SCIM 2.0 endpoints (identity provisioning — own auth)

@@ -155,6 +155,7 @@ model Organization {
   connectorSyncJobs  SearchConnectorSyncJob[]
   aiWallet           AiWallet?
   knowledgeSpaces    KnowledgeSpace[]
+  activationEvents   ActivationEvent[]
 
   @@unique([slug])
   @@map("organization")
@@ -735,4 +736,21 @@ model PaymentProviderEvent {
   @@index([provider, createdAt(sort: Desc)])
   @@index([processedAt])
   @@map("payment_provider_event")
+}
+
+// ─── Activation milestones ──────────────────────────────────────
+// Track onboarding funnel progress for each organization.
+// XOR ownership (user OR organization) mirrors Purchase pattern.
+
+model ActivationEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  eventType      String   // EMAIL_VERIFIED, FIRST_COLLECTION, FIRST_DOCUMENT, FIRST_SEARCH, WIDGET_EMBEDDED, FIRST_TEAM_MEMBER, FIRST_INTEGRATION, FIRST_PAYMENT
+  completedAt    DateTime @default(now())
+  metadata       Json?
+
+  @@unique([organizationId, eventType])
+  @@index([organizationId])
+  @@map("activation_event")
 }

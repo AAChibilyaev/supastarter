@@ -26,6 +26,7 @@
 		"@orpc/client": "catalog:",
 		"@orpc/tanstack-query": "catalog:",
 		"@prisma/nextjs-monorepo-workaround-plugin": "catalog:",
+		"@repo/analytics": "workspace:*",
 		"@repo/api": "workspace:*",
 		"@repo/auth": "workspace:*",
 		"@repo/billing-wallet": "workspace:*",

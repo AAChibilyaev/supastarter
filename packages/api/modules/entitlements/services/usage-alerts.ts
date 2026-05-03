@@ -219,46 +219,50 @@ async function sendThresholdAlert(params: {
 		members,
 		slackWebhookUrl,
 	} = params;
+	// Slack message text still needs resource label
 	const resourceLabel = resource === "search" ? "search queries" : "indexed documents";
-	const thresholdLabel = threshold >= 100 ? "limit reached" : "80% threshold";
 	const usageStr = formatUsage(current, limit);
-
 	const headline =
 		threshold >= 100
 			? `Monthly ${resourceLabel} limit reached`
 			: `Monthly ${resourceLabel} usage at ${(percentUsed * 100).toFixed(0)}%`;
-
-	const message =
-		threshold >= 100
-			? `Your organization "${org.name}" has used all ${usageStr} ${resourceLabel} this month. Upgrade your plan to avoid disruption.`
-			: `Your organization "${org.name}" has used ${(percentUsed * 100).toFixed(0)}% of its monthly ${resourceLabel} limit (${usageStr}).`;
-
 	const dashboardLink = `/org/${org.id}/settings/billing`;
 
 	// Send email notifications to all owners/admins
 	await Promise.all(
-		members.map((m) =>
-			sendEmail({
+		members.map((m) => {
+			const templateId = threshold >= 100 ? "quotaHardCap" : "quotaSoftCap";
+			const context =
+				threshold >= 100
+					? ({
+							orgName: org.name,
+							planName,
+							overageEnabled: false, // overage status is passed separately
+							billingUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://aacsearch.app"}/org/${org.id}/settings/billing`,
+						} as const)
+					: ({
+							orgName: org.name,
+							planName,
+							percentUsed: percentUsed * 100,
+							remaining: limit - current,
+							billingUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://aacsearch.app"}/org/${org.id}/settings/billing`,
+						} as const);
+			return sendEmail({
 				to: m.user.email,
 				locale:
 					(m.user.locale as Parameters<typeof sendEmail>[0] extends { locale?: infer L }
 						? L
 						: never) ?? undefined,
-				templateId: "notification",
-				context: {
-					headline,
-					title: headline,
-					message,
-					link: dashboardLink,
-				},
+				templateId,
+				context,
 			}).catch((err: unknown) =>
 				logger.error("sendThresholdAlert: email failed", {
 					error: err,
 					userId: m.userId,
 					orgId: org.id,
 				}),
-			),
-		),
+			);
+		}),
 	);
 
 	// Send Slack alert if webhook is configured
@@ -282,7 +286,7 @@ async function sendThresholdAlert(params: {
 	logger.info("Quota alert sent", {
 		orgId: org.id,
 		resource,
-		threshold: thresholdLabel,
+		threshold: threshold >= 100 ? "limit reached" : "80% threshold",
 		recipients: members.length,
 		slack: !!slackWebhookUrl,
 	});

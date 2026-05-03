@@ -2158,5 +2158,55 @@
 			"thankYou": "Vielen Dank für Ihr Feedback!",
 			"skip": "Überspringen"
 		}
+	},
+	"referral": {
+		"program": {
+			"title": "Empfehlungsprogramm",
+			"description": "Lade Freunde ein und verdiene Suchguthaben, wenn sie upgraden",
+			"shareLink": "Teile deinen Empfehlungslink",
+			"yourLink": "Dein Empfehlungslink",
+			"copyLink": "Link kopieren",
+			"linkCopied": "Link kopiert!",
+			"shareEmail": "Per E-Mail teilen",
+			"shareTwitter": "Per X teilen",
+			"stats": {
+				"clicks": "Klicks",
+				"signups": "Anmeldungen",
+				"conversions": "Konversionen",
+				"earnings": "Verdienst",
+				"empty": "Teile deinen Link, um Guthaben zu verdienen"
+			},
+			"reward": "Verdiene 20% des ersten Monats",
+			"rewardDescription": "Wenn jemand, den du empfohlen hast, auf einen kostenpflichtigen Tarif upgradet, erhältst du 20% seines ersten Monats gutgeschrieben",
+			"fraudNote": "Max. 5 Empfehlungen pro IP/E-Mail-Domain zur Missbrauchsverhinderung",
+			"cta": "Lade Freunde ein → verdiene Suchguthaben!",
+			"dashboardBanner": "Liebst du AACsearch? Teile die Liebe! Empfiehl einen Freund und verdiene 20% seines ersten Monats."
+		},
+		"inviteEmail": {
+			"subject": "{name} denkt, du wirst AACsearch lieben!",
+			"greeting": "Hallo,",
+			"intro": "{name} nutzt AACsearch und denkt, du wirst es auch lieben!",
+			"valueProp": "Sofortige Search-as-a-Service — Algolia-Qualität zu einem Bruchteil der Kosten.",
+			"giftNote": "Starte kostenlos, keine Kreditkarte erforderlich.",
+			"cta": "Starte mit {name}s Empfehlung",
+			"signoff": "Viel Erfolg bei der Suche!\nDas AACsearch-Team"
+		},
+		"confirmationEmail": {
+			"subject": "Du hast Suchguthaben verdient!",
+			"body": "Jemand, den du empfohlen hast, hat sich gerade bei AACsearch angemeldet. Sobald er seine erste Zahlung abgeschlossen hat, erhältst du 20% gutgeschrieben.",
+			"cta": "Zum Empfehlungs-Dashboard"
+		},
+		"landing": {
+			"title": "Du wurdest zu AACsearch eingeladen",
+			"subtitle": "{name} nutzt AACsearch und denkt, du wirst es lieben!",
+			"tagline": "Suche, die einfach funktioniert — keine Server, kein DevOps.",
+			"features": {
+				"instant": "Sofortige Suche in 5 Minuten eingerichtet",
+				"pricing": "Algolia-Qualität, 5x günstiger",
+				"trial": "14-tägige kostenlose Testversion, keine Kreditkarte"
+			},
+			"cta": "Kostenlos starten",
+			"socialProof": "Von über 100 Unternehmen weltweit vertrauenswürdig"
+		}
 	}
 }

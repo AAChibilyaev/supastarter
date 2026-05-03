@@ -9,6 +9,7 @@ import { indexingRouter } from "../modules/indexing/router";
 import { knowledgeRouter } from "../modules/knowledge/router";
 import { mySearchRouter } from "../modules/my-search/router";
 import { notificationsRouter } from "../modules/notifications/router";
+import { onboardingRouter } from "../modules/onboarding/router";
 import { organizationsRouter } from "../modules/organizations/router";
 import { paymentsRouter } from "../modules/payments/router";
 import { recommendationsRouter } from "../modules/recommendations/router";
@@ -29,6 +30,7 @@ export const router = publicProcedure.router({
 	billingWallet: billingWalletRouter,
 	indexing: indexingRouter,
 	mySearch: mySearchRouter,
+	onboarding: onboardingRouter,
 	recommendations: recommendationsRouter,
 });
 

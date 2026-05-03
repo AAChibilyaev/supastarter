@@ -208,6 +208,12 @@ export const PaymentProviderEventScalarFieldEnumSchema = z.enum(['id', 'provider
 
 export type PaymentProviderEventScalarFieldEnum = z.infer<typeof PaymentProviderEventScalarFieldEnumSchema>;
 
+// File: ActivationEventScalarFieldEnum.schema.ts
+
+export const ActivationEventScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'eventType', 'completedAt', 'metadata'])
+
+export type ActivationEventScalarFieldEnum = z.infer<typeof ActivationEventScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -897,4 +903,17 @@ export const PaymentProviderEventSchema = z.object({
 });
 
 export type PaymentProviderEventType = z.infer<typeof PaymentProviderEventSchema>;
+
+
+// File: ActivationEvent.schema.ts
+
+export const ActivationEventSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  eventType: z.string(),
+  completedAt: z.date(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+});
+
+export type ActivationEventType = z.infer<typeof ActivationEventSchema>;
 

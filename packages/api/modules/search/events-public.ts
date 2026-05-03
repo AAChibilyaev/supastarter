@@ -16,6 +16,8 @@ import { cors } from "hono/cors";
 import { z } from "zod";
 
 import { gatePublicSearchRequest } from "./lib/public-auth";
+import { resolveOrgPlanQuota } from "./lib/quota";
+import { triggerQuotaNotificationsAsync } from "./lib/quota-notifications";
 
 const eventSchema = z.object({
 	type: z.enum(["search_query", "zero_results", "result_click", "widget_open", "filter_used"]),
@@ -119,6 +121,29 @@ export const eventsApp = new Hono()
 				indexId: verified.indexId,
 			});
 		}
+
+		// ── Fire-and-forget quota notification check ─────────────────────
+		// Check if org has crossed 80%/100% threshold after this batch of usage.
+		// Must not block the search response.
+		void resolveOrgPlanQuota(verified.organizationId)
+			.then((quota) => {
+				const percentUsed =
+					quota.searchPerMonth > 0
+						? (quota.searchQueriesUsedThisPeriod / quota.searchPerMonth) * 100
+						: 0;
+				triggerQuotaNotificationsAsync(
+					verified.organizationId,
+					verified.indexId,
+					percentUsed,
+					quota.periodStart,
+				);
+			})
+			.catch((err: unknown) =>
+				logger.error("quota-notifications: resolve/poll failed", {
+					error: err,
+					orgId: verified.organizationId,
+				}),
+			);
 
 		return c.json({ accepted, rejected });
 	});

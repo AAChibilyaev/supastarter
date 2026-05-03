@@ -91,5 +91,18 @@
 		"openInApp": "Ouvrez cette notification dans l'application :",
 		"subject": "Nouvelle notification",
 		"view": "Voir"
+	},
+	"quotaSoftCap": {
+		"subject": "Vous avez utilisé 80% de votre quota de recherche",
+		"title": "Avertissement de quota de recherche",
+		"body": "Votre organisation {orgName} (forfait {planName}) a utilisé {percentUsed}% de son quota mensuel de recherches ({remaining} recherches restantes).",
+		"cta": "Gérer la facturation"
+	},
+	"quotaHardCap": {
+		"subject": "Quota de recherche atteint",
+		"title": "Limite mensuelle de recherche atteinte",
+		"bodyBlocked": "Votre organisation {orgName} (forfait {planName}) a atteint sa limite mensuelle de recherches. Les nouvelles recherches sont actuellement bloquées.",
+		"bodyOverage": "Votre organisation {orgName} (forfait {planName}) a atteint sa limite mensuelle de recherches. La facturation du dépassement est active — les recherches continuent au tarif de votre forfait.",
+		"cta": "Voir la facturation"
 	}
 }

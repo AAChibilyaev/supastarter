@@ -63,14 +63,14 @@ catalog:
     next-intl: 4.9.0
     nprogress: ^0.2.0
     nuqs: ^2.8.9
-    "openai": ^6.33.0
-    "posthog-js": ^1.228.0
-    "posthog-node": ^4.10.0
+    openai: ^6.33.0
     oslo: ^1.2.1
     oxfmt: ^0.43.0
     oxlint: ^1.58.0
     pg: ^8.20.0
     postcss: 8.5.8
+    posthog-js: ^1.228.0
+    posthog-node: ^4.10.0
     prettier: 3.8.1
     prisma: 7.6.0
     prisma-zod-generator: 2.1.4

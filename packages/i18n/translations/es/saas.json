@@ -2158,5 +2158,55 @@
 			"thankYou": "¡Gracias por tus comentarios!",
 			"skip": "Saltar"
 		}
+	},
+	"referral": {
+		"program": {
+			"title": "Programa de Referidos",
+			"description": "Invita a amigos y gana créditos de búsqueda cuando se actualicen",
+			"shareLink": "Comparte tu enlace de referido",
+			"yourLink": "Tu enlace de referido",
+			"copyLink": "Copiar enlace",
+			"linkCopied": "¡Enlace copiado!",
+			"shareEmail": "Compartir por correo",
+			"shareTwitter": "Compartir por X",
+			"stats": {
+				"clicks": "Clics",
+				"signups": "Registros",
+				"conversions": "Conversiones",
+				"earnings": "Ganancias",
+				"empty": "Comparte tu enlace para empezar a ganar créditos"
+			},
+			"reward": "Gana el 20% de su primer mes",
+			"rewardDescription": "Cuando alguien que recomendaste se actualice a un plan de pago, recibirás el 20% de su primer mes acreditado en tu cuenta",
+			"fraudNote": "Máx. 5 referidos por dominio de IP/correo para prevenir abusos",
+			"cta": "¡Invita amigos → gana créditos de búsqueda!",
+			"dashboardBanner": "¿Amas AACsearch? ¡Comparte el amor! Recomienda a un amigo y gana el 20% de su primer mes."
+		},
+		"inviteEmail": {
+			"subject": "¡{name} cree que te encantará AACsearch!",
+			"greeting": "Hola,",
+			"intro": "{name} ha estado usando AACsearch y cree que a ti también te encantará.",
+			"valueProp": "Búsqueda como servicio instantánea — calidad Algolia a una fracción del costo.",
+			"giftNote": "Comienza gratis, sin tarjeta de crédito.",
+			"cta": "Comienza con la recomendación de {name}",
+			"signoff": "¡Feliz búsqueda!\nEl equipo de AACsearch",
+		},
+		"confirmationEmail": {
+			"subject": "¡Ganaste créditos de búsqueda!",
+			"body": "Alguien a quien recomendaste se acaba de registrar en AACsearch. Cuando complete su primer pago, recibirás el 20% acreditado en tu cuenta.",
+			"cta": "Ver tu panel de referidos"
+		},
+		"landing": {
+			"title": "Has sido invitado a AACsearch",
+			"subtitle": "{name} usa AACsearch y cree que te encantará.",
+			"tagline": "Búsqueda que simplemente funciona — sin servidores, sin DevOps.",
+			"features": {
+				"instant": "Configuración instantánea de búsqueda en 5 minutos",
+				"pricing": "Calidad Algolia, 5x más barato",
+				"trial": "Prueba gratuita de 14 días, sin tarjeta de crédito"
+			},
+			"cta": "Comienza gratis",
+			"socialProof": "Confiado por más de 100 empresas en todo el mundo"
+		}
 	}
 }

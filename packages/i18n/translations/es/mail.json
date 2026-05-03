@@ -91,5 +91,18 @@
 		"openInApp": "Abre esta notificación en la aplicación:",
 		"subject": "Nueva notificación",
 		"view": "Ver"
+	},
+	"quotaSoftCap": {
+		"subject": "Has utilizado el 80% de tu cuota de búsqueda",
+		"title": "Advertencia de cuota de búsqueda",
+		"body": "Tu organización {orgName} (plan {planName}) ha utilizado el {percentUsed}% de su cuota mensual de búsqueda ({remaining} búsquedas restantes).",
+		"cta": "Gestionar facturación"
+	},
+	"quotaHardCap": {
+		"subject": "Cuota de búsqueda alcanzada",
+		"title": "Límite mensual de búsqueda alcanzado",
+		"bodyBlocked": "Tu organización {orgName} (plan {planName}) ha alcanzado su límite mensual de búsqueda. Las nuevas búsquedas están actualmente bloqueadas.",
+		"bodyOverage": "Tu organización {orgName} (plan {planName}) ha alcanzado su límite mensual de búsqueda. La facturación por excedente está activa: las búsquedas continúan a la tarifa de tu plan.",
+		"cta": "Ver facturación"
 	}
 }

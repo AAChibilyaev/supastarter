@@ -8,7 +8,7 @@ const withNextIntl = nextIntlPlugin("./modules/i18n/request.ts");
 
 const nextConfig: NextConfig = {
 	output: process.env.NEXT_OUTPUT_STANDALONE === "true" ? "standalone" : undefined,
-	transpilePackages: ["@repo/api", "@repo/auth", "@repo/database", "@repo/ui"],
+	transpilePackages: ["@repo/analytics", "@repo/api", "@repo/auth", "@repo/database", "@repo/ui"],
 	images: {
 		remotePatterns: [
 			{

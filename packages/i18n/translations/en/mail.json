@@ -91,5 +91,18 @@
 		"openInApp": "Open this notification in the app:",
 		"subject": "New notification",
 		"view": "View"
+	},
+	"quotaSoftCap": {
+		"subject": "You've used 80% of your search quota",
+		"title": "Search quota warning",
+		"body": "Your organization {orgName} ({planName} plan) has used {percentUsed}% of its monthly search quota ({remaining} searches remaining).",
+		"cta": "Manage billing"
+	},
+	"quotaHardCap": {
+		"subject": "Search quota reached",
+		"title": "Monthly search limit reached",
+		"bodyBlocked": "Your organization {orgName} ({planName} plan) has reached its monthly search limit. New searches are currently blocked.",
+		"bodyOverage": "Your organization {orgName} ({planName} plan) has reached its monthly search limit. Overage billing is active — searches continue at your plan's overage rate.",
+		"cta": "View billing"
 	}
 }

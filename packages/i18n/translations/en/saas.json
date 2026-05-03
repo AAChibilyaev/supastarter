@@ -2158,5 +2158,55 @@
 			"thankYou": "Thank you for your feedback!",
 			"skip": "Skip"
 		}
+	},
+	"referral": {
+		"program": {
+			"title": "Referral Program",
+			"description": "Invite friends and earn search credits when they upgrade",
+			"shareLink": "Share your referral link",
+			"yourLink": "Your referral link",
+			"copyLink": "Copy Link",
+			"linkCopied": "Link copied!",
+			"shareEmail": "Share via Email",
+			"shareTwitter": "Share via X",
+			"stats": {
+				"clicks": "Clicks",
+				"signups": "Signups",
+				"conversions": "Conversions",
+				"earnings": "Earnings",
+				"empty": "Share your link to start earning credits"
+			},
+			"reward": "Earn 20% of their first month",
+			"rewardDescription": "When someone you refer upgrades to a paid plan, you get 20% of their first month credited to your account",
+			"fraudNote": "Max 5 referrals per IP/email domain to prevent abuse",
+			"cta": "Invite friends → earn search credits!",
+			"dashboardBanner": "Love AACsearch? Share the love! Refer a friend and earn 20% of their first month."
+		},
+		"inviteEmail": {
+			"subject": "{name} thinks you'll love AACsearch!",
+			"greeting": "Hey there,",
+			"intro": "{name} has been using AACsearch and thinks you'll love it too!",
+			"valueProp": "Instant search-as-a-service — Algolia-quality at a fraction of the cost.",
+			"giftNote": "Get started free, no credit card required.",
+			"cta": "Get started with {name}'s referral",
+			"signoff": "Happy searching!\nThe AACsearch Team"
+		},
+		"confirmationEmail": {
+			"subject": "You earned search credits!",
+			"body": "Someone you referred just signed up for AACsearch. Once they complete their first payment, you'll get 20% credited to your account.",
+			"cta": "View your referral dashboard"
+		},
+		"landing": {
+			"title": "You've been invited to AACsearch",
+			"subtitle": "{name} is using AACsearch and thinks you'll love it!",
+			"tagline": "Search that just works — no servers, no DevOps.",
+			"features": {
+				"instant": "Instant search setup in 5 minutes",
+				"pricing": "Algolia-quality, 5x cheaper",
+				"trial": "14-day free trial, no credit card"
+			},
+			"cta": "Get Started Free",
+			"socialProof": "Trusted by 100+ companies worldwide"
+		}
 	}
 }

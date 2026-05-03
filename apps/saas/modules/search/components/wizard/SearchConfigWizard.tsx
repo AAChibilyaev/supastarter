@@ -1,11 +1,33 @@
 "use client";
 
 import { Button, Card, CardContent, cn } from "@repo/ui";
-import { CheckIcon, FileUpIcon, ListFilterIcon, Settings2Icon, Table2Icon } from "lucide-react";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { useQuery } from "@tanstack/react-query";
+import {
+	CheckIcon,
+	EyeIcon,
+	FileUpIcon,
+	ListFilterIcon,
+	SearchIcon,
+	Settings2Icon,
+	SlidersHorizontalIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 
 import { FacetsPanel, type FacetConfig } from "../panels/FacetsPanel";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface FieldDef {
+	name: string;
+	type: string;
+	facet: boolean;
+	sort: boolean;
+	index: boolean;
+}
 
 interface StepInfo {
 	id: number;
@@ -14,70 +36,120 @@ interface StepInfo {
 }
 
 const STEPS: StepInfo[] = [
-	{ id: 1, key: "dataSource", icon: FileUpIcon },
-	{ id: 2, key: "schema", icon: Table2Icon },
+	{ id: 1, key: "selectIndex", icon: SearchIcon },
+	{ id: 2, key: "fields", icon: FileUpIcon },
 	{ id: 3, key: "searchConfig", icon: Settings2Icon },
 	{ id: 4, key: "facets", icon: ListFilterIcon },
+	{ id: 5, key: "preview", icon: EyeIcon },
 ];
 
-interface StepData {
-	// Step 1: Data Source
-	sourceType: "csv" | "json" | "cms" | "api" | null;
-	// Step 2: Schema
-	fields: Array<{
-		name: string;
-		type: string;
-		facet: boolean;
-		sort: boolean;
-		index: boolean;
-	}>;
-	// Step 3: Search Config
-	searchableFields: string[];
-	fieldWeights: Record<string, number>;
-	typoTolerance: number;
-	prefixSearch: boolean;
-	infixSearch: "off" | "fallback" | "always";
-	exactMatch: boolean;
-	// Step 4: Facets Config
-	facetConfig: FacetConfig[];
-}
+// ─── Props ───────────────────────────────────────────────────────────────────
 
 interface SearchConfigWizardProps {
 	organizationId: string;
-	onComplete?: (data: StepData) => void;
+	onComplete?: (data: {
+		indexSlug: string;
+		queryBy: string[];
+		facetFields: string[];
+		defaultSortField?: string;
+		theme: "light" | "dark" | "auto";
+		placeholder: string;
+		resultsPerPage: number;
+		showThumbnails: boolean;
+		showSearchButton: boolean;
+		searchButtonText: string;
+		accentColor: string;
+		keyboardShortcut: boolean;
+	}) => void;
+	isSaving?: boolean;
 }
 
+// ─── Component ───────────────────────────────────────────────────────────────
+
 export function SearchConfigWizard({
-	organizationId: _organizationId,
+	organizationId,
 	onComplete,
+	isSaving,
 }: SearchConfigWizardProps) {
 	const t = useTranslations("search.configurator");
 	const [currentStep, setCurrentStep] = useState(1);
-	const [wizardData, setWizardData] = useState<StepData>({
-		sourceType: null,
-		fields: [],
-		searchableFields: [],
-		fieldWeights: {},
-		typoTolerance: 1,
-		prefixSearch: true,
-		infixSearch: "fallback",
-		exactMatch: true,
-		facetConfig: [],
+
+	// Step 1 state
+	const [selectedIndexSlug, setSelectedIndexSlug] = useState<string | null>(null);
+
+	// Step 2 state: schema fields
+	const [fields, setFields] = useState<FieldDef[]>([]);
+
+	// Step 3 state: search config
+	const [searchableFields, setSearchableFields] = useState<string[]>([]);
+	const [fieldWeights, setFieldWeights] = useState<Record<string, number>>({});
+	const [typoTolerance, setTypoTolerance] = useState(1);
+	const [prefixSearch, setPrefixSearch] = useState(true);
+	const [infixSearch, setInfixSearch] = useState<"off" | "fallback" | "always">("fallback");
+	const [exactMatch, setExactMatch] = useState(true);
+
+	// Step 4 state: facet config
+	const [facetConfig, setFacetConfig] = useState<FacetConfig[]>([]);
+
+	// Widget UI config
+	const [theme, setTheme] = useState<"light" | "dark" | "auto">("auto");
+	const [placeholder, setPlaceholder] = useState("Search products...");
+	const [resultsPerPage, setResultsPerPage] = useState(20);
+	const [showThumbnails, setShowThumbnails] = useState(true);
+	const [showSearchButton, setShowSearchButton] = useState(true);
+	const [searchButtonText, setSearchButtonText] = useState("Search");
+	const [accentColor, setAccentColor] = useState("#6366f1");
+	const [keyboardShortcut, setKeyboardShortcut] = useState(true);
+
+	// Fetch indexes for step 1
+	const { data: indexes, isLoading: indexesLoading } = useQuery({
+		...orpc.search.listIndexes.queryOptions({
+			input: { organizationId },
+		}),
+		enabled: Boolean(organizationId),
 	});
 
-	const updateData = (patch: Partial<StepData>) => {
-		setWizardData((prev) => ({ ...prev, ...patch }));
+	const activeIndex = useMemo(() => {
+		if (!selectedIndexSlug || !indexes) return null;
+		return indexes.find((i) => i.slug === selectedIndexSlug) ?? null;
+	}, [indexes, selectedIndexSlug]);
+
+	// Pre-populate fields from selected index schema
+	const handleIndexSelect = (slug: string) => {
+		setSelectedIndexSlug(slug);
+		const index = indexes?.find((i) => i.slug === slug);
+		if (index?.schema && typeof index.schema === "object") {
+			const schema = index.schema as Record<string, unknown>;
+			const schemaFields = (schema.fields as Record<string, unknown>[]) ?? [];
+			if (schemaFields.length > 0) {
+				const parsed: FieldDef[] = schemaFields.map((f: Record<string, unknown>) => ({
+					name: String(f.name ?? ""),
+					type: String(f.type ?? "string"),
+					facet: Boolean(f.facet),
+					sort: Boolean(f.sort),
+					index: Boolean(f.index ?? true),
+				}));
+				setFields(parsed);
+				setSearchableFields(parsed.filter((f) => f.index).map((f) => f.name));
+			}
+		}
+		// Move to next step
+		setCurrentStep(2);
 	};
+
+	const facetFields = fields.filter((f) => f.facet).map((f) => f.name);
 
 	const canProceed = (): boolean => {
 		switch (currentStep) {
 			case 1:
-				return wizardData.sourceType !== null;
+				return selectedIndexSlug !== null;
 			case 2:
-				return wizardData.fields.length > 0;
+				return fields.length > 0;
 			case 3:
-				return wizardData.searchableFields.length > 0;
+				return searchableFields.length > 0;
 			case 4:
+				return true;
+			case 5:
 				return true;
 			default:
 				return false;
@@ -85,10 +157,23 @@ export function SearchConfigWizard({
 	};
 
 	const handleNext = () => {
-		if (currentStep < 4) {
+		if (currentStep < 5) {
 			setCurrentStep((s) => s + 1);
-		} else if (onComplete) {
-			onComplete(wizardData);
+		} else if (onComplete && selectedIndexSlug) {
+			onComplete({
+				indexSlug: selectedIndexSlug,
+				queryBy: searchableFields,
+				facetFields,
+				defaultSortField: fields.find((f) => f.sort)?.name,
+				theme,
+				placeholder,
+				resultsPerPage,
+				showThumbnails,
+				showSearchButton,
+				searchButtonText,
+				accentColor,
+				keyboardShortcut,
+			});
 		}
 	};
 
@@ -137,38 +222,62 @@ export function SearchConfigWizard({
 			<Card>
 				<CardContent className="pt-6">
 					{currentStep === 1 && (
-						<StepDataSource
-							value={wizardData.sourceType}
-							onChange={(sourceType) => updateData({ sourceType })}
+						<StepSelectIndex
+							indexes={indexes ?? []}
+							isLoading={indexesLoading}
+							selectedSlug={selectedIndexSlug}
+							onSelect={handleIndexSelect}
 							t={t}
 						/>
 					)}
 					{currentStep === 2 && (
-						<StepSchema
-							fields={wizardData.fields}
-							onChange={(fields) => updateData({ fields })}
+						<StepSchema fields={fields} onChange={setFields} t={t} />
+					)}
+					{currentStep === 3 && (
+						<StepSearchConfig
+							fields={fields}
+							searchableFields={searchableFields}
+							fieldWeights={fieldWeights}
+							typoTolerance={typoTolerance}
+							prefixSearch={prefixSearch}
+							infixSearch={infixSearch}
+							exactMatch={exactMatch}
+							onChange={(patch) => {
+								if (patch.searchableFields !== undefined) setSearchableFields(patch.searchableFields);
+								if (patch.fieldWeights !== undefined) setFieldWeights(patch.fieldWeights);
+								if (patch.typoTolerance !== undefined) setTypoTolerance(patch.typoTolerance);
+								if (patch.prefixSearch !== undefined) setPrefixSearch(patch.prefixSearch);
+								if (patch.infixSearch !== undefined) setInfixSearch(patch.infixSearch);
+								if (patch.exactMatch !== undefined) setExactMatch(patch.exactMatch);
+							}}
 							t={t}
 						/>
 					)}
 					{currentStep === 4 && (
 						<StepFacets
-							fields={wizardData.fields}
-							configs={wizardData.facetConfig}
-							onChange={(facetConfig) => updateData({ facetConfig })}
+							fields={fields}
+							configs={facetConfig}
+							onChange={setFacetConfig}
 							t={t}
 						/>
 					)}
-
-					{currentStep === 3 && (
-						<StepSearchConfig
-							fields={wizardData.fields}
-							searchableFields={wizardData.searchableFields}
-							fieldWeights={wizardData.fieldWeights}
-							typoTolerance={wizardData.typoTolerance}
-							prefixSearch={wizardData.prefixSearch}
-							infixSearch={wizardData.infixSearch}
-							exactMatch={wizardData.exactMatch}
-							onChange={(patch) => updateData(patch)}
+					{currentStep === 5 && (
+						<StepPreview
+							selectedIndexSlug={selectedIndexSlug ?? ""}
+							activeIndexName={activeIndex?.name ?? ""}
+							searchableFields={searchableFields}
+							facetFields={facetFields}
+							defaultSortField={fields.find((f) => f.sort)?.name}
+							theme={theme}
+							placeholder={placeholder}
+							resultsPerPage={resultsPerPage}
+							showThumbnails={showThumbnails}
+							accentColor={accentColor}
+							onThemeChange={setTheme}
+							onPlaceholderChange={setPlaceholder}
+							onResultsPerPageChange={setResultsPerPage}
+							onShowThumbnailsChange={setShowThumbnails}
+							onAccentColorChange={setAccentColor}
 							t={t}
 						/>
 					)}
@@ -180,117 +289,91 @@ export function SearchConfigWizard({
 				<Button variant="outline" onClick={handleBack} disabled={currentStep === 1}>
 					{t("back")}
 				</Button>
-				<Button onClick={handleNext} disabled={!canProceed()}>
-					{currentStep === 4 ? t("finish") : t("next")}
+				<Button onClick={handleNext} disabled={!canProceed() || isSaving}>
+					{isSaving ? t("saving") : currentStep === 5 ? t("finish") : t("next")}
 				</Button>
 			</div>
 		</div>
 	);
 }
 
-// ─── Step 1: Data Source ────────────────────────────────────────────────────
+// ─── Step 1: Select Index ─────────────────────────────────────────────────────
 
-interface StepDataSourceProps {
-	value: string | null;
-	onChange: (value: "csv" | "json" | "cms" | "api") => void;
+interface StepSelectIndexProps {
+	indexes: Array<{ slug: string; name: string; documentCount: number; updatedAt: string }>;
+	isLoading: boolean;
+	selectedSlug: string | null;
+	onSelect: (slug: string) => void;
 	t: (key: string) => string;
 }
 
-function StepDataSource({ value, onChange, t }: StepDataSourceProps) {
-	const options = [
-		{
-			id: "csv" as const,
-			icon: FileUpIcon,
-			titleKey: "sourceCSV",
-			descKey: "sourceCSVDesc",
-		},
-		{
-			id: "json" as const,
-			icon: FileUpIcon,
-			titleKey: "sourceJSON",
-			descKey: "sourceJSONDesc",
-		},
-		{
-			id: "cms" as const,
-			icon: FileUpIcon,
-			titleKey: "sourceCMS",
-			descKey: "sourceCMSDesc",
-		},
-		{
-			id: "api" as const,
-			icon: FileUpIcon,
-			titleKey: "sourceAPI",
-			descKey: "sourceAPIDesc",
-		},
-	];
-
+function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: StepSelectIndexProps) {
 	return (
 		<div className="space-y-4">
 			<div>
 				<h3 className="text-lg font-semibold">{t("step1Title")}</h3>
 				<p className="text-sm text-muted-foreground">{t("step1Description")}</p>
 			</div>
-			<div className="gap-4 md:grid-cols-2 grid">
-				{options.map((opt) => (
-					<Card
-						key={opt.id}
-						className={cn(
-							"cursor-pointer border-2 transition-colors hover:border-primary/50",
-							value === opt.id && "border-primary",
-						)}
-						onClick={() => onChange(opt.id)}
-					>
-						<CardContent className="gap-3 pt-6 flex items-start">
-							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
-								<opt.icon className="size-5 text-primary" />
-							</div>
-							<div className="flex-1">
-								<p className="font-medium">{t(opt.titleKey)}</p>
-								<p className="mt-1 text-sm text-muted-foreground">
-									{t(opt.descKey)}
-								</p>
-							</div>
-							{value === opt.id && (
-								<CheckIcon className="size-5 shrink-0 text-primary" />
+
+			{isLoading ? (
+				<div className="space-y-3">
+					{[...Array(3)].map((_, i) => (
+						<Skeleton key={i} className="h-20 w-full rounded-lg" />
+					))}
+				</div>
+			) : indexes.length === 0 ? (
+				<div className="py-12 text-center space-y-3">
+					<SearchIcon className="size-10 mx-auto text-muted-foreground/40" />
+					<p className="text-sm text-muted-foreground">{t("noIndexes")}</p>
+					<p className="text-xs text-muted-foreground/60">{t("noIndexesHint")}</p>
+				</div>
+			) : (
+				<div className="space-y-2">
+					{indexes.map((index) => (
+						<Card
+							key={index.slug}
+							className={cn(
+								"cursor-pointer border-2 transition-colors hover:border-primary/50",
+								selectedSlug === index.slug && "border-primary",
 							)}
-						</CardContent>
-					</Card>
-				))}
-			</div>
+							onClick={() => onSelect(index.slug)}
+						>
+							<CardContent className="gap-4 p-4 sm:flex-row sm:items-center flex flex-col">
+								<div className="flex-1 min-w-0">
+									<p className="font-medium">{index.name}</p>
+									<p className="text-sm text-muted-foreground">
+										{index.documentCount.toLocaleString()} documents
+									</p>
+								</div>
+								<div className="gap-2 flex items-center shrink-0">
+									<span className="text-xs text-muted-foreground">
+										slug: {index.slug}
+									</span>
+									{selectedSlug === index.slug && (
+										<CheckIcon className="size-5 text-primary" />
+									)}
+								</div>
+							</CardContent>
+						</Card>
+					))}
+					<p className="text-xs text-muted-foreground pt-2">
+						{t("createIndexHint")}
+					</p>
+				</div>
+			)}
 		</div>
 	);
 }
 
-// ─── Step 2: Schema ─────────────────────────────────────────────────────────
+// ─── Step 2: Schema ──────────────────────────────────────────────────────────
 
 interface StepSchemaProps {
-	fields: Array<{ name: string; type: string; facet: boolean; sort: boolean; index: boolean }>;
-	onChange: (
-		fields: Array<{
-			name: string;
-			type: string;
-			facet: boolean;
-			sort: boolean;
-			index: boolean;
-		}>,
-	) => void;
+	fields: FieldDef[];
+	onChange: (fields: FieldDef[]) => void;
 	t: (key: string) => string;
 }
 
 function StepSchema({ fields, onChange, t }: StepSchemaProps) {
-	const SAMPLE_FIELDS = [
-		{ name: "name", type: "string", facet: true, sort: true, index: true },
-		{ name: "price", type: "float", facet: true, sort: true, index: false },
-		{ name: "category", type: "string", facet: true, sort: false, index: false },
-		{ name: "description", type: "string", facet: false, sort: false, index: true },
-		{ name: "sku", type: "string", facet: false, sort: false, index: true },
-		{ name: "image_url", type: "string", facet: false, sort: false, index: false },
-	];
-
-	const handleAutoDetect = () => {
-		onChange(SAMPLE_FIELDS);
-	};
-
 	const toggleField = (idx: number, key: "facet" | "sort" | "index") => {
 		const updated = fields.map((f, i) => (i === idx ? { ...f, [key]: !f[key] } : f));
 		onChange(updated);
@@ -298,21 +381,13 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 
 	return (
 		<div className="space-y-4">
-			<div className="gap-2 flex items-start justify-between">
-				<div>
-					<h3 className="text-lg font-semibold">{t("step2Title")}</h3>
-					<p className="text-sm text-muted-foreground">{t("step2Description")}</p>
-				</div>
-				{fields.length === 0 && (
-					<Button variant="outline" size="sm" onClick={handleAutoDetect}>
-						{t("autoDetect")}
-					</Button>
-				)}
+			<div>
+				<h3 className="text-lg font-semibold">{t("step2Title")}</h3>
+				<p className="text-sm text-muted-foreground">{t("step2Description")}</p>
 			</div>
 
 			{fields.length === 0 ? (
 				<div className="py-12 text-center">
-					<Table2Icon className="mb-3 size-10 mx-auto text-muted-foreground/40" />
 					<p className="text-sm text-muted-foreground">{t("schemaEmpty")}</p>
 					<p className="text-xs text-muted-foreground/60">{t("schemaEmptyHint")}</p>
 				</div>
@@ -322,33 +397,19 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 						<table className="text-sm w-full">
 							<thead>
 								<tr className="border-b bg-muted/50">
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-										{t("fieldName")}
-									</th>
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-										{t("fieldType")}
-									</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-										{t("fieldSearch")}
-									</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-										{t("fieldFacet")}
-									</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-										{t("fieldSort")}
-									</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldName")}</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldType")}</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldSearch")}</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldFacet")}</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldSort")}</th>
 								</tr>
 							</thead>
 							<tbody>
 								{fields.map((field, idx) => (
 									<tr key={field.name} className="border-b last:border-0">
-										<td className="px-4 py-2 font-mono text-xs">
-											{field.name}
-										</td>
+										<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
 										<td className="px-4 py-2">
-											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
-												{field.type}
-											</span>
+											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">{field.type}</span>
 										</td>
 										<td className="px-4 py-2 text-center">
 											<button
@@ -361,9 +422,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.index && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.index && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -377,9 +436,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.facet && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.facet && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -393,9 +450,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.sort && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.sort && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 									</tr>
@@ -409,17 +464,24 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 	);
 }
 
-// ─── Step 3: Search Config ──────────────────────────────────────────────────
+// ─── Step 3: Search Config ───────────────────────────────────────────────────
 
 interface StepSearchConfigProps {
-	fields: Array<{ name: string; type: string }>;
+	fields: FieldDef[];
 	searchableFields: string[];
 	fieldWeights: Record<string, number>;
 	typoTolerance: number;
 	prefixSearch: boolean;
 	infixSearch: "off" | "fallback" | "always";
 	exactMatch: boolean;
-	onChange: (patch: Partial<StepData>) => void;
+	onChange: (patch: Partial<{
+		searchableFields: string[];
+		fieldWeights: Record<string, number>;
+		typoTolerance: number;
+		prefixSearch: boolean;
+		infixSearch: "off" | "fallback" | "always";
+		exactMatch: boolean;
+	}>) => void;
 	t: (key: string) => string;
 }
 
@@ -454,81 +516,66 @@ function StepSearchConfig({
 				<p className="text-sm text-muted-foreground">{t("step3Description")}</p>
 			</div>
 
-			{/* Searchable fields */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-medium">{t("searchableFields")}</h4>
-				<Card className="overflow-x-auto rounded-md border">
-					<CardContent className="p-0">
-						<table className="text-sm w-full">
-							<thead>
-								<tr className="border-b bg-muted/50">
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-										{t("fieldName")}
-									</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-										{t("searchable")}
-									</th>
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-										{t("weight")}
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{stringFields.map((field) => (
-									<tr key={field.name} className="border-b last:border-0">
-										<td className="px-4 py-2 font-mono text-xs">
-											{field.name}
-										</td>
-										<td className="px-4 py-2 text-center">
-											<button
-												type="button"
-												onClick={() => toggleSearchable(field.name)}
-												className={cn(
-													"size-5 rounded border transition-colors",
-													searchableFields.includes(field.name)
-														? "border-primary bg-primary text-primary-foreground"
-														: "border-input",
-												)}
-											>
-												{searchableFields.includes(field.name) && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
-											</button>
-										</td>
-										<td className="px-4 py-2">
-											<input
-												type="number"
-												min={1}
-												max={100}
-												value={fieldWeights[field.name] ?? 1}
-												onChange={(e) =>
-													setWeight(field.name, Number(e.target.value))
-												}
-												disabled={!searchableFields.includes(field.name)}
-												className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
-											/>
-										</td>
+				{stringFields.length > 0 ? (
+					<Card className="overflow-x-auto rounded-md border">
+						<CardContent className="p-0">
+							<table className="text-sm w-full">
+								<thead>
+									<tr className="border-b bg-muted/50">
+										<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldName")}</th>
+										<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("searchable")}</th>
+										<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("weight")}</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					</CardContent>
-				</Card>
-				{stringFields.length === 0 && (
-					<p className="py-4 text-sm text-center text-muted-foreground">
-						{t("noStringFields")}
-					</p>
+								</thead>
+								<tbody>
+									{stringFields.map((field) => (
+										<tr key={field.name} className="border-b last:border-0">
+											<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
+											<td className="px-4 py-2 text-center">
+												<button
+													type="button"
+													onClick={() => toggleSearchable(field.name)}
+													className={cn(
+														"size-5 rounded border transition-colors",
+														searchableFields.includes(field.name)
+															? "border-primary bg-primary text-primary-foreground"
+															: "border-input",
+													)}
+												>
+													{searchableFields.includes(field.name) && (
+														<CheckIcon className="size-4 p-0.5" />
+													)}
+												</button>
+											</td>
+											<td className="px-4 py-2">
+												<input
+													type="number"
+													min={1}
+													max={100}
+													value={fieldWeights[field.name] ?? 1}
+													onChange={(e) => setWeight(field.name, Number(e.target.value))}
+													disabled={!searchableFields.includes(field.name)}
+													className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
+												/>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</CardContent>
+					</Card>
+				) : (
+					<p className="py-4 text-sm text-center text-muted-foreground">{t("noStringFields")}</p>
 				)}
 			</div>
 
-			{/* Ranking options */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
 				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">
-							{t("typoTolerance")}
-						</label>
+						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}
@@ -582,17 +629,17 @@ function StepSearchConfig({
 	);
 }
 
-// ─── Step 4: Facets ─────────────────────────────────────────────────────────
+// ─── Step 4: Facets ──────────────────────────────────────────────────────────
 
 interface StepFacetsProps {
-	fields: Array<{ name: string; type: string; facet: boolean }>;
+	fields: FieldDef[];
 	configs: FacetConfig[];
 	onChange: (configs: FacetConfig[]) => void;
 	t: (key: string) => string;
 }
 
 function StepFacets({ fields, configs, onChange, t }: StepFacetsProps) {
-	const facetFields = fields.filter((f) => f.facet).map((f) => f.name);
+	const facetFieldNames = fields.filter((f) => f.facet).map((f) => f.name);
 
 	return (
 		<div className="space-y-4">
@@ -600,7 +647,199 @@ function StepFacets({ fields, configs, onChange, t }: StepFacetsProps) {
 				<h3 className="text-lg font-semibold">{t("step4Title")}</h3>
 				<p className="text-sm text-muted-foreground">{t("step4Description")}</p>
 			</div>
-			<FacetsPanel facetFields={facetFields} configs={configs} onChange={onChange} />
+			<FacetsPanel facetFields={facetFieldNames} configs={configs} onChange={onChange} />
+		</div>
+	);
+}
+
+// ─── Step 5: Preview ─────────────────────────────────────────────────────────
+
+interface StepPreviewProps {
+	selectedIndexSlug: string;
+	activeIndexName: string;
+	searchableFields: string[];
+	facetFields: string[];
+	defaultSortField?: string;
+	theme: "light" | "dark" | "auto";
+	placeholder: string;
+	resultsPerPage: number;
+	showThumbnails: boolean;
+	accentColor: string;
+	onThemeChange: (v: "light" | "dark" | "auto") => void;
+	onPlaceholderChange: (v: string) => void;
+	onResultsPerPageChange: (v: number) => void;
+	onShowThumbnailsChange: (v: boolean) => void;
+	onAccentColorChange: (v: string) => void;
+	t: (key: string) => string;
+}
+
+function StepPreview({
+	selectedIndexSlug,
+	activeIndexName,
+	searchableFields,
+	facetFields,
+	defaultSortField,
+	theme,
+	placeholder,
+	resultsPerPage,
+	showThumbnails,
+	accentColor,
+	onThemeChange,
+	onPlaceholderChange,
+	onResultsPerPageChange,
+	onShowThumbnailsChange,
+	onAccentColorChange,
+	t,
+}: StepPreviewProps) {
+	return (
+		<div className="space-y-6">
+			<div>
+				<h3 className="text-lg font-semibold">{t("step5Title")}</h3>
+				<p className="text-sm text-muted-foreground">{t("step5Description")}</p>
+			</div>
+
+			{/* Configuration summary */}
+			<Card>
+				<CardContent className="p-4 space-y-4">
+					<div>
+						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+							{t("summaryIndex")}
+						</p>
+						<p className="text-sm font-medium">{activeIndexName || selectedIndexSlug}</p>
+					</div>
+					<div className="gap-4 sm:grid-cols-2 grid">
+						<div>
+							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+								{t("summarySearchFields")}
+							</p>
+							<p className="text-sm">{searchableFields.join(", ") || "—"}</p>
+						</div>
+						<div>
+							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+								{t("summaryFacetFields")}
+							</p>
+							<p className="text-sm">{facetFields.join(", ") || "—"}</p>
+						</div>
+						{defaultSortField && (
+							<div>
+								<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+									{t("summaryDefaultSort")}
+								</p>
+								<p className="text-sm">{defaultSortField}</p>
+							</div>
+						)}
+						<div>
+							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+								{t("summaryResultsPerPage")}
+							</p>
+							<p className="text-sm">{resultsPerPage}</p>
+						</div>
+					</div>
+				</CardContent>
+			</Card>
+
+			{/* Widget appearance settings */}
+			<Card>
+				<CardContent className="p-4 space-y-4">
+					<div className="gap-2 flex items-center">
+						<SlidersHorizontalIcon className="size-4 text-muted-foreground" />
+						<p className="text-sm font-medium">{t("widgetAppearance")}</p>
+					</div>
+					<div className="gap-4 sm:grid-cols-2 grid">
+						<div className="space-y-1.5">
+							<label className="text-xs text-muted-foreground">{t("theme")}</label>
+							<select
+								value={theme}
+								onChange={(e) => onThemeChange(e.target.value as "light" | "dark" | "auto")}
+								className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
+							>
+								<option value="light">{t("themeLight")}</option>
+								<option value="dark">{t("themeDark")}</option>
+								<option value="auto">{t("themeAuto")}</option>
+							</select>
+						</div>
+						<div className="space-y-1.5">
+							<label className="text-xs text-muted-foreground">{t("accentColor")}</label>
+							<div className="gap-2 flex items-center">
+								<input
+									type="color"
+									value={accentColor}
+									onChange={(e) => onAccentColorChange(e.target.value)}
+									className="size-8 rounded cursor-pointer border border-input"
+								/>
+								<input
+									type="text"
+									value={accentColor}
+									onChange={(e) => onAccentColorChange(e.target.value)}
+									className="h-8 rounded px-2 text-xs flex-1 border border-input bg-background font-mono"
+								/>
+							</div>
+						</div>
+						<div className="space-y-1.5">
+							<label className="text-xs text-muted-foreground">{t("placeholder")}</label>
+							<input
+								type="text"
+								value={placeholder}
+								onChange={(e) => onPlaceholderChange(e.target.value)}
+								className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
+							/>
+						</div>
+						<div className="space-y-1.5">
+							<label className="text-xs text-muted-foreground">{t("resultsPerPage")}</label>
+							<input
+								type="number"
+								min={5}
+								max={50}
+								value={resultsPerPage}
+								onChange={(e) => onResultsPerPageChange(Number(e.target.value))}
+								className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
+							/>
+						</div>
+					</div>
+					<label className="gap-2 text-sm flex items-center">
+						<input
+							type="checkbox"
+							checked={showThumbnails}
+							onChange={(e) => onShowThumbnailsChange(e.target.checked)}
+							className="size-4 rounded border-input accent-primary"
+						/>
+						{t("showThumbnails")}
+					</label>
+				</CardContent>
+			</Card>
+
+			{/* Widget code snippet preview */}
+			<Card>
+				<CardContent className="p-4 space-y-3">
+					<div className="gap-2 flex items-center">
+						<SearchIcon className="size-4 text-muted-foreground" />
+						<p className="text-sm font-medium">{t("embedCode")}</p>
+					</div>
+					<pre className="rounded-md bg-muted p-3 text-xs overflow-x-auto font-mono leading-relaxed">
+						{`<script
+  src="http://localhost:3000/api/widget/widget.js"
+  data-base-url="http://localhost:3000"
+  data-index-slug="${selectedIndexSlug}"
+  data-theme="${theme}"
+  data-placeholder="${placeholder}"
+  data-results-per-page="${resultsPerPage}"
+  data-accent-color="${accentColor}"
+  ${!showThumbnails ? '  data-show-thumbnails="false"\n' : ""}  data-query-by="${searchableFields.join(",")}"
+  ${facetFields.length > 0 ? `  data-facets="${facetFields.join(",")}"` : ""}
+  ${defaultSortField ? `  data-sort="${defaultSortField}"` : ""}
+></script>`}
+					</pre>
+					<p className="text-xs text-muted-foreground">
+						{t("embedHint")}
+					</p>
+				</CardContent>
+			</Card>
+
+			<Button variant="outline" size="sm" asChild>
+				<Link href={`/getting-started`}>
+					{t("skipToGettingStarted")}
+				</Link>
+			</Button>
 		</div>
 	);
 }

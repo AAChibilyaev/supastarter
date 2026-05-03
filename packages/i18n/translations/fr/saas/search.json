@@ -1034,7 +1034,26 @@
 			"selectSpaceAndFile": "Sélectionnez un espace et un fichier",
 			"fileReadError": "Impossible de lire le fichier",
 			"fileTypeInvalid": "Seuls les fichiers .md, .xml et .pdf sont pris en charge",
-			"selectSpaceAndGraphQuery": "Sélectionnez un espace et saisissez une requête au graphe"
+			"selectSpaceAndGraphQuery": "Sélectionnez un espace et saisissez une requête au graphe",
+			"files": {
+				"title": "Fichiers",
+				"empty": "Aucun fichier indexé",
+				"delete": "Supprimer le fichier",
+				"deleteConfirm": "Supprimer ce fichier et tout son contenu indexé?",
+				"preview": "Aperçu",
+				"colFilename": "Nom de fichier",
+				"colType": "Type",
+				"colChunks": "Fragments",
+				"colDate": "Date",
+				"colActions": "Actions",
+				"previewContent": "Aperçu du contenu",
+				"noContent": "Aucun aperçu disponible",
+				"deleteSuccess": "Fichier supprimé",
+				"deleteError": "Échec de la suppression du fichier",
+				"loadError": "Échec du chargement des fichiers",
+				"sortAsc": "Trier par ordre croissant",
+				"sortDesc": "Trier par ordre décroissant"
+			}
 		},
 		"documents": {
 			"empty": "Aucun document dans cet index pour le moment",

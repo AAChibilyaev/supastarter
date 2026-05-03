@@ -13,6 +13,8 @@ import { aliasName, physicalCollectionName } from "./collections";
 import { autoEmbedDocuments } from "./embeddings";
 import { bulkUpsert, deleteByQuery } from "./ingest";
 
+const IMPORT_ACTIONS = ["create", "update", "upsert", "emplace"] as const;
+
 export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 	const index = await getSearchIndexById(indexId);
 	if (!index) {
@@ -24,13 +26,13 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 		return { flushed: 0, failed: 0 };
 	}
 
-	const upserts = rows.filter((row) => row.action === "upsert");
+	const imports = rows.filter((row) => IMPORT_ACTIONS.includes(row.action as typeof IMPORT_ACTIONS[number]));
 	const deletes = rows.filter((row) => row.action === "delete");
 	const collection = aliasName(index.organizationId, index.slug);
 
-	// Auto-embed documents before upserting to Typesense
-	if (upserts.length > 0) {
-		const documents = upserts.map((row) => row.document as Record<string, unknown>);
+	// Auto-embed documents before importing to Typesense
+	if (imports.length > 0) {
+		const documents = imports.map((row) => row.document as Record<string, unknown>);
 		const embedResult = await autoEmbedDocuments(documents);
 		if (embedResult.embedded > 0) {
 			logger.debug(
@@ -43,28 +45,41 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 	const successIds: string[] = [];
 	const failures: { id: string; error: string }[] = [];
 
-	if (upserts.length > 0) {
-		try {
-			const result = await bulkUpsert({
-				collection,
-				tenantId: index.organizationId,
-				documents: upserts.map((row) => row.document as Record<string, unknown>),
-			});
+	if (imports.length > 0) {
+		// Group import rows by action type so each group is sent with the correct action
+		const groups = new Map<string, typeof rows>();
+		for (const row of imports) {
+			const action = IMPORT_ACTIONS.includes(row.action as typeof IMPORT_ACTIONS[number]) ? row.action : "upsert";
+			if (!groups.has(action)) {
+				groups.set(action, []);
+			}
+			groups.get(action)!.push(row);
+		}
 
-			const failedIndexes = new Set(result.failures.map((f) => f.index));
-			upserts.forEach((row, idx) => {
-				if (failedIndexes.has(idx)) {
-					const failure = result.failures.find((f) => f.index === idx);
-					failures.push({ id: row.id, error: failure?.error ?? "unknown" });
-				} else {
-					successIds.push(row.id);
+		for (const [action, group] of groups) {
+			try {
+				const result = await bulkUpsert({
+					collection,
+					tenantId: index.organizationId,
+					documents: group.map((row) => row.document as Record<string, unknown>),
+					action: action as "create" | "update" | "upsert" | "emplace",
+				});
+
+				const failedIndexes = new Set(result.failures.map((f) => f.index));
+				group.forEach((row, idx) => {
+					if (failedIndexes.has(idx)) {
+						const failure = result.failures.find((f) => f.index === idx);
+						failures.push({ id: row.id, error: failure?.error ?? "unknown" });
+					} else {
+						successIds.push(row.id);
+					}
+				});
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				logger.error("flushSearchIngestBuffer: bulkUpsert threw", { indexId, message, action });
+				for (const row of group) {
+					failures.push({ id: row.id, error: message });
 				}
-			});
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			logger.error("flushSearchIngestBuffer: bulkUpsert threw", { indexId, message });
-			for (const row of upserts) {
-				failures.push({ id: row.id, error: message });
 			}
 		}
 	}

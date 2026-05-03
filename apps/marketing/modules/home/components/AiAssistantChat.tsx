@@ -773,12 +773,12 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			</div>
 
 			{/* ─── Mobile Bottom Bar ──────────────────────── */}
-			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center gap-2 border-t border-border bg-card/95 backdrop-blur-xl px-3 py-2 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-2 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
 				{/* Hamburger menu */}
 				<button
 					type="button"
 					onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
-					className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors active:bg-muted/60 hover:text-foreground"
+					className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors active:bg-muted/60"
 					aria-label="Open menu"
 				>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -788,55 +788,54 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 					</svg>
 				</button>
 
-				{/* Divider */}
-				<div className="h-7 w-px shrink-0 bg-border/60" />
+				<div className="mx-1.5 h-7 w-px shrink-0 bg-border/60" />
 
-				{/* AI Assistant trigger */}
+				{/* Main trigger — shows ALL capabilities as inline labels */}
 				<button
 					type="button"
 					onClick={() => {
 						setOpen(!open);
 						if (!open) setView("chat");
 					}}
-					className="flex flex-1 items-center gap-2.5 rounded-lg px-3 py-2.5 transition-colors active:bg-muted/50"
+					className="flex flex-1 items-center gap-1.5 rounded-lg px-2.5 py-2 transition-colors active:bg-muted/40 truncate"
 				>
 					<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
 						<SparklesIcon className="size-4 text-primary" />
 					</div>
-					<div className="flex-1 min-w-0">
-						<div className="text-sm font-light text-muted-foreground/90 leading-tight">Ask AI...</div>
-						<div className="text-[10px] font-light text-muted-foreground/40 leading-tight mt-0.5">Search with text, voice, images</div>
+
+					{/* Capability chips — shown inline, not clickable */}
+					<div className="flex items-center gap-1 min-w-0 truncate">
+						<span className="text-sm font-light text-muted-foreground/90 whitespace-nowrap">
+							Ask AI
+						</span>
+						<span className="text-muted-foreground/20 mx-0.5">·</span>
+						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
+							⌨️Text
+						</span>
+						<span className="text-muted-foreground/20">·</span>
+						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
+							🎤Voice
+						</span>
+						<span className="text-muted-foreground/20">·</span>
+						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
+							📷Photo
+						</span>
+						<span className="text-muted-foreground/20">·</span>
+						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
+							🖼️Image
+						</span>
+						<span className="text-muted-foreground/20">·</span>
+						<span className="text-[11px] font-light text-muted-foreground/50 whitespace-nowrap">
+							💬Chat
+						</span>
 					</div>
+
 					{sessions.length > 0 && (
-						<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground">
+						<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground ml-auto">
 							{sessions.length > 9 ? "9+" : sessions.length}
 						</span>
 					)}
 				</button>
-
-				{/* Mode icons — quick access */}
-				<div className="flex items-center gap-1">
-					{MODES.map(({ key, icon: Icon }) => (
-						<button
-							key={key}
-							type="button"
-							onClick={() => {
-								handleModeClick(key);
-								setOpen(true);
-								setView("chat");
-							}}
-							className={cn(
-								"flex size-11 items-center justify-center rounded-lg transition-colors active:scale-95",
-								activeMode === key
-									? "bg-muted text-foreground"
-									: "text-muted-foreground/40 active:text-foreground",
-							)}
-							aria-label={`Search by ${key}`}
-						>
-							<Icon className="size-4" />
-						</button>
-					))}
-				</div>
 			</div>
 		</div>
 	);

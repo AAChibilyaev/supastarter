@@ -1,4 +1,5 @@
 import { logger } from "@repo/logs";
+import type { SearchDocumentsResult } from "@repo/search";
 import { aliasName, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -39,7 +40,8 @@ export const demoApp = new Hono()
 			return c.json(
 				{
 					error: "demo_not_configured",
-					message: "Demo is not configured. Set DEMO_ORG_ID and DEMO_INDEX_SLUG env vars.",
+					message:
+						"Demo is not configured. Set DEMO_ORG_ID and DEMO_INDEX_SLUG env vars.",
 				},
 				503,
 			);
@@ -58,7 +60,7 @@ export const demoApp = new Hono()
 		}
 
 		try {
-			const result = await searchDocuments({
+			const result: SearchDocumentsResult = await searchDocuments({
 				alias: aliasName(demoOrgId, demoIndexSlug),
 				tenantId: demoOrgId,
 				q: parsed.data.q,
@@ -70,20 +72,29 @@ export const demoApp = new Hono()
 				page: parsed.data.page,
 			});
 
+			const hits = result.hits?.map(
+				(hit: unknown) => {
+					const doc = hit as { document?: Record<string, unknown>; highlight?: Record<string, unknown>; text_match_info?: { score?: number } };
+					return {
+						...doc.document,
+						_highlight: doc.highlight,
+						_score: doc.text_match_info?.score,
+					};
+				},
+			) ?? [];
+
 			return c.json({
 				found: result.found,
-				out_of: result.out_of,
 				page: result.page,
-				hits: result.hits?.map((hit) => ({
-					...hit.document,
-					_highlight: hit.highlight,
-					_score: hit.text_match_info?.score,
-				})) ?? [],
-				facet_counts: result.facet_counts ?? [],
-				search_time_ms: result.search_time_ms ?? 0,
+				hits,
+				facet_counts: result.facetCounts ?? [],
+				search_time_ms: result.searchTimeMs ?? 0,
 			});
 		} catch (error) {
 			logger.error("Demo search failed", { error });
-			return c.json({ error: "search_failed", message: "Search request failed" }, 502);
+			return c.json(
+				{ error: "search_failed", message: "Search request failed" },
+				502,
+			);
 		}
 	});

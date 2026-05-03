@@ -1,4 +1,4 @@
-import { aggregateSearchUsage, recordSearchUsage } from "@repo/database";
+import { aggregateSearchUsage, recordActivationEvent, recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
 import { SymSpell, detectLanguage, normalize } from "@repo/nlp";
 import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
@@ -211,6 +211,11 @@ export const publicSearchApp = new Hono()
 					referrer: c.req.header("referer") ?? null,
 				},
 			}).catch((error) => logger.error("Could not record search usage", { error }));
+
+			// Fire-and-forget: record FIRST_SEARCH activation milestone (idempotent)
+			void recordActivationEvent(verified.organizationId, "FIRST_SEARCH").catch((err: unknown) =>
+				logger.error("Failed to record FIRST_SEARCH activation event", { error: err, organizationId: verified.organizationId }),
+			);
 
 			if (result.found === 0) {
 				void recordSearchUsage({

@@ -3948,24 +3948,24 @@
 		}
 	},
 	"tutorialsPage": {
-		"title": "Video Tutorials",
-		"description": "Watch step-by-step guides to get the most out of AACsearch — from 5-minute setup to advanced integrations.",
+		"title": "Video-Tutorials",
+		"description": "Sehen Sie sich Schritt-für-Schritt-Anleitungen an, um das Beste aus AACsearch herauszuholen — vom 5-minütigen Setup bis zu fortgeschrittenen Integrationen.",
 		"videos": {
 			"quickstart": {
-				"title": "5-Minute Quickstart",
-				"description": "Create an account, upload data, embed a search widget, and go live — all in under 5 minutes."
+				"title": "5-Minuten Schnellstart",
+				"description": "Erstellen Sie ein Konto, laden Sie Daten hoch, betten Sie ein Such-Widget ein und gehen Sie live — alles in unter 5 Minuten."
 			},
 			"ecommerce": {
-				"title": "E-commerce Search Setup",
-				"description": "Configure product search with faceted navigation, scoped tokens per storefront, and analytics."
+				"title": "E-Commerce-Suche einrichten",
+				"description": "Konfigurieren Sie die Produktsuche mit facettierter Navigation, bereichsspezifischen Tokens pro Shop und Analysen."
 			},
 			"blog": {
-				"title": "Content / Blog Search",
-				"description": "Add instant full-text search to your blog or documentation site with typo tolerance."
+				"title": "Content-/Blog-Suche",
+				"description": "Fügen Sie Ihrem Blog oder Ihrer Dokumentation sofortige Volltextsuche mit Tippfehlertoleranz hinzu."
 			},
 			"app": {
-				"title": "SaaS App Search",
-				"description": "Build multi-tenant search for your SaaS app with per-tenant isolation and scoped API keys."
+				"title": "SaaS-App-Suche",
+				"description": "Erstellen Sie eine mandantenfähige Suche für Ihre SaaS-App mit mandantenspezifischer Isolierung und bereichsspezifischen API-Schlüsseln."
 			}
 		}
 	}

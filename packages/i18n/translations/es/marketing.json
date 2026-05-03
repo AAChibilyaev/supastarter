@@ -4012,24 +4012,24 @@
 		}
 	},
 	"tutorialsPage": {
-		"title": "Video Tutorials",
-		"description": "Watch step-by-step guides to get the most out of AACsearch — from 5-minute setup to advanced integrations.",
+		"title": "Video Tutoriales",
+		"description": "Mire guías paso a paso para aprovechar al máximo AACsearch — desde la configuración en 5 minutos hasta integraciones avanzadas.",
 		"videos": {
 			"quickstart": {
-				"title": "5-Minute Quickstart",
-				"description": "Create an account, upload data, embed a search widget, and go live — all in under 5 minutes."
+				"title": "Inicio rápido en 5 minutos",
+				"description": "Cree una cuenta, cargue datos, integre un widget de búsqueda y salga al aire — todo en menos de 5 minutos."
 			},
 			"ecommerce": {
-				"title": "E-commerce Search Setup",
-				"description": "Configure product search with faceted navigation, scoped tokens per storefront, and analytics."
+				"title": "Configuración de búsqueda para e-commerce",
+				"description": "Configure la búsqueda de productos con navegación por facetas, tokens por tienda y análisis."
 			},
 			"blog": {
-				"title": "Content / Blog Search",
-				"description": "Add instant full-text search to your blog or documentation site with typo tolerance."
+				"title": "Búsqueda de contenido/blog",
+				"description": "Añada búsqueda instantánea de texto completo a su blog o sitio de documentación con tolerancia a errores tipográficos."
 			},
 			"app": {
-				"title": "SaaS App Search",
-				"description": "Build multi-tenant search for your SaaS app with per-tenant isolation and scoped API keys."
+				"title": "Búsqueda para aplicaciones SaaS",
+				"description": "Construya búsqueda multiinquilino para su app SaaS con aislamiento por inquilino y claves API restringidas."
 			}
 		}
 	}

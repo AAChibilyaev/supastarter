@@ -1,9 +1,10 @@
 import { db } from "../client";
+import { Prisma } from "../generated/client";
 
 /**
  * Activation event types that track onboarding funnel progress.
  */
-export type ActivationEventType =
+export type ActivationEventKind =
 	| "EMAIL_VERIFIED"
 	| "FIRST_COLLECTION"
 	| "FIRST_DOCUMENT"
@@ -41,7 +42,7 @@ export async function recordActivationEvent(
 		create: {
 			organizationId,
 			eventType,
-			metadata: (metadata as Record<string, unknown>) ?? undefined,
+			metadata: metadata as unknown as Prisma.InputJsonValue ?? Prisma.JsonNull,
 		},
 		update: {},
 	});

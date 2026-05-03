@@ -50,6 +50,8 @@ function CollectionGridSkeleton() {
 
 export function CollectionsPage() {
 	const t = useTranslations();
+export function CollectionsPage() {
+	const t = useTranslations("search");
 	const { activeOrganization } = useActiveOrganization();
 	const queryClient = useQueryClient();
 	const { confirm } = useConfirmationAlert();
@@ -62,12 +64,11 @@ export function CollectionsPage() {
 	const [exportCollectionSlug, setExportCollectionSlug] = useState<string | null>(null);
 	const [schemaCollectionSlug, setSchemaCollectionSlug] = useState<string | null>(null);
 
-	// ── Fetch indexes (collections = search indexes) ──────────────────────
+	// ── Fetch collections ──────────────────────────────────────
 
-	const { data: indexes, isLoading } = useQuery(
-		orpc.search.listIndexes.queryOptions({
+	const { data: collectionsData, isLoading } = useQuery(
+		orpc.collections.list.queryOptions({
 			input: { organizationId: orgId ?? "" },
-			enabled: Boolean(orgId),
 		}),
 	);
 
@@ -79,7 +80,6 @@ export function CollectionsPage() {
 				organizationId: orgId ?? "",
 				slug: importCollectionSlug ?? "",
 			},
-			enabled: Boolean(orgId) && Boolean(importCollectionSlug),
 		}),
 	);
 
@@ -91,38 +91,38 @@ export function CollectionsPage() {
 	// ── Filter by search ──────────────────────────────────────────────────
 
 	const collections: CollectionData[] = useMemo(() => {
-		if (!indexes) return [];
-		return (indexes as Array<Record<string, unknown>>)
-			.filter((idx) => {
+		if (!collectionsData) return [];
+		return collectionsData
+			.filter((col) => {
 				if (!searchQuery) return true;
-				const name = (idx.displayName as string) ?? (idx.slug as string) ?? "";
+				const name = col.name ?? col.slug ?? "";
 				return name.toLowerCase().includes(searchQuery.toLowerCase());
 			})
-			.map((idx) => ({
-				id: idx.id as string,
-				slug: idx.slug as string,
-				displayName: (idx.displayName as string) ?? (idx.slug as string),
-				enabled: (idx.enabled as boolean) ?? true,
-				numDocuments: (idx.numDocuments as number) ?? 0,
-				sizeMb: idx.sizeMb as number | undefined,
-				fieldsCount: (idx.fieldsCount as number) ?? 0,
-				lastActivityAt: idx.lastActivityAt as string | undefined,
-				createdAt: (idx.createdAt as string) ?? new Date().toISOString(),
+			.map((col) => ({
+				id: col.id,
+				slug: col.slug,
+				displayName: col.name ?? col.slug,
+				enabled: col.status === "active",
+				numDocuments: col.documentCount ?? 0,
+				sizeMb: col.size ?? 0,
+				fieldsCount: Array.isArray(col.schema) ? col.schema.length : 0,
+				lastActivityAt: col.updatedAt,
+				createdAt: col.createdAt,
 			}));
-	}, [indexes, searchQuery]);
+	}, [collectionsData, searchQuery]);
 
 	// ── Delete mutation ───────────────────────────────────────────────────
 
 	const deleteMutation = useMutation(
-		orpc.search.deleteIndex.mutationOptions({
+		orpc.collections.delete.mutationOptions({
 			onSuccess: () => {
-				toastSuccess(t("search.collection.deleted"));
+				toastSuccess(t("collection.deleted"));
 				void queryClient.invalidateQueries({
-					queryKey: orpc.search.listIndexes.key(),
+					queryKey: orpc.collections.list.key(),
 				});
 			},
 			onError: () => {
-				toastError(t("search.collection.deleteError"));
+				toastError(t("collection.deleteError"));
 			},
 		}),
 	);

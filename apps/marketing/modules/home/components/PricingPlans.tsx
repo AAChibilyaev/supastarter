@@ -28,7 +28,7 @@ export function PricingPlans() {
 						{t("home.pricing.badge")}
 					</p>
 
-					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
+					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
 						{t("home.pricing.title")}
 					</h2>
 
@@ -83,7 +83,7 @@ export function PricingPlans() {
 									)}
 
 									<div className="mb-6">
-										<p className="font-semibold text-base text-foreground">
+										<p className="font-normal text-base text-foreground">
 											{t(`home.pricing.plans.${plan.key}.name`)}
 										</p>
 										<p className="mt-1 text-sm font-light text-pretty text-muted-foreground">

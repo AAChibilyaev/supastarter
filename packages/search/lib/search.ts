@@ -214,15 +214,7 @@ export async function computeDisjunctiveFacetCounts(input: {
 	disjunctiveFacets: string[];
 	existingFacetCounts: FacetCount[];
 }): Promise<FacetCount[]> {
-	const {
-		alias,
-		tenantId,
-		q,
-		queryBy,
-		filterBy,
-		disjunctiveFacets,
-		existingFacetCounts,
-	} = input;
+	const { alias, tenantId, q, queryBy, filterBy, disjunctiveFacets, existingFacetCounts } = input;
 
 	if (!disjunctiveFacets.length || !filterBy) return existingFacetCounts;
 

@@ -140,29 +140,30 @@ model TwoFactor {
 }
 
 model Organization {
-  id                 String       @id @default(cuid())
-  name               String
-  slug               String?
-  logo               String?
-  createdAt          DateTime
-  trialEndsAt        DateTime?
-  metadata           String?
-  paymentsCustomerId String?
-  members            Member[]
-  invitations        Invitation[]
-  purchases          Purchase[]
-  searchIndexes      SearchIndex[]
-  searchApiKeys      SearchApiKey[]
-  searchUsageEvents  SearchUsageEvent[]
-  searchIngestBuffer SearchIngestBuffer[]
-  connectorSyncJobs  SearchConnectorSyncJob[]
-  shopifyStores      ShopifyStore[]
-  aiWallet           AiWallet?
-  knowledgeSpaces    KnowledgeSpace[]
-  activationEvents   ActivationEvent[]
-  collections        Collection[]
-  collectionDocuments CollectionDocument[]
-  npsSurveyResponses  NpsSurveyResponse[]
+  id                   String                   @id @default(cuid())
+  name                 String
+  slug                 String?
+  logo                 String?
+  createdAt            DateTime
+  trialEndsAt          DateTime?
+  metadata             String?
+  paymentsCustomerId   String?
+  members              Member[]
+  invitations          Invitation[]
+  purchases            Purchase[]
+  searchIndexes        SearchIndex[]
+  searchApiKeys        SearchApiKey[]
+  searchUsageEvents    SearchUsageEvent[]
+  searchIngestBuffer   SearchIngestBuffer[]
+  connectorSyncJobs    SearchConnectorSyncJob[]
+  shopifyStores        ShopifyStore[]
+  aiWallet             AiWallet?
+  knowledgeSpaces      KnowledgeSpace[]
+  activationEvents     ActivationEvent[]
+  collections          Collection[]
+  collectionDocuments  CollectionDocument[]
+  npsSurveyResponses   NpsSurveyResponse[]
+  featureFlagOverrides FeatureFlagOverride[]
 
   @@unique([slug])
   @@map("organization")
@@ -279,10 +280,10 @@ model SearchIndex {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  apiKeys      SearchApiKey[]
-  usageEvents  SearchUsageEvent[]
-  ingestBuffer SearchIngestBuffer[]
-  syncJobs     SearchConnectorSyncJob[]
+  apiKeys       SearchApiKey[]
+  usageEvents   SearchUsageEvent[]
+  ingestBuffer  SearchIngestBuffer[]
+  syncJobs      SearchConnectorSyncJob[]
   shopifyStores ShopifyStore[]
 
   @@unique([organizationId, slug])
@@ -386,7 +387,7 @@ model ShopifyStore {
   indexId        String?
   index          SearchIndex? @relation(fields: [indexId], references: [id], onDelete: SetNull)
   shop           String       @unique // myshop.myshopify.com
-  accessToken    String       // AES-256-GCM encrypted at rest
+  accessToken    String // AES-256-GCM encrypted at rest
   scopes         String       @default("")
   name           String?
   email          String?
@@ -429,16 +430,16 @@ enum IngestionJobStatus {
 }
 
 model KnowledgeSpace {
-  id             String             @id @default(cuid())
+  id             String              @id @default(cuid())
   ownerType      KnowledgeOwnerType
   userId         String?
-  user           User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
   organizationId String?
-  organization   Organization?      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization?       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   slug           String
   name           String
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
   dataSources    DataSource[]
   documents      KnowledgeDocument[]
   chunks         KnowledgeChunk[]
@@ -454,41 +455,41 @@ model KnowledgeSpace {
 }
 
 model DataSource {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  sourceType        KnowledgeSourceType
-  name              String
-  config            Json              @default("{}")
-  credentialRef     String?
-  syncEnabled       Boolean           @default(true)
-  lastSyncedAt      DateTime?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  ingestionJobs     IngestionJob[]
-  documents         KnowledgeDocument[]
+  id               String              @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace      @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  sourceType       KnowledgeSourceType
+  name             String
+  config           Json                @default("{}")
+  credentialRef    String?
+  syncEnabled      Boolean             @default(true)
+  lastSyncedAt     DateTime?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  ingestionJobs    IngestionJob[]
+  documents        KnowledgeDocument[]
 
   @@index([knowledgeSpaceId, sourceType])
   @@map("data_source")
 }
 
 model IngestionJob {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  dataSourceId      String?
-  dataSource        DataSource?       @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
-  status            IngestionJobStatus @default(QUEUED)
-  mode              String
-  inputMeta         Json              @default("{}")
-  totalItems        Int               @default(0)
-  processedItems    Int               @default(0)
-  failedItems       Int               @default(0)
-  errorMessage      String?
-  startedAt         DateTime?
-  finishedAt        DateTime?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  id               String             @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace     @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  dataSourceId     String?
+  dataSource       DataSource?        @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
+  status           IngestionJobStatus @default(QUEUED)
+  mode             String
+  inputMeta        Json               @default("{}")
+  totalItems       Int                @default(0)
+  processedItems   Int                @default(0)
+  failedItems      Int                @default(0)
+  errorMessage     String?
+  startedAt        DateTime?
+  finishedAt       DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
   @@index([knowledgeSpaceId, status, createdAt(sort: Desc)])
   @@index([dataSourceId, createdAt(sort: Desc)])
@@ -496,23 +497,23 @@ model IngestionJob {
 }
 
 model KnowledgeDocument {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  dataSourceId      String?
-  dataSource        DataSource?       @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
-  externalId        String
-  sourceType        KnowledgeSourceType
-  title             String
-  mimeType          String
-  language          String            @default("en")
-  contentText       String
-  metadata          Json              @default("{}")
-  version           Int               @default(1)
-  checksum          String
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  chunks            KnowledgeChunk[]
+  id               String              @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace      @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  dataSourceId     String?
+  dataSource       DataSource?         @relation(fields: [dataSourceId], references: [id], onDelete: SetNull)
+  externalId       String
+  sourceType       KnowledgeSourceType
+  title            String
+  mimeType         String
+  language         String              @default("en")
+  contentText      String
+  metadata         Json                @default("{}")
+  version          Int                 @default(1)
+  checksum         String
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  chunks           KnowledgeChunk[]
 
   @@unique([knowledgeSpaceId, externalId])
   @@index([knowledgeSpaceId, sourceType, updatedAt(sort: Desc)])
@@ -520,18 +521,18 @@ model KnowledgeDocument {
 }
 
 model KnowledgeChunk {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  documentId        String
-  document          KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  chunkIndex        Int
-  text              String
-  tokenCount        Int               @default(0)
-  embedding         Json?
-  metadata          Json              @default("{}")
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  id               String            @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  documentId       String
+  document         KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  chunkIndex       Int
+  text             String
+  tokenCount       Int               @default(0)
+  embedding        Json?
+  metadata         Json              @default("{}")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
   @@unique([documentId, chunkIndex])
   @@index([knowledgeSpaceId, documentId])
@@ -539,14 +540,14 @@ model KnowledgeChunk {
 }
 
 model GraphNode {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  canonicalName     String
-  nodeType          String
-  metadata          Json              @default("{}")
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  id               String         @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  canonicalName    String
+  nodeType         String
+  metadata         Json           @default("{}")
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   @@unique([knowledgeSpaceId, canonicalName, nodeType])
   @@index([knowledgeSpaceId, nodeType])
@@ -554,16 +555,16 @@ model GraphNode {
 }
 
 model GraphEdge {
-  id                String            @id @default(cuid())
-  knowledgeSpaceId  String
-  knowledgeSpace    KnowledgeSpace    @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
-  fromNodeId        String
-  toNodeId          String
-  relationType      String
-  weight            Float             @default(1)
-  evidenceChunkId   String?
-  metadata          Json              @default("{}")
-  createdAt         DateTime          @default(now())
+  id               String         @id @default(cuid())
+  knowledgeSpaceId String
+  knowledgeSpace   KnowledgeSpace @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade)
+  fromNodeId       String
+  toNodeId         String
+  relationType     String
+  weight           Float          @default(1)
+  evidenceChunkId  String?
+  metadata         Json           @default("{}")
+  createdAt        DateTime       @default(now())
 
   @@index([knowledgeSpaceId, fromNodeId, relationType])
   @@index([knowledgeSpaceId, toNodeId, relationType])
@@ -578,59 +579,59 @@ model GraphEdge {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model AiWallet {
-  id                          String   @id @default(cuid())
-  userId                      String?  @unique
-  user                        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organizationId              String?  @unique
-  organization                Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id             String        @id @default(cuid())
+  userId         String?       @unique
+  user           User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?       @unique
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  currency                    String   @default("RUB")
-  availableBalanceKopecks     BigInt   @default(0)
-  reservedBalanceKopecks      BigInt   @default(0)
-  includedMonthlyLimitKopecks BigInt   @default(0)
-  includedUsedPeriodKopecks   BigInt   @default(0)
-  promoBalanceKopecks         BigInt   @default(0)
-  overageLimitKopecks         BigInt   @default(0)
-  overageUsedKopecks          BigInt   @default(0)
+  currency                    String @default("RUB")
+  availableBalanceKopecks     BigInt @default(0)
+  reservedBalanceKopecks      BigInt @default(0)
+  includedMonthlyLimitKopecks BigInt @default(0)
+  includedUsedPeriodKopecks   BigInt @default(0)
+  promoBalanceKopecks         BigInt @default(0)
+  overageLimitKopecks         BigInt @default(0)
+  overageUsedKopecks          BigInt @default(0)
 
   // ── Auto-Recharge Config ──
-  autoRechargeEnabled         Boolean  @default(false)
+  autoRechargeEnabled          Boolean @default(false)
   autoRechargeThresholdKopecks BigInt  @default(100000) // $10 in kopecks
-  autoRechargeAmountKopecks   BigInt   @default(500000) // $50 in kopecks
+  autoRechargeAmountKopecks    BigInt  @default(500000) // $50 in kopecks
 
-  status                      String   @default("active") // active | frozen | closed
-  periodStart                 DateTime
-  periodEnd                   DateTime
-  createdAt                   DateTime @default(now())
-  updatedAt                   DateTime @updatedAt
+  status      String   @default("active") // active | frozen | closed
+  periodStart DateTime
+  periodEnd   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  transactions                AiWalletTransaction[]
-  reservations                AiQuotaReservation[]
-  usageEvents                 AiUsageEvent[]
-  topupOrders                 WalletTopupOrder[]
+  transactions AiWalletTransaction[]
+  reservations AiQuotaReservation[]
+  usageEvents  AiUsageEvent[]
+  topupOrders  WalletTopupOrder[]
 
   @@index([periodEnd, status])
   @@map("ai_wallet")
 }
 
 model AiWalletTransaction {
-  id              String   @id @default(cuid())
-  walletId        String
-  wallet          AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
-  userId          String?
-  organizationId  String?
-  projectId       String?
-  type            String   // reserve | release | debit | credit | reversal | adjustment
-  direction       String   // credit | debit | reserve | release | reversal
-  amountKopecks   BigInt
-  currency        String   @default("RUB")
-  source          String   // included | promo | prepaid | overage | tochka | manual | reservation
-  usageEventId    String?
-  reservationId   String?
-  topupOrderId    String?
-  idempotencyKey  String   @unique
-  metadata        Json?
-  createdAt       DateTime @default(now())
+  id             String   @id @default(cuid())
+  walletId       String
+  wallet         AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  userId         String?
+  organizationId String?
+  projectId      String?
+  type           String // reserve | release | debit | credit | reversal | adjustment
+  direction      String // credit | debit | reserve | release | reversal
+  amountKopecks  BigInt
+  currency       String   @default("RUB")
+  source         String // included | promo | prepaid | overage | tochka | manual | reservation
+  usageEventId   String?
+  reservationId  String?
+  topupOrderId   String?
+  idempotencyKey String   @unique
+  metadata       Json?
+  createdAt      DateTime @default(now())
 
   @@index([walletId, createdAt(sort: Desc)])
   @@index([organizationId, createdAt(sort: Desc)])
@@ -641,21 +642,21 @@ model AiWalletTransaction {
 }
 
 model AiQuotaReservation {
-  id                     String   @id @default(cuid())
+  id                     String    @id @default(cuid())
   walletId               String
-  wallet                 AiWallet @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  wallet                 AiWallet  @relation(fields: [walletId], references: [id], onDelete: Restrict)
   userId                 String?
   organizationId         String?
   projectId              String?
   apiKeyId               String?
   operation              String
   estimatedAmountKopecks BigInt
-  status                 String   @default("active") // active | committed | released | expired
+  status                 String    @default("active") // active | committed | released | expired
   expiresAt              DateTime
   committedAt            DateTime?
   releasedAt             DateTime?
   metadata               Json?
-  createdAt              DateTime @default(now())
+  createdAt              DateTime  @default(now())
 
   @@index([status, expiresAt])
   @@index([walletId, status])
@@ -738,7 +739,7 @@ model WalletTopupOrder {
   wallet              AiWallet  @relation(fields: [walletId], references: [id], onDelete: Restrict)
   userId              String?
   organizationId      String?
-  provider            String    // tochka | dodo | manual
+  provider            String // tochka | dodo | manual
   amountKopecks       BigInt
   currency            String    @default("RUB")
   status              String    @default("created") // created | pending | paid | failed | cancelled | expired | refunded
@@ -810,11 +811,11 @@ model RoadmapItem {
 }
 
 model ActivationEvent {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  eventType      String   // EMAIL_VERIFIED, FIRST_COLLECTION, FIRST_DOCUMENT, FIRST_SEARCH, WIDGET_EMBEDDED, FIRST_TEAM_MEMBER, FIRST_INTEGRATION, FIRST_PAYMENT
-  completedAt    DateTime @default(now())
+  eventType      String // EMAIL_VERIFIED, FIRST_COLLECTION, FIRST_DOCUMENT, FIRST_SEARCH, WIDGET_EMBEDDED, FIRST_TEAM_MEMBER, FIRST_INTEGRATION, FIRST_PAYMENT
+  completedAt    DateTime     @default(now())
   metadata       Json?
 
   @@unique([organizationId, eventType])
@@ -827,19 +828,19 @@ model ActivationEvent {
 // Collections belong to an organization and contain documents with flexible JSON data.
 
 model Collection {
-  id              String               @id @default(cuid())
-  organizationId  String
-  organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  slug            String
-  name            String
-  description     String?
-  schema          Json                 @default("[]")    // Array of field definitions
-  documentCount   Int                  @default(0)
-  size            BigInt               @default(0)
-  status          String               @default("active") // active | archived
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  documents       CollectionDocument[]
+  id             String               @id @default(cuid())
+  organizationId String
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  slug           String
+  name           String
+  description    String?
+  schema         Json                 @default("[]") // Array of field definitions
+  documentCount  Int                  @default(0)
+  size           BigInt               @default(0)
+  status         String               @default("active") // active | archived
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  documents      CollectionDocument[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -847,15 +848,15 @@ model Collection {
 }
 
 model CollectionDocument {
-  id              String       @id @default(cuid())
-  collectionId    String
-  collection      Collection   @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  data            Json         @default("{}")          // Flexible document fields
-  rowNumber       Int                                  // Sequential row number within collection
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id             String       @id @default(cuid())
+  collectionId   String
+  collection     Collection   @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  data           Json         @default("{}") // Flexible document fields
+  rowNumber      Int // Sequential row number within collection
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@unique([collectionId, rowNumber])
   @@index([collectionId, createdAt(sort: Desc)])
@@ -874,18 +875,76 @@ model NewsletterSubscriber {
 }
 
 model NpsSurveyResponse {
-	id             String       @id @default(cuid())
-	userId         String
-	user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-	organizationId String?
-	organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-	score          Int          // 0-10
-	feedback       String?      // Optional follow-up text
-	source         String       // "in_app" | "email" | "support"
-	createdAt      DateTime     @default(now())
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  score          Int // 0-10
+  feedback       String? // Optional follow-up text
+  source         String // "in_app" | "email" | "support"
+  createdAt      DateTime      @default(now())
 
-	@@index([userId])
-	@@index([organizationId])
-	@@index([createdAt(sort: Desc)])
-	@@map("nps_survey_response")
+  @@index([userId])
+  @@index([organizationId])
+  @@index([createdAt(sort: Desc)])
+  @@map("nps_survey_response")
+}
+
+// ─── Feature Flags ──────────────────────────────────────────────
+// Internal feature flag system for gradual rollout (AAC-176 EPIC).
+// Flags are global; overrides are per-organization.
+
+model FeatureFlag {
+  id          String  @id @default(cuid())
+  key         String  @unique // e.g. "analytics-v2", "knowledge-rag"
+  title       String // Human-readable name
+  description String? // What this flag controls
+
+  type String @default("boolean") // "boolean" | "variant"
+
+  // Boolean mode: enabled/disabled for all matching targets
+  enabled Boolean @default(false) // Global default
+
+  // Variant mode: returns one of variantValues
+  variantValues  String[] // e.g. ["control", "treatment-a", "treatment-b"]
+  variantDefault String? // Fallback variant
+
+  // % rollout
+  rolloutPercentage Int? // 0-100: % of matched tenants that get enabled=true
+
+  // Targeting rules (JSON — flexible, parsed at runtime)
+  // Rules are AND-combined. Each rule: { field: "planTier" | "orgAge" | "geo" | "orgSlug" | "manualList", operator: "in" | "notIn" | "gte" | "lt", value: string | string[] }
+  targetingRules Json? // Prisma.Json, cast as Record<string, unknown>
+
+  // Kill switch — when true, force-disables for ALL orgs regardless of overrides
+  killSwitch Boolean @default(false)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // Agent ID or user ID
+
+  overrides FeatureFlagOverride[]
+
+  @@map("feature_flag")
+}
+
+model FeatureFlagOverride {
+  id             String       @id @default(cuid())
+  flagId         String
+  flag           FeatureFlag  @relation(fields: [flagId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  enabled        Boolean // For boolean flags
+
+  // For variant flags
+  variantValue String?
+
+  // Override reason
+  reason String?
+
+  @@unique([flagId, organizationId])
+  @@index([organizationId])
+  @@map("feature_flag_override")
 }

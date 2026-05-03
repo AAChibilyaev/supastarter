@@ -29,10 +29,10 @@ import { useFormatter } from "next-intl";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { ExportAnalyticsDialog } from "../dialogs/ExportAnalyticsDialog";
 import { CTRDashboard } from "./CTRDashboard";
 import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
-import { ExportAnalyticsDialog } from "../dialogs/ExportAnalyticsDialog";
 import { FailedQueriesTable } from "./FailedQueriesTable";
 
 type PeriodKey = "24h" | "7d" | "30d";
@@ -218,7 +218,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	const planRetentionDays = isFreePlan ? FREE_RETENTION_DAYS : 30;
 	const showRetentionBanner = days > planRetentionDays;
 
-// ── Loading state ─────────────────────────────────────────────────
+	// ── Loading state ─────────────────────────────────────────────────
 
 	if (isLoading) {
 		return <div className="py-8 text-center text-foreground/60">{t("search.loading")}</div>;
@@ -595,17 +595,17 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 				</Tabs>
 
 				<div className="gap-2 flex items-center">
-\t\t\t\t\t<ExportAnalyticsDialog
-\t\t\t\t\t\ttotalSearches={totalSearches}
-\t\t\t\t\t\timpressionsCount={analyticsData?.impressionsCount ?? 0}
-\t\t\t\t\t\tzeroResultQueries={zeroResultQueries}
-\t\t\t\t\t\ttotalQueryCount={totalQueryCount}
-\t\t\t\t\t\ttopQueriesData={topQueriesData ?? []}
-\t\t\t\t\t\tanalyticsData={analyticsData ?? null}
-\t\t\t\t\t\tctrTrendData={ctrTrendData ?? null}
-\t\t\t\t\t\tperiod={period}
-\t\t\t\t\t\thasAnyData={!hasNoData}
-\t\t\t\t\t/>
+					<ExportAnalyticsDialog
+						totalSearches={totalSearches}
+						impressionsCount={analyticsData?.impressionsCount ?? 0}
+						zeroResultQueries={zeroResultQueries}
+						totalQueryCount={totalQueryCount}
+						topQueriesData={topQueriesData ?? []}
+						analyticsData={analyticsData ?? null}
+						ctrTrendData={ctrTrendData ?? null}
+						period={period}
+						hasAnyData={!hasNoData}
+					/>
 					{/* Index filter dropdown */}
 					{indexes.length > 0 && (
 						<Select value={selectedIndexId} onValueChange={setSelectedIndexId}>

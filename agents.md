@@ -48,7 +48,7 @@ Last:        Analytics events pipeline (events-public.ts, widget analytics)
 | oRPC             | 1.13.13  | type-safe RPC + TanStack Query                                |
 | Hono             | ^4.12.11 | HTTP handler (mounts oRPC, webhooks, CORS, public endpoints)  |
 | Better Auth      | 1.5.6    | auth, orgs, passkeys, 2FA, magic links, admin, OAuth          |
-| Prisma           | 7.6.0    | ACTIVE ORM — 33 models (not 25!)                              |
+| Prisma           | 7.6.0    | ACTIVE ORM — 35 models (not 33!)                              |
 | Drizzle (legacy) | ^0.45.2  | reference only — do NOT add new files                         |
 | Zod              | ^4.3.6   | validation                                                    |
 | TanStack Query   | ^5.96.2  | client data fetching                                          |
@@ -200,7 +200,7 @@ Wallet ledger and pricing use BigInt minor units. Conversion to display strings 
 
 ### Invariant 9: DB is FROZEN
 
-**No Prisma migrations / schema deltas without explicit user approval.** Any feature requiring new persistence must call out the DB change upfront. Until approved, build on 33 existing models.
+**No Prisma migrations / schema deltas without explicit user approval.** Any feature requiring new persistence must call out the DB change upfront. Until approved, build on 35 existing models.
 
 ### Invariant 10: i18n ALL 5 locales
 

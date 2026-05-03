@@ -31,7 +31,7 @@ export function UseCasesGrid() {
 		<section className="py-16 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-3xl mx-auto text-center">
-					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
+					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
 						{t("useCases.title")}
 					</h2>
 				</div>
@@ -44,7 +44,7 @@ export function UseCasesGrid() {
 									<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
 										<Icon className="size-5 text-muted-foreground" />
 									</div>
-									<h3 className="text-lg font-semibold">
+									<h3 className="text-lg font-normal">
 										{t(`useCases.items.${key}.title`)}
 									</h3>
 								</div>

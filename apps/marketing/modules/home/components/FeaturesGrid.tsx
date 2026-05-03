@@ -37,7 +37,7 @@ export function FeaturesGrid() {
 		<section id="features" className="py-16 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
+					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
 						{t("home.features.title")}
 					</h2>
 					<p className="mt-4 text-lg font-light max-w-2xl mx-auto text-balance text-muted-foreground">
@@ -53,7 +53,7 @@ export function FeaturesGrid() {
 									<Icon className="size-5 text-muted-foreground" />
 								</div>
 								<div>
-									<h3 className="text-lg font-semibold">
+									<h3 className="text-lg font-normal">
 										{t(`home.features.items.${key}.title`)}
 									</h3>
 									<p className="mt-2 text-sm font-light leading-relaxed text-pretty text-muted-foreground">

@@ -10,7 +10,7 @@ export function CtaFooter() {
 		<section className="py-16 md:py-24 text-center">
 			<div className="container">
 				<div className="max-w-2xl mx-auto">
-					<h2 className="text-3xl md:text-5xl font-bold tracking-tight text-balance">
+					<h2 className="text-3xl md:text-5xl font-light tracking-tight text-balance">
 						{t("home.cta.title")}
 					</h2>
 

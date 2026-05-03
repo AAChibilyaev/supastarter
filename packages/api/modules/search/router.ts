@@ -1,3 +1,4 @@
+import { listABTests, createABTest, updateABTestStatus, deleteABTest } from "./procedures/ab-test";
 import { aiAnswer } from "./procedures/ai-answer";
 import { getAlertRules, updateAlertRules } from "./procedures/alert-rules";
 import { analytics } from "./procedures/analytics";
@@ -262,6 +263,12 @@ export const searchRouter = {
 	alertRules: {
 		get: getAlertRules,
 		update: updateAlertRules,
+	},
+	abTest: {
+		list: listABTests,
+		create: createABTest,
+		updateStatus: updateABTestStatus,
+		delete: deleteABTest,
 	},
 	queryRules: {
 		get: getQueryRules,

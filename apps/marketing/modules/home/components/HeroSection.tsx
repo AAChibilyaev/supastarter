@@ -43,7 +43,7 @@ export function HeroSection() {
 				</div>
 
 				{/* Hero heading */}
-				<h1 className="max-w-4xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl xl:text-7xl mx-auto text-center text-balance text-foreground">
+				<h1 className="max-w-4xl text-4xl md:text-5xl lg:text-6xl font-light mx-auto text-center text-balance text-foreground">
 					{t("home.hero.title")}
 				</h1>
 

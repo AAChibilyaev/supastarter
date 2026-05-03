@@ -49,14 +49,18 @@ import { Hono } from "hono";
 
 import { analyticsApp } from "./analytics";
 import { billingApp } from "./billing";
+import { crawlerApp } from "./crawler";
 import { documentsApp } from "./documents";
 import { indexesApp } from "./indexes";
 import { keysApp } from "./keys";
 import { generateOpenApiSpec } from "./openapi";
 import { projectsApp } from "./projects";
+import { recommendationsApp } from "./recommendations";
+import { reindexApp } from "./reindex";
 import { searchApp } from "./search";
 import { spellCheckApp } from "./spell-check";
 import { suggestApp } from "./suggest";
+import { syncJobsApp } from "./sync-jobs";
 import { synonymsApp } from "./synonyms";
 
 const v1Router = new Hono()
@@ -69,7 +73,11 @@ const v1Router = new Hono()
 	.route("/", keysApp)
 	.route("/", analyticsApp)
 	.route("/", synonymsApp)
-	.route("/", billingApp);
+	.route("/", billingApp)
+	.route("/", recommendationsApp)
+	.route("/", reindexApp)
+	.route("/", crawlerApp)
+	.route("/", syncJobsApp);
 
 // OpenAPI spec (no auth required for API discovery)
 v1Router.get("/openapi.json", (c) => c.json(generateOpenApiSpec()));

@@ -631,6 +631,227 @@ const tools: ToolDefinition[] = [
 			required: ["baseUrl", "apiKey", "keyId"],
 		},
 	},
+	{
+		name: "get_recommendations",
+		description:
+			"Get AI-powered product/search recommendations. Supports also_viewed, frequently_bought_together, personalized, similar, and trending recommendation types. Returns up to 100 recommended items with relevance scores.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				type: {
+					type: "string",
+					description:
+						"Recommendation type: also_viewed, frequently_bought_together, personalized, similar, or trending",
+					enum: [
+						"also_viewed",
+						"frequently_bought_together",
+						"personalized",
+						"similar",
+						"trending",
+					],
+				},
+				userId: {
+					type: "string",
+					description: "User ID for personalized recommendations",
+				},
+				itemId: {
+					type: "string",
+					description: "Item ID for similar-item recommendations",
+				},
+				limit: {
+					type: "number",
+					description: "Number of recommendations to return (1-100, default: 10)",
+					default: 10,
+				},
+			},
+			required: ["baseUrl", "apiKey", "type"],
+		},
+	},
+	{
+		name: "track_event",
+		description:
+			"Track a search or conversion analytics event. Supports search_query, zero_results, result_click, widget_open, filter_used, conversion, and visit event types. Events are stored and used for analytics dashboards and recommendation training.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "API key to authorize the event",
+				},
+				type: {
+					type: "string",
+					description:
+						"Event type: search_query, zero_results, result_click, widget_open, filter_used, conversion, or visit",
+					enum: [
+						"search_query",
+						"zero_results",
+						"result_click",
+						"widget_open",
+						"filter_used",
+						"conversion",
+						"visit",
+					],
+				},
+				sessionId: {
+					type: "string",
+					description: "Optional session ID for grouping events (max 64 chars)",
+				},
+				anonymousUserId: {
+					type: "string",
+					description: "Optional anonymous user ID (max 64 chars)",
+				},
+				query: {
+					type: "string",
+					description: "Optional search query string (max 512 chars)",
+				},
+				productId: {
+					type: "string",
+					description: "Optional product/document ID (max 128 chars)",
+				},
+				position: {
+					type: "number",
+					description: "Optional result position (1-10000)",
+				},
+				locale: {
+					type: "string",
+					description: "Optional locale string (max 16 chars)",
+				},
+				metadata: {
+					type: "object",
+					description: "Optional custom metadata key-value pairs",
+					additionalProperties: true,
+				},
+			},
+			required: ["baseUrl", "apiKey", "type"],
+		},
+	},
+	{
+		name: "trigger_reindex",
+		description:
+			"Trigger a full reindex of a search index. This clears existing documents and re-indexes from the source. Returns job status. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID) to reindex",
+				},
+			},
+			required: ["baseUrl", "apiKey", "indexId"],
+		},
+	},
+	{
+		name: "get_analytics",
+		description:
+			"Get search analytics for a project. Returns search volume, top queries, zero-result rate, click-through rate, and other metrics over the specified period (last 7 or 30 days). Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+				period: {
+					type: "string",
+					description: "Analytics period: last7 or last30 (default: last7)",
+					enum: ["last7", "last30"],
+					default: "last7",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId"],
+		},
+	},
+	{
+		name: "trigger_crawler",
+		description:
+			"Trigger a web crawler job that scrapes a URL and indexes the content into a search index. Supports configurable max pages and CSS selector for content extraction. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+				url: {
+					type: "string",
+					description: "URL to start crawling from",
+				},
+				indexId: {
+					type: "string",
+					description: "Index ID (UUID) to index crawled content into",
+				},
+				maxPages: {
+					type: "number",
+					description: "Maximum pages to crawl (1-10000, default: 100)",
+					default: 100,
+				},
+				selector: {
+					type: "string",
+					description: "Optional CSS selector to extract specific content from pages",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId", "url", "indexId"],
+		},
+	},
+	{
+		name: "list_connector_sync_jobs",
+		description:
+			"List all connector sync jobs for a project. Returns job ID, connector type, status, document counts, and timestamps for each sync job. Requires an admin-scoped API key.",
+		inputSchema: {
+			type: "object",
+			properties: {
+				baseUrl: {
+					type: "string",
+					description: "Base URL of the AACsearch deployment",
+				},
+				apiKey: {
+					type: "string",
+					description: "Admin-scoped API key",
+				},
+				projectId: {
+					type: "string",
+					description: "Project/organization ID",
+				},
+			},
+			required: ["baseUrl", "apiKey", "projectId"],
+		},
+	},
 ];
 
 // ── Helper: fetch with auth ──────────────────────────────────────────────
@@ -1045,8 +1266,18 @@ async function toolTrackEvent(params: Record<string, unknown>): Promise<unknown>
 		};
 	}
 
-	const { baseUrl, apiKey, type, sessionId, anonymousUserId, query, productId, position, locale, metadata } =
-		parsed.data;
+	const {
+		baseUrl,
+		apiKey,
+		type,
+		sessionId,
+		anonymousUserId,
+		query,
+		productId,
+		position,
+		locale,
+		metadata,
+	} = parsed.data;
 	const url = v1Url(baseUrl, "/api/events/track");
 
 	const body: Record<string, unknown> = { type };

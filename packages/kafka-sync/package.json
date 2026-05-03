@@ -1,0 +1,43 @@
+{
+	"name": "@aacsearch/kafka-sync",
+	"version": "0.1.0",
+	"description": "Kafka streaming connector for AACsearch — consume topics and sync documents to AACsearch Engine with at-least-once delivery, dead-letter queue, and backpressure handling",
+	"keywords": [
+		"aacsearch",
+		"connector",
+		"kafka",
+		"search",
+		"streaming",
+		"sync"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nousresearch/aacsearch.git"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"type-check": "tsc --noEmit",
+		"prepublish": "pnpm build"
+	},
+	"dependencies": {
+		"kafkajs": "^2.2.4"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"typescript": "^6.0.0"
+	}
+}

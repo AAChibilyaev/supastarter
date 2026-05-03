@@ -1496,5 +1496,36 @@
     "outcomeTenant": "403 — Discrepancia de inquilino",
     "outcomeExpired": "401 — Token caducado",
     "outcomeLeak": "Filtración inofensiva — el token de ámbito no puede llamar a la API de administración"
+  },
+  "demo": {
+    "title": "Demo en vivo — AACsearch Engine",
+    "description": "Pruebe AACsearch con un catálogo de moda precargado. Busque, filtre y vea resultados en tiempo real — sin registro necesario.",
+    "heading": "Demo en vivo",
+    "subheading": "Explore un catálogo de moda precargado con AACsearch. Busque, filtre por categoría y experimente resultados en tiempo real."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "vs Algolia",
+      "elasticsearch": "vs Elasticsearch",
+      "meilisearch": "vs Meilisearch",
+      "opensearch": "vs OpenSearch",
+      "pinecone": "vs Pinecone",
+      "solr": "vs Solr",
+      "typesense": "vs Typesense Cloud",
+      "weaviate": "vs Weaviate"
+    },
+    "home": "Inicio",
+    "compare": "Comparar",
+    "features": "Características",
+    "pricing": "Precios",
+    "integrations": "Integraciones",
+    "useCases": "Casos de uso",
+    "solutions": "Soluciones",
+    "demo": "Demo"
+  },
+  "homeQuickstart": {
+    "title": "Integración en 15 minutos",
+    "subtitle": "Crea un índice, carga documentos, emite un token, ejecuta una búsqueda. Listo.",
+    "cta": "Ver documentación completa"
   }
 }

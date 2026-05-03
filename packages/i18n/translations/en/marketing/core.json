@@ -382,7 +382,7 @@
         "code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"Nike sneakers\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
       }
     },
-    "cta": "Try in Playground →"
+    "cta": "View full documentation"
   },
   "homeAiAnswers": {
     "title": "AI answers on top of search",
@@ -1838,5 +1838,31 @@
     "outcomeTenant": "403 — Tenant mismatch",
     "outcomeExpired": "401 — Token expired",
     "outcomeLeak": "Leak harmless — scoped token cannot call Admin API"
+  },
+  "demo": {
+    "title": "Live Demo — AACsearch Engine",
+    "description": "Try AACsearch with a pre-loaded fashion catalog. Search, filter, and see real-time results — no signup required.",
+    "heading": "Live Demo",
+    "subheading": "Explore a pre-loaded fashion catalog powered by AACsearch. Search, filter by category, and experience real-time results."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "vs Algolia",
+      "elasticsearch": "vs Elasticsearch",
+      "meilisearch": "vs Meilisearch",
+      "opensearch": "vs OpenSearch",
+      "pinecone": "vs Pinecone",
+      "solr": "vs Solr",
+      "typesense": "vs Typesense Cloud",
+      "weaviate": "vs Weaviate"
+    },
+    "home": "Home",
+    "compare": "Compare",
+    "features": "Features",
+    "pricing": "Pricing",
+    "integrations": "Integrations",
+    "useCases": "Use cases",
+    "solutions": "Solutions",
+    "demo": "Demo"
   }
 }

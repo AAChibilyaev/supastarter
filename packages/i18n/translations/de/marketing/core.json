@@ -1496,5 +1496,36 @@
     "outcomeTenant": "403 — Mandanten-Fehler",
     "outcomeExpired": "401 — Token abgelaufen",
     "outcomeLeak": "Leck harmlos — scoped Token kann keine Admin-API aufrufen"
+  },
+  "demo": {
+    "title": "Live-Demo — AACsearch Engine",
+    "description": "Testen Sie AACsearch mit einem vorab geladenen Modekatalog. Suchen, filtern und sehen Sie Ergebnisse in Echtzeit — ohne Anmeldung.",
+    "heading": "Live-Demo",
+    "subheading": "Erkunden Sie einen vorab geladenen Modekatalog mit AACsearch. Suchen, filtern Sie nach Kategorien und erleben Sie Echtzeit-Ergebnisse."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "vs. Algolia",
+      "elasticsearch": "vs. Elasticsearch",
+      "meilisearch": "vs. Meilisearch",
+      "opensearch": "vs. OpenSearch",
+      "pinecone": "vs. Pinecone",
+      "solr": "vs. Solr",
+      "typesense": "vs. Typesense Cloud",
+      "weaviate": "vs. Weaviate"
+    },
+    "home": "Startseite",
+    "compare": "Vergleichen",
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "integrations": "Integrationen",
+    "useCases": "Anwendungsfälle",
+    "solutions": "Lösungen",
+    "demo": "Demo"
+  },
+  "homeQuickstart": {
+    "title": "Integration in 15 Minuten",
+    "subtitle": "Index erstellen, Dokumente laden, Token ausstellen, Suche starten. Fertig.",
+    "cta": "Vollständige Dokumentation ansehen"
   }
 }

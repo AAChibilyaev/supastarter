@@ -382,7 +382,7 @@
         "code": "import { SearchClient } from \"@aacsearch/client\"\n\nconst search = new SearchClient({\n  apiKey: \"ss_search_abc123...\",\n  indexSlug: \"products\"\n})\n\nconst { hits } = await search.search({\n  q: \"кроссовки Nike\",\n  facetBy: \"price\",\n  filterBy: \"price:<10000\"\n})"
       }
     },
-    "cta": "Попробовать в Playground →"
+    "cta": "Посмотреть полную документацию"
   },
   "homeAiAnswers": {
     "title": "AI-answers поверх поиска",
@@ -1838,5 +1838,31 @@
     "outcomeTenant": "403 — Несоответствие арендатора",
     "outcomeExpired": "401 — Токен истёк",
     "outcomeLeak": "Утечка безвредна — scoped-токен не может вызвать Admin API"
+  },
+  "demo": {
+    "title": "Живое демо — AACsearch Engine",
+    "description": "Попробуйте AACsearch с предварительно загруженным каталогом моды. Ищите, фильтруйте и смотрите результаты в реальном времени — без регистрации.",
+    "heading": "Живое демо",
+    "subheading": "Исследуйте предварительно загруженный каталог моды на AACsearch. Ищите, фильтруйте по категориям и оцените результаты в реальном времени."
+  },
+  "breadcrumbs": {
+    "vs": {
+      "algolia": "с Algolia",
+      "elasticsearch": "с Elasticsearch",
+      "meilisearch": "с Meilisearch",
+      "opensearch": "с OpenSearch",
+      "pinecone": "с Pinecone",
+      "solr": "с Solr",
+      "typesense": "с Typesense Cloud",
+      "weaviate": "с Weaviate"
+    },
+    "home": "Главная",
+    "compare": "Сравнение",
+    "features": "Возможности",
+    "pricing": "Цены",
+    "integrations": "Интеграции",
+    "useCases": "Сценарии",
+    "solutions": "Решения",
+    "demo": "Демо"
   }
 }

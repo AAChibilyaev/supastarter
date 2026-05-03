@@ -63,7 +63,25 @@
   },
   "compareAlgoliaPage": {
     "title": "AACsearch vs Algolia: 5x günstigere Suche ohne Vendor Lock-In (2026)",
-    "description": "Ausführlicher AACsearch vs Algolia Vergleich. AACsearch bietet dieselbe Suchqualität zu 1/5 der Kosten — mit sofortiger Bereitstellung, integrierter Analytik und Typesense-betriebener Relevanz."
+    "description": "Ausführlicher AACsearch vs Algolia Vergleich. AACsearch bietet dieselbe Suchqualität zu 1/5 der Kosten — mit sofortiger Bereitstellung, integrierter Analytik und Typesense-betriebener Relevanz.",
+    "faq": [
+      {
+        "question": "Warum von Algolia zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in mit vollständigem Typesense-Datenexport. Die Kosteneinsparungen betragen typischerweise das 3- bis 5-fache."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Algolia?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen. Für 100.000 Dokumente und 500.000 Suchanfragen/Monat kostet AACsearch 99 $/Monat im Vergleich zu ~499 $/Monat bei Algolia."
+      },
+      {
+        "question": "Ist die Migration von Algolia zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die Typesense-kompatible API erfordert nur minimale Codeänderungen. Die meisten Teams schließen die Migration an einem Nachmittag ab."
+      },
+      {
+        "question": "Kann ich AACsearch verwenden, wenn ich Algolia-spezifische Funktionen benötige?",
+        "answer": "AACsearch deckt Kernsuche, Geo-Suche, Tippfehlertoleranz, Facettensuche, Relevanzoptimierung, Synonyme und Kurationen ab. Für Algolia-spezifische Funktionen bewerten Sie, ob die 5-fache Kostenersparnis diese Anforderungen aufwiegt."
+      }
+    ]
   },
   "compareAlgolia": {
     "title": "AACsearch vs Algolia — Der ehrliche Vergleich",
@@ -250,7 +268,25 @@
   },
   "compareElasticsearchPage": {
     "title": "AACsearch vs Elasticsearch: The Honest Alternative (2026)",
-    "description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications."
+    "description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications.",
+    "faq": [
+      {
+        "question": "Warum von Elasticsearch zu AACsearch wechseln?",
+        "answer": "AACsearch bietet Zero-Ops-Suche mit automatischer Skalierung, integrierter Analytik und vorhersehbaren Flatrate-Preisen — kein Cluster-Management, JVM-Tuning oder Kapazitätsplanung erforderlich."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Elasticsearch?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index. Elasticsearch Cloud berechnet pro Knotenstunde plus Speicher. Für 100k Dokumente kostet AACsearch 99 $/Monat gegenüber ~350-600 $/Monat bei Elastic Cloud."
+      },
+      {
+        "question": "Ist die Migration von Elasticsearch zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die Typesense-kompatible API erfordert nur minimale Codeänderungen."
+      },
+      {
+        "question": "Kann ich AACsearch für Elasticsearch-spezifische Funktionen nutzen?",
+        "answer": "AACsearch deckt Kernsuche, Geo-Suche, Tippfehlertoleranz, Facettensuche und Relevanzoptimierung ab. Für Log-Analysen behalten Sie Elasticsearch für diese Workloads bei."
+      }
+    ]
   },
   "compareElasticsearch": {
     "title": "AACsearch vs Elasticsearch — The Honest Comparison",
@@ -436,7 +472,21 @@
   },
   "compareMeilisearchPage": {
     "title": "AACsearch vs. Meilisearch",
-    "description": "AACsearch vs. Meilisearch — Engine-Vergleich, gehostete Ebene, Multi-Tenancy und wann Sie welches wählen sollten."
+    "description": "AACsearch vs. Meilisearch — Engine-Vergleich, gehostete Ebene, Multi-Tenancy und wann Sie welches wählen sollten.",
+    "faq": [
+      {
+        "question": "Warum von Meilisearch zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Meilisearch?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen."
+      },
+      {
+        "question": "Ist die Migration von Meilisearch zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die API erfordert nur minimale Codeänderungen."
+      }
+    ]
   },
   "compareMeilisearch": {
     "title": "AACsearch vs. Meilisearch",
@@ -470,7 +520,21 @@
   },
   "compareOpenSearchPage": {
     "title": "AACsearch vs. OpenSearch",
-    "description": "AACsearch ist eine fokussierte, schnelle Such-API. OpenSearch ist eine vollständige Analyseplattform. Hier steht, wann welches sinnvoll ist."
+    "description": "AACsearch ist eine fokussierte, schnelle Such-API. OpenSearch ist eine vollständige Analyseplattform. Hier steht, wann welches sinnvoll ist.",
+    "faq": [
+      {
+        "question": "Warum von OpenSearch zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und OpenSearch?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen."
+      },
+      {
+        "question": "Ist die Migration von OpenSearch zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die API erfordert nur minimale Codeänderungen."
+      }
+    ]
   },
   "compareOpenSearch": {
     "title": "Fokussierte Suche vs. Analyseplattform",
@@ -520,7 +584,21 @@
   },
   "comparePineconePage": {
     "title": "AACsearch vs. Pinecone",
-    "description": "Pinecone ist eine reine Vektordatenbank. AACsearch kombiniert Keyword- und Vektorsuche für Anwendungen, bei denen beide Relevanzmodi wichtig sind."
+    "description": "Pinecone ist eine reine Vektordatenbank. AACsearch kombiniert Keyword- und Vektorsuche für Anwendungen, bei denen beide Relevanzmodi wichtig sind.",
+    "faq": [
+      {
+        "question": "Warum von Pinecone zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Pinecone?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen."
+      },
+      {
+        "question": "Ist die Migration von Pinecone zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die API erfordert nur minimale Codeänderungen."
+      }
+    ]
   },
   "comparePinecone": {
     "title": "Reiner Vektor vs. vollständige Suchplattform",
@@ -566,7 +644,21 @@
   },
   "compareSolrPage": {
     "title": "AACsearch vs. Apache Solr",
-    "description": "Solr ist bewährt, erfordert aber Spezialisten. AACsearch bietet dieselbe Zuverlässigkeit mit einer modernen API und null Betriebsaufwand."
+    "description": "Solr ist bewährt, erfordert aber Spezialisten. AACsearch bietet dieselbe Zuverlässigkeit mit einer modernen API und null Betriebsaufwand.",
+    "faq": [
+      {
+        "question": "Warum von Solr zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Solr?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen."
+      },
+      {
+        "question": "Ist die Migration von Solr zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die API erfordert nur minimale Codeänderungen."
+      }
+    ]
   },
   "compareSolr": {
     "title": "Moderne API vs. Legacy-Komplexität",
@@ -616,7 +708,25 @@
   },
   "compareTypesensePage": {
     "title": "AACsearch vs. Typesense",
-    "description": "AACsearch basiert auf Typesense. Der Unterschied: Wir fügen Multi-Tenancy, Analytik, eine gehostete Steuerungsebene und verwalteten Betrieb hinzu."
+    "description": "AACsearch basiert auf Typesense. Der Unterschied: Wir fügen Multi-Tenancy, Analytik, eine gehostete Steuerungsebene und verwalteten Betrieb hinzu.",
+    "faq": [
+      {
+        "question": "Warum AACsearch gegenüber Typesense Cloud wählen?",
+        "answer": "AACsearch fügt eine vollständige SaaS-Schicht auf Typesense hinzu: Multi-Tenant-API-Schlüssel, bereichsbezogene Tokens, Analyse-Dashboard, Such-Widget, CMS-Connectoren und Benutzerverwaltung."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Typesense Cloud?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index. Typesense Cloud berechnet pro Knotenstunde plus pro GB Speicher."
+      },
+      {
+        "question": "Ist die Migration von Typesense zu AACsearch schwierig?",
+        "answer": "Überhaupt nicht — AACsearch verwendet dieselbe Typesense-Engine. Ihr Datenschema und Ihre Suchanfragen sind vollständig kompatibel."
+      },
+      {
+        "question": "Kann ich AACsearch nutzen, wenn ich später selbst hosten möchte?",
+        "answer": "Ja — AACsearch bietet vollständigen Typesense-Datenexport. Sie können jederzeit ohne Lock-in zu selbst gehostetem Typesense migrieren."
+      }
+    ]
   },
   "compareTypesense": {
     "title": "Engine vs. Managed-Cloud-Plattform",
@@ -806,7 +916,21 @@
   },
   "compareWeaviatePage": {
     "title": "AACsearch vs. Weaviate",
-    "description": "Weaviate ist eine Vektordatenbank. AACsearch ist eine hybride Volltext-plus-Vektor-Such-API."
+    "description": "Weaviate ist eine Vektordatenbank. AACsearch ist eine hybride Volltext-plus-Vektor-Such-API.",
+    "faq": [
+      {
+        "question": "Warum von Weaviate zu AACsearch wechseln?",
+        "answer": "AACsearch bietet natives Multi-Tenancy, bereichsbezogene API-Tokens, einfachere Flatrate-Preise und keine Vendor-Lock-in."
+      },
+      {
+        "question": "Wie vergleichen sich die Preise von AACsearch und Weaviate?",
+        "answer": "AACsearch verwendet Flatrate-Preise pro Index mit unbegrenzten Suchoperationen."
+      },
+      {
+        "question": "Ist die Migration von Weaviate zu AACsearch schwierig?",
+        "answer": "Die Migration ist unkompliziert — AACsearch bietet vollständigen Typesense-Datenexport und die API erfordert nur minimale Codeänderungen."
+      }
+    ]
   },
   "compareWeaviate": {
     "title": "Vektordatenbank vs. hybride Such-API",

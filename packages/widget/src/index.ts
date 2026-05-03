@@ -2715,6 +2715,21 @@ export class AacSearchWidget {
 								chatUI.finishAssistantStream();
 							}
 						},
+						onNewChat: () => {
+							conversationId = null;
+							chatUI?.clearMessages();
+						},
+						onOpenHistory: () => {
+							client.listConversations().then((convs) => {
+								chatUI?.loadHistoryItems(convs, async (id) => {
+									const loaded = await client.loadConversation(id);
+									if (loaded && chatUI) {
+										conversationId = loaded.id;
+										chatUI.loadMessages(loaded.messages);
+									}
+								});
+							}).catch(() => {});
+						},
 					});
 				} catch (err) {
 					console.warn("[AACsearch] Failed to initialize chat UI:", err);

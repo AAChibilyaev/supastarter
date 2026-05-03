@@ -123,7 +123,48 @@ export class ChatClient {
 		}
 	}
 
+	async listConversations(): Promise<ConversationSummary[]> {
+		const url = `${this.opts.baseUrl}/api/assistant/conversations?sessionId=${encodeURIComponent(this.sessionId)}`;
+		const res = await fetch(url, {
+			headers: { Authorization: `Bearer ${this.opts.apiKey}` },
+		});
+		if (!res.ok) return [];
+		const data = (await res.json()) as { conversations: ConversationSummary[] };
+		return data.conversations ?? [];
+	}
+
+	async loadConversation(conversationId: string): Promise<LoadedConversation | null> {
+		const res = await fetch(
+			`${this.opts.baseUrl}/api/assistant/conversation/${encodeURIComponent(conversationId)}`,
+			{ headers: { Authorization: `Bearer ${this.opts.apiKey}` } },
+		);
+		if (!res.ok) return null;
+		const data = (await res.json()) as { conversation: LoadedConversation };
+		return data.conversation ?? null;
+	}
+
 	getSessionId(): string {
 		return this.sessionId;
 	}
+}
+
+export interface ConversationSummary {
+	id: string;
+	status: string;
+	messageCount: number;
+	startedAt: string;
+	lastMessageAt: string;
+	firstUserMessage: string | null;
+}
+
+export interface HistoryMessage {
+	role: "user" | "assistant";
+	content: string;
+	createdAt: string;
+}
+
+export interface LoadedConversation {
+	id: string;
+	status: string;
+	messages: HistoryMessage[];
 }

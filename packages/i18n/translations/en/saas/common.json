@@ -255,6 +255,21 @@
       "title": "Assistant analytics",
       "resolutionRate": "Resolution rate",
       "escalationRate": "Escalation rate"
+    },
+    "chat": {
+      "title": "Live Chat",
+      "newChat": "New Conversation",
+      "placeholder": "Type a message...",
+      "send": "Send",
+      "speakOn": "Enable voice",
+      "speakOff": "Disable voice",
+      "voice": "Voice input"
+    },
+    "history": {
+      "title": "Conversation History",
+      "empty": "No conversations yet",
+      "view": "View",
+      "messages": "messages"
     }
   }
 }

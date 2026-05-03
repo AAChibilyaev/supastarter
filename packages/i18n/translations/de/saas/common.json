@@ -255,6 +255,21 @@
       "title": "Assistent-Analytik",
       "resolutionRate": "Lösungsrate",
       "escalationRate": "Eskalationsrate"
+    },
+    "chat": {
+      "title": "Live Chat",
+      "newChat": "Neues Gespräch",
+      "placeholder": "Nachricht eingeben...",
+      "send": "Senden",
+      "speakOn": "Sprache aktivieren",
+      "speakOff": "Sprache deaktivieren",
+      "voice": "Spracheingabe"
+    },
+    "history": {
+      "title": "Gesprächsverlauf",
+      "empty": "Noch keine Gespräche",
+      "view": "Anzeigen",
+      "messages": "Nachrichten"
     }
   }
 }

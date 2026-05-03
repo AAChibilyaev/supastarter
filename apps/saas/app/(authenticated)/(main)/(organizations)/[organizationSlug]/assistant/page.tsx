@@ -1,4 +1,6 @@
+import { AssistantChatPanel } from "@search/components/AssistantChatPanel";
 import { AssistantConversationsPanel } from "@search/components/AssistantConversationsPanel";
+import { AssistantHistoryPanel } from "@search/components/AssistantHistoryPanel";
 import { AssistantSettingsPanel } from "@search/components/AssistantSettingsPanel";
 import {
 	getSearchOrganizationMetadataTitle,
@@ -41,16 +43,24 @@ export default async function AssistantPage({
 				subtitle={t("assistant.page.description")}
 				className="mb-0"
 			/>
-			<Tabs defaultValue={tab ?? "settings"}>
+			<Tabs defaultValue={tab ?? "chat"}>
 				<TabsList>
-					<TabsTrigger value="settings">{t("assistant.settings.title")}</TabsTrigger>
+					<TabsTrigger value="chat">{t("assistant.chat.title")}</TabsTrigger>
+					<TabsTrigger value="history">{t("assistant.history.title")}</TabsTrigger>
 					<TabsTrigger value="analytics">{t("assistant.analytics.title")}</TabsTrigger>
+					<TabsTrigger value="settings">{t("assistant.settings.title")}</TabsTrigger>
 				</TabsList>
-				<TabsContent value="settings" className="mt-6">
-					<AssistantSettingsPanel organizationId={organization.id} />
+				<TabsContent value="chat" className="mt-6">
+					<AssistantChatPanel organizationId={organization.id} />
+				</TabsContent>
+				<TabsContent value="history" className="mt-6">
+					<AssistantHistoryPanel organizationId={organization.id} />
 				</TabsContent>
 				<TabsContent value="analytics" className="mt-6">
 					<AssistantConversationsPanel organizationId={organization.id} />
+				</TabsContent>
+				<TabsContent value="settings" className="mt-6">
+					<AssistantSettingsPanel organizationId={organization.id} />
 				</TabsContent>
 			</Tabs>
 		</div>

@@ -183,6 +183,21 @@
       "title": "Análisis del asistente",
       "resolutionRate": "Tasa de resolución",
       "escalationRate": "Tasa de escalación"
+    },
+    "chat": {
+      "title": "Chat en Vivo",
+      "newChat": "Nueva Conversación",
+      "placeholder": "Escribe un mensaje...",
+      "send": "Enviar",
+      "speakOn": "Activar voz",
+      "speakOff": "Desactivar voz",
+      "voice": "Entrada de voz"
+    },
+    "history": {
+      "title": "Historial de conversaciones",
+      "empty": "Aún no hay conversaciones",
+      "view": "Ver",
+      "messages": "mensajes"
     }
   }
 }

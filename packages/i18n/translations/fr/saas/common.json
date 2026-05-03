@@ -255,6 +255,21 @@
       "title": "Analyses de l'assistant",
       "resolutionRate": "Taux de résolution",
       "escalationRate": "Taux d'escalade"
+    },
+    "chat": {
+      "title": "Chat en Direct",
+      "newChat": "Nouvelle Conversation",
+      "placeholder": "Écrire un message...",
+      "send": "Envoyer",
+      "speakOn": "Activer la voix",
+      "speakOff": "Désactiver la voix",
+      "voice": "Saisie vocale"
+    },
+    "history": {
+      "title": "Historique des conversations",
+      "empty": "Pas encore de conversations",
+      "view": "Voir",
+      "messages": "messages"
     }
   }
 }

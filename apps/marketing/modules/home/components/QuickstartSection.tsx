@@ -49,7 +49,7 @@ await client.collections.create({
 const token = await client.tokens.create({
   ttl:       3600,              // 1 hour
   origins:   ['myapp.com'],     // origin allow-list
-  filter_by: 'tenant_id:acme', // tenant isolation
+  filter_by: 'tenant_id:myshop', // tenant isolation
 });`,
 		search: `// Browser / frontend — uses scoped token only
 const results = await client.search('products', {
@@ -91,7 +91,7 @@ client.collections.create({
 token = client.tokens.create({
     "ttl":       3600,
     "origins":   ["myapp.com"],
-    "filter_by": "tenant_id:acme",
+    "filter_by": "tenant_id:myshop",
 })
 # Send token to browser — safe to expose`,
 		search: `results = client.search("products", {
@@ -127,7 +127,7 @@ token = client.tokens.create({
   -d '{
     "ttl": 3600,
     "origins": ["myapp.com"],
-    "filter_by": "tenant_id:acme"
+    "filter_by": "tenant_id:myshop"
   }'`,
 		search: `curl "https://api.aacsearch.com/v1/indexes/products/search\\
 ?q=nike+shoes\\

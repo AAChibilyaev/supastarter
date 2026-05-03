@@ -177,14 +177,14 @@ const DEMOS: Record<UseCaseId, UseCaseConfig> = {
 		docs: [
 			{
 				id: "1",
-				title: "John Doe — john@acme.com",
+				title: "John Doe — john@myshop.io",
 				subtitle: "User · Admin · Active since Jan 2024",
 				badge: "User",
 				tags: ["user", "admin", "john"],
 			},
 			{
 				id: "2",
-				title: "John Smith — john.smith@acme.com",
+				title: "John Smith — j.smith@myshop.io",
 				subtitle: "User · Viewer · Active",
 				badge: "User",
 				tags: ["user", "viewer", "john"],
@@ -198,7 +198,7 @@ const DEMOS: Record<UseCaseId, UseCaseConfig> = {
 			},
 			{
 				id: "4",
-				title: "INV-2024-0042 — Acme Corp",
+				title: "INV-2024-0042 — Myshop Corp",
 				subtitle: "Invoice · $4,200 · Paid · Mar 2024",
 				badge: "Invoice",
 				tags: ["invoice", "2024", "paid"],
@@ -227,7 +227,7 @@ const DEMOS: Record<UseCaseId, UseCaseConfig> = {
 		},
 		scoreReasons: [
 			{ label: "Exact match in name field", score: 40 },
-			{ label: "Tenant filter (org_id = acme)", score: 30 },
+			{ label: "Tenant filter (org_id = myshop)", score: 30 },
 			{ label: "Recent activity boost", score: 10 },
 			{ label: "Role filter: admin scoped", score: 5 },
 		],

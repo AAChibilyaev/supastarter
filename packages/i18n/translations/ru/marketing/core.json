@@ -193,6 +193,69 @@
       "capterra": "на Capterra",
       "companies": "компаний",
       "apps": "приложений"
+    },
+    "osStack": {
+      "title": "Не просто search API. Полноценный Search OS.",
+      "subtitle": "AACSearch OS объединяет ввод, понимание, retrieval, рекомендации, GraphRAG, аналитику и безопасность в одном управляемом слое.",
+      "layers": {
+        "input": {
+          "title": "Слой ввода",
+          "description": "Текст, голос, фото, скриншоты и AI-диалог. Пользователи формулируют намерение так, как им удобно."
+        },
+        "understanding": {
+          "title": "Слой понимания",
+          "description": "Транскрипция, OCR, embeddings, исправление опечаток, определение намерения, извлечение сущностей и перезапись запросов."
+        },
+        "retrieval": {
+          "title": "Ядро retrieval",
+          "description": "Full-text, vector, визуальное сходство, facets, граф-retrieval и гибридный ранжировщик."
+        },
+        "intelligence": {
+          "title": "Слой интеллекта",
+          "description": "Suggestions, рекомендации, no-result recovery, GraphRAG и AI-ответы с источниками."
+        },
+        "control": {
+          "title": "Control Plane",
+          "description": "Индексы, правила релевантности, синонимы, pinned results, A/B-тесты, аналитика, API-ключи, квоты и тенанты."
+        },
+        "security": {
+          "title": "Security Plane",
+          "description": "Scoped-токены, origin allow-list, tenant isolation, SSO, audit log, IP allow-list и SLA."
+        }
+      }
+    },
+    "suggestions": {
+      "title": "От поиска к discovery",
+      "subtitle": "AACSearch OS не ждёт идеального запроса. Он помогает сформулировать намерение, исправляет ошибки, предлагает похожие объекты и рекомендует следующий лучший результат.",
+      "suggestionsTitle": "Suggestions Engine",
+      "suggestionsDescription": "Помогает пользователю дойти до правильного запроса.",
+      "recommendationsTitle": "Recommendation Engine",
+      "recommendationsDescription": "Помогает пользователю выбрать следующий объект.",
+      "tagline": "Suggestions помогают сформулировать запрос. Recommendations помогают выбрать следующий объект."
+    },
+    "graphrag": {
+      "title": "GraphRAG для вопросов, где важны связи",
+      "subtitle": "Обычный RAG ищет похожие фрагменты. GraphRAG использует связи между сущностями: документами, товарами, пользователями, ошибками, инцидентами, сервисами и владельцами.",
+      "features": {
+        "entityExtraction": {
+          "title": "Извлечение сущностей",
+          "description": "AACSearch OS извлекает сущности: users, organizations, errors, docs, incidents, SKUs, policies и services."
+        },
+        "relationshipGraph": {
+          "title": "Граф связей",
+          "description": "Строит связи: owns, depends on, caused by, similar to, mentioned in, purchased with."
+        },
+        "answersWithCitations": {
+          "title": "Ответы с источниками",
+          "description": "Ответы строятся поверх источников и графа связей, чтобы пользователь мог проверить контекст."
+        }
+      },
+      "exampleQueries": {
+        "q1": "Какие изменения в billing повлияли на Enterprise-клиентов?",
+        "q2": "Какие инциденты связаны с checkout?",
+        "q3": "Какие документы объясняют error 401 в SDK?",
+        "q4": "Кто владелец сервиса, связанного с последним инцидентом?"
+      }
     }
   },
   "homeUseCases": {

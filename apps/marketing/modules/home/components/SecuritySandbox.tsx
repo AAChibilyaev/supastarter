@@ -165,7 +165,7 @@ export function SecuritySandbox() {
 							options={[
 								{
 									value: "match",
-									label: "tenant_id = acme",
+									label: "tenant_id = myshop",
 									active: tenant === "match",
 								},
 								{
@@ -278,7 +278,7 @@ export function SecuritySandbox() {
 								{outcomeType === "allowed" && (
 									<p className="mt-1 text-xs font-light text-muted-foreground">
 										Token valid · Origin trusted · Tenant matched · filter_by:
-										tenant_id=acme applied
+										tenant_id=myshop applied
 									</p>
 								)}
 								{outcomeType === "leak" && (

@@ -5,14 +5,16 @@ import { CtaFooter } from "@home/components/CtaFooter";
 import { DocsEcosystemSection } from "@home/components/DocsEcosystemSection";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { FitSection } from "@home/components/FitSection";
+import { GraphRagSection } from "@home/components/GraphRagSection";
 import { HeroSection } from "@home/components/HeroSection";
+import { OsStackSection } from "@home/components/OsStackSection";
 import { PricingFaq } from "@home/components/PricingFaq";
 import { PricingPlans } from "@home/components/PricingPlans";
 import { QuickstartSection } from "@home/components/QuickstartSection";
 import { RelevanceSection } from "@home/components/RelevanceSection";
 import { SearchUXSection } from "@home/components/SearchUXSection";
 import { SecuritySection } from "@home/components/SecuritySection";
-import { TcoComparison } from "@home/components/TcoComparison";
+import { SuggestionsSection } from "@home/components/SuggestionsSection";
 import { UseCasesGrid } from "@home/components/UseCasesGrid";
 import { WhatUsersSearchSection } from "@home/components/WhatUsersSearchSection";
 import type { Metadata } from "next";
@@ -41,8 +43,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
 	return (
 		<>
-			{/* 1. Hero — outcome-driven value prop */}
+			{/* 1. Hero — Search OS value prop */}
 			<HeroSection />
+
+			{/* 2. OS Stack — platform architecture, not a feature list */}
+			<OsStackSection />
 
 			{/* 3. For whom — segmented use cases */}
 			<UseCasesGrid />
@@ -50,7 +55,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 4. Self-qualification — is it right for you? */}
 			<FitSection />
 
-			{/* 5. What users search — unique diff. */}
+			{/* 5. What users search — unique differentiation */}
 			<WhatUsersSearchSection />
 
 			{/* 6. Search UX — autocomplete, facets, typo */}
@@ -59,35 +64,38 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 7. Features — core capabilities */}
 			<FeaturesGrid />
 
-			{/* 8. Relevance — ranking control */}
+			{/* 8. Suggestions & Recommendations — from search to discovery */}
+			<SuggestionsSection />
+
+			{/* 9. GraphRAG — knowledge graph, connections */}
+			<GraphRagSection />
+
+			{/* 10. Relevance — ranking control */}
 			<RelevanceSection />
 
-			{/* 9. Analytics — data-driven improvement */}
+			{/* 11. Analytics — data-driven improvement */}
 			<AnalyticsSection />
 
-			{/* 11. TCO comparison — vs Algolia */}
-			<TcoComparison />
-
-			{/* 13. Architecture — system diagram for technical buyers */}
+			{/* 12. Architecture — system diagram for technical buyers */}
 			<ArchitectureSection />
 
-			{/* 14. Quickstart — code in 15 min */}
+			{/* 13. Quickstart — code in 15 min */}
 			<QuickstartSection />
 
-			{/* 15. AI answers — answer layer */}
+			{/* 14. AI answers — answer layer */}
 			<AiAnswersSection />
 
-			{/* 16. Security — feature overview */}
+			{/* 15. Security — feature overview */}
 			<SecuritySection />
 
-			{/* Pricing — plans + FAQ */}
+			{/* 16. Pricing — plans + FAQ (TCO comparison moved to /pricing and /compare) */}
 			<PricingPlans />
 			<PricingFaq />
 
-			{/* 20. Docs ecosystem — SDK, API */}
+			{/* 17. Docs ecosystem — SDK, API */}
 			<DocsEcosystemSection />
 
-			{/* 21. Final CTA */}
+			{/* 18. Final CTA */}
 			<CtaFooter />
 		</>
 	);

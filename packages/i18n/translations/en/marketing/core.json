@@ -193,6 +193,69 @@
       "capterra": "on Capterra",
       "companies": "companies",
       "apps": "apps"
+    },
+    "osStack": {
+      "title": "Not a search API. A complete Search OS.",
+      "subtitle": "AACSearch OS connects input, understanding, retrieval, recommendations, GraphRAG, analytics and security in one managed layer.",
+      "layers": {
+        "input": {
+          "title": "Input Layer",
+          "description": "Text, voice, photos, screenshots and AI dialogue. Users express intent the way they prefer."
+        },
+        "understanding": {
+          "title": "Understanding Layer",
+          "description": "Transcription, OCR, embeddings, typo correction, intent detection, entity extraction and query rewriting."
+        },
+        "retrieval": {
+          "title": "Retrieval Core",
+          "description": "Full-text, vector, visual similarity, facets, graph retrieval and hybrid ranking."
+        },
+        "intelligence": {
+          "title": "Intelligence Layer",
+          "description": "Suggestions, recommendations, no-result recovery, GraphRAG and AI answers with citations."
+        },
+        "control": {
+          "title": "Control Plane",
+          "description": "Indexes, relevance rules, synonyms, pinned results, A/B tests, analytics, API keys, quotas and tenants."
+        },
+        "security": {
+          "title": "Security Plane",
+          "description": "Scoped tokens, origin allow-list, tenant isolation, SSO, audit log, IP allow-list and SLA."
+        }
+      }
+    },
+    "suggestions": {
+      "title": "From search to discovery",
+      "subtitle": "AACSearch OS does not wait for the perfect query. It helps form intent, corrects mistakes, suggests similar objects and recommends the next best result.",
+      "suggestionsTitle": "Suggestions Engine",
+      "suggestionsDescription": "Helps the user reach the right query.",
+      "recommendationsTitle": "Recommendation Engine",
+      "recommendationsDescription": "Helps the user choose the next object.",
+      "tagline": "Suggestions help formulate the query. Recommendations help choose the next object."
+    },
+    "graphrag": {
+      "title": "GraphRAG for questions where connections matter",
+      "subtitle": "Regular RAG finds similar fragments. GraphRAG uses connections between entities: documents, products, users, errors, incidents, services and owners.",
+      "features": {
+        "entityExtraction": {
+          "title": "Entity extraction",
+          "description": "AACSearch OS extracts entities: users, organizations, errors, docs, incidents, SKUs, policies and services."
+        },
+        "relationshipGraph": {
+          "title": "Relationship graph",
+          "description": "Builds connections: owns, depends on, caused by, similar to, mentioned in, purchased with."
+        },
+        "answersWithCitations": {
+          "title": "Answers with citations",
+          "description": "Answers are built on top of sources and the relationship graph so users can verify context."
+        }
+      },
+      "exampleQueries": {
+        "q1": "What billing changes affected Enterprise customers?",
+        "q2": "Which incidents are linked to checkout?",
+        "q3": "Which documents explain error 401 in the SDK?",
+        "q4": "Who owns the service linked to the last incident?"
+      }
     }
   },
   "homeUseCases": {

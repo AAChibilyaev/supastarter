@@ -192,6 +192,69 @@
       "g2": "en G2",
       "capterra": "en Capterra",
       "companies": "empresas"
+    },
+    "osStack": {
+      "title": "No solo una API de búsqueda. Un Search OS completo.",
+      "subtitle": "AACSearch OS conecta la entrada, comprensión, recuperación, recomendaciones, GraphRAG, análisis y seguridad en una capa gestionada.",
+      "layers": {
+        "input": {
+          "title": "Capa de entrada",
+          "description": "Texto, voz, fotos, capturas y diálogo IA. Los usuarios expresan su intención como prefieran."
+        },
+        "understanding": {
+          "title": "Capa de comprensión",
+          "description": "Transcripción, OCR, embeddings, corrección de errores, detección de intención, extracción de entidades y reescritura de consultas."
+        },
+        "retrieval": {
+          "title": "Núcleo de recuperación",
+          "description": "Texto completo, vector, similitud visual, facetas, recuperación por grafo y ranking híbrido."
+        },
+        "intelligence": {
+          "title": "Capa de inteligencia",
+          "description": "Sugerencias, recomendaciones, recuperación sin resultados, GraphRAG y respuestas IA con citas."
+        },
+        "control": {
+          "title": "Plano de control",
+          "description": "Índices, reglas de relevancia, sinónimos, resultados fijados, pruebas A/B, análisis, claves API, cuotas y tenants."
+        },
+        "security": {
+          "title": "Plano de seguridad",
+          "description": "Tokens con alcance, lista de origenes permitidos, aislamiento de tenants, SSO, registro de auditoría, lista de IPs y SLA."
+        }
+      }
+    },
+    "suggestions": {
+      "title": "De la búsqueda al descubrimiento",
+      "subtitle": "AACSearch OS no espera la consulta perfecta. Ayuda a formular la intención, corrige errores, sugiere objetos similares y recomienda el siguiente mejor resultado.",
+      "suggestionsTitle": "Motor de sugerencias",
+      "suggestionsDescription": "Ayuda al usuario a llegar a la consulta correcta.",
+      "recommendationsTitle": "Motor de recomendaciones",
+      "recommendationsDescription": "Ayuda al usuario a elegir el siguiente objeto.",
+      "tagline": "Las sugerencias ayudan a formular la consulta. Las recomendaciones ayudan a elegir el siguiente objeto."
+    },
+    "graphrag": {
+      "title": "GraphRAG para preguntas donde las conexiones importan",
+      "subtitle": "El RAG regular encuentra fragmentos similares. GraphRAG usa conexiones entre entidades: documentos, productos, usuarios, errores, incidentes, servicios y propietarios.",
+      "features": {
+        "entityExtraction": {
+          "title": "Extracción de entidades",
+          "description": "AACSearch OS extrae entidades: usuarios, organizaciones, errores, documentos, incidentes, SKUs, políticas y servicios."
+        },
+        "relationshipGraph": {
+          "title": "Grafo de relaciones",
+          "description": "Construye conexiones: posee, depende de, causado por, similar a, mencionado en, comprado con."
+        },
+        "answersWithCitations": {
+          "title": "Respuestas con citas",
+          "description": "Las respuestas se construyen sobre fuentes y el grafo de relaciones para que los usuarios puedan verificar el contexto."
+        }
+      },
+      "exampleQueries": {
+        "q1": "¿Qué cambios de facturación afectaron a los clientes Enterprise?",
+        "q2": "¿Qué incidentes están relacionados con el checkout?",
+        "q3": "¿Qué documentos explican el error 401 en el SDK?",
+        "q4": "¿Quién posee el servicio relacionado con el último incidente?"
+      }
     }
   },
   "notFound": {

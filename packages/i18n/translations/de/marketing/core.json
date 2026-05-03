@@ -192,6 +192,69 @@
       "g2": "auf G2",
       "capterra": "auf Capterra",
       "companies": "Unternehmen"
+    },
+    "osStack": {
+      "title": "Keine Such-API. Ein vollständiges Search OS.",
+      "subtitle": "AACSearch OS verbindet Eingabe, Verständnis, Retrieval, Empfehlungen, GraphRAG, Analysen und Sicherheit in einer verwalteten Schicht.",
+      "layers": {
+        "input": {
+          "title": "Eingabeschicht",
+          "description": "Text, Sprache, Fotos, Screenshots und KI-Dialog. Nutzer drücken ihre Absicht nach eigenem Ermessen aus."
+        },
+        "understanding": {
+          "title": "Verständnisschicht",
+          "description": "Transkription, OCR, Embeddings, Tippfehlerkorrektur, Absichtserkennung, Entitätsextraktion und Query-Rewriting."
+        },
+        "retrieval": {
+          "title": "Retrieval-Kern",
+          "description": "Volltext, Vektor, visuelle Ähnlichkeit, Facetten, Graph-Retrieval und Hybrid-Ranking."
+        },
+        "intelligence": {
+          "title": "Intelligenzschicht",
+          "description": "Vorschläge, Empfehlungen, Null-Ergebnis-Recovery, GraphRAG und KI-Antworten mit Quellenangaben."
+        },
+        "control": {
+          "title": "Steuerungsebene",
+          "description": "Indizes, Relevanzregeln, Synonyme, angeheftete Ergebnisse, A/B-Tests, Analysen, API-Schlüssel, Kontingente und Mandanten."
+        },
+        "security": {
+          "title": "Sicherheitsebene",
+          "description": "Scoped Tokens, Herkunfts-Allowlist, Mandantenisolierung, SSO, Audit-Log, IP-Allowlist und SLA."
+        }
+      }
+    },
+    "suggestions": {
+      "title": "Von der Suche zur Entdeckung",
+      "subtitle": "AACSearch OS wartet nicht auf die perfekte Abfrage. Es hilft, Absichten zu formulieren, korrigiert Fehler, schlägt ähnliche Objekte vor und empfiehlt das nächstbeste Ergebnis.",
+      "suggestionsTitle": "Vorschlagsmaschine",
+      "suggestionsDescription": "Hilft dem Nutzer, die richtige Abfrage zu formulieren.",
+      "recommendationsTitle": "Empfehlungsmaschine",
+      "recommendationsDescription": "Hilft dem Nutzer, das nächste Objekt auszuwählen.",
+      "tagline": "Vorschläge helfen, die Abfrage zu formulieren. Empfehlungen helfen, das nächste Objekt auszuwählen."
+    },
+    "graphrag": {
+      "title": "GraphRAG für Fragen, bei denen Verbindungen wichtig sind",
+      "subtitle": "Reguläres RAG findet ähnliche Fragmente. GraphRAG nutzt Verbindungen zwischen Entitäten: Dokumente, Produkte, Nutzer, Fehler, Vorfälle, Services und Eigentümer.",
+      "features": {
+        "entityExtraction": {
+          "title": "Entitätsextraktion",
+          "description": "AACSearch OS extrahiert Entitäten: Nutzer, Organisationen, Fehler, Dokumente, Vorfälle, SKUs, Richtlinien und Services."
+        },
+        "relationshipGraph": {
+          "title": "Beziehungsgraph",
+          "description": "Erstellt Verbindungen: besitzt, hängt ab von, verursacht durch, ähnlich, erwähnt in, zusammen gekauft."
+        },
+        "answersWithCitations": {
+          "title": "Antworten mit Quellenangaben",
+          "description": "Antworten werden auf Quellen und dem Beziehungsgraphen aufgebaut, damit Nutzer den Kontext überprüfen können."
+        }
+      },
+      "exampleQueries": {
+        "q1": "Welche Billing-Änderungen betrafen Enterprise-Kunden?",
+        "q2": "Welche Vorfälle sind mit dem Checkout verknüpft?",
+        "q3": "Welche Dokumente erklären Fehler 401 im SDK?",
+        "q4": "Wer besitzt den Service, der mit dem letzten Vorfall verknüpft ist?"
+      }
     }
   },
   "notFound": {

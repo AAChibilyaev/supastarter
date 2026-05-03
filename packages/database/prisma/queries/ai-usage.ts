@@ -97,6 +97,33 @@ export interface CreditForecast {
 	overageRisk: "low" | "medium" | "high";
 }
 
+export interface ProjectBreakdown {
+	projectId: string;
+	totalKopecks: bigint;
+	eventCount: bigint;
+	lastUsed: Date;
+}
+
+export async function getWalletProjectBreakdown(
+	organizationId: string,
+	opts: { from?: Date; to?: Date } = {},
+): Promise<ProjectBreakdown[]> {
+	return db.$queryRaw<Array<ProjectBreakdown>>`
+		SELECT
+			"projectId" as "projectId",
+			SUM("totalChargeKopecks")::bigint as "totalKopecks",
+			COUNT(*)::bigint as "eventCount",
+			MAX("createdAt") as "lastUsed"
+		FROM "ai_usage_event"
+		WHERE "organizationId" = ${organizationId}
+			AND "projectId" IS NOT NULL
+			AND (${opts.from}::timestamp IS NULL OR "createdAt" >= ${opts.from})
+			AND (${opts.to}::timestamp IS NULL OR "createdAt" <= ${opts.to})
+		GROUP BY "projectId"
+		ORDER BY "totalKopecks" DESC
+	`;
+}
+
 export async function getCreditUsageForecast(
 	organizationId: string,
 ): Promise<CreditForecast | null> {

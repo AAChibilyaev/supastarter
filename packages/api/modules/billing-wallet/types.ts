@@ -119,3 +119,46 @@ export const creditForecastDtoSchema = z.object({
 	includedMonthlyLimitKopecks: bigintAsString,
 	overageRisk: z.enum(["low", "medium", "high"]),
 });
+
+// ─── AAC-109: Spending Limits ────────────────────────────────────
+
+export const spendingLimitDtoSchema = z.object({
+	projectId: z.string().optional(),
+	userId: z.string().optional(),
+	maxKopecks: bigintAsString,
+	period: z.enum(["daily", "weekly", "monthly"]),
+	enabled: z.boolean(),
+});
+
+export const setSpendingLimitInputSchema = z.object({
+	organizationId: z.string(),
+	projectId: z.string().optional(),
+	userId: z.string().optional(),
+	maxKopecks: z.bigint().min(BigInt(0)),
+	period: z.enum(["daily", "weekly", "monthly"]).default("monthly"),
+	enabled: z.boolean().default(true),
+});
+
+// ─── AAC-109: Per-project Breakdown ─────────────────────────────
+
+export const projectBreakdownItemSchema = z.object({
+	projectId: z.string(),
+	projectName: z.string().optional(),
+	totalKopecks: bigintAsString,
+	eventCount: z.number(),
+	lastUsed: z.date(),
+});
+
+export const projectBreakdownOutputSchema = z.object({
+	projects: z.array(projectBreakdownItemSchema),
+	totalKopecks: bigintAsString,
+});
+
+// ─── AAC-109: CSV Export ─────────────────────────────────────────
+
+export const exportTransactionsInputSchema = z.object({
+	organizationId: z.string(),
+	from: z.date().optional(),
+	to: z.date().optional(),
+	format: z.enum(["csv", "json"]).default("csv"),
+});

@@ -25,10 +25,7 @@ export const chargeSubscriptionProcedure = adminProcedure
 	)
 	.handler(async ({ input }) => {
 		try {
-			const result = (await chargeSubscription(input.operationId, input.amountKopecks)) as {
-				status?: string;
-				operationId?: string;
-			};
+			const result = await chargeSubscription(input.operationId, input.amountKopecks);
 
 			return {
 				status: result.status,

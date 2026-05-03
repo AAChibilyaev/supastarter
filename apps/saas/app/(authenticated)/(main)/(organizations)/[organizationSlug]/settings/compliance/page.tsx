@@ -3,8 +3,8 @@ import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { DataResidencyForm } from "../../../../../../modules/compliance/components/DataResidencyForm";
 import { DataRetentionForm } from "../../../../../../../modules/compliance/components/DataRetentionForm";
+import { DataResidencyForm } from "../../../../../../modules/compliance/components/DataResidencyForm";
 
 export async function generateMetadata() {
 	const t = await getTranslations("settings.compliance");
@@ -34,18 +34,14 @@ export default async function ComplianceSettingsPage({
 
 			<div className="gap-8 flex flex-col">
 				<section>
-					<h2 className="mb-4 font-medium text-lg">
-						{t("dataResidency.title")}
-					</h2>
+					<h2 className="mb-4 font-medium text-lg">{t("dataResidency.title")}</h2>
 					<DataResidencyForm />
 				</section>
 
 				<hr className="border-border" />
 
 				<section>
-					<h2 className="mb-4 font-medium text-lg">
-						{t("dataRetention.title")}
-					</h2>
+					<h2 className="mb-4 font-medium text-lg">{t("dataRetention.title")}</h2>
 					<DataRetentionForm />
 				</section>
 			</div>

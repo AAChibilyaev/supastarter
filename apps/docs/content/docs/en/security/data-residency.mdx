@@ -1,0 +1,184 @@
+---
+title: Data Residency
+description: Understand how AACsearch handles data residency and how to choose your data storage region.
+---
+
+# Data Residency
+
+AACsearch offers multi-region data storage so you can choose where your search data is stored and processed. This is critical for compliance with regional data protection laws such as GDPR, 152-ФЗ, and SOC 2 requirements.
+
+## Available Regions
+
+| Region | Code | Location | Compliance |
+|--------|------|----------|------------|
+| Europe | `eu` | Frankfurt, Germany | GDPR |
+| United States | `us` | Virginia, USA | SOC 2, CCPA |
+| Russia | `ru` | Moscow, Russia | 152-ФЗ, 242-ФЗ |
+
+Each region runs a fully independent AACsearch stack with its own:
+
+- **Typesense cluster** — all search indexes and data
+- **PostgreSQL database** — organization metadata, API keys, and usage records
+- **Object storage** — document attachments, knowledge base files, and ingestion buffers
+
+There is **no cross-region data sharing**. Data stored in one region never leaves that region's infrastructure boundary.
+
+## Default Region
+
+New organizations are automatically assigned to the **EU (Frankfurt)** region by default. This provides GDPR-compliant storage for all new customers out of the box.
+
+## Choosing a Region
+
+You can select your storage region when setting up your organization, or change it later from the **Compliance** settings page in your organization dashboard.
+
+**Considerations when choosing a region:**
+
+- **Latency**: Search queries are routed to the Typesense cluster in your chosen region. For best performance, select the region closest to your end users.
+- **Compliance**: Ensure the region complies with your organization's data protection requirements (GDPR, 152-ФЗ, SOC 2, etc.).
+- **Existing customers**: If you need to move existing data to a new region, use the data migration tool (see below).
+
+## Changing Your Region
+
+To change your data storage region:
+
+1. Go to **Organization Settings → Compliance**
+2. In the **Data Residency** section, view your current region
+3. Select a new region from the dropdown
+4. Click **Update Region** to save the change
+
+> **Important**: Changing the region updates the routing target for *new* data only. Existing search data remains in the original region until you run a data migration.
+
+## Data Migration Between Regions
+
+When you change your storage region, existing search data stays in the previous region. To move it:
+
+1. After changing the region, a **Migrate Existing Data** card will appear
+2. Click **Start Migration** to copy all search data from the old region to the new one
+3. If you select **Update region after migration**, the migration tool will automatically update your organization's region setting after all data is copied
+
+Migration uses a **copy-and-verify** approach:
+- Data is exported from the source Typesense cluster
+- Each document is imported into the destination cluster using upsert (emplace) semantics
+- The source data is preserved until you confirm the migration is successful
+- Progress is reported per search index
+
+**What gets migrated:**
+- All search documents in every index
+- Search index schemas and configuration
+- Synonym sets
+
+**What does NOT get migrated:**
+- Search API keys (these are stored in the database, not in Typesense)
+- Usage logs and analytics data
+- Organization metadata (name, members, etc.)
+
+## Region Health Monitoring
+
+The Compliance settings page shows the operational status of your current region, including:
+- Online/offline status of the Typesense cluster
+- Current latency (ms)
+- Any error messages if the cluster is unreachable
+
+## CDN & Edge Caching by Region
+
+AACsearch supports region-aware CDN configuration. Each region can have its own edge caching layer to reduce latency for end users:
+
+### Recommended Setup
+
+```
+┌─────────────────────────────────────────────────┐
+│              DNS (geo-routed)                    │
+│  eu.search.example.com → EU CloudFront           │
+│  us.search.example.com → US CloudFront           │
+│  ru.search.example.com → RU CloudFront           │
+└─────────────────────────────────────────────────┘
+```
+
+1. **DNS Configuration**: Set up geo-routed DNS entries (e.g., using AWS Route 53 or Cloudflare) that direct users to the nearest CDN endpoint based on their geographic location.
+
+2. **CDN Setup**: Deploy a CDN distribution (CloudFront, Cloudflare, or Fastly) per region:
+   - **EU region**: Origin → your Frankfurt Typesense node
+   - **US region**: Origin → your Virginia Typesense node
+   - **RU region**: Origin → your Moscow Typesense node
+
+3. **API Gateway**: The AACsearch API gateway uses region-aware routing. When a search query arrives, the gateway determines the organization's storage region and routes the request to the correct Typesense cluster.
+
+4. **Cache Rules**: Configure short TTL (30-60 seconds) for search results and longer TTL (5-15 minutes) for static collection metadata.
+
+### Environment Variables
+
+Configure per-region CDN endpoints via environment variables:
+
+```env
+# EU Region
+TYPESENSE_HOST_EU=typesense-eu.internal
+TYPESENSE_PORT_EU=8108
+TYPESENSE_PROTOCOL_EU=https
+TYPESENSE_ADMIN_API_KEY_EU=sk_eu_...
+
+# US Region
+TYPESENSE_HOST_US=typesense-us.internal
+TYPESENSE_PORT_US=8108
+TYPESENSE_PROTOCOL_US=https
+TYPESENSE_ADMIN_API_KEY_US=sk_us_...
+
+# RU Region
+TYPESENSE_HOST_RU=typesense-ru.internal
+TYPESENSE_PORT_RU=8108
+TYPESENSE_PROTOCOL_RU=https
+TYPESENSE_ADMIN_API_KEY_RU=sk_ru_...
+```
+
+## API Reference
+
+### List Available Regions
+
+```http
+GET /api/compliance/regions
+```
+
+Returns all supported storage regions with compliance metadata.
+
+### Get Organization Region
+
+```http
+GET /api/compliance/organizations/{organizationId}/region
+```
+
+Returns the current storage region for an organization.
+
+### Set Organization Region
+
+```http
+PUT /api/compliance/organizations/{organizationId}/region
+Content-Type: application/json
+
+{
+  "region": "us"
+}
+```
+
+Updates the storage region target for new data.
+
+### Migrate Organization Data
+
+```http
+POST /api/compliance/organizations/{organizationId}/migrate
+Content-Type: application/json
+
+{
+  "sourceRegion": "eu",
+  "destRegion": "us",
+  "updateRegionAfterMigration": true
+}
+```
+
+Copies all search data from one region to another.
+
+### Check Region Health
+
+```http
+GET /api/compliance/regions/health
+```
+
+Returns connectivity status and latency for all configured regions.

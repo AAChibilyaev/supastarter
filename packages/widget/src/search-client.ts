@@ -28,6 +28,7 @@ interface SearchResponse {
 	exhaustiveFacetsCount: boolean;
 	query: string;
 	index: string;
+	queryId: string | null;
 }
 
 export interface AiAnswerResult {
@@ -118,6 +119,7 @@ export function createAacSearchClient(config: WidgetConfig) {
 							counts: Array<{ value: string; count: number }>;
 						}>;
 						searchTimeMs: number;
+						queryId: string | null;
 					}>;
 				} = await response.json();
 

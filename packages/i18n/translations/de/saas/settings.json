@@ -558,6 +558,45 @@
 			"notifications": {
 				"saved": "Aufbewahrungsrichtlinien erfolgreich gespeichert",
 				"error": "Fehler beim Speichern der Aufbewahrungsrichtlinien"
+			},
+			"dataResidency": {
+				"title": "Datenresidenz",
+				"description": "Wählen Sie aus, wo Ihre Suchdaten gespeichert und verarbeitet werden.",
+				"currentRegion": "Aktuelle Region",
+				"currentRegionDescription": "Ihre Suchdaten werden derzeit in dieser Region gespeichert.",
+				"changeRegion": "Region ändern",
+				"changeRegionDescription": "Wählen Sie eine neue Speicherregion für die Suchdaten Ihrer Organisation.",
+				"selectRegionPlaceholder": "Region auswählen...",
+				"updateRegion": "Region aktualisieren",
+				"regionUpdated": "Speicherregion erfolgreich aktualisiert.",
+				"online": "Online",
+				"offline": "Offline",
+				"migrateData": "Vorhandene Daten migrieren",
+				"migrateDataDescription": "Ihre Daten befinden sich noch in der vorherigen Region. Migrieren Sie sie in die neue Region.",
+				"migrateDataNote": "Dies kopiert alle Suchdaten von {source} nach {dest}. Quelldaten bleiben erhalten.",
+				"startMigration": "Migration starten",
+				"skipMigration": "Überspringen",
+				"migrationComplete": "Datenmigration erfolgreich abgeschlossen.",
+				"migrationFailed": "Datenmigration fehlgeschlagen. Überprüfen Sie die Ergebnisse unten.",
+				"migrationResults": "Migrationsergebnisse",
+				"success": "Erfolg",
+				"failed": "Fehlgeschlagen",
+				"documentsImported": "Importierte Dokumente",
+				"failures": "Fehler",
+				"errors": "Fehler",
+				"cancel": "Abbrechen",
+				"notifications": {
+					"regionUpdated": "Speicherregion erfolgreich aktualisiert.",
+					"migrationStarted": "Datenmigration gestartet.",
+					"migrationComplete": "Datenmigration erfolgreich abgeschlossen.",
+					"migrationError": "Migration fehlgeschlagen. Bitte versuchen Sie es erneut."
+				},
+				"dataRetention": {
+					"title": "Datenaufbewahrung"
+				}
+			},
+			"dataRetention": {
+				"title": "Datenaufbewahrung"
 			}
 		},
 		"scim": {

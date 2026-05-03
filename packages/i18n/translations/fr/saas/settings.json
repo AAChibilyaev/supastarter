@@ -558,6 +558,45 @@
 			"notifications": {
 				"saved": "Politiques de conservation enregistrées avec succès",
 				"error": "Échec de l'enregistrement des politiques de conservation"
+			},
+			"dataResidency": {
+				"title": "Résidence des Données",
+				"description": "Choisissez où vos données de recherche sont stockées et traitées.",
+				"currentRegion": "Région Actuelle",
+				"currentRegionDescription": "Vos données de recherche sont actuellement stockées dans cette région.",
+				"changeRegion": "Changer de Région",
+				"changeRegionDescription": "Sélectionnez une nouvelle région de stockage pour les données de recherche.",
+				"selectRegionPlaceholder": "Sélectionner une région...",
+				"updateRegion": "Mettre à Jour la Région",
+				"regionUpdated": "Région de stockage mise à jour avec succès.",
+				"online": "En ligne",
+				"offline": "Hors ligne",
+				"migrateData": "Migrer les Données Existantes",
+				"migrateDataDescription": "Vos données sont encore dans la région précédente. Migrez-les vers la nouvelle région.",
+				"migrateDataNote": "Cela copiera toutes les données de recherche de {source} vers {dest}. Les données source seront conservées.",
+				"startMigration": "Lancer la Migration",
+				"skipMigration": "Ignorer",
+				"migrationComplete": "Migration des données terminée avec succès.",
+				"migrationFailed": "Échec de la migration des données. Vérifiez les résultats ci-dessous.",
+				"migrationResults": "Résultats de la Migration",
+				"success": "Succès",
+				"failed": "Échoué",
+				"documentsImported": "Documents importés",
+				"failures": "Échecs",
+				"errors": "Erreurs",
+				"cancel": "Annuler",
+				"notifications": {
+					"regionUpdated": "Région de stockage mise à jour avec succès.",
+					"migrationStarted": "Migration des données lancée.",
+					"migrationComplete": "Migration des données terminée avec succès.",
+					"migrationError": "Échec de la migration. Veuillez réessayer."
+				},
+				"dataRetention": {
+					"title": "Rétention des Données"
+				}
+			},
+			"dataRetention": {
+				"title": "Rétention des Données"
 			}
 		},
 		"scim": {

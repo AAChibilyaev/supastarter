@@ -556,6 +556,42 @@
 			"notifications": {
 				"saved": "Retention policies saved successfully",
 				"error": "Failed to save retention policies"
+			},
+			"dataResidency": {
+				"title": "Data Residency",
+				"description": "Choose where your search data is stored and processed.",
+				"currentRegion": "Current Region",
+				"currentRegionDescription": "Your search data is currently stored in this region.",
+				"changeRegion": "Change Region",
+				"changeRegionDescription": "Select a new storage region for your organization's search data.",
+				"selectRegionPlaceholder": "Select a region...",
+				"updateRegion": "Update Region",
+				"regionUpdated": "Storage region updated successfully.",
+				"online": "Online",
+				"offline": "Offline",
+				"migrateData": "Migrate Existing Data",
+				"migrateDataDescription": "Your data is still in the previous region. Migrate it to the new region to ensure all queries route correctly.",
+				"migrateDataNote": "This will copy all search data from {source} to {dest}. Source data will be preserved.",
+				"startMigration": "Start Migration",
+				"skipMigration": "Skip",
+				"migrationComplete": "Data migration completed successfully.",
+				"migrationFailed": "Data migration failed. Check the results below for details.",
+				"migrationResults": "Migration Results",
+				"success": "Success",
+				"failed": "Failed",
+				"documentsImported": "Documents imported",
+				"failures": "Failures",
+				"errors": "Errors",
+				"cancel": "Cancel",
+				"notifications": {
+					"regionUpdated": "Storage region updated successfully.",
+					"migrationStarted": "Data migration started.",
+					"migrationComplete": "Data migration completed successfully.",
+					"migrationError": "Migration failed. Please try again."
+				}
+			},
+			"dataRetention": {
+				"title": "Data Retention"
 			}
 		},
 		"scim": {

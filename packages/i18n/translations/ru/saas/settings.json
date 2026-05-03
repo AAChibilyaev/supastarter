@@ -558,6 +558,45 @@
 			"searchUsage": {
 				"title": "Хранение данных поиска",
 				"description": "Сколько хранить логи поисковых запросов и события использования"
+			},
+			"dataResidency": {
+				"title": "Хранение данных (Data Residency)",
+				"description": "Выберите, где будут храниться и обрабатываться ваши поисковые данные.",
+				"currentRegion": "Текущий регион",
+				"currentRegionDescription": "Ваши поисковые данные в настоящее время хранятся в этом регионе.",
+				"changeRegion": "Сменить регион",
+				"changeRegionDescription": "Выберите новый регион хранения для данных поиска вашей организации.",
+				"selectRegionPlaceholder": "Выберите регион...",
+				"updateRegion": "Обновить регион",
+				"regionUpdated": "Регион хранения успешно обновлён.",
+				"online": "Онлайн",
+				"offline": "Офлайн",
+				"migrateData": "Перенести существующие данные",
+				"migrateDataDescription": "Ваши данные всё ещё находятся в предыдущем регионе. Перенесите их в новый регион.",
+				"migrateDataNote": "Будут скопированы все поисковые данные из {source} в {dest}. Исходные данные сохраняются.",
+				"startMigration": "Начать перенос",
+				"skipMigration": "Пропустить",
+				"migrationComplete": "Перенос данных успешно завершён.",
+				"migrationFailed": "Перенос данных не удался. Проверьте результаты ниже.",
+				"migrationResults": "Результаты переноса",
+				"success": "Успешно",
+				"failed": "Не удалось",
+				"documentsImported": "Импортировано документов",
+				"failures": "Ошибки",
+				"errors": "Ошибки",
+				"cancel": "Отмена",
+				"notifications": {
+					"regionUpdated": "Регион хранения успешно обновлён.",
+					"migrationStarted": "Перенос данных запущен.",
+					"migrationComplete": "Перенос данных успешно завершён.",
+					"migrationError": "Перенос не удался. Пожалуйста, попробуйте снова."
+				},
+				"dataRetention": {
+					"title": "Хранение данных (Retention)"
+				}
+			},
+			"dataRetention": {
+				"title": "Хранение данных (Retention)"
 			}
 		},
 		"scim": {

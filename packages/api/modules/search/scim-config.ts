@@ -26,7 +26,7 @@ import { z } from "zod";
 
 // ─── Helpers ─────────────────────────────────────────────────
 
-const SCIM_TOKEN_PREFIX = "ss_scim_";
+const SCIM_TOKEN_PREFIX = "aa_scim_";
 const PREFIX_DISPLAY_LENGTH = 12;
 
 function generateScimToken(): { rawToken: string; hash: string; prefix: string } {

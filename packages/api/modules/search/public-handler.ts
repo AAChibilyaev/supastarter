@@ -480,6 +480,7 @@ export const publicSearchApp = new Hono()
 					perPage: r.perPage,
 					facetCounts: r.facetCounts,
 					searchTimeMs: r.searchTimeMs,
+					queryId: r.queryId ?? null,
 				})),
 			});
 		} catch (error) {

@@ -110,7 +110,10 @@ export function DataRetentionForm() {
 				auditLogRetentionDays: config?.auditLogRetentionDays ?? 365,
 				ingestBufferRetentionDays: config?.ingestBufferRetentionDays ?? 90,
 				autoDeleteEnabled: config?.autoDeleteEnabled ?? true,
-				deletionSchedule: (config?.deletionSchedule ?? "daily") as "daily" | "weekly" | "monthly",
+				deletionSchedule: (config?.deletionSchedule ?? "daily") as
+					| "daily"
+					| "weekly"
+					| "monthly",
 			};
 			return { ...base, [key]: value };
 		});

@@ -558,6 +558,45 @@
 			"notifications": {
 				"saved": "Políticas de retención guardadas correctamente",
 				"error": "Error al guardar las políticas de retención"
+			},
+			"dataResidency": {
+				"title": "Residencia de Datos",
+				"description": "Elija dónde se almacenan y procesan los datos de búsqueda.",
+				"currentRegion": "Región Actual",
+				"currentRegionDescription": "Sus datos de búsqueda se almacenan actualmente en esta región.",
+				"changeRegion": "Cambiar Región",
+				"changeRegionDescription": "Seleccione una nueva región de almacenamiento para los datos de búsqueda.",
+				"selectRegionPlaceholder": "Seleccionar una región...",
+				"updateRegion": "Actualizar Región",
+				"regionUpdated": "Región de almacenamiento actualizada correctamente.",
+				"online": "En línea",
+				"offline": "Fuera de línea",
+				"migrateData": "Migrar Datos Existentes",
+				"migrateDataDescription": "Sus datos aún están en la región anterior. Migre a la nueva región.",
+				"migrateDataNote": "Esto copiará todos los datos de búsqueda de {source} a {dest}. Los datos de origen se conservarán.",
+				"startMigration": "Iniciar Migración",
+				"skipMigration": "Saltar",
+				"migrationComplete": "Migración de datos completada correctamente.",
+				"migrationFailed": "Migración de datos fallida. Verifique los resultados a continuación.",
+				"migrationResults": "Resultados de Migración",
+				"success": "Éxito",
+				"failed": "Fallido",
+				"documentsImported": "Documentos importados",
+				"failures": "Fallos",
+				"errors": "Errores",
+				"cancel": "Cancelar",
+				"notifications": {
+					"regionUpdated": "Región de almacenamiento actualizada correctamente.",
+					"migrationStarted": "Migración de datos iniciada.",
+					"migrationComplete": "Migración de datos completada correctamente.",
+					"migrationError": "Migración fallida. Intente de nuevo."
+				},
+				"dataRetention": {
+					"title": "Retención de Datos"
+				}
+			},
+			"dataRetention": {
+				"title": "Retención de Datos"
 			}
 		},
 		"scim": {

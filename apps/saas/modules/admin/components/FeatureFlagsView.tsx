@@ -219,7 +219,12 @@ export function FeatureFlagsView() {
 			) : (
 				<div className="gap-4 flex flex-col">
 					{flags.map((flag) => (
-						<FlagCard key={flag.id} flag={flag} onDelete={handleDelete} isDeleting={deleteMutation.isPending} />
+						<FlagCard
+							key={flag.id}
+							flag={flag}
+							onDelete={handleDelete}
+							isDeleting={deleteMutation.isPending}
+						/>
 					))}
 				</div>
 			)}

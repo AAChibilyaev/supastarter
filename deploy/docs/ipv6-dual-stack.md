@@ -22,10 +22,10 @@ Config (`deploy/docker/daemon.json`):
 
 ```json
 {
-  "ipv6": true,
-  "fixed-cidr-v6": "fd00:dead:beef::/48",
-  "ip6tables": true,
-  "experimental": true
+	"ipv6": true,
+	"fixed-cidr-v6": "fd00:dead:beef::/48",
+	"ip6tables": true,
+	"experimental": true
 }
 ```
 
@@ -34,12 +34,12 @@ Config (`deploy/docker/daemon.json`):
 
 ## Subnet Allocation
 
-| Network      | IPv4 CIDR        | IPv6 ULA CIDR          | Compose File                     |
-|-------------|------------------|------------------------|----------------------------------|
-| Dev default | 172.20.0.0/16   | fd00:dead:beef:20::/56 | `docker-compose.yml`             |
-| Internal    | 172.21.0.0/16   | fd00:dead:beef:21::/56 | `docker-compose.production.yml`  |
-| Public      | 172.22.0.0/16   | fd00:dead:beef:22::/56 | `docker-compose.production.yml`  |
-| Search only | 172.23.0.0/16   | fd00:dead:beef:23::/56 | `docker-compose.search.yml`      |
+| Network     | IPv4 CIDR     | IPv6 ULA CIDR          | Compose File                    |
+| ----------- | ------------- | ---------------------- | ------------------------------- |
+| Dev default | 172.20.0.0/16 | fd00:dead:beef:20::/56 | `docker-compose.yml`            |
+| Internal    | 172.21.0.0/16 | fd00:dead:beef:21::/56 | `docker-compose.production.yml` |
+| Public      | 172.22.0.0/16 | fd00:dead:beef:22::/56 | `docker-compose.production.yml` |
+| Search only | 172.23.0.0/16 | fd00:dead:beef:23::/56 | `docker-compose.search.yml`     |
 
 These ULAs are private (non-routable on the public internet) and safe for any deployment.
 
@@ -49,12 +49,12 @@ All services bind to `0.0.0.0` (all interfaces) by default, which in Docker with
 `enable_ipv6: true` also covers IPv6 connections transparently:
 
 | Service    | Bind Address | IPv6 Ready | Notes                          |
-|-----------|-------------|------------|--------------------------------|
-| Next.js   | 0.0.0.0:3000| Yes        | Dockerfile: `HOSTNAME=0.0.0.0` |
-| PostgreSQL| 0.0.0.0:5432| Yes        | Default Postgres behavior      |
-| Typesense | 0.0.0.0:8108| Yes        | Default bind, no flag needed   |
-| MinIO     | 0.0.0.0:9000| Yes        | S3 API + Console               |
-| Neo4j     | 0.0.0.0:7687| Yes        | Bolt + HTTP browser            |
+| ---------- | ------------ | ---------- | ------------------------------ |
+| Next.js    | 0.0.0.0:3000 | Yes        | Dockerfile: `HOSTNAME=0.0.0.0` |
+| PostgreSQL | 0.0.0.0:5432 | Yes        | Default Postgres behavior      |
+| Typesense  | 0.0.0.0:8108 | Yes        | Default bind, no flag needed   |
+| MinIO      | 0.0.0.0:9000 | Yes        | S3 API + Console               |
+| Neo4j      | 0.0.0.0:7687 | Yes        | Bolt + HTTP browser            |
 
 ## Verification
 

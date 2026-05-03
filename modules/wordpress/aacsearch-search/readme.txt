@@ -1,6 +1,6 @@
 === AACsearch Search ===
 Contributors: aacsearch
-Tags: search, instant search, algolia, typesense, full-text search, custom post types
+Tags: search, instant-search, woocommerce, aacsearch, autocomplete
 Requires at least: 5.8
 Tested up to: 6.7
 Stable tag: 1.0.0
@@ -25,6 +25,11 @@ AACsearch Search replaces WordPress's built-in search with a modern, fast, insta
 * Connection testing and credential verification
 * Debug log viewer for troubleshooting
 * Multisite compatible
+* WooCommerce product search support (with AACsearch WooCommerce Addon)
+* Elementor widgets for search and autocomplete
+* Gutenberg blocks for search and autocomplete
+* Filter hook `aacsearch_document_fields` for custom field indexing
+* AJAX-powered instant search with Highlight.js results
 
 **Document Fields Indexed:**
 
@@ -33,6 +38,12 @@ AACsearch Search replaces WordPress's built-in search with a modern, fast, insta
 * Featured image (thumbnail URL)
 * Post type, categories, tags
 * Custom fields via `aacsearch_document_fields` filter
+
+**Addons:**
+
+* **WooCommerce** — Full product indexing with variations, price, stock status, categories, tags, attribute filtering, and instant search frontend
+* **Elementor** — Drag-and-drop search and autocomplete widgets for Elementor page builder
+* **Gutenberg** — Native WordPress block editor blocks for search and autocomplete
 
 == Installation ==
 
@@ -62,12 +73,23 @@ Yes. Use the `aacsearch_document_fields` filter to add custom fields (ACF, meta,
 
 = Is WooCommerce supported? =
 
-Basic WooCommerce product support is included (products are regular posts with `product` post type). For full WooCommerce product sync with variations, inventory, and price filters, install the AACsearch WooCommerce Addon.
+Yes. The AACsearch WooCommerce Addon (included with the plugin) provides full product indexing including variations, price, stock status, categories, tags, and attribute-based filtering.
+
+= Does this support Elementor? =
+
+Yes. AACsearch Search includes Elementor widgets for search and autocomplete. Find them in the Elementor widget panel under "AACsearch" category.
+
+= What is the pricing? =
+
+AACsearch offers a free tier with 10,000 search requests and 5,000 documents. Visit https://aacsearch.com/pricing for full pricing details.
 
 == Screenshots ==
 
 1. AACsearch settings page with API configuration and post type selection.
-2. Index status showing document count and last sync time.
+2. Index status dashboard showing document count and last sync time.
+3. Elementor drag-and-drop search widget configuration panel.
+4. Instant search results frontend with highlighted matches and autocomplete dropdown.
+5. WooCommerce product search frontend with instant results, filters, and sorting.
 
 == Changelog ==
 
@@ -78,4 +100,7 @@ Basic WooCommerce product support is included (products are regular posts with `
 * Real-time sync via WP-Cron.
 * Shortcode `[aacsearch_search]` for embedding search.
 * Debug log viewer.
+* Elementor widgets for search and autocomplete.
+* Gutenberg blocks for search and autocomplete.
+* WooCommerce product indexing with variations support.
 * Filter hook `aacsearch_document_fields`.

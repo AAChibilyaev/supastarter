@@ -11,6 +11,10 @@ const multiSearchEntrySchema = z.object({
 	filterBy: z.string().optional(),
 	facetBy: z.string().optional(),
 	collection: z.string().optional(),
+	groupBy: z.string().optional(),
+	groupLimit: z.number().int().min(1).max(100).optional(),
+	groupMissingValues: z.boolean().optional(),
+	pinnedHits: z.string().optional(),
 });
 
 export const federatedSearch = protectedProcedure
@@ -61,7 +65,7 @@ export const federatedSearch = protectedProcedure
 		const client = getTypesenseClient();
 		const startTime = Date.now();
 
-		const multiSearchParams = await Promise.all(
+			const multiSearchParams = await Promise.all(
 			input.searches.map(async (s) => {
 				const index = await requireSearchIndex(input.organizationId, s.slug);
 				return {
@@ -70,6 +74,12 @@ export const federatedSearch = protectedProcedure
 					query_by: s.queryBy ?? "title,description",
 					filter_by: s.filterBy ?? "",
 					facet_by: s.facetBy ?? "",
+					...(s.groupBy && { group_by: s.groupBy }),
+					...(s.groupLimit !== undefined && { group_limit: s.groupLimit }),
+					...(s.groupMissingValues !== undefined && {
+						group_missing_values: s.groupMissingValues,
+					}),
+					...(s.pinnedHits && { pinned_hits: s.pinnedHits }),
 				};
 			}),
 		);

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="772" height="250" viewBox="0 0 772 250">
+  <rect width="772" height="250" fill="#0f172a"/>
+  <rect x="0" y="0" width="772" height="250" fill="url(#g)" opacity="0.05"/>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <text x="386" y="110" font-family="system-ui, sans-serif" font-size="32" font-weight="700" fill="#ffffff" text-anchor="middle">AACsearch Search</text>
+  <text x="386" y="150" font-family="system-ui, sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">Instant search for WordPress — powered by AACsearch Engine</text>
+  <rect x="310" y="170" width="152" height="36" rx="8" fill="#6366f1"/>
+  <text x="386" y="193" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Replace WP Search</text>
+  <circle cx="50" cy="50" r="25" fill="none" stroke="#6366f1" stroke-width="3" opacity="0.3"/>
+  <path d="M58 42 L62 46 L54 54" stroke="#6366f1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="722" cy="50" r="25" fill="none" stroke="#06b6d4" stroke-width="3" opacity="0.3"/>
+  <path d="M715 50 L720 45 L720 55Z" fill="#06b6d4" opacity="0.5"/>
+</svg>

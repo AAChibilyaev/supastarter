@@ -1,6 +1,6 @@
 {
-  "ipv6": true,
-  "fixed-cidr-v6": "fd00:dead:beef::/48",
-  "ip6tables": true,
-  "experimental": true
+	"ipv6": true,
+	"fixed-cidr-v6": "fd00:dead:beef::/48",
+	"ip6tables": true,
+	"experimental": true
 }

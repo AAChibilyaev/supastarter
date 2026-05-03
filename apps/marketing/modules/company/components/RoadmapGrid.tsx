@@ -218,7 +218,9 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 
 	const shipped = items.filter((item) => item.status === "shipped");
 	const inProgress = items.filter((item) => item.status === "inProgress");
-	const planned = items.filter((item) => item.status !== "shipped" && item.status !== "inProgress");
+	const planned = items.filter(
+		(item) => item.status !== "shipped" && item.status !== "inProgress",
+	);
 
 	return (
 		<>
@@ -245,7 +247,9 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
+						<p className="mt-4 text-lg text-muted-foreground">
+							{t("feedback.description")}
+						</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

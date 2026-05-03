@@ -1,5 +1,10 @@
 "use client";
 
+import { FilterIcon } from "lucide-react";
+import React from "react";
+
+import { useHotKey } from "../../hooks/use-hot-key";
+import { useMediaQuery } from "../../hooks/use-media-query";
 import { Button } from "../button";
 import {
 	Drawer,
@@ -12,16 +17,7 @@ import {
 	DrawerTrigger,
 } from "../drawer";
 import { Kbd } from "../kbd";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "../tooltip";
-import { useHotKey } from "../../hooks/use-hot-key";
-import { useMediaQuery } from "../../hooks/use-media-query";
-import { FilterIcon } from "lucide-react";
-import React from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
 import { DataTableFilterControls } from "./data-table-filter-controls";
 
 export function DataTableFilterControlsDrawer() {
@@ -38,11 +34,7 @@ export function DataTableFilterControlsDrawer() {
 				<Tooltip delayDuration={100}>
 					<TooltipTrigger asChild>
 						<DrawerTrigger asChild>
-							<Button
-								variant="ghost"
-								size="icon"
-								className="h-9 w-9"
-							>
+							<Button variant="ghost" size="icon" className="h-9 w-9">
 								<FilterIcon className="h-4 w-4" />
 							</Button>
 						</DrawerTrigger>
@@ -50,7 +42,7 @@ export function DataTableFilterControlsDrawer() {
 					<TooltipContent side="right">
 						<p className="text-nowrap">
 							Toggle controls with{" "}
-							<Kbd className="text-muted-foreground group-hover:text-accent-foreground ml-1">
+							<Kbd className="ml-1 text-muted-foreground group-hover:text-accent-foreground">
 								<span className="mr-1">⌘</span>
 								<span>B</span>
 							</Kbd>
@@ -63,7 +55,7 @@ export function DataTableFilterControlsDrawer() {
 					<DrawerTitle>Filters</DrawerTitle>
 					<DrawerDescription>Adjust your table filters</DrawerDescription>
 				</DrawerHeader>
-				<div className="flex-1 overflow-y-auto px-4">
+				<div className="px-4 flex-1 overflow-y-auto">
 					<DataTableFilterControls />
 				</div>
 				<DrawerFooter>

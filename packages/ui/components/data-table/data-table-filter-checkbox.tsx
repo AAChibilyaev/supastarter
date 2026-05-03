@@ -1,18 +1,15 @@
 "use client";
 
-import { useDataTable } from "./data-table-provider";
-import { Checkbox } from "../checkbox";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "../input-group";
-import { Label } from "../label";
-import { Skeleton } from "../skeleton";
-import { formatCompactNumber } from "../../lib/format";
-import { cn } from "../../lib";
 import { Search } from "lucide-react";
 import { useState } from "react";
+
+import { cn } from "../../lib";
+import { formatCompactNumber } from "../../lib/format";
+import { Checkbox } from "../checkbox";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../input-group";
+import { Label } from "../label";
+import { Skeleton } from "../skeleton";
+import { useDataTable } from "./data-table-provider";
 import type { DataTableCheckboxFilterField } from "./types";
 
 export function DataTableFilterCheckbox<TData>({
@@ -22,34 +19,27 @@ export function DataTableFilterCheckbox<TData>({
 }: DataTableCheckboxFilterField<TData>) {
 	const value = _value as string;
 	const [inputValue, setInputValue] = useState("");
-	const { table, columnFilters, isLoading, getFacetedUniqueValues } =
-		useDataTable();
+	const { table, columnFilters, isLoading, getFacetedUniqueValues } = useDataTable();
 	const column = table.getColumn(value);
 	const filterValue = columnFilters.find((i) => i.id === value)?.value;
-	const facetedValue =
-		getFacetedUniqueValues?.(table, value) || column?.getFacetedUniqueValues();
+	const facetedValue = getFacetedUniqueValues?.(table, value) || column?.getFacetedUniqueValues();
 
 	const Component = component;
 
 	const filterOptions = options?.filter(
 		(option) =>
-			inputValue === "" ||
-			option.label.toLowerCase().includes(inputValue.toLowerCase()),
+			inputValue === "" || option.label.toLowerCase().includes(inputValue.toLowerCase()),
 	);
 
-	const filters = filterValue
-		? Array.isArray(filterValue)
-			? filterValue
-			: [filterValue]
-		: [];
+	const filters = filterValue ? (Array.isArray(filterValue) ? filterValue : [filterValue]) : [];
 
 	if (isLoading && !filterOptions?.length)
 		return (
-			<div className="border-border grid divide-y rounded-lg border">
+			<div className="grid divide-y rounded-lg border border-border">
 				{Array.from({ length: 3 }).map((_, index) => (
 					<div
 						key={index}
-						className="flex items-center justify-between gap-2 px-2 py-2.5"
+						className="gap-2 px-2 py-2.5 flex items-center justify-between"
 					>
 						<Skeleton className="h-4 w-4 rounded-sm" />
 						<Skeleton className="h-4 w-full rounded-sm" />
@@ -59,7 +49,7 @@ export function DataTableFilterCheckbox<TData>({
 		);
 
 	return (
-		<div className="grid gap-2">
+		<div className="gap-2 grid">
 			{options && options.length > 4 ? (
 				<InputGroup className="h-9 rounded-lg shadow-none">
 					<InputGroupAddon>
@@ -72,7 +62,7 @@ export function DataTableFilterCheckbox<TData>({
 					/>
 				</InputGroup>
 			) : null}
-			<div className="border-border max-h-[200px] overflow-y-auto rounded-lg border empty:border-none">
+			<div className="max-h-[200px] overflow-y-auto rounded-lg border border-border empty:border-none">
 				{filterOptions?.map((option, index) => {
 					const checked = filters.includes(option.value);
 
@@ -80,7 +70,7 @@ export function DataTableFilterCheckbox<TData>({
 						<div
 							key={String(option.value)}
 							className={cn(
-								"group hover:bg-accent/50 relative flex items-center space-x-2 px-2 py-2.5",
+								"group space-x-2 px-2 py-2.5 relative flex items-center hover:bg-accent/50",
 								index !== filterOptions.length - 1 ? "border-b" : undefined,
 							)}
 						>
@@ -91,22 +81,20 @@ export function DataTableFilterCheckbox<TData>({
 									const newValue = checked
 										? [...(filters || []), option.value]
 										: filters?.filter((value) => option.value !== value);
-									column?.setFilterValue(
-										newValue?.length ? newValue : undefined,
-									);
+									column?.setFilterValue(newValue?.length ? newValue : undefined);
 								}}
 								className="border-foreground! shadow-none"
 							/>
 							<Label
 								htmlFor={`${value}-${option.value}`}
-								className="text-foreground/70 group-hover:text-accent-foreground flex w-full items-center justify-center gap-1 truncate"
+								className="gap-1 flex w-full items-center justify-center truncate text-foreground/70 group-hover:text-accent-foreground"
 							>
 								{Component ? (
 									<Component {...option} />
 								) : (
-									<span className="truncate font-normal">{option.label}</span>
+									<span className="font-normal truncate">{option.label}</span>
 								)}
-								<span className="ml-auto flex items-center justify-center font-mono text-xs">
+								<span className="font-mono text-xs ml-auto flex items-center justify-center">
 									{isLoading ? (
 										<Skeleton className="h-4 w-4" />
 									) : facetedValue?.has(option.value) ? (
@@ -117,8 +105,8 @@ export function DataTableFilterCheckbox<TData>({
 									type="button"
 									onClick={() => column?.setFilterValue([option.value])}
 									className={cn(
-										"text-muted-foreground hover:text-foreground absolute inset-y-0 right-0 hidden font-normal backdrop-blur-xs group-hover:block",
-										"focus-visible:border-ring focus-visible:ring-ring/50 rounded-md transition-all outline-none focus-visible:ring-[3px]",
+										"inset-y-0 right-0 font-normal backdrop-blur-xs absolute hidden text-muted-foreground group-hover:block hover:text-foreground",
+										"rounded-md transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
 									)}
 								>
 									<span className="px-2">only</span>

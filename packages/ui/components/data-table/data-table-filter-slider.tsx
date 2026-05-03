@@ -1,16 +1,13 @@
 "use client";
 
-import { Slider } from "./slider";
-import { useDataTable } from "./data-table-provider";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "../input-group";
-import { Label } from "../label";
+import { useEffect, useState } from "react";
+
 import { useDebounce } from "../../hooks/use-debounce";
 import { isArrayOfNumbers } from "../../lib/is-array";
-import { useEffect, useState } from "react";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../input-group";
+import { Label } from "../label";
+import { useDataTable } from "./data-table-provider";
+import { Slider } from "./slider";
 import type { DataTableSliderFilterField } from "./types";
 
 function getFilter(filterValue: unknown) {
@@ -50,25 +47,19 @@ export function DataTableFilterSlider<TData>({
 		if (debouncedInput?.length !== 2) {
 		} else if (!filters) {
 			setInput(null);
-		} else if (
-			debouncedInput[0] !== filters[0] ||
-			debouncedInput[1] !== filters[1]
-		) {
+		} else if (debouncedInput[0] !== filters[0] || debouncedInput[1] !== filters[1]) {
 			setInput(filters);
 		}
 	}, [filters]);
 
 	return (
-		<div className="grid gap-2">
-			<div className="flex items-center gap-4">
-				<div className="grid w-full gap-1.5">
-					<Label
-						htmlFor={`min-${value}`}
-						className="text-muted-foreground px-2"
-					>
+		<div className="gap-2 grid">
+			<div className="gap-4 flex items-center">
+				<div className="gap-1.5 grid w-full">
+					<Label htmlFor={`min-${value}`} className="px-2 text-muted-foreground">
 						Min.
 					</Label>
-					<InputGroup className="mb-2 h-9 rounded-lg font-mono shadow-none">
+					<InputGroup className="mb-2 h-9 font-mono rounded-lg shadow-none">
 						<InputGroupInput
 							placeholder="from"
 							type="number"
@@ -81,19 +72,14 @@ export function DataTableFilterSlider<TData>({
 								setInput((prev) => [Number(e.target.value), prev?.[1] || max])
 							}
 						/>
-						{unit ? (
-							<InputGroupAddon align="inline-end">{unit}</InputGroupAddon>
-						) : null}
+						{unit ? <InputGroupAddon align="inline-end">{unit}</InputGroupAddon> : null}
 					</InputGroup>
 				</div>
-				<div className="grid w-full gap-1.5">
-					<Label
-						htmlFor={`max-${value}`}
-						className="text-muted-foreground px-2"
-					>
+				<div className="gap-1.5 grid w-full">
+					<Label htmlFor={`max-${value}`} className="px-2 text-muted-foreground">
 						Max.
 					</Label>
-					<InputGroup className="mb-2 h-9 rounded-lg font-mono shadow-none">
+					<InputGroup className="mb-2 h-9 font-mono rounded-lg shadow-none">
 						<InputGroupInput
 							placeholder="to"
 							type="number"
@@ -106,9 +92,7 @@ export function DataTableFilterSlider<TData>({
 								setInput((prev) => [prev?.[0] || min, Number(e.target.value)])
 							}
 						/>
-						{unit ? (
-							<InputGroupAddon align="inline-end">{unit}</InputGroupAddon>
-						) : null}
+						{unit ? <InputGroupAddon align="inline-end">{unit}</InputGroupAddon> : null}
 					</InputGroup>
 				</div>
 			</div>

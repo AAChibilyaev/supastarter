@@ -1,18 +1,14 @@
 "use client";
 
-import { useDataTable } from "./data-table-provider";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "../accordion";
 import * as React from "react";
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../accordion";
 import { DataTableFilterCheckbox } from "./data-table-filter-checkbox";
 import { DataTableFilterInput } from "./data-table-filter-input";
 import { DataTableFilterResetButton } from "./data-table-filter-reset-button";
 import { DataTableFilterSlider } from "./data-table-filter-slider";
 import { DataTableFilterTimerange } from "./data-table-filter-timerange";
+import { useDataTable } from "./data-table-provider";
 
 export const FILTER_COMPONENTS: Record<string, React.ComponentType<any>> = {
 	checkbox: DataTableFilterCheckbox,
@@ -33,11 +29,7 @@ export function DataTableFilterControls() {
 	return (
 		<Accordion
 			type="multiple"
-			className={
-				isMounted
-					? undefined
-					: "[&_[data-slot=accordion-content]]:!animate-none"
-			}
+			className={isMounted ? undefined : "[&_[data-slot=accordion-content]]:!animate-none"}
 			defaultValue={filterFields
 				?.filter(({ defaultOpen }) => defaultOpen)
 				?.map(({ value }) => value as string)}
@@ -48,13 +40,13 @@ export function DataTableFilterControls() {
 				if (!FilterComponent) return null;
 				return (
 					<AccordionItem key={value} value={value} className="border-none">
-						<AccordionTrigger className="data-[state=closed]:text-muted-foreground data-[state=open]:text-foreground focus-within:data-[state=closed]:text-foreground hover:data-[state=closed]:text-foreground w-full items-center px-2 py-0 hover:no-underline">
-							<div className="flex w-full items-center justify-between gap-2 truncate py-2">
-								<div className="flex items-center gap-2 truncate">
+						<AccordionTrigger className="px-2 py-0 w-full items-center hover:no-underline data-[state=closed]:text-muted-foreground focus-within:data-[state=closed]:text-foreground hover:data-[state=closed]:text-foreground data-[state=open]:text-foreground">
+							<div className="gap-2 py-2 flex w-full items-center justify-between truncate">
+								<div className="gap-2 flex items-center truncate">
 									<p className="text-sm font-medium">{field.label}</p>
 									{value !== field.label.toLowerCase() &&
 									!field.commandDisabled ? (
-										<p className="text-muted-foreground mt-px truncate font-mono text-[10px]">
+										<p className="font-mono mt-px truncate text-[10px] text-muted-foreground">
 											{value}
 										</p>
 									) : null}

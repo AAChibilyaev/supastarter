@@ -1,11 +1,9 @@
 "use client";
 
-import {
-	Sortable,
-	SortableDragHandle,
-	SortableItem,
-} from "../sortable";
-import { useDataTable } from "./data-table-provider";
+import { Check, GripVertical, Settings2 } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import { cn } from "../../lib";
 import { buttonVariants } from "../button";
 import {
 	Command,
@@ -15,14 +13,9 @@ import {
 	CommandItem,
 	CommandList,
 } from "../command";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "../popover";
-import { cn } from "../../lib";
-import { Check, GripVertical, Settings2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+import { Sortable, SortableDragHandle, SortableItem } from "../sortable";
+import { useDataTable } from "./data-table-provider";
 
 export function DataTableViewOptions() {
 	const { table, enableColumnOrdering } = useDataTable();
@@ -47,13 +40,16 @@ export function DataTableViewOptions() {
 					type="button"
 					role="combobox"
 					aria-expanded={open}
-					className={cn(buttonVariants({ variant: "outline", size: "icon" }), "shadow-none")}
+					className={cn(
+						buttonVariants({ variant: "outline", size: "icon" }),
+						"shadow-none",
+					)}
 				>
 					<Settings2 className="h-4 w-4" />
 					<span className="sr-only">View</span>
 				</button>
 			</PopoverTrigger>
-			<PopoverContent side="bottom" align="end" className="w-[200px] p-0">
+			<PopoverContent side="bottom" align="end" className="p-0 w-[200px]">
 				<Command>
 					<CommandInput
 						value={search}
@@ -68,7 +64,7 @@ export function DataTableViewOptions() {
 								onValueChange={(items) =>
 									table.setColumnOrder(items.map((c) => c.id))
 								}
-								overlay={<div className="bg-muted/60 h-8 w-full rounded-md" />}
+								overlay={<div className="h-8 w-full rounded-md bg-muted/60" />}
 								onDragStart={() => setDrag(true)}
 								onDragEnd={() => setDrag(false)}
 								onDragCancel={() => setDrag(false)}
@@ -91,21 +87,28 @@ export function DataTableViewOptions() {
 											>
 												<div
 													className={cn(
-														"border-foreground! flex h-4 w-4 items-center justify-center rounded-sm border",
+														"h-4 w-4 flex items-center justify-center rounded-sm border border-foreground!",
 														column.getIsVisible()
 															? "bg-primary text-primary-foreground"
 															: "opacity-50 [&_svg]:invisible",
 													)}
 												>
-													<Check className={cn("text-background size-3")} />
+													<Check
+														className={cn("size-3 text-background")}
+													/>
 												</div>
-												<span>{column.columnDef.meta?.label || column.id}</span>
-												<span data-slot="command-shortcut" className="hidden" />
+												<span>
+													{column.columnDef.meta?.label || column.id}
+												</span>
+												<span
+													data-slot="command-shortcut"
+													className="hidden"
+												/>
 												{enableColumnOrdering && !search ? (
 													<SortableDragHandle
 														variant="ghost"
 														size="icon"
-														className="text-muted-foreground hover:text-foreground focus:bg-muted focus:text-foreground ml-auto size-5"
+														className="size-5 ml-auto text-muted-foreground hover:text-foreground focus:bg-muted focus:text-foreground"
 													>
 														<GripVertical
 															className="size-4"

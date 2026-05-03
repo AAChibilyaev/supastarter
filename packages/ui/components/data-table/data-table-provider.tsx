@@ -1,5 +1,3 @@
-import type { DataTableFilterField } from "./types";
-import { ControlsProvider } from "../../providers/controls";
 import type {
 	ColumnDef,
 	ColumnFiltersState,
@@ -10,6 +8,9 @@ import type {
 	VisibilityState,
 } from "@tanstack/react-table";
 import { createContext, useContext, useMemo } from "react";
+
+import { ControlsProvider } from "../../providers/controls";
+import type { DataTableFilterField } from "./types";
 
 interface DataTableStateContextType {
 	columnFilters: ColumnFiltersState;
@@ -28,10 +29,7 @@ interface DataTableBaseContextType<TData = unknown, TValue = unknown> {
 	isLoading?: boolean;
 	totalRows?: number;
 	filterRows?: number;
-	getFacetedUniqueValues?: (
-		table: Table<TData>,
-		columnId: string,
-	) => Map<string, number>;
+	getFacetedUniqueValues?: (table: Table<TData>, columnId: string) => Map<string, number>;
 	getFacetedMinMaxValues?: (
 		table: Table<TData>,
 		columnId: string,
@@ -39,13 +37,9 @@ interface DataTableBaseContextType<TData = unknown, TValue = unknown> {
 }
 
 interface DataTableContextType<TData = unknown, TValue = unknown>
-	extends DataTableStateContextType,
-		DataTableBaseContextType<TData, TValue> {}
+	extends DataTableStateContextType, DataTableBaseContextType<TData, TValue> {}
 
-export const DataTableContext = createContext<DataTableContextType<
-	any,
-	any
-> | null>(null);
+export const DataTableContext = createContext<DataTableContextType<any, any> | null>(null);
 
 export function DataTableProvider<TData, TValue>({
 	children,
@@ -86,9 +80,7 @@ export function DataTableProvider<TData, TValue>({
 
 	return (
 		<DataTableContext.Provider value={value}>
-			<ControlsProvider>
-				{children}
-			</ControlsProvider>
+			<ControlsProvider>{children}</ControlsProvider>
 		</DataTableContext.Provider>
 	);
 }

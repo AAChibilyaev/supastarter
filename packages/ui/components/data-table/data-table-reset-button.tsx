@@ -1,16 +1,12 @@
 "use client";
 
-import { useDataTable } from "./data-table-provider";
+import { X } from "lucide-react";
+
+import { useHotKey } from "../../hooks/use-hot-key";
 import { Button } from "../button";
 import { Kbd } from "../kbd";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "../tooltip";
-import { useHotKey } from "../../hooks/use-hot-key";
-import { X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
+import { useDataTable } from "./data-table-provider";
 
 export function DataTableResetButton() {
 	const { table } = useDataTable();
@@ -28,7 +24,7 @@ export function DataTableResetButton() {
 				<TooltipContent side="left">
 					<p className="text-nowrap">
 						Reset filters with{" "}
-						<Kbd className="text-muted-foreground group-hover:text-accent-foreground ml-1">
+						<Kbd className="ml-1 text-muted-foreground group-hover:text-accent-foreground">
 							<span className="mr-1">⌘</span>
 							<span>Esc</span>
 						</Kbd>

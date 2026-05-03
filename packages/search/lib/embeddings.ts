@@ -208,10 +208,7 @@ async function azureEmbeddings(texts: string[], model: string): Promise<Embeddin
  * Only model name is required — baseURL and apiKey come from env vars
  * or can be configured per-index via the model config.
  */
-export function getOpenaiCompatibleClient(
-	apiUrl?: string,
-	apiKey?: string,
-): OpenAI {
+export function getOpenaiCompatibleClient(apiUrl?: string, apiKey?: string): OpenAI {
 	return new OpenAI({
 		apiKey: apiKey ?? process.env.OPENAI_COMPATIBLE_API_KEY ?? "",
 		baseURL: apiUrl ?? process.env.OPENAI_COMPATIBLE_API_URL ?? "http://localhost:11434/v1",

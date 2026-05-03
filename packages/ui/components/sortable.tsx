@@ -31,12 +31,13 @@ import {
 	type SortableContextProps,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { buttonVariants } from "../button";
-import { composeRefs } from "../../lib/compose-refs";
-import { cn } from "../../lib";
 import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import * as React from "react";
 import { createPortal } from "react-dom";
+
+import { cn } from "../../lib";
+import { composeRefs } from "../../lib/compose-refs";
+import { buttonVariants } from "../button";
 
 const orientationConfig = {
 	vertical: {
@@ -53,8 +54,7 @@ const orientationConfig = {
 	},
 };
 
-interface SortableProps<TData extends { id: UniqueIdentifier }>
-	extends DndContextProps {
+interface SortableProps<TData extends { id: UniqueIdentifier }> extends DndContextProps {
 	value: TData[];
 	onValueChange?: (items: TData[]) => void;
 	onMove?: (event: { activeIndex: number; overIndex: number }) => void;
@@ -142,8 +142,7 @@ const dropAnimationOpts: DropAnimation = {
 	}),
 };
 
-interface SortableOverlayProps
-	extends React.ComponentPropsWithRef<typeof DragOverlay> {
+interface SortableOverlayProps extends React.ComponentPropsWithRef<typeof DragOverlay> {
 	activeId?: UniqueIdentifier | null;
 }
 
@@ -200,14 +199,9 @@ function SortableItem({
 	ref,
 	...props
 }: SortableItemProps & { ref?: React.Ref<HTMLDivElement> }) {
-	const {
-		attributes,
-		listeners,
-		setNodeRef,
-		transform,
-		transition,
-		isDragging,
-	} = useSortable({ id: value });
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+		id: value,
+	});
 
 	const context = React.useMemo<SortableItemContextProps>(
 		() => ({
@@ -254,7 +248,10 @@ function SortableDragHandle({
 	size,
 	ref,
 	...props
-}: SortableDragHandleProps & { variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link"; size?: "sm" | "md" | "lg" | "icon" }) {
+}: SortableDragHandleProps & {
+	variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link";
+	size?: "sm" | "md" | "lg" | "icon";
+}) {
 	const { attributes, listeners, isDragging } = useSortableItem();
 
 	return (

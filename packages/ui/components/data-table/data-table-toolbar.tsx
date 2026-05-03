@@ -1,19 +1,15 @@
 "use client";
 
-import { useDataTable } from "./data-table-provider";
-import { Button } from "../button";
-import { Kbd } from "../kbd";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "../tooltip";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+
 import { useHotKey } from "../../hooks/use-hot-key";
 import { formatCompactNumber } from "../../lib/format";
 import { useControls } from "../../providers/controls";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Button } from "../button";
+import { Kbd } from "../kbd";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
 import { DataTableFilterControlsDrawer } from "./data-table-filter-controls-drawer";
+import { useDataTable } from "./data-table-provider";
 import { DataTableResetButton } from "./data-table-reset-button";
 import { DataTableViewOptions } from "./data-table-view-options";
 
@@ -22,8 +18,7 @@ interface DataTableToolbarProps {
 }
 
 export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
-	const { table, isLoading, columnFilters, totalRows, filterRows } =
-		useDataTable();
+	const { table, isLoading, columnFilters, totalRows, filterRows } = useDataTable();
 	const { open, setOpen } = useControls();
 	useHotKey(() => setOpen((prev) => !prev), "b");
 	const rows = {
@@ -32,25 +27,25 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 	};
 
 	return (
-		<div className="flex flex-wrap items-center justify-between gap-4">
-			<div className="flex flex-wrap items-center gap-2">
+		<div className="gap-4 flex flex-wrap items-center justify-between">
+			<div className="gap-2 flex flex-wrap items-center">
 				<TooltipProvider>
 					<Tooltip delayDuration={100}>
 						<TooltipTrigger asChild>
 							<Button
 								variant="ghost"
 								onClick={() => setOpen((prev) => !prev)}
-								className="hidden gap-2 sm:flex"
+								className="gap-2 sm:flex hidden"
 							>
 								{open ? (
 									<>
 										<PanelLeftClose className="h-4 w-4" />
-										<span className="hidden md:block">Hide Controls</span>
+										<span className="md:block hidden">Hide Controls</span>
 									</>
 								) : (
 									<>
 										<PanelLeftOpen className="h-4 w-4" />
-										<span className="hidden md:block">Show Controls</span>
+										<span className="md:block hidden">Show Controls</span>
 									</>
 								)}
 							</Button>
@@ -58,7 +53,7 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 						<TooltipContent side="right">
 							<p className="text-nowrap">
 								Toggle controls with{" "}
-								<Kbd className="text-muted-foreground group-hover:text-accent-foreground ml-1">
+								<Kbd className="ml-1 text-muted-foreground group-hover:text-accent-foreground">
 									<span className="mr-1">⌘</span>
 									<span>B</span>
 								</Kbd>
@@ -66,11 +61,11 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
-				<div className="block sm:hidden">
+				<div className="sm:hidden block">
 					<DataTableFilterControlsDrawer />
 				</div>
 				<div>
-					<p className="text-muted-foreground hidden text-sm sm:block">
+					<p className="text-sm sm:block hidden text-muted-foreground">
 						<span className="font-mono font-medium">
 							{formatCompactNumber(rows.filtered)}
 						</span>{" "}
@@ -78,9 +73,9 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 						<span className="font-mono font-medium">
 							{formatCompactNumber(rows.total)}
 						</span>{" "}
-						row(s) <span className="sr-only sm:not-sr-only">filtered</span>
+						row(s) <span className="sm:not-sr-only sr-only">filtered</span>
 					</p>
-					<p className="text-muted-foreground block text-sm sm:hidden">
+					<p className="text-sm sm:hidden block text-muted-foreground">
 						<span className="font-mono font-medium">
 							{formatCompactNumber(rows.filtered)}
 						</span>{" "}
@@ -88,7 +83,7 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 					</p>
 				</div>
 			</div>
-			<div className="ml-auto flex items-center gap-2">
+			<div className="gap-2 ml-auto flex items-center">
 				{columnFilters.length ? <DataTableResetButton /> : null}
 				{renderActions?.()}
 				<DataTableViewOptions />

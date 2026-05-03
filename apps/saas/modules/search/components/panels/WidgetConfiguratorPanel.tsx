@@ -384,13 +384,13 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 												type="checkbox"
 												className="size-4 accent-[var(--color-primary)]"
 												checked={queryBy.includes(field)}
-													onChange={() => {
-														setQueryBy((prev) =>
-															prev.includes(field)
-																? prev.filter((f) => f !== field)
-																: [...prev, field],
-														);
-													}}
+												onChange={() => {
+													setQueryBy((prev) =>
+														prev.includes(field)
+															? prev.filter((f) => f !== field)
+															: [...prev, field],
+													);
+												}}
 											/>
 											<span className="font-mono text-xs">{field}</span>
 										</label>

@@ -1,6 +1,6 @@
 import { aggregateSearchUsage, recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
-import { aliasName, multiSearchDocuments, searchDocuments } from "@repo/search";
+import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -94,12 +94,20 @@ export const publicSearchApp = new Hono()
 			return c.json({ error: "invalid_input", details: z.treeifyError(parsed.error) }, 400);
 		}
 
+		// ── Query preprocessing ──
+		const processed = processQuery(parsed.data.q);
+		const searchParams = {
+			...parsed.data,
+			q: processed.q,
+			exact: processed.isExactPhrase ? true : parsed.data.exact,
+		};
+
 		try {
 			const result = await searchDocuments({
 				alias: aliasName(verified.organizationId, verified.indexSlug),
 				tenantId: verified.organizationId,
-				...parsed.data,
-				filterBy: combineFilters(scopedFilter, parsed.data.filterBy),
+				...searchParams,
+				filterBy: combineFilters(scopedFilter, searchParams.filterBy),
 			});
 
 			void recordSearchUsage({
@@ -107,12 +115,12 @@ export const publicSearchApp = new Hono()
 				organizationId: verified.organizationId,
 				type: "search_query",
 				metadata: {
-					q: parsed.data.q,
-					queryBy: parsed.data.queryBy,
-					filterBy: parsed.data.filterBy,
-					sortBy: parsed.data.sortBy,
-					perPage: parsed.data.perPage,
-					page: parsed.data.page,
+					q: searchParams.q,
+					queryBy: searchParams.queryBy,
+					filterBy: searchParams.filterBy,
+					sortBy: searchParams.sortBy,
+					perPage: searchParams.perPage,
+					page: searchParams.page,
 					resultCount: result.found,
 					latencyMs: result.searchTimeMs,
 					ua: c.req.header("user-agent") ?? null,

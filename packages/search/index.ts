@@ -35,6 +35,7 @@ export {
 	type SearchDocumentsInput,
 	type SearchDocumentsResult,
 } from "./lib/search";
+export { processQuery, type ProcessedQuery } from "./lib/query-processor";
 export { flushSearchIngestBuffer } from "./lib/buffer";
 export {
 	flushAllSearchIngestBuffers,

@@ -52,8 +52,7 @@
       "recommendationsAnalytics": "Analytique perso.",
       "collections": "Collections",
       "collectionsGrid": "Grille",
-      "collectionsDocuments": "Documents",
-      "jobs": "Tableau des tâches"
+      "collectionsDocuments": "Documents"
     },
     "recommendations": {
       "description": "Configurez des recommandations de produits basées sur l'IA, y compris des articles similaires, des suggestions personnalisées et GraphRAG.",
@@ -162,6 +161,7 @@
         "uniqueUsers": "Unique Users",
         "uniqueUsersDesc": "With search activity",
         "ctr": "CTR",
+      "ctrTrend": "Tendance du CTR",
         "ctrDesc": "Click-through rate"
       },
       "test": {
@@ -526,7 +526,6 @@
       "title": "Analytique",
       "description": "Suivez l'utilisation de la recherche, les principales requêtes, les zéros résultats et les tendances.",
       "totalSearches": "Recherches totales",
-      "impressions": "Impressions",
       "totalSessions": "Ouvertures du widget",
       "ctr": "Taux de clics",
       "zeroResults": "Zéro résultat",
@@ -1571,23 +1570,13 @@
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
     },
-    "jobs": {
-      "title": "Tâches",
-      "allJobs": "Tous les travaux",
-      "import": "Importer",
-      "sync": "Synchroniser",
-      "reindex": "Réindexer",
-      "emptyState": "Pas encore de tâches",
-      "columns": {
-        "type": "Type",
-        "index": "Index",
-        "status": "Statut",
-        "started": "Démarré",
-        "duration": "Durée",
-        "items": "Éléments",
-        "failures": "échecs",
-        "progress": "Progression"
-      }
+    "webhooks": {
+      "title": "Webhooks",
+      "addWebhook": "Ajouter un webhook",
+      "emptyState": "Aucun webhook configuré",
+      "deleteConfirm": "Supprimer ce webhook?",
+      "url": "URL du point de terminaison",
+      "events": "Événements"
     }
   }
 }

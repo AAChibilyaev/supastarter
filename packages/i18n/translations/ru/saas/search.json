@@ -123,9 +123,9 @@
       "title": "Аналитика поиска",
       "description": "Отслеживайте использование поиска, популярные запросы, пустые результаты и тренды.",
       "totalSearches": "Всего поисков",
-      "impressions": "Показы",
       "totalSessions": "Открытий виджета",
       "ctr": "CTR",
+      "ctrTrend": "Тренд CTR",
       "zeroResults": "Пустых результатов",
       "zeroResultRate": "Доля пустых результатов",
       "comingSoon": "Скоро",
@@ -499,8 +499,7 @@
       "recommendationsAnalytics": "Персонализация",
       "collections": "Коллекции",
       "collectionsGrid": "Сетка",
-      "collectionsDocuments": "Документы",
-      "jobs": "Дашборд задач"
+      "collectionsDocuments": "Документы"
     },
     "recommendations": {
       "description": "Настройте рекомендации товаров на основе ИИ, включая похожие товары, персонализированные предложения и GraphRAG.",
@@ -1550,23 +1549,13 @@
       "deleteConfirmDesc": "Remove the no-hit queries rule \"{name}\"? Zero-result queries will stop being collected.",
       "deleteConfirmAction": "Delete"
     },
-    "jobs": {
-      "title": "Задачи",
-      "allJobs": "Все задачи",
-      "import": "Импорт",
-      "sync": "Синхронизация",
-      "reindex": "Переиндексация",
-      "emptyState": "Задач пока нет",
-      "columns": {
-        "type": "Тип",
-        "index": "Индекс",
-        "status": "Статус",
-        "started": "Запущено",
-        "duration": "Длительность",
-        "items": "Элементы",
-        "failures": "ошибок",
-        "progress": "Прогресс"
-      }
+    "webhooks": {
+      "title": "Вебхуки",
+      "addWebhook": "Добавить вебхук",
+      "emptyState": "Вебхуки не настроены",
+      "deleteConfirm": "Удалить этот вебхук?",
+      "url": "URL эндпоинта",
+      "events": "События"
     }
   }
 }

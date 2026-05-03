@@ -52,8 +52,6 @@ export const searchFieldSchema = z.object({
 	vec_dist: z.enum(["cosine", "ip"]).optional(),
 });
 
-export type EmbedConfig = z.infer<typeof embedConfigSchema>;
-
 export type SearchFieldInput = z.infer<typeof searchFieldSchema>;
 
 export const searchIndexSlugSchema = z

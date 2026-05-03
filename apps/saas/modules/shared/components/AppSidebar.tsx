@@ -134,10 +134,21 @@ export function AppSidebar() {
 
 		return [
 			...(activeOrganization
-				? [
+				? [/* organization items above */]
+				: [
 						{
-							label: t("search.nav.overview"),
-							href: `${basePath}/overview`,
+							label: t("app.menu.mySearch"),
+							href: "/my-search",
+							icon: StarIcon,
+							isActive: pathname === "/my-search" || pathname.startsWith("/my-search/"),
+						},
+						{
+							label: t("app.menu.start"),
+							href: startHref,
+							icon: HomeIcon,
+							isActive: pathname === "/" || pathname === basePath,
+						},
+					]),
 							icon: HomeIcon,
 							isActive: pathname === `${basePath}/overview` || pathname === basePath,
 						},

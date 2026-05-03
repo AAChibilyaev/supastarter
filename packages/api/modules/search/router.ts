@@ -45,6 +45,7 @@ import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
 import { listStemmingOverrides, upsertStemmingOverride } from "./procedures/stemming";
+import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
 import { listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
@@ -135,6 +136,10 @@ export const searchRouter = {
 		list: listAnalyticsRules,
 		create: createAnalyticsRule,
 		delete: deleteAnalyticsRule,
+	},
+	rankingRules: {
+		get: getRankingRules,
+		update: updateRankingRules,
 	},
 	dynamicSearch,
 };

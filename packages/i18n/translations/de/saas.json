@@ -197,6 +197,7 @@
 			"openNavigation": "Navigation offnen",
 			"organizationSettings": "Organisationseinstellungen",
 			"search": "Suche",
+			"mySearch": "Meine Suche",
 			"start": "Start"
 		},
 		"userMenu": {
@@ -1887,6 +1888,17 @@
 		"federatedSearch": "Föderiert",
 		"settings": "Einstellungen",
 		"switchOrganization": "Organisation wechseln"
+	},
+	"mySearch": {
+		"title": "Meine Suche",
+		"subtitle": "Ihr persönlicher Suchbereich — Dokumente hochladen, Webseiten indizieren und über alle Materialien suchen.",
+		"noIndexes": "Noch keine Suchindizes",
+		"noIndexesDescription": "Erstellen Sie Ihren ersten Suchindex durch Hochladen von Dokumenten oder Hinzufügen von URLs. Los geht's — keine Organisation erforderlich.",
+		"createIndex": "Neuen Index erstellen",
+		"importFiles": "Dateien importieren",
+		"emptyStateTitle": "Erstellen Sie Ihren ersten Index",
+		"createFromFiles": "Aus Dateien",
+		"createFromUrl": "Von URL"
 	},
 	"__test": {}
 }

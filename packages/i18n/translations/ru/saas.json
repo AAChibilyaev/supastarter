@@ -197,7 +197,8 @@
 			"openNavigation": "Open navigation",
 			"organizationSettings": "Organization settings",
 			"search": "Search",
-			"start": "Start"
+			"mySearch": "Мой поиск",
+			"start": "Старт"
 		},
 		"userMenu": {
 			"accountSettings": "Account settings",
@@ -686,10 +687,10 @@
 		},
 		"billing": {
 			"createCustomerPortal": {
-				"label": "Manage billing",
+				"label": "Управление биллингом",
 				"notifications": {
 					"error": {
-						"title": "Could not create a customer portal session. Please try again."
+						"title": "Не удалось создать сессию клиентского портала. Пожалуйста, попробуйте снова."
 					}
 				}
 			},
@@ -697,27 +698,27 @@
 				"description": "Ваш текущий план и лимиты использования для поиска и индексирования.",
 				"notFound": "Информация о плане недоступна.",
 				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
+					"active": "Активен",
+					"canceled": "Отменён",
+					"expired": "Истёк",
+					"incomplete": "Не завершён",
+					"past_due": "Просрочен",
+					"paused": "Приостановлен",
+					"trialing": "Пробный",
+					"unpaid": "Не оплачен"
 				},
-				"title": "Your plan"
+				"title": "Ваш план"
 			},
 			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
+				"description": "Выберите план для подписки.",
+				"title": "Изменить план"
 			},
 			"upgradePlan": "Улучшить план",
 			"currentPlan": "Текущий план",
 			"switchToAnnual": "Перейти на годовой",
 			"upgradeSuccess": "План успешно обновлён",
 			"aiCredits": {
-				"title": "AI credits",
+				"title": "AI-кредиты",
 				"subtitle": "Оплата по факту использования AI. Пополните кошелёк для доступа ко всем функциям AI.",
 				"balance": {
 					"title": "Баланс кошелька",
@@ -739,7 +740,7 @@
 					"insufficientFunds": "Недостаточно AI-кредитов. Пополните кошелёк."
 				}
 			},
-			"title": "Billing",
+			"title": "Биллинг",
 			"usage": {
 				"searches": "Поиски",
 				"documents": "Документы"
@@ -796,7 +797,7 @@
 		},
 		"menu": {
 			"account": {
-				"billing": "Billing",
+				"billing": "Биллинг",
 				"dangerZone": "Danger zone",
 				"general": "General",
 				"notifications": "Notifications",
@@ -804,7 +805,7 @@
 				"title": "Account"
 			},
 			"organization": {
-				"billing": "Billing",
+				"billing": "Биллинг",
 				"general": "General",
 				"members": "Members",
 				"title": "Organization",
@@ -1887,6 +1888,17 @@
 		"federatedSearch": "Федеративный",
 		"settings": "Настройки",
 		"switchOrganization": "Сменить организацию"
+	},
+	"mySearch": {
+		"title": "Мой поиск",
+		"subtitle": "Ваше личное поисковое пространство — загружайте документы, индексируйте веб-страницы и ищите по всем материалам.",
+		"noIndexes": "Поисковых индексов пока нет",
+		"noIndexesDescription": "Создайте первый поисковый индекс, загрузив документы или добавив URL. Быстрый старт — организация не требуется.",
+		"createIndex": "Создать индекс",
+		"importFiles": "Импортировать файлы",
+		"emptyStateTitle": "Создайте свой первый индекс",
+		"createFromFiles": "Из файлов",
+		"createFromUrl": "Из URL"
 	},
 	"__test": {}
 }

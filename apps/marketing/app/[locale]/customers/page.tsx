@@ -1,7 +1,9 @@
+import { getAllPosts } from "@blog/lib/posts";
 import { CtaFooter } from "@home/components/CtaFooter";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { CustomersCaseStudies } from "../../../modules/company/components/CustomersCaseStudies";
 import { CustomersGrid } from "../../../modules/company/components/CustomersGrid";
 
 export async function generateMetadata(props: {
@@ -19,6 +21,11 @@ export default async function CustomersPage(props: { params: Promise<{ locale: s
 	const { locale } = await props.params;
 	setRequestLocale(locale);
 
+	const allPosts = await getAllPosts(locale);
+	const caseStudies = allPosts.filter(
+		(post) => post.tags && post.tags.includes("case-study") && post.published,
+	);
+
 	const t = await getTranslations({ locale, namespace: "customersPage" });
 
 	return (
@@ -32,6 +39,7 @@ export default async function CustomersPage(props: { params: Promise<{ locale: s
 				</div>
 			</section>
 			<CustomersGrid />
+			{caseStudies.length > 0 && <CustomersCaseStudies caseStudies={caseStudies} />}
 			<CtaFooter />
 		</>
 	);

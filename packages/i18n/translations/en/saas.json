@@ -197,6 +197,7 @@
 			"openNavigation": "Open navigation",
 			"organizationSettings": "Organization settings",
 			"search": "Search",
+			"mySearch": "My Search",
 			"start": "Start"
 		},
 		"userMenu": {
@@ -1887,6 +1888,17 @@
 		"federatedSearch": "Federated",
 		"settings": "Settings",
 		"switchOrganization": "Switch organization"
+	},
+	"mySearch": {
+		"title": "My Search",
+		"subtitle": "Your personal search space — upload documents, index web pages, and search across all your materials.",
+		"noIndexes": "No search indexes yet",
+		"noIndexesDescription": "Create your first search index by uploading documents or adding URLs. Go fast — no organization needed.",
+		"createIndex": "Create New Index",
+		"importFiles": "Import Files",
+		"emptyStateTitle": "Create your first index",
+		"createFromFiles": "From Files",
+		"createFromUrl": "From URL"
 	},
 	"__test": {}
 }

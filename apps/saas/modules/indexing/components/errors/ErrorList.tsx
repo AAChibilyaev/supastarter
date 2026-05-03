@@ -24,13 +24,7 @@ interface ErrorListProps {
 
 // ── Main component ───────────────────────────────────────────────
 
-export function ErrorList({
-	errors,
-	jobId,
-	onRetry,
-	onIgnore,
-	isRetrying,
-}: ErrorListProps) {
+export function ErrorList({ errors, jobId, onRetry, onIgnore, isRetrying }: ErrorListProps) {
 	if (errors.length === 0) return null;
 
 	const handleDownloadLog = () => {
@@ -60,7 +54,8 @@ export function ErrorList({
 					<div className="gap-2 flex items-center">
 						<XCircle className="size-5 text-destructive" />
 						<CardTitle className="text-base">
-							{errors.length} document{errors.length !== 1 ? "s" : ""} failed to process
+							{errors.length} document{errors.length !== 1 ? "s" : ""} failed to
+							process
 						</CardTitle>
 					</div>
 					<div className="gap-2 flex flex-wrap">
@@ -83,11 +78,7 @@ export function ErrorList({
 							<Download className="size-3.5" />
 							Download log
 						</Button>
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => onIgnore(allErrorIds)}
-						>
+						<Button variant="ghost" size="sm" onClick={() => onIgnore(allErrorIds)}>
 							Ignore all
 						</Button>
 					</div>
@@ -95,16 +86,16 @@ export function ErrorList({
 			</CardHeader>
 			<CardContent className="p-0">
 				<div className="max-h-64 overflow-y-auto">
-					<table className="w-full text-sm">
-						<thead className="sticky top-0 bg-card">
+					<table className="text-sm w-full">
+						<thead className="top-0 sticky bg-card">
 							<tr className="border-b border-border">
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground text-xs">
+								<th className="px-4 py-2 font-medium text-xs text-left text-muted-foreground">
 									Row
 								</th>
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground text-xs">
+								<th className="px-4 py-2 font-medium text-xs text-left text-muted-foreground">
 									Document
 								</th>
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground text-xs">
+								<th className="px-4 py-2 font-medium text-xs text-left text-muted-foreground">
 									Reason
 								</th>
 								<th className="px-4 py-2 w-24" />

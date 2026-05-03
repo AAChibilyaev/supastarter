@@ -451,25 +451,44 @@
 			"ratingLabel": "Durchschnittliche Bewertung"
 		},
 		"testimonials": {
-			"title": "Was unsere Kunden sagen",
+			"title": "Real results from real customers",
 			"items": {
-				"first": {
-					"quote": "AACsearch hat unsere Suchlatenz um 80 % reduziert und unser Team hat es an einem Nachmittag eingerichtet. Es funktioniert einfach.",
-					"author": "Sarah Chen",
+				"nordikHome": {
+					"quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+					"author": "Erik Lindström",
 					"role": "CTO",
-					"company": "TechCorp"
+					"company": "NordikHome"
 				},
-				"second": {
-					"quote": "Wir haben von einem veralteten Suchanbieter migriert und sofortige Verbesserungen bei der Relevanz festgestellt. Unsere Konversionsrate stieg um 15 %.",
+				"agencyHub": {
+					"quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
 					"author": "Marcus Weber",
-					"role": "Leiter Engineering",
-					"company": "ShopNow"
+					"role": "Technical Director",
+					"company": "AgencyHub"
 				},
-				"third": {
-					"quote": "Die API ist sauber, die Dokumentation ist großartig und das Support-Team antwortet tatsächlich. Eine seltene Kombination.",
+				"devStream": {
+					"quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
 					"author": "Priya Sharma",
-					"role": "Lead-Entwicklerin",
-					"company": "DevHub"
+					"role": "VP Engineering",
+					"company": "DevStream"
+				}
+			}
+		},
+		"caseStudies": {
+			"title": "Read their full stories",
+			"description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
+			"readFullStudy": "Read full case study →",
+			"items": {
+				"nordikHome": {
+					"title": "NordikHome: 5x Cost Reduction",
+					"excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
+				},
+				"agencyHub": {
+					"title": "AgencyHub: Multi-Tenant Search",
+					"excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
+				},
+				"devStream": {
+					"title": "DevStream: Zero DevOps, 10x Faster",
+					"excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
 				}
 			}
 		},

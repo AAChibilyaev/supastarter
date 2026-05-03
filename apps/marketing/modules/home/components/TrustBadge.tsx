@@ -2,12 +2,22 @@
 
 import { useTranslations } from "next-intl";
 
-const TRUST_BADGES = [
+interface TrustBadgeItem {
+	key: string;
+	rating: string;
+	maxRating?: string;
+	labelKey: string;
+	showStars?: boolean;
+	stars?: number;
+}
+
+const TRUST_BADGES: TrustBadgeItem[] = [
 	{
 		key: "g2",
 		rating: "4.9",
 		maxRating: "5",
 		labelKey: "trustBadges.g2",
+		showStars: true,
 		stars: 5,
 	},
 	{
@@ -15,6 +25,7 @@ const TRUST_BADGES = [
 		rating: "4.8",
 		maxRating: "5",
 		labelKey: "trustBadges.capterra",
+		showStars: true,
 		stars: 5,
 	},
 	{
@@ -22,8 +33,9 @@ const TRUST_BADGES = [
 		rating: "500+",
 		labelKey: "trustBadges.companies",
 		showStars: false,
+		stars: 0,
 	},
-] as const;
+];
 
 export function TrustBadge() {
 	const t = useTranslations("home");
@@ -35,7 +47,7 @@ export function TrustBadge() {
 					key={badge.key}
 					className="gap-2 px-3 py-2 flex items-center rounded-xl border border-border/30 bg-card/50"
 				>
-					{badge.showStars !== false && (
+					{badge.showStars && badge.stars && (
 						<div className="gap-0.5 flex">
 							{Array.from({ length: badge.stars }, (_, i) => (
 								<svg
@@ -53,7 +65,7 @@ export function TrustBadge() {
 					<span className="text-sm font-semibold whitespace-nowrap text-foreground">
 						{badge.rating}
 						{badge.maxRating && (
-							<span className="font-normal text-muted-foreground/60">
+							<span className="text-muted-foreground/60 font-normal">
 								/{badge.maxRating}
 							</span>
 						)}

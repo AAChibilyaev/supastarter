@@ -9,6 +9,7 @@ import { ArrowRightIcon, Code2Icon, GlobeIcon, ShieldIcon, ZapIcon } from "lucid
 import { useTranslations } from "next-intl";
 
 import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
+import { TrustBadge } from "./TrustBadge";
 
 const codeSample = String.raw`import { SearchClient } from "@aacsearch/client";
 
@@ -94,8 +95,13 @@ export function HeroWithCode() {
 								{label}
 							</Badge>
 						))}
+						</div>
+
+						{/* Trust badges — G2, Capterra, customer count */}
+						<div className="mt-6">
+							<TrustBadge />
+						</div>
 					</div>
-				</div>
 
 				{/* Right column: glass-morphism code card */}
 				<div className="relative">

@@ -485,14 +485,10 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 
 export function OnboardingAnalyticsCards() {
 	const t = useTranslations("admin.onboarding");
-	const query = useQuery(orpc.onboarding.analytics.queryOptions({}));
+	const query = useQuery(orpc.onboarding.analytics.queryOptions({ input: {} }));
 	const [showMonthly, setShowMonthly] = useState(false);
 
-	const isLoading = query.isLoading;
-	const error = query.error;
-	const data = query.data as AnalyticsData | undefined;
-
-	if (isLoading) {
+	if (query.isLoading) {
 		return (
 			<div className="space-y-6">
 				<div className="gap-4 md:grid-cols-2 grid grid-cols-1">
@@ -500,11 +496,12 @@ export function OnboardingAnalyticsCards() {
 					<Skeleton className="h-48" />
 				</div>
 				<Skeleton className="h-64" />
+				<Skeleton className="h-[400px]" />
 			</div>
 		);
 	}
 
-	if (error) {
+	if (query.error) {
 		return (
 			<Card>
 				<CardContent className="py-8 text-center text-destructive">{t("error")}</CardContent>
@@ -512,6 +509,7 @@ export function OnboardingAnalyticsCards() {
 		);
 	}
 
+	const data = query.data as AnalyticsData | undefined;
 	if (!data) return null;
 
 	return (

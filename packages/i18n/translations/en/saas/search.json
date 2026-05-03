@@ -341,6 +341,19 @@
 			"apiKeys": "API keys",
 			"loadError": "Failed to load projects."
 		},
+		"activation": {
+			"title": "Activation Progress",
+			"currentMilestone": "Milestone",
+			"setupProgress": "Setup progress",
+			"continueSetup": "Continue setup",
+			"activated": "Activated",
+			"healthy": "Healthy",
+			"atRisk": "At risk",
+			"churned": "Churned",
+			"unknown": "Unknown",
+			"activatedDescription": "Your workspace is fully set up and active.",
+			"notActivatedDescription": "Complete the setup steps to activate your workspace."
+		},
 		"overview": {
 			"title": "Overview",
 			"subtitle": "Past {days} days",
@@ -1741,5 +1754,15 @@
 			"pendingWrites": "Pending Writes",
 			"apiStats": "API Statistics"
 		}
+	},
+	"export": {
+		"title": "Export Documents",
+		"description": "Download all documents from this index as a file.",
+		"format": "Format",
+		"filterBy": "Filter (optional)",
+		"filterPlaceholder": "e.g. category:=shoes",
+		"filterHint": "Typesense filter expression. Leave empty to export all documents.",
+		"download": "Download",
+		"failed": "Export failed"
 	}
 }

@@ -1740,5 +1740,15 @@
 			"pendingWrites": "Ожидающие записи",
 			"apiStats": "Статистика API"
 		}
+	},
+	"export": {
+		"title": "Экспорт документов",
+		"description": "Скачать все документы из этого индекса файлом.",
+		"format": "Формат",
+		"filterBy": "Фильтр (опционально)",
+		"filterPlaceholder": "напр. category:=shoes",
+		"filterHint": "Фильтр Typesense. Оставьте пустым для экспорта всех документов.",
+		"download": "Скачать",
+		"failed": "Экспорт не удался"
 	}
 }

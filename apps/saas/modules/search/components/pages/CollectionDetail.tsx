@@ -41,8 +41,10 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { EmptyState } from "../cards/EmptyState";
+import { ExportDocumentsDialog } from "../dialogs/ExportDocumentsDialog";
+import { ExportDocumentsDialog } from "../dialogs/ExportDocumentsDialog";
 import { FileTable } from "../files/FileTable";
-import { EmbeddingModelPanel } from "../panels/EmbeddingModelPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { ReindexPanel } from "../panels/ReindexPanel";
 import { SchemaEditorPanel } from "../panels/SchemaEditorPanel";
@@ -485,29 +487,32 @@ $data = json_decode($response->getBody(), true);`;
 			{activeTab === "documents" && (
 				<div className="space-y-4">
 					{/* Sub-tab toggle: Documents table vs File list */}
-					<div className="gap-1 flex border-b">
-						<button
-							type="button"
-							onClick={() => setDocView("table")}
-							className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
-								docView === "table"
-									? "border-primary text-primary"
-									: "border-transparent text-muted-foreground hover:text-foreground"
-							}`}
-						>
-							{t("collection.tab.documents")}
-						</button>
-						<button
-							type="button"
-							onClick={() => setDocView("files")}
-							className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
-								docView === "files"
-									? "border-primary text-primary"
-									: "border-transparent text-muted-foreground hover:text-foreground"
-							}`}
-						>
-							{t("files.pageTitle")}
-						</button>
+					<div className="gap-1 flex items-center justify-between border-b">
+						<div className="gap-1 flex">
+							<button
+								type="button"
+								onClick={() => setDocView("table")}
+								className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
+									docView === "table"
+										? "border-primary text-primary"
+										: "border-transparent text-muted-foreground hover:text-foreground"
+								}`}
+							>
+								{t("collection.tab.documents")}
+							</button>
+							<button
+								type="button"
+								onClick={() => setDocView("files")}
+								className={`px-3 py-1.5 text-xs font-medium border-b-2 transition-colors ${
+									docView === "files"
+										? "border-primary text-primary"
+										: "border-transparent text-muted-foreground hover:text-foreground"
+								}`}
+							>
+								{t("files.pageTitle")}
+							</button>
+						</div>
+						<ExportDocumentsDialog organizationId={orgId ?? ""} slug={indexSlug} />
 					</div>
 
 					{orgId && indexSlug ? (

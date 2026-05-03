@@ -1740,5 +1740,15 @@
 			"pendingWrites": "Escrituras pendientes",
 			"apiStats": "Estadísticas de API"
 		}
+	},
+	"export": {
+		"title": "Exportar documentos",
+		"description": "Descargar todos los documentos de este índice como archivo.",
+		"format": "Formato",
+		"filterBy": "Filtro (opcional)",
+		"filterPlaceholder": "ej. category:=shoes",
+		"filterHint": "Expresión de filtro de Typesense. Deje vacío para exportar todos los documentos.",
+		"download": "Descargar",
+		"failed": "Exportación fallida"
 	}
 }

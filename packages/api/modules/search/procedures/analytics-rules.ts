@@ -38,14 +38,41 @@ const counterParamsSchema = z.object({
 	destination: destinationConfigSchema,
 });
 
+// ── Log rule params ─────────────────────────────────────────────
+//
+// Log rules capture raw analytics events (click, conversion, search)
+// into a dedicated collection for later ML training / personalization.
+//
+// Typesense docs: https://typesense.org/docs/28.0/api/analytics-rule.html
+
+const logEventSchema = z.object({
+	type: z.string().min(1).max(64).describe("Event type, e.g. click, conversion"),
+	name: z.string().min(1).max(128).describe("Unique event name used when tracking"),
+});
+
+const logSourceConfigSchema = z.object({
+	collections: z.array(z.string().min(1)).min(1).describe("Collections to watch"),
+	events: z.array(logEventSchema).min(1).describe("Events to log"),
+});
+
+const logDestinationConfigSchema = z.object({
+	collection: z.string().min(1).describe("Destination collection for logged events"),
+});
+
+const logParamsSchema = z.object({
+	source: logSourceConfigSchema,
+	destination: logDestinationConfigSchema,
+});
+
 // Keep loose schema for aggregation rules
 const aggregationParamsSchema = z.record(z.string(), z.unknown());
 
 type CounterParams = z.infer<typeof counterParamsSchema>;
+type LogParams = z.infer<typeof logParamsSchema>;
 
 const analyticsRuleSchema = z.object({
 	name: z.string().min(1).max(200),
-	type: z.enum(["counter", "aggregation"]),
+	type: z.enum(["counter", "aggregation", "log"]),
 	params: z.record(z.string(), z.unknown()),
 });
 
@@ -54,8 +81,8 @@ export type AnalyticsRule = z.infer<typeof analyticsRuleSchema>;
 const createRuleInputSchema = z.object({
 	organizationId: z.string(),
 	name: z.string().min(1).max(200),
-	type: z.enum(["counter", "aggregation"]),
-	params: z.union([counterParamsSchema, aggregationParamsSchema]),
+	type: z.enum(["counter", "aggregation", "log"]),
+	params: z.union([counterParamsSchema, aggregationParamsSchema, logParamsSchema]),
 });
 
 function parseRuleParams(rule: {
@@ -66,7 +93,7 @@ function parseRuleParams(rule: {
 }): AnalyticsRule {
 	return {
 		name: rule.name,
-		type: rule.type as "counter" | "aggregation",
+		type: rule.type as "counter" | "aggregation" | "log",
 		params: rule.params as Record<string, unknown>,
 	};
 }
@@ -173,4 +200,13 @@ export function parseCounterRuleParams(params: Record<string, unknown>): Counter
 	return result.success ? result.data : null;
 }
 
-export { type CounterParams };
+/**
+ * Parse log rule params from a generic analytics rule.
+ * Returns null if the rule is not a log type or has unexpected shape.
+ */
+export function parseLogRuleParams(params: Record<string, unknown>): LogParams | null {
+	const result = logParamsSchema.safeParse(params);
+	return result.success ? result.data : null;
+}
+
+export { type CounterParams, type LogParams };

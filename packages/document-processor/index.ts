@@ -8,6 +8,10 @@ export { DocumentPipeline } from "./lib/pipeline";
 export { ProgressTracker } from "./lib/progress";
 export { DeadLetterQueue } from "./lib/dlq";
 export { crawlUrl } from "./lib/crawler";
+export { processFileToPipeline, processUrlToPipeline } from "./lib/search-bridge";
+
+// Parser exports (for advanced use)
+export { parsePdf, parseDocx, parseXlsx, parsePptx, parseCsv, parseJson, parseMd, parseTxt, parseEpub, parseImage, parseAudio, parseVideo } from "./lib/parsers/index";
 
 // Type exports
 export type {

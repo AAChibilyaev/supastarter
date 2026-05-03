@@ -283,7 +283,12 @@
 			"createSuccess": "Feature flag created",
 			"createError": "Failed to create feature flag",
 			"killSwitchEnabled": "Kill switch enabled — flag is force-disabled for all orgs",
-			"killSwitchDisabled": "Kill switch disabled"
+			"killSwitchDisabled": "Kill switch disabled",
+			"auditLogButton": "Audit Log",
+			"auditLogTitle": "Change History",
+			"auditLogDescription": "All changes made to this feature flag, including who made them and when.",
+			"auditLogEmpty": "No changes recorded yet for this flag.",
+			"auditLogMore": "And {count} more entries…"
 		}
 	}
 }

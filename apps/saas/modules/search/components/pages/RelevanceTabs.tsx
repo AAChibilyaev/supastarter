@@ -14,6 +14,7 @@ import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
 import { CounterRulesPanel } from "../panels/CounterRulesPanel";
+import { SearchQualityScorePanel } from "../panels/SearchQualityScorePanel";
 import { CurationsPanel } from "../panels/CurationsPanel";
 import { NoHitsQueriesRulesPanel } from "../panels/NoHitsQueriesRulesPanel";
 import { QueryRulesPanel } from "../panels/QueryRulesPanel";
@@ -72,6 +73,9 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 							{t("search.nohitsQueries.tab")}
 						</TabsTrigger>
 						<TabsTrigger value="rules">{t("search.queryRules.tab")}</TabsTrigger>
+						<TabsTrigger value="qualityScore">
+							{t("search.qualityScore.tab")}
+						</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">
@@ -105,6 +109,9 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 					</TabsContent>
 					<TabsContent value="rules">
 						<QueryRulesPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+					<TabsContent value="qualityScore">
+						<SearchQualityScorePanel organizationId={organizationId} />
 					</TabsContent>
 				</Tabs>
 			) : (

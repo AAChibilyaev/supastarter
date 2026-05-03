@@ -283,7 +283,12 @@
 			"createSuccess": "Feature flag создан",
 			"createError": "Не удалось создать feature flag",
 			"killSwitchEnabled": "Аварийное отключение активно — флаг выключен для всех организаций",
-			"killSwitchDisabled": "Аварийное отключение неактивно"
+			"killSwitchDisabled": "Аварийное отключение неактивно",
+			"auditLogButton": "Журнал аудита",
+			"auditLogTitle": "История изменений",
+			"auditLogDescription": "Все изменения этого feature flag, включая информацию о том, кто и когда их сделал.",
+			"auditLogEmpty": "Для этого флага пока нет записей изменений.",
+			"auditLogMore": "И ещё {count} записей…"
 		}
 	}
 }

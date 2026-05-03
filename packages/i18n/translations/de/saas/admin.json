@@ -283,7 +283,13 @@
 			"createSuccess": "Feature-Flag erstellt",
 			"createError": "Fehler beim Erstellen des Feature-Flags",
 			"killSwitchEnabled": "Kill-Switch aktiviert — Flag für alle Organisationen deaktiviert",
-			"killSwitchDisabled": "Kill-Switch deaktiviert"
+			"killSwitchEnabled": "Kill-Switch aktiviert — Flag für alle Organisationen deaktiviert",
+			"killSwitchDisabled": "Kill-Switch deaktiviert",
+			"auditLogButton": "Änderungsprotokoll",
+			"auditLogTitle": "Änderungsverlauf",
+			"auditLogDescription": "Alle Änderungen an diesem Feature-Flag, einschließlich wer sie wann vorgenommen hat.",
+			"auditLogEmpty": "Noch keine Änderungen für dieses Flag aufgezeichnet.",
+			"auditLogMore": "Und {count} weitere Einträge…"
 		}
 	}
 }

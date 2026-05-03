@@ -283,7 +283,12 @@
 			"createSuccess": "Feature flag creado",
 			"createError": "Error al crear el feature flag",
 			"killSwitchEnabled": "Interruptor de seguridad activado — flag desactivado para todas las orgs",
-			"killSwitchDisabled": "Interruptor de seguridad desactivado"
+			"killSwitchDisabled": "Interruptor de seguridad desactivado",
+			"auditLogButton": "Registro de auditoría",
+			"auditLogTitle": "Historial de cambios",
+			"auditLogDescription": "Todos los cambios realizados en este feature flag, incluyendo quién los hizo y cuándo.",
+			"auditLogEmpty": "Aún no se registraron cambios para este flag.",
+			"auditLogMore": "Y {count} entradas más…"
 		}
 	}
 }

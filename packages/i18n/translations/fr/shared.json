@@ -10,23 +10,23 @@
 			"basic": {
 				"description": "Parfait pour les petites équipes.",
 				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
+					"anotherFeature": "Une autre fonctionnalité géniale",
 					"limitedSupport": "Support limité"
 				},
 				"title": "Basique"
 			},
 			"enterprise": {
-				"description": "Forfait personnalisé adapté à vos besoins",
+				"description": "Forfait personnalisé selon vos besoins",
 				"features": {
 					"enterpriseSupport": "Support entreprise",
 					"unlimitedProjects": "Projets illimités"
 				},
-				"title": "Entreprise"
+				"title": "Enterprise"
 			},
 			"free": {
 				"description": "Commencez gratuitement",
 				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
+					"anotherFeature": "Une autre fonctionnalité géniale",
 					"limitedSupport": "Support limité"
 				},
 				"title": "Gratuit"
@@ -40,9 +40,9 @@
 				"title": "À vie"
 			},
 			"pro": {
-				"description": "Idéal pour les équipes",
+				"description": "Meilleur pour les équipes",
 				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
+					"anotherFeature": "Une autre fonctionnalité géniale",
 					"fiveMembers": "Jusqu'à 5 membres",
 					"fullSupport": "Support complet"
 				},
@@ -58,19 +58,57 @@
 		"yearly": "Annuel",
 		"savePercent": "Économisez {percent}%",
 		"billedAnnually": "Facturé annuellement",
-		"perSeat": "place",
+		"perSeat": "siège",
 		"nextInvoice": "Prochaine facture",
 		"synonyms": "Synonymes",
-		"curations": "Curations",
+		"curations": "Sélections",
 		"customDomain": "Domaine personnalisé",
 		"customBranding": "Marque personnalisée",
-		"multiSearch": "Multi-recherche",
+		"multiSearch": "Recherche multiple",
 		"scopedTokens": "Jetons limités",
 		"widget": "Widget"
 	},
 	"consent": {
-		"message": "Ce site n'utilise pas encore de cookies, mais nous avons ajouté cette bannière pour vous la montrer.",
+		"message": "Ce site n'utilise pas encore de cookies, mais nous avons ajouté cette bannière pour vous le démontrer.",
 		"allow": "Autoriser",
 		"decline": "Refuser"
+	},
+	"regions": {
+		"title": "Résidence des Données",
+		"description": "Choisissez où vos données de recherche sont stockées. La résidence des données garantit que vos données restent dans les limites géographiques requises par votre cadre de conformité.",
+		"currentRegion": "Région Actuelle",
+		"regionLabel": "Région",
+		"changeRegion": "Changer de Région",
+		"saving": "Enregistrement...",
+		"saved": "Région mise à jour",
+		"saveError": "Échec de la mise à jour de la région",
+		"complianceFrameworks": "Conformité",
+		"dataLocation": "Emplacement",
+		"migrateData": "Migrer les Données",
+		"migrateDescription": "Migrer les données existantes de la région actuelle vers la nouvelle région.",
+		"migrationStarted": "Migration démarrée",
+		"migrationComplete": "Migration terminée",
+		"migrationFailed": "Migration échouée",
+		"eu": {
+			"label": "Europe (Francfort)",
+			"location": "Francfort, Allemagne",
+			"compliance": "RGPD"
+		},
+		"us": {
+			"label": "États-Unis (Virginie)",
+			"location": "Virginie, États-Unis",
+			"compliance": "SOC2, CCPA"
+		},
+		"ru": {
+			"label": "Russie (Moscou)",
+			"location": "Moscou, Russie",
+			"compliance": "152-ФЗ, 242-ФЗ"
+		},
+		"defaultRegion": "Région par Défaut",
+		"regionHealth": "Santé de la Région",
+		"online": "En ligne",
+		"offline": "Hors ligne",
+		"latency": "Latence",
+		"unknown": "Inconnu"
 	}
 }

@@ -283,7 +283,12 @@
 			"createSuccess": "Feature flag créé",
 			"createError": "Échec de la création du feature flag",
 			"killSwitchEnabled": "Interrupteur d'urgence activé — flag désactivé pour toutes les orgs",
-			"killSwitchDisabled": "Interrupteur d'urgence désactivé"
+			"killSwitchDisabled": "Interrupteur d'urgence désactivé",
+			"auditLogButton": "Journal d'audit",
+			"auditLogTitle": "Historique des modifications",
+			"auditLogDescription": "Toutes les modifications apportées à ce feature flag, y compris qui les a faites et quand.",
+			"auditLogEmpty": "Aucune modification enregistrée pour ce flag pour le moment.",
+			"auditLogMore": "Et {count} entrées supplémentaires…"
 		}
 	}
 }

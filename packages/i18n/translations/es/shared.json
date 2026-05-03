@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Elegir plan",
 		"contactSales": "Contactar ventas",
-		"description": "Elige el plan que mejor te funcione.",
+		"description": "Elige el plan que mejor se adapte a ti.",
 		"getStarted": "Comenzar",
 		"month": "{count, plural, one {mes} other {{count} meses}}",
 		"monthly": "Mensual",
@@ -10,13 +10,13 @@
 			"basic": {
 				"description": "Perfecto para equipos pequeños.",
 				"features": {
-					"anotherFeature": "Otra función increíble",
+					"anotherFeature": "Otra característica increíble",
 					"limitedSupport": "Soporte limitado"
 				},
 				"title": "Básico"
 			},
 			"enterprise": {
-				"description": "Plan personalizado según tus necesidades",
+				"description": "Plan personalizado según tus requisitos",
 				"features": {
 					"enterpriseSupport": "Soporte empresarial",
 					"unlimitedProjects": "Proyectos ilimitados"
@@ -26,13 +26,13 @@
 			"free": {
 				"description": "Comienza gratis",
 				"features": {
-					"anotherFeature": "Otra función increíble",
+					"anotherFeature": "Otra característica increíble",
 					"limitedSupport": "Soporte limitado"
 				},
 				"title": "Gratis"
 			},
 			"lifetime": {
-				"description": "Compra una vez. Úsalo para siempre.",
+				"description": "Compra una vez. Usa para siempre.",
 				"features": {
 					"extendSupport": "Soporte extendido",
 					"noRecurringCosts": "Sin costos recurrentes"
@@ -40,9 +40,9 @@
 				"title": "De por vida"
 			},
 			"pro": {
-				"description": "Ideal para equipos",
+				"description": "Mejor para equipos",
 				"features": {
-					"anotherFeature": "Otra función increíble",
+					"anotherFeature": "Otra característica increíble",
 					"fiveMembers": "Hasta 5 miembros",
 					"fullSupport": "Soporte completo"
 				},
@@ -53,7 +53,7 @@
 		"recommended": "Recomendado",
 		"subscribe": "Suscribirse",
 		"title": "Precios",
-		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratis",
+		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratuita",
 		"year": "{count, plural, one {año} other {{count} años}}",
 		"yearly": "Anual",
 		"savePercent": "Ahorra {percent}%",
@@ -61,16 +61,54 @@
 		"perSeat": "asiento",
 		"nextInvoice": "Próxima factura",
 		"synonyms": "Sinónimos",
-		"curations": "Curaciones",
+		"curations": "Selecciones",
 		"customDomain": "Dominio personalizado",
 		"customBranding": "Marca personalizada",
 		"multiSearch": "Búsqueda múltiple",
-		"scopedTokens": "Tokens limitados",
+		"scopedTokens": "Tokens con ámbito",
 		"widget": "Widget"
 	},
 	"consent": {
-		"message": "Este sitio no utiliza cookies aún, pero hemos añadido este banner para mostrártelo.",
+		"message": "Este sitio aún no usa cookies, pero agregamos este banner para demostrártelo.",
 		"allow": "Permitir",
 		"decline": "Rechazar"
+	},
+	"regions": {
+		"title": "Residencia de Datos",
+		"description": "Elige dónde se almacenan tus datos de búsqueda. La residencia de datos garantiza que tus datos permanezcan dentro de los límites geográficos requeridos por tu marco de cumplimiento.",
+		"currentRegion": "Región Actual",
+		"regionLabel": "Región",
+		"changeRegion": "Cambiar Región",
+		"saving": "Guardando...",
+		"saved": "Región actualizada",
+		"saveError": "Error al actualizar la región",
+		"complianceFrameworks": "Cumplimiento",
+		"dataLocation": "Ubicación",
+		"migrateData": "Migrar Datos",
+		"migrateDescription": "Migrar datos existentes de la región actual a la nueva región.",
+		"migrationStarted": "Migración iniciada",
+		"migrationComplete": "Migración completada",
+		"migrationFailed": "Migración fallida",
+		"eu": {
+			"label": "Europa (Fráncfort)",
+			"location": "Fráncfort, Alemania",
+			"compliance": "GDPR"
+		},
+		"us": {
+			"label": "Estados Unidos (Virginia)",
+			"location": "Virginia, EE. UU.",
+			"compliance": "SOC2, CCPA"
+		},
+		"ru": {
+			"label": "Rusia (Moscú)",
+			"location": "Moscú, Rusia",
+			"compliance": "152-ФЗ, 242-ФЗ"
+		},
+		"defaultRegion": "Región Predeterminada",
+		"regionHealth": "Estado de la Región",
+		"online": "En línea",
+		"offline": "Fuera de línea",
+		"latency": "Latencia",
+		"unknown": "Desconocido"
 	}
 }

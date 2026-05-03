@@ -28,6 +28,142 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+// ─── Audit Log Action Labels ─────────────────────────────────────
+
+const AUDIT_ACTION_LABELS: Record<string, string> = {
+	created: "Created",
+	updated: "Updated",
+	deleted: "Deleted",
+	override_set: "Override Set",
+	override_removed: "Override Removed",
+};
+
+const AUDIT_ACTION_COLORS: Record<string, string> = {
+	created: "default",
+	updated: "secondary",
+	deleted: "destructive",
+	override_set: "secondary",
+	override_removed: "destructive",
+} as const;
+
+function formatAuditValue(action: string, field: string | null, value: string | null): string {
+	if (value === null) return "—";
+	if (action === "deleted") return "Flag removed";
+	if (field === "enabled" || field === "killSwitch") return value === "true" ? "On" : "Off";
+	if (field === "rolloutPercentage") return `${value}%`;
+	return value;
+}
+
+// ─── Audit Log Dialog ────────────────────────────────────────────
+
+function AuditLogDialog({
+	flagId,
+	flagKey,
+}: {
+	flagId: string;
+	flagKey: string;
+}) {
+	const t = useTranslations("admin.featureFlags");
+	const [open, setOpen] = useState(false);
+
+	const { data, isLoading } = useQuery({
+		...orpc.admin.featureFlags.auditLogs.list.queryOptions({
+			flagId,
+			limit: 50,
+			offset: 0,
+		}),
+		enabled: open,
+	});
+
+	return (
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button variant="outline" size="sm">
+					{t("auditLogButton")}
+				</Button>
+			</DialogTrigger>
+			<DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+				<DialogHeader>
+					<DialogTitle>
+						{t("auditLogTitle")}: {flagKey}
+					</DialogTitle>
+					<DialogDescription>{t("auditLogDescription")}</DialogDescription>
+				</DialogHeader>
+
+				{isLoading ? (
+					<div className="py-8 text-center text-sm text-foreground/60">
+						{t("loading")}
+					</div>
+				) : !data || data.entries.length === 0 ? (
+					<div className="py-8 text-center text-sm text-foreground/60">
+						{t("auditLogEmpty")}
+					</div>
+				) : (
+					<div className="gap-2 flex flex-col">
+						{data.entries.map((entry) => (
+							<div
+								key={entry.id}
+								className="p-3 flex flex-col gap-1.5 rounded-lg border text-sm"
+							>
+								<div className="flex items-center gap-2">
+									<Badge
+										variant={
+											(AUDIT_ACTION_COLORS[entry.action] as
+												| "default"
+												| "secondary"
+												| "destructive") ?? "outline"
+										}
+									>
+										{AUDIT_ACTION_LABELS[entry.action] ?? entry.action}
+									</Badge>
+									<span className="text-xs text-foreground/60">
+										{new Date(entry.createdAt).toLocaleString()}
+									</span>
+									{entry.organizationId && (
+										<span className="text-xs text-foreground/40 ml-auto font-mono">
+											org: {entry.organizationId.slice(0, 8)}…
+										</span>
+									)}
+								</div>
+
+								{entry.field && (
+									<div className="text-xs text-foreground/70">
+										<span className="font-medium">{entry.field}:</span>{" "}
+										{formatAuditValue(entry.action, entry.field, entry.oldValue)}
+										{entry.newValue !== null && (
+											<>
+												{" → "}
+												{formatAuditValue(entry.action, entry.field, entry.newValue)}
+											</>
+										)}
+									</div>
+								)}
+
+								{entry.performedById && (
+									<div className="text-xs text-foreground/40">
+										by{" "}
+										<span className="font-mono">
+											{entry.performedById.slice(0, 8)}…
+										</span>
+									</div>
+								)}
+							</div>
+						))}
+
+						{data.total > 50 && (
+							<p className="pt-2 text-xs text-center text-foreground/40">
+								{t("auditLogMore", { count: data.total - 50 })}
+							</p>
+						)}
+					</div>
+				)}
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+// ─── Main Feature Flags View ─────────────────────────────────────
+
 export function FeatureFlagsView() {
 	const t = useTranslations("admin.featureFlags");
 	const queryClient = useQueryClient();
@@ -79,6 +215,8 @@ export function FeatureFlagsView() {
 		</div>
 	);
 }
+
+// ─── Flag Card ───────────────────────────────────────────────────
 
 function FlagCard({
 	flag,
@@ -201,7 +339,8 @@ function FlagCard({
 						</div>
 					</div>
 
-					<div className="flex justify-end">
+					<div className="flex justify-between">
+						<AuditLogDialog flagId={flag.id} flagKey={flag.key} />
 						<Button
 							variant="destructive"
 							size="sm"
@@ -216,6 +355,8 @@ function FlagCard({
 		</Card>
 	);
 }
+
+// ─── Create Flag Dialog ──────────────────────────────────────────
 
 function CreateFlagDialog() {
 	const t = useTranslations("admin.featureFlags");

@@ -1,76 +1,114 @@
 {
 	"pricing": {
 		"choosePlan": "Выбрать тариф",
-		"contactSales": "Contact sales",
-		"description": "Выберите подходящий тариф",
-		"getStarted": "Начать бесплатно",
-		"month": "{count, plural, one {месяц} few {месяца} many {месяцев} other {месяца}}",
-		"monthly": "Помесячно",
+		"contactSales": "Связаться с продажами",
+		"description": "Выберите тариф, который подходит вам лучше всего.",
+		"getStarted": "Начать",
+		"month": "{count, plural, one {месяц} few {{count} месяца} other {{count} месяцев}}",
+		"monthly": "Ежемесячно",
 		"products": {
 			"basic": {
-				"description": "Perfect to small teams.",
+				"description": "Идеально для небольших команд.",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
+					"anotherFeature": "Ещё одна потрясающая функция",
+					"limitedSupport": "Ограниченная поддержка"
 				},
-				"title": "Basic"
+				"title": "Базовый"
 			},
 			"enterprise": {
-				"description": "Custom plan tailored to your requirements",
+				"description": "Индивидуальный план под ваши требования",
 				"features": {
-					"enterpriseSupport": "Enterprise support",
-					"unlimitedProjects": "Unlimited projects"
+					"enterpriseSupport": "Корпоративная поддержка",
+					"unlimitedProjects": "Неограниченное количество проектов"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Start for free",
+				"description": "Начните бесплатно",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
+					"anotherFeature": "Ещё одна потрясающая функция",
+					"limitedSupport": "Ограниченная поддержка"
 				},
-				"title": "Free"
+				"title": "Бесплатный"
 			},
 			"lifetime": {
-				"description": "Buy once. Use forever.",
+				"description": "Купите один раз. Пользуйтесь навсегда.",
 				"features": {
-					"extendSupport": "Extended support",
-					"noRecurringCosts": "No recurring costs"
+					"extendSupport": "Расширенная поддержка",
+					"noRecurringCosts": "Без регулярных платежей"
 				},
-				"title": "Lifetime"
+				"title": "Навсегда"
 			},
 			"pro": {
-				"description": "Best for teams",
+				"description": "Лучшее для команд",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"fiveMembers": "Up to 5 members",
-					"fullSupport": "Full support"
+					"anotherFeature": "Ещё одна потрясающая функция",
+					"fiveMembers": "До 5 участников",
+					"fullSupport": "Полная поддержка"
 				},
 				"title": "Pro"
 			}
 		},
-		"purchase": "Purchase",
+		"purchase": "Купить",
 		"recommended": "Рекомендуем",
-		"subscribe": "Subscribe",
-		"title": "Тарифы",
-		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
-		"year": "{count, plural, one {год} few {года} many {лет} other {года}}",
+		"subscribe": "Подписаться",
+		"title": "Цены",
+		"trialPeriod": "{days} {days, plural, one {день} few {{count} дня} other {{count} дней}} бесплатного пробного периода",
+		"year": "{count, plural, one {год} few {{count} года} other {{count} лет}}",
 		"yearly": "Ежегодно",
-		"savePercent": "Скидка {percent}%",
-		"billedAnnually": "Оплата за год",
+		"savePercent": "Экономия {percent}%",
+		"billedAnnually": "Оплата раз в год",
 		"perSeat": "место",
 		"nextInvoice": "Следующий счёт",
 		"synonyms": "Синонимы",
-		"curations": "Курация",
+		"curations": "Курации",
 		"customDomain": "Свой домен",
 		"customBranding": "Свой брендинг",
-		"multiSearch": "Мульти-поиск",
+		"multiSearch": "Мультипоиск",
 		"scopedTokens": "Ограниченные токены",
 		"widget": "Виджет"
 	},
 	"consent": {
-		"message": "Этот сайт пока не использует cookies, но мы добавили этот баннер чтобы показать вам.",
+		"message": "Этот сайт пока не использует куки, но мы добавили этот баннер, чтобы продемонстрировать его вам.",
 		"allow": "Разрешить",
 		"decline": "Отклонить"
+	},
+	"regions": {
+		"title": "Резидентность Данных",
+		"description": "Выберите, где будут храниться ваши поисковые данные. Резидентность данных гарантирует, что ваши данные остаются в пределах географических границ, требуемых вашей нормативной базой.",
+		"currentRegion": "Текущий Регион",
+		"regionLabel": "Регион",
+		"changeRegion": "Изменить Регион",
+		"saving": "Сохранение...",
+		"saved": "Регион обновлён",
+		"saveError": "Не удалось обновить регион",
+		"complianceFrameworks": "Соответствие",
+		"dataLocation": "Расположение",
+		"migrateData": "Перенести Данные",
+		"migrateDescription": "Перенести существующие данные из текущего региона в новый регион.",
+		"migrationStarted": "Миграция запущена",
+		"migrationComplete": "Миграция завершена",
+		"migrationFailed": "Миграция не удалась",
+		"eu": {
+			"label": "Европа (Франкфурт)",
+			"location": "Франкфурт, Германия",
+			"compliance": "GDPR (Общий регламент по защите данных)"
+		},
+		"us": {
+			"label": "США (Виргиния)",
+			"location": "Виргиния, США",
+			"compliance": "SOC2, CCPA"
+		},
+		"ru": {
+			"label": "Россия (Москва)",
+			"location": "Москва, Россия",
+			"compliance": "152-ФЗ, 242-ФЗ"
+		},
+		"defaultRegion": "Регион по Умолчанию",
+		"regionHealth": "Состояние Региона",
+		"online": "Онлайн",
+		"offline": "Офлайн",
+		"latency": "Задержка",
+		"unknown": "Неизвестно"
 	}
 }

@@ -1,10 +1,6 @@
 import { db } from "@repo/database";
 import {
-	aliasName,
 	AVAILABLE_REGIONS,
-	getTypesenseClient,
-	ingestCollectionDocuments,
-	migrateCollection,
 	migrateOrganizationData,
 } from "@repo/search";
 import { logger } from "@repo/logs";

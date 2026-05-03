@@ -1,4 +1,5 @@
 import "server-only";
+import type { Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 
 import { getTypesenseClient } from "./client";
@@ -218,13 +219,13 @@ export async function migrateOrganizationData(
 	const { db } = await import("@repo/database");
 
 	// Find all search indexes for this organization
-	const whereClause: Record<string, unknown> = { organizationId };
+	const where: Prisma.SearchIndexWhereInput = { organizationId };
 	if (indexSlugs && indexSlugs.length > 0) {
-		whereClause.slug = { in: indexSlugs };
+		where.slug = { in: indexSlugs as string[] };
 	}
 
 	const indexes = await db.searchIndex.findMany({
-		where: whereClause as Parameters<typeof db.searchIndex.findMany>[0],
+		where,
 		select: { id: true, slug: true },
 	});
 

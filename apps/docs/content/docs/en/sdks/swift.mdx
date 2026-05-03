@@ -1,0 +1,222 @@
+---
+title: Swift SDK
+description: Install and use the aacsearch-swift SDK for search, index management, synonyms, curations, and analytics from iOS, macOS, and visionOS apps.
+---
+
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+import { Steps, Step } from "fumadocs-ui/components/steps";
+
+# Swift SDK (`Aacsearch`)
+
+The `aacsearch-swift` Swift package provides a native `AacsearchClient` for iOS, macOS, and visionOS applications:
+
+| Client            | Scope     | Key Prefix    | Platform                        |
+| ----------------- | --------- | ------------- | ------------------------------- |
+| `AacsearchClient` | full CRUD | `ss_search_*` | iOS 15+, macOS 12+, visionOS 1+ |
+
+> **Note**: Currently a single client handles both search and admin operations. Use search-scoped keys (`ss_search_*`) for frontend use and admin-scoped keys in server-side code.
+
+## Installation
+
+### Swift Package Manager
+
+<Steps>
+<Step>
+Add the package to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/aacsearch/aacsearch-swift-sdk", from: "1.0.0")
+]
+```
+
+</Step>
+<Step>
+Or add via Xcode: **File → Add Package Dependencies** → enter the repository URL.
+
+</Step>
+</Steps>
+
+Requires Swift 5.9+.
+
+## Quick Start
+
+### Initialize the Client
+
+```swift
+import Aacsearch
+
+let client = AacsearchClient(apiKey: "ss_search_your_key_here")
+```
+
+Or with custom configuration:
+
+```swift
+let config = AacsearchConfig(
+    baseURL: "https://api.aacsearch.com",
+    apiKey: "ss_search_your_key_here",
+    timeout: 15
+)
+let client = AacsearchClient(config: config)
+```
+
+### Basic Search
+
+```swift
+let results = try await client.search(
+    "products",
+    query: "nike shoes",
+    queryBy: "name,description",
+    filterBy: "price:>50",
+    sortBy: "price:desc",
+    page: 1,
+    perPage: 20
+)
+
+print("Found \(results.found) results")
+for hit in results.hits {
+    print(hit.document)
+}
+```
+
+### Multi-Search
+
+Execute multiple queries in a single round-trip:
+
+```swift
+let multiResults = try await client.multiSearch(searches: [
+    MultiSearchQuery(q: "nike", queryBy: "name", perPage: 5),
+    MultiSearchQuery(q: "adidas", queryBy: "name", perPage: 5),
+])
+
+for result in multiResults.results {
+    print("Query returned \(result.found) hits")
+}
+```
+
+## Document Operations
+
+### Upsert Documents
+
+```swift
+// Single document
+let result = try await client.upsertDocument("products", document: [
+    "id": "123",
+    "name": "Nike Air Max",
+    "price": 129.99,
+    "description": "Classic running shoes"
+])
+
+// Batch upsert (up to 5000)
+let batchResult = try await client.batchUpsertDocuments("products", documents: [
+    ["id": "1", "name": "Product A", "price": 19.99],
+    ["id": "2", "name": "Product B", "price": 29.99],
+])
+```
+
+### Delete Documents
+
+```swift
+// Single document
+try await client.deleteDocument("products", documentId: "123")
+
+// Batch delete
+try await client.batchDeleteDocuments("products", ids: ["1", "2"])
+```
+
+### List & Browse Documents
+
+```swift
+let documents = try await client.listDocuments(
+    "products",
+    page: 1,
+    perPage: 50
+)
+for doc in documents.hits {
+    print(doc.id, doc.document)
+}
+```
+
+## Index Management
+
+```swift
+// List indexes for a project
+let indexes = try await client.listIndexes(projectId: "proj_xxx")
+
+// Get index stats
+let stats = try await client.getIndexStats("products")
+print("Document count: \(stats.documentCount)")
+
+// Create index
+let newIndex = try await client.createIndex(
+    slug: "products",
+    displayName: "Products",
+    fields: [
+        ["name": "title", "type": "string"],
+        ["name": "price", "type": "float", "facet": true],
+        ["name": "category", "type": "string", "facet": true],
+    ],
+    defaultSortingField: "price"
+)
+```
+
+## Synonyms & Curations
+
+```swift
+// List synonyms
+let synonyms = try await client.listSynonyms("products")
+
+// Create synonym
+try await client.createSynonym("products", synonym: [
+    "root": "shoe",
+    "synonyms": ["sneaker", "trainer"]
+])
+
+// List curations
+let curations = try await client.listCurations("products")
+```
+
+## Error Handling
+
+```swift
+import Aacsearch
+
+do {
+    let results = try await client.search("products", query: "laptop")
+    print("Found \(results.found) results")
+} catch let error as AacsearchError {
+    switch error.code {
+    case .rateLimited:
+        // Back off and retry
+        let retryAfter = error.retryAfter ?? 15
+        print("Rate limited, retry after \(retryAfter)s")
+    case .unauthorized:
+        // API key is invalid
+        print("Invalid API key: \(error.message)")
+    case .notFound:
+        // Index not found
+        print("Index not found: \(error.message)")
+    case .quotaExceeded:
+        // Monthly quota exhausted
+        print("Quota exceeded, upgrade your plan")
+    default:
+        print("Error \(error.statusCode): \(error.message)")
+    }
+} catch {
+    print("Unexpected error: \(error)")
+}
+```
+
+## API Reference
+
+| Category         | Methods                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| Search           | `search`, `multiSearch`                                                                             |
+| Documents        | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Index Management | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Synonyms         | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Curations        | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Sorting Fields   | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| API Keys         | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analytics        | `getAnalytics`, `getUsage`                                                                          |
+| Facets           | `listFacets`                                                                                        |

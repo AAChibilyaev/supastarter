@@ -36,7 +36,7 @@ export function HeroSection() {
 					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-full border">
 						<span className="font-semibold text-primary">{t("home.hero.new")}</span>
 						<span className="h-4 w-px bg-border" />
-						<span className="font-medium text-muted-foreground">
+						<span className="font-light text-muted-foreground">
 							{t("home.hero.featureBadge")}
 						</span>
 					</div>
@@ -48,7 +48,7 @@ export function HeroSection() {
 				</h1>
 
 				{/* Subtitle */}
-				<p className="mt-6 max-w-2xl text-base sm:text-lg mx-auto text-center text-balance text-muted-foreground">
+				<p className="mt-6 max-w-2xl text-base sm:text-lg font-light mx-auto text-center text-balance text-muted-foreground">
 					{t("home.hero.subtitle")}
 				</p>
 
@@ -78,7 +78,7 @@ export function HeroSection() {
 						<Badge
 							key={label}
 							status="info"
-							className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
+							className="gap-1.5 px-3 py-1 text-xs font-light shrink-0 whitespace-nowrap normal-case"
 						>
 							<Icon className="size-3" />
 							{label}
@@ -111,7 +111,7 @@ export function HeroSection() {
 							<div className="text-2xl font-bold sm:text-3xl text-foreground tabular-nums">
 								{value}
 							</div>
-							<div className="mt-1 text-xs sm:text-sm text-muted-foreground">
+							<div className="mt-1 text-xs sm:text-sm font-light text-muted-foreground">
 								{label}
 							</div>
 						</div>

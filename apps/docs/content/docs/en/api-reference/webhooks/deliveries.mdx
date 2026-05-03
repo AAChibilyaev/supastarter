@@ -1,0 +1,49 @@
+---
+title: Webhook Delivery Log
+description: Query recent webhook delivery events for your organization.
+---
+
+# Webhook Delivery Log
+
+`GET /api/webhooks/deliveries`
+
+Returns recent webhook delivery events recorded for the organization. Each entry represents one delivery attempt.
+
+## Query Parameters
+
+| Parameter | Type      | Default | Description                                  |
+| --------- | --------- | ------- | -------------------------------------------- |
+| `limit`   | `integer` | `50`    | Maximum number of events to return (max 200) |
+| `offset`  | `integer` | `0`     | Number of events to skip for pagination      |
+
+## Response
+
+`200 OK`
+
+```json
+{
+	"events": [
+		{
+			"id": "evt_xxx",
+			"indexId": "idx_xxx",
+			"type": "webhook_delivery",
+			"count": 150,
+			"metadata": {
+				"source": "webhook",
+				"event": "ingest.completed",
+				"status": "delivered",
+				"signatureVerified": true
+			},
+			"createdAt": "2026-05-03T12:00:00.000Z"
+		}
+	],
+	"total": 42
+}
+```
+
+## Errors
+
+| Status | Error Code     | Description                      |
+| ------ | -------------- | -------------------------------- |
+| 401    | `unauthorized` | Missing or invalid API key       |
+| 403    | `forbidden`    | Key does not have required scope |

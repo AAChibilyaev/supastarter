@@ -24,7 +24,7 @@ export function PricingPlans() {
 		<section id="pricing" className="py-16 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<p className="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+					<p className="mb-3 text-xs font-light tracking-widest text-muted-foreground uppercase">
 						{t("home.pricing.badge")}
 					</p>
 
@@ -32,7 +32,7 @@ export function PricingPlans() {
 						{t("home.pricing.title")}
 					</h2>
 
-					<p className="mt-4 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
+					<p className="mt-4 text-lg font-light max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("home.pricing.subtitle")}
 					</p>
 				</div>
@@ -86,7 +86,7 @@ export function PricingPlans() {
 										<p className="font-semibold text-base text-foreground">
 											{t(`home.pricing.plans.${plan.key}.name`)}
 										</p>
-										<p className="mt-1 text-sm text-pretty text-muted-foreground">
+										<p className="mt-1 text-sm font-light text-pretty text-muted-foreground">
 											{t(`home.pricing.plans.${plan.key}.description`)}
 										</p>
 									</div>
@@ -96,7 +96,7 @@ export function PricingPlans() {
 											{t(`home.pricing.plans.${plan.key}.price`)}
 										</span>
 										{plan.key !== "enterprise" && (
-											<span className="text-sm text-muted-foreground">
+											<span className="text-sm font-light text-muted-foreground">
 												{interval === "monthly"
 													? t("home.pricing.perMonth")
 													: t("home.pricing.perYear")}
@@ -127,7 +127,7 @@ export function PricingPlans() {
 												className="gap-3 text-sm flex items-start"
 											>
 												<CheckIcon className="mt-0.5 size-4 shrink-0 text-foreground/40" />
-												<span className="text-pretty text-muted-foreground">
+												<span className="font-light text-pretty text-muted-foreground">
 													{feature}
 												</span>
 											</li>

@@ -1,0 +1,185 @@
+---
+title: v1 to v2 Migration Guide
+description: Plan your migration from the AACsearch v1 REST API to v2, including timeline, breaking changes, and step-by-step upgrade instructions.
+---
+
+# v1 to v2 Migration Guide
+
+This guide helps you migrate from the AACsearch v1 REST API to v2. The v2 API represents a major step forward with improved search capabilities, new endpoints, auto-generated SDKs, and enhanced developer experience.
+
+> **v2 status**: Under active development. See [API Versioning & Deprecation](/api-reference/versioning-deprecation) for the current version lifecycle status.
+
+## Timeline
+
+| Milestone       | Date    | Impact                                      |
+| --------------- | ------- | ------------------------------------------- |
+| v2 Beta         | Q3 2026 | Early access for select customers           |
+| v2 GA           | Q4 2026 | General availability, v1 enters deprecation |
+| v1 Sunset       | Q2 2027 | v1 endpoints begin returning `410 Gone`     |
+| v1 Full Removal | Q3 2027 | v1 API fully decommissioned                 |
+
+All dates are estimates and subject to change. Subscribe to the [Changelog](/changelog) for announcements.
+
+## What's New in v2
+
+### API Changes
+
+| Area                | v1                                     | v2                                                       |
+| ------------------- | -------------------------------------- | -------------------------------------------------------- |
+| **Base path**       | `/api/v1/...`                          | `/api/v2/...`                                            |
+| **Search**          | Basic Typesense query passthrough      | Enhanced search with hybrid (semantic + keyword) ranking |
+| **Authentication**  | Bearer Token (API key)                 | Bearer Token + OAuth 2.0 client credentials              |
+| **Error format**    | `{ "error": "...", "message": "..." }` | Extended with `requestId`, `details`, `documentationUrl` |
+| **Rate limiting**   | Per-key sliding window                 | Per-key + per-org hierarchical rate limits               |
+| **SDKs**            | Hand-written per language              | Auto-generated from OpenAPI 3.1 spec                     |
+| **Responses**       | Inline schemas                         | Reusable `$ref` components                               |
+| **Pagination**      | `page` / `perPage`                     | Cursor-based pagination via `after` / `before`           |
+| **Writable fields** | All fields                             | PATCH semantics with explicit field allowlists           |
+
+### New Endpoints
+
+| Endpoint                                      | Description                                     |
+| --------------------------------------------- | ----------------------------------------------- |
+| `GET /v2/projects/:projectId/recommendations` | Product recommendations engine                  |
+| `POST /v2/indexes/:indexId/search/vector`     | Pure vector similarity search                   |
+| `GET /v2/indexes/:indexId/curations`          | Curation management (moved to stable tier)      |
+| `POST /v2/indexes/:indexId/documents/export`  | Filtered document export with cursor pagination |
+| `GET /v2/organization/usage`                  | Enhanced usage analytics with breakdowns        |
+| `POST /v2/webhooks`                           | Webhook subscription management                 |
+
+### SDK Improvements
+
+All v2 SDKs are auto-generated from the OpenAPI 3.1 specification, ensuring:
+
+- **Complete type coverage** — all request and response types are fully typed
+- **Consistent naming** — follows each language's idiomatic conventions
+- **Automatic updates** — SDKs are regenerated when the spec changes
+- **Tree-shakeable** (JS/TS) — import only what you use
+
+The auto-generated SDKs replace the hand-written v1 clients:
+
+| Language | v1 SDK              | v2 SDK                       |
+| -------- | ------------------- | ---------------------------- |
+| Node.js  | `@aacsearch/client` | `@aacsearch/js-sdk`          |
+| Python   | `aacsearch`         | `aacsearch-python`           |
+| Ruby     | `aacsearch-ruby`    | `aacsearch-ruby` (v2 branch) |
+| Go       | `aacsearch-go`      | `aacsearch-go` (v2 branch)   |
+| Swift    | —                   | `aacsearch-swift` (v2)       |
+
+## Breaking Changes
+
+### Required Changes
+
+| Change                | Migration Action                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| **Base URL**          | Replace `/api/v1/` with `/api/v2/` in all request paths                              |
+| **Error format**      | Update error parsers — v2 adds `requestId`, `details`, and `documentationUrl` fields |
+| **Pagination**        | Replace `page`/`perPage` with cursor-based `after`/`before` parameters               |
+| **Response envelope** | v2 wraps list responses in a `{ "data": [...], "meta": {...} }` envelope             |
+
+### Non-Breaking Additions
+
+These changes are backward-compatible additions on top of v1:
+
+- New `X-Request-Id` header on all responses
+- New `X-RateLimit-Org-*` headers for organization-level rate limits
+- Optional `fields` query parameter for sparse fieldsets
+- Optional `include` query parameter for embedded relationships
+
+## Step-by-Step Migration
+
+### Step 1: Audit Your API Usage
+
+```bash
+# Find all v1 API references in your codebase
+rg 'api/v1/' .
+rg 'ss_search_' .
+rg 'aa_admin_' .
+```
+
+### Step 2: Update Base URLs
+
+Replace all v1 API paths with v2:
+
+```diff
+- https://api.aacsearch.com/api/v1/indexes/:indexId/search
++ https://api.aacsearch.com/api/v2/indexes/:indexId/search
+```
+
+### Step 3: Update Error Handling
+
+v2 error responses include additional fields:
+
+```typescript
+// v1 (unchanged)
+interface V1Error {
+	error: string;
+	message: string;
+}
+
+// v2 (extended)
+interface V2Error {
+	error: string;
+	message: string;
+	requestId: string; // NEW — trace ID for support
+	details?: Record<string, unknown>; // NEW — validation errors
+	documentationUrl?: string; // NEW — link to docs
+}
+```
+
+### Step 4: Migrate Pagination
+
+```diff
+- GET /api/v1/indexes/:indexId/documents?page=2&perPage=20
++ GET /api/v2/indexes/:indexId/documents?after=eyJpZCI6InNvbWVJRCJ9&limit=20
+```
+
+The `after` cursor is returned in the `meta.nextCursor` field of list responses.
+
+### Step 5: Update SDK
+
+```diff
+- npm install @aacsearch/client
++ npm install @aacsearch/js-sdk
+```
+
+```diff
+- import { AdminClient } from "@aacsearch/client";
++ import { AACsearchClient } from "@aacsearch/js-sdk";
+```
+
+### Step 6: Test and Validate
+
+1. Run your test suite against the v2 staging environment
+2. Verify that all error-handling paths work with the extended error format
+3. Verify pagination works with cursor-based parameters
+4. Check that rate limit headers are parsed correctly
+
+## Migration Support
+
+- **Migration window**: v1 remains fully supported for **6 months** after v2 GA
+- **Staging environment**: Test your migration at `https://staging-api.aacsearch.com/api/v2/`
+- **Support channels**: Open a support ticket or email api@aacsearch.com for help
+- **Changelog**: Watch the [Changelog](/changelog) for migration-related announcements
+
+## FAQ
+
+### Will v1 SDKs work with the v2 API?
+
+No. v1 SDKs use v1 API paths and v1 response formats. You must update to the v2 SDK or update the base URL.
+
+### Can I use v2 API keys with v1?
+
+Yes. API keys are version-agnostic. A key created in the dashboard works with both v1 and v2.
+
+### Do scoped tokens work with v2?
+
+Yes. Scoped tokens are a separate authentication mechanism and work with both versions.
+
+### What if I miss the migration window?
+
+v1 endpoints will return `410 Gone` after the sunset date. We will send multiple advance notices via email and dashboard notifications before the cutoff.
+
+### Will v2 have a new pricing model?
+
+v2 uses the same search-unit pricing as v1. No additional charges for using v2.

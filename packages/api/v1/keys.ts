@@ -39,6 +39,9 @@ export const keysApp = new Hono()
 			allowedOrigins: z.array(z.string().min(3).max(255)).max(20).optional(),
 			rateLimitPerMinute: z.number().int().min(1).max(60_000).optional(),
 			expiresAt: z.string().datetime().optional(),
+			autodelete: z.boolean().optional(),
+			collectionPattern: z.string().max(500).optional(),
+			cacheTtl: z.number().int().min(1).max(86_400).optional(),
 		});
 
 		let body: unknown;

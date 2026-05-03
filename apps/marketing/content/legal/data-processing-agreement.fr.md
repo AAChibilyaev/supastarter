@@ -47,6 +47,7 @@ Chacune dénommée une **"Partie"** , collectivement les **"Parties"** .
 3.1 **Nature et Finalité du Traitement :** Le Sous-traitant fournit une plateforme de recherche en tant que service qui indexe, stocke et récupère les données soumises par le Responsable du Traitement afin de permettre la recherche en texte intégral, la recherche à facettes et les fonctionnalités de recherche connexes sur l'application, le site Web ou les propriétés numériques du Responsable.
 
 3.2 **Catégories de Données à Caractère Personnel :** Selon la nature de l'utilisation du Service par le Responsable, les Données à Caractère Personnel traitées peuvent inclure :
+
 - Noms et prénoms
 - Adresses électroniques
 - Adresses IP
@@ -55,13 +56,14 @@ Chacune dénommée une **"Partie"** , collectivement les **"Parties"** .
 - Requêtes de recherche et données de comportement de navigation
 - Toute autre Donnée à Caractère Personnel que le Responsable choisit de soumettre pour indexation
 
-3.3 **Catégories de Personnes Concernées :** Les Personnes Concernées peuvent inclure :
+    3.3 **Catégories de Personnes Concernées :** Les Personnes Concernées peuvent inclure :
+
 - Les utilisateurs finaux de l'application ou du site Web du Responsable
 - Les clients ou visiteurs du Responsable
 - Les employés ou prestataires du Responsable
 - Toute autre personne dont les Données à Caractère Personnel sont soumises au Service par le Responsable
 
-3.4 **Durée du Traitement :** Le Traitement est effectué pendant la durée du Contrat Principal. Après résiliation, le Sous-traitant supprime ou restitue toutes les Données à Caractère Personnel conformément à la Clause 12.
+    3.4 **Durée du Traitement :** Le Traitement est effectué pendant la durée du Contrat Principal. Après résiliation, le Sous-traitant supprime ou restitue toutes les Données à Caractère Personnel conformément à la Clause 12.
 
 ## 4. Obligations du Responsable du Traitement
 
@@ -179,12 +181,12 @@ Chacune dénommée une **"Partie"** , collectivement les **"Parties"** .
 
 ## Annexe 1 : Liste des Sous-traitants Ultérieurs
 
-| Nom | Siège Social | Activité de Traitement | Localisation du Centre de Données |
-|-----|-------------|----------------------|-----------------------------------|
-| [Amazon Web Services (AWS)] | [Adresse d'AWS] | Hébergement cloud, stockage, calcul | [p. ex., eu-west-1 (Irlande), eu-central-1 (Francfort)] |
-| [Sous-traitant Ultérieur supplémentaire] | [Adresse] | [Activité] | [Localisation] |
+| Nom                                      | Siège Social    | Activité de Traitement              | Localisation du Centre de Données                       |
+| ---------------------------------------- | --------------- | ----------------------------------- | ------------------------------------------------------- |
+| [Amazon Web Services (AWS)]              | [Adresse d'AWS] | Hébergement cloud, stockage, calcul | [p. ex., eu-west-1 (Irlande), eu-central-1 (Francfort)] |
+| [Sous-traitant Ultérieur supplémentaire] | [Adresse]       | [Activité]                          | [Localisation]                                          |
 
-*Liste actualisée disponible à : [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)*
+_Liste actualisée disponible à : [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)_
 
 ---
 
@@ -193,18 +195,21 @@ Chacune dénommée une **"Partie"** , collectivement les **"Parties"** .
 **A. Liste des Parties**
 
 **Exportateur de Données (Responsable du Traitement) :**
+
 - Nom : [Nom du Client]
 - Adresse : [Adresse du Client]
 - Contact : [E-mail du Client]
 - Rôle : Responsable du Traitement
 
 **Importateur de Données (Sous-traitant) :**
+
 - Nom : AACsearch
 - Adresse : [Adresse d'AACsearch]
 - Contact : privacy@aacsearch.com
 - Rôle : Sous-traitant
 
 **B. Description du Transfert**
+
 - Catégories de Personnes Concernées : Selon la Clause 3.3
 - Catégories de Données : Selon la Clause 3.2
 - Données Sensibles : Aucune (sauf spécification écrite)
@@ -223,4 +228,4 @@ Les mesures de sécurité détaillées sont maintenues dans la Documentation de 
 
 ---
 
-*Le présent Accord de Traitement des Données est un document juridiquement contraignant. Les Parties reconnaissent avoir lu et compris ses termes.*
+_Le présent Accord de Traitement des Données est un document juridiquement contraignant. Les Parties reconnaissent avoir lu et compris ses termes._

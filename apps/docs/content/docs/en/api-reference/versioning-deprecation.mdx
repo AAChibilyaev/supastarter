@@ -1,0 +1,186 @@
+---
+title: API Versioning & Deprecation Policy
+description: How AACsearch versions its public REST API, what versioning scheme we follow, and the deprecation lifecycle for endpoints.
+---
+
+# API Versioning & Deprecation Policy
+
+AACsearch uses **URL-path versioning** for its public REST API. All requests are made to a versioned base path:
+
+| Version | Base Path          | Status                                                                           |
+| ------- | ------------------ | -------------------------------------------------------------------------------- |
+| v1      | `/api/v1/...`      | **Active** — current stable release                                              |
+| v2      | _(in development)_ | Beta expected Q3 2026 — see [Migration Guide](/api-reference/v1-to-v2-migration) |
+
+## Versioning Strategy
+
+### URL-Path Versioning
+
+The API version is embedded in the URL path as a prefix:
+
+```
+GET /api/v1/indexes/{indexId}
+POST /api/v1/indexes/{indexId}/search
+```
+
+This approach gives you explicit control over which version your integration uses. You pin a version in your code and upgrade on your own schedule.
+
+### Semantic Versioning for the API
+
+We follow a simplified semver-like convention for API versions:
+
+- **Major version** (`v1`, `v2`, ...) — breaking changes. Path changes, parameter removals, response format changes.
+- **Minor version** (implicit within a major version) — additive changes only. New endpoints, optional parameters, new response fields. Never breaks existing clients.
+- **Patch** — bug fixes, documentation improvements. No API contract changes.
+
+Within a major version, backward-compatible additions follow these rules:
+
+- New response fields are always added — existing fields never change type or are removed
+- New optional request parameters may be added
+- New endpoints may be introduced
+- Existing endpoint semantics remain stable
+
+### Content Negotiation (Optional)
+
+For advanced clients that need to pin to a specific version at a finer granularity, we support an optional `Accept-Version` header:
+
+```
+Accept-Version: v1.0
+```
+
+When absent, the latest version matching the URL prefix is used.
+
+## Current Version: v1
+
+The v1 API is stable and production-ready. It covers:
+
+- **Projects** — organization management
+- **Indexes** — create, read, update, delete search indexes
+- **Documents** — index, search, export, delete documents (single and batch)
+- **Search** — full-text search, faceted search, multi-search
+- **Suggestions** — autocomplete and query suggestions
+- **Spell Check** — multi-language spell correction with keyboard layout fix
+- **API Keys** — create, list, revoke scoped API keys
+- **Analytics** — aggregated analytics and raw usage data
+- **Synonyms** — manage search synonym groups
+- **Curations** — pinned and hidden document overrides
+- **Sorting** — configure sortable fields
+
+See the [API Reference](/api-reference) for the complete endpoint list.
+
+## Migrating to a New Version
+
+When a new API version is released, we provide:
+
+1. **Migration guide** — step-by-step migration instructions with before/after examples
+2. **Backward-compatibility window** — the previous major version remains available for at least **6 months** after the new version's GA release
+3. **Changelog entries** — every breaking change is documented in the [Changelog](/changelog)
+
+### Best Practices for Upgrades
+
+1. **Pin your version** — always specify the version in your API URL (`/api/v1/...`)
+2. **Treat unknown response fields as optional** — new fields may appear in responses; your code should not break on unrecognised fields
+3. **Watch the Changelog** — subscribe to the [Changelog RSS](/changelog) for version announcement notifications
+4. **Test against staging** — use the [Local Development](/getting-started/local-development) setup to validate your integration against a new version before going to production
+
+## Deprecation Policy
+
+### Deprecation Lifecycle
+
+An endpoint or parameter moves through these stages:
+
+```
+Active → Deprecated → Sunset → Removed
+```
+
+### Stage 1: Active
+
+The endpoint is fully supported. No removal timeline exists.
+
+### Stage 2: Deprecated
+
+The endpoint is still functional but scheduled for removal. During this phase:
+
+| Signal                   | What to expect                                                                                 |
+| ------------------------ | ---------------------------------------------------------------------------------------------- |
+| **Documentation notice** | The endpoint is marked with a `⚠️ Deprecated` badge in the API Reference                       |
+| **Warning header**       | Responses include a `Sunset: <date>` and `Warning: 299 - "This endpoint is deprecated"` header |
+| **Changelog entry**      | Deprecation is announced in the Changelog with migration instructions                          |
+| **Migration period**     | Minimum **6 months** from the deprecation announcement date                                    |
+
+### Stage 3: Sunset
+
+The endpoint is approaching removal. It still works but:
+
+- No bug fixes or performance improvements will be applied
+- No new features will be added
+- Monitoring and alerting are reduced
+- The endpoint may return 5xx errors under load without SLA
+
+### Stage 4: Removed
+
+The endpoint returns `410 Gone`. No forward compatibility is possible.
+
+### What Triggers a Deprecation
+
+An endpoint or parameter may be deprecated for:
+
+| Reason                                              | Example                                            |
+| --------------------------------------------------- | -------------------------------------------------- |
+| A newer, improved version of the same functionality | v2 search with better ranking replaces v1 search   |
+| The feature was experimental and is being removed   | Unstable preview endpoints                         |
+| A parameter was renamed for consistency             | `page_size` → `perPage`                            |
+| Security concerns                                   | Removing a parameter that allows unsafe operations |
+
+## Sunset Headers
+
+Deprecated endpoints emit standard HTTP headers to help you automate migration:
+
+```
+Sunset: Sat, 01 Nov 2026 23:59:59 GMT
+Warning: 299 - "This endpoint is deprecated. Use GET /api/v2/indexes/{indexId}/search instead."
+Deprecation: true
+```
+
+| Header        | Description                                        |
+| ------------- | -------------------------------------------------- |
+| `Sunset`      | The date after which the endpoint will be removed  |
+| `Warning`     | Human-readable migration advice                    |
+| `Deprecation` | Boolean flag indicating the endpoint is deprecated |
+
+## Breaking Changes Policy
+
+A "breaking change" is any modification that requires you to update your integration:
+
+- Removing or renaming an endpoint
+- Removing a field from a response
+- Making a previously optional parameter required
+- Changing the type or format of a response field
+- Changing authentication requirements
+
+The following are **not** breaking changes:
+
+- Adding new endpoints
+- Adding new optional request parameters
+- Adding new fields to responses
+- Changing the order of fields in responses
+- Bug fixes that align behaviour with documented semantics
+- Rate limit adjustments
+- Error message string changes
+
+## Experimental Features
+
+Occasionally we release endpoints with an `x-` prefix or under an `/experimental/` path:
+
+```
+POST /api/v1/experimental/semantic-search
+```
+
+Experimental endpoints:
+
+- May change or be removed without notice
+- Do not follow the deprecation lifecycle
+- Are not covered by SLA guarantees
+- Return a `X-Experimental: true` header
+
+When an experimental feature graduates to stable, it gets a proper v1 or v2 endpoint and enters the standard lifecycle.

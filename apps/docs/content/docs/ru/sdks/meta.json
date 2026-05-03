@@ -1,4 +1,1 @@
-{
-	"title": "SDK",
-	"pages": ["node", "python", "go"]
-}
+{"title": "SDK", "pages": ["node", "python", "go", "ruby", "swift"]}

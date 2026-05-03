@@ -1,0 +1,60 @@
+---
+title: Create Webhook
+description: Register a new outgoing webhook endpoint to receive event notifications from AACsearch.
+---
+
+# Create Webhook
+
+`POST /api/webhooks`
+
+Registers a new webhook endpoint and subscribes it to specified events.
+
+## Request
+
+### Body
+
+| Field    | Type       | Required | Description                                         |
+| -------- | ---------- | -------- | --------------------------------------------------- |
+| `url`    | `string`   | Yes      | HTTPS endpoint URL that will receive event payloads |
+| `events` | `string[]` | Yes      | Array of event types to subscribe to (min 1)        |
+
+### Events
+
+| Event               | Description                        |
+| ------------------- | ---------------------------------- |
+| `index.created`     | A new search index is created      |
+| `index.deleted`     | A search index is deleted          |
+| `ingest.completed`  | A document batch ingest finishes   |
+| `reindex.completed` | A full reindex operation completes |
+
+### Example
+
+```json
+{
+	"url": "https://hooks.example.com/aacsearch-events",
+	"events": ["ingest.completed", "index.created"]
+}
+```
+
+## Response
+
+`201 Created`
+
+```json
+{
+	"id": "wh_l0x5_abc123",
+	"url": "https://hooks.example.com/aacsearch-events",
+	"events": ["ingest.completed", "index.created"],
+	"active": true,
+	"createdAt": "2026-05-03T12:00:00.000Z"
+}
+```
+
+## Errors
+
+| Status | Error Code        | Description                          |
+| ------ | ----------------- | ------------------------------------ |
+| 400    | `invalid_request` | Missing or invalid `url` or `events` |
+| 401    | `unauthorized`    | Missing or invalid API key           |
+| 403    | `forbidden`       | Key does not have admin scope        |
+| 404    | `not_found`       | Organization not found               |

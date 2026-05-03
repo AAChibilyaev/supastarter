@@ -1,16 +1,16 @@
 {
-    "pages": [
-        "index",
-        "overview",
-        "getting-started",
-        "search-api",
-        "api-reference",
-        "sdks",
-        "migration",
-        "connectors",
-        "dashboard",
-        "operations",
-        "security",
-        "changelog"
-    ]
+	"pages": [
+		"index",
+		"overview",
+		"getting-started",
+		"search-api",
+		"api-reference",
+		"sdks",
+		"migration",
+		"connectors",
+		"dashboard",
+		"operations",
+		"security",
+		"changelog"
+	]
 }

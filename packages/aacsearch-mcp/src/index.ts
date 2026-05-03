@@ -174,6 +174,73 @@ const revokeKeyInputSchema = z.object({
 	keyId: z.string().min(1, "keyId is required"),
 });
 
+// ── New tool schemas (AAC-119) ─────────────────────────────────────
+
+const getRecommendationsInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	type: z.enum([
+		"also_viewed",
+		"frequently_bought_together",
+		"personalized",
+		"similar",
+		"trending",
+	]),
+	userId: z.string().optional(),
+	itemId: z.string().optional(),
+	limit: z.number().int().min(1).max(100).optional().default(10),
+});
+
+const trackEventInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	type: z.enum([
+		"search_query",
+		"zero_results",
+		"result_click",
+		"widget_open",
+		"filter_used",
+		"conversion",
+		"visit",
+	]),
+	sessionId: z.string().min(1).max(64).optional(),
+	anonymousUserId: z.string().min(1).max(64).optional(),
+	query: z.string().max(512).optional(),
+	productId: z.string().max(128).optional(),
+	position: z.number().int().min(1).max(10_000).optional(),
+	locale: z.string().max(16).optional(),
+	metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+const triggerReindexInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	indexId: z.string().min(1, "indexId is required"),
+});
+
+const getAnalyticsInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+	period: z.enum(["last7", "last30"]).optional().default("last7"),
+});
+
+const triggerCrawlerInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+	url: z.string().url(),
+	indexId: z.string().min(1, "indexId is required"),
+	maxPages: z.number().int().min(1).max(10000).optional().default(100),
+	selector: z.string().optional(),
+});
+
+const listConnectorSyncJobsInputSchema = z.object({
+	baseUrl: z.string().min(1, "baseUrl is required"),
+	apiKey: z.string().min(1, "apiKey is required"),
+	projectId: z.string().min(1, "projectId is required"),
+});
+
 // ── MCP tool definitions ────────────────────────────────────────────────
 
 interface ToolDefinition {
@@ -938,6 +1005,149 @@ async function toolRevokeKey(params: Record<string, unknown>): Promise<unknown> 
 	return v1Fetch("DELETE", url, apiKey);
 }
 
+/**
+ * Get recommendations via the V1 REST API.
+ * POST /v1/recommendations
+ */
+async function toolGetRecommendations(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = getRecommendationsInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, type, userId, itemId, limit } = parsed.data;
+	const url = v1Url(baseUrl, "/v1/recommendations");
+
+	const body: Record<string, unknown> = { type, limit };
+	if (userId !== undefined) body.userId = userId;
+	if (itemId !== undefined) body.itemId = itemId;
+
+	return v1Fetch("POST", url, apiKey, body);
+}
+
+/**
+ * Track an analytics event via the public events API.
+ * POST /api/events/track
+ */
+async function toolTrackEvent(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = trackEventInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, type, sessionId, anonymousUserId, query, productId, position, locale, metadata } =
+		parsed.data;
+	const url = v1Url(baseUrl, "/api/events/track");
+
+	const body: Record<string, unknown> = { type };
+	if (sessionId !== undefined) body.sessionId = sessionId;
+	if (anonymousUserId !== undefined) body.anonymousUserId = anonymousUserId;
+	if (query !== undefined) body.query = query;
+	if (productId !== undefined) body.productId = productId;
+	if (position !== undefined) body.position = position;
+	if (locale !== undefined) body.locale = locale;
+	if (metadata !== undefined) body.metadata = metadata;
+
+	return v1Fetch("POST", url, apiKey, body);
+}
+
+/**
+ * Trigger a full reindex via the V1 REST API.
+ * POST /v1/indexes/:indexId/reindex
+ */
+async function toolTriggerReindex(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = triggerReindexInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, indexId } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/indexes/${encodeURIComponent(indexId)}/reindex`);
+	return v1Fetch("POST", url, apiKey);
+}
+
+/**
+ * Get analytics via the V1 REST API.
+ * GET /v1/projects/:projectId/analytics?period=last7|last30
+ */
+async function toolGetAnalytics(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = getAnalyticsInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId, period } = parsed.data;
+	const url = v1Url(
+		baseUrl,
+		`/v1/projects/${encodeURIComponent(projectId)}/analytics?period=${period}`,
+	);
+	return v1Fetch("GET", url, apiKey);
+}
+
+/**
+ * Trigger a crawl job via the V1 REST API.
+ * POST /v1/projects/:projectId/crawl
+ */
+async function toolTriggerCrawler(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = triggerCrawlerInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId, url, indexId, maxPages, selector } = parsed.data;
+	const endpoint = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/crawl`);
+
+	const body: Record<string, unknown> = { url, indexId, maxPages };
+	if (selector !== undefined) body.selector = selector;
+
+	return v1Fetch("POST", endpoint, apiKey, body);
+}
+
+/**
+ * List connector sync jobs via the V1 REST API.
+ * GET /v1/projects/:projectId/sync-jobs
+ */
+async function toolListConnectorSyncJobs(params: Record<string, unknown>): Promise<unknown> {
+	const parsed = listConnectorSyncJobsInputSchema.safeParse(params);
+	if (!parsed.success) {
+		return {
+			content: [
+				{ type: "text", text: `Invalid input: ${JSON.stringify(parsed.error.issues)}` },
+			],
+			isError: true,
+		};
+	}
+
+	const { baseUrl, apiKey, projectId } = parsed.data;
+	const url = v1Url(baseUrl, `/v1/projects/${encodeURIComponent(projectId)}/sync-jobs`);
+	return v1Fetch("GET", url, apiKey);
+}
+
 // ── Tool dispatch ───────────────────────────────────────────────────────
 
 type ToolHandler = (params: Record<string, unknown>) => Promise<unknown>;
@@ -955,6 +1165,12 @@ const toolHandlers: Record<string, ToolHandler> = {
 	create_key: toolCreateKey,
 	list_keys: toolListKeys,
 	revoke_key: toolRevokeKey,
+	get_recommendations: toolGetRecommendations,
+	track_event: toolTrackEvent,
+	trigger_reindex: toolTriggerReindex,
+	get_analytics: toolGetAnalytics,
+	trigger_crawler: toolTriggerCrawler,
+	list_connector_sync_jobs: toolListConnectorSyncJobs,
 };
 
 // ── MCP message handler ─────────────────────────────────────────────────

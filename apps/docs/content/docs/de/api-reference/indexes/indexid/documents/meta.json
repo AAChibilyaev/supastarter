@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/documents",
-  "pages": [
-    "get"
-  ]
+	"title": "indexes/indexid/documents",
+	"pages": ["get"]
 }

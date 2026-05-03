@@ -14,7 +14,7 @@ export function CtaFooter() {
 						{t("home.cta.title")}
 					</h2>
 
-					<p className="mt-5 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
+					<p className="mt-5 text-lg font-light max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("home.cta.subtitle")}
 					</p>
 					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">

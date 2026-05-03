@@ -31,7 +31,7 @@ export function TrustBadge() {
 						</div>
 					)}
 					<span className="text-sm font-semibold text-foreground">{item.rating}</span>
-					<span className="text-xs text-muted-foreground">
+					<span className="text-xs font-light text-muted-foreground">
 						{item.label ? `on ${item.label}` : t(`trustBadges.${item.key}`)}
 					</span>
 				</div>

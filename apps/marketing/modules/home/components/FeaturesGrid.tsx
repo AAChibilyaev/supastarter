@@ -40,7 +40,7 @@ export function FeaturesGrid() {
 					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
 						{t("home.features.title")}
 					</h2>
-					<p className="mt-4 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
+					<p className="mt-4 text-lg font-light max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("home.features.subtitle")}
 					</p>
 				</div>
@@ -56,7 +56,7 @@ export function FeaturesGrid() {
 									<h3 className="text-lg font-semibold">
 										{t(`home.features.items.${key}.title`)}
 									</h3>
-									<p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
+									<p className="mt-2 text-sm font-light leading-relaxed text-pretty text-muted-foreground">
 										{t(`home.features.items.${key}.description`)}
 									</p>
 								</div>

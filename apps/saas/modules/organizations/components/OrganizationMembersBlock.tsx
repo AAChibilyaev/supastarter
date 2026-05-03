@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { OrganizationInvitationsList } from "./OrganizationInvitationsList";
 import { OrganizationMembersList } from "./OrganizationMembersList";
+import { RolePermissionsMatrix } from "./RolePermissionsMatrix";
 
 export function OrganizationMembersBlock({ organizationId }: { organizationId: string }) {
 	const t = useTranslations();
@@ -32,6 +33,7 @@ export function OrganizationMembersBlock({ organizationId }: { organizationId: s
 					<OrganizationInvitationsList organizationId={organizationId} />
 				</TabsContent>
 			</Tabs>
+			<RolePermissionsMatrix />
 		</SettingsItem>
 	);
 }

@@ -1,0 +1,107 @@
+---
+title: Migrationsleitfaden v1 zu v2
+description: Planen Sie Ihre Migration von der AACsearch v1 REST API zu v2, einschließlich Zeitplan, Breaking Changes und Schritt-für-Schritt-Upgrade-Anleitung.
+---
+
+# Migrationsleitfaden: v1 zu v2
+
+Dieser Leitfaden hilft Ihnen bei der Migration von der AACsearch v1 REST API zu v2. Die v2 API bietet verbesserte Suchfunktionen, neue Endpunkte, automatisch generierte SDKs und eine verbesserte Entwicklererfahrung.
+
+> **v2 Status**: In aktiver Entwicklung. Aktuelle Versionsinformationen finden Sie unter [API Versionierung & Deprecation](/de/api-reference/versioning-deprecation).
+
+## Zeitplan
+
+| Meilenstein   | Datum   | Auswirkung                                   |
+| ------------- | ------- | -------------------------------------------- |
+| v2 Beta       | Q3 2026 | Early Access für ausgewählte Kunden          |
+| v2 GA         | Q4 2026 | Allgemeine Verfügbarkeit, v1 wird deprecated |
+| v1 Sunset     | Q2 2027 | v1-Endpunkte geben `410 Gone` zurück         |
+| v1 Entfernung | Q3 2027 | v1 API vollständig deaktiviert               |
+
+Alle Daten sind Schätzungen. Abonnieren Sie das [Changelog](/de/changelog) für Ankündigungen.
+
+## Was ist neu in v2
+
+### API-Änderungen
+
+| Bereich               | v1                                     | v2                                                                 |
+| --------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| **Basis-Pfad**        | `/api/v1/...`                          | `/api/v2/...`                                                      |
+| **Suche**             | Einfacher Typesense-Durchgriff         | Erweiterte Suche mit hybridem (semantisch + Schlüsselwort) Ranking |
+| **Authentifizierung** | Bearer Token (API-Schlüssel)           | Bearer Token + OAuth 2.0 Client Credentials                        |
+| **Fehlerformat**      | `{ "error": "...", "message": "..." }` | Erweitert mit `requestId`, `details`, `documentationUrl`           |
+| **Ratenbegrenzung**   | Sliding-Window pro Schlüssel           | Hierarchische Ratenbegrenzung pro Schlüssel + Organisation         |
+| **SDKs**              | Manuell geschrieben pro Sprache        | Automatisch generiert aus OpenAPI 3.1 Spec                         |
+| **Antworten**         | Inline-Schemas                         | Wiederverwendbare `$ref` Komponenten                               |
+| **Paginierung**       | `page` / `perPage`                     | Cursor-basierte Paginierung via `after` / `before`                 |
+
+### Neue Endpunkte
+
+| Endpunkt                                 | Beschreibung                                      |
+| ---------------------------------------- | ------------------------------------------------- |
+| `GET /v2/indexes/:indexId/search/vector` | Reine Vektor-Ähnlichkeitssuche                    |
+| `GET /v2/organization/usage`             | Erweiterte Nutzungsanalysen mit Aufschlüsselungen |
+| `POST /v2/webhooks`                      | Webhook-Abonnement-Verwaltung                     |
+
+## Wichtige Änderungen
+
+### Erforderliche Änderungen
+
+| Änderung            | Migrationsaktion                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| **Basis-URL**       | Ersetzen Sie `/api/v1/` durch `/api/v2/` in allen Anfragepfaden                             |
+| **Fehlerformat**    | Aktualisieren Sie Fehlerparser – v2 fügt `requestId`, `details` und `documenationUrl` hinzu |
+| **Paginierung**     | Ersetzen Sie `page`/`perPage` durch cursor-basierte `after`/`before`-Parameter              |
+| **Antwortstruktur** | v2 umschließt Listenantworten in einem `{ "data": [...], "meta": {...} }`-Envelope          |
+
+## Schritt-für-Schritt-Migration
+
+### Schritt 1: API-Nutzung prüfen
+
+```bash
+# Alle v1 API-Referenzen im Code finden
+rg 'api/v1/' .
+rg 'ss_search_' .
+rg 'aa_admin_' .
+```
+
+### Schritt 2: Basis-URLs aktualisieren
+
+```diff
+- https://api.aacsearch.com/api/v1/indexes/:indexId/search
++ https://api.aacsearch.com/api/v2/indexes/:indexId/search
+```
+
+### Schritt 3: Fehlerbehandlung aktualisieren
+
+v2-Fehlerantworten enthalten zusätzliche Felder:
+
+```typescript
+interface V2Error {
+	error: string;
+	message: string;
+	requestId: string; // NEU — Trace-ID für Support
+	details?: Record<string, unknown>; // NEU — Validierungsfehler
+	documentationUrl?: string; // NEU — Link zur Dokumentation
+}
+```
+
+### Schritt 4: Paginierung migrieren
+
+```diff
+- GET /api/v1/indexes/:indexId/documents?page=2&perPage=20
++ GET /api/v2/indexes/:indexId/documents?after=eyJpZCI6InNvbWVJRCJ9&limit=20
+```
+
+### Schritt 5: SDK aktualisieren
+
+```diff
+- npm install @aacsearch/client
++ npm install @aacsearch/js-sdk
+```
+
+## Support bei der Migration
+
+- **Migrationsfenster**: v1 bleibt **6 Monate** nach v2 GA vollständig unterstützt
+- **Staging-Umgebung**: Testen Sie Ihre Migration unter `https://staging-api.aacsearch.com/api/v2/`
+- **Changelog**: Beobachten Sie das [Changelog](/de/changelog) für migrationsrelevante Ankündigungen

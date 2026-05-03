@@ -1,0 +1,97 @@
+---
+title: Swift SDK
+description: Instale y use el SDK aacsearch-swift para búsqueda, gestión de índices, sinónimos, curaciones y análisis desde aplicaciones iOS, macOS y visionOS.
+---
+
+# Swift SDK (`Aacsearch`)
+
+El paquete Swift `aacsearch-swift` proporciona un `AacsearchClient` nativo para aplicaciones iOS, macOS y visionOS:
+
+| Cliente           | Ámbito          | Prefijo de clave | Plataforma                      |
+| ----------------- | --------------- | ---------------- | ------------------------------- |
+| `AacsearchClient` | Acceso completo | `ss_search_*`    | iOS 15+, macOS 12+, visionOS 1+ |
+
+> **Nota**: Un solo cliente maneja tanto las operaciones de búsqueda como las de administración. Use claves de ámbito de búsqueda (`ss_search_*`) para el frontend y claves de administración en el código del servidor.
+
+## Instalación
+
+### Swift Package Manager
+
+Agregue el paquete a su `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/aacsearch/aacsearch-swift-sdk", from: "1.0.0")
+]
+```
+
+O agregue via Xcode: **Archivo > Agregar dependencias de paquetes** > ingrese la URL del repositorio.
+
+Requiere Swift 5.9+.
+
+## Inicio rápido
+
+### Inicializar el cliente
+
+```swift
+import Aacsearch
+
+let client = AacsearchClient(apiKey: "ss_search_your_key_here")
+```
+
+O con configuración personalizada:
+
+```swift
+let config = AacsearchConfig(
+    baseURL: "https://api.aacsearch.com",
+    apiKey: "ss_search_your_key_here",
+    timeout: 15
+)
+let client = AacsearchClient(config: config)
+```
+
+### Búsqueda básica
+
+```swift
+let results = try await client.search(
+    "products",
+    query: "nike shoes",
+    queryBy: "name,description",
+    filterBy: "price:>50",
+    sortBy: "price:desc",
+    page: 1,
+    perPage: 20
+)
+
+print("Found \(results.found) results")
+for hit in results.hits {
+    print(hit.document)
+}
+```
+
+### Búsqueda múltiple
+
+```swift
+let multiResults = try await client.multiSearch(searches: [
+    MultiSearchQuery(q: "nike", queryBy: "name", perPage: 5),
+    MultiSearchQuery(q: "adidas", queryBy: "name", perPage: 5),
+])
+
+for result in multiResults.results {
+    print("Query returned \(result.found) hits")
+}
+```
+
+## Referencia de API
+
+| Categoría          | Métodos                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| Búsqueda           | `search`, `multiSearch`                                                                             |
+| Documentos         | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Gestión de índices | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Sinónimos          | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Curaciones         | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Campos de orden    | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Claves API         | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analíticas         | `getAnalytics`, `getUsage`                                                                          |
+| Facetas            | `listFacets`                                                                                        |

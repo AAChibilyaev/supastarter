@@ -220,7 +220,6 @@ export async function computeDisjunctiveFacetCounts(input: {
 		q,
 		queryBy,
 		filterBy,
-		facetBy,
 		disjunctiveFacets,
 		existingFacetCounts,
 	} = input;
@@ -228,7 +227,6 @@ export async function computeDisjunctiveFacetCounts(input: {
 	if (!disjunctiveFacets.length || !filterBy) return existingFacetCounts;
 
 	const client = getTypesenseClient();
-	const facetFields = parseFacetBy(facetBy);
 
 	// Build a map of existing counts (non-disjunctive)
 	const existingMap = new Map<string, FacetCount>();

@@ -23,7 +23,7 @@ export function HowItWorks() {
 							<h3 className="mt-6 text-lg font-semibold text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
-							<p className="mt-3 max-w-xs text-sm text-muted-foreground">
+							<p className="mt-3 max-w-xs text-sm font-light text-muted-foreground">
 								{t(`home.howItWorks.${step}.description`)}
 							</p>
 						</div>

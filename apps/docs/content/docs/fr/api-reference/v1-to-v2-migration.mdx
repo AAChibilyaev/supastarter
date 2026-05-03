@@ -1,0 +1,92 @@
+---
+title: Guide de migration v1 vers v2
+description: Planifiez votre migration de l'API REST AACsearch v1 vers v2, y compris le calendrier, les changements importants et les instructions de mise à niveau étape par étape.
+---
+
+# Guide de migration : v1 vers v2
+
+Ce guide vous aide à migrer de l'API REST AACsearch v1 vers v2. L'API v2 représente une avancée majeure avec des capacités de recherche améliorées, de nouveaux endpoints, des SDK générés automatiquement et une expérience développeur améliorée.
+
+> **Statut v2** : En développement actif. Voir [Versionnement et Dépréciation d'API](/fr/api-reference/versioning-deprecation) pour l'état actuel du cycle de vie.
+
+## Calendrier
+
+| Étape          | Date    | Impact                                            |
+| -------------- | ------- | ------------------------------------------------- |
+| v2 Bêta        | T3 2026 | Accès anticipé pour certains clients              |
+| v2 GA          | T4 2026 | Disponibilité générale, v1 entre en dépréciation  |
+| v1 Sunset      | T2 2027 | Les endpoints v1 commencent à renvoyer `410 Gone` |
+| v1 Suppression | T3 2027 | API v1 complètement décommissionnée               |
+
+Toutes les dates sont approximatives. Abonnez-vous au [Changelog](/fr/changelog) pour les annonces.
+
+## Nouveautés de v2
+
+### Changements de l'API
+
+| Domaine              | v1                                     | v2                                                                 |
+| -------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| **Chemin de base**   | `/api/v1/...`                          | `/api/v2/...`                                                      |
+| **Recherche**        | Passage simple Typesense               | Recherche améliorée avec classement hybride (sémantique + mot-clé) |
+| **Authentification** | Bearer Token (clé API)                 | Bearer Token + OAuth 2.0 client credentials                        |
+| **Format d'erreur**  | `{ "error": "...", "message": "..." }` | Étendu avec `requestId`, `details`, `documentationUrl`             |
+| **SDKs**             | Écrits à la main par langage           | Générés automatiquement depuis OpenAPI 3.1                         |
+| **Pagination**       | `page` / `perPage`                     | Basée sur curseur avec `after` / `before`                          |
+
+## Changements importants
+
+### Changements requis
+
+| Changement          | Action de migration                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| **URL de base**     | Remplacez `/api/v1/` par `/api/v2/` dans tous les chemins de requête                            |
+| **Format d'erreur** | Mettez à jour les analyseurs d'erreurs — v2 ajoute `requestId`, `details` et `documentationUrl` |
+| **Pagination**      | Remplacez `page`/`perPage` par les paramètres basés sur curseur `after`/`before`                |
+
+## Migration étape par étape
+
+### Étape 1 : Auditez votre utilisation de l'API
+
+```bash
+rg 'api/v1/' .
+rg 'ss_search_' .
+```
+
+### Étape 2 : Mettez à jour les URLs de base
+
+```diff
+- https://api.aacsearch.com/api/v1/indexes/:indexId/search
++ https://api.aacsearch.com/api/v2/indexes/:indexId/search
+```
+
+### Étape 3 : Mettez à jour la gestion des erreurs
+
+```typescript
+interface V2Error {
+	error: string;
+	message: string;
+	requestId: string; // NOUVEAU — ID de trace
+	details?: Record<string, unknown>; // NOUVEAU — erreurs de validation
+	documentationUrl?: string; // NOUVEAU — lien vers la documentation
+}
+```
+
+### Étape 4 : Migrez la pagination
+
+```diff
+- GET /api/v1/indexes/:indexId/documents?page=2&perPage=20
++ GET /api/v2/indexes/:indexId/documents?after=eyJpZCI6InNvbWVJRCJ9&limit=20
+```
+
+### Étape 5 : Mettez à jour le SDK
+
+```diff
+- npm install @aacsearch/client
++ npm install @aacsearch/js-sdk
+```
+
+## Support de migration
+
+- **Fenêtre de migration** : v1 reste entièrement supportée pendant **6 mois** après v2 GA
+- **Environnement de staging** : Testez votre migration sur `https://staging-api.aacsearch.com/api/v2/`
+- **Changelog** : Suivez le [Changelog](/fr/changelog) pour les annonces liées à la migration

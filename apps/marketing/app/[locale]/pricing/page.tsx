@@ -26,7 +26,7 @@ export default async function PricingPage(props: { params: Promise<{ locale: str
 			<section className="py-20 border-b border-border/60 text-center">
 				<div className="container">
 					<h1 className="text-5xl font-bold tracking-tight text-balance">{t("title")}</h1>
-					<p className="mt-4 text-xl max-w-2xl mx-auto text-balance text-muted-foreground">
+					<p className="mt-4 text-xl font-light max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("description")}
 					</p>
 				</div>

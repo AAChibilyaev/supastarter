@@ -61,7 +61,7 @@ export function TestimonialCarousel() {
 						{t("testimonials.title")}
 					</h2>
 
-					<p className="mt-4 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
+					<p className="mt-4 text-lg font-light max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("testimonials.subtitle")}
 					</p>
 				</div>
@@ -84,7 +84,7 @@ export function TestimonialCarousel() {
 								<p className="text-sm font-semibold text-foreground">
 									{testimonial.author}
 								</p>
-								<p className="text-xs text-muted-foreground">
+								<p className="text-xs font-light text-muted-foreground">
 									{testimonial.role}, {testimonial.company}
 								</p>
 							</div>

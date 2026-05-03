@@ -47,6 +47,7 @@ Jeweils eine **"Partei"** , gemeinsam die **"Parteien"** .
 3.1 **Art und Zweck der Verarbeitung:** Der Auftragsverarbeiter stellt eine Search-as-a-Service-Plattform bereit, die vom Verantwortlichen übermittelte Daten indexiert, speichert und abrufbar macht, um Volltextsuche, facettierte Suche und verwandte Suchfunktionen in der Anwendung, Website oder den digitalen Angeboten des Verantwortlichen zu ermöglichen.
 
 3.2 **Kategorien personenbezogener Daten:** Je nach Art der Nutzung des Dienstes durch den Verantwortlichen können verarbeitete personenbezogene Daten umfassen:
+
 - Namen
 - E-Mail-Adressen
 - IP-Adressen
@@ -55,13 +56,14 @@ Jeweils eine **"Partei"** , gemeinsam die **"Parteien"** .
 - Suchanfragen und Surfverhaltensdaten
 - Sonstige personenbezogene Daten, die der Verantwortliche zur Indexierung übermittelt
 
-3.3 **Kategorien betroffener Personen:** Betroffene Personen können sein:
+    3.3 **Kategorien betroffener Personen:** Betroffene Personen können sein:
+
 - Endnutzer der Anwendung oder Website des Verantwortlichen
 - Kunden, Klienten oder Besucher des Verantwortlichen
 - Mitarbeiter oder Auftragnehmer des Verantwortlichen
 - Sonstige Personen, deren personenbezogene Daten der Verantwortliche an den Dienst übermittelt
 
-3.4 **Dauer der Verarbeitung:** Die Verarbeitung erfolgt für die Dauer des Hauptvertrags. Nach Beendigung löscht oder gibt der Auftragsverarbeiter alle personenbezogenen Daten gemäß Ziffer 12 zurück.
+    3.4 **Dauer der Verarbeitung:** Die Verarbeitung erfolgt für die Dauer des Hauptvertrags. Nach Beendigung löscht oder gibt der Auftragsverarbeiter alle personenbezogenen Daten gemäß Ziffer 12 zurück.
 
 ## 4. Pflichten des Verantwortlichen
 
@@ -173,12 +175,12 @@ Jeweils eine **"Partei"** , gemeinsam die **"Parteien"** .
 
 ## Anlage 1: Liste der Unterauftragsverarbeiter
 
-| Name | Sitz | Verarbeitungstätigkeit | Rechenzentrumsstandort |
-|------|------|----------------------|------------------------|
-| [Amazon Web Services (AWS)] | [AWS Adresse] | Cloud-Hosting, Speicher, Rechenleistung | [z. B. eu-central-1 (Frankfurt), eu-west-1 (Irland)] |
-| [Weitere Unterauftragsverarbeiter] | [Adresse] | [Tätigkeit] | [Standort] |
+| Name                               | Sitz          | Verarbeitungstätigkeit                  | Rechenzentrumsstandort                               |
+| ---------------------------------- | ------------- | --------------------------------------- | ---------------------------------------------------- |
+| [Amazon Web Services (AWS)]        | [AWS Adresse] | Cloud-Hosting, Speicher, Rechenleistung | [z. B. eu-central-1 (Frankfurt), eu-west-1 (Irland)] |
+| [Weitere Unterauftragsverarbeiter] | [Adresse]     | [Tätigkeit]                             | [Standort]                                           |
 
-*Aktuelle Liste unter: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)*
+_Aktuelle Liste unter: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)_
 
 ---
 
@@ -187,18 +189,21 @@ Jeweils eine **"Partei"** , gemeinsam die **"Parteien"** .
 **A. Parteien**
 
 **Datenexporteur (Verantwortlicher):**
+
 - Name: [Kundenname]
 - Adresse: [Kundenadresse]
 - Kontakt: [Kunden-E-Mail]
 - Rolle: Verantwortlicher
 
 **Datenimporteur (Auftragsverarbeiter):**
+
 - Name: AACsearch
 - Adresse: [AACsearch Adresse]
 - Kontakt: privacy@aacsearch.com
 - Rolle: Auftragsverarbeiter
 
 **B. Beschreibung der Übermittlung**
+
 - Kategorien betroffener Personen: Gemäß Ziffer 3.3
 - Kategorien personenbezogener Daten: Gemäß Ziffer 3.2
 - Sensitive Daten: Keine (sofern nicht schriftlich vereinbart)
@@ -217,4 +222,4 @@ Detaillierte Sicherheitsmaßnahmen sind in der Sicherheitsdokumentation unter [h
 
 ---
 
-*Dieser Auftragsverarbeitungsvertrag ist eine rechtlich bindende Vereinbarung. Die Parteien bestätigen, dass sie die Bestimmungen gelesen und verstanden haben.*
+_Dieser Auftragsverarbeitungsvertrag ist eine rechtlich bindende Vereinbarung. Die Parteien bestätigen, dass sie die Bestimmungen gelesen und verstanden haben._

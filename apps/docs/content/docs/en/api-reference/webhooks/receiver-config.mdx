@@ -1,0 +1,83 @@
+---
+title: Webhook Receiver Config
+description: Configure HMAC-SHA256 signing secret for the generic webhook receiver endpoint.
+---
+
+# Webhook Receiver Config
+
+Manage the webhook signing secret for an index's incoming webhook receiver. The receiver at `POST /api/webhooks/sync/:indexSlug` uses this secret to verify HMAC-SHA256 signatures on incoming payloads.
+
+## Get Config
+
+`GET /api/indexes/{slug}/webhook-receiver-config`
+
+Returns whether a signing secret is configured. The secret itself is masked for security.
+
+### Response
+
+`200 OK`
+
+```json
+{
+	"hasSecret": true,
+	"enabled": true,
+	"secretPreview": "aac4****"
+}
+```
+
+## Save Config
+
+`PUT /api/indexes/{slug}/webhook-receiver-config`
+
+Sets or updates the webhook signing secret for an index.
+
+### Request Body
+
+| Field     | Type      | Required | Description                                        |
+| --------- | --------- | -------- | -------------------------------------------------- |
+| `secret`  | `string`  | Yes      | HMAC-SHA256 signing secret (min 16, max 256 chars) |
+| `enabled` | `boolean` | No       | Enable signature verification (default `true`)     |
+
+### Example
+
+```json
+{
+	"secret": "your-hmac-secret-here-min-16-chars",
+	"enabled": true
+}
+```
+
+### Response
+
+`200 OK`
+
+```json
+{
+	"ok": true
+}
+```
+
+## Delete Config
+
+`DELETE /api/indexes/{slug}/webhook-receiver-config`
+
+Removes the signing secret from the index, disabling signature verification.
+
+### Response
+
+`200 OK`
+
+```json
+{
+	"ok": true
+}
+```
+
+## Errors
+
+| Status | Error Code        | Description                          |
+| ------ | ----------------- | ------------------------------------ |
+| 400    | `invalid_request` | Secret too short (min 16 characters) |
+| 401    | `unauthorized`    | Missing or invalid API key           |
+| 403    | `forbidden`       | Key does not have admin scope        |
+| 404    | `not_found`       | Index not found                      |

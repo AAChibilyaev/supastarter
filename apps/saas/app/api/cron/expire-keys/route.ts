@@ -1,17 +1,14 @@
+import { revokeExpiredApiKeys } from "@repo/database";
 import { logger } from "@repo/logs";
 import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
-
-import { revokeExpiredApiKeys } from "@repo/database";
 
 export const dynamic = "force-dynamic";
 
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.SEARCH_CRON_SECRET;
 	if (!expected) {
-		logger.warn(
-			"SEARCH_CRON_SECRET is not set — expire-keys cron will always reject requests",
-		);
+		logger.warn("SEARCH_CRON_SECRET is not set — expire-keys cron will always reject requests");
 		return false;
 	}
 

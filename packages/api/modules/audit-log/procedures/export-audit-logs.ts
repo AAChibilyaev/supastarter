@@ -21,8 +21,7 @@ export const exportAuditLogsProcedure = protectedProcedure
 		path: "/audit-log/export",
 		tags: ["Audit Log"],
 		summary: "Export audit logs as CSV",
-		description:
-			"Returns audit log entries for an organization as a downloadable CSV string.",
+		description: "Returns audit log entries for an organization as a downloadable CSV string.",
 	})
 	.input(
 		z.object({

@@ -1,0 +1,190 @@
+---
+title: Ruby SDK
+description: Install and use the aacsearch-ruby gem for search, index management, synonyms, curations, and analytics.
+---
+
+# Ruby SDK (`aacsearch-ruby`)
+
+The `aacsearch-ruby` gem provides two clients:
+
+| Client         | Scope       | Key Prefix    | Use Case                           |
+| -------------- | ----------- | ------------- | ---------------------------------- |
+| `SearchClient` | search-only | `ss_search_*` | Public search from backend scripts |
+| `AdminClient`  | full CRUD   | `aa_admin_*`  | Server-side management, CI/CD      |
+
+## Installation
+
+Add to your Gemfile:
+
+```ruby
+gem 'aacsearch-ruby'
+```
+
+Or install directly:
+
+```bash
+gem install aacsearch-ruby
+```
+
+Requires Ruby 3.0+.
+
+## Quick Start
+
+### SearchClient (public)
+
+Use with a search-scope API key (`ss_search_*`) or a scoped token (`ss_scoped_*`).
+
+```ruby
+require 'aacsearch'
+
+client = AACSearch::SearchClient.new(
+  base_url: "https://app.aacsearch.com",
+  api_key: "ss_search_your_key_here",
+  index_slug: "products"
+)
+
+# Basic search
+results = client.search(q: "laptop")
+puts "Found #{results['found']} results"
+
+# Search with filters and facets
+results = client.search(
+  q: "phone",
+  filter_by: "price:<=500",
+  facet_by: "brand,category",
+  sort_by: "price:asc",
+  per_page: 20
+)
+
+# Multi-search (several queries in one request)
+combined = client.multi_search([
+  { q: "laptop", per_page: 5 },
+  { q: "phone", per_page: 5 }
+])
+```
+
+### AdminClient (server-side)
+
+Use with an admin-scope API key (`aa_admin_*`). Never bundle admin keys in browser code.
+
+```ruby
+require 'aacsearch'
+
+admin = AACSearch::AdminClient.new(
+  base_url: "https://app.aacsearch.com",
+  api_key: "aa_admin_your_key_here",
+  project_id: "org_xxx"
+)
+```
+
+#### Index Management
+
+```ruby
+# Create an index
+index = admin.create_index(
+  slug: "products",
+  display_name: "Products",
+  fields: [
+    { name: "title", type: "string" },
+    { name: "price", type: "float", facet: true },
+    { name: "category", type: "string", facet: true }
+  ],
+  default_sorting_field: "price"
+)
+puts "Created index: #{index['id']}"
+
+# List indexes
+indexes = admin.list_indexes
+
+# Get index details
+stats = admin.get_index_stats(index['id'])
+
+# Delete index
+admin.delete_index(index['id'])
+```
+
+#### Document Operations
+
+```ruby
+# Batch upsert documents
+admin.batch_upsert_documents("index_id", [
+  { id: "doc_1", title: "Running Shoes", price: 89.99 },
+  { id: "doc_2", title: "T-Shirt", price: 29.99 }
+])
+
+# List documents
+docs = admin.list_documents("index_id", q: "*", per_page: 20)
+
+# Delete document
+admin.delete_document("index_id", "doc_1")
+
+# Batch delete
+admin.batch_delete_documents("index_id", ids: ["doc_2", "doc_3"])
+```
+
+#### Search and Analytics
+
+```ruby
+# Search
+results = admin.search("index_id", q: "shoes", query_by: "title")
+
+# Get analytics
+analytics = admin.get_analytics(period: "7d")
+puts "Total searches: #{analytics['totalSearches']}, CTR: #{analytics['ctr']}"
+
+# Get usage data
+usage = admin.get_usage(window_days: 30)
+```
+
+#### API Keys
+
+```ruby
+# Create API key
+key = admin.create_key(
+  name: "My Search Key",
+  scopes: ["search"],
+  index_slug: "products"
+)
+puts "Created key: #{key['prefix']}..."
+
+# List keys
+keys = admin.list_keys
+
+# Revoke key
+admin.revoke_key(key['id'])
+```
+
+## Error Handling
+
+```ruby
+begin
+  results = client.search(q: "laptop")
+rescue AACSearch::RateLimitedError => e
+  # Back off and retry
+  sleep e.retry_after
+  retry
+rescue AACSearch::UnauthorizedError => e
+  # API key is invalid
+  puts "Invalid API key: #{e.message}"
+rescue AACSearch::NotFoundError => e
+  # Index not found
+  puts "Index not found: #{e.message}"
+rescue AACSearch::ApiError => e
+  puts "Error #{e.status_code}: #{e.message}"
+end
+```
+
+## API Reference
+
+| Category         | Methods                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- |
+| Project          | `get_project`, `create_project`, `get_project_by_id`                                                       |
+| Index Management | `list_indexes`, `get_index`, `create_index`, `update_index`, `delete_index`, `get_index_stats`             |
+| Documents        | `list_documents`, `upsert_document`, `batch_upsert_documents`, `delete_document`, `batch_delete_documents` |
+| Search           | `search`, `multi_search`                                                                                   |
+| API Keys         | `list_keys`, `create_key`, `revoke_key`                                                                    |
+| Analytics        | `get_analytics`, `get_usage`                                                                               |
+| Synonyms         | `list_synonyms`, `create_synonym`, `upsert_synonyms`, `delete_synonym`                                     |
+| Curations        | `list_curations`, `create_curation`, `upsert_curations`, `delete_curation`                                 |
+| Sorting Fields   | `list_sorting_fields`, `create_sorting_field`, `replace_sorting_fields`, `delete_sorting_field`            |
+| Facets           | `list_facets`                                                                                              |

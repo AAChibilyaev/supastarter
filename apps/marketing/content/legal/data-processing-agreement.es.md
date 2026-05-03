@@ -47,6 +47,7 @@ Cada uno, una **"Parte"** ; conjuntamente, las **"Partes"** .
 3.1 **Naturaleza y Finalidad del Tratamiento:** El Encargado proporciona una plataforma de search-as-a-service que indexa, almacena y recupera datos enviados por el Responsable con la finalidad de habilitar funciones de búsqueda de texto completo, búsqueda por facetas y funcionalidades relacionadas en la aplicación, sitio web o propiedades digitales del Responsable.
 
 3.2 **Categorías de Datos Personales:** Dependiendo de la naturaleza del uso del Servicio por el Responsable, los Datos Personales tratados pueden incluir:
+
 - Nombres y apellidos
 - Direcciones de correo electrónico
 - Direcciones IP
@@ -55,13 +56,14 @@ Cada uno, una **"Parte"** ; conjuntamente, las **"Partes"** .
 - Consultas de búsqueda y datos de comportamiento de navegación
 - Cualquier otro Dato Personal que el Responsable envíe para indexación
 
-3.3 **Categorías de Interesados:** Los Interesados pueden incluir:
+    3.3 **Categorías de Interesados:** Los Interesados pueden incluir:
+
 - Usuarios finales de la aplicación o sitio web del Responsable
 - Clientes, compradores o visitantes del Responsable
 - Empleados o contratistas del Responsable
 - Cualquier otra persona cuyos Datos Personales el Responsable envíe al Servicio
 
-3.4 **Duración del Tratamiento:** El Tratamiento se llevará a cabo durante la vigencia del Contrato Principal. Tras la finalización, el Encargado eliminará o devolverá todos los Datos Personales conforme a la Cláusula 12.
+    3.4 **Duración del Tratamiento:** El Tratamiento se llevará a cabo durante la vigencia del Contrato Principal. Tras la finalización, el Encargado eliminará o devolverá todos los Datos Personales conforme a la Cláusula 12.
 
 ## 4. Obligaciones del Responsable del Tratamiento
 
@@ -179,12 +181,12 @@ Cada uno, una **"Parte"** ; conjuntamente, las **"Partes"** .
 
 ## Anexo 1: Lista de Subencargados
 
-| Nombre | Domicilio Social | Actividad de Tratamiento | Ubicación del Centro de Datos |
-|--------|-----------------|--------------------------|-------------------------------|
+| Nombre                      | Domicilio Social   | Actividad de Tratamiento                       | Ubicación del Centro de Datos                           |
+| --------------------------- | ------------------ | ---------------------------------------------- | ------------------------------------------------------- |
 | [Amazon Web Services (AWS)] | [Dirección de AWS] | Alojamiento cloud, almacenamiento, computación | [p. ej., eu-west-1 (Irlanda), eu-central-1 (Frankfurt)] |
-| [Subencargado adicional] | [Dirección] | [Actividad] | [Ubicación] |
+| [Subencargado adicional]    | [Dirección]        | [Actividad]                                    | [Ubicación]                                             |
 
-*Lista actualizada disponible en: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)*
+_Lista actualizada disponible en: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)_
 
 ---
 
@@ -193,18 +195,21 @@ Cada uno, una **"Parte"** ; conjuntamente, las **"Partes"** .
 **A. Lista de Partes**
 
 **Exportador de Datos (Responsable):**
+
 - Nombre: [Nombre del Cliente]
 - Dirección: [Dirección del Cliente]
 - Contacto: [Correo electrónico del Cliente]
 - Rol: Responsable del Tratamiento
 
 **Importador de Datos (Encargado):**
+
 - Nombre: AACsearch
 - Dirección: [Dirección de AACsearch]
 - Contacto: privacy@aacsearch.com
 - Rol: Encargado del Tratamiento
 
 **B. Descripción de la Transferencia**
+
 - Categorías de Interesados: Según Cláusula 3.3
 - Categorías de Datos: Según Cláusula 3.2
 - Datos Sensibles: Ninguno (salvo especificación por escrito)
@@ -223,4 +228,4 @@ Las medidas de seguridad detalladas se mantienen en la Documentación de Segurid
 
 ---
 
-*Este Acuerdo de Procesamiento de Datos es un documento legalmente vinculante. Las Partes reconocen haber leído y comprendido sus términos.*
+_Este Acuerdo de Procesamiento de Datos es un documento legalmente vinculante. Las Partes reconocen haber leído y comprendido sus términos._

@@ -47,6 +47,7 @@ Each a **"Party"** , collectively the **"Parties"** .
 3.1 **Nature and Purpose of Processing:** The Processor provides a search-as-a-service platform that indexes, stores, and retrieves data submitted by the Controller for the purpose of enabling full-text search, faceted search, and related search functionalities on the Controller's application, website, or digital properties.
 
 3.2 **Categories of Personal Data:** Depending on the nature of the Controller's use of the Service, the Personal Data processed may include, but is not limited to:
+
 - Names
 - Email addresses
 - IP addresses
@@ -55,13 +56,14 @@ Each a **"Party"** , collectively the **"Parties"** .
 - Search queries and browsing behavior data
 - Any other Personal Data the Controller elects to submit for indexing
 
-3.3 **Categories of Data Subjects:** Data Subjects may include:
+    3.3 **Categories of Data Subjects:** Data Subjects may include:
+
 - End users of the Controller's application or website
 - Customers, clients, or visitors of the Controller
 - Employees or contractors of the Controller
 - Any other individuals whose Personal Data the Controller submits to the Service
 
-3.4 **Duration of Processing:** Processing shall continue for the duration of the Principal Agreement. Upon termination, the Processor shall delete or return all Personal Data in accordance with Clause 12.
+    3.4 **Duration of Processing:** Processing shall continue for the duration of the Principal Agreement. Upon termination, the Processor shall delete or return all Personal Data in accordance with Clause 12.
 
 ## 4. Controller Obligations
 
@@ -207,12 +209,12 @@ Each a **"Party"** , collectively the **"Parties"** .
 
 ## Schedule 1: List of Sub-processors
 
-| Name | Registered Address | Processing Activity | Data Center Location |
-|------|-------------------|--------------------|--------------------|
-| [Amazon Web Services (AWS)] | [AWS Address] | Cloud hosting, storage, compute | [e.g., us-east-1, eu-west-1, eu-central-1] |
-| [Additional Sub-processor] | [Address] | [Activity] | [Location] |
+| Name                        | Registered Address | Processing Activity             | Data Center Location                       |
+| --------------------------- | ------------------ | ------------------------------- | ------------------------------------------ |
+| [Amazon Web Services (AWS)] | [AWS Address]      | Cloud hosting, storage, compute | [e.g., us-east-1, eu-west-1, eu-central-1] |
+| [Additional Sub-processor]  | [Address]          | [Activity]                      | [Location]                                 |
 
-*Updated list available at: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)*
+_Updated list available at: [https://aacsearch.com/sub-processors](https://aacsearch.com/sub-processors)_
 
 ---
 
@@ -221,18 +223,21 @@ Each a **"Party"** , collectively the **"Parties"** .
 **A. List of Parties**
 
 **Data Exporter (Controller):**
+
 - Name: [Customer Name]
 - Address: [Customer Address]
 - Contact: [Customer Contact Email]
 - Role: Controller
 
 **Data Importer (Processor):**
+
 - Name: AACsearch
 - Address: [AACsearch Address]
 - Contact: privacy@aacsearch.com
 - Role: Processor
 
 **B. Description of Transfer**
+
 - Categories of Data Subjects: As set out in Clause 3.3
 - Categories of Personal Data: As set out in Clause 3.2
 - Sensitive Data Transferred: None (unless specified by Controller in writing)
@@ -252,4 +257,4 @@ Detailed technical and organizational security measures are maintained in the Pr
 
 ---
 
-*This Data Processing Agreement is a legally binding document. The Controller and Processor acknowledge that they have read and understood its terms and agree to be bound thereby.*
+_This Data Processing Agreement is a legally binding document. The Controller and Processor acknowledge that they have read and understood its terms and agree to be bound thereby._

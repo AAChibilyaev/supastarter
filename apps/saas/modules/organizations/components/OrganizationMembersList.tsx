@@ -7,6 +7,7 @@ import { authClient } from "@repo/auth/client";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
 import { Button, DataTableProvider, DataTableToolbar } from "@repo/ui";
 import type { DataTableFilterField } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -31,6 +32,17 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { OrganizationRoleSelect } from "./OrganizationRoleSelect";
+
+// ─── Role badge config ─────────────────────────────────────────────────────
+
+const roleBadgeConfig: Record<
+	string,
+	{ status: "success" | "info" | "warning" | "error"; label: string }
+> = {
+	owner: { status: "error", label: "Owner" },
+	admin: { status: "warning", label: "Admin" },
+	member: { status: "info", label: "Member" },
+};
 
 export function OrganizationMembersList({ organizationId }: { organizationId: string }) {
 	const t = useTranslations();
@@ -113,7 +125,14 @@ export function OrganizationMembersList({ organizationId }: { organizationId: st
 							avatarUrl={row.original.user?.image}
 						/>
 						<div>
-							<strong className="block">{row.original.user.name}</strong>
+							<div className="gap-2 flex items-center">
+								<strong className="block">{row.original.user.name}</strong>
+								{roleBadgeConfig[row.original.role] && (
+									<Badge status={roleBadgeConfig[row.original.role].status}>
+										{roleBadgeConfig[row.original.role].label}
+									</Badge>
+								)}
+							</div>
 							<small className="text-foreground/60">{row.original.user.email}</small>
 						</div>
 					</div>

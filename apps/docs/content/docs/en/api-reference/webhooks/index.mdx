@@ -1,0 +1,99 @@
+---
+title: Webhooks Overview
+description: Webhook-based event notifications and the generic webhook receiver for AACsearch — real-time event-driven integration with your systems.
+---
+
+# Webhooks
+
+AACsearch offers two webhook systems:
+
+| System                        | Direction               | Purpose                                            |
+| ----------------------------- | ----------------------- | -------------------------------------------------- |
+| **Outgoing webhooks**         | AACsearch → your server | Event notifications when index operations complete |
+| **Incoming webhook receiver** | Your system → AACsearch | Receive document syncs via HMAC-signed webhooks    |
+
+## Outgoing Webhooks
+
+Configure webhook endpoints in your organization to receive real-time notifications when:
+
+- An index is created or deleted
+- An ingest (document indexing) job completes
+- A reindex operation completes
+
+Outgoing webhooks are managed via the [Webhook Management API](/api-reference/webhooks/create).
+
+### How It Works
+
+1. You register a webhook URL via the API or dashboard
+2. Subscribe to the events you care about
+3. When those events occur, AACsearch sends an HTTP POST to your URL
+4. Your server responds with `200 OK` to acknowledge receipt
+
+### Payload Format
+
+```json
+{
+	"event": "ingest.completed",
+	"organizationId": "org_xxx",
+	"indexId": "idx_xxx",
+	"indexSlug": "products",
+	"timestamp": "2026-05-03T12:00:00.000Z",
+	"data": {
+		"documentsProcessed": 150,
+		"errors": 0
+	}
+}
+```
+
+### Events Reference
+
+| Event               | Triggered When                     | Payload Fields                            |
+| ------------------- | ---------------------------------- | ----------------------------------------- |
+| `index.created`     | A new search index is created      | `indexId`, `indexSlug`, `displayName`     |
+| `index.deleted`     | A search index is deleted          | `indexId`, `indexSlug`                    |
+| `ingest.completed`  | A document batch ingest finishes   | `indexId`, `documentsProcessed`, `errors` |
+| `reindex.completed` | A full reindex operation completes | `indexId`, `documentsProcessed`, `errors` |
+
+### Security
+
+- All outgoing webhooks are sent with a signature header (`X-AACSearch-Signature`) for verification
+- Respond with `200 OK` within **10 seconds** to acknowledge delivery
+- Retries follow an exponential backoff schedule (3 attempts: 10s, 60s, 300s)
+- After all retries are exhausted, the delivery is logged but not re-attempted
+
+## Incoming Webhook Receiver (Document Sync)
+
+AACsearch can accept document payloads via generic webhook from any external system.
+
+- **Endpoint:** `POST /api/webhooks/sync/:indexSlug`
+- **Auth:** HMAC-SHA256 signature verification (optional but recommended)
+- **Content-Type:** `application/json`
+
+### Setting Up the Receiver
+
+1. Configure a webhook secret for your search index via the [Webhook Receiver Config](/api-reference/webhooks/receiver-config) API
+2. From your external system, send POST requests with document payloads to `/api/webhooks/sync/:indexSlug`
+3. Sign the request body with HMAC-SHA256 using your webhook secret
+4. Include the signature in the `X-AACSearch-Signature-256` header
+
+### Verification
+
+```bash
+# HMAC-SHA256 signature example (using openssl)
+echo -n '{"documents": [...]}' | openssl dgst -sha256 -hmac "your-webhook-secret"
+```
+
+## Delivery Logs
+
+Every webhook delivery attempt is logged and can be queried via the [Webhook Delivery Log](/api-reference/webhooks/deliveries) API. Logs include:
+
+- Delivery timestamp
+- Event type
+- Document count
+- Signature verification status
+- Source system identifier
+
+## Rate Limits
+
+- Outgoing webhooks: up to **60 events per minute** per organization
+- Incoming webhook receiver: standard [API rate limits](/search-api/errors-and-rate-limits) apply per API key

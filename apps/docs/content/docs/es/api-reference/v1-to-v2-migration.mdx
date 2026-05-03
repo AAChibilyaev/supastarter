@@ -1,0 +1,92 @@
+---
+title: Guía de migración de v1 a v2
+description: Planifique su migración de la API REST AACsearch v1 a v2, incluyendo cronograma, cambios importantes e instrucciones de actualización paso a paso.
+---
+
+# Guía de migración: v1 a v2
+
+Esta guía le ayuda a migrar de la API REST AACsearch v1 a v2. La API v2 representa un avance significativo con capacidades de búsqueda mejoradas, nuevos endpoints, SDK generados automáticamente y una experiencia de desarrollador mejorada.
+
+> **Estado de v2**: En desarrollo activo. Consulte [Versionado y Deprecación de API](/es/api-reference/versioning-deprecation) para el estado actual del ciclo de vida.
+
+## Cronograma
+
+| Hito           | Fecha   | Impacto                                          |
+| -------------- | ------- | ------------------------------------------------ |
+| v2 Beta        | Q3 2026 | Acceso anticipado para clientes seleccionados    |
+| v2 GA          | Q4 2026 | Disponibilidad general, v1 entra en deprecación  |
+| v1 Sunset      | Q2 2027 | Los endpoints v1 comienzan a devolver `410 Gone` |
+| v1 Eliminación | Q3 2027 | API v1 completamente descontinuada               |
+
+Todas las fechas son estimadas. Suscríbase al [Changelog](/es/changelog) para anuncios.
+
+## Novedades en v2
+
+### Cambios en la API
+
+| Área                 | v1                                     | v2                                                                 |
+| -------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| **Ruta base**        | `/api/v1/...`                          | `/api/v2/...`                                                      |
+| **Búsqueda**         | Paso básico de Typesense               | Búsqueda mejorada con ranking híbrido (semántico + palabras clave) |
+| **Autenticación**    | Bearer Token (clave API)               | Bearer Token + OAuth 2.0 client credentials                        |
+| **Formato de error** | `{ "error": "...", "message": "..." }` | Extendido con `requestId`, `details`, `documentationUrl`           |
+| **SDKs**             | Escritos a mano por lenguaje           | Generados automáticamente desde OpenAPI 3.1                        |
+| **Paginación**       | `page` / `perPage`                     | Basada en cursor con `after` / `before`                            |
+
+## Cambios importantes
+
+### Cambios requeridos
+
+| Cambio               | Acción de migración                                                                           |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| **URL base**         | Reemplace `/api/v1/` con `/api/v2/` en todas las rutas de solicitud                           |
+| **Formato de error** | Actualice los analizadores de errores — v2 agrega `requestId`, `details` y `documentationUrl` |
+| **Paginación**       | Reemplace `page`/`perPage` con parámetros basados en cursor `after`/`before`                  |
+
+## Migración paso a paso
+
+### Paso 1: Audite su uso de la API
+
+```bash
+rg 'api/v1/' .
+rg 'ss_search_' .
+```
+
+### Paso 2: Actualice las URLs base
+
+```diff
+- https://api.aacsearch.com/api/v1/indexes/:indexId/search
++ https://api.aacsearch.com/api/v2/indexes/:indexId/search
+```
+
+### Paso 3: Actualice el manejo de errores
+
+```typescript
+interface V2Error {
+	error: string;
+	message: string;
+	requestId: string; // NUEVO — ID de trazabilidad
+	details?: Record<string, unknown>; // NUEVO — errores de validación
+	documentationUrl?: string; // NUEVO — enlace a la documentación
+}
+```
+
+### Paso 4: Migre la paginación
+
+```diff
+- GET /api/v1/indexes/:indexId/documents?page=2&perPage=20
++ GET /api/v2/indexes/:indexId/documents?after=eyJpZCI6InNvbWVJRCJ9&limit=20
+```
+
+### Paso 5: Actualice el SDK
+
+```diff
+- npm install @aacsearch/client
++ npm install @aacsearch/js-sdk
+```
+
+## Soporte de migración
+
+- **Ventana de migración**: v1 permanece totalmente compatible durante **6 meses** después de v2 GA
+- **Entorno de staging**: Pruebe su migración en `https://staging-api.aacsearch.com/api/v2/`
+- **Changelog**: Observe el [Changelog](/es/changelog) para anuncios relacionados con la migración

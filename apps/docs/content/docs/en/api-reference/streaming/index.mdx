@@ -1,0 +1,152 @@
+---
+title: Streaming Endpoints
+description: AACsearch supports streaming responses via Server-Sent Events (SSE) for RAG answers and AI completions — real-time, low-latency output as tokens are generated.
+---
+
+# Streaming Endpoints
+
+AACsearch provides streaming (SSE) endpoints for AI-powered features. Streaming allows you to start processing results before the full response is ready, reducing perceived latency and enabling real-time user interfaces.
+
+## How Streaming Works
+
+Streaming endpoints use **Server-Sent Events (SSE)** via the oRPC protocol. The client receives a stream of typed events as data becomes available:
+
+1. Client sends a POST request to the streaming endpoint
+2. Server immediately starts streaming event chunks
+3. Each chunk contains a delta (partial token or structured data)
+4. The stream ends with a completion event
+
+### Event Format
+
+```
+event: @orpc/server/stream-chunk
+data: {"delta": "The", "index": 0}
+
+event: @orpc/server/stream-chunk
+data: {"delta": " quick", "index": 1}
+
+event: @orpc/server/stream-chunk
+data: {"delta": " brown", "index": 2}
+
+event: @orpc/server/stream-finish
+data: {}
+```
+
+## Available Streaming Endpoints
+
+### Knowledge RAG Streaming
+
+`POST /api/rpc/knowledge/ask-stream`
+
+Stream a RAG answer with citations, confidence scores, and optional conversation history.
+
+**Auth:** Better Auth session (dashboard user)
+
+**Input:**
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `ownerType` | `string` | Yes | Owner type (`organization` or `user`) |
+| `ownerId` | `string` | Yes | Owner ID |
+| `spaceSlug` | `string` | Yes | Knowledge space slug |
+| `query` | `string` | Yes | Question to answer (min 3, max 1200 chars) |
+| `systemPrompt` | `string` | No | Custom system prompt (max 4000 chars) |
+| `ragConfig.maxOutputTokens` | `integer` | No | Max tokens in response (64–4096) |
+| `ragConfig.maxContextTokens` | `integer` | No | Max context tokens (512–16000) |
+
+**Streamed events include:**
+
+- Token deltas as the answer is generated
+- Document citations with relevance scores
+- Confidence assessment
+- Source attribution
+
+### AI Chat Streaming
+
+`POST /api/rpc/ai/stream`
+
+Stream an AI response from the configured text model without persisting the conversation.
+
+**Auth:** Better Auth session (dashboard user)
+
+**Input:**
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `messages` | `array` | Yes | Array of message objects with `role` and `content` fields |
+
+**Streamed events include:**
+
+- Token deltas as the AI responds
+- Finish reason on completion
+
+## Client Usage
+
+### Using the oRPC Client
+
+```ts
+import { createClient } from "@orpc/client";
+
+const client = createClient({
+	baseURL: "https://app.aacsearch.com/api/rpc",
+	headers: { Authorization: `Bearer ${sessionToken}` },
+});
+
+// Stream RAG answer
+const stream = client.knowledge.askStream({
+	ownerType: "organization",
+	ownerId: "org_xxx",
+	spaceSlug: "product-docs",
+	query: "What are the pricing plans?",
+});
+
+for await (const event of stream) {
+	if (event.delta) {
+		process.stdout.write(event.delta); // Real-time token output
+	}
+	if (event.citations) {
+		console.log("\n\nSources:", event.citations);
+	}
+}
+```
+
+### Using EventSource API
+
+For browser environments, you can use the standard `EventSource` API with the streaming endpoints:
+
+```javascript
+const eventSource = new EventSource("https://app.aacsearch.com/api/rpc/knowledge/ask-stream", {
+	withCredentials: true,
+});
+
+eventSource.addEventListener("@orpc/server/stream-chunk", (event) => {
+	const data = JSON.parse(event.data);
+	if (data.delta) {
+		// Append token to output
+	}
+});
+
+eventSource.addEventListener("@orpc/server/stream-finish", () => {
+	eventSource.close();
+});
+```
+
+## Error Handling
+
+Streaming errors are delivered as events within the stream rather than HTTP error responses:
+
+```
+event: @orpc/server/stream-error
+data: {"code": "BAD_REQUEST", "message": "Invalid input"}
+```
+
+| Event                        | Description                             |
+| ---------------------------- | --------------------------------------- |
+| `@orpc/server/stream-chunk`  | A data chunk (token or structured data) |
+| `@orpc/server/stream-finish` | Stream completed successfully           |
+| `@orpc/server/stream-error`  | An error occurred during streaming      |
+
+## Limitations
+
+- Maximum stream duration: **120 seconds**
+- Maximum output tokens: **4,096**
+- Streaming endpoints require an authenticated session (not available with API key auth)
+- Credit consumption is committed immediately on stream start, not on completion

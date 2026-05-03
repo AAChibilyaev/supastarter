@@ -74,8 +74,8 @@ export const performClusterOperation = protectedProcedure
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					const result = await (client as any).operations().perform("snapshot");
 					data = {
-						success: result?.success as boolean ?? true,
-						snapshotPath: result?.snapshot_path as string ?? "",
+						success: (result?.success as boolean) ?? true,
+						snapshotPath: (result?.snapshot_path as string) ?? "",
 					};
 					break;
 				}
@@ -157,13 +157,13 @@ export const clusterMetrics = protectedProcedure
 					networkReceivedBytes: "0",
 					networkSentBytes: "0",
 				},
-			typesense: {
-				memoryActiveBytes: "0",
-				memoryAllocatedBytes: "0",
-				processedRequests: 0,
-				pendingWriteBatches: 0,
-			},
-		};
+				typesense: {
+					memoryActiveBytes: "0",
+					memoryAllocatedBytes: "0",
+					processedRequests: 0,
+					pendingWriteBatches: 0,
+				},
+			};
 		}
 	});
 

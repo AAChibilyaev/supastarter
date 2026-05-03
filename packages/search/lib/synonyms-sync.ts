@@ -45,9 +45,7 @@ export async function syncSynonymsToTypesense(
 		const allSets = result.synonym_sets ?? [];
 		// Filter sets that belong to this collection by checking ID prefix
 		const prefix = `syn_${sanitizeId(collectionName)}_`;
-		existingIds = new Set(
-			allSets.filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
-		);
+		existingIds = new Set(allSets.filter((s) => s.id.startsWith(prefix)).map((s) => s.id));
 	} catch (err) {
 		logger.warn("syncSynonymsToTypesense: could not retrieve existing synonym sets", {
 			collectionName,

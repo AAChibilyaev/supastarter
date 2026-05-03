@@ -8,6 +8,7 @@ import {
 	webhookHandler as paymentsWebhookHandler,
 } from "@repo/payments";
 import { config as paymentsConfig } from "@repo/payments/config";
+import { shopifyApp } from "@repo/shopify-connector";
 import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -75,6 +76,8 @@ export const app = new Hono()
 	})
 	// Connector API (CMS modules — permissive CORS, mounted before global CORS)
 	.route("/", connectorApp)
+	// Shopify OAuth & webhooks (server-side connector)
+	.route("/", shopifyApp)
 	// Demo sandbox search (no auth, pre-loaded fashion catalog)
 	.route("/", demoApp)
 	// Analytics events endpoint (permissive CORS for widget/SDK)

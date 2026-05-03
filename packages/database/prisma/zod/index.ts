@@ -118,6 +118,12 @@ export const SearchConnectorSyncJobScalarFieldEnumSchema = z.enum(['id', 'indexI
 
 export type SearchConnectorSyncJobScalarFieldEnum = z.infer<typeof SearchConnectorSyncJobScalarFieldEnumSchema>;
 
+// File: ShopifyStoreScalarFieldEnum.schema.ts
+
+export const ShopifyStoreScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'indexId', 'shop', 'accessToken', 'scopes', 'name', 'email', 'domain', 'installedAt', 'uninstalledAt', 'lastSyncAt', 'syncStatus', 'syncError', 'metadata', 'createdAt', 'updatedAt'])
+
+export type ShopifyStoreScalarFieldEnum = z.infer<typeof ShopifyStoreScalarFieldEnumSchema>;
+
 // File: KnowledgeSpaceScalarFieldEnum.schema.ts
 
 export const KnowledgeSpaceScalarFieldEnumSchema = z.enum(['id', 'ownerType', 'userId', 'organizationId', 'slug', 'name', 'createdAt', 'updatedAt'])
@@ -588,6 +594,31 @@ export const SearchConnectorSyncJobSchema = z.object({
 });
 
 export type SearchConnectorSyncJobType = z.infer<typeof SearchConnectorSyncJobSchema>;
+
+
+// File: ShopifyStore.schema.ts
+
+export const ShopifyStoreSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  indexId: z.string().nullish(),
+  shop: z.string(),
+  accessToken: z.string(),
+  scopes: z.string(),
+  name: z.string().nullish(),
+  email: z.string().nullish(),
+  domain: z.string().nullish(),
+  installedAt: z.date(),
+  uninstalledAt: z.date().nullish(),
+  lastSyncAt: z.date().nullish(),
+  syncStatus: z.string().default("pending"),
+  syncError: z.string().nullish(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ShopifyStoreType = z.infer<typeof ShopifyStoreSchema>;
 
 
 // File: KnowledgeSpace.schema.ts

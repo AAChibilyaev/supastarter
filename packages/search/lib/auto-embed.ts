@@ -83,6 +83,37 @@ export const EMBEDDING_MODELS = {
 		provider: "azure" as const,
 		maxInputTokens: 8191,
 	},
+	// GCP Vertex AI
+	"vertex/textembedding-gecko@001": {
+		name: "vertex/textembedding-gecko@001",
+		dimensions: 768,
+		provider: "vertex" as const,
+		maxInputTokens: 2048,
+	},
+	"vertex/textembedding-gecko@003": {
+		name: "vertex/textembedding-gecko@003",
+		dimensions: 768,
+		provider: "vertex" as const,
+		maxInputTokens: 2048,
+	},
+	"vertex/text-embedding-004": {
+		name: "vertex/text-embedding-004",
+		dimensions: 768,
+		provider: "vertex" as const,
+		maxInputTokens: 2048,
+	},
+	"vertex/text-embedding-005": {
+		name: "vertex/text-embedding-005",
+		dimensions: 768,
+		provider: "vertex" as const,
+		maxInputTokens: 2048,
+	},
+	"vertex/gemini-embedding-exp-03-07": {
+		name: "vertex/gemini-embedding-exp-03-07",
+		dimensions: 3072,
+		provider: "vertex" as const,
+		maxInputTokens: 8192,
+	},
 } satisfies Record<string, EmbeddingModelDef>;
 
 export type EmbeddingModelName = keyof typeof EMBEDDING_MODELS;

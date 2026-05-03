@@ -6,7 +6,7 @@ export interface ConnectorCapabilities {
 }
 
 export interface ConnectorDefinition {
-	id: "prestashop" | "bitrix" | "wordpress";
+	id: "prestashop" | "bitrix" | "wordpress" | "shopify";
 	displayName: string;
 	auth: "bearer";
 	syncModes: Array<"full" | "delta" | "delete">;
@@ -54,10 +54,28 @@ const CONNECTOR_REGISTRY: Record<ConnectorDefinition["id"], ConnectorDefinition>
 		},
 		minModuleVersion: "0.1.0",
 	},
+	shopify: {
+		id: "shopify",
+		displayName: "Shopify",
+		auth: "bearer",
+		syncModes: ["full", "delta", "delete"],
+		capabilities: {
+			supportsFullSync: true,
+			supportsDeltaSync: true,
+			supportsDelete: true,
+			supportsDiagnostics: true,
+		},
+		minModuleVersion: "1.0.0",
+	},
 };
 
 export function getConnectorDefinition(connectorId: string): ConnectorDefinition | null {
-	if (connectorId === "prestashop" || connectorId === "bitrix" || connectorId === "wordpress") {
+	if (
+		connectorId === "prestashop" ||
+		connectorId === "bitrix" ||
+		connectorId === "wordpress" ||
+		connectorId === "shopify"
+	) {
 		return CONNECTOR_REGISTRY[connectorId];
 	}
 	return null;

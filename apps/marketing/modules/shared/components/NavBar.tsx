@@ -90,7 +90,7 @@ export function NavBar() {
 
 	return (
 		<nav
-			className="top-0 sticky z-50 w-full border-b border-border/50 bg-background"
+			className="top-0 sticky z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md"
 			data-test="navigation"
 		>
 			<div className="container">

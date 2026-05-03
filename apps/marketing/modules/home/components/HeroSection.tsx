@@ -12,7 +12,6 @@ import {
 	MicIcon,
 	SearchIcon,
 	ShieldIcon,
-	SparklesIcon,
 	ZapIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -117,35 +116,6 @@ export function HeroSection() {
 		<>
 			<CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} onModeSelect={openCmdForMode} />
 
-			{/* ─── DEBUG: Test raw button for iOS touch ──────────── */}
-			<button
-				type="button"
-				onClick={() => {
-					console.log("DEBUG BUTTON CLICKED");
-					alert("JS works!");
-				}}
-				onTouchStart={() => console.log("DEBUG: touchstart fired")}
-				onTouchEnd={(e) => {
-					e.preventDefault();
-					console.log("DEBUG: touchend fired");
-				}}
-				style={{
-					position: "fixed",
-					bottom: 80,
-					right: 4,
-					zIndex: 99998,
-					width: 120,
-					height: 44,
-					background: "#fd366e",
-					color: "white",
-					border: "none",
-					borderRadius: 22,
-					fontSize: 14,
-					cursor: "pointer",
-				}}
-			>
-				Debug JS
-			</button>
 
 			{/* ─── Hero Section ───────────────────────────────── */}
 			<section ref={sectionRef} className="relative overflow-hidden bg-background">
@@ -237,7 +207,7 @@ export function HeroSection() {
 					{/* CTA */}
 					<div className="mt-8 gap-3 flex w-full items-center justify-center">
 						<Button
-							className="text-white shrink-0 bg-[#fd366e] hover:bg-[#fd366e]/80"
+							className="shrink-0"
 							size="lg"
 							variant="primary"
 							asChild

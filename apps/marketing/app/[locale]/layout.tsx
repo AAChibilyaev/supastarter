@@ -117,21 +117,6 @@ export default async function MarketingLayout({
 
 								<ConsentBanner />
 								<AnalyticsScript />
-
-								{/* ─── DEBUG: Inline JS check ────────────────────── */}
-								<script
-									dangerouslySetInnerHTML={{
-										__html: `
-											console.log("DEBUG: inline script executed at", new Date().toISOString());
-											document.addEventListener("touchstart", function(e) {
-												console.log("DEBUG: document touchstart on", e.target.tagName, e.target.className);
-											}, { passive: true });
-											document.addEventListener("click", function(e) {
-												console.log("DEBUG: document click on", e.target.tagName, e.target.className);
-											}, { passive: true });
-										`,
-									}}
-								/>
 							</MarketingThemeProvider>
 						</ClientProviders>
 					</NextIntlClientProvider>

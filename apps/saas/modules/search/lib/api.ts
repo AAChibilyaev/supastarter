@@ -67,9 +67,7 @@ export function useRevokeSearchApiKeyMutation() {
 // ── Model Config ────────────────────────────────────────────────
 
 export function useListModelsQuery() {
-	return useQuery(
-		orpc.search.listModels.queryOptions({ input: undefined }),
-	);
+	return useQuery(orpc.search.listModels.queryOptions({ input: undefined }));
 }
 
 export function useModelConfigQuery(organizationId: string, slug: string) {
@@ -85,7 +83,7 @@ export function useUpdateModelConfigMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		...orpc.search.modelConfig.update.mutationOptions(),
-		onSuccess: async (_data, variables) => {
+		onSuccess: async (_data, _variables) => {
 			await queryClient.invalidateQueries({
 				queryKey: orpc.search.modelConfig.get.key(),
 			});

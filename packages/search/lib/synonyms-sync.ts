@@ -99,11 +99,7 @@ export async function syncSynonymsToTypesense(
  * Used for the v30 global Curation Sets / Synonym Sets API which is not
  * available as a typed method on the older typesense client library.
  */
-export async function typesenseFetch<T>(
-	method: string,
-	path: string,
-	body?: unknown,
-): Promise<T> {
+export async function typesenseFetch<T>(method: string, path: string, body?: unknown): Promise<T> {
 	const env = getTypesenseEnv();
 	const url = `${env.protocol}://${env.host}:${env.port}${path}`;
 
@@ -168,9 +164,7 @@ export async function syncCurationsToTypesense(
 	}
 
 	// Filter existing sets that belong to this collection
-	const existingForCollection = existingSets.filter(
-		(s) => s.collection_name === collectionName,
-	);
+	const existingForCollection = existingSets.filter((s) => s.collection_name === collectionName);
 	const existingIds = new Set(existingForCollection.map((s) => s.id));
 
 	const newIds = new Set<string>();

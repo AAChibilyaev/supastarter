@@ -31,8 +31,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { EmbeddingModelPanel } from "../panels/EmbeddingModelPanel";
 import { FileTable } from "../files/FileTable";
+import { EmbeddingModelPanel } from "../panels/EmbeddingModelPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { ReindexPanel } from "../panels/ReindexPanel";
 import { SchemaEditorPanel } from "../panels/SchemaEditorPanel";
@@ -540,10 +540,7 @@ $data = json_decode($response->getBody(), true);`;
 
 			{activeTab === "settings" && (
 				<div className="space-y-6">
-					<EmbeddingModelPanel
-						organizationId={orgId ?? ""}
-						slug={index.slug}
-					/>
+					<EmbeddingModelPanel organizationId={orgId ?? ""} slug={index.slug} />
 
 					<Card>
 						<CardHeader>

@@ -15,6 +15,8 @@ import type {
 	CreateCustomerPortalLink,
 	CreateUpgradeSession,
 	GetProrationPreview,
+	PauseSubscription,
+	ResumeSubscription,
 	SetSubscriptionSeats,
 	UpgradeSubscription,
 	WebhookHandler,
@@ -119,10 +121,32 @@ export const setSubscriptionSeats: SetSubscriptionSeats = async ({ id, seats }) 
 	});
 };
 
-export const cancelSubscription: CancelSubscription = async (id) => {
+export const cancelSubscription: CancelSubscription = async (id, options) => {
+	const stripeClient = getStripeClient();
+	const mode = options?.mode ?? "immediate";
+
+	if (mode === "immediate") {
+		await stripeClient.subscriptions.cancel(id);
+	} else {
+		await stripeClient.subscriptions.update(id, { cancel_at_period_end: true });
+	}
+};
+
+export const pauseSubscription: PauseSubscription = async (id, options) => {
+	const stripeClient = getStripeClient();
+	const behavior = options?.behavior ?? "keep_as_draft";
+
+	await stripeClient.subscriptions.update(id, {
+		pause_collection: { behavior },
+	});
+};
+
+export const resumeSubscription: ResumeSubscription = async (id) => {
 	const stripeClient = getStripeClient();
 
-	await stripeClient.subscriptions.cancel(id);
+	await stripeClient.subscriptions.update(id, {
+		pause_collection: "",
+	});
 };
 
 export interface StripePaymentMethod {

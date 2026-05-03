@@ -9,6 +9,7 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { CustomerPortalButton } from "../../settings/components/CustomerPortalButton";
 import { SubscriptionStatusBadge } from "../../settings/components/SubscriptionStatusBadge";
+import { SubscriptionManagement } from "./SubscriptionManagement";
 
 export function ActivePlan({ organizationId }: { organizationId?: string; seats?: number }) {
 	const t = useTranslations();
@@ -87,6 +88,10 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 				{"purchaseId" in activePlan && activePlan.purchaseId && (
 					<div className="mt-4 flex justify-end">
 						<div className="gap-2 md:flex-row flex w-full flex-col flex-wrap">
+							<SubscriptionManagement
+								purchaseId={activePlan.purchaseId}
+								status={activePlan.status}
+							/>
 							<CustomerPortalButton purchaseId={activePlan.purchaseId} />
 						</div>
 					</div>

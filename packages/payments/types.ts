@@ -118,6 +118,21 @@ export type CancelSubscription = (
 	options?: { mode?: CancelSubscriptionMode },
 ) => Promise<void>;
 
+export interface PauseSubscriptionOptions {
+	/**
+	 * The behavior during pause.
+	 * - "keep_as_draft": keeps invoices as draft, recommended for easy resume
+	 * - "mark_uncollectible": marks invoices as uncollectible
+	 * - "void": voids invoices
+	 * @default "keep_as_draft"
+	 */
+	behavior?: "keep_as_draft" | "mark_uncollectible" | "void";
+}
+
+export type PauseSubscription = (id: string, options?: PauseSubscriptionOptions) => Promise<void>;
+
+export type ResumeSubscription = (id: string) => Promise<void>;
+
 export type UpgradeSubscription = (params: {
 	subscriptionId: string;
 	newPriceId: string;

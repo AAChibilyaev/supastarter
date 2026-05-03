@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AiAssistantChat } from "./AiAssistantChat";
 import { CommandMenu } from "./CommandMenu";
 
 type SearchMode = "text" | "voice" | "photo" | "image" | "chat";
@@ -56,7 +57,7 @@ export function HeroSection() {
 	const [showWidget, setShowWidget] = useState(false);
 	const sectionRef = useRef<HTMLElement>(null);
 
-	// IntersectionObserver: auto-show widget when hero scrolls out of view
+	// IntersectionObserver: auto-show AI Assistant toggle when hero scrolls out
 	useEffect(() => {
 		const el = sectionRef.current;
 		if (!el) return;
@@ -72,7 +73,7 @@ export function HeroSection() {
 		return () => observer.disconnect();
 	}, []);
 
-	// Global Cmd+K / Ctrl+K listener
+	// Global Cmd+K / Ctrl+K
 	useEffect(() => {
 		const handler = (e: KeyboardEvent) => {
 			if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -119,13 +120,13 @@ export function HeroSection() {
 				onModeSelect={openCmdForMode}
 			/>
 
-			{/* ─── Full Hero Section ───────────────────────────── */}
+			{/* ─── Hero Section ───────────────────────────────── */}
 			<section
 				ref={sectionRef}
 				className="relative overflow-hidden bg-background"
 			>
 				<div className="section-padding relative z-10 container">
-					{/* Hero heading */}
+					{/* Heading */}
 					<div className="mx-auto max-w-3xl text-center">
 						<h1 className="text-4xl font-light tracking-tight text-balance md:text-5xl lg:text-6xl text-foreground">
 							{t("hero.title")}
@@ -135,7 +136,7 @@ export function HeroSection() {
 						</p>
 					</div>
 
-					{/* Clean search bar */}
+					{/* Search bar */}
 					<div className="mx-auto mt-10 max-w-2xl">
 						<div
 							className="group relative cursor-pointer rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-md hover:border-muted-foreground/20"
@@ -159,7 +160,6 @@ export function HeroSection() {
 									{getPlaceholder()}
 								</span>
 
-								{/* Mode icons — hidden by default, appear on hover */}
 								<div
 									className={`flex items-center gap-0.5 transition-all duration-300 ${
 										isHovered
@@ -188,7 +188,6 @@ export function HeroSection() {
 									))}
 								</div>
 
-								{/* ⌘K badge */}
 								<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/60 bg-muted/30 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/50 transition-all group-hover:border-border group-hover:text-muted-foreground sm:inline-flex">
 									<KeyboardIcon className="size-2.5" />
 									<span>K</span>
@@ -211,7 +210,7 @@ export function HeroSection() {
 						</div>
 					</div>
 
-					{/* CTA buttons */}
+					{/* CTA */}
 					<div className="mt-8 gap-3 flex w-full items-center justify-center">
 						<Button className="shrink-0" size="lg" variant="primary" asChild>
 							<a href={config.saasUrl}>
@@ -246,7 +245,7 @@ export function HeroSection() {
 						</span>
 					</div>
 
-					{/* Stats row */}
+					{/* Stats */}
 					<div className="mt-12 max-w-2xl gap-4 sm:gap-8 mx-auto grid grid-cols-3">
 						{MODE_STATS.map((stat) => (
 							<div key={stat.labelKey} className="text-center">
@@ -262,67 +261,16 @@ export function HeroSection() {
 				</div>
 			</section>
 
-			{/* ─── Floating AI Assistant Widget (auto on scroll) ─── */}
+			{/* ─── AI Assistant Chat (auto on scroll) ──────────── */}
 			<div
 				className={`fixed z-50 transition-all duration-500 ease-in-out ${
 					showWidget
-						? "bottom-6 opacity-100 translate-y-0 sm:bottom-8"
-						: "bottom-0 opacity-0 translate-y-6 pointer-events-none"
-				} right-4 sm:right-6 md:right-8`}
-				onMouseEnter={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
+						? "opacity-100 translate-y-0"
+						: "opacity-0 translate-y-6 pointer-events-none"
+				}`}
 				aria-hidden={!showWidget}
 			>
-				<div className="group flex cursor-pointer items-center gap-3 rounded-2xl border border-border/60 bg-card/85 px-4 py-2.5 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:border-border hover:bg-card/95 hover:shadow-xl hover:shadow-black/10 sm:px-5 sm:py-3">
-					{/* Animated gradient orb */}
-					<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5">
-						<SparklesIcon className="size-4 text-primary" />
-						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
-					</div>
-
-					{/* Prompt */}
-					<button
-						type="button"
-						onClick={() => setCmdOpen(true)}
-						className="flex-1 bg-transparent text-left text-sm font-light text-muted-foreground/70 outline-none transition-colors hover:text-muted-foreground"
-					>
-						{t("hero.searchPlaceholder")}
-					</button>
-
-					{/* Mode icons — appear on hover */}
-					<div
-						className={`flex items-center gap-0.5 transition-all duration-300 ${
-							isHovered
-								? "w-auto opacity-100"
-								: "w-0 overflow-hidden opacity-0"
-						}`}
-					>
-						{MODES.map(({ key, icon: Icon }) => (
-							<button
-								key={key}
-								type="button"
-								onClick={(e) => {
-									e.stopPropagation();
-									openCmdForMode(key);
-								}}
-								className={`flex size-7 items-center justify-center rounded-md transition-colors ${
-									mode === key
-										? `${modeActiveColors[key]} bg-muted/60`
-										: "text-muted-foreground/50 hover:text-muted-foreground"
-								}`}
-								aria-label={`Search by ${key}`}
-							>
-								<Icon className="size-3.5" />
-							</button>
-						))}
-					</div>
-
-					{/* ⌘K badge */}
-					<span className="hidden shrink-0 items-center gap-0.5 rounded-md border border-border/50 bg-muted/40 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/60 transition-colors group-hover:text-muted-foreground sm:inline-flex">
-						<KeyboardIcon className="size-2.5" />
-						<span>K</span>
-					</span>
-				</div>
+				<AiAssistantChat onModeSelect={openCmdForMode} />
 			</div>
 		</>
 	);

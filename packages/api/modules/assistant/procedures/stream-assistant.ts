@@ -3,6 +3,7 @@ import { ORPCError } from "@orpc/server";
 import {
 	appendMessage,
 	createConversation,
+	db,
 	getConversation,
 	getConversationHistory,
 	updateConversationMetadata,
@@ -25,7 +26,7 @@ import { requireOrganizationMember } from "../../search/lib/access";
 import { classifyIntent } from "../lib/intent-classifier";
 import { buildSystemPrompt } from "../lib/prompts/prompt-builder";
 import { checkUserMessage, sanitizeOutput } from "../lib/safety-guard";
-import { getConnectors } from "../connectors/registry";
+import { getConnectorsForOrg } from "../connectors/registry";
 
 import { createSearchProductsTool } from "../lib/tools/search-products";
 import { createCheckAvailabilityTool } from "../lib/tools/check-availability";
@@ -132,8 +133,21 @@ export const streamAssistant = protectedProcedure
 		});
 
 		// --- Build tools ---
-		const connectors = getConnectors(input.organizationId);
-		const escalationService = createEscalationService({});
+		const connectors = await getConnectorsForOrg(input.organizationId);
+
+		// Read escalation config from org metadata
+		const orgForEsc = await db.organization.findUnique({
+			where: { id: input.organizationId },
+			select: { metadata: true },
+		});
+		const orgMeta = JSON.parse((orgForEsc?.metadata as string | null) ?? "{}") as Record<string, unknown>;
+		const ac = (orgMeta.assistantConfig ?? {}) as Record<string, unknown>;
+		const escalationService = createEscalationService({
+			webhookUrl: (ac.escalationWebhookUrl as string | undefined) || undefined,
+			emailTo: (ac.escalationEmailTo as string | undefined) || undefined,
+			workingHoursStart: typeof ac.workingHoursStart === "number" ? ac.workingHoursStart : undefined,
+			workingHoursEnd: typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
+		});
 
 		const tools = {
 			search_products: createSearchProductsTool({ indexSlug: input.indexSlug ?? "products" }),

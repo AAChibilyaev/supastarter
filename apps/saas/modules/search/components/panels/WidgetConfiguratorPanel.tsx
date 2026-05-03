@@ -379,21 +379,9 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 										>
 											<input
 												type="checkbox"
-												className="size-4 accent-[var(--accent-color,var(--color-primary))]"
-												checked={
-													widgetData?.config.queryBy?.includes(field) ??
-													false
-												}
-												onChange={(e) => {
-													const current =
-														widgetData?.config.queryBy ?? [];
-													const next = e.target.checked
-														? [...current, field]
-														: current.filter(
-																(f: string) => f !== field,
-															);
-													// We handle this via save, not local state
-												}}
+												className="size-4 accent-[var(--color-primary)]"
+												checked={widgetData?.config.queryBy?.includes(field) ?? false}
+												readOnly
 											/>
 											<span className="font-mono text-xs">{field}</span>
 										</label>

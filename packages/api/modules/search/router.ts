@@ -24,6 +24,7 @@ import { dynamicSearch } from "./procedures/dynamic-search";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalSynonyms, updateGlobalSynonyms } from "./procedures/global-synonyms";
+import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
 import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
 import { imageSearch } from "./procedures/image-search";
@@ -113,6 +114,10 @@ export const searchRouter = {
 	globalSynonyms: {
 		get: getGlobalSynonyms,
 		update: updateGlobalSynonyms,
+	},
+	globalCurations: {
+		get: getGlobalCurations,
+		update: updateGlobalCurations,
 	},
 	listConnectorTokens,
 	createConnectorToken,

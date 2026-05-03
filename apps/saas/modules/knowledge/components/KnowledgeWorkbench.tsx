@@ -29,6 +29,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { FileTable } from "./FileTable";
+import { KnowledgeGraphView } from "./KnowledgeGraphView";
 import { RagConfigPanel } from "./RagConfigPanel";
 
 type OwnerType = "USER" | "ORGANIZATION";
@@ -1022,32 +1023,22 @@ export function KnowledgeWorkbench({
 								</Button>
 								{graphResult ? (
 									<div className="space-y-2">
-										<div className="rounded p-2 text-xs border">
-											<div className="font-medium mb-1">
-												{t("search.knowledge.seedNodes")}
-											</div>
-											{graphResult.seedNodes.length === 0
-												? t("search.knowledge.noSeedNodes")
-												: graphResult.seedNodes
-														.map(
-															(node) =>
-																`${node.canonicalName} (${node.nodeType})`,
-														)
-														.join(", ")}
-										</div>
-										<div className="rounded p-2 text-xs border">
-											<div className="font-medium mb-1">
-												{t("search.knowledge.edges")}
-											</div>
-											{graphResult.edges.length === 0
-												? t("search.knowledge.noEdges")
-												: graphResult.edges
-														.slice(0, 12)
-														.map(
-															(edge) =>
-																`${edge.relationType}: ${edge.fromNodeId} -> ${edge.toNodeId}`,
-														)
-														.join("\n")}
+										<div className="w-full">
+											<p className="mb-1.5 text-xs font-medium text-muted-foreground/70">
+												{t("search.knowledge.graphVisualization")}
+											</p>
+											<KnowledgeGraphView
+												nodes={graphResult.seedNodes.map((n, i) => ({
+													id: `node-${i}`,
+													canonicalName: n.canonicalName,
+													nodeType: n.nodeType,
+												}))}
+												edges={graphResult.edges.map((e, i) => ({
+													fromNodeId: `node-${graphResult.seedNodes.findIndex((sn) => sn.canonicalName === e.fromNodeId)}`,
+													toNodeId: `node-${graphResult.seedNodes.findIndex((sn) => sn.canonicalName === e.toNodeId)}`,
+													relationType: e.relationType,
+												}))}
+											/>
 										</div>
 									</div>
 								) : null}

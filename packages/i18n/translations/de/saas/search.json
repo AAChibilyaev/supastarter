@@ -1178,6 +1178,7 @@
 			"graphQueryPlaceholder": "Connector-Diagnose-Fehler",
 			"graphQueryLabel": "Graph-Abfrage",
 			"graphExplainDesc": "Graph-Nachbarschaft für Ihre Abfrage untersuchen",
+			"graphVisualization": "Graph-Visualisierung",
 			"citedFrom": "Zitiert aus Dokument",
 			"seedNodes": "Startknoten",
 			"edges": "Kanten",

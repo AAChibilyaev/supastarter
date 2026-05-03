@@ -1322,6 +1322,7 @@
 			"graphQueryPlaceholder": "connector diagnostics failures",
 			"graphQueryLabel": "Graph query",
 			"graphExplainDesc": "Inspect graph neighborhood for your query",
+			"graphVisualization": "Graph Visualization",
 			"citedFrom": "Cited from document",
 			"seedNodes": "Seed nodes",
 			"edges": "Edges",

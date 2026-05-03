@@ -2,6 +2,7 @@ import { getActiveOrganization, getSession } from "@auth/lib/server";
 import { OverviewPage } from "@search/components/pages/OverviewPage";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export async function generateMetadata({
 	params,
@@ -28,7 +29,21 @@ export default async function OverviewPageRoute({
 
 	return (
 		<div className="p-6">
+			<Suspense fallback={null}>
+				<TrialBannerAsync organizationId={org.id} organizationSlug={organizationSlug} />
+			</Suspense>
 			<OverviewPage />
 		</div>
 	);
+}
+
+async function TrialBannerAsync({
+	organizationId,
+	organizationSlug,
+}: {
+	organizationId: string;
+	organizationSlug: string;
+}) {
+	const { TrialBanner } = await import("@payments/components/TrialBanner");
+	return <TrialBanner organizationId={organizationId} orgSlug={organizationSlug} />;
 }

@@ -129,6 +129,20 @@ export const auth = betterAuth({
 				}
 
 				await updateSeatsInOrganizationSubscription(organizationId);
+			} else if (ctx.path === "/organization/create") {
+				// Activate 14-day free trial on organization creation
+				const { organizationId } = ctx.body;
+				if (organizationId && ctx.context.session) {
+					const trialEnd = new Date(Date.now() + 14 * 86400_000);
+					await db.organization.update({
+						where: { id: organizationId },
+						data: { trialEndsAt: trialEnd },
+					});
+					logger.info("Free trial activated for organization", {
+						organizationId,
+						trialEndsAt: trialEnd.toISOString(),
+					});
+				}
 			}
 		}),
 		before: createAuthMiddleware(async (ctx) => {

@@ -1,500 +1,503 @@
 {
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
-				},
-				"title": "Your avatar"
-			},
-			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
-				},
-				"title": "Your email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
-				},
-				"title": "Your name"
-			},
-			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
-				},
-				"submit": "Delete account",
-				"title": "Delete account"
-			},
-			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
-				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
-				},
-				"title": "Your language"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-					"title": "Active sessions",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session revoked"
-						}
-					},
-					"currentSession": "Current session"
-				},
-				"changePassword": {
-					"currentPassword": "Current password",
-					"newPassword": "New password",
-					"notifications": {
-						"error": "Could not update password",
-						"success": "Password was updated successfully"
-					},
-					"title": "Your password"
-				},
-				"connectedAccounts": {
-					"connect": "Connect",
-					"connected": "Connected",
-					"disconnect": "Disconnect",
-					"title": "Connected accounts"
-				},
-				"passkeys": {
-					"addPasskey": "Add passkey",
-					"description": "Use passkeys as a secure alternative to passwords.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Could not add passkey"
-							},
-							"success": {
-								"title": "Passkey added"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Could not delete passkey"
-							},
-							"loading": {
-								"title": "Deleting passkey..."
-							},
-							"success": {
-								"title": "Passkey deleted"
-							}
-						}
-					},
-					"title": "Passkeys"
-				},
-				"setPassword": {
-					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
-					"notifications": {
-						"error": "Could not send link to set password. Please try again.",
-						"success": "Check your inbox for the link to set your password."
-					},
-					"submit": "Set password",
-					"title": "Your password"
-				},
-				"title": "Security",
-				"twoFactor": {
-					"title": "Two-factor authentication",
-					"description": "Add an extra layer of security to your account.",
-					"dialog": {
-						"password": {
-							"title": "Verify with password",
-							"description": "Please verify your account by entering your password:",
-							"label": "Your password:"
-						},
-						"totpUrl": {
-							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-							"code": "Enter 6-digit code to verify the setup:",
-							"title": "Enable two-factor authentication"
-						}
-					},
-					"enable": "Enable two-factor authentication",
-					"notifications": {
-						"verify": {
-							"success": {
-								"title": "Two-factor authentication has been enabled successfully."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Could not verify your account with the provided password. Please try again."
-							}
-						},
-						"disable": {
-							"success": {
-								"title": "Two-factor authentication has been disabled successfully."
-							}
-						}
-					},
-					"disable": "Disable two-factor authentication",
-					"enabled": "You have two-factor authentication enabled for your account."
-				}
-			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Manage billing",
-				"notifications": {
-					"error": {
-						"title": "Could not create a customer portal session. Please try again."
-					}
-				}
-			},
-			"activePlan": {
-				"description": "Your current plan and usage limits for search and indexing.",
-				"notFound": "No plan information available.",
-				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
-				},
-				"title": "Your plan"
-			},
-			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
-			},
-			"upgradePlan": "Upgrade Plan",
-			"currentPlan": "Current Plan",
-			"switchToAnnual": "Switch to Annual",
-			"upgradeSuccess": "Plan upgraded successfully",
-			"upgradeSuccessTitle": "Plan Upgraded!",
-			"upgradeSuccessWithPlan": "Your plan has been upgraded to {plan}. Enjoy the new features and increased limits.",
-			"redirectingIn": "Redirecting in {seconds}s...",
-			"aiCredits": {
-				"title": "AI credits",
-				"subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",
-				"balance": {
-					"title": "Wallet balance",
-					"includedRemaining": "Included this month",
-					"reserved": "Reserved",
-					"promo": "Promo credits",
-					"notInitialized": "Wallet is not initialized yet."
-				},
-				"topup": {
-					"button": "Top up",
-					"title": "Top up your AI wallet",
-					"description": "Choose an amount or enter a custom value in rubles.",
-					"customAmount": "Custom amount (P)",
-					"summary": "You will be charged {amount}",
-					"confirm": "Pay with Tochka",
-					"error": "Failed to create payment link. Please try again."
-				},
-				"errors": {
-					"insufficientFunds": "Insufficient AI credits. Top up your wallet."
-				},
-				"chart": {
-					"title": "Credit usage",
-					"daily": "Daily",
-					"weekly": "Weekly",
-					"monthly": "Monthly",
-					"kopecks": "Cost",
-					"events": "Events"
-				},
-				"consumption": {
-					"title": "Consumption history",
-					"date": "Date",
-					"operation": "Operation",
-					"provider": "Provider",
-					"model": "Model",
-					"tokens": "Tokens",
-					"charge": "Charge",
-					"empty": "No usage events yet."
-				},
-				"rateCard": {
-					"title": "Pricing rates",
-					"operation": "Operation",
-					"provider": "Provider",
-					"model": "Model",
-					"inputPer1M": "Input / 1M tokens",
-					"outputPer1M": "Output / 1M tokens",
-					"embeddingPer1M": "Embedding / 1M tokens",
-					"flatFee": "Flat fee",
-					"empty": "No pricing rules configured."
-				},
-				"lowBalance": {
-					"title": "Low on credits",
-					"message": "Your available credit balance is running low ({balance} remaining).",
-					"topUp": "Top up now"
-				}
-			},
-			"title": "Billing",
-			"usage": {
-				"searches": "Searches",
-				"documents": "Documents"
-			},
-			"limits": {
-				"maxIndexes": "Max indexes",
-				"maxDocuments": "Max documents",
-				"maxApiKeys": "Max API keys",
-				"rateLimit": "Rate limit",
-				"maxSearchesPerMonth": "Searches / month"
-			},
-			"features": {
-				"title": "Features",
-				"none": "No features configured"
-			},
-			"upgrade": "Upgrade plan",
-			"overageStatus": {
-				"title": "Search quota usage",
-				"description": "Your current search usage and overage status.",
-				"normal": "Normal",
-				"softCap": "Approaching limit",
-				"hardCap": "Limit reached",
-				"overageActive": "Overage active",
-				"walletBalance": "Overage wallet",
-				"remaining": "remaining",
-				"noOverage": "No overage billing configured",
-				"unlimited": "Unlimited",
-				"searchesUsed": "{{used}} / {{limit}} searches used"
-			},
-			"upgradeModal": {
-				"title": "Upgrade your plan",
-				"currentPlan": "Current plan",
-				"comparePlans": "Compare plans",
-				"prorationPreview": "Proration preview",
-				"feature": "Feature",
-				"current": "Current",
-				"select": "Select",
-				"currentRemaining": "Credit from current plan",
-				"newPlanCost": "New plan cost (prorated)",
-				"totalDueToday": "Total due today",
-				"totalCredit": "Total credit",
-				"noPaymentNeeded": "No payment needed",
-				"redirectingToStripe": "Redirecting to payment...",
-				"confirmUpgrade": "Confirm upgrade",
-				"upgradeError": "Something went wrong. Please try again."
-			},
-			"downgradeModal": {
-				"title": "Confirm downgrade",
-				"warningTitle": "You're about to downgrade",
-				"dataLossWarning": "Downgrading will reduce your plan limits. Some documents, searches, and features may become unavailable.",
-				"whatChanges": "What changes",
-				"currentLimit": "Current",
-				"newLimit": "New",
-				"limitChanges": "Limit changes",
-				"featureDowngrades": "Features that will be disabled",
-				"noFeatureLoss": "No features will be lost with this downgrade",
-				"prorationCredit": "You'll receive a prorated credit of {amount}",
-				"gracePeriod": "After downgrade, you'll have a 7-day grace period where searches are still readable, but indexing is paused immediately.",
-				"confirmDowngrade": "Confirm downgrade",
-				"cancelDowngrade": "Cancel",
-				"downgradeProcessing": "Processing downgrade..."
-			},
-			"invoiceHistory": {
-				"title": "Invoice History",
-				"description": "View and download your past invoices.",
-				"date": "Date",
-				"amount": "Amount",
-				"status": {
-					"paid": "Paid",
-					"open": "Pending",
-					"uncollectible": "Uncollectible",
-					"void": "Void",
-					"draft": "Draft"
-				},
-				"actions": "Actions",
-				"downloadPdf": "Download PDF",
-				"notAvailable": "Not available",
-				"previous": "Previous",
-				"next": "Next",
-				"pageInfo": "{{start}}–{{end}} of {{total}}",
-				"empty": "No invoices yet. Invoices will appear here after your first payment.",
-				"loading": "Loading invoices...",
-				"downloadError": "Could not open invoice PDF. Please try again.",
-				"statusLabel": "Status",
-				"page": "Page {{page}}"
-			},
-			"paymentMethod": {
-				"title": "Payment Method",
-				"description": "Your current payment method on file.",
-				"card": "Card",
-				"maskedNumber": "•••• {{last4}}",
-				"expiry": "{{month}}/{{year}}",
-				"manage": "Manage",
-				"loading": "Loading payment method...",
-				"addCard": "Add Card",
-				"addCardTitle": "Add a new payment method",
-				"addCardDescription": "Enter your card details below.",
-				"addCardConfirm": "Add Card",
-				"cardAdded": "Card added successfully",
-				"defaultLabel": "Default",
-				"setDefault": "Set as default",
-				"defaultSuccess": "Default payment method updated",
-				"defaultError": "Could not update default payment method",
-				"deleteDialogTitle": "Remove card?",
-				"deleteDialogDescription": "Are you sure you want to remove {card}?",
-				"deleteConfirm": "Remove",
-				"deleteSuccess": "Card removed",
-				"deleteError": "Could not remove card",
-				"emptyState": "No saved payment methods",
-				"preparing": "Preparing card form...",
-				"setupError": "Could not prepare card form. Please try again."
-			},
-			"invoices": {
-				"title": "Invoice History",
-				"emptyState": "No invoices yet",
-				"downloadPdf": "Download PDF",
-				"status": {
-					"paid": "Paid",
-					"pending": "Pending",
-					"failed": "Failed"
-				}
-			},
-			"tabs": {
-				"overview": "Overview",
-				"paymentMethods": "Payment methods",
-				"invoices": "Invoices",
-				"aiCredits": "AI credits"
-			},
-			"paymentMethods": {
-				"title": "Payment Methods",
-				"empty": "No payment methods saved",
-				"addCard": "Add Payment Method",
-				"default": "Default",
-				"setDefault": "Set as default",
-				"delete": "Remove card",
-				"deleteConfirmTitle": "Remove this card?",
-				"deleteConfirmMessage": "This card will be removed from your account."
-			},
-			"transactionHistory": {
-				"title": "Transaction History",
-				"description": "Recent wallet transactions and overage charges",
-				"empty": "No transactions yet",
-				"date": "Date",
-				"type": "Type",
-				"source": "Source",
-				"amount": "Amount"
-			},
-			"autoRecharge": {
-				"title": "Auto Recharge",
-				"description": "Automatically top up your wallet when balance drops below a threshold",
-				"thresholdLabel": "Recharge threshold",
-				"thresholdPlaceholder": "e.g. 500",
-				"thresholdHint": "When your balance drops below this amount (in RUB), auto-recharge triggers",
-				"topupLabel": "Top-up amount",
-				"topupPlaceholder": "e.g. 1000",
-				"topupHint": "Amount to add each time auto-recharge triggers (min 1 RUB)",
-				"rub": "RUB",
-				"submit": "Set up auto recharge",
-				"saving": "Saving...",
-				"setupSuccess": "Auto-recharge configured successfully",
-				"setupError": "Failed to configure auto-recharge",
-				"invalidValues": "Please enter valid amounts"
-			}
-		},
-		"notificationsPage": {
-			"title": "Notifications",
-			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
-			"groups": {
-				"general": {
-					"title": "General"
-				},
-				"billing": {
-					"title": "Billing"
-				}
-			},
-			"types": {
-				"APP_UPDATE": {
-					"label": "App updates"
-				},
-				"AI_LOW_BALANCE": {
-					"label": "AI wallet balance is low"
-				},
-				"AI_TOPUP_PAID": {
-					"label": "AI wallet top-up confirmed"
-				},
-				"AI_TOPUP_FAILED": {
-					"label": "AI wallet top-up failed"
-				},
-				"AI_OVERAGE_REACHED": {
-					"label": "AI wallet overage limit reached"
-				},
-				"PAYMENT_FAILED": {
-					"label": "Subscription payment failed"
-				}
-			},
-			"columns": {
-				"type": "Notification",
-				"inApp": "In-app",
-				"email": "Email"
-			}
-		},
-		"menu": {
-			"account": {
-				"billing": "Billing",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"notifications": "Notifications",
-				"security": "Security",
-				"title": "Account",
-				"invoices": "Invoices",
-				"paymentMethods": "Payment Methods"
-			},
-			"organization": {
-				"billing": "Billing",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
-			}
-		},
-		"save": "Save"
-	},
-	"alertsPage": {
-		"title": "Alerts",
-		"subtitle": "Configure thresholds and notification channels for usage alerts",
-		"searchQuota": "Search Quota",
-		"ingestQuota": "Ingest Quota",
-		"thresholds": "Thresholds",
-		"threshold": "{percent}% used",
-		"channels": "Notification Channels",
-		"cooldown": "Cooldown",
-		"cooldownHours": "{hours}h between notifications",
-		"edit": "Edit",
-		"save": "Save",
-		"cancel": "Cancel",
-		"enable": "Enable",
-		"disable": "Disable",
-		"email": "Email",
-		"webhook": "Webhook",
-		"slack": "Slack",
-		"slackWebhookUrl": "Slack Webhook URL",
-		"slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
-		"deliveryChannels": "Delivery Channels",
-		"alertHistory": "Alert History",
-		"noAlerts": "No alerts triggered yet",
-		"alertTriggered": "Alert triggered",
-		"alertResolved": "Alert resolved",
-		"resource": "Resource",
-		"thresholdLabel": "Threshold",
-		"triggeredAt": "Triggered at",
-		"resolvedAt": "Resolved at",
-		"status": "Status",
-		"ruleEnabled": "Alert rule enabled",
-		"ruleDisabled": "Alert rule disabled",
-		"configureChannels": "Also configure a Slack webhook URL for Slack notifications",
-		"addWebhook": "Add Slack Webhook",
-		"removeWebhook": "Remove",
-		"saveSuccess": "Alert settings saved",
-		"saveError": "Failed to save alert settings"
-	}
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+        "notifications": {
+          "error": "Could not update avatar",
+          "success": "Avatar was updated successfully"
+        },
+        "title": "Your avatar"
+      },
+      "changeEmail": {
+        "description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+        "notifications": {
+          "error": "Could not update email",
+          "success": "Email was updated successfully"
+        },
+        "title": "Your email"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Could not update name",
+          "success": "Name was updated successfully"
+        },
+        "title": "Your name"
+      },
+      "deleteAccount": {
+        "confirmation": "Are you sure you want to delete your account?",
+        "description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+        "notifications": {
+          "error": "Could not delete account",
+          "success": "Account was deleted successfully"
+        },
+        "submit": "Delete account",
+        "title": "Delete account"
+      },
+      "language": {
+        "description": "To change the language of the app for your account, select a language from the list and click save.",
+        "notifications": {
+          "error": "Could not update language",
+          "success": "Language was updated successfully"
+        },
+        "title": "Your language"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "These are all the active sessions of your account. Click the X to end a specifc session.",
+          "title": "Active sessions",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session revoked"
+            }
+          },
+          "currentSession": "Current session"
+        },
+        "changePassword": {
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "notifications": {
+            "error": "Could not update password",
+            "success": "Password was updated successfully"
+          },
+          "title": "Your password"
+        },
+        "connectedAccounts": {
+          "connect": "Connect",
+          "connected": "Connected",
+          "disconnect": "Disconnect",
+          "title": "Connected accounts"
+        },
+        "passkeys": {
+          "addPasskey": "Add passkey",
+          "description": "Use passkeys as a secure alternative to passwords.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Could not add passkey"
+              },
+              "success": {
+                "title": "Passkey added"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Could not delete passkey"
+              },
+              "loading": {
+                "title": "Deleting passkey..."
+              },
+              "success": {
+                "title": "Passkey deleted"
+              }
+            }
+          },
+          "title": "Passkeys"
+        },
+        "setPassword": {
+          "description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+          "notifications": {
+            "error": "Could not send link to set password. Please try again.",
+            "success": "Check your inbox for the link to set your password."
+          },
+          "submit": "Set password",
+          "title": "Your password"
+        },
+        "title": "Security",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Add an extra layer of security to your account.",
+          "dialog": {
+            "password": {
+              "title": "Verify with password",
+              "description": "Please verify your account by entering your password:",
+              "label": "Your password:"
+            },
+            "totpUrl": {
+              "description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
+              "code": "Enter 6-digit code to verify the setup:",
+              "title": "Enable two-factor authentication"
+            }
+          },
+          "enable": "Enable two-factor authentication",
+          "notifications": {
+            "verify": {
+              "success": {
+                "title": "Two-factor authentication has been enabled successfully."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Could not verify your account with the provided password. Please try again."
+              }
+            },
+            "disable": {
+              "success": {
+                "title": "Two-factor authentication has been disabled successfully."
+              }
+            }
+          },
+          "disable": "Disable two-factor authentication",
+          "enabled": "You have two-factor authentication enabled for your account."
+        }
+      },
+      "subtitle": "Manage the settings of your personal account.",
+      "title": "Account settings"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Manage billing",
+        "notifications": {
+          "error": {
+            "title": "Could not create a customer portal session. Please try again."
+          }
+        }
+      },
+      "activePlan": {
+        "description": "Your current plan and usage limits for search and indexing.",
+        "notFound": "No plan information available.",
+        "status": {
+          "active": "Active",
+          "canceled": "Canceled",
+          "expired": "Expired",
+          "incomplete": "Incomplete",
+          "past_due": "Past due",
+          "paused": "Paused",
+          "trialing": "Trialing",
+          "unpaid": "Unpaid"
+        },
+        "title": "Your plan"
+      },
+      "changePlan": {
+        "description": "Choose a plan to subscribe to.",
+        "title": "Change your plan"
+      },
+      "upgradePlan": "Upgrade Plan",
+      "currentPlan": "Current Plan",
+      "switchToAnnual": "Switch to Annual",
+      "upgradeSuccess": "Plan upgraded successfully",
+      "upgradeSuccessTitle": "Plan Upgraded!",
+      "upgradeSuccessWithPlan": "Your plan has been upgraded to {plan}. Enjoy the new features and increased limits.",
+      "redirectingIn": "Redirecting in {seconds}s...",
+      "aiCredits": {
+        "title": "AI credits",
+        "subtitle": "Pay-as-you-go AI usage. Top up your wallet to unlock unlimited AI features.",
+        "balance": {
+          "title": "Wallet balance",
+          "includedRemaining": "Included this month",
+          "reserved": "Reserved",
+          "promo": "Promo credits",
+          "notInitialized": "Wallet is not initialized yet."
+        },
+        "topup": {
+          "button": "Top up",
+          "title": "Top up your AI wallet",
+          "description": "Choose an amount or enter a custom value in rubles.",
+          "customAmount": "Custom amount (P)",
+          "summary": "You will be charged {amount}",
+          "confirm": "Pay with Tochka",
+          "error": "Failed to create payment link. Please try again."
+        },
+        "errors": {
+          "insufficientFunds": "Insufficient AI credits. Top up your wallet."
+        },
+        "chart": {
+          "title": "Credit usage",
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "kopecks": "Cost",
+          "events": "Events"
+        },
+        "consumption": {
+          "title": "Consumption history",
+          "date": "Date",
+          "operation": "Operation",
+          "provider": "Provider",
+          "model": "Model",
+          "tokens": "Tokens",
+          "charge": "Charge",
+          "empty": "No usage events yet."
+        },
+        "rateCard": {
+          "title": "Pricing rates",
+          "operation": "Operation",
+          "provider": "Provider",
+          "model": "Model",
+          "inputPer1M": "Input / 1M tokens",
+          "outputPer1M": "Output / 1M tokens",
+          "embeddingPer1M": "Embedding / 1M tokens",
+          "flatFee": "Flat fee",
+          "empty": "No pricing rules configured."
+        },
+        "lowBalance": {
+          "title": "Low on credits",
+          "message": "Your available credit balance is running low ({balance} remaining).",
+          "topUp": "Top up now"
+        }
+      },
+      "title": "Billing",
+      "usage": {
+        "searches": "Searches",
+        "documents": "Documents"
+      },
+      "limits": {
+        "maxIndexes": "Max indexes",
+        "maxDocuments": "Max documents",
+        "maxApiKeys": "Max API keys",
+        "rateLimit": "Rate limit",
+        "maxSearchesPerMonth": "Searches / month"
+      },
+      "features": {
+        "title": "Features",
+        "none": "No features configured"
+      },
+      "upgrade": "Upgrade plan",
+      "overageStatus": {
+        "title": "Search quota usage",
+        "description": "Your current search usage and overage status.",
+        "normal": "Normal",
+        "softCap": "Approaching limit",
+        "hardCap": "Limit reached",
+        "overageActive": "Overage active",
+        "walletBalance": "Overage wallet",
+        "remaining": "remaining",
+        "noOverage": "No overage billing configured",
+        "unlimited": "Unlimited",
+        "searchesUsed": "{{used}} / {{limit}} searches used"
+      },
+      "upgradeModal": {
+        "title": "Upgrade your plan",
+        "currentPlan": "Current plan",
+        "comparePlans": "Compare plans",
+        "prorationPreview": "Proration preview",
+        "feature": "Feature",
+        "current": "Current",
+        "select": "Select",
+        "currentRemaining": "Credit from current plan",
+        "newPlanCost": "New plan cost (prorated)",
+        "totalDueToday": "Total due today",
+        "totalCredit": "Total credit",
+        "noPaymentNeeded": "No payment needed",
+        "redirectingToStripe": "Redirecting to payment...",
+        "confirmUpgrade": "Confirm upgrade",
+        "upgradeError": "Something went wrong. Please try again."
+      },
+      "downgradeModal": {
+        "title": "Confirm downgrade",
+        "warningTitle": "You're about to downgrade",
+        "dataLossWarning": "Downgrading will reduce your plan limits. Some documents, searches, and features may become unavailable.",
+        "whatChanges": "What changes",
+        "currentLimit": "Current",
+        "newLimit": "New",
+        "limitChanges": "Limit changes",
+        "featureDowngrades": "Features that will be disabled",
+        "noFeatureLoss": "No features will be lost with this downgrade",
+        "prorationCredit": "You'll receive a prorated credit of {amount}",
+        "gracePeriod": "After downgrade, you'll have a 7-day grace period where searches are still readable, but indexing is paused immediately.",
+        "confirmDowngrade": "Confirm downgrade",
+        "cancelDowngrade": "Cancel",
+        "downgradeProcessing": "Processing downgrade..."
+      },
+      "invoiceHistory": {
+        "title": "Invoice History",
+        "description": "View and download your past invoices.",
+        "date": "Date",
+        "amount": "Amount",
+        "status": {
+          "paid": "Paid",
+          "open": "Pending",
+          "uncollectible": "Uncollectible",
+          "void": "Void",
+          "draft": "Draft"
+        },
+        "actions": "Actions",
+        "downloadPdf": "Download PDF",
+        "notAvailable": "Not available",
+        "previous": "Previous",
+        "next": "Next",
+        "pageInfo": "{{start}}–{{end}} of {{total}}",
+        "empty": "No invoices yet. Invoices will appear here after your first payment.",
+        "loading": "Loading invoices...",
+        "downloadError": "Could not open invoice PDF. Please try again.",
+        "statusLabel": "Status",
+        "page": "Page {{page}}"
+      },
+      "paymentMethod": {
+        "title": "Payment Method",
+        "description": "Your current payment method on file.",
+        "card": "Card",
+        "maskedNumber": "•••• {{last4}}",
+        "expiry": "{{month}}/{{year}}",
+        "manage": "Manage",
+        "loading": "Loading payment method...",
+        "addCard": "Add Card",
+        "addCardTitle": "Add a new payment method",
+        "addCardDescription": "Enter your card details below.",
+        "addCardConfirm": "Add Card",
+        "cardAdded": "Card added successfully",
+        "defaultLabel": "Default",
+        "setDefault": "Set as default",
+        "defaultSuccess": "Default payment method updated",
+        "defaultError": "Could not update default payment method",
+        "deleteDialogTitle": "Remove card?",
+        "deleteDialogDescription": "Are you sure you want to remove {card}?",
+        "deleteConfirm": "Remove",
+        "deleteSuccess": "Card removed",
+        "deleteError": "Could not remove card",
+        "emptyState": "No saved payment methods",
+        "preparing": "Preparing card form...",
+        "setupError": "Could not prepare card form. Please try again."
+      },
+      "invoices": {
+        "title": "Invoice History",
+        "emptyState": "No invoices yet",
+        "downloadPdf": "Download PDF",
+        "status": {
+          "paid": "Paid",
+          "pending": "Pending",
+          "failed": "Failed"
+        }
+      },
+      "tabs": {
+        "overview": "Overview",
+        "paymentMethods": "Payment methods",
+        "invoices": "Invoices",
+        "aiCredits": "AI credits"
+      },
+      "paymentMethods": {
+        "title": "Payment Methods",
+        "empty": "No payment methods saved",
+        "addCard": "Add Payment Method",
+        "default": "Default",
+        "setDefault": "Set as default",
+        "delete": "Remove card",
+        "deleteConfirmTitle": "Remove this card?",
+        "deleteConfirmMessage": "This card will be removed from your account."
+      },
+      "transactionHistory": {
+        "title": "Transaction History",
+        "description": "Recent wallet transactions and overage charges",
+        "empty": "No transactions yet",
+        "date": "Date",
+        "type": "Type",
+        "source": "Source",
+        "amount": "Amount"
+      },
+      "autoRecharge": {
+        "title": "Auto Recharge",
+        "description": "Automatically top up your wallet when balance drops below a threshold",
+        "thresholdLabel": "Recharge threshold",
+        "thresholdPlaceholder": "e.g. 500",
+        "thresholdHint": "When your balance drops below this amount (in RUB), auto-recharge triggers",
+        "topupLabel": "Top-up amount",
+        "topupPlaceholder": "e.g. 1000",
+        "topupHint": "Amount to add each time auto-recharge triggers (min 1 RUB)",
+        "rub": "RUB",
+        "submit": "Set up auto recharge",
+        "saving": "Saving...",
+        "setupSuccess": "Auto-recharge configured successfully",
+        "setupError": "Failed to configure auto-recharge",
+        "invalidValues": "Please enter valid amounts"
+      },
+      "trialBannerTitle": "Free Trial",
+      "trialBannerMessage": "Your Pro trial ends in {days} day{days, plural, =1 {} other {s}}. Upgrade to keep your Pro features.",
+      "trialBannerUpgrade": "Upgrade now"
+    },
+    "notificationsPage": {
+      "title": "Notifications",
+      "description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
+      "groups": {
+        "general": {
+          "title": "General"
+        },
+        "billing": {
+          "title": "Billing"
+        }
+      },
+      "types": {
+        "APP_UPDATE": {
+          "label": "App updates"
+        },
+        "AI_LOW_BALANCE": {
+          "label": "AI wallet balance is low"
+        },
+        "AI_TOPUP_PAID": {
+          "label": "AI wallet top-up confirmed"
+        },
+        "AI_TOPUP_FAILED": {
+          "label": "AI wallet top-up failed"
+        },
+        "AI_OVERAGE_REACHED": {
+          "label": "AI wallet overage limit reached"
+        },
+        "PAYMENT_FAILED": {
+          "label": "Subscription payment failed"
+        }
+      },
+      "columns": {
+        "type": "Notification",
+        "inApp": "In-app",
+        "email": "Email"
+      }
+    },
+    "menu": {
+      "account": {
+        "billing": "Billing",
+        "dangerZone": "Danger zone",
+        "general": "General",
+        "notifications": "Notifications",
+        "security": "Security",
+        "title": "Account",
+        "invoices": "Invoices",
+        "paymentMethods": "Payment Methods"
+      },
+      "organization": {
+        "billing": "Billing",
+        "general": "General",
+        "members": "Members",
+        "title": "Organization",
+        "dangerZone": "Danger zone"
+      }
+    },
+    "save": "Save"
+  },
+  "alertsPage": {
+    "title": "Alerts",
+    "subtitle": "Configure thresholds and notification channels for usage alerts",
+    "searchQuota": "Search Quota",
+    "ingestQuota": "Ingest Quota",
+    "thresholds": "Thresholds",
+    "threshold": "{percent}% used",
+    "channels": "Notification Channels",
+    "cooldown": "Cooldown",
+    "cooldownHours": "{hours}h between notifications",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enable": "Enable",
+    "disable": "Disable",
+    "email": "Email",
+    "webhook": "Webhook",
+    "slack": "Slack",
+    "slackWebhookUrl": "Slack Webhook URL",
+    "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+    "deliveryChannels": "Delivery Channels",
+    "alertHistory": "Alert History",
+    "noAlerts": "No alerts triggered yet",
+    "alertTriggered": "Alert triggered",
+    "alertResolved": "Alert resolved",
+    "resource": "Resource",
+    "thresholdLabel": "Threshold",
+    "triggeredAt": "Triggered at",
+    "resolvedAt": "Resolved at",
+    "status": "Status",
+    "ruleEnabled": "Alert rule enabled",
+    "ruleDisabled": "Alert rule disabled",
+    "configureChannels": "Also configure a Slack webhook URL for Slack notifications",
+    "addWebhook": "Add Slack Webhook",
+    "removeWebhook": "Remove",
+    "saveSuccess": "Alert settings saved",
+    "saveError": "Failed to save alert settings"
+  }
 }

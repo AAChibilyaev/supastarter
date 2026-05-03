@@ -44,3 +44,6 @@ dist/
 .content-collections/
 .prisma-zod-generator-manifest.json
 .gitnexus
+
+# Claude Code worktrees (temporary agent workspaces)
+.claude/worktrees/

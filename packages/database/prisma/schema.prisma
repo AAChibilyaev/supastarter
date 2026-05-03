@@ -852,3 +852,13 @@ model CollectionDocument {
   @@index([organizationId])
   @@map("collection_document")
 }
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("roadmap_vote")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+  @@map("newsletter_subscriber")
+}

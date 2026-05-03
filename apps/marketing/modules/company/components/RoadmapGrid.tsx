@@ -22,6 +22,8 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import type { ComponentType } from "react";
 
+import { EmailCaptureModal, hasEmailCaptureBeenPrompted } from "./EmailCaptureModal";
+
 export interface RoadmapItemData {
 	key: string;
 	iconName: string;
@@ -73,6 +75,7 @@ function RoadmapCard({
 	const [votedFeatures, setVotedFeatures] = useState<Record<string, boolean>>({});
 	const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
 	const [mounted, setMounted] = useState(false);
+	const [showEmailCapture, setShowEmailCapture] = useState(false);
 
 	const Icon = ICON_MAP[iconName] ?? CheckCircleIcon;
 
@@ -95,7 +98,7 @@ function RoadmapCard({
 		}
 	}, [itemKey, initialVotes]);
 
-	const handleVote = useCallback(() => {
+	const castVote = useCallback(() => {
 		const newVoted = { ...votedFeatures };
 		const newCounts = { ...voteCounts };
 
@@ -118,6 +121,31 @@ function RoadmapCard({
 		}
 	}, [itemKey, votedFeatures, voteCounts, initialVotes]);
 
+	const handleVote = useCallback(() => {
+		// If already voted, un-vote immediately (no modal for un-voting)
+		if (votedFeatures[itemKey]) {
+			castVote();
+			return;
+		}
+
+		// Check if email capture has been prompted before
+		if (hasEmailCaptureBeenPrompted()) {
+			castVote();
+		} else {
+			setShowEmailCapture(true);
+		}
+	}, [votedFeatures, itemKey, castVote]);
+
+	const handleEmailComplete = useCallback(() => {
+		castVote();
+		setShowEmailCapture(false);
+	}, [castVote]);
+
+	const handleEmailSkip = useCallback(() => {
+		castVote();
+		setShowEmailCapture(false);
+	}, [castVote]);
+
 	const isVoted = mounted && votedFeatures[itemKey];
 	const voteCount = mounted ? (voteCounts[itemKey] ?? initialVotes) : initialVotes;
 
@@ -125,68 +153,82 @@ function RoadmapCard({
 	const isInProgress = status === "inProgress";
 
 	return (
-		<Card
-			className={cn(
-				"group transition-all duration-300 hover:border-primary/30 hover:bg-accent/5",
-				isShipped && "border-green-500/10",
-				isInProgress && "border-blue-500/10",
-			)}
-		>
-			<FeatureCardHeaderRow icon={Icon}>
-				<CardTitle className="gap-2 flex items-center">
-					{t(`items.${itemKey}.title`)}
-					<span
-						className={cn(
-							"text-xs font-normal px-2 py-0.5 rounded-full border",
-							isShipped
-								? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
-								: isInProgress
-									? "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
-									: "border-muted-foreground/30 bg-muted/50 text-muted-foreground",
-						)}
-					>
-						{isShipped ? t("shipped") : isInProgress ? t("inProgress") : t("planned")}
-					</span>
-				</CardTitle>
-			</FeatureCardHeaderRow>
-			<CardContent>
-				<CardDescription className="text-sm leading-relaxed">
-					{t(`items.${itemKey}.description`)}
-				</CardDescription>
-
-				{/* Status action row */}
-				<div className="mt-4 pt-3 flex items-center justify-between border-t border-border/20">
-					{isShipped && changelogSlug ? (
-						<a
-							href={`/changelog#${changelogSlug}`}
-							className="gap-1.5 px-3 py-1.5 text-xs font-medium border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20 inline-flex items-center rounded-lg border transition-colors"
-						>
-							{t("seeChangelog")}
-						</a>
-					) : (
-						<button
-							type="button"
-							onClick={handleVote}
-							disabled={isShipped}
+		<>
+			<Card
+				className={cn(
+					"group transition-all duration-300 hover:border-primary/30 hover:bg-accent/5",
+					isShipped && "border-green-500/10",
+					isInProgress && "border-blue-500/10",
+				)}
+			>
+				<FeatureCardHeaderRow icon={Icon}>
+					<CardTitle className="gap-2 flex items-center">
+						{t(`items.${itemKey}.title`)}
+						<span
 							className={cn(
-								"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
-								isShipped && "cursor-not-allowed opacity-30",
-								isVoted
-									? "border border-primary/20 bg-primary/10 text-primary"
-									: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
+								"text-xs font-normal px-2 py-0.5 rounded-full border",
+								isShipped
+									? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
+									: isInProgress
+										? "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
+										: "border-muted-foreground/30 bg-muted/50 text-muted-foreground",
 							)}
 						>
-							<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
-							{isVoted ? t("voted") : t("vote")}
-						</button>
-					)}
-					<span className="text-xs text-muted-foreground">
-						<strong className="font-semibold text-foreground">{voteCount}</strong>{" "}
-						{t("votes", { count: voteCount })}
-					</span>
-				</div>
-			</CardContent>
-		</Card>
+							{isShipped
+								? t("shipped")
+								: isInProgress
+									? t("inProgress")
+									: t("planned")}
+						</span>
+					</CardTitle>
+				</FeatureCardHeaderRow>
+				<CardContent>
+					<CardDescription className="text-sm leading-relaxed">
+						{t(`items.${itemKey}.description`)}
+					</CardDescription>
+
+					{/* Status action row */}
+					<div className="mt-4 pt-3 flex items-center justify-between border-t border-border/20">
+						{isShipped && changelogSlug ? (
+							<a
+								href={`/changelog#${changelogSlug}`}
+								className="gap-1.5 px-3 py-1.5 text-xs font-medium border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20 inline-flex items-center rounded-lg border transition-colors"
+							>
+								{t("seeChangelog")}
+							</a>
+						) : (
+							<button
+								type="button"
+								onClick={handleVote}
+								disabled={isShipped}
+								className={cn(
+									"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
+									isShipped && "cursor-not-allowed opacity-30",
+									isVoted
+										? "border border-primary/20 bg-primary/10 text-primary"
+										: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
+								)}
+							>
+								<ThumbsUpIcon
+									className={cn("size-3.5", isVoted && "fill-current")}
+								/>
+								{isVoted ? t("voted") : t("vote")}
+							</button>
+						)}
+						<span className="text-xs text-muted-foreground">
+							<strong className="font-semibold text-foreground">{voteCount}</strong>{" "}
+							{t("votes", { count: voteCount })}
+						</span>
+					</div>
+				</CardContent>
+			</Card>
+			<EmailCaptureModal
+				open={showEmailCapture}
+				onOpenChange={setShowEmailCapture}
+				onComplete={handleEmailComplete}
+				onSkip={handleEmailSkip}
+			/>
+		</>
 	);
 }
 

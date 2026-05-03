@@ -15,3 +15,4 @@ export * from "./my-search";
 export * from "./wallet-topup-orders";
 export * from "./personalization";
 export * from "./roadmap";
+export * from "./newsletter";

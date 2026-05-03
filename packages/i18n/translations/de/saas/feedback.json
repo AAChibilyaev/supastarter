@@ -1,19 +1,19 @@
 {
-    "feedback": {
-        "nps": {
-            "title": "Wie wahrscheinlich ist es, dass Sie AACsearch weiterempfehlen?",
-            "question": "Auf einer Skala von 0 bis 10: Wie wahrscheinlich würden Sie AACsearch einem Kollegen oder Freund weiterempfehlen?",
-            "scaleStart": "Überhaupt nicht wahrscheinlich",
-            "scaleEnd": "Äußerst wahrscheinlich",
-            "detractorFollowUp": "Was können wir besser machen?",
-            "passiveFollowUp": "Was hält Sie davon ab, uns zu empfehlen?",
-            "promoterFollowUp": "Was gefällt Ihnen an AACsearch am besten?",
-            "feedbackPlaceholder": "Erzählen Sie uns mehr (optional)",
-            "submit": "Feedback senden",
-            "dismiss": "Vielleicht später",
-            "thanks": "Vielen Dank für Ihr Feedback!",
-            "thanksDescription": "Ihre Antwort hilft uns, eine bessere Suchplattform für alle zu entwickeln.",
-            "frequency": "Einmal alle 90 Tage"
-        }
-    }
+	"feedback": {
+		"nps": {
+			"title": "Wie wahrscheinlich ist es, dass Sie AACsearch weiterempfehlen?",
+			"question": "Auf einer Skala von 0 bis 10: Wie wahrscheinlich würden Sie AACsearch einem Kollegen oder Freund weiterempfehlen?",
+			"scaleStart": "Überhaupt nicht wahrscheinlich",
+			"scaleEnd": "Äußerst wahrscheinlich",
+			"detractorFollowUp": "Was können wir besser machen?",
+			"passiveFollowUp": "Was hält Sie davon ab, uns zu empfehlen?",
+			"promoterFollowUp": "Was gefällt Ihnen an AACsearch am besten?",
+			"feedbackPlaceholder": "Erzählen Sie uns mehr (optional)",
+			"submit": "Feedback senden",
+			"dismiss": "Vielleicht später",
+			"thanks": "Vielen Dank für Ihr Feedback!",
+			"thanksDescription": "Ihre Antwort hilft uns, eine bessere Suchplattform für alle zu entwickeln.",
+			"frequency": "Einmal alle 90 Tage"
+		}
+	}
 }

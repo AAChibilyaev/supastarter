@@ -1,19 +1,19 @@
 {
-    "feedback": {
-        "nps": {
-            "title": "How likely are you to recommend AACsearch?",
-            "question": "On a scale of 0 to 10, how likely are you to recommend AACsearch to a colleague or friend?",
-            "scaleStart": "Not at all likely",
-            "scaleEnd": "Extremely likely",
-            "detractorFollowUp": "What could we do better?",
-            "passiveFollowUp": "What keeps you from recommending us?",
-            "promoterFollowUp": "What do you love most about AACsearch?",
-            "feedbackPlaceholder": "Tell us more (optional)",
-            "submit": "Submit feedback",
-            "dismiss": "Maybe later",
-            "thanks": "Thank you for your feedback!",
-            "thanksDescription": "Your response helps us build a better search platform for everyone.",
-            "frequency": "Once per 90 days"
-        }
-    }
+	"feedback": {
+		"nps": {
+			"title": "How likely are you to recommend AACsearch?",
+			"question": "On a scale of 0 to 10, how likely are you to recommend AACsearch to a colleague or friend?",
+			"scaleStart": "Not at all likely",
+			"scaleEnd": "Extremely likely",
+			"detractorFollowUp": "What could we do better?",
+			"passiveFollowUp": "What keeps you from recommending us?",
+			"promoterFollowUp": "What do you love most about AACsearch?",
+			"feedbackPlaceholder": "Tell us more (optional)",
+			"submit": "Submit feedback",
+			"dismiss": "Maybe later",
+			"thanks": "Thank you for your feedback!",
+			"thanksDescription": "Your response helps us build a better search platform for everyone.",
+			"frequency": "Once per 90 days"
+		}
+	}
 }

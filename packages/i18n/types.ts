@@ -9,12 +9,12 @@ import type marketingSolutions from "./translations/en/marketing/solutions.json"
 import type saasAdmin from "./translations/en/saas/admin.json";
 import type saasAuth from "./translations/en/saas/auth.json";
 import type saasCommon from "./translations/en/saas/common.json";
+import type saasFeedback from "./translations/en/saas/feedback.json";
 import type saasOnboarding from "./translations/en/saas/onboarding.json";
 import type saasOrganizations from "./translations/en/saas/organizations.json";
 import type saasProduct from "./translations/en/saas/product.json";
 import type saasSearch from "./translations/en/saas/search.json";
 import type saasSettings from "./translations/en/saas/settings.json";
-import type saasFeedback from "./translations/en/saas/feedback.json";
 import type sharedMessages from "./translations/en/shared.json";
 
 export interface LocaleDefinition {

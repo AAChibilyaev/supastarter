@@ -50,7 +50,7 @@ function parseCSV(text: string, delimiter = ","): ParsedImportData {
 
 function parseJSON(text: string): ParsedImportData {
 	const data = JSON.parse(text);
-	const arr = Array.isArray(data) ? data : data.data ?? data.items ?? data.results ?? [];
+	const arr = Array.isArray(data) ? data : (data.data ?? data.items ?? data.results ?? []);
 	if (!Array.isArray(arr) || arr.length === 0) {
 		return { columns: [], rows: [], totalRows: 0 };
 	}
@@ -154,12 +154,10 @@ export function ImportFileUpload({ onParse, disabled }: ImportFileUploadProps) {
 		<div className="space-y-4">
 			<div
 				{...getRootProps()}
-				className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer
-					${isDragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25 hover:border-muted-foreground/50"}
-					${disabled || isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
+				className={`p-8 cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors ${isDragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25 hover:border-muted-foreground/50"} ${disabled || isProcessing ? "cursor-not-allowed opacity-50" : ""}`}
 			>
 				<input {...getInputProps()} />
-				<UploadIcon className="mx-auto mb-2 size-8 text-muted-foreground" />
+				<UploadIcon className="mb-2 size-8 mx-auto text-muted-foreground" />
 				{isDragActive ? (
 					<p className="font-medium text-sm">
 						{t("search.import.dropHere") || "Drop your file here..."}
@@ -173,7 +171,12 @@ export function ImportFileUpload({ onParse, disabled }: ImportFileUploadProps) {
 							{t("search.import.supportedFormats") ||
 								"CSV, TSV, or JSON — up to 10,000 rows"}
 						</p>
-						<Button variant="outline" size="sm" className="mt-3" disabled={disabled || isProcessing}>
+						<Button
+							variant="outline"
+							size="sm"
+							className="mt-3"
+							disabled={disabled || isProcessing}
+						>
 							{isProcessing
 								? t("search.import.processing") || "Processing..."
 								: t("search.import.selectFile") || "Select File"}
@@ -182,9 +185,7 @@ export function ImportFileUpload({ onParse, disabled }: ImportFileUploadProps) {
 				)}
 			</div>
 
-			{error && (
-				<p className="text-xs text-destructive">{error}</p>
-			)}
+			{error && <p className="text-xs text-destructive">{error}</p>}
 		</div>
 	);
 }

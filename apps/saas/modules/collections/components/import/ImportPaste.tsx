@@ -24,9 +24,7 @@ function parsePastedData(text: string): ParsedImportData {
 	// Prefer tab for pasted data (Excel copies as TSV)
 	const delimiter = tabCount >= commaCount ? "\t" : ",";
 
-	const rawColumns = firstLine
-		.split(delimiter)
-		.map((c) => c.trim().replace(/^["']|["']$/g, ""));
+	const rawColumns = firstLine.split(delimiter).map((c) => c.trim().replace(/^["']|["']$/g, ""));
 
 	const rows = lines.slice(1).map((line) => {
 		const values = line.split(delimiter).map((v) => v.trim().replace(/^["']|["']$/g, ""));
@@ -90,7 +88,7 @@ export function ImportPaste({ onParse, disabled }: ImportPasteProps) {
 						"Paste your data here (Ctrl+V)...\n\nExample:\nname\tprice\tcategory\nWidget A\t29.99\tTools\nWidget B\t49.99\tTools"
 					}
 					disabled={disabled}
-					className="font-mono h-40 min-h-[120px] w-full resize-y rounded-md border bg-background p-3 text-xs"
+					className="font-mono h-40 p-3 text-xs min-h-[120px] w-full resize-y rounded-md border bg-background"
 					spellCheck={false}
 				/>
 			</div>

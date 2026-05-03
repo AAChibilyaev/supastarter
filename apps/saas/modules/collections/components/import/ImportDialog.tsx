@@ -129,11 +129,7 @@ export function ImportDialog({
 	};
 
 	const schemaFieldsForMapping =
-		schemaFieldNames.length > 0
-			? schemaFieldNames
-			: parsedData
-				? parsedData.columns
-				: [];
+		schemaFieldNames.length > 0 ? schemaFieldNames : parsedData ? parsedData.columns : [];
 
 	const isImporting = importMutation.isPending;
 

@@ -260,12 +260,8 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 								width={130}
 							/>
 							<Tooltip
-								formatter={(
-									value: number,
-									_name: string,
-									props: { payload: FunnelStep },
-								) => {
-									const step = props.payload;
+								formatter={(_value, _name, props) => {
+									const step = (props as { payload: FunnelStep }).payload;
 									return [
 										`${step.completed} / ${step.total} (${step.rate}%)`,
 										step.label,
@@ -496,12 +492,8 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 								allowDecimals={false}
 							/>
 							<Tooltip
-								formatter={(
-									value: number,
-									_name: string,
-									props: { payload: HealthScoreBucket },
-								) => {
-									const bucket = props.payload;
+								formatter={(_value, _name, props) => {
+									const bucket = (props as { payload: HealthScoreBucket }).payload;
 									return [
 										`${bucket.count} org${bucket.count !== 1 ? "s" : ""} (score ${bucket.label})`,
 										"Orgs",

@@ -83,7 +83,8 @@ export function ImportPreview({
 							shown: previewRows.length,
 							total: data.totalRows,
 						}) || `${previewRows.length} of ${data.totalRows} rows`}
-						{hasMoreRows && ` — ${t("search.import.previewOnlyFirst") || "first 10 shown"}`}
+						{hasMoreRows &&
+							` — ${t("search.import.previewOnlyFirst") || "first 10 shown"}`}
 					</p>
 				</div>
 			</div>
@@ -95,16 +96,14 @@ export function ImportPreview({
 				</p>
 				<div className="gap-2 flex flex-wrap">
 					{data.columns.map((col) => (
-						<div key={col} className="gap-1.5 inline-flex items-center text-xs">
+						<div key={col} className="gap-1.5 text-xs inline-flex items-center">
 							<span className="font-medium text-muted-foreground">{col}:</span>
 							<select
 								value={columnMapping[col] ?? ""}
 								onChange={(e) => handleMappingChange(col, e.target.value)}
-								className="h-7 max-w-[160px] rounded-md border bg-background px-2 text-xs"
+								className="h-7 px-2 text-xs max-w-[160px] rounded-md border bg-background"
 							>
-								<option value="">
-									{t("search.import.skip") || "— Skip —"}
-								</option>
+								<option value="">{t("search.import.skip") || "— Skip —"}</option>
 								{schemaFields.map((field) => (
 									<option key={field} value={field}>
 										{field}
@@ -140,7 +139,7 @@ export function ImportPreview({
 								{data.columns.map((col) => (
 									<TableCell
 										key={col}
-										className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-xs"
+										className="text-xs max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap"
 									>
 										{row[col] ?? ""}
 									</TableCell>

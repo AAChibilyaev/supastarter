@@ -19,17 +19,11 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@repo/ui/components/tooltip";
 import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3Icon, DownloadIcon, InfoIcon, SearchIcon } from "lucide-react";
+import { BarChart3Icon, InfoIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFormatter } from "next-intl";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -38,6 +32,7 @@ import { useMemo, useState } from "react";
 import { CTRDashboard } from "./CTRDashboard";
 import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
+import { ExportAnalyticsDialog } from "../dialogs/ExportAnalyticsDialog";
 import { FailedQueriesTable } from "./FailedQueriesTable";
 
 type PeriodKey = "24h" | "7d" | "30d";
@@ -223,43 +218,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	const planRetentionDays = isFreePlan ? FREE_RETENTION_DAYS : 30;
 	const showRetentionBanner = days > planRetentionDays;
 
-	// ── Export CSV handler ────────────────────────────────────────────
-
-	const handleExportCSV = () => {
-		const rows: string[][] = [];
-		const header = [
-			t("search.analytics.rankColumn"),
-			t("search.analytics.queryColumn"),
-			t("search.analytics.countColumn"),
-			t("search.analytics.percentColumn"),
-		];
-		rows.push(header);
-
-		if (topQueriesData) {
-			topQueriesData.forEach(
-				(row: { query: string; count: number | string }, index: number) => {
-					const count = Number(row.count);
-					const percent =
-						totalQueryCount > 0 ? ((count / totalQueryCount) * 100).toFixed(1) : "0.0";
-					rows.push([String(index + 1), row.query, String(count), `${percent}%`]);
-				},
-			);
-		}
-
-		const csv = rows
-			.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(","))
-			.join(String.fromCharCode(10));
-
-		const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = `analytics-${period}-${new Date().toISOString().split("T")[0]}.csv`;
-		a.click();
-		URL.revokeObjectURL(url);
-	};
-
-	// ── Loading state ─────────────────────────────────────────────────
+// ── Loading state ─────────────────────────────────────────────────
 
 	if (isLoading) {
 		return <div className="py-8 text-center text-foreground/60">{t("search.loading")}</div>;
@@ -636,25 +595,17 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 				</Tabs>
 
 				<div className="gap-2 flex items-center">
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={handleExportCSV}
-									disabled={hasNoData || topQueriesData?.length === 0}
-									aria-label={t("search.analytics.exportReport")}
-								>
-									<DownloadIcon className="mr-1.5 size-4" />
-									{t("search.analytics.exportReport")}
-								</Button>
-							</TooltipTrigger>
-							<TooltipContent>
-								{t("search.analytics.exportReportTooltip")}
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+\t\t\t\t\t<ExportAnalyticsDialog
+\t\t\t\t\t\ttotalSearches={totalSearches}
+\t\t\t\t\t\timpressionsCount={analyticsData?.impressionsCount ?? 0}
+\t\t\t\t\t\tzeroResultQueries={zeroResultQueries}
+\t\t\t\t\t\ttotalQueryCount={totalQueryCount}
+\t\t\t\t\t\ttopQueriesData={topQueriesData ?? []}
+\t\t\t\t\t\tanalyticsData={analyticsData ?? null}
+\t\t\t\t\t\tctrTrendData={ctrTrendData ?? null}
+\t\t\t\t\t\tperiod={period}
+\t\t\t\t\t\thasAnyData={!hasNoData}
+\t\t\t\t\t/>
 					{/* Index filter dropdown */}
 					{indexes.length > 0 && (
 						<Select value={selectedIndexId} onValueChange={setSelectedIndexId}>

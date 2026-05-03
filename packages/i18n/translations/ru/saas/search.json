@@ -1265,7 +1265,26 @@
 			"systemPromptHint": "Используйте {{question}}, {{context}}, {{history}} и {{chunks}} как переменные",
 			"saveRagConfig": "Сохранить настройки",
 			"ragConfigSaved": "Настройки RAG сохранены",
-			"ragConfigSaveError": "Не удалось сохранить настройки RAG"
+			"ragConfigSaveError": "Не удалось сохранить настройки RAG",
+			"files": {
+				"title": "Файлы",
+				"empty": "Нет проиндексированных файлов",
+				"delete": "Удалить файл",
+				"deleteConfirm": "Удалить этот файл и всё его индексированное содержимое?",
+				"preview": "Просмотр",
+				"colFilename": "Имя файла",
+				"colType": "Тип",
+				"colChunks": "Чанки",
+				"colDate": "Дата",
+				"colActions": "Действия",
+				"previewContent": "Просмотр содержимого",
+				"noContent": "Нет доступного предпросмотра",
+				"deleteSuccess": "Файл удалён",
+				"deleteError": "Не удалось удалить файл",
+				"loadError": "Не удалось загрузить файлы",
+				"sortAsc": "Сортировать по возрастанию",
+				"sortDesc": "Сортировать по убыванию"
+			}
 		},
 		"collection": {
 			"title": "Коллекция",

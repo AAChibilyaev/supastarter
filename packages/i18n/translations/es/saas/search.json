@@ -1216,7 +1216,26 @@
 			"systemPromptHint": "Use {{question}}, {{context}}, {{history}} y {{chunks}} como variables",
 			"saveRagConfig": "Guardar configuración",
 			"ragConfigSaved": "Configuración RAG guardada",
-			"ragConfigSaveError": "Error al guardar la configuración RAG"
+			"ragConfigSaveError": "Error al guardar la configuración RAG",
+			"files": {
+				"title": "Archivos",
+				"empty": "No hay archivos indexados",
+				"delete": "Eliminar archivo",
+				"deleteConfirm": "¿Eliminar este archivo y todo su contenido indexado?",
+				"preview": "Vista previa",
+				"colFilename": "Nombre",
+				"colType": "Tipo",
+				"colChunks": "Fragmentos",
+				"colDate": "Fecha",
+				"colActions": "Acciones",
+				"previewContent": "Vista previa del contenido",
+				"noContent": "No hay vista previa disponible",
+				"deleteSuccess": "Archivo eliminado",
+				"deleteError": "Error al eliminar el archivo",
+				"loadError": "Error al cargar archivos",
+				"sortAsc": "Orden ascendente",
+				"sortDesc": "Orden descendente"
+			}
 		},
 		"documents": {
 			"empty": "Aún no hay documentos en este índice",

@@ -1176,7 +1176,26 @@
 			"systemPromptHint": "Verwenden Sie {{question}}, {{context}}, {{history}} und {{chunks}} als Variablen",
 			"saveRagConfig": "Konfiguration speichern",
 			"ragConfigSaved": "RAG-Konfiguration gespeichert",
-			"ragConfigSaveError": "Fehler beim Speichern der RAG-Konfiguration"
+			"ragConfigSaveError": "Fehler beim Speichern der RAG-Konfiguration",
+			"files": {
+				"title": "Dateien",
+				"empty": "Keine Dateien indiziert",
+				"delete": "Datei löschen",
+				"deleteConfirm": "Diese Datei und ihren gesamten indizierten Inhalt löschen?",
+				"preview": "Vorschau",
+				"colFilename": "Dateiname",
+				"colType": "Typ",
+				"colChunks": "Chunks",
+				"colDate": "Datum",
+				"colActions": "Aktionen",
+				"previewContent": "Inhaltsvorschau",
+				"noContent": "Keine Vorschau verfügbar",
+				"deleteSuccess": "Datei gelöscht",
+				"deleteError": "Fehler beim Löschen der Datei",
+				"loadError": "Fehler beim Laden der Dateien",
+				"sortAsc": "Aufsteigend sortieren",
+				"sortDesc": "Absteigend sortieren"
+			}
 		},
 		"documents": {
 			"empty": "Noch keine Dokumente in diesem Index",

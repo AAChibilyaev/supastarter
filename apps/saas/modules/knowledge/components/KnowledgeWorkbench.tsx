@@ -152,7 +152,7 @@ export function KnowledgeWorkbench({
 		seedNodes: Array<{ canonicalName: string; nodeType: string }>;
 		edges: Array<{ relationType: string; fromNodeId: string; toNodeId: string }>;
 	} | null>(null);
-	const fileInputRef = useRef<HTMLInputElement>(null);
+	const fileInputId = "knowledge-file-input";
 
 	const spacesQuery = useQuery(
 		orpc.knowledge.listSpaces.queryOptions({
@@ -308,7 +308,11 @@ export function KnowledgeWorkbench({
 	const graphExplainMutation = useMutation({
 		...orpc.knowledge.graphragExplain.mutationOptions(),
 		onSuccess: (result) => {
-			setGraphResult(result);
+			const typedResult = result as unknown as {
+				seedNodes: Array<{ canonicalName: string; nodeType: string }>;
+				edges: Array<{ relationType: string; fromNodeId: string; toNodeId: string }>;
+			};
+			setGraphResult(typedResult);
 			toast.success(t("search.knowledge.graphExplained"));
 		},
 		onError: () => toast.error(t("search.knowledge.graphExplainError")),
@@ -560,7 +564,7 @@ export function KnowledgeWorkbench({
 					<p className="text-muted-foreground">{subtitle}</p>
 				</div>
 				{selectedSpace ? (
-					<p className="text-xs text-muted-foreground shrink-0">
+					<p className="text-xs shrink-0 text-muted-foreground">
 						{t("search.knowledge.activeSpaceLabel", {
 							name: selectedSpace.name,
 							slug: selectedSpace.slug,
@@ -572,7 +576,9 @@ export function KnowledgeWorkbench({
 			<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 				<TabsList>
 					<TabsTrigger value="spaces">{t("search.nav.knowledgeSpaces")}</TabsTrigger>
-					<TabsTrigger value="documents">{t("search.nav.knowledgeDocuments")}</TabsTrigger>
+					<TabsTrigger value="documents">
+						{t("search.nav.knowledgeDocuments")}
+					</TabsTrigger>
 					<TabsTrigger value="search">{t("search.nav.knowledgeSearch")}</TabsTrigger>
 				</TabsList>
 
@@ -581,7 +587,9 @@ export function KnowledgeWorkbench({
 						<Card>
 							<CardHeader>
 								<CardTitle>{t("search.knowledge.spaces")}</CardTitle>
-								<CardDescription>{t("search.knowledge.spacesDesc")}</CardDescription>
+								<CardDescription>
+									{t("search.knowledge.spacesDesc")}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="space-y-1.5">
@@ -592,8 +600,13 @@ export function KnowledgeWorkbench({
 										value={selectedSpaceSlug}
 										onValueChange={(value) => setSelectedSpaceSlug(value)}
 									>
-										<SelectTrigger id="knowledge-space-select" className="w-full">
-											<SelectValue placeholder={t("search.knowledge.selectSpace")} />
+										<SelectTrigger
+											id="knowledge-space-select"
+											className="w-full"
+										>
+											<SelectValue
+												placeholder={t("search.knowledge.selectSpace")}
+											/>
 										</SelectTrigger>
 										<SelectContent>
 											{spacesQuery.data?.map((space) => (
@@ -652,7 +665,9 @@ export function KnowledgeWorkbench({
 						<Card>
 							<CardHeader>
 								<CardTitle>{t("search.knowledge.sources")}</CardTitle>
-								<CardDescription>{t("search.knowledge.sourcesDesc")}</CardDescription>
+								<CardDescription>
+									{t("search.knowledge.sourcesDesc")}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="space-y-1.5">
@@ -672,10 +687,17 @@ export function KnowledgeWorkbench({
 									</Label>
 									<Select
 										value={sourceType}
-										onValueChange={(value) => setSourceType(value as SourceType)}
+										onValueChange={(value) =>
+											setSourceType(value as SourceType)
+										}
 									>
-										<SelectTrigger id="knowledge-source-type" className="w-full">
-											<SelectValue placeholder={t("search.knowledge.sourceType")} />
+										<SelectTrigger
+											id="knowledge-source-type"
+											className="w-full"
+										>
+											<SelectValue
+												placeholder={t("search.knowledge.sourceType")}
+											/>
 										</SelectTrigger>
 										<SelectContent>
 											{SOURCE_TYPES.map((type) => (
@@ -701,7 +723,9 @@ export function KnowledgeWorkbench({
 									type="button"
 									onClick={handleCreateSource}
 									disabled={
-										createSourceMutation.isPending || !selectedSpaceSlug || !canManage
+										createSourceMutation.isPending ||
+										!selectedSpaceSlug ||
+										!canManage
 									}
 								>
 									{t("search.knowledge.addSource")}
@@ -713,7 +737,9 @@ export function KnowledgeWorkbench({
 											className="gap-2 p-2 text-sm flex items-start rounded-md border"
 										>
 											<div className="min-w-0 flex-1">
-												<div className="font-medium truncate">{source.name}</div>
+												<div className="font-medium truncate">
+													{source.name}
+												</div>
 												<div className="text-muted-foreground">
 													{source.sourceType}
 												</div>
@@ -740,7 +766,9 @@ export function KnowledgeWorkbench({
 						<Card>
 							<CardHeader>
 								<CardTitle>{t("search.knowledge.fileIngestion")}</CardTitle>
-								<CardDescription>{t("search.knowledge.fileIngestionDesc")}</CardDescription>
+								<CardDescription>
+									{t("search.knowledge.fileIngestionDesc")}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								{/* Drag-and-drop zone */}
@@ -748,8 +776,8 @@ export function KnowledgeWorkbench({
 									onDragOver={handleDragOver}
 									onDragLeave={handleDragLeave}
 									onDrop={handleDrop}
-									onClick={() => fileInputRef.current?.click()}
-									className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+									onClick={() => document.getElementById(fileInputId)?.click()}
+									className={`p-6 relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed text-center transition-colors ${
 										dragOver
 											? "border-primary bg-primary/5"
 											: "border-muted-foreground/25 hover:border-muted-foreground/40"
@@ -759,9 +787,10 @@ export function KnowledgeWorkbench({
 									<p className="text-sm font-medium">
 										{selectedFile
 											? selectedFile.name
-											: t("search.knowledge.dragDropHint") || "Drop a file here or click to browse"}
+											: t("search.knowledge.dragDropHint") ||
+												"Drop a file here or click to browse"}
 									</p>
-									<p className="text-xs text-muted-foreground mt-1">
+									<p className="text-xs mt-1 text-muted-foreground">
 										.md, .xml, .pdf &middot; up to 50 MB
 									</p>
 								</div>
@@ -770,8 +799,7 @@ export function KnowledgeWorkbench({
 										{t("search.knowledge.fileInput")}
 									</Label>
 									<Input
-										ref={fileInputRef}
-										id="knowledge-file-input"
+										id={fileInputId}
 										type="file"
 										accept=".md,.xml,.pdf,text/markdown,application/xml,application/pdf"
 										onChange={(event) => {
@@ -782,7 +810,12 @@ export function KnowledgeWorkbench({
 								<Button
 									type="button"
 									onClick={() => handleIngest()}
-									disabled={ingestMutation.isPending || !selectedSpaceSlug || !canManage || !selectedFile}
+									disabled={
+										ingestMutation.isPending ||
+										!selectedSpaceSlug ||
+										!canManage ||
+										!selectedFile
+									}
 								>
 									{t("search.knowledge.ingestFile")}
 								</Button>
@@ -866,7 +899,7 @@ export function KnowledgeWorkbench({
 						/>
 					) : (
 						<Card>
-							<CardContent className="py-8 text-center text-sm text-muted-foreground">
+							<CardContent className="py-8 text-sm text-center text-muted-foreground">
 								{t("search.knowledge.selectSpace")}
 							</CardContent>
 						</Card>
@@ -878,7 +911,9 @@ export function KnowledgeWorkbench({
 						<Card>
 							<CardHeader>
 								<CardTitle>{t("search.knowledge.ragAsk")}</CardTitle>
-								<CardDescription>{t("search.knowledge.ragAskDesc")}</CardDescription>
+								<CardDescription>
+									{t("search.knowledge.ragAskDesc")}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="space-y-1.5">
@@ -942,7 +977,9 @@ export function KnowledgeWorkbench({
 														<span className="shrink-0 text-muted-foreground">
 															[{citation.sourceIndex}]
 														</span>
-														<span>{t("search.knowledge.citedFrom")}:</span>
+														<span>
+															{t("search.knowledge.citedFrom")}:
+														</span>
 														<span className="font-bold">
 															{citation.documentTitle}
 														</span>
@@ -960,7 +997,9 @@ export function KnowledgeWorkbench({
 						<Card>
 							<CardHeader>
 								<CardTitle>{t("search.knowledge.graphExplain")}</CardTitle>
-								<CardDescription>{t("search.knowledge.graphExplainDesc")}</CardDescription>
+								<CardDescription>
+									{t("search.knowledge.graphExplainDesc")}
+								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="space-y-1.5">

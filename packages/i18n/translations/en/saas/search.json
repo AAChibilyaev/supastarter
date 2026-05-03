@@ -1281,7 +1281,26 @@
 			"systemPromptHint": "Use {{question}}, {{context}}, {{history}}, and {{chunks}} as variables",
 			"saveRagConfig": "Save configuration",
 			"ragConfigSaved": "RAG configuration saved",
-			"ragConfigSaveError": "Failed to save RAG configuration"
+			"ragConfigSaveError": "Failed to save RAG configuration",
+			"files": {
+				"title": "Files",
+				"empty": "No files indexed",
+				"delete": "Delete file",
+				"deleteConfirm": "Delete this file and all its indexed content?",
+				"preview": "Preview",
+				"colFilename": "Filename",
+				"colType": "Type",
+				"colChunks": "Chunks",
+				"colDate": "Date",
+				"colActions": "Actions",
+				"previewContent": "Content preview",
+				"noContent": "No preview available",
+				"deleteSuccess": "File deleted",
+				"deleteError": "Failed to delete file",
+				"loadError": "Failed to load files",
+				"sortAsc": "Sort ascending",
+				"sortDesc": "Sort descending"
+			}
 		},
 		"collection": {
 			"title": "Collection",

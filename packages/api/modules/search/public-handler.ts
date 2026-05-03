@@ -68,6 +68,7 @@ const publicSearchInput = z.object({
 	geoField: z.string().optional(),
 	// ── Search Params Extensions ──
 	excludeFields: z.string().optional(),
+	includeFields: z.string().optional(),
 	highlightStartTag: z.string().optional(),
 	highlightEndTag: z.string().optional(),
 	curationTags: z.string().optional(),

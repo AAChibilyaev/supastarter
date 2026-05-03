@@ -36,6 +36,11 @@ export {
 	type SearchDocumentsInput,
 	type SearchDocumentsResult,
 } from "./lib/search";
+export {
+	joinRef,
+	joinFilter,
+	joinSort,
+} from "./lib/join-refs";
 export { processQuery, type ProcessedQuery } from "./lib/query-processor";
 export { flushSearchIngestBuffer } from "./lib/buffer";
 export {

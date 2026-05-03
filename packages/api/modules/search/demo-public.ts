@@ -18,6 +18,7 @@ const demoSearchInput = z.object({
 	filterBy: z.string().optional(),
 	facetBy: z.string().default("category,brand,color,material"),
 	sortBy: z.string().optional(),
+	includeFields: z.string().optional(),
 	perPage: z.number().int().min(1).max(50).default(20),
 	page: z.number().int().min(1).max(100).default(1),
 });
@@ -68,6 +69,7 @@ export const demoApp = new Hono()
 				filterBy: parsed.data.filterBy,
 				facetBy: parsed.data.facetBy,
 				sortBy: parsed.data.sortBy,
+				includeFields: parsed.data.includeFields,
 				perPage: parsed.data.perPage,
 				page: parsed.data.page,
 			});

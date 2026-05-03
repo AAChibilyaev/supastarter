@@ -41,8 +41,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { EmptyState } from "../cards/EmptyState";
-import { ExportDocumentsDialog } from "../dialogs/ExportDocumentsDialog";
 import { ExportDocumentsDialog } from "../dialogs/ExportDocumentsDialog";
 import { FileTable } from "../files/FileTable";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
@@ -185,7 +183,7 @@ export function CollectionDetail() {
 			<div className="space-y-6">
 				<Skeleton className="h-8 w-64" />
 				<Skeleton className="h-10 w-full" />
-				<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-1">
+				<div className="gap-4 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-2">
 					<Skeleton className="h-28" />
 					<Skeleton className="h-28" />
 					<Skeleton className="h-28" />

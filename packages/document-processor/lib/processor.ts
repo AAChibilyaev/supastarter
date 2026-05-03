@@ -1,16 +1,17 @@
 import { logger } from "@repo/logs";
-import type { ParsedDocument, FileType } from "./types";
-import { detectFileType, SUPPORTED_MIME_TYPES } from "./types";
+
 import type { ChunkerOptions } from "./chunker";
 import { chunkText } from "./chunker";
-import { parsePdf } from "./parsers/pdf";
-import { parseDocx } from "./parsers/docx";
 import { parseCsv } from "./parsers/csv";
+import { parseDocx } from "./parsers/docx";
+import { parseEpub } from "./parsers/epub";
 import { parseJson } from "./parsers/json";
 import { parseMd } from "./parsers/md";
+import { parsePdf } from "./parsers/pdf";
 import { parseTxt } from "./parsers/txt";
-import { parseEpub } from "./parsers/epub";
 import { parseUrl } from "./parsers/url";
+import type { ParsedDocument, FileType } from "./types";
+import { detectFileType, SUPPORTED_MIME_TYPES } from "./types";
 
 type ParserFn = (content: Buffer | string, filename: string) => Promise<ParsedDocument>;
 

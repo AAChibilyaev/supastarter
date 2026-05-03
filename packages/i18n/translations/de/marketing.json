@@ -3926,5 +3926,27 @@
 			},
 			"footnote": "Die Kosten sind Näherungswerte und basieren auf 100K monatlichen Suchoperationen und 10K Datensätzen. Die tatsächlichen Preise variieren je nach Nutzungsmuster."
 		}
+	},
+	"tutorialsPage": {
+		"title": "Video Tutorials",
+		"description": "Watch step-by-step guides to get the most out of AACsearch — from 5-minute setup to advanced integrations.",
+		"videos": {
+			"quickstart": {
+				"title": "5-Minute Quickstart",
+				"description": "Create an account, upload data, embed a search widget, and go live — all in under 5 minutes."
+			},
+			"ecommerce": {
+				"title": "E-commerce Search Setup",
+				"description": "Configure product search with faceted navigation, scoped tokens per storefront, and analytics."
+			},
+			"blog": {
+				"title": "Content / Blog Search",
+				"description": "Add instant full-text search to your blog or documentation site with typo tolerance."
+			},
+			"app": {
+				"title": "SaaS App Search",
+				"description": "Build multi-tenant search for your SaaS app with per-tenant isolation and scoped API keys."
+			}
+		}
 	}
 }

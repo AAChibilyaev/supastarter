@@ -1,9 +1,8 @@
 import { execSync } from "node:child_process";
+
 import type { ParsedDocument } from "../types";
 
-export async function parseUrl(
-	url: string,
-): Promise<ParsedDocument> {
+export async function parseUrl(url: string): Promise<ParsedDocument> {
 	// Use curl to fetch the page, then extract text from HTML
 	let html: string;
 	try {
@@ -25,7 +24,8 @@ export async function parseUrl(
 	const title = titleMatch?.[1]?.trim() ?? new URL(url).hostname;
 
 	// Extract description
-	const descMatch = html.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"[^>]*\/?>/i) ??
+	const descMatch =
+		html.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"[^>]*\/?>/i) ??
 		html.match(/<meta[^>]+content="([^"]+)"[^>]+name="description"[^>]*\/?>/i);
 	const description = descMatch?.[1] ?? "";
 

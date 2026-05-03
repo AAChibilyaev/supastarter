@@ -1,8 +1,9 @@
 import { execSync } from "node:child_process";
-import { tmpdir } from "node:os";
-import { writeFileSync, unlinkSync } from "node:fs";
-import { join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { writeFileSync, unlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import type { ParsedDocument } from "../types";
 
 export async function parsePdf(
@@ -25,10 +26,13 @@ export async function parsePdf(
 			text = result.trim();
 
 			// Count pages
-			const pageCountResult = execSync(`pdfinfo "${tmpPath}" 2>/dev/null | grep Pages | awk '{print $2}'`, {
-				encoding: "utf-8",
-				timeout: 10000,
-			});
+			const pageCountResult = execSync(
+				`pdfinfo "${tmpPath}" 2>/dev/null | grep Pages | awk '{print $2}'`,
+				{
+					encoding: "utf-8",
+					timeout: 10000,
+				},
+			);
 			pageCount = parseInt(pageCountResult.trim(), 10) || 0;
 		} finally {
 			try {

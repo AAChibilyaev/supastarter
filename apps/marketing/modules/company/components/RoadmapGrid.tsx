@@ -73,7 +73,9 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 			for (const item of ALL_ITEMS) {
 				initialCounts[item.key] = item.initialVotes;
 			}
-			const savedCounts = storedCounts ? { ...initialCounts, ...JSON.parse(storedCounts) } : initialCounts;
+			const savedCounts = storedCounts
+				? { ...initialCounts, ...JSON.parse(storedCounts) }
+				: initialCounts;
 			setVoteCounts(savedCounts);
 			setMounted(true);
 		} catch {
@@ -144,24 +146,24 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 				</CardDescription>
 
 				{/* Vote button row */}
-				<div className="mt-4 pt-3 border-t border-border/20 flex items-center justify-between">
+				<div className="mt-4 pt-3 flex items-center justify-between border-t border-border/20">
 					<button
 						type="button"
 						onClick={handleVote}
 						disabled={isShipped}
 						className={cn(
-							"gap-1.5 px-3 py-1.5 inline-flex items-center rounded-lg text-xs font-medium transition-all",
-							isShipped && "opacity-30 cursor-not-allowed",
+							"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
+							isShipped && "cursor-not-allowed opacity-30",
 							isVoted
-								? "bg-primary/10 text-primary border border-primary/20"
-								: "bg-muted/50 text-muted-foreground border border-border/30 hover:border-primary/20 hover:text-foreground",
+								? "border border-primary/20 bg-primary/10 text-primary"
+								: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
 						)}
 					>
 						<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
 						{isVoted ? t("voted") : t("vote")}
 					</button>
 					<span className="text-xs text-muted-foreground">
-						<strong className="text-foreground font-semibold">{voteCount}</strong>{" "}
+						<strong className="font-semibold text-foreground">{voteCount}</strong>{" "}
 						{t("votes", { count: voteCount })}
 					</span>
 				</div>
@@ -224,7 +226,11 @@ export function RoadmapGrid() {
 
 					<div className="mt-16">
 						<RoadmapSection status="shipped" titleKey="shippedTitle" items={shipped} />
-						<RoadmapSection status="inProgress" titleKey="inProgressTitle" items={inProgress} />
+						<RoadmapSection
+							status="inProgress"
+							titleKey="inProgressTitle"
+							items={inProgress}
+						/>
 						<RoadmapSection status="planned" titleKey="plannedTitle" items={planned} />
 					</div>
 				</div>
@@ -237,7 +243,9 @@ export function RoadmapGrid() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
+						<p className="mt-4 text-lg text-muted-foreground">
+							{t("feedback.description")}
+						</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

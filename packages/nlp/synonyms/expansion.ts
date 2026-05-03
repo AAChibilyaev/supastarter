@@ -4,12 +4,9 @@
  * Merges, deduplicates, and ranks results.
  */
 
-import { WordNet, type SynonymResult, type WordNetOptions } from "./wordnet";
+import { WordEmbeddingStore, type EmbeddingProvider } from "./embeddings";
 import { RuWordNet, type RuWordNetOptions } from "./ruwordnet";
-import {
-	WordEmbeddingStore,
-	type EmbeddingProvider,
-} from "./embeddings";
+import { WordNet, type SynonymResult, type WordNetOptions } from "./wordnet";
 
 export interface SynonymSource {
 	readonly name: string;
@@ -90,9 +87,7 @@ export class SynonymExpander {
 		}
 
 		if (this.config.enableEmbeddings) {
-			this.embeddingStore = new WordEmbeddingStore(
-				this.config.embeddingOptions,
-			);
+			this.embeddingStore = new WordEmbeddingStore(this.config.embeddingOptions);
 		}
 	}
 
@@ -107,10 +102,7 @@ export class SynonymExpander {
 	/**
 	 * Load embeddings from a provider into the embedding store.
 	 */
-	async loadEmbeddings(
-		provider: EmbeddingProvider,
-		words: string[],
-	): Promise<number> {
+	async loadEmbeddings(provider: EmbeddingProvider, words: string[]): Promise<number> {
 		if (!this.embeddingStore) {
 			this.embeddingStore = new WordEmbeddingStore();
 		}
@@ -131,9 +123,8 @@ export class SynonymExpander {
 
 		const allResults: Map<string, ExpandedSynonym> = new Map();
 		const script = detectScript(normalized);
-		const lang = config.language === "auto"
-			? (script === "cyrillic" ? "ru" : "en")
-			: config.language;
+		const lang =
+			config.language === "auto" ? (script === "cyrillic" ? "ru" : "en") : config.language;
 
 		// 1. WordNet (English) — use for Latin script or explicit EN
 		if (config.enableWordNet && this.wordNet && (lang === "en" || script !== "cyrillic")) {
@@ -167,10 +158,10 @@ export class SynonymExpander {
 
 		// 3. Embedding-based nearest neighbors
 		if (config.enableEmbeddings && this.embeddingStore) {
-			const results = this.embeddingStore.findNearest(
-				normalized,
-				{ maxResults: config.maxResults, minSimilarity: config.minScore },
-			);
+			const results = this.embeddingStore.findNearest(normalized, {
+				maxResults: config.maxResults,
+				minSimilarity: config.minScore,
+			});
 			for (const r of results) {
 				const key = r.word.toLowerCase();
 				if (allResults.has(key)) {
@@ -245,10 +236,7 @@ export class SynonymExpander {
 	 * Replaces expandable words with their synonyms and generates
 	 * expanded query variations.
 	 */
-	expandQuery(
-		query: string,
-		overrides?: Partial<SynonymExpanderConfig>,
-	): string[] {
+	expandQuery(query: string, overrides?: Partial<SynonymExpanderConfig>): string[] {
 		const words = query.toLowerCase().split(/\s+/).filter(Boolean);
 		const expandedWords: string[][] = [];
 
@@ -256,10 +244,7 @@ export class SynonymExpander {
 			const synonyms = this.expand(word, overrides);
 			if (synonyms.length > 0) {
 				// Keep original word + top 2 synonyms
-				const alternatives = [
-					word,
-					...synonyms.slice(0, 2).map((s) => s.word),
-				];
+				const alternatives = [word, ...synonyms.slice(0, 2).map((s) => s.word)];
 				expandedWords.push(alternatives);
 			} else {
 				expandedWords.push([word]);
@@ -269,9 +254,7 @@ export class SynonymExpander {
 		// Generate all combinations (Cartesian product)
 		if (expandedWords.length === 0) return [];
 
-		return cartesianProduct(expandedWords).map(
-			(combo) => combo.join(" "),
-		);
+		return cartesianProduct(expandedWords).map((combo) => combo.join(" "));
 	}
 }
 

@@ -10,6 +10,7 @@
 			"@i18n/*": ["./modules/i18n/*"],
 			"@case-studies/*": ["./modules/case-studies/*"],
 			"@changelog/*": ["./modules/changelog/*"],
+			"@tutorials/*": ["./modules/tutorials/*"],
 			"@legal/*": ["./modules/legal/*"],
 			"@seo/*": ["./modules/seo/*"],
 			"@shared/*": ["./modules/shared/*"],

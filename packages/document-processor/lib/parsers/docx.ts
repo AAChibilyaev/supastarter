@@ -1,8 +1,9 @@
 import { execSync } from "node:child_process";
-import { tmpdir } from "node:os";
-import { writeFileSync, unlinkSync, readFileSync, mkdtempSync, rmSync } from "node:fs";
-import { join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { writeFileSync, unlinkSync, readFileSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import type { ParsedDocument } from "../types";
 
 export async function parseDocx(
@@ -41,7 +42,10 @@ export async function parseDocx(
 			currentParagraph.push(text);
 
 			// Check if paragraph break exists
-			if (xmlContent.indexOf(`</w:p>`, xmlContent.indexOf(match)) < xmlContent.indexOf(`<w:t`, xmlContent.indexOf(match) + 1)) {
+			if (
+				xmlContent.indexOf(`</w:p>`, xmlContent.indexOf(match)) <
+				xmlContent.indexOf(`<w:t`, xmlContent.indexOf(match) + 1)
+			) {
 				paragraphs.push(currentParagraph.join(""));
 				currentParagraph = [];
 			}
@@ -60,8 +64,7 @@ export async function parseDocx(
 		return {
 			title: filename.replace(/\.docx$/i, ""),
 			content: contentText || "Unable to extract text from DOCX",
-			mimeType:
-				"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 			metadata: {
 				paragraphCount: paragraphs.filter((p) => p.trim()).length,
 				wordCount: contentText.split(/\s+/).filter(Boolean).length,

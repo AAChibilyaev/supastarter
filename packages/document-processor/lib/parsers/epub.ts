@@ -1,8 +1,9 @@
 import { execSync } from "node:child_process";
-import { tmpdir } from "node:os";
-import { writeFileSync, unlinkSync, readFileSync, mkdtempSync, rmSync, readdirSync } from "node:fs";
-import { join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { writeFileSync, unlinkSync, readFileSync, mkdtempSync, rmSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import type { ParsedDocument } from "../types";
 
 export async function parseEpub(
@@ -37,11 +38,7 @@ export async function parseEpub(
 			}
 		} catch {
 			// Try common OPF locations
-			const opfCandidates = [
-				"content.opf",
-				"OEBPS/content.opf",
-				"OPS/content.opf",
-			];
+			const opfCandidates = ["content.opf", "OEBPS/content.opf", "OPS/content.opf"];
 			for (const candidate of opfCandidates) {
 				try {
 					const candidatePath = join(tmpDir, candidate);
@@ -60,7 +57,9 @@ export async function parseEpub(
 			if (titleMatch) title = titleMatch[1]!;
 
 			// Extract manifest items and find those in the spine
-			const itemMatches = opfContent.matchAll(/<item[^>]*href="([^"]+)"[^>]*media-type="([^"]+)"[^>]*\/?>/g);
+			const itemMatches = opfContent.matchAll(
+				/<item[^>]*href="([^"]+)"[^>]*media-type="([^"]+)"[^>]*\/?>/g,
+			);
 			const spineMatches = opfContent.matchAll(/<itemref[^>]*idref="([^"]+)"[^>]*\/?>/g);
 
 			const opfDir = opfPath.substring(0, opfPath.lastIndexOf("/"));

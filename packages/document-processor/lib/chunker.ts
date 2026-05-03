@@ -17,10 +17,7 @@ export interface ChunkResult {
 	}>;
 }
 
-export function chunkText(
-	text: string,
-	options: Partial<ChunkerOptions> = {},
-): ChunkResult {
+export function chunkText(text: string, options: Partial<ChunkerOptions> = {}): ChunkResult {
 	const { maxWords, minChunkSize } = { ...DEFAULT_CHUNKER_OPTIONS, ...options };
 
 	if (!text || text.trim().length === 0) {
@@ -116,11 +113,7 @@ export function chunkText(
 	return { chunks: filteredChunks, metadata: filteredMetadata };
 }
 
-function flushChunk(
-	lines: string[],
-	chunks: string[],
-	metadata: ChunkResult["metadata"],
-): void {
+function flushChunk(lines: string[], chunks: string[], metadata: ChunkResult["metadata"]): void {
 	const text = lines.join("\n\n");
 	chunks.push(text);
 	metadata.push({
@@ -137,7 +130,5 @@ function countWords(text: string): number {
 function splitSentences(text: string): string[] {
 	// Basic sentence splitting
 	const rawSentences = text.match(/[^.!?\n]+[.!?]*/g) ?? [text];
-	return rawSentences
-		.map((s) => s.trim())
-		.filter((s) => s.length > 0);
+	return rawSentences.map((s) => s.trim()).filter((s) => s.length > 0);
 }

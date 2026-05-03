@@ -8,4 +8,5 @@ export * from "./purchases";
 export * from "./search";
 export * from "./search-rate-limit";
 export * from "./users";
+export * from "./my-search";
 export * from "./wallet-topup-orders";

@@ -125,10 +125,9 @@ const BUILTIN_RU_SYNONYMS: Record<string, Record<string, string[]>> = {
 	},
 	сравнить: { verb: ["сопоставить", "сличить", "соотнести", "противопоставить", "отождествить"] },
 	проверить: {
-		verb: ["проверить", "проверить", "удостовериться", "убедиться", "протестировать"],
+		verb: ["удостовериться", "убедиться", "протестировать", "проверить", "освидетельствовать"],
 	},
 	отправить: { verb: ["послать", "отослать", "выслать", "направить", "переслать"] },
-	получить: { verb: ["принять", "забрать", "стяжать", "овладеть", "обзавестись"] },
 	соединить: { verb: ["объединить", "связать", "прикрепить", "присоединить", "скрепить"] },
 	разделить: { verb: ["распределить", "разбить", "поделить", "отделить", "разграничить"] },
 	начать: { verb: ["запустить", "приступить", "открыть", "возобновить", "взяться"] },
@@ -309,7 +308,6 @@ export class RuWordNet {
 	lookup(word: string, overrides?: RuWordNetOptions): SynonymResult[] {
 		const opts = { ...this.options, ...overrides };
 		const maxResults = opts.maxResults ?? 10;
-		const minSimilarity = opts.minSimilarity ?? 0.5;
 
 		const normalized = word.toLowerCase().trim();
 		const entries = BUILTIN_RU_SYNONYMS[normalized];

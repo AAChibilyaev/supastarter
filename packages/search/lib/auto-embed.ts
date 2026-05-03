@@ -151,6 +151,15 @@ function getModelDef(model: string): EmbeddingModelDef {
 				maxInputTokens: 8192,
 			};
 		}
+		// Accept any model with vertex/ prefix dynamically
+		if (model.startsWith("vertex/")) {
+			return {
+				name: model,
+				dimensions: 768,
+				provider: "vertex" as const,
+				maxInputTokens: 2048,
+			};
+		}
 		throw new Error(`Unknown embedding model: ${model}`);
 	}
 	return def;

@@ -14,6 +14,8 @@ const modelConfigSchema = z.object({
 	azureApiVersion: z.string().optional(),
 	openaiCompatibleApiUrl: z.string().optional(),
 	openaiCompatibleApiKey: z.string().optional(),
+	gcpProjectId: z.string().optional(),
+	gcpRegion: z.string().optional(),
 });
 
 type ModelConfig = z.infer<typeof modelConfigSchema>;
@@ -53,6 +55,8 @@ export const getModelConfig = protectedProcedure
 			azureApiVersion: modelConfig?.azureApiVersion,
 			openaiCompatibleApiUrl: modelConfig?.openaiCompatibleApiUrl,
 			openaiCompatibleApiKey: modelConfig?.openaiCompatibleApiKey,
+			gcpProjectId: modelConfig?.gcpProjectId,
+			gcpRegion: modelConfig?.gcpRegion,
 		};
 	});
 
@@ -75,6 +79,8 @@ export const updateModelConfig = protectedProcedure
 			azureApiVersion: z.string().optional(),
 			openaiCompatibleApiUrl: z.string().optional(),
 			openaiCompatibleApiKey: z.string().optional(),
+			gcpProjectId: z.string().optional(),
+			gcpRegion: z.string().optional(),
 		}),
 	)
 	.output(modelConfigSchema)
@@ -111,6 +117,12 @@ export const updateModelConfig = protectedProcedure
 			openaiCompatibleApiKey:
 				(input.openaiCompatibleApiKey as string | undefined) ??
 				(existing.openaiCompatibleApiKey as string | undefined),
+			gcpProjectId:
+				(input.gcpProjectId as string | undefined) ??
+				(existing.gcpProjectId as string | undefined),
+			gcpRegion:
+				(input.gcpRegion as string | undefined) ??
+				(existing.gcpRegion as string | undefined),
 		};
 
 		(schema as Record<string, unknown>)._modelConfig = updated;

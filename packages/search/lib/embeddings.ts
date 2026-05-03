@@ -201,6 +201,241 @@ async function azureEmbeddings(texts: string[], model: string): Promise<Embeddin
 	}));
 }
 
+// ─── GCP Vertex AI (PaLM / Gecko / Gemini) Provider ────────────────────────────
+
+interface GcpServiceAccount {
+	type: string;
+	project_id: string;
+	private_key_id: string;
+	private_key: string;
+	client_email: string;
+	client_id: string;
+	auth_uri: string;
+	token_uri: string;
+}
+
+/**
+ * Get the GCP service account credentials from environment variable.
+ */
+function getGcpServiceAccount(): GcpServiceAccount {
+	const raw = process.env.GCP_SERVICE_ACCOUNT_JSON;
+	if (!raw) {
+		throw new Error(
+			"GCP_SERVICE_ACCOUNT_JSON not set — provide the full service account JSON string",
+		);
+	}
+	try {
+		return JSON.parse(raw) as GcpServiceAccount;
+	} catch {
+		throw new Error("GCP_SERVICE_ACCOUNT_JSON is not valid JSON");
+	}
+}
+
+/**
+ * Generate a JWT assertion and exchange it for a GCP OAuth2 access token.
+ * Uses Node.js built-in crypto (RS256 sign). No external dependencies.
+ */
+let cachedGcpToken: { token: string; expiresAt: number } | null = null;
+
+async function getGcpAccessToken(): Promise<string> {
+	if (cachedGcpToken && cachedGcpToken.expiresAt > Date.now() + 60_000) {
+		return cachedGcpToken.token;
+	}
+
+	const sa = getGcpServiceAccount();
+
+	// Build JWT header + payload
+	const header = { alg: "RS256" as const, typ: "JWT" as const };
+	const now = Math.floor(Date.now() / 1000);
+	const payload = {
+		iss: sa.client_email,
+		scope: "https://www.googleapis.com/auth/cloud-platform",
+		aud: sa.token_uri,
+		exp: now + 3600,
+		iat: now,
+	};
+
+	const base64Url = (obj: Record<string, unknown>): string =>
+		Buffer.from(JSON.stringify(obj)).toString("base64url").replace(/=+$/, "");
+
+	const signatureInput = `${base64Url(header)}.${base64Url(payload)}`;
+
+	// Sign with RSA-SHA256 using the service account's private key
+	const crypto = await import("node:crypto");
+	const sign = crypto.createSign("RSA-SHA256");
+	sign.update(signatureInput);
+	sign.end();
+	const signature = sign.sign(sa.private_key, "base64url");
+
+	const jwt = `${signatureInput}.${signature}`;
+
+	// Exchange JWT for access token
+	const tokenResponse = await fetch(sa.token_uri, {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: new URLSearchParams({
+			grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+			assertion: jwt,
+		}),
+	});
+
+	if (!tokenResponse.ok) {
+		const errText = await tokenResponse.text().catch(() => "unknown");
+		throw new Error(`GCP OAuth2 token exchange failed ${tokenResponse.status}: ${errText}`);
+	}
+
+	const tokenData = (await tokenResponse.json()) as {
+		access_token: string;
+		expires_in?: number;
+	};
+
+	cachedGcpToken = {
+		token: tokenData.access_token,
+		expiresAt: now + (tokenData.expires_in ?? 3600),
+	};
+
+	return cachedGcpToken.token;
+}
+
+/**
+ * Strip the "vertex/" prefix from model names for Vertex AI calls.
+ */
+function toVertexModelName(model: string): string {
+	return model.replace(/^vertex\//, "");
+}
+
+/**
+ * Call GCP Vertex AI embedding API for a single text.
+ */
+async function vertexEmbedding(
+	text: string,
+	model: string,
+	projectId?: string,
+	region?: string,
+): Promise<EmbeddingResult> {
+	const sa = getGcpServiceAccount();
+	const project = projectId ?? sa.project_id;
+	const gcpRegion = region ?? process.env.GCP_REGION ?? "us-central1";
+	const accessToken = await getGcpAccessToken();
+	const actualModel = toVertexModelName(model);
+
+	const url = `https://${gcpRegion}-aiplatform.googleapis.com/v1/projects/${project}/locations/${gcpRegion}/publishers/google/models/${actualModel}:predict`;
+
+	const response = await fetch(url, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			instances: [{ content: text }],
+		}),
+	});
+
+	if (!response.ok) {
+		const errText = await response.text().catch(() => "unknown");
+		throw new Error(`Vertex AI embedding API error ${response.status}: ${errText}`);
+	}
+
+	const data = (await response.json()) as {
+		predictions?: Array<{
+			embeddings?: {
+				values?: number[];
+				statistics?: { token_count?: number };
+			};
+		}>;
+	};
+
+	const prediction = data.predictions?.[0];
+	const values = prediction?.embeddings?.values;
+	if (!values) {
+		throw new Error("Vertex AI embedding API: no embedding in response");
+	}
+
+	const tokenCount = prediction.embeddings?.statistics?.token_count ?? 0;
+
+	return {
+		vector: values,
+		model,
+		dimensions: values.length,
+		tokens: tokenCount,
+	};
+}
+
+/**
+ * Batch embedding via sequential calls (Vertex AI doesn't support
+ * native batching for text embedding models in the predict endpoint).
+ */
+async function vertexEmbeddings(
+	texts: string[],
+	model: string,
+	projectId?: string,
+	region?: string,
+): Promise<EmbeddingResult[]> {
+	// For efficiency, batch up to 5 texts per call where supported
+	const batchSize = 5;
+	const results: EmbeddingResult[] = [];
+
+	for (let i = 0; i < texts.length; i += batchSize) {
+		const batch = texts.slice(i, i + batchSize);
+
+		if (batch.length === 1) {
+			results.push(await vertexEmbedding(batch[0], model, projectId, region));
+			continue;
+		}
+
+		const sa = getGcpServiceAccount();
+		const project = projectId ?? sa.project_id;
+		const gcpRegion = region ?? process.env.GCP_REGION ?? "us-central1";
+		const accessToken = await getGcpAccessToken();
+		const actualModel = toVertexModelName(model);
+
+		const url = `https://${gcpRegion}-aiplatform.googleapis.com/v1/projects/${project}/locations/${gcpRegion}/publishers/google/models/${actualModel}:predict`;
+
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				instances: batch.map((t) => ({ content: t })),
+			}),
+		});
+
+		if (!response.ok) {
+			// Fall back to sequential for this batch
+			for (const t of batch) {
+				results.push(await vertexEmbedding(t, model, projectId, region));
+			}
+			continue;
+		}
+
+		const data = (await response.json()) as {
+			predictions?: Array<{
+				embeddings?: {
+					values?: number[];
+					statistics?: { token_count?: number };
+				};
+			}>;
+		};
+
+		for (const prediction of data.predictions ?? []) {
+			const values = prediction?.embeddings?.values;
+			if (values) {
+				results.push({
+					vector: values,
+					model,
+					dimensions: values.length,
+					tokens: prediction.embeddings?.statistics?.token_count ?? 0,
+				});
+			}
+		}
+	}
+
+	return results;
+}
+
 // ─── OpenAI-Compatible Provider (Ollama, LM Studio, Together AI, etc.) ─────
 
 /**
@@ -272,6 +507,15 @@ function getModelDef(model: string): EmbeddingModelDef {
 				maxInputTokens: 8192,
 			};
 		}
+		// Accept any model with vertex/ prefix dynamically
+		if (model.startsWith("vertex/")) {
+			return {
+				name: model,
+				dimensions: 768,
+				provider: "vertex" as const,
+				maxInputTokens: 2048,
+			};
+		}
 		throw new Error(
 			`Unknown embedding model: ${model}. Available: ${Object.keys(EMBEDDING_MODELS).join(", ")}`,
 		);
@@ -295,6 +539,8 @@ export async function generateEmbedding(
 			return googleEmbedding(text, model);
 		case "azure":
 			return azureEmbedding(text, model);
+		case "vertex":
+			return vertexEmbedding(text, model);
 		case "openai-compatible":
 			return openaiCompatibleEmbedding(text, model);
 		default:
@@ -320,6 +566,8 @@ export async function generateEmbeddings(
 			return googleEmbeddings(texts, model);
 		case "azure":
 			return azureEmbeddings(texts, model);
+		case "vertex":
+			return vertexEmbeddings(texts, model);
 		case "openai-compatible":
 			return openaiCompatibleEmbeddings(texts, model);
 		default:

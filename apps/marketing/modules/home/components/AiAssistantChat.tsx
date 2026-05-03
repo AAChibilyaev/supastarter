@@ -533,6 +533,56 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			) : (
 				<>
 					<div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20">
+						{/* Capabilities grid — mobile only */}
+						{!hasMessages && (
+							<div className="space-y-3 sm:hidden">
+								<div className="grid grid-cols-2 gap-2">
+									{MODES.slice(0, 4).map(({ key, icon: Icon }) => (
+										<button
+											key={key}
+											type="button"
+											onClick={() => { setActiveMode(key); setOpen(true); setView("chat"); }}
+											className={cn(
+												"flex flex-col items-start gap-1.5 rounded-xl border p-3 text-left transition-all active:scale-[0.98]",
+												activeMode === key
+													? "border-border bg-muted/60"
+													: "border-border/60 bg-muted/20 hover:border-border hover:bg-muted/30",
+											)}
+											aria-label={`Search by ${key}`}
+										>
+											<div className="flex items-center gap-2">
+												<Icon className="size-4 shrink-0 text-muted-foreground/70" />
+												<span className="text-sm font-light text-foreground">{key === "text" ? "Text" : key === "voice" ? "Voice" : key === "photo" ? "Photo" : "Image"}</span>
+											</div>
+											<span className="text-[11px] font-light text-muted-foreground/50 leading-tight">
+												{key === "text" ? "Search docs & website" : key === "voice" ? "Voice-powered search" : key === "photo" ? "Find by photo" : "Visual similarity"}
+											</span>
+										</button>
+									))}
+								</div>
+								{MODES.slice(4).map(({ key, icon: Icon }) => (
+									<button
+										key={key}
+										type="button"
+										onClick={() => { setActiveMode(key); setOpen(true); setView("chat"); }}
+										className={cn(
+											"flex items-center gap-3 rounded-xl border p-3 text-left transition-all active:scale-[0.98]",
+											activeMode === key
+												? "border-border bg-muted/60"
+												: "border-border/60 bg-muted/20 hover:border-border hover:bg-muted/30",
+										)}
+										aria-label={`Search by ${key}`}
+									>
+										<Icon className="size-5 shrink-0 text-muted-foreground/70" />
+										<div>
+											<div className="text-sm font-light text-foreground">AI Chat</div>
+											<div className="text-[11px] font-light text-muted-foreground/50">Ask anything about your data</div>
+										</div>
+									</button>
+								))}
+							</div>
+						)}
+
 						<div className="space-y-4">
 							<ChatBubble variant="received" layout="ai">
 								<ChatBubbleMessage variant="received" layout="ai">

@@ -9,6 +9,7 @@ import { useCallback } from "react";
 
 import { RecommendationsDashboardCards } from "../recommendations/RecommendationsDashboardCards";
 import { RecommendationsGraphRAG } from "../recommendations/RecommendationsGraphRAG";
+import { RecommendationsPersonalizedAnalytics } from "../recommendations/RecommendationsPersonalizedAnalytics";
 import { RecommendationsSettings } from "../recommendations/RecommendationsSettings";
 import { RecommendationsTestPanel } from "../recommendations/RecommendationsTestPanel";
 
@@ -16,9 +17,16 @@ interface RecommendationsPageProps {
 	organizationId: string;
 }
 
-type TabId = "dashboard" | "similar" | "personalized" | "graphrag" | "settings";
+type TabId = "dashboard" | "similar" | "personalized" | "analytics" | "graphrag" | "settings";
 
-const TAB_IDS: TabId[] = ["dashboard", "similar", "personalized", "graphrag", "settings"];
+const TAB_IDS: TabId[] = [
+	"dashboard",
+	"similar",
+	"personalized",
+	"analytics",
+	"graphrag",
+	"settings",
+];
 
 export function RecommendationsPage({ organizationId }: RecommendationsPageProps) {
 	const t = useTranslations();
@@ -112,6 +120,10 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 					emptyMessage={tr("recommendations.selectProduct")}
 					neo4jConnected={neo4jConnected}
 				/>
+			</TabsContent>
+
+			<TabsContent value="analytics" className="mt-6 space-y-6">
+				<RecommendationsPersonalizedAnalytics organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="graphrag" className="mt-6 space-y-6">

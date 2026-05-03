@@ -23,6 +23,7 @@ export {
 export {
 	bulkUpsert,
 	deleteByQuery,
+	truncateCollection,
 	type BulkUpsertInput,
 	type BulkUpsertResult,
 } from "./lib/ingest";

@@ -460,7 +460,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 	const mobileChatPanel = (
 		<div
 			className={cn(
-				"fixed inset-0 z-50 flex flex-col overflow-hidden bg-card sm:hidden transition-all duration-300 ease-out",
+				"fixed inset-0 z-40 flex flex-col overflow-hidden bg-card sm:hidden transition-opacity duration-300 ease-out",
 				open
 					? "pointer-events-auto visible opacity-100"
 					: "pointer-events-none invisible opacity-0",
@@ -528,7 +528,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 											<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages &middot; {formatTimestamp(session.updatedAt)}</p>
 										</div>
 										<button type="button" onClick={(e) => deleteSession(e, session.id)}
-											className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
+											className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-muted-foreground group-hover:opacity-100"
 											aria-label="Delete chat"><Trash2Icon className="size-3" /></button>
 									</button>
 								))}</div>
@@ -801,10 +801,10 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 
 	// ── Mobile Bottom Bar ────────────────────────────────
 	const mobileBottomBar = (
-		<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+		<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] touch-manipulation">
 			<button type="button"
 				onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
-				className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-muted/60 transition-colors"
+				className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-muted/60 transition-colors cursor-pointer touch-manipulation"
 				aria-label="Open menu">
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
 					<line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" />

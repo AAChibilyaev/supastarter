@@ -126,7 +126,7 @@ export function SecuritySandbox() {
 								type="button"
 								onClick={() => setLeaked((p) => !p)}
 								className={cn(
-									"relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none",
+									"relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none",
 									leaked ? "bg-amber-500" : "bg-muted",
 								)}
 								role="switch"
@@ -134,8 +134,8 @@ export function SecuritySandbox() {
 							>
 								<span
 									className={cn(
-										"pointer-events-none inline-block size-4 rounded-full bg-white shadow-lg ring-0 transition-transform",
-										leaked ? "translate-x-4" : "translate-x-0",
+										"pointer-events-none inline-block size-5 rounded-full bg-white shadow-lg ring-0 transition-transform",
+										leaked ? "translate-x-5" : "translate-x-0",
 									)}
 								/>
 							</button>

@@ -16,14 +16,14 @@ export function FitSection() {
 					</h2>
 				</div>
 
-				<div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+				<div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
 					{/* Perfect fit */}
 					<div className="rounded-xl border border-border bg-card p-6 md:p-8">
 						<div className="flex items-center gap-2 mb-5">
 							<div className="size-7 rounded-full bg-success/15 flex items-center justify-center shrink-0">
 								<CheckIcon className="size-4 text-success" />
 							</div>
-							<h3 className="text-base font-normal text-foreground">{t("perfectTitle")}</h3>
+							<h3 className="text-base font-light text-foreground">{t("perfectTitle")}</h3>
 						</div>
 						<ul className="space-y-3">
 							{Array.from({ length: PERFECT_COUNT }, (_, i) => (
@@ -43,7 +43,7 @@ export function FitSection() {
 							<div className="size-7 rounded-full bg-muted flex items-center justify-center shrink-0">
 								<XIcon className="size-4 text-muted-foreground" />
 							</div>
-							<h3 className="text-base font-normal text-foreground">{t("skipTitle")}</h3>
+							<h3 className="text-base font-light text-foreground">{t("skipTitle")}</h3>
 						</div>
 						<ul className="space-y-3">
 							{Array.from({ length: SKIP_COUNT }, (_, i) => (

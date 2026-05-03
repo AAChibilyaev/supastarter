@@ -21,12 +21,12 @@ export function MigrationSection() {
 
 				<div className="mt-12 md:mt-16 gap-6 grid grid-cols-1 sm:grid-cols-2">
 					{STEPS.map((step, i) => (
-						<div key={step} className="gap-4 flex">
+						<div key={step} className="gap-4 flex items-start">
 							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-medium text-foreground/60">
 								{stepIndex[i]}
 							</div>
 							<div className="min-w-0">
-								<h3 className="text-base font-normal text-foreground">
+								<h3 className="text-base font-light text-foreground">
 									{t(`homeMigration.steps.${step}.title`)}
 								</h3>
 								<p className="mt-1 text-sm font-light leading-relaxed text-pretty text-muted-foreground">

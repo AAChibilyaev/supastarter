@@ -53,7 +53,7 @@ export function FeaturesGrid() {
 									<Icon className="size-5 text-muted-foreground" />
 								</div>
 								<div>
-									<h3 className="text-lg font-normal">
+									<h3 className="text-lg font-light">
 										{t(`home.features.items.${key}.title`)}
 									</h3>
 									<p className="mt-2 text-sm font-light leading-relaxed text-pretty text-muted-foreground">

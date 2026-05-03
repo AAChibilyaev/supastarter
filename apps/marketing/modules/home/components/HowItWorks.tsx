@@ -20,7 +20,7 @@ export function HowItWorks() {
 							<div className="size-14 flex items-center justify-center rounded-full bg-foreground text-background">
 								<span className="text-lg font-bold">{i + 1}</span>
 							</div>
-							<h3 className="mt-6 text-lg font-normal text-foreground">
+							<h3 className="mt-6 text-lg font-light text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
 							<p className="mt-3 max-w-xs text-sm font-light text-muted-foreground">

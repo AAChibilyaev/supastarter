@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 
 	return (
 		<html lang={locale} suppressHydrationWarning className={sansFont.variable}>
-			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
+			<body className={cn("bg-background text-foreground antialiased")}>
 				<NuqsAdapter>
 					<NextIntlClientProvider messages={messages}>
 						<ThemeProvider

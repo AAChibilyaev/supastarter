@@ -1,0 +1,23 @@
+# EU region (Frankfurt) — GDPR compliance
+# Extends the common base with EU-specific overrides.
+#
+# Usage:
+#   docker compose -f deploy/regions/common/docker-compose.base.yml \
+#     -f deploy/regions/eu/docker-compose.yml \
+#     --env-file deploy/regions/eu/.env.eu up -d
+
+services:
+    app:
+        ports:
+            - "${APP_PORT:-3000}:3000"
+        labels:
+            aacsearch.region: "eu"
+            aacsearch.compliance: "gdpr"
+
+    typesense:
+        labels:
+            aacsearch.region: "eu"
+
+    postgres:
+        labels:
+            aacsearch.region: "eu"

@@ -1,0 +1,23 @@
+# RU region (Moscow) — 152-ФЗ / 242-ФЗ compliance
+# Extends the common base with RU-specific overrides.
+#
+# Usage:
+#   docker compose -f deploy/regions/common/docker-compose.base.yml \
+#     -f deploy/regions/ru/docker-compose.yml \
+#     --env-file deploy/regions/ru/.env.ru up -d
+
+services:
+    app:
+        ports:
+            - "${APP_PORT:-3002}:3000"
+        labels:
+            aacsearch.region: "ru"
+            aacsearch.compliance: "152fz"
+
+    typesense:
+        labels:
+            aacsearch.region: "ru"
+
+    postgres:
+        labels:
+            aacsearch.region: "ru"

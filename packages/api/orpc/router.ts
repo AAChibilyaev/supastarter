@@ -7,6 +7,7 @@ import { billingWalletRouter } from "../modules/billing-wallet/router";
 import { collectionsRouter } from "../modules/collections/router";
 import { complianceRouter } from "../modules/compliance/router";
 import { entitlementsRouter } from "../modules/entitlements/router";
+import { featureFlagsRouter } from "../modules/feature-flags/router";
 import { feedbackRouter } from "../modules/feedback/router";
 import { indexingRouter } from "../modules/indexing/router";
 import { knowledgeRouter } from "../modules/knowledge/router";
@@ -33,6 +34,7 @@ export const router = publicProcedure.router({
 	knowledge: knowledgeRouter,
 	billingWallet: billingWalletRouter,
 	entitlements: entitlementsRouter,
+	featureFlags: featureFlagsRouter,
 	collections: collectionsRouter,
 	compliance: complianceRouter,
 	indexing: indexingRouter,

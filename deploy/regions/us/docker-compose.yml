@@ -1,0 +1,23 @@
+# US region (Virginia) — SOC2 compliance
+# Extends the common base with US-specific overrides.
+#
+# Usage:
+#   docker compose -f deploy/regions/common/docker-compose.base.yml \
+#     -f deploy/regions/us/docker-compose.yml \
+#     --env-file deploy/regions/us/.env.us up -d
+
+services:
+    app:
+        ports:
+            - "${APP_PORT:-3001}:3000"
+        labels:
+            aacsearch.region: "us"
+            aacsearch.compliance: "soc2"
+
+    typesense:
+        labels:
+            aacsearch.region: "us"
+
+    postgres:
+        labels:
+            aacsearch.region: "us"

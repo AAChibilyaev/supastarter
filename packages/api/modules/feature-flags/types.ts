@@ -7,12 +7,7 @@
 
 // ─── Targeting Rules ────────────────────────────────────────────
 
-export type TargetingRuleField =
-	| "planTier"
-	| "orgAge"
-	| "geo"
-	| "orgSlug"
-	| "manualList";
+export type TargetingRuleField = "planTier" | "orgAge" | "geo" | "orgSlug" | "manualList";
 
 export type TargetingRuleOperator = "in" | "notIn" | "gte" | "lt";
 

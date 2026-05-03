@@ -1,4 +1,5 @@
 import "server-only";
+import type { StorageRegion } from "./regions";
 
 interface TypesenseEnv {
 	host: string;
@@ -7,39 +8,86 @@ interface TypesenseEnv {
 	adminApiKey: string;
 }
 
-let cached: TypesenseEnv | null = null;
+let cachedDefault: TypesenseEnv | null = null;
+const cachedPerRegion = new Map<StorageRegion, TypesenseEnv>();
 
-export function getTypesenseEnv(): TypesenseEnv {
-	if (cached) {
-		return cached;
+/**
+ * Get Typesense connection environment variables for a specific region.
+ *
+ * Falls back to the default TYPESENSE_HOST / TYPESENSE_PORT / etc. if the
+ * region-specific env var is not set (backward-compatible with single-region setups).
+ */
+export function getTypesenseEnv(region?: StorageRegion): TypesenseEnv {
+	// No region specified → return default (backward-compatible)
+	if (!region) {
+		if (cachedDefault) return cachedDefault;
+		cachedDefault = resolveTypesenseEnv();
+		return cachedDefault;
 	}
 
-	const host = process.env.TYPESENSE_HOST;
-	const adminApiKey = process.env.TYPESENSE_ADMIN_API_KEY;
+	// Region-specific cache
+	const cached = cachedPerRegion.get(region);
+	if (cached) return cached;
+
+	const env = resolveTypesenseEnv(region);
+	cachedPerRegion.set(region, env);
+	return env;
+}
+
+function resolveTypesenseEnv(region?: StorageRegion): TypesenseEnv {
+	const regionKey = region?.toUpperCase();
+
+	const host = regionKey
+		? (process.env[`TYPESENSE_HOST_${regionKey}`] ?? process.env.TYPESENSE_HOST)
+		: process.env.TYPESENSE_HOST;
+	const adminApiKey = regionKey
+		? (process.env[`TYPESENSE_ADMIN_API_KEY_${regionKey}`] ??
+			process.env.TYPESENSE_ADMIN_API_KEY)
+		: process.env.TYPESENSE_ADMIN_API_KEY;
 
 	if (!host) {
-		throw new Error("TYPESENSE_HOST is not set");
+		throw new Error(
+			region
+				? `TYPESENSE_HOST_${prefix}E (or TYPESENSE_HOST) is not set for region "${region}"`
+				: "TYPESENSE_HOST is not set",
+		);
 	}
 	if (!adminApiKey) {
-		throw new Error("TYPESENSE_ADMIN_API_KEY is not set");
+		throw new Error(
+			region
+				? `TYPESENSE_ADMIN_API_KEY_${prefix}E (or TYPESENSE_ADMIN_API_KEY) is not set for region "${region}"`
+				: "TYPESENSE_ADMIN_API_KEY is not set",
+		);
 	}
 
-	// Wrap IPv6 literals in brackets (e.g. "::1" → "[::1]")
-	// so URL construction like `${host}:${port}` produces valid "[::1]:8108"
-	// Hostnames (Docker service names, domain names) are passed through unchanged.
+	// Wrap IPv6 literals in brackets
 	const normalizedHost = host.includes(":") && !host.startsWith("[") ? `[${host}]` : host;
 
-	const protocolRaw = (process.env.TYPESENSE_PROTOCOL ?? "http").toLowerCase();
+	const protocolRaw = (
+		process.env[`TYPESENSE_PROTOCOL_${prefix}E`] ??
+		process.env.TYPESENSE_PROTOCOL ??
+		"http"
+	).toLowerCase();
 	if (protocolRaw !== "http" && protocolRaw !== "https") {
-		throw new Error("TYPESENSE_PROTOCOL must be 'http' or 'https'");
+		throw new Error(
+			region
+				? `TYPESENSE_PROTOCOL_${prefix}E must be 'http' or 'https'`
+				: "TYPESENSE_PROTOCOL must be 'http' or 'https'",
+		);
 	}
 
-	const portRaw = process.env.TYPESENSE_PORT ?? (protocolRaw === "https" ? "443" : "8108");
+	const portRaw =
+		process.env[`TYPESENSE_PORT_${prefix}E`] ??
+		process.env.TYPESENSE_PORT ??
+		(protocolRaw === "https" ? "443" : "8108");
 	const port = Number.parseInt(portRaw, 10);
 	if (!Number.isFinite(port)) {
-		throw new Error("TYPESENSE_PORT must be a number");
+		throw new Error(
+			region
+				? `TYPESENSE_PORT_${prefix}E must be a number`
+				: "TYPESENSE_PORT must be a number",
+		);
 	}
 
-	cached = { host: normalizedHost, port, protocol: protocolRaw, adminApiKey };
-	return cached;
+	return { host: normalizedHost, port, protocol: protocolRaw, adminApiKey };
 }

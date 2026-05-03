@@ -2,7 +2,9 @@ import { CtaFooter } from "@home/components/CtaFooter";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { IntegrationFaq } from "../../../../modules/integrations/components/IntegrationFaq";
 import { IntegrationsContentfulGrid } from "../../../../modules/integrations/components/IntegrationsContentfulGrid";
+import { IntegrationSetupSteps } from "../../../../modules/integrations/components/IntegrationSetupSteps";
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -34,6 +36,12 @@ export default async function IntegrationsContentfulPage(props: {
 				</div>
 			</section>
 			<IntegrationsContentfulGrid />
+			<IntegrationSetupSteps
+				namespace="integrationsContentfulSetup"
+				stepCount={3}
+				ctaHref="#"
+			/>
+			<IntegrationFaq namespace="integrationsContentfulFaq" />
 			<CtaFooter />
 		</>
 	);

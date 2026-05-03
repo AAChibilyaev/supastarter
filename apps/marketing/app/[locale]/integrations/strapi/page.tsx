@@ -2,6 +2,8 @@ import { CtaFooter } from "@home/components/CtaFooter";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { IntegrationFaq } from "../../../../modules/integrations/components/IntegrationFaq";
+import { IntegrationSetupSteps } from "../../../../modules/integrations/components/IntegrationSetupSteps";
 import { IntegrationsStrapiGrid } from "../../../../modules/integrations/components/IntegrationsStrapiGrid";
 
 export async function generateMetadata(props: {
@@ -34,6 +36,8 @@ export default async function IntegrationsStrapiPage(props: {
 				</div>
 			</section>
 			<IntegrationsStrapiGrid />
+			<IntegrationSetupSteps namespace="integrationsStrapiSetup" stepCount={3} ctaHref="#" />
+			<IntegrationFaq namespace="integrationsStrapiFaq" />
 			<CtaFooter />
 		</>
 	);

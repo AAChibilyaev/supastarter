@@ -1,8 +1,15 @@
 /** Section id for i18n (`settings.notificationsPage.groups.${id}`) and ordering. */
-export type NotificationGroupId = "general";
+export type NotificationGroupId = "general" | "billing";
 
 /** Mirrors Prisma `NotificationType` — keep in sync with schema. */
-export type NotificationTypeId = "WELCOME" | "APP_UPDATE";
+export type NotificationTypeId =
+	| "WELCOME"
+	| "APP_UPDATE"
+	| "AI_LOW_BALANCE"
+	| "AI_TOPUP_PAID"
+	| "AI_TOPUP_FAILED"
+	| "AI_OVERAGE_REACHED"
+	| "PAYMENT_FAILED";
 
 export interface NotificationGroupConfig {
 	id: NotificationGroupId;
@@ -18,5 +25,15 @@ export const NOTIFICATION_GROUPS: readonly NotificationGroupConfig[] = [
 	{
 		id: "general",
 		types: ["APP_UPDATE"],
+	},
+	{
+		id: "billing",
+		types: [
+			"AI_LOW_BALANCE",
+			"AI_TOPUP_PAID",
+			"AI_TOPUP_FAILED",
+			"AI_OVERAGE_REACHED",
+			"PAYMENT_FAILED",
+		],
 	},
 ];

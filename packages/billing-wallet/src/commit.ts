@@ -1,5 +1,7 @@
 import { db } from "@repo/database";
+import { logger } from "@repo/logs";
 
+import { notifyLowBalance } from "./notify-low-balance";
 import { parsePgRpcError } from "./parse-pg-error";
 import type { CommitAiUsageInput, CommitAiUsageResult } from "./types";
 
@@ -30,6 +32,21 @@ export async function commitAiUsage(input: CommitAiUsageInput): Promise<CommitAi
 		`;
 		const row = rows[0];
 		if (!row) throw new Error("commit_ai_usage returned no row");
+
+		// Fire-and-forget: notify if balance is low after charge
+		// Use the reservation's walletId — we need to find it first
+		if (input.reservationId) {
+			const reservation = await db.aiQuotaReservation.findUnique({
+				where: { id: input.reservationId },
+				select: { walletId: true },
+			});
+			if (reservation) {
+				notifyLowBalance(reservation.walletId).catch((err: unknown) =>
+					logger.error("commitAiUsage: notifyLowBalance failed", err),
+				);
+			}
+		}
+
 		return {
 			usageEventId: row.usage_event_id,
 			chargedKopecks: row.charged_kopecks,

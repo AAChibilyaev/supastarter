@@ -6,4 +6,6 @@ export { applyTopupCredit, adminAdjustWallet } from "./topup";
 export { applySubscriptionToWallet } from "./sync-from-subscription";
 export type { ApplySubscriptionInput } from "./sync-from-subscription";
 export { notifyLowBalance } from "./notify-low-balance";
+export type { SlackAlertPayload } from "./slack-alert";
+export { sendSlackAlert } from "./slack-alert";
 export { notifyTopupPaid, notifyTopupFailed } from "./notify-topup";

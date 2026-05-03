@@ -1,5 +1,7 @@
 import { db } from "@repo/database";
+import { logger } from "@repo/logs";
 
+import { notifyLowBalance } from "./notify-low-balance";
 import { parsePgRpcError } from "./parse-pg-error";
 import type { ReserveAiCreditsInput, ReserveAiCreditsResult } from "./types";
 
@@ -25,6 +27,12 @@ export async function reserveAiCredits(
 		`;
 		const row = rows[0];
 		if (!row) throw new Error("reserve_ai_credits returned no row");
+
+		// Fire-and-forget: notify if balance is low after reservation
+		notifyLowBalance(input.walletId).catch((err: unknown) =>
+			logger.error("reserveAiCredits: notifyLowBalance failed", err),
+		);
+
 		return {
 			reservationId: row.reservation_id,
 			availableKopecks: row.available_kopecks,

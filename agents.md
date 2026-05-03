@@ -55,7 +55,7 @@ Last:        Analytics events pipeline (events-public.ts, widget analytics)
 | react-hook-form  | ^7.72.1  | forms                                                        |
 | Oxlint           | ^1.58.0  | LINT ONLY (NOT ESLint)                                       |
 | Oxfmt            | ^0.43.0  | FORMAT ONLY (NOT Prettier)                                   |
-| next-intl        | 4.9.0    | i18n — 5 locales x 4 scopes                                  |
+| next-intl        | 4.9.0    | i18n — 5 locales x 4 scopes (saas+marketing split into files) |
 | Typesense        | ^3.0.0   | search engine                                                |
 | OpenAI SDK       | ^6.33.0  | AI features (knowledge RAG, GraphRAG)                        |
 | Vercel AI SDK    | ^6.0.146 | AI streaming                                                 |
@@ -70,12 +70,17 @@ Verify: `rg '"key"' packages/i18n/translations/` → **5 hits** (not 4).
 
 ```
 packages/i18n/translations/
-  en/{mail.json, marketing.json, saas.json, shared.json}
-  de/{mail.json, marketing.json, saas.json, shared.json}
-  es/{mail.json, marketing.json, saas.json, shared.json}
-  fr/{mail.json, marketing.json, saas.json, shared.json}
-  ru/{mail.json, marketing.json, saas.json, shared.json}
+  {en,de,es,fr,ru}/
+    mail.json
+    shared.json
+    saas/          ← split: 8 файлов
+      search.json, settings.json, admin.json, organizations.json,
+      auth.json, onboarding.json, product.json, common.json
+    marketing/     ← split: 5 файлов
+      core.json, compare.json, features.json, integrations.json, solutions.json
 ```
+
+**ВАЖНО: saas/ и marketing/ — это папки, не файлы!** `get-messages.ts` сливает split-файлы при загрузке. С точки зрения приложения API не изменился (`SaasMessages`, `MarketingMessages`, `getMessagesForLocale`).
 
 ---
 
@@ -326,9 +331,13 @@ STEP 3: UI components
   # Session via @auth/hooks/use-session (client) or @auth/lib/server (server)
 
 STEP 4: i18n (ALL 5 LOCALES — en, de, es, fr, ru)
-  # packages/i18n/translations/{en,de,es,fr,ru}/saas.json
+  # saas scope → split-файлы в packages/i18n/translations/{en,de,es,fr,ru}/saas/
+  #   search.json | settings.json | admin.json | organizations.json | auth.json
+  #   onboarding.json | product.json | common.json
+  # Используй скрипт: python3 packages/i18n/scripts/i18n.py set saas <key> <en> <de> <es> <fr> <ru>
+  # Скрипт автоматически определяет правильный файл по top-level ключу.
   # ALL 5 locales in same change. ru is NOT optional.
-  # Scope: saas-only → saas.json, cross-app → shared.json
+  # Scope: saas-only → saas/, cross-app → shared.json
 
 STEP 5: Verify
   # pnpm type-check && pnpm lint && pnpm format:check
@@ -339,7 +348,10 @@ STEP 5: Verify
 
 ```bash
 STEP 1: i18n keys (ALL 5 locales)
-  # packages/i18n/translations/{en,de,es,fr,ru}/marketing.json
+  # marketing scope → split-файлы в packages/i18n/translations/{en,de,es,fr,ru}/marketing/
+  #   core.json | compare.json | features.json | integrations.json | solutions.json
+  # Используй скрипт: python3 packages/i18n/scripts/i18n.py set marketing <key> <en> <de> <es> <fr> <ru>
+  # Скрипт автоматически определяет файл по prefix ключа.
 
 STEP 2: Route
   # apps/marketing/app/[locale]/<route>/page.tsx
@@ -765,25 +777,47 @@ Hooks: `@shared/hooks/locale-currency`, `@shared/lib/sidebar-context`.
 
 ## 9. i18n SYSTEM
 
-### File structure (5 locales x 4 scopes = 20 files)
+### File structure (5 locales × split files)
 
 ```
 packages/i18n/translations/
-  en/{mail.json, marketing.json, saas.json, shared.json}
-  de/{mail.json, marketing.json, saas.json, shared.json}
-  es/{mail.json, marketing.json, saas.json, shared.json}
-  fr/{mail.json, marketing.json, saas.json, shared.json}
-  ru/{mail.json, marketing.json, saas.json, shared.json}
+  {en,de,es,fr,ru}/
+    mail.json                 ← email templates (не менять структуру)
+    shared.json               ← cross-app строки (не менять структуру)
+    saas/                     ← split: 8 файлов (apps/saas only)
+      search.json             — namespace: search (самый большой ~1465 строк)
+      settings.json           — namespace: settings
+      admin.json              — namespace: admin
+      organizations.json      — namespace: organizations
+      auth.json               — namespace: auth
+      onboarding.json         — namespaces: onboarding, choosePlan, checkoutReturn, start
+      product.json            — namespaces: indexing, mySearch, widget, sdks, analytics, feedback, referral
+      common.json             — namespaces: app, common, nav, notFound, documentation
+    marketing/                ← split: 5 файлов (apps/marketing only)
+      core.json               — home, blog, changelog, about, careers, roadmap, faq, ...
+      compare.json            — compare*, vsAlgolia*
+      features.json           — features*
+      integrations.json       — integrations*
+      solutions.json          — solutions*, useCases*
+```
+
+**Загрузка:** `get-messages.ts` сливает все split-файлы при загрузке через `Promise.all` + `Object.assign`. API приложений (`SaasMessages`, `MarketingMessages`, `getMessagesForLocale`) не изменился.
+
+**Редактировать переводы ТОЛЬКО через скрипт** (Invariant: запрещено редактировать JSON напрямую):
+```bash
+python3 packages/i18n/scripts/i18n.py set saas search.myKey "en text" "de text" "es text" "fr text" "ru text"
+python3 packages/i18n/scripts/i18n.py set marketing featuresWidget.title "en" "de" "es" "fr" "ru"
+# Скрипт автоматически определяет правильный файл по namespace ключа.
 ```
 
 ### Scope selection
 
-| Scope            | Used by              |
-| ---------------- | -------------------- |
-| `saas.json`      | apps/saas only       |
-| `marketing.json` | apps/marketing only  |
-| `shared.json`    | Cross-app strings    |
-| `mail.json`      | Email templates only |
+| Scope       | Файлы                      | Used by              |
+| ----------- | -------------------------- | -------------------- |
+| `saas`      | `saas/*.json` (8 файлов)   | apps/saas only       |
+| `marketing` | `marketing/*.json` (5 файлов) | apps/marketing only  |
+| `shared`    | `shared.json`              | Cross-app strings    |
+| `mail`      | `mail.json`                | Email templates only |
 
 ### Usage
 
@@ -805,11 +839,12 @@ return <h1>{t("dashboard.title")}</h1>;
 ### Rules
 
 - **NEVER skip `ru`** — ALL 5 locales must have the key
+- **NEVER edit split JSON files directly** — используй `python3 packages/i18n/scripts/i18n.py`
 - Marketing site uses `[locale]` segment in URL
 - SaaS app detects locale via cookie (`NEXT_LOCALE`)
 - i18n config at `packages/i18n/config.ts` — defines 5 locales, defaultLocale: "en"
 - `ru` uses RUB currency; others use USD
-- Validate JSON integrity after patch edits to i18n files
+- Validate JSON integrity after patch edits: `python3 -c "import json,glob; [json.load(open(f)) for f in glob.glob('packages/i18n/translations/**/*.json', recursive=True)]"`
 
 ---
 
@@ -1706,8 +1741,8 @@ Last: [first session]
 
 ## Last Session Bridge
 
-[pre-compact bridge — saved before context compaction]
-(no changes or facts recorded in this session segment)
+[auto-bridge snapshot @ 10 changes]
+Files: packages/shopify-connector/src/product-mapper.ts (edit), packages/shopify-connector/src/crypto.ts (edit), packages/shopify-connector/src/client.ts (edit), packages/shopify-connector/src/router.ts (edit), packages/shopify-connector/src/oauth.ts (edit)
 
 # === END COGNILAYER ===
 

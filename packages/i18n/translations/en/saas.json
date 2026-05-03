@@ -2087,6 +2087,9 @@
 			"fixKeyboardLayout": "Fix keyboard layout (RU↔EN)",
 			"transliterate": "Transliteration detection",
 			"normalizeYo": "Normalize Yo (ё→е)"
+		},
+		"ranking": {
+			"tab": "Ranking"
 		}
 	},
 	"sdks": {

@@ -2087,6 +2087,9 @@
 			"fixKeyboardLayout": "Исправлять раскладку (RU↔EN)",
 			"transliterate": "Определение транслитерации",
 			"normalizeYo": "Нормализация Ё (ё→е)"
+		},
+		"ranking": {
+			"tab": "Ранжирование"
 		}
 	},
 	"sdks": {

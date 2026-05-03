@@ -2112,6 +2112,9 @@
 			"fixKeyboardLayout": "Corriger la disposition du clavier (RU↔EN)",
 			"transliterate": "Détection de translittération",
 			"normalizeYo": "Normaliser Yo (ё→е)"
+		},
+		"ranking": {
+			"tab": "Classement"
 		}
 	},
 	"sdks": {

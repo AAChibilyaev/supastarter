@@ -14,6 +14,7 @@ import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
 import { CurationsPanel } from "../panels/CurationsPanel";
+import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { SpellCorrectionPanel } from "../panels/SpellCorrectionPanel";
 import { StemmingPanel } from "../panels/StemmingPanel";
 import { StopwordsPanel } from "../panels/StopwordsPanel";
@@ -60,6 +61,7 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 						<TabsTrigger value="spellCorrection">
 							{t("search.spellCorrection.tab")}
 						</TabsTrigger>
+						<TabsTrigger value="ranking">{t("search.ranking.tab")}</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">
@@ -80,6 +82,10 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 
 					<TabsContent value="spellCorrection">
 						<SpellCorrectionPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+
+					<TabsContent value="ranking">
+						<RankingRulesPanel organizationId={organizationId} slug={slug} />
 					</TabsContent>
 				</Tabs>
 			) : (

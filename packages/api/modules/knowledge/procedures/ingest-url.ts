@@ -1,5 +1,4 @@
 import { ORPCError } from "@orpc/client";
-import { processUrl } from "@repo/document-processor";
 import {
 	createIngestionJob,
 	getKnowledgeSpaceBySlug,
@@ -8,6 +7,7 @@ import {
 	updateIngestionJob,
 	upsertKnowledgeDocument,
 } from "@repo/database";
+import { processUrl } from "@repo/document-processor";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

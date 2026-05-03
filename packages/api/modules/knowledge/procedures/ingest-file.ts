@@ -1,5 +1,4 @@
 import { ORPCError } from "@orpc/client";
-import { detectFileType } from "@repo/document-processor";
 import {
 	createIngestionJob,
 	getKnowledgeSpaceBySlug,
@@ -8,6 +7,7 @@ import {
 	updateIngestionJob,
 	upsertKnowledgeDocument,
 } from "@repo/database";
+import { detectFileType } from "@repo/document-processor";
 import { logger } from "@repo/logs";
 import { z } from "zod";
 
@@ -27,25 +27,35 @@ import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
 /**
  * Map file type to KnowledgeSourceType enum value.
  */
-function inferFileSourceType(
-	fileName: string,
-	mimeType: string,
-): string {
+function inferFileSourceType(fileName: string, mimeType: string): string {
 	const ft = detectFileType(fileName, mimeType);
 	switch (ft) {
-		case "pdf": return "FILE_PDF";
-		case "docx": return "FILE_DOCX";
-		case "xlsx": return "FILE_XLSX";
-		case "pptx": return "FILE_PPTX";
-		case "epub": return "FILE_EPUB";
-		case "image": return "FILE_IMG";
-		case "audio": return "FILE_AUDIO";
-		case "video": return "FILE_VIDEO";
-		case "csv": return "FILE_CSV";
-		case "json": return "FILE_JSON";
-		case "md": return "FILE_MD";
-		case "txt": return "FILE_TXT";
-		default: return "FILE_TXT";
+		case "pdf":
+			return "FILE_PDF";
+		case "docx":
+			return "FILE_DOCX";
+		case "xlsx":
+			return "FILE_XLSX";
+		case "pptx":
+			return "FILE_PPTX";
+		case "epub":
+			return "FILE_EPUB";
+		case "image":
+			return "FILE_IMG";
+		case "audio":
+			return "FILE_AUDIO";
+		case "video":
+			return "FILE_VIDEO";
+		case "csv":
+			return "FILE_CSV";
+		case "json":
+			return "FILE_JSON";
+		case "md":
+			return "FILE_MD";
+		case "txt":
+			return "FILE_TXT";
+		default:
+			return "FILE_TXT";
 	}
 }
 
@@ -62,7 +72,8 @@ export const ingestFile = protectedProcedure
 		method: "POST",
 		path: "/knowledge/ingest/file",
 		tags: ["Knowledge"],
-		summary: "Ingest a document file — supports pdf, docx, xlsx, pptx, epub, csv, json, md, txt, image, audio, video",
+		summary:
+			"Ingest a document file — supports pdf, docx, xlsx, pptx, epub, csv, json, md, txt, image, audio, video",
 	})
 	.input(
 		z.object({
@@ -159,7 +170,12 @@ export const ingestFile = protectedProcedure
 			});
 
 			logger.info(
-				{ jobId: job.id, documentId: document.id, chunks: chunks.length, strategy: input.chunkStrategy ?? "fixed" },
+				{
+					jobId: job.id,
+					documentId: document.id,
+					chunks: chunks.length,
+					strategy: input.chunkStrategy ?? "fixed",
+				},
 				"Ingested file and generating embeddings",
 			);
 

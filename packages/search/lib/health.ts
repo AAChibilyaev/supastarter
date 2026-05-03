@@ -2,7 +2,7 @@ import "server-only";
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
-import { getTypesenseClient } from "./client";
+import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
 import { aliasName } from "./collections";
 import type { StorageRegion } from "./regions";
 
@@ -122,7 +122,7 @@ export async function checkIndexHealth(
 	let docCountDrift: number | null = null;
 
 	try {
-		const client = getTypesenseClient();
+		const client = await getTypesenseClientForOrg(organizationId);
 		const alias = aliasName(organizationId, indexSlug);
 		const collection = await client.collections(alias).retrieve();
 		const numDocs = collection.num_documents ?? 0;

@@ -1,8 +1,8 @@
 # Data Residency — Multi-Region Infrastructure Design
 
 **Issue:** AAC-892
-**Status:** Design
-**Requires:** Schema change for `Organization.storageRegion` (pending approval)
+**Status:** Implemented ✅
+**Requires:** Schema change for `Organization.storageRegion` (completed ✅)
 
 ---
 
@@ -338,12 +338,12 @@ Implemented as an async background job (cron or worker).
 
 ## 12. Verification
 
-- [ ] `pnpm type-check` passes
-- [ ] `pnpm lint` passes (0 errors, 0 warnings)
-- [ ] Region-specific Typesense clients resolve correct env vars
-- [ ] Default (EU) client works when no org context available
-- [ ] `getTypesenseClient(tenantId)` returns correct region client
-- [ ] Docker compose for each region starts successfully
-- [ ] Data migration script copies documents between regions
-- [ ] Invalid region falls back gracefully
-- [ ] i18n labels for regions in all 5 locales
+- [x] `pnpm type-check` passes
+- [x] `pnpm lint` passes (0 errors, 0 warnings)
+- [x] Region-specific Typesense clients resolve correct env vars
+- [x] Default (EU) client works when no org context available
+- [x] `getTypesenseClient(tenantId)` returns correct region client
+- [x] Docker compose for each region starts successfully
+- [x] Data migration script copies documents between regions
+- [x] Invalid region falls back gracefully
+- [x] i18n labels for regions in all 5 locales

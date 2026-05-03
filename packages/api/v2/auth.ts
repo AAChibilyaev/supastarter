@@ -44,12 +44,7 @@ export async function gateV2Request(
 
 	const verified = await verifySearchApiKey(rawToken, requiredScope);
 	if (!verified) {
-		return errorResponse(
-			c,
-			403,
-			"forbidden",
-			"Invalid, expired, or unauthorized API key",
-		);
+		return errorResponse(c, 403, "forbidden", "Invalid, expired, or unauthorized API key");
 	}
 
 	// Rate-limit every API call (per-key sliding window)

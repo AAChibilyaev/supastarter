@@ -1689,6 +1689,31 @@
 			"importJobs": "Import-Jobs",
 			"syncJobs": "Sync-Jobs",
 			"reindex": "Neuindizierung"
+		},
+		"indexHealth": {
+			"title": "Index-Gesundheit",
+			"subtitle": "Echtzeit-Überwachung aller Suchindexe.",
+			"healthy": "Gesund",
+			"warning": "Warnung",
+			"critical": "Kritisch",
+			"total": "Indexe gesamt",
+			"noIndexes": "Keine Indexe",
+			"noIndexesDesc": "Erstellen Sie einen Suchindex, um Metriken anzuzeigen.",
+			"createIndex": "Index erstellen",
+			"ingestQueue": "Aufnahmewarteschlange",
+			"failedItems": "Fehlgeschlagene Einträge",
+			"lastActivity": "Letzte Aktivität",
+			"connector": "Connector",
+			"reindexing": "Neuindizierung läuft...",
+			"buffer": "Puffer",
+			"viewDetails": "Details anzeigen",
+			"reindex": "Neu indizieren",
+			"clusterMetrics": "Cluster-Metriken",
+			"cpu": "CPU",
+			"memory": "Speicher",
+			"requests": "Anfragen",
+			"pendingWrites": "Ausstehende Schreibvorgänge",
+			"apiStats": "API-Statistiken"
 		}
 	}
 }

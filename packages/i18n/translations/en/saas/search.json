@@ -520,7 +520,8 @@
 			"collections": "Collections",
 			"collectionsGrid": "Grid",
 			"collectionsDocuments": "Documents",
-			"jobs": "Jobs"
+			"jobs": "Jobs",
+			"indexHealth": "Index Health"
 		},
 		"recommendations": {
 			"description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
@@ -1689,6 +1690,31 @@
 			"importJobs": "Import Jobs",
 			"syncJobs": "Sync Jobs",
 			"reindex": "Reindex"
+		},
+		"indexHealth": {
+			"title": "Index Health",
+			"subtitle": "Real-time health monitoring for all search indexes.",
+			"healthy": "Healthy",
+			"warning": "Warning",
+			"critical": "Critical",
+			"total": "Total Indexes",
+			"noIndexes": "No indexes yet",
+			"noIndexesDesc": "Create a search index to see health metrics here.",
+			"createIndex": "Create Index",
+			"ingestQueue": "Ingest Queue",
+			"failedItems": "Failed Items",
+			"lastActivity": "Last Activity",
+			"connector": "Connector",
+			"reindexing": "Reindexing in progress...",
+			"buffer": "Buffer",
+			"viewDetails": "View Details",
+			"reindex": "Reindex",
+			"clusterMetrics": "Cluster Metrics",
+			"cpu": "CPU",
+			"memory": "Memory",
+			"requests": "Requests",
+			"pendingWrites": "Pending Writes",
+			"apiStats": "API Statistics"
 		}
 	}
 }

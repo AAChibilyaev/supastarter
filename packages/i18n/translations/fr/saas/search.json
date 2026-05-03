@@ -1718,6 +1718,31 @@
 			"importJobs": "Tâches d'importation",
 			"syncJobs": "Tâches de synchronisation",
 			"reindex": "Réindexation"
+		},
+		"indexHealth": {
+			"title": "Santé de l'Index",
+			"subtitle": "Surveillance en temps réel de tous les index de recherche.",
+			"healthy": "Sain",
+			"warning": "Avertissement",
+			"critical": "Critique",
+			"total": "Index totaux",
+			"noIndexes": "Aucun index",
+			"noIndexesDesc": "Créez un index de recherche pour voir les métriques.",
+			"createIndex": "Créer un index",
+			"ingestQueue": "File d'ingestion",
+			"failedItems": "Éléments échoués",
+			"lastActivity": "Dernière activité",
+			"connector": "Connecteur",
+			"reindexing": "Réindexation en cours...",
+			"buffer": "Tampon",
+			"viewDetails": "Voir les détails",
+			"reindex": "Réindexer",
+			"clusterMetrics": "Métriques du cluster",
+			"cpu": "CPU",
+			"memory": "Mémoire",
+			"requests": "Requêtes",
+			"pendingWrites": "Écritures en attente",
+			"apiStats": "Statistiques API"
 		}
 	}
 }

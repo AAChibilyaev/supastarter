@@ -1689,6 +1689,31 @@
 			"importJobs": "Trabajos de importación",
 			"syncJobs": "Trabajos de sincronización",
 			"reindex": "Reindexar"
+		},
+		"indexHealth": {
+			"title": "Salud del Índice",
+			"subtitle": "Monitoreo en tiempo real de todos los índices de búsqueda.",
+			"healthy": "Saludable",
+			"warning": "Advertencia",
+			"critical": "Crítico",
+			"total": "Índices totales",
+			"noIndexes": "Sin índices",
+			"noIndexesDesc": "Cree un índice de búsqueda para ver las métricas.",
+			"createIndex": "Crear índice",
+			"ingestQueue": "Cola de ingesta",
+			"failedItems": "Elementos fallidos",
+			"lastActivity": "Última actividad",
+			"connector": "Conector",
+			"reindexing": "Reindexando...",
+			"buffer": "Búfer",
+			"viewDetails": "Ver detalles",
+			"reindex": "Reindexar",
+			"clusterMetrics": "Métricas del clúster",
+			"cpu": "CPU",
+			"memory": "Memoria",
+			"requests": "Solicitudes",
+			"pendingWrites": "Escrituras pendientes",
+			"apiStats": "Estadísticas de API"
 		}
 	}
 }

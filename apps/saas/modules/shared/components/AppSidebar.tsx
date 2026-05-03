@@ -26,6 +26,7 @@ import {
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
+	ActivityIcon,
 	BarChart3Icon,
 	BriefcaseIcon,
 	CableIcon,
@@ -367,6 +368,12 @@ export function AppSidebar() {
 							href: `${basePath}/jobs`,
 							icon: BriefcaseIcon,
 							isActive: pathname.startsWith(`${basePath}/jobs`),
+						},
+						{
+							label: t("search.nav.indexHealth"),
+							href: `${basePath}/health`,
+							icon: ActivityIcon,
+							isActive: pathname.startsWith(`${basePath}/health`),
 						},
 					]
 				: [

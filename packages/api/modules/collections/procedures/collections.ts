@@ -14,6 +14,9 @@ const collectionViewSchema = z.object({
 	documentCount: z.number(),
 	size: z.number(),
 	status: z.string(),
+	metadata: z.record(z.string(), z.unknown()).nullable(),
+	synonymSets: z.array(z.string()),
+	curationSets: z.array(z.string()),
 	createdAt: z.string(),
 	updatedAt: z.string(),
 });
@@ -61,6 +64,9 @@ export const createCollection = protectedProcedure
 			name: z.string().min(1).max(256),
 			description: z.string().max(1024).optional(),
 			schema: z.array(z.any()).optional().default([]),
+			metadata: z.record(z.string(), z.unknown()).optional(),
+			synonymSets: z.array(z.string().min(1)).optional(),
+			curationSets: z.array(z.string().min(1)).optional(),
 		}),
 	)
 	.output(collectionViewSchema)
@@ -83,6 +89,9 @@ export const createCollection = protectedProcedure
 			name: input.name,
 			description: input.description,
 			schema: input.schema,
+			metadata: input.metadata,
+			synonymSets: input.synonymSets,
+			curationSets: input.curationSets,
 		});
 	});
 
@@ -137,6 +146,9 @@ export const updateCollection = protectedProcedure
 				.max(128)
 				.regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens")
 				.optional(),
+			metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+			synonymSets: z.array(z.string().min(1)).optional(),
+			curationSets: z.array(z.string().min(1)).optional(),
 		}),
 	)
 	.output(collectionViewSchema)
@@ -155,6 +167,9 @@ export const updateCollection = protectedProcedure
 			name: input.name,
 			description: input.description,
 			schema: input.schema,
+			metadata: input.metadata,
+			synonymSets: input.synonymSets,
+			curationSets: input.curationSets,
 		});
 	});
 

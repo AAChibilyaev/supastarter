@@ -13,21 +13,35 @@ export interface CollectionView {
 	documentCount: number;
 	size: number;
 	status: string;
+	metadata: Record<string, unknown> | null;
+	synonymSets: string[];
+	curationSets: string[];
 	createdAt: string;
 	updatedAt: string;
 }
 
 function mapCollection(c: any): CollectionView {
+	const schema = c.schema as Record<string, unknown> | unknown[];
+	const isObject = schema && !Array.isArray(schema);
 	return {
 		id: c.id,
 		organizationId: c.organizationId,
 		slug: c.slug,
 		name: c.name,
 		description: c.description,
-		schema: c.schema,
+		schema,
 		documentCount: c.documentCount,
 		size: Number(c.size),
 		status: c.status,
+		metadata: isObject
+			? (((schema as Record<string, unknown>).metadata as Record<string, unknown>) ?? null)
+			: null,
+		synonymSets: isObject
+			? (((schema as Record<string, unknown>).synonymSets as string[]) ?? [])
+			: [],
+		curationSets: isObject
+			? (((schema as Record<string, unknown>).curationSets as string[]) ?? [])
+			: [],
 		createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),
 		updatedAt: c.updatedAt instanceof Date ? c.updatedAt.toISOString() : String(c.updatedAt),
 	};
@@ -63,16 +77,38 @@ export interface CreateCollectionInput {
 	name: string;
 	description?: string;
 	schema?: any;
+	/** Arbitrary metadata stored on the collection */
+	metadata?: Record<string, unknown> | null;
+	/** Global synonym sets to bind to this collection */
+	synonymSets?: string[];
+	/** Global curation sets to bind to this collection */
+	curationSets?: string[];
 }
 
 export async function createCollection(input: CreateCollectionInput): Promise<CollectionView> {
+	const hasMeta =
+		input.metadata !== undefined ||
+		input.synonymSets !== undefined ||
+		input.curationSets !== undefined;
+
 	const row = await db.collection.create({
 		data: {
 			organizationId: input.organizationId,
 			slug: input.slug,
 			name: input.name,
 			description: input.description ?? null,
-			schema: input.schema ?? [],
+			schema: hasMeta
+				? ({
+						fields: input.schema ?? [],
+						...(input.metadata !== undefined ? { metadata: input.metadata } : {}),
+						...(input.synonymSets !== undefined
+							? { synonymSets: input.synonymSets }
+							: {}),
+						...(input.curationSets !== undefined
+							? { curationSets: input.curationSets }
+							: {}),
+					} as never)
+				: (input.schema ?? []),
 		},
 	});
 	return mapCollection(row);
@@ -83,12 +119,23 @@ export interface UpdateCollectionInput {
 	name?: string;
 	description?: string | null;
 	schema?: any;
+	/** Arbitrary metadata stored on the collection */
+	metadata?: Record<string, unknown> | null;
+	/** Global synonym sets to bind to this collection */
+	synonymSets?: string[];
+	/** Global curation sets to bind to this collection */
+	curationSets?: string[];
 }
 
 export async function updateCollection(
 	id: string,
 	input: UpdateCollectionInput,
 ): Promise<CollectionView> {
+	const hasMeta =
+		input.metadata !== undefined ||
+		input.synonymSets !== undefined ||
+		input.curationSets !== undefined;
+
 	const row = await db.collection.update({
 		where: { id },
 		data: {
@@ -96,6 +143,20 @@ export async function updateCollection(
 			...(input.name !== undefined ? { name: input.name } : {}),
 			...(input.description !== undefined ? { description: input.description } : {}),
 			...(input.schema !== undefined ? { schema: input.schema } : {}),
+			...(hasMeta
+				? {
+						schema: {
+							...(input.schema !== undefined ? { fields: input.schema } : {}),
+							...(input.metadata !== undefined ? { metadata: input.metadata } : {}),
+							...(input.synonymSets !== undefined
+								? { synonymSets: input.synonymSets }
+								: {}),
+							...(input.curationSets !== undefined
+								? { curationSets: input.curationSets }
+								: {}),
+						} as never,
+					}
+				: {}),
 		},
 	});
 	return mapCollection(row);

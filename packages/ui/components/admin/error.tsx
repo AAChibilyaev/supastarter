@@ -27,7 +27,7 @@ export const Error = (props: InternalErrorProps & {}) => {
 			? (error.message ?? "")
 			: typeof error === "string"
 				? error
-				: String(error ?? "Unknown error");
+				: `Unknown error`;
 
 	return (
 		<div className="md:p-16 gap-5 flex flex-col items-center" {...rest}>

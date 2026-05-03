@@ -41,7 +41,7 @@ export const LandingVideoPlayer = ({
 
 		if (!isPlaying) {
 			setIsPlaying(true);
-			videoRef.current.play();
+			void videoRef.current.play();
 
 			const shouldLoop = typeof loop === "boolean" ? loop : true;
 

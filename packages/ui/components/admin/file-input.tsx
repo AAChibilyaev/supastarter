@@ -70,6 +70,7 @@ export const FileInput = (props: FileInputProps) => {
 		inputProps: inputPropsOptions,
 
 		onRemove: onRemoveProp,
+		// oxlint-disable-next-line typescript-eslint/unbound-method
 		validateFileRemoval,
 
 		placeholder,
@@ -273,6 +274,7 @@ export type FileInputProps = Omit<InputProps, "type"> & {
 	onRemove?: (file: any) => void;
 	placeholder?: ReactNode;
 	removeIcon?: ComponentType<{ className?: string }>;
+	// oxlint-disable-next-line typescript-eslint/no-redundant-type-constituents
 	inputProps?: DropzoneInputProps & React.ComponentProps<"input">;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	validateFileRemoval?(file: any): boolean | Promise<boolean>;

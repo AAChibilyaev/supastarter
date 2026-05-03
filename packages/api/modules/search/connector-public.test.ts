@@ -4,6 +4,7 @@
  * Verifies that gateConnectorRequest correctly authenticates connector tokens
  * using plain sha256 hash comparison (matching hashSearchApiKey() output).
  */
+/* oxlint-disable typescript-eslint/unbound-method */
 
 import { createHash } from "node:crypto";
 

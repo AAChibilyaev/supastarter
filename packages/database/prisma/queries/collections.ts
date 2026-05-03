@@ -62,7 +62,7 @@ export interface CreateCollectionInput {
 	slug: string;
 	name: string;
 	description?: string;
-	schema?: Prisma.JsonArray;
+	schema?: any;
 }
 
 export async function createCollection(input: CreateCollectionInput): Promise<CollectionView> {
@@ -82,7 +82,7 @@ export interface UpdateCollectionInput {
 	slug?: string;
 	name?: string;
 	description?: string | null;
-	schema?: Prisma.JsonArray;
+	schema?: any;
 }
 
 export async function updateCollection(
@@ -125,7 +125,7 @@ export async function duplicateCollection(
 			slug: newSlug,
 			name: newName,
 			description: original.description,
-			schema: original.schema as Prisma.JsonArray,
+			schema: original.schema as any,
 		},
 	});
 
@@ -167,13 +167,14 @@ function mapDocument(doc: any): CollectionDocumentView {
 		organizationId: doc.organizationId,
 		data: doc.data,
 		rowNumber: doc.rowNumber,
-		createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
-		updatedAt: doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : String(doc.updatedAt),
+		createdAt:
+			doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
+		updatedAt:
+			doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : String(doc.updatedAt),
 	};
 }
 
 export interface ListDocumentsOptions {
-	collectionId: string;
 	limit?: number;
 	offset?: number;
 	sortField?: string;
@@ -190,28 +191,9 @@ export async function listDocuments(
 
 	const where: Prisma.CollectionDocumentWhereInput = { collectionId };
 
-	if (options.filter) {
-		// Basic JSON field filtering — extend as needed
-		const filterEntries = Object.entries(options.filter);
-		for (const [key, value] of filterEntries) {
-			if (value !== undefined && value !== null && value !== "") {
-				// @ts-expect-error — Prisma JSON filtering is dynamic
-				where.data = {
-					...((where.data as Record<string, unknown>) || {}),
-					path: [key],
-					equals: value,
-				};
-			}
-		}
-	}
-
-	const orderBy: Prisma.CollectionDocumentOrderByWithRelationInput = {};
-	if (options.sortField && options.sortField !== "rowNumber") {
-		// For JSON field sorting, use rowNumber as fallback
-		orderBy.rowNumber = options.sortDirection ?? "asc";
-	} else {
-		orderBy.rowNumber = options.sortDirection ?? "asc";
-	}
+	const orderBy: Prisma.CollectionDocumentOrderByWithRelationInput = {
+		rowNumber: options.sortDirection ?? "asc",
+	};
 
 	const [rows, total] = await Promise.all([
 		db.collectionDocument.findMany({
@@ -234,7 +216,7 @@ export async function getDocument(id: string): Promise<CollectionDocumentView | 
 export interface CreateDocumentInput {
 	collectionId: string;
 	organizationId: string;
-	data: Prisma.JsonObject;
+	data: any;
 }
 
 export async function createDocument(input: CreateDocumentInput): Promise<CollectionDocumentView> {
@@ -266,7 +248,7 @@ export async function createDocument(input: CreateDocumentInput): Promise<Collec
 }
 
 export interface UpdateDocumentInput {
-	data?: Prisma.JsonObject;
+	data?: any;
 	rowNumber?: number;
 }
 
@@ -306,7 +288,7 @@ export async function deleteDocument(id: string): Promise<void> {
 export interface CreateBatchDocumentsInput {
 	collectionId: string;
 	organizationId: string;
-	documents: Prisma.JsonObject[];
+	documents: any[];
 }
 
 export async function createBatchDocuments(
@@ -350,12 +332,10 @@ export async function createBatchDocuments(
 
 export interface UpdateBatchDocumentsInput {
 	ids: string[];
-	data: Prisma.JsonObject;
+	data: any;
 }
 
-export async function updateBatchDocuments(
-	input: UpdateBatchDocumentsInput,
-): Promise<number> {
+export async function updateBatchDocuments(input: UpdateBatchDocumentsInput): Promise<number> {
 	const result = await db.collectionDocument.updateMany({
 		where: { id: { in: input.ids } },
 		data: { data: input.data },
@@ -368,9 +348,7 @@ export interface DeleteBatchDocumentsInput {
 	ids: string[];
 }
 
-export async function deleteBatchDocuments(
-	input: DeleteBatchDocumentsInput,
-): Promise<number> {
+export async function deleteBatchDocuments(input: DeleteBatchDocumentsInput): Promise<number> {
 	const result = await db.collectionDocument.deleteMany({
 		where: { id: { in: input.ids }, collectionId: input.collectionId },
 	});

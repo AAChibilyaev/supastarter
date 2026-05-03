@@ -139,9 +139,13 @@ export function AacsearchDocsSearch({
 
 	return (
 		<div
+			role="presentation"
 			className="inset-0 bg-black/50 backdrop-blur-sm fixed z-50 flex items-start justify-center pt-[15vh]"
 			onClick={(e) => {
 				if (e.target === e.currentTarget) onOpenChange(false);
+			}}
+			onKeyDown={(e) => {
+				if (e.key === "Escape") onOpenChange(false);
 			}}
 		>
 			<div className="max-w-2xl shadow-2xl w-full overflow-hidden rounded-xl border bg-background">

@@ -1,3 +1,4 @@
+/* oxlint-disable jsx-a11y/prefer-tag-over-role, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import { X } from "lucide-react";
 import type { ChoicesProps, InputProps, SupportCreateSuggestionOptions } from "ra-core";
 import {
@@ -262,8 +263,12 @@ export const SelectInput = (props: SelectInputProps) => {
 							{field.value && field.value !== emptyValue ? (
 								<div
 									role="button"
+									tabIndex={0}
 									className="p-0 pointer-events-auto ml-auto text-muted-foreground opacity-50 hover:bg-transparent hover:opacity-100"
 									onClick={handleReset}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" || e.key === " ") handleReset();
+									}}
 								>
 									<X className="h-4 w-4" />
 								</div>

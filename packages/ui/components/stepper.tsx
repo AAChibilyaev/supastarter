@@ -94,7 +94,11 @@ const StepperIndicator = ({
 /**
  * Stepper.Title — the title text of a step.
  */
-const StepperTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+const StepperTitle = ({
+	className,
+	children,
+	...props
+}: React.HTMLAttributes<HTMLHeadingElement>) => (
 	<h4
 		className={cn(
 			"text-sm font-medium leading-tight",
@@ -104,7 +108,9 @@ const StepperTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingE
 			className,
 		)}
 		{...props}
-	/>
+	>
+		{children}
+	</h4>
 );
 
 /**

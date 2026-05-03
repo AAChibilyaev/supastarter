@@ -13,7 +13,7 @@
  */
 
 import { test, expect } from "../../src/fixtures";
-import { wait } from "../../src/helpers";
+import { wait as _wait } from "../../src/helpers";
 
 const BASE_URL = process.env.E2E_SAAS_URL || "http://localhost:3010";
 const ADMIN_KEY = process.env.E2E_ADMIN_API_KEY || "test-admin-key";

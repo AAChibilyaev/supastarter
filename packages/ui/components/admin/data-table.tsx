@@ -221,7 +221,7 @@ const DataTableRow = ({ children, className }: { children: ReactNode; className?
 		if (path === false || path == null) {
 			return;
 		}
-		navigate(path, {
+		void navigate(path, {
 			state: { _scrollToTop: true },
 		});
 	}, [record, resource, rowClick, navigate, getPathForRecord]);

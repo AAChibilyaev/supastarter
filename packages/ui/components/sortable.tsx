@@ -174,6 +174,7 @@ function SortableOverlay({
 
 interface SortableItemContextProps {
 	attributes: React.HTMLAttributes<HTMLElement>;
+	// oxlint-disable-next-line typescript-eslint/no-redundant-type-constituents
 	listeners: DraggableSyntheticListeners | undefined;
 	isDragging?: boolean;
 }

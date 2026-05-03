@@ -111,6 +111,7 @@ export const FieldToggle = (props: FieldToggleProps) => {
 		<li
 			key={source}
 			role="option"
+			aria-selected={false}
 			draggable={onMove ? "true" : undefined}
 			onDrag={onMove ? handleDrag : undefined}
 			onDragStart={onMove ? handleDragStart : undefined}

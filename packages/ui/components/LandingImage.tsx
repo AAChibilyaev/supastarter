@@ -1,8 +1,8 @@
 import type { ImgHTMLAttributes } from "react";
 
-const LandingImage = ({ ...rest }: ImgHTMLAttributes<HTMLImageElement>) => (
+const LandingImage = ({ alt = "", ...rest }: ImgHTMLAttributes<HTMLImageElement>) => (
 	// eslint-disable-next-line @next/next/no-img-element
-	<img {...rest} />
+	<img alt={alt} {...rest} />
 );
 
 export default LandingImage;

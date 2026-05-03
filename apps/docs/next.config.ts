@@ -5,6 +5,9 @@ const withMDX = createMDX();
 
 const config: NextConfig = {
 	reactStrictMode: true,
+	experimental: {
+		serverExternalPackages: ["ra-core"],
+	},
 	async redirects() {
 		const nonDefaultLocales = ["de", "es", "fr", "ru"] as const;
 		const localeGettingStarted = nonDefaultLocales.flatMap((locale) => [

@@ -76,6 +76,7 @@ export const AddSavedQueryDialog = ({ open, onClose }: AddSavedQueryDialogProps)
 							id="name"
 							value={queryName}
 							onChange={handleQueryNameChange}
+							// oxlint-disable-next-line jsx-a11y/no-autofocus
 							autoFocus
 						/>
 					</div>
@@ -145,6 +146,7 @@ export const RemoveSavedQueryDialog = ({
 					<Button variant="outline" onClick={onClose}>
 						{translate("ra.action.cancel")}
 					</Button>
+					{/* oxlint-disable-next-line jsx-a11y/no-autofocus */}
 					<Button onClick={removeQuery} autoFocus>
 						{translate("ra.action.confirm")}
 					</Button>

@@ -238,5 +238,84 @@
 			"cta": "Get Started Free",
 			"socialProof": "Trusted by 100+ companies worldwide"
 		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Free",
+				"description": "For testing and small projects",
+				"features": {
+					"searches": "50K searches/month",
+					"documents": "10K documents",
+					"indexes": "1 index",
+					"apiKeys": "3 API keys",
+					"support": "Community support"
+				}
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "For growing projects and startups",
+				"features": {
+					"searches": "1M searches/month",
+					"documents": "250K documents",
+					"indexes": "5 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Basic analytics",
+					"support": "Email support"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "For professional applications",
+				"features": {
+					"searches": "10M searches/month",
+					"documents": "2M documents",
+					"indexes": "20 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Full analytics",
+					"synonyms": "Synonyms + curations",
+					"branding": "Custom branding",
+					"support": "Priority support"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "For high-volume production applications",
+				"features": {
+					"searches": "50M searches/month",
+					"documents": "10M documents",
+					"indexes": "Unlimited indexes",
+					"features": "All Pro features",
+					"support": "Dedicated support",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "For large-scale deployments",
+				"features": {
+					"searches": "Unlimited searches",
+					"documents": "Unlimited documents",
+					"indexes": "Unlimited indexes",
+					"features": "All Business features",
+					"cluster": "Dedicated cluster",
+					"sso": "SSO/SAML",
+					"sla": "99.95% SLA"
+				}
+			},
+			"lifetime": {
+				"title": "Lifetime",
+				"description": "One-time payment, starter features forever",
+				"features": {
+					"searches": "1M searches/month",
+					"documents": "250K documents",
+					"indexes": "5 indexes",
+					"apiKeys": "Unlimited API keys",
+					"analytics": "Basic analytics",
+					"support": "Email support",
+					"payment": "One-time payment"
+				}
+			}
+		}
 	}
 }

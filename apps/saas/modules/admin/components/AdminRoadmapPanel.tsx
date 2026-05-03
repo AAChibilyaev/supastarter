@@ -2,7 +2,7 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
 	Dialog,
 	DialogContent,
@@ -24,7 +24,7 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Textarea } from "@repo/ui/components/textarea";
 import { orpc } from "@shared/lib/orpc-query-utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
@@ -36,7 +36,7 @@ import {
 	Trash2Icon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 
 const STATUS_ICONS: Record<string, ComponentType<{ className?: string }>> = {
@@ -292,7 +292,7 @@ export function AdminRoadmapPanel() {
 
 	const { data, isLoading } = useQuery(orpc.admin.roadmap.list.queryOptions({ input: {} }));
 
-	const items = data?.items ?? [];
+	const items = useMemo(() => data?.items ?? [], [data?.items]);
 
 	const handleAdd = useCallback(() => {
 		setEditingItem(null);
@@ -330,7 +330,7 @@ export function AdminRoadmapPanel() {
 					changelogSlug: form.changelogSlug || null,
 				});
 			}
-			queryClient.invalidateQueries({
+			void queryClient.invalidateQueries({
 				queryKey: orpc.admin.roadmap.list.queryOptions({ input: {} }).queryKey,
 			});
 			setDialogOpen(false);
@@ -349,7 +349,7 @@ export function AdminRoadmapPanel() {
 		if (!deleteConfirmId) return;
 		try {
 			await orpc.admin.roadmap.delete.call({ id: deleteConfirmId });
-			queryClient.invalidateQueries({
+			void queryClient.invalidateQueries({
 				queryKey: orpc.admin.roadmap.list.queryOptions({ input: {} }).queryKey,
 			});
 		} catch (err) {

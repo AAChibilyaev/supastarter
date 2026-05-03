@@ -168,7 +168,7 @@ test.describe("Widget Rendering", () => {
 
 		// Verify pagination renders (3 results, default 20 per page = 1 page)
 		// We set 3 hits, 20 per page should show 1 page minimum
-		const pagination = page.locator(".aac-pagination");
+		const _pagination = page.locator(".aac-pagination");
 		// With only 3 results and perPage=20, total pages = 1, so pagination may not render
 	});
 

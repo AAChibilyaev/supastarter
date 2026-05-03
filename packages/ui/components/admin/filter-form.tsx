@@ -325,6 +325,7 @@ export const FilterButton = (props: FilterButtonProps) => {
 								resource={resource}
 								onShow={handleShow}
 								onHide={handleRemove}
+								// oxlint-disable-next-line jsx-a11y/no-autofocus
 								autoFocus={index === 0}
 							/>
 						))}
@@ -346,7 +347,7 @@ export const FilterButton = (props: FilterButtonProps) => {
 						) : (
 							<DropdownMenuItem
 								onClick={(): void => {
-									navigate({
+									void navigate({
 										search: queryString.stringify({
 											filter: JSON.stringify(savedQuery.value.filter),
 											sort: savedQuery.value.sort?.field,

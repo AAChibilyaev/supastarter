@@ -83,16 +83,19 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import {
-	ArrowDownIcon,
-	ArrowUpDown,
-	ArrowUpIcon,
-	CheckIcon,
-	ChevronDownIcon,
-	ColumnsIcon,
-	DownloadIcon,
-	Edit3Icon,
-	FileUpIcon,
-	SearchIcon,
+\tArrowDownIcon,
+\tArrowUpDown,
+\tArrowUpIcon,
+\tCheckIcon,
+\tChevronDownIcon,
+\tColumnsIcon,
+\tCopyIcon,
+\tDownloadIcon,
+\tEdit3Icon,
+\tFileUpIcon,
+\tPencilIcon,
+\tPlusIcon,
+\tSearchIcon,
 	TextIcon,
 	Trash2Icon,
 	UploadIcon,
@@ -455,10 +458,20 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 	const [columnOrder, setColumnOrder] = useState<string[]>([]);
 
-	const [editSheetOpen, setEditSheetOpen] = useState(false);
-	const [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
+\tconst [editSheetOpen, setEditSheetOpen] = useState(false);
+\tconst [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
 
-	// ── Data fetching ───────────────────────────────────────────────────────
+\t// ── Bulk edit state ──────────────────────────────────────────────────
+
+\tconst [bulkEditDialogOpen, setBulkEditDialogOpen] = useState(false);
+\tconst [bulkEditField, setBulkEditField] = useState("");
+\tconst [bulkEditValue, setBulkEditValue] = useState("");
+
+\t// ── Shift+click selection state ──────────────────────────────────────
+
+\tconst lastClickedIndexRef = useRef<number | null>(null);
+
+\t// ── Data fetching ───────────────────────────────────────────────────────
 
 	const { data: schemaData, isLoading: schemaLoading } = useQuery(
 		orpc.search.schema.get.queryOptions({
@@ -570,21 +583,70 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		},
 	});
 
-	const deleteByFilterMutation = useMutation({
-		...orpc.search.deleteDocumentsByFilter.mutationOptions(),
-		onSuccess: (data) => {
-			toastSuccess(t("search.documents.deleteByFilterSuccess", { count: data.deleted }));
-			void queryClient.invalidateQueries({
-				queryKey: orpc.search.listDocuments.key(),
-			});
-			setFilterField("");
-			setFilterOperator("contains");
-			setFilterValue("");
-		},
-		onError: (error) => {
-			toastError(error instanceof Error ? error.message : t("search.documents.deleteError"));
-		},
-	});
+\tconst deleteByFilterMutation = useMutation({
+\t\t...orpc.search.deleteDocumentsByFilter.mutationOptions(),
+\t\tonSuccess: (data) => {
+\t\t\ttoastSuccess(t("search.documents.deleteByFilterSuccess", { count: data.deleted }));
+\t\t\tvoid queryClient.invalidateQueries({
+\t\t\t\tqueryKey: orpc.search.listDocuments.key(),
+\t\t\t});
+\t\t\tsetFilterField("");
+\t\t\tsetFilterOperator("contains");
+\t\t\tsetFilterValue("");
+\t\t},
+\t\tonError: (error) => {
+\t\t\ttoastError(error instanceof Error ? error.message : t("search.documents.deleteError"));
+\t\t},
+\t});
+
+\t// ── Bulk delete by IDs ─────────────────────────────────────────────
+
+\tconst bulkDeleteMutation = useMutation({
+\t\t...orpc.search.bulkDeleteDocuments.mutationOptions(),
+\t\tonSuccess: (data) => {
+\t\t\ttoastSuccess(t("search.documents.bulkDeleteSuccess", { count: data.deleted }));
+\t\t\tvoid queryClient.invalidateQueries({
+\t\t\t\tqueryKey: orpc.search.listDocuments.key(),
+\t\t\t});
+\t\t\tsetRowSelection({});
+\t\t},
+\t\tonError: (error) => {
+\t\t\ttoastError(error instanceof Error ? error.message : t("search.documents.deleteError"));
+\t\t},
+\t});
+
+\t// ── Create / duplicate document ────────────────────────────────────
+
+\tconst createDocumentMutation = useMutation({
+\t\t...orpc.search.upsertDocument.mutationOptions(),
+\t\tonSuccess: () => {
+\t\t\ttoastSuccess(t("search.documents.rowAdded"));
+\t\t\tvoid queryClient.invalidateQueries({
+\t\t\t\tqueryKey: orpc.search.listDocuments.key(),
+\t\t\t});
+\t\t},
+\t\tonError: (error) => {
+\t\t\ttoastError(error instanceof Error ? error.message : t("search.documents.createError"));
+\t\t},
+\t});
+
+\t// ── Bulk edit (update field on multiple docs) ─────────────────────
+
+\tconst bulkEditMutation = useMutation({
+\t\t...orpc.search.upsertDocument.mutationOptions(),
+\t\tonSuccess: () => {
+\t\t\ttoastSuccess(t("search.documents.bulkEditSuccess"));
+\t\t\tvoid queryClient.invalidateQueries({
+\t\t\t\tqueryKey: orpc.search.listDocuments.key(),
+\t\t\t});
+\t\t\tsetBulkEditDialogOpen(false);
+\t\t\tsetBulkEditField("");
+\t\t\tsetBulkEditValue("");
+\t\t},
+\t\tonError: (error) => {
+\t\t\ttoastError(error instanceof Error ? error.message : t("search.documents.bulkEditError"));
+\t\t},
+\t});
 
 	// ── Inline cell editing state ────────────────────────────────────────────
 
@@ -730,13 +792,35 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						onChange={table.getToggleAllPageRowsSelectedHandler()}
 					/>
 				),
-				cell: ({ row }) => (
-					<input
-						type="checkbox"
-						className="size-4 cursor-pointer"
-						checked={row.getIsSelected()}
-						onChange={row.getToggleSelectedHandler()}
-						onClick={(e) => e.stopPropagation()}
+	\t\t\tcell: ({ row, table }) => (
+\t\t\t\t\t<input
+\t\t\t\t\t\ttype="checkbox"
+\t\t\t\t\t\tclassName="size-4 cursor-pointer"
+\t\t\t\t\t\tchecked={row.getIsSelected()}
+\t\t\t\t\t\tonChange={row.getToggleSelectedHandler()}
+\t\t\t\t\t\tonClick={(e) => {
+\t\t\t\t\t\t\te.stopPropagation();
+\t\t\t\t\t\t\t// Shift+click range selection
+\t\t\t\t\t\t\tif (e.shiftKey && lastClickedIndexRef.current !== null) {
+\t\t\t\t\t\t\t\te.preventDefault();
+\t\t\t\t\t\t\t\tconst currentIndex = rows.findIndex(
+\t\t\t\t\t\t\t\t\t(r) => r.id === row.original.id,
+\t\t\t\t\t\t\t\t);
+\t\t\t\t\t\t\t\tif (currentIndex === -1) return;
+\t\t\t\t\t\t\t\tconst start = Math.min(lastClickedIndexRef.current, currentIndex);
+\t\t\t\t\t\t\t\tconst end = Math.max(lastClickedIndexRef.current, currentIndex);
+\t\t\t\t\t\t\t\tconst newSelection: Record<string, boolean> = {};
+\t\t\t\t\t\t\t\tfor (let i = start; i <= end; i++) {
+\t\t\t\t\t\t\t\t\tconst r = rows[i];
+\t\t\t\t\t\t\t\t\tif (r) newSelection[r.id] = true;
+\t\t\t\t\t\t\t\t}
+\t\t\t\t\t\t\t\tsetRowSelection(newSelection);
+\t\t\t\t\t\t\t\treturn;
+\t\t\t\t\t\t\t}
+\t\t\t\t\t\t\tlastClickedIndexRef.current = rows.findIndex(
+\t\t\t\t\t\t\t\t(r) => r.id === row.original.id,
+\t\t\t\t\t\t\t);
+\t\t\t\t\t\t}}
 					/>
 				),
 				size: 40,
@@ -851,28 +935,70 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	const selectedIds = useMemo(() => selectedRows.map((r) => r.id), [selectedRows]);
 
-	const handleBulkDelete = () => {
-		if (selectedIds.length === 0) return;
-		confirm({
-			title: t("search.documents.bulkDeleteTitle"),
-			message: t("search.documents.bulkDeleteMessage", { count: selectedIds.length }),
-			destructive: true,
-			onConfirm: async () => {
-				try {
-					// Will use orpc.search.bulkDeleteDocuments once available
-					toastSuccess(t("search.documents.deleted", { count: selectedIds.length }));
-					setRowSelection({});
-					void queryClient.invalidateQueries({
-						queryKey: orpc.search.listDocuments.key(),
-					});
-				} catch (error) {
-					toastError(
-						error instanceof Error ? error.message : t("search.documents.deleteError"),
-					);
-				}
-			},
-		});
-	};
+\tconst handleBulkDelete = () => {
+\t\tif (selectedIds.length === 0) return;
+\t\tconfirm({
+\t\t\ttitle: t("search.documents.bulkDeleteTitle"),
+\t\t\tmessage: t("search.documents.bulkDeleteMessage", { count: selectedIds.length }),
+\t\t\tdestructive: true,
+\t\t\tonConfirm: () => {
+\t\t\t\tbulkDeleteMutation.mutate({
+\t\t\t\t\torganizationId,
+\t\t\t\t\tslug,
+\t\t\t\t\tids: selectedIds,
+\t\t\t\t});
+\t\t\t},
+\t\t});
+\t};
+
+\tconst handleAddRow = () => {
+\t\tcreateDocumentMutation.mutate({
+\t\t\torganizationId,
+\t\t\tslug,
+\t\t\tid: crypto.randomUUID(),
+\t\t\tdocument: {},
+\t\t});
+\t};
+
+\tconst handleDuplicateRow = () => {
+\t\tif (selectedIds.length === 0) return;
+\t\tconst row = selectedRows[0];
+\t\tif (!row) return;
+\t\tcreateDocumentMutation.mutate({
+\t\t\torganizationId,
+\t\t\tslug,
+\t\t\tid: crypto.randomUUID(),
+\t\t\tdocument: { ...row.document },
+\t\t});
+\t\tsetRowSelection({});
+\t};
+
+\tconst handleBulkEdit = () => {
+\t\tif (selectedIds.length === 0 || !bulkEditField) return;
+\t\t// Call upsert for each selected document with the new field value
+\t\tconst promises = selectedIds.map((id) =>
+\t\t\torpc.search.upsertDocument.mutationOptions().mutationFn({
+\t\t\t\torganizationId,
+\t\t\t\tslug,
+\t\t\t\tid,
+\t\t\t\tdocument: { [bulkEditField]: bulkEditValue },
+\t\t\t}),
+\t\t);
+\t\tPromise.all(promises)
+\t\t\t.then(() => {
+\t\t\t\ttoastSuccess(t("search.documents.bulkEditSuccess"));
+\t\t\t\tvoid queryClient.invalidateQueries({
+\t\t\t\t\tqueryKey: orpc.search.listDocuments.key(),
+\t\t\t\t});
+\t\t\t\tsetBulkEditDialogOpen(false);
+\t\t\t\tsetBulkEditField("");
+\t\t\t\tsetBulkEditValue("");
+\t\t\t\tsetRowSelection({});
+\t\t\t})
+\t\t\t.catch((error) => {
+\t\t\t\ttoastError(error instanceof Error ? error.message : t("search.documents.bulkEditError"));
+\t\t\t});
+\t};
 
 	const handleBulkExport = () => {
 		const data = selectedIds.length > 0 ? selectedRows : rows;
@@ -1163,12 +1289,23 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						</DialogContent>
 					</Dialog>
 
-					{/* Export CSV */}
-					<Button variant="ghost" size="sm" onClick={handleBulkExport}>
-						<DownloadIcon className="size-3.5" />
-						{t("search.documents.exportCsv")}
-					</Button>
-				</div>
+\t\t\t\t\t{/* Export CSV */}
+\t\t\t\t\t<Button variant="ghost" size="sm" onClick={handleBulkExport}>
+\t\t\t\t\t\t<DownloadIcon className="size-3.5" />
+\t\t\t\t\t\t{t("search.documents.exportCsv")}
+\t\t\t\t\t</Button>
+
+\t\t\t\t\t{/* Add Row */}
+\t\t\t\t\t<Button
+\t\t\t\t\t\tvariant="outline"
+\t\t\t\t\t\tsize="sm"
+\t\t\t\t\t\tonClick={handleAddRow}
+\t\t\t\t\t\tloading={createDocumentMutation.isPending}
+\t\t\t\t\t>
+\t\t\t\t\t\t<PlusIcon className="size-3.5" />
+\t\t\t\t\t\t{t("search.documents.addRow")}
+\t\t\t\t\t</Button>
+\t\t\t\t</div>
 
 				{/* ── Collapsible filter row ─────────────────────────────────── */}
 				{filterOpen && (
@@ -1459,11 +1596,25 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							<DownloadIcon className="size-3.5" />
 							{t("search.documents.exportSelected")}
 						</Button>
-						<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
-							<Trash2Icon className="size-3.5" />
-							{t("search.documents.deleteSelected")}
-						</Button>
-						<Button variant="ghost" size="sm" onClick={handleClearSelection}>
+\t\t\t\t\t\t<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
+\t\t\t\t\t\t\t<Trash2Icon className="size-3.5" />
+\t\t\t\t\t\t\t{t("search.documents.deleteSelected")}
+\t\t\t\t\t\t</Button>
+\t\t\t\t\t\t{selectedIds.length === 1 && (
+\t\t\t\t\t\t\t<Button variant="ghost" size="sm" onClick={handleDuplicateRow}>
+\t\t\t\t\t\t\t\t<CopyIcon className="size-3.5" />
+\t\t\t\t\t\t\t\t{t("search.documents.duplicateRow")}
+\t\t\t\t\t\t\t</Button>
+\t\t\t\t\t\t)}
+\t\t\t\t\t\t<Button
+\t\t\t\t\t\t\tvariant="ghost"
+\t\t\t\t\t\t\tsize="sm"
+\t\t\t\t\t\t\tonClick={() => setBulkEditDialogOpen(true)}
+\t\t\t\t\t\t>
+\t\t\t\t\t\t\t<PencilIcon className="size-3.5" />
+\t\t\t\t\t\t\t{t("search.documents.bulkEdit")}
+\t\t\t\t\t\t</Button>
+\t\t\t\t\t\t<Button variant="ghost" size="sm" onClick={handleClearSelection}>
 							<XIcon className="size-3.5" />
 							{t("search.documents.clearSelection")}
 						</Button>

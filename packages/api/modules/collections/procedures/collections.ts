@@ -1,5 +1,4 @@
 import { ORPCError } from "@orpc/client";
-import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -54,7 +53,11 @@ export const createCollection = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string(),
-			slug: z.string().min(1).max(128).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+			slug: z
+				.string()
+				.min(1)
+				.max(128)
+				.regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
 			name: z.string().min(1).max(256),
 			description: z.string().max(1024).optional(),
 			schema: z.array(z.any()).optional().default([]),
@@ -69,7 +72,9 @@ export const createCollection = protectedProcedure
 		// Check slug uniqueness
 		const existing = await getCollectionBySlug(input.organizationId, input.slug);
 		if (existing) {
-			throw new ORPCError("CONFLICT", { message: "A collection with this slug already exists" });
+			throw new ORPCError("CONFLICT", {
+				message: "A collection with this slug already exists",
+			});
 		}
 
 		return createCollection({

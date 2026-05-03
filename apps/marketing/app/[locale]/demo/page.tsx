@@ -3,11 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { DemoSearchPage } from "../../../modules/demo/components/DemoSearchPage";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
 	return {
 		title: "Live Demo — AACsearch Engine",
 		description:

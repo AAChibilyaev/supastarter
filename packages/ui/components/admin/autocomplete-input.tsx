@@ -72,7 +72,7 @@ export const AutocompleteInput = (
 			filterToQuery?: (searchText: string) => any;
 			translateChoice?: boolean;
 			placeholder?: string;
-			inputText?: React.ReactNode | ((option: any | undefined) => React.ReactNode);
+			inputText?: React.ReactNode | ((option: any) => React.ReactNode);
 		} & { modal?: boolean },
 ) => {
 	const {
@@ -204,6 +204,7 @@ export const AutocompleteInput = (
 							<Button
 								variant="outline"
 								role="combobox"
+								aria-controls="autocomplete-popover"
 								aria-expanded={open}
 								className="py-1.75 font-normal h-auto w-full justify-between"
 							>

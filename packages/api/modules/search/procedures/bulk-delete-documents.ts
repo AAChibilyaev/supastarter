@@ -5,25 +5,20 @@ import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationMember, requireSearchIndex } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
-export const deleteDocumentsByFilter = protectedProcedure
+export const bulkDeleteDocuments = protectedProcedure
 	.route({
 		method: "POST",
-		path: "/search/indexes/{slug}/documents/delete-by-filter",
+		path: "/search/indexes/{slug}/documents/bulk-delete",
 		tags: ["Search"],
-		summary: "Delete documents by filter expression",
+		summary: "Bulk delete documents by IDs",
 		description:
-			"Deletes all documents matching a filter expression. Requires a non-empty filter for safety — accidental full-collection deletion is prevented.",
+			"Deletes multiple documents from a search index by their document IDs. Uses Typesense filter expression for efficient batch deletion.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
 			slug: searchIndexSlugSchema,
-			filterBy: z
-				.string()
-				.min(
-					1,
-					"Filter expression cannot be empty — prevents accidental full-collection deletion",
-				),
+			ids: z.array(z.string()).min(1).max(1000),
 		}),
 	)
 	.output(
@@ -31,11 +26,14 @@ export const deleteDocumentsByFilter = protectedProcedure
 			deleted: z.number(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, slug, filterBy }, context: { user } }) => {
+	.handler(async ({ input: { organizationId, slug, ids }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
-		await requireSearchIndex(organizationId, slug);
+		const index = await requireSearchIndex(organizationId, slug);
 
 		const alias = aliasName(organizationId, slug);
+
+		// Build filter expression: id:=[id1,id2,id3]
+		const filterBy = `id:=${ids.map((id) => `[${id}]`).join(",")}`;
 
 		const result = await deleteByQuery(alias, filterBy);
 

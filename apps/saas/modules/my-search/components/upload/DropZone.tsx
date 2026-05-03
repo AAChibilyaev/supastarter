@@ -1,4 +1,5 @@
 "use client";
+/* oxlint-disable jsx-a11y/prefer-tag-over-role */
 
 import { Button } from "@repo/ui/components/button";
 import { FileUpIcon, XIcon } from "lucide-react";

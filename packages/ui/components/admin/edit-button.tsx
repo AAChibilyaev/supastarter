@@ -51,7 +51,9 @@ export const EditButton = (props: EditButtonProps) => {
 	const recordRepresentation =
 		typeof recordRepresentationValue === "string"
 			? recordRepresentationValue
-			: recordRepresentationValue?.toString();
+			: recordRepresentationValue != null
+				? String(recordRepresentationValue as string | number | boolean)
+				: undefined;
 	const link = createPath({
 		resource,
 		type: "edit",

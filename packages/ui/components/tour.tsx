@@ -252,7 +252,7 @@ export function TourProvider({
 		const handler = (e: KeyboardEvent) => {
 			switch (e.key) {
 				case "ArrowRight":
-					nextStep();
+					void nextStep();
 					break;
 				case "ArrowLeft":
 					previousStep();

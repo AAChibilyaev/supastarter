@@ -80,7 +80,7 @@ test.describe("Project / Index Creation", () => {
 		const indexName = `e2e-dashboard-${Date.now()}`;
 
 		// Create index via API first
-		const index = await createTestIndex(
+		const _index = await createTestIndex(
 			process.env.E2E_ADMIN_API_KEY || "test-admin-key",
 			BASE_URL,
 			indexName,

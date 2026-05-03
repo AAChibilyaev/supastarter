@@ -62,7 +62,7 @@ export const AutocompleteArrayInput = (
 			filterToQuery?: (searchText: string) => any;
 			translateChoice?: boolean;
 			placeholder?: string;
-			inputText?: React.ReactNode | ((option: any | undefined) => React.ReactNode);
+			inputText?: React.ReactNode | ((option: any) => React.ReactNode);
 		},
 ) => {
 	const { filterToQuery = DefaultFilterToQuery, inputText } = props;

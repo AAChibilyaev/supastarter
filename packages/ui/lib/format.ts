@@ -18,7 +18,7 @@ export function formatMilliseconds(value: number) {
 }
 
 export function formatDate(value: Date | string) {
-	return format(new Date(`${value}`), "LLL dd, y HH:mm");
+	return format(value instanceof Date ? value : new Date(value), "LLL dd, y HH:mm");
 }
 
 export function formatCompactNumber(value: number) {

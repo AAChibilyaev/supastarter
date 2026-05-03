@@ -31,7 +31,9 @@ test.describe("Widget Integration", () => {
 		expect(body.length).toBeGreaterThan(100);
 	});
 
-	test("should accept widget search requests with valid API key", async ({ apiClient: _apiClient }) => {
+	test("should accept widget search requests with valid API key", async ({
+		apiClient: _apiClient,
+	}) => {
 		const index = await createTestIndex(
 			process.env.E2E_ADMIN_API_KEY || "test-admin-key",
 			BASE_URL,

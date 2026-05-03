@@ -39,6 +39,7 @@ export function DataTableViewOptions() {
 				<button
 					type="button"
 					role="combobox"
+					aria-controls="view-options-popover"
 					aria-expanded={open}
 					className={cn(
 						buttonVariants({ variant: "outline", size: "icon" }),

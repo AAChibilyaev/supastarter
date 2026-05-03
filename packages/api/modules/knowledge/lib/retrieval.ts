@@ -2,6 +2,7 @@ import { db } from "@repo/database";
 
 import { cosineSimilarity, embedTextLocally } from "./chunking";
 import { expandGraphNeighborhood } from "./graphrag";
+import { computeHypeScore, getHypoQuestionEmbeddings, hasHypeQuestions } from "./hype";
 
 interface RankedChunk {
 	id: string;
@@ -51,7 +52,20 @@ export async function retrieveKnowledge(input: {
 			const embedding = Array.isArray(chunk.embedding) ? (chunk.embedding as number[]) : [];
 			const semantic = embedding.length > 0 ? cosineSimilarity(queryEmbedding, embedding) : 0;
 			const lexical = keywordScore(input.query, chunk.text);
-			const score = semantic * 0.65 + lexical * 0.35;
+			const originalScore = semantic * 0.65 + lexical * 0.35;
+
+			let score = originalScore;
+
+			const meta = chunk.metadata as Record<string, unknown>;
+			if (hasHypeQuestions(meta)) {
+				const hypoEmbeddings = getHypoQuestionEmbeddings(meta);
+				const hypeScore = computeHypeScore(queryEmbedding, lexical, {
+					embedding,
+					hypoQuestionEmbeddings: hypoEmbeddings,
+				});
+				score = Math.max(originalScore, hypeScore);
+			}
+
 			return {
 				id: chunk.id,
 				documentId: chunk.document.id,

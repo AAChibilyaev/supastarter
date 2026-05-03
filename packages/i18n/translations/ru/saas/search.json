@@ -878,7 +878,18 @@
 			"tableActions": "Действия",
 			"remove": "Удалить",
 			"removeConfirmTitle": "Удалить синоним",
-			"removeConfirmMessage": "Вы уверены, что хотите удалить эту пару синонимов?"
+			"removeConfirmMessage": "Вы уверены, что хотите удалить эту пару синонимов?",
+			"exportJson": "Экспорт JSON",
+			"exportCsv": "Экспорт CSV",
+			"exportSuccess": "Экспортировано {count} синоним(ов).",
+			"import": "Импорт",
+			"importTitle": "Импорт синонимов",
+			"importDescription": "Загрузите CSV или JSON файл с парами синонимов.",
+			"importDropzone": "Перетащите CSV/JSON файл сюда или нажмите для выбора",
+			"importSuccess": "Импортировано {count} синоним(ов).",
+			"importError": "Не удалось импортировать синонимы.",
+			"importDryRun": "Пробный запуск. {count} синоним(ов) будет импортировано.",
+			"importFormat": "Формат должен быть CSV или JSON с полями root и synonym."
 		},
 		"curations": {
 			"tab": "Курация",
@@ -2128,7 +2139,17 @@
 			"scopeLabel": "Scope",
 			"scopeAll": "Apply to all indexes",
 			"scopeSelected": "Only selected indexes",
-			"excludeLabel": "Excluded collections"
+			"excludeLabel": "Excluded collections",
+			"exportJson": "Экспорт JSON",
+			"exportCsv": "Экспорт CSV",
+			"import": "Импорт",
+			"importTitle": "Импорт глобальных наборов синонимов",
+			"importDescription": "Загрузите CSV или JSON файл с глобальными наборами синонимов. CSV формат: name,root,synonyms,locale. JSON: массив объектов наборов.",
+			"importDropzone": "Перетащите CSV/JSON файл сюда или нажмите для выбора",
+			"importSuccess": "Импортировано {count} глобальных набор(ов) синонимов.",
+			"importError": "Не удалось импортировать глобальные синонимы.",
+			"importDryRun": "Пробный запуск. {count} набор(ов) будет импортировано.",
+			"importFormat": "Формат должен быть CSV или JSON с полями name, root и synonyms."
 		},
 		"globalCurations": {
 			"title": "Global Curations",

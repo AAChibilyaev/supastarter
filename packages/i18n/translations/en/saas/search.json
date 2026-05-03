@@ -890,7 +890,18 @@
 			"tableActions": "Actions",
 			"remove": "Remove",
 			"removeConfirmTitle": "Remove synonym",
-			"removeConfirmMessage": "Are you sure you want to remove this synonym pair?"
+			"removeConfirmMessage": "Are you sure you want to remove this synonym pair?",
+			"exportJson": "Export JSON",
+			"exportCsv": "Export CSV",
+			"exportSuccess": "Exported {count} synonym(s).",
+			"import": "Import",
+			"importTitle": "Import synonyms",
+			"importDescription": "Upload a CSV or JSON file with synonym pairs. The file should contain root and synonym columns.",
+			"importDropzone": "Drop CSV/JSON file here or click to browse",
+			"importSuccess": "Imported {count} synonym(s) successfully.",
+			"importError": "Failed to import synonyms.",
+			"importDryRun": "Dry-run preview. {count} synonym(s) would be imported.",
+			"importFormat": "Format must be CSV or JSON with root and synonym fields."
 		},
 		"globalSynonyms": {
 			"title": "Global Synonyms",
@@ -910,7 +921,17 @@
 			"scopeLabel": "Scope",
 			"scopeAll": "Apply to all indexes",
 			"scopeSelected": "Only selected indexes",
-			"excludeLabel": "Excluded collections"
+			"excludeLabel": "Excluded collections",
+			"exportJson": "Export JSON",
+			"exportCsv": "Export CSV",
+			"import": "Import",
+			"importTitle": "Import global synonym sets",
+			"importDescription": "Upload a CSV or JSON file with global synonym sets. CSV format: name,root,synonyms,locale. JSON: array of set objects.",
+			"importDropzone": "Drop CSV/JSON file here or click to browse",
+			"importSuccess": "Imported {count} global synonym set(s) successfully.",
+			"importError": "Failed to import global synonyms.",
+			"importDryRun": "Dry-run preview. {count} set(s) would be imported.",
+			"importFormat": "Format must be CSV or JSON with name, root, and synonyms fields."
 		},
 		"curations": {
 			"tab": "Curations",

@@ -1,628 +1,628 @@
 {
-  "useCasesPage": {
-    "title": "Búsqueda para cada producto y equipo",
-    "description": "Desde tiendas de comercio electrónico hasta herramientas internas — AACsearch se adapta a tu modelo de datos."
-  },
-  "useCases": {
-    "title": "Construido para tu caso de uso",
-    "subtitle": "Una API, muchas formas. Trae tus datos — AACsearch se encarga de la indexación, el ranking y la entrega.",
-    "items": {
-      "ecommerce": {
-        "title": "Búsqueda de productos en e-commerce",
-        "description": "Filtros facetados, expansión de sinónimos, gestión de cero resultados y tokens con alcance por usuario — todo en una sola llamada."
-      },
-      "helpCenter": {
-        "title": "Centro de ayuda y documentación",
-        "description": "Indexa tu base de conocimientos y muestra artículos relevantes en milisegundos. Combínalo con el módulo Knowledge para Q&A sobre PDFs."
-      },
-      "multiTenant": {
-        "title": "SaaS multiinquilino",
-        "description": "Un índice de AACsearch por inquilino, tokens con alcance por usuario final. Tus clientes nunca ven los datos de los demás — por diseño."
-      },
-      "devTools": {
-        "title": "Herramientas de desarrollo",
-        "description": "Búsqueda semántica sobre código, configuraciones y logs. El servidor MCP permite a los agentes de IA acceder programáticamente."
-      },
-      "internalTools": {
-        "title": "Herramientas internas",
-        "description": "Búsqueda rápida sobre registros de CRM, inventario, directorios de empleados y cualquier conjunto de datos interno."
-      },
-      "contentSites": {
-        "title": "Sitios de contenido",
-        "description": "Búsqueda instantánea para blogs, registros de cambios y documentación. El SDK de navegador se integra en menos de una hora."
-      }
-    }
-  },
-  "useCasesEcommercePage": {
-    "title": "Búsqueda para e-commerce",
-    "description": "Filtros facetados, expansión de sinónimos, gestión de cero resultados y analíticas en tiempo real — diseñado para catálogos de productos."
-  },
-  "useCasesEcommerce": {
-    "title": "Búsqueda de productos que convierte",
-    "subtitle": "Conecta tu catálogo con el módulo de PrestaShop o Bitrix. En producción en una tarde. Analíticas desde el primer día.",
-    "items": {
-      "facetedFilter": {
-        "title": "Filtrado por facetas",
-        "description": "Marca, categoría, rango de precios, disponibilidad, atributos — cualquier campo en tu esquema se convierte en faceta. Sin configuración adicional."
-      },
-      "synonyms": {
-        "title": "Expansión de sinónimos",
-        "description": "Agrega sinónimos en el dashboard. TV → televisión, sofá → sillón. Los usuarios encuentran productos con lenguaje natural."
-      },
-      "zeroResults": {
-        "title": "Gestión de cero resultados",
-        "description": "AACsearch registra cada consulta sin resultado. Usa la lista para agregar sinónimos, productos o sugerencias alternativas."
-      },
-      "prestaShop": {
-        "title": "Módulo PrestaShop",
-        "description": "Módulo PHP listo para instalar. Sincroniza en cada guardado, actualización y eliminación de producto. Exportación completa del catálogo con un clic."
-      },
-      "analytics": {
-        "title": "Analíticas de conversión",
-        "description": "Rastrea CTR por consulta, términos de búsqueda principales y uso de filtros. Identifica problemas de ranking antes de que afecten los ingresos."
-      },
-      "widget": {
-        "title": "Widget listo para integrar",
-        "description": "Widget de 14 KB para tu tienda. Sin paso de compilación, sin npm. Funciona junto a tu tema existente."
-      }
-    }
-  },
-  "useCasesSaasPage": {
-    "title": "Búsqueda para SaaS multiinquilino",
-    "description": "Un índice de AACsearch por tenant, scoped tokens por usuario final. Tus clientes nunca ven los datos de los demás."
-  },
-  "useCasesSaas": {
-    "title": "Aislamiento de búsqueda incorporado",
-    "subtitle": "El aislamiento de tenant es arquitectónico — no solo una política. Cada organización tiene su propio índice, su propia cuota y sus propias claves.",
-    "items": {
-      "tenantIsolation": {
-        "title": "Índices por tenant",
-        "description": "Crea un índice por organización cliente. Los datos nunca se mezclan. Eliminar un tenant elimina su índice."
-      },
-      "scopedTokens": {
-        "title": "Scoped tokens por usuario",
-        "description": "Emite tokens en el servidor que bloquean a un filtro de userId. Tus usuarios finales solo buscan en sus propios registros."
-      },
-      "multiIndex": {
-        "title": "Múltiples índices por tenant",
-        "description": "Hasta 10 índices por organización en el plan Pro. Productos, pedidos, tickets, documentos — índices separados, un solo dashboard."
-      },
-      "quota": {
-        "title": "Cuota por tenant",
-        "description": "Rastrea el consumo de search-units por tenant. Atribuye costos a los clientes. Factura en consecuencia."
-      },
-      "orpc": {
-        "title": "API de gestión oRPC",
-        "description": "Crea índices, rota claves y obtén analíticas por tenant programáticamente desde tu backend."
-      },
-      "reindex": {
-        "title": "Evolución del esquema",
-        "description": "Evoluciona tu modelo de datos sin interrupciones. Reindexar cada tenant en segundo plano, cambia aliases de forma atómica."
-      }
-    }
-  },
-  "useCasesHelpCenterPage": {
-    "title": "Búsqueda para centros de ayuda y documentación",
-    "description": "Indexa tu base de conocimientos y muestra artículos relevantes en milisegundos. Combínalo con el módulo Knowledge para Q&A con IA."
-  },
-  "useCasesHelpCenter": {
-    "title": "Ayuda a los usuarios a encontrar respuestas por sí mismos",
-    "subtitle": "Búsqueda instantánea de artículos, seguimiento de cero resultados y Q&A con IA sobre PDFs — una sola integración, sin ingeniero de búsqueda.",
-    "items": {
-      "articleSearch": {
-        "title": "Búsqueda instantánea de artículos",
-        "description": "Búsqueda de texto completo en tus artículos de ayuda con tolerancia a errores tipográficos y ranking por relevancia. Resultados en menos de 50 ms."
-      },
-      "knowledgeRag": {
-        "title": "Q&A con IA (RAG)",
-        "description": "Los usuarios hacen preguntas en lenguaje natural. El módulo Knowledge recupera fragmentos relevantes y genera una respuesta citada."
-      },
-      "zeroResults": {
-        "title": "Inteligencia sobre cero resultados",
-        "description": "Cada consulta sin respuesta queda registrada. Detecta vacíos en tu documentación antes de que los clientes escalen al soporte."
-      },
-      "multilingual": {
-        "title": "Soporte multilingüe",
-        "description": "Indexa contenido en varios idiomas. Búsqueda en el idioma del usuario. Bibliotecas de sinónimos por idioma."
-      },
-      "widget": {
-        "title": "Widget de búsqueda listo para integrar",
-        "description": "Agrega búsqueda a cualquier centro de ayuda en menos de una hora. Funciona en Docusaurus, GitBook, Notion o portales personalizados."
-      },
-      "analytics": {
-        "title": "Analíticas de búsqueda",
-        "description": "Las consultas principales, cero resultados y CTR te muestran qué buscan realmente los usuarios — no lo que crees que buscan."
-      }
-    }
-  },
-  "useCasesDevToolsPage": {
-    "title": "Búsqueda para herramientas de desarrollo",
-    "description": "Búsqueda semántica sobre código, configuraciones y logs. El servidor MCP permite que los agentes de IA busquen y actualicen índices programáticamente."
-  },
-  "useCasesDevTools": {
-    "title": "Búsqueda construida para desarrolladores",
-    "subtitle": "API REST, SDK tipado, servidor MCP y un plano de control oRPC. Sin GUI necesaria — automatiza todo.",
-    "items": {
-      "restApi": {
-        "title": "API REST completa",
-        "description": "15 endpoints, especificación OpenAPI 3.1, auth con clave API. Intégrate desde cualquier lenguaje, cualquier pipeline de CI, cualquier infraestructura."
-      },
-      "mcp": {
-        "title": "Servidor MCP para agentes de IA",
-        "description": "Claude, Cursor y cualquier cliente MCP pueden buscar, listar índices, insertar documentos y obtener estadísticas programáticamente."
-      },
-      "semanticSearch": {
-        "title": "Búsqueda semántica",
-        "description": "Embeddings de OpenAI sobre comentarios de código, configuraciones y logs. Encuentra entradas relevantes incluso con terminología diferente."
-      },
-      "typedSdk": {
-        "title": "SDK de navegador tipado",
-        "description": "Paquete NPM con tipos TypeScript completos. Intégrate en el frontend de tu herramienta de desarrollo sin adivinar las formas de la API."
-      },
-      "orpcControl": {
-        "title": "Plano de control programático",
-        "description": "Crea índices, rota claves, activa reindexaciones y obtén analíticas desde tu pipeline de compilación o scripts de despliegue."
-      }
-    }
-  },
-  "useCasesContentSitesPage": {
-    "title": "Búsqueda para sitios de contenido",
-    "description": "Búsqueda instantánea para blogs, changelogs y documentación. El SDK de navegador se integra en cualquier frontend en menos de una hora."
-  },
-  "useCasesContentSites": {
-    "title": "Búsqueda de contenido que retiene lectores",
-    "subtitle": "Artículos de blog, changelogs, documentación, landing pages — indexados y con búsqueda desde el primer día.",
-    "items": {
-      "contentIndexing": {
-        "title": "Indexa cualquier cosa",
-        "description": "MDX, Markdown, HTML, feeds JSON — cualquier formato de contenido que produzca registros estructurados puede indexarse."
-      },
-      "instantSearch": {
-        "title": "Búsqueda instantánea en la UI",
-        "description": "Los resultados aparecen mientras el usuario escribe. Tolerancia a errores tipográficos, resaltado del texto coincidente, enlace profundo a secciones de anclaje."
-      },
-      "browserSdk": {
-        "title": "SDK de navegador",
-        "description": "Integra el SDK tipado en tu proyecto Next.js, Astro, Nuxt o sitio estático. Un solo componente, resultados instantáneos."
-      },
-      "changelog": {
-        "title": "Búsqueda en el changelog",
-        "description": "Los desarrolladores buscan en los changelogs para saber cuándo cambió un comportamiento. Indexa las entradas del changelog y deja que lo encuentren en segundos."
-      },
-      "multilingual": {
-        "title": "Contenido multilingüe",
-        "description": "Indexa contenido por idioma. Sirve resultados en el idioma del usuario. Bibliotecas de sinónimos ajustadas por idioma."
-      },
-      "seo": {
-        "title": "Amigable con SEO",
-        "description": "La búsqueda es del lado del cliente — no se requiere renderizado en el servidor. Tus páginas estáticas permanecen generadas estáticamente."
-      }
-    }
-  },
-  "solutionsPage": {
-    "title": "AACsearch para cada industria",
-    "description": "Soluciones de búsqueda a medida para retail, medios, fintech, educación, sanidad y gaming."
-  },
-  "solutions": {
-    "title": "Soluciones para cada sector",
-    "subtitle": "AACsearch se adapta a las necesidades de búsqueda únicas de diferentes sectores. Descubre cómo.",
-    "items": {
-      "ecommerce": {
-        "title": "E-commerce",
-        "description": "Búsqueda de productos con facetado, corrección de errores tipográficos y recomendaciones para aumentar conversiones."
-      },
-      "saas": {
-        "title": "SaaS y aplicaciones",
-        "description": "Búsqueda dentro de la aplicación con acceso basado en roles, multiinquilino y límites de cuota por plan."
-      },
-      "media": {
-        "title": "Medios y contenido",
-        "description": "Búsqueda instantánea sobre artículos, vídeos, podcasts y documentos con filtros de metadatos ricos."
-      },
-      "enterprise": {
-        "title": "Enterprise",
-        "description": "Clúster dedicado, SSO, controles de acceso avanzados y SLA garantizado para organizaciones exigentes."
-      },
-      "education": {
-        "description": "Búsqueda de cursos, lecciones e instructores. Bibliotecas de sinónimos para términos académicos, interfaz multilingüe y widget con accesibilidad.",
-        "title": "Educación y EdTech"
-      },
-      "fintech": {
-        "description": "Búsqueda con aislamiento por tenant, registro de auditoría, listas de permitidos por clave e índice cifrado. Compatible con RGPD y CCPA.",
-        "title": "Servicios financieros"
-      },
-      "gaming": {
-        "description": "Perfiles de jugadores, catálogos de objetos y búsqueda en clasificaciones. Actualizaciones de índice en tiempo real, búsqueda geográfica y latencia sub-50 ms a cualquier escala.",
-        "title": "Gaming"
-      },
-      "healthcare": {
-        "description": "Arquitectura de búsqueda compatible con HIPAA. Diccionarios de sinónimos clínicos, registro de auditoría y controles de acceso a datos basados en roles.",
-        "title": "Salud"
-      },
-      "retail": {
-        "description": "Búsqueda de productos con facetas, sinónimos y filtrado instantáneo. Boosts, reglas de pin y merchandising en sesión incluidos.",
-        "title": "Comercio minorista y e-commerce"
-      }
-    }
-  },
-  "solutionsRetailPage": {
-    "title": "AACsearch para Retail",
-    "description": "Búsqueda de productos instantánea, navegación por facetas y herramientas de merchandising para tiendas en línea."
-  },
-  "solutionsRetail": {
-    "title": "Búsqueda para retail",
-    "subtitle": "Convierte más visitantes en compradores con una búsqueda de producto rápida, relevante y personalizable.",
-    "items": {
-      "catalog": {
-        "title": "Búsqueda en catálogo",
-        "description": "Busca millones de productos en menos de 50 ms con corrección de errores tipográficos y sinónimos."
-      },
-      "filters": {
-        "title": "Filtros de compra",
-        "description": "Precio, talla, color, marca y cualquier atributo personalizado como facetas dinámicas."
-      },
-      "merch": {
-        "title": "Comercialización",
-        "description": "Ancla productos destacados, oculta agotados y aplica reglas de merchandising sin tocar código."
-      },
-      "analytics": {
-        "title": "Análisis de búsqueda para retail",
-        "description": "Descubre qué buscan los clientes y qué no encuentran para optimizar tu catálogo."
-      },
-      "filterNavigation": {
-        "description": "Facetas dinámicas para categoría, marca, precio, color y talla. Los recuentos se actualizan en tiempo real al aplicar los filtros.",
-        "title": "Navegación facetada"
-      },
-      "inventory": {
-        "description": "Ingesta actualizaciones de stock de productos en segundos. Los artículos agotados se degradan automáticamente basándose en tu campo de disponibilidad.",
-        "title": "Inventario en tiempo real"
-      },
-      "merchandising": {
-        "description": "Fija los productos promovidos en la parte superior, excluye los artículos descontinuados e impulsa las líneas de temporada sin necesidad de desplegar código.",
-        "title": "Reglas de merchandising"
-      },
-      "productSearch": {
-        "description": "Búsqueda de productos instantánea y tolerante a errores. Los clientes encuentran el artículo correcto incluso cuando lo escriben mal o usan sinónimos.",
-        "title": "Búsqueda de productos"
-      },
-      "synonyms": {
-        "description": "Gestiona 'sofá / couch', 'zapatillas / sneakers' y cientos de pares de sinónimos de retail. Una importación CSV, efecto instantáneo.",
-        "title": "Sinónimos para retail"
-      },
-      "facets": {
-        "title": "Fasetas de producto",
-        "description": "Fasetas de selección múltiple para talla, color, marca, rango de precio y atributos personalizados. Recuentos de facetas actualizados en tiempo real."
-      },
-      "instantSearch": {
-        "title": "Búsqueda instantánea",
-        "description": "Búsqueda a medida que escribes con tolerancia a errores. Resultados desde la primera tecla con consultas debounced y caché del lado del cliente."
-      },
-      "multiCurrency": {
-        "title": "Búsqueda multidivisa",
-        "description": "Muestra precios en la moneda local del comprador. AACsearch maneja indexación multidivisa con rangos de precio facetados por moneda."
-      }
-    }
-  },
-  "solutionsMediaPage": {
-    "title": "AACsearch para Medios",
-    "description": "Descubrimiento de contenidos para sitios de noticias, plataformas de streaming y editoriales digitales."
-  },
-  "solutionsMedia": {
-    "title": "Búsqueda para medios",
-    "subtitle": "Ayuda a los lectores a descubrir contenido relevante al instante en tu biblioteca de artículos y vídeos.",
-    "items": {
-      "content": {
-        "title": "Búsqueda en archivo de contenido",
-        "description": "Busca millones de artículos, episodios y vídeos con resultados enriquecidos con miniaturas y extractos."
-      },
-      "categories": {
-        "title": "Navegación por categorías",
-        "description": "Facetas por sección, autor, fecha, etiqueta y tipo de contenido para una exploración intuitiva."
-      },
-      "freshness": {
-        "title": "Impulso de contenido reciente",
-        "description": "Configura el decaimiento temporal para que el contenido reciente aparezca primero cuando la relevancia sea igual."
-      },
-      "multilingual": {
-        "title": "Soporte multiidioma",
-        "description": "Indexa y busca contenido en varios idiomas con configuraciones de análisis por idioma."
-      },
-      "analytics": {
-        "description": "Ve qué consultas no tienen resultados, qué temas son tendencia y qué artículos se descubren a través de la búsqueda frente a enlaces directos.",
-        "title": "Análisis de contenido"
-      },
-      "contentSearch": {
-        "description": "Busca en titulares, cuerpo del texto, etiquetas, biografías de autor y leyendas. Destaca fragmentos coincidentes en los resultados.",
-        "title": "Búsqueda de contenido de texto completo"
-      },
-      "fullText": {
-        "description": "Los pesos de campo configurables favorecen los titulares sobre el cuerpo del texto. Impulsa la actualidad para noticias, o la profundidad para guías perennes.",
-        "title": "Relevancia para texto largo"
-      },
-      "multiLanguage": {
-        "description": "Ejecuta índices separados por idioma o un único índice multilingüe. Gestión de sinónimos con conciencia de locale incluida.",
-        "title": "Búsqueda multilingüe"
-      },
-      "realTimeSync": {
-        "description": "Sincronización activada por webhook desde Contentful, Strapi, WordPress o Sanity. Los artículos publicados aparecen en la búsqueda en menos de un segundo.",
-        "title": "Sincronización CMS en tiempo real"
-      },
-      "tagging": {
-        "description": "Filtra por tema, formato, fecha, autor o tipo de contenido. Las facetas anidadas admiten taxonomías editoriales complejas.",
-        "title": "Facetas de etiqueta y categoría"
-      },
-      "articles": {
-        "title": "Búsqueda de artículos",
-        "description": "Busca en miles de artículos por titular, autor, categoría, fecha de publicación y palabra clave. Tolerante a errores y con soporte de facetas."
-      },
-      "multiformat": {
-        "title": "Búsqueda multiformato",
-        "description": "Indexa artículos, vídeos, podcasts y galerías de imágenes. Busca en todos los formatos desde un solo cuadro de búsqueda."
-      },
-      "recommendations": {
-        "title": "Recomendaciones de contenido",
-        "description": "Muestra artículos y contenido relacionados mediante búsqueda vectorial. Aumenta las visitas a páginas con recomendaciones impulsadas por IA."
-      },
-      "subscription": {
-        "title": "Búsqueda con suscripción",
-        "description": "Usuarios gratuitos ven resultados de previsualización; suscriptores acceden al contenido completo. Los tokens con ámbito aplican políticas de acceso."
-      },
-      "trending": {
-        "title": "Contenido trending",
-        "description": "Muestra artículos populares según actualidad y popularidad. La clasificación con decaimiento temporal mantiene el contenido obsoleto fuera de los primeros resultados."
-      },
-      "video": {
-        "title": "Búsqueda de vídeo",
-        "description": "Busca en títulos, descripciones, transcripciones y etiquetas de vídeo. Facetas por categoría, duración, fecha de publicación y tipo de contenido."
-      }
-    }
-  },
-  "solutionsFintechPage": {
-    "title": "AACsearch para Fintech",
-    "description": "Búsqueda segura y auditable sobre documentos financieros, transacciones y contenidos de cumplimiento."
-  },
-  "solutionsFintech": {
-    "title": "Búsqueda para fintech",
-    "subtitle": "Búsqueda segura, rápida y precisa para aplicaciones financieras con datos sensibles.",
-    "items": {
-      "security": {
-        "title": "Seguridad de nivel bancario",
-        "description": "Tokens con alcance restringido, aislamiento de inquilinos y cifrado en reposo y en tránsito."
-      },
-      "precision": {
-        "title": "Búsqueda de alta precisión",
-        "description": "Busca por número de cuenta, IBAN, ticker de bolsa o nombre de empresa con resultados exactos."
-      },
-      "compliance": {
-        "title": "Preparado para cumplimiento normativo",
-        "description": "Registros de auditoría, controles de retención de datos y opciones de residencia de datos para cumplir con regulaciones financieras."
-      },
-      "speed": {
-        "title": "Velocidad para operaciones en tiempo real",
-        "description": "Latencia sub-50ms para búsquedas de transacciones, cartera y clientes en tiempo real."
-      },
-      "accessControls": {
-        "description": "Emite tokens de búsqueda de solo lectura limitados a colecciones específicas, rangos de fechas o filtros de campo. Los tokens están firmados con HMAC y tienen vida corta.",
-        "title": "Controles de acceso limitados"
-      },
-      "auditLog": {
-        "description": "Cada consulta de búsqueda, ingesta de documentos y operación administrativa se registra con marca de tiempo, actor y contexto de organización.",
-        "title": "Registro de auditoría"
-      },
-      "encryption": {
-        "description": "Todos los datos cifrados en reposo (AES-256) y en tránsito (TLS 1.3). Gestión de claves a cargo de tu proveedor de nube.",
-        "title": "Cifrado en reposo y en tránsito"
-      },
-      "gdpr": {
-        "description": "Eliminación y pseudonimización a nivel de campo. Las solicitudes de derecho al olvido se resuelven a nivel de índice en minutos.",
-        "title": "Compatible con RGPD y CCPA"
-      },
-      "performance": {
-        "description": "Datos financieros de alta frecuencia indexados en tiempo real. La latencia de búsqueda P99 se mantiene por debajo de 50 ms en cualquier volumen de transacciones.",
-        "title": "Sub-50 ms a escala"
-      },
-      "tenantIsolation": {
-        "description": "Cada llamada a la API lleva un token de ámbito org. Las lecturas entre tenants se rechazan a nivel de protocolo, sin necesidad de una puerta de enlace en la capa de aplicación.",
-        "title": "Aislamiento estricto por tenant"
-      },
-      "auditLogs": {
-        "title": "Búsqueda en registros de auditoría",
-        "description": "Busca millones de entradas de registro por usuario, acción, recurso y marca de tiempo. Investiga incidentes de cumplimiento en segundos."
-      },
-      "regions": {
-        "title": "Búsqueda multirregional",
-        "description": "Despliega AACsearch en múltiples regiones para cumplimiento de residencia de datos. Cada región opera independientemente con infraestructura aislada."
-      },
-      "transactions": {
-        "title": "Búsqueda de transacciones",
-        "description": "Busca historial de transacciones por importe, moneda, comercio, rango de fechas y estado. Latencia inferior a 50 ms incluso con millones de transacciones."
-      }
-    }
-  },
-  "solutionsEducationPage": {
-    "title": "AACsearch para Educación",
-    "description": "Búsqueda de cursos, gestión del conocimiento y descubrimiento de materiales de aprendizaje para plataformas EdTech."
-  },
-  "solutionsEducation": {
-    "title": "Búsqueda para educación",
-    "subtitle": "Ayuda a estudiantes y docentes a encontrar cursos, materiales y respuestas al instante.",
-    "items": {
-      "courses": {
-        "title": "Búsqueda de cursos y materiales",
-        "description": "Busca en catálogos de cursos, bibliotecas de recursos y bases de conocimiento con facetado por nivel y tema."
-      },
-      "lms": {
-        "title": "Integración con LMS",
-        "description": "Conecta con Moodle, Canvas, Blackboard y otros LMS para indexar contenido automáticamente."
-      },
-      "access": {
-        "title": "Contenido con control de acceso",
-        "description": "Los tokens con alcance restringido aseguran que los estudiantes solo vean el contenido al que tienen acceso."
-      },
-      "analytics": {
-        "title": "Análisis de aprendizaje",
-        "description": "Identifica lagunas de contenido mediante el análisis de búsquedas sin resultados y consultas frecuentes."
-      },
-      "accessibility": {
-        "description": "Widget compatible con WCAG 2.1 AA. Navegación por teclado, etiquetas de lector de pantalla y contraste de color suficiente integrados.",
-        "title": "Widget de búsqueda accesible"
-      },
-      "courseSearch": {
-        "description": "Búsqueda instantánea en títulos, descripciones, objetivos de aprendizaje y nombres de instructores. Tolerante a errores tipográficos para consultas de estudiantes.",
-        "title": "Búsqueda de cursos y lecciones"
-      },
-      "learningPaths": {
-        "description": "Búsqueda facetada por tema, nivel, formato, duración y certificación. Las categorías anidadas se mapean a la estructura de tu currículo.",
-        "title": "Navegación estructurada"
-      },
-      "multiLanguage": {
-        "description": "Indexa contenido en más de 50 idiomas. Stemming con conciencia del idioma y bibliotecas de sinónimos separadas por locale.",
-        "title": "Contenido multilingüe"
-      },
-      "synonyms": {
-        "description": "Mapea términos específicos de la disciplina: 'ML / aprendizaje automático', 'JS / JavaScript'. Importa desde CSV o gestiona en el panel.",
-        "title": "Sinónimos académicos"
-      },
-      "catalog": {
-        "title": "Búsqueda en catálogo de cursos",
-        "description": "Ayuda a los estudiantes a encontrar cursos en todos los departamentos, niveles y formatos. Filtra por materia, instructor, horario y tipo de crédito."
-      },
-      "knowledge": {
-        "title": "Búsqueda en base de conocimiento",
-        "description": "Indexa artículos de investigación, tesis y publicaciones académicas. Búsqueda de texto completo y semántica en el repositorio de conocimiento institucional."
-      },
-      "multilingual": {
-        "title": "Educación multilingüe",
-        "description": "Admite búsqueda en varios idiomas para universidades internacionales. Cada idioma indexado independientemente con derivación lingüística."
-      },
-      "scorm": {
-        "title": "Búsqueda de contenido SCORM",
-        "description": "Indexa objetos de aprendizaje SCORM y módulos de e-learning. Busca títulos de curso, descripciones, objetivos de aprendizaje y metadatos."
-      }
-    }
-  },
-  "solutionsHealthcarePage": {
-    "title": "AACsearch para Sanidad",
-    "description": "Búsqueda conforme a HIPAA sobre contenidos médicos, documentos clínicos e información de pacientes."
-  },
-  "solutionsHealthcare": {
-    "title": "Búsqueda para sanidad",
-    "subtitle": "Búsqueda de información médica precisa, segura y conforme a la normativa para profesionales y pacientes.",
-    "items": {
-      "medical": {
-        "title": "Terminología médica",
-        "description": "Sinónimos y expansión de términos para terminología médica: ICD, nombres de medicamentos, procedimientos."
-      },
-      "hipaa": {
-        "title": "Preparado para entornos regulados",
-        "description": "Controles de acceso, cifrado y registros de auditoría para cumplir con regulaciones de salud."
-      },
-      "clinical": {
-        "title": "Búsqueda en documentos clínicos",
-        "description": "Busca en historiales médicos, protocolos de tratamiento y literatura clínica con precisión."
-      },
-      "multilingual": {
-        "title": "Acceso multiidioma",
-        "description": "Sirve contenido médico a pacientes en su idioma con soporte multilingüe completo."
-      },
-      "auditLog": {
-        "description": "Cada consulta, cada clic en un resultado y cada acción administrativa se registra con marca de tiempo y contexto de usuario para revisión de cumplimiento.",
-        "title": "Registro de auditoría"
-      },
-      "clinicalTerms": {
-        "description": "Bibliotecas de sinónimos para códigos ICD-10, nombres de medicamentos y condiciones médicas. Admite terminología laica y clínica en el mismo índice.",
-        "title": "Terminología clínica"
-      },
-      "hipaaReady": {
-        "description": "Aislamiento por tenant, tokens de acceso limitado y sin registro de PII en análisis de búsqueda. Infraestructura configurada para cargas de trabajo HIPAA.",
-        "title": "Arquitectura alineada con HIPAA"
-      },
-      "multiLanguage": {
-        "description": "Búsqueda orientada al paciente en el idioma preferido del usuario. Detección de idioma y widget de búsqueda con conciencia de locale.",
-        "title": "Soporte multilingüe"
-      },
-      "realTimeUpdates": {
-        "description": "Registros clínicos y datos de farmacia indexados en menos de un segundo. Los cambios en formularios aparecen inmediatamente sin reindexación completa.",
-        "title": "Actualizaciones de registros en tiempo real"
-      },
-      "tenantIsolation": {
-        "description": "Los tokens de búsqueda están limitados a la org y firmados con HMAC. Pacientes, profesionales y administradores tienen niveles de acceso diferentes a nivel de token.",
-        "title": "Aislamiento de datos de pacientes"
-      },
-      "medicalCoding": {
-        "title": "Búsqueda de códigos médicos",
-        "description": "Busca códigos ICD-10, CPT y SNOMED con tolerancia a errores tipográficos y búsqueda semántica. Encuentra el código correcto más rápido."
-      },
-      "patient": {
-        "title": "Búsqueda en portal de pacientes",
-        "description": "Potencia la búsqueda del portal de pacientes para citas, medicamentos, resultados de pruebas y directorios de proveedores."
-      }
-    }
-  },
-  "solutionsGamingPage": {
-    "title": "AACsearch para Gaming",
-    "description": "Búsqueda de objetos, emparejamiento de jugadores y descubrimiento de contenido comunitario para plataformas de juegos."
-  },
-  "solutionsGaming": {
-    "title": "Búsqueda para gaming",
-    "subtitle": "Búsqueda de alta velocidad para wikis de juegos, tiendas de artículos y bases de datos de jugadores.",
-    "items": {
-      "wiki": {
-        "title": "Búsqueda en wikis de juegos",
-        "description": "Busca personajes, objetos, misiones y mecánicas en wikis de gran volumen con latencia mínima."
-      },
-      "store": {
-        "title": "Búsqueda en tienda de artículos",
-        "description": "Busca skins, armas y objetos del juego con filtros por rareza, tipo y precio."
-      },
-      "leaderboard": {
-        "title": "Búsqueda de jugadores",
-        "description": "Busca jugadores por nombre, rango o estadísticas con ordenación y filtros dinámicos."
-      },
-      "realtime": {
-        "title": "Actualizaciones en tiempo real",
-        "description": "El inventario del juego y los datos de jugadores se sincronizan en tiempo real sin reindexado completo."
-      },
-      "analytics": {
-        "description": "Ve qué buscan los jugadores, qué consultas llegan a callejones sin salida y cómo la búsqueda impulsa las conversiones del marketplace.",
-        "title": "Análisis de juego"
-      },
-      "geoSearch": {
-        "description": "Muestra jugadores y servidores dentro de una distancia configurable. Consultas geográficas por radio y cuadro delimitador soportadas de fábrica.",
-        "title": "Búsqueda geolocalizada"
-      },
-      "itemSearch": {
-        "description": "Busca entre millones de objetos por rareza, tipo, estadísticas y precio. Los filtros y órdenes de clasificación se actualizan en tiempo real conforme el mercado se mueve.",
-        "title": "Búsqueda de objetos y botín"
-      },
-      "multiSearch": {
-        "description": "Ejecuta una sola solicitud en objetos, jugadores y gremios simultáneamente. Un único viaje de ida y vuelta, resultados fusionados, latencia mínima.",
-        "title": "Consultas multi-índice"
-      },
-      "playerSearch": {
-        "description": "Encuentra jugadores por nombre de usuario, rango, región y estilo de juego. Soporta coincidencia de prefijo para autocompletado en pantallas de sala.",
-        "title": "Búsqueda de perfil de jugador"
-      },
-      "realTimeSync": {
-        "description": "Las actualizaciones del índice activadas por eventos del juego (caída de objetos, cambios de rango, listados del marketplace) llegan en menos de un segundo.",
-        "title": "Sincronización de eventos en tiempo real"
-      },
-      "highConcurrency": {
-        "title": "Alta concurrencia",
-        "description": "Maneja miles de consultas de búsqueda concurrentes durante horas punta de juego. AACsearch mantiene latencia inferior a 50 ms bajo carga pesada."
-      },
-      "items": {
-        "title": "Búsqueda de objetos e inventario",
-        "description": "Busca inventarios de jugadores, catálogos de objetos y mercados. Filtra por tipo de objeto, rareza, estadísticas, nivel requerido y rango de precio."
-      },
-      "players": {
-        "title": "Búsqueda de jugadores",
-        "description": "Busca jugadores por nombre de usuario, clan, nivel, rango, puntuación de logros y región. Potencia funciones sociales y herramientas de administración."
-      },
-      "widget": {
-        "title": "Widget de búsqueda en el juego",
-        "description": "Incrusta el widget AACsearch dentro de las UIs del juego. Búsqueda de objetos, clanes, jugadores y tablas de clasificación con estilo temático."
-      }
-    }
-  }
+	"useCasesPage": {
+		"title": "Búsqueda para cada producto y equipo",
+		"description": "Desde tiendas de comercio electrónico hasta herramientas internas — AACsearch se adapta a tu modelo de datos."
+	},
+	"useCases": {
+		"title": "Construido para tu caso de uso",
+		"subtitle": "Una API, muchas formas. Trae tus datos — AACsearch se encarga de la indexación, el ranking y la entrega.",
+		"items": {
+			"ecommerce": {
+				"title": "Búsqueda de productos en e-commerce",
+				"description": "Filtros facetados, expansión de sinónimos, gestión de cero resultados y tokens con alcance por usuario — todo en una sola llamada."
+			},
+			"helpCenter": {
+				"title": "Centro de ayuda y documentación",
+				"description": "Indexa tu base de conocimientos y muestra artículos relevantes en milisegundos. Combínalo con el módulo Knowledge para Q&A sobre PDFs."
+			},
+			"multiTenant": {
+				"title": "SaaS multiinquilino",
+				"description": "Un índice de AACsearch por inquilino, tokens con alcance por usuario final. Tus clientes nunca ven los datos de los demás — por diseño."
+			},
+			"devTools": {
+				"title": "Herramientas de desarrollo",
+				"description": "Búsqueda semántica sobre código, configuraciones y logs. El servidor MCP permite a los agentes de IA acceder programáticamente."
+			},
+			"internalTools": {
+				"title": "Herramientas internas",
+				"description": "Búsqueda rápida sobre registros de CRM, inventario, directorios de empleados y cualquier conjunto de datos interno."
+			},
+			"contentSites": {
+				"title": "Sitios de contenido",
+				"description": "Búsqueda instantánea para blogs, registros de cambios y documentación. El SDK de navegador se integra en menos de una hora."
+			}
+		}
+	},
+	"useCasesEcommercePage": {
+		"title": "Búsqueda para e-commerce",
+		"description": "Filtros facetados, expansión de sinónimos, gestión de cero resultados y analíticas en tiempo real — diseñado para catálogos de productos."
+	},
+	"useCasesEcommerce": {
+		"title": "Búsqueda de productos que convierte",
+		"subtitle": "Conecta tu catálogo con el módulo de PrestaShop o Bitrix. En producción en una tarde. Analíticas desde el primer día.",
+		"items": {
+			"facetedFilter": {
+				"title": "Filtrado por facetas",
+				"description": "Marca, categoría, rango de precios, disponibilidad, atributos — cualquier campo en tu esquema se convierte en faceta. Sin configuración adicional."
+			},
+			"synonyms": {
+				"title": "Expansión de sinónimos",
+				"description": "Agrega sinónimos en el dashboard. TV → televisión, sofá → sillón. Los usuarios encuentran productos con lenguaje natural."
+			},
+			"zeroResults": {
+				"title": "Gestión de cero resultados",
+				"description": "AACsearch registra cada consulta sin resultado. Usa la lista para agregar sinónimos, productos o sugerencias alternativas."
+			},
+			"prestaShop": {
+				"title": "Módulo PrestaShop",
+				"description": "Módulo PHP listo para instalar. Sincroniza en cada guardado, actualización y eliminación de producto. Exportación completa del catálogo con un clic."
+			},
+			"analytics": {
+				"title": "Analíticas de conversión",
+				"description": "Rastrea CTR por consulta, términos de búsqueda principales y uso de filtros. Identifica problemas de ranking antes de que afecten los ingresos."
+			},
+			"widget": {
+				"title": "Widget listo para integrar",
+				"description": "Widget de 14 KB para tu tienda. Sin paso de compilación, sin npm. Funciona junto a tu tema existente."
+			}
+		}
+	},
+	"useCasesSaasPage": {
+		"title": "Búsqueda para SaaS multiinquilino",
+		"description": "Un índice de AACsearch por tenant, scoped tokens por usuario final. Tus clientes nunca ven los datos de los demás."
+	},
+	"useCasesSaas": {
+		"title": "Aislamiento de búsqueda incorporado",
+		"subtitle": "El aislamiento de tenant es arquitectónico — no solo una política. Cada organización tiene su propio índice, su propia cuota y sus propias claves.",
+		"items": {
+			"tenantIsolation": {
+				"title": "Índices por tenant",
+				"description": "Crea un índice por organización cliente. Los datos nunca se mezclan. Eliminar un tenant elimina su índice."
+			},
+			"scopedTokens": {
+				"title": "Scoped tokens por usuario",
+				"description": "Emite tokens en el servidor que bloquean a un filtro de userId. Tus usuarios finales solo buscan en sus propios registros."
+			},
+			"multiIndex": {
+				"title": "Múltiples índices por tenant",
+				"description": "Hasta 10 índices por organización en el plan Pro. Productos, pedidos, tickets, documentos — índices separados, un solo dashboard."
+			},
+			"quota": {
+				"title": "Cuota por tenant",
+				"description": "Rastrea el consumo de search-units por tenant. Atribuye costos a los clientes. Factura en consecuencia."
+			},
+			"orpc": {
+				"title": "API de gestión oRPC",
+				"description": "Crea índices, rota claves y obtén analíticas por tenant programáticamente desde tu backend."
+			},
+			"reindex": {
+				"title": "Evolución del esquema",
+				"description": "Evoluciona tu modelo de datos sin interrupciones. Reindexar cada tenant en segundo plano, cambia aliases de forma atómica."
+			}
+		}
+	},
+	"useCasesHelpCenterPage": {
+		"title": "Búsqueda para centros de ayuda y documentación",
+		"description": "Indexa tu base de conocimientos y muestra artículos relevantes en milisegundos. Combínalo con el módulo Knowledge para Q&A con IA."
+	},
+	"useCasesHelpCenter": {
+		"title": "Ayuda a los usuarios a encontrar respuestas por sí mismos",
+		"subtitle": "Búsqueda instantánea de artículos, seguimiento de cero resultados y Q&A con IA sobre PDFs — una sola integración, sin ingeniero de búsqueda.",
+		"items": {
+			"articleSearch": {
+				"title": "Búsqueda instantánea de artículos",
+				"description": "Búsqueda de texto completo en tus artículos de ayuda con tolerancia a errores tipográficos y ranking por relevancia. Resultados en menos de 50 ms."
+			},
+			"knowledgeRag": {
+				"title": "Q&A con IA (RAG)",
+				"description": "Los usuarios hacen preguntas en lenguaje natural. El módulo Knowledge recupera fragmentos relevantes y genera una respuesta citada."
+			},
+			"zeroResults": {
+				"title": "Inteligencia sobre cero resultados",
+				"description": "Cada consulta sin respuesta queda registrada. Detecta vacíos en tu documentación antes de que los clientes escalen al soporte."
+			},
+			"multilingual": {
+				"title": "Soporte multilingüe",
+				"description": "Indexa contenido en varios idiomas. Búsqueda en el idioma del usuario. Bibliotecas de sinónimos por idioma."
+			},
+			"widget": {
+				"title": "Widget de búsqueda listo para integrar",
+				"description": "Agrega búsqueda a cualquier centro de ayuda en menos de una hora. Funciona en Docusaurus, GitBook, Notion o portales personalizados."
+			},
+			"analytics": {
+				"title": "Analíticas de búsqueda",
+				"description": "Las consultas principales, cero resultados y CTR te muestran qué buscan realmente los usuarios — no lo que crees que buscan."
+			}
+		}
+	},
+	"useCasesDevToolsPage": {
+		"title": "Búsqueda para herramientas de desarrollo",
+		"description": "Búsqueda semántica sobre código, configuraciones y logs. El servidor MCP permite que los agentes de IA busquen y actualicen índices programáticamente."
+	},
+	"useCasesDevTools": {
+		"title": "Búsqueda construida para desarrolladores",
+		"subtitle": "API REST, SDK tipado, servidor MCP y un plano de control oRPC. Sin GUI necesaria — automatiza todo.",
+		"items": {
+			"restApi": {
+				"title": "API REST completa",
+				"description": "15 endpoints, especificación OpenAPI 3.1, auth con clave API. Intégrate desde cualquier lenguaje, cualquier pipeline de CI, cualquier infraestructura."
+			},
+			"mcp": {
+				"title": "Servidor MCP para agentes de IA",
+				"description": "Claude, Cursor y cualquier cliente MCP pueden buscar, listar índices, insertar documentos y obtener estadísticas programáticamente."
+			},
+			"semanticSearch": {
+				"title": "Búsqueda semántica",
+				"description": "Embeddings de OpenAI sobre comentarios de código, configuraciones y logs. Encuentra entradas relevantes incluso con terminología diferente."
+			},
+			"typedSdk": {
+				"title": "SDK de navegador tipado",
+				"description": "Paquete NPM con tipos TypeScript completos. Intégrate en el frontend de tu herramienta de desarrollo sin adivinar las formas de la API."
+			},
+			"orpcControl": {
+				"title": "Plano de control programático",
+				"description": "Crea índices, rota claves, activa reindexaciones y obtén analíticas desde tu pipeline de compilación o scripts de despliegue."
+			}
+		}
+	},
+	"useCasesContentSitesPage": {
+		"title": "Búsqueda para sitios de contenido",
+		"description": "Búsqueda instantánea para blogs, changelogs y documentación. El SDK de navegador se integra en cualquier frontend en menos de una hora."
+	},
+	"useCasesContentSites": {
+		"title": "Búsqueda de contenido que retiene lectores",
+		"subtitle": "Artículos de blog, changelogs, documentación, landing pages — indexados y con búsqueda desde el primer día.",
+		"items": {
+			"contentIndexing": {
+				"title": "Indexa cualquier cosa",
+				"description": "MDX, Markdown, HTML, feeds JSON — cualquier formato de contenido que produzca registros estructurados puede indexarse."
+			},
+			"instantSearch": {
+				"title": "Búsqueda instantánea en la UI",
+				"description": "Los resultados aparecen mientras el usuario escribe. Tolerancia a errores tipográficos, resaltado del texto coincidente, enlace profundo a secciones de anclaje."
+			},
+			"browserSdk": {
+				"title": "SDK de navegador",
+				"description": "Integra el SDK tipado en tu proyecto Next.js, Astro, Nuxt o sitio estático. Un solo componente, resultados instantáneos."
+			},
+			"changelog": {
+				"title": "Búsqueda en el changelog",
+				"description": "Los desarrolladores buscan en los changelogs para saber cuándo cambió un comportamiento. Indexa las entradas del changelog y deja que lo encuentren en segundos."
+			},
+			"multilingual": {
+				"title": "Contenido multilingüe",
+				"description": "Indexa contenido por idioma. Sirve resultados en el idioma del usuario. Bibliotecas de sinónimos ajustadas por idioma."
+			},
+			"seo": {
+				"title": "Amigable con SEO",
+				"description": "La búsqueda es del lado del cliente — no se requiere renderizado en el servidor. Tus páginas estáticas permanecen generadas estáticamente."
+			}
+		}
+	},
+	"solutionsPage": {
+		"title": "AACsearch para cada industria",
+		"description": "Soluciones de búsqueda a medida para retail, medios, fintech, educación, sanidad y gaming."
+	},
+	"solutions": {
+		"title": "Soluciones para cada sector",
+		"subtitle": "AACsearch se adapta a las necesidades de búsqueda únicas de diferentes sectores. Descubre cómo.",
+		"items": {
+			"ecommerce": {
+				"title": "E-commerce",
+				"description": "Búsqueda de productos con facetado, corrección de errores tipográficos y recomendaciones para aumentar conversiones."
+			},
+			"saas": {
+				"title": "SaaS y aplicaciones",
+				"description": "Búsqueda dentro de la aplicación con acceso basado en roles, multiinquilino y límites de cuota por plan."
+			},
+			"media": {
+				"title": "Medios y contenido",
+				"description": "Búsqueda instantánea sobre artículos, vídeos, podcasts y documentos con filtros de metadatos ricos."
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Clúster dedicado, SSO, controles de acceso avanzados y SLA garantizado para organizaciones exigentes."
+			},
+			"education": {
+				"description": "Búsqueda de cursos, lecciones e instructores. Bibliotecas de sinónimos para términos académicos, interfaz multilingüe y widget con accesibilidad.",
+				"title": "Educación y EdTech"
+			},
+			"fintech": {
+				"description": "Búsqueda con aislamiento por tenant, registro de auditoría, listas de permitidos por clave e índice cifrado. Compatible con RGPD y CCPA.",
+				"title": "Servicios financieros"
+			},
+			"gaming": {
+				"description": "Perfiles de jugadores, catálogos de objetos y búsqueda en clasificaciones. Actualizaciones de índice en tiempo real, búsqueda geográfica y latencia sub-50 ms a cualquier escala.",
+				"title": "Gaming"
+			},
+			"healthcare": {
+				"description": "Arquitectura de búsqueda compatible con HIPAA. Diccionarios de sinónimos clínicos, registro de auditoría y controles de acceso a datos basados en roles.",
+				"title": "Salud"
+			},
+			"retail": {
+				"description": "Búsqueda de productos con facetas, sinónimos y filtrado instantáneo. Boosts, reglas de pin y merchandising en sesión incluidos.",
+				"title": "Comercio minorista y e-commerce"
+			}
+		}
+	},
+	"solutionsRetailPage": {
+		"title": "AACsearch para Retail",
+		"description": "Búsqueda de productos instantánea, navegación por facetas y herramientas de merchandising para tiendas en línea."
+	},
+	"solutionsRetail": {
+		"title": "Búsqueda para retail",
+		"subtitle": "Convierte más visitantes en compradores con una búsqueda de producto rápida, relevante y personalizable.",
+		"items": {
+			"catalog": {
+				"title": "Búsqueda en catálogo",
+				"description": "Busca millones de productos en menos de 50 ms con corrección de errores tipográficos y sinónimos."
+			},
+			"filters": {
+				"title": "Filtros de compra",
+				"description": "Precio, talla, color, marca y cualquier atributo personalizado como facetas dinámicas."
+			},
+			"merch": {
+				"title": "Comercialización",
+				"description": "Ancla productos destacados, oculta agotados y aplica reglas de merchandising sin tocar código."
+			},
+			"analytics": {
+				"title": "Análisis de búsqueda para retail",
+				"description": "Descubre qué buscan los clientes y qué no encuentran para optimizar tu catálogo."
+			},
+			"filterNavigation": {
+				"description": "Facetas dinámicas para categoría, marca, precio, color y talla. Los recuentos se actualizan en tiempo real al aplicar los filtros.",
+				"title": "Navegación facetada"
+			},
+			"inventory": {
+				"description": "Ingesta actualizaciones de stock de productos en segundos. Los artículos agotados se degradan automáticamente basándose en tu campo de disponibilidad.",
+				"title": "Inventario en tiempo real"
+			},
+			"merchandising": {
+				"description": "Fija los productos promovidos en la parte superior, excluye los artículos descontinuados e impulsa las líneas de temporada sin necesidad de desplegar código.",
+				"title": "Reglas de merchandising"
+			},
+			"productSearch": {
+				"description": "Búsqueda de productos instantánea y tolerante a errores. Los clientes encuentran el artículo correcto incluso cuando lo escriben mal o usan sinónimos.",
+				"title": "Búsqueda de productos"
+			},
+			"synonyms": {
+				"description": "Gestiona 'sofá / couch', 'zapatillas / sneakers' y cientos de pares de sinónimos de retail. Una importación CSV, efecto instantáneo.",
+				"title": "Sinónimos para retail"
+			},
+			"facets": {
+				"title": "Fasetas de producto",
+				"description": "Fasetas de selección múltiple para talla, color, marca, rango de precio y atributos personalizados. Recuentos de facetas actualizados en tiempo real."
+			},
+			"instantSearch": {
+				"title": "Búsqueda instantánea",
+				"description": "Búsqueda a medida que escribes con tolerancia a errores. Resultados desde la primera tecla con consultas debounced y caché del lado del cliente."
+			},
+			"multiCurrency": {
+				"title": "Búsqueda multidivisa",
+				"description": "Muestra precios en la moneda local del comprador. AACsearch maneja indexación multidivisa con rangos de precio facetados por moneda."
+			}
+		}
+	},
+	"solutionsMediaPage": {
+		"title": "AACsearch para Medios",
+		"description": "Descubrimiento de contenidos para sitios de noticias, plataformas de streaming y editoriales digitales."
+	},
+	"solutionsMedia": {
+		"title": "Búsqueda para medios",
+		"subtitle": "Ayuda a los lectores a descubrir contenido relevante al instante en tu biblioteca de artículos y vídeos.",
+		"items": {
+			"content": {
+				"title": "Búsqueda en archivo de contenido",
+				"description": "Busca millones de artículos, episodios y vídeos con resultados enriquecidos con miniaturas y extractos."
+			},
+			"categories": {
+				"title": "Navegación por categorías",
+				"description": "Facetas por sección, autor, fecha, etiqueta y tipo de contenido para una exploración intuitiva."
+			},
+			"freshness": {
+				"title": "Impulso de contenido reciente",
+				"description": "Configura el decaimiento temporal para que el contenido reciente aparezca primero cuando la relevancia sea igual."
+			},
+			"multilingual": {
+				"title": "Soporte multiidioma",
+				"description": "Indexa y busca contenido en varios idiomas con configuraciones de análisis por idioma."
+			},
+			"analytics": {
+				"description": "Ve qué consultas no tienen resultados, qué temas son tendencia y qué artículos se descubren a través de la búsqueda frente a enlaces directos.",
+				"title": "Análisis de contenido"
+			},
+			"contentSearch": {
+				"description": "Busca en titulares, cuerpo del texto, etiquetas, biografías de autor y leyendas. Destaca fragmentos coincidentes en los resultados.",
+				"title": "Búsqueda de contenido de texto completo"
+			},
+			"fullText": {
+				"description": "Los pesos de campo configurables favorecen los titulares sobre el cuerpo del texto. Impulsa la actualidad para noticias, o la profundidad para guías perennes.",
+				"title": "Relevancia para texto largo"
+			},
+			"multiLanguage": {
+				"description": "Ejecuta índices separados por idioma o un único índice multilingüe. Gestión de sinónimos con conciencia de locale incluida.",
+				"title": "Búsqueda multilingüe"
+			},
+			"realTimeSync": {
+				"description": "Sincronización activada por webhook desde Contentful, Strapi, WordPress o Sanity. Los artículos publicados aparecen en la búsqueda en menos de un segundo.",
+				"title": "Sincronización CMS en tiempo real"
+			},
+			"tagging": {
+				"description": "Filtra por tema, formato, fecha, autor o tipo de contenido. Las facetas anidadas admiten taxonomías editoriales complejas.",
+				"title": "Facetas de etiqueta y categoría"
+			},
+			"articles": {
+				"title": "Búsqueda de artículos",
+				"description": "Busca en miles de artículos por titular, autor, categoría, fecha de publicación y palabra clave. Tolerante a errores y con soporte de facetas."
+			},
+			"multiformat": {
+				"title": "Búsqueda multiformato",
+				"description": "Indexa artículos, vídeos, podcasts y galerías de imágenes. Busca en todos los formatos desde un solo cuadro de búsqueda."
+			},
+			"recommendations": {
+				"title": "Recomendaciones de contenido",
+				"description": "Muestra artículos y contenido relacionados mediante búsqueda vectorial. Aumenta las visitas a páginas con recomendaciones impulsadas por IA."
+			},
+			"subscription": {
+				"title": "Búsqueda con suscripción",
+				"description": "Usuarios gratuitos ven resultados de previsualización; suscriptores acceden al contenido completo. Los tokens con ámbito aplican políticas de acceso."
+			},
+			"trending": {
+				"title": "Contenido trending",
+				"description": "Muestra artículos populares según actualidad y popularidad. La clasificación con decaimiento temporal mantiene el contenido obsoleto fuera de los primeros resultados."
+			},
+			"video": {
+				"title": "Búsqueda de vídeo",
+				"description": "Busca en títulos, descripciones, transcripciones y etiquetas de vídeo. Facetas por categoría, duración, fecha de publicación y tipo de contenido."
+			}
+		}
+	},
+	"solutionsFintechPage": {
+		"title": "AACsearch para Fintech",
+		"description": "Búsqueda segura y auditable sobre documentos financieros, transacciones y contenidos de cumplimiento."
+	},
+	"solutionsFintech": {
+		"title": "Búsqueda para fintech",
+		"subtitle": "Búsqueda segura, rápida y precisa para aplicaciones financieras con datos sensibles.",
+		"items": {
+			"security": {
+				"title": "Seguridad de nivel bancario",
+				"description": "Tokens con alcance restringido, aislamiento de inquilinos y cifrado en reposo y en tránsito."
+			},
+			"precision": {
+				"title": "Búsqueda de alta precisión",
+				"description": "Busca por número de cuenta, IBAN, ticker de bolsa o nombre de empresa con resultados exactos."
+			},
+			"compliance": {
+				"title": "Preparado para cumplimiento normativo",
+				"description": "Registros de auditoría, controles de retención de datos y opciones de residencia de datos para cumplir con regulaciones financieras."
+			},
+			"speed": {
+				"title": "Velocidad para operaciones en tiempo real",
+				"description": "Latencia sub-50ms para búsquedas de transacciones, cartera y clientes en tiempo real."
+			},
+			"accessControls": {
+				"description": "Emite tokens de búsqueda de solo lectura limitados a colecciones específicas, rangos de fechas o filtros de campo. Los tokens están firmados con HMAC y tienen vida corta.",
+				"title": "Controles de acceso limitados"
+			},
+			"auditLog": {
+				"description": "Cada consulta de búsqueda, ingesta de documentos y operación administrativa se registra con marca de tiempo, actor y contexto de organización.",
+				"title": "Registro de auditoría"
+			},
+			"encryption": {
+				"description": "Todos los datos cifrados en reposo (AES-256) y en tránsito (TLS 1.3). Gestión de claves a cargo de tu proveedor de nube.",
+				"title": "Cifrado en reposo y en tránsito"
+			},
+			"gdpr": {
+				"description": "Eliminación y pseudonimización a nivel de campo. Las solicitudes de derecho al olvido se resuelven a nivel de índice en minutos.",
+				"title": "Compatible con RGPD y CCPA"
+			},
+			"performance": {
+				"description": "Datos financieros de alta frecuencia indexados en tiempo real. La latencia de búsqueda P99 se mantiene por debajo de 50 ms en cualquier volumen de transacciones.",
+				"title": "Sub-50 ms a escala"
+			},
+			"tenantIsolation": {
+				"description": "Cada llamada a la API lleva un token de ámbito org. Las lecturas entre tenants se rechazan a nivel de protocolo, sin necesidad de una puerta de enlace en la capa de aplicación.",
+				"title": "Aislamiento estricto por tenant"
+			},
+			"auditLogs": {
+				"title": "Búsqueda en registros de auditoría",
+				"description": "Busca millones de entradas de registro por usuario, acción, recurso y marca de tiempo. Investiga incidentes de cumplimiento en segundos."
+			},
+			"regions": {
+				"title": "Búsqueda multirregional",
+				"description": "Despliega AACsearch en múltiples regiones para cumplimiento de residencia de datos. Cada región opera independientemente con infraestructura aislada."
+			},
+			"transactions": {
+				"title": "Búsqueda de transacciones",
+				"description": "Busca historial de transacciones por importe, moneda, comercio, rango de fechas y estado. Latencia inferior a 50 ms incluso con millones de transacciones."
+			}
+		}
+	},
+	"solutionsEducationPage": {
+		"title": "AACsearch para Educación",
+		"description": "Búsqueda de cursos, gestión del conocimiento y descubrimiento de materiales de aprendizaje para plataformas EdTech."
+	},
+	"solutionsEducation": {
+		"title": "Búsqueda para educación",
+		"subtitle": "Ayuda a estudiantes y docentes a encontrar cursos, materiales y respuestas al instante.",
+		"items": {
+			"courses": {
+				"title": "Búsqueda de cursos y materiales",
+				"description": "Busca en catálogos de cursos, bibliotecas de recursos y bases de conocimiento con facetado por nivel y tema."
+			},
+			"lms": {
+				"title": "Integración con LMS",
+				"description": "Conecta con Moodle, Canvas, Blackboard y otros LMS para indexar contenido automáticamente."
+			},
+			"access": {
+				"title": "Contenido con control de acceso",
+				"description": "Los tokens con alcance restringido aseguran que los estudiantes solo vean el contenido al que tienen acceso."
+			},
+			"analytics": {
+				"title": "Análisis de aprendizaje",
+				"description": "Identifica lagunas de contenido mediante el análisis de búsquedas sin resultados y consultas frecuentes."
+			},
+			"accessibility": {
+				"description": "Widget compatible con WCAG 2.1 AA. Navegación por teclado, etiquetas de lector de pantalla y contraste de color suficiente integrados.",
+				"title": "Widget de búsqueda accesible"
+			},
+			"courseSearch": {
+				"description": "Búsqueda instantánea en títulos, descripciones, objetivos de aprendizaje y nombres de instructores. Tolerante a errores tipográficos para consultas de estudiantes.",
+				"title": "Búsqueda de cursos y lecciones"
+			},
+			"learningPaths": {
+				"description": "Búsqueda facetada por tema, nivel, formato, duración y certificación. Las categorías anidadas se mapean a la estructura de tu currículo.",
+				"title": "Navegación estructurada"
+			},
+			"multiLanguage": {
+				"description": "Indexa contenido en más de 50 idiomas. Stemming con conciencia del idioma y bibliotecas de sinónimos separadas por locale.",
+				"title": "Contenido multilingüe"
+			},
+			"synonyms": {
+				"description": "Mapea términos específicos de la disciplina: 'ML / aprendizaje automático', 'JS / JavaScript'. Importa desde CSV o gestiona en el panel.",
+				"title": "Sinónimos académicos"
+			},
+			"catalog": {
+				"title": "Búsqueda en catálogo de cursos",
+				"description": "Ayuda a los estudiantes a encontrar cursos en todos los departamentos, niveles y formatos. Filtra por materia, instructor, horario y tipo de crédito."
+			},
+			"knowledge": {
+				"title": "Búsqueda en base de conocimiento",
+				"description": "Indexa artículos de investigación, tesis y publicaciones académicas. Búsqueda de texto completo y semántica en el repositorio de conocimiento institucional."
+			},
+			"multilingual": {
+				"title": "Educación multilingüe",
+				"description": "Admite búsqueda en varios idiomas para universidades internacionales. Cada idioma indexado independientemente con derivación lingüística."
+			},
+			"scorm": {
+				"title": "Búsqueda de contenido SCORM",
+				"description": "Indexa objetos de aprendizaje SCORM y módulos de e-learning. Busca títulos de curso, descripciones, objetivos de aprendizaje y metadatos."
+			}
+		}
+	},
+	"solutionsHealthcarePage": {
+		"title": "AACsearch para Sanidad",
+		"description": "Búsqueda conforme a HIPAA sobre contenidos médicos, documentos clínicos e información de pacientes."
+	},
+	"solutionsHealthcare": {
+		"title": "Búsqueda para sanidad",
+		"subtitle": "Búsqueda de información médica precisa, segura y conforme a la normativa para profesionales y pacientes.",
+		"items": {
+			"medical": {
+				"title": "Terminología médica",
+				"description": "Sinónimos y expansión de términos para terminología médica: ICD, nombres de medicamentos, procedimientos."
+			},
+			"hipaa": {
+				"title": "Preparado para entornos regulados",
+				"description": "Controles de acceso, cifrado y registros de auditoría para cumplir con regulaciones de salud."
+			},
+			"clinical": {
+				"title": "Búsqueda en documentos clínicos",
+				"description": "Busca en historiales médicos, protocolos de tratamiento y literatura clínica con precisión."
+			},
+			"multilingual": {
+				"title": "Acceso multiidioma",
+				"description": "Sirve contenido médico a pacientes en su idioma con soporte multilingüe completo."
+			},
+			"auditLog": {
+				"description": "Cada consulta, cada clic en un resultado y cada acción administrativa se registra con marca de tiempo y contexto de usuario para revisión de cumplimiento.",
+				"title": "Registro de auditoría"
+			},
+			"clinicalTerms": {
+				"description": "Bibliotecas de sinónimos para códigos ICD-10, nombres de medicamentos y condiciones médicas. Admite terminología laica y clínica en el mismo índice.",
+				"title": "Terminología clínica"
+			},
+			"hipaaReady": {
+				"description": "Aislamiento por tenant, tokens de acceso limitado y sin registro de PII en análisis de búsqueda. Infraestructura configurada para cargas de trabajo HIPAA.",
+				"title": "Arquitectura alineada con HIPAA"
+			},
+			"multiLanguage": {
+				"description": "Búsqueda orientada al paciente en el idioma preferido del usuario. Detección de idioma y widget de búsqueda con conciencia de locale.",
+				"title": "Soporte multilingüe"
+			},
+			"realTimeUpdates": {
+				"description": "Registros clínicos y datos de farmacia indexados en menos de un segundo. Los cambios en formularios aparecen inmediatamente sin reindexación completa.",
+				"title": "Actualizaciones de registros en tiempo real"
+			},
+			"tenantIsolation": {
+				"description": "Los tokens de búsqueda están limitados a la org y firmados con HMAC. Pacientes, profesionales y administradores tienen niveles de acceso diferentes a nivel de token.",
+				"title": "Aislamiento de datos de pacientes"
+			},
+			"medicalCoding": {
+				"title": "Búsqueda de códigos médicos",
+				"description": "Busca códigos ICD-10, CPT y SNOMED con tolerancia a errores tipográficos y búsqueda semántica. Encuentra el código correcto más rápido."
+			},
+			"patient": {
+				"title": "Búsqueda en portal de pacientes",
+				"description": "Potencia la búsqueda del portal de pacientes para citas, medicamentos, resultados de pruebas y directorios de proveedores."
+			}
+		}
+	},
+	"solutionsGamingPage": {
+		"title": "AACsearch para Gaming",
+		"description": "Búsqueda de objetos, emparejamiento de jugadores y descubrimiento de contenido comunitario para plataformas de juegos."
+	},
+	"solutionsGaming": {
+		"title": "Búsqueda para gaming",
+		"subtitle": "Búsqueda de alta velocidad para wikis de juegos, tiendas de artículos y bases de datos de jugadores.",
+		"items": {
+			"wiki": {
+				"title": "Búsqueda en wikis de juegos",
+				"description": "Busca personajes, objetos, misiones y mecánicas en wikis de gran volumen con latencia mínima."
+			},
+			"store": {
+				"title": "Búsqueda en tienda de artículos",
+				"description": "Busca skins, armas y objetos del juego con filtros por rareza, tipo y precio."
+			},
+			"leaderboard": {
+				"title": "Búsqueda de jugadores",
+				"description": "Busca jugadores por nombre, rango o estadísticas con ordenación y filtros dinámicos."
+			},
+			"realtime": {
+				"title": "Actualizaciones en tiempo real",
+				"description": "El inventario del juego y los datos de jugadores se sincronizan en tiempo real sin reindexado completo."
+			},
+			"analytics": {
+				"description": "Ve qué buscan los jugadores, qué consultas llegan a callejones sin salida y cómo la búsqueda impulsa las conversiones del marketplace.",
+				"title": "Análisis de juego"
+			},
+			"geoSearch": {
+				"description": "Muestra jugadores y servidores dentro de una distancia configurable. Consultas geográficas por radio y cuadro delimitador soportadas de fábrica.",
+				"title": "Búsqueda geolocalizada"
+			},
+			"itemSearch": {
+				"description": "Busca entre millones de objetos por rareza, tipo, estadísticas y precio. Los filtros y órdenes de clasificación se actualizan en tiempo real conforme el mercado se mueve.",
+				"title": "Búsqueda de objetos y botín"
+			},
+			"multiSearch": {
+				"description": "Ejecuta una sola solicitud en objetos, jugadores y gremios simultáneamente. Un único viaje de ida y vuelta, resultados fusionados, latencia mínima.",
+				"title": "Consultas multi-índice"
+			},
+			"playerSearch": {
+				"description": "Encuentra jugadores por nombre de usuario, rango, región y estilo de juego. Soporta coincidencia de prefijo para autocompletado en pantallas de sala.",
+				"title": "Búsqueda de perfil de jugador"
+			},
+			"realTimeSync": {
+				"description": "Las actualizaciones del índice activadas por eventos del juego (caída de objetos, cambios de rango, listados del marketplace) llegan en menos de un segundo.",
+				"title": "Sincronización de eventos en tiempo real"
+			},
+			"highConcurrency": {
+				"title": "Alta concurrencia",
+				"description": "Maneja miles de consultas de búsqueda concurrentes durante horas punta de juego. AACsearch mantiene latencia inferior a 50 ms bajo carga pesada."
+			},
+			"items": {
+				"title": "Búsqueda de objetos e inventario",
+				"description": "Busca inventarios de jugadores, catálogos de objetos y mercados. Filtra por tipo de objeto, rareza, estadísticas, nivel requerido y rango de precio."
+			},
+			"players": {
+				"title": "Búsqueda de jugadores",
+				"description": "Busca jugadores por nombre de usuario, clan, nivel, rango, puntuación de logros y región. Potencia funciones sociales y herramientas de administración."
+			},
+			"widget": {
+				"title": "Widget de búsqueda en el juego",
+				"description": "Incrusta el widget AACsearch dentro de las UIs del juego. Búsqueda de objetos, clanes, jugadores y tablas de clasificación con estilo temático."
+			}
+		}
+	}
 }

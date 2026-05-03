@@ -93,7 +93,11 @@ export const facetSearch = protectedProcedure
 			searchParams.facet_sample_threshold = input.facetSampleThreshold;
 		}
 		if (input.rangeFacets?.length) {
-			searchParams.facet_by = `${searchParams.facet_by ?? ''},${input.rangeFacets.map(r => `${r.field}:range:(${r.min}..${r.max})`).join(',')}`.replace(/^,/, '');
+			searchParams.facet_by =
+				`${searchParams.facet_by ?? ""},${input.rangeFacets.map((r) => `${r.field}:range:(${r.min}..${r.max})`).join(",")}`.replace(
+					/^,/,
+					"",
+				);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

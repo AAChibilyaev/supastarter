@@ -85,6 +85,7 @@ export const ingestFile = protectedProcedure
 			contentBase64: z.string().min(1),
 			language: z.string().max(12).optional(),
 			chunkStrategy: chunkStrategySchema,
+			hypeEnabled: z.boolean().optional().default(false),
 		}),
 	)
 	.handler(async ({ input, context: { ...rest } }) => {
@@ -125,6 +126,16 @@ export const ingestFile = protectedProcedure
 			if (chunks.length === 0) {
 				throw new ORPCError("BAD_REQUEST", { message: "No text extracted from file" });
 			}
+
+			// HyPE: Generate hypothetical questions for each chunk (if enabled)
+			const { generateHypotheticalQuestions } = await import("../lib/hype");
+			const hypeResults = input.hypeEnabled
+				? await Promise.all(
+						chunks.map((chunk) =>
+							generateHypotheticalQuestions(chunk.text, 3).catch(() => null),
+						),
+					)
+				: null;
 
 			const existingSources = await listDataSources(space.id);
 			const fileSource = existingSources.find((source) =>
@@ -191,6 +202,9 @@ export const ingestFile = protectedProcedure
 					metadata: {
 						from: "file-upload",
 						chunkStrategy: input.chunkStrategy ?? "fixed",
+						...(hypeResults?.[chunk.chunkIndex]
+							? { hypotheticalQuestions: hypeResults[chunk.chunkIndex] }
+							: {}),
 					},
 				})),
 			});

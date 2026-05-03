@@ -854,7 +854,18 @@
 			"tableActions": "Actions",
 			"remove": "Supprimer",
 			"removeConfirmTitle": "Supprimer le synonyme",
-			"removeConfirmMessage": "Voulez-vous vraiment supprimer ce synonyme ?"
+			"removeConfirmMessage": "Voulez-vous vraiment supprimer ce synonyme ?",
+			"exportJson": "Exporter JSON",
+			"exportCsv": "Exporter CSV",
+			"exportSuccess": "{count} synonyme(s) exporté(s).",
+			"import": "Importer",
+			"importTitle": "Importer des synonymes",
+			"importDescription": "Téléchargez un fichier CSV ou JSON avec des paires de synonymes.",
+			"importDropzone": "Déposez le fichier CSV/JSON ici ou cliquez pour parcourir",
+			"importSuccess": "{count} synonyme(s) importé(s) avec succès.",
+			"importError": "Échec de l'importation des synonymes.",
+			"importDryRun": "Aperçu à blanc. {count} synonyme(s) seraient importés.",
+			"importFormat": "Le format doit être CSV ou JSON avec les champs root et synonym."
 		},
 		"curations": {
 			"tab": "Curations",
@@ -2128,7 +2139,17 @@
 			"scopeLabel": "Scope",
 			"scopeAll": "Apply to all indexes",
 			"scopeSelected": "Only selected indexes",
-			"excludeLabel": "Excluded collections"
+			"excludeLabel": "Excluded collections",
+			"exportJson": "Exporter JSON",
+			"exportCsv": "Exporter CSV",
+			"import": "Importer",
+			"importTitle": "Importer des ensembles de synonymes globaux",
+			"importDescription": "Téléchargez un fichier CSV ou JSON avec des ensembles de synonymes globaux. Format CSV: name,root,synonyms,locale. JSON: tableau d'objets d'ensemble.",
+			"importDropzone": "Déposez le fichier CSV/JSON ici ou cliquez pour parcourir",
+			"importSuccess": "{count} ensemble(s) de synonymes globaux importé(s) avec succès.",
+			"importError": "Échec de l'importation des synonymes globaux.",
+			"importDryRun": "Aperçu à blanc. {count} ensemble(s) seraient importés.",
+			"importFormat": "Le format doit être CSV ou JSON avec les champs name, root et synonyms."
 		},
 		"globalCurations": {
 			"title": "Global Curations",

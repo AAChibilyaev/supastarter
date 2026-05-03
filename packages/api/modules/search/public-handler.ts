@@ -191,7 +191,7 @@ export const publicSearchApp = new Hono()
 		delete (searchParams as Record<string, unknown>).boundingBoxFilter;
 		delete (searchParams as Record<string, unknown>).multiLocation;
 		delete (searchParams as Record<string, unknown>).disjunctiveFacets;
-	delete (searchParams as Record<string, unknown>).rangeFacets;
+		delete (searchParams as Record<string, unknown>).rangeFacets;
 
 		// Build filter expression: scoped + user filter + geo filter + negate
 		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
@@ -244,7 +244,7 @@ export const publicSearchApp = new Hono()
 				...searchParams,
 				filterBy: combinedFilter,
 				...(parsed.data.multiLocation && { multiLocation: parsed.data.multiLocation }),
-			...(parsed.data.rangeFacets && { rangeFacets: parsed.data.rangeFacets }),
+				...(parsed.data.rangeFacets && { rangeFacets: parsed.data.rangeFacets }),
 			});
 
 			// Record search latency in Prometheus

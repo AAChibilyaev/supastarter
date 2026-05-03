@@ -3,6 +3,12 @@
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
 	Select,
 	SelectContent,
 	SelectItem,
@@ -19,6 +25,7 @@ import { useState } from "react";
 
 import { useSearchIndexesQuery } from "../../lib/api";
 import { EmptyState } from "../cards/EmptyState";
+import { SynonymImportDialog } from "./SynonymImportDialog";
 
 interface GlobalSynonymEntry {
 	name: string;
@@ -39,6 +46,24 @@ interface GlobalSynonymsPanelProps {
 	organizationId: string;
 }
 
+interface ImportResult {
+	imported: number;
+	skipped: number;
+	errors: string[];
+	warnings: string[];
+	dryRun: boolean;
+}
+
+function triggerDownload(content: string, filename: string, mimeType: string) {
+	const blob = new Blob([content], { type: mimeType });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = filename;
+	a.click();
+	URL.revokeObjectURL(url);
+}
+
 export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps) {
 	const t = useTranslations();
 	const queryClient = useQueryClient();
@@ -47,6 +72,7 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 
 	const [entries, setEntries] = useState<GlobalSynonymEntry[]>([]);
 	const [initialized, setInitialized] = useState(false);
+	const [importOpen, setImportOpen] = useState(false);
 
 	const { data, isLoading } = useQuery(
 		orpc.search.globalSynonyms.get.queryOptions({
@@ -93,6 +119,14 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 		onError: (error: Error) => {
 			toastError(error instanceof Error ? error.message : t("search.synonyms.error"));
 		},
+	});
+
+	const exportMutation = useMutation({
+		...orpc.search.globalSynonyms.export.mutationOptions(),
+	});
+
+	const importMutation = useMutation({
+		...orpc.search.globalSynonyms.import.mutationOptions(),
 	});
 
 	const handleAddSet = () => {
@@ -160,6 +194,33 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 		updateMutation.mutate({ organizationId, synonyms: entries });
 	};
 
+	const handleExport = async (format: "csv" | "json") => {
+		try {
+			const result = await exportMutation.mutateAsync({
+				organizationId,
+				format,
+			});
+			const mimeType = format === "csv" ? "text/csv" : "application/json";
+			triggerDownload(result.data, result.filename, mimeType);
+			toastSuccess(t("search.synonyms.exportSuccess", { count: result.total }));
+		} catch (err) {
+			toastError(err instanceof Error ? err.message : t("search.synonyms.error"));
+		}
+	};
+
+	const handleImport = async (
+		data: string,
+		format: "csv" | "json",
+		dryRun: boolean,
+	): Promise<ImportResult> => {
+		return importMutation.mutateAsync({
+			organizationId,
+			format,
+			data,
+			dryRun,
+		});
+	};
+
 	if (isLoading) {
 		return <div className="text-foreground/60">{t("search.loading")}</div>;
 	}
@@ -174,6 +235,29 @@ export function GlobalSynonymsPanel({ organizationId }: GlobalSynonymsPanelProps
 					</p>
 				</div>
 				<div className="gap-2 flex">
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="outline" size="sm">
+								Export
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem onClick={() => handleExport("json")}>
+								{t("search.globalSynonyms.exportJson")}
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => handleExport("csv")}>
+								{t("search.globalSynonyms.exportCsv")}
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+
+					<SynonymImportDialog
+						open={importOpen}
+						onOpenChange={setImportOpen}
+						onImport={handleImport}
+						isGlobal
+					/>
+
 					<Button variant="outline" onClick={handleAddSet}>
 						{t("search.globalSynonyms.addSet")}
 					</Button>

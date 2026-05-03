@@ -1116,7 +1116,18 @@
 			"tableActions": "Acciones",
 			"remove": "Eliminar",
 			"removeConfirmTitle": "Eliminar sinónimo",
-			"removeConfirmMessage": "¿Está seguro de que desea eliminar este par de sinónimos?"
+			"removeConfirmMessage": "¿Está seguro de que desea eliminar este par de sinónimos?",
+			"exportJson": "Exportar JSON",
+			"exportCsv": "Exportar CSV",
+			"exportSuccess": "{count} sinónimo(s) exportados.",
+			"import": "Importar",
+			"importTitle": "Importar sinónimos",
+			"importDescription": "Cargue un archivo CSV o JSON con pares de sinónimos.",
+			"importDropzone": "Suelte el archivo CSV/JSON aquí o haga clic para examinar",
+			"importSuccess": "{count} sinónimo(s) importados correctamente.",
+			"importError": "Error al importar sinónimos.",
+			"importDryRun": "Vista previa en seco. {count} sinónimo(s) se importarían.",
+			"importFormat": "El formato debe ser CSV o JSON con campos root y synonym."
 		},
 		"curations": {
 			"tab": "Curaciones",
@@ -2168,7 +2179,17 @@
 			"scopeLabel": "Scope",
 			"scopeAll": "Apply to all indexes",
 			"scopeSelected": "Only selected indexes",
-			"excludeLabel": "Excluded collections"
+			"excludeLabel": "Excluded collections",
+			"exportJson": "Export JSON",
+			"exportCsv": "Export CSV",
+			"import": "Importar",
+			"importTitle": "Importar conjuntos de sinónimos globales",
+			"importDescription": "Cargue un archivo CSV o JSON con conjuntos de sinónimos globales. Formato CSV: name,root,synonyms,locale. JSON: array de objetos de conjunto.",
+			"importDropzone": "Suelte el archivo CSV/JSON aquí o haga clic para examinar",
+			"importSuccess": "{count} conjunto(s) de sinónimos globales importados correctamente.",
+			"importError": "Error al importar sinónimos globales.",
+			"importDryRun": "Vista previa en seco. {count} conjunto(s) se importarían.",
+			"importFormat": "El formato debe ser CSV o JSON con campos name, root y synonyms."
 		},
 		"globalCurations": {
 			"title": "Global Curations",

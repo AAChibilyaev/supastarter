@@ -45,6 +45,7 @@ export const ingestUrl = protectedProcedure
 			url: z.string().url().min(1),
 			language: z.string().max(12).optional(),
 			chunkStrategy: chunkStrategySchema,
+			hypeEnabled: z.boolean().optional().default(false),
 		}),
 	)
 	.handler(async ({ input, context: { ...rest } }) => {
@@ -88,6 +89,16 @@ export const ingestUrl = protectedProcedure
 			if (chunks.length === 0) {
 				throw new ORPCError("BAD_REQUEST", { message: "No content extracted from URL" });
 			}
+
+			// HyPE: Generate hypothetical questions for each chunk (if enabled)
+			const { generateHypotheticalQuestions } = await import("../lib/hype");
+			const hypeResults = input.hypeEnabled
+				? await Promise.all(
+						chunks.map((chunk) =>
+							generateHypotheticalQuestions(chunk.text, 3).catch(() => null),
+						),
+					)
+				: null;
 
 			// Create ingestion job
 			const job = await createIngestionJob({
@@ -138,6 +149,9 @@ export const ingestUrl = protectedProcedure
 						from: "url-fetch",
 						sourceUrl: input.url,
 						chunkStrategy: input.chunkStrategy ?? "fixed",
+						...(hypeResults?.[chunk.chunkIndex]
+							? { hypotheticalQuestions: hypeResults[chunk.chunkIndex] }
+							: {}),
 					},
 				})),
 			});

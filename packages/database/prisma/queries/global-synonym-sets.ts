@@ -150,3 +150,42 @@ export function globalSynonymSetsToPairs(
 
 	return pairs;
 }
+
+/** Validate global synonym set import entries. */
+export function validateGlobalSynonymSetEntries(
+	entries: {
+		name: string;
+		root: string;
+		synonyms: string[];
+		locale?: string | null;
+		scope?: string;
+		excludedCollectionIds?: string[];
+	}[],
+): { valid: boolean; errors: string[]; warnings: string[] } {
+	const errors: string[] = [];
+	const warnings: string[] = [];
+	const seenRoots = new Set<string>();
+
+	for (let i = 0; i < entries.length; i++) {
+		const entry = entries[i];
+		const rowNum = i + 1;
+
+		if (!entry.name || !entry.name.trim()) {
+			errors.push(`Set ${rowNum}: name is empty`);
+		}
+		if (!entry.root || !entry.root.trim()) {
+			errors.push(`Set ${rowNum}: root is empty`);
+		}
+		if (!entry.synonyms || entry.synonyms.length === 0) {
+			errors.push(`Set ${rowNum}: at least one synonym is required`);
+		}
+		if (entry.root && seenRoots.has(entry.root)) {
+			warnings.push(`Set ${rowNum}: duplicate root "${entry.root}"`);
+		}
+		if (entry.root) {
+			seenRoots.add(entry.root);
+		}
+	}
+
+	return { valid: errors.length === 0, errors, warnings };
+}

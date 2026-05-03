@@ -102,6 +102,12 @@ import {
 } from "./procedures/stemming";
 import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-config";
+import {
+	exportIndexSynonyms,
+	importIndexSynonyms,
+	exportGlobalSynonyms,
+	importGlobalSynonyms,
+} from "./procedures/synonym-import-export";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { truncateIndex } from "./procedures/truncate-index";
@@ -161,11 +167,15 @@ export const searchRouter = {
 	synonyms: {
 		get: getSynonyms,
 		update: updateSynonyms,
+		export: exportIndexSynonyms,
+		import: importIndexSynonyms,
 	},
 	globalSynonyms: {
 		get: getGlobalSynonyms,
 		update: updateGlobalSynonyms,
 		effective: getEffectiveGlobalSynonyms,
+		export: exportGlobalSynonyms,
+		import: importGlobalSynonyms,
 	},
 	curations: {
 		get: getCurations,

@@ -1,43 +1,24 @@
 import { Card, CardContent } from "@repo/ui/components/card";
-import {
-	ArrowRightIcon,
-	BookOpenIcon,
-	ClockIcon,
-	HashIcon,
-	SearchIcon,
-	ShoppingBagIcon,
-	SparklesIcon,
-	StarIcon,
-	TrendingUpIcon,
-	UserIcon,
-	ZapIcon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ComponentType } from "react";
 
-interface ListItem {
-	icon: ComponentType<{ className?: string }>;
-	label: string;
-}
-
-const SUGGESTION_ITEMS: ListItem[] = [
-	{ icon: SearchIcon, label: "Autocomplete" },
-	{ icon: ZapIcon, label: "Query completions" },
-	{ icon: ClockIcon, label: "Recent searches" },
-	{ icon: StarIcon, label: "Pinned suggestions" },
-	{ icon: HashIcon, label: "Typo suggestions" },
-	{ icon: BookOpenIcon, label: "Facet suggestions" },
-	{ icon: ArrowRightIcon, label: "No-result suggestions" },
+const SUGGESTION_ITEMS = [
+	"Autocomplete",
+	"Query completions",
+	"Recent searches",
+	"Pinned suggestions",
+	"Typo suggestions",
+	"Facet suggestions",
+	"No-result suggestions",
 ];
 
-const RECOMMENDATION_ITEMS: ListItem[] = [
-	{ icon: ShoppingBagIcon, label: "Similar items" },
-	{ icon: BookOpenIcon, label: "Related documents" },
-	{ icon: HashIcon, label: "Frequently searched together" },
-	{ icon: TrendingUpIcon, label: "Trending queries" },
-	{ icon: ClockIcon, label: "Session-based recommendations" },
-	{ icon: UserIcon, label: "Personalized recommendations" },
-	{ icon: SparklesIcon, label: "Tenant-specific recommendations" },
+const RECOMMENDATION_ITEMS = [
+	"Similar items",
+	"Related documents",
+	"Frequently searched together",
+	"Trending queries",
+	"Session-based recommendations",
+	"Personalized recommendations",
+	"Tenant-specific recommendations",
 ];
 
 export function SuggestionsSection() {
@@ -50,7 +31,7 @@ export function SuggestionsSection() {
 					<h2 className="text-3xl md:text-4xl font-light tracking-tight text-balance">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-lg font-light text-balance text-muted-foreground">
+					<p className="mt-4 text-base font-light text-balance text-muted-foreground">
 						{t("subtitle")}
 					</p>
 				</div>
@@ -60,10 +41,10 @@ export function SuggestionsSection() {
 					<Card>
 						<CardContent className="p-6 md:p-8 flex h-full flex-col">
 							<div className="mb-5">
-								<div className="size-10 mb-4 flex items-center justify-center rounded-lg bg-muted">
-									<SearchIcon className="size-5 text-muted-foreground" />
+								<div className="font-mono mb-3 tracking-widest text-[10px] text-muted-foreground/50 uppercase">
+									01
 								</div>
-								<h3 className="text-lg font-medium text-foreground">
+								<h3 className="text-base font-normal text-foreground">
 									{t("suggestionsTitle")}
 								</h3>
 								<p className="mt-1.5 text-sm font-light text-muted-foreground">
@@ -71,12 +52,12 @@ export function SuggestionsSection() {
 								</p>
 							</div>
 							<ul className="space-y-2 mt-auto">
-								{SUGGESTION_ITEMS.map(({ icon: Icon, label }) => (
+								{SUGGESTION_ITEMS.map((label) => (
 									<li
 										key={label}
 										className="gap-2.5 text-sm font-light flex items-center text-muted-foreground"
 									>
-										<Icon className="size-3.5 shrink-0 text-muted-foreground/50" />
+										<span className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
 										{label}
 									</li>
 								))}
@@ -88,10 +69,10 @@ export function SuggestionsSection() {
 					<Card>
 						<CardContent className="p-6 md:p-8 flex h-full flex-col">
 							<div className="mb-5">
-								<div className="size-10 mb-4 flex items-center justify-center rounded-lg bg-muted">
-									<SparklesIcon className="size-5 text-muted-foreground" />
+								<div className="font-mono mb-3 tracking-widest text-[10px] text-muted-foreground/50 uppercase">
+									02
 								</div>
-								<h3 className="text-lg font-medium text-foreground">
+								<h3 className="text-base font-normal text-foreground">
 									{t("recommendationsTitle")}
 								</h3>
 								<p className="mt-1.5 text-sm font-light text-muted-foreground">
@@ -99,12 +80,12 @@ export function SuggestionsSection() {
 								</p>
 							</div>
 							<ul className="space-y-2 mt-auto">
-								{RECOMMENDATION_ITEMS.map(({ icon: Icon, label }) => (
+								{RECOMMENDATION_ITEMS.map((label) => (
 									<li
 										key={label}
 										className="gap-2.5 text-sm font-light flex items-center text-muted-foreground"
 									>
-										<Icon className="size-3.5 shrink-0 text-muted-foreground/50" />
+										<span className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
 										{label}
 									</li>
 								))}

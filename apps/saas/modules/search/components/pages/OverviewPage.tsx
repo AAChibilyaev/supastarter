@@ -2,6 +2,7 @@
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
 import {
@@ -25,11 +26,13 @@ import {
 	HelpCircleIcon,
 	KeyIcon,
 	RefreshCwIcon,
+	RocketIcon,
 	SearchIcon,
 	WifiIcon,
 	WifiOffIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
@@ -66,6 +69,13 @@ export function OverviewPage() {
 
 	const { data: planInfo, isLoading: planLoading } = useQuery({
 		...orpc.entitlements.plan.queryOptions({
+			input: { organizationId: orgId ?? "" },
+		}),
+		enabled: Boolean(orgId),
+	});
+
+	const { data: healthScoreData } = useQuery({
+		...orpc.onboarding.healthScore.queryOptions({
 			input: { organizationId: orgId ?? "" },
 		}),
 		enabled: Boolean(orgId),
@@ -266,6 +276,30 @@ export function OverviewPage() {
 										percent: Math.round(quotaPercent),
 									})}
 						</p>
+					</CardContent>
+				</Card>
+			)}
+
+			{/* Expansion signal: health = 100 → upgrade prompt */}
+			{healthScoreData?.score === 100 && planInfo?.planId === "free" && (
+				<Card className="border-l-amber-500 bg-amber-500/5 border-l-4">
+					<CardContent className="gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between flex flex-col">
+						<div className="gap-2 flex items-center">
+							<RocketIcon className="size-6 text-amber-500 shrink-0" />
+							<div>
+								<p className="text-sm font-semibold">
+									{t("overview.expansionTitle")}
+								</p>
+								<p className="text-sm text-muted-foreground">
+									{t("overview.expansionDescription")}
+								</p>
+							</div>
+						</div>
+						<Button asChild>
+							<Link href={`/${slug}/settings/billing`}>
+								{t("overview.expansionCta")}
+							</Link>
+						</Button>
 					</CardContent>
 				</Card>
 			)}

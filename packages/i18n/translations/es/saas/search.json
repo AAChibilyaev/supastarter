@@ -394,7 +394,10 @@
 			"searchesLabel": "Búsquedas",
 			"freePlan": "Gratis",
 			"activeReindexJobs": "Trabajos de reindexación activos",
-			"reindexProgress": "{processed} / {total} documentos"
+			"reindexProgress": "{processed} / {total} documentos",
+			"expansionTitle": "¿Listo para actualizar?",
+			"expansionDescription": "Has completado todos los pasos de configuración. Actualiza a Pro para desbloquear ranking personalizado, análisis avanzados y límites más altos.",
+			"expansionCta": "Actualizar a Pro"
 		},
 		"gettingStarted": {
 			"title": "Primeros pasos",

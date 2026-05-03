@@ -395,7 +395,10 @@
 			"searchesLabel": "Searches",
 			"freePlan": "Free",
 			"activeReindexJobs": "Active reindex jobs",
-			"reindexProgress": "{processed} / {total} documents"
+			"reindexProgress": "{processed} / {total} documents",
+			"expansionTitle": "Ready to upgrade?",
+			"expansionDescription": "You've completed all onboarding steps. Upgrade to Pro to unlock custom ranking, advanced analytics, and higher limits.",
+			"expansionCta": "Upgrade to Pro"
 		},
 		"gettingStarted": {
 			"title": "Getting Started",

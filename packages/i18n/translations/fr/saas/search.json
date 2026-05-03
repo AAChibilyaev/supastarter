@@ -720,7 +720,10 @@
 			"searchesLabel": "Recherches",
 			"freePlan": "Gratuit",
 			"activeReindexJobs": "Tâches de réindexation actives",
-			"reindexProgress": "{processed} / {total} documents"
+			"reindexProgress": "{processed} / {total} documents",
+			"expansionTitle": "Prêt à passer à la vitesse supérieure ?",
+			"expansionDescription": "Tu as terminé toutes les étapes d'onboarding. Passe à Pro pour débloquer le classement personnalisé, les analyses avancées et des limites plus élevées.",
+			"expansionCta": "Passer à Pro"
 		},
 		"relevance": {
 			"tab": "Pertinence",

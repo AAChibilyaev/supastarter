@@ -395,7 +395,10 @@
 			"searchesLabel": "Запросы",
 			"freePlan": "Бесплатный",
 			"activeReindexJobs": "Активные задачи переиндексации",
-			"reindexProgress": "{processed} / {total} документов"
+			"reindexProgress": "{processed} / {total} документов",
+			"expansionTitle": "Готовы к апгрейду?",
+			"expansionDescription": "Вы завершили все шаги онбординга. Перейдите на Pro, чтобы получить кастомное ранжирование, расширенную аналитику и более высокие лимиты.",
+			"expansionCta": "Перейти на Pro"
 		},
 		"gettingStarted": {
 			"title": "Начало работы",

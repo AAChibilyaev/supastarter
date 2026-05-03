@@ -395,7 +395,10 @@
 			"searchesLabel": "Suchen",
 			"freePlan": "Kostenlos",
 			"activeReindexJobs": "Aktive Neuindizierungsaufgaben",
-			"reindexProgress": "{processed} / {total} Dokumente"
+			"reindexProgress": "{processed} / {total} Dokumente",
+			"expansionTitle": "Bereit für ein Upgrade?",
+			"expansionDescription": "Du hast alle Onboarding-Schritte abgeschlossen. Upgrade auf Pro für benutzerdefiniertes Ranking, erweiterte Analysen und höhere Limits.",
+			"expansionCta": "Upgrade auf Pro"
 		},
 		"gettingStarted": {
 			"title": "Erste Schritte",

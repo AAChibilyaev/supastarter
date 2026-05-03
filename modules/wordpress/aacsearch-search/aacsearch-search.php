@@ -71,6 +71,12 @@ require_once AACSEARCH_SEARCH_DIR . 'includes/class-frontend.php';
 
 require_once AACSEARCH_SEARCH_DIR . 'includes/class-elementor.php';
 
+// ─── WP-CLI (loaded only in WP-CLI context) ────────────────────
+
+if (defined('WP_CLI') && WP_CLI) {
+    require_once AACSEARCH_SEARCH_DIR . 'includes/class-cli.php';
+}
+
 // ─── Activation / Deactivation ──────────────────────────────────
 
 register_activation_hook(__FILE__, 'aacsearch_search_activate');
@@ -175,3 +181,47 @@ function aacsearch_search_init_sync()
 
 // Shortcodes are registered by AACSearch_Frontend via class-frontend.php
 // The [aacsearch_search] shortcode is now handled by the frontend class.
+
+// ─── Elementor Integration ────────────────────────────────────────
+
+add_action('elementor/widgets/register', 'aacsearch_register_elementor_widgets');
+
+/**
+ * Register AACsearch Elementor widgets.
+ *
+ * @param \Elementor\Widgets_Manager $widgets_manager Elementor widgets manager.
+ */
+function aacsearch_register_elementor_widgets($widgets_manager)
+{
+    $search_widget_path = AACSEARCH_SEARCH_DIR . 'addons/elementor/class-elementor-search-widget.php';
+    $autocomplete_widget_path = AACSEARCH_SEARCH_DIR . 'addons/elementor/class-elementor-autocomplete-widget.php';
+
+    if (file_exists($search_widget_path)) {
+        require_once $search_widget_path;
+        $widgets_manager->register(new AACSearch_Elementor_Search_Widget());
+    }
+
+    if (file_exists($autocomplete_widget_path)) {
+        require_once $autocomplete_widget_path;
+        $widgets_manager->register(new AACSearch_Elementor_Autocomplete_Widget());
+    }
+}
+
+add_action('elementor/elements/categories_registered', 'aacsearch_add_elementor_category');
+
+/**
+ * Add AACsearch category to Elementor.
+ *
+ * @param \Elementor\Elements_Manager $elements_manager Elementor elements manager.
+ */
+function aacsearch_add_elementor_category($elements_manager)
+{
+    $elements_manager->add_category(
+        'aacsearch',
+        [
+            'title' => __('AACsearch', 'aacsearch-search'),
+            'icon'  => 'eicon-search',
+        ],
+        1 // Position: after general
+    );
+}

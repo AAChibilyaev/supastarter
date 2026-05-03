@@ -46,6 +46,7 @@ import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
+import { naturalLanguageSearch } from "./procedures/natural-language-search";
 import { spellCheck } from "./procedures/spell-check";
 import {
 	deleteStemmingOverride,
@@ -108,6 +109,7 @@ export const searchRouter = {
 	federatedSearch,
 	groupedSearch,
 	querySuggestions,
+	naturalLanguageSearch,
 	spellCheck,
 	listModels,
 	modelConfig: {

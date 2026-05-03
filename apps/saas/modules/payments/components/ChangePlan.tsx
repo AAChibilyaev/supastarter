@@ -310,23 +310,6 @@ export function ChangePlan({
 		}),
 	);
 
-	// ── Direct upgrade/downgrade ───────────────────────────────────────────
-
-	const changePlanMutation = useMutation(
-		orpc.payments.upgradeSubscription.mutationOptions({
-			onSuccess: () => {
-				logger.info("Subscription changed successfully");
-				setDialogOpen(false);
-				setDowngradeDialogOpen(false);
-				setSelectedPlanId(null);
-				router.refresh();
-			},
-			onError: (error) => {
-				logger.error("Failed to change subscription", { error });
-			},
-		}),
-	);
-
 	// ── Handle confirm upgrade ─────────────────────────────────────────────
 
 	const handleUpgrade = useCallback(async () => {
@@ -375,8 +358,8 @@ export function ChangePlan({
 		[activePlanId],
 	);
 
-	const isPending = changePlanMutation.isPending || createSessionMutation.isPending;
-	const error = changePlanMutation.error || createSessionMutation.error || prorationError;
+	const isPending = createSessionMutation.isPending;
+	const error = createSessionMutation.error || prorationError;
 
 	// ── Get active plan price ──────────────────────────────────────────────
 

@@ -71,6 +71,78 @@ export * from "./constants/local-storage";
 export { ControlsProvider, useControls } from "./providers/controls";
 export * from "./components/GlowBg";
 export * from "./components/LandingBand";
+// --- Admin components (shadcn-admin-kit) ---
+// Core admin views
+export { List, ListView, Empty } from "./components/admin/list";
+export { DataTable, DataTableColumn, DataTableNumberColumn } from "./components/admin/data-table";
+export { FilterForm, FilterButton } from "./components/admin/filter-form";
+export { ListPagination } from "./components/admin/list-pagination";
+export { CreateButton } from "./components/admin/create-button";
+export { EditButton } from "./components/admin/edit-button";
+export { ShowButton } from "./components/admin/show-button";
+export { DeleteButton } from "./components/admin/delete-button";
+export { ExportButton } from "./components/admin/export-button";
+export { RefreshButton } from "./components/admin/refresh-button";
+export { BulkActionsToolbar, BulkActionsToolbarChildren } from "./components/admin/bulk-actions-toolbar";
+export { BulkDeleteButton } from "./components/admin/bulk-delete-button";
+export { BulkExportButton } from "./components/admin/bulk-export-button";
+export { SelectAllButton } from "./components/admin/select-all-button";
+export { ColumnsButton } from "./components/admin/columns-button";
+export { FieldToggle } from "./components/admin/field-toggle";
+export { SearchInput } from "./components/admin/search-input";
+export { SortButton } from "./components/admin/sort-button";
+export { ToggleFilterButton } from "./components/admin/toggle-filter-button";
+export { SavedQueries, AddSavedQueryDialog, RemoveSavedQueryDialog } from "./components/admin/saved-queries";
+// Fields
+export { TextField } from "./components/admin/text-field";
+export { NumberField } from "./components/admin/number-field";
+export { DateField } from "./components/admin/date-field";
+export { BooleanField } from "./components/admin/boolean-field";
+export { EmailField } from "./components/admin/email-field";
+export { UrlField } from "./components/admin/url-field";
+export { ImageField } from "./components/admin/image-field";
+export { FileField } from "./components/admin/file-field";
+export { BadgeField } from "./components/admin/badge-field";
+export { SelectField } from "./components/admin/select-field";
+export { ArrayField } from "./components/admin/array-field";
+export { RecordField } from "./components/admin/record-field";
+export { ReferenceField } from "./components/admin/reference-field";
+export { ReferenceArrayField } from "./components/admin/reference-array-field";
+export { ReferenceManyField } from "./components/admin/reference-many-field";
+export { ReferenceManyCount } from "./components/admin/reference-many-count";
+export { SingleFieldList } from "./components/admin/single-field-list";
+// Inputs
+export { TextInput } from "./components/admin/text-input";
+export { NumberInput } from "./components/admin/number-input";
+export { DateInput } from "./components/admin/date-input";
+export { DateTimeInput } from "./components/admin/date-time-input";
+export { BooleanInput } from "./components/admin/boolean-input";
+export { SelectInput } from "./components/admin/select-input";
+export { AutocompleteInput } from "./components/admin/autocomplete-input";
+export { AutocompleteArrayInput } from "./components/admin/autocomplete-array-input";
+export { RadioButtonGroupInput } from "./components/admin/radio-button-group-input";
+export { TextArrayInput } from "./components/admin/text-array-input";
+export { FileInput } from "./components/admin/file-input";
+export { ArrayInput } from "./components/admin/array-input";
+export { ReferenceInput } from "./components/admin/reference-input";
+export { ReferenceArrayInput } from "./components/admin/reference-array-input";
+export { SearchInput } from "./components/admin/search-input";
+// Forms
+export { SimpleForm } from "./components/admin/simple-form";
+export { SimpleFormIterator } from "./components/admin/simple-form-iterator";
+export { SimpleShowLayout } from "./components/admin/simple-show-layout";
+// Buttons
+export { IconButtonWithTooltip } from "./components/admin/icon-button-with-tooltip";
+export { Confirm } from "./components/admin/confirm";
+export { CancelButton } from "./components/admin/cancel-button";
+export { Spinner } from "./components/admin/spinner";
+export { Loading } from "./components/admin/loading";
+// Admin app
+export { Admin } from "./components/admin/admin";
+export { Breadcrumb as AdminBreadcrumb } from "./components/admin/breadcrumb";
+export { Form as AdminForm } from "./components/admin/form";
+export { Notification } from "./components/admin/notification";
+export { ErrorComponent } from "./components/admin/error";
 export * from "./components/LandingFeature";
 export * from "./components/LandingFeatureList";
 export * from "./components/LandingPricingSection";

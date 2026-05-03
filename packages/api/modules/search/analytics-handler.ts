@@ -10,6 +10,7 @@
 
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
+import { isForwardableEvent, widgetEventToAnalyticsEvent, sendAnalyticsEvent } from "@repo/search";
 import { verifySearchApiKey } from "@repo/search";
 import type { Context } from "hono";
 import { Hono } from "hono";
@@ -124,6 +125,26 @@ export const analyticsApp = new Hono()
 					count: 1,
 				},
 			});
+
+			// Forward event to Typesense analytics (fire-and-forget)
+			// This feeds counter rules (popularity ranking) and log rules (ML data).
+			if (isForwardableEvent(type)) {
+				const meta: Record<string, unknown> = {
+					sessionId: sessionId ?? null,
+					query: query ?? null,
+					productId: productId ?? null,
+					position: _position ?? null,
+					filters: _filters ?? null,
+					sort: _sort ?? null,
+					locale: _locale ?? null,
+					referrer: _referrer ?? null,
+					ua: _userAgent ?? null,
+				};
+				const tsEvent = widgetEventToAnalyticsEvent(type, meta);
+				if (tsEvent) {
+					void sendAnalyticsEvent(tsEvent);
+				}
+			}
 
 			logger.debug("Analytics event recorded", {
 				type,

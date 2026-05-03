@@ -70,6 +70,13 @@ export {
 	type EmbeddingResult,
 } from "./lib/embeddings";
 export {
+	sendAnalyticsEvent,
+	sendAnalyticsEvents,
+	widgetEventToAnalyticsEvent,
+	isForwardableEvent,
+	type AnalyticsEvent,
+} from "./lib/analytics-events";
+export {
 	getCurationSetsForCollection,
 	deleteCurationSetById,
 	getSynonymSetsForCollection,

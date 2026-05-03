@@ -11,6 +11,11 @@
 
 import { recordSearchUsage, type Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
+import {
+	isForwardableEvent,
+	widgetEventToAnalyticsEvent,
+	sendAnalyticsEvent,
+} from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -103,6 +108,17 @@ export const eventsApp = new Hono()
 					ua,
 					extra: ev.metadata ?? null,
 				};
+
+				// Forward forwardable events to Typesense analytics (fire-and-forget)
+				// This feeds counter rules (popularity ranking) and log rules (ML data).
+				if (isForwardableEvent(ev.type)) {
+					const tsEvent = widgetEventToAnalyticsEvent(ev.type, meta);
+					if (tsEvent) {
+						// Must not await — the calling code must not block on Typesense
+						void sendAnalyticsEvent(tsEvent);
+					}
+				}
+
 				return recordSearchUsage({
 					indexId: verified.indexId,
 					organizationId: verified.organizationId,

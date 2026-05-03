@@ -19,6 +19,11 @@ const JOB_DEFINITIONS = [
 		path: "/api/cron/reconcile-tochka-topups",
 		secretEnv: "WALLET_CRON_SECRET",
 	},
+	{
+		name: "Index health check cron",
+		path: "/api/cron/index-health",
+		secretEnv: "INDEX_HEALTH_CRON_SECRET",
+	},
 ] as const;
 
 export const listJobs = adminProcedure

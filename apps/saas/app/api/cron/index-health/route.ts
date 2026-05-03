@@ -1,6 +1,5 @@
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
-import { sendEmail } from "@repo/mail";
 import {
 	checkIndexHealth,
 	detectAnomalies,
@@ -54,7 +53,6 @@ export async function POST(request: Request) {
 	};
 
 	try {
-		// Get all organizations that have search indexes
 		const orgs = await db.organization.findMany({
 			where: {
 				searchIndexes: {
@@ -83,7 +81,6 @@ export async function POST(request: Request) {
 						if (shouldSendAlert(org.metadata, alertKey)) {
 							result.alertsSent++;
 
-							// Send Slack alert if webhook is configured
 							const metadata = parseOrgMetadata(org.metadata);
 							const slackWebhookUrl = metadata.slackWebhookUrl;
 
@@ -102,19 +99,9 @@ export async function POST(request: Request) {
 								);
 							}
 
-							// Send email alert to org owners/admins
-							await sendAnomalyEmailAlert(org.id, event).catch((err: unknown) =>
-								logger.error("index-health cron: email alert failed", {
-									error: err,
-									orgId: org.id,
-									eventType: event.type,
-								}),
-							);
-
 							await markAlertSent(org.id, alertKey);
 						}
 
-						// Auto-pause for critical anomalies
 						if (
 							event.severity === "critical" &&
 							(event.type === "drift" || event.type === "doc_drop")
@@ -144,7 +131,6 @@ export async function POST(request: Request) {
 			}
 		}
 
-		// Report to Sentry if anomalies found
 		if (result.anomaliesFound > 0) {
 			Sentry.captureEvent({
 				message: `index-health: ${result.anomaliesFound} anomalies across ${result.organizationsChecked} orgs`,
@@ -175,96 +161,45 @@ export async function POST(request: Request) {
 // ─── Helpers ─────────────────────────────────────────────────────
 
 interface OrgMetadata {
-  indexHealthAlerts?: Record<string, number>;
-  slackWebhookUrl?: string;
+	indexHealthAlerts?: Record<string, number>;
+	slackWebhookUrl?: string;
 }
 
 function parseOrgMetadata(raw: string | null): OrgMetadata {
-  if (!raw) return {};
-  try {
-    const parsed = JSON.parse(raw);
-    if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
-      return parsed as OrgMetadata;
-    }
-    return {};
-  } catch {
-    return {};
-  }
+	if (!raw) return {};
+	try {
+		const parsed = JSON.parse(raw);
+		if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+			return parsed as OrgMetadata;
+		}
+		return {};
+	} catch {
+		return {};
+	}
 }
 
-/**
- * Send a Slack message via incoming webhook.
- * Lightweight inline version of the function in the entitlements module
- * — kept here to avoid cross-package dependency.
- */
 async function sendSlackAlert(
-  webhookUrl: string,
-  payload: Record<string, unknown>,
+	webhookUrl: string,
+	payload: Record<string, unknown>,
 ): Promise<boolean> {
-  try {
-    const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+	try {
+		const response = await fetch(webhookUrl, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(payload),
+		});
 
-    if (!response.ok) {
-      logger.error("Slack webhook returned error", {
-        status: response.status,
-        statusText: response.statusText,
-      });
-      return false;
-    }
+		if (!response.ok) {
+			logger.error("Slack webhook returned error", {
+				status: response.status,
+				statusText: response.statusText,
+			});
+			return false;
+		}
 
-    return true;
-  } catch (error) {
-    logger.error("Failed to send Slack alert", { error });
-    return false;
-  }
-}
-
-async function sendAnomalyEmailAlert(
-	organizationId: string,
-	event: {
-		type: string;
-		severity: string;
-		message: string;
-	},
-): Promise<void> {
-	const members = await db.member.findMany({
-		where: {
-			organizationId,
-			role: { in: ["owner", "admin"] },
-		},
-		select: {
-			userId: true,
-			user: {
-				select: { email: true, locale: true },
-			},
-		},
-	});
-
-	await Promise.all(
-		members.map((m) => {
-			if (!m.user.email) return Promise.resolve();
-
-			return sendEmail({
-				to: m.user.email,
-				locale: (m.user.locale ?? "en") as "en" | "de" | "es" | "fr" | "ru",
-				templateId: "indexHealthAlert",
-				context: {
-					alertType: event.type,
-					severity: event.severity,
-					message: event.message,
-					dashboardUrl: `${process.env.NEXT_PUBLIC_SAAS_URL ?? "http://localhost:3000"}/org/${organizationId}/overview`,
-				},
-			}).catch((err: unknown) =>
-				logger.error("sendAnomalyEmailAlert: email failed", {
-					error: err,
-					userId: m.userId,
-					organizationId,
-				}),
-			);
-		}),
-	);
+		return true;
+	} catch (error) {
+		logger.error("Failed to send Slack alert", { error });
+		return false;
+	}
 }

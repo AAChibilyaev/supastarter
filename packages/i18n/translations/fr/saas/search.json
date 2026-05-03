@@ -656,7 +656,12 @@
 			"ctrByPosition": "CTR by Position",
 			"ctrByIndex": "CTR by Index",
 			"geoMap": "Carte géographique",
-			"geoMapDescription": "Géographie des requêtes de recherche — bientôt disponible"
+			"geoMapDescription": "Géographie des requêtes de recherche — bientôt disponible",
+			"geoTitle": "Géographie des recherches",
+			"geoNoData": "Pas encore de données géographiques",
+			"geoNoDataDescription": "Les données géographiques apparaîtront lorsque les requêtes incluront des métadonnées de localisation.",
+			"regionColumn": "Région",
+			"shareColumn": "Part"
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

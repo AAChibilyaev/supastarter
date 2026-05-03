@@ -34,6 +34,7 @@ import { CTRDashboard } from "./CTRDashboard";
 import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
 import { FailedQueriesTable } from "./FailedQueriesTable";
+import { GeoMapCard } from "./GeoMapCard";
 
 type PeriodKey = "24h" | "7d" | "30d";
 
@@ -354,6 +355,26 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 			{/* CTR Trend chart */}
 			<CtrTrendChart data={analyticsData?.ctrTrend ?? []} />
+
+			{/* Geo Map card */}
+			<GeoMapCard
+				data={
+					// TODO: Add geoRegions to analytics API output when geo tracking is implemented
+					(analyticsData as Record<string, unknown>)?.geoRegions
+						? (
+								(analyticsData as Record<string, unknown>).geoRegions as Array<{
+									region: string;
+									searches: number;
+								}>
+							).map((r) => ({
+								region: r.region,
+								searches: r.searches,
+								percentage:
+									totalSearches > 0 ? (r.searches / totalSearches) * 100 : 0,
+							}))
+						: []
+				}
+			/>
 
 			{/* Top 10 queries table */}
 			<Card>

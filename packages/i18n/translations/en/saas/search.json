@@ -230,7 +230,12 @@
 			"geoMap": "Geo Map",
 			"geoMapDescription": "Search query geography — coming soon",
 			"abTestTitle": "A/B Tests",
-			"abTestDescription": "Run A/B experiments on your search configuration."
+			"abTestDescription": "Run A/B experiments on your search configuration.",
+			"geoTitle": "Search Geography",
+			"geoNoData": "No geography data yet",
+			"geoNoDataDescription": "Geographic data will appear once search queries include location metadata.",
+			"regionColumn": "Region",
+			"shareColumn": "Share"
 		},
 		"widget": {
 			"description": "Configure and customize your search widget. Set up filters, autocomplete, voice search, and embed it on your site.",

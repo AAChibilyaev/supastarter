@@ -229,7 +229,12 @@
 			"geoMapDescription": "Geografía de consultas de búsqueda — próximamente",
 			"abTestTitle": "Pruebas A/B",
 			"abTestDescription": "Ejecute experimentos A/B en su configuración de búsqueda.",
-			"ctrTrendDesc": "Tasa de clics en el tiempo"
+			"ctrTrendDesc": "Tasa de clics en el tiempo",
+			"geoTitle": "Geografía de búsqueda",
+			"geoNoData": "Aún no hay datos geográficos",
+			"geoNoDataDescription": "Los datos geográficos aparecerán cuando las consultas incluyan metadatos de ubicación.",
+			"regionColumn": "Región",
+			"shareColumn": "Participación"
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",

@@ -230,7 +230,12 @@
 			"geoMapDescription": "Geografie der Suchanfragen — bald verfügbar",
 			"abTestTitle": "A/B-Tests",
 			"abTestDescription": "Führen Sie A/B-Experimente mit Ihrer Suchkonfiguration durch.",
-			"ctrTrendDesc": "Klickrate im Zeitverlauf"
+			"ctrTrendDesc": "Klickrate im Zeitverlauf",
+			"geoTitle": "Suchgeografie",
+			"geoNoData": "Noch keine Geodaten",
+			"geoNoDataDescription": "Geografische Daten erscheinen, sobald Suchanfragen Standortmetadaten enthalten.",
+			"regionColumn": "Region",
+			"shareColumn": "Anteil"
 		},
 		"widget": {
 			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",

@@ -56,10 +56,8 @@ export function PreferredCurrencySelector({
 	const handleSelect = (currency: string) => {
 		const value = currency === "none" ? null : currency;
 		mutation.mutate({
-			input: {
-				organizationId,
-				preferredCurrency: value,
-			},
+			organizationId,
+			preferredCurrency: value,
 		});
 	};
 

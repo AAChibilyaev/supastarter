@@ -30,7 +30,7 @@ export function LowBalanceBanner({
 	if (!isLow) return null;
 
 	return (
-		<Alert variant="destructive">
+		<Alert variant="error">
 			<AlertTitle className="font-semibold">{t("title")}</AlertTitle>
 			<AlertDescription className="mt-1">
 				{t("message", { balance: formatKopecks(available, { appLocale: locale }) })}

@@ -30,14 +30,12 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 	const startingAfter = cursorStack[cursorStack.length - 1];
 
 	// Fetch preferred currency for the organization
-	const { data: prefCurrencyData } = useQuery(
-		orpc.payments.getPreferredCurrency.queryOptions({
+	const { data: prefCurrencyData } = useQuery({
+		...orpc.payments.getPreferredCurrency.queryOptions({
 			input: { organizationId: organizationId ?? "" },
 		}),
-		{
-			enabled: !!organizationId,
-		},
-	);
+		enabled: !!organizationId,
+	});
 
 	const preferredCurrency = prefCurrencyData?.preferredCurrency ?? undefined;
 

@@ -250,7 +250,7 @@ interface PlanDataEntry {
 
 export function ChangePlan({
 	organizationId,
-	_userId,
+	userId: _userId,
 	activePlanId,
 }: {
 	organizationId?: string;
@@ -696,7 +696,6 @@ function PlanComparisonTable({
 	selectedPlanId,
 	onSelectPlan,
 	t,
-	_format,
 }: PlanComparisonTableProps) {
 	const allFeatures = useMemo(() => {
 		const featureSet = new Set<string>();

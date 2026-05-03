@@ -57,7 +57,7 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 		orpc.payments.setDefaultPaymentMethod.mutationOptions({
 			onSuccess: () => {
 				void qc.invalidateQueries({
-					queryKey: orpc.payments.listPaymentMethods.queryKey(),
+					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { organizationId } }),
 				});
 			},
 			onError: () => {
@@ -70,7 +70,7 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 		orpc.payments.deletePaymentMethod.mutationOptions({
 			onSuccess: () => {
 				void qc.invalidateQueries({
-					queryKey: orpc.payments.listPaymentMethods.queryKey(),
+					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { organizationId } }),
 				});
 				toastSuccess(t("settings.billing.paymentMethods.delete"));
 			},

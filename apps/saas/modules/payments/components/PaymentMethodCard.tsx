@@ -111,7 +111,19 @@ function ConfirmDeleteDialog({
 
 declare global {
 	interface Window {
-		Stripe: unknown;
+		Stripe: new (publishKey: string) => {
+			elements: (opts: { clientSecret: string }) => {
+				create: (
+					type: string,
+					opts?: Record<string, unknown>,
+				) => { mount: (el: HTMLElement) => void };
+			};
+			confirmSetup: (opts: {
+				elements: unknown;
+				clientSecret: string;
+				confirmParams: { return_url: string };
+			}) => Promise<{ error?: { message: string } }>;
+		};
 	}
 }
 
@@ -164,7 +176,7 @@ function AddCardModal({
 		if (!stripeLoaded || !clientSecret || !elementsRef.current || elementsInstanceRef.current)
 			return;
 
-		const stripe = new (window as unknown as Record<string, unknown>).Stripe(
+		const stripe = new window.Stripe(
 			// Stripe publishable key — loaded from env
 			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "",
 		);
@@ -191,13 +203,7 @@ function AddCardModal({
 		setError(null);
 
 		try {
-			const stripe = stripeRef.current as {
-				confirmSetup: (opts: {
-					elements: unknown;
-					clientSecret: string;
-					confirmParams: { return_url: string };
-				}) => Promise<{ error?: { message: string } }>;
-			};
+			const stripe = stripeRef.current as InstanceType<typeof window.Stripe>;
 
 			const { error: confirmError } = await stripe.confirmSetup({
 				elements: elementsInstanceRef.current,
@@ -213,13 +219,15 @@ function AddCardModal({
 			} else {
 				// Success — invalidate and close
 				queryClient.invalidateQueries({
-					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
+					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: {} }),
 				});
 				toastSuccess(t("settings.billing.paymentMethod.cardAdded"));
 				onClose();
 			}
-		} catch {
-			setError(t("settings.billing.paymentMethod.setupError"));
+		} catch (e) {
+			setError(
+				e instanceof Error ? e.message : t("settings.billing.paymentMethod.setupError"),
+			);
 			setIsProcessing(false);
 		}
 	};
@@ -293,9 +301,9 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 	} | null>(null);
 	const [showAddCard, setShowAddCard] = useState(false);
 
-	const { data: methods = [], isLoading } = useQuery(
+	const { data: methodsData, isLoading } = useQuery(
 		orpc.payments.listPaymentMethods.queryOptions({
-			input: { purchaseId },
+			input: {},
 		}),
 	);
 
@@ -303,7 +311,7 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 		orpc.payments.detachPaymentMethod.mutationOptions({
 			onSuccess: () => {
 				queryClient.invalidateQueries({
-					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
+					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: {} }),
 				});
 				toastSuccess(t("settings.billing.paymentMethod.deleteSuccess"));
 				setDeleteTarget(null);
@@ -318,7 +326,7 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 		orpc.payments.setDefaultPaymentMethod.mutationOptions({
 			onSuccess: () => {
 				queryClient.invalidateQueries({
-					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
+					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: {} }),
 				});
 				toastSuccess(t("settings.billing.paymentMethod.defaultSuccess"));
 			},
@@ -336,6 +344,7 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 		);
 	}
 
+	const methods = methodsData?.paymentMethods ?? [];
 	const defaultMethod = methods.find((m) => m.isDefault);
 	const otherMethods = methods.filter((m) => !m.isDefault);
 
@@ -390,7 +399,6 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 								method={method}
 								onSetDefault={() =>
 									setDefaultMutation.mutate({
-										purchaseId,
 										paymentMethodId: method.id,
 									})
 								}

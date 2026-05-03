@@ -60,16 +60,16 @@ export function PricingRateCard() {
 										{rule.model}
 									</TableCell>
 									<TableCell className="text-xs text-right tabular-nums">
-										{fmt(rule.inputPer1MTokensKopecks)}
+										{fmt(rule.inputPer1MTokensKopecks ?? "0")}
 									</TableCell>
 									<TableCell className="text-xs text-right tabular-nums">
-										{fmt(rule.outputPer1MTokensKopecks)}
+										{fmt(rule.outputPer1MTokensKopecks ?? "0")}
 									</TableCell>
 									<TableCell className="text-xs text-right tabular-nums">
-										{fmt(rule.embeddingPer1MTokensKopecks)}
+										{fmt(rule.embeddingPer1MTokensKopecks ?? "0")}
 									</TableCell>
 									<TableCell className="text-xs text-right tabular-nums">
-										{BigInt(rule.flatFeeKopecks) > 0n
+										{Number(rule.flatFeeKopecks ?? 0) > 0
 											? fmt(rule.flatFeeKopecks)
 											: "—"}
 									</TableCell>

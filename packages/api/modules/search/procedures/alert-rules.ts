@@ -164,9 +164,7 @@ export const updateAlertRules = protectedProcedure
 		const updated: OrgMetadata = {
 			...meta,
 			alertRules: input.rules,
-			...(input.slackWebhookUrl !== undefined
-				? { slackWebhookUrl: input.slackWebhookUrl }
-				: {}),
+			slackWebhookUrl: input.slackWebhookUrl ?? undefined,
 		};
 
 		await db.organization.update({

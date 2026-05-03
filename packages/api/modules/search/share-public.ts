@@ -166,7 +166,6 @@ export const shareApp = new Hono()
 				filterBy: parsed.data.filterBy,
 				facetBy: parsed.data.facetBy,
 				sortBy: parsed.data.sortBy,
-				includeFields: parsed.data.includeFields,
 				perPage: parsed.data.perPage,
 				page: parsed.data.page,
 			});

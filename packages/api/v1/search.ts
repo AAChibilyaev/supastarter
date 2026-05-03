@@ -48,35 +48,33 @@ const searchInputSchema = z.object({
 		.optional(),
 	infix: z.enum(["off", "always", "fallback"]).optional(),
 	queryByWeights: z.string().optional(),
-	// ── Geo Search ──
-	polygonFilter: geoPolygonSchema.optional(),
-	boundingBoxFilter: geoBoundingBoxSchema.optional(),
-	// ── Search Params Extensions ──
+	// ── Fields ──
 	excludeFields: z.string().optional(),
 	includeFields: z.string().optional(),
+	// ── Highlighting ──
 	highlightStartTag: z.string().optional(),
 	highlightEndTag: z.string().optional(),
+	// ── Curation ──
 	curationTags: z.string().optional(),
+	// ── Hybrid ──
 	hybridConfidence: z.number().min(0).max(1).optional(),
-	// ── Faceted Search extensions ──
-	maxFacetValues: z.number().int().min(1).optional(),
+	// ── Facets ──
+	maxFacetValues: z.number().int().min(1).max(1000).optional(),
 	facetQuery: z.string().optional(),
 	facetSearch: z.string().optional(),
-	/** Percentage of documents to sample for facet counts (0–100). */
-	facetSamplePercent: z.number().min(0).max(100).optional(),
-	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetSamplePercent: z.number().int().min(0).max(100).optional(),
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
-	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
 	facetSortBy: z.string().optional(),
+	// ── Geo ──
+	polygonFilter: geoPolygonSchema.optional(),
+	boundingBoxFilter: geoBoundingBoxSchema.optional(),
 });
 
 type SearchInput = z.infer<typeof searchInputSchema>;
 
-function coerceExact(value: unknown): boolean | undefined {
-	if (typeof value === "boolean") return value;
-	if (value === "true") return true;
-	if (value === "false") return false;
-	return undefined;
+function coerceExact(val: boolean | "true" | "false"): boolean {
+	if (typeof val === "boolean") return val;
+	return val === "true";
 }
 
 function parseSearchInput(body: unknown): SearchInput {
@@ -118,7 +116,7 @@ export const searchApp = new Hono()
 			return c.json(
 				{
 					error: "validation_error",
-					message: z.ZodError.isZodError(err) ? err.issues : String(err),
+					message: err instanceof z.ZodError ? err.issues : String(err),
 				},
 				400,
 			);
@@ -127,7 +125,7 @@ export const searchApp = new Hono()
 		const startTime = Date.now();
 
 		const result = await searchDocuments({
-			collection: aliasName(verified.organizationId, indexSlug),
+			alias: aliasName(verified.organizationId, indexSlug),
 			tenantId: verified.organizationId,
 			q: input.q,
 			queryBy: input.queryBy,
@@ -137,33 +135,19 @@ export const searchApp = new Hono()
 			perPage: input.perPage,
 			page: input.page,
 			highlightFields: input.highlightFields,
-			numTypos: input.numTypos,
-			typoTokensThreshold: input.typoTokensThreshold,
-			dropTokensThreshold: input.dropTokensThreshold,
-			exact: input.exact,
-			prioritizeExactMatch: input.prioritizeExactMatch,
-			prefix: input.prefix,
-			infix: input.infix,
-			queryByWeights: input.queryByWeights,
-			excludeFields: input.excludeFields,
-			includeFields: input.includeFields,
-			highlightStartTag: input.highlightStartTag,
-			highlightEndTag: input.highlightEndTag,
-			curationTags: input.curationTags,
-			hybridConfidence: input.hybridConfidence,
+			...(input.exact !== undefined && { exact: coerceExact(input.exact) }),
 			maxFacetValues: input.maxFacetValues,
 			facetQuery: input.facetQuery,
 			facetSearch: input.facetSearch,
 			facetSamplePercent: input.facetSamplePercent,
 			facetStrategy: input.facetStrategy,
 			facetSortBy: input.facetSortBy,
-			polygonFilter: input.polygonFilter,
-			boundingBoxFilter: input.boundingBoxFilter,
 		});
 
 		endLatency();
 
 		void recordSearchUsage({
+			indexId: indexSlug,
 			organizationId: verified.organizationId,
 			type: "search_query",
 			count: 1,
@@ -203,7 +187,7 @@ export const searchApp = new Hono()
 			return c.json(
 				{
 					error: "validation_error",
-					message: z.ZodError.isZodError(err) ? err.issues : String(err),
+					message: err instanceof z.ZodError ? err.issues : String(err),
 				},
 				400,
 			);
@@ -211,10 +195,10 @@ export const searchApp = new Hono()
 
 		// Build multi-search entries with tenant prefix on collection names
 		const entries = parsed.searches.map((s) => ({
-			collection: aliasName(verified.organizationId, s.indexSlug),
+			alias: aliasName(verified.organizationId, s.indexSlug),
 			tenantId: verified.organizationId,
 			...s.search,
-			exact: coerceExact(s.search.exact),
+			exact: s.search.exact !== undefined ? coerceExact(s.search.exact) : undefined,
 		}));
 
 		const endLatency = trackSearchLatency(getMetrics(), "multi-search");
@@ -223,11 +207,15 @@ export const searchApp = new Hono()
 
 		endLatency();
 
-		void recordSearchUsage({
-			organizationId: verified.organizationId,
-			type: "search_query",
-			count: 1,
-		}).catch((e) => logger.error("Failed to record search usage", e));
+		// Record search usage per index
+		for (const s of parsed.searches) {
+			void recordSearchUsage({
+				indexId: s.indexSlug,
+				organizationId: verified.organizationId,
+				type: "search_query",
+				count: 1,
+			}).catch((e) => logger.error("Failed to record search usage", e));
+		}
 
 		return c.json(result);
 	});

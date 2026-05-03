@@ -50,6 +50,13 @@ export const searchFieldSchema = z.object({
 	stem: z.boolean().optional(),
 	/** Distance metric for vector fields: cosine similarity or inner product */
 	vec_dist: z.enum(["cosine", "ip"]).optional(),
+	/**
+	 * Hierarchical facet separator / locale.
+	 * When set on a string/facet field, values are treated as hierarchical paths.
+	 * E.g. "/" means values like "Electronics/Phones/Smartphones" are split
+	 * into hierarchy levels for drill-down faceting.
+	 */
+	locale: z.string().optional(),
 });
 
 export type SearchFieldInput = z.infer<typeof searchFieldSchema>;

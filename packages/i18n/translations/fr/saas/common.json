@@ -1,72 +1,72 @@
 {
-	"app": {
-		"menu": {
-			"accountSettings": "Paramètres du compte",
-			"admin": "Admin",
-			"navigationTitle": "Menu",
-			"openNavigation": "Ouvrir la navigation",
-			"organizationSettings": "Paramètres de l'organisation",
-			"search": "Recherche",
-			"mySearch": "Ma Recherche",
-			"start": "Démarrage"
-		},
-		"userMenu": {
-			"accountSettings": "Paramètres du compte",
-			"colorMode": "Mode couleur",
-			"documentation": "Documentation",
-			"home": "Accueil",
-			"logout": "Déconnexion"
-		},
-		"notifications": {
-			"title": "Notifications",
-			"empty": "Aucune notification pour le moment.",
-			"markAllRead": "Tout marquer comme lu",
-			"fallbackTitle": "Notification",
-			"aria": {
-				"open": "Ouvrir les notifications"
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Annuler",
-			"confirm": "Confirmer"
-		},
-		"actions": {
-			"continue": "Continuer",
-			"verify": "Vérifier"
-		},
-		"colorMode": {
-			"system": "Système",
-			"light": "Clair",
-			"dark": "Sombre"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 caractères",
-			"upperAndLowercase": "Majuscules et minuscules",
-			"number": "Chiffre",
-			"specialCharacter": "Caractère spécial"
-		},
-		"close": "Fermer",
-		"clear": "Effacer",
-		"previous": "Précédent",
-		"next": "Suivant",
-		"loading": "Chargement...",
-		"selected": "Sélectionné"
-	},
-	"nav": {
-		"geoSearch": "Recherche géo",
-		"federatedSearch": "Fédérée",
-		"settings": "Paramètres",
-		"switchOrganization": "Changer d'organisation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page non trouvée",
-		"goToDashboard": "Aller au tableau de bord",
-		"goToHomepage": "Aller à l'accueil"
-	},
-	"documentation": {
-		"title": "Documentation"
-	}
+  "app": {
+    "menu": {
+      "accountSettings": "Paramètres du compte",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Ouvrir la navigation",
+      "organizationSettings": "Paramètres de l'organisation",
+      "search": "Recherche",
+      "mySearch": "Ma Recherche",
+      "start": "Démarrage"
+    },
+    "userMenu": {
+      "accountSettings": "Paramètres du compte",
+      "colorMode": "Mode couleur",
+      "documentation": "Documentation",
+      "home": "Accueil",
+      "logout": "Déconnexion"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "Aucune notification pour le moment.",
+      "markAllRead": "Tout marquer comme lu",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Ouvrir les notifications"
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Annuler",
+      "confirm": "Confirmer"
+    },
+    "actions": {
+      "continue": "Continuer",
+      "verify": "Vérifier"
+    },
+    "colorMode": {
+      "system": "Système",
+      "light": "Clair",
+      "dark": "Sombre"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 caractères",
+      "upperAndLowercase": "Majuscules et minuscules",
+      "number": "Chiffre",
+      "specialCharacter": "Caractère spécial"
+    },
+    "close": "Fermer",
+    "clear": "Effacer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "loading": "Chargement...",
+    "selected": "Sélectionné"
+  },
+  "nav": {
+    "geoSearch": "Recherche géo",
+    "federatedSearch": "Fédérée",
+    "settings": "Paramètres",
+    "switchOrganization": "Changer d'organisation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page non trouvée",
+    "goToDashboard": "Aller au tableau de bord",
+    "goToHomepage": "Aller à l'accueil"
+  },
+  "documentation": {
+    "title": "Documentation"
+  }
 }

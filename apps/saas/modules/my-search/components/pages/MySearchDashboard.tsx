@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@repo/ui/components/dialog";
 import { PageHeader } from "@shared/components/PageHeader";
 import { FileUpIcon, GlobeIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { CreateIndexForm } from "../CreateIndexForm";
 
@@ -34,8 +33,8 @@ export function MySearchDashboard() {
 
 			{/* Empty state — no indexes yet */}
 			<Card className="mt-6">
-				<CardContent className="flex flex-col items-center justify-center py-12 text-center">
-					<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+				<CardContent className="py-12 flex flex-col items-center justify-center text-center">
+					<div className="mb-4 h-16 w-16 flex items-center justify-center rounded-full bg-muted">
 						<SearchIcon className="h-8 w-8 text-muted-foreground" />
 					</div>
 
@@ -44,16 +43,12 @@ export function MySearchDashboard() {
 						{t("mySearch.noIndexesDescription")}
 					</p>
 
-					<div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-						<Dialog open={createOpen} onOpenChange={setCreateOpen}>
-							<DialogTrigger asChild>
-								<Button size="lg">
-									<FileUpIcon className="mr-2 h-4 w-4" />
-									{t("mySearch.createFromFiles")}
-								</Button>
-							</DialogTrigger>
-						</Dialog>
-						<Button size="lg" variant="outline">
+					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
+						<Button size="lg" onClick={() => setCreateOpen(true)}>
+							<FileUpIcon className="mr-2 h-4 w-4" />
+							{t("mySearch.createFromFiles")}
+						</Button>
+						<Button size="lg" variant="outline" onClick={() => setCreateOpen(true)}>
 							<GlobeIcon className="mr-2 h-4 w-4" />
 							{t("mySearch.createFromUrl")}
 						</Button>

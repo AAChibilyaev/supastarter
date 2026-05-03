@@ -2092,7 +2092,17 @@
 			"allTests": "All Tests",
 			"activeTests": "Active Tests",
 			"name": "Name",
-			"status": "Status"
+			"status": "Status",
+			"results": "Results",
+			"variantA": "Variant A",
+			"variantB": "Variant B",
+			"searches": "Searches",
+			"clicks": "Clicks",
+			"ctr": "CTR",
+			"zeroResults": "Zero Results",
+			"variantALeading": "Variant A leading by {diff}% CTR",
+			"variantBLeading": "Variant B leading by {diff}% CTR",
+			"variantsTied": "Variants are tied"
 		}
 	}
 }

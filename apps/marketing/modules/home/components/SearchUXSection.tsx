@@ -10,6 +10,8 @@ import {
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
+import { SearchUXMockupVisual } from "../../visuals/scenes/SearchUXMockupVisual";
+
 interface SearchUXItem {
 	key: "autocomplete" | "typo" | "facets" | "highlight" | "grouped" | "recovery";
 	icon: ComponentType<{ className?: string }>;
@@ -39,7 +41,11 @@ export function SearchUXSection() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
+				<div className="mt-12 md:mt-16">
+					<SearchUXMockupVisual />
+				</div>
+
+				<div className="mt-8 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
 						<Card key={key}>
 							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">

@@ -10,6 +10,8 @@ import {
 import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
+import { SecurityTokenVisual } from "../../visuals/scenes/SecurityTokenVisual";
+
 interface SecurityItem {
 	key: "scopedTokens" | "tenantIsolation" | "originRestriction" | "sso" | "compliance" | "sla";
 	icon: ComponentType<{ className?: string }>;
@@ -39,7 +41,11 @@ export function SecuritySection() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
+				<div className="mt-12 md:mt-16">
+					<SecurityTokenVisual />
+				</div>
+
+				<div className="mt-8 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
 						<Card key={key}>
 							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">

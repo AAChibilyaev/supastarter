@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 
+import { MigrationFlowVisual } from "../../visuals/scenes/MigrationFlowVisual";
+
 const STEPS = ["export", "import", "switch", "monitor"] as const;
 
 const stepIndex = ["01", "02", "03", "04"];
@@ -19,7 +21,11 @@ export function MigrationSection() {
 					</p>
 				</div>
 
-				<div className="mt-12 md:mt-16 gap-6 sm:grid-cols-2 grid grid-cols-1">
+				<div className="mt-12 md:mt-16">
+					<MigrationFlowVisual />
+				</div>
+
+				<div className="mt-8 gap-6 sm:grid-cols-2 grid grid-cols-1">
 					{STEPS.map((step, i) => (
 						<div key={step} className="gap-4 flex items-start">
 							<div className="size-10 text-sm font-medium flex shrink-0 items-center justify-center rounded-lg bg-muted text-foreground/60">

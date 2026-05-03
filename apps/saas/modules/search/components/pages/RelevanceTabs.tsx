@@ -16,6 +16,7 @@ import { EmptyState } from "../cards/EmptyState";
 import { CounterRulesPanel } from "../panels/CounterRulesPanel";
 import { CurationsPanel } from "../panels/CurationsPanel";
 import { NoHitsQueriesRulesPanel } from "../panels/NoHitsQueriesRulesPanel";
+import { QueryRulesPanel } from "../panels/QueryRulesPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { SpellCorrectionPanel } from "../panels/SpellCorrectionPanel";
 import { StemmingPanel } from "../panels/StemmingPanel";
@@ -70,6 +71,7 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 						<TabsTrigger value="nohitsQueries">
 							{t("search.nohitsQueries.tab")}
 						</TabsTrigger>
+						<TabsTrigger value="rules">{t("search.queryRules.tab")}</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">
@@ -100,6 +102,9 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 					</TabsContent>
 					<TabsContent value="nohitsQueries">
 						<NoHitsQueriesRulesPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+					<TabsContent value="rules">
+						<QueryRulesPanel organizationId={organizationId} slug={slug} />
 					</TabsContent>
 				</Tabs>
 			) : (

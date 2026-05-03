@@ -68,6 +68,7 @@ import {
 } from "./procedures/operations";
 import { getOverageStatus } from "./procedures/overage-status";
 import { pipelineStatus } from "./procedures/pipelineStatus";
+import { getQueryRules, updateQueryRules } from "./procedures/query-rules";
 import { querySuggestions } from "./procedures/query-suggestions";
 import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
 import { recentActivity } from "./procedures/recent-activity";
@@ -257,5 +258,9 @@ export const searchRouter = {
 	alertRules: {
 		get: getAlertRules,
 		update: updateAlertRules,
+	},
+	queryRules: {
+		get: getQueryRules,
+		update: updateQueryRules,
 	},
 };

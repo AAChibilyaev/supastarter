@@ -2185,6 +2185,19 @@
 			"noIndexesDesc": "Create a search index first to configure the widget.",
 			"queryBy": "Searchable fields",
 			"noSearchableFields": "No searchable fields configured."
+		},
+		"autoEmbed": {
+			"autoEmbedTitle": "Авто-эмбеддинг",
+			"autoEmbedDescription": "Автоматическая генерация векторных эмбеддингов из текстовых полей при индексировании.",
+			"autoEmbedFrom": "Исходные поля",
+			"autoEmbedFromHint": "Поля для генерации эмбеддингов (например, название, описание)",
+			"autoEmbedModel": "Модель эмбеддинга",
+			"autoEmbedApiKey": "API-ключ (опционально)",
+			"autoEmbedApiKeyHint": "Оставьте пустым для использования ключа провайдера по умолчанию",
+			"autoEmbedApiUrl": "URL API (опционально)",
+			"autoEmbedApiUrlHint": "Пользовательский endpoint для OpenAI-совместимых сервисов эмбеддинга",
+			"autoEmbedToggle": "Включить авто-эмбеддинг",
+			"autoEmbedWarning": "Авто-эмбеддинги пересчитываются только при изменении исходных полей. Для существующих документов требуется полный реиндекс."
 		}
 	},
 	"sdks": {

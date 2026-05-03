@@ -2185,6 +2185,19 @@
 			"noIndexesDesc": "Create a search index first to configure the widget.",
 			"queryBy": "Searchable fields",
 			"noSearchableFields": "No searchable fields configured."
+		},
+		"autoEmbed": {
+			"autoEmbedTitle": "Auto-Embedding",
+			"autoEmbedDescription": "Automatically generate vector embeddings from text fields during indexing.",
+			"autoEmbedFrom": "Source Fields",
+			"autoEmbedFromHint": "Fields to generate embeddings from (e.g., title, description)",
+			"autoEmbedModel": "Embedding Model",
+			"autoEmbedApiKey": "API Key (optional)",
+			"autoEmbedApiKeyHint": "Leave empty to use the default provider key",
+			"autoEmbedApiUrl": "API URL (optional)",
+			"autoEmbedApiUrlHint": "Custom endpoint for OpenAI-compatible embedding services",
+			"autoEmbedToggle": "Enable auto-embedding",
+			"autoEmbedWarning": "Auto-embedded vectors are recalculated only when source fields change. A full reindex is required for existing documents."
 		}
 	},
 	"sdks": {

@@ -2207,6 +2207,19 @@
 			"noIndexesDesc": "Créez d'abord un index de recherche pour configurer le widget.",
 			"queryBy": "Champs consultables",
 			"noSearchableFields": "Aucun champ consultable configuré."
+		},
+		"autoEmbed": {
+			"autoEmbedTitle": "Auto-Embedding",
+			"autoEmbedDescription": "Générer automatiquement des embeddings vectoriels à partir de champs texte lors de l'indexation.",
+			"autoEmbedFrom": "Champs sources",
+			"autoEmbedFromHint": "Champs pour générer les embeddings (ex., titre, description)",
+			"autoEmbedModel": "Modèle d'embedding",
+			"autoEmbedApiKey": "Clé API (optionnelle)",
+			"autoEmbedApiKeyHint": "Laisser vide pour utiliser la clé du fournisseur par défaut",
+			"autoEmbedApiUrl": "URL API (optionnelle)",
+			"autoEmbedApiUrlHint": "Endpoint personnalisé pour les services d'embedding compatibles OpenAI",
+			"autoEmbedToggle": "Activer l'auto-embedding",
+			"autoEmbedWarning": "Les auto-embeddings sont recalculés uniquement lorsque les champs sources changent. Un réindexation complète est nécessaire pour les documents existants."
 		}
 	},
 	"sdks": {

@@ -1,0 +1,190 @@
+---
+title: Python SDK
+description: Install and use the aacsearch Python SDK for search, index management, synonyms, curations, and analytics.
+---
+
+# Python SDK (`aacsearch`)
+
+The `aacsearch` Python package provides two clients:
+
+| Client | Scope | Key Prefix | Use Case |
+|--------|-------|-----------|----------|
+| `SearchClient` | search-only | `ss_search_*` | Public search from backend scripts |
+| `AdminClient` | full CRUD | `aa_admin_*` | Server-side management, CI/CD |
+
+## Installation
+
+Requires Python 3.9+.
+
+```bash
+pip install aacsearch
+```
+
+## Quick Start
+
+### SearchClient (public)
+
+Use with a search-scope API key (`ss_search_*`) or a scoped token (`ss_scoped_*`).
+
+```python
+from aacsearch import SearchClient
+
+client = SearchClient(
+    base_url="https://app.aacsearch.com",
+    api_key="ss_search_your_key_here",
+    index_slug="products",
+)
+
+# Basic search
+results = client.search(q="laptop")
+print(f"Found {results['found']} results")
+
+# Search with filters and facets
+results = client.search(
+    q="phone",
+    filter_by="price:<=500",
+    facet_by="brand,category",
+    sort_by="price:asc",
+    per_page=20,
+)
+
+# Multi-search (several queries in one request)
+combined = client.multi_search([
+    {"q": "laptop", "perPage": 5},
+    {"q": "phone", "perPage": 5},
+])
+```
+
+### AdminClient (server-side)
+
+Use with an admin-scope API key (`aa_admin_*`). Never bundle admin keys in browser code.
+
+```python
+from aacsearch import AdminClient
+
+admin = AdminClient(
+    base_url="https://app.aacsearch.com",
+    api_key="aa_admin_your_key_here",
+    project_id="org_xxx",
+)
+```
+
+#### Index Management
+
+```python
+# Create an index
+index = admin.create_index(
+    slug="products",
+    display_name="Products",
+    fields=[
+        {"name": "title", "type": "string"},
+        {"name": "description", "type": "string"},
+        {"name": "price", "type": "float", "sort": True},
+        {"name": "brand", "type": "string", "facet": True},
+        {"name": "category", "type": "string[]", "facet": True},
+    ],
+    default_sorting_field="price",
+)
+print(f"Created index: {index['id']}")
+
+# List all indexes
+indexes = admin.list_indexes()
+```
+
+#### Document Operations
+
+```python
+# Upsert a single document
+admin.upsert_document(
+    index_id=index["id"],
+    document_id="doc_001",
+    document={
+        "title": "MacBook Pro 16\"",
+        "description": "Apple M3 Pro chip, 18GB RAM",
+        "price": 2499.00,
+        "brand": "Apple",
+        "category": ["Laptops", "Apple"],
+    },
+)
+
+# Batch upsert (up to 5000)
+admin.batch_upsert_documents(
+    index_id=index["id"],
+    documents=[
+        {"id": "doc_002", "title": "iPhone 15 Pro", "price": 1199.00, "brand": "Apple"},
+        {"id": "doc_003", "title": "Galaxy S24", "price": 999.00, "brand": "Samsung"},
+    ],
+)
+```
+
+#### Synonyms
+
+```python
+admin.upsert_synonyms(
+    index_id=index["id"],
+    synonyms=[
+        {"root": "laptop", "synonym": "notebook"},
+        {"root": "laptop", "synonym": "ultrabook"},
+        {"root": "phone", "synonym": "smartphone"},
+    ],
+)
+```
+
+#### Curations
+
+```python
+admin.upsert_curations(
+    index_id=index["id"],
+    curations=[
+        {"query": "macbook", "pinnedIds": ["doc_001"]},
+    ],
+)
+```
+
+#### Analytics & Usage
+
+```python
+# 7-day analytics
+analytics = admin.get_analytics(period="7d")
+
+# 30-day usage data
+usage = admin.get_usage(window_days=30)
+```
+
+#### API Key Management
+
+```python
+# Create a search key
+key = admin.create_key(
+    name="My Search Key",
+    scopes=["search"],
+    index_slug="products",
+)
+print(f"Created key: {key['prefix']}... (plaintext: {key.get('key', 'shown once')})")
+
+# List and revoke keys
+keys = admin.list_keys()
+admin.revoke_key(key_id=key["id"])
+```
+
+## Error Handling
+
+```python
+from aacsearch import (
+    AacsearchError,
+    AuthenticationError,
+    NotFoundError,
+    RateLimitError,
+)
+
+try:
+    results = client.search(q="laptop")
+except AuthenticationError:
+    print("Invalid or expired API key")
+except NotFoundError:
+    print("Index not found")
+except RateLimitError:
+    print("Rate limit exceeded, retry later")
+except AacsearchError as e:
+    print(f"API error {e.status_code}: {e}")
+```

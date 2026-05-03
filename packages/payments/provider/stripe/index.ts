@@ -15,6 +15,7 @@ import type {
 	CancelSubscription,
 	CreateCheckoutLink,
 	CreateCustomerPortalLink,
+	GetProrationPreview,
 	SetSubscriptionSeats,
 	UpgradeSubscription,
 	WebhookHandler,
@@ -291,6 +292,88 @@ export const upgradeSubscription: UpgradeSubscription = async ({
 		to: newPriceId,
 		prorationBehavior,
 	});
+};
+
+/**
+ * Preview prorated charges/credits for a plan change without applying it.
+ * Uses Stripe's upcoming invoice endpoint to calculate the difference.
+ */
+export const getProrationPreview: GetProrationPreview = async ({
+	subscriptionId,
+	newPriceId,
+	seats,
+}) => {
+	const stripeClient = getStripeClient();
+
+	const subscription = await retryStripeCall(() =>
+		stripeClient.subscriptions.retrieve(subscriptionId),
+	);
+
+	if (!subscription) {
+		throw new Error(`Subscription ${subscriptionId} not found`);
+	}
+
+	const currentItem = subscription.items?.data[0];
+	if (!currentItem) {
+		throw new Error(`No items found on subscription ${subscriptionId}`);
+	}
+
+	// Build the items array for the preview (same as upgrade would do)
+	const items: Stripe.InvoiceRetrieveUpcomingParams.SubscriptionItem[] = [
+		{
+			id: currentItem.id,
+			deleted: true,
+		},
+		{
+			price: newPriceId,
+			...(seats ? { quantity: seats } : {}),
+		},
+	];
+
+	// Retrieve the upcoming invoice with the proposed changes
+	const upcoming = await retryStripeCall(() =>
+		stripeClient.invoices.retrieveUpcoming({
+			customer: subscription.customer as string,
+			subscription: subscriptionId,
+			subscription_items: items,
+			subscription_proration_behavior: "create_prorations",
+		}),
+	);
+
+	// Calculate the immediate proration amount (total due from the upcoming invoice)
+	const immediateAmount = upcoming.total ?? 0;
+	const currency = (upcoming.currency ?? "usd").toUpperCase();
+	const prorationDate = upcoming.created;
+
+	// The next full-period invoice will not include the old item's proration credit
+	// Calculate the next period's regular amount
+	let nextInvoiceAmount: number | null = null;
+	const nextPeriodLine = upcoming.lines?.data?.find(
+		(line) =>
+			line.price?.id === newPriceId &&
+			line.period?.start &&
+			line.period.start >= subscription.current_period_end,
+	);
+	if (nextPeriodLine) {
+		nextInvoiceAmount = nextPeriodLine.amount;
+	}
+
+	// Calculate credit amount — sum of negative (credit) line items for the old subscription
+	const creditAmount = upcoming.lines?.data
+		?.filter(
+			(line) =>
+				line.amount < 0 &&
+				line.period?.start === subscription.current_period_start,
+		)
+		.reduce((sum, line) => sum + line.amount, 0) ?? 0;
+
+	return {
+		prorationDate,
+		immediateAmount,
+		currency,
+		nextInvoiceAmount,
+		creditAmount: Math.abs(creditAmount),
+	};
 };
 
 async function getPaymentRecipients(purchase: {

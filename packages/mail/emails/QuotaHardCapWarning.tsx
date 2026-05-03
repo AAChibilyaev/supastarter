@@ -9,14 +9,14 @@ import type { BaseMailProps } from "../types";
 
 export function QuotaHardCapWarning({
 	orgName,
-	_planName,
+	planName,
 	overageEnabled,
 	billingUrl,
 	locale,
 	translations,
 }: {
 	orgName: string;
-	_planName: string;
+	planName: string;
 	overageEnabled: boolean;
 	billingUrl: string;
 } & BaseMailProps) {

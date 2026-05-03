@@ -313,7 +313,7 @@ async function resolvePlanName(orgId: string): Promise<string> {
 			business: "Business",
 			enterprise: "Enterprise",
 		};
-		return planNames[planId] ?? "Free";
+		return planNames[planId ?? "free"] ?? "Free";
 	} catch {
 		return "Free";
 	}
@@ -339,8 +339,8 @@ export async function resetQuotaAlerts(organizationId: string): Promise<void> {
 		const newMetadata: OrgMetadata = {
 			...metadata,
 			quotaAlerts: {
-				search: { p80: false, p100: false },
-				ingest: { p80: false, p100: false },
+				search: { p50: false, p80: false, p100: false },
+				ingest: { p50: false, p80: false, p100: false },
 			},
 		};
 

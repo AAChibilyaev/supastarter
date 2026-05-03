@@ -36,7 +36,13 @@ export const spellConfigSchema = z.object({
 				normalizeYo: z.boolean().default(true),
 			}),
 		)
-		.default({}),
+		.default({
+			ru: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+			en: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+			de: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+			es: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+			fr: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+		}),
 });
 
 export type SpellConfig = z.infer<typeof spellConfigSchema>;
@@ -48,7 +54,13 @@ export const DEFAULT_SPELL_CONFIG: SpellConfig = {
 	splitCompoundWords: false,
 	mode: "auto",
 	useContextCorrection: false,
-	perLanguage: {},
+	perLanguage: {
+		ru: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+		en: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+		de: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+		es: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+		fr: { enabled: true, fixKeyboardLayout: true, transliterate: true, normalizeYo: true },
+	},
 };
 
 export const getSpellConfig = protectedProcedure

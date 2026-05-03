@@ -208,22 +208,26 @@ export const publicSearchApp = new Hono()
 				...(parsed.data.multiLocation && { multiLocation: parsed.data.multiLocation }),
 			});
 
+			// Store query_id in usage metadata for event association
+			const usageMeta: Record<string, unknown> = {
+				q: searchParams.q,
+				queryBy: searchParams.queryBy,
+				filterBy: searchParams.filterBy,
+				sortBy: searchParams.sortBy,
+				perPage: searchParams.perPage,
+				page: searchParams.page,
+				resultCount: result.found,
+				latencyMs: result.searchTimeMs,
+				ua: c.req.header("user-agent") ?? null,
+				referrer: c.req.header("referer") ?? null,
+				queryId: result.queryId ?? null,
+			};
+
 			void recordSearchUsage({
 				indexId: verified.indexId,
 				organizationId: verified.organizationId,
 				type: "search_query",
-				metadata: {
-					q: searchParams.q,
-					queryBy: searchParams.queryBy,
-					filterBy: searchParams.filterBy,
-					sortBy: searchParams.sortBy,
-					perPage: searchParams.perPage,
-					page: searchParams.page,
-					resultCount: result.found,
-					latencyMs: result.searchTimeMs,
-					ua: c.req.header("user-agent") ?? null,
-					referrer: c.req.header("referer") ?? null,
-				},
+				metadata: usageMeta as import("@repo/database").Prisma.InputJsonValue,
 			}).catch((error) => logger.error("Could not record search usage", { error }));
 
 			// Fire-and-forget: record FIRST_SEARCH activation milestone (idempotent)
@@ -351,6 +355,7 @@ export const publicSearchApp = new Hono()
 				perPage: result.perPage,
 				facetCounts: result.facetCounts,
 				searchTimeMs: result.searchTimeMs,
+				queryId: result.queryId,
 				didYouMean,
 			});
 		} catch (error) {

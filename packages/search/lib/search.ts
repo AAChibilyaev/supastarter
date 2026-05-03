@@ -63,6 +63,8 @@ export interface SearchDocumentsResult {
 	perPage: number;
 	facetCounts: unknown[];
 	searchTimeMs: number;
+	/** query_id from Typesense for analytics event association */
+	queryId?: string;
 }
 
 function combineTenantFilter(tenantId: string, userFilter?: string): string {
@@ -126,6 +128,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		perPage,
 		facetCounts: response.facet_counts ?? [],
 		searchTimeMs: response.search_time_ms ?? 0,
+		queryId: (response as unknown as Record<string, unknown>).query_id as string | undefined,
 	};
 }
 

@@ -118,3 +118,12 @@ export {
 	type IndexHealthResult,
 } from "./lib/health";
 export { sendSlackAlert, type SlackAlertPayload } from "./lib/slack";
+export {
+	buildPopularitySortBy,
+	buildPopularityThresholdSortBy,
+	DEFAULT_CLICK_COUNTER_RULE,
+	DEFAULT_CONVERSION_COUNTER_RULE,
+	DEFAULT_COMBINED_COUNTER_RULE,
+	type PopularityMetric,
+	type SortDirection,
+} from "./lib/popularity-ranking";

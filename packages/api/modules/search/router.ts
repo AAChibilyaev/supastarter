@@ -1,6 +1,11 @@
 import { getAlertRules, updateAlertRules } from "./procedures/alert-rules";
 import { analytics } from "./procedures/analytics";
 import {
+	listAnalyticsEvents,
+	getAnalyticsEvent,
+	getAnalyticsEventsByQuery,
+} from "./procedures/analytics-events-retrieval";
+import {
 	listAnalyticsRules,
 	createAnalyticsRule,
 	deleteAnalyticsRule,
@@ -224,6 +229,11 @@ export const searchRouter = {
 		list: listAnalyticsRules,
 		create: createAnalyticsRule,
 		delete: deleteAnalyticsRule,
+	},
+	analyticsEvents: {
+		list: listAnalyticsEvents,
+		get: getAnalyticsEvent,
+		byQuery: getAnalyticsEventsByQuery,
 	},
 	rankingRules: {
 		get: getRankingRules,

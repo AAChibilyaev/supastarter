@@ -21,7 +21,15 @@ import { resolveOrgPlanQuota } from "./lib/quota";
 import { triggerQuotaNotificationsAsync } from "./lib/quota-notifications";
 
 const eventSchema = z.object({
-	type: z.enum(["search_query", "zero_results", "result_click", "widget_open", "filter_used", "conversion", "visit"]),
+	type: z.enum([
+		"search_query",
+		"zero_results",
+		"result_click",
+		"widget_open",
+		"filter_used",
+		"conversion",
+		"visit",
+	]),
 	sessionId: z.string().min(1).max(64).optional(),
 	anonymousUserId: z.string().min(1).max(64).optional(),
 	query: z.string().max(512).optional(),

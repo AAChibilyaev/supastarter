@@ -6,7 +6,7 @@
  * analytics event model: search, click, conversion, visit.
  *
  * Events can be filtered by type, index, date range, and associated
- * with a specific query_id from a search response.
+ * with a specific query text from a search response.
  */
 
 import { db } from "@repo/database";
@@ -46,6 +46,8 @@ const eventOutputSchema = z.object({
 	createdAt: z.string(),
 });
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 export const listAnalyticsEvents = protectedProcedure
 	.route({
 		method: "GET",
@@ -64,53 +66,84 @@ export const listAnalyticsEvents = protectedProcedure
 		}),
 	)
 	.handler(async ({ input, context }) => {
-		await requireOrganizationMember(input.organizationId, context.user);
+		await requireOrganizationMember(input.organizationId, context.user.id);
 
-		const where: Record<string, unknown> = {
-			organizationId: input.organizationId,
-		};
+		// Build WHERE clause as raw SQL parts to avoid type issues with Prisma dynamic where
+		const conditions: string[] = ["event.organization_id = $1"];
+		const params: unknown[] = [input.organizationId];
+		let paramIndex = 2;
 
 		if (input.indexId) {
-			where.indexId = input.indexId;
+			conditions.push(`event.index_id = $${paramIndex}`);
+			params.push(input.indexId);
+			paramIndex++;
 		}
 
 		if (input.type) {
-			where.type = input.type;
+			conditions.push(`event.type = $${paramIndex}`);
+			params.push(input.type);
+			paramIndex++;
 		}
 
-		if (input.since || input.until) {
-			const createdAt: Record<string, Date> = {};
-			if (input.since) {
-				createdAt.gte = new Date(input.since);
-			}
-			if (input.until) {
-				createdAt.lte = new Date(input.until);
-			}
-			where.createdAt = createdAt;
+		if (input.since) {
+			conditions.push(`event.created_at >= $${paramIndex}`);
+			params.push(new Date(input.since));
+			paramIndex++;
 		}
 
-		const [events, total] = await Promise.all([
-			db.searchUsageEvent.findMany({
-				where: where as Parameters<typeof db.searchUsageEvent.findMany>[0]["where"],
-				orderBy: { createdAt: "desc" },
-				take: input.limit,
-				skip: input.offset,
-			}),
-			db.searchUsageEvent.count({
-				where: where as Parameters<typeof db.searchUsageEvent.count>[0]["where"],
-			}),
+		if (input.until) {
+			conditions.push(`event.created_at <= $${paramIndex}`);
+			params.push(new Date(input.until));
+			paramIndex++;
+		}
+
+		const whereClause = conditions.join(" AND ");
+
+		type EventRow = {
+			id: string;
+			index_id: string;
+			type: string;
+			count: number;
+			metadata: Record<string, unknown> | null;
+			created_at: Date;
+		};
+
+		const [events, totalRow] = await Promise.all([
+			db.$queryRawUnsafe<EventRow[]>(
+				`SELECT
+					event.id,
+					event.index_id,
+					event.type,
+					event.count,
+					event.metadata,
+					event.created_at
+				FROM search_usage_event event
+				WHERE ${whereClause}
+				ORDER BY event.created_at DESC
+				LIMIT $${paramIndex}
+				OFFSET $${paramIndex + 1}`,
+				...params,
+				input.limit,
+				input.offset,
+			),
+			db.$queryRawUnsafe<[{ total: bigint }]>(
+				`SELECT COUNT(*)::bigint AS total
+				FROM search_usage_event event
+				WHERE ${whereClause}`,
+				...params,
+			),
 		]);
 
 		return {
 			events: events.map((e) => ({
 				id: e.id,
-				indexId: e.indexId,
+				indexId: e.index_id,
 				type: e.type,
-				count: e.count,
+				count: Number(e.count),
 				metadata: e.metadata as Record<string, unknown> | null,
-				createdAt: e.createdAt.toISOString(),
+				createdAt: e.created_at.toISOString(),
 			})),
-			total,
+			total: Number(totalRow[0]?.total ?? 0),
 		};
 	});
 
@@ -130,24 +163,42 @@ export const getAnalyticsEvent = protectedProcedure
 	.input(getEventInputSchema)
 	.output(eventOutputSchema.nullable())
 	.handler(async ({ input, context }) => {
-		await requireOrganizationMember(input.organizationId, context.user);
+		await requireOrganizationMember(input.organizationId, context.user.id);
 
-		const event = await db.searchUsageEvent.findFirst({
-			where: {
-				id: input.eventId,
-				organizationId: input.organizationId,
-			},
-		});
+		type EventRow = {
+			id: string;
+			index_id: string;
+			type: string;
+			count: number;
+			metadata: Record<string, unknown> | null;
+			created_at: Date;
+		};
+
+		const [event] = await db.$queryRawUnsafe<EventRow[]>(
+			`SELECT
+				event.id,
+				event.index_id,
+				event.type,
+				event.count,
+				event.metadata,
+				event.created_at
+			FROM search_usage_event event
+			WHERE event.id = $1
+			  AND event.organization_id = $2
+			LIMIT 1`,
+			input.eventId,
+			input.organizationId,
+		);
 
 		if (!event) return null;
 
 		return {
 			id: event.id,
-			indexId: event.indexId,
+			indexId: event.index_id,
 			type: event.type,
-			count: event.count,
+			count: Number(event.count),
 			metadata: event.metadata as Record<string, unknown> | null,
-			createdAt: event.createdAt.toISOString(),
+			createdAt: event.created_at.toISOString(),
 		};
 	});
 
@@ -181,16 +232,30 @@ export const getAnalyticsEventsByQuery = protectedProcedure
 		}),
 	)
 	.handler(async ({ input, context }) => {
-		await requireOrganizationMember(input.organizationId, context.user);
+		await requireOrganizationMember(input.organizationId, context.user.id);
 
-		const indexFilter = input.indexId
-			? `AND event.index_id = '${input.indexId}'`
-			: "";
-		const typeFilter = input.type
-			? `AND event.type = '${input.type}'`
-			: "";
+		const conditions = [
+			"event.organization_id = $1",
+			"(event.metadata->>'query' = $2 OR event.metadata->>'q' = $2)",
+		];
+		const params: unknown[] = [input.organizationId, input.queryText];
+		let paramIndex = 3;
 
-		type EventsRow = {
+		if (input.indexId) {
+			conditions.push(`event.index_id = $${paramIndex}`);
+			params.push(input.indexId);
+			paramIndex++;
+		}
+
+		if (input.type) {
+			conditions.push(`event.type = $${paramIndex}`);
+			params.push(input.type);
+			paramIndex++;
+		}
+
+		const whereClause = conditions.join(" AND ");
+
+		type EventRow = {
 			id: string;
 			index_id: string;
 			type: string;
@@ -198,38 +263,31 @@ export const getAnalyticsEventsByQuery = protectedProcedure
 			metadata: Record<string, unknown> | null;
 			created_at: Date;
 		};
-
-		const events = await db.$queryRawUnsafe<EventsRow[]>(
-			`SELECT
-				event.id,
-				event.index_id,
-				event.type,
-				event.count,
-				event.metadata,
-				event.created_at
-			FROM search_usage_event event
-			WHERE event.organization_id = $1
-			  AND (event.metadata->>'query' = $2 OR event.metadata->>'q' = $2)
-			  ${indexFilter}
-			  ${typeFilter}
-			ORDER BY event.created_at DESC
-			LIMIT $3`,
-			input.organizationId,
-			input.queryText,
-			input.limit,
-		);
-
 		type CountRow = { total: bigint };
-		const [totalRow] = await db.$queryRawUnsafe<CountRow[]>(
-			`SELECT COUNT(*)::bigint AS total
-			FROM search_usage_event event
-			WHERE event.organization_id = $1
-			  AND (event.metadata->>'query' = $2 OR event.metadata->>'q' = $2)
-			  ${indexFilter}
-			  ${typeFilter}`,
-			input.organizationId,
-			input.queryText,
-		);
+
+		const [events, totalRow] = await Promise.all([
+			db.$queryRawUnsafe<EventRow[]>(
+				`SELECT
+					event.id,
+					event.index_id,
+					event.type,
+					event.count,
+					event.metadata,
+					event.created_at
+				FROM search_usage_event event
+				WHERE ${whereClause}
+				ORDER BY event.created_at DESC
+				LIMIT $${paramIndex}`,
+				...params,
+				input.limit,
+			),
+			db.$queryRawUnsafe<CountRow[]>(
+				`SELECT COUNT(*)::bigint AS total
+				FROM search_usage_event event
+				WHERE ${whereClause}`,
+				...params,
+			),
+		]);
 
 		return {
 			events: events.map((e) => ({
@@ -240,6 +298,6 @@ export const getAnalyticsEventsByQuery = protectedProcedure
 				metadata: e.metadata as Record<string, unknown> | null,
 				createdAt: e.created_at.toISOString(),
 			})),
-			total: Number(totalRow?.total ?? 0),
+			total: Number(totalRow[0]?.total ?? 0),
 		};
 	});

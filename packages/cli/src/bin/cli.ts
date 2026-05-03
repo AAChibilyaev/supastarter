@@ -10,7 +10,9 @@ import { createRequire } from "module";
 import { program } from "commander";
 
 import { initCommand } from "../commands/init.js";
+import { keysCommand } from "../commands/keys.js";
 import { loginCommand } from "../commands/login.js";
+import { searchCommand } from "../commands/search.js";
 import { loadConfig } from "../lib/config.js";
 
 const require = createRequire(import.meta.url);
@@ -21,7 +23,11 @@ program
 	.description("AACsearch CLI — manage your search indices from the terminal")
 	.version(pkg.version)
 	.hook("preAction", async (_thisCommand, actionCommand) => {
-		if (actionCommand.name() === "login" || actionCommand.name() === "init") {
+		// Skip auth check for login, init, and keys create (keys create needs interactive prompts)
+		if (
+			actionCommand.name() === "login" ||
+			actionCommand.name() === "init"
+		) {
 			return;
 		}
 		const config = loadConfig();
@@ -35,5 +41,7 @@ program
 
 program.addCommand(loginCommand);
 program.addCommand(initCommand);
+program.addCommand(searchCommand);
+program.addCommand(keysCommand);
 
 await program.parseAsync(process.argv);

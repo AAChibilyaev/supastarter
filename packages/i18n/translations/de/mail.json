@@ -1,108 +1,115 @@
 {
 	"common": {
-		"openLinkInBrowser": "Wenn du den Link in einem anderen Browser als deinem Standardbrowser öffnen möchtest, kopiere diesen und füge ihn in die Adresszeile deines Browsers ein:",
-		"otp": "Einmaliges Passwort",
-		"useLink": "oder nutze den folgenden Link:"
+		"openLinkInBrowser": "If you want to open the link in a different browser than your default one, copy and paste this link:",
+		"otp": "One-time password",
+		"useLink": "or use the following link:"
 	},
 	"emailVerification": {
-		"body": "Hallo!\nbitte klicke auf den unten stehenden Link, um diese neue E-Mail-Adresse zu bestätigen.",
-		"confirmEmail": "E-Mail verifizieren",
-		"subject": "E-Mail bestätigen"
+		"body": "Hey,\nplease click the link below to verify this new email address.",
+		"confirmEmail": "Verify email",
+		"subject": "Verify your email"
 	},
 	"forgotPassword": {
-		"body": "Hallo,\n\ndu hast eine Passwortzurücksetzung beantragt.\n\n\nKlicke auf den unten stehenden Link, um dein Passwort zurückzusetzen.",
-		"resetPassword": "Passwort zurücksetzen",
-		"subject": "Passwort zurücksetzen"
+		"body": "Hey,\nyou requested a password reset.\n\nClick the button below to reset your password.",
+		"resetPassword": "Reset password",
+		"subject": "Reset your password"
 	},
 	"magicLink": {
-		"body": "Hey,\ndu hast eine Anmelde-E-Mail von supastarter angefordert.\n\nKlicke auf den unten stehenden Link, um dich anzumelden.",
+		"body": "Hey,\nyou requested a login email from supastarter.\n\nClick the link below to login.",
 		"login": "Login",
-		"subject": "Login bei supastarter"
+		"subject": "Login to supastarter"
 	},
 	"newUser": {
-		"body": "Hallo,\n\nVielen Dank, dass du dich bei Supastarter angemeldet hast.\n\n\nUm mit der Nutzung unserer App zu beginnen, bestätige bitte deine E-Mail-Adresse, indem du auf den untenstehenden Link klickst.",
-		"confirmEmail": "E-Mail bestätigen",
-		"subject": "E-Mail bestätigen"
+		"body": "Hey,\nthanks for signing up for supastarter.\n\nTo start using our app, please confirm your email address by clicking the link below.",
+		"confirmEmail": "Confirm email",
+		"subject": "Confirm your email"
 	},
 	"organizationInvitation": {
-		"body": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Klicke auf den Button unten oder kopiere den Link und füge ihn in den Browser deiner Wahl ein, um die Einladung anzunehmen und der Organisation beizutreten.",
-		"headline": "Einladung zur Organisation {organizationName}",
-		"join": "Tritt der Organisation bei",
-		"subject": "Du wurdest eingeladen, einer Organisation beizutreten"
+		"body": "You have been invited to join the organization {organizationName}. Click the button below or copy and paste the link into your browser of choice to accept the invitation and join the organization.",
+		"headline": "Join the organization {organizationName}",
+		"join": "Join the organization",
+		"subject": "You have been invited to join an organization"
 	},
 	"dripDay0": {
 		"greeting": "Hallo {name},",
-		"body": "Willkommen bei AACsearch! Du hast den ersten Schritt gemacht, um leistungsstarke Suche auf deine Plattform zu bringen. Wir freuen uns, dich an Bord zu haben.",
-		"whatsNext": "So kommst du in Minuten los:",
-		"step1": "1. Erstelle deinen ersten Suchindex",
-		"step2": "2. Füge Dokumente zu deinem Index hinzu",
-		"step3": "3. Teste deine erste Suchanfrage",
-		"step4": "4. Generiere einen API-Schlüssel und starte die Integration",
-		"cta": "Schnellstart öffnen",
-		"subject": "Willkommen bei AACsearch — starte in Minuten!"
+		"body": "Willkommen bei AACsearch Engine! Du hast den besten Weg gewählt, um erstklassige Suche in dein Produkt zu bringen. Keine Server, kein Ops-Team, keine Kopfschmerzen.\n\nHier ist dein Schnellstartplan – dauert etwa 5 Minuten:",
+		"step1": "1. Erstelle deine erste Such-Collection und definiere, was du indexieren möchtest",
+		"step2": "2. Lade deine Dokumente hoch – CSV, JSON oder verbinde ein CMS",
+		"step3": "3. Führe deine erste Suchanfrage aus und sieh Ergebnisse sofort",
+		"step4": "4. Hol dir einen API-Key und integriere die Suche in deine App",
+		"cta": "Zum Dashboard",
+		"needHelp": "Hilfe nötig? Schick einfach eine Antwort – ich lese jede Nachricht persönlich.",
+		"signoff": "– Das AACsearch Team",
+		"subject": "Willkommen bei AACsearch Engine – 5 Minuten bis zu deiner ersten Suche"
 	},
 	"dripDay1": {
-		"greeting": "Hallo {name},",
-		"body": "Bereit, deinen ersten Suchindex zu erstellen? Es ist die Grundlage für alles, was du mit AACsearch bauen wirst. Sieh dir unser kurzes Tutorial an.",
-		"watchVideo": "Tutorial ansehen",
-		"orCta": "Oder lege direkt los:",
-		"createCollection": "Ersten Index erstellen",
-		"subject": "So erstellst du deinen ersten Suchindex"
+		"greeting": "Hey {name},",
+		"body": "Kurze Frage: hast du schon deine erste Collection erstellt?\n\nWenn ja – super, du bist schon auf dem richtigen Weg. Wenn nicht (oder wenn es gehakt hat), hier der schnellste Weg:",
+		"watchVideo": "90-Sekunden Tutorial ansehen",
+		"orCta": "Oder leg direkt los:",
+		"createCollection": "Meine erste Collection erstellen",
+		"tip": "Pro-Tipp: Fang mit einem kleinen Datensatz (50–100 Einträge) an, um dein Schema zu testen, bevor du deinen gesamten Katalog importierst.",
+		"subject": "Deine erste Collection ist nur 90 Sekunden entfernt"
 	},
 	"dripDay3": {
 		"greeting": "Hallo {name},",
-		"body": "Wusstest du, dass du AACsearch direkt mit deinem CMS, deiner E-Commerce-Plattform oder jeder anderen Datenquelle verbinden kannst? Unsere Konnektoren machen es nahtlos.",
-		"supported": "Derzeit unterstützt: PrestaShop, Bitrix24 und direkte API-Integration.",
-		"benefit1": "✓ Automatische Synchronisierung — kein manuelles Hochladen",
-		"benefit2": "✓ Echtzeit-Updates — deine Suche bleibt aktuell",
-		"connectNow": "Jetzt CMS verbinden",
-		"orDocs": "Mehr in unserer Dokumentation:",
-		"viewDocs": "Konnektor-Dokumentation ansehen",
-		"subject": "Verbinde dein CMS mit AACsearch"
+		"body": "Inzwischen hast du dich sicher im Dashboard umgesehen und vielleicht ein paar Suchen ausprobiert. Nächster Schritt: deine echten Daten anbinden.\n\nAACsearch Engine kann direkt mit deinem CMS oder deiner E-Commerce-Plattform synchronisieren – deine Suche bleibt immer aktuell, ohne manuelle Updates.",
+		"supported": "Das unterstützen wir standardmäßig:",
+		"connector1": "• PrestaShop 8.x – vollständiger Produktsync, Kategorien, Preise, Lagerbestand",
+		"connector2": "• 1C-Bitrix – Katalog, Bereiche, Eigenschaften, Echtzeit-Updates",
+		"connector3": "• REST API ‒ verbinde alles mit einem POST-Endpoint",
+		"benefit1": "✓ Auto-Sync – einmal hochladen, bleibt aktuell",
+		"benefit2": "✓ Echtzeit-Updates – Änderungen erscheinen sofort in den Suchergebnissen",
+		"connectNow": "Datenquelle verbinden",
+		"orDocs": "Brauchst du einen individuellen Connector? Hier entlang:",
+		"viewDocs": "Connector-Dokumentation",
+		"subject": "Verbinde dein CMS mit AACsearch Engine"
 	},
 	"dripDay7": {
-		"greeting": "Hallo {name},",
-		"body": "Hier sind einige Tipps, um das Beste aus AACsearch herauszuholen:",
-		"tip1": "🔍 Synonyme — definiere Synonyme, damit Nutzer finden, was sie brauchen",
-		"tip2": "⭐ Kuratierungen — pinne wichtige Ergebnisse für wichtige Suchbegriffe an",
-		"tip3": "⚡ Relevanzanpassung — passe das Ranking an deinen Inhaltstyp an",
-		"goToSettings": "Sucheinstellungen erkunden",
-		"subject": "Tipps: Hol mehr aus deiner AACsearch"
+		"greeting": "Hey {name},",
+		"body": "Eine Woche ist rum. Hoffentlich siehst du schon Ergebnisse! Hier sind drei Funktionen, die die meisten erst spät entdecken – nutze sie jetzt und deine Suche wird sofort besser:",
+		"tip1": "🔍 Synonyme – „Sneakers“ und „Turnschuhe“ sollten dieselben Ergebnisse liefern. Definiere Synonyme einmal, und deine Suche behandelt Variationen automatisch.",
+		"tip2": "⭐ Kuratierungen – möchtest du, dass ein bestimmtes Produkt bei einem Suchbegriff immer zuerst angezeigt wird? Pin it. Perfekt für Aktionen, beworbene Artikel oder saisonale Highlights.",
+		"tip3": "⚡ Relevanz einstellen – nicht zufrieden mit der Standardsortierung? Passe an, welche Felder am wichtigsten sind (Titel > Beschreibung > Tags) und wie Fuzzy-Suche sich verhält.",
+		"goToSettings": "Sucheinstellungen öffnen",
+		"personalNote": "Wenn es etwas gibt, das die Suche anders machen sollte, möchte ich wirklich davon hören. Antworte einfach auf diese E-Mail.",
+		"subject": "3 Einstellungen, die deine Suchergebnisse 10x verbessern"
 	},
 	"dripDay14": {
 		"greeting": "Hallo {name},",
-		"body": "Zwei Wochen sind vergangen — wir hoffen, AACsearch gefällt dir! Hier siehst du, wie andere Teams ihr Sucherlebnis verbessern.",
-		"teaser": "Lies unsere neueste Fallstudie, um zu sehen, wie eine ähnliche Plattform die Suchrelevanz um 40% verbesserte und Support-Tickets um 25% reduzierte.",
-		"readCaseStudy": "Fallstudie lesen",
-		"orMore": "Oder entdecke weitere Geschichten:",
-		"visitBlog": "Besuche unseren Blog",
-		"subject": "Wie Teams wie du AACsearch nutzen"
+		"body": "Zwei Wochen mit AACsearch Engine. Inzwischen hast du ein Gefühl dafür bekommen, was möglich ist.\n\nHier ist eine Geschichte, die dir bekannt vorkommen könnte: Einer unserer Kunden betreibt einen Marktplatz mit über 50.000 Produkten. Vor AACsearch war ihre Suche langsam, lieferte oft irrelevante Ergebnisse, und ihr Entwicklerteam verbrachte Stunden mit der Wartung.\n\nNach der Umstellung: Die Suchlatenz sank von 800 ms auf 35 ms, Null-Ergebnis-Anfragen fielen um 60 %, und das Support-Team bekam keine „Ich kann nichts finden“-Tickets mehr.\n\nDas könntest du sein.",
+		"readCaseStudy": "Die vollständige Fallstudie lesen",
+		"orMore": "Weitere Ressourcen:",
+		"visitBlog": "Besuche unser Blog",
+		"subject": "Wie 50.000 Produkte ihre Suche in 35 ms fanden"
 	},
 	"dripDay21": {
-		"greeting": "Hallo {name},",
-		"body": "Du erkundest AACsearch seit drei Wochen. Bereit, das volle Potenzial freizuschalten? Ein Upgrade bietet dir:",
-		"benefit1": "🚀 Höhere Suchvolumen und schnellere Antwortzeiten",
-		"benefit2": "📊 Erweiterte Analysen und Einblicke",
-		"benefit3": "👥 Team-Zusammenarbeitsfunktionen",
-		"upgrade": "Pläne & Preise ansehen",
-		"subject": "Schalte mehr mit AACsearch frei"
+		"greeting": "Hey {name},",
+		"body": "Drei Wochen sind vergangen. Du hast gesehen, was AACsearch Engine im kostenlosen Tarif kann. Bereit zu sehen, was wirklich möglich ist?\n\nEin Upgrade schaltet frei:",
+		"benefit1": "🚀 Höheres Anfragevolumen – bewältige 10x mehr Suchanfragen pro Monat",
+		"benefit2": "📊 Analytics-Dashboard – sieh, wonach deine Nutzer suchen (und was sie nicht finden)",
+		"benefit3": "👥 Teamzugriff – lade Kollegen ein, gemeinsam an der Suche zu arbeiten",
+		"benefit4": "🔌 Connectors – synchronisiere deine CMS-Daten in Echtzeit",
+		"upgrade": "Pläne & Preise vergleichen",
+		"notNow": "Noch nicht bereit? Kein Druck. Dein kostenloser Tarif bleibt aktiv – wann immer du bereit bist zu skalieren, wir sind da.",
+		"subject": "Skaliere deine Suche mit AACsearch Engine"
 	},
 	"notification": {
 		"openInApp": "Öffne diese Benachrichtigung in der App:",
 		"subject": "Neue Benachrichtigung",
-		"view": "Anzeigen"
+		"view": "Ansehen"
 	},
 	"quotaSoftCap": {
-		"subject": "Sie haben 80 % Ihres Suchkontingents ausgeschöpft",
+		"subject": "Du hast 80% deines Suchkontingents verbraucht",
 		"title": "Suchkontingent-Warnung",
-		"body": "Ihre Organisation {orgName} ({planName}-Tarif) hat {percentUsed}% ihres monatlichen Suchkontingents ({remaining} verbleibende Suchanfragen) genutzt.",
+		"body": "Deine Organisation {orgName} ({planName}-Tarif) hat {percentUsed}% ihres monatlichen Suchkontingents verbraucht ({remaining} Suchanfragen verbleibend).",
 		"cta": "Abrechnung verwalten"
 	},
 	"quotaHardCap": {
 		"subject": "Suchkontingent erreicht",
 		"title": "Monatliches Suchlimit erreicht",
-		"bodyBlocked": "Ihre Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Neue Suchanfragen werden derzeit blockiert.",
-		"bodyOverage": "Ihre Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Die Überzahlungsabrechnung ist aktiv — Suchanfragen werden zu Ihrem Tarifsatz fortgesetzt.",
+		"bodyBlocked": "Deine Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Neue Suchanfragen sind derzeit blockiert.",
+		"bodyOverage": "Deine Organisation {orgName} ({planName}-Tarif) hat ihr monatliches Suchlimit erreicht. Die Überschreitungsabrechnung ist aktiv – Suchanfragen werden zum Überschreitungssatz deines Tarifs fortgesetzt.",
 		"cta": "Abrechnung anzeigen"
 	}
 }

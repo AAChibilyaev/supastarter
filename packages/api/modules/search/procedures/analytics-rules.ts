@@ -4,11 +4,72 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../lib/access";
 
+// ── Counter rule params ──────────────────────────────────────────
+//
+// Counter rules increment a numeric field in documents when events occur
+// (click, conversion, visit). Used for popularity-based ranking:
+//
+//   sort_by: click_count:desc, _text_match:desc
+//
+// Typesense docs: https://typesense.org/docs/28.0/api/analytics-rule.html
+
+const eventSchema = z.object({
+	type: z.string().min(1).max(64).describe("Event type name, e.g. click, conversion, visit"),
+	weight: z.number().min(0).max(1000).default(1).describe("Multiplier for this event"),
+	name: z.string().min(1).max(128).describe("Unique event name used when tracking"),
+});
+
+const sourceConfigSchema = z.object({
+	collections: z.array(z.string().min(1)).min(1).describe("Collections to watch"),
+	events: z.array(eventSchema).min(1).describe("Events that trigger the counter increment"),
+});
+
+const destinationConfigSchema = z.object({
+	collection: z.string().min(1).describe("Destination collection holding the counter field"),
+	counter_field: z
+		.string()
+		.min(1)
+		.max(128)
+		.describe("Numeric field to increment (must exist in schema as int32)"),
+});
+
+const counterParamsSchema = z.object({
+	source: sourceConfigSchema,
+	destination: destinationConfigSchema,
+});
+
+// Keep loose schema for aggregation rules
+const aggregationParamsSchema = z.record(z.string(), z.unknown());
+
+type CounterParams = z.infer<typeof counterParamsSchema>;
+
 const analyticsRuleSchema = z.object({
 	name: z.string().min(1).max(200),
 	type: z.enum(["counter", "aggregation"]),
 	params: z.record(z.string(), z.unknown()),
 });
+
+export type AnalyticsRule = z.infer<typeof analyticsRuleSchema>;
+
+const createRuleInputSchema = z.object({
+	organizationId: z.string(),
+	name: z.string().min(1).max(200),
+	type: z.enum(["counter", "aggregation"]),
+	params: z.union([counterParamsSchema, aggregationParamsSchema]),
+});
+
+function parseRuleParams(rule: {
+	name: string;
+	type: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	params: any;
+}): AnalyticsRule {
+	return {
+		name: rule.name,
+		type: rule.type as "counter" | "aggregation",
+		params: rule.params as Record<string, unknown>,
+	};
+}
 
 export const listAnalyticsRules = protectedProcedure
 	.route({
@@ -31,12 +92,14 @@ export const listAnalyticsRules = protectedProcedure
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const result = (await (client as any).analytics.rules().retrieve()) as any;
 
-		const rules = (result?.rules ?? []) as any[];
-		return rules.map((rule: any) => ({
-			name: rule.name as string,
-			type: rule.type as "counter" | "aggregation",
-			params: rule.params as Record<string, unknown>,
-		}));
+		const rules = (result?.rules ?? []) as Array<{
+			name: string;
+			type: string;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			params: any;
+		}>;
+
+		return rules.map(parseRuleParams);
 	});
 
 export const createAnalyticsRule = protectedProcedure
@@ -47,14 +110,7 @@ export const createAnalyticsRule = protectedProcedure
 		summary: "Create a custom analytics rule",
 		description: "Creates a new analytics rule for tracking custom metrics in Typesense.",
 	})
-	.input(
-		z.object({
-			organizationId: z.string(),
-			name: z.string().min(1).max(200),
-			type: z.enum(["counter", "aggregation"]),
-			params: z.record(z.string(), z.unknown()),
-		}),
-	)
+	.input(createRuleInputSchema)
 	.output(analyticsRuleSchema)
 	.handler(async ({ input, context }) => {
 		await requireOrganizationAdmin(input.organizationId, context.user);
@@ -69,7 +125,7 @@ export const createAnalyticsRule = protectedProcedure
 		return {
 			name: input.name,
 			type: input.type,
-			params: input.params,
+			params: input.params as Record<string, unknown>,
 		};
 	});
 
@@ -105,3 +161,16 @@ export const deleteAnalyticsRule = protectedProcedure
 			return { success: false, name: input.name };
 		}
 	});
+
+// ── Helpers for UI ───────────────────────────────────────────────
+
+/**
+ * Parse counter rule params from a generic analytics rule.
+ * Returns null if the rule is not a counter type or has unexpected shape.
+ */
+export function parseCounterRuleParams(params: Record<string, unknown>): CounterParams | null {
+	const result = counterParamsSchema.safeParse(params);
+	return result.success ? result.data : null;
+}
+
+export { type CounterParams };

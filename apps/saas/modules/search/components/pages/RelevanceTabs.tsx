@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
+import { CounterRulesPanel } from "../panels/CounterRulesPanel";
 import { CurationsPanel } from "../panels/CurationsPanel";
 import { RankingRulesPanel } from "../panels/RankingRulesPanel";
 import { SpellCorrectionPanel } from "../panels/SpellCorrectionPanel";
@@ -62,6 +63,9 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 							{t("search.spellCorrection.tab")}
 						</TabsTrigger>
 						<TabsTrigger value="ranking">{t("search.ranking.tab")}</TabsTrigger>
+						<TabsTrigger value="analyticsRules">
+							{t("search.analyticsRules.tab")}
+						</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">
@@ -86,6 +90,9 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 
 					<TabsContent value="ranking">
 						<RankingRulesPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+					<TabsContent value="analyticsRules">
+						<CounterRulesPanel organizationId={organizationId} slug={slug} />
 					</TabsContent>
 				</Tabs>
 			) : (

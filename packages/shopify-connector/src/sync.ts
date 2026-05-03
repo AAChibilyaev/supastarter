@@ -11,7 +11,11 @@ import { enqueueManySearchIngest, recordSearchUsage } from "@repo/database";
 import type { ConnectorSyncJobView, Prisma } from "@repo/database";
 import { logger } from "@repo/logs";
 
+import type { CategoryMap } from "./category-sync";
+import { buildCategoryMap } from "./category-sync";
 import type { ShopifyAdminClient, ShopifyProduct } from "./client";
+import type { InventoryMap } from "./inventory-sync";
+import { fetchInventoryLevels } from "./inventory-sync";
 import type { AacSearchProductDocument } from "./product-mapper";
 import { flattenProductToDocuments } from "./product-mapper";
 
@@ -34,6 +38,10 @@ export interface SyncOptions {
 	updatedSince?: string;
 	/** Whether to fetch and index metafields */
 	includeMetafields?: boolean;
+	/** Whether to fetch accurate inventory levels from InventoryLevel API */
+	includeInventory?: boolean;
+	/** Whether to fetch collection/category data and attach to documents */
+	includeCategories?: boolean;
 	/** Optional vendor metadata to attach to every document */
 	vendorMetadata?: Record<string, unknown>;
 	/** Shopify store shop domain (e.g., mystore.myshopify.com) */
@@ -180,7 +188,7 @@ async function fetchProductPage(
 
 // ─── Batch enqueue ──────────────────────────────────────────
 
-async function enqueueDocumentBatch(
+export async function enqueueDocumentBatch(
 	indexId: string,
 	organizationId: string,
 	docs: AacSearchProductDocument[],
@@ -212,7 +220,15 @@ export async function runFullSync(
 	client: ShopifyAdminClient,
 	options: SyncOptions,
 ): Promise<SyncResult> {
-	const { shop, indexId, organizationId, includeMetafields, vendorMetadata } = options;
+	const {
+		shop,
+		indexId,
+		organizationId,
+		includeMetafields,
+		includeInventory,
+		includeCategories,
+		vendorMetadata,
+	} = options;
 
 	logger.info("Shopify full sync started", { shop, indexId, organizationId });
 
@@ -229,6 +245,25 @@ export async function runFullSync(
 	};
 
 	try {
+		// ─── Pre-fetch enrichment data ──────────────────────────
+		let inventoryMap: InventoryMap | undefined;
+		let categoryMap: CategoryMap | undefined;
+
+		if (includeInventory) {
+			logger.info("Fetching inventory levels before full sync");
+			inventoryMap = new Map();
+		}
+
+		if (includeCategories) {
+			logger.info("Building category map before full sync");
+			try {
+				categoryMap = await buildCategoryMap(client);
+			} catch (err) {
+				logger.warn("Failed to build category map, continuing without categories", { err });
+				categoryMap = new Map();
+			}
+		}
+
 		let sinceId: number | undefined;
 		let pageCount = 0;
 
@@ -243,6 +278,26 @@ export async function runFullSync(
 				count: page.products.length,
 			});
 
+			// --- Fetch inventory for this page's products ---
+			if (includeInventory && page.products.length > 0) {
+				const itemIds: number[] = [];
+				for (const p of page.products) {
+					for (const v of p.variants) {
+						if (v.inventory_item_id) {
+							itemIds.push(v.inventory_item_id);
+						}
+					}
+				}
+				try {
+					const freshMap = await fetchInventoryLevels(client, itemIds);
+					if (freshMap.size > 0) {
+						inventoryMap = freshMap;
+					}
+				} catch (err) {
+					logger.warn("Failed to fetch inventory levels for page", { page: pageCount, err });
+				}
+			}
+
 			for (const product of page.products) {
 				try {
 					let metafields: Record<string, unknown> = {};
@@ -250,10 +305,15 @@ export async function runFullSync(
 						metafields = await fetchProductMetafields(client, product.id);
 					}
 
-					const docs = flattenProductToDocuments(product, shop, {
-						...vendorMetadata,
-						...metafields,
-					});
+					const docs = flattenProductToDocuments(
+						product,
+						shop,
+						{
+							...vendorMetadata,
+							...metafields,
+						},
+						{ inventoryMap, categoryMap },
+					);
 
 					await enqueueDocumentBatch(indexId, organizationId, docs);
 					result.itemsCount += docs.length;
@@ -316,7 +376,7 @@ export async function runDeltaSync(
 	client: ShopifyAdminClient,
 	options: SyncOptions,
 ): Promise<SyncResult> {
-	const { shop, indexId, organizationId, includeMetafields, vendorMetadata } = options;
+	const { shop, indexId, organizationId, includeMetafields, includeInventory, includeCategories, vendorMetadata } = options;
 
 	const updatedSince =
 		options.updatedSince ?? new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -354,6 +414,26 @@ export async function runDeltaSync(
 				count: page.products.length,
 			});
 
+			// --- Fetch inventory for this page's products ---
+			if (includeInventory && page.products.length > 0) {
+				const itemIds: number[] = [];
+				for (const p of page.products) {
+					for (const v of p.variants) {
+						if (v.inventory_item_id) {
+							itemIds.push(v.inventory_item_id);
+						}
+					}
+				}
+				try {
+					const freshMap = await fetchInventoryLevels(client, itemIds);
+					if (freshMap.size > 0) {
+						inventoryMap = freshMap;
+					}
+				} catch (err) {
+					logger.warn("Failed to fetch inventory levels for page", { page: pageCount, err });
+				}
+			}
+
 			for (const product of page.products) {
 				try {
 					let metafields: Record<string, unknown> = {};
@@ -361,10 +441,15 @@ export async function runDeltaSync(
 						metafields = await fetchProductMetafields(client, product.id);
 					}
 
-					const docs = flattenProductToDocuments(product, shop, {
-						...vendorMetadata,
-						...metafields,
-					});
+					const docs = flattenProductToDocuments(
+						product,
+						shop,
+						{
+							...vendorMetadata,
+							...metafields,
+						},
+						{ inventoryMap, categoryMap },
+					);
 
 					await enqueueDocumentBatch(indexId, organizationId, docs);
 					result.itemsCount += docs.length;

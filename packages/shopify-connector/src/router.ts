@@ -24,6 +24,8 @@ import { z } from "zod";
 import { createShopifyClient } from "./client";
 import { buildInstallUrl, exchangeToken, markStoreUninstalled, saveShopifyStore } from "./oauth";
 import { runDeltaSync, runFullSync } from "./sync";
+import { verifyWebhookHmac } from "./webhook-verifier";
+import { handleWebhook, registerStoreWebhooks } from "./webhooks";
 
 // ─── Config ─────────────────────────────────────────────────────
 
@@ -158,6 +160,13 @@ export const shopifyApp = new Hono()
 				shop,
 				organizationId: store.organizationId,
 			});
+
+			// Register webhooks in the background
+			const webhookBaseUrl =
+				process.env.SHOPIFY_WEBHOOK_BASE_URL ||
+				process.env.NEXT_PUBLIC_SAAS_URL ||
+				"http://localhost:3000";
+			void registerStoreWebhooks(client, webhookBaseUrl);
 
 			// Redirect merchant back to the dashboard
 			const baseUrl = process.env.NEXT_PUBLIC_SAAS_URL || "http://localhost:3000";
@@ -393,6 +402,55 @@ export const shopifyApp = new Hono()
 				},
 				500,
 			);
+		}
+	})
+
+	// POST /api/shopify/webhook — general webhook handler for product/collection events
+	.post("/shopify/webhook", async (c) => {
+		try {
+			const hmacHeader = c.req.header("X-Shopify-Hmac-Sha256");
+			const topic = c.req.header("X-Shopify-Topic");
+			const shop = c.req.header("X-Shopify-Shop-Domain");
+
+			if (!hmacHeader || !topic || !shop) {
+				logger.warn("Shopify webhook missing required headers", {
+					hasHmac: !!hmacHeader,
+					hasTopic: !!topic,
+					hasShop: !!shop,
+				});
+				return c.json({ error: "missing_headers" }, 400);
+			}
+
+			// Read raw body for HMAC verification
+			const body = await c.req.text().catch(() => "");
+			if (!body) {
+				return c.json({ error: "empty_body" }, 400);
+			}
+
+			// Verify HMAC signature
+			if (!verifyWebhookHmac(body, hmacHeader)) {
+				logger.warn("Shopify webhook HMAC verification failed", {
+					shop,
+					topic,
+				});
+				return c.json({ error: "hmac_verification_failed" }, 401);
+			}
+
+			// Parse JSON body
+			let parsedBody: Record<string, unknown>;
+			try {
+				parsedBody = JSON.parse(body) as Record<string, unknown>;
+			} catch {
+				return c.json({ error: "invalid_json" }, 400);
+			}
+
+			// Process the webhook asynchronously (don't block the response)
+			void handleWebhook(topic, shop, parsedBody);
+
+			return c.json({ status: "queued" });
+		} catch (error) {
+			logger.error("Shopify webhook handler failed", { error });
+			return c.json({ status: "error" }, 500);
 		}
 	})
 

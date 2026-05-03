@@ -28,3 +28,12 @@ export { runFullSync, runDeltaSync } from "./sync";
 export type { SyncResult, SyncOptions } from "./sync";
 export { flattenProductToDocuments, documentToExternalId, parseExternalId } from "./product-mapper";
 export type { AacSearchProductDocument } from "./product-mapper";
+export { verifyWebhookHmac } from "./webhook-verifier";
+export {
+	handleWebhook,
+	registerStoreWebhooks,
+	deregisterStoreWebhooks,
+	WEBHOOK_TOPICS,
+	enqueueWebhookEvent,
+} from "./webhooks";
+export type { WebhookTopic } from "./webhooks";

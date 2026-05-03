@@ -11,6 +11,15 @@
  */
 import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "./client";
 
+// ─── Optional types from related modules (loaded when available) ──
+// These types are used by product-mapper but defined in separate modules
+// that may not exist yet (inventory-sync.ts, category-sync.ts — AAC-561).
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type InventoryMap = Record<string, any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CategoryMap = Record<string, any>;
+
 // ─── Document schema ─────────────────────────────────────────
 
 export interface AacSearchProductDocument {
@@ -33,6 +42,15 @@ export interface AacSearchProductDocument {
 	locale: string;
 	created_at: number;
 	updated_at: number;
+}
+
+// ─── Enrichment types ───────────────────────────────────────
+
+export interface DocumentEnrichment {
+	/** Accurate inventory levels keyed by inventory_item_id */
+	inventoryMap?: InventoryMap;
+	/** Product-to-category mapping keyed by product_id */
+	categoryMap?: CategoryMap;
 }
 
 // ─── Option combination helpers ─────────────────────────────
@@ -98,6 +116,7 @@ export function flattenProductToDocuments(
 	product: ShopifyProduct,
 	shop: string,
 	vendorMetadata?: Record<string, unknown>,
+	enrichment?: DocumentEnrichment,
 ): AacSearchProductDocument[] {
 	const now = Math.floor(Date.now() / 1000);
 	const createdAt = product.created_at
@@ -178,6 +197,23 @@ export function flattenProductToDocuments(
 			attributes.all_variant_skus = allSkus;
 		}
 
+		// ─── Enrichment: inventory levels ─────────────────
+		const { inventoryMap, categoryMap } = enrichment ?? {};
+		const enrichedStockQty =
+			variant.inventory_item_id !== undefined && inventoryMap?.has(variant.inventory_item_id)
+				? inventoryMap.get(variant.inventory_item_id)!
+				: stockQty;
+
+		// ─── Enrichment: categories from collections ──────
+		if (categoryMap?.has(product.id)) {
+			const pc = categoryMap.get(product.id)!;
+			for (const name of pc.categoryNames) {
+				if (!categories.includes(name)) {
+					categories.push(name);
+				}
+			}
+		}
+
 		return {
 			external_id: `shopify_${product.id}_v${variant.id}`,
 			title:
@@ -186,7 +222,9 @@ export function flattenProductToDocuments(
 			sku: variant.sku ?? "",
 			brand: product.vendor ?? "",
 			categories,
-			category_ids: [],
+			category_ids: categoryMap?.has(product.id)
+				? categoryMap.get(product.id)!.categoryIds
+				: [],
 			tags: product.tags
 				? product.tags
 						.split(",")
@@ -199,7 +237,7 @@ export function flattenProductToDocuments(
 			image_url: imageUrl,
 			product_url: productUrl,
 			availability: mapAvailability(product, variant),
-			stock_quantity: stockQty,
+			stock_quantity: enrichedStockQty,
 			attributes,
 			locale: "en",
 			created_at: createdAt,

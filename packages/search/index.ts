@@ -59,6 +59,12 @@ export {
 	generateEmbedding,
 	generateEmbeddings,
 	getOpenAIClient,
+	AUTO_EMBED_FIELDS,
+	autoEmbedDocument,
+	autoEmbedDocuments,
+	buildEmbeddingText,
+	detectEmbeddingField,
+	type AutoEmbedConfig,
 	type EmbeddingModelName,
 	type EmbeddingResult,
 } from "./lib/embeddings";

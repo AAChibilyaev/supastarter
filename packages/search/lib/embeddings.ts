@@ -18,11 +18,18 @@ import {
 	type EmbeddingModelName,
 	type EmbeddingResult,
 	EMBEDDING_MODELS,
+	AUTO_EMBED_FIELDS,
+	buildEmbeddingText,
+	detectEmbeddingField,
 } from "./auto-embed";
 
 export type { EmbeddingModelName, EmbeddingResult };
-export { EMBEDDING_MODELS } from "./auto-embed";
-export { detectEmbeddingField, buildEmbeddingText, AUTO_EMBED_FIELDS } from "./auto-embed";
+export {
+	EMBEDDING_MODELS,
+	AUTO_EMBED_FIELDS,
+	buildEmbeddingText,
+	detectEmbeddingField,
+} from "./auto-embed";
 
 // ─── OpenAI Provider ──────────────────────────────────────────────────────────
 

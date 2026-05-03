@@ -96,7 +96,9 @@ function SortableFacetRow({
 			<div className="w-28 shrink-0">
 				<select
 					value={facet.sortOrder}
-					onChange={(e) => onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })}
+					onChange={(e) =>
+						onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })
+					}
 					className="h-8 rounded px-1 text-xs w-full border border-input bg-background"
 				>
 					<option value="count">{t("facetSortCount")}</option>
@@ -111,7 +113,9 @@ function SortableFacetRow({
 					min={1}
 					max={1000}
 					value={facet.maxValues}
-					onChange={(e) => onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })}
+					onChange={(e) =>
+						onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })
+					}
 					className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
 				/>
 			</div>

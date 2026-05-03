@@ -226,7 +226,8 @@ export function RoadmapGrid() {
 	const inProgress = ALL_ITEMS.filter((item) => t(`items.${item.key}.status`) === "inProgress");
 	const planned = ALL_ITEMS.filter(
 		(item) =>
-			t(`items.${item.key}.status`) !== "shipped" && t(`items.${item.key}.status`) !== "inProgress",
+			t(`items.${item.key}.status`) !== "shipped" &&
+			t(`items.${item.key}.status`) !== "inProgress",
 	);
 
 	return (
@@ -241,7 +242,11 @@ export function RoadmapGrid() {
 
 					<div className="mt-16">
 						<RoadmapSection status="shipped" titleKey="shippedTitle" items={shipped} />
-						<RoadmapSection status="inProgress" titleKey="inProgressTitle" items={inProgress} />
+						<RoadmapSection
+							status="inProgress"
+							titleKey="inProgressTitle"
+							items={inProgress}
+						/>
 						<RoadmapSection status="planned" titleKey="plannedTitle" items={planned} />
 					</div>
 				</div>
@@ -254,7 +259,9 @@ export function RoadmapGrid() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
+						<p className="mt-4 text-lg text-muted-foreground">
+							{t("feedback.description")}
+						</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

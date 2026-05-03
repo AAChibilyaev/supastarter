@@ -100,7 +100,13 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 					? t("jobFailed")
 					: t("noActiveJob");
 
-	const statusVariant = isFailed ? "error" : isCompleted ? "success" : hasActiveJob ? "info" : null;
+	const statusVariant = isFailed
+		? "error"
+		: isCompleted
+			? "success"
+			: hasActiveJob
+				? "info"
+				: null;
 
 	const handleStartReindex = () => {
 		setShowConfirm(true);
@@ -135,7 +141,9 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 									<Checkbox
 										id="detect-schema"
 										checked={detectSchema}
-										onCheckedChange={(checked) => setDetectSchema(checked === true)}
+										onCheckedChange={(checked) =>
+											setDetectSchema(checked === true)
+										}
 									/>
 									<Label htmlFor="detect-schema">{t("detectSchema")}</Label>
 								</div>
@@ -143,9 +151,13 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 									<Checkbox
 										id="regenerate-embeddings"
 										checked={regenerateEmbeddings}
-										onCheckedChange={(checked) => setRegenerateEmbeddings(checked === true)}
+										onCheckedChange={(checked) =>
+											setRegenerateEmbeddings(checked === true)
+										}
 									/>
-									<Label htmlFor="regenerate-embeddings">{t("regenerateEmbeddings")}</Label>
+									<Label htmlFor="regenerate-embeddings">
+										{t("regenerateEmbeddings")}
+									</Label>
 								</div>
 								<div className="gap-2 text-sm flex items-center text-muted-foreground">
 									<InfoIcon className="size-3.5 shrink-0" />
@@ -163,7 +175,11 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 						>
 							{t("cancel")}
 						</Button>
-						<Button variant="primary" onClick={handleConfirm} loading={reindexMutation.isPending}>
+						<Button
+							variant="primary"
+							onClick={handleConfirm}
+							loading={reindexMutation.isPending}
+						>
 							{t("confirm")}
 						</Button>
 					</DialogFooter>
@@ -264,16 +280,21 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 											<Checkbox
 												id="detect-schema-panel"
 												checked={detectSchema}
-												onCheckedChange={(checked) => setDetectSchema(checked === true)}
+												onCheckedChange={(checked) =>
+													setDetectSchema(checked === true)
+												}
 											/>
 											<div className="gap-1 flex items-center">
-												<Label htmlFor="detect-schema-panel">{t("detectSchema")}</Label>
+												<Label htmlFor="detect-schema-panel">
+													{t("detectSchema")}
+												</Label>
 												<Tooltip>
 													<TooltipTrigger asChild>
 														<InfoIcon className="size-3.5 text-muted-foreground" />
 													</TooltipTrigger>
 													<TooltipContent>
-														Automatically detect and apply schema changes
+														Automatically detect and apply schema
+														changes
 													</TooltipContent>
 												</Tooltip>
 											</div>
@@ -282,7 +303,9 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 											<Checkbox
 												id="regenerate-embeddings-panel"
 												checked={regenerateEmbeddings}
-												onCheckedChange={(checked) => setRegenerateEmbeddings(checked === true)}
+												onCheckedChange={(checked) =>
+													setRegenerateEmbeddings(checked === true)
+												}
 											/>
 											<div className="gap-1 flex items-center">
 												<Label htmlFor="regenerate-embeddings-panel">
@@ -293,7 +316,8 @@ export function FullReindexPanel({ organizationId, indexSlug }: FullReindexPanel
 														<InfoIcon className="size-3.5 text-muted-foreground" />
 													</TooltipTrigger>
 													<TooltipContent>
-														Recompute vector embeddings for all documents
+														Recompute vector embeddings for all
+														documents
 													</TooltipContent>
 												</Tooltip>
 											</div>

@@ -41,7 +41,10 @@ export const openApiHandler = new OpenAPIHandler(router, {
 				const authSchema = await auth.api.generateOpenAPISchema();
 
 				authSchema.paths = Object.fromEntries(
-					Object.entries(authSchema.paths).map(([path, pathItem]) => [`/auth${path}`, pathItem]),
+					Object.entries(authSchema.paths).map(([path, pathItem]) => [
+						`/auth${path}`,
+						pathItem,
+					]),
 				);
 
 				return {

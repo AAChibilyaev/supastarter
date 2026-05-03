@@ -10,8 +10,7 @@ export const listFiles = protectedProcedure
 		path: "/my-search/indexes/{indexId}/files",
 		tags: ["My Search"],
 		summary: "List files in personal search index",
-		description:
-			"Lists all files (uploaded documents and URLs) in a personal search index.",
+		description: "Lists all files (uploaded documents and URLs) in a personal search index.",
 	})
 	.input(
 		z.object({

@@ -116,7 +116,11 @@ export function PasswordInput({
 						className="p-2 flex cursor-pointer items-center justify-center text-primary transition-colors hover:text-primary/80"
 						title={showPassword ? "Hide password" : "Show password"}
 					>
-						{showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+						{showPassword ? (
+							<EyeOffIcon className="size-4" />
+						) : (
+							<EyeIcon className="size-4" />
+						)}
 					</button>
 				</div>
 			</div>
@@ -135,7 +139,9 @@ export function PasswordInput({
 								<span
 									className={cn(
 										"text-xs",
-										isMet ? "font-normal text-success" : "font-light text-foreground/40",
+										isMet
+											? "font-normal text-success"
+											: "font-light text-foreground/40",
 									)}
 								>
 									{t(`common.passwordCriteria.${criterion.labelKey}`)}

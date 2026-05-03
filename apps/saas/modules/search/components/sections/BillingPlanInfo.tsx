@@ -60,9 +60,9 @@ export function BillingPlanInfo() {
 		);
 	}
 
-	const features: Array<{ key: string; enabled: boolean }> = Object.entries(planInfo.features).map(
-		([key, enabled]) => ({ key, enabled }),
-	);
+	const features: Array<{ key: string; enabled: boolean }> = Object.entries(
+		planInfo.features,
+	).map(([key, enabled]) => ({ key, enabled }));
 	const searchesUsage = planInfo.usage.searches;
 	const docsUsage = planInfo.usage.documents;
 	const isStatusActive = planInfo.status === "active";
@@ -115,18 +115,24 @@ export function BillingPlanInfo() {
 									: `${docsUsage.current.toLocaleString()} / ${docsUsage.limit.toLocaleString()}`}
 							</span>
 						</div>
-						{!docsUsage.isUnlimited && <Progress value={docsUsage.percentUsed} className="h-2" />}
+						{!docsUsage.isUnlimited && (
+							<Progress value={docsUsage.percentUsed} className="h-2" />
+						)}
 					</div>
 				</div>
 
 				{/* Limits summary */}
 				<div className="gap-2 sm:grid-cols-3 text-sm grid grid-cols-2">
 					<div>
-						<span className="block text-muted-foreground">{t("limits.maxIndexes")}</span>
+						<span className="block text-muted-foreground">
+							{t("limits.maxIndexes")}
+						</span>
 						<span className="font-medium">{planInfo.limits.maxIndexes}</span>
 					</div>
 					<div>
-						<span className="block text-muted-foreground">{t("limits.maxDocuments")}</span>
+						<span className="block text-muted-foreground">
+							{t("limits.maxDocuments")}
+						</span>
 						<span className="font-medium">
 							{planInfo.limits.maxDocuments === 0
 								? "∞"
@@ -134,15 +140,21 @@ export function BillingPlanInfo() {
 						</span>
 					</div>
 					<div>
-						<span className="block text-muted-foreground">{t("limits.maxApiKeys")}</span>
+						<span className="block text-muted-foreground">
+							{t("limits.maxApiKeys")}
+						</span>
 						<span className="font-medium">{planInfo.limits.maxApiKeys}</span>
 					</div>
 					<div>
 						<span className="block text-muted-foreground">{t("limits.rateLimit")}</span>
-						<span className="font-medium">{planInfo.limits.rateLimitPerMinute}/min</span>
+						<span className="font-medium">
+							{planInfo.limits.rateLimitPerMinute}/min
+						</span>
 					</div>
 					<div>
-						<span className="block text-muted-foreground">{t("limits.maxSearchesPerMonth")}</span>
+						<span className="block text-muted-foreground">
+							{t("limits.maxSearchesPerMonth")}
+						</span>
 						<span className="font-medium">
 							{planInfo.limits.maxSearchesPerMonth === 0
 								? "∞"
@@ -156,7 +168,9 @@ export function BillingPlanInfo() {
 					<h4 className="mb-2 text-sm font-semibold">{t("features.title")}</h4>
 					<div className="gap-2 flex flex-wrap">
 						{features.length === 0 && (
-							<span className="text-xs text-muted-foreground">{t("features.none")}</span>
+							<span className="text-xs text-muted-foreground">
+								{t("features.none")}
+							</span>
 						)}
 						{features.map((f) => (
 							<Badge

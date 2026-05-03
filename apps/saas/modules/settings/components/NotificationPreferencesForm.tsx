@@ -58,40 +58,54 @@ export function NotificationPreferencesForm() {
 							<h3 className="mb-3 font-medium text-sm text-foreground">
 								{t(`groups.${group.id}.title`)}
 							</h3>
-							<Card className="overflow-x-auto rounded-lg border"><CardContent className="p-0">
-								<table className="text-sm w-full min-w-[320px]">
-									<thead>
-										<tr className="border-b bg-muted/40 text-left">
-											<th className="px-3 py-2 font-medium">{t("columns.type")}</th>
-											<th className="px-3 py-2 font-medium">{t("columns.inApp")}</th>
-											<th className="px-3 py-2 font-medium">{t("columns.email")}</th>
-										</tr>
-									</thead>
-									<tbody>
-										{group.types.map((type) => (
-											<tr key={type} className="border-b last:border-0">
-												<td className="px-3 py-3 font-medium">{t(`types.${type}.label`)}</td>
-												<td className="px-3 py-2">
-													<Switch
-														checked={isEnabled(type, "IN_APP")}
-														disabled={updateMutation.isPending}
-														onCheckedChange={(checked) => onToggle(type, "IN_APP", checked)}
-														aria-label={`${type} in-app`}
-													/>
-												</td>
-												<td className="px-3 py-2">
-													<Switch
-														checked={isEnabled(type, "EMAIL")}
-														disabled={updateMutation.isPending}
-														onCheckedChange={(checked) => onToggle(type, "EMAIL", checked)}
-														aria-label={`${type} email`}
-													/>
-												</td>
+							<Card className="overflow-x-auto rounded-lg border">
+								<CardContent className="p-0">
+									<table className="text-sm w-full min-w-[320px]">
+										<thead>
+											<tr className="border-b bg-muted/40 text-left">
+												<th className="px-3 py-2 font-medium">
+													{t("columns.type")}
+												</th>
+												<th className="px-3 py-2 font-medium">
+													{t("columns.inApp")}
+												</th>
+												<th className="px-3 py-2 font-medium">
+													{t("columns.email")}
+												</th>
 											</tr>
-										))}
-									</tbody>
-								</table>
-							</CardContent></Card>
+										</thead>
+										<tbody>
+											{group.types.map((type) => (
+												<tr key={type} className="border-b last:border-0">
+													<td className="px-3 py-3 font-medium">
+														{t(`types.${type}.label`)}
+													</td>
+													<td className="px-3 py-2">
+														<Switch
+															checked={isEnabled(type, "IN_APP")}
+															disabled={updateMutation.isPending}
+															onCheckedChange={(checked) =>
+																onToggle(type, "IN_APP", checked)
+															}
+															aria-label={`${type} in-app`}
+														/>
+													</td>
+													<td className="px-3 py-2">
+														<Switch
+															checked={isEnabled(type, "EMAIL")}
+															disabled={updateMutation.isPending}
+															onCheckedChange={(checked) =>
+																onToggle(type, "EMAIL", checked)
+															}
+															aria-label={`${type} email`}
+														/>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</CardContent>
+							</Card>
 						</section>
 					))}
 				</div>

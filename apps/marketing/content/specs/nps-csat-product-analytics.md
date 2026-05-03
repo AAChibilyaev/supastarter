@@ -141,45 +141,45 @@ model NpsSurveyResponse {
 ### PostHog Dashboards to Create
 
 1. **Activation Funnel**
-   - Step-by-step conversion: signup → project → search → widget
-   - Weekly trend line
-   - Drop-off rates per step
+    - Step-by-step conversion: signup → project → search → widget
+    - Weekly trend line
+    - Drop-off rates per step
 
 2. **Feature Usage**
-   - Events per user per day
-   - Top collections by search volume
-   - Connector usage by type
+    - Events per user per day
+    - Top collections by search volume
+    - Connector usage by type
 
 3. **Retention**
-   - Weekly cohort: signup week → action in week N
-   - D7, D14, D30 retention rates
+    - Weekly cohort: signup week → action in week N
+    - D7, D14, D30 retention rates
 
 4. **NPS Trends**
-   - Average NPS score over time (monthly)
-   - Score distribution (detractors/passives/promoters)
-   - Feedback word cloud
+    - Average NPS score over time (monthly)
+    - Score distribution (detractors/passives/promoters)
+    - Feedback word cloud
 
 5. **Revenue & Conversion**
-   - Plan upgrade rate by cohort
-   - Time from signup to first payment
-   - Feature usage before upgrade (predictive)
+    - Plan upgrade rate by cohort
+    - Time from signup to first payment
+    - Feature usage before upgrade (predictive)
 
 ---
 
 ## 7. Implementation Files
 
-| File                                                   | Purpose                           |
-| ------------------------------------------------------ | --------------------------------- |
-| `packages/analytics/posthog.ts`                        | Server-side PostHog client        |
-| `packages/analytics/posthog-provider.tsx`              | Client-side PostHog provider      |
-| `packages/analytics/events.ts`                         | Event tracking helpers (typesafe) |
-| `packages/database/prisma/migrations/xxx_nps.ts`       | NpsSurveyResponse model           |
-| `apps/saas/modules/onboarding/hooks/useActivation.ts`  | Milestone tracking hook           |
-| `apps/saas/modules/feedback/components/NpsModal.tsx`   | NPS survey modal                  |
-| `apps/saas/modules/feedback/components/CsatBanner.tsx` | CSAT survey banner                |
-| `apps/saas/modules/feedback/procedures/submitNps.ts`   | oRPC: submit NPS                  |
-| `apps/saas/modules/feedback/procedures/submitCsat.ts`  | oRPC: submit CSAT                 |
-| `apps/saas/app/api/posthog/webhook.ts`                 | PostHog webhook handler           |
+| File                                                   | Purpose                                                              |
+| ------------------------------------------------------ | -------------------------------------------------------------------- |
+| `packages/analytics/posthog.ts`                        | Server-side PostHog client                                           |
+| `packages/analytics/posthog-provider.tsx`              | Client-side PostHog provider                                         |
+| `packages/analytics/events.ts`                         | Event tracking helpers (typesafe)                                    |
+| `packages/database/prisma/migrations/xxx_nps.ts`       | NpsSurveyResponse model                                              |
+| `apps/saas/modules/onboarding/hooks/useActivation.ts`  | Milestone tracking hook                                              |
+| `apps/saas/modules/feedback/components/NpsModal.tsx`   | NPS survey modal                                                     |
+| `apps/saas/modules/feedback/components/CsatBanner.tsx` | CSAT survey banner                                                   |
+| `apps/saas/modules/feedback/procedures/submitNps.ts`   | oRPC: submit NPS                                                     |
+| `apps/saas/modules/feedback/procedures/submitCsat.ts`  | oRPC: submit CSAT                                                    |
+| `packages/i18n/translations/*/saas.json`               | `feedback.nps.*` + `feedback.csat.*` — translations in all 5 locales |
 
 ---
 

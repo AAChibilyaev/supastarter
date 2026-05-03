@@ -306,7 +306,10 @@ export const spellCheckApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = spellCheckInputSchema.safeParse(body);
@@ -557,7 +560,10 @@ export const spellCheckApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = z

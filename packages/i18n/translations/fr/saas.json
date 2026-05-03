@@ -839,7 +839,10 @@
 			"number": "Chiffre",
 			"specialCharacter": "Caractère spécial"
 		},
-		"close": "Fermer"
+		"close": "Fermer",
+		"clear": "Effacer",
+		"previous": "Précédent",
+		"next": "Suivant"
 	},
 	"checkoutReturn": {
 		"title": "Traitement de votre achat",
@@ -959,11 +962,61 @@
 			"widgetAnalytics": "Analytiques",
 			"widgetInstall": "Installer"
 		},
-		"recommendations": {
+				"recommendations": {
 			"description": "Configurez des recommandations de produits basées sur l'IA, y compris des articles similaires, des suggestions personnalisées et GraphRAG.",
 			"dashboardTitle": "Tableau de bord des recommandations",
+			"similarTab": "Articles similaires",
+			"personalizedTab": "Personnalisées",
+			"graphRagTab": "GraphRAG",
+			"settingsTab": "Paramètres",
 			"comingSoon": "Bientôt disponible",
-			"comingSoonDescription": "Les recommandations basées sur l'IA sont en cours de développement. Revenez bientôt pour des articles similaires, des suggestions personnalisées et des explications basées sur GraphRAG."
+			"comingSoonDescription": "Les recommandations basées sur l'IA sont en cours de développement. Revenez bientôt pour des articles similaires, des suggestions personnalisées et des explications basées sur GraphRAG.",
+			"pickProduct": "Sélectionnez un produit pour voir les recommandations",
+			"searchProducts": "Rechercher des produits...",
+			"noResults": "Aucun produit trouvé",
+			"selectProduct": "Sélectionnez un produit dans les résultats de recherche pour prévisualiser ses recommandations",
+			"resultsCount": "Résultats ({{count}})",
+			"neo4jDisconnected": "Le moteur de recommandations n'est pas connecté. Configurez Neo4j pour activer les recommandations.",
+			"stats": {
+				"recommendationsServed": "Recommandations totales servies",
+				"recommendationsServedDesc": "Toutes les fois via widget et API",
+				"clickThroughRate": "Taux de clics",
+				"clickThroughRateDesc": "Moyenne sur tous les types de recommandations",
+				"popularItems": "Articles populaires",
+				"popularItemsDesc": "Produits les plus vus cette semaine",
+				"popularItemsEmpty": "Pas encore d'articles populaires. Ajoutez des produits pour voir les tendances.",
+				"trendingNow": "Tendances",
+				"trendingNowDesc": "Produits avec le plus d'engagement récent",
+				"trendingNowEmpty": "Pas encore d'articles tendance. Les données apparaissent lorsque les utilisateurs interagissent avec les produits."
+			},
+			"settings": {
+				"title": "Paramètres de recommandation",
+				"count": "Nombre de recommandations",
+				"countHint": "Nombre de recommandations à retourner par demande (1-100)",
+				"algorithm": "Algorithme",
+				"algorithmHint": "Quel algorithme de recommandation utiliser",
+				"algorithmGraph": "Graphe (Neo4j)",
+				"algorithmVector": "Vecteur (Embeddings)",
+				"algorithmHybrid": "Hybride (Graphe + Vecteur)",
+				"fieldWeights": "Poids des champs",
+				"fieldWeightsHint": "Combien chaque champ contribue au score de similarité",
+				"fieldTitle": "Titre",
+				"fieldDescription": "Description",
+				"fieldCategory": "Catégorie",
+				"save": "Enregistrer les paramètres",
+				"saved": "Paramètres enregistrés avec succès",
+				"saveError": "Échec de l'enregistrement des paramètres"
+			},
+			"graphRag": {
+				"title": "Recommandations GraphRAG",
+				"description": "Posez une question en langage naturel et obtenez des recommandations de produits basées sur l'IA avec explications.",
+				"searchPlaceholder": "Que recherchez-vous ?",
+				"searchButton": "Obtenir des recommandations",
+				"recommendations": "Produits recommandés",
+				"explanation": "Pourquoi cela a été recommandé",
+				"noResults": "Aucune recommandation trouvée pour votre requête.",
+				"error": "Échec de l'obtention des recommandations. Veuillez réessayer."
+			}
 		},
 		"widget": {
 			"tab": "Widget",
@@ -2071,7 +2124,17 @@
 			"previewImage": "Cliquez pour ouvrir l'image dans un nouvel onglet",
 			"previewUrl": "Cliquez pour ouvrir la page web",
 			"previewGeneric": "L'aperçu n'est pas disponible pour ce type de fichier"
-		}
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source"
 	},
 	"feedback": {
 		"nps": {

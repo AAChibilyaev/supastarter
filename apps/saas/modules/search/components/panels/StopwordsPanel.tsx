@@ -96,13 +96,19 @@ export function StopwordsPanel({ organizationId, slug }: StopwordsPanelProps) {
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.stopwords.title")}</h3>
-					<p className="text-sm text-foreground/60">{t("search.stopwords.description")}</p>
+					<p className="text-sm text-foreground/60">
+						{t("search.stopwords.description")}
+					</p>
 				</div>
 				<div className="gap-2 flex">
 					<Button variant="outline" onClick={handleAddRow}>
 						{t("search.stopwords.add")}
 					</Button>
-					<Button variant="primary" onClick={handleSave} loading={updateMutation.isPending}>
+					<Button
+						variant="primary"
+						onClick={handleSave}
+						loading={updateMutation.isPending}
+					>
 						{t("search.stopwords.save")}
 					</Button>
 				</div>
@@ -137,7 +143,11 @@ export function StopwordsPanel({ organizationId, slug }: StopwordsPanelProps) {
 									/>
 								</TableCell>
 								<TableCell className="text-right">
-									<Button variant="ghost" size="sm" onClick={() => handleRemoveRow(index)}>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => handleRemoveRow(index)}
+									>
 										{t("search.stopwords.remove")}
 									</Button>
 								</TableCell>

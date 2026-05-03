@@ -37,7 +37,9 @@ export const getModelConfig = protectedProcedure
 			typeof index.schema === "object" && index.schema !== null
 				? (index.schema as Record<string, unknown>)
 				: {};
-		const modelConfig = (schema as Record<string, unknown>)._modelConfig as ModelConfig | undefined;
+		const modelConfig = (schema as Record<string, unknown>)._modelConfig as
+			| ModelConfig
+			| undefined;
 
 		return {
 			embeddingModel: modelConfig?.embeddingModel ?? "text-embedding-3-small",
@@ -74,8 +76,9 @@ export const updateModelConfig = protectedProcedure
 				: {};
 
 		const existing =
-			((schema as Record<string, unknown>)._modelConfig as Record<string, unknown> | undefined) ??
-			{};
+			((schema as Record<string, unknown>)._modelConfig as
+				| Record<string, unknown>
+				| undefined) ?? {};
 
 		const updated: ModelConfig = {
 			embeddingModel:

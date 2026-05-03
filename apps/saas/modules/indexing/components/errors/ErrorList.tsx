@@ -29,7 +29,12 @@ export function ErrorList({ errors, jobId, onRetry, onIgnore, isRetrying }: Erro
 
 	const handleDownloadLog = () => {
 		const headers = ["Row", "Document ID", "Field", "Reason"];
-		const rows = errors.map((e) => [String(e.row), e.documentId, e.field ?? "\u2014", e.reason]);
+		const rows = errors.map((e) => [
+			String(e.row),
+			e.documentId,
+			e.field ?? "\u2014",
+			e.reason,
+		]);
 		const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
 		const blob = new Blob([csv], { type: "text/csv" });
 		const url = URL.createObjectURL(blob);
@@ -49,7 +54,8 @@ export function ErrorList({ errors, jobId, onRetry, onIgnore, isRetrying }: Erro
 					<div className="gap-2 flex items-center">
 						<XCircle className="size-5 text-destructive" />
 						<CardTitle className="text-base">
-							{errors.length} document{errors.length !== 1 ? "s" : ""} failed to process
+							{errors.length} document{errors.length !== 1 ? "s" : ""} failed to
+							process
 						</CardTitle>
 					</div>
 					<div className="gap-2 flex flex-wrap">
@@ -63,7 +69,12 @@ export function ErrorList({ errors, jobId, onRetry, onIgnore, isRetrying }: Erro
 							<RefreshCw className="size-3.5" />
 							Retry all
 						</Button>
-						<Button variant="outline" size="sm" className="gap-1.5" onClick={handleDownloadLog}>
+						<Button
+							variant="outline"
+							size="sm"
+							className="gap-1.5"
+							onClick={handleDownloadLog}
+						>
 							<Download className="size-3.5" />
 							Download log
 						</Button>

@@ -51,7 +51,10 @@ export const indexesApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -191,7 +194,10 @@ export const indexesApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -251,7 +257,10 @@ export const indexesApp = new Hono()
 				organizationId: index.organizationId,
 				slug: index.slug,
 			});
-			return c.json({ error: "internal_error", message: "Could not delete search index" }, 502);
+			return c.json(
+				{ error: "internal_error", message: "Could not delete search index" },
+				502,
+			);
 		}
 
 		return c.json({ deleted: true, id: index.id, slug: index.slug });
@@ -274,7 +283,11 @@ export const indexesApp = new Hono()
 		let documentCount = 0;
 		try {
 			const client = getTypesenseClient();
-			const collName = physicalCollectionName(index.organizationId, index.slug, index.version);
+			const collName = physicalCollectionName(
+				index.organizationId,
+				index.slug,
+				index.version,
+			);
 			const collection = await client.collections(collName).retrieve();
 			documentCount = collection.num_documents;
 		} catch (error) {

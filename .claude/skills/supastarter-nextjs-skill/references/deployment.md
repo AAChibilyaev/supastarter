@@ -107,15 +107,15 @@ Pattern:
 
 1. Create a tiny new app `apps/api/` that imports the Hono `app` from `@repo/api` and runs it via `@hono/node-server`:
 
-   ```typescript
-   // apps/api/server.ts
-   import { serve } from "@hono/node-server";
-   import { app } from "@repo/api";
+    ```typescript
+    // apps/api/server.ts
+    import { serve } from "@hono/node-server";
+    import { app } from "@repo/api";
 
-   const port = Number(process.env.PORT ?? 8080);
-   serve({ fetch: app.fetch, port });
-   console.log(`API listening on :${port}`);
-   ```
+    const port = Number(process.env.PORT ?? 8080);
+    serve({ fetch: app.fetch, port });
+    console.log(`API listening on :${port}`);
+    ```
 
 2. Build it as a separate container (similar Dockerfile to the apps).
 3. Update `apps/saas/next.config.ts` to proxy `/api/*` to the standalone API URL, OR change the SaaS oRPC client base URL to point at the standalone host.

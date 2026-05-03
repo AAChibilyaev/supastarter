@@ -90,7 +90,9 @@ export function LoginForm() {
 				}
 
 				if ((data as any).twoFactorRedirect) {
-					router.replace(withQuery("/verify", Object.fromEntries(searchParams.entries())));
+					router.replace(
+						withQuery("/verify", Object.fromEntries(searchParams.entries())),
+					);
 					return;
 				}
 
@@ -146,7 +148,9 @@ export function LoginForm() {
 						<Alert variant="success">
 							<MailboxIcon />
 							<AlertTitle>{t("auth.login.hints.linkSent.title")}</AlertTitle>
-							<AlertDescription>{t("auth.login.hints.linkSent.message")}</AlertDescription>
+							<AlertDescription>
+								{t("auth.login.hints.linkSent.message")}
+							</AlertDescription>
 						</Alert>
 					) : (
 						<>
@@ -154,19 +158,25 @@ export function LoginForm() {
 
 							<Form {...form}>
 								<form className="gap-6 flex flex-col" onSubmit={onSubmit}>
-									{authConfig.enableMagicLink && authConfig.enablePasswordLogin && (
-										<LoginModeSwitch
-											activeMode={signinMode}
-											onChange={(mode) => form.setValue("mode", mode as typeof signinMode)}
-										/>
-									)}
+									{authConfig.enableMagicLink &&
+										authConfig.enablePasswordLogin && (
+											<LoginModeSwitch
+												activeMode={signinMode}
+												onChange={(mode) =>
+													form.setValue("mode", mode as typeof signinMode)
+												}
+											/>
+										)}
 
-									{form.formState.isSubmitted && form.formState.errors.root?.message && (
-										<Alert variant="error">
-											<AlertTriangleIcon />
-											<AlertTitle>{form.formState.errors.root.message}</AlertTitle>
-										</Alert>
-									)}
+									{form.formState.isSubmitted &&
+										form.formState.errors.root?.message && (
+											<Alert variant="error">
+												<AlertTriangleIcon />
+												<AlertTitle>
+													{form.formState.errors.root.message}
+												</AlertTitle>
+											</Alert>
+										)}
 
 									<FormField
 										control={form.control}
@@ -181,47 +191,58 @@ export function LoginForm() {
 										)}
 									/>
 
-									{authConfig.enablePasswordLogin && signinMode === "password" && (
-										<FormField
-											control={form.control}
-											name="password"
-											render={({ field }) => (
-												<FormItem>
-													<div className="flex items-center">
-														<FormLabel>{t("auth.signup.password")}</FormLabel>
+									{authConfig.enablePasswordLogin &&
+										signinMode === "password" && (
+											<FormField
+												control={form.control}
+												name="password"
+												render={({ field }) => (
+													<FormItem>
+														<div className="flex items-center">
+															<FormLabel>
+																{t("auth.signup.password")}
+															</FormLabel>
 
-														<Link
-															href="/forgot-password"
-															className="text-sm ml-auto inline-block underline-offset-4 hover:underline"
-														>
-															{t("auth.login.forgotPassword")}
-														</Link>
-													</div>
-													<FormControl>
-														<div className="relative">
-															<Input
-																type={showPassword ? "text" : "password"}
-																className="pr-10"
-																{...field}
-																autoComplete="current-password"
-															/>
-															<button
-																type="button"
-																onClick={() => setShowPassword(!showPassword)}
-																className="inset-y-0 right-0 pr-4 text-xl absolute flex items-center text-primary"
+															<Link
+																href="/forgot-password"
+																className="text-sm ml-auto inline-block underline-offset-4 hover:underline"
 															>
-																{showPassword ? (
-																	<EyeOffIcon className="size-4" />
-																) : (
-																	<EyeIcon className="size-4" />
-																)}
-															</button>
+																{t("auth.login.forgotPassword")}
+															</Link>
 														</div>
-													</FormControl>
-												</FormItem>
-											)}
-										/>
-									)}
+														<FormControl>
+															<div className="relative">
+																<Input
+																	type={
+																		showPassword
+																			? "text"
+																			: "password"
+																	}
+																	className="pr-10"
+																	{...field}
+																	autoComplete="current-password"
+																/>
+																<button
+																	type="button"
+																	onClick={() =>
+																		setShowPassword(
+																			!showPassword,
+																		)
+																	}
+																	className="inset-y-0 right-0 pr-4 text-xl absolute flex items-center text-primary"
+																>
+																	{showPassword ? (
+																		<EyeOffIcon className="size-4" />
+																	) : (
+																		<EyeIcon className="size-4" />
+																	)}
+																</button>
+															</div>
+														</FormControl>
+													</FormItem>
+												)}
+											/>
+										)}
 
 									<Button
 										className="w-full"
@@ -275,7 +296,9 @@ export function LoginForm() {
 
 			{authConfig.enableSignup && (
 				<div className="text-sm text-center">
-					<span className="text-muted-foreground">{t("auth.login.dontHaveAnAccount")} </span>
+					<span className="text-muted-foreground">
+						{t("auth.login.dontHaveAnAccount")}{" "}
+					</span>
 					<Link
 						href={withQuery("/signup", Object.fromEntries(searchParams.entries()))}
 						className="underline underline-offset-4 hover:text-primary"

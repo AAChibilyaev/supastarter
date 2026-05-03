@@ -839,7 +839,10 @@
 			"number": "Number",
 			"specialCharacter": "Special character"
 		},
-		"close": "Закрыть"
+		"close": "Закрыть",
+		"clear": "Очистить",
+		"previous": "Назад",
+		"next": "Далее"
 	},
 	"checkoutReturn": {
 		"title": "Processing your purchase",
@@ -1304,11 +1307,61 @@
 			"widgetAnalytics": "Аналитика",
 			"widgetInstall": "Установить"
 		},
-		"recommendations": {
+				"recommendations": {
 			"description": "Настройте рекомендации товаров на основе ИИ, включая похожие товары, персонализированные предложения и GraphRAG.",
 			"dashboardTitle": "Панель рекомендаций",
+			"similarTab": "Похожие товары",
+			"personalizedTab": "Персонализированные",
+			"graphRagTab": "GraphRAG",
+			"settingsTab": "Настройки",
 			"comingSoon": "Скоро",
-			"comingSoonDescription": "Рекомендации на основе ИИ разрабатываются. Загляните позже для похожих товаров, персонализированных предложений и объяснений на основе GraphRAG."
+			"comingSoonDescription": "Рекомендации на основе ИИ разрабатываются. Загляните позже для похожих товаров, персонализированных предложений и объяснений на основе GraphRAG.",
+			"pickProduct": "Выберите товар, чтобы увидеть рекомендации",
+			"searchProducts": "Поиск товаров...",
+			"noResults": "Совпадений не найдено",
+			"selectProduct": "Выберите товар из результатов поиска, чтобы просмотреть его рекомендации",
+			"resultsCount": "Результаты ({{count}})",
+			"neo4jDisconnected": "Движок рекомендаций не подключён. Настройте Neo4j, чтобы включить рекомендации.",
+			"stats": {
+				"recommendationsServed": "Всего выдано рекомендаций",
+				"recommendationsServedDesc": "За всё время через виджет и API",
+				"clickThroughRate": "Коэффициент кликов (CTR)",
+				"clickThroughRateDesc": "Средний по всем типам рекомендаций",
+				"popularItems": "Популярные товары",
+				"popularItemsDesc": "Самые просматриваемые товары на этой неделе",
+				"popularItemsEmpty": "Популярных товаров пока нет. Начните добавлять товары, чтобы увидеть тренды.",
+				"trendingNow": "В тренде",
+				"trendingNowDesc": "Товары с наибольшей активностью за последнее время",
+				"trendingNowEmpty": "Трендов пока нет. Данные появятся по мере взаимодействия пользователей с товарами."
+			},
+			"settings": {
+				"title": "Настройки рекомендаций",
+				"count": "Количество рекомендаций",
+				"countHint": "Количество рекомендаций в одном запросе (1-100)",
+				"algorithm": "Алгоритм",
+				"algorithmHint": "Какой алгоритм рекомендаций использовать",
+				"algorithmGraph": "Граф (Neo4j)",
+				"algorithmVector": "Вектор (Embeddings)",
+				"algorithmHybrid": "Гибрид (Граф + Вектор)",
+				"fieldWeights": "Веса полей",
+				"fieldWeightsHint": "Насколько каждое поле влияет на оценку схожести",
+				"fieldTitle": "Название",
+				"fieldDescription": "Описание",
+				"fieldCategory": "Категория",
+				"save": "Сохранить настройки",
+				"saved": "Настройки сохранены",
+				"saveError": "Не удалось сохранить настройки"
+			},
+			"graphRag": {
+				"title": "Рекомендации GraphRAG",
+				"description": "Задайте вопрос на естественном языке и получите рекомендации товаров на основе ИИ с объяснениями.",
+				"searchPlaceholder": "Что вы ищете?",
+				"searchButton": "Получить рекомендации",
+				"recommendations": "Рекомендованные товары",
+				"explanation": "Почему это рекомендовано",
+				"noResults": "Рекомендаций по вашему запросу не найдено.",
+				"error": "Не удалось получить рекомендации. Попробуйте снова."
+			}
 		},
 		"importJobs": {
 			"tab": "Импорт",
@@ -2046,7 +2099,17 @@
 			"previewImage": "Нажмите, чтобы открыть изображение в новой вкладке",
 			"previewUrl": "Нажмите, чтобы открыть веб-страницу",
 			"previewGeneric": "Предпросмотр недоступен для этого типа файла"
-		}
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source"
 	},
 	"feedback": {
 		"nps": {

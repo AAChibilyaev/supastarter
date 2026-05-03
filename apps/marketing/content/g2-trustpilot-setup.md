@@ -7,11 +7,11 @@
 1. Go to https://www.g2.com/products/new → Create listing for "AACsearch"
 2. Category: "Site Search Software" + "Enterprise Search Software"
 3. Fill company details:
-   - Product name: AACsearch
-   - Tagline: "Hosted search-as-a-service powered by Typesense"
-   - Website: https://aacsearch.com
-   - Pricing URL: https://aacsearch.com/pricing
-   - HQ location: (founder's location)
+    - Product name: AACsearch
+    - Tagline: "Hosted search-as-a-service powered by Typesense"
+    - Website: https://aacsearch.com
+    - Pricing URL: https://aacsearch.com/pricing
+    - HQ location: (founder's location)
 4. Claim the listing with work email
 5. Invite initial reviewers from early users (see case study candidates)
 6. Add G2 badge to marketing site after 5+ reviews

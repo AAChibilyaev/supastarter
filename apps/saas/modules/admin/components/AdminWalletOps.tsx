@@ -128,7 +128,10 @@ export function AdminWalletOps() {
 						placeholder={t("searchOrgPlaceholder")}
 					/>
 
-					<Select value={effectiveOrganizationId} onValueChange={setSelectedOrganizationId}>
+					<Select
+						value={effectiveOrganizationId}
+						onValueChange={setSelectedOrganizationId}
+					>
 						<SelectTrigger>
 							<SelectValue placeholder={t("selectOrgPlaceholder")} />
 						</SelectTrigger>
@@ -204,11 +207,15 @@ export function AdminWalletOps() {
 							<Card key={transaction.id} className="rounded-md">
 								<CardContent className="p-3 text-sm flex items-center justify-between">
 									<div>
-										<p className="font-medium">{transaction.direction.toUpperCase()}</p>
+										<p className="font-medium">
+											{transaction.direction.toUpperCase()}
+										</p>
 										<p className="text-foreground/60">{transaction.source}</p>
 									</div>
 									<div className="text-right">
-										<p className="font-medium">{formatKopecks(transaction.amountKopecks)}</p>
+										<p className="font-medium">
+											{formatKopecks(transaction.amountKopecks)}
+										</p>
 										<p className="text-foreground/60">
 											{new Date(transaction.createdAt).toLocaleString()}
 										</p>

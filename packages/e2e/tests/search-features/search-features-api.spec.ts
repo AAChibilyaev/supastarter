@@ -33,7 +33,11 @@ test.describe.configure({ mode: "serial" });
 test.describe("AAC-321 Search Features API", () => {
 	test.beforeAll(async () => {
 		// Create a test index with geo field
-		const index = await createTestIndex(ADMIN_KEY, BASE_URL, `e2e-search-features-${Date.now()}`);
+		const index = await createTestIndex(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-search-features-${Date.now()}`,
+		);
 		indexSlug = index.slug;
 
 		// Create API keys
@@ -119,23 +123,31 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Typo Tolerance", () => {
 		test("should find documents with typos using numTypos=2", async () => {
-			const result = await searchPublic(indexSlug, "nikee", searchKey, BASE_URL, { numTypos: 2 });
+			const result = await searchPublic(indexSlug, "nikee", searchKey, BASE_URL, {
+				numTypos: 2,
+			});
 			expect(result.found).toBeGreaterThanOrEqual(1);
 			expect(result.hits.some((h: any) => h.document?.title?.includes("Nike"))).toBeTruthy();
 		});
 
 		test("should find documents with typos using numTypos=1", async () => {
-			const result = await searchPublic(indexSlug, "adida", searchKey, BASE_URL, { numTypos: 1 });
+			const result = await searchPublic(indexSlug, "adida", searchKey, BASE_URL, {
+				numTypos: 1,
+			});
 			expect(result.found).toBeGreaterThanOrEqual(1);
 		});
 
 		test("should return no results with exact search when typo exists", async () => {
-			const result = await searchPublic(indexSlug, "nikee", searchKey, BASE_URL, { exact: true });
+			const result = await searchPublic(indexSlug, "nikee", searchKey, BASE_URL, {
+				exact: true,
+			});
 			expect(result.found).toBe(0);
 		});
 
 		test("should find exact match with exact=false/typo", async () => {
-			const result = await searchPublic(indexSlug, "nike", searchKey, BASE_URL, { exact: false });
+			const result = await searchPublic(indexSlug, "nike", searchKey, BASE_URL, {
+				exact: false,
+			});
 			expect(result.found).toBeGreaterThanOrEqual(1);
 		});
 	});
@@ -144,12 +156,16 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Prefix & Infix Search", () => {
 		test("should find documents by prefix (true)", async () => {
-			const result = await searchPublic(indexSlug, "nik", searchKey, BASE_URL, { prefix: true });
+			const result = await searchPublic(indexSlug, "nik", searchKey, BASE_URL, {
+				prefix: true,
+			});
 			expect(result.found).toBeGreaterThanOrEqual(1);
 		});
 
 		test("should NOT find documents by prefix when prefix=false", async () => {
-			const result = await searchPublic(indexSlug, "nik", searchKey, BASE_URL, { prefix: false });
+			const result = await searchPublic(indexSlug, "nik", searchKey, BASE_URL, {
+				prefix: false,
+			});
 			expect(result.found).toBe(0);
 		});
 
@@ -165,9 +181,12 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Export Documents", () => {
 		test("should export documents as JSONL", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`, {
-				headers: { Authorization: `Bearer ${adminApiKey}` },
-			});
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`,
+				{
+					headers: { Authorization: `Bearer ${adminApiKey}` },
+				},
+			);
 			expect(response.status).toBe(200);
 			const text = await response.text();
 			const lines = text.trim().split("\n").filter(Boolean);
@@ -177,7 +196,9 @@ test.describe("AAC-321 Search Features API", () => {
 		});
 
 		test("should return 401 without auth", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`);
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`,
+			);
 			expect(response.status).toBe(401);
 		});
 	});

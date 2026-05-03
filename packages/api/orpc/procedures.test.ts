@@ -52,10 +52,12 @@ describe("protectedProcedure", () => {
 		} as never);
 
 		let capturedContext: unknown;
-		const testProcedure = protectedProcedure.handler(async ({ context }: { context: unknown }) => {
-			capturedContext = context;
-			return { success: true };
-		});
+		const testProcedure = protectedProcedure.handler(
+			async ({ context }: { context: unknown }) => {
+				capturedContext = context;
+				return { success: true };
+			},
+		);
 
 		await call(testProcedure, undefined, {
 			context: { headers: new Headers() },

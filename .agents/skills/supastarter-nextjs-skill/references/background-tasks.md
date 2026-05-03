@@ -166,23 +166,23 @@ Or via CI:
 ```yaml
 name: Deploy to trigger.dev (prod)
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [main]
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Deploy trigger tasks
-        env:
-          TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
-        run: pnpm --filter tasks deploy
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Deploy trigger tasks
+              env:
+                  TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
+              run: pnpm --filter tasks deploy
 ```
 
 Set `TRIGGER_ACCESS_TOKEN` in repo secrets (from trigger.dev dashboard).

@@ -67,7 +67,9 @@ export function WidgetPage({ organizationId: _organizationId }: WidgetPageProps)
 					<Card>
 						<CardHeader>
 							<CardTitle className="text-base">
-								{t(`nav.widget${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any)}
+								{t(
+									`nav.widget${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any,
+								)}
 							</CardTitle>
 						</CardHeader>
 						<CardContent>

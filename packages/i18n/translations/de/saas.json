@@ -839,7 +839,10 @@
 			"light": "Hell",
 			"dark": "Dunkel"
 		},
-		"close": "Schließen"
+		"close": "Schließen",
+		"clear": "Löschen",
+		"previous": "Zurück",
+		"next": "Weiter"
 	},
 	"checkoutReturn": {
 		"title": "Kauf wird verarbeitet",
@@ -1512,8 +1515,58 @@
 		"recommendations": {
 			"description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",
 			"dashboardTitle": "Dashboard für Empfehlungen",
+			"similarTab": "Ähnliche Artikel",
+			"personalizedTab": "Personalisiert",
+			"graphRagTab": "GraphRAG",
+			"settingsTab": "Einstellungen",
 			"comingSoon": "Demnächst verfügbar",
-			"comingSoonDescription": "KI-gestützte Empfehlungen werden entwickelt. Schauen Sie bald wieder vorbei für ähnliche Artikel, personalisierte Vorschläge und GraphRAG-gestützte Erklärungen."
+			"comingSoonDescription": "KI-gestützte Empfehlungen werden entwickelt. Schauen Sie bald wieder vorbei für ähnliche Artikel, personalisierte Vorschläge und GraphRAG-gestützte Erklärungen.",
+			"pickProduct": "Wählen Sie ein Produkt, um Empfehlungen zu sehen",
+			"searchProducts": "Produkte suchen...",
+			"noResults": "Keine passenden Produkte gefunden",
+			"selectProduct": "Wählen Sie ein Produkt aus den Suchergebnissen, um dessen Empfehlungen anzuzeigen",
+			"resultsCount": "Ergebnisse ({{count}})",
+			"neo4jDisconnected": "Empfehlungs-Engine ist nicht verbunden. Konfigurieren Sie Neo4j, um Empfehlungen zu aktivieren.",
+			"stats": {
+				"recommendationsServed": "Empfehlungen insgesamt ausgeliefert",
+				"recommendationsServedDesc": "Gesamt über Widget und API",
+				"clickThroughRate": "Klickrate",
+				"clickThroughRateDesc": "Durchschnitt über alle Empfehlungstypen",
+				"popularItems": "Beliebte Artikel",
+				"popularItemsDesc": "Meistgesehene Produkte diese Woche",
+				"popularItemsEmpty": "Noch keine beliebten Artikel. Fügen Sie Produkte hinzu, um Trends zu sehen.",
+				"trendingNow": "Im Trend",
+				"trendingNowDesc": "Produkte mit höchster aktueller Interaktion",
+				"trendingNowEmpty": "Noch keine Trending-Artikel. Daten erscheinen, sobald Nutzer mit Produkten interagieren."
+			},
+			"settings": {
+				"title": "Empfehlungseinstellungen",
+				"count": "Anzahl der Empfehlungen",
+				"countHint": "Anzahl der zurückzugebenden Empfehlungen pro Anfrage (1-100)",
+				"algorithm": "Algorithmus",
+				"algorithmHint": "Welcher Empfehlungsalgorithmus verwendet werden soll",
+				"algorithmGraph": "Graph (Neo4j)",
+				"algorithmVector": "Vektor (Embeddings)",
+				"algorithmHybrid": "Hybrid (Graph + Vektor)",
+				"fieldWeights": "Feldgewichtungen",
+				"fieldWeightsHint": "Wie stark jedes Feld zur Ähnlichkeitsbewertung beiträgt",
+				"fieldTitle": "Titel",
+				"fieldDescription": "Beschreibung",
+				"fieldCategory": "Kategorie",
+				"save": "Einstellungen speichern",
+				"saved": "Einstellungen erfolgreich gespeichert",
+				"saveError": "Fehler beim Speichern der Einstellungen"
+			},
+			"graphRag": {
+				"title": "GraphRAG Empfehlungen",
+				"description": "Stellen Sie eine Frage in natürlicher Sprache und erhalten Sie KI-gestützte Produktempfehlungen mit Erklärungen.",
+				"searchPlaceholder": "Was suchen Sie?",
+				"searchButton": "Empfehlungen erhalten",
+				"recommendations": "Empfohlene Produkte",
+				"explanation": "Warum dies empfohlen wurde",
+				"noResults": "Keine Empfehlungen für Ihre Anfrage gefunden.",
+				"error": "Empfehlungen konnten nicht abgerufen werden. Bitte versuchen Sie es erneut."
+			}
 		},
 		"synonyms": {
 			"tab": "Synonyme",
@@ -2046,7 +2099,17 @@
 			"previewImage": "Klicken Sie, um das Bild in einem neuen Tab zu öffnen",
 			"previewUrl": "Klicken Sie, um die Webseite zu öffnen",
 			"previewGeneric": "Für diesen Dateityp ist keine Vorschau verfügbar"
-		}
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source"
 	},
 	"feedback": {
 		"nps": {

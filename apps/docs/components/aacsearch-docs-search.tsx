@@ -93,24 +93,21 @@ export function AacsearchDocsSearch({
 			setError(null);
 
 			try {
-				const res = await fetch(
-					`${baseUrl}/api/v1/indexes/docs/search`,
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							"X-API-Key": searchKey,
-						},
-						body: JSON.stringify({
-							q: q.trim(),
-							query_by: "title,content,description",
-							per_page: 10,
-							filter_by: `locale:=${locale}`,
-							highlight_fields: "title,content",
-							highlight_full_fields: "title,content",
-						}),
+				const res = await fetch(`${baseUrl}/api/v1/indexes/docs/search`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-API-Key": searchKey,
 					},
-				);
+					body: JSON.stringify({
+						q: q.trim(),
+						query_by: "title,content,description",
+						per_page: 10,
+						filter_by: `locale:=${locale}`,
+						highlight_fields: "title,content",
+						highlight_full_fields: "title,content",
+					}),
+				});
 
 				if (!res.ok) {
 					throw new Error(`Search failed: ${res.status}`);
@@ -146,13 +143,13 @@ export function AacsearchDocsSearch({
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-[15vh] backdrop-blur-sm"
+			className="inset-0 bg-black/50 backdrop-blur-sm fixed z-50 flex items-start justify-center pt-[15vh]"
 			onClick={(e) => {
 				if (e.target === e.currentTarget) onOpenChange(false);
 			}}
 		>
-			<div className="w-full max-w-2xl overflow-hidden rounded-xl border bg-background shadow-2xl">
-				<div className="flex items-center border-b px-4">
+			<div className="max-w-2xl shadow-2xl w-full overflow-hidden rounded-xl border bg-background">
+				<div className="px-4 flex items-center border-b">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="18"
@@ -174,7 +171,7 @@ export function AacsearchDocsSearch({
 						value={query}
 						onChange={handleInput}
 						placeholder="Search documentation..."
-						className="flex-1 bg-transparent px-3 py-4 text-sm outline-none placeholder:text-muted-foreground"
+						className="px-3 py-4 text-sm flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
 						autoComplete="off"
 						spellCheck={false}
 					/>
@@ -187,7 +184,7 @@ export function AacsearchDocsSearch({
 								setTotal(0);
 								inputRef.current?.focus();
 							}}
-							className="shrink-0 rounded-md p-1 text-muted-foreground hover:bg-secondary"
+							className="p-1 shrink-0 rounded-md text-muted-foreground hover:bg-secondary"
 							aria-label="Clear search"
 						>
 							<svg
@@ -210,19 +207,19 @@ export function AacsearchDocsSearch({
 
 				<div className="max-h-[50vh] overflow-y-auto">
 					{loading && (
-						<div className="flex items-center justify-center py-8">
+						<div className="py-8 flex items-center justify-center">
 							<div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
 						</div>
 					)}
 
 					{error && (
-						<div className="px-4 py-6 text-center text-sm text-destructive">
+						<div className="px-4 py-6 text-sm text-center text-destructive">
 							{error}
 						</div>
 					)}
 
 					{!loading && !error && query && results.length === 0 && total === 0 && (
-						<div className="px-4 py-8 text-center text-sm text-muted-foreground">
+						<div className="px-4 py-8 text-sm text-center text-muted-foreground">
 							No results found for "{query}"
 						</div>
 					)}
@@ -238,31 +235,30 @@ export function AacsearchDocsSearch({
 										<a
 											href={hit.document.url}
 											onClick={() => onOpenChange(false)}
-											className="block px-4 py-3 transition-colors hover:bg-secondary/50"
+											className="px-4 py-3 block transition-colors hover:bg-secondary/50"
 										>
 											<div
 												className="text-sm font-medium"
 												dangerouslySetInnerHTML={{
 													__html:
-														hit.highlight?.title ||
-														hit.document.title,
+														hit.highlight?.title || hit.document.title,
 												}}
 											/>
 											{hit.document.description && (
-												<p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
+												<p className="mt-0.5 text-xs line-clamp-1 text-muted-foreground">
 													{hit.document.description}
 												</p>
 											)}
 											{hit.highlight?.content && (
 												<p
-													className="mt-1 text-xs text-muted-foreground line-clamp-2"
+													className="mt-1 text-xs line-clamp-2 text-muted-foreground"
 													dangerouslySetInnerHTML={{
 														__html: hit.highlight.content,
 													}}
 												/>
 											)}
 											{hit.document.category !== "general" && (
-												<span className="mt-1 inline-block rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground">
+												<span className="mt-1 px-2 py-0.5 inline-block rounded-full bg-secondary text-[10px] text-muted-foreground">
 													{hit.document.category}
 												</span>
 											)}
@@ -274,13 +270,13 @@ export function AacsearchDocsSearch({
 					)}
 
 					{!loading && !query && (
-						<div className="px-4 py-8 text-center text-sm text-muted-foreground">
+						<div className="px-4 py-8 text-sm text-center text-muted-foreground">
 							Type to search documentation
 						</div>
 					)}
 				</div>
 
-				<div className="flex items-center justify-between border-t px-4 py-2 text-[10px] text-muted-foreground">
+				<div className="px-4 py-2 flex items-center justify-between border-t text-[10px] text-muted-foreground">
 					<span>Powered by AACsearch Engine</span>
 					<span>↑↓ Navigate · Enter Open · Esc Close</span>
 				</div>

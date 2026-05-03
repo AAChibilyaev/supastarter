@@ -66,20 +66,32 @@ export function FailedQueriesTable({ zeroResultQueries, totalSearches }: FailedQ
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-12">{t("search.analytics.rankColumn")}</TableHead>
+								<TableHead className="w-12">
+									{t("search.analytics.rankColumn")}
+								</TableHead>
 								<TableHead>{t("search.analytics.queryColumn")}</TableHead>
-								<TableHead className="text-right">{t("search.analytics.countColumn")}</TableHead>
-								<TableHead className="text-right">{t("search.analytics.percentColumn")}</TableHead>
+								<TableHead className="text-right">
+									{t("search.analytics.countColumn")}
+								</TableHead>
+								<TableHead className="text-right">
+									{t("search.analytics.percentColumn")}
+								</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
 							{sorted.map((row, index) => {
 								const percent =
-									totalCount > 0 ? ((row.count / totalCount) * 100).toFixed(1) : "0.0";
+									totalCount > 0
+										? ((row.count / totalCount) * 100).toFixed(1)
+										: "0.0";
 								return (
 									<TableRow key={row.query}>
-										<TableCell className="text-xs text-muted-foreground">{index + 1}</TableCell>
-										<TableCell className="font-mono text-sm">{row.query}</TableCell>
+										<TableCell className="text-xs text-muted-foreground">
+											{index + 1}
+										</TableCell>
+										<TableCell className="font-mono text-sm">
+											{row.query}
+										</TableCell>
 										<TableCell className="text-right tabular-nums">
 											{format.number(row.count)}
 										</TableCell>
@@ -92,7 +104,10 @@ export function FailedQueriesTable({ zeroResultQueries, totalSearches }: FailedQ
 						</TableBody>
 					</Table>
 				) : (
-					<EmptyState variant="inline" description={t("search.analytics.noFailedQueries")} />
+					<EmptyState
+						variant="inline"
+						description={t("search.analytics.noFailedQueries")}
+					/>
 				)}
 			</CardContent>
 		</Card>

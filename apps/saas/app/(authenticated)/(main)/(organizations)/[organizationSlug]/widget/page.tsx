@@ -30,7 +30,11 @@ export default async function WidgetRoute({
 
 	return (
 		<div className="space-y-6 p-6">
-			<PageHeader title={t("nav.widget")} subtitle={t("widget.description")} className="mb-0" />
+			<PageHeader
+				title={t("nav.widget")}
+				subtitle={t("widget.description")}
+				className="mb-0"
+			/>
 			<WidgetPage organizationId={organization.id} />
 		</div>
 	);

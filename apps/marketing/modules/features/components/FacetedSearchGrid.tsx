@@ -13,7 +13,13 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface FacetedSearchGridItem {
-	key: "dynamicFacets" | "countFacets" | "rangeFacets" | "nestedFacets" | "performance" | "mobile";
+	key:
+		| "dynamicFacets"
+		| "countFacets"
+		| "rangeFacets"
+		| "nestedFacets"
+		| "performance"
+		| "mobile";
 	icon: ComponentType<{ className?: string }>;
 }
 

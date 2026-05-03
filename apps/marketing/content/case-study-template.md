@@ -95,19 +95,19 @@ Quantify EVERYTHING:
 Priority order for case study outreach:
 
 1. **[Early user 1 - e-commerce store]**
-   - Contact method: in-app chat / email
-   - Likely angle: "How [Store] increased product discovery by X% with AACSearch"
-   - Their metrics: number of products, search queries/mo, conversion rate
+    - Contact method: in-app chat / email
+    - Likely angle: "How [Store] increased product discovery by X% with AACSearch"
+    - Their metrics: number of products, search queries/mo, conversion rate
 
 2. **[Early user 2 - SaaS platform]**
-   - Contact method: in-app chat / email
-   - Likely angle: "How [SaaS] cut their search infrastructure costs by 10x"
-   - Their metrics: docs/articles indexed, API calls/mo, team size
+    - Contact method: in-app chat / email
+    - Likely angle: "How [SaaS] cut their search infrastructure costs by 10x"
+    - Their metrics: docs/articles indexed, API calls/mo, team size
 
 3. **[Early user 3 - agency / web dev]**
-   - Contact method: in-app chat / email
-   - Likely angle: "How [Agency] delivers enterprise search for clients at startup prices"
-   - Their metrics: client sites, total searches, integration methods
+    - Contact method: in-app chat / email
+    - Likely angle: "How [Agency] delivers enterprise search for clients at startup prices"
+    - Their metrics: client sites, total searches, integration methods
 
 ---
 

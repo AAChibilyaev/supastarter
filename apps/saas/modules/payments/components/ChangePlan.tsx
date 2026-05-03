@@ -61,7 +61,11 @@ export function ChangePlan({
 				title={t("settings.billing.changePlan.title")}
 				description={t("settings.billing.changePlan.description")}
 			>
-				<PricingTable organizationId={organizationId} userId={userId} activePlanId={activePlanId} />
+				<PricingTable
+					organizationId={organizationId}
+					userId={userId}
+					activePlanId={activePlanId}
+				/>
 			</SettingsItem>
 		);
 	}
@@ -125,7 +129,9 @@ export function ChangePlan({
 											}
 										).prices
 									: [];
-							const price = prices.find((p) => p.type === "subscription" && p.currency === "USD");
+							const price = prices.find(
+								(p) => p.type === "subscription" && p.currency === "USD",
+							);
 
 							return (
 								<Card key={planId} className="rounded-lg border">
@@ -135,7 +141,9 @@ export function ChangePlan({
 											<div>
 												<div className="font-semibold">{data.title}</div>
 												{data.description && (
-													<div className="text-sm text-muted-foreground">{data.description}</div>
+													<div className="text-sm text-muted-foreground">
+														{data.description}
+													</div>
 												)}
 											</div>
 										</div>

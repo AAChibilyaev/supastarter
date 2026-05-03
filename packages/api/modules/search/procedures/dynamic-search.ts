@@ -76,7 +76,9 @@ export const dynamicSearch = protectedProcedure
 			searchParams.highlight_fields = input.highlightFields;
 		}
 		if (input.diversifyField) {
-			searchParams.sort_by = input.sortBy ? `${input.sortBy},_text_match:desc` : "_text_match:desc";
+			searchParams.sort_by = input.sortBy
+				? `${input.sortBy},_text_match:desc`
+				: "_text_match:desc";
 			searchParams.include_fields = `${
 				input.diversifyField
 			}(max_per_value:${input.diversifyMaxPerValue})`;

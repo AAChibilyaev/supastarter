@@ -1,7 +1,16 @@
 "use client";
 
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@repo/ui/components/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import { useSearchIndexesQuery } from "@search/lib/api";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { EmptyState } from "../cards/EmptyState";
 import { CurationsPanel } from "../panels/CurationsPanel";
@@ -11,40 +20,65 @@ import { SynonymsPanel } from "../panels/SynonymsPanel";
 
 interface RelevanceTabsProps {
 	organizationId: string;
-	slug?: string;
 }
 
-export function RelevanceTabs({ organizationId, slug }: RelevanceTabsProps) {
+export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 	const t = useTranslations();
+	const { data: indexes } = useSearchIndexesQuery(organizationId);
+	const [selectedSlug, setSelectedSlug] = useState<string>("");
+	const slug = selectedSlug;
 
-	if (!slug) {
-		return <EmptyState variant="inline" description={t("search.selectIndex")} />;
+	if (!indexes || indexes.length === 0) {
+		return <EmptyState variant="inline" description={t("search.noIndexes")} />;
 	}
 
 	return (
-		<Tabs defaultValue="synonyms" className="space-y-4">
-			<TabsList>
-				<TabsTrigger value="synonyms">{t("search.synonyms.tab")}</TabsTrigger>
-				<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
-				<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
-				<TabsTrigger value="spellCorrection">{t("search.spellCorrection.tab")}</TabsTrigger>
-			</TabsList>
+		<div className="space-y-4">
+			<div className="max-w-xs">
+				<Select value={selectedSlug} onValueChange={setSelectedSlug}>
+					<SelectTrigger>
+						<SelectValue placeholder={t("search.selectIndex")} />
+					</SelectTrigger>
+					<SelectContent>
+						{indexes.map((index) => (
+							<SelectItem key={index.id} value={index.slug}>
+								{index.displayName}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
 
-			<TabsContent value="synonyms">
-				<SynonymsPanel organizationId={organizationId} slug={slug} />
-			</TabsContent>
+			{slug ? (
+				<Tabs defaultValue="synonyms" className="space-y-4">
+					<TabsList>
+						<TabsTrigger value="synonyms">{t("search.synonyms.tab")}</TabsTrigger>
+						<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
+						<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
+						<TabsTrigger value="spellCorrection">
+							{t("search.spellCorrection.tab")}
+						</TabsTrigger>
+					</TabsList>
 
-			<TabsContent value="curations">
-				<CurationsPanel organizationId={organizationId} slug={slug} />
-			</TabsContent>
+					<TabsContent value="synonyms">
+						<SynonymsPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
 
-			<TabsContent value="stopwords">
-				<StopwordsPanel organizationId={organizationId} slug={slug} />
-			</TabsContent>
+					<TabsContent value="curations">
+						<CurationsPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
 
-			<TabsContent value="spellCorrection">
-				<SpellCorrectionPanel organizationId={organizationId} slug={slug} />
-			</TabsContent>
-		</Tabs>
+					<TabsContent value="stopwords">
+						<StopwordsPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+
+					<TabsContent value="spellCorrection">
+						<SpellCorrectionPanel organizationId={organizationId} slug={slug} />
+					</TabsContent>
+				</Tabs>
+			) : (
+				<EmptyState variant="inline" description={t("search.selectIndex")} />
+			)}
+		</div>
 	);
 }

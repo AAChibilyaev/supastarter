@@ -1,7 +1,7 @@
 extends:
-  - recommended
+    - recommended
 
 rules:
-  operation-operationId: off
-  operation-4xx-response: off
-  info-license: warn
+    operation-operationId: off
+    operation-4xx-response: off
+    info-license: warn

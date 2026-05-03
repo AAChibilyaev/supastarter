@@ -8,6 +8,10 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAccess } from "../lib/access";
+import {
+	ensurePersonalSearchCollection,
+	indexPersonalDocumentChunks,
+} from "../lib/personal-collections";
 
 export const addUrl = protectedProcedure
 	.route({
@@ -58,6 +62,25 @@ export const addUrl = protectedProcedure
 			uploadedAt: new Date().toISOString(),
 			sourceUrl: input.url,
 		});
+
+		// Index chunks into Typesense
+		try {
+			await ensurePersonalSearchCollection(input.organizationId, index.slug, index.version);
+			await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
+				fileId,
+				filename: `url-${fileId.slice(0, 8)}.html`,
+				fileType: "url",
+				sourceUrl: input.url,
+				chunks: result.chunks,
+			});
+		} catch (error) {
+			logger.error("Failed to index URL chunks into Typesense", {
+				fileId,
+				url: input.url,
+				error,
+			});
+			// Don't fail the upload — metadata is stored
+		}
 
 		logger.info(`URL added to personal index: ${input.url} (${result.chunks.length} chunks)`);
 

@@ -116,9 +116,13 @@ export function ActivityLog({ organizationId, limit = 50 }: ActivityLogProps) {
 											</div>
 											<div className="min-w-0 flex-1">
 												<div className="gap-2 flex flex-wrap items-center">
-													<p className="text-sm font-medium">{activity.label}</p>
+													<p className="text-sm font-medium">
+														{activity.label}
+													</p>
 													{activity.indexSlug && (
-														<Badge className="text-[10px]">{activity.indexSlug}</Badge>
+														<Badge className="text-[10px]">
+															{activity.indexSlug}
+														</Badge>
 													)}
 												</div>
 												<p className="text-xs line-clamp-1 text-muted-foreground">

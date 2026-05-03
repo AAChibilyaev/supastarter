@@ -93,7 +93,12 @@ test.describe("Search Happy Path", () => {
 	});
 
 	test("should return empty results for non-matching query", async () => {
-		const results = await searchPublic(indexSlug, "zzzznon_existent_queryxxxx", adminKey, BASE_URL);
+		const results = await searchPublic(
+			indexSlug,
+			"zzzznon_existent_queryxxxx",
+			adminKey,
+			BASE_URL,
+		);
 		expect(results.found).toBe(0);
 		expect(results.hits).toHaveLength(0);
 	});

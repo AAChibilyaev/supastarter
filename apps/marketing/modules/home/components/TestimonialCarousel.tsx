@@ -14,8 +14,7 @@ interface Testimonial {
 
 const TESTIMONIALS: Testimonial[] = [
 	{
-		quote:
-			"Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+		quote: "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
 		author: "Erik Lindström",
 		role: "CTO",
 		company: "NordikHome",
@@ -23,8 +22,7 @@ const TESTIMONIALS: Testimonial[] = [
 		initials: "EL",
 	},
 	{
-		quote:
-			"With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+		quote: "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
 		author: "Marcus Weber",
 		role: "Technical Director",
 		company: "AgencyHub",
@@ -32,8 +30,7 @@ const TESTIMONIALS: Testimonial[] = [
 		initials: "MW",
 	},
 	{
-		quote:
-			"Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+		quote: "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
 		author: "Priya Sharma",
 		role: "VP Engineering",
 		company: "DevStream",
@@ -80,7 +77,9 @@ export function TestimonialCarousel() {
 				>
 					<div className="p-10 relative rounded-3xl border bg-card transition-all duration-300">
 						{/* Quote icon */}
-						<div className="mb-4 text-6xl leading-none text-primary/20 select-none">&ldquo;</div>
+						<div className="mb-4 text-6xl leading-none text-primary/20 select-none">
+							&ldquo;
+						</div>
 
 						<blockquote className="text-lg md:text-xl leading-relaxed text-foreground">
 							{testimonial.quote}
@@ -91,7 +90,9 @@ export function TestimonialCarousel() {
 								{testimonial.initials}
 							</div>
 							<div>
-								<p className="font-semibold text-foreground">{testimonial.author}</p>
+								<p className="font-semibold text-foreground">
+									{testimonial.author}
+								</p>
 								<p className="text-sm text-muted-foreground">
 									{testimonial.role}, {testimonial.company}
 								</p>

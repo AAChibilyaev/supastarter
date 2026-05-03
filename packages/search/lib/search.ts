@@ -119,7 +119,10 @@ function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
 export async function searchDocuments(input: SearchDocumentsInput): Promise<SearchDocumentsResult> {
 	const client = getTypesenseClient();
 
-	const perPage = Math.min(Math.max(input.perPage ?? config.defaultPerPage, 1), config.maxPerPage);
+	const perPage = Math.min(
+		Math.max(input.perPage ?? config.defaultPerPage, 1),
+		config.maxPerPage,
+	);
 
 	// Build combined filter: user filter + multi-location geo filter
 	let combinedUserFilter = input.filterBy;

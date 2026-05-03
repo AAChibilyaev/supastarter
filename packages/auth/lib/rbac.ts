@@ -16,7 +16,12 @@
 /** All organization member roles. String union for maximum compatibility. */
 export type OrganizationMemberRole = "owner" | "admin" | "member" | "viewer";
 
-export const ORGANIZATION_ROLES = ["owner", "admin", "member", "viewer"] as const satisfies readonly OrganizationMemberRole[];
+export const ORGANIZATION_ROLES = [
+	"owner",
+	"admin",
+	"member",
+	"viewer",
+] as const satisfies readonly OrganizationMemberRole[];
 
 // ─── Permissions ──────────────────────────────────────────────────────────────
 
@@ -47,47 +52,47 @@ export const Permission = {
 
 export type Permission = (typeof Permission)[keyof typeof Permission];
 
-// ─── Role → Permissions mapping ──────────────────────────────────────────────
+// ─── Role → Permissions mapping (using Record for ES5 compatibility) ─────────
 
-const ROLE_PERMISSIONS: Record<OrganizationMemberRole, ReadonlySet<Permission>> = {
-	owner: new Set([
-		Permission.MANAGE_MEMBERS,
-		Permission.MANAGE_BILLING,
-		Permission.VIEW_BILLING,
-		Permission.EDIT_WORKFLOWS,
-		Permission.RUN_WORKFLOWS,
-		Permission.VIEW_WORKFLOWS,
-		Permission.MANAGE_INTEGRATIONS,
-		Permission.DELETE_ORGANIZATION,
-		Permission.MANAGE_AI,
-		Permission.MANAGE_ANALYTICS,
-		Permission.VIEW_ANALYTICS,
-	]),
-	admin: new Set([
-		Permission.MANAGE_MEMBERS,
-		Permission.MANAGE_BILLING,
-		Permission.VIEW_BILLING,
-		Permission.EDIT_WORKFLOWS,
-		Permission.RUN_WORKFLOWS,
-		Permission.VIEW_WORKFLOWS,
-		Permission.MANAGE_INTEGRATIONS,
-		Permission.MANAGE_AI,
-		Permission.MANAGE_ANALYTICS,
-		Permission.VIEW_ANALYTICS,
-	]),
-	member: new Set([
-		Permission.VIEW_BILLING,
-		Permission.EDIT_WORKFLOWS,
-		Permission.RUN_WORKFLOWS,
-		Permission.VIEW_WORKFLOWS,
-		Permission.MANAGE_ANALYTICS,
-		Permission.VIEW_ANALYTICS,
-	]),
-	viewer: new Set([
-		Permission.VIEW_BILLING,
-		Permission.VIEW_WORKFLOWS,
-		Permission.VIEW_ANALYTICS,
-	]),
+const ROLE_PERMISSIONS: Record<OrganizationMemberRole, Partial<Record<Permission, true>>> = {
+	owner: {
+		[Permission.MANAGE_MEMBERS]: true,
+		[Permission.MANAGE_BILLING]: true,
+		[Permission.VIEW_BILLING]: true,
+		[Permission.EDIT_WORKFLOWS]: true,
+		[Permission.RUN_WORKFLOWS]: true,
+		[Permission.VIEW_WORKFLOWS]: true,
+		[Permission.MANAGE_INTEGRATIONS]: true,
+		[Permission.DELETE_ORGANIZATION]: true,
+		[Permission.MANAGE_AI]: true,
+		[Permission.MANAGE_ANALYTICS]: true,
+		[Permission.VIEW_ANALYTICS]: true,
+	},
+	admin: {
+		[Permission.MANAGE_MEMBERS]: true,
+		[Permission.MANAGE_BILLING]: true,
+		[Permission.VIEW_BILLING]: true,
+		[Permission.EDIT_WORKFLOWS]: true,
+		[Permission.RUN_WORKFLOWS]: true,
+		[Permission.VIEW_WORKFLOWS]: true,
+		[Permission.MANAGE_INTEGRATIONS]: true,
+		[Permission.MANAGE_AI]: true,
+		[Permission.MANAGE_ANALYTICS]: true,
+		[Permission.VIEW_ANALYTICS]: true,
+	},
+	member: {
+		[Permission.VIEW_BILLING]: true,
+		[Permission.EDIT_WORKFLOWS]: true,
+		[Permission.RUN_WORKFLOWS]: true,
+		[Permission.VIEW_WORKFLOWS]: true,
+		[Permission.MANAGE_ANALYTICS]: true,
+		[Permission.VIEW_ANALYTICS]: true,
+	},
+	viewer: {
+		[Permission.VIEW_BILLING]: true,
+		[Permission.VIEW_WORKFLOWS]: true,
+		[Permission.VIEW_ANALYTICS]: true,
+	},
 } as const;
 
 // ─── Hierarchy (for role-level checks) ───────────────────────────────────────
@@ -104,14 +109,11 @@ const ROLE_HIERARCHY: Record<OrganizationMemberRole, number> = {
 /**
  * Check whether a role has a specific permission.
  */
-export function hasPermission(
-	role: string | null | undefined,
-	permission: Permission,
-): boolean {
+export function hasPermission(role: string | null | undefined, permission: Permission): boolean {
 	if (!role) return false;
 	const permissions = ROLE_PERMISSIONS[role as OrganizationMemberRole];
 	if (!permissions) return false;
-	return permissions.has(permission);
+	return permissions[permission] === true;
 }
 
 /**
@@ -121,7 +123,7 @@ export function getRolePermissions(role: string | null | undefined): Permission[
 	if (!role) return [];
 	const permissions = ROLE_PERMISSIONS[role as OrganizationMemberRole];
 	if (!permissions) return [];
-	return [...permissions];
+	return Object.keys(permissions) as Permission[];
 }
 
 /**

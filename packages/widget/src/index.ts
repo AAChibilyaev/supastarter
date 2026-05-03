@@ -1114,15 +1114,17 @@ export class AacSearchWidget {
 			const result = response.results[0];
 
 			// Parse hits from our format — hits are full documents + highlights
-			const mappedHits = (result.hits as unknown as Array<Record<string, unknown>>).map((h) => {
-				// In our format, hits come as objects with document nested
-				const doc = (h as { document?: Record<string, unknown> }).document ?? h;
-				const highlights = (h as { _highlightResult?: unknown[] })._highlightResult;
-				return {
-					document: doc,
-					highlights: Array.isArray(highlights) ? highlights : undefined,
-				};
-			});
+			const mappedHits = (result.hits as unknown as Array<Record<string, unknown>>).map(
+				(h) => {
+					// In our format, hits come as objects with document nested
+					const doc = (h as { document?: Record<string, unknown> }).document ?? h;
+					const highlights = (h as { _highlightResult?: unknown[] })._highlightResult;
+					return {
+						document: doc,
+						highlights: Array.isArray(highlights) ? highlights : undefined,
+					};
+				},
+			);
 
 			this.state = {
 				...this.state,
@@ -1158,7 +1160,9 @@ export class AacSearchWidget {
 		this.render();
 	}
 
-	private parseFacets(facets: Record<string, Record<string, number>>): SearchState["facetCounts"] {
+	private parseFacets(
+		facets: Record<string, Record<string, number>>,
+	): SearchState["facetCounts"] {
 		return Object.entries(facets).map(([field_name, counts]) => ({
 			field_name,
 			counts: Object.entries(counts).map(([value, count]) => ({ value, count })),
@@ -1286,7 +1290,8 @@ export class AacSearchWidget {
 				...this.state,
 				recommendations: [],
 				recommendationsLoading: false,
-				recommendationsError: err instanceof Error ? err.message : this.t("recommendationsError"),
+				recommendationsError:
+					err instanceof Error ? err.message : this.t("recommendationsError"),
 			};
 		}
 
@@ -1530,7 +1535,9 @@ export class AacSearchWidget {
 		// Collect active text/checkbox filters
 		for (const [field, values] of Object.entries(this.state.filters)) {
 			if (values.length > 0) {
-				const groupLabel = field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+				const groupLabel = field
+					.replace(/_/g, " ")
+					.replace(/\b\w/g, (c) => c.toUpperCase());
 				for (const val of values) {
 					activeFilters.push({ field, label: groupLabel, value: val });
 				}
@@ -1592,7 +1599,9 @@ export class AacSearchWidget {
 		const pagination = this.root.querySelector(".aac-pagination");
 		if (pagination) {
 			pagination.addEventListener("click", (e) => {
-				const btn = (e.target as HTMLElement).closest(".aac-page-btn") as HTMLElement | null;
+				const btn = (e.target as HTMLElement).closest(
+					".aac-page-btn",
+				) as HTMLElement | null;
 				if (!btn || btn.hasAttribute("disabled")) return;
 				const page = parseInt(btn.getAttribute("data-page") ?? "1", 10);
 				void this.doSearch(page);
@@ -1618,7 +1627,9 @@ export class AacSearchWidget {
 		const resultsRoot = this.root.querySelector(".aac-results");
 		if (resultsRoot) {
 			resultsRoot.addEventListener("click", (e) => {
-				const card = (e.target as HTMLElement).closest(".aac-result-card") as HTMLElement | null;
+				const card = (e.target as HTMLElement).closest(
+					".aac-result-card",
+				) as HTMLElement | null;
 				if (!card) return;
 				const productId = card.getAttribute("data-product-id") ?? undefined;
 				const position = Number(card.getAttribute("data-position") ?? "0");
@@ -1640,7 +1651,10 @@ export class AacSearchWidget {
 			const productId = btn.getAttribute("data-product-id");
 			if (productId) {
 				// If clicking the already-active product, toggle off
-				if (this.state.recommendationsProductId === productId && this.state.recommendationsOpen) {
+				if (
+					this.state.recommendationsProductId === productId &&
+					this.state.recommendationsOpen
+				) {
 					this.closeRecommendations();
 				} else {
 					this.trackEvent({
@@ -1667,7 +1681,9 @@ export class AacSearchWidget {
 		const facetsContainer = this.root.querySelector(".aac-facets");
 		if (facetsContainer) {
 			facetsContainer.addEventListener("click", (e) => {
-				const header = (e.target as HTMLElement).closest(".aac-facet-header") as HTMLElement | null;
+				const header = (e.target as HTMLElement).closest(
+					".aac-facet-header",
+				) as HTMLElement | null;
 				if (!header) return;
 				const field = header.getAttribute("data-facet-field");
 				if (!field) return;
@@ -1686,7 +1702,9 @@ export class AacSearchWidget {
 		// Show more/less toggle for facets with 10+ values
 		if (facetsContainer) {
 			facetsContainer.addEventListener("click", (e) => {
-				const showMore = (e.target as HTMLElement).closest(".aac-show-more") as HTMLElement | null;
+				const showMore = (e.target as HTMLElement).closest(
+					".aac-show-more",
+				) as HTMLElement | null;
 				if (!showMore) return;
 				const field = showMore.getAttribute("data-show-more");
 				if (!field) return;
@@ -1727,10 +1745,16 @@ export class AacSearchWidget {
 				if (!isMin && !isMax) return;
 
 				// Update displayed values immediately
-				const container = target.closest(".aac-price-range-container") as HTMLElement | null;
+				const container = target.closest(
+					".aac-price-range-container",
+				) as HTMLElement | null;
 				if (container) {
-					const minValEl = container.querySelector(".aac-price-min") as HTMLElement | null;
-					const maxValEl = container.querySelector(".aac-price-max") as HTMLElement | null;
+					const minValEl = container.querySelector(
+						".aac-price-min",
+					) as HTMLElement | null;
+					const maxValEl = container.querySelector(
+						".aac-price-max",
+					) as HTMLElement | null;
 
 					// Get current values from both sliders
 					const minInput = container.querySelector(
@@ -1741,13 +1765,22 @@ export class AacSearchWidget {
 					) as HTMLInputElement | null;
 
 					if (minInput && maxInput) {
-						const minVal = Math.min(parseInt(minInput.value, 10), parseInt(maxInput.value, 10));
-						const maxVal = Math.max(parseInt(minInput.value, 10), parseInt(maxInput.value, 10));
+						const minVal = Math.min(
+							parseInt(minInput.value, 10),
+							parseInt(maxInput.value, 10),
+						);
+						const maxVal = Math.max(
+							parseInt(minInput.value, 10),
+							parseInt(maxInput.value, 10),
+						);
 
 						// Prevent handles from crossing
 						if (isMin && parseInt(target.value, 10) > parseInt(maxInput.value, 10)) {
 							target.value = String(parseInt(maxInput.value, 10));
-						} else if (isMax && parseInt(target.value, 10) < parseInt(minInput.value, 10)) {
+						} else if (
+							isMax &&
+							parseInt(target.value, 10) < parseInt(minInput.value, 10)
+						) {
 							target.value = String(parseInt(minInput.value, 10));
 						}
 
@@ -1956,7 +1989,9 @@ export class AacSearchWidget {
 
 			// Show "Show more/less" link if there are more than 10 values
 			if (facet.counts.length > 10) {
-				const showMoreText = isExpanded ? `Show less` : `Show all ${facet.counts.length}...`;
+				const showMoreText = isExpanded
+					? `Show less`
+					: `Show all ${facet.counts.length}...`;
 				html += `<div class="aac-show-more" data-show-more="${fieldName}">${showMoreText}</div>`;
 			}
 
@@ -2013,7 +2048,8 @@ export class AacSearchWidget {
 			const productUrl = doc.product_url as string | undefined;
 			const categories = doc.categories as string[] | undefined;
 			const availability = doc.availability as string | undefined;
-			const productId = (doc.external_id as string | undefined) ?? (doc.id as string | undefined);
+			const productId =
+				(doc.external_id as string | undefined) ?? (doc.id as string | undefined);
 
 			html += `<div class="aac-result-card" data-product-id="${escapeHtml(productId ?? "")}" data-position="${position}">`;
 			position++;
@@ -2030,10 +2066,12 @@ export class AacSearchWidget {
 				html += `<div class="aac-result-title">${highlightText(title)}</div>`;
 			}
 
-			if (sku) html += `<div class="aac-result-sku">${this.t("sku")}: ${escapeHtml(sku)}</div>`;
+			if (sku)
+				html += `<div class="aac-result-sku">${this.t("sku")}: ${escapeHtml(sku)}</div>`;
 
 			if (description) {
-				const desc = description.length > 200 ? description.slice(0, 200) + "..." : description;
+				const desc =
+					description.length > 200 ? description.slice(0, 200) + "..." : description;
 				html += `<div class="aac-result-description">${escapeHtml(desc)}</div>`;
 			}
 
@@ -2072,7 +2110,8 @@ export class AacSearchWidget {
 			// Similar Products button
 			if (productId && this.options.recommendationsMode) {
 				const isActive =
-					this.state.recommendationsProductId === productId && this.state.recommendationsOpen;
+					this.state.recommendationsProductId === productId &&
+					this.state.recommendationsOpen;
 				html += `<button class="aac-similar-btn ${isActive ? "active" : ""}" data-action="show-recs" data-product-id="${escapeHtml(productId)}">${this.t("similarProducts")}</button>`;
 			}
 

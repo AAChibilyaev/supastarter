@@ -64,7 +64,9 @@ export function TopUpDialog({
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>{t("settings.billing.aiCredits.topup.title")}</DialogTitle>
-					<DialogDescription>{t("settings.billing.aiCredits.topup.description")}</DialogDescription>
+					<DialogDescription>
+						{t("settings.billing.aiCredits.topup.description")}
+					</DialogDescription>
 				</DialogHeader>
 
 				<div className="gap-2 grid grid-cols-2">
@@ -85,7 +87,9 @@ export function TopUpDialog({
 				</div>
 
 				<div className="gap-2 flex flex-col">
-					<Label htmlFor="topup-custom">{t("settings.billing.aiCredits.topup.customAmount")}</Label>
+					<Label htmlFor="topup-custom">
+						{t("settings.billing.aiCredits.topup.customAmount")}
+					</Label>
 					<Input
 						id="topup-custom"
 						type="text"

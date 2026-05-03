@@ -17,7 +17,11 @@ export const createIndex = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string(),
-			slug: z.string().min(1).max(64).regex(/^[a-z0-9][a-z0-9-]*$/),
+			slug: z
+				.string()
+				.min(1)
+				.max(64)
+				.regex(/^[a-z0-9][a-z0-9-]*$/),
 			displayName: z.string().min(1).max(120),
 		}),
 	)
@@ -33,10 +37,7 @@ export const createIndex = protectedProcedure
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationAccess(input.organizationId, user.id);
 
-		const existing = await getPersonalSearchIndexBySlug(
-			input.organizationId,
-			input.slug,
-		);
+		const existing = await getPersonalSearchIndexBySlug(input.organizationId, input.slug);
 		if (existing) {
 			throw new ORPCError("CONFLICT", {
 				message: "An index with this slug already exists",

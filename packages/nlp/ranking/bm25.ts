@@ -157,7 +157,9 @@ export class Bm25Ranker {
 			const tfDenominator =
 				combinedTf +
 				this.params.k1 *
-					(1 - this.params.b + this.params.b * (combinedLength / this.stats.avgDocLength));
+					(1 -
+						this.params.b +
+						this.params.b * (combinedLength / this.stats.avgDocLength));
 
 			score += idf * (tfNumerator / tfDenominator);
 		}

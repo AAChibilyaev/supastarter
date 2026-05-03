@@ -40,12 +40,15 @@ export const performClusterOperation = protectedProcedure
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					const metrics = (await (client as any).metrics.retrieve()) as any;
 					data = {
-						system_cpu_percentage: (metrics?.system_cpu1_active_percentage as number) ?? 0,
+						system_cpu_percentage:
+							(metrics?.system_cpu1_active_percentage as number) ?? 0,
 						system_memory_total: (metrics?.system_memory_total_bytes as string) ?? "0",
 						system_memory_used: (metrics?.system_memory_used_bytes as string) ?? "0",
-						system_network_received: (metrics?.system_network_received_bytes as string) ?? "0",
+						system_network_received:
+							(metrics?.system_network_received_bytes as string) ?? "0",
 						system_network_sent: (metrics?.system_network_sent_bytes as string) ?? "0",
-						typesense_memory_used: (metrics?.typesense_memory_active_bytes as string) ?? "0",
+						typesense_memory_used:
+							(metrics?.typesense_memory_active_bytes as string) ?? "0",
 						typesense_memory_allocated:
 							(metrics?.typesense_memory_allocated_bytes as string) ?? "0",
 						typesense_processed_requests:
@@ -128,8 +131,10 @@ export const clusterMetrics = protectedProcedure
 				},
 				typesense: {
 					memoryActiveBytes: (metrics?.typesense_memory_active_bytes as string) ?? "0",
-					memoryAllocatedBytes: (metrics?.typesense_memory_allocated_bytes as string) ?? "0",
-					processedRequests: (metrics?.typesense_processed_requests_total_count as number) ?? 0,
+					memoryAllocatedBytes:
+						(metrics?.typesense_memory_allocated_bytes as string) ?? "0",
+					processedRequests:
+						(metrics?.typesense_processed_requests_total_count as number) ?? 0,
 					pendingWriteBatches:
 						(metrics?.typesense_pending_write_batches_total_count as number) ?? 0,
 				},

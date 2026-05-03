@@ -4,8 +4,8 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { ReactNode } from "react";
 
 import { AacsearchSearchProvider } from "@/components/aacsearch-search-provider";
-import { SearchToggle } from "@/components/search-toggle";
 import { I18nProviderClient } from "@/components/i18n-provider";
+import { SearchToggle } from "@/components/search-toggle";
 import { source } from "@/lib/source";
 
 const locales = [

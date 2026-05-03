@@ -253,7 +253,10 @@ export const scimRouter = new Hono()
 
 		const parsed = scimUserSchema.safeParse(body);
 		if (!parsed.success)
-			return c.json(scimError("Invalid schema: " + JSON.stringify(parsed.error.issues), 400), 400);
+			return c.json(
+				scimError("Invalid schema: " + JSON.stringify(parsed.error.issues), 400),
+				400,
+			);
 
 		const email = parsed.data.userName;
 		const displayName = parsed.data.displayName ?? parsed.data.name?.givenName ?? email;

@@ -1,5 +1,6 @@
 "use client";
 
+import { CsatBanner } from "@feedback/components/CsatBanner";
 import { SidebarInset, SidebarProvider } from "@repo/ui";
 import { AppSidebar } from "@shared/components/AppSidebar";
 import type { PropsWithChildren } from "react";
@@ -13,6 +14,7 @@ export function AppWrapper({ children }: PropsWithChildren) {
 					<div className="max-w-screen-2xl p-6 mx-auto w-full">{children}</div>
 				</div>
 			</SidebarInset>
+			<CsatBanner />
 		</SidebarProvider>
 	);
 }

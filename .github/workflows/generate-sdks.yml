@@ -1,193 +1,193 @@
 name: Generate SDKs from OpenAPI
 
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - "packages/api/v1/openapi.ts"
-      - "packages/api/openapi.yaml"
+    push:
+        branches: [main, develop]
+        paths:
+            - "packages/api/v1/openapi.ts"
+            - "packages/api/openapi.yaml"
 
 env:
-  OPENAPI_FILE: packages/api/openapi.yaml
-  NODE_VERSION: lts/*
+    OPENAPI_FILE: packages/api/openapi.yaml
+    NODE_VERSION: lts/*
 
 jobs:
-  # ── Step 1: Regenerate OpenAPI spec from TypeScript ──────────────
-  generate-openapi:
-    name: Generate and validate OpenAPI spec
-    runs-on: ubuntu-latest
-    outputs:
-      spec_changed: ${{ steps.check-changed.outputs.changed }}
+    # ── Step 1: Regenerate OpenAPI spec from TypeScript ──────────────
+    generate-openapi:
+        name: Generate and validate OpenAPI spec
+        runs-on: ubuntu-latest
+        outputs:
+            spec_changed: ${{ steps.check-changed.outputs.changed }}
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate openapi.yaml
-        run: pnpm generate:openapi
+            - name: Generate openapi.yaml
+              run: pnpm generate:openapi
 
-      - name: Validate OpenAPI spec
-        run: pnpm validate:openapi
+            - name: Validate OpenAPI spec
+              run: pnpm validate:openapi
 
-      - name: Check if spec changed
-        id: check-changed
-        run: |
-          if ! git diff --quiet -- "${{ env.OPENAPI_FILE }}"; then
-              echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-              echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
+            - name: Check if spec changed
+              id: check-changed
+              run: |
+                  if ! git diff --quiet -- "${{ env.OPENAPI_FILE }}"; then
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  fi
 
-      - name: Commit spec changes if any
-        if: steps.check-changed.outputs.changed == 'true'
-        run: |
-          git config user.name "aacsearch-bot"
-          git config user.email "bot@aacsearch.com"
-          git add "${{ env.OPENAPI_FILE }}"
-          git commit -m "[bot] Update openapi.yaml from spec generator"
-          git push
+            - name: Commit spec changes if any
+              if: steps.check-changed.outputs.changed == 'true'
+              run: |
+                  git config user.name "aacsearch-bot"
+                  git config user.email "bot@aacsearch.com"
+                  git add "${{ env.OPENAPI_FILE }}"
+                  git commit -m "[bot] Update openapi.yaml from spec generator"
+                  git push
 
-  # ── Step 2: Generate TypeScript SDK ──────────────────────────────
-  generate-ts-sdk:
-    name: Generate TypeScript SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 2: Generate TypeScript SDK ──────────────────────────────
+    generate-ts-sdk:
+        name: Generate TypeScript SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://registry.npmjs.org"
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  registry-url: "https://registry.npmjs.org"
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate TypeScript types from OpenAPI
-        run: |
-          npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-              -o packages/search-client/src/generated/sdk.ts
-          npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-              -o packages/search-client/src/generated/types.ts \
-              --export-type
+            - name: Generate TypeScript types from OpenAPI
+              run: |
+                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
+                      -o packages/search-client/src/generated/sdk.ts
+                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
+                      -o packages/search-client/src/generated/types.ts \
+                      --export-type
 
-      - name: Build TypeScript SDK
-        run: |
-          cd packages/search-client
-          pnpm build
+            - name: Build TypeScript SDK
+              run: |
+                  cd packages/search-client
+                  pnpm build
 
-      - name: Check SDK status
-        run: |
-          echo "✅ TypeScript SDK built successfully"
-          ls -lh packages/search-client/dist/
+            - name: Check SDK status
+              run: |
+                  echo "✅ TypeScript SDK built successfully"
+                  ls -lh packages/search-client/dist/
 
-      # Publish to npm (only on main branch push)
-      - name: Publish to npm
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd packages/search-client
-          pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            # Publish to npm (only on main branch push)
+            - name: Publish to npm
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  cd packages/search-client
+                  pnpm publish --access public --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  # ── Step 3: Generate PHP SDK ─────────────────────────────────────
-  generate-php-sdk:
-    name: Generate PHP SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 3: Generate PHP SDK ─────────────────────────────────────
+    generate-php-sdk:
+        name: Generate PHP SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate PHP SDK via openapi-generator
-        uses: openapi-generators/openapitools-generator-action@v1
-        with:
-          generator: php
-          openapi-file: ${{ env.OPENAPI_FILE }}
-          output: packages/search-client-php/
-          config: |-
-            composerPackageName=aacsearch/php-sdk
-            invokerPackage=Aacsearch
-            srcBasePath=src/
-            gitUserId=aacsearch
-            gitRepoId=aacsearch-php-sdk
+            - name: Generate PHP SDK via openapi-generator
+              uses: openapi-generators/openapitools-generator-action@v1
+              with:
+                  generator: php
+                  openapi-file: ${{ env.OPENAPI_FILE }}
+                  output: packages/search-client-php/
+                  config: |-
+                      composerPackageName=aacsearch/php-sdk
+                      invokerPackage=Aacsearch
+                      srcBasePath=src/
+                      gitUserId=aacsearch
+                      gitRepoId=aacsearch-php-sdk
 
-      - name: Validate PHP SDK syntax
-        run: |
-          if command -v php &> /dev/null; then
-              cd packages/search-client-php
-              php -l src/ 2>/dev/null || echo "PHP lint skipped (no PHP available)"
-          else
-              echo "PHP not available — lint skipped"
-          fi
+            - name: Validate PHP SDK syntax
+              run: |
+                  if command -v php &> /dev/null; then
+                      cd packages/search-client-php
+                      php -l src/ 2>/dev/null || echo "PHP lint skipped (no PHP available)"
+                  else
+                      echo "PHP not available — lint skipped"
+                  fi
 
-      - name: Check SDK status
-        run: |
-          echo "✅ PHP SDK generated"
-          ls -lh packages/search-client-php/src/
+            - name: Check SDK status
+              run: |
+                  echo "✅ PHP SDK generated"
+                  ls -lh packages/search-client-php/src/
 
-  # ── Step 4: Generate Python SDK ──────────────────────────────────
-  generate-python-sdk:
-    name: Generate Python SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 4: Generate Python SDK ──────────────────────────────────
+    generate-python-sdk:
+        name: Generate Python SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
 
-      - name: Generate Python SDK via openapi-generator
-        uses: openapi-generators/openapitools-generator-action@v1
-        with:
-          generator: python
-          openapi-file: ${{ env.OPENAPI_FILE }}
-          output: packages/search-client-python/
-          config: |-
-            packageName=aacsearch
-            projectName=aacsearch
-            packageVersion=1.0.0
+            - name: Generate Python SDK via openapi-generator
+              uses: openapi-generators/openapitools-generator-action@v1
+              with:
+                  generator: python
+                  openapi-file: ${{ env.OPENAPI_FILE }}
+                  output: packages/search-client-python/
+                  config: |-
+                      packageName=aacsearch
+                      projectName=aacsearch
+                      packageVersion=1.0.0
 
-      - name: Install Python SDK
-        run: |
-          cd packages/search-client-python
-          pip install -e .
+            - name: Install Python SDK
+              run: |
+                  cd packages/search-client-python
+                  pip install -e .
 
-      - name: Quick import test
-        run: |
-          python3 -c "import aacsearch; print('✅ Python SDK imported successfully')"
+            - name: Quick import test
+              run: |
+                  python3 -c "import aacsearch; print('✅ Python SDK imported successfully')"
 
-      - name: Check SDK status
-        run: |
-          echo "✅ Python SDK generated"
-          ls -lh packages/search-client-python/src/
+            - name: Check SDK status
+              run: |
+                  echo "✅ Python SDK generated"
+                  ls -lh packages/search-client-python/src/

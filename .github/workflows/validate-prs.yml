@@ -1,116 +1,116 @@
 name: Validate PRs
 
 on:
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 
 env:
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  BETTER_AUTH_SECRET: "better-auth-e2e-secret-1234567890"
+    DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    BETTER_AUTH_SECRET: "better-auth-e2e-secret-1234567890"
 
 jobs:
-  lint:
-    name: Lint and format check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Run oxlint
-        run: pnpm lint
-      - name: Check formatting
-        run: pnpm format:check
-  type-check:
-    name: Type check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Run TypeScript
-        run: pnpm type-check
-  build:
-    name: Build check
-    runs-on: ubuntu-latest
-    needs: [lint, type-check]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build saas app
-        run: pnpm --filter database generate && pnpm --filter saas build
-      - name: Build marketing app
-        run: pnpm --filter marketing build
-  unit:
-    name: Run unit tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Run unit tests
-        run: pnpm --filter @repo/api --filter saas --filter marketing test
-  e2e:
-    name: Run E2E tests
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: aacsearch_e2e
-          POSTGRES_USER: aacsearch
-          POSTGRES_PASSWORD: aacsearch_e2e
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Generate Prisma client
-        run: pnpm --filter database generate
-      - name: Setup database
-        run: pnpm --filter database db:push
-        env:
-          DATABASE_URL: postgres://aacsearch:aacsearch_e2e@localhost:5432/aacsearch_e2e
-      - name: Install Playwright browsers
-        run: pnpm --filter @repo/e2e exec playwright install chromium
-      - name: Run E2E test suite
-        run: pnpm --filter @repo/e2e test
-        env:
-          E2E_SAAS_URL: http://localhost:3010
-          E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
-          E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
-          E2E_ADMIN_API_KEY: ${{ secrets.E2E_ADMIN_API_KEY }}
-          DATABASE_URL: postgres://aacsearch:aacsearch_e2e@localhost:5432/aacsearch_e2e
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: packages/e2e/playwright-report/
-          retention-days: 30
+    lint:
+        name: Lint and format check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Run oxlint
+              run: pnpm lint
+            - name: Check formatting
+              run: pnpm format:check
+    type-check:
+        name: Type check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Run TypeScript
+              run: pnpm type-check
+    build:
+        name: Build check
+        runs-on: ubuntu-latest
+        needs: [lint, type-check]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Build saas app
+              run: pnpm --filter database generate && pnpm --filter saas build
+            - name: Build marketing app
+              run: pnpm --filter marketing build
+    unit:
+        name: Run unit tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Run unit tests
+              run: pnpm --filter @repo/api --filter saas --filter marketing test
+    e2e:
+        name: Run E2E tests
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:16-alpine
+                env:
+                    POSTGRES_DB: aacsearch_e2e
+                    POSTGRES_USER: aacsearch
+                    POSTGRES_PASSWORD: aacsearch_e2e
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+            - uses: pnpm/action-setup@v4
+            - name: Install dependencies
+              run: pnpm install
+            - name: Generate Prisma client
+              run: pnpm --filter database generate
+            - name: Setup database
+              run: pnpm --filter database db:push
+              env:
+                  DATABASE_URL: postgres://aacsearch:aacsearch_e2e@localhost:5432/aacsearch_e2e
+            - name: Install Playwright browsers
+              run: pnpm --filter @repo/e2e exec playwright install chromium
+            - name: Run E2E test suite
+              run: pnpm --filter @repo/e2e test
+              env:
+                  E2E_SAAS_URL: http://localhost:3010
+                  E2E_TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+                  E2E_TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+                  E2E_ADMIN_API_KEY: ${{ secrets.E2E_ADMIN_API_KEY }}
+                  DATABASE_URL: postgres://aacsearch:aacsearch_e2e@localhost:5432/aacsearch_e2e
+            - uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-report
+                  path: packages/e2e/playwright-report/
+                  retention-days: 30

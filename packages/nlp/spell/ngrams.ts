@@ -147,7 +147,8 @@ export class ShingleMatcher {
 				if (windowShingles.has(shingle)) intersection++;
 			}
 
-			const similarity = intersection / (queryShingles.size + windowShingles.size - intersection);
+			const similarity =
+				intersection / (queryShingles.size + windowShingles.size - intersection);
 			if (similarity > bestSimilarity) {
 				bestSimilarity = similarity;
 				bestPosition = i;

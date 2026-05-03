@@ -37,7 +37,9 @@ function generateDocument() {
 		id,
 		title: `Load test document ${id}`,
 		description: `Auto-generated document for ingest benchmark. Generated at ${Date.now()}. Content includes various searchable text fields for testing.`,
-		category: ["electronics", "books", "clothing", "home", "sports"][Math.floor(Math.random() * 5)],
+		category: ["electronics", "books", "clothing", "home", "sports"][
+			Math.floor(Math.random() * 5)
+		],
 		price: Math.round(Math.random() * 100000) / 100,
 		inStock: Math.random() > 0.2,
 		tags: Array.from({ length: 3 }, () => randomString(6)),

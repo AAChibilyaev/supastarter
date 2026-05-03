@@ -63,7 +63,9 @@ export function ChangePasswordForm() {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										{t("settings.account.security.changePassword.currentPassword")}
+										{t(
+											"settings.account.security.changePassword.currentPassword",
+										)}
 									</FormLabel>
 
 									<FormControl>
@@ -79,7 +81,9 @@ export function ChangePasswordForm() {
 							name="newPassword"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>{t("settings.account.security.changePassword.newPassword")}</FormLabel>
+									<FormLabel>
+										{t("settings.account.security.changePassword.newPassword")}
+									</FormLabel>
 									<FormControl>
 										<PasswordInput
 											autoComplete="new-password"
@@ -97,7 +101,10 @@ export function ChangePasswordForm() {
 								type="submit"
 								loading={form.formState.isSubmitting}
 								disabled={
-									!(form.formState.isValid && Object.keys(form.formState.dirtyFields).length)
+									!(
+										form.formState.isValid &&
+										Object.keys(form.formState.dirtyFields).length
+									)
 								}
 							>
 								{t("settings.save")}

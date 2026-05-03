@@ -223,7 +223,10 @@ export function OverviewPage() {
 		<div className="space-y-8">
 			{/* PageHeader + Period Switcher */}
 			<div className="flex items-start justify-between">
-				<PageHeader title={t("overview.title")} subtitle={t("overview.subtitle", { days })} />
+				<PageHeader
+					title={t("overview.title")}
+					subtitle={t("overview.subtitle", { days })}
+				/>
 				<Select value={validPeriod} onValueChange={(v) => setPeriod(v as PeriodKey)}>
 					<SelectTrigger className="w-28">
 						<SelectValue />
@@ -300,7 +303,11 @@ export function OverviewPage() {
 					</Badge>
 				</StatsTile>
 
-				<StatsTile title={t("overview.failedSyncJobs")} value={failedSyncs} valueFormat="number">
+				<StatsTile
+					title={t("overview.failedSyncJobs")}
+					value={failedSyncs}
+					valueFormat="number"
+				>
 					{failedSyncs > 0 && (
 						<Badge status="error" className="text-xs">
 							{failedSyncs} failed
@@ -314,7 +321,9 @@ export function OverviewPage() {
 				{/* Searches over time sparkline */}
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">{t("overview.searchesOverTime")}</CardTitle>
+						<CardTitle className="text-base">
+							{t("overview.searchesOverTime")}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						{searchesOverTime.length > 0 ? (
@@ -348,9 +357,14 @@ export function OverviewPage() {
 						{topQueriesData && topQueriesData.length > 0 ? (
 							<div className="space-y-2">
 								{topQueriesData.map((q, i) => (
-									<div key={q.query} className="text-sm flex items-center justify-between">
+									<div
+										key={q.query}
+										className="text-sm flex items-center justify-between"
+									>
 										<span className="gap-2 flex items-center">
-											<span className="w-5 text-xs text-right text-muted-foreground">{i + 1}</span>
+											<span className="w-5 text-xs text-right text-muted-foreground">
+												{i + 1}
+											</span>
 											<span>{q.query}</span>
 										</span>
 										<span className="font-medium tabular-nums">{q.count}</span>
@@ -381,7 +395,9 @@ export function OverviewPage() {
 										{item.icon}
 									</div>
 									<div className="flex-1">{item.label}</div>
-									<span className="text-xs text-muted-foreground">{item.time}</span>
+									<span className="text-xs text-muted-foreground">
+										{item.time}
+									</span>
 								</div>
 							))}
 						</div>
@@ -409,7 +425,10 @@ export function OverviewPage() {
 					<CardContent>
 						<div className="space-y-4">
 							{pipelineStatus.activeReindexJobs.map((job) => {
-								const percent = job.total > 0 ? Math.round((job.processed / job.total) * 100) : 0;
+								const percent =
+									job.total > 0
+										? Math.round((job.processed / job.total) * 100)
+										: 0;
 								return (
 									<div key={job.jobId} className="space-y-2">
 										<div className="text-sm flex items-center justify-between">
@@ -442,17 +461,23 @@ export function OverviewPage() {
 							{connectorStatus === "online" ? (
 								<>
 									<WifiIcon className="size-5 text-green-500" />
-									<span className="text-sm font-medium">{t("overview.connectorOnline")}</span>
+									<span className="text-sm font-medium">
+										{t("overview.connectorOnline")}
+									</span>
 								</>
 							) : connectorStatus === "offline" ? (
 								<>
 									<WifiOffIcon className="size-5 text-red-500" />
-									<span className="text-sm font-medium">{t("overview.connectorOffline")}</span>
+									<span className="text-sm font-medium">
+										{t("overview.connectorOffline")}
+									</span>
 								</>
 							) : (
 								<>
 									<HelpCircleIcon className="size-5 text-muted-foreground" />
-									<span className="text-sm font-medium">{t("overview.connectorUnknown")}</span>
+									<span className="text-sm font-medium">
+										{t("overview.connectorUnknown")}
+									</span>
 								</>
 							)}
 						</div>
@@ -462,7 +487,9 @@ export function OverviewPage() {
 				{/* Plan info card */}
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">{tSettings("billing.activePlan.title")}</CardTitle>
+						<CardTitle className="text-base">
+							{tSettings("billing.activePlan.title")}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex items-center justify-between">
@@ -470,7 +497,9 @@ export function OverviewPage() {
 								<span className="font-semibold capitalize">
 									{planInfo?.planName ?? t("overview.freePlan")}
 								</span>
-								{planInfo?.status !== "active" && <Badge status="error">{planInfo?.status}</Badge>}
+								{planInfo?.status !== "active" && (
+									<Badge status="error">{planInfo?.status}</Badge>
+								)}
 							</div>
 						</div>
 					</CardContent>

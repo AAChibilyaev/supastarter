@@ -118,7 +118,10 @@ export function SearchDashboard({ organizationId, canManage, baseUrl }: SearchDa
 					{selectedSlug ? (
 						<>
 							<SearchUsageCards organizationId={organizationId} />
-							<SearchApiKeysPanel organizationId={organizationId} slug={selectedSlug} />
+							<SearchApiKeysPanel
+								organizationId={organizationId}
+								slug={selectedSlug}
+							/>
 						</>
 					) : (
 						<EmptyState variant="inline" description={t("search.selectIndex")} />

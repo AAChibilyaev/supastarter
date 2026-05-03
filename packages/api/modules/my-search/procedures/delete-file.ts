@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAccess } from "../lib/access";
+import { deletePersonalDocumentChunks } from "../lib/personal-collections";
 
 export const deleteFile = protectedProcedure
 	.route({
@@ -11,7 +12,8 @@ export const deleteFile = protectedProcedure
 		path: "/my-search/indexes/{indexId}/files/{fileId}",
 		tags: ["My Search"],
 		summary: "Delete file from personal search index",
-		description: "Removes a file entry from a personal search index.",
+		description:
+			"Removes a file entry from a personal search index and its chunks from Typesense.",
 	})
 	.input(
 		z.object({
@@ -31,4 +33,16 @@ export const deleteFile = protectedProcedure
 		}
 
 		await removeFileFromIndex(input.indexId, input.fileId);
+
+		// Clean up Typesense chunks using a try-catch so DB cleanup isn't blocked
+		try {
+			await deletePersonalDocumentChunks(
+				input.organizationId,
+				index.slug,
+				index.version,
+				input.fileId,
+			);
+		} catch {
+			// Typesense cleanup failure is non-fatal
+		}
 	});

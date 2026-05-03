@@ -78,7 +78,8 @@ export function SoftwareApplicationSchema({
 	if (variant === "pricing") {
 		base.offers = {
 			...base.offers,
-			description: "Flat per-index pricing with unlimited search operations. Free tier available.",
+			description:
+				"Flat per-index pricing with unlimited search operations. Free tier available.",
 			offers: PRICING.plans.map((plan) => ({
 				"@type": "Offer",
 				name: plan.name,

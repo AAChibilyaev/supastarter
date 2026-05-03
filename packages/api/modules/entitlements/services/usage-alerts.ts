@@ -20,10 +20,12 @@ import { buildQuotaAlertMessage, sendSlackAlert } from "./slack-notifier";
 
 interface QuotaAlertState {
 	search: {
+		p50: boolean;
 		p80: boolean;
 		p100: boolean;
 	};
 	ingest: {
+		p50: boolean;
 		p80: boolean;
 		p100: boolean;
 	};
@@ -32,6 +34,8 @@ interface QuotaAlertState {
 interface OrgMetadata {
 	quotaAlerts?: QuotaAlertState;
 	slackWebhookUrl?: string;
+	/** Custom alert thresholds (0.0–1.0). Defaults to [0.5, 0.8, 1.0]. */
+	quotaAlertThresholds?: number[];
 }
 
 // ─── Alert state helpers ────────────────────────────────────────
@@ -49,22 +53,35 @@ function parseOrgMetadata(raw: string | null): OrgMetadata {
 	}
 }
 
+const DEFAULT_THRESHOLDS = [0.5, 0.8, 1.0];
+
+const THRESHOLD_KEYS: Record<number, keyof QuotaAlertState["search"]> = {
+	0.5: "p50",
+	0.8: "p80",
+	1.0: "p100",
+};
+
+/** Map numeric threshold to the alert state key used in OrgMetadata. */
+function thresholdToKey(threshold: number): keyof QuotaAlertState["search"] {
+	return THRESHOLD_KEYS[threshold] ?? "p80";
+}
+
 function getThresholdsToAlert(
 	alerts: QuotaAlertState | undefined,
 	resource: "search" | "ingest",
 	percentUsed: number,
+	customThresholds?: number[],
 ): number[] {
 	const thresholds: number[] = [];
 	const state = alerts?.[resource];
+	const activeThresholds = customThresholds ?? DEFAULT_THRESHOLDS;
 
-	// 80% threshold — only if not already sent
-	if (percentUsed >= 0.8 && !state?.p80) {
-		thresholds.push(80);
-	}
-
-	// 100% threshold — only if not already sent
-	if (percentUsed >= 1.0 && !state?.p100) {
-		thresholds.push(100);
+	for (const threshold of activeThresholds) {
+		const key = thresholdToKey(threshold);
+		const alreadySent = state?.[key] ?? false;
+		if (percentUsed >= threshold && !alreadySent) {
+			thresholds.push(Math.round(threshold * 100));
+		}
 	}
 
 	return thresholds;
@@ -76,10 +93,10 @@ function updateAlertState(
 	threshold: number,
 ): QuotaAlertState {
 	const current = state ?? {
-		search: { p80: false, p100: false },
-		ingest: { p80: false, p100: false },
+		search: { p50: false, p80: false, p100: false },
+		ingest: { p50: false, p80: false, p100: false },
 	};
-	const key = threshold >= 100 ? "p100" : "p80";
+	const key = threshold >= 100 ? "p100" : threshold >= 80 ? "p80" : "p50";
 	return {
 		...current,
 		[resource]: {

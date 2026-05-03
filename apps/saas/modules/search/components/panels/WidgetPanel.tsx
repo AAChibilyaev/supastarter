@@ -176,10 +176,15 @@ export function WidgetPanel({ slug, organizationId, baseUrl }: WidgetPanelProps)
 							<Label>{t("search.widget.facetFields")}</Label>
 							<div className="gap-3 flex flex-wrap">
 								{facetableFields.map((field) => (
-									<label key={field} className="gap-2 flex cursor-pointer items-center">
+									<label
+										key={field}
+										className="gap-2 flex cursor-pointer items-center"
+									>
 										<Checkbox
 											checked={facetFields.includes(field)}
-											onCheckedChange={(checked) => handleFacetToggle(field, !!checked)}
+											onCheckedChange={(checked) =>
+												handleFacetToggle(field, !!checked)
+											}
 										/>
 										<span className="text-sm font-mono">{field}</span>
 									</label>
@@ -193,13 +198,19 @@ export function WidgetPanel({ slug, organizationId, baseUrl }: WidgetPanelProps)
 							<Label htmlFor="default-sort">{t("search.widget.defaultSort")}</Label>
 							<Select
 								value={defaultSortField || "__none__"}
-								onValueChange={(v) => setDefaultSortField(v === "__none__" ? "" : v)}
+								onValueChange={(v) =>
+									setDefaultSortField(v === "__none__" ? "" : v)
+								}
 							>
 								<SelectTrigger id="default-sort" className="w-64">
-									<SelectValue placeholder={t("search.widget.defaultSortPlaceholder")} />
+									<SelectValue
+										placeholder={t("search.widget.defaultSortPlaceholder")}
+									/>
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="__none__">{t("search.widget.defaultSortNone")}</SelectItem>
+									<SelectItem value="__none__">
+										{t("search.widget.defaultSortNone")}
+									</SelectItem>
 									{sortableFields.map((field) => (
 										<SelectItem key={field} value={field}>
 											{field}
@@ -213,13 +224,21 @@ export function WidgetPanel({ slug, organizationId, baseUrl }: WidgetPanelProps)
 					<div className="space-y-3">
 						<Label>{t("search.widget.displayOptions")}</Label>
 						<div className="gap-3 flex items-center">
-							<Switch id="show-prices" checked={showPrices} onCheckedChange={setShowPrices} />
+							<Switch
+								id="show-prices"
+								checked={showPrices}
+								onCheckedChange={setShowPrices}
+							/>
 							<label htmlFor="show-prices" className="text-sm cursor-pointer">
 								{t("search.widget.showPrices")}
 							</label>
 						</div>
 						<div className="gap-3 flex items-center">
-							<Switch id="show-images" checked={showImages} onCheckedChange={setShowImages} />
+							<Switch
+								id="show-images"
+								checked={showImages}
+								onCheckedChange={setShowImages}
+							/>
 							<label htmlFor="show-images" className="text-sm cursor-pointer">
 								{t("search.widget.showImages")}
 							</label>
@@ -234,7 +253,9 @@ export function WidgetPanel({ slug, organizationId, baseUrl }: WidgetPanelProps)
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="auto">{t("search.widget.themeAuto")}</SelectItem>
-								<SelectItem value="light">{t("search.widget.themeLight")}</SelectItem>
+								<SelectItem value="light">
+									{t("search.widget.themeLight")}
+								</SelectItem>
 								<SelectItem value="dark">{t("search.widget.themeDark")}</SelectItem>
 							</SelectContent>
 						</Select>

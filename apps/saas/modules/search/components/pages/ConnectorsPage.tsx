@@ -149,7 +149,8 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 		const lastJob = syncJobs[0];
 		const tokenName = lastJob.indexId
 			? (activeTokens.find(
-					(token) => token.index?.slug === lastJob.indexId || token.id === lastJob.indexId,
+					(token) =>
+						token.index?.slug === lastJob.indexId || token.id === lastJob.indexId,
 				)?.name ?? "")
 			: "Direct API";
 
@@ -260,7 +261,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
-							<p className="text-2xl font-bold">{pipelineStatus.workerThroughput}/5m</p>
+							<p className="text-2xl font-bold">
+								{pipelineStatus.workerThroughput}/5m
+							</p>
 						</CardContent>
 					</Card>
 					<Card>
@@ -282,7 +285,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 							</CardTitle>
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3">
-							<p className="text-2xl font-bold text-destructive">{pipelineStatus.failedCount}</p>
+							<p className="text-2xl font-bold text-destructive">
+								{pipelineStatus.failedCount}
+							</p>
 						</CardContent>
 					</Card>
 				</div>
@@ -304,12 +309,19 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 			{!isNewOrg && (
 				<Card>
 					<CardHeader>
-						<CardTitle className="text-base">{t("search.connector.activeConnectors")}</CardTitle>
-						<CardDescription>{t("search.connector.activeConnectorsDesc")}</CardDescription>
+						<CardTitle className="text-base">
+							{t("search.connector.activeConnectors")}
+						</CardTitle>
+						<CardDescription>
+							{t("search.connector.activeConnectorsDesc")}
+						</CardDescription>
 					</CardHeader>
 					<CardContent className="overflow-x-auto">
 						{activeTokens.length === 0 ? (
-							<EmptyState variant="inline" description={t("search.connector.noConnectors")} />
+							<EmptyState
+								variant="inline"
+								description={t("search.connector.noConnectors")}
+							/>
 						) : (
 							<Table>
 								<TableHeader>
@@ -318,7 +330,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 										<TableHead>{t("search.apiKeys.tableName")}</TableHead>
 										<TableHead>{t("search.connector.jobStatus")}</TableHead>
 										<TableHead>{t("search.connector.lastHeartbeat")}</TableHead>
-										<TableHead className="text-right">{t("search.connector.jobActions")}</TableHead>
+										<TableHead className="text-right">
+											{t("search.connector.jobActions")}
+										</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -342,9 +356,13 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 											return (
 												<TableRow key={token.id}>
 													<TableCell className="font-medium">
-														{t(`search.connector.${deriveSourceType(token.name)}`)}
+														{t(
+															`search.connector.${deriveSourceType(token.name)}`,
+														)}
 													</TableCell>
-													<TableCell className="text-sm">{token.name}</TableCell>
+													<TableCell className="text-sm">
+														{token.name}
+													</TableCell>
 													<TableCell>
 														<Badge
 															status={
@@ -358,8 +376,12 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 															{status === "online"
 																? t("search.connector.statusOnline")
 																: status === "unknown"
-																	? t("search.connector.statusUnknown")
-																	: t("search.connector.statusOffline")}
+																	? t(
+																			"search.connector.statusUnknown",
+																		)
+																	: t(
+																			"search.connector.statusOffline",
+																		)}
 														</Badge>
 													</TableCell>
 													<TableCell className="text-sm whitespace-nowrap text-muted-foreground">
@@ -367,7 +389,10 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 															<span className="gap-1 inline-flex items-center">
 																<Clock className="size-3" />
 																{t("search.connector.time.ago", {
-																	time: relativeTime(token.lastUsedAt, t),
+																	time: relativeTime(
+																		token.lastUsedAt,
+																		t,
+																	),
 																})}
 															</span>
 														) : (
@@ -376,15 +401,23 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 													</TableCell>
 													<TableCell className="text-right">
 														<div className="gap-2 flex justify-end">
-															<Button variant="outline" size="sm" onClick={handleSyncNow}>
+															<Button
+																variant="outline"
+																size="sm"
+																onClick={handleSyncNow}
+															>
 																<RefreshCw className="mr-1 size-3" />
 																{t("search.connector.syncNow")}
 															</Button>
 															<Button
 																variant="destructive"
 																size="sm"
-																loading={revokingTokenId === token.id}
-																onClick={() => handleRevoke(token.id)}
+																loading={
+																	revokingTokenId === token.id
+																}
+																onClick={() =>
+																	handleRevoke(token.id)
+																}
 															>
 																{t("search.connector.revokeToken")}
 															</Button>
@@ -413,7 +446,9 @@ export function ConnectorsPage({ organizationId }: ConnectorsPageProps) {
 					</span>
 				</div>
 				{syncJobs?.length === 0 && !syncJobsLoading ? (
-					<div className="p-6 text-sm text-muted-foreground">{t("search.connector.noJobLogs")}</div>
+					<div className="p-6 text-sm text-muted-foreground">
+						{t("search.connector.noJobLogs")}
+					</div>
 				) : (
 					<SyncJobsTable
 						jobs={syncJobs ?? []}

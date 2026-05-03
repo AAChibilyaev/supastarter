@@ -13,7 +13,10 @@ export async function generateMetadata({
 }) {
 	const { organizationSlug } = await params;
 	return {
-		title: await getSearchOrganizationMetadataTitle(organizationSlug, "search.nav.recommendations"),
+		title: await getSearchOrganizationMetadataTitle(
+			organizationSlug,
+			"search.nav.recommendations",
+		),
 	};
 }
 

@@ -172,7 +172,9 @@ export const publicSearchApp = new Hono()
 				.map((term) => `(${term})`)
 				.join(" || ");
 			if (negated) {
-				combinedFilter = combinedFilter ? `${combinedFilter} && !(${negated})` : `!(${negated})`;
+				combinedFilter = combinedFilter
+					? `${combinedFilter} && !(${negated})`
+					: `!(${negated})`;
 			}
 		}
 
@@ -214,7 +216,12 @@ export const publicSearchApp = new Hono()
 
 			// Compute did-you-mean when results are empty
 			let didYouMean: string | undefined;
-			if (result.found === 0 && processed.q && processed.q !== "*" && processed.q.length > 2) {
+			if (
+				result.found === 0 &&
+				processed.q &&
+				processed.q !== "*" &&
+				processed.q.length > 2
+			) {
 				try {
 					const lang = detectLanguage(processed.q) ?? "en";
 					const isRussian = lang === "ru";
@@ -277,7 +284,11 @@ export const publicSearchApp = new Hono()
 					const freqs = new Map<string, number>();
 					for (const w of commonWords) freqs.set(w, 100);
 
-					const symspell = new SymSpell({ maxEditDistance: 2, verbosity: 2, maxResults: 5 });
+					const symspell = new SymSpell({
+						maxEditDistance: 2,
+						verbosity: 2,
+						maxResults: 5,
+					});
 					symspell.createDictionary(commonWords, freqs);
 
 					const words = processed.q.split(/\s+/).filter(Boolean);

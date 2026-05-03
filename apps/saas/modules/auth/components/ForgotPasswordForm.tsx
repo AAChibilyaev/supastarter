@@ -75,7 +75,9 @@ export function ForgotPasswordForm() {
 						<Alert variant="success">
 							<MailboxIcon />
 							<AlertTitle>{t("auth.forgotPassword.hints.linkSent.title")}</AlertTitle>
-							<AlertDescription>{t("auth.forgotPassword.hints.linkSent.message")}</AlertDescription>
+							<AlertDescription>
+								{t("auth.forgotPassword.hints.linkSent.message")}
+							</AlertDescription>
 						</Alert>
 					) : (
 						<Form {...form}>
@@ -83,7 +85,9 @@ export function ForgotPasswordForm() {
 								{form.formState.errors.root && (
 									<Alert variant="error">
 										<AlertTriangleIcon />
-										<AlertTitle>{form.formState.errors.root.message}</AlertTitle>
+										<AlertTitle>
+											{form.formState.errors.root.message}
+										</AlertTitle>
 									</Alert>
 								)}
 

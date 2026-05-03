@@ -7,7 +7,9 @@ export async function reserveAiCredits(
 	input: ReserveAiCreditsInput,
 ): Promise<ReserveAiCreditsResult> {
 	try {
-		const rows = await db.$queryRaw<Array<{ reservation_id: string; available_kopecks: bigint }>>`
+		const rows = await db.$queryRaw<
+			Array<{ reservation_id: string; available_kopecks: bigint }>
+		>`
 			SELECT * FROM reserve_ai_credits(
 				${input.walletId}::text,
 				${input.userId}::text,

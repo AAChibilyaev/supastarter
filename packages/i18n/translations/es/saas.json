@@ -839,7 +839,10 @@
 			"number": "Numero",
 			"specialCharacter": "Caracter especial"
 		},
-		"close": "Cerrar"
+		"close": "Cerrar",
+		"clear": "Limpiar",
+		"previous": "Anterior",
+		"next": "Siguiente"
 	},
 	"checkoutReturn": {
 		"title": "Procesando tu compra",
@@ -1508,11 +1511,61 @@
 			"widgetAnalytics": "Analíticas",
 			"widgetInstall": "Instalar"
 		},
-		"recommendations": {
+				"recommendations": {
 			"description": "Configure recomendaciones de productos impulsadas por IA, incluyendo artículos similares, sugerencias personalizadas y GraphRAG.",
 			"dashboardTitle": "Panel de recomendaciones",
+			"similarTab": "Artículos similares",
+			"personalizedTab": "Personalizadas",
+			"graphRagTab": "GraphRAG",
+			"settingsTab": "Ajustes",
 			"comingSoon": "Próximamente",
-			"comingSoonDescription": "Las recomendaciones impulsadas por IA están en desarrollo. Vuelva pronto para ver artículos similares, sugerencias personalizadas y explicaciones basadas en GraphRAG."
+			"comingSoonDescription": "Las recomendaciones impulsadas por IA están en desarrollo. Vuelva pronto para ver artículos similares, sugerencias personalizadas y explicaciones basadas en GraphRAG.",
+			"pickProduct": "Seleccione un producto para ver recomendaciones",
+			"searchProducts": "Buscar productos...",
+			"noResults": "No se encontraron productos coincidentes",
+			"selectProduct": "Seleccione un producto de los resultados de búsqueda para ver sus recomendaciones",
+			"resultsCount": "Resultados ({{count}})",
+			"neo4jDisconnected": "El motor de recomendaciones no está conectado. Configure Neo4j para activar las recomendaciones.",
+			"stats": {
+				"recommendationsServed": "Recomendaciones totales servidas",
+				"recommendationsServedDesc": "Todas las veces a través del widget y API",
+				"clickThroughRate": "Tasa de clics",
+				"clickThroughRateDesc": "Promedio en todos los tipos de recomendación",
+				"popularItems": "Artículos populares",
+				"popularItemsDesc": "Productos más vistos esta semana",
+				"popularItemsEmpty": "Aún no hay artículos populares. Comience a agregar productos para ver tendencias.",
+				"trendingNow": "Tendencias",
+				"trendingNowDesc": "Productos con mayor interacción reciente",
+				"trendingNowEmpty": "Aún no hay artículos en tendencia. Los datos aparecen cuando los usuarios interactúan con los productos."
+			},
+			"settings": {
+				"title": "Configuración de recomendaciones",
+				"count": "Cantidad de recomendaciones",
+				"countHint": "Número de recomendaciones a devolver por solicitud (1-100)",
+				"algorithm": "Algoritmo",
+				"algorithmHint": "Qué algoritmo de recomendación utilizar",
+				"algorithmGraph": "Grafo (Neo4j)",
+				"algorithmVector": "Vector (Embeddings)",
+				"algorithmHybrid": "Híbrido (Grafo + Vector)",
+				"fieldWeights": "Pesos de campos",
+				"fieldWeightsHint": "Cuánto contribuye cada campo a la puntuación de similitud",
+				"fieldTitle": "Título",
+				"fieldDescription": "Descripción",
+				"fieldCategory": "Categoría",
+				"save": "Guardar configuración",
+				"saved": "Configuración guardada exitosamente",
+				"saveError": "Error al guardar la configuración"
+			},
+			"graphRag": {
+				"title": "Recomendaciones GraphRAG",
+				"description": "Haga una pregunta en lenguaje natural y obtenga recomendaciones de productos impulsadas por IA con explicaciones.",
+				"searchPlaceholder": "¿Qué está buscando?",
+				"searchButton": "Obtener recomendaciones",
+				"recommendations": "Productos recomendados",
+				"explanation": "Por qué se recomendó esto",
+				"noResults": "No se encontraron recomendaciones para su consulta.",
+				"error": "No se pudieron obtener las recomendaciones. Intente nuevamente."
+			}
 		},
 		"noIndexesDescription": "Los índices de búsqueda almacenan tus datos y potencian las consultas de búsqueda. Crea uno para empezar.",
 		"synonyms": {
@@ -2046,7 +2099,17 @@
 			"previewImage": "Haga clic para abrir la imagen en una nueva pestaña",
 			"previewUrl": "Haga clic para abrir la página web",
 			"previewGeneric": "La vista previa no está disponible para este tipo de archivo"
-		}
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source"
 	},
 	"feedback": {
 		"nps": {

@@ -90,10 +90,10 @@ Load the full context from this file. Scan sections relevant to the task. Load P
 ```markdown
 1. Read task text twice — note every constraint
 2. Classify scope by PRD:
-   - v0.x (search core) ✅ — PROCEED
-   - v0.5 (marketing site) ✅ — PROCEED
-   - v0.6/v0.7/v1.0 → DEFER — ask user
-   - wallet/ai-core/billing → DEFER — ask user
+    - v0.x (search core) ✅ — PROCEED
+    - v0.5 (marketing site) ✅ — PROCEED
+    - v0.6/v0.7/v1.0 → DEFER — ask user
+    - wallet/ai-core/billing → DEFER — ask user
 3. memory_search() for related facts and gotchas
 4. If touching existing code → code_search() for relevant symbols
 5. State plan in <plan> block before writing any code
@@ -622,9 +622,52 @@ export const config = {
 
 ## 8. UI COMPONENT CATALOG (quick reference)
 
-### Layer 1 — `@repo/ui/components/*` (27 primitives)
+### 📖 Official shadcn Docs
 
-`accordion`, `alert`, `alert-dialog`, `avatar`, `badge`, `button`, `card`, `chart`, `dialog`, `dropdown-menu`, `form`, `input`, `input-otp`, `label`, `logo`, `popover`, `progress`, `select`, `sheet`, `skeleton`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `tooltip`
+- **LLMs.txt:** https://ui.shadcn.com/llms.txt
+- **MCP Server:** https://ui.shadcn.com/docs/mcp — AI can browse/search/install components
+- **Available:** 39/59 official components installed in `packages/ui/components/`
+- **Install missing:** `pnpm dlx shadcn@latest add <component-name>` before writing custom CSS
+- **Missing-but-useful:** calendar, date-picker, combobox, radio-group, slider, resizable, carousel, menubar, toggle-group
+- **Style ecosystem:** originui.com, magicui.design, aceternity.com, 21st.dev
+
+### 🔴 HARD RULE: NO raw card divs — USE shadcn Card
+
+**Запрещено:**
+
+```
+<div className="rounded-lg border p-4 ...">         ❌
+<div className="rounded-md border overflow-x-auto">  ❌
+<div className="rounded-lg border bg-card">          ❌
+<div className="rounded-lg border border-dashed">    ❌ (use Card + custom className)
+```
+
+**Правильно:**
+
+```tsx
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@repo/ui/components/card";
+
+<Card className="rounded-lg border">                          ← стили через className
+<Card><CardContent className="p-4 space-y-3">...</CardContent></Card>  ← с кастомной паддинг
+<Card className="overflow-x-auto rounded-lg border"><CardContent className="p-0">  ← table wrapper
+```
+
+**Исключения** (не заменять на Card): иконки-контейнеры (size-\*), dropzone с dashed border, `<pre>` код-блоки, input/styled элементы форм.
+
+**Card API:**
+
+```
+Card        = <div className="rounded-3xl border bg-card text-card-foreground">
+CardHeader  = <div className="space-y-1.5 p-6 pb-4 flex flex-col">
+CardTitle   = <h3 className="font-medium text-lg leading-none">
+CardDescription = <p className="text-sm text-muted-foreground">
+CardContent = <div className="p-6 pt-0">
+CardFooter  = <div className="p-6 pt-0 flex items-center">
+```
+
+### Layer 1 — `@repo/ui/components/*` (39 primitives)
+
+`accordion`, `alert`, `alert-dialog`, `avatar`, `badge`, `breadcrumb`, `button`, `card`, `chart`, `checkbox`, `collapsible`, `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `form`, `hover-card`, `input`, `input-otp`, `label`, `logo`, `navigation-menu`, `popover`, `progress`, `scroll-area`, `select`, `separator`, `sheet`, `sidebar`, `skeleton`, `spinner`, `switch`, `table`, `tabs`, `textarea`, `toast`, `toggle`, `tooltip`
 
 Button variants: `primary` (default), `secondary`, `outline`, `ghost`, `destructive`, `link`. Has `loading` prop.
 Badge uses `status` prop (not `variant`): `success` / `info` / `warning` / `error`.

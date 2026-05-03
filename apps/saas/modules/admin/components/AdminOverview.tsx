@@ -67,7 +67,9 @@ export function AdminOverview() {
 									<Card key={user.id} className="rounded-md">
 										<CardContent className="p-3 text-sm flex items-center justify-between">
 											<div>
-												<p className="font-medium">{user.name ?? user.email}</p>
+												<p className="font-medium">
+													{user.name ?? user.email}
+												</p>
 												<p className="text-foreground/60">{user.email}</p>
 											</div>
 											<span className="text-xs text-foreground/60">
@@ -97,7 +99,9 @@ export function AdminOverview() {
 										<CardContent className="p-3 text-sm flex items-center justify-between">
 											<div>
 												<p className="font-medium">{organization.name}</p>
-												<p className="text-foreground/60">{organization.slug ?? t("noSlug")}</p>
+												<p className="text-foreground/60">
+													{organization.slug ?? t("noSlug")}
+												</p>
 											</div>
 											<span className="text-xs text-foreground/60">
 												{t("membersCount", {
@@ -138,7 +142,9 @@ function KpiCard({
 				{isLoading ? (
 					<Skeleton className="h-8 w-20" />
 				) : (
-					<p className="font-semibold text-3xl">{typeof value === "number" ? value : fallback}</p>
+					<p className="font-semibold text-3xl">
+						{typeof value === "number" ? value : fallback}
+					</p>
 				)}
 			</CardContent>
 		</Card>

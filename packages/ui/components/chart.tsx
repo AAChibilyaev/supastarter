@@ -55,7 +55,9 @@ const ChartContainer = React.forwardRef<
 				{...props}
 			>
 				<ChartStyle id={chartId} config={config} />
-				<RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
+				<RechartsPrimitive.ResponsiveContainer>
+					{children}
+				</RechartsPrimitive.ResponsiveContainer>
 			</div>
 		</ChartContext.Provider>
 	);
@@ -78,7 +80,8 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 ${prefix} [data-chart=${id}] {
 ${colorConfig
 	.map(([key, itemConfig]) => {
-		const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
+		const color =
+			itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
 		return color ? `  --color-${key}: ${color};` : null;
 	})
 	.join("\n")}
@@ -210,7 +213,13 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContent
 									)}
 								>
 									{formatter && item?.value !== undefined && item.name ? (
-										formatter(item.value, item.name, item, index, item.payload || {})
+										formatter(
+											item.value,
+											item.name,
+											item,
+											index,
+											item.payload || {},
+										)
 									) : (
 										<>
 											{itemConfig?.icon ? (
@@ -225,7 +234,9 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContent
 																"w-1": indicator === "line",
 																"w-0 border-[1.5px] border-dashed bg-transparent":
 																	indicator === "dashed",
-																"my-0.5": nestLabel && indicator === "dashed",
+																"my-0.5":
+																	nestLabel &&
+																	indicator === "dashed",
 															},
 														)}
 														style={

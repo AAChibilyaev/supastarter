@@ -55,6 +55,8 @@ describe("generateOrganizationSlug", () => {
 		);
 		await expect(
 			call(generateOrganizationSlug, { name: "Taken Org" }, ctx),
-		).rejects.toMatchObject({ code: "INTERNAL_SERVER_ERROR" });
+		).rejects.toMatchObject({
+			code: "INTERNAL_SERVER_ERROR",
+		});
 	});
 });

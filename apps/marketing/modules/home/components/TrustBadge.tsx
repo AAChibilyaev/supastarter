@@ -65,7 +65,9 @@ export function TrustBadge() {
 					<span className="text-sm font-semibold whitespace-nowrap text-foreground">
 						{badge.rating}
 						{badge.maxRating && (
-							<span className="font-normal text-muted-foreground/60">/{badge.maxRating}</span>
+							<span className="font-normal text-muted-foreground/60">
+								/{badge.maxRating}
+							</span>
 						)}
 					</span>
 					<span className="text-xs text-muted-foreground">{t(badge.labelKey)}</span>

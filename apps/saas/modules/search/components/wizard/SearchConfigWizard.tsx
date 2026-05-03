@@ -123,7 +123,10 @@ export function SearchConfigWizard({
 						</div>
 						{idx < STEPS.length - 1 && (
 							<div
-								className={cn("h-px flex-1", currentStep > step.id ? "bg-primary" : "bg-border")}
+								className={cn(
+									"h-px flex-1",
+									currentStep > step.id ? "bg-primary" : "bg-border",
+								)}
 							/>
 						)}
 					</div>
@@ -243,9 +246,13 @@ function StepDataSource({ value, onChange, t }: StepDataSourceProps) {
 							</div>
 							<div className="flex-1">
 								<p className="font-medium">{t(opt.titleKey)}</p>
-								<p className="mt-1 text-sm text-muted-foreground">{t(opt.descKey)}</p>
+								<p className="mt-1 text-sm text-muted-foreground">
+									{t(opt.descKey)}
+								</p>
 							</div>
-							{value === opt.id && <CheckIcon className="size-5 shrink-0 text-primary" />}
+							{value === opt.id && (
+								<CheckIcon className="size-5 shrink-0 text-primary" />
+							)}
 						</CardContent>
 					</Card>
 				))}
@@ -310,83 +317,93 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 					<p className="text-xs text-muted-foreground/60">{t("schemaEmptyHint")}</p>
 				</div>
 			) : (
-				<Card className="overflow-x-auto rounded-md border"><CardContent className="p-0">
-					<table className="text-sm w-full">
-						<thead>
-							<tr className="border-b bg-muted/50">
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-									{t("fieldName")}
-								</th>
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-									{t("fieldType")}
-								</th>
-								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-									{t("fieldSearch")}
-								</th>
-								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-									{t("fieldFacet")}
-								</th>
-								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-									{t("fieldSort")}
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{fields.map((field, idx) => (
-								<tr key={field.name} className="border-b last:border-0">
-									<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
-									<td className="px-4 py-2">
-										<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
-											{field.type}
-										</span>
-									</td>
-									<td className="px-4 py-2 text-center">
-										<button
-											type="button"
-											onClick={() => toggleField(idx, "index")}
-											className={cn(
-												"size-5 rounded border transition-colors",
-												field.index
-													? "border-primary bg-primary text-primary-foreground"
-													: "border-input",
-											)}
-										>
-											{field.index && <CheckIcon className="size-4 p-0.5" />}
-										</button>
-									</td>
-									<td className="px-4 py-2 text-center">
-										<button
-											type="button"
-											onClick={() => toggleField(idx, "facet")}
-											className={cn(
-												"size-5 rounded border transition-colors",
-												field.facet
-													? "border-primary bg-primary text-primary-foreground"
-													: "border-input",
-											)}
-										>
-											{field.facet && <CheckIcon className="size-4 p-0.5" />}
-										</button>
-									</td>
-									<td className="px-4 py-2 text-center">
-										<button
-											type="button"
-											onClick={() => toggleField(idx, "sort")}
-											className={cn(
-												"size-5 rounded border transition-colors",
-												field.sort
-													? "border-primary bg-primary text-primary-foreground"
-													: "border-input",
-											)}
-										>
-											{field.sort && <CheckIcon className="size-4 p-0.5" />}
-										</button>
-									</td>
+				<Card className="overflow-x-auto rounded-md border">
+					<CardContent className="p-0">
+						<table className="text-sm w-full">
+							<thead>
+								<tr className="border-b bg-muted/50">
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("fieldName")}
+									</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("fieldType")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldSearch")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldFacet")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldSort")}
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</CardContent></Card>
+							</thead>
+							<tbody>
+								{fields.map((field, idx) => (
+									<tr key={field.name} className="border-b last:border-0">
+										<td className="px-4 py-2 font-mono text-xs">
+											{field.name}
+										</td>
+										<td className="px-4 py-2">
+											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
+												{field.type}
+											</span>
+										</td>
+										<td className="px-4 py-2 text-center">
+											<button
+												type="button"
+												onClick={() => toggleField(idx, "index")}
+												className={cn(
+													"size-5 rounded border transition-colors",
+													field.index
+														? "border-primary bg-primary text-primary-foreground"
+														: "border-input",
+												)}
+											>
+												{field.index && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
+											</button>
+										</td>
+										<td className="px-4 py-2 text-center">
+											<button
+												type="button"
+												onClick={() => toggleField(idx, "facet")}
+												className={cn(
+													"size-5 rounded border transition-colors",
+													field.facet
+														? "border-primary bg-primary text-primary-foreground"
+														: "border-input",
+												)}
+											>
+												{field.facet && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
+											</button>
+										</td>
+										<td className="px-4 py-2 text-center">
+											<button
+												type="button"
+												onClick={() => toggleField(idx, "sort")}
+												className={cn(
+													"size-5 rounded border transition-colors",
+													field.sort
+														? "border-primary bg-primary text-primary-foreground"
+														: "border-input",
+												)}
+											>
+												{field.sort && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
+											</button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</CardContent>
+				</Card>
 			)}
 		</div>
 	);
@@ -440,59 +457,67 @@ function StepSearchConfig({
 			{/* Searchable fields */}
 			<div className="space-y-3">
 				<h4 className="text-sm font-medium">{t("searchableFields")}</h4>
-				<Card className="overflow-x-auto rounded-md border"><CardContent className="p-0">
-					<table className="text-sm w-full">
-						<thead>
-							<tr className="border-b bg-muted/50">
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-									{t("fieldName")}
-								</th>
-								<th className="px-4 py-2 font-medium text-center text-muted-foreground">
-									{t("searchable")}
-								</th>
-								<th className="px-4 py-2 font-medium text-left text-muted-foreground">
-									{t("weight")}
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{stringFields.map((field) => (
-								<tr key={field.name} className="border-b last:border-0">
-									<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
-									<td className="px-4 py-2 text-center">
-										<button
-											type="button"
-											onClick={() => toggleSearchable(field.name)}
-											className={cn(
-												"size-5 rounded border transition-colors",
-												searchableFields.includes(field.name)
-													? "border-primary bg-primary text-primary-foreground"
-													: "border-input",
-											)}
-										>
-											{searchableFields.includes(field.name) && (
-												<CheckIcon className="size-4 p-0.5" />
-											)}
-										</button>
-									</td>
-									<td className="px-4 py-2">
-										<input
-											type="number"
-											min={1}
-											max={100}
-											value={fieldWeights[field.name] ?? 1}
-											onChange={(e) => setWeight(field.name, Number(e.target.value))}
-											disabled={!searchableFields.includes(field.name)}
-											className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
-										/>
-									</td>
+				<Card className="overflow-x-auto rounded-md border">
+					<CardContent className="p-0">
+						<table className="text-sm w-full">
+							<thead>
+								<tr className="border-b bg-muted/50">
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("fieldName")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("searchable")}
+									</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("weight")}
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</CardContent></Card>
+							</thead>
+							<tbody>
+								{stringFields.map((field) => (
+									<tr key={field.name} className="border-b last:border-0">
+										<td className="px-4 py-2 font-mono text-xs">
+											{field.name}
+										</td>
+										<td className="px-4 py-2 text-center">
+											<button
+												type="button"
+												onClick={() => toggleSearchable(field.name)}
+												className={cn(
+													"size-5 rounded border transition-colors",
+													searchableFields.includes(field.name)
+														? "border-primary bg-primary text-primary-foreground"
+														: "border-input",
+												)}
+											>
+												{searchableFields.includes(field.name) && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
+											</button>
+										</td>
+										<td className="px-4 py-2">
+											<input
+												type="number"
+												min={1}
+												max={100}
+												value={fieldWeights[field.name] ?? 1}
+												onChange={(e) =>
+													setWeight(field.name, Number(e.target.value))
+												}
+												disabled={!searchableFields.includes(field.name)}
+												className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</CardContent>
+				</Card>
 				{stringFields.length === 0 && (
-					<p className="py-4 text-sm text-center text-muted-foreground">{t("noStringFields")}</p>
+					<p className="py-4 text-sm text-center text-muted-foreground">
+						{t("noStringFields")}
+					</p>
 				)}
 			</div>
 
@@ -501,7 +526,9 @@ function StepSearchConfig({
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
 				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
+						<label className="text-xs text-muted-foreground">
+							{t("typoTolerance")}
+						</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}

@@ -54,57 +54,71 @@ export function DataTable<TData, TValue>({
 
 	return (
 		<div className={cn("space-y-4", className)}>
-			<Card className="rounded-md border"><CardContent className="p-0">
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id}>
-										{header.isPlaceholder ? null : header.column.getCanSort() ? (
-											<button
-												type="button"
-												className="-ml-1 gap-1 rounded px-1 py-0.5 text-xs font-medium inline-flex items-center text-left transition-colors hover:bg-muted/50"
-												onClick={header.column.getToggleSortingHandler()}
-											>
-												{flexRender(header.column.columnDef.header, header.getContext())}
-												{{
-													asc: <ChevronUpIcon className="size-3" />,
-													desc: <ChevronDownIcon className="size-3" />,
-												}[header.column.getIsSorted() as string] ?? null}
-											</button>
-										) : (
-											flexRender(header.column.columnDef.header, header.getContext())
-										)}
-									</TableHead>
-								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{rows.length > 0 ? (
-							rows.map((row) => (
-								<TableRow key={row.id}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
-										</TableCell>
+			<Card className="rounded-md border">
+				<CardContent className="p-0">
+					<Table>
+						<TableHeader>
+							{table.getHeaderGroups().map((headerGroup) => (
+								<TableRow key={headerGroup.id}>
+									{headerGroup.headers.map((header) => (
+										<TableHead key={header.id}>
+											{header.isPlaceholder ? null : header.column.getCanSort() ? (
+												<button
+													type="button"
+													className="-ml-1 gap-1 rounded px-1 py-0.5 text-xs font-medium inline-flex items-center text-left transition-colors hover:bg-muted/50"
+													onClick={header.column.getToggleSortingHandler()}
+												>
+													{flexRender(
+														header.column.columnDef.header,
+														header.getContext(),
+													)}
+													{{
+														asc: <ChevronUpIcon className="size-3" />,
+														desc: (
+															<ChevronDownIcon className="size-3" />
+														),
+													}[header.column.getIsSorted() as string] ??
+														null}
+												</button>
+											) : (
+												flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+												)
+											)}
+										</TableHead>
 									))}
 								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center text-muted-foreground"
-								>
-									{emptyMessage}
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</CardContent></Card>
+							))}
+						</TableHeader>
+						<TableBody>
+							{rows.length > 0 ? (
+								rows.map((row) => (
+									<TableRow key={row.id}>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell key={cell.id}>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center text-muted-foreground"
+									>
+										{emptyMessage}
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
+				</CardContent>
+			</Card>
 
 			{table.getPageCount() > 1 && (
 				<div className="flex items-center justify-between">

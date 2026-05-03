@@ -1,195 +1,224 @@
 /**
- * Build-time ingest script for AACSearch-powered docs search (dogfood).
+ * Build-time ingest script for AACSearch docs search.
  *
- * Collects all MDX page content from Fumadocs and ingests it into
- * an AACSearch index. Run: `pnpm --filter docs ingest:docs`
+ * Reads all Fumadocs pages and ingests them into the AACSearch docs index
+ * via the v1 REST API (AdminClient). Run as a prebuild step.
  *
- * Requires env vars:
- *   AACSEARCH_DOCS_BASE_URL  — AACSearch API base URL (e.g. http://localhost:3000)
- *   AACSEARCH_DOCS_ADMIN_KEY — Admin API key (aa_admin_*)
- *   AACSEARCH_DOCS_PROJECT_ID — Organization/project ID
+ * Usage:
+ *   npx tsx apps/docs/scripts/ingest-docs.ts
  *
- * The script:
- * 1. Creates a "docs" index (if not exists)
- * 2. Collects all pages from Fumadocs source
- * 3. Batches upsert into the index
+ * Env:
+ *   AACSEARCH_BASE_URL  — AACSearch API base URL (default: http://localhost:3010)
+ *   AACSEARCH_ADMIN_KEY — Admin API key (aa_admin_*) with index/document write scope
+ *   AACSEARCH_DOCS_INDEX_SLUG — Docs index slug (default: "docs")
  */
-import fs from "node:fs";
-import path from "node:path";
 
-import { source } from "@/lib/source";
+import { defineI18n } from "fumadocs-core/i18n";
+import { loader } from "fumadocs-core/source";
+import { docs } from "fumadocs-mdx:collections/server";
 
-interface DocDocument {
-	id: string;
-	title: string;
-	description: string;
-	content: string;
-	url: string;
-	locale: string;
-	category: string;
-}
+// ── Config ────────────────────────────────────────────────────
 
-const BASE_URL = process.env.AACSEARCH_BASE_URL || process.env.NEXT_PUBLIC_AACSEARCH_BASE_URL || "http://localhost:3000";
-const ADMIN_KEY = process.env.AACSEARCH_ADMIN_KEY || "";
-const PROJECT_ID = process.env.AACSEARCH_PROJECT_ID || "";
-const DOCS_INDEX_SLUG = process.env.AACSEARCH_DOCS_INDEX_SLUG || "docs";
+const BASE_URL = (process.env.AACSEARCH_BASE_URL ?? "http://localhost:3010").replace(/\/+$/, "");
+const ADMIN_KEY = process.env.AACSEARCH_ADMIN_KEY ?? "";
+const INDEX_SLUG = process.env.AACSEARCH_DOCS_INDEX_SLUG ?? "docs";
 
-async function request<T>(
-	method: string,
-	pathStr: string,
-	body?: unknown,
-): Promise<T> {
-	const res = await fetch(`${BASE_URL}/api/v1${pathStr}`, {
+const LOCALES = ["en", "de", "es", "fr", "ru"] as const;
+
+// ── Fumadocs source ───────────────────────────────────────────
+
+const i18nConfig = defineI18n({
+	languages: [...LOCALES],
+	defaultLanguage: "en",
+	parser: "dir",
+	hideLocale: "default-locale",
+});
+
+const source = loader({
+	baseUrl: "/",
+	source: docs.toFumadocsSource(),
+	i18n: i18nConfig,
+});
+
+// ── Helpers ───────────────────────────────────────────────────
+
+async function apiRequest(method: string, path: string, body?: unknown) {
+	const url = `${BASE_URL}/api/v1${path}`;
+	const headers: Record<string, string> = {
+		"Content-Type": "application/json",
+		Authorization: `Bearer ${ADMIN_KEY}`,
+	};
+
+	const res = await fetch(url, {
 		method,
-		headers: {
-			"Content-Type": "application/json",
-			"X-API-Key": ADMIN_KEY,
-		},
+		headers,
 		body: body ? JSON.stringify(body) : undefined,
 	});
 
 	if (!res.ok) {
 		const text = await res.text().catch(() => "unknown error");
-		throw new Error(`AACSearch API ${res.status}: ${text}`);
+		console.error(`[ingest] ${method} ${path} → ${res.status}: ${text}`);
+		return null;
 	}
 
-	if (res.status === 204) return undefined as T;
-	return res.json() as T;
+	const data = res.status === 204 ? null : await res.json();
+	return data;
 }
 
-async function ensureDocsIndex(): Promise<string> {
-	// Try to find existing docs index
-	const indexes = await request<Array<{ id: string; slug: string }>>(
-		"GET",
-		`/projects/${encodeURIComponent(PROJECT_ID)}/indexes`,
-	);
-
-	const existing = indexes.find((idx) => idx.slug === DOCS_INDEX_SLUG);
-	if (existing) {
-		console.log(`Found existing docs index: ${existing.id}`);
-		return existing.id;
+async function getProjectId(): Promise<string | null> {
+	const keys = await apiRequest("GET", "/projects/keys");
+	if (keys && Array.isArray(keys)) {
+		// First key has the projectId
+		if (keys.length > 0 && keys[0].projectId) return keys[0].projectId;
 	}
-
-	// Create the docs index
-	const created = await request<{ id: string; slug: string }>(
-		"POST",
-		`/projects/${encodeURIComponent(PROJECT_ID)}/indexes`,
-		{
-			slug: DOCS_INDEX_SLUG,
-			displayName: "Documentation",
-			schema: {
-				fields: [
-					{ name: "title", type: "string" as const },
-					{ name: "description", type: "string" as const },
-					{ name: "content", type: "string" as const },
-					{ name: "url", type: "string" as const },
-					{ name: "locale", type: "string" as const, facet: true },
-					{ name: "category", type: "string" as const, facet: true },
-				],
-			},
-		},
-	);
-
-	console.log(`Created docs index: ${created.id}`);
-	return created.id;
+	return null;
 }
 
-async function collectPages(): Promise<DocDocument[]> {
-	const docs: DocDocument[] = [];
-	const locales = ["en", "de", "es", "fr", "ru"];
-
-	for (const locale of locales) {
-		const pages = source.getPages(locale);
-
-		for (const page of pages) {
-			try {
-				const text = await page.data.getText("processed");
-
-				// Extract first heading or use title
-				const title = page.data.title || page.slugs.join(" / ");
-				const description = page.data.description || "";
-				const url =
-					locale === "en"
-						? `/${page.slugs.join("/")}`
-						: `/${locale}/${page.slugs.join("/")}`;
-
-				const category = page.slugs[0] || "general";
-
-				docs.push({
-					id: `${locale}-${page.slugs.join("-")}`,
-					title,
-					description,
-					content: text || "",
-					url,
-					locale,
-					category,
-				});
-
-				console.log(`  Collected: ${url}`);
-			} catch (error) {
-				console.warn(`  Failed to process page: ${page.slugs.join("/")}`, error);
-			}
+async function ensureIndex(projectId: string): Promise<{ id: string } | null> {
+	// Check if index already exists
+	const indexes = await apiRequest("GET", `/projects/${projectId}/indexes`);
+	if (indexes && Array.isArray(indexes)) {
+		const existing = indexes.find((idx: { slug: string }) => idx.slug === INDEX_SLUG);
+		if (existing) {
+			console.log(`[ingest] Found existing index: ${INDEX_SLUG} (${existing.id})`);
+			return existing;
 		}
 	}
 
-	return docs;
-}
+	// Create new index
+	console.log(`[ingest] Creating index: ${INDEX_SLUG}...`);
+	const created = await apiRequest("POST", `/projects/${projectId}/indexes`, {
+		slug: INDEX_SLUG,
+		displayName: "Documentation",
+		fields: [
+			{ name: "title", type: "string", index: true, store: true },
+			{ name: "description", type: "string", index: true, store: true, optional: true },
+			{ name: "content", type: "string", index: true },
+			{ name: "url", type: "string", index: false, store: true },
+			{ name: "locale", type: "string", index: true, store: true, facet: true },
+			{
+				name: "section",
+				type: "string",
+				index: true,
+				store: true,
+				facet: true,
+				optional: true,
+			},
+		],
+		defaultSortingField: "title",
+	});
 
-async function ingestPages(
-	indexId: string,
-	docs: DocDocument[],
-): Promise<void> {
-	const BATCH_SIZE = 100;
-
-	for (let i = 0; i < docs.length; i += BATCH_SIZE) {
-		const batch = docs.slice(i, i + BATCH_SIZE);
-		const result = await request<{ success: number; errors: number }>(
-			"POST",
-			`/indexes/${encodeURIComponent(indexId)}/documents:batch`,
-			{ documents: batch },
-		);
-
-		console.log(`  Batch ${i / BATCH_SIZE + 1}: ${result.success} success, ${result.errors} errors`);
+	if (created) {
+		console.log(`[ingest] Created index: ${INDEX_SLUG} (${created.id})`);
 	}
+	return created;
 }
 
-async function main() {
-	console.log("=== AACsearch Docs Ingest ===");
+async function ingestAllPages(indexId: string) {
+	const allDocuments: Record<string, unknown>[] = [];
 
-	if (!ADMIN_KEY) {
-		console.log("AACSEARCH_ADMIN_KEY not set — skipping AACsearch ingest");
-		console.log("Writing doc content to docs-index.json for manual upload");
-		const docs = await collectPages();
-		fs.writeFileSync(
-			path.join(__dirname, "..", "docs-index.json"),
-			JSON.stringify(docs, null, 2),
-			"utf-8",
-		);
-		console.log(`Wrote ${docs.length} documents to docs-index.json`);
+	for (const locale of LOCALES) {
+		const pages = source.getPages(locale);
+		console.log(`[ingest] Processing ${pages.length} pages for locale: ${locale}`);
+
+		for (const page of pages) {
+			const title = (page.data.title as string) ?? "Untitled";
+			const description = page.data.description as string | undefined;
+			const slugs = page.slugs as string[];
+
+			// Extract raw content from the processed MDX
+			let content = "";
+			try {
+				content = await page.data.getText("processed");
+			} catch {
+				try {
+					content = await page.data.getText();
+				} catch {
+					content = "";
+				}
+			}
+
+			if (!content) continue;
+
+			// Determine section from slugs (first directory segment)
+			const section = slugs.length > 1 ? slugs[0] : "home";
+
+			// Build URL path
+			const url = locale === "en" ? `/${slugs.join("/")}` : `/${locale}/${slugs.join("/")}`;
+
+			// Create a unique document ID based on locale + slugs
+			const docId = locale === "en" ? slugs.join("/") : `${locale}/${slugs.join("/")}`;
+
+			allDocuments.push({
+				id: docId,
+				title,
+				description: description ?? "",
+				content,
+				url,
+				locale,
+				section,
+			});
+		}
+	}
+
+	if (allDocuments.length === 0) {
+		console.log("[ingest] No documents to ingest.");
 		return;
 	}
 
-	try {
-		// Ensure the docs index exists
-		console.log("\n1. Ensuring docs index exists...");
-		const indexId = await ensureDocsIndex();
+	// Batch upsert in chunks of 500
+	const CHUNK_SIZE = 500;
+	for (let i = 0; i < allDocuments.length; i += CHUNK_SIZE) {
+		const chunk = allDocuments.slice(i, i + CHUNK_SIZE);
+		console.log(
+			`[ingest] Upserting ${chunk.length} documents (batch ${Math.floor(i / CHUNK_SIZE) + 1}/${Math.ceil(allDocuments.length / CHUNK_SIZE)})...`,
+		);
 
-		// Collect all pages
-		console.log("\n2. Collecting pages...");
-		const docs = await collectPages();
-		console.log(`   Total: ${docs.length} documents`);
+		const result = await apiRequest("POST", `/indexes/${indexId}/documents:batch`, {
+			documents: chunk,
+		});
 
-		// Ingest in batches
-		console.log("\n3. Ingesting pages...");
-		await ingestPages(indexId, docs);
-
-		console.log("\nDone! Docs search is ready.");
-		console.log(`Index ID: ${indexId}`);
-		console.log(`Total documents: ${docs.length}`);
-	} catch (error) {
-		console.error("Ingest failed:", error);
-		process.exit(1);
+		if (result) {
+			console.log(`[ingest] Batch result: ${JSON.stringify(result)}`);
+		}
 	}
+
+	console.log(
+		`[ingest] Done! Ingested ${allDocuments.length} documents across ${LOCALES.length} locales.`,
+	);
 }
 
-main();
+// ── Main ──────────────────────────────────────────────────────
+
+async function main() {
+	if (!ADMIN_KEY) {
+		console.error("[ingest] Missing AACSEARCH_ADMIN_KEY env var. Skipping ingest.");
+		console.error(
+			"[ingest] Create an admin API key in the SaaS dashboard and set AACSEARCH_ADMIN_KEY.",
+		);
+		process.exit(1);
+	}
+
+	console.log(`[ingest] Starting docs ingest to ${BASE_URL}...`);
+
+	const projectId = await getProjectId();
+	if (!projectId) {
+		console.error(
+			"[ingest] Could not determine project ID. Make sure the AACSearch API is running.",
+		);
+		process.exit(1);
+	}
+
+	const index = await ensureIndex(projectId);
+	if (!index) {
+		console.error("[ingest] Failed to create or find docs index.");
+		process.exit(1);
+	}
+
+	await ingestAllPages(index.id);
+}
+
+main().catch((err: unknown) => {
+	console.error("[ingest] Fatal error:", err);
+	process.exit(1);
+});

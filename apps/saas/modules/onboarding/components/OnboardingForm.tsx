@@ -59,17 +59,26 @@ export function OnboardingForm() {
 				},
 				{
 					component: (
-						<OnboardingAddDocumentsStep indexSlug={indexSlug} onCompleted={() => setStep(4)} />
+						<OnboardingAddDocumentsStep
+							indexSlug={indexSlug}
+							onCompleted={() => setStep(4)}
+						/>
 					),
 				},
 				{
 					component: (
-						<OnboardingInstallWidgetStep indexSlug={indexSlug} onCompleted={() => setStep(5)} />
+						<OnboardingInstallWidgetStep
+							indexSlug={indexSlug}
+							onCompleted={() => setStep(5)}
+						/>
 					),
 				},
 				{
 					component: (
-						<OnboardingApiKeyStep indexSlug={indexSlug} onCompleted={() => onCompleted()} />
+						<OnboardingApiKeyStep
+							indexSlug={indexSlug}
+							onCompleted={() => onCompleted()}
+						/>
 					),
 				},
 			];

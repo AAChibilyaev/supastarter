@@ -46,12 +46,19 @@ export function ConnectedAccountsBlock() {
 							) : isLinked ? (
 								<Button variant="secondary" disabled className="cursor-default">
 									<CheckCircle2Icon className="mr-1.5 size-4 text-success" />
-									<span>{t("settings.account.security.connectedAccounts.connected")}</span>
+									<span>
+										{t("settings.account.security.connectedAccounts.connected")}
+									</span>
 								</Button>
 							) : (
-								<Button variant="secondary" onClick={() => linkProvider(provider as OAuthProvider)}>
+								<Button
+									variant="secondary"
+									onClick={() => linkProvider(provider as OAuthProvider)}
+								>
 									<LinkIcon className="mr-1.5 size-4" />
-									<span>{t("settings.account.security.connectedAccounts.connect")}</span>
+									<span>
+										{t("settings.account.security.connectedAccounts.connect")}
+									</span>
 								</Button>
 							)}
 						</div>

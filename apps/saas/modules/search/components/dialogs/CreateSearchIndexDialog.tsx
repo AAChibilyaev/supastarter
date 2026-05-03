@@ -314,7 +314,12 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 			if (previous && patch.type !== undefined && patch.type !== previous.type) {
 				const currentSort = form.getValues("defaultSortingField");
 				const updated = next[index];
-				if (updated && currentSort === updated.name && !isNumeric(updated.type) && !updated.sort) {
+				if (
+					updated &&
+					currentSort === updated.name &&
+					!isNumeric(updated.type) &&
+					!updated.sort
+				) {
 					form.setValue("defaultSortingField", "", { shouldValidate: true });
 				}
 			}
@@ -386,7 +391,9 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 			const parsed = JSON.parse(jsonText);
 			const result = z.array(fieldSchema).safeParse(parsed);
 			if (!result.success) {
-				setJsonError(result.error.issues[0]?.message ?? t("search.createIndex.errors.invalidJson"));
+				setJsonError(
+					result.error.issues[0]?.message ?? t("search.createIndex.errors.invalidJson"),
+				);
 				return null;
 			}
 			setJsonError(null);
@@ -500,7 +507,11 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 										<FormItem>
 											<FormLabel className="gap-1.5 flex items-center">
 												{t("search.fields.displayName")}
-												<HelpHint text={t("search.createIndex.tooltips.displayName")} />
+												<HelpHint
+													text={t(
+														"search.createIndex.tooltips.displayName",
+													)}
+												/>
 											</FormLabel>
 											<FormControl>
 												<Input {...field} placeholder="Products" />
@@ -516,9 +527,14 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 										<FormItem>
 											<FormLabel className="gap-1.5 flex items-center">
 												{t("search.fields.slug")}
-												<HelpHint text={t("search.createIndex.tooltips.slug")} />
+												<HelpHint
+													text={t("search.createIndex.tooltips.slug")}
+												/>
 												{!slugTouched && (
-													<Badge status="info" className="ml-auto text-[10px]">
+													<Badge
+														status="info"
+														className="ml-auto text-[10px]"
+													>
 														{t("search.createIndex.autoFromName")}
 													</Badge>
 												)}
@@ -556,7 +572,9 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 										<div>
 											<Label className="gap-1.5 flex items-center">
 												{t("search.createIndex.fieldsTitle")}
-												<HelpHint text={t("search.createIndex.tooltips.fields")} />
+												<HelpHint
+													text={t("search.createIndex.tooltips.fields")}
+												/>
 											</Label>
 											<p className="text-xs text-foreground/60">
 												{t("search.createIndex.fieldsCount", {
@@ -564,194 +582,301 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 												})}
 											</p>
 										</div>
-										<Button type="button" variant="outline" size="sm" onClick={addField}>
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={addField}
+										>
 											<PlusIcon className="size-3.5" />
 											{t("search.createIndex.addField")}
 										</Button>
 									</div>
 
 									<div className="space-y-2">
-									{fields.length === 0 && (
-										<Card className="rounded-lg border border-dashed">
-											<CardContent className="p-6 text-sm text-center text-foreground/60">
-												{t("search.createIndex.noFields")}
-											</CardContent>
-										</Card>
-									)}
+										{fields.length === 0 && (
+											<Card className="rounded-lg border border-dashed">
+												<CardContent className="p-6 text-sm text-center text-foreground/60">
+													{t("search.createIndex.noFields")}
+												</CardContent>
+											</Card>
+										)}
 										{fields.map((field, index) => {
 											const Icon = TYPE_META[field.type].icon;
 											const error = fieldErrors[index];
 											const isIdField = field.name === "id";
 											return (
-												<Card key={index} className="rounded-lg border bg-card/40 transition-colors hover:bg-card">
-												<CardContent className="p-3">
-													<div className="gap-2 flex flex-wrap items-start">
-														<div className="gap-1 flex flex-col">
-															<Button
-																type="button"
-																variant="ghost"
-																size="sm"
-																onClick={() => moveField(index, -1)}
-																disabled={index === 0}
-																className="h-5 w-5 p-0 text-foreground/50 hover:text-foreground"
-																aria-label={t("search.createIndex.moveUp")}
-															>
-																<ArrowUpIcon className="size-3" />
-															</Button>
-															<Button
-																type="button"
-																variant="ghost"
-																size="sm"
-																onClick={() => moveField(index, 1)}
-																disabled={index === fields.length - 1}
-																className="h-5 w-5 p-0 text-foreground/50 hover:text-foreground"
-																aria-label={t("search.createIndex.moveDown")}
-															>
-																<ArrowDownIcon className="size-3" />
-															</Button>
-														</div>
-														<div className="gap-2 flex min-w-[180px] flex-1 items-center">
-															{isIdField ? (
+												<Card
+													key={index}
+													className="rounded-lg border bg-card/40 transition-colors hover:bg-card"
+												>
+													<CardContent className="p-3">
+														<div className="gap-2 flex flex-wrap items-start">
+															<div className="gap-1 flex flex-col">
+																<Button
+																	type="button"
+																	variant="ghost"
+																	size="sm"
+																	onClick={() =>
+																		moveField(index, -1)
+																	}
+																	disabled={index === 0}
+																	className="h-5 w-5 p-0 text-foreground/50 hover:text-foreground"
+																	aria-label={t(
+																		"search.createIndex.moveUp",
+																	)}
+																>
+																	<ArrowUpIcon className="size-3" />
+																</Button>
+																<Button
+																	type="button"
+																	variant="ghost"
+																	size="sm"
+																	onClick={() =>
+																		moveField(index, 1)
+																	}
+																	disabled={
+																		index === fields.length - 1
+																	}
+																	className="h-5 w-5 p-0 text-foreground/50 hover:text-foreground"
+																	aria-label={t(
+																		"search.createIndex.moveDown",
+																	)}
+																>
+																	<ArrowDownIcon className="size-3" />
+																</Button>
+															</div>
+															<div className="gap-2 flex min-w-[180px] flex-1 items-center">
+																{isIdField ? (
+																	<Tooltip>
+																		<TooltipTrigger asChild>
+																			<KeyRoundIcon className="size-4 text-primary" />
+																		</TooltipTrigger>
+																		<TooltipContent className="max-w-xs text-xs">
+																			{t(
+																				"search.createIndex.tooltips.idField",
+																			)}
+																		</TooltipContent>
+																	</Tooltip>
+																) : (
+																	<Icon className="size-4 text-foreground/50" />
+																)}
+																<Input
+																	value={field.name}
+																	placeholder="field_name"
+																	onChange={(event) =>
+																		updateField(index, {
+																			name: event.target
+																				.value,
+																		})
+																	}
+																	className="h-9"
+																/>
+															</div>
+															<div className="w-[180px]">
+																<Select
+																	value={field.type}
+																	onValueChange={(value) =>
+																		updateField(index, {
+																			type: value as FieldType,
+																		})
+																	}
+																>
+																	<SelectTrigger>
+																		<SelectValue />
+																	</SelectTrigger>
+																	<SelectContent>
+																		<SelectGroup>
+																			<SelectLabel>
+																				{t(
+																					"search.createIndex.typeGroups.text",
+																				)}
+																			</SelectLabel>
+																			<SelectItem value="string">
+																				string
+																			</SelectItem>
+																			<SelectItem value="string[]">
+																				string[]
+																			</SelectItem>
+																		</SelectGroup>
+																		<SelectGroup>
+																			<SelectLabel>
+																				{t(
+																					"search.createIndex.typeGroups.number",
+																				)}
+																			</SelectLabel>
+																			<SelectItem value="int32">
+																				int32
+																			</SelectItem>
+																			<SelectItem value="int64">
+																				int64
+																			</SelectItem>
+																			<SelectItem value="float">
+																				float
+																			</SelectItem>
+																			<SelectItem value="int32[]">
+																				int32[]
+																			</SelectItem>
+																			<SelectItem value="int64[]">
+																				int64[]
+																			</SelectItem>
+																			<SelectItem value="float[]">
+																				float[]
+																			</SelectItem>
+																		</SelectGroup>
+																		<SelectGroup>
+																			<SelectLabel>
+																				{t(
+																					"search.createIndex.typeGroups.boolean",
+																				)}
+																			</SelectLabel>
+																			<SelectItem value="bool">
+																				bool
+																			</SelectItem>
+																			<SelectItem value="bool[]">
+																				bool[]
+																			</SelectItem>
+																		</SelectGroup>
+																		<SelectGroup>
+																			<SelectLabel>
+																				{t(
+																					"search.createIndex.typeGroups.advanced",
+																				)}
+																			</SelectLabel>
+																			<SelectItem value="object">
+																				object
+																			</SelectItem>
+																			<SelectItem value="object[]">
+																				object[]
+																			</SelectItem>
+																			<SelectItem value="auto">
+																				auto
+																			</SelectItem>
+																		</SelectGroup>
+																	</SelectContent>
+																</Select>
+															</div>
+															<div className="gap-3 flex flex-wrap items-center">
 																<Tooltip>
 																	<TooltipTrigger asChild>
-																		<KeyRoundIcon className="size-4 text-primary" />
+																		<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
+																			<Switch
+																				checked={
+																					field.facet ??
+																					false
+																				}
+																				onCheckedChange={(
+																					checked,
+																				) =>
+																					updateField(
+																						index,
+																						{
+																							facet: checked,
+																						},
+																					)
+																				}
+																			/>
+																			<span>
+																				{t(
+																					"search.createIndex.toggles.facet",
+																				)}
+																			</span>
+																		</label>
 																	</TooltipTrigger>
 																	<TooltipContent className="max-w-xs text-xs">
-																		{t("search.createIndex.tooltips.idField")}
+																		{t(
+																			"search.createIndex.tooltips.facet",
+																		)}
 																	</TooltipContent>
 																</Tooltip>
-															) : (
-																<Icon className="size-4 text-foreground/50" />
-															)}
-															<Input
-																value={field.name}
-																placeholder="field_name"
-																onChange={(event) =>
-																	updateField(index, {
-																		name: event.target.value,
-																	})
-																}
-																className="h-9"
-															/>
+																<Tooltip>
+																	<TooltipTrigger asChild>
+																		<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
+																			<Switch
+																				checked={
+																					field.optional ??
+																					false
+																				}
+																				onCheckedChange={(
+																					checked,
+																				) =>
+																					updateField(
+																						index,
+																						{
+																							optional:
+																								checked,
+																						},
+																					)
+																				}
+																			/>
+																			<span>
+																				{t(
+																					"search.createIndex.toggles.optional",
+																				)}
+																			</span>
+																		</label>
+																	</TooltipTrigger>
+																	<TooltipContent className="max-w-xs text-xs">
+																		{t(
+																			"search.createIndex.tooltips.optional",
+																		)}
+																	</TooltipContent>
+																</Tooltip>
+																<Tooltip>
+																	<TooltipTrigger asChild>
+																		<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
+																			<Switch
+																				checked={
+																					field.sort ??
+																					false
+																				}
+																				onCheckedChange={(
+																					checked,
+																				) =>
+																					updateField(
+																						index,
+																						{
+																							sort: checked,
+																						},
+																					)
+																				}
+																			/>
+																			<span>
+																				{t(
+																					"search.createIndex.toggles.sort",
+																				)}
+																			</span>
+																		</label>
+																	</TooltipTrigger>
+																	<TooltipContent className="max-w-xs text-xs">
+																		{t(
+																			"search.createIndex.tooltips.sort",
+																		)}
+																	</TooltipContent>
+																</Tooltip>
+																<Button
+																	type="button"
+																	variant="ghost"
+																	size="sm"
+																	onClick={() =>
+																		removeField(index)
+																	}
+																	className="text-foreground/60 hover:text-destructive"
+																	aria-label={t(
+																		"search.createIndex.removeField",
+																	)}
+																>
+																	<Trash2Icon className="size-4" />
+																</Button>
+															</div>
 														</div>
-														<div className="w-[180px]">
-															<Select
-																value={field.type}
-																onValueChange={(value) =>
-																	updateField(index, {
-																		type: value as FieldType,
-																	})
-																}
-															>
-																<SelectTrigger>
-																	<SelectValue />
-																</SelectTrigger>
-																<SelectContent>
-																	<SelectGroup>
-																		<SelectLabel>
-																			{t("search.createIndex.typeGroups.text")}
-																		</SelectLabel>
-																		<SelectItem value="string">string</SelectItem>
-																		<SelectItem value="string[]">string[]</SelectItem>
-																	</SelectGroup>
-																	<SelectGroup>
-																		<SelectLabel>
-																			{t("search.createIndex.typeGroups.number")}
-																		</SelectLabel>
-																		<SelectItem value="int32">int32</SelectItem>
-																		<SelectItem value="int64">int64</SelectItem>
-																		<SelectItem value="float">float</SelectItem>
-																		<SelectItem value="int32[]">int32[]</SelectItem>
-																		<SelectItem value="int64[]">int64[]</SelectItem>
-																		<SelectItem value="float[]">float[]</SelectItem>
-																	</SelectGroup>
-																	<SelectGroup>
-																		<SelectLabel>
-																			{t("search.createIndex.typeGroups.boolean")}
-																		</SelectLabel>
-																		<SelectItem value="bool">bool</SelectItem>
-																		<SelectItem value="bool[]">bool[]</SelectItem>
-																	</SelectGroup>
-																	<SelectGroup>
-																		<SelectLabel>
-																			{t("search.createIndex.typeGroups.advanced")}
-																		</SelectLabel>
-																		<SelectItem value="object">object</SelectItem>
-																		<SelectItem value="object[]">object[]</SelectItem>
-																		<SelectItem value="auto">auto</SelectItem>
-																	</SelectGroup>
-																</SelectContent>
-															</Select>
-														</div>
-														<div className="gap-3 flex flex-wrap items-center">
-															<Tooltip>
-																<TooltipTrigger asChild>
-																	<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
-																		<Switch
-																			checked={field.facet ?? false}
-																			onCheckedChange={(checked) =>
-																				updateField(index, {
-																					facet: checked,
-																				})
-																			}
-																		/>
-																		<span>{t("search.createIndex.toggles.facet")}</span>
-																	</label>
-																</TooltipTrigger>
-																<TooltipContent className="max-w-xs text-xs">
-																	{t("search.createIndex.tooltips.facet")}
-																</TooltipContent>
-															</Tooltip>
-															<Tooltip>
-																<TooltipTrigger asChild>
-																	<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
-																		<Switch
-																			checked={field.optional ?? false}
-																			onCheckedChange={(checked) =>
-																				updateField(index, {
-																					optional: checked,
-																				})
-																			}
-																		/>
-																		<span>{t("search.createIndex.toggles.optional")}</span>
-																	</label>
-																</TooltipTrigger>
-																<TooltipContent className="max-w-xs text-xs">
-																	{t("search.createIndex.tooltips.optional")}
-																</TooltipContent>
-															</Tooltip>
-															<Tooltip>
-																<TooltipTrigger asChild>
-																	<label className="gap-1.5 px-2 py-1 text-xs inline-flex cursor-pointer items-center rounded-md hover:bg-muted">
-																		<Switch
-																			checked={field.sort ?? false}
-																			onCheckedChange={(checked) =>
-																				updateField(index, {
-																					sort: checked,
-																				})
-																			}
-																		/>
-																		<span>{t("search.createIndex.toggles.sort")}</span>
-																	</label>
-																</TooltipTrigger>
-																<TooltipContent className="max-w-xs text-xs">
-																	{t("search.createIndex.tooltips.sort")}
-																</TooltipContent>
-															</Tooltip>
-															<Button
-																type="button"
-																variant="ghost"
-																size="sm"
-																onClick={() => removeField(index)}
-																className="text-foreground/60 hover:text-destructive"
-																aria-label={t("search.createIndex.removeField")}
-															>
-																<Trash2Icon className="size-4" />
-															</Button>
-														</div>
-													</div>
-													{error && <p className="mt-1.5 text-xs text-destructive">{error}</p>}
-												</CardContent></Card>
+														{error && (
+															<p className="mt-1.5 text-xs text-destructive">
+																{error}
+															</p>
+														)}
+													</CardContent>
+												</Card>
 											);
 										})}
 									</div>
@@ -771,8 +896,12 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 										}}
 										className="font-mono text-xs"
 									/>
-									{jsonError && <p className="text-xs text-destructive">{jsonError}</p>}
-									<p className="text-xs text-foreground/60">{t("search.createIndex.schemaHelp")}</p>
+									{jsonError && (
+										<p className="text-xs text-destructive">{jsonError}</p>
+									)}
+									<p className="text-xs text-foreground/60">
+										{t("search.createIndex.schemaHelp")}
+									</p>
 								</TabsContent>
 							</Tabs>
 
@@ -784,29 +913,42 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 										<FormLabel className="gap-1.5 flex items-center">
 											<CalendarClockIcon className="size-3.5 text-foreground/60" />
 											{t("search.fields.defaultSortingField")}
-											<HelpHint text={t("search.createIndex.tooltips.defaultSort")} />
+											<HelpHint
+												text={t("search.createIndex.tooltips.defaultSort")}
+											/>
 										</FormLabel>
 										<FormControl>
 											<Select
 												value={field.value || "__none"}
-												onValueChange={(value) => field.onChange(value === "__none" ? "" : value)}
+												onValueChange={(value) =>
+													field.onChange(value === "__none" ? "" : value)
+												}
 											>
 												<SelectTrigger>
-													<SelectValue placeholder={t("search.createIndex.noSort")} />
+													<SelectValue
+														placeholder={t("search.createIndex.noSort")}
+													/>
 												</SelectTrigger>
 												<SelectContent>
-													<SelectItem value="__none">{t("search.createIndex.noSort")}</SelectItem>
+													<SelectItem value="__none">
+														{t("search.createIndex.noSort")}
+													</SelectItem>
 													{sortableOptions.length === 0 ? (
 														<SelectItem value="__hint" disabled>
 															{t("search.createIndex.noSortableHint")}
 														</SelectItem>
 													) : (
 														sortableOptions.map((option) => (
-															<SelectItem key={option.name} value={option.name}>
+															<SelectItem
+																key={option.name}
+																value={option.name}
+															>
 																<span className="gap-2 flex items-center">
 																	<HashIcon className="size-3.5 text-foreground/50" />
 																	{option.name}
-																	<span className="text-xs text-foreground/50">{option.type}</span>
+																	<span className="text-xs text-foreground/50">
+																		{option.type}
+																	</span>
 																</span>
 															</SelectItem>
 														))
@@ -836,7 +978,9 @@ export function CreateSearchIndexDialog({ organizationId, trigger }: CreateSearc
 								</p>
 								<Button
 									type="submit"
-									loading={form.formState.isSubmitting || createMutation.isPending}
+									loading={
+										form.formState.isSubmitting || createMutation.isPending
+									}
 									disabled={hasFieldErrors || fields.length === 0}
 									variant="primary"
 								>

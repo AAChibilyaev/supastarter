@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
+import { Card } from "@repo/ui/components/card";
 import { FileTextIcon, GlobeIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -37,13 +38,15 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 	return (
 		<div className="space-y-2">
 			<h4 className="text-sm font-medium text-muted-foreground">{t("selectedItems")}</h4>
-			<div className="divide-y rounded-lg border">
+			<Card className="divide-y rounded-lg border">
 				{files.map((item) => (
 					<div key={item.id} className="gap-3 px-4 py-3 flex items-center">
 						<FileTextIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
 						<div className="min-w-0 flex-1">
 							<p className="text-sm font-medium truncate">{item.file.name}</p>
-							<p className="text-xs text-muted-foreground">{formatFileSize(item.file.size)}</p>
+							<p className="text-xs text-muted-foreground">
+								{formatFileSize(item.file.size)}
+							</p>
 						</div>
 						<div className="gap-2 flex items-center">
 							{item.status === "uploading" && (
@@ -52,7 +55,9 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">{t("uploaded")}</span>
+								<span className="text-xs text-green-600 dark:text-green-400">
+									{t("uploaded")}
+								</span>
 							)}
 							{item.status === "error" && item.error && (
 								<span
@@ -83,10 +88,14 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 						</div>
 						<div className="gap-2 flex items-center">
 							{item.status === "fetching" && (
-								<span className="text-xs animate-pulse text-muted-foreground">{t("fetching")}</span>
+								<span className="text-xs animate-pulse text-muted-foreground">
+									{t("fetching")}
+								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">{t("added")}</span>
+								<span className="text-xs text-green-600 dark:text-green-400">
+									{t("added")}
+								</span>
 							)}
 							{item.status === "error" && item.error && (
 								<span
@@ -109,7 +118,7 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 						</div>
 					</div>
 				))}
-			</div>
+			</Card>
 		</div>
 	);
 }

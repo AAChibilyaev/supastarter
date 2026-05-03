@@ -839,7 +839,10 @@
 			"number": "Number",
 			"specialCharacter": "Special character"
 		},
-		"close": "Close"
+		"close": "Close",
+		"clear": "Clear",
+		"previous": "Previous",
+		"next": "Next"
 	},
 	"checkoutReturn": {
 		"title": "Processing your purchase",
@@ -1307,8 +1310,58 @@
 		"recommendations": {
 			"description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",
 			"dashboardTitle": "Recommendations Dashboard",
+			"similarTab": "Similar Items",
+			"personalizedTab": "Personalized",
+			"graphRagTab": "GraphRAG",
+			"settingsTab": "Settings",
 			"comingSoon": "Coming Soon",
-			"comingSoonDescription": "AI-powered recommendations are being built. Check back soon for similar items, personalized suggestions, and GraphRAG-powered explanations."
+			"comingSoonDescription": "AI-powered recommendations are being built. Check back soon for similar items, personalized suggestions, and GraphRAG-powered explanations.",
+			"pickProduct": "Pick a product to see recommendations",
+			"searchProducts": "Search products...",
+			"noResults": "No matching products found",
+			"selectProduct": "Select a product from the search results to preview its recommendations",
+			"resultsCount": "Results ({{count}})",
+			"neo4jDisconnected": "Recommendation engine is not connected. Configure Neo4j to enable recommendations.",
+			"stats": {
+				"recommendationsServed": "Total Recommendations Served",
+				"recommendationsServedDesc": "All time via widget and API",
+				"clickThroughRate": "Click-Through Rate",
+				"clickThroughRateDesc": "Average across all recommendation types",
+				"popularItems": "Popular Items",
+				"popularItemsDesc": "Most viewed products this week",
+				"popularItemsEmpty": "No popular items yet. Start adding products to see trends.",
+				"trendingNow": "Trending Now",
+				"trendingNowDesc": "Products with highest recent engagement",
+				"trendingNowEmpty": "No trending items yet. Data appears as users interact with products."
+			},
+			"settings": {
+				"title": "Recommendation Settings",
+				"count": "Recommendations Count",
+				"countHint": "Number of recommendations to return per request (1-100)",
+				"algorithm": "Algorithm",
+				"algorithmHint": "Which recommendation algorithm to use",
+				"algorithmGraph": "Graph (Neo4j)",
+				"algorithmVector": "Vector (Embeddings)",
+				"algorithmHybrid": "Hybrid (Graph + Vector)",
+				"fieldWeights": "Field Weights",
+				"fieldWeightsHint": "How much each field contributes to similarity scoring",
+				"fieldTitle": "Title",
+				"fieldDescription": "Description",
+				"fieldCategory": "Category",
+				"save": "Save Settings",
+				"saved": "Settings saved successfully",
+				"saveError": "Failed to save settings"
+			},
+			"graphRag": {
+				"title": "GraphRAG Recommendations",
+				"description": "Ask a natural language question and get AI-powered product recommendations with explanations.",
+				"searchPlaceholder": "What are you looking for?",
+				"searchButton": "Get Recommendations",
+				"recommendations": "Recommended Products",
+				"explanation": "Why this was recommended",
+				"noResults": "No recommendations found for your query.",
+				"error": "Failed to get recommendations. Please try again."
+			}
 		},
 		"importJobs": {
 			"tab": "Import Jobs",
@@ -2046,7 +2099,17 @@
 			"previewImage": "Click to open the image in a new tab",
 			"previewUrl": "Click to open the web page",
 			"previewGeneric": "Preview is not available for this file type"
-		}
+		},
+		"searchIndex": "Search Index",
+		"searchPlaceholder": "Search across your documents...",
+		"searchInputLabel": "Search query",
+		"searchPrompt": "Type a query above to start searching.",
+		"noResults": "No results found. Try a different search term.",
+		"resultsCount": "{{count}} results found in {{time}}ms",
+		"filterByType": "Filter by file type",
+		"allTypes": "All types",
+		"score": "Relevance",
+		"openSource": "Open source"
 	},
 	"feedback": {
 		"nps": {

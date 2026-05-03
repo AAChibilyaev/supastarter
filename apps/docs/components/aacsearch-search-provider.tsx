@@ -8,18 +8,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 const AacsearchDocsSearch = dynamic(
-	() =>
-		import("./aacsearch-docs-search").then((mod) => mod.AacsearchDocsSearch),
+	() => import("./aacsearch-docs-search").then((mod) => mod.AacsearchDocsSearch),
 	{ ssr: false },
 );
 
@@ -37,13 +30,7 @@ export function useAacsearchSearch() {
 	return useContext(SearchContext);
 }
 
-export function AacsearchSearchProvider({
-	children,
-	lang,
-}: {
-	children: ReactNode;
-	lang: string;
-}) {
+export function AacsearchSearchProvider({ children, lang }: { children: ReactNode; lang: string }) {
 	const [open, setOpen] = useState(false);
 
 	// Keyboard shortcut: Cmd+K or Ctrl+K
@@ -69,11 +56,7 @@ export function AacsearchSearchProvider({
 		<SearchContext.Provider value={{ open, setOpen }}>
 			{children}
 			{open && (
-				<AacsearchDocsSearch
-					locale={lang}
-					open={open}
-					onOpenChange={handleOpenChange}
-				/>
+				<AacsearchDocsSearch locale={lang} open={open} onOpenChange={handleOpenChange} />
 			)}
 		</SearchContext.Provider>
 	);

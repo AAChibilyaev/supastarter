@@ -1,4 +1,5 @@
 import { ORPCError } from "@orpc/client";
+import { hasMinRole, normalizeRole, type OrganizationMemberRole } from "@repo/auth";
 import {
 	getOrganizationMembership,
 	getSearchIndexByOwnerSlug,
@@ -39,6 +40,33 @@ export async function requireOrganizationAdmin(
 	if (!membership || !ADMIN_ROLES.has(membership.role)) {
 		throw new ORPCError("FORBIDDEN");
 	}
+	return membership;
+}
+
+/**
+ * Require the user to have at least the specified role level in the organization.
+ * Uses the centralized RBAC hierarchy from @repo/auth.
+ */
+export async function requireOrganizationMinRole(
+	organizationId: string,
+	user: { id: string; role?: string | null },
+	minimumRole: OrganizationMemberRole,
+) {
+	if (user.role === "admin") {
+		const membership = await getOrganizationMembership(organizationId, user.id);
+		return membership;
+	}
+
+	const membership = await getOrganizationMembership(organizationId, user.id);
+	if (!membership) {
+		throw new ORPCError("FORBIDDEN");
+	}
+
+	const role = normalizeRole(membership.role);
+	if (!role || !hasMinRole(role, minimumRole)) {
+		throw new ORPCError("FORBIDDEN");
+	}
+
 	return membership;
 }
 

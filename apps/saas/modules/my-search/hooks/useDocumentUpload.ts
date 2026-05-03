@@ -46,7 +46,9 @@ export function useDocumentUpload({ organizationId, indexId }: UseDocumentUpload
 				);
 				setUploadJobs((prev) =>
 					prev.map((j) =>
-						j.name === variables.filename ? { ...j, status: "done" as const, progress: 100 } : j,
+						j.name === variables.filename
+							? { ...j, status: "done" as const, progress: 100 }
+							: j,
 					),
 				);
 			},
@@ -73,18 +75,24 @@ export function useDocumentUpload({ organizationId, indexId }: UseDocumentUpload
 		orpc.mySearch.addUrl.mutationOptions({
 			onSuccess: (_data, variables) => {
 				setPendingUrls((prev) =>
-					prev.map((u) => (u.url === variables.url ? { ...u, status: "done" as const } : u)),
+					prev.map((u) =>
+						u.url === variables.url ? { ...u, status: "done" as const } : u,
+					),
 				);
 				setUploadJobs((prev) =>
 					prev.map((j) =>
-						j.name === variables.url ? { ...j, status: "done" as const, progress: 100 } : j,
+						j.name === variables.url
+							? { ...j, status: "done" as const, progress: 100 }
+							: j,
 					),
 				);
 			},
 			onError: (_error, variables) => {
 				setPendingUrls((prev) =>
 					prev.map((u) =>
-						u.url === variables.url ? { ...u, status: "error" as const, error: _error.message } : u,
+						u.url === variables.url
+							? { ...u, status: "error" as const, error: _error.message }
+							: u,
 					),
 				);
 				setUploadJobs((prev) =>
@@ -113,7 +121,9 @@ export function useDocumentUpload({ organizationId, indexId }: UseDocumentUpload
 				reader.onload = () => {
 					const base64 = (reader.result as string).split(",")[1];
 					setPendingFiles((prev) =>
-						prev.map((f) => (f.id === item.id ? { ...f, status: "uploading" as const } : f)),
+						prev.map((f) =>
+							f.id === item.id ? { ...f, status: "uploading" as const } : f,
+						),
 					);
 					setUploadJobs((prev) => [
 						...prev,

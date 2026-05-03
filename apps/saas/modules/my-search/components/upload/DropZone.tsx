@@ -37,7 +37,8 @@ export function DropZone({ onFilesSelected, disabled }: DropZoneProps) {
 
 			const invalid = fileArray.find(
 				(f) =>
-					!ACCEPTED_TYPES.includes(f.type) && !f.name.match(/\.(pdf|docx|txt|csv|json|md|epub)$/i),
+					!ACCEPTED_TYPES.includes(f.type) &&
+					!f.name.match(/\.(pdf|docx|txt|csv|json|md|epub)$/i),
 			);
 			if (invalid) {
 				setError(t("fileTypeNotSupported"));

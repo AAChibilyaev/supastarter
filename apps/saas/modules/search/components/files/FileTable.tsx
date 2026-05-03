@@ -2,6 +2,7 @@
 
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -160,7 +161,9 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 					name: (doc.title as string) ?? (doc.name as string) ?? `document-${idx}`,
 					type: inferFileType(doc),
 					mimeType:
-						(doc.mime_type as string) ?? (doc.content_type as string) ?? "application/octet-stream",
+						(doc.mime_type as string) ??
+						(doc.content_type as string) ??
+						"application/octet-stream",
 					sizeBytes: (doc.size as number) ?? (doc.file_size as number) ?? 0,
 					wordCount: doc.word_count as number | undefined,
 					pageCount: doc.page_count as number | undefined,
@@ -241,7 +244,9 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 				cell: ({ getValue }) => {
 					const val = getValue() as number | undefined;
 					return val != null ? (
-						<span className="font-mono text-xs text-muted-foreground">{val.toLocaleString()}</span>
+						<span className="font-mono text-xs text-muted-foreground">
+							{val.toLocaleString()}
+						</span>
 					) : (
 						<span className="text-muted-foreground/40">&mdash;</span>
 					);
@@ -310,7 +315,9 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 		<div className="space-y-4">
 			{/* Header toolbar */}
 			<div className="gap-2 flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">{t("files.count", { count: files.length })}</p>
+				<p className="text-sm text-muted-foreground">
+					{t("files.count", { count: files.length })}
+				</p>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="outline" size="sm">
@@ -339,62 +346,70 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 			</div>
 
 			{/* Table */}
-			<div className="overflow-x-auto rounded-lg border">
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<TableHead
-										key={header.id}
-										style={{ width: header.getSize() }}
-										onClick={header.column.getToggleSortingHandler()}
-										className={
-											header.column.getCanSort()
-												? "cursor-pointer select-none hover:text-foreground"
-												: ""
-										}
-									>
-										{flexRender(header.column.columnDef.header, header.getContext())}
-										{{
-											asc: " \u2191",
-											desc: " \u2193",
-										}[header.column.getIsSorted() as string] ?? null}
-									</TableHead>
-								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{isLoading ? (
-							<SkeletonRows columns={columns.length} />
-						) : files.length === 0 ? (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="py-12 text-center text-muted-foreground"
-								>
-									{t("files.empty")}
-								</TableCell>
-							</TableRow>
-						) : (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									className="cursor-pointer"
-									onClick={() => setPreviewFile(row.original)}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
-										</TableCell>
+			<Card className="overflow-x-auto rounded-lg border">
+				<CardContent className="p-0">
+					<Table>
+						<TableHeader>
+							{table.getHeaderGroups().map((headerGroup) => (
+								<TableRow key={headerGroup.id}>
+									{headerGroup.headers.map((header) => (
+										<TableHead
+											key={header.id}
+											style={{ width: header.getSize() }}
+											onClick={header.column.getToggleSortingHandler()}
+											className={
+												header.column.getCanSort()
+													? "cursor-pointer select-none hover:text-foreground"
+													: ""
+											}
+										>
+											{flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
+											{{
+												asc: " \u2191",
+												desc: " \u2193",
+											}[header.column.getIsSorted() as string] ?? null}
+										</TableHead>
 									))}
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
-			</div>
+							))}
+						</TableHeader>
+						<TableBody>
+							{isLoading ? (
+								<SkeletonRows columns={columns.length} />
+							) : files.length === 0 ? (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="py-12 text-center text-muted-foreground"
+									>
+										{t("files.empty")}
+									</TableCell>
+								</TableRow>
+							) : (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										className="cursor-pointer"
+										onClick={() => setPreviewFile(row.original)}
+									>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell key={cell.id}>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							)}
+						</TableBody>
+					</Table>
+				</CardContent>
+			</Card>
 
 			{/* Preview dialog */}
 			{previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}

@@ -2,15 +2,16 @@ import { randomUUID } from "node:crypto";
 
 import { ORPCError } from "@orpc/client";
 import { addFileToIndex, getPersonalSearchIndexById } from "@repo/database";
-import {
-	processFile,
-	type ProcessFileResult,
-} from "@repo/document-processor";
+import { processFile, type ProcessFileResult } from "@repo/document-processor";
 import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAccess } from "../lib/access";
+import {
+	ensurePersonalSearchCollection,
+	indexPersonalDocumentChunks,
+} from "../lib/personal-collections";
 
 /**
  * Upload a file to a personal search index.
@@ -73,7 +74,27 @@ export const uploadFile = protectedProcedure
 			uploadedAt: new Date().toISOString(),
 		});
 
-		logger.info(`File uploaded to personal index: ${input.filename} (${result.chunks.length} chunks)`);
+		// Index chunks into Typesense
+		try {
+			await ensurePersonalSearchCollection(input.organizationId, index.slug, index.version);
+			await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
+				fileId,
+				filename: input.filename,
+				fileType: result.fileType ?? "txt",
+				chunks: result.chunks,
+			});
+		} catch (error) {
+			logger.error("Failed to index personal document chunks into Typesense", {
+				fileId,
+				filename: input.filename,
+				error,
+			});
+			// Don't fail the upload — metadata is stored
+		}
+
+		logger.info(
+			`File uploaded to personal index: ${input.filename} (${result.chunks.length} chunks)`,
+		);
 
 		return {
 			fileId,

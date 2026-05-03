@@ -69,7 +69,9 @@ export function CustomersContent() {
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-center text-balance">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-lg text-center text-muted-foreground">{t("subtitle")}</p>
+					<p className="mt-4 text-lg text-center text-muted-foreground">
+						{t("subtitle")}
+					</p>
 					<div className="mt-12 gap-6 md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1">
 						{CUSTOMER_KEYS.map((key) => (
 							<Card key={key} className="flex flex-col">
@@ -80,7 +82,9 @@ export function CustomersContent() {
 									</CardDescription>
 								</CardHeader>
 								<CardContent className="mt-auto">
-									<p className="text-xs text-muted-foreground italic">— {t(`items.${key}.role`)}</p>
+									<p className="text-xs text-muted-foreground italic">
+										— {t(`items.${key}.role`)}
+									</p>
 								</CardContent>
 							</Card>
 						))}

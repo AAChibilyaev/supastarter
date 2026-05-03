@@ -335,9 +335,49 @@ export function getRequiredPlanForFeature(feature: keyof PlanFeatures): string {
 
 // ─── Quota checks ───────────────────────────────────────────────
 
+/**
+ * Resolve the soft cap threshold for an org from org.metadata.
+ * Cached 120s to avoid DB hammering.
+ */
+const softCapCache = new Map<string, { threshold: number; expiresAt: number }>();
+
+export async function resolveOrgSoftCapThreshold(orgId: string): Promise<number> {
+	const now = Date.now();
+	const cached = softCapCache.get(orgId);
+	if (cached && cached.expiresAt > now) return cached.threshold;
+
+	try {
+		const org = await db.organization.findUnique({
+			where: { id: orgId },
+			select: { metadata: true },
+		});
+		let threshold = 0.8; // default
+		if (org?.metadata) {
+			try {
+				const meta = JSON.parse(org.metadata);
+				if (typeof meta?.softCapThreshold === "number" && meta.softCapThreshold > 0) {
+					threshold = meta.softCapThreshold / 100; // convert percentage to 0-1
+				}
+			} catch {
+				// fallback to default
+			}
+		}
+		const clamped = Math.min(Math.max(threshold, 0.01), 1);
+		softCapCache.set(orgId, { threshold: clamped, expiresAt: now + 120_000 });
+		return clamped;
+	} catch {
+		return 0.8;
+	}
+}
+
+export function invalidateSoftCapCache(orgId: string): void {
+	softCapCache.delete(orgId);
+}
+
 export async function checkQuota(orgId: string, resource: "search" | "ingest"): Promise<QuotaInfo> {
 	const plan = await resolveOrgPlan(orgId);
 	const period = getPeriodBounds();
+	const softCapThreshold = await resolveOrgSoftCapThreshold(orgId);
 
 	// Grace period for writes
 	if (resource === "ingest" && plan.graceWritesUntil === null && plan.status === "canceled") {
@@ -424,7 +464,7 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			periodStart: period.start,
 			periodEnd: period.end,
 			percentUsed,
-			isSoftCap: percentUsed >= 0.8,
+			isSoftCap: percentUsed >= softCapThreshold,
 			isHardCap: percentUsed >= 1.0,
 			overageRateUsdMicrosPerSearch: overageRate,
 			planId: plan.planId,

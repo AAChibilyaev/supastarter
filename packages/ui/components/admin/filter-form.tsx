@@ -441,6 +441,13 @@ export const FilterButtonMenuItem = React.forwardRef<HTMLDivElement, FilterButto
 				data-key={filter.props.source}
 				data-default-value={filter.props.defaultValue}
 				onClick={filter.props.disabled ? undefined : displayed ? handleHide : handleShow}
+				onKeyDown={(e) => {
+					if ((e.key === "Enter" || e.key === " ") && !filter.props.disabled) {
+						e.preventDefault();
+						if (displayed) handleHide();
+						else handleShow();
+					}
+				}}
 				ref={ref}
 				role="menuitemcheckbox"
 				aria-checked={displayed}

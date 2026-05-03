@@ -366,7 +366,7 @@ export function AdminRoadmapPanel() {
 			[newIds[idx - 1], newIds[idx]] = [newIds[idx], newIds[idx - 1]];
 			try {
 				await orpc.admin.roadmap.reorder.call({ ids: newIds });
-				queryClient.invalidateQueries({
+				void queryClient.invalidateQueries({
 					queryKey: orpc.admin.roadmap.list.queryOptions({ input: {} }).queryKey,
 				});
 			} catch (err) {
@@ -384,7 +384,7 @@ export function AdminRoadmapPanel() {
 			[newIds[idx], newIds[idx + 1]] = [newIds[idx + 1], newIds[idx]];
 			try {
 				await orpc.admin.roadmap.reorder.call({ ids: newIds });
-				queryClient.invalidateQueries({
+				void queryClient.invalidateQueries({
 					queryKey: orpc.admin.roadmap.list.queryOptions({ input: {} }).queryKey,
 				});
 			} catch (err) {

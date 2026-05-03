@@ -13,5 +13,17 @@
 	],
 	"options": {
 		"typeAware": true
-	}
+	},
+	"overrides": [
+		{
+			"files": [
+				"packages/ui/components/**",
+				"apps/saas/modules/shared/components/**",
+				"apps/saas/modules/organizations/components/**"
+			],
+			"rules": {
+				"no-redundant-type-constituents": "off"
+			}
+		}
+	]
 }

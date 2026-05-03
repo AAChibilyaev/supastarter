@@ -1,4 +1,9 @@
-import { resolveOrgPlan, checkQuota, checkHardLimit } from "@repo/payments/lib/entitlements";
+import {
+	resolveOrgPlan,
+	checkQuota,
+	checkHardLimit,
+	resolveOrgSoftCapThreshold,
+} from "@repo/payments/lib/entitlements";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -46,12 +51,16 @@ export const getPlanInfo = protectedProcedure
 			}),
 			graceReadsUntil: z.string().nullable(),
 			graceWritesUntil: z.string().nullable(),
+			softCapThreshold: z.number(),
 		}),
 	)
 	.handler(async ({ input: { organizationId } }) => {
 		const plan = await resolveOrgPlan(organizationId);
 		const searchQuota = await checkQuota(organizationId, "search");
 		const ingestQuota = await checkQuota(organizationId, "ingest");
+		const softCapThreshold = Math.round(
+			(await resolveOrgSoftCapThreshold(organizationId)) * 100,
+		);
 
 		const searchesLimit = checkHardLimit(searchQuota.current, searchQuota.limit);
 		const documentsLimit = checkHardLimit(ingestQuota.current, ingestQuota.limit);
@@ -98,5 +107,6 @@ export const getPlanInfo = protectedProcedure
 			},
 			graceReadsUntil: plan.graceReadsUntil?.toISOString() ?? null,
 			graceWritesUntil: plan.graceWritesUntil?.toISOString() ?? null,
+			softCapThreshold,
 		};
 	});

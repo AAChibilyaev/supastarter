@@ -1,10 +1,10 @@
 import { analytics } from "./procedures/analytics";
-import { bulkDeleteDocuments } from "./procedures/bulk-delete-documents";
 import {
 	listAnalyticsRules,
 	createAnalyticsRule,
 	deleteAnalyticsRule,
 } from "./procedures/analytics-rules";
+import { bulkDeleteDocuments } from "./procedures/bulk-delete-documents";
 import { performClusterOperation, clusterMetrics } from "./procedures/cluster-ops";
 import {
 	createConversationModel,
@@ -105,9 +105,9 @@ export const searchRouter = {
 	indexHealth,
 	indexHealthHistory,
 	pipelineStatus,
-\tlistDocuments,
-\tbulkDeleteDocuments,
-\tonboardingStatus,
+	listDocuments,
+	bulkDeleteDocuments,
+	onboardingStatus,
 	retryFailedBatches,
 	schema: {
 		get: getSchema,

@@ -28,7 +28,7 @@ export const bulkDeleteDocuments = protectedProcedure
 	)
 	.handler(async ({ input: { organizationId, slug, ids }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
-		const index = await requireSearchIndex(organizationId, slug);
+		await requireSearchIndex(organizationId, slug);
 
 		const alias = aliasName(organizationId, slug);
 

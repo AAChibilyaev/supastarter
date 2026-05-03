@@ -2,6 +2,7 @@ import { auth } from "@repo/auth";
 import { applySubscriptionToWallet } from "@repo/billing-wallet";
 import { db } from "@repo/database";
 import { sendEmail } from "@repo/mail";
+import { startRegionHealthMonitor } from "@repo/search";
 import {
 	getMetrics,
 	httpMetricsMiddleware,
@@ -67,6 +68,11 @@ const metricsCollectors: Array<(m: PrometheusMetrics) => Promise<void>> = [
 // route handlers are instrumented. Disabled by default; enable with
 // AACSEARCH_ENABLE_TRACING=true and configure OTEL_EXPORTER_OTLP_ENDPOINT.
 initTracing();
+
+// Start the background region health monitor for multi-region failover.
+// Periodically checks all configured Typesense regions and keeps the
+// routing health cache warm for low-latency failover decisions.
+startRegionHealthMonitor();
 
 // ── App ───────────────────────────────────────────────────────────
 

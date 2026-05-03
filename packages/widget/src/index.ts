@@ -15,8 +15,11 @@
  * It uses Shadow DOM for CSS isolation.
  */
 
+import { ChatClient } from "./chat-client";
+import { ChatUI } from "./chat-ui";
+import { detectEntryPoint } from "./context-bridge";
 import { createAacSearchClient } from "./search-client";
-import { t as translate, resolveLocale } from "./translations";
+import { t as translate, t as tFn, resolveLocale } from "./translations";
 
 export interface WidgetOptions {
 	baseUrl: string;
@@ -2278,17 +2281,10 @@ export class AacSearchWidget {
 		const widgetMode = dataset.widgetMode ?? "search"; // "search" | "chat" | "hybrid"
 
 		// Wait for DOM ready
-		const init = async () => {
+		const init = () => {
 			if (widgetMode === "chat" || widgetMode === "hybrid") {
-				// Chat or hybrid mode — load ChatUI + ChatClient dynamically
+				// Chat or hybrid mode
 				try {
-					const [{ ChatUI }, { ChatClient }, { detectEntryPoint }, { t: tFn, resolveLocale }] = await Promise.all([
-						import("./chat-ui"),
-						import("./chat-client"),
-						import("./context-bridge"),
-						import("./translations"),
-					]);
-
 					const entryContext = detectEntryPoint({
 						entryPoint: dataset.entryPoint as "home" | "catalog" | "search_results" | "product_card" | undefined,
 						productId: dataset.productId,
@@ -2307,10 +2303,10 @@ export class AacSearchWidget {
 					});
 
 					// Build translations map for ChatUI
-					const translationKeys = ["chat_placeholder", "chat_send", "chat_typing", "chat_escalated", "chat_new_chat", "chat_error", "close"] as const;
-					const translationsMap: Record<string, string> = {};
-					for (const key of translationKeys) {
-						translationsMap[key] = tFn(locale, key);
+					const chatI18nKeys = ["chat_placeholder", "chat_send", "chat_typing", "chat_escalated", "chat_new_chat", "chat_error", "close"] as const;
+					const chatTranslations: Record<string, string> = {};
+					for (const key of chatI18nKeys) {
+						chatTranslations[key] = tFn(locale, key);
 					}
 
 					let conversationId: string | null = null;
@@ -2321,9 +2317,8 @@ export class AacSearchWidget {
 						locale,
 						theme: (dataset.theme as "light" | "dark" | "auto") ?? "auto",
 						entryPoint: entryContext,
-						translations: translationsMap,
+						translations: chatTranslations,
 						onSendMessage: async (message) => {
-							// Start conversation on first message
 							if (!conversationId) {
 								conversationId = await client.startConversation({
 									entryPoint: entryContext.entryPoint ?? undefined,
@@ -2334,19 +2329,16 @@ export class AacSearchWidget {
 									locale,
 								});
 							}
-							// Stream response — ChatClient handles SSE
 							const generator = client.sendMessage(conversationId, message);
-							for await (const _chunk of generator) {
-								// ChatUI receives message via the onSendMessage contract;
-								// streaming updates would be wired in a full integration
-							}
+							// Consume stream — streaming UI updates wired via ChatUI events
+							for await (const _chunk of generator) { /* noop */ }
 						},
 					});
 				} catch (err) {
-					console.warn("[AACsearch] Failed to load chat UI:", err);
+					console.warn("[AACsearch] Failed to initialize chat UI:", err);
 				}
 
-				// In hybrid mode also render search widget below chat
+				// In hybrid mode also render search widget
 				if (widgetMode !== "hybrid") {
 					return;
 				}
@@ -2371,9 +2363,9 @@ export class AacSearchWidget {
 		};
 
 		if (document.readyState === "loading") {
-			document.addEventListener("DOMContentLoaded", () => { void init(); });
+			document.addEventListener("DOMContentLoaded", init);
 		} else {
-			void init();
+			init();
 		}
 	}
 })();

@@ -3,11 +3,6 @@ import { logger } from "@repo/logs";
 import { randomUUID } from "node:crypto";
 import { type EscalationService } from "../tools/escalate-to-operator";
 
-// AssistantConversation and AssistantMessage were added to schema.prisma but prisma generate
-// has not been run yet — use runtime cast until the generated client is updated.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const dbAny = db as any;
-
 export interface EscalationChannelConfig {
 	webhookUrl?: string;
 	/** Email recipient for escalation alerts — used for logging/routing; no direct email sent here. */
@@ -53,7 +48,7 @@ export function createEscalationService(channelConfig: EscalationChannelConfig):
 			const ticketId = randomUUID().slice(0, 8).toUpperCase();
 
 			// Mark conversation as escalated in DB
-			await dbAny.assistantConversation.update({
+			await db.assistantConversation.update({
 				where: { id: conversationId },
 				data: { status: "escalated", escalatedAt: new Date() },
 			});
@@ -64,7 +59,7 @@ export function createEscalationService(channelConfig: EscalationChannelConfig):
 			);
 
 			// Load conversation history for context
-			const messages = await dbAny.assistantMessage.findMany({
+			const messages = await db.assistantMessage.findMany({
 				where: { conversationId },
 				orderBy: { createdAt: "asc" },
 				take: 20,

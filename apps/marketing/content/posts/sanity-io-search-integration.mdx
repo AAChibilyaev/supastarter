@@ -1,0 +1,146 @@
+---
+title: Sanity.io Search Integration — GROQ-Based Export with AACsearch
+date: 2026-05-03
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Index your Sanity.io content in AACsearch using GROQ queries, real-time listeners, and image asset URL extraction.
+tags: [sanity, cms, integration, connector, headless, groq, realtime]
+published: false
+---
+
+Sanity.io is the programmable CMS — built for structured content, real-time collaboration, and custom editing experiences. With GROQ (GROQ Query Language), Sanity gives you SQL-like querying over your content. But like any CMS, Sanity is a content *management* platform, not a search engine. For customer-facing search with typo tolerance, faceting, and relevance ranking, you need AACsearch.
+
+## Why Sanity Needs a Search Layer
+
+Sanity's GROQ is excellent for content queries, but it has limitations for search:
+
+- **No fuzzy matching**: Exact queries only
+- **No relevance ranking**: Results are ordered by GROQ expressions, not search relevance
+- **No typo tolerance**: User typos = zero results
+- **Query performance**: GROQ queries scan the dataset — slow at scale for search use cases
+- **API rate limits**: Sanity's API isn't designed for high-frequency public queries
+
+AACsearch adds a search layer that stays synchronized with Sanity's GROQ-queried content.
+
+## How the Sanity Connector Works
+
+### GROQ-Based Export
+
+The connector uses GROQ queries to extract content from Sanity:
+
+```groq
+// Example GROQ query for product search indexing
+*[_type == "product" && defined(slug.current)] {
+  _id,
+  title,
+  slug,
+  "description": pt::text(body),
+  price,
+  categories[]->{ title },
+  "tags": tags[],
+  "mainImage": mainImage.asset->url,
+  "gallery": gallery[].asset->url,
+  _updatedAt
+}
+```
+
+### Real-Time Listener
+
+Beyond periodic exports, the connector uses Sanity's real-time listener API for instant updates:
+
+```typescript
+import sanityClient from "@sanity/client";
+
+const client = sanityClient({
+  projectId: "your-project",
+  dataset: "production",
+  apiVersion: "2024-01-01",
+  useCdn: false,
+});
+
+// Listen for mutations on products
+const subscription = client.listen(
+  '*[_type == "product"]',
+  {},
+  { includeResult: true, events: ["create", "update", "delete"] }
+).subscribe((event) => {
+  if (event.type === "mutation") {
+    // Handle document creation
+    if (event.result) {
+      aacsearch.index({
+        collection: "products",
+        document: mapSanityDoc(event.result),
+      });
+    }
+  }
+});
+```
+
+### Image Asset Handling
+
+Sanity's image pipeline is powerful but complex. The connector automatically:
+
+1. Extracts image asset URLs from `image.asset->url` references
+2. Optionally applies Sanity's image transformations (`w=600&h=600&fit=crop`)
+3. Includes `alt` text from image metadata
+4. Handles SVG, WebP, and responsive image sets
+
+## Configuration
+
+```json
+{
+  "projectId": "your-sanity-project",
+  "dataset": "production",
+  "queries": [
+    {
+      "name": "products",
+      "groq": "*[_type == 'product' && defined(slug.current)]",
+      "collection": "products",
+      "schedule": "*/5 * * * *",
+      "realtime": true
+    },
+    {
+      "name": "articles",
+      "groq": "*[_type == 'article' && defined(slug.current) && publishAt < now()]",
+      "collection": "articles",
+      "schedule": "*/15 * * * *",
+      "realtime": true
+    }
+  ],
+  "imageOptions": {
+    "width": 800,
+    "quality": 80,
+    "format": "auto"
+  }
+}
+```
+
+## Setting Up the Connector
+
+1. **Generate a Sanity API token** with read access to your dataset
+2. **Configure GROQ queries** in the AACsearch dashboard for each content type
+3. **Map fields** to AACsearch schema (string, number, facet, geo, etc.)
+4. **Start the sync** — initial bulk import runs immediately
+5. **Enable real-time** for instant updates on content changes
+
+## Unique Advantages
+
+Sanity's structured content model pairs exceptionally well with AACsearch:
+
+- **Blocks and Portable Text**: Convert rich text to searchable plain text
+- **References**: Automatically resolve `->` references to nested objects
+- **Arrays**: Flatten array fields into facet-compatible formats
+- **Internationalization**: Each language field becomes searchable independently
+- **Drafts**: Only published documents are indexed (configurable)
+
+## Use Cases
+
+- **Content-rich sites** — search across articles, guides, and documentation
+- **Product catalogs** — faceted search with Sanity's structured product data
+- **Multi-language sites** — locale-aware search with Sanity's field-level i18n
+- **Real-time collaboration** — search reflects changes as editors publish
+
+---
+
+*AACsearch Sanity.io connector is in development. [Get early access](https://aacsearch.com) to be notified when it launches.*

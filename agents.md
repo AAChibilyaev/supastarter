@@ -1742,14 +1742,8 @@ Last: [first session]
 
 ## Last Session Bridge
 
-[pre-compact bridge — saved before context compaction]
-Files (6):
-packages/api/modules/assistant/procedures/config.ts (edit)
-packages/api/modules/assistant/assistant-public.ts (edit)
-packages/api/modules/assistant/procedures/stream-assistant.ts (edit)
-packages/widget/package.json (edit)
-packages/widget/src/index.ts (edit)
-packages/api/modules/search/procedures/widget-config.ts (edit)
+[Emergency bridge — running bridge was not updated]
+Files: /Users/aac/Projects/ts/sim/apps/aacflow/app/(auth)/login/page.tsx (edit), apps/marketing/modules/visuals/components/VisualFrame.tsx (create), apps/marketing/modules/visuals/components/MetricTile.tsx (create), apps/marketing/modules/visuals/components/MiniBarChart.tsx (create)
 
 # === END COGNILAYER ===
 

@@ -1,4 +1,8 @@
-import { db, type Prisma } from "@repo/database";
+import {
+	getSynonymsByIndexId,
+	replaceSynonyms,
+	rowsToSynonymPairs,
+} from "@repo/database/prisma/queries/synonyms";
 import { logger } from "@repo/logs";
 import { aliasName, syncSynonymsToTypesense } from "@repo/search";
 import { z } from "zod";
@@ -18,7 +22,7 @@ export const getSynonyms = protectedProcedure
 		path: "/search/indexes/{slug}/synonyms",
 		tags: ["Search"],
 		summary: "Get synonyms for a search index",
-		description: "Returns the configured synonyms stored in the index schema.",
+		description: "Returns the configured synonyms stored in the search_index_synonym table.",
 	})
 	.input(
 		z.object({
@@ -31,13 +35,8 @@ export const getSynonyms = protectedProcedure
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
-		const rawSchema =
-			typeof index.schema === "object" && index.schema !== null
-				? (index.schema as Record<string, unknown>)
-				: {};
-		const synonyms = Array.isArray(rawSchema._synonyms) ? rawSchema._synonyms : [];
-
-		return synonyms as { synonym: string; root: string }[];
+		const rows = await getSynonymsByIndexId(index.id);
+		return rowsToSynonymPairs(rows);
 	});
 
 export const updateSynonyms = protectedProcedure
@@ -46,7 +45,7 @@ export const updateSynonyms = protectedProcedure
 		path: "/search/indexes/{slug}/synonyms",
 		tags: ["Search"],
 		summary: "Update synonyms for a search index",
-		description: "Replaces the entire synonym list stored in the index schema.",
+		description: "Replaces the entire synonym list in the search_index_synonym table.",
 	})
 	.input(
 		z.object({
@@ -60,17 +59,8 @@ export const updateSynonyms = protectedProcedure
 		await requireOrganizationAdmin(input.organizationId, user);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
-		const schema = (index.schema ?? {}) as Record<string, unknown>;
-
-		await db.searchIndex.update({
-			where: { id: index.id },
-			data: {
-				schema: {
-					...schema,
-					_synonyms: input.synonyms,
-				} as Prisma.InputJsonValue,
-			},
-		});
+		// Replace synonyms in the new table (transactional)
+		await replaceSynonyms(index.id, input.organizationId, input.synonyms);
 
 		// Sync to Typesense — best-effort, does not block the response
 		const collection = aliasName(input.organizationId, input.slug);

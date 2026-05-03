@@ -8,6 +8,7 @@ import {
 	updateReindexJobProgress,
 	updateSearchIndexVersion,
 } from "@repo/database";
+import { getSynonymsByIndexId, rowsToSynonymPairs } from "@repo/database/prisma/queries/synonyms";
 import { logger } from "@repo/logs";
 import {
 	aliasName,
@@ -15,7 +16,6 @@ import {
 	syncCurationsToTypesense,
 	syncSynonymsToTypesense,
 	type CurationRule,
-	type SynonymPair,
 } from "@repo/search";
 import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
@@ -88,17 +88,17 @@ export async function POST(request: Request) {
 				failed: result.failedDocuments,
 			});
 
-			// Re-apply synonyms and curations to the newly indexed collection.
+			// Re-apply synonyms (from search_index_synonym table) and curations
+			// to the newly indexed collection.
 			// The alias now points to the new physical collection, so syncing via
 			// the alias propagates settings to it.
 			const collection = aliasName(pendingJob.organizationId, pendingJob.slug);
+			const synonymRows = await getSynonymsByIndexId(index.id);
+			const synonyms = rowsToSynonymPairs(synonymRows);
 			const schema =
 				typeof index.schema === "object" && index.schema !== null
 					? (index.schema as Record<string, unknown>)
 					: {};
-			const synonyms = Array.isArray(schema._synonyms)
-				? (schema._synonyms as SynonymPair[])
-				: [];
 			const curations = Array.isArray(schema._curations)
 				? (schema._curations as CurationRule[])
 				: [];

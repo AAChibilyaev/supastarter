@@ -173,6 +173,8 @@ model Organization {
   auditLogs                   AuditLog[]
   scimConfiguration           ScimConfiguration?
   scimAuditLogs               ScimAuditLog[]
+  scimProvisioningRules       ScimProvisioningRule[]
+  searchIndexSynonyms         SearchIndexSynonym[]
 
   @@unique([slug])
   @@map("organization")
@@ -293,11 +295,30 @@ model SearchIndex {
   usageEvents   SearchUsageEvent[]
   ingestBuffer  SearchIngestBuffer[]
   syncJobs      SearchConnectorSyncJob[]
-  shopifyStores ShopifyStore[]
+  shopifyStores        ShopifyStore[]
+  searchIndexSynonyms  SearchIndexSynonym[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
   @@map("search_index")
+}
+
+model SearchIndexSynonym {
+  id             String       @id @default(cuid())
+  indexId        String
+  index          SearchIndex  @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  root           String
+  synonym        String
+  locale         String?      @default("en")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([indexId, root, synonym])
+  @@index([indexId])
+  @@index([organizationId])
+  @@map("search_index_synonym")
 }
 
 model SearchApiKey {
@@ -1130,6 +1151,37 @@ model ScimAuditLog {
   @@index([organizationId, createdAt(sort: Desc)])
   @@index([createdAt(sort: Desc)])
   @@map("scim_audit_log")
+}
+
+// SCIM provisioning rules: maps IdP groups to organization roles
+// Each rule defines a group name from the identity provider and the target role
+// to assign in AACSearch, plus what happens on deprovisioning.
+model ScimProvisioningRule {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // The SCIM group name from the IdP (e.g., "Engineering", "Admins")
+  groupName      String
+
+  // The target role in AACSearch (owner, admin, member)
+  targetRole     String       @default("member")
+
+  // Deprovisioning action: "suspend" — disable user, "remove" — remove from org, "notify" — alert only
+  deprovisionAction String   @default("suspend")
+
+  // Whether this rule is active
+  enabled        Boolean      @default(true)
+
+  // Optional description for the rule
+  description    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, groupName])
+  @@index([organizationId])
+  @@map("scim_provisioning_rule")
 }
 
 // GDPR: Right to Erasure — tracks deletion requests with grace period

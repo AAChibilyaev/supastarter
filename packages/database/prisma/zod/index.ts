@@ -88,6 +88,12 @@ export const SearchIndexScalarFieldEnumSchema = z.enum(['id', 'organizationId', 
 
 export type SearchIndexScalarFieldEnum = z.infer<typeof SearchIndexScalarFieldEnumSchema>;
 
+// File: SearchIndexSynonymScalarFieldEnum.schema.ts
+
+export const SearchIndexSynonymScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'root', 'synonym', 'locale', 'createdAt', 'updatedAt'])
+
+export type SearchIndexSynonymScalarFieldEnum = z.infer<typeof SearchIndexSynonymScalarFieldEnumSchema>;
+
 // File: SearchApiKeyScalarFieldEnum.schema.ts
 
 export const SearchApiKeyScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'name', 'prefix', 'hash', 'scopes', 'allowedOrigins', 'rateLimitPerMinute', 'expiresAt', 'revokedAt', 'lastUsedAt', 'createdAt'])
@@ -297,6 +303,12 @@ export type ScimConfigurationScalarFieldEnum = z.infer<typeof ScimConfigurationS
 export const ScimAuditLogScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'action', 'target', 'success', 'details', 'performedBy', 'ipAddress', 'createdAt'])
 
 export type ScimAuditLogScalarFieldEnum = z.infer<typeof ScimAuditLogScalarFieldEnumSchema>;
+
+// File: ScimProvisioningRuleScalarFieldEnum.schema.ts
+
+export const ScimProvisioningRuleScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'groupName', 'targetRole', 'deprovisionAction', 'enabled', 'description', 'createdAt', 'updatedAt'])
+
+export type ScimProvisioningRuleScalarFieldEnum = z.infer<typeof ScimProvisioningRuleScalarFieldEnumSchema>;
 
 // File: UserDeletionRequestScalarFieldEnum.schema.ts
 
@@ -601,6 +613,22 @@ export const SearchIndexSchema = z.object({
 });
 
 export type SearchIndexType = z.infer<typeof SearchIndexSchema>;
+
+
+// File: SearchIndexSynonym.schema.ts
+
+export const SearchIndexSynonymSchema = z.object({
+  id: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+  root: z.string(),
+  synonym: z.string(),
+  locale: z.string().default("en").nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SearchIndexSynonymType = z.infer<typeof SearchIndexSynonymSchema>;
 
 
 // File: SearchApiKey.schema.ts
@@ -1273,6 +1301,23 @@ export const ScimAuditLogSchema = z.object({
 });
 
 export type ScimAuditLogType = z.infer<typeof ScimAuditLogSchema>;
+
+
+// File: ScimProvisioningRule.schema.ts
+
+export const ScimProvisioningRuleSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  groupName: z.string(),
+  targetRole: z.string().default("member"),
+  deprovisionAction: z.string().default("suspend"),
+  enabled: z.boolean().default(true),
+  description: z.string().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ScimProvisioningRuleType = z.infer<typeof ScimProvisioningRuleSchema>;
 
 
 // File: UserDeletionRequest.schema.ts

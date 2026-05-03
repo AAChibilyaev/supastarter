@@ -1,6 +1,6 @@
 import { aggregateSearchUsage, recordActivationEvent, recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
-import { SymSpell, detectLanguage, normalize } from "@repo/nlp";
+import { SymSpell, detectLanguage } from "@repo/nlp";
 import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -114,7 +114,7 @@ export const publicSearchApp = new Hono()
 		// Plan quota check
 		const quota = await quotaCheck(c, verified.organizationId, "search");
 		if (!quota.allowed) {
-			return c.json({ error: quota.error ?? "quota_exceeded" }, 429);
+			return c.json(quota.errorPayload ?? { error: quota.error ?? "quota_exceeded" }, 429);
 		}
 
 		// Fire-and-forget: charge wallet for overage searches
@@ -365,7 +365,10 @@ export const publicSearchApp = new Hono()
 		// Plan quota check
 		const quotaMulti = await quotaCheck(c, verified.organizationId, "search");
 		if (!quotaMulti.allowed) {
-			return c.json({ error: quotaMulti.error ?? "quota_exceeded" }, 429);
+			return c.json(
+				quotaMulti.errorPayload ?? { error: quotaMulti.error ?? "quota_exceeded" },
+				429,
+			);
 		}
 
 		let body: unknown;

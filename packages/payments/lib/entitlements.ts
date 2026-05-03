@@ -70,6 +70,10 @@ export interface QuotaInfo {
 	isHardCap: boolean;
 	/** Overage rate in USD microcents per search for the active plan. */
 	overageRateUsdMicrosPerSearch: number;
+	/** Plan identifier (free, starter, pro, business, enterprise). */
+	planId: string;
+	/** Human-readable plan name. */
+	planName: string;
 }
 
 // ─── Feature matrix ─────────────────────────────────────────────
@@ -350,6 +354,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isSoftCap: false,
 			isHardCap: false,
 			overageRateUsdMicrosPerSearch: 0,
+			planId: plan.planId,
+			planName: plan.name,
 		};
 	}
 
@@ -368,6 +374,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isSoftCap: false,
 			isHardCap: false,
 			overageRateUsdMicrosPerSearch: 0,
+			planId: plan.planId,
+			planName: plan.name,
 		};
 	}
 
@@ -387,6 +395,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isSoftCap: false,
 			isHardCap: false,
 			overageRateUsdMicrosPerSearch: 0,
+			planId: plan.planId,
+			planName: plan.name,
 		};
 	}
 
@@ -417,6 +427,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isSoftCap: percentUsed >= 0.8,
 			isHardCap: percentUsed >= 1.0,
 			overageRateUsdMicrosPerSearch: overageRate,
+			planId: plan.planId,
+			planName: plan.name,
 		};
 	} catch (error) {
 		logger.error("checkQuota failed", { error, orgId, resource });
@@ -433,6 +445,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 			isSoftCap: false,
 			isHardCap: false,
 			overageRateUsdMicrosPerSearch: 0,
+			planId: "free",
+			planName: "Free",
 		};
 	}
 }

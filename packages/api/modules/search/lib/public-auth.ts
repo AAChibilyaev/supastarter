@@ -2,7 +2,6 @@ import { incrementRateLimitBucket } from "@repo/database";
 import { verifySearchApiKey, type VerifiedSearchKey } from "@repo/search";
 import type { Context } from "hono";
 
-import { resolveOrgPlanQuota } from "./quota";
 import { verifyScopedSearchToken } from "./scoped-token";
 
 const BEARER_PREFIX = "Bearer ";
@@ -14,8 +13,11 @@ export interface PublicSearchAuth {
 }
 
 /**
- * Shared auth/origin/rate-limit/quota gate for any public search route.
+ * Shared auth/origin/rate-limit gate for any public search route.
  * Returns either a typed success or an HTTP Response (caller forwards it).
+ *
+ * NOTE: Quota enforcement is handled by the quotaCheck middleware AFTER this gate,
+ * so that overage bypass (wallet deduction) can be evaluated properly.
  *
  * tokenOverride: raw API key from the request body — used by the events endpoint
  * when the client cannot set Authorization headers (e.g. navigator.sendBeacon).
@@ -66,19 +68,6 @@ export async function gatePublicSearchRequest(
 	const used = await incrementRateLimitBucket(verified.keyId);
 	if (used > verified.rateLimitPerMinute) {
 		return c.json({ error: "rate_limited", limit: verified.rateLimitPerMinute }, 429);
-	}
-
-	const quota = await resolveOrgPlanQuota(verified.organizationId);
-	if (quota.searchPerMonth > 0 && quota.searchQueriesUsedThisPeriod >= quota.searchPerMonth) {
-		return c.json(
-			{
-				error: "quota_exceeded",
-				limit: quota.searchPerMonth,
-				used: quota.searchQueriesUsedThisPeriod,
-				reset: quota.periodEnd,
-			},
-			402,
-		);
 	}
 
 	return { verified, scopedFilter };

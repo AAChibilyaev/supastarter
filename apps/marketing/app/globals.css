@@ -55,6 +55,13 @@
 		border-color: var(--border);
 	}
 
+	code,
+	pre,
+	kbd,
+	samp {
+		font-family: var(--font-mono), ui-monospace, monospace;
+	}
+
 	* {
 		-webkit-tap-highlight-color: transparent;
 	}

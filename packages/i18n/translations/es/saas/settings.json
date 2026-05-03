@@ -652,6 +652,21 @@
 				"email": "Correo",
 				"source": "Origen",
 				"timestamp": "Marca de tiempo"
+			},
+			"provisioning": {
+				"title": "Asignación Grupo→Rol",
+				"addRule": "Agregar regla",
+				"addRuleDescription": "Asigne un grupo de IdP a un rol de organización con comportamiento de desaprovisionamiento.",
+				"editRule": "Editar regla",
+				"groupName": "Nombre del grupo",
+				"targetRole": "Rol objetivo",
+				"deprovisionAction": "Acción de desaprovisionamiento",
+				"deprovisionNote": "Comportamiento de desaprovisionamiento",
+				"deprovisionNoteDescription": "Cuando un usuario es eliminado de este grupo en su IdP, la acción seleccionada se aplicará automáticamente.",
+				"noRules": "No hay reglas de aprovisionamiento configuradas",
+				"noRulesDescription": "Agregue reglas para asignar grupos del proveedor de identidad a roles de la organización y definir el comportamiento de desaprovisionamiento.",
+				"deleteRule": "¿Eliminar regla de aprovisionamiento?",
+				"deleteRuleDescription": "Esto eliminará la regla de asignación. Los roles de usuario existentes no se verán afectados."
 			}
 		},
 		"auditLog": {

@@ -458,6 +458,185 @@ export const scimConfigRouter = new Hono()
 		);
 
 		return c.body(header + rows);
+	})
+
+	// ── List provisioning rules ──────────────────────────────────
+	.get("/:orgId/provisioning-rules", async (c) => {
+		const orgId = c.req.param("orgId");
+		const authResult = await requireOrgAdmin(c, orgId);
+		if (!authResult) {
+			return c.json({ error: "Unauthorized" }, 401);
+		}
+
+		const rules = await db.scimProvisioningRule.findMany({
+			where: { organizationId: orgId },
+			orderBy: { createdAt: "asc" },
+		});
+
+		return c.json({ rules });
+	})
+
+	// ── Create provisioning rule ─────────────────────────────────
+	.post("/:orgId/provisioning-rules", async (c) => {
+		const orgId = c.req.param("orgId");
+		const authResult = await requireOrgAdmin(c, orgId);
+		if (!authResult) {
+			return c.json({ error: "Unauthorized" }, 401);
+		}
+
+		const body = await c.req.json().catch(() => null);
+		if (!body) {
+			return c.json({ error: "Invalid JSON body" }, 400);
+		}
+
+		const parsed = z
+			.object({
+				groupName: z.string().min(1),
+				targetRole: z.enum(["owner", "admin", "member"]).default("member"),
+				deprovisionAction: z.enum(["suspend", "remove", "notify"]).default("suspend"),
+				enabled: z.boolean().default(true),
+				description: z.string().optional().nullable(),
+			})
+			.safeParse(body);
+
+		if (!parsed.success) {
+			return c.json({ error: "Invalid request body", issues: parsed.error.issues }, 400);
+		}
+
+		// Check for duplicate group name
+		const existing = await db.scimProvisioningRule.findUnique({
+			where: {
+				organizationId_groupName: {
+					organizationId: orgId,
+					groupName: parsed.data.groupName,
+				},
+			},
+		});
+
+		if (existing) {
+			return c.json({ error: "A rule for this group already exists" }, 409);
+		}
+
+		const rule = await db.scimProvisioningRule.create({
+			data: {
+				organizationId: orgId,
+				groupName: parsed.data.groupName,
+				targetRole: parsed.data.targetRole,
+				deprovisionAction: parsed.data.deprovisionAction,
+				enabled: parsed.data.enabled,
+				description: parsed.data.description ?? null,
+			},
+		});
+
+		await db.scimAuditLog.create({
+			data: {
+				organizationId: orgId,
+				action: "provisioning_rule_created",
+				target: `rule:${rule.id}`,
+				success: true,
+				performedBy: authResult.userId,
+			},
+		});
+
+		return c.json(rule, 201);
+	})
+
+	// ── Update provisioning rule ─────────────────────────────────
+	.patch("/:orgId/provisioning-rules/:ruleId", async (c) => {
+		const orgId = c.req.param("orgId");
+		const ruleId = c.req.param("ruleId");
+		const authResult = await requireOrgAdmin(c, orgId);
+		if (!authResult) {
+			return c.json({ error: "Unauthorized" }, 401);
+		}
+
+		const body = await c.req.json().catch(() => null);
+		if (!body) {
+			return c.json({ error: "Invalid JSON body" }, 400);
+		}
+
+		const parsed = z
+			.object({
+				groupName: z.string().min(1).optional(),
+				targetRole: z.enum(["owner", "admin", "member"]).optional(),
+				deprovisionAction: z.enum(["suspend", "remove", "notify"]).optional(),
+				enabled: z.boolean().optional(),
+				description: z.string().optional().nullable(),
+			})
+			.safeParse(body);
+
+		if (!parsed.success) {
+			return c.json({ error: "Invalid request body", issues: parsed.error.issues }, 400);
+		}
+
+		const existing = await db.scimProvisioningRule.findUnique({
+			where: { id: ruleId, organizationId: orgId },
+		});
+
+		if (!existing) {
+			return c.json({ error: "Provisioning rule not found" }, 404);
+		}
+
+		const rule = await db.scimProvisioningRule.update({
+			where: { id: ruleId },
+			data: {
+				...(parsed.data.groupName !== undefined && { groupName: parsed.data.groupName }),
+				...(parsed.data.targetRole !== undefined && { targetRole: parsed.data.targetRole }),
+				...(parsed.data.deprovisionAction !== undefined && {
+					deprovisionAction: parsed.data.deprovisionAction,
+				}),
+				...(parsed.data.enabled !== undefined && { enabled: parsed.data.enabled }),
+				...(parsed.data.description !== undefined && {
+					description: parsed.data.description,
+				}),
+			},
+		});
+
+		await db.scimAuditLog.create({
+			data: {
+				organizationId: orgId,
+				action: "provisioning_rule_updated",
+				target: `rule:${rule.id}`,
+				success: true,
+				performedBy: authResult.userId,
+			},
+		});
+
+		return c.json(rule);
+	})
+
+	// ── Delete provisioning rule ─────────────────────────────────
+	.delete("/:orgId/provisioning-rules/:ruleId", async (c) => {
+		const orgId = c.req.param("orgId");
+		const ruleId = c.req.param("ruleId");
+		const authResult = await requireOrgAdmin(c, orgId);
+		if (!authResult) {
+			return c.json({ error: "Unauthorized" }, 401);
+		}
+
+		const existing = await db.scimProvisioningRule.findUnique({
+			where: { id: ruleId, organizationId: orgId },
+		});
+
+		if (!existing) {
+			return c.json({ error: "Provisioning rule not found" }, 404);
+		}
+
+		await db.scimProvisioningRule.delete({
+			where: { id: ruleId },
+		});
+
+		await db.scimAuditLog.create({
+			data: {
+				organizationId: orgId,
+				action: "provisioning_rule_deleted",
+				target: `rule:${ruleId}`,
+				success: true,
+				performedBy: authResult.userId,
+			},
+		});
+
+		return c.body(null, 204);
 	});
 
 /**

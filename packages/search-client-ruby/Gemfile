@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gemspec
+
+# No additional runtime dependencies — the gem uses Ruby stdlib only.
+# Add development/test dependencies below if needed:
+#
+# gem "rspec", "~> 3.12"
+# gem "webmock", "~> 3.18"
+# gem "yard", "~> 0.9"

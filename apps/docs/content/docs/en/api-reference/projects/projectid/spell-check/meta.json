@@ -1,4 +1,6 @@
 {
-	"title": "projects/projectid/spell-check",
-	"pages": ["post"]
+  "title": "projects/projectid/spell-check",
+  "pages": [
+    "post"
+  ]
 }

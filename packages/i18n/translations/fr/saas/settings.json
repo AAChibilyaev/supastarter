@@ -652,6 +652,21 @@
 				"email": "E-mail",
 				"source": "Source",
 				"timestamp": "Horodatage"
+			},
+			"provisioning": {
+				"title": "Correspondance Groupe→Rôle",
+				"addRule": "Ajouter une règle",
+				"addRuleDescription": "Associez un groupe IdP à un rôle d'organisation avec un comportement de déprovisionnement.",
+				"editRule": "Modifier la règle",
+				"groupName": "Nom du groupe",
+				"targetRole": "Rôle cible",
+				"deprovisionAction": "Action de déprovisionnement",
+				"deprovisionNote": "Comportement de déprovisionnement",
+				"deprovisionNoteDescription": "Lorsqu'un utilisateur est retiré de ce groupe dans votre IdP, l'action sélectionnée sera appliquée automatiquement.",
+				"noRules": "Aucune règle de provisionnement configurée",
+				"noRulesDescription": "Ajoutez des règles pour mapper les groupes du fournisseur d'identité aux rôles de l'organisation et définir le comportement de déprovisionnement.",
+				"deleteRule": "Supprimer la règle de provisionnement ?",
+				"deleteRuleDescription": "Cela supprimera la règle de correspondance. Les rôles utilisateur existants ne seront pas affectés."
 			}
 		},
 		"auditLog": {

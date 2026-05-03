@@ -5,9 +5,13 @@ on:
         branches: [main, develop]
         paths:
             - "packages/api/v1/openapi.ts"
+            - "packages/api/v2/openapi.ts"
             - "packages/api/openapi.yaml"
+            - "packages/api/v2/openapi.yaml"
 
 env:
+    OPENAPI_V1_FILE: packages/api/openapi.yaml
+    OPENAPI_V2_FILE: packages/api/v2/openapi.yaml
     OPENAPI_FILE: packages/api/openapi.yaml
     NODE_VERSION: lts/*
     GO_VERSION: "1.21"
@@ -43,7 +47,7 @@ jobs:
             - name: Check if spec changed
               id: check-changed
               run: |
-                  if ! git diff --quiet -- "${{ env.OPENAPI_FILE }}"; then
+                  if ! git diff --quiet -- "${{ env.OPENAPI_V1_FILE }}" || ! git diff --quiet -- "${{ env.OPENAPI_V2_FILE }}"; then
                       echo "changed=true" >> "$GITHUB_OUTPUT"
                   else
                       echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -54,7 +58,7 @@ jobs:
               run: |
                   git config user.name "aacsearch-bot"
                   git config user.email "bot@aacsearch.com"
-                  git add "${{ env.OPENAPI_FILE }}"
+                  git add "${{ env.OPENAPI_V1_FILE }}" "${{ env.OPENAPI_V2_FILE }}"
                   git commit -m "[bot] Update openapi.yaml from spec generator"
                   git push
 
@@ -80,11 +84,10 @@ jobs:
             - name: Generate TypeScript types from OpenAPI
               run: |
                   mkdir -p packages/search-client/src/generated
-                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-                      -o packages/search-client/src/generated/sdk.ts || true
-                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-                      -o packages/search-client/src/generated/types.ts \
-                      --export-type || true
+                  npx openapi-typescript@latest "${{ env.OPENAPI_V1_FILE }}" \
+                      -o packages/search-client/src/generated/v1-types.ts || true
+                  npx openapi-typescript@latest "${{ env.OPENAPI_V2_FILE }}" \
+                      -o packages/search-client/src/generated/v2-types.ts || true
 
             - name: Type-check
               run: pnpm --filter @aacsearch/client type-check
@@ -205,6 +208,41 @@ jobs:
                   git push origin "go-sdk/$VERSION"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # ── Step 6: Build Ruby SDK ────────────────────────────────────────────
+    build-and-publish-ruby-sdk:
+        name: Build Ruby SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-ruby@v1
+              with:
+                  ruby-version: "3.1"
+
+            - name: Install build dependencies
+              run: |
+                  gem install bundler
+
+            - name: Build Ruby SDK
+              run: |
+                  cd packages/search-client-ruby
+                  gem build aacsearch.gemspec
+
+            - name: Check SDK status
+              run: |
+                  echo "✅ Ruby SDK built"
+                  ls -lh packages/search-client-ruby/*.gem
+
+            # Publish to RubyGems (only on main branch push)
+            - name: Publish to RubyGems
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  gem push packages/search-client-ruby/*.gem
+              env:
+                  GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
 
     # ── Step 5: Build PHP SDK ────────────────────────────────────────
     generate-php-sdk:

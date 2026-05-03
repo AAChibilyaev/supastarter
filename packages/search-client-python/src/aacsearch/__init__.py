@@ -14,11 +14,15 @@ Usage:
 
 from ._search_client import SearchClient
 from ._admin_client import AdminClient
+from ._v2_search_client import V2SearchClient
+from ._v2_admin_client import V2AdminClient
 from ._exceptions import AacsearchError, AuthenticationError, NotFoundError, RateLimitError
 
 __all__ = [
     "SearchClient",
     "AdminClient",
+    "V2SearchClient",
+    "V2AdminClient",
     "AacsearchError",
     "AuthenticationError",
     "NotFoundError",

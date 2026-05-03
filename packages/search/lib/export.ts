@@ -1,7 +1,7 @@
 import "server-only";
 import { logger } from "@repo/logs";
 
-import { getTypesenseClient } from "./client";
+import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
 
 export interface ExportDocumentsInput {
 	/** Physical collection name (not alias) */
@@ -10,6 +10,8 @@ export interface ExportDocumentsInput {
 	filterBy?: string;
 	/** Optional per-batch page size for paginated export */
 	perPage?: number;
+	/** Organization ID for region-aware routing. If provided, uses the org's storage region Typesense cluster. */
+	organizationId?: string;
 }
 
 export interface ExportDocumentsResult {
@@ -28,7 +30,9 @@ export interface ExportDocumentsResult {
  * Supports `filter_by` for partial exports.
  */
 export async function exportDocuments(input: ExportDocumentsInput): Promise<ExportDocumentsResult> {
-	const client = getTypesenseClient();
+	const client = input.organizationId
+		? await getTypesenseClientForOrg(input.organizationId)
+		: getTypesenseClient();
 
 	const exportParams: Record<string, unknown> = {};
 	if (input.filterBy) {
@@ -67,6 +71,8 @@ export interface ExportDocumentsStreamInput {
 	collection: string;
 	/** Optional filter_by expression */
 	filterBy?: string;
+	/** Organization ID for region-aware routing. If provided, uses the org's storage region Typesense cluster. */
+	organizationId?: string;
 }
 
 /**
@@ -74,7 +80,9 @@ export interface ExportDocumentsStreamInput {
  * Useful for large exports where you don't want to hold all docs in memory.
  */
 export async function exportDocumentsRaw(input: ExportDocumentsStreamInput): Promise<string> {
-	const client = getTypesenseClient();
+	const client = input.organizationId
+		? await getTypesenseClientForOrg(input.organizationId)
+		: getTypesenseClient();
 
 	const exportParams: Record<string, unknown> = {};
 	if (input.filterBy) {

@@ -1,0 +1,234 @@
+---
+title: "Conector Contentful"
+description: "Integre Contentful con AACsearch mediante sincronización basada en webhooks."
+---
+
+> **Estado: Integración basada en webhooks.** A diferencia de los módulos del lado del servidor (PrestaShop, Bitrix), Contentful se conecta a AACsearch a través de webhooks salientes. No hay ningún paquete que instalar: configura los webhooks en el panel de Contentful para que apunten a la API de Conector de AACsearch.
+
+El conector AACsearch para Contentful utiliza webhooks de Contentful para sincronizar sus entradas de contenido con AACsearch. Se encarga de:
+
+- Exportar entradas a AACsearch a través de la API de Conector
+- Activar sincronizaciones delta en eventos de publicación/despublicación/eliminación de entradas
+- Manejo de URLs de activos de imagen desde la API de Imágenes de Contentful
+- Sincronización de contenido sensible al idioma (localización integrada de Contentful)
+
+## Requisitos
+
+- Un espacio de Contentful con entradas publicadas
+- Al menos un modelo de contenido configurado para indexación de búsqueda
+- Una cuenta AACsearch con al menos un índice de búsqueda creado
+- Un token de conector (`ss_connector_*`) vinculado a ese índice
+- Una clave de API de búsqueda (`ss_search_*`) para el widget
+
+## Configuración del webhook en Contentful
+
+### 1. Crear un webhook en Contentful
+
+Navegue a **Settings → Webhooks** en su espacio de Contentful y haga clic en **Add Webhook**.
+
+Configure los siguientes campos:
+
+| Campo             | Valor                                                                |
+| ----------------- | -------------------------------------------------------------------- |
+| Nombre            | `AACsearch Sync`                                                     |
+| URL               | `https://app.aacsearch.com/api/projects/{projectId}/sync/contentful` |
+| Método            | `POST`                                                               |
+| Tipo de contenido | `application/json`                                                   |
+| Disparador        | **Eventos desencadenantes específicos** (ver abajo)                  |
+
+### 2. Configurar eventos desencadenantes
+
+Seleccione los siguientes eventos:
+
+- **Entry** → `publish`, `unpublish`, `delete`
+- **Asset** → `publish` (para actualizar URLs de imágenes)
+
+Opcionalmente, también puede habilitar **Entry** → `save` para sincronización en tiempo real durante la edición, pero esto aumentará significativamente el volumen de webhooks.
+
+### 3. Agregar cabeceras personalizadas
+
+Agregue las siguientes cabeceras para la autenticación:
+
+| Cabecera        | Valor                       |
+| --------------- | --------------------------- |
+| `Authorization` | `Bearer ss_connector_{...}` |
+| `X-AAC-Project` | Su ID de proyecto AACsearch |
+
+### 4. Filtrar por tipo de contenido (recomendado)
+
+En **Filters**, agregue un filtro de tipo de contenido para que el webhook solo se active para los modelos que desea indexar:
+
+| Campo          | Valor     |
+| -------------- | --------- |
+| Tipo contenido | `product` |
+| Tipo contenido | `article` |
+
+Puede agregar un filtro por tipo de contenido indexable. Las entradas de todos los demás tipos serán ignoradas.
+
+## Mapeo del modelo de contenido
+
+Las entradas se mapean a documentos de AACsearch utilizando reglas de mapeo de campos. El mapeo estándar sigue este patrón:
+
+| Campo de Contentful  | Campo documento AACsearch | Notas                                               |
+| -------------------- | ------------------------- | --------------------------------------------------- |
+| `sys.id`             | `external_id`             | Identificador único de Contentful                   |
+| `fields.title`       | `title`                   | Título principal de la entrada                      |
+| `fields.description` | `description`             | Texto enriquecido o texto plano                     |
+| `fields.slug`        | `url`                     | Ruta amigable para URL                              |
+| `fields.body`        | `content`                 | Contenido completo del cuerpo                       |
+| `fields.category`    | `categories`              | Array de nombres de categoría                       |
+| `fields.tags`        | `tags`                    | Array de etiquetas                                  |
+| `fields.image`       | `image_url`               | URL del activo (ver manejo de imágenes)             |
+| `fields.price`       | `price`                   | Valor numérico (si aplica)                          |
+| `fields.locale`      | `locale`                  | Idioma de la entrada (ver sincronización de idioma) |
+
+### Mapeo de campos personalizado
+
+Si su modelo de contenido utiliza nombres de campo diferentes, configure el mapeo en el payload del webhook o use la transformación de campos de la API de Conector de AACsearch:
+
+```json
+{
+	"field_mapping": {
+		"external_id": "sys.id",
+		"title": "fields.headline",
+		"description": "fields.teaser",
+		"content": "fields.body_text"
+	}
+}
+```
+
+## Sincronización consciente del idioma
+
+Contentful tiene localización integrada — cada entrada puede tener valores en múltiples idiomas. El conector AACsearch maneja esto de la siguiente manera:
+
+- Cada variante de idioma de una entrada se indexa como un **documento separado** con su propio valor `locale`
+- El `external_id` se sufija con el código de idioma (ej., `abc123_en`, `abc123_de`)
+- Todas las entradas respetan la configuración de idioma del índice AACsearch
+- Si un campo está vacío para un idioma determinado, se usa el valor de idioma de respaldo (predeterminado de Contentful)
+
+### Configuración de idioma
+
+Configure el comportamiento de sincronización de idioma mediante parámetros de consulta en la URL del webhook:
+
+| Parámetro       | Por defecto | Descripción                                                                                                     |
+| --------------- | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| `locales`       | `*`         | Lista separada por comas de idiomas a sincronizar (ej., `en,es`). `*` sincroniza todos los idiomas del espacio. |
+| `defaultLocale` | `en-US`     | El idioma predeterminado de Contentful usado para respaldos                                                     |
+
+Ejemplo con filtrado de idiomas:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?locales=en,es&defaultLocale=en-US
+```
+
+## Manejo de URLs de activos de imagen
+
+Contentful sirve activos a través de su API de Imágenes (`images.ctfassets.net`). El conector resuelve automáticamente las referencias a activos:
+
+1. Cuando una entrada contiene una referencia a un activo de Contentful en el campo `image`, el conector obtiene el `sys.id` del activo
+2. Construye la URL de la imagen de Contentful: `https://images.ctfassets.net/{spaceId}/{assetId}/{fileName}`
+3. La URL se establece como `image_url` en el documento de AACsearch
+4. Si el evento `publish` está habilitado para Activos, el conector vuelve a sincronizar las entradas afectadas cuando cambian las imágenes
+
+Opcionalmente, puede aplicar transformaciones de imagen utilizando los parámetros de la API de Imágenes de Contentful:
+
+```
+https://images.ctfassets.net/{spaceId}/{assetId}/{fileName}?w=800&h=600&fit=fill
+```
+
+Configure los parámetros de imagen a través de la consulta del webhook del conector:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?image_params=w%3D800%2Ch%3D600%2Cfit%3Dfill
+```
+
+## Formato del payload del webhook
+
+Contentful envía payloads de webhook en formato estándar. La API de Conector de AACsearch los procesa y extrae los datos relevantes. Ejemplo de payload para un evento de publicación de entrada:
+
+```json
+{
+	"sys": {
+		"type": "Entry",
+		"id": "abc123def",
+		"contentType": {
+			"sys": { "id": "product" }
+		},
+		"version": 5
+	},
+	"fields": {
+		"title": {
+			"en-US": "Wireless Headphones",
+			"es": "Auriculares inalámbricos"
+		},
+		"description": {
+			"en-US": "Premium wireless headphones with noise cancellation",
+			"es": "Auriculares inalámbricos premium con cancelación de ruido"
+		},
+		"slug": {
+			"en-US": "wireless-headphones"
+		},
+		"price": {
+			"en-US": 199.99
+		}
+	}
+}
+```
+
+Para eventos de eliminación, el conector analiza `sys.id` del payload y elimina los documentos correspondientes del índice.
+
+## Inyección del widget
+
+Una vez que las entradas están sincronizadas, inyecte el widget de AACsearch en su sitio web. Contentful no tiene renderizado del lado del servidor por defecto, por lo que agrega el widget del lado del cliente:
+
+1. Agregue el elemento contenedor a su plantilla de página:
+
+```html
+<div id="aac-search"></div>
+```
+
+2. Cargue el script del widget en el `<head>` de su página o antes de la etiqueta de cierre `</body>`:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="contentful-entries"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+El valor de `data-api-key` es una clave `ss_search_*` — no el token del conector. Esta clave de búsqueda puede ser de solo lectura y es segura para incrustar en el navegador.
+
+Para frameworks como Next.js o Gatsby que usan Contentful como CMS headless, puede inyectar el widget mediante un componente `<Script>` o un elemento `<Head>` personalizado.
+
+## Solución de problemas
+
+**El webhook devuelve 401 No autorizado**
+Verifique que la cabecera `Authorization` use un token `ss_connector_*` válido. Los tokens se pueden generar y revocar en el panel de AACsearch en Conectores.
+
+**Las entradas se sincronizan pero no aparecen en la búsqueda**
+La sincronización encola las entradas en `SearchIngestBuffer`; la indexación es asíncrona. Espere 30–60 segundos y pruebe la búsqueda. Verifique el estado de la canalización de ingesta en Panel → Resumen.
+
+**Los campos de texto enriquecido aparecen como JSON sin procesar**
+Contentful envía texto enriquecido como un árbol de nodos JSON (formato Mobiledoc/TextKit). Configure el conector para extraer texto plano o HTML de la estructura de texto enriquecido. Establezca el parámetro `rich_text_format` en la URL del webhook:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?rich_text_format=html
+```
+
+Valores admitidos: `raw` (predeterminado, envía árbol JSON), `text` (extracción de texto plano), `html` (renderizado HTML).
+
+**Las imágenes no aparecen en los resultados de búsqueda**
+Verifique que el evento de webhook de `publish` de Activo esté habilitado y que las entradas de activos tengan nombres de archivo adecuados. Si se establecen parámetros de imagen, asegúrese de que la cadena de consulta esté correctamente codificada en URL.
+
+**El widget no se muestra en la página**
+Confirme que el elemento contenedor `#aac-search` exista en su página. Verifique que `data-api-key` sea una clave `ss_search_*`, no el token del conector. Revise la consola del navegador para ver errores de carga del script.
+
+## Páginas relacionadas
+
+- [Descripción general de conectores](/docs/connectors/overview)
+- [Ciclo de vida de la API de conector](/docs/connectors/connector-api-lifecycle)
+- [Descripción general del widget](/docs/connectors/widget-overview)

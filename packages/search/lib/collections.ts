@@ -3,8 +3,20 @@ import { logger } from "@repo/logs";
 import type { CollectionCreateSchema } from "typesense/lib/Typesense/Collections";
 
 import { config } from "../config";
-import { getTypesenseClient } from "./client";
+import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
 import { typesenseFetch } from "./synonyms-sync";
+
+/**
+ * Get a Typesense client for a specific organization, falling back to the default client
+ * if no organization ID is provided. This ensures collection operations route to the
+ * correct region's Typesense cluster based on the organization's storage region.
+ */
+async function getOrgClient(organizationId?: string) {
+	if (organizationId) {
+		return getTypesenseClientForOrg(organizationId);
+	}
+	return getTypesenseClient();
+}
 
 function sanitize(value: string): string {
 	return value.replace(/[^a-zA-Z0-9]/g, "_");
@@ -90,7 +102,7 @@ export interface CreatePhysicalCollectionInput {
 }
 
 export async function createPhysicalCollection(input: CreatePhysicalCollectionInput) {
-	const client = getTypesenseClient();
+	const client = await getOrgClient(input.organizationId);
 	const name = physicalCollectionName(input.organizationId, input.slug, input.version);
 
 	const tenantField: CollectionFieldInput = {
@@ -128,7 +140,7 @@ export async function createPhysicalCollection(input: CreatePhysicalCollectionIn
 }
 
 export async function ensureAlias(organizationId: string, slug: string, version: number) {
-	const client = getTypesenseClient();
+	const client = await getOrgClient(organizationId);
 	const alias = aliasName(organizationId, slug);
 	const target = physicalCollectionName(organizationId, slug, version);
 
@@ -137,7 +149,7 @@ export async function ensureAlias(organizationId: string, slug: string, version:
 }
 
 export async function swapAliasToVersion(organizationId: string, slug: string, newVersion: number) {
-	const client = getTypesenseClient();
+	const client = await getOrgClient(organizationId);
 	const alias = aliasName(organizationId, slug);
 	const target = physicalCollectionName(organizationId, slug, newVersion);
 
@@ -146,7 +158,7 @@ export async function swapAliasToVersion(organizationId: string, slug: string, n
 }
 
 export async function deleteSearchIndexCollections(organizationId: string, slug: string) {
-	const client = getTypesenseClient();
+	const client = await getOrgClient(organizationId);
 	const alias = aliasName(organizationId, slug);
 
 	try {
@@ -198,7 +210,7 @@ export async function cloneCollection(
 }
 
 export async function dropOldVersions(organizationId: string, slug: string, keepVersion: number) {
-	const client = getTypesenseClient();
+	const client = await getOrgClient(organizationId);
 	const collections = await client.collections().retrieve();
 	const aliasPrefix = `${config.collectionPrefix}_${sanitize(organizationId)}_${sanitize(slug)}_v`;
 	const keepName = physicalCollectionName(organizationId, slug, keepVersion);

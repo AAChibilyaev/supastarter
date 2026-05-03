@@ -1,0 +1,117 @@
+---
+title: Contentful Search Integration — Синхронизация на вебхуках с AACsearch
+date: 2026-05-03
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Подключите Contentful к AACsearch через вебхуки. Автоматическая переиндексация записей, поиск с учётом локали и маппинг контент-моделей.
+tags: [contentful, cms, integration, connector, headless, webhook]
+published: false
+---
+
+Contentful — ведущая контент-платформа с архитектурой API-first. Её headless-архитектура, гибкое моделирование контента и мощное управление медиафайлами делают её выбором номер один для корпоративных команд. Однако встроенный поиск Contentful, хоть и достаточен для управления контентом, не рассчитан на пользовательские поисковые сценарии.
+
+## Зачем Contentful отдельный поисковый движок
+
+API поиска Contentful оптимизирован для _поиска контента внутри CMS_, а не для _поисковых сценариев конечных пользователей_. Ограничения очевидны:
+
+- **Нет настройки релевантности**: Нельзя повышать вес полей или применять правила ранжирования
+- **Нет устойчивости к опечаткам**: Ошибки в написании возвращают ноль результатов
+- **Нет фасетного поиска**: Пользователи не могут фильтровать по категориям, тегам или кастомным полям
+- **Нет аналитики**: Вы не знаете, что ищут пользователи
+- **Ограничение по частоте запросов**: API Contentful не рассчитан на высокую нагрузку от публичных пользователей
+
+AACsearch закрывает эти пробелы, предоставляя отдельный поисковый слой, который автоматически синхронизируется с Contentful.
+
+## Как работает коннектор Contentful
+
+### Синхронизация на вебхуках
+
+Коннектор использует систему вебхуков Contentful. Когда контент изменяется в Contentful, срабатывает вебхук и запускает переиндексацию в AACsearch.
+
+```
+Contentful Entry Created → Webhook → AACsearch Connector → Index Updated
+Contentful Entry Updated → Webhook → AACsearch Connector → Index Updated
+Contentful Entry Deleted → Webhook → AACsearch Connector → Index Removed
+Contentful Entry Published → Webhook → AACsearch Connector → Made Searchable
+Contentful Entry Unpublished → Webhook → AACsearch Connector → Removed from Search
+```
+
+### Маппинг контент-моделей
+
+Контент-модель Contentful гибкая — записи могут иметь разные типы контента с различной структурой полей. Коннектор сопоставляет каждый тип контента с поисковой коллекцией:
+
+```json
+{
+	"contentTypes": [
+		{
+			"contentfulType": "blogPost",
+			"searchCollection": "blog_posts",
+			"mapping": {
+				"title": { "from": "fields.title", "type": "string", "boost": 2 },
+				"slug": { "from": "fields.slug", "type": "string" },
+				"body": { "from": "fields.body", "type": "string" },
+				"author": { "from": "fields.author.fields.name", "type": "string" },
+				"tags": { "from": "fields.tags", "type": "string[]", "facet": true },
+				"publishedAt": { "from": "sys.publishedAt", "type": "string" },
+				"featuredImage": {
+					"from": "fields.featuredImage.fields.file.url",
+					"type": "string"
+				}
+			},
+			"filters": {
+				"published": true
+			}
+		}
+	]
+}
+```
+
+### Поиск с учётом локали
+
+Contentful поддерживает локализацию «из коробки». Коннектор работает с ней следующим образом:
+
+1. Создаёт отдельные документы для каждой локали (например, `blog_post_en`, `blog_post_de`, `blog_post_fr`)
+2. Использует `filter_by` в AACsearch для запросов по локали
+3. Поддерживает запасные локали, если контент недоступен на запрошенном языке
+
+```typescript
+// Поиск на стороне клиента для конкретной локали
+const results = await aacsearch.search({
+	collection: "blog_posts",
+	q: "поисковый запрос",
+	filter_by: `locale:=en`,
+});
+```
+
+## Настройка коннектора
+
+1. **Создайте вебхук** в Contentful, указав ваш эндпоинт AACsearch
+2. **Выберите события** для отслеживания: публикация, снятие с публикации, удаление записи
+3. **Настройте маппинг** в панели управления AACsearch
+4. **Запустите начальную синхронизацию** — импортируются все существующие опубликованные материалы
+5. **Запускайте в продакшн** — вебхук будет поддерживать всё в актуальном состоянии
+
+## Сценарии использования
+
+- **Корпоративные порталы документации** — Contentful управляет контентом, AACsearch — поиском
+- **Мультирегиональная электронная коммерция** — поиск товаров с учётом языка на разных рынках
+- **Контент-маркетинговые сайты** — поиск по блогу с фасетами по тегам и авторам
+- **Базы знаний** — поиск по статьям, гайдам и туториалам, управляемым в Contentful
+
+## Безопасность вебхуков
+
+Коннектор проверяет входящие вебхуки через верификацию подписи Contentful:
+
+```typescript
+import crypto from "crypto";
+
+function verifyContentfulWebhook(payload: string, signature: string, secret: string): boolean {
+	const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex");
+	return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+}
+```
+
+---
+
+_Коннектор AACsearch для Contentful находится в разработке. [Запишитесь в лист ожидания](https://aacsearch.com), чтобы получить ранний доступ._

@@ -1,0 +1,173 @@
+---
+title: Résidence des données (Data Residency)
+description: Comprenez comment AACsearch gère la résidence des données et comment choisir votre région de stockage.
+---
+
+# Résidence des données (Data Residency)
+
+AACsearch propose un stockage de données multirégional afin que vous puissiez choisir où vos données de recherche sont stockées et traitées. C'est essentiel pour la conformité avec les lois régionales sur la protection des données telles que le GDPR, le 152-ФЗ et les exigences SOC 2.
+
+## Régions disponibles
+
+| Région     | Code | Emplacement          | Conformité     |
+| ---------- | ---- | -------------------- | -------------- |
+| Europe     | `eu` | Francfort, Allemagne | GDPR           |
+| États-Unis | `us` | Virginie, États-Unis | SOC 2, CCPA    |
+| Russie     | `ru` | Moscou, Russie       | 152-ФЗ, 242-ФЗ |
+
+Chaque région exécute une pile AACsearch complètement indépendante avec ses propres :
+
+- **Cluster Typesense** — tous les index et données de recherche
+- **Base de données PostgreSQL** — métadonnées d'organisation, clés API et enregistrements d'utilisation
+- **Stockage d'objets** — pièces jointes, fichiers de la base de connaissances et tampons d'ingestion
+
+**Il n'y a aucun partage de données entre régions.** Les données stockées dans une région ne quittent jamais les limites d'infrastructure de cette région.
+
+## Région par défaut
+
+Les nouvelles organisations sont automatiquement attribuées à la région **EU (Francfort)**. Cela garantit un stockage conforme au GDPR pour tous les nouveaux clients.
+
+## Choisir une région
+
+Vous pouvez sélectionner votre région de stockage lors de la configuration de votre organisation, ou la modifier ultérieurement depuis la page **Conformité (Compliance)** de votre tableau de bord.
+
+**Considérations lors du choix d'une région :**
+
+- **Latence** : Les requêtes de recherche sont routées vers le cluster Typesense de votre région choisie. Pour de meilleures performances, sélectionnez la région la plus proche de vos utilisateurs finaux.
+- **Conformité** : Assurez-vous que la région répond aux exigences de protection des données de votre organisation (GDPR, 152-ФЗ, SOC 2, etc.).
+- **Clients existants** : Si vous devez déplacer des données existantes vers une nouvelle région, utilisez l'outil de migration (voir ci-dessous).
+
+## Modifier votre région
+
+Pour modifier votre région de stockage :
+
+1. Allez dans **Paramètres de l'organisation → Conformité**
+2. Dans la section **Résidence des données**, consultez votre région actuelle
+3. Sélectionnez une nouvelle région dans le menu déroulant
+4. Cliquez sur **Mettre à jour la région** pour enregistrer la modification
+
+> **Important** : La modification de la région met à jour le routage uniquement pour les _nouvelles_ données. Les données de recherche existantes restent dans la région d'origine jusqu'à ce que vous exécutiez une migration.
+
+## Migration des données entre régions
+
+Lorsque vous modifiez votre région de stockage, les données de recherche existantes restent dans la région précédente. Pour les déplacer :
+
+1. Après avoir changé de région, une carte **Migrer les données existantes** apparaîtra
+2. Cliquez sur **Démarrer la migration** pour copier toutes les données de recherche de l'ancienne région vers la nouvelle
+3. Si vous sélectionnez **Mettre à jour la région après la migration**, l'outil mettra automatiquement à jour le paramètre de région de votre organisation une fois terminé
+
+La migration utilise une approche de **copie et vérification** :
+
+- Les données sont exportées depuis le cluster Typesense source
+- Chaque document est importé dans le cluster de destination via upsert (emplace)
+- Les données source sont préservées jusqu'à confirmation du succès de la migration
+- La progression est rapportée par index de recherche
+
+**Ce qui est migré :**
+
+- Tous les documents de recherche dans tous les index
+- Schémas et configuration des index de recherche
+- Ensembles de synonymes
+
+**Ce qui N'est PAS migré :**
+
+- Clés API de recherche (stockées dans la base de données, pas dans Typesense)
+- Journaux d'utilisation et données d'analyse
+- Métadonnées d'organisation (nom, membres, etc.)
+
+## Surveillance de l'état de santé des régions
+
+La page Conformité affiche l'état opérationnel de votre région actuelle, y compris :
+
+- Statut en ligne/hors ligne du cluster Typesense
+- Latence actuelle (ms)
+- Messages d'erreur si le cluster est inaccessible
+
+## CDN et mise en cache périphérique par région
+
+AACsearch prend en charge la configuration régionale du CDN. Chaque région peut avoir sa propre couche de cache périphérique pour réduire la latence :
+
+### Configuration recommandée
+
+1. **Configuration DNS** : Configurez des entrées DNS à routage géographique (via AWS Route 53 ou Cloudflare) qui dirigent les utilisateurs vers le point de terminaison CDN le plus proche.
+2. **Configuration CDN** : Déployez une distribution CDN (CloudFront, Cloudflare ou Fastly) par région.
+3. **Passerelle API** : La passerelle API AACsearch utilise un routage sensible à la région et dirige les requêtes vers le cluster Typesense correct en fonction de la région de stockage de l'organisation.
+4. **Règles de cache** : Configurez un TTL court (30-60 secondes) pour les résultats de recherche et un TTL plus long (5-15 minutes) pour les métadonnées de collection statiques.
+
+### Variables d'environnement
+
+Configurez les points de terminaison CDN par région via des variables d'environnement :
+
+```env
+# Région UE
+TYPESENSE_HOST_EU=typesense-eu.internal
+TYPESENSE_PORT_EU=8108
+TYPESENSE_PROTOCOL_EU=https
+TYPESENSE_ADMIN_API_KEY_EU=***
+
+# Région US
+TYPESENSE_HOST_US=typesense-us.internal
+TYPESENSE_PORT_US=8108
+TYPESENSE_PROTOCOL_US=https
+TYPESENSE_ADMIN_API_KEY_US=***
+
+# Région RU
+TYPESENSE_HOST_RU=typesense-ru.internal
+TYPESENSE_PORT_RU=8108
+TYPESENSE_PROTOCOL_RU=https
+TYPESENSE_ADMIN_API_KEY_RU=***
+```
+
+## Référence API
+
+### Lister les régions disponibles
+
+```http
+GET /api/compliance/regions
+```
+
+Retourne toutes les régions de stockage prises en charge avec les métadonnées de conformité.
+
+### Obtenir la région de l'organisation
+
+```http
+GET /api/compliance/organizations/{organizationId}/region
+```
+
+Retourne la région de stockage actuelle d'une organisation.
+
+### Définir la région de l'organisation
+
+```http
+PUT /api/compliance/organizations/{organizationId}/region
+Content-Type: application/json
+
+{
+  "region": "us"
+}
+```
+
+Met à jour la cible de région de stockage pour les nouvelles données.
+
+### Migrer les données de l'organisation
+
+```http
+POST /api/compliance/organizations/{organizationId}/migrate
+Content-Type: application/json
+
+{
+  "sourceRegion": "eu",
+  "destRegion": "us",
+  "updateRegionAfterMigration": true
+}
+```
+
+Copie toutes les données de recherche d'une région à une autre.
+
+### Vérifier l'état de santé des régions
+
+```http
+GET /api/compliance/regions/health
+```
+
+Retourne l'état de connectivité et la latence de toutes les régions configurées.

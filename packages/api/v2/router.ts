@@ -25,10 +25,7 @@ import { generateV2OpenApiSpec } from "./openapi";
 import { projectsApp } from "./projects";
 import { searchApp } from "./search";
 
-const v2Router = new Hono()
-	.route("/", projectsApp)
-	.route("/", indexesApp)
-	.route("/", searchApp);
+const v2Router = new Hono().route("/", projectsApp).route("/", indexesApp).route("/", searchApp);
 
 // OpenAPI spec (no auth required for API discovery)
 v2Router.get("/openapi.json", (c) => c.json(generateV2OpenApiSpec()));

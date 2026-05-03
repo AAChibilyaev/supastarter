@@ -50,7 +50,11 @@ import { exportIndexDocuments } from "./procedures/export-documents";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
-import { getGlobalSynonyms, updateGlobalSynonyms } from "./procedures/global-synonyms";
+import {
+	getEffectiveGlobalSynonyms,
+	getGlobalSynonyms,
+	updateGlobalSynonyms,
+} from "./procedures/global-synonyms";
 import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
 import { hypeIndex } from "./procedures/hype-index";
@@ -165,6 +169,7 @@ export const searchRouter = {
 	globalSynonyms: {
 		get: getGlobalSynonyms,
 		update: updateGlobalSynonyms,
+		effective: getEffectiveGlobalSynonyms,
 	},
 	globalCurations: {
 		get: getGlobalCurations,

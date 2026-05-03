@@ -1,4 +1,6 @@
 {
-	"title": "indexes/indexid/documents/export",
-	"pages": ["get"]
+  "title": "indexes/indexid/documents/export",
+  "pages": [
+    "get"
+  ]
 }

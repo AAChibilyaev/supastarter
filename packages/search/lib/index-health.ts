@@ -2,7 +2,7 @@ import "server-only";
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
-import { getTypesenseClient } from "./client";
+import { getTypesenseClientForOrg } from "./client";
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -81,7 +81,7 @@ export async function getDocumentDrift(indexId: string): Promise<DriftResult | n
 		return null;
 	}
 
-	const client = getTypesenseClient();
+	const client = await getTypesenseClientForOrg(index.organizationId);
 
 	// Get Typesense collection stats
 	let typesenseCount = 0;

@@ -9,6 +9,10 @@ import {
 	updateSearchIndexVersion,
 } from "@repo/database";
 import { getSynonymsByIndexId, rowsToSynonymPairs } from "@repo/database/prisma/queries/synonyms";
+import {
+	getEffectiveGlobalSynonymSets,
+	globalSynonymSetsToPairs,
+} from "@repo/database/prisma/queries/global-synonym-sets";
 import { logger } from "@repo/logs";
 import {
 	aliasName,
@@ -90,6 +94,7 @@ export async function POST(request: Request) {
 
 			// Re-apply synonyms (from search_index_synonym table) and curations
 			// to the newly indexed collection.
+			// Also re-apply global synonym sets that apply to this index.
 			// The alias now points to the new physical collection, so syncing via
 			// the alias propagates settings to it.
 			const collection = aliasName(pendingJob.organizationId, pendingJob.slug);
@@ -103,8 +108,18 @@ export async function POST(request: Request) {
 				? (schema._curations as CurationRule[])
 				: [];
 
+			// Fetch global synonym sets that apply to this index
+			const globalSynonymRows = await getEffectiveGlobalSynonymSets(
+				pendingJob.organizationId,
+				index.id,
+			);
+			const globalSynonyms = globalSynonymSetsToPairs(globalSynonymRows);
+
+			// Merge per-index and global synonyms
+			const allSynonyms = [...synonyms, ...globalSynonyms];
+
 			await Promise.all([
-				syncSynonymsToTypesense(collection, synonyms).catch((err) =>
+				syncSynonymsToTypesense(collection, allSynonyms).catch((err) =>
 					logger.error("reindex-runner: synonym re-sync failed", {
 						jobId: pendingJob.id,
 						slug: pendingJob.slug,
@@ -128,6 +143,7 @@ export async function POST(request: Request) {
 				copied: result.copiedDocuments,
 				failed: result.failedDocuments,
 				synonymsRestored: synonyms.length,
+				globalSynonymsRestored: globalSynonyms.length,
 				curationsRestored: curations.length,
 			});
 			processed++;

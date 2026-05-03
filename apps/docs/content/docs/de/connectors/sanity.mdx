@@ -1,0 +1,329 @@
+---
+title: "Sanity.io-Connector"
+description: "Sanity.io Content Lake mit AACsearch integrieren – mit GROQ-Abfragen und Echtzeit-Synchronisation."
+---
+
+> **Status: Integrationsanleitung.** Dies ist eine Referenz zur Implementierung eines Sanity.io-Connectors mithilfe der AACsearch-Connector-API. Es gibt kein gepacktes Modul – der hier beschriebene Ansatz verwendet GROQ-basierten Export und Sanitys listen API für Echtzeit-Synchronisation.
+
+Der Sanity.io-Connector-Ansatz integriert Ihren Sanity Content Lake mit AACsearch. Er umfasst:
+
+- Exportieren von Dokumenten aus Sanity mittels GROQ-Abfragen
+- Einrichten von Echtzeit-Listenern über Sanitys listen API
+- Verarbeiten von Bild-Assets durch Sanitys Bild-Pipeline (Crops, Hotspots)
+- Konfigurieren von GROQ-Filtern und Projektionen für das Feld-Mapping
+- Optionaler Webhook-Fallback für Umgebungen, in denen Listener ungeeignet sind
+- Einbinden des gehosteten Such-Widgets in Ihr Frontend
+
+## Anforderungen
+
+- Ein Sanity.io-Projekt mit Content-Lake-Zugriff (Dataset, Projekt-ID)
+- Ein Sanity-API-Token mit Lesezugriff (für Export) oder Editor-Zugriff (für GROQ-Abfragen)
+- Ein AACsearch-Konto mit mindestens einem erstellten Suchindex
+- Ein Connector-Token (`ss_connector_*`) für diesen Index
+- Node.js 18+ oder eine Server-Umgebung für das Listener-/Export-Skript
+
+## Integrationsarchitektur
+
+Der Connector wird als leichtgewichtiges Node.js-Bridge-Skript implementiert, das in Ihrer Infrastruktur läuft. Es erfüllt drei Hauptfunktionen:
+
+1. **Vollständiger Export** — fragt Sanity per GROQ ab und sendet Dokumente an AACsearch
+2. **Echtzeit-Synchronisation** — abonniert Sanitys listen API für Mutationen
+3. **Bildverarbeitung** — löst Sanity-Bildreferenzen in herunterladbare URLs auf
+
+```
+┌─────────────┐     GROQ-Abfrage    ┌──────────────┐   Connector API    ┌────────────┐
+│  Sanity     │ ◄────────────────── │  Bridge-     │ ─────────────────► │ AACsearch  │
+│  Content    │     Mutationen      │  Skript      │   Voll/Delta       │  Index     │
+│  Lake       │ ──────────────────► │  (Node.js)   │ ◄────────────────  │            │
+└─────────────┘   listen API        └──────────────┘   Status           └────────────┘
+```
+
+## Vollständiger Export mit GROQ
+
+Schreiben Sie zunächst eine GROQ-Abfrage, die die zu indizierenden Dokumente auswählt. Die Abfrage definiert sowohl den Datensatz als auch die Form jedes Dokuments.
+
+### Basis-GROQ-Abfrage
+
+```groq
+*[_type == "product"] {
+  _id,
+  title,
+  description,
+  "slug": slug.current,
+  price,
+  categories[]->{ title },
+  "mainImage": mainImage.asset->url,
+  tags,
+  _updatedAt
+}
+```
+
+### Filter-Beispiele
+
+| Filter                                                         | Beschreibung                     |
+| -------------------------------------------------------------- | -------------------------------- |
+| `*[_type == "product"]`                                        | Alle Produktdokumente            |
+| `*[_type == "post"]`                                           | Alle Blog-Beitragsdokumente      |
+| `*[_type == "product" && published == true]`                   | Nur veröffentlichte Produkte     |
+| `*[_type == "product" && price > 0]`                           | Produkte mit definiertem Preis   |
+| `*[_type in ["product", "post"]]`                              | Mehrere Inhaltstypen             |
+| `*[_type == "product" && categories[]->title match "Schuhe*"]` | Produkte in passenden Kategorien |
+
+### Projektion für Feld-Mapping
+
+Verwenden Sie GROQ-Projektionen, um Dokumente in das AACsearch-Dokumentformat zu bringen:
+
+```groq
+*[_type == "product"] {
+  "external_id": _id,
+  "title": title,
+  "description": description,
+  "sku": sku,
+  "brand": brand,
+  "categories": categories[]->title,
+  "category_ids": categories[]->_id,
+  "tags": tags,
+  "price": price,
+  "sale_price": salePrice,
+  "currency": currency,
+  "image_url": mainImage.asset->url,
+  "product_url": "/products/" + slug.current,
+  "availability": select(stock > 0 => "in_stock", "out_of_stock"),
+  "stock_quantity": stock,
+  "attributes": { "color": color, "size": size },
+  "locale": language
+}
+```
+
+## Echtzeit-Listener einrichten
+
+Sanitys listen API bietet einen Echtzeit-Stream von Mutationen (Erstellen, Aktualisieren, Löschen) in Ihrem Dataset. Das Bridge-Skript abonniert diesen Stream und übersetzt Mutationen in Delta-Sync-Anfragen.
+
+### Listener-Skript
+
+```typescript
+import { createClient } from "@sanity/client";
+
+const client = createClient({
+	projectId: "your-project-id",
+	dataset: "production",
+	token: "your-read-token",
+	useCdn: false, // Listener benötigen den Non-CDN-API-Endpunkt
+});
+
+// Mutationen abonnieren, die Ihren Dokumenttypen entsprechen
+const subscription = client
+	.listen('*[_type in ["product", "post"]]', {}, { includeResult: true, visibility: "sync" })
+	.subscribe((mutation) => {
+		const { transition, result, documentId } = mutation;
+
+		switch (transition) {
+			case "appear":
+			case "update":
+				// Vollständige Dokumentdaten an AACsearch Delta-Sync-Endpunkt senden
+				sendToAACsearch(formatDocument(result));
+				break;
+			case "disappear":
+				// Löschanfrage an AACsearch senden
+				deleteFromAACsearch(documentId);
+				break;
+		}
+	});
+```
+
+### Listener-Konfigurationsoptionen
+
+| Option            | Beschreibung                                                           |
+| ----------------- | ---------------------------------------------------------------------- |
+| `includeResult`   | Vollständiges Dokument nach Mutation einbeziehen (Standard: `true`)    |
+| `includePrevious` | Dokumentzustand vor der Mutation einbeziehen (optional)                |
+| `visibility`      | `"sync"` für übernommene Daten, `"query"` für erneuten GROQ-Abruf      |
+| `effectFormat`    | `"mutation"` (Standard) gibt einzelne Mutationen in einem Batch zurück |
+
+> **Hinweis:** Listener benötigen den Non-CDN-API-Endpunkt (`apicdn.sanity.io` ist nicht verfügbar). Setzen Sie `useCdn: false` in Ihrer Client-Konfiguration.
+
+## Bild-Asset-URL-Verarbeitung
+
+Sanity speichert Bilder als Asset-Referenzen. Die Bild-Pipeline unterstützt Crops, Hotspots und Transformationen. Ihr Bridge-Skript muss `_ref`-Referenzen in vollständige URLs auflösen.
+
+### Bild-URLs auflösen
+
+```groq
+*[_type == "product"] {
+  ...,
+  "image_url": mainImage.asset->url,
+  "image_with_options": mainImage.asset->url + "?w=800&h=600&fit=crop"
+}
+```
+
+### Hotspot- und Crop-Verarbeitung
+
+Sanity-Bilder können Hotspot- und Crop-Metadaten enthalten. Wenn Sie ein Asset über GROQ referenzieren, können Sie auf diese Werte zugreifen:
+
+```groq
+*[_type == "product"] {
+  ...,
+  "image": {
+    "url": mainImage.asset->url,
+    "hotspot": mainImage.hotspot,
+    "crop": mainImage.crop
+  }
+}
+```
+
+Wenn Sie eine manuelle URL-Konstruktion aus einer rohen Asset-Referenz benötigen:
+
+```typescript
+function buildImageUrl(
+	ref: string,
+	options: { w?: number; h?: number; fit?: string } = {},
+): string {
+	const [, id, dimensions, format] = ref.split("-");
+	const base = `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}`;
+	const params = new URLSearchParams();
+	if (options.w) params.set("w", String(options.w));
+	if (options.h) params.set("h", String(options.h));
+	if (options.fit) params.set("fit", options.fit);
+	const qs = params.toString();
+	return qs ? `${base}?${qs}` : base;
+}
+```
+
+## Webhook-Fallback
+
+Wenn Echtzeit-Listener für Ihre Umgebung ungeeignet sind (z. B. serverlose Funktionen mit Verbindungsbeschränkungen), können Sie Sanity-Webhooks als Fallback verwenden.
+
+### Webhook einrichten
+
+Erstellen Sie in Ihrem Sanity-Projekt-Dashboard einen Webhook, der auf Ihren Bridge-Server zeigt:
+
+| Feld         | Wert                                                 |
+| ------------ | ---------------------------------------------------- | --- | ----------------- |
+| URL          | `https://your-bridge.example.com/api/sanity-webhook` |
+| Dataset(s)   | `production`                                         |
+| Filter       | `\_type == "product"                                 |     | \_type == "post"` |
+| Projektion   | Leer lassen (vollständiges Dokument senden)          |
+| HTTP-Methode | `POST`                                               |
+| HTTP-Header  | `Content-Type: application/json`                     |
+| Auslösen bei | `create`, `update`, `delete`                         |
+
+### Webhook-Handler
+
+```typescript
+export async function handleSanityWebhook(request: Request) {
+	const body = await request.json();
+
+	// Sanity sendet ein Array von Mutationsergebnissen
+	for (const mutation of body) {
+		if (mutation.result) {
+			await sendToAACsearch(formatDocument(mutation.result));
+		} else if (mutation.documentId) {
+			await deleteFromAACsearch(mutation.documentId);
+		}
+	}
+
+	return new Response("OK", { status: 200 });
+}
+```
+
+## Vollständiges Export-Skript
+
+Ein vollständiges Node.js-Skript für den initialen Voll-Export:
+
+```typescript
+import { createClient } from "@sanity/client";
+
+const sanity = createClient({
+	projectId: process.env.SANITY_PROJECT_ID!,
+	dataset: process.env.SANITY_DATASET!,
+	token: process.env.SANITY_TOKEN!,
+	useCdn: false,
+	apiVersion: "2024-01-01",
+});
+
+const GROQ_QUERY = `*[_type == "product"] {
+  "external_id": _id,
+  title,
+  description,
+  sku,
+  "categories": categories[]->title,
+  price,
+  salePrice,
+  "image_url": mainImage.asset->url,
+  "product_url": "/products/" + slug.current,
+  "availability": select(stock > 0 => "in_stock", "out_of_stock"),
+  stock,
+  _updatedAt
+}`;
+
+async function runFullSync() {
+	const documents = await sanity.fetch(GROQ_QUERY);
+
+	// In Batches an AACsearch senden
+	const batchSize = 200;
+	for (let i = 0; i < documents.length; i += batchSize) {
+		const batch = documents.slice(i, i + batchSize);
+		await fetch(
+			`https://api.aacsearch.com/api/projects/${process.env.AAC_PROJECT_ID}/sync/full`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${process.env.AAC_CONNECTOR_TOKEN}`,
+				},
+				body: JSON.stringify({ documents: batch }),
+			},
+		);
+	}
+}
+
+runFullSync().catch(console.error);
+```
+
+## Widget-Injektion
+
+Sobald Dokumente indiziert sind, injizieren Sie das AACsearch-Such-Widget in Ihr Sanity-basiertes Frontend. Fügen Sie das folgende Snippet in Ihr App-Layout oder `<head>` ein:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Der `data-api-key`-Wert ist ein separater `ss_search_*`-Schlüssel — nicht das Connector-Token. Der Suchschlüssel kann schreibgeschützt sein und ist sicher im Browser einzubetten.
+
+Fügen Sie das Container-Element zu Ihrem Template hinzu:
+
+```html
+<div id="aac-search"></div>
+```
+
+Für Sanity-basierte Frontends (Next.js, Remix, Astro) platzieren Sie die Widget-Injektion in Ihrem Layout oder Ihrer Root-Komponente.
+
+## Fehlerbehebung
+
+**GROQ-Abfrage liefert leere Ergebnisse**
+Überprüfen Sie Ihren Dataset-Namen und den Dokumenttyp-Filter. Testen Sie die Abfrage im Sanity Vision Tool, bevor Sie sie im Bridge-Skript verwenden.
+
+**Listener-Verbindung wird getrennt**
+Sanitys listen API kann nach längerer Inaktivität die Verbindung trennen. Implementieren Sie eine Wiederverbindungslogik mit exponentiellem Backoff in Ihrem Bridge-Skript. Das `@sanity/client` SDK enthält automatische Wiederverbindung — stellen Sie sicher, dass Sie das `reconnect`-Ereignis behandeln.
+
+**Bild-URLs werden nicht aufgelöst**
+Stellen Sie sicher, dass Sie `asset->url` in Ihrer GROQ-Projektion referenzieren (mit der Pfeil-Syntax). Rohe Asset-Referenzen wie `mainImage.asset._ref` enthalten die Asset-ID, nicht die vollständige URL.
+
+**Webhook feuert nicht**
+Überprüfen Sie, ob der Webhook-Filter Ihren Dokumenttypen entspricht. Stellen Sie sicher, dass die Webhook-URL von Sanitys Servern öffentlich erreichbar ist. Sanity-Webhooks enthalten einen Signatur-Header — validieren Sie diesen in der Produktion, um unbefugte Anfragen zu verhindern.
+
+**Ratenbegrenzung**
+Sanity Content Lake hat Ratenbegrenzungen für API-Anfragen. Paginieren Sie Ihre GROQ-Abfrage für große Datensätze mit `[start...end]` oder verwenden Sie den `after`-Cursor-Parameter, um Zeitüberschreitungen zu vermeiden.
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle)
+- [Widget-Übersicht](/docs/connectors/widget-overview)

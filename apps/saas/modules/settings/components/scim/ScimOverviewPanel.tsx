@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ScimEmptyState } from "./ScimEmptyState";
 import { ScimEndpointCard } from "./ScimEndpointCard";
+import { ScimProvisioningPanel } from "./ScimProvisioningPanel";
 import { ScimStatusCard } from "./ScimStatusCard";
 
 interface ScimConfig {
@@ -159,6 +160,9 @@ export function ScimOverviewPanel({ organizationId }: ScimOverviewPanelProps) {
 				onRegenerate={handleRegenerate}
 				onRevoke={handleRevoke}
 			/>
+
+			{/* Group→Role mapping & deprovisioning rules */}
+			<ScimProvisioningPanel organizationId={organizationId} />
 
 			{/* View logs link */}
 			<div className="flex justify-end">

@@ -26,13 +26,16 @@ Create a connector token from **Dashboard → Connectors → New Connector Token
 
 ## Supported CMS modules
 
-| Platform                | Status        | Notes                                              |
-| ----------------------- | ------------- | -------------------------------------------------- |
-| PrestaShop 8.x          | Early preview | PHP module skeleton exists; separate commit track  |
-| 1C-Bitrix (self-hosted) | Early preview | PHP module skeleton exists; separate commit track  |
-| Direct API              | Available     | Any system can call the Connector API with a token |
+| Platform                | Status            | Notes                                                                      |
+| ----------------------- | ----------------- | -------------------------------------------------------------------------- |
+| Strapi 5.x              | Alpha             | npm plugin with lifecycle hooks; [docs](/docs/connectors/strapi)           |
+| Contentful              | Integration guide | Webhook-based sync (no plugin needed); [docs](/docs/connectors/contentful) |
+| Sanity.io               | Integration guide | GROQ export + real-time listener; [docs](/docs/connectors/sanity)          |
+| PrestaShop 8.x          | Early preview     | PHP module skeleton exists; separate commit track                          |
+| 1C-Bitrix (self-hosted) | Early preview     | PHP module skeleton exists; separate commit track                          |
+| Direct API              | Available         | Any system can call the Connector API with a token                         |
 
-The PrestaShop and Bitrix modules are tracked separately from the main Node.js monorepo. They are functional skeletons — the core sync and auth flows work, but installation packaging and admin UI polish are still in progress.
+The Strapi plugin is an npm package installed directly into your Strapi project, providing lifecycle hooks, content-type mapping, and a settings admin panel. For Contentful and Sanity.io, AACsearch integrates at the webhook / GROQ query level — no plugin installation needed, just configuration in your CMS dashboard. The PrestaShop and Bitrix modules are tracked separately from the main Node.js monorepo.
 
 ## How to get started
 

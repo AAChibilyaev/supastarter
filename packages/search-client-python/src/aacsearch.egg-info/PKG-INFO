@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: aacsearch
 Version: 0.1.0
-Summary: Python client for the AACSearch v1 REST API — search, index management, synonyms, curations, and more
+Summary: Python client for the AACSearch REST API (v1 and v2) — search, index management, synonyms, curations, and more
 Author-email: AACSearch <dev@aacsearch.com>
 License: MIT
 Project-URL: Homepage, https://aacsearch.com
@@ -19,8 +19,10 @@ Classifier: Topic :: Internet :: WWW/HTTP
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
+License-File: LICENSE
 Requires-Dist: httpx>=0.27.0
 Requires-Dist: pydantic>=2.0.0
+Dynamic: license-file
 
 # AACSearch Python SDK
 

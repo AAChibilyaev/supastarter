@@ -6,8 +6,6 @@ import { DocsEcosystemSection } from "@home/components/DocsEcosystemSection";
 import { FeaturesGrid } from "@home/components/FeaturesGrid";
 import { FitSection } from "@home/components/FitSection";
 import { HeroSection } from "@home/components/HeroSection";
-import { HowItWorks } from "@home/components/HowItWorks";
-import { LiveDemoSection } from "@home/components/LiveDemoSection";
 import { LogosWall } from "@home/components/LogosWall";
 import { MigrationSection } from "@home/components/MigrationSection";
 import { PricingCalculator } from "@home/components/PricingCalculator";
@@ -16,10 +14,8 @@ import { PricingPlans } from "@home/components/PricingPlans";
 import { QuickstartSection } from "@home/components/QuickstartSection";
 import { RelevanceSection } from "@home/components/RelevanceSection";
 import { SearchUXSection } from "@home/components/SearchUXSection";
-import { SecuritySandbox } from "@home/components/SecuritySandbox";
 import { SecuritySection } from "@home/components/SecuritySection";
 import { TcoComparison } from "@home/components/TcoComparison";
-import { TestimonialCarousel } from "@home/components/TestimonialCarousel";
 import { UseCasesGrid } from "@home/components/UseCasesGrid";
 import { WhatUsersSearchSection } from "@home/components/WhatUsersSearchSection";
 import type { Metadata } from "next";
@@ -81,9 +77,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 11. TCO comparison — vs Algolia */}
 			<TcoComparison />
 
-			{/* 12. How it works — 3 steps */}
-			<HowItWorks />
-
 			{/* 13. Architecture — system diagram for technical buyers */}
 			<ArchitectureSection />
 
@@ -96,14 +89,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 16. Security — feature overview */}
 			<SecuritySection />
 
-			{/* 17. Security sandbox — interactive scoped-token demo */}
-			<SecuritySandbox />
-
-			{/* 18. Live demo — interactive search */}
-			<LiveDemoSection />
-
-			{/* 19. Testimonials — social proof */}
-			<TestimonialCarousel />
+			{/* 19. Pricing — plans + interactive calculator + FAQ */}
 
 			{/* 19. Pricing — plans + interactive calculator + FAQ */}
 			<PricingPlans />

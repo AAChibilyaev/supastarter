@@ -1,6 +1,7 @@
 @layer base {
 	:root {
 		--font-family-heading: var(--font-sans);
+		--font-family-mono: var(--font-mono, ui-monospace, monospace);
 		--border: transparent;
 		--input: transparent;
 		--ring: #3f3f46;

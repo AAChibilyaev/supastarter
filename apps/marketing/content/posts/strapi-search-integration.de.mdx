@@ -1,0 +1,122 @@
+---
+title: Strapi Search Integration — Echtzeit-Synchronisierung mit AACsearch
+date: 2026-05-03
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Halten Sie Ihre Strapi-Inhalte mit AACsearch mittels Lifecycle-Hooks synchron. Automatische Neuindizierung bei Create, Update und Delete mit Content-Type-Mapping.
+tags: [strapi, cms, integration, connector, headless, sync]
+published: false
+---
+
+Strapi ist eine der beliebtesten Headless-CMS-Plattformen — und das aus gutem Grund. Das Plugin-Ökosystem, die REST- und GraphQL-APIs und der Content-Type-Builder machen es zu einem Favoriten für Teams, die maßgeschneiderte digitale Erlebnisse entwickeln. Wenn es jedoch um die _Suche_ geht, sind die integrierten Funktionen von Strapi auf einfache SQL-LIKE-Abfragen beschränkt. Hier kommt AACsearch ins Spiel.
+
+## Die Herausforderung
+
+Eine Strapi-basierte Website speichert typischerweise Produktkataloge, Blogartikel, Dokumentationen oder Medien-Assets. Mit wachsenden Inhalten wird die Suche langsam und ungenau. Die native Strapi-Suche:
+
+- Verwendet SQL `LIKE`-Abfragen — kein Relevanz-Ranking
+- Kann keine Tippfehler oder unscharfe Suche verarbeiten
+- Unterstützt keine facettierte Navigation
+- Bietet keine Analysen, um zu verstehen, wonach Benutzer suchen
+
+Der AACsearch Strapi-Connector löst all diese Probleme.
+
+## Wie der Strapi-Connector funktioniert
+
+### Lifecycle-Hook-Integration
+
+Der Connector greift in die Lifecycle-Ereignisse von Strapi ein — `afterCreate`, `afterUpdate` und `afterDelete` — auf den von Ihnen konfigurierten Inhaltstypen.
+
+```typescript
+// Lifecycle hook in src/api/product/content-types/product/lifecycles.ts
+module.exports = {
+	async afterCreate(event) {
+		await aacsearch.index({
+			collection: "product",
+			document: mapProductToSearchDoc(event.result),
+		});
+	},
+	async afterUpdate(event) {
+		await aacsearch.update({
+			collection: "product",
+			document: mapProductToSearchDoc(event.result),
+		});
+	},
+	async afterDelete(event) {
+		await aacsearch.delete({
+			collection: "product",
+			id: event.result.id,
+		});
+	},
+};
+```
+
+### Content-Type-Mapping
+
+Sie definieren, wie jeder Strapi-Inhaltstyp einer Suchsammlung zugeordnet wird. Das Mapping erfolgt über eine einfache Konfigurationsdatei:
+
+```json
+{
+	"collections": [
+		{
+			"strapiContentType": "product",
+			"searchCollection": "products",
+			"fields": {
+				"title": { "type": "string", "searchable": true },
+				"description": { "type": "string", "searchable": true },
+				"price": { "type": "float", "facet": true },
+				"category": { "type": "string", "facet": true, "searchable": true },
+				"images": { "type": "string[]", "source": "media.url" },
+				"variants": {
+					"type": "object[]",
+					"fields": {
+						"sku": { "type": "string" },
+						"color": { "type": "string", "facet": true },
+						"size": { "type": "string", "facet": true },
+						"stock": { "type": "int32" }
+					}
+				}
+			}
+		}
+	]
+}
+```
+
+## Einrichten des Connectors
+
+1. **Installieren** Sie das AACsearch Strapi-Plugin über den Strapi-Marketplace oder npm.
+2. **Konfigurieren** Sie Ihren AACsearch-API-Key und die Endpunkt-URL in den Plugin-Einstellungen.
+3. **Ordnen Sie** Ihre Inhaltstypen den Suchsammlungen über das Admin-Panel zu.
+4. **Synchronisieren** Sie vorhandene Inhalte — der Connector führt einen initialen Bulk-Import durch.
+5. **Fertig** — alle nachfolgenden Änderungen werden in Echtzeit synchronisiert.
+
+## Funktionen
+
+- **Echtzeit-Synchronisierung**: Inhaltsänderungen erscheinen innerhalb von Sekunden in den Suchergebnissen
+- **Bulk-Import**: Indiziert alle vorhandenen Inhalte bei der Ersteinrichtung
+- **Entwurf/Veröffentlicht-Unterstützung**: Standardmäßig werden nur veröffentlichte Inhalte indiziert
+- **Medienverarbeitung**: Bild-URLs werden automatisch aus der Strapi-Medienbibliothek extrahiert
+- **Internationalisierung**: Sprachbewusst — jede Sprache wird zu einem eigenen Dokument oder Feld
+- **Komponentenfelder**: Strapi Dynamic Zones und Komponenten werden in durchsuchbare Felder überführt
+
+## Leistungsüberlegungen
+
+Für große Strapi-Projekte (100.000+ Dokumente) unterstützt der Connector Batch-Operationen:
+
+- Bulk-Importe verwenden paginierte Abfragen mit konfigurierbaren Batch-Größen
+- Delta-Synchronisierungen senden nur geänderte Felder, nicht das gesamte Dokument
+- Gelöschte Inhalte werden innerhalb des Lifecycle-Hooks aus dem Index entfernt
+
+## Wann Sie den Strapi-Connector verwenden sollten
+
+Dieser Connector ist ideal für:
+
+- **E-Commerce-Shops** auf Strapi-Basis (mit Strapi E-Commerce oder benutzerdefiniertem Setup)
+- **Inhaltsreiche Websites** mit Blogs, Dokumentationen und Medienbibliotheken
+- **Mehrsprachige Websites**, die in jeder Sprache eine Suche benötigen
+- **Teams, die bereits Strapi verwenden** und Algolia-Qualitätssuche ohne den Algolia-Preis wünschen
+
+---
+
+_Der AACsearch Strapi-Connector befindet sich in der Entwicklung. [Melden Sie sich für den frühen Zugang an](https://aacsearch.com), um benachrichtigt zu werden, wenn er startet._

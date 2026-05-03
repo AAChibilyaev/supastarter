@@ -1,6 +1,7 @@
 import "server-only";
 import { config } from "../config";
 import { getTypesenseClient, getTypesenseClientForOrg } from "./client";
+import { getClientWithFailover, withSearchFailover, recordRegionOnline, recordRegionOffline } from "./routing";
 
 export interface GeoPolygonFilter {
 	/** Geolocation field name (default: "_geoloc") */
@@ -296,8 +297,6 @@ function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
 }
 
 export async function searchDocuments(input: SearchDocumentsInput): Promise<SearchDocumentsResult> {
-	const client = await getTypesenseClientForOrg(input.tenantId);
-
 	const perPage = Math.min(
 		Math.max(input.perPage ?? config.defaultPerPage, 1),
 		config.maxPerPage,
@@ -306,7 +305,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 	let vectorQuery = input.vectorQuery;
 	if (vectorQuery !== undefined && input.vectorQueryEf !== undefined) {
 		// Append ef parameter to the vector query string, e.g. "vec:([...], k:10, ef:200)"
-		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${input.vectorQueryEf})`);
+		vectorQuery = vectorQuery.replace(/\\)$/, `, ef:${input.vectorQueryEf})`);
 	}
 
 	const params: TypesenseSearchParams = {
@@ -321,71 +320,75 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		vector_query: vectorQuery,
 	};
 
-	const response = await client
-		.collections(input.alias)
-		.documents()
-		.search({
-			...params,
-			...(input.facetSampleSlope !== undefined && {
-				facet_sample_slope: input.facetSampleSlope,
-			}),
-			...(input.facetSampleThreshold !== undefined && {
-				facet_sample_threshold: input.facetSampleThreshold,
-			}),
-			// ── Advanced facet params ──
-			...(input.maxFacetValues !== undefined && {
-				max_facet_values: input.maxFacetValues,
-			}),
-			...(input.facetQuery !== undefined && {
-				facet_query: input.facetQuery,
-			}),
-			...(input.facetSearch !== undefined && {
-				facet_search: input.facetSearch,
-			}),
-			...(input.facetSamplePercent !== undefined && {
-				facet_sample_percent: input.facetSamplePercent,
-			}),
-			...(input.facetStrategy !== undefined && {
-				facet_strategy: input.facetStrategy,
-			}),
-			...(input.facetSortBy !== undefined && {
-				facet_sort_by: input.facetSortBy,
-			}),
-			// ── Typo fine-tuning ──
-			...(input.exhaustiveSearch !== undefined && {
-				exhaustive_search: input.exhaustiveSearch,
-			}),
-			...(input.synonymPrefix !== undefined && {
-				synonym_prefix: input.synonymPrefix,
-			}),
-			...(input.synonymNumTypos !== undefined && {
-				synonym_num_typos: input.synonymNumTypos,
-			}),
-			...(input.minLen1Typo !== undefined && {
-				min_len_1typo: input.minLen1Typo,
-			}),
-			...(input.minLen2Typo !== undefined && {
-				min_len_2typo: input.minLen2Typo,
-			}),
-			...(input.dropTokensMode !== undefined && {
-				drop_tokens_mode: input.dropTokensMode,
-			}),
-			...(input.maxCandidates !== undefined && {
-				max_candidates: input.maxCandidates,
-			}),
-			// ── Caching ──
-			...(input.cacheTtl !== undefined && {
-				cache_ttl: input.cacheTtl,
-			}),
-			// ── Highlight ──
-			...(input.enableHighlightV1 !== undefined && {
-				enable_highlight_v1: input.enableHighlightV1,
-			}),
-			// ── Grouping ──
-			...(input.groupMissingValues !== undefined && {
-				group_missing_values: input.groupMissingValues,
-			}),
-		} as any);
+	const { result: response } = await withSearchFailover(
+		{ organizationId: input.tenantId, allowRegionOverride: true },
+		async (client) =>
+			client
+				.collections(input.alias)
+				.documents()
+				.search({
+					...params,
+					...(input.facetSampleSlope !== undefined && {
+						facet_sample_slope: input.facetSampleSlope,
+					}),
+					...(input.facetSampleThreshold !== undefined && {
+						facet_sample_threshold: input.facetSampleThreshold,
+					}),
+					// ── Advanced facet params ──
+					...(input.maxFacetValues !== undefined && {
+						max_facet_values: input.maxFacetValues,
+					}),
+					...(input.facetQuery !== undefined && {
+						facet_query: input.facetQuery,
+					}),
+					...(input.facetSearch !== undefined && {
+						facet_search: input.facetSearch,
+					}),
+					...(input.facetSamplePercent !== undefined && {
+						facet_sample_percent: input.facetSamplePercent,
+					}),
+					...(input.facetStrategy !== undefined && {
+						facet_strategy: input.facetStrategy,
+					}),
+					...(input.facetSortBy !== undefined && {
+						facet_sort_by: input.facetSortBy,
+					}),
+					// ── Typo fine-tuning ──
+					...(input.exhaustiveSearch !== undefined && {
+						exhaustive_search: input.exhaustiveSearch,
+					}),
+					...(input.synonymPrefix !== undefined && {
+						synonym_prefix: input.synonymPrefix,
+					}),
+					...(input.synonymNumTypos !== undefined && {
+						synonym_num_typos: input.synonymNumTypos,
+					}),
+					...(input.minLen1Typo !== undefined && {
+						min_len_1typo: input.minLen1Typo,
+					}),
+					...(input.minLen2Typo !== undefined && {
+						min_len_2typo: input.minLen2Typo,
+					}),
+					...(input.dropTokensMode !== undefined && {
+						drop_tokens_mode: input.dropTokensMode,
+					}),
+					...(input.maxCandidates !== undefined && {
+						max_candidates: input.maxCandidates,
+					}),
+					// ── Caching ──
+					...(input.cacheTtl !== undefined && {
+						cache_ttl: input.cacheTtl,
+					}),
+					// ── Highlight ──
+					...(input.enableHighlightV1 !== undefined && {
+						enable_highlight_v1: input.enableHighlightV1,
+					}),
+					// ── Grouping ──
+					...(input.groupMissingValues !== undefined && {
+						group_missing_values: input.groupMissingValues,
+					}),
+				} as any),
+	);
 
 	return {
 		hits: response.hits ?? [],
@@ -503,3 +506,10 @@ export async function multiSearchDocuments(
 	return results.map((r, idx) => ({
 		hits: (r.hits as unknown[]) ?? [],
 		found: (r.found as number) ?? 0,
+		page: (r.page as number) ?? 1,
+		perPage: (r.per_page as number) ?? entries[idx]?.perPage ?? 10,
+		facetCounts: (r.facet_counts as FacetCount[]) ?? [],
+		searchTimeMs: (r.search_time_ms as number) ?? 0,
+		queryId: (r as unknown as Record<string, unknown>).query_id as string | undefined,
+	}));
+}

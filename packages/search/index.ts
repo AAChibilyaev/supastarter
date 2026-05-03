@@ -164,3 +164,13 @@ export {
 	type DecayFunctionType,
 	type DecaySortParams,
 } from "./lib/sort";
+export {
+	getClientWithFailover,
+	getAllRegionHealth,
+	recordRegionHealth,
+	recordRegionOnline,
+	recordRegionOffline,
+	clearHealthCache,
+	type FailoverResult,
+	type RegionHealthEntry,
+} from "./lib/routing";

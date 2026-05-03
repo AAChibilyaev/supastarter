@@ -1,0 +1,206 @@
+---
+title: "Plugin de Strapi"
+description: "Instale y configure el plugin de AACsearch para Strapi v5 para la sincronización de contenido en tiempo real."
+---
+
+> **Estado: Vista previa temprana.** El esqueleto del plugin es funcional — los hooks del ciclo de vida, el panel de administración, la asignación de campos y la reindexación manual funcionan. El empaquetado de instalación y el refinamiento de la interfaz de administración aún están en progreso. Espere imperfecciones.
+
+El plugin de AACsearch para Strapi (`@aacsearch/strapi-plugin`) integra su CMS Strapi v5 con AACsearch. Se encarga de:
+
+- Sincronizar entradas de contenido con AACsearch mediante hooks del ciclo de vida (`afterCreate`, `afterUpdate`, `afterDelete`)
+- Asignación de campos — elija qué campos de Strapi indexar y renómbrelos
+- Asignación de tipos de contenido — configure varios tipos de contenido con diferentes slugs de índice
+- Reindexación manual — reindexación con un clic de todas las entradas para cualquier tipo de contenido
+- Inyección de widget — incruste el widget de búsqueda alojado en su frontend
+
+## Requisitos
+
+- Strapi v5.x
+- Node.js 18 o superior
+- Una cuenta de AACsearch con al menos un índice de búsqueda creado
+- Un token de conector (`ss_connector_*`) vinculado a ese índice
+
+## Diseño de archivos del plugin
+
+```
+packages/strapi-plugin/
+  package.json                             # Descriptor del paquete — nombre, versión, exportaciones
+  src/
+    server/
+      index.ts                             # Entrada del plugin — register/bootstrap/destroy
+      lifecycles/
+        index.ts                           # Registro de hooks del ciclo de vida (afterCreate/Update/Delete)
+      services/
+        index.ts                           # Servicio de persistencia de configuración (tienda strapi)
+        aacsearch.ts                       # Servicio de sincronización — asignación de documentos, comunicación API
+        client.ts                          # Cliente HTTP — llamadas a la API de conector
+      controllers/
+        aacsearch.ts                       # Puntos finales de la API de administración (get/update config, test, reindex)
+    admin/
+      index.ts                             # Registro del panel de administración
+      pages/
+        SettingsPage.tsx                   # UI de configuración — componentes React
+```
+
+## Pasos de instalación
+
+### 1. Instalar el plugin
+
+```bash
+npm install @aacsearch/strapi-plugin
+```
+
+O usando su gestor de paquetes preferido:
+
+```bash
+yarn add @aacsearch/strapi-plugin
+pnpm add @aacsearch/strapi-plugin
+```
+
+### 2. Configurar mediante el panel de administración
+
+Navegue a **Ajustes → AACsearch Sync** en su panel de administración de Strapi y complete:
+
+| Campo             | Descripción                                                             |
+| ----------------- | ----------------------------------------------------------------------- |
+| URL API AACsearch | URL base de su instancia de AACsearch (ej. `https://api.aacsearch.com`) |
+| Token de conector | El token `ss_connector_*` creado en Panel → Conectores                  |
+| Modo depuración   | Escribir registros detallados en el registro de Strapi                  |
+
+Después de ingresar los detalles de conexión, haga clic en **Probar conexión** para verificar.
+
+### 3. Agregar tipos de contenido
+
+Haga clic en **Agregar tipo de contenido** e ingrese la UID del tipo de contenido (ej. `api::product.product`). Para cada tipo de contenido, establezca el **Slug del índice** — esto se asigna al nombre del índice de búsqueda en AACsearch.
+
+El plugin genera automáticamente un slug predeterminado a partir del nombre del tipo de contenido (ej. `api::product.product` → `product`).
+
+### 4. Configuración avanzada (archivo de configuración del plugin)
+
+Para la asignación avanzada de campos, cree o edite `config/plugins.js` (o `config/plugins.ts`) en su proyecto Strapi:
+
+```javascript
+module.exports = {
+	aacsearch: {
+		enabled: true,
+		config: {
+			baseUrl: process.env.AACSEARCH_URL,
+			token: process.env.AACSEARCH_TOKEN,
+			collections: {
+				"api::product.product": {
+					indexSlug: "products",
+					fieldMapping: {
+						name: "title",
+						description: "body",
+						price: "price",
+					},
+					excludeFields: ["createdBy", "updatedBy"],
+				},
+				"api::category.category": {
+					indexSlug: "categories",
+				},
+			},
+		},
+	},
+};
+```
+
+### 5. Ejecutar una reindexación completa
+
+En la página de configuración de administración, haga clic en **Reindexar** junto a cualquier tipo de contenido configurado. Esto lee todas las entradas de Strapi, aplica sus asignaciones de campos y las envía a AACsearch como una sincronización por lotes completa mediante `POST /api/projects/strapi/sync/full`.
+
+Las colecciones grandes pueden tardar varios minutos. El progreso y cualquier error se muestran en los registros de Strapi.
+
+## Hooks del ciclo de vida
+
+El plugin registra hooks del ciclo de vida de Strapi para sincronizaciones delta automáticas. Estos se registran durante la fase `register` del plugin usando `strapi.db.lifecycles.subscribe`:
+
+| Hook          | Disparador                                                                      |
+| ------------- | ------------------------------------------------------------------------------- |
+| `afterCreate` | Se dispara después de crear una nueva entrada — sincronización de creación      |
+| `afterUpdate` | Se dispara después de actualizar una entrada — sincronización de actualización  |
+| `afterDelete` | Se dispara después de eliminar una entrada — envía una solicitud de eliminación |
+
+Los hooks se registran para cada tipo de contenido configurado en `src/server/lifecycles/index.ts`. Cuando se dispara un evento del ciclo de vida, la función `syncDocument` en `aacsearch.ts` lee la configuración del plugin, busca la configuración de colección del tipo de contenido, aplica las asignaciones de campos y llama a la API de conector mediante `AacSearchClient`.
+
+## Asignación de tipos de contenido
+
+Cada tipo de contenido en Strapi se asigna a un índice de búsqueda en AACsearch. La asignación se define en un `CollectionConfig`:
+
+| Propiedad       | Tipo                              | Descripción                                                            |
+| --------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| `indexSlug`     | string                            | El slug del índice de AACsearch (requerido)                            |
+| `idColumn`      | string (opcional)                 | Columna de ID del documento (predeterminado: `id`)                     |
+| `fieldMapping`  | Record<string, string> (opcional) | Asigna nombres de campos de Strapi a campos de documentos de AACsearch |
+| `includeFields` | string[] (opcional)               | Incluir solo estos campos en el documento                              |
+| `excludeFields` | string[] (opcional)               | Excluir estos campos del documento                                     |
+
+### Ejemplo de asignación de campos
+
+```json
+{
+	"fieldMapping": {
+		"name": "title",
+		"description": "body",
+		"price": "price"
+	}
+}
+```
+
+Esto asigna el campo `name` de Strapi a `title` en el documento de AACsearch, `description` a `body` y `price` a `price`. Los campos que no están en la asignación se excluyen a menos que se establezca `includeFields`.
+
+## Puntos finales de la API del plugin
+
+El plugin expone estos puntos finales de la API de administración:
+
+| Endpoint                             | Método | Descripción                                   |
+| ------------------------------------ | ------ | --------------------------------------------- |
+| `/aacsearch/get-config`              | GET    | Obtener la configuración actual del plugin    |
+| `/aacsearch/update-config`           | POST   | Actualizar la configuración del plugin        |
+| `/aacsearch/test-connection`         | GET    | Probar la conexión con AACsearch              |
+| `/aacsearch/reindex/:contentTypeUid` | POST   | Reindexación completa de un tipo de contenido |
+
+## Inyección del widget
+
+Después de configurar el plugin, incruste el widget alojado de AACsearch en su frontend agregando el siguiente fragmento:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+El valor `data-api-key` es una clave `ss_search_*` separada — no el token de conector. La clave de búsqueda puede ser de solo lectura y es segura para incrustar en el navegador.
+
+También necesita agregar el elemento contenedor a su plantilla de frontend:
+
+```html
+<div id="aac-search"></div>
+```
+
+Obtenga el fragmento de instalación en la pestaña **Panel → Búsqueda → Widget**.
+
+## Solución de problemas
+
+**La prueba de conexión falla con `invalid_or_revoked_key`**
+Verifique que el token de conector se haya copiado correctamente y no haya sido revocado en el panel de AACsearch. Genere un nuevo token si es necesario.
+
+**La reindexación se completa pero las entradas no aparecen en la búsqueda**
+La sincronización pone en cola los documentos en `SearchIngestBuffer`; la indexación es asíncrona. Espere 30–60 segundos e intente una búsqueda de prueba. Si los documentos aún no aparecen, verifique el estado de la canalización de ingesta en Panel → Overview.
+
+**Los hooks del ciclo de vida no se disparan**
+Verifique que la UID del tipo de contenido esté configurada correctamente en los ajustes del plugin. Revise los registros de Strapi para ver si hay errores `[aacsearch]` durante el registro del ciclo de vida. Asegúrese de que el plugin esté habilitado y la fase `register` se haya completado exitosamente.
+
+**El widget no aparece en el frontend**
+Confirme que el elemento contenedor `#aac-search` existe en su plantilla de frontend. Verifique que el valor `data-api-key` sea una clave `ss_search_*` válida (no el token de conector).
+
+## Páginas relacionadas
+
+- [Descripción general de conectores](/docs/connectors/overview)
+- [Ciclo de vida de la API de conector](/docs/connectors/connector-api-lifecycle)
+- [Descripción general del widget](/docs/connectors/widget-overview)

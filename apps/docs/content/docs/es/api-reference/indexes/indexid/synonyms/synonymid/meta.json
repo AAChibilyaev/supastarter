@@ -1,4 +1,6 @@
 {
-	"title": "indexes/indexid/synonyms/synonymid",
-	"pages": ["delete"]
+  "title": "indexes/indexid/synonyms/synonymid",
+  "pages": [
+    "delete"
+  ]
 }

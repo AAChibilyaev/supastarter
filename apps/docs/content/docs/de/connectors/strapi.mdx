@@ -1,0 +1,206 @@
+---
+title: "Strapi-Plugin"
+description: "Das AACsearch-Strapi-v5-Plugin für Echtzeit-Inhaltssynchronisierung installieren und konfigurieren."
+---
+
+> **Status: Frühe Vorschau.** Das Plugin-Entwurf ist funktional — Lifecycle-Hooks, Admin-Panel, Feldzuordnung und manuelle Neuindizierung funktionieren alle. Installationspaketierung und Admin-UI-Feinschliff sind noch in Arbeit. Erwarten Sie Kinderkrankheiten.
+
+Das AACsearch-Strapi-Plugin (`@aacsearch/strapi-plugin`) integriert Ihr Strapi-v5-CMS mit AACsearch. Es übernimmt:
+
+- Synchronisieren von Inhaltseinträgen mit AACsearch über Lifecycle-Hooks (`afterCreate`, `afterUpdate`, `afterDelete`)
+- Feldzuordnung — auswählen, welche Strapi-Felder indiziert und umbenannt werden sollen
+- Inhaltstyp-Zuordnung — mehrere Inhaltstypen mit verschiedenen Index-Slugs konfigurieren
+- Manuelle Neuindizierung — Ein-Klick-Neuindizierung aller Einträge für jeden Inhaltstyp
+- Widget-Injektion — das gehostete Such-Widget in Ihr Frontend einbetten
+
+## Anforderungen
+
+- Strapi v5.x
+- Node.js 18 oder höher
+- Ein AACsearch-Konto mit mindestens einem erstellten Suchindex
+- Ein Connector-Token (`ss_connector_*`) für diesen Index
+
+## Plugin-Dateilayout
+
+```
+packages/strapi-plugin/
+  package.json                             # Paketdeskriptor — Name, Version, Exporte
+  src/
+    server/
+      index.ts                             # Plugin-Einstieg — register/bootstrap/destroy
+      lifecycles/
+        index.ts                           # Lifecycle-Hook-Registrierung (afterCreate/Update/Delete)
+      services/
+        index.ts                           # Konfigurations-Persistenzdienst (Strapi-Store)
+        aacsearch.ts                       # Synchronisierungsdienst — Dokumentenzuordnung, API-Kommunikation
+        client.ts                          # HTTP-Client — Connector-API-Aufrufe
+      controllers/
+        aacsearch.ts                       # Admin-API-Endpunkte (get/update config, test, reindex)
+    admin/
+      index.ts                             # Admin-Panel-Registrierung
+      pages/
+        SettingsPage.tsx                   # Einstellungs-UI — React-Komponenten
+```
+
+## Installationsschritte
+
+### 1. Plugin installieren
+
+```bash
+npm install @aacsearch/strapi-plugin
+```
+
+Oder mit Ihrem bevorzugten Paketmanager:
+
+```bash
+yarn add @aacsearch/strapi-plugin
+pnpm add @aacsearch/strapi-plugin
+```
+
+### 2. Über das Admin-Panel konfigurieren
+
+Navigieren Sie zu **Einstellungen → AACsearch Sync** in Ihrem Strapi-Admin-Panel und füllen Sie aus:
+
+| Feld              | Beschreibung                                                          |
+| ----------------- | --------------------------------------------------------------------- |
+| AACsearch-API-URL | Basis-URL Ihrer AACsearch-Instanz (z. B. `https://api.aacsearch.com`) |
+| Connector-Token   | Das `ss_connector_*`-Token, erstellt in Dashboard → Connectoren       |
+| Debug-Modus       | Ausführliche Protokolle in den Strapi-Logger schreiben                |
+
+Klicken Sie nach Eingabe der Verbindungsdaten auf **Verbindung testen**, um zu überprüfen.
+
+### 3. Inhaltstypen hinzufügen
+
+Klicken Sie auf **Inhaltstyp hinzufügen** und geben Sie die Inhaltstyp-UID ein (z. B. `api::product.product`). Für jeden Inhaltstyp legen Sie den **Index-Slug** fest — dieser wird dem Suchindex-Namen in AACsearch zugeordnet.
+
+Das Plugin generiert automatisch einen Standard-Slug aus dem Inhaltstyp-Namen (z. B. `api::product.product` → `product`).
+
+### 4. Erweiterte Konfiguration (Plugin-Konfigurationsdatei)
+
+Für erweiterte Feldzuordnung erstellen oder bearbeiten Sie `config/plugins.js` (oder `config/plugins.ts`) in Ihrem Strapi-Projekt:
+
+```javascript
+module.exports = {
+	aacsearch: {
+		enabled: true,
+		config: {
+			baseUrl: process.env.AACSEARCH_URL,
+			token: process.env.AACSEARCH_TOKEN,
+			collections: {
+				"api::product.product": {
+					indexSlug: "products",
+					fieldMapping: {
+						name: "title",
+						description: "body",
+						price: "price",
+					},
+					excludeFields: ["createdBy", "updatedBy"],
+				},
+				"api::category.category": {
+					indexSlug: "categories",
+				},
+			},
+		},
+	},
+};
+```
+
+### 5. Vollständige Neuindizierung ausführen
+
+Klicken Sie auf der Admin-Einstellungsseite neben jedem konfigurierten Inhaltstyp auf **Neuindizieren**. Dies liest alle Einträge aus Strapi, wendet Ihre Feldzuordnungen an und sendet sie als vollständige Batch-Synchronisierung an AACsearch via `POST /api/projects/strapi/sync/full`.
+
+Große Sammlungen können mehrere Minuten dauern. Fortschritt und etwaige Fehler werden in den Strapi-Logs angezeigt.
+
+## Lifecycle-Hooks
+
+Das Plugin registriert Strapi-Lifecycle-Hooks für automatische Delta-Synchronisierungen. Diese werden während der `register`-Phase des Plugins mit `strapi.db.lifecycles.subscribe` registriert:
+
+| Hook          | Auslöser                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| `afterCreate` | Wird ausgelöst, nachdem ein neuer Eintrag erstellt wurde — Create-Sync   |
+| `afterUpdate` | Wird ausgelöst, nachdem ein Eintrag aktualisiert wurde — Update-Sync     |
+| `afterDelete` | Wird ausgelöst, nachdem ein Eintrag gelöscht wurde — Löschanfrage senden |
+
+Die Hooks werden für jeden konfigurierten Inhaltstyp in `src/server/lifecycles/index.ts` registriert. Wenn ein Lifecycle-Ereignis ausgelöst wird, liest die `syncDocument`-Funktion in `aacsearch.ts` die Plugin-Konfiguration, sucht die Sammlungseinstellungen des Inhaltstyps, wendet Feldzuordnungen an und ruft die Connector-API über `AacSearchClient` auf.
+
+## Inhaltstyp-Zuordnung
+
+Jeder Inhaltstyp in Strapi wird einem Suchindex in AACsearch zugeordnet. Die Zuordnung wird in einer `CollectionConfig` definiert:
+
+| Eigenschaft     | Typ                               | Beschreibung                                            |
+| --------------- | --------------------------------- | ------------------------------------------------------- |
+| `indexSlug`     | string                            | Der AACsearch-Index-Slug (erforderlich)                 |
+| `idColumn`      | string (optional)                 | Dokument-ID-Spalte (Standard: `id`)                     |
+| `fieldMapping`  | Record<string, string> (optional) | Bildet Strapi-Feldnamen auf AACsearch-Dokumentfelder ab |
+| `includeFields` | string[] (optional)               | Nur diese Felder in das Dokument aufnehmen              |
+| `excludeFields` | string[] (optional)               | Diese Felder aus dem Dokument ausschließen              |
+
+### Beispiel für Feldzuordnung
+
+```json
+{
+	"fieldMapping": {
+		"name": "title",
+		"description": "body",
+		"price": "price"
+	}
+}
+```
+
+Dies bildet das Strapi-Feld `name` auf `title` im AACsearch-Dokument ab, `description` auf `body` und `price` auf `price`. Felder, die nicht in der Zuordnung enthalten sind, werden ausgeschlossen, es sei denn, `includeFields` ist gesetzt.
+
+## Plugin-API-Endpunkte
+
+Das Plugin stellt diese Admin-API-Endpunkte bereit:
+
+| Endpunkt                             | Methode | Beschreibung                                  |
+| ------------------------------------ | ------- | --------------------------------------------- |
+| `/aacsearch/get-config`              | GET     | Aktuelle Plugin-Konfiguration abrufen         |
+| `/aacsearch/update-config`           | POST    | Plugin-Konfiguration aktualisieren            |
+| `/aacsearch/test-connection`         | GET     | AACsearch-Verbindung testen                   |
+| `/aacsearch/reindex/:contentTypeUid` | POST    | Vollständige Neuindizierung eines Inhaltstyps |
+
+## Widget-Injektion
+
+Nach der Einrichtung des Plugins betten Sie das AACsearch-gehostete Widget in Ihr Frontend ein, indem Sie den folgenden Schnipsel hinzufügen:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Der `data-api-key`-Wert ist ein separater `ss_search_*`-Schlüssel — nicht das Connector-Token. Der Suchschlüssel kann schreibgeschützt sein und ist sicher im Browser einzubetten.
+
+Sie müssen auch das Container-Element zu Ihrem Frontend-Template hinzufügen:
+
+```html
+<div id="aac-search"></div>
+```
+
+Den Installations-Snippet erhalten Sie im **Dashboard → Suche → Widget**-Tab.
+
+## Fehlerbehebung
+
+**Verbindungstest schlägt mit `invalid_or_revoked_key` fehl**
+Stellen Sie sicher, dass das Connector-Token korrekt kopiert wurde und im AACsearch-Dashboard nicht widerrufen wurde. Generieren Sie bei Bedarf ein neues Token.
+
+**Neuindizierung abgeschlossen, aber Einträge erscheinen nicht in der Suche**
+Die Synchronisierung reiht Dokumente im `SearchIngestBuffer` ein; die Indizierung ist asynchron. Warten Sie 30–60 Sekunden und versuchen Sie eine Testsuche. Wenn Dokumente immer noch nicht erscheinen, überprüfen Sie den Ingest-Pipeline-Status in Dashboard → Übersicht.
+
+**Lifecycle-Hooks werden nicht ausgelöst**
+Überprüfen Sie, ob die Inhaltstyp-UID in den Plugin-Einstellungen korrekt konfiguriert ist. Prüfen Sie die Strapi-Logs auf `[aacsearch]`-Fehler während der Lifecycle-Registrierung. Stellen Sie sicher, dass das Plugin aktiviert ist und die `register`-Phase erfolgreich abgeschlossen wurde.
+
+**Widget erscheint nicht im Frontend**
+Bestätigen Sie, dass das `#aac-search`-Container-Element in Ihrem Frontend-Template vorhanden ist. Prüfen Sie, dass der `data-api-key`-Wert ein gültiger `ss_search_*`-Schlüssel ist (nicht das Connector-Token).
+
+## Verwandte Seiten
+
+- [Connectoren-Übersicht](/docs/connectors/overview)
+- [Connector-API-Lebenszyklus](/docs/connectors/connector-api-lifecycle)
+- [Widget-Übersicht](/docs/connectors/widget-overview)

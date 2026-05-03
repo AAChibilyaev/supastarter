@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import type { Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { JetBrains_Mono, Onest } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import type { PropsWithChildren } from "react";
@@ -26,10 +26,16 @@ export const viewport: Viewport = {
 	viewportFit: "cover",
 };
 
-const sansFont = Plus_Jakarta_Sans({
-	weight: ["300", "400", "500", "600", "700", "800"],
-	subsets: ["latin", "latin-ext"],
+const sansFont = Onest({
+	subsets: ["latin", "cyrillic"],
 	variable: "--font-sans",
+	display: "swap",
+});
+
+const monoFont = JetBrains_Mono({
+	subsets: ["latin", "cyrillic"],
+	variable: "--font-mono",
+	display: "swap",
 });
 
 const locales = Object.keys(i18nConfig.locales) as string[];
@@ -94,7 +100,7 @@ export default async function MarketingLayout({
 		<html
 			lang={locale}
 			suppressHydrationWarning
-			className={cn(sansFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
+			className={cn(sansFont.variable, monoFont.variable, config.defaultTheme === "dark" ? "dark" : undefined)}
 		>
 			<body className={cn("bg-background text-foreground antialiased")}>
 				<OrganizationSchema locale={locale} />

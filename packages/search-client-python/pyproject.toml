@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aacsearch"
 version = "0.1.0"
-description = "Python client for the AACSearch v1 REST API — search, index management, synonyms, curations, and more"
+description = "Python client for the AACSearch REST API (v1 and v2) — search, index management, synonyms, curations, and more"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "AACSearch", email = "dev@aacsearch.com" }]

@@ -1,0 +1,234 @@
+---
+title: "Contentful Connector"
+description: "Integrate Contentful with AACsearch using webhook-based sync."
+---
+
+> **Status: Webhook-based integration.** Unlike server-side modules (PrestaShop, Bitrix), Contentful connects to AACsearch via outgoing webhooks. There is no package to install — you configure webhooks in the Contentful dashboard to point at the AACsearch Connector API.
+
+The AACsearch Contentful connector uses Contentful webhooks to sync your content entries to AACsearch. It handles:
+
+- Exporting entries to AACsearch via the Connector API
+- Triggering delta syncs on entry publish/unpublish/delete events
+- Image asset URL handling from Contentful's Images API
+- Locale-aware content sync (Contentful's built-in localization)
+
+## Requirements
+
+- A Contentful space with published entries
+- At least one content model configured for search indexing
+- An AACsearch account with at least one search index created
+- A connector token (`ss_connector_*`) bound to that index
+- A search API key (`ss_search_*`) for the widget
+
+## Contentful webhook setup
+
+### 1. Create a webhook in Contentful
+
+Navigate to **Settings → Webhooks** in your Contentful space and click **Add webhook**.
+
+Configure the following:
+
+| Field        | Value                                                                |
+| ------------ | -------------------------------------------------------------------- |
+| Name         | `AACsearch Sync`                                                     |
+| URL          | `https://app.aacsearch.com/api/projects/{projectId}/sync/contentful` |
+| Method       | `POST`                                                               |
+| Content type | `application/json`                                                   |
+| Trigger      | **Specific triggering events** (see below)                           |
+
+### 2. Configure trigger events
+
+Select the following events:
+
+- **Entry** → `publish`, `unpublish`, `delete`
+- **Asset** → `publish` (to update image URLs)
+
+Optionally, also enable **Entry** → `save` for real-time sync during authoring, but note this will increase webhook volume significantly.
+
+### 3. Add custom headers
+
+Add the following headers for authentication:
+
+| Header          | Value                       |
+| --------------- | --------------------------- |
+| `Authorization` | `Bearer ss_connector_{...}` |
+| `X-AAC-Project` | Your AACsearch project ID   |
+
+### 4. Filter by content type (recommended)
+
+Under **Filters**, add a content type filter so the webhook only fires for models you want indexed:
+
+| Field        | Value     |
+| ------------ | --------- |
+| Content type | `product` |
+| Content type | `article` |
+
+You can add one filter per indexable content type. Entries of all other types will be ignored.
+
+## Content model mapping
+
+Entries are mapped to AACsearch documents using field mapping rules. The standard mapping follows this pattern:
+
+| Contentful field     | AACsearch document field | Notes                             |
+| -------------------- | ------------------------ | --------------------------------- |
+| `sys.id`             | `external_id`            | Unique identifier from Contentful |
+| `fields.title`       | `title`                  | Main entry title                  |
+| `fields.description` | `description`            | Rich text or plain text           |
+| `fields.slug`        | `url`                    | URL-friendly path                 |
+| `fields.body`        | `content`                | Full body content                 |
+| `fields.category`    | `categories`             | Array of category names           |
+| `fields.tags`        | `tags`                   | Array of tags                     |
+| `fields.image`       | `image_url`              | Asset URL (see image handling)    |
+| `fields.price`       | `price`                  | Numeric value (if applicable)     |
+| `fields.locale`      | `locale`                 | Entry locale (see locale sync)    |
+
+### Custom field mapping
+
+If your content model uses different field names, configure field mapping in the webhook payload or use the AACsearch Connector API field transformation:
+
+```json
+{
+	"field_mapping": {
+		"external_id": "sys.id",
+		"title": "fields.headline",
+		"description": "fields.teaser",
+		"content": "fields.body_text"
+	}
+}
+```
+
+## Locale-aware sync
+
+Contentful has built-in localization — each entry can have values in multiple locales. The AACsearch connector handles this as follows:
+
+- Each locale variant of an entry is indexed as a **separate document** with its own `locale` value
+- The `external_id` is suffixed with the locale code (e.g., `abc123_en`, `abc123_de`)
+- All entries respect the AACsearch index locale configuration
+- If an entry field is empty for a given locale, the fallback locale value (Contentful default) is used
+
+### Locale configuration
+
+Set the sync locale behavior via query parameters on the webhook URL:
+
+| Parameter       | Default | Description                                                                           |
+| --------------- | ------- | ------------------------------------------------------------------------------------- |
+| `locales`       | `*`     | Comma-separated list of locales to sync (e.g., `en,de`). `*` syncs all space locales. |
+| `defaultLocale` | `en-US` | The Contentful default locale used for fallback                                       |
+
+Example with locale filtering:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?locales=en,de&defaultLocale=en-US
+```
+
+## Image asset URL handling
+
+Contentful serves assets via its Images API (`images.ctfassets.net`). The connector automatically resolves asset references:
+
+1. When an entry contains a reference to a Contentful asset in the `image` field, the connector fetches the asset's `sys.id`
+2. It builds the Contentful image URL: `https://images.ctfassets.net/{spaceId}/{assetId}/{fileName}`
+3. The URL is set as `image_url` in the AACsearch document
+4. If the `publish` event is enabled for Assets, the connector re-syncs affected entries when images change
+
+You can optionally apply image transformations using Contentful's Images API parameters:
+
+```
+https://images.ctfassets.net/{spaceId}/{assetId}/{fileName}?w=800&h=600&fit=fill
+```
+
+Configure image parameters via the connector webhook query:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?image_params=w%3D800%2Ch%3D600%2Cfit%3Dfill
+```
+
+## Webhook payload format
+
+Contentful sends webhook payloads in standard format. The AACsearch Connector API processes these and extracts the relevant data. Example payload for an entry publish event:
+
+```json
+{
+	"sys": {
+		"type": "Entry",
+		"id": "abc123def",
+		"contentType": {
+			"sys": { "id": "product" }
+		},
+		"version": 5
+	},
+	"fields": {
+		"title": {
+			"en-US": "Wireless Headphones",
+			"de": "Kabellose Kopfhörer"
+		},
+		"description": {
+			"en-US": "Premium wireless headphones with noise cancellation",
+			"de": "Premium-Kopfhörer mit Geräuschunterdrückung"
+		},
+		"slug": {
+			"en-US": "wireless-headphones"
+		},
+		"price": {
+			"en-US": 199.99
+		}
+	}
+}
+```
+
+For delete events, the connector parses `sys.id` from the payload and removes the corresponding documents from the index.
+
+## Widget injection
+
+Once entries are synced, inject the AACsearch widget into your website. Contentful has no server-side rendering by default, so you add the widget client-side:
+
+1. Add the container element to your page template:
+
+```html
+<div id="aac-search"></div>
+```
+
+2. Load the widget script in your page `<head>` or before the closing `</body>` tag:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="contentful-entries"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+The `data-api-key` value is a `ss_search_*` key — not the connector token. This search key can be read-only and is safe to embed in the browser.
+
+For frameworks like Next.js or Gatsby that use Contentful as a headless CMS, you can inject the widget via a `<Script>` component or custom `<Head>` element.
+
+## Troubleshooting
+
+**Webhook returns 401 Unauthorized**
+Verify the `Authorization` header uses a valid `ss_connector_*` token. Tokens can be generated and revoked in the AACsearch dashboard under Connectors.
+
+**Entries sync but do not appear in search**
+Sync enqueues entries to `SearchIngestBuffer`; indexing is asynchronous. Wait 30–60 seconds and test search. Check the ingest pipeline status in Dashboard → Overview.
+
+**Rich text fields appear as raw JSON**
+Contentful sends rich text as a JSON node tree (Mobiledoc/TextKit format). Configure the connector to extract plain text or HTML from the rich text structure. Set the `rich_text_format` parameter on the webhook URL:
+
+```
+https://app.aacsearch.com/api/projects/{projectId}/sync/contentful?rich_text_format=html
+```
+
+Supported values: `raw` (default, sends JSON tree), `text` (plain text extraction), `html` (HTML rendering).
+
+**Images not appearing in search results**
+Verify that the Asset `publish` webhook event is enabled and check that asset entries have proper file names. If image parameters are set, ensure the query string is correctly URL-encoded.
+
+**Widget not showing on page**
+Confirm the `#aac-search` container element exists in your page. Verify `data-api-key` is a `ss_search_*` key, not the connector token. Check browser console for script load errors.
+
+## Related pages
+
+- [Connectors Overview](/docs/connectors/overview)
+- [Connector API Lifecycle](/docs/connectors/connector-api-lifecycle)
+- [Widget Overview](/docs/connectors/widget-overview)

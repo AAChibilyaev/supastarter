@@ -21,3 +21,4 @@ export * from "./fx-rate";
 export * from "./audit-log";
 export * from "./feature-flags";
 export * from "./assistant";
+export * from "./global-synonym-sets";

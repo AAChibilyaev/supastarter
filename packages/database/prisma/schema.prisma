@@ -175,6 +175,8 @@ model Organization {
   scimAuditLogs               ScimAuditLog[]
   scimProvisioningRules       ScimProvisioningRule[]
   searchIndexSynonyms         SearchIndexSynonym[]
+  globalSynonymSets           GlobalSynonymSet[]
+  globalSynonymSetCollections GlobalSynonymSetCollection[]
 
   @@unique([slug])
   @@map("organization")
@@ -297,6 +299,7 @@ model SearchIndex {
   syncJobs      SearchConnectorSyncJob[]
   shopifyStores        ShopifyStore[]
   searchIndexSynonyms  SearchIndexSynonym[]
+  excludedFromGlobalSynonymSets GlobalSynonymSetCollection[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -319,6 +322,39 @@ model SearchIndexSynonym {
   @@index([indexId])
   @@index([organizationId])
   @@map("search_index_synonym")
+}
+
+model GlobalSynonymSet {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  root           String
+  synonyms       String[]
+  locale         String?      @default("en")
+  scope          String       @default("all") // "all" or "selected"
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  excludedCollections GlobalSynonymSetCollection[]
+
+  @@index([organizationId])
+  @@map("global_synonym_set")
+}
+
+model GlobalSynonymSetCollection {
+  id             String           @id @default(cuid())
+  synonymSetId   String
+  synonymSet     GlobalSynonymSet @relation(fields: [synonymSetId], references: [id], onDelete: Cascade)
+  indexId        String
+  index          SearchIndex      @relation(fields: [indexId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([synonymSetId, indexId])
+  @@index([indexId])
+  @@index([organizationId])
+  @@map("global_synonym_set_collection")
 }
 
 model SearchApiKey {

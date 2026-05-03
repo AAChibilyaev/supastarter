@@ -1,0 +1,148 @@
+---
+title: Integración de Búsqueda con Sanity.io — Exportación Basada en GROQ con AACsearch
+date: 2026-05-03
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Indexa tu contenido de Sanity.io en AACsearch usando consultas GROQ, listeners en tiempo real y extracción de URLs de imágenes.
+tags: [sanity, cms, integration, connector, headless, groq, realtime]
+published: false
+---
+
+Sanity.io es el CMS programable — construido para contenido estructurado, colaboración en tiempo real y experiencias de edición personalizadas. Con GROQ (GROQ Query Language), Sanity te ofrece consultas similares a SQL sobre tu contenido. Pero como cualquier CMS, Sanity es una plataforma de _gestión_ de contenido, no un motor de búsqueda. Para búsqueda orientada al cliente con tolerancia a errores tipográficos, facetas y clasificación por relevancia, necesitas AACsearch.
+
+## Por qué Sanity necesita una capa de búsqueda
+
+GROQ de Sanity es excelente para consultas de contenido, pero tiene limitaciones para la búsqueda:
+
+- **Sin coincidencias aproximadas**: Solo consultas exactas
+- **Sin clasificación por relevancia**: Los resultados se ordenan por expresiones GROQ, no por relevancia de búsqueda
+- **Sin tolerancia a errores tipográficos**: Errores del usuario = cero resultados
+- **Rendimiento de consultas**: Las consultas GROQ escanean el conjunto de datos — lentas a escala para casos de uso de búsqueda
+- **Límites de tasa de API**: La API de Sanity no está diseñada para consultas públicas de alta frecuencia
+
+AACsearch añade una capa de búsqueda que se mantiene sincronizada con el contenido consultado por GROQ de Sanity.
+
+## Cómo funciona el Conector de Sanity
+
+### Exportación Basada en GROQ
+
+El conector utiliza consultas GROQ para extraer contenido de Sanity:
+
+```groq
+// Ejemplo de consulta GROQ para indexación de búsqueda de productos
+*[_type == "product" && defined(slug.current)] {
+  _id,
+  title,
+  slug,
+  "description": pt::text(body),
+  price,
+  categories[]->{ title },
+  "tags": tags[],
+  "mainImage": mainImage.asset->url,
+  "gallery": gallery[].asset->url,
+  _updatedAt
+}
+```
+
+### Listener en Tiempo Real
+
+Más allá de las exportaciones periódicas, el conector utiliza la API de listener en tiempo real de Sanity para actualizaciones instantáneas:
+
+```typescript
+import sanityClient from "@sanity/client";
+
+const client = sanityClient({
+	projectId: "your-project",
+	dataset: "production",
+	apiVersion: "2024-01-01",
+	useCdn: false,
+});
+
+// Escuchar mutaciones en productos
+const subscription = client
+	.listen(
+		'*[_type == "product"]',
+		{},
+		{ includeResult: true, events: ["create", "update", "delete"] },
+	)
+	.subscribe((event) => {
+		if (event.type === "mutation") {
+			// Manejar creación de documentos
+			if (event.result) {
+				aacsearch.index({
+					collection: "products",
+					document: mapSanityDoc(event.result),
+				});
+			}
+		}
+	});
+```
+
+### Manejo de Assets de Imagen
+
+El pipeline de imágenes de Sanity es potente pero complejo. El conector automáticamente:
+
+1. Extrae las URLs de los assets de imagen de las referencias `image.asset->url`
+2. Aplica opcionalmente las transformaciones de imagen de Sanity (`w=600&h=600&fit=crop`)
+3. Incluye el texto `alt` de los metadatos de la imagen
+4. Maneja SVG, WebP y conjuntos de imágenes responsivas
+
+## Configuración
+
+```json
+{
+	"projectId": "your-sanity-project",
+	"dataset": "production",
+	"queries": [
+		{
+			"name": "products",
+			"groq": "*[_type == 'product' && defined(slug.current)]",
+			"collection": "products",
+			"schedule": "*/5 * * * *",
+			"realtime": true
+		},
+		{
+			"name": "articles",
+			"groq": "*[_type == 'article' && defined(slug.current) && publishAt < now()]",
+			"collection": "articles",
+			"schedule": "*/15 * * * *",
+			"realtime": true
+		}
+	],
+	"imageOptions": {
+		"width": 800,
+		"quality": 80,
+		"format": "auto"
+	}
+}
+```
+
+## Configuración del Conector
+
+1. **Generar un token de API de Sanity** con acceso de lectura a tu conjunto de datos
+2. **Configurar consultas GROQ** en el panel de AACsearch para cada tipo de contenido
+3. **Mapear campos** al esquema de AACsearch (string, number, facet, geo, etc.)
+4. **Iniciar la sincronización** — la importación masiva inicial se ejecuta inmediatamente
+5. **Habilitar tiempo real** para actualizaciones instantáneas en cambios de contenido
+
+## Ventajas Únicas
+
+El modelo de contenido estructurado de Sanity se combina excepcionalmente bien con AACsearch:
+
+- **Bloques y Portable Text**: Convertir texto enriquecido a texto plano buscable
+- **Referencias**: Resolver automáticamente referencias `->` a objetos anidados
+- **Arrays**: Aplanar campos de array en formatos compatibles con facetas
+- **Internacionalización**: Cada campo de idioma se vuelve buscable de forma independiente
+- **Borradores**: Solo se indexan los documentos publicados (configurable)
+
+## Casos de Uso
+
+- **Sitios con mucho contenido** — búsqueda en artículos, guías y documentación
+- **Catálogos de productos** — búsqueda facetada con datos estructurados de productos de Sanity
+- **Sitios multilingües** — búsqueda con reconocimiento de idioma con i18n a nivel de campo de Sanity
+- **Colaboración en tiempo real** — la búsqueda refleja los cambios a medida que los editores publican
+
+---
+
+_El conector AACsearch Sanity.io está en desarrollo. [Obtén acceso anticipado](https://aacsearch.com) para recibir notificaciones cuando se lance._

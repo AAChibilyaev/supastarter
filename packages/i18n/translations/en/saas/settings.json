@@ -647,6 +647,21 @@
 				"email": "Email",
 				"source": "Source",
 				"timestamp": "Timestamp"
+			},
+			"provisioning": {
+				"title": "Group→Role Mapping",
+				"addRule": "Add Rule",
+				"addRuleDescription": "Map an IdP group to an organization role with deprovisioning behavior.",
+				"editRule": "Edit Rule",
+				"groupName": "Group Name",
+				"targetRole": "Target Role",
+				"deprovisionAction": "Deprovision Action",
+				"deprovisionNote": "Deprovisioning behavior",
+				"deprovisionNoteDescription": "When a user is removed from this group in your IdP, the selected action will be applied automatically.",
+				"noRules": "No provisioning rules configured",
+				"noRulesDescription": "Add rules to map identity provider groups to organization roles and define deprovisioning behavior.",
+				"deleteRule": "Delete Provisioning Rule?",
+				"deleteRuleDescription": "This will remove the mapping rule. Existing user roles will not be affected."
 			}
 		},
 		"auditLog": {

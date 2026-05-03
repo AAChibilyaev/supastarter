@@ -1,5 +1,5 @@
-import { createAPIPage } from "fumadocs-openapi/ui";
 import { createOpenAPI } from "fumadocs-openapi/server";
+import { createAPIPage } from "fumadocs-openapi/ui";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 
@@ -10,8 +10,8 @@ import type { MDXComponents } from "mdx/types";
  */
 const openapi = createOpenAPI({
 	input: async () => {
-		const spec = await import("../../packages/api/v1/openapi").then(
-			(m) => m.generateOpenApiSpec(),
+		const spec = await import("../../packages/api/v1/openapi").then((m) =>
+			m.generateOpenApiSpec(),
 		);
 		return { "aacsearch-api-v1": spec as never };
 	},

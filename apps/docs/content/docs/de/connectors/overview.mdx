@@ -26,13 +26,16 @@ Erstellen Sie ein Connector-Token über **Dashboard → Connectoren → Neues Co
 
 ## Unterstützte CMS-Module
 
-| Plattform                   | Status         | Hinweise                                                     |
-| --------------------------- | -------------- | ------------------------------------------------------------ |
-| PrestaShop 8.x              | Frühe Vorschau | PHP-Modul-Entwurf vorhanden; separater Commit-Track          |
-| 1C-Bitrix (selbst gehostet) | Frühe Vorschau | PHP-Modul-Entwurf vorhanden; separater Commit-Track          |
-| Direkte API                 | Verfügbar      | Jedes System kann die Connector-API mit einem Token aufrufen |
+| Plattform                   | Status            | Hinweise                                                           |
+| --------------------------- | ----------------- | ------------------------------------------------------------------ |
+| Strapi 5.x                  | Alpha             | npm-Plugin mit Lifecycle-Hooks; [Dokumentation](/docs/connectors/strapi) |
+| Contentful                  | Integrationsanleitung | Webhook-basierte Synchronisation (kein Plugin nötig); [Dokumentation](/docs/connectors/contentful) |
+| Sanity.io                   | Integrationsanleitung | GROQ-Export + Echtzeit-Listener; [Dokumentation](/docs/connectors/sanity) |
+| PrestaShop 8.x              | Frühe Vorschau    | PHP-Modul-Entwurf vorhanden; separater Commit-Track                |
+| 1C-Bitrix (selbst gehostet) | Frühe Vorschau    | PHP-Modul-Entwurf vorhanden; separater Commit-Track                |
+| Direkte API                 | Verfügbar         | Jedes System kann die Connector-API mit einem Token aufrufen       |
 
-Die PrestaShop- und Bitrix-Module werden separat vom Haupt-Node.js-Monorepo verfolgt. Sie sind funktionale Entwürfe – die Kern-Sync- und Auth-Abläufe funktionieren, aber Installationspaketierung und Admin-UI-Feinschliff sind noch in Arbeit.
+Das Strapi-Plugin ist ein npm-Paket, das direkt in Ihr Strapi-Projekt installiert wird und Lifecycle-Hooks, Content-Type-Mapping und ein Admin-Einstellungs-Panel bietet. Für Contentful und Sanity.io integriert AACsearch auf Webhook-/GROQ-Abfrageebene – keine Plugin-Installation erforderlich, nur Konfiguration im CMS-Dashboard. Die PrestaShop- und Bitrix-Module werden separat vom Haupt-Node.js-Monorepo verfolgt.
 
 ## Erste Schritte
 

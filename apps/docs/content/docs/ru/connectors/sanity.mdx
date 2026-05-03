@@ -1,0 +1,329 @@
+---
+title: "Коннектор Sanity.io"
+description: "Интеграция Sanity.io Content Lake с AACsearch с использованием GROQ-запросов и синхронизации в реальном времени."
+---
+
+> **Статус: Руководство по интеграции.** Это справочное руководство по реализации коннектора Sanity.io с использованием AACsearch Connector API. Готового пакета модуля нет — описанный подход использует экспорт на основе GROQ и listen API Sanity для синхронизации в реальном времени.
+
+Подход коннектора Sanity.io интегрирует ваш Sanity Content Lake с AACsearch. Он охватывает:
+
+- Экспорт документов из Sanity с помощью GROQ-запросов
+- Настройку слушателей в реальном времени через listen API Sanity
+- Обработку изображений через пайплайн Sanity (кадрирование, хотспоты)
+- Настройку GROQ-фильтров и проекций для сопоставления полей
+- Опциональный вебхук-запасной вариант для сред, где слушатели не подходят
+- Встраивание хостингового виджета поиска в ваш фронтенд
+
+## Требования
+
+- Проект Sanity.io с доступом к Content Lake (dataset, ID проекта)
+- Токен API Sanity с доступом на чтение (для экспорта) или доступом редактора (для GROQ-запросов)
+- Аккаунт AACsearch с хотя бы одним созданным поисковым индексом
+- Токен коннектора (`ss_connector_*`), привязанный к этому индексу
+- Node.js 18+ или серверное окружение для скрипта слушателя/экспорта
+
+## Архитектура интеграции
+
+Коннектор реализован как лёгкий мостовой скрипт на Node.js, который запускается в вашей инфраструктуре. Он выполняет три основные функции:
+
+1. **Полный экспорт** — запрашивает Sanity через GROQ и отправляет документы в AACsearch
+2. **Синхронизация в реальном времени** — подписывается на listen API Sanity для получения мутаций
+3. **Обработка изображений** — преобразует ссылки на изображения Sanity в загружаемые URL
+
+```
+┌─────────────┐   GROQ-запрос     ┌──────────────┐   Connector API    ┌────────────┐
+│  Sanity     │ ◄──────────────── │  Мостовой    │ ─────────────────► │ AACsearch  │
+│  Content    │    Мутации        │  скрипт      │   Полная/Дельта    │  Индекс    │
+│  Lake       │ ─────────────────►│  (Node.js)   │ ◄────────────────  │            │
+└─────────────┘   listen API      └──────────────┘   Статус           └────────────┘
+```
+
+## Полный экспорт с GROQ
+
+Начните с написания GROQ-запроса, который выбирает документы для индексации. Запрос определяет как набор данных, так и форму каждого документа.
+
+### Базовый GROQ-запрос
+
+```groq
+*[_type == "product"] {
+  _id,
+  title,
+  description,
+  "slug": slug.current,
+  price,
+  categories[]->{ title },
+  "mainImage": mainImage.asset->url,
+  tags,
+  _updatedAt
+}
+```
+
+### Примеры фильтров
+
+| Фильтр                                                        | Описание                            |
+| ------------------------------------------------------------- | ----------------------------------- |
+| `*[_type == "product"]`                                       | Все документы товаров               |
+| `*[_type == "post"]`                                          | Все документы записей блога         |
+| `*[_type == "product" && published == true]`                  | Только опубликованные товары        |
+| `*[_type == "product" && price > 0]`                          | Товары с указанной ценой            |
+| `*[_type in ["product", "post"]]`                             | Несколько типов контента            |
+| `*[_type == "product" && categories[]->title match "Обувь*"]` | Товары в соответствующих категориях |
+
+### Проекция для сопоставления полей
+
+Используйте GROQ-проекции для преобразования документов в формат AACsearch:
+
+```groq
+*[_type == "product"] {
+  "external_id": _id,
+  "title": title,
+  "description": description,
+  "sku": sku,
+  "brand": brand,
+  "categories": categories[]->title,
+  "category_ids": categories[]->_id,
+  "tags": tags,
+  "price": price,
+  "sale_price": salePrice,
+  "currency": currency,
+  "image_url": mainImage.asset->url,
+  "product_url": "/products/" + slug.current,
+  "availability": select(stock > 0 => "in_stock", "out_of_stock"),
+  "stock_quantity": stock,
+  "attributes": { "color": color, "size": size },
+  "locale": language
+}
+```
+
+## Настройка слушателя в реальном времени
+
+Listen API Sanity предоставляет поток мутаций в реальном времени (создание, обновление, удаление) в вашем наборе данных. Мостовой скрипт подписывается на этот поток и преобразует мутации в запросы дельта-синхронизации.
+
+### Скрипт слушателя
+
+```typescript
+import { createClient } from "@sanity/client";
+
+const client = createClient({
+	projectId: "your-project-id",
+	dataset: "production",
+	token: "your-read-token",
+	useCdn: false, // слушатели требуют конечную точку не-CDN
+});
+
+// Подписка на мутации, соответствующие вашим типам документов
+const subscription = client
+	.listen('*[_type in ["product", "post"]]', {}, { includeResult: true, visibility: "sync" })
+	.subscribe((mutation) => {
+		const { transition, result, documentId } = mutation;
+
+		switch (transition) {
+			case "appear":
+			case "update":
+				// Отправка полных данных документа в конечную точку дельта-синхронизации AACsearch
+				sendToAACsearch(formatDocument(result));
+				break;
+			case "disappear":
+				// Отправка запроса на удаление в AACsearch
+				deleteFromAACsearch(documentId);
+				break;
+		}
+	});
+```
+
+### Параметры настройки слушателя
+
+| Параметр          | Описание                                                                  |
+| ----------------- | ------------------------------------------------------------------------- |
+| `includeResult`   | Включить полный документ после мутации (по умолчанию: `true`)             |
+| `includePrevious` | Включить состояние документа до мутации (опционально)                     |
+| `visibility`      | `"sync"` для подтверждённых данных, `"query"` для повторного GROQ-запроса |
+| `effectFormat`    | `"mutation"` (по умолчанию) возвращает отдельные мутации в пакете         |
+
+> **Примечание:** Слушатели требуют конечную точку не-CDN API (`apicdn.sanity.io` недоступен). Установите `useCdn: false` в конфигурации вашего клиента.
+
+## Обработка URL изображений
+
+Sanity хранит изображения как ссылки на активы. Пайплайн изображений поддерживает кадрирование, хотспоты и трансформации. Ваш мостовой скрипт должен преобразовывать ссылки `_ref` в полные URL.
+
+### Преобразование URL изображений
+
+```groq
+*[_type == "product"] {
+  ...,
+  "image_url": mainImage.asset->url,
+  "image_with_options": mainImage.asset->url + "?w=800&h=600&fit=crop"
+}
+```
+
+### Обработка хотспотов и кадрирования
+
+Изображения Sanity могут содержать метаданные хотспотов и кадрирования. При ссылке на актив через GROQ вы можете получить доступ к этим значениям:
+
+```groq
+*[_type == "product"] {
+  ...,
+  "image": {
+    "url": mainImage.asset->url,
+    "hotspot": mainImage.hotspot,
+    "crop": mainImage.crop
+  }
+}
+```
+
+Если требуется ручное построение URL из сырой ссылки на актив:
+
+```typescript
+function buildImageUrl(
+	ref: string,
+	options: { w?: number; h?: number; fit?: string } = {},
+): string {
+	const [, id, dimensions, format] = ref.split("-");
+	const base = `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}`;
+	const params = new URLSearchParams();
+	if (options.w) params.set("w", String(options.w));
+	if (options.h) params.set("h", String(options.h));
+	if (options.fit) params.set("fit", options.fit);
+	const qs = params.toString();
+	return qs ? `${base}?${qs}` : base;
+}
+```
+
+## Вебхук-запасной вариант
+
+Если слушатели в реальном времени не подходят для вашего окружения (например, бессерверные функции с ограничениями на соединения), вы можете использовать вебхуки Sanity в качестве запасного варианта.
+
+### Настройка вебхука
+
+В панели управления вашего проекта Sanity создайте вебхук, указывающий на ваш мостовой сервер:
+
+| Поле            | Значение                                             |
+| --------------- | ---------------------------------------------------- | --- | ----------------- |
+| URL             | `https://your-bridge.example.com/api/sanity-webhook` |
+| Dataset(s)      | `production`                                         |
+| Фильтр          | `\_type == "product"                                 |     | \_type == "post"` |
+| Проекция        | Оставить пустым (отправлять полный документ)         |
+| HTTP-метод      | `POST`                                               |
+| HTTP-заголовки  | `Content-Type: application/json`                     |
+| Срабатывать при | `create`, `update`, `delete`                         |
+
+### Обработчик вебхука
+
+```typescript
+export async function handleSanityWebhook(request: Request) {
+	const body = await request.json();
+
+	// Sanity отправляет массив результатов мутаций
+	for (const mutation of body) {
+		if (mutation.result) {
+			await sendToAACsearch(formatDocument(mutation.result));
+		} else if (mutation.documentId) {
+			await deleteFromAACsearch(mutation.documentId);
+		}
+	}
+
+	return new Response("OK", { status: 200 });
+}
+```
+
+## Скрипт полного экспорта
+
+Полный скрипт Node.js для выполнения начального полного экспорта:
+
+```typescript
+import { createClient } from "@sanity/client";
+
+const sanity = createClient({
+	projectId: process.env.SANITY_PROJECT_ID!,
+	dataset: process.env.SANITY_DATASET!,
+	token: process.env.SANITY_TOKEN!,
+	useCdn: false,
+	apiVersion: "2024-01-01",
+});
+
+const GROQ_QUERY = `*[_type == "product"] {
+  "external_id": _id,
+  title,
+  description,
+  sku,
+  "categories": categories[]->title,
+  price,
+  salePrice,
+  "image_url": mainImage.asset->url,
+  "product_url": "/products/" + slug.current,
+  "availability": select(stock > 0 => "in_stock", "out_of_stock"),
+  stock,
+  _updatedAt
+}`;
+
+async function runFullSync() {
+	const documents = await sanity.fetch(GROQ_QUERY);
+
+	// Отправка в AACsearch пакетами
+	const batchSize = 200;
+	for (let i = 0; i < documents.length; i += batchSize) {
+		const batch = documents.slice(i, i + batchSize);
+		await fetch(
+			`https://api.aacsearch.com/api/projects/${process.env.AAC_PROJECT_ID}/sync/full`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${process.env.AAC_CONNECTOR_TOKEN}`,
+				},
+				body: JSON.stringify({ documents: batch }),
+			},
+		);
+	}
+}
+
+runFullSync().catch(console.error);
+```
+
+## Встраивание виджета
+
+После индексации документов встройте виджет поиска AACsearch в ваш фронтенд на Sanity. Добавьте следующий сниппет в макет вашего приложения или `<head>`:
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+Значение `data-api-key` — это отдельный ключ `ss_search_*`, а не токен коннектора. Ключ поиска может быть только для чтения и безопасен для встраивания в браузер.
+
+Добавьте элемент-контейнер в ваш шаблон:
+
+```html
+<div id="aac-search"></div>
+```
+
+Для фронтендов на основе Sanity (Next.js, Remix, Astro) разместите встраивание виджета в вашем макете или корневом компоненте.
+
+## Устранение неполадок
+
+**GROQ-запрос возвращает пустые результаты**
+Проверьте имя вашего набора данных и фильтр типа документа. Протестируйте запрос в инструменте Vision Sanity перед использованием в мостовом скрипте.
+
+**Соединение слушателя разрывается**
+Listen API Sanity может отключаться после длительного периода бездействия. Реализуйте логику переподключения с экспоненциальной задержкой в вашем мостовом скрипте. SDK `@sanity/client` включает автоматическое переподключение — убедитесь, что вы обрабатываете событие `reconnect`.
+
+**URL изображений не преобразуются**
+Убедитесь, что вы ссылаетесь на `asset->url` в вашей GROQ-проекции (с синтаксисом стрелки). Сырые ссылки на активы, такие как `mainImage.asset._ref`, содержат ID актива, а не полный URL.
+
+**Вебхук не срабатывает**
+Проверьте, что фильтр вебхука соответствует вашим типам документов. Убедитесь, что URL вебхука общедоступен с серверов Sanity. Вебхуки Sanity включают заголовок подписи — проверяйте его в продакшене для предотвращения несанкционированных запросов.
+
+**Ограничение скорости запросов**
+Sanity Content Lake имеет ограничения скорости на API-запросы. Для больших наборов данных используйте пагинацию GROQ-запроса с помощью `[start...end]` или параметр курсора `after`, чтобы избежать тайм-аутов.
+
+## Связанные страницы
+
+- [Обзор коннекторов](/docs/connectors/overview)
+- [Жизненный цикл Connector API](/docs/connectors/connector-api-lifecycle)
+- [Обзор виджета](/docs/connectors/widget-overview)

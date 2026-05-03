@@ -1,0 +1,1099 @@
+openapi: 3.1.0
+info:
+    title: AACsearch API v2
+    version: 2.0.0
+    summary: >-
+        Version 2 of the AACsearch REST API. Manages projects, search indexes, documents, API keys, search/analytics, and
+        more.
+    description: >-
+        Version 2 of the AACsearch REST API. All endpoints require Bearer token authentication.
+
+
+        ## v2 Changes
+
+
+        - **Extended error format**: All errors return `requestId`, `error`, `message`, `statusCode`, and optionally
+        `details` and `documentationUrl`.
+
+        - **Rate limit headers**: All responses include `X-RateLimit-Org-Limit`, `X-RateLimit-Org-Remaining`,
+        `X-RateLimit-Org-Reset`, and `X-RateLimit-Org-Policy` headers.
+
+        - **Consistent naming**: Resource IDs use `{projectId}`, `{indexId}`, `{keyId}` consistently across all routes.
+
+        - **Cursor-based pagination**: Document listing uses cursor-based pagination for better performance on large
+        collections.
+
+
+        See the [v1→v2 Migration Guide](https://docs.aacsearch.com/api/v2/migration) for details on upgrading.
+    license:
+        name: MIT
+        url: https://opensource.org/licenses/MIT
+servers:
+    - url: /api/v2
+      description: v2 API base path
+paths:
+    /projects:
+        get:
+            summary: Get current project
+            description: Returns the project (organization) associated with the authenticated API key.
+            tags:
+                - Projects
+            security:
+                - BearerAuth: []
+            responses:
+                "200":
+                    description: Project details
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Project"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+        post:
+            summary: Create project
+            description: Creates a new project (organization). Requires an admin scope key.
+            tags:
+                - Projects
+            security:
+                - BearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - name
+                                - slug
+                            properties:
+                                name:
+                                    type: string
+                                    maxLength: 120
+                                    description: Display name of the project
+                                slug:
+                                    type: string
+                                    pattern: ^[a-z0-9][a-z0-9-]*$
+                                    maxLength: 64
+                                    description: URL-safe identifier (lowercase, digits, hyphens)
+                                logo:
+                                    type: string
+                                    format: uri
+                                    description: URL to project logo image
+            responses:
+                "201":
+                    description: Project created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Project"
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+    /projects/{projectId}:
+        get:
+            summary: Get project by ID
+            tags:
+                - Projects
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                  description: Project ID
+            responses:
+                "200":
+                    description: Project details
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /projects/{projectId}/indexes:
+        get:
+            summary: List search indexes
+            description: Returns all search indexes belonging to the specified project.
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: List of indexes
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/SearchIndex"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+        post:
+            summary: Create search index
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - slug
+                                - displayName
+                                - fields
+                            properties:
+                                slug:
+                                    type: string
+                                    pattern: ^[a-z0-9][a-z0-9-]*$
+                                displayName:
+                                    type: string
+                                    maxLength: 120
+                                fields:
+                                    type: array
+                                    items:
+                                        $ref: "#/components/schemas/SearchField"
+                                defaultSortingField:
+                                    type: string
+            responses:
+                "201":
+                    description: Index created
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+    /indexes/{indexId}:
+        get:
+            summary: Get search index by ID
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Index details
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+        patch:
+            summary: Update search index
+            description: Updates index metadata such as displayName, enabled status, and defaultSortingField.
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                displayName:
+                                    type: string
+                                    maxLength: 120
+                                enabled:
+                                    type: boolean
+                                defaultSortingField:
+                                    type: string
+            responses:
+                "200":
+                    description: Index updated
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+        delete:
+            summary: Delete search index
+            description: Permanently deletes the search index and its Typesense collection.
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "204":
+                    description: Index deleted
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /indexes/{indexId}/stats:
+        get:
+            summary: Get index statistics
+            tags:
+                - Indexes
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Index statistics
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /indexes/{indexId}/documents:
+        get:
+            summary: List documents (cursor-based pagination)
+            description: Lists documents in the index. Uses cursor-based pagination via the `cursor` query parameter.
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: cursor
+                  in: query
+                  schema:
+                      type: string
+                  description: Pagination cursor from previous response
+                - name: perPage
+                  in: query
+                  schema:
+                      type: integer
+                      maximum: 100
+                      default: 20
+                - name: filterBy
+                  in: query
+                  schema:
+                      type: string
+                  description: Typesense filter expression
+            responses:
+                "200":
+                    description: Paginated list of documents
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+        post:
+            summary: Upsert documents (batch)
+            description: Upserts documents into the index. Enqueues into the ingest buffer for async processing.
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - documents
+                            properties:
+                                documents:
+                                    type: array
+                                    items:
+                                        type: object
+                                    description: Array of document objects. Each document should have a unique `id` field.
+                                action:
+                                    type: string
+                                    enum:
+                                        - upsert
+                                        - create
+                                        - update
+                                    default: upsert
+                                    description: Import action. 'upsert' creates or replaces, 'create' fails on duplicates, 'update' merges fields.
+            responses:
+                "202":
+                    description: Documents queued for ingestion
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "402":
+                    $ref: "#/components/responses/QuotaExceeded"
+                "403":
+                    $ref: "#/components/responses/Forbidden"
+    /indexes/{indexId}/documents/{documentId}:
+        get:
+            summary: Get document by ID
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: documentId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Document details
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+        put:
+            summary: Upsert single document
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: documentId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            description: Document data (does not need to include `id`)
+            responses:
+                "200":
+                    description: Document upserted
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        delete:
+            summary: Delete document
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: documentId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Document deleted
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /indexes/{indexId}/documents:batchDelete:
+        post:
+            summary: Batch delete documents by IDs
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - ids
+                            properties:
+                                ids:
+                                    type: array
+                                    items:
+                                        type: string
+                                    description: Array of document IDs to delete
+            responses:
+                "200":
+                    description: Documents deleted
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /indexes/{indexId}/documents:export:
+        get:
+            summary: Export documents
+            tags:
+                - Documents
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: format
+                  in: query
+                  schema:
+                      type: string
+                      enum:
+                          - jsonl
+                          - json
+                      default: jsonl
+                - name: filterBy
+                  in: query
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Exported documents (streamed)
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /indexes/{indexId}/search:
+        post:
+            summary: Search an index
+            description: Full-text and faceted search across a single index.
+            tags:
+                - Search
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SearchRequest"
+            responses:
+                "200":
+                    description: Search results
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /multi-search:
+        post:
+            summary: Multi-search across multiple indexes
+            description: Executes multiple search queries in a single request. Each search targets a specific index.
+            tags:
+                - Search
+            security:
+                - BearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                required:
+                                    - indexId
+                                    - search
+                                properties:
+                                    indexId:
+                                        type: string
+                                        description: Index slug or ID
+                                    search:
+                                        $ref: "#/components/schemas/SearchRequest"
+            responses:
+                "200":
+                    description: Array of search results per query
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /projects/{projectId}/keys:
+        get:
+            summary: List API keys
+            tags:
+                - API Keys
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: List of API keys
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        post:
+            summary: Create API key
+            tags:
+                - API Keys
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - description
+                                - scopes
+                            properties:
+                                description:
+                                    type: string
+                                    description: Human-readable description
+                                scopes:
+                                    type: array
+                                    items:
+                                        type: string
+                                        enum:
+                                            - admin
+                                            - ingest
+                                            - search
+                                rateLimitPerMinute:
+                                    type: integer
+                                    minimum: 1
+                                    maximum: 10000
+                                allowedOrigins:
+                                    type: array
+                                    items:
+                                        type: string
+                                    description: CORS allowed origins (empty for all)
+            responses:
+                "201":
+                    description: API key created
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /keys/{keyId}:
+        delete:
+            summary: Revoke API key
+            tags:
+                - API Keys
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: keyId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: API key revoked
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /indexes/{indexId}/synonyms:
+        get:
+            summary: List synonyms
+            tags:
+                - Synonyms
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: List of synonyms
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        post:
+            summary: Create synonym
+            tags:
+                - Synonyms
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "201":
+                    description: Synonym created
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        put:
+            summary: Upsert synonyms (batch)
+            tags:
+                - Synonyms
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Synonyms upserted
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        delete:
+            summary: Delete synonym
+            tags:
+                - Synonyms
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                - name: synonymId
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Synonym deleted
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+    /indexes/{indexId}/curations:
+        get:
+            summary: List curations
+            tags:
+                - Curations
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: List of curations
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        post:
+            summary: Create curation
+            tags:
+                - Curations
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "201":
+                    description: Curation created
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+        put:
+            summary: Upsert curations (batch)
+            tags:
+                - Curations
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: indexId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Curations upserted
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /projects/{projectId}/analytics:
+        get:
+            summary: Get analytics
+            tags:
+                - Analytics
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Analytics data
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /projects/{projectId}/usage:
+        get:
+            summary: Get usage data
+            tags:
+                - Analytics
+            security:
+                - BearerAuth: []
+            parameters:
+                - name: projectId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Usage data
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+    /openapi.json:
+        get:
+            summary: OpenAPI 3.1 specification
+            description: Returns the v2 API specification in OpenAPI 3.1 format.
+            tags:
+                - Meta
+            security:
+                - BearerAuth: []
+            responses:
+                "200":
+                    description: OpenAPI spec
+components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: ss_search_*
+            description: AACsearch API key. Create keys from the dashboard or the /v2/projects/{projectId}/keys endpoint.
+    schemas:
+        Project:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                slug:
+                    type: string
+                logo:
+                    type:
+                        - string
+                        - "null"
+                    format: uri
+                membersCount:
+                    type: integer
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+        SearchIndex:
+            type: object
+            properties:
+                id:
+                    type: string
+                slug:
+                    type: string
+                displayName:
+                    type: string
+                enabled:
+                    type: boolean
+                projectId:
+                    type: string
+                documentCount:
+                    type: integer
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+        SearchField:
+            type: object
+            required:
+                - name
+                - type
+            properties:
+                name:
+                    type: string
+                    description: Field name
+                type:
+                    type: string
+                    enum:
+                        - string
+                        - int32
+                        - int64
+                        - float
+                        - bool
+                        - string[]
+                        - int32[]
+                        - int64[]
+                        - float[]
+                        - bool[]
+                        - geopoint
+                        - geopoint[]
+                        - object
+                        - object[]
+                        - auto
+                facet:
+                    type: boolean
+                    description: Enable faceting on this field
+                index:
+                    type: boolean
+                    default: true
+                    description: Enable full-text search on this field
+                optional:
+                    type: boolean
+                    description: Field may be absent from documents
+                locale:
+                    type: string
+                    description: Locale for stemming (e.g. 'en', 'de', 'fr')
+                sort:
+                    type: boolean
+                    description: Enable sorting on this field
+                infix:
+                    type: boolean
+                    description: Enable infix search
+                numDimensions:
+                    type: integer
+                    description: Number of dimensions for vector fields
+        SearchRequest:
+            type: object
+            properties:
+                q:
+                    type: string
+                    description: Search query. Use '*' for wildcard.
+                    default: "*"
+                queryBy:
+                    type: string
+                    description: Comma-separated field names to search against
+                filterBy:
+                    type: string
+                    description: Typesense filter expression
+                facetBy:
+                    type: string
+                    description: Comma-separated field names to facet on
+                sortBy:
+                    type: string
+                    description: Sort expression (e.g. 'price:desc')
+                perPage:
+                    type: integer
+                    minimum: 1
+                    maximum: 100
+                    description: Results per page
+                page:
+                    type: integer
+                    minimum: 1
+                    maximum: 1000
+                    description: Page number
+                highlightFields:
+                    type: string
+                    description: Fields to highlight
+                includeFields:
+                    type: string
+                    description: Fields to include in results (comma-separated)
+                excludeFields:
+                    type: string
+                    description: Fields to exclude from results
+                numTypos:
+                    type: integer
+                    minimum: 0
+                    maximum: 3
+                    description: Number of typo corrections (0-3)
+                prefix:
+                    type: boolean
+                    description: Enable prefix search
+                exact:
+                    type: boolean
+                    description: Only return exact matches
+                prioritizeExactMatch:
+                    type: boolean
+                hybridConfidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    description: Hybrid search confidence threshold
+                curationTags:
+                    type: string
+        V2Error:
+            type: object
+            description: Extended v2 error response format
+            required:
+                - requestId
+                - error
+                - message
+                - statusCode
+            properties:
+                requestId:
+                    type: string
+                    description: Unique identifier for request tracing
+                error:
+                    type: string
+                    description: Machine-readable error code
+                message:
+                    type: string
+                    description: Human-readable error description
+                statusCode:
+                    type: integer
+                    description: HTTP status code
+                details:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/ErrorDetail"
+                    description: Structured error details (validation errors, etc.)
+                documentationUrl:
+                    type: string
+                    format: uri
+                    description: Link to API documentation for this error
+        ErrorDetail:
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: Machine-readable error sub-code
+                message:
+                    type: string
+                    description: Human-readable detail
+                path:
+                    type: array
+                    items:
+                        type: string
+                    description: JSON path to the field that caused the error
+    responses:
+        BadRequest:
+            description: Bad request — invalid input or malformed payload
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        Unauthorized:
+            description: Unauthorized — missing or invalid Bearer token
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        Forbidden:
+            description: Forbidden — valid token lacks required scope or resource access
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        NotFound:
+            description: Not found — the requested resource does not exist
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        Conflict:
+            description: Conflict — resource already exists (e.g. duplicate slug)
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        QuotaExceeded:
+            description: Payment Required — monthly quota exceeded
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"
+        TooManyRequests:
+            description: Too Many Requests — rate limit exceeded
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/V2Error"

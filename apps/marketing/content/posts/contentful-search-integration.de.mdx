@@ -1,0 +1,117 @@
+---
+title: Contentful Search Integration — Webhook-basierte Synchronisierung mit AACsearch
+date: 2026-05-03
+image: https://picsum.photos/id/20/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Verbinden Sie Contentful mit AACsearch per Webhook-basierter Synchronisierung. Automatische Neuindizierung von Einträgen, sprachbewusste Suche und Content-Modell-Mapping.
+tags: [contentful, cms, integration, connector, headless, webhook]
+published: false
+---
+
+Contentful ist die führende API-first Content-Plattform. Die Headless-Architektur, das leistungsstarke Content-Modelling und die umfangreiche Medienverwaltung machen sie zur ersten Wahl für Enterprise-Teams. Die native Suche von Contentful ist jedoch — obwohl für die Content-Verwaltung ausreichend — nicht für kundenorientierte Sucherlebnisse ausgelegt.
+
+## Warum Contentful eine dedizierte Suchmaschine braucht
+
+Die Search-API von Contentful ist für das _Auffinden von Inhalten im CMS_ optimiert, nicht für _Endbenutzer-Sucherlebnisse_. Die Einschränkungen sind deutlich:
+
+- **Keine Relevanzsteuerung**: Sie können Felder nicht gewichten oder Ranking-Regeln anwenden
+- **Keine Tipptoleranz**: Tippfehler liefern null Ergebnisse
+- **Keine facettierte Suche**: Benutzer können nicht nach Kategorien, Tags oder benutzerdefinierten Feldern filtern
+- **Keine Analytik**: Sie erfahren nicht, wonach Benutzer suchen
+- **Ratenbegrenzung**: Die API von Contentful ist nicht für hohe Abfragevolumen durch öffentliche Benutzer ausgelegt
+
+AACsearch schließt diese Lücken mit einer dedizierten Suchschicht, die automatisch mit Contentful synchronisiert bleibt.
+
+## Wie der Contentful-Connector funktioniert
+
+### Webhook-basierte Synchronisierung
+
+Der Connector nutzt das Webhook-System von Contentful. Wenn sich Inhalte in Contentful ändern, wird ein Webhook ausgelöst, der eine Neuindizierung in AACsearch anstößt.
+
+```
+Contentful Entry Created → Webhook → AACsearch Connector → Index Updated
+Contentful Entry Updated → Webhook → AACsearch Connector → Index Updated
+Contentful Entry Deleted → Webhook → AACsearch Connector → Index Removed
+Contentful Entry Published → Webhook → AACsearch Connector → Made Searchable
+Contentful Entry Unpublished → Webhook → AACsearch Connector → Removed from Search
+```
+
+### Content-Modell-Mapping
+
+Das Content-Modell von Contentful ist flexibel — Einträge können verschiedene Inhaltstypen mit unterschiedlichen Feldstrukturen haben. Der Connector ordnet jeden Inhaltstyp einer Sammlung zu:
+
+```json
+{
+	"contentTypes": [
+		{
+			"contentfulType": "blogPost",
+			"searchCollection": "blog_posts",
+			"mapping": {
+				"title": { "from": "fields.title", "type": "string", "boost": 2 },
+				"slug": { "from": "fields.slug", "type": "string" },
+				"body": { "from": "fields.body", "type": "string" },
+				"author": { "from": "fields.author.fields.name", "type": "string" },
+				"tags": { "from": "fields.tags", "type": "string[]", "facet": true },
+				"publishedAt": { "from": "sys.publishedAt", "type": "string" },
+				"featuredImage": {
+					"from": "fields.featuredImage.fields.file.url",
+					"type": "string"
+				}
+			},
+			"filters": {
+				"published": true
+			}
+		}
+	]
+}
+```
+
+### Sprachbewusste Suche
+
+Contentful bietet erstklassige Lokalisierungsunterstützung. Der Connector verarbeitet dies wie folgt:
+
+1. Erstellung separater Dokumente pro Sprache (z. B. `blog_post_en`, `blog_post_de`, `blog_post_fr`)
+2. Nutzung von AACsearch `filter_by` für sprachbasierte Abfragen
+3. Unterstützung von Fallback-Sprachen, wenn Inhalte in der angeforderten Sprache nicht verfügbar sind
+
+```typescript
+// Client-seitige Suche für eine bestimmte Sprache
+const results = await aacsearch.search({
+	collection: "blog_posts",
+	q: "Suchanfrage",
+	filter_by: `locale:=en`,
+});
+```
+
+## Einrichten des Connectors
+
+1. **Erstellen Sie einen Webhook** in Contentful, der auf Ihren AACsearch-Endpunkt zeigt
+2. **Wählen Sie Ereignisse** aus, auf die gehört werden soll: Eintrag veröffentlichen, zurückziehen, löschen
+3. **Konfigurieren Sie das Mapping** im AACsearch-Dashboard
+4. **Führen Sie die Erstsynchronisierung durch** — importiert alle vorhandenen veröffentlichten Inhalte
+5. **Gehen Sie live** — der Webhook hält alles synchron
+
+## Anwendungsfälle
+
+- **Enterprise-Dokumentationsportale** — Contentful verwaltet die Inhalte, AACsearch die Suche
+- **Multi-Region E-Commerce** — sprachbewusste Produktsuche über Märkte hinweg
+- **Content-Marketing-Seiten** — Blog-Suche mit Tag- und Author-Facettierung
+- **Wissensdatenbanken** — Suche über Artikel, Anleitungen und Tutorials, die in Contentful verwaltet werden
+
+## Webhook-Sicherheit
+
+Der Connector validiert eingehende Webhooks mittels Signaturprüfung von Contentful:
+
+```typescript
+import crypto from "crypto";
+
+function verifyContentfulWebhook(payload: string, signature: string, secret: string): boolean {
+	const expected = crypto.createHmac("sha256", secret).update(payload).digest("hex");
+	return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+}
+```
+
+---
+
+_AACsearch Contentful Connector befindet sich in der Entwicklung. [Tragen Sie sich in die Warteliste ein](https://aacsearch.com) für frühen Zugang._

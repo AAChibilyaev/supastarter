@@ -94,6 +94,18 @@ export const SearchIndexSynonymScalarFieldEnumSchema = z.enum(['id', 'indexId', 
 
 export type SearchIndexSynonymScalarFieldEnum = z.infer<typeof SearchIndexSynonymScalarFieldEnumSchema>;
 
+// File: GlobalSynonymSetScalarFieldEnum.schema.ts
+
+export const GlobalSynonymSetScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'name', 'root', 'synonyms', 'locale', 'scope', 'createdAt', 'updatedAt'])
+
+export type GlobalSynonymSetScalarFieldEnum = z.infer<typeof GlobalSynonymSetScalarFieldEnumSchema>;
+
+// File: GlobalSynonymSetCollectionScalarFieldEnum.schema.ts
+
+export const GlobalSynonymSetCollectionScalarFieldEnumSchema = z.enum(['id', 'synonymSetId', 'indexId', 'organizationId'])
+
+export type GlobalSynonymSetCollectionScalarFieldEnum = z.infer<typeof GlobalSynonymSetCollectionScalarFieldEnumSchema>;
+
 // File: SearchApiKeyScalarFieldEnum.schema.ts
 
 export const SearchApiKeyScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'name', 'prefix', 'hash', 'scopes', 'allowedOrigins', 'rateLimitPerMinute', 'expiresAt', 'revokedAt', 'lastUsedAt', 'createdAt'])
@@ -629,6 +641,35 @@ export const SearchIndexSynonymSchema = z.object({
 });
 
 export type SearchIndexSynonymType = z.infer<typeof SearchIndexSynonymSchema>;
+
+
+// File: GlobalSynonymSet.schema.ts
+
+export const GlobalSynonymSetSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  name: z.string(),
+  root: z.string(),
+  synonyms: z.array(z.string()),
+  locale: z.string().default("en").nullish(),
+  scope: z.string().default("all"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type GlobalSynonymSetType = z.infer<typeof GlobalSynonymSetSchema>;
+
+
+// File: GlobalSynonymSetCollection.schema.ts
+
+export const GlobalSynonymSetCollectionSchema = z.object({
+  id: z.string(),
+  synonymSetId: z.string(),
+  indexId: z.string(),
+  organizationId: z.string(),
+});
+
+export type GlobalSynonymSetCollectionType = z.infer<typeof GlobalSynonymSetCollectionSchema>;
 
 
 // File: SearchApiKey.schema.ts

@@ -2,7 +2,7 @@ import "server-only";
 import { logger } from "@repo/logs";
 
 import { config } from "../config";
-import { getTypesenseClient } from "./client";
+import { getTypesenseClientForOrg } from "./client";
 import {
 	createPhysicalCollection,
 	dropOldVersions,
@@ -43,7 +43,7 @@ export interface ReindexResult {
  * worker so the request doesn't block.
  */
 export async function reindexCollection(input: ReindexInput): Promise<ReindexResult> {
-	const client = getTypesenseClient();
+	const client = await getTypesenseClientForOrg(input.organizationId);
 	const newVersion = input.currentVersion + 1;
 	const oldName = physicalCollectionName(input.organizationId, input.slug, input.currentVersion);
 	const newName = physicalCollectionName(input.organizationId, input.slug, newVersion);

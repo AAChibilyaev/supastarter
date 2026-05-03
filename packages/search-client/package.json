@@ -1,7 +1,7 @@
 {
 	"name": "@aacsearch/client",
 	"version": "0.1.0",
-	"description": "AACSearch TypeScript SDK — browser-safe SearchClient + server-side AdminClient for the v1 REST API",
+	"description": "AACSearch TypeScript SDK — browser-safe SearchClient + server-side AdminClient for the v1 and v2 REST API",
 	"keywords": [
 		"aacsearch",
 		"sdk",

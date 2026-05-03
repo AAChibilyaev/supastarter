@@ -652,6 +652,21 @@
 				"email": "E-Mail",
 				"source": "Quelle",
 				"timestamp": "Zeitstempel"
+			},
+			"provisioning": {
+				"title": "Gruppen→Rollen-Zuordnung",
+				"addRule": "Regel hinzufügen",
+				"addRuleDescription": "Ordnen Sie eine IdP-Gruppe einer Organisationsrolle mit Deaktivierungsverhalten zu.",
+				"editRule": "Regel bearbeiten",
+				"groupName": "Gruppenname",
+				"targetRole": "Zielrolle",
+				"deprovisionAction": "Deaktivierungsaktion",
+				"deprovisionNote": "Deaktivierungsverhalten",
+				"deprovisionNoteDescription": "Wenn ein Benutzer aus dieser Gruppe in Ihrem IdP entfernt wird, wird die ausgewählte Aktion automatisch angewendet.",
+				"noRules": "Keine Bereitstellungsregeln konfiguriert",
+				"noRulesDescription": "Fügen Sie Regeln hinzu, um Identitätsanbietergruppen Organisationsrollen zuzuordnen und das Deaktivierungsverhalten zu definieren.",
+				"deleteRule": "Bereitstellungsregel löschen?",
+				"deleteRuleDescription": "Dies entfernt die Zuordnungsregel. Vorhandene Benutzerrollen bleiben unberührt."
 			}
 		},
 		"auditLog": {

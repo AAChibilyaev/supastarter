@@ -26,13 +26,16 @@ Cree un token de conector desde **Panel → Conectores → Nuevo token de conect
 
 ## Módulos CMS compatibles
 
-| Plataforma              | Estado                | Notas                                                              |
-| ----------------------- | --------------------- | ------------------------------------------------------------------ |
-| PrestaShop 8.x          | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada |
-| 1C-Bitrix (autoalojado) | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada |
-| API directa             | Disponible            | Cualquier sistema puede llamar a la API de conector con un token   |
+| Plataforma              | Estado                | Notas                                                                  |
+| ----------------------- | --------------------- | ---------------------------------------------------------------------- |
+| Strapi 5.x              | Alpha                 | Plugin npm con lifecycle hooks; [documentación](/docs/connectors/strapi) |
+| Contentful              | Guía de integración   | Sincronización basada en webhook (sin plugin); [documentación](/docs/connectors/contentful) |
+| Sanity.io               | Guía de integración   | Exportación GROQ + listener en tiempo real; [documentación](/docs/connectors/sanity) |
+| PrestaShop 8.x          | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada     |
+| 1C-Bitrix (autoalojado) | Vista previa temprana | El esqueleto del módulo PHP existe; pista de confirmación separada     |
+| API directa             | Disponible            | Cualquier sistema puede llamar a la API de conector con un token       |
 
-Los módulos PrestaShop y Bitrix se rastrean por separado del monorepo principal de Node.js. Son esqueletos funcionales — los flujos principales de sincronización y autenticación funcionan, pero el empaquetado de instalación y el refinamiento de la interfaz de administración aún están en progreso.
+El plugin de Strapi es un paquete npm que se instala directamente en su proyecto Strapi, proporcionando lifecycle hooks, mapeo de tipos de contenido y un panel de configuración de administración. Para Contentful y Sanity.io, AACsearch se integra a nivel de webhook/consulta GROQ — no se necesita instalación de plugin, solo configuración en el panel del CMS. Los módulos PrestaShop y Bitrix se rastrean por separado del monorepo principal de Node.js.
 
 ## Cómo empezar
 

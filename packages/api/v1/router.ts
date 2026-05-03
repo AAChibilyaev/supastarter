@@ -62,6 +62,7 @@ import { spellCheckApp } from "./spell-check";
 import { suggestApp } from "./suggest";
 import { syncJobsApp } from "./sync-jobs";
 import { synonymsApp } from "./synonyms";
+import { globalSynonymSetsApp } from "./global-synonym-sets";
 
 const v1Router = new Hono()
 	.route("/", projectsApp)
@@ -73,6 +74,7 @@ const v1Router = new Hono()
 	.route("/", keysApp)
 	.route("/", analyticsApp)
 	.route("/", synonymsApp)
+	.route("/", globalSynonymSetsApp)
 	.route("/", billingApp)
 	.route("/", recommendationsApp)
 	.route("/", reindexApp)

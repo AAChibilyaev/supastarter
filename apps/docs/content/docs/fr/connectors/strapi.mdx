@@ -1,0 +1,206 @@
+---
+title: "Plugin Strapi"
+description: "Installer et configurer le plugin AACsearch pour Strapi v5 pour la synchronisation de contenu en temps réel."
+---
+
+> **Statut : Aperçu anticipé.** Le squelette du plugin est fonctionnel — les hooks de cycle de vie, le panneau d'administration, le mappage de champs et la réindexation manuelle fonctionnent tous. L'emballage d'installation et la finition de l'UI d'administration sont encore en cours. Attendez-vous à des imperfections.
+
+Le plugin AACsearch pour Strapi (`@aacsearch/strapi-plugin`) intègre votre CMS Strapi v5 avec AACsearch. Il gère :
+
+- La synchronisation des entrées de contenu vers AACsearch via des hooks de cycle de vie (`afterCreate`, `afterUpdate`, `afterDelete`)
+- Le mappage de champs — choisissez quels champs Strapi indexer et renommez-les
+- Le mappage de types de contenu — configurez plusieurs types de contenu avec différents slugs d'index
+- La réindexation manuelle — réindexation en un clic de toutes les entrées pour n'importe quel type de contenu
+- L'injection de widget — intégrez le widget de recherche hébergé dans votre frontend
+
+## Prérequis
+
+- Strapi v5.x
+- Node.js 18 ou supérieur
+- Un compte AACsearch avec au moins un index de recherche créé
+- Un token de connecteur (`ss_connector_*`) lié à cet index
+
+## Structure des fichiers du plugin
+
+```
+packages/strapi-plugin/
+  package.json                             # Descripteur du paquet — nom, version, exportations
+  src/
+    server/
+      index.ts                             # Point d'entrée du plugin — register/bootstrap/destroy
+      lifecycles/
+        index.ts                           # Enregistrement des hooks de cycle de vie (afterCreate/Update/Delete)
+      services/
+        index.ts                           # Service de persistance de configuration (store strapi)
+        aacsearch.ts                       # Service de synchronisation — mappage de documents, communication API
+        client.ts                          # Client HTTP — appels à l'API Connecteur
+      controllers/
+        aacsearch.ts                       # Points de terminaison de l'API d'administration (get/update config, test, reindex)
+    admin/
+      index.ts                             # Enregistrement du panneau d'administration
+      pages/
+        SettingsPage.tsx                   # UI des paramètres — composants React
+```
+
+## Étapes d'installation
+
+### 1. Installer le plugin
+
+```bash
+npm install @aacsearch/strapi-plugin
+```
+
+Ou avec votre gestionnaire de paquets préféré :
+
+```bash
+yarn add @aacsearch/strapi-plugin
+pnpm add @aacsearch/strapi-plugin
+```
+
+### 2. Configurer via le panneau d'administration
+
+Accédez à **Paramètres → AACsearch Sync** dans votre panneau d'administration Strapi et remplissez :
+
+| Champ             | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| URL API AACsearch | URL de base de votre instance AACsearch (ex. `https://api.aacsearch.com`) |
+| Token connecteur  | Le token `ss_connector_*` créé dans Tableau de bord → Connecteurs         |
+| Mode débogage     | Écrire des logs détaillés dans le logger Strapi                           |
+
+Après avoir saisi les informations de connexion, cliquez sur **Tester la connexion** pour vérifier.
+
+### 3. Ajouter des types de contenu
+
+Cliquez sur **Ajouter un type de contenu** et saisissez l'UID du type de contenu (ex. `api::product.product`). Pour chaque type de contenu, définissez le **Slug d'index** — celui-ci correspond au nom de l'index de recherche dans AACsearch.
+
+Le plugin génère automatiquement un slug par défaut à partir du nom du type de contenu (ex. `api::product.product` → `product`).
+
+### 4. Configuration avancée (fichier de configuration du plugin)
+
+Pour un mappage de champs avancé, créez ou modifiez `config/plugins.js` (ou `config/plugins.ts`) dans votre projet Strapi :
+
+```javascript
+module.exports = {
+	aacsearch: {
+		enabled: true,
+		config: {
+			baseUrl: process.env.AACSEARCH_URL,
+			token: process.env.AACSEARCH_TOKEN,
+			collections: {
+				"api::product.product": {
+					indexSlug: "products",
+					fieldMapping: {
+						name: "title",
+						description: "body",
+						price: "price",
+					},
+					excludeFields: ["createdBy", "updatedBy"],
+				},
+				"api::category.category": {
+					indexSlug: "categories",
+				},
+			},
+		},
+	},
+};
+```
+
+### 5. Exécuter une réindexation complète
+
+Sur la page des paramètres d'administration, cliquez sur **Réindexer** à côté de n'importe quel type de contenu configuré. Cela lit toutes les entrées de Strapi, applique vos mappages de champs et les envoie à AACsearch comme une synchronisation complète par lots via `POST /api/projects/strapi/sync/full`.
+
+Les grandes collections peuvent prendre plusieurs minutes. La progression et les éventuelles erreurs sont affichées dans les logs Strapi.
+
+## Hooks de cycle de vie
+
+Le plugin enregistre des hooks de cycle de vie Strapi pour les synchronisations delta automatiques. Ceux-ci sont enregistrés pendant la phase `register` du plugin en utilisant `strapi.db.lifecycles.subscribe` :
+
+| Hook          | Déclencheur                                                                        |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `afterCreate` | Se déclenche après la création d'une nouvelle entrée — synchronisation de création |
+| `afterUpdate` | Se déclenche après la mise à jour d'une entrée — synchronisation de mise à jour    |
+| `afterDelete` | Se déclenche après la suppression d'une entrée — envoie une demande de suppression |
+
+Les hooks sont enregistrés pour chaque type de contenu configuré dans `src/server/lifecycles/index.ts`. Lorsqu'un événement de cycle de vie se déclenche, la fonction `syncDocument` dans `aacsearch.ts` lit la configuration du plugin, recherche les paramètres de collection du type de contenu, applique les mappages de champs et appelle l'API Connecteur via `AacSearchClient`.
+
+## Mappage des types de contenu
+
+Chaque type de contenu dans Strapi correspond à un index de recherche dans AACsearch. Le mappage est défini dans un `CollectionConfig` :
+
+| Propriété       | Type                               | Description                                                       |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------- |
+| `indexSlug`     | string                             | Le slug d'index AACsearch (obligatoire)                           |
+| `idColumn`      | string (optionnel)                 | Colonne d'ID du document (par défaut : `id`)                      |
+| `fieldMapping`  | Record<string, string> (optionnel) | Mappe les noms de champs Strapi aux champs de documents AACsearch |
+| `includeFields` | string[] (optionnel)               | Inclure uniquement ces champs dans le document                    |
+| `excludeFields` | string[] (optionnel)               | Exclure ces champs du document                                    |
+
+### Exemple de mappage de champs
+
+```json
+{
+	"fieldMapping": {
+		"name": "title",
+		"description": "body",
+		"price": "price"
+	}
+}
+```
+
+Cela mappe le champ Strapi `name` à `title` dans le document AACsearch, `description` à `body` et `price` à `price`. Les champs qui ne sont pas dans le mappage sont exclus sauf si `includeFields` est défini.
+
+## Points de terminaison de l'API du plugin
+
+Le plugin expose ces points de terminaison de l'API d'administration :
+
+| Endpoint                             | Méthode | Description                                 |
+| ------------------------------------ | ------- | ------------------------------------------- |
+| `/aacsearch/get-config`              | GET     | Obtenir la configuration actuelle du plugin |
+| `/aacsearch/update-config`           | POST    | Mettre à jour la configuration du plugin    |
+| `/aacsearch/test-connection`         | GET     | Tester la connexion AACsearch               |
+| `/aacsearch/reindex/:contentTypeUid` | POST    | Réindexation complète d'un type de contenu  |
+
+## Injection du widget
+
+Après avoir configuré le plugin, intégrez le widget hébergé AACsearch dans votre frontend en ajoutant l'extrait suivant :
+
+```html
+<script
+	src="https://app.aacsearch.com/api/widget/widget.js"
+	data-base-url="https://app.aacsearch.com"
+	data-api-key="ss_search_***"
+	data-index-slug="products"
+	data-container="#aac-search"
+	data-theme="auto"
+></script>
+```
+
+La valeur `data-api-key` est une clé `ss_search_*` distincte — pas le token de connecteur. La clé de recherche peut être en lecture seule et peut être intégrée en toute sécurité dans le navigateur.
+
+Vous devez également ajouter l'élément conteneur à votre modèle frontend :
+
+```html
+<div id="aac-search"></div>
+```
+
+Obtenez l'extrait d'installation depuis l'onglet **Tableau de bord → Search → Widget**.
+
+## Dépannage
+
+**Le test de connexion échoue avec `invalid_or_revoked_key`**
+Vérifiez que le token de connecteur a été copié correctement et n'a pas été révoqué dans le tableau de bord AACsearch. Générez un nouveau token si nécessaire.
+
+**La réindexation se termine mais les entrées n'apparaissent pas dans la recherche**
+La synchronisation met les documents en file d'attente dans `SearchIngestBuffer` ; l'indexation est asynchrone. Attendez 30 à 60 secondes et essayez une recherche test. Si les documents n'apparaissent toujours pas, vérifiez l'état du pipeline d'ingestion dans Tableau de bord → Overview.
+
+**Les hooks de cycle de vie ne se déclenchent pas**
+Vérifiez que l'UID du type de contenu est correctement configuré dans les paramètres du plugin. Consultez les logs Strapi pour toute erreur `[aacsearch]` lors de l'enregistrement du cycle de vie. Assurez-vous que le plugin est activé et que la phase `register` s'est terminée avec succès.
+
+**Le widget n'apparaît pas sur le frontend**
+Confirmez que l'élément conteneur `#aac-search` existe dans votre modèle frontend. Vérifiez que la valeur `data-api-key` est une clé `ss_search_*` valide (pas le token de connecteur).
+
+## Pages associées
+
+- [Vue d'ensemble des connecteurs](/docs/connectors/overview)
+- [Cycle de vie de l'API Connecteur](/docs/connectors/connector-api-lifecycle)
+- [Vue d'ensemble du widget](/docs/connectors/widget-overview)

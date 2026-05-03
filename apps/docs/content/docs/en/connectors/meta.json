@@ -6,6 +6,7 @@
 		"prestashop",
 		"bitrix",
 		"widget-overview",
-		"widget-analytics-events"
+		"widget-analytics-events",
+		"supabase-sync"
 	]
 }

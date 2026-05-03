@@ -1,0 +1,43 @@
+{
+	"name": "@aacsearch/supabase-sync",
+	"version": "0.1.0",
+	"description": "Supabase real-time sync connector for AACsearch — subscribe to Supabase Realtime changes and push them to AACsearch Engine",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsc",
+		"type-check": "tsc --noEmit",
+		"prepublish": "pnpm build"
+	},
+	"keywords": [
+		"aacsearch",
+		"supabase",
+		"realtime",
+		"sync",
+		"connector",
+		"search"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nousresearch/aacsearch.git"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"@supabase/realtime-js": "^2.11.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"typescript": "^6.0.0"
+	}
+}

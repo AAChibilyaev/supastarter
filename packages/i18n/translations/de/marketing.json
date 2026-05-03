@@ -587,6 +587,14 @@
 				"description": "Semantische Suche über OpenAI-Embeddings. Hybrides BM25 + Vektor-Ranking. Bereits in Prozeduren implementiert.",
 				"status": "shipped"
 			}
+		},
+		"shippedTitle": "Bereits verfügbar",
+		"inProgressTitle": "In Entwicklung",
+		"plannedTitle": "Geplant",
+		"feedback": {
+			"title": "Haben Sie eine Idee?",
+			"description": "Wir lesen jede Feature-Anfrage. Teilen Sie uns mit, was AACsearch für Sie besser machen würde.",
+			"cta": "Feature vorschlagen"
 		}
 	},
 	"careersPage": {

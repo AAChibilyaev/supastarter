@@ -27,6 +27,8 @@ export const createIndex = protectedProcedure
 			displayName: z.string().min(1).max(120),
 			fields: z.array(searchFieldSchema).min(1),
 			defaultSortingField: z.string().optional(),
+			tokenSeparators: z.array(z.string().min(1)).optional(),
+			symbolTokensToIndex: z.array(z.string().min(1)).optional(),
 		}),
 	)
 	.output(
@@ -81,6 +83,8 @@ export const createIndex = protectedProcedure
 				version: created.version,
 				fields: input.fields,
 				defaultSortingField: input.defaultSortingField,
+				tokenSeparators: input.tokenSeparators,
+				symbolTokensToIndex: input.symbolTokensToIndex,
 			});
 			await ensureAlias(owner.ownerId, input.slug, created.version);
 		} catch (error) {

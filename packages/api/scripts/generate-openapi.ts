@@ -5,10 +5,12 @@
  * Output: packages/api/openapi.yaml
  */
 
-import { generateOpenApiSpec } from "../v1/openapi";
-import { dump } from "js-yaml";
-import { resolve } from "node:path";
 import { statSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { dump } from "js-yaml";
+
+import { generateOpenApiSpec } from "../v1/openapi";
 
 const __dirname = import.meta.dirname ?? new URL(".", import.meta.url).pathname;
 

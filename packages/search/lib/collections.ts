@@ -36,6 +36,10 @@ export interface CreatePhysicalCollectionInput {
 	version: number;
 	fields: CollectionFieldInput[];
 	defaultSortingField?: string;
+	/** Custom token separators (e.g. "+-@#"). Allows searching "C++", "C#", "hello@world" */
+	tokenSeparators?: string[];
+	/** Symbols to index as part of tokens (e.g. "+#@."). Overrides tokenSeparators for specific chars */
+	symbolTokensToIndex?: string[];
 }
 
 export async function createPhysicalCollection(input: CreatePhysicalCollectionInput) {
@@ -56,6 +60,12 @@ export async function createPhysicalCollection(input: CreatePhysicalCollectionIn
 		fields: [tenantField, ...userFields],
 		default_sorting_field: input.defaultSortingField,
 		enable_nested_fields: true,
+		...(input.tokenSeparators !== undefined && {
+			token_separators: input.tokenSeparators,
+		}),
+		...(input.symbolTokensToIndex !== undefined && {
+			symbol_tokens_to_index: input.symbolTokensToIndex,
+		}),
 	} as unknown as CollectionCreateSchema;
 
 	return client.collections().create(schema);

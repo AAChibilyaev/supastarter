@@ -587,6 +587,14 @@
 				"description": "Búsqueda semántica mediante embeddings de OpenAI. Ranking híbrido BM25 + vector. Ya implementado en los procedimientos.",
 				"status": "shipped"
 			}
+		},
+		"shippedTitle": "Enviado",
+		"inProgressTitle": "En progreso",
+		"plannedTitle": "Planificado",
+		"feedback": {
+			"title": "¿Tienes una idea?",
+			"description": "Leemos cada solicitud de función. Cuéntanos qué mejoraría AACsearch para ti.",
+			"cta": "Sugerir función"
 		}
 	},
 	"careersPage": {

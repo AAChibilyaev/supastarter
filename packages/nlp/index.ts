@@ -7,3 +7,4 @@ export * from "./spell/distances";
 export * from "./spell/corrector";
 export * from "./spell/ngrams";
 export * from "./phonetic/index";
+export * from "./synonyms/index";

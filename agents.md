@@ -1704,6 +1704,68 @@ To check whether embeddings exist, inspect `.gitnexus/meta.json` — the `stats.
 
 > Claude Code users: A PostToolUse hook handles this automatically after `git commit` and `git merge`.
 
+## 📋 Consolidated Project Rules
+
+### 🔴 Branding Constraint — CRITICAL
+
+In ALL customer-facing content (EPIC titles, descriptions, SaaS UI, blog, docs, marketing):
+
+- ONLY use **"AACsearch"** or **"AACsearch Engine"**
+- NO: Typesense, Algolia, Elasticsearch, Meilisearch, Pinecone, Weaviate, Qdrant, Milvus
+- NO: self-hosted, open source
+- Internal code (packages/, env vars, Prisma models) CAN use vendor names
+
+### 🔒 Code Quality — HARD RULES
+
+- **DRY** — Grep codebase FIRST. Reuse before create. No copy-paste.
+- **KISS** — Simple > clever. Max 3 nesting levels. One file = one responsibility.
+- **Strict TypeScript** — No `any`, no `@ts-ignore`, no `@ts-expect-error`. Use `as const`, `satisfies`, discriminated unions. No enums — use `as const` objects or string unions.
+- **No console.log** — use `logger` from `@repo/logs`.
+- **i18n always** — every user-visible string MUST have 5 locale keys (en, de, es, fr, ru). Skipping `ru` = production bug.
+- **🚨 ZERO TOLERANCE**: 0 TypeScript errors, 0 lint errors, 0 lint warnings — mandatory before any commit. Blocked otherwise.
+
+### 💳 Billing — Stripe + Tochka Bank RU
+
+- **Stripe**: international subscriptions (USD), Customer Portal, invoices, cards
+- **Tochka Bank**: Russian payments (RUB), AI Wallet top-up
+- **RU locale**: prices in RUB (conversion via FxRate or separate RUB price IDs), AiWallet in RUB kopecks (BigInt)
+- Key models: Purchase, AiWallet, AiWalletTransaction, WalletTopupOrder, PaymentProviderEvent
+- Key oRPC: paymentsRouter._, billingWalletRouter._
+
+### 🏗️ Domain Ownership — 10 Agents
+
+```mermaid
+graph TD
+    CEO --> CTO
+    CEO --> CMO
+    CEO --> DocsAuthor
+    CTO --> BackendDev
+    CTO --> Frontend
+    CTO --> AIML
+    CTO --> PHPDev
+    CTO --> QA
+    CTO --> Infra
+```
+
+| Agent                 | Domain                                                    |
+| --------------------- | --------------------------------------------------------- |
+| **CEO**               | Strategy, product prioritization, cross-functional        |
+| **CTO**               | Architecture, search engine, API, payments, integration   |
+| **Backend/Dev**       | API backend, search core, MCP server, payments backend    |
+| **Frontend Engineer** | SaaS UI, Widget UI, Marketing UI, shadcn components       |
+| **AI/ML Engineer**    | NLP Pipeline, Vector Search, RAG, Recommendations         |
+| **CMO**               | Marketing content, blog, SEO, comparison pages, 5 locales |
+| **PHP Dev**           | Bitrix + PrestaShop CMS modules                           |
+| **QA**                | E2E tests, Playwright, regression, test coverage          |
+| **Docs Author**       | Documentation site (apps/docs), API ref, SDK guides       |
+| **Infrastructure**    | CI/CD, Coolify deploy, Docker, monitoring, backups        |
+
+### ⏱️ Cooldown Schedule
+
+- **60s**: CTO, Frontend, Backend/Dev (main workers)
+- **120s**: CEO, CMO, PHP Dev, QA, Docs Author, Infrastructure
+- **180s**: AI/ML Engineer (heavy tasks, runs rarely)
+
 ## CLI
 
 | Task                                         | Read this skill file                                        |

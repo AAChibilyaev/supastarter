@@ -105,20 +105,20 @@ print("Document count: \(stats.documentCount)")
 
 ## API Coverage
 
-| Feature | Status |
-|---------|--------|
-| Search (single index) | ✅ |
-| Multi-search | ✅ |
-| Document CRUD | ✅ |
-| Batch upsert | ✅ |
-| Synonyms | ✅ |
-| Curations | ✅ |
-| Index management | ✅ |
-| Index stats | ✅ |
-| Analytics | 🔜 |
-| API Keys | 🔜 |
-| Async/await | ✅ |
-| Codable models | ✅ |
+| Feature               | Status |
+| --------------------- | ------ |
+| Search (single index) | ✅     |
+| Multi-search          | ✅     |
+| Document CRUD         | ✅     |
+| Batch upsert          | ✅     |
+| Synonyms              | ✅     |
+| Curations             | ✅     |
+| Index management      | ✅     |
+| Index stats           | ✅     |
+| Analytics             | 🔜     |
+| API Keys              | 🔜     |
+| Async/await           | ✅     |
+| Codable models        | ✅     |
 
 ## License
 

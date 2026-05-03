@@ -42,6 +42,8 @@ export const getSchema = protectedProcedure
 			defaultSortingField: z.string().nullable(),
 			enableNestedFields: z.boolean(),
 			numDocuments: z.number(),
+			tokenSeparators: z.array(z.string()).optional(),
+			symbolTokensToIndex: z.array(z.string()).optional(),
 		}),
 	)
 	.handler(async ({ input: { organizationId, slug }, context: { user } }) => {
@@ -76,6 +78,11 @@ export const getSchema = protectedProcedure
 			defaultSortingField: fullCollection.default_sorting_field ?? null,
 			enableNestedFields: fullCollection.enable_nested_fields ?? false,
 			numDocuments: fullCollection.num_documents ?? 0,
+			tokenSeparators: (fullCollection as Record<string, unknown>).token_separators as
+				| string[]
+				| undefined,
+			symbolTokensToIndex: (fullCollection as Record<string, unknown>)
+				.symbol_tokens_to_index as string[] | undefined,
 		};
 	});
 
@@ -94,6 +101,8 @@ export const updateSchema = protectedProcedure
 			slug: searchIndexSlugSchema,
 			fields: z.array(searchFieldSchema),
 			defaultSortingField: z.string().optional(),
+			tokenSeparators: z.array(z.string().min(1)).optional(),
+			symbolTokensToIndex: z.array(z.string().min(1)).optional(),
 			triggerReindex: z.boolean().optional().default(false),
 		}),
 	)
@@ -117,6 +126,12 @@ export const updateSchema = protectedProcedure
 			const schema = {
 				fields: fields as unknown[],
 				...(defaultSortingField ? { defaultSortingField } : {}),
+				...(input.tokenSeparators !== undefined
+					? { tokenSeparators: input.tokenSeparators }
+					: {}),
+				...(input.symbolTokensToIndex !== undefined
+					? { symbolTokensToIndex: input.symbolTokensToIndex }
+					: {}),
 			};
 
 			await db.searchIndex.update({

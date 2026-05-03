@@ -31,7 +31,7 @@ export default async function PricingPage(props: { params: Promise<{ locale: str
 					</p>
 				</div>
 			</section>
-			<div className="flex justify-center py-6 border-b border-border/60">
+			<div className="py-6 flex justify-center border-b border-border/60">
 				<TrustBadge />
 			</div>
 			<PricingPlans />

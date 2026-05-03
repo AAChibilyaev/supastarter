@@ -23,6 +23,7 @@ import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
+import { exportIndexDocuments } from "./procedures/export-documents";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
@@ -86,6 +87,7 @@ export const searchRouter = {
 	listIndexes,
 	createIndex,
 	deleteIndex,
+	exportDocuments: exportIndexDocuments,
 	truncateIndex,
 	importDocuments,
 	importJobs,

@@ -108,6 +108,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { EmptyState } from "../cards/EmptyState";
+import { ExportDialog } from "../dialogs/ExportDialog";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -247,20 +248,6 @@ function formatCellValue(value: unknown): string {
 function truncate(str: string, max = 60): string {
 	if (str.length <= max) return str;
 	return `${str.slice(0, max)}\u2026`;
-}
-
-function downloadCSV(filename: string, rows: Record<string, unknown>[]) {
-	if (rows.length === 0) return;
-	const csv = Papa.unparse(rows);
-	const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = filename;
-	document.body.appendChild(a);
-	a.click();
-	document.body.removeChild(a);
-	URL.revokeObjectURL(url);
 }
 
 // ─── Skeleton Rows ──────────────────────────────────────────────────────────
@@ -954,7 +941,14 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		[rows, rowSelection],
 	);
 
+	const selectedDocuments = useMemo(
+		() => selectedRows.map((r) => ({ id: r.id, ...r.document })),
+		[selectedRows],
+	);
+
 	const selectedIds = useMemo(() => selectedRows.map((r) => r.id), [selectedRows]);
+
+	const hasFilter = filterField !== "" && filterValue !== "";
 
 	const handleBulkDelete = () => {
 		if (selectedIds.length === 0) return;
@@ -1021,14 +1015,6 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 					error instanceof Error ? error.message : t("search.documents.bulkEditError"),
 				);
 			});
-	};
-
-	const handleBulkExport = () => {
-		const data = selectedIds.length > 0 ? selectedRows : rows;
-		downloadCSV(
-			`documents-${slug}-page-${page}.csv`,
-			data.map((r) => ({ id: r.id, ...r.document })),
-		);
 	};
 
 	const handleClearSelection = () => {
@@ -1312,11 +1298,16 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						</DialogContent>
 					</Dialog>
 
-					{/* Export CSV */}
-					<Button variant="ghost" size="sm" onClick={handleBulkExport}>
-						<DownloadIcon className="size-3.5" />
-						{t("search.documents.exportCsv")}
-					</Button>
+					{/* Export Dialog */}
+					<ExportDialog
+						organizationId={organizationId}
+						slug={slug}
+						selectedCount={selectedIds.length}
+						selectedDocuments={selectedDocuments}
+						totalCount={totalFound}
+						hasFilter={hasFilter}
+						filterBy={buildFilterByExpression() || undefined}
+					/>
 
 					{/* Add Row */}
 					<Button
@@ -1615,10 +1606,21 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						<span className="text-sm mr-2 text-foreground/60">
 							{t("search.documents.selected", { count: selectedIds.length })}
 						</span>
-						<Button variant="ghost" size="sm" onClick={handleBulkExport}>
-							<DownloadIcon className="size-3.5" />
-							{t("search.documents.exportSelected")}
-						</Button>
+						<ExportDialog
+							organizationId={organizationId}
+							slug={slug}
+							selectedCount={selectedIds.length}
+							selectedDocuments={selectedDocuments}
+							totalCount={totalFound}
+							hasFilter={hasFilter}
+							filterBy={buildFilterByExpression() || undefined}
+							trigger={
+								<Button variant="ghost" size="sm">
+									<DownloadIcon className="size-3.5" />
+									{t("search.documents.exportSelected")}
+								</Button>
+							}
+						/>
 						<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
 							<Trash2Icon className="size-3.5" />
 							{t("search.documents.deleteSelected")}

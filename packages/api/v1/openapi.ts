@@ -814,10 +814,10 @@ export function generateOpenApiSpec() {
 											type: "string",
 											description: "Custom end tag for field highlighting.",
 										},
-										overrideTags: {
-											type: "string",
-											description:
-												"Tags for curation/override results, comma-separated.",
+									curationTags: {
+									type: "string",
+									description:
+										"Tags for curation results, comma-separated.",
 										},
 										hybridConfidence: {
 											type: "number",

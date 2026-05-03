@@ -307,7 +307,7 @@ function InlineCellEditor({
 	if (field.type === "bool") {
 		return (
 			<select
-				ref={inputRef as React.RefObject<HTMLSelectElement>}
+				ref={inputRef as unknown as React.RefObject<HTMLSelectElement>}
 				className="h-7 text-sm rounded px-1 w-full border border-ring bg-background focus:outline-hidden"
 				value={editValue}
 				onChange={(e) => setEditValue(e.target.value)}
@@ -367,6 +367,93 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	const [editSheetOpen, setEditSheetOpen] = useState(false);
 	const [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
+
+	// ── Data fetching ───────────────────────────────────────────────────────
+
+	const { data: schemaData, isLoading: schemaLoading } = useQuery(
+		orpc.search.schema.get.queryOptions({
+			input: { organizationId, slug },
+			enabled: !fieldsProp && !!organizationId && !!slug,
+		}),
+	);
+
+	const fields: SchemaField[] = useMemo(
+		() => fieldsProp ?? (schemaData?.fields as SchemaField[] | undefined) ?? [],
+		[fieldsProp, schemaData?.fields],
+	);
+
+	const documentFields = useMemo(
+		() => fields.filter((f) => f.name !== "tenant_id" && f.name !== "id"),
+		[fields],
+	);
+
+	const { data: docsData, isLoading: docsLoading } = useQuery(
+		orpc.search.listDocuments.queryOptions({
+			input: {
+				organizationId,
+				slug,
+				page,
+				perPage,
+				...(debouncedSearch ? { searchQuery: debouncedSearch } : {}),
+			},
+			enabled: !!organizationId && !!slug,
+		}),
+	);
+
+	const rows: DocumentRow[] = useMemo(() => {
+		if (!docsData?.hits) return [];
+		return (docsData.hits as Array<{ document: Record<string, unknown> }>).map((hit) => ({
+			id: (hit.document?.id as string) ?? crypto.randomUUID(),
+			document: hit.document ?? {},
+		}));
+	}, [docsData]);
+
+	const totalFound = docsData?.found ?? 0;
+	const totalPages = Math.max(1, Math.ceil(totalFound / perPage));
+
+	// ── Debounced search ────────────────────────────────────────────────────
+
+	const handleSearchChange = useCallback((value: string) => {
+		setSearchInput(value);
+		if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+		searchTimerRef.current = setTimeout(() => {
+			setDebouncedSearch(value);
+			setPage(1);
+		}, 300);
+	}, []);
+
+	// ── Mutations ───────────────────────────────────────────────────────────
+
+	const importMutation = useMutation({
+		...orpc.search.importDocuments.mutationOptions(),
+		onSuccess: (data) => {
+			toastSuccess(t("search.documents.importSuccess", { count: data.queued }));
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listDocuments.key(),
+			});
+			setImportDialogOpen(false);
+			setImportFile(null);
+			setImportParsed([]);
+		},
+		onError: (error) => {
+			toastError(error instanceof Error ? error.message : t("search.documents.importError"));
+		},
+	});
+
+	const upsertMutation = useMutation({
+		...orpc.search.upsertDocument.mutationOptions(),
+		onSuccess: () => {
+			toastSuccess(t("search.documents.saved"));
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listDocuments.key(),
+			});
+			setEditSheetOpen(false);
+			setEditingDocument(null);
+		},
+		onError: (error) => {
+			toastError(error instanceof Error ? error.message : t("search.documents.saveError"));
+		},
+	});
 
 	// ── Inline cell editing state ────────────────────────────────────────────
 
@@ -497,93 +584,6 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [importFile, setImportFile] = useState<File | null>(null);
 	const [importParsed, setImportParsed] = useState<Record<string, unknown>[]>([]);
-
-	// ── Debounced search ────────────────────────────────────────────────────
-
-	const handleSearchChange = useCallback((value: string) => {
-		setSearchInput(value);
-		if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
-		searchTimerRef.current = setTimeout(() => {
-			setDebouncedSearch(value);
-			setPage(1);
-		}, 300);
-	}, []);
-
-	// ── Data fetching ───────────────────────────────────────────────────────
-
-	const { data: schemaData, isLoading: schemaLoading } = useQuery(
-		orpc.search.schema.get.queryOptions({
-			input: { organizationId, slug },
-			enabled: !fieldsProp && !!organizationId && !!slug,
-		}),
-	);
-
-	const fields: SchemaField[] = useMemo(
-		() => fieldsProp ?? (schemaData?.fields as SchemaField[] | undefined) ?? [],
-		[fieldsProp, schemaData?.fields],
-	);
-
-	const documentFields = useMemo(
-		() => fields.filter((f) => f.name !== "tenant_id" && f.name !== "id"),
-		[fields],
-	);
-
-	const { data: docsData, isLoading: docsLoading } = useQuery(
-		orpc.search.listDocuments.queryOptions({
-			input: {
-				organizationId,
-				slug,
-				page,
-				perPage,
-				...(debouncedSearch ? { searchQuery: debouncedSearch } : {}),
-			},
-			enabled: !!organizationId && !!slug,
-		}),
-	);
-
-	const rows: DocumentRow[] = useMemo(() => {
-		if (!docsData?.hits) return [];
-		return (docsData.hits as Array<{ document: Record<string, unknown> }>).map((hit) => ({
-			id: (hit.document?.id as string) ?? crypto.randomUUID(),
-			document: hit.document ?? {},
-		}));
-	}, [docsData]);
-
-	const totalFound = docsData?.found ?? 0;
-	const totalPages = Math.max(1, Math.ceil(totalFound / perPage));
-
-	// ── Mutations ───────────────────────────────────────────────────────────
-
-	const importMutation = useMutation({
-		...orpc.search.importDocuments.mutationOptions(),
-		onSuccess: (data) => {
-			toastSuccess(t("search.documents.importSuccess", { count: data.queued }));
-			void queryClient.invalidateQueries({
-				queryKey: orpc.search.listDocuments.key(),
-			});
-			setImportDialogOpen(false);
-			setImportFile(null);
-			setImportParsed([]);
-		},
-		onError: (error) => {
-			toastError(error instanceof Error ? error.message : t("search.documents.importError"));
-		},
-	});
-
-	const upsertMutation = useMutation({
-		...orpc.search.upsertDocument.mutationOptions(),
-		onSuccess: () => {
-			toastSuccess(t("search.documents.saved"));
-			void queryClient.invalidateQueries({
-				queryKey: orpc.search.listDocuments.key(),
-			});
-			setEditSheetOpen(false);
-			setEditingDocument(null);
-		},
-		onError: (error) => {
-			toastError(error instanceof Error ? error.message : t("search.documents.saveError"));
-		},
-	});
 
 	// ── TanStack Table ──────────────────────────────────────────────────────
 

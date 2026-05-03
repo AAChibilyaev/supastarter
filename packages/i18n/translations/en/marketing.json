@@ -618,7 +618,16 @@
 		},
 		"vote": "Vote",
 		"voted": "Voted",
-		"votes": "votes"
+		"votes": "votes",
+		"emailCapture": {
+			"title": "Shape what we build next",
+			"description": "Vote to prioritize features and get early access updates. Join 700+ search teams.",
+			"placeholder": "you@company.com",
+			"subscribeAndVote": "Subscribe & Vote",
+			"skipAndVote": "No thanks, just vote",
+			"privacy": "No spam. Unsubscribe anytime.",
+			"success": "Thanks! Your vote is counted. Watch your inbox for updates."
+		}
 	},
 	"careersPage": {
 		"title": "Careers at AACsearch",

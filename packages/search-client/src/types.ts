@@ -44,7 +44,7 @@ export interface SearchParams {
 	excludeFields?: string;
 	highlightStartTag?: string;
 	highlightEndTag?: string;
-	overrideTags?: string;
+	curationTags?: string;
 	hybridConfidence?: number;
 	// ── Faceted Search extensions ──
 	facetQuery?: string;

@@ -63,3 +63,32 @@ export function useRevokeSearchApiKeyMutation() {
 		},
 	});
 }
+
+// ── Model Config ────────────────────────────────────────────────
+
+export function useListModelsQuery() {
+	return useQuery(
+		orpc.search.listModels.queryOptions({ input: undefined }),
+	);
+}
+
+export function useModelConfigQuery(organizationId: string, slug: string) {
+	return useQuery(
+		orpc.search.modelConfig.get.queryOptions({
+			input: { organizationId, slug },
+			enabled: !!organizationId && !!slug,
+		}),
+	);
+}
+
+export function useUpdateModelConfigMutation() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		...orpc.search.modelConfig.update.mutationOptions(),
+		onSuccess: async (_data, variables) => {
+			await queryClient.invalidateQueries({
+				queryKey: orpc.search.modelConfig.get.key(),
+			});
+		},
+	});
+}

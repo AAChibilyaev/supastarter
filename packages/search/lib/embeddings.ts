@@ -131,7 +131,75 @@ async function googleEmbeddings(texts: string[], model: string): Promise<Embeddi
 	return results;
 }
 
-// ─── Provider Router ──────────────────────────────────────────────────────────
+// ─── Azure OpenAI Provider ─────────────────────────────────────────────────────
+
+function getAzureApiKey(): string {
+	return process.env.AZURE_OPENAI_API_KEY ?? "";
+}
+
+function getAzureApiUrl(): string {
+	return process.env.AZURE_OPENAI_API_URL ?? "";
+}
+
+function getAzureApiVersion(): string {
+	return process.env.AZURE_OPENAI_API_VERSION ?? "2024-02-01";
+}
+
+let cachedAzureOpenAIClient: OpenAI | null = null;
+
+export function getAzureOpenAIClient(): OpenAI {
+	if (cachedAzureOpenAIClient) return cachedAzureOpenAIClient;
+	const apiKey = getAzureApiKey();
+	const apiUrl = getAzureApiUrl();
+	const apiVersion = getAzureApiVersion();
+	if (!apiKey) {
+		throw new Error("AZURE_OPENAI_API_KEY not set");
+	}
+	if (!apiUrl) {
+		throw new Error("AZURE_OPENAI_API_URL not set");
+	}
+	cachedAzureOpenAIClient = new OpenAI({
+		apiKey,
+		baseURL: apiUrl,
+		defaultQuery: { "api-version": apiVersion },
+	});
+	return cachedAzureOpenAIClient;
+}
+
+/**
+ * Strip the "azure/" prefix from model names for Azure API calls.
+ * Azure uses the base model name (e.g. "text-embedding-ada-002").
+ */
+function toAzureDeploymentName(model: string): string {
+	return model.replace(/^azure\//, "");
+}
+
+async function azureEmbedding(text: string, model: string): Promise<EmbeddingResult> {
+	const client = getAzureOpenAIClient();
+	const deployment = toAzureDeploymentName(model);
+	const response = await client.embeddings.create({ model: deployment, input: text });
+	const embedding = response.data[0];
+	return {
+		vector: embedding.embedding,
+		model: response.model,
+		dimensions: embedding.embedding.length,
+		tokens: response.usage?.total_tokens ?? 0,
+	};
+}
+
+async function azureEmbeddings(texts: string[], model: string): Promise<EmbeddingResult[]> {
+	const client = getAzureOpenAIClient();
+	const deployment = toAzureDeploymentName(model);
+	const response = await client.embeddings.create({ model: deployment, input: texts });
+	return response.data.map((embedding) => ({
+		vector: embedding.embedding,
+		model: response.model,
+		dimensions: embedding.embedding.length,
+		tokens: response.usage?.total_tokens
+			? Math.ceil(response.usage.total_tokens / texts.length)
+			: 0,
+	}));
+}
 
 function getModelDef(model: string): EmbeddingModelDef {
 	const def = EMBEDDING_MODELS[model as EmbeddingModelName];
@@ -157,6 +225,8 @@ export async function generateEmbedding(
 			return openaiEmbedding(text, model);
 		case "google":
 			return googleEmbedding(text, model);
+		case "azure":
+			return azureEmbedding(text, model);
 		default:
 			throw new Error(`Unsupported embedding provider: ${def.provider}`);
 	}
@@ -178,6 +248,8 @@ export async function generateEmbeddings(
 			return openaiEmbeddings(texts, model);
 		case "google":
 			return googleEmbeddings(texts, model);
+		case "azure":
+			return azureEmbeddings(texts, model);
 		default:
 			throw new Error(`Unsupported embedding provider: ${def.provider}`);
 	}

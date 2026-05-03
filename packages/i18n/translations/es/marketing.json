@@ -618,7 +618,16 @@
 		},
 		"vote": "Votar",
 		"voted": "Votado",
-		"votes": "votos"
+		"votes": "votos",
+		"emailCapture": {
+			"title": "Da forma a lo que construimos a continuación",
+			"description": "Vota para priorizar funciones y recibe actualizaciones de acceso anticipado. Únete a más de 700 equipos de búsqueda.",
+			"placeholder": "tu@empresa.es",
+			"subscribeAndVote": "Suscribirse y Votar",
+			"skipAndVote": "No gracias, solo votar",
+			"privacy": "Sin spam. Cancela la suscripción en cualquier momento.",
+			"success": "¡Gracias! Tu voto ha sido contado. Revisa tu bandeja de entrada para novedades."
+		}
 	},
 	"careersPage": {
 		"title": "Trabaja en AACsearch",

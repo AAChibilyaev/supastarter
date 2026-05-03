@@ -618,7 +618,16 @@
 		},
 		"vote": "Abstimmen",
 		"voted": "Abgestimmt",
-		"votes": "Stimmen"
+		"votes": "Stimmen",
+		"emailCapture": {
+			"title": "Gestalten Sie mit, was als Nächstes kommt",
+			"description": "Stimmen Sie für Funktionen und erhalten Sie Early-Access-Updates. Schließen Sie sich 700+ Suchteams an.",
+			"placeholder": "ihre@firma.de",
+			"subscribeAndVote": "Abonnieren & Abstimmen",
+			"skipAndVote": "Nein danke, nur abstimmen",
+			"privacy": "Kein Spam. Jederzeit kündbar.",
+			"success": "Danke! Ihre Stimme wurde gezählt. Prüfen Sie Ihren Posteingang für Updates."
+		}
 	},
 	"careersPage": {
 		"title": "Karriere bei AACsearch",

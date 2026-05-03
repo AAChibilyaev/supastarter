@@ -153,6 +153,7 @@ model Organization {
   searchUsageEvents  SearchUsageEvent[]
   searchIngestBuffer SearchIngestBuffer[]
   connectorSyncJobs  SearchConnectorSyncJob[]
+  shopifyStores      ShopifyStore[]
   aiWallet           AiWallet?
   knowledgeSpaces    KnowledgeSpace[]
   activationEvents   ActivationEvent[]
@@ -275,6 +276,7 @@ model SearchIndex {
   usageEvents  SearchUsageEvent[]
   ingestBuffer SearchIngestBuffer[]
   syncJobs     SearchConnectorSyncJob[]
+  shopifyStores ShopifyStore[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -368,6 +370,32 @@ model SearchConnectorSyncJob {
   @@index([organizationId, startedAt(sort: Desc)])
   @@index([indexId, startedAt(sort: Desc)])
   @@map("search_connector_sync_job")
+}
+
+model ShopifyStore {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  indexId        String?
+  index          SearchIndex? @relation(fields: [indexId], references: [id], onDelete: SetNull)
+  shop           String       @unique // myshop.myshopify.com
+  accessToken    String       // AES-256-GCM encrypted at rest
+  scopes         String       @default("")
+  name           String?
+  email          String?
+  domain         String?
+  installedAt    DateTime     @default(now())
+  uninstalledAt  DateTime?
+  lastSyncAt     DateTime?
+  syncStatus     String       @default("pending") // pending, syncing, active, error, uninstalled
+  syncError      String?
+  metadata       Json         @default("{}")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([syncStatus])
+  @@map("shopify_store")
 }
 
 enum KnowledgeOwnerType {

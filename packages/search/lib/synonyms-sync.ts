@@ -1,9 +1,9 @@
 import "server-only";
 import { logger } from "@repo/logs";
-import type { OverrideCreateSchema } from "typesense/lib/Typesense/Overrides";
 import type { SynonymCreateSchema } from "typesense/lib/Typesense/Synonyms";
 
 import { getTypesenseClient } from "./client";
+import { getTypesenseEnv } from "./env";
 
 export interface SynonymPair {
 	synonym: string;
@@ -95,9 +95,59 @@ export async function syncSynonymsToTypesense(
 }
 
 /**
- * Syncs the curation list to Typesense overrides (what Typesense calls curations).
- * Each curation maps to one override rule keyed by a sanitized query string.
- * Removes overrides that are no longer present.
+ * Performs a raw fetch request to the Typesense API.
+ * Used for the v30 global Curation Sets / Synonym Sets API which is not
+ * available as a typed method on the older typesense client library.
+ */
+export async function typesenseFetch<T>(
+	method: string,
+	path: string,
+	body?: unknown,
+): Promise<T> {
+	const env = getTypesenseEnv();
+	const url = `${env.protocol}://${env.host}:${env.port}${path}`;
+
+	const res = await fetch(url, {
+		method,
+		headers: {
+			"X-TYPESENSE-API-KEY": env.adminApiKey,
+			"Content-Type": "application/json",
+		},
+		...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+	});
+
+	if (!res.ok) {
+		const text = await res.text();
+		throw new Error(`Typesense API error ${res.status}: ${text}`);
+	}
+
+	// 204 No Content (DELETE) returns empty body
+	if (res.status === 204) {
+		return undefined as T;
+	}
+
+	return res.json() as Promise<T>;
+}
+
+export interface CurationSetRecord {
+	id: string;
+	collection_name: string;
+	rule: { query: string; match: string };
+}
+
+interface CurationSetList {
+	curation_sets: CurationSetRecord[];
+}
+
+/**
+ * Syncs the curation list to Typesense v30 global Curation Sets.
+ * Each curation maps to one Curation Set (replaces old override rules).
+ * Removes curation sets that are no longer present.
+ *
+ * In Typesense v30, curations moved from collection-level overrides
+ * (`/collections/{col}/overrides/{id}`) to global Curation Sets
+ * (`/curation_sets/{id}`). The body schema is the same but includes
+ * a `collection_name` field to bind it to a collection.
  *
  * Best-effort: logs errors, never throws.
  */
@@ -105,20 +155,23 @@ export async function syncCurationsToTypesense(
 	collectionName: string,
 	curations: CurationRule[],
 ): Promise<void> {
-	const client = getTypesenseClient();
-	const coll = client.collections(collectionName);
-
-	let existingIds: Set<string>;
+	let existingSets: CurationSetRecord[];
 	try {
-		const existing = await coll.overrides().retrieve();
-		existingIds = new Set(existing.overrides.map((o) => o.id));
+		const result = await typesenseFetch<CurationSetList>("GET", "/curation_sets");
+		existingSets = result.curation_sets ?? [];
 	} catch (err) {
-		logger.warn("syncCurationsToTypesense: could not retrieve existing overrides", {
+		logger.warn("syncCurationsToTypesense: could not retrieve existing curation sets", {
 			collectionName,
 			err,
 		});
-		existingIds = new Set();
+		existingSets = [];
 	}
+
+	// Filter existing sets that belong to this collection
+	const existingForCollection = existingSets.filter(
+		(s) => s.collection_name === collectionName,
+	);
+	const existingIds = new Set(existingForCollection.map((s) => s.id));
 
 	const newIds = new Set<string>();
 
@@ -131,16 +184,17 @@ export async function syncCurationsToTypesense(
 		const includes = cur.pinnedIds.map((docId, pos) => ({ id: docId, position: pos + 1 }));
 		const excludes = cur.hiddenIds.map((docId) => ({ id: docId }));
 
-		const body: OverrideCreateSchema = {
+		const body: Record<string, unknown> = {
+			collection_name: collectionName,
 			rule: { query: cur.query, match: "exact" },
 			...(includes.length > 0 ? { includes } : {}),
 			...(excludes.length > 0 ? { excludes } : {}),
 		};
 
 		try {
-			await coll.overrides().upsert(id, body);
+			await typesenseFetch("PUT", `/curation_sets/${encodeURIComponent(id)}`, body);
 		} catch (err) {
-			logger.error("syncCurationsToTypesense: failed to upsert override", {
+			logger.error("syncCurationsToTypesense: failed to upsert curation set", {
 				collectionName,
 				id,
 				query: cur.query,
@@ -149,18 +203,51 @@ export async function syncCurationsToTypesense(
 		}
 	}
 
-	// Remove overrides that were deleted
+	// Remove curation sets that were deleted
 	for (const id of existingIds) {
 		if (!newIds.has(id)) {
 			try {
-				await coll.overrides(id).delete();
+				await typesenseFetch("DELETE", `/curation_sets/${encodeURIComponent(id)}`);
 			} catch (err) {
-				logger.warn("syncCurationsToTypesense: failed to delete override", {
+				logger.warn("syncCurationsToTypesense: failed to delete curation set", {
 					collectionName,
 					id,
 					err,
 				});
 			}
 		}
+	}
+}
+
+/**
+ * Retrieves all curation sets from Typesense that belong to a specific collection.
+ */
+export async function getCurationSetsForCollection(
+	collectionName: string,
+): Promise<CurationSetRecord[]> {
+	try {
+		const result = await typesenseFetch<CurationSetList>("GET", "/curation_sets");
+		const allSets = result.curation_sets ?? [];
+		return allSets.filter((s) => s.collection_name === collectionName);
+	} catch (err) {
+		logger.warn("getCurationSetsForCollection: could not retrieve curation sets", {
+			collectionName,
+			err,
+		});
+		return [];
+	}
+}
+
+/**
+ * Deletes a single curation set from Typesense by its set ID (not collection-level).
+ */
+export async function deleteCurationSetById(setId: string): Promise<void> {
+	try {
+		await typesenseFetch("DELETE", `/curation_sets/${encodeURIComponent(setId)}`);
+	} catch (err) {
+		logger.warn("deleteCurationSetById: failed to delete curation set", {
+			setId,
+			err,
+		});
 	}
 }

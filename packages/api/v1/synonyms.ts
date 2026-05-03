@@ -25,10 +25,13 @@ import { getSearchIndexById } from "@repo/database";
 import { logger } from "@repo/logs";
 import {
 	aliasName,
+	getCurationSetsForCollection,
+	deleteCurationSetById,
 	getTypesenseClient,
 	physicalCollectionName,
 	syncCurationsToTypesense,
 	syncSynonymsToTypesense,
+	typesenseFetch,
 	type CurationRule,
 	type SynonymPair,
 } from "@repo/search";
@@ -264,12 +267,11 @@ export const synonymsApp = new Hono()
 		const index = await resolveIndex(c, indexId, verified);
 		if (index instanceof Response) return index;
 
-		const client = getTypesenseClient();
 		const collectionName = aliasName(verified.organizationId, index.slug);
 
 		try {
-			const result = await client.collections(collectionName).overrides().retrieve();
-			return c.json(result);
+			const sets = await getCurationSetsForCollection(collectionName);
+			return c.json({ curation_sets: sets });
 		} catch (error) {
 			logger.error("V1 list curations failed", { error, indexId, collectionName });
 			return c.json(
@@ -312,7 +314,6 @@ export const synonymsApp = new Hono()
 		}
 
 		const collectionName = aliasName(verified.organizationId, index.slug);
-		const client = getTypesenseClient();
 		const sanitized = sanitizeId(parsed.data.query);
 		const id = sanitized.length > 0 ? `cur_${sanitized}` : `cur_${Date.now()}`;
 
@@ -323,14 +324,13 @@ export const synonymsApp = new Hono()
 		const excludes = parsed.data.hiddenIds.map((docId) => ({ id: docId }));
 
 		try {
-			await client
-				.collections(collectionName)
-				.overrides()
-				.upsert(id, {
-					rule: { query: parsed.data.query, match: "exact" },
-					...(includes.length > 0 ? { includes } : {}),
-					...(excludes.length > 0 ? { excludes } : {}),
-				});
+			const body: Record<string, unknown> = {
+				collection_name: collectionName,
+				rule: { query: parsed.data.query, match: "exact" },
+				...(includes.length > 0 ? { includes } : {}),
+				...(excludes.length > 0 ? { excludes } : {}),
+			};
+			await typesenseFetch("PUT", `/curation_sets/${encodeURIComponent(id)}`, body);
 			logger.info("Curation created", { indexId, collectionName, id });
 			return c.json(
 				{
@@ -418,10 +418,9 @@ export const synonymsApp = new Hono()
 		if (index instanceof Response) return index;
 
 		const collectionName = aliasName(verified.organizationId, index.slug);
-		const client = getTypesenseClient();
 
 		try {
-			await client.collections(collectionName).overrides(curationId).delete();
+			await deleteCurationSetById(curationId);
 			logger.info("Curation deleted", { indexId, collectionName, curationId });
 			return c.json({ id: curationId, deleted: true });
 		} catch (error) {

@@ -25,7 +25,7 @@ export interface EmbeddingResult {
 export interface EmbeddingModelDef {
 	name: string;
 	dimensions: number;
-	provider: "openai" | "google" | "vertex";
+	provider: "openai" | "google" | "vertex" | "azure";
 	maxInputTokens: number;
 }
 
@@ -63,6 +63,25 @@ export const EMBEDDING_MODELS = {
 		dimensions: 3072,
 		provider: "google" as const,
 		maxInputTokens: 8192,
+	},
+	// Azure OpenAI
+	"azure/text-embedding-ada-002": {
+		name: "azure/text-embedding-ada-002",
+		dimensions: 1536,
+		provider: "azure" as const,
+		maxInputTokens: 8191,
+	},
+	"azure/text-embedding-3-small": {
+		name: "azure/text-embedding-3-small",
+		dimensions: 1536,
+		provider: "azure" as const,
+		maxInputTokens: 8191,
+	},
+	"azure/text-embedding-3-large": {
+		name: "azure/text-embedding-3-large",
+		dimensions: 3072,
+		provider: "azure" as const,
+		maxInputTokens: 8191,
 	},
 } satisfies Record<string, EmbeddingModelDef>;
 

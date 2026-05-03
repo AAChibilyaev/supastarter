@@ -618,7 +618,16 @@
 		},
 		"vote": "Voter",
 		"voted": "Voté",
-		"votes": "votes"
+		"votes": "votes",
+		"emailCapture": {
+			"title": "Façonnez ce que nous construisons ensuite",
+			"description": "Votez pour prioriser les fonctionnalités et recevez des mises à jour en avant-première. Rejoignez plus de 700 équipes de recherche.",
+			"placeholder": "vous@entreprise.fr",
+			"subscribeAndVote": "S'abonner et Voter",
+			"skipAndVote": "Non merci, voter seulement",
+			"privacy": "Pas de spam. Désabonnez-vous à tout moment.",
+			"success": "Merci ! Votre vote a été compté. Surveillez votre boîte de réception."
+		}
 	},
 	"careersPage": {
 		"title": "Carrières chez AACsearch",

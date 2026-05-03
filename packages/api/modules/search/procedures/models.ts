@@ -10,6 +10,8 @@ const modelConfigSchema = z.object({
 	embeddingModel: z.string().default("text-embedding-3-small"),
 	hybridAlpha: z.number().min(0).max(1).default(0.5),
 	enabled: z.boolean().default(false),
+	azureApiUrl: z.string().optional(),
+	azureApiVersion: z.string().optional(),
 });
 
 type ModelConfig = z.infer<typeof modelConfigSchema>;
@@ -45,6 +47,8 @@ export const getModelConfig = protectedProcedure
 			embeddingModel: modelConfig?.embeddingModel ?? "text-embedding-3-small",
 			hybridAlpha: modelConfig?.hybridAlpha ?? 0.5,
 			enabled: modelConfig?.enabled ?? false,
+			azureApiUrl: modelConfig?.azureApiUrl,
+			azureApiVersion: modelConfig?.azureApiVersion,
 		};
 	});
 
@@ -63,6 +67,8 @@ export const updateModelConfig = protectedProcedure
 			embeddingModel: z.string().optional(),
 			hybridAlpha: z.number().min(0).max(1).optional(),
 			enabled: z.boolean().optional(),
+			azureApiUrl: z.string().optional(),
+			azureApiVersion: z.string().optional(),
 		}),
 	)
 	.output(modelConfigSchema)
@@ -87,6 +93,12 @@ export const updateModelConfig = protectedProcedure
 				"text-embedding-3-small",
 			hybridAlpha: (input.hybridAlpha as number) ?? (existing.hybridAlpha as number) ?? 0.5,
 			enabled: (input.enabled as boolean) ?? (existing.enabled as boolean) ?? false,
+			azureApiUrl:
+				(input.azureApiUrl as string | undefined) ??
+				(existing.azureApiUrl as string | undefined),
+			azureApiVersion:
+				(input.azureApiVersion as string | undefined) ??
+				(existing.azureApiVersion as string | undefined),
 		};
 
 		(schema as Record<string, unknown>)._modelConfig = updated;

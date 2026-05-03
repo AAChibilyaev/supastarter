@@ -54,7 +54,7 @@ const searchInputSchema = z.object({
 	excludeFields: z.string().optional(),
 	highlightStartTag: z.string().optional(),
 	highlightEndTag: z.string().optional(),
-	overrideTags: z.string().optional(),
+	curationTags: z.string().optional(),
 	hybridConfidence: z.number().min(0).max(1).optional(),
 	// ── Faceted Search extensions ──
 	facetQuery: z.string().optional(),

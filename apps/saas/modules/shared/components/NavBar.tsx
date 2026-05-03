@@ -29,21 +29,39 @@ import {
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
+	ActivityIcon,
+	BanIcon,
+	BarChart3Icon,
+	BookTextIcon,
+	CableIcon,
 	ChevronRightIcon,
+	Code2,
+	FileTextIcon,
+	FilterIcon,
+	GripVerticalIcon,
 	HomeIcon,
+	LayersIcon,
+	LightbulbIcon,
 	MenuIcon,
+	MicIcon,
+	NetworkIcon,
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
+	PinIcon,
+	RocketIcon,
+	ScissorsIcon,
 	SearchIcon,
 	SettingsIcon,
 	ShieldUserIcon,
-	BarChart3Icon,
+	ShuffleIcon,
 	SlidersHorizontalIcon,
-	CableIcon,
+	SparklesIcon,
+	TrendingUpIcon,
 	UserCogIcon,
-	RocketIcon,
-	LightbulbIcon,
-	Code2,
+	WandIcon,
+	WebhookIcon,
+	WrenchIcon,
+	XCircleIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -335,6 +353,14 @@ export function NavBar() {
 							label: t("settings.menu.organization.members"),
 							href: `${orgSettingsPrefix}/members`,
 						},
+						{
+							label: t("search.nav.connectorsWebhooks"),
+							href: `${orgSettingsPrefix}/webhooks`,
+						},
+						{
+							label: t("search.nav.apiKeys"),
+							href: `${orgSettingsPrefix}/api-keys`,
+						},
 						...(paymentsConfig.billingAttachedTo === "organization" &&
 						isOrganizationAdmin
 							? [
@@ -379,6 +405,10 @@ export function NavBar() {
 								pathname.startsWith(`${basePath}/preview`),
 							subItems: [
 								{
+									label: t("search.nav.indexes"),
+									href: `${basePath}/search`,
+								},
+								{
 									label: t("search.nav.apiKeys"),
 									href: `${basePath}/api-keys`,
 								},
@@ -387,7 +417,7 @@ export function NavBar() {
 									href: `${basePath}/import-jobs`,
 								},
 								{
-									label: t("search.nav.searchPreview"),
+									label: t("search.nav.playground"),
 									href: `${basePath}/preview`,
 								},
 							],
@@ -397,30 +427,156 @@ export function NavBar() {
 							href: `${basePath}/analytics`,
 							icon: BarChart3Icon,
 							isActive: pathname.startsWith(`${basePath}/analytics`),
+							subItems: [
+								{
+									label: t("search.nav.analyticsDashboard"),
+									href: `${basePath}/analytics`,
+								},
+								{
+									label: t("search.nav.analyticsTopQueries"),
+									href: `${basePath}/analytics`,
+								},
+								{
+									label: t("search.nav.analyticsFailed"),
+									href: `${basePath}/analytics`,
+								},
+								{
+									label: t("search.nav.analyticsActivity"),
+									href: `${basePath}/analytics`,
+								},
+							],
 						},
 						{
 							label: t("search.nav.relevance"),
 							href: `${basePath}/relevance`,
 							icon: SlidersHorizontalIcon,
 							isActive: pathname.startsWith(`${basePath}/relevance`),
-						},
-						{
-							label: t("search.nav.knowledge"),
-							href: `${basePath}/knowledge`,
-							icon: LightbulbIcon,
-							isActive: pathname.startsWith(`${basePath}/knowledge`),
+							subItems: [
+								{
+									label: t("search.nav.relevanceSynonyms"),
+									href: `${basePath}/relevance`,
+								},
+								{
+									label: t("search.nav.relevanceCurations"),
+									href: `${basePath}/relevance`,
+								},
+								{
+									label: t("search.nav.relevanceStemming"),
+									href: `${basePath}/relevance`,
+								},
+								{
+									label: t("search.nav.relevanceStopwords"),
+									href: `${basePath}/relevance`,
+								},
+								{
+									label: t("search.nav.relevanceRanking"),
+									href: `${basePath}/relevance`,
+								},
+								{
+									label: t("search.nav.relevanceSpell"),
+									href: `${basePath}/relevance`,
+								},
+							],
 						},
 						{
 							label: t("search.nav.connectors"),
 							href: `${basePath}/connectors`,
 							icon: CableIcon,
 							isActive: pathname.startsWith(`${basePath}/connectors`),
+							subItems: [
+								{
+									label: t("search.nav.connectorsCMS"),
+									href: `${basePath}/connectors`,
+								},
+								{
+									label: t("search.nav.connectorsWebhooks"),
+									href: `${basePath}/connectors`,
+								},
+								{
+									label: t("search.nav.connectorsSDK"),
+									href: `${basePath}/sdks`,
+								},
+							],
 						},
 						{
-							label: t("sdks.nav"),
-							href: `${basePath}/sdks`,
-							icon: Code2,
-							isActive: pathname.startsWith(`${basePath}/sdks`),
+							label: t("search.nav.recommendations"),
+							href: `${basePath}/recommendations`,
+							icon: SparklesIcon,
+							isActive: pathname.startsWith(`${basePath}/recommendations`),
+							subItems: [
+								{
+									label: t("search.nav.recommendationsDashboard"),
+									href: `${basePath}/recommendations`,
+								},
+								{
+									label: t("search.nav.recommendationsSimilar"),
+									href: `${basePath}/recommendations`,
+								},
+								{
+									label: t("search.nav.recommendationsPersonalized"),
+									href: `${basePath}/recommendations`,
+								},
+								{
+									label: t("search.nav.recommendationsGraphRAG"),
+									href: `${basePath}/recommendations`,
+								},
+								{
+									label: t("search.nav.recommendationsSettings"),
+									href: `${basePath}/recommendations`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.knowledge"),
+							href: `${basePath}/knowledge`,
+							icon: LightbulbIcon,
+							isActive: pathname.startsWith(`${basePath}/knowledge`),
+							subItems: [
+								{
+									label: t("search.nav.knowledgeSpaces"),
+									href: `${basePath}/knowledge`,
+								},
+								{
+									label: t("search.nav.knowledgeDocuments"),
+									href: `${basePath}/knowledge`,
+								},
+								{
+									label: t("search.nav.knowledgeSearch"),
+									href: `${basePath}/knowledge`,
+								},
+							],
+						},
+						{
+							label: t("search.nav.widget"),
+							href: `${basePath}/widget`,
+							icon: WrenchIcon,
+							isActive: pathname.startsWith(`${basePath}/widget`),
+							subItems: [
+								{
+									label: t("search.nav.widgetConfigurator"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetFilters"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetAutocomplete"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetVoice"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetAnalytics"),
+									href: `${basePath}/widget`,
+								},
+								{
+									label: t("search.nav.widgetInstall"),
+									href: `${basePath}/widget`,
+								},
+							],
 						},
 					]
 				: []),

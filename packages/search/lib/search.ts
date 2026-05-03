@@ -49,7 +49,7 @@ interface TypesenseSearchParams {
 	exclude_fields?: string;
 	highlight_start_tag?: string;
 	highlight_end_tag?: string;
-	override_tags?: string;
+	curation_tags?: string;
 	hybrid_confidence?: number;
 	// ── Faceted Search extensions ──────────────────────────────────
 	facet_query?: string;
@@ -85,7 +85,7 @@ export interface SearchDocumentsInput {
 	excludeFields?: string;
 	highlightStartTag?: string;
 	highlightEndTag?: string;
-	overrideTags?: string;
+	curationTags?: string;
 	hybridConfidence?: number;
 	// ── Faceted Search extensions ──────────────────────────────────
 	facetQuery?: string;
@@ -177,7 +177,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 			highlight_start_tag: input.highlightStartTag,
 		}),
 		...(input.highlightEndTag !== undefined && { highlight_end_tag: input.highlightEndTag }),
-		...(input.overrideTags !== undefined && { override_tags: input.overrideTags }),
+		...(input.curationTags !== undefined && { curation_tags: input.curationTags }),
 		...(input.hybridConfidence !== undefined && { hybrid_confidence: input.hybridConfidence }),
 		// ── Faceted Search extensions ──
 		...(input.facetQuery !== undefined && { facet_query: input.facetQuery }),
@@ -275,7 +275,7 @@ export async function multiSearchDocuments(
 			...(entry.highlightEndTag !== undefined && {
 				highlight_end_tag: entry.highlightEndTag,
 			}),
-			...(entry.overrideTags !== undefined && { override_tags: entry.overrideTags }),
+			...(entry.curationTags !== undefined && { curation_tags: entry.curationTags }),
 			...(entry.hybridConfidence !== undefined && {
 				hybrid_confidence: entry.hybridConfidence,
 			}),

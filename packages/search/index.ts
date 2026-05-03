@@ -59,6 +59,7 @@ export {
 	generateEmbedding,
 	generateEmbeddings,
 	getOpenAIClient,
+	getAzureOpenAIClient,
 	AUTO_EMBED_FIELDS,
 	autoEmbedDocument,
 	autoEmbedDocuments,
@@ -69,8 +70,12 @@ export {
 	type EmbeddingResult,
 } from "./lib/embeddings";
 export {
+	getCurationSetsForCollection,
+	deleteCurationSetById,
 	syncCurationsToTypesense,
 	syncSynonymsToTypesense,
+	typesenseFetch,
 	type CurationRule,
+	type CurationSetRecord,
 	type SynonymPair,
 } from "./lib/synonyms-sync";

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../lib/access";
 
-const clusterOperationSchema = z.enum(["vote", "debug", "metrics"]);
+const clusterOperationSchema = z.enum(["vote", "debug", "metrics", "snapshot"]);
 
 export const performClusterOperation = protectedProcedure
 	.route({
@@ -68,6 +68,15 @@ export const performClusterOperation = protectedProcedure
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					await (client as any).operations().perform("vote");
 					data = { message: "Vote requested successfully" };
+					break;
+				}
+				case "snapshot": {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const result = await (client as any).operations().perform("snapshot");
+					data = {
+						success: result?.success as boolean ?? true,
+						snapshotPath: result?.snapshot_path as string ?? "",
+					};
 					break;
 				}
 			}
@@ -148,12 +157,48 @@ export const clusterMetrics = protectedProcedure
 					networkReceivedBytes: "0",
 					networkSentBytes: "0",
 				},
-				typesense: {
-					memoryActiveBytes: "0",
-					memoryAllocatedBytes: "0",
-					processedRequests: 0,
-					pendingWriteBatches: 0,
-				},
+			typesense: {
+				memoryActiveBytes: "0",
+				memoryAllocatedBytes: "0",
+				processedRequests: 0,
+				pendingWriteBatches: 0,
+			},
+		};
+		}
+	});
+
+export const triggerClusterSnapshot = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/search/cluster/snapshot",
+		tags: ["Search"],
+		summary: "Trigger a point-in-time cluster snapshot",
+		description:
+			"Initiates a Typesense cluster snapshot operation. The snapshot is created server-side and the response includes the snapshot path on disk.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			snapshotPath: z.string(),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
+
+		const client = getTypesenseClient();
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const result = await (client as any).operations().perform("snapshot");
+			return {
+				success: (result?.success as boolean) ?? true,
+				snapshotPath: (result?.snapshot_path as string) ?? "",
 			};
+		} catch {
+			return { success: false, snapshotPath: "" };
 		}
 	});

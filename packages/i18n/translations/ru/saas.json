@@ -2110,7 +2110,11 @@
 		"filterByType": "Filter by file type",
 		"allTypes": "All types",
 		"score": "Relevance",
-		"openSource": "Open source"
+		"openSource": "Open source",
+		"dateFrom": "От",
+		"dateTo": "До",
+		"crossSearch": "Кросс-поиск",
+		"crossSearchDescription": "Ищите по всем личным индексам одновременно"
 	},
 	"feedback": {
 		"nps": {

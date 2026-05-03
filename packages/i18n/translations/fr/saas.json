@@ -2135,7 +2135,11 @@
 		"filterByType": "Filter by file type",
 		"allTypes": "All types",
 		"score": "Relevance",
-		"openSource": "Open source"
+		"openSource": "Open source",
+		"dateFrom": "Du",
+		"dateTo": "Au",
+		"crossSearch": "Recherche croisée",
+		"crossSearchDescription": "Recherchez dans tous vos index personnels à la fois"
 	},
 	"feedback": {
 		"nps": {

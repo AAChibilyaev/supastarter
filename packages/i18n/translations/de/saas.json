@@ -2110,7 +2110,11 @@
 		"filterByType": "Filter by file type",
 		"allTypes": "All types",
 		"score": "Relevance",
-		"openSource": "Open source"
+		"openSource": "Open source",
+		"dateFrom": "Von",
+		"dateTo": "Bis",
+		"crossSearch": "Übergreifende Suche",
+		"crossSearchDescription": "Durchsuchen Sie alle Ihre persönlichen Indizes auf einmal"
 	},
 	"feedback": {
 		"nps": {

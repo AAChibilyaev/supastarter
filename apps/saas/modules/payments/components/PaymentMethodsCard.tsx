@@ -89,7 +89,7 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 	};
 
 	const handleSetDefault = (paymentMethodId: string) => {
-		void setDefaultMutation.mutate({ paymentMethodId, organizationId });
+		setDefaultMutation.mutate({ paymentMethodId, organizationId });
 	};
 
 	const handleDelete = (paymentMethodId: string) => {

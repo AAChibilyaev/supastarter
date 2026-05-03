@@ -1,8 +1,6 @@
 /**
  * Generate an HTML receipt for a wallet topup order.
  * Can be printed as PDF from the browser.
- *
- * @remarks Uses inline type instead of Prisma-generated type for cross-package compatibility
  */
 interface ReceiptOrderFields {
 	id: string;
@@ -12,12 +10,17 @@ interface ReceiptOrderFields {
 	createdAt: Date;
 }
 
+interface ReceiptTaxInfo {
+	taxIdType?: string | null;
+	taxId?: string | null;
+	legalName?: string | null;
+	address?: string | null;
+}
+
 export function generateReceiptHtml(
 	order: ReceiptOrderFields,
 	orgName: string,
-	taxInfo?: {
-		address?: string | null;
-	},
+	taxInfo?: ReceiptTaxInfo,
 ): string {
 	const date = new Date(order.createdAt).toLocaleDateString("en-US", {
 		year: "numeric",
@@ -216,11 +219,11 @@ export function generateReceiptHtml(
 }
 
 /**
- * Generate a simple fiscal receipt line for 54-ФЗ compliance.
+ * Generate a simple fiscal receipt data for 54-ФЗ compliance.
  * Returns structured fiscal data that could be sent to OFD.
  */
 export function generateFiscalReceiptData(
-	order: Pick<WalletTopupOrder, "id" | "amount" | "currency" | "createdAt">,
+	order: ReceiptOrderFields,
 	sellerTaxId: string,
 	buyerTaxId?: string | null,
 ): Record<string, unknown> {

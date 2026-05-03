@@ -20,3 +20,6 @@
 
 # Index health check — every 5 minutes: drift, lag, error rate, auto-pause, Slack alerts
 */5 * * * * curl -sf -X POST "$APP_URL/api/cron/index-health-check" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1
+
+# Expire search API keys — revoke keys past their expiresAt (daily at 03:00)
+0 3 * * * curl -sf -X POST "$APP_URL/api/cron/expire-keys" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1

@@ -1,7 +1,14 @@
+import { ORPCError } from "@orpc/client";
 import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -11,6 +18,7 @@ const hitSchema = z.object({
 });
 
 export const imageSearch = protectedProcedure
+	.use(creditGate("embedding", BigInt(200)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/image-search",
@@ -48,6 +56,7 @@ export const imageSearch = protectedProcedure
 	.handler(async ({ input, context }) => {
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
+		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		// Phase 1: describe the image via OpenAI Vision
 		const imageUrl = input.imageUrl
@@ -83,6 +92,8 @@ export const imageSearch = protectedProcedure
 		}
 
 		if (!caption) {
+			// Release reservation — no work was done
+			await releaseCreditReservation(creditReservationId, "cancelled");
 			return {
 				found: 0,
 				hits: [],
@@ -93,7 +104,16 @@ export const imageSearch = protectedProcedure
 		}
 
 		// Phase 2: embed the caption and vector-search
-		const embedding = await generateEmbedding(caption, input.embeddingModel);
+		let embedding;
+		try {
+			embedding = await generateEmbedding(caption, input.embeddingModel);
+		} catch {
+			await releaseCreditReservation(creditReservationId, "error");
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Failed to generate image embedding.",
+			});
+		}
+
 		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
 
 		const client = getTypesenseClient();
@@ -107,6 +127,15 @@ export const imageSearch = protectedProcedure
 				filter_by: input.filterBy ?? undefined,
 				per_page: input.k,
 			} as any)) as any;
+
+		// Commit flat-fee usage on success
+		await commitFlatFeeUsage({
+			reservationId: creditReservationId,
+			operation: "embedding",
+			provider: "aacsearch",
+			model: "image",
+			flatFeeKopecks: BigInt(200),
+		});
 
 		return {
 			found: results.found ?? 0,

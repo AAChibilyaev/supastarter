@@ -2,6 +2,12 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -25,6 +31,7 @@ const sourceSchema = z.object({
  * Falls back to the manual OpenAI RAG approach when no conversationModelId is given.
  */
 export const conversationalSearch = protectedProcedure
+	.use(creditGate("rag_answer", BigInt(300)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
@@ -73,6 +80,7 @@ export const conversationalSearch = protectedProcedure
 	.handler(async ({ input, context }) => {
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
+		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		const client = getTypesenseClient();
 		const searchStartTime = Date.now();
@@ -117,6 +125,15 @@ export const conversationalSearch = protectedProcedure
 				(results.conversation_id as string | undefined) ??
 				input.conversationId ??
 				undefined;
+
+			// Commit flat-fee usage on success (Typesense native RAG)
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "rag_answer",
+				provider: "aacsearch",
+				model: "ai_answer",
+				flatFeeKopecks: BigInt(300),
+			});
 
 			return {
 				answer,
@@ -187,7 +204,17 @@ export const conversationalSearch = protectedProcedure
 				temperature: 0.3,
 			});
 			answer = completion.choices[0]?.message?.content ?? "Unable to generate an answer.";
+
+			// Commit flat-fee usage on successful manual RAG
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "rag_answer",
+				provider: "openai",
+				model: input.model,
+				flatFeeKopecks: BigInt(300),
+			});
 		} catch {
+			await releaseCreditReservation(creditReservationId, "error");
 			answer = "Conversational search is unavailable at this moment.";
 		}
 

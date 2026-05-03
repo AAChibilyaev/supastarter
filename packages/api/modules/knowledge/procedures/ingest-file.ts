@@ -10,6 +10,12 @@ import {
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireKnowledgeOwnerAdmin } from "../lib/access";
 import { chunkText } from "../lib/chunking";
 import { buildGraphFromChunks } from "../lib/graphrag";
@@ -32,6 +38,7 @@ async function checksum(text: string): Promise<string> {
 }
 
 export const ingestFile = protectedProcedure
+	.use(creditGate("chat", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/knowledge/ingest/file",
@@ -49,99 +56,119 @@ export const ingestFile = protectedProcedure
 			language: z.string().max(12).optional(),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		await requireKnowledgeOwnerAdmin(
-			{
+	.handler(async ({ input, context: { ...rest } }) => {
+		const user = (rest as Record<string, unknown>).user as { id: string };
+		const { creditReservationId } = rest as unknown as CreditGateContext;
+
+		try {
+			await requireKnowledgeOwnerAdmin(
+				{
+					ownerType: input.ownerType,
+					ownerId: input.ownerId,
+				},
+				user,
+			);
+
+			const scope = {
 				ownerType: input.ownerType,
-				ownerId: input.ownerId,
-			},
-			user,
-		);
+				organizationId: input.ownerType === "ORGANIZATION" ? input.ownerId : undefined,
+				userId: input.ownerType === "USER" ? input.ownerId : undefined,
+			};
+			const space = await getKnowledgeSpaceBySlug(scope, input.spaceSlug);
+			if (!space) {
+				throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
+			}
 
-		const scope = {
-			ownerType: input.ownerType,
-			organizationId: input.ownerType === "ORGANIZATION" ? input.ownerId : undefined,
-			userId: input.ownerType === "USER" ? input.ownerId : undefined,
-		};
-		const space = await getKnowledgeSpaceBySlug(scope, input.spaceSlug);
-		if (!space) {
-			throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
-		}
-
-		const parsed = await parseIncomingFile({
-			fileName: input.fileName,
-			mimeType: input.mimeType,
-			contentBase64: input.contentBase64,
-		});
-		const chunks = chunkText(parsed.text);
-		if (chunks.length === 0) {
-			throw new ORPCError("BAD_REQUEST", { message: "No text extracted from file" });
-		}
-
-		const existingSources = await listDataSources(space.id);
-		const fileSource = existingSources.find((source) => source.sourceType.startsWith("FILE_"));
-
-		const job = await createIngestionJob({
-			knowledgeSpaceId: space.id,
-			dataSourceId: fileSource?.id,
-			mode: "file_upload",
-			inputMeta: {
+			const parsed = await parseIncomingFile({
 				fileName: input.fileName,
 				mimeType: input.mimeType,
-			},
-		});
+				contentBase64: input.contentBase64,
+			});
+			const chunks = chunkText(parsed.text);
+			if (chunks.length === 0) {
+				throw new ORPCError("BAD_REQUEST", { message: "No text extracted from file" });
+			}
 
-		await updateIngestionJob(job.id, { status: "RUNNING", startedAt: new Date() });
+			const existingSources = await listDataSources(space.id);
+			const fileSource = existingSources.find((source) =>
+				source.sourceType.startsWith("FILE_"),
+			);
 
-		const digest = await checksum(parsed.text);
-		const document = await upsertKnowledgeDocument({
-			knowledgeSpaceId: space.id,
-			dataSourceId: fileSource?.id,
-			externalId: `file:${input.fileName}`,
-			sourceType: inferFileSourceType(input.fileName, input.mimeType),
-			title: parsed.title,
-			mimeType: parsed.mimeType,
-			language: input.language,
-			contentText: parsed.text,
-			metadata: {
-				...parsed.metadata,
-				fileName: input.fileName,
-			},
-			checksum: digest,
-		});
+			const job = await createIngestionJob({
+				knowledgeSpaceId: space.id,
+				dataSourceId: fileSource?.id,
+				mode: "file_upload",
+				inputMeta: {
+					fileName: input.fileName,
+					mimeType: input.mimeType,
+				},
+			});
 
-		await replaceKnowledgeChunks({
-			knowledgeSpaceId: space.id,
-			documentId: document.id,
-			chunks: chunks.map((chunk) => ({
-				chunkIndex: chunk.chunkIndex,
+			await updateIngestionJob(job.id, { status: "RUNNING", startedAt: new Date() });
+
+			const digest = await checksum(parsed.text);
+			const document = await upsertKnowledgeDocument({
+				knowledgeSpaceId: space.id,
+				dataSourceId: fileSource?.id,
+				externalId: `file:${input.fileName}`,
+				sourceType: inferFileSourceType(input.fileName, input.mimeType),
+				title: parsed.title,
+				mimeType: parsed.mimeType,
+				language: input.language,
+				contentText: parsed.text,
+				metadata: {
+					...parsed.metadata,
+					fileName: input.fileName,
+				},
+				checksum: digest,
+			});
+
+			await replaceKnowledgeChunks({
+				knowledgeSpaceId: space.id,
+				documentId: document.id,
+				chunks: chunks.map((chunk) => ({
+					chunkIndex: chunk.chunkIndex,
+					text: chunk.text,
+					tokenCount: chunk.tokenCount,
+					embedding: chunk.embedding,
+					metadata: { from: "file-upload" },
+				})),
+			});
+
+			const savedChunks = chunks.map((chunk) => ({
+				id: `${document.id}:${chunk.chunkIndex}`,
 				text: chunk.text,
-				tokenCount: chunk.tokenCount,
-				embedding: chunk.embedding,
-				metadata: { from: "file-upload" },
-			})),
-		});
+			}));
+			await buildGraphFromChunks({
+				knowledgeSpaceId: space.id,
+				chunks: savedChunks,
+			});
 
-		const savedChunks = chunks.map((chunk) => ({
-			id: `${document.id}:${chunk.chunkIndex}`,
-			text: chunk.text,
-		}));
-		await buildGraphFromChunks({
-			knowledgeSpaceId: space.id,
-			chunks: savedChunks,
-		});
+			await updateIngestionJob(job.id, {
+				status: "SUCCEEDED",
+				totalItems: chunks.length,
+				processedItems: chunks.length,
+				finishedAt: new Date(),
+			});
 
-		await updateIngestionJob(job.id, {
-			status: "SUCCEEDED",
-			totalItems: chunks.length,
-			processedItems: chunks.length,
-			finishedAt: new Date(),
-		});
+			// Commit flat-fee usage on successful ingestion with GraphRAG extraction
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "chat",
+				provider: "aacsearch",
+				model: "graphrag",
+				flatFeeKopecks: BigInt(500),
+			});
 
-		return {
-			status: "ok",
-			jobId: job.id,
-			documentId: document.id,
-			chunks: chunks.length,
-		};
+			return {
+				status: "ok",
+				jobId: job.id,
+				documentId: document.id,
+				chunks: chunks.length,
+			};
+		} catch (err) {
+			// Release reservation on any error
+			await releaseCreditReservation(creditReservationId);
+			throw err;
+		}
 	});

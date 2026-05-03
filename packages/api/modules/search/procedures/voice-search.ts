@@ -1,9 +1,16 @@
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireOrganizationMember } from "../lib/access";
 
 export const voiceSearch = protectedProcedure
+	.use(creditGate("chat", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/search/voice",
@@ -29,6 +36,7 @@ export const voiceSearch = protectedProcedure
 	)
 	.handler(async ({ input, context }) => {
 		await requireOrganizationMember(input.organizationId, context.user.id);
+		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		const audioBuffer = Buffer.from(input.audioBase64, "base64");
 
@@ -50,7 +58,18 @@ export const voiceSearch = protectedProcedure
 			transcript = response.text ?? "";
 			language = response.language ?? input.language;
 			durationSeconds = response.duration ?? 0;
+
+			// Commit flat-fee usage on success
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "chat",
+				provider: "aacsearch",
+				model: "audio",
+				flatFeeKopecks: BigInt(500),
+			});
 		} catch {
+			// Release reservation on error
+			await releaseCreditReservation(creditReservationId);
 			transcript = "";
 			durationSeconds = 0;
 		}

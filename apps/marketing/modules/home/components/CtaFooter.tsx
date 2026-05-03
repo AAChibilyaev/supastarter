@@ -7,13 +7,14 @@ export function CtaFooter() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-20 md:py-28 text-center">
+		<section className="py-16 md:py-24 text-center">
 			<div className="container">
 				<div className="max-w-2xl mx-auto">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-5xl text-balance text-foreground">
+					<h2 className="text-3xl md:text-5xl font-bold tracking-tight text-balance">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">
+
+					<p className="mt-5 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("home.cta.subtitle")}
 					</p>
 					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">

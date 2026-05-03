@@ -6,10 +6,10 @@ export function HowItWorks() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-14 md:py-24 border-b border-border">
+		<section className="py-16 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl text-balance">
+					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
 						{t("home.howItWorks.title")}
 					</h2>
 				</div>
@@ -23,7 +23,7 @@ export function HowItWorks() {
 							<h3 className="mt-6 text-lg font-semibold text-foreground">
 								{t(`home.howItWorks.${step}.title`)}
 							</h3>
-							<p className="mt-3 max-w-xs text-sm leading-relaxed text-pretty text-muted-foreground">
+							<p className="mt-3 max-w-xs text-sm text-muted-foreground">
 								{t(`home.howItWorks.${step}.description`)}
 							</p>
 						</div>

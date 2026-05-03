@@ -30,7 +30,7 @@ export function HeroSection() {
 
 	return (
 		<section className="relative overflow-hidden bg-background">
-			<div className="py-16 md:py-24 lg:py-32 relative z-10 container">
+			<div className="py-16 md:py-24 relative z-10 container">
 				{/* Announcement badge */}
 				<div className="mb-6 flex justify-center">
 					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-full border">

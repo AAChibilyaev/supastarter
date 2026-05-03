@@ -21,16 +21,18 @@ export function PricingPlans() {
 	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="py-14 md:py-24 border-b border-border">
+		<section id="pricing" className="py-16 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<p className="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
 						{t("home.pricing.badge")}
 					</p>
-					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
+
+					<h2 className="text-3xl md:text-4xl font-bold tracking-tight text-balance">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
+
+					<p className="mt-4 text-lg max-w-2xl mx-auto text-balance text-muted-foreground">
 						{t("home.pricing.subtitle")}
 					</p>
 				</div>

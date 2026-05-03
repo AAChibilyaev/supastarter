@@ -11,3 +11,4 @@ export { parseXlsx } from "./xlsx";
 export { parseImage } from "./image";
 export { parseAudio } from "./audio";
 export { parseVideo } from "./video";
+export { parseVideoMoments, type VideoMoment, type ParsedVideoMoments } from "./video-moments";

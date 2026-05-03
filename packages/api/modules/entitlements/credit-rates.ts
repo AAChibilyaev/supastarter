@@ -61,6 +61,9 @@ export const CREDIT_RATES = {
 	/** Image search with Vision API caption → embedding generation — per query (3 credits / 300 kopecks) */
 	image_search: BigInt(300),
 
+	/** Video moment search — per minute of video processed (10 credits / 1000 kopecks per minute) */
+	video_search: BigInt(1000),
+
 	/** Chat / file ingest / voice search generic cost — per operation (5 credits / 500 kopecks) */
 	chat: BigInt(500),
 

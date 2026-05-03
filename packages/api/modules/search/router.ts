@@ -6,6 +6,7 @@ import {
 	getABTestResults,
 } from "./procedures/ab-test";
 import { aiAnswer } from "./procedures/ai-answer";
+import { suggestAISynonyms, suggestAIGlobalSynonyms } from "./procedures/ai-synonym-suggestions";
 import { getAlertRules, updateAlertRules } from "./procedures/alert-rules";
 import { analytics } from "./procedures/analytics";
 import {
@@ -117,6 +118,7 @@ import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
 import { voiceSearch } from "./procedures/voice-search";
+import { videoMomentSearch } from "./procedures/video-moment-search";
 import {
 	createWebhook,
 	deleteWebhook,
@@ -169,6 +171,7 @@ export const searchRouter = {
 		update: updateSynonyms,
 		export: exportIndexSynonyms,
 		import: importIndexSynonyms,
+		suggest: suggestAISynonyms,
 	},
 	globalSynonyms: {
 		get: getGlobalSynonyms,
@@ -176,6 +179,7 @@ export const searchRouter = {
 		effective: getEffectiveGlobalSynonyms,
 		export: exportGlobalSynonyms,
 		import: importGlobalSynonyms,
+		suggest: suggestAIGlobalSynonyms,
 	},
 	curations: {
 		get: getCurations,
@@ -238,6 +242,7 @@ export const searchRouter = {
 	},
 	voiceSearch,
 	imageSearch,
+	videoMomentSearch,
 	stemming: {
 		list: listStemmingOverrides,
 		upsert: upsertStemmingOverride,

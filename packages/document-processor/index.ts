@@ -25,7 +25,10 @@ export {
 	parseImage,
 	parseAudio,
 	parseVideo,
+	parseVideoMoments,
 } from "./lib/parsers/index";
+
+export type { VideoMoment, ParsedVideoMoments } from "./lib/parsers/video-moments";
 
 // Type exports
 export type {

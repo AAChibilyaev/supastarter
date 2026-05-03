@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAccess } from "../lib/access";
+import { readPersonalizationConfig } from "./personalization-config";
 
 export const personalizationOverview = protectedProcedure
 	.route({
@@ -77,12 +78,20 @@ export const personalizationOverview = protectedProcedure
 			const ctr =
 				totalSearches > 0 ? Math.round((totalClicks / totalSearches) * 1000) / 10 : 0;
 
+			// Read personalization config to determine if enabled
+			const org = await db.organization.findUniqueOrThrow({
+				where: { id: organizationId },
+				select: { metadata: true },
+			});
+			const config = readPersonalizationConfig(org.metadata);
+			const hasEvents = totalSearches > 0 || totalClicks > 0;
+
 			return {
 				totalSearches,
 				totalClicks,
 				uniqueUsers: uniqueUsersSet.size,
 				ctr,
-				personalizationEnabled: true, // Default to enabled until config model exists (AAC-719)
+				personalizationEnabled: hasEvents && config.minEventsPerUser <= 50,
 			};
 		} catch (err) {
 			logger.error(

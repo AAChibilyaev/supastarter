@@ -10,3 +10,13 @@ export async function requireOrganizationAccess(organizationId: string, userId: 
 	}
 	return membership;
 }
+
+export async function requireOrganizationAdmin(organizationId: string, user: { id: string }) {
+	const membership = await requireOrganizationAccess(organizationId, user.id);
+	if (membership.role !== "owner" && membership.role !== "admin") {
+		throw new ORPCError("FORBIDDEN", {
+			message: "Only organization admins can modify personalization settings",
+		});
+	}
+	return membership;
+}

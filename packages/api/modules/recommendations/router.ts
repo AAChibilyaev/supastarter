@@ -1,6 +1,10 @@
 import { alsoViewed } from "./procedures/also-viewed";
 import { frequentlyBoughtTogether } from "./procedures/frequently-bought-together";
 import { graphrag, graphragMultiSeed } from "./procedures/graphrag";
+import {
+	getPersonalizationConfig,
+	updatePersonalizationConfig,
+} from "./procedures/personalization-config";
 import { personalizationOverview } from "./procedures/personalization-overview";
 import { personalized } from "./procedures/personalized";
 import { personalizedFromAnalytics } from "./procedures/personalized-from-analytics";
@@ -12,6 +16,8 @@ export const recommendationsRouter = {
 	personalized,
 	personalizedFromAnalytics,
 	personalizationOverview,
+	getPersonalizationConfig,
+	updatePersonalizationConfig,
 	trending,
 	frequentlyBoughtTogether,
 	alsoViewed,

@@ -989,7 +989,9 @@
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",
-			"noLatencyData": "Latency data will appear after search queries are processed."
+			"noLatencyData": "Latency data will appear after search queries are processed.",
+			"ctrTrend": "CTR Trend",
+			"ctrTrendDesc": "Click-through rate over time"
 		},
 		"widget": {
 			"tab": "Widget",

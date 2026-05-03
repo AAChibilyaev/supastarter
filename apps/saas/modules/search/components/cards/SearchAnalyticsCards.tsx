@@ -20,6 +20,7 @@ import { useTranslations } from "next-intl";
 import { useFormatter } from "next-intl";
 import { useMemo, useState } from "react";
 
+import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
 
 type PeriodKey = "24h" | "7d" | "30d";
@@ -302,6 +303,9 @@ export function SearchAnalyticsCards({ organizationId }: SearchAnalyticsCardsPro
 					</CardContent>
 				</Card>
 			)}
+
+			{/* CTR Trend chart */}
+			<CtrTrendChart data={analyticsData?.ctrTrend ?? []} />
 
 			{/* Top 10 queries table */}
 			<Card>

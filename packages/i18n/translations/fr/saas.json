@@ -1001,7 +1001,9 @@
 			"latencyP50": "p50",
 			"latencyP95": "p95",
 			"latencyP99": "p99",
-			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche."
+			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche.",
+			"ctrTrend": "Tendance CTR",
+			"ctrTrendDesc": "Taux de clics dans le temps"
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

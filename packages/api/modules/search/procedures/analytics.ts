@@ -31,6 +31,16 @@ export const analytics = protectedProcedure
 			),
 			ctr: z.number(),
 			searchesOverTime: z.array(z.object({ date: z.string(), count: z.number() })),
+			ctrTrend: z
+				.array(
+					z.object({
+						date: z.string(),
+						searches: z.number(),
+						clicks: z.number(),
+						ctr: z.number(),
+					}),
+				)
+				.default([]),
 			latencyP50: z.number().nullable(),
 			latencyP95: z.number().nullable(),
 			latencyP99: z.number().nullable(),
@@ -132,6 +142,28 @@ export const analytics = protectedProcedure
 			.sort(([a], [b]) => a.localeCompare(b))
 			.map(([date, count]) => ({ date, count }));
 
+		// ── CTR trend (searches + clicks per day) ──
+		const clicksMap: Record<string, number> = {};
+		// Initialise all days in the period with 0
+		for (const key of Object.keys(daysMap)) {
+			clicksMap[key] = 0;
+		}
+		for (const e of events) {
+			if (e.type === "result_click") {
+				const key = e.createdAt.toISOString().slice(0, 10);
+				clicksMap[key] = (clicksMap[key] ?? 0) + e.count;
+			}
+		}
+
+		const ctrTrend = Object.keys(daysMap)
+			.sort((a, b) => a.localeCompare(b))
+			.map((date) => {
+				const searches = daysMap[date] ?? 0;
+				const clicks = clicksMap[date] ?? 0;
+				const dayCtr = searches > 0 ? clicks / searches : 0;
+				return { date, searches, clicks, ctr: dayCtr };
+			});
+
 		// ── Latency percentiles (p50/p95/p99) ──
 		type LatencyRow = { p50: number | null; p95: number | null; p99: number | null };
 		const latencyRows = await db.$queryRaw<LatencyRow[]>`
@@ -155,6 +187,7 @@ export const analytics = protectedProcedure
 			topClickedProducts,
 			ctr,
 			searchesOverTime,
+			ctrTrend,
 			latencyP50: latency.p50 !== null ? Math.round(latency.p50) : null,
 			latencyP95: latency.p95 !== null ? Math.round(latency.p95) : null,
 			latencyP99: latency.p99 !== null ? Math.round(latency.p99) : null,

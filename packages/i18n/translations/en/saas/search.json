@@ -137,6 +137,7 @@
       "queryColumn": "Query",
       "countColumn": "Count",
       "productColumn": "Product",
+      "byQuery": "by Query",
       "clicksColumn": "Clicks",
       "rankColumn": "#",
       "percentColumn": "% of total",
@@ -1607,6 +1608,23 @@
         "syncNow": "Sync Now",
         "autoSync": "Auto-sync"
       }
+    },
+    "export": {
+      "title": "Export Documents",
+      "description": "Export documents from this collection",
+      "format": "Format",
+      "csvDesc": "Excel-compatible, best for spreadsheets",
+      "jsonDesc": "Pretty-printed JSON, best for APIs",
+      "jsonlDesc": "JSON Lines, best for large datasets",
+      "xlsxDesc": "Formatted Excel workbook (.xlsx)",
+      "scope": "Scope",
+      "scopeAll": "All documents",
+      "scopeAllDesc": "Everything in this collection",
+      "scopeSelected": "Selected rows",
+      "rows": "rows",
+      "exporting": "Exporting...",
+      "download": "Download",
+      "error": "Export failed"
     }
   }
 }

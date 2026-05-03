@@ -12,25 +12,29 @@ export const exportDocuments = protectedProcedure
 		path: "/collections/{slug}/documents/export",
 		tags: ["Documents"],
 		summary: "Export documents",
-		description: "Exports collection documents as CSV, JSON, or JSONL.",
+		description: "Exports collection documents as CSV, JSON, JSONL, or XLSX.",
 	})
 	.input(
 		z.object({
 			organizationId: z.string(),
 			slug: z.string(),
-			format: z.enum(["csv", "json", "jsonl"]).optional().default("csv"),
+			format: z.enum(["csv", "json", "jsonl", "xlsx"]).optional().default("csv"),
 			pretty: z.boolean().optional().default(true),
 			/** Optional field list — if omitted, uses all keys from first document */
 			fields: z.array(z.string()).optional(),
+			/** Optional document IDs for selection-aware export */
+			documentIds: z.array(z.string()).optional(),
 		}),
 	)
 	.output(
 		z.object({
 			content: z.string(),
 			total: z.number(),
-			format: z.enum(["csv", "json", "jsonl"]),
+			format: z.enum(["csv", "json", "jsonl", "xlsx"]),
 			filename: z.string(),
 			mimeType: z.string(),
+			/** Only present for xlsx — base64-encoded binary */
+			isBase64: z.boolean().optional(),
 		}),
 	)
 	.handler(async ({ input, context: { user } }) => {
@@ -41,6 +45,7 @@ export const exportDocuments = protectedProcedure
 			exportCollectionDocuments,
 			buildCsvContent,
 			buildJsonContent,
+			buildXlsxContent,
 		} = await import("@repo/database");
 
 		const collection = await getCollectionBySlug(input.organizationId, input.slug);
@@ -48,7 +53,9 @@ export const exportDocuments = protectedProcedure
 			throw new ORPCError("NOT_FOUND");
 		}
 
-		const documents = await exportCollectionDocuments(collection.id);
+		const documents = await exportCollectionDocuments(collection.id, {
+			documentIds: input.documentIds,
+		});
 
 		// Determine fields: from input, schema, or auto-detect
 		const schemaFields: string[] = input.fields ?? [];
@@ -71,6 +78,7 @@ export const exportDocuments = protectedProcedure
 		let content: string;
 		let mimeType: string;
 		let extension: string;
+		let isBase64 = false;
 
 		switch (input.format) {
 			case "csv": {
@@ -83,6 +91,15 @@ export const exportDocuments = protectedProcedure
 				content = documents.map((doc) => JSON.stringify(doc.data)).join("\n");
 				mimeType = "application/jsonl";
 				extension = "jsonl";
+				break;
+			}
+			case "xlsx": {
+				const buffer = buildXlsxContent(documents, fields);
+				content = buffer.toString("base64");
+				mimeType =
+					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+				extension = "xlsx";
+				isBase64 = true;
 				break;
 			}
 			default: {
@@ -99,5 +116,6 @@ export const exportDocuments = protectedProcedure
 			format: input.format,
 			filename: `${input.slug}-documents.${extension}`,
 			mimeType,
+			isBase64: isBase64 || undefined,
 		};
 	});

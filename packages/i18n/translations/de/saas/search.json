@@ -137,6 +137,7 @@
       "queryColumn": "Suchanfrage",
       "countColumn": "Anzahl",
       "productColumn": "Produkt",
+      "byQuery": "nach Suchanfrage",
       "clicksColumn": "Klicks",
       "rankColumn": "#",
       "percentColumn": "% der Gesamtanzahl",
@@ -1607,6 +1608,23 @@
         "syncNow": "Jetzt synchronisieren",
         "autoSync": "Auto-Sync"
       }
+    },
+    "export": {
+      "title": "Dokumente exportieren",
+      "description": "Dokumente aus dieser Sammlung exportieren",
+      "format": "Format",
+      "csvDesc": "Excel-kompatibel, am besten für Tabellen",
+      "jsonDesc": "Schön formatiertes JSON, am besten für APIs",
+      "jsonlDesc": "JSON Lines, am besten für große Datensätze",
+      "xlsxDesc": "Formatierte Excel-Arbeitsmappe (.xlsx)",
+      "scope": "Umfang",
+      "scopeAll": "Alle Dokumente",
+      "scopeAllDesc": "Alles in dieser Sammlung",
+      "scopeSelected": "Ausgewählte Zeilen",
+      "rows": "Zeilen",
+      "exporting": "Exportiere...",
+      "download": "Herunterladen",
+      "error": "Export fehlgeschlagen"
     }
   }
 }

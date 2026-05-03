@@ -137,6 +137,7 @@
       "queryColumn": "Запрос",
       "countColumn": "Кол-во",
       "productColumn": "Товар",
+      "byQuery": "по запросу",
       "clicksColumn": "Клики",
       "rankColumn": "#",
       "percentColumn": "% of total",
@@ -1607,6 +1608,23 @@
         "syncNow": "Синхронизировать сейчас",
         "autoSync": "Автосинхронизация"
       }
+    },
+    "export": {
+      "title": "Экспорт документов",
+      "description": "Экспорт документов из этой коллекции",
+      "format": "Формат",
+      "csvDesc": "Совместимо с Excel, лучше для таблиц",
+      "jsonDesc": "Форматированный JSON, лучше для API",
+      "jsonlDesc": "JSON Lines, лучше для больших наборов",
+      "xlsxDesc": "Форматированная книга Excel (.xlsx)",
+      "scope": "Область",
+      "scopeAll": "Все документы",
+      "scopeAllDesc": "Всё в этой коллекции",
+      "scopeSelected": "Выбранные строки",
+      "rows": "строк",
+      "exporting": "Экспорт...",
+      "download": "Скачать",
+      "error": "Ошибка экспорта"
     }
   }
 }

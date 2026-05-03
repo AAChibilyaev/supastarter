@@ -540,6 +540,7 @@
       "queryColumn": "Requête",
       "countColumn": "Nombre",
       "productColumn": "Produit",
+      "byQuery": "par Requête",
       "clicksColumn": "Clics",
       "rankColumn": "#",
       "percentColumn": "% du total",
@@ -1629,6 +1630,23 @@
         "syncNow": "Synchroniser maintenant",
         "autoSync": "Synchronisation automatique"
       }
+    },
+    "export": {
+      "title": "Exporter les documents",
+      "description": "Exporter les documents de cette collection",
+      "format": "Format",
+      "csvDesc": "Compatible Excel, idéal pour les tableurs",
+      "jsonDesc": "JSON joliment formaté, idéal pour les API",
+      "jsonlDesc": "JSON Lines, idéal pour les grands ensembles",
+      "xlsxDesc": "Classeur Excel formaté (.xlsx)",
+      "scope": "Portée",
+      "scopeAll": "Tous les documents",
+      "scopeAllDesc": "Tout dans cette collection",
+      "scopeSelected": "Lignes sélectionnées",
+      "rows": "lignes",
+      "exporting": "Exportation...",
+      "download": "Télécharger",
+      "error": "Échec de l'exportation"
     }
   }
 }

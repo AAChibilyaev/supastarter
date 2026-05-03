@@ -1,5 +1,16 @@
 "use client";
 
+import {
+	DndContext,
+	closestCenter,
+	PointerSensor,
+	useSensor,
+	useSensors,
+	type DragEndEvent,
+} from "@dnd-kit/core";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
@@ -44,6 +55,62 @@ interface CustomRule {
 	expression: string;
 }
 
+// ─── Sortable Field Weight Row ────────────────────────────────────────────
+
+function SortableFieldWeightRow({
+	field,
+	onWeightChange,
+	t,
+}: {
+	field: FieldWeight;
+	onWeightChange: (name: string, weight: number) => void;
+	t: (key: string) => string;
+}) {
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+		id: field.name,
+	});
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+	};
+
+	return (
+		<tr
+			ref={setNodeRef}
+			style={style}
+			className={cn(
+				"border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+				isDragging && "shadow-lg opacity-50",
+			)}
+		>
+			<TableCell className="w-8">
+				<button
+					type="button"
+					className="size-6 rounded flex cursor-grab items-center justify-center hover:bg-muted"
+					{...attributes}
+					{...listeners}
+				>
+					<GripVertical className="size-4 text-muted-foreground" />
+				</button>
+			</TableCell>
+			<TableCell className="font-mono text-xs">{field.name}</TableCell>
+			<TableCell className="w-24">
+				<Input
+					type="number"
+					min={1}
+					max={100}
+					value={field.weight}
+					onChange={(e) => onWeightChange(field.name, Number(e.target.value))}
+					className="h-7 w-20 text-xs"
+				/>
+			</TableCell>
+		</tr>
+	);
+}
+
+// ─── Main Component ──────────────────────────────────────────────────────
+
 export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelProps) {
 	const t = useTranslations("search");
 	const queryClient = useQueryClient();
@@ -58,7 +125,13 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 	const [initialized, setInitialized] = useState(false);
 	const [changed, setChanged] = useState(false);
 
-	// ── Fetch schema (for field list) ──────────────────────────────
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: { distance: 8 },
+		}),
+	);
+
+	// ── Fetch schema (for field list) ───────────────────────────────────
 
 	const { data: schemaData, isLoading: schemaLoading } = useQuery(
 		orpc.search.schema.get.queryOptions({
@@ -76,7 +149,7 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 		}),
 	);
 
-	// ── Initialize from fetched data ───────────────────────────────
+	// ── Initialize from fetched data ────────────────────────────────────
 
 	useEffect(() => {
 		if (!rankingData || initialized) return;
@@ -103,7 +176,24 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rankingData, schemaFields.length, initialized]);
 
-	// ── Update mutation ────────────────────────────────────────────
+	// ── Drag-and-drop reorder ───────────────────────────────────────────
+
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (!over || active.id === over.id) return;
+
+		const oldIndex = fieldWeights.findIndex((fw) => fw.name === active.id);
+		const newIndex = fieldWeights.findIndex((fw) => fw.name === over.id);
+		if (oldIndex === -1 || newIndex === -1) return;
+
+		const updated = [...fieldWeights];
+		const [moved] = updated.splice(oldIndex, 1);
+		updated.splice(newIndex, 0, moved);
+		setFieldWeights(updated);
+		setChanged(true);
+	};
+
+	// ── Update mutation ─────────────────────────────────────────────────
 
 	const updateMutation = useMutation({
 		...orpc.search.rankingRules.update.mutationOptions(),
@@ -171,247 +261,254 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 	}
 
 	return (
-		<Card className="p-6 space-y-8">
-			{/* Header */}
-			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
-				<div>
-					<h3 className="text-lg font-semibold">{t("rankingRules.title")}</h3>
-					<p className="text-sm text-foreground/60">{t("rankingRules.description")}</p>
-				</div>
-				<Button
-					variant="primary"
-					onClick={handleSave}
-					disabled={!changed}
-					loading={updateMutation.isPending}
-				>
-					{t("rankingRules.save")}
-				</Button>
-			</div>
-
-			{/* Per-field weights */}
-			<div className="space-y-3">
-				<div>
-					<h4 className="text-sm font-medium">{t("rankingRules.fieldWeights")}</h4>
-					<p className="text-xs text-muted-foreground">
-						{t("rankingRules.fieldWeightsHint")}
-					</p>
-				</div>
-
-				{fieldWeights.length === 0 ? (
-					<EmptyState
-						title={t("rankingRules.noFields")}
-						description={t("rankingRules.noFieldsHint")}
-						icon={TrendingUp}
-					/>
-				) : (
-					<Card>
-						<CardContent className="p-0 overflow-x-auto">
-							<Table>
-								<TableHeader>
-									<TableRow>
-										<TableHead className="w-8" />
-										<TableHead>{t("rankingRules.fieldColumn")}</TableHead>
-										<TableHead className="w-24">
-											{t("rankingRules.weightColumn")}
-										</TableHead>
-									</TableRow>
-								</TableHeader>
-								<TableBody>
-									{fieldWeights.map((fw) => (
-										<TableRow key={fw.name}>
-											<TableCell className="text-muted-foreground">
-												<GripVertical className="size-4" />
-											</TableCell>
-											<TableCell className="font-mono text-xs">
-												{fw.name}
-											</TableCell>
-											<TableCell>
-												<Input
-													type="number"
-													min={1}
-													max={100}
-													value={fw.weight}
-													onChange={(e) =>
-														setWeight(fw.name, Number(e.target.value))
-													}
-													className="h-7 w-20 text-xs"
-												/>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</CardContent>
-					</Card>
-				)}
-			</div>
-
-			{/* General ranking settings */}
-			<div className="space-y-4">
-				<div>
-					<h4 className="text-sm font-medium">{t("rankingRules.generalSettings")}</h4>
-					<p className="text-xs text-muted-foreground">
-						{t("rankingRules.generalSettingsHint")}
-					</p>
-				</div>
-
-				<div className="gap-4 md:grid-cols-2 grid">
-					{/* Default sorting field */}
-					<div className="space-y-1.5">
-						<Label className="text-xs text-muted-foreground">
-							{t("rankingRules.defaultSortField")}
-						</Label>
-						<Select
-							value={defaultSortingField ?? ""}
-							onValueChange={(v) => {
-								setDefaultSortingField(v || null);
-								setChanged(true);
-							}}
-						>
-							<SelectTrigger className="h-8 text-xs">
-								<SelectValue placeholder={t("rankingRules.noDefaultSort")} />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="">{t("rankingRules.noDefaultSort")}</SelectItem>
-								{schemaFields.map((f) => (
-									<SelectItem key={f.name} value={f.name}>
-										{f.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
-
-					{/* Typo tolerance */}
-					<div className="space-y-1.5">
-						<Label className="text-xs text-muted-foreground">
-							{t("rankingRules.typoTolerance")}
-						</Label>
-						<Select
-							value={String(typoTolerance)}
-							onValueChange={(v) => {
-								setTypoTolerance(Number(v));
-								setChanged(true);
-							}}
-						>
-							<SelectTrigger className="h-8 text-xs">
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="0">{t("rankingRules.typoOff")}</SelectItem>
-								<SelectItem value="1">{t("rankingRules.typo1")}</SelectItem>
-								<SelectItem value="2">{t("rankingRules.typo2")}</SelectItem>
-								<SelectItem value="4">{t("rankingRules.typo4")}</SelectItem>
-							</SelectContent>
-						</Select>
-					</div>
-
-					{/* Infix search */}
-					<div className="space-y-1.5">
-						<Label className="text-xs text-muted-foreground">
-							{t("rankingRules.infixSearch")}
-						</Label>
-						<Select
-							value={infixSearch}
-							onValueChange={(v: "off" | "fallback" | "always") => {
-								setInfixSearch(v);
-								setChanged(true);
-							}}
-						>
-							<SelectTrigger className="h-8 text-xs">
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="off">{t("rankingRules.infixOff")}</SelectItem>
-								<SelectItem value="fallback">
-									{t("rankingRules.infixFallback")}
-								</SelectItem>
-								<SelectItem value="always">
-									{t("rankingRules.infixAlways")}
-								</SelectItem>
-							</SelectContent>
-						</Select>
-					</div>
-				</div>
-
-				{/* Toggle switches */}
-				<div className="gap-6 flex flex-wrap">
-					<div className="gap-2 flex items-center">
-						<Switch
-							id="prefix-search"
-							checked={prefixSearch}
-							onCheckedChange={(v) => {
-								setPrefixSearch(v);
-								setChanged(true);
-							}}
-						/>
-						<Label htmlFor="prefix-search" className="text-sm cursor-pointer">
-							{t("rankingRules.prefixSearch")}
-						</Label>
-					</div>
-					<div className="gap-2 flex items-center">
-						<Switch
-							id="exact-match"
-							checked={exactMatch}
-							onCheckedChange={(v) => {
-								setExactMatch(v);
-								setChanged(true);
-							}}
-						/>
-						<Label htmlFor="exact-match" className="text-sm cursor-pointer">
-							{t("rankingRules.exactMatch")}
-						</Label>
-					</div>
-				</div>
-			</div>
-
-			{/* Custom ranking rules */}
-			<div className="space-y-3">
-				<div className="sm:flex-row sm:items-center sm:justify-between gap-2 flex flex-col">
+		<Card>
+			<CardContent className="p-6 space-y-8">
+				{/* Header */}
+				<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 					<div>
-						<h4 className="text-sm font-medium">{t("rankingRules.customRules")}</h4>
-						<p className="text-xs text-muted-foreground">
-							{t("rankingRules.customRulesHint")}
+						<h3 className="text-lg font-semibold">{t("rankingRules.title")}</h3>
+						<p className="text-sm text-foreground/60">
+							{t("rankingRules.description")}
 						</p>
 					</div>
-					<Button variant="outline" size="sm" onClick={addCustomRule}>
-						<PlusIcon className="size-3.5 mr-1" />
-						{t("rankingRules.addRule")}
+					<Button
+						variant="primary"
+						onClick={handleSave}
+						disabled={!changed}
+						loading={updateMutation.isPending}
+					>
+						{t("rankingRules.save")}
 					</Button>
 				</div>
 
-				{customRules.length === 0 ? (
-					<EmptyState
-						title={t("rankingRules.noCustomRules")}
-						description={t("rankingRules.noCustomRulesHint")}
-						icon={TrendingUp}
-					/>
-				) : (
-					<div className="space-y-2">
-						{customRules.map((rule) => (
-							<div key={rule.id} className="gap-2 flex items-start">
-								<div className="flex-1">
-									<Input
-										type="text"
-										value={rule.expression}
-										onChange={(e) => updateCustomRule(rule.id, e.target.value)}
-										placeholder={t("rankingRules.rulePlaceholder")}
-										className="h-8 text-xs font-mono"
-									/>
-								</div>
-								<Button
-									variant="ghost"
-									size="sm"
-									onClick={() => removeCustomRule(rule.id)}
-									className="shrink-0 text-destructive hover:text-destructive"
-								>
-									<Trash2 className="size-4" />
-								</Button>
-							</div>
-						))}
+				{/* Per-field weights with drag-to-reorder */}
+				<div className="space-y-3">
+					<div>
+						<h4 className="text-sm font-medium">{t("rankingRules.fieldWeights")}</h4>
+						<p className="text-xs text-muted-foreground">
+							{t("rankingRules.fieldWeightsHint")}
+						</p>
 					</div>
-				)}
-			</div>
+
+					{fieldWeights.length === 0 ? (
+						<EmptyState
+							title={t("rankingRules.noFields")}
+							description={t("rankingRules.noFieldsHint")}
+							icon={TrendingUp}
+						/>
+					) : (
+						<Card>
+							<CardContent className="p-0 overflow-x-auto">
+								<Table>
+									<TableHeader>
+										<TableRow>
+											<TableHead className="w-8" />
+											<TableHead>{t("rankingRules.fieldColumn")}</TableHead>
+											<TableHead className="w-24">
+												{t("rankingRules.weightColumn")}
+											</TableHead>
+										</TableRow>
+									</TableHeader>
+									<DndContext
+										sensors={sensors}
+										collisionDetection={closestCenter}
+										onDragEnd={handleDragEnd}
+									>
+										<SortableContext
+											items={fieldWeights.map((fw) => fw.name)}
+											strategy={verticalListSortingStrategy}
+										>
+											<TableBody>
+												{fieldWeights.map((fw) => (
+													<SortableFieldWeightRow
+														key={fw.name}
+														field={fw}
+														onWeightChange={setWeight}
+														t={t}
+													/>
+												))}
+											</TableBody>
+										</SortableContext>
+									</DndContext>
+								</Table>
+							</CardContent>
+						</Card>
+					)}
+				</div>
+
+				{/* General ranking settings */}
+				<div className="space-y-4">
+					<div>
+						<h4 className="text-sm font-medium">{t("rankingRules.generalSettings")}</h4>
+						<p className="text-xs text-muted-foreground">
+							{t("rankingRules.generalSettingsHint")}
+						</p>
+					</div>
+
+					<div className="gap-4 md:grid-cols-2 grid">
+						{/* Default sorting field */}
+						<div className="space-y-1.5">
+							<Label className="text-xs text-muted-foreground">
+								{t("rankingRules.defaultSortField")}
+							</Label>
+							<Select
+								value={defaultSortingField ?? ""}
+								onValueChange={(v) => {
+									setDefaultSortingField(v || null);
+									setChanged(true);
+								}}
+							>
+								<SelectTrigger className="h-8 text-xs">
+									<SelectValue placeholder={t("rankingRules.noDefaultSort")} />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="">
+										{t("rankingRules.noDefaultSort")}
+									</SelectItem>
+									{schemaFields.map((f) => (
+										<SelectItem key={f.name} value={f.name}>
+											{f.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+
+						{/* Typo tolerance */}
+						<div className="space-y-1.5">
+							<Label className="text-xs text-muted-foreground">
+								{t("rankingRules.typoTolerance")}
+							</Label>
+							<Select
+								value={String(typoTolerance)}
+								onValueChange={(v) => {
+									setTypoTolerance(Number(v));
+									setChanged(true);
+								}}
+							>
+								<SelectTrigger className="h-8 text-xs">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="0">{t("rankingRules.typoOff")}</SelectItem>
+									<SelectItem value="1">{t("rankingRules.typo1")}</SelectItem>
+									<SelectItem value="2">{t("rankingRules.typo2")}</SelectItem>
+									<SelectItem value="4">{t("rankingRules.typo4")}</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+
+						{/* Infix search */}
+						<div className="space-y-1.5">
+							<Label className="text-xs text-muted-foreground">
+								{t("rankingRules.infixSearch")}
+							</Label>
+							<Select
+								value={infixSearch}
+								onValueChange={(v: "off" | "fallback" | "always") => {
+									setInfixSearch(v);
+									setChanged(true);
+								}}
+							>
+								<SelectTrigger className="h-8 text-xs">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="off">
+										{t("rankingRules.infixOff")}
+									</SelectItem>
+									<SelectItem value="fallback">
+										{t("rankingRules.infixFallback")}
+									</SelectItem>
+									<SelectItem value="always">
+										{t("rankingRules.infixAlways")}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+					</div>
+
+					{/* Toggle switches */}
+					<div className="gap-6 flex flex-wrap">
+						<div className="gap-2 flex items-center">
+							<Switch
+								id="prefix-search"
+								checked={prefixSearch}
+								onCheckedChange={(v) => {
+									setPrefixSearch(v);
+									setChanged(true);
+								}}
+							/>
+							<Label htmlFor="prefix-search" className="text-sm cursor-pointer">
+								{t("rankingRules.prefixSearch")}
+							</Label>
+						</div>
+						<div className="gap-2 flex items-center">
+							<Switch
+								id="exact-match"
+								checked={exactMatch}
+								onCheckedChange={(v) => {
+									setExactMatch(v);
+									setChanged(true);
+								}}
+							/>
+							<Label htmlFor="exact-match" className="text-sm cursor-pointer">
+								{t("rankingRules.exactMatch")}
+							</Label>
+						</div>
+					</div>
+				</div>
+
+				{/* Custom ranking rules */}
+				<div className="space-y-3">
+					<div className="sm:flex-row sm:items-center sm:justify-between gap-2 flex flex-col">
+						<div>
+							<h4 className="text-sm font-medium">{t("rankingRules.customRules")}</h4>
+							<p className="text-xs text-muted-foreground">
+								{t("rankingRules.customRulesHint")}
+							</p>
+						</div>
+						<Button variant="outline" size="sm" onClick={addCustomRule}>
+							<PlusIcon className="size-3.5 mr-1" />
+							{t("rankingRules.addRule")}
+						</Button>
+					</div>
+
+					{customRules.length === 0 ? (
+						<EmptyState
+							title={t("rankingRules.noCustomRules")}
+							description={t("rankingRules.noCustomRulesHint")}
+							icon={TrendingUp}
+						/>
+					) : (
+						<div className="space-y-2">
+							{customRules.map((rule) => (
+								<div key={rule.id} className="gap-2 flex items-start">
+									<div className="flex-1">
+										<Input
+											type="text"
+											value={rule.expression}
+											onChange={(e) =>
+												updateCustomRule(rule.id, e.target.value)
+											}
+											placeholder={t("rankingRules.rulePlaceholder")}
+											className="h-8 text-xs font-mono"
+										/>
+									</div>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => removeCustomRule(rule.id)}
+										className="shrink-0 text-destructive hover:text-destructive"
+									>
+										<Trash2 className="size-4" />
+									</Button>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
+			</CardContent>
 		</Card>
 	);
 }

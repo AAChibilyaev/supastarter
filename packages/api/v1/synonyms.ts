@@ -27,6 +27,8 @@ import {
 	aliasName,
 	getCurationSetsForCollection,
 	deleteCurationSetById,
+	getSynonymSetsForCollection,
+	deleteSynonymSetById,
 	getTypesenseClient,
 	physicalCollectionName,
 	syncCurationsToTypesense,
@@ -34,6 +36,7 @@ import {
 	typesenseFetch,
 	type CurationRule,
 	type SynonymPair,
+	type SynonymSetRecord,
 } from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";
@@ -112,12 +115,11 @@ export const synonymsApp = new Hono()
 		const index = await resolveIndex(c, indexId, verified);
 		if (index instanceof Response) return index;
 
-		const client = getTypesenseClient();
 		const collectionName = aliasName(verified.organizationId, index.slug);
 
 		try {
-			const result = await client.collections(collectionName).synonyms().retrieve();
-			return c.json(result);
+			const sets = await getSynonymSetsForCollection(collectionName);
+			return c.json({ synonym_sets: sets });
 		} catch (error) {
 			logger.error("V1 list synonyms failed", { error, indexId, collectionName });
 			return c.json({ error: "internal_error", message: "Failed to retrieve synonyms" }, 502);
@@ -157,11 +159,10 @@ export const synonymsApp = new Hono()
 		}
 
 		const collectionName = aliasName(verified.organizationId, index.slug);
-		const client = getTypesenseClient();
-		const id = `syn_${sanitizeId(parsed.data.root)}`;
+		const id = `syn_${sanitizeId(collectionName)}_${sanitizeId(parsed.data.root)}`;
 
 		try {
-			await client.collections(collectionName).synonyms().upsert(id, {
+			await typesenseFetch("PUT", `/synonym_sets/${encodeURIComponent(id)}`, {
 				root: parsed.data.root,
 				synonyms: parsed.data.synonyms,
 			});
@@ -243,10 +244,9 @@ export const synonymsApp = new Hono()
 		if (index instanceof Response) return index;
 
 		const collectionName = aliasName(verified.organizationId, index.slug);
-		const client = getTypesenseClient();
 
 		try {
-			await client.collections(collectionName).synonyms(synonymId).delete();
+			await deleteSynonymSetById(synonymId);
 			logger.info("Synonym deleted", { indexId, collectionName, synonymId });
 			return c.json({ id: synonymId, deleted: true });
 		} catch (error) {

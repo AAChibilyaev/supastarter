@@ -72,10 +72,13 @@ export {
 export {
 	getCurationSetsForCollection,
 	deleteCurationSetById,
+	getSynonymSetsForCollection,
+	deleteSynonymSetById,
 	syncCurationsToTypesense,
 	syncSynonymsToTypesense,
 	typesenseFetch,
 	type CurationRule,
 	type CurationSetRecord,
 	type SynonymPair,
+	type SynonymSetRecord,
 } from "./lib/synonyms-sync";

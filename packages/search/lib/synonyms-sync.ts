@@ -1,8 +1,6 @@
 import "server-only";
 import { logger } from "@repo/logs";
-import type { SynonymCreateSchema } from "typesense/lib/Typesense/Synonyms";
 
-import { getTypesenseClient } from "./client";
 import { getTypesenseEnv } from "./env";
 
 export interface SynonymPair {
@@ -26,9 +24,14 @@ function sanitizeId(value: string): string {
 }
 
 /**
- * Syncs the synonym list to the Typesense collection (or alias).
- * Groups {synonym, root} pairs by root, upserts one entry per root,
- * and removes any synonyms no longer present.
+ * Syncs the synonym list to Typesense v30 global Synonym Sets.
+ * Groups {synonym, root} pairs by root, upserts one global set per root,
+ * and removes any sets no longer present.
+ *
+ * In Typesense v30, synonyms moved from collection-level (`/collections/{col}/synonyms/*`)
+ * to global Synonym Sets (`/synonym_sets/*`). Since synonym sets are global
+ * (no collection_name field), we prefix IDs with the collection name to avoid
+ * collisions across collections.
  *
  * Best-effort: logs errors, never throws, so it doesn't block writes.
  */
@@ -36,15 +39,17 @@ export async function syncSynonymsToTypesense(
 	collectionName: string,
 	synonyms: SynonymPair[],
 ): Promise<void> {
-	const client = getTypesenseClient();
-	const coll = client.collections(collectionName);
-
 	let existingIds: Set<string>;
 	try {
-		const existing = await coll.synonyms().retrieve();
-		existingIds = new Set(existing.synonyms.map((s) => s.id));
+		const result = await typesenseFetch<SynonymSetList>("GET", "/synonym_sets");
+		const allSets = result.synonym_sets ?? [];
+		// Filter sets that belong to this collection by checking ID prefix
+		const prefix = `syn_${sanitizeId(collectionName)}_`;
+		existingIds = new Set(
+			allSets.filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
+		);
 	} catch (err) {
-		logger.warn("syncSynonymsToTypesense: could not retrieve existing synonyms", {
+		logger.warn("syncSynonymsToTypesense: could not retrieve existing synonym sets", {
 			collectionName,
 			err,
 		});
@@ -62,14 +67,15 @@ export async function syncSynonymsToTypesense(
 	const newIds = new Set<string>();
 
 	for (const [root, synonymList] of grouped) {
-		const id = `syn_${sanitizeId(root)}`;
+		const id = `syn_${sanitizeId(collectionName)}_${sanitizeId(root)}`;
 		newIds.add(id);
 		try {
-			await coll
-				.synonyms()
-				.upsert(id, { root, synonyms: synonymList } satisfies SynonymCreateSchema);
+			await typesenseFetch("PUT", `/synonym_sets/${encodeURIComponent(id)}`, {
+				root,
+				synonyms: synonymList,
+			});
 		} catch (err) {
-			logger.error("syncSynonymsToTypesense: failed to upsert synonym", {
+			logger.error("syncSynonymsToTypesense: failed to upsert synonym set", {
 				collectionName,
 				id,
 				root,
@@ -78,13 +84,13 @@ export async function syncSynonymsToTypesense(
 		}
 	}
 
-	// Remove synonyms that were deleted
+	// Remove synonym sets that were deleted
 	for (const id of existingIds) {
 		if (!newIds.has(id)) {
 			try {
-				await coll.synonyms(id).delete();
+				await typesenseFetch("DELETE", `/synonym_sets/${encodeURIComponent(id)}`);
 			} catch (err) {
-				logger.warn("syncSynonymsToTypesense: failed to delete synonym", {
+				logger.warn("syncSynonymsToTypesense: failed to delete synonym set", {
 					collectionName,
 					id,
 					err,
@@ -240,6 +246,51 @@ export async function deleteCurationSetById(setId: string): Promise<void> {
 		await typesenseFetch("DELETE", `/curation_sets/${encodeURIComponent(setId)}`);
 	} catch (err) {
 		logger.warn("deleteCurationSetById: failed to delete curation set", {
+			setId,
+			err,
+		});
+	}
+}
+
+export interface SynonymSetRecord {
+	id: string;
+	root: string;
+	synonyms: string[];
+}
+
+interface SynonymSetList {
+	synonym_sets: SynonymSetRecord[];
+}
+
+/**
+ * Retrieves all synonym sets from Typesense that belong to a specific collection
+ * (identified by the collection-name prefix in the synonym set ID).
+ */
+export async function getSynonymSetsForCollection(
+	collectionName: string,
+): Promise<SynonymSetRecord[]> {
+	try {
+		const result = await typesenseFetch<SynonymSetList>("GET", "/synonym_sets");
+		const allSets = result.synonym_sets ?? [];
+		const prefix = `syn_${sanitizeId(collectionName)}_`;
+		return allSets.filter((s) => s.id.startsWith(prefix));
+	} catch (err) {
+		logger.warn("getSynonymSetsForCollection: could not retrieve synonym sets", {
+			collectionName,
+			err,
+		});
+		return [];
+	}
+}
+
+/**
+ * Deletes a single synonym set from Typesense by its set ID.
+ */
+export async function deleteSynonymSetById(setId: string): Promise<void> {
+	try {
+		await typesenseFetch("DELETE", `/synonym_sets/${encodeURIComponent(setId)}`);
+	} catch (err) {
+		logger.warn("deleteSynonymSetById: failed to delete synonym set", {
 			setId,
 			err,
 		});

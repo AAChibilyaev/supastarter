@@ -371,7 +371,7 @@ export function OverviewPage() {
 					<CardTitle className="text-base">{t("overview.quickActions")}</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid">
+					<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid grid-cols-2">
 						<Button
 							variant="outline"
 							className="gap-3 py-4 px-4 h-auto justify-start text-left"

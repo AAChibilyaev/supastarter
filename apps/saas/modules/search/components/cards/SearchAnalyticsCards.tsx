@@ -164,8 +164,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	const zeroResultCount = zeroResultQueries.length > 0 ? zeroResultQueries[0].count : 0;
 	const zeroResultRate = totalSearches > 0 ? zeroResultCount / totalSearches : 0;
 	const hasZeroResultData =
-		Array.isArray(analyticsData?.zeroResultQueries) &&
-		analyticsData!.zeroResultQueries.length > 0;
+		Array.isArray(analyticsData?.zeroResultQueries) && analyticsData!.zeroResultQueries.length > 0;
 
 	const latencyP50 = analyticsData?.latencyP50 ?? null;
 	const latencyP95 = analyticsData?.latencyP95 ?? null;
@@ -235,14 +234,11 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 		rows.push(header);
 
 		if (topQueriesData) {
-			topQueriesData.forEach(
-				(row: { query: string; count: number | string }, index: number) => {
-					const count = Number(row.count);
-					const percent =
-						totalQueryCount > 0 ? ((count / totalQueryCount) * 100).toFixed(1) : "0.0";
-					rows.push([String(index + 1), row.query, String(count), `${percent}%`]);
-				},
-			);
+			topQueriesData.forEach((row: { query: string; count: number | string }, index: number) => {
+				const count = Number(row.count);
+				const percent = totalQueryCount > 0 ? ((count / totalQueryCount) * 100).toFixed(1) : "0.0";
+				rows.push([String(index + 1), row.query, String(count), `${percent}%`]);
+			});
 		}
 
 		const csv = rows
@@ -279,7 +275,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	const renderDashboardTab = () => (
 		<div className="space-y-6">
 			{/* KPI row */}
-			<div className="gap-4 md:grid-cols-2 lg:grid-cols-5 grid">
+			<div className="gap-4 md:grid-cols-2 lg:grid-cols-5 grid grid-cols-2">
 				<StatsTile
 					title={t("search.analytics.totalSearches")}
 					value={totalSearches}
@@ -347,9 +343,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							))}
 						</div>
 					) : (
-						<p className="text-sm text-muted-foreground">
-							{t("search.analytics.noLatencyData")}
-						</p>
+						<p className="text-sm text-muted-foreground">{t("search.analytics.noLatencyData")}</p>
 					)}
 				</CardContent>
 			</Card>
@@ -405,13 +399,9 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead className="w-12">
-										{t("search.analytics.rankColumn")}
-									</TableHead>
+									<TableHead className="w-12">{t("search.analytics.rankColumn")}</TableHead>
 									<TableHead>{t("search.analytics.queryColumn")}</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.countColumn")}
-									</TableHead>
+									<TableHead className="text-right">{t("search.analytics.countColumn")}</TableHead>
 									<TableHead className="text-right">
 										{t("search.analytics.percentColumn")}
 									</TableHead>
@@ -419,23 +409,14 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							</TableHeader>
 							<TableBody>
 								{topQueriesData.map(
-									(
-										row: { query: string; count: number | string },
-										index: number,
-									) => {
+									(row: { query: string; count: number | string }, index: number) => {
 										const count = Number(row.count);
 										const percent =
-											totalQueryCount > 0
-												? ((count / totalQueryCount) * 100).toFixed(1)
-												: "0.0";
+											totalQueryCount > 0 ? ((count / totalQueryCount) * 100).toFixed(1) : "0.0";
 										return (
 											<TableRow key={row.query}>
-												<TableCell className="text-xs text-muted-foreground">
-													{index + 1}
-												</TableCell>
-												<TableCell className="font-mono text-sm">
-													{row.query}
-												</TableCell>
+												<TableCell className="text-xs text-muted-foreground">{index + 1}</TableCell>
+												<TableCell className="font-mono text-sm">{row.query}</TableCell>
 												<TableCell className="text-right tabular-nums">
 													{format.number(count)}
 												</TableCell>
@@ -469,18 +450,14 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							<TableHeader>
 								<TableRow>
 									<TableHead>{t("search.analytics.productColumn")}</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.clicksColumn")}
-									</TableHead>
+									<TableHead className="text-right">{t("search.analytics.clicksColumn")}</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{analyticsData.topClickedProducts.map(
 									(row: { productId: string; title: string; clicks: number }) => (
 										<TableRow key={row.productId}>
-											<TableCell className="font-mono text-sm">
-												{row.title}
-											</TableCell>
+											<TableCell className="font-mono text-sm">{row.title}</TableCell>
 											<TableCell className="text-right tabular-nums">
 												{format.number(row.clicks)}
 											</TableCell>
@@ -494,10 +471,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 			)}
 
 			{/* Failed Queries table */}
-			<FailedQueriesTable
-				zeroResultQueries={zeroResultQueries}
-				totalSearches={totalSearches}
-			/>
+			<FailedQueriesTable zeroResultQueries={zeroResultQueries} totalSearches={totalSearches} />
 		</div>
 	);
 
@@ -512,13 +486,9 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead className="w-12">
-										{t("search.analytics.rankColumn")}
-									</TableHead>
+									<TableHead className="w-12">{t("search.analytics.rankColumn")}</TableHead>
 									<TableHead>{t("search.analytics.queryColumn")}</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.countColumn")}
-									</TableHead>
+									<TableHead className="text-right">{t("search.analytics.countColumn")}</TableHead>
 									<TableHead className="text-right">
 										{t("search.analytics.percentColumn")}
 									</TableHead>
@@ -526,23 +496,14 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							</TableHeader>
 							<TableBody>
 								{topQueriesData.map(
-									(
-										row: { query: string; count: number | string },
-										index: number,
-									) => {
+									(row: { query: string; count: number | string }, index: number) => {
 										const count = Number(row.count);
 										const percent =
-											totalQueryCount > 0
-												? ((count / totalQueryCount) * 100).toFixed(1)
-												: "0.0";
+											totalQueryCount > 0 ? ((count / totalQueryCount) * 100).toFixed(1) : "0.0";
 										return (
 											<TableRow key={row.query}>
-												<TableCell className="text-xs text-muted-foreground">
-													{index + 1}
-												</TableCell>
-												<TableCell className="font-mono text-sm">
-													{row.query}
-												</TableCell>
+												<TableCell className="text-xs text-muted-foreground">{index + 1}</TableCell>
+												<TableCell className="font-mono text-sm">{row.query}</TableCell>
 												<TableCell className="text-right tabular-nums">
 													{format.number(count)}
 												</TableCell>
@@ -569,10 +530,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 
 	const renderFailedTab = () => (
 		<div className="space-y-6">
-			<FailedQueriesTable
-				zeroResultQueries={zeroResultQueries}
-				totalSearches={totalSearches}
-			/>
+			<FailedQueriesTable zeroResultQueries={zeroResultQueries} totalSearches={totalSearches} />
 
 			{/* Summary stats for failed queries */}
 			<Card>
@@ -586,8 +544,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 							value={
 								hasZeroResultData
 									? zeroResultQueries.reduce(
-											(sum: number, q: { count: number }) =>
-												sum + (q.count ?? 0),
+											(sum: number, q: { count: number }) => sum + (q.count ?? 0),
 											0,
 										)
 									: 0
@@ -618,16 +575,10 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 			<div className="flex items-center justify-between">
 				<Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AnalyticsTab)}>
 					<TabsList>
-						<TabsTrigger value="dashboard">
-							{t("search.analytics.tabDashboard")}
-						</TabsTrigger>
-						<TabsTrigger value="top-queries">
-							{t("search.analytics.tabTopQueries")}
-						</TabsTrigger>
+						<TabsTrigger value="dashboard">{t("search.analytics.tabDashboard")}</TabsTrigger>
+						<TabsTrigger value="top-queries">{t("search.analytics.tabTopQueries")}</TabsTrigger>
 						<TabsTrigger value="failed">{t("search.analytics.tabFailed")}</TabsTrigger>
-						<TabsTrigger value="activity">
-							{t("search.analytics.tabActivity")}
-						</TabsTrigger>
+						<TabsTrigger value="activity">{t("search.analytics.tabActivity")}</TabsTrigger>
 					</TabsList>
 				</Tabs>
 
@@ -646,9 +597,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 									{t("search.analytics.exportReport")}
 								</Button>
 							</TooltipTrigger>
-							<TooltipContent>
-								{t("search.analytics.exportReportTooltip")}
-							</TooltipContent>
+							<TooltipContent>{t("search.analytics.exportReportTooltip")}</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 					{/* Index filter dropdown */}

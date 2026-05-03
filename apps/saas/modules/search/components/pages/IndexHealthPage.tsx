@@ -298,7 +298,7 @@ export function IndexHealthPage({ organizationId, orgSlug }: IndexHealthPageProp
 						</div>
 					</CardHeader>
 					<CardContent>
-						<div className="gap-6 md:grid-cols-2 lg:grid-cols-4 grid">
+						<div className="gap-6 md:grid-cols-2 lg:grid-cols-4 grid grid-cols-2">
 							{/* CPU */}
 							<div className="space-y-2">
 								<div className="gap-2 text-sm flex items-center text-muted-foreground">

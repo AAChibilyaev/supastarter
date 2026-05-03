@@ -16,7 +16,8 @@
 			"copyToClipboard": "Скопировать в буфер обмена",
 			"copiedToClipboard": "Скопировано в буфер обмена",
 			"exportedSuccess": "Успешно экспортировано",
-			"clearConversation": "Очистить чат"
+			"clearConversation": "Очистить чат",
+			"subtitle": "ИИ-ассистент для AACsearch"
 		}
 	}
 }

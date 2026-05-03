@@ -16,7 +16,8 @@
 			"copyToClipboard": "In Zwischenablage kopieren",
 			"copiedToClipboard": "In Zwischenablage kopiert",
 			"exportedSuccess": "Erfolgreich exportiert",
-			"clearConversation": "Unterhaltung löschen"
+			"clearConversation": "Unterhaltung löschen",
+			"subtitle": "KI-gestützter Assistent für AACsearch"
 		}
 	}
 }

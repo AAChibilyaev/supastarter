@@ -16,7 +16,8 @@
 			"copyToClipboard": "Copier dans le presse-papiers",
 			"copiedToClipboard": "Copié dans le presse-papiers",
 			"exportedSuccess": "Exporté avec succès",
-			"clearConversation": "Effacer la conversation"
+			"clearConversation": "Effacer la conversation",
+			"subtitle": "Assistant IA pour AACsearch"
 		}
 	}
 }

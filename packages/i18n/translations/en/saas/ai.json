@@ -16,7 +16,8 @@
 			"copyToClipboard": "Copy to clipboard",
 			"copiedToClipboard": "Copied to clipboard",
 			"exportedSuccess": "Exported successfully",
-			"clearConversation": "Clear conversation"
+			"clearConversation": "Clear conversation",
+			"subtitle": "AI-powered assistant for AACsearch"
 		}
 	}
 }

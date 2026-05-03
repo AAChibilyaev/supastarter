@@ -464,6 +464,12 @@ export function AppSidebar() {
 						},
 					]
 				: []),
+			{
+				label: t("ai.chat.title"),
+				href: "/chatbot",
+				icon: BotIcon,
+				isActive: pathname === "/chatbot",
+			},
 		];
 	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, showStartNav, t, user?.role]);
 

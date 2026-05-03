@@ -1943,9 +1943,20 @@
 			"description": "Suchen Sie durch Hochladen eines Bildes. KI beschreibt es vor der Suche."
 		},
 		"stemming": {
-			"description": "Verwalten Sie Stemming-Überschreibungen für präzise Textübereinstimmung.",
+			"tab": "Stemming",
+			"title": "Stemming-Überschreibungen",
+			"description": "Verwalten Sie Stemming-Überschreibungen für eine präzise Textübereinstimmung. Steuern Sie, welche Wörter auf welche Grundformen abgebildet werden.",
+			"save": "Änderungen speichern",
+			"saved": "Stemming-Überschreibungen gespeichert.",
+			"error": "Fehler beim Speichern der Stemming-Überschreibungen.",
 			"word": "Wort",
-			"root": "Stamm"
+			"root": "Stamm",
+			"add": "Überschreibung hinzufügen",
+			"remove": "Entfernen",
+			"removeConfirmTitle": "Überschreibung entfernen",
+			"removeConfirmMessage": "Sind Sie sicher, dass Sie diese Stemming-Überschreibung entfernen möchten?",
+			"empty": "Noch keine Stemming-Überschreibungen konfiguriert.",
+			"emptyDescription": "Stemming-Überschreibungen ordnen Wortvarianten einer gemeinsamen Grundform zu. Fügen Sie Überschreibungen hinzu, um die Suchergebnisse zu verbessern."
 		},
 		"stopwords": {
 			"description": "Wörter in dieser Liste werden bei der Suche ignoriert. Verwenden Sie sie, um häufige Wörter wie Artikel und Präpositionen herauszufiltern.",

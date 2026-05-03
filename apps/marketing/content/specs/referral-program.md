@@ -24,11 +24,11 @@
 
 ### 1.2 Reward Structure
 
-| Trigger | Reward | Notes |
-|---------|--------|-------|
-| Referee's first payment | 20% of first month credited to referrer | One-time bonus per referred user |
-| Referee's ongoing subscription | — | Only first month rewarded |
-| Multiple referrals | Accumulated credits | Max 5 per IP/email domain |
+| Trigger                        | Reward                                  | Notes                            |
+| ------------------------------ | --------------------------------------- | -------------------------------- |
+| Referee's first payment        | 20% of first month credited to referrer | One-time bonus per referred user |
+| Referee's ongoing subscription | —                                       | Only first month rewarded        |
+| Multiple referrals             | Accumulated credits                     | Max 5 per IP/email domain        |
 
 ### 1.3 Fraud Prevention
 
@@ -96,26 +96,26 @@ This is a **schema change** (Gate A). Requires approval before implementation.
 
 ### 3.1 Referral Code Management
 
-| Procedure | Method | Description |
-|-----------|--------|-------------|
-| `referral.getMyCode` | GET | Returns the user's referral code (generates if absent) |
-| `referral.getMyStats` | GET | Returns click/signup/conversion counts |
-| `referral.getMyReferrals` | GET | List of referral entries with status |
-| `referral.getAvailableRewards` | GET | Total unclaimed credit balance |
+| Procedure                      | Method | Description                                            |
+| ------------------------------ | ------ | ------------------------------------------------------ |
+| `referral.getMyCode`           | GET    | Returns the user's referral code (generates if absent) |
+| `referral.getMyStats`          | GET    | Returns click/signup/conversion counts                 |
+| `referral.getMyReferrals`      | GET    | List of referral entries with status                   |
+| `referral.getAvailableRewards` | GET    | Total unclaimed credit balance                         |
 
 ### 3.2 Referral Landing
 
-| Procedure | Method | Description |
-|-----------|--------|-------------|
-| `referral.resolveCode` | GET | Returns referrer name/org from code (for landing page) |
+| Procedure              | Method | Description                                            |
+| ---------------------- | ------ | ------------------------------------------------------ |
+| `referral.resolveCode` | GET    | Returns referrer name/org from code (for landing page) |
 
 ### 3.3 Webhook/Event Tracking
 
-| Event | Trigger | Description |
-|-------|---------|-------------|
-| `referral_link_clicked` | Link clicked | Increment click count |
+| Event                       | Trigger          | Description            |
+| --------------------------- | ---------------- | ---------------------- |
+| `referral_link_clicked`     | Link clicked     | Increment click count  |
 | `referral_signup_completed` | Signup with code | Create Referral record |
-| `referral_conversion_check` | First payment | Check + award credit |
+| `referral_conversion_check` | First payment    | Check + award credit   |
 
 ---
 
@@ -183,6 +183,7 @@ This is a **schema change** (Gate A). Requires approval before implementation.
 ### 4.3 Affiliate Portal (`/affiliates`)
 
 Extended referral dashboard for high-volume affiliates:
+
 - Bulk link generation (up to 100 unique codes)
 - Payout history with CSV export
 - Promotional materials (banners, ad copy)

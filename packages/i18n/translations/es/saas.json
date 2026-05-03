@@ -1943,9 +1943,20 @@
 			"description": "Busca subiendo una imagen. La IA la describe antes de buscar."
 		},
 		"stemming": {
-			"description": "Gestiona anulaciones de stemming para coincidencias de texto precisas.",
+			"tab": "Stemming",
+			"title": "Anulaciones de stemming",
+			"description": "Gestione las anulaciones de stemming para una coincidencia de texto precisa. Controle qué palabras se asignan a qué formas raíz.",
+			"save": "Guardar cambios",
+			"saved": "Anulaciones de stemming guardadas.",
+			"error": "Error al guardar las anulaciones de stemming.",
 			"word": "Palabra",
-			"root": "Raíz"
+			"root": "Raíz",
+			"add": "Añadir anulación",
+			"remove": "Eliminar",
+			"removeConfirmTitle": "Eliminar anulación",
+			"removeConfirmMessage": "¿Está seguro de que desea eliminar esta anulación de stemming?",
+			"empty": "Aún no hay anulaciones de stemming configuradas.",
+			"emptyDescription": "Las anulaciones de stemming asignan variantes de palabras a una raíz común. Añada anulaciones para mejorar la coincidencia de búsqueda."
 		},
 		"stopwords": {
 			"description": "Las palabras de esta lista se ignoran durante la búsqueda. Úselas para filtrar palabras comunes como artículos y preposiciones.",

@@ -1944,9 +1944,20 @@
 			"description": "Recherchez en téléchargeant une image. L'IA la décrit avant de chercher."
 		},
 		"stemming": {
-			"description": "Gérez les substitutions de racinisation pour une correspondance textuelle précise.",
+			"tab": "Stemming",
+			"title": "Remplacements de stemming",
+			"description": "Gérez les remplacements de stemming pour une correspondance textuelle précise. Contrôlez quels mots sont mappés à quelles formes racines.",
+			"save": "Enregistrer les modifications",
+			"saved": "Remplacements de stemming enregistrés.",
+			"error": "Échec de l'enregistrement des remplacements de stemming.",
 			"word": "Mot",
-			"root": "Racine"
+			"root": "Racine",
+			"add": "Ajouter un remplacement",
+			"remove": "Supprimer",
+			"removeConfirmTitle": "Supprimer le remplacement",
+			"removeConfirmMessage": "Êtes-vous sûr de vouloir supprimer ce remplacement de stemming ?",
+			"empty": "Aucun remplacement de stemming configuré pour le moment.",
+			"emptyDescription": "Les remplacements de stemming mappent les variantes de mots à une racine commune. Ajoutez des remplacements pour améliorer la correspondance de recherche."
 		},
 		"stopwords": {
 			"description": "Les mots de cette liste sont ignorés lors de la recherche. Utilisez-les pour filtrer les mots courants comme les articles et les prépositions.",

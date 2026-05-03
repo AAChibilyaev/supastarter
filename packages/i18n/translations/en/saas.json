@@ -1943,9 +1943,20 @@
 			"description": "Search by uploading an image. AI describes it before searching."
 		},
 		"stemming": {
-			"description": "Manage stemming overrides for fine-grained text matching.",
+			"tab": "Stemming",
+			"title": "Stemming Overrides",
+			"description": "Manage stemming overrides for fine-grained text matching. Control which words map to which root forms.",
+			"save": "Save changes",
+			"saved": "Stemming overrides saved.",
+			"error": "Failed to save stemming overrides.",
 			"word": "Word",
-			"root": "Root"
+			"root": "Root",
+			"add": "Add override",
+			"remove": "Remove",
+			"removeConfirmTitle": "Remove override",
+			"removeConfirmMessage": "Are you sure you want to remove this stemming override?",
+			"empty": "No stemming overrides configured yet.",
+			"emptyDescription": "Stemming overrides map variant word forms to a common root. Add overrides to improve search matching for domain-specific terms."
 		},
 		"stopwords": {
 			"description": "Words in this list are ignored during search. Use it to filter out common words like articles and prepositions.",

@@ -12,10 +12,7 @@ import * as path from "node:path";
 
 const REPO_ROOT = path.resolve(process.cwd(), "../..");
 const CHANGELOG_PATH = path.join(REPO_ROOT, "CHANGELOG.md");
-const OUTPUT_PATH = path.resolve(
-	process.cwd(),
-	"content/docs/en/changelog/index.mdx",
-);
+const OUTPUT_PATH = path.resolve(process.cwd(), "content/docs/en/changelog/index.mdx");
 
 function main() {
 	if (!fs.existsSync(CHANGELOG_PATH)) {
@@ -50,9 +47,7 @@ description: Release history and changelog for AACsearch.
 	fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
 
 	fs.writeFileSync(OUTPUT_PATH, mdxContent, "utf-8");
-	console.log(
-		`[generate-changelog] Wrote ${bodyLines.length} lines to ${OUTPUT_PATH}`,
-	);
+	console.log(`[generate-changelog] Wrote ${bodyLines.length} lines to ${OUTPUT_PATH}`);
 }
 
 main();

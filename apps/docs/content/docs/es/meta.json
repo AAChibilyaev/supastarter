@@ -1,3 +1,11 @@
 {
-	"pages": ["index", "overview", "getting-started", "search-api", "connectors", "dashboard"]
+	"pages": [
+		"index",
+		"overview",
+		"getting-started",
+		"search-api",
+		"connectors",
+		"dashboard",
+		"changelog"
+	]
 }

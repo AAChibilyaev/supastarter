@@ -28,6 +28,7 @@ npm install @aacsearch/strapi-plugin
 ## Usage
 
 Once configured, the plugin automatically:
+
 - Creates/updates AACsearch documents when you **create or update** Strapi entries
 - Deletes AACsearch documents when you **delete** Strapi entries
 - Provides a **Reindex** button per content type to re-sync all entries
@@ -39,27 +40,27 @@ For advanced field mapping, configure in your Strapi config:
 ```javascript
 // config/plugins.js or config/plugins.ts
 module.exports = {
-  aacsearch: {
-    enabled: true,
-    config: {
-      baseUrl: process.env.AACSEARCH_URL,
-      token: process.env.AACSEARCH_TOKEN,
-      collections: {
-        "api::product.product": {
-          indexSlug: "products",
-          fieldMapping: {
-            name: "title",
-            description: "body",
-            price: "price",
-          },
-          excludeFields: ["createdBy", "updatedBy"],
-        },
-        "api::category.category": {
-          indexSlug: "categories",
-        },
-      },
-    },
-  },
+	aacsearch: {
+		enabled: true,
+		config: {
+			baseUrl: process.env.AACSEARCH_URL,
+			token: process.env.AACSEARCH_TOKEN,
+			collections: {
+				"api::product.product": {
+					indexSlug: "products",
+					fieldMapping: {
+						name: "title",
+						description: "body",
+						price: "price",
+					},
+					excludeFields: ["createdBy", "updatedBy"],
+				},
+				"api::category.category": {
+					indexSlug: "categories",
+				},
+			},
+		},
+	},
 };
 ```
 
@@ -67,12 +68,12 @@ module.exports = {
 
 The plugin exposes these admin API endpoints:
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/aacsearch/get-config` | GET | Get current plugin configuration |
-| `/aacsearch/update-config` | POST | Update plugin configuration |
-| `/aacsearch/test-connection` | GET | Test AACsearch connection |
-| `/aacsearch/reindex/:contentTypeUid` | POST | Full reindex of a content type |
+| Endpoint                             | Method | Description                      |
+| ------------------------------------ | ------ | -------------------------------- |
+| `/aacsearch/get-config`              | GET    | Get current plugin configuration |
+| `/aacsearch/update-config`           | POST   | Update plugin configuration      |
+| `/aacsearch/test-connection`         | GET    | Test AACsearch connection        |
+| `/aacsearch/reindex/:contentTypeUid` | POST   | Full reindex of a content type   |
 
 ## Development
 

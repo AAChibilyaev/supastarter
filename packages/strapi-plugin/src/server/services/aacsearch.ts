@@ -2,13 +2,10 @@
  * AACsearch Strapi sync service — handles all AACsearch API communication.
  */
 
-import type { Strapi } from "@strapi/types";
-
 /** AACsearch connector configuration stored in Strapi plugin config */
 export interface AacsearchPluginConfig {
 	baseUrl: string;
 	token: string;
-	/** Collection-level mappings: keyed by content type UID */
 	collections: Record<string, CollectionConfig>;
 	debug?: boolean;
 }
@@ -21,11 +18,14 @@ export interface CollectionConfig {
 	fieldMapping?: Record<string, string>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type StrapiLike = any;
+
 /**
  * Sync a document to AACsearch.
  */
 export async function syncDocument(
-	strapi: Strapi,
+	strapi: StrapiLike,
 	contentTypeUid: string,
 	document: Record<string, unknown>,
 	action: "create" | "update" | "delete",
@@ -34,24 +34,20 @@ export async function syncDocument(
 	const collectionConfig = config.collections[contentTypeUid];
 	if (!collectionConfig) return;
 
-	if (config.debug) {
+	if (config.debug && strapi.log) {
 		strapi.log.debug(`[aacsearch] ${action.toUpperCase()} ${contentTypeUid}:${document.id}`);
 	}
 
 	const { AacSearchClient } = await import("./client");
-	const client = new AacSearchClient({
-		baseUrl: config.baseUrl,
-		token: config.token,
-	});
+	const client = new AacSearchClient({ baseUrl: config.baseUrl, token: config.token });
 
 	switch (action) {
-		case "delete": {
+		case "delete":
 			await client.deleteDocument(
 				collectionConfig.indexSlug,
 				String(document.id ?? document.documentId),
 			);
 			break;
-		}
 		case "create":
 		case "update": {
 			const mapped = applyMapping(document, collectionConfig);
@@ -72,30 +68,23 @@ export function applyMapping(
 	let result: Record<string, unknown> = { [idColumn]: doc.id ?? doc.documentId };
 
 	if (fieldMapping) {
-		const keys = Object.keys(fieldMapping);
-		if (includeFields) {
-			// Only map fields that are in includeFields
-			for (const key of keys) {
-				if (includeFields.includes(key) && key in doc) {
-					result[fieldMapping[key]] = doc[key];
-				}
-			}
-		} else {
-			for (const key of keys) {
-				if (key in doc) {
-					result[fieldMapping[key]] = doc[key];
-				}
+		for (const [key, mappedKey] of Object.entries(fieldMapping)) {
+			if (key in doc) {
+				result[mappedKey] = doc[key];
 			}
 		}
 	} else {
-		// Passthrough
 		result = { ...doc };
 	}
 
+	if (includeFields && includeFields.length > 0) {
+		result = Object.fromEntries(
+			Object.entries(result).filter(([k]) => k === idColumn || includeFields.includes(k)),
+		);
+	}
+
 	if (excludeFields && excludeFields.length > 0) {
-		for (const field of excludeFields) {
-			delete result[field];
-		}
+		for (const field of excludeFields) delete result[field];
 	}
 
 	return result;
@@ -104,12 +93,9 @@ export function applyMapping(
 /**
  * Get the plugin configuration from Strapi store.
  */
-export async function getPluginConfig(strapi: Strapi): Promise<AacsearchPluginConfig> {
-	const config = await strapi
-		.plugin("aacsearch")
-		.service("aacsearch")
-		.getConfig();
-
+export async function getPluginConfig(strapi: StrapiLike): Promise<AacsearchPluginConfig> {
+	const service = strapi.plugin("aacsearch").service("aacsearch");
+	const config = await service.getConfig();
 	return config as AacsearchPluginConfig;
 }
 
@@ -117,11 +103,9 @@ export async function getPluginConfig(strapi: Strapi): Promise<AacsearchPluginCo
  * Set the plugin configuration.
  */
 export async function setPluginConfig(
-	strapi: Strapi,
+	strapi: StrapiLike,
 	config: AacsearchPluginConfig,
 ): Promise<void> {
-	await strapi
-		.plugin("aacsearch")
-		.service("aacsearch")
-		.setConfig(config);
+	const service = strapi.plugin("aacsearch").service("aacsearch");
+	await service.setConfig(config);
 }

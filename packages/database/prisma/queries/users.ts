@@ -247,13 +247,10 @@ export async function exportUserData(userId: string) {
 		})),
 		usageSummary: {
 			totalEvents: usageEvents.length,
-			eventsByType: usageEvents.reduce<Record<string, number>>(
-				(acc, e) => {
-					acc[e.type] = (acc[e.type] ?? 0) + (e.count ?? 1);
-					return acc;
-				},
-				{},
-			),
+			eventsByType: usageEvents.reduce<Record<string, number>>((acc, e) => {
+				acc[e.type] = (acc[e.type] ?? 0) + (e.count ?? 1);
+				return acc;
+			}, {}),
 		},
 	};
 }

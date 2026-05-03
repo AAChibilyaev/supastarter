@@ -106,7 +106,7 @@ export const LandingNewsletterSection = ({
 								height={200}
 								className={cn(
 									"w-16 h-16 -ml-6 shrink-0 rotate-12 rounded-full",
-									variant === "primary" ? "border-primary-500 border-2" : "",
+									variant === "primary" ? "border-2 border-primary-500" : "",
 									variant === "secondary" ? "border-secondary-500 border-2" : "",
 								)}
 							/>
@@ -118,7 +118,7 @@ export const LandingNewsletterSection = ({
 								height={200}
 								className={cn(
 									"w-20 h-20 -ml-4 relative z-10 shrink-0 rounded-full",
-									variant === "primary" ? "border-primary-500 border-2" : "",
+									variant === "primary" ? "border-2 border-primary-500" : "",
 									variant === "secondary" ? "border-secondary-500 border-2" : "",
 								)}
 							/>
@@ -130,7 +130,7 @@ export const LandingNewsletterSection = ({
 								height={200}
 								className={cn(
 									"w-16 h-16 -ml-4 shrink-0 -rotate-12 rounded-full",
-									variant === "primary" ? "border-primary-500 border-2" : "",
+									variant === "primary" ? "border-2 border-primary-500" : "",
 									variant === "secondary" ? "border-secondary-500 border-2" : "",
 								)}
 							/>

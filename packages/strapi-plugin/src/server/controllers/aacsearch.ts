@@ -2,17 +2,20 @@
  * AACsearch plugin controllers — admin API endpoints.
  */
 
-import type { Strapi } from "@strapi/types";
-import type { Context } from "koa";
+import { getPluginConfig, setPluginConfig, applyMapping } from "../services/aacsearch";
 
-import { getPluginConfig, setPluginConfig, syncDocument, applyMapping } from "../services/aacsearch";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type StrapiLike = any;
 
 /**
  * Get the current plugin configuration.
  */
-export async function getConfig(ctx: Context, _next: () => Promise<void>): Promise<void> {
+export async function getConfig(
+	ctx: { body: unknown; status: number; request: { body: unknown } },
+	_next: () => Promise<void>,
+): Promise<void> {
 	try {
-		const strapi: Strapi = (global as unknown as { strapi: Strapi }).strapi;
+		const strapi = (globalThis as Record<string, unknown>).strapi as StrapiLike;
 		const config = await getPluginConfig(strapi);
 		ctx.body = config;
 		ctx.status = 200;
@@ -25,11 +28,15 @@ export async function getConfig(ctx: Context, _next: () => Promise<void>): Promi
 /**
  * Update the plugin configuration.
  */
-export async function updateConfig(ctx: Context, _next: () => Promise<void>): Promise<void> {
+export async function updateConfig(
+	ctx: { body: unknown; status: number; request: { body: unknown } },
+	_next: () => Promise<void>,
+): Promise<void> {
 	try {
-		const strapi: Strapi = (global as unknown as { strapi: Strapi }).strapi;
+		const strapi = (globalThis as Record<string, unknown>).strapi as StrapiLike;
 		const newConfig = ctx.request.body as Record<string, unknown>;
-		await setPluginConfig(strapi, newConfig as Parameters<typeof setPluginConfig>[1]);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		await setPluginConfig(strapi, newConfig as any);
 		ctx.body = { ok: true };
 		ctx.status = 200;
 	} catch (err) {
@@ -41,9 +48,12 @@ export async function updateConfig(ctx: Context, _next: () => Promise<void>): Pr
 /**
  * Manual reindex a specific content type.
  */
-export async function reindex(ctx: Context, _next: () => Promise<void>): Promise<void> {
+export async function reindex(
+	ctx: { body: unknown; status: number; params: Record<string, string> },
+	_next: () => Promise<void>,
+): Promise<void> {
 	try {
-		const strapi: Strapi = (global as unknown as { strapi: Strapi }).strapi;
+		const strapi = (globalThis as Record<string, unknown>).strapi as StrapiLike;
 		const { contentTypeUid } = ctx.params as { contentTypeUid: string };
 
 		const config = await getPluginConfig(strapi);
@@ -54,14 +64,14 @@ export async function reindex(ctx: Context, _next: () => Promise<void>): Promise
 			return;
 		}
 
-		const entries = await strapi.db.query(contentTypeUid).findMany();
+		const entries = (await strapi.db.query(contentTypeUid).findMany()) as Record<
+			string,
+			unknown
+		>[];
 		const { AacSearchClient } = await import("../services/client");
-		const client = new AacSearchClient({
-			baseUrl: config.baseUrl,
-			token: config.token,
-		});
+		const client = new AacSearchClient({ baseUrl: config.baseUrl, token: config.token });
 
-		const mapped = entries.map((entry: Record<string, unknown>) => applyMapping(entry, collectionConfig));
+		const mapped = entries.map((entry) => applyMapping(entry, collectionConfig));
 		const result = await client.fullSync(collectionConfig.indexSlug, mapped);
 
 		ctx.body = { ok: true, synced: result.synced, total: entries.length };
@@ -75,9 +85,12 @@ export async function reindex(ctx: Context, _next: () => Promise<void>): Promise
 /**
  * Test the AACsearch connection.
  */
-export async function testConnection(ctx: Context, _next: () => Promise<void>): Promise<void> {
+export async function testConnection(
+	ctx: { body: unknown; status: number },
+	_next: () => Promise<void>,
+): Promise<void> {
 	try {
-		const strapi: Strapi = (global as unknown as { strapi: Strapi }).strapi;
+		const strapi = (globalThis as Record<string, unknown>).strapi as StrapiLike;
 		const config = await getPluginConfig(strapi);
 		const { AacSearchClient } = await import("../services/client");
 		const client = new AacSearchClient({ baseUrl: config.baseUrl, token: config.token });

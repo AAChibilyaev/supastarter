@@ -3,9 +3,9 @@
  * Convenience wrapper around startChangeStreamListener and initialFullSync.
  */
 
-import type { MongoSyncConfig, CollectionConfig, SyncCallbacks, SyncResult } from "./types";
 import { startChangeStreamListener, type ChangeStreamController } from "./change-stream";
 import { initialFullSync } from "./initial-sync";
+import type { MongoSyncConfig, CollectionConfig, SyncCallbacks, SyncResult } from "./types";
 
 /**
  * Manages multiple MongoDB collection syncs.
@@ -83,7 +83,13 @@ export class MongoSyncManager {
 	}
 
 	/** Get status of all running syncs */
-	getAllStatus(): Array<{ collection: string; indexSlug: string; running: boolean; pendingCount: number; errorCount: number }> {
+	getAllStatus(): Array<{
+		collection: string;
+		indexSlug: string;
+		running: boolean;
+		pendingCount: number;
+		errorCount: number;
+	}> {
 		return Array.from(this.controllers.entries()).map(([key, controller]) => {
 			const [collection, indexSlug] = key.split("→");
 			const status = controller.status();

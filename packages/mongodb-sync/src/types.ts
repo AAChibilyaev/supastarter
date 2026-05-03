@@ -61,11 +61,21 @@ export interface ChangeEvent {
 
 /** Sync status callbacks */
 export interface SyncCallbacks {
-	onSync?: (event: { collection: string; action: SyncAction; documentCount: number; indexSlug: string }) => void;
+	onSync?: (event: {
+		collection: string;
+		action: SyncAction;
+		documentCount: number;
+		indexSlug: string;
+	}) => void;
 	onError?: (error: Error, context?: Record<string, unknown>) => void;
 	onConnected?: () => void;
 	onDisconnected?: () => void;
-	onInitialSyncProgress?: (event: { collection: string; indexSlug: string; total: number; synced: number }) => void;
+	onInitialSyncProgress?: (event: {
+		collection: string;
+		indexSlug: string;
+		total: number;
+		synced: number;
+	}) => void;
 }
 
 /** Result of a sync operation */

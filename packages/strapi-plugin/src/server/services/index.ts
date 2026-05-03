@@ -1,9 +1,7 @@
 /**
  * AACsearch Strapi plugin — server services.
- * Registers the core AACsearch service for configuration storage and sync operations.
  */
 
-import type { Strapi } from "@strapi/types";
 import type { AacsearchPluginConfig } from "./aacsearch";
 
 const DEFAULT_CONFIG: AacsearchPluginConfig = {
@@ -14,10 +12,9 @@ const DEFAULT_CONFIG: AacsearchPluginConfig = {
 };
 
 export default {
-	/**
-	 * Get the AACsearch plugin configuration from the Strapi store.
-	 */
-	async getConfig(strapi: Strapi): Promise<AacsearchPluginConfig> {
+	async getConfig(strapi: {
+		store?: { get: (opts: { type: string; name: string; key: string }) => Promise<unknown> };
+	}): Promise<AacsearchPluginConfig> {
 		try {
 			const config = await strapi.store?.get({
 				type: "plugin",
@@ -30,10 +27,19 @@ export default {
 		}
 	},
 
-	/**
-	 * Save the AACsearch plugin configuration to the Strapi store.
-	 */
-	async setConfig(strapi: Strapi, config: AacsearchPluginConfig): Promise<void> {
+	async setConfig(
+		strapi: {
+			store?: {
+				set: (opts: {
+					type: string;
+					name: string;
+					key: string;
+					value: unknown;
+				}) => Promise<void>;
+			};
+		},
+		config: AacsearchPluginConfig,
+	): Promise<void> {
 		await strapi.store?.set({
 			type: "plugin",
 			name: "aacsearch",

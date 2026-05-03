@@ -9,14 +9,14 @@ This guide walks you through migrating your search infrastructure from Elasticse
 
 ## Migration overview
 
-| Step | What you do | Duration |
-|------|-------------|----------|
-| 1 | Export your Elasticsearch index mapping | ~5 minutes |
-| 2 | Create an AACsearch index with translated schema | ~10 minutes |
-| 3 | Export and reindex documents | ~15 minutes |
-| 4 | Port search queries | ~30 minutes |
-| 5 | Update application code | ~30 minutes |
-| 6 | Switch traffic and verify | ~10 minutes |
+| Step | What you do                                      | Duration    |
+| ---- | ------------------------------------------------ | ----------- |
+| 1    | Export your Elasticsearch index mapping          | ~5 minutes  |
+| 2    | Create an AACsearch index with translated schema | ~10 minutes |
+| 3    | Export and reindex documents                     | ~15 minutes |
+| 4    | Port search queries                              | ~30 minutes |
+| 5    | Update application code                          | ~30 minutes |
+| 6    | Switch traffic and verify                        | ~10 minutes |
 
 ## Step 1: Export Elasticsearch mapping
 
@@ -34,18 +34,18 @@ Understand your field types — each Elasticsearch type maps to an AACsearch equ
 
 ### Mapping translation reference
 
-| Elasticsearch type | AACsearch type | Notes |
-|--------------------|----------------|-------|
-| `text` | `string` | Full-text search |
-| `keyword` | `string` | Use for filtering, faceting |
-| `integer`, `long` | `int32`, `int64` | Numeric range filters |
-| `float`, `double` | `float` | Sortable, range filters |
-| `boolean` | `bool` | Exact match filter |
-| `date` | `int64` | Store as Unix timestamp |
-| `geo_point` | `geopoint` | Geo distance/radius search |
-| `nested` | `object[]` | Array of objects |
-| `object` | `object` | Single object |
-| `completion` | `string` (auto) | Suggest queries use `string` fields |
+| Elasticsearch type | AACsearch type   | Notes                               |
+| ------------------ | ---------------- | ----------------------------------- |
+| `text`             | `string`         | Full-text search                    |
+| `keyword`          | `string`         | Use for filtering, faceting         |
+| `integer`, `long`  | `int32`, `int64` | Numeric range filters               |
+| `float`, `double`  | `float`          | Sortable, range filters             |
+| `boolean`          | `bool`           | Exact match filter                  |
+| `date`             | `int64`          | Store as Unix timestamp             |
+| `geo_point`        | `geopoint`       | Geo distance/radius search          |
+| `nested`           | `object[]`       | Array of objects                    |
+| `object`           | `object`         | Single object                       |
+| `completion`       | `string` (auto)  | Suggest queries use `string` fields |
 
 Create the index:
 
@@ -133,18 +133,18 @@ done
 
 ### Query translation reference
 
-| Elasticsearch DSL | AACsearch parameter |
-|-------------------|---------------------|
-| `match` / `multi_match` on `q` | `q` |
-| `term` filter | `filterBy: "field:=value"` |
-| `range` filter | `filterBy: "field:>=value && field:<=value"` |
-| `bool` must/should | Combine with `filterBy` AND/OR syntax |
-| `sort` | `sortBy: "field:asc"` |
-| `aggs` (simple terms) | `facetBy: "field"` |
-| `from` / `size` | `page` / `perPage` |
-| `highlight` | `highlightFields: "field1,field2"` |
-| `suggest` | `POST /api/v1/indexes/:id/suggest` |
-| `function_score` | Use `ranking` config or `sortBy: _eval(...)` |
+| Elasticsearch DSL              | AACsearch parameter                          |
+| ------------------------------ | -------------------------------------------- |
+| `match` / `multi_match` on `q` | `q`                                          |
+| `term` filter                  | `filterBy: "field:=value"`                   |
+| `range` filter                 | `filterBy: "field:>=value && field:<=value"` |
+| `bool` must/should             | Combine with `filterBy` AND/OR syntax        |
+| `sort`                         | `sortBy: "field:asc"`                        |
+| `aggs` (simple terms)          | `facetBy: "field"`                           |
+| `from` / `size`                | `page` / `perPage`                           |
+| `highlight`                    | `highlightFields: "field1,field2"`           |
+| `suggest`                      | `POST /api/v1/indexes/:id/suggest`           |
+| `function_score`               | Use `ranking` config or `sortBy: _eval(...)` |
 
 ### Example: Porting a complex query
 
@@ -194,17 +194,17 @@ curl -X POST "https://app.aacsearch.com/api/v1/indexes/products/search" \
 
 ### Filter syntax comparison
 
-| Operation | Elasticsearch | AACsearch |
-|-----------|---------------|-----------|
-| Equals | `term: {field: val}` | `field:=val` |
-| Not equals | `must_not term` | `field:!=val` |
-| Greater than | `range: {gt: val}` | `field:>val` |
-| Less than or equal | `range: {lte: val}` | `field:<=val` |
-| Range | `range: {gte: a, lte: b}` | `field:>=a && field:<=b` |
-| AND | `bool must` | `&&` between filters |
-| OR | `bool should` | `||` between filters |
-| IN | `terms: {field: [...]}` | `field:=[val1,val2]` |
-| Geo radius | `geo_distance` | `location:(lat, lng, distance)` |
+| Operation          | Elasticsearch             | AACsearch                       |
+| ------------------ | ------------------------- | ------------------------------- | --- | ----------------- |
+| Equals             | `term: {field: val}`      | `field:=val`                    |
+| Not equals         | `must_not term`           | `field:!=val`                   |
+| Greater than       | `range: {gt: val}`        | `field:>val`                    |
+| Less than or equal | `range: {lte: val}`       | `field:<=val`                   |
+| Range              | `range: {gte: a, lte: b}` | `field:>=a && field:<=b`        |
+| AND                | `bool must`               | `&&` between filters            |
+| OR                 | `bool should`             | `                               |     | ` between filters |
+| IN                 | `terms: {field: [...]}`   | `field:=[val1,val2]`            |
+| Geo radius         | `geo_distance`            | `location:(lat, lng, distance)` |
 
 ## Step 5: Update application code
 
@@ -218,10 +218,10 @@ import { Client } from "@elastic/elasticsearch";
 const es = new Client({ node: "http://localhost:9200" });
 
 const result = await es.search({
-  index: "products",
-  query: {
-    match: { title: "laptop" },
-  },
+	index: "products",
+	query: {
+		match: { title: "laptop" },
+	},
 });
 ```
 
@@ -231,14 +231,14 @@ const result = await es.search({
 import { SearchClient } from "@aacsearch/client";
 
 const client = new SearchClient({
-  baseUrl: "https://app.aacsearch.com",
-  apiKey: "ss_search_YOUR_KEY",
-  indexSlug: "products",
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "ss_search_YOUR_KEY",
+	indexSlug: "products",
 });
 
 const result = await client.search({
-  q: "laptop",
-  queryBy: "title",
+	q: "laptop",
+	queryBy: "title",
 });
 ```
 
@@ -252,31 +252,31 @@ const result = await client.search({
 
 ## What you gain
 
-| Aspect | Elasticsearch | AACsearch |
-|--------|---------------|-----------|
-| **Operations** | Cluster management, shard tuning, JVM tuning | Fully managed, zero ops |
-| **Scaling** | Manual shard splitting, rebalancing | Automatic |
-| **High availability** | Multi-node cluster, replication | Built-in, multi-region |
-| **Search quality** | BM25 (configurable) | Typo-tolerant, proximity-aware by default |
-| **Analytics** | Requires Kibana + extra setup | Built-in dashboards, query analytics |
-| **Price** | Infrastructure + ops cost | Usage-based, predictable |
-| **Security** | Elasticsearch security features | API key + scoped tokens + IP allowlist |
+| Aspect                | Elasticsearch                                | AACsearch                                 |
+| --------------------- | -------------------------------------------- | ----------------------------------------- |
+| **Operations**        | Cluster management, shard tuning, JVM tuning | Fully managed, zero ops                   |
+| **Scaling**           | Manual shard splitting, rebalancing          | Automatic                                 |
+| **High availability** | Multi-node cluster, replication              | Built-in, multi-region                    |
+| **Search quality**    | BM25 (configurable)                          | Typo-tolerant, proximity-aware by default |
+| **Analytics**         | Requires Kibana + extra setup                | Built-in dashboards, query analytics      |
+| **Price**             | Infrastructure + ops cost                    | Usage-based, predictable                  |
+| **Security**          | Elasticsearch security features              | API key + scoped tokens + IP allowlist    |
 
 ## API equivalence reference
 
-| Feature | Elasticsearch | AACsearch |
-|---------|---------------|-----------|
-| Full-text search | `match` / `multi_match` | `q` + `queryBy` |
-| Filtered search | `bool` + `filter` | `filterBy` |
-| Faceted search | `aggs` | `facetBy` |
-| Sorting | `sort` | `sortBy` |
-| Pagination | `from` / `size` | `page` / `perPage` |
-| Geo search | `geo_distance` | Geo filter in `filterBy` |
-| Synonyms | Synonym graph token filter | `PUT /api/indexes/:id/synonyms` |
-| Curations | Query rules | `PUT /api/indexes/:id/curations` |
-| Suggest | `_search` with `suggest` | `POST /api/v1/indexes/:id/suggest` |
-| Multi-search | `_msearch` | `POST /api/v1/multi-search` |
-| Analytics | Kibana + Beats | Built-in analytics API |
+| Feature          | Elasticsearch              | AACsearch                          |
+| ---------------- | -------------------------- | ---------------------------------- |
+| Full-text search | `match` / `multi_match`    | `q` + `queryBy`                    |
+| Filtered search  | `bool` + `filter`          | `filterBy`                         |
+| Faceted search   | `aggs`                     | `facetBy`                          |
+| Sorting          | `sort`                     | `sortBy`                           |
+| Pagination       | `from` / `size`            | `page` / `perPage`                 |
+| Geo search       | `geo_distance`             | Geo filter in `filterBy`           |
+| Synonyms         | Synonym graph token filter | `PUT /api/indexes/:id/synonyms`    |
+| Curations        | Query rules                | `PUT /api/indexes/:id/curations`   |
+| Suggest          | `_search` with `suggest`   | `POST /api/v1/indexes/:id/suggest` |
+| Multi-search     | `_msearch`                 | `POST /api/v1/multi-search`        |
+| Analytics        | Kibana + Beats             | Built-in analytics API             |
 
 ## Need help?
 

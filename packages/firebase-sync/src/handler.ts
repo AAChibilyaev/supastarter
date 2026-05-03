@@ -37,7 +37,14 @@ export async function handleFirestoreChange(
 ): Promise<void> {
 	const { AacSearchClient } = await import("./client");
 	const client = new AacSearchClient(aacsearch);
-	const { indexSlug, fieldMapping, includeFields, excludeFields, transform, idField = "id" } = collectionConfig;
+	const {
+		indexSlug,
+		fieldMapping,
+		includeFields,
+		excludeFields,
+		transform,
+		idField = "id",
+	} = collectionConfig;
 
 	try {
 		if (changeEvent.type === "delete") {
@@ -54,11 +61,13 @@ export async function handleFirestoreChange(
 
 		// Transform for create/update
 		const rawData = changeEvent.data ?? {};
-		const mapped = applyFieldMapping(
-			rawData,
-			changeEvent.documentId,
-			{ fieldMapping, includeFields, excludeFields, transform, idField },
-		);
+		const mapped = applyFieldMapping(rawData, changeEvent.documentId, {
+			fieldMapping,
+			includeFields,
+			excludeFields,
+			transform,
+			idField,
+		});
 
 		await client.syncDocuments(indexSlug, [mapped]);
 		callbacks?.onSync?.({
@@ -116,7 +125,9 @@ export function applyFieldMapping(
 	// Apply include filter
 	if (includeFields && includeFields.length > 0) {
 		result = Object.fromEntries(
-			Object.entries(result).filter(([key]) => key === idField || includeFields.includes(key)),
+			Object.entries(result).filter(
+				([key]) => key === idField || includeFields.includes(key),
+			),
 		);
 	}
 

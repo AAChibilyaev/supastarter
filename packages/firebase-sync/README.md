@@ -21,23 +21,23 @@ import { onDocumentWritten } from "firebase-functions/v2/firestore";
 import { createFirestoreSyncHandler } from "@aacsearch/firebase-sync";
 
 const config = {
-  aacsearch: {
-    baseUrl: process.env.AACSEARCH_URL!,
-    token: process.env.AACSEARCH_TOKEN!,
-    projectId: process.env.AACSEARCH_PROJECT_ID!,
-  },
-  collectionPath: "products",
-  indexSlug: "products",
-  fieldMapping: {
-    name: "title",
-    description: "body",
-    price: "price",
-  },
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	collectionPath: "products",
+	indexSlug: "products",
+	fieldMapping: {
+		name: "title",
+		description: "body",
+		price: "price",
+	},
 };
 
 export const syncProducts = onDocumentWritten(
-  "products/{docId}",
-  createFirestoreSyncHandler(config)
+	"products/{docId}",
+	createFirestoreSyncHandler(config),
 );
 ```
 
@@ -94,13 +94,13 @@ Control how Firestore fields map to AACsearch fields:
 
 ```typescript
 const config = {
-  collectionPath: "products",
-  indexSlug: "products_index",
-  fieldMapping: {
-    name: "title",
-    "details.description": "body",
-    "pricing.usd": "price",
-  },
+	collectionPath: "products",
+	indexSlug: "products_index",
+	fieldMapping: {
+		name: "title",
+		"details.description": "body",
+		"pricing.usd": "price",
+	},
 };
 ```
 
@@ -110,15 +110,15 @@ Custom transform for complex logic:
 
 ```typescript
 const config = {
-  collectionPath: "users",
-  indexSlug: "users",
-  transform: (doc, docId) => ({
-    id: docId,
-    full_name: `${doc.first_name} ${doc.last_name}`,
-    email: doc.email,
-    is_active: doc.status === "active",
-    created_at: doc.created_at?.toDate?.()?.toISOString() ?? doc.created_at,
-  }),
+	collectionPath: "users",
+	indexSlug: "users",
+	transform: (doc, docId) => ({
+		id: docId,
+		full_name: `${doc.first_name} ${doc.last_name}`,
+		email: doc.email,
+		is_active: doc.status === "active",
+		created_at: doc.created_at?.toDate?.()?.toISOString() ?? doc.created_at,
+	}),
 };
 ```
 
@@ -126,15 +126,15 @@ const config = {
 
 When installed as a Firebase Extension, configure via:
 
-| Parameter | Description |
-|-----------|-------------|
-| COLLECTION_PATH | Firestore collection path to watch |
-| AACSEARCH_URL | Your AACsearch instance URL |
-| AACSEARCH_TOKEN | Connector API token (secret) |
-| AACSEARCH_PROJECT_ID | AACsearch organization ID |
-| INDEX_SLUG | Target index slug |
-| FIELD_MAPPING | Optional JSON field mapping |
-| LOCATION | Cloud Functions region |
+| Parameter            | Description                        |
+| -------------------- | ---------------------------------- |
+| COLLECTION_PATH      | Firestore collection path to watch |
+| AACSEARCH_URL        | Your AACsearch instance URL        |
+| AACSEARCH_TOKEN      | Connector API token (secret)       |
+| AACSEARCH_PROJECT_ID | AACsearch organization ID          |
+| INDEX_SLUG           | Target index slug                  |
+| FIELD_MAPPING        | Optional JSON field mapping        |
+| LOCATION             | Cloud Functions region             |
 
 ## License
 

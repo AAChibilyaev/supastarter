@@ -4,22 +4,16 @@
 	"description": "Strapi v5 plugin for AACsearch — sync your Strapi content to AACsearch Engine in real-time",
 	"keywords": [
 		"aacsearch",
-		"strapi",
+		"cms",
 		"plugin",
 		"search",
-		"sync",
-		"cms"
+		"strapi",
+		"sync"
 	],
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nousresearch/aacsearch.git"
-	},
-	"strapi": {
-		"name": "aacsearch",
-		"displayName": "AACsearch Sync",
-		"description": "Sync Strapi content to AACsearch Engine in real-time",
-		"kind": "plugin"
 	},
 	"files": [
 		"dist",
@@ -67,5 +61,11 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-router-dom": "^7.0.0"
+	},
+	"strapi": {
+		"name": "aacsearch",
+		"displayName": "AACsearch Sync",
+		"description": "Sync Strapi content to AACsearch Engine in real-time",
+		"kind": "plugin"
 	}
 }

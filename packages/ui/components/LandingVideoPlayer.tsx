@@ -60,7 +60,7 @@ export const LandingVideoPlayer = ({
 						className={cn(
 							"inset-0 group absolute flex h-full w-full items-center justify-center bg-gradient-to-r",
 							variant === "primary"
-								? "from-primary-900/30 to-black/70"
+								? "to-black/70 from-primary-900/30"
 								: "from-secondary-900/40 to-black/70",
 						)}
 					>
@@ -69,7 +69,7 @@ export const LandingVideoPlayer = ({
 								className={cn(
 									"top-0 left-0 inset-0 w-28 h-28 absolute z-10 transition-transform group-hover:scale-95",
 									variant === "primary"
-										? "stroke-primary-200/50 fill-primary-200"
+										? "fill-primary-200 stroke-primary-200/50"
 										: "stroke-secondary-200/50 fill-secondary-200",
 								)}
 							/>

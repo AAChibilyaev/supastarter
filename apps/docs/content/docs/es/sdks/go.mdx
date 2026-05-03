@@ -7,9 +7,9 @@ description: Instala y usa el SDK aacsearch-go para búsqueda, gestión de índi
 
 El módulo `github.com/aacsearch/aacsearch-go` de Go proporciona dos clientes:
 
-| Cliente         | Ámbito       | Prefijo de clave | Caso de uso                            |
-| --------------- | ------------ | ---------------- | -------------------------------------- |
-| `SearchClient` | solo búsqueda | `ss_search_*`    | Búsqueda pública desde servicios backend |
+| Cliente        | Ámbito        | Prefijo de clave | Caso de uso                                 |
+| -------------- | ------------- | ---------------- | ------------------------------------------- |
+| `SearchClient` | solo búsqueda | `ss_search_*`    | Búsqueda pública desde servicios backend    |
 | `AdminClient`  | CRUD completo | `aa_admin_*`     | Gestión del lado servidor, herramientas CLI |
 
 ## Instalación
@@ -157,15 +157,15 @@ if err != nil {
 
 ## Referencia de la API
 
-| Categoría          | Métodos                                                                                              |
-| ------------------ | ---------------------------------------------------------------------------------------------------- |
-| Proyecto           | `GetProject`, `CreateProject`, `GetProjectByID`                                                      |
-| Gestión de índices | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats`              |
-| Documentos         | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments`  |
-| Búsqueda           | `Search`, `MultiSearch`                                                                              |
-| Claves API         | `ListKeys`, `CreateKey`, `RevokeKey`                                                                 |
-| Analíticas         | `GetAnalytics`, `GetUsage`                                                                           |
-| Sinónimos          | `ListSynonyms`, `CreateSynonym`, `UpsertSynonyms`, `DeleteSynonym`                                   |
-| Curadurías         | `ListCurations`, `CreateCuration`, `UpsertCurations`, `DeleteCuration`                               |
-| Campos de orden    | `ListSortingFields`, `CreateSortingField`, `ReplaceSortingFields`, `DeleteSortingField`              |
-| Facetas            | `ListFacets`                                                                                         |
+| Categoría          | Métodos                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| Proyecto           | `GetProject`, `CreateProject`, `GetProjectByID`                                                     |
+| Gestión de índices | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats`             |
+| Documentos         | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments` |
+| Búsqueda           | `Search`, `MultiSearch`                                                                             |
+| Claves API         | `ListKeys`, `CreateKey`, `RevokeKey`                                                                |
+| Analíticas         | `GetAnalytics`, `GetUsage`                                                                          |
+| Sinónimos          | `ListSynonyms`, `CreateSynonym`, `UpsertSynonyms`, `DeleteSynonym`                                  |
+| Curadurías         | `ListCurations`, `CreateCuration`, `UpsertCurations`, `DeleteCuration`                              |
+| Campos de orden    | `ListSortingFields`, `CreateSortingField`, `ReplaceSortingFields`, `DeleteSortingField`             |
+| Facetas            | `ListFacets`                                                                                        |

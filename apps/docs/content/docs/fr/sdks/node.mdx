@@ -10,10 +10,10 @@ import { Steps, Step } from "fumadocs-ui/components/steps";
 
 Le paquet npm `@aacsearch/client` fournit deux clients :
 
-| Client         | Portée       | Préfixe de clé | Compatible navigateur | Cas d'utilisation              |
-| -------------- | ------------ | --------------- | --------------------- | ------------------------------ |
-| `SearchClient` | recherche    | `ss_search_*`   | Oui                   | Widgets navigateur, frontend   |
-| `AdminClient`  | CRUD complet | `aa_admin_*`    | Non                   | Scripts serveur, CLI, CI/CD    |
+| Client         | Portée       | Préfixe de clé | Compatible navigateur | Cas d'utilisation            |
+| -------------- | ------------ | -------------- | --------------------- | ---------------------------- |
+| `SearchClient` | recherche    | `ss_search_*`  | Oui                   | Widgets navigateur, frontend |
+| `AdminClient`  | CRUD complet | `aa_admin_*`   | Non                   | Scripts serveur, CLI, CI/CD  |
 
 > **Règle de sécurité** : n'integreze jamais les clés admin dans du code navigateur. Utilisez `SearchClient` pour le frontend et passez les opérations admin par votre propre backend.
 
@@ -213,15 +213,15 @@ try {
 
 Couverture complète de l'API du SDK Node.js :
 
-| Catégorie         | Méthodes                                                                                                 |
-| ----------------- | -------------------------------------------------------------------------------------------------------- |
-| Projet            | `getProject`, `createProject`, `getProjectById`                                                          |
-| Gestion d'index   | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`                  |
-| Documents         | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments`      |
-| Recherche         | `search`, `multiSearch`                                                                                  |
-| Clés API          | `listKeys`, `createKey`, `revokeKey`                                                                     |
-| Analytics         | `getAnalytics`, `getUsage`                                                                               |
-| Synonymes         | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                       |
-| Curations         | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                                   |
-| Champs de tri     | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`                  |
-| Facettes          | `listFacets`                                                                                             |
+| Catégorie       | Méthodes                                                                                            |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| Projet          | `getProject`, `createProject`, `getProjectById`                                                     |
+| Gestion d'index | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Documents       | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Recherche       | `search`, `multiSearch`                                                                             |
+| Clés API        | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analytics       | `getAnalytics`, `getUsage`                                                                          |
+| Synonymes       | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Curations       | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Champs de tri   | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Facettes        | `listFacets`                                                                                        |

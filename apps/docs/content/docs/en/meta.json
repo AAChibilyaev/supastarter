@@ -9,6 +9,7 @@
 		"migration",
 		"connectors",
 		"dashboard",
+		"security",
 		"changelog"
 	]
 }

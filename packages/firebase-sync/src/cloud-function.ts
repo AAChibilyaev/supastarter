@@ -44,7 +44,9 @@ export function createFirestoreSyncHandler(
 		const { handleFirestoreChange: handler } = await import("./handler");
 
 		const before = event.data?.data?.() as Record<string, unknown> | undefined;
-		const after = event.data?.exists ? (event.data.data?.() as Record<string, unknown> | undefined) : undefined;
+		const after = event.data?.exists
+			? (event.data.data?.() as Record<string, unknown> | undefined)
+			: undefined;
 		const documentId = event.params?.docId ?? event.data?.id ?? "";
 
 		if (!before && !after) {
@@ -52,9 +54,7 @@ export function createFirestoreSyncHandler(
 		}
 
 		const type: "create" | "update" | "delete" =
-			!before && after ? "create"
-			: before && !after ? "delete"
-			: "update";
+			!before && after ? "create" : before && !after ? "delete" : "update";
 
 		await handler(
 			{

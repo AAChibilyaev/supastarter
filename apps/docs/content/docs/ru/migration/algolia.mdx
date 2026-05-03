@@ -1,0 +1,221 @@
+---
+title: "Миграция с Algolia"
+description: "Пошаговое руководство по миграции вашего поиска с Algolia на AACsearch Engine — перенос индексов, ключей API и замена виджетов."
+---
+
+# Миграция с Algolia
+
+Это руководство проведет вас через процесс миграции вашей поисковой инфраструктуры с Algolia на AACsearch Engine. Процесс разработан для минимального времени простоя и может быть завершен за несколько часов для большинства конфигураций.
+
+## Обзор миграции
+
+| Шаг | Что вы делаете                                       | Длительность |
+| --- | ---------------------------------------------------- | ------------ |
+| 1   | Экспортируйте ваш индекс Algolia                     | ~5 минут     |
+| 2   | Создайте индекс AACsearch                            | ~5 минут     |
+| 3   | Импортируйте данные                                  | ~10 минут    |
+| 4   | Настройте параметры (фасеты, синонимы, ранжирование) | ~15 минут    |
+| 5   | Обновите ключи API                                   | ~10 минут    |
+| 6   | Обновите ваш фронтенд                                | ~30 минут    |
+| 7   | Переключите DNS / эндпоинты                          | ~5 минут     |
+
+## Шаг 1: Экспорт индекса Algolia
+
+Используйте CLI Algolia или API для экспорта данных индекса:
+
+```bash
+# Install Algolia CLI
+npm install -g algolia-cli
+
+# Export index to JSON
+algolia export \
+  --app-id YOUR_ALGOLIA_APP_ID \
+  --api-key YOUR_ADMIN_API_KEY \
+  --index-name your_index_name \
+  --output ./algolia-export.json
+```
+
+В качестве альтернативы используйте API Algolia напрямую:
+
+```bash
+curl "https://YOUR_APP_ID.algolia.net/1/indexes/YOUR_INDEX_NAME/browse" \
+  -H "X-Algolia-API-Key: YOUR_ADMIN_API_KEY" \
+  -H "X-Algolia-Application-Id: YOUR_APP_ID" \
+  | jq '.hits' > algolia-export.json
+```
+
+## Шаг 2: Создание индекса AACsearch
+
+В панели управления AACsearch или через API:
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/projects/YOUR_PROJECT_ID/indexes" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "your_index",
+    "displayName": "Your Index",
+    "fields": [
+      {"name": "objectID", "type": "string"},
+      {"name": "title", "type": "string"},
+      {"name": "description", "type": "string"},
+      {"name": "price", "type": "float", "sort": true},
+      {"name": "category", "type": "string", "facet": true},
+      {"name": "brand", "type": "string", "facet": true},
+      {"name": "tags", "type": "string[]", "facet": true}
+    ],
+    "defaultSortingField": "price"
+  }'
+```
+
+> **Совет по сопоставлению полей**: Сопоставьте `objectID` → `id` или `external_id`. AACsearch использует `id` в качестве первичного ключа для вставки и удаления. Если ваши записи Algolia используют `objectID`, включите поле `id` в экспорт или сопоставьте его во время импорта.
+
+## Шаг 3: Импорт данных
+
+```bash
+# Transform objectID to id
+cat algolia-export.json | jq '[.[] | {id: .objectID, title, description, price, category, brand, tags}]' > import-data.json
+
+# Batch import
+curl -X POST "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/documents:batch" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d @import-data.json
+```
+
+## Шаг 4: Настройка параметров
+
+### Фасеты
+
+Сопоставьте ваши Algolia `attributesForFaceting` с полями AACsearch `facet: true`. AACsearch поддерживает те же типы фасетов:
+
+| Algolia                 | AACsearch                                       | Примечания                            |
+| ----------------------- | ----------------------------------------------- | ------------------------------------- |
+| `searchable(attribute)` | `type: "string", facet: true`                   | Фасет только для фильтрации           |
+| `filterOnly(attribute)` | `type: "string", facet: true, filterOnly: true` | Количество фасетов не возвращается    |
+| Иерархический           | `type: "string[]"`                              | Используйте поля-массивы для иерархии |
+
+### Синонимы
+
+Экспортируйте синонимы Algolia и импортируйте их в AACsearch:
+
+```bash
+# Export Algolia synonyms
+curl "https://YOUR_APP_ID.algolia.net/1/indexes/YOUR_INDEX_NAME/synonyms" \
+  -H "X-Algolia-API-Key: YOUR_ADMIN_API_KEY" \
+  -H "X-Algolia-Application-Id: YOUR_APP_ID" \
+  | jq '.hits' > algolia-synonyms.json
+
+# Convert to AACsearch format (one-way synonyms)
+cat algolia-synonyms.json | jq '[.[] | select(.type == "synonym") | {root: .word, synonyms: (.synonyms // [])}]' > aacsearch-synonyms.json
+
+# Import
+curl -X PUT "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/synonyms" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d @aacsearch-synonyms.json
+```
+
+### Ранжирование
+
+Ранжирование AACsearch по умолчанию (Опечатки → Близость → TextMatch → Пользовательское) сравнимо со стратегией ранжирования Algolia по умолчанию. Чтобы воспроизвести пользовательское ранжирование:
+
+```bash
+curl -X PATCH "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ranking": {
+      "textMatchWeight": 3,
+      "proximityWeight": 2,
+      "typoWeight": 1,
+      "fieldWeights": {"title": 5, "description": 2}
+    }
+  }'
+```
+
+## Шаг 5: Обновление ключей API
+
+Создайте новые ключи API в панели управления AACsearch:
+
+- **Административный ключ** (`aa_admin_*`) — полный CRUD-доступ, для серверных служб
+- **Поисковый ключ** (`ss_search_*`) — доступ только для поиска, безопасен для использования в браузере
+- **Токены с областью действия** (`ss_scoped_*`) — ограничены конкретным индексом и фильтрами
+
+Замените ваш Algolia `search-only API key` на ключ AACsearch `ss_search_*` в вашем фронтенде.
+
+## Шаг 6: Обновление фронтенда
+
+### Замена клиента InstantSearch
+
+**До (Algolia):**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script>
+	const searchClient = algoliasearch("APP_ID", "SEARCH_KEY");
+	// ...
+</script>
+```
+
+**После (AACsearch Engine):**
+
+```html
+<script src="https://cdn.aacsearch.com/widget/v1/widget.js"></script>
+<script>
+	const search = new AacsearchWidget.Search({
+		baseUrl: "https://app.aacsearch.com",
+		apiKey: "ss_search_YOUR_KEY",
+		indexSlug: "your_index",
+	});
+</script>
+```
+
+### Справочник по переводу запросов
+
+| Algolia                                         | AACsearch                                                                         |
+| ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| `index.search(query, { filters })`              | `client.search({ q: query, filterBy: filters })`                                  |
+| `index.search(query, { facetFilters })`         | `client.search({ q: query, filterBy: filters, facetBy: attributes })`             |
+| `index.search(query, { hitsPerPage })`          | `client.search({ q: query, perPage: n })`                                         |
+| `index.search(query, { page })`                 | `client.search({ q: query, page: n })`                                            |
+| `index.search(query, { attributesToRetrieve })` | — все поля возвращаются по умолчанию; используйте `includeFields` для ограничения |
+| `index.search(query, { sort })`                 | `client.search({ q: query, sortBy: "field:asc" })`                                |
+| `index.searchForFacetValues(...)`               | `client.search({ q: query, facetBy: "field", maxFacetValues: n })`                |
+
+## Шаг 7: Переключение DNS / эндпоинтов
+
+После того как вы убедитесь, что все работает:
+
+1. Обновите ваши серверные службы, чтобы они указывали на `https://app.aacsearch.com` (или ваш EU/RU узел)
+2. Обновите ваш фронтенд-виджет для использования эндпоинта AACsearch
+3. Сохраните ваш индекс Algolia в качестве резервной копии на переходный период
+4. Проверьте, что результаты поиска соответствуют ожиданиям
+5. Выведите Algolia из эксплуатации (или оставьте как холодный резерв)
+
+## План отката
+
+Если в процессе миграции что-то пойдет не так:
+
+1. Верните ваш фронтенд к клиенту Algolia
+2. Поддерживайте синхронизацию обоих индексов во время перехода
+3. Повторно запустите импорт, если данные неполные
+
+## Справочник эквивалентности API
+
+| Функция             | Algolia                    | AACsearch                              |
+| ------------------- | -------------------------- | -------------------------------------- |
+| Поиск               | `index.search()`           | `POST /api/v1/indexes/:slug/search`    |
+| Множественный поиск | `multipleQueries()`        | `POST /api/v1/multi-search`            |
+| Фасетирование       | `attributesForFaceting`    | Поле `facet: true` в схеме             |
+| Синонимы            | `saveSynonym()`            | `PUT /api/indexes/:id/synonyms`        |
+| Курации (Правила)   | `saveRule()`               | `PUT /api/indexes/:id/curations`       |
+| Допуск опечаток     | `typoTolerance`            | `typoTolerance` в конфигурации индекса |
+| Аналитика           | `getAnalytics()`           | `GET /api/projects/:id/analytics`      |
+| Ключи API           | `apiKey` / `securedApiKey` | Модель токенов Admin/Search/Scoped     |
+
+## Нужна помощь?
+
+- [Справочник API коннекторов](../api-reference)
+- [Node.js SDK](../sdks/node)
+- Свяжитесь со службой поддержки по адресу support@aacsearch.com

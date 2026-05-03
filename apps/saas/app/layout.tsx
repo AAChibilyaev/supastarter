@@ -7,10 +7,10 @@ import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { ThemeProvider } from "@teispace/next-themes";
 import { getTheme } from "@teispace/next-themes/server";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Figtree } from "next/font/google";
+import { cookies } from "next/headers";
 
 import "./globals.css";
 import "cropperjs/dist/cropper.css";

@@ -1,0 +1,285 @@
+---
+title: "Миграция с Elasticsearch"
+description: "Пошаговое руководство по миграции вашего поиска с Elasticsearch на AACsearch Engine — сопоставление индексов, переиндексация и перевод запросов."
+---
+
+# Миграция с Elasticsearch
+
+Это руководство проведет вас через процесс миграции вашей поисковой инфраструктуры с Elasticsearch на AACsearch Engine. AACsearch предлагает сравнимое качество поиска с значительно более простой операционной моделью — никакого управления кластерами, настройки шардов или подбора размера кучи JVM.
+
+## Обзор миграции
+
+| Шаг | Что вы делаете                                           | Длительность |
+| --- | -------------------------------------------------------- | ------------ |
+| 1   | Экспортируйте сопоставление вашего индекса Elasticsearch | ~5 минут     |
+| 2   | Создайте индекс AACsearch с переведенной схемой          | ~10 минут    |
+| 3   | Экспортируйте и переиндексируйте документы               | ~15 минут    |
+| 4   | Перенесите поисковые запросы                             | ~30 минут    |
+| 5   | Обновите код приложения                                  | ~30 минут    |
+| 6   | Переключите трафик и проверьте                           | ~10 минут    |
+
+## Шаг 1: Экспорт сопоставления Elasticsearch
+
+```bash
+# Get index mapping
+curl "http://localhost:9200/YOUR_INDEX_NAME/_mapping" | jq . > es-mapping.json
+
+# Get index settings
+curl "http://localhost:9200/YOUR_INDEX_NAME/_settings" | jq . > es-settings.json
+```
+
+Поймите свои типы полей — каждый тип Elasticsearch сопоставляется с эквивалентом AACsearch.
+
+## Шаг 2: Создание индекса AACsearch с переведенной схемой
+
+### Справочник по переводу сопоставлений
+
+| Тип Elasticsearch | Тип AACsearch    | Примечания                                  |
+| ----------------- | ---------------- | ------------------------------------------- |
+| `text`            | `string`         | Полнотекстовый поиск                        |
+| `keyword`         | `string`         | Используйте для фильтрации, фасетирования   |
+| `integer`, `long` | `int32`, `int64` | Числовые фильтры диапазона                  |
+| `float`, `double` | `float`          | Сортируемый, фильтры диапазона              |
+| `boolean`         | `bool`           | Фильтр точного совпадения                   |
+| `date`            | `int64`          | Хранить как временную метку Unix            |
+| `geo_point`       | `geopoint`       | Поиск по географическому расстоянию/радиусу |
+| `nested`          | `object[]`       | Массив объектов                             |
+| `object`          | `object`         | Одиночный объект                            |
+| `completion`      | `string` (auto)  | Подсказки используют поля `string`          |
+
+Создайте индекс:
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/projects/YOUR_PROJECT_ID/indexes" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "your_index",
+    "displayName": "Your Index",
+    "fields": [
+      {"name": "id", "type": "string"},
+      {"name": "title", "type": "string"},
+      {"name": "content", "type": "string"},
+      {"name": "price", "type": "float", "sort": true},
+      {"name": "category", "type": "string", "facet": true},
+      {"name": "published_at", "type": "int64", "sort": true},
+      {"name": "in_stock", "type": "bool"},
+      {"name": "location", "type": "geopoint"}
+    ],
+    "defaultSortingField": "published_at"
+  }'
+```
+
+> **Совет**: В отличие от Elasticsearch, AACsearch требует предварительного определения схемы. Используйте экспорт `_source`, чтобы узнать все имена полей и их типы перед созданием индекса.
+
+## Шаг 3: Экспорт и переиндексация документов
+
+### Экспорт через scroll из Elasticsearch
+
+```bash
+#!/bin/bash
+ES_URL="http://localhost:9200"
+INDEX="your_index"
+
+# Initialize scroll
+SCROLL_ID=$(curl -s "$ES_URL/$INDEX/_search?scroll=1m" \
+  -H "Content-Type: application/json" \
+  -d '{"size": 1000, "_source": true}' | jq -r '._scroll_id')
+
+echo "[]" > export.json
+while true; do
+  RESULT=$(curl -s "$ES_URL/_search/scroll" \
+    -H "Content-Type: application/json" \
+    -d "{\"scroll\": \"1m\", \"scroll_id\": \"$SCROLL_ID\"}")
+
+  HITS=$(echo "$RESULT" | jq '.hits.hits')
+  COUNT=$(echo "$HITS" | jq 'length')
+
+  if [ "$COUNT" -eq "0" ]; then break; fi
+
+  # Transform to AACsearch format
+  echo "$HITS" | jq '[.[] | {id: ._id} + ._source]' > batch.json
+  cat batch.json | python3 -c "
+import json,sys
+docs=json.load(sys.stdin)
+with open('export.json') as f: existing=json.load(f)
+existing.extend(docs)
+with open('export.json','w') as f: json.dump(existing,f)
+"
+
+  SCROLL_ID=$(echo "$RESULT" | jq -r '._scroll_id')
+done
+
+# Clear scroll
+curl -X DELETE "$ES_URL/_search/scroll" \
+  -H "Content-Type: application/json" \
+  -d "{\"scroll_id\": \"$SCROLL_ID\"}"
+```
+
+### Импорт в AACsearch
+
+```bash
+# Batch import (up to 5000 docs per request)
+split -l 1000 export.json batch-
+for f in batch-*; do
+  curl -X POST "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/documents:batch" \
+    -H "Authorization: Bearer *** \
+    -H "Content-Type: application/json" \
+    -d @$f
+done
+```
+
+## Шаг 4: Перенос поисковых запросов
+
+### Справочник по переводу запросов
+
+| DSL Elasticsearch              | Параметр AACsearch                                          |
+| ------------------------------ | ----------------------------------------------------------- |
+| `match` / `multi_match` по `q` | `q`                                                         |
+| Фильтр `term`                  | `filterBy: "field:=value"`                                  |
+| Фильтр `range`                 | `filterBy: "field:>=value && field:<=value"`                |
+| `bool` must/should             | Комбинируйте с синтаксисом AND/OR в `filterBy`              |
+| `sort`                         | `sortBy: "field:asc"`                                       |
+| `aggs` (простые Terms)         | `facetBy: "field"`                                          |
+| `from` / `size`                | `page` / `perPage`                                          |
+| `highlight`                    | `highlightFields: "field1,field2"`                          |
+| `suggest`                      | `POST /api/v1/indexes/:id/suggest`                          |
+| `function_score`               | Используйте конфигурацию `ranking` или `sortBy: _eval(...)` |
+
+### Пример: Перенос сложного запроса
+
+**Elasticsearch:**
+
+```json
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title": "laptop" }},
+        { "match": { "description": "gaming" }}
+      ],
+      "filter": [
+        { "term": { "category": "electronics" }},
+        { "range": { "price": { "gte": 500, "lte": 3000 }}}
+      ]
+    }
+  },
+  "sort": [{ "price": "asc" }],
+  "from": 0,
+  "size": 20,
+  "aggs": {
+    "by_brand": { "terms": { "field": "brand" }},
+    "price_range": { "stats": { "field": "price" }}
+  }
+}
+```
+
+**Эквивалент в AACsearch:**
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/v1/indexes/products/search" \
+  -H "X-API-Key: ss_search_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "laptop gaming",
+    "queryBy": "title,description",
+    "filterBy": "category:=electronics && price:>=500 && price:<=3000",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20,
+    "facetBy": "brand"
+  }'
+```
+
+### Сравнение синтаксиса фильтров
+
+| Операция         | Elasticsearch             | AACsearch                       |
+| ---------------- | ------------------------- | ------------------------------- | --- | ----------------- |
+| Равно            | `term: {field: val}`      | `field:=val`                    |
+| Не равно         | `must_not term`           | `field:!=val`                   |
+| Больше чем       | `range: {gt: val}`        | `field:>val`                    |
+| Меньше или равно | `range: {lte: val}`       | `field:<=val`                   |
+| Диапазон         | `range: {gte: a, lte: b}` | `field:>=a && field:<=b`        |
+| И                | `bool must`               | `&&` между фильтрами            |
+| ИЛИ              | `bool should`             | `                               |     | ` между фильтрами |
+| В                | `terms: {field: [...]}`   | `field:=[val1,val2]`            |
+| Гео-радиус       | `geo_distance`            | `location:(lat, lng, distance)` |
+
+## Шаг 5: Обновление кода приложения
+
+### Замена клиента Elasticsearch
+
+**До (Elasticsearch):**
+
+```typescript
+import { Client } from "@elastic/elasticsearch";
+
+const es = new Client({ node: "http://localhost:9200" });
+
+const result = await es.search({
+	index: "products",
+	query: {
+		match: { title: "laptop" },
+	},
+});
+```
+
+**После (AACsearch):**
+
+```typescript
+import { SearchClient } from "@aacsearch/client";
+
+const client = new SearchClient({
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "ss_search_YOUR_KEY",
+	indexSlug: "products",
+});
+
+const result = await client.search({
+	q: "laptop",
+	queryBy: "title",
+});
+```
+
+## Шаг 6: Переключение трафика
+
+1. Направьте ваше приложение на `https://app.aacsearch.com`
+2. Обновите ключи API с учетных данных Elasticsearch на токены AACsearch
+3. Выполните параллельное сравнение результатов поиска для ключевых запросов
+4. Отслеживайте частоту ошибок и задержку поиска
+5. Выведите ваш кластер Elasticsearch из эксплуатации (или сохраните как горячий резерв)
+
+## Что вы получаете
+
+| Аспект                  | Elasticsearch                                      | AACsearch                                            |
+| ----------------------- | -------------------------------------------------- | ---------------------------------------------------- |
+| **Эксплуатация**        | Управление кластером, настройка шардов, тюнинг JVM | Полностью управляемый, ноль операций                 |
+| **Масштабирование**     | Ручное разделение шардов, ребалансировка           | Автоматическое                                       |
+| **Высокая доступность** | Многоузловой кластер, репликация                   | Встроенная, мультирегиональная                       |
+| **Качество поиска**     | BM25 (настраиваемый)                               | Устойчивость к опечаткам, учет близости по умолчанию |
+| **Аналитика**           | Требуется Kibana + дополнительная настройка        | Встроенные панели, аналитика запросов                |
+| **Цена**                | Инфраструктура + эксплуатационные расходы          | На основе использования, предсказуемо                |
+| **Безопасность**        | Функции безопасности Elasticsearch                 | API-ключ + токены с областью + IP-белый список       |
+
+## Справочник эквивалентности API
+
+| Функция                | Elasticsearch                  | AACsearch                          |
+| ---------------------- | ------------------------------ | ---------------------------------- |
+| Полнотекстовый поиск   | `match` / `multi_match`        | `q` + `queryBy`                    |
+| Фильтрованный поиск    | `bool` + `filter`              | `filterBy`                         |
+| Фасетный поиск         | `aggs`                         | `facetBy`                          |
+| Сортировка             | `sort`                         | `sortBy`                           |
+| Постраничная навигация | `from` / `size`                | `page` / `perPage`                 |
+| Гео-поиск              | `geo_distance`                 | Гео-фильтр в `filterBy`            |
+| Синонимы               | Фильтр токенов графа синонимов | `PUT /api/indexes/:id/synonyms`    |
+| Курации                | Правила запросов               | `PUT /api/indexes/:id/curations`   |
+| Подсказки              | `_search` с `suggest`          | `POST /api/v1/indexes/:id/suggest` |
+| Множественный поиск    | `_msearch`                     | `POST /api/v1/multi-search`        |
+| Аналитика              | Kibana + Beats                 | Встроенный API аналитики           |
+
+## Нужна помощь?
+
+- [Справочник API коннекторов](../api-reference)
+- [Node.js SDK](../sdks/node)
+- Свяжитесь со службой поддержки по адресу support@aacsearch.com

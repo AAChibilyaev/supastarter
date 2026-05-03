@@ -242,7 +242,10 @@ export function CTRDashboard({ organizationId }: CTRDashboardProps) {
 				<CardContent>
 					{positionChartData.length > 0 ? (
 						<ResponsiveContainer width="100%" height={220}>
-							<BarChart data={positionChartData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+							<BarChart
+								data={positionChartData}
+								margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
+							>
 								<CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
 								<XAxis
 									dataKey="position"
@@ -260,7 +263,10 @@ export function CTRDashboard({ organizationId }: CTRDashboardProps) {
 									className="fill-muted-foreground"
 								/>
 								<RechartsTooltip
-									formatter={(value: number) => [`${value}%`, t("search.analytics.ctrLabel")]}
+									formatter={(value: number) => [
+										`${value}%`,
+										t("search.analytics.ctrLabel"),
+									]}
 									labelClassName="text-xs text-foreground"
 									contentStyle={{
 										fontSize: 12,
@@ -270,7 +276,11 @@ export function CTRDashboard({ organizationId }: CTRDashboardProps) {
 										color: "hsl(var(--popover-foreground))",
 									}}
 								/>
-								<Bar dataKey="ctrPct" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
+								<Bar
+									dataKey="ctrPct"
+									fill="hsl(var(--chart-2))"
+									radius={[4, 4, 0, 0]}
+								/>
 							</BarChart>
 						</ResponsiveContainer>
 					) : (
@@ -300,14 +310,20 @@ export function CTRDashboard({ organizationId }: CTRDashboardProps) {
 									<TableHead className="text-right">
 										{t("search.analytics.searchesColumn")}
 									</TableHead>
-									<TableHead className="text-right">{t("search.analytics.clicksColumn")}</TableHead>
-									<TableHead className="text-right">{t("search.analytics.ctrColumn")}</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.clicksColumn")}
+									</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.ctrColumn")}
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{ctrData!.byIndex.map((row) => (
 									<TableRow key={row.indexId ?? row.indexName}>
-										<TableCell className="font-medium">{row.indexName}</TableCell>
+										<TableCell className="font-medium">
+											{row.indexName}
+										</TableCell>
 										<TableCell className="text-right tabular-nums">
 											{format.number(row.searches)}
 										</TableCell>
@@ -382,7 +398,11 @@ export function CTRDashboard({ organizationId }: CTRDashboardProps) {
 												{row.ctr > 0 ? (
 													<Badge
 														status={
-															row.ctr >= 0.3 ? "success" : row.ctr >= 0.1 ? "warning" : "default"
+															row.ctr >= 0.3
+																? "success"
+																: row.ctr >= 0.1
+																	? "warning"
+																	: "default"
 														}
 														className="text-[11px]"
 													>

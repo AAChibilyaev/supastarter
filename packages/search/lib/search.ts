@@ -122,6 +122,182 @@ function combineTenantFilter(tenantId: string, userFilter?: string): string {
 	return `${tenant} && (${userFilter})`;
 }
 
+/**
+ * Remove filter clauses matching a specific facet field from a Typesense filter_by expression.
+ * Handles field:=value, field:[v1,v2], field:>value, etc. by removing the top-level `&&` clause.
+ */
+export function removeFilterByClause(
+	filterBy: string | undefined,
+	fieldName: string,
+): string | undefined {
+	if (!filterBy) return undefined;
+
+	// Split by top-level AND. Handle parenthesized groups.
+	const clauses = splitTopLevelAnd(filterBy);
+	const strippedField = fieldName.replace(/^\(/, "").replace(/\)$/, "");
+	const remaining = clauses.filter((c) => {
+		const trimmed = c.trim();
+		// Check if clause starts with fieldname: after optional opening paren
+		const cleaned = trimmed.replace(/^\(/, "");
+		return !cleaned.startsWith(`${strippedField}:`);
+	});
+
+	if (remaining.length === 0) return undefined;
+	return remaining.join(" && ");
+}
+
+/**
+ * Split a Typesense filter_by string into top-level AND clauses,
+ * respecting parenthesized groups.
+ */
+function splitTopLevelAnd(filterBy: string): string[] {
+	const clauses: string[] = [];
+	let depth = 0;
+	let current = "";
+
+	for (const ch of filterBy) {
+		if (ch === "(") depth++;
+		else if (ch === ")") depth--;
+		else if (ch === "&" && depth === 0) {
+			// Skip next '&'
+			if (current.endsWith("&")) continue;
+		}
+
+		if (ch === "&" && depth === 0) {
+			if (current.trim()) {
+				clauses.push(current.trim());
+				current = "";
+			}
+			// Skip the second '&'
+			continue;
+		}
+
+		current += ch;
+	}
+
+	if (current.trim()) {
+		clauses.push(current.trim());
+	}
+
+	return clauses;
+}
+
+/**
+ * Parse a comma-separated facet_by string into field names.
+ */
+export function parseFacetBy(facetBy: string | undefined): string[] {
+	if (!facetBy) return [];
+	return facetBy
+		.split(",")
+		.map((f) => f.trim())
+		.filter(Boolean);
+}
+
+/**
+ * Compute disjunctive facet counts for fields where the user has active selections.
+ *
+ * For each disjunctive facet, fires a sub-query WITHOUT that facet's filter clauses
+ * to get correct "OR" counts. For example, selecting brand=Apple AND category=Phones:
+ *   - brand counts come from a query WITHOUT brand filter (only category=Phones)
+ *   - category counts come from a query WITHOUT category filter (only brand=Apple)
+ *
+ * Merges disjunctive counts into the main result's facetCounts, returning all
+ * fields with their disjunctive counts.
+ */
+export async function computeDisjunctiveFacetCounts(input: {
+	alias: string;
+	tenantId: string;
+	q: string;
+	queryBy?: string;
+	filterBy?: string;
+	facetBy?: string;
+	disjunctiveFacets: string[];
+	existingFacetCounts: FacetCount[];
+}): Promise<FacetCount[]> {
+	const {
+		alias,
+		tenantId,
+		q,
+		queryBy,
+		filterBy,
+		facetBy,
+		disjunctiveFacets,
+		existingFacetCounts,
+	} = input;
+
+	if (!disjunctiveFacets.length || !filterBy) return existingFacetCounts;
+
+	const client = getTypesenseClient();
+	const facetFields = parseFacetBy(facetBy);
+
+	// Build a map of existing counts (non-disjunctive)
+	const existingMap = new Map<string, FacetCount>();
+	for (const fc of existingFacetCounts) {
+		existingMap.set(fc.field_name, fc);
+	}
+
+	// For each disjunctive facet that has active selections, fire a sub-query
+	const aliasName = alias;
+
+	const results = await Promise.all(
+		disjunctiveFacets.map(async (field) => {
+			// Remove THIS field's filter clause
+			const subFilter = removeFilterByClause(filterBy, field);
+			if (subFilter === filterBy) {
+				// No filter clause for this field — nothing to do
+				return null;
+			}
+
+			try {
+				// Build sub-query params — only need facet counts, minimize overhead
+				const subParams: Record<string, unknown> = {
+					q,
+					query_by: queryBy ?? "",
+					filter_by: combineTenantFilter(tenantId, subFilter),
+					facet_by: field, // Only request this facet
+					max_facet_values: 1000,
+					per_page: 0, // No hits needed
+					page: 1,
+				};
+
+				const response = await client
+					.collections(aliasName)
+					.documents()
+					.search(subParams as any);
+
+				const facetCounts = (response.facet_counts ?? []) as FacetCount[];
+				if (facetCounts.length > 0) {
+					return { field, counts: facetCounts[0]!.counts };
+				}
+				return null;
+			} catch {
+				return null;
+			}
+		}),
+	);
+
+	// Merge sub-query results into existing counts
+	const merged = [...existingFacetCounts];
+
+	for (const result of results) {
+		if (!result) continue;
+		const idx = merged.findIndex((fc) => fc.field_name === result.field);
+		if (idx >= 0) {
+			merged[idx] = {
+				field_name: result.field,
+				counts: result.counts,
+			};
+		} else {
+			merged.push({
+				field_name: result.field,
+				counts: result.counts,
+			});
+		}
+	}
+
+	return merged;
+}
+
 function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
 	const field = filter.field ?? "_geoloc";
 	return filter.locations

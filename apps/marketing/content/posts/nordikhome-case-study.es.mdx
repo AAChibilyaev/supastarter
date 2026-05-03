@@ -1,0 +1,88 @@
+---
+title: "Cómo NordikHome redujo los costos de búsqueda 5 veces y mejoró el descubrimiento en un 34 %"
+date: 2026-05-03
+image: https://picsum.photos/id/26/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "NordikHome, un minorista de muebles escandinavos en rápido crecimiento, reemplazó Algolia con AACsearch y redujo sus costos mensuales de búsqueda en 5 veces, al tiempo que mejoró las métricas de descubrimiento de productos en todos los ámbitos."
+tags: [case-study, ecommerce, algolia, migración]
+published: true
+---
+
+# Cómo NordikHome redujo los costos de búsqueda 5 veces y mejoró el descubrimiento en un 34 % con AACsearch
+
+> _„Cambiar a AACsearch fue la decisión de infraestructura más fácil que hemos tomado. Redujimos los costos en 5 veces, nuestra búsqueda es más rápida y los análisis integrados nos mostraron brechas de productos que no sabíamos que teníamos."_
+> — Erik Lindström, CTO de NordikHome
+
+---
+
+## Metadatos
+
+- **Empresa:** NordikHome — Minorista escandinavo de muebles y artículos para el hogar
+- **Industria:** Comercio electrónico
+- **Tamaño:** Más de 50 000 productos en 3 tiendas (SE, NO, DK), más de 200 000 consultas de búsqueda mensuales
+- **Solución anterior:** Algolia Growth Plan (~$499/mes)
+- **Caso de uso:** Búsqueda de productos en tiendas de comercio electrónico (3 sitios específicos por país)
+- **AACsearch desde:** Enero de 2026
+
+---
+
+## 1. El problema
+
+NordikHome gestiona una operación de comercio electrónico multimarca con tres tiendas localizadas que atienden a Suecia, Noruega y Dinamarca. Cada tienda tenía su propio catálogo de productos con precios, disponibilidad y promociones específicos de cada país, pero todas compartían una única suscripción al Algolia Growth Plan por $499/mes.
+
+A medida que su catálogo crecía y los picos de tráfico estacionales se hacían más pronunciados, surgieron tres problemas críticos:
+
+**Costos impredecibles.** La facturación por operación de búsqueda de Algolia significaba que cada promoción, campaña navideña o venta flash aumentaba significativamente su factura. Durante la temporada navideña de diciembre, su factura de Algolia se disparó a más de $1200.
+
+**Analíticas limitadas en el Growth Plan.** El Algolia Growth Plan incluía solo un seguimiento básico de consultas. NordikHome no podía ver qué búsquedas devolvían cero resultados, qué productos se buscaban con frecuencia pero no se encontraban, ni cómo variaba el comportamiento de búsqueda en sus tres mercados.
+
+**Multiinquilino complejo.** Ejecutar índices de Algolia separados para cada país requería middleware personalizado. Agregar un nuevo mercado (por ejemplo, Finlandia) implicaba aprovisionar un nuevo índice de Algolia y reconfigurar la capa de middleware.
+
+„Estábamos gastando más en infraestructura de búsqueda que en alojar toda nuestra tienda", dice Erik Lindström, CTO de NordikHome. „Y aún así no podíamos responder preguntas básicas como '¿por qué los clientes se van sin comprar?'"
+
+---
+
+## 2. La solución
+
+Después de evaluar Typesense autogestionado, Typesense Cloud, MeiliSearch y Elasticsearch, NordikHome eligió AACsearch por tres razones:
+
+1. **Precio fijo predecible** — $99/mes por 50 000 documentos con operaciones de búsqueda ilimitadas
+2. **Analíticas integradas** — sin costo adicional por analíticas de búsqueda, seguimiento de resultados cero e informes de tendencias en todos los mercados
+3. **Tokens de API con ámbito** — cada tienda obtiene colecciones de búsqueda aisladas con una sola cuenta de AACsearch
+
+La implementación fue notablemente rápida:
+
+- **Migración:** Exportación de productos existentes como JSON desde Algolia → carga masiva al índice de AACsearch. Tiempo total: 2 horas.
+- **Widget:** Inserción del widget de búsqueda HTML/JS en su tienda Next.js, reemplazando Algolia InstantSearch. Tiempo: 1 hora por tienda.
+- **Configuración:** Configuración de tolerancia a errores tipográficos, búsqueda facetada para categorías/tamaños/colores y reglas de clasificación personalizadas que priorizan artículos en stock. Tiempo: 1 hora.
+- **Tokens con ámbito:** Creación de 3 tokens para las tiendas SE, NO y DK, cada uno con ámbito en su catálogo de productos específico del país.
+
+„Estuvimos completamente en funcionamiento en menos de 4 horas, incluida la importación de nuestro catálogo de productos completo", dice Lindström. „Los tokens con ámbito significaron que no necesitábamos ningún middleware — cada tienda simplemente usa su propio token."
+
+---
+
+## 3. Los resultados
+
+| Métrica                          | Antes (Algolia)        | Después (AACsearch) | Mejora                  |
+| -------------------------------- | ---------------------- | ------------------- | ----------------------- |
+| Costo de búsqueda mensual        | $499/mes ($1200 pico)  | $99/mes             | **Reducción de 5×**     |
+| Latencia de búsqueda (p95)       | 45 ms                  | 8 ms                | **5,6× más rápido**     |
+| Tiempo de DevOps para búsqueda   | 4 h/semana (monitoreo) | 0 h/semana          | **Reducción del 100 %** |
+| Búsquedas sin resultados         | Desconocido            | 12 % → 3 %\*        | **Reducción del 75 %**  |
+| Tiempo para lanzar nuevo mercado | 2–3 días               | 15 minutos          | **96 % más rápido**     |
+| Tasa de descubrimiento de prod.  | 22 %                   | 29,5 %              | **+34 % de mejora**     |
+
+_\*Después de que los conocimientos analíticos mostraran las principales consultas sin resultados, NordikHome agregó grupos de sinónimos y nuevas etiquetas de productos, reduciendo las búsquedas sin resultados del 12 % al 3 %._
+
+**En resumen:** NordikHome ahorró más de $4800/año en costos directos de búsqueda, eliminó todos los gastos generales de DevOps y mejoró el descubrimiento de productos en un 34 %, todo en una sola tarde de trabajo.
+
+---
+
+## 4. Detalles técnicos
+
+- **Documentos indexados:** 52 000 productos en 3 colecciones
+- **Funciones utilizadas:** Búsqueda facetada, tolerancia a errores tipográficos, clasificación personalizada, tokens de API con ámbito, panel de analíticas
+- **Integraciones:** Tienda Next.js, API personalizada para actualizaciones de catálogo
+- **Idiomas:** Sueco, noruego, danés, inglés (datos de productos)
+- **Ruta de migración:** Exportación JSON de Algolia → importación masiva de AACsearch

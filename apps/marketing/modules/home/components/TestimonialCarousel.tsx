@@ -57,7 +57,7 @@ export function TestimonialCarousel() {
 		<section className="py-14 md:py-24 border-b border-border">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
+					<h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl text-balance">
 						{t("testimonials.title")}
 					</h2>
 					<p className="mt-4 text-lg leading-relaxed text-pretty text-muted-foreground">
@@ -71,16 +71,16 @@ export function TestimonialCarousel() {
 					onMouseLeave={() => setIsPaused(false)}
 				>
 					<div className="p-6 sm:p-10 rounded-lg border border-border bg-card">
-						<blockquote className="text-lg md:text-xl leading-relaxed text-pretty text-foreground">
-							"{testimonial.quote}"
+						<blockquote className="text-xl leading-relaxed md:text-2xl text-pretty text-foreground">
+							&ldquo;{testimonial.quote}&rdquo;
 						</blockquote>
 
 						<div className="mt-8 gap-4 pt-6 flex items-center border-t border-border">
-							<div className="size-10 font-semibold text-sm flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
+							<div className="size-10 text-sm font-semibold flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
 								{testimonial.initials}
 							</div>
 							<div>
-								<p className="font-semibold text-sm text-foreground">
+								<p className="text-sm font-semibold text-foreground">
 									{testimonial.author}
 								</p>
 								<p className="text-xs text-muted-foreground">
@@ -90,18 +90,18 @@ export function TestimonialCarousel() {
 						</div>
 					</div>
 
-					{/* Progress dots */}
-					<div className="mt-5 gap-2 flex items-center justify-center">
+					{/* Simple circle progress dots */}
+					<div className="mt-6 gap-2 flex items-center justify-center">
 						{TESTIMONIALS.map((_, index) => (
 							<button
 								key={index}
 								type="button"
 								onClick={() => setActiveIndex(index)}
 								className={cn(
-									"h-1.5 rounded-full transition-all duration-300",
+									"size-2.5 rounded-full transition-all duration-300",
 									index === activeIndex
-										? "w-8 bg-primary"
-										: "w-1.5 bg-border hover:bg-muted-foreground/40",
+										? "bg-foreground"
+										: "bg-muted-foreground/30 hover:bg-muted-foreground/50",
 								)}
 								aria-label={t("testimonials.dotLabel", { number: index + 1 })}
 							/>

@@ -10,10 +10,10 @@ import { Steps, Step } from "fumadocs-ui/components/steps";
 
 El paquete npm `@aacsearch/client` proporciona dos clientes:
 
-| Cliente         | Ámbito       | Prefijo de clave | Seguro para navegador | Caso de uso                       |
-| --------------- | ------------ | ---------------- | --------------------- | --------------------------------- |
-| `SearchClient` | solo búsqueda | `ss_search_*`    | Sí                    | Widgets de navegador, frontend    |
-| `AdminClient`  | CRUD completo | `aa_admin_*`     | No                    | Scripts de servidor, CLI, CI/CD   |
+| Cliente        | Ámbito        | Prefijo de clave | Seguro para navegador | Caso de uso                     |
+| -------------- | ------------- | ---------------- | --------------------- | ------------------------------- |
+| `SearchClient` | solo búsqueda | `ss_search_*`    | Sí                    | Widgets de navegador, frontend  |
+| `AdminClient`  | CRUD completo | `aa_admin_*`     | No                    | Scripts de servidor, CLI, CI/CD |
 
 > **Regla de seguridad**: nunca incrustes claves de administrador en código de navegador. Usa `SearchClient` para el frontend y tramita las operaciones de administración a través de tu propio backend.
 
@@ -196,32 +196,32 @@ try {
 
 ### Códigos de error
 
-| Código                   | Cuándo ocurre                          | Estado HTTP |
-| ------------------------ | -------------------------------------- | ----------- |
-| `missing_bearer_token`   | Sin cabecera de autenticación          | 401         |
-| `unauthorized`           | Token vacío o con formato inválido     | 401         |
-| `forbidden`              | Clave API inválida/expirada/revocada   | 403         |
-| `not_found`              | Recurso no encontrado                  | 404         |
-| `conflict`               | El slug ya está en uso                 | 409         |
-| `rate_limited`           | Límite de tasa por clave superado      | 429         |
-| `quota_exceeded`         | Límite mensual del plan superado       | 402         |
-| `invalid_input`          | Error de validación en el cuerpo       | 400         |
-| `search_failed`          | Error interno de Typesense             | 502         |
-| `network_error`          | Fallo en la conexión o Fetch           | 0           |
+| Código                 | Cuándo ocurre                        | Estado HTTP |
+| ---------------------- | ------------------------------------ | ----------- |
+| `missing_bearer_token` | Sin cabecera de autenticación        | 401         |
+| `unauthorized`         | Token vacío o con formato inválido   | 401         |
+| `forbidden`            | Clave API inválida/expirada/revocada | 403         |
+| `not_found`            | Recurso no encontrado                | 404         |
+| `conflict`             | El slug ya está en uso               | 409         |
+| `rate_limited`         | Límite de tasa por clave superado    | 429         |
+| `quota_exceeded`       | Límite mensual del plan superado     | 402         |
+| `invalid_input`        | Error de validación en el cuerpo     | 400         |
+| `search_failed`        | Error interno de Typesense           | 502         |
+| `network_error`        | Fallo en la conexión o Fetch         | 0           |
 
 ## Referencia de la API
 
 Cobertura completa de la API del SDK de Node.js:
 
-| Categoría          | Métodos                                                                                              |
-| ------------------ | ---------------------------------------------------------------------------------------------------- |
-| Proyecto           | `getProject`, `createProject`, `getProjectById`                                                      |
-| Gestión de índices | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`              |
-| Documentos         | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments`  |
-| Búsqueda           | `search`, `multiSearch`                                                                              |
-| Claves API         | `listKeys`, `createKey`, `revokeKey`                                                                 |
-| Analíticas         | `getAnalytics`, `getUsage`                                                                           |
-| Sinónimos          | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                   |
-| Curadurías         | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                               |
-| Campos de orden    | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`              |
-| Facetas            | `listFacets`                                                                                         |
+| Categoría          | Métodos                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| Proyecto           | `getProject`, `createProject`, `getProjectById`                                                     |
+| Gestión de índices | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Documentos         | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Búsqueda           | `search`, `multiSearch`                                                                             |
+| Claves API         | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analíticas         | `getAnalytics`, `getUsage`                                                                          |
+| Sinónimos          | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Curadurías         | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Campos de orden    | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Facetas            | `listFacets`                                                                                        |

@@ -127,10 +127,10 @@ startPgNotifyListener(config, undefined, {
 
 ## Comparaison des stratégies
 
-| Stratégie       | Latence | Nécessite un déclencheur | Surcharge                    | Idéal pour                           |
-| --------------- | ------- | ------------------------ | ---------------------------- | ------------------------------------ |
-| pg_notify       | ~100ms  | Oui                      | Minimale (NOTIFY est asynchrone) | Tables de production que vous contrôlez |
-| Curseur polling | ~5-60s  | Non                      | SELECT par intervalle        | Tables sans accès en écriture        |
+| Stratégie       | Latence | Nécessite un déclencheur | Surcharge                          | Idéal pour                              |
+| --------------- | ------- | ------------------------ | ---------------------------------- | --------------------------------------- |
+| pg_notify       | ~100ms  | Oui                      | Minimale (NOTIFY est asynchrone)   | Tables de production que vous contrôlez |
+| Curseur polling | ~5-60s  | Non                      | SELECT par intervalle              | Tables sans accès en écriture           |
 | Sequin CDC      | ~1-5s   | Non                      | Emplacement de réplication logique | Haute disponibilité, zéro configuration |
 
 ## Liens connexes

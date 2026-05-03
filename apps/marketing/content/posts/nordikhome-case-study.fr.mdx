@@ -1,0 +1,88 @@
+---
+title: "Comment NordikHome a réduit ses coûts de recherche par 5 et amélioré la découverte de 34 %"
+date: 2026-05-03
+image: https://picsum.photos/id/26/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "NordikHome, un détaillant scandinave de meubles en pleine croissance, a remplacé Algolia par AACsearch et réduit ses coûts de recherche mensuels par 5 tout en améliorant l'ensemble des indicateurs de découverte de produits."
+tags: [case-study, ecommerce, algolia, migration]
+published: true
+---
+
+# Comment NordikHome a réduit ses coûts de recherche par 5 et amélioré la découverte de 34 % avec AACsearch
+
+> _« Passer à AACsearch a été la décision d'infrastructure la plus simple que nous ayons prise. Nous avons réduit les coûts par 5, notre recherche est plus rapide, et les analyses intégrées nous ont montré des lacunes produit dont nous ignorions l'existence. »_
+> — Erik Lindström, CTO chez NordikHome
+
+---
+
+## Métadonnées
+
+- **Société :** NordikHome — Détaillant scandinave de meubles et d'articles de maison
+- **Secteur :** E-commerce
+- **Taille :** Plus de 50 000 produits dans 3 boutiques (SE, NO, DK), plus de 200 000 requêtes de recherche par mois
+- **Solution précédente :** Algolia Growth Plan (~499 $/mois)
+- **Cas d'usage :** Recherche de produits sur des boutiques e-commerce (3 sites spécifiques par pays)
+- **AACsearch depuis :** Janvier 2026
+
+---
+
+## 1. Le problème
+
+NordikHome gère une activité e-commerce multimarque avec trois boutiques localisées pour la Suède, la Norvège et le Danemark. Chaque boutique disposait de son propre catalogue de produits avec des prix, une disponibilité et des promotions spécifiques à chaque pays — mais elles partageaient toutes un seul abonnement Algolia Growth Plan à 499 $/mois.
+
+À mesure que leur catalogue s'agrandissait et que les pics de trafic saisonniers devenaient plus prononcés, trois problèmes critiques sont apparus :
+
+**Coûts imprévisibles.** La facturation par opération de recherche d'Algolia signifiait que chaque promotion, campagne de vacances ou vente flash augmentait considérablement leur facture. Pendant la période des fêtes de décembre, leur facture Algolia grimpait à plus de 1 200 $.
+
+**Analyses limitées sur le Growth Plan.** Le plan Algolia Growth ne comprenait qu'un suivi de base des requêtes. NordikHome ne pouvait pas voir quelles recherches renvoyaient zéro résultat, quels produits étaient fréquemment recherchés mais introuvables, ni comment le comportement de recherche variait selon leurs trois marchés.
+
+**Multi-tenant complexe.** L'exécution d'index Algolia séparés pour chaque pays nécessitait un middleware personnalisé. L'ajout d'un nouveau marché (par exemple, la Finlande) impliquait de provisionner un nouvel index Algolia et de reconfigurer la couche middleware.
+
+« Nous dépensions plus pour l'infrastructure de recherche que pour héberger l'intégralité de notre boutique », déclare Erik Lindström, CTO chez NordikHome. « Et nous ne pouvions toujours pas répondre à des questions simples comme « pourquoi les clients partent-ils sans acheter ? » »
+
+---
+
+## 2. La solution
+
+Après avoir évalué Typesense auto-hébergé, Typesense Cloud, MeiliSearch et Elasticsearch, NordikHome a choisi AACsearch pour trois raisons :
+
+1. **Tarification forfaitaire prévisible** — 99 $/mois pour 50 000 documents avec opérations de recherche illimitées
+2. **Analyses intégrées** — aucun coût supplémentaire pour les analyses de recherche, le suivi des résultats zéro et les rapports de tendances sur tous les marchés
+3. **Jetons API limités** — chaque boutique obtient des collections de recherche isolées avec un seul compte AACsearch
+
+La mise en œuvre a été remarquablement rapide :
+
+- **Migration :** Export des produits existants au format JSON depuis Algolia → import en masse dans l'index AACsearch. Durée totale : 2 heures.
+- **Widget :** Insertion du widget de recherche HTML/JS dans leur boutique Next.js, remplacement d'Algolia InstantSearch. Durée : 1 heure par boutique.
+- **Configuration :** Mise en place de la tolérance aux fautes de frappe, de la recherche facetée pour les catégories/taille/couleurs et de règles de classement personnalisées priorisant les articles en stock. Durée : 1 heure.
+- **Jetons limités :** Création de 3 jetons pour les boutiques SE, NO et DK, chacun limité à leur catalogue de produits spécifique au pays.
+
+« Nous étions entièrement opérationnels en moins de 4 heures, y compris l'importation de notre catalogue produit complet », déclare Lindström. « Les jetons limités ont fait que nous n'avions besoin d'aucun middleware — chaque boutique utilise simplement son propre jeton. »
+
+---
+
+## 3. Les résultats
+
+| Métrique                               | Avant (Algolia)            | Après (AACsearch) | Amélioration             |
+| -------------------------------------- | -------------------------- | ----------------- | ------------------------ |
+| Coût mensuel de recherche              | 499 $/mois (1 200 $ pic)   | 99 $/mois         | **Réduction par 5**      |
+| Latence de recherche (p95)             | 45 ms                      | 8 ms              | **5,6× plus rapide**     |
+| Temps DevOps pour la recherche         | 4 h/semaine (surveillance) | 0 h/semaine       | **Réduction de 100 %**   |
+| Recherches sans résultat               | Inconnu                    | 12 % → 3 %\*      | **Réduction de 75 %**    |
+| Délai de lancement d'un nouveau marché | 2–3 jours                  | 15 minutes        | **96 % plus rapide**     |
+| Taux de découverte de produits         | 22 %                       | 29,5 %            | **+34 % d'amélioration** |
+
+_\*Après que les analyses aient révélé les principales requêtes sans résultat, NordikHome a ajouté des groupes de synonymes et de nouvelles étiquettes de produits, réduisant les recherches sans résultat de 12 % à 3 %._
+
+**En résumé :** NordikHome a économisé plus de 4 800 $/an en coûts de recherche directs, éliminé tous les frais généraux de DevOps et amélioré la découverte de produits de 34 % — le tout en un après-midi de travail.
+
+---
+
+## 4. Détails techniques
+
+- **Documents indexés :** 52 000 produits dans 3 collections
+- **Fonctionnalités utilisées :** Recherche facetée, tolérance aux fautes de frappe, classement personnalisé, jetons API limités, tableau de bord d'analyses
+- **Intégrations :** Boutique Next.js, API personnalisée pour les mises à jour du catalogue
+- **Langues :** Suédois, norvégien, danois, anglais (données produits)
+- **Chemin de migration :** Export JSON Algolia → import en masse AACsearch

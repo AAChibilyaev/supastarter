@@ -61,7 +61,9 @@ export async function initialCollectionSync(
 				onProgress?.(synced, total);
 			}
 		} catch (err) {
-			errors.push(`Failed to process document ${doc.id}: ${err instanceof Error ? err.message : String(err)}`);
+			errors.push(
+				`Failed to process document ${doc.id}: ${err instanceof Error ? err.message : String(err)}`,
+			);
 		}
 	}
 
@@ -116,9 +118,14 @@ Usage:
 				}
 
 				const firestore = getFirestore();
-				const result = await initialCollectionSync(collConfig, config.aacsearch, firestore, (synced, total) => {
-					process.stdout.write(`\r  Progress: ${synced}/${total} documents`);
-				});
+				const result = await initialCollectionSync(
+					collConfig,
+					config.aacsearch,
+					firestore,
+					(synced, total) => {
+						process.stdout.write(`\r  Progress: ${synced}/${total} documents`);
+					},
+				);
 				console.log(`  Done: ${result.synced} synced, ${result.errors.length} errors`);
 			}
 			break;

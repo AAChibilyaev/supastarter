@@ -4,26 +4,13 @@ import { config } from "@config";
 import { LocaleLink, useLocalePathname } from "@i18n/routing";
 import { cn, Logo } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@repo/ui/components/collapsible";
-import {
-	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuItem,
-	NavigationMenuList,
-	NavigationMenuTrigger,
-} from "@repo/ui/components/navigation-menu";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@repo/ui/components/sheet";
 import { ColorModeToggle } from "@shared/components/ColorModeToggle";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
-import { ChevronDown, MenuIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import NextLink from "next/link";
 import { Suspense, useEffect, useState } from "react";
-import { useDebounceCallback } from "usehooks-ts";
 
 interface NavItem {
 	label: string;
@@ -40,27 +27,10 @@ export function NavBar() {
 	const t = useTranslations();
 	const localePathname = useLocalePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [isTop, setIsTop] = useState(true);
 
 	const handleMobileMenuClose = () => {
 		setMobileMenuOpen(false);
 	};
-
-	const debouncedScrollHandler = useDebounceCallback(
-		() => {
-			setIsTop(window.scrollY <= 10);
-		},
-		150,
-		{ maxWait: 150 },
-	);
-
-	useEffect(() => {
-		window.addEventListener("scroll", debouncedScrollHandler);
-		debouncedScrollHandler();
-		return () => {
-			window.removeEventListener("scroll", debouncedScrollHandler);
-		};
-	}, [debouncedScrollHandler]);
 
 	useEffect(() => {
 		handleMobileMenuClose();
@@ -113,19 +83,11 @@ export function NavBar() {
 
 	return (
 		<nav
-			className={cn("top-0 sticky z-50 w-full bg-background transition-shadow duration-200", {
-				"border-b": !isTop,
-			})}
+			className="top-0 backdrop-blur-md sticky z-50 w-full bg-background/80"
 			data-test="navigation"
 		>
 			<div className="container">
-				<div
-					className={cn(
-						"gap-4 flex items-center justify-between transition-[padding] duration-200",
-						"lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-6",
-						!isTop ? "py-4" : "py-6",
-					)}
-				>
+				<div className="py-4 gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-6 flex items-center justify-between">
 					<div className="min-w-0 flex shrink-0 items-center justify-start">
 						<LocaleLink
 							href="/"
@@ -135,54 +97,23 @@ export function NavBar() {
 						</LocaleLink>
 					</div>
 
-					{/* Desktop: true viewport center — equal 1fr side tracks, auto-width menu */}
-					<div className="lg:block hidden justify-self-center">
-						<NavigationMenu className="max-w-max flex-none">
-							<NavigationMenuList>
-								{navGroups.map((group) => (
-									<NavigationMenuItem key={group.label}>
-										<NavigationMenuTrigger className="text-sm font-medium bg-transparent text-foreground/80 hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent">
-											{group.label}
-										</NavigationMenuTrigger>
-										<NavigationMenuContent>
-											<ul className="w-48 gap-0.5 p-2 grid">
-												{group.items.map((item) =>
-													item.external ? (
-														<li key={item.href}>
-															<a
-																href={item.href}
-																target="_blank"
-																rel="noopener noreferrer"
-																className="px-3 py-2 text-sm block rounded-md text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
-															>
-																{item.label}
-															</a>
-														</li>
-													) : (
-														<li key={item.href}>
-															<LocaleLink
-																href={item.href}
-																className="px-3 py-2 text-sm block rounded-md text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground"
-															>
-																{item.label}
-															</LocaleLink>
-														</li>
-													),
-												)}
-											</ul>
-										</NavigationMenuContent>
-									</NavigationMenuItem>
-								))}
-								<NavigationMenuItem>
-									<LocaleLink
-										href="/contact"
-										className="px-4 py-2 font-medium text-sm block shrink-0 text-foreground/80 transition-colors hover:text-foreground"
-									>
-										{t("common.menu.contact")}
-									</LocaleLink>
-								</NavigationMenuItem>
-							</NavigationMenuList>
-						</NavigationMenu>
+					{/* Desktop: inline nav links */}
+					<div className="lg:flex gap-1 hidden items-center justify-self-center">
+						{navGroups.map((group) => (
+							<LocaleLink
+								key={group.label}
+								href={group.items[0].href}
+								className="px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+							>
+								{group.label}
+							</LocaleLink>
+						))}
+						<LocaleLink
+							href="/contact"
+							className="px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+						>
+							{t("common.menu.contact")}
+						</LocaleLink>
 					</div>
 
 					<div className="min-w-0 gap-3 flex items-center justify-end">
@@ -209,14 +140,44 @@ export function NavBar() {
 							<SheetContent className="w-[280px] overflow-y-auto" side="right">
 								<SheetTitle />
 								<div className="pt-2 flex flex-col">
-									{navGroups.map((group) => (
-										<MobileNavGroup
+									{/* Flat list of all nav group links */}
+									{navGroups.flatMap((group) => [
+										<div
 											key={group.label}
-											group={group}
-											onClose={handleMobileMenuClose}
-											localePathname={localePathname}
-										/>
-									))}
+											className="px-3 py-2 text-xs font-semibold tracking-wider text-foreground/50 uppercase"
+										>
+											{group.label}
+										</div>,
+										...group.items.map((item) =>
+											item.external ? (
+												<a
+													key={item.href}
+													href={item.href}
+													target="_blank"
+													rel="noopener noreferrer"
+													onClick={handleMobileMenuClose}
+													className="px-3 py-1.5 text-sm block text-foreground/70 hover:text-foreground"
+												>
+													{item.label}
+												</a>
+											) : (
+												<LocaleLink
+													key={item.href}
+													href={item.href}
+													onClick={handleMobileMenuClose}
+													className={cn(
+														"px-3 py-1.5 text-sm block text-foreground/70",
+														localePathname.startsWith(item.href)
+															? "font-semibold text-foreground"
+															: "hover:text-foreground",
+													)}
+												>
+													{item.label}
+												</LocaleLink>
+											),
+										),
+									])}
+									<div className="my-2 border-t border-border/50" />
 									<LocaleLink
 										href="/contact"
 										onClick={handleMobileMenuClose}
@@ -249,62 +210,5 @@ export function NavBar() {
 				</div>
 			</div>
 		</nav>
-	);
-}
-
-function MobileNavGroup({
-	group,
-	onClose,
-	localePathname,
-}: {
-	group: NavGroup;
-	onClose: () => void;
-	localePathname: string;
-}) {
-	const [open, setOpen] = useState(false);
-	return (
-		<Collapsible open={open} onOpenChange={setOpen}>
-			<CollapsibleTrigger className="px-3 py-2 font-medium text-base flex w-full items-center justify-between text-foreground/80 hover:text-foreground">
-				{group.label}
-				<ChevronDown
-					className={cn(
-						"h-4 w-4 transition-transform duration-200",
-						open && "rotate-180",
-					)}
-				/>
-			</CollapsibleTrigger>
-			<CollapsibleContent>
-				<div className="pl-3 pb-1 flex flex-col">
-					{group.items.map((item) =>
-						item.external ? (
-							<a
-								key={item.href}
-								href={item.href}
-								target="_blank"
-								rel="noopener noreferrer"
-								onClick={onClose}
-								className="px-3 py-1.5 text-sm block text-foreground/70 hover:text-foreground"
-							>
-								{item.label}
-							</a>
-						) : (
-							<LocaleLink
-								key={item.href}
-								href={item.href}
-								onClick={onClose}
-								className={cn(
-									"px-3 py-1.5 text-sm block text-foreground/70",
-									localePathname.startsWith(item.href)
-										? "font-semibold text-foreground"
-										: "hover:text-foreground",
-								)}
-							>
-								{item.label}
-							</LocaleLink>
-						),
-					)}
-				</div>
-			</CollapsibleContent>
-		</Collapsible>
 	);
 }

@@ -3,7 +3,6 @@
  * Allows users to configure the AACsearch connection and content type mappings.
  */
 
-import React, { useState, useEffect } from "react";
 import {
 	Box,
 	Button,
@@ -31,11 +30,9 @@ import {
 	Flex,
 } from "@strapi/design-system";
 import { Check, Plus } from "@strapi/icons";
+import React, { useState, useEffect } from "react";
 
-import type {
-	AacsearchPluginConfig,
-	CollectionConfig,
-} from "../../server/services/aacsearch";
+import type { AacsearchPluginConfig, CollectionConfig } from "../../server/services/aacsearch";
 
 /**
  * Fetch plugin config from Strapi admin API.
@@ -93,9 +90,7 @@ export default function SettingsPage() {
 	const [saveResult, setSaveResult] = useState<"idle" | "success" | "error">("idle");
 
 	useEffect(() => {
-		fetchConfig()
-			.then(setConfig)
-			.catch(console.error);
+		fetchConfig().then(setConfig).catch(console.error);
 	}, []);
 
 	const contentTypeUids = Object.keys(config.collections);
@@ -155,7 +150,11 @@ export default function SettingsPage() {
 				<ContentLayout>
 					{saveResult === "success" && (
 						<Box paddingBottom={4}>
-							<Alert title="Saved" variant="success" onClose={() => setSaveResult("idle")}>
+							<Alert
+								title="Saved"
+								variant="success"
+								onClose={() => setSaveResult("idle")}
+							>
 								Configuration saved successfully.
 							</Alert>
 						</Box>
@@ -163,7 +162,11 @@ export default function SettingsPage() {
 
 					{testResult === "success" && (
 						<Box paddingBottom={4}>
-							<Alert title="Connected" variant="success" onClose={() => setTestResult("idle")}>
+							<Alert
+								title="Connected"
+								variant="success"
+								onClose={() => setTestResult("idle")}
+							>
 								Successfully connected to AACsearch!
 							</Alert>
 						</Box>
@@ -171,7 +174,11 @@ export default function SettingsPage() {
 
 					{testResult === "error" && (
 						<Box paddingBottom={4}>
-							<Alert title="Connection failed" variant="danger" onClose={() => setTestResult("idle")}>
+							<Alert
+								title="Connection failed"
+								variant="danger"
+								onClose={() => setTestResult("idle")}
+							>
 								Could not connect to AACsearch. Check your URL and token.
 							</Alert>
 						</Box>
@@ -238,7 +245,11 @@ export default function SettingsPage() {
 							<Typography variant="delta" as="h2">
 								Content Types
 							</Typography>
-							<Button variant="secondary" startIcon={<Plus />} onClick={handleAddContentType}>
+							<Button
+								variant="secondary"
+								startIcon={<Plus />}
+								onClick={handleAddContentType}
+							>
 								Add Content Type
 							</Button>
 						</Flex>
@@ -254,7 +265,9 @@ export default function SettingsPage() {
 									<Thead>
 										<Tr>
 											<Th>
-												<Typography variant="sigma">Content Type UID</Typography>
+												<Typography variant="sigma">
+													Content Type UID
+												</Typography>
 											</Th>
 											<Th>
 												<Typography variant="sigma">Index Slug</Typography>
@@ -277,12 +290,18 @@ export default function SettingsPage() {
 															aria-label="Index slug"
 															name={`${uid}-indexSlug`}
 															value={col.indexSlug}
-															onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+															onChange={(
+																e: React.ChangeEvent<HTMLInputElement>,
+															) => {
 																setConfig({
 																	...config,
 																	collections: {
 																		...config.collections,
-																		[uid]: { ...col, indexSlug: e.target.value },
+																		[uid]: {
+																			...col,
+																			indexSlug:
+																				e.target.value,
+																		},
 																	},
 																});
 															}}
@@ -293,14 +312,18 @@ export default function SettingsPage() {
 															<Button
 																variant="tertiary"
 																size="S"
-																onClick={() => reindexContentType(uid)}
+																onClick={() =>
+																	reindexContentType(uid)
+																}
 															>
 																Reindex
 															</Button>
 															<Button
 																variant="danger-light"
 																size="S"
-																onClick={() => handleRemoveContentType(uid)}
+																onClick={() =>
+																	handleRemoveContentType(uid)
+																}
 															>
 																Remove
 															</Button>

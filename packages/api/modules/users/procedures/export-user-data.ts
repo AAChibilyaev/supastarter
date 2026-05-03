@@ -1,6 +1,6 @@
 import { exportUserData } from "@repo/database";
-import { logger } from "../../../lib/scrubbed-logger";
 
+import { logger } from "../../../lib/scrubbed-logger";
 import { protectedProcedure } from "../../../orpc/procedures";
 
 export const exportMyData = protectedProcedure

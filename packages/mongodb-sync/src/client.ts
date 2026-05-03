@@ -51,7 +51,10 @@ export class AacSearchClient {
 	}
 
 	/** Push documents via delta-sync */
-	async syncDocuments(indexSlug: string, documents: Record<string, unknown>[]): Promise<SyncResult> {
+	async syncDocuments(
+		indexSlug: string,
+		documents: Record<string, unknown>[],
+	): Promise<SyncResult> {
 		if (documents.length === 0) return { synced: 0, skipped: 0, errors: [] };
 		const res = await fetch(`${this.baseUrl}/api/projects/${this.projectId}/sync/delta`, {
 			method: "POST",

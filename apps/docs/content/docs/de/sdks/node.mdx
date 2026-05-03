@@ -10,10 +10,10 @@ import { Steps, Step } from "fumadocs-ui/components/steps";
 
 Das npm-Paket `@aacsearch/client` stellt zwei Clients bereit:
 
-| Client         | Bereich      | Schlüssel-Präfix | Bundle-sicher | Anwendungsfall                    |
-| -------------- | ------------ | ---------------- | ------------- | --------------------------------- |
-| `SearchClient` | Nur Suche    | `ss_search_*`    | Ja            | Browser-Widgets, Frontend         |
-| `AdminClient`  | Vollzugriff  | `aa_admin_*`     | Nein          | Serverseitige Skripte, CLI, CI/CD |
+| Client         | Bereich     | Schlüssel-Präfix | Bundle-sicher | Anwendungsfall                    |
+| -------------- | ----------- | ---------------- | ------------- | --------------------------------- |
+| `SearchClient` | Nur Suche   | `ss_search_*`    | Ja            | Browser-Widgets, Frontend         |
+| `AdminClient`  | Vollzugriff | `aa_admin_*`     | Nein          | Serverseitige Skripte, CLI, CI/CD |
 
 > **Sicherheitsregel**: Admin-Schlüssel niemals in Browser-Code einbetten. Verwenden Sie `SearchClient` für das Frontend und leiten Sie Admin-Operationen über Ihr eigenes Backend weiter.
 
@@ -196,32 +196,32 @@ try {
 
 ### Fehlercodes
 
-| Code                   | Wann                                  | HTTP-Status |
-| ---------------------- | ------------------------------------- | ----------- |
-| `missing_bearer_token` | Kein Auth-Header                      | 401         |
-| `unauthorized`         | Leeres oder ungültiges Token-Format   | 401         |
-| `forbidden`            | Ungültiger/abgelaufener/widerrufener  | 403         |
-| `not_found`            | Ressource nicht gefunden              | 404         |
-| `conflict`             | Slug bereits vergeben                 | 409         |
-| `rate_limited`         | Pro-Schlüssel-Ratenlimit überschritten| 429         |
-| `quota_exceeded`       | Monatsplan-Limit überschritten        | 402         |
-| `invalid_input`        | Validierungsfehler im Anfragetext     | 400         |
-| `search_failed`        | Upstream-Typesense-Fehler             | 502         |
-| `network_error`        | Fetch fehlgeschlagen oder Verbindung  | 0           |
+| Code                   | Wann                                   | HTTP-Status |
+| ---------------------- | -------------------------------------- | ----------- |
+| `missing_bearer_token` | Kein Auth-Header                       | 401         |
+| `unauthorized`         | Leeres oder ungültiges Token-Format    | 401         |
+| `forbidden`            | Ungültiger/abgelaufener/widerrufener   | 403         |
+| `not_found`            | Ressource nicht gefunden               | 404         |
+| `conflict`             | Slug bereits vergeben                  | 409         |
+| `rate_limited`         | Pro-Schlüssel-Ratenlimit überschritten | 429         |
+| `quota_exceeded`       | Monatsplan-Limit überschritten         | 402         |
+| `invalid_input`        | Validierungsfehler im Anfragetext      | 400         |
+| `search_failed`        | Upstream-Typesense-Fehler              | 502         |
+| `network_error`        | Fetch fehlgeschlagen oder Verbindung   | 0           |
 
 ## API-Referenz
 
 Vollständige API-Abdeckung des Node.js SDK:
 
-| Kategorie         | Methoden                                                                                           |
-| ----------------- | -------------------------------------------------------------------------------------------------- |
-| Projekt           | `getProject`, `createProject`, `getProjectById`                                                    |
-| Index-Verwaltung  | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`            |
-| Dokumente         | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments`|
-| Suche             | `search`, `multiSearch`                                                                            |
-| API-Schlüssel     | `listKeys`, `createKey`, `revokeKey`                                                               |
-| Analysen          | `getAnalytics`, `getUsage`                                                                         |
-| Synonyme          | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                 |
-| Kuratierungen     | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                             |
-| Sortierfelder     | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`            |
-| Facetten          | `listFacets`                                                                                       |
+| Kategorie        | Methoden                                                                                            |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| Projekt          | `getProject`, `createProject`, `getProjectById`                                                     |
+| Index-Verwaltung | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Dokumente        | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Suche            | `search`, `multiSearch`                                                                             |
+| API-Schlüssel    | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Analysen         | `getAnalytics`, `getUsage`                                                                          |
+| Synonyme         | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Kuratierungen    | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Sortierfelder    | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Facetten         | `listFacets`                                                                                        |

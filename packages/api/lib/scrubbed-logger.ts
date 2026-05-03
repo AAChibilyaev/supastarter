@@ -6,6 +6,7 @@
  * personal data in error objects) from appearing in log output.
  */
 import { logger as rawLogger } from "@repo/logs";
+
 import { scrubValue } from "./scrub-secrets";
 
 /**
@@ -14,7 +15,9 @@ import { scrubValue } from "./scrub-secrets";
  */
 function makeScrubbed(method: "info" | "warn" | "error" | "debug" | "log") {
 	return (...args: unknown[]): void => {
-		(rawLogger[method] as unknown as (...args: unknown[]) => void)(...args.map((a) => scrubValue(a)));
+		(rawLogger[method] as unknown as (...args: unknown[]) => void)(
+			...args.map((a) => scrubValue(a)),
+		);
 	};
 }
 

@@ -1,0 +1,72 @@
+---
+title: Headless Commerce Search — API-First-Architektur mit Typesense
+date: 2026-05-22
+image: https://picsum.photos/id/0/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: Moderne Commerce-Stacks sind entkoppelt — warum ist die Suche dann immer noch angebunden? Hier erfahren Sie, wie eine API-First-Architektur mit Typesense und AACsearch das Spiel verändert.
+tags: [headless, commerce, search, typesense, architecture]
+published: true
+---
+
+## Die Monolith-Falle im modernen Commerce
+
+Die meisten "Headless"-Commerce-Setups sind nicht wirklich entkoppelt. Der Storefront ist eine SPA, das CMS läuft auf einer separaten Instanz, der Warenkorb lebt in einer Backend-API — aber **die Suche ist immer noch ein Monolith, der in der Legacy-Plattform vergraben ist**. Sie fragen das CMS direkt ab, greifen auf dessen MySQL- Volltextindex zu und hoffen, dass etwas Relevantes zurückkommt.
+
+Das funktionierte, als Produktkataloge 500 Artikel umfassten. Bei 5.000 bricht es zusammen. Und bei 50.000 ist es völlig unbrauchbar.
+
+Die Lösung liegt auf der Hand: Entkoppeln Sie die Suche genauso wie alles andere. Doch den Aufbau eines dedizierten Suchdienstes von Grund auf bedeutet, sich zwischen einer komplexen selbst gehosteten Engine (Elasticsearch, Meilisearch, Typesense) und einem teuren Managed SaaS zu entscheiden, das nicht die Sprache Ihres Stacks spricht.
+
+## Was API-First-Suche wirklich bedeutet
+
+API-First-Suche bedeutet, dass die Suchmaschine **ein unabhängiger Dienst** ist, mit dem Ihr Frontend direkt kommuniziert — kein CMS-Middleware, kein Backend-Proxy, kein Datenbank-Engpass. Die Architektur sieht so aus:
+
+- **Index-Ebene**: Produktdaten werden von Ihrem CMS oder Ihrer Commerce-Plattform in einen dedizierten Suchindex synchronisiert
+- **Abfrage-Ebene**: Der Storefront sendet Suchanfragen direkt über REST oder SDK an die Such-API
+- **UI-Ebene**: Ein Such-Widget oder eine benutzerdefinierte Komponente rendert Ergebnisse, Facetten, Autovervollständigung und tippfehlertolerante Vorschläge
+
+Jede Ebene ist unabhängig bereitstellbar, skalierbar und austauschbar. Sie können die CMS-Plattform wechseln, ohne Ihre Suchlogik neu schreiben zu müssen. Sie können Ranking-Algorithmen im A/B-Test vergleichen, ohne Ihren Storefront-Code anzufassen. Das ist das Versprechen von Headless Search.
+
+## Typesense als Engine-Ebene
+
+Unter der Haube wird AACsearch von **Typesense** betrieben — einer Open-Source-Suchmaschine, die für die meisten Commerce-Anwendungsfälle schneller und einfacher ist als Elasticsearch. Typesense liefert Suchergebnisse in **Millisekunden**, unterstützt Tippfehlertoleranz out of the box und beherrscht facettierte Navigation, Sortierung und Geolokalisierungsfilterung ohne Doktortitel in Query-DSLs.
+
+Was Typesense besonders geeignet für Headless Commerce macht:
+
+- **Sofortsuche**: Getippte Abfragen werden in unter 50 ms zurückgegeben — kein Debounce erforderlich
+- **Integrierte Facettierung**: Kategoriefilter, Preisspannen, Attribut-Drilldowns ohne eigene Infrastruktur
+- **Automatische Tippfehlertoleranz**: "Nike" matcht "Nikee" und "Nik" ohne Konfiguration
+- **REST-first-Design**: Jeder Vorgang ist eine einfache HTTP-Anfrage — kein benutzerdefiniertes Protokoll, keine Binär-Clients
+
+## Wo AACsearch die Komplexität abstrahiert
+
+Typesense selbst zu betreiben bedeutet, Schema-Migrationen, Connection-Pooling, Index-Replikation und Delta-Sync-Zeitpläne zu verwalten. Das ist machbar, wenn Suche Ihr Produkt ist; es ist eine Ablenkung, wenn Sie einen Shop betreiben.
+
+AACsearch umhüllt Typesense mit **verwalteter Infrastruktur, die Commerce-bewusst ist**:
+
+- **CMS-Connectoren** für Shopify, WooCommerce, PrestaShop und Bitrix — jeder bildet Produktfelder, Kategorien, Varianten und Lagerbestände automatisch ab
+- **Automatische Delta-Syncs** — wenn sich ein Produktpreis ändert oder der Bestand aktualisiert wird, erfasst der Connector die Änderung und indiziert innerhalb von Minuten neu
+- **Schema-Inferenz** — der Connector liest Ihren Produktkatalog und erstellt das Typesense-Schema ohne manuelles Mapping
+- **Eine REST-API und SDKs** — Node.js, Python, PHP, Ruby — sodass Sie programmatisch mit der Suche interagieren können, ohne rohe HTTP-Aufrufe zu schreiben
+
+Sie erhalten die Leistung einer zweckgebauten Suchmaschine mit den Betriebskosten einer Drittanbieter-Integration.
+
+## Widget SDK: UI ohne Boilerplate
+
+Die Such-UI ist der Teil, den Ihre Kunden tatsächlich sehen, also muss sie schnell, zugänglich und markengerecht sein. AACsearch liefert ein **Widget SDK**, das mit React, Vue, Angular und Vanilla JavaScript funktioniert.
+
+Integrieren Sie ein vorgefertigtes Suchfeld, das Autovervollständigung, facettierte Filter und sofortige Ergebnisse abdeckt — oder verwenden Sie die SDK-Primitiven, um eine vollständig benutzerdefinierte UI zu erstellen. Das Widget kommuniziert direkt über die API-Schlüssel Ihrer Mandanten mit der Typesense-API, sodass es **keinen Backend-Roundtrip** zwischen dem Browser und Ihrem Server gibt. Jede Millisekunde zählt, wenn ein Käufer eine Abfrage eingibt, und das Entfernen der Middleware spart 100-200 ms pro Suche.
+
+## Alles zusammengeführt
+
+So sieht ein Headless-Search-Stack mit AACsearch aus:
+
+1. Ihr CMS (Shopify, WooCommerce, PrestaShop, Bitrix) überträgt Produktdaten über den AACsearch-Connector
+2. AACsearch verwaltet den Typesense-Index — Schema, Sync und Skalierung
+3. Ihr Storefront (Next.js, Nuxt, SPA oder statische Website) lädt das Widget SDK
+4. Käuferanfragen gehen direkt vom Browser → Typesense-API → gerenderte Ergebnisse
+5. Das AACsearch-Dashboard zeigt Analysen an — Top-Anfragen, Null-Ergebnis-Suchen, Klickraten
+
+Keine Infrastruktur. Keine Middleware. Kein DevOps-Overhead. Einfach **schnelle, relevante Suche**, die mit Ihrem Katalog skaliert.
+
+Wenn Sie einen Headless-Commerce-Stack betreiben und die Suche immer noch ein Engpass ist — testen Sie AACsearch kostenlos. Keine Kreditkarte erforderlich.

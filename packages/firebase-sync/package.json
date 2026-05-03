@@ -4,16 +4,19 @@
 	"description": "Firebase/Firestore real-time sync connector for AACsearch — sync Firestore collections to AACsearch Engine via Cloud Functions",
 	"keywords": [
 		"aacsearch",
+		"cloud-functions",
+		"connector",
 		"firebase",
 		"firestore",
-		"connector",
-		"sync",
-		"cloud-functions"
+		"sync"
 	],
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nousresearch/aacsearch.git"
+	},
+	"bin": {
+		"aacsearch-firebase-sync": "./dist/cli.js"
 	},
 	"files": [
 		"dist",
@@ -41,8 +44,5 @@
 	"devDependencies": {
 		"@types/node": "^22.0.0",
 		"typescript": "^6.0.0"
-	},
-	"bin": {
-		"aacsearch-firebase-sync": "./dist/cli.js"
 	}
 }

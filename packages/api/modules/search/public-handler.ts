@@ -2,7 +2,13 @@ import { aggregateSearchUsage, recordActivationEvent, recordSearchUsage } from "
 import { logger } from "@repo/logs";
 import { SymSpell, detectLanguage } from "@repo/nlp";
 import { getMetrics, trackSearchLatency } from "@repo/observability";
-import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
+import {
+	aliasName,
+	computeDisjunctiveFacetCounts,
+	multiSearchDocuments,
+	processQuery,
+	searchDocuments,
+} from "@repo/search";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -88,6 +94,8 @@ const publicSearchInput = z.object({
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
 	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
 	facetSortBy: z.string().optional(),
+	/** Comma-separated list of facet fields using disjunctive (OR) counting. */
+	disjunctiveFacets: z.string().optional(),
 	// ── Negation (explicit) ──
 	negate: z.string().optional(),
 	// ── Wildcard toggle ──
@@ -165,6 +173,7 @@ export const publicSearchApp = new Hono()
 		delete (searchParams as Record<string, unknown>).polygonFilter;
 		delete (searchParams as Record<string, unknown>).boundingBoxFilter;
 		delete (searchParams as Record<string, unknown>).multiLocation;
+		delete (searchParams as Record<string, unknown>).disjunctiveFacets;
 
 		// Build filter expression: scoped + user filter + geo filter + negate
 		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
@@ -362,12 +371,45 @@ export const publicSearchApp = new Hono()
 				}
 			}
 
+			// ── Disjunctive facet counts ──
+			// If disjunctiveFacets is specified, fire sub-queries without each
+			// disjunctive facet's filter to get correct "OR" facet counts.
+			let finalFacetCounts = result.facetCounts;
+			if (parsed.data.disjunctiveFacets) {
+				const disjunctiveFields = parsed.data.disjunctiveFacets
+					.split(",")
+					.map((f) => f.trim())
+					.filter(Boolean);
+				if (disjunctiveFields.length > 0) {
+					try {
+						finalFacetCounts = await computeDisjunctiveFacetCounts({
+							alias: aliasName(verified.organizationId, verified.indexSlug),
+							tenantId: verified.organizationId,
+							q: searchParams.q as string,
+							queryBy: searchParams.queryBy as string | undefined,
+							filterBy: combinedFilter,
+							facetBy: searchParams.facetBy as string | undefined,
+							disjunctiveFacets: disjunctiveFields,
+							existingFacetCounts: result.facetCounts,
+						});
+					} catch (error) {
+						logger.error(
+							"Disjunctive facet computation failed, falling back to intersection counts",
+							{
+								error,
+								slug,
+							},
+						);
+					}
+				}
+			}
+
 			return c.json({
 				hits: result.hits,
 				found: result.found,
 				page: result.page,
 				perPage: result.perPage,
-				facetCounts: result.facetCounts,
+				facetCounts: finalFacetCounts,
 				searchTimeMs: result.searchTimeMs,
 				queryId: result.queryId,
 				didYouMean,

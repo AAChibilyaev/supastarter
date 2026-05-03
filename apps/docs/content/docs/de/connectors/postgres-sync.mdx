@@ -128,11 +128,11 @@ startPgNotifyListener(config, undefined, {
 
 ## Strategievergleich
 
-| Strategie       | Latenz   | Erfordert Trigger | Overhead                   | Am besten geeignet für                    |
-| --------------- | -------- | ----------------- | -------------------------- | ----------------------------------------- |
-| pg_notify       | ~100ms   | Ja                | Minimal (NOTIFY ist async) | Produktionstabellen unter eigener Kontrolle |
-| Polling-Cursor  | ~5-60s   | Nein              | SELECT pro Intervall       | Tabellen ohne Schreibzugriff              |
-| Sequin CDC      | ~1-5s    | Nein              | Logischer Replikations-Slot | Hohe Verfügbarkeit, null Konfiguration    |
+| Strategie      | Latenz | Erfordert Trigger | Overhead                    | Am besten geeignet für                      |
+| -------------- | ------ | ----------------- | --------------------------- | ------------------------------------------- |
+| pg_notify      | ~100ms | Ja                | Minimal (NOTIFY ist async)  | Produktionstabellen unter eigener Kontrolle |
+| Polling-Cursor | ~5-60s | Nein              | SELECT pro Intervall        | Tabellen ohne Schreibzugriff                |
+| Sequin CDC     | ~1-5s  | Nein              | Logischer Replikations-Slot | Hohe Verfügbarkeit, null Konfiguration      |
 
 ## Verwandte Themen
 

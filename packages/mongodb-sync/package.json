@@ -5,12 +5,12 @@
 	"keywords": [
 		"aacsearch",
 		"cdc",
+		"change-streams",
 		"connector",
-		"mongodb",
 		"mongo",
+		"mongodb",
 		"search",
-		"sync",
-		"change-streams"
+		"sync"
 	],
 	"license": "MIT",
 	"repository": {

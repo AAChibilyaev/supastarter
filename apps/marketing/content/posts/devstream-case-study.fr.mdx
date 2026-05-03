@@ -1,0 +1,97 @@
+---
+title: "Comment DevStream a Remplacé Elasticsearch — Zéro DevOps, Recherche 10x Plus Rapide"
+date: 2026-05-03
+image: https://picsum.photos/id/201/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "DevStream, une plateforme B2B SaaS de documentation pour développeurs, a remplacé un cluster Elasticsearch autogéré par AACsearch, éliminant 20 heures de charge DevOps par semaine et réduisant la latence de recherche par 10."
+tags: [case-study, saas, elasticsearch, migration, devops]
+published: true
+---
+
+# Comment DevStream a Remplacé Elasticsearch — Zéro DevOps, Recherche 10x Plus Rapide
+
+> _« Elasticsearch dévorait 20 heures par semaine de notre équipe d'ingénierie. AACsearch nous a offert une meilleure recherche avec zéro maintenance. Notre équipe a récupéré 20 heures, littéralement du jour au lendemain. »_
+> — Priya Sharma, VP Ingénierie chez DevStream
+
+---
+
+## Métadonnées
+
+- **Entreprise :** DevStream — plateforme de documentation pour développeurs au service de plus de 15 000 équipes techniques
+- **Secteur :** B2B SaaS
+- **Volume :** Plus de 200 000 articles de documentation, plus de 1,5 million de requêtes de recherche par mois
+- **Solution précédente :** Cluster Elasticsearch autogéré (3 nœuds, AWS EC2)
+- **Cas d'usage :** Recherche en texte intégral dans la documentation technique
+- **AACsearch depuis :** Février 2026
+
+---
+
+## 1. Le Problème
+
+DevStream héberge la documentation de plus de 15 000 équipes techniques, traitant plus de 1,5 million de requêtes de recherche par mois. Son infrastructure de recherche — un cluster Elasticsearch autogéré de 3 nœuds sur AWS — avait été déployée à l'origine par un ingénieur fondateur qui avait depuis quitté l'entreprise.
+
+En deux ans, le cluster est devenu de plus en plus fragile :
+
+**Fardeau DevOps.** Un seul ingénieur consacrait environ 4 heures par jour à la maintenance d'Elasticsearch : surveillance de la santé du cluster, gestion des rotations d'index, réglage de l'allocation des shards et gestion des pannes mémoire occasionnelles.
+
+**Dégradation des performances.** À mesure que le corpus de documents dépassait les 200 000 articles, la latence de recherche augmentait. Les temps de requête p95 atteignaient 180 ms aux heures de pointe — bien au-dessus de l'objectif de 50 ms pour une bonne expérience développeur.
+
+**Aucune reprise après sinistre.** Le cluster n'avait pas de stratégie de sauvegarde automatisée. Un crash complet aurait signifié une reconstruction intégrale — un effort d'ingénierie estimé à 3 jours.
+
+« Nous savions qu'Elasticsearch était le mauvais choix dès que nous avons eu besoin de notre premier redimensionnement de cluster », déclare Priya Sharma, VP Ingénierie chez DevStream. « Mais la migration semblait trop risquée. Nous avons continué à repousser le problème. »
+
+---
+
+## 2. La Solution
+
+DevStream a évalué trois alternatives : mettre à niveau son cluster Elasticsearch (coût prohibitif), migrer vers Typesense Cloud (bon mais multi-tenant limité), et AACsearch.
+
+AACsearch l'a emporté pour trois raisons :
+
+1. **Zéro DevOps** — infrastructure entièrement gérée avec SLA de 99,9 %
+2. **Multi-tenant intégré** — la documentation de chaque client est une collection de recherche distincte avec un accès isolé
+3. **Analytiques par index** — visibilité sur les sections de documentation les plus recherchées et là où les utilisateurs rencontrent des difficultés
+
+La migration était prévue pour un week-end mais a été achevée en 5 heures un mardi :
+
+- **Export des données :** Utilisation de l'API dump d'Elasticsearch pour exporter les 200 000+ documents au format JSON
+- **Création d'index :** Création de 2 collections de recherche dans AACsearch (une pour les docs de production, une pour les docs versionnées/archivées)
+- **Import en masse :** Utilisation de l'API bulk d'AACsearch pour importer tous les documents (~30 minutes)
+- **Intégration du widget :** Remplacement du frontend Elasticsearch existant par le widget intégrable d'AACsearch
+- **Jetons à portée :** Création de jetons API en lecture seule pour la documentation publique et de jetons admin pour l'indexation interne
+
+« Nous avions prévu un week-end entier pour la migration. Nous avions terminé vers midi et avons passé l'après-midi à tester des cas limites », déclare Sharma.
+
+---
+
+## 3. Les Résultats
+
+| Métrique                      | Avant (Elasticsearch)     | Après (AACsearch) | Amélioration           |
+| ----------------------------- | ------------------------- | ----------------- | ---------------------- |
+| Heures DevOps/semaine         | 20h                       | 0h                | **100 % de réduction** |
+| Latence de recherche (p95)    | 180 ms                    | 18 ms             | **10x plus rapide**    |
+| Coût mensuel d'infrastructure | 2 400 $ (EC2 + EBS)       | 199 $/mois        | **12x de réduction**   |
+| Débit de requêtes             | ~500 QPS (dégradation)    | 2 000+ QPS        | **4x de marge**        |
+| Gestion des index             | Manuelle (réglage shards) | Automatique       | **Zéro intervention**  |
+| Reprise après sinistre        | Aucune                    | Sauvegardes auto. | **Instantanée**        |
+
+**En résumé :** DevStream a éliminé 20 heures de travail DevOps par semaine, réduit les coûts d'infrastructure par 12 et amélioré la latence de recherche par 10. L'équipe d'ingénierie a redirigé les heures libérées vers le développement produit.
+
+---
+
+## 4. Ce Qu'ont Vu Les Clients de DevStream
+
+Les utilisateurs finaux de la plateforme DevStream n'ont pas remarqué la migration — sauf que les résultats de recherche apparaissaient instantanément au lieu d'après un délai notable.
+
+« Nous avons interrogé nos clients une semaine après la migration. Le score de satisfaction de "l'expérience de recherche" est passé de 68 % à 92 % », note Sharma.
+
+---
+
+## 5. Détails Techniques
+
+- **Documents indexés :** 215 000 articles de documentation répartis dans 2 collections
+- **Fonctionnalités utilisées :** Recherche en texte intégral, tolérance aux fautes de frappe, filtrage par facettes par produit/catégorie, analytiques
+- **Intégrations :** API personnalisée pour l'indexation de documents en temps réel, widget intégrable
+- **Chemin de migration :** Export JSON Elasticsearch → API bulk AACsearch
+- **Statut actuel :** En fonctionnement depuis 3 mois sans incident

@@ -1,0 +1,221 @@
+---
+title: "Migration depuis Algolia"
+description: "Guide étape par étape pour migrer votre recherche d'Algolia vers AACsearch Engine — migration d'index, transfert de clés API et remplacement de widget."
+---
+
+# Migration depuis Algolia
+
+Ce guide vous accompagne dans la migration de votre infrastructure de recherche d'Algolia vers AACsearch Engine. Le processus est conçu pour un temps d'arrêt minimal et peut être réalisé en quelques heures pour la plupart des configurations.
+
+## Aperçu de la migration
+
+| Étape | Ce que vous faites                                          | Durée       |
+| ----- | ----------------------------------------------------------- | ----------- |
+| 1     | Exporter votre index Algolia                                | ~5 minutes  |
+| 2     | Créer un index AACsearch                                    | ~5 minutes  |
+| 3     | Importer les données                                        | ~10 minutes |
+| 4     | Configurer les paramètres (facettes, synonymes, classement) | ~15 minutes |
+| 5     | Mettre à jour les clés API                                  | ~10 minutes |
+| 6     | Mettre à jour votre frontend                                | ~30 minutes |
+| 7     | Basculer DNS / endpoints                                    | ~5 minutes  |
+
+## Étape 1 : Exporter votre index Algolia
+
+Utilisez la CLI Algolia ou l'API pour exporter les données de votre index :
+
+```bash
+# Install Algolia CLI
+npm install -g algolia-cli
+
+# Export index to JSON
+algolia export \
+  --app-id YOUR_ALGOLIA_APP_ID \
+  --api-key YOUR_ADMIN_API_KEY \
+  --index-name your_index_name \
+  --output ./algolia-export.json
+```
+
+Vous pouvez également utiliser l'API Algolia directement :
+
+```bash
+curl "https://YOUR_APP_ID.algolia.net/1/indexes/YOUR_INDEX_NAME/browse" \
+  -H "X-Algolia-API-Key: YOUR_ADMIN_API_KEY" \
+  -H "X-Algolia-Application-Id: YOUR_APP_ID" \
+  | jq '.hits' > algolia-export.json
+```
+
+## Étape 2 : Créer un index AACsearch
+
+Dans le tableau de bord AACsearch ou via l'API :
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/projects/YOUR_PROJECT_ID/indexes" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "your_index",
+    "displayName": "Your Index",
+    "fields": [
+      {"name": "objectID", "type": "string"},
+      {"name": "title", "type": "string"},
+      {"name": "description", "type": "string"},
+      {"name": "price", "type": "float", "sort": true},
+      {"name": "category", "type": "string", "facet": true},
+      {"name": "brand", "type": "string", "facet": true},
+      {"name": "tags", "type": "string[]", "facet": true}
+    ],
+    "defaultSortingField": "price"
+  }'
+```
+
+> **Conseil de mappage de champs** : Mappez `objectID` → `id` ou `external_id`. AACsearch utilise `id` comme clé primaire pour les upserts et les suppressions. Si vos enregistrements Algolia utilisent `objectID`, incluez un champ `id` dans votre export ou mappez-le lors de l'importation.
+
+## Étape 3 : Importer les données
+
+```bash
+# Transform objectID to id
+cat algolia-export.json | jq '[.[] | {id: .objectID, title, description, price, category, brand, tags}]' > import-data.json
+
+# Batch import
+curl -X POST "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/documents:batch" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d @import-data.json
+```
+
+## Étape 4 : Configurer les paramètres
+
+### Facettes
+
+Mappez vos `attributesForFaceting` d'Algolia aux champs `facet: true` d'AACsearch. AACsearch prend en charge les mêmes types de facettes :
+
+| Algolia                 | AACsearch                                       | Remarques                                         |
+| ----------------------- | ----------------------------------------------- | ------------------------------------------------- |
+| `searchable(attribute)` | `type: "string", facet: true`                   | Facette de filtre uniquement                      |
+| `filterOnly(attribute)` | `type: "string", facet: true, filterOnly: true` | Aucun décompte de facette retourné                |
+| Hiérarchique            | `type: "string[]"`                              | Utilisez des champs de tableau pour la hiérarchie |
+
+### Synonymes
+
+Exportez les synonymes d'Algolia et importez-les dans AACsearch :
+
+```bash
+# Export Algolia synonyms
+curl "https://YOUR_APP_ID.algolia.net/1/indexes/YOUR_INDEX_NAME/synonyms" \
+  -H "X-Algolia-API-Key: YOUR_ADMIN_API_KEY" \
+  -H "X-Algolia-Application-Id: YOUR_APP_ID" \
+  | jq '.hits' > algolia-synonyms.json
+
+# Convert to AACsearch format (one-way synonyms)
+cat algolia-synonyms.json | jq '[.[] | select(.type == "synonym") | {root: .word, synonyms: (.synonyms // [])}]' > aacsearch-synonyms.json
+
+# Import
+curl -X PUT "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/synonyms" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d @aacsearch-synonyms.json
+```
+
+### Classement
+
+Le classement par défaut d'AACsearch (Faute de frappe → Proximité → TextMatch → Personnalisé) est comparable à la stratégie de classement par défaut d'Algolia. Pour reproduire un classement personnalisé :
+
+```bash
+curl -X PATCH "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ranking": {
+      "textMatchWeight": 3,
+      "proximityWeight": 2,
+      "typoWeight": 1,
+      "fieldWeights": {"title": 5, "description": 2}
+    }
+  }'
+```
+
+## Étape 5 : Mettre à jour les clés API
+
+Créez de nouvelles clés API dans le tableau de bord AACsearch :
+
+- **Clé d'administration** (`aa_admin_*`) — accès CRUD complet, pour les services backend
+- **Clé de recherche** (`ss_search_*`) — accès en lecture seule, sécurisé pour une utilisation dans le navigateur
+- **Jetons à portée limitée** (`ss_scoped_*`) — restreint à un index et des filtres spécifiques
+
+Remplacez votre `clé API de recherche uniquement` d'Algolia par une clé `ss_search_*` d'AACsearch dans votre frontend.
+
+## Étape 6 : Mettre à jour votre frontend
+
+### Remplacer le client InstantSearch
+
+**Avant (Algolia) :**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script>
+	const searchClient = algoliasearch("APP_ID", "SEARCH_KEY");
+	// ...
+</script>
+```
+
+**Après (AACsearch Engine) :**
+
+```html
+<script src="https://cdn.aacsearch.com/widget/v1/widget.js"></script>
+<script>
+	const search = new AacsearchWidget.Search({
+		baseUrl: "https://app.aacsearch.com",
+		apiKey: "ss_search_YOUR_KEY",
+		indexSlug: "your_index",
+	});
+</script>
+```
+
+### Référence de traduction des requêtes
+
+| Algolia                                         | AACsearch                                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `index.search(query, { filters })`              | `client.search({ q: query, filterBy: filters })`                               |
+| `index.search(query, { facetFilters })`         | `client.search({ q: query, filterBy: filters, facetBy: attributes })`          |
+| `index.search(query, { hitsPerPage })`          | `client.search({ q: query, perPage: n })`                                      |
+| `index.search(query, { page })`                 | `client.search({ q: query, page: n })`                                         |
+| `index.search(query, { attributesToRetrieve })` | — tous les champs retournés par défaut ; utilisez `includeFields` pour limiter |
+| `index.search(query, { sort })`                 | `client.search({ q: query, sortBy: "field:asc" })`                             |
+| `index.searchForFacetValues(...)`               | `client.search({ q: query, facetBy: "field", maxFacetValues: n })`             |
+
+## Étape 7 : Basculer DNS / endpoints
+
+Une fois que vous avez vérifié que tout fonctionne :
+
+1. Mettez à jour vos services backend pour pointer vers `https://app.aacsearch.com` (ou votre nœud EU/RU)
+2. Mettez à jour votre widget frontend pour utiliser le endpoint AACsearch
+3. Gardez votre index Algolia comme sauvegarde pendant la période de transition
+4. Vérifiez que les résultats de recherche correspondent aux attentes
+5. Décommissionnez Algolia (ou conservez-le comme réserve à froid)
+
+## Plan de retour
+
+Si quelque chose se passe mal pendant la migration :
+
+1. Revenez au client Algolia dans votre frontend
+2. Maintenez les deux index synchronisés pendant la transition
+3. Relancez l'importation si les données sont incomplètes
+
+## Référence d'équivalence API
+
+| Fonctionnalité                 | Algolia                    | AACsearch                                        |
+| ------------------------------ | -------------------------- | ------------------------------------------------ |
+| Recherche                      | `index.search()`           | `POST /api/v1/indexes/:slug/search`              |
+| Recherche multiple             | `multipleQueries()`        | `POST /api/v1/multi-search`                      |
+| Facettage                      | `attributesForFaceting`    | Champ `facet: true` dans le schéma               |
+| Synonymes                      | `saveSynonym()`            | `PUT /api/indexes/:id/synonyms`                  |
+| Curation (Règles)              | `saveRule()`               | `PUT /api/indexes/:id/curations`                 |
+| Tolérance aux fautes de frappe | `typoTolerance`            | `typoTolerance` dans la configuration de l'index |
+| Analytics                      | `getAnalytics()`           | `GET /api/projects/:id/analytics`                |
+| Clés API                       | `apiKey` / `securedApiKey` | Modèle de jeton Admin/Search/Scoped              |
+
+## Besoin d'aide ?
+
+- [Référence de l'API Connecteur](../api-reference)
+- [SDK Node.js](../sdks/node)
+- Contactez le support à support@aacsearch.com

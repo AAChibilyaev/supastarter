@@ -3,8 +3,9 @@
  */
 
 import { MongoClient } from "mongodb";
-import type { MongoSyncConfig, CollectionConfig, SyncResult, SyncCallbacks } from "./types";
+
 import { AacSearchClient } from "./client";
+import type { MongoSyncConfig, CollectionConfig, SyncResult, SyncCallbacks } from "./types";
 
 /**
  * Perform an initial full sync of a MongoDB collection to AACsearch.
@@ -35,7 +36,9 @@ export async function initialFullSync(
 		// Count total documents for progress reporting
 		const totalDocs = await coll.countDocuments();
 		if (debug) {
-			console.log(`[mongodb-sync] Initial sync: ${collection} → ${indexSlug} (${totalDocs} documents)`);
+			console.log(
+				`[mongodb-sync] Initial sync: ${collection} → ${indexSlug} (${totalDocs} documents)`,
+			);
 		}
 
 		if (totalDocs === 0) {
@@ -127,7 +130,9 @@ export async function initialFullSync(
 		}
 
 		if (debug) {
-			console.log(`[mongodb-sync] Initial sync complete: ${collection} → ${indexSlug} (${synced}/${totalDocs})`);
+			console.log(
+				`[mongodb-sync] Initial sync complete: ${collection} → ${indexSlug} (${synced}/${totalDocs})`,
+			);
 		}
 
 		return { synced, skipped: totalDocs - synced - errors.length, errors };

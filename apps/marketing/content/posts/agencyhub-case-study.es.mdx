@@ -1,0 +1,98 @@
+---
+title: "Cómo AgencyHub ofrece búsqueda de nivel empresarial para 12 clientes a precios de startup"
+date: 2026-05-03
+image: https://picsum.photos/id/219/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "AgencyHub, una agencia digital que atiende a marcas de comercio electrónico de mercado medio, utiliza la multi-tenencia de AACsearch para ofrecer búsqueda de nivel empresarial a 12 clientes desde un solo panel — ahorrando más de $4000/mes en costos de infraestructura por cliente."
+tags: [case-study, agency, multi-tenancy, enterprise]
+published: true
+---
+
+# Cómo AgencyHub ofrece búsqueda de nivel empresarial para 12 clientes a precios de startup
+
+> _„Con AACsearch, aprovisionamos la búsqueda de un nuevo cliente en 15 minutos. Cada cliente cree que tiene su propia infraestructura de búsqueda dedicada — y así es. Simplemente lo gestionamos todo desde un solo panel."_
+> — Marcus Weber, Director Técnico de AgencyHub
+
+---
+
+## Metadatos
+
+- **Empresa:** AgencyHub — agencia digital de servicio completo que atiende a marcas de comercio electrónico de mercado medio
+- **Industria:** Agencia / Desarrollo Web
+- **Tamaño:** 12 clientes activos, más de 500 000 productos indexados, más de 800 000 consultas de búsqueda mensuales
+- **Solución anterior:** Mixta — algunos clientes en Algolia, otros en Elasticsearch autoalojado, otros en la búsqueda integrada de Shopify
+- **Caso de uso:** Búsqueda gestionada por agencia para clientes de comercio electrónico
+- **AACsearch desde:** Noviembre de 2025
+
+---
+
+## 1. El problema
+
+AgencyHub gestiona sitios de comercio electrónico para 12 marcas de mercado medio, cada una con 5000–100 000 productos. Su infraestructura de búsqueda era un desorden fragmentado:
+
+**Clientes de Algolia (5).** Cada cliente tenía su propia cuenta de Algolia con facturación separada. Total: ~$2500/mes. La agencia tenía que iniciar sesión en 5 paneles diferentes de Algolia para monitorear la calidad de la búsqueda.
+
+**Clientes de Elasticsearch (3).** AgencyHub ejecutaba un clúster compartido de Elasticsearch y usaba lógica a nivel de aplicación para separar los datos de los clientes. Cualquier cambio en el esquema corría el riesgo de afectar a todos los clientes del clúster.
+
+**Búsqueda nativa de Shopify (4).** Estos clientes usaban la búsqueda integrada de Shopify — funciones limitadas, sin análisis, y la agencia no podía optimizarla.
+
+"Los gastos generales nos estaban matando", dice Marcus Weber, Director Técnico de AgencyHub. "Estábamos gestionando 5 cuentas de Algolia, un clúster frágil de Elasticsearch, y no podíamos vender mejoras de búsqueda a nuestros clientes de Shopify porque no teníamos nada que ofrecer."
+
+---
+
+## 2. La solución
+
+AgencyHub consolidó a todos los clientes en AACsearch por tres razones:
+
+1. **Multi-tenencia integrada** — cada cliente obtiene colecciones de búsqueda aisladas con tokens de API con alcance, todo bajo una misma cuenta
+2. **Listo para marca blanca** — el widget integrable es completamente personalizable, adaptándose a la imagen de cada cliente
+3. **Análisis por cliente** — análisis separados por cliente que muestran volumen de búsqueda, consultas principales y tasa de resultados cero
+
+La migración se ejecutó cliente por cliente durante dos semanas:
+
+- **Migración de Algolia:** Se usó la API de importación de AACsearch para la migración directa. Promedio: 2 horas por cliente.
+- **Migración de Elasticsearch:** Se exportaron los datos de cada cliente y se importaron en colecciones separadas. Promedio: 3 horas por cliente.
+- **Actualización de Shopify:** Para los 4 clientes de Shopify, AgencyHub instaló el widget de AACsearch como superposición de búsqueda, reemplazando la búsqueda integrada de Shopify. Promedio: 1 hora por cliente.
+- **Marca blanca:** Se personalizaron el CSS, los colores y las fuentes del widget de búsqueda para la identidad de marca de cada cliente.
+
+"Cada cliente recibió un documento de migración detallado. Ninguno de ellos notó tiempo de inactividad", dice Weber.
+
+---
+
+## 3. Los resultados
+
+| Métrica                            | Antes (Mixto)       | Después (AACsearch) | Mejora              |
+| ---------------------------------- | ------------------- | ------------------- | ------------------- |
+| Costo mensual de búsqueda (todos)  | ~$3800              | $499 (Plan Pro)     | **Reducción 7,6×**  |
+| Tiempo de incorporación de cliente | 3–5 días            | 15 minutos          | **99 % más rápido** |
+| Latencia de búsqueda (promedio)    | 80–200 ms           | 8–15 ms             | **10× más rápido**  |
+| Paneles de cliente a monitorear    | 9 inicios de sesión | 1 panel             | **Panel único**     |
+| Satisfacción de búsqueda informada | 3,8/5 (agregado)    | 4,6/5               | **+21 %**           |
+| Tickets de soporte relacionados    | 12/mes              | 2/mes               | **Reducción 83 %**  |
+
+**En resumen:** AgencyHub redujo sus costos de infraestructura de búsqueda de $3800/mes a $499/mes, mientras mejoraba el rendimiento de la búsqueda y añadía análisis para los 12 clientes — incluidos los 4 que anteriormente solo tenían la búsqueda básica de Shopify.
+
+---
+
+## 4. El modelo de agencia
+
+AgencyHub ahora ofrece "Búsqueda Empresarial" como un servicio adicional empaquetado:
+
+- **Tarifa de configuración:** $500 por cliente (única vez)
+- **Tarifa mensual de gestión:** $200 por cliente
+- **Costo para el cliente:** Menor de lo que cada cliente pagaría individualmente por Algolia o Elasticsearch
+
+Esto genera $2400/mes en ingresos recurrentes para AgencyHub, además de los $499 que pagan por el plan Pro — un margen de 5×.
+
+"Hemos convertido la búsqueda de un centro de costos en un centro de ganancias", dice Weber. "Nuestros clientes obtienen una mejor búsqueda de la que podrían construir ellos mismos, y nosotros ganamos dinero con ello."
+
+---
+
+## 5. Detalles técnicos
+
+- **Documentos indexados:** Más de 500 000 productos en 12 colecciones
+- **Funciones utilizadas:** Multi-tenencia (tokens de API con alcance), búsqueda facetada, tolerancia a errores tipográficos, clasificación personalizada, análisis, widget de marca blanca
+- **Integraciones:** API personalizada para actualizaciones de productos en tiempo real, aplicación de Shopify, widget HTML/JS
+- **Configuración específica de la agencia:** Cada colección de cliente tiene reglas de clasificación personalizadas basadas en sus categorías de producto y campos prioritarios
+- **Cronograma de migración:** 14 días en total (los 12 clientes migrados sin tiempo de inactividad)

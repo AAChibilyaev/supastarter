@@ -29,76 +29,66 @@ export function HeroSection() {
 	const t = useTranslations();
 
 	return (
-		<section className="relative overflow-hidden">
-			{/* Layered gradient background */}
-			<div className="inset-0 absolute bg-gradient-to-br from-primary/5 via-background to-secondary/10" />
-			<div className="inset-0 absolute bg-[radial-gradient(circle_at_20%_30%,oklch(0.45_0_0/0.06),transparent_50%)]" />
-			<div className="inset-0 absolute bg-[radial-gradient(circle_at_80%_70%,oklch(0.45_0_0/0.04),transparent_50%)]" />
-
+		<section className="relative overflow-hidden bg-background">
 			<div className="py-16 md:py-24 lg:py-32 relative z-10 container">
 				{/* Announcement badge */}
 				<div className="mb-6 flex justify-center">
-					<div className="gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex items-center rounded-full border border-primary/20 bg-primary/5">
+					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-full border">
 						<span className="font-semibold text-primary">{t("home.hero.new")}</span>
-						<span className="h-4 w-px bg-primary/20" />
+						<span className="h-4 w-px bg-border" />
 						<span className="font-medium text-muted-foreground">
 							{t("home.hero.featureBadge")}
 						</span>
 					</div>
 				</div>
 
-				{/* Gradient heading */}
-				<h1 className="max-w-4xl font-semibold text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight mx-auto text-center text-balance">
-					<span className="bg-gradient-to-r from-primary via-primary/80 to-foreground bg-clip-text text-transparent">
-						{t("home.hero.title")}
-					</span>
+				{/* Hero heading */}
+				<h1 className="max-w-4xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl xl:text-7xl mx-auto text-center text-balance text-foreground">
+					{t("home.hero.title")}
 				</h1>
 
-				<p className="mt-6 max-w-2xl text-base sm:text-lg mx-auto text-center text-pretty text-muted-foreground">
+				{/* Subtitle */}
+				<p className="mt-6 max-w-2xl text-base sm:text-lg mx-auto text-center text-balance text-muted-foreground">
 					{t("home.hero.subtitle")}
 				</p>
 
-				{/* CTA buttons — single row; scroll on narrow widths */}
-				<div className="mt-8 w-full overflow-x-auto">
-					<div className="gap-3 mx-auto flex w-max items-center justify-center">
-						<Button
-							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
-							size="lg"
-							variant="primary"
-							asChild
-						>
-							<a href={config.saasUrl}>
-								{t("home.hero.getStarted")}
-								<ArrowRightIcon className="ml-2 size-4" />
-							</a>
+				{/* CTA buttons */}
+				<div className="mt-8 gap-3 flex w-full items-center justify-center">
+					<Button
+						className={cn(marketingCtaButtonClassName(true), "shrink-0")}
+						size="lg"
+						variant="primary"
+						asChild
+					>
+						<a href={config.saasUrl}>
+							{t("home.hero.getStarted")}
+							<ArrowRightIcon className="ml-2 size-4" />
+						</a>
+					</Button>
+					{config.docsUrl && (
+						<Button className="shrink-0" variant="outline" size="lg" asChild>
+							<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
 						</Button>
-						{config.docsUrl && (
-							<Button className="shrink-0" variant="ghost" size="lg" asChild>
-								<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
-							</Button>
-						)}
-					</div>
+					)}
 				</div>
 
-				{/* Feature badge row — single line; scroll on narrow widths */}
-				<div className="mt-8 w-full overflow-x-auto">
-					<div className="gap-2 mx-auto flex w-max items-center">
-						{featureBadges.map(({ icon: Icon, label }) => (
-							<Badge
-								key={label}
-								status="info"
-								className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
-							>
-								<Icon className="size-3" />
-								{label}
-							</Badge>
-						))}
-					</div>
+				{/* Feature badges */}
+				<div className="mt-8 gap-2 flex w-full items-center justify-center">
+					{featureBadges.map(({ icon: Icon, label }) => (
+						<Badge
+							key={label}
+							status="info"
+							className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
+						>
+							<Icon className="size-3" />
+							{label}
+						</Badge>
+					))}
 				</div>
 
-				{/* Hero image in glass-morphism card */}
-				<div className="mt-12 lg:mt-16 max-w-5xl mx-auto">
-					<div className="shadow-2xl backdrop-blur-sm relative overflow-hidden rounded-xl border border-border/50 bg-card/40 shadow-primary/5">
+				{/* Hero image */}
+				<div className="mt-12 max-w-5xl lg:mt-16 mx-auto">
+					<div className="shadow-lg overflow-hidden rounded-xl border">
 						<Image
 							src={heroImage}
 							alt={t("home.hero.imageAlt")}
@@ -115,10 +105,10 @@ export function HeroSection() {
 				</div>
 
 				{/* Stats row */}
-				<div className="mt-12 gap-4 sm:gap-8 max-w-2xl mx-auto grid grid-cols-3">
+				<div className="mt-12 max-w-2xl gap-4 sm:gap-8 mx-auto grid grid-cols-3">
 					{stats.map(({ value, label }) => (
 						<div key={label} className="text-center">
-							<div className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">
+							<div className="text-2xl font-bold sm:text-3xl text-foreground tabular-nums">
 								{value}
 							</div>
 							<div className="mt-1 text-xs sm:text-sm text-muted-foreground">

@@ -9,15 +9,15 @@ This guide walks you through migrating your search infrastructure from Algolia t
 
 ## Migration overview
 
-| Step | What you do | Duration |
-|------|-------------|----------|
-| 1 | Export your Algolia index | ~5 minutes |
-| 2 | Create an AACsearch index | ~5 minutes |
-| 3 | Import data | ~10 minutes |
-| 4 | Configure settings (facets, synonyms, ranking) | ~15 minutes |
-| 5 | Update API keys | ~10 minutes |
-| 6 | Update your frontend | ~30 minutes |
-| 7 | Switch DNS / endpoints | ~5 minutes |
+| Step | What you do                                    | Duration    |
+| ---- | ---------------------------------------------- | ----------- |
+| 1    | Export your Algolia index                      | ~5 minutes  |
+| 2    | Create an AACsearch index                      | ~5 minutes  |
+| 3    | Import data                                    | ~10 minutes |
+| 4    | Configure settings (facets, synonyms, ranking) | ~15 minutes |
+| 5    | Update API keys                                | ~10 minutes |
+| 6    | Update your frontend                           | ~30 minutes |
+| 7    | Switch DNS / endpoints                         | ~5 minutes  |
 
 ## Step 1: Export your Algolia index
 
@@ -89,11 +89,11 @@ curl -X POST "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/documents:batc
 
 Map your Algolia `attributesForFaceting` to AACsearch `facet: true` fields. AACsearch supports the same facet types:
 
-| Algolia | AACsearch | Notes |
-|---------|-----------|-------|
-| `searchable(attribute)` | `type: "string", facet: true` | Filter-only facet |
-| `filterOnly(attribute)` | `type: "string", facet: true, filterOnly: true` | No facet count returned |
-| Hierarchical | `type: "string[]"` | Use array fields for hierarchy |
+| Algolia                 | AACsearch                                       | Notes                          |
+| ----------------------- | ----------------------------------------------- | ------------------------------ |
+| `searchable(attribute)` | `type: "string", facet: true`                   | Filter-only facet              |
+| `filterOnly(attribute)` | `type: "string", facet: true, filterOnly: true` | No facet count returned        |
+| Hierarchical            | `type: "string[]"`                              | Use array fields for hierarchy |
 
 ### Synonyms
 
@@ -153,8 +153,8 @@ Replace your Algolia `search-only API key` with an AACsearch `ss_search_*` key i
 ```html
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
 <script>
-const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
-// ...
+	const searchClient = algoliasearch("APP_ID", "SEARCH_KEY");
+	// ...
 </script>
 ```
 
@@ -163,25 +163,25 @@ const searchClient = algoliasearch('APP_ID', 'SEARCH_KEY');
 ```html
 <script src="https://cdn.aacsearch.com/widget/v1/widget.js"></script>
 <script>
-const search = new AacsearchWidget.Search({
-  baseUrl: "https://app.aacsearch.com",
-  apiKey: "ss_search_YOUR_KEY",
-  indexSlug: "your_index",
-});
+	const search = new AacsearchWidget.Search({
+		baseUrl: "https://app.aacsearch.com",
+		apiKey: "ss_search_YOUR_KEY",
+		indexSlug: "your_index",
+	});
 </script>
 ```
 
 ### Query translation reference
 
-| Algolia | AACsearch |
-|---------|-----------|
-| `index.search(query, { filters })` | `client.search({ q: query, filterBy: filters })` |
-| `index.search(query, { facetFilters })` | `client.search({ q: query, filterBy: filters, facetBy: attributes })` |
-| `index.search(query, { hitsPerPage })` | `client.search({ q: query, perPage: n })` |
-| `index.search(query, { page })` | `client.search({ q: query, page: n })` |
-| `index.search(query, { attributesToRetrieve })` | — all fields returned by default; use `includeFields` to limit |
-| `index.search(query, { sort })` | `client.search({ q: query, sortBy: "field:asc" })` |
-| `index.searchForFacetValues(...)` | `client.search({ q: query, facetBy: "field", maxFacetValues: n })` |
+| Algolia                                         | AACsearch                                                             |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| `index.search(query, { filters })`              | `client.search({ q: query, filterBy: filters })`                      |
+| `index.search(query, { facetFilters })`         | `client.search({ q: query, filterBy: filters, facetBy: attributes })` |
+| `index.search(query, { hitsPerPage })`          | `client.search({ q: query, perPage: n })`                             |
+| `index.search(query, { page })`                 | `client.search({ q: query, page: n })`                                |
+| `index.search(query, { attributesToRetrieve })` | — all fields returned by default; use `includeFields` to limit        |
+| `index.search(query, { sort })`                 | `client.search({ q: query, sortBy: "field:asc" })`                    |
+| `index.searchForFacetValues(...)`               | `client.search({ q: query, facetBy: "field", maxFacetValues: n })`    |
 
 ## Step 7: Switch DNS / endpoints
 
@@ -203,16 +203,16 @@ If something goes wrong during migration:
 
 ## API equivalence reference
 
-| Feature | Algolia | AACsearch |
-|---------|---------|-----------|
-| Search | `index.search()` | `POST /api/v1/indexes/:slug/search` |
-| Multi-search | `multipleQueries()` | `POST /api/v1/multi-search` |
-| Faceting | `attributesForFaceting` | Field `facet: true` in schema |
-| Synonyms | `saveSynonym()` | `PUT /api/indexes/:id/synonyms` |
-| Curations (Rules) | `saveRule()` | `PUT /api/indexes/:id/curations` |
-| Typo tolerance | `typoTolerance` | `typoTolerance` in index config |
-| Analytics | `getAnalytics()` | `GET /api/projects/:id/analytics` |
-| API keys | `apiKey` / `securedApiKey` | Admin/Search/Scoped token model |
+| Feature           | Algolia                    | AACsearch                           |
+| ----------------- | -------------------------- | ----------------------------------- |
+| Search            | `index.search()`           | `POST /api/v1/indexes/:slug/search` |
+| Multi-search      | `multipleQueries()`        | `POST /api/v1/multi-search`         |
+| Faceting          | `attributesForFaceting`    | Field `facet: true` in schema       |
+| Synonyms          | `saveSynonym()`            | `PUT /api/indexes/:id/synonyms`     |
+| Curations (Rules) | `saveRule()`               | `PUT /api/indexes/:id/curations`    |
+| Typo tolerance    | `typoTolerance`            | `typoTolerance` in index config     |
+| Analytics         | `getAnalytics()`           | `GET /api/projects/:id/analytics`   |
+| API keys          | `apiKey` / `securedApiKey` | Admin/Search/Scoped token model     |
 
 ## Need help?
 

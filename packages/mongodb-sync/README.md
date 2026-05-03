@@ -19,39 +19,36 @@ npm install @aacsearch/mongodb-sync
 
 ```javascript
 // In mongosh:
-rs.initiate()
+rs.initiate();
 ```
 
 ### 2. Connect and sync
 
 ```typescript
-import {
-  startChangeStreamListener,
-  initialFullSync,
-} from "@aacsearch/mongodb-sync";
+import { startChangeStreamListener, initialFullSync } from "@aacsearch/mongodb-sync";
 
 const config = {
-  aacsearch: {
-    baseUrl: process.env.AACSEARCH_URL!,
-    token: process.env.AACSEARCH_TOKEN!,
-    projectId: process.env.AACSEARCH_PROJECT_ID!,
-  },
-  mongoUri: process.env.MONGO_URI!,
-  dbName: "myapp",
-  collections: [
-    {
-      collection: "products",
-      indexSlug: "products",
-      fieldMapping: {
-        _id: "id",
-        name: "title",
-        description: "body",
-        price: "price",
-        category: "category",
-      },
-    },
-  ],
-  debug: true,
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	mongoUri: process.env.MONGO_URI!,
+	dbName: "myapp",
+	collections: [
+		{
+			collection: "products",
+			indexSlug: "products",
+			fieldMapping: {
+				_id: "id",
+				name: "title",
+				description: "body",
+				price: "price",
+				category: "category",
+			},
+		},
+	],
+	debug: true,
 };
 
 // Step 1: Initial full sync (load all existing documents)
@@ -63,8 +60,8 @@ await listener.start();
 
 // Graceful shutdown
 process.on("SIGTERM", async () => {
-  await listener.stop();
-  process.exit(0);
+	await listener.stop();
+	process.exit(0);
 });
 ```
 
@@ -89,15 +86,15 @@ Control how MongoDB fields map to AACsearch document fields:
 
 ```typescript
 const config = {
-  collection: "products",
-  indexSlug: "products_index",
-  fieldMapping: {
-    _id: "external_id",
-    name: "title",
-    description: "body",
-    "metadata.price": "price",  // Nested field access
-    "metadata.tags": "tags",
-  },
+	collection: "products",
+	indexSlug: "products_index",
+	fieldMapping: {
+		_id: "external_id",
+		name: "title",
+		description: "body",
+		"metadata.price": "price", // Nested field access
+		"metadata.tags": "tags",
+	},
 };
 ```
 
@@ -107,17 +104,15 @@ Custom transform function for complex logic:
 
 ```typescript
 const config = {
-  collection: "users",
-  indexSlug: "users",
-  transform: (doc) => ({
-    external_id: String(doc._id),
-    full_name: `${doc.first_name} ${doc.last_name}`,
-    email: doc.email,
-    is_active: doc.status === "active",
-    created_at: doc.created_at instanceof Date
-      ? doc.created_at.toISOString()
-      : doc.created_at,
-  }),
+	collection: "users",
+	indexSlug: "users",
+	transform: (doc) => ({
+		external_id: String(doc._id),
+		full_name: `${doc.first_name} ${doc.last_name}`,
+		email: doc.email,
+		is_active: doc.status === "active",
+		created_at: doc.created_at instanceof Date ? doc.created_at.toISOString() : doc.created_at,
+	}),
 };
 ```
 
@@ -128,8 +123,8 @@ To persist tokens across restarts:
 
 ```typescript
 const config = {
-  ...baseConfig,
-  resumeTokenFile: "/var/lib/aacsearch/mongo-resume-tokens.json",
+	...baseConfig,
+	resumeTokenFile: "/var/lib/aacsearch/mongo-resume-tokens.json",
 };
 
 // Resume token is automatically loaded on start and saved periodically
@@ -140,22 +135,22 @@ const listener = await startChangeStreamListener(config, collectionConfig);
 
 ```typescript
 const listener = await startChangeStreamListener(config, collectionConfig, {
-  onSync: (event) => {
-    console.log(`Synced ${event.action} on ${event.collection} → ${event.indexSlug}`);
-  },
-  onError: (error, context) => {
-    console.error(`Error on ${context?.collection}:`, error.message);
-    // Optionally send to monitoring
-  },
-  onConnected: () => {
-    console.log("Connected to MongoDB change stream");
-  },
-  onDisconnected: () => {
-    console.log("Disconnected from MongoDB change stream");
-  },
-  onInitialSyncProgress: ({ collection, indexSlug, total, synced }) => {
-    console.log(`Initial sync ${collection}: ${synced}/${total}`);
-  },
+	onSync: (event) => {
+		console.log(`Synced ${event.action} on ${event.collection} → ${event.indexSlug}`);
+	},
+	onError: (error, context) => {
+		console.error(`Error on ${context?.collection}:`, error.message);
+		// Optionally send to monitoring
+	},
+	onConnected: () => {
+		console.log("Connected to MongoDB change stream");
+	},
+	onDisconnected: () => {
+		console.log("Disconnected from MongoDB change stream");
+	},
+	onInitialSyncProgress: ({ collection, indexSlug, total, synced }) => {
+		console.log(`Initial sync ${collection}: ${synced}/${total}`);
+	},
 });
 ```
 
@@ -167,13 +162,13 @@ Start listening to MongoDB Change Stream for a single collection.
 
 **Returns**: `ChangeStreamController`
 
-| Method | Description |
-|--------|-------------|
-| `start()` | Connect to MongoDB and begin listening |
-| `stop()` | Stop listening, flush pending, close connection |
-| `status()` | Get current status (running, pendingCount, errorCount) |
-| `getResumeToken()` | Get current resume token |
-| `flushBatch()` | Manually flush pending changes |
+| Method             | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| `start()`          | Connect to MongoDB and begin listening                 |
+| `stop()`           | Stop listening, flush pending, close connection        |
+| `status()`         | Get current status (running, pendingCount, errorCount) |
+| `getResumeToken()` | Get current resume token                               |
+| `flushBatch()`     | Manually flush pending changes                         |
 
 ### `initialFullSync(config, collectionConfig, callbacks?)`
 

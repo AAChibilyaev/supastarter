@@ -127,11 +127,11 @@ startPgNotifyListener(config, undefined, {
 
 ## Comparación de estrategias
 
-| Estrategia       | Latencia | Requiere disparador | Sobrecarga                  | Mejor para                               |
-| ---------------- | -------- | ------------------- | --------------------------- | ---------------------------------------- |
-| pg_notify        | ~100ms   | Sí                  | Mínima (NOTIFY es asíncrono) | Tablas de producción que usted controla  |
-| Cursor de polling| ~5-60s   | No                  | SELECT por intervalo        | Tablas sin acceso de escritura           |
-| Sequin CDC       | ~1-5s    | No                  | Slot de replicación lógica  | Alta disponibilidad, configuración cero  |
+| Estrategia        | Latencia | Requiere disparador | Sobrecarga                   | Mejor para                              |
+| ----------------- | -------- | ------------------- | ---------------------------- | --------------------------------------- |
+| pg_notify         | ~100ms   | Sí                  | Mínima (NOTIFY es asíncrono) | Tablas de producción que usted controla |
+| Cursor de polling | ~5-60s   | No                  | SELECT por intervalo         | Tablas sin acceso de escritura          |
+| Sequin CDC        | ~1-5s    | No                  | Slot de replicación lógica   | Alta disponibilidad, configuración cero |
 
 ## Relacionados
 

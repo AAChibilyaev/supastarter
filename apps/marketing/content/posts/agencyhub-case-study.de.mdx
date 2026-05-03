@@ -1,0 +1,98 @@
+---
+title: "Wie AgencyHub Enterprise-Suche für 12 Kunden zu Start-up-Preisen liefert"
+date: 2026-05-03
+image: https://picsum.photos/id/219/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "AgencyHub, eine Digitalagentur für mittelständische E-Commerce-Marken, nutzt AACsearchs Multi-Tenancy, um 12 Kunden von einem einzigen Dashboard aus eine Enterprise-Suche zu bieten – und spart so über 4.000 $/Monat an Infrastrukturkosten pro Kunde."
+tags: [case-study, agency, multi-tenancy, enterprise]
+published: true
+---
+
+# Wie AgencyHub Enterprise-Suche für 12 Kunden zu Start-up-Preisen liefert
+
+> _„Mit AACsearch richten wir die Suche für einen neuen Kunden in 15 Minuten ein. Jeder Kunde denkt, er hätte seine eigene dedizierte Suchinfrastruktur – und das hat er auch. Wir verwalten alles von einem einzigen Dashboard aus."_
+> — Marcus Weber, Technical Director bei AgencyHub
+
+---
+
+## Metadaten
+
+- **Unternehmen:** AgencyHub – Full-Service-Digitalagentur für mittelständische E-Commerce-Marken
+- **Branche:** Agentur / Webentwicklung
+- **Größe:** 12 aktive Kunden, 500.000+ indizierte Produkte, 800.000+ monatliche Suchanfragen
+- **Vorherige Lösung:** Gemischt – einige Kunden bei Algolia, einige auf selbst gehostetem Elasticsearch, einige bei Shopifys integrierter Suche
+- **Anwendungsfall:** Agenturverwaltete Suche für E-Commerce-Kunden
+- **AACsearch seit:** November 2025
+
+---
+
+## 1. Das Problem
+
+AgencyHub betreibt E-Commerce-Seiten für 12 mittelständische Marken mit jeweils 5.000–100.000 Produkten. Die Suchinfrastruktur war ein fragmentiertes Durcheinander:
+
+**Algolia-Kunden (5).** Jeder Kunde hatte ein eigenes Algolia-Konto mit separater Abrechnung. Gesamt: ~2.500 $/Monat. Die Agentur musste sich in 5 verschiedene Algolia-Dashboards einloggen, um die Suchqualität zu überwachen.
+
+**Elasticsearch-Kunden (3).** AgencyHub betrieb einen gemeinsam genutzten Elasticsearch-Cluster und trennte die Kundendaten auf Anwendungsebene. Jede Schemaänderung riskierte, alle Kunden im Cluster zu beeinträchtigen.
+
+**Shopify-native Suche (4).** Diese Kunden nutzten Shopifys integrierte Suche – eingeschränkte Funktionen, keine Analysen, und die Agentur konnte sie nicht optimieren.
+
+„Der Aufwand hat uns umgebracht", sagt Marcus Weber, Technical Director bei AgencyHub. „Wir verwalteten 5 Algolia-Konten, einen fragilen Elasticsearch-Cluster, und wir konnten unseren Shopify-Kunden keine Suchverbesserungen verkaufen, weil wir nichts anzubieten hatten."
+
+---
+
+## 2. Die Lösung
+
+AgencyHub konsolidierte alle Kunden auf AACsearch aus drei Gründen:
+
+1. **Integrierte Multi-Tenancy** – jeder Kunde erhält isolierte Suchkollektionen mit abgegrenzten API-Tokens, alles unter einem Konto
+2. **White-Label-fähig** – das einbettbare Widget ist vollständig anpassbar und passt sich dem Branding jedes Kunden an
+3. **Kundenbezogene Analysen** – separate Analysen pro Kunde mit Suchvolumen, Top-Anfragen und Null-Ergebnis-Rate
+
+Die Migration erfolgte Kunde für Kunde über zwei Wochen:
+
+- **Algolia-Migration:** Nutzung der AACsearch-Import-API für die direkte Migration. Durchschnitt: 2 Stunden pro Kunde.
+- **Elasticsearch-Migration:** Export der kundenbezogenen Daten und Import in separate Kollektionen. Durchschnitt: 3 Stunden pro Kunde.
+- **Shopify-Upgrade:** Für die 4 Shopify-Kunden installierte AgencyHub das AACsearch-Widget als Such-Overlay und ersetzte Shopifys integrierte Suche. Durchschnitt: 1 Stunde pro Kunde.
+- **White-Label-Branding:** Anpassung von CSS, Farben und Schriftarten des Such-Widgets an die Markenidentität jedes Kunden.
+
+„Jeder Kunde erhielt ein detailliertes Migrationsdokument. Keiner von ihnen hat Ausfallzeiten bemerkt", sagt Weber.
+
+---
+
+## 3. Die Ergebnisse
+
+| Kennzahl                               | Vorher (Gemischt)  | Nachher (AACsearch) | Verbesserung             |
+| -------------------------------------- | ------------------ | ------------------- | ------------------------ |
+| Monatliche Suchkosten (alle Kunden)    | ~3.800 $           | 499 $ (Pro-Tarif)   | **7,6-fache Reduktion**  |
+| Zeit für Onboarding neuer Kunden       | 3–5 Tage           | 15 Minuten          | **99 % schneller**       |
+| Suchlatenz (Durchschnitt aller Kunden) | 80–200 ms          | 8–15 ms             | **10-mal schneller**     |
+| Zu überwachende Kunden-Dashboards      | 9 separate Logins  | 1 Dashboard         | **Einheitliche Ansicht** |
+| Kundenseitige Suchzufriedenheit        | 3,8/5 (aggregiert) | 4,6/5               | **+21 %**                |
+| Suchbezogene Support-Tickets           | 12/Monat           | 2/Monat             | **83 % Reduktion**       |
+
+**Das Fazit:** AgencyHub senkte seine Suchinfrastrukturkosten von 3.800 $/Monat auf 499 $/Monat, verbesserte gleichzeitig die Suchleistung und führte Analysen für alle 12 Kunden ein – einschließlich der 4, die zuvor nur Shopifys einfache Suche hatten.
+
+---
+
+## 4. Das Agentur-Modell
+
+AgencyHub bietet jetzt „Enterprise Search" als paketierten Zusatzdienst an:
+
+- **Einrichtungsgebühr:** 500 $ pro Kunde (einmalig)
+- **Monatliche Verwaltungsgebühr:** 200 $ pro Kunde
+- **Kundenkosten:** Niedriger als das, was jeder Kunde einzeln für Algolia oder Elasticsearch zahlen würde
+
+Dies generiert 2.400 $/Monat an wiederkehrenden Einnahmen für AgencyHub, zusätzlich zu den 499 $, die sie für den Pro-Tarif zahlen – eine 5-fache Marge.
+
+„Wir haben die Suche vom Kostenfaktor zur Gewinnquelle gemacht", sagt Weber. „Unsere Kunden bekommen eine bessere Suche, als sie selbst aufbauen könnten, und wir verdienen daran."
+
+---
+
+## 5. Technische Details
+
+- **Indizierte Dokumente:** 500.000+ Produkte in 12 Kollektionen
+- **Verwendete Funktionen:** Multi-Tenancy (abgegrenzte API-Tokens), Facettensuche, Tipptoleranz, benutzerdefiniertes Ranking, Analysen, White-Label-Widget
+- **Integrationen:** Benutzerdefinierte API für Echtzeit-Produktaktualisierungen, Shopify-App, HTML/JS-Widget
+- **Agenturspezifische Konfiguration:** Jede Kundenkollektion hat benutzerdefinierte Ranking-Regeln basierend auf deren Produktkategorien und Prioritätsfeldern
+- **Migrationszeitplan:** 14 Tage insgesamt (alle 12 Kunden ohne Ausfallzeiten migriert)

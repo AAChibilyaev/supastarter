@@ -53,7 +53,7 @@ export function LandingBentoGridItem({
 		rowSpan === 2 ? "row-span-2" : "",
 		rowSpan === 3 ? "row-span-3" : "",
 		isInteractive &&
-			"hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 cursor-pointer",
+			"hover:shadow-md cursor-pointer hover:border-primary-200 dark:hover:border-primary-800",
 
 		// When inside a bento container with variant
 		"[.primary_&]:bg-primary-100/30 [.primary_&]:dark:bg-primary-900/20",

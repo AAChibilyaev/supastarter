@@ -7,13 +7,13 @@ export function CtaFooter() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-20 md:py-28 bg-foreground">
+		<section className="py-20 md:py-28 text-center">
 			<div className="container">
-				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-5xl text-balance text-background">
+				<div className="max-w-2xl mx-auto">
+					<h2 className="font-bold text-3xl tracking-tight leading-tight md:text-5xl text-balance text-foreground">
 						{t("home.cta.title")}
 					</h2>
-					<p className="mt-5 text-lg leading-relaxed text-pretty text-background/55">
+					<p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">
 						{t("home.cta.subtitle")}
 					</p>
 					<div className="mt-8 gap-4 flex flex-wrap items-center justify-center">
@@ -26,8 +26,8 @@ export function CtaFooter() {
 						{config.docsUrl && (
 							<Button
 								size="lg"
-								variant="ghost"
-								className="sm:w-auto w-full text-background/60 hover:text-background hover:bg-background/10"
+								variant="outline"
+								className="sm:w-auto w-full"
 								asChild
 							>
 								<a href={config.docsUrl}>{t("home.cta.secondary")}</a>

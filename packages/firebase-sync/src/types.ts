@@ -58,9 +58,19 @@ export interface FirestoreChangeEvent {
 
 /** Sync callbacks */
 export interface SyncCallbacks {
-	onSync?: (event: { collection: string; action: string; documentCount: number; indexSlug: string }) => void;
+	onSync?: (event: {
+		collection: string;
+		action: string;
+		documentCount: number;
+		indexSlug: string;
+	}) => void;
 	onError?: (error: Error, context?: Record<string, unknown>) => void;
-	onInitialSyncProgress?: (event: { collection: string; indexSlug: string; total: number; synced: number }) => void;
+	onInitialSyncProgress?: (event: {
+		collection: string;
+		indexSlug: string;
+		total: number;
+		synced: number;
+	}) => void;
 }
 
 /** Sync result */

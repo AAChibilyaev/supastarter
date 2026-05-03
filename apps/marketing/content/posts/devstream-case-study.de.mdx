@@ -1,0 +1,97 @@
+---
+title: "Wie DevStream Elasticsearch ersetzte — Null DevOps, 10x schnellere Suche"
+date: 2026-05-03
+image: https://picsum.photos/id/201/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "DevStream, eine B2B-SaaS-Plattform für Entwicklerdokumentation, ersetzte einen selbst verwalteten Elasticsearch-Cluster durch AACsearch, eliminierte 20 Stunden DevOps-Aufwand pro Woche und senkte die Suchlatenz um das Zehnfache."
+tags: [case-study, saas, elasticsearch, migration, devops]
+published: true
+---
+
+# Wie DevStream Elasticsearch ersetzte — Null DevOps, 10x schnellere Suche
+
+> _„Elasticsearch hat 20 Stunden pro Woche aus dem Kalender unseres Engineering-Teams gefressen. AACsearch lieferte uns bessere Suche ohne Wartungsaufwand. Unser Team bekam 20 Stunden zurück — praktisch über Nacht."_
+> — Priya Sharma, VP Engineering bei DevStream
+
+---
+
+## Metadaten
+
+- **Unternehmen:** DevStream — Entwicklerdokumentations-Plattform für über 15.000 technische Teams
+- **Branche:** B2B SaaS
+- **Umfang:** 200.000+ Dokumentationsartikel, 1,5 Mio.+ Suchanfragen pro Monat
+- **Bisherige Lösung:** Selbst verwalteter Elasticsearch-Cluster (3 Knoten, AWS EC2)
+- **Anwendungsfall:** Volltextsuche in technischer Dokumentation
+- **AACsearch seit:** Februar 2026
+
+---
+
+## 1. Das Problem
+
+DevStream hostet Dokumentation für über 15.000 technische Teams und verarbeitet mehr als 1,5 Millionen Suchanfragen pro Monat. Die Suchinfrastruktur — ein selbst verwalteter 3-Knoten-Elasticsearch-Cluster auf AWS — wurde ursprünglich von einem Gründungsentwickler bereitgestellt, der das Unternehmen inzwischen verlassen hatte.
+
+Im Laufe von zwei Jahren wurde der Cluster zunehmend anfällig:
+
+**DevOps-Belastung.** Ein einzelner Entwickler verbrachte täglich etwa 4 Stunden mit der Elasticsearch-Wartung: Überwachung der Cluster-Gesundheit, Verwaltung von Index-Rotationen, Optimierung der Shard-Allokation und Bearbeitung gelegentlicher Out-of-Memory-Abstürze.
+
+**Leistungsabfall.** Mit dem Wachstum des Dokumentenbestands auf über 200.000 Artikel stieg die Suchlatenz. Die p95-Abfragezeiten erreichten in Spitzenzeiten 180 ms — weit über dem 50-ms-Ziel für eine gute Entwicklererfahrung.
+
+**Keine Notfallwiederherstellung.** Der Cluster hatte keine automatisierte Backup-Strategie. Ein vollständiger Absturz hätte einen Neuaufbau von Grund auf bedeutet — geschätzte 3 Tage Engineering-Aufwand.
+
+„Wir wussten, dass Elasticsearch die falsche Wahl war, sobald wir unsere erste Cluster-Vergrößerung brauchten", sagt Priya Sharma, VP Engineering bei DevStream. „Aber die Migration fühlte sich zu riskant an. Wir haben das Problem immer wieder aufgeschoben."
+
+---
+
+## 2. Die Lösung
+
+DevStream evaluierte drei Alternativen: das Upgrade des Elasticsearch-Clusters (unverhältnismäßig hohe Kosten), die Migration zu Typesense Cloud (gut, aber eingeschränktes Multi-Tenancy) und AACsearch.
+
+AACsearch gewann aus drei Gründen:
+
+1. **Null DevOps** — vollständig verwaltete Infrastruktur mit 99,9 % SLA
+2. **Integriertes Multi-Tenancy** — die Dokumentation jedes Kunden ist eine separate Suchsammlung mit isoliertem Zugriff
+3. **Pro-Index-Analysen** — Transparenz darüber, welche Dokumentationsabschnitte am häufigsten durchsucht werden und wo Benutzer hängen bleiben
+
+Die Migration war für ein Wochenende geplant, wurde aber an einem Dienstag in 5 Stunden abgeschlossen:
+
+- **Datenexport:** Nutzung der Elasticsearch-Dump-API zum Export aller 200.000+ Dokumente als JSON
+- **Index-Erstellung:** Erstellung von 2 Suchsammlungen in AACsearch (eine für Produktionsdokumente, eine für versionierte/archivierte Dokumente)
+- **Massenimport:** Nutzung der AACsearch-Bulk-API zum Import aller Dokumente (~30 Minuten)
+- **Widget-Integration:** Ersetzung des bestehenden Elasticsearch-Frontends durch das einbettbare AACsearch-Widget
+- **Bereichsgebundene Tokens:** Erstellung von schreibgeschützten API-Tokens für öffentliche Dokumentation und Admin-Tokens für interne Indizierung
+
+„Wir hatten ein ganzes Wochenende für die Migration eingeplant. Wir waren mittags fertig und haben den Nachmittag damit verbracht, Randfälle zu testen", sagt Sharma.
+
+---
+
+## 3. Die Ergebnisse
+
+| Metrik                         | Vorher (Elasticsearch) | Nachher (AACsearch)  | Verbesserung        |
+| ------------------------------ | ---------------------- | -------------------- | ------------------- |
+| DevOps-Stunden/Woche           | 20h                    | 0h                   | **100 % Reduktion** |
+| Suchlatenz (p95)               | 180 ms                 | 18 ms                | **10x schneller**   |
+| Monatliche Infrastrukturkosten | 2.400 $ (EC2 + EBS)    | 199 $/Monat          | **12x Reduktion**   |
+| Abfragedurchsatz               | ~500 QPS (abnehmend)   | 2.000+ QPS           | **4x Spielraum**    |
+| Index-Verwaltung               | Manuell (Shard-Tuning) | Automatisch          | **Null Aufwand**    |
+| Notfallwiederherstellung       | Keine                  | Automatische Backups | **Sofort**          |
+
+**Fazit:** DevStream eliminierte 20 Stunden DevOps-Arbeit pro Woche, senkte die Infrastrukturkosten um das Zwölffache und verbesserte die Suchlatenz um das Zehnfache. Das Engineering-Team lenkte die frei gewordenen Stunden in die Produktentwicklung um.
+
+---
+
+## 4. Was DevStreams Kunden sahen
+
+Die Endbenutzer der DevStream-Plattform bemerkten die Migration nicht — außer dass Suchergebnisse sofort statt mit einer spürbaren Verzögerung erschienen.
+
+„Wir haben unsere Kunden eine Woche nach der Migration befragt. Der Zufriedenheitswert für das 'Sucherlebnis' stieg von 68 % auf 92 %", merkt Sharma an.
+
+---
+
+## 5. Technische Details
+
+- **Indizierte Dokumente:** 215.000 Dokumentationsartikel in 2 Sammlungen
+- **Verwendete Funktionen:** Volltextsuche, Tippfehlertoleranz, facettenreiche Filterung nach Produkt/Kategorie, Analysen
+- **Integrationen:** Benutzerdefinierte API für Echtzeit-Dokumentenindizierung, einbettbares Widget
+- **Migrationspfad:** Elasticsearch-JSON-Export → AACsearch-Bulk-API
+- **Aktueller Status:** Seit 3 Monaten in Betrieb ohne Vorfälle

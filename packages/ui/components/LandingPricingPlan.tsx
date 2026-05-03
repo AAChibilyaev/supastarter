@@ -60,12 +60,12 @@ export const LandingPricingPlan = ({
 			{highlighted ? (
 				<>
 					<div
-						className="left-0 top-0 bg-primary-100/5 pointer-events-none absolute h-full w-full"
+						className="left-0 top-0 pointer-events-none absolute h-full w-full bg-primary-100/5"
 						aria-hidden
 					></div>
 
 					<div
-						className="left-0 top-0 bg-primary-100/30 dark:bg-primary-100/5 pointer-events-none absolute h-full w-full mix-blend-hard-light dark:mix-blend-soft-light"
+						className="left-0 top-0 pointer-events-none absolute h-full w-full bg-primary-100/30 mix-blend-hard-light dark:bg-primary-100/5 dark:mix-blend-soft-light"
 						aria-hidden
 					></div>
 

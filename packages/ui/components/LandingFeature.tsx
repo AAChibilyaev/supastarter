@@ -29,7 +29,7 @@ export const LandingFeature = ({
 				className={cn(
 					"w-16 h-16 flex items-center justify-center rounded-md",
 					variant === "primary"
-						? "bg-primary-100/30 border-primary-100/70 dark:border-primary-900 dark:bg-primary-900/70 text-primary-500 border"
+						? "border border-primary-100/70 bg-primary-100/30 text-primary-500 dark:border-primary-900 dark:bg-primary-900/70"
 						: "bg-secondary-100/30 border-secondary-100/70 dark:border-secondary-900 dark:bg-secondary-900/70 text-secondary-500 border",
 				)}
 				aria-describedby="icon"

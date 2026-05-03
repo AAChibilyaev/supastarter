@@ -52,6 +52,8 @@ export function createAacSearchClient(config: WidgetConfig) {
 					perPage: (params.hitsPerPage as number) ?? 20,
 					page: ((params.page as number) ?? 1) + 1, // InstantSearch is 0-based, Typesense is 1-based
 					highlightFields: params.highlightFields as string | undefined,
+					disjunctiveFacets: params.disjunctiveFacets as string | undefined,
+					maxFacetValues: params.maxFacetValues as number | undefined,
 				};
 			});
 

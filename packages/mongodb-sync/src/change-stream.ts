@@ -2,9 +2,22 @@
  * MongoDB Change Stream listener — watches collections and pushes changes to AACsearch.
  */
 
-import { MongoClient, type ChangeStream, type ResumeToken, type Document as MongoDocument } from "mongodb";
-import type { MongoSyncConfig, CollectionConfig, ChangeEvent, SyncCallbacks, SyncResult, ResumeTokenState } from "./types";
+import {
+	MongoClient,
+	type ChangeStream,
+	type ResumeToken,
+	type Document as MongoDocument,
+} from "mongodb";
+
 import { AacSearchClient } from "./client";
+import type {
+	MongoSyncConfig,
+	CollectionConfig,
+	ChangeEvent,
+	SyncCallbacks,
+	SyncResult,
+	ResumeTokenState,
+} from "./types";
 
 /**
  * Default batch interval in milliseconds.
@@ -90,7 +103,9 @@ export async function startChangeStreamListener(
 
 		// Split into inserts/updates and deletes
 		const upserts = batch.filter((e) => e.action !== "delete").map((e) => e.doc);
-		const deletes = batch.filter((e) => e.action === "delete").map((e) => extractExternalId(e.doc));
+		const deletes = batch
+			.filter((e) => e.action === "delete")
+			.map((e) => extractExternalId(e.doc));
 
 		let result: SyncResult = { synced: 0, skipped: 0, errors: [] };
 
@@ -142,14 +157,22 @@ export async function startChangeStreamListener(
 				action: "delete",
 				doc: { [idColumn]: docKey._id },
 			});
-		} else if (operationType === "insert" || operationType === "update" || operationType === "replace") {
+		} else if (
+			operationType === "insert" ||
+			operationType === "update" ||
+			operationType === "replace"
+		) {
 			const fullDoc = change.fullDocument as Record<string, unknown> | undefined;
 			if (!fullDoc) {
 				if (debug) {
-					console.log(`[mongodb-sync] Skipping change without fullDocument (${operationType} ${externalId})`);
+					console.log(
+						`[mongodb-sync] Skipping change without fullDocument (${operationType} ${externalId})`,
+					);
 				}
 				// For updates without fullDocument, try to apply if fullDocumentBeforeChange is available
-				const before = change.fullDocumentBeforeChange as Record<string, unknown> | undefined;
+				const before = change.fullDocumentBeforeChange as
+					| Record<string, unknown>
+					| undefined;
 				if (before) {
 					const mapped = applyFieldMapping(before);
 					pendingBatch.set(externalId, { action: "update", doc: mapped });
@@ -278,7 +301,13 @@ export interface ChangeStreamController {
 	/** Stop listening (closes stream and connection) */
 	stop(): Promise<void>;
 	/** Get current listener status */
-	status(): { running: boolean; collection: string; indexSlug: string; pendingCount: number; errorCount: number };
+	status(): {
+		running: boolean;
+		collection: string;
+		indexSlug: string;
+		pendingCount: number;
+		errorCount: number;
+	};
 	/** Get the current resume token */
 	getResumeToken(): unknown;
 	/** Manually flush pending batch */

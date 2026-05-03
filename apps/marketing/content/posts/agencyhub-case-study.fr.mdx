@@ -1,0 +1,98 @@
+---
+title: "Comment AgencyHub fournit une recherche de qualité entreprise à 12 clients pour le prix d'une startup"
+date: 2026-05-03
+image: https://picsum.photos/id/219/1200/800
+authorName: Alex Chibilyaev
+authorImage: https://picsum.photos/id/433/200/200
+excerpt: "AgencyHub, une agence digitale au service des marques e-commerce de milieu de gamme, utilise la multi-tenant d'AACsearch pour offrir une recherche de niveau entreprise à 12 clients depuis un seul tableau de bord — économisant plus de 4 000 $/mois en coûts d'infrastructure par client."
+tags: [case-study, agency, multi-tenancy, enterprise]
+published: true
+---
+
+# Comment AgencyHub fournit une recherche de qualité entreprise à 12 clients pour le prix d'une startup
+
+> _« Avec AACsearch, nous provisionnons la recherche d'un nouveau client en 15 minutes. Chaque client pense disposer de sa propre infrastructure de recherche dédiée — et c'est le cas. Nous gérons simplement le tout depuis un seul tableau de bord. »_
+> — Marcus Weber, Directeur Technique chez AgencyHub
+
+---
+
+## Métadonnées
+
+- **Société :** AgencyHub — agence digitale complète au service des marques e-commerce de milieu de gamme
+- **Secteur :** Agence / Développement Web
+- **Taille :** 12 clients actifs, plus de 500 000 produits indexés, plus de 800 000 requêtes de recherche par mois
+- **Solution précédente :** Mixte — certains clients sur Algolia, d'autres sur Elasticsearch auto-hébergé, d'autres sur la recherche intégrée de Shopify
+- **Cas d'usage :** Recherche gérée par agence pour des clients e-commerce
+- **AACsearch depuis :** Novembre 2025
+
+---
+
+## 1. Le problème
+
+AgencyHub gère des sites e-commerce pour 12 marques de milieu de gamme, chacune avec 5 000 à 100 000 produits. Leur infrastructure de recherche était un fouillis fragmenté :
+
+**Clients Algolia (5).** Chaque client avait son propre compte Algolia avec une facturation séparée. Total : ~2 500 $/mois. L'agence devait se connecter à 5 tableaux de bord Algolia différents pour surveiller la qualité de la recherche.
+
+**Clients Elasticsearch (3).** AgencyHub exploitait un cluster Elasticsearch partagé et utilisait une logique au niveau applicatif pour séparer les données clients. Tout changement de schéma risquait d'affecter tous les clients du cluster.
+
+**Recherche native Shopify (4).** Ces clients utilisaient la recherche intégrée de Shopify — fonctionnalités limitées, pas d'analytique, et l'agence ne pouvait pas l'optimiser.
+
+« Les frais généraux nous tuaient », déclare Marcus Weber, Directeur Technique chez AgencyHub. « Nous gérions 5 comptes Algolia, un cluster Elasticsearch fragile, et nous ne pouvions pas vendre d'améliorations de recherche à nos clients Shopify parce que nous n'avions rien à proposer. »
+
+---
+
+## 2. La solution
+
+AgencyHub a consolidé tous ses clients sur AACsearch pour trois raisons :
+
+1. **Multi-tenant intégré** — chaque client bénéficie de collections de recherche isolées avec des jetons API limités, le tout sous un seul compte
+2. **Prêt pour le marquage blanc** — le widget intégrable est entièrement personnalisable pour correspondre à l'identité visuelle de chaque client
+3. **Analytique par client** — analyses séparées par client montrant le volume de recherche, les requêtes principales et le taux de résultats nuls
+
+La migration a été exécutée client par client sur deux semaines :
+
+- **Migration Algolia :** Utilisation de l'API d'importation d'AACsearch pour une migration directe. Moyenne : 2 heures par client.
+- **Migration Elasticsearch :** Exportation des données par client et importation dans des collections séparées. Moyenne : 3 heures par client.
+- **Mise à niveau Shopify :** Pour les 4 clients Shopify, AgencyHub a installé le widget AACsearch comme superposition de recherche, remplaçant la recherche intégrée de Shopify. Moyenne : 1 heure par client.
+- **Marquage blanc :** Personnalisation du CSS, des couleurs et des polices du widget de recherche pour l'identité de marque de chaque client.
+
+« Chaque client a reçu un document de migration détaillé. Aucun d'eux n'a remarqué de temps d'arrêt », déclare Weber.
+
+---
+
+## 3. Les résultats
+
+| Métrique                                | Avant (Mixte)           | Après (AACsearch) | Amélioration         |
+| --------------------------------------- | ----------------------- | ----------------- | -------------------- |
+| Coût mensuel de recherche (tous)        | ~3 800 $                | 499 $ (Plan Pro)  | **Réduction 7,6×**   |
+| Délai d'intégration d'un nouveau client | 3–5 jours               | 15 minutes        | **99 % plus rapide** |
+| Latence de recherche (moyenne)          | 80–200 ms               | 8–15 ms           | **10× plus rapide**  |
+| Tableaux de bord clients à surveiller   | 9 connexions distinctes | 1 tableau de bord | **Vue unique**       |
+| Satisfaction client (recherche)         | 3,8/5 (agrégé)          | 4,6/5             | **+21 %**            |
+| Tickets de support liés à la recherche  | 12/mois                 | 2/mois            | **Réduction 83 %**   |
+
+**En résumé :** AgencyHub a réduit ses coûts d'infrastructure de recherche de 3 800 $/mois à 499 $/mois, tout en améliorant les performances de recherche et en ajoutant des analyses pour les 12 clients — y compris les 4 qui n'avaient auparavant que la recherche de base de Shopify.
+
+---
+
+## 4. Le modèle d'agence
+
+AgencyHub propose désormais « Recherche Entreprise » en tant que service complémentaire packagé :
+
+- **Frais d'installation :** 500 $ par client (unique)
+- **Frais de gestion mensuels :** 200 $ par client
+- **Coût client :** Inférieur à ce que chaque client paierait individuellement pour Algolia ou Elasticsearch
+
+Cela génère 2 400 $/mois de revenus récurrents pour AgencyHub, en plus des 499 $ qu'ils paient pour le plan Pro — une marge de 5×.
+
+« Nous avons transformé la recherche d'un centre de coûts en un centre de profit », déclare Weber. « Nos clients obtiennent une meilleure recherche que ce qu'ils pourraient construire eux-mêmes, et nous gagnons de l'argent dessus. »
+
+---
+
+## 5. Détails techniques
+
+- **Documents indexés :** Plus de 500 000 produits dans 12 collections
+- **Fonctionnalités utilisées :** Multi-tenant (jetons API limités), recherche facettée, tolérance aux fautes de frappe, classement personnalisé, analytique, widget de marque blanche
+- **Intégrations :** API personnalisée pour les mises à jour de produits en temps réel, application Shopify, widget HTML/JS
+- **Configuration spécifique à l'agence :** Chaque collection client dispose de règles de classement personnalisées basées sur leurs catégories de produits et champs prioritaires
+- **Calendrier de migration :** 14 jours au total (les 12 clients migrés sans temps d'arrêt)

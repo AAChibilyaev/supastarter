@@ -10,10 +10,10 @@ import { Steps, Step } from "fumadocs-ui/components/steps";
 
 Пакет `@aacsearch/client` npm предоставляет два клиента:
 
-| Клиент          | Область      | Префикс ключа | Безопасен для браузера | Назначение                        |
-| --------------- | ------------ | ------------- | ---------------------- | --------------------------------- |
-| `SearchClient`  | только поиск | `ss_search_*` | Да                     | Виджеты в браузере, фронтенд      |
-| `AdminClient`   | полный CRUD  | `aa_admin_*`  | Нет                    | Серверные скрипты, CLI, CI/CD     |
+| Клиент         | Область      | Префикс ключа | Безопасен для браузера | Назначение                    |
+| -------------- | ------------ | ------------- | ---------------------- | ----------------------------- |
+| `SearchClient` | только поиск | `ss_search_*` | Да                     | Виджеты в браузере, фронтенд  |
+| `AdminClient`  | полный CRUD  | `aa_admin_*`  | Нет                    | Серверные скрипты, CLI, CI/CD |
 
 > **Правило безопасности**: никогда не встраивайте административные ключи в код браузера. Используйте `SearchClient` для фронтенда и проксируйте административные запросы через свой бэкенд.
 
@@ -196,32 +196,32 @@ try {
 
 ### Коды ошибок
 
-| Код                   | Когда                                 | HTTP статус |
-| --------------------- | ------------------------------------- | ----------- |
-| `missing_bearer_token`| Нет заголовка авторизации             | 401         |
-| `unauthorized`        | Пустой или неверный формат токена     | 401         |
-| `forbidden`           | Неверный/просроченный/отозванный ключ | 403         |
-| `not_found`           | Ресурс не найден                      | 404         |
-| `conflict`            | Slug уже используется                 | 409         |
-| `rate_limited`        | Превышен лимит запросов на ключ       | 429         |
-| `quota_exceeded`      | Превышены лимиты месячного плана      | 402         |
-| `invalid_input`       | Ошибка валидации в теле запроса       | 400         |
-| `search_failed`       | Ошибка вышестоящего Typesense         | 502         |
-| `network_error`       | Сбой запроса или отказ соединения     | 0           |
+| Код                    | Когда                                 | HTTP статус |
+| ---------------------- | ------------------------------------- | ----------- |
+| `missing_bearer_token` | Нет заголовка авторизации             | 401         |
+| `unauthorized`         | Пустой или неверный формат токена     | 401         |
+| `forbidden`            | Неверный/просроченный/отозванный ключ | 403         |
+| `not_found`            | Ресурс не найден                      | 404         |
+| `conflict`             | Slug уже используется                 | 409         |
+| `rate_limited`         | Превышен лимит запросов на ключ       | 429         |
+| `quota_exceeded`       | Превышены лимиты месячного плана      | 402         |
+| `invalid_input`        | Ошибка валидации в теле запроса       | 400         |
+| `search_failed`        | Ошибка вышестоящего Typesense         | 502         |
+| `network_error`        | Сбой запроса или отказ соединения     | 0           |
 
 ## Справочник API
 
 Полный охват API Node.js SDK:
 
-| Категория            | Методы                                                                                             |
-| -------------------- | -------------------------------------------------------------------------------------------------- |
-| Проект               | `getProject`, `createProject`, `getProjectById`                                                    |
-| Управление индексами | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`           |
-| Документы            | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments`|
-| Поиск                | `search`, `multiSearch`                                                                            |
-| API-ключи            | `listKeys`, `createKey`, `revokeKey`                                                               |
-| Аналитика            | `getAnalytics`, `getUsage`                                                                         |
-| Синонимы             | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                 |
-| Курации              | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                             |
-| Поля сортировки      | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`            |
-| Фасеты               | `listFacets`                                                                                       |
+| Категория            | Методы                                                                                              |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
+| Проект               | `getProject`, `createProject`, `getProjectById`                                                     |
+| Управление индексами | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`             |
+| Документы            | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments` |
+| Поиск                | `search`, `multiSearch`                                                                             |
+| API-ключи            | `listKeys`, `createKey`, `revokeKey`                                                                |
+| Аналитика            | `getAnalytics`, `getUsage`                                                                          |
+| Синонимы             | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                  |
+| Курации              | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                              |
+| Поля сортировки      | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`             |
+| Фасеты               | `listFacets`                                                                                        |

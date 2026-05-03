@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@repo/ui/components/card";
 import {
 	GaugeIcon,
 	GitBranchIcon,
@@ -44,21 +45,23 @@ export function FeaturesGrid() {
 					</p>
 				</div>
 
-				<div className="mt-12 sm:grid-cols-2 lg:grid-cols-3 md:mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border">
+				<div className="mt-12 md:mt-16 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
-						<div key={key} className="gap-4 p-6 md:p-8 flex flex-col bg-card">
-							<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
-								<Icon className="size-5 text-muted-foreground" />
-							</div>
-							<div>
-								<h3 className="font-semibold text-lg leading-snug text-foreground">
-									{t(`home.features.items.${key}.title`)}
-								</h3>
-								<p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
-									{t(`home.features.items.${key}.description`)}
-								</p>
-							</div>
-						</div>
+						<Card key={key}>
+							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">
+								<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
+									<Icon className="size-5 text-muted-foreground" />
+								</div>
+								<div>
+									<h3 className="font-semibold text-lg leading-snug text-foreground">
+										{t(`home.features.items.${key}.title`)}
+									</h3>
+									<p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
+										{t(`home.features.items.${key}.description`)}
+									</p>
+								</div>
+							</CardContent>
+						</Card>
 					))}
 				</div>
 			</div>

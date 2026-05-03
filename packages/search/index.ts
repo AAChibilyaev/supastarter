@@ -34,6 +34,10 @@ export {
 export {
 	multiSearchDocuments,
 	searchDocuments,
+	computeDisjunctiveFacetCounts,
+	removeFilterByClause,
+	parseFacetBy,
+	type FacetStrategy,
 	type GeoBoundingBoxFilter,
 	type GeoMultiLocationFilter,
 	type GeoPolygonFilter,

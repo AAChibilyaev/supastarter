@@ -5,6 +5,7 @@ import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import {
 	getMetrics,
+	httpMetricsMiddleware,
 	metricsHandler,
 	collectIngestQueueDepth,
 	collectActiveApiKeys,
@@ -68,6 +69,8 @@ export const app = new Hono()
 	.use(honoLogger((message, ...rest) => logger.log(message, ...rest)))
 	// OpenTelemetry tracing middleware (auto-instruments HTTP requests)
 	.use(tracedHonoMiddleware(getTracer()))
+	// HTTP metrics middleware (tracks request count + duration histograms for all routes)
+	.use(httpMetricsMiddleware(metrics))
 	// Public search endpoint (own permissive CORS, mounted before global CORS)
 	.route("/", publicSearchApp)
 	// Public spell-check endpoint (API-key auth, own CORS)

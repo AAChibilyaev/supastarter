@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/documents/delete-by-query",
-  "pages": [
-    "post"
-  ]
+	"title": "indexes/indexid/documents/delete-by-query",
+	"pages": ["post"]
 }

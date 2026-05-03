@@ -145,6 +145,7 @@
 		"dotenv-cli": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
+		"pdf-lib": "^1.17.1",
 		"tsx": "catalog:",
 		"turbo": "^2.9.4",
 		"typescript": "catalog:"

@@ -12,6 +12,7 @@ export function StatsTile({
 	context,
 	trend,
 	valueFormat,
+	icon,
 	children,
 }: PropsWithChildren<{
 	title: string;

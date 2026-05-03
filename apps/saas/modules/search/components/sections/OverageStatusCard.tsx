@@ -16,17 +16,32 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
+interface OverageStatus {
+	percentUsed: number;
+	searchesUsed: number;
+	searchLimit: number;
+	isUnlimited: boolean;
+	isSoftCap: boolean;
+	isHardCap: boolean;
+	overageEnabled: boolean;
+	overageLimitKopecks: string | null;
+	overageUsedKopecks: string | null;
+	overageRemainingKopecks: string | null;
+	overageRateUsdMicrosPerSearch: number;
+}
+
 export function OverageStatusCard() {
 	const t = useTranslations("settings.billing");
 	const { activeOrganization } = useActiveOrganization();
 	const orgId = activeOrganization?.id;
 
-	const { data: status, isLoading } = useQuery({
+	const { data, isLoading } = useQuery({
 		...orpc.search.getOverageStatus.queryOptions({
 			input: { organizationId: orgId ?? "" },
 		}),
 		enabled: Boolean(orgId),
 	});
+	const status = data as OverageStatus | undefined;
 
 	if (!orgId) return null;
 

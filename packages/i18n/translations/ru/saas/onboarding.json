@@ -1,21 +1,30 @@
 {
 	"onboarding": {
 		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
+			"avatar": "Аватар",
+			"avatarDescription": "Нажмите на круг или перетащите изображение, чтобы загрузить аватар.",
+			"name": "Имя"
 		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
+		"continue": "Продолжить",
+		"message": "Всего несколько шагов для начала работы.",
 		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+			"accountSetupFailed": "Извините, не удалось настроить аккаунт. Пожалуйста, попробуйте позже."
 		},
 		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
+			"planSelected": "Тариф успешно выбран.",
+			"skip": "Пропустить"
 		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account",
+		"skipConfirmTitle": "Пропустить этот шаг?",
+		"skipConfirmDescription": "Вы сможете вернуться к этому шагу позже из дашборда.",
+		"skipConfirmAction": "Да, пропустить",
+		"skipConfirmCancel": "Остаться на этом шаге",
+		"step": "Шаг {step} / {total}",
+		"stepLabel_one": "Аккаунт",
+		"stepLabel_two": "Индекс",
+		"stepLabel_three": "Документы",
+		"stepLabel_four": "Виджет",
+		"stepLabel_five": "API-ключ",
+		"title": "Настройка аккаунта",
 		"createIndex": {
 			"title": "Создайте первый поисковый индекс",
 			"description": "Дайте название индексу. Документы и схему можно настроить позже.",
@@ -60,16 +69,16 @@
 		}
 	},
 	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan."
+		"title": "Выберите тариф",
+		"description": "Чтобы продолжить, выберите тарифный план."
 	},
 	"checkoutReturn": {
-		"title": "Processing your purchase",
-		"description": "Please wait while we confirm your payment.",
-		"loading": "Confirming your purchase, please wait..."
+		"title": "Обработка покупки",
+		"description": "Пожалуйста, подождите, пока мы подтвердим ваш платёж.",
+		"loading": "Подтверждение платежа, пожалуйста, подождите..."
 	},
 	"start": {
-		"subtitle": "See the latest stats of your awesome business.",
-		"welcome": "Welcome {name}!"
+		"subtitle": "Смотрите последнюю статистику вашего бизнеса.",
+		"welcome": "Добро пожаловать, {name}!"
 	}
 }

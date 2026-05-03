@@ -1,0 +1,62 @@
+# AACsearch Engine — Observability Stack (Prometheus + Grafana)
+#
+# Start with:
+#   docker compose -f packages/observability/docker-compose.observability.yml up -d
+#
+# Access:
+#   Grafana: http://localhost:3002  admin/admin (change on first login)
+#   Prometheus: http://localhost:9090
+#   SaaS API metrics: http://localhost:3000/api/metrics
+#
+# Services expect the AACsearch SaaS API to be running on port 3000/3001.
+# On macOS, host.docker.internal resolves to the host machine where your
+# app runs. On Linux, replace with your host IP or use --network=host.
+
+services:
+    # ── Prometheus ─────────────────────────────────────────────────
+    prometheus:
+        image: prom/prometheus:v3.3.1
+        container_name: aacsearch-prometheus
+        restart: unless-stopped
+        ports:
+            - "9090:9090"
+        volumes:
+            - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+            - ./prometheus/alerts.yml:/etc/prometheus/rules/aacsearch_alerts.yml:ro
+            - prometheus_data:/prometheus
+        command:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+            - "--storage.tsdb.retention.time=30d"
+            - "--web.console.libraries=/etc/prometheus/console_libraries"
+            - "--web.console.templates=/etc/prometheus/consoles"
+            - "--web.enable-lifecycle"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    # ── Grafana ────────────────────────────────────────────────────
+    grafana:
+        image: grafana/grafana:11.6.1
+        container_name: aacsearch-grafana
+        restart: unless-stopped
+        ports:
+            - "3002:3000"
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+            - GF_INSTALL_PLUGINS=
+            - GF_AUTH_ANONYMOUS_ENABLED=false
+        volumes:
+            - grafana_data:/var/lib/grafana
+            - ./grafana/dashboard.json:/var/lib/grafana/dashboards/aacsearch.json:ro
+            - ./grafana/provisioning/:/etc/grafana/provisioning/:ro
+        depends_on:
+            - prometheus
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+volumes:
+    prometheus_data:
+        driver: local
+    grafana_data:
+        driver: local

@@ -2,6 +2,7 @@ import { aggregateSearchUsage, recordActivationEvent, recordSearchUsage } from "
 import { logger } from "@repo/logs";
 import { SymSpell, detectLanguage } from "@repo/nlp";
 import { aliasName, multiSearchDocuments, processQuery, searchDocuments } from "@repo/search";
+import { getMetrics, trackSearchLatency } from "@repo/observability";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -200,6 +201,7 @@ export const publicSearchApp = new Hono()
 		}
 
 		try {
+			const endTracking = trackSearchLatency(getMetrics(), verified.indexSlug);
 			const result = await searchDocuments({
 				alias: aliasName(verified.organizationId, verified.indexSlug),
 				tenantId: verified.organizationId,
@@ -207,6 +209,9 @@ export const publicSearchApp = new Hono()
 				filterBy: combinedFilter,
 				...(parsed.data.multiLocation && { multiLocation: parsed.data.multiLocation }),
 			});
+
+			// Record search latency in Prometheus
+			endTracking();
 
 			// Store query_id in usage metadata for event association
 			const usageMeta: Record<string, unknown> = {

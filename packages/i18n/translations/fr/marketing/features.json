@@ -560,6 +560,18 @@
 			"scoring": {
 				"description": "Combinez la pertinence textuelle avec des signaux numériques comme le prix, la fraîcheur ou la popularité via une formule de scoring configurable.",
 				"title": "Scoring personnalisé"
+			},
+			"customSorting": {
+				"title": "Tris personnalisés",
+				"description": "Définissez des profils de tri pour différents cas d'usage : prix croissant/décroissant, plus récents, mieux notés ou champs personnalisés."
+			},
+			"preview": {
+				"title": "Aperçu du classement",
+				"description": "Prévisualisez comment l'ordre des résultats change lorsque vous ajustez les poids, les boosts ou la décroissance, avant d'appliquer au trafic réel."
+			},
+			"synonyms": {
+				"title": "Classement avec synonymes",
+				"description": "Boostez les résultats où le terme de recherche correspond au mot d'origine par rapport à une expansion de synonymes."
 			}
 		}
 	},
@@ -610,6 +622,26 @@
 			"realTime": {
 				"description": "Ajoutez ou supprimez des stopwords sans réindexation. Les modifications prennent effet immédiatement à la prochaine requête.",
 				"title": "Mises à jour sans interruption"
+			},
+			"builtinLists": {
+				"title": "Listes par langue",
+				"description": "Chaque langue dispose d'une liste de mots vides par défaut optimisée pour la recherche. Personnalisable par collection."
+			},
+			"customLists": {
+				"title": "Listes par collection",
+				"description": "Différentes listes de mots vides pour différentes collections. Votre catalogue produits et votre documentation peuvent avoir des règles indépendantes."
+			},
+			"indexTime": {
+				"title": "Filtrage à l'indexation",
+				"description": "Supprimez les mots vides lors de l'indexation pour réduire la taille de l'index et améliorer les performances sur les collections à fort trafic."
+			},
+			"queryTime": {
+				"title": "Filtrage à la requête",
+				"description": "Supprimez les mots vides au moment de la requête sans affecter l'index. Les changements s'appliquent immédiatement."
+			},
+			"ui": {
+				"title": "Gestion depuis le tableau",
+				"description": "Gérez les mots vides depuis le tableau de bord AACsearch avec un éditeur visuel. Ajoutez, supprimez ou testez des règles avant de les appliquer."
 			}
 		}
 	},
@@ -652,6 +684,26 @@
 			"scope": {
 				"description": "Différentes bibliothèques de synonymes par collection. Votre index de produits et votre index de documentation peuvent avoir des règles de synonymes indépendantes.",
 				"title": "Portée par collection"
+			},
+			"collectionScoped": {
+				"title": "Portée par collection",
+				"description": "Différentes bibliothèques de synonymes par collection. Votre index produits et votre documentation peuvent avoir des règles indépendantes."
+			},
+			"equivalentSynonyms": {
+				"title": "Synonymes équivalents",
+				"description": "Définissez des groupes de termes équivalents où n'importe quel terme correspond aux documents contenant n'importe quel autre."
+			},
+			"instantApplication": {
+				"title": "Application instantanée",
+				"description": "Les nouvelles règles de synonymes s'appliquent à la requête suivante. Sans réindexation, sans temps d'arrêt."
+			},
+			"onewayExpansion": {
+				"title": "Expansion unidirectionnelle",
+				"description": "Mappez un terme vers un autre sans l'inverse. Utile quand le catalogue utilise des termes formels mais les utilisateurs cherchent avec des termes informels."
+			},
+			"phraseMatching": {
+				"title": "Correspondance de phrases",
+				"description": "Support de synonymes multi-mots : téléphone mobile correspond à cellulaire en tant que phrases complètes, pas comme mots individuels."
 			}
 		}
 	},
@@ -702,6 +754,18 @@
 			"splitWords": {
 				"description": "« macbook pro » correspond à « macbookpro » et vice versa. La détection de mots fractionnés capture les espaces manquants et les mots composés.",
 				"title": "Correction de mots fractionnés"
+			},
+			"autoCorrect": {
+				"title": "Mode d'autocorrection",
+				"description": "Suggérez et appliquez des corrections typographiques à la requête. Retourne les résultats pour la requête corrigée avec une suggestion."
+			},
+			"fieldsControl": {
+				"title": "Contrôle par champ",
+				"description": "Activez la tolérance aux fautes de frappe uniquement sur des champs spécifiques. Idéal pour les recherches de titre avec des champs SKU nécessitant une correspondance exacte."
+			},
+			"symbolStripping": {
+				"title": "Suppression des symboles",
+				"description": "Supprimez la ponctuation et les caractères spéciaux des requêtes avant la correspondance. Gère les tirets, apostrophes et caractères accentués."
 			}
 		}
 	}

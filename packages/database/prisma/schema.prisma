@@ -593,6 +593,11 @@ model AiWallet {
   overageLimitKopecks         BigInt   @default(0)
   overageUsedKopecks          BigInt   @default(0)
 
+  // ── Auto-Recharge Config ──
+  autoRechargeEnabled         Boolean  @default(false)
+  autoRechargeThresholdKopecks BigInt  @default(100000) // $10 in kopecks
+  autoRechargeAmountKopecks   BigInt   @default(500000) // $50 in kopecks
+
   status                      String   @default("active") // active | frozen | closed
   periodStart                 DateTime
   periodEnd                   DateTime

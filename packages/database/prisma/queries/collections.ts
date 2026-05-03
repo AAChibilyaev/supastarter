@@ -34,15 +34,9 @@ function mapCollection(c: any): CollectionView {
 		documentCount: c.documentCount,
 		size: Number(c.size),
 		status: c.status,
-		metadata: schemaObj
-			? ((schemaObj.metadata as Record<string, unknown>) ?? null)
-			: null,
-		synonymSets: schemaObj
-			? ((schemaObj.synonymSets as string[]) ?? [])
-			: [],
-		curationSets: schemaObj
-			? ((schemaObj.curationSets as string[]) ?? [])
-			: [],
+		metadata: schemaObj ? ((schemaObj.metadata as Record<string, unknown>) ?? null) : null,
+		synonymSets: schemaObj ? ((schemaObj.synonymSets as string[]) ?? []) : [],
+		curationSets: schemaObj ? ((schemaObj.curationSets as string[]) ?? []) : [],
 		createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),
 		updatedAt: c.updatedAt instanceof Date ? c.updatedAt.toISOString() : String(c.updatedAt),
 	};

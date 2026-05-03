@@ -14,7 +14,16 @@
 			"planSelected": "Your plan has been selected successfully.",
 			"skip": "Skip for now"
 		},
+		"skipConfirmTitle": "Skip this step?",
+		"skipConfirmDescription": "You can come back to this step later from your dashboard.",
+		"skipConfirmAction": "Yes, skip it",
+		"skipConfirmCancel": "Stay on this step",
 		"step": "Step {step} / {total}",
+		"stepLabel_one": "Account",
+		"stepLabel_two": "Index",
+		"stepLabel_three": "Documents",
+		"stepLabel_four": "Widget",
+		"stepLabel_five": "API Key",
 		"title": "Set up your account",
 		"createIndex": {
 			"title": "Create your first search index",

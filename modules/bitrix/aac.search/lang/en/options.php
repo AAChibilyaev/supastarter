@@ -1,0 +1,30 @@
+<?php
+
+$MESS['AAC_SEARCH_TAB_CONNECTION'] = 'Connection';
+$MESS['AAC_SEARCH_TAB_CONNECTION_TITLE'] = 'AACsearch API Connection Settings';
+$MESS['AAC_SEARCH_TAB_CATALOG'] = 'Catalog';
+$MESS['AAC_SEARCH_TAB_CATALOG_TITLE'] = 'Catalog Selection Settings';
+$MESS['AAC_SEARCH_TAB_SYNC'] = 'Sync';
+$MESS['AAC_SEARCH_TAB_SYNC_TITLE'] = 'Synchronization Settings';
+$MESS['AAC_SEARCH_TAB_WIDGET'] = 'Widget';
+$MESS['AAC_SEARCH_TAB_WIDGET_TITLE'] = 'Search Widget Settings';
+$MESS['AAC_SEARCH_API_URL'] = 'API URL';
+$MESS['AAC_SEARCH_PROJECT_ID'] = 'Project ID';
+$MESS['AAC_SEARCH_CONNECTOR_TOKEN'] = 'Connector Token';
+$MESS['AAC_SEARCH_REQUEST_TIMEOUT'] = 'Request Timeout (sec)';
+$MESS['AAC_SEARCH_IBLOCK_IDS'] = 'Information Block IDs (comma-separated)';
+$MESS['AAC_SEARCH_PRICE_TYPE'] = 'Price Type';
+$MESS['AAC_SEARCH_BASE_CURRENCY'] = 'Base Currency';
+$MESS['AAC_SEARCH_SYNC_INTERVAL'] = 'Sync Interval (seconds)';
+$MESS['AAC_SEARCH_SYNC_MODE'] = 'Sync Mode';
+$MESS['AAC_SEARCH_SYNC_MODE_FULL'] = 'Full sync';
+$MESS['AAC_SEARCH_SYNC_MODE_DELTA'] = 'Delta sync only';
+$MESS['AAC_SEARCH_EVENTS_ENABLED'] = 'Real-time events (delta sync)';
+$MESS['AAC_SEARCH_WIDGET_PLACEMENT'] = 'Widget Placement';
+$MESS['AAC_SEARCH_WIDGET_AUTO'] = 'Automatic';
+$MESS['AAC_SEARCH_WIDGET_MANUAL'] = 'Manual';
+$MESS['AAC_SEARCH_WIDGET_INLINE'] = 'Inline component';
+$MESS['AAC_SEARCH_WIDGET_THEME'] = 'Widget Theme';
+$MESS['AAC_SEARCH_WIDGET_THEME_LIGHT'] = 'Light';
+$MESS['AAC_SEARCH_WIDGET_THEME_DARK'] = 'Dark';
+$MESS['AAC_SEARCH_WIDGET_LOCALE'] = 'Widget Locale';

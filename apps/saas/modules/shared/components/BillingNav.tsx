@@ -38,7 +38,7 @@ export function BillingNav() {
 								: "font-medium border-transparent text-muted-foreground hover:text-foreground",
 						)}
 					>
-						{t(labelKey)}
+						{t(item.labelKey)}
 					</Link>
 				);
 			})}

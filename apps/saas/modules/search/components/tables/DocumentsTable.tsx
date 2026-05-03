@@ -19,6 +19,7 @@ import {
 } from "@repo/ui/components/dialog";
 import {
 	DropdownMenu,
+	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
@@ -590,7 +591,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	const deleteByFilterMutation = useMutation({
 		...orpc.search.deleteDocumentsByFilter.mutationOptions(),
-		onSuccess: (data) => {
+		onSuccess: (data: { deleted: number }) => {
 			toastSuccess(t("search.documents.deleteByFilterSuccess", { count: data.deleted }));
 			void queryClient.invalidateQueries({
 				queryKey: orpc.search.listDocuments.key(),
@@ -994,7 +995,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		if (selectedIds.length === 0 || !bulkEditField) return;
 		// Call upsert for each selected document with the new field value
 		const promises = selectedIds.map((id) =>
-			orpc.search.upsertDocument.mutationOptions().mutationFn({
+			orpc.search.upsertDocument.mutationOptions().mutationFn!({
 				organizationId,
 				slug,
 				id,

@@ -1,0 +1,34 @@
+# AACsearch Engine — Prometheus Configuration
+#
+# Scrapes the AACsearch API /api/metrics endpoint.
+# Deploy alongside Grafana via docker-compose.observability.yml.
+#
+# Global defaults
+global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+# Rule files for alerting
+rule_files:
+    - /etc/prometheus/rules/aacsearch_alerts.yml
+
+# Scrape targets
+scrape_configs:
+    - job_name: aacsearch-api
+      metrics_path: /api/metrics
+      static_configs:
+          - targets:
+                - host.docker.internal:3000 # SaaS API (local dev via Docker host)
+                - host.docker.internal:3001 # SaaS API fallback port
+      relabel_configs:
+          - source_labels: [__address__]
+            regex: ".*"
+            target_label: instance
+            replacement: "aacsearch-api"
+
+    - job_name: aacsearch-typesense
+      static_configs:
+          - targets:
+                - host.docker.internal:8108 # Typesense metrics if exposed
+      metrics_path: /metrics
+      scheme: http

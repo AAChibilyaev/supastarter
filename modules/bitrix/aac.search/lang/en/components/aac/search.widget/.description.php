@@ -1,0 +1,6 @@
+<?php
+
+$MESS['AAC_SEARCH_WIDGET_COMPONENT_NAME'] = 'AAC Search Widget';
+$MESS['AAC_SEARCH_WIDGET_COMPONENT_DESC'] = 'Renders the AACsearch search widget on the site.';
+$MESS['AAC_SEARCH_COMPONENTS_GROUP'] = 'AAC';
+$MESS['AAC_SEARCH_COMPONENTS_SUBGROUP'] = 'Search';

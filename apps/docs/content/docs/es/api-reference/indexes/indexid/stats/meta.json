@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/stats",
-  "pages": [
-    "get"
-  ]
+	"title": "indexes/indexid/stats",
+	"pages": ["get"]
 }

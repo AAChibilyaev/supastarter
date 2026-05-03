@@ -604,7 +604,16 @@ export function NavBar() {
 					]
 				: []),
 		];
-	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, showStartNav, startHref, t, user?.role]);
+	}, [
+		activeOrganization,
+		basePath,
+		isOrganizationAdmin,
+		pathname,
+		showStartNav,
+		startHref,
+		t,
+		user?.role,
+	]);
 
 	return (
 		<nav

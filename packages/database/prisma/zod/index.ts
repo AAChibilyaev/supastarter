@@ -168,7 +168,7 @@ export type GraphEdgeScalarFieldEnum = z.infer<typeof GraphEdgeScalarFieldEnumSc
 
 // File: AiWalletScalarFieldEnum.schema.ts
 
-export const AiWalletScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'currency', 'availableBalanceKopecks', 'reservedBalanceKopecks', 'includedMonthlyLimitKopecks', 'includedUsedPeriodKopecks', 'promoBalanceKopecks', 'overageLimitKopecks', 'overageUsedKopecks', 'status', 'periodStart', 'periodEnd', 'createdAt', 'updatedAt'])
+export const AiWalletScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'currency', 'availableBalanceKopecks', 'reservedBalanceKopecks', 'includedMonthlyLimitKopecks', 'includedUsedPeriodKopecks', 'promoBalanceKopecks', 'overageLimitKopecks', 'overageUsedKopecks', 'autoRechargeEnabled', 'autoRechargeThresholdKopecks', 'autoRechargeAmountKopecks', 'status', 'periodStart', 'periodEnd', 'createdAt', 'updatedAt'])
 
 export type AiWalletScalarFieldEnum = z.infer<typeof AiWalletScalarFieldEnumSchema>;
 
@@ -801,6 +801,9 @@ export const AiWalletSchema = z.object({
   promoBalanceKopecks: z.bigint().default(BigInt(0)),
   overageLimitKopecks: z.bigint().default(BigInt(0)),
   overageUsedKopecks: z.bigint().default(BigInt(0)),
+  autoRechargeEnabled: z.boolean(),
+  autoRechargeThresholdKopecks: z.bigint().default(BigInt(100000)),
+  autoRechargeAmountKopecks: z.bigint().default(BigInt(500000)),
   status: z.string().default("active"),
   periodStart: z.date(),
   periodEnd: z.date(),

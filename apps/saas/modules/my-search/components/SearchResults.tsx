@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 
 import { ResultCard, type SearchHit } from "./ResultCard";
 
+export type { SearchHit };
+
 interface SearchResultsProps {
 	hits: SearchHit[];
 	found: number;

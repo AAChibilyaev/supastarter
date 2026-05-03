@@ -16,6 +16,8 @@ const multiSearchEntrySchema = z.object({
 	groupLimit: z.number().int().min(1).max(100).optional(),
 	groupMissingValues: z.boolean().optional(),
 	pinnedHits: z.string().optional(),
+	/** Per-index weight/boost multiplier for blended results (1.0 = default) */
+	weight: z.number().min(0.1).max(10).optional(),
 });
 
 export const federatedSearch = protectedProcedure
@@ -25,7 +27,7 @@ export const federatedSearch = protectedProcedure
 		tags: ["Search"],
 		summary: "Federated multi-search across indexes",
 		description:
-			"Performs multiple searches across different indexes in one round-trip. Results can be returned separately or merged with duplicate removal.",
+			"Performs multiple searches across different indexes in one round-trip. Results can be returned separately or merged with duplicate removal. Supports per-index weight for relevance boosting in blended results.",
 	})
 	.input(
 		z.object({
@@ -45,6 +47,7 @@ export const federatedSearch = protectedProcedure
 					hits: z.array(
 						z.object({
 							document: z.record(z.string(), z.unknown()),
+							weight: z.number().optional(),
 						}),
 					),
 					searchTimeMs: z.number(),
@@ -54,6 +57,8 @@ export const federatedSearch = protectedProcedure
 				.array(
 					z.object({
 						document: z.record(z.string(), z.unknown()),
+						weight: z.number().optional(),
+						_sourceSlug: z.string().optional(),
 					}),
 				)
 				.optional(),
@@ -92,29 +97,60 @@ export const federatedSearch = protectedProcedure
 			{},
 		)) as any;
 
+		const weights = input.searches.map((s) => s.weight ?? 1.0);
+
 		const searchResults = (multiResult?.results ?? []).map((result: any, i: number) => ({
 			slug: input.searches[i]!.slug,
 			found: result.found ?? 0,
 			hits: (result.hits ?? []).map((hit: any) => ({
 				document: hit.document as Record<string, unknown>,
+				weight: weights[i],
 			})),
 			searchTimeMs: result.search_time_ms ?? 0,
 		}));
 
-		// Build union with dedup if requested
-		let unionResults: Array<{ document: Record<string, unknown> }> | undefined;
+		// Build union with dedup if requested — apply per-index weight for blended ordering
+		let unionResults:
+			| Array<{
+					document: Record<string, unknown>;
+					weight?: number;
+					_sourceSlug?: string;
+			  }>
+			| undefined;
 		if (input.union || input.dedup) {
 			const seen = new Set<string>();
 			unionResults = [];
+			// Collect all hits with their weights
+			const weightedHits: Array<{
+				document: Record<string, unknown>;
+				weight: number;
+				slug: string;
+			}> = [];
 			for (const result of searchResults) {
 				for (const hit of result.hits) {
-					const key = JSON.stringify(hit.document);
-					if (!input.dedup || !seen.has(key)) {
-						seen.add(key);
-						unionResults.push({ document: hit.document });
-					}
+					weightedHits.push({
+						document: hit.document,
+						weight: hit.weight ?? 1.0,
+						slug: result.slug,
+					});
 				}
 			}
+			// Sort weighted hits by weight descending (higher weight = higher priority)
+			weightedHits.sort((a, b) => b.weight - a.weight);
+			// Dedup and build union
+			for (const hit of weightedHits) {
+				const key = JSON.stringify(hit.document);
+				if (!input.dedup || !seen.has(key)) {
+					seen.add(key);
+					unionResults.push({
+						document: hit.document,
+						weight: hit.weight,
+						_sourceSlug: hit.slug,
+					});
+				}
+			}
+			// Trim to requested perPage
+			unionResults = unionResults.slice(0, input.perPage);
 		}
 
 		return {

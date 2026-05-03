@@ -137,6 +137,15 @@ class aac_search extends CModule
             'onAfterIBlockElementDelete',
         );
 
+        // Register REST API service for Bitrix24 marketplace
+        $eventManager->registerEventHandler(
+            'rest',
+            'OnRestServiceBuildHandler',
+            $this->MODULE_ID,
+            \AAC\Search\RestService::class,
+            'onRestServiceBuildHandler',
+        );
+
         return true;
     }
 
@@ -169,6 +178,15 @@ class aac_search extends CModule
             $this->MODULE_ID,
             \AAC\Search\EventHandlers::class,
             'onAfterIBlockElementDelete',
+        );
+
+        // Unregister REST API service
+        $eventManager->unRegisterEventHandler(
+            'rest',
+            'OnRestServiceBuildHandler',
+            $this->MODULE_ID,
+            \AAC\Search\RestService::class,
+            'onRestServiceBuildHandler',
         );
 
         return true;

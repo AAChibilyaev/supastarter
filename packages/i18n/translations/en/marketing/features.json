@@ -346,6 +346,22 @@
 			"filters": {
 				"title": "Geo + attribute filters",
 				"description": "Combine geo filters with any other facet — price, category, availability — in a single query."
+			},
+			"bounds": {
+				"title": "Bounding-box search",
+				"description": "Filter results within a geographic rectangle using NE and SW coordinates. Ideal for map-viewport search."
+			},
+			"polygon": {
+				"title": "Polygon filtering",
+				"description": "Define custom geographic shapes to filter results within districts, delivery zones, or custom areas."
+			},
+			"radius": {
+				"title": "Radius search",
+				"description": "Search for documents within a given distance from a lat/lon point. Essential for near-me and location-aware queries."
+			},
+			"sort": {
+				"title": "Sort by distance",
+				"description": "Return closest results first. Combine with text relevance weights for mixed ranking — relevance first, distance tiebreaker."
 			}
 		}
 	},
@@ -380,6 +396,18 @@
 			"widget": {
 				"title": "Drop-in widget",
 				"description": "The AACsearch widget ships with instant-search UI out of the box. One script tag, zero configuration required."
+			},
+			"highlight": {
+				"title": "Snippet highlighting",
+				"description": "Highlight matching search terms directly in returned snippets so users immediately see why each result matched."
+			},
+			"prefix": {
+				"title": "Prefix search",
+				"description": "Return results from the very first character typed. No need to complete the word before seeing relevant matches."
+			},
+			"typo": {
+				"title": "Typo tolerance",
+				"description": "Find correct results even with misspellings, partial matches, and phonetic variations. Works out of the box."
 			}
 		},
 		"codeTitle": "One script tag",
@@ -416,6 +444,22 @@
 			"mobile": {
 				"title": "Mobile-first facets",
 				"description": "The widget renders facets as a collapsible drawer on mobile. Tap to open, tap to filter, tap to close."
+			},
+			"dynamic": {
+				"title": "Dynamic facets",
+				"description": "Facets update in real time as filters are refined, always showing accurate counts without a separate aggregation pass."
+			},
+			"hierarchical": {
+				"title": "Hierarchical facets",
+				"description": "Navigate nested categories like Clothing > Men > Shirts with full hierarchical drill-down support."
+			},
+			"multi": {
+				"title": "Multi-select facets",
+				"description": "Allow selecting multiple facet values for combined filtering. Users can pick several brands, price ranges, or colors at once."
+			},
+			"numeric": {
+				"title": "Numeric range facets",
+				"description": "Filter by price, rating, date, or other numeric values with slider controls and range inputs."
 			}
 		}
 	},
@@ -450,6 +494,34 @@
 			"accuracy": {
 				"title": "High precision",
 				"description": "Short queries with many short words skip typo tolerance to avoid false positives. Configurable minimum token length."
+			},
+			"auto": {
+				"title": "Auto-correction",
+				"description": "Detect and correct common spelling mistakes automatically. No configuration needed — works out of the box."
+			},
+			"autoCorrect": {
+				"title": "Auto-correct mode",
+				"description": "Suggest and apply typo corrections to the user query. Returns results for the corrected query with a suggestion shown."
+			},
+			"distance": {
+				"title": "Configurable edit distance",
+				"description": "Control how many character edits (Levenshtein distance) are tolerated per word. Tighter for short words, looser for long ones."
+			},
+			"fieldsControl": {
+				"title": "Per-field control",
+				"description": "Enable typo tolerance on specific fields only. Ideal for title searches with strict SKU and code fields needing exact match."
+			},
+			"metrics": {
+				"title": "Correction analytics",
+				"description": "See which queries are corrected most frequently and which corrections improve CTR. Use data to refine your catalog labeling."
+			},
+			"phonetic": {
+				"title": "Phonetic matching",
+				"description": "Find results even when the user phonetically misspells a word they have only heard. Works for names and foreign terms."
+			},
+			"symbolStripping": {
+				"title": "Symbol stripping",
+				"description": "Strip punctuation and special characters from queries before matching. Handles dashes, apostrophes, and accented characters."
 			}
 		}
 	},
@@ -484,6 +556,34 @@
 			"analytics": {
 				"title": "Synonym effectiveness",
 				"description": "See which synonym rules fire most often and which queries still return zero results despite synonym expansion."
+			},
+			"collectionScoped": {
+				"title": "Per-collection scoping",
+				"description": "Different synonym libraries per collection. Your products index and documentation index can have independent synonym rules."
+			},
+			"equivalentSynonyms": {
+				"title": "Equivalent synonyms",
+				"description": "Define groups of equivalent terms — \"laptop, notebook, ultrabook\" — where any term matches documents containing any other."
+			},
+			"import": {
+				"title": "Bulk import",
+				"description": "Import synonym dictionaries via API or CSV upload. Supports thousands of synonym pairs in a single operation."
+			},
+			"instantApplication": {
+				"title": "Instant application",
+				"description": "New synonym rules take effect on the next query, not the next deployment. No reindex, no downtime."
+			},
+			"onewayExpansion": {
+				"title": "One-way expansion",
+				"description": "Map \"sofa → couch\" without the reverse. Use when your catalog uses formal terms but users search with informal ones."
+			},
+			"phraseMatching": {
+				"title": "Phrase matching",
+				"description": "Multi-word synonym support: \"mobile phone\" matches \"cell phone\" and \"smartphone\" as complete phrases, not individual words."
+			},
+			"realtime": {
+				"title": "Real-time updates",
+				"description": "Add or remove synonyms without reindexing the catalog. Changes apply to the next query within seconds."
 			}
 		}
 	},
@@ -518,6 +618,34 @@
 			"analytics": {
 				"title": "Relevance analytics",
 				"description": "Measure CTR and zero-result rate before and after a tuning change. Roll back in one click if metrics regress."
+			},
+			"boost": {
+				"title": "Numeric boosting",
+				"description": "Automatically boost products with higher ratings, sales volume, or margin. Conditional boosts express merchandising logic."
+			},
+			"custom": {
+				"title": "Custom scoring",
+				"description": "Define your own relevance formula combining multiple fields and business signals into a single ranking score."
+			},
+			"customSorting": {
+				"title": "Custom sort orders",
+				"description": "Define sort profiles for different use cases: price asc/desc, newest first, best rated, or custom field ordering."
+			},
+			"decay": {
+				"title": "Time decay",
+				"description": "Gradually reduce relevance of older content based on publish date. Configurable decay curve (linear, gaussian, or exponential)."
+			},
+			"preview": {
+				"title": "Ranking preview",
+				"description": "Preview how result ordering changes when you adjust weights, boosts, or decay settings — before applying to production traffic."
+			},
+			"synonyms": {
+				"title": "Synonym-aware ranking",
+				"description": "Boost results where the query term matches on the original word versus a synonym expansion. Tune synonym vs exact-match weights."
+			},
+			"weights": {
+				"title": "Field weights",
+				"description": "Assign relative importance to title, description, tags, and custom fields. A title match outweighs a description match by default."
 			}
 		}
 	},
@@ -552,6 +680,22 @@
 			"analytics": {
 				"title": "Curation analytics",
 				"description": "Track impressions, clicks, and conversions for curated results. Compare against organic results to measure editorial lift."
+			},
+			"pin": {
+				"title": "Pin results",
+				"description": "Force specific documents to the top for particular queries. Perfect for promoted products, seasonal highlights, and editorial picks."
+			},
+			"hide": {
+				"title": "Hide results",
+				"description": "Exclude certain documents from search results without removing them from the index. Ideal for out-of-stock or unlisted items."
+			},
+			"rules": {
+				"title": "Query-based rules",
+				"description": "Automatically apply filters, boosts, or sort orders when the search query matches a pattern. One rule covers hundreds of query variants."
+			},
+			"ab": {
+				"title": "Curation A/B testing",
+				"description": "Test different curation strategies against each other. Measure CTR, conversion, and revenue lift to decide which approach wins."
 			}
 		}
 	},
@@ -586,6 +730,42 @@
 			"performance": {
 				"title": "Zero query overhead",
 				"description": "Stopword filtering runs at query parse time, before index lookup. No measurable latency impact."
+			},
+			"builtin": {
+				"title": "Built-in language lists",
+				"description": "Predefined stopword lists for 15+ languages. Activate any language with a single config line."
+			},
+			"builtinLists": {
+				"title": "Per-language defaults",
+				"description": "Each language has a curated default stopword list optimized for search. Override or extend per collection."
+			},
+			"custom": {
+				"title": "Custom lists",
+				"description": "Add domain-specific noise words — internal SKUs, technical codes, common abbreviations — that add no search value."
+			},
+			"customLists": {
+				"title": "Per-collection custom lists",
+				"description": "Different stopword lists for different collections. Your product catalog and documentation can have independent noise-word rules."
+			},
+			"indexTime": {
+				"title": "Index-time filtering",
+				"description": "Strip stopwords during indexing to reduce index size and improve query performance on high-traffic collections."
+			},
+			"metrics": {
+				"title": "Impact metrics",
+				"description": "Monitor how stopword configurations affect query coverage, zero-result rate, and query latency in the analytics dashboard."
+			},
+			"queryTime": {
+				"title": "Query-time filtering",
+				"description": "Remove stopwords at query time without affecting the index. Changes take effect immediately on the next search."
+			},
+			"realtime": {
+				"title": "Real-time application",
+				"description": "Stopword list changes apply instantly, no reindex required. Add or remove words in the dashboard and queries adapt immediately."
+			},
+			"ui": {
+				"title": "Dashboard management",
+				"description": "Manage stopwords through the AACsearch dashboard with a visual editor. Add, remove, or test rules before applying them."
 			}
 		}
 	}

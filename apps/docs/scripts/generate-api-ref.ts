@@ -37,10 +37,7 @@ async function main(): Promise<void> {
 
 	// Generate API ref pages for each locale
 	for (const locale of LOCALES) {
-		const outputDir = path.resolve(
-			process.cwd(),
-			`content/docs/${locale}/api-reference`,
-		);
+		const outputDir = path.resolve(process.cwd(), `content/docs/${locale}/api-reference`);
 
 		await generateFiles({
 			input: server,

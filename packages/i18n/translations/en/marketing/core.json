@@ -776,6 +776,18 @@
 			"assets": {
 				"title": "Brand assets",
 				"description": "Download our logo in SVG, PNG, and dark/light variants. Usage guidelines included — see Brand page for full details."
+			},
+			"releases": {
+				"title": "Press releases",
+				"description": "Official announcements about AACsearch product launches, funding rounds, partnerships, and company milestones."
+			},
+			"founders": {
+				"title": "Founder stories",
+				"description": "Interviews and articles featuring AACsearch founders discussing the company mission, product vision, and industry perspective."
+			},
+			"kit": {
+				"title": "Press kit",
+				"description": "Download logos, brand assets, screenshots, and product fact sheets for media coverage and editorial use."
 			}
 		}
 	},
@@ -810,6 +822,10 @@
 			"contact": {
 				"title": "Brand questions",
 				"description": "For co-marketing materials, conference sponsorships, or unusual usage questions, email brand@aacsearch.com."
+			},
+			"logos": {
+				"title": "Logos & assets",
+				"description": "Download AACsearch logos in SVG, PNG, and vector formats. Color, monochrome, and dark-background variants included."
 			}
 		}
 	},
@@ -844,6 +860,18 @@
 			"support": {
 				"title": "Support",
 				"description": "Email support for Starter and above. Enterprise plans include a dedicated Slack channel and contractual SLA."
+			},
+			"migration": {
+				"title": "Migration guides",
+				"description": "Step-by-step instructions for migrating from Typesense Cloud, Algolia, Elasticsearch, Meilisearch, and other search platforms to AACsearch."
+			},
+			"apiRef": {
+				"title": "API reference",
+				"description": "Complete OpenAPI 3.1 specification for all AACsearch endpoints. Browse endpoints, request schemas, and response examples."
+			},
+			"sdks": {
+				"title": "Client SDKs",
+				"description": "TypeScript/JavaScript, Python, PHP, and Go SDKs for the AACsearch API. Type-safe, well-documented, and published on package registries."
 			}
 		}
 	},
@@ -878,6 +906,34 @@
 			"searchUnit": {
 				"title": "Search unit",
 				"description": "AACsearch billing unit. One search unit equals one search query or one document indexed. Used to calculate your monthly plan allocation."
+			},
+			"bm25": {
+				"title": "BM25",
+				"description": "A ranking function that scores documents based on term frequency and inverse document frequency. AACsearch uses BM25 as the default text relevance algorithm."
+			},
+			"inverted": {
+				"title": "Inverted index",
+				"description": "A data structure mapping every unique term in a document collection to the documents containing it. Enables fast full-text search at scale."
+			},
+			"vector": {
+				"title": "Vector search",
+				"description": "A search method that finds documents based on semantic similarity using embeddings, rather than exact keyword matches. AACsearch supports hybrid keyword + vector search."
+			},
+			"facets": {
+				"title": "Facets",
+				"description": "Filters that let users narrow search results by categories, price ranges, ratings, and other attributes. AACsearch computes facet counts server-side on every query."
+			},
+			"relevanceTuning": {
+				"title": "Relevance tuning",
+				"description": "The process of adjusting search ranking to surface the most relevant results first. AACsearch supports field weights, boost rules, and custom scoring formulas."
+			},
+			"synonyms": {
+				"title": "Synonyms",
+				"description": "Words or phrases treated as equivalent during search. AACsearch supports one-way, multi-way, and multi-word synonym rules managed from the dashboard."
+			},
+			"typoTolerance": {
+				"title": "Typo tolerance",
+				"description": "The ability to return correct results even when the search query contains spelling errors. AACsearch uses configurable Levenshtein distance and phonetic matching."
 			}
 		}
 	},
@@ -912,6 +968,26 @@
 			"disclosure": {
 				"title": "Responsible disclosure",
 				"description": "Found a vulnerability? Email security@aacsearch.com. We follow a 90-day coordinated disclosure timeline and credit all reporters."
+			},
+			"audit": {
+				"title": "Third-party audits",
+				"description": "AACsearch undergoes regular security audits by independent third parties. Reports are available under NDA for enterprise customers."
+			},
+			"isolation": {
+				"title": "Tenant isolation",
+				"description": "Every organization data is isolated at the infrastructure level. Cross-tenant access is architecturally impossible, not just policy-enforced."
+			},
+			"tokens": {
+				"title": "Token-based authentication",
+				"description": "API keys are hashed at rest using bcrypt. Scoped tokens use HMAC signing with server-side secrets. Plaintext keys are shown once and never stored."
+			},
+			"accessControl": {
+				"title": "Access control",
+				"description": "Role-based access control (RBAC) with owner, admin, member, and viewer roles. API keys with granular permissions per index."
+			},
+			"pentest": {
+				"title": "Penetration testing",
+				"description": "Regular penetration tests by certified security firms. Summary reports are available to enterprise customers under NDA."
 			}
 		}
 	},
@@ -946,6 +1022,38 @@
 			"social": {
 				"title": "Follow the highlights",
 				"description": "Newsletter highlights are posted on LinkedIn. Follow us there for shorter-form engineering updates."
+			},
+			"community": {
+				"title": "Community highlights",
+				"description": "A monthly roundup of the best AACsearch community projects, plugins, and success stories from developers worldwide."
+			},
+			"product": {
+				"title": "Product updates",
+				"description": "New features, performance improvements, and API changes. Changelog highlights delivered to your inbox monthly."
+			},
+			"tutorials": {
+				"title": "Tutorials & guides",
+				"description": "Step-by-step guides for setting up search, migrating from competitors, and integrating AACsearch with popular frameworks."
+			},
+			"benchmarks": {
+				"title": "Search benchmarks",
+				"description": "Industry benchmarks for search latency, zero-result rates, and CTR. See how your search performance compares to peers."
+			},
+			"industry": {
+				"title": "Industry insights",
+				"description": "Trends, best practices, and research in search and discovery. Curated for product, engineering, and growth teams."
+			},
+			"productUpdates": {
+				"title": "Product updates",
+				"description": "New features, performance improvements, and API changes delivered to your inbox monthly."
+			},
+			"searchTips": {
+				"title": "Search optimization tips",
+				"description": "Practical tips for improving search relevance, reducing zero-result rates, and tuning your indexes for better performance."
+			},
+			"showcase": {
+				"title": "Customer showcase",
+				"description": "See how other teams use AACsearch to power search across e-commerce, SaaS, media, and enterprise applications."
 			}
 		}
 	},
@@ -980,6 +1088,10 @@
 			"roadmap": {
 				"title": "Vote on the roadmap",
 				"description": "Every public roadmap item is open for community upvotes. The most-voted features ship first."
+			},
+			"events": {
+				"title": "Events & meetups",
+				"description": "Join AACsearch at industry events, webinars, and community meetups. Connect with the team and fellow developers."
 			}
 		}
 	},
@@ -1014,6 +1126,22 @@
 			"sla": {
 				"title": "Support SLA",
 				"description": "Enterprise SLA: 99.95% uptime, 4-hour critical response, dedicated channel manager, and named technical contact."
+			},
+			"docs": {
+				"title": "Documentation",
+				"description": "Comprehensive guides, API reference, SDK documentation, and integration tutorials at docs.aacsearch.com."
+			},
+			"enterprise": {
+				"title": "Enterprise support",
+				"description": "Dedicated Slack channel, phone support, custom SLAs, and a named support engineer. Priority response time under 1 hour."
+			},
+			"onboarding": {
+				"title": "Onboarding assistance",
+				"description": "Free onboarding call for Pro and Enterprise plans. Our team helps you set up your index, configure the widget, and integrate the SDK."
+			},
+			"status": {
+				"title": "System status",
+				"description": "Real-time status dashboard showing uptime, latency, and incident history across all AACsearch services at status.aacsearch.com."
 			}
 		}
 	},
@@ -1048,6 +1176,14 @@
 			"subscribe": {
 				"title": "Subscribe to alerts",
 				"description": "Get notified by email or webhook when incident status changes. Powered by our public status API."
+			},
+			"uptime": {
+				"title": "99.99% uptime SLA",
+				"description": "Enterprise plan includes a 99.99% uptime SLA with credits for any downtime. Real-time status at status.aacsearch.com."
+			},
+			"maintenance": {
+				"title": "Scheduled maintenance",
+				"description": "Planned maintenance windows are announced at least 24 hours in advance. Subscribe to status page notifications for real-time updates."
 			}
 		}
 	},
@@ -1082,6 +1218,26 @@
 			"selfHost": {
 				"title": "Do you offer dedicated or on-prem deployment?",
 				"description": "Yes. Enterprise plans include a dedicated cluster in the region you choose. For regulated industries with strict data residency requirements, contact us to scope a custom deployment."
+			},
+			"data": {
+				"title": "Where is my data stored?",
+				"description": "AACsearch runs on AWS in the region closest to your user base. Data stays in the chosen region and never leaves without your authorization."
+			},
+			"limits": {
+				"title": "What are the plan limits?",
+				"description": "Free: 1,000 search-units/month, 1 index, 1 API key. Pro: 50,000 search-units/month, unlimited indexes, 10 API keys. Enterprise: custom limits and SLAs."
+			},
+			"migrate": {
+				"title": "How do I migrate from Typesense?",
+				"description": "AACsearch is built on Typesense and uses the same search core. Migrate by exporting your index schema and documents, then reindexing via the AACsearch API. Most users complete the move in under a day."
+			},
+			"support": {
+				"title": "What support options are available?",
+				"description": "Free plan: community support via Discord. Pro: email support within 24 hours. Enterprise: dedicated Slack channel and phone support with 1-hour SLA."
+			},
+			"typesense": {
+				"title": "How is AACsearch different from Typesense Cloud?",
+				"description": "AACsearch is a managed search platform built on Typesense with additional features: multi-tenancy, scoped tokens, analytics dashboard, CMS connectors, knowledge RAG, and a hosted widget — all included in the price."
 			}
 		}
 	},
@@ -1116,6 +1272,14 @@
 			"apply": {
 				"title": "Apply now",
 				"description": "Apply at affiliate.aacsearch.com. We review applications within 3 business days. No minimum audience size required."
+			},
+			"payouts": {
+				"title": "Generous payouts",
+				"description": "Earn 20% recurring commission on every subscription you refer. Paid monthly via Stripe, no minimum threshold."
+			},
+			"support": {
+				"title": "Dedicated affiliate support",
+				"description": "Get a personal affiliate manager, promotional materials, and a custom landing page for your audience."
 			}
 		}
 	},
@@ -1150,6 +1314,10 @@
 			"custom": {
 				"title": "Need something different?",
 				"description": "Non-standard requirements — on-prem deployment, data residency agreements, white-labelling — are handled as custom contracts."
+			},
+			"overage": {
+				"title": "Overage pricing",
+				"description": "Exceed your plan limit and pay only for what you use. Overage is billed at $0.50 per 1,000 search-units with no hard cap — search keeps working."
 			}
 		}
 	},

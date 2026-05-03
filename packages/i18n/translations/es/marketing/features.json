@@ -560,6 +560,18 @@
 			"scoring": {
 				"description": "Combina la relevancia de texto con señales numéricas como precio, actualidad o popularidad usando una fórmula de puntuación configurable.",
 				"title": "Puntuación personalizada"
+			},
+			"customSorting": {
+				"title": "Órdenes de clasificación personalizados",
+				"description": "Define perfiles de ordenación para diferentes casos de uso: precio ascendente/descendente, más recientes, mejor valorados o campos personalizados."
+			},
+			"preview": {
+				"title": "Vista previa de clasificación",
+				"description": "Previsualiza cómo cambia el orden de los resultados al ajustar pesos, impulsos o configuraciones de decadencia, antes de aplicar al tráfico real."
+			},
+			"synonyms": {
+				"title": "Clasificación con sinónimos",
+				"description": "Impulsa los resultados donde el término de búsqueda coincide con la palabra original frente a una expansión de sinónimos."
 			}
 		}
 	},
@@ -610,6 +622,26 @@
 			"realTime": {
 				"description": "Añade o elimina palabras vacías sin reindexar. Los cambios surten efecto inmediatamente en la siguiente consulta.",
 				"title": "Actualizaciones sin tiempo de inactividad"
+			},
+			"builtinLists": {
+				"title": "Listas por idioma",
+				"description": "Cada idioma tiene una lista de palabras vacías predeterminada optimizada para búsqueda. Se puede anular o ampliar por colección."
+			},
+			"customLists": {
+				"title": "Listas por colección",
+				"description": "Diferentes listas de palabras vacías para diferentes colecciones. Tu catálogo de productos y documentación pueden tener reglas independientes."
+			},
+			"indexTime": {
+				"title": "Filtrado en tiempo de indexación",
+				"description": "Elimina palabras vacías durante la indexación para reducir el tamaño del índice y mejorar el rendimiento en colecciones de alto tráfico."
+			},
+			"queryTime": {
+				"title": "Filtrado en tiempo de consulta",
+				"description": "Elimina palabras vacías en el momento de la consulta sin afectar al índice. Los cambios se aplican inmediatamente."
+			},
+			"ui": {
+				"title": "Gestión desde el panel",
+				"description": "Gestiona las palabras vacías desde el panel de AACsearch con un editor visual. Añade, elimina o prueba reglas antes de aplicarlas."
 			}
 		}
 	},
@@ -652,6 +684,26 @@
 			"scope": {
 				"description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y tu índice de documentación pueden tener reglas de sinónimos independientes.",
 				"title": "Ámbito por colección"
+			},
+			"collectionScoped": {
+				"title": "Ámbito por colección",
+				"description": "Diferentes bibliotecas de sinónimos por colección. Tu índice de productos y de documentación pueden tener reglas independientes."
+			},
+			"equivalentSynonyms": {
+				"title": "Sinónimos equivalentes",
+				"description": "Define grupos de términos equivalentes donde cualquier término coincide con documentos que contengan cualquier otro."
+			},
+			"instantApplication": {
+				"title": "Aplicación instantánea",
+				"description": "Las nuevas reglas de sinónimos se aplican en la siguiente consulta. Sin reindexación, sin tiempo de inactividad."
+			},
+			"onewayExpansion": {
+				"title": "Expansión unidireccional",
+				"description": "Asigna un término a otro sin la inversa. Útil cuando el catálogo usa términos formales pero los usuarios buscan con informales."
+			},
+			"phraseMatching": {
+				"title": "Coincidencia de frases",
+				"description": "Soporte de sinónimos de varias palabras: teléfono móvil coincide con celular como frases completas, no como palabras individuales."
 			}
 		}
 	},
@@ -702,6 +754,18 @@
 			"splitWords": {
 				"description": "'macbook pro' coincide con 'macbookpro' y viceversa. La detección de palabras divididas captura espacios omitidos y palabras compuestas.",
 				"title": "Corrección de palabras divididas"
+			},
+			"autoCorrect": {
+				"title": "Modo de autocorrección",
+				"description": "Sugiere y aplica correcciones tipográficas a la consulta del usuario. Devuelve resultados para la consulta corregida con una sugerencia."
+			},
+			"fieldsControl": {
+				"title": "Control por campo",
+				"description": "Activa la tolerancia a errores tipográficos solo en campos específicos. Ideal para búsquedas de título con campos SKU que necesitan coincidencia exacta."
+			},
+			"symbolStripping": {
+				"title": "Eliminación de símbolos",
+				"description": "Elimina signos de puntuación y caracteres especiales de las consultas antes de la coincidencia. Maneja guiones, apóstrofes y caracteres acentuados."
 			}
 		}
 	}

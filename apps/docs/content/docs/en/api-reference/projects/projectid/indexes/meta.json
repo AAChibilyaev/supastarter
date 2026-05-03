@@ -1,7 +1,4 @@
 {
-  "title": "projects/projectid/indexes",
-  "pages": [
-    "get",
-    "post"
-  ]
+	"title": "projects/projectid/indexes",
+	"pages": ["get", "post"]
 }

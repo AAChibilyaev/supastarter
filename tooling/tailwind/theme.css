@@ -98,4 +98,26 @@
 			height: 0;
 		}
 	}
+
+	@keyframes marquee {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+}
+
+@utility animate-marquee {
+	animation: marquee var(--marquee-duration, 15s) linear infinite;
+}
+
+@utility direction-reverse {
+	animation-direction: reverse;
+}
+
+@utility fancyHeading {
+	font-family: var(--font-family-heading);
+	font-weight: 700;
 }

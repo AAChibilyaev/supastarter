@@ -7,6 +7,7 @@
 
 import { recordSearchUsage } from "@repo/database";
 import { logger } from "@repo/logs";
+import { getMetrics, trackSearchLatency } from "@repo/observability";
 import { aliasName, multiSearchDocuments, searchDocuments } from "@repo/search";
 import { Hono } from "hono";
 import { z } from "zod";
@@ -58,121 +59,166 @@ const searchInputSchema = z.object({
 	curationTags: z.string().optional(),
 	hybridConfidence: z.number().min(0).max(1).optional(),
 	// ── Faceted Search extensions ──
+	maxFacetValues: z.number().int().optional(),
 	facetQuery: z.string().optional(),
-	maxFacetValues: z.number().int().min(1).optional(),
-	// ── Distinct Dedup ──
-	distinct: z.union([z.string(), z.number()]).optional(),
-	// ── MMR Diversification (Typesense v0.30+) ──
-	diversifyBasedOn: z.string().optional(),
-	// ── Token Join (Typesense v0.30+) ──
-	splitJoinTokens: z.enum(["always", "fallback", "off"]).optional(),
-	// ── Highlight Extensions (Typesense v0.30+) ──
-	highlightFullFields: z.string().optional(),
-	prioritizeTokenPosition: z.boolean().optional(),
+	facetSearch: z.string().optional(),
 });
 
-const multiSearchInputSchema = z.object({
-	searches: z.array(searchInputSchema).min(1).max(20),
-});
+type SearchInput = z.infer<typeof searchInputSchema>;
+
+function coerceExact(value: unknown): boolean | undefined {
+	if (typeof value === "boolean") return value;
+	if (value === "true") return true;
+	if (value === "false") return false;
+	return undefined;
+}
+
+function parseSearchInput(body: unknown): SearchInput {
+	const parsed = searchInputSchema.parse(body);
+
+	// Manually coerce the `exact` field from strings
+	if (parsed.exact !== undefined) {
+		parsed.exact = coerceExact(parsed.exact);
+	}
+
+	return parsed;
+}
 
 export const searchApp = new Hono()
-	// ── Search single index ────────────────────────────────────────
+	// ── Single index search ─────────────────────────────────────────
 	.post("/indexes/:indexId/search", async (c) => {
 		const gated = await requireScope("search")(c);
 		if (gated instanceof Response) return gated;
 		const { verified } = gated;
 
-		const indexId = c.req.param("indexId");
-		if (indexId !== verified.indexId) {
-			return c.json({ error: "not_found", message: "Index not found" }, 404);
-		}
+		const indexSlug = c.req.param("indexId");
+
+		const endLatency = trackSearchLatency(getMetrics(), indexSlug);
 
 		let body: unknown;
 		try {
 			body = await c.req.json();
 		} catch {
-			body = {};
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
-		const parsed = searchInputSchema.safeParse(body);
-		if (!parsed.success) {
-			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
-		}
-
+		let input: SearchInput;
 		try {
-			const result = await searchDocuments({
-				alias: aliasName(verified.organizationId, verified.indexSlug),
-				tenantId: verified.organizationId,
-				...parsed.data,
-			});
-
-			void recordSearchUsage({
-				indexId: verified.indexId,
-				organizationId: verified.organizationId,
-				type: "search_query",
-			}).catch((error) => logger.error("Could not record search usage", { error }));
-
-			return c.json({
-				hits: result.hits,
-				found: result.found,
-				page: result.page,
-				perPage: result.perPage,
-				facetCounts: result.facetCounts,
-				searchTimeMs: result.searchTimeMs,
-			});
-		} catch (error) {
-			logger.error("V1 search failed", { error, indexId });
-			return c.json({ error: "search_failed", message: "Search query failed" }, 502);
+			input = parseSearchInput(body);
+		} catch (err) {
+			return c.json(
+				{
+					error: "validation_error",
+					message: z.ZodError.isZodError(err) ? err.issues : String(err),
+				},
+				400,
+			);
 		}
-	})
 
-	// ── Multi-search ───────────────────────────────────────────────
+		const startTime = Date.now();
+
+		const result = await searchDocuments({
+			collection: aliasName(verified.organizationId, indexSlug),
+			tenantId: verified.organizationId,
+			q: input.q,
+			queryBy: input.queryBy,
+			filterBy: input.filterBy,
+			facetBy: input.facetBy,
+			sortBy: input.sortBy,
+			perPage: input.perPage,
+			page: input.page,
+			highlightFields: input.highlightFields,
+			numTypos: input.numTypos,
+			typoTokensThreshold: input.typoTokensThreshold,
+			dropTokensThreshold: input.dropTokensThreshold,
+			exact: input.exact,
+			prioritizeExactMatch: input.prioritizeExactMatch,
+			prefix: input.prefix,
+			infix: input.infix,
+			queryByWeights: input.queryByWeights,
+			excludeFields: input.excludeFields,
+			includeFields: input.includeFields,
+			highlightStartTag: input.highlightStartTag,
+			highlightEndTag: input.highlightEndTag,
+			curationTags: input.curationTags,
+			hybridConfidence: input.hybridConfidence,
+			maxFacetValues: input.maxFacetValues,
+			facetQuery: input.facetQuery,
+			facetSearch: input.facetSearch,
+			polygonFilter: input.polygonFilter,
+			boundingBoxFilter: input.boundingBoxFilter,
+		});
+
+		endLatency();
+
+		void recordSearchUsage({
+			organizationId: verified.organizationId,
+			type: "searches",
+			count: 1,
+		}).catch((e) => logger.error("Failed to record search usage", e));
+
+		return c.json(result);
+	})
+	// ── Multi-search (federated) ────────────────────────────────────
 	.post("/multi-search", async (c) => {
 		const gated = await requireScope("search")(c);
 		if (gated instanceof Response) return gated;
 		const { verified } = gated;
 
+		const searchesSchema = z.object({
+			searches: z.array(
+				z.object({
+					indexSlug: z.string(),
+					search: searchInputSchema,
+				}),
+			),
+		});
+
 		let body: unknown;
 		try {
 			body = await c.req.json();
 		} catch {
-			body = {};
-		}
-
-		const parsed = multiSearchInputSchema.safeParse(body);
-		if (!parsed.success) {
-			return c.json({ error: "invalid_input", details: parsed.error.issues }, 400);
-		}
-
-		try {
-			const alias = aliasName(verified.organizationId, verified.indexSlug);
-			const results = await multiSearchDocuments(
-				parsed.data.searches.map((s) => ({
-					alias,
-					tenantId: verified.organizationId,
-					...s,
-				})),
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
 			);
-
-			void recordSearchUsage({
-				indexId: verified.indexId,
-				organizationId: verified.organizationId,
-				type: "search_query",
-				count: parsed.data.searches.length,
-			}).catch((error) => logger.error("Could not record multi-search usage", { error }));
-
-			return c.json({
-				results: results.map((r) => ({
-					hits: r.hits,
-					found: r.found,
-					page: r.page,
-					perPage: r.perPage,
-					facetCounts: r.facetCounts,
-					searchTimeMs: r.searchTimeMs,
-				})),
-			});
-		} catch (error) {
-			logger.error("V1 multi-search failed", { error, indexId: verified.indexId });
-			return c.json({ error: "search_failed", message: "Multi-search query failed" }, 502);
 		}
+
+		let parsed: z.infer<typeof searchesSchema>;
+		try {
+			parsed = searchesSchema.parse(body);
+		} catch (err) {
+			return c.json(
+				{
+					error: "validation_error",
+					message: z.ZodError.isZodError(err) ? err.issues : String(err),
+				},
+				400,
+			);
+		}
+
+		// Build multi-search entries with tenant prefix on collection names
+		const entries = parsed.searches.map((s) => ({
+			collection: aliasName(verified.organizationId, s.indexSlug),
+			tenantId: verified.organizationId,
+			...s.search,
+			exact: coerceExact(s.search.exact),
+		}));
+
+		const endLatency = trackSearchLatency(getMetrics(), "multi-search");
+
+		const result = await multiSearchDocuments(entries);
+
+		endLatency();
+
+		void recordSearchUsage({
+			organizationId: verified.organizationId,
+			type: "searches",
+			count: 1,
+		}).catch((e) => logger.error("Failed to record search usage", e));
+
+		return c.json(result);
 	});

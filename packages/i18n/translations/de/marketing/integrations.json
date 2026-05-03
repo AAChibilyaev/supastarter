@@ -254,6 +254,18 @@
 			"widget": {
 				"description": "Das AACsearch-Browser-SDK mit jedem Contentful-gestützten Frontend verwenden. React-Hooks, Vue-Composables und Vanilla JS werden unterstützt.",
 				"title": "JavaScript-SDK"
+			},
+			"fields": {
+				"title": "Feldebene Synchronisierung",
+				"description": "Wählen Sie aus, welche Contentful-Felder mit AACsearch synchronisiert werden sollen. Interne Felder ausschließen und Feldwerte transformieren."
+			},
+			"locales": {
+				"title": "Gebietsschemata-Verwaltung",
+				"description": "Bestimmte Contentful-Gebietsschemata mit AACsearch synchronisieren. Suche in einem, mehreren oder allen Gebietsschemata aktivieren."
+			},
+			"sync": {
+				"title": "Automatische Synchronisierung",
+				"description": "Contentful Webhook-Integration löst automatische Synchronisierung bei Veröffentlichung aus. Kein manueller Eingriff erforderlich."
 			}
 		}
 	},
@@ -308,6 +320,14 @@
 			"widget": {
 				"description": "Das AACsearch-Widget mit einem Script-Tag zum Next.js-Layout hinzufügen oder das React-SDK für eine vollständig anpassbare Such-UI verwenden.",
 				"title": "Clientseitiges Widget"
+			},
+			"routing": {
+				"title": "App Router-Unterstützung",
+				"description": "Vollständige Next.js App Router-Unterstützung mit Server- und Client-Komponenten. Suchstatus wird automatisch mit URL-Suchparametern synchronisiert."
+			},
+			"ssr": {
+				"title": "Server-seitiges Rendering",
+				"description": "Erste Suchergebnisse serverseitig für SEO und schnellere Seitenladezeiten rendern. Pages Route und App Router werden unterstützt."
 			}
 		}
 	},
@@ -354,6 +374,14 @@
 			"ssr": {
 				"description": "Suchergebnisse serverseitig vorab laden und clientseitig ohne Flash of Empty Content hydrieren.",
 				"title": "SSR & Hydration"
+			},
+			"headless": {
+				"title": "Headless-Modus",
+				"description": "AACsearch als Headless-Such-API mit React verwenden. Keine UI-Komponenten enthalten; bauen Sie Ihre eigene Suche von Grund auf."
+			},
+			"perf": {
+				"title": "Leistung zuerst",
+				"description": "Memoisierte Ergebnisse, entprellte Abfragen und inkrementelles Rendering. Suche bleibt schnell, selbst mit Tausenden von Dokumenten."
 			}
 		}
 	},
@@ -404,6 +432,14 @@
 			"widget": {
 				"description": "Das AACsearch-Browser-SDK funktioniert mit jedem Sanity-gestützten Frontend. React-Hooks oder Vanilla-JS-Client verwenden.",
 				"title": "Frontend-Integration"
+			},
+			"listener": {
+				"title": "GROQ-Listener",
+				"description": "Auf GROQ-Mutationen hören und AACsearch in Echtzeit aktualisieren. Filtern, welche Inhaltstypen Sync-Updates auslösen."
+			},
+			"portable": {
+				"title": "Portable Text-Unterstützung",
+				"description": "Sanity Portable Text-Blöcke in durchsuchbaren Klartext konvertieren. Überschriftenstruktur beibehalten und Formatierungsrauschen entfernen."
 			}
 		}
 	},
@@ -454,6 +490,10 @@
 			"variantSync": {
 				"description": "Jede Produktvariante wird als separates Dokument indexiert. Kunden können direkt nach Größe, Farbe oder SKU suchen.",
 				"title": "Varianten-Indexierung"
+			},
+			"products": {
+				"title": "Produktsynchronisierung",
+				"description": "Shopify-Produkte inklusive Titel, Beschreibung, Preis, Bilder und Metafelder synchronisieren. Varianten als separate Dokumente indexieren."
 			}
 		}
 	},
@@ -504,6 +544,14 @@
 			"widget": {
 				"description": "Das AACsearch-Browser-SDK verwenden, um Instant Search für das Strapi-gestützte Frontend zu bauen — React, Vue oder Vanilla JS.",
 				"title": "Frontend-Such-Widget"
+			},
+			"content": {
+				"title": "Inhaltstyp-Synchronisierung",
+				"description": "Jeden Strapi-Inhaltstyp synchronisieren: Sammlungstypen, Einzeltypen, Komponenten und dynamische Zonen. Konfiguration pro Inhaltstyp unabhängig."
+			},
+			"populate": {
+				"title": "Tiefen-Population",
+				"description": "Verschachtelte Beziehungen, Komponenten und Medienfelder während der Synchronisierung befüllen. AACsearch löst Strapi-Beziehungen automatisch auf."
 			}
 		}
 	},
@@ -558,6 +606,18 @@
 			"variantSync": {
 				"description": "Kunden können nach bestimmten Variationen nach Attribut suchen — Farbe, Größe, Material — ohne zuerst zur Produktseite zu navigieren.",
 				"title": "Variationssuche"
+			},
+			"filters": {
+				"title": "Erweiterte Filter",
+				"description": "Preisschieberegler, Kategoriebäume, Attributauswahl und Bewertungsfilter — automatisch aus WooCommerce-Produktdaten generiert."
+			},
+			"orders": {
+				"title": "Bestellungssuche",
+				"description": "WooCommerce-Bestellungen nach Bestellnummer, Kundennamen, E-Mail oder Produkt durchsuchen. Sofortige Bestellungssuche für Support und Fulfillment."
+			},
+			"products": {
+				"title": "Produktsuche",
+				"description": "Volltextsuche über Produkttitel, Beschreibungen, SKUs und Kurzbeschreibungen. Tippfehlertolerant und facettenunterstützt für vollständige E-Commerce-Suche."
 			}
 		}
 	},
@@ -612,6 +672,14 @@
 			"widget": {
 				"description": "Das Standard-Such-Widget durch den AACsearch-Block ersetzen. Sofortige Ergebnisse, Facettenfilter und Tastaturnavigation.",
 				"title": "Gutenberg-Suchblock"
+			},
+			"gutenberg": {
+				"title": "Gutenberg-Blöcke",
+				"description": "Inhalte aus Gutenberg-Blöcken indexieren. Überschriftentext, Absatzinhalte, Bild-Alt-Texte und benutzerdefinierte Blockattribute werden durchsuchbar."
+			},
+			"posts": {
+				"title": "Beitrags- und Seitensuche",
+				"description": "Suche über WordPress-Beiträge, Seiten und benutzerdefinierte Beitragstypen. Titel, Inhalt, Auszug und benutzerdefinierte Felder mit konfigurierbaren Gewichten."
 			}
 		}
 	},

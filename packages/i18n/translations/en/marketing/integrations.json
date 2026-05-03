@@ -238,6 +238,26 @@
 			"analytics": {
 				"title": "Search analytics",
 				"description": "See which queries convert, which hit dead ends, and how search contributes to revenue in your AACsearch dashboard."
+			},
+			"facets": {
+				"title": "Product facets",
+				"description": "Shopify product variants, options, and metafields are automatically indexed as search facets. Filter by size, color, material, or custom attributes."
+			},
+			"multilingual": {
+				"title": "Multi-language support",
+				"description": "Sync Shopify product content in all store languages. AACsearch indexes each locale separately for region-specific search experiences."
+			},
+			"sync": {
+				"title": "Automated sync",
+				"description": "Automatic product sync via Shopify webhooks. Product create, update, and delete events propagate to AACsearch in real time."
+			},
+			"variants": {
+				"title": "Variant indexing",
+				"description": "Index Shopify variants as separate searchable documents or as nested fields. Each variant maintains its own price, inventory, and SKU."
+			},
+			"products": {
+				"title": "Product sync",
+				"description": "Sync Shopify products including title, description, price, images, and metafields. Variants and options indexed as separate documents or nested fields."
 			}
 		}
 	},
@@ -272,6 +292,34 @@
 			"analytics": {
 				"title": "Search analytics",
 				"description": "WordPress editors see top queries, zero-result rates, and search-driven page views directly in the AACsearch dashboard."
+			},
+			"acf": {
+				"title": "Advanced Custom Fields",
+				"description": "ACF field values are automatically indexed when using the AACsearch plugin. Text, number, select, and repeater fields become searchable without manual mapping."
+			},
+			"instant": {
+				"title": "Instant search",
+				"description": "Replace default WordPress search with instant, as-you-type results. Search across posts, pages, custom post types, and ACF fields simultaneously."
+			},
+			"multilingual": {
+				"title": "WPML & Polylang support",
+				"description": "Compatible with WPML and Polylang for multi-language WordPress sites. Search results respect the current language context automatically."
+			},
+			"postTypes": {
+				"title": "Custom post types",
+				"description": "Index any WordPress custom post type. Each post type can have its own search configuration, field weights, and facet settings."
+			},
+			"shortcode": {
+				"title": "Shortcode widget",
+				"description": "Embed AACsearch widget anywhere in WordPress using a shortcode. Customize placeholder text, locale, and search results per page."
+			},
+			"gutenberg": {
+				"title": "Gutenberg blocks",
+				"description": "Index content from Gutenberg blocks: heading text, paragraph content, image alt text, and custom block attributes all become searchable."
+			},
+			"posts": {
+				"title": "Post and page search",
+				"description": "Search across WordPress posts, pages, and custom post types. Title, content, excerpt, and custom fields are indexed with configurable weights."
 			}
 		}
 	},
@@ -306,6 +354,38 @@
 			"analytics": {
 				"title": "Commerce analytics",
 				"description": "Track search-to-cart conversion, zero-result rate, and top queries. Identify gaps in your catalog from real search data."
+			},
+			"attributes": {
+				"title": "Product attributes",
+				"description": "Index WooCommerce product attributes as search facets. Color, size, material, and custom attributes become clickable filters in search results."
+			},
+			"categories": {
+				"title": "Category hierarchy",
+				"description": "Preserve WooCommerce category tree structure in AACsearch. Navigate categories with hierarchical facets that respect parent-child relationships."
+			},
+			"performance": {
+				"title": "Search performance",
+				"description": "AACsearch handles WooCommerce search at scale. Sub-50ms query latency even on catalogues with 500K+ products and 10M+ SKUs."
+			},
+			"plugin": {
+				"title": "WordPress plugin",
+				"description": "Install the AACsearch WooCommerce plugin from the WordPress plugin directory. One-click activation, automatic product sync, no code required."
+			},
+			"sync": {
+				"title": "Automated product sync",
+				"description": "Automatic sync via WooCommerce hooks. Product changes propagate to AACsearch in real time. Bulk sync on plugin activation catches existing products."
+			},
+			"filters": {
+				"title": "Advanced filters",
+				"description": "Price range sliders, category trees, attribute selectors, and rating filters generated automatically from WooCommerce product data."
+			},
+			"orders": {
+				"title": "Order search",
+				"description": "Search WooCommerce orders by order number, customer name, email, or product. Power support and fulfillment teams with instant order lookup."
+			},
+			"products": {
+				"title": "Product search",
+				"description": "Full-text search across product titles, descriptions, SKUs, and short descriptions. Typo-tolerant and facet-supported for complete e-commerce search."
 			}
 		}
 	},
@@ -340,6 +420,30 @@
 			"analytics": {
 				"title": "Content search analytics",
 				"description": "See which content types get the most search traffic and which queries find no results. Drive editorial decisions with search data."
+			},
+			"adminPanel": {
+				"title": "Admin panel integration",
+				"description": "Manage AACsearch directly from the Strapi admin panel. View index status, trigger syncs, and monitor errors without leaving Strapi."
+			},
+			"api": {
+				"title": "REST API sync",
+				"description": "Sync any Strapi content type via the REST API. Define which collection types and single types to include or exclude from search indexing."
+			},
+			"lifecycle": {
+				"title": "Lifecycle hooks",
+				"description": "Strapi lifecycle hooks trigger AACsearch updates on content create, update, and delete. Zero configuration required — hooks are installed by the plugin."
+			},
+			"localization": {
+				"title": "i18n support",
+				"description": "Sync Strapi localized content to separate AACsearch collections per locale. Each locale maintains independent search configuration."
+			},
+			"content": {
+				"title": "Content type sync",
+				"description": "Sync any Strapi content type: collection types, single types, components, and dynamic zones. Configure sync per content type independently."
+			},
+			"populate": {
+				"title": "Deep population",
+				"description": "Populate nested relations, components, and media fields during sync. AACsearch resolves Strapi relations up to the configured depth automatically."
 			}
 		}
 	},
@@ -374,6 +478,34 @@
 			"analytics": {
 				"title": "Content analytics",
 				"description": "Understand which content entries surface in search, which topics have gaps, and how search drives content engagement."
+			},
+			"localization": {
+				"title": "Localization support",
+				"description": "Sync content across all Contentful locales. Each locale maps to a separate AACsearch collection for multi-language search."
+			},
+			"mapping": {
+				"title": "Field mapping",
+				"description": "Map Contentful content fields to AACsearch index fields. Transform Rich Text to plain text, extract nested references, and flatten arrays."
+			},
+			"preview": {
+				"title": "Preview environment",
+				"description": "Sync draft content from Contentful preview environment for testing before publishing. Validate search results before going live."
+			},
+			"richText": {
+				"title": "Rich Text handling",
+				"description": "Automatically convert Contentful Rich Text fields to plain text for search indexing. Embedded assets and entries are extracted and processed."
+			},
+			"fields": {
+				"title": "Field-level sync",
+				"description": "Select which Contentful fields to sync to AACsearch. Exclude internal fields, hide metadata, and transform field values during sync."
+			},
+			"locales": {
+				"title": "Locale management",
+				"description": "Sync specific Contentful locales to AACsearch. Enable search in one, some, or all locales with per-locale index configuration."
+			},
+			"sync": {
+				"title": "Automated sync",
+				"description": "Contentful webhook integration triggers automatic sync on content publish, unpublish, and delete. No manual intervention required."
 			}
 		}
 	},
@@ -408,6 +540,30 @@
 			"analytics": {
 				"title": "Search analytics",
 				"description": "Track which document types get searched, which queries fail, and how search discovery drives downstream conversions."
+			},
+			"multiDataset": {
+				"title": "Multi-dataset sync",
+				"description": "Sync multiple Sanity datasets to separate AACsearch collections. Each dataset maintains its own search configuration and schema."
+			},
+			"realtime": {
+				"title": "Real-time sync",
+				"description": "Listen to Sanity GROQ mutations and update AACsearch in real time. Changes propagate within seconds of publishing in Sanity Studio."
+			},
+			"studio": {
+				"title": "Sanity Studio plugin",
+				"description": "Manage AACsearch configuration directly from Sanity Studio. View sync status, trigger reindex, and monitor errors without leaving Sanity."
+			},
+			"types": {
+				"title": "GROQ query support",
+				"description": "Use GROQ queries to define exactly what content gets synced to AACsearch. Filter, project, and join documents using Sanity query syntax."
+			},
+			"listener": {
+				"title": "GROQ listener",
+				"description": "Listen for GROQ mutations and update AACsearch in real time. Filter which content types trigger sync updates to control indexing costs."
+			},
+			"portable": {
+				"title": "Portable Text support",
+				"description": "Convert Sanity Portable Text blocks to searchable plain text. Preserve heading structure, extract inline annotations, and strip formatting noise."
 			}
 		}
 	},
@@ -442,6 +598,34 @@
 			"analytics": {
 				"title": "Edge-compatible analytics",
 				"description": "Track search events from the Vercel Edge Network. No cold starts, no timeout risk for lightweight analytics calls."
+			},
+			"edgeRuntime": {
+				"title": "Edge Runtime support",
+				"description": "Use AACsearch SDK with Next.js Edge Runtime for sub-50ms search at the edge. Works with middleware and edge API routes."
+			},
+			"hooks": {
+				"title": "React hooks",
+				"description": "useSearch, useFacets, and useAutocomplete hooks for declarative search UI in Next.js App Router. Type-safe and server-compatible."
+			},
+			"routeHandlers": {
+				"title": "Route handlers",
+				"description": "Server-side API route handlers for scoped token generation, proxy search, and analytics endpoints. Keep API keys secure on the server."
+			},
+			"ssg": {
+				"title": "Static generation",
+				"description": "Pre-render search pages at build time with AACsearch data. Reduce time-to-first-byte while keeping search results current via ISR."
+			},
+			"typescript": {
+				"title": "TypeScript first",
+				"description": "Full TypeScript support with generated types from your AACsearch collection schema. Autocomplete for field names, filter values, and response shapes."
+			},
+			"routing": {
+				"title": "App Router support",
+				"description": "Full Next.js App Router support with server components and client components. Search state syncs with URL search params automatically."
+			},
+			"ssr": {
+				"title": "Server-side rendering",
+				"description": "Render initial search results server-side for SEO and faster page loads. Pages Route and App Router both supported."
 			}
 		}
 	},
@@ -476,6 +660,26 @@
 			"analytics": {
 				"title": "Event tracking",
 				"description": "The SDK includes a trackEvent call for result clicks, filter usage, and zero-result reporting. Feeds your AACsearch dashboard."
+			},
+			"customUI": {
+				"title": "Custom UI components",
+				"description": "Build fully custom search UIs with React components. AACsearch SDK gives you the data layer — design your own search box, facets, and results grid."
+			},
+			"performance": {
+				"title": "Performance optimized",
+				"description": "Tree-shakeable SDK. Import only the hooks you need. Bundle size under 5KB for a basic search implementation."
+			},
+			"stateManagement": {
+				"title": "State management",
+				"description": "Search state is managed internally by the SDK. Syncs with URL params, browser history, and supports multi-search state for federated queries."
+			},
+			"headless": {
+				"title": "Headless mode",
+				"description": "Use AACsearch as a headless search API with React. No UI components included; build your own search experience from scratch."
+			},
+			"perf": {
+				"title": "Performance first",
+				"description": "Memoized results, debounced queries, and incremental rendering. Search stays fast even with thousands of documents and complex facet configurations."
 			}
 		}
 	},

@@ -293,3 +293,82 @@ export async function deleteKnowledgeDocument(id: string) {
 	// Chunks are cascade-deleted via FK constraint
 	return db.knowledgeDocument.delete({ where: { id } });
 }
+
+/**
+ * Sentinel DataSource name used to store per-space RAG configuration.
+ * The DataSource.config JSON field holds the RagConfig values.
+ */
+const RAG_CONFIG_DATASOURCE_NAME = "__rag_config__";
+
+export type StoredRagConfig = {
+	maxOutputTokens: number;
+	maxContextTokens: number;
+	minConfidence: number;
+	retrievalLimit: number;
+	includeGraphEdges: boolean;
+	systemPrompt: string;
+};
+
+/**
+ * Read the stored RAG configuration for a knowledge space.
+ * Returns null if no config has been saved yet.
+ */
+export async function getSpaceRagConfig(knowledgeSpaceId: string): Promise<StoredRagConfig | null> {
+	const ds = await db.dataSource.findFirst({
+		where: {
+			knowledgeSpaceId,
+			name: RAG_CONFIG_DATASOURCE_NAME,
+		},
+	});
+	if (!ds || !ds.config) return null;
+	const config = ds.config as Record<string, unknown>;
+	return {
+		maxOutputTokens: (config.maxOutputTokens as number) ?? 1024,
+		maxContextTokens: (config.maxContextTokens as number) ?? 8000,
+		minConfidence: (config.minConfidence as number) ?? 0.35,
+		retrievalLimit: (config.retrievalLimit as number) ?? 8,
+		includeGraphEdges: (config.includeGraphEdges as boolean) ?? true,
+		systemPrompt: (config.systemPrompt as string) ?? "",
+	};
+}
+
+/**
+ * Save or update the RAG configuration for a knowledge space.
+ * Uses a DetaSource entry as storage proxy (DB frozen — no schema change possible).
+ */
+export async function upsertSpaceRagConfig(
+	knowledgeSpaceId: string,
+	config: StoredRagConfig,
+): Promise<void> {
+	const existing = await db.dataSource.findFirst({
+		where: {
+			knowledgeSpaceId,
+			name: RAG_CONFIG_DATASOURCE_NAME,
+		},
+	});
+
+	const configJson: Prisma.InputJsonValue = {
+		maxOutputTokens: config.maxOutputTokens,
+		maxContextTokens: config.maxContextTokens,
+		minConfidence: config.minConfidence,
+		retrievalLimit: config.retrievalLimit,
+		includeGraphEdges: config.includeGraphEdges,
+		systemPrompt: config.systemPrompt,
+	};
+
+	if (existing) {
+		await db.dataSource.update({
+			where: { id: existing.id },
+			data: { config: configJson },
+		});
+	} else {
+		await db.dataSource.create({
+			data: {
+				knowledgeSpaceId,
+				sourceType: "FILE_MD",
+				name: RAG_CONFIG_DATASOURCE_NAME,
+				config: configJson,
+			},
+		});
+	}
+}

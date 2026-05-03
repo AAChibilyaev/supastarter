@@ -960,6 +960,22 @@
 			"searchUnit": {
 				"description": "Unité de facturation AACsearch. Une unité de recherche correspond à une requête de recherche ou un document indexé. Utilisée pour calculer l'allocation de votre plan mensuel.",
 				"title": "Unité de recherche"
+			},
+			"facets": {
+				"title": "Facettes",
+				"description": "Filtres qui permettent aux utilisateurs d'affiner les résultats de recherche par catégories, fourchettes de prix, notes et autres attributs."
+			},
+			"relevanceTuning": {
+				"title": "Réglage de la pertinence",
+				"description": "Processus d'ajustement du classement pour afficher les résultats les plus pertinents en premier. AACsearch prend en charge les poids de champ, les règles de boost et les formules de score personnalisées."
+			},
+			"synonyms": {
+				"title": "Synonymes",
+				"description": "Mots ou expressions traités comme équivalents lors de la recherche. AACsearch prend en charge les règles de synonymes unidirectionnelles, multidirectionnelles et multi-mots."
+			},
+			"typoTolerance": {
+				"title": "Tolérance aux fautes",
+				"description": "Capacité à renvoyer des résultats corrects même lorsque la requête contient des fautes d'orthographe. AACsearch utilise une distance de Levenshtein configurable et une correspondance phonétique."
 			}
 		}
 	},
@@ -1006,6 +1022,26 @@
 			"unsubscribe": {
 				"description": "Chaque e-mail contient un lien de désinscription en un clic. Aucun dark pattern, aucune boîte de dialogue de confirmation.",
 				"title": "Désabonnement en un clic"
+			},
+			"benchmarks": {
+				"title": "Références de recherche",
+				"description": "Références sectorielles sur la latence de recherche, les taux de zéro résultat et le CTR. Comparez les performances de votre recherche avec celles de vos pairs."
+			},
+			"industry": {
+				"title": "Informations sectorielles",
+				"description": "Tendances, bonnes pratiques et recherche en matière de découverte et de recherche. Sélectionné pour les équipes produit, ingénierie et croissance."
+			},
+			"productUpdates": {
+				"title": "Mises à jour produit",
+				"description": "Nouvelles fonctionnalités, améliorations de performance et changements API livrés dans votre boîte de réception mensuellement."
+			},
+			"searchTips": {
+				"title": "Conseils d'optimisation",
+				"description": "Conseils pratiques pour améliorer la pertinence de la recherche, réduire les taux de zéro résultat et optimiser vos index."
+			},
+			"showcase": {
+				"title": "Témoignages clients",
+				"description": "Découvrez comment d'autres équipes utilisent AACsearch pour la recherche dans le commerce électronique, les SaaS, les médias et les applications d'entreprise."
 			}
 		}
 	},
@@ -1044,6 +1080,14 @@
 			"pressReleases": {
 				"description": "Annonces officielles pour les lancements de produits, levées de fonds et partenariats majeurs — formatées et prêtes à être republiées.",
 				"title": "Communiqués de presse"
+			},
+			"founders": {
+				"title": "Histoires de fondateurs",
+				"description": "Interviews et articles avec les fondateurs d'AACsearch sur la mission de l'entreprise, la vision du produit et la perspective du secteur."
+			},
+			"kit": {
+				"title": "Kit de presse",
+				"description": "Téléchargez les logos, les éléments de marque, les captures d'écran et les fiches techniques du produit pour la couverture médiatique."
 			}
 		}
 	},
@@ -1078,6 +1122,10 @@
 			"starter": {
 				"description": "250 000 unités de recherche par mois, 5 index, support par e-mail. Idéal pour les petits produits SaaS et les outils de développement en croissance.",
 				"title": "Starter"
+			},
+			"overage": {
+				"title": "Tarification du dépassement",
+				"description": "Dépassez la limite de votre plan et ne payez que ce que vous utilisez. Le dépassement est facturé à 0,50 $ par 1 000 unités de recherche."
 			}
 		}
 	},
@@ -1116,6 +1164,14 @@
 			"tutorials": {
 				"description": "Guides pas à pas pour Shopify, WordPress, Next.js et plus encore. De zéro à la production en moins d'une après-midi.",
 				"title": "Tutoriels"
+			},
+			"apiRef": {
+				"title": "Référence API",
+				"description": "Spécification OpenAPI 3.1 complète pour tous les endpoints AACsearch. Parcourez les endpoints, les schémas de requête et les exemples de réponse."
+			},
+			"sdks": {
+				"title": "SDKs client",
+				"description": "SDKs TypeScript/JavaScript, Python, PHP et Go pour l'API AACsearch. Typés, bien documentés et publiés sur les registres de paquets."
 			}
 		}
 	},
@@ -1154,6 +1210,10 @@
 			"subscribe": {
 				"description": "Recevez des notifications par e-mail ou webhook lors des changements de statut d'incident. Alimenté par notre API de statut public.",
 				"title": "S'abonner aux alertes"
+			},
+			"maintenance": {
+				"title": "Maintenance programmée",
+				"description": "Les fenêtres de maintenance planifiée sont annoncées au moins 24 heures à l'avance. Abonnez-vous aux notifications de la page de statut."
 			}
 		}
 	},
@@ -1196,6 +1256,14 @@
 			"slack": {
 				"description": "Les clients Enterprise obtiennent un canal Slack Connect partagé avec l'équipe d'ingénierie et de support AACsearch.",
 				"title": "Canal Slack dédié"
+			},
+			"onboarding": {
+				"title": "Assistance à l'intégration",
+				"description": "Appel d'intégration gratuit pour les plans Pro et Enterprise. Notre équipe vous aide à configurer votre index, le widget et à intégrer le SDK."
+			},
+			"status": {
+				"title": "Statut du système",
+				"description": "Tableau de bord en temps réel montrant la disponibilité, la latence et l'historique des incidents sur tous les services AACsearch."
 			}
 		}
 	},
@@ -1242,6 +1310,14 @@
 			"soc2": {
 				"description": "AACsearch est certifié SOC 2 Type II. Le rapport d'audit est disponible sous NDA pour les clients du plan Enterprise.",
 				"title": "SOC 2 Type II"
+			},
+			"accessControl": {
+				"title": "Contrôle d'accès",
+				"description": "Contrôle d'accès basé sur les rôles (RBAC) avec les rôles propriétaire, administrateur, membre et visiteur. Clés API avec permissions granulaires par index."
+			},
+			"pentest": {
+				"title": "Tests d'intrusion",
+				"description": "Tests d'intrusion réguliers par des sociétés de sécurité certifiées. Rapports disponibles pour les clients entreprise sous NDA."
 			}
 		}
 	},

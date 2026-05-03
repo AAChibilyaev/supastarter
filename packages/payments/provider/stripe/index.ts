@@ -616,49 +616,77 @@ export const webhookHandler: WebhookHandler = async (req) => {
 					purchaseId: purchase.id,
 				});
 
-				// Send invoice paid email with PDF link
+				// Send invoice paid notification + email with dedicated template
 				const recipients = await getInvoiceRecipients(purchase);
 				const invoiceData = invoice as unknown as Record<string, unknown>;
 				const invoicePdf = invoiceData.invoice_pdf as string | null;
 				const invoiceUrl = invoiceData.hosted_invoice_url as string | null;
 
-				await Promise.all(
-					recipients.map((userId) =>
+				// Get org name for the email context
+				const purchaseWithOrg = await db.purchase.findUnique({
+					where: { id: purchase.id },
+					include: { organization: true },
+				});
+				const orgName = purchaseWithOrg?.organization?.name ?? "AACsearch";
+
+				// Get plan name from the plan config
+				let planName = purchase.priceId;
+				try {
+					const { getPlanIdByProviderPriceId } = await import("../../lib/provider-price-ids");
+					const planId = getPlanIdByProviderPriceId(purchase.priceId);
+					if (planId) {
+						planName = String(planId);
+					}
+				} catch {
+					// fallback to priceId
+				}
+
+				const amount = (invoice.amount_paid / 100).toFixed(2);
+				const currency = (invoice.currency ?? "USD").toUpperCase();
+				const date = new Date(invoice.created * 1000).toLocaleDateString("en-US", {
+					year: "numeric",
+					month: "short",
+					day: "numeric",
+				});
+				const manageBillingUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://app.aacsearch.app"}/settings/billing`;
+
+				await Promise.all([
+					...recipients.map((userId) =>
 						createNotification({
 							userId,
 							type: "WELCOME",
 							data: {
 								headline: "Invoice paid",
-								message: `Your invoice of ${(invoice.amount_paid / 100).toFixed(2)} ${(invoice.currency ?? "USD").toUpperCase()} has been paid.`,
+								message: `Your invoice of ${amount} ${currency} has been paid.`,
 							},
 							link: invoiceUrl,
 						}).catch((err: unknown) =>
 							logger.error("invoice.paid: notification failed", { userId, err }),
 						),
 					),
-				);
-
-				// Also send email
-				if (invoicePdf) {
-					for (const userId of recipients) {
+					// Send dedicated invoice paid email with proper template
+					...recipients.map(async (userId) => {
 						const user = await getRecipientUser(userId);
 						if (user?.email) {
-							const amount = (invoice.amount_paid / 100).toFixed(2);
-							const currency = (invoice.currency ?? "USD").toUpperCase();
 							await sendEmail({
 								to: user.email,
-								templateId: "notification",
+								locale: (user.locale as "en" | "de" | "es" | "fr" | "ru") ?? "en",
+								templateId: "invoicePaid",
 								context: {
-									title: `Invoice paid — ${currency} ${amount}`,
-									message: `Your invoice has been paid. View the invoice at ${invoiceUrl ?? invoicePdf}`,
-									link: invoiceUrl ?? invoicePdf,
+									orgName,
+									planName,
+									amount: `${currency} ${amount}`,
+									currency,
+									date,
+									invoiceUrl: invoiceUrl ?? invoicePdf ?? manageBillingUrl,
+									manageBillingUrl,
 								},
 							}).catch((err: unknown) =>
 								logger.error("invoice.paid: email send failed", { userId, err }),
 							);
 						}
-					}
-				}
+					}),
+				]);
 
 				break;
 			}

@@ -288,6 +288,18 @@
 			"synonyms": {
 				"description": "Gérez « canapé / sofa », « baskets / sneakers » et des centaines de paires de synonymes retail. Un import CSV, effet instantané.",
 				"title": "Synonymes retail"
+			},
+			"facets": {
+				"title": "Facettes produit",
+				"description": "Facettes multi-sélection pour taille, couleur, marque, prix, note et attributs personnalisés. Compteurs de facettes mis à jour en temps réel."
+			},
+			"instantSearch": {
+				"title": "Recherche instantanée",
+				"description": "Recherche en cours de frappe avec tolérance aux fautes. Résultats dès la première touche avec requêtes debounced et cache côté client."
+			},
+			"multiCurrency": {
+				"title": "Recherche multidevise",
+				"description": "Affichez les prix dans la devise locale de l'acheteur. AACsearch gère l'indexation multidevise avec des fourchettes de prix facettées par devise."
 			}
 		}
 	},
@@ -338,6 +350,30 @@
 			"tagging": {
 				"description": "Filtrez par sujet, format, date, auteur ou type de contenu. Les facettes imbriquées supportent des taxonomies éditoriales complexes.",
 				"title": "Facettes de tag et catégorie"
+			},
+			"articles": {
+				"title": "Recherche d'articles",
+				"description": "Recherchez dans des milliers d'articles par titre, auteur, catégorie, date de publication et mot-clé. Tolérant aux fautes et avec facettes."
+			},
+			"multiformat": {
+				"title": "Recherche multi-format",
+				"description": "Indexez articles, vidéos, podcasts et galeries d'images. Recherchez dans tous les formats à partir d'une seule boîte de recherche."
+			},
+			"recommendations": {
+				"title": "Recommandations de contenu",
+				"description": "Affichez des articles et contenus connexes par recherche vectorielle. Augmentez les pages vues avec des recommandations basées sur l'IA."
+			},
+			"subscription": {
+				"title": "Recherche par abonnement",
+				"description": "Utilisateurs gratuits voient un aperçu; abonnés accèdent au contenu complet. Les tokens limités appliquent les politiques d'accès par requête."
+			},
+			"trending": {
+				"title": "Contenu tendance",
+				"description": "Affichez les articles tendance basés sur l'actualité et la popularité. Le classement par décroissance temporelle garde le contenu obsolète hors des premiers résultats."
+			},
+			"video": {
+				"title": "Recherche vidéo",
+				"description": "Recherchez dans les titres, descriptions, transcriptions et tags vidéo. Facettes par catégorie, durée, date de publication et type de contenu."
 			}
 		}
 	},
@@ -388,6 +424,18 @@
 			"tenantIsolation": {
 				"description": "Chaque appel API porte un token de portée org. Les lectures inter-tenants sont rejetées au niveau du protocole — aucune passerelle au niveau application requise.",
 				"title": "Isolation stricte par tenant"
+			},
+			"auditLogs": {
+				"title": "Recherche de journaux d'audit",
+				"description": "Recherchez des millions d'entrées de journal par utilisateur, action, ressource et horodatage. Enquêtez sur les incidents de conformité en quelques secondes."
+			},
+			"regions": {
+				"title": "Recherche multirégion",
+				"description": "Déployez AACsearch dans plusieurs régions pour la conformité de résidence des données. Chaque région opère indépendamment."
+			},
+			"transactions": {
+				"title": "Recherche de transactions",
+				"description": "Recherchez l'historique des transactions par montant, devise, commerçant, plage de dates et statut. Latence inférieure à 50 ms même avec des millions de transactions."
 			}
 		}
 	},
@@ -434,6 +482,22 @@
 			"synonyms": {
 				"description": "Mappez les termes spécifiques à la discipline : « ML / apprentissage automatique », « JS / JavaScript ». Importez depuis CSV ou gérez dans le tableau de bord.",
 				"title": "Synonymes académiques"
+			},
+			"catalog": {
+				"title": "Recherche de catalogue de cours",
+				"description": "Aidez les étudiants à trouver des cours dans tous les départements, niveaux et formats. Filtrez par matière, instructeur, horaire et type de crédit."
+			},
+			"knowledge": {
+				"title": "Recherche de base de connaissances",
+				"description": "Indexez les articles de recherche, thèses et publications académiques. Recherche plein texte et sémantique dans le référentiel de connaissances."
+			},
+			"multilingual": {
+				"title": "Éducation multilingue",
+				"description": "Support de recherche en plusieurs langues pour les universités internationales. Chaque langue indexée indépendamment avec racinisation linguistique."
+			},
+			"scorm": {
+				"title": "Recherche de contenu SCORM",
+				"description": "Indexez les objets d'apprentissage SCORM et les modules e-learning. Recherchez par titres de cours, descriptions, objectifs et métadonnées."
 			}
 		}
 	},
@@ -484,6 +548,14 @@
 			"tenantIsolation": {
 				"description": "Les tokens de recherche sont de portée org et signés HMAC. Patients, praticiens et administrateurs ont chacun un niveau d'accès différent au niveau du token.",
 				"title": "Isolation des données patients"
+			},
+			"medicalCoding": {
+				"title": "Recherche de codes médicaux",
+				"description": "Recherchez les codes ICD-10, CPT et SNOMED avec tolérance aux fautes et recherche sémantique. Trouvez le bon code plus rapidement."
+			},
+			"patient": {
+				"title": "Recherche de portail patient",
+				"description": "Alimentez la recherche du portail patient pour les rendez-vous, médicaments, résultats de tests et annuaires de prestataires."
 			}
 		}
 	},
@@ -534,6 +606,22 @@
 			"realTimeSync": {
 				"description": "Les mises à jour d'index déclenchées par les événements du jeu — chutes d'objets, changements de rang, annonces sur le marketplace — arrivent en moins d'une seconde.",
 				"title": "Synchronisation d'événements en temps réel"
+			},
+			"highConcurrency": {
+				"title": "Haute concurrence",
+				"description": "Gérez des milliers de requêtes de recherche simultanées pendant les heures de pointe. AACsearch maintient une latence inférieure à 50 ms sous charge."
+			},
+			"items": {
+				"title": "Recherche d'objets et d'inventaire",
+				"description": "Recherchez dans les inventaires de joueurs, catalogues d'objets et marchés. Filtrez par type, rareté, statistiques, niveau requis et prix."
+			},
+			"players": {
+				"title": "Recherche de joueurs",
+				"description": "Recherchez des joueurs par nom d'utilisateur, guilde, niveau, rang, score de succès et région. Alimentez les fonctions sociales et les outils d'administration."
+			},
+			"widget": {
+				"title": "Widget de recherche dans le jeu",
+				"description": "Intégrez le widget AACsearch dans les UI de jeu. Recherche d'objets, guildes, joueurs et classements avec style thématique."
 			}
 		}
 	}

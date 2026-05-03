@@ -115,13 +115,13 @@ export function AutoRechargeSettings() {
 					<CardDescription>{t("autoRecharge.statusActive")}</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-2">
-					<div className="flex justify-between text-sm">
+					<div className="text-sm flex justify-between">
 						<span className="text-muted-foreground">
 							{t("autoRecharge.thresholdLabel")}
 						</span>
 						<span className="font-medium">{thresholdRub} RUB</span>
 					</div>
-					<div className="flex justify-between text-sm">
+					<div className="text-sm flex justify-between">
 						<span className="text-muted-foreground">
 							{t("autoRecharge.topupLabel")}
 						</span>

@@ -73,8 +73,8 @@ if ($widgetPlacement === 'inline') {
 
             results.innerHTML = 'Searching...';
 
-            // Use fetch to proxy through Connector API or local endpoint
-            fetch('/api/aac-search/search', {
+            // Use fetch to proxy through the server-side AJAX handler
+            fetch('/bitrix/admin/aac_search_ajax.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

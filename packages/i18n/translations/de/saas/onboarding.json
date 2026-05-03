@@ -14,7 +14,16 @@
 			"planSelected": "Dein Plan wurde erfolgreich ausgewahlt.",
 			"skip": "Vorerst uberspringen"
 		},
+		"skipConfirmTitle": "Diesen Schritt überspringen?",
+		"skipConfirmDescription": "Du kannst später vom Dashboard aus zu diesem Schritt zurückkehren.",
+		"skipConfirmAction": "Ja, überspringen",
+		"skipConfirmCancel": "Bei diesem Schritt bleiben",
 		"step": "Schritt {step} / {total}",
+		"stepLabel_one": "Konto",
+		"stepLabel_two": "Index",
+		"stepLabel_three": "Dokumente",
+		"stepLabel_four": "Widget",
+		"stepLabel_five": "API-Schlüssel",
 		"title": "Richte dein Konto ein",
 		"createIndex": {
 			"title": "Erstellen Sie Ihren ersten Suchindex",

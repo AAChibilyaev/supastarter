@@ -1,0 +1,14 @@
+# Grafana — Dashboard provisioning (auto-adds AACsearch dashboard)
+apiVersion: 1
+
+providers:
+    - name: AACsearch
+      orgId: 1
+      folder: AACsearch
+      type: file
+      disableDeletion: true
+      updateIntervalSeconds: 30
+      allowUiUpdates: false
+      options:
+          path: /var/lib/grafana/dashboards
+          foldersFromFilesStructure: false

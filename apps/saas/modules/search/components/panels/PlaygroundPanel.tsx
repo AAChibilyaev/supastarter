@@ -128,7 +128,7 @@ function HitCard({
 
 	return (
 		<Card className="p-4 space-y-2">
-			<div className="gap-2 flex items-center text-xs font-mono text-foreground/40">
+			<div className="gap-2 text-xs font-mono flex items-center text-foreground/40">
 				<span>#{index + 1}</span>
 				{sourceSlug && (
 					<Badge status="info" className="text-[10px]">
@@ -335,7 +335,7 @@ function FederatedSearchPanel({
 						const idx = indexes?.find((i) => i.slug === entry.slug);
 						return (
 							<Card key={entry.slug} className="gap-3 p-3 flex items-center">
-								<span className="flex-1 text-sm font-medium truncate">
+								<span className="text-sm font-medium flex-1 truncate">
 									{idx?.displayName ?? entry.slug}
 								</span>
 								<div className="gap-1.5 flex items-center">

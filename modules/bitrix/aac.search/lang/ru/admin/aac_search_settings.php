@@ -1,0 +1,29 @@
+<?php
+
+$MESS['AAC_SEARCH_SAVED'] = 'Настройки сохранены.';
+$MESS['AAC_SEARCH_TAB_CONNECTION'] = 'Подключение';
+$MESS['AAC_SEARCH_TAB_CATALOG'] = 'Каталог';
+$MESS['AAC_SEARCH_TAB_SYNC'] = 'Синхронизация';
+$MESS['AAC_SEARCH_TAB_WIDGET'] = 'Виджет';
+$MESS['AAC_SEARCH_API_URL'] = 'URL API';
+$MESS['AAC_SEARCH_PROJECT_ID'] = 'ID проекта';
+$MESS['AAC_SEARCH_CONNECTOR_TOKEN'] = 'Токен коннектора';
+$MESS['AAC_SEARCH_REQUEST_TIMEOUT'] = 'Таймаут запроса (сек)';
+$MESS['AAC_SEARCH_IBLOCK_IDS'] = 'Инфоблоки (каталоги)';
+$MESS['AAC_SEARCH_PRICE_TYPE'] = 'Тип цены';
+$MESS['AAC_SEARCH_BASE_CURRENCY'] = 'Базовая валюта';
+$MESS['AAC_SEARCH_SYNC_INTERVAL'] = 'Интервал синхронизации (сек)';
+$MESS['AAC_SEARCH_SYNC_MODE'] = 'Режим синхронизации';
+$MESS['AAC_SEARCH_SYNC_MODE_FULL'] = 'Полная синхронизация';
+$MESS['AAC_SEARCH_SYNC_MODE_DELTA'] = 'Только дельта';
+$MESS['AAC_SEARCH_EVENTS_ENABLED'] = 'События в реальном времени (дельта-синхр.)';
+$MESS['AAC_SEARCH_WIDGET_PLACEMENT'] = 'Размещение виджета';
+$MESS['AAC_SEARCH_WIDGET_THEME'] = 'Тема виджета';
+$MESS['AAC_SEARCH_WIDGET_AUTO'] = 'Автоматически (на всех страницах)';
+$MESS['AAC_SEARCH_WIDGET_MANUAL'] = 'Вручную (через API)';
+$MESS['AAC_SEARCH_WIDGET_INLINE'] = 'Компонент на странице';
+$MESS['AAC_SEARCH_WIDGET_THEME_LIGHT'] = 'Светлая';
+$MESS['AAC_SEARCH_WIDGET_THEME_DARK'] = 'Тёмная';
+$MESS['AAC_SEARCH_WIDGET_LOCALE'] = 'Язык виджета';
+$MESS['AAC_SEARCH_WIDGET_CODE_SAMPLE'] = 'Вызов компонента';
+$MESS['AAC_SEARCH_SAVE'] = 'Сохранить настройки';

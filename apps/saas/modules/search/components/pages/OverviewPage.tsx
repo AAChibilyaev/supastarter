@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { EmptyState } from "@search/components/cards/EmptyState";
+import { MilestonesCard } from "@search/components/cards/MilestonesCard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { StatsTileChart } from "@shared/components/StatsTileChart";
@@ -271,6 +272,9 @@ export function OverviewPage() {
 			</div>
 
 			<TrialBanner organizationId={orgId ?? ""} orgSlug={slug} />
+
+			{/* Activation milestones card */}
+			<MilestonesCard />
 
 			{/* Quota warning banner */}
 			{quotaPercent >= softCapThreshold && (

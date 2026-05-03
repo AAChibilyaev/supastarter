@@ -14,7 +14,16 @@
 			"planSelected": "Tu plan ha sido seleccionado correctamente.",
 			"skip": "Saltar por ahora"
 		},
+		"skipConfirmTitle": "¿Saltar este paso?",
+		"skipConfirmDescription": "Puedes volver a este paso más tarde desde el panel.",
+		"skipConfirmAction": "Sí, saltar",
+		"skipConfirmCancel": "Quedarse en este paso",
 		"step": "Paso {step} / {total}",
+		"stepLabel_one": "Cuenta",
+		"stepLabel_two": "Índice",
+		"stepLabel_three": "Documentos",
+		"stepLabel_four": "Widget",
+		"stepLabel_five": "Clave API",
 		"title": "Configura tu cuenta",
 		"createIndex": {
 			"title": "Crea tu primer índice de búsqueda",

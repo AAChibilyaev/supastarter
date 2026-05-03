@@ -74,7 +74,7 @@ export function AppSidebar() {
 	const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
 
 	const basePath = activeOrganization ? `/${activeOrganization.slug}` : "";
-	const startHref = basePath || "/";
+	const showStartNav = !user?.onboardingComplete;
 
 	const menuItems: NavMenuItem[] = useMemo(() => {
 		const accountSubItems: NavSubItem[] = [
@@ -384,12 +384,16 @@ export function AppSidebar() {
 							isActive:
 								pathname === "/my-search" || pathname.startsWith("/my-search/"),
 						},
-						{
-							label: t("app.menu.start"),
-							href: startHref,
-							icon: HomeIcon,
-							isActive: pathname === "/" || pathname === basePath,
-						},
+						...(showStartNav
+							? [
+									{
+										label: t("app.menu.start"),
+										href: `${basePath}/start`,
+										icon: HomeIcon,
+										isActive: pathname.startsWith(`${basePath}/start`),
+									},
+								]
+							: []),
 					]),
 			...(organizationSubItems
 				? [
@@ -420,7 +424,7 @@ export function AppSidebar() {
 					]
 				: []),
 		];
-	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, startHref, t, user?.role]);
+	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, showStartNav, t, user?.role]);
 
 	return (
 		<Sidebar collapsible="icon" variant="sidebar">

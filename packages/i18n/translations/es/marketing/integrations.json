@@ -254,6 +254,18 @@
 			"widget": {
 				"description": "Usa el SDK del navegador de AACsearch con cualquier frontend impulsado por Contentful. Compatible con hooks de React, composables de Vue y JS vanilla.",
 				"title": "SDK de JavaScript"
+			},
+			"localization": {
+				"title": "Soporte de localización",
+				"description": "Sincroniza contenido en todas las configuraciones regionales de Contentful. Cada idioma se asigna a una colección AACsearch independiente para búsqueda multilingüe."
+			},
+			"mapping": {
+				"title": "Mapeo de campos",
+				"description": "Asigna campos de contenido de Contentful a campos de índice AACsearch. Transforma texto enriquecido a texto plano y extrae referencias anidadas."
+			},
+			"richText": {
+				"title": "Manejo de texto enriquecido",
+				"description": "Convierte automáticamente campos de texto enriquecido de Contentful a texto plano para indexación de búsqueda. Los recursos y entradas incrustados se extraen y procesan."
 			}
 		}
 	},
@@ -278,8 +290,8 @@
 				"description": "Sincroniza automáticamente la consulta de búsqueda y los filtros con la URL para compartir y retroceder."
 			},
 			"typescript": {
-				"title": "TypeScript de primera clase",
-				"description": "Tipos de respuesta completos y autocompletado en tu editor. Sin suposiciones."
+				"title": "TypeScript primero",
+				"description": "Soporte completo de TypeScript con tipos generados a partir del esquema de tu colección AACsearch. Autocompletado para nombres de campo, valores de filtro y formas de respuesta."
 			},
 			"analytics": {
 				"description": "Rastrea eventos de búsqueda desde Vercel Edge Network. Sin cold starts, sin riesgo de timeout para llamadas de análisis ligeras.",
@@ -300,6 +312,22 @@
 			"widget": {
 				"description": "Añade el widget de AACsearch a tu layout de Next.js con una etiqueta script, o usa el SDK de React para una interfaz de búsqueda totalmente personalizable.",
 				"title": "Widget del lado del cliente"
+			},
+			"edgeRuntime": {
+				"title": "Soporte Edge Runtime",
+				"description": "Usa el SDK de AACsearch con Next.js Edge Runtime para búsqueda de sub-50 ms en el borde. Funciona con middleware y rutas API edge."
+			},
+			"hooks": {
+				"title": "Hooks de React",
+				"description": "Hooks useSearch, useFacets y useAutocomplete para UI de búsqueda declarativa en Next.js App Router. Con seguridad de tipos y compatible con servidor."
+			},
+			"routeHandlers": {
+				"title": "Manejadores de ruta",
+				"description": "Manejadores de ruta API del lado del servidor para generación de tokens con alcance, búsqueda proxy y endpoints de análisis. Mantén las claves API seguras en el servidor."
+			},
+			"ssg": {
+				"title": "Generación estática",
+				"description": "Pre-renderiza páginas de búsqueda en tiempo de compilación con datos de AACsearch. Reduce el tiempo hasta el primer byte manteniendo resultados actualizados mediante ISR."
 			}
 		}
 	},
@@ -342,6 +370,18 @@
 			"typescript": {
 				"description": "Los tipos del SDK se generan a partir de la especificación OpenAPI de AACsearch. Autocompletado para cada campo en el esquema de tu colección.",
 				"title": "Soporte completo de TypeScript"
+			},
+			"customUI": {
+				"title": "Componentes UI personalizados",
+				"description": "Crea UIs de búsqueda totalmente personalizadas con componentes React. El SDK de AACsearch proporciona la capa de datos: diseña tu propia caja de búsqueda, facetas y cuadrícula de resultados."
+			},
+			"performance": {
+				"title": "Rendimiento optimizado",
+				"description": "SDK optimizable. Importa solo los hooks que necesitas. Tamaño de paquete inferior a 5KB para una implementación básica de búsqueda."
+			},
+			"stateManagement": {
+				"title": "Gestión de estado",
+				"description": "El estado de búsqueda se gestiona internamente por el SDK. Se sincroniza con parámetros de URL, historial del navegador y admite estado de búsqueda múltiple."
 			}
 		}
 	},
@@ -388,6 +428,18 @@
 			"widget": {
 				"description": "El SDK del navegador de AACsearch funciona con cualquier frontend impulsado por Sanity. Usa los hooks de React o el cliente de JS vanilla.",
 				"title": "Integración frontend"
+			},
+			"multiDataset": {
+				"title": "Sincronización multi-conjunto",
+				"description": "Sincroniza múltiples conjuntos de datos de Sanity en colecciones AACsearch separadas. Cada conjunto mantiene su propia configuración de búsqueda y esquema."
+			},
+			"realtime": {
+				"title": "Sincronización en tiempo real",
+				"description": "Escucha mutaciones GROQ de Sanity y actualiza AACsearch en tiempo real. Los cambios se propagan en segundos tras publicar en Sanity Studio."
+			},
+			"types": {
+				"title": "Soporte de consultas GROQ",
+				"description": "Usa consultas GROQ para definir exactamente qué contenido se sincroniza con AACsearch. Filtra, proyecta y une documentos usando sintaxis de consulta de Sanity."
 			}
 		}
 	},
@@ -426,6 +478,22 @@
 			"variantSync": {
 				"description": "Cada variante de producto se indexa como un documento separado. Los clientes pueden buscar por talla, color o SKU directamente.",
 				"title": "Indexación de variantes"
+			},
+			"facets": {
+				"title": "Fasetas de producto",
+				"description": "Las variantes, opciones y metacampos de productos de Shopify se indexan automáticamente como facetas de búsqueda. Filtra por talla, color, material o atributos personalizados."
+			},
+			"multilingual": {
+				"title": "Soporte multilingüe",
+				"description": "Sincroniza el contenido de productos de Shopify en todos los idiomas de la tienda. AACsearch indexa cada idioma por separado."
+			},
+			"sync": {
+				"title": "Sincronización automatizada",
+				"description": "Sincronización automática de productos mediante webhooks de Shopify. Los eventos de creación, actualización y eliminación se propagan a AACsearch en tiempo real."
+			},
+			"variants": {
+				"title": "Indexación de variantes",
+				"description": "Indexa las variantes de Shopify como documentos buscables separados o como campos anidados. Cada variante mantiene su propio precio, inventario y SKU."
 			}
 		}
 	},
@@ -472,6 +540,18 @@
 			"widget": {
 				"description": "Usa el SDK del navegador de AACsearch para crear búsqueda instantánea para tu frontend impulsado por Strapi: React, Vue o JS vanilla.",
 				"title": "Widget de búsqueda frontend"
+			},
+			"adminPanel": {
+				"title": "Integración con panel de administración",
+				"description": "Gestiona AACsearch directamente desde el panel de administración de Strapi. Visualiza el estado del índice, activa sincronizaciones y supervisa errores."
+			},
+			"api": {
+				"title": "Sincronización REST API",
+				"description": "Sincroniza cualquier tipo de contenido de Strapi a través de la API REST. Define qué tipos de colección incluir o excluir de la indexación."
+			},
+			"localization": {
+				"title": "Soporte i18n",
+				"description": "Sincroniza el contenido localizado de Strapi en colecciones AACsearch separadas por idioma. Cada idioma mantiene configuración de búsqueda independiente."
 			}
 		}
 	},
@@ -522,6 +602,22 @@
 			"widget": {
 				"description": "Widget listo para usar para tu tema de WooCommerce. Muestra resultados de búsqueda instantánea, facetas y añadir al carrito sin salir de la superposición.",
 				"title": "Widget de tienda"
+			},
+			"attributes": {
+				"title": "Atributos de producto",
+				"description": "Indexa los atributos de productos de WooCommerce como facetas de búsqueda. Color, talla, material y atributos personalizados se convierten en filtros seleccionables."
+			},
+			"categories": {
+				"title": "Jerarquía de categorías",
+				"description": "Preserva la estructura del árbol de categorías de WooCommerce en AACsearch. Navega por categorías con facetas jerárquicas que respetan relaciones padre-hijo."
+			},
+			"performance": {
+				"title": "Rendimiento de búsqueda",
+				"description": "AACsearch maneja la búsqueda de WooCommerce a escala. Latencia de consulta inferior a 50 ms incluso en catálogos con más de 500 000 productos y 10 millones de SKU."
+			},
+			"sync": {
+				"title": "Sincronización automatizada",
+				"description": "Sincronización automática mediante hooks de WooCommerce. Los cambios de producto se propagan a AACsearch en tiempo real."
 			}
 		}
 	},
@@ -568,6 +664,22 @@
 			"widget": {
 				"description": "Reemplaza el widget de búsqueda predeterminado con el bloque AACsearch. Resultados instantáneos, filtros de faceta y navegación por teclado.",
 				"title": "Bloque de búsqueda Gutenberg"
+			},
+			"instant": {
+				"title": "Búsqueda instantánea",
+				"description": "Reemplaza la búsqueda predeterminada de WordPress con resultados instantáneos a medida que escribes. Busca en entradas, páginas, tipos de contenido personalizados y campos ACF simultáneamente."
+			},
+			"multilingual": {
+				"title": "Soporte WPML y Polylang",
+				"description": "Compatible con WPML y Polylang para sitios WordPress multilingües. Los resultados de búsqueda respetan automáticamente el contexto de idioma actual."
+			},
+			"postTypes": {
+				"title": "Tipos de contenido personalizados",
+				"description": "Indexa cualquier tipo de contenido personalizado de WordPress. Cada tipo puede tener su propia configuración de búsqueda, pesos de campo y facetas."
+			},
+			"shortcode": {
+				"title": "Shortcode del widget",
+				"description": "Incrusta el widget de AACsearch en cualquier lugar de WordPress usando un shortcode. Personaliza el texto del placeholder, el idioma y los resultados por página."
 			}
 		}
 	},

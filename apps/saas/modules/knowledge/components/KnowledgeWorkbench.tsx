@@ -25,6 +25,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { FileTable } from "./FileTable";
+import { RagConfigPanel } from "./RagConfigPanel";
 
 type OwnerType = "USER" | "ORGANIZATION";
 type SourceType =
@@ -707,6 +708,16 @@ export function KnowledgeWorkbench({
 			{/* File management table — shown when a space is selected */}
 			{selectedSpaceSlug && (
 				<FileTable
+					ownerType={ownerType}
+					ownerId={ownerId}
+					spaceSlug={selectedSpaceSlug}
+					canManage={canManage}
+				/>
+			)}
+
+			{/* RAG configuration panel — shown when a space is selected */}
+			{selectedSpaceSlug && (
+				<RagConfigPanel
 					ownerType={ownerType}
 					ownerId={ownerId}
 					spaceSlug={selectedSpaceSlug}

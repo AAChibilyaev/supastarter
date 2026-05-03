@@ -3,6 +3,7 @@ import type { InputProps } from "ra-core";
 import { useInput, FieldTitle } from "ra-core";
 import * as React from "react";
 
+import { cn } from "../../lib";
 import { Input } from "../input";
 import { FormControl, FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
@@ -178,10 +179,10 @@ export const DateTimeInput = ({
 					readOnly={readOnly}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
-					className={clsx(
+					className={cn(
 						"ra-input",
 						`ra-input-${source}`,
-						"scheme-light dark:scheme-dark relative [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:opacity-100 appearance-none",
+						"[&::-webkit-calendar-picker-indicator]:right-3 relative appearance-none scheme-light dark:scheme-dark [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100",
 						className,
 					)}
 				/>

@@ -31,7 +31,8 @@ export function MySearchDashboard() {
 
 	return (
 		<div>
-			<PageHeader title={t("mySearch.title")} subtitle={t("mySearch.subtitle")}>
+			<div className="mb-6 flex items-start justify-between">
+				<PageHeader title={t("mySearch.title")} subtitle={t("mySearch.subtitle")} />
 				<Dialog open={createOpen} onOpenChange={setCreateOpen}>
 					<DialogTrigger asChild>
 						<Button size="sm">
@@ -44,7 +45,7 @@ export function MySearchDashboard() {
 						<CreateIndexForm onSuccess={() => setCreateOpen(false)} />
 					</DialogContent>
 				</Dialog>
-			</PageHeader>
+			</div>
 
 			{hasIndexes ? (
 				<div className="mt-6 gap-4 sm:grid-cols-2 lg:grid-cols-3 grid">

@@ -148,9 +148,12 @@ export async function chargeAiUsage(input: ChargeAiUsageInput): Promise<ChargeAi
 		};
 	});
 
-	// Check auto-recharge threshold
+	// Check auto-recharge threshold and fire low-balance notification
 	if (result.charged) {
-		const threshold = wallet.includedMonthlyLimitKopecks;
+		const threshold =
+			wallet.autoRechargeEnabled && wallet.autoRechargeThresholdKopecks > BigInt(0)
+				? wallet.autoRechargeThresholdKopecks
+				: wallet.includedMonthlyLimitKopecks;
 		if (threshold > BigInt(0) && result.remainingBalanceKopecks < threshold) {
 			logger.warn(
 				{
@@ -158,9 +161,16 @@ export async function chargeAiUsage(input: ChargeAiUsageInput): Promise<ChargeAi
 					walletId,
 					balanceKopecks: result.remainingBalanceKopecks.toString(),
 					thresholdKopecks: threshold.toString(),
+					autoRechargeEnabled: wallet.autoRechargeEnabled,
 				},
 				"chargeAiUsage: wallet balance below auto-recharge threshold",
 			);
+			// Fire-and-forget: trigger low-balance notification + auto-recharge
+			void import("@repo/billing-wallet").then(({ notifyLowBalance }) => {
+				notifyLowBalance(walletId).catch((err: unknown) =>
+					logger.error("chargeAiUsage: notifyLowBalance failed", err),
+				);
+			});
 		}
 	}
 

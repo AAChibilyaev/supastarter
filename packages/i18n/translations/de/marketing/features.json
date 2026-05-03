@@ -346,6 +346,22 @@
 			"analytics": {
 				"title": "Kuratierungs-Analytik",
 				"description": "Verfolge Impressionen, Klicks und Conversions für kuratierte Ergebnisse."
+			},
+			"pin": {
+				"title": "Ergebnisse anheften",
+				"description": "Bestimmte Dokumente für bestimmte Suchanfragen ganz oben platzieren. Ideal für beworbene Produkte, saisonale Highlights und redaktionelle Auswahlen."
+			},
+			"hide": {
+				"title": "Ergebnisse ausblenden",
+				"description": "Bestimmte Dokumente aus den Suchergebnissen ausschließen, ohne sie aus dem Index zu entfernen. Ideal für nicht vorrätige oder ausgeblendete Artikel."
+			},
+			"rules": {
+				"title": "Abfragebasierte Regeln",
+				"description": "Filter, Boosts oder Sortierungen automatisch anwenden, wenn die Suchanfrage einem Muster entspricht. Eine Regel deckt hunderte Abfragevarianten ab."
+			},
+			"ab": {
+				"title": "A/B-Testing für Kuratierungen",
+				"description": "Verschiedene Kuratierungsstrategien gegeneinander testen. CTR, Konversion und Umsatz messen, um die beste Strategie zu ermitteln."
 			}
 		}
 	},
@@ -380,6 +396,22 @@
 			"mobile": {
 				"title": "Mobile-First-Facetten",
 				"description": "Das Widget rendert Facetten als einklappbare Schublade auf Mobilgeräten."
+			},
+			"dynamic": {
+				"title": "Dynamische Facetten",
+				"description": "Facetten aktualisieren sich in Echtzeit, wenn Filter verfeinert werden, und zeigen stets genaue Zählwerte ohne separaten Aggregationsdurchlauf."
+			},
+			"hierarchical": {
+				"title": "Hierarchische Facetten",
+				"description": "Navigation durch verschachtelte Kategorien wie Kleidung > Herren > Hemden mit vollständiger hierarchischer Drill-Down-Unterstützung."
+			},
+			"multi": {
+				"title": "Mehrfachauswahl-Facetten",
+				"description": "Mehrere Fassettenwerte für kombinierte Filterung auswählen. Benutzer können mehrere Marken, Preisklassen oder Farben gleichzeitig wählen."
+			},
+			"numeric": {
+				"title": "Numerische Bereichsfacetten",
+				"description": "Nach Preis, Bewertung, Datum oder anderen numerischen Werten mit Schiebereglern und Bereichseingaben filtern."
 			}
 		}
 	},
@@ -414,6 +446,22 @@
 			"filters": {
 				"title": "Geo + Attributfilter",
 				"description": "Kombiniere Geo-Filter mit beliebigen anderen Facetten – Preis, Kategorie, Verfügbarkeit – in einer einzigen Abfrage."
+			},
+			"bounds": {
+				"title": "Bounding-Box-Suche",
+				"description": "Ergebnisse innerhalb eines geografischen Rechtecks mit NE- und SW-Koordinaten filtern. Ideal für Kartenansicht-Suche."
+			},
+			"polygon": {
+				"title": "Polygon-Filterung",
+				"description": "Benutzerdefinierte geografische Formen definieren, um Ergebnisse innerhalb von Bezirken, Lieferzonen oder benutzerdefinierten Bereichen zu filtern."
+			},
+			"radius": {
+				"title": "Radius-Suche",
+				"description": "Dokumente innerhalb einer bestimmten Entfernung von einem lat/lon-Punkt suchen. Unverzichtbar für Umkreissuche und standortbezogene Abfragen."
+			},
+			"sort": {
+				"title": "Nach Entfernung sortieren",
+				"description": "Nächste Ergebnisse zuerst anzeigen. Mit Textrelevanzgewichten für gemischtes Ranking kombinieren."
 			}
 		}
 	},
@@ -448,6 +496,18 @@
 			"widget": {
 				"title": "Drop-in-Widget",
 				"description": "Das AACsearch-Widget enthält Sofortsuche-UI out of the box. Ein Script-Tag, null Konfiguration erforderlich."
+			},
+			"highlight": {
+				"title": "Snippet-Hervorhebung",
+				"description": "Übereinstimmende Suchbegriffe direkt in zurückgegebenen Snippets hervorheben, damit Benutzer sofort sehen, warum jedes Ergebnis übereinstimmt."
+			},
+			"prefix": {
+				"title": "Präfix-Suche",
+				"description": "Ergebnisse bereits ab dem ersten eingegebenen Zeichen zurückgeben. Keine Notwendigkeit, das Wort vollständig einzugeben."
+			},
+			"typo": {
+				"title": "Tippfehlertoleranz",
+				"description": "Korrekte Ergebnisse auch bei Rechtschreibfehlern, Teilübereinstimmungen und phonetischen Variationen finden."
 			}
 		},
 		"codeTitle": "Ein Script-Tag",
@@ -496,6 +556,22 @@
 			"scoring": {
 				"description": "Textrelevanz mit numerischen Signalen wie Preis, Aktualität oder Beliebtheit über eine konfigurierbare Scoring-Formel kombinieren.",
 				"title": "Benutzerdefiniertes Scoring"
+			},
+			"boost": {
+				"title": "Numerisches Boosten",
+				"description": "Produkte mit höheren Bewertungen, Verkaufszahlen oder Margen automatisch bevorzugen. Bedingte Boosts für Merchandising-Logik."
+			},
+			"custom": {
+				"title": "Benutzerdefiniertes Scoring",
+				"description": "Eine eigene Relevanzformel definieren, die mehrere Felder und Geschäftssignale in einer einzigen Ranking-Punktzahl kombiniert."
+			},
+			"decay": {
+				"title": "Zeitverfall",
+				"description": "Relevanz älterer Inhalte basierend auf dem Veröffentlichungsdatum allmählich reduzieren. Konfigurierbare Abklingkurve."
+			},
+			"weights": {
+				"title": "Feldgewichte",
+				"description": "Relative Bedeutung von Titel, Beschreibung, Tags und benutzerdefinierten Feldern zuweisen. Titelübereinstimmung wiegt standardmäßig mehr als Beschreibungsübereinstimmung."
 			}
 		}
 	},
@@ -550,6 +626,22 @@
 			"realTime": {
 				"description": "Stoppwörter ohne Re-Indexierung hinzufügen oder entfernen. Änderungen wirken sofort bei der nächsten Anfrage.",
 				"title": "Updates ohne Ausfallzeit"
+			},
+			"builtin": {
+				"title": "Integrierte Sprachlisten",
+				"description": "Vordefinierte Stoppwortlisten für 15+ Sprachen. Jede Sprache mit einer einzigen Konfigurationszeile aktivieren."
+			},
+			"custom": {
+				"title": "Benutzerdefinierte Listen",
+				"description": "Domänenspezifische Rauschwörter hinzufügen. Interne SKUs, technische Codes oder gebräuchliche Abkürzungen, die keinen Suchwert bieten."
+			},
+			"metrics": {
+				"title": "Auswirkungsmetriken",
+				"description": "Überwachen, wie sich Stoppwortkonfigurationen auf Abfrageabdeckung, Null-Ergebnis-Rate und Abfragelatenz auswirken."
+			},
+			"realtime": {
+				"title": "Echtzeit-Anwendung",
+				"description": "Stoppwortlistenänderungen werden sofort übernommen, keine Neuindizierung erforderlich."
 			}
 		}
 	},
@@ -604,6 +696,14 @@
 			"scope": {
 				"description": "Verschiedene Synonymbibliotheken pro Kollektion. Produkt-Index und Docs-Index können unabhängige Synonymregeln haben.",
 				"title": "Kollektionsweiter Umfang"
+			},
+			"import": {
+				"title": "Massenimport",
+				"description": "Synonymwörterbücher per API oder CSV-Upload importieren. Unterstützt tausende Synonympaare."
+			},
+			"realtime": {
+				"title": "Echtzeit-Updates",
+				"description": "Synonyme ohne Neuindizierung des Katalogs hinzufügen oder entfernen. Änderungen gelten innerhalb von Sekunden."
 			}
 		}
 	},
@@ -650,6 +750,22 @@
 			"splitWords": {
 				"description": "'macbook pro' findet 'macbookpro' und umgekehrt. Split-Word-Erkennung erkennt fehlende Leerzeichen und zusammengesetzte Wörter.",
 				"title": "Geteilte Wortkorrektur"
+			},
+			"auto": {
+				"title": "Automatische Korrektur",
+				"description": "Häufige Rechtschreibfehler automatisch erkennen und korrigieren. Keine Konfiguration erforderlich."
+			},
+			"distance": {
+				"title": "Konfigurierbare Bearbeitungsentfernung",
+				"description": "Steuern, wie viele Zeichenänderungen (Levenshtein-Distanz) pro Wort toleriert werden."
+			},
+			"metrics": {
+				"title": "Korrekturmetriken",
+				"description": "Sehen, welche Abfragen am häufigsten korrigiert werden und welche Korrekturen die CTR verbessern."
+			},
+			"phonetic": {
+				"title": "Phonetischer Abgleich",
+				"description": "Ergebnisse finden, auch wenn der Benutzer ein Wort phonetisch falsch schreibt. Funktioniert für Namen und Fremdwörter."
 			}
 		}
 	}

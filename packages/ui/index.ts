@@ -85,7 +85,23 @@ export * from "./components/LandingSaleCta";
 export * from "./components/LandingVideoPlayer";
 export { default as LandingImage } from "./components/LandingImage";
 
-// --- Chat components ---
+// --- New PageUI Landing Components ---
+export * from "./components/LandingDiscount";
+export * from "./components/LandingFaq";
+export * from "./components/LandingFaqCollapsible";
+export * from "./components/LandingMarquee";
+export * from "./components/stats/LandingStatItem";
+export * from "./components/stats/LandingStatsSection";
+export * from "./components/rating/LandingRating";
+export * from "./components/testimonial/LandingTestimonialGrid";
+export * from "./components/bento-grid/LandingBentoGridSection";
+export * from "./components/bento-grid/LandingBentoGridItem";
+export * from "./components/bento-grid/LandingBentoGridIconItem";
+export * from "./components/bento-grid/LandingBentoGridImageItem";
+export * from "./components/bento-grid/LandingBentoGridNumberItem";
+export * from "./components/newsletter/LandingNewsletterInput";
+export * from "./components/newsletter/LandingNewsletterSection";
+
 export * from "./components/chat/chat-bubble";
 export * from "./components/chat/chat-input";
 export * from "./components/chat/chat-message-list";

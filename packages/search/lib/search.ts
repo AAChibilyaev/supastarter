@@ -35,6 +35,19 @@ interface TypesenseSearchParams {
 	vector_query?: string;
 }
 
+export interface FacetCount {
+	field_name: string;
+	counts: Array<{ value: string; count: number }>;
+	stats?: {
+		min?: number;
+		max?: number;
+		avg?: number;
+		sum?: number;
+	} | null;
+}
+
+export type FacetStrategy = "exact" | "intersection";
+
 export interface SearchDocumentsInput {
 	alias: string;
 	tenantId: string;
@@ -54,6 +67,17 @@ export interface SearchDocumentsInput {
 	facetSampleSlope?: number;
 	/** Minimum number of documents before adaptive facet sampling kicks in. */
 	facetSampleThreshold?: number;
+	/** Advanced facet params (Typesense v0.30+) —────────────────────── */
+	/** Maximum number of facet values to return per field. */
+	maxFacetValues?: number;
+	/** Filter facet values by a sub-query (autocomplete within facet values). */
+	facetQuery?: string;
+	/** Search across facet values (typeahead within facet values). */
+	facetSearch?: string;
+	/** Percentage of documents to sample for facet counts (0–100). */
+	facetSamplePercent?: number;
+	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetStrategy?: FacetStrategy;
 	// ── Typo fine-tuning (Typesense v0.30+) ─────────────────────────
 	/** Exhaustive search: scan all matching documents for typo corrections (slower but more accurate). */
 	exhaustiveSearch?: boolean;
@@ -82,7 +106,7 @@ export interface SearchDocumentsResult {
 	found: number;
 	page: number;
 	perPage: number;
-	facetCounts: unknown[];
+	facetCounts: FacetCount[];
 	searchTimeMs: number;
 	/** query_id from Typesense for analytics event association */
 	queryId?: string;
@@ -139,6 +163,22 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 			}),
 			...(input.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: input.facetSampleThreshold,
+			}),
+			// ── Advanced facet params ──
+			...(input.maxFacetValues !== undefined && {
+				max_facet_values: input.maxFacetValues,
+			}),
+			...(input.facetQuery !== undefined && {
+				facet_query: input.facetQuery,
+			}),
+			...(input.facetSearch !== undefined && {
+				facet_search: input.facetSearch,
+			}),
+			...(input.facetSamplePercent !== undefined && {
+				facet_sample_percent: input.facetSamplePercent,
+			}),
+			...(input.facetStrategy !== undefined && {
+				facet_strategy: input.facetStrategy,
 			}),
 			// ── Typo fine-tuning ──
 			...(input.exhaustiveSearch !== undefined && {
@@ -227,6 +267,22 @@ export async function multiSearchDocuments(
 			...(entry.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: entry.facetSampleThreshold,
 			}),
+			// ── Advanced facet params ──
+			...(entry.maxFacetValues !== undefined && {
+				max_facet_values: entry.maxFacetValues,
+			}),
+			...(entry.facetQuery !== undefined && {
+				facet_query: entry.facetQuery,
+			}),
+			...(entry.facetSearch !== undefined && {
+				facet_search: entry.facetSearch,
+			}),
+			...(entry.facetSamplePercent !== undefined && {
+				facet_sample_percent: entry.facetSamplePercent,
+			}),
+			...(entry.facetStrategy !== undefined && {
+				facet_strategy: entry.facetStrategy,
+			}),
 			// ── Typo fine-tuning ──
 			...(entry.exhaustiveSearch !== undefined && {
 				exhaustive_search: entry.exhaustiveSearch,
@@ -273,7 +329,7 @@ export async function multiSearchDocuments(
 		found: (r.found as number) ?? 0,
 		page: (r.page as number) ?? 1,
 		perPage: searches[idx].per_page,
-		facetCounts: (r.facet_counts as unknown[]) ?? [],
+		facetCounts: (r.facet_counts as FacetCount[]) ?? [],
 		searchTimeMs: (r.search_time_ms as number) ?? 0,
 	}));
 }

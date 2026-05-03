@@ -120,5 +120,71 @@ export function createAacSearchClient(config: WidgetConfig) {
 				return { results };
 			});
 		},
+
+		/**
+		 * Get autocomplete suggestions for a search prefix.
+		 * Calls POST /v1/indexes/:slug/suggest
+		 *
+		 * @param q - The search query prefix
+		 * @param options - Optional settings (limit, fuzzy, etc.)
+		 * @returns Suggestions grouped by source (popular, trending, prefix, etc.)
+		 */
+		getSuggestions(
+			q: string,
+			options?: {
+				limit?: number;
+				fuzzy?: boolean;
+				fuzzyDistance?: number;
+				minPrefix?: number;
+				popular?: boolean;
+				trending?: boolean;
+				recent?: boolean;
+				anonymousUserId?: string;
+				sessionId?: string;
+			},
+		): Promise<{
+			suggestions: Array<{
+				text: string;
+				score: number;
+				source: string;
+				type: string;
+				highlights?: Array<{ start: number; end: number }>;
+			}>;
+			groups: Array<{
+				name: string;
+				label: string;
+				suggestions: Array<{
+					text: string;
+					score: number;
+					source: string;
+					type: string;
+					highlights?: Array<{ start: number; end: number }>;
+				}>;
+			}>;
+			total: number;
+		}> {
+			return fetch(
+				`${baseUrl}/api/v1/indexes/${encodeURIComponent(config.indexSlug)}/suggest`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${config.apiKey}`,
+					},
+					body: JSON.stringify({ q, ...options }),
+				},
+			).then(async (response) => {
+				if (!response.ok) {
+					const body = await response.text().catch(() => "");
+					throw new Error(
+						`AACsearch suggest failed: ${response.status} ${response.statusText}${body ? ` — ${body}` : ""}`,
+					);
+				}
+				return response.json();
+			});
+		},
 	};
 }
+
+// Re-export type for consumers
+export type { SearchResponse };

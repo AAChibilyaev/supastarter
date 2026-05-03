@@ -54,6 +54,21 @@ export interface SearchDocumentsInput {
 	facetSampleSlope?: number;
 	/** Minimum number of documents before adaptive facet sampling kicks in. */
 	facetSampleThreshold?: number;
+	// ── Typo fine-tuning (Typesense v0.30+) ─────────────────────────
+	/** Exhaustive search: scan all matching documents for typo corrections (slower but more accurate). */
+	exhaustiveSearch?: boolean;
+	/** Whether synonym values also benefit from typo tolerance. */
+	synonymPrefix?: boolean;
+	/** Number of typos allowed for synonym values. */
+	synonymNumTypos?: number;
+	/** Minimum word length for 1-typo correction. */
+	minLen1Typo?: number;
+	/** Minimum word length for 2-typo correction. */
+	minLen2Typo?: number;
+	/** Token dropping strategy when no results match all tokens. */
+	dropTokensMode?: "right_to_left" | "left_to_right" | `both_sides:${number}`;
+	/** Maximum number of candidate corrections to consider. */
+	maxCandidates?: number;
 }
 
 export interface SearchDocumentsResult {
@@ -119,6 +134,28 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 			...(input.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: input.facetSampleThreshold,
 			}),
+			// ── Typo fine-tuning ──
+			...(input.exhaustiveSearch !== undefined && {
+				exhaustive_search: input.exhaustiveSearch,
+			}),
+			...(input.synonymPrefix !== undefined && {
+				synonym_prefix: input.synonymPrefix,
+			}),
+			...(input.synonymNumTypos !== undefined && {
+				synonym_num_typos: input.synonymNumTypos,
+			}),
+			...(input.minLen1Typo !== undefined && {
+				min_len_1typo: input.minLen1Typo,
+			}),
+			...(input.minLen2Typo !== undefined && {
+				min_len_2typo: input.minLen2Typo,
+			}),
+			...(input.dropTokensMode !== undefined && {
+				drop_tokens_mode: input.dropTokensMode,
+			}),
+			...(input.maxCandidates !== undefined && {
+				max_candidates: input.maxCandidates,
+			}),
 		} as any);
 
 	return {
@@ -171,6 +208,28 @@ export async function multiSearchDocuments(
 			}),
 			...(entry.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: entry.facetSampleThreshold,
+			}),
+			// ── Typo fine-tuning ──
+			...(entry.exhaustiveSearch !== undefined && {
+				exhaustive_search: entry.exhaustiveSearch,
+			}),
+			...(entry.synonymPrefix !== undefined && {
+				synonym_prefix: entry.synonymPrefix,
+			}),
+			...(entry.synonymNumTypos !== undefined && {
+				synonym_num_typos: entry.synonymNumTypos,
+			}),
+			...(entry.minLen1Typo !== undefined && {
+				min_len_1typo: entry.minLen1Typo,
+			}),
+			...(entry.minLen2Typo !== undefined && {
+				min_len_2typo: entry.minLen2Typo,
+			}),
+			...(entry.dropTokensMode !== undefined && {
+				drop_tokens_mode: entry.dropTokensMode,
+			}),
+			...(entry.maxCandidates !== undefined && {
+				max_candidates: entry.maxCandidates,
 			}),
 		};
 	});

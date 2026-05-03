@@ -107,7 +107,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 					<CardContent className="pt-6">
 						<EmptyState
 							variant="inline"
-							icon={<AlertTriangleIcon className="size-8" />}
+							icon={AlertTriangleIcon}
 							title={tr("recommendations.test.errorTitle")}
 							description={tr("recommendations.test.errorDescription")}
 						/>
@@ -134,7 +134,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 							{!profile.hasProfile && (
 								<EmptyState
 									variant="inline"
-									icon={<SearchIcon className="size-8" />}
+									icon={SearchIcon}
 									title={tr("recommendations.test.noProfileTitle")}
 									description={tr("recommendations.test.noProfileDescription")}
 								/>
@@ -323,7 +323,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 					<CardContent className="pt-6">
 						<EmptyState
 							variant="inline"
-							icon={<SearchIcon className="size-8" />}
+							icon={SearchIcon}
 							title={tr("recommendations.test.readyToTest")}
 							description={tr("recommendations.test.readyToTestDescription")}
 						/>

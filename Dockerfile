@@ -51,25 +51,59 @@ COPY tooling/typescript/package.json ./tooling/typescript/
 RUN pnpm install --frozen-lockfile --ignore-scripts && \
     pnpm rebuild
 
-# ─── Stage 3: build ───────────────────────────────────────────────────────────
-FROM installer AS builder
+# ─── Stage 3: source ──────────────────────────────────────────────────────────
+FROM installer AS source
 WORKDIR /app
-COPY . .
+
+# Copy only what saas build + docs postinstall need
+# Apps
+COPY apps/saas      ./apps/saas
+COPY apps/docs      ./apps/docs
+COPY apps/marketing ./apps/marketing
+COPY apps/mail-preview ./apps/mail-preview
+
+# Packages (all since dependencies are cross-cutting)
+COPY packages/aacsearch-mcp ./packages/aacsearch-mcp
+COPY packages/ai           ./packages/ai
+COPY packages/ai-core      ./packages/ai-core
+COPY packages/api          ./packages/api
+COPY packages/auth         ./packages/auth
+COPY packages/billing-wallet ./packages/billing-wallet
+COPY packages/database     ./packages/database
+COPY packages/i18n         ./packages/i18n
+COPY packages/logs         ./packages/logs
+COPY packages/mail         ./packages/mail
+COPY packages/notifications ./packages/notifications
+COPY packages/payments     ./packages/payments
+COPY packages/search       ./packages/search
+COPY packages/search-client ./packages/search-client
+COPY packages/storage      ./packages/storage
+COPY packages/ui           ./packages/ui
+COPY packages/utils        ./packages/utils
+COPY packages/widget       ./packages/widget
+
+# Tooling
+COPY tooling ./tooling
+
+# Tsconfig needed for builds
+COPY tsconfig.json ./
 
 # Generate Prisma client (engineType = "client" — no binary needed)
 RUN pnpm --filter @repo/database generate
 
-# Docs postinstall needs the full source tree (imports packages/api/v1/openapi.ts)
-# Run it now that all files are available
+# Docs postinstall needs full source tree — run it now
 RUN pnpm --filter docs exec node --import tsx scripts/generate-api-ref.ts && \
     pnpm --filter docs exec fumadocs-mdx
+
+# ─── Stage 4: build ─────────────────────────────────────────────────────────────
+FROM source AS builder
 
 # Build saas app in standalone mode so the runner stage is minimal
 ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter saas build
 
-# ─── Stage 4: runner ──────────────────────────────────────────────────────────
+# ─── Stage 5: runner ──────────────────────────────────────────────────────────
 FROM base AS runner
 WORKDIR /app
 

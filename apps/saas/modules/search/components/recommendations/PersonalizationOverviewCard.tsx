@@ -58,7 +58,7 @@ export function PersonalizationOverviewCard({ organizationId }: PersonalizationO
 				<CardContent className="pt-6">
 					<EmptyState
 						variant="inline"
-						icon={<BarChart3Icon className="size-8" />}
+					\ticon={BarChart3Icon}
 						title={tr("recommendations.overview.noDataTitle")}
 						description={tr("recommendations.overview.noDataDescription")}
 					/>

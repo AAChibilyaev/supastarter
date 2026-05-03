@@ -134,7 +134,7 @@ export function RecommendationsPersonalizedAnalytics({
 					{!isLoadingProfile && !hasProfile && (
 						<EmptyState
 							variant="inline"
-							icon={<SearchIcon className="size-8" />}
+\t\t\t\t\t\t\ticon={SearchIcon}
 							title={tr("recommendations.analytics.noProfileTitle")}
 							description={tr("recommendations.analytics.noProfileDescription")}
 						/>

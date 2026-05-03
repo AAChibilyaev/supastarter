@@ -8,6 +8,8 @@ export interface SynonymPair {
 	root: string;
 	/** Optional locale scope (en, de, es, fr, ru). Null/undefined = universal. */
 	locale?: string;
+	/** Synonym type: "synonym" (default) or "alt_correction" */
+	type?: string;
 }
 
 export interface CurationRule {
@@ -58,14 +60,22 @@ export async function syncSynonymsToTypesense(
 
 	// Group by root + locale: { "root@@locale" -> [synonym, ...] }
 	// Universal synonyms (no locale) use "root@@" as key
-	const grouped = new Map<string, { root: string; locale: string | undefined; synonyms: string[] }>();
+	const grouped = new Map<
+		string,
+		{ root: string; locale: string | undefined; synonyms: string[]; type: string | undefined }
+	>();
 	for (const pair of synonyms) {
 		const key = `${pair.root}@@${pair.locale ?? ""}`;
 		const existing = grouped.get(key);
 		if (existing) {
 			existing.synonyms.push(pair.synonym);
 		} else {
-			grouped.set(key, { root: pair.root, locale: pair.locale, synonyms: [pair.synonym] });
+			grouped.set(key, {
+				root: pair.root,
+				locale: pair.locale,
+				synonyms: [pair.synonym],
+				type: pair.type,
+			});
 		}
 	}
 
@@ -73,8 +83,10 @@ export async function syncSynonymsToTypesense(
 
 	for (const [, entry] of grouped) {
 		// Build locale-aware ID: syn_{collection}_{locale}_{root} or syn_{collection}_{root}
+		// Alt-corrections use "alt_" prefix for distinct identification
+		const typePrefix = entry.type === "alt_correction" ? "alt_" : "";
 		const localePart = entry.locale ? `${sanitizeId(entry.locale)}_` : "";
-		const id = `syn_${sanitizeId(collectionName)}_${localePart}${sanitizeId(entry.root)}`;
+		const id = `${typePrefix}syn_${sanitizeId(collectionName)}_${localePart}${sanitizeId(entry.root)}`;
 		newIds.add(id);
 		try {
 			await typesenseFetch("PUT", `/synonym_sets/${encodeURIComponent(id)}`, {

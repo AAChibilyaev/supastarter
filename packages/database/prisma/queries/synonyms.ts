@@ -6,6 +6,7 @@ export interface SynonymRow {
 	organizationId: string;
 	root: string;
 	synonym: string;
+	type: string;
 	locale: string | null;
 	createdAt: Date;
 	updatedAt: Date;
@@ -31,7 +32,7 @@ export async function getSynonymsByIndexIds(indexIds: string[]): Promise<Synonym
 export async function replaceSynonyms(
 	indexId: string,
 	organizationId: string,
-	synonyms: { root: string; synonym: string; locale?: string | null }[],
+	synonyms: { root: string; synonym: string; locale?: string | null; type?: string | null }[],
 ): Promise<SynonymRow[]> {
 	return db.$transaction(async (tx) => {
 		await tx.searchIndexSynonym.deleteMany({
@@ -47,6 +48,7 @@ export async function replaceSynonyms(
 				root: s.root,
 				synonym: s.synonym,
 				locale: s.locale ?? "en",
+				type: s.type ?? "synonym",
 			})),
 			skipDuplicates: true,
 		});
@@ -73,6 +75,7 @@ export async function getSynonymsByOrganizationId(
 		organizationId: r.organizationId,
 		root: r.root,
 		synonym: r.synonym,
+		type: r.type,
 		locale: r.locale,
 		createdAt: r.createdAt,
 		updatedAt: r.updatedAt,
@@ -93,17 +96,18 @@ export async function getSynonymRootsByIndexId(indexId: string): Promise<string[
 /** Convert SynonymRow[] to SynonymPair[] (for Typesense sync). */
 export function rowsToSynonymPairs(
 	rows: SynonymRow[],
-): { synonym: string; root: string; locale?: string }[] {
+): { synonym: string; root: string; locale?: string; type?: "synonym" | "alt_correction" }[] {
 	return rows.map((r) => ({
 		synonym: r.synonym,
 		root: r.root,
 		...(r.locale ? { locale: r.locale } : {}),
+		...(r.type && r.type !== "synonym" ? { type: r.type as "alt_correction" } : {}),
 	}));
 }
 
 /** Validate synonym import entries for duplicates and invalid values. */
 export function validateSynonymEntries(
-	entries: { root: string; synonym: string; locale?: string | null }[],
+	entries: { root: string; synonym: string; locale?: string | null; type?: string | null }[],
 	existingRoots: string[],
 ): { valid: boolean; errors: string[]; warnings: string[] } {
 	const errors: string[] = [];

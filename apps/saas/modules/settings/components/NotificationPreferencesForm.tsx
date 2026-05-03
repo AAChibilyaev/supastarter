@@ -41,7 +41,7 @@ export function NotificationPreferencesForm() {
 
 	const onToggle = (type: string, target: TargetKey, nextEnabled: boolean) => {
 		updateMutation.mutate({
-			type,
+			type: type as "WELCOME" | "APP_UPDATE",
 			target,
 			disabled: !nextEnabled,
 		});

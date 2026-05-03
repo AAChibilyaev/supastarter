@@ -255,7 +255,10 @@ export const importIndexSynonyms = protectedProcedure
 
 			// Sync to Typesense (best-effort)
 			const collection = aliasName(input.organizationId, input.slug);
-			syncSynonymsToTypesense(collection, entries).catch((err) =>
+			syncSynonymsToTypesense(
+				collection,
+				entries.map((e) => ({ ...e, locale: e.locale ?? undefined })),
+			).catch((err) =>
 				logger.error("importIndexSynonyms: Typesense sync failed", {
 					organizationId: input.organizationId,
 					slug: input.slug,

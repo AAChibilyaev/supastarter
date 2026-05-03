@@ -2,7 +2,7 @@ import {
 	chunkText as docProcessorChunker,
 	type ChunkerOptions as DocProcessorChunkerOptions,
 	type ChunkTextResult as DocProcessorChunkResult,
-	ChunkStrategy,
+	type ChunkStrategy as DocProcessorChunkStrategy,
 } from "@repo/document-processor";
 
 export type ChunkStrategy = "fixed" | "semantic" | "markdown" | "code";

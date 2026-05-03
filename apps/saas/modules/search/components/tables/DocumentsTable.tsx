@@ -995,7 +995,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		if (selectedIds.length === 0 || !bulkEditField) return;
 		// Call upsert for each selected document with the new field value
 		const promises = selectedIds.map((id) =>
-			orpc.search.upsertDocument.mutationOptions().mutationFn!({
+			orpc.search.upsertDocument.mutateAsync({
 				organizationId,
 				slug,
 				id,

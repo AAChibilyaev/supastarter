@@ -110,5 +110,27 @@
 		"offline": "Офлайн",
 		"latency": "Задержка",
 		"unknown": "Неизвестно"
+	},
+	"synonyms": {
+		"title": "Синонимы",
+		"description": "Управляйте синонимами и альтернативными исправлениями для поисковых индексов.",
+		"addSynonym": "Добавить синоним",
+		"editSynonym": "Редактировать синоним",
+		"deleteSynonym": "Удалить синоним",
+		"root": "Корень",
+		"synonym": "Синоним",
+		"locale": "Язык",
+		"type": "Тип",
+		"synonymType": "Синоним",
+		"altCorrectionType": "Альтернативное исправление",
+		"altCorrection": "Альтернативное исправление",
+		"altCorrectionDescription": "Автоматически исправляет опечатки в запросах (напр.: iphon → iphone)",
+		"importExport": "Импорт / Экспорт",
+		"importSynonyms": "Импорт",
+		"exportSynonyms": "Экспорт",
+		"showResultsFor": "Показаны результаты для {corrected}",
+		"alsoSearchFor": "Также выполняется поиск {original}",
+		"noResultsFor": "Нет результатов для \"{query}\".",
+		"showingAltCorrection": "Вместо этого показаны результаты для \"{corrected}\"."
 	}
 }

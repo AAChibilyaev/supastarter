@@ -61,10 +61,14 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 			onSuccess: () => {
 				toastSuccess(tr("recommendations.segments.deleted"));
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.listUserSegments.queryKey(),
+					queryKey: orpc.recommendations.listUserSegments.queryKey({
+						input: { organizationId },
+					}),
 				});
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.getUserSegmentStats.queryKey(),
+					queryKey: orpc.recommendations.getUserSegmentStats.queryKey({
+						input: { organizationId, window: 90 },
+					}),
 				});
 			},
 			onError: () => {
@@ -182,17 +186,15 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 							<CardContent className="pt-6">
 								<EmptyState
 									variant="inline"
-									icon={<UsersIcon className="size-8" />}
+									icon={UsersIcon}
 									title={tr("recommendations.segments.noCustomSegments")}
 									description={tr(
 										"recommendations.segments.noCustomSegmentsDesc",
 									)}
-									action={
-										<Button size="sm" onClick={() => setCreateOpen(true)}>
-											<PlusIcon className="size-4 mr-1" />
-											{tr("recommendations.segments.createButton")}
-										</Button>
-									}
+									action={{
+										label: tr("recommendations.segments.createButton"),
+										onClick: () => setCreateOpen(true),
+									}}
 								/>
 							</CardContent>
 						</Card>
@@ -362,10 +364,14 @@ function CreateSegmentDialog({
 				toastSuccess(tr("recommendations.segments.created"));
 				onClose();
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.listUserSegments.queryKey(),
+					queryKey: orpc.recommendations.listUserSegments.queryKey({
+						input: { organizationId },
+					}),
 				});
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.getUserSegmentStats.queryKey(),
+					queryKey: orpc.recommendations.getUserSegmentStats.queryKey({
+						input: { organizationId, window: 90 },
+					}),
 				});
 			},
 			onError: () => {
@@ -513,10 +519,14 @@ function EditSegmentDialog({
 				toastSuccess(tr("recommendations.segments.updated"));
 				onClose();
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.listUserSegments.queryKey(),
+					queryKey: orpc.recommendations.listUserSegments.queryKey({
+						input: { organizationId },
+					}),
 				});
 				void queryClient.invalidateQueries({
-					queryKey: orpc.recommendations.getUserSegmentStats.queryKey(),
+					queryKey: orpc.recommendations.getUserSegmentStats.queryKey({
+						input: { organizationId, window: 90 },
+					}),
 				});
 			},
 			onError: () => {

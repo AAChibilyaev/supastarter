@@ -110,5 +110,27 @@
 		"offline": "Offline",
 		"latency": "Latency",
 		"unknown": "Unknown"
+	},
+	"synonyms": {
+		"title": "Synonyms",
+		"description": "Manage synonyms and alt-corrections for your search indexes.",
+		"addSynonym": "Add Synonym",
+		"editSynonym": "Edit Synonym",
+		"deleteSynonym": "Delete Synonym",
+		"root": "Root",
+		"synonym": "Synonym",
+		"locale": "Locale",
+		"type": "Type",
+		"synonymType": "Synonym",
+		"altCorrectionType": "Alt-Correction",
+		"altCorrection": "Alt-Correction",
+		"altCorrectionDescription": "Automatically correct misspelled queries (e.g., iphon → iphone)",
+		"importExport": "Import / Export",
+		"importSynonyms": "Import",
+		"exportSynonyms": "Export",
+		"showResultsFor": "Showing results for {corrected}",
+		"alsoSearchFor": "Also searching for {original}",
+		"noResultsFor": "No results for \"{query}\".",
+		"showingAltCorrection": "Showing results for \"{corrected}\" instead."
 	}
 }

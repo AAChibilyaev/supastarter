@@ -315,6 +315,7 @@ model SearchIndexSynonym {
   root           String
   synonym        String
   locale         String?      @default("en")
+  type           String       @default("synonym")
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 

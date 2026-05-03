@@ -182,3 +182,8 @@ export {
 	type FailoverResult,
 	type RegionHealthEntry,
 } from "./lib/routing";
+export {
+	lookupAltCorrections,
+	getAltCorrectionCount,
+	type AltCorrectionResult,
+} from "./lib/alt-corrections";

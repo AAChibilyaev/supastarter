@@ -20,13 +20,13 @@ import { useMemo, useState } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Period = "last7" | "last30" | "last90";
+type Period = "last7" | "last30";
 
 interface UsageDashboardProps {
 	organizationId: string;
 }
 
-const PERIODS: Period[] = ["last7", "last30", "last90"];
+const PERIODS: Period[] = ["last7", "last30"];
 
 function periodLabel(t: (key: string) => string, period: Period): string {
 	switch (period) {
@@ -34,8 +34,6 @@ function periodLabel(t: (key: string) => string, period: Period): string {
 			return t("dashboard.usage.period.7days");
 		case "last30":
 			return t("dashboard.usage.period.30days");
-		case "last90":
-			return t("dashboard.usage.period.90days");
 	}
 }
 
@@ -317,8 +315,8 @@ export function UsageDashboard({ organizationId }: UsageDashboardProps) {
 		100,
 	);
 
-	const planResetDate = planInfo?.currentPeriodEnd
-		? new Date(planInfo.currentPeriodEnd).toLocaleDateString(undefined, {
+	const planResetDate = summary?.periodEnd
+		? new Date(summary.periodEnd).toLocaleDateString(undefined, {
 				year: "numeric",
 				month: "long",
 				day: "numeric",

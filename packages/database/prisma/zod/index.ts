@@ -90,7 +90,7 @@ export type SearchIndexScalarFieldEnum = z.infer<typeof SearchIndexScalarFieldEn
 
 // File: SearchIndexSynonymScalarFieldEnum.schema.ts
 
-export const SearchIndexSynonymScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'root', 'synonym', 'locale', 'createdAt', 'updatedAt'])
+export const SearchIndexSynonymScalarFieldEnumSchema = z.enum(['id', 'indexId', 'organizationId', 'root', 'synonym', 'locale', 'type', 'createdAt', 'updatedAt'])
 
 export type SearchIndexSynonymScalarFieldEnum = z.infer<typeof SearchIndexSynonymScalarFieldEnumSchema>;
 
@@ -636,6 +636,7 @@ export const SearchIndexSynonymSchema = z.object({
   root: z.string(),
   synonym: z.string(),
   locale: z.string().default("en").nullish(),
+  type: z.string().default("synonym"),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

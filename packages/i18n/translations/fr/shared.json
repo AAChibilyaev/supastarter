@@ -110,5 +110,27 @@
 		"offline": "Hors ligne",
 		"latency": "Latence",
 		"unknown": "Inconnu"
+	},
+	"synonyms": {
+		"title": "Synonymes",
+		"description": "Gérez les synonymes et les corrections alternatives pour vos index de recherche.",
+		"addSynonym": "Ajouter un Synonyme",
+		"editSynonym": "Modifier le Synonyme",
+		"deleteSynonym": "Supprimer le Synonyme",
+		"root": "Racine",
+		"synonym": "Synonyme",
+		"locale": "Langue",
+		"type": "Type",
+		"synonymType": "Synonyme",
+		"altCorrectionType": "Correction Alternative",
+		"altCorrection": "Correction Alternative",
+		"altCorrectionDescription": "Corrige automatiquement les requêtes mal orthographiées (ex. iphon → iphone)",
+		"importExport": "Importer / Exporter",
+		"importSynonyms": "Importer",
+		"exportSynonyms": "Exporter",
+		"showResultsFor": "Affichage des résultats pour {corrected}",
+		"alsoSearchFor": "Recherche également {original}",
+		"noResultsFor": "Aucun résultat pour \"{query}\".",
+		"showingAltCorrection": "Affichage des résultats pour \"{corrected}\"."
 	}
 }

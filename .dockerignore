@@ -33,9 +33,18 @@ packages/database/prisma/zod
 docs
 archive
 modules
+!.gitkeep
+
+# Generated / cached content
+apps/docs/.source
+apps/docs/.cache
+apps/docs/content/docs/*/api-reference
 
 # Editor / OS
 .vscode
 .idea
 .DS_Store
 *.log
+*.tsbuildinfo
+*.swp
+*.swo

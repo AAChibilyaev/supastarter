@@ -3,6 +3,7 @@ import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 
 import { getTypesenseClient } from "./client";
+import type { StorageRegion } from "./regions";
 import { aliasName } from "./collections";
 
 export type HealthStatus = "healthy" | "warning" | "critical";
@@ -179,4 +180,64 @@ export async function checkAllIndexesHealth(organizationId: string): Promise<Ind
 		}
 	}
 	return results;
+}
+
+// ── Region health check ─────────────────────────────────────────────────
+
+export interface RegionHealthResult {
+	region: string;
+	label: string;
+	online: boolean;
+	latencyMs: number | null;
+	error: string | null;
+}
+
+/**
+ * Check health of all configured Typesense regions.
+ *
+ * Pings each region's Typesense health endpoint and reports connectivity.
+ * Useful for the dashboard region status indicator and for operational monitoring.
+ */
+export async function checkAllRegionsHealth(): Promise<RegionHealthResult[]> {
+	const { AVAILABLE_REGIONS } = await import("./regions");
+	const results: RegionHealthResult[] = [];
+
+	for (const region of AVAILABLE_REGIONS) {
+		const result = await checkRegionHealth(region.code);
+		results.push(result);
+	}
+
+	return results;
+}
+
+/**
+ * Check health of a specific Typesense region.
+ */
+export async function checkRegionHealth(region: StorageRegion): Promise<RegionHealthResult> {
+	const { AVAILABLE_REGIONS: regions } = await import("./regions");
+	const info = regions.find((r) => r.code === region);
+
+	const start = Date.now();
+	try {
+		const client = getTypesenseClient(region);
+		const health = await client.health.retrieve();
+		const latencyMs = Date.now() - start;
+
+		return {
+			region,
+			label: info?.label ?? region.toUpperCase(),
+			online: health === true || (health as Record<string, unknown>)?.ok === true,
+			latencyMs,
+			error: null,
+		};
+	} catch (error) {
+		const latencyMs = Date.now() - start;
+		return {
+			region,
+			label: info?.label ?? region.toUpperCase(),
+			online: false,
+			latencyMs,
+			error: error instanceof Error ? error.message : String(error),
+		};
+	}
 }

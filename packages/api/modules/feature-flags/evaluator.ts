@@ -208,8 +208,10 @@ function getFieldValue(
 			return context.organizationId;
 		default:
 			// Support dynamic fields from context
-			const val = context[field];
-			return val !== undefined ? (typeof val === "string" ? val : String(val)) : null;
+			const val: unknown = context[field];
+			if (typeof val === "string") return val;
+			if (typeof val === "number") return val;
+			return null;
 	}
 }
 

@@ -848,5 +848,110 @@
 			"question": "Can I customize which iBlock properties are indexed?",
 			"answer": "Yes. The module exports all product properties by default. You can limit the fields in the admin settings or extend the ProductExporter class for fully custom field selection."
 		}
+	},
+	"integrationsStrapiSetup": {
+		"title": "Connect Strapi to AACsearch in 3 steps",
+		"subtitle": "Install the plugin, configure content types, and search is live.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Install the plugin",
+			"description": "Run npm install sanity-plugin-aacsearch in your Strapi project, or download the plugin from the AACsearch dashboard under Connectors."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Configure content-type mapping",
+			"description": "In the plugin settings, select which Strapi content types to sync. Map fields to AACsearch attributes. Nested relations, dynamic zones, and media fields are all supported."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Search is live",
+			"description": "Publish a new entry in Strapi. It appears in AACsearch within a second via lifecycle hooks. Use the AACsearch browser SDK on your frontend to add instant search."
+		},
+		"cta": "Download the plugin"
+	},
+	"integrationsStrapiFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Which Strapi versions are supported?",
+			"answer": "Strapi 4.x and 5.x are fully supported. The plugin uses standard Strapi lifecycle hooks and the REST API — no undocumented APIs or experimental features."
+		},
+		"q2": {
+			"question": "Does the plugin slow down Strapi content saves?",
+			"answer": "No. Sync is asynchronous via the AACsearch ingest buffer. The lifecycle hook enqueues the update and returns immediately — no blocking API calls on save."
+		},
+		"q3": {
+			"question": "Can I sync specific content types only?",
+			"answer": "Yes. The plugin settings page lets you select which content types and fields to sync. You can include or exclude specific collection types, components, and single types."
+		}
+	},
+	"integrationsContentfulSetup": {
+		"title": "Connect Contentful to AACsearch in 3 steps",
+		"subtitle": "Install the app, configure webhooks, and your content is searchable.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Install the AACsearch app",
+			"description": "Install the AACsearch app from the Contentful Marketplace. Grant read access to your space and select the environment to sync."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Configure content model mapping",
+			"description": "In the app settings, map each Contentful content model to an AACsearch collection. Rich text fields are automatically converted to plain text for search."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Set up webhooks",
+			"description": "Configure Contentful webhooks in your AACsearch dashboard. Publish, unpublish, and archive events trigger automatic index updates in real time."
+		},
+		"cta": "Install the app"
+	},
+	"integrationsContentfulFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Does it support Contentful locales?",
+			"answer": "Yes. Each Contentful locale maps to a separate AACsearch collection. You can enable search in one, some, or all locales with per-locale search configuration."
+		},
+		"q2": {
+			"question": "How does Rich Text field indexing work?",
+			"answer": "Contentful Rich Text fields are automatically converted to plain text during sync. Embedded assets and entries are extracted and processed. Formatting markup does not pollute search results."
+		},
+		"q3": {
+			"question": "Can I use the preview environment?",
+			"answer": "Yes. The integration supports syncing from Contentful preview environment for testing before publishing. Validate search results with draft content before going live."
+		}
+	},
+	"integrationsSanitySetup": {
+		"title": "Connect Sanity to AACsearch in 3 steps",
+		"subtitle": "Install the plugin, write a GROQ query, and your content is searchable.",
+		"step1": {
+			"label": "Step 1",
+			"title": "Install the Sanity plugin",
+			"description": "Run npm install sanity-plugin-aacsearch in your Sanity Studio project. Add it to your sanity.config.ts plugins array."
+		},
+		"step2": {
+			"label": "Step 2",
+			"title": "Write a GROQ projection",
+			"description": "Define which documents and fields to index using a GROQ query. Select exactly the fields your search needs — no extra data leaves your Sanity dataset."
+		},
+		"step3": {
+			"label": "Step 3",
+			"title": "Configure webhook sync",
+			"description": "Sanity delivers document changes to AACsearch via HTTPS webhook. New documents, updates, and deletions are handled automatically in real time."
+		},
+		"cta": "Download the plugin"
+	},
+	"integrationsSanityFaq": {
+		"title": "Frequently asked questions",
+		"q1": {
+			"question": "Does it support Portable Text?",
+			"answer": "Yes. Sanity Portable Text blocks are converted to searchable plain text. Heading structure is preserved, inline annotations are extracted, and formatting noise is stripped."
+		},
+		"q2": {
+			"question": "Can I sync multiple Sanity datasets?",
+			"answer": "Yes. Each Sanity dataset maps to a separate AACsearch collection. Production and development datasets maintain independent search configurations and schemas."
+		},
+		"q3": {
+			"question": "How does real-time sync work?",
+			"answer": "The plugin listens for Sanity GROQ mutations and updates AACsearch in real time. Changes propagate within seconds of publishing in Sanity Studio — no cron job or manual export required."
+		}
 	}
 }

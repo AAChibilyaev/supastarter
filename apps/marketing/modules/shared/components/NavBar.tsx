@@ -144,7 +144,7 @@ export function NavBar() {
 									{navGroups.flatMap((group) => [
 										<div
 											key={group.label}
-											className="px-3 py-2 text-xs font-light tracking-wider text-foreground/50 uppercase"
+											className="px-4 py-3 text-xs font-light tracking-wider text-foreground/50 uppercase"
 										>
 											{group.label}
 										</div>,
@@ -156,7 +156,7 @@ export function NavBar() {
 													target="_blank"
 													rel="noopener noreferrer"
 													onClick={handleMobileMenuClose}
-													className="px-3 py-1.5 text-sm block text-foreground/70 hover:text-foreground"
+													className="px-4 py-3 text-sm block text-foreground/70 hover:text-foreground"
 												>
 													{item.label}
 												</a>
@@ -166,7 +166,7 @@ export function NavBar() {
 													href={item.href}
 													onClick={handleMobileMenuClose}
 													className={cn(
-														"px-3 py-1.5 text-sm block text-foreground/70",
+														"px-4 py-3 text-sm block text-foreground/70",
 														localePathname.startsWith(item.href)
 															? "font-light text-foreground"
 															: "hover:text-foreground",
@@ -181,14 +181,14 @@ export function NavBar() {
 									<LocaleLink
 										href="/contact"
 										onClick={handleMobileMenuClose}
-										className="px-3 py-2 font-light text-base block shrink-0 text-foreground/80"
+										className="px-4 py-3 font-light text-base block shrink-0 text-foreground/80"
 									>
 										{t("common.menu.contact")}
 									</LocaleLink>
 									{config.saasUrl && (
 										<NextLink
 											href={config.saasUrl}
-											className="px-3 py-2 text-base block"
+											className="px-4 py-3 text-base block"
 											onClick={handleMobileMenuClose}
 											prefetch
 										>

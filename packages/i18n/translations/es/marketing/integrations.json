@@ -848,5 +848,110 @@
 			"question": "¿Puedo personalizar qué propiedades de iBlock se indexan?",
 			"answer": "Sí. El módulo exporta todas las propiedades de producto por defecto. Puedes limitar los campos en la configuración del administrador o extender la clase ProductExporter para una selección de campos completamente personalizada."
 		}
+	},
+	"integrationsStrapiSetup": {
+		"title": "Conecta Strapi a AACsearch en 3 pasos",
+		"subtitle": "Instala el plugin, configura los tipos de contenido y la búsqueda estará activa.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Instala el plugin",
+			"description": "Ejecuta npm install sanity-plugin-aacsearch en tu proyecto Strapi o descarga el plugin desde el panel de AACsearch en Conectores."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Configura el mapeo de tipos de contenido",
+			"description": "En la configuración del plugin, selecciona qué tipos de contenido de Strapi sincronizar. Asigna campos a atributos de AACsearch."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "La búsqueda está activa",
+			"description": "Publica una nueva entrada en Strapi. Aparece en AACsearch en menos de un segundo. Usa el SDK de navegador AACsearch para añadir búsqueda instantánea."
+		},
+		"cta": "Descargar el plugin"
+	},
+	"integrationsStrapiFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Qué versiones de Strapi son compatibles?",
+			"answer": "Strapi 4.x y 5.x son totalmente compatibles. El plugin utiliza hooks de ciclo de vida estándar de Strapi y la API REST."
+		},
+		"q2": {
+			"question": "¿El plugin ralentiza el guardado de contenido en Strapi?",
+			"answer": "No. La sincronización es asíncrona a través del búfer de ingesta de AACsearch. El hook encola la actualización y regresa inmediatamente."
+		},
+		"q3": {
+			"question": "¿Puedo sincronizar solo tipos de contenido específicos?",
+			"answer": "Sí. La configuración del plugin te permite seleccionar qué tipos de contenido y campos sincronizar."
+		}
+	},
+	"integrationsContentfulSetup": {
+		"title": "Conecta Contentful a AACsearch en 3 pasos",
+		"subtitle": "Instala la app, configura los webhooks y tu contenido será buscable.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Instala la app de AACsearch",
+			"description": "Instala la app de AACsearch desde Contentful Marketplace. Concede acceso de lectura a tu espacio y selecciona el entorno a sincronizar."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Configura el mapeo del modelo de contenido",
+			"description": "En la configuración de la app, asigna cada modelo de contenido de Contentful a una colección de AACsearch. Los campos Rich Text se convierten automáticamente."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Configura los webhooks",
+			"description": "Configura webhooks de Contentful en tu panel de AACsearch. Eventos de publicación y archivo activan actualizaciones automáticas del índice."
+		},
+		"cta": "Instalar la app"
+	},
+	"integrationsContentfulFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Es compatible con las locales de Contentful?",
+			"answer": "Sí. Cada locale de Contentful se asigna a una colección separada de AACsearch. Puedes activar la búsqueda en uno, varios o todos los idiomas."
+		},
+		"q2": {
+			"question": "¿Cómo funciona la indexación de campos Rich Text?",
+			"answer": "Los campos Rich Text de Contentful se convierten automáticamente a texto plano durante la sincronización. Los activos y entradas incrustados se extraen y procesan."
+		},
+		"q3": {
+			"question": "¿Puedo usar el entorno de vista previa?",
+			"answer": "Sí. La integración admite la sincronización desde el entorno de vista previa de Contentful para realizar pruebas antes de publicar."
+		}
+	},
+	"integrationsSanitySetup": {
+		"title": "Conecta Sanity a AACsearch en 3 pasos",
+		"subtitle": "Instala el plugin, escribe una consulta GROQ y tu contenido será buscable.",
+		"step1": {
+			"label": "Paso 1",
+			"title": "Instala el plugin de Sanity",
+			"description": "Ejecuta npm install sanity-plugin-aacsearch en tu proyecto de Sanity Studio. Agrégalo a tu matriz de plugins en sanity.config.ts."
+		},
+		"step2": {
+			"label": "Paso 2",
+			"title": "Escribe una proyección GROQ",
+			"description": "Define qué documentos y campos indexar usando una consulta GROQ. Solo los datos que necesita tu búsqueda salen de tu conjunto de datos de Sanity."
+		},
+		"step3": {
+			"label": "Paso 3",
+			"title": "Configura la sincronización por webhook",
+			"description": "Sanity entrega los cambios de documentos a AACsearch mediante webhook HTTPS. Los documentos nuevos, actualizaciones y eliminaciones se manejan automáticamente."
+		},
+		"cta": "Descargar el plugin"
+	},
+	"integrationsSanityFaq": {
+		"title": "Preguntas frecuentes",
+		"q1": {
+			"question": "¿Es compatible con Portable Text?",
+			"answer": "Sí. Los bloques de Portable Text de Sanity se convierten en texto plano searchable. La estructura de encabezados se conserva y las anotaciones en línea se extraen."
+		},
+		"q2": {
+			"question": "¿Puedo sincronizar múltiples conjuntos de datos de Sanity?",
+			"answer": "Sí. Cada conjunto de datos de Sanity se asigna a una colección separada de AACsearch. Los conjuntos de datos de producción y desarrollo tienen configuraciones independientes."
+		},
+		"q3": {
+			"question": "¿Cómo funciona la sincronización en tiempo real?",
+			"answer": "El plugin escucha las mutaciones GROQ de Sanity y actualiza AACsearch en tiempo real. Los cambios se propagan en segundos tras la publicación."
+		}
 	}
 }

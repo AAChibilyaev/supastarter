@@ -11,9 +11,9 @@ import {
 } from "@repo/database";
 import { z } from "zod";
 
-import { invalidateFlagCache } from "../../../modules/feature-flags/evaluator";
-import { publishFlagChange } from "../../../modules/feature-flags/sse-publisher";
+import { publishFlagChange } from "../../feature-flags/sse-publisher";
 import { adminProcedure } from "../../../orpc/procedures";
+import { invalidateFlagCache } from "../../feature-flags/evaluator";
 
 export const listFeatureFlagsProcedure = adminProcedure
 	.route({
@@ -125,6 +125,10 @@ export const updateFeatureFlagProcedure = adminProcedure
 		}),
 	)
 	.handler(async ({ input: { id, ...data } }) => {
+		// Fetch the flag first to get the key for cache invalidation and SSE
+		const existing = await getFeatureFlag(id);
+		const flagKey = existing?.key;
+
 		const cleanedData: Record<string, unknown> = {};
 		if (data.title !== undefined) cleanedData.title = data.title;
 		if (data.description !== undefined) cleanedData.description = data.description;
@@ -133,7 +137,19 @@ export const updateFeatureFlagProcedure = adminProcedure
 			cleanedData.rolloutPercentage = data.rolloutPercentage;
 		if (data.killSwitch !== undefined) cleanedData.killSwitch = data.killSwitch;
 
-		return await updateFeatureFlag(id, cleanedData);
+		const result = await updateFeatureFlag(id, cleanedData);
+
+		// Invalidate server-side cache and notify SSE clients
+		if (flagKey) {
+			invalidateFlagCache(flagKey);
+			publishFlagChange({
+				type: "flag_updated",
+				flagKey,
+				enabled: result.enabled,
+			});
+		}
+
+		return result;
 	});
 
 export const deleteFeatureFlagProcedure = adminProcedure
@@ -154,7 +170,17 @@ export const deleteFeatureFlagProcedure = adminProcedure
 		}),
 	)
 	.handler(async ({ input: { id } }) => {
+		// Fetch the flag first to get the key for SSE notification
+		const existing = await getFeatureFlag(id);
+		const flagKey = existing?.key;
+
 		await deleteFeatureFlag(id);
+
+		// Notify SSE clients about deletion
+		if (flagKey) {
+			publishFlagChange({ type: "flag_deleted", flagKey });
+		}
+
 		return { success: true };
 	});
 
@@ -195,7 +221,23 @@ export const setOverrideProcedure = adminProcedure
 		}),
 	)
 	.handler(async ({ input: { flagId, organizationId, enabled, reason } }) => {
+		// Fetch the flag to get the key for SSE notification
+		const flag = await getFeatureFlag(flagId);
+		const flagKey = flag?.key;
+
 		await setFeatureFlagOverride(flagId, organizationId, enabled, reason);
+
+		// Invalidate server-side cache and notify SSE clients
+		if (flagKey) {
+			invalidateFlagCache(flagKey);
+			publishFlagChange({
+				type: "override_updated",
+				flagKey,
+				organizationId,
+				enabled,
+			});
+		}
+
 		return { success: true };
 	});
 
@@ -218,7 +260,23 @@ export const removeOverrideProcedure = adminProcedure
 		}),
 	)
 	.handler(async ({ input: { flagId, organizationId } }) => {
+		// Fetch the flag to get the key for SSE notification
+		const flag = await getFeatureFlag(flagId);
+		const flagKey = flag?.key;
+
 		await removeFeatureFlagOverride(flagId, organizationId);
+
+		// Invalidate server-side cache and notify SSE clients
+		if (flagKey) {
+			invalidateFlagCache(flagKey);
+			publishFlagChange({
+				type: "override_updated",
+				flagKey,
+				organizationId,
+				enabled: false,
+			});
+		}
+
 		return { success: true };
 	});
 

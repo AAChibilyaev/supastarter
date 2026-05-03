@@ -1,5 +1,16 @@
 export { config as searchConfig } from "./config";
-export { getTypesenseClient } from "./lib/client";
+export {
+	getTypesenseClient,
+	getTypesenseClientForOrg,
+	clearTypesenseClientCache,
+} from "./lib/client";
+export {
+	AVAILABLE_REGIONS,
+	DEFAULT_REGION,
+	getOrganizationStorageRegion,
+	isValidRegion,
+} from "./lib/org-region";
+export type { RegionInfo, StorageRegion } from "./lib/regions";
 export {
 	aliasName,
 	cloneCollection,

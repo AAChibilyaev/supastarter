@@ -32,6 +32,8 @@ export interface EvaluationContext {
 	orgMetadata: Record<string, unknown>;
 	/** Organization age in days (based on Organization.createdAt) */
 	orgAgeDays: number;
+	/** Resolved plan tier (free, starter, pro, business, enterprise) */
+	planTier: string;
 	/** Active subscription price IDs (from Purchase records) */
 	activePriceIds?: string[];
 	/** Geo/country code if known */

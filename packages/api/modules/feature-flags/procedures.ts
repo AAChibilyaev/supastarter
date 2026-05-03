@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../orpc/procedures";
 import { requireOrganizationMember } from "../search/lib/access";
-
 import { isFeatureEnabled, invalidateFlagCache } from "./evaluator";
 
 /**
@@ -51,9 +50,7 @@ export const batchCheckFlags = protectedProcedure
 			flagKeys: z.array(z.string().min(1).max(128)).min(1).max(50),
 		}),
 	)
-	.output(
-		z.record(z.string(), z.boolean()),
-	)
+	.output(z.record(z.string(), z.boolean()))
 	.handler(async ({ input: { flagKeys, organizationId }, context: { user } }) => {
 		await requireOrganizationMember(organizationId, user.id);
 

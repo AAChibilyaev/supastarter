@@ -37,9 +37,12 @@ export function getTypesenseEnv(region?: StorageRegion): TypesenseEnv {
 function resolveTypesenseEnv(region?: StorageRegion): TypesenseEnv {
 	const regionKey = region?.toUpperCase();
 
+	// Resolve host
 	const host = regionKey
 		? (process.env[`TYPESENSE_HOST_${regionKey}`] ?? process.env.TYPESENSE_HOST)
 		: process.env.TYPESENSE_HOST;
+
+	// Resolve API key
 	const adminApiKey = regionKey
 		? (process.env[`TYPESENSE_ADMIN_API_KEY_${regionKey}`] ??
 			process.env.TYPESENSE_ADMIN_API_KEY)
@@ -48,14 +51,14 @@ function resolveTypesenseEnv(region?: StorageRegion): TypesenseEnv {
 	if (!host) {
 		throw new Error(
 			region
-				? `TYPESENSE_HOST_${prefix}E (or TYPESENSE_HOST) is not set for region "${region}"`
+				? `TYPESENSE_HOST_${regionKey} (or TYPESENSE_HOST) is not set for region "${region}"`
 				: "TYPESENSE_HOST is not set",
 		);
 	}
 	if (!adminApiKey) {
 		throw new Error(
 			region
-				? `TYPESENSE_ADMIN_API_KEY_${prefix}E (or TYPESENSE_ADMIN_API_KEY) is not set for region "${region}"`
+				? `TYPESENSE_ADMIN_API_KEY_${regionKey} (or TYPESENSE_ADMIN_API_KEY) is not set for region "${region}"`
 				: "TYPESENSE_ADMIN_API_KEY is not set",
 		);
 	}
@@ -63,28 +66,33 @@ function resolveTypesenseEnv(region?: StorageRegion): TypesenseEnv {
 	// Wrap IPv6 literals in brackets
 	const normalizedHost = host.includes(":") && !host.startsWith("[") ? `[${host}]` : host;
 
+	// Resolve protocol
 	const protocolRaw = (
-		process.env[`TYPESENSE_PROTOCOL_${prefix}E`] ??
-		process.env.TYPESENSE_PROTOCOL ??
-		"http"
+		regionKey
+			? (process.env[`TYPESENSE_PROTOCOL_${regionKey}`] ??
+				process.env.TYPESENSE_PROTOCOL ??
+				"http")
+			: (process.env.TYPESENSE_PROTOCOL ?? "http")
 	).toLowerCase();
 	if (protocolRaw !== "http" && protocolRaw !== "https") {
 		throw new Error(
 			region
-				? `TYPESENSE_PROTOCOL_${prefix}E must be 'http' or 'https'`
+				? `TYPESENSE_PROTOCOL_${regionKey} must be 'http' or 'https'`
 				: "TYPESENSE_PROTOCOL must be 'http' or 'https'",
 		);
 	}
 
-	const portRaw =
-		process.env[`TYPESENSE_PORT_${prefix}E`] ??
-		process.env.TYPESENSE_PORT ??
-		(protocolRaw === "https" ? "443" : "8108");
+	// Resolve port
+	const portRaw = regionKey
+		? (process.env[`TYPESENSE_PORT_${regionKey}`] ??
+			process.env.TYPESENSE_PORT ??
+			(protocolRaw === "https" ? "443" : "8108"))
+		: (process.env.TYPESENSE_PORT ?? (protocolRaw === "https" ? "443" : "8108"));
 	const port = Number.parseInt(portRaw, 10);
 	if (!Number.isFinite(port)) {
 		throw new Error(
 			region
-				? `TYPESENSE_PORT_${prefix}E must be a number`
+				? `TYPESENSE_PORT_${regionKey} must be a number`
 				: "TYPESENSE_PORT must be a number",
 		);
 	}

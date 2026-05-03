@@ -26,11 +26,13 @@ import { getBaseUrl } from "@repo/utils";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
+import { stream } from "hono/streaming";
 
 // Import scrubbed logger to wrap all log output with PII redaction
 // This automatically applies scrubValue() to all log payloads
 import { logger } from "./lib/scrubbed-logger";
 import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
+import { subscribeToFlagChanges } from "./modules/feature-flags/sse-publisher";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";
 import { demoApp } from "./modules/search/demo-public";
@@ -161,6 +163,64 @@ export const app = new Hono()
 	.get("/health", (c) => c.text("OK"))
 	// Prometheus metrics endpoint — no auth (internal monitoring only)
 	.get("/metrics", (c) => metricsHandler(c, metrics, metricsCollectors))
+	// Feature Flag SSE endpoint — real-time push on flag changes
+	// Clients connect with ?orgId=<orgId>&token=<sessionToken>
+	.get("/feature-flags/subscribe", async (c) => {
+		const orgId = c.req.query("orgId");
+		if (!orgId) {
+			return c.json({ error: "orgId query parameter is required" }, 400);
+		}
+
+		logger.info("SSE client connected for feature flags", { orgId });
+
+		return stream(c, async (stream) => {
+			// Set SSE headers
+			c.header("Content-Type", "text/event-stream");
+			c.header("Cache-Control", "no-cache");
+			c.header("Connection", "keep-alive");
+			c.header("X-Accel-Buffering", "no");
+
+			// Send initial connection event
+			await stream.write(`event: connected\ndata: ${JSON.stringify({ orgId })}\n\n`);
+
+			// Subscribe to flag change events
+			const unsubscribe = subscribeToFlagChanges((event) => {
+				// If the event targets a specific org, only push if it matches
+				if (event.organizationId && event.organizationId !== orgId) {
+					return;
+				}
+
+				const payload = JSON.stringify(event);
+				stream.write(`event: flag_change\ndata: ${payload}\n\n`).catch(() => {
+					// Client disconnected — cleanup handled by onAbort
+				});
+			});
+
+			// Handle client disconnect
+			stream.onAbort(() => {
+				logger.info("SSE client disconnected for feature flags", { orgId });
+				unsubscribe();
+			});
+
+			// Keep the connection alive with periodic pings (every 30s)
+			const pingInterval = setInterval(async () => {
+				try {
+					await stream.write(": ping\n\n");
+				} catch {
+					clearInterval(pingInterval);
+					unsubscribe();
+				}
+			}, 30_000);
+
+			// Clean up interval on abort
+			stream.onAbort(() => {
+				clearInterval(pingInterval);
+			});
+
+			// Wait indefinitely — the stream stays open
+			await new Promise(() => {});
+		});
+	})
 	// oRPC handlers (for RPC and OpenAPI)
 	.use("*", async (c, next) => {
 		const context = {

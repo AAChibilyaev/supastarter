@@ -848,5 +848,110 @@
 			"question": "Kann ich anpassen, welche iBlock-Eigenschaften indexiert werden?",
 			"answer": "Ja. Das Modul exportiert standardmäßig alle Produkteigenschaften. Du kannst die Felder in den Admin-Einstellungen einschränken oder die ProductExporter-Klasse für vollständig benutzerdefinierte Feldauswahl erweitern."
 		}
+	},
+	"integrationsStrapiSetup": {
+		"title": "Strapi mit AACsearch verbinden in 3 Schritten",
+		"subtitle": "Plugin installieren, Inhaltstypen konfigurieren, Suche ist live.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Plugin installieren",
+			"description": "Führen Sie npm install sanity-plugin-aacsearch in Ihrem Strapi-Projekt aus oder laden Sie das Plugin aus dem AACsearch-Dashboard unter Connectors herunter."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "Inhaltstyp-Zuordnung konfigurieren",
+			"description": "Wählen Sie in den Plugin-Einstellungen aus, welche Strapi-Inhaltstypen synchronisiert werden sollen. Ordnen Sie Felder den AACsearch-Attributen zu."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Suche ist live",
+			"description": "Veröffentlichen Sie einen neuen Eintrag in Strapi. Er erscheint innerhalb einer Sekunde in AACsearch. Verwenden Sie das AACsearch Browser SDK für die sofortige Suche."
+		},
+		"cta": "Plugin herunterladen"
+	},
+	"integrationsStrapiFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Welche Strapi-Versionen werden unterstützt?",
+			"answer": "Strapi 4.x und 5.x werden vollständig unterstützt. Das Plugin verwendet standardmäßige Strapi-Lifecycle-Hooks und die REST-API."
+		},
+		"q2": {
+			"question": "Verlangsamt das Plugin das Speichern von Inhalten in Strapi?",
+			"answer": "Nein. Die Synchronisierung erfolgt asynchron über den AACsearch-Ingest-Puffer. Der Lifecycle-Hook stellt die Aktualisierung in die Warteschlange und kehrt sofort zurück."
+		},
+		"q3": {
+			"question": "Kann ich nur bestimmte Inhaltstypen synchronisieren?",
+			"answer": "Ja. In den Plugin-Einstellungen können Sie auswählen, welche Inhaltstypen und Felder synchronisiert werden sollen."
+		}
+	},
+	"integrationsContentfulSetup": {
+		"title": "Contentful mit AACsearch verbinden in 3 Schritten",
+		"subtitle": "App installieren, Webhooks konfigurieren, Ihre Inhalte sind durchsuchbar.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "AACsearch-App installieren",
+			"description": "Installieren Sie die AACsearch-App aus dem Contentful Marketplace. Gewähren Sie Lesezugriff auf Ihren Space und wählen Sie die Umgebung aus."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "Content-Modell-Zuordnung konfigurieren",
+			"description": "Ordnen Sie in den App-Einstellungen jedes Contentful-Content-Modell einer AACsearch-Collection zu. Rich-Text-Felder werden automatisch konvertiert."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Webhooks einrichten",
+			"description": "Konfigurieren Sie Contentful-Webhooks in Ihrem AACsearch-Dashboard. Veröffentlichungs- und Archivierungsereignisse lösen automatische Indexaktualisierungen aus."
+		},
+		"cta": "App installieren"
+	},
+	"integrationsContentfulFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Unterstützt es Contentful-Locales?",
+			"answer": "Ja. Jedes Contentful-Locale wird einer separaten AACsearch-Collection zugeordnet. Sie können die Suche in einer, mehreren oder allen Sprachen aktivieren."
+		},
+		"q2": {
+			"question": "Wie funktioniert die Rich-Text-Feldindizierung?",
+			"answer": "Contentful Rich-Text-Felder werden während der Synchronisierung automatisch in Klartext umgewandelt. Eingebettete Assets und Einträge werden extrahiert und verarbeitet."
+		},
+		"q3": {
+			"question": "Kann ich die Preview-Umgebung verwenden?",
+			"answer": "Ja. Die Integration unterstützt die Synchronisierung aus der Contentful-Preview-Umgebung zum Testen vor der Veröffentlichung."
+		}
+	},
+	"integrationsSanitySetup": {
+		"title": "Sanity mit AACsearch verbinden in 3 Schritten",
+		"subtitle": "Plugin installieren, GROQ-Abfrage schreiben, Ihre Inhalte sind durchsuchbar.",
+		"step1": {
+			"label": "Schritt 1",
+			"title": "Sanity-Plugin installieren",
+			"description": "Führen Sie npm install sanity-plugin-aacsearch in Ihrem Sanity Studio-Projekt aus. Fügen Sie es Ihrem sanity.config.ts plugins-Array hinzu."
+		},
+		"step2": {
+			"label": "Schritt 2",
+			"title": "GROQ-Projektion schreiben",
+			"description": "Definieren Sie mit einer GROQ-Abfrage, welche Dokumente und Felder indiziert werden sollen. Nur die benötigten Daten verlassen Ihr Sanity-Dataset."
+		},
+		"step3": {
+			"label": "Schritt 3",
+			"title": "Webhook-Synchronisierung konfigurieren",
+			"description": "Sanity liefert Dokumentänderungen per HTTPS-Webhook an AACsearch. Neue Dokumente, Aktualisierungen und Löschungen werden automatisch verarbeitet."
+		},
+		"cta": "Plugin herunterladen"
+	},
+	"integrationsSanityFaq": {
+		"title": "Häufig gestellte Fragen",
+		"q1": {
+			"question": "Unterstützt es Portable Text?",
+			"answer": "Ja. Sanity Portable Text-Blöcke werden in durchsuchbaren Klartext umgewandelt. Die Überschriftstruktur bleibt erhalten, Inline-Anmerkungen werden extrahiert."
+		},
+		"q2": {
+			"question": "Kann ich mehrere Sanity-Datasets synchronisieren?",
+			"answer": "Ja. Jedes Sanity-Dataset wird einer separaten AACsearch-Collection zugeordnet. Produktions- und Entwicklungs-Datasets haben unabhängige Konfigurationen."
+		},
+		"q3": {
+			"question": "Wie funktioniert die Echtzeit-Synchronisierung?",
+			"answer": "Das Plugin hört auf Sanity GROQ-Mutationen und aktualisiert AACsearch in Echtzeit. Änderungen werden innerhalb von Sekunden nach der Veröffentlichung übernommen."
+		}
 	}
 }

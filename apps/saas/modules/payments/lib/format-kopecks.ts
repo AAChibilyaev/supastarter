@@ -1,15 +1,40 @@
 /**
+ * Resolve the Intl locale tag and currency code from a next-intl locale key.
+ * ru → { intlLocale: "ru-RU", currency: "RUB" }
+ * anything else → { intlLocale: locale, currency: "USD" }
+ */
+function resolveLocaleCurrency(locale: string): { intlLocale: string; currency: string } {
+	if (locale === "ru") {
+		return { intlLocale: "ru-RU", currency: "RUB" };
+	}
+	const intlLocale =
+		locale === "de"
+			? "de-DE"
+			: locale === "es"
+				? "es-ES"
+				: locale === "fr"
+					? "fr-FR"
+					: "en-US";
+	return { intlLocale, currency: "USD" };
+}
+
+/**
  * Format kopecks (or numeric string of kopecks) as a localized currency string.
  *
- * Always renders RUB with 2 fraction digits. Accepts `bigint`, `number`, or
- * a numeric `string` (because oRPC serializes BigInt as string on the wire).
+ * For `ru` locale: renders as RUB (kopecks → rubles).
+ * For all other locales: renders as USD (kopecks treated as cents → dollars).
+ *
+ * Accepts `bigint`, `number`, or a numeric `string` (oRPC serializes BigInt as
+ * string on the wire). Pass `appLocale` from `useLocale()` / `getLocale()`.
  */
 export function formatKopecks(
 	amount: bigint | number | string,
-	options: { locale?: string; currency?: string } = {},
+	options: { locale?: string; currency?: string; appLocale?: string } = {},
 ): string {
-	const locale = options.locale ?? "ru-RU";
-	const currency = options.currency ?? "RUB";
+	const appLocale = options.appLocale;
+	const resolved = appLocale ? resolveLocaleCurrency(appLocale) : null;
+	const locale = options.locale ?? resolved?.intlLocale ?? "ru-RU";
+	const currency = options.currency ?? resolved?.currency ?? "RUB";
 
 	const value =
 		typeof amount === "bigint"

@@ -54,6 +54,10 @@ export function createAacSearchClient(config: WidgetConfig) {
 					highlightFields: params.highlightFields as string | undefined,
 					disjunctiveFacets: params.disjunctiveFacets as string | undefined,
 					maxFacetValues: params.maxFacetValues as number | undefined,
+					facetSearch: params.facetSearch as string | undefined,
+					facetSamplePercent: params.facetSamplePercent as number | undefined,
+					facetSortBy: params.facetSortBy as string | undefined,
+					facetStrategy: params.facetStrategy as string | undefined,
 				};
 			});
 

@@ -35,7 +35,14 @@
       "codeCaption": "search-client.ts",
       "new": "NUEVO",
       "featureBadge": "Búsqueda como Servicio",
-      "imageAlt": "Captura del panel AACsearch"
+      "imageAlt": "Captura del panel AACsearch",
+      "badgeLatency": "50ms p99",
+      "badgeSoc2": "SOC 2",
+      "badgeFulltext": "Texto completo",
+      "badgeAnalytics": "Analítica",
+      "statDocs": "Documentos indexados",
+      "statLatency": "Latencia de búsqueda",
+      "statUptime": "SLA de uptime"
     },
     "howItWorks": {
       "title": "Tres llamadas. Una tarde.",

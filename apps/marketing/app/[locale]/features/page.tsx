@@ -23,11 +23,12 @@ export default async function FeaturesPage(props: { params: Promise<{ locale: st
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "featuresPage" });
+	const tb = await getTranslations({ locale, namespace: "breadcrumbs" });
 	const baseUrl = getBaseUrl();
 
 	const breadcrumbs = [
-		{ name: "Home", url: `${baseUrl}/${locale}` },
-		{ name: "Features", url: `${baseUrl}/${locale}/features` },
+		{ name: tb("home"), url: `${baseUrl}/${locale}` },
+		{ name: tb("features"), url: `${baseUrl}/${locale}/features` },
 	];
 
 	return (

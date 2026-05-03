@@ -35,7 +35,14 @@
       "codeCaption": "search-client.ts",
       "new": "НОВОЕ",
       "featureBadge": "Поиск как сервис",
-      "imageAlt": "Скриншот панели AACsearch"
+      "imageAlt": "Скриншот панели AACsearch",
+      "badgeLatency": "50ms p99",
+      "badgeSoc2": "SOC 2",
+      "badgeFulltext": "Полнотекстовый",
+      "badgeAnalytics": "Аналитика",
+      "statDocs": "Проиндексировано документов",
+      "statLatency": "Задержка поиска",
+      "statUptime": "SLA аптайма"
     },
     "howItWorks": {
       "title": "Три вызова. Один вечер.",

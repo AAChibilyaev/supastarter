@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { DemoSearchPage } from "../../../modules/demo/components/DemoSearchPage";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata(props: {
+	params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+	const { locale } = await props.params;
+	const t = await getTranslations({ locale, namespace: "demo" });
 	return {
-		title: "Live Demo — AACsearch Engine",
-		description:
-			"Try AACsearch with a pre-loaded fashion catalog. Search, filter, and see real-time results — no signup required.",
+		title: t("title"),
+		description: t("description"),
 		openGraph: {
-			title: "Live Demo — AACsearch Engine",
-			description: "Try AACsearch with a pre-loaded fashion catalog. No signup required.",
+			title: t("title"),
+			description: t("description"),
 		},
 	};
 }
@@ -19,15 +22,14 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
 	const { locale } = await params;
 	setRequestLocale(locale);
 
+	const t = await getTranslations({ locale, namespace: "demo" });
+
 	return (
 		<main className="section-padding min-h-screen">
 			<div className="container">
 				<div className="max-w-3xl mb-12 mx-auto text-center">
-					<h1 className="text-4xl font-bold tracking-tight mb-4">Live Demo</h1>
-					<p className="text-lg text-muted-foreground">
-						Explore a pre-loaded fashion catalog powered by AACsearch. Search, filter by
-						category, and experience real-time results.
-					</p>
+					<h1 className="text-4xl font-bold tracking-tight mb-4">{t("heading")}</h1>
+					<p className="text-lg text-muted-foreground">{t("subheading")}</p>
 				</div>
 				<DemoSearchPage />
 			</div>

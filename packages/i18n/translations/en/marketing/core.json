@@ -35,7 +35,14 @@
       "codeCaption": "search-client.ts",
       "new": "NEW",
       "featureBadge": "Search-as-a-Service",
-      "imageAlt": "AACsearch dashboard screenshot"
+      "imageAlt": "AACsearch dashboard screenshot",
+      "badgeLatency": "50ms p99",
+      "badgeSoc2": "SOC 2",
+      "badgeFulltext": "Full-text",
+      "badgeAnalytics": "Analytics",
+      "statDocs": "Documents indexed",
+      "statLatency": "Search latency",
+      "statUptime": "Uptime SLA"
     },
     "howItWorks": {
       "title": "Three calls. One afternoon.",

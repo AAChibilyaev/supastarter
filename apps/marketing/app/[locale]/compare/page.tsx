@@ -24,11 +24,12 @@ export default async function ComparePage(props: { params: Promise<{ locale: str
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "comparePage" });
+	const tb = await getTranslations({ locale, namespace: "breadcrumbs" });
 	const baseUrl = getBaseUrl();
 
 	const breadcrumbs = [
-		{ name: "Home", url: `${baseUrl}/${locale}` },
-		{ name: "Compare", url: `${baseUrl}/${locale}/compare` },
+		{ name: tb("home"), url: `${baseUrl}/${locale}` },
+		{ name: tb("compare"), url: `${baseUrl}/${locale}/compare` },
 	];
 
 	return (

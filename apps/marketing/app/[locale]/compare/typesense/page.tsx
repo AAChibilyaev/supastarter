@@ -31,25 +31,6 @@ const results = await client.search({
   filter_by: combineFilters(tenantFilter, scopedToken),
 });`;
 
-const FAQ_ITEMS = [
-	{
-		question: "Why choose AACsearch over Typesense Cloud?",
-		answer: "AACsearch adds a full SaaS layer on top of Typesense: multi-tenant API keys, scoped tokens, analytics dashboard, search widget, CMS connectors, rate limiting, and user management — all included. Typesense Cloud gives you a Typesense cluster, but you build everything else yourself.",
-	},
-	{
-		question: "How does AACsearch pricing compare to Typesense Cloud?",
-		answer: "AACsearch uses flat per-index pricing with unlimited search operations. Typesense Cloud charges per node-hour plus per-GB storage. For 100k documents and 500k searches/month, AACsearch is $99/mo compared to Typesense Cloud's ~$99/mo for the cluster — but you'd also need to build and maintain multi-tenancy, analytics, and other middleware.",
-	},
-	{
-		question: "Is migration from Typesense to AACsearch difficult?",
-		answer: "Not at all — AACsearch uses the same Typesense engine. Your data schema, search queries, and relevance tuning are fully compatible. Most teams reindex in under an hour.",
-	},
-	{
-		question: "Can I use AACsearch if I need to self-host later?",
-		answer: "Yes — AACsearch provides full Typesense data export. Because both use the same open-source engine, you can migrate to self-hosted Typesense anytime with zero lock-in. Export your data and point your client to your own cluster.",
-	},
-];
-
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -70,18 +51,21 @@ export default async function CompareTypesensePage(props: { params: Promise<{ lo
 	setRequestLocale(locale);
 
 	const t = await getTranslations({ locale, namespace: "compareTypesensePage" });
+	const tb = await getTranslations({ locale, namespace: "breadcrumbs" });
 	const baseUrl = getBaseUrl();
 
+	const faqItems = t.raw("faq") as { question: string; answer: string }[];
+
 	const breadcrumbs = [
-		{ name: "Home", url: `${baseUrl}/${locale}` },
-		{ name: "Compare", url: `${baseUrl}/${locale}/compare` },
-		{ name: "vs Typesense Cloud", url: `${baseUrl}/${locale}/compare/typesense` },
+		{ name: tb("home"), url: `${baseUrl}/${locale}` },
+		{ name: tb("compare"), url: `${baseUrl}/${locale}/compare` },
+		{ name: tb("vs.typesense"), url: `${baseUrl}/${locale}/compare/typesense` },
 	];
 
 	return (
 		<>
 			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
-			<FAQPageSchema items={FAQ_ITEMS} id={`/${locale}/compare/typesense#faq`} />
+			<FAQPageSchema items={faqItems} id={`/${locale}/compare/typesense#faq`} />
 
 			{/* Hero */}
 			<section className="section-padding border-b border-border/60 text-center">

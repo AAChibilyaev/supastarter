@@ -55,9 +55,7 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 						<TabsTrigger value="synonyms">{t("search.synonyms.tab")}</TabsTrigger>
 						<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
 						<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
-						<TabsTrigger value="spellCorrection">
-							{t("search.spellCorrection.tab")}
-						</TabsTrigger>
+						<TabsTrigger value="spellCorrection">{t("search.spellCorrection.tab")}</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">

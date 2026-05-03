@@ -121,5 +121,35 @@
 		"cta": "Öffnen Sie das AACsearch Engine Dashboard, um neue Funktionen zu nutzen:",
 		"openDashboard": "Dashboard öffnen",
 		"signoff": "— Das AACsearch Engine Team"
+	},
+	"invoicePaid": {
+		"title": "Zahlungsbeleg",
+		"greeting": "Hallo {orgName},",
+		"body": "Dies ist eine Quittung für Ihre {planName}-Abonnementzahlung von {amount} am {date}.",
+		"viewInvoice": "Rechnung anzeigen",
+		"cta": "Möchten Sie Ihre Abrechnung verwalten?",
+		"manageBilling": "Abrechnung verwalten",
+		"subject": "Ihre AACsearch Engine Quittung"
+	},
+	"paymentFailed": {
+		"title": "Zahlung fehlgeschlagen",
+		"greeting": "Hallo {orgName},",
+		"body": "Ihre {planName}-Abonnementzahlung von {amount} am {date} konnte nicht verarbeitet werden.",
+		"cardInfo": "Karte: {brand} endet auf {last4}",
+		"action": "Um Unterbrechungen zu vermeiden, aktualisieren Sie bitte Ihre Zahlungsmethode:",
+		"updatePayment": "Zahlungsmethode aktualisieren",
+		"warning": "Wenn die Zahlung nicht innerhalb von 7 Tagen erfolgt, wird Ihr Abonnement möglicherweise herabgestuft.",
+		"manageBilling": "Abrechnungseinstellungen",
+		"subject": "Handlung erforderlich: AACsearch Engine Zahlung fehlgeschlagen"
+	},
+	"subscriptionCancelled": {
+		"title": "Abonnement gekündigt",
+		"greeting": "Hallo {orgName},",
+		"body": "Ihr {planName}-Abonnement wurde gekündigt. Sie haben weiterhin Zugriff bis zum {endDate}.",
+		"info": "Wenn Sie AACsearch Engine weiter nutzen möchten, können Sie Ihr Abonnement vor Ablauf reaktivieren.",
+		"reactivate": "Abonnement reaktivieren",
+		"feedback": "Wir bedauern, Sie gehen zu sehen. Wenn wir etwas besser machen könnten, antworten Sie bitte auf diese E-Mail.",
+		"signoff": "— Das AACsearch Engine Team",
+		"subject": "AACsearch Engine Abonnement gekündigt"
 	}
 }

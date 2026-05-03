@@ -114,5 +114,35 @@
 		"cta": "Abre el panel de AACsearch Engine para empezar a usar las nuevas funciones:",
 		"openDashboard": "Abrir panel",
 		"signoff": "— El equipo de AACsearch Engine"
+	},
+	"invoicePaid": {
+		"title": "Recibo de pago",
+		"greeting": "Hola {orgName},",
+		"body": "Este es un recibo de su pago de suscripción {planName} de {amount} del {date}.",
+		"viewInvoice": "Ver factura",
+		"cta": "¿Necesita gestionar su facturación?",
+		"manageBilling": "Gestionar facturación",
+		"subject": "Su recibo de AACsearch Engine"
+	},
+	"paymentFailed": {
+		"title": "Pago fallido",
+		"greeting": "Hola {orgName},",
+		"body": "No pudimos procesar su pago de suscripción {planName} de {amount} del {date}.",
+		"cardInfo": "Tarjeta: {brand} terminada en {last4}",
+		"action": "Para evitar interrupciones, actualice su método de pago:",
+		"updatePayment": "Actualizar método de pago",
+		"warning": "Si el pago no se resuelve en 7 días, su suscripción podría degradarse.",
+		"manageBilling": "Configuración de facturación",
+		"subject": "Acción requerida: pago de AACsearch Engine fallido"
+	},
+	"subscriptionCancelled": {
+		"title": "Suscripción cancelada",
+		"greeting": "Hola {orgName},",
+		"body": "Su suscripción {planName} ha sido cancelada. Seguirá teniendo acceso hasta el {endDate}.",
+		"info": "Si desea seguir usando AACsearch Engine, puede reactivar su suscripción antes de la fecha de vencimiento.",
+		"reactivate": "Reactivar suscripción",
+		"feedback": "Lamentamos verle irse. Si hay algo que podríamos haber hecho mejor, responda a este correo.",
+		"signoff": "— El equipo de AACsearch Engine",
+		"subject": "Suscripción de AACsearch Engine cancelada"
 	}
 }

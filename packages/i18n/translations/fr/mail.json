@@ -114,5 +114,35 @@
 		"cta": "Ouvrez le tableau de bord AACsearch Engine pour commencer à utiliser les nouvelles fonctionnalités :",
 		"openDashboard": "Ouvrir le tableau de bord",
 		"signoff": "— L'équipe AACsearch Engine"
+	},
+	"invoicePaid": {
+		"title": "Reçu de paiement",
+		"greeting": "Bonjour {orgName},",
+		"body": "Ceci est un reçu pour votre paiement d'abonnement {planName} de {amount} le {date}.",
+		"viewInvoice": "Voir la facture",
+		"cta": "Besoin de gérer votre facturation ?",
+		"manageBilling": "Gérer la facturation",
+		"subject": "Votre reçu AACsearch Engine"
+	},
+	"paymentFailed": {
+		"title": "Paiement échoué",
+		"greeting": "Bonjour {orgName},",
+		"body": "Nous n'avons pas pu traiter votre paiement d'abonnement {planName} de {amount} le {date}.",
+		"cardInfo": "Carte : {brand} se terminant par {last4}",
+		"action": "Pour éviter toute interruption, veuillez mettre à jour votre moyen de paiement :",
+		"updatePayment": "Mettre à jour le moyen de paiement",
+		"warning": "Si le paiement n'est pas effectué sous 7 jours, votre abonnement pourrait être rétrogradé.",
+		"manageBilling": "Paramètres de facturation",
+		"subject": "Action requise : paiement AACsearch Engine échoué"
+	},
+	"subscriptionCancelled": {
+		"title": "Abonnement annulé",
+		"greeting": "Bonjour {orgName},",
+		"body": "Votre abonnement {planName} a été annulé. Vous aurez toujours accès jusqu'au {endDate}.",
+		"info": "Si vous souhaitez continuer à utiliser AACsearch Engine, vous pouvez réactiver votre abonnement avant la date d'expiration.",
+		"reactivate": "Réactiver l'abonnement",
+		"feedback": "Nous sommes désolés de vous voir partir. Si nous aurions pu faire mieux, répondez à cet e-mail.",
+		"signoff": "— L'équipe AACsearch Engine",
+		"subject": "Abonnement AACsearch Engine annulé"
 	}
 }

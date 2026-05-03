@@ -1,4 +1,4 @@
-import type { PopoverProps } from "@radix-ui/react-popover";
+import type { PopoverContentProps } from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import type { ChoicesProps, InputProps, SupportCreateSuggestionOptions } from "ra-core";
 import {

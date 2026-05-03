@@ -37,7 +37,7 @@ export const ReferenceInput = (props: ReferenceInputProps) => {
 	return <ReferenceInputBase {...rest}>{children}</ReferenceInputBase>;
 };
 
-const defaultChildren = <AutocompleteInput />;
+const defaultChildren = <AutocompleteInput modal />;
 
 export interface ReferenceInputProps extends ReferenceInputBaseProps {
 	/**

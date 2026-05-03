@@ -6,6 +6,7 @@ import {
 	updatePurchase,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { sendEmail } from "@repo/mail";
 import { createNotification } from "@repo/notifications";
 import Stripe from "stripe";
 

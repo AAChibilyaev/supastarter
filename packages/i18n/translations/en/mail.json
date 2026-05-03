@@ -121,5 +121,35 @@
 		"cta": "Open AACsearch Engine dashboard to start using new features:",
 		"openDashboard": "Open Dashboard",
 		"signoff": "— The AACsearch Engine Team"
+	},
+	"invoicePaid": {
+		"title": "Payment Receipt",
+		"greeting": "Hi {orgName},",
+		"body": "This is a receipt for your {planName} subscription payment of {amount} on {date}.",
+		"viewInvoice": "View Invoice",
+		"cta": "Need to manage your billing?",
+		"manageBilling": "Manage Billing",
+		"subject": "Your AACsearch Engine receipt"
+	},
+	"paymentFailed": {
+		"title": "Payment Failed",
+		"greeting": "Hi {orgName},",
+		"body": "We were unable to process your {planName} subscription payment of {amount} on {date}.",
+		"cardInfo": "Card: {brand} ending in {last4}",
+		"action": "To avoid any interruption to your service, please update your payment method:",
+		"updatePayment": "Update Payment Method",
+		"warning": "If the payment is not resolved within 7 days, your subscription may be downgraded.",
+		"manageBilling": "Billing Settings",
+		"subject": "Action required: AACsearch Engine payment failed"
+	},
+	"subscriptionCancelled": {
+		"title": "Subscription Cancelled",
+		"greeting": "Hi {orgName},",
+		"body": "Your {planName} subscription has been cancelled. You will continue to have access until {endDate}.",
+		"info": "If you'd like to continue using AACsearch Engine, you can reactivate your subscription before the end date.",
+		"reactivate": "Reactivate Subscription",
+		"feedback": "We're sorry to see you go. If there's anything we could have done better, please reply to this email.",
+		"signoff": "— The AACsearch Engine Team",
+		"subject": "AACsearch Engine subscription cancelled"
 	}
 }

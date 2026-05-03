@@ -79,9 +79,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 		setShowThumbnails(cfg.autocompleteThumbnails ?? false);
 		setHighlightText(cfg.autocompleteHighlight ?? true);
 		setShowRecent(cfg.autocompleteRecent ?? false);
-	const [showRecent, setShowRecent] = useState(false);
+	}, [widgetData]);
 
-	// Auto-select first index
+	const saveMutation = useMutation({
 		...orpc.search.saveWidgetConfig.mutationOptions(),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: orpc.search.widgetConfig.key() });
@@ -104,7 +104,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 				autocompleteThumbnails: showThumbnails,
 				autocompleteHighlight: highlightText,
 				autocompleteRecent: showRecent,
-				// Preserve existing fields
 				facetFields: widgetData?.config.facetFields ?? [],
 				facetConfigs: widgetData?.config.facetConfigs ?? [],
 				theme: widgetData?.config.theme ?? "auto",
@@ -146,7 +145,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 
 	return (
 		<div className="space-y-6">
-			{/* Index selector */}
 			<div className="gap-3 flex items-center">
 				<Label htmlFor="autocomplete-index" className="shrink-0">
 					{t("widgetConfigurator.selectIndex")}
@@ -166,14 +164,12 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 			</div>
 
 			<div className="gap-6 lg:grid-cols-2 grid">
-				{/* Left: Settings */}
 				<Card className="shadow-sm">
 					<CardHeader>
 						<CardTitle className="text-base">{t("widget.autocompleteTitle")}</CardTitle>
 						<CardDescription>{t("widget.autocompleteDesc")}</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-6">
-						{/* Enable toggle */}
 						<div className="gap-3 flex items-center justify-between">
 							<Label htmlFor="ac-enable">{t("widget.autocompleteEnable")}</Label>
 							<Switch id="ac-enable" checked={enabled} onCheckedChange={setEnabled} />
@@ -181,7 +177,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 
 						{enabled && (
 							<>
-								{/* Source */}
 								<div className="space-y-2">
 									<Label>{t("widget.autocompleteSource")}</Label>
 									<Select
@@ -204,7 +199,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									</Select>
 								</div>
 
-								{/* Result count */}
 								<div className="space-y-2">
 									<div className="gap-2 flex items-center justify-between">
 										<Label htmlFor="ac-results">
@@ -225,7 +219,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									/>
 								</div>
 
-								{/* Debounce delay */}
 								<div className="space-y-2">
 									<div className="gap-2 flex items-center justify-between">
 										<Label htmlFor="ac-debounce">
@@ -245,7 +238,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									/>
 								</div>
 
-								{/* Min query length */}
 								<div className="space-y-2">
 									<Label htmlFor="ac-min-query">
 										{t("widget.autocompleteMinQuery")}
@@ -267,7 +259,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									</div>
 								</div>
 
-								{/* Show thumbnails */}
 								<div className="gap-3 flex items-center justify-between">
 									<Label htmlFor="ac-thumbnails">
 										{t("widget.autocompleteThumbnails")}
@@ -279,7 +270,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									/>
 								</div>
 
-								{/* Highlight text */}
 								<div className="gap-3 flex items-center justify-between">
 									<Label htmlFor="ac-highlight">
 										{t("widget.autocompleteHighlight")}
@@ -291,7 +281,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									/>
 								</div>
 
-								{/* Recent searches */}
 								<div className="gap-3 flex items-center justify-between">
 									<Label htmlFor="ac-recent">
 										{t("widget.autocompleteRecent")}
@@ -315,7 +304,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 					</CardContent>
 				</Card>
 
-				{/* Right: Live preview */}
 				<Card className="shadow-sm">
 					<CardHeader>
 						<CardTitle className="text-base">
@@ -325,7 +313,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 					</CardHeader>
 					<CardContent>
 						<div className="p-6 min-h-80 space-y-3 rounded-lg border bg-background">
-							{/* Simulated search input */}
 							<div className="gap-2 px-3 py-2 flex items-center rounded-lg border">
 								<svg
 									className="size-4 shrink-0 text-foreground/40"
@@ -343,7 +330,6 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 								<span className="text-sm flex-1 text-foreground/50">Search...</span>
 							</div>
 
-							{/* Simulated autocomplete dropdown */}
 							{enabled && (
 								<div className="p-2 space-y-1 shadow-sm rounded-lg border bg-background">
 									{[1, 2, 3, 4, 5].slice(0, resultCount).map((i) => (

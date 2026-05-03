@@ -91,7 +91,6 @@ const nohitsQueriesParamsSchema = z.object({
 });
 
 type NoHitsQueriesParams = z.infer<typeof nohitsQueriesParamsSchema>;
-export type { NoHitsQueriesParams };
 
 // Keep loose schema for aggregation rules
 const aggregationParamsSchema = z.record(z.string(), z.unknown());

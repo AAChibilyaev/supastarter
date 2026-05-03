@@ -89,7 +89,6 @@ import {
 	ArrowUpIcon,
 	CheckIcon,
 	ChevronDownIcon,
-	ColumnsIcon,
 	CopyIcon,
 	DownloadIcon,
 	Edit3Icon,
@@ -103,6 +102,7 @@ import {
 	XIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { DataTableProvider, DataTableViewOptions } from "@repo/ui";
 import Papa from "papaparse";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -1162,6 +1162,18 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	return (
 		<div className="space-y-4">
+			<DataTableProvider
+				table={table}
+				columns={columns}
+				filterFields={[]}
+				sorting={sorting}
+				columnVisibility={columnVisibility}
+				columnFilters={columnFilters}
+				rowSelection={rowSelection}
+				columnOrder={columnOrder}
+				enableColumnOrdering={true}
+				totalRows={rows.length}
+			>
 			{/* ── Toolbar ──────────────────────────────────────────────── */}
 			<div className="top-0 pb-2 space-y-2 sticky z-20 bg-background">
 				<div className="gap-2 flex flex-wrap items-center">
@@ -1186,36 +1198,10 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						{t("search.documents.filter")}
 					</Button>
 
-					{/* Columns dropdown */}
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="sm">
-								<ColumnsIcon className="size-3.5" />
-								{t("search.documents.columns")}
-								<ChevronDownIcon className="size-3" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end" className="max-h-60 overflow-y-auto">
-							<DropdownMenuLabel>
-								{t("search.documents.toggleColumns")}
-							</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							{table.getAllLeafColumns().map((col) => {
-								if (col.id === "select") return null;
-								return (
-									<DropdownMenuCheckboxItem
-										key={col.id}
-										checked={col.getIsVisible()}
-										onCheckedChange={(checked) => col.toggleVisibility(checked)}
-									>
-										{col.id}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<DataTableViewOptions />
 
 					{/* Density toggle */}
+
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="sm">
@@ -1682,6 +1668,8 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 					</CardContent>
 				</Card>
 			)}
+
+			</DataTableProvider>
 
 			{/* ── Bulk Edit Dialog ─────────────────────────────────────────── */}
 			<Dialog open={bulkEditDialogOpen} onOpenChange={setBulkEditDialogOpen}>

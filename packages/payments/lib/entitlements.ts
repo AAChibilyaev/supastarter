@@ -223,22 +223,50 @@ export async function resolveOrgPlan(orgId: string): Promise<PlanInfo> {
 	if (cached && cached.expiresAt > now) return cached.plan;
 
 	try {
-		const purchase = await db.purchase.findFirst({
-			where: { organizationId: orgId, type: "SUBSCRIPTION" },
-			orderBy: { createdAt: "desc" },
-		});
+		const [purchase, org] = await Promise.all([
+			db.purchase.findFirst({
+				where: { organizationId: orgId, type: "SUBSCRIPTION" },
+				orderBy: { createdAt: "desc" },
+			}),
+			db.organization.findUnique({
+				where: { id: orgId },
+				select: { trialEndsAt: true },
+			}),
+		]);
+
+		// Check trial period first — if within trial and no active purchase, give Pro
+		if (!purchase && org?.trialEndsAt && new Date(org.trialEndsAt) > new Date(now)) {
+			const info = buildTrialPlan(org.trialEndsAt);
+			planCache.set(orgId, { plan: info, expiresAt: now + 60_000 });
+			return info;
+		}
 
 		const planId = resolvePlanId(purchase);
 		const planDef = PLANS[planId];
 		if (!planDef) return buildFreePlan();
 
-		const info = buildPlanInfo(planId, planDef, purchase);
+		const info = buildPlanInfo(planId, planDef, purchase, org?.trialEndsAt ?? null);
 		planCache.set(orgId, { plan: info, expiresAt: now + 60_000 });
 		return info;
 	} catch (error) {
 		logger.error("resolveOrgPlan failed", { error, orgId });
 		return buildFreePlan();
 	}
+}
+
+function buildTrialPlan(trialEndsAt: Date): PlanInfo {
+	return {
+		planId: "pro",
+		name: PLANS.pro.name,
+		features: { ...PLANS.pro.features },
+		limits: { ...PLANS.pro.limits },
+		status: "trialing",
+		graceReadsUntil: null,
+		graceWritesUntil: null,
+		trialEndsAt,
+		overageRateUsdMicrosPerSearch:
+			paymentsConfig.searchLimits.pro?.overageRateUsdMicrosPerSearch ?? 0,
+	};
 }
 
 function resolvePlanId(purchase: { priceId: string } | null): PlanId {
@@ -277,6 +305,7 @@ function buildPlanInfo(
 	planId: PlanId,
 	planDef: (typeof PLANS)[PlanId],
 	purchase: { status: string | null; createdAt: Date; updatedAt: Date } | null,
+	trialEndsAt: Date | null = null,
 ): PlanInfo {
 	const status = purchase?.status ?? "active";
 	const now = new Date();
@@ -307,7 +336,7 @@ function buildPlanInfo(
 		status: resolvedStatus,
 		graceReadsUntil,
 		graceWritesUntil,
-		trialEndsAt: null,
+		trialEndsAt,
 		overageRateUsdMicrosPerSearch:
 			paymentsConfig.searchLimits[planId]?.overageRateUsdMicrosPerSearch ?? 0,
 	};

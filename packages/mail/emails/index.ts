@@ -17,6 +17,8 @@ import { QuotaHardCapWarning } from "./QuotaHardCapWarning";
 import { QuotaSoftCapWarning } from "./QuotaSoftCapWarning";
 import { SubscriptionCancelled } from "./SubscriptionCancelled";
 import { SubscriptionUpgrade } from "./SubscriptionUpgrade";
+import { TrialEndingSoon } from "./TrialEndingSoon";
+import { TrialExpired } from "./TrialExpired";
 
 export const mailTemplates = {
 	magicLink: MagicLink,
@@ -38,4 +40,6 @@ export const mailTemplates = {
 	invoicePaid: InvoicePaid,
 	paymentFailed: PaymentFailed,
 	subscriptionCancelled: SubscriptionCancelled,
+	trialEndingSoon: TrialEndingSoon,
+	trialExpired: TrialExpired,
 } as const;

@@ -144,6 +144,7 @@ model Organization {
   slug               String?
   logo               String?
   createdAt          DateTime
+  trialEndsAt        DateTime?
   metadata           String?
   paymentsCustomerId String?
   members            Member[]

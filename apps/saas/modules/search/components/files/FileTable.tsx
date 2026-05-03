@@ -1,16 +1,9 @@
 "use client";
 
+import { DataTableProvider, DataTableToolbar, type DataTableFilterField } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
-import {
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@repo/ui/components/dropdown-menu";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
 	Table,
@@ -24,21 +17,13 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
 	type ColumnDef,
-	type VisibilityState,
 	flexRender,
 	getCoreRowModel,
 	getSortedRowModel,
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import {
-	ChevronDownIcon,
-	ColumnsIcon,
-	FileIcon,
-	FileTextIcon,
-	ImageIcon,
-	Trash2Icon,
-} from "lucide-react";
+import { FileIcon, FileTextIcon, ImageIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -131,7 +116,6 @@ function SkeletonRows({ columns }: { columns: number }) {
 export function FileTable({ organizationId, slug }: FileTableProps) {
 	const t = useTranslations("search");
 	const [sorting, setSorting] = useState<SortingState>([]);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [previewFile, setPreviewFile] = useState<FileEntry | null>(null);
 	const [deleteFile, setDeleteFile] = useState<FileEntry | null>(null);
 
@@ -301,115 +285,92 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 
 	// ── Table ──────────────────────────────────────────────────────────────
 
+	const filterFields: DataTableFilterField<FileEntry>[] = [];
+
 	const table = useReactTable({
 		data: files,
 		columns,
-		state: { sorting, columnVisibility },
+		state: { sorting },
 		onSortingChange: setSorting,
-		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 	});
 
 	return (
 		<div className="space-y-4">
-			{/* Header toolbar */}
-			<div className="gap-2 flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">
-					{t("files.count", { count: files.length })}
-				</p>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" size="sm">
-							<ColumnsIcon className="size-3.5" />
-							{t("documents.columns")}
-							<ChevronDownIcon className="size-3.5" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>{t("documents.toggleColumns")}</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						{table
-							.getAllLeafColumns()
-							.filter((col) => col.id !== "actions")
-							.map((column) => (
-								<DropdownMenuCheckboxItem
-									key={column.id}
-									checked={column.getIsVisible()}
-									onCheckedChange={(value) => column.toggleVisibility(!!value)}
-								>
-									{column.id}
-								</DropdownMenuCheckboxItem>
-							))}
-					</DropdownMenuContent>
-				</DropdownMenu>
-			</div>
-
-			{/* Table */}
-			<Card className="overflow-x-auto rounded-lg border">
-				<CardContent className="p-0">
-					<Table>
-						<TableHeader>
-							{table.getHeaderGroups().map((headerGroup) => (
-								<TableRow key={headerGroup.id}>
-									{headerGroup.headers.map((header) => (
-										<TableHead
-											key={header.id}
-											style={{ width: header.getSize() }}
-											onClick={header.column.getToggleSortingHandler()}
-											className={
-												header.column.getCanSort()
-													? "cursor-pointer select-none hover:text-foreground"
-													: ""
-											}
-										>
-											{flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-											)}
-											{{
-												asc: " \u2191",
-												desc: " \u2193",
-											}[header.column.getIsSorted() as string] ?? null}
-										</TableHead>
-									))}
-								</TableRow>
-							))}
-						</TableHeader>
-						<TableBody>
-							{isLoading ? (
-								<SkeletonRows columns={columns.length} />
-							) : files.length === 0 ? (
-								<TableRow>
-									<TableCell
-										colSpan={columns.length}
-										className="py-12 text-center text-muted-foreground"
-									>
-										{t("files.empty")}
-									</TableCell>
-								</TableRow>
-							) : (
-								table.getRowModel().rows.map((row) => (
-									<TableRow
-										key={row.id}
-										className="cursor-pointer"
-										onClick={() => setPreviewFile(row.original)}
-									>
-										{row.getVisibleCells().map((cell) => (
-											<TableCell key={cell.id}>
+			<DataTableProvider
+				table={table}
+				columns={columns}
+				filterFields={filterFields}
+				totalRows={files.length}
+			>
+				<DataTableToolbar />
+				{/* Table */}
+				<Card className="overflow-x-auto rounded-lg border">
+					<CardContent className="p-0">
+						<Table>
+							<TableHeader>
+								{table.getHeaderGroups().map((headerGroup) => (
+									<TableRow key={headerGroup.id}>
+										{headerGroup.headers.map((header) => (
+											<TableHead
+												key={header.id}
+												style={{ width: header.getSize() }}
+												onClick={header.column.getToggleSortingHandler()}
+												className={
+													header.column.getCanSort()
+														? "cursor-pointer select-none hover:text-foreground"
+														: ""
+												}
+											>
 												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext(),
+													header.column.columnDef.header,
+													header.getContext(),
 												)}
-											</TableCell>
+												{{
+													asc: " \u2191",
+													desc: " \u2193",
+												}[header.column.getIsSorted() as string] ?? null}
+											</TableHead>
 										))}
 									</TableRow>
-								))
-							)}
-						</TableBody>
-					</Table>
-				</CardContent>
-			</Card>
+								))}
+							</TableHeader>
+							<TableBody>
+								{isLoading ? (
+									<SkeletonRows columns={columns.length} />
+								) : files.length === 0 ? (
+									<TableRow>
+										<TableCell
+											colSpan={columns.length}
+											className="py-12 text-center text-muted-foreground"
+										>
+											{t("files.empty")}
+										</TableCell>
+									</TableRow>
+								) : (
+									table.getRowModel().rows.map((row) => (
+										<TableRow
+											key={row.id}
+											className="cursor-pointer"
+											onClick={() => setPreviewFile(row.original)}
+										>
+											{row.getVisibleCells().map((cell) => (
+												<TableCell key={cell.id}>
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext(),
+													)}
+												</TableCell>
+											))}
+										</TableRow>
+									))
+								)}
+							</TableBody>
+						</Table>
+					</CardContent>
+				</Card>
+			</DataTableProvider>
 
 			{/* Preview dialog */}
 			{previewFile && <FilePreview file={previewFile} onClose={() => setPreviewFile(null)} />}

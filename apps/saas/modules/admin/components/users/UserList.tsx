@@ -1,7 +1,8 @@
 "use client";
 
 import { authClient } from "@repo/auth/client";
-import { Spinner } from "@repo/ui";
+import { DataTableProvider, DataTableToolbar, Spinner } from "@repo/ui";
+import type { DataTableFilterField } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {
@@ -279,56 +280,68 @@ export function UserList() {
 				className="mb-4"
 			/>
 
-			<Card className="rounded-md">
-				<Table>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-									className="group"
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell
-											key={cell.id}
-											className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
-										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									{isLoading ? (
-										<div className="flex h-full items-center justify-center">
-											<Spinner className="mr-2 size-4 text-primary" />
-											{t("admin.users.loading")}
-										</div>
-									) : (
-										<p>No results.</p>
-									)}
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</Card>
+			<DataTableProvider
+				table={table}
+				columns={columns}
+				filterFields={[]}
+				totalRows={data?.total}
+			>
+				<DataTableToolbar />
 
-			{data?.total && data.total > ITEMS_PER_PAGE && (
-				<Pagination
-					className="mt-4"
-					totalItems={data.total}
-					itemsPerPage={ITEMS_PER_PAGE}
-					currentPage={currentPage}
-					onChangeCurrentPage={setCurrentPage}
-				/>
-			)}
+				<Card className="rounded-md">
+					<Table>
+						<TableBody>
+							{table.getRowModel().rows?.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										data-state={row.getIsSelected() && "selected"}
+										className="group"
+									>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell
+												key={cell.id}
+												className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
+											>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										{isLoading ? (
+											<div className="flex h-full items-center justify-center">
+												<Spinner className="mr-2 size-4 text-primary" />
+												{t("admin.users.loading")}
+											</div>
+										) : (
+											<p>No results.</p>
+										)}
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
+				</Card>
+
+				{data?.total && data.total > ITEMS_PER_PAGE && (
+					<Pagination
+						className="mt-4"
+						totalItems={data.total}
+						itemsPerPage={ITEMS_PER_PAGE}
+						currentPage={currentPage}
+						onChangeCurrentPage={setCurrentPage}
+					/>
+				)}
+			</DataTableProvider>
 		</Card>
 	);
 }

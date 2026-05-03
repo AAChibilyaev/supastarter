@@ -48,7 +48,7 @@ export type TwoFactorScalarFieldEnum = z.infer<typeof TwoFactorScalarFieldEnumSc
 
 // File: OrganizationScalarFieldEnum.schema.ts
 
-export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId'])
+export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'trialEndsAt', 'metadata', 'paymentsCustomerId'])
 
 export type OrganizationScalarFieldEnum = z.infer<typeof OrganizationScalarFieldEnumSchema>;
 
@@ -442,6 +442,7 @@ export const OrganizationSchema = z.object({
   slug: z.string().nullish(),
   logo: z.string().nullish(),
   createdAt: z.date(),
+  trialEndsAt: z.date().nullish(),
   metadata: z.string().nullish(),
   paymentsCustomerId: z.string().nullish(),
 });
@@ -787,13 +788,13 @@ export const AiWalletSchema = z.object({
   userId: z.string().nullish(),
   organizationId: z.string().nullish(),
   currency: z.string().default("RUB"),
-  availableBalanceKopecks: z.bigint().default("0"),
-  reservedBalanceKopecks: z.bigint().default("0"),
-  includedMonthlyLimitKopecks: z.bigint().default("0"),
-  includedUsedPeriodKopecks: z.bigint().default("0"),
-  promoBalanceKopecks: z.bigint().default("0"),
-  overageLimitKopecks: z.bigint().default("0"),
-  overageUsedKopecks: z.bigint().default("0"),
+  availableBalanceKopecks: z.bigint().default(BigInt(0)),
+  reservedBalanceKopecks: z.bigint().default(BigInt(0)),
+  includedMonthlyLimitKopecks: z.bigint().default(BigInt(0)),
+  includedUsedPeriodKopecks: z.bigint().default(BigInt(0)),
+  promoBalanceKopecks: z.bigint().default(BigInt(0)),
+  overageLimitKopecks: z.bigint().default(BigInt(0)),
+  overageUsedKopecks: z.bigint().default(BigInt(0)),
   status: z.string().default("active"),
   periodStart: z.date(),
   periodEnd: z.date(),
@@ -867,13 +868,13 @@ export const AiUsageEventSchema = z.object({
   promptTokens: z.number().int(),
   completionTokens: z.number().int(),
   totalTokens: z.number().int(),
-  inputCostKopecks: z.bigint().default("0"),
-  outputCostKopecks: z.bigint().default("0"),
-  flatFeeKopecks: z.bigint().default("0"),
+  inputCostKopecks: z.bigint().default(BigInt(0)),
+  outputCostKopecks: z.bigint().default(BigInt(0)),
+  flatFeeKopecks: z.bigint().default(BigInt(0)),
   markupBps: z.number().int(),
-  totalChargeKopecks: z.bigint().default("0"),
-  providerCostUsdMicros: z.bigint().default("0"),
-  fxRateRubPerUsdMicros: z.bigint().default("0"),
+  totalChargeKopecks: z.bigint().default(BigInt(0)),
+  providerCostUsdMicros: z.bigint().default(BigInt(0)),
+  fxRateRubPerUsdMicros: z.bigint().default(BigInt(0)),
   pricingRuleId: z.string().nullish(),
   requestId: z.string().nullish(),
   idempotencyKey: z.string(),
@@ -895,7 +896,7 @@ export const AiPricingRuleSchema = z.object({
   inputPer1MTokensKopecks: z.bigint().nullish(),
   outputPer1MTokensKopecks: z.bigint().nullish(),
   embeddingPer1MTokensKopecks: z.bigint().nullish(),
-  flatFeeKopecks: z.bigint().default("0"),
+  flatFeeKopecks: z.bigint().default(BigInt(0)),
   markupBps: z.number().int().default(2000),
   effectiveFrom: z.date(),
   effectiveTo: z.date().nullish(),
@@ -1010,7 +1011,7 @@ export const CollectionSchema = z.object({
   description: z.string().nullish(),
   schema: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("[]"),
   documentCount: z.number().int(),
-  size: z.bigint().default("0"),
+  size: z.bigint().default(BigInt(0)),
   status: z.string().default("active"),
   createdAt: z.date(),
   updatedAt: z.date(),

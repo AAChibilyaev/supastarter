@@ -17,20 +17,23 @@ The project has **two** data-table ecosystems and **zero** shared component cons
 ## 1. The Custom DataTable Block (Legacy)
 
 ### File
+
 `apps/saas/modules/search/components/blocks/DataTable.tsx`
 
 ### Interface
+
 ```tsx
 export interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  pageSize?: number;           // default: 10
-  emptyMessage?: string;       // default: "No results."
-  className?: string;
+	columns: ColumnDef<TData, TValue>[];
+	data: TData[];
+	pageSize?: number; // default: 10
+	emptyMessage?: string; // default: "No results."
+	className?: string;
 }
 ```
 
 ### What It Provides
+
 - Client-side sorting (click header to sort asc/desc)
 - Client-side pagination (prev/next buttons + "Page X of Y" display)
 - Empty state with configurable message
@@ -40,6 +43,7 @@ export interface DataTableProps<TData, TValue> {
 ### Usage Count: **0 consumers** (dead code)
 
 ### Recommendation
+
 ✅ **Keep as-is or deprecate.** It has no consumers, so there's nothing to migrate. If needed later for trivial tables, it still works. No migration effort required.
 
 ---
@@ -47,49 +51,55 @@ export interface DataTableProps<TData, TValue> {
 ## 2. The supastarter DataTableProvider (Target)
 
 ### Location
+
 `packages/ui/components/data-table/` — exported from `@repo/ui` via `packages/ui/index.ts` → `packages/ui/components/data-table/index.ts`
 
 ### Available Exports
-| Export | Purpose |
-|--------|---------|
-| `DataTableProvider` | Context provider wrapping TanStack table instance |
-| `useDataTable` | Hook to consume data table context |
-| `DataTableToolbar` | Toolbar with search, actions, column visibility, filter drawer toggle |
-| `DataTableViewOptions` | Dropdown to toggle column visibility |
-| `DataTableFilterControls` | Side panel with filter fields |
-| `DataTableFilterControlsDrawer` | Mobile drawer variant |
-| `DataTableFilterInput` | Debounced text filter input |
-| `DataTableFilterCheckbox` | Checkbox filter with faceted values |
-| `DataTableFilterSlider` | Range slider filter |
-| `DataTableFilterTimerange` | Date range filter |
-| `DataTableResetButton` | Reset all table state |
-| `DataTableFilterResetButton` | Reset only filters |
+
+| Export                          | Purpose                                                               |
+| ------------------------------- | --------------------------------------------------------------------- |
+| `DataTableProvider`             | Context provider wrapping TanStack table instance                     |
+| `useDataTable`                  | Hook to consume data table context                                    |
+| `DataTableToolbar`              | Toolbar with search, actions, column visibility, filter drawer toggle |
+| `DataTableViewOptions`          | Dropdown to toggle column visibility                                  |
+| `DataTableFilterControls`       | Side panel with filter fields                                         |
+| `DataTableFilterControlsDrawer` | Mobile drawer variant                                                 |
+| `DataTableFilterInput`          | Debounced text filter input                                           |
+| `DataTableFilterCheckbox`       | Checkbox filter with faceted values                                   |
+| `DataTableFilterSlider`         | Range slider filter                                                   |
+| `DataTableFilterTimerange`      | Date range filter                                                     |
+| `DataTableResetButton`          | Reset all table state                                                 |
+| `DataTableFilterResetButton`    | Reset only filters                                                    |
 
 ### `DataTableProvider` API
 
 ```tsx
 interface DataTableProviderProps<TData, TValue> {
-  children: React.ReactNode;
-  table: Table<TData>;                        // Pre-configured TanStack Table instance
-  filterFields: DataTableFilterField<TData>[];  // Filter field definitions
-  columns: ColumnDef<TData, TValue>[];         // Column definitions
-  isLoading?: boolean;
-  totalRows?: number;
-  filterRows?: number;
-  getFacetedUniqueValues?: (table: Table<TData>, columnId: string) => Map<string, number>;
-  getFacetedMinMaxValues?: (table: Table<TData>, columnId: string) => [number, number] | undefined;
-  // Optional state overrides:
-  columnFilters?: ColumnFiltersState;
-  sorting?: SortingState;
-  rowSelection?: RowSelectionState;
-  columnOrder?: string[];
-  columnVisibility?: VisibilityState;
-  pagination?: PaginationState;
-  enableColumnOrdering?: boolean;
+	children: React.ReactNode;
+	table: Table<TData>; // Pre-configured TanStack Table instance
+	filterFields: DataTableFilterField<TData>[]; // Filter field definitions
+	columns: ColumnDef<TData, TValue>[]; // Column definitions
+	isLoading?: boolean;
+	totalRows?: number;
+	filterRows?: number;
+	getFacetedUniqueValues?: (table: Table<TData>, columnId: string) => Map<string, number>;
+	getFacetedMinMaxValues?: (
+		table: Table<TData>,
+		columnId: string,
+	) => [number, number] | undefined;
+	// Optional state overrides:
+	columnFilters?: ColumnFiltersState;
+	sorting?: SortingState;
+	rowSelection?: RowSelectionState;
+	columnOrder?: string[];
+	columnVisibility?: VisibilityState;
+	pagination?: PaginationState;
+	enableColumnOrdering?: boolean;
 }
 ```
 
 ### Key Pattern
+
 ```tsx
 // Parent creates the table instance
 const table = useReactTable({ data, columns, ... });
@@ -112,6 +122,7 @@ const table = useReactTable({ data, columns, ... });
 These are the 7 files that would benefit from migration. None use the custom `DataTable` block; all directly use `useReactTable`.
 
 ### Consumer 1: `UserList.tsx` (admin)
+
 - **File**: `apps/saas/modules/admin/components/users/UserList.tsx` (~335 lines)
 - **Table features**: Server-side pagination via nuqs `currentPage`, server-side search via debounced `query`, manual Table rendering without TableHeader/sorting, external `Pagination` component
 - **State**: `currentPage`/`searchTerm` from URL query params, server-driven data
@@ -121,6 +132,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Wrap in `DataTableProvider`, add filterFields, use `DataTableToolbar` for search, keep external Pagination
 
 ### Consumer 2: `OrganizationList.tsx` (admin)
+
 - **File**: `apps/saas/modules/admin/components/organizations/OrganizationList.tsx` (~283 lines)
 - **Table features**: Same pattern as UserList — server-side pagination + search via URL params
 - **State**: `currentPage`/`searchTerm` from nuqs, server-driven data
@@ -129,6 +141,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Same as UserList
 
 ### Consumer 3: `OrganizationMembersList.tsx` (orgs)
+
 - **File**: `apps/saas/modules/organizations/components/OrganizationMembersList.tsx` (~221 lines)
 - **Table features**: Client-side sorting, client-side column filters, manual TableBody only (no TableHeader), no pagination
 - **State**: `sorting`, `columnFilters` via `useState`, data from parent query
@@ -137,6 +150,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Add `DataTableProvider`, add filterFields, optionally add TableHeader render
 
 ### Consumer 4: `OrganizationInvitationsList.tsx` (orgs)
+
 - **File**: `apps/saas/modules/organizations/components/OrganizationInvitationsList.tsx` (~195 lines)
 - **Table features**: Client-side sorting, client-side text filter on email, client-side pagination
 - **State**: No sorting/filtering state tracked (using defaults)
@@ -145,6 +159,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Wrap in `DataTableProvider`, add filterFields, render header
 
 ### Consumer 5: `MySearchFileTable.tsx` (my-search)
+
 - **File**: `apps/saas/modules/my-search/components/files/MySearchFileTable.tsx` (~341 lines)
 - **Table features**: Client-side sorting, column visibility toggle (custom DropdownMenu), manual header + body rendering with sorting indicators, custom skeleton loading, preview/delete dialogs
 - **State**: `sorting`, `columnVisibility` via `useState`
@@ -153,6 +168,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Could benefit from `DataTableToolbar` + `DataTableViewOptions` to replace custom columns dropdown
 
 ### Consumer 6: `FileTable.tsx` (search)
+
 - **File**: `apps/saas/modules/search/components/files/FileTable.tsx` (~428 lines)
 - **Table features**: Client-side sorting, column visibility toggle (custom DropdownMenu), manual header + body rendering, skeleton loading, preview/delete dialogs. Very similar to MySearchFileTable.
 - **State**: `sorting`, `columnVisibility` via `useState`
@@ -161,6 +177,7 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 - **What changes**: Same as MySearchFileTable
 
 ### Consumer 7: `DocumentsTable.tsx` (search) — **BIG ONE**
+
 - **File**: `apps/saas/modules/search/components/tables/DocumentsTable.tsx` (~2045 lines)
 - **Table features**: Drag-and-drop column reordering (dnd-kit), column visibility, client-side sorting, client-side pagination with custom UI, row selection with bulk actions (copy, delete, edit), sheet for editing, search input, filter controls
 - **State**: `sorting`, `columnVisibility`, `columnFilters`, `rowSelection`, and drag state
@@ -174,15 +191,16 @@ These are the 7 files that would benefit from migration. None use the custom `Da
 
 Since the custom `DataTable` block has **zero consumers**, this mapping is hypothetical but illustrates the relationship:
 
-| Custom DataTable | DataTableProvider Equivalent |
-|---|---|
-| `data: TData[]` | → Already passed to `useReactTable({data})` setup |
-| `columns: ColumnDef[]` | → Passed to both `useReactTable({columns})` and `DataTableProvider columns` prop |
-| `pageSize?: number` | → Set via `initialState.pagination.pageSize` in `useReactTable` |
-| `emptyMessage?: string` | → Custom render in empty state (DataTableProvider doesn't have this prop) |
-| `className?: string` | → Apply to wrapper div |
+| Custom DataTable        | DataTableProvider Equivalent                                                     |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| `data: TData[]`         | → Already passed to `useReactTable({data})` setup                                |
+| `columns: ColumnDef[]`  | → Passed to both `useReactTable({columns})` and `DataTableProvider columns` prop |
+| `pageSize?: number`     | → Set via `initialState.pagination.pageSize` in `useReactTable`                  |
+| `emptyMessage?: string` | → Custom render in empty state (DataTableProvider doesn't have this prop)        |
+| `className?: string`    | → Apply to wrapper div                                                           |
 
 The custom DataTable provides:
+
 - Built-in **Card** wrapper → migrate to `<Card>` in consumer
 - Built-in **pagination** UI (prev/next buttons + "Page X of Y") → DataTableProvider doesn't provide pagination UI; consumer renders it
 - Built-in **sorting** (click-to-sort with chevron icons) → DataTableProvider doesn't render the table itself; consumer renders headers
@@ -199,6 +217,7 @@ The custom DataTable provides:
 A gradual migration is safest. Each consumer can be wrapped independently.
 
 ### Suggested Order (lowest risk first)
+
 1. **OrganizationInvitationsList** (~195 lines, simplest) — ⭐ Easy
 2. **OrganizationMembersList** (~221 lines, minimal) — ⭐ Easy
 3. **MySearchFileTable** (~341 lines, reusable pattern) — ⭐⭐ Medium
@@ -210,85 +229,88 @@ A gradual migration is safest. Each consumer can be wrapped independently.
 ### Migration Pattern (per consumer)
 
 **Before:**
+
 ```tsx
 export function MyTable() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const table = useReactTable({
+		data,
+		columns,
+		state: { sorting },
+		onSortingChange: setSorting,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+	});
 
-  return (
-    <div className="space-y-4">
-      {/* Custom toolbar */}
-      <div className="flex items-center justify-between">
-        <p>{data.length} rows</p>
-        <DropdownMenu>{/* column visibility */}</DropdownMenu>
-      </div>
-      <Card>
-        <Table>
-          <TableHeader>{/* header rendering */}</TableHeader>
-          <TableBody>{/* body rendering */}</TableBody>
-        </Table>
-      </Card>
-    </div>
-  );
+	return (
+		<div className="space-y-4">
+			{/* Custom toolbar */}
+			<div className="flex items-center justify-between">
+				<p>{data.length} rows</p>
+				<DropdownMenu>{/* column visibility */}</DropdownMenu>
+			</div>
+			<Card>
+				<Table>
+					<TableHeader>{/* header rendering */}</TableHeader>
+					<TableBody>{/* body rendering */}</TableBody>
+				</Table>
+			</Card>
+		</div>
+	);
 }
 ```
 
 **After:**
+
 ```tsx
 export function MyTable() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const table = useReactTable({
+		data,
+		columns,
+		state: { sorting },
+		onSortingChange: setSorting,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+	});
 
-  return (
-    <DataTableProvider
-      table={table}
-      columns={columns}
-      filterFields={[]}  // Define column filters
-      totalRows={data.length}
-    >
-      <DataTableToolbar />
-      <Card>
-        <Table>
-          <TableHeader>{/* header rendering */}</TableHeader>
-          <TableBody>{/* body rendering */}</TableBody>
-        </Table>
-      </Card>
-    </DataTableProvider>
-  );
+	return (
+		<DataTableProvider
+			table={table}
+			columns={columns}
+			filterFields={[]} // Define column filters
+			totalRows={data.length}
+		>
+			<DataTableToolbar />
+			<Card>
+				<Table>
+					<TableHeader>{/* header rendering */}</TableHeader>
+					<TableBody>{/* body rendering */}</TableBody>
+				</Table>
+			</Card>
+		</DataTableProvider>
+	);
 }
 ```
 
 ### Estimated Effort
 
-| Consumer | Lines | Effort | Key Changes |
-|---|---|---|---|
-| OrganizationInvitationsList | ~195 | 1-2 hrs | Wrap in provider, add filter fields |
-| OrganizationMembersList | ~221 | 1-2 hrs | Wrap in provider, add filter fields |
-| MySearchFileTable | ~341 | 2-3 hrs | Replace custom toolbar with `DataTableToolbar` + `DataTableViewOptions` |
-| FileTable | ~428 | 2-3 hrs | Same as MySearchFileTable |
-| UserList | ~335 | 2-3 hrs | Add header rendering, wrap in provider |
-| OrganizationList | ~283 | 2-3 hrs | Same as UserList |
-| DocumentsTable | ~2045 | 4-8 hrs | Complex — partial migration or phased approach |
+| Consumer                    | Lines | Effort  | Key Changes                                                             |
+| --------------------------- | ----- | ------- | ----------------------------------------------------------------------- |
+| OrganizationInvitationsList | ~195  | 1-2 hrs | Wrap in provider, add filter fields                                     |
+| OrganizationMembersList     | ~221  | 1-2 hrs | Wrap in provider, add filter fields                                     |
+| MySearchFileTable           | ~341  | 2-3 hrs | Replace custom toolbar with `DataTableToolbar` + `DataTableViewOptions` |
+| FileTable                   | ~428  | 2-3 hrs | Same as MySearchFileTable                                               |
+| UserList                    | ~335  | 2-3 hrs | Add header rendering, wrap in provider                                  |
+| OrganizationList            | ~283  | 2-3 hrs | Same as UserList                                                        |
+| DocumentsTable              | ~2045 | 4-8 hrs | Complex — partial migration or phased approach                          |
 
 **Total estimated effort**: 14-24 hours across all 7 consumers.
 
 ### Do NOT Migrate
 
 The following tables use plain `<Table>` components without `useReactTable` — they're static displays not suited for DataTableProvider migration:
+
 - `ImportPreview.tsx` — static CSV/import preview
 - `ConnectorsPage.tsx` — simple API keys list table
 - `JobsDashboardPage.tsx` — simple job list

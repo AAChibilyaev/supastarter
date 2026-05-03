@@ -2,7 +2,8 @@
 
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { authClient } from "@repo/auth/client";
-import { Button } from "@repo/ui/components/button";
+import { Button, DataTableProvider, DataTableToolbar } from "@repo/ui";
+import type { DataTableFilterField } from "@repo/ui";
 import { Card } from "@repo/ui/components/card";
 import {
 	DropdownMenu,
@@ -197,16 +198,7 @@ export function OrganizationList() {
 
 	return (
 		<Card className="p-6">
-			<div className="mb-4 gap-6 flex items-center justify-between">
-				<h2 className="font-semibold text-2xl">{t("admin.organizations.title")}</h2>
-
-				<Button asChild>
-					<Link href={joinRelativeURL("/admin", "/organizations/new")}>
-						<PlusIcon className="mr-1.5 size-4" />
-						{t("admin.organizations.create")}
-					</Link>
-				</Button>
-			</div>
+			<h2 className="mb-4 font-semibold text-2xl">{t("admin.organizations.title")}</h2>
 			<Input
 				type="search"
 				placeholder={t("admin.organizations.search")}
@@ -215,68 +207,89 @@ export function OrganizationList() {
 				className="mb-4"
 			/>
 
-			<Card className="rounded-md">
-				<Table>
-					<TableBody>
-						{isLoading ? (
-							Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
-								<TableRow key={`skeleton-${index}`}>
-									<TableCell className="py-2">
-										<div className="gap-2 flex items-center">
-											<Skeleton className="size-10 rounded-md" />
-											<div className="space-y-2 flex-1">
-												<Skeleton className="h-4 w-32" />
-												<Skeleton className="h-3 w-24" />
-											</div>
-										</div>
-									</TableCell>
-									<TableCell className="py-2">
-										<div className="flex justify-end">
-											<Skeleton className="size-9 rounded-md" />
-										</div>
-									</TableCell>
-								</TableRow>
-							))
-						) : table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-									className="group"
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell
-											key={cell.id}
-											className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
-										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									<p>No results.</p>
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</Card>
-
-			{!!data?.total && data.total > ITEMS_PER_PAGE && (
-				<Pagination
-					className="mt-4"
-					totalItems={data.total}
-					itemsPerPage={ITEMS_PER_PAGE}
-					currentPage={currentPage}
-					onChangeCurrentPage={setCurrentPage}
+			<DataTableProvider
+				table={table}
+				columns={columns}
+				filterFields={[]}
+				totalRows={data?.total}
+			>
+				<DataTableToolbar
+					renderActions={() => (
+						<Button asChild>
+							<Link href={joinRelativeURL("/admin", "/organizations/new")}>
+								<PlusIcon className="mr-1.5 size-4" />
+								{t("admin.organizations.create")}
+							</Link>
+						</Button>
+					)}
 				/>
-			)}
+
+				<Card className="rounded-md">
+					<Table>
+						<TableBody>
+							{isLoading ? (
+								Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+									<TableRow key={`skeleton-${index}`}>
+										<TableCell className="py-2">
+											<div className="gap-2 flex items-center">
+												<Skeleton className="size-10 rounded-md" />
+												<div className="space-y-2 flex-1">
+													<Skeleton className="h-4 w-32" />
+													<Skeleton className="h-3 w-24" />
+												</div>
+											</div>
+										</TableCell>
+										<TableCell className="py-2">
+											<div className="flex justify-end">
+												<Skeleton className="size-9 rounded-md" />
+											</div>
+										</TableCell>
+									</TableRow>
+								))
+							) : table.getRowModel().rows?.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										data-state={row.getIsSelected() && "selected"}
+										className="group"
+									>
+										{row.getVisibleCells().map((cell) => (
+											<TableCell
+												key={cell.id}
+												className="py-2 group-first:rounded-t-md group-last:rounded-b-md"
+											>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										<p>No results.</p>
+									</TableCell>
+								</TableRow>
+							)}
+						</TableBody>
+					</Table>
+				</Card>
+
+				{!!data?.total && data.total > ITEMS_PER_PAGE && (
+					<Pagination
+						className="mt-4"
+						totalItems={data.total}
+						itemsPerPage={ITEMS_PER_PAGE}
+						currentPage={currentPage}
+						onChangeCurrentPage={setCurrentPage}
+					/>
+				)}
+			</DataTableProvider>
 		</Card>
 	);
 }

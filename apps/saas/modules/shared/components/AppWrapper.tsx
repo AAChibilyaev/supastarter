@@ -1,6 +1,7 @@
 "use client";
 
 import { CsatBanner } from "@feedback/components/CsatBanner";
+import { NpsModal } from "@feedback/components/NpsModal";
 import { SidebarInset, SidebarProvider } from "@repo/ui";
 import { createDashboardTour } from "@search/components/GuidedTour";
 import { AppSidebar } from "@shared/components/AppSidebar";
@@ -28,6 +29,7 @@ export function AppWrapper({ children }: PropsWithChildren) {
 				</div>
 			</SidebarInset>
 			<CsatBanner />
+			<NpsModal />
 		</SidebarProvider>
 	);
 }

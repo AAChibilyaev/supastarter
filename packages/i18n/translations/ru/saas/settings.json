@@ -423,6 +423,33 @@
 				"resumeButton": "Возобновить подписку",
 				"resumeSuccess": "Подписка успешно возобновлена",
 				"resumeError": "Не удалось возобновить подписку"
+			},
+			"invoice": {
+				"title": "Настройки счетов",
+				"taxInfo": "Налоговая информация",
+				"legalName": "Юридическое название компании",
+				"legalNameHint": "Полное юридическое название для счетов",
+				"taxIdType": "Тип налогового номера",
+				"taxId": "ИНН / VAT номер",
+				"taxIdHint": "Например, EU VAT номер, US EIN или российский ИНН",
+				"address": "Юридический адрес",
+				"addressHint": "Зарегистрированный адрес компании для счетов",
+				"invoiceEmail": "Email для счетов",
+				"invoiceEmailHint": "Email для получения счетов",
+				"save": "Сохранить",
+				"saved": "Настройки счетов сохранены",
+				"error": "Не удалось сохранить настройки счетов",
+				"empty": "Настройки счетов не заданы",
+				"receiptTitle": "Квитанции об оплате",
+				"receiptEmpty": "Квитанций пока нет",
+				"receiptDate": "Дата",
+				"receiptAmount": "Сумма",
+				"receiptStatus": "Статус",
+				"receiptActions": "Действия",
+				"receiptDownload": "Скачать квитанцию",
+				"receiptStatusCompleted": "Завершено",
+				"receiptStatusPending": "В обработке",
+				"receiptStatusFailed": "Ошибка"
 			}
 		},
 		"notificationsPage": {

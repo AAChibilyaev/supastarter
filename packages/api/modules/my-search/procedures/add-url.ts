@@ -7,6 +7,13 @@ import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireOrganizationAccess } from "../lib/access";
 import {
 	ensurePersonalSearchCollection,
@@ -14,6 +21,7 @@ import {
 } from "../lib/personal-collections";
 
 export const addUrl = protectedProcedure
+	.use(creditGate("web_crawler_page", CREDIT_RATES.web_crawler_page))
 	.route({
 		method: "POST",
 		path: "/my-search/indexes/{indexId}/urls",
@@ -37,57 +45,81 @@ export const addUrl = protectedProcedure
 			chunkCount: z.number(),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationAccess(input.organizationId, user.id);
+	.handler(async ({ input, context: { ...rest } }) => {
+		const user = (rest as Record<string, unknown>).user as { id: string };
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 
-		// Verify index access
-		const index = await getPersonalSearchIndexById(input.organizationId, input.indexId);
-		if (!index) {
-			throw new ORPCError("NOT_FOUND", { message: "Search index not found" });
-		}
-
-		// Fetch and parse the URL
-		const result = await processUrl({ url: input.url });
-
-		// Store as a file entry in the index schema
-		const fileId = randomUUID();
-		await addFileToIndex(input.indexId, {
-			id: fileId,
-			filename: `url-${fileId.slice(0, 8)}.html`,
-			originalFilename: input.url,
-			mimeType: result.document.mimeType,
-			fileType: "url",
-			fileSize: result.document.content.length,
-			wordCount: result.document.content.split(/\s+/).filter(Boolean).length,
-			uploadedAt: new Date().toISOString(),
-			sourceUrl: input.url,
-		});
-
-		// Index chunks into Typesense
 		try {
-			await ensurePersonalSearchCollection(input.organizationId, index.slug, index.version);
-			await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
-				fileId,
+			await requireOrganizationAccess(input.organizationId, user.id);
+
+			// Verify index access
+			const index = await getPersonalSearchIndexById(input.organizationId, input.indexId);
+			if (!index) {
+				throw new ORPCError("NOT_FOUND", { message: "Search index not found" });
+			}
+
+			// Fetch and parse the URL
+			const result = await processUrl({ url: input.url });
+
+			// Store as a file entry in the index schema
+			const fileId = randomUUID();
+			await addFileToIndex(input.indexId, {
+				id: fileId,
 				filename: `url-${fileId.slice(0, 8)}.html`,
+				originalFilename: input.url,
+				mimeType: result.document.mimeType,
 				fileType: "url",
+				fileSize: result.document.content.length,
+				wordCount: result.document.content.split(/\s+/).filter(Boolean).length,
+				uploadedAt: new Date().toISOString(),
 				sourceUrl: input.url,
-				chunks: result.chunks,
 			});
-		} catch (error) {
-			logger.error("Failed to index URL chunks into Typesense", {
+
+			// Index chunks into Typesense
+			try {
+				await ensurePersonalSearchCollection(
+					input.organizationId,
+					index.slug,
+					index.version,
+				);
+				await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
+					fileId,
+					filename: `url-${fileId.slice(0, 8)}.html`,
+					fileType: "url",
+					sourceUrl: input.url,
+					chunks: result.chunks,
+				});
+			} catch (error) {
+				logger.error("Failed to index URL chunks into Typesense", {
+					fileId,
+					url: input.url,
+					error,
+				});
+				// Don't fail the upload — metadata is stored
+			}
+
+			// Commit flat-fee usage on successful URL ingestion
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "web_crawler_page",
+				provider: "aacsearch",
+				model: "web-crawler",
+				flatFeeKopecks: CREDIT_RATES.web_crawler_page,
+			});
+
+			logger.info(
+				`URL added to personal index: ${input.url} (${result.chunks.length} chunks)`,
+			);
+
+			return {
 				fileId,
 				url: input.url,
-				error,
-			});
-			// Don't fail the upload — metadata is stored
+				title: result.document.title,
+				chunkCount: result.chunks.length,
+			};
+		} catch (err) {
+			// Release reservation on any error
+			await releaseCreditReservation(creditReservationId);
+			throw err;
 		}
-
-		logger.info(`URL added to personal index: ${input.url} (${result.chunks.length} chunks)`);
-
-		return {
-			fileId,
-			url: input.url,
-			title: result.document.title,
-			chunkCount: result.chunks.length,
-		};
 	});

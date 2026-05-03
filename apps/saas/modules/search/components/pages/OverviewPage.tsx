@@ -383,14 +383,16 @@ export function OverviewPage() {
 					<div className="gap-4 sm:grid-cols-2 lg:grid-cols-4 grid">
 						<Button
 							variant="outline"
-							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							className="gap-3 py-4 px-4 h-auto justify-start text-left"
 							asChild
 						>
 							<Link href={`/${slug}/search`}>
 								<PlusCircleIcon className="size-5 shrink-0 text-primary" />
 								<div className="min-w-0">
-									<div className="text-sm font-medium">{t("overview.createIndex")}</div>
-									<div className="text-xs text-muted-foreground truncate">
+									<div className="text-sm font-medium">
+										{t("overview.createIndex")}
+									</div>
+									<div className="text-xs truncate text-muted-foreground">
 										{t("overview.manageIndexesDesc")}
 									</div>
 								</div>
@@ -398,14 +400,16 @@ export function OverviewPage() {
 						</Button>
 						<Button
 							variant="outline"
-							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							className="gap-3 py-4 px-4 h-auto justify-start text-left"
 							asChild
 						>
 							<Link href={`/${slug}/import-jobs`}>
 								<FileUpIcon className="size-5 shrink-0 text-primary" />
 								<div className="min-w-0">
-									<div className="text-sm font-medium">{t("overview.import.data") ?? "Import Data"}</div>
-									<div className="text-xs text-muted-foreground truncate">
+									<div className="text-sm font-medium">
+										{t("overview.import.data") ?? "Import Data"}
+									</div>
+									<div className="text-xs truncate text-muted-foreground">
 										{t("import.description")}
 									</div>
 								</div>
@@ -413,14 +417,14 @@ export function OverviewPage() {
 						</Button>
 						<Button
 							variant="outline"
-							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							className="gap-3 py-4 px-4 h-auto justify-start text-left"
 							asChild
 						>
 							<Link href={`/${slug}/preview`}>
 								<SearchIcon className="size-5 shrink-0 text-primary" />
 								<div className="min-w-0">
 									<div className="text-sm font-medium">{t("preview.title")}</div>
-									<div className="text-xs text-muted-foreground truncate">
+									<div className="text-xs truncate text-muted-foreground">
 										{t("preview.description")}
 									</div>
 								</div>
@@ -428,14 +432,16 @@ export function OverviewPage() {
 						</Button>
 						<Button
 							variant="outline"
-							className="gap-3 h-auto justify-start py-4 px-4 text-left"
+							className="gap-3 py-4 px-4 h-auto justify-start text-left"
 							asChild
 						>
 							<Link href={`/${slug}/widget`}>
 								<CodeIcon className="size-5 shrink-0 text-primary" />
 								<div className="min-w-0">
-									<div className="text-sm font-medium">{t("widget.installScriptTitle")}</div>
-									<div className="text-xs text-muted-foreground truncate">
+									<div className="text-sm font-medium">
+										{t("widget.installScriptTitle")}
+									</div>
+									<div className="text-xs truncate text-muted-foreground">
 										{t("widget.description")}
 									</div>
 								</div>

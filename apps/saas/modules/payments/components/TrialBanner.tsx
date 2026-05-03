@@ -31,9 +31,7 @@ export function TrialBanner({
 
 	if (!trialInfo?.isTrialing) return null;
 
-	const billingUrl = orgSlug
-		? `/organizations/${orgSlug}/settings/billing`
-		: "/settings/billing";
+	const billingUrl = orgSlug ? `/organizations/${orgSlug}/settings/billing` : "/settings/billing";
 
 	return (
 		<Alert className="mb-6 border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
@@ -41,9 +39,7 @@ export function TrialBanner({
 				{t("trialBannerTitle")}
 			</AlertTitle>
 			<AlertDescription className="text-amber-700 dark:text-amber-400">
-				<span>
-					{t("trialBannerMessage", { days: trialInfo.daysRemaining })}
-				</span>
+				<span>{t("trialBannerMessage", { days: trialInfo.daysRemaining })}</span>
 				<Button variant="primary" size="sm" className="ml-3" asChild>
 					<Link href={billingUrl}>{t("trialBannerUpgrade")}</Link>
 				</Button>

@@ -2,7 +2,6 @@
 
 import { authClient } from "@repo/auth/client";
 import { DataTableProvider, DataTableToolbar, Spinner } from "@repo/ui";
-import type { DataTableFilterField } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {

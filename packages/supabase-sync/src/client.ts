@@ -36,17 +36,14 @@ export class AacSearchClient {
 
 	/** Perform handshake to verify the connector token */
 	async handshake(): Promise<{ status: string; indexSlug: string }> {
-		const res = await fetch(
-			`${this.baseUrl}/api/connectors/handshake`,
-			{
-				method: "POST",
-				headers: this.headers(),
-				body: JSON.stringify({
-					moduleVersion: "0.1.0",
-					platform: "supabase",
-				}),
-			},
-		);
+		const res = await fetch(`${this.baseUrl}/api/connectors/handshake`, {
+			method: "POST",
+			headers: this.headers(),
+			body: JSON.stringify({
+				moduleVersion: "0.1.0",
+				platform: "supabase",
+			}),
+		});
 		if (!res.ok) {
 			const body = await res.text().catch(() => "");
 			throw new Error(`Handshake failed: ${res.status} ${body}`);
@@ -68,14 +65,11 @@ export class AacSearchClient {
 			return { synced: 0, skipped: 0, errors: [] };
 		}
 
-		const res = await fetch(
-			`${this.baseUrl}/api/projects/${this.projectId}/sync/delta`,
-			{
-				method: "POST",
-				headers: this.headers(),
-				body: JSON.stringify({ products: documents }),
-			},
-		);
+		const res = await fetch(`${this.baseUrl}/api/projects/${this.projectId}/sync/delta`, {
+			method: "POST",
+			headers: this.headers(),
+			body: JSON.stringify({ products: documents }),
+		});
 		if (!res.ok) {
 			const body = await res.text().catch(() => "");
 			throw new Error(`Delta sync failed: ${res.status} ${body}`);
@@ -110,14 +104,11 @@ export class AacSearchClient {
 	async batchDelete(externalIds: string[]): Promise<number> {
 		if (externalIds.length === 0) return 0;
 
-		const res = await fetch(
-			`${this.baseUrl}/api/connector/documents`,
-			{
-				method: "DELETE",
-				headers: this.headers(),
-				body: JSON.stringify({ externalIds }),
-			},
-		);
+		const res = await fetch(`${this.baseUrl}/api/connector/documents`, {
+			method: "DELETE",
+			headers: this.headers(),
+			body: JSON.stringify({ externalIds }),
+		});
 		if (!res.ok) {
 			const body = await res.text().catch(() => "");
 			throw new Error(`Batch delete failed: ${res.status} ${body}`);
@@ -132,14 +123,11 @@ export class AacSearchClient {
 			return { synced: 0, skipped: 0, errors: [] };
 		}
 
-		const res = await fetch(
-			`${this.baseUrl}/api/projects/${this.projectId}/sync/full`,
-			{
-				method: "POST",
-				headers: this.headers(),
-				body: JSON.stringify({ products: documents }),
-			},
-		);
+		const res = await fetch(`${this.baseUrl}/api/projects/${this.projectId}/sync/full`, {
+			method: "POST",
+			headers: this.headers(),
+			body: JSON.stringify({ products: documents }),
+		});
 		if (!res.ok) {
 			const body = await res.text().catch(() => "");
 			throw new Error(`Full sync failed: ${res.status} ${body}`);

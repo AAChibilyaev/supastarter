@@ -5,6 +5,8 @@ import { AutoRechargeSettings } from "@payments/components/AutoRechargeSettings"
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { InvoiceHistory } from "@payments/components/InvoiceHistory";
 import { OverageTransactionHistory } from "@payments/components/OverageTransactionHistory";
+import { ReceiptSection } from "@payments/components/ReceiptSection";
+import { TaxInfoForm } from "@payments/components/TaxInfoForm";
 import { TopUpDialog } from "@payments/components/TopUpDialog";
 import { TrialBanner } from "@payments/components/TrialBanner";
 import { listPurchases } from "@payments/lib/server";
@@ -88,6 +90,14 @@ export default async function BillingSettingsPage({
 
 			<div className="mt-8">
 				<InvoiceHistory organizationId={organization.id} />
+			</div>
+
+			<div className="mt-8">
+				<TaxInfoForm organizationId={organization.id} />
+			</div>
+
+			<div className="mt-8">
+				<ReceiptSection organizationId={organization.id} />
 			</div>
 		</>
 	);

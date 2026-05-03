@@ -4,6 +4,7 @@ import { type DragEndEvent, DndContext, PointerSensor, useSensor, useSensors } f
 import { useSortable } from "@dnd-kit/sortable";
 import { SortableContext, horizontalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { DataTableProvider, DataTableViewOptions } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -18,9 +19,7 @@ import {
 } from "@repo/ui/components/dialog";
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
@@ -102,7 +101,6 @@ import {
 	XIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { DataTableProvider, DataTableViewOptions } from "@repo/ui";
 import Papa from "papaparse";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -1174,460 +1172,157 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 				enableColumnOrdering={true}
 				totalRows={rows.length}
 			>
-			{/* ── Toolbar ──────────────────────────────────────────────── */}
-			<div className="top-0 pb-2 space-y-2 sticky z-20 bg-background">
-				<div className="gap-2 flex flex-wrap items-center">
-					{/* Search */}
-					<div className="sm:max-w-xs relative min-w-[200px] flex-1">
-						<SearchIcon className="left-2.5 size-4 absolute top-1/2 -translate-y-1/2 text-foreground/40" />
-						<Input
-							placeholder={t("search.documents.searchPlaceholder")}
-							value={searchInput}
-							onChange={(e) => handleSearchChange(e.target.value)}
-							className="pl-8"
-						/>
-					</div>
+				{/* ── Toolbar ──────────────────────────────────────────────── */}
+				<div className="top-0 pb-2 space-y-2 sticky z-20 bg-background">
+					<div className="gap-2 flex flex-wrap items-center">
+						{/* Search */}
+						<div className="sm:max-w-xs relative min-w-[200px] flex-1">
+							<SearchIcon className="left-2.5 size-4 absolute top-1/2 -translate-y-1/2 text-foreground/40" />
+							<Input
+								placeholder={t("search.documents.searchPlaceholder")}
+								value={searchInput}
+								onChange={(e) => handleSearchChange(e.target.value)}
+								className="pl-8"
+							/>
+						</div>
 
-					{/* Filter toggle */}
-					<Button
-						variant={filterOpen ? "primary" : "ghost"}
-						size="sm"
-						onClick={() => setFilterOpen(!filterOpen)}
-					>
-						<SearchIcon className="size-3.5" />
-						{t("search.documents.filter")}
-					</Button>
+						{/* Filter toggle */}
+						<Button
+							variant={filterOpen ? "primary" : "ghost"}
+							size="sm"
+							onClick={() => setFilterOpen(!filterOpen)}
+						>
+							<SearchIcon className="size-3.5" />
+							{t("search.documents.filter")}
+						</Button>
 
-					<DataTableViewOptions />
+						<DataTableViewOptions />
 
-					{/* Density toggle */}
+						{/* Density toggle */}
 
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="sm">
-								{density === "compact"
-									? t("search.documents.compact")
-									: t("search.documents.comfortable")}
-								<ChevronDownIcon className="size-3" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuCheckboxItem
-								checked={density === "comfortable"}
-								onCheckedChange={() => {
-									setDensity("comfortable");
-									setStoredDensity("comfortable");
-								}}
-							>
-								{t("search.documents.comfortable")}
-							</DropdownMenuCheckboxItem>
-							<DropdownMenuCheckboxItem
-								checked={density === "compact"}
-								onCheckedChange={() => {
-									setDensity("compact");
-									setStoredDensity("compact");
-								}}
-							>
-								{t("search.documents.compact")}
-							</DropdownMenuCheckboxItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-
-					{/* Import CSV */}
-					<Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-						<DialogTrigger asChild>
-							<Button variant="ghost" size="sm">
-								<UploadIcon className="size-3.5" />
-								{t("search.documents.importCsv")}
-							</Button>
-						</DialogTrigger>
-						<DialogContent>
-							<DialogHeader>
-								<DialogTitle>{t("search.documents.importCsv")}</DialogTitle>
-								<DialogDescription>
-									{t("search.documents.importCsvDescription")}
-								</DialogDescription>
-							</DialogHeader>
-							<div className="space-y-4">
-								<div className="gap-4 flex items-center">
-									<input
-										type="file"
-										accept=".csv"
-										onChange={handleFileSelect}
-										className="h-9 shadow-xs px-3 py-1 text-base file:font-medium file:text-sm flex w-full rounded-md border border-input bg-card transition-colors file:border-0 file:bg-transparent placeholder:text-foreground/60 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
-									/>
-								</div>
-								{importFile && (
-									<div className="text-sm text-foreground/60">
-										{t("search.documents.parsedRows", {
-											count: importParsed.length,
-										})}
-									</div>
-								)}
-
-								{/* Import action mode selector */}
-								<div className="space-y-2">
-									<Label>{t("search.documents.importAction")}</Label>
-									<Select
-										value={importAction}
-										onValueChange={(val) =>
-											setImportAction(
-												val as "create" | "update" | "upsert" | "emplace",
-											)
-										}
-									>
-										<SelectTrigger>
-											<SelectValue />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="create">
-												{t("search.documents.importAction_create")}
-											</SelectItem>
-											<SelectItem value="update">
-												{t("search.documents.importAction_update")}
-											</SelectItem>
-											<SelectItem value="upsert">
-												{t("search.documents.importAction_upsert")}
-											</SelectItem>
-											<SelectItem value="emplace">
-												{t("search.documents.importAction_emplace")}
-											</SelectItem>
-										</SelectContent>
-									</Select>
-								</div>
-							</div>
-							<DialogFooter>
-								<Button
-									variant="ghost"
-									onClick={() => {
-										setImportDialogOpen(false);
-										setImportFile(null);
-										setImportParsed([]);
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" size="sm">
+									{density === "compact"
+										? t("search.documents.compact")
+										: t("search.documents.comfortable")}
+									<ChevronDownIcon className="size-3" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuCheckboxItem
+									checked={density === "comfortable"}
+									onCheckedChange={() => {
+										setDensity("comfortable");
+										setStoredDensity("comfortable");
 									}}
 								>
-									{t("search.documents.cancel")}
-								</Button>
-								<Button
-									variant="primary"
-									disabled={importParsed.length === 0}
-									loading={importMutation.isPending}
-									onClick={handleImportSubmit}
+									{t("search.documents.comfortable")}
+								</DropdownMenuCheckboxItem>
+								<DropdownMenuCheckboxItem
+									checked={density === "compact"}
+									onCheckedChange={() => {
+										setDensity("compact");
+										setStoredDensity("compact");
+									}}
 								>
-									<FileUpIcon className="size-3.5" />
-									{t("search.documents.import")}
+									{t("search.documents.compact")}
+								</DropdownMenuCheckboxItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+
+						{/* Import CSV */}
+						<Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+							<DialogTrigger asChild>
+								<Button variant="ghost" size="sm">
+									<UploadIcon className="size-3.5" />
+									{t("search.documents.importCsv")}
 								</Button>
-							</DialogFooter>
-						</DialogContent>
-					</Dialog>
-
-					{/* Export Dialog */}
-					<ExportDialog
-						organizationId={organizationId}
-						slug={slug}
-						selectedCount={selectedIds.length}
-						selectedDocuments={selectedDocuments}
-						totalCount={totalFound}
-						hasFilter={hasFilter}
-						filterBy={buildFilterByExpression() || undefined}
-					/>
-
-					{/* Add Row */}
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={handleAddRow}
-						loading={createDocumentMutation.isPending}
-					>
-						<PlusIcon className="size-3.5" />
-						{t("search.documents.addRow")}
-					</Button>
-				</div>
-
-				{/* ── Collapsible filter row ─────────────────────────────────── */}
-				{filterOpen && (
-					<div className="gap-2 pt-1 pb-2 flex flex-wrap items-start">
-						{/* Field selector */}
-						<Select value={filterField} onValueChange={setFilterField}>
-							<SelectTrigger className="h-8 w-auto min-w-[120px]">
-								<SelectValue placeholder={t("search.documents.filterField")} />
-							</SelectTrigger>
-							<SelectContent>
-								{documentFields.map((f) => (
-									<SelectItem key={f.name} value={f.name}>
-										<span className="gap-2 inline-flex items-center">
-											{f.name}
-											<span className="text-[10px] text-muted-foreground">
-												{f.type}
-											</span>
-										</span>
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-
-						{/* Operator selector */}
-						<Select value={filterOperator} onValueChange={setFilterOperator}>
-							<SelectTrigger className="h-8 w-auto min-w-[100px]">
-								<SelectValue />
-							</SelectTrigger>
-							<SelectContent>
-								{filterField &&
-									getOperatorsForType(currentFilterFieldType ?? "").map((op) => (
-										<SelectItem key={op.value} value={op.value}>
-											{op.label}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-
-						{/* Value input */}
-						{filterOperator !== "not_empty" &&
-							filterOperator !== "is_empty" &&
-							(currentFilterFieldType === "bool" ? (
-								<div className="min-w-[150px] flex-1">
-									<Select value={filterValue} onValueChange={setFilterValue}>
-										<SelectTrigger className="h-8">
-											<SelectValue
-												placeholder={t("search.documents.selectValue")}
-											/>
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="true">
-												{t("search.documents.true")}
-											</SelectItem>
-											<SelectItem value="false">
-												{t("search.documents.false")}
-											</SelectItem>
-										</SelectContent>
-									</Select>
-								</div>
-							) : (
-								<div className="min-w-[150px] flex-1">
-									<Input
-										placeholder={t("search.documents.filterValuePlaceholder")}
-										value={filterValue}
-										onChange={(e) => setFilterValue(e.target.value)}
-										type={
-											currentFilterFieldType?.startsWith("int") ||
-											currentFilterFieldType === "float"
-												? "number"
-												: "text"
-										}
-										className="h-8"
-									/>
-								</div>
-							))}
-
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => {
-								setFilterField("");
-								setFilterOperator("contains");
-								setFilterValue("");
-							}}
-						>
-							<XIcon className="size-3.5" />
-							{t("search.documents.clear")}
-						</Button>
-						<Button
-							variant="destructive"
-							size="sm"
-							disabled={
-								!filterField || !filterOperator || deleteByFilterMutation.isPending
-							}
-							loading={deleteByFilterMutation.isPending}
-							onClick={handleDeleteByFilter}
-						>
-							<Trash2Icon className="size-3.5" />
-							{t("search.documents.deleteByFilter")}
-						</Button>
-					</div>
-				)}
-			</div>
-
-			{/* ── Table / Empty / Loading ─────────────────────────────────── */}
-			<Card className="overflow-hidden">
-				{isLoading ? (
-					<Table>
-						<TableHeader>
-							<TableRow>
-								{[...Array(Math.max(documentFields.length + 2, 4))].map((_, i) => (
-									<TableHead key={i}>
-										<Skeleton className="h-4 w-24" />
-									</TableHead>
-								))}
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							<SkeletonRows columns={documentFields.length + 2} count={8} />
-						</TableBody>
-					</Table>
-				) : rows.length === 0 ? (
-					<EmptyDocumentsState onImport={() => setImportDialogOpen(true)} />
-				) : (
-					<DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-						<div className="overflow-x-auto">
-							<Table>
-								<TableHeader className="top-0 sticky z-10 bg-card">
-									{table.getHeaderGroups().map((headerGroup) => (
-										<TableRow key={headerGroup.id}>
-											<SortableContext
-												items={sortableColumnIds}
-												strategy={horizontalListSortingStrategy}
-											>
-												{headerGroup.headers.map((header) => (
-													<DraggableColumnHeader
-														key={header.id}
-														id={header.column.id}
-														isDragDisabled={
-															header.column.id === "select"
-														}
-													>
-														<TableHead
-															style={{ width: header.getSize() }}
-															className={`relative ${
-																header.column.getCanSort()
-																	? "cursor-pointer select-none hover:text-foreground"
-																	: ""
-															} ${header.column.getCanResize() ? "group" : ""}`}
-															onClick={header.column.getToggleSortingHandler()}
-														>
-															<div className="gap-1 flex items-center">
-																{flexRender(
-																	header.column.columnDef.header,
-																	header.getContext(),
-																)}
-																{header.column.getCanSort() && (
-																	<span className="flex shrink-0 items-center">
-																		{header.column.getIsSorted() ===
-																		"asc" ? (
-																			<ArrowUpIcon className="size-3 text-primary" />
-																		) : header.column.getIsSorted() ===
-																		  "desc" ? (
-																			<ArrowDownIcon className="size-3 text-primary" />
-																		) : (
-																			<ArrowUpDown className="size-3 text-foreground/20" />
-																		)}
-																	</span>
-																)}
-																{header.column.getIsSorted() &&
-																	header.column.getSortIndex() >
-																		0 && (
-																		<span className="size-3.5 font-mono inline-flex items-center justify-center rounded-full bg-muted-foreground/20 text-[10px] leading-none text-foreground/60">
-																			{header.column.getSortIndex() +
-																				1}
-																		</span>
-																	)}
-															</div>
-															{header.column.getCanResize() && (
-																// oxlint-disable-next-line jsx-a11y/no-static-element-interactions
-																<div
-																	role="separator"
-																	onDoubleClick={() =>
-																		header.column.resetSize()
-																	}
-																	onMouseDown={header.getResizeHandler()}
-																	onTouchStart={header.getResizeHandler()}
-																	className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
-																/>
-															)}
-														</TableHead>
-													</DraggableColumnHeader>
-												))}
-											</SortableContext>
-										</TableRow>
-									))}
-								</TableHeader>
-								<TableBody>
-									{table.getRowModel().rows.length === 0 ? (
-										<TableRow>
-											<TableCell
-												colSpan={columns.length}
-												className="py-12 text-center text-foreground/60"
-											>
-												{t("search.documents.noResults")}
-											</TableCell>
-										</TableRow>
-									) : (
-										table.getRowModel().rows.map((row, rowIndex) => (
-											<TableRow
-												key={row.id}
-												className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
-												onClick={() => {
-													const docRow = rows.find(
-														(r) => r.id === row.original.id,
-													);
-													if (docRow) openEditSheet(docRow);
-												}}
-											>
-												{row.getVisibleCells().map((cell, cellIndex) => {
-													const fieldName = cell.column.id;
-													const isEditing =
-														cellEdit?.rowId === row.original.id &&
-														cellEdit?.fieldName === fieldName;
-													return (
-														<TableCell
-															key={cell.id}
-															className={isEditing ? "p-0" : ""}
-														>
-															{isEditing ? (
-																<InlineCellEditor
-																	field={documentFields.find(
-																		(f) => f.name === fieldName,
-																	)}
-																	value={cell.getValue()}
-																	onSave={(val) =>
-																		handleCellSave(
-																			row.original.id,
-																			fieldName,
-																			val,
-																		)
-																	}
-																	onCancel={handleCancelEdit}
-																	onNext={moveToNextCell}
-																	onPrev={moveToPrevCell}
-																	onDown={moveToNextRow}
-																/>
-															) : (
-																<div
-																	className="rounded px-1 -mx-1 min-h-[24px] cursor-pointer hover:bg-muted/30"
-																	onDoubleClick={(e) => {
-																		e.stopPropagation();
-																		handleCellClick(
-																			rowIndex,
-																			cellIndex,
-																			row.original.id,
-																			fieldName,
-																		);
-																	}}
-																>
-																	{flexRender(
-																		cell.column.columnDef.cell,
-																		cell.getContext(),
-																	)}
-																</div>
-															)}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										))
+							</DialogTrigger>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>{t("search.documents.importCsv")}</DialogTitle>
+									<DialogDescription>
+										{t("search.documents.importCsvDescription")}
+									</DialogDescription>
+								</DialogHeader>
+								<div className="space-y-4">
+									<div className="gap-4 flex items-center">
+										<input
+											type="file"
+											accept=".csv"
+											onChange={handleFileSelect}
+											className="h-9 shadow-xs px-3 py-1 text-base file:font-medium file:text-sm flex w-full rounded-md border border-input bg-card transition-colors file:border-0 file:bg-transparent placeholder:text-foreground/60 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
+										/>
+									</div>
+									{importFile && (
+										<div className="text-sm text-foreground/60">
+											{t("search.documents.parsedRows", {
+												count: importParsed.length,
+											})}
+										</div>
 									)}
-								</TableBody>
-							</Table>
-						</div>
-					</DndContext>
-				)}
-			</Card>
 
-			{/* ── Bulk action bar ─────────────────────────────────────────── */}
-			{selectedIds.length > 0 && (
-				<Card className="shadow-md sticky z-20">
-					<CardContent className="bottom-0 gap-2 p-3 flex flex-wrap items-center">
-						<span className="text-sm mr-2 text-foreground/60">
-							{t("search.documents.selected", { count: selectedIds.length })}
-						</span>
+									{/* Import action mode selector */}
+									<div className="space-y-2">
+										<Label>{t("search.documents.importAction")}</Label>
+										<Select
+											value={importAction}
+											onValueChange={(val) =>
+												setImportAction(
+													val as
+														| "create"
+														| "update"
+														| "upsert"
+														| "emplace",
+												)
+											}
+										>
+											<SelectTrigger>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="create">
+													{t("search.documents.importAction_create")}
+												</SelectItem>
+												<SelectItem value="update">
+													{t("search.documents.importAction_update")}
+												</SelectItem>
+												<SelectItem value="upsert">
+													{t("search.documents.importAction_upsert")}
+												</SelectItem>
+												<SelectItem value="emplace">
+													{t("search.documents.importAction_emplace")}
+												</SelectItem>
+											</SelectContent>
+										</Select>
+									</div>
+								</div>
+								<DialogFooter>
+									<Button
+										variant="ghost"
+										onClick={() => {
+											setImportDialogOpen(false);
+											setImportFile(null);
+											setImportParsed([]);
+										}}
+									>
+										{t("search.documents.cancel")}
+									</Button>
+									<Button
+										variant="primary"
+										disabled={importParsed.length === 0}
+										loading={importMutation.isPending}
+										onClick={handleImportSubmit}
+									>
+										<FileUpIcon className="size-3.5" />
+										{t("search.documents.import")}
+									</Button>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
+
+						{/* Export Dialog */}
 						<ExportDialog
 							organizationId={organizationId}
 							slug={slug}
@@ -1636,39 +1331,364 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							totalCount={totalFound}
 							hasFilter={hasFilter}
 							filterBy={buildFilterByExpression() || undefined}
-							trigger={
-								<Button variant="ghost" size="sm">
-									<DownloadIcon className="size-3.5" />
-									{t("search.documents.exportSelected")}
-								</Button>
-							}
 						/>
-						<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
-							<Trash2Icon className="size-3.5" />
-							{t("search.documents.deleteSelected")}
-						</Button>
-						{selectedIds.length === 1 && (
-							<Button variant="ghost" size="sm" onClick={handleDuplicateRow}>
-								<CopyIcon className="size-3.5" />
-								{t("search.documents.duplicateRow")}
-							</Button>
-						)}
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => setBulkEditDialogOpen(true)}
-						>
-							<PencilIcon className="size-3.5" />
-							{t("search.documents.bulkEdit")}
-						</Button>
-						<Button variant="ghost" size="sm" onClick={handleClearSelection}>
-							<XIcon className="size-3.5" />
-							{t("search.documents.clearSelection")}
-						</Button>
-					</CardContent>
-				</Card>
-			)}
 
+						{/* Add Row */}
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={handleAddRow}
+							loading={createDocumentMutation.isPending}
+						>
+							<PlusIcon className="size-3.5" />
+							{t("search.documents.addRow")}
+						</Button>
+					</div>
+
+					{/* ── Collapsible filter row ─────────────────────────────────── */}
+					{filterOpen && (
+						<div className="gap-2 pt-1 pb-2 flex flex-wrap items-start">
+							{/* Field selector */}
+							<Select value={filterField} onValueChange={setFilterField}>
+								<SelectTrigger className="h-8 w-auto min-w-[120px]">
+									<SelectValue placeholder={t("search.documents.filterField")} />
+								</SelectTrigger>
+								<SelectContent>
+									{documentFields.map((f) => (
+										<SelectItem key={f.name} value={f.name}>
+											<span className="gap-2 inline-flex items-center">
+												{f.name}
+												<span className="text-[10px] text-muted-foreground">
+													{f.type}
+												</span>
+											</span>
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+
+							{/* Operator selector */}
+							<Select value={filterOperator} onValueChange={setFilterOperator}>
+								<SelectTrigger className="h-8 w-auto min-w-[100px]">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									{filterField &&
+										getOperatorsForType(currentFilterFieldType ?? "").map(
+											(op) => (
+												<SelectItem key={op.value} value={op.value}>
+													{op.label}
+												</SelectItem>
+											),
+										)}
+								</SelectContent>
+							</Select>
+
+							{/* Value input */}
+							{filterOperator !== "not_empty" &&
+								filterOperator !== "is_empty" &&
+								(currentFilterFieldType === "bool" ? (
+									<div className="min-w-[150px] flex-1">
+										<Select value={filterValue} onValueChange={setFilterValue}>
+											<SelectTrigger className="h-8">
+												<SelectValue
+													placeholder={t("search.documents.selectValue")}
+												/>
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="true">
+													{t("search.documents.true")}
+												</SelectItem>
+												<SelectItem value="false">
+													{t("search.documents.false")}
+												</SelectItem>
+											</SelectContent>
+										</Select>
+									</div>
+								) : (
+									<div className="min-w-[150px] flex-1">
+										<Input
+											placeholder={t(
+												"search.documents.filterValuePlaceholder",
+											)}
+											value={filterValue}
+											onChange={(e) => setFilterValue(e.target.value)}
+											type={
+												currentFilterFieldType?.startsWith("int") ||
+												currentFilterFieldType === "float"
+													? "number"
+													: "text"
+											}
+											className="h-8"
+										/>
+									</div>
+								))}
+
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => {
+									setFilterField("");
+									setFilterOperator("contains");
+									setFilterValue("");
+								}}
+							>
+								<XIcon className="size-3.5" />
+								{t("search.documents.clear")}
+							</Button>
+							<Button
+								variant="destructive"
+								size="sm"
+								disabled={
+									!filterField ||
+									!filterOperator ||
+									deleteByFilterMutation.isPending
+								}
+								loading={deleteByFilterMutation.isPending}
+								onClick={handleDeleteByFilter}
+							>
+								<Trash2Icon className="size-3.5" />
+								{t("search.documents.deleteByFilter")}
+							</Button>
+						</div>
+					)}
+				</div>
+
+				{/* ── Table / Empty / Loading ─────────────────────────────────── */}
+				<Card className="overflow-hidden">
+					{isLoading ? (
+						<Table>
+							<TableHeader>
+								<TableRow>
+									{[...Array(Math.max(documentFields.length + 2, 4))].map(
+										(_, i) => (
+											<TableHead key={i}>
+												<Skeleton className="h-4 w-24" />
+											</TableHead>
+										),
+									)}
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								<SkeletonRows columns={documentFields.length + 2} count={8} />
+							</TableBody>
+						</Table>
+					) : rows.length === 0 ? (
+						<EmptyDocumentsState onImport={() => setImportDialogOpen(true)} />
+					) : (
+						<DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+							<div className="overflow-x-auto">
+								<Table>
+									<TableHeader className="top-0 sticky z-10 bg-card">
+										{table.getHeaderGroups().map((headerGroup) => (
+											<TableRow key={headerGroup.id}>
+												<SortableContext
+													items={sortableColumnIds}
+													strategy={horizontalListSortingStrategy}
+												>
+													{headerGroup.headers.map((header) => (
+														<DraggableColumnHeader
+															key={header.id}
+															id={header.column.id}
+															isDragDisabled={
+																header.column.id === "select"
+															}
+														>
+															<TableHead
+																style={{ width: header.getSize() }}
+																className={`relative ${
+																	header.column.getCanSort()
+																		? "cursor-pointer select-none hover:text-foreground"
+																		: ""
+																} ${header.column.getCanResize() ? "group" : ""}`}
+																onClick={header.column.getToggleSortingHandler()}
+															>
+																<div className="gap-1 flex items-center">
+																	{flexRender(
+																		header.column.columnDef
+																			.header,
+																		header.getContext(),
+																	)}
+																	{header.column.getCanSort() && (
+																		<span className="flex shrink-0 items-center">
+																			{header.column.getIsSorted() ===
+																			"asc" ? (
+																				<ArrowUpIcon className="size-3 text-primary" />
+																			) : header.column.getIsSorted() ===
+																			  "desc" ? (
+																				<ArrowDownIcon className="size-3 text-primary" />
+																			) : (
+																				<ArrowUpDown className="size-3 text-foreground/20" />
+																			)}
+																		</span>
+																	)}
+																	{header.column.getIsSorted() &&
+																		header.column.getSortIndex() >
+																			0 && (
+																			<span className="size-3.5 font-mono inline-flex items-center justify-center rounded-full bg-muted-foreground/20 text-[10px] leading-none text-foreground/60">
+																				{header.column.getSortIndex() +
+																					1}
+																			</span>
+																		)}
+																</div>
+																{header.column.getCanResize() && (
+																	// oxlint-disable-next-line jsx-a11y/no-static-element-interactions
+																	<div
+																		role="separator"
+																		onDoubleClick={() =>
+																			header.column.resetSize()
+																		}
+																		onMouseDown={header.getResizeHandler()}
+																		onTouchStart={header.getResizeHandler()}
+																		className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
+																	/>
+																)}
+															</TableHead>
+														</DraggableColumnHeader>
+													))}
+												</SortableContext>
+											</TableRow>
+										))}
+									</TableHeader>
+									<TableBody>
+										{table.getRowModel().rows.length === 0 ? (
+											<TableRow>
+												<TableCell
+													colSpan={columns.length}
+													className="py-12 text-center text-foreground/60"
+												>
+													{t("search.documents.noResults")}
+												</TableCell>
+											</TableRow>
+										) : (
+											table.getRowModel().rows.map((row, rowIndex) => (
+												<TableRow
+													key={row.id}
+													className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
+													onClick={() => {
+														const docRow = rows.find(
+															(r) => r.id === row.original.id,
+														);
+														if (docRow) openEditSheet(docRow);
+													}}
+												>
+													{row
+														.getVisibleCells()
+														.map((cell, cellIndex) => {
+															const fieldName = cell.column.id;
+															const isEditing =
+																cellEdit?.rowId ===
+																	row.original.id &&
+																cellEdit?.fieldName === fieldName;
+															return (
+																<TableCell
+																	key={cell.id}
+																	className={
+																		isEditing ? "p-0" : ""
+																	}
+																>
+																	{isEditing ? (
+																		<InlineCellEditor
+																			field={documentFields.find(
+																				(f) =>
+																					f.name ===
+																					fieldName,
+																			)}
+																			value={cell.getValue()}
+																			onSave={(val) =>
+																				handleCellSave(
+																					row.original.id,
+																					fieldName,
+																					val,
+																				)
+																			}
+																			onCancel={
+																				handleCancelEdit
+																			}
+																			onNext={moveToNextCell}
+																			onPrev={moveToPrevCell}
+																			onDown={moveToNextRow}
+																		/>
+																	) : (
+																		<div
+																			className="rounded px-1 -mx-1 min-h-[24px] cursor-pointer hover:bg-muted/30"
+																			onDoubleClick={(e) => {
+																				e.stopPropagation();
+																				handleCellClick(
+																					rowIndex,
+																					cellIndex,
+																					row.original.id,
+																					fieldName,
+																				);
+																			}}
+																		>
+																			{flexRender(
+																				cell.column
+																					.columnDef.cell,
+																				cell.getContext(),
+																			)}
+																		</div>
+																	)}
+																</TableCell>
+															);
+														})}
+												</TableRow>
+											))
+										)}
+									</TableBody>
+								</Table>
+							</div>
+						</DndContext>
+					)}
+				</Card>
+
+				{/* ── Bulk action bar ─────────────────────────────────────────── */}
+				{selectedIds.length > 0 && (
+					<Card className="shadow-md sticky z-20">
+						<CardContent className="bottom-0 gap-2 p-3 flex flex-wrap items-center">
+							<span className="text-sm mr-2 text-foreground/60">
+								{t("search.documents.selected", { count: selectedIds.length })}
+							</span>
+							<ExportDialog
+								organizationId={organizationId}
+								slug={slug}
+								selectedCount={selectedIds.length}
+								selectedDocuments={selectedDocuments}
+								totalCount={totalFound}
+								hasFilter={hasFilter}
+								filterBy={buildFilterByExpression() || undefined}
+								trigger={
+									<Button variant="ghost" size="sm">
+										<DownloadIcon className="size-3.5" />
+										{t("search.documents.exportSelected")}
+									</Button>
+								}
+							/>
+							<Button variant="ghost" size="sm" onClick={handleBulkDelete}>
+								<Trash2Icon className="size-3.5" />
+								{t("search.documents.deleteSelected")}
+							</Button>
+							{selectedIds.length === 1 && (
+								<Button variant="ghost" size="sm" onClick={handleDuplicateRow}>
+									<CopyIcon className="size-3.5" />
+									{t("search.documents.duplicateRow")}
+								</Button>
+							)}
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setBulkEditDialogOpen(true)}
+							>
+								<PencilIcon className="size-3.5" />
+								{t("search.documents.bulkEdit")}
+							</Button>
+							<Button variant="ghost" size="sm" onClick={handleClearSelection}>
+								<XIcon className="size-3.5" />
+								{t("search.documents.clearSelection")}
+							</Button>
+						</CardContent>
+					</Card>
+				)}
 			</DataTableProvider>
 
 			{/* ── Bulk Edit Dialog ─────────────────────────────────────────── */}

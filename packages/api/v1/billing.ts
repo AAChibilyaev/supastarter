@@ -93,10 +93,8 @@ export const billingApp = new Hono()
 			return c.json({ error: "unauthorized", message: "Authentication required" }, 401);
 		}
 
-		const plans = (paymentsConfig as unknown as Record<
-			string,
-			Record<string, unknown>
-		>).plans as Record<string, Record<string, unknown>> | null;
+		const plans = (paymentsConfig as unknown as Record<string, Record<string, unknown>>)
+			.plans as Record<string, Record<string, unknown>> | null;
 		if (!plans) {
 			return c.json({ error: "not_found", message: "No plans configured" }, 404);
 		}
@@ -131,7 +129,10 @@ export const billingApp = new Hono()
 		if (organizationId) {
 			const membership = await getOrganizationMembership(organizationId, session.user.id);
 			if (!membership) {
-				return c.json({ error: "forbidden", message: "Not a member of this organization" }, 403);
+				return c.json(
+					{ error: "forbidden", message: "Not a member of this organization" },
+					403,
+				);
 			}
 		}
 
@@ -150,8 +151,10 @@ export const billingApp = new Hono()
 				? {
 						amount: planPrice.amount,
 						currency: planPrice.currency,
-						interval: (planPrice as unknown as Record<string, unknown>).interval ?? null,
-						seatBased: (planPrice as unknown as Record<string, unknown>).seatBased ?? false,
+						interval:
+							(planPrice as unknown as Record<string, unknown>).interval ?? null,
+						seatBased:
+							(planPrice as unknown as Record<string, unknown>).seatBased ?? false,
 					}
 				: null,
 		});
@@ -168,7 +171,10 @@ export const billingApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const schema = z.object({
@@ -179,7 +185,11 @@ export const billingApp = new Hono()
 		const parsed = schema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -192,9 +202,15 @@ export const billingApp = new Hono()
 		}
 
 		if (purchase.organizationId) {
-			const membership = await getOrganizationMembership(purchase.organizationId, session.user.id);
+			const membership = await getOrganizationMembership(
+				purchase.organizationId,
+				session.user.id,
+			);
 			if (membership?.role !== "owner") {
-				return c.json({ error: "forbidden", message: "Only organization owners can cancel" }, 403);
+				return c.json(
+					{ error: "forbidden", message: "Only organization owners can cancel" },
+					403,
+				);
 			}
 		} else if (purchase.userId && purchase.userId !== session.user.id) {
 			return c.json({ error: "forbidden", message: "Not your purchase" }, 403);
@@ -214,7 +230,10 @@ export const billingApp = new Hono()
 			return c.json({ success: true, mode });
 		} catch (e) {
 			logger.error("Could not cancel subscription", e);
-			return c.json({ error: "internal_error", message: "Failed to cancel subscription" }, 500);
+			return c.json(
+				{ error: "internal_error", message: "Failed to cancel subscription" },
+				500,
+			);
 		}
 	})
 
@@ -225,22 +244,34 @@ export const billingApp = new Hono()
 			return c.json({ error: "unauthorized", message: "Authentication required" }, 401);
 		}
 
-		let body: { purchaseId: string; behavior?: "keep_as_draft" | "mark_uncollectible" | "void" };
+		let body: {
+			purchaseId: string;
+			behavior?: "keep_as_draft" | "mark_uncollectible" | "void";
+		};
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const schema = z.object({
 			purchaseId: z.string().min(1),
-			behavior: z.enum(["keep_as_draft", "mark_uncollectible", "void"]).default("keep_as_draft"),
+			behavior: z
+				.enum(["keep_as_draft", "mark_uncollectible", "void"])
+				.default("keep_as_draft"),
 		});
 
 		const parsed = schema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -253,9 +284,15 @@ export const billingApp = new Hono()
 		}
 
 		if (purchase.organizationId) {
-			const membership = await getOrganizationMembership(purchase.organizationId, session.user.id);
+			const membership = await getOrganizationMembership(
+				purchase.organizationId,
+				session.user.id,
+			);
 			if (membership?.role !== "owner") {
-				return c.json({ error: "forbidden", message: "Only organization owners can pause" }, 403);
+				return c.json(
+					{ error: "forbidden", message: "Only organization owners can pause" },
+					403,
+				);
 			}
 		} else if (purchase.userId && purchase.userId !== session.user.id) {
 			return c.json({ error: "forbidden", message: "Not your purchase" }, 403);
@@ -272,7 +309,10 @@ export const billingApp = new Hono()
 			return c.json({ success: true, behavior });
 		} catch (e) {
 			logger.error("Could not pause subscription", e);
-			return c.json({ error: "internal_error", message: "Failed to pause subscription" }, 500);
+			return c.json(
+				{ error: "internal_error", message: "Failed to pause subscription" },
+				500,
+			);
 		}
 	})
 
@@ -287,7 +327,10 @@ export const billingApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const schema = z.object({
@@ -297,7 +340,11 @@ export const billingApp = new Hono()
 		const parsed = schema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -310,9 +357,15 @@ export const billingApp = new Hono()
 		}
 
 		if (purchase.organizationId) {
-			const membership = await getOrganizationMembership(purchase.organizationId, session.user.id);
+			const membership = await getOrganizationMembership(
+				purchase.organizationId,
+				session.user.id,
+			);
 			if (membership?.role !== "owner") {
-				return c.json({ error: "forbidden", message: "Only organization owners can resume" }, 403);
+				return c.json(
+					{ error: "forbidden", message: "Only organization owners can resume" },
+					403,
+				);
 			}
 		} else if (purchase.userId && purchase.userId !== session.user.id) {
 			return c.json({ error: "forbidden", message: "Not your purchase" }, 403);
@@ -329,7 +382,10 @@ export const billingApp = new Hono()
 			return c.json({ success: true });
 		} catch (e) {
 			logger.error("Could not resume subscription", e);
-			return c.json({ error: "internal_error", message: "Failed to resume subscription" }, 500);
+			return c.json(
+				{ error: "internal_error", message: "Failed to resume subscription" },
+				500,
+			);
 		}
 	})
 
@@ -348,7 +404,10 @@ export const billingApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		const schema = z.object({
@@ -360,7 +419,11 @@ export const billingApp = new Hono()
 		const parsed = schema.safeParse(body);
 		if (!parsed.success) {
 			return c.json(
-				{ error: "invalid_input", message: "Validation failed", details: parsed.error.issues },
+				{
+					error: "invalid_input",
+					message: "Validation failed",
+					details: parsed.error.issues,
+				},
 				400,
 			);
 		}
@@ -373,9 +436,15 @@ export const billingApp = new Hono()
 		}
 
 		if (purchase.organizationId) {
-			const membership = await getOrganizationMembership(purchase.organizationId, session.user.id);
+			const membership = await getOrganizationMembership(
+				purchase.organizationId,
+				session.user.id,
+			);
 			if (membership?.role !== "owner") {
-				return c.json({ error: "forbidden", message: "Only organization owners can change plan" }, 403);
+				return c.json(
+					{ error: "forbidden", message: "Only organization owners can change plan" },
+					403,
+				);
 			}
 		} else if (purchase.userId && purchase.userId !== session.user.id) {
 			return c.json({ error: "forbidden", message: "Not your purchase" }, 403);
@@ -386,13 +455,14 @@ export const billingApp = new Hono()
 		}
 
 		// Look up the new price ID for the requested plan
-		const plans = (paymentsConfig as unknown as Record<string, Record<string, unknown>>).plans as Record<
-			string,
-			{ prices?: Array<{ priceId?: string }> }
-		>;
+		const plans = (paymentsConfig as unknown as Record<string, Record<string, unknown>>)
+			.plans as Record<string, { prices?: Array<{ priceId?: string }> }>;
 		const targetPlan = plans[newPlanId];
 		if (!targetPlan?.prices?.length) {
-			return c.json({ error: "invalid_input", message: "Plan not found or has no pricing" }, 400);
+			return c.json(
+				{ error: "invalid_input", message: "Plan not found or has no pricing" },
+				400,
+			);
 		}
 
 		const newPriceId = targetPlan.prices[0].priceId;
@@ -411,7 +481,10 @@ export const billingApp = new Hono()
 			return c.json(result);
 		} catch (e) {
 			logger.error("Could not change subscription", e);
-			return c.json({ error: "internal_error", message: "Failed to change subscription plan" }, 500);
+			return c.json(
+				{ error: "internal_error", message: "Failed to change subscription plan" },
+				500,
+			);
 		}
 	})
 

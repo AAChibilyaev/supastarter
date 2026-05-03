@@ -16,3 +16,4 @@ export * from "./wallet-topup-orders";
 export * from "./personalization";
 export * from "./roadmap";
 export * from "./newsletter";
+export * from "./nps";

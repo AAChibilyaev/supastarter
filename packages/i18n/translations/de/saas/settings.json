@@ -423,6 +423,33 @@
 				"resumeButton": "Abonnement reaktivieren",
 				"resumeSuccess": "Abonnement erfolgreich reaktiviert",
 				"resumeError": "Abonnement konnte nicht reaktiviert werden"
+			},
+			"invoice": {
+				"title": "Rechnungseinstellungen",
+				"taxInfo": "Steuerinformationen",
+				"legalName": "Gesetzlicher Firmenname",
+				"legalNameHint": "Vollständiger gesetzlicher Name, wie er auf Rechnungen erscheinen soll",
+				"taxIdType": "Steuernummer-Typ",
+				"taxId": "Steuernummer / USt-IdNr.",
+				"taxIdHint": "z.B. EU USt-IdNr., US EIN oder deutsche Steuernummer",
+				"address": "Firmenadresse",
+				"addressHint": "Eingetragene Geschäftsadresse für Rechnungen",
+				"invoiceEmail": "Rechnungs-E-Mail",
+				"invoiceEmailHint": "E-Mail-Adresse, an die Rechnungen gesendet werden sollen",
+				"save": "Einstellungen speichern",
+				"saved": "Rechnungseinstellungen erfolgreich gespeichert",
+				"error": "Fehler beim Speichern der Rechnungseinstellungen",
+				"empty": "Keine Rechnungseinstellungen konfiguriert",
+				"receiptTitle": "Zahlungsbelege",
+				"receiptEmpty": "Noch keine Zahlungsbelege",
+				"receiptDate": "Datum",
+				"receiptAmount": "Betrag",
+				"receiptStatus": "Status",
+				"receiptActions": "Aktionen",
+				"receiptDownload": "Beleg herunterladen",
+				"receiptStatusCompleted": "Abgeschlossen",
+				"receiptStatusPending": "Ausstehend",
+				"receiptStatusFailed": "Fehlgeschlagen"
 			}
 		},
 		"notificationsPage": {

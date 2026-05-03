@@ -7,12 +7,15 @@ import { createUpgradeSession } from "./procedures/create-upgrade-session";
 import { deletePaymentMethod } from "./procedures/delete-payment-method";
 import { detachPaymentMethod } from "./procedures/detach-payment-method";
 import { getProrationPreview } from "./procedures/get-proration-preview";
+import { getTaxInfo } from "./procedures/get-tax-info";
 import { listInvoices } from "./procedures/list-invoices";
 import { listPaymentMethods } from "./procedures/list-payment-methods";
 import { listPurchases } from "./procedures/list-purchases";
+import { listReceipts } from "./procedures/list-receipts";
 import { pauseSubscription } from "./procedures/pause-subscription";
 import { resumeSubscription } from "./procedures/resume-subscription";
 import { setDefaultPaymentMethod } from "./procedures/set-default-payment-method";
+import { updateTaxInfo } from "./procedures/update-tax-info";
 import { upgradeSubscription } from "./procedures/upgrade-subscription";
 
 export const paymentsRouter = {
@@ -31,5 +34,8 @@ export const paymentsRouter = {
 	pauseSubscription,
 	resumeSubscription,
 	setDefaultPaymentMethod,
+	updateTaxInfo,
+	getTaxInfo,
+	listReceipts,
 	upgradeSubscription,
 };

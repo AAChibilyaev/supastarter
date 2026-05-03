@@ -423,6 +423,33 @@
 				"resumeButton": "Reprendre l'abonnement",
 				"resumeSuccess": "Abonnement repris avec succès",
 				"resumeError": "Impossible de reprendre l'abonnement"
+			},
+			"invoice": {
+				"title": "Paramètres de facturation",
+				"taxInfo": "Informations fiscales",
+				"legalName": "Raison sociale légale",
+				"legalNameHint": "Nom juridique complet tel qu'il doit apparaître sur les factures",
+				"taxIdType": "Type d'identifiant fiscal",
+				"taxId": "Numéro de TVA / SIRET",
+				"taxIdHint": "ex. Numéro de TVA intracommunautaire, US EIN",
+				"address": "Adresse de l'entreprise",
+				"addressHint": "Adresse professionnelle enregistrée pour les factures",
+				"invoiceEmail": "Email de facturation",
+				"invoiceEmailHint": "Adresse email à laquelle envoyer les factures",
+				"save": "Enregistrer les paramètres",
+				"saved": "Paramètres de facturation enregistrés avec succès",
+				"error": "Échec de l'enregistrement des paramètres de facturation",
+				"empty": "Aucun paramètre de facturation configuré",
+				"receiptTitle": "Reçus de paiement",
+				"receiptEmpty": "Pas encore de reçus de paiement",
+				"receiptDate": "Date",
+				"receiptAmount": "Montant",
+				"receiptStatus": "Statut",
+				"receiptActions": "Actions",
+				"receiptDownload": "Télécharger le reçu",
+				"receiptStatusCompleted": "Terminé",
+				"receiptStatusPending": "En attente",
+				"receiptStatusFailed": "Échoué"
 			}
 		},
 		"notificationsPage": {

@@ -3,7 +3,6 @@
 import { OrganizationLogo } from "@organizations/components/OrganizationLogo";
 import { authClient } from "@repo/auth/client";
 import { Button, DataTableProvider, DataTableToolbar } from "@repo/ui";
-import type { DataTableFilterField } from "@repo/ui";
 import { Card } from "@repo/ui/components/card";
 import {
 	DropdownMenu,

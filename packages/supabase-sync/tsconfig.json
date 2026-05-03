@@ -1,19 +1,13 @@
 {
+	"extends": "@repo/tsconfig/base.json",
 	"compilerOptions": {
 		"target": "ES2022",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
 		"lib": ["ES2022"],
 		"outDir": "./dist",
 		"rootDir": "./src",
 		"declaration": true,
 		"declarationMap": true,
-		"sourceMap": true,
-		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"isolatedModules": true
+		"sourceMap": true
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist", "src/edge-function"]

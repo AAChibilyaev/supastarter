@@ -1,6 +1,4 @@
 {
-  "title": "indexes/indexid/curations/curationid",
-  "pages": [
-    "delete"
-  ]
+	"title": "indexes/indexid/curations/curationid",
+	"pages": ["delete"]
 }

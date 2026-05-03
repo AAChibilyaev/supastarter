@@ -8,10 +8,10 @@
  */
 
 import { db } from "@repo/database";
+import type { Locale } from "@repo/i18n";
 import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import { createNotification } from "@repo/notifications";
-import type { Locale } from "@repo/i18n";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

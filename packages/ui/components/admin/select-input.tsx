@@ -267,7 +267,10 @@ export const SelectInput = (props: SelectInputProps) => {
 									className="p-0 pointer-events-auto ml-auto text-muted-foreground opacity-50 hover:bg-transparent hover:opacity-100"
 									onClick={handleReset}
 									onKeyDown={(e) => {
-										if (e.key === "Enter" || e.key === " ") handleReset();
+										if (e.key === "Enter" || e.key === " ")
+											handleReset(
+												e as unknown as React.MouseEvent<HTMLDivElement>,
+											);
 									}}
 								>
 									<X className="h-4 w-4" />

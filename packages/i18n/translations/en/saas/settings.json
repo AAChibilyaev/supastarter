@@ -421,6 +421,33 @@
 				"resumeButton": "Resume subscription",
 				"resumeSuccess": "Subscription resumed successfully",
 				"resumeError": "Could not resume subscription"
+			},
+			"invoice": {
+				"title": "Invoice Settings",
+				"taxInfo": "Tax Information",
+				"legalName": "Legal Company Name",
+				"legalNameHint": "Full legal name as it should appear on invoices",
+				"taxIdType": "Tax ID Type",
+				"taxId": "Tax ID / VAT Number",
+				"taxIdHint": "e.g. EU VAT number, US EIN, or Russian ИНН",
+				"address": "Company Address",
+				"addressHint": "Registered business address for invoices",
+				"invoiceEmail": "Invoice Email",
+				"invoiceEmailHint": "Email address where invoices should be sent",
+				"save": "Save Settings",
+				"saved": "Invoice settings saved successfully",
+				"error": "Failed to save invoice settings",
+				"empty": "No invoice settings configured",
+				"receiptTitle": "Payment Receipts",
+				"receiptEmpty": "No payment receipts yet",
+				"receiptDate": "Date",
+				"receiptAmount": "Amount",
+				"receiptStatus": "Status",
+				"receiptActions": "Actions",
+				"receiptDownload": "Download Receipt",
+				"receiptStatusCompleted": "Completed",
+				"receiptStatusPending": "Pending",
+				"receiptStatusFailed": "Failed"
 			}
 		},
 		"notificationsPage": {

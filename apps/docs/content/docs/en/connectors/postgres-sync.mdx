@@ -34,22 +34,23 @@ FOR EACH ROW EXECUTE FUNCTION notify_aacsearch();
 import { startPgNotifyListener } from "@aacsearch/postgres-sync";
 
 const pg = await startPgNotifyListener({
-  aacsearch: {
-    baseUrl: process.env.AACSEARCH_URL!,
-    token: process.env.AACSEARCH_TOKEN!,
-    projectId: process.env.AACSEARCH_PROJECT_ID!,
-  },
-  connectionString: process.env.DATABASE_URL!,
-  table: "products",
-  idColumn: "id",
-  initialFullSync: true,
-  debug: true,
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	connectionString: process.env.DATABASE_URL!,
+	table: "products",
+	idColumn: "id",
+	initialFullSync: true,
+	debug: true,
 });
 
 process.on("SIGTERM", () => pg.end());
 ```
 
 The listener will:
+
 1. Perform an initial full sync of all existing rows
 2. Subscribe to `pg_notify` events for real-time updates
 3. Push each change to AACsearch as it arrives
@@ -62,11 +63,11 @@ Polling is useful when you cannot add triggers to your database tables.
 import { startPollingSync } from "@aacsearch/postgres-sync";
 
 const poller = startPollingSync({
-  aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
-  connectionString: process.env.DATABASE_URL!,
-  table: "orders",
-  cursorColumn: "updated_at",
-  pollIntervalMs: 5000,
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	connectionString: process.env.DATABASE_URL!,
+	table: "orders",
+	cursorColumn: "updated_at",
+	pollIntervalMs: 5000,
 });
 
 // Stop later:
@@ -85,10 +86,10 @@ For production-grade logical replication without triggers, use
 import { startSequinCdcSync } from "@aacsearch/postgres-sync";
 
 const sequin = startSequinCdcSync({
-  aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
-  streamUrl: "https://api.sequin.io/streams/YOUR_STREAM_ID",
-  accessToken: "seq_xxx",
-  table: "products",
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	streamUrl: "https://api.sequin.io/streams/YOUR_STREAM_ID",
+	accessToken: "seq_xxx",
+	table: "products",
 });
 ```
 
@@ -98,12 +99,12 @@ All strategies accept a custom `mapper` function:
 
 ```typescript
 startPgNotifyListener(config, (row) => ({
-  external_id: String(row.id),
-  title: row.title,
-  content: row.body || row.description,
-  price: row.price,
-  category: row.category_name,
-  tags: row.tags ? JSON.parse(row.tags) : [],
+	external_id: String(row.id),
+	title: row.title,
+	content: row.body || row.description,
+	price: row.price,
+	category: row.category_name,
+	tags: row.tags ? JSON.parse(row.tags) : [],
 }));
 ```
 
@@ -113,24 +114,24 @@ Monitor sync activity with callbacks:
 
 ```typescript
 startPgNotifyListener(config, undefined, {
-  onSync: (event) => {
-    console.log(`Synced ${event.action} on ${event.table}`);
-  },
-  onError: (error, context) => {
-    console.error(`Error on ${context?.table}:`, error);
-  },
-  onConnected: () => console.log("Connected to PostgreSQL"),
-  onDisconnected: () => console.log("Disconnected from PostgreSQL"),
+	onSync: (event) => {
+		console.log(`Synced ${event.action} on ${event.table}`);
+	},
+	onError: (error, context) => {
+		console.error(`Error on ${context?.table}:`, error);
+	},
+	onConnected: () => console.log("Connected to PostgreSQL"),
+	onDisconnected: () => console.log("Disconnected from PostgreSQL"),
 });
 ```
 
 ## Strategy comparison
 
-| Strategy | Latency | Requires trigger | Overhead | Best for |
-|----------|---------|-----------------|----------|----------|
-| pg_notify | ~100ms | Yes | Minimal (NOTIFY is async) | Production tables you control |
-| Polling cursor | ~5-60s | No | SELECT per interval | Tables without write access |
-| Sequin CDC | ~1-5s | No | Logical replication slot | High-availability, zero-config |
+| Strategy       | Latency | Requires trigger | Overhead                  | Best for                       |
+| -------------- | ------- | ---------------- | ------------------------- | ------------------------------ |
+| pg_notify      | ~100ms  | Yes              | Minimal (NOTIFY is async) | Production tables you control  |
+| Polling cursor | ~5-60s  | No               | SELECT per interval       | Tables without write access    |
+| Sequin CDC     | ~1-5s   | No               | Logical replication slot  | High-availability, zero-config |
 
 ## Related
 

@@ -21,33 +21,33 @@ pnpm add @aacsearch/supabase-sync
 import { createRealtimeSubscription } from "@aacsearch/supabase-sync";
 
 const rtClient = createRealtimeSubscription({
-  aacsearch: {
-    baseUrl: "https://api.aacsearch.com",
-    token: "ss_connector_your_token_here",
-    projectId: "org_your_project_id",
-  },
-  supabase: {
-    url: "https://your-project.supabase.co",
-    apiKey: "your_supabase_anon_or_service_role_key",
-  },
-  tables: [
-    // Sync all columns from the `products` table
-    { table: "products", idColumn: "id" },
-    // Only sync specific columns from `categories`
-    { table: "categories", idColumn: "id", columns: ["name", "slug", "description"] },
-    // Use a custom mapper
-    {
-      table: "reviews",
-      idColumn: "id",
-      mapper: (row) => ({
-        external_id: String(row.id),
-        title: row.title,
-        content: row.body,
-        rating: row.stars,
-        product_id: row.product_id,
-      }),
-    },
-  ],
+	aacsearch: {
+		baseUrl: "https://api.aacsearch.com",
+		token: "ss_connector_your_token_here",
+		projectId: "org_your_project_id",
+	},
+	supabase: {
+		url: "https://your-project.supabase.co",
+		apiKey: "your_supabase_anon_or_service_role_key",
+	},
+	tables: [
+		// Sync all columns from the `products` table
+		{ table: "products", idColumn: "id" },
+		// Only sync specific columns from `categories`
+		{ table: "categories", idColumn: "id", columns: ["name", "slug", "description"] },
+		// Use a custom mapper
+		{
+			table: "reviews",
+			idColumn: "id",
+			mapper: (row) => ({
+				external_id: String(row.id),
+				title: row.title,
+				content: row.body,
+				rating: row.stars,
+				product_id: row.product_id,
+			}),
+		},
+	],
 });
 
 // Disconnect when done
@@ -71,21 +71,21 @@ triggering the `aacsearch-sync` function on INSERT/UPDATE/DELETE for your table.
 
 ## Configuration
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `aacsearch.baseUrl` | string | AACsearch API URL |
-| `aacsearch.token` | string | Connector bearer token (`ss_connector_*`) |
-| `aacsearch.projectId` | string | Your AACsearch organization/project ID |
-| `supabase.url` | string | Supabase project URL |
-| `supabase.apiKey` | string | Supabase anon or service_role key |
-| `tables[].table` | string | Table name to subscribe to |
-| `tables[].schema` | string? | Schema (default: `public`) |
-| `tables[].idColumn` | string? | Primary key column (default: `id`) |
-| `tables[].columns` | string[]? | Columns to include (default: all) |
-| `tables[].mapper` | function? | Custom row-to-document transform |
-| `tables[].filter` | string? | Realtime filter (e.g. `published=eq.true`) |
-| `batchSize` | number? | Documents per API call (default: 50) |
-| `debug` | boolean? | Enable verbose logging |
+| Option                | Type      | Description                                |
+| --------------------- | --------- | ------------------------------------------ |
+| `aacsearch.baseUrl`   | string    | AACsearch API URL                          |
+| `aacsearch.token`     | string    | Connector bearer token (`ss_connector_*`)  |
+| `aacsearch.projectId` | string    | Your AACsearch organization/project ID     |
+| `supabase.url`        | string    | Supabase project URL                       |
+| `supabase.apiKey`     | string    | Supabase anon or service_role key          |
+| `tables[].table`      | string    | Table name to subscribe to                 |
+| `tables[].schema`     | string?   | Schema (default: `public`)                 |
+| `tables[].idColumn`   | string?   | Primary key column (default: `id`)         |
+| `tables[].columns`    | string[]? | Columns to include (default: all)          |
+| `tables[].mapper`     | function? | Custom row-to-document transform           |
+| `tables[].filter`     | string?   | Realtime filter (e.g. `published=eq.true`) |
+| `batchSize`           | number?   | Documents per API call (default: 50)       |
+| `debug`               | boolean?  | Enable verbose logging                     |
 
 ## API
 
@@ -97,12 +97,12 @@ Creates a Supabase Realtime subscription. Returns a `RealtimeClient` instance.
 
 ```typescript
 const rtClient = createRealtimeSubscription(config, {
-  onSync: (event) => {
-    console.log(`Synced ${event.type} on ${event.table}`);
-  },
-  onError: (error, context) => {
-    console.error(`Sync error on ${context?.table}:`, error);
-  },
+	onSync: (event) => {
+		console.log(`Synced ${event.type} on ${event.table}`);
+	},
+	onError: (error, context) => {
+		console.error(`Sync error on ${context?.table}:`, error);
+	},
 });
 ```
 
@@ -123,9 +123,9 @@ await client.deleteDocument("123");
 ```typescript
 import { defaultMapper, pickColumns, flattenJsonColumn } from "@aacsearch/supabase-sync";
 
-defaultMapper(row);                     // Safe map with serialization
-pickColumns(row, ["name", "price"]);    // Pick specific columns
-flattenJsonColumn(row, "metadata");     // Flatten JSON column into fields
+defaultMapper(row); // Safe map with serialization
+pickColumns(row, ["name", "price"]); // Pick specific columns
+flattenJsonColumn(row, "metadata"); // Flatten JSON column into fields
 ```
 
 ## License

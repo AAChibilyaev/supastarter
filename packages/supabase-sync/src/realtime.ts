@@ -5,6 +5,8 @@
  */
 
 import { RealtimeClient } from "@supabase/realtime-js";
+
+import { AacSearchClient } from "./client";
 import type {
 	SupabaseSyncConfig,
 	TableSyncConfig,
@@ -12,7 +14,6 @@ import type {
 	RealtimeChangeType,
 	SyncCallbacks,
 } from "./types";
-import { AacSearchClient } from "./client";
 
 /**
  * Subscribe to Supabase Realtime changes for all configured tables.
@@ -27,7 +28,9 @@ export function createRealtimeSubscription(
 		params: { apikey: config.supabase.apiKey },
 	});
 	const batchSize = config.batchSize ?? 50;
-	const log = config.debug ? (...args: unknown[]) => console.log("[supabase-sync]", ...args) : () => {};
+	const log = config.debug
+		? (...args: unknown[]) => console.log("[supabase-sync]", ...args)
+		: () => {};
 
 	for (const tableCfg of config.tables) {
 		const schema = tableCfg.schema ?? "public";
@@ -44,21 +47,18 @@ export function createRealtimeSubscription(
 
 		const channel = rtClient.channel(channelName);
 
-		channel.on(
-			"postgres_changes" as never,
-			channelFilters,
-			async (payload: unknown) => {
-				const event = payload as RealtimeChangeEvent;
-				try {
-					await handleChange(client, tableCfg, event, batchSize, log, callbacks);
-				} catch (error) {
-					callbacks?.onError?.(
-						error instanceof Error ? error : new Error(String(error)),
-						{ table: tableCfg.table, type: event.type, event },
-					);
-				}
-			},
-		);
+		channel.on("postgres_changes" as never, channelFilters, async (payload: unknown) => {
+			const event = payload as RealtimeChangeEvent;
+			try {
+				await handleChange(client, tableCfg, event, batchSize, log, callbacks);
+			} catch (error) {
+				callbacks?.onError?.(error instanceof Error ? error : new Error(String(error)), {
+					table: tableCfg.table,
+					type: event.type,
+					event,
+				});
+			}
+		});
 
 		channel.subscribe((status: string) => {
 			log(`Channel "${channelName}" status: ${status}`);

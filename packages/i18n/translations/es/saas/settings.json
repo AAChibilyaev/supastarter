@@ -423,6 +423,33 @@
 				"resumeButton": "Reanudar suscripción",
 				"resumeSuccess": "Suscripción reanudada exitosamente",
 				"resumeError": "No se pudo reanudar la suscripción"
+			},
+			"invoice": {
+				"title": "Configuración de facturación",
+				"taxInfo": "Información fiscal",
+				"legalName": "Nombre legal de la empresa",
+				"legalNameHint": "Nombre legal completo tal como debe aparecer en las facturas",
+				"taxIdType": "Tipo de identificación fiscal",
+				"taxId": "NIF / IVA",
+				"taxIdHint": "p.ej. NIF español, EU VAT number, US EIN",
+				"address": "Dirección de la empresa",
+				"addressHint": "Dirección comercial registrada para facturas",
+				"invoiceEmail": "Email de facturación",
+				"invoiceEmailHint": "Dirección de correo donde enviar las facturas",
+				"save": "Guardar configuración",
+				"saved": "Configuración de factura guardada correctamente",
+				"error": "Error al guardar la configuración de factura",
+				"empty": "No hay configuración de factura",
+				"receiptTitle": "Recibos de pago",
+				"receiptEmpty": "Aún no hay recibos de pago",
+				"receiptDate": "Fecha",
+				"receiptAmount": "Monto",
+				"receiptStatus": "Estado",
+				"receiptActions": "Acciones",
+				"receiptDownload": "Descargar recibo",
+				"receiptStatusCompleted": "Completado",
+				"receiptStatusPending": "Pendiente",
+				"receiptStatusFailed": "Fallido"
 			}
 		},
 		"notificationsPage": {

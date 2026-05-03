@@ -92,14 +92,11 @@ serve(async (req: Request) => {
 			...record,
 		};
 
-		const res = await fetch(
-			`${baseUrl}/api/projects/${AACSEARCH_PROJECT_ID}/sync/delta`,
-			{
-				method: "POST",
-				headers,
-				body: JSON.stringify({ products: [document] }),
-			},
-		);
+		const res = await fetch(`${baseUrl}/api/projects/${AACSEARCH_PROJECT_ID}/sync/delta`, {
+			method: "POST",
+			headers,
+			body: JSON.stringify({ products: [document] }),
+		});
 
 		if (!res.ok) {
 			const body = await res.text();

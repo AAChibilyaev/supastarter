@@ -69,11 +69,7 @@ export interface RealtimeChangeEvent {
 
 /** Sync status callback for monitoring */
 export interface SyncCallbacks {
-	onSync?: (event: {
-		table: string;
-		type: RealtimeChangeType;
-		documentCount: number;
-	}) => void;
+	onSync?: (event: { table: string; type: RealtimeChangeType; documentCount: number }) => void;
 	onError?: (error: Error, context?: Record<string, unknown>) => void;
 }
 

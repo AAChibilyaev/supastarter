@@ -7,6 +7,13 @@ import { logger } from "@repo/logs";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireOrganizationAccess } from "../lib/access";
 import {
 	ensurePersonalSearchCollection,
@@ -18,6 +25,7 @@ import {
  * Accepts base64-encoded file content.
  */
 export const uploadFile = protectedProcedure
+	.use(creditGate("chat", CREDIT_RATES.chat))
 	.route({
 		method: "POST",
 		path: "/my-search/indexes/{indexId}/files",
@@ -42,63 +50,85 @@ export const uploadFile = protectedProcedure
 			chunkCount: z.number(),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		await requireOrganizationAccess(input.organizationId, user.id);
+	.handler(async ({ input, context: { ...rest } }) => {
+		const user = (rest as Record<string, unknown>).user as { id: string };
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 
-		// Verify index access
-		const index = await getPersonalSearchIndexById(input.organizationId, input.indexId);
-		if (!index) {
-			throw new ORPCError("NOT_FOUND", { message: "Search index not found" });
-		}
-
-		// Decode base64 to buffer
-		const buffer = Buffer.from(input.content, "base64");
-
-		// Process the file through document-processor
-		const result: ProcessFileResult = await processFile({
-			filename: input.filename,
-			content: buffer,
-			mimeType: input.mimeType,
-		});
-
-		// Store file metadata in index schema
-		const fileId = randomUUID();
-		await addFileToIndex(input.indexId, {
-			id: fileId,
-			filename: input.filename,
-			originalFilename: input.filename,
-			mimeType: result.document.mimeType,
-			fileType: result.fileType ?? "txt",
-			fileSize: buffer.length,
-			wordCount: result.document.content.split(/\s+/).filter(Boolean).length,
-			uploadedAt: new Date().toISOString(),
-		});
-
-		// Index chunks into Typesense
 		try {
-			await ensurePersonalSearchCollection(input.organizationId, index.slug, index.version);
-			await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
-				fileId,
+			await requireOrganizationAccess(input.organizationId, user.id);
+
+			// Verify index access
+			const index = await getPersonalSearchIndexById(input.organizationId, input.indexId);
+			if (!index) {
+				throw new ORPCError("NOT_FOUND", { message: "Search index not found" });
+			}
+
+			// Decode base64 to buffer
+			const buffer = Buffer.from(input.content, "base64");
+
+			// Process the file through document-processor
+			const result: ProcessFileResult = await processFile({
 				filename: input.filename,
+				content: buffer,
+				mimeType: input.mimeType,
+			});
+
+			// Store file metadata in index schema
+			const fileId = randomUUID();
+			await addFileToIndex(input.indexId, {
+				id: fileId,
+				filename: input.filename,
+				originalFilename: input.filename,
+				mimeType: result.document.mimeType,
 				fileType: result.fileType ?? "txt",
-				chunks: result.chunks,
+				fileSize: buffer.length,
+				wordCount: result.document.content.split(/\s+/).filter(Boolean).length,
+				uploadedAt: new Date().toISOString(),
 			});
-		} catch (error) {
-			logger.error("Failed to index personal document chunks into Typesense", {
+
+			// Index chunks into Typesense
+			try {
+				await ensurePersonalSearchCollection(
+					input.organizationId,
+					index.slug,
+					index.version,
+				);
+				await indexPersonalDocumentChunks(input.organizationId, index.slug, index.version, {
+					fileId,
+					filename: input.filename,
+					fileType: result.fileType ?? "txt",
+					chunks: result.chunks,
+				});
+			} catch (error) {
+				logger.error("Failed to index personal document chunks into Typesense", {
+					fileId,
+					filename: input.filename,
+					error,
+				});
+				// Don't fail the upload — metadata is stored
+			}
+
+			// Commit flat-fee usage on successful file upload
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "chat",
+				provider: "aacsearch",
+				model: "file-ingest",
+				flatFeeKopecks: CREDIT_RATES.chat,
+			});
+
+			logger.info(
+				`File uploaded to personal index: ${input.filename} (${result.chunks.length} chunks)`,
+			);
+
+			return {
 				fileId,
 				filename: input.filename,
-				error,
-			});
-			// Don't fail the upload — metadata is stored
+				chunkCount: result.chunks.length,
+			};
+		} catch (err) {
+			// Release reservation on any error
+			await releaseCreditReservation(creditReservationId);
+			throw err;
 		}
-
-		logger.info(
-			`File uploaded to personal index: ${input.filename} (${result.chunks.length} chunks)`,
-		);
-
-		return {
-			fileId,
-			filename: input.filename,
-			chunkCount: result.chunks.length,
-		};
 	});

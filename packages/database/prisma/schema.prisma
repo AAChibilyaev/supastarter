@@ -45,6 +45,7 @@ model User {
   notificationPreferences  UserNotificationPreference[]
   aiWallet                 AiWallet?
   knowledgeSpaces          KnowledgeSpace[]
+  npsSurveyResponses       NpsSurveyResponse[]
 
   @@unique([email])
   @@unique([username])
@@ -161,6 +162,7 @@ model Organization {
   activationEvents   ActivationEvent[]
   collections        Collection[]
   collectionDocuments CollectionDocument[]
+  npsSurveyResponses  NpsSurveyResponse[]
 
   @@unique([slug])
   @@map("organization")
@@ -864,4 +866,21 @@ model NewsletterSubscriber {
 
   @@index([createdAt(sort: Desc)])
   @@map("newsletter_subscriber")
+}
+
+model NpsSurveyResponse {
+	id             String       @id @default(cuid())
+	userId         String
+	user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+	organizationId String?
+	organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+	score          Int          // 0-10
+	feedback       String?      // Optional follow-up text
+	source         String       // "in_app" | "email" | "support"
+	createdAt      DateTime     @default(now())
+
+	@@index([userId])
+	@@index([organizationId])
+	@@index([createdAt(sort: Desc)])
+	@@map("nps_survey_response")
 }

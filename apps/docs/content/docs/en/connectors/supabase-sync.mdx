@@ -25,36 +25,42 @@ Create a sync process (e.g. `sync.ts`):
 import { createRealtimeSubscription } from "@aacsearch/supabase-sync";
 
 const rtClient = createRealtimeSubscription({
-  aacsearch: {
-    baseUrl: process.env.AACSEARCH_URL!,
-    token: process.env.AACSEARCH_TOKEN!,
-    projectId: process.env.AACSEARCH_PROJECT_ID!,
-  },
-  supabase: {
-    url: process.env.SUPABASE_URL!,
-    apiKey: process.env.SUPABASE_ANON_KEY!,
-  },
-  tables: [
-    { table: "products", idColumn: "id" },
-    { table: "categories", idColumn: "id", columns: ["name", "slug", "description"] },
-    {
-      table: "reviews",
-      idColumn: "id",
-      mapper: (row) => ({
-        external_id: String(row.id),
-        title: row.title,
-        content: row.body,
-        rating: row.stars,
-        product_id: row.product_id,
-      }),
-    },
-  ],
-  debug: true,
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	supabase: {
+		url: process.env.SUPABASE_URL!,
+		apiKey: process.env.SUPABASE_ANON_KEY!,
+	},
+	tables: [
+		{ table: "products", idColumn: "id" },
+		{ table: "categories", idColumn: "id", columns: ["name", "slug", "description"] },
+		{
+			table: "reviews",
+			idColumn: "id",
+			mapper: (row) => ({
+				external_id: String(row.id),
+				title: row.title,
+				content: row.body,
+				rating: row.stars,
+				product_id: row.product_id,
+			}),
+		},
+	],
+	debug: true,
 });
 
 // Handle graceful shutdown
-process.on("SIGTERM", () => { rtClient.disconnect(); process.exit(0); });
-process.on("SIGINT", () => { rtClient.disconnect(); process.exit(0); });
+process.on("SIGTERM", () => {
+	rtClient.disconnect();
+	process.exit(0);
+});
+process.on("SIGINT", () => {
+	rtClient.disconnect();
+	process.exit(0);
+});
 ```
 
 Run it:
@@ -67,13 +73,13 @@ Or deploy to any Node.js hosting (Fly.io, Railway, Render, etc.).
 
 ### Environment variables
 
-| Variable | Description |
-|----------|-------------|
-| `AACSEARCH_URL` | AACsearch API URL (e.g. `https://api.aacsearch.com`) |
-| `AACSEARCH_TOKEN` | Connector bearer token (`ss_connector_*`) |
-| `AACSEARCH_PROJECT_ID` | Your AACsearch project ID |
-| `SUPABASE_URL` | Supabase project URL (e.g. `https://xxx.supabase.co`) |
-| `SUPABASE_ANON_KEY` | Supabase anon or service_role key |
+| Variable               | Description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `AACSEARCH_URL`        | AACsearch API URL (e.g. `https://api.aacsearch.com`)  |
+| `AACSEARCH_TOKEN`      | Connector bearer token (`ss_connector_*`)             |
+| `AACSEARCH_PROJECT_ID` | Your AACsearch project ID                             |
+| `SUPABASE_URL`         | Supabase project URL (e.g. `https://xxx.supabase.co`) |
+| `SUPABASE_ANON_KEY`    | Supabase anon or service_role key                     |
 
 ## Approach 2: Supabase Edge Function (serverless)
 
@@ -100,14 +106,14 @@ supabase secrets set AACSEARCH_PROJECT_ID=org_xxx
 1. Open your **Supabase Dashboard** → **Database** → **Webhooks**
 2. Click **Create a new webhook**
 3. Configure:
-   - **Name**: `aacsearch-sync`
-   - **Table**: Your table (e.g. `products`)
-   - **Events**: INSERT, UPDATE, DELETE
-   - **Type**: HTTP Request
-   - **HTTP Method**: POST
-   - **URL**: `https://[project-ref].supabase.co/functions/v1/aacsearch-sync`
-   - **HTTP Headers**: `Authorization: Bearer [anon-key]`
-   - **Condition** (optional): e.g. only trigger when `published = true`
+    - **Name**: `aacsearch-sync`
+    - **Table**: Your table (e.g. `products`)
+    - **Events**: INSERT, UPDATE, DELETE
+    - **Type**: HTTP Request
+    - **HTTP Method**: POST
+    - **URL**: `https://[project-ref].supabase.co/functions/v1/aacsearch-sync`
+    - **HTTP Headers**: `Authorization: Bearer [anon-key]`
+    - **Condition** (optional): e.g. only trigger when `published = true`
 
 The Edge Function receives the webhook payload, builds an AACsearch document,
 and pushes it to `POST /api/projects/:projectId/sync/delta` or

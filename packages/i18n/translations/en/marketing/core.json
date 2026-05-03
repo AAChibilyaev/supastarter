@@ -28,8 +28,8 @@
 	"home": {
 		"hero": {
 			"badge": "v0 — accepting early access",
-			"title": "AACsearch — hosted search API for SaaS, docs, and catalogs",
-			"subtitle": "Scoped tokens, origin allow-lists, rate limits, multi-search, and zero-downtime reindex — out of the box. < 50ms p99.",
+			"title": "Search that converts. Without the infra team.",
+			"subtitle": "Scoped tokens, multi-tenant isolation, and AI relevance — out of the box. Pay 5x less than Algolia. Migrate in 1 hour.",
 			"getStarted": "Start free",
 			"documentation": "Read the docs",
 			"codeCaption": "search-client.ts",
@@ -410,6 +410,91 @@
 			"playground": {
 				"title": "Playground",
 				"description": "Interactive console in the dashboard. Try queries, see results, copy ready-to-use code."
+			}
+		}
+	},
+	"homeTco": {
+		"title": "AACsearch vs Algolia — real cost comparison",
+		"subtitle": "Algolia charges per record every month. At 1M searches/month, AACsearch costs 5x less.",
+		"rows": {
+			"priceModel": {
+				"metric": "Pricing model",
+				"algolia": "$0.50 / 1K searches + $0.50 / record / month",
+				"aac": "$0.10 / 1K search-units. 1 unit = 1 search OR 1 document."
+			},
+			"oneMillion": {
+				"metric": "1M searches/mo + 10K docs",
+				"algolia": "$500 (search) + $5,000 (records) = $5,500/mo",
+				"aac": "$100/mo"
+			},
+			"tenMillion": {
+				"metric": "10M searches/mo + 100K docs",
+				"algolia": "$5,000 (search) + $50,000 (records) = $55,000/mo",
+				"aac": "$1,000/mo"
+			},
+			"overage": {
+				"metric": "Overage",
+				"algolia": "Auto overage at standard rates",
+				"aac": "Soft cap: dashboard warning. Hard cap: block until next cycle."
+			},
+			"records": {
+				"metric": "Record storage cost",
+				"algolia": "Every record costs money every month",
+				"aac": "Pay once at index time. Free thereafter."
+			},
+			"zeroDowntime": {
+				"metric": "Zero-downtime reindex",
+				"algolia": "Enterprise plan only",
+				"aac": "Included in all plans"
+			}
+		},
+		"cta": "Calculate your savings →"
+	},
+	"homeMigration": {
+		"title": "Migrate from Algolia, Meilisearch, or Elasticsearch — in 1 hour",
+		"subtitle": "Zero-downtime reindex, physical index dump, or direct sync. Start integration without stopping your current search.",
+		"steps": {
+			"export": {
+				"title": "1. Export your index",
+				"description": "Export your current index via your provider's API. AACsearch accepts JSON, NDJSON, and CSV."
+			},
+			"import": {
+				"title": "2. Import to AACsearch",
+				"description": "POST to /collections — indexing starts immediately. Via dashboard, CLI, or API."
+			},
+			"switch": {
+				"title": "3. Switch without downtime",
+				"description": "Live search stays on your old provider. New index builds in parallel. Atomic alias switch."
+			},
+			"monitor": {
+				"title": "4. Monitor and rollback",
+				"description": "Compare before/after metrics: latency, CTR, zero-result rate. One-click rollback if needed."
+			}
+		},
+		"cta": "Start migration"
+	},
+	"homePricingFaq": {
+		"title": "Pricing FAQ — unit economics explained",
+		"items": {
+			"unit": {
+				"q": "What counts as one search-unit?",
+				"a": "1 search request OR 1 indexed document. A document update = 1 unit. Reindex is not billed — only the final write to the new index."
+			},
+			"overage": {
+				"q": "What happens after exceeding the limit?",
+				"a": "Soft cap: you receive a dashboard warning and email notification. Hard cap: search is blocked until the next billing cycle. No surprise bills."
+			},
+			"comparison": {
+				"q": "How does AACsearch compare to Algolia on price?",
+				"a": "Algolia charges for every record every month. At 1M searches + 10K documents, Algolia costs ~$5,500/mo — AACsearch costs $100/mo. At 10M searches, the difference reaches 50x."
+			},
+			"free": {
+				"q": "What's included in the free tier?",
+				"a": "10,000 search-units/month, 1 index, 3 API keys. Enough for a prototype, MVP, or small side project."
+			},
+			"migration": {
+				"q": "How do I migrate from another provider?",
+				"a": "Zero-downtime reindex out of the box. Export your index → import into AACsearch → switch the alias. All online, no search interruption."
 			}
 		}
 	},

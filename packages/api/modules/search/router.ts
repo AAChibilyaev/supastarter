@@ -12,6 +12,7 @@ import {
 	clusterMetrics,
 	configureSlowRequestLogging,
 	clearClusterCache,
+	getApiStats,
 } from "./procedures/cluster-ops";
 import {
 	createConversationModel,
@@ -217,6 +218,7 @@ export const searchRouter = {
 		metrics: clusterMetrics,
 		configureSlowRequestLogging,
 		clearCache: clearClusterCache,
+		apiStats: getApiStats,
 	},
 	analyticsRules: {
 		list: listAnalyticsRules,

@@ -4,7 +4,14 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin } from "../lib/access";
 
-const clusterOperationSchema = z.enum(["vote", "debug", "metrics", "snapshot", "compact", "cache_clear"]);
+const clusterOperationSchema = z.enum([
+	"vote",
+	"debug",
+	"metrics",
+	"snapshot",
+	"compact",
+	"cache_clear",
+]);
 
 export const performClusterOperation = protectedProcedure
 	.route({
@@ -84,7 +91,8 @@ export const performClusterOperation = protectedProcedure
 					const compactResult = await (client as any).operations().perform("db_compact");
 					data = {
 						success: true,
-						message: (compactResult?.message as string) ?? "Database compaction completed",
+						message:
+							(compactResult?.message as string) ?? "Database compaction completed",
 					};
 					break;
 				}
@@ -292,5 +300,39 @@ export const clearClusterCache = protectedProcedure
 			};
 		} catch {
 			return { success: false, message: "Failed to clear cache" };
+		}
+	});
+
+export const getApiStats = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/search/cluster/api-stats",
+		tags: ["Search"],
+		summary: "Get Typesense API statistics",
+		description:
+			"Returns real-time API request statistics from Typesense /stats.json, including requests per second and latency percentiles per endpoint.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			stats: z.record(z.string(), z.unknown()),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
+
+		try {
+			const stats = await typesenseFetch<Record<string, unknown>>("GET", "/stats.json");
+			return {
+				success: true,
+				stats,
+			};
+		} catch {
+			return { success: false, stats: {} };
 		}
 	});

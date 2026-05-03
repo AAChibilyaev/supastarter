@@ -78,6 +78,8 @@ export interface SearchDocumentsInput {
 	facetSamplePercent?: number;
 	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
 	facetStrategy?: FacetStrategy;
+	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". E.g. "category:count,brand:alpha". */
+	facetSortBy?: string;
 	// ── Typo fine-tuning (Typesense v0.30+) ─────────────────────────
 	/** Exhaustive search: scan all matching documents for typo corrections (slower but more accurate). */
 	exhaustiveSearch?: boolean;
@@ -179,6 +181,9 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 			}),
 			...(input.facetStrategy !== undefined && {
 				facet_strategy: input.facetStrategy,
+			}),
+			...(input.facetSortBy !== undefined && {
+				facet_sort_by: input.facetSortBy,
 			}),
 			// ── Typo fine-tuning ──
 			...(input.exhaustiveSearch !== undefined && {
@@ -282,6 +287,9 @@ export async function multiSearchDocuments(
 			}),
 			...(entry.facetStrategy !== undefined && {
 				facet_strategy: entry.facetStrategy,
+			}),
+			...(entry.facetSortBy !== undefined && {
+				facet_sort_by: entry.facetSortBy,
 			}),
 			// ── Typo fine-tuning ──
 			...(entry.exhaustiveSearch !== undefined && {

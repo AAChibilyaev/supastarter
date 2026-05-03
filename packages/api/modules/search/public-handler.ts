@@ -86,6 +86,8 @@ const publicSearchInput = z.object({
 	facetSearch: z.string().optional(),
 	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
+	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
+	facetSortBy: z.string().optional(),
 	// ── Negation (explicit) ──
 	negate: z.string().optional(),
 	// ── Wildcard toggle ──

@@ -66,6 +66,8 @@ const searchInputSchema = z.object({
 	facetSamplePercent: z.number().min(0).max(100).optional(),
 	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
+	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
+	facetSortBy: z.string().optional(),
 });
 
 type SearchInput = z.infer<typeof searchInputSchema>;
@@ -154,6 +156,7 @@ export const searchApp = new Hono()
 			facetSearch: input.facetSearch,
 			facetSamplePercent: input.facetSamplePercent,
 			facetStrategy: input.facetStrategy,
+			facetSortBy: input.facetSortBy,
 			polygonFilter: input.polygonFilter,
 			boundingBoxFilter: input.boundingBoxFilter,
 		});

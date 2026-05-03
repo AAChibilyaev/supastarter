@@ -38,8 +38,10 @@ export const dynamicSearch = protectedProcedure
 			facetSearch: z.string().optional(),
 			/** Percentage of documents to sample for facet counts (0–100). */
 			facetSamplePercent: z.number().min(0).max(100).optional(),
-			/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
-			facetStrategy: z.enum(["exact", "intersection"]).optional(),
+	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
+	facetStrategy: z.enum(["exact", "intersection"]).optional(),
+	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
+	facetSortBy: z.string().optional(),
 			sortBy: z.string().optional(),
 			diversifyField: z.string().optional(),
 			diversifyMaxPerValue: z.number().int().min(1).max(250).default(3),
@@ -86,6 +88,7 @@ export const dynamicSearch = protectedProcedure
 		if (input.facetSearch) searchParams.facet_search = input.facetSearch;
 		if (input.facetSamplePercent) searchParams.facet_sample_percent = input.facetSamplePercent;
 		if (input.facetStrategy) searchParams.facet_strategy = input.facetStrategy;
+		if (input.facetSortBy) searchParams.facet_sort_by = input.facetSortBy;
 		if (input.sortBy) searchParams.sort_by = input.sortBy;
 		if (input.highlightFields) {
 			searchParams.highlight_fields = input.highlightFields;

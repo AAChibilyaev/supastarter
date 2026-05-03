@@ -20,6 +20,8 @@ const multiSearchEntrySchema = z.object({
 	facetSamplePercent: z.number().min(0).max(100).optional(),
 	/** Facet strategy: "exact" for exact matches, "intersection" for intersection-based counting. */
 	facetStrategy: z.enum(["exact", "intersection"]).optional(),
+	/** Per-field facet value sort order (comma-separated). Format: "field_name:count|alpha". */
+	facetSortBy: z.string().optional(),
 	sortBy: z.string().optional(),
 	collection: z.string().optional(),
 	groupBy: z.string().optional(),
@@ -104,6 +106,9 @@ export const federatedSearch = protectedProcedure
 					}),
 					...(s.facetStrategy !== undefined && {
 						facet_strategy: s.facetStrategy,
+					}),
+					...(s.facetSortBy !== undefined && {
+						facet_sort_by: s.facetSortBy,
 					}),
 					...(s.sortBy && { sort_by: s.sortBy }),
 					...(s.groupBy && { group_by: s.groupBy }),

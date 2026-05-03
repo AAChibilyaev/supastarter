@@ -111,10 +111,18 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>{t("settings.billing.invoiceHistory.date")}</TableHead>
-									<TableHead>{t("settings.billing.invoiceHistory.amount")}</TableHead>
-									<TableHead>{t("settings.billing.invoiceHistory.statusLabel")}</TableHead>
-									<TableHead className="text-right">{t("settings.billing.invoiceHistory.actions")}</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.date")}
+									</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.amount")}
+									</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.statusLabel")}
+									</TableHead>
+									<TableHead className="text-right">
+										{t("settings.billing.invoiceHistory.actions")}
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -150,7 +158,9 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 														download
 													>
 														<DownloadIcon className="size-4 mr-1" />
-														{t("settings.billing.invoiceHistory.downloadPdf")}
+														{t(
+															"settings.billing.invoiceHistory.downloadPdf",
+														)}
 													</a>
 												</Button>
 											)}
@@ -171,7 +181,9 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 									{t("settings.billing.invoiceHistory.previous")}
 								</Button>
 								<span className="text-sm text-muted-foreground">
-									{t("settings.billing.invoiceHistory.page", { page: currentPage })}
+									{t("settings.billing.invoiceHistory.page", {
+										page: currentPage,
+									})}
 								</span>
 								<Button
 									variant="ghost"

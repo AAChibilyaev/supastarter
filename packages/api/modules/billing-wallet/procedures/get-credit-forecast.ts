@@ -3,6 +3,7 @@ import { getCreditUsageForecast } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { requireOrganizationMember } from "../../search/lib/access";
 import { creditForecastDtoSchema } from "../types";
 
 export const getCreditForecast = protectedProcedure
@@ -20,7 +21,9 @@ export const getCreditForecast = protectedProcedure
 		}),
 	)
 	.output(creditForecastDtoSchema)
-	.handler(async ({ input }) => {
+	.handler(async ({ input, context: { user } }) => {
+		await requireOrganizationMember(input.organizationId, user.id);
+
 		const forecast = await getCreditUsageForecast(input.organizationId);
 		if (!forecast) throw new ORPCError("NOT_FOUND", { message: "Wallet not found" });
 

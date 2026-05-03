@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { requireOrganizationMember } from "../../search/lib/access";
 import { getCreditUsageStatsOutputSchema, usageStatsPeriodSchema } from "../types";
 
 export const getCreditUsageStats = protectedProcedure
@@ -27,6 +28,8 @@ export const getCreditUsageStats = protectedProcedure
 	)
 	.output(getCreditUsageStatsOutputSchema)
 	.handler(async ({ input, context: { user } }) => {
+		await requireOrganizationMember(input.organizationId, user.id);
+
 		const wallet = await getAiWalletByEntity({ organizationId: input.organizationId });
 		if (!wallet) throw new ORPCError("NOT_FOUND", { message: "Wallet not initialized" });
 

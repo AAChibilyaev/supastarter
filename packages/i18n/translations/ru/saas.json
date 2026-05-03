@@ -776,6 +776,22 @@
 				"noOverage": "Превышение не настроено",
 				"unlimited": "Безлимитно",
 				"searchesUsed": "Использовано {{used}} из {{limit}} поисков"
+			},
+			"upgradeModal": {
+				"title": "Upgrade тарифа",
+				"currentPlan": "Текущий тариф",
+				"selectPlan": "Выберите тариф для перехода",
+				"prorationPreview": "Предпросчёт пропорции",
+				"currentRemaining": "Остаток на текущем тарифе",
+				"newPlanCost": "Новый тариф (пропорционально)",
+				"totalDueToday": "К оплате сегодня",
+				"totalCredit": "Общий кредит",
+				"confirmUpgrade": "Подтвердить upgrade",
+				"redirectingToStripe": "Перенаправление в Stripe...",
+				"upgradeSuccess": "Тариф успешно обновлён!",
+				"upgradeError": "Не удалось обновить тариф. Попробуйте ещё раз.",
+				"noPaymentNeeded": "Платёж не требуется",
+				"comparePlans": "Сравнить тарифы"
 			}
 		},
 		"notificationsPage": {
@@ -861,7 +877,9 @@
 		"close": "Закрыть",
 		"clear": "Очистить",
 		"previous": "Назад",
-		"next": "Далее"
+		"next": "Далее",
+		"loading": "Загрузка...",
+		"selected": "Выбрано"
 	},
 	"checkoutReturn": {
 		"title": "Processing your purchase",
@@ -2421,5 +2439,85 @@
 			"cta": "Начать бесплатно",
 			"socialProof": "Более 100 компаний по всему миру доверяют нам"
 		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Бесплатный",
+				"description": "Для тестирования и небольших проектов",
+				"features": {
+					"searches": "50K поисковых запросов/мес",
+					"documents": "10K документов",
+					"indexes": "1 индекс",
+					"apiKeys": "3 API-ключа",
+					"support": "Поддержка сообщества"
+				}
+			},
+			"starter": {
+				"title": "Стартовый",
+				"description": "Для растущих проектов и стартапов",
+				"features": {
+					"searches": "1M поисковых запросов/мес",
+					"documents": "250K документов",
+					"indexes": "5 индексов",
+					"apiKeys": "Неограниченно API-ключей",
+					"analytics": "Базовая аналитика",
+					"support": "Поддержка по email"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "Для профессиональных приложений",
+				"features": {
+					"searches": "10M поисковых запросов/мес",
+					"documents": "2M документов",
+					"indexes": "20 индексов",
+					"apiKeys": "Неограниченно API-ключей",
+					"analytics": "Полная аналитика",
+					"synonyms": "Синонимы + курации",
+					"branding": "Свой брендинг",
+					"support": "Приоритетная поддержка"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "Для высоконагруженных продуктовых приложений",
+				"features": {
+					"searches": "50M поисковых запросов/мес",
+					"documents": "10M документов",
+					"indexes": "Неограниченно индексов",
+					"features": "Все функции Pro",
+					"support": "Выделенная поддержка",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Для масштабных развёртываний",
+				"features": {
+					"searches": "Безлимитные запросы",
+					"documents": "Безлимитные документы",
+					"indexes": "Неограниченно индексов",
+					"features": "Все функции Business",
+					"cluster": "Выделенный кластер",
+					"sso": "SSO/SAML",
+					"sla": "SLA 99,95%"
+				}
+			},
+			"lifetime": {
+				"title": "Навсегда",
+				"description": "Единоразовый платёж, функции Стартового навсегда",
+				"features": {
+					"searches": "1M поисковых запросов/мес",
+					"documents": "250K документов",
+					"indexes": "5 индексов",
+					"apiKeys": "Неограниченно API-ключей",
+					"analytics": "Базовая аналитика",
+					"support": "Поддержка по email",
+					"payment": "Единоразовый платёж"
+				}
+			}
+		},
+		"nextInvoice": "Следующий счет"
 	}
 }

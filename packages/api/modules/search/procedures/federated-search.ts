@@ -65,7 +65,7 @@ export const federatedSearch = protectedProcedure
 		const client = getTypesenseClient();
 		const startTime = Date.now();
 
-			const multiSearchParams = await Promise.all(
+		const multiSearchParams = await Promise.all(
 			input.searches.map(async (s) => {
 				const index = await requireSearchIndex(input.organizationId, s.slug);
 				return {

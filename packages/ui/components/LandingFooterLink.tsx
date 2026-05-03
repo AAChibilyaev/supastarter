@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { cn } from "../lib";
 
 /**
@@ -18,7 +16,7 @@ export const LandingFooterLink = ({
 	className?: string;
 }) => {
 	return (
-		<Link
+		<a
 			href={href}
 			className={cn(
 				"text-xs transition-colors",
@@ -32,6 +30,6 @@ export const LandingFooterLink = ({
 			)}
 		>
 			{children}
-		</Link>
+		</a>
 	);
 };

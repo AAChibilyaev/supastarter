@@ -294,7 +294,10 @@ export async function runFullSync(
 						inventoryMap = freshMap;
 					}
 				} catch (err) {
-					logger.warn("Failed to fetch inventory levels for page", { page: pageCount, err });
+					logger.warn("Failed to fetch inventory levels for page", {
+						page: pageCount,
+						err,
+					});
 				}
 			}
 
@@ -376,7 +379,15 @@ export async function runDeltaSync(
 	client: ShopifyAdminClient,
 	options: SyncOptions,
 ): Promise<SyncResult> {
-	const { shop, indexId, organizationId, includeMetafields, includeInventory, includeCategories, vendorMetadata } = options;
+	const {
+		shop,
+		indexId,
+		organizationId,
+		includeMetafields,
+		includeInventory,
+		includeCategories,
+		vendorMetadata,
+	} = options;
 
 	const updatedSince =
 		options.updatedSince ?? new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -400,6 +411,25 @@ export async function runDeltaSync(
 	};
 
 	try {
+		// ─── Pre-fetch enrichment data ──────────────────────────
+		let inventoryMap: InventoryMap | undefined;
+		let categoryMap: CategoryMap | undefined;
+
+		if (includeInventory) {
+			logger.info("Fetching inventory levels before delta sync");
+			inventoryMap = new Map();
+		}
+
+		if (includeCategories) {
+			logger.info("Building category map before delta sync");
+			try {
+				categoryMap = await buildCategoryMap(client);
+			} catch (err) {
+				logger.warn("Failed to build category map, continuing without categories", { err });
+				categoryMap = new Map();
+			}
+		}
+
 		let sinceId: number | undefined;
 		let pageCount = 0;
 
@@ -430,7 +460,10 @@ export async function runDeltaSync(
 						inventoryMap = freshMap;
 					}
 				} catch (err) {
-					logger.warn("Failed to fetch inventory levels for page", { page: pageCount, err });
+					logger.warn("Failed to fetch inventory levels for page", {
+						page: pageCount,
+						err,
+					});
 				}
 			}
 

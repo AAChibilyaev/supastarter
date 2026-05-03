@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
 export function useHotKey(callback: () => void, key: string, options?: { shift?: boolean }): void {

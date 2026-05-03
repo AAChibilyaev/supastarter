@@ -861,7 +861,9 @@
 		"close": "Close",
 		"clear": "Clear",
 		"previous": "Previous",
-		"next": "Next"
+		"next": "Next",
+		"loading": "Loading...",
+		"selected": "Selected"
 	},
 	"checkoutReturn": {
 		"title": "Processing your purchase",

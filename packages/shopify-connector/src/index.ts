@@ -27,7 +27,11 @@ export type { ShopifyOAuthConfig, ShopifyTokenResult, ShopifySyncStatus } from "
 export { runFullSync, runDeltaSync } from "./sync";
 export type { SyncResult, SyncOptions } from "./sync";
 export { flattenProductToDocuments, documentToExternalId, parseExternalId } from "./product-mapper";
-export type { AacSearchProductDocument } from "./product-mapper";
+export type { AacSearchProductDocument, DocumentEnrichment } from "./product-mapper";
+export { fetchInventoryLevels, fetchLocations } from "./inventory-sync";
+export type { InventoryMap, InventoryLevel } from "./inventory-sync";
+export { buildCategoryMap, getProductCategories } from "./category-sync";
+export type { CategoryMap, ProductCategories } from "./category-sync";
 export { verifyWebhookHmac } from "./webhook-verifier";
 export {
 	handleWebhook,

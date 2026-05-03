@@ -1,11 +1,11 @@
-// Props to https://github.com/shadcn-ui/ui/issues/885#issuecomment-2059600641
-
 "use client";
+
+// Props to https://github.com/shadcn-ui/ui/issues/885#issuecomment-2059600641
 
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import * as React from "react";
 
-import { cn } from "../lib";
+import { cn } from "../../lib";
 
 function Slider({ className, ...props }: React.ComponentProps<typeof SliderPrimitive.Root>) {
 	const initialValue = Array.isArray(props.value) ? props.value : [props.min, props.max];

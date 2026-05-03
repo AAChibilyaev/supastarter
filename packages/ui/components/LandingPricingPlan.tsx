@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckIcon } from "lucide-react";
-import Link from "next/link";
 
 import { cn } from "../lib";
 import { buttonVariants } from "./button";
@@ -140,7 +139,7 @@ export const LandingPricingPlan = ({
 					) : null}
 				</p>
 
-				<Link
+				<a
 					href={href}
 					onClick={onClick}
 					className={cn(
@@ -155,7 +154,7 @@ export const LandingPricingPlan = ({
 					)}
 				>
 					{soldOut ? "Sold out" : ctaText}
-				</Link>
+				</a>
 
 				{Array.isArray(children) ? (
 					<ul

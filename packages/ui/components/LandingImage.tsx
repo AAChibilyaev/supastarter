@@ -1,5 +1,8 @@
-import NextImage, { type ImageProps } from "next/image";
+import type { ImgHTMLAttributes } from "react";
 
-const LandingImage = ({ ...rest }: ImageProps) => <NextImage {...rest} />;
+const LandingImage = ({ ...rest }: ImgHTMLAttributes<HTMLImageElement>) => (
+	// eslint-disable-next-line @next/next/no-img-element
+	<img {...rest} />
+);
 
 export default LandingImage;

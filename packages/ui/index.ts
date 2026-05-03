@@ -78,3 +78,10 @@ export * from "./components/LandingPrimaryCta";
 export * from "./components/LandingSaleCta";
 export * from "./components/LandingVideoPlayer";
 export { default as LandingImage } from "./components/LandingImage";
+
+// --- Chat components ---
+export * from "./components/chat/chat-bubble";
+export * from "./components/chat/chat-input";
+export * from "./components/chat/chat-message-list";
+export * from "./components/chat/expandable-chat";
+export * from "./components/chat/message-loading";

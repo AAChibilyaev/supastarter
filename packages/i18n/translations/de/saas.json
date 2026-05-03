@@ -776,6 +776,22 @@
 				"noOverage": "Kein Überlauf konfiguriert",
 				"unlimited": "Unbegrenzt",
 				"searchesUsed": "{{used}} / {{limit}} Suchanfragen genutzt"
+			},
+			"upgradeModal": {
+				"title": "Tarif upgraden",
+				"currentPlan": "Aktueller Tarif",
+				"selectPlan": "Wählen Sie einen Tarif zum Upgraden",
+				"prorationPreview": "Pro-Rata-Vorschau",
+				"currentRemaining": "Restwert des aktuellen Tarifs",
+				"newPlanCost": "Neuer Tarif (anteilig)",
+				"totalDueToday": "Heute fälliger Betrag",
+				"totalCredit": "Gesamtguthaben",
+				"confirmUpgrade": "Upgrade bestätigen",
+				"redirectingToStripe": "Weiterleitung zu Stripe...",
+				"upgradeSuccess": "Tarif erfolgreich upgegradet!",
+				"upgradeError": "Upgrade fehlgeschlagen. Bitte versuchen Sie es erneut.",
+				"noPaymentNeeded": "Keine Zahlung erforderlich",
+				"comparePlans": "Tarife vergleichen"
 			}
 		},
 		"notificationsPage": {
@@ -861,7 +877,9 @@
 		"close": "Schließen",
 		"clear": "Löschen",
 		"previous": "Zurück",
-		"next": "Weiter"
+		"next": "Weiter",
+		"loading": "Laden...",
+		"selected": "Ausgewählt"
 	},
 	"checkoutReturn": {
 		"title": "Kauf wird verarbeitet",
@@ -2371,5 +2389,85 @@
 			"cta": "Kostenlos starten",
 			"socialProof": "Von über 100 Unternehmen weltweit vertrauenswürdig"
 		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Kostenlos",
+				"description": "Für Tests und kleine Projekte",
+				"features": {
+					"searches": "50K Suchanfragen/Monat",
+					"documents": "10K Dokumente",
+					"indexes": "1 Index",
+					"apiKeys": "3 API-Schlüssel",
+					"support": "Community-Support"
+				}
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "Für wachsende Projekte und Startups",
+				"features": {
+					"searches": "1M Suchanfragen/Monat",
+					"documents": "250K Dokumente",
+					"indexes": "5 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Basis-Analyse",
+					"support": "E-Mail-Support"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "Für professionelle Anwendungen",
+				"features": {
+					"searches": "10M Suchanfragen/Monat",
+					"documents": "2M Dokumente",
+					"indexes": "20 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Vollständige Analyse",
+					"synonyms": "Synonyme + Kurationen",
+					"branding": "Eigenes Branding",
+					"support": "Priority-Support"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "Für produktive Anwendungen mit hohem Volumen",
+				"features": {
+					"searches": "50M Suchanfragen/Monat",
+					"documents": "10M Dokumente",
+					"indexes": "Unbegrenzte Indizes",
+					"features": "Alle Pro-Funktionen",
+					"support": "Dedizierter Support",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Für groß angelegte Bereitstellungen",
+				"features": {
+					"searches": "Unbegrenzte Suchanfragen",
+					"documents": "Unbegrenzte Dokumente",
+					"indexes": "Unbegrenzte Indizes",
+					"features": "Alle Business-Funktionen",
+					"cluster": "Dedizierter Cluster",
+					"sso": "SSO/SAML",
+					"sla": "99,95 % SLA"
+				}
+			},
+			"lifetime": {
+				"title": "Lebenslang",
+				"description": "Einmalzahlung, Starter-Funktionen für immer",
+				"features": {
+					"searches": "1M Suchanfragen/Monat",
+					"documents": "250K Dokumente",
+					"indexes": "5 Indizes",
+					"apiKeys": "Unbegrenzte API-Schlüssel",
+					"analytics": "Basis-Analyse",
+					"support": "E-Mail-Support",
+					"payment": "Einmalzahlung"
+				}
+			}
+		},
+		"nextInvoice": "Nächste Rechnung"
 	}
 }

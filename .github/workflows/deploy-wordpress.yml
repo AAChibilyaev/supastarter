@@ -13,11 +13,12 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Build assets (if any)
+            - name: Install dependencies & build blocks
               working-directory: modules/wordpress/aacsearch-search
               run: |
                   if [ -f package.json ]; then
-                    npm ci --omit=dev || true
+                    npm ci
+                    npm run build
                   fi
 
             - name: WordPress Plugin Deploy

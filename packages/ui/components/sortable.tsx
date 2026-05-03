@@ -35,9 +35,9 @@ import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-import { cn } from "../../lib";
-import { composeRefs } from "../../lib/compose-refs";
-import { buttonVariants } from "../button";
+import { cn } from "../lib";
+import { composeRefs } from "../lib/compose-refs";
+import { buttonVariants } from "./button";
 
 const orientationConfig = {
 	vertical: {

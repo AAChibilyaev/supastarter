@@ -776,6 +776,22 @@
 				"noOverage": "Sin configuración de excedente",
 				"unlimited": "Ilimitado",
 				"searchesUsed": "{{used}} / {{limit}} búsquedas usadas"
+			},
+			"upgradeModal": {
+				"title": "Mejorar plan",
+				"currentPlan": "Plan actual",
+				"selectPlan": "Selecciona un plan para mejorar",
+				"prorationPreview": "Vista previa de prorrateo",
+				"currentRemaining": "Valor restante del plan actual",
+				"newPlanCost": "Nuevo plan (prorrateado)",
+				"totalDueToday": "Total a pagar hoy",
+				"totalCredit": "Crédito total",
+				"confirmUpgrade": "Confirmar mejora",
+				"redirectingToStripe": "Redirigiendo a Stripe...",
+				"upgradeSuccess": "¡Plan mejorado exitosamente!",
+				"upgradeError": "Error al mejorar el plan. Inténtalo de nuevo.",
+				"noPaymentNeeded": "No se necesita pago",
+				"comparePlans": "Comparar planes"
 			}
 		},
 		"notificationsPage": {
@@ -861,7 +877,9 @@
 		"close": "Cerrar",
 		"clear": "Limpiar",
 		"previous": "Anterior",
-		"next": "Siguiente"
+		"next": "Siguiente",
+		"loading": "Cargando...",
+		"selected": "Seleccionado"
 	},
 	"checkoutReturn": {
 		"title": "Procesando tu compra",
@@ -2371,5 +2389,85 @@
 			"cta": "Comienza gratis",
 			"socialProof": "Confiado por más de 100 empresas en todo el mundo"
 		}
+	},
+	"pricing": {
+		"products": {
+			"free": {
+				"title": "Gratis",
+				"description": "Para pruebas y proyectos pequeños",
+				"features": {
+					"searches": "50K búsquedas/mes",
+					"documents": "10K documentos",
+					"indexes": "1 índice",
+					"apiKeys": "3 claves API",
+					"support": "Soporte comunitario"
+				}
+			},
+			"starter": {
+				"title": "Starter",
+				"description": "Para proyectos en crecimiento y startups",
+				"features": {
+					"searches": "1M búsquedas/mes",
+					"documents": "250K documentos",
+					"indexes": "5 índices",
+					"apiKeys": "Claves API ilimitadas",
+					"analytics": "Analítica básica",
+					"support": "Soporte por email"
+				}
+			},
+			"pro": {
+				"title": "Pro",
+				"description": "Para aplicaciones profesionales",
+				"features": {
+					"searches": "10M búsquedas/mes",
+					"documents": "2M documentos",
+					"indexes": "20 índices",
+					"apiKeys": "Claves API ilimitadas",
+					"analytics": "Analítica completa",
+					"synonyms": "Sinónimos + curaciones",
+					"branding": "Marca personalizada",
+					"support": "Soporte prioritario"
+				}
+			},
+			"business": {
+				"title": "Business",
+				"description": "Para aplicaciones de producción de alto volumen",
+				"features": {
+					"searches": "50M búsquedas/mes",
+					"documents": "10M documentos",
+					"indexes": "Índices ilimitados",
+					"features": "Todas las funciones Pro",
+					"support": "Soporte dedicado",
+					"sla": "SLA"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Para despliegues a gran escala",
+				"features": {
+					"searches": "Búsquedas ilimitadas",
+					"documents": "Documentos ilimitados",
+					"indexes": "Índices ilimitados",
+					"features": "Todas las funciones Business",
+					"cluster": "Cluster dedicado",
+					"sso": "SSO/SAML",
+					"sla": "99,95 % SLA"
+				}
+			},
+			"lifetime": {
+				"title": "De por vida",
+				"description": "Pago único, funciones Starter para siempre",
+				"features": {
+					"searches": "1M búsquedas/mes",
+					"documents": "250K documentos",
+					"indexes": "5 índices",
+					"apiKeys": "Claves API ilimitadas",
+					"analytics": "Analítica básica",
+					"support": "Soporte por email",
+					"payment": "Pago único"
+				}
+			}
+		},
+		"nextInvoice": "Próxima factura"
 	}
 }

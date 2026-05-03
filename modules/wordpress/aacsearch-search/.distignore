@@ -1,0 +1,27 @@
+# WordPress.org SVN deploy exclude list
+# Files/directories listed here are NOT deployed to WordPress.org
+
+# Development & build
+blocks/
+node_modules/
+package.json
+package-lock.json
+webpack.config.js
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Tests & docs
+tests/
+test/
+phpunit.xml*
+phpcs.xml*
+*.md

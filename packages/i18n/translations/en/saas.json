@@ -1735,6 +1735,31 @@
 			"description": "Advanced search with dynamic sorting and result diversification.",
 			"diversifyField": "Diversify field",
 			"maxPerValue": "Max per value"
+		},
+		"webhooks": {
+			"title": "Webhooks",
+			"description": "Receive HTTP POST notifications when key events occur in your AACsearch organization.",
+			"addWebhook": "Add Webhook",
+			"emptyState": "No webhooks configured",
+			"emptyDescription": "Add a webhook to receive real-time notifications about index and ingest events.",
+			"urlLabel": "Endpoint URL",
+			"urlPlaceholder": "https://example.com/webhook",
+			"eventsLabel": "Events to subscribe",
+			"tableUrl": "Endpoint",
+			"tableEvents": "Events",
+			"tableStatus": "Status",
+			"tableActions": "Actions",
+			"tableCreated": "Created",
+			"statusActive": "Active",
+			"deleteConfirm": "Delete this webhook?",
+			"deleteConfirmMessage": "This action cannot be undone. The webhook endpoint will stop receiving events.",
+			"deleted": "Webhook deleted",
+			"created": "Webhook created",
+			"error": "Something went wrong",
+			"createTitle": "Add Webhook",
+			"createDescription": "Configure an HTTPS endpoint to receive webhook notifications.",
+			"deleteAction": "Delete",
+			"saveAction": "Save Webhook"
 		}
 	},
 	"nav": {

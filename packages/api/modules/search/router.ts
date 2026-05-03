@@ -13,6 +13,7 @@ import { createScopedToken } from "./procedures/create-scoped-token";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
+import { createWebhook, deleteWebhook, listWebhooks } from "./procedures/webhooks";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { groupedSearch } from "./procedures/grouped-search";
@@ -137,4 +138,9 @@ export const searchRouter = {
 		delete: deleteAnalyticsRule,
 	},
 	dynamicSearch,
+	webhooks: {
+		list: listWebhooks,
+		create: createWebhook,
+		delete: deleteWebhook,
+	},
 };

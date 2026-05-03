@@ -1735,6 +1735,31 @@
 			"description": "Расширенный поиск с динамической сортировкой и диверсификацией результатов.",
 			"diversifyField": "Поле диверсификации",
 			"maxPerValue": "Макс на значение"
+		},
+		"webhooks": {
+			"title": "Вебхуки",
+			"description": "Получайте HTTP POST уведомления при ключевых событиях в вашей организации AACsearch.",
+			"addWebhook": "Добавить вебхук",
+			"emptyState": "Вебхуки не настроены",
+			"emptyDescription": "Добавьте вебхук для получения уведомлений в реальном времени о событиях индекса и загрузки данных.",
+			"urlLabel": "URL конечной точки",
+			"urlPlaceholder": "https://example.com/webhook",
+			"eventsLabel": "События для подписки",
+			"tableUrl": "Конечная точка",
+			"tableEvents": "События",
+			"tableStatus": "Статус",
+			"tableActions": "Действия",
+			"tableCreated": "Создан",
+			"statusActive": "Активен",
+			"deleteConfirm": "Удалить этот вебхук?",
+			"deleteConfirmMessage": "Это действие необратимо. Конечная точка вебхука перестанет получать события.",
+			"deleted": "Вебхук удалён",
+			"created": "Вебхук создан",
+			"error": "Что-то пошло не так",
+			"createTitle": "Добавить вебхук",
+			"createDescription": "Настройте HTTPS конечную точку для получения уведомлений о вебхуках.",
+			"deleteAction": "Удалить",
+			"saveAction": "Сохранить вебхук"
 		}
 	},
 	"nav": {

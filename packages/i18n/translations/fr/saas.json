@@ -1735,6 +1735,31 @@
 			"apiKeys": "Clés API",
 			"loadError": "Impossible de charger les projets.",
 			"title": "Projets"
+		},
+		"webhooks": {
+			"title": "Webhooks",
+			"description": "Recevez des notifications HTTP POST lors d'événements clés dans votre organisation AACsearch.",
+			"addWebhook": "Ajouter un webhook",
+			"emptyState": "Aucun webhook configuré",
+			"emptyDescription": "Ajoutez un webhook pour recevoir des notifications en temps réel sur les événements d'index et d'ingestion.",
+			"urlLabel": "URL du point de terminaison",
+			"urlPlaceholder": "https://example.com/webhook",
+			"eventsLabel": "Événements à souscrire",
+			"tableUrl": "Point de terminaison",
+			"tableEvents": "Événements",
+			"tableStatus": "Statut",
+			"tableActions": "Actions",
+			"tableCreated": "Créé",
+			"statusActive": "Actif",
+			"deleteConfirm": "Supprimer ce webhook?",
+			"deleteConfirmMessage": "Cette action est irréversible. Le point de terminaison webhook ne recevra plus d'événements.",
+			"deleted": "Webhook supprimé",
+			"created": "Webhook créé",
+			"error": "Quelque chose a mal tourné",
+			"createTitle": "Ajouter un webhook",
+			"createDescription": "Configurez un endpoint HTTPS pour recevoir des notifications webhook.",
+			"deleteAction": "Supprimer",
+			"saveAction": "Enregistrer le webhook"
 		}
 	},
 	"nav": {

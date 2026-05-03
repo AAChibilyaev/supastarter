@@ -1735,6 +1735,31 @@
 			"description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
 			"diversifyField": "Campo de diversificación",
 			"maxPerValue": "Máx por valor"
+		},
+		"webhooks": {
+			"title": "Webhooks",
+			"description": "Reciba notificaciones HTTP POST cuando ocurran eventos clave en su organización AACsearch.",
+			"addWebhook": "Añadir webhook",
+			"emptyState": "No hay webhooks configurados",
+			"emptyDescription": "Agrega un webhook para recibir notificaciones en tiempo real sobre eventos de índice e ingesta.",
+			"urlLabel": "URL del endpoint",
+			"urlPlaceholder": "https://example.com/webhook",
+			"eventsLabel": "Eventos a suscribir",
+			"tableUrl": "Endpoint",
+			"tableEvents": "Eventos",
+			"tableStatus": "Estado",
+			"tableActions": "Acciones",
+			"tableCreated": "Creado",
+			"statusActive": "Activo",
+			"deleteConfirm": "¿Eliminar este webhook?",
+			"deleteConfirmMessage": "Esta acción no se puede deshacer. El endpoint webhook dejará de recibir eventos.",
+			"deleted": "Webhook eliminado",
+			"created": "Webhook creado",
+			"error": "Algo salió mal",
+			"createTitle": "Añadir webhook",
+			"createDescription": "Configure un endpoint HTTPS para recibir notificaciones de webhook.",
+			"deleteAction": "Eliminar",
+			"saveAction": "Guardar webhook"
 		}
 	},
 	"nav": {

@@ -1735,6 +1735,31 @@
 			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
 			"diversifyField": "Diversifikationsfeld",
 			"maxPerValue": "Max pro Wert"
+		},
+		"webhooks": {
+			"title": "Webhooks",
+			"description": "Erhalten Sie HTTP POST-Benachrichtigungen bei wichtigen Ereignissen in Ihrer AACsearch-Organisation.",
+			"addWebhook": "Webhook hinzufügen",
+			"emptyState": "Keine Webhooks konfiguriert",
+			"emptyDescription": "Fügen Sie einen Webhook hinzu, um Echtzeit-Benachrichtigungen über Index- und Ingest-Ereignisse zu erhalten.",
+			"urlLabel": "Endpunkt-URL",
+			"urlPlaceholder": "https://example.com/webhook",
+			"eventsLabel": "Ereignisse abonnieren",
+			"tableUrl": "Endpunkt",
+			"tableEvents": "Ereignisse",
+			"tableStatus": "Status",
+			"tableActions": "Aktionen",
+			"tableCreated": "Erstellt",
+			"statusActive": "Aktiv",
+			"deleteConfirm": "Diesen Webhook löschen?",
+			"deleteConfirmMessage": "Diese Aktion kann nicht rückgängig gemacht werden. Der Webhook-Endpunkt erhält keine Ereignisse mehr.",
+			"deleted": "Webhook gelöscht",
+			"created": "Webhook erstellt",
+			"error": "Etwas ist schief gelaufen",
+			"createTitle": "Webhook hinzufügen",
+			"createDescription": "Konfigurieren Sie einen HTTPS-Endpunkt für Webhook-Benachrichtigungen.",
+			"deleteAction": "Löschen",
+			"saveAction": "Webhook speichern"
 		}
 	},
 	"nav": {

@@ -400,7 +400,10 @@
 				"saving": "Enregistrement...",
 				"setupSuccess": "Recharge automatique configurée avec succès",
 				"setupError": "Échec de la configuration de la recharge automatique",
-				"invalidValues": "Veuillez saisir des montants valides"
+				"invalidValues": "Veuillez saisir des montants valides",
+				"disabled": "Désactiver le rechargement automatique",
+				"disabling": "Désactivation...",
+				"statusActive": "Le rechargement automatique est actif. Votre portefeuille sera rechargé automatiquement lorsque le solde tombe en dessous du seuil."
 			},
 			"trialBannerTitle": "Essai gratuit",
 			"trialBannerMessage": "Votre essai Pro se termine dans {days} jour{days, plural, =1 {} other {s}}. Mettez a niveau pour conserver vos fonctionnalites Pro.",

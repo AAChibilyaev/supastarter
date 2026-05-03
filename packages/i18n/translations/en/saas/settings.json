@@ -398,7 +398,10 @@
 				"saving": "Saving...",
 				"setupSuccess": "Auto-recharge configured successfully",
 				"setupError": "Failed to configure auto-recharge",
-				"invalidValues": "Please enter valid amounts"
+				"invalidValues": "Please enter valid amounts",
+				"disabled": "Disable auto recharge",
+				"disabling": "Disabling...",
+				"statusActive": "Auto-recharge is active. Your wallet will be topped up automatically when the balance drops below the threshold."
 			},
 			"trialBannerTitle": "Free Trial",
 			"trialBannerMessage": "Your Pro trial ends in {days} day{days, plural, =1 {} other {s}}. Upgrade to keep your Pro features.",

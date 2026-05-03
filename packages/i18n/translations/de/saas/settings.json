@@ -400,7 +400,10 @@
 				"saving": "Wird gespeichert...",
 				"setupSuccess": "Automatische Aufladung erfolgreich konfiguriert",
 				"setupError": "Fehler bei der Konfiguration der automatischen Aufladung",
-				"invalidValues": "Bitte geben Sie gültige Beträge ein"
+				"invalidValues": "Bitte geben Sie gültige Beträge ein",
+				"disabled": "Automatische Aufladung deaktivieren",
+				"disabling": "Deaktivieren...",
+				"statusActive": "Automatische Aufladung ist aktiv. Ihr Wallet wird automatisch aufgeladen, wenn der Saldo unter den Schwellenwert fällt."
 			},
 			"trialBannerTitle": "Kostenlose Testversion",
 			"trialBannerMessage": "Ihre Pro-Testversion endet in {days} Tag{days, plural, =1 {} other {en}}. Upgraden Sie, um Ihre Pro-Funktionen zu behalten.",

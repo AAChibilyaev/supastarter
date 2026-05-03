@@ -400,7 +400,10 @@
 				"saving": "Guardando...",
 				"setupSuccess": "Recarga automática configurada exitosamente",
 				"setupError": "Error al configurar la recarga automática",
-				"invalidValues": "Por favor ingrese montos válidos"
+				"invalidValues": "Por favor ingrese montos válidos",
+				"disabled": "Desactivar recarga automática",
+				"disabling": "Desactivando...",
+				"statusActive": "La recarga automática está activa. Su billetera se recargará automáticamente cuando el saldo caiga por debajo del umbral."
 			},
 			"trialBannerTitle": "Prueba gratuita",
 			"trialBannerMessage": "Tu prueba Pro termina en {days} día{days, plural, =1 {} other {s}}. Actualiza para mantener tus funciones Pro.",

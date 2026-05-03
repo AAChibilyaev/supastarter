@@ -6,6 +6,7 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
@@ -28,6 +29,8 @@ export function AutoRechargeSettings() {
 	const { data: wallet, isLoading } = useAiWallet(orgId);
 	const qc = useQueryClient();
 
+	const isEnabled = wallet?.autoRechargeEnabled ?? false;
+
 	const [thresholdInput, setThresholdInput] = useState("");
 	const [topupInput, setTopupInput] = useState("");
 
@@ -38,6 +41,18 @@ export function AutoRechargeSettings() {
 				if (data.paymentUrl) {
 					window.open(data.paymentUrl, "_blank");
 				}
+				void qc.invalidateQueries({ queryKey: ["billingWallet"] });
+			},
+			onError: (error) => {
+				toast.error(error.message || t("autoRecharge.setupError"));
+			},
+		}),
+	);
+
+	const disableMutation = useMutation(
+		orpc.billingWallet.setupAutorecharge.mutationOptions({
+			onSuccess: () => {
+				toast.success(t("autoRecharge.disabled"));
 				void qc.invalidateQueries({ queryKey: ["billingWallet"] });
 			},
 			onError: (error) => {
@@ -59,6 +74,15 @@ export function AutoRechargeSettings() {
 		setupMutation.mutate({
 			thresholdKopecks,
 			topupAmountKopecks,
+			enabled: true,
+		});
+	};
+
+	const handleDisable = () => {
+		disableMutation.mutate({
+			thresholdKopecks: BigInt(0),
+			topupAmountKopecks: BigInt(0),
+			enabled: false,
 		});
 	};
 
@@ -78,6 +102,46 @@ export function AutoRechargeSettings() {
 	}
 
 	if (!wallet) return null;
+
+	// Show status when auto-recharge is already configured
+	if (isEnabled) {
+		const thresholdRub = (Number(wallet.autoRechargeThresholdKopecks) / 100).toFixed(2);
+		const topupRub = (Number(wallet.autoRechargeAmountKopecks) / 100).toFixed(2);
+
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle>{t("autoRecharge.title")}</CardTitle>
+					<CardDescription>{t("autoRecharge.statusActive")}</CardDescription>
+				</CardHeader>
+				<CardContent className="space-y-2">
+					<div className="flex justify-between text-sm">
+						<span className="text-muted-foreground">
+							{t("autoRecharge.thresholdLabel")}
+						</span>
+						<span className="font-medium">{thresholdRub} RUB</span>
+					</div>
+					<div className="flex justify-between text-sm">
+						<span className="text-muted-foreground">
+							{t("autoRecharge.topupLabel")}
+						</span>
+						<span className="font-medium">{topupRub} RUB</span>
+					</div>
+				</CardContent>
+				<CardFooter>
+					<Button
+						variant="outline"
+						onClick={handleDisable}
+						disabled={disableMutation.isPending}
+					>
+						{disableMutation.isPending
+							? t("autoRecharge.disabling")
+							: t("autoRecharge.disable")}
+					</Button>
+				</CardFooter>
+			</Card>
+		);
+	}
 
 	return (
 		<Card>

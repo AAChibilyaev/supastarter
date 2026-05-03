@@ -6,30 +6,76 @@ import { sendSlackAlert } from "./slack-alert";
 
 const LOW_BALANCE_RATIO = 0.2; // 20% of included monthly limit
 const CRITICAL_BALANCE_RATIO = 0.05; // 5% — triggers auto-recharge attempt
+const DEFAULT_LOW_THRESHOLD_KOPECKS = BigInt(20_000); // 200 RUB
+const DEFAULT_CRITICAL_THRESHOLD_KOPECKS = BigInt(5_000); // 50 RUB
+const DEFAULT_RECHARGE_AMOUNT_KOPECKS = BigInt(100_000); // 1000 RUB
 
 /**
  * Sends AI_LOW_BALANCE notifications to wallet owner(s), triggers auto-recharge,
  * and fires a Slack webhook alert if configured.
  *
  * Threshold logic:
- * 1. If wallet has `includedMonthlyLimitKopecks > 0`:
+ * 1. If wallet has auto-recharge configured → use wallet's autoRechargeThresholdKopecks
+ * 2. Else if wallet has `includedMonthlyLimitKopecks > 0`:
  *    low = 20% of monthly limit, critical = 5%
- * 2. Fallback: low = 20_000 kopecks (200 RUB), critical = 5_000 kopecks (50 RUB)
+ * 3. Fallback: low = 20_000 kopecks (200 RUB), critical = 5_000 kopecks (50 RUB)
+ *
+ * Auto-recharge amount:
+ * 1. If wallet has auto-recharge configured → use wallet's autoRechargeAmountKopecks
+ * 2. Else: monthly limit or 1000 RUB fallback
  */
 export async function notifyLowBalance(walletId: string): Promise<void> {
 	const wallet = await db.aiWallet.findUnique({ where: { id: walletId } });
 	if (!wallet) return;
 
 	const monthlyLimit = wallet.includedMonthlyLimitKopecks;
+
+	// Use wallet's auto-recharge config when available and enabled
+	if (wallet.autoRechargeEnabled && wallet.autoRechargeThresholdKopecks > BigInt(0)) {
+		await applyThresholdCheck(wallet, {
+			lowThreshold: wallet.autoRechargeThresholdKopecks,
+			criticalThreshold: wallet.autoRechargeThresholdKopecks, // same as low for config-based
+			rechargeAmount:
+				wallet.autoRechargeAmountKopecks > BigInt(0)
+					? wallet.autoRechargeAmountKopecks
+					: DEFAULT_RECHARGE_AMOUNT_KOPECKS,
+		});
+		return;
+	}
+
+	// Fallback: compute from monthly limit
 	const lowThreshold =
 		monthlyLimit > BigInt(0)
 			? (monthlyLimit * BigInt(Math.round(LOW_BALANCE_RATIO * 100))) / BigInt(100)
-			: BigInt(20_000);
+			: DEFAULT_LOW_THRESHOLD_KOPECKS;
 	const criticalThreshold =
 		monthlyLimit > BigInt(0)
 			? (monthlyLimit * BigInt(Math.round(CRITICAL_BALANCE_RATIO * 100))) / BigInt(100)
-			: BigInt(5_000);
+			: DEFAULT_CRITICAL_THRESHOLD_KOPECKS;
+	const rechargeAmount =
+		monthlyLimit > BigInt(0) ? monthlyLimit : DEFAULT_RECHARGE_AMOUNT_KOPECKS;
 
+	await applyThresholdCheck(wallet, { lowThreshold, criticalThreshold, rechargeAmount });
+}
+
+async function applyThresholdCheck(
+	wallet: {
+		id: string;
+		organizationId: string | null;
+		userId: string | null;
+		availableBalanceKopecks: bigint;
+		status: string;
+		autoRechargeEnabled: boolean;
+		autoRechargeThresholdKopecks: bigint;
+		autoRechargeAmountKopecks: bigint;
+	},
+	opts: {
+		lowThreshold: bigint;
+		criticalThreshold: bigint;
+		rechargeAmount: bigint;
+	},
+): Promise<void> {
+	const { lowThreshold, criticalThreshold, rechargeAmount } = opts;
 	const balance = wallet.availableBalanceKopecks;
 	const isCritical = balance <= criticalThreshold;
 	if (balance > lowThreshold) return;
@@ -80,8 +126,8 @@ export async function notifyLowBalance(walletId: string): Promise<void> {
 	// 2. Slack webhook alert (if configured)
 	await sendSlackAlert({
 		text: isCritical
-			? `⚡ *AI Wallet CRITICAL* — wallet \`${walletId}\``
-			: `⚠️ *AI Wallet Low Balance* — wallet \`${walletId}\``,
+			? `⚡ *AI Wallet CRITICAL* — wallet \`${wallet.id}\``
+			: `⚠️ *AI Wallet Low Balance* — wallet \`${wallet.id}\``,
 		fallback: `AI Wallet ${isCritical ? "CRITICAL" : "Low Balance"} — ${balanceRub} ₽ remaining`,
 		color: isCritical ? "#dc2626" : "#f59e0b",
 		fields: [
@@ -97,26 +143,22 @@ export async function notifyLowBalance(walletId: string): Promise<void> {
 
 	// 3. Auto-recharge trigger (only at critical threshold)
 	if (isCritical) {
-		await triggerAutoRecharge(wallet);
+		await triggerAutoRecharge(wallet, rechargeAmount);
 	}
 }
 
 /**
  * Attempts to create a pending auto-recharge order.
- * The actual payment charge is handled by the payment provider cron/webhook.
+ * Uses the configured recharge amount. Deduplicates against existing pending orders.
  */
-async function triggerAutoRecharge(wallet: {
-	id: string;
-	organizationId: string | null;
-	userId: string | null;
-	availableBalanceKopecks: bigint;
-	includedMonthlyLimitKopecks: bigint;
-}): Promise<void> {
-	const rechargeAmount =
-		wallet.includedMonthlyLimitKopecks > BigInt(0)
-			? wallet.includedMonthlyLimitKopecks // top up full monthly limit
-			: BigInt(100_000); // fallback: 1000 RUB
-
+async function triggerAutoRecharge(
+	wallet: {
+		id: string;
+		organizationId: string | null;
+		userId: string | null;
+	},
+	rechargeAmount: bigint,
+): Promise<void> {
 	try {
 		// Check for existing pending topup order to avoid duplicates
 		const pendingOrder = await db.walletTopupOrder.findFirst({

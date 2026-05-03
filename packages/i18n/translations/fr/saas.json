@@ -854,7 +854,8 @@
 			"analytics": "Analytiques",
 			"relevance": "Pertinence",
 			"connectors": "Connecteurs",
-			"knowledge": "Connaissances"
+			"knowledge": "Connaissances",
+			"jobs": "Tâches"
 		},
 		"apiKeysPage": {
 			"title": "API Keys"
@@ -1735,6 +1736,19 @@
 			"apiKeys": "Clés API",
 			"loadError": "Impossible de charger les projets.",
 			"title": "Projets"
+		},
+		"jobs": {
+			"title": "Tableau des tâches",
+			"importJobs": "Tâches d'importation",
+			"syncJobs": "Tâches de synchronisation",
+			"reindex": "Réindexation",
+			"reindexEmpty": "Aucune tâche de réindexation active",
+			"syncJobsEmpty": "Aucune tâche de synchronisation trouvée",
+			"reindexJobId": "ID de tâche",
+			"reindexSlug": "Index",
+			"reindexProgress": "Progression",
+			"reindexStarted": "Démarré",
+			"subtitle": "Surveiller les tâches d'importation, de synchronisation et de réindexation"
 		}
 	},
 	"nav": {

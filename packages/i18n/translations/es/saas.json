@@ -1359,7 +1359,8 @@
 			"analytics": "Analíticas",
 			"relevance": "Relevancia",
 			"connectors": "Conectores",
-			"knowledge": "Conocimiento"
+			"knowledge": "Conocimiento",
+			"jobs": "Trabajos"
 		},
 		"noIndexesDescription": "Los índices de búsqueda almacenan tus datos y potencian las consultas de búsqueda. Crea uno para empezar.",
 		"synonyms": {
@@ -1735,6 +1736,19 @@
 			"description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
 			"diversifyField": "Campo de diversificación",
 			"maxPerValue": "Máx por valor"
+		},
+		"jobs": {
+			"title": "Panel de trabajos",
+			"importJobs": "Trabajos de importación",
+			"syncJobs": "Trabajos de sincronización",
+			"reindex": "Reindexar",
+			"reindexEmpty": "No hay trabajos de reindexación activos",
+			"syncJobsEmpty": "No se encontraron trabajos de sincronización",
+			"reindexJobId": "ID de trabajo",
+			"reindexSlug": "Índice",
+			"reindexProgress": "Progreso",
+			"reindexStarted": "Iniciado",
+			"subtitle": "Monitorear trabajos de importación, sincronización y reindexación"
 		}
 	},
 	"nav": {

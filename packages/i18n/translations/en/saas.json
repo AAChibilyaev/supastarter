@@ -1155,7 +1155,8 @@
 			"analytics": "Analytics",
 			"relevance": "Relevance",
 			"connectors": "Connectors",
-			"knowledge": "Knowledge"
+			"knowledge": "Knowledge",
+			"jobs": "Jobs"
 		},
 		"importJobs": {
 			"tab": "Import Jobs",
@@ -1735,6 +1736,19 @@
 			"description": "Advanced search with dynamic sorting and result diversification.",
 			"diversifyField": "Diversify field",
 			"maxPerValue": "Max per value"
+		},
+		"jobs": {
+			"title": "Jobs Dashboard",
+			"importJobs": "Import Jobs",
+			"syncJobs": "Sync Jobs",
+			"reindex": "Reindex",
+			"reindexEmpty": "No active reindex jobs",
+			"syncJobsEmpty": "No sync jobs found",
+			"reindexJobId": "Job ID",
+			"reindexSlug": "Index",
+			"reindexProgress": "Progress",
+			"reindexStarted": "Started",
+			"subtitle": "Monitor import, sync, and reindex jobs"
 		}
 	},
 	"nav": {

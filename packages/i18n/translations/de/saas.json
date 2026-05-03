@@ -1360,7 +1360,8 @@
 			"analytics": "Analysen",
 			"relevance": "Relevanz",
 			"connectors": "Connectors",
-			"knowledge": "Wissen"
+			"knowledge": "Wissen",
+			"jobs": "Jobs"
 		},
 		"synonyms": {
 			"tab": "Synonyme",
@@ -1735,6 +1736,19 @@
 			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
 			"diversifyField": "Diversifikationsfeld",
 			"maxPerValue": "Max pro Wert"
+		},
+		"jobs": {
+			"title": "Jobs-Dashboard",
+			"importJobs": "Import-Jobs",
+			"syncJobs": "Sync-Jobs",
+			"reindex": "Neuindizierung",
+			"reindexEmpty": "Keine aktiven Neuindizierungsjobs",
+			"syncJobsEmpty": "Keine Sync-Jobs gefunden",
+			"reindexJobId": "Job-ID",
+			"reindexSlug": "Index",
+			"reindexProgress": "Fortschritt",
+			"reindexStarted": "Gestartet",
+			"subtitle": "Importieren-, Sync- und Neuindizierungsjobs überwachen"
 		}
 	},
 	"nav": {

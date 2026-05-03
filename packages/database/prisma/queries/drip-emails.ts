@@ -2,14 +2,15 @@ import { db } from "../client";
 
 /**
  * Drip day offsets (in days from dripStartedAt):
- *   Day 0 → welcome (immediate)
- *   Day 1 → how to create first collection
- *   Day 3 → connect your CMS
- *   Day 7 → tips: synonyms, curations
- *   Day 14 → case study
- *   Day 21 → upgrade prompt
+ *   Day 0  → welcome (immediate)
+ *   Day 1  → how to create first collection
+ *   Day 3  → connect your CMS
+ *   Day 7  → tips: synonyms, curations
+ *   Day 14 → case study / upgrade prompt
+ *   Day 21 → upgrade benefits
+ *   Day 30 → check-in / feedback request
  */
-export const DRIP_DAY_OFFSETS = [0, 1, 3, 7, 14, 21] as const;
+export const DRIP_DAY_OFFSETS = [0, 1, 3, 7, 14, 21, 30] as const;
 export type DripDay = (typeof DRIP_DAY_OFFSETS)[number];
 
 export interface DripEmailRecord {

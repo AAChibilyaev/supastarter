@@ -218,7 +218,9 @@ export function CollectionsPage() {
 				<EmptyState
 					title={searchQuery ? t("collections.noResults") : t("collections.empty")}
 					description={
-						searchQuery ? t("collections.noResultsDescription") : t("collections.emptyDescription")
+						searchQuery
+							? t("collections.noResultsDescription")
+							: t("collections.emptyDescription")
 					}
 					icon={Columns3Icon}
 					action={
@@ -277,7 +279,10 @@ export function CollectionsPage() {
 						<DialogTitle>{t("collection.schemaEditor") || "Schema Editor"}</DialogTitle>
 					</DialogHeader>
 					{schemaCollectionSlug && (
-						<SchemaEditorPanel organizationId={orgId ?? ""} slug={schemaCollectionSlug} />
+						<SchemaEditorPanel
+							organizationId={orgId ?? ""}
+							slug={schemaCollectionSlug}
+						/>
 					)}
 				</DialogContent>
 			</Dialog>

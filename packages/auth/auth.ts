@@ -6,6 +6,7 @@ import {
 	getPurchasesByUserId,
 	getUserByEmail,
 	getUserById,
+	startDripSequence,
 } from "@repo/database";
 import { config as i18nConfig, type Locale } from "@repo/i18n";
 import { logger } from "@repo/logs";
@@ -83,6 +84,14 @@ export const auth = betterAuth({
 					} catch (error) {
 						logger.error(error, {
 							ctx: "createWelcomeNotification",
+							userId: createdUser.id,
+						});
+					}
+					try {
+						await startDripSequence(createdUser.id);
+					} catch (error) {
+						logger.error(error, {
+							ctx: "startDripSequence",
 							userId: createdUser.id,
 						});
 					}

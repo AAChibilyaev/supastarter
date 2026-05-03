@@ -26,7 +26,9 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 		return { flushed: 0, failed: 0 };
 	}
 
-	const imports = rows.filter((row) => IMPORT_ACTIONS.includes(row.action as typeof IMPORT_ACTIONS[number]));
+	const imports = rows.filter((row) =>
+		IMPORT_ACTIONS.includes(row.action as (typeof IMPORT_ACTIONS)[number]),
+	);
 	const deletes = rows.filter((row) => row.action === "delete");
 	const collection = aliasName(index.organizationId, index.slug);
 
@@ -49,7 +51,9 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 		// Group import rows by action type so each group is sent with the correct action
 		const groups = new Map<string, typeof rows>();
 		for (const row of imports) {
-			const action = IMPORT_ACTIONS.includes(row.action as typeof IMPORT_ACTIONS[number]) ? row.action : "upsert";
+			const action = IMPORT_ACTIONS.includes(row.action as (typeof IMPORT_ACTIONS)[number])
+				? row.action
+				: "upsert";
 			if (!groups.has(action)) {
 				groups.set(action, []);
 			}
@@ -76,7 +80,11 @@ export async function flushSearchIngestBuffer(indexId: string, limit?: number) {
 				});
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
-				logger.error("flushSearchIngestBuffer: bulkUpsert threw", { indexId, message, action });
+				logger.error("flushSearchIngestBuffer: bulkUpsert threw", {
+					indexId,
+					message,
+					action,
+				});
 				for (const row of group) {
 					failures.push({ id: row.id, error: message });
 				}

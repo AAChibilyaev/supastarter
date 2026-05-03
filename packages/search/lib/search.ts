@@ -111,7 +111,9 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		.documents()
 		.search({
 			...params,
-			...(input.facetSampleSlope !== undefined && { facet_sample_slope: input.facetSampleSlope }),
+			...(input.facetSampleSlope !== undefined && {
+				facet_sample_slope: input.facetSampleSlope,
+			}),
 			...(input.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: input.facetSampleThreshold,
 			}),
@@ -161,7 +163,9 @@ export async function multiSearchDocuments(
 			page: entry.page ?? 1,
 			highlight_fields: entry.highlightFields,
 			vector_query: vectorQuery,
-			...(entry.facetSampleSlope !== undefined && { facet_sample_slope: entry.facetSampleSlope }),
+			...(entry.facetSampleSlope !== undefined && {
+				facet_sample_slope: entry.facetSampleSlope,
+			}),
 			...(entry.facetSampleThreshold !== undefined && {
 				facet_sample_threshold: entry.facetSampleThreshold,
 			}),

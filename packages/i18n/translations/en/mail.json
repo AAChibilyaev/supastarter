@@ -96,6 +96,15 @@
 		"notNow": "Not ready? No pressure. Your free tier stays active — whenever you're ready to scale, we're here.",
 		"subject": "Scale your search with AACsearch Engine"
 	},
+	"dripDay30": {
+		"greeting": "Hey {name},",
+		"body": "One month in. We hope AACsearch Engine has been valuable for you.\n\nWe're constantly improving and your feedback directly shapes what we build next. We'd love to hear about your experience.",
+		"question1": "🤔 What's one thing you wish AACsearch Engine did better?",
+		"question2": "⭐ What feature has been most useful for you so far?",
+		"shareFeedback": "Share your feedback",
+		"replyNote": "Or just hit reply — every message goes straight to our product team.",
+		"subject": "How's AACsearch Engine working for you? (1 question)"
+	},
 	"notification": {
 		"openInApp": "Open this notification in the app:",
 		"subject": "New notification",

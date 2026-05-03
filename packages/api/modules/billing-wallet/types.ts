@@ -75,3 +75,44 @@ export const adminAdjustInputSchema = z.object({
 	direction: z.enum(["credit", "debit"]),
 	reason: z.string().min(10).max(500),
 });
+
+// ---------------------------------------------------------------------------
+// AAC-771: Credits analytics DTOs
+// ---------------------------------------------------------------------------
+
+export const usageStatsPeriodSchema = z.enum(["daily", "weekly", "monthly"]);
+
+export const usageStatsBucketSchema = z.object({
+	periodStart: z.date(),
+	totalKopecks: bigintAsString,
+	events: z.number(),
+});
+
+export const getCreditUsageStatsOutputSchema = z.object({
+	buckets: z.array(usageStatsBucketSchema),
+});
+
+export const pricingRuleDtoSchema = z.object({
+	id: z.string(),
+	provider: z.string(),
+	model: z.string(),
+	operation: z.string(),
+	currency: z.string(),
+	inputPer1MTokensKopecks: bigintAsString,
+	outputPer1MTokensKopecks: bigintAsString,
+	embeddingPer1MTokensKopecks: bigintAsString,
+	flatFeeKopecks: bigintAsString,
+	markupBps: z.number(),
+	effectiveFrom: z.date(),
+	effectiveTo: z.date().nullable(),
+	notes: z.string().nullable(),
+});
+
+export const creditForecastDtoSchema = z.object({
+	dailyAverageKopecks: bigintAsString,
+	projectedMonthlyKopecks: bigintAsString,
+	remainingDays: z.number(),
+	consumedKopecks: bigintAsString,
+	includedMonthlyLimitKopecks: bigintAsString,
+	overageRisk: z.enum(["low", "medium", "high"]),
+});

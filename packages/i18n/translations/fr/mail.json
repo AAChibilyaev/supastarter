@@ -96,6 +96,15 @@
 		"notNow": "Pas prêt ? Pas de pression. Votre forfait gratuit reste actif — quand vous serez prêt à passer à l'échelle, nous sommes là.",
 		"subject": "Passez votre recherche à l'échelle avec AACsearch Engine"
 	},
+	"dripDay30": {
+		"greeting": "Bonjour {name},",
+		"body": "Un mois déjà. Nous espérons qu'AACsearch Engine vous a été utile.\n\nNous nous améliorons en permanence et vos retours influencent directement ce que nous construisons ensuite. Nous aimerions entendre votre expérience.",
+		"question1": "🤔 Qu'est-ce que vous souhaiteriez qu'AACsearch Engine fasse mieux ?",
+		"question2": "⭐ Quelle fonctionnalité vous a été la plus utile jusqu'à présent ?",
+		"shareFeedback": "Partager votre avis",
+		"replyNote": "Ou répondez simplement à cet e-mail — chaque message va directement à notre équipe produit.",
+		"subject": "Comment fonctionne AACsearch Engine pour vous ? (1 question)"
+	},
 	"notification": {
 		"openInApp": "Ouvrez cette notification dans l'application :",
 		"subject": "Nouvelle notification",

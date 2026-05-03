@@ -80,15 +80,17 @@ export function MySearchUsageCard({ ownerType, ownerId, orgSlug }: MySearchUsage
 			: 0;
 
 	const isNearLimit =
-		filePercent >= 80 || storagePercent >= 80 || (data.aiAskLimit !== null && aiAsksPercent >= 80);
+		filePercent >= 80 ||
+		storagePercent >= 80 ||
+		(data.aiAskLimit !== null && aiAsksPercent >= 80);
 	const showUpgradeCta = isNearLimit || data.plan === "free";
 
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between gap-2">
+				<div className="gap-2 flex items-center justify-between">
 					<CardTitle className="text-base">{t("title")}</CardTitle>
-					<span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+					<span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
 						{data.plan}
 					</span>
 				</div>
@@ -112,7 +114,8 @@ export function MySearchUsageCard({ ownerType, ownerId, orgSlug }: MySearchUsage
 					<div className="text-sm flex items-center justify-between">
 						<span className="text-muted-foreground">{t("storage")}</span>
 						<span className="font-medium tabular-nums">
-							{formatBytes(data.storageUsedBytes)} / {formatBytes(data.storageLimitBytes)}
+							{formatBytes(data.storageUsedBytes)} /{" "}
+							{formatBytes(data.storageLimitBytes)}
 						</span>
 					</div>
 					<Progress value={storagePercent} className="h-1.5" />
@@ -142,7 +145,7 @@ export function MySearchUsageCard({ ownerType, ownerId, orgSlug }: MySearchUsage
 
 				{/* Upgrade CTA */}
 				{showUpgradeCta && data.plan !== "unlimited" && (
-					<Button asChild variant="primary" size="sm" className="w-full mt-2">
+					<Button asChild variant="primary" size="sm" className="mt-2 w-full">
 						<Link href={billingHref}>{t("upgradeCta")}</Link>
 					</Button>
 				)}

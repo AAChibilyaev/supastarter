@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const DRIP_DAYS = [0, 1, 3, 7, 14, 21] as const;
+const DRIP_DAYS = [0, 1, 3, 7, 14, 21, 30] as const;
 
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.SEARCH_CRON_SECRET;
@@ -59,6 +59,8 @@ async function sendDripForDay(
 				context.blogUrl = `${appUrl}/blog`;
 			} else if (dripDay === 21) {
 				context.billingUrl = `${appUrl}/settings/billing`;
+			} else if (dripDay === 30) {
+				context.feedbackUrl = `${appUrl}/feedback`;
 			}
 
 			await sendEmail({

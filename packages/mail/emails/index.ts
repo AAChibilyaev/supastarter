@@ -4,6 +4,7 @@ import { DripDay3 } from "./DripDay3";
 import { DripDay7 } from "./DripDay7";
 import { DripDay14 } from "./DripDay14";
 import { DripDay21 } from "./DripDay21";
+import { DripDay30 } from "./DripDay30";
 import { EmailVerification } from "./EmailVerification";
 import { ForgotPassword } from "./ForgotPassword";
 import { InvoicePaid } from "./InvoicePaid";
@@ -32,6 +33,7 @@ export const mailTemplates = {
 	dripDay7: DripDay7,
 	dripDay14: DripDay14,
 	dripDay21: DripDay21,
+	dripDay30: DripDay30,
 	subscriptionUpgrade: SubscriptionUpgrade,
 	invoicePaid: InvoicePaid,
 	paymentFailed: PaymentFailed,

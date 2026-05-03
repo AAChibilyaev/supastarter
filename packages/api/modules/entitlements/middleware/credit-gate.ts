@@ -23,14 +23,14 @@
 import { randomUUID } from "node:crypto";
 
 import { ORPCError } from "@orpc/server";
-import { getAiWalletByOrganizationId, getAiWalletByUserId } from "@repo/database";
-import { logger } from "@repo/logs";
 import {
 	AiWalletInsufficientFundsError,
 	reserveAiCredits,
 	releaseAiReservation,
 	commitAiUsage,
 } from "@repo/billing-wallet";
+import { getAiWalletByOrganizationId, getAiWalletByUserId } from "@repo/database";
+import { logger } from "@repo/logs";
 
 export interface CreditGateContext {
 	creditReservationId: string;
@@ -194,7 +194,10 @@ export async function releaseCreditReservation(
 			reason: "error",
 		});
 	} catch (err) {
-		logger.error({ err, reservationId }, "releaseCreditReservation: failed to release reservation");
+		logger.error(
+			{ err, reservationId },
+			"releaseCreditReservation: failed to release reservation",
+		);
 		// Do not re-throw — release failure should not mask the original error
 	}
 }

@@ -96,6 +96,15 @@
 		"notNow": "Noch nicht bereit? Kein Druck. Dein kostenloser Tarif bleibt aktiv – wann immer du bereit bist zu skalieren, wir sind da.",
 		"subject": "Skaliere deine Suche mit AACsearch Engine"
 	},
+	"dripDay30": {
+		"greeting": "Hey {name},",
+		"body": "Ein Monat ist um. Wir hoffen, dass AACsearch Engine für dich wertvoll war.\n\nWir verbessern uns ständig und dein Feedback beeinflusst direkt, was wir als Nächstes entwickeln. Wir würden gerne von deiner Erfahrung hören.",
+		"question1": "🤔 Was würdest du dir bei AACsearch Engine anders wünschen?",
+		"question2": "⭐ Welche Funktion war bisher am nützlichsten für dich?",
+		"shareFeedback": "Feedback teilen",
+		"replyNote": "Oder antworte einfach auf diese E-Mail – jede Nachricht geht direkt an unser Produktteam.",
+		"subject": "Wie läuft AACsearch Engine bei dir? (1 Frage)"
+	},
 	"notification": {
 		"openInApp": "Öffne diese Benachrichtigung in der App:",
 		"subject": "Neue Benachrichtigung",

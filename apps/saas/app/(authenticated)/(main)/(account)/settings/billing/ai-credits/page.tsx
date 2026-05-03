@@ -1,5 +1,6 @@
 import { getSession } from "@auth/lib/server";
 import { AiWalletCard } from "@payments/components/AiWalletCard";
+import { AutoRechargeSettings } from "@payments/components/AutoRechargeSettings";
 import { CreditConsumptionTable } from "@payments/components/CreditConsumptionTable";
 import { CreditUsageChart } from "@payments/components/CreditUsageChart";
 import { LowBalanceBanner } from "@payments/components/LowBalanceBanner";
@@ -43,6 +44,11 @@ export default async function AiCreditsPage() {
 			<SettingsList>
 				<AiWalletCard />
 			</SettingsList>
+
+			{/* Auto-recharge settings */}
+			<div className="mt-6">
+				<AutoRechargeSettings />
+			</div>
 
 			{/* Usage chart & consumption table */}
 			<div className="mt-8">

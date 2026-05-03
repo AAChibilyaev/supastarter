@@ -25,7 +25,7 @@ export default async function PricingPage(props: { params: Promise<{ locale: str
 		<>
 			<section className="section-padding border-b border-border/60 text-center">
 				<div className="container">
-					<h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-balance">
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
 						{t("title")}
 					</h1>
 					<p className="mt-4 text-xl font-light max-w-2xl mx-auto text-balance text-muted-foreground">
@@ -33,7 +33,7 @@ export default async function PricingPage(props: { params: Promise<{ locale: str
 					</p>
 				</div>
 			</section>
-			<div className="py-6 flex justify-center border-b border-border/60">
+			<div className="section-padding flex justify-center border-b border-border/60">
 				<TrustBadge />
 			</div>
 			<PricingPlans />

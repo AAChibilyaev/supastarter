@@ -18,17 +18,18 @@ export default async function BlogListPage(props: { params: Promise<{ locale: st
 	const posts = await getAllPosts(locale);
 
 	return (
-		<div className="max-w-6xl py-16 container">
-			<div className="mb-12 pt-8 text-center">
-				<h1 className="mb-2 font-bold text-5xl">{t("title")}</h1>
-				<p className="text-lg opacity-50">{t("description")}</p>
-			</div>
+		<section className="section-padding">
+			<div className="container">
+				<div className="mb-12 pt-8 text-center">
+					<h1 className="mb-2 font-bold text-4xl md:text-5xl lg:text-6xl">{t("title")}</h1>
+					<p className="text-lg font-light opacity-50">{t("description")}</p>
+				</div>
 
-			<div className="gap-8 md:grid-cols-2 grid">
+				<div className="gap-8 md:grid-cols-2 grid grid-cols-1">
 				{posts.map((post, index) => (
 					<PostListItem post={post} key={post.path} priorityImage={index < 2} />
 				))}
 			</div>
-		</div>
+		</section>
 	);
 }

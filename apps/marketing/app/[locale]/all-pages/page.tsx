@@ -212,7 +212,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 				</div>
 			</section>
 
-			<section className="py-16 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<h2 className="text-2xl font-semibold mb-8">{t("marketingTitle")}</h2>
 					<div className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 grid grid-cols-1">
@@ -247,7 +247,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 				</div>
 			</section>
 
-			<section className="py-16">
+			<section className="section-padding">
 				<div className="container">
 					<h2 className="text-2xl font-semibold mb-2">{t("appTitle")}</h2>
 					{saasBase && (

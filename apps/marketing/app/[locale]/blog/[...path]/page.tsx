@@ -79,14 +79,14 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 				url={postUrl}
 				imageUrl={imageUrl}
 			/>
-			<div className="py-16 container">
+			<section className="section-padding container">
 				<div className="">
 					<div className="mb-12">
 						<LocaleLink href="/blog">&larr; {t("back")}</LocaleLink>
 					</div>
 
 					<div className="max-w-2xl mx-auto text-center">
-						<h1 className="font-bold text-4xl">{title}</h1>
+						<h1 className="font-bold text-4xl md:text-5xl lg:text-6xl">{title}</h1>
 
 						<div className="mt-4 min-w-0 gap-4 sm:gap-6 flex items-center justify-center overflow-x-auto">
 							{authorName && (
@@ -149,7 +149,7 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 				<div className="pb-8">
 					<PostContent content={body} />
 				</div>
-			</div>
+			</section>
 		</>
 	);
 }

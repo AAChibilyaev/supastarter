@@ -15,13 +15,15 @@ export default async function ContactPage(props: { params: Promise<{ locale: str
 
 	const t = await getTranslations({ locale, namespace: "contact" });
 	return (
-		<div className="max-w-xl py-16 container">
-			<div className="mb-12 pt-8 text-center">
-				<h1 className="mb-2 font-bold text-5xl">{t("title")}</h1>
-				<p className="text-lg text-balance opacity-50">{t("description")}</p>
-			</div>
+		<section className="section-padding">
+			<div className="container max-w-xl">
+				<div className="mb-12 pt-8 text-center">
+					<h1 className="mb-2 font-bold text-4xl md:text-5xl lg:text-6xl">{t("title")}</h1>
+					<p className="text-lg font-light text-balance opacity-50">{t("description")}</p>
+				</div>
 
-			<ContactForm />
-		</div>
+				<ContactForm />
+			</div>
+		</section>
 	);
 }

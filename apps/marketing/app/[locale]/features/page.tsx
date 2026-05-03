@@ -36,7 +36,7 @@ export default async function FeaturesPage(props: { params: Promise<{ locale: st
 			<BreadcrumbSchema items={breadcrumbs} baseUrl={baseUrl} />
 			<section className="section-padding border-b border-border/60 text-center">
 				<div className="container">
-					<h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-balance">
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
 						{t("title")}
 					</h1>
 					<p className="mt-4 text-xl font-light max-w-2xl mx-auto text-balance text-muted-foreground">

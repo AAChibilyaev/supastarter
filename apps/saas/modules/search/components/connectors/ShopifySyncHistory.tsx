@@ -3,8 +3,8 @@
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
 interface ShopifySyncHistoryProps {
@@ -12,9 +12,7 @@ interface ShopifySyncHistoryProps {
 	storeId: string;
 }
 
-function getSyncStatusColor(
-	status: string,
-): "success" | "warning" | "error" | "info" {
+function getSyncStatusColor(status: string): "success" | "warning" | "error" | "info" {
 	switch (status) {
 		case "completed":
 			return "success";
@@ -43,9 +41,7 @@ function relativeTime(
 	return t("search.connector.time.daysAgo", { count: days });
 }
 
-export function ShopifySyncHistory({
-	organizationId,
-}: ShopifySyncHistoryProps) {
+export function ShopifySyncHistory({ organizationId }: ShopifySyncHistoryProps) {
 	const t = useTranslations();
 	const tShopify = useTranslations("search.connector.shopify");
 
@@ -59,7 +55,7 @@ export function ShopifySyncHistory({
 		return (
 			<div className="space-y-2">
 				{[...Array(3)].map((_, i) => (
-					<Skeleton key={i} className="h-14 rounded-lg w-full" />
+					<Skeleton key={i} className="h-14 w-full rounded-lg" />
 				))}
 			</div>
 		);
@@ -103,7 +99,7 @@ export function ShopifySyncHistory({
 											: job.status}
 							</Badge>
 						</div>
-						<div className="gap-2 mt-0.5 flex items-center text-xs text-muted-foreground">
+						<div className="gap-2 mt-0.5 text-xs flex items-center text-muted-foreground">
 							<span>{relativeTime(job.startedAt, t)}</span>
 							{job.itemsCount > 0 && (
 								<>
@@ -123,7 +119,7 @@ export function ShopifySyncHistory({
 							)}
 						</div>
 						{job.lastError && (
-							<p className="mt-0.5 text-xs text-destructive truncate">
+							<p className="mt-0.5 text-xs truncate text-destructive">
 								{job.lastError}
 							</p>
 						)}

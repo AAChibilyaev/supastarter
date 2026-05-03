@@ -1152,7 +1152,23 @@
 			"comingSoonDescription": "El asistente de configuración del widget está en desarrollo. Vuelva pronto para ver filtros, autocompletado, búsqueda por voz y opciones de inserción.",
 			"saved": "Widget configuration saved!",
 			"saveFailed": "Failed to save widget configuration",
-			"snippet": "Embed snippet"
+			"snippet": "Embed snippet",
+			"copySnippet": "Copiar código",
+			"snippetCopied": "¡Copiado!",
+			"installSteps": "Pasos de instalación",
+			"installStep1": "Pegue el código antes de la etiqueta <code>&lt;/body&gt;</code> de cierre.",
+			"installStep2": "Reemplace con una clave de búsqueda restringida para producción.",
+			"installStep3": "El widget se renderiza dentro de un elemento con <code>id=\"aac-search\"</code>.",
+			"installStep4": "Pruebe presionando <kbd>Ctrl+K</kbd> o <kbd>⌘K</kbd> en su sitio.",
+			"installScriptTitle": "Incrustar mediante etiqueta Script",
+			"installScriptDesc": "Copie el código y péguelo en el HTML de su sitio web.",
+			"installNpmTitle": "Instalar mediante gestor de paquetes",
+			"installNpmDesc": "Instale el paquete AACsearch Widget para uso programático.",
+			"installReactTitle": "Integración con React",
+			"installReactDesc": "Use el componente React para una integración perfecta con su aplicación React.",
+			"installNpmDocs": "Vea la",
+			"installDocs": "documentación",
+			"installNpmDocsEnd": "para guías de integración específicas por framework."
 		},
 		"configurator": {
 			"pageTitle": "Configurador de búsqueda",
@@ -1234,7 +1250,9 @@
 			"showThumbnails": "Mostrar miniaturas",
 			"embedCode": "Código de inserción",
 			"embedHint": "Copia este fragmento y pégalo en el HTML de tu sitio web para incrustar el widget de búsqueda.",
-			"skipToGettingStarted": "← Volver a Primeros pasos"
+			"skipToGettingStarted": "← Volver a Primeros pasos",
+			"facetSettingsTitle": "Filtros de faceta",
+			"facetSettingsDesc": "Configure qué campos aparecen como filtros en el widget de búsqueda."
 		},
 		"projects": {
 			"title": "Proyectos",

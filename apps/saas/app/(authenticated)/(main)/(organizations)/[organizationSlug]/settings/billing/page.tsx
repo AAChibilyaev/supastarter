@@ -3,6 +3,7 @@ import { ActivePlan } from "@payments/components/ActivePlan";
 import { AiWalletCard } from "@payments/components/AiWalletCard";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { TopUpDialog } from "@payments/components/TopUpDialog";
+import { UpgradeSuccessToast } from "@payments/components/UpgradeSuccessToast";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
@@ -13,6 +14,7 @@ import { orpc } from "@shared/lib/orpc-query-utils";
 import { getServerQueryClient } from "@shared/lib/server";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export async function generateMetadata() {
 	const t = await getTranslations("settings.billing");
@@ -56,6 +58,9 @@ export default async function BillingSettingsPage({
 
 	return (
 		<>
+			<Suspense fallback={null}>
+				<UpgradeSuccessToast />
+			</Suspense>
 			<PageHeader title={t("title")} subtitle={t("changePlan.description")} />
 
 			{/* AACsearch-specific plan info */}

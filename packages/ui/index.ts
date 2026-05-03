@@ -92,14 +92,9 @@ export { BulkExportButton } from "./components/admin/bulk-export-button";
 export { SelectAllButton } from "./components/admin/select-all-button";
 export { ColumnsButton } from "./components/admin/columns-button";
 export { FieldToggle } from "./components/admin/field-toggle";
-export { SearchInput } from "./components/admin/search-input";
 export { SortButton } from "./components/admin/sort-button";
 export { ToggleFilterButton } from "./components/admin/toggle-filter-button";
-export {
-	SavedQueries,
-	AddSavedQueryDialog,
-	RemoveSavedQueryDialog,
-} from "./components/admin/saved-queries";
+export { AddSavedQueryDialog, RemoveSavedQueryDialog } from "./components/admin/saved-queries";
 // Fields
 export { TextField } from "./components/admin/text-field";
 export { NumberField } from "./components/admin/number-field";
@@ -133,7 +128,6 @@ export { FileInput } from "./components/admin/file-input";
 export { ArrayInput } from "./components/admin/array-input";
 export { ReferenceInput } from "./components/admin/reference-input";
 export { ReferenceArrayInput } from "./components/admin/reference-array-input";
-export { SearchInput } from "./components/admin/search-input";
 // Forms
 export { SimpleForm } from "./components/admin/simple-form";
 export { SimpleFormIterator } from "./components/admin/simple-form-iterator";
@@ -149,7 +143,7 @@ export { Admin } from "./components/admin/admin";
 export { Breadcrumb as AdminBreadcrumb } from "./components/admin/breadcrumb";
 export { Form as AdminForm } from "./components/admin/form";
 export { Notification } from "./components/admin/notification";
-export { ErrorComponent } from "./components/admin/error";
+export { Error as ErrorComponent } from "./components/admin/error";
 export * from "./components/LandingFeature";
 export * from "./components/LandingFeatureList";
 export * from "./components/LandingPricingSection";

@@ -1,3 +1,12 @@
+import type {
+	FilterPayload,
+	ListControllerResult,
+	RaRecord,
+	SortPayload,
+	ExtractRecordPaths,
+	HintedString,
+} from "ra-core";
+import { ReferenceArrayFieldBase, useListContext } from "ra-core";
 import type { ReactElement, ReactNode } from "react";
 import { memo } from "react";
 
@@ -76,7 +85,9 @@ export interface ReferenceArrayFieldProps<
 	resource?: string;
 	source: NoInfer<HintedString<ExtractRecordPaths<RecordType>>>;
 	sort?: SortPayload;
-	queryOptions?: Omit<UseQueryOptions<ReferenceRecordType[], Error>, "queryFn" | "queryKey">;
+	queryOptions?: {
+		meta?: Record<string, unknown>;
+	};
 	render?: (props: ListControllerResult<ReferenceRecordType>) => ReactElement;
 }
 

@@ -6,6 +6,7 @@ import { PageHeader } from "@shared/components/PageHeader";
 import {
 	ActivityIcon,
 	BanknoteIcon,
+	BarChart3Icon,
 	BellIcon,
 	Building2Icon,
 	ClipboardListIcon,
@@ -61,6 +62,11 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
 								title: "Billing",
 								href: "/admin/billing-analytics",
 								icon: <BanknoteIcon className="size-4 opacity-50" />,
+							},
+							{
+								title: "Onboarding",
+								href: "/admin/onboarding",
+								icon: <BarChart3Icon className="size-4 opacity-50" />,
 							},
 							{
 								title: "Audit",

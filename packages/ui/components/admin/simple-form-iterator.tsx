@@ -29,7 +29,7 @@ import { cn } from "../../lib";
 import { Button } from "../button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../tooltip";
 import { Confirm } from "./confirm";
-import { IconButtonWithTooltip } from "./icon-button-with-tooltip.tsx";
+import { IconButtonWithTooltip } from "./icon-button-with-tooltip";
 
 type GetItemLabelFunc = (index: number) => string | ReactElement;
 

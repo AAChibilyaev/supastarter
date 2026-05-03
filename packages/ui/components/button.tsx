@@ -17,12 +17,14 @@ const buttonVariants = cva(
 				ghost: "text-foreground hover:bg-foreground/10 hover:text-foreground",
 				destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/80",
 				link: "text-primary underline-offset-4 hover:underline",
+				default: "bg-primary text-primary-foreground hover:bg-primary/80",
 			},
 			size: {
 				sm: "h-6 rounded-full px-3 text-xs",
 				md: "h-9 rounded-full px-4 text-sm",
 				lg: "h-12 rounded-full px-6 text-base",
 				icon: "size-8 rounded-full [&>svg]:m-0",
+				default: "h-9 rounded-full px-4 text-sm",
 			},
 		},
 		defaultVariants: {

@@ -1117,7 +1117,22 @@
 			"themeDark": "Sombre",
 			"saveConfig": "Enregistrer la configuration",
 			"saved": "Configuration du widget enregistrée !",
-			"saveFailed": "Impossible d'enregistrer la configuration."
+			"saveFailed": "Impossible d'enregistrer la configuration.",
+			"snippetCopied": "Copié !",
+			"installSteps": "Étapes d'installation",
+			"installStep1": "Collez l'extrait avant la balise <code>&lt;/body&gt;</code> fermante.",
+			"installStep2": "Remplacez par une clé de recherche restreinte pour la production.",
+			"installStep3": "Le widget s'affiche dans un élément avec <code>id=\"aac-search\"</code>.",
+			"installStep4": "Testez en appuyant sur <kbd>Ctrl+K</kbd> ou <kbd>⌘K</kbd> sur votre site.",
+			"installScriptTitle": "Intégrer par balise Script",
+			"installScriptDesc": "Copiez l'extrait ci-dessous et collez-le dans le HTML de votre site Web.",
+			"installNpmTitle": "Installer via le gestionnaire de paquets",
+			"installNpmDesc": "Installez le paquet AACsearch Widget pour une utilisation programmatique.",
+			"installReactTitle": "Intégration React",
+			"installReactDesc": "Utilisez le composant React pour une intégration transparente avec votre application React.",
+			"installNpmDocs": "Voir la",
+			"installDocs": "documentation",
+			"installNpmDocsEnd": "pour les guides d'intégration spécifiques aux frameworks."
 		},
 		"configurator": {
 			"pageTitle": "Configuration de recherche",
@@ -1199,7 +1214,9 @@
 			"showThumbnails": "Afficher les miniatures",
 			"embedCode": "Code d'intégration",
 			"embedHint": "Copiez cet extrait et collez-le dans le HTML de votre site pour intégrer le widget de recherche.",
-			"skipToGettingStarted": "← Retour à Premiers pas"
+			"skipToGettingStarted": "← Retour à Premiers pas",
+			"facetSettingsTitle": "Filtres à facettes",
+			"facetSettingsDesc": "Configurez les champs qui apparaissent comme filtres dans le widget de recherche."
 		},
 		"apiKeysPage": {
 			"title": "API Keys"

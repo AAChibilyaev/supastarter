@@ -289,6 +289,88 @@ export async function getCohortData(): Promise<CohortRow[]> {
 	return cohorts;
 }
 
+/**
+ * Monthly cohort data — activation rate grouped by signup month.
+ */
+export interface MonthlyCohortRow {
+	month: string; // ISO month string e.g. "2026-05"
+	orgCount: number;
+	emailVerified: number;
+	firstCollection: number;
+	firstDocument: number;
+	firstSearch: number;
+	widgetEmbedded: number;
+	firstTeamMember: number;
+	firstIntegration: number;
+	firstPayment: number;
+}
+
+/** Helper: format a date as ISO month string (YYYY-MM). */
+function getMonthKey(date: Date): string {
+	const d = new Date(date);
+	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+export async function getMonthlyCohortData(): Promise<MonthlyCohortRow[]> {
+	const [orgs, allEvents] = await Promise.all([
+		db.organization.findMany({ select: { id: true, createdAt: true } }),
+		db.activationEvent.findMany({ select: { organizationId: true, eventType: true } }),
+	]);
+
+	// Group orgs by month
+	const orgsByMonth = new Map<string, typeof orgs>();
+	for (const org of orgs) {
+		const month = getMonthKey(org.createdAt);
+		const list = orgsByMonth.get(month) ?? [];
+		list.push(org);
+		orgsByMonth.set(month, list);
+	}
+
+	// Build event lookup set per org
+	const eventSet = new Set<string>();
+	for (const evt of allEvents) {
+		eventSet.add(`${evt.organizationId}:${evt.eventType}`);
+	}
+
+	const cohorts: MonthlyCohortRow[] = [];
+	const sortedMonths = Array.from(orgsByMonth.keys()).sort();
+
+	for (const month of sortedMonths) {
+		const monthOrgs = orgsByMonth.get(month)!;
+		const count = monthOrgs.length;
+
+		const counts = {
+			orgCount: count,
+			emailVerified: 0,
+			firstCollection: 0,
+			firstDocument: 0,
+			firstSearch: 0,
+			widgetEmbedded: 0,
+			firstTeamMember: 0,
+			firstIntegration: 0,
+			firstPayment: 0,
+		};
+
+		for (const org of monthOrgs) {
+			if (eventSet.has(`${org.id}:EMAIL_VERIFIED`)) counts.emailVerified++;
+			if (eventSet.has(`${org.id}:FIRST_COLLECTION`)) counts.firstCollection++;
+			if (eventSet.has(`${org.id}:FIRST_DOCUMENT`)) counts.firstDocument++;
+			if (eventSet.has(`${org.id}:FIRST_SEARCH`)) counts.firstSearch++;
+			if (eventSet.has(`${org.id}:WIDGET_EMBEDDED`)) counts.widgetEmbedded++;
+			if (eventSet.has(`${org.id}:FIRST_TEAM_MEMBER`)) counts.firstTeamMember++;
+			if (eventSet.has(`${org.id}:FIRST_INTEGRATION`)) counts.firstIntegration++;
+			if (eventSet.has(`${org.id}:FIRST_PAYMENT`)) counts.firstPayment++;
+		}
+
+		cohorts.push({
+			month,
+			...counts,
+		});
+	}
+
+	return cohorts;
+}
+
 // ─── Health Score Distribution ─────────────────────────────────────
 
 /** Bucket ranges for health score distribution. */

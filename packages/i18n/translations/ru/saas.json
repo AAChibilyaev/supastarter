@@ -1153,7 +1153,23 @@
 			"comingSoonDescription": "Мастер настройки виджета разрабатывается. Загляните позже для фильтров, автодополнения, голосового поиска и опций встраивания.",
 			"saved": "Widget configuration saved!",
 			"saveFailed": "Failed to save widget configuration",
-			"snippet": "Embed snippet"
+			"snippet": "Embed snippet",
+			"copySnippet": "Скопировать код",
+			"snippetCopied": "Скопировано!",
+			"installSteps": "Шаги установки",
+			"installStep1": "Вставьте код перед закрывающим тегом <code>&lt;/body&gt;</code>.",
+			"installStep2": "Замените на ограниченный поисковый ключ для продакшена.",
+			"installStep3": "Виджет отображается внутри элемента с <code>id=\"aac-search\"</code>.",
+			"installStep4": "Проверьте, нажав <kbd>Ctrl+K</kbd> или <kbd>⌘K</kbd> на вашем сайте.",
+			"installScriptTitle": "Встраивание через script-тег",
+			"installScriptDesc": "Скопируйте код и вставьте его в HTML вашего сайта.",
+			"installNpmTitle": "Установка через менеджер пакетов",
+			"installNpmDesc": "Установите пакет AACsearch Widget для программного использования.",
+			"installReactTitle": "Интеграция с React",
+			"installReactDesc": "Используйте React-компонент для бесшовной интеграции с вашим React-приложением.",
+			"installNpmDocs": "Смотрите",
+			"installDocs": "документацию",
+			"installNpmDocsEnd": "для руководств по интеграции для конкретных фреймворков."
 		},
 		"configurator": {
 			"pageTitle": "Конфигуратор поиска",
@@ -1235,7 +1251,9 @@
 			"showThumbnails": "Показывать миниатюры",
 			"embedCode": "Код для вставки",
 			"embedHint": "Скопируйте этот фрагмент и вставьте его в HTML вашего сайта, чтобы встроить виджет поиска.",
-			"skipToGettingStarted": "← Назад к началу работы"
+			"skipToGettingStarted": "← Назад к началу работы",
+			"facetSettingsTitle": "Фасетные фильтры",
+			"facetSettingsDesc": "Настройте, какие поля будут отображаться как фильтры в виджете поиска."
 		},
 		"projects": {
 			"title": "Проекты",

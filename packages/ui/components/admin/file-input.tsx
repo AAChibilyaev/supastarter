@@ -8,7 +8,7 @@ import type { DropzoneOptions, FileRejection, DropEvent, DropzoneInputProps } fr
 import { useDropzone } from "react-dropzone";
 
 import { cn } from "../../lib";
-import { Button } from "../button.tsx";
+import { Button } from "../button";
 import { FormError, FormField, FormLabel } from "./form";
 import { InputHelperText } from "./input-helper-text";
 

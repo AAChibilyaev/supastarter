@@ -1,10 +1,12 @@
 import { ORPCError } from "@orpc/client";
 import {
+	db,
 	getOrganizationMembership,
 	getPurchasesByOrganizationId,
 	getPurchasesByUserId,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { createNotification } from "@repo/notifications";
 import {
 	findPriceByPlanId,
 	getProviderPriceIdByPlanId,
@@ -91,9 +93,15 @@ export const upgradeSubscription = protectedProcedure
 			});
 
 			// Immediately invalidate the plan cache so the new limits take effect
-			if (organizationId) {
-				invalidatePlanCache(organizationId);
+			const orgId = organizationId ?? activePurchase.organizationId ?? null;
+			if (orgId) {
+				invalidatePlanCache(orgId);
 			}
+
+			// Send plan upgrade welcome notification (fire-and-forget)
+			sendUpgradeNotification(orgId, user.id, newPlanId).catch((err: unknown) =>
+				logger.error("Failed to send upgrade notification", err),
+			);
 
 			return { success: true };
 		} catch (e) {
@@ -103,3 +111,56 @@ export const upgradeSubscription = protectedProcedure
 			});
 		}
 	});
+}
+
+/**
+ * Fire-and-forget helper to send upgrade notification to org admins or the user.
+ */
+async function sendUpgradeNotification(
+	orgId: string | null,
+	userId: string,
+	newPlanId: string,
+): Promise<void> {
+	const planName = newPlanId;
+
+	let recipientIds: string[];
+	let dashboardUrl: string;
+
+	if (orgId) {
+		const [orgMembers, org] = await Promise.all([
+			db.member.findMany({
+				where: { organizationId: orgId, role: { in: ["owner", "admin"] } },
+				select: { userId: true },
+			}),
+			db.organization.findUnique({
+				where: { id: orgId },
+				select: { slug: true },
+			}),
+		]);
+		recipientIds = orgMembers.length > 0 ? orgMembers.map((m) => m.userId) : [userId];
+		dashboardUrl = org?.slug
+			? `/organizations/${org.slug}/settings/billing`
+			: "/settings/billing";
+	} else {
+		recipientIds = [userId];
+		dashboardUrl = "/settings/billing";
+	}
+
+	await Promise.all(
+		recipientIds.map((uid) =>
+			createNotification({
+				userId: uid,
+				type: "WELCOME",
+				data: {
+					headline: `Plan upgraded to ${planName}`,
+					message:
+						`Your plan has been successfully upgraded to ${planName}. ` +
+						"You now have access to all the features and increased limits of your new plan.",
+				},
+				link: dashboardUrl,
+			}).catch((err: unknown) =>
+				logger.error("Failed to send upgrade notification to user", { userId: uid, err }),
+			),
+		),
+	);
+}

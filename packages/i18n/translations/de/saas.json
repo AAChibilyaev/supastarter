@@ -1153,7 +1153,23 @@
 			"comingSoonDescription": "Der Widget-Konfigurationsassistent wird entwickelt. Schauen Sie bald wieder vorbei für Filter, Autovervollständigung, Sprachsuche und Einbettungsoptionen.",
 			"saved": "Widget configuration saved!",
 			"saveFailed": "Failed to save widget configuration",
-			"snippet": "Embed snippet"
+			"snippet": "Embed snippet",
+			"copySnippet": "Code kopieren",
+			"snippetCopied": "Kopiert!",
+			"installSteps": "Installationsschritte",
+			"installStep1": "Fügen Sie den Code vor dem schließenden <code>&lt;/body&gt;</code>-Tag ein.",
+			"installStep2": "Ersetzen Sie durch einen eingeschränkten Suchschlüssel für die Produktion.",
+			"installStep3": "Das Widget wird in einem Element mit <code>id=\"aac-search\"</code> gerendert.",
+			"installStep4": "Testen Sie mit <kbd>Strg+K</kbd> oder <kbd>⌘K</kbd> auf Ihrer Website.",
+			"installScriptTitle": "Per Script-Tag einbetten",
+			"installScriptDesc": "Kopieren Sie den Code und fügen Sie ihn in das HTML Ihrer Website ein.",
+			"installNpmTitle": "Per Paketmanager installieren",
+			"installNpmDesc": "Installieren Sie das AACsearch Widget-Paket für die programmatische Nutzung.",
+			"installReactTitle": "React-Integration",
+			"installReactDesc": "Verwenden Sie die React-Komponente für die nahtlose Integration in Ihre React-App.",
+			"installNpmDocs": "Siehe",
+			"installDocs": "Dokumentation",
+			"installNpmDocsEnd": "für frameworkspezifische Integrationsanleitungen."
 		},
 		"configurator": {
 			"pageTitle": "Suchkonfigurator",
@@ -1235,7 +1251,9 @@
 			"showThumbnails": "Vorschaubilder anzeigen",
 			"embedCode": "Einbettungscode",
 			"embedHint": "Kopiere diesen Code und füge ihn in das HTML deiner Website ein, um das Such-Widget einzubetten.",
-			"skipToGettingStarted": "← Zurück zu Erste Schritte"
+			"skipToGettingStarted": "← Zurück zu Erste Schritte",
+			"facetSettingsTitle": "Facettenfilter",
+			"facetSettingsDesc": "Konfigurieren Sie, welche Felder als Filter im Such-Widget erscheinen."
 		},
 		"projects": {
 			"title": "Projekte",

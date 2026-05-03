@@ -661,6 +661,43 @@ export const webhookHandler: WebhookHandler = async (req) => {
 						to: newPriceId,
 					});
 
+					// Send plan upgrade welcome notification
+					const planName = getPlanIdByProviderPriceId(newPriceId) || "new plan";
+					const purchaseAfterUpgrade =
+						await getPurchaseBySubscriptionId(currentSubscriptionId);
+					if (purchaseAfterUpgrade) {
+						const recipients = await getPaymentRecipients(purchaseAfterUpgrade);
+						const orgSlug = purchaseAfterUpgrade.organizationId
+							? (
+									await db.organization.findUnique({
+										where: { id: purchaseAfterUpgrade.organizationId },
+										select: { slug: true },
+									})
+								)?.slug
+							: null;
+						const dashboardUrl = orgSlug
+							? `/organizations/${orgSlug}/settings/billing`
+							: "/settings/billing";
+
+						await Promise.all(
+							recipients.map((userId) =>
+								createNotification({
+									userId,
+									type: "WELCOME",
+									data: {
+										headline: `Plan upgraded to ${planName}`,
+										message:
+											`Your plan has been successfully upgraded to ${planName}. ` +
+											"You now have access to all the features and increased limits of your new plan.",
+									},
+									link: dashboardUrl,
+								}).catch((err: unknown) =>
+									logger.error("Failed to send upgrade notification", err),
+								),
+							),
+						);
+					}
+
 					break;
 				}
 

@@ -2,7 +2,8 @@
 
 import { X } from "lucide-react";
 
-import { Button, buttonVariants } from "../button";
+import { cn } from "../../lib";
+import { buttonVariants } from "../button";
 import { useDataTable } from "./data-table-provider";
 import type { DataTableFilterField } from "./types";
 
@@ -17,9 +18,12 @@ export function DataTableFilterResetButton<TData>({ value: _value }: DataTableFi
 	if (filters.length === 0) return null;
 
 	return (
-		<Button
-			variant="outline"
-			className="h-5 gap-1 px-1.5! py-1! font-mono rounded-full text-[10px] shadow-none"
+		<button
+			type="button"
+			className={cn(
+				buttonVariants({ variant: "outline" }),
+				"h-5 gap-1 px-1.5! py-1! font-mono rounded-full text-[10px] shadow-none",
+			)}
 			onClick={(e) => {
 				e.stopPropagation();
 				column?.setFilterValue(undefined);
@@ -30,12 +34,9 @@ export function DataTableFilterResetButton<TData>({ value: _value }: DataTableFi
 					column?.setFilterValue(undefined);
 				}
 			}}
-			asChild
 		>
-			<div role="button" tabIndex={0}>
-				<span>{filters.length}</span>
-				<X className="ml-1! size-2.5! text-muted-foreground" />
-			</div>
-		</Button>
+			<span>{filters.length}</span>
+			<X className="ml-1! size-2.5! text-muted-foreground" />
+		</button>
 	);
 }

@@ -2,8 +2,9 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
-import { EmptyState } from "@search/components/cards/EmptyState";
 import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
+import { WidgetFiltersPanel } from "@search/components/panels/WidgetFiltersPanel";
+import { WidgetInstallPanel } from "@search/components/panels/WidgetInstallPanel";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
@@ -22,6 +23,11 @@ const TAB_IDS: TabId[] = [
 	"analytics",
 	"install",
 ];
+
+function tabLabel(t: (key: string) => string, tab: TabId): string {
+	const key = `nav.widget${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
+	return t(key);
+}
 
 export function WidgetPage({ organizationId }: WidgetPageProps) {
 	const t = useTranslations("search");
@@ -44,7 +50,7 @@ export function WidgetPage({ organizationId }: WidgetPageProps) {
 			<TabsList>
 				{TAB_IDS.map((tab) => (
 					<TabsTrigger key={tab} value={tab}>
-						{t(`nav.widget${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any)}
+						{tabLabel(t, tab)}
 					</TabsTrigger>
 				))}
 			</TabsList>
@@ -53,25 +59,53 @@ export function WidgetPage({ organizationId }: WidgetPageProps) {
 				<WidgetConfiguratorPanel organizationId={organizationId} />
 			</TabsContent>
 
-			{TAB_IDS.filter((t) => t !== "configurator").map((tab) => (
-				<TabsContent key={tab} value={tab} className="space-y-6 mt-6">
-					<Card>
-						<CardHeader>
-							<CardTitle className="text-base">
-								{t(
-									`nav.widget${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any,
-								)}
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<EmptyState
-								title={t("widget.comingSoon")}
-								description={t("widget.comingSoonDescription")}
-							/>
-						</CardContent>
-					</Card>
-				</TabsContent>
-			))}
+			<TabsContent value="filters" className="space-y-6 mt-6">
+				<Card>
+					<CardHeader>
+						<CardTitle className="text-base">{tabLabel(t, "filters")}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<WidgetFiltersPanel organizationId={organizationId} />
+					</CardContent>
+				</Card>
+			</TabsContent>
+
+			<TabsContent value="autocomplete" className="space-y-6 mt-6">
+				<Card>
+					<CardHeader>
+						<CardTitle className="text-base">{tabLabel(t, "autocomplete")}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
+					</CardContent>
+				</Card>
+			</TabsContent>
+
+			<TabsContent value="voice" className="space-y-6 mt-6">
+				<Card>
+					<CardHeader>
+						<CardTitle className="text-base">{tabLabel(t, "voice")}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
+					</CardContent>
+				</Card>
+			</TabsContent>
+
+			<TabsContent value="analytics" className="space-y-6 mt-6">
+				<Card>
+					<CardHeader>
+						<CardTitle className="text-base">{tabLabel(t, "analytics")}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-muted-foreground">{t("widget.comingSoon")}</p>
+					</CardContent>
+				</Card>
+			</TabsContent>
+
+			<TabsContent value="install" className="space-y-6 mt-6">
+				<WidgetInstallPanel organizationId={organizationId} />
+			</TabsContent>
 		</Tabs>
 	);
 }

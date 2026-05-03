@@ -6,6 +6,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import {
 	BarChart,
 	Bar,
@@ -47,6 +48,19 @@ interface CohortRow {
 	firstPayment: number;
 }
 
+interface MonthlyCohortRow {
+	month: string;
+	orgCount: number;
+	emailVerified: number;
+	firstCollection: number;
+	firstDocument: number;
+	firstSearch: number;
+	widgetEmbedded: number;
+	firstTeamMember: number;
+	firstIntegration: number;
+	firstPayment: number;
+}
+
 interface HealthScoreBucket {
 	label: string;
 	minScore: number;
@@ -64,6 +78,7 @@ interface AnalyticsData {
 	funnel: FunnelStep[];
 	timeToFirstValue: TimeToFirstValue;
 	cohorts: CohortRow[];
+	monthlyCohorts: MonthlyCohortRow[];
 	healthScoreDistribution: HealthScoreDistribution;
 }
 
@@ -140,6 +155,39 @@ function downloadCsv(data: AnalyticsData) {
 		rows.push(
 			[
 				cohort.week,
+				cohort.orgCount,
+				cohort.emailVerified,
+				cohort.firstCollection,
+				cohort.firstDocument,
+				cohort.firstSearch,
+				cohort.widgetEmbedded,
+				cohort.firstTeamMember,
+				cohort.firstIntegration,
+				cohort.firstPayment,
+			].join(","),
+		);
+	}
+
+	rows.push("");
+	rows.push("Cohort Analysis (by signup month)");
+	rows.push(
+		[
+			"Month",
+			"Orgs",
+			"Email Verified",
+			"First Collection",
+			"First Document",
+			"First Search",
+			"Widget Embedded",
+			"Team Member",
+			"Connector",
+			"Payment",
+		].join(","),
+	);
+	for (const cohort of data.monthlyCohorts ?? []) {
+		rows.push(
+			[
+				cohort.month,
 				cohort.orgCount,
 				cohort.emailVerified,
 				cohort.firstCollection,
@@ -305,12 +353,30 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 	);
 }
 
-function CohortTable({ cohorts }: { cohorts: CohortRow[] }) {
-	if (cohorts.length === 0) {
+function CohortTable({
+	cohorts,
+	monthlyCohorts,
+	showMonthly,
+	onToggle,
+}: {
+	cohorts: CohortRow[];
+	monthlyCohorts: MonthlyCohortRow[];
+	showMonthly: boolean;
+	onToggle: () => void;
+}) {
+	const data = showMonthly ? monthlyCohorts : cohorts;
+	const periodLabel = showMonthly ? "Month" : "Week";
+
+	if (data.length === 0) {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-base">Cohort Analysis</CardTitle>
+					<div className="flex items-center justify-between">
+						<CardTitle className="text-base">Cohort Analysis</CardTitle>
+						<Button variant="outline" size="sm" onClick={onToggle}>
+							{showMonthly ? "Weekly" : "Monthly"}
+						</Button>
+					</div>
 				</CardHeader>
 				<CardContent>
 					<div className="py-8 text-sm text-center text-muted-foreground">
@@ -335,14 +401,19 @@ function CohortTable({ cohorts }: { cohorts: CohortRow[] }) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="text-base">Cohort Analysis</CardTitle>
+				<div className="flex items-center justify-between">
+					<CardTitle className="text-base">Cohort Analysis</CardTitle>
+					<Button variant="outline" size="sm" onClick={onToggle}>
+						{showMonthly ? "Weekly" : "Monthly"}
+					</Button>
+				</div>
 			</CardHeader>
 			<CardContent>
 				<div className="overflow-x-auto">
 					<table className="text-xs min-w-full">
 						<thead>
 							<tr className="border-b text-left">
-								<th className="p-2 font-medium">Week</th>
+								<th className="p-2 font-medium">{periodLabel}</th>
 								<th className="p-2 font-medium">Orgs</th>
 								{events.map((evt) => (
 									<th key={evt.key} className="p-2 font-medium">
@@ -352,15 +423,18 @@ function CohortTable({ cohorts }: { cohorts: CohortRow[] }) {
 							</tr>
 						</thead>
 						<tbody>
-							{cohorts.map((row) => {
+							{data.map((row) => {
+								const weekVal = showMonthly
+									? (row as MonthlyCohortRow).month
+									: (row as CohortRow).week;
 								const rate = (val: number) =>
 									row.orgCount > 0
 										? `${Math.round((val / row.orgCount) * 100)}%`
 										: "\u2014";
 								return (
-									<tr key={row.week} className="border-b hover:bg-muted/50">
+									<tr key={weekVal} className="border-b hover:bg-muted/50">
 										<td className="p-2 font-medium whitespace-nowrap">
-											{row.week}
+											{weekVal}
 										</td>
 										<td className="p-2">{row.orgCount}</td>
 										{events.map((evt) => (
@@ -451,6 +525,7 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 export function OnboardingAnalyticsCards() {
 	const t = useTranslations("admin.onboarding");
 	const query = useQuery(orpc.onboarding.analytics.queryOptions({}));
+	const [showMonthly, setShowMonthly] = useState(false);
 
 	const isLoading = query.isLoading;
 	const error = query.error;
@@ -492,7 +567,12 @@ export function OnboardingAnalyticsCards() {
 			<TimeToFirstValueCard ttfv={data.timeToFirstValue} />
 			<HealthScoreChart distribution={data.healthScoreDistribution} />
 			<FunnelChart funnel={data.funnel} />
-			<CohortTable cohorts={data.cohorts} />
+			<CohortTable
+				cohorts={data.cohorts}
+				monthlyCohorts={data.monthlyCohorts}
+				showMonthly={showMonthly}
+				onToggle={() => setShowMonthly((v) => !v)}
+			/>
 		</div>
 	);
 }

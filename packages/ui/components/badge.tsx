@@ -30,12 +30,29 @@ export const badge = cva(
 	},
 );
 
-export type BadgeProps = React.HtmlHTMLAttributes<HTMLDivElement> & VariantProps<typeof badge>;
+export type BadgeProps = React.HtmlHTMLAttributes<HTMLDivElement> &
+	VariantProps<typeof badge> & {
+		variant?: "default" | "secondary" | "outline" | "destructive";
+	};
 
-export const Badge = ({ children, className, status, ...props }: BadgeProps) => (
-	<span className={cn(badge({ status }), className)} {...props}>
-		{children}
-	</span>
-);
+export const Badge = ({ children, className, status, variant, ...props }: BadgeProps) => {
+	// Map variant to status for shadcn-admin-kit compatibility
+	let resolvedStatus = status;
+	if (!resolvedStatus && variant) {
+		resolvedStatus =
+			variant === "default"
+				? "info"
+				: variant === "destructive"
+					? "error"
+					: variant === "secondary"
+						? "info"
+						: "info";
+	}
+	return (
+		<span className={cn(badge({ status: resolvedStatus }), className)} {...props}>
+			{children}
+		</span>
+	);
+};
 
 Badge.displayName = "Badge";

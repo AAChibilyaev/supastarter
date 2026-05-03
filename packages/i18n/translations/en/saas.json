@@ -1151,7 +1151,23 @@
 			"comingSoonDescription": "The widget configuration wizard is being built. Check back soon for filters, autocomplete, voice search, and embed options.",
 			"saved": "Widget configuration saved!",
 			"saveFailed": "Failed to save widget configuration",
-			"snippet": "Embed snippet"
+			"snippet": "Embed snippet",
+			"copySnippet": "Copy snippet",
+			"snippetCopied": "Copied!",
+			"installSteps": "Installation Steps",
+			"installStep1": "Paste the snippet before the closing <code>&lt;/body&gt;</code> tag.",
+			"installStep2": "Replace with a scoped search key for production.",
+			"installStep3": "The widget renders inside an element with <code>id=\"aac-search\"</code>.",
+			"installStep4": "Test by pressing <kbd>Ctrl+K</kbd> or <kbd>⌘K</kbd> on your site.",
+			"installScriptTitle": "Embed via Script Tag",
+			"installScriptDesc": "Copy the snippet below and paste it into your website's HTML.",
+			"installNpmTitle": "Install via Package Manager",
+			"installNpmDesc": "Install the AACsearch Widget package for programmatic usage.",
+			"installReactTitle": "React Integration",
+			"installReactDesc": "Use the React component for seamless integration with your React app.",
+			"installNpmDocs": "See the",
+			"installDocs": "documentation",
+			"installNpmDocsEnd": "for framework-specific integration guides."
 		},
 		"configurator": {
 			"pageTitle": "Search Configurator",
@@ -1233,7 +1249,9 @@
 			"showThumbnails": "Show thumbnails",
 			"embedCode": "Embed Code",
 			"embedHint": "Copy this snippet and paste it into your website's HTML to embed the search widget.",
-			"skipToGettingStarted": "← Back to Getting Started"
+			"skipToGettingStarted": "← Back to Getting Started",
+			"facetSettingsTitle": "Facet Filters",
+			"facetSettingsDesc": "Configure which fields appear as filters in the search widget."
 		},
 		"projects": {
 			"title": "Projects",

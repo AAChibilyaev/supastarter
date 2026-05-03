@@ -29,10 +29,10 @@ interface DocDocument {
 	category: string;
 }
 
-const BASE_URL = process.env.AACSEARCH_DOCS_BASE_URL || "http://localhost:3000";
-const ADMIN_KEY = process.env.AACSEARCH_DOCS_ADMIN_KEY || "";
-const PROJECT_ID = process.env.AACSEARCH_DOCS_PROJECT_ID || "";
-const DOCS_INDEX_SLUG = "docs";
+const BASE_URL = process.env.AACSEARCH_BASE_URL || process.env.NEXT_PUBLIC_AACSEARCH_BASE_URL || "http://localhost:3000";
+const ADMIN_KEY = process.env.AACSEARCH_ADMIN_KEY || "";
+const PROJECT_ID = process.env.AACSEARCH_PROJECT_ID || "";
+const DOCS_INDEX_SLUG = process.env.AACSEARCH_DOCS_INDEX_SLUG || "docs";
 
 async function request<T>(
 	method: string,
@@ -154,10 +154,10 @@ async function ingestPages(
 }
 
 async function main() {
-	console.log("=== AACSearch Docs Ingest ===");
+	console.log("=== AACsearch Docs Ingest ===");
 
 	if (!ADMIN_KEY) {
-		console.log("AACSEARCH_DOCS_ADMIN_KEY not set — skipping AACSearch ingest");
+		console.log("AACSEARCH_ADMIN_KEY not set — skipping AACsearch ingest");
 		console.log("Writing doc content to docs-index.json for manual upload");
 		const docs = await collectPages();
 		fs.writeFileSync(

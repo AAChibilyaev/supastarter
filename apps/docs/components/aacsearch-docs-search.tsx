@@ -4,7 +4,7 @@
  * Replaces Fumadocs' built-in search with our own AACsearch Engine.
  * Controlled by Fumadocs SearchProvider (Cmd+K handler).
  *
- * Environment variable: NEXT_PUBLIC_AACSEARCH_DOCS_KEY
+ * Environment variable: NEXT_PUBLIC_AACSEARCH_SEARCH_KEY
  *   — A search-scoped API key (ss_search_*) that the browser can safely use.
  *   - If not set, the component falls back gracefully (hidden/disabled).
  */
@@ -54,11 +54,11 @@ export function AacsearchDocsSearch({
 	const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 	const searchKey =
 		typeof window !== "undefined"
-			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_DOCS_KEY || ""
+			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_SEARCH_KEY || ""
 			: "";
 	const baseUrl =
 		typeof window !== "undefined"
-			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_DOCS_URL ||
+			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_BASE_URL ||
 				"http://localhost:3000"
 			: "http://localhost:3000";
 

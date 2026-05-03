@@ -7,6 +7,7 @@
 
 import { logger } from "@repo/logs";
 import { checkQuota, checkHardLimit, invalidatePlanCache } from "@repo/payments/lib/entitlements";
+import { checkAndSendQuotaAlerts } from "../services/usage-alerts";
 import type { Context } from "hono";
 
 export interface QuotaContext {

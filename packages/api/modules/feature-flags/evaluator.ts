@@ -261,6 +261,19 @@ export function clearAllCaches(): void {
  * @param extraContext - Optional evaluation context overrides (geo, etc.)
  * @returns boolean — true if the flag is enabled for this org
  */
+// ─── Global (Master) Kill Switch ───────────────────────────────
+
+/**
+ * Check if the environment-level master kill switch is active.
+ * When FEATURE_FLAGS_KILL_SWITCH=true or FEATURE_FLAGS_KILL_SWITCH=1,
+ * ALL feature flags return false regardless of DB config, overrides, or rules.
+ * This is the emergency override — survives DB outages.
+ */
+export function isGlobalKillSwitchActive(): boolean {
+	const val = process.env.FEATURE_FLAGS_KILL_SWITCH;
+	return val === "true" || val === "1";
+}
+
 export async function isFeatureEnabled(
 	orgId: string,
 	flagKey: string,
@@ -268,10 +281,13 @@ export async function isFeatureEnabled(
 ): Promise<boolean> {
 	if (!orgId || !flagKey) return false;
 
+	// Step 0: Global (env-level) kill switch — force off ALL flags
+	if (isGlobalKillSwitchActive()) return false;
+
 	const flag = await loadFlagByKey(flagKey);
 	if (!flag) return false;
 
-	// Step 1: Kill switch — force off for ALL orgs
+	// Step 1: Per-flag kill switch — force off for ALL orgs
 	if (flag.killSwitch) return false;
 
 	// Step 2: Org override — per-organization override

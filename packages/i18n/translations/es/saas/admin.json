@@ -287,8 +287,10 @@
       "auditLogButton": "Registro de auditoría",
       "auditLogTitle": "Historial de cambios",
       "auditLogDescription": "Todos los cambios realizados en este feature flag, incluyendo quién los hizo y cuándo.",
-      "auditLogEmpty": "Aún no se registraron cambios para este flag.",
-      "auditLogMore": "Y {count} entradas más…"
+      "auditLogEmpty": "Aún no hay cambios registrados para este flag.",
+      "auditLogMore": "Y {count} entradas más…",
+      "globalKillSwitchTitle": "Interruptor general activado",
+      "globalKillSwitchDescription": "Todos los feature flags están desactivados por la variable de entorno FEATURE_FLAGS_KILL_SWITCH. Esto anula todas las configuraciones por flag, anulaciones y reglas de implementación."
     }
   }
 }

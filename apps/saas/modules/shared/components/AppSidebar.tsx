@@ -134,6 +134,10 @@ export function AppSidebar() {
 							label: t("settings.menu.organization.compliance"),
 							href: `${orgSettingsPrefix}/compliance`,
 						},
+						{
+							label: t("settings.menu.organization.auditLog"),
+							href: `${orgSettingsPrefix}/audit-log`,
+						},
 					]
 				: undefined;
 

@@ -8,8 +8,6 @@ import { requireOrganizationAdmin } from "../../search/lib/access";
 
 // ── Constants ─────────────────────────────────────────────────────
 
-const STORAGE_REGION_META_KEY = "storageRegion";
-
 // ── Schemas ────────────────────────────────────────────────────────
 
 const regionInfoSchema = z.object({
@@ -41,14 +39,7 @@ function getRegionInfo(region: string) {
 	return AVAILABLE_REGIONS.find((r) => r.code === region);
 }
 
-/**
- * Read the storage region from org metadata.
- */
-function readStorageRegion(rawMetadata: string | null): OrgRegionResponse {
-	const metadata = parseOrgMetadata(rawMetadata);
-	const stored = metadata[STORAGE_REGION_META_KEY];
-	const region = typeof stored === "string" && isValidRegion(stored) ? stored : DEFAULT_REGION;
-
+function buildRegionResponse(region: string): OrgRegionResponse {
 	const info = getRegionInfo(region);
 	return {
 		region,
@@ -56,24 +47,6 @@ function readStorageRegion(rawMetadata: string | null): OrgRegionResponse {
 		location: info?.location ?? region.toUpperCase(),
 		compliance: info?.compliance ?? [],
 	};
-}
-
-interface OrgMetadata {
-	storageRegion?: string;
-	[key: string]: unknown;
-}
-
-function parseOrgMetadata(raw: string | null): OrgMetadata {
-	if (!raw) return {};
-	try {
-		const parsed = JSON.parse(raw);
-		if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
-			return parsed as OrgMetadata;
-		}
-		return {};
-	} catch {
-		return {};
-	}
 }
 
 // ── Procedures ─────────────────────────────────────────────────────
@@ -129,10 +102,14 @@ export const getOrgRegion = protectedProcedure
 
 		const org = await db.organization.findUniqueOrThrow({
 			where: { id: organizationId },
-			select: { metadata: true },
+			select: { storageRegion: true },
 		});
 
-		return readStorageRegion(org.metadata);
+		const region = org.storageRegion && isValidRegion(org.storageRegion)
+			? org.storageRegion
+			: DEFAULT_REGION;
+
+		return buildRegionResponse(region);
 	});
 
 /**
@@ -165,35 +142,29 @@ export const setOrgRegion = protectedProcedure
 
 		const org = await db.organization.findUniqueOrThrow({
 			where: { id: organizationId },
-			select: { metadata: true, name: true },
+			select: { storageRegion: true, name: true },
 		});
 
-		const metadata = parseOrgMetadata(org.metadata);
-		const previousRegion = readStorageRegion(org.metadata);
-
-		metadata[STORAGE_REGION_META_KEY] = region;
+		const previousRegion = org.storageRegion && isValidRegion(org.storageRegion)
+			? org.storageRegion
+			: DEFAULT_REGION;
 
 		await db.organization.update({
 			where: { id: organizationId },
-			data: { metadata: JSON.stringify(metadata) },
+			data: { storageRegion: region },
 		});
 
 		const newInfo = getRegionInfo(region);
 		const message =
-			previousRegion.region !== region
-				? `Storage region updated from ${previousRegion.region.toUpperCase()} to ${region.toUpperCase()}. ` +
+			previousRegion !== region
+				? `Storage region updated from ${previousRegion.toUpperCase()} to ${region.toUpperCase()}. ` +
 					`New search data will be routed to ${newInfo?.location ?? region.toUpperCase()}. ` +
 					"Run data migration to move existing data."
 				: "Storage region unchanged.";
 
 		return {
 			success: true,
-			region: {
-				region,
-				label: newInfo?.label ?? region.toUpperCase(),
-				location: newInfo?.location ?? region.toUpperCase(),
-				compliance: newInfo?.compliance ?? [],
-			},
+			region: buildRegionResponse(region),
 			message,
 		};
 	});

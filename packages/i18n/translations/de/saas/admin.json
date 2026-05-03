@@ -288,7 +288,9 @@
       "auditLogTitle": "Änderungsverlauf",
       "auditLogDescription": "Alle Änderungen an diesem Feature-Flag, einschließlich wer sie wann vorgenommen hat.",
       "auditLogEmpty": "Noch keine Änderungen für dieses Flag aufgezeichnet.",
-      "auditLogMore": "Und {count} weitere Einträge…"
+      "auditLogMore": "Und {count} weitere Einträge…",
+      "globalKillSwitchTitle": "Globaler Kill Switch aktiv",
+      "globalKillSwitchDescription": "Alle Feature-Flags werden durch die Umgebungsvariable FEATURE_FLAGS_KILL_SWITCH deaktiviert. Dies überschreibt alle Flag-Einstellungen, Überschreibungen und Rollout-Regeln."
     }
   }
 }

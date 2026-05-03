@@ -14,7 +14,7 @@ import {
 import { z } from "zod";
 
 import { adminProcedure } from "../../../orpc/procedures";
-import { invalidateFlagCache } from "../../feature-flags/evaluator";
+import { invalidateFlagCache, isGlobalKillSwitchActive } from "../../feature-flags/evaluator";
 import { publishFlagChange } from "../../feature-flags/sse-publisher";
 
 export const listFeatureFlagsProcedure = adminProcedure
@@ -399,4 +399,22 @@ export const listAuditLogsProcedure = adminProcedure
 	)
 	.handler(async ({ input: { flagId, limit, offset } }) => {
 		return await listFeatureFlagAuditLogs(flagId, { limit, offset });
+	});
+
+// ─── Global Kill Switch Status (AAC-879) ─────────────────────────
+
+export const getGlobalKillSwitchStatusProcedure = adminProcedure
+	.route({
+		method: "GET",
+		path: "/admin/feature-flags/global-kill-switch",
+		tags: ["Administration"],
+		summary: "Check if the environment-level master kill switch is active",
+	})
+	.output(
+		z.object({
+			active: z.boolean(),
+		}),
+	)
+	.handler(async () => {
+		return { active: isGlobalKillSwitchActive() };
 	});

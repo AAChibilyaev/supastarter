@@ -287,8 +287,10 @@
       "auditLogButton": "Journal d'audit",
       "auditLogTitle": "Historique des modifications",
       "auditLogDescription": "Toutes les modifications apportées à ce feature flag, y compris qui les a faites et quand.",
-      "auditLogEmpty": "Aucune modification enregistrée pour ce flag pour le moment.",
-      "auditLogMore": "Et {count} entrées supplémentaires…"
+      "auditLogEmpty": "Aucune modification enregistrée pour ce flag.",
+      "auditLogMore": "Et {count} entrées supplémentaires…",
+      "globalKillSwitchTitle": "Interrupteur général activé",
+      "globalKillSwitchDescription": "Tous les feature flags sont forcés en désactivé par la variable d'environnement FEATURE_FLAGS_KILL_SWITCH. Cela remplace tous les paramètres par flag, les surcharges et les règles de déploiement."
     }
   }
 }

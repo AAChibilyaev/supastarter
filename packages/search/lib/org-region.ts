@@ -1,4 +1,5 @@
 import "server-only";
+import type { Prisma } from "@repo/database";
 import type { StorageRegion } from "./regions";
 import { DEFAULT_REGION, isValidRegion } from "./regions";
 
@@ -7,26 +8,19 @@ import { DEFAULT_REGION, isValidRegion } from "./regions";
  *
  * Returns the region code stored in the organization's `storageRegion` field.
  * Falls back to DEFAULT_REGION if not set.
- *
- * NOTE: This is designed to work BEFORE the schema change is merged.
- * If `storageRegion` doesn't exist yet on the model, it returns DEFAULT_REGION.
- * In production, this queries the Prisma Organization model.
  */
 export async function getOrganizationStorageRegion(organizationId: string): Promise<StorageRegion> {
 	try {
 		// Dynamic import to avoid pulling in Prisma on the client side
 		const { db } = await import("@repo/database");
 
-		const org = await (db.organization.findUnique as any)({
+		const org = await db.organization.findUnique({
 			where: { id: organizationId },
 			select: { storageRegion: true },
-		});
+		}) as { storageRegion: string | null } | null;
 
-		if (org && typeof org === "object" && "storageRegion" in (org as Record<string, unknown>)) {
-			const region = (org as Record<string, unknown>).storageRegion as string;
-			if (isValidRegion(region)) {
-				return region;
-			}
+		if (org?.storageRegion && isValidRegion(org.storageRegion)) {
+			return org.storageRegion;
 		}
 
 		return DEFAULT_REGION;

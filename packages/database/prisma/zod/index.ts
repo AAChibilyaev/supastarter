@@ -48,7 +48,7 @@ export type TwoFactorScalarFieldEnum = z.infer<typeof TwoFactorScalarFieldEnumSc
 
 // File: OrganizationScalarFieldEnum.schema.ts
 
-export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'trialEndsAt', 'metadata', 'paymentsCustomerId'])
+export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'trialEndsAt', 'metadata', 'paymentsCustomerId', 'storageRegion'])
 
 export type OrganizationScalarFieldEnum = z.infer<typeof OrganizationScalarFieldEnumSchema>;
 
@@ -286,6 +286,18 @@ export const FeatureFlagAuditLogScalarFieldEnumSchema = z.enum(['id', 'flagId', 
 
 export type FeatureFlagAuditLogScalarFieldEnum = z.infer<typeof FeatureFlagAuditLogScalarFieldEnumSchema>;
 
+// File: ScimConfigurationScalarFieldEnum.schema.ts
+
+export const ScimConfigurationScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'provider', 'bearerTokenHash', 'bearerTokenPrefix', 'syncEnabled', 'lastSyncAt', 'lastSyncStatus', 'endpointUrl', 'createdAt', 'updatedAt'])
+
+export type ScimConfigurationScalarFieldEnum = z.infer<typeof ScimConfigurationScalarFieldEnumSchema>;
+
+// File: ScimAuditLogScalarFieldEnum.schema.ts
+
+export const ScimAuditLogScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'action', 'target', 'success', 'details', 'performedBy', 'ipAddress', 'createdAt'])
+
+export type ScimAuditLogScalarFieldEnum = z.infer<typeof ScimAuditLogScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -487,6 +499,7 @@ export const OrganizationSchema = z.object({
   trialEndsAt: z.date().nullish(),
   metadata: z.string().nullish(),
   paymentsCustomerId: z.string().nullish(),
+  storageRegion: z.string().default("eu"),
 });
 
 export type OrganizationType = z.infer<typeof OrganizationSchema>;
@@ -1217,4 +1230,40 @@ export const FeatureFlagAuditLogSchema = z.object({
 });
 
 export type FeatureFlagAuditLogType = z.infer<typeof FeatureFlagAuditLogSchema>;
+
+
+// File: ScimConfiguration.schema.ts
+
+export const ScimConfigurationSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  provider: z.string().default("other"),
+  bearerTokenHash: z.string(),
+  bearerTokenPrefix: z.string(),
+  syncEnabled: z.boolean(),
+  lastSyncAt: z.date().nullish(),
+  lastSyncStatus: z.string().nullish(),
+  endpointUrl: z.string().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ScimConfigurationType = z.infer<typeof ScimConfigurationSchema>;
+
+
+// File: ScimAuditLog.schema.ts
+
+export const ScimAuditLogSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  action: z.string(),
+  target: z.string().nullish(),
+  success: z.boolean().default(true),
+  details: z.string().nullish(),
+  performedBy: z.string().nullish(),
+  ipAddress: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type ScimAuditLogType = z.infer<typeof ScimAuditLogSchema>;
 

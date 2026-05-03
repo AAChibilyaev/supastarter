@@ -287,8 +287,10 @@
       "auditLogButton": "Журнал аудита",
       "auditLogTitle": "История изменений",
       "auditLogDescription": "Все изменения этого feature flag, включая информацию о том, кто и когда их сделал.",
-      "auditLogEmpty": "Для этого флага пока нет записей изменений.",
-      "auditLogMore": "И ещё {count} записей…"
+      "auditLogEmpty": "Изменений для этого флага пока нет.",
+      "auditLogMore": "И ещё {count} записей…",
+      "globalKillSwitchTitle": "Глобальный аварийный выключатель активен",
+      "globalKillSwitchDescription": "Все feature flags принудительно отключены переменной окружения FEATURE_FLAGS_KILL_SWITCH. Это переопределяет все настройки флагов, переопределения и правила раскатки."
     }
   }
 }

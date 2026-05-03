@@ -40,13 +40,15 @@ export function DataRetentionForm() {
 		}),
 	);
 
-	const [formState, setFormState] = useState<{
-		searchUsageRetentionDays: number;
-		auditLogRetentionDays: number;
-		ingestBufferRetentionDays: number;
-		autoDeleteEnabled: boolean;
-		deletionSchedule: "daily" | "weekly" | "monthly";
-	} | null>(null);
+type RetentionConfigState = {
+	searchUsageRetentionDays: number;
+	auditLogRetentionDays: number;
+	ingestBufferRetentionDays: number;
+	autoDeleteEnabled: boolean;
+	deletionSchedule: "daily" | "weekly" | "monthly";
+};
+
+	const [formState, setFormState] = useState<RetentionConfigState | null>(null);
 
 	const configState = useMemo(() => {
 		if (formState) return formState;
@@ -98,12 +100,12 @@ export function DataRetentionForm() {
 		setFormState(null);
 	};
 
-	const updateField = <K extends keyof typeof configState>(
+	const updateField = <K extends keyof RetentionConfigState>(
 		key: K,
-		value: (typeof configState)[K],
+		value: RetentionConfigState[K],
 	) => {
 		setFormState((prev) => ({
-			...(prev ?? config ?? {}),
+			...(prev ?? (config ?? {})),
 			[key]: value,
 		}));
 	};

@@ -18,18 +18,14 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 	try {
 		const order = await db.walletTopupOrder.findUnique({
 			where: { id },
-			include: {
-				organization: {
-					select: { id: true, name: true, metadata: true },
-				},
-			},
 		});
 
 		if (!order) {
 			return NextResponse.json({ error: "Receipt not found" }, { status: 404 });
 		}
 
-		// Parse tax info from org metadata
+		// Fetch organization for tax info
+		let orgName = "";
 		let taxInfo: {
 			taxIdType?: string | null;
 			taxId?: string | null;
@@ -37,26 +33,35 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 			address?: string | null;
 		} = {};
 
-		if (order.organization.metadata) {
-			try {
-				const metadata = JSON.parse(order.organization.metadata);
-				if (metadata.invoice) {
-					taxInfo = metadata.invoice;
+		if (order.organizationId) {
+			const org = await getOrganizationById(order.organizationId);
+			if (org) {
+				orgName = org.name;
+				if (org.metadata) {
+					try {
+						const metadata =
+							typeof org.metadata === "string"
+								? JSON.parse(org.metadata)
+								: org.metadata;
+						if (metadata.invoice) {
+							taxInfo = metadata.invoice;
+						}
+					} catch {
+						// Malformed metadata — ignore
+					}
 				}
-			} catch {
-				// Malformed metadata — ignore
 			}
 		}
 
 		const html = generateReceiptHtml(
 			{
 				id: order.id,
-				amount: order.amount,
+				amount: order.amountKopecks,
 				currency: order.currency,
 				status: order.status,
 				createdAt: order.createdAt,
 			},
-			order.organization.name,
+			orgName,
 			taxInfo,
 		);
 

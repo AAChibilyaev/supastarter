@@ -172,6 +172,10 @@ export function FeatureFlagsView() {
 
 	const { data: flags, isLoading } = useQuery(orpc.admin.featureFlags.list.queryOptions());
 
+	const { data: globalKillSwitch } = useQuery(
+		orpc.admin.featureFlags.globalKillSwitch.queryOptions(),
+	);
+
 	const deleteMutation = useMutation(orpc.admin.featureFlags.delete.mutationOptions());
 
 	const handleDelete = async (id: string) => {
@@ -196,6 +200,13 @@ export function FeatureFlagsView() {
 
 	return (
 		<div className="gap-6 flex flex-col">
+			{globalKillSwitch?.active && (
+				<div className="p-3 flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/5 text-destructive text-sm">
+					<span className="font-medium">{t("globalKillSwitchTitle")}</span>
+					<span className="text-destructive/80">{t("globalKillSwitchDescription")}</span>
+				</div>
+			)}
+
 			<div className="flex items-center justify-between">
 				<p className="text-sm text-foreground/60">{t("subtitle")}</p>
 				<CreateFlagDialog />

@@ -3,6 +3,7 @@ import {
 	createFeatureFlagProcedure,
 	deleteFeatureFlagProcedure,
 	getFeatureFlagProcedure,
+	getGlobalKillSwitchStatusProcedure,
 	listAuditLogsProcedure,
 	listFeatureFlagsProcedure,
 	listOrgsForFlagsProcedure,
@@ -61,6 +62,7 @@ export const adminRouter = {
 		create: createFeatureFlagProcedure,
 		update: updateFeatureFlagProcedure,
 		delete: deleteFeatureFlagProcedure,
+		globalKillSwitch: getGlobalKillSwitchStatusProcedure,
 		overrides: {
 			list: listOverridesProcedure,
 			set: setOverrideProcedure,

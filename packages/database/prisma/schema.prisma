@@ -150,6 +150,7 @@ model Organization {
   trialEndsAt          DateTime?
   metadata             String?
   paymentsCustomerId   String?
+  storageRegion        String                   @default("eu")
   members              Member[]
   invitations          Invitation[]
   purchases            Purchase[]
@@ -168,6 +169,8 @@ model Organization {
   featureFlagOverrides        FeatureFlagOverride[]
   assistantConversations      AssistantConversation[]
   auditLogs                   AuditLog[]
+  scimConfiguration           ScimConfiguration?
+  scimAuditLogs               ScimAuditLog[]
 
   @@unique([slug])
   @@map("organization")
@@ -1052,4 +1055,67 @@ model FeatureFlagAuditLog {
   @@index([flagId, createdAt])
   @@index([createdAt])
   @@map("feature_flag_audit_log")
+}
+
+// ── SCIM 2.0 Configuration ─────────────────────────────────────────────
+
+// SCIM IdP connection configuration per organization
+model ScimConfiguration {
+  id             String   @id @default(cuid())
+  organizationId String   @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Identity provider type
+  provider       String   @default("other")
+
+  // Bearer token hash (sha256 hex) — hash-once pattern like SearchApiKey
+  // Only the prefix is stored for display; raw token is shown once at creation
+  bearerTokenHash    String   @unique
+  bearerTokenPrefix  String
+
+  // Sync status
+  syncEnabled    Boolean  @default(false)
+  lastSyncAt     DateTime?
+  lastSyncStatus String?
+
+  // Custom provider endpoint URL
+  endpointUrl    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@map("scim_configuration")
+}
+
+// Audit log for SCIM provisioning actions
+model ScimAuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Action: config_created, config_updated, config_deleted, token_regenerated,
+  // test_connection, sync_started, sync_completed, sync_failed,
+  // user_provisioned, user_deprovisioned, group_provisioned
+  action         String
+
+  // Target of the action (e.g. "config", "user:userId", "group:groupId")
+  target         String?
+
+  // Result
+  success        Boolean  @default(true)
+
+  // Details — error messages, counts, etc. (serialized JSON)
+  details        String?
+
+  // Who triggered it
+  performedBy    String?
+  ipAddress      String?
+
+  createdAt DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([organizationId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("scim_audit_log")
 }

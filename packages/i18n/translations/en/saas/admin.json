@@ -288,7 +288,9 @@
       "auditLogTitle": "Change History",
       "auditLogDescription": "All changes made to this feature flag, including who made them and when.",
       "auditLogEmpty": "No changes recorded yet for this flag.",
-      "auditLogMore": "And {count} more entries…"
+      "auditLogMore": "And {count} more entries…",
+      "globalKillSwitchTitle": "Global Kill Switch Active",
+      "globalKillSwitchDescription": "All feature flags are force-disabled by FEATURE_FLAGS_KILL_SWITCH environment variable. This overrides all per-flag settings, overrides, and rollout rules."
     }
   }
 }

@@ -12,6 +12,11 @@ const migrateOrgInput = z.object({
 	organizationId: z.string(),
 	sourceRegion: z.string(),
 	destRegion: z.string(),
+	/**
+	 * If true, automatically updates the organization's storageRegion
+	 * to the destination region after successful migration.
+	 */
+	updateRegionAfterMigration: z.boolean().default(false),
 });
 
 const migrationProgressSchema = z.object({
@@ -61,7 +66,7 @@ export const migrateOrgData = protectedProcedure
 			message: z.string(),
 		}),
 	)
-	.handler(async ({ input: { organizationId, sourceRegion, destRegion }, context }) => {
+	.handler(async ({ input: { organizationId, sourceRegion, destRegion, updateRegionAfterMigration }, context }) => {
 		await requireOrganizationAdmin(organizationId, context.user);
 
 		// Validate regions
@@ -99,6 +104,18 @@ export const migrateOrgData = protectedProcedure
 			const totalMigrated = results.reduce((sum, r) => sum + r.progress.imported, 0);
 			const totalFailures = results.reduce((sum, r) => sum + r.progress.failures, 0);
 
+			// Auto-update the organization's storage region if requested and success
+			if (updateRegionAfterMigration && allSucceeded) {
+				await db.organization.update({
+					where: { id: organizationId },
+					data: { storageRegion: destRegion },
+				});
+				logger.info("Organization region auto-updated after migration", {
+					organizationId,
+					newRegion: destRegion,
+				});
+			}
+
 			return {
 				success: allSucceeded,
 				results: results.map((r) => ({
@@ -110,7 +127,7 @@ export const migrateOrgData = protectedProcedure
 					durationMs: r.durationMs,
 				})),
 				message: allSucceeded
-					? `Migration completed successfully. ${totalMigrated} documents migrated to ${destRegion.toUpperCase()}.`
+					? `Migration completed successfully. ${totalMigrated} documents migrated to ${destRegion.toUpperCase()}.${updateRegionAfterMigration ? ` Organization region updated to ${destRegion.toUpperCase()}.` : ""}`
 					: `Migration completed with ${totalFailures} failures. ${totalMigrated} documents migrated. Check logs for details.`,
 			};
 		} catch (error) {

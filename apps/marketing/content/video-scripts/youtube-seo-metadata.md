@@ -8,14 +8,15 @@
 
 ## Video 1: 5-Minute Quickstart
 
-| Field | Value |
-|-------|-------|
-| **Title** | AACsearch in 5 Minutes — Instant Search Setup Tutorial |
-| **Duration** | ~5:00 |
-| **Category** | Science & Technology |
-| **Language** | English |
+| Field        | Value                                                  |
+| ------------ | ------------------------------------------------------ |
+| **Title**    | AACsearch in 5 Minutes — Instant Search Setup Tutorial |
+| **Duration** | ~5:00                                                  |
+| **Category** | Science & Technology                                   |
+| **Language** | English                                                |
 
 **Description** (250-300 chars):
+
 ```
 Set up production-ready search for your website or app in under 5 minutes with AACsearch. No servers to provision, no Elasticsearch to tune.
 
@@ -38,14 +39,15 @@ Try AACsearch free → https://aacsearch.com
 
 ## Video 2: E-commerce Search Setup
 
-| Field | Value |
-|-------|-------|
-| **Title** | E-commerce Search Setup — Product Search with Faceted Navigation |
-| **Duration** | ~6:30 |
-| **Category** | Science & Technology |
-| **Language** | English |
+| Field        | Value                                                            |
+| ------------ | ---------------------------------------------------------------- |
+| **Title**    | E-commerce Search Setup — Product Search with Faceted Navigation |
+| **Duration** | ~6:30                                                            |
+| **Category** | Science & Technology                                             |
+| **Language** | English                                                          |
 
 **Description** (250-300 chars):
+
 ```
 Add powerful product search to your e-commerce store with faceted navigation, auto-sync, and analytics.
 
@@ -69,14 +71,15 @@ Try AACsearch free → https://aacsearch.com
 
 ## Video 3: Content / Blog Search
 
-| Field | Value |
-|-------|-------|
-| **Title** | Add Instant Blog Search — Typo-Tolerant Full-Text Search |
-| **Duration** | ~4:15 |
-| **Category** | Science & Technology |
-| **Language** | English |
+| Field        | Value                                                    |
+| ------------ | -------------------------------------------------------- |
+| **Title**    | Add Instant Blog Search — Typo-Tolerant Full-Text Search |
+| **Duration** | ~4:15                                                    |
+| **Category** | Science & Technology                                     |
+| **Language** | English                                                  |
 
 **Description** (250-300 chars):
+
 ```
 Make your blog or documentation instantly searchable with full-text search, typo tolerance, and highlighted content previews.
 
@@ -100,14 +103,15 @@ Try AACsearch free → https://aacsearch.com
 
 ## Video 4: SaaS App Search
 
-| Field | Value |
-|-------|-------|
-| **Title** | Multi-Tenant Search for SaaS Apps — Scoped API Keys & Isolation |
-| **Duration** | ~5:45 |
-| **Category** | Science & Technology |
-| **Language** | English |
+| Field        | Value                                                           |
+| ------------ | --------------------------------------------------------------- |
+| **Title**    | Multi-Tenant Search for SaaS Apps — Scoped API Keys & Isolation |
+| **Duration** | ~5:45                                                           |
+| **Category** | Science & Technology                                            |
+| **Language** | English                                                         |
 
 **Description** (250-300 chars):
+
 ```
 Add multi-tenant search to your SaaS application with per-tenant isolation, scoped API keys, and built-in analytics.
 
@@ -136,6 +140,7 @@ Try AACsearch free → https://aacsearch.com
 **Channel Name**: AACsearch
 
 **Channel Description**:
+
 ```
 AACsearch — the fastest way to add instant, typo-tolerant search to any website, app, or e-commerce store.
 
@@ -156,6 +161,7 @@ https://aacsearch.com
 4. Multi-Tenant Search for SaaS Apps — Scoped API Keys & Isolation
 
 **Playlist Description**:
+
 ```
 Learn how to set up AACsearch for every use case — from 5-minute quickstart to e-commerce, blogging, and SaaS. New tutorials added regularly.
 ```

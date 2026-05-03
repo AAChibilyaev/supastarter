@@ -127,12 +127,12 @@ async function ingestAllPages(indexId: string) {
 			const slugs = page.slugs as string[];
 
 			// Extract raw content from the processed MDX
-			let content = "";
+			let content: string | undefined;
 			try {
 				content = await page.data.getText("processed");
 			} catch {
 				try {
-					content = await page.data.getText();
+					content = await page.data.getText("raw");
 				} catch {
 					content = "";
 				}

@@ -51,16 +51,12 @@ export function AacsearchDocsSearch({
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const debounceRef = useRef<ReturnType<typeof setTimeout>>();
-	const searchKey =
-		typeof window !== "undefined"
-			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_SEARCH_KEY || ""
-			: "";
-	const baseUrl =
-		typeof window !== "undefined"
-			? (window as Record<string, string>).NEXT_PUBLIC_AACSEARCH_BASE_URL ||
-				"http://localhost:3000"
-			: "http://localhost:3000";
+	const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+	// Next.js inlines NEXT_PUBLIC_* at build time for client components
+	const env =
+		typeof process !== "undefined" ? (process.env as Record<string, string | undefined>) : {};
+	const searchKey = env.NEXT_PUBLIC_AACSEARCH_SEARCH_KEY ?? "";
+	const baseUrl = env.NEXT_PUBLIC_AACSEARCH_BASE_URL ?? "http://localhost:3000";
 
 	// Focus input when opened
 	useEffect(() => {

@@ -72,16 +72,19 @@ export const demoApp = new Hono()
 				page: parsed.data.page,
 			});
 
-			const hits = result.hits?.map(
-				(hit: unknown) => {
-					const doc = hit as { document?: Record<string, unknown>; highlight?: Record<string, unknown>; text_match_info?: { score?: number } };
+			const hits =
+				result.hits?.map((hit: unknown) => {
+					const doc = hit as {
+						document?: Record<string, unknown>;
+						highlight?: Record<string, unknown>;
+						text_match_info?: { score?: number };
+					};
 					return {
 						...doc.document,
 						_highlight: doc.highlight,
 						_score: doc.text_match_info?.score,
 					};
-				},
-			) ?? [];
+				}) ?? [];
 
 			return c.json({
 				found: result.found,
@@ -92,9 +95,6 @@ export const demoApp = new Hono()
 			});
 		} catch (error) {
 			logger.error("Demo search failed", { error });
-			return c.json(
-				{ error: "search_failed", message: "Search request failed" },
-				502,
-			);
+			return c.json({ error: "search_failed", message: "Search request failed" }, 502);
 		}
 	});

@@ -77,6 +77,7 @@
 		"recharts": "catalog:",
 		"server-only": "catalog:",
 		"sharp": "catalog:",
+		"shepherd.js": "^15.2.2",
 		"slugify": "catalog:",
 		"sonner": "catalog:",
 		"streamdown": "catalog:",

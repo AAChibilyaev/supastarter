@@ -1,4 +1,4 @@
-import { recordActivationEvent, type ActivationEventType } from "@repo/database";
+import { recordActivationEvent, type ActivationEventKind } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -29,7 +29,7 @@ export const recordEvent = protectedProcedure
 		z.object({
 			organizationId: z.string(),
 			eventType: z.enum(ACTIVATION_EVENT_TYPES),
-			metadata: z.record(z.unknown()).optional(),
+			metadata: z.record(z.string(), z.unknown()).optional(),
 		}),
 	)
 	.output(
@@ -44,7 +44,7 @@ export const recordEvent = protectedProcedure
 
 		const event = await recordActivationEvent(
 			organizationId,
-			eventType as ActivationEventType,
+			eventType as ActivationEventKind,
 			metadata,
 		);
 

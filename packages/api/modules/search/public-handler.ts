@@ -181,7 +181,9 @@ export const publicSearchApp = new Hono()
 				.map((term) => `(${term})`)
 				.join(" || ");
 			if (negated) {
-				combinedFilter = combinedFilter ? `${combinedFilter} && !(${negated})` : `!(${negated})`;
+				combinedFilter = combinedFilter
+					? `${combinedFilter} && !(${negated})`
+					: `!(${negated})`;
 			}
 		}
 
@@ -213,8 +215,12 @@ export const publicSearchApp = new Hono()
 			}).catch((error) => logger.error("Could not record search usage", { error }));
 
 			// Fire-and-forget: record FIRST_SEARCH activation milestone (idempotent)
-			void recordActivationEvent(verified.organizationId, "FIRST_SEARCH").catch((err: unknown) =>
-				logger.error("Failed to record FIRST_SEARCH activation event", { error: err, organizationId: verified.organizationId }),
+			void recordActivationEvent(verified.organizationId, "FIRST_SEARCH").catch(
+				(err: unknown) =>
+					logger.error("Failed to record FIRST_SEARCH activation event", {
+						error: err,
+						organizationId: verified.organizationId,
+					}),
 			);
 
 			if (result.found === 0) {
@@ -228,7 +234,12 @@ export const publicSearchApp = new Hono()
 
 			// Compute did-you-mean when results are empty
 			let didYouMean: string | undefined;
-			if (result.found === 0 && processed.q && processed.q !== "*" && processed.q.length > 2) {
+			if (
+				result.found === 0 &&
+				processed.q &&
+				processed.q !== "*" &&
+				processed.q.length > 2
+			) {
 				try {
 					const lang = detectLanguage(processed.q) ?? "en";
 					const isRussian = lang === "ru";

@@ -32,7 +32,7 @@ export const ALL_ACTIVATION_EVENTS: ActivationEventKind[] = [
  */
 export async function recordActivationEvent(
 	organizationId: string,
-	eventType: ActivationEventType,
+	eventType: ActivationEventKind,
 	metadata?: Record<string, unknown>,
 ) {
 	return db.activationEvent.upsert({
@@ -42,7 +42,7 @@ export async function recordActivationEvent(
 		create: {
 			organizationId,
 			eventType,
-			metadata: metadata as unknown as Prisma.InputJsonValue ?? Prisma.JsonNull,
+			metadata: (metadata as unknown as Prisma.InputJsonValue) ?? Prisma.JsonNull,
 		},
 		update: {},
 	});
@@ -63,7 +63,7 @@ export async function getActivationEvents(organizationId: string) {
  */
 export async function hasActivationEvent(
 	organizationId: string,
-	eventType: ActivationEventType,
+	eventType: ActivationEventKind,
 ): Promise<boolean> {
 	const event = await db.activationEvent.findUnique({
 		where: {

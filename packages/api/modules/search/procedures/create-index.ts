@@ -1,5 +1,9 @@
 import { ORPCError } from "@orpc/client";
-import { createSearchIndexByOwner, getSearchIndexByOwnerSlug, recordActivationEvent } from "@repo/database";
+import {
+	createSearchIndexByOwner,
+	getSearchIndexByOwnerSlug,
+	recordActivationEvent,
+} from "@repo/database";
 import { logger } from "@repo/logs";
 import { createPhysicalCollection, ensureAlias } from "@repo/search";
 import { z } from "zod";
@@ -96,7 +100,10 @@ export const createIndex = protectedProcedure
 
 		// Fire-and-forget: record FIRST_COLLECTION activation milestone
 		void recordActivationEvent(owner.ownerId, "FIRST_COLLECTION").catch((err: unknown) =>
-			logger.error("Failed to record FIRST_COLLECTION activation event", { error: err, organizationId: owner.ownerId }),
+			logger.error("Failed to record FIRST_COLLECTION activation event", {
+				error: err,
+				organizationId: owner.ownerId,
+			}),
 		);
 
 		return {

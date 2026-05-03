@@ -493,7 +493,8 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 							/>
 							<Tooltip
 								formatter={(_value, _name, props) => {
-									const bucket = (props as { payload: HealthScoreBucket }).payload;
+									const bucket = (props as { payload: HealthScoreBucket })
+										.payload;
 									return [
 										`${bucket.count} org${bucket.count !== 1 ? "s" : ""} (score ${bucket.label})`,
 										"Orgs",

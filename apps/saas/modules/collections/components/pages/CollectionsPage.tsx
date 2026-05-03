@@ -10,11 +10,12 @@ import { EmptyState } from "@search/components/cards/EmptyState";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Columns3Icon, PlusIcon, SearchIcon, XIcon } from "lucide-react";
+import { Columns3Icon, PlusIcon, SearchIcon, UploadIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { CollectionCard, type CollectionData } from "../cards/CollectionCard";
+import { ImportDialog } from "../import/ImportDialog";
 
 // ─── Skeleton grid ──────────────────────────────────────────────────────────
 
@@ -46,6 +47,7 @@ export function CollectionsPage() {
 	const orgSlug = activeOrganization?.slug;
 
 	const [searchQuery, setSearchQuery] = useState("");
+	const [importCollectionSlug, setImportCollectionSlug] = useState<string | null>(null);
 
 	// ── Fetch indexes (collections = search indexes) ──────────────────────
 
@@ -100,13 +102,13 @@ export function CollectionsPage() {
 		confirm({
 			title: t("search.collection.deleteTitle"),
 			message: t("search.collection.deleteMessage", {
-				name: collection?.displayName ?? collection?.slug,
+				name: collection?.displayName ?? collection?.slug ?? "",
 			}),
 			destructive: true,
 			onConfirm: () => {
 				deleteMutation.mutate({
 					organizationId: orgId ?? "",
-					id,
+					slug: collection?.slug ?? id,
 				});
 			},
 		});
@@ -114,6 +116,13 @@ export function CollectionsPage() {
 
 	const handleDuplicate = (_id: string) => {
 		toastSuccess(t("common.comingSoon") || "Coming soon");
+	};
+
+	const handleImport = (id: string) => {
+		const collection = collections.find((c) => c.id === id);
+		if (collection) {
+			setImportCollectionSlug(collection.slug);
+		}
 	};
 
 	// ── Render ─────────────────────────────────────────────────────────────
@@ -205,10 +214,21 @@ export function CollectionsPage() {
 							organizationSlug={orgSlug}
 							onDelete={handleDelete}
 							onDuplicate={handleDuplicate}
+							onImport={handleImport}
 						/>
 					))}
 				</div>
 			)}
+
+			<ImportDialog
+				open={importCollectionSlug !== null}
+				onOpenChange={(open) => {
+					if (!open) setImportCollectionSlug(null);
+				}}
+				organizationId={orgId ?? ""}
+				slug={importCollectionSlug ?? ""}
+				schemaFields={[]}
+			/>
 		</div>
 	);
 }

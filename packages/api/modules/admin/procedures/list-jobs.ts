@@ -21,8 +21,8 @@ const JOB_DEFINITIONS = [
 	},
 	{
 		name: "Index health check cron",
-		path: "/api/cron/index-health",
-		secretEnv: "INDEX_HEALTH_CRON_SECRET",
+		path: "/api/cron/index-health-check",
+		secretEnv: "SEARCH_CRON_SECRET",
 	},
 ] as const;
 

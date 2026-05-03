@@ -11,7 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { CopyIcon, DatabaseIcon, DownloadIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, DatabaseIcon, DownloadIcon, ImportIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -34,6 +34,7 @@ interface CollectionCardProps {
 	organizationSlug: string;
 	onDelete?: (id: string) => void;
 	onDuplicate?: (id: string) => void;
+	onImport?: (id: string) => void;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -64,6 +65,7 @@ export function CollectionCard({
 	organizationSlug,
 	onDelete,
 	onDuplicate,
+	onImport,
 }: CollectionCardProps) {
 	const t = useTranslations();
 
@@ -138,7 +140,15 @@ export function CollectionCard({
 				<div className="gap-1 flex">
 					<Button
 						variant="ghost"
-						size="icon-sm"
+						size="icon"
+						title={t("search.import.title") || "Import"}
+						onClick={() => onImport?.(collection.id)}
+					>
+						<ImportIcon className="size-3.5" />
+					</Button>
+					<Button
+						variant="ghost"
+						size="icon"
 						title={t("common.duplicate") || "Duplicate"}
 						onClick={() => onDuplicate?.(collection.id)}
 					>
@@ -146,7 +156,7 @@ export function CollectionCard({
 					</Button>
 					<Button
 						variant="ghost"
-						size="icon-sm"
+						size="icon"
 						title={t("common.export") || "Export"}
 						asChild
 					>
@@ -158,7 +168,7 @@ export function CollectionCard({
 					</Button>
 					<Button
 						variant="ghost"
-						size="icon-sm"
+						size="icon"
 						title={t("common.delete") || "Delete"}
 						onClick={() => onDelete?.(collection.id)}
 					>

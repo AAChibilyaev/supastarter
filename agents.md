@@ -1651,48 +1651,42 @@ _End of AGENTS.md — fully autonomous coding enabled._
 # === COGNILAYER (auto-generated, do not delete) ===
 
 ## CogniLayer v4 Active
-
 Persistent memory + code intelligence is ON.
 ON FIRST USER MESSAGE in this session, briefly tell the user:
-'CogniLayer v4 active — persistent memory is on. Type /cognihelp for available commands.'
+  'CogniLayer v4 active — persistent memory is on. Type /cognihelp for available commands.'
 Say it ONCE, keep it short, then continue with their request.
 
 ## Tools — HOW TO WORK
 
 FIRST RUN ON A PROJECT:
 When DNA shows "[new session]" or "[first session]":
-
 1. Run /onboard — indexes project docs (PRD, README), builds initial memory
 2. Run code_index() — builds AST index for code intelligence
-   Both are one-time. After that, updates are incremental.
-   If file_search or code_search return empty → these haven't been run yet.
+Both are one-time. After that, updates are incremental.
+If file_search or code_search return empty → these haven't been run yet.
 
 UNDERSTAND FIRST (before making changes):
-
 - memory_search(query) → what do we know? Past bugs, decisions, gotchas
 - code_context(symbol) → how does the code work? Callers, callees, dependencies
 - file_search(query) → search project docs (PRD, README) without reading full files
 - code_search(query) → find where a function/class is defined
-  Use BOTH memory + code tools for complete picture. They are fast — call in parallel.
+Use BOTH memory + code tools for complete picture. They are fast — call in parallel.
 
 BEFORE RISKY CHANGES (mandatory):
-
 - Renaming, deleting, or moving a function/class → code_impact(symbol) FIRST
 - Changing a function's signature or return value → code_impact(symbol) FIRST
 - Modifying shared utilities used across multiple files → code_impact(symbol) FIRST
 - ALSO: memory_search(symbol) → check for related decisions or known gotchas
-  Both required. Structure tells you what breaks, memory tells you WHY it was built that way.
+Both required. Structure tells you what breaks, memory tells you WHY it was built that way.
 
 AFTER COMPLETING WORK:
-
 - memory_write(content) → save important discoveries immediately
   (error_fix, gotcha, pattern, api_contract, procedure, decision)
 - session_bridge(action="save", content="Progress: ...; Open: ...")
-  DO NOT wait for /harvest — session may crash.
+DO NOT wait for /harvest — session may crash.
 
 SUBAGENT MEMORY PROTOCOL:
 When spawning Agent tool for research or exploration:
-
 - Include in prompt: synthesize findings into consolidated memory_write(content, type, tags="subagent,<task-topic>") facts
   Assign a descriptive topic tag per subagent (e.g. tags="subagent,auth-review", tags="subagent,perf-analysis")
 - Do NOT write each discovery separately — group related findings into cohesive facts
@@ -1704,35 +1698,29 @@ When spawning Agent tool for research or exploration:
 - Return: actionable summary (file paths, function names, specific values) + what was saved + keywords for memory_search
 - If MCP tools unavailable or fail → include key findings directly in return text as fallback
 - Launch subagents as foreground (default) for reliable MCP access — user can Ctrl+B to background later
-  Why: without this protocol, subagent returns dump all text into parent context (40K+ tokens).
-  With protocol, findings go to DB and parent gets ~500 token summary + on-demand memory_search.
+Why: without this protocol, subagent returns dump all text into parent context (40K+ tokens).
+With protocol, findings go to DB and parent gets ~500 token summary + on-demand memory_search.
 
 BEFORE DEPLOY/PUSH:
-
 - verify_identity(action_type="...") → mandatory safety gate
 - If BLOCKED → STOP and ask the user
 - If VERIFIED → READ the target server to the user and request confirmation
 
 ## VERIFY-BEFORE-ACT
-
 When memory_search returns a fact marked ⚠ STALE:
-
 1. Read the source file and verify the fact still holds
 2. If changed → update via memory_write
 3. NEVER act on STALE facts without verification
 
 ## Process Management (Windows)
-
 - NEVER use `taskkill //F //IM node.exe` — kills ALL Node.js INCLUDING Claude Code CLI!
 - Use: `npx kill-port PORT` or find PID via `netstat -ano | findstr :PORT` then `taskkill //F //PID XXXX`
 
 ## Git Rules
-
 - Commit often, small atomic changes. Format: "[type] what and why"
 - commit = Tier 1 (do it yourself). push = Tier 3 (verify_identity).
 
 ## Project DNA: supastarter-nextjs
-
 Stack: TypeScript
 Style: [unknown]
 Structure: .cursor, .github, .vscode, apps, docs, packages, tooling
@@ -1741,33 +1729,8 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-
-[pre-compact bridge — saved before context compaction]
-Files (11):
-packages/i18n/lib/get-messages.ts (edit)
-packages/i18n/types.ts (edit)
-packages/i18n/scripts/i18n.py (create)
-agents.md (edit)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/feedback_i18n_tool.md (edit)
-packages/ui/index.ts (edit)
-apps/saas/modules/my-search/components/upload/FileList.tsx (edit)
-apps/saas/modules/search/components/panels/FacetsPanel.tsx (edit)
-apps/saas/app/(authenticated)/(main)/(account)/my-search/[id]/page.tsx (edit)
-apps/saas/app/api/cron/send-drip-emails/route.ts (edit)
-.oxlintrc.json (edit)
-Manual bridge:
-[proactive bridge @ 76% context — saved before compacting]
-Files (10):
-packages/i18n/lib/get-messages.ts (edit)
-packages/i18n/types.ts (edit)
-packages/i18n/scripts/i18n.py (create)
-agents.md (edit)
-/Users/aac/.claude/projects/-Users-aac-Projects-ts-supastarter/memory/feedback_i18n_tool.md (edit)
-packages/ui/index.ts (edit)
-apps/saas/modules/my-search/components/upload/FileList.tsx (edit)
-apps/saas/modules/search/components/panels/FacetsPanel.tsx (edit)
-apps/saas/app/(authenticated)/(main)/(account)/my-search/[id]/page.tsx (edit)
-apps/saas/app/api/cron/send-drip-emails/route.ts (edit)
+[Emergency bridge — running bridge was not updated]
+Files: apps/saas/modules/collections/components/pages/CollectionsPage.tsx (edit)
 
 # === END COGNILAYER ===
 

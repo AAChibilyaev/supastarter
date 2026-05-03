@@ -4,7 +4,7 @@
 # Format: minute hour day month weekday command
 
 # Send onboarding drip emails — runs daily at 09:00
-0 9 * * * curl -sf -X POST \"$APP_URL/api/cron/send-drip-emails\" -H \"Authorization: Bearer $SEARC...RET\" > /proc/1/fd/1 2>&1
+0 9 * * * curl -sf -X POST "$APP_URL/api/cron/send-drip-emails" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1
 
 # Flush search ingest buffer — runs every minute to minimize indexing lag
 * * * * * curl -sf -X POST "$APP_URL/api/cron/search-flush" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1
@@ -17,3 +17,6 @@
 
 # Reconcile pending Tochka top-up orders — every hour at :15
 15 * * * * curl -sf -X POST "$APP_URL/api/cron/reconcile-tochka-topups" -H "Authorization: Bearer $WALLET_CRON_SECRET" > /proc/1/fd/1 2>&1
+
+# Index health check — every 5 minutes: drift, lag, error rate, auto-pause, Slack alerts
+*/5 * * * * curl -sf -X POST "$APP_URL/api/cron/index-health-check" -H "Authorization: Bearer $SEARCH_CRON_SECRET" > /proc/1/fd/1 2>&1

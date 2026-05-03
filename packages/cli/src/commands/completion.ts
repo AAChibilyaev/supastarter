@@ -48,9 +48,7 @@ export const completionCommand = new Command("completion")
 				input: process.stdin,
 				output: process.stdout,
 			});
-			const answer = await rl.question(
-				"Install to default location? [y/N]: ",
-			);
+			const answer = await rl.question("Install to default location? [y/N]: ");
 			rl.close();
 
 			if (answer.toLowerCase() === "y" || answer.toLowerCase() === "yes") {
@@ -70,10 +68,7 @@ function detectShell(): string {
 	return "bash";
 }
 
-async function installCompletion(
-	shell: string,
-	script: string,
-): Promise<void> {
+async function installCompletion(shell: string, script: string): Promise<void> {
 	const { homedir } = await import("os");
 	const { join } = await import("path");
 	const home = homedir();
@@ -93,13 +88,7 @@ async function installCompletion(
 			break;
 		}
 		case "fish":
-			installPath = join(
-				home,
-				".config",
-				"fish",
-				"completions",
-				"aacsearch.fish",
-			);
+			installPath = join(home, ".config", "fish", "completions", "aacsearch.fish");
 			sourceCmd =
 				"# Completions installed — fish loads them automatically from ~/.config/fish/completions/";
 			break;

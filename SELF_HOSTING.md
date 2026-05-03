@@ -119,6 +119,7 @@ AACSearch needs four periodic jobs. In the Docker Compose setup, the `cron-worke
 | `POST /api/cron/reindex-runner`          | Every 2 min  | `SEARCH_CRON_SECRET` | Run pending reindex jobs         |
 | `POST /api/cron/expire-reservations`     | Every 5 min  | `WALLET_CRON_SECRET` | Expire stale wallet reservations |
 | `POST /api/cron/reconcile-tochka-topups` | Hourly       | `WALLET_CRON_SECRET` | Reconcile Tochka top-up orders   |
+| `POST /api/cron/index-health-check`      | Every 5 min  | `SEARCH_CRON_SECRET` | Drift, lag, error rate checks    |
 
 To call them manually:
 

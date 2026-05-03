@@ -53,11 +53,11 @@ export default async function BillingSettingsPage() {
 
 			{activePlan?.purchaseId && (
 				<div className="mt-8 space-y-6">
-					<SettingsItem title={t("settings.billing.paymentMethod.title")}>
+\t\t\t\t\t<SettingsItem title={t("paymentMethod.title")}>
 						<PaymentMethodCard purchaseId={activePlan.purchaseId} />
 					</SettingsItem>
 
-					<SettingsItem title={t("settings.billing.invoiceHistory.title")}>
+\t\t\t\t\t<SettingsItem title={t("invoiceHistory.title")}>
 						<InvoiceHistory purchaseId={activePlan.purchaseId} />
 					</SettingsItem>
 				</div>

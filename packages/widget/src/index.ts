@@ -320,6 +320,49 @@ const WIDGET_STYLES = `
   border-radius: var(--aac-radius);
   border: 1px solid #fecaca;
 }
+
+.aac-mic-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--aac-text-secondary);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.aac-mic-btn:hover {
+  color: var(--aac-primary);
+}
+
+.aac-mic-btn.aac-mic-listening {
+  color: #ef4444;
+  animation: aac-pulse 1s infinite;
+}
+
+@keyframes aac-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.aac-mic-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  margin-bottom: 4px;
+  z-index: 10;
+}
 `;
 
 interface SearchState {
@@ -663,6 +706,79 @@ export class AacSearchWidget {
 		void this.doSearch(1);
 	}
 
+	private startVoiceSearch(): void {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const w = window as unknown as Record<string, unknown>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const SR = w["SpeechRecognition"] ?? w["webkitSpeechRecognition"];
+
+		if (!SR) {
+			this.showVoiceUnsupportedTooltip();
+			return;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const recognition = new (SR as new () => Record<string, unknown>)() as Record<string, unknown> & {
+			lang: string;
+			interimResults: boolean;
+			maxAlternatives: number;
+			start: () => void;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			onresult: ((e: any) => void) | null;
+			onend: (() => void) | null;
+			onerror: (() => void) | null;
+		};
+
+		recognition.lang = this.locale;
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+
+		this.setMicListening(true);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		recognition.onresult = (event: any) => {
+			const transcript = String(event.results[0][0].transcript);
+			// Update input value
+			const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
+			if (input) input.value = transcript;
+			this.state = { ...this.state, query: transcript };
+			void this.doSearch(1);
+		};
+
+		recognition.onerror = () => {
+			this.setMicListening(false);
+		};
+
+		recognition.onend = () => {
+			this.setMicListening(false);
+		};
+
+		recognition.start();
+	}
+
+	private setMicListening(listening: boolean): void {
+		const btn = this.root.querySelector(".aac-mic-btn");
+		if (btn) {
+			btn.classList.toggle("aac-mic-listening", listening);
+			btn.setAttribute(
+				"aria-label",
+				listening ? this.t("listening") : this.t("voiceSearch"),
+			);
+		}
+	}
+
+	private showVoiceUnsupportedTooltip(): void {
+		const btn = this.root.querySelector(".aac-mic-btn");
+		if (!btn) return;
+		// Remove any existing tooltip first
+		btn.querySelector(".aac-mic-tooltip")?.remove();
+		const tip = document.createElement("div");
+		tip.className = "aac-mic-tooltip";
+		tip.textContent = this.t("voiceNotSupported");
+		btn.appendChild(tip);
+		setTimeout(() => tip.remove(), 2000);
+	}
+
 	private attachEvents(): void {
 		// Search input (debounced)
 		const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
@@ -711,6 +827,11 @@ export class AacSearchWidget {
 				}
 			});
 		}
+
+		// Mic button
+		this.root.querySelector(".aac-mic-btn")?.addEventListener("click", () => {
+			this.startVoiceSearch();
+		});
 
 		// Result clicks (delegated) — fires `result_click` analytics event
 		// before the browser navigates via the <a target="_blank">.
@@ -937,7 +1058,7 @@ export class AacSearchWidget {
 		this.root.innerHTML = `
 			<style>${WIDGET_STYLES}</style>
 			<div class="aac-widget-container">
-				<div class="aac-search-box">
+				<div class="aac-search-box" style="position:relative;">
 				<input
 					type="text"
 					class="aac-search-input"
@@ -945,6 +1066,14 @@ export class AacSearchWidget {
 					value="${escapeHtml(this.state.query)}"
 					aria-label="${this.t("searchLabel")}"
 				/>
+				<button class="aac-mic-btn" title="${this.t("voiceSearch")}" aria-label="${this.t("voiceSearch")}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+						<path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+						<line x1="12" y1="19" x2="12" y2="23"/>
+						<line x1="8" y1="23" x2="16" y2="23"/>
+					</svg>
+				</button>
 				</div>
 				${
 					this.state.query || this.state.results.length > 0

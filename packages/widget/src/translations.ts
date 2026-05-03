@@ -28,6 +28,9 @@ const translations: Record<string, Record<string, string>> = {
 		untitled: "Untitled",
 		sku: "SKU",
 		noData: "No data",
+		voiceSearch: "Voice search",
+		voiceNotSupported: "Voice search not supported",
+		listening: "Listening...",
 	},
 	ru: {
 		searchPlaceholder: "Поиск товаров...",
@@ -49,6 +52,9 @@ const translations: Record<string, Record<string, string>> = {
 		untitled: "Без названия",
 		sku: "Артикул",
 		noData: "Нет данных",
+		voiceSearch: "Голосовой поиск",
+		voiceNotSupported: "Голосовой поиск не поддерживается",
+		listening: "Слушаю...",
 	},
 	de: {
 		searchPlaceholder: "Produkte suchen...",
@@ -70,6 +76,9 @@ const translations: Record<string, Record<string, string>> = {
 		untitled: "Ohne Titel",
 		sku: "Artikelnummer",
 		noData: "Keine Daten",
+		voiceSearch: "Sprachsuche",
+		voiceNotSupported: "Sprachsuche nicht unterstützt",
+		listening: "Höre zu...",
 	},
 	es: {
 		searchPlaceholder: "Buscar productos...",
@@ -91,6 +100,9 @@ const translations: Record<string, Record<string, string>> = {
 		untitled: "Sin título",
 		sku: "SKU",
 		noData: "Sin datos",
+		voiceSearch: "Búsqueda por voz",
+		voiceNotSupported: "Búsqueda por voz no compatible",
+		listening: "Escuchando...",
 	},
 	fr: {
 		searchPlaceholder: "Rechercher des produits...",
@@ -112,6 +124,9 @@ const translations: Record<string, Record<string, string>> = {
 		untitled: "Sans titre",
 		sku: "Référence",
 		noData: "Aucune donnée",
+		voiceSearch: "Recherche vocale",
+		voiceNotSupported: "Recherche vocale non supportée",
+		listening: "J'écoute...",
 	},
 };
 

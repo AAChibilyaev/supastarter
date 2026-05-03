@@ -206,6 +206,45 @@
 			"plan": "Plan",
 			"subscribers": "Subscribers",
 			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Gestión de la hoja de ruta",
+			"pageSubtitle": "Añadir, editar, reordenar y eliminar elementos de la hoja de ruta pública.",
+			"menu": {
+				"roadmap": "Hoja de ruta"
+			},
+			"addItem": "Añadir elemento",
+			"itemsCount": "{count} {count, plural, one {elemento} other {elementos}}",
+			"empty": "Aún no hay elementos en la hoja de ruta. Cree el primero.",
+			"createTitle": "Nuevo elemento de la hoja de ruta",
+			"createDescription": "Añadir una nueva función a la hoja de ruta pública.",
+			"editTitle": "Editar elemento de la hoja de ruta",
+			"editDescription": "Actualizar un elemento existente de la hoja de ruta.",
+			"form": {
+				"key": "Clave",
+				"title": "Título",
+				"description": "Descripción",
+				"status": "Estado",
+				"quarter": "Trimestre",
+				"iconName": "Nombre del icono",
+				"changelogSlug": "Slug del changelog",
+				"changelogSlugPlaceholder": "ej. vector-search-launch",
+				"cancel": "Cancelar",
+				"save": "Guardar",
+				"saving": "Guardando...",
+				"create": "Crear"
+			},
+			"status": {
+				"shipped": "Enviado",
+				"inProgress": "En progreso",
+				"planned": "Planificado"
+			},
+			"confirmDelete": {
+				"title": "Eliminar elemento de la hoja de ruta",
+				"message": "¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.",
+				"confirm": "Eliminar",
+				"cancel": "Cancelar"
+			}
 		}
 	}
 }

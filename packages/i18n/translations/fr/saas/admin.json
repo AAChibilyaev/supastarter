@@ -206,6 +206,45 @@
 			"plan": "Plan",
 			"subscribers": "Subscribers",
 			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Gestion de la feuille de route",
+			"pageSubtitle": "Ajouter, modifier, réorganiser et supprimer des éléments de la feuille de route publique.",
+			"menu": {
+				"roadmap": "Feuille de route"
+			},
+			"addItem": "Ajouter un élément",
+			"itemsCount": "{count} {count, plural, one {élément} other {éléments}}",
+			"empty": "Aucun élément de feuille de route pour l'instant. Créez le premier.",
+			"createTitle": "Nouvel élément de feuille de route",
+			"createDescription": "Ajouter une nouvelle fonctionnalité à la feuille de route publique.",
+			"editTitle": "Modifier l'élément de feuille de route",
+			"editDescription": "Mettre à jour un élément existant de la feuille de route.",
+			"form": {
+				"key": "Clé",
+				"title": "Titre",
+				"description": "Description",
+				"status": "Statut",
+				"quarter": "Trimestre",
+				"iconName": "Nom de l'icône",
+				"changelogSlug": "Slug du changelog",
+				"changelogSlugPlaceholder": "ex. vector-search-launch",
+				"cancel": "Annuler",
+				"save": "Enregistrer",
+				"saving": "Enregistrement...",
+				"create": "Créer"
+			},
+			"status": {
+				"shipped": "Expédié",
+				"inProgress": "En cours",
+				"planned": "Prévu"
+			},
+			"confirmDelete": {
+				"title": "Supprimer l'élément de feuille de route",
+				"message": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
+				"confirm": "Supprimer",
+				"cancel": "Annuler"
+			}
 		}
 	}
 }

@@ -79,7 +79,10 @@ export async function createRoadmapItem(input: CreateRoadmapItemInput): Promise<
 
 export type UpdateRoadmapItemInput = Partial<CreateRoadmapItemInput>;
 
-export async function updateRoadmapItem(id: string, input: UpdateRoadmapItemInput): Promise<RoadmapItemView | null> {
+export async function updateRoadmapItem(
+	id: string,
+	input: UpdateRoadmapItemInput,
+): Promise<RoadmapItemView | null> {
 	const item = await db.roadmapItem.update({
 		where: { id },
 		data: {
@@ -90,7 +93,9 @@ export async function updateRoadmapItem(id: string, input: UpdateRoadmapItemInpu
 			...(input.quarter !== undefined && { quarter: input.quarter }),
 			...(input.iconName !== undefined && { iconName: input.iconName }),
 			...(input.sortOrder !== undefined && { sortOrder: input.sortOrder }),
-			...(input.changelogSlug !== undefined && { changelogSlug: input.changelogSlug ?? null }),
+			...(input.changelogSlug !== undefined && {
+				changelogSlug: input.changelogSlug ?? null,
+			}),
 		},
 	});
 	return toView(item);

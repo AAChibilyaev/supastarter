@@ -11,6 +11,7 @@ import {
 	Building2Icon,
 	ClipboardListIcon,
 	CogIcon,
+	MapIcon,
 	PlaySquareIcon,
 	ShieldIcon,
 	UsersIcon,
@@ -82,6 +83,11 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
 								title: "Jobs",
 								href: "/admin/jobs",
 								icon: <CogIcon className="size-4 opacity-50" />,
+							},
+							{
+								title: t("menu.roadmap"),
+								href: "/admin/roadmap",
+								icon: <MapIcon className="size-4 opacity-50" />,
 							},
 							{
 								title: "Config",

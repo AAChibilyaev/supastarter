@@ -206,6 +206,45 @@
 			"plan": "Plan",
 			"subscribers": "Subscribers",
 			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Управление дорожной картой",
+			"pageSubtitle": "Добавление, редактирование, изменение порядка и удаление элементов публичной дорожной карты.",
+			"menu": {
+				"roadmap": "Дорожная карта"
+			},
+			"addItem": "Добавить элемент",
+			"itemsCount": "{count} {count, plural, one {элемент} few {элемента} many {элементов} other {элемента}}",
+			"empty": "Элементы дорожной карты пока отсутствуют. Создайте первый.",
+			"createTitle": "Новый элемент дорожной карты",
+			"createDescription": "Добавить новую функцию в публичную дорожную карту.",
+			"editTitle": "Редактировать элемент",
+			"editDescription": "Обновить существующий элемент дорожной карты.",
+			"form": {
+				"key": "Ключ",
+				"title": "Название",
+				"description": "Описание",
+				"status": "Статус",
+				"quarter": "Квартал",
+				"iconName": "Название иконки",
+				"changelogSlug": "Чейнджлог-слаг",
+				"changelogSlugPlaceholder": "например, vector-search-launch",
+				"cancel": "Отмена",
+				"save": "Сохранить",
+				"saving": "Сохранение...",
+				"create": "Создать"
+			},
+			"status": {
+				"shipped": "Готово",
+				"inProgress": "В работе",
+				"planned": "Запланировано"
+			},
+			"confirmDelete": {
+				"title": "Удалить элемент",
+				"message": "Вы уверены, что хотите удалить этот элемент? Это действие нельзя отменить.",
+				"confirm": "Удалить",
+				"cancel": "Отмена"
+			}
 		}
 	}
 }

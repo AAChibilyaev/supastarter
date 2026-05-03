@@ -206,6 +206,45 @@
 			"plan": "Plan",
 			"subscribers": "Subscribers",
 			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Roadmap-Verwaltung",
+			"pageSubtitle": "Roadmap-Elemente hinzufügen, bearbeiten, neu anordnen und löschen.",
+			"menu": {
+				"roadmap": "Roadmap"
+			},
+			"addItem": "Element hinzufügen",
+			"itemsCount": "{count} {count, plural, one {Element} other {Elemente}}",
+			"empty": "Noch keine Roadmap-Elemente. Erstellen Sie Ihr erstes.",
+			"createTitle": "Neues Roadmap-Element",
+			"createDescription": "Ein neues Feature zur öffentlichen Roadmap hinzufügen.",
+			"editTitle": "Roadmap-Element bearbeiten",
+			"editDescription": "Ein vorhandenes Roadmap-Element aktualisieren.",
+			"form": {
+				"key": "Schlüssel",
+				"title": "Titel",
+				"description": "Beschreibung",
+				"status": "Status",
+				"quarter": "Quartal",
+				"iconName": "Symbolname",
+				"changelogSlug": "Changelog-Slug",
+				"changelogSlugPlaceholder": "z.B. vector-search-launch",
+				"cancel": "Abbrechen",
+				"save": "Speichern",
+				"saving": "Speichern...",
+				"create": "Erstellen"
+			},
+			"status": {
+				"shipped": "Veröffentlicht",
+				"inProgress": "In Arbeit",
+				"planned": "Geplant"
+			},
+			"confirmDelete": {
+				"title": "Roadmap-Element löschen",
+				"message": "Sind Sie sicher, dass Sie dieses Element löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+				"confirm": "Löschen",
+				"cancel": "Abbrechen"
+			}
 		}
 	}
 }

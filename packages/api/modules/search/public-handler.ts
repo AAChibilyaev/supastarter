@@ -54,6 +54,10 @@ const publicSearchInput = z.object({
 	// ── Faceted Search extensions ──
 	facetQuery: z.string().optional(),
 	maxFacetValues: z.number().int().min(1).optional(),
+	// ── Negation (explicit) ──
+	negate: z.string().optional(),
+	// ── Wildcard toggle ──
+	wildcard: z.boolean().optional(),
 });
 
 const multiSearchInput = z.object({
@@ -101,13 +105,31 @@ export const publicSearchApp = new Hono()
 			q: processed.q,
 			exact: processed.isExactPhrase ? true : parsed.data.exact,
 		};
+		delete (searchParams as Record<string, unknown>).negate;
+		delete (searchParams as Record<string, unknown>).wildcard;
+
+		// Build filter expression: scoped + user filter + negate
+		let combinedFilter = combineFilters(scopedFilter, searchParams.filterBy);
+		if (parsed.data.negate) {
+			const negated = parsed.data.negate
+				.split(",")
+				.map((t) => t.trim())
+				.filter(Boolean)
+				.map((term) => `(${term})`)
+				.join(" || ");
+			if (negated) {
+				combinedFilter = combinedFilter
+					? `${combinedFilter} && !(${negated})`
+					: `!(${negated})`;
+			}
+		}
 
 		try {
 			const result = await searchDocuments({
 				alias: aliasName(verified.organizationId, verified.indexSlug),
 				tenantId: verified.organizationId,
 				...searchParams,
-				filterBy: combineFilters(scopedFilter, searchParams.filterBy),
+				filterBy: combinedFilter,
 			});
 
 			void recordSearchUsage({

@@ -19,7 +19,7 @@ const yaml = dump(spec, {
 	sortKeys: false,
 });
 
-const outputPath = "packages/api/openapi.yaml";
+const outputPath = "openapi.yaml";
 writeFileSync(outputPath, yaml, "utf-8");
 console.log(`✅ openapi.yaml written to ${outputPath}`);
 console.log(`   Size: ${(statSync(outputPath).size / 1024).toFixed(1)} KB`);

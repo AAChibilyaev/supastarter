@@ -17,6 +17,8 @@
  *   PUT    /v1/indexes/:indexId/documents/:documentId         — upsert doc
  *   POST   /v1/indexes/:indexId/documents:batch               — batch upsert
  *   POST   /v1/indexes/:indexId/documents:batchDelete         — batch delete by IDs
+ *   GET    /v1/indexes/:indexId/documents/export              — export documents as JSONL/JSON
+ *   POST   /v1/indexes/:indexId/documents/delete-by-query     — delete documents by filter expression
  *   DELETE /v1/indexes/:indexId/documents/:documentId         — delete doc
  *   POST   /v1/indexes/:indexId/search             — search index
  *   POST   /v1/multi-search                        — multi-search

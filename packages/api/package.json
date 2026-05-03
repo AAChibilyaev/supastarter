@@ -4,8 +4,8 @@
 	"main": "./index.ts",
 	"scripts": {
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
-		"generate:openapi": "node node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs packages/api/scripts/generate-openapi.ts",
-		"validate:openapi": "redocly lint packages/api/openapi.yaml",
+		"generate:openapi": "node ../../node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs scripts/generate-openapi.ts",
+		"validate:openapi": "redocly lint openapi.yaml",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",

@@ -9,6 +9,7 @@ import { personalizationOverview } from "./procedures/personalization-overview";
 import { personalized } from "./procedures/personalized";
 import { personalizedFromAnalytics } from "./procedures/personalized-from-analytics";
 import { similar } from "./procedures/similar";
+import { testPersonalization } from "./procedures/test-personalization";
 import { trending } from "./procedures/trending";
 
 export const recommendationsRouter = {
@@ -18,6 +19,7 @@ export const recommendationsRouter = {
 	personalizationOverview,
 	getPersonalizationConfig,
 	updatePersonalizationConfig,
+	testPersonalization,
 	trending,
 	frequentlyBoughtTogether,
 	alsoViewed,

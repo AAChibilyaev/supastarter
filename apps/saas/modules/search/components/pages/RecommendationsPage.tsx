@@ -13,14 +13,15 @@ import { RecommendationsGraphRAG } from "../recommendations/RecommendationsGraph
 import { RecommendationsPersonalizedAnalytics } from "../recommendations/RecommendationsPersonalizedAnalytics";
 import { RecommendationsSettings } from "../recommendations/RecommendationsSettings";
 import { RecommendationsTestPanel } from "../recommendations/RecommendationsTestPanel";
+import { TestPersonalizationPanel } from "../recommendations/TestPersonalizationPanel";
 
 interface RecommendationsPageProps {
 	organizationId: string;
 }
 
-type TabId = "dashboard" | "similar" | "personalized" | "graphrag" | "settings";
+type TabId = "dashboard" | "similar" | "personalized" | "graphrag" | "settings" | "test";
 
-const TAB_IDS: TabId[] = ["dashboard", "similar", "personalized", "graphrag", "settings"];
+const TAB_IDS: TabId[] = ["dashboard", "similar", "personalized", "graphrag", "settings", "test"];
 
 export function RecommendationsPage({ organizationId }: RecommendationsPageProps) {
 	const t = useTranslations();
@@ -96,6 +97,10 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 
 			<TabsContent value="graphrag" className="mt-6 space-y-6">
 				<RecommendationsGraphRAG organizationId={organizationId} />
+			</TabsContent>
+
+			<TabsContent value="test" className="mt-6 space-y-6">
+				<TestPersonalizationPanel organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="settings" className="mt-6 space-y-6">

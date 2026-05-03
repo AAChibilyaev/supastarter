@@ -5,6 +5,7 @@ import { createCustomerPortalLink } from "./procedures/create-customer-portal-li
 import { createUpgradeSession } from "./procedures/create-upgrade-session";
 import { detachPaymentMethod } from "./procedures/detach-payment-method";
 import { getProrationPreview } from "./procedures/get-proration-preview";
+import { listInvoices } from "./procedures/list-invoices";
 import { listPaymentMethods } from "./procedures/list-payment-methods";
 import { listPurchases } from "./procedures/list-purchases";
 import { upgradeSubscription } from "./procedures/upgrade-subscription";
@@ -17,6 +18,7 @@ export const paymentsRouter = {
 	createUpgradeSession,
 	detachPaymentMethod,
 	getProrationPreview,
+	listInvoices,
 	listPaymentMethods,
 	listPurchases,
 	upgradeSubscription,

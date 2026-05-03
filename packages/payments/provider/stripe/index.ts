@@ -19,6 +19,7 @@ import type {
 	CreateCheckoutLink,
 	CreateCustomerPortalLink,
 	GetProrationPreview,
+	ListInvoices,
 	SetSubscriptionSeats,
 	UpgradeSubscription,
 	WebhookHandler,
@@ -795,8 +796,71 @@ export const webhookHandler: WebhookHandler = async (req) => {
 				break;
 			}
 			case "customer.subscription.deleted": {
-				await deletePurchaseBySubscriptionId(event.data.object.id);
+				const sub = event.data.object as Stripe.Subscription & {
+					current_period_end: number;
+				};
+				const purchase = await getPurchaseBySubscriptionId(sub.id);
 
+				if (purchase) {
+					const recipients = await getPaymentRecipients(purchase);
+					await Promise.all(
+						recipients.map(async (userId) => {
+							const user = await db.user.findUnique({
+								where: { id: userId },
+								select: { email: true, locale: true, name: true },
+							});
+							if (!user?.email) return;
+
+							const orgLookup = purchase.organizationId
+								? await db.organization.findUnique({
+										where: { id: purchase.organizationId },
+										select: { name: true, slug: true },
+									})
+								: null;
+							const orgNameVal = orgLookup?.name ?? "your organization";
+							const orgSlugVal = orgLookup?.slug;
+
+							const planName =
+								getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
+							const endDate = sub.current_period_end
+								? new Date(sub.current_period_end * 1000).toLocaleDateString(
+										"en-US",
+										{
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										},
+									)
+								: "soon";
+
+							const reactivateUrl = orgSlugVal
+								? `/organizations/${orgSlugVal}/settings/billing`
+								: "/settings/billing";
+
+							await sendEmail({
+								to: user.email,
+								locale:
+									(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
+									undefined,
+								templateId: "subscriptionCancelled",
+								context: {
+									orgName: orgNameVal,
+									planName,
+									endDate,
+									reactivateUrl,
+									manageBillingUrl: reactivateUrl,
+								},
+							}).catch((err: unknown) =>
+								logger.error(
+									"customer.subscription.deleted: sendEmail failed",
+									err,
+								),
+							);
+						}),
+					);
+				}
+
+				await deletePurchaseBySubscriptionId(sub.id);
 				break;
 			}
 			case "invoice.paid": {
@@ -815,6 +879,69 @@ export const webhookHandler: WebhookHandler = async (req) => {
 				logger.info("invoice.paid: purchase status set to active", {
 					purchaseId: purchase.id,
 				});
+
+				// Send receipt email
+				const recipients = await getPaymentRecipients(purchase);
+				await Promise.all(
+					recipients.map(async (userId) => {
+						const user = await db.user.findUnique({
+							where: { id: userId },
+							select: { email: true, locale: true, name: true },
+						});
+						if (!user?.email) return;
+
+						const orgLookup = purchase.organizationId
+							? await db.organization.findUnique({
+									where: { id: purchase.organizationId },
+									select: { name: true, slug: true },
+								})
+							: null;
+						const orgNameVal = orgLookup?.name ?? "your organization";
+						const orgSlugVal = orgLookup?.slug;
+
+						const amount = invoice.total
+							? new Intl.NumberFormat("en-US", {
+									style: "currency",
+									currency: (invoice.currency ?? "usd").toUpperCase(),
+								}).format(invoice.total / 100)
+							: "—";
+
+						const date = invoice.created
+							? new Date(invoice.created * 1000).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})
+							: "—";
+
+						const planName =
+							getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
+
+						const invoiceUrl = invoice.hosted_invoice_url ?? "";
+						const manageBillingUrl = orgSlugVal
+							? `/organizations/${orgSlugVal}/settings/billing`
+							: "/settings/billing";
+
+						await sendEmail({
+							to: user.email,
+							locale:
+								(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
+								undefined,
+							templateId: "invoicePaid",
+							context: {
+								orgName: orgNameVal,
+								planName,
+								amount,
+								currency: (invoice.currency ?? "usd").toUpperCase(),
+								date,
+								invoiceUrl,
+								manageBillingUrl,
+							},
+						}).catch((err: unknown) =>
+							logger.error("invoice.paid: sendEmail failed", err),
+						);
+					}),
+				);
 
 				break;
 			}
@@ -850,6 +977,93 @@ export const webhookHandler: WebhookHandler = async (req) => {
 							logger.error("invoice.payment_failed: createNotification failed", err),
 						),
 					),
+				);
+
+				// Send payment failed email
+				await Promise.all(
+					recipients.map(async (userId) => {
+						const user = await db.user.findUnique({
+							where: { id: userId },
+							select: { email: true, locale: true, name: true },
+						});
+						if (!user?.email) return;
+
+						const orgLookup = purchase.organizationId
+							? await db.organization.findUnique({
+									where: { id: purchase.organizationId },
+									select: { name: true, slug: true },
+								})
+							: null;
+						const orgNameVal = orgLookup?.name ?? "your organization";
+						const orgSlugVal = orgLookup?.slug;
+
+						const invoiceObj = event.data.object as unknown as Record<string, unknown>;
+						const amount = (invoiceObj.total as unknown as number)
+							? new Intl.NumberFormat("en-US", {
+									style: "currency",
+									currency: (
+										(invoiceObj.currency as unknown as string as string) ??
+										"usd"
+									).toUpperCase(),
+								}).format((invoiceObj.total as unknown as number as number) / 100)
+							: "—";
+
+						const date = (invoiceObj.created as unknown as number)
+							? new Date(
+									(invoiceObj.created as unknown as number) * 1000,
+								).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})
+							: "—";
+
+						const planName =
+							getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
+
+						const pmDetails = (invoiceObj as Record<string, unknown>)
+							?.payment_method_details;
+						const brand =
+							pmDetails && typeof pmDetails === "object" && "card" in pmDetails
+								? ((pmDetails as { card?: { brand?: string; last4?: string } }).card
+										?.brand ?? "Card")
+								: "Card";
+						const last4 =
+							pmDetails && typeof pmDetails === "object" && "card" in pmDetails
+								? ((pmDetails as { card?: { brand?: string; last4?: string } }).card
+										?.last4 ?? "****")
+								: "****";
+
+						const updatePaymentUrl = orgSlugVal
+							? `/organizations/${orgSlugVal}/settings/billing/payment-methods`
+							: "/settings/billing/payment-methods";
+						const manageBillingUrl = orgSlugVal
+							? `/organizations/${orgSlugVal}/settings/billing`
+							: "/settings/billing";
+
+						await sendEmail({
+							to: user.email,
+							locale:
+								(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
+								undefined,
+							templateId: "paymentFailed",
+							context: {
+								orgName: orgNameVal,
+								planName,
+								brand: brand.charAt(0).toUpperCase() + brand.slice(1),
+								last4,
+								amount,
+								currency: (
+									(invoiceObj.currency as unknown as string) ?? "usd"
+								).toUpperCase(),
+								date,
+								updatePaymentUrl,
+								manageBillingUrl,
+							},
+						}).catch((err: unknown) =>
+							logger.error("invoice.payment_failed: sendEmail failed", err),
+						);
+					}),
 				);
 
 				break;
@@ -906,5 +1120,43 @@ export const webhookHandler: WebhookHandler = async (req) => {
 		return new Response(`Webhook error: ${error instanceof Error ? error.message : ""}`, {
 			status: 400,
 		});
+	}
+};
+
+/**
+ * Retrieve all invoices for a subscription from Stripe.
+ */
+export const listInvoices: ListInvoices = async (subscriptionId: string) => {
+	const stripeClient = getStripeClient();
+
+	try {
+		const result = await retryStripeCall(() =>
+			stripeClient.invoices.list({
+				subscription: subscriptionId,
+				limit: 100,
+			}),
+		);
+
+		return (result.data ?? []).map((inv) => ({
+			id: inv.id,
+			number: inv.number ?? "",
+			amount: inv.total ?? 0,
+			currency: (inv.currency ?? "usd").toUpperCase(),
+			status: inv.status ?? "unknown",
+			paidAt: inv.status === "paid" && inv.status_transitions?.paid_at
+				? new Date(inv.status_transitions.paid_at * 1000).toISOString()
+				: null,
+			periodStart: inv.period_start
+				? new Date(inv.period_start * 1000).toISOString()
+				: new Date().toISOString(),
+			periodEnd: inv.period_end
+				? new Date(inv.period_end * 1000).toISOString()
+				: new Date().toISOString(),
+			pdfUrl: inv.invoice_pdf ?? null,
+			hostedUrl: inv.hosted_invoice_url ?? null,
+		}));
+	} catch (error) {
+		logger.error("listInvoices failed", { subscriptionId, error });
+		return [];
 	}
 };

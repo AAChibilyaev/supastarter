@@ -154,6 +154,21 @@ export type GetProrationPreview = (params: {
 	creditAmount: number;
 }>;
 
+export type InvoiceInfo = {
+	id: string;
+	number: string;
+	amount: number;
+	currency: string;
+	status: string;
+	paidAt: string | null;
+	periodStart: string;
+	periodEnd: string;
+	pdfUrl: string | null;
+	hostedUrl: string | null;
+};
+
+export type ListInvoices = (subscriptionId: string) => Promise<InvoiceInfo[]>;
+
 export type WebhookHandler = (req: Request) => Promise<Response>;
 
 export type PaymentProvider = {

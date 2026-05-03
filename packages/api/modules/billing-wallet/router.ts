@@ -1,4 +1,5 @@
 import { adminAdjust } from "./procedures/admin-adjust";
+import { chargeSubscriptionProcedure } from "./procedures/charge-subscription";
 import { checkBalance } from "./procedures/check-balance";
 import { createTopup } from "./procedures/create-topup";
 import { createTopupLink } from "./procedures/create-topup-link";
@@ -18,6 +19,7 @@ export const billingWalletRouter = {
 	adminAdjust,
 	setupAutorecharge,
 	checkBalance,
+	chargeSubscription: chargeSubscriptionProcedure,
 };
 
 export { chargeAiUsage } from "./services/charge-ai-usage";

@@ -17,12 +17,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { Textarea } from "@repo/ui/components/textarea";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -112,6 +114,23 @@ export function KnowledgeWorkbench({
 }: KnowledgeWorkbenchProps) {
 	const t = useTranslations();
 	const queryClient = useQueryClient();
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	// URL-synced tab state
+	const activeTab = searchParams.get("tab") || "spaces";
+
+	const setActiveTab = (tab: string) => {
+		const params = new URLSearchParams(searchParams.toString());
+		if (tab === "spaces") {
+			params.delete("tab");
+		} else {
+			params.set("tab", tab);
+		}
+		const qs = params.toString();
+		router.replace(qs ? `?${qs}` : window.location.pathname, { scroll: false });
+	};
+
 	const [spaceSlug, setSpaceSlug] = useState("");
 	const [spaceName, setSpaceName] = useState("");
 	const [selectedSpaceSlug, setSelectedSpaceSlug] = useState("");
@@ -121,6 +140,7 @@ export function KnowledgeWorkbench({
 	const [question, setQuestion] = useState("");
 	const [graphQuery, setGraphQuery] = useState("");
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [dragOver, setDragOver] = useState(false);
 	const [answerResult, setAnswerResult] = useState<{
 		answer: string;
 		citations: Array<{ sourceIndex: number; documentTitle: string; snippet: string }>;
@@ -132,6 +152,7 @@ export function KnowledgeWorkbench({
 		seedNodes: Array<{ canonicalName: string; nodeType: string }>;
 		edges: Array<{ relationType: string; fromNodeId: string; toNodeId: string }>;
 	} | null>(null);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const spacesQuery = useQuery(
 		orpc.knowledge.listSpaces.queryOptions({
@@ -381,34 +402,35 @@ export function KnowledgeWorkbench({
 		});
 	};
 
-	const handleIngest = async () => {
+	const handleIngest = async (overrideFile?: File) => {
+		const file = overrideFile || selectedFile;
 		if (!canManage) {
 			toast.error(t("search.knowledge.noPermissionIngest"));
 			return;
 		}
-		if (!selectedSpaceSlug || !selectedFile) {
+		if (!selectedSpaceSlug || !file) {
 			toast.error(t("search.knowledge.selectSpaceAndFile"));
 			return;
 		}
 
 		// Client-side file validation
-		if (selectedFile.size > MAX_FILE_SIZE) {
+		if (file.size > MAX_FILE_SIZE) {
 			toast.error(t("search.knowledge.fileSizeLimit"));
 			return;
 		}
-		if (!hasAllowedExtension(selectedFile.name)) {
+		if (!hasAllowedExtension(file.name)) {
 			toast.error(t("search.knowledge.fileTypeInvalid"));
 			return;
 		}
 
 		try {
-			const contentBase64 = await fileToBase64(selectedFile);
+			const contentBase64 = await fileToBase64(file);
 			await ingestMutation.mutateAsync({
 				ownerType,
 				ownerId,
 				spaceSlug: selectedSpaceSlug,
-				fileName: selectedFile.name,
-				mimeType: selectedFile.type || "application/octet-stream",
+				fileName: file.name,
+				mimeType: file.type || "application/octet-stream",
 				contentBase64,
 			});
 		} catch {
@@ -511,424 +533,499 @@ export function KnowledgeWorkbench({
 		});
 	};
 
+	const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setDragOver(false);
+		const file = event.dataTransfer.files?.[0];
+		if (file) {
+			setSelectedFile(file);
+		}
+	};
+
+	const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setDragOver(true);
+	};
+
+	const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+		setDragOver(false);
+	};
+
 	return (
 		<div className="space-y-6">
-			<div>
-				<h1 className="text-2xl font-bold">{title}</h1>
-				<p className="text-muted-foreground">{subtitle}</p>
+			<div className="gap-2 flex items-baseline justify-between">
+				<div>
+					<h1 className="text-2xl font-bold">{title}</h1>
+					<p className="text-muted-foreground">{subtitle}</p>
+				</div>
+				{selectedSpace ? (
+					<p className="text-xs text-muted-foreground shrink-0">
+						{t("search.knowledge.activeSpaceLabel", {
+							name: selectedSpace.name,
+							slug: selectedSpace.slug,
+						})}
+					</p>
+				) : null}
 			</div>
 
-			<div className="gap-6 lg:grid-cols-2 grid">
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.spaces")}</CardTitle>
-						<CardDescription>{t("search.knowledge.spacesDesc")}</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-select">
-								{t("search.knowledge.activeSpace")}
-							</Label>
-							<Select
-								value={selectedSpaceSlug}
-								onValueChange={(value) => setSelectedSpaceSlug(value)}
-							>
-								<SelectTrigger id="knowledge-space-select" className="w-full">
-									<SelectValue placeholder={t("search.knowledge.selectSpace")} />
-								</SelectTrigger>
-								<SelectContent>
-									{spacesQuery.data?.map((space) => (
-										<SelectItem key={space.id} value={space.slug}>
-											{space.name} ({space.slug})
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-slug">
-								{t("search.knowledge.newSpaceSlug")}
-							</Label>
-							<Input
-								id="knowledge-space-slug"
-								value={spaceSlug}
-								onChange={(event) => setSpaceSlug(event.target.value)}
-								placeholder={t("search.knowledge.slugPlaceholder")}
-							/>
-						</div>
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-name">
-								{t("search.knowledge.newSpaceName")}
-							</Label>
-							<Input
-								id="knowledge-space-name"
-								value={spaceName}
-								onChange={(event) => setSpaceName(event.target.value)}
-								placeholder={t("search.knowledge.namePlaceholder")}
-							/>
-						</div>
-						<Button
-							type="button"
-							onClick={handleCreateSpace}
-							disabled={createSpaceMutation.isPending || !canManage}
-						>
-							{t("search.knowledge.createSpace")}
-						</Button>
-					</CardContent>
-				</Card>
+			<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+				<TabsList>
+					<TabsTrigger value="spaces">{t("search.nav.knowledgeSpaces")}</TabsTrigger>
+					<TabsTrigger value="documents">{t("search.nav.knowledgeDocuments")}</TabsTrigger>
+					<TabsTrigger value="search">{t("search.nav.knowledgeSearch")}</TabsTrigger>
+				</TabsList>
 
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.sources")}</CardTitle>
-						<CardDescription>{t("search.knowledge.sourcesDesc")}</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-name">
-								{t("search.knowledge.sourceName")}
-							</Label>
-							<Input
-								id="knowledge-source-name"
-								value={sourceName}
-								onChange={(event) => setSourceName(event.target.value)}
-								placeholder={t("search.knowledge.sourceNamePlaceholder")}
-							/>
-						</div>
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-type">
-								{t("search.knowledge.sourceType")}
-							</Label>
-							<Select
-								value={sourceType}
-								onValueChange={(value) => setSourceType(value as SourceType)}
-							>
-								<SelectTrigger id="knowledge-source-type" className="w-full">
-									<SelectValue placeholder={t("search.knowledge.sourceType")} />
-								</SelectTrigger>
-								<SelectContent>
-									{SOURCE_TYPES.map((type) => (
-										<SelectItem key={type} value={type}>
-											{type}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-config">
-								{t("search.knowledge.sourceConfig")}
-							</Label>
-							<Textarea
-								id="knowledge-source-config"
-								rows={4}
-								value={sourceConfig}
-								onChange={(event) => setSourceConfig(event.target.value)}
-							/>
-						</div>
-						<Button
-							type="button"
-							onClick={handleCreateSource}
-							disabled={
-								createSourceMutation.isPending || !selectedSpaceSlug || !canManage
-							}
-						>
-							{t("search.knowledge.addSource")}
-						</Button>
-						<div className="space-y-2">
-							{sourcesQuery.data?.map((source) => (
-								<div
-									key={source.id}
-									className="gap-2 p-2 text-sm flex items-start rounded-md border"
-								>
-									<div className="min-w-0 flex-1">
-										<div className="font-medium truncate">{source.name}</div>
-										<div className="text-muted-foreground">
-											{source.sourceType}
-										</div>
-									</div>
-									{canManage && (
+				<TabsContent value="spaces" className="space-y-6">
+					<div className="gap-6 lg:grid-cols-2 grid">
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.spaces")}</CardTitle>
+								<CardDescription>{t("search.knowledge.spacesDesc")}</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-space-select">
+										{t("search.knowledge.activeSpace")}
+									</Label>
+									<Select
+										value={selectedSpaceSlug}
+										onValueChange={(value) => setSelectedSpaceSlug(value)}
+									>
+										<SelectTrigger id="knowledge-space-select" className="w-full">
+											<SelectValue placeholder={t("search.knowledge.selectSpace")} />
+										</SelectTrigger>
+										<SelectContent>
+											{spacesQuery.data?.map((space) => (
+												<SelectItem key={space.id} value={space.slug}>
+													{space.name} ({space.slug})
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</div>
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-space-slug">
+										{t("search.knowledge.newSpaceSlug")}
+									</Label>
+									<Input
+										id="knowledge-space-slug"
+										value={spaceSlug}
+										onChange={(event) => setSpaceSlug(event.target.value)}
+										placeholder={t("search.knowledge.slugPlaceholder")}
+									/>
+								</div>
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-space-name">
+										{t("search.knowledge.newSpaceName")}
+									</Label>
+									<Input
+										id="knowledge-space-name"
+										value={spaceName}
+										onChange={(event) => setSpaceName(event.target.value)}
+										placeholder={t("search.knowledge.namePlaceholder")}
+									/>
+								</div>
+								<div className="gap-2 flex flex-wrap items-center">
+									<Button
+										type="button"
+										onClick={handleCreateSpace}
+										disabled={createSpaceMutation.isPending || !canManage}
+									>
+										{t("search.knowledge.createSpace")}
+									</Button>
+									{selectedSpaceSlug && canManage && (
 										<Button
-											variant="ghost"
+											type="button"
+											variant="destructive"
 											size="sm"
-											onClick={() => handleDeleteSource(source.id)}
-											disabled={deleteSourceMutation.isPending}
-											className="shrink-0 text-destructive hover:text-destructive"
+											onClick={() => handleDeleteSpace(selectedSpaceSlug)}
+											disabled={deleteSpaceMutation.isPending}
 										>
 											<Trash2 className="size-3.5" />
 										</Button>
 									)}
 								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+							</CardContent>
+						</Card>
 
-			<div className="gap-6 lg:grid-cols-2 grid">
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.fileIngestion")}</CardTitle>
-						<CardDescription>{t("search.knowledge.fileIngestionDesc")}</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-file-input">
-								{t("search.knowledge.fileInput")}
-							</Label>
-							<Input
-								id="knowledge-file-input"
-								type="file"
-								accept=".md,.xml,.pdf,text/markdown,application/xml,application/pdf"
-								onChange={(event) => {
-									setSelectedFile(event.target.files?.[0] ?? null);
-								}}
-							/>
-						</div>
-						<Button
-							type="button"
-							onClick={handleIngest}
-							disabled={ingestMutation.isPending || !selectedSpaceSlug || !canManage}
-						>
-							{t("search.knowledge.ingestFile")}
-						</Button>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.jobsAndMetrics")}</CardTitle>
-						<CardDescription>
-							{t("search.knowledge.jobsAndMetricsDesc")}
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						{usageQuery.data ? (
-							<div className="text-sm gap-2 grid grid-cols-2">
-								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">
-										{t("search.knowledge.sourcesMetric")}
-									</div>
-									<div className="text-lg font-semibold">
-										{usageQuery.data.sourceCount}
-									</div>
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.sources")}</CardTitle>
+								<CardDescription>{t("search.knowledge.sourcesDesc")}</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-source-name">
+										{t("search.knowledge.sourceName")}
+									</Label>
+									<Input
+										id="knowledge-source-name"
+										value={sourceName}
+										onChange={(event) => setSourceName(event.target.value)}
+										placeholder={t("search.knowledge.sourceNamePlaceholder")}
+									/>
 								</div>
-								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">
-										{t("search.knowledge.documentsMetric")}
-									</div>
-									<div className="text-lg font-semibold">
-										{usageQuery.data.documentCount}
-									</div>
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-source-type">
+										{t("search.knowledge.sourceType")}
+									</Label>
+									<Select
+										value={sourceType}
+										onValueChange={(value) => setSourceType(value as SourceType)}
+									>
+										<SelectTrigger id="knowledge-source-type" className="w-full">
+											<SelectValue placeholder={t("search.knowledge.sourceType")} />
+										</SelectTrigger>
+										<SelectContent>
+											{SOURCE_TYPES.map((type) => (
+												<SelectItem key={type} value={type}>
+													{type}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 								</div>
-								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">
-										{t("search.knowledge.chunksMetric")}
-									</div>
-									<div className="text-lg font-semibold">
-										{usageQuery.data.chunkCount}
-									</div>
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-source-config">
+										{t("search.knowledge.sourceConfig")}
+									</Label>
+									<Textarea
+										id="knowledge-source-config"
+										rows={4}
+										value={sourceConfig}
+										onChange={(event) => setSourceConfig(event.target.value)}
+									/>
 								</div>
-								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">
-										{t("search.knowledge.graphEdgesMetric")}
-									</div>
-									<div className="text-lg font-semibold">
-										{usageQuery.data.graphEdgeCount}
-									</div>
-								</div>
-							</div>
-						) : null}
-						<div className="space-y-2">
-							{jobsQuery.data?.map((job) => (
-								<div key={job.id} className="rounded p-2 text-sm border">
-									<div className="font-medium">
-										{job.mode} - {job.status}
-									</div>
-									<div className="text-muted-foreground">
-										{job.processedItems}/{job.totalItems} processed
-									</div>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-
-			<div className="gap-6 lg:grid-cols-2 grid">
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.ragAsk")}</CardTitle>
-						<CardDescription>{t("search.knowledge.ragAskDesc")}</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-question">
-								{t("search.knowledge.question")}
-							</Label>
-							<Textarea
-								id="knowledge-question"
-								rows={3}
-								value={question}
-								onChange={(event) => setQuestion(event.target.value)}
-								placeholder={t("search.knowledge.questionPlaceholder")}
-							/>
-						</div>
-						<div className="gap-2 flex items-center">
-							<Button
-								type="button"
-								onClick={handleAsk}
-								disabled={askMutation.isPending || !selectedSpaceSlug}
-							>
-								{t("search.knowledge.askButton")}
-							</Button>
-							<Button
-								type="button"
-								variant="outline"
-								onClick={handleStreamAsk}
-								disabled={isStreaming || !selectedSpaceSlug}
-							>
-								{isStreaming
-									? t("search.knowledge.streaming")
-									: t("search.knowledge.askStreamButton")}
-							</Button>
-							{isStreaming && (
 								<Button
 									type="button"
-									variant="ghost"
-									size="sm"
-									onClick={() => abortControllerRef.current?.abort()}
+									onClick={handleCreateSource}
+									disabled={
+										createSourceMutation.isPending || !selectedSpaceSlug || !canManage
+									}
 								>
-									{t("search.knowledge.stop")}
+									{t("search.knowledge.addSource")}
 								</Button>
-							)}
-						</div>
-						{answerResult || streamingAnswer ? (
-							<div className="space-y-2">
-								<Card>
-									<CardContent className="p-3 text-sm whitespace-pre-wrap">
-										{streamingAnswer || answerResult?.answer}
-										{isStreaming && (
-											<span className="ml-0.5 w-2 h-4 animate-pulse inline-block bg-foreground" />
-										)}
-									</CardContent>
-								</Card>
-								{answerResult &&
-									answerResult.citations.map((citation) => (
+								<div className="space-y-2">
+									{sourcesQuery.data?.map((source) => (
 										<div
-											key={`${citation.sourceIndex}-${citation.documentTitle}`}
-											className="rounded p-2 text-xs border"
+											key={source.id}
+											className="gap-2 p-2 text-sm flex items-start rounded-md border"
 										>
-											<div className="gap-1.5 font-medium flex items-baseline">
-												<span className="shrink-0 text-muted-foreground">
-													[{citation.sourceIndex}]
-												</span>
-												<span>{t("search.knowledge.citedFrom")}:</span>
-												<span className="font-bold">
-													{citation.documentTitle}
-												</span>
+											<div className="min-w-0 flex-1">
+												<div className="font-medium truncate">{source.name}</div>
+												<div className="text-muted-foreground">
+													{source.sourceType}
+												</div>
 											</div>
-											<div className="mt-1 text-muted-foreground">
-												{citation.snippet}
+											{canManage && (
+												<Button
+													variant="ghost"
+													size="sm"
+													onClick={() => handleDeleteSource(source.id)}
+													disabled={deleteSourceMutation.isPending}
+													className="shrink-0 text-destructive hover:text-destructive"
+												>
+													<Trash2 className="size-3.5" />
+												</Button>
+											)}
+										</div>
+									))}
+								</div>
+							</CardContent>
+						</Card>
+					</div>
+
+					<div className="gap-6 lg:grid-cols-2 grid">
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.fileIngestion")}</CardTitle>
+								<CardDescription>{t("search.knowledge.fileIngestionDesc")}</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								{/* Drag-and-drop zone */}
+								<div
+									onDragOver={handleDragOver}
+									onDragLeave={handleDragLeave}
+									onDrop={handleDrop}
+									onClick={() => fileInputRef.current?.click()}
+									className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+										dragOver
+											? "border-primary bg-primary/5"
+											: "border-muted-foreground/25 hover:border-muted-foreground/40"
+									}`}
+								>
+									<Upload className="size-6 mb-2 text-muted-foreground" />
+									<p className="text-sm font-medium">
+										{selectedFile
+											? selectedFile.name
+											: t("search.knowledge.dragDropHint") || "Drop a file here or click to browse"}
+									</p>
+									<p className="text-xs text-muted-foreground mt-1">
+										.md, .xml, .pdf &middot; up to 50 MB
+									</p>
+								</div>
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-file-input">
+										{t("search.knowledge.fileInput")}
+									</Label>
+									<Input
+										ref={fileInputRef}
+										id="knowledge-file-input"
+										type="file"
+										accept=".md,.xml,.pdf,text/markdown,application/xml,application/pdf"
+										onChange={(event) => {
+											setSelectedFile(event.target.files?.[0] ?? null);
+										}}
+									/>
+								</div>
+								<Button
+									type="button"
+									onClick={() => handleIngest()}
+									disabled={ingestMutation.isPending || !selectedSpaceSlug || !canManage || !selectedFile}
+								>
+									{t("search.knowledge.ingestFile")}
+								</Button>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.jobsAndMetrics")}</CardTitle>
+								<CardDescription>
+									{t("search.knowledge.jobsAndMetricsDesc")}
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								{usageQuery.data ? (
+									<div className="text-sm gap-2 grid grid-cols-2">
+										<div className="rounded p-2 border">
+											<div className="text-muted-foreground">
+												{t("search.knowledge.sourcesMetric")}
+											</div>
+											<div className="text-lg font-semibold">
+												{usageQuery.data.sourceCount}
+											</div>
+										</div>
+										<div className="rounded p-2 border">
+											<div className="text-muted-foreground">
+												{t("search.knowledge.documentsMetric")}
+											</div>
+											<div className="text-lg font-semibold">
+												{usageQuery.data.documentCount}
+											</div>
+										</div>
+										<div className="rounded p-2 border">
+											<div className="text-muted-foreground">
+												{t("search.knowledge.chunksMetric")}
+											</div>
+											<div className="text-lg font-semibold">
+												{usageQuery.data.chunkCount}
+											</div>
+										</div>
+										<div className="rounded p-2 border">
+											<div className="text-muted-foreground">
+												{t("search.knowledge.graphEdgesMetric")}
+											</div>
+											<div className="text-lg font-semibold">
+												{usageQuery.data.graphEdgeCount}
+											</div>
+										</div>
+									</div>
+								) : null}
+								<div className="space-y-2">
+									{jobsQuery.data?.map((job) => (
+										<div key={job.id} className="rounded p-2 text-sm border">
+											<div className="font-medium">
+												{job.mode} - {job.status}
+											</div>
+											<div className="text-muted-foreground">
+												{job.processedItems}/{job.totalItems} processed
 											</div>
 										</div>
 									))}
-							</div>
-						) : null}
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.knowledge.graphExplain")}</CardTitle>
-						<CardDescription>{t("search.knowledge.graphExplainDesc")}</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-graph-query">
-								{t("search.knowledge.graphQueryLabel")}
-							</Label>
-							<Input
-								id="knowledge-graph-query"
-								value={graphQuery}
-								onChange={(event) => setGraphQuery(event.target.value)}
-								placeholder={t("search.knowledge.graphQueryPlaceholder")}
-							/>
-						</div>
-						<Button
-							type="button"
-							onClick={handleGraphExplain}
-							disabled={graphExplainMutation.isPending || !selectedSpaceSlug}
-						>
-							{t("search.knowledge.explainGraph")}
-						</Button>
-						{graphResult ? (
-							<div className="space-y-2">
-								<div className="rounded p-2 text-xs border">
-									<div className="font-medium mb-1">
-										{t("search.knowledge.seedNodes")}
-									</div>
-									{graphResult.seedNodes.length === 0
-										? t("search.knowledge.noSeedNodes")
-										: graphResult.seedNodes
-												.map(
-													(node) =>
-														`${node.canonicalName} (${node.nodeType})`,
-												)
-												.join(", ")}
 								</div>
-								<div className="rounded p-2 text-xs border">
-									<div className="font-medium mb-1">
-										{t("search.knowledge.edges")}
-									</div>
-									{graphResult.edges.length === 0
-										? t("search.knowledge.noEdges")
-										: graphResult.edges
-												.slice(0, 12)
-												.map(
-													(edge) =>
-														`${edge.relationType}: ${edge.fromNodeId} -> ${edge.toNodeId}`,
-												)
-												.join("\n")}
+							</CardContent>
+						</Card>
+					</div>
+
+					{spacesQuery.isLoading ? (
+						<p className="text-sm text-muted-foreground">
+							{t("search.knowledge.loadingSpaces")}
+						</p>
+					) : null}
+				</TabsContent>
+
+				<TabsContent value="documents" className="space-y-6">
+					{selectedSpaceSlug ? (
+						<FileTable
+							ownerType={ownerType}
+							ownerId={ownerId}
+							spaceSlug={selectedSpaceSlug}
+							canManage={canManage}
+						/>
+					) : (
+						<Card>
+							<CardContent className="py-8 text-center text-sm text-muted-foreground">
+								{t("search.knowledge.selectSpace")}
+							</CardContent>
+						</Card>
+					)}
+				</TabsContent>
+
+				<TabsContent value="search" className="space-y-6">
+					<div className="gap-6 lg:grid-cols-2 grid">
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.ragAsk")}</CardTitle>
+								<CardDescription>{t("search.knowledge.ragAskDesc")}</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-question">
+										{t("search.knowledge.question")}
+									</Label>
+									<Textarea
+										id="knowledge-question"
+										rows={3}
+										value={question}
+										onChange={(event) => setQuestion(event.target.value)}
+										placeholder={t("search.knowledge.questionPlaceholder")}
+									/>
 								</div>
-							</div>
-						) : null}
-					</CardContent>
-				</Card>
-			</div>
+								<div className="gap-2 flex items-center">
+									<Button
+										type="button"
+										onClick={handleAsk}
+										disabled={askMutation.isPending || !selectedSpaceSlug}
+									>
+										{t("search.knowledge.askButton")}
+									</Button>
+									<Button
+										type="button"
+										variant="outline"
+										onClick={handleStreamAsk}
+										disabled={isStreaming || !selectedSpaceSlug}
+									>
+										{isStreaming
+											? t("search.knowledge.streaming")
+											: t("search.knowledge.askStreamButton")}
+									</Button>
+									{isStreaming && (
+										<Button
+											type="button"
+											variant="destructive"
+											size="sm"
+											onClick={() => abortControllerRef.current?.abort()}
+										>
+											{t("search.knowledge.stop")}
+										</Button>
+									)}
+								</div>
+								{answerResult || streamingAnswer ? (
+									<div className="space-y-2">
+										<Card>
+											<CardContent className="p-3 text-sm whitespace-pre-wrap">
+												{streamingAnswer || answerResult?.answer}
+												{isStreaming && (
+													<span className="ml-0.5 w-2 h-4 animate-pulse inline-block bg-foreground" />
+												)}
+											</CardContent>
+										</Card>
+										{answerResult &&
+											answerResult.citations.map((citation) => (
+												<div
+													key={`${citation.sourceIndex}-${citation.documentTitle}`}
+													className="rounded p-2 text-xs border"
+												>
+													<div className="gap-1.5 font-medium flex items-baseline">
+														<span className="shrink-0 text-muted-foreground">
+															[{citation.sourceIndex}]
+														</span>
+														<span>{t("search.knowledge.citedFrom")}:</span>
+														<span className="font-bold">
+															{citation.documentTitle}
+														</span>
+													</div>
+													<div className="mt-1 text-muted-foreground">
+														{citation.snippet}
+													</div>
+												</div>
+											))}
+									</div>
+								) : null}
+							</CardContent>
+						</Card>
 
-			{/* File management table — shown when a space is selected */}
-			{selectedSpaceSlug && (
-				<FileTable
-					ownerType={ownerType}
-					ownerId={ownerId}
-					spaceSlug={selectedSpaceSlug}
-					canManage={canManage}
-				/>
-			)}
+						<Card>
+							<CardHeader>
+								<CardTitle>{t("search.knowledge.graphExplain")}</CardTitle>
+								<CardDescription>{t("search.knowledge.graphExplainDesc")}</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-3">
+								<div className="space-y-1.5">
+									<Label htmlFor="knowledge-graph-query">
+										{t("search.knowledge.graphQueryLabel")}
+									</Label>
+									<Input
+										id="knowledge-graph-query"
+										value={graphQuery}
+										onChange={(event) => setGraphQuery(event.target.value)}
+										placeholder={t("search.knowledge.graphQueryPlaceholder")}
+									/>
+								</div>
+								<Button
+									type="button"
+									onClick={handleGraphExplain}
+									disabled={graphExplainMutation.isPending || !selectedSpaceSlug}
+								>
+									{t("search.knowledge.explainGraph")}
+								</Button>
+								{graphResult ? (
+									<div className="space-y-2">
+										<div className="rounded p-2 text-xs border">
+											<div className="font-medium mb-1">
+												{t("search.knowledge.seedNodes")}
+											</div>
+											{graphResult.seedNodes.length === 0
+												? t("search.knowledge.noSeedNodes")
+												: graphResult.seedNodes
+														.map(
+															(node) =>
+																`${node.canonicalName} (${node.nodeType})`,
+														)
+														.join(", ")}
+										</div>
+										<div className="rounded p-2 text-xs border">
+											<div className="font-medium mb-1">
+												{t("search.knowledge.edges")}
+											</div>
+											{graphResult.edges.length === 0
+												? t("search.knowledge.noEdges")
+												: graphResult.edges
+														.slice(0, 12)
+														.map(
+															(edge) =>
+																`${edge.relationType}: ${edge.fromNodeId} -> ${edge.toNodeId}`,
+														)
+														.join("\n")}
+										</div>
+									</div>
+								) : null}
+							</CardContent>
+						</Card>
+					</div>
 
-			{/* RAG configuration panel — shown when a space is selected */}
-			{selectedSpaceSlug && (
-				<RagConfigPanel
-					ownerType={ownerType}
-					ownerId={ownerId}
-					spaceSlug={selectedSpaceSlug}
-					canManage={canManage}
-				/>
-			)}
-
-			{spacesQuery.isLoading ? (
-				<p className="text-sm text-muted-foreground">
-					{t("search.knowledge.loadingSpaces")}
-				</p>
-			) : null}
-			{selectedSpace ? (
-				<p className="text-xs text-muted-foreground">
-					{t("search.knowledge.activeSpaceLabel", {
-						name: selectedSpace.name,
-						slug: selectedSpace.slug,
-					})}
-				</p>
-			) : null}
+					{selectedSpaceSlug ? (
+						<RagConfigPanel
+							ownerType={ownerType}
+							ownerId={ownerId}
+							spaceSlug={selectedSpaceSlug}
+							canManage={canManage}
+						/>
+					) : null}
+				</TabsContent>
+			</Tabs>
 		</div>
 	);
 }

@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "dotenv -c -- turbo build",
 		"dev": "dotenv -c -- turbo dev --concurrency 15",
-		"generate:openapi": "cd packages/api && node ../../node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/cli.mjs scripts/generate-openapi.ts",
+		"generate:openapi": "pnpm exec tsx packages/api/scripts/generate-openapi.ts",
 		"type-check": "dotenv -c -- turbo type-check",
 		"start": "dotenv -c -- turbo start",
 		"lint": "oxlint .",
@@ -32,6 +32,7 @@
 		"dotenv-cli": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
+		"tsx": "catalog:",
 		"turbo": "^2.9.4",
 		"typescript": "catalog:"
 	},

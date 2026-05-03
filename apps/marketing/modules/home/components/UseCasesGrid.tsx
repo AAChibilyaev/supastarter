@@ -40,30 +40,30 @@ export function UseCasesGrid() {
 				<div className="mt-12 md:mt-16 gap-4 md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
 						<Card key={key} className="text-left">
-							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">
-								<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
-									<Icon className="size-5 text-muted-foreground" />
-								</div>
-								<div>
+							<CardContent className="p-6 md:p-8 gap-3 flex flex-col">
+								<div className="flex items-center gap-3">
+									<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
+										<Icon className="size-5 text-muted-foreground" />
+									</div>
 									<h3 className="text-lg font-light">
 										{t(`homeUseCases.items.${key}.title`)}
 									</h3>
-									<p className="mt-2 text-sm font-light leading-relaxed text-pretty text-muted-foreground">
-										{t(`homeUseCases.items.${key}.description`)}
-									</p>
-									<div className="mt-3 gap-1.5 flex flex-wrap">
-										{t(`homeUseCases.items.${key}.searchExamples`)
-											.split(", ")
-											.slice(0, 4)
-											.map((example: string) => (
-												<span
-													key={example}
-													className="px-2 py-1 text-xs rounded-md border border-border bg-muted/50 text-muted-foreground"
-												>
-													{example}
-												</span>
-											))}
-									</div>
+								</div>
+								<p className="text-sm font-light leading-relaxed text-pretty text-muted-foreground">
+									{t(`homeUseCases.items.${key}.description`)}
+								</p>
+								<div className="mt-3 gap-1.5 flex flex-wrap">
+									{t(`homeUseCases.items.${key}.searchExamples`)
+										.split(", ")
+										.slice(0, 4)
+										.map((example: string) => (
+											<span
+												key={example}
+												className="px-2 py-1 text-xs rounded-md border border-border bg-muted/50 text-muted-foreground"
+											>
+												{example}
+											</span>
+										))}
 								</div>
 							</CardContent>
 						</Card>

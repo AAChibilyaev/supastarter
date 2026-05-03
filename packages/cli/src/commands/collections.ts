@@ -8,10 +8,7 @@ import { Command } from "commander";
 
 import { ApiClient } from "../lib/client.js";
 import { loadConfig } from "../lib/config.js";
-import {
-	formatError,
-	formatTable,
-} from "../lib/formatter.js";
+import { formatError, formatTable } from "../lib/formatter.js";
 
 interface IndexInfo {
 	id: string;
@@ -44,9 +41,7 @@ collectionsCommand
 				process.exit(1);
 			}
 
-			const indexes = await client.get<IndexInfo[]>(
-				`/v1/projects/${project.id}/indexes`,
-			);
+			const indexes = await client.get<IndexInfo[]>(`/v1/projects/${project.id}/indexes`);
 
 			if (json) {
 				console.log(JSON.stringify(indexes, null, 2));
@@ -63,9 +58,7 @@ collectionsCommand
 				name: idx.displayName ?? "—",
 				documents: String(idx.documentsCount ?? "—"),
 				status: idx.status ?? "—",
-				created: idx.createdAt
-					? new Date(idx.createdAt).toLocaleDateString()
-					: "—",
+				created: idx.createdAt ? new Date(idx.createdAt).toLocaleDateString() : "—",
 			}));
 
 			console.log(
@@ -143,14 +136,14 @@ collectionsCommand
 		}
 	});
 
-async function promptForFields(): Promise<
-	Array<{ name: string; type: string; facet?: boolean }>
-> {
+async function promptForFields(): Promise<Array<{ name: string; type: string; facet?: boolean }>> {
 	const rl = createInterface({ input: process.stdin, output: process.stdout });
 	const fields: Array<{ name: string; type: string; facet?: boolean }> = [];
 
 	console.log("\nDefine schema fields (one by one). Leave name empty to finish.");
-	console.log("Available types: string, int32, int64, float, bool, string[], auto, geocoordinates, object, object[]");
+	console.log(
+		"Available types: string, int32, int64, float, bool, string[], auto, geocoordinates, object, object[]",
+	);
 
 	// eslint-disable-next-line no-constant-condition
 	while (true) {
@@ -195,12 +188,8 @@ collectionsCommand
 			}
 
 			// Find the index
-			const indexes = await client.get<IndexInfo[]>(
-				`/v1/projects/${project.id}/indexes`,
-			);
-			const found = indexes.find(
-				(idx) => idx.slug === slug || idx.displayName === slug,
-			);
+			const indexes = await client.get<IndexInfo[]>(`/v1/projects/${project.id}/indexes`);
+			const found = indexes.find((idx) => idx.slug === slug || idx.displayName === slug);
 			if (!found) {
 				console.error(
 					`Error: Collection "${slug}" not found. Use 'aacsearch collections list' to see available collections.`,
@@ -225,9 +214,7 @@ collectionsCommand
 				}
 			}
 
-			await client.delete<Record<string, unknown>>(
-				`/v1/indexes/${found.id}`,
-			);
+			await client.delete<Record<string, unknown>>(`/v1/indexes/${found.id}`);
 
 			console.log(`✓ Collection "${found.displayName}" (${found.slug}) deleted.`);
 		} catch (error) {

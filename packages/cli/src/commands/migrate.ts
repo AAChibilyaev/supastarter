@@ -57,9 +57,7 @@ export const migrateCommand = new Command("migrate")
 				const projects = await client.get<Array<{ id: string }>>("/v1/projects");
 				const project = projects?.[0];
 				if (!project?.id) {
-					console.error(
-						"Error: Could not find project. Is your API key valid?",
-					);
+					console.error("Error: Could not find project. Is your API key valid?");
 					process.exit(1);
 				}
 
@@ -68,7 +66,11 @@ export const migrateCommand = new Command("migrate")
 				const data = JSON.parse(raw) as Record<string, unknown>;
 
 				// Convert provider format to AACsearch format
-				let result: { collectionSlug: string; documents: Array<Record<string, unknown>>; schemaFields?: Array<{ name: string; type: string }> };
+				let result: {
+					collectionSlug: string;
+					documents: Array<Record<string, unknown>>;
+					schemaFields?: Array<{ name: string; type: string }>;
+				};
 
 				switch (provider) {
 					case "algolia":
@@ -131,9 +133,9 @@ export const migrateCommand = new Command("migrate")
 				}
 
 				// Create the collection if needed
-				const indexes = await client.get<
-					Array<{ id: string; slug: string }>
-				>(`/v1/projects/${project.id}/indexes`);
+				const indexes = await client.get<Array<{ id: string; slug: string }>>(
+					`/v1/projects/${project.id}/indexes`,
+				);
 				const existing = indexes.find((idx) => idx.slug === targetCollection);
 
 				let indexId: string;
@@ -288,9 +290,7 @@ function convertSolr(data: Record<string, unknown>): ConvertedData {
 	const docs = response?.docs ?? [];
 
 	if (docs.length === 0) {
-		throw new Error(
-			"No Solr documents found. Expected format: { response: { docs: [...] } }",
-		);
+		throw new Error("No Solr documents found. Expected format: { response: { docs: [...] } }");
 	}
 
 	const slug = (data.core as string) ?? (data.collection as string) ?? "solr-migration";

@@ -218,6 +218,29 @@ export function formatRotatedKey(
 	return lines.join("\n");
 }
 
+/**
+ * Format data as YAML string.
+ * Uses js-yaml for proper YAML serialization with block scalars.
+ */
+export function formatYaml(data: unknown): string {
+	const yaml = require("js-yaml") as {
+		dump: (
+			input: unknown,
+			opts?: { indent: number; lineWidth: number; noRefs: boolean; sortKeys: boolean },
+		) => string;
+	};
+	try {
+		return yaml.dump(data, {
+			indent: 2,
+			lineWidth: 120,
+			noRefs: true,
+			sortKeys: false,
+		});
+	} catch {
+		return JSON.stringify(data, null, 2);
+	}
+}
+
 export function formatError(error: unknown): string {
 	if (error && typeof error === "object" && "status" in error) {
 		const apiErr = error as { status: number; message: string; body?: string };

@@ -11,23 +11,15 @@ import { ApiClient } from "../lib/client.js";
 import { loadConfig } from "../lib/config.js";
 import { formatError, formatTable } from "../lib/formatter.js";
 
-export const documentsCommand = new Command("documents")
-	.description("Import and export documents");
+export const documentsCommand = new Command("documents").description("Import and export documents");
 
 // ── documents import ───────────────────────────────────────────────────────
 documentsCommand
 	.command("import [file]")
 	.description("Import documents from a JSON/CSV file or stdin (pipe)")
 	.option("-c, --collection <slug>", "Collection slug to import into (required)")
-	.option(
-		"-f, --format <format>",
-		"Input format (auto-detected from extension, or json/csv)",
-	)
-	.option(
-		"--batch-size <n>",
-		"Documents per batch (default: 100)",
-		"100",
-	)
+	.option("-f, --format <format>", "Input format (auto-detected from extension, or json/csv)")
+	.option("--batch-size <n>", "Documents per batch (default: 100)", "100")
 	.option("--json", "Output as JSON")
 	.action(
 		async (
@@ -58,9 +50,7 @@ documentsCommand
 				const projects = await client.get<Array<{ id: string }>>("/v1/projects");
 				const project = projects?.[0];
 				if (!project?.id) {
-					console.error(
-						"Error: Could not find project. Is your API key valid?",
-					);
+					console.error("Error: Could not find project. Is your API key valid?");
 					process.exit(1);
 				}
 
@@ -69,8 +59,7 @@ documentsCommand
 				>(`/v1/projects/${project.id}/indexes`);
 				const found = indexes.find(
 					(idx) =>
-						idx.slug === options.collection ||
-						idx.displayName === options.collection,
+						idx.slug === options.collection || idx.displayName === options.collection,
 				);
 				if (!found) {
 					console.error(
@@ -90,9 +79,7 @@ documentsCommand
 					}
 					rawData = readFileSync(file, "utf-8");
 					detectedFormat =
-						options.format ?? file.toLowerCase().endsWith(".csv")
-							? "csv"
-							: "json";
+						(options.format ?? file.toLowerCase().endsWith(".csv")) ? "csv" : "json";
 				} else {
 					// Pipe mode: read from stdin
 					const stdin = process.stdin;
@@ -156,9 +143,7 @@ documentsCommand
 					console.log(`  Imported: ${imported}`);
 					console.log(`  Errors:   ${errors}`);
 				} else {
-					console.log(
-						JSON.stringify({ imported, errors, total: totalDocs }, null, 2),
-					);
+					console.log(JSON.stringify({ imported, errors, total: totalDocs }, null, 2));
 				}
 			} catch (error) {
 				console.error(formatError(error));
@@ -172,10 +157,7 @@ documentsCommand
 	.command("export")
 	.description("Export documents from a collection")
 	.option("-c, --collection <slug>", "Collection slug to export from (required)")
-	.option(
-		"-o, --output <file>",
-		"Output file path (default: stdout)",
-	)
+	.option("-o, --output <file>", "Output file path (default: stdout)")
 	.option("-f, --format <format>", "Output format: json or csv (default: json)")
 	.option("--filter <expression>", "Filter expression (e.g. 'price:>10')")
 	.option("--limit <n>", "Maximum documents to export (default: all)", "10000")
@@ -204,9 +186,7 @@ documentsCommand
 				const projects = await client.get<Array<{ id: string }>>("/v1/projects");
 				const project = projects?.[0];
 				if (!project?.id) {
-					console.error(
-						"Error: Could not find project. Is your API key valid?",
-					);
+					console.error("Error: Could not find project. Is your API key valid?");
 					process.exit(1);
 				}
 
@@ -215,8 +195,7 @@ documentsCommand
 				>(`/v1/projects/${project.id}/indexes`);
 				const found = indexes.find(
 					(idx) =>
-						idx.slug === options.collection ||
-						idx.displayName === options.collection,
+						idx.slug === options.collection || idx.displayName === options.collection,
 				);
 				if (!found) {
 					console.error(
@@ -256,9 +235,7 @@ documentsCommand
 					page++;
 				} while (allDocs.length < Math.min(totalFound, limit));
 
-				console.error(
-					`Exported ${allDocs.length} documents from "${found.displayName}".`,
-				);
+				console.error(`Exported ${allDocs.length} documents from "${found.displayName}".`);
 
 				// Format output
 				let output: string;
@@ -289,101 +266,87 @@ documentsCommand
 	.option("-c, --collection <slug>", "Collection slug (required)")
 	.option("--limit <n>", "Max documents to show (default: 20)", "20")
 	.option("--json", "Output as JSON")
-	.action(
-		async (options: {
-			collection?: string;
-			limit?: string;
-			json?: boolean;
-		}) => {
-			const config = loadConfig();
-			const client = new ApiClient(config);
-			const limit = Math.min(
-				Math.max(parseInt(options.limit ?? "20", 10) || 20, 1),
-				100,
+	.action(async (options: { collection?: string; limit?: string; json?: boolean }) => {
+		const config = loadConfig();
+		const client = new ApiClient(config);
+		const limit = Math.min(Math.max(parseInt(options.limit ?? "20", 10) || 20, 1), 100);
+
+		if (!options.collection) {
+			console.error(
+				"Error: --collection is required. Use 'aacsearch collections list' to see available collections.",
 			);
+			process.exit(1);
+		}
 
-			if (!options.collection) {
-				console.error(
-					"Error: --collection is required. Use 'aacsearch collections list' to see available collections.",
-				);
+		try {
+			// Resolve
+			const projects = await client.get<Array<{ id: string }>>("/v1/projects");
+			const project = projects?.[0];
+			if (!project?.id) {
+				console.error("Error: Could not find project. Is your API key valid?");
 				process.exit(1);
 			}
 
-			try {
-				// Resolve
-				const projects = await client.get<Array<{ id: string }>>("/v1/projects");
-				const project = projects?.[0];
-				if (!project?.id) {
-					console.error(
-						"Error: Could not find project. Is your API key valid?",
-					);
-					process.exit(1);
-				}
-
-				const indexes = await client.get<
-					Array<{ id: string; slug: string; displayName: string }>
-				>(`/v1/projects/${project.id}/indexes`);
-				const found = indexes.find(
-					(idx) =>
-						idx.slug === options.collection ||
-						idx.displayName === options.collection,
-				);
-				if (!found) {
-					console.error(
-						`Error: Collection "${options.collection}" not found.`,
-					);
-					process.exit(1);
-				}
-
-				const result = await client.post<{
-					hits?: Array<Record<string, unknown>>;
-					found?: number;
-				}>(`/v1/indexes/${found.id}/search`, {
-					q: "*",
-					perPage: limit,
-					page: 1,
-				});
-
-				const hits = result.hits ?? [];
-				const foundCount = result.found ?? 0;
-
-				if (options.json) {
-					console.log(JSON.stringify({ found: foundCount, documents: hits }, null, 2));
-					return;
-				}
-
-				console.log(`Found ${foundCount} documents in "${found.displayName}":`);
-				console.log("");
-
-				const keys = hits.length > 0 ? Object.keys(hits[0]).slice(0, 4) : [];
-				const rows = hits.map((hit) => {
-					const row: Record<string, string> = {};
-					for (const key of keys) {
-						const val = (hit[key] as string) ?? "";
-						row[key] = typeof val === "string" ? val.slice(0, 50) : String(val).slice(0, 50);
-					}
-					return row;
-				});
-
-				if (rows.length > 0) {
-					console.log(
-						formatTable(
-							rows,
-							keys.map((k) => ({ header: k })),
-							{ maxWidth: 40 },
-						),
-					);
-				}
-
-				if (foundCount > limit) {
-					console.log(`\n... and ${foundCount - limit} more. Use --limit to show more.`);
-				}
-			} catch (error) {
-				console.error(formatError(error));
+			const indexes = await client.get<
+				Array<{ id: string; slug: string; displayName: string }>
+			>(`/v1/projects/${project.id}/indexes`);
+			const found = indexes.find(
+				(idx) => idx.slug === options.collection || idx.displayName === options.collection,
+			);
+			if (!found) {
+				console.error(`Error: Collection "${options.collection}" not found.`);
 				process.exit(1);
 			}
-		},
-	);
+
+			const result = await client.post<{
+				hits?: Array<Record<string, unknown>>;
+				found?: number;
+			}>(`/v1/indexes/${found.id}/search`, {
+				q: "*",
+				perPage: limit,
+				page: 1,
+			});
+
+			const hits = result.hits ?? [];
+			const foundCount = result.found ?? 0;
+
+			if (options.json) {
+				console.log(JSON.stringify({ found: foundCount, documents: hits }, null, 2));
+				return;
+			}
+
+			console.log(`Found ${foundCount} documents in "${found.displayName}":`);
+			console.log("");
+
+			const keys = hits.length > 0 ? Object.keys(hits[0]).slice(0, 4) : [];
+			const rows = hits.map((hit) => {
+				const row: Record<string, string> = {};
+				for (const key of keys) {
+					const val = (hit[key] as string) ?? "";
+					row[key] =
+						typeof val === "string" ? val.slice(0, 50) : String(val).slice(0, 50);
+				}
+				return row;
+			});
+
+			if (rows.length > 0) {
+				console.log(
+					formatTable(
+						rows,
+						keys.map((k) => ({ header: k })),
+						{ maxWidth: 40 },
+					),
+				);
+			}
+
+			if (foundCount > limit) {
+				console.log(`\n... and ${foundCount - limit} more. Use --limit to show more.`);
+			}
+		} catch (error) {
+			console.error(formatError(error));
+			process.exit(1);
+		}
+	});
 
 // ── Helper: Parse JSON array or NDJSON ─────────────────────────────────────
 function parseJson(raw: string): Array<Record<string, unknown>> {

@@ -28,6 +28,8 @@ program
 	.name("aacsearch")
 	.description("AACsearch CLI — manage your search indices from the terminal")
 	.version(pkg.version)
+	.option("--json", "Output as JSON")
+	.option("--yaml", "Output as YAML")
 	.hook("preAction", async (_thisCommand, actionCommand) => {
 		// Skip auth check for login, init, and keys create (keys create needs interactive prompts)
 		if (actionCommand.name() === "login" || actionCommand.name() === "init") {

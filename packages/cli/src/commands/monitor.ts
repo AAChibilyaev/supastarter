@@ -24,73 +24,59 @@ interface Metrics {
 
 export const monitorCommand = new Command("monitor")
 	.description("Live search metrics dashboard")
-	.option(
-		"-i, --interval <seconds>",
-		"Refresh interval in seconds (default: 5)",
-		"5",
-	)
+	.option("-i, --interval <seconds>", "Refresh interval in seconds (default: 5)", "5")
 	.option("-c, --collection <slug>", "Filter metrics to a specific collection")
-	.action(
-		async (options: { interval?: string; collection?: string }) => {
-			const config = loadConfig();
-			const client = new ApiClient(config);
-			const interval = Math.max(
-				parseInt(options.interval ?? "5", 10) || 5,
-				2,
-			);
+	.action(async (options: { interval?: string; collection?: string }) => {
+		const config = loadConfig();
+		const client = new ApiClient(config);
+		const interval = Math.max(parseInt(options.interval ?? "5", 10) || 5, 2);
 
-			try {
-				// Quick auth check
-				const projects = await client.get<Array<{ id: string }>>("/v1/projects");
-				const project = projects?.[0];
-				if (!project?.id) {
-					console.error(
-						"Error: Could not find project. Is your API key valid?",
-					);
-					process.exit(1);
-				}
-
-				// Resolve collection if specified
-				let indexId: string | undefined;
-				if (options.collection) {
-					const indexes = await client.get<
-						Array<{ id: string; slug: string; displayName: string }>
-					>(`/v1/projects/${project.id}/indexes`);
-					const found = indexes.find(
-						(idx) =>
-							idx.slug === options.collection ||
-							idx.displayName === options.collection,
-					);
-					if (!found) {
-						console.error(
-							`Error: Collection "${options.collection}" not found.`,
-						);
-						process.exit(1);
-					}
-					indexId = found.id;
-				}
-
-				console.log("AACsearch Monitor — Ctrl+C to exit");
-				console.log("");
-
-				// eslint-disable-next-line no-constant-condition
-				while (true) {
-					try {
-						await renderDashboard(client, project.id, indexId, interval);
-					} catch (error) {
-						// Don't crash on a single refresh failure
-						process.stdout.write(`\n⚠ Refresh error: ${formatError(error)}\n`);
-					}
-
-					// Wait for interval
-					await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-				}
-			} catch (error) {
-				console.error(formatError(error));
+		try {
+			// Quick auth check
+			const projects = await client.get<Array<{ id: string }>>("/v1/projects");
+			const project = projects?.[0];
+			if (!project?.id) {
+				console.error("Error: Could not find project. Is your API key valid?");
 				process.exit(1);
 			}
-		},
-	);
+
+			// Resolve collection if specified
+			let indexId: string | undefined;
+			if (options.collection) {
+				const indexes = await client.get<
+					Array<{ id: string; slug: string; displayName: string }>
+				>(`/v1/projects/${project.id}/indexes`);
+				const found = indexes.find(
+					(idx) =>
+						idx.slug === options.collection || idx.displayName === options.collection,
+				);
+				if (!found) {
+					console.error(`Error: Collection "${options.collection}" not found.`);
+					process.exit(1);
+				}
+				indexId = found.id;
+			}
+
+			console.log("AACsearch Monitor — Ctrl+C to exit");
+			console.log("");
+
+			// eslint-disable-next-line no-constant-condition
+			while (true) {
+				try {
+					await renderDashboard(client, project.id, indexId, interval);
+				} catch (error) {
+					// Don't crash on a single refresh failure
+					process.stdout.write(`\n⚠ Refresh error: ${formatError(error)}\n`);
+				}
+
+				// Wait for interval
+				await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+			}
+		} catch (error) {
+			console.error(formatError(error));
+			process.exit(1);
+		}
+	});
 
 async function renderDashboard(
 	client: ApiClient,
@@ -114,9 +100,7 @@ async function renderDashboard(
 		metrics = await client.get<Metrics>(path);
 	} catch {
 		// Fallback: try analytics endpoint
-		metrics = await client.get<Metrics>(
-			`/v1/projects/${projectId}/analytics/summary`,
-		);
+		metrics = await client.get<Metrics>(`/v1/projects/${projectId}/analytics/summary`);
 	}
 
 	// Fetch indexes for health status
@@ -151,11 +135,12 @@ async function renderDashboard(
 	process.stdout.write("  ┌─ Index Overview ─────────────────────────────┐\n");
 	for (const idx of indexes.slice(0, 5)) {
 		const docs = idx.documentsCount ?? 0;
-		const docsLabel = docs >= 1_000_000
-			? `${(docs / 1_000_000).toFixed(1)}M`
-			: docs >= 1_000
-				? `${(docs / 1_000).toFixed(1)}K`
-				: String(docs);
+		const docsLabel =
+			docs >= 1_000_000
+				? `${(docs / 1_000_000).toFixed(1)}M`
+				: docs >= 1_000
+					? `${(docs / 1_000).toFixed(1)}K`
+					: String(docs);
 		const status = idx.status ?? "active";
 		const statusIcon = status === "active" ? "✓" : "⚠";
 		process.stdout.write(

@@ -1,75 +1,75 @@
 {
-	"onboarding": {
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
-		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
-		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
-		},
-		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
-		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account",
-		"createIndex": {
-			"title": "Создайте первый поисковый индекс",
-			"description": "Дайте название индексу. Документы и схему можно настроить позже.",
-			"nameLabel": "Название индекса",
-			"slugLabel": "Slug (URL-идентификатор)",
-			"slugHint": "Только строчные буквы, цифры и дефисы",
-			"submit": "Создать индекс",
-			"success": "Индекс успешно создан.",
-			"error": "Не удалось создать индекс. Попробуйте ещё раз.",
-			"noOrg": "Сначала создайте организацию перед настройкой поискового индекса."
-		},
-		"addDocuments": {
-			"title": "Импортируйте первые документы",
-			"description": "Вставьте JSON-массив объектов для наполнения индекса. Документы можно добавить позже.",
-			"pasteLabel": "Документы (JSON-массив)",
-			"placeholder": "[{\"id\":\"1\",\"title\":\"Привет мир\"}]",
-			"importButton": "Импортировать документы",
-			"skip": "Пропустить",
-			"success": "Документы поставлены в очередь на индексирование.",
-			"parseError": "Неверный JSON. Вставьте корректный массив объектов.",
-			"error": "Не удалось импортировать документы. Попробуйте ещё раз."
-		},
-		"installWidget": {
-			"title": "Встройте поисковый виджет",
-			"description": "Скопируйте фрагмент ниже и вставьте его в HTML вашего сайта для добавления виджета.",
-			"snippetLabel": "Код виджета",
-			"copyButton": "Копировать код",
-			"copied": "Код скопирован!",
-			"next": "Далее",
-			"skip": "Пропустить"
-		},
-		"apiKey": {
-			"title": "Получите API-ключ",
-			"description": "Создайте поисковый API-ключ для интеграции AACsearch. Скопируйте его — он больше не будет показан.",
-			"createButton": "Создать API-ключ",
-			"keyLabel": "Ваш API-ключ (показан один раз)",
-			"copyButton": "Копировать ключ",
-			"copied": "API-ключ скопирован!",
-			"finish": "Перейти к дашборду",
-			"error": "Не удалось создать API-ключ. Попробуйте ещё раз.",
-			"keyName": "Ключ онбординга"
-		}
-	},
-	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan."
-	},
-	"checkoutReturn": {
-		"title": "Processing your purchase",
-		"description": "Please wait while we confirm your payment.",
-		"loading": "Confirming your purchase, please wait..."
-	},
-	"start": {
-		"subtitle": "See the latest stats of your awesome business.",
-		"welcome": "Welcome {name}!"
-	}
+  "onboarding": {
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
+      "name": "Name"
+    },
+    "continue": "Continue",
+    "message": "Just a few quick steps to get you started.",
+    "notifications": {
+      "accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+    },
+    "pricing": {
+      "planSelected": "Your plan has been selected successfully.",
+      "skip": "Skip for now"
+    },
+    "step": "Step {step} / {total}",
+    "title": "Set up your account",
+    "createIndex": {
+      "title": "Создайте первый поисковый индекс",
+      "description": "Дайте название индексу. Документы и схему можно настроить позже.",
+      "nameLabel": "Название индекса",
+      "slugLabel": "Slug (URL-идентификатор)",
+      "slugHint": "Только строчные буквы, цифры и дефисы",
+      "submit": "Создать индекс",
+      "success": "Индекс успешно создан.",
+      "error": "Не удалось создать индекс. Попробуйте ещё раз.",
+      "noOrg": "Сначала создайте организацию перед настройкой поискового индекса."
+    },
+    "addDocuments": {
+      "title": "Импортируйте первые документы",
+      "description": "Вставьте JSON-массив объектов для наполнения индекса. Документы можно добавить позже.",
+      "pasteLabel": "Документы (JSON-массив)",
+      "placeholder": "[{\"id\":\"1\",\"title\":\"Привет мир\"}]",
+      "importButton": "Импортировать документы",
+      "skip": "Пропустить",
+      "success": "Документы поставлены в очередь на индексирование.",
+      "parseError": "Неверный JSON. Вставьте корректный массив объектов.",
+      "error": "Не удалось импортировать документы. Попробуйте ещё раз."
+    },
+    "installWidget": {
+      "title": "Встройте поисковый виджет",
+      "description": "Скопируйте фрагмент ниже и вставьте его в HTML вашего сайта для добавления виджета.",
+      "snippetLabel": "Код виджета",
+      "copyButton": "Копировать код",
+      "copied": "Код скопирован!",
+      "next": "Далее",
+      "skip": "Пропустить"
+    },
+    "apiKey": {
+      "title": "Получите API-ключ",
+      "description": "Создайте поисковый API-ключ для интеграции AACsearch. Скопируйте его — он больше не будет показан.",
+      "createButton": "Создать API-ключ",
+      "keyLabel": "Ваш API-ключ (показан один раз)",
+      "copyButton": "Копировать ключ",
+      "copied": "API-ключ скопирован!",
+      "finish": "Перейти к дашборду",
+      "error": "Не удалось создать API-ключ. Попробуйте ещё раз.",
+      "keyName": "Ключ онбординга"
+    }
+  },
+  "choosePlan": {
+    "title": "Choose your plan",
+    "description": "To continue, please select a plan."
+  },
+  "checkoutReturn": {
+    "title": "Processing your purchase",
+    "description": "Please wait while we confirm your payment.",
+    "loading": "Confirming your purchase, please wait..."
+  },
+  "start": {
+    "subtitle": "See the latest stats of your awesome business.",
+    "welcome": "Welcome {name}!"
+  }
 }

@@ -6,26 +6,27 @@ import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 
-export const setDefaultPaymentMethod = protectedProcedure
+export const addPaymentMethodLink = protectedProcedure
 	.route({
 		method: "POST",
-		path: "/payments/payment-methods/set-default",
+		path: "/payments/payment-methods/add-link",
 		tags: ["Payments"],
-		summary: "Set default payment method",
-		description: "Update the Stripe customer's default payment method for invoices",
+		summary: "Add payment method link",
+		description:
+			"Create a Stripe Customer Portal session with payment_method_update flow for adding a new card",
 	})
 	.input(
 		z.object({
-			paymentMethodId: z.string(),
 			organizationId: z.string().optional(),
+			redirectUrl: z.string().optional(),
 		}),
 	)
 	.output(
 		z.object({
-			updated: z.literal(true),
+			url: z.string(),
 		}),
 	)
-	.handler(async ({ input: { paymentMethodId, organizationId }, context: { user } }) => {
+	.handler(async ({ input: { organizationId, redirectUrl }, context: { user } }) => {
 		const entity = organizationId
 			? await getOrganizationById(organizationId)
 			: await getUserById(user.id);
@@ -37,17 +38,23 @@ export const setDefaultPaymentMethod = protectedProcedure
 		const customerId = entity.paymentsCustomerId;
 
 		if (!customerId) {
-			throw new ORPCError("NOT_FOUND");
+			throw new ORPCError("NOT_FOUND", {
+				message: "No billing account found. Please subscribe to a plan first.",
+			});
 		}
 
 		try {
 			const stripe = getStripeClient();
-			await stripe.customers.update(customerId, {
-				invoice_settings: { default_payment_method: paymentMethodId },
+			const session = await stripe.billingPortal.sessions.create({
+				customer: customerId,
+				return_url: redirectUrl ?? "",
+				flow_data: {
+					type: "payment_method_update",
+				},
 			});
-			return { updated: true as const };
+			return { url: session.url };
 		} catch (e) {
-			logger.error("Could not set default payment method", e);
+			logger.error("Could not create add-payment-method portal session", e);
 			throw new ORPCError("INTERNAL_SERVER_ERROR");
 		}
 	});

@@ -13,6 +13,7 @@ export const listPricingRules = protectedProcedure
 		description:
 			"Returns all active and historical AI pricing rules grouped by provider, model, and operation. Used by the dashboard rate card display.",
 	})
+	.input(z.void())
 	.output(z.array(pricingRuleDtoSchema))
 	.handler(async () => {
 		const rules = await listAiPricingRules();

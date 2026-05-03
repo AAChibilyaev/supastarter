@@ -1,4 +1,5 @@
 import { config } from "@config";
+import { PostHogProvider } from "@repo/analytics";
 import { cn, Toaster } from "@repo/ui";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
@@ -48,9 +49,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 						>
 							<ApiClientProvider>
 								<ClientProviders>
-									{children}
+									<PostHogProvider>
+										{children}
 
-									<Toaster position="top-right" />
+										<Toaster position="top-right" />
+									</PostHogProvider>
 								</ClientProviders>
 							</ApiClientProvider>
 						</ThemeProvider>

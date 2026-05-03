@@ -1,6 +1,7 @@
 "use client";
 
 import { ProgressProvider } from "@bprogress/next/app";
+import { PostHogProvider } from "@shared/components/PostHogProvider";
 import type { PropsWithChildren } from "react";
 
 export function ClientProviders({ children }: PropsWithChildren) {
@@ -12,7 +13,7 @@ export function ClientProviders({ children }: PropsWithChildren) {
 			shallowRouting
 			delay={250}
 		>
-			{children}
+			<PostHogProvider>{children}</PostHogProvider>
 		</ProgressProvider>
 	);
 }

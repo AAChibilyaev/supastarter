@@ -63,6 +63,8 @@
 		"openai": "catalog:",
 		"oslo": "catalog:",
 		"pg": "catalog:",
+		"posthog-js": "^1.372.6",
+		"posthog-node": "^5.33.0",
 		"prettier": "catalog:",
 		"radix-ui": "catalog:",
 		"react": "catalog:",

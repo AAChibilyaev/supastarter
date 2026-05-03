@@ -6,6 +6,12 @@ import {
 	ChatBubbleMessage,
 } from "@repo/ui/components/chat/chat-bubble";
 import { ChatInput } from "@repo/ui/components/chat/chat-input";
+import {
+	ExpandableChatHeader,
+	ExpandableChatBody,
+	ExpandableChatFooter,
+} from "@repo/ui/components/chat/expandable-chat";
+import { ChatMessageList } from "@repo/ui/components/chat/chat-message-list";
 import { cn } from "@repo/ui/lib";
 import MessageLoading from "@repo/ui/components/chat/message-loading";
 import {
@@ -460,48 +466,49 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 					: "pointer-events-none invisible opacity-0",
 			)}
 		>
-			{/* Header */}
-			<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3.5">
-				<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
-					<SparklesIcon className="size-3.5 text-muted-foreground" />
-					<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
+			<ExpandableChatHeader>
+				<div className="flex items-center gap-2 flex-1 min-w-0">
+					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+						<SparklesIcon className="size-3.5 text-muted-foreground" />
+						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
+					</div>
+					{view === "history" ? (
+						<>
+							<span className="text-sm font-light text-foreground">History</span>
+							<button type="button" onClick={() => setView("chat")}
+								className="ml-auto flex size-7 items-center justify-center rounded-md text-muted-foreground/50 text-xs transition-colors hover:text-muted-foreground">← Back</button>
+						</>
+					) : (
+						<>
+							<span className="text-sm font-light text-foreground truncate">
+								{hasMessages ? currentSession?.title?.slice(0, 24) ?? "Chat" : "AI Assistant"}
+							</span>
+							<div className="ml-auto flex items-center gap-0.5">
+								{MODES.map(({ key, icon: Icon }) => (
+									<button key={key} type="button" onClick={() => handleModeClick(key)}
+										className={cn("flex size-7 items-center justify-center rounded-md transition-colors",
+											activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40")}
+										aria-label={`Search by ${key}`}>
+										<Icon className="size-3.5" />
+									</button>
+								))}
+							</div>
+							<button type="button" onClick={openHistory}
+								className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+								aria-label="Chat history"><ClockIcon className="size-3.5" /></button>
+							<button type="button" onClick={startNewChat}
+								className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+								aria-label="New chat"><PlusIcon className="size-3.5" /></button>
+						</>
+					)}
+					<button type="button" onClick={() => setOpen(false)}
+						className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
+						aria-label="Close assistant"><XIcon className="size-4" /></button>
 				</div>
-				{view === "history" ? (
-					<>
-						<span className="text-sm font-light text-foreground">History</span>
-						<button type="button" onClick={() => setView("chat")}
-							className="ml-auto flex size-7 items-center justify-center rounded-md text-muted-foreground/50 text-xs transition-colors hover:text-muted-foreground">← Back</button>
-					</>
-				) : (
-					<>
-						<span className="text-sm font-light text-foreground">
-							{hasMessages ? currentSession?.title?.slice(0, 24) ?? "Chat" : "AI Assistant"}
-						</span>
-						<div className="ml-auto flex items-center gap-0.5">
-							{MODES.map(({ key, icon: Icon }) => (
-								<button key={key} type="button" onClick={() => handleModeClick(key)}
-									className={cn("flex size-7 items-center justify-center rounded-md transition-colors",
-										activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40")}
-									aria-label={`Search by ${key}`}>
-									<Icon className="size-3.5" />
-								</button>
-							))}
-						</div>
-						<button type="button" onClick={openHistory}
-							className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-							aria-label="Chat history"><ClockIcon className="size-3.5" /></button>
-						<button type="button" onClick={startNewChat}
-							className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-							aria-label="New chat"><PlusIcon className="size-3.5" /></button>
-					</>
-				)}
-				<button type="button" onClick={() => setOpen(false)}
-					className="flex size-7 items-center justify-center rounded-md text-muted-foreground/40 transition-colors hover:text-muted-foreground"
-					aria-label="Close assistant"><XIcon className="size-4" /></button>
-			</div>
+			</ExpandableChatHeader>
 
 			{view === "history" ? (
-				<div className="flex-1 overflow-y-auto p-4">
+				<ExpandableChatBody>
 					{sessions.length === 0 ? (
 						<div className="flex flex-col items-center justify-center h-full text-center">
 							<ClockIcon className="size-8 text-muted-foreground/30 mb-3" />
@@ -518,7 +525,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 										<MessageSquareIcon className="size-3.5 shrink-0 text-muted-foreground/50" />
 										<div className="flex-1 min-w-0">
 											<p className="text-sm font-light text-foreground truncate">{session.title}</p>
-											<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages · {formatTimestamp(session.updatedAt)}</p>
+											<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages &middot; {formatTimestamp(session.updatedAt)}</p>
 										</div>
 										<button type="button" onClick={(e) => deleteSession(e, session.id)}
 											className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
@@ -529,10 +536,10 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 						))}</div>
 					)}
 					<div className="mt-4"><Button variant="outline" size="sm" onClick={startNewChat} className="w-full rounded-lg"><PlusIcon className="mr-1.5 size-3.5" /> New Chat</Button></div>
-				</div>
+				</ExpandableChatBody>
 			) : (
 				<>
-					<div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-20">
+					<ExpandableChatBody>
 						{/* Capabilities grid — mobile only */}
 						{!hasMessages && (
 							<div className="space-y-3 sm:hidden">
@@ -583,51 +590,54 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 							</div>
 						)}
 
-						<div className="space-y-4">
-							<ChatBubble variant="received" layout="ai">
-								<ChatBubbleMessage variant="received" layout="ai">
-									<div className="space-y-3">
-										<div className="flex items-center gap-2">
-											<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
-												<SparklesIcon className="size-3 text-muted-foreground" />
+						{/* Welcome message + messages */}
+						<ChatMessageList>
+							<div className="space-y-4">
+								<ChatBubble variant="received" layout="ai">
+									<ChatBubbleMessage variant="received" layout="ai">
+										<div className="space-y-3">
+											<div className="flex items-center gap-2">
+												<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+													<SparklesIcon className="size-3 text-muted-foreground" />
+												</div>
+												<span className="text-xs font-medium text-foreground/80">AACsearch Assistant</span>
 											</div>
-											<span className="text-xs font-medium text-foreground/80">AACsearch Assistant</span>
+											<p className="text-sm font-light text-muted-foreground leading-relaxed">{WELCOME_MESSAGE}</p>
 										</div>
-										<p className="text-sm font-light text-muted-foreground leading-relaxed">{WELCOME_MESSAGE}</p>
-									</div>
-								</ChatBubbleMessage>
-							</ChatBubble>
-						</div>
-						{messages.map((msg) => (
-							<ChatBubble key={msg.id} variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
-								<ChatBubbleMessage variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
-									{msg.mode && msg.role === "user" && (
-										<div className="mb-1 flex items-center gap-1">
-											<span className="text-[10px] font-medium text-muted-foreground/50">{MODES.find((m) => m.key === msg.mode)?.label}</span>
-										</div>
-									)}
-									<p className={cn("text-sm font-light leading-relaxed whitespace-pre-wrap", msg.role === "assistant" && "text-muted-foreground")}>{msg.text}</p>
-								</ChatBubbleMessage>
-							</ChatBubble>
-						))}
-						{isLoading && (
-							<ChatBubble variant="received" layout="ai">
-								<ChatBubbleMessage variant="received" layout="ai" isLoading />
-							</ChatBubble>
-						)}
-						{!hasMessages && (
-							<div className="flex flex-col gap-2 pt-2">
-								{SUGGESTED_QUESTIONS.map((q) => (
-									<button key={q.text} type="button" onClick={() => handleSuggestedClick(q.text)}
-										className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3.5 py-2.5 text-left text-sm font-light text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground">
-										<span className="text-base">{q.icon}</span>
-										<span>{q.text}</span>
-									</button>
-								))}
+									</ChatBubbleMessage>
+								</ChatBubble>
 							</div>
-						)}
-					</div>
-					<div className="shrink-0 border-t border-border p-3">
+							{messages.map((msg) => (
+								<ChatBubble key={msg.id} variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+									<ChatBubbleMessage variant={msg.role === "user" ? "sent" : "received"} layout={msg.role === "user" ? "default" : "ai"}>
+										{msg.mode && msg.role === "user" && (
+											<div className="mb-1 flex items-center gap-1">
+												<span className="text-[10px] font-medium text-muted-foreground/50">{MODES.find((m) => m.key === msg.mode)?.label}</span>
+											</div>
+										)}
+										<p className={cn("text-sm font-light leading-relaxed whitespace-pre-wrap", msg.role === "assistant" && "text-muted-foreground")}>{msg.text}</p>
+									</ChatBubbleMessage>
+								</ChatBubble>
+							))}
+							{isLoading && (
+								<ChatBubble variant="received" layout="ai">
+									<ChatBubbleMessage variant="received" layout="ai" isLoading />
+								</ChatBubble>
+							)}
+							{!hasMessages && (
+								<div className="flex flex-col gap-2 pt-2">
+									{SUGGESTED_QUESTIONS.map((q) => (
+										<button key={q.text} type="button" onClick={() => handleSuggestedClick(q.text)}
+											className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 px-3.5 py-2.5 text-left text-sm font-light text-muted-foreground/80 transition-all hover:border-border hover:bg-muted/40 hover:text-foreground">
+											<span className="text-base">{q.icon}</span>
+											<span>{q.text}</span>
+										</button>
+									))}
+								</div>
+							)}
+						</ChatMessageList>
+					</ExpandableChatBody>
+					<ExpandableChatFooter>
 						<form onSubmit={handleSubmit} className="flex items-end gap-2">
 							<div className="relative flex-1">
 								<ChatInput ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)}
@@ -637,7 +647,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 							<Button type="submit" size="icon" variant="primary" disabled={!input.trim() || isLoading}
 								className="flex size-10 shrink-0 items-center justify-center rounded-lg"><ArrowRightIcon className="size-4" /></Button>
 						</form>
-					</div>
+					</ExpandableChatFooter>
 				</>
 			)}
 		</div>
@@ -704,7 +714,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 												<p className="text-[10px] font-light text-muted-foreground/50 mt-0.5">{session.messages.length} messages · {formatTimestamp(session.updatedAt)}</p>
 											</div>
 											<button type="button" onClick={(e) => deleteSession(e, session.id)}
-												className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
+												className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-muted-foreground group-hover:opacity-100"
 												aria-label="Delete chat"><Trash2Icon className="size-3" /></button>
 										</button>
 									))}</div>

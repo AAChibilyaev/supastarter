@@ -595,7 +595,10 @@
 			"title": "Haben Sie eine Idee?",
 			"description": "Wir lesen jede Feature-Anfrage. Teilen Sie uns mit, was AACsearch für Sie besser machen würde.",
 			"cta": "Feature vorschlagen"
-		}
+		},
+		"vote": "Abstimmen",
+		"voted": "Abgestimmt",
+		"votes": "Stimmen"
 	},
 	"careersPage": {
 		"title": "Karriere bei AACsearch",

@@ -12,8 +12,10 @@ import {
 	LinkIcon,
 	MegaphoneIcon,
 	SearchIcon,
+	ThumbsUpIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useState } from "react";
 import type { ComponentType } from "react";
 
 interface RoadmapItem {
@@ -27,17 +29,20 @@ interface RoadmapItem {
 		| "selfHost"
 		| "vectorSearch";
 	icon: ComponentType<{ className?: string }>;
+	initialVotes: number;
 }
 
+const VOTE_STORAGE_KEY = "aacsearch_roadmap_votes";
+
 const ALL_ITEMS: RoadmapItem[] = [
-	{ key: "searchCore", icon: CheckCircleIcon },
-	{ key: "marketing", icon: MegaphoneIcon },
-	{ key: "connectors", icon: LinkIcon },
-	{ key: "knowledge", icon: BrainCircuitIcon },
-	{ key: "metering", icon: GaugeIcon },
-	{ key: "docs", icon: BookOpenIcon },
-	{ key: "selfHost", icon: CloudIcon },
-	{ key: "vectorSearch", icon: SearchIcon },
+	{ key: "searchCore", icon: CheckCircleIcon, initialVotes: 142 },
+	{ key: "marketing", icon: MegaphoneIcon, initialVotes: 68 },
+	{ key: "connectors", icon: LinkIcon, initialVotes: 95 },
+	{ key: "knowledge", icon: BrainCircuitIcon, initialVotes: 127 },
+	{ key: "metering", icon: GaugeIcon, initialVotes: 89 },
+	{ key: "docs", icon: BookOpenIcon, initialVotes: 113 },
+	{ key: "selfHost", icon: CloudIcon, initialVotes: 156 },
+	{ key: "vectorSearch", icon: SearchIcon, initialVotes: 78 },
 ];
 
 const spanMap: Record<RoadmapItem["key"], string> = {
@@ -51,8 +56,58 @@ const spanMap: Record<RoadmapItem["key"], string> = {
 	vectorSearch: "md:col-span-2",
 };
 
-function RoadmapCard({ key, icon: Icon }: RoadmapItem) {
+function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 	const t = useTranslations("roadmap");
+	const [votedFeatures, setVotedFeatures] = useState<Record<string, boolean>>({});
+	const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		try {
+			const stored = localStorage.getItem(VOTE_STORAGE_KEY);
+			const parsed = stored ? JSON.parse(stored) : {};
+			setVotedFeatures(parsed);
+
+			const storedCounts = localStorage.getItem(`${VOTE_STORAGE_KEY}_counts`);
+			const initialCounts: Record<string, number> = {};
+			for (const item of ALL_ITEMS) {
+				initialCounts[item.key] = item.initialVotes;
+			}
+			const savedCounts = storedCounts ? { ...initialCounts, ...JSON.parse(storedCounts) } : initialCounts;
+			setVoteCounts(savedCounts);
+			setMounted(true);
+		} catch {
+			setMounted(true);
+		}
+	}, []);
+
+	const handleVote = useCallback(() => {
+		const newVoted = { ...votedFeatures };
+		const newCounts = { ...voteCounts };
+
+		if (newVoted[key]) {
+			// Unvote
+			delete newVoted[key];
+			newCounts[key] = Math.max(0, (newCounts[key] ?? initialVotes) - 1);
+		} else {
+			// Vote
+			newVoted[key] = true;
+			newCounts[key] = (newCounts[key] ?? initialVotes) + 1;
+		}
+
+		setVotedFeatures(newVoted);
+		setVoteCounts(newCounts);
+
+		try {
+			localStorage.setItem(VOTE_STORAGE_KEY, JSON.stringify(newVoted));
+			localStorage.setItem(`${VOTE_STORAGE_KEY}_counts`, JSON.stringify(newCounts));
+		} catch {
+			// localStorage may be full or disabled
+		}
+	}, [key, votedFeatures, voteCounts, initialVotes]);
+
+	const isVoted = mounted && votedFeatures[key];
+	const voteCount = mounted ? (voteCounts[key] ?? initialVotes) : initialVotes;
 
 	const status = t(`items.${key}.status`);
 	const isShipped = status === "shipped";
@@ -87,6 +142,29 @@ function RoadmapCard({ key, icon: Icon }: RoadmapItem) {
 				<CardDescription className="text-sm leading-relaxed">
 					{t(`items.${key}.description`)}
 				</CardDescription>
+
+				{/* Vote button row */}
+				<div className="mt-4 pt-3 border-t border-border/20 flex items-center justify-between">
+					<button
+						type="button"
+						onClick={handleVote}
+						disabled={isShipped}
+						className={cn(
+							"gap-1.5 px-3 py-1.5 inline-flex items-center rounded-lg text-xs font-medium transition-all",
+							isShipped && "opacity-30 cursor-not-allowed",
+							isVoted
+								? "bg-primary/10 text-primary border border-primary/20"
+								: "bg-muted/50 text-muted-foreground border border-border/30 hover:border-primary/20 hover:text-foreground",
+						)}
+					>
+						<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
+						{isVoted ? t("voted") : t("vote")}
+					</button>
+					<span className="text-xs text-muted-foreground">
+						<strong className="text-foreground font-semibold">{voteCount}</strong>{" "}
+						{t("votes", { count: voteCount })}
+					</span>
+				</div>
 			</CardContent>
 		</Card>
 	);
@@ -146,11 +224,7 @@ export function RoadmapGrid() {
 
 					<div className="mt-16">
 						<RoadmapSection status="shipped" titleKey="shippedTitle" items={shipped} />
-						<RoadmapSection
-							status="inProgress"
-							titleKey="inProgressTitle"
-							items={inProgress}
-						/>
+						<RoadmapSection status="inProgress" titleKey="inProgressTitle" items={inProgress} />
 						<RoadmapSection status="planned" titleKey="plannedTitle" items={planned} />
 					</div>
 				</div>
@@ -163,9 +237,7 @@ export function RoadmapGrid() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">
-							{t("feedback.description")}
-						</p>
+						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

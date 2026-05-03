@@ -78,10 +78,10 @@ export const getSchema = protectedProcedure
 			defaultSortingField: fullCollection.default_sorting_field ?? null,
 			enableNestedFields: fullCollection.enable_nested_fields ?? false,
 			numDocuments: fullCollection.num_documents ?? 0,
-			tokenSeparators: (fullCollection as Record<string, unknown>).token_separators as
+			tokenSeparators: (fullCollection as unknown as Record<string, unknown>).token_separators as
 				| string[]
 				| undefined,
-			symbolTokensToIndex: (fullCollection as Record<string, unknown>)
+			symbolTokensToIndex: (fullCollection as unknown as Record<string, unknown>)
 				.symbol_tokens_to_index as string[] | undefined,
 		};
 	});
@@ -117,7 +117,15 @@ export const updateSchema = protectedProcedure
 	)
 	.handler(
 		async ({
-			input: { organizationId, slug, fields, defaultSortingField, triggerReindex },
+			input: {
+				organizationId,
+				slug,
+				fields,
+				defaultSortingField,
+				tokenSeparators,
+				symbolTokensToIndex,
+				triggerReindex,
+			},
 			context: { user },
 		}) => {
 			await requireOrganizationAdmin(organizationId, user);
@@ -126,11 +134,11 @@ export const updateSchema = protectedProcedure
 			const schema = {
 				fields: fields as unknown[],
 				...(defaultSortingField ? { defaultSortingField } : {}),
-				...(input.tokenSeparators !== undefined
-					? { tokenSeparators: input.tokenSeparators }
+				...(tokenSeparators !== undefined
+					? { tokenSeparators }
 					: {}),
-				...(input.symbolTokensToIndex !== undefined
-					? { symbolTokensToIndex: input.symbolTokensToIndex }
+				...(symbolTokensToIndex !== undefined
+					? { symbolTokensToIndex }
 					: {}),
 			};
 

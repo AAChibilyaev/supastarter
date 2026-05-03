@@ -595,7 +595,10 @@
 			"title": "Have an idea?",
 			"description": "We read every feature request. Tell us what would make AACsearch better for you.",
 			"cta": "Suggest a feature"
-		}
+		},
+		"vote": "Vote",
+		"voted": "Voted",
+		"votes": "votes"
 	},
 	"careersPage": {
 		"title": "Careers at AACsearch",

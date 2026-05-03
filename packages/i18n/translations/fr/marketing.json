@@ -595,7 +595,10 @@
 			"title": "Une idée ?",
 			"description": "Nous lisons chaque demande de fonctionnalité. Dites-nous ce qui améliorerait AACsearch pour vous.",
 			"cta": "Suggérer une fonctionnalité"
-		}
+		},
+		"vote": "Voter",
+		"voted": "Voté",
+		"votes": "votes"
 	},
 	"careersPage": {
 		"title": "Carrières chez AACsearch",

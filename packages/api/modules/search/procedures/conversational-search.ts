@@ -2,6 +2,12 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -16,6 +22,7 @@ const sourceSchema = z.object({
 });
 
 export const conversationalSearch = protectedProcedure
+	.use(creditGate("conversational_search_llm", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
@@ -43,7 +50,8 @@ export const conversationalSearch = protectedProcedure
 			searchTimeMs: z.number(),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
@@ -99,8 +107,10 @@ export const conversationalSearch = protectedProcedure
 				temperature: 0.3,
 			});
 			answer = completion.choices[0]?.message?.content ?? "Unable to generate an answer.";
+			await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
 		} catch {
 			answer = "Conversational search is unavailable at this moment.";
+			await releaseCreditReservation(context, creditReservationId);
 		}
 
 		return {

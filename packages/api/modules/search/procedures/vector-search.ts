@@ -2,6 +2,12 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -11,6 +17,7 @@ const hitSchema = z.object({
 });
 
 export const vectorSearch = protectedProcedure
+	.use(creditGate("vector_search_embedding", BigInt(200)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/vector-search",
@@ -42,11 +49,18 @@ export const vectorSearch = protectedProcedure
 			}),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
-		const embedding = await generateEmbedding(input.query, input.model);
+		let embedding: Awaited<ReturnType<typeof generateEmbedding>>;
+		try {
+			embedding = await generateEmbedding(input.query, input.model);
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
 		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
 
 		const client = getTypesenseClient();
@@ -60,6 +74,8 @@ export const vectorSearch = protectedProcedure
 				filter_by: input.filterBy ?? undefined,
 				per_page: input.k,
 			}) as any);
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(200));
 
 		return {
 			found: results.found ?? 0,

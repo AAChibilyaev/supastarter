@@ -4,11 +4,18 @@ import { getKnowledgeSpaceBySlug } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireKnowledgeOwnerMember } from "../lib/access";
 import { retrieveKnowledge } from "../lib/retrieval";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
 
 export const ask = protectedProcedure
+	.use(creditGate("knowledge_ask_rag", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/knowledge/ask",
@@ -23,7 +30,9 @@ export const ask = protectedProcedure
 			query: z.string().min(3).max(1200),
 		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
+		const { user } = context;
 		await requireKnowledgeOwnerMember(
 			{
 				ownerType: input.ownerType,
@@ -48,6 +57,7 @@ export const ask = protectedProcedure
 			limit: 8,
 		});
 		if (retrieved.chunks.length === 0) {
+			await releaseCreditReservation(context, creditReservationId);
 			return {
 				answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
 				citations: [],
@@ -62,17 +72,25 @@ export const ask = protectedProcedure
 			)
 			.join("\n\n");
 
-		const response = await generateText({
-			model: textModel,
-			prompt: [
-				"You are AACsearch assistant.",
-				"Answer using only provided context snippets.",
-				"If context is insufficient, explicitly say so.",
-				"Always cite snippet numbers in the answer.",
-				`Question: ${input.query}`,
-				`Context:\n${contextText}`,
-			].join("\n\n"),
-		});
+		let response: Awaited<ReturnType<typeof generateText>>;
+		try {
+			response = await generateText({
+				model: textModel,
+				prompt: [
+					"You are AACsearch assistant.",
+					"Answer using only provided context snippets.",
+					"If context is insufficient, explicitly say so.",
+					"Always cite snippet numbers in the answer.",
+					`Question: ${input.query}`,
+					`Context:\n${contextText}`,
+				].join("\n\n"),
+			});
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
 
 		return {
 			answer: response.text,

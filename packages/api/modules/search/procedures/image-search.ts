@@ -2,6 +2,12 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -11,6 +17,7 @@ const hitSchema = z.object({
 });
 
 export const imageSearch = protectedProcedure
+	.use(creditGate("image_search", BigInt(300)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/image-search",
@@ -45,7 +52,8 @@ export const imageSearch = protectedProcedure
 			}),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
@@ -83,6 +91,7 @@ export const imageSearch = protectedProcedure
 		}
 
 		if (!caption) {
+			await releaseCreditReservation(context, creditReservationId);
 			return {
 				found: 0,
 				hits: [],
@@ -93,7 +102,13 @@ export const imageSearch = protectedProcedure
 		}
 
 		// Phase 2: embed the caption and vector-search
-		const embedding = await generateEmbedding(caption, input.embeddingModel);
+		let embedding: Awaited<ReturnType<typeof generateEmbedding>>;
+		try {
+			embedding = await generateEmbedding(caption, input.embeddingModel);
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
 		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
 
 		const client = getTypesenseClient();
@@ -107,6 +122,8 @@ export const imageSearch = protectedProcedure
 				filter_by: input.filterBy ?? undefined,
 				per_page: input.k,
 			} as any)) as any;
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(300));
 
 		return {
 			found: results.found ?? 0,

@@ -1,10 +1,13 @@
 import {
 	createPurchase,
+	db,
 	deletePurchaseBySubscriptionId,
 	getPurchaseBySubscriptionId,
 	updatePurchase,
 } from "@repo/database";
 import { logger } from "@repo/logs";
+import { sendEmail } from "@repo/mail";
+import { createNotification } from "@repo/notifications";
 import Stripe from "stripe";
 
 import { setCustomerIdToEntity } from "../../lib/customer";
@@ -442,6 +445,47 @@ export const listCustomerInvoices = async ({
 	return { invoices, hasMore: response.has_more };
 };
 
+/**
+ * Get the user IDs who should receive invoice-related notifications.
+ */
+async function getInvoiceRecipients(purchase: {
+	userId: string | null;
+	organizationId: string | null;
+}): Promise<string[]> {
+	if (purchase.userId) {
+		return [purchase.userId];
+	}
+	if (purchase.organizationId) {
+		const members = await db.member.findMany({
+			where: {
+				organizationId: purchase.organizationId,
+				role: { in: ["owner", "admin"] },
+			},
+			select: { userId: true },
+		});
+		return members.map((m) => m.userId);
+	}
+	return [];
+}
+
+/**
+ * Get user email and locale for sending invoice email.
+ */
+async function getRecipientUser(
+	userId: string,
+): Promise<{ email: string; locale: string | null } | null> {
+	try {
+		const user = await db.user.findUnique({
+			where: { id: userId },
+			select: { email: true, locale: true },
+		});
+		if (!user) return null;
+		return { email: user.email, locale: user.locale };
+	} catch {
+		return null;
+	}
+}
+
 export const webhookHandler: WebhookHandler = async (req) => {
 	const stripeClient = getStripeClient();
 
@@ -552,6 +596,69 @@ export const webhookHandler: WebhookHandler = async (req) => {
 			}
 			case "customer.subscription.deleted": {
 				await deletePurchaseBySubscriptionId(event.data.object.id);
+
+				break;
+			}
+			case "invoice.paid": {
+				const invoice = event.data.object;
+				const subscriptionId =
+					typeof invoice.parent?.subscription_details?.subscription === "string"
+						? invoice.parent.subscription_details.subscription
+						: null;
+
+				if (!subscriptionId) break;
+
+				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
+				if (!purchase) break;
+
+				await updatePurchase({ id: purchase.id, status: "active" });
+				logger.info("invoice.paid: purchase status set to active", {
+					purchaseId: purchase.id,
+				});
+
+				// Send invoice paid email with PDF link
+				const recipients = await getInvoiceRecipients(purchase);
+				const invoiceData = invoice as unknown as Record<string, unknown>;
+				const invoicePdf = invoiceData.invoice_pdf as string | null;
+				const invoiceUrl = invoiceData.hosted_invoice_url as string | null;
+
+				await Promise.all(
+					recipients.map((userId) =>
+						createNotification({
+							userId,
+							type: "WELCOME",
+							data: {
+								headline: "Invoice paid",
+								message: `Your invoice of ${(invoice.amount_paid / 100).toFixed(2)} ${(invoice.currency ?? "USD").toUpperCase()} has been paid.`,
+							},
+							link: invoiceUrl,
+						}).catch((err: unknown) =>
+							logger.error("invoice.paid: notification failed", { userId, err }),
+						),
+					),
+				);
+
+				// Also send email
+				if (invoicePdf) {
+					for (const userId of recipients) {
+						const user = await getRecipientUser(userId);
+						if (user?.email) {
+							const amount = (invoice.amount_paid / 100).toFixed(2);
+							const currency = (invoice.currency ?? "USD").toUpperCase();
+							await sendEmail({
+								to: user.email,
+								templateId: "notification",
+								context: {
+									title: `Invoice paid — ${currency} ${amount}`,
+									message: `Your invoice has been paid. View the invoice at ${invoiceUrl ?? invoicePdf}`,
+									link: invoiceUrl ?? invoicePdf,
+								},
+							}).catch((err: unknown) =>
+								logger.error("invoice.paid: email send failed", { userId, err }),
+							);
+						}
+					}
+				}
 
 				break;
 			}

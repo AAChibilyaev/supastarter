@@ -1,11 +1,11 @@
 {
 	"pricing": {
-		"choosePlan": "Choose plan",
+		"choosePlan": "Выбрать тариф",
 		"contactSales": "Contact sales",
-		"description": "Choose the plan that works best for you.",
-		"getStarted": "Get started",
-		"month": "{count, plural, one {month} other {{count} months}}",
-		"monthly": "Monthly",
+		"description": "Выберите подходящий тариф",
+		"getStarted": "Начать бесплатно",
+		"month": "{count, plural, one {месяц} few {месяца} many {месяцев} other {месяца}}",
+		"monthly": "Помесячно",
 		"products": {
 			"basic": {
 				"description": "Perfect to small teams.",
@@ -50,12 +50,12 @@
 			}
 		},
 		"purchase": "Purchase",
-		"recommended": "Recommended",
+		"recommended": "Рекомендуем",
 		"subscribe": "Subscribe",
-		"title": "Pricing",
+		"title": "Тарифы",
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
-		"year": "{count, plural, one {year} other {{count} years}}",
-		"yearly": "Yearly",
+		"year": "{count, plural, one {год} few {года} many {лет} other {года}}",
+		"yearly": "Ежегодно",
 		"savePercent": "Скидка {percent}%",
 		"billedAnnually": "Оплата за год",
 		"perSeat": "место",

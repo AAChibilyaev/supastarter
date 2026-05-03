@@ -47,7 +47,7 @@ function intFromEnv(key: string, fallback: number): number {
 	return Number.isFinite(val) ? val : fallback;
 }
 
-/** Helper: read a Stripe price ID from env or fall back to a default placeholder. */
+/** Helper: read a Stripe price ID from env. Returns undefined if not set. */
 function priceIdFromEnv(key: string): string | undefined {
 	const raw = process.env[key];
 	return raw && raw.length > 0 ? raw : undefined;
@@ -95,7 +95,7 @@ export const config: PaymentsConfigWithWallet = {
 			prices: [
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_STARTER_MONTHLY as string,
+					priceId: priceIdFromEnv("PRICE_ID_STARTER_MONTHLY"),
 					interval: "month",
 					amount: 12,
 					currency: "USD",
@@ -104,10 +104,28 @@ export const config: PaymentsConfigWithWallet = {
 				},
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_STARTER_YEARLY as string,
+					priceId: priceIdFromEnv("PRICE_ID_STARTER_YEARLY"),
 					interval: "year",
 					amount: 120,
 					currency: "USD",
+					seatBased: false,
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: priceIdFromEnv("PRICE_ID_STARTER_MONTHLY_RUB"),
+					interval: "month",
+					amount: 990,
+					currency: "RUB",
+					seatBased: false,
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: priceIdFromEnv("PRICE_ID_STARTER_YEARLY_RUB"),
+					interval: "year",
+					amount: 9_900,
+					currency: "RUB",
 					seatBased: false,
 					trialPeriodDays: 7,
 				},
@@ -118,7 +136,7 @@ export const config: PaymentsConfigWithWallet = {
 			prices: [
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_PRO_MONTHLY as string,
+					priceId: priceIdFromEnv("PRICE_ID_PRO_MONTHLY"),
 					interval: "month",
 					amount: 29,
 					currency: "USD",
@@ -127,10 +145,28 @@ export const config: PaymentsConfigWithWallet = {
 				},
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_PRO_YEARLY as string,
+					priceId: priceIdFromEnv("PRICE_ID_PRO_YEARLY"),
 					interval: "year",
 					amount: 290,
 					currency: "USD",
+					seatBased: true,
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: priceIdFromEnv("PRICE_ID_PRO_MONTHLY_RUB"),
+					interval: "month",
+					amount: 2_490,
+					currency: "RUB",
+					seatBased: true,
+					trialPeriodDays: 7,
+				},
+				{
+					type: "subscription",
+					priceId: priceIdFromEnv("PRICE_ID_PRO_YEARLY_RUB"),
+					interval: "year",
+					amount: 24_900,
+					currency: "RUB",
 					seatBased: true,
 					trialPeriodDays: 7,
 				},
@@ -140,9 +176,15 @@ export const config: PaymentsConfigWithWallet = {
 			prices: [
 				{
 					type: "one-time",
-					priceId: process.env.PRICE_ID_LIFETIME as string,
+					priceId: priceIdFromEnv("PRICE_ID_LIFETIME"),
 					amount: 799,
 					currency: "USD",
+				},
+				{
+					type: "one-time",
+					priceId: priceIdFromEnv("PRICE_ID_LIFETIME_RUB"),
+					amount: 69_000,
+					currency: "RUB",
 				},
 			],
 		},

@@ -6,14 +6,27 @@ import { config as paymentsConfig } from "@repo/payments/config";
 import type { PaidPlan } from "@repo/payments/types";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@repo/ui/components/select";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { useLocaleCurrency } from "@shared/hooks/locale-currency";
 import { useRouter } from "@shared/hooks/router";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
-import { ArrowRightIcon, BadgePercentIcon, CheckIcon, StarIcon } from "lucide-react";
+import {
+	ArrowRightIcon,
+	BadgePercentIcon,
+	CheckIcon,
+	DollarSignIcon,
+	StarIcon,
+} from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const plans = paymentsConfig.plans;
 
@@ -21,6 +34,24 @@ interface PlanSelection {
 	type: "one-time" | "subscription";
 	interval?: "month" | "year";
 }
+
+/** Gather all unique currencies available across all paid plans. */
+function getAvailableCurrencies(): string[] {
+	const currencySet = new Set<string>();
+	for (const plan of Object.values(plans)) {
+		if (!("prices" in plan)) continue;
+		for (const price of (plan as PaidPlan).prices) {
+			currencySet.add(price.currency);
+		}
+	}
+	return Array.from(currencySet).sort();
+}
+
+const CURRENCY_LABELS: Record<string, { label: string; symbol: string }> = {
+	USD: { label: "USD", symbol: "$" },
+	RUB: { label: "RUB", symbol: "₽" },
+	EUR: { label: "EUR", symbol: "€" },
+};
 
 export function PricingTable({
 	className,
@@ -39,12 +70,19 @@ export function PricingTable({
 	const localeCurrency = useLocaleCurrency();
 	const [loading, setLoading] = useState<PlanId | false>(false);
 	const [interval, setInterval] = useState<"month" | "year">("month");
+	const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
 
 	const { planData } = usePlanData();
 
 	const createCheckoutLinkMutation = useMutation(
 		orpc.payments.createCheckoutLink.mutationOptions(),
 	);
+
+	// Use user-selected currency, falling back to locale-detected currency
+	const displayCurrency = selectedCurrency ?? localeCurrency;
+
+	// Collect available currencies from all paid plans
+	const availableCurrencies = useMemo(() => getAvailableCurrencies(), []);
 
 	const onSelectPlan = async (planId: PlanId, selection?: PlanSelection) => {
 		if (!(userId || organizationId)) {
@@ -85,16 +123,22 @@ export function PricingTable({
 			: false,
 	);
 
-	// Calculate annual savings from the first eligible plan
+	// Calculate annual savings from the first eligible plan for the current currency
 	const annualSavingsPercent = (() => {
 		for (const [, plan] of Object.entries(plans)) {
 			if (!("prices" in plan)) continue;
 			const prices = (plan as PaidPlan).prices;
 			const monthlyPrice = prices.find(
-				(p) => p.type === "subscription" && p.interval === "month" && p.currency === localeCurrency,
+				(p) =>
+					p.type === "subscription" &&
+					p.interval === "month" &&
+					p.currency === displayCurrency,
 			);
 			const yearlyPrice = prices.find(
-				(p) => p.type === "subscription" && p.interval === "year" && p.currency === localeCurrency,
+				(p) =>
+					p.type === "subscription" &&
+					p.interval === "year" &&
+					p.currency === displayCurrency,
 			);
 			if (monthlyPrice && yearlyPrice) {
 				return Math.round((1 - yearlyPrice.amount / 12 / monthlyPrice.amount) * 100);
@@ -105,8 +149,43 @@ export function PricingTable({
 
 	return (
 		<div className={cn("@container", className)}>
-			{hasSubscriptions && (
-				<div className="mb-6 flex justify-center">
+			{/* Currency switcher + interval tabs */}
+			<div className="mb-6 gap-3 flex items-center justify-center">
+				{availableCurrencies.length > 1 && (
+					<Select
+						value={displayCurrency}
+						onValueChange={(value) => setSelectedCurrency(value)}
+					>
+						<SelectTrigger className="w-24">
+							<SelectValue>
+								<div className="gap-1.5 flex items-center">
+									<DollarSignIcon className="size-3.5" />
+									{displayCurrency}
+								</div>
+							</SelectValue>
+						</SelectTrigger>
+						<SelectContent>
+							{availableCurrencies.map((currency) => {
+								const info = CURRENCY_LABELS[currency] ?? {
+									label: currency,
+									symbol: currency,
+								};
+								return (
+									<SelectItem key={currency} value={currency}>
+										<span className="gap-2 flex items-center">
+											<span className="text-muted-foreground">
+												{info.symbol}
+											</span>
+											{info.label}
+										</span>
+									</SelectItem>
+								);
+							})}
+						</SelectContent>
+					</Select>
+				)}
+
+				{hasSubscriptions && (
 					<Tabs
 						value={interval}
 						onValueChange={(value) => setInterval(value as typeof interval)}
@@ -126,8 +205,9 @@ export function PricingTable({
 							</TabsTrigger>
 						</TabsList>
 					</Tabs>
-				</div>
-			)}
+				)}
+			</div>
+
 			<div
 				className={cn("gap-4 grid grid-cols-1", {
 					"@xl:grid-cols-2": filteredPlans.length >= 2,
@@ -149,11 +229,12 @@ export function PricingTable({
 
 					const { title, description, features } = planDataEntry;
 
+					// Find a price matching the display currency and interval
 					const price = prices?.find(
 						(price) =>
 							!hidden &&
 							(price.type === "one-time" || price.interval === interval) &&
-							price.currency === localeCurrency,
+							price.currency === displayCurrency,
 					);
 
 					if (!price && !isEnterprise) {
@@ -186,13 +267,18 @@ export function PricingTable({
 										{title}
 									</h3>
 									{description && (
-										<div className="prose mt-2 text-sm text-foreground/60">{description}</div>
+										<div className="prose mt-2 text-sm text-foreground/60">
+											{description}
+										</div>
 									)}
 
 									{!!features?.length && (
 										<ul className="mt-4 gap-2 text-sm grid list-none">
 											{features.map((feature, key) => (
-												<li key={key} className="flex items-center justify-start">
+												<li
+													key={key}
+													className="flex items-center justify-start"
+												>
 													<CheckIcon className="mr-2 size-4 text-primary" />
 													<span>{feature}</span>
 												</li>
@@ -200,45 +286,61 @@ export function PricingTable({
 										</ul>
 									)}
 
-									{price && "trialPeriodDays" in price && price.trialPeriodDays && (
-										<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
-											<BadgePercentIcon className="mr-2 size-4" />
-											{t("pricing.trialPeriod", {
-												days: price.trialPeriodDays,
-											})}
-										</div>
-									)}
+									{price &&
+										"trialPeriodDays" in price &&
+										price.trialPeriodDays && (
+											<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
+												<BadgePercentIcon className="mr-2 size-4" />
+												{t("pricing.trialPeriod", {
+													days: price.trialPeriodDays,
+												})}
+											</div>
+										)}
 								</div>
 
 								<div>
 									{price && (
-										<strong
-											className="font-medium text-2xl lg:text-3xl block"
-											data-test="price-table-plan-price"
-										>
-											{format.number(price.amount, {
-												style: "currency",
-												currency: price.currency,
-											})}
-											{"interval" in price && (
-												<span className="font-normal text-xs opacity-60">
-													{" / "}
-													{interval === "month"
-														? t("pricing.month", {
-																count: 1,
-															})
-														: t("pricing.year", {
-																count: 1,
-															})}
-												</span>
+										<>
+											<strong
+												className="font-medium text-2xl lg:text-3xl block"
+												data-test="price-table-plan-price"
+											>
+												{format.number(price.amount, {
+													style: "currency",
+													currency: price.currency,
+												})}
+												{"interval" in price && (
+													<span className="font-normal text-xs opacity-60">
+														{" / "}
+														{interval === "month"
+															? t("pricing.month", {
+																	count: 1,
+																})
+															: t("pricing.year", {
+																	count: 1,
+																})}
+													</span>
+												)}
+												{organizationId &&
+													"seatBased" in price &&
+													price.seatBased && (
+														<span className="font-normal text-xs opacity-60">
+															{" / "}
+															{t("pricing.perSeat")}
+														</span>
+													)}
+											</strong>
+
+											{/* Show alternative currency price as hint */}
+											{availableCurrencies.length > 1 && (
+												<AlternativePriceHint
+													prices={prices ?? []}
+													displayCurrency={displayCurrency}
+													interval={interval}
+													format={format}
+												/>
 											)}
-											{organizationId && "seatBased" in price && price.seatBased && (
-												<span className="font-normal text-xs opacity-60">
-													{" / "}
-													{t("pricing.perSeat")}
-												</span>
-											)}
-										</strong>
+										</>
 									)}
 
 									<Button
@@ -249,15 +351,23 @@ export function PricingTable({
 												planId as PlanId,
 												price
 													? {
-															type: price.type === "one-time" ? "one-time" : "subscription",
-															interval: price.type === "subscription" ? price.interval : undefined,
+															type:
+																price.type === "one-time"
+																	? "one-time"
+																	: "subscription",
+															interval:
+																price.type === "subscription"
+																	? price.interval
+																	: undefined,
 														}
 													: undefined,
 											)
 										}
 										loading={loading === planId}
 									>
-										{userId || organizationId ? t("pricing.choosePlan") : t("pricing.getStarted")}
+										{userId || organizationId
+											? t("pricing.choosePlan")
+											: t("pricing.getStarted")}
 										<ArrowRightIcon className="ml-2 size-4" />
 									</Button>
 								</div>
@@ -267,5 +377,43 @@ export function PricingTable({
 				})}
 			</div>
 		</div>
+	);
+}
+
+/**
+ * Shows the price in the alternative currency as a small hint below the main price.
+ * E.g. if displaying RUB, shows "≈ $X" or vice versa.
+ */
+function AlternativePriceHint({
+	prices,
+	displayCurrency,
+	interval,
+	format,
+}: {
+	prices: PaidPlan["prices"];
+	displayCurrency: string;
+	interval: "month" | "year";
+	format: ReturnType<typeof useFormatter>;
+}) {
+	const altPrice = prices.find(
+		(p) => (p.type === "one-time" || p.interval === interval) && p.currency !== displayCurrency,
+	);
+
+	if (!altPrice) return null;
+
+	return (
+		<span className="mt-0.5 text-xs block text-muted-foreground">
+			≈{" "}
+			{format.number(altPrice.amount, {
+				style: "currency",
+				currency: altPrice.currency,
+			})}
+			{altPrice.type === "subscription" && (
+				<>
+					{" / "}
+					{altPrice.interval === "month" ? "mo" : "yr"}
+				</>
+			)}
+		</span>
 	);
 }

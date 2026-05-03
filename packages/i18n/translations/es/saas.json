@@ -1087,7 +1087,12 @@
 			"searchesLabel": "Búsquedas",
 			"freePlan": "Gratis",
 			"activeReindexJobs": "Trabajos de reindexación activos",
-			"reindexProgress": "{processed} / {total} documentos"
+			"reindexProgress": "{processed} / {total} documentos",
+			"expansion": {
+				"upgradeTitle": "¡Rendimiento máximo!",
+				"upgradeDesc": "Su búsqueda está completamente optimizada. Actualice a Pro para límites más altos y soporte prioritario.",
+				"upgradeCta": "Actualizar a Pro"
+			}
 		},
 		"gettingStarted": {
 			"title": "Primeros pasos",

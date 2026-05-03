@@ -2,6 +2,7 @@
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Progress } from "@repo/ui/components/progress";
 import {
@@ -21,15 +22,18 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	ActivityIcon,
 	AlertTriangleIcon,
+	ArrowRightIcon,
 	DatabaseIcon,
 	HelpCircleIcon,
 	KeyIcon,
 	RefreshCwIcon,
 	SearchIcon,
+	SparklesIcon,
 	WifiIcon,
 	WifiOffIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
@@ -112,6 +116,13 @@ export function OverviewPage() {
 		}),
 		enabled: Boolean(orgId),
 		refetchInterval: 3000,
+	});
+
+	const { data: onboardingData } = useQuery({
+		...orpc.search.onboardingStatus.queryOptions({
+			input: { organizationId: orgId ?? "" },
+		}),
+		enabled: Boolean(orgId),
 	});
 
 	const isLoading = planLoading || usageLoading;
@@ -201,6 +212,9 @@ export function OverviewPage() {
 	const quotaColor =
 		quotaPercent >= 100 ? "destructive" : quotaPercent >= 80 ? "warning" : "success";
 
+	// ── Expansion signal ─────────────────────────────────────────────
+	const showUpgradePrompt = onboardingData?.showUpgradePrompt ?? false;
+
 	if (!orgId || !slug) {
 		return null;
 	}
@@ -261,6 +275,31 @@ export function OverviewPage() {
 										percent: Math.round(quotaPercent),
 									})}
 						</p>
+					</CardContent>
+				</Card>
+			)}
+
+			{/* Expansion signal: upgrade prompt when health_score = 100 on free plan */}
+			{showUpgradePrompt && (
+				<Card className="border-primary/30 bg-primary/5">
+					<CardContent className="gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between flex flex-col">
+						<div className="gap-3 flex items-start">
+							<SparklesIcon className="mt-0.5 size-5 shrink-0 text-primary" />
+							<div className="space-y-1">
+								<p className="text-sm font-semibold">
+									{t("overview.expansion.upgradeTitle")}
+								</p>
+								<p className="text-sm text-muted-foreground">
+									{t("overview.expansion.upgradeDesc")}
+								</p>
+							</div>
+						</div>
+						<Button size="sm" asChild className="shrink-0">
+							<Link href={`/${slug}/settings/billing`}>
+								{t("overview.expansion.upgradeCta")}
+								<ArrowRightIcon className="ml-2 size-4" />
+							</Link>
+						</Button>
 					</CardContent>
 				</Card>
 			)}

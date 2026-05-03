@@ -1186,7 +1186,12 @@
 			"searchesLabel": "Recherches",
 			"freePlan": "Gratuit",
 			"activeReindexJobs": "Tâches de réindexation actives",
-			"reindexProgress": "{processed} / {total} documents"
+			"reindexProgress": "{processed} / {total} documents",
+			"expansion": {
+				"upgradeTitle": "Performance maximale !",
+				"upgradeDesc": "Votre recherche est entièrement optimisée. Passez à Pro pour des limites plus élevées et un support prioritaire.",
+				"upgradeCta": "Passer à Pro"
+			}
 		},
 		"relevance": {
 			"tab": "Pertinence",

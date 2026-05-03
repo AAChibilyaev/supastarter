@@ -1,4 +1,5 @@
 import { db } from "@repo/database";
+import { resolveOrgPlan } from "@repo/payments/lib/entitlements";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
@@ -30,6 +31,7 @@ export const onboardingStatus = protectedProcedure
 			completedCount: z.number(),
 			totalSteps: z.number(),
 			allCompleted: z.boolean(),
+			showUpgradePrompt: z.boolean(),
 		}),
 	)
 	.handler(async ({ input: { organizationId }, context: { user } }) => {
@@ -92,11 +94,20 @@ export const onboardingStatus = protectedProcedure
 		];
 
 		const completedCount = steps.filter((s) => s.completed).length;
+		const allCompleted = completedCount === steps.length;
+
+		// Expansion signal: prompt upgrade when health is 100 and org is on the free plan
+		let showUpgradePrompt = false;
+		if (allCompleted) {
+			const plan = await resolveOrgPlan(organizationId);
+			showUpgradePrompt = plan.planId === "free";
+		}
 
 		return {
 			steps,
 			completedCount,
 			totalSteps: steps.length,
-			allCompleted: completedCount === steps.length,
+			allCompleted,
+			showUpgradePrompt,
 		};
 	});

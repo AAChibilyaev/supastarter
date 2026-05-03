@@ -1088,7 +1088,12 @@
 			"searchesLabel": "Запросы",
 			"freePlan": "Бесплатный",
 			"activeReindexJobs": "Активные задачи переиндексации",
-			"reindexProgress": "{processed} / {total} документов"
+			"reindexProgress": "{processed} / {total} документов",
+			"expansion": {
+				"upgradeTitle": "Максимальная производительность!",
+				"upgradeDesc": "Ваш поиск полностью оптимизирован. Перейдите на Pro для повышенных лимитов и приоритетной поддержки.",
+				"upgradeCta": "Перейти на Pro"
+			}
 		},
 		"gettingStarted": {
 			"title": "Начало работы",

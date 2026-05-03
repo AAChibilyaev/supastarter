@@ -262,12 +262,26 @@ export function AppSidebar() {
 								},
 							],
 						},
-						{
-							label: t("search.nav.knowledge"),
-							href: `${basePath}/knowledge`,
-							icon: LightbulbIcon,
-							isActive: pathname.startsWith(`${basePath}/knowledge`),
-						},
+					{
+						label: t("search.nav.knowledge"),
+						href: `${basePath}/knowledge`,
+						icon: LightbulbIcon,
+						isActive: pathname.startsWith(`${basePath}/knowledge`),
+						subItems: [
+							{
+								label: t("search.nav.knowledgeSpaces"),
+								href: `${basePath}/knowledge`,
+							},
+							{
+								label: t("search.nav.knowledgeDocuments"),
+								href: `${basePath}/knowledge?tab=documents`,
+							},
+							{
+								label: t("search.nav.knowledgeSearch"),
+								href: `${basePath}/knowledge?tab=search`,
+							},
+						],
+					},
 						{
 							label: t("search.nav.recommendations"),
 							href: `${basePath}/recommendations`,

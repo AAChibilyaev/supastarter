@@ -1452,7 +1452,7 @@ export class AacSearchWidget {
 	 */
 	private setPriceRange(range: { min: number; max: number } | null): void {
 		this.state = { ...this.state, priceRange: range, page: 1 };
-		this.doSearch();
+		void this.doSearch();
 	}
 
 	/**
@@ -2673,8 +2673,9 @@ export class AacSearchWidget {
 					}
 
 					let conversationId: string | null = null;
+					let chatUI: ChatUI | null = null;
 
-					new ChatUI({
+					chatUI = new ChatUI({
 						container: chatContainer as HTMLElement,
 						assistantName: dataset.assistantName ?? "Ассистент",
 						locale,
@@ -2682,19 +2683,37 @@ export class AacSearchWidget {
 						entryPoint: entryContext,
 						translations: chatTranslations,
 						onSendMessage: async (message) => {
-							if (!conversationId) {
-								conversationId = await client.startConversation({
-									entryPoint: entryContext.entryPoint ?? undefined,
-									productId: entryContext.productId ?? undefined,
-									categorySlug: entryContext.categorySlug ?? undefined,
-									searchQuery: entryContext.searchQuery ?? undefined,
-									userToken: dataset.userToken,
-									locale,
-								});
+							if (!chatUI) return;
+							chatUI.addUserMessage(message);
+							chatUI.startAssistantStream();
+
+							try {
+								if (!conversationId) {
+									conversationId = await client.startConversation({
+										entryPoint: entryContext.entryPoint ?? undefined,
+										productId: entryContext.productId ?? undefined,
+										categorySlug: entryContext.categorySlug ?? undefined,
+										searchQuery: entryContext.searchQuery ?? undefined,
+										userToken: dataset.userToken,
+										locale,
+									});
+								}
+								const generator = client.sendMessage(conversationId, message);
+								for await (const chunk of generator) {
+									if (chunk.type === "text_delta" && chunk.content) {
+										chatUI.appendStreamChunk(chunk.content);
+									} else if (chunk.type === "error") {
+										chatUI.showError(chatTranslations.chat_error ?? "Error");
+										return;
+									} else if (chunk.type === "done") {
+										break;
+									}
+								}
+							} catch {
+								chatUI.showError(chatTranslations.chat_error ?? "Error");
+							} finally {
+								chatUI.finishAssistantStream();
 							}
-							const generator = client.sendMessage(conversationId, message);
-							// Consume stream — streaming UI updates wired via ChatUI events
-							for await (const _chunk of generator) { /* noop */ }
 						},
 					});
 				} catch (err) {

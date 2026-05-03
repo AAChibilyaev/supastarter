@@ -185,26 +185,45 @@ export const assistantPublicApp = new Hono()
 			tools: tools as any,
 		});
 
-		// Persist assistant response after stream
-		Promise.resolve(response.text).then(async (text) => {
-			try {
-				const safeText = sanitizeOutput(text);
-				const usage = await response.usage;
-				await appendMessage({
-					conversationId,
-					role: "assistant",
-					content: safeText,
-					latencyMs: Date.now() - turnStart,
-					inputTokens: usage?.inputTokens ?? null,
-					outputTokens: usage?.outputTokens ?? null,
-				});
-			} catch (err) {
-				logger.warn({ conversationId, error: err }, "assistantPublic: failed to save assistant message");
-			}
-		}).catch(() => {});
+		// Build proper SSE stream with { type, content } chunks the ChatClient expects
+		const enc = new TextEncoder();
+		const sseStream = new ReadableStream<Uint8Array>({
+			async start(controller) {
+				const send = (obj: Record<string, unknown>) =>
+					controller.enqueue(enc.encode(`data: ${JSON.stringify(obj)}\n\n`));
+				let fullText = "";
+				try {
+					for await (const delta of response.textStream) {
+						fullText += delta;
+						send({ type: "text_delta", content: delta });
+					}
+					send({ type: "done" });
+					controller.enqueue(enc.encode("data: [DONE]\n\n"));
+				} catch {
+					send({ type: "error", error: "stream_failed" });
+				} finally {
+					controller.close();
+				}
 
-		// Return SSE stream using UI message stream format
-		return new Response(response.toUIMessageStream(), {
+				// Persist after stream completes
+				try {
+					const safeText = sanitizeOutput(fullText);
+					const usage = await response.usage;
+					await appendMessage({
+						conversationId,
+						role: "assistant",
+						content: safeText,
+						latencyMs: Date.now() - turnStart,
+						inputTokens: usage?.inputTokens ?? null,
+						outputTokens: usage?.outputTokens ?? null,
+					});
+				} catch (err) {
+					logger.warn({ conversationId, error: err }, "assistantPublic: failed to save assistant message");
+				}
+			},
+		});
+
+		return new Response(sseStream, {
 			headers: {
 				"Content-Type": "text/event-stream",
 				"Cache-Control": "no-cache",

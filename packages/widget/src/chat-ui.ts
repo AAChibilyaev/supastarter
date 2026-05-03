@@ -238,7 +238,7 @@ function simpleMarkdown(text: string): string {
 		.replace(/\*(.*?)\*/g, "<em>$1</em>")
 		.replace(/`(.*?)`/g, "<code>$1</code>")
 		.replace(/\n/g, "<br>")
-		.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+		.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 }
 
 export class ChatUI {

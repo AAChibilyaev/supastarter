@@ -9,7 +9,7 @@
 	"keywords": ["search", "aacsearch", "instant search", "ajax"],
 	"version": "1.0.0",
 	"textdomain": "aacsearch-search",
-	"editorScript": "file:./index.js",
+	"editorScript": "file:../../assets/js/blocks/search-bar.js",
 	"attributes": {
 		"placeholder": {
 			"type": "string",
@@ -18,6 +18,15 @@
 		"queryBy": {
 			"type": "string",
 			"default": "post_title"
+		},
+		"filtersVisible": {
+			"type": "boolean",
+			"default": false
+		},
+		"layout": {
+			"type": "string",
+			"default": "inline",
+			"enum": ["inline", "modal"]
 		}
 	},
 	"supports": {

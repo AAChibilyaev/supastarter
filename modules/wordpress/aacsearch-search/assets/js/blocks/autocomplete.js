@@ -6,16 +6,15 @@
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
 	var SelectControl = components.SelectControl;
-	var ToggleControl = components.ToggleControl;
 	var Placeholder = components.Placeholder;
 
 	/**
-	 * AACsearch Search Bar — Editor Edit Component.
+	 * AACsearch Autocomplete — Editor Edit Component.
 	 *
-	 * Renders a preview in the editor and exposes placeholder,
-	 * query_by, filtersVisible, and layout controls in the sidebar.
+	 * Renders a preview placeholder and exposes placeholder +
+	 * query_by controls in the sidebar InspectorPanel.
 	 */
-	function SearchBarEdit(props) {
+	function AutocompleteEdit(props) {
 		var attributes = props.attributes;
 		var setAttributes = props.setAttributes;
 
@@ -29,7 +28,7 @@
 				null,
 				el(
 					PanelBody,
-					{ title: __("Search Bar Settings", "aacsearch-search"), initialOpen: true },
+					{ title: __("Autocomplete Settings", "aacsearch-search"), initialOpen: true },
 					el(TextControl, {
 						label: __("Placeholder Text", "aacsearch-search"),
 						value: attributes.placeholder,
@@ -52,61 +51,36 @@
 							setAttributes({ queryBy: val });
 						},
 					}),
-					el(SelectControl, {
-						label: __("Layout", "aacsearch-search"),
-						value: attributes.layout,
-						options: [
-							{ label: __("Inline", "aacsearch-search"), value: "inline" },
-							{ label: __("Modal", "aacsearch-search"), value: "modal" },
-						],
-						onChange: function (val) {
-							setAttributes({ layout: val });
-						},
-					}),
-					el(ToggleControl, {
-						label: __("Show Filters by Default", "aacsearch-search"),
-						checked: attributes.filtersVisible,
-						onChange: function (val) {
-							setAttributes({ filtersVisible: val });
-						},
-					}),
 				),
 			),
 			el(
 				Placeholder,
 				{
-					icon: "search",
-					label: __("AACsearch Search Bar", "aacsearch-search"),
+					icon: "editor-insert-emoticon",
+					label: __("AACsearch Autocomplete", "aacsearch-search"),
 					instructions: __(
-						"This block renders a search input bar on the frontend. Configure options in the block sidebar.",
+						"This block renders an inline autocomplete search field on the frontend. Configure options in the block sidebar.",
 						"aacsearch-search",
 					),
 				},
 				el(
 					"p",
 					{ className: "aacsearch-block-preview" },
-					__("Search placeholder:", "aacsearch-search") +
+					__("Placeholder:", "aacsearch-search") +
 						' "' +
 						attributes.placeholder +
 						'" | ' +
-						__("Layout:", "aacsearch-search") +
+						__("Search in:", "aacsearch-search") +
 						" " +
-						attributes.layout +
-						" | " +
-						__("Filters:", "aacsearch-search") +
-						" " +
-						(attributes.filtersVisible
-							? __("Visible", "aacsearch-search")
-							: __("Hidden", "aacsearch-search")),
+						attributes.queryBy,
 				),
 			),
 		);
 	}
 
-	blocks.registerBlockType("aacsearch/search-bar", {
-		edit: SearchBarEdit,
+	blocks.registerBlockType("aacsearch/autocomplete", {
+		edit: AutocompleteEdit,
 		save: function () {
-			// Dynamic block — rendered server-side via render_callback
 			return null;
 		},
 	});

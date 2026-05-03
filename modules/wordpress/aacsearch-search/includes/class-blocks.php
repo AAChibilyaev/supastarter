@@ -88,8 +88,16 @@ class AACSearch_Blocks
             ? esc_attr($attributes['queryBy'])
             : 'post_title';
 
+        $filters = isset($attributes['filtersVisible']) && $attributes['filtersVisible']
+            ? 'show'
+            : 'hide';
+
+        $layout = !empty($attributes['layout'])
+            ? esc_attr($attributes['layout'])
+            : 'inline';
+
         return do_shortcode(
-            '[aacsearch_autocomplete placeholder="' . $placeholder . '" query_by="' . $query_by . '"]'
+            '[aacsearch_autocomplete placeholder="' . $placeholder . '" query_by="' . $query_by . '" filters="' . $filters . '" layout="' . $layout . '"]'
         );
     }
 

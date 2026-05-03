@@ -125,6 +125,18 @@ export type UpgradeSubscription = (params: {
 	prorationBehavior?: "create_prorations" | "always_invoice" | "none";
 }) => Promise<void>;
 
+export type GetProrationPreview = (params: {
+	subscriptionId: string;
+	newPriceId: string;
+	seats?: number;
+}) => Promise<{
+	prorationDate: number;
+	immediateAmount: number;
+	currency: string;
+	nextInvoiceAmount: number | null;
+	creditAmount: number;
+}>;
+
 export type WebhookHandler = (req: Request) => Promise<Response>;
 
 export type PaymentProvider = {

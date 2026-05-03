@@ -187,6 +187,12 @@
 		"security": {
 			"pageTitle": "Security operations",
 			"pageSubtitle": "Active sessions, passkeys and two-factor settings for the current admin account."
+		},
+		"onboarding": {
+			"pageTitle": "Onboarding Analytics",
+			"pageSubtitle": "Funnel completion rates, time-to-first-value, and cohort analysis",
+			"exportCsv": "Export CSV",
+			"error": "Failed to load analytics data"
 		}
 	},
 	"app": {

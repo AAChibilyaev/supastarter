@@ -1,5 +1,4 @@
 import { withContentCollections } from "@content-collections/next";
-import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import nextIntlPlugin from "next-intl/plugin";
 
@@ -21,18 +20,4 @@ const nextConfig: NextConfig = {
 	},
 };
 
-export default withSentryConfig(withContentCollections(withNextIntl(nextConfig)), {
-	org: process.env.SENTRY_ORG,
-	project: process.env.SENTRY_PROJECT,
-	authToken: process.env.SENTRY_AUTH_TOKEN,
-	silent: !process.env.CI,
-	widenClientFileUpload: true,
-	sourcemaps: {
-		deleteSourcemapsAfterUpload: true,
-	},
-	webpack: {
-		treeshake: {
-			removeDebugLogging: true,
-		},
-	},
-});
+export default withContentCollections(withNextIntl(nextConfig));

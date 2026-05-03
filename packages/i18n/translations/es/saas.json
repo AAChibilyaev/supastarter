@@ -187,6 +187,12 @@
 		"security": {
 			"pageTitle": "Operaciones de seguridad",
 			"pageSubtitle": "Sesiones activas, claves de acceso y configuración de doble factor para la cuenta de administrador actual."
+		},
+		"onboarding": {
+			"pageTitle": "Analíticas de Onboarding",
+			"pageSubtitle": "Tasas de finalización del embudo, tiempo hasta el primer valor y análisis de cohortes",
+			"exportCsv": "Exportar CSV",
+			"error": "No se pudieron cargar los datos analíticos"
 		}
 	},
 	"app": {

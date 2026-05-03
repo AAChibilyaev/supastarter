@@ -1,29 +1,24 @@
 import { ORPCError } from "@orpc/client";
-import {
-	getOrganizationMembership,
-	getPurchasesByOrganizationId,
-	getPurchasesByUserId,
-} from "@repo/database";
+import { getPurchasesByOrganizationId, getPurchasesByUserId } from "@repo/database";
 import { logger } from "@repo/logs";
 import {
 	findPriceByPlanId,
+	getProrationPreview as getProrationPreviewFn,
 	getProviderPriceIdByPlanId,
-	upgradeSubscription as upgradeSubscriptionFn,
 	type PlanId,
 } from "@repo/payments";
-import { invalidatePlanCache } from "@repo/payments/lib/entitlements";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 
-export const upgradeSubscription = protectedProcedure
+export const getProrationPreview = protectedProcedure
 	.route({
 		method: "POST",
-		path: "/payments/upgrade-subscription",
+		path: "/payments/proration-preview",
 		tags: ["Payments"],
-		summary: "Upgrade or downgrade subscription",
+		summary: "Preview proration",
 		description:
-			"Changes the plan of an active subscription with proration. Requires owner or admin role for org-owned subscriptions.",
+			"Calculates the prorated charges/credits for changing subscription plans, without applying the change.",
 	})
 	.input(
 		z.object({
@@ -52,20 +47,6 @@ export const upgradeSubscription = protectedProcedure
 			});
 		}
 
-		// Authorization: only owner/admin can change org subscriptions
-		if (activePurchase.organizationId) {
-			const membership = await getOrganizationMembership(
-				activePurchase.organizationId,
-				user.id,
-			);
-
-			if (!membership || (membership.role !== "owner" && membership.role !== "admin")) {
-				throw new ORPCError("FORBIDDEN");
-			}
-		} else if (activePurchase.userId && activePurchase.userId !== user.id) {
-			throw new ORPCError("FORBIDDEN");
-		}
-
 		// Resolve new price ID from plan
 		const price = findPriceByPlanId(newPlanId as PlanId, {
 			type: "subscription",
@@ -82,24 +63,18 @@ export const upgradeSubscription = protectedProcedure
 			});
 		}
 
-		// Perform the upgrade
+		// Get proration preview from Stripe
 		try {
-			await upgradeSubscriptionFn({
+			const preview = await getProrationPreviewFn({
 				subscriptionId: activePurchase.subscriptionId,
 				newPriceId,
-				prorationBehavior: "create_prorations",
 			});
 
-			// Immediately invalidate the plan cache so the new limits take effect
-			if (organizationId) {
-				invalidatePlanCache(organizationId);
-			}
-
-			return { success: true };
+			return preview;
 		} catch (e) {
-			logger.error("Failed to upgrade subscription", e);
+			logger.error("Failed to get proration preview", e);
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {
-				message: "Failed to upgrade subscription",
+				message: "Failed to get proration preview",
 			});
 		}
 	});

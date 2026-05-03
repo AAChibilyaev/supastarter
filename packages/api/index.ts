@@ -20,6 +20,7 @@ import { demoApp } from "./modules/search/demo-public";
 import { eventsApp } from "./modules/search/events-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { scimRouter } from "./modules/search/scim-public";
+import { shareApp } from "./modules/search/share-public";
 import { publicSpellCheckApp } from "./modules/search/spell-check-public";
 import { openApiHandler, rpcHandler } from "./orpc/handler";
 import { v1Router } from "./v1/router";
@@ -80,6 +81,8 @@ export const app = new Hono()
 	.route("/", analyticsApp)
 	// SCIM 2.0 endpoints (identity provisioning — own auth)
 	.route("/", scimRouter)
+	// Share link search (HMAC token, no API key required)
+	.route("/", shareApp)
 	// Version 1 public REST API (API-key auth, mounted before global CORS for broad access)
 	.route("/v1", v1Router)
 	// Cors middleware

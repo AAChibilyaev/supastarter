@@ -187,6 +187,12 @@
 		"security": {
 			"pageTitle": "Opérations de sécurité",
 			"pageSubtitle": "Sessions actives, clés d'accès et paramètres de double facteur pour le compte administrateur actuel."
+		},
+		"onboarding": {
+			"pageTitle": "Analytiques d'Onboarding",
+			"pageSubtitle": "Taux de complétion de l'entonnoir, temps jusqu'à la première valeur et analyse de cohorte",
+			"exportCsv": "Exporter CSV",
+			"error": "Échec du chargement des données analytiques"
 		}
 	},
 	"app": {

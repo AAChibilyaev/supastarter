@@ -187,6 +187,12 @@
 		"security": {
 			"pageTitle": "Sicherheitsoperationen",
 			"pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
+		},
+		"onboarding": {
+			"pageTitle": "Onboarding-Analytics",
+			"pageSubtitle": "Funnel-Abschlussraten, Zeit bis zum ersten Wert und Kohortenanalyse",
+			"exportCsv": "CSV exportieren",
+			"error": "Analytik-Daten konnten nicht geladen werden"
 		}
 	},
 	"app": {

@@ -13,6 +13,7 @@ import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
 import { OverageStatusCard } from "@search/components/sections/OverageStatusCard";
+import { UsageDashboard } from "@search/components/sections/UsageDashboard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -67,6 +68,11 @@ export default async function BillingSettingsPage({
 			<div className="mb-6 space-y-4">
 				<BillingPlanInfo />
 				<OverageStatusCard />
+			</div>
+
+			{/* Detailed Usage Dashboard */}
+			<div className="mb-6">
+				<UsageDashboard organizationId={organization.id} />
 			</div>
 
 			<SettingsList>

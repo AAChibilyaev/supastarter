@@ -118,6 +118,38 @@
 			"ofLimit": "of monthly limit",
 			"loadError": "Failed to load usage data."
 		},
+		"dashboard": {
+			"usage": {
+				"title": "Usage Dashboard",
+				"period": {
+					"7days": "7 days",
+					"30days": "30 days",
+					"90days": "90 days"
+				},
+				"searches": "Total Searches",
+				"documents": "Documents Indexed",
+				"overage": "Overage",
+				"planReset": "Plan Reset",
+				"periodSearch": "Searches in last {days} days",
+				"totalIndexed": "Total indexed documents",
+				"overageActive": "Overage active",
+				"noOverage": "Within limits",
+				"trialStatus": "Trial period",
+				"currentCycle": "Current billing cycle",
+				"quotaTitle": "Quota Usage",
+				"searchQuota": "Search Quota",
+				"documentQuota": "Document Quota",
+				"byIndexTitle": "Usage by Index",
+				"noData": "No usage data for this period",
+				"loadError": "Failed to load usage data.",
+				"table": {
+					"index": "Index",
+					"searches": "Searches",
+					"documents": "Documents",
+					"percent": "% of Total"
+				}
+			}
+		},
 		"analytics": {
 			"tab": "Analytics",
 			"title": "Analytics",

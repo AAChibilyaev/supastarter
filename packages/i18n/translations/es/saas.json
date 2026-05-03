@@ -751,6 +751,18 @@
 			"usage": {
 				"searches": "Búsquedas",
 				"documents": "Documentos"
+			},
+			"paymentMethods": {
+				"title": "Métodos de pago",
+				"empty": "No hay métodos de pago guardados",
+				"addCard": "Añadir método de pago",
+				"default": "Predeterminado",
+				"setDefault": "Establecer como predeterminado",
+				"delete": "Eliminar tarjeta",
+				"deleteConfirmTitle": "¿Eliminar esta tarjeta?",
+				"deleteConfirmMessage": "Esta tarjeta se eliminará permanentemente de su cuenta.",
+				"addCardError": "Error al abrir el portal de pagos. Por favor, inténtelo de nuevo.",
+				"actionError": "La acción falló. Por favor, inténtelo de nuevo."
 			}
 		},
 		"notificationsPage": {

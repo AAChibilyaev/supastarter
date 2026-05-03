@@ -751,6 +751,18 @@
 			"usage": {
 				"searches": "Suchen",
 				"documents": "Dokumente"
+			},
+			"paymentMethods": {
+				"title": "Zahlungsmethoden",
+				"empty": "Keine Zahlungsmethoden gespeichert",
+				"addCard": "Zahlungsmethode hinzufügen",
+				"default": "Standard",
+				"setDefault": "Als Standard festlegen",
+				"delete": "Karte entfernen",
+				"deleteConfirmTitle": "Diese Karte entfernen?",
+				"deleteConfirmMessage": "Diese Karte wird dauerhaft von Ihrem Konto entfernt.",
+				"addCardError": "Fehler beim Öffnen des Zahlungsportals. Bitte versuchen Sie es erneut.",
+				"actionError": "Aktion fehlgeschlagen. Bitte versuchen Sie es erneut."
 			}
 		},
 		"notificationsPage": {

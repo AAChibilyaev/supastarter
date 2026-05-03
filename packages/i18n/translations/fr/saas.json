@@ -751,6 +751,18 @@
 			"usage": {
 				"searches": "Recherches",
 				"documents": "Documents"
+			},
+			"paymentMethods": {
+				"title": "Moyens de paiement",
+				"empty": "Aucun moyen de paiement enregistré",
+				"addCard": "Ajouter un moyen de paiement",
+				"default": "Par défaut",
+				"setDefault": "Définir par défaut",
+				"delete": "Supprimer la carte",
+				"deleteConfirmTitle": "Supprimer cette carte ?",
+				"deleteConfirmMessage": "Cette carte sera définitivement supprimée de votre compte.",
+				"addCardError": "Impossible d'ouvrir le portail de paiement. Veuillez réessayer.",
+				"actionError": "L'action a échoué. Veuillez réessayer."
 			}
 		},
 		"notificationsPage": {

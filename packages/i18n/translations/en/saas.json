@@ -751,7 +751,19 @@
 				"title": "Features",
 				"none": "No features configured"
 			},
-			"upgrade": "Upgrade plan"
+			"upgrade": "Upgrade plan",
+			"paymentMethods": {
+				"title": "Payment Methods",
+				"empty": "No payment methods saved",
+				"addCard": "Add Payment Method",
+				"default": "Default",
+				"setDefault": "Set as default",
+				"delete": "Remove card",
+				"deleteConfirmTitle": "Remove this card?",
+				"deleteConfirmMessage": "This card will be permanently removed from your account.",
+				"addCardError": "Failed to open payment portal. Please try again.",
+				"actionError": "Action failed. Please try again."
+			}
 		},
 		"notificationsPage": {
 			"title": "Notifications",

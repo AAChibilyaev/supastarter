@@ -556,6 +556,58 @@
         "saved": "Retention policies saved successfully",
         "error": "Failed to save retention policies"
       }
+    },
+    "scim": {
+      "title": "SCIM Provisioning",
+      "description": "Automate user provisioning with SCIM 2.0",
+      "emptyState": {
+        "title": "Automate user provisioning with SCIM",
+        "description": "Connect your identity provider to automatically sync users and groups to your organization.",
+        "cta": "Connect Identity Provider",
+        "planUpgrade": "Enterprise feature — available on Scale plan+"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "lastSync": "Last sync",
+        "usersProvisioned": "Users provisioned"
+      },
+      "endpoint": {
+        "baseUrl": "SCIM Base URL",
+        "bearerToken": "Bearer Token",
+        "copy": "Copy",
+        "regenerate": "Regenerate",
+        "revoke": "Revoke",
+        "disconnect": "Disconnect",
+        "viewLogs": "View Logs"
+      },
+      "disconnectDialog": {
+        "title": "Disconnect SCIM?",
+        "description": "This will revoke the bearer token and stop user provisioning. Existing users will remain in your organization.",
+        "confirm": "Disconnect",
+        "cancel": "Cancel"
+      },
+      "wizard": {
+        "title": "Connect Identity Provider",
+        "selectProvider": "Select your identity provider",
+        "configure": "Configure {provider} Connection",
+        "testConnection": "Test SCIM Connection",
+        "skipAndSave": "Skip Test & Save",
+        "complete": "Complete Setup"
+      },
+      "test": {
+        "success": "Connection successful!",
+        "failure": "Connection failed"
+      },
+      "logs": {
+        "title": "SCIM Audit Logs",
+        "exportCsv": "Export CSV",
+        "action": "Action",
+        "user": "User",
+        "email": "Email",
+        "source": "Source",
+        "timestamp": "Timestamp"
+      }
     }
   }
 }

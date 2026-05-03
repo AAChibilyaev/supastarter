@@ -558,6 +558,58 @@
         "title": "Хранение данных поиска",
         "description": "Сколько хранить логи поисковых запросов и события использования"
       }
+    },
+    "scim": {
+      "title": "SCIM-провизионинг",
+      "description": "Автоматическое управление пользователями через SCIM 2.0",
+      "emptyState": {
+        "title": "Автоматизируйте провизионинг пользователей с SCIM",
+        "description": "Подключите ваш Identity Provider для автоматической синхронизации пользователей и групп с вашей организацией.",
+        "cta": "Подключить Identity Provider",
+        "planUpgrade": "Enterprise-функция — доступна на тарифе Scale+"
+      },
+      "status": {
+        "active": "Активно",
+        "inactive": "Неактивно",
+        "lastSync": "Последняя синхронизация",
+        "usersProvisioned": "Провизионировано пользователей"
+      },
+      "endpoint": {
+        "baseUrl": "SCIM Base URL",
+        "bearerToken": "Bearer Token",
+        "copy": "Копировать",
+        "regenerate": "Перегенерировать",
+        "revoke": "Отозвать",
+        "disconnect": "Отключить",
+        "viewLogs": "Просмотр логов"
+      },
+      "disconnectDialog": {
+        "title": "Отключить SCIM?",
+        "description": "Это отозвёт bearer-токен и остановит провизионинг пользователей. Существующие пользователи останутся в организации.",
+        "confirm": "Отключить",
+        "cancel": "Отмена"
+      },
+      "wizard": {
+        "title": "Подключение Identity Provider",
+        "selectProvider": "Выберите ваш Identity Provider",
+        "configure": "Настройка подключения {provider}",
+        "testConnection": "Проверить SCIM-подключение",
+        "skipAndSave": "Пропустить проверку и сохранить",
+        "complete": "Завершить настройку"
+      },
+      "test": {
+        "success": "Подключение успешно!",
+        "failure": "Ошибка подключения"
+      },
+      "logs": {
+        "title": "SCIM Audit Logs",
+        "exportCsv": "Экспорт CSV",
+        "action": "Действие",
+        "user": "Пользователь",
+        "email": "Email",
+        "source": "Источник",
+        "timestamp": "Время"
+      }
     }
   }
 }

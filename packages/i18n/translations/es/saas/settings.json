@@ -564,7 +564,7 @@
       "description": "Automatice el aprovisionamiento de usuarios con SCIM 2.0",
       "emptyState": {
         "title": "Automatice el aprovisionamiento de usuarios con SCIM",
-        "description": "Conecte su proveedor de identidad para crear, actualizar y desactivar usuarios automáticamente en su organización AACsearch.",
+        "description": "Conecte su proveedor de identidad para sincronizar usuarios y grupos automáticamente con su organización.",
         "cta": "Conectar proveedor de identidad",
         "planUpgrade": "Función Enterprise — disponible en el plan Scale+"
       },
@@ -572,63 +572,43 @@
         "active": "Activo",
         "inactive": "Inactivo",
         "lastSync": "Última sincronización",
-        "usersProvisioned": "Usuarios aprovisionados",
-        "disconnect": "Desconectar",
-        "viewLogs": "Ver registros"
+        "usersProvisioned": "Usuarios aprovisionados"
       },
       "endpoint": {
-        "baseUrl": "SCIM Base URL",
+        "baseUrl": "URL base SCIM",
         "bearerToken": "Bearer Token",
         "copy": "Copiar",
         "regenerate": "Regenerar",
         "revoke": "Revocar",
-        "noToken": "No hay token activo",
-        "lastUsed": "Último uso"
+        "disconnect": "Desconectar",
+        "viewLogs": "Ver registros"
+      },
+      "disconnectDialog": {
+        "title": "¿Desconectar SCIM?",
+        "description": "Esto revocará el bearer token y detendrá el aprovisionamiento de usuarios. Los usuarios existentes permanecerán en su organización.",
+        "confirm": "Desconectar",
+        "cancel": "Cancelar"
       },
       "wizard": {
         "title": "Conectar proveedor de identidad",
         "selectProvider": "Seleccione su proveedor de identidad",
-        "configure": "Configurar conexión de {provider}",
+        "configure": "Configurar conexión {provider}",
         "testConnection": "Probar conexión SCIM",
-        "skipAndSave": "Omitir prueba y guardar",
-        "complete": "Completar configuración",
-        "back": "Atrás",
-        "okta": "Okta",
-        "azureAd": "Azure AD",
-        "googleWorkspace": "Google Workspace",
-        "onelogin": "OneLogin",
-        "keycloak": "Keycloak",
-        "generic": "Otro (SCIM v2)"
+        "skipAndSave": "Saltar prueba y guardar",
+        "complete": "Completar configuración"
       },
       "test": {
         "success": "¡Conexión exitosa!",
-        "failure": "Conexión fallida",
-        "inProgress": "Probando conexión...",
-        "stepConfig": "Configuración del proveedor de servicio",
-        "stepListUsers": "Listando usuarios",
-        "stepCreateUser": "Creando usuario de prueba",
-        "stepCleanup": "Limpiando usuario de prueba",
-        "ok": "OK",
-        "error": "Error"
+        "failure": "Conexión fallida"
       },
       "logs": {
         "title": "Registros de auditoría SCIM",
-        "description": "Revise toda la actividad de aprovisionamiento SCIM de su organización",
         "exportCsv": "Exportar CSV",
         "action": "Acción",
         "user": "Usuario",
-        "email": "Email",
+        "email": "Correo",
         "source": "Origen",
-        "timestamp": "Marca de tiempo",
-        "noLogs": "Aún no hay actividad SCIM",
-        "noLogsDescription": "Los registros de auditoría SCIM aparecerán aquí cuando el aprovisionamiento esté configurado y activo.",
-        "actions": {
-          "user_created": "Creado",
-          "user_updated": "Actualizado",
-          "user_deactivated": "Desactivado",
-          "group_created": "Grupo creado",
-          "group_synced": "Grupo sincronizado"
-        }
+        "timestamp": "Marca de tiempo"
       }
     }
   }

@@ -558,6 +558,58 @@
         "saved": "Aufbewahrungsrichtlinien erfolgreich gespeichert",
         "error": "Fehler beim Speichern der Aufbewahrungsrichtlinien"
       }
+    },
+    "scim": {
+      "title": "SCIM-Bereitstellung",
+      "description": "Automatisieren Sie die Benutzerbereitstellung mit SCIM 2.0",
+      "emptyState": {
+        "title": "Automatisieren Sie die Benutzerbereitstellung mit SCIM",
+        "description": "Verbinden Sie Ihren Identity Provider, um Benutzer und Gruppen automatisch mit Ihrer Organisation zu synchronisieren.",
+        "cta": "Identity Provider verbinden",
+        "planUpgrade": "Enterprise-Funktion — verfügbar ab Scale Plan+"
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "lastSync": "Letzte Synchronisation",
+        "usersProvisioned": "Bereitgestellte Benutzer"
+      },
+      "endpoint": {
+        "baseUrl": "SCIM Base URL",
+        "bearerToken": "Bearer Token",
+        "copy": "Kopieren",
+        "regenerate": "Neu generieren",
+        "revoke": "Widerrufen",
+        "disconnect": "Trennen",
+        "viewLogs": "Logs anzeigen"
+      },
+      "disconnectDialog": {
+        "title": "SCIM trennen?",
+        "description": "Dies widerruft den Bearer-Token und stoppt die Benutzerbereitstellung. Vorhandene Benutzer bleiben in Ihrer Organisation.",
+        "confirm": "Trennen",
+        "cancel": "Abbrechen"
+      },
+      "wizard": {
+        "title": "Identity Provider verbinden",
+        "selectProvider": "Wählen Sie Ihren Identity Provider",
+        "configure": "{provider} Verbindung konfigurieren",
+        "testConnection": "SCIM-Verbindung testen",
+        "skipAndSave": "Test überspringen & speichern",
+        "complete": "Einrichtung abschließen"
+      },
+      "test": {
+        "success": "Verbindung erfolgreich!",
+        "failure": "Verbindung fehlgeschlagen"
+      },
+      "logs": {
+        "title": "SCIM Audit Logs",
+        "exportCsv": "CSV exportieren",
+        "action": "Aktion",
+        "user": "Benutzer",
+        "email": "E-Mail",
+        "source": "Quelle",
+        "timestamp": "Zeitstempel"
+      }
     }
   }
 }

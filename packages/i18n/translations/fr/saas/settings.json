@@ -558,6 +558,58 @@
         "saved": "Politiques de conservation enregistrées avec succès",
         "error": "Échec de l'enregistrement des politiques de conservation"
       }
+    },
+    "scim": {
+      "title": "Provisionnement SCIM",
+      "description": "Automatisez le provisionnement des utilisateurs avec SCIM 2.0",
+      "emptyState": {
+        "title": "Automatisez le provisionnement des utilisateurs avec SCIM",
+        "description": "Connectez votre fournisseur d'identité pour synchroniser automatiquement les utilisateurs et les groupes avec votre organisation.",
+        "cta": "Connecter le fournisseur d'identité",
+        "planUpgrade": "Fonctionnalité Enterprise — disponible sur le plan Scale+"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "lastSync": "Dernière synchronisation",
+        "usersProvisioned": "Utilisateurs provisionnés"
+      },
+      "endpoint": {
+        "baseUrl": "URL de base SCIM",
+        "bearerToken": "Bearer Token",
+        "copy": "Copier",
+        "regenerate": "Régénérer",
+        "revoke": "Révoquer",
+        "disconnect": "Déconnecter",
+        "viewLogs": "Voir les journaux"
+      },
+      "disconnectDialog": {
+        "title": "Déconnecter SCIM ?",
+        "description": "Cela révoquera le bearer token et arrêtera le provisionnement des utilisateurs. Les utilisateurs existants resteront dans votre organisation.",
+        "confirm": "Déconnecter",
+        "cancel": "Annuler"
+      },
+      "wizard": {
+        "title": "Connecter le fournisseur d'identité",
+        "selectProvider": "Sélectionnez votre fournisseur d'identité",
+        "configure": "Configurer la connexion {provider}",
+        "testConnection": "Tester la connexion SCIM",
+        "skipAndSave": "Ignorer le test et enregistrer",
+        "complete": "Terminer la configuration"
+      },
+      "test": {
+        "success": "Connexion réussie !",
+        "failure": "Échec de la connexion"
+      },
+      "logs": {
+        "title": "Journaux d'audit SCIM",
+        "exportCsv": "Exporter CSV",
+        "action": "Action",
+        "user": "Utilisateur",
+        "email": "E-mail",
+        "source": "Source",
+        "timestamp": "Horodatage"
+      }
     }
   }
 }

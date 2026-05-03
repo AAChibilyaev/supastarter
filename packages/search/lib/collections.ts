@@ -21,6 +21,11 @@ export function aliasName(organizationId: string, slug: string): string {
 	return `${config.collectionPrefix}_${sanitize(organizationId)}_${sanitize(slug)}`;
 }
 
+export interface HnswParams {
+	ef_construction?: number;
+	M?: number;
+}
+
 export interface CollectionFieldInput {
 	name: string;
 	type: string;
@@ -28,15 +33,8 @@ export interface CollectionFieldInput {
 	optional?: boolean;
 	index?: boolean;
 	sort?: boolean;
-	reference?: string;
-	embed?: {
-		from: string[];
-		model_config?: {
-			model_name?: string;
-			api_key?: string;
-			api_url?: string;
-		};
-	};
+	num_dim?: number;
+	hnsw_params?: HnswParams;
 }
 
 export interface CreatePhysicalCollectionInput {

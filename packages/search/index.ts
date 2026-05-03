@@ -11,6 +11,7 @@ export {
 	swapAliasToVersion,
 	type CollectionFieldInput,
 	type CreatePhysicalCollectionInput,
+	type HnswParams,
 } from "./lib/collections";
 export {
 	generateSearchApiKey,

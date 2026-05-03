@@ -1,17 +1,11 @@
 import { z } from "zod";
 
-const embedConfigSchema = z.object({
-	from: z.array(z.string().min(1)).min(1).describe("Source fields to generate embeddings from"),
-	model_config: z.object({
-		model_name: z
-			.string()
-			.min(1)
-			.default("openai/text-embedding-3-small")
-			.describe("Embedding model name"),
-		api_key: z.string().optional().describe("API key for the embedding service"),
-		api_url: z.string().optional().describe("Custom API URL for the embedding service"),
-	}),
+export const hnswParamsSchema = z.object({
+	ef_construction: z.number().int().positive().optional(),
+	M: z.number().int().positive().optional(),
 });
+
+export type HnswParamsInput = z.infer<typeof hnswParamsSchema>;
 
 export const searchFieldSchema = z.object({
 	name: z.string().min(1).max(64),
@@ -37,8 +31,10 @@ export const searchFieldSchema = z.object({
 	optional: z.boolean().optional(),
 	index: z.boolean().optional(),
 	sort: z.boolean().optional(),
-	reference: z.string().optional(),
-	embed: embedConfigSchema.optional(),
+	/** Number of dimensions for vector fields (required when type is "float[]" used as a vector field). */
+	num_dim: z.number().int().positive().optional(),
+	/** HNSW index build parameters for vector fields. ef_construction controls index quality; M controls connections per node. */
+	hnsw_params: hnswParamsSchema.optional(),
 });
 
 export type EmbedConfig = z.infer<typeof embedConfigSchema>;

@@ -24,8 +24,7 @@ import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
 import { truncateIndex } from "./procedures/truncate-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
-import { exportIndexDocuments } from "./procedures/export-documents";
-import { facetSearch } from "./procedures/facet-search";
+import { createWebhook, deleteWebhook, listWebhooks } from "./procedures/webhooks";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
@@ -208,7 +207,9 @@ export const searchRouter = {
 		update: updateRankingRules,
 	},
 	dynamicSearch,
-	exportIndexDocuments,
-	facetSearch,
-	getOverageStatus,
+	webhooks: {
+		list: listWebhooks,
+		create: createWebhook,
+		delete: deleteWebhook,
+	},
 };

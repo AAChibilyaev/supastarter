@@ -1,6 +1,6 @@
 {
 	"name": "aacsearch/aacsearch-php",
-	"description": "PHP client for the AACSearch v1 REST API — search, index management, synonyms, curations, and more",
+	"description": "PHP client for AACSearch REST API (v1 + v2) — search, index management, synonyms, curations, analytics, and more",
 	"type": "library",
 	"license": "MIT",
 	"authors": [
@@ -21,7 +21,7 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-main": "0.1.x-dev"
+			"dev-main": "0.2.x-dev"
 		}
 	}
 }

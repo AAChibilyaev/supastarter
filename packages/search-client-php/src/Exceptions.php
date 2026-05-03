@@ -35,3 +35,8 @@ class NotFoundException extends AacsearchException {}
  * Raised when the API rate limit has been exceeded.
  */
 class RateLimitException extends AacsearchException {}
+
+/**
+ * Raised when the request is malformed or fails validation (HTTP 400).
+ */
+class ValidationException extends AacsearchException {}

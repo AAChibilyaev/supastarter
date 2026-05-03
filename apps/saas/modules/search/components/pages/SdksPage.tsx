@@ -41,11 +41,7 @@ function CopyButton({ text }: { text: string }) {
 
 	return (
 		<Button variant="outline" size="sm" onClick={handleCopy} className="gap-1.5 shrink-0">
-			{copied ? (
-				<Check className="size-3.5 text-green-500" />
-			) : (
-				<Clipboard className="size-3.5" />
-			)}
+			{copied ? <Check className="size-3.5 text-green-500" /> : <Clipboard className="size-3.5" />}
 			{copied ? "Copied!" : "Copy"}
 		</Button>
 	);
@@ -76,8 +72,7 @@ export function SdksPage() {
 			packageName: "aacsearch/aacsearch-php",
 			installCommand: "composer require aacsearch/aacsearch-php",
 			docsUrl: "https://aacsearch.com/docs/sdks/php",
-			repoUrl:
-				"https://github.com/aacsearch/supastarter/tree/main/packages/search-client-php",
+			repoUrl: "https://github.com/aacsearch/supastarter/tree/main/packages/search-client-php",
 			status: "ready",
 			version: "0.1.0",
 			color: "bg-indigo-500",
@@ -89,8 +84,7 @@ export function SdksPage() {
 			packageName: "aacsearch",
 			installCommand: "pip install aacsearch",
 			docsUrl: "https://aacsearch.com/docs/sdks/python",
-			repoUrl:
-				"https://github.com/aacsearch/supastarter/tree/main/packages/search-client-python",
+			repoUrl: "https://github.com/aacsearch/supastarter/tree/main/packages/search-client-python",
 			status: "ready",
 			version: "0.1.0",
 			color: "bg-yellow-500",
@@ -143,16 +137,12 @@ export function SdksPage() {
 						<CardContent className="space-y-4">
 							{/* Install command */}
 							<div className="space-y-1.5">
-								<span className="text-xs font-medium text-muted-foreground">
-									{t("install")}
-								</span>
+								<span className="text-xs font-medium text-muted-foreground">{t("install")}</span>
 								<div className="gap-2 flex items-center">
 									<code className="px-3 py-2 text-xs font-mono flex-1 overflow-x-auto rounded-md bg-muted whitespace-nowrap">
 										{sdk.installCommand}
 									</code>
-									{sdk.status === "ready" && (
-										<CopyButton text={sdk.installCommand} />
-									)}
+									{sdk.status === "ready" && <CopyButton text={sdk.installCommand} />}
 								</div>
 							</div>
 

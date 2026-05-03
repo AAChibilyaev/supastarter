@@ -23,10 +23,7 @@ export const deleteFile = protectedProcedure
 	)
 	.output(z.object({ deleted: z.boolean() }))
 	.handler(async ({ input, context: { user } }) => {
-		await requireKnowledgeOwnerAdmin(
-			{ ownerType: input.ownerType, ownerId: input.ownerId },
-			user,
-		);
+		await requireKnowledgeOwnerAdmin({ ownerType: input.ownerType, ownerId: input.ownerId }, user);
 
 		const scope = {
 			ownerType: input.ownerType,

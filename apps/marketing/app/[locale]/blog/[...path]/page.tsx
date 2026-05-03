@@ -103,9 +103,7 @@ export default async function BlogPostPage(props: { params: Promise<Params> }) {
 										</div>
 									)}
 									<div>
-										<p className="font-semibold text-sm opacity-50">
-											{authorName}
-										</p>
+										<p className="font-semibold text-sm opacity-50">{authorName}</p>
 									</div>
 								</div>
 							)}

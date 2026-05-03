@@ -38,9 +38,7 @@ export const LandingPricingSection = ({
 		<section
 			className={cn(
 				"gap-8 py-12 lg:py-16 flex w-full flex-col items-center justify-center",
-				withBackground && variant === "primary"
-					? "bg-primary-100/20 dark:bg-primary-900/10"
-					: "",
+				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",

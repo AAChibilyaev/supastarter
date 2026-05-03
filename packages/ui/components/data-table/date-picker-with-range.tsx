@@ -69,8 +69,7 @@ export function DatePickerWithRange({
 						{date?.from ? (
 							date.to ? (
 								<span className="truncate">
-									{format(date.from, "LLL dd, y")} -{" "}
-									{format(date.to, "LLL dd, y")}
+									{format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
 								</span>
 							) : (
 								format(date.from, "LLL dd, y")
@@ -86,11 +85,7 @@ export function DatePickerWithRange({
 							<DatePresets onSelect={setDate} selected={date} presets={presets} />
 						</div>
 						<div className="p-3 sm:hidden block">
-							<DatePresetsSelect
-								onSelect={setDate}
-								selected={date}
-								presets={presets}
-							/>
+							<DatePresetsSelect onSelect={setDate} selected={date} presets={presets} />
 						</div>
 						<Separator orientation="vertical" className="h-auto w-px" />
 						<Calendar

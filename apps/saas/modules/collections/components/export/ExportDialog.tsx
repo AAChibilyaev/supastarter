@@ -50,9 +50,7 @@ interface ExportDialogProps {
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function downloadBlob(content: string, filename: string, mimeType: string, isBase64?: boolean) {
-	const blob = isBase64
-		? base64ToBlob(content, mimeType)
-		: new Blob([content], { type: mimeType });
+	const blob = isBase64 ? base64ToBlob(content, mimeType) : new Blob([content], { type: mimeType });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement("a");
 	a.href = url;
@@ -112,9 +110,7 @@ export function ExportDialog({
 		const documentIds =
 			scope === "selected" && selectedIds && selectedIds.length > 0 ? selectedIds : undefined;
 		const activeFilterBy =
-			scope === "filtered" && filterBy && Object.keys(filterBy).length > 0
-				? filterBy
-				: undefined;
+			scope === "filtered" && filterBy && Object.keys(filterBy).length > 0 ? filterBy : undefined;
 
 		exportMutation.mutate({
 			organizationId,
@@ -152,9 +148,7 @@ export function ExportDialog({
 
 				{/* Format Selection */}
 				<div className="gap-2 grid">
-					<Label className="text-sm font-medium">
-						{t("search.export.format") || "Format"}
-					</Label>
+					<Label className="text-sm font-medium">{t("search.export.format") || "Format"}</Label>
 					<RadioGroup
 						value={format}
 						onValueChange={(v) => setFormat(v as ExportFormat)}
@@ -172,16 +166,12 @@ export function ExportDialog({
 										<p className="font-medium text-sm">{fmt.toUpperCase()}</p>
 										<p className="text-xs text-muted-foreground">
 											{fmt === "csv"
-												? t("search.export.csvDesc") ||
-													"Excel-compatible, best for spreadsheets"
+												? t("search.export.csvDesc") || "Excel-compatible, best for spreadsheets"
 												: fmt === "json"
-													? t("search.export.jsonDesc") ||
-														"Pretty-printed JSON, best for APIs"
+													? t("search.export.jsonDesc") || "Pretty-printed JSON, best for APIs"
 													: fmt === "jsonl"
-														? t("search.export.jsonlDesc") ||
-															"JSON Lines, best for large datasets"
-														: t("search.export.xlsxDesc") ||
-															"Formatted Excel workbook (.xlsx)"}
+														? t("search.export.jsonlDesc") || "JSON Lines, best for large datasets"
+														: t("search.export.xlsxDesc") || "Formatted Excel workbook (.xlsx)"}
 										</p>
 									</div>
 								</div>
@@ -192,9 +182,7 @@ export function ExportDialog({
 
 				{/* Scope Selection */}
 				<div className="gap-2 grid">
-					<Label className="text-sm font-medium">
-						{t("search.export.scope") || "Scope"}
-					</Label>
+					<Label className="text-sm font-medium">{t("search.export.scope") || "Scope"}</Label>
 					<RadioGroup
 						value={scope}
 						onValueChange={(v) => setScope(v as ExportScope)}
@@ -211,8 +199,7 @@ export function ExportDialog({
 								<p className="text-xs text-muted-foreground">
 									{totalFiltered != null
 										? `${totalFiltered} documents`
-										: t("search.export.scopeAllDesc") ||
-											"Everything in this collection"}
+										: t("search.export.scopeAllDesc") || "Everything in this collection"}
 								</p>
 							</div>
 						</label>
@@ -255,11 +242,7 @@ export function ExportDialog({
 				</div>
 
 				<DialogFooter>
-					<Button
-						variant="outline"
-						onClick={() => onOpenChange(false)}
-						disabled={isExporting}
-					>
+					<Button variant="outline" onClick={() => onOpenChange(false)} disabled={isExporting}>
 						{t("common.cancel") || "Cancel"}
 					</Button>
 					<Button variant="primary" onClick={handleExport} disabled={isExporting}>

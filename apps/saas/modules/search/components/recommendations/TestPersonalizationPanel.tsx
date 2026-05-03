@@ -145,31 +145,23 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 									<div className="space-y-1">
 										<div className="gap-1.5 text-sm flex items-center text-muted-foreground">
 											<MousePointerClickIcon className="size-3.5" />
-											<span>
-												{tr("recommendations.test.clickedProducts")}
-											</span>
+											<span>{tr("recommendations.test.clickedProducts")}</span>
 										</div>
-										<p className="text-2xl font-semibold">
-											{profile.clickedProductIds.length}
-										</p>
+										<p className="text-2xl font-semibold">{profile.clickedProductIds.length}</p>
 									</div>
 									<div className="space-y-1">
 										<div className="gap-1.5 text-sm flex items-center text-muted-foreground">
 											<SearchIcon className="size-3.5" />
 											<span>{tr("recommendations.test.recentQueries")}</span>
 										</div>
-										<p className="text-2xl font-semibold">
-											{profile.recentQueries.length}
-										</p>
+										<p className="text-2xl font-semibold">{profile.recentQueries.length}</p>
 									</div>
 									<div className="space-y-1">
 										<div className="gap-1.5 text-sm flex items-center text-muted-foreground">
 											<SparklesIcon className="size-3.5" />
 											<span>{tr("recommendations.test.totalEvents")}</span>
 										</div>
-										<p className="text-2xl font-semibold">
-											{profile.totalEvents}
-										</p>
+										<p className="text-2xl font-semibold">{profile.totalEvents}</p>
 									</div>
 									<div className="space-y-1">
 										<div className="gap-1.5 text-sm flex items-center text-muted-foreground">
@@ -221,9 +213,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 									<EmptyState
 										variant="inline"
 										title={tr("recommendations.test.noPersonalized")}
-										description={tr(
-											"recommendations.test.noPersonalizedDescription",
-										)}
+										description={tr("recommendations.test.noPersonalizedDescription")}
 									/>
 								)}
 
@@ -236,9 +226,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 											>
 												<div className="min-w-0 flex-1">
 													<div className="gap-2 flex items-center">
-														<span className="font-medium truncate">
-															{rec.productId}
-														</span>
+														<span className="font-medium truncate">{rec.productId}</span>
 														<Badge
 															status={
 																rec.source === "collaborative"
@@ -275,18 +263,14 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 									<SearchIcon className="size-4 text-muted-foreground" />
 									{tr("recommendations.test.baselineTitle")}
 								</CardTitle>
-								<CardDescription>
-									{tr("recommendations.test.baselineDescription")}
-								</CardDescription>
+								<CardDescription>{tr("recommendations.test.baselineDescription")}</CardDescription>
 							</CardHeader>
 							<CardContent>
 								{baseline.length === 0 && (
 									<EmptyState
 										variant="inline"
 										title={tr("recommendations.test.noBaseline")}
-										description={tr(
-											"recommendations.test.noBaselineDescription",
-										)}
+										description={tr("recommendations.test.noBaselineDescription")}
 									/>
 								)}
 
@@ -297,9 +281,7 @@ export function TestPersonalizationPanel({ organizationId }: TestPersonalization
 												key={rec.productId}
 												className="p-3 flex items-center justify-between rounded-lg border"
 											>
-												<span className="font-medium truncate">
-													{rec.productId}
-												</span>
+												<span className="font-medium truncate">{rec.productId}</span>
 												<div className="gap-3 flex shrink-0 items-center">
 													<span className="text-sm text-muted-foreground">
 														{rec.score.toFixed(2)}

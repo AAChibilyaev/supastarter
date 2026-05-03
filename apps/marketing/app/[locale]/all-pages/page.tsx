@@ -228,11 +228,7 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 										{section.pages.map((page) => (
 											<li key={page.href}>
 												<LocaleLink
-													href={
-														page.href as Parameters<
-															typeof LocaleLink
-														>[0]["href"]
-													}
+													href={page.href as Parameters<typeof LocaleLink>[0]["href"]}
 													className="text-sm transition-colors hover:text-primary"
 												>
 													{page.label}
@@ -277,18 +273,12 @@ export default async function AllPagesPage(props: { params: Promise<{ locale: st
 													<code className="text-xs font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
 														{page.href}
 													</code>
-													<span className="ml-1.5 text-xs text-muted-foreground">
-														{page.label}
-													</span>
+													<span className="ml-1.5 text-xs text-muted-foreground">{page.label}</span>
 												</li>
 											) : (
 												<li key={page.href}>
 													<a
-														href={
-															saasBase
-																? `${saasBase}${page.href}`
-																: undefined
-														}
+														href={saasBase ? `${saasBase}${page.href}` : undefined}
 														target="_blank"
 														rel="noopener noreferrer"
 														className="text-sm transition-colors hover:text-primary"

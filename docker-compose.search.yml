@@ -4,33 +4,33 @@
 # Start with: docker compose -f docker-compose.search.yml up -d
 
 networks:
-    default:
-        enable_ipv6: true
-        ipam:
-            config:
-                - subnet: 172.23.0.0/16
-                - subnet: fd00:dead:beef:23::/56
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+        - subnet: fd00:dead:beef:23::/56
 
 services:
-    typesense:
-        image: typesense/typesense:30.2
-        container_name: supastarter-typesense
-        restart: unless-stopped
-        command: >
-            --data-dir /data
-            --api-key=xyz_change_me_in_production
-            --enable-cors
-        environment:
-            TYPESENSE_DATA_DIR: /data
-        ports:
-            - "8108:8108"
-        volumes:
-            - typesense_data:/data
-        healthcheck:
-            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+  typesense:
+    image: typesense/typesense:30.2
+    container_name: supastarter-typesense
+    restart: unless-stopped
+    command: >
+      --data-dir /data
+      --api-key=xyz_change_me_in_production
+      --enable-cors
+    environment:
+      TYPESENSE_DATA_DIR: /data
+    ports:
+      - "8108:8108"
+    volumes:
+      - typesense_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-    typesense_data:
+  typesense_data:

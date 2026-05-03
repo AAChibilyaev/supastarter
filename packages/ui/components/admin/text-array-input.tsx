@@ -100,12 +100,7 @@ export const TextArrayInput = (props: TextArrayInputProps) => {
 		<FormField id={id} className={className} name={field.name}>
 			{label !== false && (
 				<FormLabel>
-					<FieldTitle
-						label={label}
-						source={source}
-						resource={resource}
-						isRequired={isRequired}
-					/>
+					<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
 				</FormLabel>
 			)}
 			<FormControl>
@@ -134,9 +129,7 @@ export const TextArrayInput = (props: TextArrayInputProps) => {
 									}}
 									disabled={disabled || readOnly}
 								>
-									<span className="sr-only">
-										{translate("ra.action.remove", { _: "Remove" })}
-									</span>
+									<span className="sr-only">{translate("ra.action.remove", { _: "Remove" })}</span>
 									<X className="h-3 w-3" />
 								</button>
 							</Badge>

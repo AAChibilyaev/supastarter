@@ -60,8 +60,7 @@ function parseJSON(text: string): ParsedImportData {
 		const row: Record<string, string> = {};
 		columns.forEach((col) => {
 			const val = item[col];
-			row[col] =
-				val == null ? "" : typeof val === "object" ? JSON.stringify(val) : String(val);
+			row[col] = val == null ? "" : typeof val === "object" ? JSON.stringify(val) : String(val);
 		});
 		return row;
 	});
@@ -169,8 +168,7 @@ export function ImportFileUpload({ onParse, disabled }: ImportFileUploadProps) {
 							{t("search.import.dragAndDrop") || "Drag & drop a file here"}
 						</p>
 						<p className="mt-1 text-xs text-muted-foreground">
-							{t("search.import.supportedFormats") ||
-								"CSV, TSV, or JSON — up to 10,000 rows"}
+							{t("search.import.supportedFormats") || "CSV, TSV, or JSON — up to 10,000 rows"}
 						</p>
 						<Button
 							variant="outline"

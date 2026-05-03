@@ -46,9 +46,7 @@ export const NumberField = <RecordType extends Record<string, any> = Record<stri
 		}
 
 		return (
-			<span {...rest}>
-				{typeof empty === "string" ? translate(empty, { _: empty }) : empty}
-			</span>
+			<span {...rest}>{typeof empty === "string" ? translate(empty, { _: empty }) : empty}</span>
 		);
 	}
 

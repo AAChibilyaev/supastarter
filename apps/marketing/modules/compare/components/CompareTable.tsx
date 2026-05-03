@@ -155,9 +155,7 @@ export function CompareTable() {
 								<TableCell className="font-medium">
 									{t(`table.features.${row.key}` as Parameters<typeof t>[0])}
 								</TableCell>
-								<TableCell className="bg-primary/5">
-									{renderCell(row.aacsearch, true)}
-								</TableCell>
+								<TableCell className="bg-primary/5">{renderCell(row.aacsearch, true)}</TableCell>
 								<TableCell>{renderCell(row.algolia)}</TableCell>
 								<TableCell>{renderCell(row.elasticsearch)}</TableCell>
 								<TableCell>{renderCell(row.meilisearch)}</TableCell>

@@ -74,9 +74,7 @@ export function ConnectorsOverview() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{tc("comingSoonTitle")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">
-							{tc("comingSoonSubtitle")}
-						</p>
+						<p className="mt-4 text-lg text-muted-foreground">{tc("comingSoonSubtitle")}</p>
 					</div>
 
 					<div className="mt-16 gap-4 md:grid-cols-2 max-w-2xl mx-auto grid grid-cols-1">

@@ -46,9 +46,7 @@ export function AdminAuditView() {
 											<p className="text-foreground/60">{user.email}</p>
 										</div>
 										<div className="text-right">
-											<p className="text-xs text-foreground/60">
-												{user.role ?? t("defaultRole")}
-											</p>
+											<p className="text-xs text-foreground/60">{user.role ?? t("defaultRole")}</p>
 											<p className="text-xs text-foreground/60">
 												{new Date(user.updatedAt).toLocaleString()}
 											</p>
@@ -73,9 +71,7 @@ export function AdminAuditView() {
 									<CardContent className="p-3 text-sm flex items-center justify-between">
 										<div>
 											<p className="font-medium">{organization.name}</p>
-											<p className="text-foreground/60">
-												{organization.slug ?? t("noSlug")}
-											</p>
+											<p className="text-foreground/60">{organization.slug ?? t("noSlug")}</p>
 										</div>
 										<div className="text-right">
 											<p className="text-xs text-foreground/60">

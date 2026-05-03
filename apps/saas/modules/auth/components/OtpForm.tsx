@@ -113,33 +113,15 @@ export function OtpForm() {
 												}}
 											>
 												<InputOTPGroup>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={0}
-													/>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={1}
-													/>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={2}
-													/>
+													<InputOTPSlot className="size-10 text-lg" index={0} />
+													<InputOTPSlot className="size-10 text-lg" index={1} />
+													<InputOTPSlot className="size-10 text-lg" index={2} />
 												</InputOTPGroup>
 												<InputOTPSeparator className="opacity-40" />
 												<InputOTPGroup>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={3}
-													/>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={4}
-													/>
-													<InputOTPSlot
-														className="size-10 text-lg"
-														index={5}
-													/>
+													<InputOTPSlot className="size-10 text-lg" index={3} />
+													<InputOTPSlot className="size-10 text-lg" index={4} />
+													<InputOTPSlot className="size-10 text-lg" index={5} />
 												</InputOTPGroup>
 											</InputOTP>
 										</FormControl>
@@ -148,9 +130,7 @@ export function OtpForm() {
 								)}
 							/>
 
-							<Button loading={form.formState.isSubmitting}>
-								{t("auth.verify.submit")}
-							</Button>
+							<Button loading={form.formState.isSubmitting}>{t("auth.verify.submit")}</Button>
 						</form>
 					</Form>
 				</CardContent>

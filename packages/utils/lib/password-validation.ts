@@ -13,10 +13,7 @@ export const passwordSchema = z
 	.string()
 	.min(8, "Password must be at least 8 characters long")
 	.max(255, "Password must be no more than 255 characters")
-	.refine(
-		(password) => password === password.trim(),
-		"Password must not start or end with a space",
-	)
+	.refine((password) => password === password.trim(), "Password must not start or end with a space")
 	.refine(
 		(password) => /[A-Z]/.test(password),
 		"Password must contain at least one uppercase letter",

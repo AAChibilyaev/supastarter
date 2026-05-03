@@ -57,74 +57,13 @@ export const ask = protectedProcedure
 			limit: 8,
 		});
 		if (retrieved.chunks.length === 0) {
-			await releaseCreditReservation(context, creditReservationId);
+			await releaseCreditReservation(creditReservationId);
 			return {
-				answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
+				answer:
+					"I could not find supporting knowledge in this space yet. Upload data sources or files first.",
 				citations: [],
 				graphEdges: [],
 			};
-			const space = await getKnowledgeSpaceBySlug(scope, input.spaceSlug);
-			if (!space) {
-				throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
-			}
-
-			const retrieved = await retrieveKnowledge({
-				knowledgeSpaceId: space.id,
-				query: input.query,
-				limit: 8,
-			});
-			if (retrieved.chunks.length === 0) {
-				return {
-					answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
-					citations: [],
-					graphEdges: [],
-				};
-			}
-
-			const contextText = retrieved.chunks
-				.map(
-					(chunk, index) =>
-						`[${index + 1}] ${chunk.documentTitle}\nScore: ${chunk.score.toFixed(3)}\n${chunk.text}`,
-				)
-				.join("\n\n");
-
-			const response = await generateText({
-				model: textModel,
-				prompt: [
-					"You are AACsearch assistant.",
-					"Answer using only provided context snippets.",
-					"If context is insufficient, explicitly say so.",
-					"Always cite snippet numbers in the answer.",
-					`Question: ${input.query}`,
-					`Context:\n${contextText}`,
-				].join("\n\n"),
-			});
-
-			// Commit flat-fee usage on success
-			await commitFlatFeeUsage({
-				reservationId: creditReservationId,
-				operation: "rag_answer",
-				provider: "aacsearch",
-				model: "rag",
-				flatFeeKopecks: CREDIT_RATES.rag_answer,
-			});
-
-			return {
-				answer: response.text,
-				citations: retrieved.chunks.map((chunk, index) => ({
-					id: chunk.id,
-					documentId: chunk.documentId,
-					documentTitle: chunk.documentTitle,
-					snippet: chunk.text.slice(0, 300),
-					sourceIndex: index + 1,
-					score: chunk.score,
-				})),
-				graphEdges: retrieved.graphEdges,
-			};
-		} catch (err) {
-			// Release reservation on any error (fire-and-forget)
-			await releaseCreditReservation(creditReservationId);
-			throw err;
 		}
 
 		const contextText = retrieved.chunks
@@ -148,11 +87,17 @@ export const ask = protectedProcedure
 				].join("\n\n"),
 			});
 		} catch (err) {
-			await releaseCreditReservation(context, creditReservationId);
+			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
 
-		await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
+		await commitFlatFeeUsage({
+			reservationId: creditReservationId,
+			operation: "rag_answer",
+			provider: "aacsearch",
+			model: "rag",
+			flatFeeKopecks: BigInt(500),
+		});
 
 		return {
 			answer: response.text,

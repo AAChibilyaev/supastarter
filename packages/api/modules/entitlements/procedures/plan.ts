@@ -14,8 +14,7 @@ export const getPlanInfo = protectedProcedure
 		path: "/entitlements/plan",
 		tags: ["Entitlements"],
 		summary: "Get current plan info and usage",
-		description:
-			"Returns the organization's plan, feature availability, and current quota usage.",
+		description: "Returns the organization's plan, feature availability, and current quota usage.",
 	})
 	.input(z.object({ organizationId: z.string() }))
 	.output(
@@ -58,9 +57,7 @@ export const getPlanInfo = protectedProcedure
 		const plan = await resolveOrgPlan(organizationId);
 		const searchQuota = await checkQuota(organizationId, "search");
 		const ingestQuota = await checkQuota(organizationId, "ingest");
-		const softCapThreshold = Math.round(
-			(await resolveOrgSoftCapThreshold(organizationId)) * 100,
-		);
+		const softCapThreshold = Math.round((await resolveOrgSoftCapThreshold(organizationId)) * 100);
 
 		const searchesLimit = checkHardLimit(searchQuota.current, searchQuota.limit);
 		const documentsLimit = checkHardLimit(ingestQuota.current, ingestQuota.limit);

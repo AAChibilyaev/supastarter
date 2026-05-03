@@ -323,11 +323,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 								{t("exportJson")}
 							</Button>
 							{hasDiff && (
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setDiffOpen(true)}
-								>
+								<Button variant="outline" size="sm" onClick={() => setDiffOpen(true)}>
 									{t("previewDiff")}
 								</Button>
 							)}
@@ -343,9 +339,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 
 					{/* Default sort selector */}
 					<div className="gap-3 flex flex-wrap items-center">
-						<Label className="text-sm shrink-0 text-muted-foreground">
-							{t("defaultSort")}
-						</Label>
+						<Label className="text-sm shrink-0 text-muted-foreground">{t("defaultSort")}</Label>
 						<Select value={defaultSort} onValueChange={setDefaultSort}>
 							<SelectTrigger className="w-48">
 								<SelectValue placeholder={t("noDefaultSort")} />
@@ -362,9 +356,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 
 					{/* Token Separators */}
 					<div className="gap-2 flex flex-col">
-						<Label className="text-sm text-muted-foreground">
-							{t("tokenSeparators")}
-						</Label>
+						<Label className="text-sm text-muted-foreground">{t("tokenSeparators")}</Label>
 						<Input
 							value={tokenSeparatorsInput}
 							onChange={(e) => setTokenSeparatorsInput(e.target.value)}
@@ -375,9 +367,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 
 					{/* Symbol Tokens to Index */}
 					<div className="gap-2 flex flex-col">
-						<Label className="text-sm text-muted-foreground">
-							{t("symbolTokensToIndex")}
-						</Label>
+						<Label className="text-sm text-muted-foreground">{t("symbolTokensToIndex")}</Label>
 						<Input
 							value={symbolTokensInput}
 							onChange={(e) => setSymbolTokensInput(e.target.value)}
@@ -399,24 +389,12 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 							<table className="text-sm w-full">
 								<thead>
 									<tr className="border-b text-left text-muted-foreground">
-										<th className="pb-2 pr-3 font-medium min-w-[140px]">
-											{tColl("fieldName")}
-										</th>
-										<th className="pb-2 pr-3 font-medium min-w-[120px]">
-											{tColl("fieldType")}
-										</th>
-										<th className="pb-2 pr-2 font-medium text-center">
-											{tColl("fieldFacet")}
-										</th>
-										<th className="pb-2 pr-2 font-medium text-center">
-											{tColl("fieldSort")}
-										</th>
-										<th className="pb-2 pr-2 font-medium text-center">
-											{tColl("fieldIndex")}
-										</th>
-										<th className="pb-2 pr-2 font-medium text-center">
-											{tColl("fieldOptional")}
-										</th>
+										<th className="pb-2 pr-3 font-medium min-w-[140px]">{tColl("fieldName")}</th>
+										<th className="pb-2 pr-3 font-medium min-w-[120px]">{tColl("fieldType")}</th>
+										<th className="pb-2 pr-2 font-medium text-center">{tColl("fieldFacet")}</th>
+										<th className="pb-2 pr-2 font-medium text-center">{tColl("fieldSort")}</th>
+										<th className="pb-2 pr-2 font-medium text-center">{tColl("fieldIndex")}</th>
+										<th className="pb-2 pr-2 font-medium text-center">{tColl("fieldOptional")}</th>
 										<th className="pb-2 font-medium" />
 									</tr>
 								</thead>
@@ -426,9 +404,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 											<td className="py-1.5 pr-3">
 												<Input
 													value={field.name}
-													onChange={(e) =>
-														handleChange(idx, { name: e.target.value })
-													}
+													onChange={(e) => handleChange(idx, { name: e.target.value })}
 													className="h-7 font-mono text-xs"
 													placeholder={t("unnamed")}
 												/>
@@ -436,9 +412,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 											<td className="py-1.5 pr-3">
 												<Select
 													value={field.type}
-													onValueChange={(v) =>
-														handleChange(idx, { type: v as FieldType })
-													}
+													onValueChange={(v) => handleChange(idx, { type: v as FieldType })}
 												>
 													<SelectTrigger className="h-7 text-xs w-full">
 														<SelectValue />
@@ -455,36 +429,28 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 											<td className="py-1.5 pr-2 text-center">
 												<Switch
 													checked={field.facet ?? false}
-													onCheckedChange={(v) =>
-														handleChange(idx, { facet: v })
-													}
+													onCheckedChange={(v) => handleChange(idx, { facet: v })}
 													className="scale-75"
 												/>
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												<Switch
 													checked={field.sort ?? false}
-													onCheckedChange={(v) =>
-														handleChange(idx, { sort: v })
-													}
+													onCheckedChange={(v) => handleChange(idx, { sort: v })}
 													className="scale-75"
 												/>
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												<Switch
 													checked={field.index ?? true}
-													onCheckedChange={(v) =>
-														handleChange(idx, { index: v })
-													}
+													onCheckedChange={(v) => handleChange(idx, { index: v })}
 													className="scale-75"
 												/>
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												<Switch
 													checked={field.optional ?? false}
-													onCheckedChange={(v) =>
-														handleChange(idx, { optional: v })
-													}
+													onCheckedChange={(v) => handleChange(idx, { optional: v })}
 													className="scale-75"
 												/>
 											</td>
@@ -509,15 +475,10 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 									if (field.type !== "float[]") return null;
 									const isEmbedEnabled = Boolean(field.embed);
 									return (
-										<div
-											key={`embed-${idx}`}
-											className="overflow-hidden rounded-md border"
-										>
+										<div key={`embed-${idx}`} className="overflow-hidden rounded-md border">
 											<button
 												type="button"
-												onClick={() =>
-													handleEmbedToggle(idx, !isEmbedEnabled)
-												}
+												onClick={() => handleEmbedToggle(idx, !isEmbedEnabled)}
 												className="gap-2 px-3 py-2 text-xs flex w-full items-center justify-between bg-muted/30 transition-colors hover:bg-muted/50"
 											>
 												<span className="gap-2 flex items-center">
@@ -526,26 +487,19 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 													) : (
 														<ChevronRightIcon className="size-3.5 text-muted-foreground" />
 													)}
-													<code className="font-mono">
-														{field.name || t("unnamed")}
-													</code>
+													<code className="font-mono">{field.name || t("unnamed")}</code>
 													<span className="text-muted-foreground">
 														&mdash; {tEmbed("autoEmbedTitle")}
 													</span>
 													{isEmbedEnabled && (
-														<Badge
-															status="info"
-															className="px-1.5 py-0 text-[10px]"
-														>
+														<Badge status="info" className="px-1.5 py-0 text-[10px]">
 															ON
 														</Badge>
 													)}
 												</span>
 												<Switch
 													checked={isEmbedEnabled}
-													onCheckedChange={(v) =>
-														handleEmbedToggle(idx, v)
-													}
+													onCheckedChange={(v) => handleEmbedToggle(idx, v)}
 													onClick={(e) => e.stopPropagation()}
 													className="scale-75"
 												/>
@@ -558,9 +512,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 															{tEmbed("autoEmbedFrom")}
 														</Label>
 														<Input
-															value={
-																field.embed?.from?.join(", ") ?? ""
-															}
+															value={field.embed?.from?.join(", ") ?? ""}
 															onChange={(e) =>
 																handleEmbedChange(idx, {
 																	from: e.target.value
@@ -584,8 +536,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 														</Label>
 														<Select
 															value={
-																field.embed?.model_config
-																	?.model_name ??
+																field.embed?.model_config?.model_name ??
 																"openai/text-embedding-3-small"
 															}
 															onValueChange={(v) =>
@@ -601,10 +552,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 															</SelectTrigger>
 															<SelectContent>
 																{EMBEDDING_MODELS.map((m) => (
-																	<SelectItem
-																		key={m.value}
-																		value={m.value}
-																	>
+																	<SelectItem key={m.value} value={m.value}>
 																		{m.label}
 																	</SelectItem>
 																))}
@@ -618,24 +566,17 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 															{tEmbed("autoEmbedApiKey")}
 														</Label>
 														<Input
-															value={
-																field.embed?.model_config
-																	?.api_key ?? ""
-															}
+															value={field.embed?.model_config?.api_key ?? ""}
 															onChange={(e) =>
 																handleEmbedChange(idx, {
 																	model_config: {
-																		api_key:
-																			e.target.value ||
-																			undefined,
+																		api_key: e.target.value || undefined,
 																	},
 																})
 															}
 															className="h-7 font-mono text-xs"
 															type="password"
-															placeholder={tEmbed(
-																"autoEmbedApiKeyHint",
-															)}
+															placeholder={tEmbed("autoEmbedApiKeyHint")}
 														/>
 													</div>
 
@@ -645,23 +586,16 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 															{tEmbed("autoEmbedApiUrl")}
 														</Label>
 														<Input
-															value={
-																field.embed?.model_config
-																	?.api_url ?? ""
-															}
+															value={field.embed?.model_config?.api_url ?? ""}
 															onChange={(e) =>
 																handleEmbedChange(idx, {
 																	model_config: {
-																		api_url:
-																			e.target.value ||
-																			undefined,
+																		api_url: e.target.value || undefined,
 																	},
 																})
 															}
 															className="h-7 font-mono text-xs"
-															placeholder={tEmbed(
-																"autoEmbedApiUrlHint",
-															)}
+															placeholder={tEmbed("autoEmbedApiUrlHint")}
 														/>
 													</div>
 
@@ -696,11 +630,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 							>
 								{t("saveOnly")}
 							</Button>
-							<Button
-								size="sm"
-								onClick={() => handleSave(true)}
-								loading={mutation.isPending}
-							>
+							<Button size="sm" onClick={() => handleSave(true)} loading={mutation.isPending}>
 								{t("saveReindex")}
 							</Button>
 						</div>
@@ -744,9 +674,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 						<div className="space-y-3 text-sm">
 							{addedFields.length > 0 && (
 								<div>
-									<p className="mb-1 font-medium text-success">
-										+ Added ({addedFields.length})
-									</p>
+									<p className="mb-1 font-medium text-success">+ Added ({addedFields.length})</p>
 									{addedFields.map((f) => (
 										<div
 											key={f.name}
@@ -790,14 +718,9 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 										slug,
 										fields: validFields as never,
 										defaultSortingField: defaultSort || undefined,
-										tokenSeparators:
-											tokenSeparators.length > 0
-												? tokenSeparators
-												: undefined,
+										tokenSeparators: tokenSeparators.length > 0 ? tokenSeparators : undefined,
 										symbolTokensToIndex:
-											symbolTokensToIndex.length > 0
-												? symbolTokensToIndex
-												: undefined,
+											symbolTokensToIndex.length > 0 ? symbolTokensToIndex : undefined,
 										triggerReindex: false,
 									},
 									{

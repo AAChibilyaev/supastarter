@@ -194,10 +194,7 @@ export async function releaseCreditReservation(
 			reason: "error",
 		});
 	} catch (err) {
-		logger.error(
-			{ err, reservationId },
-			"releaseCreditReservation: failed to release reservation",
-		);
+		logger.error({ err, reservationId }, "releaseCreditReservation: failed to release reservation");
 		// Do not re-throw — release failure should not mask the original error
 	}
 }

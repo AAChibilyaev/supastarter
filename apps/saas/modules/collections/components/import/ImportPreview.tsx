@@ -74,16 +74,13 @@ export function ImportPreview({
 			<div className="gap-2 flex items-center">
 				{getIcon(fileType)}
 				<div>
-					<p className="font-medium text-sm">
-						{t("search.import.previewTitle") || "Preview"}
-					</p>
+					<p className="font-medium text-sm">{t("search.import.previewTitle") || "Preview"}</p>
 					<p className="text-xs text-muted-foreground">
 						{t("search.import.previewCount", {
 							shown: previewRows.length,
 							total: data.totalRows,
 						}) || `${previewRows.length} of ${data.totalRows} rows`}
-						{hasMoreRows &&
-							` — ${t("search.import.previewOnlyFirst") || "first 10 shown"}`}
+						{hasMoreRows && ` — ${t("search.import.previewOnlyFirst") || "first 10 shown"}`}
 					</p>
 				</div>
 			</div>
@@ -122,9 +119,7 @@ export function ImportPreview({
 							<TableHead className="w-10 text-xs text-muted-foreground">#</TableHead>
 							{data.columns.map((col) => (
 								<TableHead key={col} className="text-xs whitespace-nowrap">
-									{columnMapping[col] || (
-										<span className="text-muted-foreground">{col}</span>
-									)}
+									{columnMapping[col] || <span className="text-muted-foreground">{col}</span>}
 								</TableHead>
 							))}
 						</TableRow>
@@ -132,9 +127,7 @@ export function ImportPreview({
 					<TableBody>
 						{previewRows.map((row, i) => (
 							<TableRow key={i}>
-								<TableCell className="font-mono text-xs text-muted-foreground">
-									{i + 1}
-								</TableCell>
+								<TableCell className="font-mono text-xs text-muted-foreground">{i + 1}</TableCell>
 								{data.columns.map((col) => (
 									<TableCell
 										key={col}

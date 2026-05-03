@@ -105,10 +105,7 @@ export const documentsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const schema = z.record(z.string(), z.unknown());
@@ -166,10 +163,7 @@ export const documentsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -228,10 +222,7 @@ export const documentsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);
@@ -377,10 +368,7 @@ export const documentsApp = new Hono()
 		try {
 			body = await c.req.json();
 		} catch {
-			return c.json(
-				{ error: "invalid_json", message: "Request body must be valid JSON" },
-				400,
-			);
+			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
 		}
 
 		const parsed = schema.safeParse(body);

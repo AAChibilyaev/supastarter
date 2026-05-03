@@ -36,10 +36,7 @@ export const createUpgradeSession = protectedProcedure
 		}),
 	)
 	.handler(
-		async ({
-			input: { newPlanId, interval, organizationId, returnUrl },
-			context: { user },
-		}) => {
+		async ({ input: { newPlanId, interval, organizationId, returnUrl }, context: { user } }) => {
 			// Find the active subscription purchase
 			const purchases = organizationId
 				? await getPurchasesByOrganizationId(organizationId)
@@ -61,10 +58,7 @@ export const createUpgradeSession = protectedProcedure
 
 			// Authorization: only owner/admin can change org subscriptions
 			if (activePurchase.organizationId) {
-				const membership = await getOrganizationMembership(
-					activePurchase.organizationId,
-					user.id,
-				);
+				const membership = await getOrganizationMembership(activePurchase.organizationId, user.id);
 
 				if (!membership || (membership.role !== "owner" && membership.role !== "admin")) {
 					throw new ORPCError("FORBIDDEN");

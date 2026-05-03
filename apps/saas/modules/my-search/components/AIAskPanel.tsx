@@ -80,9 +80,7 @@ export function AIAskPanel({ organizationId, indexId }: AIAskPanelProps) {
 											<p className="font-medium text-foreground">
 												[{idx + 1}] {source.filename}
 											</p>
-											<p className="mt-1 line-clamp-3 text-muted-foreground">
-												{source.excerpt}
-											</p>
+											<p className="mt-1 line-clamp-3 text-muted-foreground">{source.excerpt}</p>
 										</li>
 									))}
 								</ul>

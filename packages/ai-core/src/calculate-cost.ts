@@ -18,8 +18,7 @@ export function calculateCharge(
 	const promptTokens = BigInt(Math.max(0, Math.floor(input.promptTokens)));
 	const outputTokens = BigInt(Math.max(0, Math.floor(input.maxOutputTokens)));
 
-	const inputPrice =
-		rule.inputPer1MTokensKopecks ?? rule.embeddingPer1MTokensKopecks ?? BigInt(0);
+	const inputPrice = rule.inputPer1MTokensKopecks ?? rule.embeddingPer1MTokensKopecks ?? BigInt(0);
 	const outputPrice = rule.outputPer1MTokensKopecks ?? BigInt(0);
 
 	const inputCost = (promptTokens * inputPrice + ONE_MILLION - BigInt(1)) / ONE_MILLION;

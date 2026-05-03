@@ -106,9 +106,7 @@ function SortableFacetRow({
 				<div className="w-24 shrink-0">
 					<select
 						value={facet.sortOrder}
-						onChange={(e) =>
-							onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })
-						}
+						onChange={(e) => onUpdate(index, { sortOrder: e.target.value as "count" | "alpha" })}
 						className="h-8 rounded px-1 text-xs w-full border border-input bg-background"
 					>
 						<option value="count">{t("facetSortCount")}</option>
@@ -123,9 +121,7 @@ function SortableFacetRow({
 						min={1}
 						max={1000}
 						value={facet.maxValues}
-						onChange={(e) =>
-							onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })
-						}
+						onChange={(e) => onUpdate(index, { maxValues: Math.max(1, Number(e.target.value)) })}
 						className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
 					/>
 				</div>
@@ -138,9 +134,7 @@ function SortableFacetRow({
 						onChange={(e) => onUpdate(index, { multiSelect: e.target.checked })}
 						className="size-4 rounded border-input accent-primary"
 					/>
-					<span className="text-xs md:inline hidden text-muted-foreground">
-						{t("facetMulti")}
-					</span>
+					<span className="text-xs md:inline hidden text-muted-foreground">{t("facetMulti")}</span>
 				</label>
 
 				{/* Remove button */}
@@ -157,14 +151,10 @@ function SortableFacetRow({
 			<div className="ml-9 gap-4 flex flex-wrap items-center">
 				{/* Facet type */}
 				<div className="gap-1.5 flex items-center">
-					<span className="text-xs font-medium text-muted-foreground">
-						{t("facetType")}:
-					</span>
+					<span className="text-xs font-medium text-muted-foreground">{t("facetType")}:</span>
 					<select
 						value={facet.type}
-						onChange={(e) =>
-							onUpdate(index, { type: e.target.value as FacetConfig["type"] })
-						}
+						onChange={(e) => onUpdate(index, { type: e.target.value as FacetConfig["type"] })}
 						className="h-7 rounded px-1 text-xs border border-input bg-background"
 					>
 						{FACET_TYPES.map((type) => (
@@ -190,17 +180,13 @@ function SortableFacetRow({
 				{facet.type === "range" && (
 					<>
 						<div className="gap-1.5 flex items-center">
-							<span className="text-xs text-muted-foreground">
-								{t("facetPriceRangeMin")}:
-							</span>
+							<span className="text-xs text-muted-foreground">{t("facetPriceRangeMin")}:</span>
 							<input
 								type="number"
 								value={facet.rangeMin ?? ""}
 								onChange={(e) =>
 									onUpdate(index, {
-										rangeMin: e.target.value
-											? Number(e.target.value)
-											: undefined,
+										rangeMin: e.target.value ? Number(e.target.value) : undefined,
 									})
 								}
 								placeholder="0"
@@ -208,17 +194,13 @@ function SortableFacetRow({
 							/>
 						</div>
 						<div className="gap-1.5 flex items-center">
-							<span className="text-xs text-muted-foreground">
-								{t("facetPriceRangeMax")}:
-							</span>
+							<span className="text-xs text-muted-foreground">{t("facetPriceRangeMax")}:</span>
 							<input
 								type="number"
 								value={facet.rangeMax ?? ""}
 								onChange={(e) =>
 									onUpdate(index, {
-										rangeMax: e.target.value
-											? Number(e.target.value)
-											: undefined,
+										rangeMax: e.target.value ? Number(e.target.value) : undefined,
 									})
 								}
 								placeholder="1000"
@@ -226,9 +208,7 @@ function SortableFacetRow({
 							/>
 						</div>
 						<div className="gap-1.5 flex items-center">
-							<span className="text-xs text-muted-foreground">
-								{t("facetPriceFormat")}:
-							</span>
+							<span className="text-xs text-muted-foreground">{t("facetPriceFormat")}:</span>
 							<select
 								value={facet.numberFormat ?? "number"}
 								onChange={(e) =>
@@ -240,9 +220,7 @@ function SortableFacetRow({
 							>
 								{NUMBER_FORMATS.map((fmt) => (
 									<option key={fmt} value={fmt}>
-										{t(
-											`facetFormat${fmt.charAt(0).toUpperCase()}${fmt.slice(1)}`,
-										)}
+										{t(`facetFormat${fmt.charAt(0).toUpperCase()}${fmt.slice(1)}`)}
 									</option>
 								))}
 							</select>

@@ -135,11 +135,7 @@ const ChatBubbleAction: React.FC<ChatBubbleActionProps> = ({
 	size = "icon",
 	...props
 }) => (
-	<button
-		className={cn(buttonVariants({ variant, size, className }))}
-		onClick={onClick}
-		{...props}
-	>
+	<button className={cn(buttonVariants({ variant, size, className }))} onClick={onClick} {...props}>
 		{icon}
 	</button>
 );

@@ -63,10 +63,7 @@ export const listStopwords = protectedProcedure
 
 		const client = getTypesenseClient();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const result = (await (client as any)
-			.collections(input.slug)
-			.stopwords()
-			.retrieve()) as any;
+		const result = (await (client as any).collections(input.slug).stopwords().retrieve()) as any;
 
 		const stopwords = (result?.stopwords ?? []) as string[];
 		return { stopwords };

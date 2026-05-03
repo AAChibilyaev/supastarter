@@ -44,8 +44,7 @@ export function DataTableFilterControls() {
 							<div className="gap-2 py-2 flex w-full items-center justify-between truncate">
 								<div className="gap-2 flex items-center truncate">
 									<p className="text-sm font-medium">{field.label}</p>
-									{value !== field.label.toLowerCase() &&
-									!field.commandDisabled ? (
+									{value !== field.label.toLowerCase() && !field.commandDisabled ? (
 										<p className="font-mono mt-px truncate text-[10px] text-muted-foreground">
 											{value}
 										</p>

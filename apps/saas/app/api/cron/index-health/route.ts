@@ -90,12 +90,11 @@ export async function POST(request: Request) {
 									org.name,
 									`${process.env.NEXT_PUBLIC_SAAS_URL ?? "http://localhost:3000"}/org/${org.id}/overview`,
 								);
-								await sendSlackAlert(slackWebhookUrl, slackMsg).catch(
-									(err: unknown) =>
-										logger.error("index-health cron: Slack send failed", {
-											error: err,
-											orgId: org.id,
-										}),
+								await sendSlackAlert(slackWebhookUrl, slackMsg).catch((err: unknown) =>
+									logger.error("index-health cron: Slack send failed", {
+										error: err,
+										orgId: org.id,
+									}),
 								);
 							}
 
@@ -120,9 +119,7 @@ export async function POST(request: Request) {
 				}
 			} catch (orgError) {
 				const errorMessage =
-					orgError instanceof Error
-						? orgError.message
-						: "Unknown error checking org health";
+					orgError instanceof Error ? orgError.message : "Unknown error checking org health";
 				result.errors.push(`org ${org.id}: ${errorMessage}`);
 				logger.error("index-health cron: org check failed", {
 					orgId: org.id,
@@ -151,10 +148,7 @@ export async function POST(request: Request) {
 		Sentry.captureException(error, {
 			tags: { "cron.job": "index-health" },
 		});
-		return NextResponse.json(
-			{ error: "index_health_check_failed", ...result },
-			{ status: 500 },
-		);
+		return NextResponse.json({ error: "index_health_check_failed", ...result }, { status: 500 });
 	}
 }
 

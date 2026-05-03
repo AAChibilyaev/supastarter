@@ -102,9 +102,7 @@ export function ShopifyConnectorCard({
 					<StoreIcon className="size-5 text-muted-foreground" />
 				</div>
 				<div className="flex-1">
-					<CardTitle className="text-base">
-						{t("search.connector.shopify.title")}
-					</CardTitle>
+					<CardTitle className="text-base">{t("search.connector.shopify.title")}</CardTitle>
 					<CardDescription className="text-xs">
 						{t("search.connector.shopify.desc")}
 					</CardDescription>
@@ -132,9 +130,7 @@ export function ShopifyConnectorCard({
 								className="gap-3 px-3 py-2 flex items-center justify-between rounded-lg border border-border"
 							>
 								<div className="min-w-0 flex-1">
-									<p className="text-sm font-medium truncate">
-										{store.name || store.shop}
-									</p>
+									<p className="text-sm font-medium truncate">{store.name || store.shop}</p>
 									<p className="text-xs truncate text-muted-foreground">
 										{store.domain || store.shop}
 										{store.lastSyncAt && (

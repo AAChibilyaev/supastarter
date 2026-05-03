@@ -181,9 +181,7 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 					<div className="mb-4 flex items-center justify-between">
 						<div>
 							<h3 className="text-lg font-medium">{t("counterRules.title")}</h3>
-							<p className="text-sm text-muted-foreground">
-								{t("counterRules.description")}
-							</p>
+							<p className="text-sm text-muted-foreground">{t("counterRules.description")}</p>
 						</div>
 						<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 							<DialogTrigger asChild>
@@ -195,9 +193,7 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 							<DialogContent className="max-w-lg">
 								<DialogHeader>
 									<DialogTitle>{t("counterRules.createDialogTitle")}</DialogTitle>
-									<DialogDescription>
-										{t("counterRules.createDialogDesc")}
-									</DialogDescription>
+									<DialogDescription>{t("counterRules.createDialogDesc")}</DialogDescription>
 								</DialogHeader>
 								<div className="space-y-4">
 									<div className="space-y-2">
@@ -205,23 +201,17 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 										<Input
 											placeholder="products-click-counter"
 											value={newRule.name}
-											onChange={(e) =>
-												setNewRule({ ...newRule, name: e.target.value })
-											}
+											onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
 										/>
 									</div>
 									<div className="space-y-2">
 										<Label>{t("counterRules.sourceCollection")}</Label>
 										<Select
 											value={newRule.sourceCollection}
-											onValueChange={(v) =>
-												setNewRule({ ...newRule, sourceCollection: v })
-											}
+											onValueChange={(v) => setNewRule({ ...newRule, sourceCollection: v })}
 										>
 											<SelectTrigger>
-												<SelectValue
-													placeholder={t("counterRules.selectCollection")}
-												/>
+												<SelectValue placeholder={t("counterRules.selectCollection")} />
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value={slug}>{slug}</SelectItem>
@@ -233,23 +223,17 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 											<Label>{t("counterRules.eventType")}</Label>
 											<Select
 												value={newRule.eventType}
-												onValueChange={(v) =>
-													setNewRule({ ...newRule, eventType: v })
-												}
+												onValueChange={(v) => setNewRule({ ...newRule, eventType: v })}
 											>
 												<SelectTrigger>
 													<SelectValue />
 												</SelectTrigger>
 												<SelectContent>
-													<SelectItem value="click">
-														{t("counterRules.eventClick")}
-													</SelectItem>
+													<SelectItem value="click">{t("counterRules.eventClick")}</SelectItem>
 													<SelectItem value="conversion">
 														{t("counterRules.eventConversion")}
 													</SelectItem>
-													<SelectItem value="visit">
-														{t("counterRules.eventVisit")}
-													</SelectItem>
+													<SelectItem value="visit">{t("counterRules.eventVisit")}</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
@@ -289,14 +273,10 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 										<Label>{t("counterRules.counterField")}</Label>
 										<Select
 											value={newRule.counterField}
-											onValueChange={(v) =>
-												setNewRule({ ...newRule, counterField: v })
-											}
+											onValueChange={(v) => setNewRule({ ...newRule, counterField: v })}
 										>
 											<SelectTrigger>
-												<SelectValue
-													placeholder={t("counterRules.selectField")}
-												/>
+												<SelectValue placeholder={t("counterRules.selectField")} />
 											</SelectTrigger>
 											<SelectContent>
 												{numericFields.length === 0 && (
@@ -322,10 +302,7 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 									<Button variant="outline" onClick={() => setDialogOpen(false)}>
 										{t("counterRules.cancel")}
 									</Button>
-									<Button
-										onClick={handleCreate}
-										loading={createMutation.isPending}
-									>
+									<Button onClick={handleCreate} loading={createMutation.isPending}>
 										{t("counterRules.create")}
 									</Button>
 								</DialogFooter>
@@ -345,9 +322,7 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 									<TableHead>{t("counterRules.name")}</TableHead>
 									<TableHead>{t("counterRules.eventType")}</TableHead>
 									<TableHead>{t("counterRules.counterField")}</TableHead>
-									<TableHead className="w-[80px]">
-										{t("counterRules.actions")}
-									</TableHead>
+									<TableHead className="w-[80px]">{t("counterRules.actions")}</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -359,16 +334,12 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 												events?: Array<{ type?: string }>;
 										  }
 										| undefined;
-									const destination = params?.destination as
-										| { counter_field?: string }
-										| undefined;
+									const destination = params?.destination as { counter_field?: string } | undefined;
 									const eventType = source?.events?.[0]?.type ?? "-";
 									const counterField = destination?.counter_field ?? "-";
 									return (
 										<TableRow key={rule.name}>
-											<TableCell className="font-medium">
-												{rule.name}
-											</TableCell>
+											<TableCell className="font-medium">{rule.name}</TableCell>
 											<TableCell>{eventType}</TableCell>
 											<TableCell>{counterField}</TableCell>
 											<TableCell>
@@ -397,9 +368,7 @@ export function CounterRulesPanel({ organizationId, slug }: CounterRulesPanelPro
 						<div className="p-3 font-mono text-xs rounded-md bg-muted">
 							<code>sort_by: counter_field_name:desc, _text_match:desc</code>
 						</div>
-						<p className="mt-2 text-xs text-muted-foreground">
-							{t("counterRules.usageHint")}
-						</p>
+						<p className="mt-2 text-xs text-muted-foreground">{t("counterRules.usageHint")}</p>
 					</CardContent>
 				</Card>
 			)}

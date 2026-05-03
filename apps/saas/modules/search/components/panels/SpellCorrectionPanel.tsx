@@ -126,9 +126,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.spellCorrection.title")}</h3>
-					<p className="text-sm text-foreground/60">
-						{t("search.spellCorrection.description")}
-					</p>
+					<p className="text-sm text-foreground/60">{t("search.spellCorrection.description")}</p>
 				</div>
 				<Button variant="primary" onClick={handleSave} loading={updateMutation.isPending}>
 					{t("search.spellCorrection.save")}
@@ -159,14 +157,10 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 
 				{/* Verbosity */}
 				<div className="space-y-2">
-					<label className="text-sm font-medium">
-						{t("search.spellCorrection.verbosity")}
-					</label>
+					<label className="text-sm font-medium">{t("search.spellCorrection.verbosity")}</label>
 					<select
 						value={config.verbosity}
-						onChange={(e) =>
-							updateField("verbosity", Number(e.target.value) as 0 | 1 | 2)
-						}
+						onChange={(e) => updateField("verbosity", Number(e.target.value) as 0 | 1 | 2)}
 						className="p-2.5 rounded text-sm w-full border bg-background"
 					>
 						{VERBOSITY_OPTIONS.map((v) => (
@@ -179,9 +173,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 
 				{/* Max Results */}
 				<div className="space-y-2">
-					<label className="text-sm font-medium">
-						{t("search.spellCorrection.maxResults")}
-					</label>
+					<label className="text-sm font-medium">{t("search.spellCorrection.maxResults")}</label>
 					<input
 						type="number"
 						min={1}
@@ -194,9 +186,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 
 				{/* Mode */}
 				<div className="space-y-2">
-					<label className="text-sm font-medium">
-						{t("search.spellCorrection.mode")}
-					</label>
+					<label className="text-sm font-medium">{t("search.spellCorrection.mode")}</label>
 					<select
 						value={config.mode}
 						onChange={(e) => updateField("mode", e.target.value as "auto" | "suggest")}
@@ -220,10 +210,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 						className="mt-1"
 					/>
 					<div>
-						<label
-							htmlFor="splitCompounds"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="splitCompounds" className="text-sm font-medium cursor-pointer">
 							{t("search.spellCorrection.splitCompounds")}
 						</label>
 						<p className="text-xs text-foreground/40">
@@ -242,10 +229,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 						className="mt-1"
 					/>
 					<div>
-						<label
-							htmlFor="useContextCorrection"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="useContextCorrection" className="text-sm font-medium cursor-pointer">
 							{t("search.spellCorrection.useContextCorrection")}
 						</label>
 						<p className="text-xs text-foreground/40">
@@ -257,9 +241,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 
 			{/* Per-Language Settings */}
 			<div>
-				<h4 className="text-md font-semibold mb-3">
-					{t("search.spellCorrection.perLanguage")}
-				</h4>
+				<h4 className="text-md font-semibold mb-3">{t("search.spellCorrection.perLanguage")}</h4>
 				<div className="md:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
 					{LANGUAGES.map((lang) => {
 						const langCfg = config.perLanguage[lang] ?? {
@@ -275,9 +257,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 									<input
 										type="checkbox"
 										checked={langCfg.enabled}
-										onChange={(e) =>
-											updateLanguage(lang, "enabled", e.target.checked)
-										}
+										onChange={(e) => updateLanguage(lang, "enabled", e.target.checked)}
 									/>
 								</div>
 								{langCfg.enabled && (
@@ -289,11 +269,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 														type="checkbox"
 														checked={langCfg.fixKeyboardLayout}
 														onChange={(e) =>
-															updateLanguage(
-																lang,
-																"fixKeyboardLayout",
-																e.target.checked,
-															)
+															updateLanguage(lang, "fixKeyboardLayout", e.target.checked)
 														}
 													/>
 													{t("search.spellCorrection.fixKeyboardLayout")}
@@ -303,11 +279,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 														type="checkbox"
 														checked={langCfg.transliterate}
 														onChange={(e) =>
-															updateLanguage(
-																lang,
-																"transliterate",
-																e.target.checked,
-															)
+															updateLanguage(lang, "transliterate", e.target.checked)
 														}
 													/>
 													{t("search.spellCorrection.transliterate")}
@@ -316,13 +288,7 @@ export function SpellCorrectionPanel({ organizationId, slug }: SpellCorrectionPa
 													<input
 														type="checkbox"
 														checked={langCfg.normalizeYo}
-														onChange={(e) =>
-															updateLanguage(
-																lang,
-																"normalizeYo",
-																e.target.checked,
-															)
-														}
+														onChange={(e) => updateLanguage(lang, "normalizeYo", e.target.checked)}
 													/>
 													{t("search.spellCorrection.normalizeYo")}
 												</label>

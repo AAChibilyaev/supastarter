@@ -53,9 +53,7 @@ export function ConnectorCard({ type, status, onSetup, onManage }: ConnectorCard
 				</div>
 				<div className="flex-1">
 					<CardTitle className="text-base">{t(`search.connector.${type}`)}</CardTitle>
-					<CardDescription className="text-xs">
-						{t(`search.connector.${type}Desc`)}
-					</CardDescription>
+					<CardDescription className="text-xs">{t(`search.connector.${type}Desc`)}</CardDescription>
 				</div>
 				<Badge status={statusBadge}>{statusLabel}</Badge>
 			</CardHeader>
@@ -63,8 +61,7 @@ export function ConnectorCard({ type, status, onSetup, onManage }: ConnectorCard
 				<div className="space-y-2 text-sm text-muted-foreground">
 					{status.lastSync ? (
 						<p>
-							{t("search.connector.lastSync")}:{" "}
-							{new Date(status.lastSync).toLocaleString()}
+							{t("search.connector.lastSync")}: {new Date(status.lastSync).toLocaleString()}
 						</p>
 					) : (
 						<p>{t("search.connector.noHeartbeat")}</p>
@@ -78,11 +75,7 @@ export function ConnectorCard({ type, status, onSetup, onManage }: ConnectorCard
 				<div className="mt-4">
 					{type === "directApi" ? (
 						<Button variant="outline" size="sm" asChild>
-							<a
-								href="https://docs.aacsearch.com/api"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
+							<a href="https://docs.aacsearch.com/api" target="_blank" rel="noopener noreferrer">
 								{t("search.connector.viewDocs")}
 							</a>
 						</Button>

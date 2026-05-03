@@ -78,9 +78,7 @@ export function RecommendationsDashboardCards({
 				<div className="md:col-span-2 lg:col-span-4">
 					<Card>
 						<CardHeader>
-							<CardTitle className="text-base">
-								{tr("recommendations.stats.trendingNow")}
-							</CardTitle>
+							<CardTitle className="text-base">{tr("recommendations.stats.trendingNow")}</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-2">

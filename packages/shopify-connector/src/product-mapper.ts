@@ -209,8 +209,7 @@ export function flattenProductToDocuments(
 
 		return {
 			external_id: `shopify_${product.id}_v${variant.id}`,
-			title:
-				variant.title === "Default" ? product.title : `${product.title} - ${variant.title}`,
+			title: variant.title === "Default" ? product.title : `${product.title} - ${variant.title}`,
 			description: product.body_html?.replace(/<[^>]*>/g, "") ?? "",
 			sku: variant.sku ?? "",
 			brand: product.vendor ?? "",

@@ -107,9 +107,7 @@ export function AdminIntegrationsView() {
 					</div>
 					{data.tochka.baseUrl && (
 						<div className="gap-2 flex items-center justify-between">
-							<span className="text-muted-foreground">
-								{t("integrations.endpoint")}
-							</span>
+							<span className="text-muted-foreground">{t("integrations.endpoint")}</span>
 							<span className="font-mono text-xs">{data.tochka.baseUrl}</span>
 						</div>
 					)}
@@ -147,9 +145,7 @@ function IntegrationCard({
 					<div className="gap-3 flex items-center">
 						<CheckCircle2Icon className="size-5 text-success" />
 						<div>
-							<p className="font-medium text-sm text-success">
-								{t("integrations.connected")}
-							</p>
+							<p className="font-medium text-sm text-success">{t("integrations.connected")}</p>
 							{latencyMs !== undefined && (
 								<p className="text-xs text-muted-foreground">
 									{t("integrations.latencyMs", { ms: latencyMs })}

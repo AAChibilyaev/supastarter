@@ -79,10 +79,7 @@ const nohitsQueriesSourceSchema = z.object({
 });
 
 const nohitsQueriesDestinationSchema = z.object({
-	collection: z
-		.string()
-		.min(1)
-		.describe("Destination collection where no-hit queries are logged"),
+	collection: z.string().min(1).describe("Destination collection where no-hit queries are logged"),
 });
 
 const nohitsQueriesParamsSchema = z.object({

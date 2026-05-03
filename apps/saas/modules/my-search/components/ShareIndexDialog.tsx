@@ -100,8 +100,7 @@ export function ShareIndexDialog({ indexId, orgId, slug, children }: ShareIndexD
 				<DialogHeader>
 					<DialogTitle>Share Search Index</DialogTitle>
 					<DialogDescription>
-						Anyone with this link can view your search index. The link expires in 30
-						days.
+						Anyone with this link can view your search index. The link expires in 30 days.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -114,12 +113,7 @@ export function ShareIndexDialog({ indexId, orgId, slug, children }: ShareIndexD
 				{shareUrl && (
 					<div className="gap-2 flex items-center">
 						<Input value={shareUrl} readOnly className="font-mono text-sm flex-1" />
-						<Button
-							variant="secondary"
-							size="icon"
-							onClick={handleCopy}
-							title="Copy link"
-						>
+						<Button variant="secondary" size="icon" onClick={handleCopy} title="Copy link">
 							<CopyIcon className="size-4" />
 						</Button>
 					</div>

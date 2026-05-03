@@ -33,19 +33,23 @@ const results = await client.search({
 const FAQ_ITEMS = [
 	{
 		question: "Why switch from Elasticsearch to AACsearch?",
-		answer: "AACsearch offers zero-ops search with automatic scaling, built-in analytics, and predictable flat pricing — no cluster management, JVM tuning, or capacity planning required. Teams typically eliminate 80% of search infrastructure overhead.",
+		answer:
+			"AACsearch offers zero-ops search with automatic scaling, built-in analytics, and predictable flat pricing — no cluster management, JVM tuning, or capacity planning required. Teams typically eliminate 80% of search infrastructure overhead.",
 	},
 	{
 		question: "How does AACsearch pricing compare to Elasticsearch?",
-		answer: "AACsearch uses flat per-index pricing with unlimited search operations. Elasticsearch Cloud charges per node-hour plus storage. For 100k docs and 500k searches/month, AACsearch is $99/mo compared to Elastic Cloud's ~$350-600/mo (3-node cluster).",
+		answer:
+			"AACsearch uses flat per-index pricing with unlimited search operations. Elasticsearch Cloud charges per node-hour plus storage. For 100k docs and 500k searches/month, AACsearch is $99/mo compared to Elastic Cloud's ~$350-600/mo (3-node cluster).",
 	},
 	{
 		question: "Is migration from Elasticsearch to AACsearch difficult?",
-		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes. Most teams complete migration in a weekend.",
+		answer:
+			"Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes. Most teams complete migration in a weekend.",
 	},
 	{
 		question: "Can I use AACsearch if I need Elasticsearch-specific features?",
-		answer: "AACsearch covers core search, geo-search, typo tolerance, faceted search, and relevance tuning. For Elasticsearch-specific features like log analytics / ELK stack, complex aggregations, or ML capabilities, consider keeping Elasticsearch for those workloads while using AACsearch for application search.",
+		answer:
+			"AACsearch covers core search, geo-search, typo tolerance, faceted search, and relevance tuning. For Elasticsearch-specific features like log analytics / ELK stack, complex aggregations, or ML capabilities, consider keeping Elasticsearch for those workloads while using AACsearch for application search.",
 	},
 ];
 

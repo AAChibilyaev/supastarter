@@ -145,28 +145,28 @@ See dedicated setup guide: `apps/marketing/content/specs/posthog-dashboards-setu
 Automation script: `apps/marketing/content/specs/setup-posthog-dashboards.sh`
 
 1. **Activation Funnel**
-    - Step-by-step conversion: signup → project → search → widget
-    - Weekly trend line
-    - Drop-off rates per step
+   - Step-by-step conversion: signup → project → search → widget
+   - Weekly trend line
+   - Drop-off rates per step
 
 2. **Feature Usage**
-    - Events per user per day
-    - Top collections by search volume
-    - Connector usage by type
+   - Events per user per day
+   - Top collections by search volume
+   - Connector usage by type
 
 3. **Retention**
-    - Weekly cohort: signup week → action in week N
-    - D7, D14, D30 retention rates
+   - Weekly cohort: signup week → action in week N
+   - D7, D14, D30 retention rates
 
 4. **NPS Trends**
-    - Average NPS score over time (monthly)
-    - Score distribution (detractors/passives/promoters)
-    - Feedback word cloud
+   - Average NPS score over time (monthly)
+   - Score distribution (detractors/passives/promoters)
+   - Feedback word cloud
 
 5. **Revenue & Conversion**
-    - Plan upgrade rate by cohort
-    - Time from signup to first payment
-    - Feature usage before upgrade (predictive)
+   - Plan upgrade rate by cohort
+   - Time from signup to first payment
+   - Feature usage before upgrade (predictive)
 
 ---
 

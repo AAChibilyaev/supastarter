@@ -1,30 +1,30 @@
 name: Deploy WordPress Plugin
 
 on:
-    push:
-        tags:
-            - "wordpress-v*"
+  push:
+    tags:
+      - "wordpress-v*"
 
 jobs:
-    deploy:
-        name: Deploy to WordPress.org SVN
-        runs-on: ubuntu-latest
+  deploy:
+    name: Deploy to WordPress.org SVN
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Install dependencies & build blocks
-              working-directory: modules/wordpress/aacsearch-search
-              run: |
-                  if [ -f package.json ]; then
-                    npm ci
-                    npm run build
-                  fi
+      - name: Install dependencies & build blocks
+        working-directory: modules/wordpress/aacsearch-search
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+            npm run build
+          fi
 
-            - name: WordPress Plugin Deploy
-              uses: 10up/action-wordpress-plugin-deploy@stable
-              env:
-                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-                  SLUG: aacsearch-search
-                  BUILD_DIR: modules/wordpress/aacsearch-search
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: aacsearch-search
+          BUILD_DIR: modules/wordpress/aacsearch-search

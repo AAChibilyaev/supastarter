@@ -73,9 +73,8 @@ export const LoginPage = (props: { redirectTo?: string }) => {
 					<div className="relative z-20 mt-auto">
 						<blockquote className="space-y-2">
 							<p className="text-lg">
-								&ldquo;Shadcn Admin Kit has allowed us to quickly create and evolve
-								a powerful tool that otherwise would have taken months of time and
-								effort to develop.&rdquo;
+								&ldquo;Shadcn Admin Kit has allowed us to quickly create and evolve a powerful tool
+								that otherwise would have taken months of time and effort to develop.&rdquo;
 							</p>
 							<footer className="text-sm">John Doe</footer>
 						</blockquote>
@@ -90,18 +89,8 @@ export const LoginPage = (props: { redirectTo?: string }) => {
 							</p>
 						</div>
 						<Form className="space-y-8" onSubmit={handleSubmit}>
-							<TextInput
-								label="Email"
-								source="email"
-								type="email"
-								validate={required()}
-							/>
-							<TextInput
-								label="Password"
-								source="password"
-								type="password"
-								validate={required()}
-							/>
+							<TextInput label="Email" source="email" type="email" validate={required()} />
+							<TextInput label="Password" source="password" type="password" validate={required()} />
 							<Button type="submit" className="cursor-pointer" disabled={loading}>
 								Sign in
 							</Button>

@@ -56,10 +56,7 @@ export const frequentlyBoughtTogether = protectedProcedure
 
 			return { results, neo4jConnected: true };
 		} catch (err) {
-			logger.error(
-				{ err, productId },
-				"Failed to fetch frequently bought together from Neo4j",
-			);
+			logger.error({ err, productId }, "Failed to fetch frequently bought together from Neo4j");
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {
 				message: "Recommendation engine unavailable",
 			});

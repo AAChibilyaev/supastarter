@@ -176,9 +176,7 @@ export const migrateCommand = new Command("migrate")
 						imported += resp.count ?? batch.length;
 					} catch (error) {
 						errors += batch.length;
-						console.error(
-							`Batch ${Math.floor(i / batchSize) + 1} failed: ${formatError(error)}`,
-						);
+						console.error(`Batch ${Math.floor(i / batchSize) + 1} failed: ${formatError(error)}`);
 					}
 					process.stdout.write(
 						`\r  Progress: ${imported + errors}/${result.documents.length} (${imported} ok, ${errors} errors)`,
@@ -226,9 +224,7 @@ function convertAlgolia(data: Record<string, unknown>): ConvertedData {
 		if (entries.length > 0) {
 			docs = entries.map(([, v]) => v as Record<string, unknown>);
 		} else {
-			throw new Error(
-				"Could not parse Algolia export format. Expected a JSON array of objects.",
-			);
+			throw new Error("Could not parse Algolia export format. Expected a JSON array of objects.");
 		}
 	}
 

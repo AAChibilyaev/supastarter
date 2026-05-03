@@ -25,9 +25,7 @@ export const dynamic = "force-dynamic";
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.SEARCH_CRON_SECRET;
 	if (!expected) {
-		logger.warn(
-			"SEARCH_CRON_SECRET is not set — reindex-runner cron will always reject requests",
-		);
+		logger.warn("SEARCH_CRON_SECRET is not set — reindex-runner cron will always reject requests");
 		return false;
 	}
 	const auth = request.headers.get("authorization");
@@ -93,9 +91,7 @@ export async function POST(request: Request) {
 				typeof index.schema === "object" && index.schema !== null
 					? (index.schema as Record<string, unknown>)
 					: {};
-			const synonyms = Array.isArray(schema._synonyms)
-				? (schema._synonyms as SynonymPair[])
-				: [];
+			const synonyms = Array.isArray(schema._synonyms) ? (schema._synonyms as SynonymPair[]) : [];
 			const curations = Array.isArray(schema._curations)
 				? (schema._curations as CurationRule[])
 				: [];

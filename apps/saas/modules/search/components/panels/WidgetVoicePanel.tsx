@@ -128,9 +128,7 @@ export function WidgetVoicePanel({ organizationId }: WidgetVoicePanelProps) {
 		return (
 			<Card>
 				<CardContent className="py-12 flex flex-col items-center text-center">
-					<p className="text-sm text-muted-foreground">
-						{t("widgetConfigurator.noIndexes")}
-					</p>
+					<p className="text-sm text-muted-foreground">{t("widgetConfigurator.noIndexes")}</p>
 				</CardContent>
 			</Card>
 		);
@@ -180,9 +178,7 @@ export function WidgetVoicePanel({ organizationId }: WidgetVoicePanelProps) {
 									<SelectContent>
 										{LANGUAGES.map((lang) => (
 											<SelectItem key={lang.value} value={lang.value}>
-												{lang.labelKey
-													? t(`widget.${lang.labelKey}`)
-													: lang.label}
+												{lang.labelKey ? t(`widget.${lang.labelKey}`) : lang.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -224,11 +220,7 @@ export function WidgetVoicePanel({ organizationId }: WidgetVoicePanelProps) {
 						</>
 					)}
 
-					<Button
-						onClick={handleSave}
-						loading={saveMutation.isPending}
-						className="w-full"
-					>
+					<Button onClick={handleSave} loading={saveMutation.isPending} className="w-full">
 						{t("widgetConfigurator.saveConfig")}
 					</Button>
 				</CardContent>
@@ -237,9 +229,7 @@ export function WidgetVoicePanel({ organizationId }: WidgetVoicePanelProps) {
 			{/* Live preview */}
 			<Card className="shadow-sm">
 				<CardHeader>
-					<CardTitle className="text-base">
-						{t("widgetConfigurator.previewTitle")}
-					</CardTitle>
+					<CardTitle className="text-base">{t("widgetConfigurator.previewTitle")}</CardTitle>
 					<CardDescription>{t("widgetConfigurator.previewDesc")}</CardDescription>
 				</CardHeader>
 				<CardContent>

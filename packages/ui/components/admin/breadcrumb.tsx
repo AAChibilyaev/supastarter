@@ -98,9 +98,7 @@ export const Breadcrumb = ({ children, ref }: BreadcrumbProps) => {
 										<DrawerFooter className="pt-4">
 											<DrawerClose asChild>
 												<Button variant="outline">
-													<Translate i18nKey="ra.action.close">
-														Close
-													</Translate>
+													<Translate i18nKey="ra.action.close">Close</Translate>
 												</Button>
 											</DrawerClose>
 										</DrawerFooter>
@@ -117,9 +115,7 @@ export const Breadcrumb = ({ children, ref }: BreadcrumbProps) => {
 								child && (
 									<React.Fragment key={index}>
 										{child}
-										{index < React.Children.count(children) - 1 ? (
-											<BreadcrumbSeparator />
-										) : null}
+										{index < React.Children.count(children) - 1 ? <BreadcrumbSeparator /> : null}
 									</React.Fragment>
 								),
 						)

@@ -89,7 +89,8 @@ export const ask = protectedProcedure
 			if (results.hits.length === 0) {
 				await releaseCreditReservation(creditReservationId, "cancelled");
 				return {
-					answer: "No relevant content found in this index yet. Upload documents or add URLs first.",
+					answer:
+						"No relevant content found in this index yet. Upload documents or add URLs first.",
 					sources: [],
 				};
 			}
@@ -100,8 +101,7 @@ export const ask = protectedProcedure
 				const doc = (h.document ?? {}) as Record<string, unknown>;
 				const textMatchInfo = h.text_match_info as Record<string, unknown> | undefined;
 				const highlights = (h.highlights as Array<Record<string, unknown>>) ?? [];
-				const highlightSnippet =
-					(highlights[0]?.snippet as string | undefined) ?? undefined;
+				const highlightSnippet = (highlights[0]?.snippet as string | undefined) ?? undefined;
 				const content = (doc.content as string) ?? "";
 
 				return {

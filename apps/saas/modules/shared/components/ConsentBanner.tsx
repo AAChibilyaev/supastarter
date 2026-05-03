@@ -29,11 +29,7 @@ export function ConsentBanner() {
 				<div>
 					<p className="text-sm leading-normal">{t("consent.message")}</p>
 					<div className="mt-4 gap-2 flex">
-						<Button
-							variant="secondary"
-							className="flex-1"
-							onClick={() => declineCookies()}
-						>
+						<Button variant="secondary" className="flex-1" onClick={() => declineCookies()}>
 							{t("consent.decline")}
 						</Button>
 						<Button variant="primary" className="flex-1" onClick={() => allowCookies()}>

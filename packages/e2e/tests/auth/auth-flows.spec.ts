@@ -178,9 +178,7 @@ test.describe("Auth — Organization Switching", () => {
 		if (visible) {
 			// Click org switcher
 			await orgSwitcher.click();
-			const orgOptions = page.locator(
-				'[role="option"], [role="menuitem"], [data-org-option]',
-			);
+			const orgOptions = page.locator('[role="option"], [role="menuitem"], [data-org-option]');
 			await expect(orgOptions.first()).toBeVisible({ timeout: 3000 });
 		}
 		// If no org switcher, user may only have one org — that's acceptable

@@ -707,16 +707,16 @@ export function SoftwareApplicationSchema({ variant = "home" }: SoftwareApplicat
 ### Required Checks Before Deployment
 
 1. **Google Rich Results Test** — https://search.google.com/test/rich-results
-    - Paste the rendered JSON-LD (view page source, copy `application/ld+json` block)
-    - Fix all errors and warnings
+   - Paste the rendered JSON-LD (view page source, copy `application/ld+json` block)
+   - Fix all errors and warnings
 
 2. **Schema.org Validator** — https://validator.schema.org
-    - Validate the raw JSON against the schema.org schema
-    - Check for missing required fields
+   - Validate the raw JSON against the schema.org schema
+   - Check for missing required fields
 
 3. **Google Search Console** — After deployment
-    - Monitor "Enhancements > Software Application" report
-    - Watch for "Missing field" or "Invalid value" errors
+   - Monitor "Enhancements > Software Application" report
+   - Watch for "Missing field" or "Invalid value" errors
 
 4. **Automated Tests (Recommended)**
 

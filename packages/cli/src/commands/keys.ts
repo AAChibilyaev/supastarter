@@ -118,9 +118,7 @@ keysCommand
 					const scopesInput = await rl.question(
 						"Scopes (comma-separated: admin, ingest, search) [admin]: ",
 					);
-					resolvedScopes = scopesInput
-						? scopesInput.split(",").map((s) => s.trim())
-						: ["admin"];
+					resolvedScopes = scopesInput ? scopesInput.split(",").map((s) => s.trim()) : ["admin"];
 				}
 
 				rl.close();
@@ -133,9 +131,7 @@ keysCommand
 			};
 
 			if (opts.origins) {
-				body.allowedOrigins = (opts.origins as string)
-					.split(",")
-					.map((o: string) => o.trim());
+				body.allowedOrigins = (opts.origins as string).split(",").map((o: string) => o.trim());
 			}
 			if (opts.rateLimit) {
 				body.rateLimitPerMinute = parseInt(opts.rateLimit as string, 10);
@@ -165,9 +161,7 @@ keysCommand
 		const client = new ApiClient(config);
 
 		try {
-			const result = await client.delete<{ id: string; revoked: boolean }>(
-				`/v1/keys/${keyId}`,
-			);
+			const result = await client.delete<{ id: string; revoked: boolean }>(`/v1/keys/${keyId}`);
 
 			if (result.revoked) {
 				console.log(`✓ API key ${result.id.slice(0, 8)} revoked.`);

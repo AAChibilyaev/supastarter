@@ -449,10 +449,7 @@ export class AdminClient {
 	}
 
 	/** Add a sorting field to an index. */
-	async createSortingField(
-		indexId: string,
-		input: CreateSortingFieldInput,
-	): Promise<SortingField> {
+	async createSortingField(indexId: string, input: CreateSortingFieldInput): Promise<SortingField> {
 		return request<SortingField>(
 			this.baseUrl,
 			this.apiKey,

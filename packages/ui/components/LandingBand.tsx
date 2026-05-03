@@ -33,9 +33,7 @@ export const LandingBandSection = ({
 		<section
 			className={cn(
 				"p-2 md:p-6 gap-6 flex w-full items-center justify-center",
-				withBackground && variant === "primary"
-					? "bg-primary-100/20 dark:bg-primary-100/60"
-					: "",
+				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-100/60" : "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-100/60"
 					: "",
@@ -50,12 +48,9 @@ export const LandingBandSection = ({
 					)}
 				>
 					{titleComponent ||
-						(title && (
-							<h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">{title}</h2>
-						))}
+						(title && <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">{title}</h2>)}
 
-					{descriptionComponent ||
-						(description && <p className="text-lg">{description}</p>)}
+					{descriptionComponent || (description && <p className="text-lg">{description}</p>)}
 
 					{children}
 				</div>

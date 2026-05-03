@@ -138,9 +138,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 									{form.formState.isSubmitted && form.formState.errors.root && (
 										<Alert variant="error">
 											<AlertTriangleIcon />
-											<AlertDescription>
-												{form.formState.errors.root.message}
-											</AlertDescription>
+											<AlertDescription>{form.formState.errors.root.message}</AlertDescription>
 										</Alert>
 									)}
 
@@ -165,11 +163,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 											<FormItem>
 												<FormLabel>{t("auth.signup.email")}</FormLabel>
 												<FormControl>
-													<Input
-														{...field}
-														autoComplete="email"
-														readOnly={!!prefillEmail}
-													/>
+													<Input {...field} autoComplete="email" readOnly={!!prefillEmail} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -182,9 +176,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 											name="password"
 											render={({ field }) => (
 												<FormItem>
-													<FormLabel>
-														{t("auth.signup.password")}
-													</FormLabel>
+													<FormLabel>{t("auth.signup.password")}</FormLabel>
 													<FormControl>
 														<PasswordInput
 															autoComplete="new-password"
@@ -215,10 +207,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 									<div className="gap-2 sm:grid-cols-2 grid grid-cols-1 items-stretch">
 										{Object.keys(oAuthProviders).map((providerId) => (
-											<SocialSigninButton
-												key={providerId}
-												provider={providerId as OAuthProvider}
-											/>
+											<SocialSigninButton key={providerId} provider={providerId as OAuthProvider} />
 										))}
 									</div>
 								</>
@@ -229,9 +218,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 			</Card>
 
 			<div className="text-sm text-center">
-				<span className="text-muted-foreground">
-					{t("auth.signup.alreadyHaveAccount")}{" "}
-				</span>
+				<span className="text-muted-foreground">{t("auth.signup.alreadyHaveAccount")} </span>
 				<Link
 					href={withQuery("/login", Object.fromEntries(searchParams.entries()))}
 					className="underline underline-offset-4 hover:text-primary"

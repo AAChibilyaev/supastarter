@@ -122,9 +122,7 @@ export const ListPagination = ({
 						total: total === -1 ? pageEnd : total,
 					}}
 				>
-					{total != null
-						? `${pageStart}-${pageEnd} of ${total === -1 ? pageEnd : total}`
-						: null}
+					{total != null ? `${pageStart}-${pageEnd} of ${total === -1 ? pageEnd : total}` : null}
 				</Translate>
 			</div>
 			<Pagination className="-w-full -mx-auto">

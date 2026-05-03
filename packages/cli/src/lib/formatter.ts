@@ -179,9 +179,7 @@ export function formatCreatedKey(
 	lines.push(`  ID:     ${(key.id as string) ?? "?"}`);
 	lines.push(`  Name:   ${(key.name as string) ?? "?"}`);
 	lines.push(`  Prefix: ${(key.prefix as string) ?? "?"}`);
-	lines.push(
-		`  Scopes: ${Array.isArray(key.scopes) ? (key.scopes as string[]).join(", ") : "?"}`,
-	);
+	lines.push(`  Scopes: ${Array.isArray(key.scopes) ? (key.scopes as string[]).join(", ") : "?"}`);
 
 	const rawKey = key.rawKey as string | undefined;
 	if (rawKey) {

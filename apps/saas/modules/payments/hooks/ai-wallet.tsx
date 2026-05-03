@@ -46,3 +46,22 @@ export function useCreateTopup() {
 		}),
 	);
 }
+
+export function useCreditUsageStats(
+	organizationId: string,
+	period: "daily" | "weekly" | "monthly" = "daily",
+) {
+	return useQuery(
+		orpc.billingWallet.getCreditUsageStats.queryOptions({
+			input: { organizationId, period },
+		}),
+	);
+}
+
+export function usePricingRules() {
+	return useQuery(
+		orpc.billingWallet.listPricingRules.queryOptions({
+			input: {},
+		}),
+	);
+}

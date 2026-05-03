@@ -52,19 +52,11 @@ export interface AuthErrorProps {
  * );
  */
 export const AuthError = (props: AuthErrorProps) => {
-	const {
-		className,
-		title = "ra.page.error",
-		message = "ra.message.auth_error",
-		...rest
-	} = props;
+	const { className, title = "ra.page.error", message = "ra.message.auth_error", ...rest } = props;
 
 	const translate = useTranslate();
 	return (
-		<div
-			className={cn("flex h-full flex-col items-center justify-center", className)}
-			{...rest}
-		>
+		<div className={cn("flex h-full flex-col items-center justify-center", className)} {...rest}>
 			<h1 className="text-3xl my-5 gap-3 flex items-center" role="alert">
 				<CircleAlert className="w-2em h-2em" />
 				<Translate i18nKey={title} />

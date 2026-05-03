@@ -101,8 +101,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 			((collectionData as any)?.tokenSeparators as string[] | undefined)?.join(", ") ?? "",
 		);
 		setSymbolTokensInput(
-			((collectionData as any)?.symbolTokensToIndex as string[] | undefined)?.join(", ") ??
-				"",
+			((collectionData as any)?.symbolTokensToIndex as string[] | undefined)?.join(", ") ?? "",
 		);
 		setInitialized(true);
 	}
@@ -114,8 +113,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 			onSuccess: () => {
 				toastSuccess(t("saved") || "Schema saved");
 				void queryClient.invalidateQueries({
-					queryKey: orpc.collections.get.queryOptions({ input: { slug, organizationId } })
-						.queryKey,
+					queryKey: orpc.collections.get.queryOptions({ input: { slug, organizationId } }).queryKey,
 				});
 			},
 			onError: () => toastError(t("saveError") || "Failed to save schema"),
@@ -263,11 +261,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 								{t("exportJson") || "Export JSON"}
 							</Button>
 							{hasDiff && (
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setDiffOpen(true)}
-								>
+								<Button variant="outline" size="sm" onClick={() => setDiffOpen(true)}>
 									{t("previewDiff") || "Review changes"}
 								</Button>
 							)}
@@ -291,9 +285,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 						</Label>
 						<Select value={defaultSort} onValueChange={setDefaultSort}>
 							<SelectTrigger className="w-48">
-								<SelectValue
-									placeholder={t("noDefaultSort") || "No default sort"}
-								/>
+								<SelectValue placeholder={t("noDefaultSort") || "No default sort"} />
 							</SelectTrigger>
 							<SelectContent>
 								{sortableFields.map((f) => (
@@ -365,23 +357,16 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 										<th className="pb-2 pr-2 font-medium text-center">
 											{tColl("fieldOptional") || "Opt."}
 										</th>
-										<th className="pb-2 pr-2 font-medium text-center">
-											Search
-										</th>
+										<th className="pb-2 pr-2 font-medium text-center">Search</th>
 										<th className="pb-2 font-medium" />
 									</tr>
 								</thead>
 								<tbody>
 									{draft.map((field, idx) => (
 										<tr key={idx} className="group border-b last:border-0">
-											<td className="py-1.5 pr-3 font-mono text-xs">
-												{field.name}
-											</td>
+											<td className="py-1.5 pr-3 font-mono text-xs">{field.name}</td>
 											<td className="py-1.5 pr-3">
-												<Badge
-													variant="outline"
-													className="font-mono text-[10px]"
-												>
+												<Badge variant="outline" className="font-mono text-[10px]">
 													{field.type}
 												</Badge>
 											</td>
@@ -389,34 +374,26 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 												{field.facet ? (
 													<Badge status="success">Yes</Badge>
 												) : (
-													<span className="text-xs text-muted-foreground">
-														—
-													</span>
+													<span className="text-xs text-muted-foreground">—</span>
 												)}
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												{field.sort ? (
 													<Badge status="success">Yes</Badge>
 												) : (
-													<span className="text-xs text-muted-foreground">
-														—
-													</span>
+													<span className="text-xs text-muted-foreground">—</span>
 												)}
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												{field.index !== false ? (
 													<Badge status="info">Yes</Badge>
 												) : (
-													<span className="text-xs text-muted-foreground">
-														—
-													</span>
+													<span className="text-xs text-muted-foreground">—</span>
 												)}
 											</td>
 											<td className="py-1.5 pr-2 text-center">
 												{field.optional ? (
-													<span className="text-xs text-muted-foreground">
-														Opt
-													</span>
+													<span className="text-xs text-muted-foreground">Opt</span>
 												) : (
 													<Badge variant="outline">Req</Badge>
 												)}

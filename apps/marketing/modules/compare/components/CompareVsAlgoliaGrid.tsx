@@ -128,9 +128,7 @@ export function CompareVsAlgoliaGrid() {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("decision.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">
-							{t("decision.subtitle")}
-						</p>
+						<p className="mt-4 text-lg text-muted-foreground">{t("decision.subtitle")}</p>
 					</div>
 
 					<div className="mt-16 max-w-4xl mx-auto">
@@ -148,12 +146,8 @@ export function CompareVsAlgoliaGrid() {
 									className="gap-4 p-4 text-sm grid grid-cols-3 transition-colors hover:bg-muted/10"
 								>
 									<div className="font-medium">{t(row.labelKey)}</div>
-									<div className="font-medium text-primary">
-										{t(row.aacsearchValueKey)}
-									</div>
-									<div className="text-muted-foreground">
-										{t(row.algoliaValueKey)}
-									</div>
+									<div className="font-medium text-primary">{t(row.aacsearchValueKey)}</div>
+									<div className="text-muted-foreground">{t(row.algoliaValueKey)}</div>
 								</div>
 							))}
 						</div>

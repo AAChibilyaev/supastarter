@@ -43,12 +43,11 @@ export const monitorCommand = new Command("monitor")
 			// Resolve collection if specified
 			let indexId: string | undefined;
 			if (options.collection) {
-				const indexes = await client.get<
-					Array<{ id: string; slug: string; displayName: string }>
-				>(`/v1/projects/${project.id}/indexes`);
+				const indexes = await client.get<Array<{ id: string; slug: string; displayName: string }>>(
+					`/v1/projects/${project.id}/indexes`,
+				);
 				const found = indexes.find(
-					(idx) =>
-						idx.slug === options.collection || idx.displayName === options.collection,
+					(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 				);
 				if (!found) {
 					console.error(`Error: Collection "${options.collection}" not found.`);
@@ -143,9 +142,7 @@ async function renderDashboard(
 					: String(docs);
 		const status = idx.status ?? "active";
 		const statusIcon = status === "active" ? "✓" : "⚠";
-		process.stdout.write(
-			`  │ ${statusIcon} ${pad(idx.slug, 22)} ${pad(docsLabel, 8)} docs  │\n`,
-		);
+		process.stdout.write(`  │ ${statusIcon} ${pad(idx.slug, 22)} ${pad(docsLabel, 8)} docs  │\n`);
 	}
 	if (indexes.length > 5) {
 		process.stdout.write(`  │   ... and ${indexes.length - 5} more indexes              │\n`);

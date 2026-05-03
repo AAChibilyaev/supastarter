@@ -148,16 +148,12 @@ export const FilterFormInput = (inProps: FilterFormInputProps) => {
 	const resource = useResourceContext(inProps);
 	const translate = useTranslate();
 	const { alwaysOn: _, ...filterElementProps } = filterElement.props;
-	const filterElementType =
-		typeof filterElement === "string" ? filterElement : filterElement.type;
+	const filterElementType = typeof filterElement === "string" ? filterElement : filterElement.type;
 
 	return (
 		<div
 			data-source={filterElement.props.source}
-			className={cn(
-				"filter-field gap-2 pointer-events-auto relative flex flex-row",
-				className,
-			)}
+			className={cn("filter-field gap-2 pointer-events-auto relative flex flex-row", className)}
 		>
 			{React.createElement(filterElementType, {
 				...filterElementProps,
@@ -256,9 +252,7 @@ export const FilterButton = (props: FilterButtonProps) => {
 			// We have to fallback to imperative code because the new FilterFormInput
 			// has no way of knowing it has just been displayed (and thus that it should focus its input)
 			setTimeout(() => {
-				const inputElement = document.querySelector(
-					`input[name='${source}']`,
-				) as HTMLInputElement;
+				const inputElement = document.querySelector(`input[name='${source}']`) as HTMLInputElement;
 				if (inputElement) {
 					inputElement.focus();
 				}
@@ -354,9 +348,7 @@ export const FilterButton = (props: FilterButtonProps) => {
 											order: savedQuery.value.sort?.order,
 											page: 1,
 											perPage: savedQuery.value.perPage,
-											displayedFilters: JSON.stringify(
-												savedQuery.value.displayedFilters,
-											),
+											displayedFilters: JSON.stringify(savedQuery.value.displayedFilters),
 										}),
 									});
 									setOpen(false);
@@ -393,10 +385,7 @@ export const FilterButton = (props: FilterButtonProps) => {
 			</DropdownMenu>
 			{!disableSaveQuery && (
 				<>
-					<AddSavedQueryDialog
-						open={addSavedQueryDialogOpen}
-						onClose={hideAddSavedQueryDialog}
-					/>
+					<AddSavedQueryDialog open={addSavedQueryDialogOpen} onClose={hideAddSavedQueryDialog} />
 					<RemoveSavedQueryDialog
 						open={removeSavedQueryDialogOpen}
 						onClose={hideRemoveSavedQueryDialog}
@@ -456,11 +445,7 @@ export const FilterButtonMenuItem = React.forwardRef<HTMLDivElement, FilterButto
 					{displayed && <Check className="h-3 w-3" />}
 				</div>
 				<div>
-					<FieldTitle
-						label={filter.props.label}
-						source={filter.props.source}
-						resource={resource}
-					/>
+					<FieldTitle label={filter.props.label} source={filter.props.source} resource={resource} />
 				</div>
 			</div>
 		);

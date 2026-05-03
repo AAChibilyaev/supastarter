@@ -67,16 +67,13 @@ export const personalizationOverview = protectedProcedure
 				if (ev.metadata) {
 					const meta = ev.metadata as Record<string, unknown>;
 					const uid =
-						(typeof meta.anonymousUserId === "string"
-							? meta.anonymousUserId
-							: undefined) ??
+						(typeof meta.anonymousUserId === "string" ? meta.anonymousUserId : undefined) ??
 						(typeof meta.sessionId === "string" ? meta.sessionId : undefined);
 					if (uid) uniqueUsersSet.add(uid);
 				}
 			}
 
-			const ctr =
-				totalSearches > 0 ? Math.round((totalClicks / totalSearches) * 1000) / 10 : 0;
+			const ctr = totalSearches > 0 ? Math.round((totalClicks / totalSearches) * 1000) / 10 : 0;
 
 			// Read personalization config to determine if enabled
 			const org = await db.organization.findUniqueOrThrow({
@@ -94,10 +91,7 @@ export const personalizationOverview = protectedProcedure
 				personalizationEnabled: hasEvents && config.minEventsPerUser <= 50,
 			};
 		} catch (err) {
-			logger.error(
-				{ err, organizationId, window },
-				"Failed to fetch personalization overview",
-			);
+			logger.error({ err, organizationId, window }, "Failed to fetch personalization overview");
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {
 				message: "Personalization overview unavailable",
 			});

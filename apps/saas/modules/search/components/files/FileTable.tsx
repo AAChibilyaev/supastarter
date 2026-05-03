@@ -161,9 +161,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 					name: (doc.title as string) ?? (doc.name as string) ?? `document-${idx}`,
 					type: inferFileType(doc),
 					mimeType:
-						(doc.mime_type as string) ??
-						(doc.content_type as string) ??
-						"application/octet-stream",
+						(doc.mime_type as string) ?? (doc.content_type as string) ?? "application/octet-stream",
 					sizeBytes: (doc.size as number) ?? (doc.file_size as number) ?? 0,
 					wordCount: doc.word_count as number | undefined,
 					pageCount: doc.page_count as number | undefined,
@@ -244,9 +242,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 				cell: ({ getValue }) => {
 					const val = getValue() as number | undefined;
 					return val != null ? (
-						<span className="font-mono text-xs text-muted-foreground">
-							{val.toLocaleString()}
-						</span>
+						<span className="font-mono text-xs text-muted-foreground">{val.toLocaleString()}</span>
 					) : (
 						<span className="text-muted-foreground/40">&mdash;</span>
 					);
@@ -315,9 +311,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 		<div className="space-y-4">
 			{/* Header toolbar */}
 			<div className="gap-2 flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">
-					{t("files.count", { count: files.length })}
-				</p>
+				<p className="text-sm text-muted-foreground">{t("files.count", { count: files.length })}</p>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="outline" size="sm">
@@ -363,10 +357,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 													: ""
 											}
 										>
-											{flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-											)}
+											{flexRender(header.column.columnDef.header, header.getContext())}
 											{{
 												asc: " \u2191",
 												desc: " \u2193",
@@ -397,10 +388,7 @@ export function FileTable({ organizationId, slug }: FileTableProps) {
 									>
 										{row.getVisibleCells().map((cell) => (
 											<TableCell key={cell.id}>
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext(),
-												)}
+												{flexRender(cell.column.columnDef.cell, cell.getContext())}
 											</TableCell>
 										))}
 									</TableRow>

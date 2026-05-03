@@ -40,9 +40,7 @@ function CommandDialog({
 				<DialogTitle>{title}</DialogTitle>
 				<DialogDescription>{description}</DialogDescription>
 			</DialogHeader>
-			<DialogContent className={cn("p-0 overflow-hidden", className)}>
-				{children}
-			</DialogContent>
+			<DialogContent className={cn("p-0 overflow-hidden", className)}>{children}</DialogContent>
 		</Dialog>
 	);
 }

@@ -129,20 +129,15 @@ export function extractFeatures(
 	return {
 		recency: doc.createdAt ? recencyScore(doc.createdAt) : 0.5,
 		popularity:
-			corpusStats?.maxViews && doc.views
-				? popularityScore(doc.views, corpusStats.maxViews)
-				: 0,
+			corpusStats?.maxViews && doc.views ? popularityScore(doc.views, corpusStats.maxViews) : 0,
 		freshness: doc.updatesPerDay ? freshnessScore(doc.updatesPerDay) : 0,
-		ctr:
-			doc.clicks !== undefined && doc.impressions ? ctrScore(doc.clicks, doc.impressions) : 0,
+		ctr: doc.clicks !== undefined && doc.impressions ? ctrScore(doc.clicks, doc.impressions) : 0,
 		authority:
 			doc.inboundLinks && corpusStats?.maxInbound
 				? authorityScore(doc.inboundLinks, corpusStats.maxInbound)
 				: 0,
 		completeness:
-			doc.fields && doc.requiredFields
-				? completenessScore(doc.fields, doc.requiredFields)
-				: 0.5,
+			doc.fields && doc.requiredFields ? completenessScore(doc.fields, doc.requiredFields) : 0.5,
 	};
 }
 

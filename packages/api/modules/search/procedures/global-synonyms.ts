@@ -37,8 +37,7 @@ export const getGlobalSynonyms = protectedProcedure
 		path: "/search/global-synonyms",
 		tags: ["Search"],
 		summary: "Get global synonym sets",
-		description:
-			"Returns all global synonym sets that apply to all indexes in the organization.",
+		description: "Returns all global synonym sets that apply to all indexes in the organization.",
 	})
 	.input(
 		z.object({
@@ -91,9 +90,7 @@ export const updateGlobalSynonyms = protectedProcedure
 			// Retrieve existing global synonym sets
 			const existing = await typesenseFetch<SynonymSetList>("GET", "/synonym_sets");
 			const existingIds = new Set(
-				(existing.synonym_sets ?? [])
-					.filter((s) => s.id.startsWith(prefix))
-					.map((s) => s.id),
+				(existing.synonym_sets ?? []).filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
 			);
 
 			const newIds = new Set<string>();

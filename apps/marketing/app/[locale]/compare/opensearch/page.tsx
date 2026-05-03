@@ -11,15 +11,18 @@ import { CompareOpenSearchGrid } from "../../../../modules/compare/components/Co
 const FAQ_ITEMS = [
 	{
 		question: "Why switch from OpenSearch to AACsearch?",
-		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
+		answer:
+			"AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
 	},
 	{
 		question: "How does AACsearch pricing compare to OpenSearch?",
-		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. OpenSearch pricing info would go here.",
+		answer:
+			"AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. OpenSearch pricing info would go here.",
 	},
 	{
 		question: "Is migration from OpenSearch to AACsearch difficult?",
-		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
+		answer:
+			"Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
 	},
 ];
 

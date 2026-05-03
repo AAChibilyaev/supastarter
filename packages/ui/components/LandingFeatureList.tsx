@@ -45,9 +45,7 @@ export const LandingFeatureList = ({
 		<section
 			className={cn(
 				"gap-8 py-12 lg:py-16 relative flex w-full flex-col items-center justify-center",
-				withBackground && variant === "primary"
-					? "bg-primary-100/20 dark:bg-primary-900/10"
-					: "",
+				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",
@@ -57,10 +55,7 @@ export const LandingFeatureList = ({
 		>
 			{withBackgroundGlow ? (
 				<div className="lg:flex absolute -bottom-1/2 hidden h-full w-full justify-center">
-					<GlowBg
-						className={cn("lg:w-2/3 z-0 h-auto w-full")}
-						variant={backgroundGlowVariant}
-					/>
+					<GlowBg className={cn("lg:w-2/3 z-0 h-auto w-full")} variant={backgroundGlowVariant} />
 				</div>
 			) : null}
 
@@ -71,8 +66,7 @@ export const LandingFeatureList = ({
 							{title}
 						</h2>
 					))}
-				{descriptionComponent ||
-					(description && <p className="mt-6 md:text-xl">{description}</p>)}
+				{descriptionComponent || (description && <p className="mt-6 md:text-xl">{description}</p>)}
 
 				<div
 					className={cn(

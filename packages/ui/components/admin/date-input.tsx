@@ -199,12 +199,7 @@ export const DateInput = (props: DateInputProps) => {
 		<FormField id={id} className={className} name={name}>
 			{label !== false && (
 				<FormLabel>
-					<FieldTitle
-						label={label}
-						source={source}
-						resource={resource}
-						isRequired={isRequired}
-					/>
+					<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
 				</FormLabel>
 			)}
 			<FormControl>

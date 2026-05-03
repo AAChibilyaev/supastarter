@@ -186,25 +186,13 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 		if (step.key === "connectSource") {
 			return (
 				<div className="gap-2 flex flex-wrap">
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => openConnectorWizard("prestashop")}
-					>
+					<Button variant="outline" size="sm" onClick={() => openConnectorWizard("prestashop")}>
 						{tConnector("prestashop")}
 					</Button>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => openConnectorWizard("bitrix")}
-					>
+					<Button variant="outline" size="sm" onClick={() => openConnectorWizard("bitrix")}>
 						{tConnector("bitrix")}
 					</Button>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => openConnectorWizard("directApi")}
-					>
+					<Button variant="outline" size="sm" onClick={() => openConnectorWizard("directApi")}>
 						{tConnector("directApi")}
 					</Button>
 				</div>
@@ -233,10 +221,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 									<SparklesIcon className="mr-1 size-3 inline" />
 									{t("title")}
 								</Badge>
-								<Badge
-									status={isComplete ? "success" : "warning"}
-									className="text-xs"
-								>
+								<Badge status={isComplete ? "success" : "warning"} className="text-xs">
 									{isComplete ? t("done") : t("pending")}
 								</Badge>
 							</div>
@@ -262,9 +247,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 								className="rounded-lg border border-foreground/10 bg-foreground/3"
 							>
 								<BarChart3Icon />
-								<AlertTitle>
-									{isComplete ? t("allDoneTitle") : t("progress")}
-								</AlertTitle>
+								<AlertTitle>{isComplete ? t("allDoneTitle") : t("progress")}</AlertTitle>
 								<AlertDescription>
 									{isComplete ? t("allDoneDesc") : t("planCtaDesc")}
 								</AlertDescription>
@@ -280,17 +263,11 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 											{completedCount} / {totalSteps} {t("completed")}
 										</CardDescription>
 									</div>
-									<Badge
-										status={isComplete ? "success" : "info"}
-										className="text-sm normal-case"
-									>
+									<Badge status={isComplete ? "success" : "info"} className="text-sm normal-case">
 										{percentComplete}%
 									</Badge>
 								</div>
-								<Progress
-									value={percentComplete}
-									className="h-2.5 rounded-full bg-foreground/10"
-								/>
+								<Progress value={percentComplete} className="h-2.5 rounded-full bg-foreground/10" />
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<Card className="border-foreground/10 bg-foreground/3">
@@ -309,14 +286,10 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 
 								<div className="gap-3 flex flex-wrap">
 									<Button variant="outline" size="sm" asChild>
-										<Link href={`/${slug}/overview`}>
-											{t("skipToDashboard")}
-										</Link>
+										<Link href={`/${slug}/overview`}>{t("skipToDashboard")}</Link>
 									</Button>
 									<Button variant="ghost" size="sm" asChild>
-										<Link href={`/${slug}/settings/billing`}>
-											{t("managePlan")}
-										</Link>
+										<Link href={`/${slug}/settings/billing`}>{t("managePlan")}</Link>
 									</Button>
 								</div>
 							</CardContent>
@@ -349,9 +322,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 										{step.done ? (
 											<CheckIcon className="size-5" />
 										) : (
-											<span className="text-base font-semibold">
-												{index + 1}
-											</span>
+											<span className="text-base font-semibold">{index + 1}</span>
 										)}
 									</div>
 									<div className="min-w-0 space-y-2">
@@ -359,19 +330,14 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 											<div className="size-7 flex items-center justify-center rounded-md border border-foreground/10 text-foreground/50">
 												<Icon className="size-3.5" />
 											</div>
-											<CardTitle className="text-lg leading-tight">
-												{t(step.labelKey)}
-											</CardTitle>
+											<CardTitle className="text-lg leading-tight">{t(step.labelKey)}</CardTitle>
 										</div>
 										<CardDescription className="text-sm leading-6 text-pretty">
 											{t(step.descKey)}
 										</CardDescription>
 									</div>
 								</div>
-								<Badge
-									status={step.done ? "success" : "warning"}
-									className="text-xs shrink-0"
-								>
+								<Badge status={step.done ? "success" : "warning"} className="text-xs shrink-0">
 									{step.done ? t("done") : t("pending")}
 								</Badge>
 							</CardHeader>
@@ -379,9 +345,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 								<Card className="border-foreground/8 bg-foreground/2">
 									<CardContent className="gap-3 p-4 sm:flex-row sm:items-center sm:justify-between flex flex-col">
 										<div className="space-y-1">
-											<p className="text-sm font-medium text-foreground">
-												{t(step.actionKey)}
-											</p>
+											<p className="text-sm font-medium text-foreground">{t(step.actionKey)}</p>
 											<p className="text-sm text-muted-foreground">
 												{step.key === "connectSource"
 													? tConnector("subtitle")

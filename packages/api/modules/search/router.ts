@@ -5,6 +5,7 @@ import {
 	deleteAnalyticsRule,
 } from "./procedures/analytics-rules";
 import { bulkDeleteDocuments } from "./procedures/bulk-delete-documents";
+import { cloneIndex } from "./procedures/clone-index";
 import { performClusterOperation, clusterMetrics } from "./procedures/cluster-ops";
 import {
 	createConversationModel,
@@ -87,6 +88,7 @@ import { getWidgetConfig, saveWidgetConfig } from "./procedures/widget-config";
 export const searchRouter = {
 	listIndexes,
 	createIndex,
+	cloneIndex,
 	deleteIndex,
 	exportDocuments: exportIndexDocuments,
 	truncateIndex,

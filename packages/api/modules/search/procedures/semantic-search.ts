@@ -31,8 +31,7 @@ export const semanticSearch = protectedProcedure
 		path: "/search/indexes/{slug}/semantic-search",
 		tags: ["Search"],
 		summary: "Natural language / semantic search",
-		description:
-			"Submits a natural language query. Supports faceting, filtering, highlighting.",
+		description: "Submits a natural language query. Supports faceting, filtering, highlighting.",
 	})
 	.input(
 		z.object({
@@ -85,14 +84,10 @@ export const semanticSearch = protectedProcedure
 			hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
 				document: hit.document as Record<string, unknown>,
 				highlights: hit.highlights
-					? Object.entries(hit.highlights as Record<string, unknown>).map(
-							([field, snippet]) => ({
-								field,
-								snippet: Array.isArray(snippet)
-									? String(snippet.join(" "))
-									: String(snippet),
-							}),
-						)
+					? Object.entries(hit.highlights as Record<string, unknown>).map(([field, snippet]) => ({
+							field,
+							snippet: Array.isArray(snippet) ? String(snippet.join(" ")) : String(snippet),
+						}))
 					: undefined,
 			})),
 			facets: ((results.facet_counts ?? []) as any[]).map((facet: any) => ({

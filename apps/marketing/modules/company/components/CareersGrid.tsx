@@ -72,10 +72,7 @@ export function CareersGrid() {
 				<div className="mt-12 p-6 max-w-2xl mx-auto rounded-lg border border-border/60 bg-muted/30 text-center">
 					<p className="text-muted-foreground">
 						{t("noRoles")} {t("applyPrompt")}{" "}
-						<a
-							href={`mailto:${t("applyEmail")}`}
-							className="text-primary hover:underline"
-						>
+						<a href={`mailto:${t("applyEmail")}`} className="text-primary hover:underline">
 							{t("applyEmail")}
 						</a>
 					</p>

@@ -2,6 +2,7 @@ export { config as searchConfig } from "./config";
 export { getTypesenseClient } from "./lib/client";
 export {
 	aliasName,
+	cloneCollection,
 	createPhysicalCollection,
 	deleteSearchIndexCollections,
 	dropCollection,

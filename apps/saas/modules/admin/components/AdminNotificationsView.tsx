@@ -66,9 +66,7 @@ export function AdminNotificationsView() {
 							<CardContent className="p-3 text-sm flex items-center justify-between">
 								<div>
 									<p className="font-medium">{item.type}</p>
-									<p className="text-foreground/60">
-										{new Date(item.createdAt).toLocaleString()}
-									</p>
+									<p className="text-foreground/60">{new Date(item.createdAt).toLocaleString()}</p>
 								</div>
 								<span className="text-xs text-foreground/60">
 									{item.read ? t("statusRead") : t("statusUnread")}

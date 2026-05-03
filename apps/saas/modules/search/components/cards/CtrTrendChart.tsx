@@ -41,10 +41,7 @@ export function CtrTrendChart({ data }: CtrTrendChartProps) {
 			<CardContent>
 				{hasData ? (
 					<ResponsiveContainer width="100%" height={200}>
-						<LineChart
-							data={chartData}
-							margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
-						>
+						<LineChart data={chartData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
 							<CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
 							<XAxis
 								dataKey="date"
@@ -62,10 +59,7 @@ export function CtrTrendChart({ data }: CtrTrendChartProps) {
 								className="fill-muted-foreground"
 							/>
 							<Tooltip
-								formatter={(value: number) => [
-									`${value}%`,
-									t("search.analytics.ctr"),
-								]}
+								formatter={(value: number) => [`${value}%`, t("search.analytics.ctr")]}
 								labelClassName="text-xs text-foreground"
 								contentStyle={{
 									fontSize: 12,

@@ -113,8 +113,7 @@ export function OrganizationForm({ organizationId }: { organizationId: string })
 								<Button
 									type="submit"
 									loading={
-										updateOrganizationMutation.isPending ||
-										createOrganizationMutation.isPending
+										updateOrganizationMutation.isPending || createOrganizationMutation.isPending
 									}
 								>
 									{t("admin.organizations.form.save")}

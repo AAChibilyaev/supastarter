@@ -11,7 +11,14 @@ import { EmptyState } from "@search/components/cards/EmptyState";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertCircleIcon, Columns3Icon, PlusIcon, RefreshCwIcon, SearchIcon, XIcon } from "lucide-react";
+import {
+	AlertCircleIcon,
+	Columns3Icon,
+	PlusIcon,
+	RefreshCwIcon,
+	SearchIcon,
+	XIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -65,7 +72,12 @@ export function CollectionsPage() {
 
 	// ── Fetch collections ──────────────────────────────────────
 
-	const { data: collectionsData, isLoading, isError, refetch } = useQuery(
+	const {
+		data: collectionsData,
+		isLoading,
+		isError,
+		refetch,
+	} = useQuery(
 		orpc.collections.list.queryOptions({
 			input: { organizationId: orgId ?? "" },
 		}),
@@ -183,12 +195,7 @@ export function CollectionsPage() {
 					<p className="text-sm text-muted-foreground">{t("collections.subtitle")}</p>
 				</div>
 				<div className="gap-2 flex items-center">
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => void refetch()}
-						disabled={isLoading}
-					>
+					<Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isLoading}>
 						<RefreshCwIcon className="size-4" />
 						{tCommon("refresh")}
 					</Button>
@@ -223,7 +230,7 @@ export function CollectionsPage() {
 
 			{/* Error state */}
 			{isError && (
-				<div className="flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+				<div className="gap-3 p-4 text-sm flex items-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive">
 					<AlertCircleIcon className="size-4 shrink-0" />
 					<span>{t("collections.loadError")}</span>
 					<Button
@@ -244,9 +251,7 @@ export function CollectionsPage() {
 				<EmptyState
 					title={searchQuery ? t("collections.noResults") : t("collections.empty")}
 					description={
-						searchQuery
-							? t("collections.noResultsDescription")
-							: t("collections.emptyDescription")
+						searchQuery ? t("collections.noResultsDescription") : t("collections.emptyDescription")
 					}
 					icon={Columns3Icon}
 					action={
@@ -305,10 +310,7 @@ export function CollectionsPage() {
 						<DialogTitle>{t("collection.schemaEditor.title")}</DialogTitle>
 					</DialogHeader>
 					{schemaCollectionSlug && (
-						<SchemaEditorPanel
-							organizationId={orgId ?? ""}
-							slug={schemaCollectionSlug}
-						/>
+						<SchemaEditorPanel organizationId={orgId ?? ""} slug={schemaCollectionSlug} />
 					)}
 				</DialogContent>
 			</Dialog>

@@ -53,11 +53,10 @@ export const imageSearch = protectedProcedure
 			}),
 		}),
 	)
-	.handler(async ({ input, context, ...rest }) => {
-		const { creditReservationId } = rest as unknown as CreditGateContext;
+	.handler(async ({ input, context }) => {
+		const { creditReservationId } = context as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
-		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		try {
 			if (!input.imageUrl && !input.imageBase64) {
@@ -66,53 +65,34 @@ export const imageSearch = protectedProcedure
 				});
 			}
 
-			// Phase 1: Generate a caption using OpenAI Vision (if imageUrl) or use base64 directly
+			// Phase 1: Generate a caption using OpenAI Vision
 			const startTime = Date.now();
 			let caption: string;
 
 			const OpenAI = await import("openai").then((m) => m.default);
 			const openai = new OpenAI();
 
-			if (input.imageUrl) {
-				const visionResponse = await openai.chat.completions.create({
-					model: input.visionModel,
-					messages: [
-						{
-							role: "user",
-							content: [
-								{
-									type: "text",
-									text: "Describe this image in detail for search purposes. Focus on objects, colors, style, visible text, and composition.",
-								},
-								{ type: "image_url", image_url: { url: input.imageUrl } },
-							] as any,
-						},
-					],
-					max_tokens: 200,
-				});
-				caption = visionResponse.choices[0]?.message?.content ?? "";
-			} else {
-				// If base64, convert to data URL and use vision
-				const mimeType = "image/jpeg";
-				const dataUri = `data:${mimeType};base64,${input.imageBase64}`;
-				const visionResponse = await openai.chat.completions.create({
-					model: input.visionModel,
-					messages: [
-						{
-							role: "user",
-							content: [
-								{
-									type: "text",
-									text: "Describe this image in detail for search purposes. Focus on objects, colors, style, visible text, and composition.",
-								},
-								{ type: "image_url", image_url: { url: dataUri } },
-							] as any,
-						},
-					],
-					max_tokens: 200,
-				});
-				caption = visionResponse.choices[0]?.message?.content ?? "";
-			}
+			const imageUrl = input.imageUrl
+				? input.imageUrl
+				: `data:image/jpeg;base64,${input.imageBase64}`;
+
+			const visionResponse = await openai.chat.completions.create({
+				model: input.visionModel,
+				messages: [
+					{
+						role: "user",
+						content: [
+							{
+								type: "text",
+								text: "Describe this image in detail for search purposes. Focus on objects, colors, style, visible text, and composition.",
+							},
+							{ type: "image_url", image_url: { url: imageUrl } },
+						] as any,
+					},
+				],
+				max_tokens: 200,
+			});
+			caption = visionResponse.choices[0]?.message?.content ?? "";
 
 			if (!caption) {
 				throw new ORPCError("BAD_REQUEST", {
@@ -127,7 +107,6 @@ export const imageSearch = protectedProcedure
 			const vectorQuery = formatVectorQuery(embeddingResult.vector);
 
 			const client = getTypesenseClient();
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const results = (await client
 				.collections(index.slug)
 				.documents()
@@ -146,11 +125,9 @@ export const imageSearch = protectedProcedure
 				operation: "embedding",
 				provider: "openai",
 				model: input.visionModel,
-				flatFeeKopecks: CREDIT_RATES.embedding,
+				flatFeeKopecks: BigInt(300),
 			});
 
-		if (!caption) {
-			await releaseCreditReservation(context, creditReservationId);
 			return {
 				found: results.found ?? 0,
 				hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
@@ -166,47 +143,6 @@ export const imageSearch = protectedProcedure
 				},
 			};
 		} catch (err) {
-			// Release reservation on any error
-			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
-
-		// Phase 2: embed the caption and vector-search
-		let embedding: Awaited<ReturnType<typeof generateEmbedding>>;
-		try {
-			embedding = await generateEmbedding(caption, input.embeddingModel);
-		} catch (err) {
-			await releaseCreditReservation(context, creditReservationId);
-			throw err;
-		}
-		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
-
-		const client = getTypesenseClient();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const results = (await client
-			.collections(index.slug)
-			.documents()
-			.search({
-				q: "*",
-				vector_query: vectorQuery,
-				filter_by: input.filterBy ?? undefined,
-				per_page: input.k,
-			} as any)) as any;
-
-		await commitFlatFeeUsage(context, creditReservationId, BigInt(300));
-
-		return {
-			found: results.found ?? 0,
-			hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
-				document: hit.document as Record<string, unknown>,
-				vectorDistance: hit.vector_distance as number | undefined,
-			})),
-			searchTimeMs: results.search_time_ms ?? 0,
-			caption,
-			embedding: {
-				model: embedding.model,
-				dimensions: embedding.dimensions,
-				tokens: embedding.tokens,
-			},
-		};
 	});

@@ -12,6 +12,7 @@ const NAV_ITEMS = [
 		href: "/settings/billing/payment-methods",
 	},
 	{ labelKey: "tabs.invoices", href: "/settings/billing/invoices" },
+	{ labelKey: "tabs.aiCredits", href: "/settings/billing/ai-credits" },
 ] as const;
 
 export function BillingNav() {

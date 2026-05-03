@@ -182,10 +182,7 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 										<FormItem>
 											<FormLabel>{t("urlLabel")}</FormLabel>
 											<FormControl>
-												<Input
-													{...field}
-													placeholder={t("urlPlaceholder")}
-												/>
+												<Input {...field} placeholder={t("urlPlaceholder")} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -199,31 +196,18 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 											<FormLabel>{t("eventsLabel")}</FormLabel>
 											<div className="space-y-2">
 												{WEBHOOK_EVENTS.map((event) => (
-													<div
-														key={event}
-														className="gap-2 flex items-center"
-													>
+													<div key={event} className="gap-2 flex items-center">
 														<Checkbox
 															id={event}
-															checked={field.value.includes(
-																event as WebhookEvent,
-															)}
+															checked={field.value.includes(event as WebhookEvent)}
 															onCheckedChange={(checked) => {
 																const next = checked
-																	? [
-																			...field.value,
-																			event as WebhookEvent,
-																		]
-																	: field.value.filter(
-																			(e) => e !== event,
-																		);
+																	? [...field.value, event as WebhookEvent]
+																	: field.value.filter((e) => e !== event);
 																field.onChange(next);
 															}}
 														/>
-														<label
-															htmlFor={event}
-															className="text-sm font-mono cursor-pointer"
-														>
+														<label htmlFor={event} className="text-sm font-mono cursor-pointer">
 															{event}
 														</label>
 													</div>
@@ -272,17 +256,11 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 					<TableBody>
 						{webhooks.map((wh) => (
 							<TableRow key={wh.id}>
-								<TableCell className="font-mono text-xs max-w-[200px] truncate">
-									{wh.url}
-								</TableCell>
+								<TableCell className="font-mono text-xs max-w-[200px] truncate">{wh.url}</TableCell>
 								<TableCell className="text-xs">
 									<div className="gap-1 flex flex-wrap">
 										{wh.events.map((event) => (
-											<Badge
-												key={event}
-												status="info"
-												className="text-xs normal-case"
-											>
+											<Badge key={event} status="info" className="text-xs normal-case">
 												{event}
 											</Badge>
 										))}
@@ -295,11 +273,7 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 									{formatDate(wh.createdAt)}
 								</TableCell>
 								<TableCell className="text-right">
-									<Button
-										variant="ghost"
-										size="sm"
-										onClick={() => handleDelete(wh.id)}
-									>
+									<Button variant="ghost" size="sm" onClick={() => handleDelete(wh.id)}>
 										{t("deleteAction")}
 									</Button>
 								</TableCell>

@@ -55,9 +55,7 @@ export function AacsearchSearchProvider({ children, lang }: { children: ReactNod
 	return (
 		<SearchContext.Provider value={{ open, setOpen }}>
 			{children}
-			{open && (
-				<AacsearchDocsSearch locale={lang} open={open} onOpenChange={handleOpenChange} />
-			)}
+			{open && <AacsearchDocsSearch locale={lang} open={open} onOpenChange={handleOpenChange} />}
 		</SearchContext.Provider>
 	);
 }

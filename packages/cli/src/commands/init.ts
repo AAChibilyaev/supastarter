@@ -25,9 +25,7 @@ export const initCommand = new Command("init")
 		const existing = loadConfig();
 
 		const endpoint =
-			((await rl.question(
-				`API endpoint (${existing.endpoint ?? "https://api.aacsearch.io"}): `,
-			)) ||
+			((await rl.question(`API endpoint (${existing.endpoint ?? "https://api.aacsearch.io"}): `)) ||
 				existing.endpoint) ??
 			"https://api.aacsearch.io";
 		const projectId =

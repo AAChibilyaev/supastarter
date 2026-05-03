@@ -40,9 +40,7 @@ export function IntegrationSetupSteps({
 									{t(`step${n}.label`)}
 								</p>
 								<h3 className="font-semibold text-lg">{t(`step${n}.title`)}</h3>
-								<p className="mt-1 text-muted-foreground">
-									{t(`step${n}.description`)}
-								</p>
+								<p className="mt-1 text-muted-foreground">{t(`step${n}.description`)}</p>
 							</div>
 						</li>
 					))}

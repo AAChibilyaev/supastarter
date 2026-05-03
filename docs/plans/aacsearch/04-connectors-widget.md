@@ -294,26 +294,26 @@ sort_used
 
 ```yaml
 query_by:
-    - title # weight: highest
-    - sku # weight: high
-    - brand # weight: medium
-    - categories # weight: medium
-    - description # weight: lower
-    - tags # weight: lower
+  - title # weight: highest
+  - sku # weight: high
+  - brand # weight: medium
+  - categories # weight: medium
+  - description # weight: lower
+  - tags # weight: lower
 
 filter_by:
-    - project_id # always — tenant boundary
-    - availability
-    - categories      (or category_ids)
-    - brand
-    - price           (range)
-    - locale
+  - project_id # always — tenant boundary
+  - availability
+  - categories      (or category_ids)
+  - brand
+  - price           (range)
+  - locale
 
 sort_by:
-    - _text_match:desc # default
-    - price:asc | price:desc
-    - sale_price:asc | sale_price:desc
-    - created_at:desc # "newest"
+  - _text_match:desc # default
+  - price:asc | price:desc
+  - sale_price:asc | sale_price:desc
+  - created_at:desc # "newest"
 ```
 
 ### MVP feature surface

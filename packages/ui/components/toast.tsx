@@ -74,19 +74,12 @@ function Toast({ id, title, description, action, cancel, icon, type = "default" 
 			<div className="gap-1 flex flex-1 flex-col">
 				{title && <div className="font-medium leading-tight tracking-tight">{title}</div>}
 				{description && (
-					<div className="text-sm leading-relaxed text-muted-foreground">
-						{description}
-					</div>
+					<div className="text-sm leading-relaxed text-muted-foreground">{description}</div>
 				)}
 				{(action || cancel) && (
 					<div className="mt-2 gap-2 flex">
 						{action && (
-							<Button
-								variant="primary"
-								size="sm"
-								onClick={action.onClick}
-								className="h-7"
-							>
+							<Button variant="primary" size="sm" onClick={action.onClick} className="h-7">
 								{action.label}
 							</Button>
 						)}

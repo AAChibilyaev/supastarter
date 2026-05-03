@@ -87,12 +87,7 @@ export const BooleanInput = (props: BooleanInputProps) => {
 					disabled={disabled || readOnly}
 				/>
 				<FormLabel htmlFor={id}>
-					<FieldTitle
-						label={label}
-						source={source}
-						resource={resource}
-						isRequired={isRequired}
-					/>
+					<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
 				</FormLabel>
 			</div>
 			<InputHelperText helperText={helperText} />

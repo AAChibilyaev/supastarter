@@ -63,9 +63,7 @@ export const createCheckoutLink = protectedProcedure
 			const trialPeriodDays =
 				price && "trialPeriodDays" in price ? price.trialPeriodDays : undefined;
 
-			const organization = organizationId
-				? await getOrganizationById(organizationId)
-				: undefined;
+			const organization = organizationId ? await getOrganizationById(organizationId) : undefined;
 
 			if (organization === null) {
 				throw new ORPCError("NOT_FOUND");

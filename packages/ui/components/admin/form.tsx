@@ -55,12 +55,7 @@ function FormField({ className, id, name, ...props }: FormItemProps) {
 
 	return (
 		<FormItemContext.Provider value={contextValue}>
-			<div
-				data-slot="form-item"
-				className={cn("gap-2 grid", className)}
-				role="group"
-				{...props}
-			/>
+			<div data-slot="form-item" className={cn("gap-2 grid", className)} role="group" {...props} />
 		</FormItemContext.Provider>
 	);
 }
@@ -91,9 +86,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
 		<Slot
 			data-slot="form-control"
 			id={formItemId}
-			aria-describedby={
-				!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`
-			}
+			aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
 			aria-invalid={!!error}
 			{...props}
 		/>
@@ -173,8 +166,7 @@ const SaveButton = <RecordType extends RaRecord = RaRecord>(props: SaveButtonPro
 
 	warning(
 		type === "submit" &&
-			((mutationOptions && (mutationOptions.onSuccess || mutationOptions.onError)) ||
-				transform),
+			((mutationOptions && (mutationOptions.onSuccess || mutationOptions.onError)) || transform),
 		'Cannot use <SaveButton mutationOptions> props on a button of type "submit". To override the default mutation options on a particular save button, set the <SaveButton type="button"> prop, or set mutationOptions in the main view component (<Create> or <Edit>).',
 	);
 

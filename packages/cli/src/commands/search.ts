@@ -58,21 +58,16 @@ export const searchCommand = new Command("search")
 
 				if (options.collection) {
 					// Find the index by slug
-					const projects =
-						await client.get<Array<Record<string, string>>>("/v1/projects");
+					const projects = await client.get<Array<Record<string, string>>>("/v1/projects");
 					const project = projects?.[0];
 					const projectId = project?.id;
 					if (!projectId) {
 						console.error("Error: Could not find project. Is your API key valid?");
 						process.exit(1);
 					}
-					const indexes = await client.get<IndexInfo[]>(
-						`/v1/projects/${projectId}/indexes`,
-					);
+					const indexes = await client.get<IndexInfo[]>(`/v1/projects/${projectId}/indexes`);
 					const found = indexes.find(
-						(idx) =>
-							idx.slug === options.collection ||
-							idx.displayName === options.collection,
+						(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 					);
 					if (!found) {
 						console.error(
@@ -87,14 +82,11 @@ export const searchCommand = new Command("search")
 				if (!indexId) {
 					// Try to get index info from the projects endpoint
 					try {
-						const projects =
-							await client.get<Array<Record<string, string>>>("/v1/projects");
+						const projects = await client.get<Array<Record<string, string>>>("/v1/projects");
 						const project = projects?.[0];
 						const projectId = project?.id;
 						if (projectId) {
-							const indexes = await client.get<IndexInfo[]>(
-								`/v1/projects/${projectId}/indexes`,
-							);
+							const indexes = await client.get<IndexInfo[]>(`/v1/projects/${projectId}/indexes`);
 							if (indexes.length === 1) {
 								indexId = indexes[0].id;
 							} else if (indexes.length === 0) {
@@ -127,10 +119,7 @@ export const searchCommand = new Command("search")
 				if (options.facetBy) body.facetBy = options.facetBy;
 				if (options.sortBy) body.sortBy = options.sortBy;
 
-				const result = await client.post<SearchResult>(
-					`/v1/indexes/${indexId}/search`,
-					body,
-				);
+				const result = await client.post<SearchResult>(`/v1/indexes/${indexId}/search`, body);
 
 				console.log(formatSearchResults(result, { json: options.json ?? false }));
 			} catch (error) {

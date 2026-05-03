@@ -98,9 +98,7 @@
 						" | " +
 						__("Filters:", "aacsearch-search") +
 						" " +
-						(attributes.showFacets
-							? __("On", "aacsearch-search")
-							: __("Off", "aacsearch-search")),
+						(attributes.showFacets ? __("On", "aacsearch-search") : __("Off", "aacsearch-search")),
 				),
 			),
 		);

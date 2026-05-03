@@ -50,9 +50,7 @@ export function ResultCard({ hit }: ResultCardProps) {
 							</Badge>
 						</div>
 
-						{displayUrl && (
-							<p className="text-xs truncate text-muted-foreground">{displayUrl}</p>
-						)}
+						{displayUrl && <p className="text-xs truncate text-muted-foreground">{displayUrl}</p>}
 
 						{/* Content with highlights */}
 						<div

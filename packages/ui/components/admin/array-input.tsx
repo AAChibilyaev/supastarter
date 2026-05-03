@@ -72,12 +72,7 @@ export const ArrayInput = (props: ArrayInputProps) => {
 
 	return (
 		<FormField
-			className={cn(
-				"ra-input",
-				`ra-input-${finalSource}`,
-				className,
-				"gap-2 flex w-full flex-col",
-			)}
+			className={cn("ra-input", `ra-input-${finalSource}`, className, "gap-2 flex w-full flex-col")}
 			name={finalSource}
 			{...sanitizeInputRestProps(rest)}
 		>

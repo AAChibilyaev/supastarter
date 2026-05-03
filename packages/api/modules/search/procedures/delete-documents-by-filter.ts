@@ -20,10 +20,7 @@ export const deleteDocumentsByFilter = protectedProcedure
 			slug: searchIndexSlugSchema,
 			filterBy: z
 				.string()
-				.min(
-					1,
-					"Filter expression cannot be empty — prevents accidental full-collection deletion",
-				),
+				.min(1, "Filter expression cannot be empty — prevents accidental full-collection deletion"),
 		}),
 	)
 	.output(

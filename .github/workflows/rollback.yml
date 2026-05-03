@@ -1,86 +1,86 @@
 name: Rollback
 
 on:
-    workflow_dispatch:
-        inputs:
-            environment:
-                description: "Target environment"
-                required: true
-                type: choice
-                options:
-                    - staging
-                    - production
-            tag:
-                description: "Docker image tag to rollback to (git SHA)"
-                required: true
-                type: string
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      tag:
+        description: "Docker image tag to rollback to (git SHA)"
+        required: true
+        type: string
 
 env:
-    REGISTRY: ghcr.io
-    IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-    rollback:
-        name: Rollback ${{ github.event.inputs.environment }} to ${{ github.event.inputs.tag }}
-        runs-on: ubuntu-latest
-        environment: ${{ github.event.inputs.environment }}
-        permissions:
-            contents: read
-            packages: read
+  rollback:
+    name: Rollback ${{ github.event.inputs.environment }} to ${{ github.event.inputs.tag }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    permissions:
+      contents: read
+      packages: read
 
-        steps:
-            - name: Validate tag format
-              run: |
-                  if [[ ! "${{ github.event.inputs.tag }}" =~ ^[a-f0-9]{7,40}$ ]]; then
-                    echo "Invalid tag format. Must be a git SHA (hex string)."
-                    exit 1
-                  fi
+    steps:
+      - name: Validate tag format
+        run: |
+          if [[ ! "${{ github.event.inputs.tag }}" =~ ^[a-f0-9]{7,40}$ ]]; then
+            echo "Invalid tag format. Must be a git SHA (hex string)."
+            exit 1
+          fi
 
-            - name: Log in to GitHub Container Registry
-              uses: docker/login-action@v3
-              with:
-                  registry: ${{ env.REGISTRY }}
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Verify image exists
-              run: |
-                  docker buildx imagetools inspect \
-                    "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}" || {
-                    echo "Image not found: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}"
-                    exit 1
-                  }
-                  echo "Image verified: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}"
+      - name: Verify image exists
+        run: |
+          docker buildx imagetools inspect \
+            "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}" || {
+            echo "Image not found: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}"
+            exit 1
+          }
+          echo "Image verified: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.event.inputs.tag }}"
 
-            - name: Trigger Coolify rollback deploy
-              run: |
-                  WEBHOOK="${{ github.event.inputs.environment == 'production' && secrets.COOLIFY_DEPLOY_WEBHOOK_PRODUCTION || secrets.COOLIFY_DEPLOY_WEBHOOK_STAGING }}"
-                  if [ -z "$WEBHOOK" ] || [ "$WEBHOOK" = "" ]; then
-                    echo "ERROR: Webhook secret not configured for ${{ github.event.inputs.environment }}"
-                    echo "Set COOLIFY_DEPLOY_WEBHOOK_${{ github.event.inputs.environment == 'production' && 'PRODUCTION' || 'STAGING' }} in GitHub secrets"
-                    exit 1
-                  fi
-                  curl -sf -X POST "$WEBHOOK" \
-                    -H "Content-Type: application/json" \
-                    -d '{"imageTag": "${{ github.event.inputs.tag }}"}'
-                  echo "Rollback deploy triggered for ${{ github.event.inputs.environment }}"
+      - name: Trigger Coolify rollback deploy
+        run: |
+          WEBHOOK="${{ github.event.inputs.environment == 'production' && secrets.COOLIFY_DEPLOY_WEBHOOK_PRODUCTION || secrets.COOLIFY_DEPLOY_WEBHOOK_STAGING }}"
+          if [ -z "$WEBHOOK" ] || [ "$WEBHOOK" = "" ]; then
+            echo "ERROR: Webhook secret not configured for ${{ github.event.inputs.environment }}"
+            echo "Set COOLIFY_DEPLOY_WEBHOOK_${{ github.event.inputs.environment == 'production' && 'PRODUCTION' || 'STAGING' }} in GitHub secrets"
+            exit 1
+          fi
+          curl -sf -X POST "$WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d '{"imageTag": "${{ github.event.inputs.tag }}"}'
+          echo "Rollback deploy triggered for ${{ github.event.inputs.environment }}"
 
-            - name: Wait for health check
-              run: |
-                  URL="${{ github.event.inputs.environment == 'production' && secrets.PRODUCTION_URL || secrets.STAGING_URL }}"
-                  if [ -z "$URL" ] || [ "$URL" = "" ]; then
-                    echo "WARNING: Health check URL not configured. Skipping health check."
-                    echo "Set ${{ github.event.inputs.environment == 'production' && 'PRODUCTION_URL' || 'STAGING_URL' }} in GitHub secrets"
-                    exit 0
-                  fi
-                  for i in $(seq 1 30); do
-                    STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$URL/api/health" || echo "000")
-                    if [ "$STATUS" = "200" ]; then
-                      echo "${{ github.event.inputs.environment }} is healthy after rollback"
-                      exit 0
-                    fi
-                    echo "Attempt $i: got $STATUS, retrying in 10s..."
-                    sleep 10
-                  done
-                  echo "Health check failed after 5 minutes"
-                  exit 1
+      - name: Wait for health check
+        run: |
+          URL="${{ github.event.inputs.environment == 'production' && secrets.PRODUCTION_URL || secrets.STAGING_URL }}"
+          if [ -z "$URL" ] || [ "$URL" = "" ]; then
+            echo "WARNING: Health check URL not configured. Skipping health check."
+            echo "Set ${{ github.event.inputs.environment == 'production' && 'PRODUCTION_URL' || 'STAGING_URL' }} in GitHub secrets"
+            exit 0
+          fi
+          for i in $(seq 1 30); do
+            STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$URL/api/health" || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "${{ github.event.inputs.environment }} is healthy after rollback"
+              exit 0
+            fi
+            echo "Attempt $i: got $STATUS, retrying in 10s..."
+            sleep 10
+          done
+          echo "Health check failed after 5 minutes"
+          exit 1

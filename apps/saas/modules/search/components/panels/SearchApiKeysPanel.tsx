@@ -136,9 +136,7 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 					<DialogContent>
 						<DialogHeader>
 							<DialogTitle>{t("search.apiKeys.create")}</DialogTitle>
-							<DialogDescription>
-								{t("search.apiKeys.createDescription")}
-							</DialogDescription>
+							<DialogDescription>{t("search.apiKeys.createDescription")}</DialogDescription>
 						</DialogHeader>
 						{revealedKey ? (
 							<div className="space-y-3">
@@ -167,12 +165,7 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 											<FormItem>
 												<FormLabel>{t("search.apiKeys.name")}</FormLabel>
 												<FormControl>
-													<Input
-														{...field}
-														placeholder={t(
-															"search.apiKeys.namePlaceholder",
-														)}
-													/>
+													<Input {...field} placeholder={t("search.apiKeys.namePlaceholder")} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -212,9 +205,7 @@ export function SearchApiKeysPanel({ organizationId, slug }: SearchApiKeysPanelP
 							<TableHead>{t("search.apiKeys.tablePrefix")}</TableHead>
 							<TableHead>{t("search.apiKeys.tableScopes")}</TableHead>
 							<TableHead>{t("search.apiKeys.tableStatus")}</TableHead>
-							<TableHead className="text-right">
-								{t("search.apiKeys.tableActions")}
-							</TableHead>
+							<TableHead className="text-right">{t("search.apiKeys.tableActions")}</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>

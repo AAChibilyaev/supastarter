@@ -89,21 +89,15 @@ export function RecommendationsPersonalizedAnalytics({
 			{/* Mode Selector */}
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-base">
-						{tr("recommendations.analytics.modeTitle")}
-					</CardTitle>
-					<CardDescription>
-						{tr("recommendations.analytics.modeDescription")}
-					</CardDescription>
+					<CardTitle className="text-base">{tr("recommendations.analytics.modeTitle")}</CardTitle>
+					<CardDescription>{tr("recommendations.analytics.modeDescription")}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Tabs value={mode} onValueChange={(v) => setMode(v as PersonalizationMode)}>
 						<TabsList>
 							{MODE_OPTIONS.map((m) => (
 								<TabsTrigger key={m} value={m}>
-									{tr(
-										`recommendations.analytics.mode${m.charAt(0).toUpperCase() + m.slice(1)}`,
-									)}
+									{tr(`recommendations.analytics.mode${m.charAt(0).toUpperCase() + m.slice(1)}`)}
 								</TabsTrigger>
 							))}
 						</TabsList>
@@ -118,9 +112,7 @@ export function RecommendationsPersonalizedAnalytics({
 						<SparklesIcon className="size-4 text-primary" />
 						{tr("recommendations.analytics.profileTitle")}
 					</CardTitle>
-					<CardDescription>
-						{tr("recommendations.analytics.profileDescription")}
-					</CardDescription>
+					<CardDescription>{tr("recommendations.analytics.profileDescription")}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					{isLoadingProfile && (
@@ -147,9 +139,7 @@ export function RecommendationsPersonalizedAnalytics({
 									<MousePointerClickIcon className="size-3.5" />
 									<span>{tr("recommendations.analytics.clickedProducts")}</span>
 								</div>
-								<p className="text-2xl font-semibold">
-									{profile.clickedProductIds.length}
-								</p>
+								<p className="text-2xl font-semibold">{profile.clickedProductIds.length}</p>
 							</div>
 
 							<div className="space-y-1">
@@ -157,9 +147,7 @@ export function RecommendationsPersonalizedAnalytics({
 									<SearchIcon className="size-3.5" />
 									<span>{tr("recommendations.analytics.recentQueries")}</span>
 								</div>
-								<p className="text-2xl font-semibold">
-									{profile.recentQueries.length}
-								</p>
+								<p className="text-2xl font-semibold">{profile.recentQueries.length}</p>
 							</div>
 
 							<div className="space-y-1">
@@ -207,9 +195,7 @@ export function RecommendationsPersonalizedAnalytics({
 						<EmptyState
 							variant="inline"
 							title={tr("recommendations.analytics.noRecommendationsTitle")}
-							description={tr(
-								"recommendations.analytics.noRecommendationsDescription",
-							)}
+							description={tr("recommendations.analytics.noRecommendationsDescription")}
 						/>
 					)}
 
@@ -222,9 +208,7 @@ export function RecommendationsPersonalizedAnalytics({
 								>
 									<div className="min-w-0 flex-1">
 										<div className="gap-2 flex items-center">
-											<span className="font-medium truncate">
-												{rec.productId}
-											</span>
+											<span className="font-medium truncate">{rec.productId}</span>
 											<Badge
 												status={sourceBadgeVariant(rec.source)}
 												className="shrink-0 text-[10px]"
@@ -233,15 +217,11 @@ export function RecommendationsPersonalizedAnalytics({
 											</Badge>
 										</div>
 										{rec.reason && (
-											<p className="mt-0.5 text-xs truncate text-muted-foreground">
-												{rec.reason}
-											</p>
+											<p className="mt-0.5 text-xs truncate text-muted-foreground">{rec.reason}</p>
 										)}
 									</div>
 									<div className="ml-3 gap-3 flex shrink-0 items-center">
-										<span className="text-sm text-muted-foreground">
-											{rec.score.toFixed(2)}
-										</span>
+										<span className="text-sm text-muted-foreground">{rec.score.toFixed(2)}</span>
 										{rec.matchedUsers !== undefined && (
 											<span className="text-xs text-muted-foreground">
 												{rec.matchedUsers} users

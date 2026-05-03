@@ -113,18 +113,14 @@ export function EmailCaptureModal({
 									className="px-4 py-2.5 text-sm w-full rounded-xl border border-border/40 bg-accent/5 text-foreground placeholder:text-muted-foreground/50 focus:border-primary/40 focus:ring-1 focus:ring-primary/20 focus:outline-none disabled:opacity-50"
 								/>
 
-								{status === "error" && (
-									<p className="text-xs text-red-500">{errorMessage}</p>
-								)}
+								{status === "error" && <p className="text-xs text-red-500">{errorMessage}</p>}
 
 								<button
 									type="submit"
 									disabled={status === "loading" || !email.trim()}
 									className="gap-2 px-4 py-2.5 text-sm font-semibold flex w-full items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
 								>
-									{status === "loading" && (
-										<Loader2 className="size-4 animate-spin" />
-									)}
+									{status === "loading" && <Loader2 className="size-4 animate-spin" />}
 									{t("subscribeAndVote")}
 								</button>
 

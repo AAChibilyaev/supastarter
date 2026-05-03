@@ -35,6 +35,8 @@ export const searchFieldSchema = z.object({
 	num_dim: z.number().int().positive().optional(),
 	/** HNSW index build parameters for vector fields. ef_construction controls index quality; M controls connections per node. */
 	hnsw_params: hnswParamsSchema.optional(),
+	/** When true, the field value is truncated to fit within the token limit */
+	truncate: z.boolean().optional(),
 });
 
 export type EmbedConfig = z.infer<typeof embedConfigSchema>;

@@ -310,25 +310,25 @@ Purpose: user profile, security, preferences and billing settings.
 Key components:
 
 - profile:
-    - `ChangeNameForm.tsx`
-    - `ChangeEmailForm.tsx`
-    - `UserAvatarForm.tsx`
-    - `UserAvatarUpload.tsx`
-    - `CropImageDialog.tsx`
-    - `UserLanguageForm.tsx`
+  - `ChangeNameForm.tsx`
+  - `ChangeEmailForm.tsx`
+  - `UserAvatarForm.tsx`
+  - `UserAvatarUpload.tsx`
+  - `CropImageDialog.tsx`
+  - `UserLanguageForm.tsx`
 - security:
-    - `ChangePassword.tsx`
-    - `SetPassword.tsx`
-    - `TwoFactorBlock.tsx`
-    - `PasskeysBlock.tsx`
-    - `ActiveSessionsBlock.tsx`
-    - `ConnectedAccountsBlock.tsx`
+  - `ChangePassword.tsx`
+  - `SetPassword.tsx`
+  - `TwoFactorBlock.tsx`
+  - `PasskeysBlock.tsx`
+  - `ActiveSessionsBlock.tsx`
+  - `ConnectedAccountsBlock.tsx`
 - account/billing:
-    - `DeleteAccountForm.tsx`
-    - `SubscriptionStatusBadge.tsx`
-    - `CustomerPortalButton.tsx`
-    - `NotificationPreferencesForm.tsx`
-    - `SettingsMenu.tsx`
+  - `DeleteAccountForm.tsx`
+  - `SubscriptionStatusBadge.tsx`
+  - `CustomerPortalButton.tsx`
+  - `NotificationPreferencesForm.tsx`
+  - `SettingsMenu.tsx`
 
 Best use cases:
 
@@ -434,35 +434,35 @@ Best use cases:
 Use these before building new custom UI:
 
 - `apps/saas/modules/search/components/dialogs/CreateSearchIndexDialog.tsx`
-    - best for create-index/create-entity flows
+  - best for create-index/create-entity flows
 - `apps/saas/modules/search/components/dialogs/ConnectorWizard.tsx`
-    - best for guided setup wizards
+  - best for guided setup wizards
 - `apps/saas/modules/search/components/panels/SearchApiKeysPanel.tsx`
-    - best for token/key management surfaces
+  - best for token/key management surfaces
 - `apps/saas/modules/search/components/panels/SchemaEditorPanel.tsx`
-    - best for schema/field editors
+  - best for schema/field editors
 - `apps/saas/modules/search/components/tables/DocumentsTable.tsx`
-    - best for document-heavy CRUD screens
+  - best for document-heavy CRUD screens
 - `apps/saas/modules/search/components/panels/ImportJobsPanel.tsx`
-    - best for job management UIs
+  - best for job management UIs
 - `apps/saas/modules/search/components/tables/SyncJobsTable.tsx`
-    - best for sync/history/status screens
+  - best for sync/history/status screens
 - `apps/saas/modules/search/components/panels/PlaygroundPanel.tsx`
-    - best for preview/test/live-validation UIs
+  - best for preview/test/live-validation UIs
 - widget stack:
-    - `WidgetConfiguratorPanel.tsx`
-    - `WidgetInstallPanel.tsx`
-    - `WidgetAnalyticsPanel.tsx`
+  - `WidgetConfiguratorPanel.tsx`
+  - `WidgetInstallPanel.tsx`
+  - `WidgetAnalyticsPanel.tsx`
 - relevance stack:
-    - `RankingRulesPanel.tsx`
-    - `SynonymsPanel.tsx`
-    - `CurationsPanel.tsx`
-    - `SpellCorrectionPanel.tsx`
-    - `StemmingPanel.tsx`
-    - `StopwordsPanel.tsx`
-    - `FacetsPanel.tsx`
+  - `RankingRulesPanel.tsx`
+  - `SynonymsPanel.tsx`
+  - `CurationsPanel.tsx`
+  - `SpellCorrectionPanel.tsx`
+  - `StemmingPanel.tsx`
+  - `StopwordsPanel.tsx`
+  - `FacetsPanel.tsx`
 - `apps/saas/modules/search/components/GuidedTour.tsx`
-    - best for product onboarding and in-feature guidance
+  - best for product onboarding and in-feature guidance
 
 ### 4.2 Best reusable stacks in `packages/ui/components`
 
@@ -654,25 +654,25 @@ Most useful pieces:
 If the task is about...
 
 - admin/backoffice
-    - first check `packages/ui/components/admin/*`
+  - first check `packages/ui/components/admin/*`
 - tables / filters / listing
-    - first check `packages/ui/components/data-table/*`
+  - first check `packages/ui/components/data-table/*`
 - new dashboard shell
-    - first check `AppSidebar`, `NavBar`, `AppWrapper`, `PageHeader`, `StatsTile`
+  - first check `AppSidebar`, `NavBar`, `AppWrapper`, `PageHeader`, `StatsTile`
 - onboarding / wizard / guided setup
-    - first check `ConnectorWizard`, `SearchConfigWizard`, `tour.tsx`, `stepper.tsx`
+  - first check `ConnectorWizard`, `SearchConfigWizard`, `tour.tsx`, `stepper.tsx`
 - search settings / relevance / quality
-    - first check `apps/saas/modules/search/components/panels/*`
+  - first check `apps/saas/modules/search/components/panels/*`
 - docs search or command-like UX
-    - first check `aacsearch-docs-search.tsx`, `aacsearch-search-provider.tsx`, `command.tsx`
+  - first check `aacsearch-docs-search.tsx`, `aacsearch-search-provider.tsx`, `command.tsx`
 - marketing page blocks
-    - first check `apps/marketing/modules/shared/*` and landing components in `packages/ui/components/*`
+  - first check `apps/marketing/modules/shared/*` and landing components in `packages/ui/components/*`
 - chat or in-app assistant
-    - first check `packages/ui/components/chat/*`
+  - first check `packages/ui/components/chat/*`
 - org/member management
-    - first check `apps/saas/modules/organizations/components/*`
+  - first check `apps/saas/modules/organizations/components/*`
 - account/security settings
-    - first check `apps/saas/modules/settings/components/*`
+  - first check `apps/saas/modules/settings/components/*`
 
 ---
 
@@ -681,15 +681,15 @@ If the task is about...
 The most valuable reuse zones in this repo are:
 
 1. `apps/saas/modules/search/components/*`
-    - richest product-level reusable UI
+   - richest product-level reusable UI
 2. `packages/ui/components/data-table/*`
-    - best foundation for data-heavy screens
+   - best foundation for data-heavy screens
 3. `packages/ui/components/admin/*`
-    - best foundation for internal admin tools
+   - best foundation for internal admin tools
 4. `apps/saas/modules/shared/components/*`
-    - best shared SaaS shell layer
+   - best shared SaaS shell layer
 5. `packages/ui/components/chat/*` and landing components
-    - strong specialized stacks
+   - strong specialized stacks
 
 ---
 

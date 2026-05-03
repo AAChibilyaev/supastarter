@@ -91,9 +91,7 @@ export const ingestFile = protectedProcedure
 			}
 
 			const existingSources = await listDataSources(space.id);
-			const fileSource = existingSources.find((source) =>
-				source.sourceType.startsWith("FILE_"),
-			);
+			const fileSource = existingSources.find((source) => source.sourceType.startsWith("FILE_"));
 
 			const job = await createIngestionJob({
 				knowledgeSpaceId: space.id,

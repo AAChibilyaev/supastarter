@@ -63,12 +63,7 @@ export default function Wrapper({ children }: PropsWithChildren) {
 		>
 			<Html lang="en">
 				<Head>
-					<Font
-						fontFamily="Inter"
-						fallbackFontFamily="Arial"
-						fontWeight={400}
-						fontStyle="normal"
-					/>
+					<Font fontFamily="Inter" fallbackFontFamily="Arial" fontWeight={400} fontStyle="normal" />
 				</Head>
 				<Section className="p-4 bg-background">
 					<Container className="p-6 rounded-lg bg-card text-card-foreground">

@@ -198,12 +198,7 @@ export const FileInput = (props: FileInputProps) => {
 				htmlFor={id}
 				className={disabled || readOnly ? "cursor-default" : "cursor-pointer"}
 			>
-				<FieldTitle
-					label={label}
-					source={source}
-					resource={resource}
-					isRequired={isRequired}
-				/>
+				<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
 			</FormLabel>
 
 			<div
@@ -248,9 +243,7 @@ export const FileInput = (props: FileInputProps) => {
 								onRemove={onRemove(file)}
 								removeIcon={removeIcon}
 							>
-								<RecordContextProvider value={file}>
-									{childrenElement}
-								</RecordContextProvider>
+								<RecordContextProvider value={file}>{childrenElement}</RecordContextProvider>
 							</FileInputPreview>
 						))
 					}

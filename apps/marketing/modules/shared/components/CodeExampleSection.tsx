@@ -27,9 +27,7 @@ export function CodeExampleSection({ namespace, code, language }: CodeExampleSec
 							<span className="ml-2 text-xs text-zinc-500 font-mono">{language}</span>
 						</div>
 						<pre className="p-5 text-sm leading-relaxed overflow-x-auto">
-							<code className="text-zinc-200 font-mono whitespace-pre">
-								{code.trim()}
-							</code>
+							<code className="text-zinc-200 font-mono whitespace-pre">{code.trim()}</code>
 						</pre>
 					</div>
 				</div>

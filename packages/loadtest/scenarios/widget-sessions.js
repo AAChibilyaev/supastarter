@@ -39,8 +39,7 @@ function simulateWidgetSession() {
 		const res = http.get(WIDGET_URL);
 		check(res, {
 			"widget.js loads (200)": (r) => r.status === 200,
-			"widget.js is JavaScript": (r) =>
-				(r.headers["Content-Type"] || "").includes("javascript"),
+			"widget.js is JavaScript": (r) => (r.headers["Content-Type"] || "").includes("javascript"),
 		});
 	});
 

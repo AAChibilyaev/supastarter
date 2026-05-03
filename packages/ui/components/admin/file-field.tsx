@@ -31,18 +31,8 @@ export const FileField = <
 >(
 	props: FileFieldProps<RecordType>,
 ) => {
-	const {
-		className,
-		empty,
-		title,
-		src,
-		target,
-		download,
-		defaultValue,
-		source,
-		record,
-		...rest
-	} = props;
+	const { className, empty, title, src, target, download, defaultValue, source, record, ...rest } =
+		props;
 	const sourceValue = useFieldValue({ defaultValue, source, record });
 	const titleValue =
 		useFieldValue({

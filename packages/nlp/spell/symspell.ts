@@ -230,9 +230,7 @@ export class SymSpell {
 			}
 			case 1: {
 				// All suggestions of same minimal distance
-				const minDist = Math.min(
-					...Array.from(suggestions.values()).map((s) => s.distance),
-				);
+				const minDist = Math.min(...Array.from(suggestions.values()).map((s) => s.distance));
 				filtered = Array.from(suggestions.entries())
 					.filter(([, s]) => s.distance === minDist)
 					.map(([term, s]) => ({ term, ...s }));
@@ -255,22 +253,13 @@ export class SymSpell {
 		});
 
 		// Score and limit results
-		const maxFreq = Math.max(
-			...Array.from(this.dictionary.values()).map((e) => e.frequency),
-			1,
-		);
+		const maxFreq = Math.max(...Array.from(this.dictionary.values()).map((e) => e.frequency), 1);
 
 		return filtered.slice(0, cfg.maxResults).map((s) => ({
 			term: s.term,
 			distance: s.distance,
 			frequency: s.frequency,
-			score: this.calculateScore(
-				s.distance,
-				s.frequency,
-				maxFreq,
-				lower.length,
-				s.term.length,
-			),
+			score: this.calculateScore(s.distance, s.frequency, maxFreq, lower.length, s.term.length),
 		}));
 	}
 
@@ -305,10 +294,7 @@ export class SymSpell {
 
 		// Score each split
 		const results: SymSpellSuggestion[] = [];
-		const maxFreq = Math.max(
-			...Array.from(this.dictionary.values()).map((e) => e.frequency),
-			1,
-		);
+		const maxFreq = Math.max(...Array.from(this.dictionary.values()).map((e) => e.frequency), 1);
 
 		for (const split of splits) {
 			const compoundWord = split.join("");
@@ -321,13 +307,7 @@ export class SymSpell {
 				term: compoundWord,
 				distance: 0,
 				frequency: totalFreq,
-				score: this.calculateScore(
-					0,
-					totalFreq,
-					maxFreq,
-					lower.length,
-					compoundWord.length,
-				),
+				score: this.calculateScore(0, totalFreq, maxFreq, lower.length, compoundWord.length),
 			});
 		}
 

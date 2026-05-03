@@ -84,8 +84,7 @@ export function ShopifyStoreSettings({
 						{store.installedAt && (
 							<>
 								{" "}
-								· {tShopify("installedOn")}:{" "}
-								{new Date(store.installedAt).toLocaleDateString()}
+								· {tShopify("installedOn")}: {new Date(store.installedAt).toLocaleDateString()}
 							</>
 						)}
 					</DialogDescription>
@@ -132,9 +131,7 @@ export function ShopifyStoreSettings({
 						</CardHeader>
 						<CardContent className="pb-3 pt-0 px-3 space-y-1.5">
 							<div className="gap-2 text-xs flex items-center justify-between">
-								<span className="text-muted-foreground">
-									{tShopify("storeDomain")}
-								</span>
+								<span className="text-muted-foreground">{tShopify("storeDomain")}</span>
 								<a
 									href={`https://${store.domain || store.shop}`}
 									target="_blank"
@@ -147,9 +144,7 @@ export function ShopifyStoreSettings({
 							</div>
 							{store.lastSyncAt && (
 								<div className="gap-2 text-xs flex items-center justify-between">
-									<span className="text-muted-foreground">
-										{tShopify("lastSync")}
-									</span>
+									<span className="text-muted-foreground">{tShopify("lastSync")}</span>
 									<span>{new Date(store.lastSyncAt).toLocaleString()}</span>
 								</div>
 							)}

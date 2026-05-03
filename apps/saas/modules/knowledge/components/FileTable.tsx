@@ -177,9 +177,7 @@ export function FileTable({ ownerType, ownerId, spaceSlug, canManage }: FileTabl
 				<CardContent>
 					<div className="py-8 flex flex-col items-center justify-center text-center">
 						<FileText className="size-10 mb-3 text-muted-foreground" />
-						<p className="text-sm text-muted-foreground">
-							{t("search.knowledge.files.empty")}
-						</p>
+						<p className="text-sm text-muted-foreground">{t("search.knowledge.files.empty")}</p>
 					</div>
 				</CardContent>
 			</Card>
@@ -230,9 +228,7 @@ export function FileTable({ ownerType, ownerId, spaceSlug, canManage }: FileTabl
 											</button>
 										</TableCell>
 										<TableCell>
-											<Badge status="info">
-												{formatMimeType(file.mimeType)}
-											</Badge>
+											<Badge status="info">{formatMimeType(file.mimeType)}</Badge>
 										</TableCell>
 										<TableCell className="text-sm text-right tabular-nums">
 											{file.chunkCount}
@@ -273,21 +269,14 @@ export function FileTable({ ownerType, ownerId, spaceSlug, canManage }: FileTabl
 			</Card>
 
 			{/* Preview Sheet */}
-			<Sheet
-				open={previewFile !== null}
-				onOpenChange={(open) => !open && setPreviewFile(null)}
-			>
+			<Sheet open={previewFile !== null} onOpenChange={(open) => !open && setPreviewFile(null)}>
 				<SheetContent side="right" className="sm:max-w-lg w-full overflow-y-auto">
 					{previewFile && (
 						<>
 							<SheetHeader className="mb-4">
-								<SheetTitle className="pr-6 truncate">
-									{previewFile.title}
-								</SheetTitle>
+								<SheetTitle className="pr-6 truncate">{previewFile.title}</SheetTitle>
 								<SheetDescription>
-									<Badge status="info">
-										{formatMimeType(previewFile.mimeType)}
-									</Badge>
+									<Badge status="info">{formatMimeType(previewFile.mimeType)}</Badge>
 									<span className="ml-2 text-muted-foreground">
 										{previewFile.chunkCount} chunks · {previewFile.language} · v
 										{previewFile.version}
@@ -303,21 +292,15 @@ export function FileTable({ ownerType, ownerId, spaceSlug, canManage }: FileTabl
 									</div>
 									<div>
 										<span className="font-medium block">External ID</span>
-										<span className="font-mono block truncate">
-											{previewFile.externalId}
-										</span>
+										<span className="font-mono block truncate">{previewFile.externalId}</span>
 									</div>
 									<div>
 										<span className="font-medium block">Created</span>
-										<span>
-											{new Date(previewFile.createdAt).toLocaleString()}
-										</span>
+										<span>{new Date(previewFile.createdAt).toLocaleString()}</span>
 									</div>
 									<div>
 										<span className="font-medium block">Updated</span>
-										<span>
-											{new Date(previewFile.updatedAt).toLocaleString()}
-										</span>
+										<span>{new Date(previewFile.updatedAt).toLocaleString()}</span>
 									</div>
 								</div>
 

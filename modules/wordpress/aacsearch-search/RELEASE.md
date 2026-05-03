@@ -5,8 +5,8 @@
 1. A WordPress.org plugin developer account
 2. SVN access to `plugins.svn.wordpress.org/aacsearch-search/` (request via plugins@wordpress.org)
 3. GitHub secrets configured in the repository:
-    - `SVN_USERNAME` — WordPress.org SVN username
-    - `SVN_PASSWORD` — WordPress.org SVN password (application password)
+   - `SVN_USERNAME` — WordPress.org SVN username
+   - `SVN_PASSWORD` — WordPress.org SVN password (application password)
 
 ## Initial SVN Setup (one-time)
 

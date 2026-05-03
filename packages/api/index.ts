@@ -46,10 +46,7 @@ export const app = new Hono()
 		try {
 			const fs = await import("node:fs/promises");
 			const path = await import("node:path");
-			const widgetPath = path.resolve(
-				process.cwd(),
-				"../../packages/widget/dist/index.global.js",
-			);
+			const widgetPath = path.resolve(process.cwd(), "../../packages/widget/dist/index.global.js");
 			const content = await fs.readFile(widgetPath, "utf-8");
 			return c.newResponse(content, 200, {
 				"Content-Type": "application/javascript",
@@ -61,10 +58,7 @@ export const app = new Hono()
 			try {
 				const fs = await import("node:fs/promises");
 				const path = await import("node:path");
-				const widgetPath = path.resolve(
-					process.cwd(),
-					"packages/widget/dist/index.global.js",
-				);
+				const widgetPath = path.resolve(process.cwd(), "packages/widget/dist/index.global.js");
 				const content = await fs.readFile(widgetPath, "utf-8");
 				return c.newResponse(content, 200, {
 					"Content-Type": "application/javascript",
@@ -188,11 +182,7 @@ async function syncIncludedCreditsAfterPaymentEvent(req: Request): Promise<void>
 		).aiWallet?.monthlyIncludedByPlan ?? {};
 	const rawValue = includedMap[planId];
 	const includedKopecks =
-		typeof rawValue === "bigint"
-			? rawValue
-			: rawValue !== undefined
-				? BigInt(rawValue)
-				: BigInt(0);
+		typeof rawValue === "bigint" ? rawValue : rawValue !== undefined ? BigInt(rawValue) : BigInt(0);
 
 	await applySubscriptionToWallet({
 		organizationId: purchase.organizationId,

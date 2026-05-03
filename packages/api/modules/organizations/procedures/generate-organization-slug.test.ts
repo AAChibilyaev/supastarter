@@ -53,9 +53,7 @@ describe("generateOrganizationSlug", () => {
 		await expect(call(generateOrganizationSlug, { name: "Taken Org" }, ctx)).rejects.toThrow(
 			ORPCError,
 		);
-		await expect(
-			call(generateOrganizationSlug, { name: "Taken Org" }, ctx),
-		).rejects.toMatchObject({
+		await expect(call(generateOrganizationSlug, { name: "Taken Org" }, ctx)).rejects.toMatchObject({
 			code: "INTERNAL_SERVER_ERROR",
 		});
 	});

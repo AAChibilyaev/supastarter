@@ -210,11 +210,7 @@ export const AutocompleteArrayInput = (
 												<CommandItem
 													key={getChoiceValue(choice)}
 													value={getChoiceValue(choice)}
-													keywords={
-														React.isValidElement(choiceText)
-															? undefined
-															: [choiceText]
-													}
+													keywords={React.isValidElement(choiceText) ? undefined : [choiceText]}
 													onMouseDown={(e) => {
 														e.preventDefault();
 														e.stopPropagation();
@@ -224,10 +220,7 @@ export const AutocompleteArrayInput = (
 														if (isFromReference) {
 															setFilters(filterToQuery(""));
 														}
-														field.onChange([
-															...field.value,
-															getChoiceValue(choice),
-														]);
+														field.onChange([...field.value, getChoiceValue(choice)]);
 													}}
 													className="cursor-pointer"
 												>

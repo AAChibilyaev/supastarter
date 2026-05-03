@@ -79,10 +79,7 @@ export function MySearchIndexPage({ organizationId, indexId }: MySearchIndexPage
 
 	return (
 		<div>
-			<PageHeader
-				title={index?.displayName ?? t("mySearch.searchIndex")}
-				subtitle={index?.slug}
-			/>
+			<PageHeader title={index?.displayName ?? t("mySearch.searchIndex")} subtitle={index?.slug} />
 
 			<div className="mt-6 space-y-6">
 				{/* Add URL card */}

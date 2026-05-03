@@ -69,8 +69,7 @@ export function CancelJobDialog({
 								{jobLabel
 									? `This will cancel "${jobLabel}". `
 									: "This will cancel the running reindex job. "}
-								The operation cannot be undone and the job will be marked as
-								cancelled.
+								The operation cannot be undone and the job will be marked as cancelled.
 							</DialogDescription>
 						</div>
 					</div>
@@ -83,11 +82,7 @@ export function CancelJobDialog({
 					>
 						Keep running
 					</Button>
-					<Button
-						variant="destructive"
-						onClick={handleCancel}
-						disabled={cancelMutation.isPending}
-					>
+					<Button variant="destructive" onClick={handleCancel} disabled={cancelMutation.isPending}>
 						{cancelMutation.isPending ? "Cancelling..." : "Yes, cancel job"}
 					</Button>
 				</DialogFooter>

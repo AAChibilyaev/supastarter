@@ -68,8 +68,7 @@ export function buildQuotaAlertMessage(params: {
 	const emoji = params.threshold >= 100 ? ":rotating_light:" : ":warning:";
 	const color = params.threshold >= 100 ? "danger" : "warning";
 
-	const percentLabel =
-		params.threshold >= 100 ? "100% (limit reached)" : "80% (warning threshold)";
+	const percentLabel = params.threshold >= 100 ? "100% (limit reached)" : "80% (warning threshold)";
 
 	return {
 		text: `${emoji} *Quota Alert — ${params.orgName}*`,

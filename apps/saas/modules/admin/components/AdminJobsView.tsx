@@ -40,9 +40,7 @@ export function AdminJobsView() {
 							<CardContent className="p-4 flex items-center justify-between">
 								<div className="gap-1 grid grid-cols-1">
 									<p className="font-medium text-sm">{job.name}</p>
-									<p className="font-mono text-xs text-muted-foreground">
-										{job.path}
-									</p>
+									<p className="font-mono text-xs text-muted-foreground">{job.path}</p>
 								</div>
 								<div className="gap-3 flex items-center">
 									{job.secretPreview && (
@@ -97,9 +95,7 @@ export function AdminJobsView() {
 											<span className="font-medium">{sync.type}</span>
 										</div>
 										<div className="gap-4 text-xs flex items-center text-muted-foreground">
-											<span>
-												{t("jobs.itemsCount", { count: sync.itemsCount })}
-											</span>
+											<span>{t("jobs.itemsCount", { count: sync.itemsCount })}</span>
 											<span>{new Date(sync.startedAt).toLocaleString()}</span>
 										</div>
 									</CardContent>

@@ -27,9 +27,7 @@ export function IntegrationFaq({ namespace, questionCount = 3 }: IntegrationFaqP
 					<Accordion type="single" collapsible>
 						{questions.map((n) => (
 							<AccordionItem key={n} value={`q${n}`}>
-								<AccordionTrigger className="text-left">
-									{t(`q${n}.question`)}
-								</AccordionTrigger>
+								<AccordionTrigger className="text-left">{t(`q${n}.question`)}</AccordionTrigger>
 								<AccordionContent className="text-muted-foreground">
 									{t(`q${n}.answer`)}
 								</AccordionContent>

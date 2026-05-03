@@ -69,9 +69,7 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 			<TabsList>
 				{TAB_IDS.map((tab) => (
 					<TabsTrigger key={tab} value={tab}>
-						{t(
-							`search.nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any,
-						)}
+						{t(`search.nav.recommendations${tab.charAt(0).toUpperCase() + tab.slice(1)}` as any)}
 					</TabsTrigger>
 				))}
 			</TabsList>

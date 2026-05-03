@@ -34,9 +34,7 @@ function computeHealthScore(eventTypes: string[]): number {
 function isAuthorized(request: Request): boolean {
 	const expected = process.env.SEARCH_CRON_SECRET;
 	if (!expected) {
-		logger.warn(
-			"SEARCH_CRON_SECRET is not set — churn-detection cron will always reject requests",
-		);
+		logger.warn("SEARCH_CRON_SECRET is not set — churn-detection cron will always reject requests");
 		return false;
 	}
 	const auth = request.headers.get("authorization");

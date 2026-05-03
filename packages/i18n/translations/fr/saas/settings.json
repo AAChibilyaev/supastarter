@@ -1,429 +1,429 @@
 {
-  "settings": {
-    "account": {
-      "avatar": {
-        "description": "Pour changer votre avatar, cliquez sur l'image dans ce bloc et sélectionnez un fichier sur votre ordinateur à télécharger.",
-        "notifications": {
-          "error": "Impossible de mettre à jour l'avatar",
-          "success": "L'avatar a été mis à jour avec succès"
-        },
-        "title": "Votre avatar"
-      },
-      "changeEmail": {
-        "description": "Pour changer votre e-mail, entrez le nouvel e-mail et enregistrez. Vous devrez confirmer le nouvel e-mail avant qu'il ne soit actif.",
-        "notifications": {
-          "error": "Impossible de mettre à jour l'e-mail",
-          "success": "L'e-mail a été mis à jour avec succès"
-        },
-        "title": "Votre e-mail"
-      },
-      "changeName": {
-        "notifications": {
-          "error": "Impossible de mettre à jour le nom",
-          "success": "Le nom a été mis à jour avec succès"
-        },
-        "title": "Votre nom"
-      },
-      "deleteAccount": {
-        "confirmation": "Êtes-vous sûr de vouloir supprimer votre compte ?",
-        "description": "Supprimer définitivement votre compte. Une fois supprimé, il n'y a pas de retour en arrière possible. Pour confirmer, veuillez entrer votre mot de passe ci-dessous :",
-        "notifications": {
-          "error": "Impossible de supprimer le compte",
-          "success": "Le compte a été supprimé avec succès"
-        },
-        "submit": "Supprimer le compte",
-        "title": "Supprimer le compte"
-      },
-      "language": {
-        "description": "Pour changer la langue de l'application pour votre compte, sélectionnez une langue dans la liste et cliquez sur enregistrer.",
-        "notifications": {
-          "error": "Impossible de mettre à jour la langue",
-          "success": "La langue a été mise à jour avec succès"
-        },
-        "title": "Votre langue"
-      },
-      "security": {
-        "activeSessions": {
-          "description": "Voici toutes les sessions actives de votre compte. Cliquez sur le X pour terminer une session spécifique.",
-          "title": "Sessions actives",
-          "notifications": {
-            "revokeSession": {
-              "success": "Session révoquée"
-            }
-          },
-          "currentSession": "Session actuelle"
-        },
-        "changePassword": {
-          "currentPassword": "Mot de passe actuel",
-          "newPassword": "Nouveau mot de passe",
-          "notifications": {
-            "error": "Impossible de mettre à jour le mot de passe",
-            "success": "Le mot de passe a été mis à jour avec succès"
-          },
-          "title": "Votre mot de passe"
-        },
-        "connectedAccounts": {
-          "connect": "Connecter",
-          "connected": "Connecté",
-          "disconnect": "Déconnecter",
-          "title": "Comptes connectés"
-        },
-        "passkeys": {
-          "addPasskey": "Ajouter une passkey",
-          "description": "Utilisez les passkeys comme alternative sécurisée aux mots de passe.",
-          "notifications": {
-            "addPasskey": {
-              "error": {
-                "title": "Impossible d'ajouter la passkey"
-              },
-              "success": {
-                "title": "Passkey ajoutée"
-              }
-            },
-            "deletePasskey": {
-              "error": {
-                "title": "Impossible de supprimer la passkey"
-              },
-              "loading": {
-                "title": "Suppression de la passkey..."
-              },
-              "success": {
-                "title": "Passkey supprimée"
-              }
-            }
-          },
-          "title": "Passkeys"
-        },
-        "setPassword": {
-          "description": "Vous n'avez pas encore défini de mot de passe. Pour en définir un, vous devez suivre le processus de réinitialisation du mot de passe. Cliquez sur le bouton ci-dessous pour envoyer un e-mail afin de réinitialiser votre mot de passe et suivez les instructions dans l'e-mail.",
-          "notifications": {
-            "error": "Impossible d'envoyer le lien pour définir le mot de passe. Veuillez réessayer.",
-            "success": "Vérifiez votre boîte de réception pour le lien permettant de définir votre mot de passe."
-          },
-          "submit": "Définir le mot de passe",
-          "title": "Votre mot de passe"
-        },
-        "title": "Sécurité",
-        "twoFactor": {
-          "title": "Authentification à deux facteurs",
-          "description": "Ajoutez une couche de sécurité supplémentaire à votre compte.",
-          "dialog": {
-            "password": {
-              "title": "Vérifier avec le mot de passe",
-              "description": "Veuillez vérifier votre compte en entrant votre mot de passe :",
-              "label": "Votre mot de passe :"
-            },
-            "totpUrl": {
-              "description": "Utilisez votre application d'authentification préférée et scannez le code QR ou entrez le secret ci-dessous manuellement pour configurer l'authentification à deux facteurs.",
-              "code": "Entrez le code à 6 chiffres pour vérifier la configuration :",
-              "title": "Activer l'authentification à deux facteurs"
-            }
-          },
-          "enable": "Activer l'authentification à deux facteurs",
-          "notifications": {
-            "verify": {
-              "success": {
-                "title": "L'authentification à deux facteurs a été activée avec succès."
-              }
-            },
-            "enable": {
-              "error": {
-                "title": "Impossible de vérifier votre compte avec le mot de passe fourni. Veuillez réessayer."
-              }
-            },
-            "disable": {
-              "success": {
-                "title": "L'authentification à deux facteurs a été désactivée avec succès."
-              }
-            }
-          },
-          "disable": "Désactiver l'authentification à deux facteurs",
-          "enabled": "Vous avez l'authentification à deux facteurs activée pour votre compte."
-        }
-      },
-      "subtitle": "Gérez les paramètres de votre compte personnel.",
-      "title": "Paramètres du compte"
-    },
-    "billing": {
-      "createCustomerPortal": {
-        "label": "Gérer la facturation",
-        "notifications": {
-          "error": {
-            "title": "Impossible de créer une session du portail client. Veuillez réessayer."
-          }
-        }
-      },
-      "activePlan": {
-        "status": {
-          "active": "Actif",
-          "canceled": "Annulé",
-          "expired": "Expiré",
-          "incomplete": "Incomplet",
-          "past_due": "En retard",
-          "paused": "En pause",
-          "trialing": "En essai",
-          "unpaid": "Impayé"
-        },
-        "title": "Votre forfait",
-        "description": "Votre plan actuel et les limites d'utilisation pour la recherche et l'indexation.",
-        "notFound": "Aucune information de plan disponible."
-      },
-      "changePlan": {
-        "description": "Choisissez un forfait auquel vous abonner.",
-        "title": "Changer de forfait"
-      },
-      "upgradePlan": "Mettre à niveau",
-      "currentPlan": "Plan actuel",
-      "switchToAnnual": "Passer à l'annuel",
-      "upgradeSuccess": "Plan mis à niveau avec succès",
-      "upgradeSuccessTitle": "Forfait mis a jour!",
-      "upgradeSuccessWithPlan": "Votre forfait a ete mis a niveau vers {plan}. Profitez des nouvelles fonctionnalites et des limites accrues.",
-      "redirectingIn": "Redirection dans {seconds}s...",
-      "title": "Facturation",
-      "aiCredits": {
-        "title": "Crédits IA",
-        "subtitle": "Utilisation de l'IA à la demande. Rechargez votre portefeuille pour débloquer toutes les fonctionnalités IA.",
-        "balance": {
-          "title": "Solde du portefeuille",
-          "includedRemaining": "Inclus ce mois-ci",
-          "reserved": "Réservé",
-          "promo": "Crédits promo",
-          "notInitialized": "Le portefeuille n'est pas encore initialisé."
-        },
-        "topup": {
-          "button": "Recharger",
-          "title": "Recharger le portefeuille IA",
-          "description": "Choisissez un montant ou saisissez une valeur personnalisée en roubles.",
-          "customAmount": "Montant personnalisé (₽)",
-          "summary": "Vous serez débité de {amount}",
-          "confirm": "Payer avec Tochka",
-          "error": "Impossible de créer le lien de paiement. Veuillez réessayer."
-        },
-        "errors": {
-          "insufficientFunds": "Crédits IA insuffisants. Rechargez votre portefeuille."
-        },
-        "chart": {
-          "title": "Utilisation des crédits",
-          "daily": "Quotidien",
-          "weekly": "Hebdomadaire",
-          "monthly": "Mensuel",
-          "kopecks": "Coût",
-          "events": "Événements"
-        },
-        "consumption": {
-          "title": "Historique de consommation",
-          "date": "Date",
-          "operation": "Opération",
-          "provider": "Fournisseur",
-          "model": "Modèle",
-          "tokens": "Tokens",
-          "charge": "Facturation",
-          "empty": "Aucun événement d'utilisation pour l'instant."
-        },
-        "rateCard": {
-          "title": "Tarifs",
-          "operation": "Opération",
-          "provider": "Fournisseur",
-          "model": "Modèle",
-          "inputPer1M": "Entrée / 1M tokens",
-          "outputPer1M": "Sortie / 1M tokens",
-          "embeddingPer1M": "Plongement / 1M tokens",
-          "flatFee": "Frais fixes",
-          "empty": "Aucune règle de prix configurée."
-        },
-        "lowBalance": {
-          "title": "Crédits faibles",
-          "message": "Votre solde de crédits est faible ({balance} restant).",
-          "topUp": "Recharger maintenant"
-        }
-      },
-      "features": {
-        "title": "Fonctionnalités",
-        "none": "Aucune fonctionnalité configurée"
-      },
-      "limits": {
-        "maxIndexes": "Max. index",
-        "maxDocuments": "Max. documents",
-        "maxApiKeys": "Max. clés API",
-        "rateLimit": "Limite de taux",
-        "maxSearchesPerMonth": "Recherches / mois"
-      },
-      "upgrade": "Améliorer le plan",
-      "usage": {
-        "searches": "Recherches",
-        "documents": "Documents"
-      },
-      "overageStatus": {
-        "title": "Utilisation du quota de recherche",
-        "description": "Votre utilisation actuelle et votre statut de dépassement.",
-        "normal": "Normal",
-        "softCap": "Limite bientôt atteinte",
-        "hardCap": "Limite atteinte",
-        "overageActive": "Dépassement actif",
-        "walletBalance": "Portefeuille de dépassement",
-        "remaining": "restant",
-        "noOverage": "Aucun dépassement configuré",
-        "unlimited": "Illimité",
-        "searchesUsed": "{{used}} / {{limit}} recherches utilisées"
-      },
-      "upgradeModal": {
-        "title": "Changer de forfait",
-        "currentPlan": "Forfait actuel",
-        "selectPlan": "Sélectionnez un forfait pour passer à un niveau supérieur",
-        "prorationPreview": "Aperçu de la proratisation",
-        "currentRemaining": "Valeur restante du forfait actuel",
-        "newPlanCost": "Nouveau forfait (proratisé)",
-        "totalDueToday": "Total dû aujourd'hui",
-        "totalCredit": "Crédit total",
-        "confirmUpgrade": "Confirmer le changement",
-        "redirectingToStripe": "Redirection vers Stripe...",
-        "upgradeSuccess": "Forfait mis à niveau avec succès !",
-        "upgradeError": "Échec de la mise à niveau du forfait. Veuillez réessayer.",
-        "noPaymentNeeded": "Aucun paiement nécessaire",
-        "comparePlans": "Comparer les forfaits",
-        "feature": "Fonctionnalité",
-        "current": "Actuel",
-        "select": "Sélectionner"
-      },
-      "downgradeModal": {
-        "title": "Confirmer la rétrogradation",
-        "warningTitle": "Vous êtes sur le point de rétrograder",
-        "dataLossWarning": "La rétrogradation réduira les limites de votre forfait. Certains documents, recherches et fonctionnalités peuvent devenir indisponibles.",
-        "whatChanges": "Ce qui change",
-        "currentLimit": "Actuel",
-        "newLimit": "Nouveau",
-        "limitChanges": "Changements de limites",
-        "featureDowngrades": "Fonctionnalités qui seront désactivées",
-        "noFeatureLoss": "Aucune fonctionnalité ne sera perdue avec cette rétrogradation",
-        "prorationCredit": "Vous recevrez un crédit proratisé de {amount}",
-        "gracePeriod": "Après la rétrogradation, vous aurez une période de grâce de 7 jours où les recherches restent lisibles, mais l'indexation est immédiatement interrompue.",
-        "confirmDowngrade": "Confirmer la rétrogradation",
-        "cancelDowngrade": "Annuler",
-        "downgradeProcessing": "Traitement de la rétrogradation..."
-      },
-      "invoiceHistory": {
-        "title": "Historique des Factures",
-        "description": "Consulter et télécharger vos factures passées.",
-        "date": "Date",
-        "amount": "Montant",
-        "status": {
-          "paid": "Payé",
-          "open": "En attente",
-          "uncollectible": "Irrecouvrable",
-          "void": "Annulé",
-          "draft": "Brouillon"
-        },
-        "actions": "Actions",
-        "downloadPdf": "Télécharger PDF",
-        "notAvailable": "Non disponible",
-        "previous": "Précédent",
-        "next": "Suivant",
-        "pageInfo": "{{start}}–{{end}} sur {{total}}",
-        "empty": "Pas encore de factures. Les factures apparaîtront ici après votre premier paiement.",
-        "loading": "Chargement des factures...",
-        "downloadError": "Impossible d'ouvrir le PDF de la facture. Veuillez réessayer.",
-        "statusLabel": "Statut",
-        "page": "Page {{page}}"
-      },
-      "paymentMethod": {
-        "title": "Méthode de Paiement",
-        "description": "Votre méthode de paiement actuelle.",
-        "card": "Carte",
-        "maskedNumber": "•••• {{last4}}",
-        "expiry": "{{month}}/{{year}}",
-        "manage": "Gérer",
-        "loading": "Chargement du mode de paiement...",
-        "addCard": "Ajouter une carte",
-        "addCardTitle": "Ajouter un nouveau moyen de paiement",
-        "addCardDescription": "Saisissez les détails de votre carte ci-dessous.",
-        "addCardConfirm": "Ajouter la carte",
-        "cardAdded": "Carte ajoutée avec succès",
-        "defaultLabel": "Par défaut",
-        "setDefault": "Définir par défaut",
-        "defaultSuccess": "Moyen de paiement par défaut mis à jour",
-        "defaultError": "Impossible de mettre à jour le moyen de paiement par défaut",
-        "deleteDialogTitle": "Supprimer la carte ?",
-        "deleteDialogDescription": "Êtes-vous sûr de vouloir supprimer {card} ?",
-        "deleteConfirm": "Supprimer",
-        "deleteSuccess": "Carte supprimée",
-        "deleteError": "Impossible de supprimer la carte",
-        "emptyState": "Aucun moyen de paiement enregistré",
-        "preparing": "Préparation du formulaire...",
-        "setupError": "Impossible de préparer le formulaire. Veuillez réessayer."
-      },
-      "invoices": {
-        "title": "Historique des factures",
-        "emptyState": "Pas encore de factures",
-        "downloadPdf": "Télécharger le PDF",
-        "status": {
-          "paid": "Payé",
-          "pending": "En attente",
-          "failed": "Échoué"
-        }
-      },
-      "tabs": {
-        "overview": "Aperçu",
-        "paymentMethods": "Moyens de paiement",
-        "invoices": "Factures",
-        "aiCredits": "Crédits IA"
-      }
-    },
-    "notificationsPage": {
-      "title": "Notifications",
-      "description": "Choisissez comment vous recevez les notifications. Les options désactivées sont enregistrées ; tout est activé par défaut.",
-      "groups": {
-        "general": {
-          "title": "Général"
-        },
-        "billing": {
-          "title": "Facturation"
-        }
-      },
-      "types": {
-        "APP_UPDATE": {
-          "label": "Mises à jour de l'application"
-        },
-        "AI_LOW_BALANCE": {
-          "label": "Le solde IA est faible"
-        },
-        "AI_TOPUP_PAID": {
-          "label": "Rechargement IA confirmé"
-        },
-        "AI_TOPUP_FAILED": {
-          "label": "Rechargement IA échoué"
-        },
-        "AI_OVERAGE_REACHED": {
-          "label": "Limite IA atteinte"
-        },
-        "PAYMENT_FAILED": {
-          "label": "Échec du paiement de l'abonnement"
-        }
-      },
-      "columns": {
-        "type": "Notification",
-        "inApp": "Dans l'application",
-        "email": "E-mail"
-      }
-    },
-    "menu": {
-      "account": {
-        "billing": "Facturation",
-        "dangerZone": "Zone de danger",
-        "general": "Général",
-        "notifications": "Notifications",
-        "security": "Sécurité",
-        "title": "Compte",
-        "invoices": "Factures",
-        "paymentMethods": "Moyens de paiement"
-      },
-      "organization": {
-        "billing": "Facturation",
-        "general": "Général",
-        "members": "Membres",
-        "title": "Organisation",
-        "dangerZone": "Zone de danger"
-      }
-    },
-    "save": "Enregistrer"
-  }
+	"settings": {
+		"account": {
+			"avatar": {
+				"description": "Pour changer votre avatar, cliquez sur l'image dans ce bloc et sélectionnez un fichier sur votre ordinateur à télécharger.",
+				"notifications": {
+					"error": "Impossible de mettre à jour l'avatar",
+					"success": "L'avatar a été mis à jour avec succès"
+				},
+				"title": "Votre avatar"
+			},
+			"changeEmail": {
+				"description": "Pour changer votre e-mail, entrez le nouvel e-mail et enregistrez. Vous devrez confirmer le nouvel e-mail avant qu'il ne soit actif.",
+				"notifications": {
+					"error": "Impossible de mettre à jour l'e-mail",
+					"success": "L'e-mail a été mis à jour avec succès"
+				},
+				"title": "Votre e-mail"
+			},
+			"changeName": {
+				"notifications": {
+					"error": "Impossible de mettre à jour le nom",
+					"success": "Le nom a été mis à jour avec succès"
+				},
+				"title": "Votre nom"
+			},
+			"deleteAccount": {
+				"confirmation": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+				"description": "Supprimer définitivement votre compte. Une fois supprimé, il n'y a pas de retour en arrière possible. Pour confirmer, veuillez entrer votre mot de passe ci-dessous :",
+				"notifications": {
+					"error": "Impossible de supprimer le compte",
+					"success": "Le compte a été supprimé avec succès"
+				},
+				"submit": "Supprimer le compte",
+				"title": "Supprimer le compte"
+			},
+			"language": {
+				"description": "Pour changer la langue de l'application pour votre compte, sélectionnez une langue dans la liste et cliquez sur enregistrer.",
+				"notifications": {
+					"error": "Impossible de mettre à jour la langue",
+					"success": "La langue a été mise à jour avec succès"
+				},
+				"title": "Votre langue"
+			},
+			"security": {
+				"activeSessions": {
+					"description": "Voici toutes les sessions actives de votre compte. Cliquez sur le X pour terminer une session spécifique.",
+					"title": "Sessions actives",
+					"notifications": {
+						"revokeSession": {
+							"success": "Session révoquée"
+						}
+					},
+					"currentSession": "Session actuelle"
+				},
+				"changePassword": {
+					"currentPassword": "Mot de passe actuel",
+					"newPassword": "Nouveau mot de passe",
+					"notifications": {
+						"error": "Impossible de mettre à jour le mot de passe",
+						"success": "Le mot de passe a été mis à jour avec succès"
+					},
+					"title": "Votre mot de passe"
+				},
+				"connectedAccounts": {
+					"connect": "Connecter",
+					"connected": "Connecté",
+					"disconnect": "Déconnecter",
+					"title": "Comptes connectés"
+				},
+				"passkeys": {
+					"addPasskey": "Ajouter une passkey",
+					"description": "Utilisez les passkeys comme alternative sécurisée aux mots de passe.",
+					"notifications": {
+						"addPasskey": {
+							"error": {
+								"title": "Impossible d'ajouter la passkey"
+							},
+							"success": {
+								"title": "Passkey ajoutée"
+							}
+						},
+						"deletePasskey": {
+							"error": {
+								"title": "Impossible de supprimer la passkey"
+							},
+							"loading": {
+								"title": "Suppression de la passkey..."
+							},
+							"success": {
+								"title": "Passkey supprimée"
+							}
+						}
+					},
+					"title": "Passkeys"
+				},
+				"setPassword": {
+					"description": "Vous n'avez pas encore défini de mot de passe. Pour en définir un, vous devez suivre le processus de réinitialisation du mot de passe. Cliquez sur le bouton ci-dessous pour envoyer un e-mail afin de réinitialiser votre mot de passe et suivez les instructions dans l'e-mail.",
+					"notifications": {
+						"error": "Impossible d'envoyer le lien pour définir le mot de passe. Veuillez réessayer.",
+						"success": "Vérifiez votre boîte de réception pour le lien permettant de définir votre mot de passe."
+					},
+					"submit": "Définir le mot de passe",
+					"title": "Votre mot de passe"
+				},
+				"title": "Sécurité",
+				"twoFactor": {
+					"title": "Authentification à deux facteurs",
+					"description": "Ajoutez une couche de sécurité supplémentaire à votre compte.",
+					"dialog": {
+						"password": {
+							"title": "Vérifier avec le mot de passe",
+							"description": "Veuillez vérifier votre compte en entrant votre mot de passe :",
+							"label": "Votre mot de passe :"
+						},
+						"totpUrl": {
+							"description": "Utilisez votre application d'authentification préférée et scannez le code QR ou entrez le secret ci-dessous manuellement pour configurer l'authentification à deux facteurs.",
+							"code": "Entrez le code à 6 chiffres pour vérifier la configuration :",
+							"title": "Activer l'authentification à deux facteurs"
+						}
+					},
+					"enable": "Activer l'authentification à deux facteurs",
+					"notifications": {
+						"verify": {
+							"success": {
+								"title": "L'authentification à deux facteurs a été activée avec succès."
+							}
+						},
+						"enable": {
+							"error": {
+								"title": "Impossible de vérifier votre compte avec le mot de passe fourni. Veuillez réessayer."
+							}
+						},
+						"disable": {
+							"success": {
+								"title": "L'authentification à deux facteurs a été désactivée avec succès."
+							}
+						}
+					},
+					"disable": "Désactiver l'authentification à deux facteurs",
+					"enabled": "Vous avez l'authentification à deux facteurs activée pour votre compte."
+				}
+			},
+			"subtitle": "Gérez les paramètres de votre compte personnel.",
+			"title": "Paramètres du compte"
+		},
+		"billing": {
+			"createCustomerPortal": {
+				"label": "Gérer la facturation",
+				"notifications": {
+					"error": {
+						"title": "Impossible de créer une session du portail client. Veuillez réessayer."
+					}
+				}
+			},
+			"activePlan": {
+				"status": {
+					"active": "Actif",
+					"canceled": "Annulé",
+					"expired": "Expiré",
+					"incomplete": "Incomplet",
+					"past_due": "En retard",
+					"paused": "En pause",
+					"trialing": "En essai",
+					"unpaid": "Impayé"
+				},
+				"title": "Votre forfait",
+				"description": "Votre plan actuel et les limites d'utilisation pour la recherche et l'indexation.",
+				"notFound": "Aucune information de plan disponible."
+			},
+			"changePlan": {
+				"description": "Choisissez un forfait auquel vous abonner.",
+				"title": "Changer de forfait"
+			},
+			"upgradePlan": "Mettre à niveau",
+			"currentPlan": "Plan actuel",
+			"switchToAnnual": "Passer à l'annuel",
+			"upgradeSuccess": "Plan mis à niveau avec succès",
+			"upgradeSuccessTitle": "Forfait mis a jour!",
+			"upgradeSuccessWithPlan": "Votre forfait a ete mis a niveau vers {plan}. Profitez des nouvelles fonctionnalites et des limites accrues.",
+			"redirectingIn": "Redirection dans {seconds}s...",
+			"title": "Facturation",
+			"aiCredits": {
+				"title": "Crédits IA",
+				"subtitle": "Utilisation de l'IA à la demande. Rechargez votre portefeuille pour débloquer toutes les fonctionnalités IA.",
+				"balance": {
+					"title": "Solde du portefeuille",
+					"includedRemaining": "Inclus ce mois-ci",
+					"reserved": "Réservé",
+					"promo": "Crédits promo",
+					"notInitialized": "Le portefeuille n'est pas encore initialisé."
+				},
+				"topup": {
+					"button": "Recharger",
+					"title": "Recharger le portefeuille IA",
+					"description": "Choisissez un montant ou saisissez une valeur personnalisée en roubles.",
+					"customAmount": "Montant personnalisé (₽)",
+					"summary": "Vous serez débité de {amount}",
+					"confirm": "Payer avec Tochka",
+					"error": "Impossible de créer le lien de paiement. Veuillez réessayer."
+				},
+				"errors": {
+					"insufficientFunds": "Crédits IA insuffisants. Rechargez votre portefeuille."
+				},
+				"chart": {
+					"title": "Utilisation des crédits",
+					"daily": "Quotidien",
+					"weekly": "Hebdomadaire",
+					"monthly": "Mensuel",
+					"kopecks": "Coût",
+					"events": "Événements"
+				},
+				"consumption": {
+					"title": "Historique de consommation",
+					"date": "Date",
+					"operation": "Opération",
+					"provider": "Fournisseur",
+					"model": "Modèle",
+					"tokens": "Tokens",
+					"charge": "Facturation",
+					"empty": "Aucun événement d'utilisation pour l'instant."
+				},
+				"rateCard": {
+					"title": "Tarifs",
+					"operation": "Opération",
+					"provider": "Fournisseur",
+					"model": "Modèle",
+					"inputPer1M": "Entrée / 1M tokens",
+					"outputPer1M": "Sortie / 1M tokens",
+					"embeddingPer1M": "Plongement / 1M tokens",
+					"flatFee": "Frais fixes",
+					"empty": "Aucune règle de prix configurée."
+				},
+				"lowBalance": {
+					"title": "Crédits faibles",
+					"message": "Votre solde de crédits est faible ({balance} restant).",
+					"topUp": "Recharger maintenant"
+				}
+			},
+			"features": {
+				"title": "Fonctionnalités",
+				"none": "Aucune fonctionnalité configurée"
+			},
+			"limits": {
+				"maxIndexes": "Max. index",
+				"maxDocuments": "Max. documents",
+				"maxApiKeys": "Max. clés API",
+				"rateLimit": "Limite de taux",
+				"maxSearchesPerMonth": "Recherches / mois"
+			},
+			"upgrade": "Améliorer le plan",
+			"usage": {
+				"searches": "Recherches",
+				"documents": "Documents"
+			},
+			"overageStatus": {
+				"title": "Utilisation du quota de recherche",
+				"description": "Votre utilisation actuelle et votre statut de dépassement.",
+				"normal": "Normal",
+				"softCap": "Limite bientôt atteinte",
+				"hardCap": "Limite atteinte",
+				"overageActive": "Dépassement actif",
+				"walletBalance": "Portefeuille de dépassement",
+				"remaining": "restant",
+				"noOverage": "Aucun dépassement configuré",
+				"unlimited": "Illimité",
+				"searchesUsed": "{{used}} / {{limit}} recherches utilisées"
+			},
+			"upgradeModal": {
+				"title": "Changer de forfait",
+				"currentPlan": "Forfait actuel",
+				"selectPlan": "Sélectionnez un forfait pour passer à un niveau supérieur",
+				"prorationPreview": "Aperçu de la proratisation",
+				"currentRemaining": "Valeur restante du forfait actuel",
+				"newPlanCost": "Nouveau forfait (proratisé)",
+				"totalDueToday": "Total dû aujourd'hui",
+				"totalCredit": "Crédit total",
+				"confirmUpgrade": "Confirmer le changement",
+				"redirectingToStripe": "Redirection vers Stripe...",
+				"upgradeSuccess": "Forfait mis à niveau avec succès !",
+				"upgradeError": "Échec de la mise à niveau du forfait. Veuillez réessayer.",
+				"noPaymentNeeded": "Aucun paiement nécessaire",
+				"comparePlans": "Comparer les forfaits",
+				"feature": "Fonctionnalité",
+				"current": "Actuel",
+				"select": "Sélectionner"
+			},
+			"downgradeModal": {
+				"title": "Confirmer la rétrogradation",
+				"warningTitle": "Vous êtes sur le point de rétrograder",
+				"dataLossWarning": "La rétrogradation réduira les limites de votre forfait. Certains documents, recherches et fonctionnalités peuvent devenir indisponibles.",
+				"whatChanges": "Ce qui change",
+				"currentLimit": "Actuel",
+				"newLimit": "Nouveau",
+				"limitChanges": "Changements de limites",
+				"featureDowngrades": "Fonctionnalités qui seront désactivées",
+				"noFeatureLoss": "Aucune fonctionnalité ne sera perdue avec cette rétrogradation",
+				"prorationCredit": "Vous recevrez un crédit proratisé de {amount}",
+				"gracePeriod": "Après la rétrogradation, vous aurez une période de grâce de 7 jours où les recherches restent lisibles, mais l'indexation est immédiatement interrompue.",
+				"confirmDowngrade": "Confirmer la rétrogradation",
+				"cancelDowngrade": "Annuler",
+				"downgradeProcessing": "Traitement de la rétrogradation..."
+			},
+			"invoiceHistory": {
+				"title": "Historique des Factures",
+				"description": "Consulter et télécharger vos factures passées.",
+				"date": "Date",
+				"amount": "Montant",
+				"status": {
+					"paid": "Payé",
+					"open": "En attente",
+					"uncollectible": "Irrecouvrable",
+					"void": "Annulé",
+					"draft": "Brouillon"
+				},
+				"actions": "Actions",
+				"downloadPdf": "Télécharger PDF",
+				"notAvailable": "Non disponible",
+				"previous": "Précédent",
+				"next": "Suivant",
+				"pageInfo": "{{start}}–{{end}} sur {{total}}",
+				"empty": "Pas encore de factures. Les factures apparaîtront ici après votre premier paiement.",
+				"loading": "Chargement des factures...",
+				"downloadError": "Impossible d'ouvrir le PDF de la facture. Veuillez réessayer.",
+				"statusLabel": "Statut",
+				"page": "Page {{page}}"
+			},
+			"paymentMethod": {
+				"title": "Méthode de Paiement",
+				"description": "Votre méthode de paiement actuelle.",
+				"card": "Carte",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Gérer",
+				"loading": "Chargement du mode de paiement...",
+				"addCard": "Ajouter une carte",
+				"addCardTitle": "Ajouter un nouveau moyen de paiement",
+				"addCardDescription": "Saisissez les détails de votre carte ci-dessous.",
+				"addCardConfirm": "Ajouter la carte",
+				"cardAdded": "Carte ajoutée avec succès",
+				"defaultLabel": "Par défaut",
+				"setDefault": "Définir par défaut",
+				"defaultSuccess": "Moyen de paiement par défaut mis à jour",
+				"defaultError": "Impossible de mettre à jour le moyen de paiement par défaut",
+				"deleteDialogTitle": "Supprimer la carte ?",
+				"deleteDialogDescription": "Êtes-vous sûr de vouloir supprimer {card} ?",
+				"deleteConfirm": "Supprimer",
+				"deleteSuccess": "Carte supprimée",
+				"deleteError": "Impossible de supprimer la carte",
+				"emptyState": "Aucun moyen de paiement enregistré",
+				"preparing": "Préparation du formulaire...",
+				"setupError": "Impossible de préparer le formulaire. Veuillez réessayer."
+			},
+			"invoices": {
+				"title": "Historique des factures",
+				"emptyState": "Pas encore de factures",
+				"downloadPdf": "Télécharger le PDF",
+				"status": {
+					"paid": "Payé",
+					"pending": "En attente",
+					"failed": "Échoué"
+				}
+			},
+			"tabs": {
+				"overview": "Aperçu",
+				"paymentMethods": "Moyens de paiement",
+				"invoices": "Factures",
+				"aiCredits": "Crédits IA"
+			}
+		},
+		"notificationsPage": {
+			"title": "Notifications",
+			"description": "Choisissez comment vous recevez les notifications. Les options désactivées sont enregistrées ; tout est activé par défaut.",
+			"groups": {
+				"general": {
+					"title": "Général"
+				},
+				"billing": {
+					"title": "Facturation"
+				}
+			},
+			"types": {
+				"APP_UPDATE": {
+					"label": "Mises à jour de l'application"
+				},
+				"AI_LOW_BALANCE": {
+					"label": "Le solde IA est faible"
+				},
+				"AI_TOPUP_PAID": {
+					"label": "Rechargement IA confirmé"
+				},
+				"AI_TOPUP_FAILED": {
+					"label": "Rechargement IA échoué"
+				},
+				"AI_OVERAGE_REACHED": {
+					"label": "Limite IA atteinte"
+				},
+				"PAYMENT_FAILED": {
+					"label": "Échec du paiement de l'abonnement"
+				}
+			},
+			"columns": {
+				"type": "Notification",
+				"inApp": "Dans l'application",
+				"email": "E-mail"
+			}
+		},
+		"menu": {
+			"account": {
+				"billing": "Facturation",
+				"dangerZone": "Zone de danger",
+				"general": "Général",
+				"notifications": "Notifications",
+				"security": "Sécurité",
+				"title": "Compte",
+				"invoices": "Factures",
+				"paymentMethods": "Moyens de paiement"
+			},
+			"organization": {
+				"billing": "Facturation",
+				"general": "Général",
+				"members": "Membres",
+				"title": "Organisation",
+				"dangerZone": "Zone de danger"
+			}
+		},
+		"save": "Enregistrer"
+	}
 }

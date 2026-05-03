@@ -3,9 +3,9 @@ name: supastarter-nextjs-skill
 description: "Guides development with supastarter for Next.js only (not Vue/Nuxt): split-app monorepo (saas/marketing/docs), tech stack, setup with Docker, configuration, database (Prisma + Drizzle), API (Hono/oRPC with public/protected/admin procedures), auth (Better Auth), organizations, payments (Stripe/Lemonsqueezy/Polar/Creem/DodoPayments), AI, customization (Tailwind v4), storage (S3/MinIO), notifications, mailing, i18n (5 locales × 4 scopes), SEO, deployment, background tasks, analytics, monitoring, E2E. Use when building or modifying supastarter Next.js apps, adding features, or when the user mentions supastarter Next.js, Prisma, Drizzle, oRPC, Better Auth, or related Next.js stack topics."
 license: See LICENSE
 metadata:
-    author: supastarter (community-maintained skill, updated for split-app monorepo)
-    version: "2.0"
-    compatibility: "Designed for Cursor/Claude Code agents. Run scripts from supastarter monorepo root."
+  author: supastarter (community-maintained skill, updated for split-app monorepo)
+  version: "2.0"
+  compatibility: "Designed for Cursor/Claude Code agents. Run scripts from supastarter monorepo root."
 ---
 
 # supastarter for Next.js – Skill
@@ -30,13 +30,13 @@ Run these in order. Skipping a step is the #1 source of "I missed something".
 1. **Read the request twice.** If multiple interpretations exist, name them and ask. Don't pick silently. (Working Principle #1)
 2. **Classify scope** (see Project context below): `v0.x search/keys/tokens/quota/usage` ✅ implement | `v0.5 marketing` ✅ implement | `v0.6/v0.7/v1.0` → deferred, ask first | `wallet/ai/dslmrank` → out of scope, ask first. **State the bucket in your first reply.**
 3. **Read the source-of-truth files** for this task type before writing anything:
-    - Schema/DB → `packages/database/prisma/schema.prisma`, `packages/database/prisma/queries/<area>.ts`
-    - oRPC → `packages/api/modules/<feature>/{router,types}.ts`, `packages/api/orpc/{router,procedures}.ts`
-    - Search runtime → `packages/search/lib/{client,collections,buffer,reindex}.ts`, `packages/api/modules/search/{public-handler.ts,lib/public-auth.ts,lib/scoped-token.ts}`
-    - UI (saas) → `apps/saas/modules/<feature>/components/*` → `apps/saas/modules/shared/components/*` → `packages/ui/components/*`
-    - UI (marketing) → `apps/marketing/modules/<area>/components/*` → `apps/marketing/modules/shared/components/*` → `packages/ui/components/*`
-    - i18n → `packages/i18n/translations/{en,de,es,fr,ru}/<scope>.json` (5 locales — `ru` is mandatory, see Hard Invariant #11)
-    - Conventions → `agents.md` (= `claude.md`, symlinked) + this SKILL.md
+   - Schema/DB → `packages/database/prisma/schema.prisma`, `packages/database/prisma/queries/<area>.ts`
+   - oRPC → `packages/api/modules/<feature>/{router,types}.ts`, `packages/api/orpc/{router,procedures}.ts`
+   - Search runtime → `packages/search/lib/{client,collections,buffer,reindex}.ts`, `packages/api/modules/search/{public-handler.ts,lib/public-auth.ts,lib/scoped-token.ts}`
+   - UI (saas) → `apps/saas/modules/<feature>/components/*` → `apps/saas/modules/shared/components/*` → `packages/ui/components/*`
+   - UI (marketing) → `apps/marketing/modules/<area>/components/*` → `apps/marketing/modules/shared/components/*` → `packages/ui/components/*`
+   - i18n → `packages/i18n/translations/{en,de,es,fr,ru}/<scope>.json` (5 locales — `ru` is mandatory, see Hard Invariant #11)
+   - Conventions → `agents.md` (= `claude.md`, symlinked) + this SKILL.md
 4. **Run the MANDATORY pre-write greps** below. Reuse-first per Hard Invariant #12.
 5. **State assumptions, the verifiable goal, and the file list you intend to touch — before writing.** (Working Principle #4)
 6. **Implement.** Surgical changes only (Working Principle #3).

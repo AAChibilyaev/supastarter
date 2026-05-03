@@ -30,9 +30,7 @@ export function AboutContent() {
 						<blockquote className="mt-6 text-2xl md:text-3xl font-medium tracking-tight leading-snug text-balance">
 							&ldquo;{t("mission.quote")}&rdquo;
 						</blockquote>
-						<p className="mt-6 text-lg text-balance text-muted-foreground">
-							{t("mission.body")}
-						</p>
+						<p className="mt-6 text-lg text-balance text-muted-foreground">{t("mission.body")}</p>
 					</div>
 				</div>
 			</section>
@@ -45,33 +43,25 @@ export function AboutContent() {
 							<div className="text-4xl font-bold text-foreground tabular-nums">
 								{t("stats.searches")}
 							</div>
-							<div className="mt-2 text-sm text-muted-foreground">
-								{t("stats.searchesLabel")}
-							</div>
+							<div className="mt-2 text-sm text-muted-foreground">{t("stats.searchesLabel")}</div>
 						</div>
 						<div>
 							<div className="text-4xl font-bold text-foreground tabular-nums">
 								{t("stats.companies")}
 							</div>
-							<div className="mt-2 text-sm text-muted-foreground">
-								{t("stats.companiesLabel")}
-							</div>
+							<div className="mt-2 text-sm text-muted-foreground">{t("stats.companiesLabel")}</div>
 						</div>
 						<div>
 							<div className="text-4xl font-bold text-foreground tabular-nums">
 								{t("stats.uptime")}
 							</div>
-							<div className="mt-2 text-sm text-muted-foreground">
-								{t("stats.uptimeLabel")}
-							</div>
+							<div className="mt-2 text-sm text-muted-foreground">{t("stats.uptimeLabel")}</div>
 						</div>
 						<div>
 							<div className="text-4xl font-bold text-foreground tabular-nums">
 								{t("stats.latency")}
 							</div>
-							<div className="mt-2 text-sm text-muted-foreground">
-								{t("stats.latencyLabel")}
-							</div>
+							<div className="mt-2 text-sm text-muted-foreground">{t("stats.latencyLabel")}</div>
 						</div>
 					</div>
 				</div>

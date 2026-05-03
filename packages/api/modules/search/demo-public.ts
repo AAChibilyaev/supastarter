@@ -41,8 +41,7 @@ export const demoApp = new Hono()
 			return c.json(
 				{
 					error: "demo_not_configured",
-					message:
-						"Demo is not configured. Set DEMO_ORG_ID and DEMO_INDEX_SLUG env vars.",
+					message: "Demo is not configured. Set DEMO_ORG_ID and DEMO_INDEX_SLUG env vars.",
 				},
 				503,
 			);

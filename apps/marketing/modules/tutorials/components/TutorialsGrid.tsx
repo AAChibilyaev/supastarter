@@ -62,9 +62,7 @@ export function TutorialsGrid() {
 								</div>
 							</div>
 
-							<h3 className="font-semibold text-lg">
-								{t(`videos.${video.key}.title`)}
-							</h3>
+							<h3 className="font-semibold text-lg">{t(`videos.${video.key}.title`)}</h3>
 							<p className="mt-1 text-sm text-muted-foreground">
 								{t(`videos.${video.key}.description`)}
 							</p>

@@ -22,7 +22,6 @@ if (src === patched) {
 	console.log("patch-zod-bigint-defaults: nothing to patch");
 } else {
 	await writeFile(target, patched, "utf8");
-	const count = (src.match(/z\.bigint\(\)(?:\.[a-zA-Z]+\(\))*\.default\("-?\d+"\)/g) ?? [])
-		.length;
+	const count = (src.match(/z\.bigint\(\)(?:\.[a-zA-Z]+\(\))*\.default\("-?\d+"\)/g) ?? []).length;
 	console.log(`patch-zod-bigint-defaults: patched ${count} BigInt defaults`);
 }

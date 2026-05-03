@@ -54,12 +54,11 @@ documentsCommand
 					process.exit(1);
 				}
 
-				const indexes = await client.get<
-					Array<{ id: string; slug: string; displayName: string }>
-				>(`/v1/projects/${project.id}/indexes`);
+				const indexes = await client.get<Array<{ id: string; slug: string; displayName: string }>>(
+					`/v1/projects/${project.id}/indexes`,
+				);
 				const found = indexes.find(
-					(idx) =>
-						idx.slug === options.collection || idx.displayName === options.collection,
+					(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 				);
 				if (!found) {
 					console.error(
@@ -78,8 +77,7 @@ documentsCommand
 						process.exit(1);
 					}
 					rawData = readFileSync(file, "utf-8");
-					detectedFormat =
-						(options.format ?? file.toLowerCase().endsWith(".csv")) ? "csv" : "json";
+					detectedFormat = (options.format ?? file.toLowerCase().endsWith(".csv")) ? "csv" : "json";
 				} else {
 					// Pipe mode: read from stdin
 					const stdin = process.stdin;
@@ -190,12 +188,11 @@ documentsCommand
 					process.exit(1);
 				}
 
-				const indexes = await client.get<
-					Array<{ id: string; slug: string; displayName: string }>
-				>(`/v1/projects/${project.id}/indexes`);
+				const indexes = await client.get<Array<{ id: string; slug: string; displayName: string }>>(
+					`/v1/projects/${project.id}/indexes`,
+				);
 				const found = indexes.find(
-					(idx) =>
-						idx.slug === options.collection || idx.displayName === options.collection,
+					(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 				);
 				if (!found) {
 					console.error(
@@ -287,9 +284,9 @@ documentsCommand
 				process.exit(1);
 			}
 
-			const indexes = await client.get<
-				Array<{ id: string; slug: string; displayName: string }>
-			>(`/v1/projects/${project.id}/indexes`);
+			const indexes = await client.get<Array<{ id: string; slug: string; displayName: string }>>(
+				`/v1/projects/${project.id}/indexes`,
+			);
 			const found = indexes.find(
 				(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 			);
@@ -323,8 +320,7 @@ documentsCommand
 				const row: Record<string, string> = {};
 				for (const key of keys) {
 					const val = (hit[key] as string) ?? "";
-					row[key] =
-						typeof val === "string" ? val.slice(0, 50) : String(val).slice(0, 50);
+					row[key] = typeof val === "string" ? val.slice(0, 50) : String(val).slice(0, 50);
 				}
 				return row;
 			});

@@ -240,11 +240,7 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 							layout="vertical"
 							margin={{ top: 8, right: 24, left: 120, bottom: 8 }}
 						>
-							<CartesianGrid
-								strokeDasharray="3 3"
-								className="stroke-border"
-								horizontal={false}
-							/>
+							<CartesianGrid strokeDasharray="3 3" className="stroke-border" horizontal={false} />
 							<XAxis
 								type="number"
 								domain={[0, 100]}
@@ -262,18 +258,12 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 							<Tooltip
 								formatter={(_value, _name, props) => {
 									const step = (props as { payload: FunnelStep }).payload;
-									return [
-										`${step.completed} / ${step.total} (${step.rate}%)`,
-										step.label,
-									];
+									return [`${step.completed} / ${step.total} (${step.rate}%)`, step.label];
 								}}
 							/>
 							<Bar dataKey="rate" radius={[0, 4, 4, 0]} maxBarSize={28}>
 								{funnel.map((_entry, index) => (
-									<Cell
-										key={index}
-										fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]}
-									/>
+									<Cell key={index} fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]} />
 								))}
 							</Bar>
 						</BarChart>
@@ -283,19 +273,14 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 				{/* Funnel step details */}
 				<div className="gap-2 mt-4 sm:grid-cols-2 lg:grid-cols-4 grid grid-cols-1">
 					{funnel.map((step) => (
-						<div
-							key={step.eventType}
-							className="space-y-1 p-3 text-sm rounded-lg border"
-						>
+						<div key={step.eventType} className="space-y-1 p-3 text-sm rounded-lg border">
 							<div className="font-medium">{step.label}</div>
 							<div className="text-muted-foreground">
 								{step.completed} / {step.total}
 							</div>
 							<div className="flex justify-between">
 								<span className="text-muted-foreground">{step.rate}%</span>
-								{step.dropOff > 0 && (
-									<span className="text-destructive">-{step.dropOff}%</span>
-								)}
+								{step.dropOff > 0 && <span className="text-destructive">-{step.dropOff}%</span>}
 							</div>
 						</div>
 					))}
@@ -320,9 +305,7 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 					<div className="gap-4 sm:grid-cols-4 grid grid-cols-2">
 						<div className="space-y-1">
 							<div className="text-xs text-muted-foreground">Median</div>
-							<div className="font-medium text-2xl">
-								{formatHours(ttfv.medianHours)}
-							</div>
+							<div className="font-medium text-2xl">{formatHours(ttfv.medianHours)}</div>
 						</div>
 						<div className="space-y-1">
 							<div className="text-xs text-muted-foreground">Mean</div>
@@ -340,8 +323,7 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 				)}
 				{ttfv.count > 0 && (
 					<div className="mt-2 text-xs text-muted-foreground">
-						Based on {ttfv.count} organization{ttfv.count !== 1 ? "s" : ""} with
-						completed searches
+						Based on {ttfv.count} organization{ttfv.count !== 1 ? "s" : ""} with completed searches
 					</div>
 				)}
 			</CardContent>
@@ -424,14 +406,10 @@ function CohortTable({
 									? (row as MonthlyCohortRow).month
 									: (row as CohortRow).week;
 								const rate = (val: number) =>
-									row.orgCount > 0
-										? `${Math.round((val / row.orgCount) * 100)}%`
-										: "\u2014";
+									row.orgCount > 0 ? `${Math.round((val / row.orgCount) * 100)}%` : "\u2014";
 								return (
 									<tr key={weekVal} className="border-b hover:bg-muted/50">
-										<td className="p-2 font-medium whitespace-nowrap">
-											{weekVal}
-										</td>
+										<td className="p-2 font-medium whitespace-nowrap">{weekVal}</td>
 										<td className="p-2">{row.orgCount}</td>
 										{events.map((evt) => (
 											<td key={evt.key} className="p-2">
@@ -481,11 +459,7 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 							margin={{ top: 8, right: 24, left: 8, bottom: 8 }}
 						>
 							<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-							<XAxis
-								dataKey="label"
-								tick={{ fontSize: 12 }}
-								className="text-muted-foreground"
-							/>
+							<XAxis dataKey="label" tick={{ fontSize: 12 }} className="text-muted-foreground" />
 							<YAxis
 								tick={{ fontSize: 12 }}
 								className="text-muted-foreground"
@@ -493,20 +467,14 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 							/>
 							<Tooltip
 								formatter={(_value, _name, props) => {
-									const bucket = (props as { payload: HealthScoreBucket })
-										.payload;
+									const bucket = (props as { payload: HealthScoreBucket }).payload;
 									return [
 										`${bucket.count} org${bucket.count !== 1 ? "s" : ""} (score ${bucket.label})`,
 										"Orgs",
 									];
 								}}
 							/>
-							<Bar
-								dataKey="count"
-								radius={[4, 4, 0, 0]}
-								fill="#6366f1"
-								maxBarSize={48}
-							/>
+							<Bar dataKey="count" radius={[4, 4, 0, 0]} fill="#6366f1" maxBarSize={48} />
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
@@ -539,9 +507,7 @@ export function OnboardingAnalyticsCards() {
 	if (error) {
 		return (
 			<Card>
-				<CardContent className="py-8 text-center text-destructive">
-					{t("error")}
-				</CardContent>
+				<CardContent className="py-8 text-center text-destructive">{t("error")}</CardContent>
 			</Card>
 		);
 	}

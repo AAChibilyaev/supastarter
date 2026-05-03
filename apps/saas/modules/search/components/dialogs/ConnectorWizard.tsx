@@ -87,8 +87,7 @@ export function ConnectorWizard({
 			setRawKey(result.rawKey);
 			setStep(2);
 		} catch (error: unknown) {
-			const msg =
-				error instanceof Error ? error.message : t("search.connector.wizard.tokenFailed");
+			const msg = error instanceof Error ? error.message : t("search.connector.wizard.tokenFailed");
 			throw new Error(msg);
 		}
 	};
@@ -200,27 +199,15 @@ export function ConnectorWizard({
 								<CardTitle className="text-base">
 									{t("search.connector.stepGenerateToken")}
 								</CardTitle>
-								<CardDescription>
-									{t("search.connector.tokenGenerated")}
-								</CardDescription>
+								<CardDescription>{t("search.connector.tokenGenerated")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								{rawKey ? (
 									<div className="space-y-3">
 										<div className="gap-2 flex">
-											<Input
-												value={rawKey}
-												readOnly
-												className="font-mono text-xs"
-											/>
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={handleCopyToken}
-											>
-												{copied
-													? t("search.connector.tokenCopied")
-													: t("search.apiKeys.copy")}
+											<Input value={rawKey} readOnly className="font-mono text-xs" />
+											<Button variant="outline" size="sm" onClick={handleCopyToken}>
+												{copied ? t("search.connector.tokenCopied") : t("search.apiKeys.copy")}
 											</Button>
 										</div>
 										<Card className="border-foreground/20 bg-foreground/5 text-foreground/70 dark:border-foreground/30 dark:bg-foreground/10 dark:text-foreground/70">
@@ -228,20 +215,12 @@ export function ConnectorWizard({
 												{t("search.connector.tokenCopyWarning")}
 											</CardContent>
 										</Card>
-										<Button
-											variant="primary"
-											onClick={() => setStep(2)}
-											className="w-full"
-										>
+										<Button variant="primary" onClick={() => setStep(2)} className="w-full">
 											{t("search.connector.stepDownloadModule")} →
 										</Button>
 									</div>
 								) : (
-									<Button
-										variant="primary"
-										onClick={handleGenerateToken}
-										className="w-full"
-									>
+									<Button variant="primary" onClick={handleGenerateToken} className="w-full">
 										{t("search.connector.stepGenerateToken")}
 									</Button>
 								)}
@@ -262,11 +241,7 @@ export function ConnectorWizard({
 							</CardHeader>
 							<CardContent className="space-y-3">
 								{source === "prestashop" || source === "directApi" ? (
-									<Button
-										variant="outline"
-										className="w-full justify-start"
-										asChild
-									>
+									<Button variant="outline" className="w-full justify-start" asChild>
 										<a
 											href="https://github.com/nousresearch/aacsearch-prestashop/releases"
 											target="_blank"
@@ -277,11 +252,7 @@ export function ConnectorWizard({
 									</Button>
 								) : null}
 								{source === "bitrix" || source === "directApi" ? (
-									<Button
-										variant="outline"
-										className="w-full justify-start"
-										asChild
-									>
+									<Button variant="outline" className="w-full justify-start" asChild>
 										<a
 											href="https://github.com/nousresearch/aacsearch-bitrix/releases"
 											target="_blank"
@@ -291,11 +262,7 @@ export function ConnectorWizard({
 										</a>
 									</Button>
 								) : null}
-								<Button
-									variant="primary"
-									onClick={() => setStep(3)}
-									className="mt-2 w-full"
-								>
+								<Button variant="primary" onClick={() => setStep(3)} className="mt-2 w-full">
 									{t("search.connector.stepConfigure")} →
 								</Button>
 							</CardContent>
@@ -308,17 +275,12 @@ export function ConnectorWizard({
 					<div className="space-y-4">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">
-									{t("search.connector.stepConfigure")}
-								</CardTitle>
+								<CardTitle className="text-base">{t("search.connector.stepConfigure")}</CardTitle>
 								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
 								<div className="space-y-2">
-									<label
-										htmlFor="connector-api-url"
-										className="text-sm font-medium"
-									>
+									<label htmlFor="connector-api-url" className="text-sm font-medium">
 										API URL
 									</label>
 									<Input
@@ -329,10 +291,7 @@ export function ConnectorWizard({
 									/>
 								</div>
 								<div className="space-y-2">
-									<label
-										htmlFor="connector-access-token"
-										className="text-sm font-medium"
-									>
+									<label htmlFor="connector-access-token" className="text-sm font-medium">
 										{t("search.connector.tokenLabel")}
 									</label>
 									<Input
@@ -343,24 +302,14 @@ export function ConnectorWizard({
 									/>
 								</div>
 								<div className="p-3 text-sm rounded-md bg-muted text-muted-foreground">
-									<p className="font-medium mb-1">
-										{t("search.connector.stepConfigure")}
-									</p>
+									<p className="font-medium mb-1">{t("search.connector.stepConfigure")}</p>
 									<ol className="space-y-1 text-xs list-inside list-decimal">
-										<li>
-											{t(`search.connector.configStep1.${source}` as never)}
-										</li>
-										<li>
-											{t(`search.connector.configStep2.${source}` as never)}
-										</li>
+										<li>{t(`search.connector.configStep1.${source}` as never)}</li>
+										<li>{t(`search.connector.configStep2.${source}` as never)}</li>
 										<li>{t("search.connector.configStep3")}</li>
 									</ol>
 								</div>
-								<Button
-									variant="primary"
-									onClick={() => setStep(4)}
-									className="w-full"
-								>
+								<Button variant="primary" onClick={() => setStep(4)} className="w-full">
 									{t("search.connector.stepTestConnection")} →
 								</Button>
 							</CardContent>
@@ -391,22 +340,14 @@ export function ConnectorWizard({
 								) : (
 									<div className="space-y-3">
 										<div className="gap-3 flex items-center">
-											<Badge
-												status={
-													testResult === "success" ? "success" : "error"
-												}
-											>
+											<Badge status={testResult === "success" ? "success" : "error"}>
 												{testResult === "success"
 													? t("search.connector.testSuccess")
 													: t("search.connector.testFailed")}
 											</Badge>
 										</div>
 										{testResult === "success" ? (
-											<Button
-												variant="primary"
-												onClick={() => setStep(5)}
-												className="w-full"
-											>
+											<Button variant="primary" onClick={() => setStep(5)} className="w-full">
 												{t("search.connector.stepRunSync")} →
 											</Button>
 										) : (
@@ -430,15 +371,11 @@ export function ConnectorWizard({
 					<div className="space-y-4">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">
-									{t("search.connector.stepRunSync")}
-								</CardTitle>
+								<CardTitle className="text-base">{t("search.connector.stepRunSync")}</CardTitle>
 								<CardDescription>{t("search.connector.subtitle")}</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<p className="text-sm text-muted-foreground">
-									{t("search.connector.runSyncDesc")}
-								</p>
+								<p className="text-sm text-muted-foreground">{t("search.connector.runSyncDesc")}</p>
 								<Button
 									variant="primary"
 									onClick={handleRunSync}

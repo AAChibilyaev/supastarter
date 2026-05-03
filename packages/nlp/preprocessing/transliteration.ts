@@ -526,10 +526,7 @@ export function transliterate(
 
 		let result = text;
 		for (const [lat, cyr] of sortedMappings) {
-			result = result.replace(
-				new RegExp(lat.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
-				cyr,
-			);
+			result = result.replace(new RegExp(lat.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), cyr);
 		}
 
 		// Single character mapping

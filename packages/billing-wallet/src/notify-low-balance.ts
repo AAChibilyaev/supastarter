@@ -44,9 +44,7 @@ export async function notifyLowBalance(walletId: string): Promise<void> {
 					message: `Available: ${balanceRub} ₽`,
 				},
 				link,
-			}).catch((err: unknown) =>
-				logger.error("notifyLowBalance: createNotification failed", err),
-			),
+			}).catch((err: unknown) => logger.error("notifyLowBalance: createNotification failed", err)),
 		),
 	);
 }

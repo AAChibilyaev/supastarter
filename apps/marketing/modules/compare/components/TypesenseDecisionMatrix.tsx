@@ -25,16 +25,10 @@ export function TypesenseDecisionMatrix() {
 								{aacItems.map((i) => (
 									<li key={i} className="gap-3 text-sm flex">
 										<span className="size-5 mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full bg-primary/20">
-											<span className="font-bold text-xs text-primary">
-												✓
-											</span>
+											<span className="font-bold text-xs text-primary">✓</span>
 										</span>
 										<span className="leading-relaxed text-muted-foreground">
-											{t(
-												`decisionMatrix.whenAACsearch.items.${i}` as Parameters<
-													typeof t
-												>[0],
-											)}
+											{t(`decisionMatrix.whenAACsearch.items.${i}` as Parameters<typeof t>[0])}
 										</span>
 									</li>
 								))}
@@ -50,16 +44,10 @@ export function TypesenseDecisionMatrix() {
 								{typesenseItems.map((i) => (
 									<li key={i} className="gap-3 text-sm flex">
 										<span className="size-5 mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full bg-muted">
-											<span className="font-bold text-xs text-muted-foreground">
-												•
-											</span>
+											<span className="font-bold text-xs text-muted-foreground">•</span>
 										</span>
 										<span className="leading-relaxed text-muted-foreground">
-											{t(
-												`decisionMatrix.whenTypesenseCloud.items.${i}` as Parameters<
-													typeof t
-												>[0],
-											)}
+											{t(`decisionMatrix.whenTypesenseCloud.items.${i}` as Parameters<typeof t>[0])}
 										</span>
 									</li>
 								))}

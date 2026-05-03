@@ -104,9 +104,7 @@ export function RecommendationsGraphRAG({
 
 				{results.length > 0 && (
 					<div className="space-y-4">
-						<h4 className="font-medium">
-							{tr("recommendations.graphRag.recommendations")}
-						</h4>
+						<h4 className="font-medium">{tr("recommendations.graphRag.recommendations")}</h4>
 						{results.map((item) => (
 							<div key={item.id} className="space-y-2 p-4 rounded-lg border">
 								<div className="flex items-center justify-between">
@@ -116,9 +114,7 @@ export function RecommendationsGraphRAG({
 									</span>
 								</div>
 								<div className="text-sm text-muted-foreground">
-									<span className="font-medium">
-										{tr("recommendations.graphRag.explanation")}:
-									</span>{" "}
+									<span className="font-medium">{tr("recommendations.graphRag.explanation")}:</span>{" "}
 									{item.explanation}
 								</div>
 							</div>

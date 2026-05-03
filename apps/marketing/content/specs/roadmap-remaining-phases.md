@@ -19,11 +19,11 @@
 - Route: `apps/marketing/app/[locale]/admin/roadmap/page.tsx`
 - Authentication: protect with existing admin middleware / role check
 - Features:
-    - List all roadmap items with status, vote count, quarter
-    - Add new item: title, description, status dropdown (shipped/inProgress/planned), quarter, icon selector
-    - Edit existing item: all fields editable
-    - Reorder items within a status group (drag-and-drop or move up/down)
-    - Delete item with confirmation
+  - List all roadmap items with status, vote count, quarter
+  - Add new item: title, description, status dropdown (shipped/inProgress/planned), quarter, icon selector
+  - Edit existing item: all fields editable
+  - Reorder items within a status group (drag-and-drop or move up/down)
+  - Delete item with confirmation
 - Data: currently hardcoded in RoadmapGrid.tsx — Phase 3 can keep hardcoded data OR implement Prisma model (Phase 6)
 - i18n: admin UI labels in `admin.json` under `roadmap` key
 
@@ -40,12 +40,12 @@
 
 - When a user clicks "Vote" on a feature they haven't voted for yet, show an email capture modal (first time only)
 - Modal content:
-    - Title: "Shape what we build next"
-    - Description: "Vote to prioritize features and get early access updates. Join 700+ search teams."
-    - Email input field
-    - "Subscribe & Vote" button
-    - "No thanks, just vote" link (dismisses, allows voting anyway)
-    - Privacy note: "No spam. Unsubscribe anytime."
+  - Title: "Shape what we build next"
+  - Description: "Vote to prioritize features and get early access updates. Join 700+ search teams."
+  - Email input field
+  - "Subscribe & Vote" button
+  - "No thanks, just vote" link (dismisses, allows voting anyway)
+  - Privacy note: "No spam. Unsubscribe anytime."
 - Backend: POST endpoint to store email in newsletter list (or Mailchimp/webhook)
 - Cookie: track that user has been prompted (don't ask again)
 - i18n: keys under `roadmap.emailCapture.*` in marketing.json (all 5 locales)
@@ -82,7 +82,7 @@
 **Requirements**:
 
 - Prisma model `RoadmapItem`:
-    - `id`, `key` (slug), `title`, `description`, `status` (enum: shipped, inProgress, planned), `quarter`, `iconName`, `voteCount`, `sortOrder`, `changelogSlug` (nullable), `createdAt`, `updatedAt`
+  - `id`, `key` (slug), `title`, `description`, `status` (enum: shipped, inProgress, planned), `quarter`, `iconName`, `voteCount`, `sortOrder`, `changelogSlug` (nullable), `createdAt`, `updatedAt`
 - Migration: seed initial 12 items from hardcoded data
 - Replace `ALL_ITEMS` constant in RoadmapGrid.tsx with server-side data fetch
 - Status badge updates: when an item moves to "shipped", show a "See changelog →" link

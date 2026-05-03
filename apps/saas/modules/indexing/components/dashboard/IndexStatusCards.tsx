@@ -89,11 +89,7 @@ export function IndexStatusCards({
 				label={t("todaySearches")}
 				value={todaySearches.toLocaleString()}
 			/>
-			<StatCard
-				icon={<HardDrive className="size-4" />}
-				label={t("size")}
-				value={sizeDisplay}
-			/>
+			<StatCard icon={<HardDrive className="size-4" />} label={t("size")} value={sizeDisplay} />
 			<StatCard
 				icon={<Clock className="size-4" />}
 				label={t("avgLatency")}

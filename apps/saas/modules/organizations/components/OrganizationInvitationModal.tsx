@@ -57,8 +57,7 @@ export function OrganizationInvitationModal({
 				router.replace("/");
 			}
 		} catch (err) {
-			const msg =
-				err instanceof Error ? err.message : t("organizations.invitationModal.error");
+			const msg = err instanceof Error ? err.message : t("organizations.invitationModal.error");
 			toastError(msg);
 		} finally {
 			setSubmitting(false);
@@ -67,9 +66,7 @@ export function OrganizationInvitationModal({
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">
-				{t("organizations.invitationModal.title")}
-			</h1>
+			<h1 className="font-bold text-xl md:text-2xl">{t("organizations.invitationModal.title")}</h1>
 			<p className="mt-1 mb-6 text-foreground/60">
 				{t("organizations.invitationModal.description", {
 					organizationName,
@@ -78,11 +75,7 @@ export function OrganizationInvitationModal({
 
 			<Card className="mb-6 rounded-lg border">
 				<CardContent className="gap-3 p-2 flex items-center">
-					<OrganizationLogo
-						name={organizationName}
-						logoUrl={logoUrl}
-						className="size-12"
-					/>
+					<OrganizationLogo name={organizationName} logoUrl={logoUrl} className="size-12" />
 					<div>
 						<strong className="font-medium text-lg">{organizationName}</strong>
 					</div>

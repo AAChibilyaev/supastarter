@@ -11,213 +11,213 @@
 name: aacsearch
 
 services:
-    # ── Application ───────────────────────────────────────────────────────────
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        image: aacsearch/app:latest
-        container_name: aacsearch-app
-        restart: unless-stopped
-        ports:
-            - "${PORT:-3000}:3000"
-        environment:
-            NODE_ENV: production
+  # ── Application ───────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aacsearch/app:latest
+    container_name: aacsearch-app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
 
-            # Database — points to the postgres service defined below
-            DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-aacsearch}
+      # Database — points to the postgres service defined below
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-aacsearch}
 
-            # App URLs
-            NEXT_PUBLIC_SAAS_URL: ${NEXT_PUBLIC_SAAS_URL}
-            NEXT_PUBLIC_MARKETING_URL: ${NEXT_PUBLIC_MARKETING_URL:-${NEXT_PUBLIC_SAAS_URL}}
-            NEXT_PUBLIC_DOCS_URL: ${NEXT_PUBLIC_DOCS_URL:-${NEXT_PUBLIC_SAAS_URL}}
+      # App URLs
+      NEXT_PUBLIC_SAAS_URL: ${NEXT_PUBLIC_SAAS_URL}
+      NEXT_PUBLIC_MARKETING_URL: ${NEXT_PUBLIC_MARKETING_URL:-${NEXT_PUBLIC_SAAS_URL}}
+      NEXT_PUBLIC_DOCS_URL: ${NEXT_PUBLIC_DOCS_URL:-${NEXT_PUBLIC_SAAS_URL}}
 
-            # Auth
-            BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-            BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-}
-            GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
-            GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
-            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      # Auth
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_TRUSTED_ORIGINS: ${BETTER_AUTH_TRUSTED_ORIGINS:-}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
 
-            # Mail
-            MAIL_FROM: ${MAIL_FROM:-noreply@example.com}
-            RESEND_API_KEY: ${RESEND_API_KEY:-}
-            MAIL_HOST: ${MAIL_HOST:-}
-            MAIL_PORT: ${MAIL_PORT:-}
-            MAIL_USER: ${MAIL_USER:-}
-            MAIL_PASS: ${MAIL_PASS:-}
+      # Mail
+      MAIL_FROM: ${MAIL_FROM:-noreply@example.com}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      MAIL_HOST: ${MAIL_HOST:-}
+      MAIL_PORT: ${MAIL_PORT:-}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASS: ${MAIL_PASS:-}
 
-            # Storage — points to the minio service defined below
-            S3_ENDPOINT: http://minio:9000
-            S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
-            S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
-            S3_REGION: ${S3_REGION:-us-east-1}
-            NEXT_PUBLIC_AVATARS_BUCKET_NAME: ${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars}
+      # Storage — points to the minio service defined below
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
+      S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      NEXT_PUBLIC_AVATARS_BUCKET_NAME: ${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars}
 
-            # Typesense — points to the typesense service defined below
-            TYPESENSE_HOST: typesense
-            TYPESENSE_PORT: "8108"
-            TYPESENSE_PROTOCOL: http
-            TYPESENSE_ADMIN_API_KEY: ${TYPESENSE_ADMIN_API_KEY}
+      # Typesense — points to the typesense service defined below
+      TYPESENSE_HOST: typesense
+      TYPESENSE_PORT: "8108"
+      TYPESENSE_PROTOCOL: http
+      TYPESENSE_ADMIN_API_KEY: ${TYPESENSE_ADMIN_API_KEY}
 
-            # Cron secrets (used by cron-worker to call /api/cron/* endpoints)
-            SEARCH_CRON_SECRET: ${SEARCH_CRON_SECRET}
-            WALLET_CRON_SECRET: ${WALLET_CRON_SECRET:-}
+      # Cron secrets (used by cron-worker to call /api/cron/* endpoints)
+      SEARCH_CRON_SECRET: ${SEARCH_CRON_SECRET}
+      WALLET_CRON_SECRET: ${WALLET_CRON_SECRET:-}
 
-            # AI
-            OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # AI
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
 
-            # Payments (optional — configure one provider)
-            STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
-            STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
-            LEMONSQUEEZY_API_KEY: ${LEMONSQUEEZY_API_KEY:-}
-            LEMONSQUEEZY_WEBHOOK_SECRET: ${LEMONSQUEEZY_WEBHOOK_SECRET:-}
-            LEMONSQUEEZY_STORE_ID: ${LEMONSQUEEZY_STORE_ID:-}
-            PRICE_ID_PRO_MONTHLY: ${PRICE_ID_PRO_MONTHLY:-}
-            PRICE_ID_PRO_YEARLY: ${PRICE_ID_PRO_YEARLY:-}
-            PRICE_ID_LIFETIME: ${PRICE_ID_LIFETIME:-}
+      # Payments (optional — configure one provider)
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      LEMONSQUEEZY_API_KEY: ${LEMONSQUEEZY_API_KEY:-}
+      LEMONSQUEEZY_WEBHOOK_SECRET: ${LEMONSQUEEZY_WEBHOOK_SECRET:-}
+      LEMONSQUEEZY_STORE_ID: ${LEMONSQUEEZY_STORE_ID:-}
+      PRICE_ID_PRO_MONTHLY: ${PRICE_ID_PRO_MONTHLY:-}
+      PRICE_ID_PRO_YEARLY: ${PRICE_ID_PRO_YEARLY:-}
+      PRICE_ID_LIFETIME: ${PRICE_ID_LIFETIME:-}
 
-            # Sentry (optional)
-            NEXT_PUBLIC_SENTRY_DSN: ${SENTRY_DSN:-}
-            SENTRY_DSN: ${SENTRY_DSN:-}
-            SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+      # Sentry (optional)
+      NEXT_PUBLIC_SENTRY_DSN: ${SENTRY_DSN:-}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
 
-        depends_on:
-            postgres:
-                condition: service_healthy
-            typesense:
-                condition: service_healthy
-            minio:
-                condition: service_healthy
-        networks:
-            - internal
-            - public
-        healthcheck:
-            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:3000/api/health"]
-            interval: 30s
-            timeout: 10s
-            start_period: 90s
-            retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      typesense:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - internal
+      - public
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 90s
+      retries: 3
 
-    # ── Cron worker ───────────────────────────────────────────────────────────
-    # Calls the Next.js cron endpoints on a schedule.
-    # Uses busybox crond (already in alpine) — no extra image needed.
-    cron-worker:
-        image: alpine:3.20
-        container_name: aacsearch-cron
-        restart: unless-stopped
-        environment:
-            APP_URL: http://app:3000
-            SEARCH_CRON_SECRET: ${SEARCH_CRON_SECRET}
-            WALLET_CRON_SECRET: ${WALLET_CRON_SECRET:-}
-        volumes:
-            - ./deploy/cron/crontab:/etc/crontabs/root:ro
-        entrypoint: >
-            /bin/sh -c "
-            apk add --no-cache curl &&
-            crond -f -d 8
-            "
-        depends_on:
-            app:
-                condition: service_healthy
-        networks:
-            - internal
+  # ── Cron worker ───────────────────────────────────────────────────────────
+  # Calls the Next.js cron endpoints on a schedule.
+  # Uses busybox crond (already in alpine) — no extra image needed.
+  cron-worker:
+    image: alpine:3.20
+    container_name: aacsearch-cron
+    restart: unless-stopped
+    environment:
+      APP_URL: http://app:3000
+      SEARCH_CRON_SECRET: ${SEARCH_CRON_SECRET}
+      WALLET_CRON_SECRET: ${WALLET_CRON_SECRET:-}
+    volumes:
+      - ./deploy/cron/crontab:/etc/crontabs/root:ro
+    entrypoint: >
+      /bin/sh -c "
+      apk add --no-cache curl &&
+      crond -f -d 8
+      "
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - internal
 
-    # ── PostgreSQL ────────────────────────────────────────────────────────────
-    postgres:
-        image: postgres:16-alpine
-        container_name: aacsearch-postgres
-        restart: unless-stopped
-        environment:
-            POSTGRES_USER: ${DB_USER:-postgres}
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
-            POSTGRES_DB: ${DB_NAME:-aacsearch}
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
-        networks:
-            - internal
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: aacsearch-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-aacsearch}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-    # ── MinIO (S3-compatible object storage) ──────────────────────────────────
-    minio:
-        image: minio/minio:latest
-        container_name: aacsearch-minio
-        restart: unless-stopped
-        command: server /data --console-address ":9001"
-        environment:
-            MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-        ports:
-            - "${MINIO_CONSOLE_PORT:-9001}:9001"
-        volumes:
-            - minio_data:/data
-        networks:
-            - internal
-        healthcheck:
-            test: ["CMD", "mc", "ready", "local"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+  # ── MinIO (S3-compatible object storage) ──────────────────────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: aacsearch-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-    # Creates the avatars bucket on first start
-    minio-setup:
-        image: minio/mc:latest
-        container_name: aacsearch-minio-setup
-        entrypoint: >
-            /bin/sh -c "
-            mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD};
-            mc mb local/${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars} --ignore-existing;
-            mc anonymous set download local/${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars};
-            echo 'Bucket setup complete';
-            exit 0;
-            "
-        depends_on:
-            minio:
-                condition: service_healthy
-        networks:
-            - internal
+  # Creates the avatars bucket on first start
+  minio-setup:
+    image: minio/mc:latest
+    container_name: aacsearch-minio-setup
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD};
+      mc mb local/${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars} --ignore-existing;
+      mc anonymous set download local/${NEXT_PUBLIC_AVATARS_BUCKET_NAME:-avatars};
+      echo 'Bucket setup complete';
+      exit 0;
+      "
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - internal
 
-    # ── Typesense ─────────────────────────────────────────────────────────────
-    typesense:
-        image: typesense/typesense:30.2
-        container_name: aacsearch-typesense
-        restart: unless-stopped
-        command: >
-            --data-dir /data
-            --api-key=${TYPESENSE_ADMIN_API_KEY}
-            --enable-cors
-        volumes:
-            - typesense_data:/data
-        networks:
-            - internal
-        healthcheck:
-            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+  # ── Typesense ─────────────────────────────────────────────────────────────
+  typesense:
+    image: typesense/typesense:30.2
+    container_name: aacsearch-typesense
+    restart: unless-stopped
+    command: >
+      --data-dir /data
+      --api-key=${TYPESENSE_ADMIN_API_KEY}
+      --enable-cors
+    volumes:
+      - typesense_data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
-    internal:
-        driver: bridge
-        enable_ipv6: true
-        ipam:
-            config:
-                - subnet: 172.21.0.0/16
-                - subnet: fd00:dead:beef:21::/56
-    public:
-        driver: bridge
-        enable_ipv6: true
-        ipam:
-            config:
-                - subnet: 172.22.0.0/16
-                - subnet: fd00:dead:beef:22::/56
+  internal:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+        - subnet: fd00:dead:beef:21::/56
+  public:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+        - subnet: fd00:dead:beef:22::/56
 
 volumes:
-    postgres_data:
-    minio_data:
-    typesense_data:
+  postgres_data:
+  minio_data:
+  typesense_data:

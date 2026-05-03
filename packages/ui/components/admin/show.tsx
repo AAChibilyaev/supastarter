@@ -161,9 +161,7 @@ export const ShowView = ({
 					{title !== undefined ? title : context.defaultTitle}
 				</h2>
 				{actions ?? (
-					<div className="flex items-center justify-end">
-						{hasEdit ? <EditButton /> : null}
-					</div>
+					<div className="flex items-center justify-end">{hasEdit ? <EditButton /> : null}</div>
 				)}
 			</div>
 			<div className="my-2">{children}</div>

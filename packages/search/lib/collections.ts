@@ -4,6 +4,7 @@ import type { CollectionCreateSchema } from "typesense/lib/Typesense/Collections
 
 import { config } from "../config";
 import { getTypesenseClient } from "./client";
+import { typesenseFetch } from "./synonyms-sync";
 
 function sanitize(value: string): string {
 	return value.replace(/[^a-zA-Z0-9]/g, "_");
@@ -35,6 +36,8 @@ export interface CollectionFieldInput {
 	sort?: boolean;
 	num_dim?: number;
 	hnsw_params?: HnswParams;
+	/** When true, the field value is truncated to fit within the token limit */
+	truncate?: boolean;
 }
 
 export interface CreatePhysicalCollectionInput {
@@ -123,6 +126,29 @@ export async function dropCollection(name: string) {
 	} catch (error) {
 		logger.warn("Could not drop collection", { name, error });
 	}
+}
+
+export async function cloneCollection(
+	name: string,
+	newName: string,
+	copyDocuments: boolean,
+): Promise<{ name: string }> {
+	const client = getTypesenseClient();
+
+	const existing = await client.collections(name).exists();
+	if (!existing) {
+		throw new Error(`Source collection "${name}" does not exist`);
+	}
+
+	const result = await typesenseFetch<{ name: string }>(
+		"POST",
+		`/collections/${encodeURIComponent(name)}/clone`,
+		{
+			copy_documents: copyDocuments,
+		},
+	);
+
+	return result;
 }
 
 export async function dropOldVersions(organizationId: string, slug: string, keepVersion: number) {

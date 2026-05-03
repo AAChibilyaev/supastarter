@@ -121,9 +121,7 @@ export function analyzeQuery(query: string, options?: PipelineOptions): SearchPi
 		: normalizedQuery;
 
 	// Step 5: Stemming
-	const stemmedTerms = opts.enableStemming
-		? tokens.map((t) => stem(t, detectedLanguage))
-		: tokens;
+	const stemmedTerms = opts.enableStemming ? tokens.map((t) => stem(t, detectedLanguage)) : tokens;
 
 	// Step 6: Synonym expansion
 	let expandedQueries: string[] | undefined;

@@ -95,10 +95,7 @@ export function OnboardingForm() {
 				},
 				{
 					component: (
-						<OnboardingApiKeyStep
-							indexSlug={indexSlug}
-							onCompleted={() => onCompleted()}
-						/>
+						<OnboardingApiKeyStep indexSlug={indexSlug} onCompleted={() => onCompleted()} />
 					),
 				},
 			];

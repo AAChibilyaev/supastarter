@@ -199,9 +199,7 @@ function buildFieldSchema(fields: SchemaField[]) {
 		switch (f.type) {
 			case "int32":
 			case "int64":
-				shape[f.name] = f.optional
-					? z.coerce.number().int().optional()
-					: z.coerce.number().int();
+				shape[f.name] = f.optional ? z.coerce.number().int().optional() : z.coerce.number().int();
 				break;
 			case "float":
 				shape[f.name] = f.optional ? z.coerce.number().optional() : z.coerce.number();
@@ -500,10 +498,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			setColumnFilters([
 				{ id: filterField, value: { operator: filterOperator, value: filterValue } },
 			]);
-		} else if (
-			filterField &&
-			(filterOperator === "not_empty" || filterOperator === "is_empty")
-		) {
+		} else if (filterField && (filterOperator === "not_empty" || filterOperator === "is_empty")) {
 			setColumnFilters([{ id: filterField, value: { operator: filterOperator } }]);
 		} else {
 			setColumnFilters([]);
@@ -658,9 +653,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 			setBulkEditValue("");
 		},
 		onError: (error) => {
-			toastError(
-				error instanceof Error ? error.message : t("search.documents.bulkEditError"),
-			);
+			toastError(error instanceof Error ? error.message : t("search.documents.bulkEditError"));
 		},
 	});
 
@@ -690,8 +683,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							parsedValue = rawValue === "" ? null : Number.parseFloat(rawValue);
 							break;
 						case "bool":
-							parsedValue =
-								rawValue === "true" ? true : rawValue === "false" ? false : null;
+							parsedValue = rawValue === "true" ? true : rawValue === "false" ? false : null;
 							break;
 						default:
 							parsedValue = rawValue;
@@ -822,9 +814,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							// Shift+click range selection
 							if (e.shiftKey && lastClickedIndexRef.current !== null) {
 								e.preventDefault();
-								const currentIndex = rows.findIndex(
-									(r) => r.id === row.original.id,
-								);
+								const currentIndex = rows.findIndex((r) => r.id === row.original.id);
 								if (currentIndex === -1) return;
 								const start = Math.min(lastClickedIndexRef.current, currentIndex);
 								const end = Math.max(lastClickedIndexRef.current, currentIndex);
@@ -836,9 +826,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								setRowSelection(newSelection);
 								return;
 							}
-							lastClickedIndexRef.current = rows.findIndex(
-								(r) => r.id === row.original.id,
-							);
+							lastClickedIndexRef.current = rows.findIndex((r) => r.id === row.original.id);
 						}}
 					/>
 				),
@@ -947,10 +935,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 
 	// ── Bulk actions ────────────────────────────────────────────────────────
 
-	const selectedRows = useMemo(
-		() => rows.filter((r) => rowSelection[r.id]),
-		[rows, rowSelection],
-	);
+	const selectedRows = useMemo(() => rows.filter((r) => rowSelection[r.id]), [rows, rowSelection]);
 
 	const selectedDocuments = useMemo(
 		() => selectedRows.map((r) => ({ id: r.id, ...r.document })),
@@ -1022,9 +1007,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 				setRowSelection({});
 			})
 			.catch((error) => {
-				toastError(
-					error instanceof Error ? error.message : t("search.documents.bulkEditError"),
-				);
+				toastError(error instanceof Error ? error.message : t("search.documents.bulkEditError"));
 			});
 	};
 
@@ -1203,9 +1186,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end" className="max-h-60 overflow-y-auto">
-							<DropdownMenuLabel>
-								{t("search.documents.toggleColumns")}
-							</DropdownMenuLabel>
+							<DropdownMenuLabel>{t("search.documents.toggleColumns")}</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							{table.getAllLeafColumns().map((col) => {
 								if (col.id === "select") return null;
@@ -1265,9 +1246,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						<DialogContent>
 							<DialogHeader>
 								<DialogTitle>{t("search.documents.importCsv")}</DialogTitle>
-								<DialogDescription>
-									{t("search.documents.importCsvDescription")}
-								</DialogDescription>
+								<DialogDescription>{t("search.documents.importCsvDescription")}</DialogDescription>
 							</DialogHeader>
 							<div className="space-y-4">
 								<div className="gap-4 flex items-center">
@@ -1292,9 +1271,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 									<Select
 										value={importAction}
 										onValueChange={(val) =>
-											setImportAction(
-												val as "create" | "update" | "upsert" | "emplace",
-											)
+											setImportAction(val as "create" | "update" | "upsert" | "emplace")
 										}
 									>
 										<SelectTrigger>
@@ -1377,9 +1354,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 									<SelectItem key={f.name} value={f.name}>
 										<span className="gap-2 inline-flex items-center">
 											{f.name}
-											<span className="text-[10px] text-muted-foreground">
-												{f.type}
-											</span>
+											<span className="text-[10px] text-muted-foreground">{f.type}</span>
 										</span>
 									</SelectItem>
 								))}
@@ -1408,17 +1383,11 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								<div className="min-w-[150px] flex-1">
 									<Select value={filterValue} onValueChange={setFilterValue}>
 										<SelectTrigger className="h-8">
-											<SelectValue
-												placeholder={t("search.documents.selectValue")}
-											/>
+											<SelectValue placeholder={t("search.documents.selectValue")} />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="true">
-												{t("search.documents.true")}
-											</SelectItem>
-											<SelectItem value="false">
-												{t("search.documents.false")}
-											</SelectItem>
+											<SelectItem value="true">{t("search.documents.true")}</SelectItem>
+											<SelectItem value="false">{t("search.documents.false")}</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
@@ -1454,9 +1423,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						<Button
 							variant="destructive"
 							size="sm"
-							disabled={
-								!filterField || !filterOperator || deleteByFilterMutation.isPending
-							}
+							disabled={!filterField || !filterOperator || deleteByFilterMutation.isPending}
 							loading={deleteByFilterMutation.isPending}
 							onClick={handleDeleteByFilter}
 						>
@@ -1501,9 +1468,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 													<DraggableColumnHeader
 														key={header.id}
 														id={header.column.id}
-														isDragDisabled={
-															header.column.id === "select"
-														}
+														isDragDisabled={header.column.id === "select"}
 													>
 														<TableHead
 															style={{ width: header.getSize() }}
@@ -1515,17 +1480,12 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 															onClick={header.column.getToggleSortingHandler()}
 														>
 															<div className="gap-1 flex items-center">
-																{flexRender(
-																	header.column.columnDef.header,
-																	header.getContext(),
-																)}
+																{flexRender(header.column.columnDef.header, header.getContext())}
 																{header.column.getCanSort() && (
 																	<span className="flex shrink-0 items-center">
-																		{header.column.getIsSorted() ===
-																		"asc" ? (
+																		{header.column.getIsSorted() === "asc" ? (
 																			<ArrowUpIcon className="size-3 text-primary" />
-																		) : header.column.getIsSorted() ===
-																		  "desc" ? (
+																		) : header.column.getIsSorted() === "desc" ? (
 																			<ArrowDownIcon className="size-3 text-primary" />
 																		) : (
 																			<ArrowUpDown className="size-3 text-foreground/20" />
@@ -1533,11 +1493,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 																	</span>
 																)}
 																{header.column.getIsSorted() &&
-																	header.column.getSortIndex() >
-																		0 && (
+																	header.column.getSortIndex() > 0 && (
 																		<span className="size-3.5 font-mono inline-flex items-center justify-center rounded-full bg-muted-foreground/20 text-[10px] leading-none text-foreground/60">
-																			{header.column.getSortIndex() +
-																				1}
+																			{header.column.getSortIndex() + 1}
 																		</span>
 																	)}
 															</div>
@@ -1545,9 +1503,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 																// oxlint-disable-next-line jsx-a11y/no-static-element-interactions
 																<div
 																	role="separator"
-																	onDoubleClick={() =>
-																		header.column.resetSize()
-																	}
+																	onDoubleClick={() => header.column.resetSize()}
 																	onMouseDown={header.getResizeHandler()}
 																	onTouchStart={header.getResizeHandler()}
 																	className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
@@ -1576,9 +1532,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 												key={row.id}
 												className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
 												onClick={() => {
-													const docRow = rows.find(
-														(r) => r.id === row.original.id,
-													);
+													const docRow = rows.find((r) => r.id === row.original.id);
 													if (docRow) openEditSheet(docRow);
 												}}
 											>
@@ -1588,23 +1542,12 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														cellEdit?.rowId === row.original.id &&
 														cellEdit?.fieldName === fieldName;
 													return (
-														<TableCell
-															key={cell.id}
-															className={isEditing ? "p-0" : ""}
-														>
+														<TableCell key={cell.id} className={isEditing ? "p-0" : ""}>
 															{isEditing ? (
 																<InlineCellEditor
-																	field={documentFields.find(
-																		(f) => f.name === fieldName,
-																	)}
+																	field={documentFields.find((f) => f.name === fieldName)}
 																	value={cell.getValue()}
-																	onSave={(val) =>
-																		handleCellSave(
-																			row.original.id,
-																			fieldName,
-																			val,
-																		)
-																	}
+																	onSave={(val) => handleCellSave(row.original.id, fieldName, val)}
 																	onCancel={handleCancelEdit}
 																	onNext={moveToNextCell}
 																	onPrev={moveToPrevCell}
@@ -1623,10 +1566,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 																		);
 																	}}
 																>
-																	{flexRender(
-																		cell.column.columnDef.cell,
-																		cell.getContext(),
-																	)}
+																	{flexRender(cell.column.columnDef.cell, cell.getContext())}
 																</div>
 															)}
 														</TableCell>
@@ -1674,11 +1614,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								{t("search.documents.duplicateRow")}
 							</Button>
 						)}
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => setBulkEditDialogOpen(true)}
-						>
+						<Button variant="ghost" size="sm" onClick={() => setBulkEditDialogOpen(true)}>
 							<PencilIcon className="size-3.5" />
 							{t("search.documents.bulkEdit")}
 						</Button>
@@ -1709,18 +1645,14 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							</label>
 							<Select value={bulkEditField} onValueChange={setBulkEditField}>
 								<SelectTrigger className="w-full">
-									<SelectValue
-										placeholder={t("search.documents.bulkEditFieldPlaceholder")}
-									/>
+									<SelectValue placeholder={t("search.documents.bulkEditFieldPlaceholder")} />
 								</SelectTrigger>
 								<SelectContent>
 									{documentFields.map((f) => (
 										<SelectItem key={f.name} value={f.name}>
 											<span className="gap-2 inline-flex items-center">
 												{f.name}
-												<span className="text-[10px] text-muted-foreground">
-													{f.type}
-												</span>
+												<span className="text-[10px] text-muted-foreground">{f.type}</span>
 											</span>
 										</SelectItem>
 									))}
@@ -1750,11 +1682,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 						>
 							{t("search.documents.cancel")}
 						</Button>
-						<Button
-							variant="primary"
-							disabled={!bulkEditField}
-							onClick={handleBulkEdit}
-						>
+						<Button variant="primary" disabled={!bulkEditField} onClick={handleBulkEdit}>
 							<PencilIcon className="size-3.5" />
 							{t("search.documents.bulkEditApply")}
 						</Button>
@@ -1802,11 +1730,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 											e.preventDefault();
 											if (page > 1) setPage(page - 1);
 										}}
-										className={
-											page <= 1
-												? "pointer-events-none opacity-50"
-												: "cursor-pointer"
-										}
+										className={page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
 									/>
 								</PaginationItem>
 
@@ -1815,10 +1739,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 									const items: React.ReactNode[] = [];
 									const maxVisible = 5;
 									let startPage = Math.max(1, page - Math.floor(maxVisible / 2));
-									const endPage = Math.min(
-										totalPages,
-										startPage + maxVisible - 1,
-									);
+									const endPage = Math.min(totalPages, startPage + maxVisible - 1);
 									if (endPage - startPage < maxVisible - 1) {
 										startPage = Math.max(1, endPage - maxVisible + 1);
 									}
@@ -1896,9 +1817,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 											if (page < totalPages) setPage(page + 1);
 										}}
 										className={
-											page >= totalPages
-												? "pointer-events-none opacity-50"
-												: "cursor-pointer"
+											page >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"
 										}
 									/>
 								</PaginationItem>
@@ -1946,30 +1865,18 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														<select
 															name={formField.name}
 															className="h-9 px-3 py-2 text-sm shadow-xs flex w-full rounded-md border border-input bg-card ring-offset-background focus:ring-1 focus:ring-ring focus:outline-hidden"
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
 															onChange={(e) => {
 																const val = e.target.value;
 																formField.onChange(
-																	val === "true"
-																		? true
-																		: val === "false"
-																			? false
-																			: val,
+																	val === "true" ? true : val === "false" ? false : val,
 																);
 															}}
 														>
-															<option value="">
-																{t("search.documents.notSet")}
-															</option>
-															<option value="true">
-																{t("search.documents.true")}
-															</option>
-															<option value="false">
-																{t("search.documents.false")}
-															</option>
+															<option value="">{t("search.documents.notSet")}</option>
+															<option value="true">{t("search.documents.true")}</option>
+															<option value="false">{t("search.documents.false")}</option>
 														</select>
 													) : field.type === "int32" ||
 													  field.type === "int64" ||
@@ -1977,27 +1884,17 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 														<Input
 															name={formField.name}
 															type="number"
-															step={
-																field.type === "float" ? "any" : "1"
-															}
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															step={field.type === "float" ? "any" : "1"}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
-															onChange={(e) =>
-																formField.onChange(e.target.value)
-															}
+															onChange={(e) => formField.onChange(e.target.value)}
 														/>
 													) : (
 														<Input
 															name={formField.name}
-															value={stringifyInputValue(
-																formField.value,
-															)}
+															value={stringifyInputValue(formField.value)}
 															onBlur={formField.onBlur}
-															onChange={(e) =>
-																formField.onChange(e.target.value)
-															}
+															onChange={(e) => formField.onChange(e.target.value)}
 														/>
 													)}
 												</FormControl>
@@ -2019,18 +1916,10 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 								)}
 
 								<SheetFooter>
-									<Button
-										variant="ghost"
-										type="button"
-										onClick={() => setEditSheetOpen(false)}
-									>
+									<Button variant="ghost" type="button" onClick={() => setEditSheetOpen(false)}>
 										{t("search.documents.cancel")}
 									</Button>
-									<Button
-										variant="primary"
-										type="submit"
-										loading={upsertMutation.isPending}
-									>
+									<Button variant="primary" type="submit" loading={upsertMutation.isPending}>
 										<Edit3Icon className="size-3.5" />
 										{t("search.documents.save")}
 									</Button>

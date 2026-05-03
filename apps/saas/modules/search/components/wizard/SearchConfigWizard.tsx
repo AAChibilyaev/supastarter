@@ -256,10 +256,7 @@ export function SearchConfigWizard({
 						</div>
 						{idx < STEPS.length - 1 && (
 							<div
-								className={cn(
-									"h-px flex-1",
-									currentStep > step.id ? "bg-primary" : "bg-border",
-								)}
+								className={cn("h-px flex-1", currentStep > step.id ? "bg-primary" : "bg-border")}
 							/>
 						)}
 					</div>
@@ -291,26 +288,17 @@ export function SearchConfigWizard({
 							onChange={(patch) => {
 								if (patch.searchableFields !== undefined)
 									setSearchableFields(patch.searchableFields);
-								if (patch.fieldWeights !== undefined)
-									setFieldWeights(patch.fieldWeights);
-								if (patch.typoTolerance !== undefined)
-									setTypoTolerance(patch.typoTolerance);
-								if (patch.prefixSearch !== undefined)
-									setPrefixSearch(patch.prefixSearch);
-								if (patch.infixSearch !== undefined)
-									setInfixSearch(patch.infixSearch);
+								if (patch.fieldWeights !== undefined) setFieldWeights(patch.fieldWeights);
+								if (patch.typoTolerance !== undefined) setTypoTolerance(patch.typoTolerance);
+								if (patch.prefixSearch !== undefined) setPrefixSearch(patch.prefixSearch);
+								if (patch.infixSearch !== undefined) setInfixSearch(patch.infixSearch);
 								if (patch.exactMatch !== undefined) setExactMatch(patch.exactMatch);
 							}}
 							t={t}
 						/>
 					)}
 					{currentStep === 4 && (
-						<StepFacets
-							fields={fields}
-							configs={facetConfig}
-							onChange={setFacetConfig}
-							t={t}
-						/>
+						<StepFacets fields={fields} configs={facetConfig} onChange={setFacetConfig} t={t} />
 					)}
 					{currentStep === 5 && (
 						<StepPreview
@@ -392,17 +380,11 @@ function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: Step
 							<CardContent className="gap-4 p-4 sm:flex-row sm:items-center flex flex-col">
 								<div className="min-w-0 flex-1">
 									<p className="font-medium">{index.displayName}</p>
-									<p className="text-sm text-muted-foreground">
-										{index.apiKeysCount} keys
-									</p>
+									<p className="text-sm text-muted-foreground">{index.apiKeysCount} keys</p>
 								</div>
 								<div className="gap-2 flex shrink-0 items-center">
-									<span className="text-xs text-muted-foreground">
-										slug: {index.slug}
-									</span>
-									{selectedSlug === index.slug && (
-										<CheckIcon className="size-5 text-primary" />
-									)}
+									<span className="text-xs text-muted-foreground">slug: {index.slug}</span>
+									{selectedSlug === index.slug && <CheckIcon className="size-5 text-primary" />}
 								</div>
 							</CardContent>
 						</Card>
@@ -466,9 +448,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 							<tbody>
 								{fields.map((field, idx) => (
 									<tr key={field.name} className="border-b last:border-0">
-										<td className="px-4 py-2 font-mono text-xs">
-											{field.name}
-										</td>
+										<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
 										<td className="px-4 py-2">
 											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
 												{field.type}
@@ -485,9 +465,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.index && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.index && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -501,9 +479,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.facet && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.facet && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -517,9 +493,7 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.sort && (
-													<CheckIcon className="size-4 p-0.5" />
-												)}
+												{field.sort && <CheckIcon className="size-4 p-0.5" />}
 											</button>
 										</td>
 									</tr>
@@ -609,9 +583,7 @@ function StepSearchConfig({
 								<tbody>
 									{stringFields.map((field) => (
 										<tr key={field.name} className="border-b last:border-0">
-											<td className="px-4 py-2 font-mono text-xs">
-												{field.name}
-											</td>
+											<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
 											<td className="px-4 py-2 text-center">
 												<button
 													type="button"
@@ -634,15 +606,8 @@ function StepSearchConfig({
 													min={1}
 													max={100}
 													value={fieldWeights[field.name] ?? 1}
-													onChange={(e) =>
-														setWeight(
-															field.name,
-															Number(e.target.value),
-														)
-													}
-													disabled={
-														!searchableFields.includes(field.name)
-													}
+													onChange={(e) => setWeight(field.name, Number(e.target.value))}
+													disabled={!searchableFields.includes(field.name)}
 													className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
 												/>
 											</td>
@@ -653,9 +618,7 @@ function StepSearchConfig({
 						</CardContent>
 					</Card>
 				) : (
-					<p className="py-4 text-sm text-center text-muted-foreground">
-						{t("noStringFields")}
-					</p>
+					<p className="py-4 text-sm text-center text-muted-foreground">{t("noStringFields")}</p>
 				)}
 			</div>
 
@@ -663,9 +626,7 @@ function StepSearchConfig({
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
 				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">
-							{t("typoTolerance")}
-						</label>
+						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}
@@ -795,9 +756,7 @@ function StepPreview({
 						<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 							{t("summaryIndex")}
 						</p>
-						<p className="text-sm font-medium">
-							{activeIndexName || selectedIndexSlug}
-						</p>
+						<p className="text-sm font-medium">{activeIndexName || selectedIndexSlug}</p>
 					</div>
 					<div className="gap-4 sm:grid-cols-2 grid">
 						<div>
@@ -842,9 +801,7 @@ function StepPreview({
 							<label className="text-xs text-muted-foreground">{t("theme")}</label>
 							<select
 								value={theme}
-								onChange={(e) =>
-									onThemeChange(e.target.value as "light" | "dark" | "auto")
-								}
+								onChange={(e) => onThemeChange(e.target.value as "light" | "dark" | "auto")}
 								className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
 							>
 								<option value="light">{t("themeLight")}</option>
@@ -853,9 +810,7 @@ function StepPreview({
 							</select>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">
-								{t("accentColor")}
-							</label>
+							<label className="text-xs text-muted-foreground">{t("accentColor")}</label>
 							<div className="gap-2 flex items-center">
 								<input
 									type="color"
@@ -872,9 +827,7 @@ function StepPreview({
 							</div>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">
-								{t("placeholder")}
-							</label>
+							<label className="text-xs text-muted-foreground">{t("placeholder")}</label>
 							<input
 								type="text"
 								value={placeholder}
@@ -883,9 +836,7 @@ function StepPreview({
 							/>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">
-								{t("resultsPerPage")}
-							</label>
+							<label className="text-xs text-muted-foreground">{t("resultsPerPage")}</label>
 							<input
 								type="number"
 								min={5}

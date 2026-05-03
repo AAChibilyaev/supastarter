@@ -43,9 +43,7 @@ export const getModelConfig = protectedProcedure
 			typeof index.schema === "object" && index.schema !== null
 				? (index.schema as Record<string, unknown>)
 				: {};
-		const modelConfig = (schema as Record<string, unknown>)._modelConfig as
-			| ModelConfig
-			| undefined;
+		const modelConfig = (schema as Record<string, unknown>)._modelConfig as ModelConfig | undefined;
 
 		return {
 			embeddingModel: modelConfig?.embeddingModel ?? "text-embedding-3-small",
@@ -94,9 +92,8 @@ export const updateModelConfig = protectedProcedure
 				: {};
 
 		const existing =
-			((schema as Record<string, unknown>)._modelConfig as
-				| Record<string, unknown>
-				| undefined) ?? {};
+			((schema as Record<string, unknown>)._modelConfig as Record<string, unknown> | undefined) ??
+			{};
 
 		const updated: ModelConfig = {
 			embeddingModel:
@@ -106,8 +103,7 @@ export const updateModelConfig = protectedProcedure
 			hybridAlpha: (input.hybridAlpha as number) ?? (existing.hybridAlpha as number) ?? 0.5,
 			enabled: (input.enabled as boolean) ?? (existing.enabled as boolean) ?? false,
 			azureApiUrl:
-				(input.azureApiUrl as string | undefined) ??
-				(existing.azureApiUrl as string | undefined),
+				(input.azureApiUrl as string | undefined) ?? (existing.azureApiUrl as string | undefined),
 			azureApiVersion:
 				(input.azureApiVersion as string | undefined) ??
 				(existing.azureApiVersion as string | undefined),
@@ -118,11 +114,9 @@ export const updateModelConfig = protectedProcedure
 				(input.openaiCompatibleApiKey as string | undefined) ??
 				(existing.openaiCompatibleApiKey as string | undefined),
 			gcpProjectId:
-				(input.gcpProjectId as string | undefined) ??
-				(existing.gcpProjectId as string | undefined),
+				(input.gcpProjectId as string | undefined) ?? (existing.gcpProjectId as string | undefined),
 			gcpRegion:
-				(input.gcpRegion as string | undefined) ??
-				(existing.gcpRegion as string | undefined),
+				(input.gcpRegion as string | undefined) ?? (existing.gcpRegion as string | undefined),
 		};
 
 		(schema as Record<string, unknown>)._modelConfig = updated;

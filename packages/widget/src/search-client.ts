@@ -163,17 +163,14 @@ export function createAacSearchClient(config: WidgetConfig) {
 			}>;
 			total: number;
 		}> {
-			return fetch(
-				`${baseUrl}/api/v1/indexes/${encodeURIComponent(config.indexSlug)}/suggest`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${config.apiKey}`,
-					},
-					body: JSON.stringify({ q, ...options }),
+			return fetch(`${baseUrl}/api/v1/indexes/${encodeURIComponent(config.indexSlug)}/suggest`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${config.apiKey}`,
 				},
-			).then(async (response) => {
+				body: JSON.stringify({ q, ...options }),
+			}).then(async (response) => {
 				if (!response.ok) {
 					const body = await response.text().catch(() => "");
 					throw new Error(

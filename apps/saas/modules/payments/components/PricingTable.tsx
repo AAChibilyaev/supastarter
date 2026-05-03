@@ -91,16 +91,10 @@ export function PricingTable({
 			if (!("prices" in plan)) continue;
 			const prices = (plan as PaidPlan).prices;
 			const monthlyPrice = prices.find(
-				(p) =>
-					p.type === "subscription" &&
-					p.interval === "month" &&
-					p.currency === localeCurrency,
+				(p) => p.type === "subscription" && p.interval === "month" && p.currency === localeCurrency,
 			);
 			const yearlyPrice = prices.find(
-				(p) =>
-					p.type === "subscription" &&
-					p.interval === "year" &&
-					p.currency === localeCurrency,
+				(p) => p.type === "subscription" && p.interval === "year" && p.currency === localeCurrency,
 			);
 			if (monthlyPrice && yearlyPrice) {
 				return Math.round((1 - yearlyPrice.amount / 12 / monthlyPrice.amount) * 100);
@@ -192,18 +186,13 @@ export function PricingTable({
 										{title}
 									</h3>
 									{description && (
-										<div className="prose mt-2 text-sm text-foreground/60">
-											{description}
-										</div>
+										<div className="prose mt-2 text-sm text-foreground/60">{description}</div>
 									)}
 
 									{!!features?.length && (
 										<ul className="mt-4 gap-2 text-sm grid list-none">
 											{features.map((feature, key) => (
-												<li
-													key={key}
-													className="flex items-center justify-start"
-												>
+												<li key={key} className="flex items-center justify-start">
 													<CheckIcon className="mr-2 size-4 text-primary" />
 													<span>{feature}</span>
 												</li>
@@ -211,16 +200,14 @@ export function PricingTable({
 										</ul>
 									)}
 
-									{price &&
-										"trialPeriodDays" in price &&
-										price.trialPeriodDays && (
-											<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
-												<BadgePercentIcon className="mr-2 size-4" />
-												{t("pricing.trialPeriod", {
-													days: price.trialPeriodDays,
-												})}
-											</div>
-										)}
+									{price && "trialPeriodDays" in price && price.trialPeriodDays && (
+										<div className="mt-4 font-medium text-sm flex items-center justify-start text-primary opacity-80">
+											<BadgePercentIcon className="mr-2 size-4" />
+											{t("pricing.trialPeriod", {
+												days: price.trialPeriodDays,
+											})}
+										</div>
+									)}
 								</div>
 
 								<div>
@@ -245,14 +232,12 @@ export function PricingTable({
 															})}
 												</span>
 											)}
-											{organizationId &&
-												"seatBased" in price &&
-												price.seatBased && (
-													<span className="font-normal text-xs opacity-60">
-														{" / "}
-														{t("pricing.perSeat")}
-													</span>
-												)}
+											{organizationId && "seatBased" in price && price.seatBased && (
+												<span className="font-normal text-xs opacity-60">
+													{" / "}
+													{t("pricing.perSeat")}
+												</span>
+											)}
 										</strong>
 									)}
 
@@ -264,23 +249,15 @@ export function PricingTable({
 												planId as PlanId,
 												price
 													? {
-															type:
-																price.type === "one-time"
-																	? "one-time"
-																	: "subscription",
-															interval:
-																price.type === "subscription"
-																	? price.interval
-																	: undefined,
+															type: price.type === "one-time" ? "one-time" : "subscription",
+															interval: price.type === "subscription" ? price.interval : undefined,
 														}
 													: undefined,
 											)
 										}
 										loading={loading === planId}
 									>
-										{userId || organizationId
-											? t("pricing.choosePlan")
-											: t("pricing.getStarted")}
+										{userId || organizationId ? t("pricing.choosePlan") : t("pricing.getStarted")}
 										<ArrowRightIcon className="ml-2 size-4" />
 									</Button>
 								</div>

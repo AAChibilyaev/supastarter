@@ -70,9 +70,7 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 						"organizations.settings.members.notifications.revokeInvitation.success.description",
 					);
 				},
-				error: t(
-					"organizations.settings.members.notifications.revokeInvitation.error.description",
-				),
+				error: t("organizations.settings.members.notifications.revokeInvitation.error.description"),
 			},
 		);
 	};

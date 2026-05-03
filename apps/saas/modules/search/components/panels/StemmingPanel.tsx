@@ -188,9 +188,7 @@ export function StemmingPanel({ organizationId, slug }: StemmingPanelProps) {
 										<input
 											type="text"
 											value={displayWord}
-											onChange={(e) =>
-												handleEdit(override.word, "word", e.target.value)
-											}
+											onChange={(e) => handleEdit(override.word, "word", e.target.value)}
 											className="p-2 rounded text-sm w-full border bg-background"
 										/>
 									</TableCell>
@@ -198,9 +196,7 @@ export function StemmingPanel({ organizationId, slug }: StemmingPanelProps) {
 										<input
 											type="text"
 											value={displayRoot}
-											onChange={(e) =>
-												handleEdit(override.word, "root", e.target.value)
-											}
+											onChange={(e) => handleEdit(override.word, "root", e.target.value)}
 											className="p-2 rounded text-sm w-full border bg-background"
 										/>
 									</TableCell>
@@ -237,9 +233,7 @@ export function StemmingPanel({ organizationId, slug }: StemmingPanelProps) {
 									<input
 										type="text"
 										value={row.word}
-										onChange={(e) =>
-											handleNewRowChange(index, "word", e.target.value)
-										}
+										onChange={(e) => handleNewRowChange(index, "word", e.target.value)}
 										className="p-2 rounded text-sm w-full border bg-background"
 										placeholder="e.g. running"
 									/>
@@ -248,9 +242,7 @@ export function StemmingPanel({ organizationId, slug }: StemmingPanelProps) {
 									<input
 										type="text"
 										value={row.root}
-										onChange={(e) =>
-											handleNewRowChange(index, "root", e.target.value)
-										}
+										onChange={(e) => handleNewRowChange(index, "root", e.target.value)}
 										className="p-2 rounded text-sm w-full border bg-background"
 										placeholder="e.g. run"
 									/>
@@ -265,11 +257,7 @@ export function StemmingPanel({ organizationId, slug }: StemmingPanelProps) {
 										>
 											{t("search.stemming.save")}
 										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => handleCancelNewRow(index)}
-										>
+										<Button variant="ghost" size="sm" onClick={() => handleCancelNewRow(index)}>
 											{t("search.stopwords.remove")}
 										</Button>
 									</div>

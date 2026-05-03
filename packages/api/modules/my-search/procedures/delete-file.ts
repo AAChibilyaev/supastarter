@@ -12,8 +12,7 @@ export const deleteFile = protectedProcedure
 		path: "/my-search/indexes/{indexId}/files/{fileId}",
 		tags: ["My Search"],
 		summary: "Delete file from personal search index",
-		description:
-			"Removes a file entry from a personal search index and its chunks from Typesense.",
+		description: "Removes a file entry from a personal search index and its chunks from Typesense.",
 	})
 	.input(
 		z.object({

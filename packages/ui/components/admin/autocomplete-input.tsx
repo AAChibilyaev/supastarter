@@ -177,9 +177,7 @@ export const AutocompleteInput = (
 	});
 
 	const createItem =
-		(create || onCreate) && (filterValue !== "" || createLabel)
-			? getCreateItem(filterValue)
-			: null;
+		(create || onCreate) && (filterValue !== "" || createLabel) ? getCreateItem(filterValue) : null;
 	let finalChoices = allChoices;
 	if (createItem) {
 		finalChoices = [...finalChoices, createItem];
@@ -238,20 +236,16 @@ export const AutocompleteInput = (
 									<CommandEmpty>No matching item found.</CommandEmpty>
 									<CommandGroup>
 										{finalChoices.map((choice) => {
-											const isCreateItem =
-												!!createItem && choice?.id === createItem.id;
+											const isCreateItem = !!createItem && choice?.id === createItem.id;
 											const disabled = getOptionDisabled(choice);
 
-											const choiceText = getChoiceText(
-												isCreateItem ? createItem : choice,
-											);
+											const choiceText = getChoiceText(isCreateItem ? createItem : choice);
 
 											return (
 												<CommandItem
 													key={getChoiceValue(choice)}
 													keywords={
-														isCreateItem ||
-														React.isValidElement(choiceText)
+														isCreateItem || React.isValidElement(choiceText)
 															? undefined
 															: [choiceText]
 													}
@@ -263,17 +257,13 @@ export const AutocompleteInput = (
 																`?${filterValue}?`
 															: getChoiceValue(choice)
 													}
-													onSelect={() =>
-														handleChangeWithCreateSupport(choice)
-													}
+													onSelect={() => handleChangeWithCreateSupport(choice)}
 													disabled={disabled}
 												>
 													<Check
 														className={cn(
 															"mr-2 h-4 w-4",
-															field.value === getChoiceValue(choice)
-																? "opacity-100"
-																: "opacity-0",
+															field.value === getChoiceValue(choice) ? "opacity-100" : "opacity-0",
 														)}
 													/>
 													{choiceText}

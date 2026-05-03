@@ -375,9 +375,7 @@ export function ChangePlan({
 	// ── Get all plans with their data for the comparison table ─────────────
 
 	const allPlans = useMemo(() => {
-		const planIds = Object.keys(planData).filter(
-			(id) => id !== "lifetime" && id !== "enterprise",
-		);
+		const planIds = Object.keys(planData).filter((id) => id !== "lifetime" && id !== "enterprise");
 		const order = ["free", "starter", "pro", "business"];
 		return order
 			.filter((id) => planIds.includes(id))
@@ -454,8 +452,7 @@ export function ChangePlan({
 							<DialogDescription>
 								{t("settings.billing.upgradeModal.currentPlan")}:{" "}
 								<strong>
-									{planData[activePlanId as keyof typeof planData]?.title ??
-										activePlanId}
+									{planData[activePlanId as keyof typeof planData]?.title ?? activePlanId}
 								</strong>
 								{activePlanPrice && (
 									<span className="ml-1 text-muted-foreground">
@@ -513,11 +510,7 @@ export function ChangePlan({
 						{/* Action buttons */}
 						{selectedPlanId && selectedPlanId !== activePlanId && (
 							<div className="mt-6 gap-3 flex justify-end">
-								<Button
-									variant="outline"
-									onClick={() => setDialogOpen(false)}
-									disabled={isPending}
-								>
+								<Button variant="outline" onClick={() => setDialogOpen(false)} disabled={isPending}>
 									{t("common.confirmation.cancel")}
 								</Button>
 								<Button
@@ -533,9 +526,7 @@ export function ChangePlan({
 								>
 									{isPending
 										? isSelectedDowngrade
-											? t(
-													"settings.billing.downgradeModal.downgradeProcessing",
-												)
+											? t("settings.billing.downgradeModal.downgradeProcessing")
 											: t("settings.billing.upgradeModal.redirectingToStripe")
 										: isSelectedDowngrade
 											? t("settings.billing.downgradeModal.confirmDowngrade")
@@ -634,11 +625,7 @@ export function ChangePlan({
 							</h4>
 							<div className="gap-2 flex flex-wrap">
 								{disabledFeatures.map((feature) => (
-									<Badge
-										key={feature.key}
-										status="error"
-										className="gap-1 text-xs"
-									>
+									<Badge key={feature.key} status="error" className="gap-1 text-xs">
 										<XIcon className="size-3" />
 										{featureLabel(feature.key)}
 									</Badge>
@@ -745,9 +732,7 @@ function PlanComparisonTable({
 						<tr
 							key={feature}
 							className={
-								idx % 2 === 0
-									? "border-b border-muted/30"
-									: "border-b border-muted/30 bg-muted/20"
+								idx % 2 === 0 ? "border-b border-muted/30" : "border-b border-muted/30 bg-muted/20"
 							}
 						>
 							<td className="px-3 py-2.5 text-xs text-muted-foreground">{feature}</td>
@@ -780,9 +765,7 @@ function PlanComparisonTable({
 								<Button
 									variant={selectedPlanId === plan.id ? "primary" : "outline"}
 									size="sm"
-									onClick={() =>
-										onSelectPlan(selectedPlanId === plan.id ? null : plan.id)
-									}
+									onClick={() => onSelectPlan(selectedPlanId === plan.id ? null : plan.id)}
 									disabled={plan.isActive}
 									className="w-full"
 								>
@@ -879,9 +862,7 @@ function ProrationPreviewCard({ preview, isLoading, t, format }: ProrationPrevie
 						</div>
 						<span
 							className={`text-sm font-bold ${
-								immediateAmount > 0
-									? "text-foreground"
-									: "text-green-600 dark:text-green-400"
+								immediateAmount > 0 ? "text-foreground" : "text-green-600 dark:text-green-400"
 							}`}
 						>
 							{format.number(Math.abs(immediateAmount), currencyFormat)}
@@ -896,8 +877,7 @@ function ProrationPreviewCard({ preview, isLoading, t, format }: ProrationPrevie
 
 				{nextInvoiceAmount && nextInvoiceAmount > 0 && (
 					<div className="text-xs pt-1 text-muted-foreground">
-						{t("pricing.nextInvoice")}:{" "}
-						{format.number(nextInvoiceAmount, currencyFormat)} /{" "}
+						{t("pricing.nextInvoice")}: {format.number(nextInvoiceAmount, currencyFormat)} /{" "}
 						{nextInvoiceAmount === immediateAmount + creditAmount
 							? t("pricing.month", { count: 1 })
 							: t("pricing.month", { count: 1 })}

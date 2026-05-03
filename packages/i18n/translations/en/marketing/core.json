@@ -94,12 +94,7 @@
 					"name": "Free",
 					"price": "$0",
 					"description": "For evaluating, hobby projects and side-products.",
-					"features": [
-						"10K search-units / month",
-						"1 index",
-						"3 API keys",
-						"Community support"
-					]
+					"features": ["10K search-units / month", "1 index", "3 API keys", "Community support"]
 				},
 				"pro": {
 					"name": "Pro",

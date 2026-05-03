@@ -197,12 +197,9 @@ test.describe("Index Lifecycle — Error Cases", () => {
 	});
 
 	test("should return 404 for non-existent index", async () => {
-		const response = await fetch(
-			`${BASE_URL}/api/v1/indexes/non-existent-id-that-is-long-enough`,
-			{
-				headers: { Authorization: `Bearer ${ADMIN_KEY}` },
-			},
-		);
+		const response = await fetch(`${BASE_URL}/api/v1/indexes/non-existent-id-that-is-long-enough`, {
+			headers: { Authorization: `Bearer ${ADMIN_KEY}` },
+		});
 		expect(response.status).toBe(404);
 	});
 

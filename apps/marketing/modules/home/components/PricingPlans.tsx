@@ -34,9 +34,7 @@ export function PricingPlans() {
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 						{t("home.pricing.title")}
 					</h2>
-					<p className="mt-4 text-lg text-muted-foreground">
-						{t("home.pricing.subtitle")}
-					</p>
+					<p className="mt-4 text-lg text-muted-foreground">{t("home.pricing.subtitle")}</p>
 				</div>
 
 				<div className="mt-8 flex justify-center">
@@ -86,9 +84,7 @@ export function PricingPlans() {
 								)}
 
 								<CardHeader className={plan.primary ? "pt-8" : ""}>
-									<CardTitle>
-										{t(`home.pricing.plans.${plan.key}.name`)}
-									</CardTitle>
+									<CardTitle>{t(`home.pricing.plans.${plan.key}.name`)}</CardTitle>
 									<CardDescription>
 										{t(`home.pricing.plans.${plan.key}.description`)}
 									</CardDescription>
@@ -110,14 +106,9 @@ export function PricingPlans() {
 
 									<ul className="mt-8 gap-3 flex flex-col">
 										{features.map((feature) => (
-											<li
-												key={feature}
-												className="gap-3 text-sm flex items-start"
-											>
+											<li key={feature} className="gap-3 text-sm flex items-start">
 												<CheckIcon className="mt-0.5 size-4 shrink-0 text-success" />
-												<span className="text-muted-foreground">
-													{feature}
-												</span>
+												<span className="text-muted-foreground">{feature}</span>
 											</li>
 										))}
 									</ul>
@@ -125,19 +116,12 @@ export function PricingPlans() {
 
 								<CardFooter>
 									<Button
-										className={cn(
-											"w-full",
-											marketingCtaButtonClassName(plan.primary),
-										)}
+										className={cn("w-full", marketingCtaButtonClassName(plan.primary))}
 										variant={plan.primary ? "primary" : "outline"}
 										asChild
 									>
 										<a
-											href={
-												plan.key === "enterprise"
-													? "/contact"
-													: (config.saasUrl ?? "/signup")
-											}
+											href={plan.key === "enterprise" ? "/contact" : (config.saasUrl ?? "/signup")}
 										>
 											{t(`home.pricing.${plan.ctaKey}`)}
 										</a>

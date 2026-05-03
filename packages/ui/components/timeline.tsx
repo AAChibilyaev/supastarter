@@ -148,9 +148,7 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
 							<div className="h-8 w-8 animate-pulse relative flex items-center justify-center rounded-full bg-muted ring-8 ring-background">
 								<Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
 							</div>
-							{showConnector && (
-								<div className="w-0.5 animate-pulse h-full bg-muted" />
-							)}
+							{showConnector && <div className="w-0.5 animate-pulse h-full bg-muted" />}
 						</div>
 
 						<div className="gap-2 pl-2 flex flex-col">
@@ -169,10 +167,7 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
 			return (
 				<motion.li
 					ref={ref}
-					className={cn(
-						commonClassName,
-						"border border-destructive/50 bg-destructive/10",
-					)}
+					className={cn(commonClassName, "border border-destructive/50 bg-destructive/10")}
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					role="alert"
@@ -187,20 +182,14 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
 							<div className="h-8 w-8 relative flex items-center justify-center rounded-full bg-destructive/20 ring-8 ring-background">
 								<AlertCircle className="h-4 w-4 text-destructive" />
 							</div>
-							{showConnector && (
-								<TimelineConnector status="pending" className="h-full" />
-							)}
+							{showConnector && <TimelineConnector status="pending" className="h-full" />}
 						</div>
 
 						<div className="gap-2 pl-2 flex flex-col">
 							<TimelineHeader>
-								<TimelineTitle className="text-destructive">
-									{title || "Error"}
-								</TimelineTitle>
+								<TimelineTitle className="text-destructive">{title || "Error"}</TimelineTitle>
 							</TimelineHeader>
-							<TimelineDescription className="text-destructive">
-								{error}
-							</TimelineDescription>
+							<TimelineDescription className="text-destructive">{error}</TimelineDescription>
 						</div>
 					</div>
 				</motion.li>
@@ -220,12 +209,7 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
 				{/* Timeline dot and connector */}
 				<div className="flex flex-col items-center">
 					<div className="relative z-10">
-						<TimelineIcon
-							icon={icon}
-							color={iconColor}
-							status={status}
-							iconSize={iconsize}
-						/>
+						<TimelineIcon icon={icon} color={iconColor} status={status} iconSize={iconsize} />
 					</div>
 					{showConnector && <div className="h-16 w-0.5 mt-2 bg-border" />}
 				</div>
@@ -314,10 +298,7 @@ const TimelineTime = React.forwardRef<HTMLTimeElement, TimelineTimeProps>(
 			<time
 				ref={ref}
 				dateTime={date ? new Date(date).toISOString() : undefined}
-				className={cn(
-					"text-sm font-medium tracking-tight text-muted-foreground",
-					className,
-				)}
+				className={cn("text-sm font-medium tracking-tight text-muted-foreground", className)}
 				{...props}
 			>
 				{children || formattedDate}
@@ -371,10 +352,7 @@ const TimelineTitle = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
 	<h3
 		ref={ref}
-		className={cn(
-			"font-semibold tracking-tight leading-none text-secondary-foreground",
-			className,
-		)}
+		className={cn("font-semibold tracking-tight leading-none text-secondary-foreground", className)}
 		{...props}
 	>
 		{children}
@@ -462,9 +440,7 @@ const TimelineEmpty = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
 			className={cn("p-8 flex flex-col items-center justify-center text-center", className)}
 			{...props}
 		>
-			<p className="text-sm text-muted-foreground">
-				{children || "No timeline items to display"}
-			</p>
+			<p className="text-sm text-muted-foreground">{children || "No timeline items to display"}</p>
 		</div>
 	),
 );
@@ -508,9 +484,7 @@ const TimelineLayout = ({
 						date={item.date}
 						title={item.title}
 						description={item.description}
-						icon={
-							typeof item.icon === "function" ? item.icon() : item.icon || customIcon
-						}
+						icon={typeof item.icon === "function" ? item.icon() : item.icon || customIcon}
 						iconColor={item.color || iconColor}
 						connectorColor={item.color || connectorColor}
 						showConnector={index !== items.length - 1}

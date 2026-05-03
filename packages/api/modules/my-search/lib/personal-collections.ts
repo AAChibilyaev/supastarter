@@ -185,13 +185,10 @@ export async function indexPersonalDocumentChunks(
 			chunkCount: input.chunks.length,
 		});
 	} catch (error) {
-		logger.warn(
-			"Failed to generate embeddings for personal document chunks — continuing without",
-			{
-				fileId: input.fileId,
-				error,
-			},
-		);
+		logger.warn("Failed to generate embeddings for personal document chunks — continuing without", {
+			fileId: input.fileId,
+			error,
+		});
 	}
 
 	const documents = input.chunks.map((content, index) => ({

@@ -20,10 +20,7 @@ export default async function ConnectorsPageRoute({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const [org, session] = await Promise.all([
-		getActiveOrganization(organizationSlug),
-		getSession(),
-	]);
+	const [org, session] = await Promise.all([getActiveOrganization(organizationSlug), getSession()]);
 	if (!org || !session) return notFound();
 
 	return (

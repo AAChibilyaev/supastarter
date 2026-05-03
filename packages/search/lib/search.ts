@@ -83,10 +83,7 @@ function buildMultiLocationFilter(filter: GeoMultiLocationFilter): string {
 export async function searchDocuments(input: SearchDocumentsInput): Promise<SearchDocumentsResult> {
 	const client = getTypesenseClient();
 
-	const perPage = Math.min(
-		Math.max(input.perPage ?? config.defaultPerPage, 1),
-		config.maxPerPage,
-	);
+	const perPage = Math.min(Math.max(input.perPage ?? config.defaultPerPage, 1), config.maxPerPage);
 
 	let vectorQuery = input.vectorQuery;
 	if (vectorQuery !== undefined && input.vectorQueryEf !== undefined) {

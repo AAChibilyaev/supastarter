@@ -269,11 +269,7 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 								<div className="p-6 text-sm text-foreground/60">{t("loading")}</div>
 							) : syncJobs.length === 0 ? (
 								<div className="p-6">
-									<EmptyState
-										title={t("jobs.emptyState")}
-										description=""
-										icon={BriefcaseIcon}
-									/>
+									<EmptyState title={t("jobs.emptyState")} description="" icon={BriefcaseIcon} />
 								</div>
 							) : (
 								<SyncJobsTable jobs={syncJobs} isLoading={syncLoading} />
@@ -289,11 +285,7 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 								<div className="p-6 text-sm text-foreground/60">{t("loading")}</div>
 							) : (pipelineData?.activeReindexJobs ?? []).length === 0 ? (
 								<div className="p-6">
-									<EmptyState
-										title={t("jobs.emptyState")}
-										description=""
-										icon={BriefcaseIcon}
-									/>
+									<EmptyState title={t("jobs.emptyState")} description="" icon={BriefcaseIcon} />
 								</div>
 							) : (
 								<div className="overflow-x-auto">
@@ -309,17 +301,9 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 										<TableBody>
 											{(pipelineData?.activeReindexJobs ?? []).map((job) => (
 												<TableRow key={job.jobId}>
-													<TableCell className="font-mono text-xs">
-														{job.slug}
-													</TableCell>
+													<TableCell className="font-mono text-xs">{job.slug}</TableCell>
 													<TableCell>
-														<Badge
-															status={
-																ingestJobStatusBadge[
-																	"processing"
-																] ?? "info"
-															}
-														>
+														<Badge status={ingestJobStatusBadge["processing"] ?? "info"}>
 															running
 														</Badge>
 													</TableCell>

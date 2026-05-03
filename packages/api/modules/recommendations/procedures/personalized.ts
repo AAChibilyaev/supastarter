@@ -58,10 +58,7 @@ export const personalized = protectedProcedure
 
 			return { results, neo4jConnected: true };
 		} catch (err) {
-			logger.error(
-				{ err, userId },
-				"Failed to fetch personalized recommendations from Neo4j",
-			);
+			logger.error({ err, userId }, "Failed to fetch personalized recommendations from Neo4j");
 			throw new ORPCError("INTERNAL_SERVER_ERROR", {
 				message: "Recommendation engine unavailable",
 			});

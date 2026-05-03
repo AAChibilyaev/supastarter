@@ -123,9 +123,7 @@ export const conversationalSearch = protectedProcedure
 
 			// Extract or generate a conversation_id from the response
 			const responseConversationId =
-				(results.conversation_id as string | undefined) ??
-				input.conversationId ??
-				undefined;
+				(results.conversation_id as string | undefined) ?? input.conversationId ?? undefined;
 
 			// Commit flat-fee usage on success (Typesense native RAG)
 			await commitFlatFeeUsage({
@@ -140,9 +138,7 @@ export const conversationalSearch = protectedProcedure
 				answer,
 				sources: hits.map((hit: any) => ({
 					document: hit.document as Record<string, unknown>,
-					textMatch: (hit.text_match_info?.snippet ?? hit.highlight?.snippet) as
-						| string
-						| undefined,
+					textMatch: (hit.text_match_info?.snippet ?? hit.highlight?.snippet) as string | undefined,
 				})),
 				found: results.found ?? 0,
 				searchTimeMs,

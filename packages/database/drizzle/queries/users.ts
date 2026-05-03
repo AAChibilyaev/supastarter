@@ -16,8 +16,7 @@ export async function getUsers({
 }) {
 	return await db.query.user.findMany({
 		where: query
-			? (user, { ilike, or }) =>
-					or(ilike(user.name, `%${query}%`), ilike(user.email, `%${query}%`))
+			? (user, { ilike, or }) => or(ilike(user.name, `%${query}%`), ilike(user.email, `%${query}%`))
 			: undefined,
 		limit,
 		offset,
@@ -28,9 +27,7 @@ export async function countAllUsers({ query }: { query?: string }) {
 	const result = await db
 		.select({ count: sql<number>`count(*)` })
 		.from(user)
-		.where(
-			query ? or(ilike(user.name, `%${query}%`), ilike(user.email, `%${query}%`)) : undefined,
-		);
+		.where(query ? or(ilike(user.name, `%${query}%`), ilike(user.email, `%${query}%`)) : undefined);
 	return Number(result[0]?.count ?? 0);
 }
 

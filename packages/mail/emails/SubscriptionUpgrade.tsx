@@ -36,9 +36,7 @@ export function SubscriptionUpgrade({
 			<Text className="font-semibold">{t("nextBillingDate")}</Text>
 			<Text>{nextBillingDate}</Text>
 
-			<PrimaryButton href={manageSubscriptionUrl}>
-				{t("manageSubscription")} &rarr;
-			</PrimaryButton>
+			<PrimaryButton href={manageSubscriptionUrl}>{t("manageSubscription")} &rarr;</PrimaryButton>
 
 			<Text className="text-sm pt-4 text-muted-foreground">{t("cta")}</Text>
 

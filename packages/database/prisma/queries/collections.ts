@@ -167,10 +167,8 @@ function mapDocument(doc: any): CollectionDocumentView {
 		organizationId: doc.organizationId,
 		data: doc.data,
 		rowNumber: doc.rowNumber,
-		createdAt:
-			doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
-		updatedAt:
-			doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : String(doc.updatedAt),
+		createdAt: doc.createdAt instanceof Date ? doc.createdAt.toISOString() : String(doc.createdAt),
+		updatedAt: doc.updatedAt instanceof Date ? doc.updatedAt.toISOString() : String(doc.updatedAt),
 	};
 }
 

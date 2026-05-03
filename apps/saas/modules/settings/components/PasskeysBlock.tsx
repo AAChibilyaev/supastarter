@@ -25,17 +25,11 @@ export function PasskeysBlock() {
 					});
 
 					toastSuccess(
-						t(
-							"settings.account.security.passkeys.notifications.addPasskey.success.title",
-						),
+						t("settings.account.security.passkeys.notifications.addPasskey.success.title"),
 					);
 				},
 				onError: () => {
-					toastError(
-						t(
-							"settings.account.security.passkeys.notifications.addPasskey.error.title",
-						),
-					);
+					toastError(t("settings.account.security.passkeys.notifications.addPasskey.error.title"));
 				},
 			},
 		});
@@ -56,15 +50,9 @@ export function PasskeysBlock() {
 				});
 			},
 			{
-				loading: t(
-					"settings.account.security.passkeys.notifications.deletePasskey.loading.title",
-				),
-				success: t(
-					"settings.account.security.passkeys.notifications.deletePasskey.success.title",
-				),
-				error: t(
-					"settings.account.security.passkeys.notifications.deletePasskey.error.title",
-				),
+				loading: t("settings.account.security.passkeys.notifications.deletePasskey.loading.title"),
+				success: t("settings.account.security.passkeys.notifications.deletePasskey.success.title"),
+				error: t("settings.account.security.passkeys.notifications.deletePasskey.error.title"),
 			},
 		);
 	};

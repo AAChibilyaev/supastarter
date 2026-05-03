@@ -46,9 +46,7 @@ export function ShopifyConnectorCard({ organizationId, status }: ShopifyConnecto
 						<ShoppingCartIcon className="size-5 text-muted-foreground" />
 					</div>
 					<div className="flex-1">
-						<CardTitle className="text-base">
-							{t("search.connectors.shopify.title")}
-						</CardTitle>
+						<CardTitle className="text-base">{t("search.connectors.shopify.title")}</CardTitle>
 						<CardDescription className="text-xs">
 							{t("search.connectors.shopify.description")}
 						</CardDescription>
@@ -59,17 +57,13 @@ export function ShopifyConnectorCard({ organizationId, status }: ShopifyConnecto
 					<div className="space-y-2 text-sm text-muted-foreground">
 						{status.lastSync ? (
 							<p>
-								{t("search.connector.lastSync")}:{" "}
-								{new Date(status.lastSync).toLocaleString()}
+								{t("search.connector.lastSync")}: {new Date(status.lastSync).toLocaleString()}
 							</p>
 						) : (
 							<p>{t("search.connectors.shopify.notConnected")}</p>
 						)}
 						{status.lastError && (
-							<p
-								className="text-xs truncate text-destructive"
-								title={status.lastError}
-							>
+							<p className="text-xs truncate text-destructive" title={status.lastError}>
 								{t("search.connector.lastError")}: {status.lastError}
 							</p>
 						)}
@@ -77,18 +71,10 @@ export function ShopifyConnectorCard({ organizationId, status }: ShopifyConnecto
 					<div className="mt-4 gap-2 flex flex-wrap">
 						{status.isConnected ? (
 							<>
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setSettingsOpen(true)}
-								>
+								<Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
 									{t("search.connector.manage")}
 								</Button>
-								<Button
-									variant="ghost"
-									size="sm"
-									onClick={() => setHistoryOpen(true)}
-								>
+								<Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>
 									{t("search.connector.syncJobs")}
 								</Button>
 							</>

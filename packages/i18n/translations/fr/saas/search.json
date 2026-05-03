@@ -559,19 +559,8 @@
 			"latencyP95": "p95",
 			"latencyP99": "p99",
 			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche.",
-			"failedQueries": "Requêtes échouées",
-			"ofTotalSearches": "du total des recherches",
-			"totalFailedQueries": "total échouées",
-			"noFailedQueries": "Aucune requête échouée sur cette période.",
-			"tabDashboard": "Tableau de bord",
-			"tabFailed": "Échouées",
-			"tabActivity": "Activité",
-			"uniqueFailedQueries": "Requêtes échouées uniques",
-			"recentActivity": "Activité récente",
-			"noActivity": "Aucune activité récente.",
-			"allIndexes": "Tous les index",
-			"searchesColumn": "Recherches",
-			"ctrColumn": "CTR"
+			"ctrTrend": "Tendance CTR",
+			"ctrTrendDesc": "Taux de clics dans le temps"
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

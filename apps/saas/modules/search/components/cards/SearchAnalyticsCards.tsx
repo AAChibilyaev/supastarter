@@ -28,7 +28,7 @@ import { useFormatter } from "next-intl";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
-import { ActivityLog } from "./ActivityLog";
+import { CtrTrendChart } from "./CtrTrendChart";
 import { EmptyState } from "./EmptyState";
 import { FailedQueriesTable } from "./FailedQueriesTable";
 
@@ -349,85 +349,8 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 				</Card>
 			)}
 
-			{/* CTR trend chart */}
-			{ctrChartData.length > 0 && (
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("search.analytics.ctrTrend")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<StatsTileChart
-							data={ctrChartData}
-							dataKey="ctr"
-							gradientId="ctrGradient"
-							chartConfig={{
-								ctr: {
-									label: t("search.analytics.ctrLabel"),
-									color: "hsl(var(--chart-2))",
-								},
-							}}
-							tooltipFormatter={(value) => `${(Number(value) * 100).toFixed(1)}%`}
-						/>
-					</CardContent>
-				</Card>
-			)}
-
-			{/* CTR by Query table */}
-			{ctrTrendData?.byQuery && ctrTrendData.byQuery.length > 0 && (
-				<Card>
-					<CardHeader>
-						<CardTitle>
-							{t("search.analytics.ctrLabel")} {t("search.analytics.byQuery")}
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<Table>
-							<TableHeader>
-								<TableRow>
-									<TableHead>{t("search.analytics.queryColumn")}</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.searchesColumn")}
-									</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.clicksColumn")}
-									</TableHead>
-									<TableHead className="text-right">
-										{t("search.analytics.ctrColumn")}
-									</TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{ctrTrendData.byQuery.map(
-									(
-										row: {
-											query: string;
-											searches: number;
-											clicks: number;
-											ctr: number;
-										},
-										index: number,
-									) => (
-										<TableRow key={row.query + index}>
-											<TableCell className="font-mono text-sm max-w-xs truncate">
-												{row.query}
-											</TableCell>
-											<TableCell className="text-right tabular-nums">
-												{format.number(row.searches)}
-											</TableCell>
-											<TableCell className="text-right tabular-nums">
-												{format.number(row.clicks)}
-											</TableCell>
-											<TableCell className="text-right tabular-nums">
-												{(row.ctr * 100).toFixed(1)}%
-											</TableCell>
-										</TableRow>
-									),
-								)}
-							</TableBody>
-						</Table>
-					</CardContent>
-				</Card>
-			)}
+			{/* CTR Trend chart */}
+			<CtrTrendChart data={analyticsData?.ctrTrend ?? []} />
 
 			{/* Top 10 queries table */}
 			<Card>

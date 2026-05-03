@@ -7,3 +7,8 @@ export * from "./spell";
 export * from "./phonetic/index";
 export * from "./synonyms/index";
 export * from "./morphology/index";
+export * from "./suggest/index";
+export * from "./ranking/index";
+export * from "./postprocessing/index";
+export { analyzeQuery, enhanceSearchResults, buildEnhancedQuery } from "./search-pipeline";
+export type { SearchPipelineResult, EnhancedSearchResult, PipelineOptions, EnhancedSearchOptions } from "./search-pipeline";

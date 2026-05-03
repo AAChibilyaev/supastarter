@@ -21,26 +21,27 @@ export interface CollectionView {
 }
 
 function mapCollection(c: any): CollectionView {
-	const schema = c.schema as Record<string, unknown> | unknown[];
-	const isObject = schema && !Array.isArray(schema);
+	const schemaRaw = c.schema as Record<string, unknown> | unknown[];
+	const isObject = schemaRaw && !Array.isArray(schemaRaw);
+	const schemaObj = isObject ? (schemaRaw as Record<string, unknown>) : null;
 	return {
 		id: c.id,
 		organizationId: c.organizationId,
 		slug: c.slug,
 		name: c.name,
 		description: c.description,
-		schema,
+		schema: c.schema,
 		documentCount: c.documentCount,
 		size: Number(c.size),
 		status: c.status,
-		metadata: isObject
-			? (((schema as Record<string, unknown>).metadata as Record<string, unknown>) ?? null)
+		metadata: schemaObj
+			? ((schemaObj.metadata as Record<string, unknown>) ?? null)
 			: null,
-		synonymSets: isObject
-			? (((schema as Record<string, unknown>).synonymSets as string[]) ?? [])
+		synonymSets: schemaObj
+			? ((schemaObj.synonymSets as string[]) ?? [])
 			: [],
-		curationSets: isObject
-			? (((schema as Record<string, unknown>).curationSets as string[]) ?? [])
+		curationSets: schemaObj
+			? ((schemaObj.curationSets as string[]) ?? [])
 			: [],
 		createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),
 		updatedAt: c.updatedAt instanceof Date ? c.updatedAt.toISOString() : String(c.updatedAt),

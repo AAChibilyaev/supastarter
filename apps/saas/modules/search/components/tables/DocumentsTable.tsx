@@ -84,7 +84,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Papa from "papaparse";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -239,6 +239,107 @@ function EmptyDocumentsState({ onImport: _onImport }: { onImport: () => void }) 
 	);
 }
 
+// ─── Editing State ──────────────────────────────────────────────────────────
+
+interface CellEditPosition {
+	rowId: string;
+	fieldName: string;
+	rowIndex: number;
+	colIndex: number;
+}
+
+// ─── Inline Cell Editor ─────────────────────────────────────────────────────
+
+interface InlineCellEditorProps {
+	field: SchemaField | undefined;
+	value: unknown;
+	onSave: (value: string) => void;
+	onCancel: () => void;
+	onNext: () => void;
+	onPrev: () => void;
+	onDown: () => void;
+}
+
+function InlineCellEditor({
+	field,
+	value,
+	onSave,
+	onCancel,
+	onNext,
+	onPrev,
+	onDown,
+}: InlineCellEditorProps) {
+	const inputRef = useRef<HTMLInputElement>(null);
+	const [editValue, setEditValue] = useState(stringifyInputValue(value));
+
+	useEffect(() => {
+		inputRef.current?.focus();
+		inputRef.current?.select();
+	}, []);
+
+	const commit = useCallback(() => {
+		onSave(editValue);
+	}, [editValue, onSave]);
+
+	const handleKeyDown = useCallback(
+		(e: React.KeyboardEvent) => {
+			if (e.key === "Enter") {
+				e.preventDefault();
+				commit();
+				onDown();
+			} else if (e.key === "Tab") {
+				e.preventDefault();
+				commit();
+				if (e.shiftKey) onPrev();
+				else onNext();
+			} else if (e.key === "Escape") {
+				e.preventDefault();
+				onCancel();
+			}
+		},
+		[commit, onCancel, onDown, onNext, onPrev],
+	);
+
+	if (!field) {
+		return <span className="text-foreground/40">?</span>;
+	}
+
+	if (field.type === "bool") {
+		return (
+			<select
+				ref={inputRef as React.RefObject<HTMLSelectElement>}
+				className="h-7 text-sm rounded px-1 w-full border border-ring bg-background focus:outline-hidden"
+				value={editValue}
+				onChange={(e) => setEditValue(e.target.value)}
+				onKeyDown={handleKeyDown}
+				onBlur={commit}
+				autoFocus
+			>
+				<option value="">---</option>
+				<option value="true">true</option>
+				<option value="false">false</option>
+			</select>
+		);
+	}
+
+	return (
+		<input
+			ref={inputRef}
+			className="h-7 text-sm rounded px-1 w-full border border-ring bg-background focus:outline-hidden"
+			type={
+				field.type === "int32" || field.type === "int64" || field.type === "float"
+					? "number"
+					: "text"
+			}
+			step={field.type === "float" ? "any" : "1"}
+			value={editValue}
+			onChange={(e) => setEditValue(e.target.value)}
+			onKeyDown={handleKeyDown}
+			onBlur={commit}
+		/>
+	);
+}
+
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: DocumentsTableProps) {
@@ -267,8 +368,138 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const [editSheetOpen, setEditSheetOpen] = useState(false);
 	const [editingDocument, setEditingDocument] = useState<DocumentRow | null>(null);
 
+	// ── Inline cell editing state ────────────────────────────────────────────
+
+	const [cellEdit, setCellEdit] = useState<CellEditPosition | null>(null);
+	const cellSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const handleCellSave = useCallback(
+		(rowId: string, fieldName: string, rawValue: string) => {
+			// Debounce rapid saves
+			if (cellSaveTimerRef.current) clearTimeout(cellSaveTimerRef.current);
+			cellSaveTimerRef.current = setTimeout(() => {
+				const row = rows.find((r) => r.id === rowId);
+				if (!row) return;
+
+				// Parse value based on field type
+				const field = documentFields.find((f) => f.name === fieldName);
+				let parsedValue: unknown = rawValue;
+				if (field) {
+					switch (field.type) {
+						case "int32":
+						case "int64":
+							parsedValue = rawValue === "" ? null : Number.parseInt(rawValue, 10);
+							break;
+						case "float":
+							parsedValue = rawValue === "" ? null : Number.parseFloat(rawValue);
+							break;
+						case "bool":
+							parsedValue =
+								rawValue === "true" ? true : rawValue === "false" ? false : null;
+							break;
+						default:
+							parsedValue = rawValue;
+					}
+				}
+
+				const updatedDoc = { ...row.document, [fieldName]: parsedValue };
+				upsertMutation.mutate({
+					organizationId,
+					slug,
+					id: rowId,
+					document: updatedDoc,
+				});
+			}, 400);
+		},
+		[rows, documentFields, upsertMutation, organizationId, slug],
+	);
+
+	const handleCellClick = useCallback(
+		(rowIndex: number, cellIndex: number, rowId: string, fieldName: string) => {
+			// Don't edit select or id columns inline
+			if (fieldName === "select" || fieldName === "id") return;
+			setCellEdit({ rowId, fieldName, rowIndex, colIndex: cellIndex });
+		},
+		[],
+	);
+
+	const moveToNextCell = useCallback(() => {
+		setCellEdit((prev) => {
+			if (!prev) return null;
+			const nextCol = prev.colIndex + 1;
+			const visibleFieldsCount = documentFields.length + 2; // select + id + data fields
+			if (nextCol >= visibleFieldsCount) {
+				// Move to next row
+				const nextRow = prev.rowIndex + 1;
+				if (nextRow < rows.length) {
+					return {
+						...prev,
+						rowIndex: nextRow,
+						colIndex: 2,
+						rowId: rows[nextRow]?.id ?? prev.rowId,
+					};
+				}
+				return prev; // stay in place if at last row
+			}
+			const fieldName =
+				nextCol === 0
+					? "select"
+					: nextCol === 1
+						? "id"
+						: (documentFields[nextCol - 2]?.name ?? prev.fieldName);
+			if (fieldName === "select" || fieldName === "id") {
+				return { ...prev, colIndex: nextCol, fieldName };
+			}
+			return { ...prev, colIndex: nextCol, fieldName };
+		});
+	}, [documentFields, rows]);
+
+	const moveToPrevCell = useCallback(() => {
+		setCellEdit((prev) => {
+			if (!prev) return null;
+			const prevCol = prev.colIndex - 1;
+			if (prevCol < 2) {
+				// Move to previous row
+				const prevRow = prev.rowIndex - 1;
+				if (prevRow >= 0) {
+					const maxCol = documentFields.length + 1;
+					const lastField = documentFields[maxCol - 2]?.name ?? prev.fieldName;
+					return {
+						...prev,
+						rowIndex: prevRow,
+						colIndex: maxCol,
+						rowId: rows[prevRow]?.id ?? prev.rowId,
+						fieldName: lastField,
+					};
+				}
+				return prev;
+			}
+			const fieldName = documentFields[prevCol - 2]?.name ?? prev.fieldName;
+			return { ...prev, colIndex: prevCol, fieldName };
+		});
+	}, [documentFields, rows]);
+
+	const moveToNextRow = useCallback(() => {
+		setCellEdit((prev) => {
+			if (!prev) return null;
+			const nextRow = prev.rowIndex + 1;
+			if (nextRow < rows.length) {
+				return { ...prev, rowIndex: nextRow, rowId: rows[nextRow]?.id ?? prev.rowId };
+			}
+			return null; // end of table
+		});
+	}, [rows]);
+
+	const handleCancelEdit = useCallback(() => {
+		setCellEdit(null);
+	}, []);
+
 	const [importDialogOpen, setImportDialogOpen] = useState(false);
 	const [importFile, setImportFile] = useState<File | null>(null);
+	const documentFields = useMemo(
+		() => fields.filter((f) => f.name !== "tenant_id" && f.name !== "id"),
+		[fields],
+	);
 	const [importParsed, setImportParsed] = useState<Record<string, unknown>[]>([]);
 
 	// ── Debounced search ────────────────────────────────────────────────────
@@ -444,6 +675,8 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		enableRowSelection: true,
+		enableColumnResizing: true,
+		columnResizeMode: "onChange",
 	});
 
 	// ── Bulk actions ────────────────────────────────────────────────────────
@@ -788,11 +1021,11 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 											<TableHead
 												key={header.id}
 												style={{ width: header.getSize() }}
-												className={
+												className={`relative ${
 													header.column.getCanSort()
 														? "cursor-pointer select-none hover:text-foreground"
 														: ""
-												}
+												} ${header.column.getCanResize() ? "group" : ""}`}
 												onClick={header.column.getToggleSortingHandler()}
 											>
 												<div className="gap-1 flex items-center">
@@ -806,6 +1039,16 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 													}[header.column.getIsSorted() as string] ??
 														null}
 												</div>
+												{header.column.getCanResize() && (
+													<div
+														onDoubleClick={() =>
+															header.column.resetSize()
+														}
+														onMouseDown={header.getResizeHandler()}
+														onTouchStart={header.getResizeHandler()}
+														className="top-0 right-0 w-1 absolute z-10 h-full cursor-col-resize bg-border/0 group-last:hidden hover:bg-primary data-[resizing=true]:bg-primary"
+													/>
+												)}
 											</TableHead>
 										))}
 									</TableRow>
@@ -822,7 +1065,7 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 										</TableCell>
 									</TableRow>
 								) : (
-									table.getRowModel().rows.map((row) => (
+									table.getRowModel().rows.map((row, rowIndex) => (
 										<TableRow
 											key={row.id}
 											className={`cursor-pointer ${densityClass} ${row.getIsSelected() ? "bg-muted/40" : ""}`}
@@ -833,14 +1076,56 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 												if (docRow) openEditSheet(docRow);
 											}}
 										>
-											{row.getVisibleCells().map((cell) => (
-												<TableCell key={cell.id}>
-													{flexRender(
-														cell.column.columnDef.cell,
-														cell.getContext(),
-													)}
-												</TableCell>
-											))}
+											{row.getVisibleCells().map((cell, cellIndex) => {
+												const fieldName = cell.column.id;
+												const isEditing =
+													cellEdit?.rowId === row.original.id &&
+													cellEdit?.fieldName === fieldName;
+												return (
+													<TableCell
+														key={cell.id}
+														className={isEditing ? "p-0" : ""}
+													>
+														{isEditing ? (
+															<InlineCellEditor
+																field={documentFields.find(
+																	(f) => f.name === fieldName,
+																)}
+																value={cell.getValue()}
+																onSave={(val) =>
+																	handleCellSave(
+																		row.original.id,
+																		fieldName,
+																		val,
+																	)
+																}
+																onCancel={handleCancelEdit}
+																onNext={moveToNextCell}
+																onPrev={moveToPrevCell}
+																onDown={moveToNextRow}
+															/>
+														) : (
+															<div
+																className="rounded px-1 -mx-1 min-h-[24px] cursor-pointer hover:bg-muted/30"
+																onDoubleClick={(e) => {
+																	e.stopPropagation();
+																	handleCellClick(
+																		rowIndex,
+																		cellIndex,
+																		row.original.id,
+																		fieldName,
+																	);
+																}}
+															>
+																{flexRender(
+																	cell.column.columnDef.cell,
+																	cell.getContext(),
+																)}
+															</div>
+														)}
+													</TableCell>
+												);
+											})}
 										</TableRow>
 									))
 								)}

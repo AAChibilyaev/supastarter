@@ -102,6 +102,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 	const [searchButtonText, setSearchButtonText] = useState(DEFAULT_CONFIG.searchButtonText);
 	const [accentColor, setAccentColor] = useState(DEFAULT_CONFIG.accentColor);
 	const [keyboardShortcut, setKeyboardShortcut] = useState(DEFAULT_CONFIG.keyboardShortcut);
+	const [queryBy, setQueryBy] = useState<string[]>([]);
 
 	// Data
 	const { data: indexes, isLoading: indexesLoading } = useSearchIndexesQuery(organizationId);
@@ -121,7 +122,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 	);
 
 	const searchableFields = useMemo(
-		() => (schemaData?.fields ?? []).filter((f) => f.searchable).map((f) => f.name),
+		() => (schemaData?.fields ?? []).filter((f) => f.index).map((f) => f.name),
 		[schemaData],
 	);
 
@@ -139,6 +140,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 		setSearchButtonText(c.searchButtonText ?? DEFAULT_CONFIG.searchButtonText);
 		setAccentColor(c.accentColor ?? DEFAULT_CONFIG.accentColor);
 		setKeyboardShortcut(c.keyboardShortcut ?? DEFAULT_CONFIG.keyboardShortcut);
+		setQueryBy(c.queryBy ?? DEFAULT_CONFIG.queryBy);
 	}, [widgetData]);
 
 	// Select first index by default
@@ -209,6 +211,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 				defaultSortField: widgetData?.config.defaultSortField,
 				showPrices: widgetData?.config.showPrices ?? true,
 				showImages: widgetData?.config.showImages ?? true,
+				queryBy,
 			},
 		});
 	};
@@ -250,7 +253,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 					<SelectContent>
 						{indexes.map((idx) => (
 							<SelectItem key={idx.slug} value={idx.slug}>
-								{idx.name ?? idx.slug}
+								{idx.displayName ?? idx.slug}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -380,8 +383,14 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 											<input
 												type="checkbox"
 												className="size-4 accent-[var(--color-primary)]"
-												checked={widgetData?.config.queryBy?.includes(field) ?? false}
-												readOnly
+												checked={queryBy.includes(field)}
+													onChange={() => {
+														setQueryBy((prev) =>
+															prev.includes(field)
+																? prev.filter((f) => f !== field)
+																: [...prev, field],
+														);
+													}}
 											/>
 											<span className="font-mono text-xs">{field}</span>
 										</label>

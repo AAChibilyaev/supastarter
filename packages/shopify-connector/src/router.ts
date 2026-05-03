@@ -126,7 +126,7 @@ export const shopifyApp = new Hono()
 			const tokenResult = await exchangeToken(config, shop, code);
 
 			// Fetch store details
-			const client = createShopifyClient(shop, "__temp__");
+			const client = createShopifyClient(shop, shop, tokenResult.accessToken);
 			let shopInfo: { name?: string; email?: string; domain?: string } = {};
 			try {
 				const info = await client.getShopInfo();

@@ -770,6 +770,33 @@ model PaymentProviderEvent {
 // Track onboarding funnel progress for each organization.
 // XOR ownership (user OR organization) mirrors Purchase pattern.
 
+// ─── Roadmap items ─────────────────────────────────────────────
+// Public roadmap items for the marketing site. Stores canonical EN data;
+// localized titles/descriptions remain in i18n.
+
+enum RoadmapItemStatus {
+  shipped
+  inProgress
+  planned
+}
+
+model RoadmapItem {
+  id            String            @id @default(cuid())
+  key           String            @unique
+  title         String
+  description   String
+  status        RoadmapItemStatus
+  quarter       String
+  iconName      String
+  voteCount     Int               @default(0)
+  sortOrder     Int               @default(0)
+  changelogSlug String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@map("roadmap_item")
+}
+
 model ActivationEvent {
   id             String   @id @default(cuid())
   organizationId String

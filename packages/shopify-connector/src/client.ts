@@ -46,11 +46,10 @@ async function acquireToken(storeId: string): Promise<void> {
 	refillBucket(bucket);
 
 	if (bucket.tokens <= 0) {
-		const waitMs = Math.ceil(
-			(REFILL_INTERVAL_MS / REFILL_RATE) * (1 - bucket.tokens / MAX_TOKENS),
-		);
+		// Wait for next token (25ms = 1000ms / 40 tokens)
+		const waitMs = Math.ceil(REFILL_INTERVAL_MS / REFILL_RATE);
 		logger.debug("Shopify rate limit wait", { storeId, waitMs });
-		await new Promise((resolve) => setTimeout(resolve, Math.min(waitMs, 1000)));
+		await new Promise((resolve) => setTimeout(resolve, waitMs));
 		return acquireToken(storeId); // Retry after wait
 	}
 

@@ -1668,6 +1668,7 @@
 		"shipped": "Готово",
 		"inProgress": "В работе",
 		"planned": "Запланировано",
+		"seeChangelog": "Смотреть changelog →",
 		"items": {
 			"searchCore": {
 				"title": "Ядро поиска v0.x",

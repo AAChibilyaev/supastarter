@@ -201,9 +201,80 @@ async function azureEmbeddings(texts: string[], model: string): Promise<Embeddin
 	}));
 }
 
+// ─── OpenAI-Compatible Provider (Ollama, LM Studio, Together AI, etc.) ─────
+
+/**
+ * Create an OpenAI SDK client pointed at an OpenAI-compatible API.
+ * Only model name is required — baseURL and apiKey come from env vars
+ * or can be configured per-index via the model config.
+ */
+export function getOpenaiCompatibleClient(
+	apiUrl?: string,
+	apiKey?: string,
+): OpenAI {
+	return new OpenAI({
+		apiKey: apiKey ?? process.env.OPENAI_COMPATIBLE_API_KEY ?? "",
+		baseURL: apiUrl ?? process.env.OPENAI_COMPATIBLE_API_URL ?? "http://localhost:11434/v1",
+	});
+}
+
+/**
+ * Strip the "openai-compatible/" prefix from model names for API calls.
+ * The actual model name is what follows the prefix (e.g. "nomic-embed-text-v1.5").
+ */
+function toOpenaiCompatibleModelName(model: string): string {
+	return model.replace(/^openai-compatible\//, "");
+}
+
+async function openaiCompatibleEmbedding(
+	text: string,
+	model: string,
+	apiUrl?: string,
+	apiKey?: string,
+): Promise<EmbeddingResult> {
+	const client = getOpenaiCompatibleClient(apiUrl, apiKey);
+	const actualModel = toOpenaiCompatibleModelName(model);
+	const response = await client.embeddings.create({ model: actualModel, input: text });
+	const embedding = response.data[0];
+	return {
+		vector: embedding.embedding,
+		model: response.model,
+		dimensions: embedding.embedding.length,
+		tokens: response.usage?.total_tokens ?? 0,
+	};
+}
+
+async function openaiCompatibleEmbeddings(
+	texts: string[],
+	model: string,
+	apiUrl?: string,
+	apiKey?: string,
+): Promise<EmbeddingResult[]> {
+	const client = getOpenaiCompatibleClient(apiUrl, apiKey);
+	const actualModel = toOpenaiCompatibleModelName(model);
+	const response = await client.embeddings.create({ model: actualModel, input: texts });
+	return response.data.map((embedding) => ({
+		vector: embedding.embedding,
+		model: response.model,
+		dimensions: embedding.embedding.length,
+		tokens: response.usage?.total_tokens
+			? Math.ceil(response.usage.total_tokens / texts.length)
+			: 0,
+	}));
+}
+
 function getModelDef(model: string): EmbeddingModelDef {
 	const def = EMBEDDING_MODELS[model as EmbeddingModelName];
 	if (!def) {
+		// Accept any model with openai-compatible/ prefix dynamically
+		if (model.startsWith("openai-compatible/")) {
+			return {
+				name: model,
+				dimensions: 1536,
+				provider: "openai-compatible" as const,
+				maxInputTokens: 8192,
+			};
+		}
 		throw new Error(
 			`Unknown embedding model: ${model}. Available: ${Object.keys(EMBEDDING_MODELS).join(", ")}`,
 		);
@@ -227,6 +298,8 @@ export async function generateEmbedding(
 			return googleEmbedding(text, model);
 		case "azure":
 			return azureEmbedding(text, model);
+		case "openai-compatible":
+			return openaiCompatibleEmbedding(text, model);
 		default:
 			throw new Error(`Unsupported embedding provider: ${def.provider}`);
 	}
@@ -250,6 +323,8 @@ export async function generateEmbeddings(
 			return googleEmbeddings(texts, model);
 		case "azure":
 			return azureEmbeddings(texts, model);
+		case "openai-compatible":
+			return openaiCompatibleEmbeddings(texts, model);
 		default:
 			throw new Error(`Unsupported embedding provider: ${def.provider}`);
 	}

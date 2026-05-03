@@ -9,6 +9,7 @@
 		"push": "dotenv -c -e ../../.env -- prisma db push",
 		"migrate": "dotenv -c -e ../../.env -- prisma migrate dev",
 		"studio": "dotenv -c -e ../../.env -- prisma studio",
+		"seed": "dotenv -c -e ../../.env -- tsx prisma/seed.ts",
 		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -28,5 +29,8 @@
 		"drizzle-kit": "catalog:",
 		"prisma": "catalog:",
 		"prisma-zod-generator": "catalog:"
+	},
+	"prisma": {
+		"seed": "dotenv -c -e ../../.env -- tsx prisma/seed.ts"
 	}
 }

@@ -546,6 +546,7 @@
 		"shipped": "Publicado",
 		"inProgress": "En progreso",
 		"planned": "Planificado",
+		"seeChangelog": "Ver changelog →",
 		"items": {
 			"searchCore": {
 				"title": "Search core v0.x",

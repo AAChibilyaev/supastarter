@@ -12,6 +12,8 @@ const modelConfigSchema = z.object({
 	enabled: z.boolean().default(false),
 	azureApiUrl: z.string().optional(),
 	azureApiVersion: z.string().optional(),
+	openaiCompatibleApiUrl: z.string().optional(),
+	openaiCompatibleApiKey: z.string().optional(),
 });
 
 type ModelConfig = z.infer<typeof modelConfigSchema>;
@@ -49,6 +51,8 @@ export const getModelConfig = protectedProcedure
 			enabled: modelConfig?.enabled ?? false,
 			azureApiUrl: modelConfig?.azureApiUrl,
 			azureApiVersion: modelConfig?.azureApiVersion,
+			openaiCompatibleApiUrl: modelConfig?.openaiCompatibleApiUrl,
+			openaiCompatibleApiKey: modelConfig?.openaiCompatibleApiKey,
 		};
 	});
 
@@ -69,6 +73,8 @@ export const updateModelConfig = protectedProcedure
 			enabled: z.boolean().optional(),
 			azureApiUrl: z.string().optional(),
 			azureApiVersion: z.string().optional(),
+			openaiCompatibleApiUrl: z.string().optional(),
+			openaiCompatibleApiKey: z.string().optional(),
 		}),
 	)
 	.output(modelConfigSchema)
@@ -99,6 +105,12 @@ export const updateModelConfig = protectedProcedure
 			azureApiVersion:
 				(input.azureApiVersion as string | undefined) ??
 				(existing.azureApiVersion as string | undefined),
+			openaiCompatibleApiUrl:
+				(input.openaiCompatibleApiUrl as string | undefined) ??
+				(existing.openaiCompatibleApiUrl as string | undefined),
+			openaiCompatibleApiKey:
+				(input.openaiCompatibleApiKey as string | undefined) ??
+				(existing.openaiCompatibleApiKey as string | undefined),
 		};
 
 		(schema as Record<string, unknown>)._modelConfig = updated;

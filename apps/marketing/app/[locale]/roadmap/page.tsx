@@ -1,8 +1,10 @@
 import { CtaFooter } from "@home/components/CtaFooter";
+import { listRoadmapItems } from "@repo/database";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { RoadmapGrid } from "../../../modules/company/components/RoadmapGrid";
+import type { RoadmapItemData } from "../../../modules/company/components/RoadmapGrid";
 
 export async function generateMetadata(props: {
 	params: Promise<{ locale: string }>;
@@ -21,6 +23,15 @@ export default async function RoadmapPage(props: { params: Promise<{ locale: str
 
 	const t = await getTranslations({ locale, namespace: "roadmapPage" });
 
+	const dbItems = await listRoadmapItems();
+	const items: RoadmapItemData[] = dbItems.map((item) => ({
+		key: item.key,
+		iconName: item.iconName,
+		voteCount: item.voteCount,
+		status: item.status,
+		changelogSlug: item.changelogSlug,
+	}));
+
 	return (
 		<>
 			<section className="py-20 border-b border-border/60 text-center">
@@ -31,7 +42,7 @@ export default async function RoadmapPage(props: { params: Promise<{ locale: str
 					</p>
 				</div>
 			</section>
-			<RoadmapGrid />
+			<RoadmapGrid items={items} />
 			<CtaFooter />
 		</>
 	);

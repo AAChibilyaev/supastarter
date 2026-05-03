@@ -22,42 +22,32 @@ import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import type { ComponentType } from "react";
 
-interface RoadmapItem {
-	key:
-		| "aiNlp"
-		| "analytics"
-		| "billing"
-		| "connectors"
-		| "docs"
-		| "knowledge"
-		| "marketing"
-		| "metering"
-		| "searchCore"
-		| "selfHost"
-		| "vectorSearch"
-		| "widget";
-	icon: ComponentType<{ className?: string }>;
-	initialVotes: number;
+export interface RoadmapItemData {
+	key: string;
+	iconName: string;
+	voteCount: number;
+	status: "shipped" | "inProgress" | "planned";
+	changelogSlug: string | null;
 }
 
 const VOTE_STORAGE_KEY = "aacsearch_roadmap_votes";
 
-const ALL_ITEMS: RoadmapItem[] = [
-	{ key: "searchCore", icon: CheckCircleIcon, initialVotes: 142 },
-	{ key: "marketing", icon: MegaphoneIcon, initialVotes: 68 },
-	{ key: "connectors", icon: LinkIcon, initialVotes: 95 },
-	{ key: "knowledge", icon: BrainCircuitIcon, initialVotes: 127 },
-	{ key: "metering", icon: GaugeIcon, initialVotes: 89 },
-	{ key: "billing", icon: CreditCardIcon, initialVotes: 73 },
-	{ key: "analytics", icon: BarChart3Icon, initialVotes: 81 },
-	{ key: "widget", icon: MonitorIcon, initialVotes: 64 },
-	{ key: "aiNlp", icon: SparklesIcon, initialVotes: 112 },
-	{ key: "docs", icon: BookOpenIcon, initialVotes: 113 },
-	{ key: "selfHost", icon: CloudIcon, initialVotes: 156 },
-	{ key: "vectorSearch", icon: SearchIcon, initialVotes: 78 },
-];
+const ICON_MAP: Record<string, ComponentType<{ className?: string }>> = {
+	CheckCircleIcon,
+	MegaphoneIcon,
+	LinkIcon,
+	BrainCircuitIcon,
+	GaugeIcon,
+	CreditCardIcon,
+	BarChart3Icon,
+	MonitorIcon,
+	SparklesIcon,
+	BookOpenIcon,
+	CloudIcon,
+	SearchIcon,
+};
 
-const spanMap: Record<RoadmapItem["key"], string> = {
+const spanMap: Record<string, string> = {
 	searchCore: "md:col-span-2",
 	marketing: "md:col-span-2",
 	connectors: "md:col-span-2",
@@ -72,11 +62,19 @@ const spanMap: Record<RoadmapItem["key"], string> = {
 	vectorSearch: "md:col-span-2",
 };
 
-function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
+function RoadmapCard({
+	key: itemKey,
+	iconName,
+	voteCount: initialVotes,
+	status,
+	changelogSlug,
+}: RoadmapItemData) {
 	const t = useTranslations("roadmap");
 	const [votedFeatures, setVotedFeatures] = useState<Record<string, boolean>>({});
 	const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
 	const [mounted, setMounted] = useState(false);
+
+	const Icon = ICON_MAP[iconName] ?? CheckCircleIcon;
 
 	useEffect(() => {
 		try {
@@ -86,9 +84,7 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 
 			const storedCounts = localStorage.getItem(`${VOTE_STORAGE_KEY}_counts`);
 			const initialCounts: Record<string, number> = {};
-			for (const item of ALL_ITEMS) {
-				initialCounts[item.key] = item.initialVotes;
-			}
+			initialCounts[itemKey] = initialVotes;
 			const savedCounts = storedCounts
 				? { ...initialCounts, ...JSON.parse(storedCounts) }
 				: initialCounts;
@@ -97,20 +93,18 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 		} catch {
 			setMounted(true);
 		}
-	}, []);
+	}, [itemKey, initialVotes]);
 
 	const handleVote = useCallback(() => {
 		const newVoted = { ...votedFeatures };
 		const newCounts = { ...voteCounts };
 
-		if (newVoted[key]) {
-			// Unvote
-			delete newVoted[key];
-			newCounts[key] = Math.max(0, (newCounts[key] ?? initialVotes) - 1);
+		if (newVoted[itemKey]) {
+			delete newVoted[itemKey];
+			newCounts[itemKey] = Math.max(0, (newCounts[itemKey] ?? initialVotes) - 1);
 		} else {
-			// Vote
-			newVoted[key] = true;
-			newCounts[key] = (newCounts[key] ?? initialVotes) + 1;
+			newVoted[itemKey] = true;
+			newCounts[itemKey] = (newCounts[itemKey] ?? initialVotes) + 1;
 		}
 
 		setVotedFeatures(newVoted);
@@ -122,12 +116,11 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 		} catch {
 			// localStorage may be full or disabled
 		}
-	}, [key, votedFeatures, voteCounts, initialVotes]);
+	}, [itemKey, votedFeatures, voteCounts, initialVotes]);
 
-	const isVoted = mounted && votedFeatures[key];
-	const voteCount = mounted ? (voteCounts[key] ?? initialVotes) : initialVotes;
+	const isVoted = mounted && votedFeatures[itemKey];
+	const voteCount = mounted ? (voteCounts[itemKey] ?? initialVotes) : initialVotes;
 
-	const status = t(`items.${key}.status`);
 	const isShipped = status === "shipped";
 	const isInProgress = status === "inProgress";
 
@@ -141,7 +134,7 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 		>
 			<FeatureCardHeaderRow icon={Icon}>
 				<CardTitle className="gap-2 flex items-center">
-					{t(`items.${key}.title`)}
+					{t(`items.${itemKey}.title`)}
 					<span
 						className={cn(
 							"text-xs font-normal px-2 py-0.5 rounded-full border",
@@ -158,26 +151,35 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 			</FeatureCardHeaderRow>
 			<CardContent>
 				<CardDescription className="text-sm leading-relaxed">
-					{t(`items.${key}.description`)}
+					{t(`items.${itemKey}.description`)}
 				</CardDescription>
 
-				{/* Vote button row */}
+				{/* Status action row */}
 				<div className="mt-4 pt-3 flex items-center justify-between border-t border-border/20">
-					<button
-						type="button"
-						onClick={handleVote}
-						disabled={isShipped}
-						className={cn(
-							"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
-							isShipped && "cursor-not-allowed opacity-30",
-							isVoted
-								? "border border-primary/20 bg-primary/10 text-primary"
-								: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
-						)}
-					>
-						<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
-						{isVoted ? t("voted") : t("vote")}
-					</button>
+					{isShipped && changelogSlug ? (
+						<a
+							href={`/changelog#${changelogSlug}`}
+							className="gap-1.5 px-3 py-1.5 text-xs font-medium border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20 inline-flex items-center rounded-lg border transition-colors"
+						>
+							{t("seeChangelog")}
+						</a>
+					) : (
+						<button
+							type="button"
+							onClick={handleVote}
+							disabled={isShipped}
+							className={cn(
+								"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
+								isShipped && "cursor-not-allowed opacity-30",
+								isVoted
+									? "border border-primary/20 bg-primary/10 text-primary"
+									: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
+							)}
+						>
+							<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
+							{isVoted ? t("voted") : t("vote")}
+						</button>
+					)}
 					<span className="text-xs text-muted-foreground">
 						<strong className="font-semibold text-foreground">{voteCount}</strong>{" "}
 						{t("votes", { count: voteCount })}
@@ -189,14 +191,13 @@ function RoadmapCard({ key, icon: Icon, initialVotes }: RoadmapItem) {
 }
 
 function RoadmapSection({
-	status,
 	titleKey,
 	items,
 }: {
-	status: string;
 	titleKey: string;
-	items: RoadmapItem[];
+	items: RoadmapItemData[];
 }) {
+
 	const t = useTranslations("roadmap");
 
 	if (items.length === 0) return null;
@@ -210,7 +211,7 @@ function RoadmapSection({
 			</div>
 			<div className="gap-4 md:grid-cols-4 grid grid-cols-1">
 				{items.map((item) => (
-					<div key={item.key} className={spanMap[item.key]}>
+					<div key={item.key} className={spanMap[item.key] ?? ""}>
 						<RoadmapCard {...item} />
 					</div>
 				))}
@@ -219,15 +220,13 @@ function RoadmapSection({
 	);
 }
 
-export function RoadmapGrid() {
+export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 	const t = useTranslations("roadmap");
 
-	const shipped = ALL_ITEMS.filter((item) => t(`items.${item.key}.status`) === "shipped");
-	const inProgress = ALL_ITEMS.filter((item) => t(`items.${item.key}.status`) === "inProgress");
-	const planned = ALL_ITEMS.filter(
-		(item) =>
-			t(`items.${item.key}.status`) !== "shipped" &&
-			t(`items.${item.key}.status`) !== "inProgress",
+	const shipped = items.filter((item) => item.status === "shipped");
+	const inProgress = items.filter((item) => item.status === "inProgress");
+	const planned = items.filter(
+		(item) => item.status !== "shipped" && item.status !== "inProgress",
 	);
 
 	return (
@@ -241,13 +240,9 @@ export function RoadmapGrid() {
 					</div>
 
 					<div className="mt-16">
-						<RoadmapSection status="shipped" titleKey="shippedTitle" items={shipped} />
-						<RoadmapSection
-							status="inProgress"
-							titleKey="inProgressTitle"
-							items={inProgress}
-						/>
-						<RoadmapSection status="planned" titleKey="plannedTitle" items={planned} />
+						<RoadmapSection titleKey="shippedTitle" items={shipped} />
+						<RoadmapSection titleKey="inProgressTitle" items={inProgress} />
+						<RoadmapSection titleKey="plannedTitle" items={planned} />
 					</div>
 				</div>
 			</section>

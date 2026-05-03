@@ -25,7 +25,7 @@ export interface EmbeddingResult {
 export interface EmbeddingModelDef {
 	name: string;
 	dimensions: number;
-	provider: "openai" | "google" | "vertex" | "azure";
+	provider: "openai" | "google" | "vertex" | "azure" | "openai-compatible";
 	maxInputTokens: number;
 }
 
@@ -114,6 +114,25 @@ export const EMBEDDING_MODELS = {
 		provider: "vertex" as const,
 		maxInputTokens: 8192,
 	},
+	// OpenAI-compatible (Ollama, LM Studio, Together AI, etc.)
+	"openai-compatible/nomic-embed-text-v1.5": {
+		name: "openai-compatible/nomic-embed-text-v1.5",
+		dimensions: 768,
+		provider: "openai-compatible" as const,
+		maxInputTokens: 8192,
+	},
+	"openai-compatible/bge-m3": {
+		name: "openai-compatible/bge-m3",
+		dimensions: 1024,
+		provider: "openai-compatible" as const,
+		maxInputTokens: 8192,
+	},
+	"openai-compatible/bge-large-en-v1.5": {
+		name: "openai-compatible/bge-large-en-v1.5",
+		dimensions: 1024,
+		provider: "openai-compatible" as const,
+		maxInputTokens: 512,
+	},
 } satisfies Record<string, EmbeddingModelDef>;
 
 export type EmbeddingModelName = keyof typeof EMBEDDING_MODELS;
@@ -123,6 +142,15 @@ export type EmbeddingModelName = keyof typeof EMBEDDING_MODELS;
 function getModelDef(model: string): EmbeddingModelDef {
 	const def = EMBEDDING_MODELS[model as EmbeddingModelName];
 	if (!def) {
+		// Accept any model with openai-compatible/ prefix dynamically
+		if (model.startsWith("openai-compatible/")) {
+			return {
+				name: model,
+				dimensions: 1536,
+				provider: "openai-compatible" as const,
+				maxInputTokens: 8192,
+			};
+		}
 		throw new Error(`Unknown embedding model: ${model}`);
 	}
 	return def;

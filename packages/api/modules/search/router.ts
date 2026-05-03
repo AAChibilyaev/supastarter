@@ -23,6 +23,7 @@ import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
+import { getGlobalSynonyms, updateGlobalSynonyms } from "./procedures/global-synonyms";
 import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
 import { imageSearch } from "./procedures/image-search";
@@ -66,10 +67,6 @@ import {
 import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-config";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
-import {
-	getGlobalSynonyms,
-	updateGlobalSynonyms,
-} from "./procedures/global-synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
@@ -112,6 +109,10 @@ export const searchRouter = {
 	curations: {
 		get: getCurations,
 		update: updateCurations,
+	},
+	globalSynonyms: {
+		get: getGlobalSynonyms,
+		update: updateGlobalSynonyms,
 	},
 	listConnectorTokens,
 	createConnectorToken,

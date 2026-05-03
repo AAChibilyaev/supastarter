@@ -1,13 +1,12 @@
 "use client";
 
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { logger } from "@repo/logs";
 import { SearchConfigWizard } from "@search/components/wizard/SearchConfigWizard";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-
-import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 export function SearchConfigPage({ organizationId }: { organizationId: string }) {
 	const router = useRouter();

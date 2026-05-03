@@ -230,9 +230,7 @@ export function SearchConfigWizard({
 							t={t}
 						/>
 					)}
-					{currentStep === 2 && (
-						<StepSchema fields={fields} onChange={setFields} t={t} />
-					)}
+					{currentStep === 2 && <StepSchema fields={fields} onChange={setFields} t={t} />}
 					{currentStep === 3 && (
 						<StepSearchConfig
 							fields={fields}
@@ -243,11 +241,16 @@ export function SearchConfigWizard({
 							infixSearch={infixSearch}
 							exactMatch={exactMatch}
 							onChange={(patch) => {
-								if (patch.searchableFields !== undefined) setSearchableFields(patch.searchableFields);
-								if (patch.fieldWeights !== undefined) setFieldWeights(patch.fieldWeights);
-								if (patch.typoTolerance !== undefined) setTypoTolerance(patch.typoTolerance);
-								if (patch.prefixSearch !== undefined) setPrefixSearch(patch.prefixSearch);
-								if (patch.infixSearch !== undefined) setInfixSearch(patch.infixSearch);
+								if (patch.searchableFields !== undefined)
+									setSearchableFields(patch.searchableFields);
+								if (patch.fieldWeights !== undefined)
+									setFieldWeights(patch.fieldWeights);
+								if (patch.typoTolerance !== undefined)
+									setTypoTolerance(patch.typoTolerance);
+								if (patch.prefixSearch !== undefined)
+									setPrefixSearch(patch.prefixSearch);
+								if (patch.infixSearch !== undefined)
+									setInfixSearch(patch.infixSearch);
 								if (patch.exactMatch !== undefined) setExactMatch(patch.exactMatch);
 							}}
 							t={t}
@@ -322,7 +325,7 @@ function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: Step
 					))}
 				</div>
 			) : indexes.length === 0 ? (
-				<div className="py-12 text-center space-y-3">
+				<div className="py-12 space-y-3 text-center">
 					<SearchIcon className="size-10 mx-auto text-muted-foreground/40" />
 					<p className="text-sm text-muted-foreground">{t("noIndexes")}</p>
 					<p className="text-xs text-muted-foreground/60">{t("noIndexesHint")}</p>
@@ -339,13 +342,13 @@ function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: Step
 							onClick={() => onSelect(index.slug)}
 						>
 							<CardContent className="gap-4 p-4 sm:flex-row sm:items-center flex flex-col">
-								<div className="flex-1 min-w-0">
+								<div className="min-w-0 flex-1">
 									<p className="font-medium">{index.name}</p>
 									<p className="text-sm text-muted-foreground">
 										{index.documentCount.toLocaleString()} documents
 									</p>
 								</div>
-								<div className="gap-2 flex items-center shrink-0">
+								<div className="gap-2 flex shrink-0 items-center">
 									<span className="text-xs text-muted-foreground">
 										slug: {index.slug}
 									</span>
@@ -356,9 +359,7 @@ function StepSelectIndex({ indexes, isLoading, selectedSlug, onSelect, t }: Step
 							</CardContent>
 						</Card>
 					))}
-					<p className="text-xs text-muted-foreground pt-2">
-						{t("createIndexHint")}
-					</p>
+					<p className="text-xs pt-2 text-muted-foreground">{t("createIndexHint")}</p>
 				</div>
 			)}
 		</div>
@@ -397,19 +398,33 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 						<table className="text-sm w-full">
 							<thead>
 								<tr className="border-b bg-muted/50">
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldName")}</th>
-									<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldType")}</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldSearch")}</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldFacet")}</th>
-									<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("fieldSort")}</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("fieldName")}
+									</th>
+									<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+										{t("fieldType")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldSearch")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldFacet")}
+									</th>
+									<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+										{t("fieldSort")}
+									</th>
 								</tr>
 							</thead>
 							<tbody>
 								{fields.map((field, idx) => (
 									<tr key={field.name} className="border-b last:border-0">
-										<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
+										<td className="px-4 py-2 font-mono text-xs">
+											{field.name}
+										</td>
 										<td className="px-4 py-2">
-											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">{field.type}</span>
+											<span className="rounded px-1.5 py-0.5 font-mono text-xs bg-muted">
+												{field.type}
+											</span>
 										</td>
 										<td className="px-4 py-2 text-center">
 											<button
@@ -422,7 +437,9 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.index && <CheckIcon className="size-4 p-0.5" />}
+												{field.index && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -436,7 +453,9 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.facet && <CheckIcon className="size-4 p-0.5" />}
+												{field.facet && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
 											</button>
 										</td>
 										<td className="px-4 py-2 text-center">
@@ -450,7 +469,9 @@ function StepSchema({ fields, onChange, t }: StepSchemaProps) {
 														: "border-input",
 												)}
 											>
-												{field.sort && <CheckIcon className="size-4 p-0.5" />}
+												{field.sort && (
+													<CheckIcon className="size-4 p-0.5" />
+												)}
 											</button>
 										</td>
 									</tr>
@@ -474,14 +495,16 @@ interface StepSearchConfigProps {
 	prefixSearch: boolean;
 	infixSearch: "off" | "fallback" | "always";
 	exactMatch: boolean;
-	onChange: (patch: Partial<{
-		searchableFields: string[];
-		fieldWeights: Record<string, number>;
-		typoTolerance: number;
-		prefixSearch: boolean;
-		infixSearch: "off" | "fallback" | "always";
-		exactMatch: boolean;
-	}>) => void;
+	onChange: (
+		patch: Partial<{
+			searchableFields: string[];
+			fieldWeights: Record<string, number>;
+			typoTolerance: number;
+			prefixSearch: boolean;
+			infixSearch: "off" | "fallback" | "always";
+			exactMatch: boolean;
+		}>,
+	) => void;
 	t: (key: string) => string;
 }
 
@@ -524,15 +547,23 @@ function StepSearchConfig({
 							<table className="text-sm w-full">
 								<thead>
 									<tr className="border-b bg-muted/50">
-										<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("fieldName")}</th>
-										<th className="px-4 py-2 font-medium text-center text-muted-foreground">{t("searchable")}</th>
-										<th className="px-4 py-2 font-medium text-left text-muted-foreground">{t("weight")}</th>
+										<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+											{t("fieldName")}
+										</th>
+										<th className="px-4 py-2 font-medium text-center text-muted-foreground">
+											{t("searchable")}
+										</th>
+										<th className="px-4 py-2 font-medium text-left text-muted-foreground">
+											{t("weight")}
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{stringFields.map((field) => (
 										<tr key={field.name} className="border-b last:border-0">
-											<td className="px-4 py-2 font-mono text-xs">{field.name}</td>
+											<td className="px-4 py-2 font-mono text-xs">
+												{field.name}
+											</td>
 											<td className="px-4 py-2 text-center">
 												<button
 													type="button"
@@ -555,8 +586,15 @@ function StepSearchConfig({
 													min={1}
 													max={100}
 													value={fieldWeights[field.name] ?? 1}
-													onChange={(e) => setWeight(field.name, Number(e.target.value))}
-													disabled={!searchableFields.includes(field.name)}
+													onChange={(e) =>
+														setWeight(
+															field.name,
+															Number(e.target.value),
+														)
+													}
+													disabled={
+														!searchableFields.includes(field.name)
+													}
 													className="h-7 w-16 rounded px-2 text-xs border border-input bg-background disabled:opacity-40"
 												/>
 											</td>
@@ -567,7 +605,9 @@ function StepSearchConfig({
 						</CardContent>
 					</Card>
 				) : (
-					<p className="py-4 text-sm text-center text-muted-foreground">{t("noStringFields")}</p>
+					<p className="py-4 text-sm text-center text-muted-foreground">
+						{t("noStringFields")}
+					</p>
 				)}
 			</div>
 
@@ -575,7 +615,9 @@ function StepSearchConfig({
 				<h4 className="text-sm font-medium">{t("ranking")}</h4>
 				<div className="gap-3 sm:grid-cols-2 grid">
 					<div className="space-y-1.5">
-						<label className="text-xs text-muted-foreground">{t("typoTolerance")}</label>
+						<label className="text-xs text-muted-foreground">
+							{t("typoTolerance")}
+						</label>
 						<select
 							value={typoTolerance}
 							onChange={(e) => onChange({ typoTolerance: Number(e.target.value) })}
@@ -702,34 +744,36 @@ function StepPreview({
 			<Card>
 				<CardContent className="p-4 space-y-4">
 					<div>
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+						<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 							{t("summaryIndex")}
 						</p>
-						<p className="text-sm font-medium">{activeIndexName || selectedIndexSlug}</p>
+						<p className="text-sm font-medium">
+							{activeIndexName || selectedIndexSlug}
+						</p>
 					</div>
 					<div className="gap-4 sm:grid-cols-2 grid">
 						<div>
-							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+							<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 								{t("summarySearchFields")}
 							</p>
 							<p className="text-sm">{searchableFields.join(", ") || "—"}</p>
 						</div>
 						<div>
-							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+							<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 								{t("summaryFacetFields")}
 							</p>
 							<p className="text-sm">{facetFields.join(", ") || "—"}</p>
 						</div>
 						{defaultSortField && (
 							<div>
-								<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+								<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 									{t("summaryDefaultSort")}
 								</p>
 								<p className="text-sm">{defaultSortField}</p>
 							</div>
 						)}
 						<div>
-							<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+							<p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 								{t("summaryResultsPerPage")}
 							</p>
 							<p className="text-sm">{resultsPerPage}</p>
@@ -750,7 +794,9 @@ function StepPreview({
 							<label className="text-xs text-muted-foreground">{t("theme")}</label>
 							<select
 								value={theme}
-								onChange={(e) => onThemeChange(e.target.value as "light" | "dark" | "auto")}
+								onChange={(e) =>
+									onThemeChange(e.target.value as "light" | "dark" | "auto")
+								}
 								className="h-8 rounded px-2 text-xs w-full border border-input bg-background"
 							>
 								<option value="light">{t("themeLight")}</option>
@@ -759,7 +805,9 @@ function StepPreview({
 							</select>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">{t("accentColor")}</label>
+							<label className="text-xs text-muted-foreground">
+								{t("accentColor")}
+							</label>
 							<div className="gap-2 flex items-center">
 								<input
 									type="color"
@@ -771,12 +819,14 @@ function StepPreview({
 									type="text"
 									value={accentColor}
 									onChange={(e) => onAccentColorChange(e.target.value)}
-									className="h-8 rounded px-2 text-xs flex-1 border border-input bg-background font-mono"
+									className="h-8 rounded px-2 text-xs font-mono flex-1 border border-input bg-background"
 								/>
 							</div>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">{t("placeholder")}</label>
+							<label className="text-xs text-muted-foreground">
+								{t("placeholder")}
+							</label>
 							<input
 								type="text"
 								value={placeholder}
@@ -785,7 +835,9 @@ function StepPreview({
 							/>
 						</div>
 						<div className="space-y-1.5">
-							<label className="text-xs text-muted-foreground">{t("resultsPerPage")}</label>
+							<label className="text-xs text-muted-foreground">
+								{t("resultsPerPage")}
+							</label>
 							<input
 								type="number"
 								min={5}
@@ -815,7 +867,7 @@ function StepPreview({
 						<SearchIcon className="size-4 text-muted-foreground" />
 						<p className="text-sm font-medium">{t("embedCode")}</p>
 					</div>
-					<pre className="rounded-md bg-muted p-3 text-xs overflow-x-auto font-mono leading-relaxed">
+					<pre className="p-3 text-xs font-mono leading-relaxed overflow-x-auto rounded-md bg-muted">
 						{`<script
   src="http://localhost:3000/api/widget/widget.js"
   data-base-url="http://localhost:3000"
@@ -829,16 +881,12 @@ function StepPreview({
   ${defaultSortField ? `  data-sort="${defaultSortField}"` : ""}
 ></script>`}
 					</pre>
-					<p className="text-xs text-muted-foreground">
-						{t("embedHint")}
-					</p>
+					<p className="text-xs text-muted-foreground">{t("embedHint")}</p>
 				</CardContent>
 			</Card>
 
 			<Button variant="outline" size="sm" asChild>
-				<Link href={`/getting-started`}>
-					{t("skipToGettingStarted")}
-				</Link>
+				<Link href={`/getting-started`}>{t("skipToGettingStarted")}</Link>
 			</Button>
 		</div>
 	);

@@ -17,14 +17,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Slider } from "@repo/ui/components/slider";
 import { Switch } from "@repo/ui/components/switch";
-import { Skeleton } from "@repo/ui/components/skeleton";
-import { toast } from "sonner";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { useSearchIndexesQuery } from "../../lib/api";
 
@@ -68,7 +68,8 @@ function buildEmbedSnippet({
 	];
 	if (!config.showThumbnails) lines.push(`  data-show-thumbnails="false"`);
 	if (!config.showSearchButton) lines.push(`  data-show-search-button="false"`);
-	if (config.searchButtonText !== "Search") lines.push(`  data-search-button-text="${config.searchButtonText}"`);
+	if (config.searchButtonText !== "Search")
+		lines.push(`  data-search-button-text="${config.searchButtonText}"`);
 	if (!config.keyboardShortcut) lines.push(`  data-keyboard-shortcut="false"`);
 	lines.push(`></script>`);
 	return lines.join("\n");
@@ -166,7 +167,19 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 				keyboardShortcut,
 			},
 		});
-	}, [baseUrl, selectedIndexSlug, apiKeyPrefix, theme, placeholder, resultsPerPage, showThumbnails, showSearchButton, searchButtonText, accentColor, keyboardShortcut]);
+	}, [
+		baseUrl,
+		selectedIndexSlug,
+		apiKeyPrefix,
+		theme,
+		placeholder,
+		resultsPerPage,
+		showThumbnails,
+		showSearchButton,
+		searchButtonText,
+		accentColor,
+		keyboardShortcut,
+	]);
 
 	const saveMutation = useMutation({
 		...orpc.search.saveWidgetConfig.mutationOptions(),
@@ -275,7 +288,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 										type="color"
 										value={accentColor}
 										onChange={(e) => setAccentColor(e.target.value)}
-										className="size-10 w-16 cursor-pointer p-1"
+										className="size-10 w-16 p-1 cursor-pointer"
 									/>
 									<Input
 										value={accentColor}
@@ -301,7 +314,7 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 						<div className="space-y-2">
 							<div className="gap-2 flex items-center justify-between">
 								<Label htmlFor="results-per-page">{t("resultsPerPage")}</Label>
-								<span className="text-sm font-mono tabular-nums text-foreground/60">
+								<span className="text-sm font-mono text-foreground/60 tabular-nums">
 									{resultsPerPage}
 								</span>
 							</div>
@@ -362,17 +375,23 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 									{searchableFields.map((field) => (
 										<label
 											key={field}
-											className="gap-2 flex cursor-pointer items-center rounded-md border border-foreground/10 px-3 py-1.5 text-sm hover:bg-foreground/5"
+											className="gap-2 px-3 py-1.5 text-sm flex cursor-pointer items-center rounded-md border border-foreground/10 hover:bg-foreground/5"
 										>
 											<input
 												type="checkbox"
 												className="size-4 accent-[var(--accent-color,var(--color-primary))]"
-												checked={widgetData?.config.queryBy?.includes(field) ?? false}
+												checked={
+													widgetData?.config.queryBy?.includes(field) ??
+													false
+												}
 												onChange={(e) => {
-													const current = widgetData?.config.queryBy ?? [];
+													const current =
+														widgetData?.config.queryBy ?? [];
 													const next = e.target.checked
 														? [...current, field]
-														: current.filter((f: string) => f !== field);
+														: current.filter(
+																(f: string) => f !== field,
+															);
 													// We handle this via save, not local state
 												}}
 											/>
@@ -381,11 +400,17 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 									))}
 								</div>
 							) : (
-								<p className="text-sm text-foreground/50">{t("noSearchableFields")}</p>
+								<p className="text-sm text-foreground/50">
+									{t("noSearchableFields")}
+								</p>
 							)}
 						</div>
 
-						<Button onClick={handleSave} loading={saveMutation.isPending} className="w-full">
+						<Button
+							onClick={handleSave}
+							loading={saveMutation.isPending}
+							className="w-full"
+						>
 							{t("saveConfig")}
 						</Button>
 					</CardContent>
@@ -403,19 +428,22 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 						) : selectedIndexSlug ? (
 							<div className="space-y-4">
 								<div
-									className="rounded-lg border p-8 min-h-80 flex items-center justify-center transition-colors"
+									className="p-8 min-h-80 flex items-center justify-center rounded-lg border transition-colors"
 									style={
 										{
 											"--accent-color": accentColor,
-											backgroundColor: theme === "dark" ? "#1a1a2e" : theme === "light" ? "#ffffff" : undefined,
+											backgroundColor:
+												theme === "dark"
+													? "#1a1a2e"
+													: theme === "light"
+														? "#ffffff"
+														: undefined,
 										} as React.CSSProperties
 									}
 								>
-									<div className="w-full max-w-md space-y-4">
+									<div className="max-w-md space-y-4 w-full">
 										{/* Simulated search input */}
-										<div
-											className="flex items-center gap-2 rounded-lg border bg-background px-3 py-2 shadow-sm"
-										>
+										<div className="gap-2 px-3 py-2 shadow-sm flex items-center rounded-lg border bg-background">
 											<svg
 												className="size-4 shrink-0 text-foreground/40"
 												fill="none"
@@ -429,14 +457,20 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 													d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
 												/>
 											</svg>
-											<span className="text-sm text-foreground/50">{placeholder || "Search..."}</span>
+											<span className="text-sm text-foreground/50">
+												{placeholder || "Search..."}
+											</span>
 											{keyboardShortcut && (
-												<span className="ml-auto rounded border bg-muted px-1.5 py-0.5 text-xs text-foreground/40 font-mono">
+												<span className="rounded px-1.5 py-0.5 text-xs font-mono ml-auto border bg-muted text-foreground/40">
 													⌘K
 												</span>
 											)}
 											{showSearchButton && (
-												<Button size="sm" className="shrink-0" style={{ backgroundColor: accentColor }}>
+												<Button
+													size="sm"
+													className="shrink-0"
+													style={{ backgroundColor: accentColor }}
+												>
 													{searchButtonText || "Search"}
 												</Button>
 											)}
@@ -448,30 +482,30 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 												{showThumbnails && (
 													<div className="size-12 shrink-0 rounded-md bg-foreground/10" />
 												)}
-												<div className="min-w-0 flex-1 space-y-1.5">
-													<div className="h-3 w-3/4 rounded bg-foreground/15" />
-													<div className="h-2.5 w-full rounded bg-foreground/8" />
-													<div className="h-2.5 w-1/2 rounded bg-foreground/8" />
+												<div className="min-w-0 space-y-1.5 flex-1">
+													<div className="h-3 rounded w-3/4 bg-foreground/15" />
+													<div className="h-2.5 rounded w-full bg-foreground/8" />
+													<div className="h-2.5 rounded w-1/2 bg-foreground/8" />
 												</div>
 											</div>
 											<div className="gap-3 flex items-start">
 												{showThumbnails && (
 													<div className="size-12 shrink-0 rounded-md bg-foreground/10" />
 												)}
-												<div className="min-w-0 flex-1 space-y-1.5">
-													<div className="h-3 w-2/3 rounded bg-foreground/15" />
-													<div className="h-2.5 w-full rounded bg-foreground/8" />
-													<div className="h-2.5 w-2/3 rounded bg-foreground/8" />
+												<div className="min-w-0 space-y-1.5 flex-1">
+													<div className="h-3 rounded w-2/3 bg-foreground/15" />
+													<div className="h-2.5 rounded w-full bg-foreground/8" />
+													<div className="h-2.5 rounded w-2/3 bg-foreground/8" />
 												</div>
 											</div>
 											<div className="gap-3 flex items-start">
 												{showThumbnails && (
 													<div className="size-12 shrink-0 rounded-md bg-foreground/10" />
 												)}
-												<div className="min-w-0 flex-1 space-y-1.5">
-													<div className="h-3 w-5/6 rounded bg-foreground/15" />
-													<div className="h-2.5 w-full rounded bg-foreground/8" />
-													<div className="h-2.5 w-1/3 rounded bg-foreground/8" />
+												<div className="min-w-0 space-y-1.5 flex-1">
+													<div className="h-3 rounded w-5/6 bg-foreground/15" />
+													<div className="h-2.5 rounded w-full bg-foreground/8" />
+													<div className="h-2.5 rounded w-1/3 bg-foreground/8" />
 												</div>
 											</div>
 										</div>
@@ -481,13 +515,13 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 								{/* Embed snippet */}
 								<div className="space-y-2">
 									<Label>{tCommon("widget.snippet")}</Label>
-									<pre className="max-h-32 overflow-auto rounded-lg border bg-muted p-3 font-mono text-xs text-muted-foreground">
+									<pre className="max-h-32 p-3 font-mono text-xs overflow-auto rounded-lg border bg-muted text-muted-foreground">
 										{snippet || t("noIndexSelected")}
 									</pre>
 								</div>
 							</div>
 						) : (
-							<div className="flex h-80 items-center justify-center">
+							<div className="h-80 flex items-center justify-center">
 								<p className="text-sm text-foreground/50">{t("noIndexSelected")}</p>
 							</div>
 						)}

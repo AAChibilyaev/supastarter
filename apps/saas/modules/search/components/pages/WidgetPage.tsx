@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
-import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
 import { EmptyState } from "@search/components/cards/EmptyState";
+import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfiguratorPanel";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";

@@ -67,7 +67,7 @@ export function TestimonialCarousel() {
 						</blockquote>
 
 						<div className="mt-8 gap-4 pt-6 flex items-center border-t border-border">
-							<div className="size-10 text-sm font-light flex shrink-0 items-center justify-center rounded-full bg-muted text-foreground select-none">
+							<div className="size-10 text-sm font-light flex shrink-0 items-center justify-center rounded-md bg-muted text-foreground select-none">
 								{testimonial.initials}
 							</div>
 							<div>

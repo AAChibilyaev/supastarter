@@ -17,7 +17,7 @@ export function HowItWorks() {
 				<div className="mt-16 gap-12 md:mt-20 lg:grid-cols-3 lg:gap-8 grid grid-cols-1">
 					{steps.map((step, i) => (
 						<div key={step} className="flex flex-col items-center text-center">
-							<div className="size-14 flex items-center justify-center rounded-full bg-foreground text-background">
+							<div className="size-14 flex items-center justify-center rounded-md bg-foreground text-background">
 								<span className="text-lg font-bold">{i + 1}</span>
 							</div>
 							<h3 className="mt-6 text-lg font-light text-foreground">

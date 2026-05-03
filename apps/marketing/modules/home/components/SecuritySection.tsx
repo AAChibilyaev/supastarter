@@ -42,8 +42,8 @@ export function SecuritySection() {
 				<div className="mt-12 md:mt-16 sm:grid-cols-2 lg:grid-cols-3 gap-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
 						<Card key={key}>
-							<CardContent className="p-6 md:p-8 gap-3 flex flex-col">
-								<div className="flex items-center gap-3">
+							<CardContent className="p-6 md:p-8 gap-4 flex flex-col">
+								<div className="flex items-center gap-4">
 									<div className="size-10 flex shrink-0 items-center justify-center rounded-lg bg-muted">
 										<Icon className="size-5 text-muted-foreground" />
 									</div>

@@ -185,7 +185,7 @@ export function QuickstartSection() {
 								>
 									<span
 										className={cn(
-											"size-4 text-[10px] rounded-full flex items-center justify-center font-semibold shrink-0",
+											"size-4 text-[10px] rounded-md flex items-center justify-center font-semibold shrink-0",
 											isDone
 												? "bg-success/20 text-success"
 												: isActive

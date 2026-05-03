@@ -359,7 +359,7 @@ export function LiveDemoSection() {
 								type="button"
 								onClick={() => applyChip(chip)}
 								className={cn(
-									"px-2.5 py-1 text-xs rounded-full border transition-all",
+									"px-2.5 py-1 text-xs rounded-md border transition-all",
 									query === chip
 										? "bg-primary/10 border-primary/30 text-primary"
 										: "border-border bg-muted/50 text-muted-foreground hover:border-primary/30 hover:text-foreground",
@@ -476,7 +476,7 @@ export function LiveDemoSection() {
 												key={chip}
 												type="button"
 												onClick={() => applyChip(chip)}
-												className="px-3 py-1 text-xs rounded-full border border-border hover:bg-muted transition-colors text-muted-foreground"
+												className="px-3 py-1 text-xs rounded-md border border-border hover:bg-muted transition-colors text-muted-foreground"
 											>
 												{chip}
 											</button>

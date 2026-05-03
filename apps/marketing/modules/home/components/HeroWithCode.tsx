@@ -32,7 +32,7 @@ export function HeroWithCode() {
 			<div className="gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20 container grid">
 				{/* Left: text */}
 				<div className="flex flex-col justify-center">
-					<div className="mb-6 gap-2 px-3 py-1 text-xs font-semibold tracking-widest inline-flex w-fit items-center rounded-full border border-primary/25 bg-primary/8 text-primary uppercase">
+					<div className="mb-6 gap-2 px-3 py-1 text-xs font-semibold tracking-widest inline-flex w-fit items-center rounded-md border border-primary/25 bg-primary/8 text-primary uppercase">
 						{t("home.hero.badge")}
 					</div>
 

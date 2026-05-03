@@ -20,7 +20,7 @@ export function FitSection() {
 					{/* Perfect fit */}
 					<div className="rounded-xl border border-border bg-card p-6 md:p-8">
 						<div className="flex items-center gap-2 mb-5">
-							<div className="size-7 rounded-full bg-success/15 flex items-center justify-center shrink-0">
+							<div className="size-7 rounded-md bg-success/15 flex items-center justify-center shrink-0">
 								<CheckIcon className="size-4 text-success" />
 							</div>
 							<h3 className="text-base font-light text-foreground">{t("perfectTitle")}</h3>
@@ -40,7 +40,7 @@ export function FitSection() {
 					{/* Skip if */}
 					<div className="rounded-xl border border-border bg-card p-6 md:p-8">
 						<div className="flex items-center gap-2 mb-5">
-							<div className="size-7 rounded-full bg-muted flex items-center justify-center shrink-0">
+							<div className="size-7 rounded-md bg-muted flex items-center justify-center shrink-0">
 								<XIcon className="size-4 text-muted-foreground" />
 							</div>
 							<h3 className="text-base font-light text-foreground">{t("skipTitle")}</h3>

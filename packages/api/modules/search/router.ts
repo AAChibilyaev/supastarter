@@ -1,4 +1,5 @@
 import { analytics } from "./procedures/analytics";
+import { ctrAnalytics } from "./procedures/ctr-analytics";
 import {
 	listAnalyticsRules,
 	createAnalyticsRule,
@@ -33,6 +34,7 @@ import { importJobs } from "./procedures/import-jobs";
 import { listApiKeys } from "./procedures/list-api-keys";
 import { listConnectorSyncJobs } from "./procedures/list-connector-sync-jobs";
 import { listConnectorTokens } from "./procedures/list-connector-tokens";
+import { listShopifyStores } from "./procedures/list-shopify-stores";
 import { listDocuments } from "./procedures/list-documents";
 import { listIndexes } from "./procedures/list-indexes";
 import { listModels, getModelConfig, updateModelConfig } from "./procedures/models";
@@ -95,6 +97,7 @@ export const searchRouter = {
 	widgetConfig: getWidgetConfig,
 	saveWidgetConfig,
 	analytics,
+	ctrAnalytics,
 	pipelineStatus,
 	listDocuments,
 	onboardingStatus,
@@ -123,6 +126,7 @@ export const searchRouter = {
 	createConnectorToken,
 	revokeConnectorToken,
 	listConnectorSyncJobs,
+	listShopifyStores,
 	vectorSearch,
 	hybridSearch,
 	semanticSearch,

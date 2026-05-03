@@ -16,6 +16,41 @@ const presetSchema = z.object({
 	value: z.record(z.string(), z.unknown()),
 });
 
+export const deletePreset = protectedProcedure
+	.route({
+		method: "DELETE",
+		path: "/search/indexes/{slug}/presets/{name}",
+		tags: ["Search"],
+		summary: "Delete a search preset",
+		description: "Removes a search preset by its name.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			slug: searchIndexSlugSchema,
+			name: z.string().min(1).max(200),
+		}),
+	)
+	.output(
+		z.object({
+			success: z.boolean(),
+			name: z.string(),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		await requireOrganizationAdmin(input.organizationId, context.user);
+		await requireSearchIndex(input.organizationId, input.slug);
+
+		const client = getTypesenseClient();
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			await (client as any).presets(input.name).delete();
+			return { success: true, name: input.name };
+		} catch {
+			return { success: false, name: input.name };
+		}
+	});
+
 export const listPresets = protectedProcedure
 	.route({
 		method: "GET",

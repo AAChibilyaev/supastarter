@@ -29,6 +29,7 @@ import { listModels, getModelConfig, updateModelConfig } from "./procedures/mode
 import { onboardingStatus } from "./procedures/onboarding-status";
 import {
 	createSnapshot,
+	deletePreset,
 	healthCheck,
 	listAliases,
 	listPresets,
@@ -45,8 +46,13 @@ import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
 import { getSchema, updateSchema } from "./procedures/schema";
 import { semanticSearch } from "./procedures/semantic-search";
-import { listStemmingOverrides, upsertStemmingOverride } from "./procedures/stemming";
-import { listStopwords, upsertStopwords } from "./procedures/stopwords";
+import { spellCheck } from "./procedures/spell-check";
+import {
+	deleteStemmingOverride,
+	listStemmingOverrides,
+	upsertStemmingOverride,
+} from "./procedures/stemming";
+import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/stopwords";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
@@ -102,6 +108,7 @@ export const searchRouter = {
 	federatedSearch,
 	groupedSearch,
 	querySuggestions,
+	spellCheck,
 	listModels,
 	modelConfig: {
 		get: getModelConfig,
@@ -110,6 +117,7 @@ export const searchRouter = {
 	presets: {
 		list: listPresets,
 		upsert: upsertPreset,
+		delete: deletePreset,
 	},
 	aliases: {
 		list: listAliases,
@@ -123,10 +131,12 @@ export const searchRouter = {
 	stemming: {
 		list: listStemmingOverrides,
 		upsert: upsertStemmingOverride,
+		delete: deleteStemmingOverride,
 	},
 	stopwords: {
 		list: listStopwords,
 		upsert: upsertStopwords,
+		delete: deleteStopwords,
 	},
 	clusterOps: {
 		perform: performClusterOperation,

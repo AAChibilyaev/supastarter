@@ -376,6 +376,31 @@
 				"delete": "Eliminar tarjeta",
 				"deleteConfirmTitle": "¿Eliminar esta tarjeta?",
 				"deleteConfirmMessage": "Esta tarjeta se eliminará de su cuenta."
+			},
+			"transactionHistory": {
+				"title": "Historial de transacciones",
+				"description": "Transacciones recientes de la wallet y cargos por exceso",
+				"empty": "Aún no hay transacciones",
+				"date": "Fecha",
+				"type": "Tipo",
+				"source": "Origen",
+				"amount": "Monto"
+			},
+			"autoRecharge": {
+				"title": "Recarga automática",
+				"description": "Recargue su wallet automáticamente cuando el saldo baje de un umbral",
+				"thresholdLabel": "Umbral de recarga",
+				"thresholdPlaceholder": "p.ej. 500",
+				"thresholdHint": "Cuando su saldo baje de este monto (en RUB), se activará la recarga automática",
+				"topupLabel": "Monto de recarga",
+				"topupPlaceholder": "p.ej. 1000",
+				"topupHint": "Monto a agregar cada vez que se active la recarga automática (mín 1 RUB)",
+				"rub": "RUB",
+				"submit": "Configurar recarga automática",
+				"saving": "Guardando...",
+				"setupSuccess": "Recarga automática configurada exitosamente",
+				"setupError": "Error al configurar la recarga automática",
+				"invalidValues": "Por favor ingrese montos válidos"
 			}
 		},
 		"notificationsPage": {

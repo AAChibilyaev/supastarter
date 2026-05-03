@@ -1,12 +1,15 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { AiWalletCard } from "@payments/components/AiWalletCard";
+import { AutoRechargeSettings } from "@payments/components/AutoRechargeSettings";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { InvoiceHistory } from "@payments/components/InvoiceHistory";
+import { OverageTransactionHistory } from "@payments/components/OverageTransactionHistory";
 import { TopUpDialog } from "@payments/components/TopUpDialog";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
+import { OverageStatusCard } from "@search/components/sections/OverageStatusCard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -55,9 +58,10 @@ export default async function BillingSettingsPage({
 		<>
 			<PageHeader title={t("title")} subtitle={t("changePlan.description")} />
 
-			{/* AACsearch-specific plan info */}
-			<div className="mb-6">
+			{/* AACsearch-specific plan info + overage status */}
+			<div className="mb-6 space-y-4">
 				<BillingPlanInfo />
+				<OverageStatusCard />
 			</div>
 
 			<SettingsList>
@@ -72,6 +76,11 @@ export default async function BillingSettingsPage({
 				<SettingsList>
 					<AiWalletCard organizationId={organization.id} />
 				</SettingsList>
+			</div>
+
+			<div className="mt-8 space-y-4">
+				<AutoRechargeSettings />
+				<OverageTransactionHistory />
 			</div>
 
 			<div className="mt-8">

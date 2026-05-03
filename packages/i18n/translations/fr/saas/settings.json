@@ -376,6 +376,31 @@
 				"delete": "Supprimer la carte",
 				"deleteConfirmTitle": "Supprimer cette carte?",
 				"deleteConfirmMessage": "Cette carte sera supprimée de votre compte."
+			},
+			"transactionHistory": {
+				"title": "Historique des transactions",
+				"description": "Transactions récentes du portefeuille et frais de dépassement",
+				"empty": "Aucune transaction pour le moment",
+				"date": "Date",
+				"type": "Type",
+				"source": "Source",
+				"amount": "Montant"
+			},
+			"autoRecharge": {
+				"title": "Recharge automatique",
+				"description": "Rechargez automatiquement votre portefeuille lorsque le solde descend sous un seuil",
+				"thresholdLabel": "Seuil de recharge",
+				"thresholdPlaceholder": "ex. 500",
+				"thresholdHint": "Lorsque votre solde descend sous ce montant (en RUB), la recharge automatique se déclenche",
+				"topupLabel": "Montant de recharge",
+				"topupPlaceholder": "ex. 1000",
+				"topupHint": "Montant à ajouter à chaque recharge automatique (min 1 RUB)",
+				"rub": "RUB",
+				"submit": "Configurer la recharge automatique",
+				"saving": "Enregistrement...",
+				"setupSuccess": "Recharge automatique configurée avec succès",
+				"setupError": "Échec de la configuration de la recharge automatique",
+				"invalidValues": "Veuillez saisir des montants valides"
 			}
 		},
 		"notificationsPage": {

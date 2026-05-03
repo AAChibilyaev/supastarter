@@ -1,7 +1,10 @@
 import { getSession } from "@auth/lib/server";
 import { ActivePlan } from "@payments/components/ActivePlan";
+import { AiWalletCard } from "@payments/components/AiWalletCard";
 import { ChangePlan } from "@payments/components/ChangePlan";
+import { OverageTransactionHistory } from "@payments/components/OverageTransactionHistory";
 import { PaymentMethodsCard } from "@payments/components/PaymentMethodsCard";
+import { TopUpDialog } from "@payments/components/TopUpDialog";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { PageHeader } from "@shared/components/PageHeader";
@@ -45,11 +48,19 @@ export default async function BillingSettingsPage() {
 				<PaymentMethodsCard />
 			</SettingsList>
 
-			{activePlan?.purchaseId && (
-				<div className="mt-8">
-					<PaymentMethodCard purchaseId={activePlan.purchaseId} />
+			{/* AI Wallet section for personal account */}
+			<div className="mt-8 space-y-4">
+				<div className="flex justify-end">
+					<TopUpDialog />
 				</div>
-			)}
+				<SettingsList>
+					<AiWalletCard />
+				</SettingsList>
+			</div>
+
+			<div className="mt-8">
+				<OverageTransactionHistory />
+			</div>
 		</>
 	);
 }

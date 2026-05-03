@@ -374,6 +374,31 @@
 				"delete": "Remove card",
 				"deleteConfirmTitle": "Remove this card?",
 				"deleteConfirmMessage": "This card will be removed from your account."
+			},
+			"transactionHistory": {
+				"title": "Transaction History",
+				"description": "Recent wallet transactions and overage charges",
+				"empty": "No transactions yet",
+				"date": "Date",
+				"type": "Type",
+				"source": "Source",
+				"amount": "Amount"
+			},
+			"autoRecharge": {
+				"title": "Auto Recharge",
+				"description": "Automatically top up your wallet when balance drops below a threshold",
+				"thresholdLabel": "Recharge threshold",
+				"thresholdPlaceholder": "e.g. 500",
+				"thresholdHint": "When your balance drops below this amount (in RUB), auto-recharge triggers",
+				"topupLabel": "Top-up amount",
+				"topupPlaceholder": "e.g. 1000",
+				"topupHint": "Amount to add each time auto-recharge triggers (min 1 RUB)",
+				"rub": "RUB",
+				"submit": "Set up auto recharge",
+				"saving": "Saving...",
+				"setupSuccess": "Auto-recharge configured successfully",
+				"setupError": "Failed to configure auto-recharge",
+				"invalidValues": "Please enter valid amounts"
 			}
 		},
 		"notificationsPage": {

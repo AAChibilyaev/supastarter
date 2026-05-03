@@ -376,6 +376,31 @@
 				"delete": "Karte entfernen",
 				"deleteConfirmTitle": "Diese Karte entfernen?",
 				"deleteConfirmMessage": "Diese Karte wird von Ihrem Konto entfernt."
+			},
+			"transactionHistory": {
+				"title": "Transaktionsverlauf",
+				"description": "Letzte Wallet-Transaktionen und Überlaufgebühren",
+				"empty": "Noch keine Transaktionen",
+				"date": "Datum",
+				"type": "Typ",
+				"source": "Quelle",
+				"amount": "Betrag"
+			},
+			"autoRecharge": {
+				"title": "Automatische Aufladung",
+				"description": "Wallet automatisch aufladen, wenn der Kontostand unter einen Schwellenwert fällt",
+				"thresholdLabel": "Aufladungsschwelle",
+				"thresholdPlaceholder": "z.B. 500",
+				"thresholdHint": "Wenn Ihr Kontostand unter diesen Betrag (in RUB) fällt, wird die automatische Aufladung ausgelöst",
+				"topupLabel": "Aufladebetrag",
+				"topupPlaceholder": "z.B. 1000",
+				"topupHint": "Betrag, der bei jeder automatischen Aufladung hinzugefügt wird (min 1 RUB)",
+				"rub": "RUB",
+				"submit": "Automatische Aufladung einrichten",
+				"saving": "Wird gespeichert...",
+				"setupSuccess": "Automatische Aufladung erfolgreich konfiguriert",
+				"setupError": "Fehler bei der Konfiguration der automatischen Aufladung",
+				"invalidValues": "Bitte geben Sie gültige Beträge ein"
 			}
 		},
 		"notificationsPage": {

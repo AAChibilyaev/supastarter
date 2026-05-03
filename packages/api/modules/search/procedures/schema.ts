@@ -78,9 +78,8 @@ export const getSchema = protectedProcedure
 			defaultSortingField: fullCollection.default_sorting_field ?? null,
 			enableNestedFields: fullCollection.enable_nested_fields ?? false,
 			numDocuments: fullCollection.num_documents ?? 0,
-			tokenSeparators: (fullCollection as unknown as Record<string, unknown>).token_separators as
-				| string[]
-				| undefined,
+			tokenSeparators: (fullCollection as unknown as Record<string, unknown>)
+				.token_separators as string[] | undefined,
 			symbolTokensToIndex: (fullCollection as unknown as Record<string, unknown>)
 				.symbol_tokens_to_index as string[] | undefined,
 		};
@@ -134,12 +133,8 @@ export const updateSchema = protectedProcedure
 			const schema = {
 				fields: fields as unknown[],
 				...(defaultSortingField ? { defaultSortingField } : {}),
-				...(tokenSeparators !== undefined
-					? { tokenSeparators }
-					: {}),
-				...(symbolTokensToIndex !== undefined
-					? { symbolTokensToIndex }
-					: {}),
+				...(tokenSeparators !== undefined ? { tokenSeparators } : {}),
+				...(symbolTokensToIndex !== undefined ? { symbolTokensToIndex } : {}),
 			};
 
 			await db.searchIndex.update({

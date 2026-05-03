@@ -1,9 +1,21 @@
 import { ORPCError } from "@orpc/client";
-import { getPurchaseById } from "@repo/database";
-import { listInvoices as listInvoicesFn } from "@repo/payments";
+import { getOrganizationMembership, getPurchasesByOrganizationId, getPurchasesByUserId } from "@repo/database";
+import { logger } from "@repo/logs";
+import { listCustomerInvoices } from "@repo/payments";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+
+const InvoiceSchema = z.object({
+	id: z.string(),
+	date: z.number().nullable(),
+	amountPaid: z.number(),
+	currency: z.string(),
+	status: z.string().nullable(),
+	invoicePdf: z.string().nullable(),
+	hostedInvoiceUrl: z.string().nullable(),
+	number: z.string().nullable(),
+});
 
 export const listInvoices = protectedProcedure
 	.route({
@@ -11,69 +23,43 @@ export const listInvoices = protectedProcedure
 		path: "/payments/invoices",
 		tags: ["Payments"],
 		summary: "List invoices",
-		description: "Get all invoices for a purchase's subscription.",
+		description: "List Stripe invoices for the current user or organization",
 	})
 	.input(
 		z.object({
-			purchaseId: z.string(),
+			organizationId: z.string().optional(),
+			limit: z.number().min(1).max(100).optional().default(10),
+			startingAfter: z.string().optional(),
 		}),
 	)
 	.output(
-		z.array(
-			z.object({
-				id: z.string(),
-				number: z.string(),
-				amount: z.number(),
-				currency: z.string(),
-				status: z.string(),
-				paidAt: z.string().nullable(),
-				periodStart: z.string(),
-				periodEnd: z.string(),
-				pdfUrl: z.string().nullable(),
-				hostedUrl: z.string().nullable(),
-			}),
-		),
+		z.object({
+			invoices: z.array(InvoiceSchema),
+			hasMore: z.boolean(),
+		}),
 	)
-	.handler(async ({ input, context: { user } }) => {
-		const purchase = await getPurchaseById(input.purchaseId);
-		if (!purchase) {
-			throw new ORPCError("NOT_FOUND", { message: "Purchase not found" });
-		}
-
-		// Verify ownership: user must own the purchase or be in the org
-		if (purchase.userId && purchase.userId !== user.id) {
-			throw new ORPCError("FORBIDDEN");
-		}
-		if (purchase.organizationId && !purchase.userId?.startsWith("org_")) {
-			// Allow if user is in the organization
-			const { getOrganizationMembership } = await import("@repo/database");
-			const membership = await getOrganizationMembership(purchase.organizationId, user.id);
+	.handler(async ({ input: { organizationId, limit, startingAfter }, context: { user } }) => {
+		if (organizationId) {
+			const membership = await getOrganizationMembership(organizationId, user.id);
 			if (!membership) {
 				throw new ORPCError("FORBIDDEN");
 			}
 		}
 
-		if (!purchase.subscriptionId) {
-			return [];
+		const purchases = organizationId
+			? await getPurchasesByOrganizationId(organizationId)
+			: await getPurchasesByUserId(user.id);
+
+		const customerId = purchases.find((p) => p.customerId)?.customerId;
+
+		if (!customerId) {
+			return { invoices: [], hasMore: false };
 		}
 
 		try {
-			const invoices = await listInvoicesFn(purchase.subscriptionId);
-			return invoices.map((inv) => ({
-				id: inv.id,
-				number: inv.number ?? "",
-				amount: inv.amount,
-				currency: inv.currency,
-				status: inv.status,
-				paidAt: inv.paidAt,
-				periodStart: inv.periodStart,
-				periodEnd: inv.periodEnd,
-				pdfUrl: inv.pdfUrl,
-				hostedUrl: inv.hostedUrl,
-			}));
-		} catch {
-			throw new ORPCError("INTERNAL_SERVER_ERROR", {
-				message: "Failed to retrieve invoices",
-			});
+			return await listCustomerInvoices({ customerId, limit, startingAfter });
+		} catch (e) {
+			logger.error("Failed to list Stripe invoices", e);
+			throw new ORPCError("INTERNAL_SERVER_ERROR");
 		}
 	});

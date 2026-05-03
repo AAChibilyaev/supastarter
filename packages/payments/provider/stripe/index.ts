@@ -1,94 +1,23 @@
 import {
 	createPurchase,
-	db,
 	deletePurchaseBySubscriptionId,
 	getPurchaseBySubscriptionId,
 	updatePurchase,
 } from "@repo/database";
 import { logger } from "@repo/logs";
-import { sendEmail } from "@repo/mail";
-import { createNotification } from "@repo/notifications";
 import Stripe from "stripe";
 
 import { setCustomerIdToEntity } from "../../lib/customer";
-import { invalidatePlanCache } from "../../lib/entitlements";
 import { getPlanIdByProviderPriceId } from "../../lib/provider-price-ids";
-import type { CreateUpgradeSession } from "../../types";
 import type {
 	CancelSubscription,
 	CreateCheckoutLink,
 	CreateCustomerPortalLink,
-	GetProrationPreview,
-	ListInvoices,
 	SetSubscriptionSeats,
-	UpgradeSubscription,
 	WebhookHandler,
 } from "../../types";
 
 let stripeClient: Stripe | null = null;
-
-// In-memory cache of processed Stripe event IDs for idempotency.
-// Best-effort guard within the same process lifetime (survives restarts only via Stripe's own retry idempotency).
-const processedEventIds = new Set<string>();
-const IDEMPOTENCY_CLEANUP_INTERVAL_MS = 3600_000; // 1 hour
-let lastCleanup = Date.now();
-
-/** Check if an event has already been processed. Logs a warning on duplicate. */
-function isEventProcessed(eventId: string): boolean {
-	if (processedEventIds.has(eventId)) {
-		logger.warn("Duplicate Stripe event detected (skipping)", { eventId });
-		return true;
-	}
-	processedEventIds.add(eventId);
-
-	// Periodic cleanup to prevent memory leak
-	const now = Date.now();
-	if (now - lastCleanup > IDEMPOTENCY_CLEANUP_INTERVAL_MS) {
-		processedEventIds.clear();
-		lastCleanup = now;
-	}
-	return false;
-}
-
-/** Retry a Stripe API call with exponential backoff on transient errors. */
-async function retryStripeCall<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
-	let lastError: unknown;
-	for (let attempt = 0; attempt <= maxRetries; attempt++) {
-		try {
-			return await fn();
-		} catch (error) {
-			lastError = error;
-			if (error instanceof Stripe.errors.StripeError) {
-				// Only retry on rate limits (429) and server errors (5xx)
-				if (error.statusCode && error.statusCode >= 500 && error.statusCode < 600) {
-					if (attempt < maxRetries) {
-						const delay = Math.min(1000 * 2 ** attempt, 10_000);
-						logger.warn("Stripe API error, retrying", {
-							statusCode: error.statusCode,
-							attempt: attempt + 1,
-							delayMs: delay,
-						});
-						await new Promise((r) => setTimeout(r, delay));
-						continue;
-					}
-				} else if (error.statusCode === 429) {
-					if (attempt < maxRetries) {
-						const delay = Math.min(2000 * 2 ** attempt, 15_000);
-						logger.warn("Stripe rate limited, retrying", {
-							attempt: attempt + 1,
-							delayMs: delay,
-						});
-						await new Promise((r) => setTimeout(r, delay));
-						continue;
-					}
-				}
-			}
-			// Non-retryable error or exhausted retries
-			throw error;
-		}
-	}
-	throw lastError;
-}
 
 export function getStripeClient() {
 	if (stripeClient) {
@@ -125,8 +54,6 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 		user_id: userId || null,
 	};
 
-	const automaticTaxEnabled = process.env.STRIPE_AUTOMATIC_TAX === "true";
-
 	const response = await stripeClient.checkout.sessions.create({
 		mode: type === "subscription" ? "subscription" : "payment",
 		success_url: redirectUrl ?? "",
@@ -141,7 +68,6 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 			? {
 					payment_intent_data: {
 						metadata,
-						setup_future_usage: "off_session",
 					},
 					customer_creation: "always",
 				}
@@ -149,25 +75,8 @@ export const createCheckoutLink: CreateCheckoutLink = async (options) => {
 					subscription_data: {
 						metadata,
 						trial_period_days: trialPeriodDays,
-						...(automaticTaxEnabled
-							? {
-									default_settings: {
-										card: {
-											request_three_d_secure: "automatic",
-										},
-									},
-								}
-							: {}),
 					},
 				}),
-		...(automaticTaxEnabled
-			? {
-					automatic_tax: { enabled: true },
-					tax_id_collection: { enabled: true },
-					billing_address_collection: "required",
-					...(customerId ? { customer_update: { address: "auto", name: "auto" } } : {}),
-				}
-			: {}),
 		metadata,
 	});
 
@@ -207,365 +116,53 @@ export const setSubscriptionSeats: SetSubscriptionSeats = async ({ id, seats }) 
 	});
 };
 
-export const cancelSubscription: CancelSubscription = async (id, options) => {
+export const cancelSubscription: CancelSubscription = async (id) => {
 	const stripeClient = getStripeClient();
 
-	if (options?.mode === "cancel_at_period_end") {
-		await stripeClient.subscriptions.update(id, { cancel_at_period_end: true });
-	} else {
-		await stripeClient.subscriptions.cancel(id);
-	}
+	await stripeClient.subscriptions.cancel(id);
 };
 
-export interface PaymentMethodInfo {
+export interface StripeInvoice {
 	id: string;
-	brand: string | null;
-	last4: string | null;
-	expMonth: number | null;
-	expYear: number | null;
+	date: number | null;
+	amountPaid: number;
+	currency: string;
+	status: string | null;
+	invoicePdf: string | null;
+	hostedInvoiceUrl: string | null;
+	number: string | null;
 }
 
-export const listPaymentMethods = async (customerId: string): Promise<PaymentMethodInfo[]> => {
-	const stripeClient = getStripeClient();
-	const methods = await stripeClient.paymentMethods.list({
+export const listCustomerInvoices = async ({
+	customerId,
+	limit = 10,
+	startingAfter,
+}: {
+	customerId: string;
+	limit?: number;
+	startingAfter?: string;
+}): Promise<{ invoices: StripeInvoice[]; hasMore: boolean }> => {
+	const stripe = getStripeClient();
+
+	const response = await stripe.invoices.list({
 		customer: customerId,
-		type: "card",
+		limit,
+		...(startingAfter ? { starting_after: startingAfter } : {}),
 	});
-	return methods.data.map((pm) => ({
-		id: pm.id,
-		brand: pm.card?.brand ?? null,
-		last4: pm.card?.last4 ?? null,
-		expMonth: pm.card?.exp_month ?? null,
-		expYear: pm.card?.exp_year ?? null,
+
+	const invoices: StripeInvoice[] = response.data.map((invoice: Stripe.Invoice) => ({
+		id: invoice.id,
+		date: invoice.created,
+		amountPaid: invoice.amount_paid,
+		currency: invoice.currency,
+		status: invoice.status ?? null,
+		invoicePdf: invoice.invoice_pdf ?? null,
+		hostedInvoiceUrl: invoice.hosted_invoice_url ?? null,
+		number: invoice.number ?? null,
 	}));
+
+	return { invoices, hasMore: response.has_more };
 };
-
-export const detachPaymentMethod = async (paymentMethodId: string): Promise<void> => {
-	const stripeClient = getStripeClient();
-	await stripeClient.paymentMethods.detach(paymentMethodId);
-};
-
-export const createUpgradeSession: CreateUpgradeSession = async (params) => {
-	const stripeClient = getStripeClient();
-	const { subscriptionId, newPriceId, customerId, organizationId, userId, returnUrl } = params;
-
-	// Retrieve the current subscription to get the existing item
-	const subscription = await retryStripeCall(() =>
-		stripeClient.subscriptions.retrieve(subscriptionId),
-	);
-
-	if (!subscription) {
-		throw new Error(`Subscription ${subscriptionId} not found`);
-	}
-
-	const currentItem = subscription.items?.data[0];
-	if (!currentItem) {
-		throw new Error(`No items found on subscription ${subscriptionId}`);
-	}
-
-	const currentPriceId = currentItem.price.id;
-	if (currentPriceId === newPriceId) {
-		return {
-			type: "direct_update" as const,
-			success: true,
-			immediateAmount: 0,
-			currency: (currentItem.price.currency ?? "usd").toUpperCase(),
-			creditAmount: 0,
-			nextInvoiceAmount: currentItem.price.unit_amount ?? null,
-		};
-	}
-
-	// Get accurate proration via Stripe SDK v22 createPreview
-	const upcomingInvoice = await retryStripeCall(() =>
-		stripeClient.invoices.createPreview({
-			customer: customerId,
-			subscription: subscriptionId,
-			subscription_details: {
-				items: [{ id: currentItem.id, deleted: true }, { price: newPriceId }],
-				proration_behavior: "create_prorations",
-				billing_cycle_anchor: "unchanged",
-			},
-		}),
-	);
-
-	const currency = (upcomingInvoice.currency ?? "usd").toUpperCase();
-	const amountDue = upcomingInvoice.amount_due;
-	const amountPaid = upcomingInvoice.amount_paid;
-	const immediateAmount = amountDue - amountPaid;
-
-	// Credit = sum of negative proration line items for unused time
-	const creditLines = upcomingInvoice.lines.data.filter(
-		(line: {
-			amount: number;
-			parent?: {
-				subscription_item_details?: { proration: boolean } | null;
-				invoice_item_details?: { proration: boolean } | null;
-			} | null;
-		}) =>
-			line.amount < 0 &&
-			(line.parent?.subscription_item_details?.proration ??
-				line.parent?.invoice_item_details?.proration ??
-				false),
-	);
-	const creditAmount = Math.abs(creditLines.reduce((sum, line) => sum + line.amount, 0));
-
-	// Next full invoice amount = new price (non-proration items)
-	const nextInvoiceAmount = upcomingInvoice.lines.data
-		.filter(
-			(line: {
-				amount: number;
-				pricing?: {
-					price_details?: {
-						price: string | { id: string };
-					} | null;
-				} | null;
-				parent?: {
-					subscription_item_details?: { proration: boolean } | null;
-					invoice_item_details?: { proration: boolean } | null;
-				} | null;
-			}) => {
-				const linePriceId =
-					typeof line.pricing?.price_details?.price === "object"
-						? line.pricing.price_details.price.id
-						: line.pricing?.price_details?.price;
-				const isProration =
-					line.parent?.subscription_item_details?.proration ??
-					line.parent?.invoice_item_details?.proration ??
-					false;
-				return linePriceId === newPriceId && !isProration;
-			},
-		)
-		.reduce((sum, line) => sum + line.amount, 0);
-
-	// If payment is needed, create a Checkout session
-	if (immediateAmount > 0) {
-		const metadata: Record<string, string> = {
-			upgrade_subscription: "true",
-			current_subscription_id: subscriptionId,
-			new_price_id: newPriceId,
-		};
-		if (organizationId) {
-			metadata.organization_id = organizationId;
-		}
-		if (userId) {
-			metadata.user_id = userId;
-		}
-
-		const session = await retryStripeCall(() =>
-			stripeClient.checkout.sessions.create({
-				mode: "payment",
-				customer: customerId,
-				line_items: [
-					{
-						price_data: {
-							currency: upcomingInvoice.currency ?? "usd",
-							product_data: {
-								name: `Plan upgrade — prorated amount`,
-							},
-							unit_amount: immediateAmount,
-						},
-						quantity: 1,
-					},
-				],
-				metadata,
-				success_url: returnUrl,
-				cancel_url: returnUrl,
-			}),
-		);
-
-		logger.info("Upgrade Checkout session created", {
-			subscriptionId,
-			from: currentPriceId,
-			to: newPriceId,
-			immediateAmount,
-			sessionId: session.id,
-		});
-
-		return {
-			type: "checkout" as const,
-			url: session.url,
-			immediateAmount,
-			currency,
-			creditAmount,
-			nextInvoiceAmount,
-		};
-	}
-
-	// No payment needed — update subscription directly
-	await retryStripeCall(() =>
-		stripeClient.subscriptions.update(subscriptionId, {
-			items: [
-				{
-					id: currentItem.id,
-					deleted: true,
-				},
-				{
-					price: newPriceId,
-				},
-			],
-			proration_behavior: "create_prorations",
-			billing_cycle_anchor: "unchanged",
-			off_session: true,
-		}),
-	);
-
-	logger.info("Subscription upgraded directly (no payment needed)", {
-		subscriptionId,
-		from: currentPriceId,
-		to: newPriceId,
-		immediateAmount,
-	});
-
-	return {
-		type: "direct_update" as const,
-		success: true,
-		immediateAmount,
-		currency,
-		creditAmount,
-		nextInvoiceAmount,
-	};
-};
-export const upgradeSubscription: UpgradeSubscription = async ({
-	subscriptionId,
-	newPriceId,
-	seats,
-	prorationBehavior = "create_prorations",
-}) => {
-	const stripeClient = getStripeClient();
-
-	// Retrieve the current subscription to get the existing item IDs
-	const subscription = await retryStripeCall(() =>
-		stripeClient.subscriptions.retrieve(subscriptionId),
-	);
-
-	if (!subscription) {
-		throw new Error(`Subscription ${subscriptionId} not found`);
-	}
-
-	const currentItem = subscription.items?.data[0];
-	if (!currentItem) {
-		throw new Error(`No items found on subscription ${subscriptionId}`);
-	}
-
-	// Build the update: mark old item as deleted, add new item
-	const items: Stripe.SubscriptionUpdateParams.Item[] = [
-		{
-			id: currentItem.id,
-			deleted: true,
-		},
-		{
-			price: newPriceId,
-			...(seats ? { quantity: seats } : {}),
-		},
-	];
-
-	await retryStripeCall(() =>
-		stripeClient.subscriptions.update(subscriptionId, {
-			items,
-			proration_behavior: prorationBehavior,
-			// Preserve the current billing cycle anchor
-			billing_cycle_anchor: "unchanged",
-			// Ensure subscription doesn't pause during update
-			off_session: true,
-		}),
-	);
-
-	logger.info("Subscription upgraded/downgraded", {
-		subscriptionId,
-		from: currentItem.price.id,
-		to: newPriceId,
-		prorationBehavior,
-	});
-};
-
-/**
- * Preview prorated charges/credits for a plan change without applying it.
- * Calculates approximate proration from the current subscription period.
- */
-export const getProrationPreview: GetProrationPreview = async ({
-	subscriptionId,
-	newPriceId,
-	seats: _seats,
-}) => {
-	const stripeClient = getStripeClient();
-
-	const subscription = await retryStripeCall(() =>
-		stripeClient.subscriptions.retrieve(subscriptionId),
-	);
-
-	if (!subscription) {
-		throw new Error(`Subscription ${subscriptionId} not found`);
-	}
-
-	const currentItem = subscription.items?.data[0];
-	if (!currentItem) {
-		throw new Error(`No items found on subscription ${subscriptionId}`);
-	}
-
-	// Get both price objects to compare amounts
-	const oldPrice = currentItem.price;
-	const newPriceObj = await retryStripeCall(() => stripeClient.prices.retrieve(newPriceId));
-
-	if (!oldPrice || !newPriceObj) {
-		throw new Error("Could not retrieve price information");
-	}
-
-	const oldAmount = oldPrice.unit_amount ?? 0;
-	const newAmount = newPriceObj.unit_amount ?? 0;
-	const currency = (oldPrice.currency ?? "usd").toUpperCase();
-
-	// Calculate proration based on remaining days in the current period
-	const now = Math.floor(Date.now() / 1000);
-	const sub = subscription as unknown as {
-		current_period_start: number;
-		current_period_end: number;
-	};
-	const periodStart = sub.current_period_start;
-	const periodEnd = sub.current_period_end;
-	const totalPeriodDays = periodEnd - periodStart;
-	const remainingDays = periodEnd - now;
-	const fractionRemaining = totalPeriodDays > 0 ? remainingDays / totalPeriodDays : 0;
-
-	// Credit for unused portion of old plan
-	const creditAmount = Math.round(oldAmount * fractionRemaining);
-
-	// Charge for new plan for remaining days
-	const newPlanCharge = Math.round(newAmount * fractionRemaining);
-
-	// Net immediate effect (positive = charge, negative = credit)
-	const immediateAmount = newPlanCharge - creditAmount;
-
-	// Next full invoice amount (new plan full price)
-	const nextInvoiceAmount = newAmount;
-
-	return {
-		prorationDate: now,
-		immediateAmount,
-		currency,
-		nextInvoiceAmount,
-		creditAmount,
-	};
-};
-
-async function getPaymentRecipients(purchase: {
-	userId: string | null;
-	organizationId: string | null;
-}): Promise<string[]> {
-	if (purchase.userId) {
-		return [purchase.userId];
-	}
-	if (purchase.organizationId) {
-		const members = await db.member.findMany({
-			where: {
-				organizationId: purchase.organizationId,
-				role: { in: ["owner", "admin"] },
-			},
-			select: { userId: true },
-		});
-		return members.map((m) => m.userId);
-	}
-	return [];
-}
 
 export const webhookHandler: WebhookHandler = async (req) => {
 	const stripeClient = getStripeClient();
@@ -593,124 +190,9 @@ export const webhookHandler: WebhookHandler = async (req) => {
 	}
 
 	try {
-		// Idempotency: skip already-processed Stripe events
-		if (isEventProcessed(event.id)) {
-			logger.info("Skipping already-processed Stripe event", {
-				eventId: event.id,
-				type: event.type,
-			});
-			return new Response(null, { status: 204 });
-		}
-
-		logger.info("Processing Stripe webhook event", {
-			eventId: event.id,
-			type: event.type,
-		});
-
 		switch (event.type) {
 			case "checkout.session.completed": {
 				const { mode, metadata, customer, id } = event.data.object;
-
-				// Handle upgrade subscription checkout (payment for prorated upgrade amount)
-				if (metadata?.upgrade_subscription === "true") {
-					const currentSubscriptionId = metadata.current_subscription_id;
-					const newPriceId = metadata.new_price_id;
-
-					if (!currentSubscriptionId || !newPriceId) {
-						return new Response("Missing upgrade metadata.", {
-							status: 400,
-						});
-					}
-
-					// Retrieve the current subscription to get the existing item IDs
-					const subscription = await retryStripeCall(() =>
-						stripeClient.subscriptions.retrieve(currentSubscriptionId),
-					);
-
-					if (!subscription) {
-						return new Response("Subscription not found.", {
-							status: 404,
-						});
-					}
-
-					const currentItem = subscription.items?.data[0];
-					if (!currentItem) {
-						return new Response("No items found on subscription.", {
-							status: 404,
-						});
-					}
-
-					// Now update the subscription with the new price
-					await retryStripeCall(() =>
-						stripeClient.subscriptions.update(currentSubscriptionId, {
-							items: [
-								{
-									id: currentItem.id,
-									deleted: true,
-								},
-								{
-									price: newPriceId,
-								},
-							],
-							proration_behavior: "none",
-							billing_cycle_anchor: "unchanged",
-							off_session: true,
-						}),
-					);
-
-					logger.info("Subscription upgraded via Checkout payment", {
-						subscriptionId: currentSubscriptionId,
-						to: newPriceId,
-					});
-
-					// Send plan upgrade welcome notification
-					const planName = getPlanIdByProviderPriceId(newPriceId) || "new plan";
-					const purchaseAfterUpgrade =
-						await getPurchaseBySubscriptionId(currentSubscriptionId);
-					if (purchaseAfterUpgrade) {
-						const recipients = await getPaymentRecipients(purchaseAfterUpgrade);
-						const orgSlug = purchaseAfterUpgrade.organizationId
-							? (
-									await db.organization.findUnique({
-										where: { id: purchaseAfterUpgrade.organizationId },
-										select: { slug: true },
-									})
-								)?.slug
-							: null;
-						const dashboardUrl = orgSlug
-							? `/organizations/${orgSlug}/settings/billing`
-							: "/settings/billing";
-
-						await Promise.all(
-							recipients.map((userId) =>
-								createNotification({
-									userId,
-									type: "WELCOME",
-									data: {
-										headline: `Plan upgraded to ${planName}`,
-										message:
-											`Your plan has been successfully upgraded to ${planName}. ` +
-											"You now have access to all the features and increased limits of your new plan.",
-									},
-									link: dashboardUrl,
-								}).catch((err: unknown) =>
-									logger.error("Failed to send upgrade notification", err),
-								),
-							),
-						);
-
-						// Invalidate plan cache so updated limits take effect immediately
-						if (purchaseAfterUpgrade.organizationId) {
-							invalidatePlanCache(purchaseAfterUpgrade.organizationId);
-						}
-						logger.info("Plan cache invalidated after checkout upgrade", {
-							subscriptionId: currentSubscriptionId,
-							organizationId: purchaseAfterUpgrade.organizationId,
-						});
-					}
-
-					break;
-				}
 
 				if (mode === "subscription") {
 					break;
@@ -774,337 +256,24 @@ export const webhookHandler: WebhookHandler = async (req) => {
 				break;
 			}
 			case "customer.subscription.updated": {
-				const sub = event.data.object;
-				const existingPurchase = await getPurchaseBySubscriptionId(sub.id);
+				const subscriptionId = event.data.object.id;
+
+				const existingPurchase = await getPurchaseBySubscriptionId(subscriptionId);
 
 				if (existingPurchase) {
-					const priceId = sub.items?.data[0].price?.id;
-					const status = sub.cancel_at_period_end ? "canceling" : sub.status;
+					const priceId = event.data.object.items?.data[0].price?.id;
 
 					await updatePurchase({
 						id: existingPurchase.id,
-						status,
+						status: event.data.object.status,
 						...(priceId ? { priceId } : {}),
 					});
-
-					// Invalidate plan cache so updated limits take effect immediately
-					if (existingPurchase.organizationId) {
-						invalidatePlanCache(existingPurchase.organizationId);
-					}
 				}
 
 				break;
 			}
 			case "customer.subscription.deleted": {
-				const sub = event.data.object as Stripe.Subscription & {
-					current_period_end: number;
-				};
-				const purchase = await getPurchaseBySubscriptionId(sub.id);
-
-				if (purchase) {
-					const recipients = await getPaymentRecipients(purchase);
-					await Promise.all(
-						recipients.map(async (userId) => {
-							const user = await db.user.findUnique({
-								where: { id: userId },
-								select: { email: true, locale: true, name: true },
-							});
-							if (!user?.email) return;
-
-							const orgLookup = purchase.organizationId
-								? await db.organization.findUnique({
-										where: { id: purchase.organizationId },
-										select: { name: true, slug: true },
-									})
-								: null;
-							const orgNameVal = orgLookup?.name ?? "your organization";
-							const orgSlugVal = orgLookup?.slug;
-
-							const planName =
-								getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
-							const endDate = sub.current_period_end
-								? new Date(sub.current_period_end * 1000).toLocaleDateString(
-										"en-US",
-										{
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-										},
-									)
-								: "soon";
-
-							const reactivateUrl = orgSlugVal
-								? `/organizations/${orgSlugVal}/settings/billing`
-								: "/settings/billing";
-
-							await sendEmail({
-								to: user.email,
-								locale:
-									(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
-									undefined,
-								templateId: "subscriptionCancelled",
-								context: {
-									orgName: orgNameVal,
-									planName,
-									endDate,
-									reactivateUrl,
-									manageBillingUrl: reactivateUrl,
-								},
-							}).catch((err: unknown) =>
-								logger.error(
-									"customer.subscription.deleted: sendEmail failed",
-									err,
-								),
-							);
-						}),
-					);
-				}
-
-				await deletePurchaseBySubscriptionId(sub.id);
-				break;
-			}
-			case "invoice.paid": {
-				const invoice = event.data.object;
-				const subscriptionId =
-					typeof invoice.parent?.subscription_details?.subscription === "string"
-						? invoice.parent.subscription_details.subscription
-						: null;
-
-				if (!subscriptionId) break;
-
-				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
-				if (!purchase) break;
-
-				await updatePurchase({ id: purchase.id, status: "active" });
-				logger.info("invoice.paid: purchase status set to active", {
-					purchaseId: purchase.id,
-				});
-
-				// Send receipt email
-				const recipients = await getPaymentRecipients(purchase);
-				await Promise.all(
-					recipients.map(async (userId) => {
-						const user = await db.user.findUnique({
-							where: { id: userId },
-							select: { email: true, locale: true, name: true },
-						});
-						if (!user?.email) return;
-
-						const orgLookup = purchase.organizationId
-							? await db.organization.findUnique({
-									where: { id: purchase.organizationId },
-									select: { name: true, slug: true },
-								})
-							: null;
-						const orgNameVal = orgLookup?.name ?? "your organization";
-						const orgSlugVal = orgLookup?.slug;
-
-						const amount = invoice.total
-							? new Intl.NumberFormat("en-US", {
-									style: "currency",
-									currency: (invoice.currency ?? "usd").toUpperCase(),
-								}).format(invoice.total / 100)
-							: "—";
-
-						const date = invoice.created
-							? new Date(invoice.created * 1000).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})
-							: "—";
-
-						const planName =
-							getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
-
-						const invoiceUrl = invoice.hosted_invoice_url ?? "";
-						const manageBillingUrl = orgSlugVal
-							? `/organizations/${orgSlugVal}/settings/billing`
-							: "/settings/billing";
-
-						await sendEmail({
-							to: user.email,
-							locale:
-								(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
-								undefined,
-							templateId: "invoicePaid",
-							context: {
-								orgName: orgNameVal,
-								planName,
-								amount,
-								currency: (invoice.currency ?? "usd").toUpperCase(),
-								date,
-								invoiceUrl,
-								manageBillingUrl,
-							},
-						}).catch((err: unknown) =>
-							logger.error("invoice.paid: sendEmail failed", err),
-						);
-					}),
-				);
-
-				break;
-			}
-			case "invoice.payment_failed": {
-				const invoice = event.data.object;
-				const subscriptionId =
-					typeof invoice.parent?.subscription_details?.subscription === "string"
-						? invoice.parent.subscription_details.subscription
-						: null;
-
-				if (!subscriptionId) break;
-
-				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
-				if (!purchase) break;
-
-				await updatePurchase({ id: purchase.id, status: "past_due" });
-
-				const recipients = await getPaymentRecipients(purchase);
-				const link = invoice.hosted_invoice_url ?? null;
-
-				await Promise.all(
-					recipients.map((userId) =>
-						createNotification({
-							userId,
-							type: "PAYMENT_FAILED",
-							data: {
-								headline: "Subscription payment failed",
-								message: "Your subscription payment could not be processed.",
-								hosted_invoice_url: link,
-							},
-							link,
-						}).catch((err: unknown) =>
-							logger.error("invoice.payment_failed: createNotification failed", err),
-						),
-					),
-				);
-
-				// Send payment failed email
-				await Promise.all(
-					recipients.map(async (userId) => {
-						const user = await db.user.findUnique({
-							where: { id: userId },
-							select: { email: true, locale: true, name: true },
-						});
-						if (!user?.email) return;
-
-						const orgLookup = purchase.organizationId
-							? await db.organization.findUnique({
-									where: { id: purchase.organizationId },
-									select: { name: true, slug: true },
-								})
-							: null;
-						const orgNameVal = orgLookup?.name ?? "your organization";
-						const orgSlugVal = orgLookup?.slug;
-
-						const invoiceObj = event.data.object as unknown as Record<string, unknown>;
-						const amount = (invoiceObj.total as unknown as number)
-							? new Intl.NumberFormat("en-US", {
-									style: "currency",
-									currency: (
-										(invoiceObj.currency as unknown as string as string) ??
-										"usd"
-									).toUpperCase(),
-								}).format((invoiceObj.total as unknown as number as number) / 100)
-							: "—";
-
-						const date = (invoiceObj.created as unknown as number)
-							? new Date(
-									(invoiceObj.created as unknown as number) * 1000,
-								).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})
-							: "—";
-
-						const planName =
-							getPlanIdByProviderPriceId(purchase.priceId) ?? "current plan";
-
-						const pmDetails = (invoiceObj as Record<string, unknown>)
-							?.payment_method_details;
-						const brand =
-							pmDetails && typeof pmDetails === "object" && "card" in pmDetails
-								? ((pmDetails as { card?: { brand?: string; last4?: string } }).card
-										?.brand ?? "Card")
-								: "Card";
-						const last4 =
-							pmDetails && typeof pmDetails === "object" && "card" in pmDetails
-								? ((pmDetails as { card?: { brand?: string; last4?: string } }).card
-										?.last4 ?? "****")
-								: "****";
-
-						const updatePaymentUrl = orgSlugVal
-							? `/organizations/${orgSlugVal}/settings/billing/payment-methods`
-							: "/settings/billing/payment-methods";
-						const manageBillingUrl = orgSlugVal
-							? `/organizations/${orgSlugVal}/settings/billing`
-							: "/settings/billing";
-
-						await sendEmail({
-							to: user.email,
-							locale:
-								(user.locale as "en" | "de" | "es" | "fr" | "ru" | null) ??
-								undefined,
-							templateId: "paymentFailed",
-							context: {
-								orgName: orgNameVal,
-								planName,
-								brand: brand.charAt(0).toUpperCase() + brand.slice(1),
-								last4,
-								amount,
-								currency: (
-									(invoiceObj.currency as unknown as string) ?? "usd"
-								).toUpperCase(),
-								date,
-								updatePaymentUrl,
-								manageBillingUrl,
-							},
-						}).catch((err: unknown) =>
-							logger.error("invoice.payment_failed: sendEmail failed", err),
-						);
-					}),
-				);
-
-				break;
-			}
-			case "invoice.payment_action_required": {
-				const invoice = event.data.object;
-				const subscriptionId =
-					typeof invoice.parent?.subscription_details?.subscription === "string"
-						? invoice.parent.subscription_details.subscription
-						: null;
-
-				if (!subscriptionId) break;
-
-				const purchase = await getPurchaseBySubscriptionId(subscriptionId);
-				if (!purchase) break;
-
-				await updatePurchase({ id: purchase.id, status: "past_due" });
-
-				const recipients = await getPaymentRecipients(purchase);
-				const hostedInvoiceUrl = invoice.hosted_invoice_url ?? null;
-
-				await Promise.all(
-					recipients.map((userId) =>
-						createNotification({
-							userId,
-							type: "PAYMENT_FAILED",
-							data: {
-								headline: "Payment action required",
-								message:
-									"Your subscription payment requires additional action to complete.",
-								hosted_invoice_url: hostedInvoiceUrl,
-							},
-							link: hostedInvoiceUrl,
-						}).catch((err: unknown) =>
-							logger.error(
-								"invoice.payment_action_required: createNotification failed",
-								err,
-							),
-						),
-					),
-				);
+				await deletePurchaseBySubscriptionId(event.data.object.id);
 
 				break;
 			}
@@ -1120,44 +289,5 @@ export const webhookHandler: WebhookHandler = async (req) => {
 		return new Response(`Webhook error: ${error instanceof Error ? error.message : ""}`, {
 			status: 400,
 		});
-	}
-};
-
-/**
- * Retrieve all invoices for a subscription from Stripe.
- */
-export const listInvoices: ListInvoices = async (subscriptionId: string) => {
-	const stripeClient = getStripeClient();
-
-	try {
-		const result = await retryStripeCall(() =>
-			stripeClient.invoices.list({
-				subscription: subscriptionId,
-				limit: 100,
-			}),
-		);
-
-		return (result.data ?? []).map((inv) => ({
-			id: inv.id,
-			number: inv.number ?? "",
-			amount: inv.total ?? 0,
-			currency: (inv.currency ?? "usd").toUpperCase(),
-			status: inv.status ?? "unknown",
-			paidAt:
-				inv.status === "paid" && inv.status_transitions?.paid_at
-					? new Date(inv.status_transitions.paid_at * 1000).toISOString()
-					: null,
-			periodStart: inv.period_start
-				? new Date(inv.period_start * 1000).toISOString()
-				: new Date().toISOString(),
-			periodEnd: inv.period_end
-				? new Date(inv.period_end * 1000).toISOString()
-				: new Date().toISOString(),
-			pdfUrl: inv.invoice_pdf ?? null,
-			hostedUrl: inv.hosted_invoice_url ?? null,
-		}));
-	} catch (error) {
-		logger.error("listInvoices failed", { subscriptionId, error });
-		return [];
 	}
 };

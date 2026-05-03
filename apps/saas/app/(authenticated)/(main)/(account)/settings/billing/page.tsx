@@ -2,17 +2,13 @@ import { getSession } from "@auth/lib/server";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { InvoiceHistory } from "@payments/components/InvoiceHistory";
-import { PaymentMethodCard } from "@payments/components/PaymentMethodCard";
-import { UpgradeSuccessToast } from "@payments/components/UpgradeSuccessToast";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { PageHeader } from "@shared/components/PageHeader";
-import { SettingsItem } from "@shared/components/SettingsItem";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { getServerQueryClient } from "@shared/lib/server";
 import { getTranslations } from "next-intl/server";
-import { Suspense } from "react";
 
 export async function generateMetadata() {
 	const t = await getTranslations("settings.billing");
@@ -41,9 +37,6 @@ export default async function BillingSettingsPage() {
 
 	return (
 		<>
-			<Suspense fallback={null}>
-				<UpgradeSuccessToast />
-			</Suspense>
 			<PageHeader title={t("title")} subtitle={t("changePlan.description")} />
 
 			<SettingsList>
@@ -51,17 +44,9 @@ export default async function BillingSettingsPage() {
 				<ChangePlan userId={session?.user.id} activePlanId={activePlan?.id} />
 			</SettingsList>
 
-			{activePlan?.purchaseId && (
-				<div className="mt-8 space-y-6">
-\t\t\t\t\t<SettingsItem title={t("paymentMethod.title")}>
-						<PaymentMethodCard purchaseId={activePlan.purchaseId} />
-					</SettingsItem>
-
-\t\t\t\t\t<SettingsItem title={t("invoiceHistory.title")}>
-						<InvoiceHistory purchaseId={activePlan.purchaseId} />
-					</SettingsItem>
-				</div>
-			)}
+			<div className="mt-8">
+				<InvoiceHistory />
+			</div>
 		</>
 	);
 }

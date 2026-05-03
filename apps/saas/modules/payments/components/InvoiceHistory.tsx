@@ -1,151 +1,183 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@repo/ui/components/table";
-import { toastError } from "@repo/ui/components/toast";
+import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
-import { DownloadIcon, FileTextIcon } from "lucide-react";
+import { DownloadIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { InvoiceStatusBadge } from "./InvoiceStatusBadge";
+const ITEMS_PER_PAGE = 10;
 
-const PAGE_SIZE = 10;
+type InvoiceStatus = string | null;
 
-export function InvoiceHistory({ purchaseId }: { purchaseId: string }) {
+function getStatusBadge(status: InvoiceStatus) {
+	if (status === "paid") {
+		return "success" as const;
+	}
+	if (status === "open" || status === "draft") {
+		return "warning" as const;
+	}
+	if (status === "void" || status === "uncollectible") {
+		return "error" as const;
+	}
+	return "info" as const;
+}
+
+function getStatusLabel(status: InvoiceStatus, t: ReturnType<typeof useTranslations>) {
+	if (status === "paid") {
+		return t("settings.billing.invoices.paid");
+	}
+	if (status === "open" || status === "draft") {
+		return t("settings.billing.invoices.pending");
+	}
+	if (status === "void" || status === "uncollectible") {
+		return t("settings.billing.invoices.failed");
+	}
+	return status ?? "—";
+}
+
+export function InvoiceHistory({ organizationId }: { organizationId?: string }) {
 	const t = useTranslations();
 	const format = useFormatter();
-	const [page, setPage] = useState(0);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [cursorStack, setCursorStack] = useState<string[]>([]);
 
-	const { data: invoices = [], isLoading } = useQuery(
+	const startingAfter = cursorStack[cursorStack.length - 1];
+
+	const { data, isLoading } = useQuery(
 		orpc.payments.listInvoices.queryOptions({
-			input: { purchaseId },
+			input: {
+				organizationId,
+				limit: ITEMS_PER_PAGE,
+				startingAfter,
+			},
 		}),
 	);
 
-	const totalPages = Math.max(1, Math.ceil(invoices.length / PAGE_SIZE));
-	const currentPage = Math.min(page, totalPages - 1);
-	const pageInvoices = invoices.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
+	const invoices = data?.invoices ?? [];
+	const hasMore = data?.hasMore ?? false;
 
-	if (isLoading) {
-		return (
-			<div className="p-6 text-sm rounded-lg border text-center text-foreground/60">
-				{t("settings.billing.invoiceHistory.loading")}
-			</div>
-		);
-	}
+	const handleNextPage = () => {
+		if (hasMore && invoices.length > 0) {
+			const lastId = invoices[invoices.length - 1].id;
+			setCursorStack((prev) => [...prev, lastId]);
+			setCurrentPage((p) => p + 1);
+		}
+	};
 
-	if (invoices.length === 0) {
-		return (
-			<div className="p-6 rounded-lg border text-center">
-				<FileTextIcon className="mb-2 size-8 mx-auto text-foreground/40" />
-				<p className="text-sm text-foreground/60">
-					{t("settings.billing.invoiceHistory.empty")}
-				</p>
-			</div>
-		);
-	}
+	const handlePrevPage = () => {
+		if (currentPage > 1) {
+			setCursorStack((prev) => prev.slice(0, -1));
+			setCurrentPage((p) => p - 1);
+		}
+	};
 
 	return (
-		<div className="space-y-4">
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead>{t("settings.billing.invoiceHistory.date")}</TableHead>
-						<TableHead>{t("settings.billing.invoiceHistory.amount")}</TableHead>
-						<TableHead>{t("settings.billing.invoiceHistory.status")}</TableHead>
-						<TableHead className="text-right">
-							{t("settings.billing.invoiceHistory.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{pageInvoices.map((inv) => (
-						<TableRow key={inv.id}>
-							<TableCell className="whitespace-nowrap">
-								{format.dateTime(new Date(inv.periodStart), {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})}
-							</TableCell>
-							<TableCell>
-								{format.number(inv.amount / 100, {
-									style: "currency",
-									currency: inv.currency,
-								})}
-							</TableCell>
-							<TableCell>
-								<InvoiceStatusBadge status={inv.status} />
-							</TableCell>
-							<TableCell className="text-right">
-								{inv.pdfUrl ? (
-									<Button
-										variant="secondary"
-										size="sm"
-										onClick={() => {
-											try {
-												window.open(inv.pdfUrl!, "_blank");
-											} catch {
-												toastError(
-													t(
-														"settings.billing.invoiceHistory.downloadError",
-													),
-												);
-											}
-										}}
-									>
-										<DownloadIcon className="mr-2 size-4" />
-										{t("settings.billing.invoiceHistory.downloadPdf")}
-									</Button>
-								) : (
-									<span className="text-xs text-foreground/40">
-										{t("settings.billing.invoiceHistory.notAvailable")}
-									</span>
-								)}
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-
-			{totalPages > 1 && (
-				<div className="flex items-center justify-between">
-					<p className="text-xs text-foreground/60">
-						{t("settings.billing.invoiceHistory.pageInfo", {
-							start: currentPage * PAGE_SIZE + 1,
-							end: Math.min((currentPage + 1) * PAGE_SIZE, invoices.length),
-							total: invoices.length,
-						})}
-					</p>
-					<div className="gap-2 flex">
-						<Button
-							variant="secondary"
-							size="sm"
-							disabled={currentPage === 0}
-							onClick={() => setPage((p) => p - 1)}
-						>
-							{t("settings.billing.invoiceHistory.previous")}
-						</Button>
-						<Button
-							variant="secondary"
-							size="sm"
-							disabled={currentPage >= totalPages - 1}
-							onClick={() => setPage((p) => p + 1)}
-						>
-							{t("settings.billing.invoiceHistory.next")}
-						</Button>
+		<Card>
+			<CardHeader>
+				<CardTitle>{t("settings.billing.invoices.title")}</CardTitle>
+			</CardHeader>
+			<CardContent className="p-0">
+				{isLoading ? (
+					<div className="p-6 space-y-3">
+						{Array.from({ length: 3 }).map((_, i) => (
+							<Skeleton key={i} className="h-10 w-full" />
+						))}
 					</div>
-				</div>
-			)}
-		</div>
+				) : invoices.length === 0 ? (
+					<div className="p-6 text-center text-sm text-muted-foreground">
+						{t("settings.billing.invoices.emptyState")}
+					</div>
+				) : (
+					<>
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead>Date</TableHead>
+									<TableHead>Amount</TableHead>
+									<TableHead>Status</TableHead>
+									<TableHead className="text-right">Actions</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{invoices.map((invoice) => (
+									<TableRow key={invoice.id}>
+										<TableCell className="text-sm">
+											{invoice.date
+												? format.dateTime(new Date(invoice.date * 1000), {
+														year: "numeric",
+														month: "short",
+														day: "numeric",
+												  })
+												: "—"}
+										</TableCell>
+										<TableCell className="text-sm font-medium">
+											{format.number(invoice.amountPaid / 100, {
+												style: "currency",
+												currency: invoice.currency.toUpperCase(),
+											})}
+										</TableCell>
+										<TableCell>
+											<Badge status={getStatusBadge(invoice.status)}>
+												{getStatusLabel(invoice.status, t)}
+											</Badge>
+										</TableCell>
+										<TableCell className="text-right">
+											{invoice.invoicePdf && (
+												<Button
+													variant="ghost"
+													size="sm"
+													asChild
+												>
+													<a
+														href={invoice.invoicePdf}
+														target="_blank"
+														rel="noopener noreferrer"
+														download
+													>
+														<DownloadIcon className="size-4 mr-1" />
+														{t("settings.billing.invoices.downloadPdf")}
+													</a>
+												</Button>
+											)}
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+
+						{(currentPage > 1 || hasMore) && (
+							<div className="p-4 flex items-center justify-center gap-4">
+								<Button
+									variant="ghost"
+									size="sm"
+									disabled={currentPage === 1}
+									onClick={handlePrevPage}
+								>
+									Previous
+								</Button>
+								<span className="text-sm text-muted-foreground">
+									Page {currentPage}
+								</span>
+								<Button
+									variant="ghost"
+									size="sm"
+									disabled={!hasMore}
+									onClick={handleNextPage}
+								>
+									Next
+								</Button>
+							</div>
+						)}
+					</>
+				)}
+			</CardContent>
+		</Card>
 	);
 }

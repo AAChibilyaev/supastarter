@@ -219,7 +219,7 @@ export function FeatureFlagsView() {
 			) : (
 				<div className="gap-4 flex flex-col">
 					{flags.map((flag) => (
-						<FlagCard key={flag.id} flag={flag} onDelete={handleDelete} />
+						<FlagCard key={flag.id} flag={flag} onDelete={handleDelete} isDeleting={deleteMutation.isPending} />
 					))}
 				</div>
 			)}
@@ -232,6 +232,7 @@ export function FeatureFlagsView() {
 function FlagCard({
 	flag,
 	onDelete,
+	isDeleting,
 }: {
 	flag: {
 		id: string;
@@ -245,6 +246,7 @@ function FlagCard({
 		_count: { overrides: number };
 	};
 	onDelete: (id: string) => void;
+	isDeleting: boolean;
 }) {
 	const t = useTranslations("admin.featureFlags");
 	const queryClient = useQueryClient();
@@ -356,7 +358,7 @@ function FlagCard({
 							variant="destructive"
 							size="sm"
 							onClick={() => onDelete(flag.id)}
-							disabled={deleteMutation.isPending}
+							disabled={isDeleting}
 						>
 							{t("deleteButton")}
 						</Button>

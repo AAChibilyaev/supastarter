@@ -127,3 +127,10 @@ export {
 	type PopularityMetric,
 	type SortDirection,
 } from "./lib/popularity-ranking";
+export {
+	decaySort,
+	hasDecaySort,
+	textMatchDecay,
+	type DecayFunctionType,
+	type DecaySortParams,
+} from "./lib/sort";

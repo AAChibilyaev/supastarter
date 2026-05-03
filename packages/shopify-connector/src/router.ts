@@ -22,13 +22,7 @@ import { cors } from "hono/cors";
 import { z } from "zod";
 
 import { createShopifyClient } from "./client";
-import {
-	buildInstallUrl,
-	exchangeToken,
-	getStoreByShop,
-	markStoreUninstalled,
-	saveShopifyStore,
-} from "./oauth";
+import { buildInstallUrl, exchangeToken, markStoreUninstalled, saveShopifyStore } from "./oauth";
 import { runDeltaSync, runFullSync } from "./sync";
 
 // ─── Config ─────────────────────────────────────────────────────

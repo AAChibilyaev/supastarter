@@ -9,7 +9,7 @@
  * The parent product's metadata (title, description, images, categories) is
  * repeated on each variant document for searchability.
  */
-import type { ShopifyImage, ShopifyOption, ShopifyProduct, ShopifyVariant } from "./client";
+import type { ShopifyImage, ShopifyProduct, ShopifyVariant } from "./client";
 
 // ─── Document schema ─────────────────────────────────────────
 

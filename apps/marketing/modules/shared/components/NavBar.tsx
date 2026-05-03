@@ -33,6 +33,13 @@ export function NavBar() {
 	};
 
 	useEffect(() => {
+		// Listen for custom toggle-menu event from mobile bottom bar
+		const handler = () => setMobileMenuOpen((prev) => !prev);
+		window.addEventListener("aacsearch:toggle-menu", handler);
+		return () => window.removeEventListener("aacsearch:toggle-menu", handler);
+	}, []);
+
+	useEffect(() => {
 		handleMobileMenuClose();
 	}, [localePathname]);
 

@@ -64,10 +64,10 @@ const MODES: { key: SearchMode; icon: typeof KeyboardIcon; label: string }[] = [
 
 const MODE_COLORS: Record<SearchMode, string> = {
 	text: "text-foreground",
-	voice: "text-cyan-400",
-	photo: "text-purple-400",
-	image: "text-amber-400",
-	chat: "text-green-400",
+	voice: "text-foreground",
+	photo: "text-foreground",
+	image: "text-foreground",
+	chat: "text-foreground",
 };
 
 const MODE_PLACEHOLDERS: Record<SearchMode, string> = {
@@ -452,13 +452,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 
 	return (
 		<div
-			className={cn(
-				"fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6",
-				"transition-all duration-500 ease-in-out",
-				visible
-					? "opacity-100 translate-y-0"
-					: "opacity-0 translate-y-8 pointer-events-none",
-			)}
+			className="fixed bottom-0 right-0 z-50 sm:bottom-6 sm:right-6 sm:block"
 		>
 			{/* ─── Chat Panel ───────────────────────────── */}
 			<div
@@ -472,8 +466,8 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			>
 				{/* ── Header ────────────────────────────── */}
 				<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3">
-					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5">
-						<SparklesIcon className="size-3.5 text-primary" />
+					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+						<SparklesIcon className="size-3.5 text-muted-foreground" />
 						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
 					</div>
 
@@ -629,8 +623,8 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 									<ChatBubbleMessage variant="received" layout="ai">
 										<div className="space-y-3">
 											<div className="flex items-center gap-2">
-												<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 via-primary/15 to-primary/5">
-													<SparklesIcon className="size-3 text-primary" />
+												<div className="relative flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+													<SparklesIcon className="size-3 text-muted-foreground" />
 												</div>
 												<span className="text-xs font-medium text-foreground/80">
 													AACsearch Assistant
@@ -739,27 +733,35 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 				)}
 			</div>
 
-			{/* ─── Toggle Pill ─────────────────────────── */}
-			<button
-				type="button"
-				onClick={() => {
-					setOpen(!open);
-					if (!open) setView("chat");
-				}}
+			{/* ─── Toggle Pill (desktop only, scroll-animated) ── */}
+			<div
 				className={cn(
-					"ml-auto flex items-center gap-3 rounded-2xl border border-border/60 bg-card/90 px-4 py-2.5 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:border-border hover:shadow-xl hover:shadow-black/10 sm:px-5 sm:py-3",
-					open && "opacity-0 pointer-events-none",
+					"hidden sm:block transition-all duration-500 ease-in-out",
+					visible
+						? "opacity-100 translate-y-0"
+						: "opacity-0 translate-y-8 pointer-events-none",
 				)}
 			>
-				<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5">
-					<SparklesIcon className="size-4 text-primary" />
+				<button
+					type="button"
+					onClick={() => {
+						setOpen(!open);
+						if (!open) setView("chat");
+					}}
+					className={cn(
+						"ml-auto flex items-center gap-3 rounded-2xl border border-border/60 bg-card/90 px-4 py-2.5 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:border-border hover:shadow-xl hover:shadow-black/10 sm:px-5 sm:py-3",
+						open && "opacity-0 pointer-events-none",
+					)}
+				>
+				<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
+					<SparklesIcon className="size-4 text-muted-foreground" />
 					<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
 				</div>
 				<span className="text-sm font-light text-muted-foreground/70 whitespace-nowrap">
 					Ask AI...
 				</span>
 				{sessions.length > 0 && (
-					<span className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-medium text-primary">
+					<span className="flex size-5 items-center justify-center rounded-full bg-muted text-[9px] font-medium text-muted-foreground">
 						{sessions.length > 9 ? "9+" : sessions.length}
 					</span>
 				)}
@@ -767,7 +769,72 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 					<KeyboardIcon className="size-2.5" />
 					<span>K</span>
 				</span>
-			</button>
+				</button>
+			</div>
+
+			{/* ─── Mobile Bottom Bar ──────────────────────── */}
+			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center gap-1 border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+				{/* Hamburger menu */}
+				<button
+					type="button"
+					onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
+					className="flex size-11 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors hover:text-foreground hover:bg-muted/50"
+					aria-label="Open menu"
+				>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+						<line x1="4" y1="6" x2="20" y2="6" />
+						<line x1="4" y1="12" x2="20" y2="12" />
+						<line x1="4" y1="18" x2="20" y2="18" />
+					</svg>
+				</button>
+
+				{/* Divider */}
+				<div className="h-6 w-px bg-border/60" />
+
+				{/* AI Assistant trigger */}
+				<button
+					type="button"
+					onClick={() => {
+						setOpen(!open);
+						if (!open) setView("chat");
+					}}
+					className="flex flex-1 items-center gap-2.5 rounded-lg px-3 py-2 transition-colors hover:bg-muted/50"
+				>
+					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
+						<SparklesIcon className="size-3.5 text-primary" />
+					</div>
+					<span className="text-sm font-light text-muted-foreground/80">Ask AI...</span>
+					{sessions.length > 0 && (
+						<span className="flex size-4.5 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground ml-auto">
+							{sessions.length > 9 ? "9+" : sessions.length}
+						</span>
+					)}
+				</button>
+
+				{/* Mode icons — quick access */}
+				<div className="flex items-center gap-0.5">
+					{MODES.map(({ key, icon: Icon }) => (
+						<button
+							key={key}
+							type="button"
+							onClick={() => {
+								handleModeClick(key);
+								setOpen(true);
+								setView("chat");
+							}}
+							className={cn(
+								"flex size-10 items-center justify-center rounded-lg transition-colors",
+								activeMode === key
+									? `${MODE_COLORS[key]} bg-muted`
+									: "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40",
+							)}
+							aria-label={`Search by ${key}`}
+						>
+							<Icon className="size-4" />
+						</button>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }

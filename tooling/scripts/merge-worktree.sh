@@ -13,20 +13,31 @@ if [ -z "$AGENT_ID" ]; then
   exit 1
 fi
 
-echo "→ Merging branch $BRANCH (-X theirs)..."
-if git merge "$BRANCH" -X theirs --no-edit -m "$MSG
+# Helper: remove stale pre-split saas.json files agents sometimes create
+_fix_i18n() {
+  local found
+  found=$(git diff --name-only --diff-filter=U 2>/dev/null | grep "saas\.json" || true)
+  if [ -n "$found" ]; then
+    echo "  → removing stale saas.json files (pre-split format)..."
+    git rm --cached packages/i18n/translations/*/saas.json 2>/dev/null || true
+    rm -f packages/i18n/translations/*/saas.json
+  fi
+}
 
-Co-Authored-By: Paperclip <noreply@paperclip.ing>"; then
+echo "→ Merging branch $BRANCH (-X theirs)..."
+if git merge "$BRANCH" -X theirs --no-edit \
+    -m "$MSG
+
+Co-Authored-By: Paperclip <noreply@paperclip.ing>" 2>&1; then
   echo "✓ Merge clean"
 else
-  echo "Conflicts detected — resolving..."
-  # Remove stale pre-split saas.json files that old worktrees may produce
-  git rm --cached "packages/i18n/translations/*/saas.json" 2>/dev/null || true
-  rm -f packages/i18n/translations/*/saas.json
+  echo "  Conflicts detected — auto-resolving..."
+  _fix_i18n
   git add -A
   git commit -m "$MSG
 
 Co-Authored-By: Paperclip <noreply@paperclip.ing>"
+  echo "✓ Resolved"
 fi
 
 echo "→ Cleaning up worktree and branch..."

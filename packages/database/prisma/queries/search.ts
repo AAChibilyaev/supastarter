@@ -211,6 +211,21 @@ export async function touchSearchApiKey(id: string) {
 	});
 }
 
+/**
+ * Revoke all expired API keys that have not yet been revoked.
+ * Returns the count of keys revoked. Used by the expire-keys cron.
+ */
+export async function revokeExpiredApiKeys(): Promise<number> {
+	const result = await db.searchApiKey.updateMany({
+		where: {
+			expiresAt: { lt: new Date() },
+			revokedAt: null,
+		},
+		data: { revokedAt: new Date() },
+	});
+	return result.count;
+}
+
 export async function recordSearchUsage(input: {
 	indexId: string;
 	organizationId: string;

@@ -41,7 +41,7 @@ export function TypesenseScenarios() {
 												<span>{t(`scenarios.${scenario}.aacsearch`)}</span>
 											</li>
 										</ul>
-										<div className="pt-1 text-sm font-semibold text-green-600 dark:text-green-400">
+										<div className="pt-1 text-sm font-semibold text-muted-foreground">
 											{t(`scenarios.${scenario}.saving`)}
 										</div>
 									</div>

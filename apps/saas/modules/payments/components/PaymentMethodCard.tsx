@@ -32,28 +32,28 @@ function BrandIcon({ brand }: { brand: string | null }) {
 
 	if (lower === "visa") {
 		return (
-			<span className="size-8 rounded bg-blue-600 font-bold text-white flex items-center justify-center text-[10px]">
+			<span className="size-8 rounded bg-muted font-bold text-muted-foreground flex items-center justify-center text-[10px]">
 				V
 			</span>
 		);
 	}
 	if (lower === "mastercard") {
 		return (
-			<span className="size-8 rounded bg-orange-500 font-bold text-white flex items-center justify-center text-[10px]">
+			<span className="size-8 rounded bg-muted font-bold text-muted-foreground flex items-center justify-center text-[10px]">
 				MC
 			</span>
 		);
 	}
 	if (lower === "amex" || lower === "american_express") {
 		return (
-			<span className="size-8 rounded bg-sky-600 font-bold text-white flex items-center justify-center text-[10px]">
+			<span className="size-8 rounded bg-muted font-bold text-muted-foreground flex items-center justify-center text-[10px]">
 				AE
 			</span>
 		);
 	}
 	if (lower === "discover") {
 		return (
-			<span className="size-8 rounded bg-orange-600 font-bold text-white flex items-center justify-center text-[10px]">
+			<span className="size-8 rounded bg-muted font-bold text-muted-foreground flex items-center justify-center text-[10px]">
 				D
 			</span>
 		);

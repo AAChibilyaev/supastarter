@@ -42,7 +42,7 @@ function Toast({ id, title, description, action, cancel, icon, type = "default" 
 			return <LoaderIcon className="size-5 animate-spin text-primary" aria-hidden="true" />;
 		}
 		if (type === "warning") {
-			return <TriangleAlertIcon className="size-5 text-amber-500" aria-hidden="true" />;
+			return <TriangleAlertIcon className="size-5 text-muted-foreground" aria-hidden="true" />;
 		}
 		return null;
 	};
@@ -58,7 +58,7 @@ function Toast({ id, title, description, action, cancel, icon, type = "default" 
 			return "border-primary/20";
 		}
 		if (type === "warning") {
-			return "border-amber-500/20";
+			return "border-border";
 		}
 		return "border-border";
 	};

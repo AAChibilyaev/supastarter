@@ -1,4 +1,8 @@
 {
-	"title": "indexes/indexid/synonyms",
-	"pages": ["get", "post", "put"]
+  "title": "indexes/indexid/synonyms",
+  "pages": [
+    "get",
+    "post",
+    "put"
+  ]
 }

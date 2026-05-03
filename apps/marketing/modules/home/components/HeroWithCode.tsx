@@ -77,9 +77,9 @@ export function HeroWithCode() {
 				<div>
 					<div className="overflow-hidden rounded-lg border border-border bg-[#0d0d10]">
 						<div className="gap-2 border-white/8 px-4 py-3 flex items-center border-b">
-							<span className="size-2.5 bg-red-500/70 rounded-full" />
-							<span className="size-2.5 bg-amber-500/70 rounded-full" />
-							<span className="size-2.5 bg-emerald-500/70 rounded-full" />
+	<span className="size-2.5 rounded-full bg-muted-foreground/20" />
+								<span className="size-2.5 rounded-full bg-muted-foreground/30" />
+								<span className="size-2.5 rounded-full bg-muted-foreground/40" />
 							<span className="ml-3 font-mono text-xs text-white/35">
 								{t("home.hero.codeCaption")}
 							</span>
@@ -121,9 +121,9 @@ function highlightCode(source: string) {
 		parts.push(...next);
 	};
 
-	tokenize(strings, "text-amber-300/90");
-	tokenize(keywords, "text-violet-400/90");
-	tokenize(fns, "text-pink-400/90");
+	tokenize(strings, "text-muted-foreground/70");
+	tokenize(keywords, "text-muted-foreground/50");
+	tokenize(fns, "text-muted-foreground/80");
 
 	return parts.map((part, i) =>
 		part.className ? (

@@ -48,7 +48,7 @@ export function SecuritySandbox() {
 			allowed: { type: "allowed", icon: "✓", color: "text-success", bgColor: "bg-success/10", borderColor: "border-success/30" },
 			origin: { type: "origin", icon: "✗", color: "text-destructive", bgColor: "bg-destructive/10", borderColor: "border-destructive/30" },
 			tenant: { type: "tenant", icon: "✗", color: "text-destructive", bgColor: "bg-destructive/10", borderColor: "border-destructive/30" },
-			expired: { type: "expired", icon: "✗", color: "text-amber-600 dark:text-amber-400", bgColor: "bg-amber-50 dark:bg-amber-950/20", borderColor: "border-amber-300 dark:border-amber-700" },
+			expired: { type: "expired", icon: "✗", color: "text-muted-foreground", bgColor: "bg-muted", borderColor: "border-border" },
 			leak: { type: "leak", icon: "✓", color: "text-success", bgColor: "bg-success/10", borderColor: "border-success/30" },
 		}),
 		[],
@@ -127,7 +127,7 @@ export function SecuritySandbox() {
 								onClick={() => setLeaked((p) => !p)}
 								className={cn(
 									"relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none",
-									leaked ? "bg-amber-500" : "bg-muted",
+									leaked ? "bg-muted-foreground/30" : "bg-muted",
 								)}
 								role="switch"
 								aria-checked={leaked}

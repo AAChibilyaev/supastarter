@@ -483,9 +483,9 @@ export function AlertsSettingsPage({ organizationId }: { organizationId: string 
 					<CardHeader>
 						<CardTitle className="gap-2 text-base flex items-center">
 							{rule.resource === "search" ? (
-								<AlertTriangleIcon className="size-4 text-amber-500" />
+								<AlertTriangleIcon className="size-4 text-muted-foreground" />
 							) : (
-								<BellIcon className="size-4 text-blue-500" />
+								<BellIcon className="size-4 text-muted-foreground" />
 							)}
 							{rule.resource === "search" ? t("searchQuota") : t("ingestQuota")}
 						</CardTitle>

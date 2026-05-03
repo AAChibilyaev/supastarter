@@ -87,8 +87,8 @@ export function EmailCaptureModal({
 
 					{status === "success" ? (
 						<div className="gap-4 py-6 flex flex-col items-center text-center">
-							<div className="size-12 bg-green-500/10 flex items-center justify-center rounded-full">
-								<MailCheck className="size-6 text-green-500" />
+							<div className="size-12 bg-muted flex items-center justify-center rounded-full">
+							<MailCheck className="size-6 text-muted-foreground" />
 							</div>
 							<Dialog.Title className="text-xl font-semibold tracking-tight">
 								{t("success")}
@@ -114,7 +114,7 @@ export function EmailCaptureModal({
 								/>
 
 								{status === "error" && (
-									<p className="text-xs text-red-500">{errorMessage}</p>
+									<p className="text-xs text-muted-foreground">{errorMessage}</p>
 								)}
 
 								<button

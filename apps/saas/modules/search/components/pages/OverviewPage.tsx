@@ -195,7 +195,7 @@ export function OverviewPage() {
 	const kindIcon: Record<string, React.ReactNode> = {
 		index_created: <SearchIcon className="size-4 text-primary" />,
 		api_key_created: <KeyIcon className="size-4 text-muted-foreground" />,
-		usage_event: <ActivityIcon className="size-4 text-blue-500" />,
+		usage_event: <ActivityIcon className="size-4 text-muted-foreground" />,
 		sync_job: <RefreshCwIcon className="size-4 text-muted-foreground" />,
 	};
 
@@ -599,14 +599,14 @@ export function OverviewPage() {
 						<div className="gap-3 flex items-center">
 							{connectorStatus === "online" ? (
 								<>
-									<WifiIcon className="size-5 text-green-500" />
+									<WifiIcon className="size-5 text-muted-foreground" />
 									<span className="text-sm font-medium">
 										{t("overview.connectorOnline")}
 									</span>
 								</>
 							) : connectorStatus === "offline" ? (
 								<>
-									<WifiOffIcon className="size-5 text-red-500" />
+									<WifiOffIcon className="size-5 text-muted-foreground" />
 									<span className="text-sm font-medium">
 										{t("overview.connectorOffline")}
 									</span>

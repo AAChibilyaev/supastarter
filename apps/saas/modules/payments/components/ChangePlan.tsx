@@ -852,7 +852,7 @@ function ProrationPreviewCard({ preview, isLoading, t, format }: ProrationPrevie
 						<CreditCardIcon className="size-4 shrink-0 text-muted-foreground" />
 						<span>{t("settings.billing.upgradeModal.currentRemaining")}</span>
 					</div>
-					<span className="text-sm font-medium text-green-600 dark:text-green-400">
+					<span className="text-sm font-medium text-muted-foreground">
 						-{format.number(creditAmount, currencyFormat)}
 					</span>
 				</div>
@@ -881,12 +881,12 @@ function ProrationPreviewCard({ preview, isLoading, t, format }: ProrationPrevie
 							className={`text-sm font-bold ${
 								immediateAmount > 0
 									? "text-foreground"
-									: "text-green-600 dark:text-green-400"
+									: "text-muted-foreground"
 							}`}
 						>
 							{format.number(Math.abs(immediateAmount), currencyFormat)}
 							{immediateAmount <= 0 && (
-								<span className="ml-1 text-xs font-normal text-green-600 dark:text-green-400">
+								<span className="ml-1 text-xs font-normal text-muted-foreground">
 									{t("settings.billing.upgradeModal.noPaymentNeeded")}
 								</span>
 							)}

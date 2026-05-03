@@ -86,7 +86,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
 										isCurrent &&
 											"border-primary bg-primary text-primary-foreground",
 										isCompleted &&
-											"border-emerald-500 bg-emerald-500 text-white",
+											"bg-muted border-border text-muted-foreground",
 										isUpcoming && "border-border text-muted-foreground",
 									)}
 								>
@@ -113,7 +113,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
 								className={cn(
 									"mt-1.5 sm:block text-xs font-medium hidden text-center",
 									isCurrent && "text-foreground",
-									isCompleted && "text-emerald-600",
+									isCompleted && "text-muted-foreground",
 									isUpcoming && "text-muted-foreground",
 								)}
 							>

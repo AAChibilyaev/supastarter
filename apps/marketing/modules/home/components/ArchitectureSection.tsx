@@ -69,7 +69,7 @@ export function ArchitectureSection() {
 					{/* Diagram grid */}
 					<div className="p-6 md:p-10 space-y-8 overflow-x-auto">
 						<Flow
-							color="bg-blue-500/10 text-blue-600 dark:text-blue-400"
+							color="bg-muted text-muted-foreground"
 							badge={t("ingestLabel")}
 							steps={[
 								{ label: "Your backend" },
@@ -80,7 +80,7 @@ export function ArchitectureSection() {
 						/>
 
 						<Flow
-							color="bg-green-500/10 text-green-600 dark:text-green-400"
+							color="bg-muted text-muted-foreground"
 							badge={t("searchLabel")}
 							steps={[
 								{ label: "Browser / app" },
@@ -91,7 +91,7 @@ export function ArchitectureSection() {
 						/>
 
 						<Flow
-							color="bg-orange-500/10 text-orange-600 dark:text-orange-400"
+							color="bg-muted text-muted-foreground"
 							badge={t("manageLabel")}
 							steps={[
 								{ label: "Dashboard" },

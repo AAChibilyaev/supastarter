@@ -55,15 +55,41 @@
 		border-color: var(--border);
 	}
 
-	html {
-		overflow-x: hidden;
+	* {
+		-webkit-tap-highlight-color: transparent;
 	}
 
+	html {
+		scroll-behavior: smooth;
+	}
+
+	/* Prevent Elastic Overscroll / Pull-to-Refresh on mobile */
 	body {
 		overflow-x: hidden;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		text-rendering: optimizeLegibility;
+		overscroll-behavior-y: contain;
+		/* Safe area insets for iPhone X+ notched devices */
+		padding-left: env(safe-area-inset-left, 0px);
+		padding-right: env(safe-area-inset-right, 0px);
+	}
+
+	/* Touch-friendly tap targets: remove 300ms delay on iOS + cursor pointer */
+	button,
+	a,
+	input,
+	select,
+	textarea,
+	[role="button"],
+	[role="tab"],
+	[role="menuitem"],
+	[role="option"],
+	[role="switch"],
+	[role="radio"],
+	[role="checkbox"] {
+		touch-action: manipulation;
+		cursor: pointer;
 	}
 
 	svg.lucide {

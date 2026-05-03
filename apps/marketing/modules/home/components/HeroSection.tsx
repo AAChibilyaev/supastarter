@@ -101,10 +101,10 @@ export function HeroSection() {
 
 	const modeActiveColors: Record<SearchMode, string> = {
 		text: "text-foreground",
-		voice: "text-cyan-500 dark:text-cyan-400",
-		photo: "text-purple-500 dark:text-purple-400",
-		image: "text-amber-500 dark:text-amber-400",
-		chat: "text-green-500 dark:text-green-400",
+		voice: "text-foreground",
+		photo: "text-foreground",
+		image: "text-foreground",
+		chat: "text-foreground",
 	};
 
 	const openCmdForMode = useCallback((m: SearchMode) => {
@@ -212,7 +212,7 @@ export function HeroSection() {
 
 					{/* CTA */}
 					<div className="mt-8 gap-3 flex w-full items-center justify-center">
-						<Button className="shrink-0" size="lg" variant="primary" asChild>
+						<Button className="shrink-0 bg-[#fd366e] text-white hover:bg-[#fd366e]/80" size="lg" variant="primary" asChild>
 							<a href={config.saasUrl}>
 								{t("hero.getStarted")}
 								<ArrowRightIcon className="ml-2 size-4" />

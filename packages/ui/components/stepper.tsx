@@ -81,7 +81,7 @@ const StepperIndicator = ({
 		className={cn(
 			"size-7 relative flex shrink-0 items-center justify-center rounded-full border",
 			"data-[status=active]:border-primary data-[status=active]:bg-primary data-[status=active]:text-primary-foreground",
-			"data-[status=success]:border-emerald-500 data-[status=success]:bg-emerald-500 data-[status=success]:text-white",
+			"data-[status=success]:border-muted data-[status=success]:bg-muted data-[status=success]:text-muted-foreground",
 			"data-[status=inactive]:border-muted-foreground/30 data-[status=inactive]:text-muted-foreground",
 			className,
 		)}
@@ -103,7 +103,7 @@ const StepperTitle = ({
 		className={cn(
 			"text-sm font-medium leading-tight",
 			"data-[status=active]:text-foreground",
-			"data-[status=success]:text-emerald-600",
+			"data-[status=success]:text-muted-foreground",
 			"data-[status=inactive]:text-muted-foreground",
 			className,
 		)}

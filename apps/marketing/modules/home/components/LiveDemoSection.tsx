@@ -396,7 +396,7 @@ export function LiveDemoSection() {
 						<div className="flex-1 p-4">
 							{/* Typo banner */}
 							{typoCorrection && query && (
-								<div className="mb-3 px-3 py-2 text-xs rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 flex items-center gap-2">
+								<div className="mb-3 px-3 py-2 text-xs rounded-lg bg-muted border border-border text-muted-foreground flex items-center gap-2">
 									<span>{t("didYouMean")}</span>
 									<button type="button" className="font-semibold underline underline-offset-2" onClick={() => applyChip(typoCorrection)}>{typoCorrection}</button>
 									<span className="ml-auto opacity-50 text-[10px]">typo tolerance</span>

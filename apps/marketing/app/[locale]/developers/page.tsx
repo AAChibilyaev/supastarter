@@ -45,9 +45,9 @@ console.log(results.hits);`;
 			{/* Hero */}
 			<section className="section-padding border-b border-border/60">
 				<div className="container">
-					<div className="mb-4 gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex items-center rounded-full border border-primary/20 bg-primary/5">
-						<span className="size-1.5 rounded-full bg-primary" />
-						<span className="font-medium text-primary">{t("hero.badge")}</span>
+					<div className="mb-4 gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex items-center rounded-md border border-border bg-muted/50">
+						<span className="size-1.5 rounded-full bg-muted-foreground" />
+						<span className="font-medium text-muted-foreground">{t("hero.badge")}</span>
 					</div>
 					<h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-3xl text-balance">
 						{t("title")}
@@ -64,9 +64,9 @@ console.log(results.hits);`;
 						<div className="shadow-lg overflow-hidden rounded-lg border border-border/60 bg-card/80">
 							{/* Terminal title bar */}
 							<div className="gap-2 px-4 py-3 flex items-center border-b border-border/50 bg-muted/30">
-								<span className="size-2.5 bg-red-500/70 rounded-full" />
-								<span className="size-2.5 bg-amber-500/70 rounded-full" />
-								<span className="size-2.5 bg-emerald-500/70 rounded-full" />
+								<span className="size-2.5 bg-muted-foreground/20 rounded-full" />
+								<span className="size-2.5 bg-muted-foreground/40 rounded-full" />
+								<span className="size-2.5 bg-muted-foreground/60 rounded-full" />
 								<span className="ml-3 text-xs font-mono text-muted-foreground">
 									search.ts
 								</span>

@@ -70,7 +70,7 @@ export function OnboardingApiKeyStep({ indexSlug, onCompleted }: Props) {
 								title={t("onboarding.apiKey.copyButton")}
 							>
 								{copied ? (
-									<CheckIcon className="size-4 text-green-500" />
+									<CheckIcon className="size-4 text-muted-foreground" />
 								) : (
 									<CopyIcon className="size-4" />
 								)}

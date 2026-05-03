@@ -227,9 +227,9 @@ export function QuickstartSection() {
 							{/* Traffic lights + copy */}
 							<div className="flex items-center gap-3">
 								<div className="gap-1.5 flex items-center">
-									<span className="size-2.5 bg-red-500/70 rounded-full" />
-									<span className="size-2.5 bg-amber-500/70 rounded-full" />
-									<span className="size-2.5 bg-emerald-500/70 rounded-full" />
+									<span className="size-2.5 rounded-full bg-muted-foreground/20" />
+									<span className="size-2.5 rounded-full bg-muted-foreground/30" />
+									<span className="size-2.5 rounded-full bg-muted-foreground/40" />
 								</div>
 								<button
 									type="button"
@@ -238,7 +238,7 @@ export function QuickstartSection() {
 									aria-label="Copy code"
 								>
 									{copied ? (
-										<CheckIcon className="size-3 text-emerald-400" />
+										<CheckIcon className="size-3 text-muted-foreground/60" />
 									) : (
 										<CopyIcon className="size-3" />
 									)}

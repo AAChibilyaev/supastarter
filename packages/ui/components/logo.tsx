@@ -8,7 +8,7 @@ export function Logo({ withLabel = true, className }: { className?: string; with
 				className,
 			)}
 		>
-			<svg className="size-10 text-primary" viewBox="0 0 734 635">
+			<svg className="size-10 text-[#fd366e]" viewBox="0 0 734 635">
 				<title>acme</title>
 				<path
 					opacity="0.2"

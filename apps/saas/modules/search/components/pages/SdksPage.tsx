@@ -42,7 +42,7 @@ function CopyButton({ text }: { text: string }) {
 	return (
 		<Button variant="outline" size="sm" onClick={handleCopy} className="gap-1.5 shrink-0">
 			{copied ? (
-				<Check className="size-3.5 text-green-500" />
+				<Check className="size-3.5 text-muted-foreground" />
 			) : (
 				<Clipboard className="size-3.5" />
 			)}
@@ -67,7 +67,7 @@ export function SdksPage() {
 			repoUrl: "https://github.com/aacsearch/supastarter/tree/main/packages/search-client",
 			status: "ready",
 			version: "0.1.0",
-			color: "bg-blue-500",
+			color: "bg-muted",
 		},
 		{
 			id: "php",
@@ -80,7 +80,7 @@ export function SdksPage() {
 				"https://github.com/aacsearch/supastarter/tree/main/packages/search-client-php",
 			status: "ready",
 			version: "0.1.0",
-			color: "bg-indigo-500",
+			color: "bg-muted",
 		},
 		{
 			id: "python",
@@ -93,7 +93,7 @@ export function SdksPage() {
 				"https://github.com/aacsearch/supastarter/tree/main/packages/search-client-python",
 			status: "ready",
 			version: "0.1.0",
-			color: "bg-yellow-500",
+			color: "bg-muted",
 		},
 		{
 			id: "swift",
@@ -106,7 +106,7 @@ export function SdksPage() {
 			repoUrl: "https://github.com/aacsearch/aacsearch-swift",
 			status: "coming_soon",
 			version: "\u2014",
-			color: "bg-orange-500",
+			color: "bg-muted",
 		},
 	];
 

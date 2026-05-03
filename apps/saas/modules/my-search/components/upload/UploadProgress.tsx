@@ -60,8 +60,8 @@ export function UploadProgress({ jobs }: UploadProgressProps) {
 									<Progress value={job.progress} className="mt-1 h-1.5" />
 								) : job.status === "done" ? (
 									<div className="mt-0.5 gap-1 flex items-center">
-										<CheckCircleIcon className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
-										<span className="text-xs text-green-600 dark:text-green-400">
+										<CheckCircleIcon className="h-3.5 w-3.5 text-muted-foreground" />
+										<span className="text-xs text-muted-foreground">
 											{t("completed").toLowerCase()}
 										</span>
 									</div>

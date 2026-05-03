@@ -53,11 +53,11 @@ export function UpgradeSuccessToast() {
 	if (!visible || !upgradeSuccess) return null;
 
 	return (
-		<Alert className="mb-6 border-emerald-500/50 bg-emerald-50 dark:bg-emerald-950/20">
-			<AlertTitle className="text-lg font-semibold text-emerald-800 dark:text-emerald-300">
+		<Alert className="mb-6 border-border bg-muted">
+			<AlertTitle className="text-lg font-semibold text-muted-foreground">
 				{t("upgradeSuccessTitle")}
 			</AlertTitle>
-			<AlertDescription className="text-emerald-700 dark:text-emerald-400">
+			<AlertDescription className="text-muted-foreground">
 				{planName ? t("upgradeSuccessWithPlan", { plan: planName }) : t("upgradeSuccess")}
 				<span className="ml-2 text-sm text-muted-foreground">
 					{t("redirectingIn", { seconds: countdown })}

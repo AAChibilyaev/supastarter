@@ -55,7 +55,7 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">
+								<span className="text-xs text-muted-foreground">
 									{t("uploaded")}
 								</span>
 							)}
@@ -93,7 +93,7 @@ export function FileList({ files, urls, onRemoveFile, onRemoveUrl }: FileListPro
 								</span>
 							)}
 							{item.status === "done" && (
-								<span className="text-xs text-green-600 dark:text-green-400">
+								<span className="text-xs text-muted-foreground">
 									{t("added")}
 								</span>
 							)}

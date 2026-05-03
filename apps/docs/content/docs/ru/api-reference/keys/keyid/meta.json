@@ -1,4 +1,6 @@
 {
-	"title": "keys/keyid",
-	"pages": ["delete"]
+  "title": "keys/keyid",
+  "pages": [
+    "delete"
+  ]
 }

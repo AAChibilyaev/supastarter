@@ -17,11 +17,11 @@ export function TrustBadge() {
 				<div key={item.key} className="gap-1.5 flex items-center">
 					{item.key !== "companies" && (
 						<div className="gap-0.5 flex">
-							{Array.from({ length: 5 }, (_, i) => (
-								<svg
-									key={i}
-									className="size-3 text-amber-400"
-									fill="currentColor"
+									{Array.from({ length: 5 }, (_, i) => (
+										<svg
+											key={i}
+											className="size-3 text-muted-foreground/50"
+											fill="currentColor"
 									viewBox="0 0 20 20"
 								>
 									<title>★</title>

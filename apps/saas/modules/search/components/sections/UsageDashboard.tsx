@@ -101,7 +101,7 @@ function KpiCard({
 						color === "error"
 							? "text-destructive"
 							: color === "warning"
-								? "text-amber-500"
+								? "text-muted-foreground"
 								: ""
 					}`}
 				>
@@ -152,7 +152,7 @@ function QuotaProgress({
 						color === "error"
 							? "text-destructive"
 							: color === "warning"
-								? "text-amber-500"
+								? "text-muted-foreground"
 								: "text-muted-foreground"
 					}`}
 				>

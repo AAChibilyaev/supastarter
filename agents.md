@@ -1729,8 +1729,14 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-[auto-bridge snapshot @ 10 changes]
-Files: packages/api/modules/assistant/lib/prompts/prompt-builder.ts (create), packages/api/modules/assistant/lib/prompts/outfit-prompt.ts (create), packages/api/modules/assistant/lib/prompts/expert-prompt.ts (create), packages/api/modules/assistant/lib/prompts/service-prompt.ts (create), packages/api/modules/assistant/lib/prompts/consultation-prompt.ts (create), packages/api/modules/assistant/lib/prompts/base-system-prompt.ts (create), packages/api/modules/assistant/lib/intent-classifier.ts (create), packages/api/modules/entitlements/credit-rates.ts (edit), packages/database/prisma/schema.prisma (edit), /Users/aac/.claude/plans/reflective-gliding-crane.md (create)
+[pre-compact bridge — saved before context compaction]
+Files (6):
+  packages/api/modules/assistant/procedures/config.ts (edit)
+  packages/api/modules/assistant/assistant-public.ts (edit)
+  packages/api/modules/assistant/procedures/stream-assistant.ts (edit)
+  packages/widget/package.json (edit)
+  packages/widget/src/index.ts (edit)
+  packages/api/modules/search/procedures/widget-config.ts (edit)
 
 # === END COGNILAYER ===
 

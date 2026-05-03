@@ -17,10 +17,10 @@ interface ActivityLogProps {
 }
 
 const ACTIVITY_ICONS: Record<string, { icon: typeof ActivityIcon; color: string }> = {
-	index_created: { icon: DatabaseIcon, color: "text-blue-500" },
-	api_key_created: { icon: KeyIcon, color: "text-amber-500" },
-	usage_event: { icon: SearchIcon, color: "text-green-500" },
-	sync_job: { icon: RefreshCwIcon, color: "text-purple-500" },
+	index_created: { icon: DatabaseIcon, color: "text-muted-foreground" },
+	api_key_created: { icon: KeyIcon, color: "text-muted-foreground" },
+	usage_event: { icon: SearchIcon, color: "text-muted-foreground" },
+	sync_job: { icon: RefreshCwIcon, color: "text-muted-foreground" },
 };
 
 export function ActivityLog({ organizationId, limit = 50 }: ActivityLogProps) {

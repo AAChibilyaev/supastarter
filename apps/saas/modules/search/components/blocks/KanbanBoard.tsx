@@ -34,8 +34,8 @@ interface KanbanBoardProps {
 
 const STATUS_ICONS: Record<string, ReactNode> = {
 	pending: <ClockIcon className="size-4 text-muted-foreground" />,
-	processing: <Loader2Icon className="size-4 animate-spin text-blue-500" />,
-	completed: <CheckCircle2Icon className="size-4 text-green-500" />,
+	processing: <Loader2Icon className="size-4 animate-spin text-muted-foreground" />,
+	completed: <CheckCircle2Icon className="size-4 text-muted-foreground" />,
 	failed: <XCircleIcon className="size-4 text-destructive" />,
 };
 

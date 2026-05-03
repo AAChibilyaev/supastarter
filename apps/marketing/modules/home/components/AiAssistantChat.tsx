@@ -460,10 +460,8 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 	const mobileChatPanel = (
 		<div
 			className={cn(
-				"fixed inset-0 z-40 flex flex-col overflow-hidden bg-card sm:hidden transition-opacity duration-300 ease-out",
-				open
-					? "pointer-events-auto visible opacity-100"
-					: "pointer-events-none invisible opacity-0",
+				"fixed inset-0 z-40 flex-col overflow-hidden bg-card sm:hidden",
+				open ? "flex" : "hidden",
 			)}
 		>
 			<ExpandableChatHeader>

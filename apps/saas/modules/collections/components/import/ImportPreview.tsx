@@ -36,11 +36,11 @@ interface ImportPreviewProps {
 function getIcon(fileType: ImportPreviewProps["fileType"]) {
 	switch (fileType) {
 		case "json":
-			return <FileJsonIcon className="size-5 text-blue-500" />;
+			return <FileJsonIcon className="size-5 text-muted-foreground" />;
 		case "excel":
 		case "csv":
 		case "tsv":
-			return <FileSpreadsheetIcon className="size-5 text-green-500" />;
+			return <FileSpreadsheetIcon className="size-5 text-muted-foreground" />;
 		default:
 			return <FileTextIcon className="size-5 text-muted-foreground" />;
 	}

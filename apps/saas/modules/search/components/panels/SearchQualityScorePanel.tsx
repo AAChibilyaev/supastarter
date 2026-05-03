@@ -279,24 +279,18 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 				<div
 					className={`h-2 ${
 						scores.rating === "excellent"
-							? "bg-green-500"
+							? "bg-muted"
 							: scores.rating === "good"
-								? "bg-blue-500"
+								? "bg-muted"
 								: scores.rating === "fair"
-									? "bg-amber-500"
-									: "bg-red-500"
+									? "bg-muted"
+									: "bg-muted"
 					}`}
 				/>
 				<CardContent className="gap-6 pt-6 sm:flex-row sm:items-center flex flex-col">
 					<div className="flex shrink-0 flex-col items-center">
 						<div
-							className={`size-20 text-3xl font-bold flex items-center justify-center rounded-full ${
-								scores.rating === "excellent" || scores.rating === "good"
-									? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-									: scores.rating === "fair"
-										? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-										: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-							}`}
+							className={`size-20 text-3xl font-bold flex items-center justify-center rounded-md bg-muted text-muted-foreground`}
 						>
 							{scores.composite}
 						</div>
@@ -310,20 +304,20 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 						</p>
 						<div className="gap-4 flex flex-wrap">
 							<div className="gap-2 text-sm flex items-center text-muted-foreground">
-								<CheckCircleIcon className="size-4 text-green-500" />
+								<CheckCircleIcon className="size-4 text-muted-foreground" />
 								<span>
 									{t("search.qualityScore.factorZeroResults")}:{" "}
 									{scores.zeroResultScore}/100
 								</span>
 							</div>
 							<div className="gap-2 text-sm flex items-center text-muted-foreground">
-								<TrendingUpIcon className="size-4 text-blue-500" />
+								<TrendingUpIcon className="size-4 text-muted-foreground" />
 								<span>
 									{t("search.qualityScore.factorCTR")}: {scores.ctrScore}/100
 								</span>
 							</div>
 							<div className="gap-2 text-sm flex items-center text-muted-foreground">
-								<InfoIcon className="size-4 text-purple-500" />
+								<InfoIcon className="size-4 text-muted-foreground" />
 								<span>
 									{t("search.qualityScore.factorLatency")}: {scores.latencyScore}
 									/100
@@ -438,7 +432,7 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 				<Card>
 					<CardHeader>
 						<CardTitle className="gap-2 text-base flex items-center">
-							<AlertTriangleIcon className="size-4 text-amber-500" />
+							<AlertTriangleIcon className="size-4 text-muted-foreground" />
 							{t("search.qualityScore.suggestions")}
 						</CardTitle>
 					</CardHeader>
@@ -479,7 +473,7 @@ export function SearchQualityScorePanel({ organizationId }: SearchQualityScorePa
 					<Card>
 						<CardHeader>
 							<CardTitle className="gap-2 text-base flex items-center">
-								<TrendingDownIcon className="size-4 text-red-500" />
+								<TrendingDownIcon className="size-4 text-muted-foreground" />
 								{t("search.qualityScore.topZeroResults")}
 							</CardTitle>
 						</CardHeader>

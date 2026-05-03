@@ -156,9 +156,9 @@ function RoadmapCard({
 		<>
 			<Card
 				className={cn(
-					"group transition-all duration-300 hover:border-primary/30 hover:bg-accent/5",
-					isShipped && "border-green-500/10",
-					isInProgress && "border-blue-500/10",
+					"group transition-all duration-300 hover:border-border hover:bg-muted",
+					isShipped && "border-border",
+					isInProgress && "border-border",
 				)}
 			>
 				<FeatureCardHeaderRow icon={Icon}>
@@ -166,11 +166,11 @@ function RoadmapCard({
 						{t(`items.${itemKey}.title`)}
 						<span
 							className={cn(
-								"text-xs font-normal px-2 py-0.5 rounded-full border",
+								"text-xs font-normal px-2 py-0.5 rounded-md border",
 								isShipped
-									? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
+									? "border-border bg-muted text-muted-foreground"
 									: isInProgress
-										? "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
+										? "border-border bg-muted text-muted-foreground"
 										: "border-muted-foreground/30 bg-muted/50 text-muted-foreground",
 							)}
 						>
@@ -192,7 +192,7 @@ function RoadmapCard({
 						{isShipped && changelogSlug ? (
 							<a
 								href={`/changelog#${changelogSlug}`}
-								className="gap-1.5 px-3 py-1.5 text-xs font-medium border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20 inline-flex items-center rounded-lg border transition-colors"
+								className="gap-1.5 px-3 py-1.5 text-xs font-medium border-border bg-muted text-muted-foreground hover:bg-muted/80 inline-flex items-center rounded-lg border transition-colors"
 							>
 								{t("seeChangelog")}
 							</a>
@@ -205,8 +205,8 @@ function RoadmapCard({
 									"gap-1.5 px-3 py-1.5 text-xs font-medium inline-flex items-center rounded-lg transition-all",
 									isShipped && "cursor-not-allowed opacity-30",
 									isVoted
-										? "border border-primary/20 bg-primary/10 text-primary"
-										: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
+										? "border border-border bg-muted text-muted-foreground"
+										: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-border hover:text-foreground",
 								)}
 							>
 								<ThumbsUpIcon
@@ -295,7 +295,7 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"
-								className="px-6 py-3 text-sm font-medium rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
+								className="px-6 py-3 text-sm font-medium rounded-xl bg-foreground text-background transition-colors hover:bg-foreground/90"
 							>
 								{t("feedback.cta")}
 							</a>

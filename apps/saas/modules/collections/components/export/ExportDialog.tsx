@@ -127,10 +127,10 @@ export function ExportDialog({
 	};
 
 	const formatIcons: Record<ExportFormat, React.ReactNode> = {
-		csv: <FileSpreadsheetIcon className="size-5 text-green-500" />,
-		json: <FileJsonIcon className="size-5 text-blue-500" />,
-		jsonl: <FileTextIcon className="size-5 text-amber-500" />,
-		xlsx: <Table2Icon className="size-5 text-emerald-600" />,
+		csv: <FileSpreadsheetIcon className="size-5 text-muted-foreground" />,
+		json: <FileJsonIcon className="size-5 text-muted-foreground" />,
+		jsonl: <FileTextIcon className="size-5 text-muted-foreground" />,
+		xlsx: <Table2Icon className="size-5 text-muted-foreground" />,
 	};
 
 	const isExporting = exportMutation.isPending;

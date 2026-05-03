@@ -266,6 +266,37 @@
 				"confirmDowngrade": "Downgrade bestätigen",
 				"cancelDowngrade": "Abbrechen",
 				"downgradeProcessing": "Downgrade wird verarbeitet..."
+			},
+			"invoiceHistory": {
+				"title": "Rechnungshistorie",
+				"description": "Frühere Rechnungen anzeigen und herunterladen.",
+				"date": "Datum",
+				"amount": "Betrag",
+				"status": {
+					"paid": "Bezahlt",
+					"open": "Ausstehend",
+					"uncollectible": "Nicht einziehbar",
+					"void": "Storniert",
+					"draft": "Entwurf"
+				},
+				"actions": "Aktionen",
+				"downloadPdf": "PDF herunterladen",
+				"notAvailable": "Nicht verfügbar",
+				"previous": "Zurück",
+				"next": "Weiter",
+				"pageInfo": "{{start}}–{{end}} von {{total}}",
+				"empty": "Noch keine Rechnungen. Rechnungen erscheinen hier nach Ihrer ersten Zahlung.",
+				"loading": "Rechnungen werden geladen...",
+				"downloadError": "Rechnungs-PDF konnte nicht geöffnet werden. Bitte versuchen Sie es erneut."
+			},
+			"paymentMethod": {
+				"title": "Zahlungsmethode",
+				"description": "Ihre aktuelle Zahlungsmethode.",
+				"card": "Karte",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Verwalten",
+				"loading": "Zahlungsmethode wird geladen..."
 			}
 		},
 		"notificationsPage": {

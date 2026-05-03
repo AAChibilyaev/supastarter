@@ -21,14 +21,15 @@ import { z } from "zod";
 export function ContactForm() {
 	const t = useTranslations();
 
-	const form = useForm({
-		resolver: zodResolver(
-			z.object({
-				name: z.string().min(1),
-				email: z.email(),
-				message: z.string().min(10),
-			}),
-		),
+	const contactSchema = z.object({
+		name: z.string().min(1),
+		email: z.email(),
+		message: z.string().min(10),
+	});
+	type ContactValues = z.infer<typeof contactSchema>;
+
+	const form = useForm<ContactValues, any>({
+		resolver: zodResolver(contactSchema),
 		defaultValues: {
 			name: "",
 			email: "",

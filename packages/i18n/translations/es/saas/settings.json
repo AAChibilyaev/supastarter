@@ -266,6 +266,37 @@
 				"confirmDowngrade": "Confirmar degradación",
 				"cancelDowngrade": "Cancelar",
 				"downgradeProcessing": "Procesando degradación..."
+			},
+			"invoiceHistory": {
+				"title": "Historial de Facturas",
+				"description": "Ver y descargar facturas anteriores.",
+				"date": "Fecha",
+				"amount": "Monto",
+				"status": {
+					"paid": "Pagado",
+					"open": "Pendiente",
+					"uncollectible": "Incobrable",
+					"void": "Anulado",
+					"draft": "Borrador"
+				},
+				"actions": "Acciones",
+				"downloadPdf": "Descargar PDF",
+				"notAvailable": "No disponible",
+				"previous": "Anterior",
+				"next": "Siguiente",
+				"pageInfo": "{{start}}–{{end}} de {{total}}",
+				"empty": "Aún no hay facturas. Las facturas aparecerán aquí después de su primer pago.",
+				"loading": "Cargando facturas...",
+				"downloadError": "No se pudo abrir el PDF de la factura. Inténtelo de nuevo."
+			},
+			"paymentMethod": {
+				"title": "Método de Pago",
+				"description": "Su método de pago actual.",
+				"card": "Tarjeta",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Gestionar",
+				"loading": "Cargando método de pago..."
 			}
 		},
 		"notificationsPage": {

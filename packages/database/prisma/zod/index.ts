@@ -238,6 +238,12 @@ export const CollectionDocumentScalarFieldEnumSchema = z.enum(['id', 'collection
 
 export type CollectionDocumentScalarFieldEnum = z.infer<typeof CollectionDocumentScalarFieldEnumSchema>;
 
+// File: NewsletterSubscriberScalarFieldEnum.schema.ts
+
+export const NewsletterSubscriberScalarFieldEnumSchema = z.enum(['id', 'email', 'source', 'createdAt'])
+
+export type NewsletterSubscriberScalarFieldEnum = z.infer<typeof NewsletterSubscriberScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -1025,4 +1031,16 @@ export const CollectionDocumentSchema = z.object({
 });
 
 export type CollectionDocumentType = z.infer<typeof CollectionDocumentSchema>;
+
+
+// File: NewsletterSubscriber.schema.ts
+
+export const NewsletterSubscriberSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  source: z.string().default("roadmap_vote"),
+  createdAt: z.date(),
+});
+
+export type NewsletterSubscriberType = z.infer<typeof NewsletterSubscriberSchema>;
 

@@ -19,6 +19,7 @@
 		"@bprogress/next": "^3.2.12",
 		"@hookform/resolvers": "catalog:",
 		"@next/third-parties": "catalog:",
+		"@radix-ui/react-dialog": "^1.1.15",
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"@repo/payments": "workspace:*",

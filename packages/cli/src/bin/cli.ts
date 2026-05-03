@@ -9,9 +9,14 @@ import { createRequire } from "module";
 
 import { program } from "commander";
 
+import { collectionsCommand } from "../commands/collections.js";
+import { documentsCommand } from "../commands/documents.js";
 import { initCommand } from "../commands/init.js";
 import { keysCommand } from "../commands/keys.js";
 import { loginCommand } from "../commands/login.js";
+import { migrateCommand } from "../commands/migrate.js";
+import { monitorCommand } from "../commands/monitor.js";
+import { reindexCommand } from "../commands/reindex.js";
 import { searchCommand } from "../commands/search.js";
 import { loadConfig } from "../lib/config.js";
 
@@ -38,7 +43,12 @@ program
 
 program.addCommand(loginCommand);
 program.addCommand(initCommand);
+program.addCommand(collectionsCommand);
+program.addCommand(documentsCommand);
 program.addCommand(searchCommand);
 program.addCommand(keysCommand);
+program.addCommand(reindexCommand);
+program.addCommand(monitorCommand);
+program.addCommand(migrateCommand);
 
 await program.parseAsync(process.argv);

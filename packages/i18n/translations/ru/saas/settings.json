@@ -266,6 +266,37 @@
 				"confirmDowngrade": "Подтвердить понижение",
 				"cancelDowngrade": "Отмена",
 				"downgradeProcessing": "Обработка понижения..."
+			},
+			"invoiceHistory": {
+				"title": "История счетов",
+				"description": "Просмотр и скачивание прошлых счетов.",
+				"date": "Дата",
+				"amount": "Сумма",
+				"status": {
+					"paid": "Оплачено",
+					"open": "Ожидается",
+					"uncollectible": "Невозможно взыскать",
+					"void": "Аннулирован",
+					"draft": "Черновик"
+				},
+				"actions": "Действия",
+				"downloadPdf": "Скачать PDF",
+				"notAvailable": "Недоступно",
+				"previous": "Назад",
+				"next": "Далее",
+				"pageInfo": "{{start}}–{{end}} из {{total}}",
+				"empty": "Счетов пока нет. Счета появятся здесь после первого платежа.",
+				"loading": "Загрузка счетов...",
+				"downloadError": "Не удалось открыть PDF счета. Попробуйте снова."
+			},
+			"paymentMethod": {
+				"title": "Способ оплаты",
+				"description": "Текущий способ оплаты.",
+				"card": "Карта",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Управлять",
+				"loading": "Загрузка способа оплаты..."
 			}
 		},
 		"notificationsPage": {

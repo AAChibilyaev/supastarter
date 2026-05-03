@@ -1,10 +1,13 @@
 import { getSession } from "@auth/lib/server";
+import { InvoiceHistory } from "@payments/components/InvoiceHistory";
+import { PaymentMethodCard } from "@payments/components/PaymentMethodCard";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { ChangePlan } from "@payments/components/ChangePlan";
 import { UpgradeSuccessToast } from "@payments/components/UpgradeSuccessToast";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { PageHeader } from "@shared/components/PageHeader";
+import { SettingsItem } from "@shared/components/SettingsItem";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { getServerQueryClient } from "@shared/lib/server";
@@ -47,6 +50,18 @@ export default async function BillingSettingsPage() {
 				{activePlan && <ActivePlan />}
 				<ChangePlan userId={session?.user.id} activePlanId={activePlan?.id} />
 			</SettingsList>
+
+			{activePlan?.purchaseId && (
+				<div className="mt-8 space-y-6">
+					<SettingsItem title={t("settings.billing.paymentMethod.title")}>
+						<PaymentMethodCard purchaseId={activePlan.purchaseId} />
+					</SettingsItem>
+
+					<SettingsItem title={t("settings.billing.invoiceHistory.title")}>
+						<InvoiceHistory purchaseId={activePlan.purchaseId} />
+					</SettingsItem>
+				</div>
+			)}
 		</>
 	);
 }

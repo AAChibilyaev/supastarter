@@ -264,6 +264,37 @@
 				"confirmDowngrade": "Confirm downgrade",
 				"cancelDowngrade": "Cancel",
 				"downgradeProcessing": "Processing downgrade..."
+			},
+			"invoiceHistory": {
+				"title": "Invoice History",
+				"description": "View and download your past invoices.",
+				"date": "Date",
+				"amount": "Amount",
+				"status": {
+					"paid": "Paid",
+					"open": "Pending",
+					"uncollectible": "Uncollectible",
+					"void": "Void",
+					"draft": "Draft"
+				},
+				"actions": "Actions",
+				"downloadPdf": "Download PDF",
+				"notAvailable": "Not available",
+				"previous": "Previous",
+				"next": "Next",
+				"pageInfo": "{{start}}–{{end}} of {{total}}",
+				"empty": "No invoices yet. Invoices will appear here after your first payment.",
+				"loading": "Loading invoices...",
+				"downloadError": "Could not open invoice PDF. Please try again."
+			},
+			"paymentMethod": {
+				"title": "Payment Method",
+				"description": "Your current payment method on file.",
+				"card": "Card",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Manage",
+				"loading": "Loading payment method..."
 			}
 		},
 		"notificationsPage": {

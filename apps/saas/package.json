@@ -45,6 +45,7 @@
 		"@tanstack/react-query": "^5.96.2",
 		"@tanstack/react-table": "^8.21.3",
 		"@teispace/next-themes": "catalog:",
+		"@types/papaparse": "catalog:",
 		"ai": "catalog:",
 		"better-auth": "catalog:",
 		"boring-avatars": "catalog:",
@@ -63,6 +64,7 @@
 		"nuqs": "catalog:",
 		"openai": "catalog:",
 		"oslo": "catalog:",
+		"papaparse": "catalog:",
 		"pg": "catalog:",
 		"posthog-js": "^1.372.6",
 		"posthog-node": "^5.33.0",
@@ -85,6 +87,7 @@
 		"ufo": "catalog:",
 		"usehooks-ts": "catalog:",
 		"uuid": "catalog:",
+		"xlsx": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

@@ -10,6 +10,8 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
+const DialogClose = DialogPrimitive.Close;
+
 const DialogPortal = ({ ...props }: DialogPrimitive.DialogPortalProps) => (
 	<DialogPrimitive.Portal {...props} />
 );
@@ -86,6 +88,7 @@ const DialogDescription = ({
 
 export {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,

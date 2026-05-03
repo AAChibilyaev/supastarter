@@ -1,4 +1,6 @@
 import { getActiveOrganization } from "@auth/lib/server";
+import { InvoiceHistory } from "@payments/components/InvoiceHistory";
+import { PaymentMethodCard } from "@payments/components/PaymentMethodCard";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { AiWalletCard } from "@payments/components/AiWalletCard";
 import { ChangePlan } from "@payments/components/ChangePlan";
@@ -9,6 +11,7 @@ import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { BillingPlanInfo } from "@search/components/sections/BillingPlanInfo";
 import { OverageStatusCard } from "@search/components/sections/OverageStatusCard";
 import { PageHeader } from "@shared/components/PageHeader";
+import { SettingsItem } from "@shared/components/SettingsItem";
 import { SettingsList } from "@shared/components/SettingsList";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { getServerQueryClient } from "@shared/lib/server";
@@ -73,6 +76,18 @@ export default async function BillingSettingsPage({
 				{activePlan && <ActivePlan organizationId={organization.id} />}
 				<ChangePlan organizationId={organization.id} activePlanId={activePlan?.id} />
 			</SettingsList>
+
+			{activePlan?.purchaseId && (
+				<div className="mt-8 space-y-6">
+					<SettingsItem title={t("settings.billing.paymentMethod.title")}>
+						<PaymentMethodCard purchaseId={activePlan.purchaseId} />
+					</SettingsItem>
+
+					<SettingsItem title={t("settings.billing.invoiceHistory.title")}>
+						<InvoiceHistory purchaseId={activePlan.purchaseId} />
+					</SettingsItem>
+				</div>
+			)}
 
 			{/* Tochka wallet topup for Russian locale */}
 			{locale === "ru" && (

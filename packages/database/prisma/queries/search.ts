@@ -495,6 +495,9 @@ interface ReindexParamsEvent {
 	defaultSortingField?: string;
 	tokenSeparators?: string[];
 	symbolTokensToIndex?: string[];
+	metadata?: Record<string, unknown>;
+	synonymSets?: string[];
+	curationSets?: string[];
 }
 
 export interface ReindexJobParams {
@@ -502,6 +505,9 @@ export interface ReindexJobParams {
 	defaultSortingField?: string;
 	tokenSeparators?: string[];
 	symbolTokensToIndex?: string[];
+	metadata?: Record<string, unknown>;
+	synonymSets?: string[];
+	curationSets?: string[];
 }
 
 function toReindexJobView(row: {
@@ -542,6 +548,9 @@ export async function createPendingReindexJob(input: {
 	defaultSortingField?: string;
 	tokenSeparators?: string[];
 	symbolTokensToIndex?: string[];
+	metadata?: Record<string, unknown>;
+	synonymSets?: string[];
+	curationSets?: string[];
 }): Promise<ReindexJobView> {
 	const paramsEvent: ReindexParamsEvent = {
 		_type: "reindex_params",
@@ -549,6 +558,9 @@ export async function createPendingReindexJob(input: {
 		defaultSortingField: input.defaultSortingField,
 		tokenSeparators: input.tokenSeparators,
 		symbolTokensToIndex: input.symbolTokensToIndex,
+		metadata: input.metadata,
+		synonymSets: input.synonymSets,
+		curationSets: input.curationSets,
 	};
 	const row = await db.searchConnectorSyncJob.create({
 		data: {
@@ -591,6 +603,9 @@ export async function getReindexJobParams(jobId: string): Promise<ReindexJobPara
 		defaultSortingField: first.defaultSortingField,
 		tokenSeparators: first.tokenSeparators,
 		symbolTokensToIndex: first.symbolTokensToIndex,
+		metadata: first.metadata,
+		synonymSets: first.synonymSets,
+		curationSets: first.curationSets,
 	};
 }
 

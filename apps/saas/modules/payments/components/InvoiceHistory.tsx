@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@repo/ui/components/badge";
+import { InvoiceStatusBadge } from "@payments/components/InvoiceStatusBadge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -19,40 +19,6 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
 const ITEMS_PER_PAGE = 10;
-
-type InvoiceStatus = string | null;
-
-function getStatusBadge(status: InvoiceStatus) {
-	if (status === "paid") {
-		return "success" as const;
-	}
-	if (status === "open" || status === "draft") {
-		return "warning" as const;
-	}
-	if (status === "void" || status === "uncollectible") {
-		return "error" as const;
-	}
-	return "info" as const;
-}
-
-function getStatusLabel(status: InvoiceStatus, t: ReturnType<typeof useTranslations>) {
-	if (status === "paid") {
-		return t("settings.billing.invoiceHistory.status.paid");
-	}
-	if (status === "open") {
-		return t("settings.billing.invoiceHistory.status.open");
-	}
-	if (status === "draft") {
-		return t("settings.billing.invoiceHistory.status.draft");
-	}
-	if (status === "void") {
-		return t("settings.billing.invoiceHistory.status.void");
-	}
-	if (status === "uncollectible") {
-		return t("settings.billing.invoiceHistory.status.uncollectible");
-	}
-	return status ?? "—";
-}
 
 export function InvoiceHistory({ organizationId }: { organizationId?: string }) {
 	const t = useTranslations();
@@ -144,9 +110,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 											})}
 										</TableCell>
 										<TableCell>
-											<Badge status={getStatusBadge(invoice.status)}>
-												{getStatusLabel(invoice.status, t)}
-											</Badge>
+											<InvoiceStatusBadge status={invoice.status ?? ""} />
 										</TableCell>
 										<TableCell className="text-right">
 											{invoice.invoicePdf && (

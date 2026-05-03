@@ -98,14 +98,14 @@ export function CollectionCard({
 			<CardFooter className="gap-1 pt-0">
 				<Button variant="outline" size="sm" asChild className="flex-1">
 					<Link href={`/${organizationSlug}/collections/${collection.slug}`}>
-						{t("search.collection.open") || "Open"}
+						{t("search.collection.open")}
 					</Link>
 				</Button>
 				<div className="gap-1 flex">
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("search.import.title") || "Import"}
+						title={t("search.import.title")}
 						onClick={() => onImport?.(collection.id)}
 					>
 						<ImportIcon className="size-3.5" />
@@ -113,7 +113,7 @@ export function CollectionCard({
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("search.collection.schema") || "Schema"}
+						title={t("search.collection.schema")}
 						onClick={() => onSchema?.(collection.slug)}
 					>
 						<Settings2Icon className="size-3.5" />
@@ -121,7 +121,7 @@ export function CollectionCard({
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("search.collection.collectionSettings") || "Settings"}
+						title={t("search.collection.collectionSettings")}
 						asChild
 					>
 						<Link href={`/${organizationSlug}/collections/${collection.slug}/settings`}>
@@ -131,7 +131,7 @@ export function CollectionCard({
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("common.duplicate") || "Duplicate"}
+						title={t("common.duplicate")}
 						onClick={() => onDuplicate?.(collection.id)}
 					>
 						<CopyIcon className="size-3.5" />
@@ -139,7 +139,7 @@ export function CollectionCard({
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("common.export") || "Export"}
+						title={t("common.export")}
 						onClick={() => onExport?.(collection.slug)}
 					>
 						<DownloadIcon className="size-3.5" />
@@ -147,7 +147,7 @@ export function CollectionCard({
 					<Button
 						variant="ghost"
 						size="icon"
-						title={t("common.delete") || "Delete"}
+						title={t("common.delete")}
 						onClick={() => onDelete?.(collection.id)}
 					>
 						<Trash2Icon className="size-3.5 text-destructive" />

@@ -11,7 +11,7 @@ import { EmptyState } from "@search/components/cards/EmptyState";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Columns3Icon, PlusIcon, SearchIcon, XIcon } from "lucide-react";
+import { AlertCircleIcon, Columns3Icon, PlusIcon, RefreshCwIcon, SearchIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -50,6 +50,7 @@ function CollectionGridSkeleton() {
 
 export function CollectionsPage() {
 	const t = useTranslations("search");
+	const tCommon = useTranslations("common");
 	const { activeOrganization } = useActiveOrganization();
 	const queryClient = useQueryClient();
 	const { confirm } = useConfirmationAlert();
@@ -64,7 +65,7 @@ export function CollectionsPage() {
 
 	// ── Fetch collections ──────────────────────────────────────
 
-	const { data: collectionsData, isLoading } = useQuery(
+	const { data: collectionsData, isLoading, isError, refetch } = useQuery(
 		orpc.collections.list.queryOptions({
 			input: { organizationId: orgId ?? "" },
 		}),
@@ -143,7 +144,7 @@ export function CollectionsPage() {
 	};
 
 	const handleDuplicate = (_id: string) => {
-		toastSuccess(t("common.comingSoon") || "Coming soon");
+		toastSuccess(tCommon("comingSoon"));
 	};
 
 	const handleImport = (id: string) => {
@@ -179,23 +180,32 @@ export function CollectionsPage() {
 			<div className="gap-4 sm:items-center sm:flex-row flex flex-col items-start justify-between">
 				<div>
 					<h1 className="font-bold text-2xl tracking-tight">{t("nav.collections")}</h1>
-					<p className="text-sm text-muted-foreground">
-						{t("collections.subtitle") || "Manage your search indexes and documents"}
-					</p>
+					<p className="text-sm text-muted-foreground">{t("collections.subtitle")}</p>
 				</div>
-				<Button variant="primary" asChild>
-					<a href={`/${orgSlug}/search?tab=create`}>
-						<PlusIcon className="size-4" />
-						{t("collection.new") || "New Collection"}
-					</a>
-				</Button>
+				<div className="gap-2 flex items-center">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => void refetch()}
+						disabled={isLoading}
+					>
+						<RefreshCwIcon className="size-4" />
+						{tCommon("refresh")}
+					</Button>
+					<Button variant="primary" asChild>
+						<a href={`/${orgSlug}/search?tab=create`}>
+							<PlusIcon className="size-4" />
+							{t("collection.new")}
+						</a>
+					</Button>
+				</div>
 			</div>
 
 			{/* Search */}
 			<div className="sm:max-w-md relative">
 				<SearchIcon className="left-2.5 size-4 absolute top-1/2 -translate-y-1/2 text-foreground/40" />
 				<Input
-					placeholder={t("collections.searchPlaceholder") || "Search collections..."}
+					placeholder={t("collections.searchPlaceholder")}
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
 					className="pl-8"
@@ -210,6 +220,22 @@ export function CollectionsPage() {
 					</button>
 				)}
 			</div>
+
+			{/* Error state */}
+			{isError && (
+				<div className="flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+					<AlertCircleIcon className="size-4 shrink-0" />
+					<span>{t("collections.loadError")}</span>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="ml-auto text-destructive hover:text-destructive"
+						onClick={() => void refetch()}
+					>
+						{tCommon("refresh")}
+					</Button>
+				</div>
+			)}
 
 			{/* Content */}
 			{isLoading ? (
@@ -276,7 +302,7 @@ export function CollectionsPage() {
 			>
 				<DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
 					<DialogHeader>
-						<DialogTitle>{t("collection.schemaEditor") || "Schema Editor"}</DialogTitle>
+						<DialogTitle>{t("collection.schemaEditor.title")}</DialogTitle>
 					</DialogHeader>
 					{schemaCollectionSlug && (
 						<SchemaEditorPanel

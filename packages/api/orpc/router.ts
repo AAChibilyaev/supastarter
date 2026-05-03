@@ -2,8 +2,10 @@ import type { RouterClient } from "@orpc/server";
 
 import { adminRouter } from "../modules/admin/router";
 import { aiRouter } from "../modules/ai/router";
+import { auditLogRouter } from "../modules/audit-log/router";
 import { billingWalletRouter } from "../modules/billing-wallet/router";
 import { collectionsRouter } from "../modules/collections/router";
+import { complianceRouter } from "../modules/compliance/router";
 import { entitlementsRouter } from "../modules/entitlements/router";
 import { feedbackRouter } from "../modules/feedback/router";
 import { indexingRouter } from "../modules/indexing/router";
@@ -20,6 +22,7 @@ import { publicProcedure } from "./procedures";
 
 export const router = publicProcedure.router({
 	admin: adminRouter,
+	auditLog: auditLogRouter,
 	organizations: organizationsRouter,
 	users: usersRouter,
 	payments: paymentsRouter,
@@ -31,6 +34,7 @@ export const router = publicProcedure.router({
 	billingWallet: billingWalletRouter,
 	entitlements: entitlementsRouter,
 	collections: collectionsRouter,
+	compliance: complianceRouter,
 	indexing: indexingRouter,
 	mySearch: mySearchRouter,
 	onboarding: onboardingRouter,

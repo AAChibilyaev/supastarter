@@ -53,8 +53,13 @@ export function StatsTile({
 
 	return (
 		<Card>
-			<CardHeader className="pb-2">
+			<CardHeader className="pb-2 flex flex-row items-center justify-between">
 				<CardTitle>{title}</CardTitle>
+				{icon && (
+					<div className="size-8 flex items-center justify-center rounded-lg bg-muted text-muted-foreground">
+						{icon}
+					</div>
+				)}
 			</CardHeader>
 			<CardContent>
 				<div className="flex items-center justify-between">

@@ -1,3 +1,4 @@
+import { getAlertRules, updateAlertRules } from "./procedures/alert-rules";
 import { analytics } from "./procedures/analytics";
 import {
 	listAnalyticsRules,
@@ -217,5 +218,9 @@ export const searchRouter = {
 		list: listWebhooks,
 		create: createWebhook,
 		delete: deleteWebhook,
+	},
+	alertRules: {
+		get: getAlertRules,
+		update: updateAlertRules,
 	},
 };

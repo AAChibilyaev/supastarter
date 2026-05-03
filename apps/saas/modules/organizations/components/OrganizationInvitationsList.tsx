@@ -5,7 +5,8 @@ import { fullOrganizationQueryKey, useFullOrganizationQuery } from "@organizatio
 import type { ActiveOrganization } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
-import { cn } from "@repo/ui";
+import { cn, DataTableProvider, DataTableToolbar } from "@repo/ui";
+import type { DataTableFilterField } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import {
 	DropdownMenu,
@@ -157,6 +158,9 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 		},
 	];
 
+	type Invitation = NonNullable<ActiveOrganization["invitations"]>[number];
+	const filterFields: DataTableFilterField<Invitation>[] = [];
+
 	const table = useReactTable({
 		data: invitations ?? [],
 		columns,
@@ -168,27 +172,35 @@ export function OrganizationInvitationsList({ organizationId }: { organizationId
 
 	return (
 		<div className="rounded-2xl border">
-			<Table>
-				<TableBody>
-					{table.getRowModel().rows?.length ? (
-						table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</TableCell>
-								))}
+			<DataTableProvider
+				table={table}
+				columns={columns}
+				filterFields={filterFields}
+				totalRows={invitations?.length}
+			>
+				<DataTableToolbar />
+				<Table>
+					<TableBody>
+						{table.getRowModel().rows?.length ? (
+							table.getRowModel().rows.map((row) => (
+								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id}>
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+										</TableCell>
+									))}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={columns.length} className="h-24 text-center">
+									{t("organizations.settings.members.invitations.empty")}
+								</TableCell>
 							</TableRow>
-						))
-					) : (
-						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								{t("organizations.settings.members.invitations.empty")}
-							</TableCell>
-						</TableRow>
-					)}
-				</TableBody>
-			</Table>
+						)}
+					</TableBody>
+				</Table>
+			</DataTableProvider>
 		</div>
 	);
 }

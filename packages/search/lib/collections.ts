@@ -81,6 +81,12 @@ export interface CreatePhysicalCollectionInput {
 	tokenSeparators?: string[];
 	/** Symbols to index as part of tokens (e.g. "+#@."). Overrides tokenSeparators for specific chars */
 	symbolTokensToIndex?: string[];
+	/** Arbitrary metadata stored on the collection */
+	metadata?: Record<string, unknown>;
+	/** Global synonym sets to bind to this collection (Typesense v30+) */
+	synonymSets?: string[];
+	/** Global curation sets to bind to this collection (Typesense v30+) */
+	curationSets?: string[];
 }
 
 export async function createPhysicalCollection(input: CreatePhysicalCollectionInput) {
@@ -106,6 +112,15 @@ export async function createPhysicalCollection(input: CreatePhysicalCollectionIn
 		}),
 		...(input.symbolTokensToIndex !== undefined && {
 			symbol_tokens_to_index: input.symbolTokensToIndex,
+		}),
+		...(input.metadata !== undefined && {
+			metadata: input.metadata,
+		}),
+		...(input.synonymSets !== undefined && {
+			synonym_sets: input.synonymSets,
+		}),
+		...(input.curationSets !== undefined && {
+			curation_sets: input.curationSets,
 		}),
 	} as unknown as CollectionCreateSchema;
 

@@ -26,6 +26,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { NotificationCenter } from "@shared/components/NotificationCenter";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
@@ -51,7 +52,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
-import { useIsMobile } from "../hooks/use-media-query";
 import { useSidebar } from "../lib/sidebar-context";
 
 interface NavSubItem {

@@ -1,6 +1,6 @@
-\"use client\";
+"use client";
 
-import { Button } from \"@repo/ui/components/button\";
+import { Button } from "@repo/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -8,11 +8,11 @@ import {
 	DialogTitle,
 	DialogDescription,
 	DialogFooter,
-} from \"@repo/ui/components/dialog\";
-import { Skeleton } from \"@repo/ui/components/skeleton\";
-import { toastError, toastSuccess } from \"@repo/ui/components/toast\";
-import { orpc } from \"@shared/lib/orpc-query-utils\";
-import { useMutation, useQuery, useQueryClient } from \"@tanstack/react-query\";
+} from "@repo/ui/components/dialog";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
+import { orpc } from "@shared/lib/orpc-query-utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	AlertCircleIcon,
 	CheckCircle2Icon,
@@ -20,46 +20,46 @@ import {
 	PlusIcon,
 	StarIcon,
 	Trash2Icon,
-} from \"lucide-react\";
-import { useFormatter, useTranslations } from \"next-intl\";
-import Script from \"next/script\";
-import { useCallback, useEffect, useRef, useState } from \"react\";
+} from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
+import Script from "next/script";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ── Brand icon ──────────────────────────────────────────────
 
 function BrandIcon({ brand }: { brand: string | null }) {
-	const lower = (brand ?? \"\").toLowerCase();
+	const lower = (brand ?? "").toLowerCase();
 
-	if (lower === \"visa\") {
+	if (lower === "visa") {
 		return (
-			<span className=\"size-8 rounded bg-blue-600 font-bold text-white flex items-center justify-center text-[10px]\">
+			<span className="size-8 rounded bg-blue-600 font-bold text-white flex items-center justify-center text-[10px]">
 				V
 			</span>
 		);
 	}
-	if (lower === \"mastercard\") {
+	if (lower === "mastercard") {
 		return (
-			<span className=\"size-8 rounded bg-orange-500 font-bold text-white flex items-center justify-center text-[10px]\">
+			<span className="size-8 rounded bg-orange-500 font-bold text-white flex items-center justify-center text-[10px]">
 				MC
 			</span>
 		);
 	}
-	if (lower === \"amex\" || lower === \"american_express\") {
+	if (lower === "amex" || lower === "american_express") {
 		return (
-			<span className=\"size-8 rounded bg-sky-600 font-bold text-white flex items-center justify-center text-[10px]\">
+			<span className="size-8 rounded bg-sky-600 font-bold text-white flex items-center justify-center text-[10px]">
 				AE
 			</span>
 		);
 	}
-	if (lower === \"discover\") {
+	if (lower === "discover") {
 		return (
-			<span className=\"size-8 rounded bg-orange-600 font-bold text-white flex items-center justify-center text-[10px]\">
+			<span className="size-8 rounded bg-orange-600 font-bold text-white flex items-center justify-center text-[10px]">
 				D
 			</span>
 		);
 	}
 
-	return <CreditCardIcon className=\"size-8 text-foreground/60\" />;
+	return <CreditCardIcon className="size-8 text-foreground/60" />;
 }
 
 // ── Confirm Delete Dialog ───────────────────────────────────
@@ -85,19 +85,21 @@ function ConfirmDeleteDialog({
 		<Dialog open={open} onOpenChange={onClose}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>{t(\"settings.billing.paymentMethod.deleteDialogTitle\")}</DialogTitle>
+					<DialogTitle>
+						{t("settings.billing.paymentMethod.deleteDialogTitle")}
+					</DialogTitle>
 					<DialogDescription>
-						{t(\"settings.billing.paymentMethod.deleteDialogDescription\", {
-							card: `${brand ?? t(\"settings.billing.paymentMethod.card\")} •••• ${last4 ?? \"••••\"}`,
+						{t("settings.billing.paymentMethod.deleteDialogDescription", {
+							card: `${brand ?? t("settings.billing.paymentMethod.card")} •••• ${last4 ?? "••••"}`,
 						})}
 					</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
-					<Button variant=\"outline\" onClick={onClose} disabled={isPending}>
+					<Button variant="outline" onClick={onClose} disabled={isPending}>
 						{t("common.confirmation.cancel")}
 					</Button>
-					<Button variant=\"destructive\" onClick={onConfirm} loading={isPending}>
-						{t(\"settings.billing.paymentMethod.deleteConfirm\")}
+					<Button variant="destructive" onClick={onConfirm} loading={isPending}>
+						{t("settings.billing.paymentMethod.deleteConfirm")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
@@ -113,7 +115,7 @@ declare global {
 	}
 }
 
-const STRIPE_JS_URL = \"https://js.stripe.com/v3/\";
+const STRIPE_JS_URL = "https://js.stripe.com/v3/";
 
 function AddCardModal({
 	open,
@@ -140,7 +142,7 @@ function AddCardModal({
 				setClientSecret(data.clientSecret);
 			},
 			onError: () => {
-				setError(t(\"settings.billing.paymentMethod.setupError\"));
+				setError(t("settings.billing.paymentMethod.setupError"));
 			},
 		}),
 	);
@@ -159,19 +161,20 @@ function AddCardModal({
 
 	// Initialize Stripe Elements when both stripe.js and clientSecret are ready
 	const initElements = useCallback(() => {
-		if (!stripeLoaded || !clientSecret || !elementsRef.current || elementsInstanceRef.current) return;
+		if (!stripeLoaded || !clientSecret || !elementsRef.current || elementsInstanceRef.current)
+			return;
 
 		const stripe = new (window as unknown as Record<string, unknown>).Stripe(
 			// Stripe publishable key — loaded from env
-			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? \"\",
+			process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "",
 		);
 		stripeRef.current = stripe;
 
 		const elements = stripe.elements({ clientSecret });
 		elementsInstanceRef.current = elements;
 
-		const paymentElement = elements.create(\"payment\", {
-			layout: { type: \"tabs\" },
+		const paymentElement = elements.create("payment", {
+			layout: { type: "tabs" },
 		});
 
 		paymentElement.mount(elementsRef.current);
@@ -212,58 +215,62 @@ function AddCardModal({
 				queryClient.invalidateQueries({
 					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
 				});
-				toastSuccess(t(\"settings.billing.paymentMethod.cardAdded\"));
+				toastSuccess(t("settings.billing.paymentMethod.cardAdded"));
 				onClose();
 			}
 		} catch {
-			setError(t(\"settings.billing.paymentMethod.setupError\"));
+			setError(t("settings.billing.paymentMethod.setupError"));
 			setIsProcessing(false);
 		}
 	};
 
 	return (
 		<>
-			<Script src={STRIPE_JS_URL} onLoad={() => setStripeLoaded(true)} strategy=\"afterInteractive\" />
+			<Script
+				src={STRIPE_JS_URL}
+				onLoad={() => setStripeLoaded(true)}
+				strategy="afterInteractive"
+			/>
 
 			<Dialog open={open} onOpenChange={onClose}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>{t(\"settings.billing.paymentMethod.addCardTitle\")}</DialogTitle>
+						<DialogTitle>
+							{t("settings.billing.paymentMethod.addCardTitle")}
+						</DialogTitle>
 						<DialogDescription>
-							{t(\"settings.billing.paymentMethod.addCardDescription\")}
+							{t("settings.billing.paymentMethod.addCardDescription")}
 						</DialogDescription>
 					</DialogHeader>
 
-					<div className=\"space-y-4\">
+					<div className="space-y-4">
 						{!clientSecret && !error && (
-							<div className=\"flex items-center gap-2 text-sm text-muted-foreground\">
-								<AlertCircleIcon className=\"size-4\" />
-								{t(\"settings.billing.paymentMethod.preparing\")}
+							<div className="gap-2 text-sm flex items-center text-muted-foreground">
+								<AlertCircleIcon className="size-4" />
+								{t("settings.billing.paymentMethod.preparing")}
 							</div>
 						)}
 
 						{error && (
-							<div className=\"flex items-center gap-2 text-sm text-destructive\">
-								<AlertCircleIcon className=\"size-4\" />
+							<div className="gap-2 text-sm flex items-center text-destructive">
+								<AlertCircleIcon className="size-4" />
 								{error}
 							</div>
 						)}
 
-						{clientSecret && (
-							<div ref={elementsRef} className=\"min-h-[200px]\" />
-						)}
+						{clientSecret && <div ref={elementsRef} className="min-h-[200px]" />}
 					</div>
 
 					<DialogFooter>
-						<Button variant=\"outline\" onClick={onClose} disabled={isProcessing}>
-						{t("common.confirmation.cancel")}
+						<Button variant="outline" onClick={onClose} disabled={isProcessing}>
+							{t("common.confirmation.cancel")}
 						</Button>
 						<Button
 							onClick={handleConfirm}
 							disabled={!clientSecret || isProcessing}
 							loading={isProcessing}
 						>
-							{t(\"settings.billing.paymentMethod.addCardConfirm\")}
+							{t("settings.billing.paymentMethod.addCardConfirm")}
 						</Button>
 					</DialogFooter>
 				</DialogContent>
@@ -298,11 +305,11 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 				queryClient.invalidateQueries({
 					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
 				});
-				toastSuccess(t(\"settings.billing.paymentMethod.deleteSuccess\"));
+				toastSuccess(t("settings.billing.paymentMethod.deleteSuccess"));
 				setDeleteTarget(null);
 			},
 			onError: () => {
-				toastError(t(\"settings.billing.paymentMethod.deleteError\"));
+				toastError(t("settings.billing.paymentMethod.deleteError"));
 			},
 		}),
 	);
@@ -313,18 +320,18 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 				queryClient.invalidateQueries({
 					queryKey: orpc.payments.listPaymentMethods.queryKey({ input: { purchaseId } }),
 				});
-				toastSuccess(t(\"settings.billing.paymentMethod.defaultSuccess\"));
+				toastSuccess(t("settings.billing.paymentMethod.defaultSuccess"));
 			},
 			onError: () => {
-				toastError(t(\"settings.billing.paymentMethod.defaultError\"));
+				toastError(t("settings.billing.paymentMethod.defaultError"));
 			},
 		}),
 	);
 
 	if (isLoading) {
 		return (
-			<div className=\"space-y-2\">
-				<Skeleton className=\"h-16 w-full\" />
+			<div className="space-y-2">
+				<Skeleton className="h-16 w-full" />
 			</div>
 		);
 	}
@@ -334,25 +341,27 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 
 	return (
 		<>
-			<div className=\"space-y-3\">
-				<div className=\"flex items-center justify-between\">
-					<h3 className=\"font-semibold text-sm\">{t(\"settings.billing.paymentMethod.title\")}</h3>
-					<Button variant=\"outline\" size=\"sm\" onClick={() => setShowAddCard(true)}>
-						<PlusIcon className=\"mr-1 size-4\" />
-						{t(\"settings.billing.paymentMethod.addCard\")}
+			<div className="space-y-3">
+				<div className="flex items-center justify-between">
+					<h3 className="font-semibold text-sm">
+						{t("settings.billing.paymentMethod.title")}
+					</h3>
+					<Button variant="outline" size="sm" onClick={() => setShowAddCard(true)}>
+						<PlusIcon className="mr-1 size-4" />
+						{t("settings.billing.paymentMethod.addCard")}
 					</Button>
 				</div>
 
-				<p className=\"text-xs text-muted-foreground\">
-					{t(\"settings.billing.paymentMethod.description\")}
+				<p className="text-xs text-muted-foreground">
+					{t("settings.billing.paymentMethod.description")}
 				</p>
 
 				{methods.length === 0 ? (
-					<div className=\"p-6 text-sm rounded-lg border text-center text-muted-foreground\">
-						{t(\"settings.billing.paymentMethod.emptyState\")}
+					<div className="p-6 text-sm rounded-lg border text-center text-muted-foreground">
+						{t("settings.billing.paymentMethod.emptyState")}
 					</div>
 				) : (
-					<div className=\"space-y-2\">
+					<div className="space-y-2">
 						{/* Default card */}
 						{defaultMethod && (
 							<PaymentMethodRow
@@ -365,7 +374,10 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 										last4: defaultMethod.last4,
 									})
 								}
-								isDeleting={deleteMutation.isPending && deleteTarget?.id === defaultMethod.id}
+								isDeleting={
+									deleteMutation.isPending &&
+									deleteTarget?.id === defaultMethod.id
+								}
 								t={t}
 								format={format}
 							/>
@@ -377,16 +389,25 @@ export function PaymentMethodCard({ purchaseId }: { purchaseId: string }) {
 								key={method.id}
 								method={method}
 								onSetDefault={() =>
-									setDefaultMutation.mutate({ purchaseId, paymentMethodId: method.id })
+									setDefaultMutation.mutate({
+										purchaseId,
+										paymentMethodId: method.id,
+									})
 								}
 								onDelete={() =>
-									setDeleteTarget({ id: method.id, brand: method.brand, last4: method.last4 })
+									setDeleteTarget({
+										id: method.id,
+										brand: method.brand,
+										last4: method.last4,
+									})
 								}
 								isSettingDefault={
 									setDefaultMutation.isPending &&
 									setDefaultMutation.variables?.paymentMethodId === method.id
 								}
-								isDeleting={deleteMutation.isPending && deleteTarget?.id === method.id}
+								isDeleting={
+									deleteMutation.isPending && deleteTarget?.id === method.id
+								}
 								t={t}
 								format={format}
 							/>
@@ -446,28 +467,28 @@ function PaymentMethodRow({
 	format: ReturnType<typeof useFormatter>;
 }) {
 	return (
-		<div className=\"p-3 rounded-lg border flex items-center justify-between gap-3\">
-			<div className=\"flex items-center gap-3 min-w-0\">
+		<div className="p-3 gap-3 flex items-center justify-between rounded-lg border">
+			<div className="gap-3 min-w-0 flex items-center">
 				<BrandIcon brand={method.brand} />
-				<div className=\"min-w-0\">
-					<p className=\"font-medium text-sm flex items-center gap-1.5\">
-						{method.brand ?? t(\"settings.billing.paymentMethod.card\")}
+				<div className="min-w-0">
+					<p className="font-medium text-sm gap-1.5 flex items-center">
+						{method.brand ?? t("settings.billing.paymentMethod.card")}
 						{method.isDefault && (
-							<span className=\"inline-flex items-center gap-0.5 text-xs text-primary\">
-								<StarIcon className=\"size-3 fill-primary\" />
-								{t(\"settings.billing.paymentMethod.defaultLabel\")}
+							<span className="gap-0.5 text-xs inline-flex items-center text-primary">
+								<StarIcon className="size-3 fill-primary" />
+								{t("settings.billing.paymentMethod.defaultLabel")}
 							</span>
 						)}
 					</p>
-					<p className=\"text-xs text-muted-foreground\">
-						{t(\"settings.billing.paymentMethod.maskedNumber\", {
-							last4: method.last4 ?? \"••••\",
+					<p className="text-xs text-muted-foreground">
+						{t("settings.billing.paymentMethod.maskedNumber", {
+							last4: method.last4 ?? "••••",
 						})}
 						{method.expMonth && method.expYear && (
 							<>
-								{\" — \"}
-								{t(\"settings.billing.paymentMethod.expiry\", {
-									month: String(method.expMonth).padStart(2, \"0\"),
+								{" — "}
+								{t("settings.billing.paymentMethod.expiry", {
+									month: String(method.expMonth).padStart(2, "0"),
 									year: String(method.expYear).slice(-2),
 								})}
 							</>
@@ -476,26 +497,26 @@ function PaymentMethodRow({
 				</div>
 			</div>
 
-			<div className=\"flex items-center gap-1 shrink-0\">
+			<div className="gap-1 flex shrink-0 items-center">
 				{!method.isDefault && onSetDefault && (
 					<Button
-						variant=\"ghost\"
-						size=\"sm\"
+						variant="ghost"
+						size="sm"
 						onClick={onSetDefault}
 						loading={isSettingDefault}
-						title={t(\"settings.billing.paymentMethod.setDefault\")}
+						title={t("settings.billing.paymentMethod.setDefault")}
 					>
-						<CheckCircle2Icon className=\"size-4\" />
+						<CheckCircle2Icon className="size-4" />
 					</Button>
 				)}
 				<Button
-					variant=\"ghost\"
-					size=\"sm\"
+					variant="ghost"
+					size="sm"
 					onClick={onDelete}
 					loading={isDeleting}
-				className="text-destructive hover:text-destructive"
+					className="text-destructive hover:text-destructive"
 				>
-					<Trash2Icon className=\"size-4\" />
+					<Trash2Icon className="size-4" />
 				</Button>
 			</div>
 		</div>

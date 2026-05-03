@@ -51,13 +51,6 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@repo/ui/components/select";
-import {
 	Sheet,
 	SheetContent,
 	SheetDescription,

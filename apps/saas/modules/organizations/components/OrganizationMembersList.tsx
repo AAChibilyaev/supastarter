@@ -5,7 +5,8 @@ import { fullOrganizationQueryKey, useFullOrganizationQuery } from "@organizatio
 import type { OrganizationMemberRole } from "@repo/auth";
 import { authClient } from "@repo/auth/client";
 import { isOrganizationAdmin } from "@repo/auth/lib/helper";
-import { Button } from "@repo/ui/components/button";
+import { Button, DataTableProvider, DataTableToolbar } from "@repo/ui";
+import type { DataTableFilterField } from "@repo/ui";
 import {
 	DropdownMenu,
 	DropdownMenuContent,

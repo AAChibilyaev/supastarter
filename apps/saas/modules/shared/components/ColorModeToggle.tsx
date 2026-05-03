@@ -11,12 +11,15 @@ import { useTheme } from "@teispace/next-themes";
 import { MonitorCogIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useIsClient } from "usehooks-ts";
 
 export function ColorModeToggle() {
 	const { setTheme, theme } = useTheme();
 	const [value, setValue] = useState<string>(theme ?? "system");
-	const isClient = useIsClient();
+	const [isClient, setIsClient] = useState(false);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
 	const t = useTranslations();
 
 	const colorModeOptions = [

@@ -9,7 +9,8 @@ export type NotificationTypeId =
 	| "AI_TOPUP_PAID"
 	| "AI_TOPUP_FAILED"
 	| "AI_OVERAGE_REACHED"
-	| "PAYMENT_FAILED";
+	| "PAYMENT_FAILED"
+	| "QUOTA_ALERT";
 
 export interface NotificationGroupConfig {
 	id: NotificationGroupId;
@@ -33,6 +34,7 @@ export const NOTIFICATION_GROUPS: readonly NotificationGroupConfig[] = [
 			"AI_TOPUP_PAID",
 			"AI_TOPUP_FAILED",
 			"AI_OVERAGE_REACHED",
+			"QUOTA_ALERT",
 			"PAYMENT_FAILED",
 		],
 	},

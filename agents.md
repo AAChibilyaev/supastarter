@@ -1742,8 +1742,53 @@ Last: [first session]
 
 ## Last Session Bridge
 
-[Emergency bridge — running bridge was not updated]
-Files: apps/saas/modules/collections/components/pages/CollectionsPage.tsx (edit)
+[pre-compact bridge — saved before context compaction]
+Files (53):
+/Users/aac/Projects/ts/sim/apps/aacflow/lib/auth/auth.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/search/lib/search.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/api/modules/search/public-handler.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/search-client/src/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/slack.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/procedures/list-invoices.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/router.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/health.ts (create)
+.claude/worktrees/agent-ae4438c41328a3a29/apps/saas/app/api/cron/index-health-check/route.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/payments/provider/stripe/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/.env.local.example (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/procedures/list-invoices.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/health.ts (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/modules/payments/components/InvoiceHistory.tsx (create)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/app/(authenticated)/(main)/(account)/settings/billing/page.tsx (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/app/(authenticated)/(main)/(organizations)/[organizationSlug]/settings/billing/page.tsx (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/lib/format-kopecks.ts (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/components/AiWalletCard.tsx (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/components/TopUpDialog.tsx (edit)
+... +33 more
+Manual bridge:
+[proactive bridge @ 79% context — saved before compacting]
+Files (47):
+/Users/aac/Projects/ts/sim/apps/aacflow/lib/auth/auth.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/search/lib/search.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/api/modules/search/public-handler.ts (edit)
+.claude/worktrees/agent-acce8d9fd39731193/packages/search-client/src/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/slack.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/procedures/list-invoices.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/router.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/health.ts (create)
+.claude/worktrees/agent-ae4438c41328a3a29/apps/saas/app/api/cron/index-health-check/route.ts (create)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/payments/provider/stripe/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/index.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/.env.local.example (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/packages/api/modules/payments/procedures/list-invoices.ts (edit)
+.claude/worktrees/agent-ae4438c41328a3a29/packages/search/lib/health.ts (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/modules/payments/components/InvoiceHistory.tsx (create)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/app/(authenticated)/(main)/(account)/settings/billing/page.tsx (edit)
+.claude/worktrees/agent-a862802c8a1063d4d/apps/saas/app/(authenticated)/(main)/(organizations)/[organizationSlug]/settings/billing/page.tsx (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/lib/format-kopecks.ts (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/components/AiWalletCard.tsx (edit)
+.claude/worktrees/agent-ab06241c606f61ee6/apps/saas/modules/payments/components/TopUpDialog.tsx (edit)
+... +27 more
 
 # === END COGNILAYER ===
 

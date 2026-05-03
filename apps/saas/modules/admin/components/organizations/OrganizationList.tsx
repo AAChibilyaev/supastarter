@@ -14,6 +14,7 @@ import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { toastPromise } from "@repo/ui/components/toast";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -31,7 +32,6 @@ import Link from "next/link";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef } from "react";
 import { joinRelativeURL, withQuery } from "ufo";
-import { useDebounceValue } from "usehooks-ts";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -44,10 +44,7 @@ export function OrganizationList() {
 		parseAsInteger.withDefault(1),
 	);
 	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
-	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
-		leading: true,
-		trailing: false,
-	});
+	const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
 	const previousSearchTermRef = useRef(debouncedSearchTerm);
 
@@ -61,10 +58,6 @@ export function OrganizationList() {
 	const getOrganizationEditPath = (id: string) => {
 		return getPathWithBackToParemeter(joinRelativeURL("/admin", `/organizations/${id}`));
 	};
-
-	useEffect(() => {
-		setDebouncedSearchTerm(searchTerm);
-	}, [searchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
 
 	const { data, isLoading } = useQuery(
 		orpc.admin.organizations.list.queryOptions({

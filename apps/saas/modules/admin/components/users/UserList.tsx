@@ -13,6 +13,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Table, TableBody, TableCell, TableRow } from "@repo/ui/components/table";
 import { dismiss, toastLoading, toastPromise } from "@repo/ui/components/toast";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { Pagination } from "@shared/components/Pagination";
 import { UserAvatar } from "@shared/components/UserAvatar";
@@ -36,7 +37,6 @@ import {
 import { useTranslations } from "next-intl";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo } from "react";
-import { useDebounceValue } from "usehooks-ts";
 
 import { EmailVerified } from "./EmailVerified";
 
@@ -51,14 +51,7 @@ export function UserList() {
 		parseAsInteger.withDefault(1),
 	);
 	const [searchTerm, setSearchTerm] = useQueryState("query", parseAsString.withDefault(""));
-	const [debouncedSearchTerm, setDebouncedSearchTerm] = useDebounceValue(searchTerm, 300, {
-		leading: true,
-		trailing: false,
-	});
-
-	useEffect(() => {
-		setDebouncedSearchTerm(searchTerm);
-	}, [searchTerm]); // oxlint-disable-line eslint-plugin-react-hooks/exhaustive-deps
+	const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
 	const { data, isLoading, refetch } = useQuery(
 		orpc.admin.users.list.queryOptions({

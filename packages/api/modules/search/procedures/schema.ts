@@ -108,6 +108,9 @@ export const updateSchema = protectedProcedure
 			defaultSortingField: z.string().optional(),
 			tokenSeparators: z.array(z.string().min(1)).optional(),
 			symbolTokensToIndex: z.array(z.string().min(1)).optional(),
+			metadata: z.record(z.string(), z.unknown()).optional(),
+			synonymSets: z.array(z.string().min(1)).optional(),
+			curationSets: z.array(z.string().min(1)).optional(),
 			triggerReindex: z.boolean().optional().default(false),
 		}),
 	)
@@ -129,6 +132,9 @@ export const updateSchema = protectedProcedure
 				defaultSortingField,
 				tokenSeparators,
 				symbolTokensToIndex,
+				metadata,
+				synonymSets,
+				curationSets,
 				triggerReindex,
 			},
 			context: { user },
@@ -141,6 +147,9 @@ export const updateSchema = protectedProcedure
 				...(defaultSortingField ? { defaultSortingField } : {}),
 				...(tokenSeparators !== undefined ? { tokenSeparators } : {}),
 				...(symbolTokensToIndex !== undefined ? { symbolTokensToIndex } : {}),
+				...(metadata !== undefined ? { metadata } : {}),
+				...(synonymSets !== undefined ? { synonymSets } : {}),
+				...(curationSets !== undefined ? { curationSets } : {}),
 			};
 
 			await db.searchIndex.update({

@@ -12,7 +12,7 @@
  */
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
-import { sendEmail } from "@repo/mail";
+import { createNotification } from "@repo/notifications";
 
 import { buildQuotaAlertMessage, sendSlackAlert } from "./slack-notifier";
 
@@ -214,35 +214,41 @@ async function sendThresholdAlert(params: {
 	} = params;
 	const dashboardLink = `/org/${org.id}/settings/billing`;
 
-	// Send email notifications to all owners/admins
+	// Send in-app + email notifications to all owners/admins
+	// createNotification handles both channels with preference checks
 	await Promise.all(
 		members.map((m) => {
-			const templateId = threshold >= 100 ? "quotaHardCap" : "quotaSoftCap";
-			const context =
-				threshold >= 100
-					? ({
-							orgName: org.name,
-							planName,
-							overageEnabled: false, // overage status is passed separately
-							billingUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://aacsearch.app"}/org/${org.id}/settings/billing`,
-						} as const)
-					: ({
-							orgName: org.name,
-							planName,
-							percentUsed: percentUsed * 100,
-							remaining: limit - current,
-							billingUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://aacsearch.app"}/org/${org.id}/settings/billing`,
-						} as const);
-			return sendEmail({
-				to: m.user.email,
-				locale:
-					(m.user.locale as Parameters<typeof sendEmail>[0] extends { locale?: infer L }
-						? L
-						: never) ?? undefined,
-				templateId,
-				context,
+			const isHardCap = threshold >= 100;
+			const resourceLabel = resource === "search" ? "Search queries" : "Indexed documents";
+			const headline = isHardCap
+				? `Quota limit reached for ${resourceLabel}`
+				: `Quota usage warning for ${resourceLabel}`;
+			const title = isHardCap
+				? `${org.name}: ${resourceLabel} limit reached`
+				: `${org.name}: ${resourceLabel} at ${threshold}% usage`;
+			const message = isHardCap
+				? `Your ${resourceLabel} quota for the ${planName} plan has been fully used (${current}/${limit}). Upgrade your plan to continue without interruption.`
+				: `${resourceLabel} usage has reached ${Math.round(percentUsed * 100)}% of your ${planName} plan limit (${current.toLocaleString()} / ${limit.toLocaleString()}). Consider upgrading to avoid hitting the cap.`;
+			const link = dashboardLink;
+
+			return createNotification({
+				userId: m.userId,
+				type: "QUOTA_ALERT",
+				data: {
+					headline,
+					title,
+					message,
+					resource,
+					threshold,
+					percentUsed,
+					current,
+					limit,
+					planName,
+					orgName: org.name,
+				},
+				link,
 			}).catch((err: unknown) =>
-				logger.error("sendThresholdAlert: email failed", {
+				logger.error("sendThresholdAlert: createNotification failed", {
 					error: err,
 					userId: m.userId,
 					orgId: org.id,

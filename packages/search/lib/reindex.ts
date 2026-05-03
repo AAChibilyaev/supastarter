@@ -20,6 +20,9 @@ export interface ReindexInput {
 	defaultSortingField?: string;
 	tokenSeparators?: string[];
 	symbolTokensToIndex?: string[];
+	metadata?: Record<string, unknown>;
+	synonymSets?: string[];
+	curationSets?: string[];
 	onProgress?: (processed: number, total: number) => void;
 }
 
@@ -53,6 +56,9 @@ export async function reindexCollection(input: ReindexInput): Promise<ReindexRes
 		defaultSortingField: input.defaultSortingField,
 		tokenSeparators: input.tokenSeparators,
 		symbolTokensToIndex: input.symbolTokensToIndex,
+		metadata: input.metadata,
+		synonymSets: input.synonymSets,
+		curationSets: input.curationSets,
 	});
 
 	let copied = 0;

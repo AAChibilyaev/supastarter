@@ -33,6 +33,9 @@ export const createIndex = protectedProcedure
 			defaultSortingField: z.string().optional(),
 			tokenSeparators: z.array(z.string().min(1)).optional(),
 			symbolTokensToIndex: z.array(z.string().min(1)).optional(),
+			metadata: z.record(z.string(), z.unknown()).optional(),
+			synonymSets: z.array(z.string().min(1)).optional(),
+			curationSets: z.array(z.string().min(1)).optional(),
 		}),
 	)
 	.output(
@@ -77,7 +80,10 @@ export const createIndex = protectedProcedure
 			schema: {
 				fields: input.fields,
 				defaultSortingField: input.defaultSortingField,
-			},
+				metadata: input.metadata,
+				synonymSets: input.synonymSets,
+				curationSets: input.curationSets,
+			} as never,
 		});
 
 		try {
@@ -89,6 +95,9 @@ export const createIndex = protectedProcedure
 				defaultSortingField: input.defaultSortingField,
 				tokenSeparators: input.tokenSeparators,
 				symbolTokensToIndex: input.symbolTokensToIndex,
+				metadata: input.metadata,
+				synonymSets: input.synonymSets,
+				curationSets: input.curationSets,
 			});
 			await ensureAlias(owner.ownerId, input.slug, created.version);
 		} catch (error) {

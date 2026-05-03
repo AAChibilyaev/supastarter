@@ -10,14 +10,17 @@ import {
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useIsClient } from "usehooks-ts";
 
 import { useMarketingTheme } from "./ThemeProvider";
 
 export function ColorModeToggle() {
 	const { setTheme, theme } = useMarketingTheme();
 	const [value, setValue] = useState<string>(theme);
-	const isClient = useIsClient();
+	const [isClient, setIsClient] = useState(false);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
 	const t = useTranslations();
 
 	const colorModeOptions = [

@@ -18,6 +18,7 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { toastError } from "@repo/ui/components/toast";
+import { logger } from "@repo/logs";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
@@ -151,7 +152,7 @@ export function ExportDialog({
 			});
 			rows = result.documents;
 			if (result.parseFailures > 0) {
-				console.warn(`Export: ${result.parseFailures} documents failed to parse`);
+				logger.warn(`Export: ${result.parseFailures} documents failed to parse`);
 			}
 		}
 

@@ -2,6 +2,12 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -13,6 +19,7 @@ const hitSchema = z.object({
 });
 
 export const hybridSearch = protectedProcedure
+	.use(creditGate("hybrid_search_embedding", BigInt(200)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/hybrid-search",
@@ -46,11 +53,18 @@ export const hybridSearch = protectedProcedure
 			}),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 
-		const embedding = await generateEmbedding(input.query, input.model);
+		let embedding: Awaited<ReturnType<typeof generateEmbedding>>;
+		try {
+			embedding = await generateEmbedding(input.query, input.model);
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
 		const vectorQuery = formatVectorQuery(embedding.vector, input.vectorField, input.k);
 
 		const client = getTypesenseClient();
@@ -72,6 +86,8 @@ export const hybridSearch = protectedProcedure
 			.documents()
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.search(searchParams as any)) as any;
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(200));
 
 		return {
 			found: results.found ?? 0,

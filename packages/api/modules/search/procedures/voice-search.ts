@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -11,7 +10,7 @@ import {
 import { requireOrganizationMember } from "../lib/access";
 
 export const voiceSearch = protectedProcedure
-	.use(creditGate("audio_transcription", CREDIT_RATES.audio_transcription))
+	.use(creditGate("voice_search_transcription", BigInt(200)))
 	.route({
 		method: "POST",
 		path: "/search/voice",
@@ -35,7 +34,8 @@ export const voiceSearch = protectedProcedure
 			durationSeconds: z.number(),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const { creditReservationId } = context as unknown as CreditGateContext;
 
@@ -60,19 +60,13 @@ export const voiceSearch = protectedProcedure
 			language = response.language ?? input.language;
 			durationSeconds = response.duration ?? 0;
 
-			// Commit flat-fee usage on success
-			await commitFlatFeeUsage({
-				reservationId: creditReservationId,
-				operation: "audio_transcription",
-				provider: "aacsearch",
-				model: "audio",
-				flatFeeKopecks: CREDIT_RATES.audio_transcription,
-			});
+			await commitFlatFeeUsage(context, creditReservationId, BigInt(200));
 		} catch {
 			// Release reservation on error
 			await releaseCreditReservation(creditReservationId);
 			transcript = "";
 			durationSeconds = 0;
+			await releaseCreditReservation(context, creditReservationId);
 		}
 
 		return {

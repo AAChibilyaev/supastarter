@@ -3,7 +3,6 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -19,7 +18,7 @@ const hitSchema = z.object({
 });
 
 export const imageSearch = protectedProcedure
-	.use(creditGate("embedding", CREDIT_RATES.embedding))
+	.use(creditGate("image_search", BigInt(300)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/image-search",
@@ -54,7 +53,8 @@ export const imageSearch = protectedProcedure
 			}),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 		const { creditReservationId } = context as unknown as CreditGateContext;
@@ -149,6 +149,8 @@ export const imageSearch = protectedProcedure
 				flatFeeKopecks: CREDIT_RATES.embedding,
 			});
 
+		if (!caption) {
+			await releaseCreditReservation(context, creditReservationId);
 			return {
 				found: results.found ?? 0,
 				hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
@@ -168,4 +170,43 @@ export const imageSearch = protectedProcedure
 			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
+
+		// Phase 2: embed the caption and vector-search
+		let embedding: Awaited<ReturnType<typeof generateEmbedding>>;
+		try {
+			embedding = await generateEmbedding(caption, input.embeddingModel);
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
+		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
+
+		const client = getTypesenseClient();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const results = (await client
+			.collections(index.slug)
+			.documents()
+			.search({
+				q: "*",
+				vector_query: vectorQuery,
+				filter_by: input.filterBy ?? undefined,
+				per_page: input.k,
+			} as any)) as any;
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(300));
+
+		return {
+			found: results.found ?? 0,
+			hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
+				document: hit.document as Record<string, unknown>,
+				vectorDistance: hit.vector_distance as number | undefined,
+			})),
+			searchTimeMs: results.search_time_ms ?? 0,
+			caption,
+			embedding: {
+				model: embedding.model,
+				dimensions: embedding.dimensions,
+				tokens: embedding.tokens,
+			},
+		};
 	});

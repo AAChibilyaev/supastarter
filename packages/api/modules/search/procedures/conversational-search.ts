@@ -2,7 +2,6 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -32,7 +31,7 @@ const sourceSchema = z.object({
  * Falls back to the manual OpenAI RAG approach when no conversationModelId is given.
  */
 export const conversationalSearch = protectedProcedure
-	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
+	.use(creditGate("conversational_search_llm", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
@@ -78,7 +77,8 @@ export const conversationalSearch = protectedProcedure
 			conversationHistory: z.array(messageSchema).optional(),
 		}),
 	)
-	.handler(async ({ input, context }) => {
+	.handler(async ({ input, context, ...rest }) => {
+		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 		const { creditReservationId } = context as unknown as CreditGateContext;
@@ -205,18 +205,11 @@ export const conversationalSearch = protectedProcedure
 				temperature: 0.3,
 			});
 			answer = completion.choices[0]?.message?.content ?? "Unable to generate an answer.";
-
-			// Commit flat-fee usage on successful manual RAG
-			await commitFlatFeeUsage({
-				reservationId: creditReservationId,
-				operation: "rag_answer",
-				provider: "openai",
-				model: input.model,
-				flatFeeKopecks: CREDIT_RATES.rag_answer,
-			});
+			await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
 		} catch {
 			await releaseCreditReservation(creditReservationId, "error");
 			answer = "Conversational search is unavailable at this moment.";
+			await releaseCreditReservation(context, creditReservationId);
 		}
 
 		const searchTimeMs = Date.now() - searchStartTime;

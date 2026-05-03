@@ -4,7 +4,6 @@ import { getKnowledgeSpaceBySlug } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
-import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -16,7 +15,7 @@ import { retrieveKnowledge } from "../lib/retrieval";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
 
 export const ask = protectedProcedure
-	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
+	.use(creditGate("knowledge_ask_rag", BigInt(500)))
 	.route({
 		method: "POST",
 		path: "/knowledge/ask",
@@ -31,22 +30,38 @@ export const ask = protectedProcedure
 			query: z.string().min(3).max(1200),
 		}),
 	)
-	.handler(async ({ input, context: { user, ...rest } }) => {
+	.handler(async ({ input, context, ...rest }) => {
 		const { creditReservationId } = rest as unknown as CreditGateContext;
-
-		try {
-			await requireKnowledgeOwnerMember(
-				{
-					ownerType: input.ownerType,
-					ownerId: input.ownerId,
-				},
-				user,
-			);
-
-			const scope = {
+		const { user } = context;
+		await requireKnowledgeOwnerMember(
+			{
 				ownerType: input.ownerType,
-				organizationId: input.ownerType === "ORGANIZATION" ? input.ownerId : undefined,
-				userId: input.ownerType === "USER" ? input.ownerId : undefined,
+				ownerId: input.ownerId,
+			},
+			user,
+		);
+
+		const scope = {
+			ownerType: input.ownerType,
+			organizationId: input.ownerType === "ORGANIZATION" ? input.ownerId : undefined,
+			userId: input.ownerType === "USER" ? input.ownerId : undefined,
+		};
+		const space = await getKnowledgeSpaceBySlug(scope, input.spaceSlug);
+		if (!space) {
+			throw new ORPCError("NOT_FOUND", { message: "Knowledge space not found" });
+		}
+
+		const retrieved = await retrieveKnowledge({
+			knowledgeSpaceId: space.id,
+			query: input.query,
+			limit: 8,
+		});
+		if (retrieved.chunks.length === 0) {
+			await releaseCreditReservation(context, creditReservationId);
+			return {
+				answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
+				citations: [],
+				graphEdges: [],
 			};
 			const space = await getKnowledgeSpaceBySlug(scope, input.spaceSlug);
 			if (!space) {
@@ -111,4 +126,44 @@ export const ask = protectedProcedure
 			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
+
+		const contextText = retrieved.chunks
+			.map(
+				(chunk, index) =>
+					`[${index + 1}] ${chunk.documentTitle}\nScore: ${chunk.score.toFixed(3)}\n${chunk.text}`,
+			)
+			.join("\n\n");
+
+		let response: Awaited<ReturnType<typeof generateText>>;
+		try {
+			response = await generateText({
+				model: textModel,
+				prompt: [
+					"You are AACsearch assistant.",
+					"Answer using only provided context snippets.",
+					"If context is insufficient, explicitly say so.",
+					"Always cite snippet numbers in the answer.",
+					`Question: ${input.query}`,
+					`Context:\n${contextText}`,
+				].join("\n\n"),
+			});
+		} catch (err) {
+			await releaseCreditReservation(context, creditReservationId);
+			throw err;
+		}
+
+		await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
+
+		return {
+			answer: response.text,
+			citations: retrieved.chunks.map((chunk, index) => ({
+				id: chunk.id,
+				documentId: chunk.documentId,
+				documentTitle: chunk.documentTitle,
+				snippet: chunk.text.slice(0, 300),
+				sourceIndex: index + 1,
+				score: chunk.score,
+			})),
+			graphEdges: retrieved.graphEdges,
+		};
 	});

@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import {
 	Card,
@@ -24,7 +25,15 @@ import { Textarea } from "@repo/ui/components/textarea";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, DownloadIcon, PlusIcon, Trash2Icon, UploadIcon } from "lucide-react";
+import {
+	AlertTriangle,
+	ChevronDownIcon,
+	ChevronRightIcon,
+	DownloadIcon,
+	PlusIcon,
+	Trash2Icon,
+	UploadIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -46,6 +55,15 @@ type FieldType =
 	| "geopoint[]"
 	| "geojson";
 
+interface EmbedConfig {
+	from: string[];
+	model_config?: {
+		model_name?: string;
+		api_key?: string;
+		api_url?: string;
+	};
+}
+
 interface SchemaField {
 	name: string;
 	type: FieldType;
@@ -53,6 +71,7 @@ interface SchemaField {
 	optional?: boolean;
 	index?: boolean;
 	sort?: boolean;
+	embed?: EmbedConfig;
 }
 
 const FIELD_TYPES: FieldType[] = [
@@ -74,6 +93,12 @@ const FIELD_TYPES: FieldType[] = [
 	"geojson",
 ];
 
+const EMBEDDING_MODELS = [
+	{ value: "openai/text-embedding-3-small", label: "OpenAI text-embedding-3-small" },
+	{ value: "openai/text-embedding-3-large", label: "OpenAI text-embedding-3-large" },
+	{ value: "openai/text-embedding-ada-002", label: "OpenAI text-embedding-ada-002" },
+];
+
 interface SchemaEditorPanelProps {
 	organizationId: string;
 	slug: string;
@@ -82,6 +107,7 @@ interface SchemaEditorPanelProps {
 export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelProps) {
 	const t = useTranslations("search.collection.schemaEditor");
 	const tColl = useTranslations("search.collection");
+	const tEmbed = useTranslations("search.autoEmbed");
 	const queryClient = useQueryClient();
 
 	const [draft, setDraft] = useState<SchemaField[]>([]);
@@ -103,8 +129,38 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 	const schemaFields = schemaData?.fields ?? [];
 	const defaultSortingField = schemaData?.defaultSortingField ?? null;
 
+	const tokenSeparators = tokenSeparatorsInput
+		.split(",")
+		.map((s) => s.trim())
+		.filter(Boolean);
+	const symbolTokensToIndex = symbolTokensInput
+		.split(",")
+		.map((s) => s.trim())
+		.filter(Boolean);
+
 	if (!initialized && (schemaFields.length > 0 || !schemaLoading)) {
-		setDraft(schemaFields.map((f) => ({ ...f })) as SchemaField[]);
+		setDraft(
+			schemaFields.map((f) => {
+				const field: SchemaField = {
+					name: f.name,
+					type: f.type as FieldType,
+					facet: f.facet,
+					optional: f.optional,
+					index: f.index,
+					sort: f.sort,
+				};
+				if (f.embed && typeof f.embed === "object") {
+					const embed = f.embed as EmbedConfig;
+					field.embed = {
+						from: embed.from ?? [],
+						model_config: embed.model_config ?? {
+							model_name: "openai/text-embedding-3-small",
+						},
+					};
+				}
+				return field;
+			}),
+		);
 		setDefaultSort(defaultSortingField ?? "");
 		setTokenSeparatorsInput((schemaData?.tokenSeparators ?? []).join(", "));
 		setSymbolTokensInput((schemaData?.symbolTokensToIndex ?? []).join(", "));
@@ -144,20 +200,53 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 		setDraft((prev) => prev.map((f, i) => (i === idx ? { ...f, ...patch } : f)));
 	};
 
+	const handleEmbedToggle = (idx: number, enabled: boolean) => {
+		setDraft((prev) =>
+			prev.map((f, i) => {
+				if (i !== idx) return f;
+				if (enabled) {
+					return {
+						...f,
+						embed: {
+							from: [],
+							model_config: {
+								model_name: "openai/text-embedding-3-small",
+							},
+						},
+					};
+				}
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { embed: _, ...rest } = f;
+				return rest;
+			}),
+		);
+	};
+
+	const handleEmbedChange = (idx: number, patch: Partial<EmbedConfig>) => {
+		setDraft((prev) =>
+			prev.map((f, i) => {
+				if (i !== idx) return f;
+				return {
+					...f,
+					embed: {
+						...f.embed,
+						...patch,
+						model_config: {
+							...(f.embed?.model_config ?? {}),
+							...(patch.model_config ?? {}),
+						},
+					} as EmbedConfig,
+				};
+			}),
+		);
+	};
+
 	const handleSave = (triggerReindex: boolean) => {
 		const validFields = draft.filter((f) => f.name.trim());
-		const tokenSeparators = tokenSeparatorsInput
-			.split(",")
-			.map((s) => s.trim())
-			.filter(Boolean);
-		const symbolTokensToIndex = symbolTokensInput
-			.split(",")
-			.map((s) => s.trim())
-			.filter(Boolean);
 		mutation.mutate({
 			organizationId,
 			slug,
-			fields: validFields,
+			fields: validFields as never,
 			defaultSortingField: defaultSort || undefined,
 			tokenSeparators: tokenSeparators.length > 0 ? tokenSeparators : undefined,
 			symbolTokensToIndex: symbolTokensToIndex.length > 0 ? symbolTokensToIndex : undefined,
@@ -413,6 +502,182 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 									))}
 								</tbody>
 							</table>
+
+							{/* Auto-embed config sections */}
+							<div className="mt-4 space-y-3">
+								{draft.map((field, idx) => {
+									if (field.type !== "float[]") return null;
+									const isEmbedEnabled = Boolean(field.embed);
+									return (
+										<div
+											key={`embed-${idx}`}
+											className="overflow-hidden rounded-md border"
+										>
+											<button
+												type="button"
+												onClick={() =>
+													handleEmbedToggle(idx, !isEmbedEnabled)
+												}
+												className="gap-2 px-3 py-2 text-xs flex w-full items-center justify-between bg-muted/30 transition-colors hover:bg-muted/50"
+											>
+												<span className="gap-2 flex items-center">
+													{isEmbedEnabled ? (
+														<ChevronDownIcon className="size-3.5 text-muted-foreground" />
+													) : (
+														<ChevronRightIcon className="size-3.5 text-muted-foreground" />
+													)}
+													<code className="font-mono">
+														{field.name || t("unnamed")}
+													</code>
+													<span className="text-muted-foreground">
+														&mdash; {tEmbed("autoEmbedTitle")}
+													</span>
+													{isEmbedEnabled && (
+														<Badge
+															status="info"
+															className="px-1.5 py-0 text-[10px]"
+														>
+															ON
+														</Badge>
+													)}
+												</span>
+												<Switch
+													checked={isEmbedEnabled}
+													onCheckedChange={(v) =>
+														handleEmbedToggle(idx, v)
+													}
+													onClick={(e) => e.stopPropagation()}
+													className="scale-75"
+												/>
+											</button>
+											{isEmbedEnabled && (
+												<div className="gap-3 px-3 py-3 flex flex-wrap border-t bg-background">
+													{/* Source Fields */}
+													<div className="gap-1.5 flex min-w-[200px] flex-1 flex-col">
+														<Label className="text-xs text-muted-foreground">
+															{tEmbed("autoEmbedFrom")}
+														</Label>
+														<Input
+															value={
+																field.embed?.from?.join(", ") ?? ""
+															}
+															onChange={(e) =>
+																handleEmbedChange(idx, {
+																	from: e.target.value
+																		.split(",")
+																		.map((s) => s.trim())
+																		.filter(Boolean),
+																})
+															}
+															className="h-7 font-mono text-xs"
+															placeholder="title, description"
+														/>
+														<p className="text-[10px] text-muted-foreground">
+															{tEmbed("autoEmbedFromHint")}
+														</p>
+													</div>
+
+													{/* Embedding Model */}
+													<div className="gap-1.5 flex min-w-[200px] flex-1 flex-col">
+														<Label className="text-xs text-muted-foreground">
+															{tEmbed("autoEmbedModel")}
+														</Label>
+														<Select
+															value={
+																field.embed?.model_config
+																	?.model_name ??
+																"openai/text-embedding-3-small"
+															}
+															onValueChange={(v) =>
+																handleEmbedChange(idx, {
+																	model_config: {
+																		model_name: v,
+																	},
+																})
+															}
+														>
+															<SelectTrigger className="h-7 text-xs w-full">
+																<SelectValue />
+															</SelectTrigger>
+															<SelectContent>
+																{EMBEDDING_MODELS.map((m) => (
+																	<SelectItem
+																		key={m.value}
+																		value={m.value}
+																	>
+																		{m.label}
+																	</SelectItem>
+																))}
+															</SelectContent>
+														</Select>
+													</div>
+
+													{/* API Key */}
+													<div className="gap-1.5 flex min-w-[160px] flex-1 flex-col">
+														<Label className="text-xs text-muted-foreground">
+															{tEmbed("autoEmbedApiKey")}
+														</Label>
+														<Input
+															value={
+																field.embed?.model_config
+																	?.api_key ?? ""
+															}
+															onChange={(e) =>
+																handleEmbedChange(idx, {
+																	model_config: {
+																		api_key:
+																			e.target.value ||
+																			undefined,
+																	},
+																})
+															}
+															className="h-7 font-mono text-xs"
+															type="password"
+															placeholder={tEmbed(
+																"autoEmbedApiKeyHint",
+															)}
+														/>
+													</div>
+
+													{/* API URL */}
+													<div className="gap-1.5 flex min-w-[200px] flex-1 flex-col">
+														<Label className="text-xs text-muted-foreground">
+															{tEmbed("autoEmbedApiUrl")}
+														</Label>
+														<Input
+															value={
+																field.embed?.model_config
+																	?.api_url ?? ""
+															}
+															onChange={(e) =>
+																handleEmbedChange(idx, {
+																	model_config: {
+																		api_url:
+																			e.target.value ||
+																			undefined,
+																	},
+																})
+															}
+															className="h-7 font-mono text-xs"
+															placeholder={tEmbed(
+																"autoEmbedApiUrlHint",
+															)}
+														/>
+													</div>
+
+													{/* Warning */}
+													<div className="w-full">
+														<p className="text-warning gap-1 flex items-center text-[10px]">
+															<AlertTriangle className="size-3" />
+															{tEmbed("autoEmbedWarning")}
+														</p>
+													</div>
+												</div>
+											)}
+										</div>
+									);
+								})}
+							</div>
 						</div>
 					)}
 
@@ -523,7 +788,7 @@ export function SchemaEditorPanel({ organizationId, slug }: SchemaEditorPanelPro
 									{
 										organizationId,
 										slug,
-										fields: validFields,
+										fields: validFields as never,
 										defaultSortingField: defaultSort || undefined,
 										tokenSeparators:
 											tokenSeparators.length > 0

@@ -296,6 +296,9 @@ export function NavBar() {
 	/** Home for the current context: org dashboard or `/` when no org is selected. */
 	const startHref = basePath || "/";
 
+	// Whether to show the Start/onboarding nav item
+	const showStartNav = !user?.onboardingComplete;
+
 	const menuItems: NavMenuItem[] = useMemo(() => {
 		const accountSubItems: NavSubItem[] = [
 			{
@@ -357,12 +360,16 @@ export function NavBar() {
 				: undefined;
 
 		return [
-			{
-				label: t("app.menu.start"),
-				href: startHref,
-				icon: HomeIcon,
-				isActive: pathname === "/" || pathname === basePath,
-			},
+			...(showStartNav
+				? [
+						{
+							label: t("app.menu.start"),
+							href: `${basePath}/start`,
+							icon: RocketIcon,
+							isActive: pathname.startsWith(`${basePath}/start`),
+						},
+					]
+				: []),
 			...(activeOrganization
 				? [
 						{
@@ -597,7 +604,7 @@ export function NavBar() {
 					]
 				: []),
 		];
-	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, startHref, t, user?.role]);
+	}, [activeOrganization, basePath, isOrganizationAdmin, pathname, showStartNav, startHref, t, user?.role]);
 
 	return (
 		<nav

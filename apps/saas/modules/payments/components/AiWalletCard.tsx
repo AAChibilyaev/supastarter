@@ -2,14 +2,17 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useAiWallet } from "../hooks/ai-wallet";
 import { formatKopecks } from "../lib/format-kopecks";
 
 export function AiWalletCard({ organizationId }: { organizationId?: string }) {
 	const t = useTranslations();
+	const locale = useLocale();
 	const { data: wallet, isLoading } = useAiWallet(organizationId);
+
+	const fmt = (amount: bigint | number | string) => formatKopecks(amount, { appLocale: locale });
 
 	if (isLoading) {
 		return (
@@ -57,23 +60,23 @@ export function AiWalletCard({ organizationId }: { organizationId?: string }) {
 			</CardHeader>
 			<CardContent className="gap-3 flex flex-col">
 				<div className="font-semibold text-3xl">
-					{formatKopecks(wallet.availableBalanceKopecks)}
+					{fmt(wallet.availableBalanceKopecks)}
 				</div>
 
 				<dl className="gap-x-4 gap-y-1 text-sm grid grid-cols-2 text-foreground/70">
 					<dt>{t("settings.billing.aiCredits.balance.includedRemaining")}</dt>
 					<dd className="text-right tabular-nums">
-						{formatKopecks(includedRemaining.toString())}
+						{fmt(includedRemaining.toString())}
 					</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.reserved")}</dt>
 					<dd className="text-right tabular-nums">
-						{formatKopecks(reserved.toString())}
+						{fmt(reserved.toString())}
 					</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.promo")}</dt>
 					<dd className="text-right tabular-nums">
-						{formatKopecks(wallet.promoBalanceKopecks)}
+						{fmt(wallet.promoBalanceKopecks)}
 					</dd>
 				</dl>
 			</CardContent>

@@ -13,7 +13,7 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -30,6 +30,8 @@ export function TopUpDialog({
 	trigger?: React.ReactNode;
 }) {
 	const t = useTranslations();
+	const locale = useLocale();
+	const fmt = (amount: bigint | number | string) => formatKopecks(amount, { appLocale: locale });
 	const [open, setOpen] = useState(false);
 	const [selected, setSelected] = useState<number>(PRESETS_KOPECKS[1]);
 	const [custom, setCustom] = useState<string>("");
@@ -50,9 +52,8 @@ export function TopUpDialog({
 				organizationId,
 			});
 			window.location.href = res.paymentLinkUrl;
-		} catch (e) {
+		} catch {
 			toast.error(t("settings.billing.aiCredits.topup.error"));
-			console.error(e);
 		}
 	};
 
@@ -81,7 +82,7 @@ export function TopUpDialog({
 								setCustom("");
 							}}
 						>
-							{formatKopecks(amt)}
+							{fmt(amt)}
 						</Button>
 					))}
 				</div>
@@ -103,7 +104,7 @@ export function TopUpDialog({
 				<DialogFooter className="gap-3 sm:justify-between flex flex-row items-center justify-between">
 					<div className="text-sm text-foreground/70">
 						{t("settings.billing.aiCredits.topup.summary", {
-							amount: formatKopecks(finalKopecks),
+							amount: fmt(finalKopecks),
 						})}
 					</div>
 					<Button onClick={onConfirm} loading={mutation.isPending}>

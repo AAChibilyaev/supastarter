@@ -127,7 +127,7 @@ catalogs:
       specifier: 1.6.2
       version: 1.6.2
     date-fns:
-      specifier: ^4.1.0
+      specifier: 'catalog:'
       version: 4.1.0
     dotenv:
       specifier: ^17.4.1

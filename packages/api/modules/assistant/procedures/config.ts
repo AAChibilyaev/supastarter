@@ -3,6 +3,7 @@ import z from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin, requireOrganizationMember } from "../../search/lib/access";
+import { clearConnectorCache } from "../connectors/registry";
 
 export const assistantConfigSchema = z.object({
 	enabled: z.boolean().default(false),
@@ -56,6 +57,8 @@ export const saveAssistantConfigProcedure = protectedProcedure
 			where: { id: input.organizationId },
 			data: { metadata: JSON.stringify({ ...meta, assistantConfig: input.config }) },
 		});
+
+		clearConnectorCache(input.organizationId);
 
 		return { ok: true };
 	});

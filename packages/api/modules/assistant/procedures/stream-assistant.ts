@@ -149,6 +149,12 @@ export const streamAssistant = protectedProcedure
 			workingHoursEnd: typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
 		});
 
+		const knowledgeSpace = await db.knowledgeSpace.findFirst({
+			where: { organizationId: input.organizationId, ownerType: "ORGANIZATION" },
+			select: { id: true },
+		}).catch(() => null);
+		const knowledgeSpaceId = knowledgeSpace?.id ?? "";
+
 		const tools = {
 			search_products: createSearchProductsTool({ indexSlug: input.indexSlug ?? "products" }),
 			check_availability: createCheckAvailabilityTool(connectors.inventory),
@@ -156,7 +162,7 @@ export const streamAssistant = protectedProcedure
 			get_return_status: createGetReturnStatusTool(connectors.oms, user.id),
 			get_user_conditions: createGetUserConditionsTool(connectors.loyalty, user.id),
 			get_product_details: createGetProductDetailsTool({ indexSlug: input.indexSlug ?? "products" }),
-			search_knowledge: createSearchKnowledgeTool(""),
+			search_knowledge: createSearchKnowledgeTool(knowledgeSpaceId),
 			get_similar_products: createGetSimilarProductsTool({ organizationId: input.organizationId }),
 			escalate_to_operator: createEscalateToOperatorTool({
 				conversationId: conversationId!,

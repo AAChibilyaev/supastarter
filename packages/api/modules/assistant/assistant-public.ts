@@ -147,11 +147,17 @@ export const assistantPublicApp = new Hono()
 			workingHoursEnd: typeof ac.workingHoursEnd === "number" ? ac.workingHoursEnd : undefined,
 		});
 
+		const knowledgeSpace = await db.knowledgeSpace.findFirst({
+			where: { organizationId, ownerType: "ORGANIZATION" },
+			select: { id: true },
+		}).catch(() => null);
+		const knowledgeSpaceId = knowledgeSpace?.id ?? "";
+
 		const tools = {
 			search_products: createSearchProductsTool({ indexSlug }),
 			check_availability: createCheckAvailabilityTool(connectors.inventory),
 			get_product_details: createGetProductDetailsTool({ indexSlug }),
-			search_knowledge: createSearchKnowledgeTool(""),
+			search_knowledge: createSearchKnowledgeTool(knowledgeSpaceId),
 			get_similar_products: createGetSimilarProductsTool({ organizationId }),
 			escalate_to_operator: createEscalateToOperatorTool({
 				conversationId,

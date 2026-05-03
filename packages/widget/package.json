@@ -10,8 +10,8 @@
 		"./search-client": "./src/search-client.ts"
 	},
 	"scripts": {
-		"build": "tsup src/index.ts --format esm,iife --outDir dist --clean --minify",
-		"dev": "tsup src/index.ts --format esm,iife --outDir dist --watch",
+		"build": "tsup src/index.ts src/search-client.ts --format esm,iife --outDir dist --clean --minify",
+		"dev": "tsup src/index.ts src/search-client.ts --format esm,iife --outDir dist --watch",
 		"clean": "git clean -xdf .cache .turbo dist node_modules",
 		"type-check": "tsc --noEmit"
 	},

@@ -457,15 +457,15 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			{/* ─── Chat Panel ───────────────────────────── */}
 			<div
 				className={cn(
-					"absolute bottom-[calc(100%+12px)] right-0 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 backdrop-blur-xl transition-all duration-300 ease-out origin-bottom-right",
+					"absolute right-0 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10 backdrop-blur-xl transition-all duration-300 ease-out origin-bottom-right",
 					open
 						? "pointer-events-auto visible scale-100 opacity-100"
 						: "pointer-events-none invisible scale-95 opacity-0",
-					"h-[560px] w-[calc(100vw-32px)] sm:h-[600px] sm:w-[440px]",
+					"bottom-0 sm:bottom-[calc(100%+12px)] w-full sm:w-[440px] sm:h-[600px] h-dvh sm:rounded-2xl rounded-none sm:max-h-[600px]",
 				)}
 			>
 				{/* ── Header ────────────────────────────── */}
-				<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3">
+				<div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3.5 sm:py-3">
 					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-muted to-muted/50">
 						<SparklesIcon className="size-3.5 text-muted-foreground" />
 						<span className="absolute inset-0 animate-pulse rounded-full bg-primary/[0.06]" />
@@ -585,7 +585,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 													<button
 														type="button"
 														onClick={(e) => deleteSession(e, session.id)}
-														className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-red-400 group-hover:opacity-100"
+														className="flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/30 opacity-0 transition-all hover:text-muted-foreground group-hover:opacity-100"
 														aria-label="Delete chat"
 													>
 														<Trash2Icon className="size-3" />
@@ -773,12 +773,12 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			</div>
 
 			{/* ─── Mobile Bottom Bar ──────────────────────── */}
-			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center gap-1 border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+			<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center gap-2 border-t border-border bg-card/95 backdrop-blur-xl px-3 py-2 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
 				{/* Hamburger menu */}
 				<button
 					type="button"
 					onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
-					className="flex size-11 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors hover:text-foreground hover:bg-muted/50"
+					className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 transition-colors active:bg-muted/60 hover:text-foreground"
 					aria-label="Open menu"
 				>
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -789,7 +789,7 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 				</button>
 
 				{/* Divider */}
-				<div className="h-6 w-px bg-border/60" />
+				<div className="h-7 w-px shrink-0 bg-border/60" />
 
 				{/* AI Assistant trigger */}
 				<button
@@ -798,21 +798,24 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 						setOpen(!open);
 						if (!open) setView("chat");
 					}}
-					className="flex flex-1 items-center gap-2.5 rounded-lg px-3 py-2 transition-colors hover:bg-muted/50"
+					className="flex flex-1 items-center gap-2.5 rounded-lg px-3 py-2.5 transition-colors active:bg-muted/50"
 				>
-					<div className="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
-						<SparklesIcon className="size-3.5 text-primary" />
+					<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
+						<SparklesIcon className="size-4 text-primary" />
 					</div>
-					<span className="text-sm font-light text-muted-foreground/80">Ask AI...</span>
+					<div className="flex-1 min-w-0">
+						<div className="text-sm font-light text-muted-foreground/90 leading-tight">Ask AI...</div>
+						<div className="text-[10px] font-light text-muted-foreground/40 leading-tight mt-0.5">Search with text, voice, images</div>
+					</div>
 					{sessions.length > 0 && (
-						<span className="flex size-4.5 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground ml-auto">
+						<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[8px] font-medium text-muted-foreground">
 							{sessions.length > 9 ? "9+" : sessions.length}
 						</span>
 					)}
 				</button>
 
 				{/* Mode icons — quick access */}
-				<div className="flex items-center gap-0.5">
+				<div className="flex items-center gap-1">
 					{MODES.map(({ key, icon: Icon }) => (
 						<button
 							key={key}
@@ -823,10 +826,10 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 								setView("chat");
 							}}
 							className={cn(
-								"flex size-10 items-center justify-center rounded-lg transition-colors",
+								"flex size-11 items-center justify-center rounded-lg transition-colors active:scale-95",
 								activeMode === key
-									? `${MODE_COLORS[key]} bg-muted`
-									: "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/40",
+									? "bg-muted text-foreground"
+									: "text-muted-foreground/40 active:text-foreground",
 							)}
 							aria-label={`Search by ${key}`}
 						>

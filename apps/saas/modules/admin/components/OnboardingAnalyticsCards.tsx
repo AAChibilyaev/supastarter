@@ -8,15 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
-	BarChart,
 	Bar,
-	XAxis,
-	YAxis,
-	Tooltip,
-	ResponsiveContainer,
+	BarChart,
 	CartesianGrid,
 	Cell,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
 } from "recharts";
+
+// ── Local types mirroring database return shapes ────────────────────────────
 
 interface FunnelStep {
 	eventType: string;
@@ -82,6 +84,8 @@ interface AnalyticsData {
 	healthScoreDistribution: HealthScoreDistribution;
 }
 
+// ── Constants ───────────────────────────────────────────────────────────────
+
 const FUNNEL_COLORS = [
 	"#22c55e",
 	"#16a34a",
@@ -93,8 +97,10 @@ const FUNNEL_COLORS = [
 	"#1d4ed8",
 ];
 
+// ── Utility functions ───────────────────────────────────────────────────────
+
 function formatHours(hours: number | null): string {
-	if (hours === null) return "\u2014";
+	if (hours === null) return "—";
 	if (hours < 1) return `${Math.round(hours * 60)} min`;
 	if (hours < 24) return `${Math.round(hours)} h`;
 	const days = Math.round((hours / 24) * 10) / 10;
@@ -112,7 +118,6 @@ function csvEscape(val: string | number): string {
 function downloadCsv(data: AnalyticsData) {
 	const rows: string[] = [];
 
-	// Funnel section
 	rows.push("Onboarding Funnel");
 	rows.push(["Step", "Completed", "Total", "Rate (%)", "Drop-off (%)"].join(","));
 	for (const step of data.funnel) {
@@ -224,6 +229,8 @@ function downloadCsv(data: AnalyticsData) {
 	URL.revokeObjectURL(url);
 }
 
+// ── Sub-components ──────────────────────────────────────────────────────────
+
 function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 	if (funnel.length === 0) return null;
 
@@ -240,7 +247,11 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 							layout="vertical"
 							margin={{ top: 8, right: 24, left: 120, bottom: 8 }}
 						>
-							<CartesianGrid strokeDasharray="3 3" className="stroke-border" horizontal={false} />
+							<CartesianGrid
+								strokeDasharray="3 3"
+								className="stroke-border"
+								horizontal={false}
+							/>
 							<XAxis
 								type="number"
 								domain={[0, 100]}
@@ -258,29 +269,39 @@ function FunnelChart({ funnel }: { funnel: FunnelStep[] }) {
 							<Tooltip
 								formatter={(_value, _name, props) => {
 									const step = (props as { payload: FunnelStep }).payload;
-									return [`${step.completed} / ${step.total} (${step.rate}%)`, step.label];
+									return [
+										`${step.completed} / ${step.total} (${step.rate}%)`,
+										step.label,
+									];
 								}}
 							/>
 							<Bar dataKey="rate" radius={[0, 4, 4, 0]} maxBarSize={28}>
 								{funnel.map((_entry, index) => (
-									<Cell key={index} fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]} />
+									<Cell
+										key={index}
+										fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]}
+									/>
 								))}
 							</Bar>
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
 
-				{/* Funnel step details */}
 				<div className="gap-2 mt-4 sm:grid-cols-2 lg:grid-cols-4 grid grid-cols-1">
 					{funnel.map((step) => (
-						<div key={step.eventType} className="space-y-1 p-3 text-sm rounded-lg border">
+						<div
+							key={step.eventType}
+							className="space-y-1 p-3 text-sm rounded-lg border"
+						>
 							<div className="font-medium">{step.label}</div>
 							<div className="text-muted-foreground">
 								{step.completed} / {step.total}
 							</div>
 							<div className="flex justify-between">
 								<span className="text-muted-foreground">{step.rate}%</span>
-								{step.dropOff > 0 && <span className="text-destructive">-{step.dropOff}%</span>}
+								{step.dropOff > 0 && (
+									<span className="text-destructive">-{step.dropOff}%</span>
+								)}
 							</div>
 						</div>
 					))}
@@ -299,13 +320,15 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 			<CardContent>
 				{ttfv.count === 0 ? (
 					<div className="py-8 text-sm text-center text-muted-foreground">
-						No data yet \u2014 waiting for first searches
+						No data yet — waiting for first searches
 					</div>
 				) : (
 					<div className="gap-4 sm:grid-cols-4 grid grid-cols-2">
 						<div className="space-y-1">
 							<div className="text-xs text-muted-foreground">Median</div>
-							<div className="font-medium text-2xl">{formatHours(ttfv.medianHours)}</div>
+							<div className="font-medium text-2xl">
+								{formatHours(ttfv.medianHours)}
+							</div>
 						</div>
 						<div className="space-y-1">
 							<div className="text-xs text-muted-foreground">Mean</div>
@@ -323,13 +346,35 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 				)}
 				{ttfv.count > 0 && (
 					<div className="mt-2 text-xs text-muted-foreground">
-						Based on {ttfv.count} organization{ttfv.count !== 1 ? "s" : ""} with completed searches
+						Based on {ttfv.count} organization{ttfv.count !== 1 ? "s" : ""} with
+						completed searches
 					</div>
 				)}
 			</CardContent>
 		</Card>
 	);
 }
+
+type CohortEventKey =
+	| "emailVerified"
+	| "firstCollection"
+	| "firstDocument"
+	| "firstSearch"
+	| "widgetEmbedded"
+	| "firstTeamMember"
+	| "firstIntegration"
+	| "firstPayment";
+
+const COHORT_EVENTS: { key: CohortEventKey; label: string }[] = [
+	{ key: "emailVerified", label: "Email" },
+	{ key: "firstCollection", label: "Collection" },
+	{ key: "firstDocument", label: "Document" },
+	{ key: "firstSearch", label: "Search" },
+	{ key: "widgetEmbedded", label: "Widget" },
+	{ key: "firstTeamMember", label: "Team" },
+	{ key: "firstIntegration", label: "Connector" },
+	{ key: "firstPayment", label: "Payment" },
+];
 
 function CohortTable({
 	cohorts,
@@ -365,17 +410,6 @@ function CohortTable({
 		);
 	}
 
-	const events = [
-		{ key: "emailVerified" as const, label: "Email" },
-		{ key: "firstCollection" as const, label: "Collection" },
-		{ key: "firstDocument" as const, label: "Document" },
-		{ key: "firstSearch" as const, label: "Search" },
-		{ key: "widgetEmbedded" as const, label: "Widget" },
-		{ key: "firstTeamMember" as const, label: "Team" },
-		{ key: "firstIntegration" as const, label: "Connector" },
-		{ key: "firstPayment" as const, label: "Payment" },
-	] as const;
-
 	return (
 		<Card>
 			<CardHeader>
@@ -393,7 +427,7 @@ function CohortTable({
 							<tr className="border-b text-left">
 								<th className="p-2 font-medium">{periodLabel}</th>
 								<th className="p-2 font-medium">Orgs</th>
-								{events.map((evt) => (
+								{COHORT_EVENTS.map((evt) => (
 									<th key={evt.key} className="p-2 font-medium">
 										{evt.label}
 									</th>
@@ -402,16 +436,20 @@ function CohortTable({
 						</thead>
 						<tbody>
 							{data.map((row) => {
-								const weekVal = showMonthly
+								const periodVal = showMonthly
 									? (row as MonthlyCohortRow).month
 									: (row as CohortRow).week;
 								const rate = (val: number) =>
-									row.orgCount > 0 ? `${Math.round((val / row.orgCount) * 100)}%` : "\u2014";
+									row.orgCount > 0
+										? `${Math.round((val / row.orgCount) * 100)}%`
+										: "—";
 								return (
-									<tr key={weekVal} className="border-b hover:bg-muted/50">
-										<td className="p-2 font-medium whitespace-nowrap">{weekVal}</td>
+									<tr key={periodVal} className="border-b hover:bg-muted/50">
+										<td className="p-2 font-medium whitespace-nowrap">
+											{periodVal}
+										</td>
 										<td className="p-2">{row.orgCount}</td>
-										{events.map((evt) => (
+										{COHORT_EVENTS.map((evt) => (
 											<td key={evt.key} className="p-2">
 												{row[evt.key]} ({rate(row[evt.key])})
 											</td>
@@ -459,7 +497,11 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 							margin={{ top: 8, right: 24, left: 8, bottom: 8 }}
 						>
 							<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-							<XAxis dataKey="label" tick={{ fontSize: 12 }} className="text-muted-foreground" />
+							<XAxis
+								dataKey="label"
+								tick={{ fontSize: 12 }}
+								className="text-muted-foreground"
+							/>
 							<YAxis
 								tick={{ fontSize: 12 }}
 								className="text-muted-foreground"
@@ -474,7 +516,12 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 									];
 								}}
 							/>
-							<Bar dataKey="count" radius={[4, 4, 0, 0]} fill="#6366f1" maxBarSize={48} />
+							<Bar
+								dataKey="count"
+								radius={[4, 4, 0, 0]}
+								fill="#6366f1"
+								maxBarSize={48}
+							/>
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
@@ -482,6 +529,8 @@ function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribut
 		</Card>
 	);
 }
+
+// ── Main export ─────────────────────────────────────────────────────────────
 
 export function OnboardingAnalyticsCards() {
 	const t = useTranslations("admin.onboarding");
@@ -504,7 +553,9 @@ export function OnboardingAnalyticsCards() {
 	if (query.error) {
 		return (
 			<Card>
-				<CardContent className="py-8 text-center text-destructive">{t("error")}</CardContent>
+				<CardContent className="py-8 text-center text-destructive">
+					{t("error")}
+				</CardContent>
 			</Card>
 		);
 	}

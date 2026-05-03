@@ -244,7 +244,7 @@ function RoadmapSection({ titleKey, items }: { titleKey: string; items: RoadmapI
 					{t(titleKey)}
 				</h2>
 			</div>
-			<div className="gap-4 md:grid-cols-4 grid grid-cols-1">
+			<div className="gap-4 sm:grid-cols-2 md:grid-cols-4 grid grid-cols-1">
 				{items.map((item) => (
 					<div key={item.key} className={spanMap[item.key] ?? ""}>
 						<RoadmapCard {...item} />
@@ -266,7 +266,7 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 
 	return (
 		<>
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<p className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">

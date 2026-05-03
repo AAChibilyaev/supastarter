@@ -64,7 +64,7 @@ export function CustomersContent() {
 			</section>
 
 			{/* Testimonials grid */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-center text-balance">
 						{t("title")}

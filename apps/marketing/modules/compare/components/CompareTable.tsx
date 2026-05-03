@@ -135,7 +135,7 @@ export function CompareTable() {
 	}
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<Table>
 					<TableHeader>

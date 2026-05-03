@@ -6,7 +6,7 @@ export function TypesenseWhyMigrate() {
 	const t = useTranslations("compareTypesense");
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-3xl mx-auto">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl mb-10 text-center text-balance">

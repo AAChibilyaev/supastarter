@@ -69,6 +69,9 @@ export const CREDIT_RATES = {
 
 	/** Natural language search — per query (1 credit / 100 kopecks) */
 	natural_language_query: BigInt(100),
+
+	/** Conversational assistant turn — per message (5 credits / 500 kopecks) */
+	conversation_turn: BigInt(500),
 } as const;
 
 export type CreditOperation = keyof typeof CREDIT_RATES;

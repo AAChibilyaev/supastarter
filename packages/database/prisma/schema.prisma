@@ -46,6 +46,8 @@ model User {
   aiWallet                 AiWallet?
   knowledgeSpaces          KnowledgeSpace[]
   npsSurveyResponses       NpsSurveyResponse[]
+  assistantConversations   AssistantConversation[]
+  auditLogs                AuditLog[]
 
   @@unique([email])
   @@unique([username])
@@ -163,7 +165,9 @@ model Organization {
   collections          Collection[]
   collectionDocuments  CollectionDocument[]
   npsSurveyResponses   NpsSurveyResponse[]
-  featureFlagOverrides FeatureFlagOverride[]
+  featureFlagOverrides        FeatureFlagOverride[]
+  assistantConversations      AssistantConversation[]
+  auditLogs                   AuditLog[]
 
   @@unique([slug])
   @@map("organization")
@@ -972,6 +976,54 @@ model FeatureFlagOverride {
   @@unique([flagId, organizationId])
   @@index([organizationId])
   @@map("feature_flag_override")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Assistant Conversations & Messages
+// Persistent storage for the Conversational AI Assistant (chat mode widget).
+// Supports anonymous users (sessionId) and authenticated users (userId).
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AssistantConversation {
+  id             String             @id @default(cuid())
+  organizationId String
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sessionId      String
+  mode           String             @default("product_consultation")
+  entryPoint     String?
+  status         String             @default("active")
+  startedAt      DateTime           @default(now())
+  lastMessageAt  DateTime           @updatedAt
+  resolvedAt     DateTime?
+  escalatedAt    DateTime?
+  messageCount   Int                @default(0)
+  metadata       Json               @default("{}")
+  messages       AssistantMessage[]
+
+  @@index([organizationId, userId])
+  @@index([organizationId, sessionId])
+  @@index([organizationId, status, lastMessageAt(sort: Desc)])
+  @@map("assistant_conversation")
+}
+
+model AssistantMessage {
+  id             String                 @id @default(cuid())
+  conversationId String
+  conversation   AssistantConversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String
+  content        String                 @db.Text
+  toolName       String?
+  toolCalls      Json?
+  citations      Json?
+  latencyMs      Int?
+  inputTokens    Int?
+  outputTokens   Int?
+  createdAt      DateTime               @default(now())
+
+  @@index([conversationId, createdAt])
+  @@map("assistant_message")
 }
 
 // Audit log for feature flag changes (AAC-880)

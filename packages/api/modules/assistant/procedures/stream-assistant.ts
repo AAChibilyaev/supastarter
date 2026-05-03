@@ -1,0 +1,224 @@
+import { streamToEventIterator } from "@orpc/client";
+import { ORPCError } from "@orpc/server";
+import {
+	appendMessage,
+	createConversation,
+	getConversation,
+	getConversationHistory,
+	updateConversationMetadata,
+} from "@repo/database";
+import { logger } from "@repo/logs";
+import { streamText, textModel } from "@repo/ai";
+import z from "zod";
+
+import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
+import { requireOrganizationMember } from "../../search/lib/access";
+
+import { classifyIntent } from "../lib/intent-classifier";
+import { buildSystemPrompt } from "../lib/prompts/prompt-builder";
+import { checkUserMessage, sanitizeOutput } from "../lib/safety-guard";
+import { getConnectors } from "../connectors/registry";
+
+import { createSearchProductsTool } from "../lib/tools/search-products";
+import { createCheckAvailabilityTool } from "../lib/tools/check-availability";
+import { createGetOrderStatusTool } from "../lib/tools/get-order-status";
+import { createGetReturnStatusTool } from "../lib/tools/get-return-status";
+import { createGetUserConditionsTool } from "../lib/tools/get-user-conditions";
+import { createGetProductDetailsTool } from "../lib/tools/get-product-details";
+import { createSearchKnowledgeTool } from "../lib/tools/search-knowledge";
+import { createGetSimilarProductsTool } from "../lib/tools/get-similar-products";
+import { createEscalateToOperatorTool } from "../lib/tools/escalate-to-operator";
+import { createEscalationService } from "../lib/escalation/escalation-service";
+
+export const streamAssistant = protectedProcedure
+	.use(creditGate("conversation_turn", CREDIT_RATES.conversation_turn))
+	.route({
+		method: "POST",
+		path: "/assistant/stream",
+		tags: ["Assistant"],
+		summary: "Stream conversational assistant response",
+	})
+	.input(
+		z.object({
+			conversationId: z.string().optional(),
+			message: z.string().min(1).max(4000),
+			organizationId: z.string(),
+			indexSlug: z.string().optional().default("products"),
+			entryPoint: z
+				.enum(["home", "catalog", "search_results", "product_card", "unknown"])
+				.optional(),
+			productContext: z
+				.object({ productId: z.string(), categorySlug: z.string().optional() })
+				.optional(),
+			locale: z.string().optional().default("ru"),
+		}),
+	)
+	.handler(async ({ input, context }) => {
+		const { user } = context;
+		const { creditReservationId } = context as unknown as CreditGateContext;
+
+		await requireOrganizationMember(input.organizationId, user.id);
+
+		// --- Safety: content filter (off-topic) ---
+		const safety = checkUserMessage(input.message);
+		if (!safety.allowed) {
+			await releaseCreditReservation(creditReservationId, "cancelled");
+			throw new ORPCError("BAD_REQUEST", {
+				message: safety.reason ?? "Message not allowed.",
+			});
+		}
+
+		// --- Resolve or create conversation ---
+		let conversationId = input.conversationId;
+		let existingConversation = conversationId
+			? await getConversation(conversationId, 0)
+			: null;
+
+		if (!existingConversation) {
+			const newConv = await createConversation({
+				organizationId: input.organizationId,
+				userId: user.id,
+				sessionId: user.id,
+				mode: "product_consultation",
+				entryPoint: input.entryPoint ?? null,
+				metadata: {
+					locale: input.locale,
+					...(input.productContext ? { currentProductId: input.productContext.productId } : {}),
+				},
+			});
+			conversationId = newConv.id;
+			existingConversation = await getConversation(conversationId, 0);
+		}
+
+		if (!existingConversation || existingConversation.organizationId !== input.organizationId) {
+			await releaseCreditReservation(creditReservationId);
+			throw new ORPCError("FORBIDDEN");
+		}
+
+		// --- Load conversation history ---
+		const historyMessages = await getConversationHistory(conversationId!, 10);
+		const metadata = (existingConversation.metadata ?? {}) as Record<string, unknown>;
+		const personalization = metadata.personalization as Record<string, unknown> | undefined;
+
+		// --- Classify intent (with mode cache) ---
+		const cachedMode = metadata.lastMode as string | undefined;
+		const classificationResult = await classifyIntent(input.message, {
+			currentMode: cachedMode as import("../lib/intent-classifier").AssistantMode | undefined,
+			history: historyMessages.map((m) => ({ role: m.role, content: m.content })),
+		});
+		const mode = classificationResult.mode;
+
+		// Update cached mode if changed
+		if (mode !== cachedMode) {
+			await updateConversationMetadata(conversationId!, { lastMode: mode });
+		}
+
+		// --- Build system prompt ---
+		const systemPrompt = buildSystemPrompt({
+			mode,
+			brandName: "AACsearch",
+			locale: input.locale ?? "ru",
+			availableTools: ["search_products", "check_availability", "get_order_status", "get_return_status", "get_user_conditions", "get_product_details", "search_knowledge", "get_similar_products", "escalate_to_operator"],
+			...(input.productContext ? {
+				productContext: {
+					productId: input.productContext.productId,
+					categorySlug: input.productContext.categorySlug,
+				}
+			} : {}),
+			userSegment: (personalization as { segment?: string } | undefined)?.segment,
+		});
+
+		// --- Build tools ---
+		const connectors = getConnectors(input.organizationId);
+		const escalationService = createEscalationService({});
+
+		const tools = {
+			search_products: createSearchProductsTool({
+				indexSlug: input.indexSlug ?? "products",
+			}),
+			check_availability: createCheckAvailabilityTool(connectors.inventory),
+			get_order_status: createGetOrderStatusTool(connectors.oms, user.id),
+			get_return_status: createGetReturnStatusTool(connectors.oms, user.id),
+			get_user_conditions: createGetUserConditionsTool(connectors.loyalty, user.id),
+			get_product_details: createGetProductDetailsTool({ indexSlug: input.indexSlug ?? "products" }),
+			search_knowledge: createSearchKnowledgeTool(""),
+			get_similar_products: createGetSimilarProductsTool({ organizationId: input.organizationId }),
+			escalate_to_operator: createEscalateToOperatorTool({
+				conversationId: conversationId!,
+				organizationId: input.organizationId,
+				escalationService,
+			}),
+		};
+
+		// --- Build message history for LLM ---
+		const llmMessages: Array<{ role: "user" | "assistant"; content: string }> = [
+			...historyMessages
+				.filter((m) => m.role === "user" || m.role === "assistant")
+				.map((m) => ({
+					role: m.role as "user" | "assistant",
+					content: m.content,
+				})),
+			{ role: "user" as const, content: input.message },
+		];
+
+		// --- Save user message to DB ---
+		const userMsgStarted = Date.now();
+		await appendMessage({
+			conversationId: conversationId!,
+			role: "user",
+			content: input.message,
+		});
+
+		// --- Stream from LLM ---
+		let response: Awaited<ReturnType<typeof streamText>>;
+		try {
+			response = await streamText({
+				model: textModel,
+				system: systemPrompt,
+				messages: llmMessages,
+				tools,
+				maxSteps: 5,
+			});
+		} catch (err) {
+			await releaseCreditReservation(creditReservationId);
+			throw err;
+		}
+
+		// Commit credit usage immediately — stream may be long-lived
+		await commitFlatFeeUsage({
+			reservationId: creditReservationId,
+			operation: "conversation_turn",
+			provider: "openai",
+			model: "gpt-4o-mini",
+			flatFeeKopecks: CREDIT_RATES.conversation_turn,
+		});
+
+		// Save assistant response after stream completes (fire-and-forget)
+		Promise.resolve(response.text).then(async (text) => {
+			try {
+				const safeText = sanitizeOutput(text);
+				const usage = await response.usage;
+				await appendMessage({
+					conversationId: conversationId!,
+					role: "assistant",
+					content: safeText,
+					latencyMs: Date.now() - userMsgStarted,
+					inputTokens: usage?.promptTokens,
+					outputTokens: usage?.completionTokens,
+				});
+			} catch (saveErr) {
+				logger.warn({ conversationId, error: saveErr }, "streamAssistant: failed to save assistant message");
+			}
+		}).catch(() => {
+			// ignore
+		});
+
+		return streamToEventIterator(response.toUIMessageStream());
+	});

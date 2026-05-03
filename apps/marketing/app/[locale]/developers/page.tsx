@@ -43,13 +43,13 @@ console.log(results.hits);`;
 	return (
 		<>
 			{/* Hero */}
-			<section className="py-20 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="mb-4 gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex items-center rounded-full border border-primary/20 bg-primary/5">
 						<span className="size-1.5 rounded-full bg-primary" />
 						<span className="font-medium text-primary">{t("hero.badge")}</span>
 					</div>
-					<h1 className="mt-4 text-5xl font-bold tracking-tight max-w-3xl text-balance">
+					<h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-3xl text-balance">
 						{t("title")}
 					</h1>
 					<p className="mt-4 text-xl max-w-2xl text-balance text-muted-foreground">

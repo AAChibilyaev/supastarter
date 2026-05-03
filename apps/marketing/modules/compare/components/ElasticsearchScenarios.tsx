@@ -8,7 +8,7 @@ export function ElasticsearchScenarios() {
 	const scenarios = ["scenario1", "scenario2", "scenario3"] as const;
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-4xl mx-auto">
 					<div className="mb-10 text-center">

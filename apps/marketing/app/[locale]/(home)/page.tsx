@@ -16,6 +16,7 @@ import { PricingPlans } from "@home/components/PricingPlans";
 import { QuickstartSection } from "@home/components/QuickstartSection";
 import { RelevanceSection } from "@home/components/RelevanceSection";
 import { SearchUXSection } from "@home/components/SearchUXSection";
+import { SecuritySandbox } from "@home/components/SecuritySandbox";
 import { SecuritySection } from "@home/components/SecuritySection";
 import { TcoComparison } from "@home/components/TcoComparison";
 import { TestimonialCarousel } from "@home/components/TestimonialCarousel";
@@ -92,13 +93,16 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 			{/* 15. AI answers — answer layer */}
 			<AiAnswersSection />
 
-			{/* 16. Security — multi-tenant design */}
+			{/* 16. Security — feature overview */}
 			<SecuritySection />
 
-			{/* 17. Live demo — interactive search */}
+			{/* 17. Security sandbox — interactive scoped-token demo */}
+			<SecuritySandbox />
+
+			{/* 18. Live demo — interactive search */}
 			<LiveDemoSection />
 
-			{/* 18. Testimonials — social proof */}
+			{/* 19. Testimonials — social proof */}
 			<TestimonialCarousel />
 
 			{/* 19. Pricing — plans + interactive calculator + FAQ */}

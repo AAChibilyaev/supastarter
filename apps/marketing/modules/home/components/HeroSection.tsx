@@ -12,21 +12,21 @@ import heroImageDark from "../../../public/images/hero-image-dark.png";
 import heroImage from "../../../public/images/hero-image.png";
 import { marketingCtaButtonClassName } from "../../shared/lib/cta-button-styles";
 
-const featureBadges = [
-	{ icon: ZapIcon, label: "50ms p99" },
-	{ icon: ShieldIcon, label: "SOC 2" },
-	{ icon: SearchIcon, label: "Full-text" },
-	{ icon: BarChart3Icon, label: "Analytics" },
-];
-
-const stats = [
-	{ value: "2.5M+", label: "Documents indexed" },
-	{ value: "< 50ms", label: "Search latency" },
-	{ value: "99.99%", label: "Uptime SLA" },
-];
-
 export function HeroSection() {
-	const t = useTranslations();
+	const t = useTranslations("home");
+
+	const featureBadges = [
+		{ icon: ZapIcon, label: t("hero.badgeLatency") },
+		{ icon: ShieldIcon, label: t("hero.badgeSoc2") },
+		{ icon: SearchIcon, label: t("hero.badgeFulltext") },
+		{ icon: BarChart3Icon, label: t("hero.badgeAnalytics") },
+	];
+
+	const stats = [
+		{ value: "2.5M+", label: t("hero.statDocs") },
+		{ value: "< 50ms", label: t("hero.statLatency") },
+		{ value: "99.99%", label: t("hero.statUptime") },
+	];
 
 	return (
 		<section className="relative overflow-hidden bg-background">
@@ -34,22 +34,22 @@ export function HeroSection() {
 				{/* Announcement badge */}
 				<div className="mb-6 flex justify-center">
 					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-full border">
-						<span className="font-semibold text-primary">{t("home.hero.new")}</span>
+						<span className="font-semibold text-primary">{t("hero.new")}</span>
 						<span className="h-4 w-px bg-border" />
 						<span className="font-light text-muted-foreground">
-							{t("home.hero.featureBadge")}
+							{t("hero.featureBadge")}
 						</span>
 					</div>
 				</div>
 
 				{/* Hero heading */}
 				<h1 className="max-w-4xl text-4xl md:text-5xl lg:text-6xl font-light mx-auto text-center text-balance text-foreground">
-					{t("home.hero.title")}
+					{t("hero.title")}
 				</h1>
 
 				{/* Subtitle */}
 				<p className="mt-6 max-w-2xl text-base sm:text-lg font-light mx-auto text-center text-balance text-muted-foreground">
-					{t("home.hero.subtitle")}
+					{t("hero.subtitle")}
 				</p>
 
 				{/* CTA buttons */}
@@ -61,13 +61,13 @@ export function HeroSection() {
 						asChild
 					>
 						<a href={config.saasUrl}>
-							{t("home.hero.getStarted")}
+							{t("hero.getStarted")}
 							<ArrowRightIcon className="ml-2 size-4" />
 						</a>
 					</Button>
 					{config.docsUrl && (
 						<Button className="shrink-0" variant="outline" size="lg" asChild>
-							<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
+							<a href={config.docsUrl}>{t("hero.documentation")}</a>
 						</Button>
 					)}
 				</div>
@@ -91,13 +91,13 @@ export function HeroSection() {
 					<div className="shadow-lg overflow-hidden rounded-xl border">
 						<Image
 							src={heroImage}
-							alt={t("home.hero.imageAlt")}
+							alt={t("hero.imageAlt")}
 							className="block w-full dark:hidden"
 							priority
 						/>
 						<Image
 							src={heroImageDark}
-							alt={t("home.hero.imageAlt")}
+							alt={t("hero.imageAlt")}
 							className="hidden w-full dark:block"
 							priority
 						/>

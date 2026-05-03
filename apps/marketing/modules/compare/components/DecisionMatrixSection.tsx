@@ -9,13 +9,13 @@ export function DecisionMatrixSection() {
 	const algoliaItems = [0, 1, 2, 3];
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-4xl mx-auto">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl mb-12 text-center text-balance">
 						{t("decisionMatrix.title")}
 					</h2>
-					<div className="md:grid-cols-2 gap-8 grid">
+					<div className="md:grid-cols-2 gap-8 grid grid-cols-1">
 						{/* AACsearch column */}
 						<div className="p-6 md:p-8 rounded-xl border border-primary/20 bg-primary/5">
 							<h3 className="font-semibold text-xl mb-4 text-primary">

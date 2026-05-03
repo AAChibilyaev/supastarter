@@ -21,7 +21,7 @@ export function AboutContent() {
 	return (
 		<>
 			{/* Mission section */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-3xl mx-auto text-center">
 						<p className="text-sm font-semibold tracking-widest text-primary uppercase">
@@ -38,7 +38,7 @@ export function AboutContent() {
 			</section>
 
 			{/* Stats section */}
-			<section className="py-20 border-b border-border/60 bg-muted/30">
+			<section className="section-padding border-b border-border/60 bg-muted/30">
 				<div className="container">
 					<div className="md:grid-cols-4 gap-8 max-w-4xl mx-auto grid grid-cols-2 text-center">
 						<div>
@@ -78,7 +78,7 @@ export function AboutContent() {
 			</section>
 
 			{/* Why AACsearch section */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">

@@ -145,7 +145,30 @@
       "next": "Next",
       "prevLabel": "Previous testimonial",
       "nextLabel": "Next testimonial",
-      "dotLabel": "Go to testimonial {number}"
+      "dotLabel": "Go to testimonial {number}",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome",
+          "initials": "EL"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub",
+          "initials": "MW"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream",
+          "initials": "PS"
+        }
+      }
     },
     "logos": {
       "title": "Confiado por equipos innovadores"
@@ -1452,5 +1475,26 @@
       "2": "Necesitas plugins de puntuación personalizados a nivel Lucene",
       "3": "Tienes menos de 1.000 documentos y Postgres ILIKE es suficiente"
     }
+  },
+  "homeLiveDemo": {
+    "title": "Prueba la búsqueda ahora mismo",
+    "subtitle": "Elige un escenario, escribe una consulta — ve la tolerancia a errores, las facetas y los resaltados.",
+    "didYouMean": "¿Quisiste decir:",
+    "whyResult": "¿Por qué este resultado?",
+    "noResults": "Sin coincidencias exactas — AACsearch sugiere:",
+    "openPlayground": "Abrir Playground completo"
+  },
+  "homeSecuritySandbox": {
+    "title": "Ve los scoped tokens en acción",
+    "subtitle": "Activa las restricciones — AACsearch refuerza la seguridad del navegador sin exponer tu clave API.",
+    "ttlLabel": "TTL del token",
+    "originLabel": "Origen de la solicitud",
+    "tenantLabel": "Filtro de inquilino",
+    "leakLabel": "Simular filtración de token",
+    "outcomeAllowed": "Búsqueda permitida",
+    "outcomeOrigin": "403 — Origen bloqueado",
+    "outcomeTenant": "403 — Discrepancia de inquilino",
+    "outcomeExpired": "401 — Token caducado",
+    "outcomeLeak": "Filtración inofensiva — el token de ámbito no puede llamar a la API de administración"
   }
 }

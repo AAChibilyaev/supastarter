@@ -1729,8 +1729,8 @@ Active: [new session]
 Last: [first session]
 
 ## Last Session Bridge
-[Emergency bridge — running bridge was not updated]
-Files: apps/marketing/modules/home/components/QuickstartSection.tsx (edit), apps/marketing/modules/home/components/LiveDemoSection.tsx (edit)
+[auto-bridge snapshot @ 10 changes]
+Files: packages/api/modules/assistant/lib/prompts/prompt-builder.ts (create), packages/api/modules/assistant/lib/prompts/outfit-prompt.ts (create), packages/api/modules/assistant/lib/prompts/expert-prompt.ts (create), packages/api/modules/assistant/lib/prompts/service-prompt.ts (create), packages/api/modules/assistant/lib/prompts/consultation-prompt.ts (create), packages/api/modules/assistant/lib/prompts/base-system-prompt.ts (create), packages/api/modules/assistant/lib/intent-classifier.ts (create), packages/api/modules/entitlements/credit-rates.ts (edit), packages/database/prisma/schema.prisma (edit), /Users/aac/.claude/plans/reflective-gliding-crane.md (create)
 
 # === END COGNILAYER ===
 

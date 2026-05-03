@@ -15,7 +15,7 @@ export function CustomersCaseStudies({ caseStudies }: CustomersCaseStudiesProps)
 	const t = useTranslations("customersPage");
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -26,7 +26,7 @@ export function CustomersCaseStudies({ caseStudies }: CustomersCaseStudiesProps)
 					</p>
 				</div>
 
-				<div className="mt-16 gap-6 md:grid-cols-3 grid grid-cols-1">
+				<div className="mt-16 gap-6 sm:grid-cols-2 md:grid-cols-3 grid grid-cols-1">
 					{caseStudies.map((post) => {
 						const { title, excerpt, image, path } = post;
 						return (

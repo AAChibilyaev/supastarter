@@ -46,7 +46,7 @@ export function AiSearchContent() {
 	return (
 		<>
 			{/* Search modes section */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -54,7 +54,7 @@ export function AiSearchContent() {
 						</h2>
 					</div>
 
-					<div className="mt-16 gap-4 md:grid-cols-3 grid grid-cols-1">
+					<div className="mt-16 gap-4 sm:grid-cols-2 md:grid-cols-3 grid grid-cols-1">
 						{searchModes.map(({ key, icon: Icon }) => (
 							<Card
 								key={key}
@@ -75,7 +75,7 @@ export function AiSearchContent() {
 			</section>
 
 			{/* Use cases section */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -108,7 +108,7 @@ export function AiSearchContent() {
 			</section>
 
 			{/* How it works section */}
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">

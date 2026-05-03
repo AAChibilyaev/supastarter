@@ -7,7 +7,7 @@ export function TypesenseTestimonial() {
 	const t = useTranslations("compareTypesense");
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-3xl mx-auto">
 					<Card className="p-8 md:p-10 relative">

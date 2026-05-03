@@ -29,9 +29,9 @@ export default async function IntegrationsReactPage(props: {
 
 	return (
 		<>
-			<section className="py-20 border-b border-border/60 text-center">
+			<section className="section-padding border-b border-border/60 text-center">
 				<div className="container">
-					<h1 className="text-5xl font-bold tracking-tight text-balance">
+					<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
 						{tPage("title")}
 					</h1>
 					<p className="mt-4 text-xl max-w-2xl mx-auto text-balance text-muted-foreground">

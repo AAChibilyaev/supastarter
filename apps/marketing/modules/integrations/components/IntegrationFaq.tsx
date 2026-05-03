@@ -16,7 +16,7 @@ export function IntegrationFaq({ namespace, questionCount = 3 }: IntegrationFaqP
 	const questions = Array.from({ length: questionCount }, (_, i) => i + 1);
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mb-12 mx-auto text-center">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">

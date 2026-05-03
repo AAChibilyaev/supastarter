@@ -52,7 +52,7 @@ export function ConnectorsOverview() {
 
 	return (
 		<>
-			<section className="py-24 border-b border-border/60">
+			<section className="section-padding border-b border-border/60">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -61,7 +61,7 @@ export function ConnectorsOverview() {
 						<p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
 					</div>
 
-					<div className="mt-16 gap-4 md:grid-cols-4 grid grid-cols-1">
+					<div className="mt-16 gap-4 sm:grid-cols-2 md:grid-cols-4 grid grid-cols-1">
 						{availableItems.map(({ key, icon: Icon, span }) => (
 							<Card
 								key={key}
@@ -84,7 +84,7 @@ export function ConnectorsOverview() {
 				</div>
 			</section>
 
-			<section className="py-24 border-b border-border/60 bg-muted/10">
+			<section className="section-padding border-b border-border/60 bg-muted/10">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -115,7 +115,7 @@ export function ConnectorsOverview() {
 				</div>
 			</section>
 
-			<section className="py-24 border-b border-border/60 bg-muted/20">
+			<section className="section-padding border-b border-border/60 bg-muted/20">
 				<div className="container">
 					<div className="max-w-2xl mx-auto text-center">
 						<Badge status="info" className="mb-4">

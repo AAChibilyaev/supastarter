@@ -145,7 +145,30 @@
       "next": "Далее",
       "prevLabel": "Предыдущий отзыв",
       "nextLabel": "Следующий отзыв",
-      "dotLabel": "Отзыв {number}"
+      "dotLabel": "Отзыв {number}",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome",
+          "initials": "EL"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub",
+          "initials": "MW"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream",
+          "initials": "PS"
+        }
+      }
     },
     "logos": {
       "title": "Внедрено в production у"
@@ -1794,5 +1817,26 @@
       "2": "Вам нужны кастомные плагины оценки на уровне Lucene",
       "3": "У вас менее 1000 документов и Postgres ILIKE вполне достаточно"
     }
+  },
+  "homeLiveDemo": {
+    "title": "Попробуйте поиск прямо сейчас",
+    "subtitle": "Выберите сценарий, введите запрос — исправление опечаток, фасеты и подсветка в деле.",
+    "didYouMean": "Вы имели в виду:",
+    "whyResult": "Почему этот результат?",
+    "noResults": "Нет точных совпадений — AACsearch предлагает:",
+    "openPlayground": "Открыть Playground"
+  },
+  "homeSecuritySandbox": {
+    "title": "Scoped-токены в действии",
+    "subtitle": "Переключайте ограничения — AACsearch защищает браузер, не раскрывая ваш API-ключ.",
+    "ttlLabel": "TTL токена",
+    "originLabel": "Источник запроса",
+    "tenantLabel": "Фильтр арендатора",
+    "leakLabel": "Симулировать утечку токена",
+    "outcomeAllowed": "Поиск разрешён",
+    "outcomeOrigin": "403 — Источник заблокирован",
+    "outcomeTenant": "403 — Несоответствие арендатора",
+    "outcomeExpired": "401 — Токен истёк",
+    "outcomeLeak": "Утечка безвредна — scoped-токен не может вызвать Admin API"
   }
 }

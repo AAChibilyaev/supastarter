@@ -20,7 +20,7 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
 	setRequestLocale(locale);
 
 	return (
-		<main className="pt-24 pb-16 min-h-screen">
+		<main className="section-padding min-h-screen">
 			<div className="container">
 				<div className="max-w-3xl mb-12 mx-auto text-center">
 					<h1 className="text-4xl font-bold tracking-tight mb-4">Live Demo</h1>

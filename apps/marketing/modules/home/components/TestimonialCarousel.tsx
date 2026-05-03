@@ -2,7 +2,7 @@
 
 import { cn } from "@repo/ui";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface Testimonial {
 	quote: string;
@@ -12,38 +12,28 @@ interface Testimonial {
 	initials: string;
 }
 
-const TESTIMONIALS: Testimonial[] = [
-	{
-		quote: "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
-		author: "Erik Lindström",
-		role: "CTO",
-		company: "NordikHome",
-		initials: "EL",
-	},
-	{
-		quote: "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
-		author: "Marcus Weber",
-		role: "Technical Director",
-		company: "AgencyHub",
-		initials: "MW",
-	},
-	{
-		quote: "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
-		author: "Priya Sharma",
-		role: "VP Engineering",
-		company: "DevStream",
-		initials: "PS",
-	},
-];
+const TESTIMONIAL_IDS = ["nordikHome", "agencyHub", "devStream"] as const;
 
 export function TestimonialCarousel() {
 	const t = useTranslations("home");
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [isPaused, setIsPaused] = useState(false);
 
+	const testimonials = useMemo<Testimonial[]>(
+		() =>
+			TESTIMONIAL_IDS.map((id) => ({
+				quote: t(`testimonials.items.${id}.quote`),
+				author: t(`testimonials.items.${id}.author`),
+				role: t(`testimonials.items.${id}.role`),
+				company: t(`testimonials.items.${id}.company`),
+				initials: t(`testimonials.items.${id}.initials`),
+			})),
+		[t],
+	);
+
 	const next = useCallback(() => {
-		setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
-	}, []);
+		setActiveIndex((prev) => (prev + 1) % testimonials.length);
+	}, [testimonials.length]);
 
 	useEffect(() => {
 		if (isPaused) return;
@@ -51,7 +41,7 @@ export function TestimonialCarousel() {
 		return () => clearInterval(interval);
 	}, [isPaused, next]);
 
-	const testimonial = TESTIMONIALS[activeIndex]!;
+	const testimonial = testimonials[activeIndex]!;
 
 	return (
 		<section className="section-padding border-b border-border">
@@ -93,7 +83,7 @@ export function TestimonialCarousel() {
 
 					{/* Simple circle progress dots */}
 					<div className="mt-6 gap-2 flex items-center justify-center">
-						{TESTIMONIALS.map((_, index) => (
+						{testimonials.map((_, index) => (
 							<button
 								key={index}
 								type="button"

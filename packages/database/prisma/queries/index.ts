@@ -20,3 +20,4 @@ export * from "./nps";
 export * from "./fx-rate";
 export * from "./audit-log";
 export * from "./feature-flags";
+export * from "./assistant";

@@ -250,6 +250,12 @@ export const NpsSurveyResponseScalarFieldEnumSchema = z.enum(['id', 'userId', 'o
 
 export type NpsSurveyResponseScalarFieldEnum = z.infer<typeof NpsSurveyResponseScalarFieldEnumSchema>;
 
+// File: AuditLogScalarFieldEnum.schema.ts
+
+export const AuditLogScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'userId', 'action', 'targetType', 'targetId', 'details', 'ipAddress', 'userAgent', 'createdAt'])
+
+export type AuditLogScalarFieldEnum = z.infer<typeof AuditLogScalarFieldEnumSchema>;
+
 // File: FeatureFlagScalarFieldEnum.schema.ts
 
 export const FeatureFlagScalarFieldEnumSchema = z.enum(['id', 'key', 'title', 'description', 'type', 'enabled', 'variantValues', 'variantDefault', 'rolloutPercentage', 'targetingRules', 'killSwitch', 'createdAt', 'updatedAt', 'createdBy'])
@@ -261,6 +267,18 @@ export type FeatureFlagScalarFieldEnum = z.infer<typeof FeatureFlagScalarFieldEn
 export const FeatureFlagOverrideScalarFieldEnumSchema = z.enum(['id', 'flagId', 'organizationId', 'enabled', 'variantValue', 'reason'])
 
 export type FeatureFlagOverrideScalarFieldEnum = z.infer<typeof FeatureFlagOverrideScalarFieldEnumSchema>;
+
+// File: AssistantConversationScalarFieldEnum.schema.ts
+
+export const AssistantConversationScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'userId', 'sessionId', 'mode', 'entryPoint', 'status', 'startedAt', 'lastMessageAt', 'resolvedAt', 'escalatedAt', 'messageCount', 'metadata'])
+
+export type AssistantConversationScalarFieldEnum = z.infer<typeof AssistantConversationScalarFieldEnumSchema>;
+
+// File: AssistantMessageScalarFieldEnum.schema.ts
+
+export const AssistantMessageScalarFieldEnumSchema = z.enum(['id', 'conversationId', 'role', 'content', 'toolName', 'toolCalls', 'citations', 'latencyMs', 'inputTokens', 'outputTokens', 'createdAt'])
+
+export type AssistantMessageScalarFieldEnum = z.infer<typeof AssistantMessageScalarFieldEnumSchema>;
 
 // File: FeatureFlagAuditLogScalarFieldEnum.schema.ts
 
@@ -1089,6 +1107,24 @@ export const NpsSurveyResponseSchema = z.object({
 export type NpsSurveyResponseType = z.infer<typeof NpsSurveyResponseSchema>;
 
 
+// File: AuditLog.schema.ts
+
+export const AuditLogSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  userId: z.string(),
+  action: z.string(),
+  targetType: z.string().nullish(),
+  targetId: z.string().nullish(),
+  details: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  ipAddress: z.string().nullish(),
+  userAgent: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type AuditLogType = z.infer<typeof AuditLogSchema>;
+
+
 // File: FeatureFlag.schema.ts
 
 export const FeatureFlagSchema = z.object({
@@ -1123,6 +1159,46 @@ export const FeatureFlagOverrideSchema = z.object({
 });
 
 export type FeatureFlagOverrideType = z.infer<typeof FeatureFlagOverrideSchema>;
+
+
+// File: AssistantConversation.schema.ts
+
+export const AssistantConversationSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  userId: z.string().nullish(),
+  sessionId: z.string(),
+  mode: z.string().default("product_consultation"),
+  entryPoint: z.string().nullish(),
+  status: z.string().default("active"),
+  startedAt: z.date(),
+  lastMessageAt: z.date(),
+  resolvedAt: z.date().nullish(),
+  escalatedAt: z.date().nullish(),
+  messageCount: z.number().int(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+});
+
+export type AssistantConversationType = z.infer<typeof AssistantConversationSchema>;
+
+
+// File: AssistantMessage.schema.ts
+
+export const AssistantMessageSchema = z.object({
+  id: z.string(),
+  conversationId: z.string(),
+  role: z.string(),
+  content: z.string(),
+  toolName: z.string().nullish(),
+  toolCalls: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  citations: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  latencyMs: z.number().int().nullish(),
+  inputTokens: z.number().int().nullish(),
+  outputTokens: z.number().int().nullish(),
+  createdAt: z.date(),
+});
+
+export type AssistantMessageType = z.infer<typeof AssistantMessageSchema>;
 
 
 // File: FeatureFlagAuditLog.schema.ts

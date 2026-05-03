@@ -42,7 +42,7 @@ export function CompareTypesenseTable() {
 	const t = useTranslations("compareTypesense");
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-5xl mx-auto">
 					<div className="mb-10 text-center">

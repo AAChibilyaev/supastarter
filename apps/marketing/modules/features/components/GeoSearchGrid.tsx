@@ -45,7 +45,7 @@ export function GeoSearchGrid() {
 	const t = useTranslations("featuresGeoSearch");
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
@@ -54,7 +54,7 @@ export function GeoSearchGrid() {
 					<p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>
 				</div>
 
-				<div className="mt-16 gap-4 md:grid-cols-4 grid grid-cols-1">
+				<div className="mt-16 gap-4 sm:grid-cols-2 md:grid-cols-4 grid grid-cols-1">
 					{items.map(({ key, icon: Icon }) => (
 						<Card
 							key={key}

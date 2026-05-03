@@ -10,7 +10,7 @@ export function CodeExampleSection({ namespace, code, language }: CodeExampleSec
 	const t = useTranslations(namespace);
 
 	return (
-		<section className="py-20 border-b border-border/60">
+		<section className="section-padding border-b border-border/60">
 			<div className="container">
 				<div className="max-w-3xl mx-auto">
 					<div className="mb-8 text-center">

@@ -56,3 +56,10 @@ export {
 	type CurationRule,
 	type SynonymPair,
 } from "./lib/synonyms-sync";
+export {
+	checkAllIndexesHealth,
+	checkIndexHealth,
+	type HealthStatus,
+	type IndexHealthResult,
+} from "./lib/health";
+export { sendSlackAlert, type SlackAlertPayload } from "./lib/slack";

@@ -33,7 +33,7 @@ export function HeroSection() {
 			<div className="section-padding relative z-10 container">
 				{/* Announcement badge */}
 				<div className="mb-6 flex justify-center">
-					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-full border">
+					<div className="gap-2 px-4 py-1.5 text-sm inline-flex items-center rounded-md border">
 						<span className="font-semibold text-primary">{t("hero.new")}</span>
 						<span className="h-4 w-px bg-border" />
 						<span className="font-light text-muted-foreground">
@@ -78,7 +78,7 @@ export function HeroSection() {
 						<Badge
 							key={label}
 							status="info"
-							className="gap-1.5 px-3 py-1 text-xs font-light shrink-0 whitespace-nowrap normal-case"
+							className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-light shrink-0 whitespace-nowrap normal-case"
 						>
 							<Icon className="size-3" />
 							{label}

@@ -1,0 +1,29 @@
+{
+  "name": "aacsearch",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "AACsearch CLI — npx aacsearch",
+  "bin": {
+    "aacsearch": "./bin/aacsearch.mjs"
+  },
+  "files": ["dist", "bin"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "commander": "12.1.0",
+    "conf": "13.1.0",
+    "open": "10.1.0",
+    "@repo/logs": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

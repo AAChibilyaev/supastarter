@@ -1,3 +1,4 @@
+import { aiAnswer } from "./procedures/ai-answer";
 import { getAlertRules, updateAlertRules } from "./procedures/alert-rules";
 import { analytics } from "./procedures/analytics";
 import {
@@ -34,6 +35,7 @@ import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
 import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
+import { customEmbedding } from "./procedures/custom-embedding";
 import { deleteDocumentsByFilter } from "./procedures/delete-documents-by-filter";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
@@ -44,6 +46,7 @@ import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-c
 import { getGlobalSynonyms, updateGlobalSynonyms } from "./procedures/global-synonyms";
 import { groupedSearch } from "./procedures/grouped-search";
 import { hybridSearch } from "./procedures/hybrid-search";
+import { hypeIndex } from "./procedures/hype-index";
 import { imageSearch } from "./procedures/image-search";
 import { importDocuments } from "./procedures/import-documents";
 import { importJobs } from "./procedures/import-jobs";
@@ -73,6 +76,7 @@ import { querySuggestions } from "./procedures/query-suggestions";
 import { getRankingRules, updateRankingRules } from "./procedures/ranking-rules";
 import { recentActivity } from "./procedures/recent-activity";
 import { reindex } from "./procedures/reindex";
+import { rerank } from "./procedures/rerank";
 import { retryFailedBatches } from "./procedures/retry-failed-batches";
 import { revokeApiKey } from "./procedures/revoke-api-key";
 import { revokeConnectorToken } from "./procedures/revoke-connector-token";
@@ -263,4 +267,8 @@ export const searchRouter = {
 		get: getQueryRules,
 		update: updateQueryRules,
 	},
+	aiAnswer,
+	customEmbedding,
+	hypeIndex,
+	rerank,
 };

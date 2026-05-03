@@ -20,6 +20,7 @@ export const importDocuments = protectedProcedure
 		z.object({
 			organizationId: z.string(),
 			slug: searchIndexSlugSchema,
+			action: z.enum(["create", "update", "upsert", "emplace"]).default("upsert"),
 			documents: z.array(z.record(z.string(), z.unknown())).min(1).max(5000),
 		}),
 	)
@@ -31,7 +32,7 @@ export const importDocuments = protectedProcedure
 			const queued = await enqueueManySearchIngest(
 				index.id,
 				index.organizationId,
-				"upsert",
+				input.action,
 				input.documents as Prisma.InputJsonValue[],
 			);
 

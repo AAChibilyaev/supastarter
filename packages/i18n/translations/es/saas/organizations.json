@@ -1,152 +1,152 @@
 {
-	"organizations": {
-		"createForm": {
-			"name": "Nombre de la organizacion",
-			"notifications": {
-				"error": "Lo sentimos, no pudimos crear tu organizacion. Intentelo de nuevo mas tarde.",
-				"success": "Tu organizacion ha sido creada. Ya puedes invitar miembros."
-			},
-			"submit": "Crear organizacion",
-			"subtitle": "Introduce un nombre para tu organizacion para empezar. Puedes cambiar el nombre mas tarde en la configuracion de la organizacion.",
-			"title": "Crear una organizacion"
-		},
-		"invitationAlert": {
-			"description": "Necesitas iniciar sesion o crear una cuenta para unirte a la organizacion.",
-			"title": "Has sido invitado a unirte a una organizacion."
-		},
-		"invitationModal": {
-			"accept": "Aceptar",
-			"decline": "Rechazar",
-			"description": "Has sido invitado a unirte a la organizacion {organizationName}. Quieres aceptar la invitacion y unirte a la organizacion?",
-			"title": "Unirse a la organizacion",
-			"error": "Se produjo un error. Por favor, inténtelo de nuevo."
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Crear nueva organizacion",
-			"organizations": "Organizaciones",
-			"personalAccount": "Cuenta personal"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Crear nueva organizacion",
-			"title": "Tus organizaciones"
-		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Miembro",
-			"owner": "Propietario",
-			"viewer": "Espectador"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Nombre de la organizacion"
-			},
-			"deleteOrganization": {
-				"confirmation": "Estas seguro de que quieres eliminar tu organizacion?",
-				"description": "Elimina permanentemente tu organizacion. Una vez que elimines tu organizacion, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
-				"submit": "Eliminar organizacion",
-				"title": "Eliminar organizacion"
-			},
-			"logo": {
-				"description": "Sube un logotipo para tu organizacion.",
-				"title": "Logotipo de la organizacion"
-			},
-			"members": {
-				"activeMembers": "Miembros activos",
-				"description": "Ve todos los miembros activos y las invitaciones pendientes de tu organizacion.",
-				"invitations": {
-					"empty": "Aun no has invitado a ningun miembro.",
-					"expiresAt": "Expira el {date}",
-					"invitationStatus": {
-						"accepted": "Aceptada",
-						"canceled": "Cancelada",
-						"pending": "Pendiente",
-						"rejected": "Rechazada"
-					},
-					"revoke": "Revocar invitacion",
-					"resend": "Reenviar invitacion"
-				},
-				"inviteMember": {
-					"description": "Para invitar a un nuevo miembro, enviale una invitacion.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "No pudimos invitar al miembro. Intentelo de nuevo mas tarde.",
-							"title": "No se pudo invitar al miembro"
-						},
-						"success": {
-							"description": "El miembro ha sido invitado.",
-							"title": "Miembro invitado"
-						}
-					},
-					"role": "Rol",
-					"submit": "Invitar",
-					"title": "Invitar miembro"
-				},
-				"leaveOrganization": "Abandonar organizacion",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "No se pudo eliminar al miembro de tu organizacion. Intentelo de nuevo."
-						},
-						"loading": {
-							"description": "Eliminando miembro de la organizacion..."
-						},
-						"success": {
-							"description": "El miembro ha sido eliminado correctamente de tu organizacion."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "No se pudo revocar la invitacion. Intentelo de nuevo mas tarde."
-						},
-						"loading": {
-							"description": "Revocando invitacion..."
-						},
-						"success": {
-							"description": "La invitacion ha sido revocada."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "No se pudo actualizar la membresia de la organizacion. Intentelo de nuevo."
-						},
-						"loading": {
-							"description": "Actualizando membresia..."
-						},
-						"success": {
-							"description": "La membresia se actualizo correctamente"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Reenviando invitacion..."
-						},
-						"success": {
-							"description": "Invitacion enviada"
-						},
-						"error": {
-							"description": "No se pudo enviar la invitacion. Intentelo de nuevo."
-						}
-					}
-				},
-				"pendingInvitations": "Invitaciones pendientes",
-				"removeMember": "Eliminar miembro",
-				"title": "Miembros"
-			},
-			"notifications": {
-				"organizationDeleted": "Tu organizacion ha sido eliminada.",
-				"organizationNameNotUpdated": "No pudimos actualizar el nombre de tu organizacion. Intentelo de nuevo mas tarde.",
-				"organizationNameUpdated": "El nombre de tu organizacion ha sido actualizado.",
-				"organizationNotDeleted": "No pudimos eliminar tu organizacion. Intentelo de nuevo mas tarde."
-			},
-			"subtitle": "Gestiona la configuracion de la organizacion.",
-			"title": "Organizacion",
-			"dangerZone": {
-				"title": "Zona de peligro"
-			}
-		},
-		"start": {
-			"subtitle": "Bienvenido a la pagina de inicio de esta organizacion!"
-		}
-	}
+  "organizations": {
+    "createForm": {
+      "name": "Nombre de la organizacion",
+      "notifications": {
+        "error": "Lo sentimos, no pudimos crear tu organizacion. Intentelo de nuevo mas tarde.",
+        "success": "Tu organizacion ha sido creada. Ya puedes invitar miembros."
+      },
+      "submit": "Crear organizacion",
+      "subtitle": "Introduce un nombre para tu organizacion para empezar. Puedes cambiar el nombre mas tarde en la configuracion de la organizacion.",
+      "title": "Crear una organizacion"
+    },
+    "invitationAlert": {
+      "description": "Necesitas iniciar sesion o crear una cuenta para unirte a la organizacion.",
+      "title": "Has sido invitado a unirte a una organizacion."
+    },
+    "invitationModal": {
+      "accept": "Aceptar",
+      "decline": "Rechazar",
+      "description": "Has sido invitado a unirte a la organizacion {organizationName}. Quieres aceptar la invitacion y unirte a la organizacion?",
+      "title": "Unirse a la organizacion",
+      "error": "Se produjo un error. Por favor, inténtelo de nuevo."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Crear nueva organizacion",
+      "organizations": "Organizaciones",
+      "personalAccount": "Cuenta personal"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Crear nueva organizacion",
+      "title": "Tus organizaciones"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Miembro",
+      "owner": "Propietario",
+      "viewer": "Espectador"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Nombre de la organizacion"
+      },
+      "deleteOrganization": {
+        "confirmation": "Estas seguro de que quieres eliminar tu organizacion?",
+        "description": "Elimina permanentemente tu organizacion. Una vez que elimines tu organizacion, no hay vuelta atras. Para confirmar, introduce tu contrasena a continuacion:",
+        "submit": "Eliminar organizacion",
+        "title": "Eliminar organizacion"
+      },
+      "logo": {
+        "description": "Sube un logotipo para tu organizacion.",
+        "title": "Logotipo de la organizacion"
+      },
+      "members": {
+        "activeMembers": "Miembros activos",
+        "description": "Ve todos los miembros activos y las invitaciones pendientes de tu organizacion.",
+        "invitations": {
+          "empty": "Aun no has invitado a ningun miembro.",
+          "expiresAt": "Expira el {date}",
+          "invitationStatus": {
+            "accepted": "Aceptada",
+            "canceled": "Cancelada",
+            "pending": "Pendiente",
+            "rejected": "Rechazada"
+          },
+          "revoke": "Revocar invitacion",
+          "resend": "Reenviar invitacion"
+        },
+        "inviteMember": {
+          "description": "Para invitar a un nuevo miembro, enviale una invitacion.",
+          "email": "Email",
+          "notifications": {
+            "error": {
+              "description": "No pudimos invitar al miembro. Intentelo de nuevo mas tarde.",
+              "title": "No se pudo invitar al miembro"
+            },
+            "success": {
+              "description": "El miembro ha sido invitado.",
+              "title": "Miembro invitado"
+            }
+          },
+          "role": "Rol",
+          "submit": "Invitar",
+          "title": "Invitar miembro"
+        },
+        "leaveOrganization": "Abandonar organizacion",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "No se pudo eliminar al miembro de tu organizacion. Intentelo de nuevo."
+            },
+            "loading": {
+              "description": "Eliminando miembro de la organizacion..."
+            },
+            "success": {
+              "description": "El miembro ha sido eliminado correctamente de tu organizacion."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "No se pudo revocar la invitacion. Intentelo de nuevo mas tarde."
+            },
+            "loading": {
+              "description": "Revocando invitacion..."
+            },
+            "success": {
+              "description": "La invitacion ha sido revocada."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "No se pudo actualizar la membresia de la organizacion. Intentelo de nuevo."
+            },
+            "loading": {
+              "description": "Actualizando membresia..."
+            },
+            "success": {
+              "description": "La membresia se actualizo correctamente"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Reenviando invitacion..."
+            },
+            "success": {
+              "description": "Invitacion enviada"
+            },
+            "error": {
+              "description": "No se pudo enviar la invitacion. Intentelo de nuevo."
+            }
+          }
+        },
+        "pendingInvitations": "Invitaciones pendientes",
+        "removeMember": "Eliminar miembro",
+        "title": "Miembros"
+      },
+      "notifications": {
+        "organizationDeleted": "Tu organizacion ha sido eliminada.",
+        "organizationNameNotUpdated": "No pudimos actualizar el nombre de tu organizacion. Intentelo de nuevo mas tarde.",
+        "organizationNameUpdated": "El nombre de tu organizacion ha sido actualizado.",
+        "organizationNotDeleted": "No pudimos eliminar tu organizacion. Intentelo de nuevo mas tarde."
+      },
+      "subtitle": "Gestiona la configuracion de la organizacion.",
+      "title": "Organizacion",
+      "dangerZone": {
+        "title": "Zona de peligro"
+      }
+    },
+    "start": {
+      "subtitle": "Bienvenido a la pagina de inicio de esta organizacion!"
+    }
+  }
 }

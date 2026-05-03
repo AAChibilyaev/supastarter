@@ -49,8 +49,6 @@ function CollectionGridSkeleton() {
 // ─── Main Component ──────────────────────────────────────────────────────────
 
 export function CollectionsPage() {
-	const t = useTranslations();
-export function CollectionsPage() {
 	const t = useTranslations("search");
 	const { activeOrganization } = useActiveOrganization();
 	const queryClient = useQueryClient();
@@ -130,8 +128,8 @@ export function CollectionsPage() {
 	const handleDelete = (id: string) => {
 		const collection = collections.find((c) => c.id === id);
 		confirm({
-			title: t("search.collection.deleteTitle"),
-			message: t("search.collection.deleteMessage", {
+			title: t("collection.deleteTitle"),
+			message: t("collection.deleteMessage", {
 				name: collection?.displayName ?? collection?.slug ?? "",
 			}),
 			destructive: true,

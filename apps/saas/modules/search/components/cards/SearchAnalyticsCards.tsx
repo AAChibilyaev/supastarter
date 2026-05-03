@@ -23,6 +23,7 @@ import { useMemo, useState } from "react";
 
 import { EmptyState } from "./EmptyState";
 import { FailedQueriesTable } from "./FailedQueriesTable";
+import { ActivityLog } from "./ActivityLog";
 
 type PeriodKey = "24h" | "7d" | "30d";
 
@@ -422,14 +423,7 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 	);
 
 	const renderActivityTab = () => (
-		<Card>
-			<CardHeader>
-				<CardTitle>{t("search.analytics.recentActivity")}</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<EmptyState variant="inline" description={t("search.analytics.noActivity")} />
-			</CardContent>
-		</Card>
+		<ActivityLog organizationId={organizationId} limit={50} />
 	);
 
 	return (

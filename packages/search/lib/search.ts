@@ -69,6 +69,12 @@ export interface SearchDocumentsInput {
 	dropTokensMode?: "right_to_left" | "left_to_right" | `both_sides:${number}`;
 	/** Maximum number of candidate corrections to consider. */
 	maxCandidates?: number;
+	/** Cache TTL in seconds — how long to cache this specific search query result. Only applies when `use_cache` is enabled on the collection. */
+	cacheTtl?: number;
+	/** Use the new highlight v2 response format (set to `false` to opt in). */
+	enableHighlightV1?: boolean;
+	/** Whether to group null/empty values as a separate group when using `group_by`. */
+	groupMissingValues?: boolean;
 }
 
 export interface SearchDocumentsResult {
@@ -156,6 +162,18 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 			...(input.maxCandidates !== undefined && {
 				max_candidates: input.maxCandidates,
 			}),
+			// ── Caching ──
+			...(input.cacheTtl !== undefined && {
+				cache_ttl: input.cacheTtl,
+			}),
+			// ── Highlight ──
+			...(input.enableHighlightV1 !== undefined && {
+				enable_highlight_v1: input.enableHighlightV1,
+			}),
+			// ── Grouping ──
+			...(input.groupMissingValues !== undefined && {
+				group_missing_values: input.groupMissingValues,
+			}),
 		} as any);
 
 	return {
@@ -230,6 +248,18 @@ export async function multiSearchDocuments(
 			}),
 			...(entry.maxCandidates !== undefined && {
 				max_candidates: entry.maxCandidates,
+			}),
+			// ── Caching ──
+			...(entry.cacheTtl !== undefined && {
+				cache_ttl: entry.cacheTtl,
+			}),
+			// ── Highlight ──
+			...(entry.enableHighlightV1 !== undefined && {
+				enable_highlight_v1: entry.enableHighlightV1,
+			}),
+			// ── Grouping ──
+			...(entry.groupMissingValues !== undefined && {
+				group_missing_values: entry.groupMissingValues,
 			}),
 		};
 	});

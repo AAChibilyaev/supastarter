@@ -801,11 +801,12 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 
 	// ── Mobile Bottom Bar ────────────────────────────────
 	const mobileBottomBar = (
-		<div className="fixed bottom-0 left-0 right-0 z-50 flex sm:hidden items-center border-t border-border bg-card/95 backdrop-blur-xl px-2 py-1.5 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] touch-manipulation">
+		<div className="fixed bottom-0 left-0 right-0 z-[60] flex sm:hidden items-center border-t border-border bg-card px-2 py-2 pb-[env(safe-area-inset-bottom,8px)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] touch-manipulation select-none">
 			<button type="button"
 				onClick={() => window.dispatchEvent(new CustomEvent("aacsearch:toggle-menu"))}
-				className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-muted/60 transition-colors cursor-pointer touch-manipulation"
-				aria-label="Open menu">
+				className="flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-muted/60 transition-colors cursor-pointer touch-manipulation active:scale-95"
+				aria-label="Open menu"
+				style={{ WebkitTapHighlightColor: "transparent" }}>
 				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
 					<line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" />
 				</svg>
@@ -814,7 +815,8 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 
 			{/* Main Ask AI trigger */}
 			<button type="button" onClick={() => { setOpen(true); setView("chat"); }}
-				className="flex flex-1 items-center gap-2 rounded-lg px-2.5 py-2 transition-colors active:bg-muted/40 truncate">
+				className="flex flex-1 items-center gap-2 rounded-lg px-2.5 py-2 transition-colors active:bg-muted/40 truncate cursor-pointer touch-manipulation"
+				style={{ WebkitTapHighlightColor: "transparent" }}>
 				<div className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
 					<SparklesIcon className="size-4 text-primary" />
 				</div>
@@ -831,13 +833,14 @@ export function AiAssistantChat({ visible }: AiAssistantChatProps) {
 			<div className="mx-1 h-6 w-px shrink-0 bg-border/40" />
 
 			{/* Clickable mode chips */}
-			<div className="flex items-center gap-0.5 overflow-x-auto scrollbar-none">
+			<div className="flex items-center gap-0.5 overflow-x-auto">
 				{MODES.map(({ key, icon: Icon }) => (
 					<button key={key} type="button"
 						onClick={() => { setActiveMode(key); setOpen(true); setView("chat"); }}
-						className={cn("flex flex-col items-center justify-center rounded-lg transition-colors active:scale-95 px-2 py-1 gap-0.5",
+						className={cn("flex flex-col items-center justify-center rounded-lg transition-colors active:scale-95 px-2 py-1 gap-0.5 cursor-pointer touch-manipulation",
 							activeMode === key ? "bg-muted text-foreground" : "text-muted-foreground/50 active:text-foreground")}
-						aria-label={`Search by ${key}`}>
+						aria-label={`Search by ${key}`}
+						style={{ WebkitTapHighlightColor: "transparent" }}>
 						<Icon className="size-4" />
 						<span className="text-[9px] font-light leading-none">{key === "text" ? "Text" : key === "voice" ? "Voice" : key === "photo" ? "Photo" : key === "image" ? "Image" : "Chat"}</span>
 					</button>

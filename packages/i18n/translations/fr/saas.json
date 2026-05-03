@@ -1375,7 +1375,13 @@
 			"planCtaTitle": "Besoin de plus de puissance ?",
 			"planCtaDesc": "Améliorez votre forfait pour des limites plus élevées et plus de fonctionnalités.",
 			"managePlan": "Gérer le forfait",
-			"skipToDashboard": "Passer au tableau de bord"
+			"skipToDashboard": "Passer au tableau de bord",
+			"step7Label": "Voir les analyses",
+			"step7Desc": "Suivez les performances de recherche, les clics et le comportement.",
+			"step7Action": "Voir les analyses →",
+			"step8Label": "Configurer la pertinence",
+			"step8Desc": "Affinez le classement avec des synonymes, des boosts et des règles.",
+			"step8Action": "Configurer la pertinence →"
 		},
 		"overview": {
 			"title": "Aperçu",
@@ -2007,7 +2013,8 @@
 			"name": "Nom",
 			"type": "Type",
 			"create": "Créer une règle",
-			"delete": "Supprimer la règle"
+			"delete": "Supprimer la règle",
+			"tab": "Règles d'analyse"
 		},
 		"dynamicSearch": {
 			"description": "Recherche avancée avec tri dynamique et diversification des résultats.",
@@ -2115,6 +2122,44 @@
 		},
 		"ranking": {
 			"tab": "Classement"
+		},
+		"counterRules": {
+			"title": "Règles de compteur",
+			"description": "Inc rémente les champs numériques lors d'événements.",
+			"tab": "Règles d'analyse",
+			"createRule": "Créer une règle de compteur",
+			"createDialogTitle": "Créer une règle de compteur",
+			"createDialogDesc": "Configurez un compteur basé sur des événements.",
+			"ruleName": "Nom de la règle",
+			"sourceCollection": "Collection source",
+			"selectCollection": "Sélectionner une collection",
+			"eventType": "Type d'événement",
+			"eventClick": "Clic",
+			"eventConversion": "Conversion",
+			"eventVisit": "Visite",
+			"eventWeight": "Poids",
+			"eventName": "Nom d'événement (optionnel)",
+			"eventNamePlaceholder": "Généré automatiquement",
+			"eventNameHint": "Nom unique pour le suivi des événements.",
+			"counterField": "Champ compteur",
+			"selectField": "Sélectionner un champ numérique",
+			"noNumericFields": "Aucun champ numérique",
+			"counterFieldHint": "Ce champ doit exister comme int32 ou float dans le schéma.",
+			"cancel": "Annuler",
+			"create": "Créer la règle",
+			"created": "Règle de compteur créée.",
+			"createError": "Échec de création de la règle.",
+			"deleted": "Règle de compteur supprimée.",
+			"deleteError": "Échec de suppression de la règle.",
+			"empty": "Aucune règle de compteur configurée.",
+			"name": "Nom",
+			"actions": "Actions",
+			"usageTitle": "Utilisation dans sort_by",
+			"usageHint": "Utilisez le champ compteur : sort_by: click_count:desc, _text_match:desc",
+			"required": "Veuillez remplir tous les champs obligatoires.",
+			"deleteConfirmTitle": "Supprimer la règle ?",
+			"deleteConfirmDesc": "Supprimer la règle \"{name}\" ?",
+			"deleteConfirmAction": "Supprimer"
 		}
 	},
 	"sdks": {

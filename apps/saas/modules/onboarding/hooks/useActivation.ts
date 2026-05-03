@@ -67,7 +67,7 @@ function daysSince(date: Date): number {
 }
 
 /**
- * Map the 6-step server checklist to the 5 NPS milestones.
+ * Map the 8-step server checklist to the 5 NPS milestones.
  *
  * Server steps:
  *   1 = has index
@@ -76,6 +76,8 @@ function daysSince(date: Date): number {
  *   4 = has search
  *   5 = has API key
  *   6 = widget embedded
+ *   7 = has analytics events
+ *   8 = relevance configured
  *
  * NPS milestones:
  *   1 = signed up (always true if user exists)
@@ -152,7 +154,7 @@ export function useActivation(): UseActivationReturn {
 
 	const serverSteps = onboarding?.steps ?? [];
 	const completedCount = onboarding?.completedCount ?? 0;
-	const totalSteps = onboarding?.totalSteps ?? 6;
+	const totalSteps = onboarding?.totalSteps ?? 8;
 	const percent = totalSteps > 0 ? Math.round((completedCount / totalSteps) * 100) : 0;
 
 	const milestone = computeMilestone(serverSteps);

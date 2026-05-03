@@ -24,6 +24,7 @@ import {
 	KeyIcon,
 	RocketIcon,
 	SearchIcon,
+	SlidersHorizontalIcon,
 	SparklesIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -80,7 +81,7 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 	const serverSteps = onboarding?.steps ?? [];
 	const isComplete = onboarding?.allCompleted ?? false;
 	const completedCount = onboarding?.completedCount ?? 0;
-	const totalSteps = onboarding?.totalSteps ?? 6;
+	const totalSteps = onboarding?.totalSteps ?? 8;
 	const percentComplete = totalSteps > 0 ? Math.round((completedCount / totalSteps) * 100) : 0;
 
 	const stepConfigs: StepConfig[] = [
@@ -141,6 +142,26 @@ export function GettingStarted({ organizationId }: { organizationId: string }) {
 			icon: GlobeIcon,
 			href: `/${slug}/search?tab=widget`,
 			done: serverSteps.find((step) => step.step === 6)?.completed ?? false,
+		},
+		{
+			key: "viewAnalytics",
+			serverStep: 7,
+			labelKey: "step7Label",
+			descKey: "step7Desc",
+			actionKey: "step7Action",
+			icon: BarChart3Icon,
+			href: `/${slug}/analytics`,
+			done: serverSteps.find((step) => step.step === 7)?.completed ?? false,
+		},
+		{
+			key: "configureRelevance",
+			serverStep: 8,
+			labelKey: "step8Label",
+			descKey: "step8Desc",
+			actionKey: "step8Action",
+			icon: SlidersHorizontalIcon,
+			href: `/${slug}/relevance`,
+			done: serverSteps.find((step) => step.step === 8)?.completed ?? false,
 		},
 	];
 

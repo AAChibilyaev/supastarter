@@ -1262,7 +1262,13 @@
 			"planCtaTitle": "¿Necesitas más potencia?",
 			"planCtaDesc": "Mejora tu plan para obtener límites más altos y más funciones.",
 			"managePlan": "Gestionar plan",
-			"skipToDashboard": "Ir al panel"
+			"skipToDashboard": "Ir al panel",
+			"step7Label": "Ver análisis",
+			"step7Desc": "Realice un seguimiento del rendimiento de búsqueda, clics y comportamiento.",
+			"step7Action": "Ver análisis →",
+			"step8Label": "Configurar relevancia",
+			"step8Desc": "Ajueste la clasificación con sinónimos, refuerzos y reglas.",
+			"step8Action": "Configurar relevancia →"
 		},
 		"checklist": {
 			"title": "Lista de verificación",
@@ -2006,7 +2012,8 @@
 			"name": "Nombre",
 			"type": "Tipo",
 			"create": "Crear regla",
-			"delete": "Eliminar regla"
+			"delete": "Eliminar regla",
+			"tab": "Reglas de análisis"
 		},
 		"dynamicSearch": {
 			"description": "Búsqueda avanzada con ordenación dinámica y diversificación de resultados.",
@@ -2090,6 +2097,44 @@
 		},
 		"ranking": {
 			"tab": "Clasificación"
+		},
+		"counterRules": {
+			"title": "Reglas de contador",
+			"description": "Incrementa campos numéricos en documentos cuando ocurren eventos.",
+			"tab": "Reglas de análisis",
+			"createRule": "Crear regla de contador",
+			"createDialogTitle": "Crear regla de contador",
+			"createDialogDesc": "Configure un contador basado en eventos para campos de documentos.",
+			"ruleName": "Nombre de la regla",
+			"sourceCollection": "Colección de origen",
+			"selectCollection": "Seleccionar colección",
+			"eventType": "Tipo de evento",
+			"eventClick": "Clic",
+			"eventConversion": "Conversión",
+			"eventVisit": "Visita",
+			"eventWeight": "Peso",
+			"eventName": "Nombre del evento (opcional)",
+			"eventNamePlaceholder": "Generado automáticamente",
+			"eventNameHint": "Nombre único para seguimiento de eventos.",
+			"counterField": "Campo de contador",
+			"selectField": "Seleccionar campo numérico",
+			"noNumericFields": "Sin campos numéricos",
+			"counterFieldHint": "Este campo debe existir como int32 o float en el esquema.",
+			"cancel": "Cancelar",
+			"create": "Crear regla",
+			"created": "Regla de contador creada.",
+			"createError": "Error al crear la regla de contador.",
+			"deleted": "Regla de contador eliminada.",
+			"deleteError": "Error al eliminar la regla de contador.",
+			"empty": "Sin reglas de contador configuradas.",
+			"name": "Nombre",
+			"actions": "Acciones",
+			"usageTitle": "Uso en sort_by",
+			"usageHint": "Use el campo de contador: sort_by: click_count:desc, _text_match:desc",
+			"required": "Complete todos los campos obligatorios.",
+			"deleteConfirmTitle": "¿Eliminar regla de contador?",
+			"deleteConfirmDesc": "¿Eliminar la regla \"{name}\"?",
+			"deleteConfirmAction": "Eliminar"
 		}
 	},
 	"sdks": {

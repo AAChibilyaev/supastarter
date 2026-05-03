@@ -1263,7 +1263,13 @@
 			"planCtaTitle": "Need more power?",
 			"planCtaDesc": "Upgrade your plan for higher limits and more features.",
 			"managePlan": "Manage plan",
-			"skipToDashboard": "Skip to dashboard"
+			"skipToDashboard": "Skip to dashboard",
+			"step7Label": "View analytics",
+			"step7Desc": "Track search performance, clicks, and user behavior.",
+			"step7Action": "View analytics →",
+			"step8Label": "Configure relevance",
+			"step8Desc": "Fine-tune search ranking with synonyms, boosts, and rules.",
+			"step8Action": "Configure relevance →"
 		},
 		"checklist": {
 			"title": "Setup checklist",
@@ -2006,7 +2012,8 @@
 			"name": "Name",
 			"type": "Type",
 			"create": "Create Rule",
-			"delete": "Delete Rule"
+			"delete": "Delete Rule",
+			"tab": "Analytics Rules"
 		},
 		"dynamicSearch": {
 			"description": "Advanced search with dynamic sorting and result diversification.",
@@ -2090,6 +2097,44 @@
 		},
 		"ranking": {
 			"tab": "Ranking"
+		},
+		"counterRules": {
+			"title": "Counter Rules",
+			"description": "Increment numeric fields in documents when events occur. Use for popularity-based ranking.",
+			"tab": "Analytics Rules",
+			"createRule": "Create Counter Rule",
+			"createDialogTitle": "Create Counter Rule",
+			"createDialogDesc": "Configure event-based counter that increments a document field.",
+			"ruleName": "Rule Name",
+			"sourceCollection": "Source Collection",
+			"selectCollection": "Select collection",
+			"eventType": "Event Type",
+			"eventClick": "Click",
+			"eventConversion": "Conversion",
+			"eventVisit": "Visit",
+			"eventWeight": "Weight",
+			"eventName": "Event Name (optional)",
+			"eventNamePlaceholder": "Auto-generated if empty",
+			"eventNameHint": "Unique name used when tracking events. Leave empty to auto-generate.",
+			"counterField": "Counter Field",
+			"selectField": "Select numeric field",
+			"noNumericFields": "No numeric fields in schema",
+			"counterFieldHint": "This field must exist in the collection schema as int32 or float.",
+			"cancel": "Cancel",
+			"create": "Create Rule",
+			"created": "Counter rule created.",
+			"createError": "Failed to create counter rule.",
+			"deleted": "Counter rule deleted.",
+			"deleteError": "Failed to delete counter rule.",
+			"empty": "No counter rules configured. Create one to start tracking popular items.",
+			"name": "Name",
+			"actions": "Actions",
+			"usageTitle": "Usage in sort_by",
+			"usageHint": "Use the counter field in your search query to boost popular results: sort_by: click_count:desc, _text_match:desc",
+			"required": "Please fill in all required fields.",
+			"deleteConfirmTitle": "Delete counter rule?",
+			"deleteConfirmDesc": "Remove the counter rule \"{name}\"? Documents will stop incrementing on events.",
+			"deleteConfirmAction": "Delete"
 		}
 	},
 	"sdks": {

@@ -1263,7 +1263,13 @@
 			"planCtaTitle": "Mehr Leistung nötig?",
 			"planCtaDesc": "Upgrade deinen Plan für höhere Limits und mehr Funktionen.",
 			"managePlan": "Plan verwalten",
-			"skipToDashboard": "Zum Dashboard"
+			"skipToDashboard": "Zum Dashboard",
+			"step7Label": "Analysen anzeigen",
+			"step7Desc": "Verfolgen Sie Suchleistung, Klicks und Nutzerverhalten.",
+			"step7Action": "Analysen anzeigen →",
+			"step8Label": "Relevanz konfigurieren",
+			"step8Desc": "Passen Sie die Suche mit Synonymen, Boosts und Regeln an.",
+			"step8Action": "Relevanz konfigurieren →"
 		},
 		"checklist": {
 			"title": "Setup-Checkliste",
@@ -2006,7 +2012,8 @@
 			"name": "Name",
 			"type": "Typ",
 			"create": "Regel erstellen",
-			"delete": "Regel löschen"
+			"delete": "Regel löschen",
+			"tab": "Analyseregeln"
 		},
 		"dynamicSearch": {
 			"description": "Erweiterte Suche mit dynamischer Sortierung und Ergebnisdiversifikation.",
@@ -2090,6 +2097,44 @@
 		},
 		"ranking": {
 			"tab": "Ranking"
+		},
+		"counterRules": {
+			"title": "Zählerregeln",
+			"description": "Inkrementiert numerische Felder in Dokumenten bei Ereignissen. Für populäritätsbasiertes Ranking.",
+			"tab": "Analyseregeln",
+			"createRule": "Zählerregel erstellen",
+			"createDialogTitle": "Zählerregel erstellen",
+			"createDialogDesc": "Konfigurieren Sie einen ereignisbasierten Zähler für Dokumentfelder.",
+			"ruleName": "Regelname",
+			"sourceCollection": "Quellsammlung",
+			"selectCollection": "Sammlung auswählen",
+			"eventType": "Ereignistyp",
+			"eventClick": "Klick",
+			"eventConversion": "Conversion",
+			"eventVisit": "Besuch",
+			"eventWeight": "Gewichtung",
+			"eventName": "Ereignisname (optional)",
+			"eventNamePlaceholder": "Automatisch generiert",
+			"eventNameHint": "Eindeutiger Name für Ereignisverfolgung.",
+			"counterField": "Zählerfeld",
+			"selectField": "Numerisches Feld auswählen",
+			"noNumericFields": "Keine numerischen Felder",
+			"counterFieldHint": "Dieses Feld muss als int32 oder float im Schema existieren.",
+			"cancel": "Abbrechen",
+			"create": "Regel erstellen",
+			"created": "Zählerregel erstellt.",
+			"createError": "Fehler beim Erstellen der Zählerregel.",
+			"deleted": "Zählerregel gelöscht.",
+			"deleteError": "Fehler beim Löschen der Zählerregel.",
+			"empty": "Keine Zählerregeln konfiguriert.",
+			"name": "Name",
+			"actions": "Aktionen",
+			"usageTitle": "Verwendung in sort_by",
+			"usageHint": "Verwenden Sie das Zählerfeld: sort_by: click_count:desc, _text_match:desc",
+			"required": "Bitte füllen Sie alle Pflichtfelder aus.",
+			"deleteConfirmTitle": "Zählerregel löschen?",
+			"deleteConfirmDesc": "Zählerregel \"{name}\" entfernen?",
+			"deleteConfirmAction": "Löschen"
 		}
 	},
 	"sdks": {
